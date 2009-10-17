@@ -41,14 +41,12 @@ class PLASMA_EXPORT FadeAnimation : public Animation
     Q_OBJECT
 
 public:
+    /* TODO: convert to qreal */
     FadeAnimation(double factor);
     virtual ~FadeAnimation(){};
 
 protected:
     virtual QAbstractAnimation* render(QObject* parent = 0);
-
-private:
-    qreal m_factor;
 
 };
 
