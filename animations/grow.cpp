@@ -26,7 +26,7 @@
 namespace Plasma
 {
 
-GrowAnimation::GrowAnimation(double factor)
+GrowAnimation::GrowAnimation(qreal factor)
 {
     getAnimationPrivate()->animFactor = factor;
 }

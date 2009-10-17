@@ -42,7 +42,7 @@ class PLASMA_EXPORT ExpandAnimation : public Animation
     Q_OBJECT
 
 public:
-    ExpandAnimation(AnimationDirection direction, int distance);
+    ExpandAnimation(AnimationDirection direction, qreal distance);
     virtual ~ExpandAnimation(){};
 
 protected:
@@ -50,7 +50,7 @@ protected:
 
 private:
     AnimationDirection m_direction;
-    int m_distance;
+    qreal m_distance;
 
 };
 

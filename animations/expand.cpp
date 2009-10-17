@@ -26,7 +26,7 @@
 namespace Plasma
 {
 
-ExpandAnimation::ExpandAnimation(AnimationDirection direction, int distance)
+ExpandAnimation::ExpandAnimation(AnimationDirection direction, qreal distance)
     : m_direction(direction),
       m_distance(distance)
 {

@@ -44,7 +44,7 @@ class PLASMA_EXPORT GrowAnimation : public Animation
 
 public:
     /* TODO: convert to qreal */
-    GrowAnimation(double factor);
+    GrowAnimation(qreal factor);
     virtual ~GrowAnimation(){};
 
 protected:

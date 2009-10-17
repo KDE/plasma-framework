@@ -26,7 +26,7 @@
 namespace Plasma
 {
 
-FadeAnimation::FadeAnimation(double factor)
+FadeAnimation::FadeAnimation(qreal factor)
 {
     AnimationPrivate *obj = getAnimationPrivate();
     obj->animFactor = factor;

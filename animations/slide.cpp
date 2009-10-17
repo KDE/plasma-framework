@@ -27,7 +27,7 @@
 namespace Plasma
 {
 
-SlideAnimation::SlideAnimation(AnimationDirection direction, int distance)
+SlideAnimation::SlideAnimation(AnimationDirection direction, qreal distance)
     : m_direction(direction),
       m_distance(distance),
       m_end_visibility(true)
