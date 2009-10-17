@@ -25,6 +25,8 @@
 namespace Plasma
 {
 
+class PulseAnimationPrivate;
+
 class PLASMA_EXPORT PulseAnimation : public Animation
 {
     Q_OBJECT
@@ -45,13 +47,8 @@ protected:
 
 private:
     void createAnimation(qreal _duration = 500, qreal _scale = 1.5);
-    QAbstractAnimation *animation;
-    QGraphicsWidget *under;
-    QRectF *pulseGeometry;
-    qreal zvalue, mscale, mopacity;
-    QPropertyAnimation *opacityAnimation;
-    QPropertyAnimation *geometryAnimation;
-    QPropertyAnimation *scaleAnimation;
+
+    PulseAnimationPrivate *d;
 };
 
 }
