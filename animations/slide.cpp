@@ -18,20 +18,23 @@
  */
 
 #include "slide.h"
+#include "private/animationprivate_p.h"
 
 #include <QPointF>
-
 #include <kdebug.h>
-
 
 namespace Plasma
 {
 
 SlideAnimation::SlideAnimation(AnimationDirection direction, qreal distance)
-    : m_direction(direction),
-      m_distance(distance),
-      m_end_visibility(true)
 {
+    AnimationPrivate *obj = getAnimationPrivate();
+    obj->animDirection = direction;
+    //: m_direction(direction),
+    obj->animDistance = distance;
+    //m_distance(distance),
+    obj->animVisible = true;
+    //m_end_visibility(true)
 
 }
 
@@ -45,23 +48,24 @@ QAbstractAnimation* SlideAnimation::render(QObject* parent){
     qreal newX = x;
     qreal newY = y;
 
+    AnimationPrivate *obj = getAnimationPrivate();
     //compute new geometry values
-    switch (m_direction){
+    switch (obj->animDirection) {
 
         case MoveUp:
-            newY = y - m_distance;
+            newY = y - obj->animDistance;
             break;
 
         case MoveRight:
-            newX = x + m_distance;
+            newX = x + obj->animDistance;
             break;
 
         case MoveDown:
-            newY = y + m_distance;
+            newY = y + obj->animDistance;
             break;
 
         case MoveLeft:
-            newX = x - m_distance;
+            newX = x - obj->animDistance;
             break;
 
         case MoveUpRight:
@@ -81,7 +85,7 @@ UpLeft) are not supported\n";
 
     //QObject::connect(anim, SIGNAL(finished()), anim, SLOT(deleteLater()));
 
-    if(m_end_visibility){
+    if (obj->animVisible) {
         QObject::connect(anim, SIGNAL(finished()), m_object, SLOT(show()));
     } else {
         QObject::connect(anim, SIGNAL(finished()), m_object, SLOT(hide()));
@@ -92,7 +96,7 @@ UpLeft) are not supported\n";
 }
 
 void SlideAnimation::setVisibleAtEnd(bool visibility){
-    m_end_visibility = visibility;
+    getAnimationPrivate()->animVisible = visibility;
 }
 
 } //namespace Plasma

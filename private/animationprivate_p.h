@@ -49,6 +49,12 @@ public:
      */
     qreal animDistance;
 
+    /**
+     * Animation visibility: whether to end the animation being visible
+     * or not.
+     */
+    bool animVisible;
+
 };
 
 }

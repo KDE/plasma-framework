@@ -33,7 +33,7 @@ namespace Plasma
 /**
  * @class Slide plasma/animations/slide.h
  * @short Slide effect
- * 
+ *
  * Effect that moves the object a specific distance in a given direction. The
  * object is optionally made invisible at the beginning or at the end.
  */
@@ -52,12 +52,6 @@ public:
 
 protected:
     virtual QAbstractAnimation* render(QObject* parent = 0);
-
-private:
-    AnimationDirection m_direction;
-    qreal m_distance;
-    //bool m_beginning_visibility;
-    bool m_end_visibility;
 
 };
 
