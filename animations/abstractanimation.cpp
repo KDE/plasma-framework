@@ -29,6 +29,24 @@ public:
      * Object the animation(s) should act upon.
      */
     QGraphicsWidget* animObject;
+
+    /**
+     * Animation factor: its meaning depends on the animation class
+     * (e.g. opacity in FadeAnimation, scale in GrowAnimation, etc)
+     */
+    qreal animFactor;
+
+    /**
+     * Animation direction: where the animation will move.
+     */
+    AnimationDirection animDirection;
+
+    /**
+     * Animation distance: displacement factor for animations where
+     * there is change in the position of animated widget.
+     */
+    qreal animDistance;
+
 };
 
 AbstractAnimation::AbstractAnimation(): d(new AnimationPrivate)
