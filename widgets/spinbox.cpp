@@ -30,6 +30,7 @@
 #include <plasma/theme.h>
 #include <plasma/framesvg.h>
 #include <plasma/private/style_p.h>
+#include <plasma/private/focusindicator_p.h>
 
 namespace Plasma
 {
@@ -69,6 +70,7 @@ public:
     SpinBox *q;
     Plasma::Style::Ptr style;
     Plasma::FrameSvg *background;
+    FocusIndicator *focusIndicator;
     bool customFont;
 };
 
@@ -77,6 +79,8 @@ SpinBox::SpinBox(QGraphicsWidget *parent)
       d(new SpinBoxPrivate(this))
 {
     KIntSpinBox *native = new KIntSpinBox;
+
+    d->focusIndicator = new FocusIndicator(this);
 
     connect(native, SIGNAL(valueChanged(int)), this, SIGNAL(valueChanged(int)));
     connect(native, SIGNAL(editingFinished()), this, SIGNAL(editingFinished()));
@@ -173,27 +177,18 @@ void SpinBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     update();
 }
 
+void SpinBox::resizeEvent(QGraphicsSceneResizeEvent *event)
+{
+    QStyleOptionSpinBox spinOpt;
+    spinOpt.initFrom(nativeWidget());
+    QRect controlrect = nativeWidget()->style()->subControlRect(QStyle::CC_SpinBox, &spinOpt, QStyle::SC_SpinBoxFrame, nativeWidget());
+    d->focusIndicator->setCustomGeometry(controlrect);
+}
+
 void SpinBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
-
-    if (hasFocus() || isUnderMouse()) {
-        if (hasFocus()) {
-            d->background->setElementPrefix("focus");
-        } else {
-            d->background->setElementPrefix("hover");
-        }
-        qreal left, top, right, bottom;
-        d->background->getMargins(left, top, right, bottom);
-
-        QStyleOptionSpinBox spinOpt;
-        spinOpt.initFrom(nativeWidget());
-        QRect controlrect = nativeWidget()->style()->subControlRect(QStyle::CC_SpinBox, &spinOpt, QStyle::SC_SpinBoxFrame, nativeWidget());
-
-        d->background->resizeFrame(controlrect.size()+QSizeF(left+right, top+bottom));
-        d->background->paintFrame(painter, QPoint(-left, -top));
-    }
 
     QGraphicsProxyWidget::paint(painter, option, widget);
 }

@@ -21,10 +21,13 @@
 
 #include <QPainter>
 
+#include <QGraphicsSceneResizeEvent>
+
 #include <klineedit.h>
 #include <kmimetype.h>
 
 #include <plasma/private/style_p.h>
+#include <plasma/private/focusindicator_p.h>
 
 #include "theme.h"
 #include "svg.h"
@@ -72,6 +75,7 @@ LineEdit::LineEdit(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
       d(new LineEditPrivate(this))
 {
+    FocusIndicator *focusIndicator = new FocusIndicator(this);
     d->style = Plasma::Style::sharedStyle();
     d->background = new Plasma::FrameSvg(this);
     d->background->setImagePath("widgets/lineedit");
@@ -159,18 +163,6 @@ void LineEdit::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
-
-    if (hasFocus() || isUnderMouse()) {
-        if (hasFocus()) {
-            d->background->setElementPrefix("focus");
-        } else {
-            d->background->setElementPrefix("hover");
-        }
-        qreal left, top, right, bottom;
-        d->background->getMargins(left, top, right, bottom);
-        d->background->resizeFrame(size()+QSizeF(left+right, top+bottom));
-        d->background->paintFrame(painter, QPoint(-left, -top));
-    }
 
     nativeWidget()->render(painter, QPoint(0, 0), QRegion(), QWidget::DrawChildren|QWidget::IgnoreMask);
 }

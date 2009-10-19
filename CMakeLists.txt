@@ -81,6 +81,7 @@ set(plasma_LIB_SRCS
     private/desktoptoolbox.cpp
     private/extenderapplet.cpp
     private/extenderitemmimedata.cpp
+    private/focusindicator.cpp
     private/getsource.cpp
     private/nativetabbar.cpp
     private/packages.cpp
