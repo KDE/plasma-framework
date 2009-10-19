@@ -526,6 +526,28 @@ void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
         return; //no unexpected click-throughs
     }
 
+    QGraphicsItem *item = scene()->itemAt(event->scenePos());
+    if (event->button() == Qt::RightButton && event->modifiers() == Qt::NoModifier && item != this) {
+        //fake a contextmenuevent in case something in the containment plugin is expecting it
+        //we do this because the click is sent around as a mousepress before a contextmenu event,
+        //folderview only handles it as a contextmenu event, but if folderview isn't handling it
+        //then we need to handle it as a mousepress *not* a contextmenuevent.
+        //unfortunately this makes is possible for badly-behaved containments to eat rightclicks
+        QGraphicsSceneContextMenuEvent contextEvent(QEvent::GraphicsSceneContextMenu);
+        contextEvent.setReason(QGraphicsSceneContextMenuEvent::Mouse);
+        contextEvent.setPos(event->pos());
+        contextEvent.setScenePos(event->scenePos());
+        contextEvent.setScreenPos(event->screenPos());
+        contextEvent.setModifiers(event->modifiers());
+        contextEvent.setWidget(event->widget());
+
+        scene()->sendEvent(item, &contextEvent);
+        if (contextEvent.isAccepted()) {
+            event->accept();
+            return;
+        }
+    }
+
     if (d->wallpaper && d->wallpaper->isInitialized() && !event->isAccepted()) {
         d->wallpaper->mousePressEvent(event);
     }
