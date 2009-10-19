@@ -47,6 +47,7 @@ FocusIndicator::FocusIndicator(QGraphicsWidget *parent)
 
     parent->installEventFilter(this);
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(syncGeometry()));
+    syncGeometry();
 }
 
 FocusIndicator::~FocusIndicator()
@@ -100,7 +101,7 @@ void FocusIndicator::syncGeometry()
     if (!m_customGeometry.isNull()) {
         geom = m_customGeometry;
     } else {
-        geom = boundingRect();
+        geom = m_parent->boundingRect();
     }
 
     qreal left, top, right, bottom;
