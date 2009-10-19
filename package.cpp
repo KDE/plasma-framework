@@ -24,6 +24,7 @@
 #include <QDir>
 #include <QFile>
 #include <QRegExp>
+#include <QtNetwork/QHostInfo>
 
 #ifdef QCA2_FOUND
 #include <QtCrypto>
@@ -573,9 +574,9 @@ void PackagePrivate::publish(AnnouncementMethods methods)
         service = new PlasmoidService(structure->path());
     }
 
-    QString resourceName = 
+    QString resourceName =
     i18nc("%1 is the name of a plasmoid, %2 the name of the machine that plasmoid is published on",
-          "%1 on %2", structure->metadata().name(), AuthorizationManager::self()->d->myCredentials.name());
+          "%1 on %2", structure->metadata().name(), QHostInfo::localHostName());
     kDebug() << "publishing package under name " << resourceName;
     service->d->publish(methods, resourceName, structure->metadata());
 }
