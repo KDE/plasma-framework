@@ -27,6 +27,7 @@
 #include <plasma/plasma_export.h>
 
 class QGraphicsItem;
+class QGraphicsWidget;
 class QTimeLine;
 
 namespace Plasma
@@ -158,6 +159,25 @@ public:
      * @deprecated use new Animator API with Qt Kinetic
      */
     KDE_DEPRECATED Q_INVOKABLE bool isAnimating() const;
+
+    /**
+     * Register a widget as a scrolling widget.
+     * The widget will get animate scrolling with mouse dragging and mouse wheel.
+     * It must provide
+     * scrollValue, viewportGeometry and pageSize properties
+     *
+     * @param widget the widget that offers a scrolling behaviour
+     * @since 4.4
+     */
+    void registerScrollingManager(QGraphicsWidget *widget);
+
+    /**
+     * unregister the scrolling manager of a certain widget
+     *
+     * @param widget the widget we don't want no longer animated
+     * @since 4.4
+     */
+    void unregisterScrollingManager(QGraphicsWidget *widget);
 
 Q_SIGNALS:
     void animationFinished(QGraphicsItem *item, Plasma::Animator::Animation anim);

@@ -18,7 +18,6 @@
  */
 
 #include "scrollwidget.h"
-#include "private/kineticscroll_p.h"
 //Qt
 #include <QGraphicsSceneResizeEvent>
 #include <QGraphicsGridLayout>
@@ -39,7 +38,7 @@
 namespace Plasma
 {
 
-class ScrollWidgetPrivate: public KineticScrolling
+class ScrollWidgetPrivate
 {
 public:
     ScrollWidgetPrivate(ScrollWidget *parent)
@@ -275,7 +274,7 @@ void ScrollWidget::setWidget(QGraphicsWidget *widget)
     }
 
     d->widget = widget;
-    d->setWidget(this);
+    Plasma::Animator::self()->registerScrollingManager(this);
     widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     widget->setParentItem(d->scrollingWidget);
     widget->setPos(QPoint(0,0));

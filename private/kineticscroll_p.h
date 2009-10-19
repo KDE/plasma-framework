@@ -38,7 +38,7 @@ class KineticScrolling: public QObject
 {
     Q_OBJECT
 public:
-    KineticScrolling();
+    KineticScrolling(QGraphicsWidget *parent);
     ~KineticScrolling();
     void setWidget(QGraphicsWidget *parent);
 

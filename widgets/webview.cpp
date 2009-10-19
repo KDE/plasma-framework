@@ -37,12 +37,12 @@
 
 #include "plasma/widgets/webview.h"
 
-#include "plasma/private/kineticscroll_p.h"
+#include "plasma/animator.h"
 
 namespace Plasma
 {
 
-class WebViewPrivate : public KineticScrolling
+class WebViewPrivate
 {
 public:
     WebViewPrivate(WebView *parent)
@@ -69,7 +69,7 @@ WebView::WebView(QGraphicsItem *parent)
 {
     d->page = 0;
     d->loaded = false;
-    d->setWidget(this);
+    Plasma::Animator::self()->registerScrollingManager(this);
     setAcceptsHoverEvents(true);
     setFlags(QGraphicsItem::ItemIsFocusable);
 

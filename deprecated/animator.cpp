@@ -31,6 +31,7 @@
 #include <kglobalsettings.h>
 
 #include "animationdriver.h"
+#include "private/kineticscroll_p.h"
 
 namespace Plasma
 {
@@ -194,6 +195,8 @@ class AnimatorPrivateDeprecated
         QSet<MovementState *> movingItemsToDelete;
         QSet<ElementAnimationState *> animatedElementsToDelete;
         QSet<CustomAnimationState *> customAnimsToDelete;
+
+        QHash<QGraphicsWidget *, KineticScrolling *> scrollingManagers;
 };
 
 class AnimatorSingleton
@@ -826,6 +829,22 @@ void AnimatorPrivateDeprecated::cleanupStates()
         delete state;
     }
     customAnimsToDelete.clear();
+}
+
+void Animator::registerScrollingManager(QGraphicsWidget *widget)
+{
+    if (!d->scrollingManagers.contains(widget)) {
+        KineticScrolling *scroll = new KineticScrolling(widget);
+        d->scrollingManagers.insert(widget, scroll);
+    }
+}
+
+void Animator::unregisterScrollingManager(QGraphicsWidget *widget)
+{
+    if (d->scrollingManagers.contains(widget)) {
+        d->scrollingManagers.value(widget)->deleteLater();
+        d->scrollingManagers.remove(widget);
+    }
 }
 
 } // namespace Plasma

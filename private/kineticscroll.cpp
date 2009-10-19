@@ -126,9 +126,10 @@ public:
 };
 
 
-KineticScrolling::KineticScrolling(): d(0)
+KineticScrolling::KineticScrolling(QGraphicsWidget *parent)
+    : d(new KineticScrollingPrivate)
 {
-    d = new KineticScrollingPrivate;
+    setWidget(parent);
 }
 
 KineticScrolling::~KineticScrolling()
@@ -354,6 +355,8 @@ void KineticScrolling::setWidget(QGraphicsWidget *parent)
     if (d->parent) {
         d->parent->removeEventFilter(this);
     }
+
+    setParent(parent);
 
     d->parent = parent;
 
