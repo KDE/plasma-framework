@@ -14,7 +14,7 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Publishing a widget on the network allows you to access this widget from another computer as a remote control.</string>
+      <string>Sharing a widget on the network allows you to access this widget from another computer as a remote control.</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
@@ -24,7 +24,7 @@
    <item>
     <widget class="QCheckBox" name="publishCheckbox">
      <property name="text">
-      <string>Publish this widget on the network.</string>
+      <string>Share this widget on the network.</string>
      </property>
     </widget>
    </item>

@@ -1842,7 +1842,7 @@ void AppletPrivate::addPublishPage(KConfigDialog *dialog)
 
     q->connect(publishUI.publishCheckbox, SIGNAL(stateChanged(int)),
                q, SLOT(publishCheckboxStateChanged(int)));
-    dialog->addPage(page, i18n("Publish"), "applications-internet");
+    dialog->addPage(page, i18n("Share"), "applications-internet");
 #endif
 }
 
@@ -1871,7 +1871,7 @@ void AppletPrivate::configDialogFinished()
     }
 
 #ifdef ENABLE_REMOTE_WIDGETS
-    q->config().writeEntry("Publish", publishUI.publishCheckbox->isChecked());
+    q->config().writeEntry("Share", publishUI.publishCheckbox->isChecked());
 
     if (publishUI.publishCheckbox->isChecked()) {
         QString resourceName =
