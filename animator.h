@@ -33,6 +33,8 @@ class QTimeLine;
 namespace Plasma
 {
 
+class AbstractAnimation;
+
 class AnimatorPrivateDeprecated;
 
 /**
@@ -55,14 +57,14 @@ public:
         DisappearAnimation,  /*<< Animate the disappearance of an element */
         ActivateAnimation,    /*<< When something is activated or launched,
 				such as an app icon being clicked */
-	/* TODO: should we change the names of animation classes? */
-        FadeAnimation, /*<< Can be used for both fade in and out */
-        GrowAnimation, /*<< Grow animated object geometry */
-        ExpandAnimation, /*<< Not sure if we need this (should ask Mehmet A. Akmanalp) */
-        PulserAnimation, /*<< Pulse animated object (opacity/geometry/scale) */
-        RotationAnimation, /*<< Rotate an animated object */
-        RotationStackedAnimation, /*<< TODO: for flipping one object with another */
-        SlideAnimation /*<< Move the position of animated object */
+	/* TODO: change the names of animation classes */
+        FadeAnim, /*<< Can be used for both fade in and out */
+        GrowAnim, /*<< Grow animated object geometry */
+        ExpandAnim, /*<< Not sure if we need this (should ask Mehmet A. Akmanalp) */
+        PulseAnim, /*<< Pulse animated object (opacity/geometry/scale) */
+        RotationAnim, /*<< Rotate an animated object */
+        RotationStackedAnim, /*<< TODO: for flipping one object with another */
+        SlideAnim /*<< Move the position of animated object */
     };
 
     enum CurveShape {
@@ -83,6 +85,12 @@ public:
      * Singleton accessor
      **/
     static KDE_DEPRECATED Animator *self();
+
+    /**
+     * Factory to build new animation objects. To control their behavior,
+     * check \ref AbstractAnimation properties.
+     **/
+    AbstractAnimation *create(Animation type);
 
     /**
      * Starts a standard animation on a QGraphicsItem.

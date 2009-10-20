@@ -19,6 +19,14 @@
  */
 
 #include "animator.h"
+#include "animations/abstractanimation.h"
+#include "animations/animation.h"
+#include "animations/expand.h"
+#include "animations/fade.h"
+#include "animations/grow.h"
+#include "animations/pulser.h"
+#include "animations/rotation.h"
+#include "animations/slide.h"
 
 #include <QGraphicsItem>
 #include <QTimeLine>
@@ -210,6 +218,49 @@ K_GLOBAL_STATIC(AnimatorSingleton, privateSelf)
 Animator *Animator::self()
 {
     return &privateSelf->self;
+}
+
+AbstractAnimation *Animator::create(Animation type)
+{
+    AbstractAnimation *result = 0;
+
+    switch (type) {
+
+    case FadeAnim:
+	result = new FadeAnimation;
+	break;
+
+    case GrowAnim:
+	result = new GrowAnimation;
+	break;
+
+    case ExpandAnim:
+	result = new ExpandAnimation;
+	break;
+
+    case PulseAnim:
+	result = new PulseAnimation;
+	break;
+
+    case RotationAnim:
+	result = new RotationAnimation;
+	break;
+
+    case RotationStackedAnim:
+	//TODO: implement stacked rotation
+	//result = new Plasma::RotationStackedAnimation;
+	break;
+
+    case SlideAnim:
+	result = new SlideAnimation;
+	break;
+
+    default:
+	kDebug() << "Unsupported animation type.";
+
+    }
+
+    return result;
 }
 
 Animator::Animator(QObject *parent)
