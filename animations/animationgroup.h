@@ -37,7 +37,8 @@ namespace Plasma
 {
 
 /**
- * A group of Animations and / or AnimationGroups.
+ * @brief A group of Animations and / or AnimationGroups.
+ * @since 4.4
  */
 class PLASMA_EXPORT AnimationGroup : public AbstractAnimation
 {
@@ -65,8 +66,6 @@ public:
      */
     bool isParallel() const;
 
-
-
     /**
      * Add an Animation or AnimationGroup to the group
      * @arg elem element to add
@@ -85,7 +84,6 @@ public:
      * @arg id id of element to remove
      */
     void remove(int id);
-
 
     /**
      * Take the animation object and turn it into a QAnimationGroup. More

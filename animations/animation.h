@@ -38,7 +38,8 @@ namespace Plasma
 class AnimationPrivate;
 
 /**
- * Abstract representation of a single animation.
+ * @brief Abstract representation of a single animation.
+ * @since 4.4
  */
 class PLASMA_EXPORT Animation : public AbstractAnimation
 {
