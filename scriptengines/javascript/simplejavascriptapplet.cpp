@@ -403,21 +403,23 @@ void SimpleJavaScriptApplet::setupObjects()
     // Work around bug in 4.3.0
     qMetaTypeId<QVariant>();
 
-    // Add constructors
-    global.setProperty("PlasmaSvg", m_engine->newFunction(SimpleJavaScriptApplet::newPlasmaSvg));
-    global.setProperty("PlasmaFrameSvg", m_engine->newFunction(SimpleJavaScriptApplet::newPlasmaFrameSvg));
-
-    // Add stuff from 4.4
+    // Add stuff from Qt
     global.setProperty("QPainter", constructPainterClass(m_engine));
     global.setProperty("QGraphicsItem", constructGraphicsItemClass(m_engine));
     global.setProperty("QTimer", constructTimerClass(m_engine));
     global.setProperty("QFont", constructFontClass(m_engine));
     global.setProperty("QRectF", constructQRectFClass(m_engine));
-    global.setProperty("QPixap", constructQPixmapClass(m_engine));
+    global.setProperty("QPixmap", constructQPixmapClass(m_engine));
     global.setProperty("QSizeF", constructQSizeFClass(m_engine));
     global.setProperty("QPoint", constructQPointClass(m_engine));
     global.setProperty("LinearLayout", constructLinearLayoutClass(m_engine));
+
+    // Add stuff from KDE libs
     global.setProperty("Url", constructKUrlClass(m_engine));
+
+    // Add stuff from Plasma
+    global.setProperty("PlasmaSvg", m_engine->newFunction(SimpleJavaScriptApplet::newPlasmaSvg));
+    global.setProperty("PlasmaFrameSvg", m_engine->newFunction(SimpleJavaScriptApplet::newPlasmaFrameSvg));
 
     installWidgets(m_engine);
 }
