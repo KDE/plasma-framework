@@ -33,7 +33,7 @@ namespace Plasma
 /**
  * @class Fade plasma/animations/fade.h
  * @short Fade effect
- * 
+ *
  * Effect that slowly transforms the opacity of the object to the given value.
  */
 class PLASMA_EXPORT FadeAnimation : public Animation

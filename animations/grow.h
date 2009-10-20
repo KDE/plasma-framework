@@ -33,7 +33,7 @@ namespace Plasma
 /**
  * @class Grow plasma/animations/grow.h
  * @short Grow effect
- * 
+ *
  * Effect that grows any QGraphicsWidget by a multiple given in the
  * constructor. The center of the object stays in place while the sides grow.
  *

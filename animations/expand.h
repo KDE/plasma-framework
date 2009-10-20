@@ -33,7 +33,7 @@ namespace Plasma
 /**
  * @class Expand plasma/animations/expand.h
  * @short Expand effect
- * 
+ *
  * Effect that grows the object a specific distance in a given direction, on
  * one side. The object doesn't "move" except for the side that is expanding.
  */

@@ -63,7 +63,7 @@ public:
     virtual void setWidget(QGraphicsWidget* receiver);
 
     /**
-     * Take an AbstractAnimation and turn it into a 
+     * Take an AbstractAnimation and turn it into a
      * QAbstractAnimation.
      */
     virtual QAbstractAnimation* toQAbstractAnimation(QObject* parent) = 0;

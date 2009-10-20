@@ -89,7 +89,7 @@ public:
 
     /**
      * Take the animation object and turn it into a QAnimationGroup. More
-     * specifically, a QSerialAnimation or QParallelAnimation depending on 
+     * specifically, a QSerialAnimation or QParallelAnimation depending on
      * the value of m_parallel at the time of invocation. Returns NULL on error.
      */
     QAnimationGroup* toQAbstractAnimation(QObject* parent = 0);
