@@ -210,6 +210,11 @@ QSizeF AppletInterface::size() const
     return applet()->size();
 }
 
+QRectF AppletInterface::rect() const
+{
+    return applet()->contentRect();
+}
+
 void AppletInterface::setAction(const QString &name, const QString &text, const QString &icon, const QString &shortcut)
 {
     Plasma::Applet *a = applet();

@@ -133,6 +133,7 @@ enum QtAlignment {
     Q_INVOKABLE void setConfigurationRequired(bool needsConfiguring, const QString &reason = QString());
 
     Q_INVOKABLE QSizeF size() const;
+    Q_INVOKABLE QRectF rect() const;
 
     Q_INVOKABLE void setAction(const QString &name, const QString &text,
                                const QString &icon = QString(), const QString &shortcut = QString());
