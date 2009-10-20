@@ -16,7 +16,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "remotedataengine.h"
+#include "remotedataengine_p.h"
 
 #include "remoteservice_p.h"
 
@@ -232,5 +232,5 @@ void RemoteDataEngine::updateSources()
 
 }
 
-#include "remotedataengine.moc"
+#include "remotedataengine_p.moc"
 

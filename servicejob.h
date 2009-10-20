@@ -123,6 +123,7 @@ private:
     ServiceJobPrivate * const d;
 
     friend class ServiceProvider;
+    friend class RemoteServiceJob;
 };
 
 } // namespace Plasma

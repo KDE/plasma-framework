@@ -93,6 +93,7 @@
 #include "wallpaper.h"
 #include "paintutils.h"
 
+#include "private/associatedapplicationmanager_p.h"
 #include "private/authorizationmanager_p.h"
 #include "private/containment_p.h"
 #include "private/extenderapplet_p.h"
@@ -100,10 +101,9 @@
 #include "private/packages_p.h"
 #include "private/plasmoidservice.h"
 #include "private/popupapplet_p.h"
+#include "private/remotedataengine_p.h"
 #include "private/service_p.h"
-#include "private/remotedataengine.h"
 #include "private/internaltoolbox_p.h"
-#include "private/associatedapplicationmanager_p.h"
 #include "ui_publish.h"
 
 #include "config-plasma.h"

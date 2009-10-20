@@ -26,7 +26,7 @@
 #include <kdebug.h>
 
 #include "plasma/dataenginemanager.h"
-#include "plasma/private/remotedataengine.h"
+#include "plasma/private/remotedataengine_p.h"
 #include <servicejob.h>
 
 namespace Plasma

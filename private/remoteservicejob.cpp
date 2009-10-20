@@ -18,6 +18,7 @@
 
 #include "remoteservicejob_p.h"
 
+#include <kconfiggroup.h>
 #include <kurl.h>
 
 #include <QtCore/QBuffer>
@@ -31,6 +32,7 @@
 #include "../remote/authorizationmanager.h"
 #include "authorizationmanager_p.h"
 #include "remoteservice_p.h"
+#include "servicejob_p.h"
 #include "joliemessagehelper_p.h"
 #include <qtimer.h>
 
@@ -46,8 +48,15 @@ RemoteServiceJob::RemoteServiceJob(KUrl location,
                 : ServiceJob(destination, operation, parameters, parent),
                   m_token(initialToken),
                   m_location(location),
-                  m_service(parent)
+                  m_service(parent),
+                  m_delayedDesc(0)
 {
+}
+
+RemoteServiceJob::~RemoteServiceJob()
+{
+    delete m_delayedDesc;
+    m_delayedDesc = 0;
 }
 
 void RemoteServiceJob::start()
@@ -94,11 +103,22 @@ void RemoteServiceJob::start()
             this, SLOT(callCompleted(Jolie::PendingCallWatcher*)));
 }
 
+void RemoteServiceJob::setDelayedDescription(const KConfigGroup &desc)
+{
+    if (!m_delayedDesc) {
+        m_delayedDesc = new KConfigGroup(desc);
+    } else {
+        *m_delayedDesc = desc;
+    }
+}
+
 void RemoteServiceJob::checkValidity()
 {
     if (!m_service->isOperationEnabled(operationName())) {
         setError(-1);
         setErrorText(i18n("Job no longer valid, operation is not enabled!"));
+    } else if (m_delayedDesc) {
+        d->parameters = m_service->parametersFromDescription(*m_delayedDesc);
     } else {
         KConfigGroup description = m_service->operationDescription(operationName());
         QMapIterator<QString, QVariant> param(parameters());
@@ -111,6 +131,9 @@ void RemoteServiceJob::checkValidity()
             }
         }
     }
+
+    delete m_delayedDesc;
+    m_delayedDesc = 0;
 }
 
 void RemoteServiceJob::callCompleted(Jolie::PendingCallWatcher *watcher)

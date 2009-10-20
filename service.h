@@ -192,6 +192,13 @@ public:
      */
     Q_INVOKABLE void disassociateWidget(QGraphicsWidget *widget);
 
+    /**
+     * @return a parameter map for the given description
+     * @arg description the configuration values to turn into the parameter map
+     * @since 4.4
+     */
+    Q_INVOKABLE QMap<QString, QVariant> parametersFromDescription(const KConfigGroup &description);
+
 Q_SIGNALS:
     /**
      * Emitted when a job associated with this Service completes its task
@@ -275,6 +282,7 @@ private:
     friend class GetSource;
     friend class PackagePrivate;
     friend class ServiceProvider;
+    friend class RemoveService;
 };
 
 } // namespace Plasma

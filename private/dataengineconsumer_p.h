@@ -27,13 +27,13 @@
 #include <kdebug.h>
 
 #include "plasma/dataenginemanager.h"
-#include "plasma/private/remotedataengine.h"
 #include <servicejob.h>
 
 namespace Plasma
 {
 
 class DataEngineConsumer;
+class RemoteDataEngine;
 
 class ServiceMonitor : public QObject
 {

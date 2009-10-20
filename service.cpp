@@ -19,7 +19,6 @@
 
 #include "service.h"
 #include "private/authorizationmanager_p.h"
-#include "private/remoteservice_p.h"
 #include "private/service_p.h"
 #include "private/serviceprovider_p.h"
 
@@ -40,6 +39,8 @@
 #include "configloader.h"
 #include "version.h"
 #include "private/configloader_p.h"
+#include "private/remoteservice_p.h"
+#include "private/remoteservicejob_p.h"
 
 namespace Plasma
 {
@@ -224,27 +225,49 @@ KConfigGroup Service::operationDescription(const QString &operationName)
     return params;
 }
 
+QMap<QString, QVariant> Service::parametersFromDescription(const KConfigGroup &description)
+{
+    QMap<QString, QVariant> params;
+
+    if (!d->config || !description.isValid()) {
+        return params;
+    }
+
+    const QString op = description.name();
+    foreach (const QString &key, description.keyList()) {
+        KConfigSkeletonItem *item = d->config->findItem(op, key);
+        if (item) {
+            params.insert(key, description.readEntry(key, item->property()));
+        }
+    }
+
+    return params;
+}
+
 ServiceJob *Service::startOperationCall(const KConfigGroup &description, QObject *parent)
 {
     // TODO: nested groups?
     ServiceJob *job = 0;
-    QString op = description.isValid() ? description.name() : QString();
+    const QString op = description.isValid() ? description.name() : QString();
 
-    if (!d->config) {
+    RemoteService *rs = qobject_cast<RemoteService *>(this);
+    if (!op.isEmpty() && rs && !rs->isReady()) {
+        // if we have an operation, but a non-ready remote service, just let it through
+        kDebug() << "Remote service is not ready; queueing operation";
+        QMap<QString, QVariant> params;
+        job = createJob(op, params);
+        RemoteServiceJob *rsj = qobject_cast<RemoteServiceJob *>(job);
+        if (rsj) {
+            rsj->setDelayedDescription(description);
+        }
+    } else if (!d->config) {
         kDebug() << "No valid operations scheme has been registered";
     } else if (!op.isEmpty() && d->config->hasGroup(op)) {
         if (d->disabledOperations.contains(op)) {
             kDebug() << "Operation" << op << "is disabled";
         } else {
-            QMap<QString, QVariant> params;
-            foreach (const QString &key, description.keyList()) {
-                KConfigSkeletonItem *item = d->config->findItem(op, key);
-                if (item) {
-                    params.insert(key, description.readEntry(key, item->property()));
-                }
-            }
-
-            job = createJob(description.name(), params);
+            QMap<QString, QVariant> params = parametersFromDescription(description);
+            job = createJob(op, params);
         }
     } else {
         kDebug() << "Not a valid group!";

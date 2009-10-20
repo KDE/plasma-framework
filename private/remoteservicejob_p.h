@@ -24,6 +24,8 @@
 
 #include "../servicejob.h"
 
+class KConfigGroup;
+
 namespace Jolie
 {
     class PendingCallWatcher;
@@ -45,8 +47,10 @@ class RemoteServiceJob : public Plasma::ServiceJob
                   QMap<QString,QVariant>& parameters,
                   QByteArray initialToken,
                   RemoteService *parent);
+        ~RemoteServiceJob();
 
         void start();
+        void setDelayedDescription(const KConfigGroup &desc);
 
     private Q_SLOTS:
         void callCompleted(Jolie::PendingCallWatcher *watcher);
@@ -58,6 +62,7 @@ class RemoteServiceJob : public Plasma::ServiceJob
         QByteArray m_token;
         KUrl m_location;
         RemoteService *m_service;
+        KConfigGroup *m_delayedDesc;
 };
 
 } // namespace Plasma
