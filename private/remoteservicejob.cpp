@@ -54,15 +54,22 @@ void RemoteServiceJob::start()
 {
     QTimer::singleShot(30000, this, SLOT(timeout()));
 
-    Jolie::Client *client = m_service->m_client;
-
-    if (m_service->m_busy) {
+    if (m_service->m_busy || !m_service->m_ready) {
         //enqueue and wait
         m_service->m_queue.enqueue(this);
         kDebug() << "already busy... enqueue, queue contains " << m_service->m_queue.count();
         return;
-    } else {
-        m_service->m_busy = true;
+    }
+
+    // the service is now busy ... with us!
+    m_service->m_busy = true;
+
+    // while waiting in the queue, our validity may have changed; it's all async
+    // so don't assume anything
+    checkValidity();
+    if (error()) {
+        emitResult();
+        return;
     }
 
     //serialize the parameters
@@ -80,10 +87,30 @@ void RemoteServiceJob::start()
     data.children(Message::Field::DESTINATION) << Jolie::Value(destination().toAscii());
     message.setData(data);
 
+    Jolie::Client *client = m_service->m_client;
     Jolie::PendingCall pendingReply = client->asyncCall(m_service->signMessage(message));
     Jolie::PendingCallWatcher *watcher = new Jolie::PendingCallWatcher(pendingReply, this);
     connect(watcher, SIGNAL(finished(Jolie::PendingCallWatcher*)),
             this, SLOT(callCompleted(Jolie::PendingCallWatcher*)));
+}
+
+void RemoteServiceJob::checkValidity()
+{
+    if (!m_service->isOperationEnabled(operationName())) {
+        setError(-1);
+        setErrorText(i18n("Job no longer valid, operation is not enabled!"));
+    } else {
+        KConfigGroup description = m_service->operationDescription(operationName());
+        QMapIterator<QString, QVariant> param(parameters());
+        while (param.hasNext()) {
+            param.next();
+            if (!description.hasKey(param.key())) {
+                setError(-1);
+                setErrorText(i18n("Job no longer valid, invalid parameters."));
+                break;
+            }
+        }
+    }
 }
 
 void RemoteServiceJob::callCompleted(Jolie::PendingCallWatcher *watcher)

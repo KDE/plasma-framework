@@ -53,6 +53,8 @@ class RemoteServiceJob : public Plasma::ServiceJob
         void timeout();
 
     private:
+        void checkValidity();
+
         QByteArray m_token;
         KUrl m_location;
         RemoteService *m_service;
