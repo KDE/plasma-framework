@@ -90,7 +90,7 @@ public:
      * Factory to build new animation objects. To control their behavior,
      * check \ref AbstractAnimation properties.
      **/
-    AbstractAnimation *create(Animation type, QObject *parent = 0);
+    static AbstractAnimation *create(Animation type, QObject *parent = 0);
 
     /**
      * Starts a standard animation on a QGraphicsItem.
