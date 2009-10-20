@@ -33,7 +33,7 @@ GrowAnimation::GrowAnimation(qreal factor)
 QAbstractAnimation* GrowAnimation::render(QObject* parent){
 
     //get current geometry values
-    QGraphicsWidget *m_object = animatedObject();
+    QGraphicsWidget *m_object = animatedWidget();
     QRectF geometry = m_object->geometry();
     qreal w = geometry.width();
     qreal h = geometry.height();

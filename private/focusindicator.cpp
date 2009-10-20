@@ -40,9 +40,9 @@ FocusIndicator::FocusIndicator(QGraphicsWidget *parent)
     m_background->setCacheAllRenderedFrames(true);
 
     m_fadeIn = new FadeAnimation(1.0);
-    m_fadeIn->setWidget(this);
+    m_fadeIn->setAnimatedWidget(this);
     m_fadeOut = new FadeAnimation(0.0);
-    m_fadeOut->setWidget(this);
+    m_fadeOut->setAnimatedWidget(this);
     setOpacity(0);
 
     parent->installEventFilter(this);
@@ -92,6 +92,8 @@ void FocusIndicator::resizeEvent(QGraphicsSceneResizeEvent *event)
 
 void FocusIndicator::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option)
+    Q_UNUSED(widget)
     m_background->paintFrame(painter);
 }
 

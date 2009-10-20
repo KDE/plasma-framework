@@ -37,14 +37,14 @@ AbstractAnimation::~AbstractAnimation()
     delete d;
 }
 
-void AbstractAnimation::setWidget(QGraphicsWidget* receiver)
+void AbstractAnimation::setAnimatedWidget(QGraphicsWidget* receiver)
 {
     d->animObject = receiver;
 }
 
-QGraphicsWidget* AbstractAnimation::animatedObject()
+QGraphicsWidget* AbstractAnimation::animatedWidget()
 {
-    return d->animObject;
+    return d->animObject.data();
 }
 
 void AbstractAnimation::setEasingCurveType(QEasingCurve::Type easingCurve)
@@ -57,32 +57,32 @@ QEasingCurve::Type AbstractAnimation::easingCurveType() const
     return d->easingCurve;
 }
 
-void AbstractAnimation::setAnimationDirection(AnimationDirection animationDirection)
+void AbstractAnimation::setDirection(AnimationDirection direction)
 {
-    d->animDirection = animationDirection;
+    d->animDirection = direction;
 }
 
-AnimationDirection AbstractAnimation::animationDirection() const
+AnimationDirection AbstractAnimation::direction() const
 {
     return d->animDirection;
 }
 
-void AbstractAnimation::setAnimationDistance(qreal animationDistance)
+void AbstractAnimation::setDistance(qreal distance)
 {
-    d->animDistance = animationDistance;
+    d->animDistance = distance;
 }
 
-qreal AbstractAnimation::animationDistance() const
+qreal AbstractAnimation::distance() const
 {
     return d->animDistance;
 }
 
-void AbstractAnimation::setAnimationVisible(bool animationVisible)
+void AbstractAnimation::setVisible(bool isVisible)
 {
-    d->animVisible = animationVisible;
+    d->animVisible = isVisible;
 }
 
-bool AbstractAnimation::animationVisible() const
+bool AbstractAnimation::isVisible() const
 {
     return d->animVisible;
 }

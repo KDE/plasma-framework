@@ -27,33 +27,33 @@ namespace Plasma
 
 ExpandAnimation::ExpandAnimation(AnimationDirection direction, qreal distance)
 {
-    setAnimationDirection(direction);
-    setAnimationDistance(distance);
+    setDirection(direction);
+    setDistance(distance);
 }
 
 QAbstractAnimation* ExpandAnimation::render(QObject* parent){
 
     //get current geometry values
-    QGraphicsWidget *m_object = animatedObject();
+    QGraphicsWidget *m_object = animatedWidget();
     QRectF geometry = m_object->geometry();
 
     //compute new geometry values
-    switch (animationDirection()) {
+    switch (direction()) {
 
     case MoveUp:
-        geometry.setTop(geometry.y() - animationDistance());
+        geometry.setTop(geometry.y() - distance());
         break;
 
     case MoveRight:
-        geometry.setRight(geometry.x() + geometry.width() - 1 + animationDistance());
+        geometry.setRight(geometry.x() + geometry.width() - 1 + distance());
         break;
 
     case MoveDown:
-        geometry.setBottom(geometry.y() + geometry.height() - 1  + animationDistance());
+        geometry.setBottom(geometry.y() + geometry.height() - 1  + distance());
         break;
 
     case MoveLeft:
-        geometry.setLeft(geometry.x() - animationDistance());
+        geometry.setLeft(geometry.x() - distance());
         break;
 
     case MoveUpRight:

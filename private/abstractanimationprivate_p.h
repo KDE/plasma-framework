@@ -21,7 +21,8 @@
 #ifndef PLASMA_ANIMATIONPRIVATE_H
 #define PLASMA_ANIMATIONPRIVATE_H
 
-#include  <QEasingCurve>
+#include <QEasingCurve>
+#include <QWeakPointer>
 
 namespace Plasma
 {
@@ -32,7 +33,7 @@ public:
     /**
      * Object the animation(s) should act upon.
      */
-    QGraphicsWidget* animObject;
+    QWeakPointer<QGraphicsWidget> animObject;
 
     /**
      * Animation direction: where the animation will move.

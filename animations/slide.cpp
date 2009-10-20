@@ -27,35 +27,35 @@ namespace Plasma
 
 SlideAnimation::SlideAnimation(AnimationDirection direction, qreal distance)
 {
-    setAnimationDirection(direction);
-    setAnimationDistance(distance);
-    setAnimationVisible(true);
+    setDirection(direction);
+    setDistance(distance);
+    setVisible(true);
 }
 
 QAbstractAnimation* SlideAnimation::render(QObject* parent)
 {
-    QGraphicsWidget *m_object = animatedObject();
+    QGraphicsWidget *m_object = animatedWidget();
     qreal x = m_object->x();
     qreal y = m_object->y();
 
     qreal newX = x;
     qreal newY = y;
 
-    switch (animationDirection()) {
+    switch (direction()) {
     case MoveUp:
-        newY = y - animationDistance();
+        newY = y - distance();
         break;
 
     case MoveRight:
-        newX = x + animationDistance();
+        newX = x + distance();
         break;
 
     case MoveDown:
-        newY = y + animationDistance();
+        newY = y + distance();
         break;
 
     case MoveLeft:
-        newX = x - animationDistance();
+        newX = x - distance();
         break;
 
     case MoveUpRight:
@@ -73,7 +73,7 @@ QAbstractAnimation* SlideAnimation::render(QObject* parent)
 
     //QObject::connect(anim, SIGNAL(finished()), anim, SLOT(deleteLater()));
 
-    if (animationVisible()) {
+    if (isVisible()) {
         QObject::connect(anim, SIGNAL(finished()), m_object, SLOT(show()));
     } else {
         QObject::connect(anim, SIGNAL(finished()), m_object, SLOT(hide()));
@@ -85,7 +85,7 @@ QAbstractAnimation* SlideAnimation::render(QObject* parent)
 
 void SlideAnimation::setVisibleAtEnd(bool visibility)
 {
-    setAnimationVisible(visibility);
+    setVisible(visibility);
 }
 
 } //namespace Plasma

@@ -47,9 +47,9 @@ class PLASMA_EXPORT AbstractAnimation : public QObject
 
     Q_OBJECT
     Q_PROPERTY(QEasingCurve::Type easingCurveType READ easingCurveType WRITE setEasingCurveType)
-    Q_PROPERTY(AnimationDirection animationDirection READ animationDirection WRITE setAnimationDirection)
-    Q_PROPERTY(qreal animationDistance READ animationDistance WRITE setAnimationDistance)
-    Q_PROPERTY(bool animationVisible READ animationVisible WRITE setAnimationVisible)
+    Q_PROPERTY(AnimationDirection direction READ direction WRITE setDirection)
+    Q_PROPERTY(qreal distance READ distance WRITE setDistance)
+    Q_PROPERTY(bool isVisible READ isVisible WRITE setVisible)
 
 public:
 
@@ -60,7 +60,7 @@ public:
      * Set the widget on which the animation is to be performed.
      * @arg receiver The QGraphicsWidget to be animated.
      */
-    virtual void setWidget(QGraphicsWidget* receiver);
+    virtual void setAnimatedWidget(QGraphicsWidget* receiver);
 
     /**
      * Take an AbstractAnimation and turn it into a
@@ -80,36 +80,36 @@ public:
 
     /**
      * Set the animation direction
-     * @arg animationDirection animation direction
+     * @arg direction animation direction
      */
-    void setAnimationDirection(AnimationDirection animationDirection);
+    void setDirection(AnimationDirection direction);
 
     /**
      * Get the animation direction
      */
-    AnimationDirection animationDirection() const;
+    AnimationDirection direction() const;
 
     /**
      * Set the animation distance
-     * @animationDistance animation distance
+     * @distance animation distance
      */
-    void setAnimationDistance(qreal animationDistance);
+    void setDistance(qreal distance);
 
     /**
      * Get the animation distance
      */
-    qreal animationDistance() const;
+    qreal distance() const;
 
     /**
      * set the animation visibility
-     * @arg animationVisible animation visibility
+     * @arg isVisible animation visibility
      */
-    void setAnimationVisible(bool animationVisible);
+    void setVisible(bool isVisible);
 
     /**
      * get the animation visibility
      */
-    bool animationVisible() const;
+    bool isVisible() const;
 
 public slots:
 
@@ -119,7 +119,7 @@ public slots:
     virtual void start() = 0;
 
 protected:
-    QGraphicsWidget *animatedObject();
+    QGraphicsWidget *animatedWidget();
 
 private:
     AbstractAnimationPrivate *d;

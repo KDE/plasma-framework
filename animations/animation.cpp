@@ -75,7 +75,7 @@ void Animation::start()
 QAbstractAnimation* Animation::toQAbstractAnimation(QObject* parent)
 {
     //check if .setObject() was done
-    if (!animatedObject()) {
+    if (!animatedWidget()) {
         kDebug() << "Object not set.";
         return NULL;
     }
