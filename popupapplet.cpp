@@ -571,7 +571,8 @@ PopupAppletPrivate::~PopupAppletPrivate()
 
 void PopupAppletPrivate::internalTogglePopup()
 {
-    if (!dialog) {
+    Plasma::Dialog *d = dialog.data();
+    if (!d) {
         q->setFocus(Qt::ShortcutFocusReason);
         return;
     }
@@ -584,14 +585,14 @@ void PopupAppletPrivate::internalTogglePopup()
         timer->stop();
     }
 
-    if (dialog.data()->isVisible()) {
+    if (d->isVisible()) {
         if (q->location() != Floating) {
-            dialog.data()->animatedHide(locationToInverseDirection(q->location()));
+            d->animatedHide(locationToInverseDirection(q->location()));
         } else {
-            dialog.data()->hide();
+            d->hide();
         }
 
-        dialog.data()->clearFocus();
+        d->clearFocus();
     } else {
         if (q->graphicsWidget() &&
             q->graphicsWidget() == static_cast<Applet*>(q)->d->extender &&
@@ -603,17 +604,17 @@ void PopupAppletPrivate::internalTogglePopup()
         ToolTipManager::self()->hide(q);
         updateDialogPosition();
 
-        KWindowSystem::setOnAllDesktops(dialog.data()->winId(), true);
-        KWindowSystem::setState(dialog.data()->winId(), NET::SkipTaskbar | NET::SkipPager);
+        KWindowSystem::setOnAllDesktops(d->winId(), true);
+        KWindowSystem::setState(d->winId(), NET::SkipTaskbar | NET::SkipPager);
 
         if (q->location() != Floating) {
-            dialog.data()->animatedShow(locationToDirection(q->location()));
+            d->animatedShow(locationToDirection(q->location()));
         } else {
-            dialog.data()->show();
+            d->show();
         }
 
-        if (!(dialog.data()->windowFlags() & Qt::X11BypassWindowManagerHint)) {
-            KWindowSystem::activateWindow(dialog.data()->winId());
+        if (!(d->windowFlags() & Qt::X11BypassWindowManagerHint)) {
+            KWindowSystem::activateWindow(d->winId());
         }
     }
 }
