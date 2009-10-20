@@ -47,8 +47,8 @@ public:
 };
 
 Animation::Animation(QObject* parent)
+    : d(new AnimationPrivate)
 {
-    d = new AnimationPrivate;
     d->m_parent = parent;
     d->m_duration = 250;
 
@@ -75,7 +75,7 @@ void Animation::start()
 QAbstractAnimation* Animation::toQAbstractAnimation(QObject* parent)
 {
     //check if .setObject() was done
-    if (!getAnimatedObject()) {
+    if (!animatedObject()) {
         kDebug() << "Object not set.";
         return NULL;
     }
@@ -89,7 +89,7 @@ QAbstractAnimation* Animation::toQAbstractAnimation(QObject* parent)
 
 }
 
-int Animation::getDuration()
+int Animation::duration() const
 {
     return d->m_duration;
 }

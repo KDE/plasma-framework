@@ -18,7 +18,6 @@
  */
 
 #include "slide.h"
-#include "private/animationprivate_p.h"
 
 #include <QPointF>
 #include <kdebug.h>
@@ -28,57 +27,53 @@ namespace Plasma
 
 SlideAnimation::SlideAnimation(AnimationDirection direction, qreal distance)
 {
-    AnimationPrivate *obj = getAnimationPrivate();
-    obj->animDirection = direction;
-    obj->animDistance = distance;
-    obj->animVisible = true;
+    setAnimationDirection(direction);
+    setAnimationDistance(distance);
+    setAnimationVisible(true);
 }
 
 QAbstractAnimation* SlideAnimation::render(QObject* parent)
 {
-    QGraphicsWidget *m_object = getAnimatedObject();
+    QGraphicsWidget *m_object = animatedObject();
     qreal x = m_object->x();
     qreal y = m_object->y();
 
     qreal newX = x;
     qreal newY = y;
 
-    AnimationPrivate *obj = getAnimationPrivate();
-    switch (obj->animDirection) {
-
+    switch (animationDirection()) {
     case MoveUp:
-	newY = y - obj->animDistance;
-	break;
+        newY = y - animationDistance();
+        break;
 
     case MoveRight:
-	newX = x + obj->animDistance;
-	break;
+        newX = x + animationDistance();
+        break;
 
     case MoveDown:
-	newY = y + obj->animDistance;
-	break;
+        newY = y + animationDistance();
+        break;
 
     case MoveLeft:
-	newX = x - obj->animDistance;
-	break;
+        newX = x - animationDistance();
+        break;
 
     case MoveUpRight:
     case MoveDownRight:
     case MoveDownLeft:
     case MoveUpLeft:
-	/* TODO: support compound directions */
-	kDebug() << "Compound directions (UpRight, DownRight, DownLeft, \
-UpLeft) are not supported\n";
-	break;
+        /* TODO: support compound directions */
+        kDebug() << "Compound directions (UpRight, DownRight, DownLeft, UpLeft) are not supported";
+        break;
     }
 
     QPropertyAnimation* anim = new QPropertyAnimation(m_object, "pos", parent);
     anim->setEndValue(QPointF(newX, newY));
-    anim->setDuration(getDuration());
+    anim->setDuration(duration());
 
     //QObject::connect(anim, SIGNAL(finished()), anim, SLOT(deleteLater()));
 
-    if (obj->animVisible) {
+    if (animationVisible()) {
         QObject::connect(anim, SIGNAL(finished()), m_object, SLOT(show()));
     } else {
         QObject::connect(anim, SIGNAL(finished()), m_object, SLOT(hide()));
@@ -90,7 +85,7 @@ UpLeft) are not supported\n";
 
 void SlideAnimation::setVisibleAtEnd(bool visibility)
 {
-    getAnimationPrivate()->animVisible = visibility;
+    setAnimationVisible(visibility);
 }
 
 } //namespace Plasma

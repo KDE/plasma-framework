@@ -37,7 +37,7 @@
 namespace Plasma
 {
 
-class AnimationPrivate;
+class AbstractAnimationPrivate;
 
 /**
  * Abstract base class for AnimationGroup and Animation.
@@ -119,14 +119,10 @@ public slots:
     virtual void start() = 0;
 
 protected:
-
-    QGraphicsWidget *getAnimatedObject();
-
-    AnimationPrivate *getAnimationPrivate();
+    QGraphicsWidget *animatedObject();
 
 private:
-
-    AnimationPrivate *d;
+    AbstractAnimationPrivate *d;
 };
 
 } //namespace Plasma

@@ -38,7 +38,7 @@ namespace Plasma
  * constructor. The center of the object stays in place while the sides grow.
  *
  */
-class PLASMA_EXPORT GrowAnimation : public Animation
+class GrowAnimation : public Animation
 {
     Q_OBJECT
 
@@ -50,6 +50,8 @@ public:
 protected:
     virtual QAbstractAnimation* render(QObject* parent = 0);
 
+private:
+    qreal m_animFactor;
 };
 
 }

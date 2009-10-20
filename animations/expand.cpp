@@ -18,7 +18,6 @@
  */
 
 #include "expand.h"
-#include "private/animationprivate_p.h"
 
 #include <QRect>
 #include <kdebug.h>
@@ -28,53 +27,50 @@ namespace Plasma
 
 ExpandAnimation::ExpandAnimation(AnimationDirection direction, qreal distance)
 {
-    AnimationPrivate *obj = getAnimationPrivate();
-    obj->animDirection = direction;
-    obj->animDistance = distance;
+    setAnimationDirection(direction);
+    setAnimationDistance(distance);
 }
 
 QAbstractAnimation* ExpandAnimation::render(QObject* parent){
 
     //get current geometry values
-    QGraphicsWidget *m_object = getAnimatedObject();
+    QGraphicsWidget *m_object = animatedObject();
     QRectF geometry = m_object->geometry();
-    AnimationPrivate *obj = getAnimationPrivate();
 
     //compute new geometry values
-    switch (obj->animDirection) {
+    switch (animationDirection()) {
 
     case MoveUp:
-	geometry.setTop(geometry.y() - obj->animDistance);
-	break;
+        geometry.setTop(geometry.y() - animationDistance());
+        break;
 
     case MoveRight:
-	geometry.setRight(geometry.x() + geometry.width() - 1 + obj->animDistance);
-	break;
+        geometry.setRight(geometry.x() + geometry.width() - 1 + animationDistance());
+        break;
 
     case MoveDown:
-	geometry.setBottom(geometry.y() + geometry.height() - 1  + obj->animDistance);
-	break;
+        geometry.setBottom(geometry.y() + geometry.height() - 1  + animationDistance());
+        break;
 
     case MoveLeft:
-	geometry.setLeft(geometry.x() - obj->animDistance);
-	break;
+        geometry.setLeft(geometry.x() - animationDistance());
+        break;
 
     case MoveUpRight:
     case MoveDownRight:
     case MoveDownLeft:
     case MoveUpLeft:
-	break;
+        break;
     }
 
     //create animation
     QPropertyAnimation* anim = new QPropertyAnimation(m_object, "geometry", parent);
     anim->setEndValue(geometry);
-    anim->setDuration(getDuration());
+    anim->setDuration(duration());
 
     //QObject::connect(anim, SIGNAL(finished()), anim, SLOT(deleteLater()));
 
     return anim;
-
 }
 
 } //namespace Plasma

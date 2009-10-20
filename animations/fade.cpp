@@ -18,7 +18,6 @@
  */
 
 #include "fade.h"
-#include "private/animationprivate_p.h"
 
 #include <QRect>
 #include <kdebug.h>
@@ -27,25 +26,17 @@ namespace Plasma
 {
 
 FadeAnimation::FadeAnimation(qreal factor)
+    : m_animFactor(qBound(qreal(0.0), factor, qreal(1.0)))
 {
-    AnimationPrivate *obj = getAnimationPrivate();
-    obj->animFactor = factor;
-    if (obj->animFactor > 1.0) {
-        kDebug() << "Opacity must be between 0 and 1.0. Reducing to 1.0.";
-        obj->animFactor = 1.0;
-    } else if (obj->animFactor < 0) {
-        kDebug() << "Opacity must be between 0 and 1.0. Increasing to 0.";
-        obj->animFactor = 0;
-    }
 }
 
 QAbstractAnimation* FadeAnimation::render(QObject* parent){
 
     //create animation
-    QGraphicsWidget *m_object = getAnimatedObject();
+    QGraphicsWidget *m_object = animatedObject();
     QPropertyAnimation* anim = new QPropertyAnimation(m_object, "opacity", parent);
-    anim->setEndValue(getAnimationPrivate()->animFactor);
-    anim->setDuration(getDuration());
+    anim->setEndValue(m_animFactor);
+    anim->setDuration(duration());
 
     //QObject::connect(anim, SIGNAL(finished()), anim, SLOT(deleteLater()));
 

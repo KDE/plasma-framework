@@ -18,7 +18,6 @@
  */
 
 #include "grow.h"
-#include "private/animationprivate_p.h"
 
 #include <QRect>
 #include <kdebug.h>
@@ -27,20 +26,20 @@ namespace Plasma
 {
 
 GrowAnimation::GrowAnimation(qreal factor)
+    : m_animFactor(factor)
 {
-    getAnimationPrivate()->animFactor = factor;
 }
 
 QAbstractAnimation* GrowAnimation::render(QObject* parent){
 
     //get current geometry values
-    QGraphicsWidget *m_object = getAnimatedObject();
+    QGraphicsWidget *m_object = animatedObject();
     QRectF geometry = m_object->geometry();
     qreal w = geometry.width();
     qreal h = geometry.height();
 
     //compute new geometry values
-    qreal factor = getAnimationPrivate()->animFactor;
+    qreal factor = m_animFactor;
     qreal newWidth = w * factor;
     qreal newHeight = h * factor;
     //locfactor is factor by which object must move up and left
@@ -55,7 +54,7 @@ QAbstractAnimation* GrowAnimation::render(QObject* parent){
     anim->setEndValue(QRectF(
                 newX, newY,
                 newWidth, newHeight));
-    anim->setDuration(getDuration());
+    anim->setDuration(duration());
 
     //QObject::connect(anim, SIGNAL(finished()), anim, SLOT(deleteLater()));
 

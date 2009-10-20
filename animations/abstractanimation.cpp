@@ -18,7 +18,7 @@
  */
 
 #include "abstractanimation.h"
-#include "private/animationprivate_p.h"
+#include "private/abstractanimationprivate_p.h"
 
 #include <QEasingCurve>
 
@@ -26,7 +26,8 @@ namespace Plasma
 {
 
 
-AbstractAnimation::AbstractAnimation(): d(new AnimationPrivate)
+AbstractAnimation::AbstractAnimation()
+    : d(new AbstractAnimationPrivate)
 {
     d->easingCurve = QEasingCurve::Linear;
 }
@@ -41,7 +42,7 @@ void AbstractAnimation::setWidget(QGraphicsWidget* receiver)
     d->animObject = receiver;
 }
 
-QGraphicsWidget* AbstractAnimation::getAnimatedObject()
+QGraphicsWidget* AbstractAnimation::animatedObject()
 {
     return d->animObject;
 }
@@ -84,11 +85,6 @@ void AbstractAnimation::setAnimationVisible(bool animationVisible)
 bool AbstractAnimation::animationVisible() const
 {
     return d->animVisible;
-}
-
-AnimationPrivate* AbstractAnimation::getAnimationPrivate()
-{
-    return d;
 }
 
 } //namespace Plasma

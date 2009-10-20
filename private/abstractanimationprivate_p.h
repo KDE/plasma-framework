@@ -26,19 +26,13 @@
 namespace Plasma
 {
 
-class AnimationPrivate
+class AbstractAnimationPrivate
 {
 public:
     /**
      * Object the animation(s) should act upon.
      */
     QGraphicsWidget* animObject;
-
-    /**
-     * Animation factor: its meaning depends on the animation class
-     * (e.g. opacity in FadeAnimation, scale in GrowAnimation, etc)
-     */
-    qreal animFactor;
 
     /**
      * Animation direction: where the animation will move.

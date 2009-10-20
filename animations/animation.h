@@ -82,11 +82,11 @@ protected:
      * Get the animation duration.
      * @return duration in ms.
      */
-    int getDuration();
+    int duration() const;
 
 private:
 
-    AnimationPrivate *d;
+    AnimationPrivate * const d;
 };
 
 } //namespace Plasma
