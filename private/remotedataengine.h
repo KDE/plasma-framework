@@ -49,16 +49,17 @@ private Q_SLOTS:
     void serviceReady(Plasma::Service *service);
     void remoteCallFinished(Plasma::ServiceJob *job);
     void updateSources();
+    void createSource(const QString &source);
     void initRemoteService(const QString &source, RemoteService *service);
 
 private:
     Service         *m_service;
-    QStringList     m_sources;
-    bool            m_callInProgress;
-    QMap<QString, RemoteService *> m_serviceForSource;
+    QSet<QString>   m_sources;
+    QHash<QString, RemoteService *> m_serviceForSource;
+    QHash<QString, RemoteService *> m_pendingServices;
+    QStringList     m_pendingSources;
     KUrl            m_location;
     QString         m_uuid;
-
 };
 
 } // namespace Plasma

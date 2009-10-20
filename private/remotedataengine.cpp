@@ -36,7 +36,6 @@ namespace Plasma
 RemoteDataEngine::RemoteDataEngine(KUrl location, QObject* parent, const QVariantList& args)
     : Plasma::DataEngine(parent, args),
       m_service(0),
-      m_callInProgress(true),
       m_location(location),
       m_uuid("")
 {
@@ -68,7 +67,6 @@ Plasma::Service* RemoteDataEngine::serviceForSource(const QString& source)
         return m_serviceForSource[source];
     } else {
         RemoteService *service = new RemoteService(this);
-        m_serviceForSource[source] = service;
         initRemoteService(source, service);
         return service;
     }
@@ -80,6 +78,9 @@ void RemoteDataEngine::initRemoteService(const QString &source, RemoteService *s
         KConfigGroup op = m_service->operationDescription("ServiceForSource");
         op.writeEntry("SourceName", source);
         m_service->startOperationCall(op);
+        m_serviceForSource[source] = service;
+    } else {
+        m_pendingServices[source] = service;
     }
 }
 
@@ -91,60 +92,82 @@ void RemoteDataEngine::serviceReady(Plasma::Service *service)
 {
     m_service = service;
 
-    QMapIterator<QString, RemoteService *> it(m_serviceForSource);
-    while (it.hasNext()) {
-        it.next();
-        initRemoteService(it.key(), it.value());
-    }
-
     KConfigGroup op = m_service->operationDescription("GetSourceNames");
     m_service->startOperationCall(op);
     connect(m_service, SIGNAL(finished(Plasma::ServiceJob*)),
             this, SLOT(remoteCallFinished(Plasma::ServiceJob*)));
+    //FIXME: every 5s? this MUST become push rather than pull
     QTimer *timer = new QTimer(this);
     timer->setInterval(5000);
     connect(timer, SIGNAL(timeout()), this, SLOT(updateSources()));
     timer->start();
-    m_callInProgress = false;
 }
 
 QStringList RemoteDataEngine::sources() const
 {
-    return m_sources;
+    return m_sources.toList();
 }
 
 void RemoteDataEngine::remoteCallFinished(Plasma::ServiceJob *job)
 {
     if (job->operationName() == "GetSourceNames") {
         kDebug() << "get source names";
-        QStringList oldsources = m_sources;
-        m_sources = job->result().toStringList();
+        const QSet<QString> oldsources = m_sources;
+        m_sources = QSet<QString>::fromList(job->result().toStringList());
 
         //first check if there are sources that have to be removed:
         foreach (const QString &source, oldsources) {
             if (!m_sources.contains(source)) {
                 kDebug() << "source no longer exists... remove that data.";
-                removeAllData(source);
+                removeSource(source);
             }
         }
 
         //are there sources that have to be added?
-        foreach (const QString &source, m_sources) {
-            if (!oldsources.contains(source)) {
-                kDebug() << "new source = " << source;
-                setData(source, DataEngine::Data());
+        {
+            // we have to check the current container dict, because we may have added
+            // an empty data set in a call to sourceRequestEvent before the service was
+            // ready; in this case, it will already exist in the engine's container
+            // collection and be listed in pendingSources.
+            // we also have to check oldSources since it may be in there, but never
+            // actually connected to from the local side
+            const SourceDict s = containerDict();
+            foreach (const QString &source, m_sources) {
+                if (!oldsources.contains(source) && !s.contains(source)) {
+                    kDebug() << "new source = " << source;
+                    setData(source, DataEngine::Data());
+                }
             }
         }
+
+        //and now check and update any nding resources
+        foreach (const QString &pendingSource, m_pendingSources) {
+            createSource(pendingSource);
+        }
+        m_pendingSources.clear();
     } else if (job->operationName() == "GetSource") {
         QString source = job->parameters().value("SourceName").toString();
         kDebug() << "setting data for " << source;
-        if (m_sources.contains(source)) {
-            if (job->result().type() == QVariant::Bool && job->result().toBool() == false) {
-                kDebug() << "there is no update";
-            } else {
-                setData(source,
-                        static_cast<Plasma::DataEngine::Data>(job->result().toHash()));
+        bool newSource = !m_sources.contains(source);
+        if (job->result().type() == QVariant::Bool && job->result().toBool() == false) {
+            kDebug() << "there is no update";
+            if (newSource) {
+                // the source doesn't exist on the remote side!
+                removeSource(source);
+                m_pendingServices.remove(source);
             }
+        } else {
+            if (newSource) {
+                m_sources.insert(source);
+
+                RemoteService *rs = m_pendingServices.value(source);
+                if (rs) {
+                    m_pendingServices.remove(source);
+                    initRemoteService(source, rs);
+                }
+            }
+
+            setData(source, static_cast<Plasma::DataEngine::Data>(job->result().toHash()));
         }
     } else {
         QString source = job->parameters().value("SourceName").toString();
@@ -152,19 +175,21 @@ void RemoteDataEngine::remoteCallFinished(Plasma::ServiceJob *job)
         QString resource = job->result().toString();
         KUrl loc = m_location;
         loc.setFileName(resource);
-        if (m_serviceForSource.contains(source)) {
-            m_serviceForSource[source]->setLocation(loc);
+        RemoteService *rs = m_serviceForSource.value(source);
+        if (rs) {
+            rs->setLocation(loc);
         } else {
-            kDebug() << "no such service?";
+            kDebug() << "no such service?" << source;
         }
     }
 }
 
 bool RemoteDataEngine::updateSourceEvent(const QString &source)
 {
-    if (m_callInProgress) {
+    if (!m_service) {
         return false;
     }
+
     KConfigGroup op = m_service->operationDescription("GetSource");
     op.writeEntry("SourceName", source);
     op.writeEntry("UUID", m_uuid);
@@ -174,22 +199,31 @@ bool RemoteDataEngine::updateSourceEvent(const QString &source)
 
 bool RemoteDataEngine::sourceRequestEvent(const QString &source)
 {
-    if (m_callInProgress) {
-        return false;
+    setData(source, Data());
+
+    if (m_service) {
+        createSource(source);
+    } else {
+        m_pendingSources.append(source);
     }
 
+    return true;
+}
+
+void RemoteDataEngine::createSource(const QString &source)
+{
     KConfigGroup op = m_service->operationDescription("GetSource");
     op.writeEntry("SourceName", source);
     op.writeEntry("UUID", m_uuid);
     m_service->startOperationCall(op);
-    return false;
 }
 
 void RemoteDataEngine::updateSources()
 {
-    if (m_callInProgress) {
+    if (!m_service) {
         return;
     }
+
     if (m_service) {
         KConfigGroup op = m_service->operationDescription("GetSourceNames");
         m_service->startOperationCall(op);
