@@ -60,7 +60,7 @@ public:
 };
 
 PanelToolBox::PanelToolBox(Containment *parent)
-    : ToolBox(parent),
+    : InternalToolBox(parent),
       d(new PanelToolBoxPrivate)
 {
     connect(this, SIGNAL(toggled()), this, SLOT(toggle()));
@@ -97,9 +97,9 @@ QRectF PanelToolBox::boundingRect() const
     QRectF r;
 
     //Only Left,Right and Bottom supported, default to Right
-    if (corner() == ToolBox::Bottom) {
+    if (corner() == InternalToolBox::Bottom) {
         r = QRectF(0, 0, size() * 2, size());
-    } else if (corner() == ToolBox::Left) {
+    } else if (corner() == InternalToolBox::Left) {
         r = QRectF(0, 0, size(), size() * 2);
     } else {
         r = QRectF(0, 0, size(), size() * 2);
@@ -132,13 +132,13 @@ void PanelToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     QRectF rect = boundingRect();
     QString cornerElement;
 
-    if (corner() == ToolBox::Bottom) {
+    if (corner() == InternalToolBox::Bottom) {
         gradientCenter = QPoint(rect.center().x(), rect.bottom());
         cornerElement = "panel-south";
 
         backgroundRect = d->background->elementRect(cornerElement).toRect();
         backgroundRect.moveBottomLeft(shape().boundingRect().bottomLeft().toPoint());
-    } else if (corner() == ToolBox::Right) {
+    } else if (corner() == InternalToolBox::Right) {
         gradientCenter = QPoint(rect.right(), rect.center().y());
         cornerElement = "panel-east";
 
@@ -159,10 +159,10 @@ void PanelToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     QRect iconRect;
 
     //Only Left,Right and Bottom supported, default to Right
-    if (corner() == ToolBox::Bottom) {
+    if (corner() == InternalToolBox::Bottom) {
         iconRect = QRect(QPoint(gradientCenter.x() - iconSize().width() / 2,
                                 (int)rect.bottom() - iconSize().height() - 2), iconSize());
-    } else if (corner() == ToolBox::Left) {
+    } else if (corner() == InternalToolBox::Left) {
         iconRect = QRect(QPoint(2, gradientCenter.y() - iconSize().height() / 2), iconSize());
     } else {
         iconRect = QRect(QPoint((int)rect.right() - iconSize().width() + 1,
@@ -190,13 +190,13 @@ QPainterPath PanelToolBox::shape() const
     QRectF rect = boundingRect();
 
     //Only Left,Right and Bottom supported, default to Right
-    if (corner() == ToolBox::Bottom) {
+    if (corner() == InternalToolBox::Bottom) {
         path.moveTo(rect.bottomLeft());
         path.arcTo(QRectF(rect.center().x() - toolSize,
                           rect.bottom() - toolSize,
                           toolSize * 2,
                           toolSize * 2), 0, 180);
-    } else if (corner() == ToolBox::Left) {
+    } else if (corner() == InternalToolBox::Left) {
         path.arcTo(QRectF(rect.left(),
                           rect.center().y() - toolSize,
                           toolSize * 2,
@@ -221,7 +221,7 @@ void PanelToolBox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 void PanelToolBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     //kDebug() << event->pos() << event->scenePos()
-    if (!showing()) {
+    if (!isShowing()) {
         highlight(false);
     }
 
@@ -242,7 +242,7 @@ void PanelToolBox::hideToolBox()
 
 void PanelToolBox::toolTipAboutToShow()
 {
-    if (showing()) {
+    if (isShowing()) {
         return;
     }
 
@@ -297,8 +297,8 @@ void PanelToolBox::animate(qreal progress)
 
 void PanelToolBox::toggle()
 {
-    setShowing(!showing());
-    highlight(showing());
+    setShowing(!isShowing());
+    highlight(isShowing());
 }
 
 } // plasma namespace

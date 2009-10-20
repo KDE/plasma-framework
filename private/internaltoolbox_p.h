@@ -24,6 +24,7 @@
 #include <QGraphicsWidget>
 
 #include "containment.h"
+#include "abstracttoolbox.h"
 
 class QAction;
 
@@ -34,18 +35,15 @@ namespace Plasma
 
 //class Widget;
 //class EmptyGraphicsItem;
-class ToolBoxPrivate;
+class InternalToolBoxPrivate;
 
-class ToolBox : public QGraphicsWidget
+class InternalToolBox : public AbstractToolBox
 {
     Q_OBJECT
 #if QT_VERSION >= 0x040600
     Q_INTERFACES(QGraphicsItem)
 #endif
 public:
-    /**
-    * These flags represents what borders should be drawn
-    */
     enum Corner {
         Top = 0,
         TopRight,
@@ -57,8 +55,8 @@ public:
         BottomLeft
     };
 
-    explicit ToolBox(Containment *parent);
-    ~ToolBox();
+    explicit InternalToolBox(Containment *parent);
+    ~InternalToolBox();
 
     /**
      * create a toolbox tool from the given action
@@ -73,10 +71,11 @@ public:
     void setSize(const int newSize);
     QSize iconSize() const;
     void  setIconSize(const QSize newSize);
-    bool showing() const;
+    bool isShowing() const;
     void setShowing(const bool show);
-    void setCorner(const Corner corner);
-    Corner corner() const;
+
+    virtual void setCorner(const Corner corner);
+    virtual Corner corner() const;
 
     bool isMovable() const;
     void setIsMovable(bool movable);
@@ -103,9 +102,6 @@ public Q_SLOTS:
      */
     void updateToolBox();
 
-Q_SIGNALS:
-    void toggled();
-
 protected:
     Containment *containment();
     QPoint toolPosition(int toolHeight);
@@ -117,7 +113,7 @@ protected Q_SLOTS:
     virtual void toolTriggered(bool);
 
 private:
-    ToolBoxPrivate *d;
+    InternalToolBoxPrivate *d;
 
 };
 

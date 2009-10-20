@@ -96,7 +96,7 @@ set(plasma_LIB_SRCS
     private/serviceprovider.cpp
     private/style.cpp
     private/trustedonlyauthorization.cpp
-    private/toolbox.cpp
+    private/internaltoolbox.cpp
     private/tooltip.cpp
     private/wallpaperrenderthread.cpp
     private/windowpreview.cpp
@@ -121,6 +121,7 @@ set(plasma_LIB_SRCS
     servicejob.cpp
     svg.cpp
     theme.cpp
+    abstracttoolbox.cpp
     tooltipcontent.cpp
     tooltipmanager.cpp
     version.cpp
@@ -287,6 +288,7 @@ set(plasma_LIB_INCLUDES
     servicejob.h
     svg.h
     theme.h
+    abstracttoolbox.h
     tooltipcontent.h
     tooltipmanager.h
     version.h

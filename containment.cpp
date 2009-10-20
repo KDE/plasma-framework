@@ -368,8 +368,9 @@ void Containment::restore(KConfigGroup &group)
     setWallpaper(group.readEntry("wallpaperplugin", defaultWallpaper),
                  group.readEntry("wallpaperpluginmode", defaultWallpaperMode));
 
-    if (d->toolBox) {
-        d->toolBox->load(group);
+    InternalToolBox *toolBox = qobject_cast<InternalToolBox *>(d->toolBox);
+    if (toolBox) {
+        toolBox->load(group);
     }
 
     KConfigGroup cfg(&group, "ActionPlugins");
@@ -414,8 +415,9 @@ void Containment::save(KConfigGroup &g) const
     group.writeEntry("location", (int)d->location);
     group.writeEntry("activity", d->context()->currentActivity());
 
-    if (d->toolBox) {
-        d->toolBox->save(group);
+    InternalToolBox *toolBox = qobject_cast<InternalToolBox *>(d->toolBox);
+    if (toolBox) {
+        toolBox->save(group);
     }
 
     if (d->wallpaper) {
@@ -801,14 +803,15 @@ void Containment::setFormFactor(FormFactor formFactor)
         d->positionPanel(true);
     }
 
-    if (d->toolBox) {
+    InternalToolBox *toolBox = static_cast<InternalToolBox *>(d->toolBox);
+    if (toolBox) {
         if (d->formFactor == Vertical) {
-            d->toolBox->setCorner(ToolBox::Bottom);
+            toolBox->setCorner(InternalToolBox::Bottom);
             //defaults to horizontal
         } else if (QApplication::layoutDirection() == Qt::RightToLeft) {
-            d->toolBox->setCorner(ToolBox::Left);
+            toolBox->setCorner(InternalToolBox::Left);
         } else {
-            d->toolBox->setCorner(ToolBox::Right);
+            toolBox->setCorner(InternalToolBox::Right);
         }
     }
 
@@ -1514,6 +1517,19 @@ const QGraphicsItem *Containment::toolBoxItem() const
     return d->toolBox;
 }
 
+void Containment::setToolBox(AbstractToolBox *toolBox)
+{
+    if (d->toolBox) {
+        d->toolBox->deleteLater();
+    }
+    d->toolBox = toolBox;
+}
+
+AbstractToolBox *Containment::toolBox() const
+{
+    return d->toolBox;
+}
+
 void Containment::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
     Applet::resizeEvent(event);
@@ -1688,16 +1704,16 @@ void Containment::setToolBoxOpen(bool open)
 
 void Containment::openToolBox()
 {
-    if (d->toolBox && !d->toolBox->showing()) {
-        d->toolBox->showToolBox();
+    if (d->toolBox && !d->toolBox->isShowing()) {
+        d->toolBox->setShowing(true);
         emit toolBoxVisibilityChanged(true);
     }
 }
 
 void Containment::closeToolBox()
 {
-    if (d->toolBox && d->toolBox->showing()) {
-        d->toolBox->hideToolBox();
+    if (d->toolBox && d->toolBox->isShowing()) {
+        d->toolBox->setShowing(false);
         emit toolBoxVisibilityChanged(false);
     }
 }
@@ -2021,31 +2037,40 @@ void ContainmentPrivate::zoomOut()
     positionToolBox();
 }
 
-ToolBox *ContainmentPrivate::createToolBox()
+AbstractToolBox *ContainmentPrivate::createToolBox()
 {
     if (!toolBox) {
         switch (type) {
         case Containment::PanelContainment:
         case Containment::CustomPanelContainment:
-            toolBox = new PanelToolBox(q);
-            toolBox->setSize(KIconLoader::SizeSmallMedium);
-            toolBox->setIconSize(QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall));
+        {
+            PanelToolBox *pt = new PanelToolBox(q);
+            toolBox = pt;
+            pt->setSize(KIconLoader::SizeSmallMedium);
+            pt->setIconSize(QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall));
             if (q->immutability() != Mutable) {
-                toolBox->hide();
+                pt->hide();
             }
             break;
+        }
         default:
-            toolBox = new DesktopToolBox(q);
-            toolBox->setSize(KIconLoader::SizeSmallMedium);
-            toolBox->setIconSize(QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall));
+        {
+            DesktopToolBox *dt = new DesktopToolBox(q);
+            toolBox = dt;
+            dt->setSize(KIconLoader::SizeSmallMedium);
+            dt->setIconSize(QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall));
             break;
+        }
         }
 
         if (toolBox) {
+            InternalToolBox *internalToolBox = qobject_cast<InternalToolBox *>(toolBox);
             QObject::connect(toolBox, SIGNAL(toggled()), q, SIGNAL(toolBoxToggled()));
             QObject::connect(toolBox, SIGNAL(toggled()), q, SLOT(updateToolBoxVisibility()));
-            toolBox->load();
-            positionToolBox();
+            if (internalToolBox) {
+                internalToolBox->load();
+                positionToolBox();
+            }
         }
     }
 
@@ -2054,14 +2079,15 @@ ToolBox *ContainmentPrivate::createToolBox()
 
 void ContainmentPrivate::positionToolBox()
 {
-    if (toolBox) {
-        toolBox->reposition();
+    PanelToolBox *internalToolBox = qobject_cast<PanelToolBox *>(toolBox);
+    if (internalToolBox) {
+        internalToolBox->reposition();
     }
 }
 
 void ContainmentPrivate::updateToolBoxVisibility()
 {
-    emit q->toolBoxVisibilityChanged(toolBox->showing());
+    emit q->toolBoxVisibilityChanged(toolBox->isShowing());
 }
 
 void ContainmentPrivate::triggerShowAddWidgets()
@@ -2109,7 +2135,8 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
             if (type == Containment::PanelContainment || type == Containment::CustomPanelContainment) {
                 toolBox->setVisible(unlocked);
             } else {
-                toolBox->setIsMovable(unlocked);
+                InternalToolBox *internalToolBox = qobject_cast<InternalToolBox *>(toolBox);
+                internalToolBox->setIsMovable(unlocked);
             }
         }
 

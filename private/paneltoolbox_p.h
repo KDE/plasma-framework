@@ -27,7 +27,7 @@
 
 #include <kicon.h>
 
-#include <private/toolbox_p.h>
+#include <private/internaltoolbox_p.h>
 
 #include "animator.h"
 
@@ -38,7 +38,7 @@ class Widget;
 class EmptyGraphicsItem;
 class PanelToolBoxPrivate;
 
-class PanelToolBox : public ToolBox
+class PanelToolBox : public InternalToolBox
 {
     Q_OBJECT
 

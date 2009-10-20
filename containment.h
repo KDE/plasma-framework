@@ -50,6 +50,7 @@ class View;
 class Wallpaper;
 class ContainmentActions;
 class ContainmentPrivate;
+class AbstractToolBox;
 
 /**
  * @class Containment plasma/containment.h <Plasma/Containment>
@@ -567,7 +568,23 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * @returns the toolbox associated with this containment, or a null pointer if none
          */
-        const QGraphicsItem *toolBoxItem() const;
+        KDE_DEPRECATED const QGraphicsItem *toolBoxItem() const;
+
+        /**
+         * Sets a custom ToolBox
+         * if there was an old one it will be deleted
+         * and the new one won't have any actions in it
+         *
+         * @param item the new toolbox item
+         * @since 4.4
+         */
+        void setToolBox(AbstractToolBox *toolBox);
+
+        /**
+         * @return the ToolBox
+         * @since 4.4
+         */
+        AbstractToolBox *toolBox() const;
 
     private:
         Q_PRIVATE_SLOT(d, void appletDestroyed(Plasma::Applet*))

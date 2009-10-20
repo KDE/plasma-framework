@@ -35,7 +35,7 @@ namespace Plasma
 
 class AccessAppletJob;
 class Containment;
-class ToolBox;
+class AbstractToolBox;
 
 class ContainmentPrivate
 {
@@ -63,7 +63,7 @@ public:
         qDeleteAll(dropMenus);
     }
 
-    ToolBox *createToolBox();
+    AbstractToolBox *createToolBox();
     void positionToolBox();
     void updateToolBoxVisibility();
     void triggerShowAddWidgets();
@@ -148,7 +148,7 @@ public:
     QHash<QString, ContainmentActions*> actionPlugins;
     int screen;
     int desktop;
-    ToolBox *toolBox;
+    AbstractToolBox *toolBox;
     Context *con;
     Containment::Type type;
     static bool s_positioning;

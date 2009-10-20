@@ -102,7 +102,7 @@
 #include "private/popupapplet_p.h"
 #include "private/service_p.h"
 #include "private/remotedataengine.h"
-#include "private/toolbox_p.h"
+#include "private/internaltoolbox_p.h"
 #include "private/associatedapplicationmanager_p.h"
 #include "ui_publish.h"
 
@@ -1328,11 +1328,12 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 
         //update the view transform of the toolbox, since it ignores transforms
         if (v && c && c->d->toolBox) {
-            if (c->d->toolBox->viewTransform().isScaling() && !v->transform().isScaling()) {
+            InternalToolBox *toolBox = qobject_cast<InternalToolBox *>(c->d->toolBox);
+            if (toolBox && toolBox->viewTransform().isScaling() && !v->transform().isScaling()) {
                 c->d->positionToolBox();
             }
-            if (v) {
-                c->d->toolBox->setViewTransform(v->transform());
+            if (toolBox && v) {
+                toolBox->setViewTransform(v->transform());
             }
         }
 

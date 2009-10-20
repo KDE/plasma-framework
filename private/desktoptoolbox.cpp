@@ -163,28 +163,28 @@ public:
     void adjustBackgroundBorders()
     {
         switch (q->corner()) {
-          case ToolBox::TopRight:
+          case InternalToolBox::TopRight:
             background->setEnabledBorders(FrameSvg::BottomBorder|FrameSvg::LeftBorder);
             break;
-        case ToolBox::Top:
+        case InternalToolBox::Top:
             background->setEnabledBorders(FrameSvg::BottomBorder|FrameSvg::LeftBorder|FrameSvg::RightBorder);
             break;
-        case ToolBox::TopLeft:
+        case InternalToolBox::TopLeft:
             background->setEnabledBorders(FrameSvg::BottomBorder|FrameSvg::RightBorder);
             break;
-        case ToolBox::Left:
+        case InternalToolBox::Left:
             background->setEnabledBorders(FrameSvg::BottomBorder|FrameSvg::TopBorder|FrameSvg::RightBorder);
             break;
-        case ToolBox::Right:
+        case InternalToolBox::Right:
             background->setEnabledBorders(FrameSvg::BottomBorder|FrameSvg::TopBorder|FrameSvg::LeftBorder);
             break;
-        case ToolBox::BottomLeft:
+        case InternalToolBox::BottomLeft:
             background->setEnabledBorders(FrameSvg::TopBorder|FrameSvg::RightBorder);
             break;
-        case ToolBox::Bottom:
+        case InternalToolBox::Bottom:
             background->setEnabledBorders(FrameSvg::TopBorder|FrameSvg::LeftBorder|FrameSvg::RightBorder);
             break;
-        case ToolBox::BottomRight:
+        case InternalToolBox::BottomRight:
         default:
             background->setEnabledBorders(FrameSvg::TopBorder|FrameSvg::LeftBorder);
             break;
@@ -207,7 +207,7 @@ public:
 };
 
 DesktopToolBox::DesktopToolBox(Containment *parent)
-    : ToolBox(parent),
+    : InternalToolBox(parent),
       d(new DesktopToolBoxPrivate(this))
 {
     d->background = new Plasma::FrameSvg(this);
@@ -274,7 +274,7 @@ QSize DesktopToolBox::fullHeight() const
 
 void DesktopToolBox::toolTipAboutToShow()
 {
-    if (isToolbar() || showing()) {
+    if (isToolbar() || isShowing()) {
         return;
     }
 
@@ -330,7 +330,7 @@ void DesktopToolBox::toolTriggered(bool)
 {
     QAction *action = qobject_cast<QAction *>(sender());
 
-    if (showing() && (!action || !action->autoRepeat())) {
+    if (isShowing() && (!action || !action->autoRepeat())) {
         emit toggled();
     }
 }
@@ -509,7 +509,7 @@ QPainterPath DesktopToolBox::shape() const
 
 void DesktopToolBox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-    if (showing() || d->hovering) {
+    if (isShowing() || d->hovering) {
         QGraphicsItem::hoverEnterEvent(event);
         return;
     }
@@ -529,7 +529,7 @@ void DesktopToolBox::showToolBox()
 {
     setFlag(ItemIgnoresTransformations, isToolbar());
 
-    if (showing() && !isToolbar()) {
+    if (isShowing() && !isToolbar()) {
         return;
     }
 
@@ -729,7 +729,7 @@ void DesktopToolBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     //kDebug() << event->pos() << event->scenePos()
     //         << d->toolBacker->rect().contains(event->scenePos().toPoint());
-    if (!d->hovering || showing() || isToolbar()) {
+    if (!d->hovering || isShowing() || isToolbar()) {
         QGraphicsItem::hoverLeaveEvent(event);
         return;
     }
@@ -748,7 +748,7 @@ void DesktopToolBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 void DesktopToolBox::hideToolBox()
 {
-    if (!showing()) {
+    if (!isShowing()) {
         return;
     }
 
@@ -796,7 +796,7 @@ void DesktopToolBox::animateHighlight(qreal progress)
 void DesktopToolBox::toolMoved(QGraphicsItem *item)
 {
     //kDebug() << "geometry is now " << static_cast<Plasma::Widget*>(item)->geometry();
-    if (!showing() &&
+    if (!isShowing() &&
         QGraphicsItem::children().indexOf(static_cast<Plasma::Applet*>(item)) != -1) {
         item->hide();
     }
@@ -808,7 +808,7 @@ void DesktopToolBox::toggle()
         return;
     }
 
-    if (showing()) {
+    if (isShowing()) {
         hideToolBox();
     } else {
         showToolBox();
