@@ -48,6 +48,9 @@ class RemoteService : public Plasma::Service
         void setLocation(const KUrl &location);
         QString location() const;
 
+        bool isReady() const;
+        bool isBusy() const;
+
     protected:
         ServiceJob* createJob(const QString& operation,
                               QMap<QString,QVariant>& parameters);

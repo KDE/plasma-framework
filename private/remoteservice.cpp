@@ -125,6 +125,16 @@ QString RemoteService::location() const
     return m_location.prettyUrl();
 }
 
+bool RemoteService::isReady() const
+{
+    return m_ready;
+}
+
+bool RemoteService::isBusy() const
+{
+    return m_busy;
+}
+
 void RemoteService::callCompleted(Jolie::PendingCallWatcher *watcher)
 {
     Jolie::PendingReply reply = *watcher;
@@ -153,6 +163,8 @@ void RemoteService::callCompleted(Jolie::PendingCallWatcher *watcher)
             m_token = Message::field(Message::Field::TOKEN, response);
             m_ready = true;
             setName(m_location.prettyUrl());
+            //if there's stuff in the queue, let it continue.
+            slotFinished();
         }
     } else if (response.operationName() == "getEnabledOperations") {
         //TODO: optimize.
@@ -228,27 +240,22 @@ void RemoteService::slotUpdateEnabledOperations()
 ServiceJob* RemoteService::createJob(const QString& operation,
                                      QMap<QString,QVariant>& parameters)
 {
-    if (m_ready) {
-        ServiceJob *job = new RemoteServiceJob(m_location, destination(),
-                                               operation, parameters, m_token, this);
-        connect(job, SIGNAL(finished(KJob *)), this, SLOT(slotFinished()));
-        return job;
-    } else {
-        kWarning() << "We're not yet ready, so we're starting a NullServiceJob.";
-        kWarning() << "This means some plasmoid doesn't check for the serviceReady signal, which it should.";
-        return new NullServiceJob(destination(), operation, this);
+    if (!m_ready) {
+        kDebug() << "Use of this service hasn't checked for the serviceReady signal, which it should.";
     }
+
+    ServiceJob *job = new RemoteServiceJob(m_location, destination(), operation, parameters, m_token, this);
+    connect(job, SIGNAL(finished(KJob *)), this, SLOT(slotFinished()));
+    return job;
 }
 
 void RemoteService::slotFinished()
 {
-    if (m_queue.isEmpty()) {
-        return;
+    if (!m_queue.isEmpty()) {
+        kDebug() << "Job finished, there are still service jobs in queue, starting next in queue.";
+        ServiceJob *job = m_queue.dequeue();
+        QTimer::singleShot(0, job, SLOT(slotStart()));
     }
-
-    kDebug() << "Job finished, there are still service jobs in queue, starting next in queue.";
-    ServiceJob *job = m_queue.dequeue();
-    QTimer::singleShot(0, job, SLOT(slotStart()));
 }
 
 Jolie::Message RemoteService::signMessage(const Jolie::Message &message) const
