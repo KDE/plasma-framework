@@ -21,6 +21,8 @@
 #ifndef PLASMA_ANIMATIONPRIVATE_H
 #define PLASMA_ANIMATIONPRIVATE_H
 
+#include  <QEasingCurve>
+
 namespace Plasma
 {
 
@@ -54,6 +56,11 @@ public:
      * or not.
      */
     bool animVisible;
+
+    /**
+     * Animation easing curve type
+     */
+    QEasingCurve::Type easingCurve;
 
 };
 

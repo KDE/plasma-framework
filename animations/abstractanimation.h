@@ -26,11 +26,13 @@
 #define PLASMA_ABSTRACTANIMATION_H
 
 #include <QAbstractAnimation>
+#include <QEasingCurve>
 #include <QGraphicsWidget>
 #include <QObject>
 
 #include <plasma/plasma.h>
 #include <plasma/plasma_export.h>
+
 
 namespace Plasma
 {
@@ -44,6 +46,7 @@ class PLASMA_EXPORT AbstractAnimation : public QObject
 {
 
     Q_OBJECT
+    Q_PROPERTY(QEasingCurve::Type easingCurveType READ easingCurveType WRITE setEasingCurveType)
 
 public:
 
@@ -61,6 +64,16 @@ public:
      * QAbstractAnimation.
      */
     virtual QAbstractAnimation* toQAbstractAnimation(QObject* parent) = 0;
+
+    /**
+     * Set the animation easing curve type
+     */
+    void setEasingCurveType(QEasingCurve::Type easingCurve);
+
+    /**
+     * Get the animation easing curve type
+     */
+    QEasingCurve::Type easingCurveType() const;
 
 public slots:
 

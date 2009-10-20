@@ -20,13 +20,15 @@
 #include "abstractanimation.h"
 #include "private/animationprivate_p.h"
 
+#include <QEasingCurve>
+
 namespace Plasma
 {
 
 
 AbstractAnimation::AbstractAnimation(): d(new AnimationPrivate)
 {
-
+    d->easingCurve = QEasingCurve::Linear;
 }
 
 AbstractAnimation::~AbstractAnimation()
@@ -42,6 +44,16 @@ void AbstractAnimation::setWidget(QGraphicsWidget* receiver)
 QGraphicsWidget* AbstractAnimation::getAnimatedObject()
 {
     return d->animObject;
+}
+
+void AbstractAnimation::setEasingCurveType(QEasingCurve::Type easingCurve)
+{
+    d->easingCurve = easingCurve;
+}
+
+QEasingCurve::Type AbstractAnimation::easingCurveType() const
+{
+    return d->easingCurve;
 }
 
 AnimationPrivate* AbstractAnimation::getAnimationPrivate()
