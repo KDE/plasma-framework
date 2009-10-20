@@ -50,10 +50,19 @@ class PLASMA_EXPORT Animator : public QObject
 public:
 
     enum Animation {
+	/* TODO: should we map older animations to new ones? */
         AppearAnimation = 0, /*<< Animate the appearance of an element */
         DisappearAnimation,  /*<< Animate the disappearance of an element */
-        ActivateAnimation    /*<< When something is activated or launched,
-                               such as an app icon being clicked */
+        ActivateAnimation,    /*<< When something is activated or launched,
+				such as an app icon being clicked */
+	/* TODO: should we change the names of animation classes? */
+        FadeAnimation, /*<< Can be used for both fade in and out */
+        GrowAnimation, /*<< Grow animated object geometry */
+        ExpandAnimation, /*<< Not sure if we need this (should ask Mehmet A. Akmanalp) */
+        PulserAnimation, /*<< Pulse animated object (opacity/geometry/scale) */
+        RotationAnimation, /*<< Rotate an animated object */
+        RotationStackedAnimation, /*<< TODO: for flipping one object with another */
+        SlideAnimation /*<< Move the position of animated object */
     };
 
     enum CurveShape {
