@@ -220,7 +220,7 @@ Animator *Animator::self()
     return &privateSelf->self;
 }
 
-AbstractAnimation *Animator::create(Animation type)
+AbstractAnimation *Animator::create(Animation type, QObject *parent)
 {
     AbstractAnimation *result = 0;
 
@@ -259,6 +259,9 @@ AbstractAnimation *Animator::create(Animation type)
 	kDebug() << "Unsupported animation type.";
 
     }
+
+    if (result)
+	result->setParent(parent);
 
     return result;
 }
