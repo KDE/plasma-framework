@@ -466,6 +466,7 @@ void Dialog::setGraphicsWidget(QGraphicsWidget *widget)
     }
 }
 
+//BIC FIXME: should be const
 QGraphicsWidget *Dialog::graphicsWidget()
 {
     return d->graphicsWidget;

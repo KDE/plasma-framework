@@ -73,7 +73,18 @@ class PLASMA_EXPORT Dialog : public QWidget
         explicit Dialog(QWidget * parent = 0, Qt::WindowFlags f =  Qt::Window);
         virtual ~Dialog();
 
+        /**
+         * Sets a QGraphicsWidget to be shown as the content in this dialog.
+         * The dialog will then set up a QGraphicsView and coordinate geometry with
+         * the widget automatically.
+         *
+         * @arg widget the QGraphicsWidget to display in this dialog
+         */
         void setGraphicsWidget(QGraphicsWidget *widget);
+
+        /**
+         * @return the graphics widget shown in this dialog
+         */
         QGraphicsWidget *graphicsWidget();
 
         /**
