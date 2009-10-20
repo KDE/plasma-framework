@@ -63,12 +63,17 @@ public:
     QAbstractAnimation* toQAbstractAnimation(QObject* parent = 0);
 
 protected:
-
     /**
      * Change the animation duration. Default is 1000ms.
      * @arg duration The new duration of the animation.
      */
     virtual void setDuration(int duration = 250);
+
+    /**
+     * Get the animation duration.
+     * @return duration in ms.
+     */
+    int duration() const;
 
     /**
      * Each individual class must override this function to place their main
@@ -78,14 +83,7 @@ protected:
      */
     virtual QAbstractAnimation* render(QObject* parent = 0) = 0;
 
-    /**
-     * Get the animation duration.
-     * @return duration in ms.
-     */
-    int duration() const;
-
 private:
-
     AnimationPrivate * const d;
 };
 
