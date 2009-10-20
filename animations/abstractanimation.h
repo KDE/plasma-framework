@@ -40,11 +40,11 @@ namespace Plasma
 class AbstractAnimationPrivate;
 
 /**
- * Abstract base class for AnimationGroup and Animation.
+ * @brief Abstract base class for AnimationGroup and Animation.
+ * @since 4.4
  */
 class PLASMA_EXPORT AbstractAnimation : public QObject
 {
-
     Q_OBJECT
     Q_PROPERTY(QEasingCurve::Type easingCurveType READ easingCurveType WRITE setEasingCurveType)
     Q_PROPERTY(AnimationDirection direction READ direction WRITE setDirection)
@@ -60,7 +60,12 @@ public:
      * Set the widget on which the animation is to be performed.
      * @arg receiver The QGraphicsWidget to be animated.
      */
-    virtual void setAnimatedWidget(QGraphicsWidget* receiver);
+    virtual void setWidgetToAnimate(QGraphicsWidget* receiver);
+
+    /**
+     * The widget that the animation will be performed upon
+     */
+    QGraphicsWidget *widgetToAnimate();
 
     /**
      * Take an AbstractAnimation and turn it into a
@@ -119,7 +124,6 @@ public slots:
     virtual void start() = 0;
 
 protected:
-    QGraphicsWidget *animatedWidget();
 
 private:
     AbstractAnimationPrivate *d;

@@ -40,9 +40,9 @@ FocusIndicator::FocusIndicator(QGraphicsWidget *parent)
     m_background->setCacheAllRenderedFrames(true);
 
     m_fadeIn = new FadeAnimation(1.0);
-    m_fadeIn->setAnimatedWidget(this);
+    m_fadeIn->setWidgetToAnimate(this);
     m_fadeOut = new FadeAnimation(0.0);
-    m_fadeOut->setAnimatedWidget(this);
+    m_fadeOut->setWidgetToAnimate(this);
     setOpacity(0);
 
     parent->installEventFilter(this);

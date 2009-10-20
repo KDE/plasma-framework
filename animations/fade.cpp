@@ -33,7 +33,7 @@ FadeAnimation::FadeAnimation(qreal factor)
 QAbstractAnimation* FadeAnimation::render(QObject* parent){
 
     //create animation
-    QGraphicsWidget *m_object = animatedWidget();
+    QGraphicsWidget *m_object = widgetToAnimate();
     QPropertyAnimation* anim = new QPropertyAnimation(m_object, "opacity", parent);
     anim->setEndValue(m_animFactor);
     anim->setDuration(duration());

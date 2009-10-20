@@ -34,7 +34,7 @@ ExpandAnimation::ExpandAnimation(AnimationDirection direction, qreal distance)
 QAbstractAnimation* ExpandAnimation::render(QObject* parent){
 
     //get current geometry values
-    QGraphicsWidget *m_object = animatedWidget();
+    QGraphicsWidget *m_object = widgetToAnimate();
     QRectF geometry = m_object->geometry();
 
     //compute new geometry values

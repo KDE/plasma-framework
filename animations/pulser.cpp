@@ -68,7 +68,7 @@ PulseAnimation::~PulseAnimation()
 
 void PulseAnimation::setCopy(QGraphicsWidget *copy)
 {
-    QGraphicsWidget *target = animatedWidget();
+    QGraphicsWidget *target = widgetToAnimate();
     d->under = copy;
     if (d->under != target) {
 	d->under->setParentItem(target);
@@ -116,7 +116,7 @@ void PulseAnimation::resetPulser()
 
 void PulseAnimation::createAnimation(qreal duration, qreal scale)
 {
-    QGraphicsWidget *target = animatedWidget();
+    QGraphicsWidget *target = widgetToAnimate();
     /* Fallback to parent widget if we don't have one 'shadow' widget */
     if (!d->under) {
         setCopy(target);

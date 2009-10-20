@@ -37,12 +37,12 @@ AbstractAnimation::~AbstractAnimation()
     delete d;
 }
 
-void AbstractAnimation::setAnimatedWidget(QGraphicsWidget* receiver)
+void AbstractAnimation::setWidgetToAnimate(QGraphicsWidget* receiver)
 {
     d->animObject = receiver;
 }
 
-QGraphicsWidget* AbstractAnimation::animatedWidget()
+QGraphicsWidget* AbstractAnimation::widgetToAnimate()
 {
     return d->animObject.data();
 }

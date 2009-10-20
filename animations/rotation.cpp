@@ -91,7 +91,7 @@ void RotationAnimation::setAngle(const qreal &angle)
 QPropertyAnimation *RotationAnimation::render(QObject *parent)
 {
     Q_UNUSED(parent);
-    QGraphicsWidget *m_object = animatedWidget();
+    QGraphicsWidget *m_object = widgetToAnimate();
 
     QVector3D vector(0, 0, 0);
 

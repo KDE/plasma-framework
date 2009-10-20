@@ -34,7 +34,7 @@ SlideAnimation::SlideAnimation(AnimationDirection direction, qreal distance)
 
 QAbstractAnimation* SlideAnimation::render(QObject* parent)
 {
-    QGraphicsWidget *m_object = animatedWidget();
+    QGraphicsWidget *m_object = widgetToAnimate();
     qreal x = m_object->x();
     qreal y = m_object->y();
 
