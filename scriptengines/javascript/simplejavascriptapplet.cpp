@@ -53,15 +53,16 @@ Q_DECLARE_METATYPE(KConfigGroup)
 
 Q_SCRIPT_DECLARE_QMETAOBJECT(AppletInterface, SimpleJavaScriptApplet*)
 
-QScriptValue constructPainterClass(QScriptEngine *engine);
-QScriptValue constructGraphicsItemClass(QScriptEngine *engine);
-QScriptValue constructLinearLayoutClass(QScriptEngine *engine);
-QScriptValue constructKUrlClass(QScriptEngine *engine);
-QScriptValue constructTimerClass(QScriptEngine *engine);
 QScriptValue constructFontClass(QScriptEngine *engine);
-QScriptValue constructQRectFClass(QScriptEngine *engine);
+QScriptValue constructGraphicsItemClass(QScriptEngine *engine);
+QScriptValue constructKUrlClass(QScriptEngine *engine);
+QScriptValue constructLinearLayoutClass(QScriptEngine *engine);
+QScriptValue constructPainterClass(QScriptEngine *engine);
+QScriptValue constructQPixmapClass(QScriptEngine *engine);
 QScriptValue constructQPointClass(QScriptEngine *engine);
+QScriptValue constructQRectFClass(QScriptEngine *engine);
 QScriptValue constructQSizeFClass(QScriptEngine *engine);
+QScriptValue constructTimerClass(QScriptEngine *engine);
 
 
 //typedef VideoWidget::Control Control;
@@ -412,6 +413,7 @@ void SimpleJavaScriptApplet::setupObjects()
     global.setProperty("QTimer", constructTimerClass(m_engine));
     global.setProperty("QFont", constructFontClass(m_engine));
     global.setProperty("QRectF", constructQRectFClass(m_engine));
+    global.setProperty("QPixap", constructQPixmapClass(m_engine));
     global.setProperty("QSizeF", constructQSizeFClass(m_engine));
     global.setProperty("QPoint", constructQPointClass(m_engine));
     global.setProperty("LinearLayout", constructLinearLayoutClass(m_engine));
@@ -501,6 +503,24 @@ QScriptValue SimpleJavaScriptApplet::loadui(QScriptContext *context, QScriptEngi
     f.close();
 
     return engine->newQObject(w);
+}
+
+QString SimpleJavaScriptApplet::findImageFile(QScriptEngine *engine, const QString &file)
+{
+    QScriptValue appletValue = engine->globalObject().property("plasmoid");
+    //kDebug() << "appletValue is " << appletValue.toString();
+
+    QObject *appletObject = appletValue.toQObject();
+    if (!appletObject) {
+        return QString();
+    }
+
+    AppletInterface *interface = qobject_cast<AppletInterface*>(appletObject);
+    if (!interface) {
+        return QString();
+    }
+
+    return interface->package()->filePath("images", file);
 }
 
 QString SimpleJavaScriptApplet::findSvg(QScriptEngine *engine, const QString &file)

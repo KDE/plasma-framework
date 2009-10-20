@@ -51,6 +51,8 @@ public:
 
     QScriptValue variantToScriptValue(QVariant var);
 
+    static QString findImageFile(QScriptEngine *engine, const QString &file);
+
 public slots:
     void dataUpdated( const QString &name, const Plasma::DataEngine::Data &data );
     void configChanged();

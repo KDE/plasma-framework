@@ -8,6 +8,7 @@ set(simple_javascript_engine_SRCS
     qtgui/graphicsitem.cpp
     qtgui/linearlayout.cpp
     qtgui/painter.cpp
+    qtgui/pixmap.cpp
     qtgui/point.cpp
     qtgui/rect.cpp
     qtgui/size.cpp
@@ -18,8 +19,7 @@ set(simple_javascript_engine_SRCS
 include_directories(${PHONON_INCLUDES})
 
 
-kde4_add_plugin(plasma_appletscript_simple_javascript
-	        ${simple_javascript_engine_SRCS})
+kde4_add_plugin(plasma_appletscript_simple_javascript ${simple_javascript_engine_SRCS})
 
 target_link_libraries(plasma_appletscript_simple_javascript
                        ${KDE4_KDECORE_LIBS}
