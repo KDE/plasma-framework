@@ -45,7 +45,7 @@ static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
 static QScriptValue rect(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(QPixmap, rect)
-    return qScriptValueFromValue(eng, self->rect());
+    return qScriptValueFromValue(eng, QRectF(self->rect()));
 }
 
 static QScriptValue isNull(QScriptContext *ctx, QScriptEngine *eng)
