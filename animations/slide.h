@@ -42,7 +42,7 @@ class PLASMA_EXPORT SlideAnimation : public Animation
     Q_OBJECT
 
 public:
-    SlideAnimation(AnimationDirection direction, qreal distance);
+    SlideAnimation(AnimationDirection direction = MoveUp, qreal distance = 0);
     virtual ~SlideAnimation(){};
     /**
      * Set if the widget is visible at the end of the animation (default True).

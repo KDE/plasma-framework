@@ -41,7 +41,7 @@ class PLASMA_EXPORT FadeAnimation : public Animation
     Q_OBJECT
 
 public:
-    FadeAnimation(qreal factor);
+    FadeAnimation(qreal factor =  0.5);
     virtual ~FadeAnimation(){};
 
 protected:
