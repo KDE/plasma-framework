@@ -49,6 +49,7 @@ private Q_SLOTS:
     void serviceReady(Plasma::Service *service);
     void remoteCallFinished(Plasma::ServiceJob *job);
     void updateSources();
+    void initRemoteService(const QString &source, RemoteService *service);
 
 private:
     Service         *m_service;

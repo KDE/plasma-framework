@@ -69,10 +69,17 @@ Plasma::Service* RemoteDataEngine::serviceForSource(const QString& source)
     } else {
         RemoteService *service = new RemoteService(this);
         m_serviceForSource[source] = service;
+        initRemoteService(source, service);
+        return service;
+    }
+}
+
+void RemoteDataEngine::initRemoteService(const QString &source, RemoteService *service)
+{
+    if (m_service) {
         KConfigGroup op = m_service->operationDescription("ServiceForSource");
         op.writeEntry("SourceName", source);
         m_service->startOperationCall(op);
-        return service;
     }
 }
 
@@ -83,6 +90,13 @@ void RemoteDataEngine::init()
 void RemoteDataEngine::serviceReady(Plasma::Service *service)
 {
     m_service = service;
+
+    QMapIterator<QString, RemoteService *> it(m_serviceForSource);
+    while (it.hasNext()) {
+        it.next();
+        initRemoteService(it.key(), it.value());
+    }
+
     KConfigGroup op = m_service->operationDescription("GetSourceNames");
     m_service->startOperationCall(op);
     connect(m_service, SIGNAL(finished(Plasma::ServiceJob*)),
