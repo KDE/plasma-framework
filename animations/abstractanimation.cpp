@@ -56,6 +56,36 @@ QEasingCurve::Type AbstractAnimation::easingCurveType() const
     return d->easingCurve;
 }
 
+void AbstractAnimation::setAnimationDirection(AnimationDirection animationDirection)
+{
+    d->animDirection = animationDirection;
+}
+
+AnimationDirection AbstractAnimation::animationDirection() const
+{
+    return d->animDirection;
+}
+
+void AbstractAnimation::setAnimationDistance(qreal animationDistance)
+{
+    d->animDistance = animationDistance;
+}
+
+qreal AbstractAnimation::animationDistance() const
+{
+    return d->animDistance;
+}
+
+void AbstractAnimation::setAnimationVisible(bool animationVisible)
+{
+    d->animVisible = animationVisible;
+}
+
+bool AbstractAnimation::animationVisible() const
+{
+    return d->animVisible;
+}
+
 AnimationPrivate* AbstractAnimation::getAnimationPrivate()
 {
     return d;

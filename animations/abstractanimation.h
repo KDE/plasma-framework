@@ -47,6 +47,9 @@ class PLASMA_EXPORT AbstractAnimation : public QObject
 
     Q_OBJECT
     Q_PROPERTY(QEasingCurve::Type easingCurveType READ easingCurveType WRITE setEasingCurveType)
+    Q_PROPERTY(AnimationDirection animationDirection READ animationDirection WRITE setAnimationDirection)
+    Q_PROPERTY(qreal animationDistance READ animationDistance WRITE setAnimationDistance)
+    Q_PROPERTY(bool animationVisible READ animationVisible WRITE setAnimationVisible)
 
 public:
 
@@ -74,6 +77,39 @@ public:
      * Get the animation easing curve type
      */
     QEasingCurve::Type easingCurveType() const;
+
+    /**
+     * Set the animation direction
+     * @arg animationDirection animation direction
+     */
+    void setAnimationDirection(AnimationDirection animationDirection);
+
+    /**
+     * Get the animation direction
+     */
+    AnimationDirection animationDirection() const;
+
+    /**
+     * Set the animation distance
+     * @animationDistance animation distance
+     */
+    void setAnimationDistance(qreal animationDistance);
+
+    /**
+     * Get the animation distance
+     */
+    qreal animationDistance() const;
+
+    /**
+     * set the animation visibility
+     * @arg animationVisible animation visibility
+     */
+    void setAnimationVisible(bool animationVisible);
+
+    /**
+     * get the animation visibility
+     */
+    bool animationVisible() const;
 
 public slots:
 
