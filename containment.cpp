@@ -803,7 +803,7 @@ void Containment::setFormFactor(FormFactor formFactor)
         d->positionPanel(true);
     }
 
-    InternalToolBox *toolBox = static_cast<InternalToolBox *>(d->toolBox);
+    InternalToolBox *toolBox = qobject_cast<InternalToolBox *>(d->toolBox);
     if (toolBox) {
         if (d->formFactor == Vertical) {
             toolBox->setCorner(InternalToolBox::Bottom);
