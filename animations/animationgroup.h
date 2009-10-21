@@ -36,25 +36,21 @@
 namespace Plasma
 {
 
+class AnimationGroupPrivate;
+
 /**
  * @brief A group of Animations and / or AnimationGroups.
  * @since 4.4
  */
 class PLASMA_EXPORT AnimationGroup : public AbstractAnimation
 {
-
     Q_OBJECT
+    Q_PROPERTY(bool parallel READ isParallel WRITE setParallel)
 
 public:
 
     AnimationGroup(QObject* parent = 0);
     virtual ~AnimationGroup();
-
-    /**
-     * Start the animation.
-     */
-    virtual void start();
-
 
     /**
      * @arg parallelness whether the animation should be in parallel or not
@@ -92,23 +88,14 @@ public:
      */
     QAnimationGroup* toQAbstractAnimation(QObject* parent = 0);
 
+public Q_SLOTS:
+    /**
+     * Start the animation.
+     */
+    virtual void start();
+
 private:
-
-    /**
-     * Parent owner object to use in generated animations.
-     */
-    QObject* m_parent;
-
-    /**
-     * Boolean determining if the animation is parallel. Default is false.
-     */
-    bool m_parallel;
-
-    /**
-     * Map of AbstractAnimations to be run, by id.
-     */
-    QList<AbstractAnimation *> anims;
-
+    AnimationGroupPrivate * const d;
 };
 
 

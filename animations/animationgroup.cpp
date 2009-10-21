@@ -26,45 +26,65 @@
 namespace Plasma
 {
 
-AnimationGroup::AnimationGroup(QObject* parent)
-    : m_parent(parent),
-      m_parallel(false)
+class AnimationGroupPrivate
 {
+public:
+    /**
+     * Boolean determining if the animation is parallel. Default is false.
+     */
+    bool parallel;
+
+    /**
+     * Map of AbstractAnimations to be run, by id.
+     */
+    QList<AbstractAnimation *> anims;
+};
+
+AnimationGroup::AnimationGroup(QObject* parent)
+    : AbstractAnimation(parent),
+      d(new AnimationGroupPrivate)
+{
+    d->parallel = false;
 }
 
 AnimationGroup::~AnimationGroup()
 {
+    delete d;
 }
 
 void AnimationGroup::setParallel(bool parallelness)
 {
-    m_parallel = parallelness;
+    d->parallel = parallelness;
 }
 
 bool AnimationGroup::isParallel() const
 {
-    return m_parallel;
+    return d->parallel;
 }
 
 int AnimationGroup::add(AbstractAnimation* elem)
 {
-    anims.insert(anims.count(), elem);
-    return anims.count();
+    d->anims.insert(d->anims.count(), elem);
+    return d->anims.count();
 }
 
 AbstractAnimation* AnimationGroup::at(int id) const
 {
-    return anims[id];
+    return d->anims.value(id);
 }
 
 void AnimationGroup::remove(int id)
 {
-    anims.removeAt(id);
+    if (id >= d->anims.count() || id < 0) {
+        return;
+    }
+
+    d->anims.removeAt(id);
 }
 
 void AnimationGroup::start()
 {
-    QAbstractAnimation* anim = toQAbstractAnimation(m_parent);
+    QAbstractAnimation* anim = toQAbstractAnimation(parent());
     if (anim){
         /* FIXME: why to create and delete all the animations
          * every single time it runs?
@@ -76,21 +96,18 @@ void AnimationGroup::start()
 QAnimationGroup* AnimationGroup::toQAbstractAnimation(QObject* parent)
 {
     //if supplied, use parent given in args.
-    QObject* correctParent;
-    if (parent){
-        correctParent = parent;
-    } else {
-        correctParent = m_parent;
+    if (!parent){
+        parent = this->parent();
     }
 
     QAnimationGroup* g;
-    if (m_parallel) {
-        g = new QParallelAnimationGroup(correctParent);
+    if (d->parallel) {
+        g = new QParallelAnimationGroup(parent);
     } else {
-        g = new QSequentialAnimationGroup(correctParent);
+        g = new QSequentialAnimationGroup(parent);
     }
 
-    QListIterator<AbstractAnimation*> it(anims);
+    QListIterator<AbstractAnimation*> it(d->anims);
     while (it.hasNext()) {
         //add with group as owner
         g->addAnimation(it.next()->toQAbstractAnimation(g));
