@@ -30,6 +30,8 @@
 namespace Plasma
 {
 
+class FadeAnimationPrivate;
+
 /**
  * @class Fade plasma/animations/fade.h
  * @short Fade effect
@@ -42,12 +44,15 @@ class FadeAnimation : public Animation
 
 public:
     FadeAnimation(qreal factor =  0.5);
-    virtual ~FadeAnimation(){};
+    virtual ~FadeAnimation();
+
+    void setWidgetToAnimate(QGraphicsWidget *widget);
 
 protected:
     virtual QAbstractAnimation* render(QObject* parent = 0);
 
 private:
+    FadeAnimationPrivate *const d;
     qreal m_animFactor;
 };
 

@@ -20,21 +20,59 @@
 #include "fade.h"
 
 #include <QRect>
+#include <QtGui/QGraphicsOpacityEffect>
+
 #include <kdebug.h>
 
 namespace Plasma
 {
 
-FadeAnimation::FadeAnimation(qreal factor)
-    : m_animFactor(qBound(qreal(0.0), factor, qreal(1.0)))
+class FadeAnimationPrivate
 {
+public:
+    FadeAnimationPrivate()
+    {
+    }
+
+    ~FadeAnimationPrivate()
+    {
+    }
+
+    QGraphicsOpacityEffect *opacityEffect;
+};
+
+FadeAnimation::FadeAnimation(qreal factor)
+             : d(new FadeAnimationPrivate()),
+               m_animFactor(qBound(qreal(0.0), factor, qreal(1.0)))
+{
+}
+
+FadeAnimation::~FadeAnimation()
+{
+    delete d;
+}
+
+void FadeAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
+{
+    QGraphicsWidget *m_widget = widgetToAnimate();
+    if (m_widget) {
+        QGraphicsEffect *effect = m_widget->graphicsEffect();
+        if (effect && dynamic_cast<QGraphicsOpacityEffect *>(effect)) {
+            effect->deleteLater();
+        }
+    }
+
+    Animation::setWidgetToAnimate(widget);
+
+    d->opacityEffect = new QGraphicsOpacityEffect(widget);
+    widget->setGraphicsEffect(d->opacityEffect);
 }
 
 QAbstractAnimation* FadeAnimation::render(QObject* parent)
 {
+
     //create animation
-    QGraphicsWidget *m_object = widgetToAnimate();
-    QPropertyAnimation* anim = new QPropertyAnimation(m_object, "opacity", parent);
+    QPropertyAnimation* anim = new QPropertyAnimation(d->opacityEffect, "opacity", parent);
     anim->setEndValue(m_animFactor);
     anim->setDuration(duration());
 
