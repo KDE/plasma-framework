@@ -30,8 +30,8 @@ FadeAnimation::FadeAnimation(qreal factor)
 {
 }
 
-QAbstractAnimation* FadeAnimation::render(QObject* parent){
-
+QAbstractAnimation* FadeAnimation::render(QObject* parent)
+{
     //create animation
     QGraphicsWidget *m_object = widgetToAnimate();
     QPropertyAnimation* anim = new QPropertyAnimation(m_object, "opacity", parent);
