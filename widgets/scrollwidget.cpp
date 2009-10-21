@@ -150,10 +150,11 @@ public:
 
         QSizeF widgetSize = widget->size();
         if (widget->sizePolicy().expandingDirections() & Qt::Horizontal) {
-            widgetSize.setWidth(scrollingWidget->size().width());
+            //keep a 1 pixel border
+            widgetSize.setWidth(scrollingWidget->size().width()-2);
         }
         if (widget->sizePolicy().expandingDirections() & Qt::Vertical) {
-            widgetSize.setHeight(scrollingWidget->size().height());
+            widgetSize.setHeight(scrollingWidget->size().height()-2);
         }
         widget->resize(widgetSize);
     }
