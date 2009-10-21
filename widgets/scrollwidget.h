@@ -63,7 +63,11 @@ public:
     /**
      * Sets the widget this ScrollWidget will contain
      * ownership is transferred to this scrollwidget,
-     * if an old one was already in, it will be deleted
+     * if an old one was already in, it will be deleted.
+     * If the widget size policy will have an horizontal expand direction,
+     * it will be resized when possible, otherwise it will be keps to whichever
+     * width the widget resizes itself.
+     * The same thing it's true for the vertical size hint.
      *
      * @arg widget the new main sub widget
      */

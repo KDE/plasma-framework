@@ -148,7 +148,14 @@ public:
             rightBorder->setPos(q->size().width() - rightBorder->size().width(), 0);
         }
 
-        widget->resize(scrollingWidget->size().width(), widget->size().height());
+        QSizeF widgetSize = widget->size();
+        if (widget->sizePolicy().expandingDirections() & Qt::Horizontal) {
+            widgetSize.setWidth(scrollingWidget->size().width());
+        }
+        if (widget->sizePolicy().expandingDirections() & Qt::Vertical) {
+            widgetSize.setHeight(scrollingWidget->size().height());
+        }
+        widget->resize(widgetSize);
     }
 
     void verticalScroll(int value)
@@ -275,6 +282,7 @@ void ScrollWidget::setWidget(QGraphicsWidget *widget)
 
     d->widget = widget;
     Plasma::Animator::self()->registerScrollingManager(this);
+    //it's not good it's setting a size policy here, but it's done to be retrocompatible with older applications
     widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     widget->setParentItem(d->scrollingWidget);
     widget->setPos(QPoint(0,0));
