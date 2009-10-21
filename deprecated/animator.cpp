@@ -19,14 +19,7 @@
  */
 
 #include "animator.h"
-#include "animations/abstractanimation.h"
-#include "animations/animation.h"
-#include "animations/expand.h"
-#include "animations/fade.h"
-#include "animations/grow.h"
-#include "animations/pulser.h"
-#include "animations/rotation.h"
-#include "animations/slide.h"
+#include "private/animator_p.h"
 
 #include <QGraphicsItem>
 #include <QTimeLine>
@@ -47,165 +40,77 @@ namespace Plasma
 static const int MIN_TICK_RATE_INT = 10;
 static const qreal MIN_TICK_RATE = 10;
 
-struct AnimationState
+AnimatorPrivate::AnimatorPrivate()
+    : driver(0),
+      animId(0),
+      timerId(0)
 {
-    QGraphicsItem *item;
-    QObject *qobj;
-    Animator::Animation animation;
-    Animator::CurveShape curve;
-    int interval;
-    int currentInterval;
-    int frames;
-    int currentFrame;
-    int id;
-};
+}
 
-struct ElementAnimationState
+AnimatorPrivate::~AnimatorPrivate()
 {
-    QGraphicsItem *item;
-    QObject *qobj;
-    Animator::CurveShape curve;
-    Animator::Animation animation;
-    int interval;
-    int currentInterval;
-    int frames;
-    int currentFrame;
-    int id;
-    QPixmap pixmap;
-};
+    cleanupStates();
+    qDeleteAll(animatedItems);
+    qDeleteAll(animatedElements);
+    qDeleteAll(movingItems);
 
-struct MovementState
+    QMutableHashIterator<int, CustomAnimationState*> it(customAnims);
+    while (it.hasNext()) {
+        it.next();
+        delete[] it.value()->slot;
+        delete it.value();
+        it.remove();
+    }
+
+    // Animator is a QObject
+    // and we don't own the items
+}
+
+qreal AnimatorPrivate::calculateProgress(int time, int duration, Animator::CurveShape curve)
 {
-    QGraphicsItem *item;
-    QObject *qobj;
-    Animator::CurveShape curve;
-    Animator::Movement movement;
-    int interval;
-    int currentInterval;
-    int frames;
-    int currentFrame;
-    QPoint start;
-    QPoint destination;
-    int id;
-};
+    if (!(KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects)) {
+        return qreal(1.0);
+    }
 
-struct CustomAnimationState
+    timeline.setCurveShape(static_cast<QTimeLine::CurveShape>(curve));
+    timeline.setDuration(duration);
+    qreal progress = timeline.valueForTime(time);
+    return progress;
+}
+
+void AnimatorPrivate::performAnimation(qreal amount, const AnimationState *state)
 {
-    Animator::CurveShape curve;
-    int frames;
-    int currentFrame;
-    int frameInterval;
-    int interval;
-    int currentInterval;
-    int id;
-    QObject *receiver;
-    char *slot;
-};
-
-class AnimatorPrivateDeprecated
-{
-    public:
-
-        AnimatorPrivateDeprecated()
-            : driver(0),
-              animId(0),
-              timerId(0)
-        {
-        }
-
-        ~AnimatorPrivateDeprecated()
-        {
-            cleanupStates();
-            qDeleteAll(animatedItems);
-            qDeleteAll(animatedElements);
-            qDeleteAll(movingItems);
-
-            QMutableMapIterator<int, CustomAnimationState*> it(customAnims);
-            while (it.hasNext()) {
-                it.next();
-                delete[] it.value()->slot;
-                delete it.value();
-                it.remove();
+    switch (state->animation) {
+        case Animator::AppearAnimation:
+            driver->itemAppear(amount, state->item);
+            break;
+        case Animator::DisappearAnimation:
+            driver->itemDisappear(amount, state->item);
+            if (amount >= 1) {
+                state->item->hide();
             }
+            break;
+        case Animator::ActivateAnimation:
+            driver->itemActivated(amount, state->item);
+            break;
+    }
+}
 
-            // Animator is a QObject
-            // and we don't own the items
-        }
-
-        qreal calculateProgress(int time, int duration, Animator::CurveShape curve)
-        {
-            if (!(KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects)) {
-                return qreal(1.0);
-            }
-
-            timeline.setCurveShape(static_cast<QTimeLine::CurveShape>(curve));
-            timeline.setDuration(duration);
-            qreal progress = timeline.valueForTime(time);
-            return progress;
-        }
-
-        void performAnimation(qreal amount, const AnimationState *state)
-        {
-            switch (state->animation) {
-            case Animator::AppearAnimation:
-                driver->itemAppear(amount, state->item);
-                break;
-            case Animator::DisappearAnimation:
-                driver->itemDisappear(amount, state->item);
-                if (amount >= 1) {
-                    state->item->hide();
-                }
-                break;
-            case Animator::ActivateAnimation:
-                driver->itemActivated(amount, state->item);
-                break;
-            }
-        }
-
-        void performMovement(qreal amount, const MovementState *state)
-        {
-            switch (state->movement) {
-                case Animator::SlideInMovement:
-                case Animator::FastSlideInMovement:
-                    //kDebug() << "performMovement, SlideInMovement";
-                    driver->itemSlideIn(amount, state->item, state->start, state->destination);
-                    break;
-                case Animator::SlideOutMovement:
-                case Animator::FastSlideOutMovement:
-                    //kDebug() << "performMovement, SlideOutMovement";
-                    driver->itemSlideOut(amount, state->item, state->start, state->destination);
-                    break;
-            }
-        }
-
-
-        void init(Animator *q);
-        void cleanupStates();
-        void animatedItemDestroyed(QObject*);
-        void movingItemDestroyed(QObject*);
-        void animatedElementDestroyed(QObject*);
-        void customAnimReceiverDestroyed(QObject*);
-
-        AnimationDriver *driver;
-        int animId;
-        int timerId;
-        QTime time;
-        QTimeLine timeline;
-
-        // active items
-        QMap<QGraphicsItem *, AnimationState *> animatedItems;
-        QMap<QGraphicsItem *, MovementState *> movingItems;
-        QMap<int, ElementAnimationState *> animatedElements;
-        QMap<int, CustomAnimationState *> customAnims;
-
-        // items to cull
-        QSet<AnimationState *> animatedItemsToDelete;
-        QSet<MovementState *> movingItemsToDelete;
-        QSet<ElementAnimationState *> animatedElementsToDelete;
-        QSet<CustomAnimationState *> customAnimsToDelete;
-
-        QHash<QGraphicsWidget *, KineticScrolling *> scrollingManagers;
-};
+void AnimatorPrivate::performMovement(qreal amount, const MovementState *state)
+{
+    switch (state->movement) {
+        case Animator::SlideInMovement:
+        case Animator::FastSlideInMovement:
+            //kDebug() << "performMovement, SlideInMovement";
+            driver->itemSlideIn(amount, state->item, state->start, state->destination);
+            break;
+        case Animator::SlideOutMovement:
+        case Animator::FastSlideOutMovement:
+            //kDebug() << "performMovement, SlideOutMovement";
+            driver->itemSlideOut(amount, state->item, state->start, state->destination);
+            break;
+    }
+}
 
 class AnimatorSingleton
 {
@@ -220,55 +125,9 @@ Animator *Animator::self()
     return &privateSelf->self;
 }
 
-AbstractAnimation *Animator::create(Animation type, QObject *parent)
-{
-    AbstractAnimation *result = 0;
-
-    switch (type) {
-
-    case FadeAnim:
-	result = new FadeAnimation;
-	break;
-
-    case GrowAnim:
-	result = new GrowAnimation;
-	break;
-
-    case ExpandAnim:
-	result = new ExpandAnimation;
-	break;
-
-    case PulseAnim:
-	result = new PulseAnimation;
-	break;
-
-    case RotationAnim:
-	result = new RotationAnimation;
-	break;
-
-    case RotationStackedAnim:
-	//TODO: implement stacked rotation
-	//result = new Plasma::RotationStackedAnimation;
-	break;
-
-    case SlideAnim:
-	result = new SlideAnimation;
-	break;
-
-    default:
-	kDebug() << "Unsupported animation type.";
-
-    }
-
-    if (result)
-	result->setParent(parent);
-
-    return result;
-}
-
 Animator::Animator(QObject *parent)
     : QObject(parent),
-      d(new AnimatorPrivateDeprecated)
+      d(new AnimatorPrivate)
 {
     d->init(this);
 }
@@ -278,10 +137,10 @@ Animator::~Animator()
     delete d;
 }
 
-void AnimatorPrivateDeprecated::animatedItemDestroyed(QObject *o)
+void AnimatorPrivate::animatedItemDestroyed(QObject *o)
 {
     //kDebug() << "testing for" << (void*)o;
-    QMutableMapIterator<QGraphicsItem*, AnimationState*> it(animatedItems);
+    QMutableHashIterator<QGraphicsItem*, AnimationState*> it(animatedItems);
     while (it.hasNext()) {
         it.next();
         //kDebug() << "comparing against" << it.value()->qobj;
@@ -298,9 +157,9 @@ void AnimatorPrivateDeprecated::animatedItemDestroyed(QObject *o)
     }
 }
 
-void AnimatorPrivateDeprecated::movingItemDestroyed(QObject *o)
+void AnimatorPrivate::movingItemDestroyed(QObject *o)
 {
-    QMutableMapIterator<QGraphicsItem*, MovementState*> it(movingItems);
+    QMutableHashIterator<QGraphicsItem*, MovementState*> it(movingItems);
     while (it.hasNext()) {
         it.next();
         if (it.value()->qobj == o) {
@@ -315,9 +174,9 @@ void AnimatorPrivateDeprecated::movingItemDestroyed(QObject *o)
     }
 }
 
-void AnimatorPrivateDeprecated::animatedElementDestroyed(QObject *o)
+void AnimatorPrivate::animatedElementDestroyed(QObject *o)
 {
-    QMutableMapIterator<int, ElementAnimationState*> it(animatedElements);
+    QMutableHashIterator<int, ElementAnimationState*> it(animatedElements);
     while (it.hasNext()) {
         it.next();
         if (it.value()->qobj == o) {
@@ -332,9 +191,9 @@ void AnimatorPrivateDeprecated::animatedElementDestroyed(QObject *o)
     }
 }
 
-void AnimatorPrivateDeprecated::customAnimReceiverDestroyed(QObject *o)
+void AnimatorPrivate::customAnimReceiverDestroyed(QObject *o)
 {
-    QMutableMapIterator<int, CustomAnimationState*> it(customAnims);
+    QMutableHashIterator<int, CustomAnimationState*> it(customAnims);
     while (it.hasNext()) {
         if (it.next().value()->receiver == o) {
             if (timerId) {
@@ -353,8 +212,7 @@ int Animator::animateItem(QGraphicsItem *item, Animation animation)
 {
      //kDebug();
     // get rid of any existing animations on this item.
-    //TODO: shoudl we allow multiple anims per item?
-    QMap<QGraphicsItem*, AnimationState*>::iterator it = d->animatedItems.find(item);
+    QHash<QGraphicsItem*, AnimationState*>::iterator it = d->animatedItems.find(item);
     if (it != d->animatedItems.end()) {
         if (d->timerId) {
             d->animatedItemsToDelete.insert(it.value());
@@ -409,7 +267,7 @@ int Animator::animateItem(QGraphicsItem *item, Animation animation)
 int Animator::moveItem(QGraphicsItem *item, Movement movement, const QPoint &destination)
 {
      //kDebug();
-     QMap<QGraphicsItem*, MovementState*>::iterator it = d->movingItems.find(item);
+     QHash<QGraphicsItem*, MovementState*>::iterator it = d->movingItems.find(item);
      if (it != d->movingItems.end()) {
          if (d->timerId) {
              d->movingItemsToDelete.insert(it.value());
@@ -434,7 +292,6 @@ int Animator::moveItem(QGraphicsItem *item, Movement movement, const QPoint &des
      state->item = item;
      state->movement = movement;
      state->curve = d->driver->movementAnimationCurve(movement);
-     //TODO: variance in times based on the value of animation
      int duration = d->driver->movementAnimationDuration(movement);
      state->frames = qMax(1.0, frames * (duration / 1000.0));
      state->currentFrame = 0;
@@ -502,7 +359,7 @@ int Animator::customAnimation(int frames, int duration, Animator::CurveShape cur
 
 void Animator::stopCustomAnimation(int id)
 {
-    QMap<int, CustomAnimationState*>::iterator it = d->customAnims.find(id);
+    QHash<int, CustomAnimationState*>::iterator it = d->customAnims.find(id);
     if (it != d->customAnims.end()) {
         if (d->timerId) {
             d->customAnimsToDelete.insert(it.value());
@@ -518,7 +375,7 @@ void Animator::stopCustomAnimation(int id)
 
 void Animator::stopItemAnimation(int id)
 {
-    QMutableMapIterator<QGraphicsItem*, AnimationState*> it(d->animatedItems);
+    QMutableHashIterator<QGraphicsItem*, AnimationState*> it(d->animatedItems);
     while (it.hasNext()) {
         it.next();
         if (it.value()->id == id) {
@@ -536,7 +393,7 @@ void Animator::stopItemAnimation(int id)
 
 void Animator::stopItemMovement(int id)
 {
-    QMutableMapIterator<QGraphicsItem*, MovementState*> it(d->movingItems);
+    QMutableHashIterator<QGraphicsItem*, MovementState*> it(d->movingItems);
     while (it.hasNext()) {
         it.next();
         if (it.value()->id == id) {
@@ -591,7 +448,6 @@ int Animator::animateElement(QGraphicsItem *item, Animation animation)
     //kDebug() << "startElementAnimation(AnimId " << animation << ") returning " << state->id;
     if (needTimer && !d->timerId) {
         // start a 20fps timer;
-        //TODO: should be started at the maximum frame rate needed only?
         d->timerId = startTimer(MIN_TICK_RATE);
         d->time.restart();
     }
@@ -600,7 +456,7 @@ int Animator::animateElement(QGraphicsItem *item, Animation animation)
 
 void Animator::stopElementAnimation(int id)
 {
-    QMap<int, ElementAnimationState*>::iterator it = d->animatedElements.find(id);
+    QHash<int, ElementAnimationState*>::iterator it = d->animatedElements.find(id);
     if (it != d->animatedElements.end()) {
         if (d->timerId) {
             d->animatedElementsToDelete.insert(it.value());
@@ -615,7 +471,7 @@ void Animator::stopElementAnimation(int id)
 
 void Animator::setInitialPixmap(int id, const QPixmap &pixmap)
 {
-    QMap<int, ElementAnimationState*>::iterator it = d->animatedElements.find(id);
+    QHash<int, ElementAnimationState*>::iterator it = d->animatedElements.find(id);
 
     if (it == d->animatedElements.end()) {
         kDebug() << "No entry found for id " << id;
@@ -627,7 +483,7 @@ void Animator::setInitialPixmap(int id, const QPixmap &pixmap)
 
 QPixmap Animator::currentPixmap(int id)
 {
-    QMap<int, ElementAnimationState*>::const_iterator it = d->animatedElements.constFind(id);
+    QHash<int, ElementAnimationState*>::const_iterator it = d->animatedElements.constFind(id);
 
     if (it == d->animatedElements.constEnd()) {
         //kDebug() << "Animator::currentPixmap(" << id << ") found no entry for it!";
@@ -750,7 +606,6 @@ void Animator::timerEvent(QTimerEvent *event)
             // since we keep element animations around until they are
             // removed, we will end up with finished animations in the queue;
             // just skip them
-            //TODO: should we move them to a separate QMap?
             continue;
         }
 
@@ -796,7 +651,6 @@ void Animator::timerEvent(QTimerEvent *event)
 
             if (state->currentFrame < state->frames) {
                 //kDebug () << "not the final frame";
-                //TODO: calculate a proper interval based on the curve
                 state->currentInterval = state->interval;
                 animationsRemain = true;
                 // signal the object
@@ -831,7 +685,7 @@ void Animator::timerEvent(QTimerEvent *event)
     d->cleanupStates();
 }
 
-void AnimatorPrivateDeprecated::init(Animator *q)
+void AnimatorPrivate::init(Animator *q)
 {
     //FIXME: usage between different applications?
     KConfig c("plasmarc");
@@ -863,7 +717,7 @@ void AnimatorPrivateDeprecated::init(Animator *q)
     }
 }
 
-void AnimatorPrivateDeprecated::cleanupStates()
+void AnimatorPrivate::cleanupStates()
 {
     /*
     kDebug() << animatedItemsToDelete.count() << animatedElementsToDelete.count()
@@ -903,4 +757,3 @@ void Animator::unregisterScrollingManager(QGraphicsWidget *widget)
 
 } // namespace Plasma
 
-#include <../animator.moc>
