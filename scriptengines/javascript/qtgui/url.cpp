@@ -23,6 +23,7 @@
 #include "../backportglobal.h"
 
 Q_DECLARE_METATYPE(KUrl*)
+//Q_DECLARE_METATYPE(KUrl) unneeded; found in kurl.h
 
 static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
 {
