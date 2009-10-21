@@ -21,7 +21,6 @@
 //Qt
 #include <QGraphicsSceneResizeEvent>
 #include <QGraphicsGridLayout>
-#include <QGraphicsAnchorLayout>
 #include <QApplication>
 #include <QWidget>
 #include <QTimer>
@@ -95,15 +94,14 @@ public:
             topBorder->setSvg(borderSvg);
             topBorder->setElementID("border-top");
             topBorder->setZValue(900);
-            bordersLayout->addAnchors(bordersLayout, topBorder, Qt::Horizontal);
-            bordersLayout->addAnchor(bordersLayout, Qt::AnchorTop, topBorder, Qt::AnchorTop);
-
+            topBorder->resize(topBorder->effectiveSizeHint(Qt::PreferredSize));
+            topBorder->show();
             bottomBorder = new Plasma::SvgWidget(q);
             bottomBorder->setSvg(borderSvg);
             bottomBorder->setElementID("border-bottom");
             bottomBorder->setZValue(900);
-            bordersLayout->addAnchors(bordersLayout, bottomBorder, Qt::Horizontal);
-            bordersLayout->addAnchor(bordersLayout, Qt::AnchorBottom, bottomBorder, Qt::AnchorBottom);
+            bottomBorder->resize(bottomBorder->effectiveSizeHint(Qt::PreferredSize));
+            bottomBorder->show();
         } else if (topBorder && widget && widget->size().height() <= q->size().height()) {
             //FIXME: in some cases topBorder->deleteLater() is deleteNever(), why?
             topBorder->hide();
@@ -120,16 +118,14 @@ public:
             leftBorder->setSvg(borderSvg);
             leftBorder->setElementID("border-left");
             leftBorder->setZValue(900);
-            bordersLayout->addAnchors(bordersLayout, leftBorder, Qt::Vertical);
-            bordersLayout->addAnchor(bordersLayout, Qt::AnchorLeft, leftBorder, Qt::AnchorLeft);
-
+            leftBorder->resize(leftBorder->effectiveSizeHint(Qt::PreferredSize));
+            leftBorder->show();
             rightBorder = new Plasma::SvgWidget(q);
             rightBorder->setSvg(borderSvg);
             rightBorder->setElementID("border-right");
             rightBorder->setZValue(900);
-            bordersLayout->addAnchors(bordersLayout, rightBorder, Qt::Vertical);
-            bordersLayout->addAnchor(bordersLayout, Qt::AnchorRight, rightBorder, Qt::AnchorRight);
-
+            rightBorder->resize(rightBorder->effectiveSizeHint(Qt::PreferredSize));
+            rightBorder->show();
         } else if (leftBorder && widget && widget->size().width() <= q->size().width()) {
             leftBorder->hide();
             rightBorder->hide();
@@ -140,6 +136,17 @@ public:
         }
 
         layout->activate();
+
+        if (topBorder) {
+            topBorder->resize(q->size().width(), topBorder->size().height());
+            bottomBorder->resize(q->size().width(), bottomBorder->size().height());
+            bottomBorder->setPos(0, q->size().height() - topBorder->size().height());
+        }
+        if (leftBorder) {
+            leftBorder->resize(leftBorder->size().width(), q->size().height());
+            rightBorder->resize(rightBorder->size().width(), q->size().height());
+            rightBorder->setPos(q->size().width() - rightBorder->size().width(), 0);
+        }
 
         QSizeF widgetSize = widget->size();
         if (widget->sizePolicy().expandingDirections() & Qt::Horizontal) {
@@ -207,7 +214,6 @@ public:
 
     ScrollWidget *q;
     QGraphicsWidget *scrollingWidget;
-    QGraphicsAnchorLayout *bordersLayout;
     QGraphicsWidget *widget;
     Plasma::Svg *borderSvg;
     Plasma::SvgWidget *topBorder;
@@ -232,11 +238,8 @@ ScrollWidget::ScrollWidget(QGraphicsWidget *parent)
 {
     d->layout = new QGraphicsGridLayout(this);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    d->layout->setContentsMargins(0, 0, 0, 0);
+    d->layout->setContentsMargins(1, 1, 1, 1);
     d->scrollingWidget = new QGraphicsWidget(this);
-    d->bordersLayout = new QGraphicsAnchorLayout(d->scrollingWidget);
-//FIXME:setContentsMargins(0) crashes AnchorLayout
-    d->bordersLayout->setContentsMargins(0.01, 0.01, 0.01, 0.01);
     d->layout->addItem(d->scrollingWidget, 0, 0);
     d->borderSvg = new Plasma::Svg(this);
     d->borderSvg->setImagePath("widgets/scrollwidget");
@@ -400,6 +403,18 @@ void ScrollWidget::resizeEvent(QGraphicsSceneResizeEvent *event)
     d->adjustScrollbars();
 
     d->adjustClipping();
+
+    //if topBorder exists bottomBorder too
+    if (d->topBorder) {
+        d->topBorder->resize(event->newSize().width(), d->topBorder->size().height());
+        d->bottomBorder->resize(event->newSize().width(), d->bottomBorder->size().height());
+        d->bottomBorder->setPos(0, event->newSize().height() - d->bottomBorder->size().height());
+    }
+    if (d->leftBorder) {
+        d->leftBorder->resize(d->leftBorder->size().width(), event->newSize().height());
+        d->rightBorder->resize(d->rightBorder->size().width(), event->newSize().height());
+        d->rightBorder->setPos(event->newSize().width() - d->rightBorder->size().width(), 0);
+    }
 
     QGraphicsWidget::resizeEvent(event);
 }
