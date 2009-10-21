@@ -48,13 +48,8 @@ class PLASMA_EXPORT Animation : public AbstractAnimation
 
 public:
 
-    Animation(QObject* parent = 0);
+    explicit Animation(QObject* parent = 0);
     virtual ~Animation() = 0;
-
-    /**
-     * Start the animation.
-     */
-    virtual void start();
 
     /**
      * Take the animation object and turn it into a QPropertyAnimation. Returns

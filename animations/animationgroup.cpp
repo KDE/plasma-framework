@@ -68,6 +68,11 @@ int AnimationGroup::add(AbstractAnimation* elem)
     return d->anims.count();
 }
 
+void AnimationGroup::remove(Plasma::AbstractAnimation* elem)
+{
+    d->anims.removeAll(elem);
+}
+
 AbstractAnimation* AnimationGroup::at(int id) const
 {
     return d->anims.value(id);
@@ -80,17 +85,6 @@ void AnimationGroup::remove(int id)
     }
 
     d->anims.removeAt(id);
-}
-
-void AnimationGroup::start()
-{
-    QAbstractAnimation* anim = toQAbstractAnimation(parent());
-    if (anim){
-        /* FIXME: why to create and delete all the animations
-         * every single time it runs?
-         */
-        anim->start(QAbstractAnimation::DeleteWhenStopped);
-    }
 }
 
 QAnimationGroup* AnimationGroup::toQAbstractAnimation(QObject* parent)

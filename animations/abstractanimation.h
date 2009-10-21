@@ -63,15 +63,15 @@ public:
 
     /* FIXME: find a better place and name for it. */
     enum Reference{
-	Center,
-	Up,
-	Down,
-	Left,
-	Right
+        Center,
+        Up,
+        Down,
+        Left,
+        Right
     };
 
 
-    AbstractAnimation(QObject *parent = 0);
+    explicit AbstractAnimation(QObject *parent = 0);
     virtual ~AbstractAnimation();
 
     /**
@@ -175,7 +175,7 @@ public slots:
     /**
      * Start the animation.
      */
-    virtual void start() = 0;
+    virtual void start();
 
 protected:
 

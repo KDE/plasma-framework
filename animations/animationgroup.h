@@ -49,7 +49,7 @@ class PLASMA_EXPORT AnimationGroup : public AbstractAnimation
 
 public:
 
-    AnimationGroup(QObject* parent = 0);
+    explicit AnimationGroup(QObject* parent = 0);
     virtual ~AnimationGroup();
 
     /**
@@ -63,25 +63,6 @@ public:
     bool isParallel() const;
 
     /**
-     * Add an Animation or AnimationGroup to the group
-     * @arg elem element to add
-     * @return id of element added
-     */
-    int add(AbstractAnimation* elem);
-
-    /**
-     * Return element with given id
-     * @return id of element to get
-     */
-    AbstractAnimation* at(int id) const;
-
-    /**
-     * Remove element with given id
-     * @arg id id of element to remove
-     */
-    void remove(int id);
-
-    /**
      * Take the animation object and turn it into a QAnimationGroup. More
      * specifically, a QSerialAnimation or QParallelAnimation depending on
      * the value of m_parallel at the time of invocation. Returns NULL on error.
@@ -90,9 +71,29 @@ public:
 
 public Q_SLOTS:
     /**
-     * Start the animation.
+     * Add an Animation or AnimationGroup to the group
+     * @arg elem element to add
+     * @return id of element added
      */
-    virtual void start();
+    Q_INVOKABLE int add(Plasma::AbstractAnimation* elem);
+
+    /**
+     * Remove an Animation or AnimationGroup from this group
+     * @arg eleme element to remove
+     */
+    Q_INVOKABLE void remove(Plasma::AbstractAnimation* elem);
+
+    /**
+     * Return element with given id
+     * @return id of element to get
+     */
+    Q_INVOKABLE AbstractAnimation* at(int id) const;
+
+    /**
+     * Remove element with given id
+     * @arg id id of element to remove
+     */
+    Q_INVOKABLE void remove(int id);
 
 private:
     AnimationGroupPrivate * const d;

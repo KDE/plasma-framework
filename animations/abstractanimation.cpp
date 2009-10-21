@@ -119,7 +119,13 @@ void AbstractAnimation::setAngle(const qreal &angle)
     d->angle = angle;
 }
 
-
+void AbstractAnimation::start()
+{
+    QAbstractAnimation* anim = toQAbstractAnimation(parent());
+    if (anim) {
+        anim->start(QAbstractAnimation::DeleteWhenStopped);
+    }
+}
 
 } //namespace Plasma
 
