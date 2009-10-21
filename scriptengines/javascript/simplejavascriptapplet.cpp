@@ -561,27 +561,26 @@ QScriptValue SimpleJavaScriptApplet::newPlasmaSvg(QScriptContext *context, QScri
     QString filename = context->argument(0).toString();
     QObject *parent = 0;
 
-    if (context->argumentCount() == 2) {
-        parent = qscriptvalue_cast<QObject *>(context->argument(1));
+    QScriptValue appletValue = engine->globalObject().property("plasmoid");
+    QObject *appletObject = appletValue.toQObject();
+    AppletInterface *interface = 0;
+    if (appletObject) {
+        interface = qobject_cast<AppletInterface*>(appletObject);
     }
 
     bool parentedToApplet = false;
-    if (!parent) {
-        QScriptValue appletValue = engine->globalObject().property("plasmoid");
-        //kDebug() << "appletValue is " << appletValue.toString();
+    if (context->argumentCount() == 2) {
+        parent = qscriptvalue_cast<QObject *>(context->argument(1));
+        parentedToApplet = parent == interface;
+    }
 
-        QObject *appletObject = appletValue.toQObject();
-        if (appletObject) {
-            AppletInterface *interface = qobject_cast<AppletInterface*>(appletObject);
-            if (interface) {
-                parentedToApplet = true;
-                parent = interface->applet();
-            }
-        }
+    if (!parent && interface) {
+        parentedToApplet = true;
+        parent = interface->applet();
     }
 
     Svg *svg = new Svg(parent);
-    svg->setImagePath(parentedToApplet ? filename : findSvg(engine, filename));
+    svg->setImagePath(parentedToApplet ? findSvg(engine, filename) : filename);
     return engine->newQObject(svg);
 }
 
