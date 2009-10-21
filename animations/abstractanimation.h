@@ -50,6 +50,7 @@ class PLASMA_EXPORT AbstractAnimation : public QObject
     Q_PROPERTY(AnimationDirection direction READ direction WRITE setDirection)
     Q_PROPERTY(qreal distance READ distance WRITE setDistance)
     Q_PROPERTY(bool isVisible READ isVisible WRITE setVisible)
+    Q_PROPERTY(QGraphicsWidget *widgetToAnimate READ widgetToAnimate WRITE setWidgetToAnimate)
 
 public:
 
