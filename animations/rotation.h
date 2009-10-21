@@ -31,35 +31,12 @@ class RotationAnimationPrivate;
 
 class PLASMA_EXPORT RotationAnimation : public Animation
 {
-    Q_OBJECT
-    Q_PROPERTY(Qt::Axis axis READ axis WRITE setAxis)
-    Q_PROPERTY(qint8 reference READ reference WRITE setReference)
-    Q_PROPERTY(qreal angle READ angle WRITE setAngle)
-
-    public:
-        enum Reference{
-            Center,
-            Up,
-            Down,
-            Left,
-            Right
-        };
-
     public:
         RotationAnimation(const qint8 &reference = Center,
                 const Qt::Axis &axis = Qt::ZAxis, const qreal &angle = 180);
         ~RotationAnimation();
 
         QPropertyAnimation* render(QObject* parent = 0);
-
-        Qt::Axis axis() const;
-        void setAxis(const Qt::Axis &axis);
-
-        qint8 reference() const;
-        void setReference(const qint8 &reference);
-
-        qreal angle() const;
-        void setAngle(const qreal &angle);
 
     private:
         RotationAnimationPrivate *const d;

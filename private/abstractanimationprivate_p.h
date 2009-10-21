@@ -57,6 +57,22 @@ public:
      */
     QEasingCurve::Type easingCurve;
 
+    /**
+     * Animation rotation angle (e.g. 45, 180, etc)
+     */
+    qreal angle;
+
+    /**
+     * Rotation axis (e.g. X, Y, Z)
+     */
+    Qt::Axis axis;
+
+    /**
+     * Rotation reference (e.g. Center, Up, Down, Left, Right) can
+     * be combined (i.e. Center|Up)
+     */
+    qint8 reference;
+
 };
 
 }

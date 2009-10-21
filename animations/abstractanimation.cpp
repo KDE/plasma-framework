@@ -88,6 +88,39 @@ bool AbstractAnimation::isVisible() const
     return d->animVisible;
 }
 
+
+Qt::Axis AbstractAnimation::axis() const
+{
+    return d->axis;
+}
+
+void AbstractAnimation::setAxis(const Qt::Axis &axis)
+{
+    d->axis = axis;
+}
+
+qint8 AbstractAnimation::reference() const
+{
+    return d->reference;
+}
+
+void AbstractAnimation::setReference(const qint8 &reference)
+{
+    d->reference = reference;
+}
+
+qreal AbstractAnimation::angle() const
+{
+    return d->angle;
+}
+
+void AbstractAnimation::setAngle(const qreal &angle)
+{
+    d->angle = angle;
+}
+
+
+
 } //namespace Plasma
 
 #include <../abstractanimation.moc>
