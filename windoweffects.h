@@ -37,7 +37,9 @@ namespace WindowEffects
 {
     enum Effect {
         Slide = 1,
-        WindowPreview = 2
+        WindowPreview = 2,
+        PresentWindows = 3,
+        PresentWindowsGroup = 4
     };
 
     /**
@@ -90,6 +92,25 @@ namespace WindowEffects
      * @since 4.4
      */
     PLASMA_EXPORT void showWindowThumbnails(WId parent, const QList<WId> &windows = QList<WId>(), const QList<QRect> &rects = QList<QRect>());
+
+    /**
+    * Activate the Present Windows effect for the given groups of windows.
+    *
+    * @param controler The window which is the controler of this effect. The property
+    *                   will be set on this window. It will be removed by the effect
+    * @param ids all the windows which should be presented.
+    * @since 4.4
+    */
+    PLASMA_EXPORT void presentWindows(WId controler, const QList<WId> &ids);
+    /**
+    * Activate the Present Windows effect for the windows of the given desktop.
+    *
+    * @param controler The window which is the controler of this effect. The property
+    *                   will be set on this window. It will be removed by the effect
+    * @param desktop The desktop whose windows should be presented. -1 for all desktops
+    * @since 4.4
+    */
+    PLASMA_EXPORT void presentWindows(WId controler, int desktop = -1);
 }
 
 } // namespace Plasma
