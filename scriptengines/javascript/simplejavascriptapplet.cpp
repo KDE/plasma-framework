@@ -30,6 +30,7 @@
 #include <KConfigGroup>
 
 #include <Plasma/AbstractAnimation>
+#include <Plasma/AnimationGroup>
 #include <Plasma/Applet>
 #include <Plasma/Svg>
 #include <Plasma/FrameSvg>
@@ -51,6 +52,8 @@ Q_DECLARE_METATYPE(Applet*)
 Q_DECLARE_METATYPE(QGraphicsWidget*)
 Q_DECLARE_METATYPE(QGraphicsLayout*)
 Q_DECLARE_METATYPE(KConfigGroup)
+Q_DECLARE_METATYPE(Plasma::AbstractAnimation *)
+Q_DECLARE_METATYPE(Plasma::AnimationGroup *)
 
 Q_SCRIPT_DECLARE_QMETAOBJECT(AppletInterface, SimpleJavaScriptApplet*)
 
@@ -376,12 +379,38 @@ void SimpleJavaScriptApplet::importExtensions()
     */
 }
 
+typedef AbstractAnimation* AbstractAnimationPtr;
+QScriptValue qScriptValueFromAbstractAnimation(QScriptEngine *engine, const AbstractAnimationPtr &anim)
+{
+    return engine->newQObject(const_cast<AbstractAnimation *>(anim));
+}
+
+void abstractAnimationFromQScriptValue(const QScriptValue &scriptValue, AbstractAnimationPtr &anim)
+{
+    QObject *obj = scriptValue.toQObject();
+    anim = static_cast<AbstractAnimation *>(obj);
+}
+
+typedef QGraphicsWidget * QGraphicsWidgetPtr;
+QScriptValue qScriptValueFromQGraphicsWidget(QScriptEngine *engine, const QGraphicsWidgetPtr &anim)
+{
+    return engine->newQObject(const_cast<QGraphicsWidget *>(anim));
+}
+
+void qGraphicsWidgetFromQScriptValue(const QScriptValue &scriptValue, QGraphicsWidgetPtr &anim)
+{
+    QObject *obj = scriptValue.toQObject();
+    anim = static_cast<QGraphicsWidget *>(obj);
+}
+
 void SimpleJavaScriptApplet::setupObjects()
 {
     QScriptValue global = m_engine->globalObject();
 
     // Bindings for animations
     global.setProperty("animation", m_engine->newFunction(SimpleJavaScriptApplet::animation));
+    qScriptRegisterMetaType<AbstractAnimation*>(m_engine, qScriptValueFromAbstractAnimation, abstractAnimationFromQScriptValue);
+    global.setProperty("AnimationGroup", m_engine->newFunction(SimpleJavaScriptApplet::animationGroup));
 
     // Bindings for data engine
     m_engine->setDefaultPrototype(qMetaTypeId<DataEngine*>(), m_engine->newQObject(new DataEngine()));
@@ -412,6 +441,7 @@ void SimpleJavaScriptApplet::setupObjects()
 
 
     // Add a global loadui method for ui files
+    qScriptRegisterMetaType<QGraphicsWidget*>(m_engine, qScriptValueFromQGraphicsWidget, qGraphicsWidgetFromQScriptValue);
     QScriptValue fun = m_engine->newFunction(SimpleJavaScriptApplet::loadui);
     global.setProperty("loadui", fun);
 
@@ -531,9 +561,28 @@ QScriptValue SimpleJavaScriptApplet::animation(QScriptContext *context, QScriptE
         return context->throwError(i18n("Could not extract the Applet"));
     }
 
-    Plasma::AbstractAnimation *anim = Plasma::Animator::create(s_animationDefs.value(animName));
+    Plasma::AbstractAnimation *anim = Plasma::Animator::create(s_animationDefs.value(animName), interface->applet());
     anim->setWidgetToAnimate(interface->applet());
     return engine->newQObject(anim);
+}
+
+QScriptValue SimpleJavaScriptApplet::animationGroup(QScriptContext *context, QScriptEngine *engine)
+{
+    QScriptValue appletValue = engine->globalObject().property("plasmoid");
+    //kDebug() << "appletValue is " << appletValue.toString();
+
+    QObject *appletObject = appletValue.toQObject();
+    if (!appletObject) {
+        return context->throwError(i18n("Could not extract the AppletObject"));
+    }
+
+    AppletInterface *interface = qobject_cast<AppletInterface*>(appletObject);
+    if (!interface) {
+        return context->throwError(i18n("Could not extract the Applet"));
+    }
+
+    Plasma::AnimationGroup *group = new Plasma::AnimationGroup(interface->applet());
+    return engine->newQObject(group);
 }
 
 QScriptValue SimpleJavaScriptApplet::loadui(QScriptContext *context, QScriptEngine *engine)

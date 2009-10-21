@@ -67,6 +67,7 @@ private:
 
     static QString findSvg(QScriptEngine *engine, const QString &file);
     static QScriptValue animation(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue animationGroup(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue jsi18n(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue jsi18nc(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue jsi18np(QScriptContext *context, QScriptEngine *engine);
