@@ -54,8 +54,8 @@ class PLASMA_EXPORT AbstractAnimation : public QObject
 
 public:
 
-    AbstractAnimation();
-    virtual ~AbstractAnimation() = 0;
+    AbstractAnimation(QObject *parent = 0);
+    virtual ~AbstractAnimation();
 
     /**
      * Set the widget on which the animation is to be performed.

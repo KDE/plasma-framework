@@ -26,8 +26,9 @@ namespace Plasma
 {
 
 
-AbstractAnimation::AbstractAnimation()
-    : d(new AbstractAnimationPrivate)
+AbstractAnimation::AbstractAnimation(QObject *parent)
+    : QObject(parent),
+      d(new AbstractAnimationPrivate)
 {
     d->easingCurve = QEasingCurve::Linear;
 }
