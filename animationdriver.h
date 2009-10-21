@@ -37,7 +37,7 @@ namespace Plasma
 
 class AnimationDriverPrivate;
 
-class PLASMA_EXPORT AnimationDriver : public QObject
+class PLASMA_EXPORT_DEPRECATED AnimationDriver : public QObject
 {
     Q_OBJECT
 

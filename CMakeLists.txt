@@ -42,7 +42,7 @@ set(plasmagik_SRCS
 set(plasma_LIB_SRCS
     ${plasmagik_SRCS}
     abstractrunner.cpp
-    animationdriver.cpp
+    animator.cpp
     animations/abstractanimation.cpp
     animations/animation.cpp
     animations/animationgroup.cpp
@@ -63,6 +63,7 @@ set(plasma_LIB_SRCS
     dataengine.cpp
     dataenginemanager.cpp
     delegate.cpp
+    deprecated/animationdriver.cpp
     deprecated/animator.cpp
     dialog.cpp
     extenders/extender.cpp

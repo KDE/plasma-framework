@@ -143,4 +143,4 @@ void AnimationDriver::itemSlideOut(qreal progress, QGraphicsItem *item, const QP
 
 } // Plasma namespace
 
-#include "animationdriver.moc"
+#include "../animationdriver.moc"
