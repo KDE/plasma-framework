@@ -292,30 +292,14 @@ void KineticScrolling::setKineticScrollValue(QPointF value)
 
     QPointF movement = d->cposition - value;
 
-    if (d->kinMovement.y() < 0 && !d->canScroll(KineticScrollingPrivate::Up, true)) {
-        if (d->canScroll(KineticScrollingPrivate::Down, false)) {
-            d->kinMovement.setY(d->overshoot/2);
-        }
-        movement.setY(scrollPosition.y());
-    } else if (d->kinMovement.y() > 0 && !d->canScroll(KineticScrollingPrivate::Down, true)) {
-        if (d->canScroll(KineticScrollingPrivate::Up, false)) {
-            d->kinMovement.setY(-d->overshoot/2);
-        }
-        movement.setY(scrollPosition.y());
-    }
-
-    if (d->kinMovement.x() < 0 && !d->canScroll(KineticScrollingPrivate::Left, true)) {
-        if (d->canScroll(KineticScrollingPrivate::Right, false)) {
-            d->kinMovement.setX(d->overshoot/2);
-        }
-        movement.setX(scrollPosition.x());
-    } else if (d->kinMovement.x() > 0 && !d->canScroll(KineticScrollingPrivate::Right, true)) {
-        if (d->canScroll(KineticScrollingPrivate::Left, false)) {
-            d->kinMovement.setX(-d->overshoot/2);
-        }
+    if (movement.x() > d->overshoot*2 ||
+        movement.x() + d->contentsSize.width() < d->viewportGeometry.right() - d->overshoot*2) {
         movement.setX(scrollPosition.x());
     }
-
+    if (movement.y() > d->overshoot*2 ||
+        movement.y() + d->contentsSize.height() < d->viewportGeometry.bottom() - d->overshoot*2) {
+        movement.setY(scrollPosition.y());
+    }
     d->parent->setProperty("scrollPosition", -movement);
 
 
