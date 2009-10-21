@@ -21,25 +21,18 @@
 /////////////////////////////////////////////////////////////////////////
 #include "rotation.h"
 
-/* TODO:
- * - revise coding style
- */
 #include <QGraphicsRotation>
 
 namespace Plasma
 {
 
 class RotationAnimationPrivate {
-    public:
-        RotationAnimationPrivate()
-        {
-        }
+public:
 
-        ~RotationAnimationPrivate()
-        {
-        }
-
-        QGraphicsRotation *rotation;
+    /* TODO: check if the rotation object will be deleted
+     * when the animation runs
+     */
+    QGraphicsRotation *rotation;
 };
 
 
@@ -70,54 +63,56 @@ QPropertyAnimation *RotationAnimation::render(QObject *parent)
 
     if (axis() == Qt::XAxis) {
         switch (reference()) {
-            case Center:
-                vector.setY(widgetHeight/2);
-                break;
-            case Up:
-                vector.setY(0);
-                break;
-            case Down:
-                vector.setY(widgetHeight);
-                break;
+	case Center:
+	    vector.setY(widgetHeight/2);
+	    break;
+	case Up:
+	    vector.setY(0);
+	    break;
+	case Down:
+	    vector.setY(widgetHeight);
+	    break;
         }
+
     } else if(axis() == Qt::YAxis) {
         switch (reference()) {
-            case Center:
-                vector.setX(widgetWidth/2);
-                break;
-            case Left:
-                vector.setX(0);
-                break;
-            case Right:
-                vector.setX(widgetWidth);
-                break;
+	case Center:
+	    vector.setX(widgetWidth/2);
+	    break;
+	case Left:
+	    vector.setX(0);
+	    break;
+	case Right:
+	    vector.setX(widgetWidth);
+	    break;
         }
+
     } else if (axis() == Qt::ZAxis) {
         switch (reference()) {
-            case Center:
-                vector.setX(widgetWidth/2);
-                vector.setY(widgetHeight/2);
-                break;
+	case Center:
+	    vector.setX(widgetWidth/2);
+	    vector.setY(widgetHeight/2);
+	    break;
 
-            case Center|Up:
-                vector.setX(widgetWidth/2);
-                vector.setY(0);
-                break;
+	case Center|Up:
+	    vector.setX(widgetWidth/2);
+	    vector.setY(0);
+	    break;
 
-            case Center|Down:
-                vector.setX(widgetWidth/2);
-                vector.setY(widgetHeight);
-                break;
+	case Center|Down:
+	    vector.setX(widgetWidth/2);
+	    vector.setY(widgetHeight);
+	    break;
 
-            case Center|Left:
-                vector.setX(0);
-                vector.setY(widgetHeight/2);
-                break;
+	case Center|Left:
+	    vector.setX(0);
+	    vector.setY(widgetHeight/2);
+	    break;
 
-            case Center|Right:
-                vector.setX(widgetWidth);
-                vector.setY(widgetHeight/2);
-                break;
+	case Center|Right:
+	    vector.setX(widgetWidth);
+	    vector.setY(widgetHeight/2);
+	    break;
         }
     }
 
