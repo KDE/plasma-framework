@@ -21,6 +21,7 @@
 
 #include <QScriptValue>
 
+#include <Plasma/Animator>
 #include <Plasma/AppletScript>
 #include <Plasma/DataEngine>
 
@@ -62,8 +63,10 @@ private:
     void importExtensions();
     void setupObjects();
     void callFunction(const QString &functionName, const QScriptValueList &args = QScriptValueList());
+    static void populateAnimationsHash();
 
     static QString findSvg(QScriptEngine *engine, const QString &file);
+    static QScriptValue animation(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue jsi18n(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue jsi18nc(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue jsi18np(QScriptContext *context, QScriptEngine *engine);
@@ -78,10 +81,11 @@ private:
     static QScriptValue createWidget(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue notSupported(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue print(QScriptContext *context, QScriptEngine *engine);
-    static QScriptValue createPrototype( QScriptEngine *engine, const QString &name );
+    static QScriptValue createPrototype(QScriptEngine *engine, const QString &name);
 
 private:
     static KSharedPtr<UiLoader> s_widgetLoader;
+    static QHash<QString, Plasma::Animator::Animation> s_animationDefs;
     QScriptEngine *m_engine;
     QScriptValue m_self;
     QVariantList m_args;

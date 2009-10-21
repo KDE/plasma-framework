@@ -29,6 +29,7 @@
 #include <KStandardDirs>
 #include <KConfigGroup>
 
+#include <Plasma/AbstractAnimation>
 #include <Plasma/Applet>
 #include <Plasma/Svg>
 #include <Plasma/FrameSvg>
@@ -169,6 +170,7 @@ void registerEnums(QScriptEngine *engine, QScriptValue &scriptValue, const QMeta
 }
 
 KSharedPtr<UiLoader> SimpleJavaScriptApplet::s_widgetLoader;
+QHash<QString, Plasma::Animator::Animation> SimpleJavaScriptApplet::s_animationDefs;
 
 SimpleJavaScriptApplet::SimpleJavaScriptApplet(QObject *parent, const QVariantList &args)
     : Plasma::AppletScript(parent)
@@ -316,9 +318,23 @@ void SimpleJavaScriptApplet::constraintsEvent(Plasma::Constraints constraints)
     }
 }
 
+void SimpleJavaScriptApplet::populateAnimationsHash()
+{
+    if (s_animationDefs.isEmpty()) {
+        s_animationDefs.insert("fade", Plasma::Animator::FadeAnimation);
+        s_animationDefs.insert("grow", Plasma::Animator::GrowAnimation);
+        s_animationDefs.insert("expand", Plasma::Animator::ExpandAnimation);
+        s_animationDefs.insert("pulse", Plasma::Animator::PulseAnimation);
+        s_animationDefs.insert("rotate", Plasma::Animator::RotationAnimation);
+        s_animationDefs.insert("rotateStacked", Plasma::Animator::RotationStackedAnimation);
+        s_animationDefs.insert("slide", Plasma::Animator::SlideAnimation);
+    }
+}
+
 bool SimpleJavaScriptApplet::init()
 {
     setupObjects();
+    populateAnimationsHash();
 
     kDebug() << "ScriptName:" << applet()->name();
     kDebug() << "ScriptCategory:" << applet()->category();
@@ -363,6 +379,9 @@ void SimpleJavaScriptApplet::importExtensions()
 void SimpleJavaScriptApplet::setupObjects()
 {
     QScriptValue global = m_engine->globalObject();
+
+    // Bindings for animations
+    global.setProperty("animation", m_engine->newFunction(SimpleJavaScriptApplet::animation));
 
     // Bindings for data engine
     m_engine->setDefaultPrototype(qMetaTypeId<DataEngine*>(), m_engine->newQObject(new DataEngine()));
@@ -486,6 +505,35 @@ QScriptValue SimpleJavaScriptApplet::service(QScriptContext *context, QScriptEng
     Service *service = data->serviceForSource(source);
     //kDebug( )<< "lets try to get" << source << "from" << dataEngine;
     return engine->newQObject(service);
+}
+
+QScriptValue SimpleJavaScriptApplet::animation(QScriptContext *context, QScriptEngine *engine)
+{
+    if (context->argumentCount() != 1) {
+        return context->throwError(i18n("animation() takes one argument"));
+    }
+
+    QString animName = context->argument(0).toString().toLower();
+    if (!s_animationDefs.contains(animName)) {
+        return context->throwError(i18n("%1 is not a known animation type", animName));
+    }
+
+    QScriptValue appletValue = engine->globalObject().property("plasmoid");
+    //kDebug() << "appletValue is " << appletValue.toString();
+
+    QObject *appletObject = appletValue.toQObject();
+    if (!appletObject) {
+        return context->throwError(i18n("Could not extract the AppletObject"));
+    }
+
+    AppletInterface *interface = qobject_cast<AppletInterface*>(appletObject);
+    if (!interface) {
+        return context->throwError(i18n("Could not extract the Applet"));
+    }
+
+    Plasma::AbstractAnimation *anim = Plasma::Animator::create(s_animationDefs.value(animName));
+    anim->setWidgetToAnimate(interface->applet());
+    return engine->newQObject(anim);
 }
 
 QScriptValue SimpleJavaScriptApplet::loadui(QScriptContext *context, QScriptEngine *engine)
