@@ -23,6 +23,8 @@
 
 #include <QGraphicsRotation>
 
+#include <kdebug.h>
+
 namespace Plasma
 {
 
@@ -63,56 +65,56 @@ QPropertyAnimation *RotationAnimation::render(QObject *parent)
 
     if (axis() == Qt::XAxis) {
         switch (reference()) {
-	case Center:
-	    vector.setY(widgetHeight/2);
-	    break;
-	case Up:
-	    vector.setY(0);
-	    break;
-	case Down:
-	    vector.setY(widgetHeight);
-	    break;
+            case Center:
+                vector.setY(widgetHeight/2);
+                break;
+            case Up:
+                vector.setY(0);
+                break;
+            case Down:
+                vector.setY(widgetHeight);
+                break;
         }
 
     } else if(axis() == Qt::YAxis) {
         switch (reference()) {
-	case Center:
-	    vector.setX(widgetWidth/2);
-	    break;
-	case Left:
-	    vector.setX(0);
-	    break;
-	case Right:
-	    vector.setX(widgetWidth);
-	    break;
+            case Center:
+                vector.setX(widgetWidth/2);
+                break;
+            case Left:
+                vector.setX(0);
+                break;
+            case Right:
+                vector.setX(widgetWidth);
+                break;
         }
 
     } else if (axis() == Qt::ZAxis) {
         switch (reference()) {
-	case Center:
-	    vector.setX(widgetWidth/2);
-	    vector.setY(widgetHeight/2);
-	    break;
+            case Center:
+                vector.setX(widgetWidth/2);
+                vector.setY(widgetHeight/2);
+                break;
 
-	case Center|Up:
-	    vector.setX(widgetWidth/2);
-	    vector.setY(0);
-	    break;
+            case Center|Up:
+                vector.setX(widgetWidth/2);
+                vector.setY(0);
+                break;
 
-	case Center|Down:
-	    vector.setX(widgetWidth/2);
-	    vector.setY(widgetHeight);
-	    break;
+            case Center|Down:
+                vector.setX(widgetWidth/2);
+                vector.setY(widgetHeight);
+                break;
 
-	case Center|Left:
-	    vector.setX(0);
-	    vector.setY(widgetHeight/2);
-	    break;
+            case Center|Left:
+                vector.setX(0);
+                vector.setY(widgetHeight/2);
+                break;
 
-	case Center|Right:
-	    vector.setX(widgetWidth);
-	    vector.setY(widgetHeight/2);
-	    break;
+            case Center|Right:
+                vector.setX(widgetWidth);
+                vector.setY(widgetHeight/2);
+                break;
         }
     }
 
@@ -123,8 +125,9 @@ QPropertyAnimation *RotationAnimation::render(QObject *parent)
     transformation.append(d->rotation);
     m_object->setTransformations(transformation);
 
-    QPropertyAnimation *rotationAnimation= new QPropertyAnimation(d->rotation,
-            "angle", m_object);
+    QPropertyAnimation *rotationAnimation= new QPropertyAnimation(d->rotation, "angle", m_object);
+    rotationAnimation->setStartValue(0);
+    kDebug() << "angle is" << angle();
     rotationAnimation->setEndValue(angle());
     rotationAnimation->setDuration(duration());
 
