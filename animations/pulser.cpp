@@ -121,15 +121,12 @@ void PulseAnimation::createAnimation(qreal duration, qreal scale)
     QGraphicsWidget *target = widgetToAnimate();
     /* Fallback to parent widget if we don't have one 'shadow' widget */
     if (!d->under) {
-        kDebug() << "setting copy to ourselves";
         setCopy(target);
     } else if (d->under != target) {
-        kDebug() << "deleting under and creating a child of the target";
         delete d->under;
         d->under = new QGraphicsWidget(target);
         setCopy(d->under);
     }
-    kDebug() << (QObject*)d->under << (QObject*)target;
 
     d->pulseGeometry = new QRectF(d->under->geometry());
     QParallelAnimationGroup *group = new QParallelAnimationGroup(this);
@@ -155,8 +152,6 @@ void PulseAnimation::createAnimation(qreal duration, qreal scale)
     group->addAnimation(d->scaleAnimation);
 
     d->animation = group;
-    d->under->setOpacity(1);
-
 
     //This makes sure that if there is *not* a shadow widget, the
     //parent widget will still remain visible
@@ -167,7 +162,7 @@ QAbstractAnimation* PulseAnimation::render(QObject* parent)
 {
     Q_UNUSED(parent)
 
-    createAnimation();
+    createAnimation(duration());
     d->under->setOpacity(1);
     return d->animation;
 }
