@@ -45,6 +45,7 @@ class PLASMA_EXPORT Animation : public AbstractAnimation
 {
 
     Q_OBJECT
+    Q_PROPERTY(int duration READ duration WRITE setDuration)
 
 public:
 
