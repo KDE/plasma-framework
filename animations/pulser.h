@@ -39,7 +39,6 @@ public:
     void setCopy(QGraphicsWidget *copy);
 
 public Q_SLOTS:
-    void start();
     void resetPulser();
 
 protected:

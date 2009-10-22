@@ -21,27 +21,31 @@
  */
 
 #include "pulser.h"
-#include <QGraphicsWidget>
-#include <QEvent>
+
 #include <QAbstractAnimation>
-#include <QParallelAnimationGroup>
 #include <QDebug>
+#include <QEvent>
+#include <QGraphicsWidget>
+#include <QParallelAnimationGroup>
 #include <QPropertyAnimation>
+
+#include <kdebug.h>
 
 namespace Plasma
 {
 
 class PulseAnimationPrivate
 {
-public:
-    PulseAnimationPrivate(): animation(0),
-			     under(0),
-			     pulseGeometry(0),
-			     zvalue(0),
-			     mscale(0),
-			     opacityAnimation(0),
-			     geometryAnimation(0),
-			     scaleAnimation(0)
+public :
+    PulseAnimationPrivate()
+        : animation(0),
+          under(0),
+          pulseGeometry(0),
+          zvalue(0),
+          mscale(0),
+          opacityAnimation(0),
+          geometryAnimation(0),
+          scaleAnimation(0)
     {}
 
     QAbstractAnimation *animation;
@@ -70,11 +74,11 @@ void PulseAnimation::setCopy(QGraphicsWidget *copy)
 {
     QGraphicsWidget *target = widgetToAnimate();
     d->under = copy;
-    if (d->under != target) {
-	d->under->setParentItem(target);
-	d->mopacity = 0;
+    if (d->under == target) {
+        d->mopacity = d->under->opacity();
     } else {
-	d->mopacity = d->under->opacity();
+        d->under->setParentItem(target);
+        d->mopacity = 0;
     }
 
     d->zvalue = target->zValue();
@@ -82,7 +86,6 @@ void PulseAnimation::setCopy(QGraphicsWidget *copy)
     d->under->setOpacity(0);
     d->under->setZValue(d->zvalue);
     d->mscale = d->under->scale();
-
 }
 
 void PulseAnimation::updateGeometry(QRectF updated, qreal zCoordinate, qreal scale)
@@ -99,7 +102,7 @@ void PulseAnimation::updateGeometry(QRectF updated, qreal zCoordinate, qreal sca
     qreal W = initial.width() * scale * 0.33;
     qreal H = initial.height() * scale * 0.33;
     QRectF end(initial.x() - W, initial.y() -  H, initial.width() * scale,
-	       initial.height() * scale);
+              initial.height() * scale);
     d->geometryAnimation->setEndValue(end);
  }
 
@@ -110,7 +113,6 @@ void PulseAnimation::resetPulser()
     d->under->setOpacity(d->mopacity);
     d->under->setZValue(d->zvalue);
     d->under->setScale(d->mscale);
-
 }
 
 
@@ -119,12 +121,15 @@ void PulseAnimation::createAnimation(qreal duration, qreal scale)
     QGraphicsWidget *target = widgetToAnimate();
     /* Fallback to parent widget if we don't have one 'shadow' widget */
     if (!d->under) {
+        kDebug() << "setting copy to ourselves";
         setCopy(target);
     } else if (d->under != target) {
-	delete d->under;
-	d->under = new QGraphicsWidget(target);
-	setCopy(d->under);
+        kDebug() << "deleting under and creating a child of the target";
+        delete d->under;
+        d->under = new QGraphicsWidget(target);
+        setCopy(d->under);
     }
+    kDebug() << (QObject*)d->under << (QObject*)target;
 
     d->pulseGeometry = new QRectF(d->under->geometry());
     QParallelAnimationGroup *group = new QParallelAnimationGroup(this);
@@ -140,7 +145,7 @@ void PulseAnimation::createAnimation(qreal duration, qreal scale)
     qreal W = initial.width() * scale * 0.33;
     qreal H = initial.height() * scale * 0.33;
     QRectF end(initial.x() - W, initial.y() -  H, initial.width() * scale,
-		initial.height() * scale);
+               initial.height() * scale);
     d->geometryAnimation->setEndValue(end);
     group->addAnimation(d->geometryAnimation);
 
@@ -150,6 +155,8 @@ void PulseAnimation::createAnimation(qreal duration, qreal scale)
     group->addAnimation(d->scaleAnimation);
 
     d->animation = group;
+    d->under->setOpacity(1);
+
 
     //This makes sure that if there is *not* a shadow widget, the
     //parent widget will still remain visible
@@ -158,16 +165,11 @@ void PulseAnimation::createAnimation(qreal duration, qreal scale)
 
 QAbstractAnimation* PulseAnimation::render(QObject* parent)
 {
-    Q_UNUSED(parent);
+    Q_UNUSED(parent)
+
     createAnimation();
     d->under->setOpacity(1);
     return d->animation;
-}
-
-void PulseAnimation::start()
-{
-    d->under->setOpacity(1);
-    d->animation->start();
 }
 
 } //namespace Plasma
