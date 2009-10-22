@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "expand.h"
+#include "expand_p.h"
 
 #include <QRect>
 #include <kdebug.h>

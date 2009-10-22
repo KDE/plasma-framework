@@ -20,7 +20,7 @@
  * - fix centering of pulsed shadow object
  */
 
-#include "pulser.h"
+#include "pulser_p.h"
 
 #include <QAbstractAnimation>
 #include <QDebug>

@@ -24,13 +24,13 @@
 
 #include "animations/abstractanimation.h"
 #include "animations/animation.h"
-#include "animations/expand.h"
-#include "animations/fade.h"
-#include "animations/grow.h"
-#include "animations/pause.h"
-#include "animations/pulser.h"
-#include "animations/rotation.h"
-#include "animations/slide.h"
+#include "animations/expand_p.h"
+#include "animations/fade_p.h"
+#include "animations/grow_p.h"
+#include "animations/pause_p.h"
+#include "animations/pulser_p.h"
+#include "animations/rotation_p.h"
+#include "animations/slide_p.h"
 
 namespace Plasma
 {

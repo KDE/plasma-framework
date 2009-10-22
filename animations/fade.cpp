@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "fade.h"
+#include "fade_p.h"
 
 #include <QRect>
 #include <QtGui/QGraphicsOpacityEffect>
