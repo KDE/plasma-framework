@@ -111,12 +111,11 @@ QAbstractAnimation *RotationStackedAnimation::render(QObject *parent)
             d->frontRotation->setAxis(Qt::YAxis);
             d->backRotation->setAxis(Qt::YAxis);
 
-            if(direction() == MoveLeft) {
-                d->backRotation->setAngle(265);
+        if(direction() == MoveLeft) {
+        } else {
+                 d->backRotation->setAngle(265);
                 backAnim->setEndValue(360);
                 frontAnim->setEndValue(90);
-            } else {
-                d->backRotation->setAngle(-90);
             }
         }
     }
