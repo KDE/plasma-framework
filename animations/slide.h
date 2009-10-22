@@ -37,7 +37,7 @@ namespace Plasma
  * Effect that moves the object a specific distance in a given direction. The
  * object is optionally made invisible at the beginning or at the end.
  */
-class PLASMA_EXPORT SlideAnimation : public Animation
+class SlideAnimation : public Animation
 {
     Q_OBJECT
 

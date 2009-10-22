@@ -27,7 +27,7 @@ namespace Plasma
 
 class PulseAnimationPrivate;
 
-class PLASMA_EXPORT PulseAnimation : public Animation
+class PulseAnimation : public Animation
 {
     Q_OBJECT
 

@@ -29,7 +29,7 @@ namespace Plasma {
 
 class RotationAnimationPrivate;
 
-class PLASMA_EXPORT RotationAnimation : public Animation
+class RotationAnimation : public Animation
 {
     public:
         RotationAnimation(const qint8 &reference = Center,
