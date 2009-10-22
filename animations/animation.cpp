@@ -34,7 +34,7 @@ class AnimationPrivate {
 
 public:
     /**
-     * Duration of the animation. Default is 1000ms.
+     * Duration of the animation. Default is 250ms.
      */
     int duration;
 };
@@ -58,7 +58,7 @@ void Animation::setDuration(int duration)
 
 QAbstractAnimation* Animation::toQAbstractAnimation(QObject* parent)
 {
-    //check if .setObject() was done
+    //check if the widget to animate was set already
     if (!widgetToAnimate()) {
         kDebug() << "Object not set.";
         return NULL;
