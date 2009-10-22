@@ -73,6 +73,7 @@ QAbstractAnimation* FadeAnimation::render(QObject* parent)
 
     //create animation
     QPropertyAnimation* anim = new QPropertyAnimation(d->opacityEffect, "opacity", parent);
+    anim->setStartValue(0);
     anim->setEndValue(m_animFactor);
     anim->setDuration(duration());
 
