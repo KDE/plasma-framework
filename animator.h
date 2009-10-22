@@ -64,7 +64,8 @@ public:
         PulseAnimation, /*<< Pulse animated object (opacity/geometry/scale) */
         RotationAnimation, /*<< Rotate an animated object */
         RotationStackedAnimation, /*<< TODO: for flipping one object with another */
-        SlideAnimation /*<< Move the position of animated object */
+        SlideAnimation, /*<< Move the position of animated object */
+        PauseAnimation /*<< Pulse animated object (opacity/geometry/scale) */
     };
 
     enum CurveShape {
