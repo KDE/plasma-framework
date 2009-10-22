@@ -42,6 +42,11 @@ void FadeAnimation::setFactor(qreal factor)
     m_animFactor = qBound(qreal(0.0), factor, qreal(1.0));
 }
 
+qreal FadeAnimation::factor() const
+{
+    return m_animFactor;
+}
+
 void FadeAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
 {
     QGraphicsOpacityEffect *effect = m_opacityEffect.data();

@@ -52,6 +52,7 @@ set(plasma_LIB_SRCS
     animations/slide.cpp
     animations/pulser.cpp
     animations/rotation.cpp
+    animations/pause.cpp
     applet.cpp
     configloader.cpp
     containment.cpp
@@ -358,6 +359,7 @@ install(FILES
     animations/slide.h
     animations/pulser.h
     animations/rotation.h
+    animations/pause.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/animations COMPONENT Devel)
 
 

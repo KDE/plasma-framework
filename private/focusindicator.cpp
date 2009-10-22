@@ -39,9 +39,11 @@ FocusIndicator::FocusIndicator(QGraphicsWidget *parent)
     m_background->setElementPrefix("hover");
     m_background->setCacheAllRenderedFrames(true);
 
-    m_fadeIn = new FadeAnimation(1.0);
+    m_fadeIn = new FadeAnimation();
+    m_fadeIn->setFactor(1.0);
     m_fadeIn->setWidgetToAnimate(this);
-    m_fadeOut = new FadeAnimation(0.0);
+    m_fadeOut = new FadeAnimation();
+    m_fadeOut->setFactor(0);
     m_fadeOut->setWidgetToAnimate(this);
     setOpacity(0);
 
