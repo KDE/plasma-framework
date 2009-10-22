@@ -1167,21 +1167,44 @@ void Containment::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
         }
     }
 
-    if (event->isAccepted() && view()) {
-        showDropZone(view()->mapFromScene(event->scenePos()));
+    if (event->isAccepted()) {
+        if (!d->showDropZoneDelayTimer) {
+            d->showDropZoneDelayTimer = new QTimer(this);
+            d->showDropZoneDelayTimer->setInterval(300);
+            d->showDropZoneDelayTimer->setSingleShot(true);
+            connect(d->showDropZoneDelayTimer, SIGNAL(timeout()), this, SLOT(showDropZoneDelayed()));
+        }
+
+        d->dropPoints.insert(0, event->pos());
+        d->showDropZoneDelayTimer->start();
     }
+}
+
+void Containment::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
+{
+    if (d->showDropZoneDelayTimer) {
+        d->showDropZoneDelayTimer->stop();
+    }
+}
+
+void ContainmentPrivate::showDropZoneDelayed()
+{
+    q->showDropZone(dropPoints.value(0).toPoint());
+    dropPoints.remove(0);
 }
 
 void Containment::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
     QGraphicsItem *item = scene()->itemAt(event->scenePos());
-    event->setAccepted(item == this || !item);
-    Plasma::Containment *c = containment();
-    if (c && c->immutability() == Plasma::Mutable &&
-        (event->mimeData()->hasFormat(static_cast<Plasma::Corona*>(scene())->appletMimeType()) ||
-        KUrl::List::canDecode(event->mimeData())) && view()) {
-            showDropZone(view()->mapFromScene(event->scenePos()));
-     }
+    event->setAccepted(item == this || item == d->toolBox || !item);
+    if (!event->isAccepted()) {
+        if (d->showDropZoneDelayTimer) {
+            d->showDropZoneDelayTimer->stop();
+        }
+    } else if (!d->showDropZoneDelayTimer->isActive() && immutability() == Plasma::Mutable) {
+        kDebug() << event->pos().toPoint();
+        showDropZone(event->pos().toPoint());
+    }
 }
 
 void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
@@ -1250,7 +1273,7 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
         foreach (const KUrl &url, urls) {
             if (AccessManager::supportedProtocols().contains(url.protocol())) {
                 AccessAppletJob *job = AccessManager::self()->accessRemoteApplet(url);
-                dropPoints[job] = dropEvent->scenePos();
+                dropPoints[job] = dropEvent->pos();
                 QObject::connect(AccessManager::self(), SIGNAL(finished(Plasma::AccessAppletJob*)),
                                  q, SLOT(remoteAppletReady(Plasma::AccessAppletJob*)));
             } else {
@@ -1270,7 +1293,7 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
                 // It may be a directory or a file, let's stat
                 KIO::JobFlags flags = KIO::HideProgressInfo;
                 KIO::TransferJob *job = KIO::get(url, KIO::NoReload, flags);
-                dropPoints[job] = dropEvent->scenePos();
+                dropPoints[job] = dropEvent->pos();
                 QObject::connect(job, SIGNAL(result(KJob*)), q, SLOT(dropJobResult(KJob*)));
                 QObject::connect(job, SIGNAL(mimetype(KIO::Job *, const QString&)),
                                  q, SLOT(mimeTypeRetrieved(KIO::Job *, const QString&)));

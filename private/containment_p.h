@@ -51,6 +51,7 @@ public:
           toolBox(0),
           con(0),
           type(Containment::NoContainmentType),
+          showDropZoneDelayTimer(0),
           drawWallpaper(true)
     {
     }
@@ -138,6 +139,13 @@ public:
      */
     bool showAppletContextMenu(Applet *applet, const QPoint &screenPos);
 
+    /**
+     * Delayed drop zone display
+     */
+    void showDropZoneDelayed();
+
+    static bool s_positioning;
+
     Containment *q;
     FormFactor formFactor;
     Location location;
@@ -151,10 +159,10 @@ public:
     AbstractToolBox *toolBox;
     Context *con;
     Containment::Type type;
-    static bool s_positioning;
-    bool drawWallpaper;
     QHash<KJob*, QPointF> dropPoints;
     QHash<KJob*, KMenu*> dropMenus;
+    QTimer *showDropZoneDelayTimer;
+    bool drawWallpaper;
 };
 
 } // Plasma namespace
