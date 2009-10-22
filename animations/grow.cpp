@@ -30,6 +30,16 @@ GrowAnimation::GrowAnimation(qreal factor)
 {
 }
 
+void GrowAnimation::setFactor(qreal factor)
+{
+    m_animFactor = qBound(qreal(0.0), factor, qreal(1.0));
+}
+
+qreal GrowAnimation::factor() const
+{
+    return m_animFactor;
+}
+
 QAbstractAnimation* GrowAnimation::render(QObject* parent){
 
     //get current geometry values

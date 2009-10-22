@@ -41,11 +41,17 @@ namespace Plasma
 class GrowAnimation : public Animation
 {
     Q_OBJECT
+    Q_PROPERTY(qreal factor READ factor WRITE setFactor)
 
 public:
-    /* TODO: convert to qreal */
+
     GrowAnimation(qreal factor = 0.5);
     virtual ~GrowAnimation(){};
+
+    qreal factor() const;
+
+    void setFactor(qreal);
+
 
 protected:
     virtual QAbstractAnimation* render(QObject* parent = 0);
