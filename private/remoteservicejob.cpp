@@ -116,7 +116,7 @@ void RemoteServiceJob::checkValidity()
 {
     if (!m_service->isOperationEnabled(operationName())) {
         setError(-1);
-        setErrorText(i18n("Job no longer valid, operation is not enabled!"));
+        setErrorText(i18n("Job no longer valid, operation is not enabled."));
     } else if (m_delayedDesc) {
         d->parameters = m_service->parametersFromDescription(*m_delayedDesc);
     } else {
