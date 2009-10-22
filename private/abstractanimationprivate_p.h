@@ -30,6 +30,8 @@ namespace Plasma
 class AbstractAnimationPrivate
 {
 public:
+
+    AbstractAnimationPrivate();
     /**
      * Object the animation(s) should act upon.
      */
@@ -73,6 +75,7 @@ public:
      */
     qint8 reference;
 
+    bool forwards;
 };
 
 }
