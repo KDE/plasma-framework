@@ -53,6 +53,8 @@ set(plasma_LIB_SRCS
     animations/pause.cpp
     animations/pulser.cpp
     animations/rotation.cpp
+    animations/rotationstacked.cpp
+    animations/stackedlayout.cpp
     applet.cpp
     configloader.cpp
     containment.cpp
@@ -353,6 +355,7 @@ install(FILES
     animations/abstractanimation.h
     animations/animation.h
     animations/animationgroup.h
+    animations/rotationstacked.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/animations COMPONENT Devel)
 
 
