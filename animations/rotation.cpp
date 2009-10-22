@@ -35,6 +35,24 @@ public:
      * when the animation runs
      */
     QGraphicsRotation *rotation;
+
+    /**
+     * Animation rotation angle (e.g. 45, 180, etc)
+     */
+    qreal angle;
+
+    /**
+     * Rotation axis (e.g. X, Y, Z)
+     */
+    Qt::Axis axis;
+
+    /**
+     * Rotation reference (e.g. Center, Up, Down, Left, Right) can
+     * be combined (i.e. Center|Up)
+     */
+    qint8 reference;
+
+
 };
 
 
@@ -131,6 +149,36 @@ QPropertyAnimation *RotationAnimation::render(QObject *parent)
     rotationAnimation->setDuration(duration());
 
     return rotationAnimation;
+}
+
+Qt::Axis RotationAnimation::axis() const
+{
+    return d->axis;
+}
+
+void RotationAnimation::setAxis(const Qt::Axis &axis)
+{
+    d->axis = axis;
+}
+
+qint8 RotationAnimation::reference() const
+{
+    return d->reference;
+}
+
+void RotationAnimation::setReference(const qint8 &reference)
+{
+    d->reference = reference;
+}
+
+qreal RotationAnimation::angle() const
+{
+    return d->angle;
+}
+
+void RotationAnimation::setAngle(const qreal &angle)
+{
+    d->angle = angle;
 }
 
 }

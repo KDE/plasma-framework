@@ -28,8 +28,8 @@ namespace Plasma
 {
 
 AbstractAnimationPrivate::AbstractAnimationPrivate()
-    : easingCurve(QEasingCurve::Linear),
-      animVisible(true),
+    : animVisible(true),
+      easingCurve(QEasingCurve::Linear),
       forwards(true)
 {
 }
@@ -103,37 +103,6 @@ void AbstractAnimation::setVisible(bool isVisible)
 bool AbstractAnimation::isVisible() const
 {
     return d->animVisible;
-}
-
-
-Qt::Axis AbstractAnimation::axis() const
-{
-    return d->axis;
-}
-
-void AbstractAnimation::setAxis(const Qt::Axis &axis)
-{
-    d->axis = axis;
-}
-
-qint8 AbstractAnimation::reference() const
-{
-    return d->reference;
-}
-
-void AbstractAnimation::setReference(const qint8 &reference)
-{
-    d->reference = reference;
-}
-
-qreal AbstractAnimation::angle() const
-{
-    return d->angle;
-}
-
-void AbstractAnimation::setAngle(const qreal &angle)
-{
-    d->angle = angle;
 }
 
 void AbstractAnimation::start()

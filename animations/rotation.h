@@ -31,12 +31,57 @@ class RotationAnimationPrivate;
 
 class RotationAnimation : public Animation
 {
-    public:
-        RotationAnimation(const qint8 &reference = Center,
-                const Qt::Axis &axis = Qt::ZAxis, const qreal &angle = 180);
-        ~RotationAnimation();
 
-        QPropertyAnimation* render(QObject* parent = 0);
+    Q_OBJECT
+    Q_PROPERTY(Qt::Axis axis READ axis WRITE setAxis)
+    Q_PROPERTY(qint8 reference READ reference WRITE setReference)
+    Q_PROPERTY(qreal angle READ angle WRITE setAngle)
+
+public:
+    RotationAnimation(const qint8 &reference = Center,
+		      const Qt::Axis &axis = Qt::ZAxis,
+		      const qreal &angle = 180);
+
+    ~RotationAnimation();
+
+    QPropertyAnimation* render(QObject* parent = 0);
+
+    /**
+     * get animation rotation axis (e.g. YAxis, ZAxis, XAxis)
+     */
+    Qt::Axis axis() const;
+
+    /**
+     * set animation rotation axis
+     * @arg axis Rotation (e.g. YAxis, ZAxis, XAxis)
+     */
+    void setAxis(const Qt::Axis &axis);
+
+    /**
+     * Rotation reference (e.g. Center, Up, Down, Left, Right) can
+     * be combined (i.e. Center|Up)
+     */
+    qint8 reference() const;
+
+    /**
+     * Set rotation reference (e.g. Center, Up, Down, Left, Right) can
+     * be combined (i.e. Center|Up)
+     * @arg reference The reference
+     */
+    void setReference(const qint8 &reference);
+
+    /**
+     * Animation rotation angle (e.g. 45, 180, etc)
+     */
+    qreal angle() const;
+
+    /**
+     * Set animation rotation angle (e.g. 45, 180, etc)
+     * @arg angle The angle
+     */
+    void setAngle(const qreal &angle);
+
+
 
     private:
         RotationAnimationPrivate *const d;
