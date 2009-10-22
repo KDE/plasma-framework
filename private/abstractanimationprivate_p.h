@@ -75,6 +75,10 @@ public:
      */
     qint8 reference;
 
+    /**
+     * Animation direction, I supose that the idea is to offer a way
+     * to rewind the animation by setDirection(QAbstractAnimation::Backward).
+     */
     bool forwards;
 };
 
