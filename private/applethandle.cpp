@@ -229,8 +229,8 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
                 qreal opaquePoint =
                     1 - ((m_background->marginSize(RightMargin) + translation) / m_decorationRect.width());
                 g.setColorAt(1.0, Qt::transparent);
-                g.setColorAt(opaquePoint, Qt::transparent);
-                g.setColorAt(qMax(0.0, opaquePoint - 0.05), transparencyColor);
+                g.setColorAt(opaquePoint + 0.05, Qt::transparent);
+                g.setColorAt(qMax(0.0, opaquePoint), transparencyColor);
                 g.setColorAt(0.0, transparencyColor);
             }
         //complete panel
