@@ -40,6 +40,7 @@ class SpinBoxPrivate
 public:
     SpinBoxPrivate(SpinBox *spinBox)
         : q(spinBox),
+          focusIndicator(0),
           customFont(false)
     {
     }
@@ -80,10 +81,10 @@ SpinBox::SpinBox(QGraphicsWidget *parent)
 {
     KIntSpinBox *native = new KIntSpinBox;
 
-    d->focusIndicator = new FocusIndicator(this);
-
     connect(native, SIGNAL(valueChanged(int)), this, SIGNAL(valueChanged(int)));
     connect(native, SIGNAL(editingFinished()), this, SIGNAL(editingFinished()));
+
+    d->focusIndicator = new FocusIndicator(this, "widgets/lineedit");
 
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
@@ -92,6 +93,7 @@ SpinBox::SpinBox(QGraphicsWidget *parent)
     d->background = new Plasma::FrameSvg(this);
     d->background->setImagePath("widgets/lineedit");
     d->background->setCacheAllRenderedFrames(true);
+
 
     d->style = Plasma::Style::sharedStyle();
     native->setStyle(d->style.data());
@@ -182,7 +184,9 @@ void SpinBox::resizeEvent(QGraphicsSceneResizeEvent *event)
     QStyleOptionSpinBox spinOpt;
     spinOpt.initFrom(nativeWidget());
     QRect controlrect = nativeWidget()->style()->subControlRect(QStyle::CC_SpinBox, &spinOpt, QStyle::SC_SpinBoxFrame, nativeWidget());
-    d->focusIndicator->setCustomGeometry(controlrect);
+    if (d->focusIndicator) {
+        d->focusIndicator->setCustomGeometry(controlrect);
+    }
 }
 
 void SpinBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

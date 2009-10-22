@@ -75,11 +75,12 @@ LineEdit::LineEdit(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
       d(new LineEditPrivate(this))
 {
-    FocusIndicator *focusIndicator = new FocusIndicator(this);
     d->style = Plasma::Style::sharedStyle();
     d->background = new Plasma::FrameSvg(this);
     d->background->setImagePath("widgets/lineedit");
     d->background->setCacheAllRenderedFrames(true);
+
+    FocusIndicator *focusIndicator = new FocusIndicator(this, "widgets/lineedit");
 
     setNativeWidget(new KLineEdit);
 

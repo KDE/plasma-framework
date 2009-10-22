@@ -23,29 +23,29 @@
 
 #include <plasma/theme.h>
 #include <plasma/framesvg.h>
-#include <plasma/animations/fade.h>
+
+#include <plasma/animator.h>
 
 namespace Plasma
 {
 
-FocusIndicator::FocusIndicator(QGraphicsWidget *parent)
+FocusIndicator::FocusIndicator(QGraphicsWidget *parent, QString widget)
     : QGraphicsWidget(parent),
-    m_parent(parent)
+      m_parent(parent),
+      m_background(0)
 {
     setFlag(QGraphicsItem::ItemStacksBehindParent);
     setAcceptsHoverEvents(true);
+
     m_background = new Plasma::FrameSvg(this);
-    m_background->setImagePath("widgets/lineedit");
+    m_background->setImagePath(widget);
     m_background->setElementPrefix("hover");
     m_background->setCacheAllRenderedFrames(true);
 
-    m_fadeIn = new FadeAnimation();
-    m_fadeIn->setFactor(1.0);
-    m_fadeIn->setWidgetToAnimate(this);
-    m_fadeOut = new FadeAnimation();
-    m_fadeOut->setFactor(0);
-    m_fadeOut->setWidgetToAnimate(this);
-    setOpacity(0);
+    m_fade = Animator::create(Animator::FadeAnimation, this);
+    m_fade->setWidgetToAnimate(this);
+    m_fade->setProperty("startOpacity", 0.0);
+    m_fade->setProperty("targetOpacity", 1.0);
 
     parent->installEventFilter(this);
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(syncGeometry()));
@@ -54,8 +54,7 @@ FocusIndicator::FocusIndicator(QGraphicsWidget *parent)
 
 FocusIndicator::~FocusIndicator()
 {
-    delete m_fadeIn;
-    delete m_fadeOut;
+    delete m_fade;
 }
 
 void FocusIndicator::setCustomGeometry(const QRectF &geometry)
@@ -72,16 +71,24 @@ bool FocusIndicator::eventFilter(QObject *watched, QEvent *event)
 
     if (!m_parent->hasFocus() && event->type() == QEvent::GraphicsSceneHoverEnter) {
         m_background->setElementPrefix("hover");
-        m_fadeIn->start();
+        m_fade->setProperty("startOpacity", 0.0);
+        m_fade->setProperty("targetOpacity", 1.0);
+        m_fade->start();
     } else if (!m_parent->hasFocus() && event->type() == QEvent::GraphicsSceneHoverLeave) {
-        m_fadeOut->start();
+        m_fade->setProperty("startOpacity", 1.0);
+        m_fade->setProperty("targetOpacity", 0.0);
+        m_fade->start();
     } else if (event->type() == QEvent::GraphicsSceneResize) {
         syncGeometry();
     } else if (event->type() == QEvent::FocusIn) {
         m_background->setElementPrefix("focus");
-        m_fadeIn->start();
+        m_fade->setProperty("startOpacity", 0.0);
+        m_fade->setProperty("targetOpacity", 1.0);
+        m_fade->start();
     } else if (!m_parent->isUnderMouse() && event->type() == QEvent::FocusOut) {
-        m_fadeOut->start();
+        m_fade->setProperty("startOpacity", 1.0);
+        m_fade->setProperty("targetOpacity", 0.0);
+        m_fade->start();
     }
 
     return false;
@@ -94,8 +101,6 @@ void FocusIndicator::resizeEvent(QGraphicsSceneResizeEvent *event)
 
 void FocusIndicator::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    Q_UNUSED(option)
-    Q_UNUSED(widget)
     m_background->paintFrame(painter);
 }
 

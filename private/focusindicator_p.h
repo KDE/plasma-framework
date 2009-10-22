@@ -22,6 +22,8 @@
 
 #include <QGraphicsWidget>
 
+#include <plasma/animations/abstractanimation.h>
+
 namespace Plasma
 {
     class FrameSvg;
@@ -31,7 +33,7 @@ class FocusIndicator : public QGraphicsWidget
 {
     Q_OBJECT
 public:
-    FocusIndicator(QGraphicsWidget *parent);
+    FocusIndicator(QGraphicsWidget *parent = 0, QString widget = "widgets/lineedit");
     ~FocusIndicator();
 
     void setCustomGeometry(const QRectF &geometry);
@@ -48,8 +50,7 @@ private Q_SLOTS:
 private:
     QGraphicsWidget *m_parent;
     Plasma::FrameSvg *m_background;
-    FadeAnimation *m_fadeIn;
-    FadeAnimation *m_fadeOut;
+    AbstractAnimation *m_fade;
     QRectF m_customGeometry;
 };
 }

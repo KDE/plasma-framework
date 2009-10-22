@@ -43,14 +43,18 @@ class FadeAnimationPrivate;
 class FadeAnimation : public Animation
 {
     Q_OBJECT
-    Q_PROPERTY(qreal factor READ factor WRITE setFactor)
+    Q_PROPERTY(qreal startOpacity READ startOpacity WRITE setStartOpacity)
+    Q_PROPERTY(qreal targetOpacity READ targetOpacity WRITE setTargetOpacity)
 
 public:
     FadeAnimation(QObject *parent = 0);
     virtual ~FadeAnimation();
 
-    qreal factor() const;
-    void setFactor(qreal);
+    qreal startOpacity() const;
+    void setStartOpacity(qreal);
+
+    qreal targetOpacity() const;
+    void setTargetOpacity(qreal);
 
     void setWidgetToAnimate(QGraphicsWidget *widget);
 
@@ -59,7 +63,8 @@ protected:
 
 private:
     QWeakPointer<QGraphicsOpacityEffect> m_opacityEffect;
-    qreal m_animFactor;
+    qreal m_startOpacity;
+    qreal m_targetOpacity;
 };
 
 }

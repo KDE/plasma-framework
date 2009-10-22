@@ -29,7 +29,8 @@ namespace Plasma
 
 FadeAnimation::FadeAnimation(QObject *parent)
              : Animation(parent),
-               m_animFactor(0.5)
+               m_startOpacity(0),
+               m_targetOpacity(1)
 {
 }
 
@@ -37,14 +38,24 @@ FadeAnimation::~FadeAnimation()
 {
 }
 
-void FadeAnimation::setFactor(qreal factor)
+void FadeAnimation::setStartOpacity(qreal factor)
 {
-    m_animFactor = qBound(qreal(0.0), factor, qreal(1.0));
+    m_startOpacity = qBound(qreal(0.0), factor, qreal(1.0));
 }
 
-qreal FadeAnimation::factor() const
+qreal FadeAnimation::startOpacity() const
 {
-    return m_animFactor;
+    return m_startOpacity;
+}
+
+void FadeAnimation::setTargetOpacity(qreal factor)
+{
+    m_targetOpacity = qBound(qreal(0.0), factor, qreal(1.0));
+}
+
+qreal FadeAnimation::targetOpacity() const
+{
+    return m_targetOpacity;
 }
 
 void FadeAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
@@ -56,7 +67,7 @@ void FadeAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
 
     if (widget) {
         effect = new QGraphicsOpacityEffect(widget);
-        effect->setOpacity(qreal(1.0));
+        effect->setOpacity(m_startOpacity);
         widget->setGraphicsEffect(effect);
         m_opacityEffect = effect;
     }
@@ -66,8 +77,8 @@ QAbstractAnimation* FadeAnimation::render(QObject* parent)
 {
     //create animation
     QPropertyAnimation* anim = new QPropertyAnimation(m_opacityEffect.data(), "opacity", parent);
-    anim->setStartValue(qreal(1.0));
-    anim->setEndValue(m_animFactor);
+    anim->setStartValue(m_startOpacity);
+    anim->setEndValue(m_targetOpacity);
     anim->setDuration(duration());
 
     return anim;
