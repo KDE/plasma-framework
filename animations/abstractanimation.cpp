@@ -22,15 +22,22 @@
 
 #include <QEasingCurve>
 
+#include <kdebug.h>
+
 namespace Plasma
 {
 
+AbstractAnimationPrivate::AbstractAnimationPrivate()
+    : easingCurve(QEasingCurve::Linear),
+      animVisible(true),
+      forwards(true)
+{
+}
 
 AbstractAnimation::AbstractAnimation(QObject *parent)
     : QObject(parent),
       d(new AbstractAnimationPrivate)
 {
-    d->easingCurve = QEasingCurve::Linear;
 }
 
 AbstractAnimation::~AbstractAnimation()
@@ -56,6 +63,16 @@ void AbstractAnimation::setEasingCurveType(QEasingCurve::Type easingCurve)
 QEasingCurve::Type AbstractAnimation::easingCurveType() const
 {
     return d->easingCurve;
+}
+
+void AbstractAnimation::setForwards(bool forwards)
+{
+    d->forwards = forwards;
+}
+
+bool AbstractAnimation::forwards() const
+{
+    return d->forwards;
 }
 
 void AbstractAnimation::setDirection(AnimationDirection direction)
@@ -123,6 +140,8 @@ void AbstractAnimation::start()
 {
     QAbstractAnimation* anim = toQAbstractAnimation(parent());
     if (anim) {
+        anim->setDirection(d->forwards ? QAbstractAnimation::Forward :
+                                         QAbstractAnimation::Backward);
         anim->start(QAbstractAnimation::DeleteWhenStopped);
     }
 }

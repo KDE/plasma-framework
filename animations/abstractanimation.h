@@ -51,6 +51,8 @@ class PLASMA_EXPORT AbstractAnimation : public QObject
     Q_PROPERTY(qreal distance READ distance WRITE setDistance)
     Q_PROPERTY(bool isVisible READ isVisible WRITE setVisible)
     Q_PROPERTY(QGraphicsWidget *widgetToAnimate READ widgetToAnimate WRITE setWidgetToAnimate)
+    Q_PROPERTY(bool forwards READ forwards WRITE setForwards)
+
     /**
      * TODO: add missing properties (e.g. angle, axis, reference, etc)
      */
@@ -100,6 +102,17 @@ public:
      * Get the animation easing curve type
      */
     QEasingCurve::Type easingCurveType() const;
+
+    /**
+     * Sets whether the animation will run forwards or backwards
+     * @arg forward true to run the animation forewards
+     */
+    void setForwards(bool forward);
+
+    /**
+     * @return true if the animation will run forwards, false if it will run backwards
+     */
+    bool forwards() const;
 
     /**
      * Set the animation direction
