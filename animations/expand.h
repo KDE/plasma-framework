@@ -37,17 +37,15 @@ namespace Plasma
  * Effect that grows the object a specific distance in a given direction, on
  * one side. The object doesn't "move" except for the side that is expanding.
  */
-class PLASMA_EXPORT ExpandAnimation : public Animation
+class ExpandAnimation : public Animation
 {
     Q_OBJECT
 
 public:
-    ExpandAnimation(AnimationDirection direction = MoveUp, qreal distance = 0);
-    virtual ~ExpandAnimation(){};
+    ExpandAnimation(QObject *parent = 0);
 
 protected:
-    virtual QAbstractAnimation* render(QObject* parent = 0);
-
+    virtual QAbstractAnimation *render(QObject* parent = 0);
 };
 
 }

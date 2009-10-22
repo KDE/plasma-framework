@@ -25,13 +25,13 @@
 namespace Plasma
 {
 
-ExpandAnimation::ExpandAnimation(AnimationDirection direction, qreal distance)
+ExpandAnimation::ExpandAnimation(QObject *parent)
+    : Animation(parent)
 {
-    setDirection(direction);
-    setDistance(distance);
 }
 
-QAbstractAnimation* ExpandAnimation::render(QObject* parent){
+QAbstractAnimation* ExpandAnimation::render(QObject* parent)
+{
 
     //get current geometry values
     QGraphicsWidget *m_object = widgetToAnimate();
