@@ -309,12 +309,12 @@ void PushButton::resizeEvent(QGraphicsSceneResizeEvent *event)
         //resize all four panels
         d->background->setElementPrefix("pressed");
         d->background->resizeFrame(size());
-        d->background->setElementPrefix("focus");
-        d->background->resizeFrame(size());
 
         d->syncActiveRect();
 
         d->background->setElementPrefix("active");
+        d->background->resizeFrame(d->activeRect.size());
+        d->background->setElementPrefix("focus");
         d->background->resizeFrame(d->activeRect.size());
 
         d->background->setElementPrefix("normal");
@@ -374,7 +374,7 @@ void PushButton::paint(QPainter *painter,
 
     if (nativeWidget()->hasFocus()) {
         d->background->setElementPrefix("focus");
-        d->background->paintFrame(painter);
+        d->background->paintFrame(painter, d->activeRect.topLeft());
     }
 
     painter->setPen(Plasma::Theme::defaultTheme()->color(Theme::ButtonTextColor));
