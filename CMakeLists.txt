@@ -42,6 +42,7 @@ set(plasmagik_SRCS
 set(plasma_LIB_SRCS
     ${plasmagik_SRCS}
     abstractrunner.cpp
+    abstracttoolbox.cpp
     animator.cpp
     animations/abstractanimation.cpp
     animations/animation.cpp
@@ -125,7 +126,6 @@ set(plasma_LIB_SRCS
     servicejob.cpp
     svg.cpp
     theme.cpp
-    abstracttoolbox.cpp
     tooltipcontent.cpp
     tooltipmanager.cpp
     version.cpp
@@ -250,6 +250,7 @@ install(FILES ${plasmagik_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/ CO
 
 set(plasma_LIB_INCLUDES
     abstractrunner.h
+    abstracttoolbox.h
     animationdriver.h
     animations/abstractanimation.h
     animations/animation.h
@@ -292,7 +293,6 @@ set(plasma_LIB_INCLUDES
     servicejob.h
     svg.h
     theme.h
-    abstracttoolbox.h
     tooltipcontent.h
     tooltipmanager.h
     version.h
