@@ -127,7 +127,6 @@ QPropertyAnimation *RotationAnimation::render(QObject *parent)
 
     QPropertyAnimation *rotationAnimation= new QPropertyAnimation(d->rotation, "angle", m_object);
     rotationAnimation->setStartValue(0);
-    kDebug() << "angle is" << angle();
     rotationAnimation->setEndValue(angle());
     rotationAnimation->setDuration(duration());
 
