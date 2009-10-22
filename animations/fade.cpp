@@ -27,57 +27,43 @@
 namespace Plasma
 {
 
-class FadeAnimationPrivate
-{
-public:
-    FadeAnimationPrivate()
-    {
-    }
-
-    ~FadeAnimationPrivate()
-    {
-    }
-
-    QGraphicsOpacityEffect *opacityEffect;
-};
-
-FadeAnimation::FadeAnimation(qreal factor)
-             : d(new FadeAnimationPrivate()),
-               m_animFactor(qBound(qreal(0.0), factor, qreal(1.0)))
+FadeAnimation::FadeAnimation(QObject *parent)
+             : Animation(parent),
+               m_animFactor(0.5)
 {
 }
 
 FadeAnimation::~FadeAnimation()
 {
-    delete d;
+}
+
+void FadeAnimation::setFactor(qreal factor)
+{
+    m_animFactor = qBound(qreal(0.0), factor, qreal(1.0));
 }
 
 void FadeAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
 {
-    QGraphicsWidget *m_widget = widgetToAnimate();
-    if (m_widget) {
-        QGraphicsEffect *effect = m_widget->graphicsEffect();
-        if (effect && dynamic_cast<QGraphicsOpacityEffect *>(effect)) {
-            effect->deleteLater();
-        }
-    }
+    QGraphicsOpacityEffect *effect = m_opacityEffect.data();
+    delete effect;
 
     Animation::setWidgetToAnimate(widget);
 
-    d->opacityEffect = new QGraphicsOpacityEffect(widget);
-    widget->setGraphicsEffect(d->opacityEffect);
+    if (widget) {
+        effect = new QGraphicsOpacityEffect(widget);
+        effect->setOpacity(qreal(1.0));
+        widget->setGraphicsEffect(effect);
+        m_opacityEffect = effect;
+    }
 }
 
 QAbstractAnimation* FadeAnimation::render(QObject* parent)
 {
-
     //create animation
-    QPropertyAnimation* anim = new QPropertyAnimation(d->opacityEffect, "opacity", parent);
-    anim->setStartValue(0);
+    QPropertyAnimation* anim = new QPropertyAnimation(m_opacityEffect.data(), "opacity", parent);
+    anim->setStartValue(qreal(1.0));
     anim->setEndValue(m_animFactor);
     anim->setDuration(duration());
-
-    //QObject::connect(anim, SIGNAL(finished()), anim, SLOT(deleteLater()));
 
     return anim;
 }

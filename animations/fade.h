@@ -27,6 +27,8 @@
 #include <plasma/animations/animation.h>
 #include <plasma/plasma_export.h>
 
+class QGraphicsOpacityEffect;
+
 namespace Plasma
 {
 
@@ -41,10 +43,14 @@ class FadeAnimationPrivate;
 class FadeAnimation : public Animation
 {
     Q_OBJECT
+    Q_PROPERTY(qreal factor READ factor WRITE setFactor)
 
 public:
-    FadeAnimation(qreal factor =  0.5);
+    FadeAnimation(QObject *parent = 0);
     virtual ~FadeAnimation();
+
+    qreal factor() const;
+    void setFactor(qreal);
 
     void setWidgetToAnimate(QGraphicsWidget *widget);
 
@@ -52,7 +58,7 @@ protected:
     virtual QAbstractAnimation* render(QObject* parent = 0);
 
 private:
-    FadeAnimationPrivate *const d;
+    QWeakPointer<QGraphicsOpacityEffect> m_opacityEffect;
     qreal m_animFactor;
 };
 
