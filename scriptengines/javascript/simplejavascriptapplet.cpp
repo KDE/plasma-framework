@@ -192,11 +192,11 @@ SimpleJavaScriptApplet::~SimpleJavaScriptApplet()
     }
 }
 
-void SimpleJavaScriptApplet::reportError()
+void SimpleJavaScriptApplet::reportError(QScriptEngine *engine)
 {
-    kDebug() << "Error: " << m_engine->uncaughtException().toString()
-             << " at line " << m_engine->uncaughtExceptionLineNumber() << endl;
-    kDebug() << m_engine->uncaughtExceptionBacktrace();
+    kDebug() << "Error: " << engine->uncaughtException().toString()
+             << " at line " << engine->uncaughtExceptionLineNumber() << endl;
+    kDebug() << engine->uncaughtExceptionBacktrace();
 }
 
 void SimpleJavaScriptApplet::configChanged()
@@ -214,7 +214,7 @@ void SimpleJavaScriptApplet::configChanged()
     m_engine->popContext();
 
     if (m_engine->hasUncaughtException()) {
-        reportError();
+        reportError(m_engine);
     }
 }
 
@@ -235,14 +235,13 @@ void SimpleJavaScriptApplet::dataUpdated(const QString &name, const DataEngine::
     m_engine->popContext();
 
     if (m_engine->hasUncaughtException()) {
-        reportError();
+        reportError(m_engine);
     }
 }
 
 void SimpleJavaScriptApplet::executeAction(const QString &name)
 {
-    callFunction("action_" + name);
-    /*
+    //callFunction("action_" + name);
     QScriptValue fun = m_self.property("action_" + name);
     if (fun.isFunction()) {
         QScriptContext *ctx = m_engine->pushContext();
@@ -251,9 +250,9 @@ void SimpleJavaScriptApplet::executeAction(const QString &name)
         m_engine->popContext();
 
         if (m_engine->hasUncaughtException()) {
-            reportError();
+            reportError(m_engine);
         }
-    }*/
+    }
 }
 
 void SimpleJavaScriptApplet::paintInterface(QPainter *p, const QStyleOptionGraphicsItem *option, const QRect &contentsRect)
@@ -280,7 +279,7 @@ void SimpleJavaScriptApplet::paintInterface(QPainter *p, const QStyleOptionGraph
     m_engine->popContext();
 
     if (m_engine->hasUncaughtException()) {
-        reportError();
+        reportError(m_engine);
     }
 }
 
@@ -299,7 +298,7 @@ void SimpleJavaScriptApplet::callFunction(const QString &functionName, const QSc
         m_engine->popContext();
 
         if (m_engine->hasUncaughtException()) {
-            reportError();
+            reportError(m_engine);
         }
     }
 }
@@ -353,7 +352,7 @@ bool SimpleJavaScriptApplet::init()
 
     m_engine->evaluate(script);
     if (m_engine->hasUncaughtException()) {
-        reportError();
+        reportError(m_engine);
         return false;
     }
 
@@ -667,7 +666,7 @@ QScriptValue SimpleJavaScriptApplet::newPlasmaSvg(QScriptContext *context, QScri
 
     bool parentedToApplet = false;
     if (context->argumentCount() == 2) {
-        parent = qscriptvalue_cast<QObject *>(context->argument(1));
+        parent = context->argument(1).toQObject();
         parentedToApplet = parent == interface;
     }
 
@@ -691,7 +690,7 @@ QScriptValue SimpleJavaScriptApplet::newPlasmaFrameSvg(QScriptContext *context, 
     QObject *parent = 0;
 
     if (context->argumentCount() == 2) {
-        parent = qscriptvalue_cast<QObject *>(context->argument(1));
+        parent = context->argument(1).toQObject();
     }
 
     bool parentedToApplet = false;
@@ -740,10 +739,10 @@ QScriptValue SimpleJavaScriptApplet::createWidget(QScriptContext *context, QScri
 
     QGraphicsWidget *parent = 0;
     if (context->argumentCount()) {
-        parent = qscriptvalue_cast<QGraphicsWidget*>(context->argument(0));
+        parent = qobject_cast<QGraphicsWidget*>(context->argument(0).toQObject());
 
         if (!parent) {
-            return context->throwError(i18n("The parent must be a QGraphicsWidget"));
+            context->throwError(i18n("The parent must be a QGraphicsWidget"));
         }
     }
 
@@ -761,6 +760,7 @@ QScriptValue SimpleJavaScriptApplet::createWidget(QScriptContext *context, QScri
             return context->throwError(i18n("Could not extract the Applet"));
         }
 
+        //kDebug() << "got the applet!";
         parent = interface->applet();
     }
 

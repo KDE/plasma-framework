@@ -41,7 +41,7 @@ public:
     ~SimpleJavaScriptApplet();
     bool init();
 
-    void reportError();
+    static void reportError(QScriptEngine *error);
 
     void paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, const QRect &contentsRect);
     QList<QAction*> contextualActions();
