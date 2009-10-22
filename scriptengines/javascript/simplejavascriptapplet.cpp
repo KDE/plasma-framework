@@ -326,6 +326,7 @@ void SimpleJavaScriptApplet::populateAnimationsHash()
         s_animationDefs.insert("fade", Plasma::Animator::FadeAnimation);
         s_animationDefs.insert("grow", Plasma::Animator::GrowAnimation);
         s_animationDefs.insert("expand", Plasma::Animator::ExpandAnimation);
+        s_animationDefs.insert("pause", Plasma::Animator::PauseAnimation);
         s_animationDefs.insert("pulse", Plasma::Animator::PulseAnimation);
         s_animationDefs.insert("rotate", Plasma::Animator::RotationAnimation);
         s_animationDefs.insert("rotateStacked", Plasma::Animator::RotationStackedAnimation);
@@ -536,6 +537,7 @@ QScriptValue SimpleJavaScriptApplet::service(QScriptContext *context, QScriptEng
     return engine->newQObject(service);
 }
 
+#include <Plasma/Animation>
 QScriptValue SimpleJavaScriptApplet::animation(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() != 1) {
