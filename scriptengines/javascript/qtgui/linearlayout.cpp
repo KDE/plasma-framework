@@ -45,7 +45,8 @@ DECLARE_NUMBER_GET_SET_METHODS(QGraphicsLinearLayout, spacing, setSpacing)
 
 QGraphicsLayoutItem *layoutItem(QScriptContext *ctx, int index = 0)
 {
-    QGraphicsLayoutItem *item = qscriptvalue_cast<QGraphicsWidget*>(ctx->argument(index));
+    QObject *object = ctx->argument(index).toQObject();
+    QGraphicsLayoutItem *item = qobject_cast<QGraphicsWidget*>(object);
 
     if (!item) {
         item = qscriptvalue_cast<QGraphicsLinearLayout*>(ctx->argument(index));
@@ -55,9 +56,13 @@ QGraphicsLayoutItem *layoutItem(QScriptContext *ctx, int index = 0)
         item = qscriptvalue_cast<QGraphicsGridLayout*>(ctx->argument(index));
     }
 
-    QObject *appletObject = ctx->argument(index).toQObject();
-    if (appletObject) {
-        AppletInterface *interface = qobject_cast<AppletInterface*>(appletObject);
+    if (!item) {
+        AppletInterface *interface = qobject_cast<AppletInterface*>(object);
+
+        if (!interface) {
+            interface = qobject_cast<AppletInterface*>(ctx->engine()->globalObject().property("plasmoid").toQObject());
+        }
+
         if (interface) {
             item = interface->applet();
         }
@@ -68,10 +73,6 @@ QGraphicsLayoutItem *layoutItem(QScriptContext *ctx, int index = 0)
 
 static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
 {
-    if (ctx->argumentCount() == 0) {
-        return ctx->throwError(i18n("LinearLayout requires a parent"));
-    }
-
     QGraphicsLayoutItem *parent = layoutItem(ctx);
 
     if (!parent) {
