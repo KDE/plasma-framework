@@ -975,7 +975,7 @@ void AppletHandle::calculateSize()
 
     //m_rect = m_applet->mapToParent(m_rect).boundingRect();
     m_decorationRect = m_rect.adjusted(-marginLeft, -marginTop, marginRight, marginBottom);
-    m_totalRect = m_decorationRect.united(m_applet->geometry());
+    m_totalRect = m_decorationRect.united(m_applet->boundingRect());
 }
 
 } // Plasma Namespace
