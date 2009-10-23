@@ -45,7 +45,7 @@ class PopupAppletPrivate;
  *
  * If you use this class as a base class for your extender using applet, the extender will
  * automatically be used for the popup; reimplementing graphicsWidget() is unnecessary in this case.
- * If you need a popup that does not steal window focus when openend or used, set window flag 
+ * If you need a popup that does not steal window focus when openend or used, set window flag
  * Qt::X11BypassWindowManagerHint the widget returned by widget() or graphicsWidget().
  */
 
@@ -100,7 +100,7 @@ public:
 
     /**
      * Sets whether or not the dialog popup that gets created should be a "passive" popup
-     * that does not steal focus from other windows or not. 
+     * that does not steal focus from other windows or not.
      *
      * @arg passive true if the dialog should be treated as a passive popup
      */
@@ -152,6 +152,16 @@ protected:
     void dropEvent(QGraphicsSceneDragDropEvent *event);
 
 private:
+    /**
+     * @internal This constructor is to be used with the Package loading system.
+     *
+     * @param parent a QObject parent; you probably want to pass in 0
+     * @param args a list of strings containing two entries: the service id
+     *      and the applet id
+     * @since 4.3
+     */
+    PopupApplet(const QString &packagePath, uint appletId, const QVariantList &args);
+
     Q_PRIVATE_SLOT(d, void internalTogglePopup())
     Q_PRIVATE_SLOT(d, void hideTimedPopup())
     Q_PRIVATE_SLOT(d, void clearPopupLostFocus())

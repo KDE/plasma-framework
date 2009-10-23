@@ -102,6 +102,7 @@ public:
     void clearShortcutEditorPtr();
     void configDialogFinished();
     KConfigDialog *generateGenericConfigDialog();
+    void addStandardConfigurationPages(KConfigDialog *dialog);
     QString configDialogId() const;
     QString configWindowTitle() const;
     void updateShortcuts();

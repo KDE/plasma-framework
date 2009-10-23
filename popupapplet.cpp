@@ -62,6 +62,17 @@ PopupApplet::PopupApplet(QObject *parent, const QVariantList &args)
     setAcceptDrops(true);
 }
 
+PopupApplet::PopupApplet(const QString &packagePath, uint appletId, const QVariantList &args)
+    : Plasma::Applet(packagePath, appletId, args),
+      d(new PopupAppletPrivate(this))
+{
+    int iconSize = IconSize(KIconLoader::Desktop);
+    resize(iconSize, iconSize);
+    disconnect(this, SIGNAL(activate()), (Applet*)this, SLOT(setFocus()));
+    connect(this, SIGNAL(activate()), this, SLOT(internalTogglePopup()));
+    setAcceptDrops(true);
+}
+
 PopupApplet::~PopupApplet()
 {
     delete widget();

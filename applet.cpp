@@ -1738,6 +1738,7 @@ void Applet::showConfigurationInterface()
     } else {
         KConfigDialog *dialog = d->generateGenericConfigDialog();
         //createConfigurationInterface(dialog);
+        d->addStandardConfigurationPages(dialog);
         dialog->show();
     }
 
@@ -1789,14 +1790,18 @@ KConfigDialog *AppletPrivate::generateGenericConfigDialog()
     dialog->setWindowTitle(configWindowTitle());
     dialog->setAttribute(Qt::WA_DeleteOnClose, true);
     q->createConfigurationInterface(dialog);
-    addGlobalShortcutsPage(dialog);
-    addPublishPage(dialog);
     //TODO: Apply button does not correctly work for now, so do not show it
     dialog->showButton(KDialog::Apply, false);
     QObject::connect(dialog, SIGNAL(applyClicked()), q, SLOT(configDialogFinished()));
     QObject::connect(dialog, SIGNAL(okClicked()), q, SLOT(configDialogFinished()));
     QObject::connect(dialog, SIGNAL(finished()), nullManager, SLOT(deleteLater()));
     return dialog;
+}
+
+void AppletPrivate::addStandardConfigurationPages(KConfigDialog *dialog)
+{
+    addGlobalShortcutsPage(dialog);
+    addPublishPage(dialog);
 }
 
 void AppletPrivate::addGlobalShortcutsPage(KConfigDialog *dialog)
@@ -2137,7 +2142,16 @@ Applet::Applet(const QString &packagePath, uint appletId, const QVariantList &ar
 Applet *Applet::loadPlasmoid(const QString &path, uint appletId, const QVariantList &args)
 {
     if (QFile::exists(path + "/metadata.desktop")) {
-        return new Applet(path, appletId, args);
+        KService service(path + "/metadata.desktop");
+        const QStringList& types = service.serviceTypes();
+
+        if (types.contains("Plasma/Containment")) {
+            return new Containment(path, appletId, args);
+        } else if (types.contains("Plasma/PopupApplet")) {
+            return new PopupApplet(path, appletId, args);
+        } else {
+            return new Applet(path, appletId, args);
+        }
     }
 
     return 0;

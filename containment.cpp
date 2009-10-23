@@ -123,6 +123,17 @@ Containment::Containment(QObject *parent, const QVariantList &args)
     setHasConfigurationInterface(false);
 }
 
+Containment::Containment(const QString &packagePath, uint appletId, const QVariantList &args)
+    : Plasma::Applet(packagePath, appletId, args),
+      d(new ContainmentPrivate(this))
+{
+    // WARNING: do not access config() OR globalConfig() in this method!
+    //          that requires a scene, which is not available at this point
+    setPos(0, 0);
+    setBackgroundHints(NoBackground);
+    setHasConfigurationInterface(false);
+}
+
 Containment::~Containment()
 {
     delete d;
