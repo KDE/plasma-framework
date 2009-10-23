@@ -1,5 +1,5 @@
 #////////////////////////////////////////////////////////////////////////
-// rotation.cpp                                                        //
+// rotationstacked.h                                                   //
 //                                                                     //
 // Copyright(C) 2009 Igor Trindade Oliveira <igor.oliveira@indt.org.br>//
 //                                                                     //
@@ -25,13 +25,23 @@
 #include <plasma/animations/animation.h>
 #include <plasma/plasma_export.h>
 
+#include <QGraphicsLayoutItem>
+
 namespace Plasma {
 
 class RotationStackedAnimationPrivate;
 
+/* TODO:
+ * create a parent class for rotations
+ */
+
 class RotationStackedAnimation : public Animation
 {
     Q_OBJECT
+
+    Q_PROPERTY(QGraphicsLayoutItem* layout READ layout)
+    Q_PROPERTY(Reference reference READ reference WRITE setReference)
+    Q_PROPERTY(QGraphicsWidget* backWidget READ backWidget WRITE setBackWidget)
 
     public:
         RotationStackedAnimation(QObject *parent = 0);
@@ -44,9 +54,8 @@ class RotationStackedAnimation : public Animation
 
         QGraphicsLayoutItem *layout();
 
-        void setWidgetsToAnimate(QGraphicsWidget *front, QGraphicsWidget *back);
-
-        QPair<QGraphicsWidget *, QGraphicsWidget *> widgetsToAnimate();
+        QGraphicsWidget *backWidget();
+        void setBackWidget(QGraphicsWidget *backWidget);
 
     public Q_SLOTS:
         void rotateBackWidget();

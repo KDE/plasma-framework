@@ -1,5 +1,5 @@
 /***********************************************************************/
-/* stackedlayout.h                                                     */
+/* stackedlayout.c                                                     */
 /*                                                                     */
 /* Copyright(C) 2009 Igor Trindade Oliveira <igor.oliveira@indt.org.br>*/
 /*                                                                     */

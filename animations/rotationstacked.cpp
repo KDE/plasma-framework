@@ -1,5 +1,5 @@
 /***********************************************************************/
-/* stackedlayout.h                                                     */
+/* rotationstacked.h                                                     */
 /*                                                                     */
 /* Copyright(C) 2009 Igor Trindade Oliveira <igor.oliveira@indt.org.br>*/
 /*                                                                     */
@@ -35,7 +35,7 @@ class RotationStackedAnimationPrivate {
 
         AbstractAnimation::Reference reference;
 
-        QPair<QGraphicsWidget *, QGraphicsWidget *> animObjects;
+        QGraphicsWidget *backWidget;
 
         StackedLayout *sLayout;
 };
@@ -65,12 +65,19 @@ AbstractAnimation::Reference RotationStackedAnimation::reference()
     return d->reference;
 }
 
-void RotationStackedAnimation::setWidgetsToAnimate(QGraphicsWidget *front, QGraphicsWidget *back)
+QGraphicsWidget *RotationStackedAnimation::backWidget()
 {
-    d->animObjects = qMakePair(front, back);
+    return d->backWidget;
+}
 
-    d->sLayout->addWidget(front);
-    d->sLayout->addWidget(back);
+void RotationStackedAnimation::setBackWidget(QGraphicsWidget *backWidget)
+{
+    d->backWidget = backWidget;
+
+    if(widgetToAnimate()) {
+        d->sLayout->addWidget(widgetToAnimate());
+        d->sLayout->addWidget(backWidget);
+    }
 }
 
 QGraphicsLayoutItem *RotationStackedAnimation::layout()
@@ -78,16 +85,11 @@ QGraphicsLayoutItem *RotationStackedAnimation::layout()
     return d->sLayout;
 }
 
-QPair<QGraphicsWidget *,QGraphicsWidget *>  RotationStackedAnimation::widgetsToAnimate()
-{
-    return d->animObjects;
-}
-
 QAbstractAnimation *RotationStackedAnimation::render(QObject *parent)
 {
     Q_UNUSED(parent);
 
-    QPair<QGraphicsWidget *,QGraphicsWidget *> widgets = widgetsToAnimate();
+    QPair<QGraphicsWidget *,QGraphicsWidget *> widgets = qMakePair(widgetToAnimate(), d->backWidget);
 
     QSequentialAnimationGroup *groupAnim = new QSequentialAnimationGroup(parent);
 
