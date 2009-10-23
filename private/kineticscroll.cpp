@@ -363,7 +363,9 @@ bool KineticScrolling::eventFilter(QObject *watched, QEvent *event)
         d->forwardingEvent = false;
     }
 
-   if (!notBlocked || ((event->type() != QEvent::GraphicsSceneMousePress && event->isAccepted()) && (event->type() != QEvent::GraphicsSceneWheel && event->isAccepted()))) {
+   if (!notBlocked ||
+       ((event->type() != QEvent::GraphicsSceneMousePress && event->isAccepted()) &&
+       (event->type() != QEvent::GraphicsSceneWheel && event->isAccepted()))) {
        return true;
    }
 
