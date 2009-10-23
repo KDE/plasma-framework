@@ -63,12 +63,14 @@ QAbstractAnimation* ExpandAnimation::render(QObject* parent)
         break;
     }
 
-    //create animation
-    QPropertyAnimation* anim = new QPropertyAnimation(m_object, "geometry", parent);
+    //Recreate only if needed
+    QPropertyAnimation *anim = dynamic_cast<QPropertyAnimation* >(animation());
+    if (!anim) {
+	anim = new QPropertyAnimation(m_object, "geometry", parent);
+	setAnimation(anim);
+    }
     anim->setEndValue(geometry);
     anim->setDuration(duration());
-
-    //QObject::connect(anim, SIGNAL(finished()), anim, SLOT(deleteLater()));
 
     return anim;
 }

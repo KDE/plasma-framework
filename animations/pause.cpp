@@ -31,8 +31,14 @@ PauseAnimation::PauseAnimation(QObject *parent)
 
 QAbstractAnimation* PauseAnimation::render(QObject* parent)
 {
-    //create animation
-    return new QPauseAnimation(duration(), parent);
+    //Recreate only if needed
+    QPauseAnimation *anim = dynamic_cast<QPauseAnimation* >(animation());
+    if (!anim) {
+	anim = new QPauseAnimation(duration(), parent);
+	setAnimation(anim);
+    }
+
+    return anim;
 }
 
 } //namespace Plasma

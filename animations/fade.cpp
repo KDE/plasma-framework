@@ -76,7 +76,12 @@ void FadeAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
 QAbstractAnimation* FadeAnimation::render(QObject* parent)
 {
     //create animation
-    QPropertyAnimation* anim = new QPropertyAnimation(m_opacityEffect.data(), "opacity", parent);
+    QPropertyAnimation* anim = dynamic_cast<QPropertyAnimation* >(animation());
+    if (!anim) {
+        anim = new QPropertyAnimation(m_opacityEffect.data(), "opacity", parent);
+        setAnimation(anim);
+    }
+
     anim->setStartValue(m_startOpacity);
     anim->setEndValue(m_targetOpacity);
     anim->setDuration(duration());

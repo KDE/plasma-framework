@@ -59,8 +59,13 @@ QAbstractAnimation* GrowAnimation::render(QObject* parent){
     qreal newX = geometry.x() - w * locfactor;
     qreal newY = geometry.y() - h * locfactor;
 
-    //create animation
-    QPropertyAnimation* anim = new QPropertyAnimation(m_object, "geometry", parent);
+    //Recreate only if needed
+    QPropertyAnimation *anim = dynamic_cast<QPropertyAnimation* >(animation());
+    if (!anim) {
+	anim = new QPropertyAnimation(m_object, "geometry", parent);
+	setAnimation(anim);
+    }
+
     anim->setEndValue(QRectF(
                 newX, newY,
                 newWidth, newHeight));

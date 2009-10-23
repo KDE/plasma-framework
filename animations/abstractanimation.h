@@ -52,6 +52,7 @@ class PLASMA_EXPORT AbstractAnimation : public QObject
     Q_PROPERTY(bool isVisible READ isVisible WRITE setVisible)
     Q_PROPERTY(QGraphicsWidget *widgetToAnimate READ widgetToAnimate WRITE setWidgetToAnimate)
     Q_PROPERTY(bool forwards READ forwards WRITE setForwards)
+    Q_PROPERTY(QAbstractAnimation* animation READ animation WRITE setAnimation)
 
 public:
 
@@ -138,6 +139,18 @@ public:
      * get the animation visibility
      */
     bool isVisible() const;
+
+    /**
+     * Access the QAbstractAnimation of this plasma::Animation object.
+     */
+    QAbstractAnimation *animation();
+
+    /**
+     * Access the QAbstractAnimation of this plasma::Animation object.
+     * @arg obj An animation pointer (it will be cleared by the object)
+     */
+    void setAnimation(QAbstractAnimation *obj);
+
 
 public slots:
 

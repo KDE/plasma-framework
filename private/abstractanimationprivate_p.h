@@ -23,6 +23,7 @@
 
 #include <QEasingCurve>
 #include <QWeakPointer>
+class QAbstractAnimation;
 
 namespace Plasma
 {
@@ -36,6 +37,11 @@ public:
      * Object the animation(s) should act upon.
      */
     QWeakPointer<QGraphicsWidget> animObject;
+
+    /**
+     * All animations will have *at least* one animation property
+     */
+    QWeakPointer<QAbstractAnimation> animation;
 
     /**
      * Animation direction: where the animation will move.

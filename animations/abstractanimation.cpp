@@ -48,6 +48,10 @@ AbstractAnimation::~AbstractAnimation()
 void AbstractAnimation::setWidgetToAnimate(QGraphicsWidget* receiver)
 {
     d->animObject = receiver;
+    /* Changed the object, delete the animation */
+    delete d->animation.data();
+    d->animation.clear();
+
 }
 
 QGraphicsWidget* AbstractAnimation::widgetToAnimate()
@@ -105,13 +109,23 @@ bool AbstractAnimation::isVisible() const
     return d->animVisible;
 }
 
+QAbstractAnimation* AbstractAnimation::animation()
+{
+    return d->animation.data();
+}
+
+void AbstractAnimation::setAnimation(QAbstractAnimation *obj)
+{
+    d->animation = obj;
+}
+
 void AbstractAnimation::start()
 {
     QAbstractAnimation* anim = toQAbstractAnimation(parent());
     if (anim) {
         anim->setDirection(d->forwards ? QAbstractAnimation::Forward :
                                          QAbstractAnimation::Backward);
-        anim->start(QAbstractAnimation::DeleteWhenStopped);
+        anim->start();
     }
 }
 

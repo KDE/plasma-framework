@@ -50,6 +50,7 @@ public :
 
     QAbstractAnimation *animation;
     QGraphicsWidget *under;
+    /* FIXME: clean up this guy */
     QRectF *pulseGeometry;
     qreal zvalue, mscale, mopacity;
     QPropertyAnimation *opacityAnimation;
@@ -88,25 +89,6 @@ void PulseAnimation::setCopy(QGraphicsWidget *copy)
     d->mscale = d->under->scale();
 }
 
-void PulseAnimation::updateGeometry(QRectF updated, qreal zCoordinate, qreal scale)
-{
-    d->zvalue = zCoordinate;
-    --d->zvalue;
-    d->under->setGeometry(updated);
-    d->under->setPos(0, 0);
-    d->under->setOpacity(0);
-    d->under->setZValue(d->zvalue);
-
-    /* TODO: move this to a function */
-    QRectF initial(d->under->geometry());
-    qreal W = initial.width() * scale * 0.33;
-    qreal H = initial.height() * scale * 0.33;
-    QRectF end(initial.x() - W, initial.y() -  H, initial.width() * scale,
-              initial.height() * scale);
-    d->geometryAnimation->setEndValue(end);
- }
-
-
 void PulseAnimation::resetPulser()
 {
     d->under->setGeometry(*d->pulseGeometry);
@@ -118,6 +100,7 @@ void PulseAnimation::resetPulser()
 
 void PulseAnimation::createAnimation(qreal duration, qreal scale)
 {
+    bool dirty = false;
     QGraphicsWidget *target = widgetToAnimate();
     /* Fallback to parent widget if we don't have one 'shadow' widget */
     if (!d->under) {
@@ -128,34 +111,53 @@ void PulseAnimation::createAnimation(qreal duration, qreal scale)
         setCopy(d->under);
     }
 
-    d->pulseGeometry = new QRectF(d->under->geometry());
-    QParallelAnimationGroup *group = new QParallelAnimationGroup(this);
-    d->opacityAnimation = new QPropertyAnimation(d->under, "opacity");
-    d->opacityAnimation->setDuration(duration);
-    d->opacityAnimation->setEndValue(0);
-    group->addAnimation(d->opacityAnimation);
 
-    /* TODO: move this to a function */
-    d->geometryAnimation = new QPropertyAnimation(d->under, "geometry");
-    d->geometryAnimation->setDuration(duration);
-    QRectF initial(d->under->geometry());
-    qreal W = initial.width() * scale * 0.33;
-    qreal H = initial.height() * scale * 0.33;
-    QRectF end(initial.x() - W, initial.y() -  H, initial.width() * scale,
-               initial.height() * scale);
-    d->geometryAnimation->setEndValue(end);
-    group->addAnimation(d->geometryAnimation);
+    QParallelAnimationGroup *anim = dynamic_cast<QParallelAnimationGroup* >(animation());
+    if (!anim) {
+	d->pulseGeometry = new QRectF(d->under->geometry());
+	QParallelAnimationGroup *group = new QParallelAnimationGroup(this);
+	d->opacityAnimation = new QPropertyAnimation(d->under, "opacity");
+	d->opacityAnimation->setDuration(duration);
+	d->opacityAnimation->setEndValue(0);
+	group->addAnimation(d->opacityAnimation);
 
-    d->scaleAnimation = new QPropertyAnimation(d->under, "scale");
-    d->scaleAnimation->setDuration(duration);
-    d->scaleAnimation->setEndValue(scale);
-    group->addAnimation(d->scaleAnimation);
+	/* TODO: move this to a function */
+	d->geometryAnimation = new QPropertyAnimation(d->under, "geometry");
+	d->geometryAnimation->setDuration(duration);
+	QRectF initial(d->under->geometry());
+	qreal W = initial.width() * scale * 0.33;
+	qreal H = initial.height() * scale * 0.33;
+	QRectF end(initial.x() - W, initial.y() -  H, initial.width() * scale,
+		   initial.height() * scale);
+	d->geometryAnimation->setEndValue(end);
+	group->addAnimation(d->geometryAnimation);
 
-    d->animation = group;
+	d->scaleAnimation = new QPropertyAnimation(d->under, "scale");
+	d->scaleAnimation->setDuration(duration);
+	d->scaleAnimation->setEndValue(scale);
+	/* The group takes ownership of all animations */
+	group->addAnimation(d->scaleAnimation);
+	d->animation = group;
+	setAnimation(d->animation);
+	dirty = true;
 
-    //This makes sure that if there is *not* a shadow widget, the
-    //parent widget will still remain visible
-    connect(d->animation, SIGNAL(finished()), this, SLOT(resetPulser()));
+    } else {
+        *(d->pulseGeometry) = d->under->geometry();
+	d->opacityAnimation->setEndValue(0);
+	QRectF initial(d->under->geometry());
+	qreal W = initial.width() * scale * 0.33;
+	qreal H = initial.height() * scale * 0.33;
+	QRectF end(initial.x() - W, initial.y() -  H, initial.width() * scale,
+		   initial.height() * scale);
+	d->geometryAnimation->setEndValue(end);
+
+    }
+
+    if (dirty) {
+	//This makes sure that if there is *not* a shadow widget, the
+	//parent widget will still remain visible
+	connect(d->animation, SIGNAL(finished()), this, SLOT(resetPulser()));
+    }
 }
 
 QAbstractAnimation* PulseAnimation::render(QObject* parent)

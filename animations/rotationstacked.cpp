@@ -24,6 +24,7 @@
 
 #include <QGraphicsRotation>
 #include <QSequentialAnimationGroup>
+#include <kdebug.h>
 
 namespace Plasma
 {
@@ -51,6 +52,9 @@ RotationStackedAnimation::RotationStackedAnimation(QObject *parent)
 
 RotationStackedAnimation::~RotationStackedAnimation()
 {
+    /* XXX: do we need to delete the layout if the 'parent' layout is
+     * deleted too ?
+     */
     delete d->sLayout;
     delete d;
 }
@@ -88,13 +92,26 @@ QGraphicsLayoutItem *RotationStackedAnimation::layout()
 QAbstractAnimation *RotationStackedAnimation::render(QObject *parent)
 {
     Q_UNUSED(parent);
-
+    bool dirty = false;
     QPair<QGraphicsWidget *,QGraphicsWidget *> widgets = qMakePair(widgetToAnimate(), d->backWidget);
+    QPropertyAnimation *frontAnim, *backAnim;
+    QSequentialAnimationGroup *groupAnim = dynamic_cast<QSequentialAnimationGroup* >(animation());
+    if (!groupAnim) {
 
-    QSequentialAnimationGroup *groupAnim = new QSequentialAnimationGroup(parent);
-
-    QPropertyAnimation *frontAnim = new QPropertyAnimation(d->frontRotation, "angle", groupAnim);
-    QPropertyAnimation *backAnim = new QPropertyAnimation(d->backRotation, "angle", groupAnim);
+	groupAnim = new QSequentialAnimationGroup(parent);
+	frontAnim = new QPropertyAnimation(d->frontRotation, "angle", groupAnim);
+	backAnim = new QPropertyAnimation(d->backRotation, "angle", groupAnim);
+	setAnimation(groupAnim);
+	dirty = true;
+    } else {
+	if (groupAnim->animationCount() == 2) {
+	    frontAnim = dynamic_cast<QPropertyAnimation* >(groupAnim->animationAt(0));
+	    backAnim = dynamic_cast<QPropertyAnimation* >(groupAnim->animationAt(1));
+	} else {
+	    kDebug() << "_ Where are my little animations? Duh!";
+	    return groupAnim;
+	}
+    }
 
     const qreal widgetFrontWidth = widgets.first->size().width();
     const qreal widgetFrontHeight = widgets.first->size().height();
@@ -137,10 +154,11 @@ QAbstractAnimation *RotationStackedAnimation::render(QObject *parent)
     frontAnim->setDuration(duration()/2);
     backAnim->setDuration(duration()/2);
 
-    connect(frontAnim, SIGNAL(finished()), this, SLOT(rotateBackWidget()));
-
-    groupAnim->addAnimation(frontAnim);
-    groupAnim->addAnimation(backAnim);
+    if (dirty) {
+	connect(frontAnim, SIGNAL(finished()), this, SLOT(rotateBackWidget()));
+	groupAnim->addAnimation(frontAnim);
+	groupAnim->addAnimation(backAnim);
+    }
 
     return groupAnim;
 }

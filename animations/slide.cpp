@@ -34,6 +34,7 @@ SlideAnimation::SlideAnimation(AnimationDirection direction, qreal distance)
 
 QAbstractAnimation* SlideAnimation::render(QObject* parent)
 {
+    bool dirty = false;
     QGraphicsWidget *m_object = widgetToAnimate();
     qreal x = m_object->x();
     qreal y = m_object->y();
@@ -67,18 +68,25 @@ QAbstractAnimation* SlideAnimation::render(QObject* parent)
         break;
     }
 
-    QPropertyAnimation* anim = new QPropertyAnimation(m_object, "pos", parent);
+    //Recreate only if needed
+    QPropertyAnimation* anim = dynamic_cast<QPropertyAnimation* >(animation());
+    if (!anim) {
+        anim = new QPropertyAnimation(m_object, "pos", parent);
+        setAnimation(anim);
+        dirty = true;
+    }
     anim->setEndValue(QPointF(newX, newY));
     anim->setDuration(duration());
 
     //QObject::connect(anim, SIGNAL(finished()), anim, SLOT(deleteLater()));
 
-    if (isVisible()) {
-        QObject::connect(anim, SIGNAL(finished()), m_object, SLOT(show()));
-    } else {
-        QObject::connect(anim, SIGNAL(finished()), m_object, SLOT(hide()));
+    if (dirty) {
+	if (isVisible()) {
+	    QObject::connect(anim, SIGNAL(finished()), m_object, SLOT(show()));
+	} else {
+            QObject::connect(anim, SIGNAL(finished()), m_object, SLOT(hide()));
+	}
     }
-
     return anim;
 
 }
