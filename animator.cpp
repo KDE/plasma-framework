@@ -31,6 +31,7 @@
 #include "animations/pulser_p.h"
 #include "animations/rotation_p.h"
 #include "animations/slide_p.h"
+#include "animations/rotationstacked.h"
 
 namespace Plasma
 {
@@ -62,8 +63,7 @@ AbstractAnimation *Animator::create(Animation type, QObject *parent)
         break;
 
     case RotationStackedAnimation:
-        //TODO: implement stacked rotation
-        //result = new Plasma::Plasma::RotationStackedAnimation;
+        result = new Plasma::RotationStackedAnimation;
         break;
 
     case SlideAnimation:
