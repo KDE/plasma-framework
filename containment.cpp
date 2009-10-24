@@ -2113,7 +2113,7 @@ AbstractToolBox *ContainmentPrivate::createToolBox()
 
 void ContainmentPrivate::positionToolBox()
 {
-    PanelToolBox *internalToolBox = qobject_cast<PanelToolBox *>(toolBox);
+    InternalToolBox *internalToolBox = qobject_cast<InternalToolBox *>(toolBox);
     if (internalToolBox) {
         internalToolBox->reposition();
     }
