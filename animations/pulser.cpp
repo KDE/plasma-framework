@@ -142,14 +142,26 @@ void PulseAnimation::createAnimation(qreal duration, qreal scale)
 	dirty = true;
 
     } else {
-        *(d->pulseGeometry) = d->under->geometry();
-	d->opacityAnimation->setEndValue(0);
-	QRectF initial(d->under->geometry());
-	qreal W = initial.width() * scale * 0.33;
-	qreal H = initial.height() * scale * 0.33;
-	QRectF end(initial.x() - W, initial.y() -  H, initial.width() * scale,
-		   initial.height() * scale);
-	d->geometryAnimation->setEndValue(end);
+
+        /* Stop the animation or the widget will be deformed.
+         */
+        QAbstractAnimation::State temp = anim->state();
+        if (temp == QAbstractAnimation::Running) {
+            anim->stop();
+            /* TODO: will need to watch stateChanged signal
+             * and *then* reset the geometry
+             */
+        } else {
+            /* TODO: move this to a function */
+            *(d->pulseGeometry) = d->under->geometry();
+            d->opacityAnimation->setEndValue(0);
+            QRectF initial(d->under->geometry());
+            qreal W = initial.width() * scale * 0.33;
+            qreal H = initial.height() * scale * 0.33;
+            QRectF end(initial.x() - W, initial.y() -  H, initial.width() * scale,
+                       initial.height() * scale);
+            d->geometryAnimation->setEndValue(end);
+        }
 
     }
 
