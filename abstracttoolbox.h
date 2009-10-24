@@ -59,6 +59,7 @@ public:
 
 Q_SIGNALS:
     void toggled();
+    void visibilityChanged(bool);
 
 protected:
     Containment *containment() const;
