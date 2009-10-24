@@ -58,7 +58,7 @@ PopupApplet::PopupApplet(QObject *parent, const QVariantList &args)
     int iconSize = IconSize(KIconLoader::Desktop);
     resize(iconSize, iconSize);
     disconnect(this, SIGNAL(activate()), (Applet*)this, SLOT(setFocus()));
-    connect(this, SIGNAL(activate()), this, SLOT(internalTogglePopup()));
+    connect(this, SIGNAL(activate()), this, SLOT(showPopup()));
     setAcceptDrops(true);
 }
 
@@ -69,7 +69,7 @@ PopupApplet::PopupApplet(const QString &packagePath, uint appletId, const QVaria
     int iconSize = IconSize(KIconLoader::Desktop);
     resize(iconSize, iconSize);
     disconnect(this, SIGNAL(activate()), (Applet*)this, SLOT(setFocus()));
-    connect(this, SIGNAL(activate()), this, SLOT(internalTogglePopup()));
+    connect(this, SIGNAL(activate()), this, SLOT(showPopup()));
     setAcceptDrops(true);
 }
 
