@@ -39,6 +39,7 @@ class PLASMA_EXPORT AbstractToolBox : public QGraphicsWidget
 {
     Q_OBJECT
     Q_INTERFACES(QGraphicsItem)
+    Q_PROPERTY(bool showing READ isShowing WRITE setShowing )
 
 public:
     explicit AbstractToolBox(Containment *parent);
