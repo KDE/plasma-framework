@@ -45,12 +45,12 @@ class GrowAnimation : public Animation
 
 public:
 
-    GrowAnimation(qreal factor = 0.5);
+    GrowAnimation(qreal factor = 2);
     virtual ~GrowAnimation(){};
 
     qreal factor() const;
 
-    void setFactor(qreal);
+    void setFactor(const qreal factor);
 
 
 protected:
