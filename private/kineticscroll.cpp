@@ -90,7 +90,7 @@ public:
     bool canScroll(Direction direction, bool hasOvershoot = false) const
     {
         QPointF scrollPosition = -parent->property("scrollPosition").value<QPointF>();
-        int offset = (hasOvershoot?overshoot*2:0);
+        int offset = (hasOvershoot?overshoot*2:-4);
 
         switch (direction) {
         case Up:
@@ -213,6 +213,8 @@ void KineticScrolling::wheelReleaseEvent(QGraphicsSceneWheelEvent *event)
             if ((event->delta() < 0 && d->canScroll(KineticScrollingPrivate::Right)) ||
                    (event->delta() > 0 && d->canScroll(KineticScrollingPrivate::Left))) {
                 d->kinMovement.setX(kinMovement().x() + temp);
+            } else {
+                event->ignore();
             }
         } else {
             event->ignore();
