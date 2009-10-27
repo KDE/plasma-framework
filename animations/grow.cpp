@@ -45,19 +45,18 @@ QAbstractAnimation* GrowAnimation::render(QObject* parent){
     //get current geometry values
     QGraphicsWidget *m_object = widgetToAnimate();
     QRectF geometry = m_object->geometry();
+    QSizeF minimum = m_object->effectiveSizeHint(Qt::MinimumSize);
+    QSizeF maximum = m_object->effectiveSizeHint(Qt::MaximumSize);
     qreal w = geometry.width();
     qreal h = geometry.height();
 
     //compute new geometry values
     qreal factor = m_animFactor;
-    qreal newWidth = w * factor;
-    qreal newHeight = h * factor;
-    //locfactor is factor by which object must move up and left
-    //to compensate for its growth down and right, to keep the
-    //center in place.
-    qreal locfactor = (factor - 1) / 2.0;
-    qreal newX = geometry.x() - w * locfactor;
-    qreal newY = geometry.y() - h * locfactor;
+    qreal newWidth = qBound(minimum.width(), w * factor, maximum.width());
+    qreal newHeight = qBound(minimum.width(), h * factor, maximum.width());
+
+    qreal newX = geometry.x() - (newWidth - w)/2;
+    qreal newY = geometry.y() - (newHeight - h)/2;
 
     //Recreate only if needed
     QPropertyAnimation *anim = dynamic_cast<QPropertyAnimation* >(animation());
