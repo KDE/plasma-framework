@@ -42,7 +42,7 @@ QAbstractAnimation* SlideAnimation::render(QObject* parent)
     qreal newX = x;
     qreal newY = y;
 
-    kDebug()<<direction(  );
+    kDebug()<<direction();
     switch (direction()) {
     case MoveUp:
         newY -= distance();
@@ -61,12 +61,29 @@ QAbstractAnimation* SlideAnimation::render(QObject* parent)
         break;
 
     case MoveUpRight:
-    case MoveDownRight:
-    case MoveDownLeft:
-    case MoveUpLeft:
-        /* TODO: support compound directions */
-        kDebug() << "Compound directions (UpRight, DownRight, DownLeft, UpLeft) are not supported";
+        newX += distance();
+        newY -= distance();
         break;
+
+    case MoveDownRight:
+        newX += distance();
+        newY += distance();
+        break;
+
+    case MoveDownLeft:
+        newX -= distance();
+        newY += distance();
+        break;
+
+
+    case MoveUpLeft:
+        newX -= distance();
+        newY -= distance();
+        break;
+
+    default:
+        kDebug()<<"Compound direction is not supported";
+        return 0;
     }
 
     //Recreate only if needed
