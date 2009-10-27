@@ -114,32 +114,32 @@ void PulseAnimation::createAnimation(qreal duration, qreal scale)
 
     QParallelAnimationGroup *anim = dynamic_cast<QParallelAnimationGroup* >(animation());
     if (!anim) {
-	d->pulseGeometry = new QRectF(d->under->geometry());
-	QParallelAnimationGroup *group = new QParallelAnimationGroup(this);
-	d->opacityAnimation = new QPropertyAnimation(d->under, "opacity");
-	d->opacityAnimation->setDuration(duration);
-	d->opacityAnimation->setEndValue(0);
-	group->addAnimation(d->opacityAnimation);
+        d->pulseGeometry = new QRectF(d->under->geometry());
+        QParallelAnimationGroup *group = new QParallelAnimationGroup(this);
+        d->opacityAnimation = new QPropertyAnimation(d->under, "opacity");
+        d->opacityAnimation->setDuration(duration);
+        d->opacityAnimation->setEndValue(0);
+        group->addAnimation(d->opacityAnimation);
 
-	/* TODO: move this to a function */
-	d->geometryAnimation = new QPropertyAnimation(d->under, "geometry");
-	d->geometryAnimation->setDuration(duration);
-	QRectF initial(d->under->geometry());
-	qreal W = initial.width() * scale * 0.33;
-	qreal H = initial.height() * scale * 0.33;
-	QRectF end(initial.x() - W, initial.y() -  H, initial.width() * scale,
-		   initial.height() * scale);
-	d->geometryAnimation->setEndValue(end);
-	group->addAnimation(d->geometryAnimation);
+        /* TODO: move this to a function */
+        d->geometryAnimation = new QPropertyAnimation(d->under, "geometry");
+        d->geometryAnimation->setDuration(duration);
+        QRectF initial(d->under->geometry());
+        qreal W = initial.width() * scale * 0.33;
+        qreal H = initial.height() * scale * 0.33;
+        QRectF end(initial.x() - W, initial.y() -  H, initial.width() * scale,
+                initial.height() * scale);
+        d->geometryAnimation->setEndValue(end);
+        group->addAnimation(d->geometryAnimation);
 
-	d->scaleAnimation = new QPropertyAnimation(d->under, "scale");
-	d->scaleAnimation->setDuration(duration);
-	d->scaleAnimation->setEndValue(scale);
-	/* The group takes ownership of all animations */
-	group->addAnimation(d->scaleAnimation);
-	d->animation = group;
-	setAnimation(d->animation);
-	dirty = true;
+        d->scaleAnimation = new QPropertyAnimation(d->under, "scale");
+        d->scaleAnimation->setDuration(duration);
+        d->scaleAnimation->setEndValue(scale);
+        /* The group takes ownership of all animations */
+        group->addAnimation(d->scaleAnimation);
+        d->animation = group;
+        setAnimation(d->animation);
+        dirty = true;
 
     } else {
 
@@ -166,9 +166,9 @@ void PulseAnimation::createAnimation(qreal duration, qreal scale)
     }
 
     if (dirty) {
-	//This makes sure that if there is *not* a shadow widget, the
-	//parent widget will still remain visible
-	connect(d->animation, SIGNAL(finished()), this, SLOT(resetPulser()));
+        //This makes sure that if there is *not* a shadow widget, the
+        //parent widget will still remain visible
+        connect(d->animation, SIGNAL(finished()), this, SLOT(resetPulser()));
     }
 }
 

@@ -66,8 +66,8 @@ QAbstractAnimation* ExpandAnimation::render(QObject* parent)
     //Recreate only if needed
     QPropertyAnimation *anim = dynamic_cast<QPropertyAnimation* >(animation());
     if (!anim) {
-	anim = new QPropertyAnimation(m_object, "geometry", parent);
-	setAnimation(anim);
+        anim = new QPropertyAnimation(m_object, "geometry", parent);
+        setAnimation(anim);
     }
     anim->setEndValue(geometry);
     anim->setDuration(duration());

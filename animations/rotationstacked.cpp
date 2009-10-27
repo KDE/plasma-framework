@@ -98,19 +98,19 @@ QAbstractAnimation *RotationStackedAnimation::render(QObject *parent)
     QSequentialAnimationGroup *groupAnim = dynamic_cast<QSequentialAnimationGroup* >(animation());
     if (!groupAnim) {
 
-	groupAnim = new QSequentialAnimationGroup(parent);
-	frontAnim = new QPropertyAnimation(d->frontRotation, "angle", groupAnim);
-	backAnim = new QPropertyAnimation(d->backRotation, "angle", groupAnim);
-	setAnimation(groupAnim);
-	dirty = true;
+        groupAnim = new QSequentialAnimationGroup(parent);
+        frontAnim = new QPropertyAnimation(d->frontRotation, "angle", groupAnim);
+        backAnim = new QPropertyAnimation(d->backRotation, "angle", groupAnim);
+        setAnimation(groupAnim);
+        dirty = true;
     } else {
-	if (groupAnim->animationCount() == 2) {
-	    frontAnim = dynamic_cast<QPropertyAnimation* >(groupAnim->animationAt(0));
-	    backAnim = dynamic_cast<QPropertyAnimation* >(groupAnim->animationAt(1));
-	} else {
-	    kDebug() << "_ Where are my little animations? Duh!";
-	    return groupAnim;
-	}
+        if (groupAnim->animationCount() == 2) {
+            frontAnim = dynamic_cast<QPropertyAnimation* >(groupAnim->animationAt(0));
+            backAnim = dynamic_cast<QPropertyAnimation* >(groupAnim->animationAt(1));
+        } else {
+            kDebug() << "_ Where are my little animations? Duh!";
+            return groupAnim;
+        }
     }
 
     const qreal widgetFrontWidth = widgets.first->size().width();
@@ -155,9 +155,9 @@ QAbstractAnimation *RotationStackedAnimation::render(QObject *parent)
     backAnim->setDuration(duration()/2);
 
     if (dirty) {
-	connect(frontAnim, SIGNAL(finished()), this, SLOT(rotateBackWidget()));
-	groupAnim->addAnimation(frontAnim);
-	groupAnim->addAnimation(backAnim);
+        connect(frontAnim, SIGNAL(finished()), this, SLOT(rotateBackWidget())); 
+        groupAnim->addAnimation(frontAnim);
+        groupAnim->addAnimation(backAnim);
     }
 
     return groupAnim;

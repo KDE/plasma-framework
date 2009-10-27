@@ -42,21 +42,22 @@ QAbstractAnimation* SlideAnimation::render(QObject* parent)
     qreal newX = x;
     qreal newY = y;
 
+    kDebug()<<direction(  );
     switch (direction()) {
     case MoveUp:
-        newY = y - distance();
+        newY -= distance();
         break;
 
     case MoveRight:
-        newX = x + distance();
+        newX += distance();
         break;
 
     case MoveDown:
-        newY = y + distance();
+        newY += distance();
         break;
 
     case MoveLeft:
-        newX = x - distance();
+        newX -= distance();
         break;
 
     case MoveUpRight:
@@ -81,11 +82,11 @@ QAbstractAnimation* SlideAnimation::render(QObject* parent)
     //QObject::connect(anim, SIGNAL(finished()), anim, SLOT(deleteLater()));
 
     if (dirty) {
-	if (isVisible()) {
-	    QObject::connect(anim, SIGNAL(finished()), m_object, SLOT(show()));
-	} else {
+        if (isVisible()) {
+            QObject::connect(anim, SIGNAL(finished()), m_object, SLOT(show()));
+        } else {
             QObject::connect(anim, SIGNAL(finished()), m_object, SLOT(hide()));
-	}
+        }
     }
     return anim;
 

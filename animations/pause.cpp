@@ -34,8 +34,8 @@ QAbstractAnimation* PauseAnimation::render(QObject* parent)
     //Recreate only if needed
     QPauseAnimation *anim = dynamic_cast<QPauseAnimation* >(animation());
     if (!anim) {
-	anim = new QPauseAnimation(duration(), parent);
-	setAnimation(anim);
+        anim = new QPauseAnimation(duration(), parent);
+        setAnimation(anim);
     }
 
     return anim;
