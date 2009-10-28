@@ -140,7 +140,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
 
         /**
          * If the runner has options that the user can interact with to modify
-         * what happens when run or one of the actions created in fillMatches
+         * what happens when run or one of the actions created in match
          * is called, the runner should return true
          */
         bool hasRunOptions();
