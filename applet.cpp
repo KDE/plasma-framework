@@ -81,8 +81,9 @@
 #include "scripting/appletscript.h"
 #include "svg.h"
 #include "framesvg.h"
-#include "private/framesvg_p.h"
 #include "popupapplet.h"
+#include "private/framesvg_p.h"
+#include "private/applethandle_p.h"
 #include "theme.h"
 #include "view.h"
 #include "widgets/iconwidget.h"
@@ -350,7 +351,11 @@ void Applet::setFailedToLaunch(bool failed, const QString &reason)
     d->failed = failed;
     prepareGeometryChange();
 
-    qDeleteAll(QGraphicsItem::children());
+    foreach (QGraphicsItem *item, childItems()) {
+        if (!dynamic_cast<AppletHandle *>(item)) {
+            delete item;
+        }
+    }
     setLayout(0);
 
     if (failed) {
