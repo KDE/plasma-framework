@@ -480,7 +480,7 @@ QSizeF ScrollWidget::sizeHint(Qt::SizeHint which, const QSizeF & constraint) con
     QSizeF hint = QGraphicsWidget::sizeHint(which, constraint);
 
     if (which == Qt::PreferredSize && d->widget) {
-        return d->widget->size().expandedTo(d->widget->effectiveSizeHint(Qt::PreferredSize));
+        return (d->widget->size()+QSize(4,4)).expandedTo(d->widget->effectiveSizeHint(Qt::PreferredSize));
     }
 
     return hint;
