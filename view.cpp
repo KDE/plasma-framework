@@ -180,12 +180,14 @@ void View::setScreen(int screen, int desktop)
         }
 
         Containment *containment = corona->containmentForScreen(screen, desktop);
+        d->lastScreen = screen;
+        d->lastDesktop = desktop;
+
         if (containment) {
             d->containment = 0; //so that we don't end up on the old containment's screen
-            d->lastScreen = screen;
-            d->lastDesktop = desktop;
             setContainment(containment);
         }
+
     }
 }
 
