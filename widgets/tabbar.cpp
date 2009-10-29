@@ -145,6 +145,7 @@ void TabBarPrivate::slidingCompleted(QGraphicsItem *item)
         if (item == newPage) {
             tabWidgetLayout->addItem(newPage);
             newPageAnimId = -1;
+            emit q->currentChanged(currentIndex);
         } else {
             oldPageAnimId = -1;
             item->hide();
@@ -251,13 +252,13 @@ int TabBar::insertTab(int index, const QIcon &icon, const QString &label,
                       QGraphicsLayoutItem *content)
 {
     QGraphicsWidget *page = new QGraphicsWidget(this);
-    page->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    page->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     if (content) {
         if (content->isLayout()) {
             page->setLayout(static_cast<QGraphicsLayout *>(content));
         } else {
             QGraphicsLinearLayout *layout = new QGraphicsLinearLayout(Qt::Vertical, page);
-            layout->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+            layout->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
             layout->addItem(content);
             page->setLayout(layout);
         }
@@ -394,7 +395,7 @@ void TabBar::setCurrentIndex(int index)
     }
 
     d->currentIndex = index;
-    emit currentChanged(index);
+
     d->tabProxy->native->setCurrentIndex(index);
 }
 
