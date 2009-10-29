@@ -168,12 +168,6 @@ View::~View()
 void View::setScreen(int screen, int desktop)
 {
     if (screen > -1) {
-        Corona *corona = qobject_cast<Corona*>(scene());
-
-        if (!corona) {
-            return;
-        }
-
         // -1 == All desktops
         if (desktop < -1 || desktop > KWindowSystem::numberOfDesktops() - 1) {
             desktop = -1;
