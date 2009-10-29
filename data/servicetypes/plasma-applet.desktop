@@ -76,6 +76,9 @@ Type=QString
 [PropertyDef::X-Plasma-DropMimeTypes]
 Type=QStringList
 
+[PropertyDef::X-Plasma-DropUrlPatterns]
+Type=QStringList
+
 [PropertyDef::X-Plasma-DefaultSize]
 Type=QSize
 

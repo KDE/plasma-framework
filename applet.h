@@ -306,6 +306,14 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         static KPluginInfo::List listAppletInfoForMimetype(const QString &mimetype);
 
         /**
+         * Returns a list of all known applets associated with a certain URL.
+         *
+         * @since 4.4
+         * @return list of applets
+         **/
+        static KPluginInfo::List listAppletInfoForUrl(const QUrl &url);
+
+        /**
          * Returns a list of all the categories used by installed applets.
          *
          * @param parentApp the application to filter applets on. Uses the

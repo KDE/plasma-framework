@@ -37,6 +37,7 @@
 #include <QList>
 #include <QGraphicsLinearLayout>
 #include <QPainter>
+#include <QRegExp>
 #include <QSize>
 #include <QStyleOptionGraphicsItem>
 #include <QTextDocument>
@@ -2077,6 +2078,28 @@ KPluginInfo::List Applet::listAppletInfoForMimetype(const QString &mimetype)
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
     offers << KServiceTypeTrader::self()->query("Plasma/PopupApplet", constraint);
     return KPluginInfo::fromServices(offers);
+}
+
+KPluginInfo::List Applet::listAppletInfoForUrl(const QUrl &url)
+{
+    QString constraint = "exist [X-Plasma-DropUrlPatterns]";
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
+    offers << KServiceTypeTrader::self()->query("Plasma/PopupApplet", constraint);
+
+    KPluginInfo::List allApplets = KPluginInfo::fromServices(offers);
+    KPluginInfo::List filtered;
+    foreach (const KPluginInfo &info, allApplets) {
+        QStringList urlPatterns = info.property("X-Plasma-DropUrlPatterns").toStringList();
+        foreach (const QString &glob, urlPatterns) {
+            QRegExp rx(glob);
+            rx.setPatternSyntax(QRegExp::Wildcard);
+            if (rx.exactMatch(url.toString())) {
+                kDebug() << info.name() << "matches" << glob << url;
+                filtered << info;
+            }
+        }
+    }
+    return filtered;
 }
 
 QStringList Applet::listCategories(const QString &parentApp, bool visibleOnly)

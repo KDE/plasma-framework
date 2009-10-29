@@ -1213,7 +1213,6 @@ void Containment::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
             d->showDropZoneDelayTimer->stop();
         }
     } else if (!d->showDropZoneDelayTimer->isActive() && immutability() == Plasma::Mutable) {
-        kDebug() << event->pos().toPoint();
         showDropZone(event->pos().toPoint());
     }
 }
@@ -1294,12 +1293,6 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
                 QVariantList args;
                 args << url.url();
                 kDebug() << "can decode" << mimeName << args;
-                kDebug() << "protocol:" << url.protocol();
-                KPluginInfo::List appletList = Applet::listAppletInfoForMimetype(mimeName);
-                KPluginInfo::List wallpaperList;
-                if (q->drawWallpaper()) {
-                    wallpaperList = Wallpaper::listWallpaperInfoForMimetype(mimeName);
-                }
 
                 // It may be a directory or a file, let's stat
                 KIO::JobFlags flags = KIO::HideProgressInfo;
@@ -1418,28 +1411,35 @@ void ContainmentPrivate::remoteAppletReady(Plasma::AccessAppletJob *job)
 
 void ContainmentPrivate::dropJobResult(KJob *job)
 {
-    if (job->error()) {
-        // TODO: error feedback
-        clearDataForMimeJob(qobject_cast<KIO::Job *>(job));
-        kDebug() << "ERROR" << job->error() << ' ' << job->errorString();
+    KIO::TransferJob* tjob = dynamic_cast<KIO::TransferJob*>(job);
+    if (!tjob) {
+        kDebug() << "job is not a KIO::TransferJob, won't handle the drop...";
+        clearDataForMimeJob(tjob);
+        return;
     }
+    if (job->error()) {
+        kDebug() << "ERROR" << tjob->error() << ' ' << tjob->errorString();
+    }
+    // We call mimetypeRetrieved since there might be other mechanisms
+    // for finding suitable applets. Cleanup happens there as well.
+    mimeTypeRetrieved(qobject_cast<KIO::Job *>(job), QString());
 }
 
 void ContainmentPrivate::mimeTypeRetrieved(KIO::Job *job, const QString &mimetype)
 {
     kDebug() << "Mimetype Job returns." << mimetype;
-    if (job->error()) {
-        // TODO: error feedback
+    KIO::TransferJob* tjob = dynamic_cast<KIO::TransferJob*>(job);
+    if (!tjob) {
+        kDebug() << "job should be a TransferJob, but isn't";
         clearDataForMimeJob(job);
-        kDebug() << "ERROR" << job->error() << ' ' << job->errorString();
+        return;
+    }
+    KPluginInfo::List appletList = Applet::listAppletInfoForUrl(tjob->url());
+    if (mimetype.isEmpty() && !appletList.count()) {
+        clearDataForMimeJob(job);
+        kDebug() << "No applets found matching the url (" << tjob->url() << ") or the mimetype (" << mimetype << ")";
         return;
     } else {
-        KIO::TransferJob* tjob = dynamic_cast<KIO::TransferJob*>(job);
-        if (!tjob) {
-            kDebug() << "job should be a TransferJob, but isn't";
-            clearDataForMimeJob(job);
-            return;
-        }
 
         QPointF posi; // will be overwritten with the event's position
         if (dropPoints.keys().contains(tjob)) {
@@ -1458,13 +1458,12 @@ void ContainmentPrivate::mimeTypeRetrieved(KIO::Job *job, const QString &mimetyp
             return;
         }
 
-
         QVariantList args;
         args << tjob->url().url() << mimetype;
 
         kDebug() << "Creating menu for:" << mimetype  << posi << args;
-        KPluginInfo::List appletList = Applet::listAppletInfoForMimetype(mimetype);
 
+        appletList << Applet::listAppletInfoForMimetype(mimetype);
         KPluginInfo::List wallpaperList;
         if (q->drawWallpaper()) {
             wallpaperList = Wallpaper::listWallpaperInfoForMimetype(mimetype);
@@ -1514,9 +1513,10 @@ void ContainmentPrivate::mimeTypeRetrieved(KIO::Job *job, const QString &mimetyp
                 // Put the job on hold so it can be recycled to fetch the actual content,
                 // which is to be expected when something's dropped onto the desktop and
                 // an applet is to be created with this URL
-                tjob->putOnHold();
-                KIO::Scheduler::publishSlaveOnHold();
-
+                if (!mimetype.isEmpty() && !tjob->error()) {
+                    tjob->putOnHold();
+                    KIO::Scheduler::publishSlaveOnHold();
+                }
                 QString plugin = actionsToApplets.value(choice);
                 if (plugin.isEmpty()) {
                     //set wallpapery stuff
