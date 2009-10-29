@@ -145,6 +145,7 @@ void TabBarPrivate::slidingCompleted(QGraphicsItem *item)
         if (item == newPage) {
             tabWidgetLayout->addItem(newPage);
             newPageAnimId = -1;
+            mainLayout->invalidate();
             emit q->currentChanged(currentIndex);
         } else {
             oldPageAnimId = -1;
