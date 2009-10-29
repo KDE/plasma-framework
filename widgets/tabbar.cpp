@@ -126,6 +126,7 @@ void TabBarPrivate::updateTabWidgetMode()
             mainLayout->removeAt(0);
             tabBarLayout->removeAt(1);
             mainLayout->addItem(tabProxy);
+            q->setPreferredSize(-1, -1);
         }
     }
 
@@ -144,7 +145,11 @@ void TabBarPrivate::slidingCompleted(QGraphicsItem *item)
     if (item == oldPage || item == newPage) {
         if (item == newPage) {
             tabWidgetLayout->addItem(newPage);
+            mainLayout->invalidate();
+            //FIXME: usual QGraphicsLayout hack
+            q->setPreferredSize(mainLayout->effectiveSizeHint(Qt::PreferredSize));
             newPageAnimId = -1;
+            emit q->currentChanged(currentIndex);
         } else {
             oldPageAnimId = -1;
             item->hide();
@@ -213,11 +218,14 @@ TabBar::TabBar(QGraphicsWidget *parent)
     : QGraphicsWidget(parent),
       d(new TabBarPrivate(this))
 {
+    setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     d->tabProxy = new TabBarProxy(this);
     d->tabWidgetLayout = new QGraphicsLinearLayout(Qt::Vertical);
+    d->tabWidgetLayout->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     d->tabBarLayout = new QGraphicsLinearLayout(Qt::Horizontal);
 
     d->mainLayout = new QGraphicsLinearLayout(Qt::Horizontal);
+    d->mainLayout->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     d->mainLayout->addItem(d->tabWidgetLayout);
 
     setLayout(d->mainLayout);
@@ -251,13 +259,13 @@ int TabBar::insertTab(int index, const QIcon &icon, const QString &label,
                       QGraphicsLayoutItem *content)
 {
     QGraphicsWidget *page = new QGraphicsWidget(this);
-    page->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    page->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     if (content) {
         if (content->isLayout()) {
             page->setLayout(static_cast<QGraphicsLayout *>(content));
         } else {
             QGraphicsLinearLayout *layout = new QGraphicsLinearLayout(Qt::Vertical, page);
-            layout->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+            layout->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
             layout->addItem(content);
             page->setLayout(layout);
         }
@@ -394,7 +402,6 @@ void TabBar::setCurrentIndex(int index)
     }
 
     d->currentIndex = index;
-    emit currentChanged(index);
     d->tabProxy->native->setCurrentIndex(index);
 }
 
