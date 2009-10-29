@@ -32,6 +32,7 @@ namespace Plasma
 
 class DataEngine;
 class WallpaperPrivate;
+class Package;
 
 /**
  * @class Wallpaper plasma/wallpaper.h <Plasma/Wallpaper>
@@ -144,6 +145,13 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * @return the user-visible name for the wallpaper.
          **/
         QString name() const;
+
+        /**
+         * Accessor for the associated Package object if any.
+         *
+         * @return the Package object, or 0 if none
+         **/
+        const Package *package() const;
 
         /**
          * Returns the plugin name for the wallpaper
@@ -296,7 +304,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
 
         /**
          * Allows one to set rendering hints that may differ from the actualities of the
-         * Wallpaper's current state, allowing for better selection of papers from packages, 
+         * Wallpaper's current state, allowing for better selection of papers from packages,
          * for instance.
          *
          * @arg resizeMethod The resize method to assume will be used for future wallpaper
@@ -306,9 +314,9 @@ class PLASMA_EXPORT Wallpaper : public QObject
          */
         void setResizeMethodHint(Wallpaper::ResizeMethod resizeMethod);
 
-        /*
+        /**
          * Allows one to set rendering hints that may differ from the actualities of the
-         * Wallpaper's current state, allowing for better selection of papers from packages, 
+         * Wallpaper's current state, allowing for better selection of papers from packages,
          * for instance.
          *
          * @arg targetSize The size to assume will be used for future wallpaper scaling
@@ -420,7 +428,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
         /**
          * Sets whether or not to cache on disk the results of calls to render. If the wallpaper
          * changes often or is innexpensive to render, then it's probably best not to cache them.
-         * 
+         *
          * The default is not to cache.
          *
          * @see render
@@ -470,9 +478,12 @@ class PLASMA_EXPORT Wallpaper : public QObject
         Q_PRIVATE_SLOT(d, void renderCompleted(int token, const QImage &image,
                                                const QString &sourceImagePath, const QSize &size,
                                                int resizeMethod, const QColor &color))
+        Q_PRIVATE_SLOT(d, void initScript())
 
         friend class WallpaperPackage;
         friend class WallpaperPrivate;
+        friend class WallpaperScript;
+        friend class WallpaperWithPaint;
         friend class ContainmentPrivate;
         WallpaperPrivate *const d;
 };

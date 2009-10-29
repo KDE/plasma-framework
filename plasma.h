@@ -44,17 +44,17 @@ namespace Plasma
 enum Constraint {
     NoConstraint = 0,
     /** The FormFactor for an object */
-    FormFactorConstraint = 1, 
+    FormFactorConstraint = 1,
     /** The Location of an object */
     LocationConstraint = 2,
-    /** Which screen an object is on */ 
+    /** Which screen an object is on */
     ScreenConstraint = 4,
     /** the size of the applet was changed */
     SizeConstraint = 8,
     /** the immutability (locked) nature of the applet changed  */
-    ImmutableConstraint = 16, 
+    ImmutableConstraint = 16,
     /** application startup has completed */
-    StartupCompletedConstraint = 32, 
+    StartupCompletedConstraint = 32,
     /** the desktop context has changed */
     ContextConstraint = 64,
     /** the position of the popup needs to be recalculated*/
@@ -247,7 +247,8 @@ enum ComponentType {
     DataEngineComponent = 2,  /**< Plasma::DataEngine based plugins **/
     RunnerComponent = 4,      /**< Plasma::AbstractRunner based plugsin **/
     AnimatorComponent = 8,    /**< Plasma::Animator based plugins **/
-    ContainmentComponent = 16 /**< Plasma::Containment based plugins **/
+    ContainmentComponent = 16,/**< Plasma::Containment based plugins **/
+    WallpaperComponent = 32   /**< Plasma::Wallpaper based plugins **/
 };
 Q_DECLARE_FLAGS(ComponentTypes, ComponentType)
 

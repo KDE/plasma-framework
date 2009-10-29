@@ -21,6 +21,7 @@
 #ifndef PLASMA_WALLPAPERPRIVATE_H
 #define PLASMA_WALLPAPERPRIVATE_H
 
+#include "plasma/scripting/wallpaperscript.h"
 #include "plasma/private/dataengineconsumer_p.h"
 #include "plasma/private/wallpaperrenderthread_p.h"
 
@@ -30,25 +31,17 @@ namespace Plasma
 class WallpaperPrivate : public DataEngineConsumer
 {
 public:
-    WallpaperPrivate(KService::Ptr service, Wallpaper *wallpaper) :
-        q(wallpaper),
-        wallpaperDescription(service),
-        renderToken(-1),
-        lastResizeMethod(Wallpaper::ScaledResize),
-        cacheRendering(false),
-        initialized(false),
-        needsConfig(false)
-    {
-    };
+    WallpaperPrivate(KService::Ptr service, Wallpaper *wallpaper);
 
     QString cachePath(const QString &key) const;
     QString cacheKey(const QString &sourceImagePath, const QSize &size,
                      int resizeMethod, const QColor &color) const;
-
+    void initScript();
 
     void renderCompleted(int token, const QImage &image,
                          const QString &sourceImagePath, const QSize &size,
                          int resizeMethod, const QColor &color);
+    void setupScriptSupport();
 
     static WallpaperRenderThread s_renderer;
     static PackageStructure::Ptr s_packageStructure;
@@ -61,6 +54,7 @@ public:
     int renderToken;
     Wallpaper::ResizeMethod lastResizeMethod;
     QSizeF targetSize;
+    WallpaperScript *script;
     bool cacheRendering : 1;
     bool initialized : 1;
     bool needsConfig : 1;

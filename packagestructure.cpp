@@ -132,6 +132,9 @@ PackageStructure::Ptr PackageStructure::load(const QString &packageFormat)
     } else if (packageFormat == "Plasma/Runner") {
         structure = defaultPackageStructure(RunnerComponent);
         structure->d->type = "Plasma/Runner";
+    } else if (packageFormat == "Plasma/Wallpaper") {
+        structure = defaultPackageStructure(WallpaperComponent);
+        structure->d->type = "Plasma/Wallpaper";
     } else if (packageFormat == "Plasma/Theme") {
         structure = Theme::packageStructure();
         structure->d->type = "Plasma/Theme";

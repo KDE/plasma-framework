@@ -121,6 +121,7 @@ set(plasma_LIB_SRCS
     scripting/appletscript.cpp
     scripting/dataenginescript.cpp
     scripting/runnerscript.cpp
+    scripting/wallpaperscript.cpp
     scripting/scriptengine.cpp
     service.cpp
     servicejob.cpp
@@ -342,6 +343,7 @@ install(FILES
     scripting/appletscript.h
     scripting/dataenginescript.h
     scripting/runnerscript.h
+    scripting/wallpaperscript.h
     scripting/scriptengine.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/scripting COMPONENT Devel)
 
