@@ -173,16 +173,18 @@ void View::setScreen(int screen, int desktop)
             desktop = -1;
         }
 
-        Plasma::Corona *corona = qobject_cast<Plasma::Corona*>(scene());
-        Containment *containment = corona->containmentForScreen(screen, desktop);
         d->lastScreen = screen;
         d->lastDesktop = desktop;
 
-        if (containment) {
-            d->containment = 0; //so that we don't end up on the old containment's screen
-            setContainment(containment);
-        }
+        Plasma::Corona *corona = qobject_cast<Plasma::Corona*>(scene());
+        if (corona) {
+            Containment *containment = corona->containmentForScreen(screen, desktop);
 
+            if (containment) {
+                d->containment = 0; //so that we don't end up on the old containment's screen
+                setContainment(containment);
+            }
+        }
     }
 }
 
