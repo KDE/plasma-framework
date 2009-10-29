@@ -173,6 +173,7 @@ void View::setScreen(int screen, int desktop)
             desktop = -1;
         }
 
+        Plasma::Corona *corona = qobject_cast<Plasma::Corona*>(scene());
         Containment *containment = corona->containmentForScreen(screen, desktop);
         d->lastScreen = screen;
         d->lastDesktop = desktop;
