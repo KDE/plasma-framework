@@ -662,9 +662,15 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::Alig
     }
 
     //are we out of screen?
-    QRect screenRect = screenGeometry(pv ? pv->screen() : -1);
-    //kDebug() << "==> rect for" << (pv ? pv->containment()->screen() : -1) << "is" << screenRect;
+    int screen = ((pv && pv->containment()) ? pv->containment()->screen() : -1);
+    if (pv && screen == -1) {
+        screen = pv->screen();
+    }
 
+    QRect screenRect = screenGeometry(screen);
+    //kDebug() << "==> rect for" << screen << "is" << screenRect;
+
+    
     if (loc != LeftEdge && pos.x() + s.width() > screenRect.right()) {
         pos.rx() -= ((pos.x() + s.width()) - screenRect.right());
     }
