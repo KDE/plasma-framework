@@ -269,6 +269,10 @@ QSizeF Frame::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
         d->svg->getMargins(left, top, right, bottom);
 
         hint.setHeight(fm.height() + top + bottom);
+        if (which == Qt::MinimumSize || which == Qt::PreferredSize) {
+            QRectF rect = fm.boundingRect(d->text);
+            hint.setWidth(rect.width() + left + right);
+        }
     }
 
     return hint;
