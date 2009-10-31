@@ -42,6 +42,7 @@
 #include <plasma/plasma.h>
 #include <plasma/theme.h>
 #include <plasma/framesvg.h>
+#include <plasma/windoweffects.h>
 
 namespace Plasma {
 
@@ -205,6 +206,7 @@ void ToolTip::hideEvent(QHideEvent *e)
     if (d->source) {
         QMetaObject::invokeMethod(d->source.data(), "toolTipHidden");
     }
+    WindowEffects::highlightWindows(winId(), QList<WId>());
 }
 
 void ToolTip::mouseReleaseEvent(QMouseEvent *event)
@@ -272,6 +274,10 @@ void ToolTip::setContent(QObject *tipper, const ToolTipContent &data)
     //reset our size
     d->text->setContent(data);
     d->imageLabel->setPixmap(data.image());
+
+    if (data.windowsToPreview().size() > 1 || data.windowToPreview() != 0) {
+        WindowEffects::highlightWindows(winId(), QList<WId>()<<winId());
+    }
     if (data.windowsToPreview().size() > 1) {
         d->preview->setWindowIds(data.windowsToPreview());
     } else {
