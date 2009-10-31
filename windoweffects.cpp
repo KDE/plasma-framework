@@ -56,6 +56,9 @@ bool isEffectAvailable(Effect effect)
     case PresentWindowsGroup:
         effectName = "_KDE_PRESENT_WINDOWS_GROUP";
         break;
+    case HighlightWindows:
+        effectName = "_KDE_WINDOW_HIGHLIGHT";
+        break;
     default:
         return false;
     }
@@ -239,6 +242,38 @@ void presentWindows(WId controler, int desktop)
     Atom atom = XInternAtom(dpy, "_KDE_PRESENT_WINDOWS_DESKTOP", False);
     XChangeProperty(dpy, controler, atom, atom, 32, PropModeReplace,
                     reinterpret_cast<unsigned char *>(data.data()), data.size());
+#endif
+}
+
+void highlightWindows(WId controller, const QList<WId> &ids)
+{
+#ifdef Q_WS_X11
+    const int numWindows = ids.count();
+    Display *dpy = QX11Info::display();
+    Atom atom = XInternAtom(dpy, "_KDE_WINDOW_HIGHLIGHT", False);
+
+    if (numWindows == 0) {
+        Atom atom = XInternAtom(dpy, "_KDE_WINDOW_HIGHLIGHT", False);
+        XDeleteProperty(dpy, controller, atom);
+    }
+
+    QVarLengthArray<long, 32> data(numWindows);
+    int actualCount = 0;
+
+    for (int i = 0; i < numWindows; ++i) {
+        data[i] = ids.at(i);
+        ++actualCount;
+
+    }
+
+    if (actualCount != numWindows) {
+        data.resize(actualCount);
+    }
+
+    if (!data.isEmpty()) {
+        XChangeProperty(dpy, controller, atom, atom, 32, PropModeReplace,
+                        reinterpret_cast<unsigned char *>(data.data()), data.size());
+    }
 #endif
 }
 

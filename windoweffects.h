@@ -39,7 +39,8 @@ namespace WindowEffects
         Slide = 1,
         WindowPreview = 2,
         PresentWindows = 3,
-        PresentWindowsGroup = 4
+        PresentWindowsGroup = 4,
+        HighlightWindows = 5
     };
 
     /**
@@ -96,21 +97,32 @@ namespace WindowEffects
     /**
     * Activate the Present Windows effect for the given groups of windows.
     *
-    * @param controler The window which is the controler of this effect. The property
+    * @param controller The window which is the controller of this effect. The property
     *                   will be set on this window. It will be removed by the effect
     * @param ids all the windows which should be presented.
     * @since 4.4
     */
-    PLASMA_EXPORT void presentWindows(WId controler, const QList<WId> &ids);
-    /**
+    PLASMA_EXPORT void presentWindows(WId controller, const QList<WId> &ids);
+
+   /**
     * Activate the Present Windows effect for the windows of the given desktop.
     *
-    * @param controler The window which is the controler of this effect. The property
+    * @param controller The window which is the controller of this effect. The property
     *                   will be set on this window. It will be removed by the effect
     * @param desktop The desktop whose windows should be presented. -1 for all desktops
     * @since 4.4
     */
-    PLASMA_EXPORT void presentWindows(WId controler, int desktop = -1);
+    PLASMA_EXPORT void presentWindows(WId controller, int desktop = -1);
+
+   /**
+    * Highlight the selected windos, making all the others translucent
+    *
+    * @param controller The window which is the controller of this effect. The property
+    *                   will be set on this window. It will be removed by the effect
+    * @param ids all the windows which should be highlighted.
+    * @since 4.4
+    */
+    PLASMA_EXPORT void highlightWindows(WId controller, const QList<WId> &ids);
 }
 
 } // namespace Plasma
