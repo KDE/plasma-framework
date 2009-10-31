@@ -148,6 +148,7 @@ void Frame::setText(QString text)
 {
     d->text = text;
     d->syncBorders();
+    updateGeometry();
 }
 
 QString Frame::text() const
