@@ -49,14 +49,23 @@ QAbstractAnimation* GrowAnimation::render(QObject* parent){
     QSizeF maximum = m_object->effectiveSizeHint(Qt::MaximumSize);
     qreal w = geometry.width();
     qreal h = geometry.height();
+    qreal factor = m_animFactor;
 
     //compute new geometry values
-    qreal factor = m_animFactor;
-    qreal newWidth = qBound(minimum.width(), w * factor, maximum.width());
-    qreal newHeight = qBound(minimum.width(), h * factor, maximum.width());
+    qreal newWidth;
+    qreal newHeight;
+    if (forwards()) {
+        newWidth = qBound(minimum.width(), w * factor, maximum.width());
+        newHeight = qBound(minimum.height(), h * factor, maximum.height());
+    } else {
+        newWidth = qBound(minimum.width(), w / factor, maximum.width());
+        newHeight = qBound(minimum.height(), h / factor, maximum.height());
+    }
 
-    qreal newX = geometry.x() - (newWidth - w)/2;
-    qreal newY = geometry.y() - (newHeight - h)/2;
+    qreal newX;
+    qreal newY;
+    newX = geometry.x() - (newWidth - w)/2;
+    newY = geometry.y() - (newHeight - h)/2;
 
     //Recreate only if needed
     QPropertyAnimation *anim = dynamic_cast<QPropertyAnimation* >(animation());
@@ -65,9 +74,14 @@ QAbstractAnimation* GrowAnimation::render(QObject* parent){
         setAnimation(anim);
     }
 
-    anim->setEndValue(QRectF(
-                newX, newY,
-                newWidth, newHeight));
+    if (forwards()) {
+        anim->setStartValue(QRectF(geometry.x(), geometry.y(), w, h));
+        anim->setEndValue(QRectF(newX, newY, newWidth, newHeight));
+    } else {
+        anim->setStartValue(QRectF(newX, newY, newWidth, newHeight));
+        anim->setEndValue(QRectF(geometry.x(), geometry.y(), w, h));
+    }
+
     anim->setDuration(duration());
 
     //QObject::connect(anim, SIGNAL(finished()), anim, SLOT(deleteLater()));
