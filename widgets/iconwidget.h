@@ -173,6 +173,8 @@ public:
     /**
      * Removes a previously set iconAction. The action will be removed from the widget
      * but will not be deleted.
+     *
+     * @param the QAction to be removed, if 0 all actions will be removed
      */
     void removeIconAction(QAction *action);
 
