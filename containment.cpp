@@ -2170,7 +2170,9 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
                 toolBox->setVisible(unlocked);
             } else {
                 InternalToolBox *internalToolBox = qobject_cast<InternalToolBox *>(toolBox);
-                internalToolBox->setIsMovable(unlocked);
+                if (internalToolBox) {
+                    internalToolBox->setIsMovable(unlocked);
+                }
             }
         }
 
