@@ -80,6 +80,7 @@ private Q_SLOTS:
 
 private:
     Wallpaper *m_paper;
+    bool m_fullPackage;
 };
 
 class ContainmentActionsPackage : public PackageStructure

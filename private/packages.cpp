@@ -174,7 +174,8 @@ ThemePackage::ThemePackage(QObject *parent)
 
 WallpaperPackage::WallpaperPackage(Wallpaper *paper, QObject *parent)
     : PackageStructure(parent, "Background"),
-      m_paper(paper)
+      m_paper(paper),
+      m_fullPackage(true)
 {
     QStringList mimetypes;
     mimetypes << "image/svg" << "image/png" << "image/jpeg" << "image/jpg";
@@ -193,7 +194,9 @@ WallpaperPackage::WallpaperPackage(Wallpaper *paper, QObject *parent)
 
 void WallpaperPackage::renderHintsChanged()
 {
-    pathChanged();
+    if (m_fullPackage) {
+        findBestPaper();
+    }
 }
 
 void WallpaperPackage::pathChanged()
@@ -208,7 +211,8 @@ void WallpaperPackage::pathChanged()
 
     QFileInfo info(path());
 
-    if (info.isDir()) {
+    m_fullPackage = info.isDir();
+    if (m_fullPackage) {
         setContentsPrefix("contents/");
         findBestPaper();
     } else {
