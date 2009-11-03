@@ -1829,8 +1829,6 @@ void Containment::setWallpaper(const QString &pluginName, const QString &mode)
             d->wallpaper->setRenderingMode(mode);
 
             if (newPlugin) {
-                connect(d->wallpaper, SIGNAL(update(const QRectF&)),
-                        this, SLOT(updateRect(const QRectF&)));
                 cfg.writeEntry("wallpaperplugin", pluginName);
             }
 
