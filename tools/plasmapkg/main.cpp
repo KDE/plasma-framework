@@ -109,11 +109,48 @@ int main(int argc, char **argv)
     KApplication app;
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    const QString type = args->getOption("type").toLower();
+    QString type = args->getOption("type").toLower();
     QString packageRoot = type;
     QString servicePrefix;
     QStringList pluginTypes;
     Plasma::PackageStructure *installer = 0;
+    QString package;
+    QString packageFile;
+
+    if (args->isSet("remove")) {
+        package = args->getOption("remove");
+    } else if (args->isSet("upgrade")) {
+        package = args->getOption("upgrade");
+    } else if (args->isSet("install")) {
+        package = args->getOption("install");
+    }
+    if (!QDir::isAbsolutePath(package)) {
+        packageFile = QDir(QDir::currentPath() + '/' + package).absolutePath();
+    } else {
+        packageFile = package;
+    }
+
+    if (!packageFile.isEmpty() && (!args->isSet("type") ||
+        type == i18nc("package type", "wallpaper") || type == "wallpaper")) {
+        // Check type for common plasma packages
+        Plasma::PackageStructure package;
+        package.setPath(packageFile);
+        QString serviceType = package.metadata().serviceType();
+        if (!serviceType.isEmpty()) {
+            if (serviceType == "Plasma/Applet" || serviceType == "Plasma/PopupApplet") {
+                type = "plasmoid";
+            } else if (serviceType == "Plasma/DataEngine") {
+                type = "dataengine";
+            } else if (serviceType == "Plasma/Runner") {
+                type = "runner";
+            } else if (serviceType == "Plasma/Wallpaper") {
+                // This also changes type to wallpaperplugin when --type wallpaper
+                // was specified and we have wallpaper plugin package (instead of
+                // wallpaper image package)
+                type = "wallpaperplugin";
+            }
+        }
+    }
 
     if (type == i18nc("package type", "plasmoid") || type == "plasmoid") {
         packageRoot = "plasma/plasmoids/";
@@ -132,6 +169,10 @@ int main(int argc, char **argv)
         packageRoot = "plasma/runners/";
         servicePrefix = "plasma-runner-";
         pluginTypes << "Runner";
+    } else if (type == i18nc("package type", "wallpaperplugin") || type == "wallpaperplugin") {
+        packageRoot = "plasma/wallpapers/";
+        servicePrefix = "plasma-wallpaper-";
+        pluginTypes << "Wallpaper";
     } else {
         QString constraint = QString("'%1' == [X-KDE-PluginInfo-Name]").arg(packageRoot);
         KService::List offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure", constraint);
@@ -170,21 +211,6 @@ int main(int argc, char **argv)
             packageRoot = KStandardDirs::locate("data", packageRoot);
         } else {
             packageRoot = KStandardDirs::locateLocal("data", packageRoot);
-        }
-
-        QString package;
-        QString packageFile;
-        if (args->isSet("remove")) {
-            package = args->getOption("remove");
-        } else if (args->isSet("upgrade")) {
-            package = args->getOption("upgrade");
-        } else if (args->isSet("install")) {
-            package = args->getOption("install");
-        }
-        if (!QDir::isAbsolutePath(package)) {
-            packageFile = QDir(QDir::currentPath() + '/' + package).absolutePath();
-        } else {
-            packageFile = package;
         }
 
         if (args->isSet("remove") || args->isSet("upgrade")) {
