@@ -61,6 +61,7 @@ QScriptValue constructFontClass(QScriptEngine *engine);
 QScriptValue constructGraphicsItemClass(QScriptEngine *engine);
 QScriptValue constructKUrlClass(QScriptEngine *engine);
 QScriptValue constructLinearLayoutClass(QScriptEngine *engine);
+QScriptValue constructAnchorLayoutClass(QScriptEngine *engine);
 QScriptValue constructPainterClass(QScriptEngine *engine);
 QScriptValue constructQPixmapClass(QScriptEngine *engine);
 QScriptValue constructQPointClass(QScriptEngine *engine);
@@ -462,6 +463,7 @@ void SimpleJavaScriptApplet::setupObjects()
     global.setProperty("QSizeF", constructQSizeFClass(m_engine));
     global.setProperty("QPoint", constructQPointClass(m_engine));
     global.setProperty("LinearLayout", constructLinearLayoutClass(m_engine));
+    global.setProperty("AnchorLayout", constructAnchorLayoutClass(m_engine));
 
     // Add stuff from KDE libs
     global.setProperty("Url", constructKUrlClass(m_engine));

@@ -7,6 +7,7 @@ set(simple_javascript_engine_SRCS
     qtgui/font.cpp
     qtgui/graphicsitem.cpp
     qtgui/linearlayout.cpp
+    qtgui/anchorlayout.cpp
     qtgui/painter.cpp
     qtgui/pixmap.cpp
     qtgui/point.cpp
