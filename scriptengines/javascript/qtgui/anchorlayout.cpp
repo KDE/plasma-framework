@@ -36,8 +36,8 @@ DECLARE_POINTER_METATYPE(QGraphicsAnchorLayout)
 
 // QGraphicsAnchorLayout
 DECLARE_VOID_NUMBER_METHOD(QGraphicsAnchorLayout, setSpacing)
-DECLARE_NUMBER_GET_SET_METHODS(QGraphicsAnchorLayout, horizontalSpacing, setHorizontalSpacing);
-DECLARE_NUMBER_GET_SET_METHODS(QGraphicsAnchorLayout, verticalSpacing, setVerticalSpacing);
+DECLARE_NUMBER_GET_SET_METHODS(QGraphicsAnchorLayout, horizontalSpacing, setHorizontalSpacing)
+DECLARE_NUMBER_GET_SET_METHODS(QGraphicsAnchorLayout, verticalSpacing, setVerticalSpacing)
 DECLARE_VOID_NUMBER_METHOD(QGraphicsAnchorLayout, removeAt)
 
 
