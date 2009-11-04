@@ -476,6 +476,7 @@ QSizeF WebView::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
 void WebViewPrivate::loadingFinished(bool success)
 {
     loaded = success;
+    q->updateGeometry();
     emit q->loadFinished(success);
     q->update();
 }
