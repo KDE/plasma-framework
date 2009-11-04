@@ -67,7 +67,13 @@ class PLASMA_EXPORT RunnerContext : public QObject
         /**
          * Copy constructor
          */
-        explicit RunnerContext(RunnerContext &other, QObject *parent = 0);
+        RunnerContext(RunnerContext &other, QObject *parent = 0);
+
+        /**
+         * Assignment operator
+         * @since 4.4
+         */
+        RunnerContext &operator=(const RunnerContext &other);
 
         ~RunnerContext();
 

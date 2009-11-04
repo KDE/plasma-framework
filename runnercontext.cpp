@@ -249,6 +249,16 @@ RunnerContext::~RunnerContext()
 {
 }
 
+RunnerContext &RunnerContext::operator=(const RunnerContext &other)
+{
+    LOCK_FOR_WRITE(this)
+    LOCK_FOR_READ((&other))
+    d = other.d;
+    UNLOCK((&other))
+    UNLOCK(this)
+    return *this;
+}
+
 void RunnerContext::reset()
 {
     // We will detach if we are a copy of someone. But we will reset
