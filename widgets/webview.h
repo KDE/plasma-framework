@@ -196,6 +196,7 @@ class PLASMA_EXPORT WebView : public QGraphicsWidget
         void dragLeaveEvent(QGraphicsSceneDragDropEvent * event);
         void dragMoveEvent(QGraphicsSceneDragDropEvent * event);
         void dropEvent(QGraphicsSceneDragDropEvent * event);
+        QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint) const;
 
     private:
         Q_PRIVATE_SLOT(d, void loadingFinished(bool success))

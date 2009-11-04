@@ -464,6 +464,15 @@ void WebView::setGeometry(const QRectF &geometry)
     d->page->setViewportSize(geometry.size().toSize());
 }
 
+QSizeF WebView::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
+{
+    if (which == Qt::PreferredSize) {
+        return d->page->mainFrame()->contentsSize();
+    } else {
+        return QGraphicsWidget::sizeHint(which, constraint);
+    }
+}
+
 void WebViewPrivate::loadingFinished(bool success)
 {
     loaded = success;
