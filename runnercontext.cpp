@@ -251,6 +251,10 @@ RunnerContext::~RunnerContext()
 
 RunnerContext &RunnerContext::operator=(const RunnerContext &other)
 {
+    if (this->d == other.d) {
+        return *this;
+    }
+
     LOCK_FOR_WRITE(this)
     LOCK_FOR_READ((&other))
     d = other.d;
