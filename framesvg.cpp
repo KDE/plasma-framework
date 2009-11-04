@@ -239,7 +239,7 @@ void FrameSvg::getMargins(qreal &left, qreal &top, qreal &right, qreal &bottom) 
 {
     FrameData *frame = d->frames[d->prefix];
 
-    if (!frame || frame->noBorderPadding) {
+    if (frame->noBorderPadding) {
         left = top = right = bottom = 0;
         return;
     }
