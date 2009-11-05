@@ -391,6 +391,9 @@ void Applet::setFailedToLaunch(bool failed, const QString &reason)
 
 void Applet::saveState(KConfigGroup &group) const
 {
+    if (d->script) {
+        emit d->script->saveState(group);
+    }
     if (group.config()->name() != config().config()->name()) {
         // we're being saved to a different file!
         // let's just copy the current values in our configuration over

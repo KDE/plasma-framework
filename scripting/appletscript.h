@@ -141,6 +141,12 @@ public:
      */
     Extender *extender() const;
 
+Q_SIGNALS:
+    /**
+     * @see Applet
+     */
+    void saveState(KConfigGroup &group) const;
+
 public Q_SLOTS:
 
     /**
@@ -188,7 +194,29 @@ protected:
      */
     void addStandardConfigurationPages(KConfigDialog *dialog);
 
+    /**
+     * @see Applet
+     */
+    void showMessage(const QIcon &icon, const QString &message, const MessageButtons buttons);
+
+    /**
+     * @see Applet
+     */
+    void registerAsDragHandle(QGraphicsItem *item);
+
+    /**
+     * @see Applet
+     */
+    void unregisterAsDragHandle(QGraphicsItem *item);
+
+    /**
+     * @see Applet
+     */
+    bool isRegisteredAsDragHandle(QGraphicsItem *item);
+
 private:
+    friend class Applet;
+
     AppletScriptPrivate *const d;
 };
 
