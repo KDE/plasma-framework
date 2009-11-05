@@ -52,7 +52,8 @@ public:
           con(0),
           type(Containment::NoContainmentType),
           showDropZoneDelayTimer(0),
-          drawWallpaper(true)
+          drawWallpaper(true),
+          dropZoneStarted(false)
     {
     }
 
@@ -162,7 +163,8 @@ public:
     QHash<KJob*, QPointF> dropPoints;
     QHash<KJob*, KMenu*> dropMenus;
     QTimer *showDropZoneDelayTimer;
-    bool drawWallpaper;
+    bool drawWallpaper : 1;
+    bool dropZoneStarted : 1;
 };
 
 } // Plasma namespace

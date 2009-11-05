@@ -1179,27 +1179,39 @@ void Containment::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
     }
 
     if (event->isAccepted()) {
-        if (!d->showDropZoneDelayTimer) {
-            d->showDropZoneDelayTimer = new QTimer(this);
-            d->showDropZoneDelayTimer->setInterval(300);
-            d->showDropZoneDelayTimer->setSingleShot(true);
-            connect(d->showDropZoneDelayTimer, SIGNAL(timeout()), this, SLOT(showDropZoneDelayed()));
-        }
+        if (d->dropZoneStarted) {
+            showDropZone(event->pos().toPoint());
+        } else {
+            if (!d->showDropZoneDelayTimer) {
+                d->showDropZoneDelayTimer = new QTimer(this);
+                d->showDropZoneDelayTimer->setInterval(300);
+                d->showDropZoneDelayTimer->setSingleShot(true);
+                connect(d->showDropZoneDelayTimer, SIGNAL(timeout()), this, SLOT(showDropZoneDelayed()));
+            }
 
-        d->dropPoints.insert(0, event->pos());
-        d->showDropZoneDelayTimer->start();
+            d->dropPoints.insert(0, event->pos());
+            d->showDropZoneDelayTimer->start();
+        }
     }
 }
 
 void Containment::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 {
+    //kDebug() << event->pos() << size().height() << size().width();
     if (d->showDropZoneDelayTimer) {
         d->showDropZoneDelayTimer->stop();
+    }
+
+    if (event->pos().y() < 1 || event->pos().y() > size().height() ||
+        event->pos().x() < 1 || event->pos().x() > size().width()) {
+        showDropZone(QPoint());
+        d->dropZoneStarted = false;
     }
 }
 
 void ContainmentPrivate::showDropZoneDelayed()
 {
+    dropZoneStarted = true;
     q->showDropZone(dropPoints.value(0).toPoint());
     dropPoints.remove(0);
 }
@@ -1208,6 +1220,7 @@ void Containment::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
     QGraphicsItem *item = scene()->itemAt(event->scenePos());
     event->setAccepted(item == this || item == d->toolBox || !item);
+    //kDebug() << event->isAccepted() << d->showDropZoneDelayTimer->isActive();
     if (!event->isAccepted()) {
         if (d->showDropZoneDelayTimer) {
             d->showDropZoneDelayTimer->stop();
