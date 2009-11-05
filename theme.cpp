@@ -632,6 +632,8 @@ QFont Theme::font(FontRole role) const
         return d->generalFont;
         break;
     }
+
+    return d->generalFont;
 }
 
 QFontMetrics Theme::fontMetrics() const
