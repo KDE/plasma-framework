@@ -23,12 +23,12 @@
 #include <kgenericfactory.h>
 
 #include <plasma/plasma_export.h>
+#include <plasma/dataengine.h>
 #include <plasma/scripting/scriptengine.h>
 
 namespace Plasma
 {
 
-class DataEngine;
 class DataEngineScriptPrivate;
 class Service;
 
@@ -120,6 +120,14 @@ protected:
     int  minimumPollingInterval() const;
     void setPollingInterval(uint frequency);
     void removeAllSources();
+    void addSource(DataContainer *source);
+    DataEngine::SourceDict containerDict() const;
+    void setName(const QString &name);
+    void setIcon(const QString &icon);
+    void scheduleSourcesUpdated();
+    void removeSource(const QString &source);
+    void updateAllSources();
+    void forceImmediateUpdateOfAllVisualizations();
 
 private:
     DataEngineScriptPrivate *const d;

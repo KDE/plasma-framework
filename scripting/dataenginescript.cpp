@@ -19,7 +19,6 @@
 
 #include "dataenginescript.h"
 
-#include "dataengine.h"
 #include "package.h"
 
 namespace Plasma
@@ -148,6 +147,63 @@ void DataEngineScript::removeAllSources()
 {
     if (d->dataEngine) {
         d->dataEngine->removeAllSources();
+    }
+}
+
+void DataEngineScript::addSource(DataContainer *source)
+{
+    if (d->dataEngine) {
+        d->dataEngine->addSource(source);
+    }
+}
+
+DataEngine::SourceDict DataEngineScript::containerDict() const
+{
+    if (d->dataEngine) {
+        return d->dataEngine->containerDict();
+    }
+    return DataEngine::SourceDict();
+}
+
+void DataEngineScript::setName(const QString &name)
+{
+    if (d->dataEngine) {
+        d->dataEngine->setName(name);
+    }
+}
+
+void DataEngineScript::setIcon(const QString &icon)
+{
+    if (d->dataEngine) {
+        d->dataEngine->setIcon(icon);
+    }
+}
+
+void DataEngineScript::scheduleSourcesUpdated()
+{
+    if (d->dataEngine) {
+        d->dataEngine->scheduleSourcesUpdated();
+    }
+}
+
+void DataEngineScript::removeSource(const QString &source)
+{
+    if (d->dataEngine) {
+        d->dataEngine->removeSource(source);
+    }
+}
+
+void DataEngineScript::updateAllSources()
+{
+    if (d->dataEngine) {
+        d->dataEngine->updateAllSources();
+    }
+}
+
+void DataEngineScript::forceImmediateUpdateOfAllVisualizations()
+{
+    if (d->dataEngine) {
+        d->dataEngine->forceImmediateUpdateOfAllVisualizations();
     }
 }
 
