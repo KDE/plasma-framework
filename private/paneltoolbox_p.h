@@ -50,6 +50,7 @@ public:
 
     void showToolBox();
     void hideToolBox();
+    void setShowing(bool show);
 
 public Q_SLOTS:
     void toolTipAboutToShow();

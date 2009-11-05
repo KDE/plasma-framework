@@ -231,13 +231,17 @@ void PanelToolBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 void PanelToolBox::showToolBox()
 {
     setShowing(true);
-    highlight(true);
 }
 
 void PanelToolBox::hideToolBox()
 {
     setShowing(false);
-    highlight(false);
+}
+
+void PanelToolBox::setShowing(bool show)
+{
+    InternalToolBox::setShowing(show);
+    highlight(show);
 }
 
 void PanelToolBox::toolTipAboutToShow()
@@ -298,7 +302,6 @@ void PanelToolBox::animate(qreal progress)
 void PanelToolBox::toggle()
 {
     setShowing(!isShowing());
-    highlight(isShowing());
 }
 
 } // plasma namespace
