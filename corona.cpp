@@ -474,18 +474,12 @@ Containment *Corona::addContainmentDelayed(const QString &name, const QVariantLi
 
 void Corona::addOffscreenWidget(QGraphicsWidget *widget)
 {
-    if (d->offscreenWidgets.values().contains(widget)) {
-        kDebug() << "widget is already an offscreen widget!";
-        return;
+    foreach (QGraphicsWidget *w, d->offscreenWidgets) {
+        if (w == widget) {
+            kDebug() << "widget is already an offscreen widget!";
+            return;
+        }
     }
-
-    if (!widget->scene()) {
-        addItem(widget);
-    }
-
-    QGraphicsWidget *pw = widget->parentWidget();
-    widget->setParentItem(0);
-    widget->setParent(pw);
 
     //search for an empty spot in the topleft quadrant of the scene. each 'slot' is QWIDGETSIZE_MAX
     //x QWIDGETSIZE_MAX, so we're guaranteed to never have to move widgets once they're placed here.
@@ -496,7 +490,15 @@ void Corona::addOffscreenWidget(QGraphicsWidget *widget)
 
     d->offscreenWidgets[i] = widget;
     widget->setPos((-i - 1) * QWIDGETSIZE_MAX, -QWIDGETSIZE_MAX);
-    kDebug() << "adding offscreen widget at slot " << i;
+
+    QGraphicsWidget *pw = widget->parentWidget();
+    widget->setParentItem(0);
+    widget->setParent(pw);
+
+    //kDebug() << "adding offscreen widget at slot " << i;
+    if (!widget->scene()) {
+        addItem(widget);
+    }
 
     connect(widget, SIGNAL(destroyed(QObject*)), this, SLOT(offscreenWidgetDestroyed(QObject*)));
 }
