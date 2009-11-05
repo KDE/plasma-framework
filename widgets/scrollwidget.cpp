@@ -151,10 +151,10 @@ public:
         QSizeF widgetSize = widget->size();
         if (widget->sizePolicy().expandingDirections() & Qt::Horizontal) {
             //keep a 1 pixel border
-            widgetSize.setWidth(scrollingWidget->size().width()-4);
+            widgetSize.setWidth(scrollingWidget->size().width()-borderSize);
         }
         if (widget->sizePolicy().expandingDirections() & Qt::Vertical) {
-            widgetSize.setHeight(scrollingWidget->size().height()-4);
+            widgetSize.setHeight(scrollingWidget->size().height()-borderSize);
         }
         widget->resize(widgetSize);
     }
@@ -229,6 +229,7 @@ public:
     QRectF rectToBeVisible;
     bool dragging;
     int animId;
+    static const int borderSize = 4;
 };
 
 
@@ -480,7 +481,7 @@ QSizeF ScrollWidget::sizeHint(Qt::SizeHint which, const QSizeF & constraint) con
     QSizeF hint = QGraphicsWidget::sizeHint(which, constraint);
 
     if (which == Qt::PreferredSize && d->widget) {
-        return (d->widget->size()+QSize(4,4)).expandedTo(d->widget->effectiveSizeHint(Qt::PreferredSize));
+        return (d->widget->size()+QSize(d->borderSize, d->borderSize)).expandedTo(d->widget->effectiveSizeHint(Qt::PreferredSize));
     }
 
     return hint;
