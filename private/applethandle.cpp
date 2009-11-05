@@ -514,21 +514,18 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                     // see which containment it belongs to
                     Corona * corona = qobject_cast<Corona*>(scene());
                     if (corona) {
-                        QList<Containment*> containments = corona->containments();
-                        for (int i = 0; i < containments.size(); ++i) {
+                        foreach (Containment *containment, corona->containments()) {
                             QPointF pos;
-                            QGraphicsView *v;
-                            v = containments[i]->view();
+                            QGraphicsView *v = containment->view();
                             if (v) {
-                                pos = v->mapToScene(
-                                    v->mapFromGlobal(event->screenPos() - m_mousePos));
+                                pos = v->mapToScene(v->mapFromGlobal(event->screenPos() - m_mousePos));
 
-                                if (containments[i]->sceneBoundingRect().contains(pos)) {
+                                if (containment->sceneBoundingRect().contains(pos)) {
                                     //kDebug() << "new containment = " << containments[i];
                                     //kDebug() << "rect = " << containments[i]->sceneBoundingRect();
                                     // add the applet to the new containment and take it from the old one
                                     //kDebug() << "moving to other containment with position" << pos;;
-                                    switchContainment(containments[i], pos);
+                                    switchContainment(containment, pos);
                                     break;
                                 }
                             }
@@ -603,11 +600,13 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             Plasma::View *v = Plasma::View::topLevelViewAt(event->screenPos());
             if (v && v != m_currentView) {
                 Containment *c = v->containment();
-                QPoint pos = v->mapFromGlobal(event->screenPos());
-                //we actually have been dropped on another containment, so
-                //move there: we have a screenpos, we need a scenepos
-                //FIXME how reliable is this transform?
-                switchContainment(c, v->mapToScene(pos));
+                if (c) {
+                    QPoint pos = v->mapFromGlobal(event->screenPos());
+                    //we actually have been dropped on another containment, so
+                    //move there: we have a screenpos, we need a scenepos
+                    //FIXME how reliable is this transform?
+                    switchContainment(c, v->mapToScene(pos));
+                }
             }
         }
 
