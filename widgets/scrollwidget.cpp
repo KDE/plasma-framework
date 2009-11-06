@@ -21,6 +21,7 @@
 //Qt
 #include <QGraphicsSceneResizeEvent>
 #include <QGraphicsGridLayout>
+#include <QGraphicsScene>
 #include <QApplication>
 #include <QWidget>
 #include <QTimer>
@@ -227,6 +228,7 @@ public:
     Qt::ScrollBarPolicy horizontalScrollBarPolicy;
     QString styleSheet;
     QRectF rectToBeVisible;
+    QSet<QGraphicsItem *>dragHandles;
     bool dragging;
     int animId;
     static const int borderSize = 4;
@@ -343,6 +345,33 @@ void ScrollWidget::ensureItemVisible(QGraphicsItem *item)
     QTimer::singleShot(0, this, SLOT(makeRectVisible()));
 }
 
+void ScrollWidget::registerAsDragHandle(QGraphicsItem *item)
+{
+    if (!d->widget || !item) {
+        return;
+    }
+
+    QGraphicsItem *parentOfItem = item->parentItem();
+    while (parentOfItem != d->widget) {
+        if (!parentOfItem) {
+            return;
+        }
+
+        parentOfItem = parentOfItem->parentItem();
+    }
+
+    item->installSceneEventFilter(this);
+    d->dragHandles.insert(item);
+}
+
+void ScrollWidget::unregisterAsDragHandle(QGraphicsItem *item)
+{
+    if (item) {
+        item->removeSceneEventFilter(this);
+        d->dragHandles.remove(item);
+    }
+}
+
 QRectF ScrollWidget::viewportGeometry() const
 {
     QRectF result;
@@ -451,6 +480,24 @@ void ScrollWidget::wheelEvent(QGraphicsSceneWheelEvent *event)
         Animator::self()->stopItemMovement(d->animId);
     }
 
+}
+
+bool ScrollWidget::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
+{
+    if (!scene()) {
+        return false;
+    }
+
+    if (d->dragHandles.contains(watched)) {
+        if (event->type() == QEvent::GraphicsSceneMousePress ||
+            event->type() == QEvent::GraphicsSceneMouseMove ||
+            event->type() == QEvent::GraphicsSceneMouseRelease) {
+            if (scene()) {
+                scene()->sendEvent(this, event);
+            }
+        }
+    }
+    return false;
 }
 
 bool ScrollWidget::eventFilter(QObject *watched, QEvent *event)

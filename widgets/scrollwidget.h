@@ -119,6 +119,25 @@ public:
     void ensureItemVisible(QGraphicsItem *item);
 
     /**
+     * Register an item as a drag handle, it means mouse events will pass trough it
+     * and will be possible to drag the view by dragging the item itself.
+     * The item will still receive mouse clicks if the mouse didn't move
+     * between press and release.
+     *
+     * @param item the drag handle item. widget() must be an ancestor if it in
+     *             the parent hierarchy. if item doesn't accept mose press events
+     *             it's not necessary to call this function.
+     * @since 4.4
+     */
+    void registerAsDragHandle(QGraphicsItem *item);
+
+    /**
+     * Unregister the given item as drag handle (if it was registered)
+     * @since 4.4
+     */
+    void unregisterAsDragHandle(QGraphicsItem *item);
+
+    /**
      * The geometry of the viewport.
      * @since 4.4
      */
@@ -172,6 +191,7 @@ protected:
     bool eventFilter(QObject *watched, QEvent *event);
     void focusInEvent(QFocusEvent *event);
     QSizeF sizeHint(Qt::SizeHint which, const QSizeF & constraint) const;
+    bool sceneEventFilter(QGraphicsItem *watched, QEvent *event);
 
 private:
     ScrollWidgetPrivate * const d;
