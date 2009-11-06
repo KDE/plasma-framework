@@ -436,7 +436,8 @@ void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
         }
 
         if (m_pressedButton == ResizeButton || m_pressedButton == RotateButton) {
-            m_origAppletCenter = m_applet->geometry().center();
+            m_originalGeom = m_applet->geometry();
+            m_origAppletCenter = m_originalGeom.center();
             m_origAppletSize = QPointF(m_applet->size().width(), m_applet->size().height());
 
             // resize
@@ -707,7 +708,7 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
         if (m_pressedButton == ResizeButton) {
             // set applet size
-            kDebug() << newCenter << m_originalGeom.topLeft() << newSize;
+            //kDebug() << newCenter << m_originalGeom.topLeft() << newSize;
             QPointF newPos = m_originalGeom.topLeft() + _k_rotatePoint(newCenter, m_angle);
             m_applet->setPos(newPos);
            // m_applet->moveBy(newCenter.x(), newCenter.y());
