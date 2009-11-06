@@ -484,7 +484,7 @@ void ScrollWidget::wheelEvent(QGraphicsSceneWheelEvent *event)
 
 bool ScrollWidget::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 {
-    if (!scene()) {
+    if (!d->widget && !scene()) {
         return false;
     }
 
@@ -493,7 +493,7 @@ bool ScrollWidget::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
             event->type() == QEvent::GraphicsSceneMouseMove ||
             event->type() == QEvent::GraphicsSceneMouseRelease) {
             if (scene()) {
-                scene()->sendEvent(this, event);
+                scene()->sendEvent(d->widget, event);
             }
         }
     }
