@@ -45,6 +45,8 @@ RunnerScript::~RunnerScript()
 void RunnerScript::setRunner(AbstractRunner *runner)
 {
     d->runner = runner;
+    connect(runner, SIGNAL(prepare()), this, SIGNAL(prepare()));
+    connect(runner, SIGNAL(teardown()), this, SIGNAL(teardown()));
 }
 
 AbstractRunner *RunnerScript::runner() const
@@ -61,6 +63,110 @@ void RunnerScript::run(const Plasma::RunnerContext &search, const Plasma::QueryM
 {
     Q_UNUSED(search);
     Q_UNUSED(action);
+}
+
+KConfigGroup RunnerScript::config() const
+{
+    if (d->runner) {
+        return d->runner->config();
+    }
+    return KConfigGroup();
+}
+
+void RunnerScript::setIgnoredTypes(RunnerContext::Types types)
+{
+    if (d->runner) {
+        d->runner->setIgnoredTypes(types);
+    }
+}
+
+void RunnerScript::setHasRunOptions(bool hasRunOptions)
+{
+    if (d->runner) {
+        d->runner->setHasRunOptions(hasRunOptions);
+    }
+}
+
+void RunnerScript::setSpeed(AbstractRunner::Speed newSpeed)
+{
+    if (d->runner) {
+        d->runner->setSpeed(newSpeed);
+    }
+}
+
+void RunnerScript::setPriority(AbstractRunner::Priority newPriority)
+{
+    if (d->runner) {
+        d->runner->setPriority(newPriority);
+    }
+}
+
+KService::List RunnerScript::serviceQuery(const QString &serviceType,
+                                          const QString &constraint) const
+{
+    if (d->runner) {
+        return d->runner->serviceQuery(serviceType, constraint);
+    }
+    return KService::List();
+}
+
+QAction* RunnerScript::addAction(const QString &id, const QIcon &icon, const QString &text)
+{
+    if (d->runner) {
+        return d->runner->addAction(id, icon, text);
+    }
+    return 0;
+}
+
+void RunnerScript::addAction(const QString &id, QAction *action)
+{
+    if (d->runner) {
+        d->runner->addAction(id, action);
+    }
+}
+
+void RunnerScript::removeAction(const QString &id)
+{
+    if (d->runner) {
+        d->runner->removeAction(id);
+    }
+}
+
+QAction* RunnerScript::action(const QString &id) const
+{
+    if (d->runner) {
+        return d->runner->action(id);
+    }
+    return 0;
+}
+
+QHash<QString, QAction*> RunnerScript::actions() const
+{
+    if (d->runner) {
+        return d->runner->actions();
+    }
+    return QHash<QString, QAction*>();
+}
+
+void RunnerScript::clearActions()
+{
+    if (d->runner) {
+        d->runner->clearActions();
+    }
+}
+
+void RunnerScript::addSyntax(const RunnerSyntax &syntax)
+{
+    if (d->runner) {
+        d->runner->addSyntax(syntax);
+    }
+}
+
+void RunnerScript::setSyntaxes(const QList<RunnerSyntax> &syns)
+{
+    if (d->runner) {
+        d->runner->setSyntaxes(syns);
+    }
 }
 
 const Package *RunnerScript::package() const

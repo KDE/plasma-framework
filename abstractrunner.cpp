@@ -132,6 +132,9 @@ KConfigGroup AbstractRunner::config() const
 
 void AbstractRunner::reloadConfiguration()
 {
+    if (d->script) {
+        emit d->script->reloadConfiguration();
+    }
 }
 
 void AbstractRunner::addSyntax(const RunnerSyntax &syntax)
@@ -237,7 +240,9 @@ void AbstractRunner::setHasRunOptions(bool hasRunOptions)
 
 void AbstractRunner::createRunOptions(QWidget *parent)
 {
-    Q_UNUSED(parent)
+    if (d->script) {
+        emit d->script->createRunOptions(parent);
+    }
 }
 
 AbstractRunner::Speed AbstractRunner::speed() const

@@ -81,7 +81,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
 
         /**
          * This is the main query method. It should trigger creation of
-         * QueryMatch instances through RunnerContext::addMatch and 
+         * QueryMatch instances through RunnerContext::addMatch and
          * RunnerContext::addMatches. It is called internally by performMatch().
          *
          * If the runner can run precisely the requested term (RunnerContext::query()),
@@ -97,7 +97,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * to be reported once this method returns. Asyncroneous runners therefore need
          * to make use of a local event loop to wait for all matches.
          *
-         * It is recommended to use local status data in async runners. The simplest way is 
+         * It is recommended to use local status data in async runners. The simplest way is
          * to have a separate class doing all the work like so:
          *
          * \code
@@ -395,6 +395,8 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         void init();
 
     private:
+        friend class RunnerScript;
+
         AbstractRunnerPrivate *const d;
 };
 

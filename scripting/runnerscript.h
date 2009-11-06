@@ -23,14 +23,12 @@
 #include <kgenericfactory.h>
 
 #include <plasma/plasma_export.h>
+#include <plasma/abstractrunner.h>
 #include <plasma/scripting/scriptengine.h>
 
 namespace Plasma
 {
 
-class AbstractRunner;
-class RunnerContext;
-class QueryMatch;
 class RunnerScriptPrivate;
 
 /**
@@ -76,6 +74,14 @@ public:
      */
     virtual void run(const Plasma::RunnerContext &search, const Plasma::QueryMatch &action);
 
+
+Q_SIGNALS:
+    void prepare();
+    void teardown();
+    void createRunOptions(QWidget *widget);
+    void reloadConfiguration();
+    //TODO: QList<QAction*> actionsForMatch(const Plasma::QueryMatch &match);
+
 protected:
     /**
      * @return absolute path to the main script file for this plasmoid
@@ -89,7 +95,25 @@ protected:
      */
     const Package *package() const;
 
+    KConfigGroup config() const;
+    void setIgnoredTypes(RunnerContext::Types types);
+    void setHasRunOptions(bool hasRunOptions);
+    void setSpeed(AbstractRunner::Speed newSpeed);
+    void setPriority(AbstractRunner::Priority newPriority);
+    KService::List serviceQuery(const QString &serviceType,
+                                const QString &constraint = QString()) const;
+    QAction* addAction(const QString &id, const QIcon &icon, const QString &text);
+    void addAction(const QString &id, QAction *action);
+    void removeAction(const QString &id);
+    QAction* action(const QString &id) const;
+    QHash<QString, QAction*> actions() const;
+    void clearActions();
+    void addSyntax(const RunnerSyntax &syntax);
+    void setSyntaxes(const QList<RunnerSyntax> &syns);
+
 private:
+    friend class AbstractRunner;
+
     RunnerScriptPrivate *const d;
 };
 
