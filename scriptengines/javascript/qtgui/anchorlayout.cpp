@@ -89,7 +89,7 @@ BEGIN_DECLARE_METHOD(QGraphicsAnchorLayout, addAnchor) {
     QGraphicsAnchor *anchor = self->addAnchor(item1, static_cast<Qt::AnchorPoint>(ctx->argument(1).toInt32()),
                                               item2, static_cast<Qt::AnchorPoint>(ctx->argument(3).toInt32()));
 
-    return qScriptValueFromValue(eng, anchor);
+    return eng->newQObject(anchor, QScriptEngine::QtOwnership);
 } END_DECLARE_METHOD
 
 
@@ -108,7 +108,10 @@ public:
 
 QScriptValue constructAnchorLayoutClass(QScriptEngine *eng)
 {
-    QScriptValue proto = QScript::wrapPointer<QGraphicsAnchorLayout>(eng, new QGraphicsAnchorLayout(), QScript::UserOwnership);
+    QScriptValue proto =
+        QScript::wrapPointer<QGraphicsAnchorLayout>(eng,
+                                                    new QGraphicsAnchorLayout(),
+                                                    QScript::UserOwnership);
     ADD_METHOD(proto, setSpacing);
     ADD_GET_SET_METHODS(proto, horizontalSpacing, setHorizontalSpacing);
     ADD_GET_SET_METHODS(proto, verticalSpacing, setVerticalSpacing);
