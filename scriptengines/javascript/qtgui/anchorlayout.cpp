@@ -92,6 +92,31 @@ BEGIN_DECLARE_METHOD(QGraphicsAnchorLayout, addAnchor) {
     return eng->newQObject(anchor, QScriptEngine::QtOwnership);
 } END_DECLARE_METHOD
 
+BEGIN_DECLARE_METHOD(QGraphicsAnchorLayout, anchor) {
+    QGraphicsLayoutItem *item1 = convertToLayoutItem(ctx, 0);
+    QGraphicsLayoutItem *item2 = convertToLayoutItem(ctx, 2);
+
+    if (!item1 || !item2) {
+        return eng->undefinedValue();
+    }
+
+    QGraphicsAnchor *anchor = self->anchor(item1, static_cast<Qt::AnchorPoint>(ctx->argument(1).toInt32()),
+                                           item2, static_cast<Qt::AnchorPoint>(ctx->argument(3).toInt32()));
+
+    return eng->newQObject(anchor, QScriptEngine::QtOwnership);
+} END_DECLARE_METHOD
+
+BEGIN_DECLARE_METHOD(QGraphicsAnchorLayout, addAnchors) {
+    QGraphicsLayoutItem *item1 = convertToLayoutItem(ctx, 0);
+    QGraphicsLayoutItem *item2 = convertToLayoutItem(ctx, 1);
+
+    if (!item1 || !item2) {
+        return eng->undefinedValue();
+    }
+
+    self->addAnchors(item1, item2, static_cast<Qt::Orientation>(ctx->argument(2).toInt32()));
+    return eng->undefinedValue();
+} END_DECLARE_METHOD
 
 BEGIN_DECLARE_METHOD(QGraphicsItem, toString) {
     return QScriptValue(eng, "QGraphicsAnchorLayout");
@@ -117,6 +142,8 @@ QScriptValue constructAnchorLayoutClass(QScriptEngine *eng)
     ADD_GET_SET_METHODS(proto, verticalSpacing, setVerticalSpacing);
     ADD_METHOD(proto, removeAt);
     ADD_METHOD(proto, addAnchor);
+    ADD_METHOD(proto, anchor);
+    ADD_METHOD(proto, addAnchors);
     ADD_METHOD(proto, toString);
 
     QScript::registerPointerMetaType<QGraphicsAnchorLayout>(eng, proto);
