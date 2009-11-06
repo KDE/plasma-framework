@@ -22,6 +22,7 @@
 #define APPLETINTERFACE_H
 
 #include <QObject>
+#include <QSizePolicy>
 #include <QScriptValue>
 #include <Plasma/DataEngine>
 
@@ -45,6 +46,7 @@ class AppletInterface : public QObject
     Q_ENUMS(AspectRatioMode)
     Q_ENUMS(QtOrientation)
     Q_ENUMS(QtAnchorPoint)
+    Q_ENUMS(QtSizePolicy)
     Q_ENUMS(QtAlignment)
     Q_PROPERTY(QString activeConfig WRITE setActiveConfig READ activeConfig)
     Q_PROPERTY(bool busy WRITE setBusy READ isBusy)
@@ -109,6 +111,16 @@ enum QtAnchorPoint {
     QtAnchorTop = Qt::AnchorTop,
     QtAnchorHorizontalCenter = Qt::AnchorHorizontalCenter,
     QtAnchorVerticalCenter = Qt::AnchorVerticalCenter
+};
+
+enum QtSizePolicy {
+    QSizePolicyFixed = QSizePolicy::Fixed,
+    QSizePolicyMinimum = QSizePolicy::Minimum,
+    QSizePolicyMaximum = QSizePolicy::Maximum,
+    QSizePolicyPreferred = QSizePolicy::Preferred,
+    QSizePolicyExpanding = QSizePolicy::Expanding,
+    QSizePolicyMinimumExpanding = QSizePolicy::MinimumExpanding,
+    QSizePolicyIgnored = QSizePolicy::Ignored
 };
 
 enum QtAlignment {
