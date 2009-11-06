@@ -213,6 +213,11 @@ public:
                                                 (widget->pos() + delta).toPoint());
     }
 
+    void cleanupDragHandles(QObject *destroyed)
+    {
+        dragHandles.remove(static_cast<QGraphicsWidget *>(destroyed));
+    }
+
     ScrollWidget *q;
     QGraphicsWidget *scrollingWidget;
     QGraphicsWidget *widget;
@@ -228,7 +233,7 @@ public:
     Qt::ScrollBarPolicy horizontalScrollBarPolicy;
     QString styleSheet;
     QRectF rectToBeVisible;
-    QSet<QGraphicsItem *>dragHandles;
+    QSet<QGraphicsWidget *>dragHandles;
     bool dragging;
     int animId;
     static const int borderSize = 4;
@@ -345,9 +350,9 @@ void ScrollWidget::ensureItemVisible(QGraphicsItem *item)
     QTimer::singleShot(0, this, SLOT(makeRectVisible()));
 }
 
-void ScrollWidget::registerAsDragHandle(QGraphicsItem *item)
+void ScrollWidget::registerAsDragHandle(QGraphicsWidget *item)
 {
-    if (!d->widget || !item) {
+    if (!d->widget || !item || d->dragHandles.contains(item)) {
         return;
     }
 
@@ -360,14 +365,15 @@ void ScrollWidget::registerAsDragHandle(QGraphicsItem *item)
         parentOfItem = parentOfItem->parentItem();
     }
 
-    item->installSceneEventFilter(this);
+    connect(item, SIGNAL(destroyed(QObject *)), this, SLOT(cleanupDragHandles(QObject *)));
+    item->installEventFilter(this);
     d->dragHandles.insert(item);
 }
 
-void ScrollWidget::unregisterAsDragHandle(QGraphicsItem *item)
+void ScrollWidget::unregisterAsDragHandle(QGraphicsWidget *item)
 {
     if (item) {
-        item->removeSceneEventFilter(this);
+        item->removeEventFilter(this);
         d->dragHandles.remove(item);
     }
 }
@@ -482,24 +488,6 @@ void ScrollWidget::wheelEvent(QGraphicsSceneWheelEvent *event)
 
 }
 
-bool ScrollWidget::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
-{
-    if (!d->widget && !scene()) {
-        return false;
-    }
-
-    if (d->dragHandles.contains(watched)) {
-        if (event->type() == QEvent::GraphicsSceneMousePress ||
-            event->type() == QEvent::GraphicsSceneMouseMove ||
-            event->type() == QEvent::GraphicsSceneMouseRelease) {
-            if (scene()) {
-                scene()->sendEvent(d->widget, event);
-            }
-        }
-    }
-    return false;
-}
-
 bool ScrollWidget::eventFilter(QObject *watched, QEvent *event)
 {
     if (!d->widget) {
@@ -518,6 +506,14 @@ bool ScrollWidget::eventFilter(QObject *watched, QEvent *event)
         d->verticalScrollBar->setValue(-d->widget->pos().y()/10);
         d->horizontalScrollBar->blockSignals(false);
         d->verticalScrollBar->blockSignals(false);
+    } else if (d->dragHandles.contains(static_cast<QGraphicsWidget *>(watched))) {
+        if (event->type() == QEvent::GraphicsSceneMousePress ||
+            event->type() == QEvent::GraphicsSceneMouseMove ||
+            event->type() == QEvent::GraphicsSceneMouseRelease) {
+            if (scene()) {
+                scene()->sendEvent(this, event);
+            }
+        }
     }
 
     return false;

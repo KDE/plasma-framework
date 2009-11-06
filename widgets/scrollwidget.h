@@ -129,13 +129,13 @@ public:
      *             it's not necessary to call this function.
      * @since 4.4
      */
-    void registerAsDragHandle(QGraphicsItem *item);
+    void registerAsDragHandle(QGraphicsWidget *item);
 
     /**
      * Unregister the given item as drag handle (if it was registered)
      * @since 4.4
      */
-    void unregisterAsDragHandle(QGraphicsItem *item);
+    void unregisterAsDragHandle(QGraphicsWidget *item);
 
     /**
      * The geometry of the viewport.
@@ -191,7 +191,6 @@ protected:
     bool eventFilter(QObject *watched, QEvent *event);
     void focusInEvent(QFocusEvent *event);
     QSizeF sizeHint(Qt::SizeHint which, const QSizeF & constraint) const;
-    bool sceneEventFilter(QGraphicsItem *watched, QEvent *event);
 
 private:
     ScrollWidgetPrivate * const d;
@@ -199,6 +198,7 @@ private:
     Q_PRIVATE_SLOT(d, void verticalScroll(int value))
     Q_PRIVATE_SLOT(d, void horizontalScroll(int value))
     Q_PRIVATE_SLOT(d, void makeRectVisible())
+    Q_PRIVATE_SLOT(d, void cleanupDragHandles(QObject *destroyed))
 };
 
 } // namespace Plasma
