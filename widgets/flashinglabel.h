@@ -38,35 +38,38 @@ class FlashingLabelPrivate;
  */
 class PLASMA_EXPORT FlashingLabel : public QGraphicsWidget
 {
-    Q_OBJECT
-    public:
-        explicit FlashingLabel(QGraphicsItem *parent = 0);
-        virtual ~FlashingLabel();
+Q_OBJECT
+public:
+    explicit FlashingLabel(QGraphicsItem *parent = 0);
+    virtual ~FlashingLabel();
 
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
-        void setFont(const QFont &);
-        void setColor(const QColor &);
-        void setDuration(int duration);
+    void setFont(const QFont &);
+    void setColor(const QColor &);
+    void setDuration(int duration);
 
-        void flash(const QString &text, int duration = 0,
-                   const QTextOption &option = QTextOption(Qt::AlignCenter));
-        void flash(const QPixmap &pixmap, int duration = 0,
-                   Qt::Alignment align = Qt::AlignCenter);
+    void flash(const QString &text, int duration = 0,
+                const QTextOption &option = QTextOption(Qt::AlignCenter));
+    void flash(const QPixmap &pixmap, int duration = 0,
+                Qt::Alignment align = Qt::AlignCenter);
 
-        void setAutohide(bool autohide);
-        bool autohide() const;
+    void setAutohide(bool autohide);
+    bool autohide() const;
 
-    public Q_SLOTS:
-        void kill();
+protected:
+    QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint) const;
 
-    protected Q_SLOTS:
-        void fadeIn();
-        void fadeOut();
+public Q_SLOTS:
+    void kill();
 
-    private:
-        Q_PRIVATE_SLOT(d, void elementAnimationFinished(int))
-        FlashingLabelPrivate *const d;
+protected Q_SLOTS:
+    void fadeIn();
+    void fadeOut();
+
+private:
+    Q_PRIVATE_SLOT(d, void elementAnimationFinished(int))
+    FlashingLabelPrivate *const d;
 };
 
 }

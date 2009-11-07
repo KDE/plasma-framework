@@ -212,6 +212,15 @@ void FlashingLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
     }
 }
 
+QSizeF FlashingLabel::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
+{
+    if (which == Qt::PreferredSize) {
+        QFontMetrics fm(d->font);
+        return fm.boundingRect(d->text).size();
+    }
+    return QGraphicsWidget::sizeHint(which, constraint);
+}
+
 void FlashingLabelPrivate::renderPixmap(const QSize &size)
 {
     if (renderedPixmap.size() != size) {
