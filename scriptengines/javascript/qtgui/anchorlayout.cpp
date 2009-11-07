@@ -106,6 +106,20 @@ BEGIN_DECLARE_METHOD(QGraphicsAnchorLayout, anchor) {
     return eng->newQObject(anchor, QScriptEngine::QtOwnership);
 } END_DECLARE_METHOD
 
+BEGIN_DECLARE_METHOD(QGraphicsAnchorLayout, addCornerAnchors) {
+    QGraphicsLayoutItem *item1 = convertToLayoutItem(ctx, 0);
+    QGraphicsLayoutItem *item2 = convertToLayoutItem(ctx, 2);
+
+    if (!item1 || !item2) {
+        return eng->undefinedValue();
+    }
+
+    self->addCornerAnchors(item1, static_cast<Qt::Corner>(ctx->argument(1).toInt32()),
+                           item2, static_cast<Qt::Corner>(ctx->argument(3).toInt32()));
+
+    return eng->undefinedValue();
+} END_DECLARE_METHOD
+
 BEGIN_DECLARE_METHOD(QGraphicsAnchorLayout, addAnchors) {
     QGraphicsLayoutItem *item1 = convertToLayoutItem(ctx, 0);
     QGraphicsLayoutItem *item2 = convertToLayoutItem(ctx, 1);
@@ -144,6 +158,7 @@ QScriptValue constructAnchorLayoutClass(QScriptEngine *eng)
     ADD_METHOD(proto, addAnchor);
     ADD_METHOD(proto, anchor);
     ADD_METHOD(proto, addAnchors);
+    ADD_METHOD(proto, addCornerAnchors);
     ADD_METHOD(proto, toString);
 
     QScript::registerPointerMetaType<QGraphicsAnchorLayout>(eng, proto);

@@ -46,6 +46,7 @@ class AppletInterface : public QObject
     Q_ENUMS(AspectRatioMode)
     Q_ENUMS(QtOrientation)
     Q_ENUMS(QtAnchorPoint)
+    Q_ENUMS(QtCorner)
     Q_ENUMS(QtSizePolicy)
     Q_ENUMS(QtAlignment)
     Q_PROPERTY(QString activeConfig WRITE setActiveConfig READ activeConfig)
@@ -111,6 +112,13 @@ enum QtAnchorPoint {
     QtAnchorTop = Qt::AnchorTop,
     QtAnchorHorizontalCenter = Qt::AnchorHorizontalCenter,
     QtAnchorVerticalCenter = Qt::AnchorVerticalCenter
+};
+
+enum QtCorner {
+    QtTopLeftCorner = Qt::TopLeftCorner,
+    QtTopRightCorner = Qt::TopRightCorner,
+    QtBottomLeftCorner = Qt::BottomLeftCorner,
+    QtBottomRightCorner = Qt::BottomRightCorner
 };
 
 enum QtSizePolicy {
