@@ -255,7 +255,7 @@ void Label::paint(QPainter *painter,
     QLabel *native = nativeWidget();
     QFontMetrics fm = native->font();
 
-    if (native->wordWrap() || native->text().isEmpty() || size().width() > fm.width(native->text())) {
+    if (native->wordWrap() || native->text().isEmpty() || size().width() >= fm.width(native->text())) {
         QGraphicsProxyWidget::paint(painter, option, widget);
     } else {
         const int gradientLength = 25;
