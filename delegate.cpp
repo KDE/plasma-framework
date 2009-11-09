@@ -233,41 +233,17 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
 
     QString titleText = index.data(Qt::DisplayRole).value<QString>();
     QString subTitleText = index.data(d->roles[SubTitleRole]).value<QString>();
+    //kDebug() << subTitleText;
 
     QRect titleRect = d->titleRect(option, index);
     titleRect.moveTopLeft(titleRect.topLeft()-option.rect.topLeft());
     QRect subTitleRect = d->subTitleRect(option, index);
     subTitleRect.moveTopLeft(subTitleRect.topLeft()-option.rect.topLeft());
 
-    // If the model wants to have exact control for subtitles showing
-    // it is expected to return a valid data for SubTitleMandatoryRole.
-    // If it doesn't return a valid data for this role
-    // then by default we well be showing a subtitles for
-    // adjasent items with the same content (see comments below too)
-    bool uniqueTitle = true;
-    QVariant mandatoryRoleData = index.data(d->roles[SubTitleMandatoryRole]);
-    if (!mandatoryRoleData.isValid()) {
-        uniqueTitle = !mandatoryRoleData.value<bool>();// true;
-        if (uniqueTitle) {
-            QModelIndex sib = index.sibling(index.row() + 1, index.column());
-            if (sib.isValid()) {
-                uniqueTitle = sib.data(Qt::DisplayRole).value<QString>() != titleText;
-            }
-
-            if (uniqueTitle) {
-                sib = index.sibling(index.row() + -1, index.column());
-                if (sib.isValid()) {
-                    uniqueTitle = sib.data(Qt::DisplayRole).value<QString>() != titleText;
-                }
-            }
-        }
-    }
-
     if (subTitleText == titleText) {
+        kDebug() << "clearing subtitle";
         subTitleText.clear();
     }
-
-    QFont subTitleFont = d->fontForSubTitle(option.font);
 
     QFont titleFont(option.font);
 
@@ -309,7 +285,35 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     // required to understand the item itself and that showing all the subtexts in a
     // listing makes the information density very high, impacting both the speed at
     // which one can scan the list visually and the aesthetic qualities of the listing.
-    bool drawSubTitle = mandatoryRoleData.isValid() ? mandatoryRoleData.value<bool>() : (hover || !uniqueTitle);
+    bool drawSubTitle = !subTitleText.isEmpty();
+
+    if (drawSubTitle && !hover) {
+        // If the model wants to have exact control for subtitles showing
+        // it is expected to return a valid data for SubTitleMandatoryRole.
+        // If it doesn't return a valid data for this role
+        // then by default we well be showing a subtitles for
+        // adjasent items with the same content (see comments below too)
+        QVariant mandatoryRoleData = index.data(d->roles[SubTitleMandatoryRole]);
+        if (mandatoryRoleData.isValid()) {
+            drawSubTitle = mandatoryRoleData.value<bool>();
+        } else {
+            bool uniqueTitle = true;
+            QModelIndex sib = index.sibling(index.row() + 1, index.column());
+            if (sib.isValid()) {
+                uniqueTitle = sib.data(Qt::DisplayRole).value<QString>() != titleText;
+            }
+
+            if (uniqueTitle) {
+                sib = index.sibling(index.row() + -1, index.column());
+                if (sib.isValid()) {
+                    uniqueTitle = sib.data(Qt::DisplayRole).value<QString>() != titleText;
+                }
+            }
+
+            drawSubTitle = !uniqueTitle;
+        }
+    }
+
 
     if (drawSubTitle) {
         if (option.palette.color(QPalette::Base).alpha() > 0) {
@@ -319,6 +323,8 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
             textColor.setAlphaF(0.6);
             p.setPen(textColor);
         }
+
+        const QFont subTitleFont = d->fontForSubTitle(option.font);
         p.setFont(subTitleFont);
         p.drawText(subTitleRect, Qt::AlignLeft|Qt::AlignVCenter, "  " + subTitleText);
     }
