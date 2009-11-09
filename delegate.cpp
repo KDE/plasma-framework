@@ -241,7 +241,6 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     subTitleRect.moveTopLeft(subTitleRect.topLeft()-option.rect.topLeft());
 
     if (subTitleText == titleText) {
-        kDebug() << "clearing subtitle";
         subTitleText.clear();
     }
 
