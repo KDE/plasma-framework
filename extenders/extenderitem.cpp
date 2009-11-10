@@ -445,10 +445,6 @@ void ExtenderItem::destroy()
     d->extender->d->removeExtenderItem(this);
     emit d->extender->itemDetached(this);
 
-    if (sender() == d->destroyAction) {
-        emit destroyActionTriggered();
-    }
-
     deleteLater();
 }
 
@@ -694,7 +690,7 @@ ExtenderItemPrivate::ExtenderItemPrivate(ExtenderItem *extenderItem, Extender *h
       dragger(new FrameSvg(extenderItem)),
       background(new FrameSvg(extenderItem)),
       collapseIcon(0),
-      destroyAction(0),
+      destroyButton(0),
       title(QString()),
       mouseOver(false),
       dragStarted(false),
@@ -754,7 +750,9 @@ void ExtenderItemPrivate::updateToolBox()
             QSizeF size = icon->sizeFromIconSize(iconSize);
             icon->setMinimumSize(size);
             icon->setMaximumSize(size);
-            toolboxLayout->addItem(icon);
+            if (action != actions.value("close")) {
+                toolboxLayout->addItem(icon);
+            }
         }
     }
 
@@ -772,14 +770,24 @@ void ExtenderItemPrivate::updateToolBox()
 
     //add the close icon if desired.
     if (destroyActionVisibility) {
-        destroyAction = new IconWidget(q);
-        destroyAction->setSvg("widgets/configuration-icons", "close");
-        QSizeF size = destroyAction->sizeFromIconSize(iconSize);
-        destroyAction->setMinimumSize(size);
-        destroyAction->setMaximumSize(size);
+        destroyButton = new IconWidget(q);
+        if (!actions.contains("close")) {
+            QAction *destroyAction = new QAction(q);
+            actions["close"] = destroyAction;
+        }
+        destroyButton->setAction(actions["close"]);
+        destroyButton->setSvg("widgets/configuration-icons", "close");
+        QSizeF size = destroyButton->sizeFromIconSize(iconSize);
+        destroyButton->setMinimumSize(size);
+        destroyButton->setMaximumSize(size);
 
-        toolboxLayout->addItem(destroyAction);
-        QObject::connect(destroyAction, SIGNAL(clicked()), q, SLOT(destroy()));
+        toolboxLayout->addItem(destroyButton);
+
+        QObject::connect(actions["close"], SIGNAL(triggered()), q, SLOT(destroy()));
+    } else if (actions.contains("close")) {
+        QAction *destroyAction = actions["close"];
+        actions.remove("close");
+        destroyAction->deleteLater();
     }
 
     toolboxLayout->updateGeometry();

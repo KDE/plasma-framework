@@ -78,7 +78,7 @@ class ExtenderItemPrivate
         QHash<QString, QAction*> actions;
         QList<QAction*> actionsInOrder;
 
-        Plasma::IconWidget *destroyAction;
+        Plasma::IconWidget *destroyButton;
 
         QString title;
         QString name;
