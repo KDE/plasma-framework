@@ -410,9 +410,9 @@ void PushButton::paint(QPainter *painter,
 
     QFont widgetFont;
     if (d->customFont) {
-        widgetFont = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
-    } else {
         widgetFont = font();
+    } else {
+        widgetFont = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
     }
 
     //if there is not enough room for the text make it to fade out

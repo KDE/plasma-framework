@@ -43,7 +43,8 @@ public:
         : q(parent),
           svg(0),
           image(0),
-          pixmap(0)
+          pixmap(0),
+          customFont(false)
     {
     }
 
@@ -53,6 +54,7 @@ public:
     }
 
     void syncBorders();
+    QFont widgetFont() const;
 
     Frame *q;
     FrameSvg *svg;
@@ -66,6 +68,15 @@ public:
     bool customFont;
 };
 
+QFont FramePrivate::widgetFont() const
+{
+    if (customFont) {
+        return q->font();
+    } else {
+        return Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
+    }
+}
+
 void FramePrivate::syncBorders()
 {
     //set margins from the normal element
@@ -73,15 +84,8 @@ void FramePrivate::syncBorders()
 
     svg->getMargins(left, top, right, bottom);
 
-    QFont widgetFont;
-    if (customFont) {
-        widgetFont = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
-    } else {
-        widgetFont = q->font();
-    }
-
     if (!text.isNull()) {
-        QFontMetricsF fm(widgetFont);
+        QFontMetricsF fm(widgetFont());
         top += fm.height();
     }
 
@@ -225,18 +229,11 @@ void Frame::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 
     d->svg->paintFrame(painter);
 
-    QFont widgetFont;
-    if (d->customFont) {
-        widgetFont = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
-    } else {
-        widgetFont = font();
-    }
-
     if (!d->text.isNull()) {
-        QFontMetricsF fm(widgetFont);
+        QFontMetricsF fm(d->widgetFont());
         QRectF textRect = d->svg->contentsRect();
         textRect.setHeight(fm.height());
-        painter->setFont(widgetFont);
+        painter->setFont(d->widgetFont());
         painter->setPen(Plasma::Theme::defaultTheme()->color(Theme::TextColor));
         painter->drawText(textRect, Qt::AlignHCenter|Qt::AlignTop, d->text);
     }
@@ -264,7 +261,7 @@ QSizeF Frame::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
     QSizeF hint = QGraphicsWidget::sizeHint(which, constraint);
 
     if (!d->image && !layout()) {
-        QFontMetricsF fm(QApplication::font());
+        QFontMetricsF fm(d->widgetFont());
 
         qreal left, top, right, bottom;
         d->svg->getMargins(left, top, right, bottom);

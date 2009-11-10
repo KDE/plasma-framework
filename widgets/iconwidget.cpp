@@ -118,6 +118,15 @@ void IconWidgetPrivate::iconConfigChanged()
     }
 }
 
+QFont IconWidgetPrivate::widgetFont() const
+{
+    if (customFont) {
+        return q->font();
+    } else {
+        return Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
+    }
+}
+
 IconAction::IconAction(IconWidget *icon, QAction *action)
     : m_icon(icon),
       m_action(action),
@@ -477,16 +486,9 @@ QSizeF IconWidgetPrivate::displaySizeHint(const QStyleOptionGraphicsItem *option
                       horizontalMargin[IconWidgetPrivate::TextMargin].left -
                       horizontalMargin[IconWidgetPrivate::TextMargin].right;
 
-    QFont widgetFont;
-    if (customFont) {
-        widgetFont = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
-    } else {
-        widgetFont = q->font();
-    }
-
     //allow only five lines of text
     const qreal maxHeight =
-        numDisplayLines * QFontMetrics(widgetFont).lineSpacing();
+        numDisplayLines * QFontMetrics(widgetFont()).lineSpacing();
 
     // To compute the nominal size for the label + info, we'll just append
     // the information string to the label
@@ -496,7 +498,7 @@ QSizeF IconWidgetPrivate::displaySizeHint(const QStyleOptionGraphicsItem *option
 
     QTextLayout layout;
     setLayoutOptions(layout, option, q->orientation());
-    layout.setFont(widgetFont);
+    layout.setFont(widgetFont());
     QSizeF size = layoutText(layout, option, label, QSizeF(textWidth, maxHeight));
 
     return addMargin(size, TextMargin);
@@ -540,15 +542,7 @@ void IconWidgetPrivate::layoutIcons(const QStyleOptionGraphicsItem *option)
         }
         iconWidth -= horizontalMargin[IconWidgetPrivate::ItemMargin].left + horizontalMargin[IconWidgetPrivate::ItemMargin].right;
     } else {
-        QFont widgetFont;
-        if (customFont) {
-            widgetFont = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
-        } else {
-            widgetFont = q->font();
-        }
         //Horizontal layout
-        QFontMetricsF fm = QFontMetrics(widgetFont);
-
         //if there is text resize the icon in order to make room for the text
         if (text.isEmpty() && infoText.isEmpty()) {
             // with no text, we just take up the whole geometry
@@ -1010,19 +1004,9 @@ void IconWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
         }
     }
 
-    QFont widgetFont;
-    if (d->customFont) {
-        widgetFont = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
-    } else {
-        widgetFont = font();
-    }
-
     // Draw text last because it is overlayed
     QTextLayout labelLayout, infoLayout;
-    labelLayout.setFont(widgetFont);
-    infoLayout.setFont(widgetFont);
     QRectF textBoundingRect;
-
 
     d->layoutTextItems(option, icon, &labelLayout, &infoLayout, &textBoundingRect);
 
@@ -1352,14 +1336,7 @@ QSizeF IconWidget::sizeFromIconSize(const qreal iconWidth) const
                             IconWidgetPrivate::ItemMargin);
     }
 
-    QFont widgetFont;
-    if (d->customFont) {
-        widgetFont = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
-    } else {
-        widgetFont = font();
-    }
-
-    QFontMetricsF fm(widgetFont);
+    QFontMetricsF fm(d->widgetFont());
     qreal width = 0;
 
     if (d->orientation == Qt::Vertical) {

@@ -77,7 +77,7 @@ public:
           newPage(0),
           oldPageAnimId(-1),
           newPageAnimId(-1),
-          customFont(true)
+          customFont(false)
     {
     }
 

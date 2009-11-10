@@ -365,9 +365,9 @@ void ToolButton::paint(QPainter *painter,
 
     QFont widgetFont;
     if (d->customFont) {
-        widgetFont = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
-    } else {
         widgetFont = font();
+    } else {
+        widgetFont = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
     }
     buttonOpt.font = widgetFont;
 

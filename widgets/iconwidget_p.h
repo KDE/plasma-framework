@@ -187,6 +187,7 @@ public:
     void readColors();
     void colorConfigChanged();
     void iconConfigChanged();
+    QFont widgetFont() const;
     void hoverAnimationUpdate(qreal progress);
     void init();
     void layoutIcons(const QStyleOptionGraphicsItem *option);
@@ -246,7 +247,7 @@ void IconWidgetPrivate::setLayoutOptions(QTextLayout &layout,
 
     textoption.setWrapMode(QTextOption::WordWrap);  // NOTE: assumption as well
 
-    layout.setFont(QApplication::font());    // NOTE: find better ways to get the font
+    layout.setFont(widgetFont());
     layout.setTextOption(textoption);
 }
 

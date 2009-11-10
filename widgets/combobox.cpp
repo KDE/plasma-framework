@@ -42,7 +42,7 @@ public:
     ComboBoxPrivate(ComboBox *comboBox)
          : q(comboBox),
            background(0),
-           customFont(0),
+           customFont(false),
            underMouse(false)
     {
     }
@@ -101,9 +101,9 @@ void ComboBoxPrivate::syncBorders()
 
     KComboBox *native = q->nativeWidget();
     if (customFont) {
-        native->setFont(Theme::defaultTheme()->font(Theme::DefaultFont));
-    } else {
         native->setFont(q->font());
+    } else {
+        native->setFont(Theme::defaultTheme()->font(Theme::DefaultFont));
     }
 }
 
