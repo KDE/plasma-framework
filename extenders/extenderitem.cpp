@@ -444,6 +444,11 @@ void ExtenderItem::destroy()
     d->hostApplet()->config("ExtenderItems").deleteGroup(QString::number(d->extenderItemId));
     d->extender->d->removeExtenderItem(this);
     emit d->extender->itemDetached(this);
+
+    if (sender() == d->destroyAction) {
+        emit destroyActionTriggered();
+    }
+
     deleteLater();
 }
 
@@ -689,6 +694,7 @@ ExtenderItemPrivate::ExtenderItemPrivate(ExtenderItem *extenderItem, Extender *h
       dragger(new FrameSvg(extenderItem)),
       background(new FrameSvg(extenderItem)),
       collapseIcon(0),
+      destroyAction(0),
       title(QString()),
       mouseOver(false),
       dragStarted(false),
@@ -766,7 +772,7 @@ void ExtenderItemPrivate::updateToolBox()
 
     //add the close icon if desired.
     if (destroyActionVisibility) {
-        IconWidget *destroyAction = new IconWidget(q);
+        destroyAction = new IconWidget(q);
         destroyAction->setSvg("widgets/configuration-icons", "close");
         QSizeF size = destroyAction->sizeFromIconSize(iconSize);
         destroyAction->setMinimumSize(size);
