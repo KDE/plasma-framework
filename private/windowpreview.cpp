@@ -45,6 +45,7 @@ WindowPreview::WindowPreview(QWidget *parent)
     m_background = new Plasma::FrameSvg(this);
     m_background->setImagePath("widgets/frame");
     m_background->setElementPrefix("raised");
+    setMouseTracking(true);
 }
 
 void WindowPreview::setWindowIds(const QList<WId> wids)
@@ -191,6 +192,25 @@ void WindowPreview::mousePressEvent(QMouseEvent *event)
     if (wid) {
         emit windowPreviewClicked(wid, event->buttons(), event->modifiers(), event->globalPos());
     }
+}
+
+void WindowPreview::mouseMoveEvent(QMouseEvent *event)
+{
+    int i = 0;
+    foreach (QRect rect, m_thumbnailRects) {
+        if (rect.contains(event->pos())) {
+            WindowEffects::highlightWindows(effectiveWinId(), QList<WId>()<<effectiveWinId()<<ids[i]);
+            return;
+        }
+        ++i;
+    }
+    WindowEffects::highlightWindows(effectiveWinId(), QList<WId>());
+}
+
+void WindowPreview::leaveEvent(QEvent *event)
+{
+    Q_UNUSED(event)
+    WindowEffects::highlightWindows(effectiveWinId(), QList<WId>());
 }
 
 } // namespace Plasma
