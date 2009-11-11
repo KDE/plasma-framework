@@ -24,7 +24,6 @@
 #include <QMenu>
 #include <QMutex>
 #include <QMutexLocker>
-#include <QReadWriteLock>
 #include <QTimer>
 
 #include <kdebug.h>
@@ -36,69 +35,12 @@
 #include <plasma/package.h>
 #include <plasma/querymatch.h>
 
-#include "scripting/runnerscript.h"
-
+#include "private/abstractrunner_p.h"
 #include "runnercontext.h"
+#include "scripting/runnerscript.h"
 
 namespace Plasma
 {
-
-class AbstractRunnerPrivate
-{
-public:
-    AbstractRunnerPrivate(AbstractRunner *r, KService::Ptr service)
-      : priority(AbstractRunner::NormalPriority),
-        speed(AbstractRunner::NormalSpeed),
-        blackListed(0),
-        script(0),
-        runnerDescription(service),
-        runner(r),
-        fastRuns(0),
-        package(0),
-        hasRunOptions(false)
-    {
-        if (runnerDescription.isValid()) {
-            const QString api = runnerDescription.property("X-Plasma-API").toString();
-            if (!api.isEmpty()) {
-                const QString path = KStandardDirs::locate("data",
-                                    "plasma/runners/" + runnerDescription.pluginName() + '/');
-                PackageStructure::Ptr structure =
-                    Plasma::packageStructure(api, Plasma::RunnerComponent);
-                structure->setPath(path);
-                package = new Package(path, structure);
-
-                script = Plasma::loadScriptEngine(api, runner);
-                if (!script) {
-                    kDebug() << "Could not create a(n)" << api << "ScriptEngine for the"
-                             << runnerDescription.name() << "Runner.";
-                    delete package;
-                    package = 0;
-                }
-            }
-        }
-    }
-
-    ~AbstractRunnerPrivate()
-    {
-        delete script;
-        script = 0;
-        delete package;
-        package = 0;
-    }
-
-    AbstractRunner::Priority priority;
-    AbstractRunner::Speed speed;
-    RunnerContext::Types blackListed;
-    RunnerScript *script;
-    KPluginInfo runnerDescription;
-    AbstractRunner *runner;
-    int fastRuns;
-    Package *package;
-    QHash<QString, QAction*> actions;
-    QList<RunnerSyntax> syntaxes;
-    bool hasRunOptions;
-    QReadWriteLock speedLock;
-};
 
 K_GLOBAL_STATIC(QMutex, s_bigLock)
 
@@ -355,6 +297,46 @@ void AbstractRunner::init()
     if (d->script) {
         d->script->init();
     }
+}
+
+AbstractRunnerPrivate::AbstractRunnerPrivate(AbstractRunner *r, KService::Ptr service)
+    : priority(AbstractRunner::NormalPriority),
+      speed(AbstractRunner::NormalSpeed),
+      blackListed(0),
+      script(0),
+      runnerDescription(service),
+      runner(r),
+      fastRuns(0),
+      package(0),
+      hasRunOptions(false)
+{
+    if (runnerDescription.isValid()) {
+        const QString api = runnerDescription.property("X-Plasma-API").toString();
+        if (!api.isEmpty()) {
+            const QString path = KStandardDirs::locate("data",
+                    "plasma/runners/" + runnerDescription.pluginName() + '/');
+            PackageStructure::Ptr structure =
+                Plasma::packageStructure(api, Plasma::RunnerComponent);
+            structure->setPath(path);
+            package = new Package(path, structure);
+
+            script = Plasma::loadScriptEngine(api, runner);
+            if (!script) {
+                kDebug() << "Could not create a(n)" << api << "ScriptEngine for the"
+                    << runnerDescription.name() << "Runner.";
+                delete package;
+                package = 0;
+            }
+        }
+    }
+}
+
+AbstractRunnerPrivate::~AbstractRunnerPrivate()
+{
+    delete script;
+    script = 0;
+    delete package;
+    package = 0;
 }
 
 } // Plasma namespace
