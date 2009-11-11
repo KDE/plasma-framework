@@ -110,6 +110,7 @@ public:
 
     static KActionCollection* defaultActions(QObject *parent);
     static QSet<QString> knownCategories();
+    static void filterOffers(QList<KService::Ptr> &offers);
 
     static uint s_maxAppletId;
     static int s_maxZValue;

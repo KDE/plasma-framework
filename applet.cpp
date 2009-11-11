@@ -2011,6 +2011,39 @@ bool Applet::hasValidAssociatedApplication() const
     return AssociatedApplicationManager::self()->appletHasValidAssociatedApplication(this);
 }
 
+void AppletPrivate::filterOffers(QList<KService::Ptr> &offers)
+{
+    KConfigGroup constraintGroup(KGlobal::config(), "Constraints");
+    foreach (const QString &key, constraintGroup.keyList()) {
+        //kDebug() << "security constraint" << key;
+        if (constraintGroup.readEntry(key, true)) {
+            continue;
+        }
+
+        //ugh. a qlist of ksharedptr<kservice>
+        QMutableListIterator<KService::Ptr> it(offers);
+        while (it.hasNext()) {
+            KService::Ptr p = it.next();
+            QString prop = QString("X-Plasma-Requires-").append(key);
+            QVariant req = p->property(prop, QVariant::String);
+            //valid values: Required/Optional/Unused
+            QString reqValue;
+            if (req.isValid()) {
+                reqValue = req.toString();
+            } else if (p->property("X-Plasma-API").toString().toLower() == "javascript") {
+                //TODO: be able to check whether or not a script engine provides "controled"
+                //bindings; for now we just give a pass to the qscript ones
+                reqValue = "Unused";
+            }
+
+            if (!(reqValue == "Optional" || reqValue == "Unused")) {
+            //if (reqValue == "Required") {
+                it.remove();
+            }
+        }
+    }
+}
+
 KPluginInfo::List Applet::listAppletInfo(const QString &category,
                                          const QString &parentApp)
 {
@@ -2042,34 +2075,7 @@ KPluginInfo::List Applet::listAppletInfo(const QString &category,
     offers << KServiceTypeTrader::self()->query("Plasma/PopupApplet", constraint);
 
     //now we have to do some manual filtering because the constraint can't handle everything
-    KConfigGroup constraintGroup(KGlobal::config(), "Constraints");
-    foreach (const QString &key, constraintGroup.keyList()) {
-        //kDebug() << "security constraint" << key;
-        if (constraintGroup.readEntry(key, true)) {
-            continue;
-        }
-        //ugh. a qlist of ksharedptr<kservice>
-        QMutableListIterator<KService::Ptr> it(offers);
-        while (it.hasNext()) {
-            KService::Ptr p = it.next();
-            QString prop = QString("X-Plasma-Requires-").append(key);
-            QVariant req = p->property(prop, QVariant::String);
-            //valid values: Required/Optional/Unused
-            QString reqValue;
-            if (req.isValid()) {
-                reqValue = req.toString();
-            } else {
-                //TODO if it's a scripted language default to not-required because the bindings disable it
-                //this isn't actually implemented in any bindings yet but should be possible for
-                //anything but c++
-            }
-
-            if (!(reqValue == "Optional" || reqValue == "Unused")) {
-            //if (reqValue == "Required") {
-                it.remove();
-            }
-        }
-    }
+    AppletPrivate::filterOffers(offers);
 
     //kDebug() << "Applet::listAppletInfo constraint was '" << constraint
     //         << "' which got us " << offers.count() << " matches";
@@ -2082,6 +2088,7 @@ KPluginInfo::List Applet::listAppletInfoForMimetype(const QString &mimetype)
     //kDebug() << "listAppletInfoForMimetype with" << mimetype << constraint;
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
     offers << KServiceTypeTrader::self()->query("Plasma/PopupApplet", constraint);
+    AppletPrivate::filterOffers(offers);
     return KPluginInfo::fromServices(offers);
 }
 
@@ -2090,6 +2097,7 @@ KPluginInfo::List Applet::listAppletInfoForUrl(const QUrl &url)
     QString constraint = "exist [X-Plasma-DropUrlPatterns]";
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
     offers << KServiceTypeTrader::self()->query("Plasma/PopupApplet", constraint);
+    AppletPrivate::filterOffers(offers);
 
     KPluginInfo::List allApplets = KPluginInfo::fromServices(offers);
     KPluginInfo::List filtered;
@@ -2104,6 +2112,7 @@ KPluginInfo::List Applet::listAppletInfoForUrl(const QUrl &url)
             }
         }
     }
+
     return filtered;
 }
 
@@ -2125,6 +2134,8 @@ QStringList Applet::listCategories(const QString &parentApp, bool visibleOnly)
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
     offers << KServiceTypeTrader::self()->query("Plasma/PopupApplet", constraint);
+    AppletPrivate::filterOffers(offers);
+
     QStringList categories;
     QSet<QString> known = AppletPrivate::knownCategories();
     foreach (const KService::Ptr &applet, offers) {
