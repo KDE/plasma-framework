@@ -279,13 +279,13 @@ void Dialog::paintEvent(QPaintEvent *e)
 
 void Dialog::mouseMoveEvent(QMouseEvent *event)
 {
-    if (d->resizeAreas[Dialog::NorthEast].contains(event->pos()) && d->resizeCorners & Dialog::NorthEast) {
+    if (d->resizeAreas[Dialog::NorthEast].contains(event->pos())) {
         setCursor(Qt::SizeBDiagCursor);
-    } else if (d->resizeAreas[Dialog::NorthWest].contains(event->pos()) && d->resizeCorners & Dialog::NorthWest) {
+    } else if (d->resizeAreas[Dialog::NorthWest].contains(event->pos())) {
         setCursor(Qt::SizeFDiagCursor);
-    } else if (d->resizeAreas[Dialog::SouthEast].contains(event->pos()) && d->resizeCorners & Dialog::SouthEast) {
+    } else if (d->resizeAreas[Dialog::SouthEast].contains(event->pos())) {
         setCursor(Qt::SizeFDiagCursor);
-    } else if (d->resizeAreas[Dialog::SouthWest].contains(event->pos()) && d->resizeCorners & Dialog::SouthWest) {
+    } else if (d->resizeAreas[Dialog::SouthWest].contains(event->pos())) {
         setCursor(Qt::SizeBDiagCursor);
     } else if (!(event->buttons() & Qt::LeftButton)) {
         unsetCursor();
@@ -333,18 +333,14 @@ void Dialog::mouseMoveEvent(QMouseEvent *event)
 
 void Dialog::mousePressEvent(QMouseEvent *event)
 {
-    if (d->resizeAreas[Dialog::NorthEast].contains(event->pos()) && d->resizeCorners & Dialog::NorthEast) {
+    if (d->resizeAreas[Dialog::NorthEast].contains(event->pos())) {
         d->resizeStartCorner = Dialog::NorthEast;
-
-    } else if (d->resizeAreas[Dialog::NorthWest].contains(event->pos()) && d->resizeCorners & Dialog::NorthWest) {
+    } else if (d->resizeAreas[Dialog::NorthWest].contains(event->pos())) {
         d->resizeStartCorner = Dialog::NorthWest;
-
-    } else if (d->resizeAreas[Dialog::SouthEast].contains(event->pos()) && d->resizeCorners & Dialog::SouthEast) {
+    } else if (d->resizeAreas[Dialog::SouthEast].contains(event->pos())) {
         d->resizeStartCorner = Dialog::SouthEast;
-
-    } else if (d->resizeAreas[Dialog::SouthWest].contains(event->pos()) && d->resizeCorners & Dialog::SouthWest) {
+    } else if (d->resizeAreas[Dialog::SouthWest].contains(event->pos())) {
         d->resizeStartCorner = Dialog::SouthWest;
-
     } else {
         d->resizeStartCorner = Dialog::NoCorner;
     }
@@ -404,24 +400,37 @@ void DialogPrivate::updateResizeCorners()
 {
     const int resizeAreaMargin = 20;
     const QRect r = q->rect();
+    const FrameSvg::EnabledBorders borders = background->enabledBorders();
+
+    // IMPLEMENTATION NOTE: we set resize corners for the corners set, but also
+    // for the complimentary corners if we've cut out an edge of our SVG background
+    // which implies we are up against an immovable edge (e.g. a screen edge)
 
     resizeAreas.clear();
-    if (resizeCorners & Dialog::NorthEast) {
+    if (resizeCorners & Dialog::NorthEast ||
+        (resizeCorners & Dialog::NorthWest && !(borders & FrameSvg::LeftBorder)) ||
+        (resizeCorners & Dialog::SouthEast && !(borders & FrameSvg::BottomBorder))) {
         resizeAreas[Dialog::NorthEast] = QRect(r.right() - resizeAreaMargin, 0,
                                                resizeAreaMargin, resizeAreaMargin);
     }
 
-    if (resizeCorners & Dialog::NorthWest) {
+    if (resizeCorners & Dialog::NorthWest ||
+        (resizeCorners & Dialog::NorthEast && !(borders & FrameSvg::RightBorder)) ||
+        (resizeCorners & Dialog::SouthWest && !(borders & FrameSvg::BottomBorder))) {
         resizeAreas[Dialog::NorthWest] = QRect(0, 0, resizeAreaMargin, resizeAreaMargin);
     }
 
-    if (resizeCorners & Dialog::SouthEast) {
+    if (resizeCorners & Dialog::SouthEast ||
+        (resizeCorners & Dialog::SouthWest && !(borders & FrameSvg::LeftBorder)) ||
+        (resizeCorners & Dialog::NorthEast && !(borders & FrameSvg::TopBorder))) {
         resizeAreas[Dialog::SouthEast] = QRect(r.right() - resizeAreaMargin,
                                                r.bottom() - resizeAreaMargin,
                                                resizeAreaMargin, resizeAreaMargin);
     }
 
-    if (resizeCorners & Dialog::SouthWest) {
+    if (resizeCorners & Dialog::SouthWest ||
+        (resizeCorners & Dialog::SouthEast && !(borders & FrameSvg::RightBorder)) ||
+        (resizeCorners & Dialog::NorthWest && !(borders & FrameSvg::TopBorder))) {
         resizeAreas[Dialog::SouthWest] = QRect(0, r.bottom() - resizeAreaMargin,
                                                resizeAreaMargin, resizeAreaMargin);
     }
@@ -494,6 +503,7 @@ void Dialog::showEvent(QShowEvent * event)
 
     //check if the widget size is still synced with the view
     d->themeChanged();
+    d->updateResizeCorners();
 
     if (d->graphicsWidget && d->view && d->graphicsWidget->size().toSize() != d->view->size()) {
         d->adjustView();
