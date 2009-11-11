@@ -25,6 +25,7 @@
 #include <QWidget>
 
 #include <KDebug>
+#include <KIcon>
 #include <KLocale>
 #include <KStandardDirs>
 #include <KConfigGroup>
@@ -163,7 +164,7 @@ void kConfigGroupFromScriptValue(const QScriptValue& obj, KConfigGroup &config)
 void registerEnums(QScriptEngine *engine, QScriptValue &scriptValue, const QMetaObject &meta)
 {
     //manually create enum values. ugh
-    for (int i=0; i < meta.enumeratorCount(); ++i) {
+    for (int i = 0; i < meta.enumeratorCount(); ++i) {
         QMetaEnum e = meta.enumerator(i);
         //kDebug() << e.name();
         for (int i=0; i < e.keyCount(); ++i) {
@@ -183,7 +184,6 @@ SimpleJavaScriptApplet::SimpleJavaScriptApplet(QObject *parent, const QVariantLi
 //    kDebug() << "Script applet launched, args" << applet()->startupArguments();
 
     m_engine = new QScriptEngine(this);
-    importExtensions();
 }
 
 SimpleJavaScriptApplet::~SimpleJavaScriptApplet()
@@ -193,10 +193,22 @@ SimpleJavaScriptApplet::~SimpleJavaScriptApplet()
     }
 }
 
-void SimpleJavaScriptApplet::reportError(QScriptEngine *engine)
+void SimpleJavaScriptApplet::reportError(QScriptEngine *engine, bool fatal)
 {
-    kDebug() << "Error: " << engine->uncaughtException().toString()
-             << " at line " << engine->uncaughtExceptionLineNumber() << endl;
+    SimpleJavaScriptApplet *jsApplet = qobject_cast<SimpleJavaScriptApplet *>(engine->parent());
+    const QString failureMsg = i18n("Script failure on line %1:\n%2",
+                                    QString::number(engine->uncaughtExceptionLineNumber()),
+                                    engine->uncaughtException().toString());
+    if (jsApplet) {
+        if (fatal) {
+            jsApplet->setFailedToLaunch(true, failureMsg);
+        } else {
+            jsApplet->showMessage(KIcon("dialog-error"), failureMsg, Plasma::ButtonNone);
+        }
+    } else {
+        kDebug() << failureMsg;
+    }
+
     kDebug() << engine->uncaughtExceptionBacktrace();
 }
 
@@ -340,6 +352,10 @@ bool SimpleJavaScriptApplet::init()
     setupObjects();
     populateAnimationsHash();
 
+    if (!importExtensions()) {
+        return false;
+    }
+
     kDebug() << "ScriptName:" << applet()->name();
     kDebug() << "ScriptCategory:" << applet()->category();
 
@@ -354,30 +370,37 @@ bool SimpleJavaScriptApplet::init()
 
     m_engine->evaluate(script);
     if (m_engine->hasUncaughtException()) {
-        reportError(m_engine);
+        reportError(m_engine, true);
         return false;
     }
 
     return true;
 }
 
-void SimpleJavaScriptApplet::importExtensions()
+bool SimpleJavaScriptApplet::importExtensions()
 {
-    return; // no extension, so do bother wasting cycles
-
-    /*
-    QStringList extensions;
-    //extensions << "qt.core" << "qt.gui" << "qt.svg" << "qt.xml" << "qt.plasma";
-    //extensions << "qt.core" << "qt.gui" << "qt.xml";
-    foreach (const QString &ext, extensions) {
-        kDebug() << "importing " << ext << "...";
-        QScriptValue ret = m_engine->importExtension(ext);
-        if (ret.isError()) {
-            kDebug() << "failed to import extension" << ext << ":" << ret.toString();
+    KPluginInfo info = description();
+    QStringList requiredExtensions = info.property("X-Plasma-RequiredExtensions").toStringList();
+    kDebug() << "required extensions are" << requiredExtensions;
+    foreach (const QString &extension, requiredExtensions) {
+        if (!applet()->hasAuthorization(extension)) {
+            setFailedToLaunch(true,
+                              i18n("Authorization for required extension '%1' was denied.",
+                                   extension));
+            return false;
+        } else {
+            m_engine->importExtension(extension);
+            if (m_engine->hasUncaughtException()) {
+                reportError(m_engine, true);
+                return false;
+            }
         }
     }
-    kDebug() << "done importing extensions.";
-    */
+
+    QStringList optionalExtensions = info.property("X-Plasma-OptionalExtensions").toStringList();
+    kDebug() << "extensions are" << optionalExtensions;
+
+    return true;
 }
 
 typedef AbstractAnimation* AbstractAnimationPtr;

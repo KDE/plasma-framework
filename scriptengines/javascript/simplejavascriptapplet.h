@@ -41,7 +41,7 @@ public:
     ~SimpleJavaScriptApplet();
     bool init();
 
-    static void reportError(QScriptEngine *error);
+    static void reportError(QScriptEngine *error, bool fatal = false);
 
     void paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, const QRect &contentsRect);
     QList<QAction*> contextualActions();
@@ -60,7 +60,7 @@ public slots:
     void executeAction(const QString &name);
 
 private:
-    void importExtensions();
+    bool importExtensions();
     void setupObjects();
     void callFunction(const QString &functionName, const QScriptValueList &args = QScriptValueList());
     static void populateAnimationsHash();
