@@ -44,7 +44,7 @@ public:
 
     PopupApplet *q;
     Plasma::IconWidget *icon;
-    QWeakPointer<Plasma::Dialog> dialog;
+    QWeakPointer<Plasma::Dialog> dialogPtr;
     QWeakPointer<QGraphicsProxyWidget>proxy;
     QWidget *widget;
     QGraphicsWidget *graphicsWidget;
