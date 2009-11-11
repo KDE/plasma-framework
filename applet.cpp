@@ -361,6 +361,7 @@ void Applet::setFailedToLaunch(bool failed, const QString &reason)
     setLayout(0);
 
     if (failed) {
+        d->destroyMessageOverlay();
         setBackgroundHints(d->backgroundHints|StandardBackground);
 
         QGraphicsLinearLayout *failureLayout = new QGraphicsLinearLayout(this);
