@@ -215,9 +215,7 @@ PackageStructure::Ptr Applet::packageStructure()
 void Applet::init()
 {
     if (d->script) {
-        if (d->package) {
-            d->setupScriptSupport();
-        }
+        d->setupScriptSupport();
 
         if (!d->script->init() && !d->failed) {
             setFailedToLaunch(true, i18n("Script initialization failed"));
@@ -2643,7 +2641,10 @@ void AppletPrivate::init(const QString &packagePath)
 // package exists and that we have a script engine
 void AppletPrivate::setupScriptSupport()
 {
-    Q_ASSERT(package);
+    if (!package) {
+        return;
+    }
+
     kDebug() << "setting up script support, package is in" << package->path()
              << "which is a" << package->structure()->type() << "package"
              << ", main script is" << package->filePath("mainscript");
