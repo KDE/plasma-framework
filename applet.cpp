@@ -218,7 +218,8 @@ void Applet::init()
         if (d->package) {
             d->setupScriptSupport();
         }
-        if (!d->script->init()) {
+
+        if (!d->script->init() && !d->failed) {
             setFailedToLaunch(true, i18n("Script initialization failed"));
         }
     }
