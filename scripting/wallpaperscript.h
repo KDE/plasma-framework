@@ -22,6 +22,7 @@
 #define PLASMA_WALLPAPERSCRIPT_H
 
 #include <kgenericfactory.h>
+#include <kplugininfo.h>
 
 #include <plasma/plasma_export.h>
 #include <plasma/scripting/scriptengine.h>
@@ -148,6 +149,11 @@ protected:
      *         interface files.
      */
     const Package *package() const;
+
+    /**
+     * @return the KPluginInfo associated with this wallpaper
+     */
+    KPluginInfo description() const;
 
     bool isInitialized() const;
     QRectF boundingRect() const;

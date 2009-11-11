@@ -19,6 +19,7 @@
  */
 
 #include "wallpaperscript.h"
+#include "private/wallpaper_p.h"
 #include "package.h"
 
 namespace Plasma
@@ -65,6 +66,12 @@ const Package *WallpaperScript::package() const
 {
     Q_ASSERT(d->wallpaper);
     return d->wallpaper->package();
+}
+
+KPluginInfo WallpaperScript::description() const
+{
+    Q_ASSERT(d->wallpaper);
+    return d->wallpaper->d->wallpaperDescription;
 }
 
 void WallpaperScript::initWallpaper(const KConfigGroup &config)
