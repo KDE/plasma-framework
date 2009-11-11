@@ -41,6 +41,7 @@ public:
     void updateDialogPosition();
     void popupConstraintsEvent(Plasma::Constraints constraints);
     void checkExtenderAppearance(Plasma::FormFactor f);
+    KConfigGroup popupConfigGroup();
 
     PopupApplet *q;
     Plasma::IconWidget *icon;

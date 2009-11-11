@@ -646,13 +646,18 @@ void PopupAppletPrivate::clearPopupLostFocus()
     popupLostFocus = false;
 }
 
+KConfigGroup PopupAppletPrivate::popupConfigGroup()
+{
+    KConfigGroup *mainGroup = static_cast<Applet*>(q)->d->mainConfigGroup();
+    return KConfigGroup(mainGroup, "PopupApplet");
+}
+
 void PopupAppletPrivate::dialogSizeChanged()
 {
     //Reposition the dialog
     Plasma::Dialog *dialog = dialogPtr.data();
     if (dialog) {
-        KConfigGroup *mainGroup = static_cast<Applet*>(q)->d->mainConfigGroup();
-        KConfigGroup sizeGroup(mainGroup, "PopupApplet");
+        KConfigGroup sizeGroup = popupConfigGroup();
         sizeGroup.writeEntry("DialogHeight", dialog->height());
         sizeGroup.writeEntry("DialogWidth", dialog->width());
 
@@ -675,14 +680,7 @@ void PopupAppletPrivate::updateDialogPosition()
         return;
     }
 
-    QGraphicsView *view = q->view();
-
-    if (!view) {
-        return;
-    }
-
-    KConfigGroup *mainGroup = static_cast<Applet*>(q)->d->mainConfigGroup();
-    KConfigGroup sizeGroup(mainGroup, "PopupApplet");
+    KConfigGroup sizeGroup = popupConfigGroup();
 
     Corona *corona = qobject_cast<Corona *>(q->scene());
     Q_ASSERT(corona);
@@ -709,6 +707,11 @@ void PopupAppletPrivate::updateDialogPosition()
 
     if (saved.width() != dialog->width() || saved.height() != dialog->height()) {
         dialog->resize(saved);
+    }
+
+    QGraphicsView *view = q->view();
+    if (!view) {
+        return;
     }
 
     QSize s = dialog->size();
