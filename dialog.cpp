@@ -91,7 +91,7 @@ public:
     QGraphicsWidget *graphicsWidget;
     Dialog::ResizeCorners resizeCorners;
     QMap<Dialog::ResizeCorner, QRect> resizeAreas;
-    Dialog::ResizeCorner resizeStartCorner;
+    int resizeStartCorner;
     QTimer *moveTimer;
 };
 
@@ -189,6 +189,8 @@ void DialogPrivate::themeChanged()
 void DialogPrivate::adjustView()
 {
     if (view && graphicsWidget) {
+        const int prevStartCorner = resizeStartCorner;
+        resizeStartCorner = -1;
         QSize prevSize = q->size();
         /*
         kDebug() << "Widget size:" << graphicsWidget->size()
@@ -206,7 +208,7 @@ void DialogPrivate::adjustView()
         q->setMaximumSize(qMin(int(graphicsWidget->maximumSize().width()) + left + right, QWIDGETSIZE_MAX),
                           qMin(int(graphicsWidget->maximumSize().height()) + top + bottom, QWIDGETSIZE_MAX));
         q->resize(qMin(int(graphicsWidget->size().width()) + left + right, QWIDGETSIZE_MAX),
-                          qMin(int(graphicsWidget->size().height()) + top + bottom, QWIDGETSIZE_MAX));
+                  qMin(int(graphicsWidget->size().height()) + top + bottom, QWIDGETSIZE_MAX));
         q->updateGeometry();
 
         //reposition and resize the view.
@@ -239,6 +241,7 @@ void DialogPrivate::adjustView()
             //the size of the dialog has changed, emit the signal:
             emit q->dialogResized();
         }
+        resizeStartCorner = prevStartCorner;
     }
 }
 
@@ -383,7 +386,7 @@ void Dialog::resizeEvent(QResizeEvent *e)
 
     setMask(d->background->mask());
 
-    if (d->resizeStartCorner != Dialog::NoCorner && d->view && d->graphicsWidget) {
+    if (d->resizeStartCorner != -1 && d->view && d->graphicsWidget) {
         d->graphicsWidget->resize(d->view->size());
 
         QRectF sceneRect(d->graphicsWidget->sceneBoundingRect());
