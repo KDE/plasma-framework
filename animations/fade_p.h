@@ -27,8 +27,6 @@
 #include <plasma/animations/animation.h>
 #include <plasma/plasma_export.h>
 
-class QGraphicsOpacityEffect;
-
 namespace Plasma
 {
 
@@ -62,7 +60,7 @@ protected:
     virtual QAbstractAnimation* render(QObject* parent = 0);
 
 private:
-    QWeakPointer<QGraphicsOpacityEffect> m_opacityEffect;
+    QWeakPointer<QGraphicsWidget> m_widget;
     qreal m_startOpacity;
     qreal m_targetOpacity;
 };

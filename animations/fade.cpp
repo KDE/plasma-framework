@@ -20,7 +20,6 @@
 #include "fade_p.h"
 
 #include <QRect>
-#include <QtGui/QGraphicsOpacityEffect>
 
 #include <kdebug.h>
 
@@ -60,16 +59,12 @@ qreal FadeAnimation::targetOpacity() const
 
 void FadeAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
 {
-    QGraphicsOpacityEffect *effect = m_opacityEffect.data();
-    delete effect;
 
     Animation::setWidgetToAnimate(widget);
 
     if (widget) {
-        effect = new QGraphicsOpacityEffect(widget);
-        effect->setOpacity(m_startOpacity);
-        widget->setGraphicsEffect(effect);
-        m_opacityEffect = effect;
+        widget->setOpacity(m_startOpacity);
+        m_widget = widget;
     }
 }
 
@@ -78,7 +73,7 @@ QAbstractAnimation* FadeAnimation::render(QObject* parent)
     //create animation
     QPropertyAnimation* anim = dynamic_cast<QPropertyAnimation* >(animation());
     if (!anim) {
-        anim = new QPropertyAnimation(m_opacityEffect.data(), "opacity", parent);
+        anim = new QPropertyAnimation(m_widget.data(), "opacity", parent);
         setAnimation(anim);
     }
 
