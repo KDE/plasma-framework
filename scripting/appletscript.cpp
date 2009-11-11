@@ -199,6 +199,12 @@ const Package *AppletScript::package() const
     return d->applet->package();
 }
 
+KPluginInfo AppletScript::description() const
+{
+    Q_ASSERT(d->applet);
+    return d->applet->d->appletDescription;
+}
+
 Extender *AppletScript::extender() const
 {
     Q_ASSERT(d->applet);

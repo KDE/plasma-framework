@@ -21,6 +21,7 @@
 #define PLASMA_RUNNERSCRIPT_H
 
 #include <kgenericfactory.h>
+#include <kplugininfo.h>
 
 #include <plasma/plasma_export.h>
 #include <plasma/abstractrunner.h>
@@ -94,6 +95,11 @@ protected:
      *         interface files.
      */
     const Package *package() const;
+
+    /**
+     * @return the KPluginInfo associated with this plasmoid
+     */
+    KPluginInfo description() const;
 
     KConfigGroup config() const;
     void setIgnoredTypes(RunnerContext::Types types);

@@ -21,6 +21,7 @@
 
 #include "plasma/package.h"
 #include "plasma/abstractrunner.h"
+#include "plasma/private/abstractrunner_p.h"
 
 namespace Plasma
 {
@@ -172,6 +173,11 @@ void RunnerScript::setSyntaxes(const QList<RunnerSyntax> &syns)
 const Package *RunnerScript::package() const
 {
     return d->runner ? d->runner->package() : 0;
+}
+
+KPluginInfo RunnerScript::description() const
+{
+    return d->runner ? d->runner->d->runnerDescription : KPluginInfo();
 }
 
 QString RunnerScript::mainScript() const

@@ -20,6 +20,7 @@
 #include "dataenginescript.h"
 
 #include "package.h"
+#include "private/dataengine_p.h"
 
 namespace Plasma
 {
@@ -83,6 +84,12 @@ const Package *DataEngineScript::package() const
 {
     Q_ASSERT(d->dataEngine);
     return d->dataEngine->package();
+}
+
+KPluginInfo DataEngineScript::description() const
+{
+    Q_ASSERT(d->dataEngine);
+    return d->dataEngine->d->dataEngineDescription;
 }
 
 void DataEngineScript::setData(const QString &source, const QString &key,

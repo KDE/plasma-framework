@@ -21,6 +21,7 @@
 #define PLASMA_DATAENGINESCRIPT_H
 
 #include <kgenericfactory.h>
+#include <kplugininfo.h>
 
 #include <plasma/plasma_export.h>
 #include <plasma/dataengine.h>
@@ -109,6 +110,11 @@ protected:
      *         interface files.
      */
     const Package *package() const;
+
+    /**
+     * @return the KPluginInfo associated with this plasmoid
+     */
+    KPluginInfo description() const;
 
     void setData(const QString &source, const QString &key,
                  const QVariant &value);
