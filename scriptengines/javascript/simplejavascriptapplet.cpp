@@ -388,16 +388,30 @@ bool SimpleJavaScriptApplet::importExtensions()
                               i18n("Authorization for required extension '%1' was denied.",
                                    extension));
             return false;
-        } else {
-            m_engine->importExtension(extension);
-            if (m_engine->hasUncaughtException()) {
-                reportError(m_engine, true);
-                return false;
-            }
+        }
+
+        m_engine->importExtension(extension);
+        if (m_engine->hasUncaughtException()) {
+            reportError(m_engine, true);
+            return false;
         }
     }
 
     QStringList optionalExtensions = info.property("X-Plasma-OptionalExtensions").toStringList();
+    foreach (const QString &extension, requiredExtensions) {
+        if (!applet()->hasAuthorization(extension)) {
+            setFailedToLaunch(true,
+                              i18n("Authorization for required extension '%1' was denied.",
+                                   extension));
+            continue;
+        }
+
+        m_engine->importExtension(extension);
+        if (m_engine->hasUncaughtException()) {
+            reportError(m_engine);
+        }
+    }
+
     kDebug() << "extensions are" << optionalExtensions;
 
     return true;
