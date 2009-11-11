@@ -2235,6 +2235,7 @@ Applet *Applet::load(const QString &appletName, uint appletId, const QVariantLis
         kDebug() << "hey! we got more than one! let's blindly take the first one";
     } */
 
+    AppletPrivate::filterOffers(offers);
     if (offers.isEmpty()) {
         kDebug() << "offers is empty for " << appletName;
         return 0;
