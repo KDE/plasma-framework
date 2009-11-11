@@ -1116,6 +1116,7 @@ void Applet::showMessage(const QIcon &icon, const QString &message, const Messag
         delete d->messageDialog.data();
         d->createMessageOverlay();
         d->messageOverlay->opacity = 0.8;
+        mainWidget->setParentItem(d->messageOverlay);
         QGraphicsLinearLayout *l = new QGraphicsLinearLayout(d->messageOverlay);
         l->addItem(mainWidget);
     }
