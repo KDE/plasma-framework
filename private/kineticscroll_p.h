@@ -47,6 +47,7 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     void wheelReleaseEvent(QGraphicsSceneWheelEvent *event);
+    void keyPressEvent(QKeyEvent *event);
 
 private:
     KineticScrollingPrivate *d;

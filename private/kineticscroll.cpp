@@ -228,6 +228,30 @@ void KineticScrolling::wheelReleaseEvent(QGraphicsSceneWheelEvent *event)
 
 }
 
+void KineticScrolling::keyPressEvent(QKeyEvent *event)
+{
+    switch (event->key()) {
+    case Qt::Key_Left:
+        d->kinMovement.setX(kinMovement().x() - 30);
+        startAnimationTimer(30);
+        break;
+    case Qt::Key_Right:
+        d->kinMovement.setX(kinMovement().x() + 30);
+        startAnimationTimer(30);
+        break;
+    case Qt::Key_Up:
+        d->kinMovement.setY(kinMovement().y() - 30);
+        startAnimationTimer(30);
+        break;
+    case Qt::Key_Down:
+        d->kinMovement.setY(kinMovement().y() + 30);
+        startAnimationTimer(30);
+        break;
+    default:
+        break;
+    }
+}
+
 void KineticScrolling::startAnimationTimer(int interval)
 {
     if (d->timerID) {
@@ -396,6 +420,11 @@ bool KineticScrolling::eventFilter(QObject *watched, QEvent *event)
     case QEvent::GraphicsSceneWheel:
         wheelReleaseEvent(we);
         break;
+    case QEvent::KeyPress: {
+        QKeyEvent *ke = static_cast<QKeyEvent *>(event);
+        keyPressEvent(ke);
+        break;
+    }
     default:
         break;
     }

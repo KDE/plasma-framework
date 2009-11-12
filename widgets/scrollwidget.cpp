@@ -244,6 +244,7 @@ ScrollWidget::ScrollWidget(QGraphicsWidget *parent)
     : QGraphicsWidget(parent),
       d(new ScrollWidgetPrivate(this))
 {
+    setFocusPolicy(Qt::StrongFocus);
     d->layout = new QGraphicsGridLayout(this);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->layout->setContentsMargins(1, 1, 1, 1);
@@ -254,6 +255,7 @@ ScrollWidget::ScrollWidget(QGraphicsWidget *parent)
 
     d->verticalScrollBarPolicy = Qt::ScrollBarAsNeeded;
     d->verticalScrollBar = new Plasma::ScrollBar(this);
+    d->verticalScrollBar->setFocusPolicy(Qt::NoFocus);
     d->layout->addItem(d->verticalScrollBar, 0, 1);
     d->verticalScrollBar->nativeWidget()->setMinimum(0);
     d->verticalScrollBar->nativeWidget()->setMaximum(100);
@@ -261,6 +263,7 @@ ScrollWidget::ScrollWidget(QGraphicsWidget *parent)
 
     d->horizontalScrollBarPolicy = Qt::ScrollBarAsNeeded;
     d->horizontalScrollBar = new Plasma::ScrollBar(this);
+    d->verticalScrollBar->setFocusPolicy(Qt::NoFocus);
     d->horizontalScrollBar->setOrientation(Qt::Horizontal);
     d->layout->addItem(d->horizontalScrollBar, 1, 0);
     d->horizontalScrollBar->nativeWidget()->setMinimum(0);
