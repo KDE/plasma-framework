@@ -325,7 +325,7 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
 
         const QFont subTitleFont = d->fontForSubTitle(option.font);
         p.setFont(subTitleFont);
-        p.drawText(subTitleRect, Qt::AlignLeft|Qt::AlignVCenter, "  " + subTitleText);
+        p.drawText(subTitleRect, Qt::AlignLeft|Qt::AlignVCenter, subTitleText);
     }
     p.end();
 
