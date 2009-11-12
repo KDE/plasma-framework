@@ -32,7 +32,8 @@ namespace Plasma
 FocusIndicator::FocusIndicator(QGraphicsWidget *parent, QString widget)
     : QGraphicsWidget(parent),
       m_parent(parent),
-      m_background(0)
+      m_background(0),
+      m_prefix("hover")
 {
     setFlag(QGraphicsItem::ItemStacksBehindParent);
     setAcceptsHoverEvents(true);
@@ -71,6 +72,7 @@ bool FocusIndicator::eventFilter(QObject *watched, QEvent *event)
 
     if (!m_parent->hasFocus() && event->type() == QEvent::GraphicsSceneHoverEnter) {
         m_background->setElementPrefix("hover");
+        m_prefix = "hover";
         m_fade->setProperty("startOpacity", 0.0);
         m_fade->setProperty("targetOpacity", 1.0);
         m_fade->start();
@@ -82,6 +84,7 @@ bool FocusIndicator::eventFilter(QObject *watched, QEvent *event)
         syncGeometry();
     } else if (event->type() == QEvent::FocusIn) {
         m_background->setElementPrefix("focus");
+        m_prefix = "focus";
         m_fade->setProperty("startOpacity", 0.0);
         m_fade->setProperty("targetOpacity", 1.0);
         m_fade->start();
@@ -101,7 +104,14 @@ void FocusIndicator::resizeEvent(QGraphicsSceneResizeEvent *event)
 
 void FocusIndicator::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    m_background->paintFrame(painter);
+    Q_UNUSED(option)
+    Q_UNUSED(widget)
+
+    if (m_background->hasElementPrefix(m_prefix)) {
+        m_background->paintFrame(painter);
+    } else {
+        m_background->paint(painter, QPoint(0,0), m_prefix);
+    }
 }
 
 void FocusIndicator::syncGeometry()
@@ -113,9 +123,15 @@ void FocusIndicator::syncGeometry()
         geom = m_parent->boundingRect();
     }
 
-    qreal left, top, right, bottom;
-    m_background->getMargins(left, top, right, bottom);
-    setGeometry(QRectF(geom.topLeft() + QPointF(-left, -top), geom.size() + QSize(left+right, top+bottom)));
+    if (m_background->hasElementPrefix(m_prefix)) {
+        qreal left, top, right, bottom;
+        m_background->getMargins(left, top, right, bottom);
+        setGeometry(QRectF(geom.topLeft() + QPointF(-left, -top), geom.size() + QSize(left+right, top+bottom)));
+    } else {
+        QRectF elementRect = m_background->elementRect(m_prefix);
+        elementRect.moveCenter(geom.center());
+        setGeometry(elementRect);
+    }
 }
 
 }

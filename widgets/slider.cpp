@@ -30,6 +30,7 @@
 #include "framesvg.h"
 
 #include "private/style_p.h"
+#include "private/focusindicator_p.h"
 
 namespace Plasma
 {
@@ -47,6 +48,7 @@ public:
 
     Plasma::FrameSvg *background;
     Plasma::Style::Ptr style;
+    FocusIndicator *focusIndicator;
 };
 
 Slider::Slider(QGraphicsWidget *parent)
@@ -57,6 +59,8 @@ Slider::Slider(QGraphicsWidget *parent)
 
     connect(native, SIGNAL(sliderMoved(int)), this, SIGNAL(sliderMoved(int)));
     connect(native, SIGNAL(valueChanged(int)), this, SIGNAL(valueChanged(int)));
+
+    d->focusIndicator = new FocusIndicator(this, "widgets/slider");
 
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
@@ -153,6 +157,7 @@ void Slider::paint(QPainter *painter,
 
     QRect elementRect = d->background->elementRect(handle).toRect();
     elementRect.moveCenter(handleRect.center());
+    d->focusIndicator->setCustomGeometry(elementRect);
     d->background->paint(painter, elementRect, handle);
 
 }

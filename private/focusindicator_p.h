@@ -52,6 +52,7 @@ private:
     Plasma::FrameSvg *m_background;
     AbstractAnimation *m_fade;
     QRectF m_customGeometry;
+    QString m_prefix;
 };
 }
 #endif
