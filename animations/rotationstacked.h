@@ -40,7 +40,7 @@ class RotationStackedAnimation : public Animation
     Q_OBJECT
 
     Q_PROPERTY(QGraphicsLayoutItem* layout READ layout)
-    Q_PROPERTY(Reference reference READ reference WRITE setReference)
+    Q_PROPERTY(qint8 reference READ reference WRITE setReference)
     Q_PROPERTY(QGraphicsWidget* backWidget READ backWidget WRITE setBackWidget)
 
     public:
@@ -49,8 +49,8 @@ class RotationStackedAnimation : public Animation
 
         QAbstractAnimation *render(QObject *parent = 0);
 
-        void setReference(Reference reference);
-        Reference reference();
+        void setReference(const qint8 &reference);
+        qint8 reference() const;
 
         QGraphicsLayoutItem *layout();
 

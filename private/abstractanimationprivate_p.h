@@ -46,7 +46,7 @@ public:
     /**
      * Animation direction: where the animation will move.
      */
-    AnimationDirection animDirection;
+    qint8 animDirection;
 
     /**
      * Animation distance: displacement factor for animations where

@@ -38,7 +38,7 @@ class RotationAnimation : public Animation
     Q_PROPERTY(qreal angle READ angle WRITE setAngle)
 
 public:
-    RotationAnimation(const qint8 &reference = Center,
+    RotationAnimation(const qint8 &reference = Up,
 		      const Qt::Axis &axis = Qt::ZAxis,
 		      const qreal &angle = 180);
 

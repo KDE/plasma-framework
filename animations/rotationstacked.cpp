@@ -34,7 +34,7 @@ class RotationStackedAnimationPrivate {
         QGraphicsRotation *backRotation;
         QGraphicsRotation *frontRotation;
 
-        AbstractAnimation::Reference reference;
+        qint8 reference;
 
         QGraphicsWidget *backWidget;
 
@@ -59,12 +59,12 @@ RotationStackedAnimation::~RotationStackedAnimation()
     delete d;
 }
 
-void RotationStackedAnimation::setReference(AbstractAnimation::Reference reference)
+void RotationStackedAnimation::setReference(const qint8 &reference)
 {
     d->reference = reference;
 }
 
-AbstractAnimation::Reference RotationStackedAnimation::reference()
+qint8 RotationStackedAnimation::reference() const
 {
     return d->reference;
 }

@@ -47,7 +47,7 @@ class PLASMA_EXPORT AbstractAnimation : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QEasingCurve::Type easingCurveType READ easingCurveType WRITE setEasingCurveType)
-    Q_PROPERTY(AnimationDirection direction READ direction WRITE setDirection)
+    Q_PROPERTY(qint8 direction READ direction WRITE setDirection)
     Q_PROPERTY(qreal distance READ distance WRITE setDistance)
     Q_PROPERTY(bool isVisible READ isVisible WRITE setVisible)
     Q_PROPERTY(QGraphicsWidget *widgetToAnimate READ widgetToAnimate WRITE setWidgetToAnimate)
@@ -111,12 +111,12 @@ public:
      * Set the animation direction
      * @arg direction animation direction
      */
-    void setDirection(AnimationDirection direction);
+    void setDirection(const qint8 &direction);
 
     /**
      * Get the animation direction
      */
-    AnimationDirection direction() const;
+    qint8 direction() const;
 
     /**
      * Set the animation distance

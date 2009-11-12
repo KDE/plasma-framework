@@ -79,12 +79,12 @@ bool AbstractAnimation::forwards() const
     return d->forwards;
 }
 
-void AbstractAnimation::setDirection(AnimationDirection direction)
+void AbstractAnimation::setDirection(const qint8 &direction)
 {
     d->animDirection = direction;
 }
 
-AnimationDirection AbstractAnimation::direction() const
+qint8 AbstractAnimation::direction() const
 {
     return d->animDirection;
 }
