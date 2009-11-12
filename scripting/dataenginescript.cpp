@@ -21,6 +21,7 @@
 
 #include "package.h"
 #include "private/dataengine_p.h"
+#include "private/service_p.h"
 
 namespace Plasma
 {
@@ -71,7 +72,8 @@ bool DataEngineScript::updateSourceEvent(const QString &source)
 
 Service *DataEngineScript::serviceForSource(const QString &source)
 {
-    return d->dataEngine->serviceForSource(source);
+    Q_ASSERT(d->dataEngine);
+    return new NullService(source, d->dataEngine);
 }
 
 QString DataEngineScript::mainScript() const
