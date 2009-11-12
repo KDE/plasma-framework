@@ -253,16 +253,9 @@ PackageStructure::Ptr defaultPackageStructure(ComponentType type)
     case AppletComponent:
     case DataEngineComponent:
     case WallpaperComponent:
+    case RunnerComponent:
         return PackageStructure::Ptr(new PlasmoidPackage());
         break;
-    case RunnerComponent:
-    {
-        PackageStructure::Ptr structure(new PackageStructure());
-        structure->addFileDefinition("mainscript", "code/main", i18n("Main Script File"));
-        structure->setRequired("mainscript", true);
-        return structure;
-        break;
-    }
     default:
         // TODO: we don't have any special structures for other components yet
         break;

@@ -32,6 +32,7 @@ class AbstractRunnerPrivate
 public:
     AbstractRunnerPrivate(AbstractRunner *r, KService::Ptr service);
     ~AbstractRunnerPrivate();
+    void setupScriptSupport();
 
     AbstractRunner::Priority priority;
     AbstractRunner::Speed speed;

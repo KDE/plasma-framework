@@ -295,6 +295,7 @@ const Package* AbstractRunner::package() const
 void AbstractRunner::init()
 {
     if (d->script) {
+        d->setupScriptSupport();
         d->script->init();
     }
 }
@@ -337,6 +338,27 @@ AbstractRunnerPrivate::~AbstractRunnerPrivate()
     script = 0;
     delete package;
     package = 0;
+}
+
+// put all setup routines for script here. at this point we can assume that
+// package exists and that we have a script engine
+void AbstractRunnerPrivate::setupScriptSupport()
+{
+    if (!package) {
+        return;
+    }
+
+    kDebug() << "setting up script support, package is in" << package->path()
+             << "which is a" << package->structure()->type() << "package"
+             << ", main script is" << package->filePath("mainscript");
+
+    QString translationsPath = package->filePath("translations");
+    if (!translationsPath.isEmpty()) {
+        //FIXME: we should _probably_ use a KComponentData to segregate the applets
+        //       from each other; but I want to get the basics working first :)
+        KGlobal::dirs()->addResourceDir("locale", translationsPath);
+        KGlobal::locale()->insertCatalog(package->metadata().pluginName());
+    }
 }
 
 } // Plasma namespace
