@@ -205,11 +205,13 @@ void KineticScrolling::wheelReleaseEvent(QGraphicsSceneWheelEvent *event)
 
         int temp = -event->delta()/2;
 
-        if ((event->delta() < 0 && d->canScroll(KineticScrollingPrivate::Down)) ||
-            (event->delta() > 0 && d->canScroll(KineticScrollingPrivate::Up))){
+        if (event->orientation() == Qt::Vertical &&
+            ((event->delta() < 0 && d->canScroll(KineticScrollingPrivate::Down)) ||
+            (event->delta() > 0 && d->canScroll(KineticScrollingPrivate::Up)))) {
             d->kinMovement.setY(kinMovement().y() + temp);
-        } else if (!d->canScroll(KineticScrollingPrivate::Down) &&
-                   !d->canScroll(KineticScrollingPrivate::Up)) {
+        } else if (event->orientation() == Qt::Vertical ||
+                   (!d->canScroll(KineticScrollingPrivate::Down) &&
+                    !d->canScroll(KineticScrollingPrivate::Up))) {
             if ((event->delta() < 0 && d->canScroll(KineticScrollingPrivate::Right)) ||
                    (event->delta() > 0 && d->canScroll(KineticScrollingPrivate::Left))) {
                 d->kinMovement.setX(kinMovement().x() + temp);
