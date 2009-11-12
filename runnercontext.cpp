@@ -37,13 +37,13 @@
 #include "abstractrunner.h"
 #include "querymatch.h"
 
-//#define LOCK_FOR_READ(context) if (context->d->policy == Shared) { context->d->lock.lockForRead(); }
-//#define LOCK_FOR_WRITE(context) if (context->d->policy == Shared) { context->d->lock.lockForWrite(); }
-//#define UNLOCK(context) if (context->d->policy == Shared) { context->d->lock.unlock(); }
+//#define LOCK_FOR_READ(d) if (d->policy == Shared) { d->lock.lockForRead(); }
+//#define LOCK_FOR_WRITE(d) if (d->policy == Shared) { d->lock.lockForWrite(); }
+//#define UNLOCK(d) if (d->policy == Shared) { d->lock.unlock(); }
 
-#define LOCK_FOR_READ(context) context->d->lock.lockForRead();
-#define LOCK_FOR_WRITE(context) context->d->lock.lockForWrite();
-#define UNLOCK(context) context->d->lock.unlock();
+#define LOCK_FOR_READ(d) d->lock.lockForRead();
+#define LOCK_FOR_WRITE(d) d->lock.lockForWrite();
+#define UNLOCK(d) d->lock.unlock();
 
 namespace Plasma
 {
@@ -240,9 +240,9 @@ RunnerContext::RunnerContext(QObject *parent)
 RunnerContext::RunnerContext(RunnerContext &other, QObject *parent)
     : QObject(parent)
 {
-    LOCK_FOR_READ((&other))
+    LOCK_FOR_READ(other.d)
     d = other.d;
-    UNLOCK((&other))
+    UNLOCK(other.d)
 }
 
 RunnerContext::~RunnerContext()
@@ -255,11 +255,12 @@ RunnerContext &RunnerContext::operator=(const RunnerContext &other)
         return *this;
     }
 
-    LOCK_FOR_WRITE(this)
-    LOCK_FOR_READ((&other))
+    QExplicitlySharedDataPointer<Plasma::RunnerContextPrivate> oldD = d;
+    LOCK_FOR_WRITE(d)
+    LOCK_FOR_READ(other.d)
     d = other.d;
-    UNLOCK((&other))
-    UNLOCK(this)
+    UNLOCK(other.d)
+    UNLOCK(oldD)
     return *this;
 }
 
@@ -339,7 +340,7 @@ bool RunnerContext::addMatches(const QString &term, const QList<QueryMatch> &mat
         return false;
     }
 
-    LOCK_FOR_WRITE(this)
+    LOCK_FOR_WRITE(d)
     foreach (QueryMatch match, matches) {
         // Give previously launched matches a slight boost in relevance
         if (int count = d->launchCounts.value(match.id())) {
@@ -354,7 +355,7 @@ bool RunnerContext::addMatches(const QString &term, const QList<QueryMatch> &mat
 #endif
         d->matchesById.insert(match.id(), &d->matches.at(d->matches.size() - 1));
     }
-    UNLOCK(this);
+    UNLOCK(d);
     //kDebug()<< "add matches";
     // A copied searchContext may share the d pointer,
     // we always want to sent the signal of the object that created
@@ -375,7 +376,7 @@ bool RunnerContext::addMatch(const QString &term, const QueryMatch &match)
 
     QueryMatch m(match); // match must be non-const to modify relevance
 
-    LOCK_FOR_WRITE(this)
+    LOCK_FOR_WRITE(d)
 
     if (int count = d->launchCounts.value(m.id())) {
         m.setRelevance(m.relevance() + 0.05 * count);
@@ -383,7 +384,7 @@ bool RunnerContext::addMatch(const QString &term, const QueryMatch &match)
 
     d->matches.append(m);
     d->matchesById.insert(m.id(), &d->matches.at(d->matches.size() - 1));
-    UNLOCK(this);
+    UNLOCK(d);
     //kDebug()<< "added match" << match->text();
     emit d->q->matchesChanged();
 
@@ -392,17 +393,17 @@ bool RunnerContext::addMatch(const QString &term, const QueryMatch &match)
 
 QList<QueryMatch> RunnerContext::matches() const
 {
-    LOCK_FOR_READ(this)
+    LOCK_FOR_READ(d)
     QList<QueryMatch> matches = d->matches;
-    UNLOCK(this);
+    UNLOCK(d);
     return matches;
 }
 
 QueryMatch RunnerContext::match(const QString &id) const
 {
-    LOCK_FOR_READ(this)
+    LOCK_FOR_READ(d)
     const QueryMatch *match = d->matchesById.value(id, 0);
-    UNLOCK(this)
+    UNLOCK(d)
 
     if (match) {
         return *match;
