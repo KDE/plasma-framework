@@ -109,9 +109,9 @@ void AppletInterface::setConfigurationRequired(bool needsConfiguring, const QStr
     m_appletScriptEngine->setConfigurationRequired(needsConfiguring, reason);
 }
 
-void AppletInterface::update()
+void AppletInterface::update(const QRectF &rect)
 {
-    applet()->update();
+    applet()->update(rect);
 }
 
 QString AppletInterface::activeConfig() const
