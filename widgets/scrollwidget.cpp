@@ -29,6 +29,7 @@
 //KDE
 #include <kmimetype.h>
 #include <kdebug.h>
+#include <kglobalsettings.h>
 
 //Plasma
 #include <plasma/widgets/scrollbar.h>
@@ -233,6 +234,7 @@ public:
     Qt::ScrollBarPolicy horizontalScrollBarPolicy;
     QString styleSheet;
     QRectF rectToBeVisible;
+    QPointF dragHandleClicked;
     QSet<QGraphicsWidget *>dragHandles;
     bool dragging;
     int animId;
@@ -515,6 +517,14 @@ bool ScrollWidget::eventFilter(QObject *watched, QEvent *event)
             event->type() == QEvent::GraphicsSceneMouseRelease) {
             if (scene()) {
                 scene()->sendEvent(this, event);
+            }
+
+            QGraphicsSceneMouseEvent *me = static_cast<QGraphicsSceneMouseEvent *>(event);
+            if (event->type() == QEvent::GraphicsSceneMousePress) {
+                d->dragHandleClicked = me->scenePos();
+            } else if (event->type() == QEvent::GraphicsSceneMouseRelease &&
+                       (d->dragHandleClicked.toPoint() - me->scenePos().toPoint()).manhattanLength() > KGlobalSettings::dndEventDelay()) {
+                return true;
             }
         }
     }
