@@ -36,7 +36,7 @@ public:
     ~PulseAnimation();
 
     void updateGeometry(QRectF updated, qreal zCoordinate = 0, qreal scale = 1.5);
-    void setCopy(QGraphicsWidget *copy);
+    void setCopy();
 
 public Q_SLOTS:
     void resetPulser();

@@ -21,7 +21,7 @@
  */
 
 #include "pulser_p.h"
-
+#include "plasma/private/pulsershadow_p.h"
 #include <QAbstractAnimation>
 #include <QDebug>
 #include <QEvent>
@@ -30,7 +30,6 @@
 #include <QPropertyAnimation>
 
 #include <kdebug.h>
-
 namespace Plasma
 {
 
@@ -48,15 +47,21 @@ public :
           scaleAnimation(0)
     {}
 
+    ~PulseAnimationPrivate()
+    {
+        if (pulseGeometry)
+            delete pulseGeometry;
+    }
+
     QAbstractAnimation *animation;
     QGraphicsWidget *under;
-    /* FIXME: clean up this guy */
     QRectF *pulseGeometry;
     qreal zvalue, mscale, mopacity;
     QPropertyAnimation *opacityAnimation;
     QPropertyAnimation *geometryAnimation;
     QPropertyAnimation *scaleAnimation;
 };
+
 
 PulseAnimation::PulseAnimation(): d(new PulseAnimationPrivate)
 {
@@ -65,76 +70,70 @@ PulseAnimation::PulseAnimation(): d(new PulseAnimationPrivate)
 
 PulseAnimation::~PulseAnimation()
 {
-    //XXX: current plasma::Animation model will delete all animation objects
-    //     delete animation;
-    //     delete pulseGeometry;
     delete d;
 }
 
-void PulseAnimation::setCopy(QGraphicsWidget *copy)
+void PulseAnimation::setCopy()
 {
     QGraphicsWidget *target = widgetToAnimate();
-    d->under = copy;
-    if (d->under == target) {
-        d->mopacity = d->under->opacity();
-    } else {
-        d->under->setParentItem(target);
-        d->mopacity = 0;
-    }
+    /* copy the parent to an image, the animation will happen on the
+     * pixmap copy.
+     */
+    ShadowFake *shadow = 0;
+    if (!d->under)
+        shadow  = new ShadowFake;
 
+    shadow->copyTarget(target);
+
+    if (d->pulseGeometry)
+        delete d->pulseGeometry;
+    d->pulseGeometry = new QRectF(target->geometry());
+
+    d->mopacity = 0;
     d->zvalue = target->zValue();
     --d->zvalue;
-    d->under->setOpacity(0);
+    d->mscale = target->scale();
+
+    d->under = shadow;
+    d->under->setOpacity(d->mopacity);
+    d->under->setScale(d->mscale);
     d->under->setZValue(d->zvalue);
-    d->mscale = d->under->scale();
+
 }
 
 void PulseAnimation::resetPulser()
 {
-    d->under->setGeometry(*d->pulseGeometry);
+    d->under->setGeometry(*(d->pulseGeometry));
     d->under->setOpacity(d->mopacity);
-    d->under->setZValue(d->zvalue);
     d->under->setScale(d->mscale);
+    d->under->setZValue(d->zvalue);
 }
 
 
 void PulseAnimation::createAnimation(qreal duration, qreal scale)
 {
     bool dirty = false;
-    QGraphicsWidget *target = widgetToAnimate();
-    /* Fallback to parent widget if we don't have one 'shadow' widget */
-    if (!d->under) {
-        setCopy(target);
-    } else if (d->under != target) {
-        delete d->under;
-        d->under = new QGraphicsWidget(target);
-        setCopy(d->under);
-    }
-
+    if (!d->under)
+        setCopy();
 
     QParallelAnimationGroup *anim = dynamic_cast<QParallelAnimationGroup* >(animation());
     if (!anim) {
-        d->pulseGeometry = new QRectF(d->under->geometry());
         QParallelAnimationGroup *group = new QParallelAnimationGroup(this);
         d->opacityAnimation = new QPropertyAnimation(d->under, "opacity");
         d->opacityAnimation->setDuration(duration);
+        d->opacityAnimation->setStartValue(100);
         d->opacityAnimation->setEndValue(0);
         group->addAnimation(d->opacityAnimation);
 
-        /* TODO: move this to a function */
-        d->geometryAnimation = new QPropertyAnimation(d->under, "geometry");
-        d->geometryAnimation->setDuration(duration);
         QRectF initial(d->under->geometry());
-        qreal W = initial.width() * scale * 0.33;
-        qreal H = initial.height() * scale * 0.33;
-        QRectF end(initial.x() - W, initial.y() -  H, initial.width() * scale,
-                initial.height() * scale);
-        d->geometryAnimation->setEndValue(end);
-        group->addAnimation(d->geometryAnimation);
+        QPointF tmp(initial.width() * 0.5, initial.height() * 0.5);
+        d->under->setTransformOriginPoint(tmp);
 
         d->scaleAnimation = new QPropertyAnimation(d->under, "scale");
         d->scaleAnimation->setDuration(duration);
+        d->scaleAnimation->setStartValue(d->mscale);
         d->scaleAnimation->setEndValue(scale);
+
         /* The group takes ownership of all animations */
         group->addAnimation(d->scaleAnimation);
         d->animation = group;
@@ -143,8 +142,6 @@ void PulseAnimation::createAnimation(qreal duration, qreal scale)
 
     } else {
 
-        /* Stop the animation or the widget will be deformed.
-         */
         QAbstractAnimation::State temp = anim->state();
         if (temp == QAbstractAnimation::Running) {
             anim->stop();
@@ -152,24 +149,24 @@ void PulseAnimation::createAnimation(qreal duration, qreal scale)
              * and *then* reset the geometry
              */
         } else {
-            /* TODO: move this to a function */
-            *(d->pulseGeometry) = d->under->geometry();
+            if ((*d->pulseGeometry) != widgetToAnimate()->geometry()) {
+                /*FIXME: it crashes when deleting old the image in ShadowFake
+                 * setCopy();
+                 */
+                qDebug() << "PulseAnimation:: it should update the geom....";
+            }
+
             d->opacityAnimation->setEndValue(0);
+            d->scaleAnimation->setEndValue(scale);
+
             QRectF initial(d->under->geometry());
-            qreal W = initial.width() * scale * 0.33;
-            qreal H = initial.height() * scale * 0.33;
-            QRectF end(initial.x() - W, initial.y() -  H, initial.width() * scale,
-                       initial.height() * scale);
-            d->geometryAnimation->setEndValue(end);
+            QPointF tmp(initial.width() * 0.5, initial.height() * 0.5);
+            d->under->setTransformOriginPoint(tmp);
         }
-
     }
 
-    if (dirty) {
-        //This makes sure that if there is *not* a shadow widget, the
-        //parent widget will still remain visible
+    if (dirty)
         connect(d->animation, SIGNAL(finished()), this, SLOT(resetPulser()));
-    }
 }
 
 QAbstractAnimation* PulseAnimation::render(QObject* parent)
@@ -177,7 +174,6 @@ QAbstractAnimation* PulseAnimation::render(QObject* parent)
     Q_UNUSED(parent)
 
     createAnimation(duration());
-    d->under->setOpacity(1);
     return d->animation;
 }
 
