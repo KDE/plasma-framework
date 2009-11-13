@@ -24,6 +24,8 @@
 
 #include <QGraphicsRotation>
 #include <QSequentialAnimationGroup>
+#include <QWeakPointer>
+
 #include <kdebug.h>
 
 namespace Plasma
@@ -36,7 +38,7 @@ class RotationStackedAnimationPrivate {
 
         qint8 reference;
 
-        QGraphicsWidget *backWidget;
+        QWeakPointer<QGraphicsWidget> backWidget;
         QSequentialAnimationGroup *groupAnim;
         StackedLayout *sLayout;
 };
@@ -71,7 +73,7 @@ qint8 RotationStackedAnimation::reference() const
 
 QGraphicsWidget *RotationStackedAnimation::backWidget()
 {
-    return d->backWidget;
+    return d->backWidget.data();
 }
 
 void RotationStackedAnimation::setBackWidget(QGraphicsWidget *backWidget)
@@ -80,7 +82,7 @@ void RotationStackedAnimation::setBackWidget(QGraphicsWidget *backWidget)
 
     if(widgetToAnimate()) {
         d->sLayout->addWidget(widgetToAnimate());
-        d->sLayout->addWidget(backWidget);
+        d->sLayout->addWidget(d->backWidget.data());
     }
 }
 
@@ -93,7 +95,7 @@ QAbstractAnimation *RotationStackedAnimation::render(QObject *parent)
 {
     Q_UNUSED(parent);
     bool dirty = false;
-    QPair<QGraphicsWidget *,QGraphicsWidget *> widgets = qMakePair(widgetToAnimate(), d->backWidget);
+    QPair<QGraphicsWidget *,QGraphicsWidget *> widgets = qMakePair(widgetToAnimate(), backWidget());
     QPropertyAnimation *frontAnim, *backAnim;
     d->groupAnim = dynamic_cast<QSequentialAnimationGroup* >(animation());
     if (!d->groupAnim) {
