@@ -58,7 +58,8 @@ class RotationStackedAnimation : public Animation
         void setBackWidget(QGraphicsWidget *backWidget);
 
     public Q_SLOTS:
-        void rotateBackWidget();
+        void animationStateChange(QAbstractAnimation::State oldState,
+                QAbstractAnimation::State newState);
 
     private:
         RotationStackedAnimationPrivate *d;

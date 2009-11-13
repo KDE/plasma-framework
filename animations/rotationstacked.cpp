@@ -37,7 +37,7 @@ class RotationStackedAnimationPrivate {
         qint8 reference;
 
         QGraphicsWidget *backWidget;
-
+        QSequentialAnimationGroup *groupAnim;
         StackedLayout *sLayout;
 };
 
@@ -95,21 +95,21 @@ QAbstractAnimation *RotationStackedAnimation::render(QObject *parent)
     bool dirty = false;
     QPair<QGraphicsWidget *,QGraphicsWidget *> widgets = qMakePair(widgetToAnimate(), d->backWidget);
     QPropertyAnimation *frontAnim, *backAnim;
-    QSequentialAnimationGroup *groupAnim = dynamic_cast<QSequentialAnimationGroup* >(animation());
-    if (!groupAnim) {
+    d->groupAnim = dynamic_cast<QSequentialAnimationGroup* >(animation());
+    if (!d->groupAnim) {
 
-        groupAnim = new QSequentialAnimationGroup(parent);
-        frontAnim = new QPropertyAnimation(d->frontRotation, "angle", groupAnim);
-        backAnim = new QPropertyAnimation(d->backRotation, "angle", groupAnim);
-        setAnimation(groupAnim);
+        d->groupAnim = new QSequentialAnimationGroup(parent);
+        frontAnim = new QPropertyAnimation(d->frontRotation, "angle", d->groupAnim);
+        backAnim = new QPropertyAnimation(d->backRotation, "angle", d->groupAnim);
+        setAnimation(d->groupAnim);
         dirty = true;
     } else {
-        if (groupAnim->animationCount() == 2) {
-            frontAnim = dynamic_cast<QPropertyAnimation* >(groupAnim->animationAt(0));
-            backAnim = dynamic_cast<QPropertyAnimation* >(groupAnim->animationAt(1));
+        if (d->groupAnim->animationCount() == 2) {
+            frontAnim = dynamic_cast<QPropertyAnimation* >(d->groupAnim->animationAt(0));
+            backAnim = dynamic_cast<QPropertyAnimation* >(d->groupAnim->animationAt(1));
         } else {
             kDebug() << "_ Where are my little animations? Duh!";
-            return groupAnim;
+            return d->groupAnim;
         }
     }
 
@@ -132,7 +132,9 @@ QAbstractAnimation *RotationStackedAnimation::render(QObject *parent)
 
         if(direction() == MoveLeft) {
         } else {
-                 d->backRotation->setAngle(265);
+                d->backRotation->setAngle(265);
+                backAnim->setStartValue(d->backRotation->angle());
+                frontAnim->setStartValue(0);
                 backAnim->setEndValue(360);
                 frontAnim->setEndValue(90);
             }
@@ -155,17 +157,27 @@ QAbstractAnimation *RotationStackedAnimation::render(QObject *parent)
     backAnim->setDuration(duration()/2);
 
     if (dirty) {
-        connect(frontAnim, SIGNAL(finished()), this, SLOT(rotateBackWidget())); 
-        groupAnim->addAnimation(frontAnim);
-        groupAnim->addAnimation(backAnim);
+        connect(frontAnim, SIGNAL(stateChanged(QAbstractAnimation::State, QAbstractAnimation::State)),
+                this, SLOT(animationStateChange(QAbstractAnimation::State, QAbstractAnimation::State)));
+        d->groupAnim->addAnimation(frontAnim);
+        d->groupAnim->addAnimation(backAnim);
     }
 
-    return groupAnim;
+    return d->groupAnim;
 }
 
-void RotationStackedAnimation::rotateBackWidget()
+void RotationStackedAnimation::animationStateChange(
+        QAbstractAnimation::State oldState, QAbstractAnimation::State newState)
 {
-    d->sLayout->setCurrentWidgetIndex(1);
+    if(d->groupAnim->direction() == QAbstractAnimation::Backward) {
+        if(newState == QAbstractAnimation::Running) {
+            d->sLayout->setCurrentWidgetIndex(0);
+        }
+    } else {
+        if(newState == QAbstractAnimation::Stopped) {
+            d->sLayout->setCurrentWidgetIndex(1);
+        }
+    }
 }
 
 }
