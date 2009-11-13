@@ -81,7 +81,7 @@ bool AbstractAnimation::forwards() const
 
 void AbstractAnimation::setDirection(const qint8 &direction)
 {
-    d->animDirection = direction;
+    d->animDirection = static_cast<Plasma::AnimationDirection>(direction);
 }
 
 qint8 AbstractAnimation::direction() const
