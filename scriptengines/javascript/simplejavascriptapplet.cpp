@@ -329,7 +329,15 @@ void SimpleJavaScriptApplet::constraintsEvent(Plasma::Constraints constraints)
     }
 
     if (constraints & Plasma::ContextConstraint) {
-        callFunction("contextChanged");
+        callFunction("currentActivityChanged");
+    }
+
+    if (constraints & Plasma::SizeConstraint) {
+        callFunction("sizeChanged");
+    }
+
+    if (constraints & Plasma::ImmutableConstraint) {
+        callFunction("immutabilityChanged");
     }
 }
 
