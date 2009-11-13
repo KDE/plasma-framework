@@ -24,6 +24,8 @@
 #include <QObject>
 #include <QSizePolicy>
 #include <QScriptValue>
+
+#include <Plasma/Applet>
 #include <Plasma/DataEngine>
 
 class QAction;
@@ -34,7 +36,6 @@ class QSizeF;
 
 namespace Plasma
 {
-    class Applet;
     class ConfigLoader;
 } // namespace Plasa
 
@@ -44,6 +45,7 @@ class AppletInterface : public QObject
     Q_ENUMS(FormFactor)
     Q_ENUMS(Location)
     Q_ENUMS(AspectRatioMode)
+    Q_ENUMS(BackgroundHints)
     Q_ENUMS(QtOrientation)
     Q_ENUMS(QtAnchorPoint)
     Q_ENUMS(QtCorner)
@@ -51,6 +53,7 @@ class AppletInterface : public QObject
     Q_ENUMS(QtAlignment)
     Q_PROPERTY(QString activeConfig WRITE setActiveConfig READ activeConfig)
     Q_PROPERTY(bool busy WRITE setBusy READ isBusy)
+    Q_PROPERTY(BackgroundHints backgroundHints WRITE setBackgroundHints READ backgroundHints)
 
 public:
     AppletInterface(SimpleJavaScriptApplet *parent);
@@ -75,6 +78,7 @@ enum FormFactor {
     Vertical     /**< The applet is constrained horizontally, but
                     can expand vertically. */
 };
+
 enum Location {
     Floating = 0, /**< Free floating. Neither geometry or z-ordering
                      is described precisely by this value. */
@@ -86,6 +90,7 @@ enum Location {
     LeftEdge,     /**< Along the left side of the screen */
     RightEdge     /**< Along the right side of the screen */
 };
+
 enum AspectRatioMode {
     InvalidAspectRatioMode = -1, /**< Unsetted mode used for dev convenience
                                     when there is a need to store the
@@ -131,6 +136,13 @@ enum QtSizePolicy {
     QSizePolicyIgnored = QSizePolicy::Ignored
 };
 
+enum BackgroundHints {
+    NoBackground = Plasma::Applet::NoBackground,
+    StandardBackground = Plasma::Applet::StandardBackground,
+    TranslucentBackground = Plasma::Applet::TranslucentBackground,
+    DefaultBackground = Plasma::Applet::DefaultBackground
+};
+
 enum QtAlignment {
     QtAlignLeft = 0x0001,
     QtAlignRight = 0x0002,
@@ -143,23 +155,26 @@ enum QtAlignment {
 
 //-------------------------------------------------------------------
 
-    Q_INVOKABLE FormFactor formFactor();
+    Q_INVOKABLE FormFactor formFactor() const;
 
-    Q_INVOKABLE Location location();
+    Q_INVOKABLE Location location() const;
 
-    Q_INVOKABLE QString currentActivity();
+    Q_INVOKABLE QString currentActivity() const;
 
-    Q_INVOKABLE AspectRatioMode aspectRatioMode();
+    Q_INVOKABLE AspectRatioMode aspectRatioMode() const;
 
     Q_INVOKABLE void setAspectRatioMode(AspectRatioMode mode);
 
-    Q_INVOKABLE bool shouldConserveResources();
+    Q_INVOKABLE bool shouldConserveResources() const;
 
     Q_INVOKABLE void setFailedToLaunch(bool failed, const QString &reason = QString());
 
-    Q_INVOKABLE bool isBusy();
+    Q_INVOKABLE bool isBusy() const;
 
     Q_INVOKABLE void setBusy(bool busy);
+
+    Q_INVOKABLE BackgroundHints backgroundHints() const;
+    Q_INVOKABLE void setBackgroundHints(BackgroundHints hint);
 
     Q_INVOKABLE void setConfigurationRequired(bool needsConfiguring, const QString &reason = QString());
 

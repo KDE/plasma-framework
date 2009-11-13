@@ -51,22 +51,22 @@ Plasma::DataEngine* AppletInterface::dataEngine(const QString &name)
     return applet()->dataEngine(name);
 }
 
-AppletInterface::FormFactor AppletInterface::formFactor()
+AppletInterface::FormFactor AppletInterface::formFactor() const
 {
     return static_cast<FormFactor>(applet()->formFactor());
 }
 
-AppletInterface::Location AppletInterface::location()
+AppletInterface::Location AppletInterface::location() const
 {
     return static_cast<Location>(applet()->location());
 }
 
-QString AppletInterface::currentActivity()
+QString AppletInterface::currentActivity() const
 {
     return applet()->context()->currentActivity();
 }
 
-AppletInterface::AspectRatioMode AppletInterface::aspectRatioMode()
+AppletInterface::AspectRatioMode AppletInterface::aspectRatioMode() const
 {
     return static_cast<AspectRatioMode>(applet()->aspectRatioMode());
 }
@@ -76,7 +76,7 @@ void AppletInterface::setAspectRatioMode(AppletInterface::AspectRatioMode mode)
     applet()->setAspectRatioMode(static_cast<Plasma::AspectRatioMode>(mode));
 }
 
-bool AppletInterface::shouldConserveResources()
+bool AppletInterface::shouldConserveResources() const
 {
     return applet()->shouldConserveResources();
 }
@@ -86,7 +86,7 @@ void AppletInterface::setFailedToLaunch(bool failed, const QString &reason)
     m_appletScriptEngine->setFailedToLaunch(failed, reason);
 }
 
-bool AppletInterface::isBusy()
+bool AppletInterface::isBusy() const
 {
     return applet()->isBusy();
 }
@@ -94,6 +94,16 @@ bool AppletInterface::isBusy()
 void AppletInterface::setBusy(bool busy)
 {
     applet()->setBusy(busy);
+}
+
+AppletInterface::BackgroundHints AppletInterface::backgroundHints() const
+{
+    return static_cast<BackgroundHints>(static_cast<int>(applet()->backgroundHints()));
+}
+
+void AppletInterface::setBackgroundHints(BackgroundHints hint)
+{
+    applet()->setBackgroundHints(Plasma::Applet::BackgroundHints(hint));
 }
 
 void AppletInterface::setConfigurationRequired(bool needsConfiguring, const QString &reason)
