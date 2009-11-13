@@ -28,6 +28,8 @@
 #include <Plasma/Applet>
 #include <Plasma/DataEngine>
 
+#include "simplejavascriptapplet.h"
+
 class QAction;
 class SimpleJavaScriptApplet;
 class QSignalMapper;
@@ -51,9 +53,15 @@ class AppletInterface : public QObject
     Q_ENUMS(QtCorner)
     Q_ENUMS(QtSizePolicy)
     Q_ENUMS(QtAlignment)
+    Q_PROPERTY(AspectRatioMode aspectRatioMode READ aspectRatioMode WRITE setAspectRatioMode)
+    Q_PROPERTY(FormFactor formFactor READ formFactor)
+    Q_PROPERTY(Location location READ location)
+    Q_PROPERTY(QString currentActivity READ currentActivity)
+    Q_PROPERTY(bool shouldConserveResources READ shouldConserveResources)
     Q_PROPERTY(QString activeConfig WRITE setActiveConfig READ activeConfig)
     Q_PROPERTY(bool busy WRITE setBusy READ isBusy)
     Q_PROPERTY(BackgroundHints backgroundHints WRITE setBackgroundHints READ backgroundHints)
+    Q_PROPERTY(QGraphicsLayout *layout WRITE setLayout READ layout)
 
 public:
     AppletInterface(SimpleJavaScriptApplet *parent);
@@ -157,15 +165,13 @@ enum QtAlignment {
 
     Q_INVOKABLE FormFactor formFactor() const;
 
-    Q_INVOKABLE Location location() const;
-
-    Q_INVOKABLE QString currentActivity() const;
+    Location location() const;
+    QString currentActivity() const;
+    bool shouldConserveResources() const;
 
     Q_INVOKABLE AspectRatioMode aspectRatioMode() const;
-
     Q_INVOKABLE void setAspectRatioMode(AspectRatioMode mode);
 
-    Q_INVOKABLE bool shouldConserveResources() const;
 
     Q_INVOKABLE void setFailedToLaunch(bool failed, const QString &reason = QString());
 
@@ -209,7 +215,10 @@ enum QtAlignment {
 
     const Plasma::Package *package() const;
     QList<QAction*> contextualActions() const;
-    Plasma::Applet *applet() const;
+    QGraphicsLayout *layout() const;
+    void setLayout(QGraphicsLayout *);
+
+    inline Plasma::Applet *applet() const { return m_appletScriptEngine->applet(); }
 
 Q_SIGNALS:
     void releaseVisualFocus();

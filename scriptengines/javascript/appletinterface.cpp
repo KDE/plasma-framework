@@ -31,8 +31,6 @@
 #include <Plasma/DataEngine>
 #include <Plasma/Package>
 
-#include "simplejavascriptapplet.h"
-
 AppletInterface::AppletInterface(SimpleJavaScriptApplet *parent)
     : QObject(parent),
       m_appletScriptEngine(parent),
@@ -290,9 +288,14 @@ void AppletInterface::dataUpdated(QString source, Plasma::DataEngine::Data data)
     m_appletScriptEngine->dataUpdated(source, data);
 }
 
-Plasma::Applet *AppletInterface::applet() const
+QGraphicsLayout *AppletInterface::layout() const
 {
-    return m_appletScriptEngine->applet();
+    return applet()->layout();
+}
+
+void AppletInterface::setLayout(QGraphicsLayout *layout)
+{
+    applet()->setLayout(layout);
 }
 
 #include "appletinterface.moc"
