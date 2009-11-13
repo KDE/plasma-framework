@@ -166,7 +166,7 @@ public:
         if (image->hasElement("background-center")) {
             QRectF elementRect = barRect();
             if (elementRect.isEmpty()) {
-                return; // nothing to be done 
+                return; // nothing to be done
             }
 
             QSize imageSize = image->size();
@@ -483,7 +483,7 @@ void Meter::paint(QPainter *p,
     }
 
     if (d->maximum != d->minimum) {
-        percentage = (qreal)d->value / (d->maximum - d->minimum);
+        percentage = (qreal)(d->value - d->minimum) / (d->maximum - d->minimum);
     }
 
     p->setRenderHint(QPainter::SmoothPixmapTransform);
