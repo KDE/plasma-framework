@@ -62,6 +62,7 @@ class AppletInterface : public QObject
     Q_PROPERTY(bool busy WRITE setBusy READ isBusy)
     Q_PROPERTY(BackgroundHints backgroundHints WRITE setBackgroundHints READ backgroundHints)
     Q_PROPERTY(QGraphicsLayout *layout WRITE setLayout READ layout)
+    Q_PROPERTY(bool immutable READ immutable)
 
 public:
     AppletInterface(SimpleJavaScriptApplet *parent);
@@ -217,6 +218,7 @@ enum QtAlignment {
     QList<QAction*> contextualActions() const;
     QGraphicsLayout *layout() const;
     void setLayout(QGraphicsLayout *);
+    bool immutable() const;
 
     inline Plasma::Applet *applet() const { return m_appletScriptEngine->applet(); }
 

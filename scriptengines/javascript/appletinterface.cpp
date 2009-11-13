@@ -298,4 +298,9 @@ void AppletInterface::setLayout(QGraphicsLayout *layout)
     applet()->setLayout(layout);
 }
 
+bool AppletInterface::immutable() const
+{
+    return applet()->immutability() != Plasma::Mutable;
+}
+
 #include "appletinterface.moc"
