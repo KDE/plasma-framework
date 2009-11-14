@@ -219,6 +219,7 @@ enum QtScrollBarPolicy {
     Q_INVOKABLE QString file(const QString &fileType, const QString &filePath);
 
     Q_INVOKABLE bool include(const QString &script);
+    Q_INVOKABLE bool hasExtension(const QString &extension) const;
 
     Q_INVOKABLE void debug(const QString &msg);
 
