@@ -281,6 +281,11 @@ void PushButton::setCheckable(bool checkable)
     nativeWidget()->setCheckable(checkable);
 }
 
+bool PushButton::isCheckable() const
+{
+    return nativeWidget()->isCheckable();
+}
+
 void PushButton::setChecked(bool checked)
 {
     nativeWidget()->setChecked(checked);
