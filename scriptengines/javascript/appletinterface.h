@@ -164,6 +164,11 @@ enum QtAlignment {
     QtAlignVCenter = 0x0080
 };
 
+enum QtScrollBarPolicy {
+    QtScrollBarAsNeeded = Qt::ScrollBarAsNeeded,
+    QtScrollBarAlwaysOff = Qt::ScrollBarAlwaysOff,
+    QtScrollBarAlwaysOn = Qt::ScrollBarAlwaysOn
+};
 //-------------------------------------------------------------------
 
     Q_INVOKABLE FormFactor formFactor() const;
