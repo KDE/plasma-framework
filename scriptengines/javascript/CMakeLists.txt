@@ -4,10 +4,12 @@ set(simple_javascript_engine_SRCS
     simplejavascriptapplet.cpp
     appletinterface.cpp
     uiloader.cpp
+    qtgui/anchorlayout.cpp
+    qtgui/color.cpp
     qtgui/font.cpp
+    qtgui/filedialogproxy.cpp
     qtgui/graphicsitem.cpp
     qtgui/linearlayout.cpp
-    qtgui/anchorlayout.cpp
     qtgui/painter.cpp
     qtgui/pixmap.cpp
     qtgui/point.cpp
@@ -24,6 +26,7 @@ kde4_add_plugin(plasma_appletscript_simple_javascript ${simple_javascript_engine
 
 target_link_libraries(plasma_appletscript_simple_javascript
                        ${KDE4_KDECORE_LIBS}
+                       ${KDE4_KIO_LIBS}
                        ${KDE4_PLASMA_LIBS}
                        ${QT_QTSCRIPT_LIBRARY}
                        ${QT_QTUITOOLS_LIBRARY}
