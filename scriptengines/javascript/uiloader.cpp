@@ -30,12 +30,14 @@
 #include <Plasma/Frame>
 #include <Plasma/GroupBox>
 #include <Plasma/IconWidget>
+#include <Plasma/ItemBackground>
 #include <Plasma/Label>
 #include <Plasma/LineEdit>
 #include <Plasma/Meter>
 #include <Plasma/PushButton>
 #include <Plasma/RadioButton>
 #include <Plasma/ScrollBar>
+#include <Plasma/Separator>
 #include <Plasma/SignalPlotter>
 #include <Plasma/Slider>
 #include <Plasma/SpinBox>
@@ -55,12 +57,14 @@ QGraphicsWidget *createFlashingLabel(QGraphicsWidget *parent) { return new Plasm
 QGraphicsWidget *createFrame(QGraphicsWidget *parent) { return new Plasma::Frame(parent); }
 QGraphicsWidget *createGroupBox(QGraphicsWidget *parent) { return new Plasma::GroupBox(parent); }
 QGraphicsWidget *createIconWidget(QGraphicsWidget *parent) { return new Plasma::IconWidget(parent); }
+QGraphicsWidget *createItemBackground(QGraphicsWidget *parent) { return new Plasma::ItemBackground(parent); }
 QGraphicsWidget *createLabel(QGraphicsWidget *parent) { return new Plasma::Label(parent); }
 QGraphicsWidget *createLineEdit(QGraphicsWidget *parent) { return new Plasma::LineEdit(parent); }
 QGraphicsWidget *createMeter(QGraphicsWidget *parent) { return new Plasma::Meter(parent); }
 QGraphicsWidget *createPushButton(QGraphicsWidget *parent) { return new Plasma::PushButton(parent); }
 QGraphicsWidget *createRadioButton(QGraphicsWidget *parent) { return new Plasma::RadioButton(parent); }
 QGraphicsWidget *createScrollBar(QGraphicsWidget *parent) { return new Plasma::ScrollBar(parent); }
+QGraphicsWidget *createSeparator(QGraphicsWidget *parent) { return new Plasma::Separator(parent); }
 QGraphicsWidget *createSignalPlotter(QGraphicsWidget *parent) { return new Plasma::SignalPlotter(parent); }
 QGraphicsWidget *createSlider(QGraphicsWidget *parent) { return new Plasma::Slider(parent); }
 QGraphicsWidget *createSpinBox(QGraphicsWidget *parent) { return new Plasma::SpinBox(parent); }
@@ -81,12 +85,14 @@ UiLoader::UiLoader()
     m_widgetCtors.insert("Frame", createFrame);
     m_widgetCtors.insert("GroupBox", createGroupBox);
     m_widgetCtors.insert("IconWidget", createIconWidget);
+    m_widgetCtors.insert("ItemBackground", createItemBackground);
     m_widgetCtors.insert("Label", createLabel);
     m_widgetCtors.insert("LineEdit", createLineEdit);
     m_widgetCtors.insert("Meter", createMeter);
     m_widgetCtors.insert("PushButton", createPushButton);
     m_widgetCtors.insert("RadioButton", createRadioButton);
     m_widgetCtors.insert("ScrollBar", createScrollBar);
+    m_widgetCtors.insert("Separator", createSeparator);
     m_widgetCtors.insert("SignalPlotter", createSignalPlotter);
     m_widgetCtors.insert("Slider", createSlider);
     m_widgetCtors.insert("SpinBox", createSpinBox);
