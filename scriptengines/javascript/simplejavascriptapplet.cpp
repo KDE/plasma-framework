@@ -18,6 +18,8 @@
 
 #include "simplejavascriptapplet.h"
 
+#include <iostream>
+
 #include <QScriptEngine>
 #include <QFile>
 #include <QUiLoader>
@@ -852,7 +854,8 @@ QScriptValue SimpleJavaScriptApplet::print(QScriptContext *context, QScriptEngin
         return context->throwError(i18n("print() takes one argument"));
     }
 
-    kDebug() << context->argument(0).toString();
+    //TODO: a GUI console? :)
+    std::cout << context->argument(0).toString().toLocal8Bit().constData() << std::endl;
     return engine->undefinedValue();
 }
 
