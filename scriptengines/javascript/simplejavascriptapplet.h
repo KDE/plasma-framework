@@ -62,6 +62,7 @@ public slots:
 
 private:
     bool importExtensions();
+    bool importBuiltinExtesion(const QString &extension);
     void setupObjects();
     void callFunction(const QString &functionName, const QScriptValueList &args = QScriptValueList());
     static void populateAnimationsHash();
@@ -78,6 +79,8 @@ private:
     static QScriptValue loadui(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue newPlasmaSvg(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue newPlasmaFrameSvg(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue fileDialogSave(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue fileDialogOpen(QScriptContext *context, QScriptEngine *engine);
 
     void installWidgets( QScriptEngine *engine );
     static QScriptValue createWidget(QScriptContext *context, QScriptEngine *engine);
@@ -91,6 +94,7 @@ private:
     QScriptEngine *m_engine;
     QScriptValue m_self;
     QVariantList m_args;
+    QSet<QString> m_extensions;
     AppletInterface *m_interface;
     friend class AppletInterface;
 };

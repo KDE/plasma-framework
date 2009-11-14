@@ -27,6 +27,7 @@
 #include <QWidget>
 
 #include <KDebug>
+#include <KFileDialog>
 #include <KIcon>
 #include <KLocale>
 #include <KStandardDirs>
@@ -41,6 +42,7 @@
 #include <Plasma/VideoWidget>
 
 #include "appletinterface.h"
+#include "qtgui/filedialogproxy.h"
 
 using namespace Plasma;
 
@@ -60,6 +62,7 @@ Q_DECLARE_METATYPE(Plasma::AnimationGroup *)
 
 Q_SCRIPT_DECLARE_QMETAOBJECT(AppletInterface, SimpleJavaScriptApplet*)
 
+QScriptValue constructColorClass(QScriptEngine *engine);
 QScriptValue constructFontClass(QScriptEngine *engine);
 QScriptValue constructGraphicsItemClass(QScriptEngine *engine);
 QScriptValue constructKUrlClass(QScriptEngine *engine);
@@ -71,7 +74,6 @@ QScriptValue constructQPointClass(QScriptEngine *engine);
 QScriptValue constructQRectFClass(QScriptEngine *engine);
 QScriptValue constructQSizeFClass(QScriptEngine *engine);
 QScriptValue constructTimerClass(QScriptEngine *engine);
-
 
 //typedef VideoWidget::Control Control;
 Q_DECLARE_FLAGS(Controls, VideoWidget::Control)
@@ -392,12 +394,38 @@ bool SimpleJavaScriptApplet::init()
     return include(mainScript());
 }
 
+bool SimpleJavaScriptApplet::importBuiltinExtesion(const QString &extension)
+{
+    if ("filedialog" == extension) {
+        //qScriptRegisterMetaType<KFileDialog*>(m_engine, qScriptValueFromKFileDialog, kFileDialogFromQScriptValue);
+        QScriptValue global = m_engine->globalObject();
+        global.setProperty("OpenFileDialog", m_engine->newFunction(SimpleJavaScriptApplet::fileDialogOpen));
+        global.setProperty("SaveFileDialog", m_engine->newFunction(SimpleJavaScriptApplet::fileDialogSave));
+        return true;
+    } else if ("launchapp" == extension) {
+        return true;
+    } else if ("http" == extension) {
+        return true;
+    } else if ("networkio" == extension) {
+        return true;
+    } else if ("localio" == extension) {
+        return true;
+    }
+
+    return false;
+}
+
 bool SimpleJavaScriptApplet::importExtensions()
 {
     KPluginInfo info = description();
     QStringList requiredExtensions = info.property("X-Plasma-RequiredExtensions").toStringList();
     kDebug() << "required extensions are" << requiredExtensions;
-    foreach (const QString &extension, requiredExtensions) {
+    foreach (const QString &ext, requiredExtensions) {
+        QString extension = ext.toLower();
+        if (m_extensions.contains(extension)) {
+            continue;
+        }
+
         if (!applet()->hasAuthorization(extension)) {
             setFailedToLaunch(true,
                               i18n("Authorization for required extension '%1' was denied.",
@@ -405,15 +433,27 @@ bool SimpleJavaScriptApplet::importExtensions()
             return false;
         }
 
-        m_engine->importExtension(extension);
+        if (!importBuiltinExtesion(extension)) {
+            m_engine->importExtension(extension);
+        }
+
         if (m_engine->hasUncaughtException()) {
             reportError(m_engine, true);
             return false;
+        } else {
+            m_extensions << extension;
         }
     }
 
     QStringList optionalExtensions = info.property("X-Plasma-OptionalExtensions").toStringList();
-    foreach (const QString &extension, requiredExtensions) {
+    kDebug() << "extensions are" << optionalExtensions;
+    foreach (const QString &ext, requiredExtensions) {
+        QString extension = ext.toLower();
+
+        if (m_extensions.contains(extension)) {
+            continue;
+        }
+
         if (!applet()->hasAuthorization(extension)) {
             setFailedToLaunch(true,
                               i18n("Authorization for required extension '%1' was denied.",
@@ -421,13 +461,17 @@ bool SimpleJavaScriptApplet::importExtensions()
             continue;
         }
 
+        if (!importBuiltinExtesion(extension)) {
+            m_engine->importExtension(extension);
+        }
+
         m_engine->importExtension(extension);
         if (m_engine->hasUncaughtException()) {
             reportError(m_engine);
+        } else {
+            m_extensions << extension;
         }
     }
-
-    kDebug() << "extensions are" << optionalExtensions;
 
     return true;
 }
@@ -510,6 +554,7 @@ void SimpleJavaScriptApplet::setupObjects()
     global.setProperty("QGraphicsItem", constructGraphicsItemClass(m_engine));
     global.setProperty("QTimer", constructTimerClass(m_engine));
     global.setProperty("QFont", constructFontClass(m_engine));
+    global.setProperty("QColor", constructColorClass(m_engine));
     global.setProperty("QRectF", constructQRectFClass(m_engine));
     global.setProperty("QPixmap", constructQPixmapClass(m_engine));
     global.setProperty("QSizeF", constructQSizeFClass(m_engine));
@@ -767,6 +812,20 @@ QScriptValue SimpleJavaScriptApplet::newPlasmaFrameSvg(QScriptContext *context, 
     FrameSvg *frameSvg = new FrameSvg(parent);
     frameSvg->setImagePath(parentedToApplet ? filename : findSvg(engine, filename));
     return engine->newQObject(frameSvg);
+}
+
+QScriptValue SimpleJavaScriptApplet::fileDialogSave(QScriptContext *context, QScriptEngine *engine)
+{
+    FileDialogProxy *fd = new FileDialogProxy(KFileDialog::Saving);
+
+    return engine->newQObject(fd);
+}
+
+QScriptValue SimpleJavaScriptApplet::fileDialogOpen(QScriptContext *context, QScriptEngine *engine)
+{
+    FileDialogProxy *fd = new FileDialogProxy(KFileDialog::Opening);
+
+    return engine->newQObject(fd);
 }
 
 void SimpleJavaScriptApplet::installWidgets(QScriptEngine *engine)
