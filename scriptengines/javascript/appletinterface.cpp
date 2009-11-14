@@ -326,4 +326,9 @@ bool AppletInterface::include(const QString &script)
     return m_appletScriptEngine->include(path);
 }
 
+void AppletInterface::debug(const QString &msg)
+{
+    kDebug() << msg;
+}
+
 #include "appletinterface.moc"

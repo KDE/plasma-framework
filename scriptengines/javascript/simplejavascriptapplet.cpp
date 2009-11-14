@@ -572,15 +572,9 @@ void SimpleJavaScriptApplet::setupObjects()
     installWidgets(m_engine);
 }
 
-QString SimpleJavaScriptApplet::findDataResource(const QString &filename)
+QSet<QString> SimpleJavaScriptApplet::loadedExtensions() const
 {
-    QString path("plasma-script/%1");
-    return KGlobal::dirs()->findResource("data", path.arg(filename));
-}
-
-void SimpleJavaScriptApplet::debug(const QString &msg)
-{
-    kDebug() << msg;
+    return m_extensions;
 }
 
 QScriptValue SimpleJavaScriptApplet::dataEngine(QScriptContext *context, QScriptEngine *engine)

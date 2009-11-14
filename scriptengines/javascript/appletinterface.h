@@ -220,6 +220,8 @@ enum QtScrollBarPolicy {
 
     Q_INVOKABLE bool include(const QString &script);
 
+    Q_INVOKABLE void debug(const QString &msg);
+
     Plasma::DataEngine *dataEngine(const QString &name);
 
     const Plasma::Package *package() const;

@@ -47,9 +47,7 @@ public:
     QList<QAction*> contextualActions();
     void constraintsEvent(Plasma::Constraints constraints);
     bool include(const QString &path);
-
-    Q_INVOKABLE QString findDataResource( const QString &filename );
-    Q_INVOKABLE void debug( const QString &msg );
+    QSet<QString> loadedExtensions() const;
 
     QScriptValue variantToScriptValue(QVariant var);
 
