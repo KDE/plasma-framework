@@ -46,6 +46,7 @@ public:
     void paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, const QRect &contentsRect);
     QList<QAction*> contextualActions();
     void constraintsEvent(Plasma::Constraints constraints);
+    bool include(const QString &path);
 
     Q_INVOKABLE QString findDataResource( const QString &filename );
     Q_INVOKABLE void debug( const QString &msg );

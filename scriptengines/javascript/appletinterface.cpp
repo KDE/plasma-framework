@@ -316,4 +316,14 @@ int AppletInterface::apiVersion() const
     return offers.first()->property("X-KDE-PluginInfo-Version", QVariant::Int).toInt();
 }
 
+bool AppletInterface::include(const QString &script)
+{
+    const QString path = package()->filePath("scripts", script);
+    if (path.isEmpty()) {
+        return false;
+    }
+
+    return m_appletScriptEngine->include(path);
+}
+
 #include "appletinterface.moc"

@@ -184,7 +184,6 @@ enum QtScrollBarPolicy {
     Q_INVOKABLE void setFailedToLaunch(bool failed, const QString &reason = QString());
 
     Q_INVOKABLE bool isBusy() const;
-
     Q_INVOKABLE void setBusy(bool busy);
 
     Q_INVOKABLE BackgroundHints backgroundHints() const;
@@ -218,6 +217,8 @@ enum QtScrollBarPolicy {
 
     Q_INVOKABLE QString file(const QString &fileType);
     Q_INVOKABLE QString file(const QString &fileType, const QString &filePath);
+
+    Q_INVOKABLE bool include(const QString &script);
 
     Plasma::DataEngine *dataEngine(const QString &name);
 

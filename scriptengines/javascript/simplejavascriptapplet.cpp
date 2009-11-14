@@ -343,6 +343,26 @@ void SimpleJavaScriptApplet::constraintsEvent(Plasma::Constraints constraints)
     }
 }
 
+bool SimpleJavaScriptApplet::include(const QString &path)
+{
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        kWarning() << i18n("Unable to load script file: %1", path);
+        return false;
+    }
+
+    QString script = file.readAll();
+    //kDebug() << "Script says" << script;
+
+    m_engine->evaluate(script);
+    if (m_engine->hasUncaughtException()) {
+        reportError(m_engine, true);
+        return false;
+    }
+
+    return true;
+}
+
 void SimpleJavaScriptApplet::populateAnimationsHash()
 {
     if (s_animationDefs.isEmpty()) {
@@ -369,22 +389,7 @@ bool SimpleJavaScriptApplet::init()
     kDebug() << "ScriptName:" << applet()->name();
     kDebug() << "ScriptCategory:" << applet()->category();
 
-    QFile file(mainScript());
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        kWarning() << "Unable to load script file";
-        return false;
-    }
-
-    QString script = file.readAll();
-    //kDebug() << "Script says" << script;
-
-    m_engine->evaluate(script);
-    if (m_engine->hasUncaughtException()) {
-        reportError(m_engine, true);
-        return false;
-    }
-
-    return true;
+    return include(mainScript());
 }
 
 bool SimpleJavaScriptApplet::importExtensions()
