@@ -288,11 +288,14 @@ void ScrollWidget::setWidget(QGraphicsWidget *widget)
     d->widget = widget;
     Plasma::Animator::self()->registerScrollingManager(this);
     //it's not good it's setting a size policy here, but it's done to be retrocompatible with older applications
-    widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    widget->setParentItem(d->scrollingWidget);
-    widget->setPos(QPoint(0,0));
-    widget->installEventFilter(this);
-    d->adjustScrollbars();
+
+    if (widget) {
+        widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        widget->setParentItem(d->scrollingWidget);
+        widget->setPos(QPoint(0,0));
+        widget->installEventFilter(this);
+        d->adjustScrollbars();
+    }
 }
 
 QGraphicsWidget *ScrollWidget::widget() const
@@ -395,17 +398,19 @@ QRectF ScrollWidget::viewportGeometry() const
 
 QSizeF ScrollWidget::contentsSize() const
 {
-    return d->widget->size();
+    return d->widget ? d->widget->size() : QSizeF();
 }
 
 void ScrollWidget::setScrollPosition(const QPointF &position)
 {
-    d->widget->setPos(-position);
+    if (d->widget) {
+        d->widget->setPos(-position);
+    }
 }
 
 QPointF ScrollWidget::scrollPosition() const
 {
-    return -d->widget->pos();
+    return d->widget ? -d->widget->pos() : QPointF();
 }
 
 void ScrollWidget::setStyleSheet(const QString &styleSheet)
