@@ -26,6 +26,7 @@
 #include <QtGui/QPainter>
 #include <QtGui/QApplication>
 #include <QtGui/QMenu>
+#include <QTouchEvent>
 
 #include <kcolorscheme.h>
 #include <kglobalsettings.h>
@@ -71,6 +72,7 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &h
     setFlags(flags() | QGraphicsItem::ItemStacksBehindParent);
     KColorScheme colorScheme(QPalette::Active, KColorScheme::View,
                              Theme::defaultTheme()->colorScheme());
+	setAcceptTouchEvents(true);
     m_gradientColor = colorScheme.background(KColorScheme::NormalBackground).color();
     m_originalGeom = m_applet->geometry();
     m_originalTransform = m_applet->transform();
@@ -727,6 +729,51 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     } else {
         QGraphicsItem::mouseMoveEvent(event);
     }
+}
+
+bool AppletHandle::sceneEvent(QEvent *event)
+{
+    switch (event->type()) {
+    case QEvent::TouchBegin:
+    case QEvent::TouchUpdate:
+    case QEvent::TouchEnd:
+    {
+        QList<QTouchEvent::TouchPoint> touchPoints = static_cast<QTouchEvent *>(event)->touchPoints();
+        if (touchPoints.count() == 2) {
+            const QTouchEvent::TouchPoint &touchPoint0 = touchPoints.first();
+            const QTouchEvent::TouchPoint &touchPoint1 = touchPoints.last();
+
+			//rotation
+			QLineF line0(touchPoint0.lastScenePos(), touchPoint1.lastScenePos());
+            QLineF line1(touchPoint0.scenePos(), touchPoint1.scenePos());
+            //m_applet->setTransformOriginPoint(m_applet->boundingRect().center());
+			m_angle = m_applet->rotation()+line1.angleTo(line0);
+            //m_applet->setRotation(m_angle);
+            //m_applet->setTransformOriginPoint(QPointF(0,0));
+			QTransform t = m_applet->transform();
+			t.translate(m_applet->size().width()/2, m_applet->size().height()/2);
+			t.rotate(m_angle);
+			t.translate(-m_applet->size().width()/2, -m_applet->size().height()/2);
+			m_applet->setTransform(t);
+
+
+			//scaling
+			qreal scaleFactor = 1;
+			if (line0.length() > 0) {
+				scaleFactor = line1.length() / line0.length();
+            }
+			QRectF geom = m_applet->geometry();
+            geom.setWidth(geom.width()*scaleFactor);
+			geom.setHeight(geom.height()*scaleFactor);
+			geom.moveCenter(line1.pointAt(0.5));
+            m_applet->setGeometry(geom);
+        }
+        return true;
+    }
+    default:
+        break;
+    }
+    return QGraphicsItem::sceneEvent(event);
 }
 
 //pos relative to scene
