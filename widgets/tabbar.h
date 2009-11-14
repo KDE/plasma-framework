@@ -73,8 +73,8 @@ public:
      * @arg content the page content that will be shown by this tab
      * @return the index of the inserted tab
      */
-    int insertTab(int index, const QIcon &icon, const QString &label,
-                  QGraphicsLayoutItem *content = 0);
+    Q_INVOKABLE int insertTab(int index, const QIcon &icon, const QString &label,
+                              QGraphicsLayoutItem *content = 0);
 
     /**
      * Adds a new tab in the desired position
@@ -88,7 +88,7 @@ public:
      * @arg content the page content that will be shown by this tab
      * @return the index of the inserted tab
      */
-    int insertTab(int index, const QString &label, QGraphicsLayoutItem *content = 0);
+    Q_INVOKABLE int insertTab(int index, const QString &label, QGraphicsLayoutItem *content = 0);
 
     /**
      * Adds a new tab in the last position
@@ -98,7 +98,7 @@ public:
      * @arg content the page content that will be shown by this tab
      * @return the index of the inserted tab
      */
-    int addTab(const QIcon &icon, const QString &label, QGraphicsLayoutItem *content = 0);
+    Q_INVOKABLE int addTab(const QIcon &icon, const QString &label, QGraphicsLayoutItem *content = 0);
 
     /**
      * Adds a new tab in the last position
@@ -109,14 +109,14 @@ public:
      * @arg content the page content that will be shown by this tab
      * @return the index of the inserted tab
      */
-    int addTab(const QString &label, QGraphicsLayoutItem *content = 0);
+    Q_INVOKABLE int addTab(const QString &label, QGraphicsLayoutItem *content = 0);
 
     /**
      * Removes a tab, contents are deleted
      *
      * @arg index the index of the tab to remove
      */
-    void removeTab(int index);
+    Q_INVOKABLE void removeTab(int index);
 
     /**
      * Removes a tab, the page is reparented to 0 and is returned
@@ -124,7 +124,7 @@ public:
      * @arg index the index of the tab to remove
      * @since 4.4
      */
-    QGraphicsLayoutItem *takeTab(int index);
+    Q_INVOKABLE QGraphicsLayoutItem *takeTab(int index);
 
     /**
      * Returns the contents of a page
@@ -132,7 +132,7 @@ public:
      * @arg index the index of the tab to retrieve
      * @since 4.4
      */
-    QGraphicsLayoutItem *tabAt(int index);
+    Q_INVOKABLE QGraphicsLayoutItem *tabAt(int index);
 
     /**
      * @return the index of the tab currently active
@@ -150,14 +150,14 @@ public:
      * @arg index the index of the tab to modify
      * @arg label the new text label of the given tab
      */
-    void setTabText(int index, const QString &label);
+    Q_INVOKABLE void setTabText(int index, const QString &label);
 
     /**
      * @return the text label of the given tab
      *
      * @arg index the index of the tab we want to know its label
      */
-    QString tabText(int index) const;
+    Q_INVOKABLE QString tabText(int index) const;
 
     /**
      * Sets an icon for a given tab
@@ -165,14 +165,14 @@ public:
      * @arg index the index of the tab to modify
      * @arg icon the new icon for the given tab
      */
-    void setTabIcon(int index, const QIcon &icon);
+    Q_INVOKABLE void setTabIcon(int index, const QIcon &icon);
 
     /**
      * @return the current icon for a given tab
      *
      * @arg index the index of the tab we want to know its icon
      */
-    QIcon tabIcon(int index) const;
+    Q_INVOKABLE QIcon tabIcon(int index) const;
 
     /**
      * shows or hides the tabbar, used if you just want to display the

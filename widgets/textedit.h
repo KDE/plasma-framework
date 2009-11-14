@@ -45,6 +45,7 @@ class PLASMA_EXPORT TextEdit : public QGraphicsProxyWidget
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
     Q_PROPERTY(QString stylesheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(KTextEdit *nativeWidget READ nativeWidget WRITE setNativeWidget)
+    Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
 
 public:
     explicit TextEdit(QGraphicsWidget *parent = 0);
@@ -61,6 +62,18 @@ public:
      * @return the display text
      */
     QString text() const;
+
+    /**
+     * Sets the text area to be read only or interactive
+     * @arg true to make it read only, false for interactive
+     * @since 4.4
+     */
+    void setReadOnly(bool readOnly);
+
+    /**
+     * @return true if the text area is non-interacive
+     */
+    bool isReadOnly() const;
 
     /**
      * Sets the stylesheet used to control the visual display of this TextEdit

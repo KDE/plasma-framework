@@ -88,13 +88,22 @@ TextEdit::~TextEdit()
 
 void TextEdit::setText(const QString &text)
 {
-    //FIXME I'm not certain about using only the html methods. look at this again later.
-    static_cast<KTextEdit*>(widget())->setHtml(text);
+    static_cast<KTextEdit*>(widget())->setText(text);
 }
 
 QString TextEdit::text() const
 {
     return static_cast<KTextEdit*>(widget())->toHtml();
+}
+
+void TextEdit::setReadOnly(bool readOnly)
+{
+    static_cast<KTextEdit*>(widget())->setReadOnly(readOnly);
+}
+
+bool TextEdit::isReadOnly() const
+{
+    return static_cast<KTextEdit*>(widget())->isReadOnly();
 }
 
 void TextEdit::setStyleSheet(const QString &stylesheet)

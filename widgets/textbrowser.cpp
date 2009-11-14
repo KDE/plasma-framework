@@ -124,8 +124,7 @@ TextBrowser::~TextBrowser()
 
 void TextBrowser::setText(const QString &text)
 {
-    //FIXME I'm not certain about using only the html methods. look at this again later.
-    static_cast<KTextBrowser*>(widget())->setHtml(text);
+    static_cast<KTextBrowser*>(widget())->setText(text);
 }
 
 QString TextBrowser::text() const
