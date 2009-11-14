@@ -38,21 +38,31 @@ class FlashingLabelPrivate;
  */
 class PLASMA_EXPORT FlashingLabel : public QGraphicsWidget
 {
-Q_OBJECT
+    Q_OBJECT
+    Q_PROPERTY(bool autohide READ autohide WRITE setAutohide)
+    Q_PROPERTY(QFont font READ font WRITE setFont)
+    Q_PROPERTY(QColor color READ color WRITE setColor)
+    Q_PROPERTY(int duration READ duration WRITE setDuration)
+
 public:
     explicit FlashingLabel(QGraphicsItem *parent = 0);
     virtual ~FlashingLabel();
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
+    QFont font() const;
     void setFont(const QFont &);
+
+    QColor color() const;
     void setColor(const QColor &);
+
+    int duration() const;
     void setDuration(int duration);
 
-    void flash(const QString &text, int duration = 0,
-                const QTextOption &option = QTextOption(Qt::AlignCenter));
-    void flash(const QPixmap &pixmap, int duration = 0,
-                Qt::Alignment align = Qt::AlignCenter);
+    Q_INVOKABLE void flash(const QString &text, int duration = 0,
+                           const QTextOption &option = QTextOption(Qt::AlignCenter));
+    Q_INVOKABLE void flash(const QPixmap &pixmap, int duration = 0,
+                           Qt::Alignment align = Qt::AlignCenter);
 
     void setAutohide(bool autohide);
     bool autohide() const;

@@ -102,6 +102,11 @@ FlashingLabel::~FlashingLabel()
     delete d;
 }
 
+int FlashingLabel::duration() const
+{
+    return d->defaultDuration;
+}
+
 void FlashingLabel::setDuration(int duration)
 {
     if (duration < 1) {
@@ -111,9 +116,19 @@ void FlashingLabel::setDuration(int duration)
     d->defaultDuration = duration;
 }
 
+QColor FlashingLabel::color() const
+{
+    return d->color;
+}
+
 void FlashingLabel::setColor(const QColor &color)
 {
     d->color = color;
+}
+
+QFont FlashingLabel::font() const
+{
+    return d->font;
 }
 
 void FlashingLabel::setFont(const QFont &font)
