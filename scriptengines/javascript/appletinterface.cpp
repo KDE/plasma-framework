@@ -23,7 +23,9 @@
 #include <QFile>
 #include <QSignalMapper>
 
-#include <KDE/KIcon>
+#include <KIcon>
+#include <KService>
+#include <KServiceTypeTrader>
 
 #include <Plasma/Plasma>
 #include <Plasma/Applet>
@@ -301,6 +303,17 @@ void AppletInterface::setLayout(QGraphicsLayout *layout)
 bool AppletInterface::immutable() const
 {
     return applet()->immutability() != Plasma::Mutable;
+}
+
+int AppletInterface::apiVersion() const
+{
+    const QString constraint("[X-Plasma-API] == 'javascript' and 'Applet' in [X-Plasma-ComponentTypes]");
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/ScriptEngine", constraint);
+    if (offers.isEmpty()) {
+        return -1;
+    }
+
+    return offers.first()->property("X-KDE-PluginInfo-Version", QVariant::Int).toInt();
 }
 
 #include "appletinterface.moc"
