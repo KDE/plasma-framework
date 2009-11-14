@@ -37,6 +37,7 @@
 #include <Plasma/PushButton>
 #include <Plasma/RadioButton>
 #include <Plasma/ScrollBar>
+#include <Plasma/ScrollWidget>
 #include <Plasma/Separator>
 #include <Plasma/SignalPlotter>
 #include <Plasma/Slider>
@@ -64,6 +65,7 @@ QGraphicsWidget *createMeter(QGraphicsWidget *parent) { return new Plasma::Meter
 QGraphicsWidget *createPushButton(QGraphicsWidget *parent) { return new Plasma::PushButton(parent); }
 QGraphicsWidget *createRadioButton(QGraphicsWidget *parent) { return new Plasma::RadioButton(parent); }
 QGraphicsWidget *createScrollBar(QGraphicsWidget *parent) { return new Plasma::ScrollBar(parent); }
+QGraphicsWidget *createScrollWidget(QGraphicsWidget *parent) { return new Plasma::ScrollWidget(parent); }
 QGraphicsWidget *createSeparator(QGraphicsWidget *parent) { return new Plasma::Separator(parent); }
 QGraphicsWidget *createSignalPlotter(QGraphicsWidget *parent) { return new Plasma::SignalPlotter(parent); }
 QGraphicsWidget *createSlider(QGraphicsWidget *parent) { return new Plasma::Slider(parent); }
@@ -92,6 +94,7 @@ UiLoader::UiLoader()
     m_widgetCtors.insert("PushButton", createPushButton);
     m_widgetCtors.insert("RadioButton", createRadioButton);
     m_widgetCtors.insert("ScrollBar", createScrollBar);
+    m_widgetCtors.insert("ScrollWidget", createScrollWidget);
     m_widgetCtors.insert("Separator", createSeparator);
     m_widgetCtors.insert("SignalPlotter", createSignalPlotter);
     m_widgetCtors.insert("Slider", createSlider);
