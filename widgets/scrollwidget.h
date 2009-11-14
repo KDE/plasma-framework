@@ -108,7 +108,7 @@ public:
      * @param rect rect we want visible, in coordinates mapped to the inner widget
      * @since 4.4
      */
-    void ensureRectVisible(const QRectF &rect);
+    Q_INVOKABLE void ensureRectVisible(const QRectF &rect);
 
     /**
      * Scroll the view until the given item is visible
@@ -116,7 +116,7 @@ public:
      * @param item item we want visible
      * @since 4.4
      */
-    void ensureItemVisible(QGraphicsItem *item);
+    Q_INVOKABLE void ensureItemVisible(QGraphicsItem *item);
 
     /**
      * Register an item as a drag handle, it means mouse events will pass trough it
@@ -129,13 +129,13 @@ public:
      *             it's not necessary to call this function.
      * @since 4.4
      */
-    void registerAsDragHandle(QGraphicsWidget *item);
+    Q_INVOKABLE void registerAsDragHandle(QGraphicsWidget *item);
 
     /**
      * Unregister the given item as drag handle (if it was registered)
      * @since 4.4
      */
-    void unregisterAsDragHandle(QGraphicsWidget *item);
+    Q_INVOKABLE void unregisterAsDragHandle(QGraphicsWidget *item);
 
     /**
      * The geometry of the viewport.
