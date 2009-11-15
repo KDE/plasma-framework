@@ -810,6 +810,7 @@ QScriptValue SimpleJavaScriptApplet::newPlasmaFrameSvg(QScriptContext *context, 
 
 QScriptValue SimpleJavaScriptApplet::fileDialogSave(QScriptContext *context, QScriptEngine *engine)
 {
+    Q_UNUSED(context);
     FileDialogProxy *fd = new FileDialogProxy(KFileDialog::Saving);
 
     return engine->newQObject(fd);
@@ -817,6 +818,7 @@ QScriptValue SimpleJavaScriptApplet::fileDialogSave(QScriptContext *context, QSc
 
 QScriptValue SimpleJavaScriptApplet::fileDialogOpen(QScriptContext *context, QScriptEngine *engine)
 {
+    Q_UNUSED(context);
     FileDialogProxy *fd = new FileDialogProxy(KFileDialog::Opening);
 
     return engine->newQObject(fd);

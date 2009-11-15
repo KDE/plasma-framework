@@ -36,6 +36,7 @@ Q_DECLARE_METATYPE(ConstSearchMatchStar)
 JavaScriptRunner::JavaScriptRunner(QObject *parent, const QVariantList &args)
     : RunnerScript(parent)
 {
+    Q_UNUSED(args);
     m_engine = new QScriptEngine(this);
     importExtensions();
 }
