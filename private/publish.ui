@@ -24,7 +24,7 @@
    <item>
     <widget class="QCheckBox" name="publishCheckbox">
      <property name="text">
-      <string>Share this widget on the network.</string>
+      <string>Share this widget on the network</string>
      </property>
     </widget>
    </item>
@@ -34,7 +34,7 @@
       <bool>false</bool>
      </property>
      <property name="text">
-      <string>Allow everybody to freely access this widget.</string>
+      <string>Allow everybody to freely access this widget</string>
      </property>
     </widget>
    </item>

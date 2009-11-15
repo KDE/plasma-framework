@@ -61,14 +61,14 @@
      <item>
       <widget class="QCheckBox" name="allServicesCheckbox">
        <property name="text">
-        <string>Allow this user access to any service.</string>
+        <string>Allow this user access to any service</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QCheckBox" name="persistentCheckbox">
        <property name="text">
-        <string>Remember this user.</string>
+        <string>Remember this user</string>
        </property>
       </widget>
      </item>
