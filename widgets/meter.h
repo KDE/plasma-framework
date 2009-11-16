@@ -87,29 +87,14 @@ public:
     ~Meter();
 
     /**
-     * Set maximum value for the meter
-     */
-    void setMaximum(int maximum);
-
-    /**
      * @return maximum value for the meter
      */
     int maximum() const;
 
     /**
-     * Set minimum value for the meter
-     */
-    void setMinimum(int minimum);
-
-    /**
      * @return minimum value for the meter
      */
     int minimum() const;
-
-    /**
-     * Set value for the meter
-     */
-    void setValue(int value);
 
     /**
      * @return value for the meter
@@ -200,6 +185,21 @@ public Q_SLOTS:
      * Used when connecting to a DataEngine
      */
     void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
+
+    /**
+     * Set maximum value for the meter
+     */
+    void setMaximum(int maximum);
+
+    /**
+     * Set minimum value for the meter
+     */
+    void setMinimum(int minimum);
+
+    /**
+     * Set value for the meter
+     */
+    void setValue(int value);
 
 protected:
     /**
