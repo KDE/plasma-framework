@@ -480,6 +480,10 @@ void ScrollWidget::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void ScrollWidget::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    if (!(event->buttons() & Qt::LeftButton)) {
+        event->ignore();
+    }
+
     if (d->animId) {
         Animator::self()->stopItemMovement(d->animId);
     }
