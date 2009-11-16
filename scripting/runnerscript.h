@@ -81,7 +81,7 @@ Q_SIGNALS:
     void teardown();
     void createRunOptions(QWidget *widget);
     void reloadConfiguration();
-    //TODO: QList<QAction*> actionsForMatch(const Plasma::QueryMatch &match);
+    void actionsForMatch(const Plasma::QueryMatch &match, QList<QAction*>* actions);
 
 protected:
     /**

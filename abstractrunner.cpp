@@ -133,6 +133,9 @@ QList<QAction*> AbstractRunner::actionsForMatch(const Plasma::QueryMatch &match)
 {
     Q_UNUSED(match)
     QList<QAction*> ret;
+    if (d->script) {
+        emit d->script->actionsForMatch(match, &ret);
+    }
     return ret;
 }
 
