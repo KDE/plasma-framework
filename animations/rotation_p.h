@@ -20,6 +20,9 @@
 /* 02110-1301  USA                                                     */
 /***********************************************************************/
 
+#ifndef ROTATION_P_H
+#define ROTATION_P_H
+
 #include <plasma/plasma_export.h>
 #include <plasma/animations/animation.h>
 
@@ -87,3 +90,5 @@ public:
         RotationAnimationPrivate *const d;
 };
 } // Plasma
+
+#endif
