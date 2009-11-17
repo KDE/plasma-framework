@@ -53,6 +53,7 @@ class PLASMA_EXPORT WebView : public QGraphicsWidget
     Q_PROPERTY(QPointF scrollPosition READ scrollPosition WRITE setScrollPosition)
     Q_PROPERTY(QSizeF contentsSize READ contentsSize)
     Q_PROPERTY(QRectF viewportGeometry READ viewportGeometry)
+    Q_PROPERTY(qreal zoomFactor READ zoomFactor WRITE setZoomFactor)
 
     public:
         explicit WebView(QGraphicsItem *parent = 0);
@@ -121,6 +122,20 @@ class PLASMA_EXPORT WebView : public QGraphicsWidget
          * @since 4.4
          */
         QRectF viewportGeometry() const;
+
+        /**
+         * The zoom factor of the page
+         *
+         * @since 4.4
+         */
+        qreal zoomFactor() const;
+
+        /**
+         * Sets the zoom factor of the page
+         *
+         * @since 4.4
+         */
+        void setZoomFactor(const qreal zoom);
 
         /**
          * Sets the page to use in this item. The owner of the webpage remains,

@@ -69,6 +69,7 @@ WebView::WebView(QGraphicsItem *parent)
 {
     d->page = 0;
     d->loaded = false;
+    setAcceptTouchEvents(true);
     Plasma::Animator::self()->registerScrollingManager(this);
     setAcceptsHoverEvents(true);
     setFlags(QGraphicsItem::ItemIsFocusable);
@@ -163,6 +164,24 @@ QRectF WebView::viewportGeometry() const
         return result;
     } else {
         return d->page->mainFrame()->geometry();
+    }
+}
+
+qreal WebView::zoomFactor() const
+{
+    if (!d->page) {
+        return 1;
+    } else {
+        return d->page->mainFrame()->zoomFactor();
+    }
+}
+
+void WebView::setZoomFactor(const qreal zoom)
+{
+    if (!d->page) {
+        return;
+    } else {
+        d->page->mainFrame()->setZoomFactor(zoom);
     }
 }
 
