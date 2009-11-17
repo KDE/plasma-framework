@@ -16,6 +16,9 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#ifndef PLASMA_PACKAGE_P_H
+#define PLASMA_PACKAGE_P_H
+
 #include "../plasma.h"
 #include "../package.h"
 #include "../service.h"
@@ -46,3 +49,4 @@ public:
 
 }
 
+#endif
