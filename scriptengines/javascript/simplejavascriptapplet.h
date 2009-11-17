@@ -77,8 +77,6 @@ private:
     static QScriptValue loadui(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue newPlasmaSvg(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue newPlasmaFrameSvg(QScriptContext *context, QScriptEngine *engine);
-    static QScriptValue fileDialogSave(QScriptContext *context, QScriptEngine *engine);
-    static QScriptValue fileDialogOpen(QScriptContext *context, QScriptEngine *engine);
 
     void installWidgets( QScriptEngine *engine );
     static QScriptValue createWidget(QScriptContext *context, QScriptEngine *engine);

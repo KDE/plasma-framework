@@ -20,7 +20,12 @@
 #define FILEDIALOGPROXY_H
 
 #include <QObject>
+#include <QScriptValue>
+
 #include <KFileDialog>
+
+class QScriptEngine;
+class QScriptContext;
 
 class FileDialogProxy : public QObject
 {
@@ -59,11 +64,18 @@ public:
     bool existingOnly() const;
     void setExistingOnly(bool existingOnly);
 
+    static void registerWithRuntime(QScriptEngine *global);
+    static QScriptValue fileDialogSave(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue fileDialogOpen(QScriptContext *context, QScriptEngine *engine);
+
 public Q_SLOTS:
     void show();
 
 Q_SIGNALS:
-    void finished();
+    void finished(FileDialogProxy *);
+
+private Q_SLOTS:
+    void dialogFinished();
 
 private:
     KFileDialog *m_dialog;

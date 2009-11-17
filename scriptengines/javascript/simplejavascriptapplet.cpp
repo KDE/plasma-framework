@@ -396,11 +396,9 @@ bool SimpleJavaScriptApplet::init()
 
 bool SimpleJavaScriptApplet::importBuiltinExtesion(const QString &extension)
 {
+    kDebug() << extension;
     if ("filedialog" == extension) {
-        //qScriptRegisterMetaType<KFileDialog*>(m_engine, qScriptValueFromKFileDialog, kFileDialogFromQScriptValue);
-        QScriptValue global = m_engine->globalObject();
-        global.setProperty("OpenFileDialog", m_engine->newFunction(SimpleJavaScriptApplet::fileDialogOpen));
-        global.setProperty("SaveFileDialog", m_engine->newFunction(SimpleJavaScriptApplet::fileDialogSave));
+        FileDialogProxy::registerWithRuntime(m_engine);
         return true;
     } else if ("launchapp" == extension) {
         return true;
@@ -418,7 +416,7 @@ bool SimpleJavaScriptApplet::importBuiltinExtesion(const QString &extension)
 bool SimpleJavaScriptApplet::importExtensions()
 {
     KPluginInfo info = description();
-    QStringList requiredExtensions = info.property("X-Plasma-RequiredExtensions").toStringList();
+    QStringList requiredExtensions = info.service()->property("X-Plasma-RequiredExtensions", QVariant::StringList).toStringList();
     kDebug() << "required extensions are" << requiredExtensions;
     foreach (const QString &ext, requiredExtensions) {
         QString extension = ext.toLower();
@@ -445,7 +443,7 @@ bool SimpleJavaScriptApplet::importExtensions()
         }
     }
 
-    QStringList optionalExtensions = info.property("X-Plasma-OptionalExtensions").toStringList();
+    QStringList optionalExtensions = info.service()->property("X-Plasma-OptionalExtensions", QVariant::StringList).toStringList();
     kDebug() << "extensions are" << optionalExtensions;
     foreach (const QString &ext, requiredExtensions) {
         QString extension = ext.toLower();
@@ -806,22 +804,6 @@ QScriptValue SimpleJavaScriptApplet::newPlasmaFrameSvg(QScriptContext *context, 
     FrameSvg *frameSvg = new FrameSvg(parent);
     frameSvg->setImagePath(parentedToApplet ? filename : findSvg(engine, filename));
     return engine->newQObject(frameSvg);
-}
-
-QScriptValue SimpleJavaScriptApplet::fileDialogSave(QScriptContext *context, QScriptEngine *engine)
-{
-    Q_UNUSED(context);
-    FileDialogProxy *fd = new FileDialogProxy(KFileDialog::Saving);
-
-    return engine->newQObject(fd);
-}
-
-QScriptValue SimpleJavaScriptApplet::fileDialogOpen(QScriptContext *context, QScriptEngine *engine)
-{
-    Q_UNUSED(context);
-    FileDialogProxy *fd = new FileDialogProxy(KFileDialog::Opening);
-
-    return engine->newQObject(fd);
 }
 
 void SimpleJavaScriptApplet::installWidgets(QScriptEngine *engine)

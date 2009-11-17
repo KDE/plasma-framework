@@ -18,16 +18,22 @@
 
 #include "filedialogproxy.h"
 
+#include <QScriptEngine>
+
+#include <KDebug>
+
 FileDialogProxy::FileDialogProxy(KFileDialog::OperationMode mode, QObject *parent)
     : QObject(parent),
       m_dialog(new KFileDialog(KUrl("~"), QString(), 0))
 {
+    kDebug() << "hello beautiful";
     m_dialog->setOperationMode(mode);
-    connect(m_dialog, SIGNAL(okClicked()), this, SIGNAL(finished()));
+    connect(m_dialog, SIGNAL(okClicked()), this, SLOT(dialogFinished()));
 }
 
 FileDialogProxy::~FileDialogProxy()
 {
+    kDebug() << "bye bye";
     delete m_dialog;
 }
 
@@ -116,6 +122,54 @@ void FileDialogProxy::setExistingOnly(bool existingOnly)
 void FileDialogProxy::show()
 {
     m_dialog->show();
+}
+
+void FileDialogProxy::dialogFinished()
+{
+    emit finished(this);
+}
+
+Q_DECLARE_METATYPE(FileDialogProxy *)
+typedef FileDialogProxy* FileDialogProxyPtr;
+QScriptValue qScriptValueFromFileDialogProxy(QScriptEngine *engine, const FileDialogProxyPtr &fd)
+{
+    return engine->newQObject(const_cast<FileDialogProxy *>(fd));
+}
+
+void fileDialogProxyFromQScriptValue(const QScriptValue &scriptValue, FileDialogProxyPtr &fd)
+{
+    QObject *obj = scriptValue.toQObject();
+    fd = static_cast<FileDialogProxy *>(obj);
+}
+
+void FileDialogProxy::registerWithRuntime(QScriptEngine *engine)
+{
+    QScriptValue global = engine->globalObject();
+    qScriptRegisterMetaType<FileDialogProxy*>(engine, qScriptValueFromFileDialogProxy, fileDialogProxyFromQScriptValue);
+    global.setProperty("OpenFileDialog", engine->newFunction(FileDialogProxy::fileDialogOpen));
+    global.setProperty("SaveFileDialog", engine->newFunction(FileDialogProxy::fileDialogSave));
+}
+
+QScriptValue FileDialogProxy::fileDialogSave(QScriptContext *context, QScriptEngine *engine)
+{
+    QObject *parent = 0;
+    if (context->argumentCount()) {
+        parent = context->argument(0).toQObject();
+    }
+
+    FileDialogProxy *fd = new FileDialogProxy(KFileDialog::Saving, parent);
+    return engine->newQObject(fd, QScriptEngine::ScriptOwnership, QScriptEngine::ExcludeSuperClassContents);
+}
+
+QScriptValue FileDialogProxy::fileDialogOpen(QScriptContext *context, QScriptEngine *engine)
+{
+    QObject *parent = 0;
+    if (context->argumentCount()) {
+        parent = context->argument(0).toQObject();
+    }
+
+    FileDialogProxy *fd = new FileDialogProxy(KFileDialog::Opening, parent);
+    return engine->newQObject(fd, QScriptEngine::ScriptOwnership, QScriptEngine::ExcludeSuperClassContents);
 }
 
 #include "filedialogproxy.moc"
