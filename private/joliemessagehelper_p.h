@@ -26,7 +26,7 @@
 #include <kdebug.h>
 #include <klocalizedstring.h>
 
-namespace Message {
+namespace JolieMessage {
     namespace Field {
         static const QByteArray DESTINATION  = "Destination";
         static const QByteArray ENABLEDOPERATIONS

@@ -110,8 +110,8 @@ void RemoteService::setLocation(const KUrl &location)
     Jolie::Message getOpDesc(location.path(KUrl::RemoveTrailingSlash).remove(0, 1).toUtf8(),
                              "startConnection");
     Jolie::Value data;
-    data.children(Message::Field::IDENTITY) << Jolie::Value(identityByteArray);
-    data.children(Message::Field::UUID) << Jolie::Value(m_uuid.toAscii());
+    data.children(JolieMessage::Field::IDENTITY) << Jolie::Value(identityByteArray);
+    data.children(JolieMessage::Field::UUID) << Jolie::Value(m_uuid.toAscii());
     getOpDesc.setData(data);
 
     Jolie::PendingCall pendingReply = m_client->asyncCall(getOpDesc);
@@ -142,7 +142,7 @@ void RemoteService::callCompleted(Jolie::PendingCallWatcher *watcher)
 
     if (response.operationName() == "startConnection") {
         kDebug() << "Started connection: fetching .operations";
-        m_token = Message::field(Message::Field::TOKEN, response);
+        m_token = JolieMessage::field(JolieMessage::Field::TOKEN, response);
         Jolie::Message getOpDesc(m_location.path(KUrl::RemoveTrailingSlash).remove(0, 1).toUtf8(),
                                  "getOperations");
         //TODO: async
@@ -151,7 +151,7 @@ void RemoteService::callCompleted(Jolie::PendingCallWatcher *watcher)
         connect(watcher, SIGNAL(finished(Jolie::PendingCallWatcher*)),
                 this, SLOT(callCompleted(Jolie::PendingCallWatcher*)));
     } else if (response.operationName() == "getOperations") {
-        if (response.fault().name() == Message::Error::REQUIREPIN) {
+        if (response.fault().name() == JolieMessage::Error::REQUIREPIN) {
             kDebug() << "pin required, request auth interface";
             ClientPinRequest *request = new ClientPinRequest(this);
             connect(request, SIGNAL(changed(Plasma::ClientPinRequest*)),
@@ -159,8 +159,8 @@ void RemoteService::callCompleted(Jolie::PendingCallWatcher *watcher)
             AuthorizationManager::self()->d->authorizationInterface->clientPinRequest(*request);
         } else {
             kDebug() << "RemoteService is now ready for use!";
-            m_operationsScheme = Message::field(Message::Field::OPERATIONSDESCRIPTION, response);
-            m_token = Message::field(Message::Field::TOKEN, response);
+            m_operationsScheme = JolieMessage::field(JolieMessage::Field::OPERATIONSDESCRIPTION, response);
+            m_token = JolieMessage::field(JolieMessage::Field::TOKEN, response);
             m_ready = true;
             setName(m_location.prettyUrl());
             //if there's stuff in the queue, let it continue.
@@ -168,8 +168,8 @@ void RemoteService::callCompleted(Jolie::PendingCallWatcher *watcher)
         }
     } else if (response.operationName() == "getEnabledOperations") {
         //TODO: optimize.
-        m_token = Message::field(Message::Field::TOKEN, response);
-        QByteArray enabledOperations = Message::field(Message::Field::ENABLEDOPERATIONS, response);
+        m_token = JolieMessage::field(JolieMessage::Field::TOKEN, response);
+        QByteArray enabledOperations = JolieMessage::field(JolieMessage::Field::ENABLEDOPERATIONS, response);
         QDataStream in(&enabledOperations, QIODevice::ReadOnly);
         QStringList enabledOperationsList;
         in >> enabledOperationsList;
@@ -197,9 +197,9 @@ void RemoteService::slotGotPin(Plasma::ClientPinRequest *request)
     Jolie::Message getOpDesc(m_location.path(KUrl::RemoveTrailingSlash).remove(0, 1).toUtf8(),
                              "getOperations");
     Jolie::Value value;
-    value.children(Message::Field::PARAMETERS) << Jolie::Value(QByteArray());
+    value.children(JolieMessage::Field::PARAMETERS) << Jolie::Value(QByteArray());
     if (!request->pin().isEmpty()) {
-        value.children(Message::Field::PIN) << Jolie::Value(request->pin().toAscii());
+        value.children(JolieMessage::Field::PIN) << Jolie::Value(request->pin().toAscii());
     }
     getOpDesc.setData(value);
     //TODO: async
@@ -269,12 +269,12 @@ Jolie::Message RemoteService::signMessage(const Jolie::Message &message) const
     }
 
     Jolie::Value data = response.data();
-    data.children(Message::Field::IDENTITYID) << Jolie::Value(identity.id().toAscii());
-    data.children(Message::Field::TOKEN) << Jolie::Value(m_token);
-    data.children(Message::Field::UUID) << Jolie::Value(m_uuid.toAscii());
+    data.children(JolieMessage::Field::IDENTITYID) << Jolie::Value(identity.id().toAscii());
+    data.children(JolieMessage::Field::TOKEN) << Jolie::Value(m_token);
+    data.children(JolieMessage::Field::UUID) << Jolie::Value(m_uuid.toAscii());
     response.setData(data);
-    data.children(Message::Field::SIGNATURE) <<
-                Jolie::Value(identity.signMessage(Message::payload(response)));
+    data.children(JolieMessage::Field::SIGNATURE) <<
+                Jolie::Value(identity.signMessage(JolieMessage::payload(response)));
     response.setData(data);
     return response;
 }

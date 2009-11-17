@@ -91,9 +91,9 @@ void RemoteServiceJob::start()
     Jolie::Message message(m_location.path(KUrl::RemoveTrailingSlash).remove(0, 1).toUtf8(),
                            "startOperationCall");
     Jolie::Value data;
-    data.children(Message::Field::OPERATION) << (Jolie::Value(operationName().toAscii()));
-    data.children(Message::Field::PARAMETERS) << Jolie::Value(params);
-    data.children(Message::Field::DESTINATION) << Jolie::Value(destination().toAscii());
+    data.children(JolieMessage::Field::OPERATION) << (Jolie::Value(operationName().toAscii()));
+    data.children(JolieMessage::Field::PARAMETERS) << Jolie::Value(params);
+    data.children(JolieMessage::Field::DESTINATION) << Jolie::Value(destination().toAscii());
     message.setData(data);
 
     Jolie::Client *client = m_service->m_client;
@@ -147,15 +147,15 @@ void RemoteServiceJob::callCompleted(Jolie::PendingCallWatcher *watcher)
     if (response.fault().isValid()) {
         kDebug() << "fault: " << response.fault().name();
         setError(-1);
-        setErrorText(Message::errorMessage(response.fault().name()));
+        setErrorText(JolieMessage::errorMessage(response.fault().name()));
         emitResult();
         return;
     }
 
-    m_service->m_token = Message::field(Message::Field::TOKEN, response);
+    m_service->m_token = JolieMessage::field(JolieMessage::Field::TOKEN, response);
 
     QVariant variantResult;
-    QByteArray byteArrayResult = Message::field(Message::Field::RESULT, response);
+    QByteArray byteArrayResult = JolieMessage::field(JolieMessage::Field::RESULT, response);
     QBuffer buffer(&byteArrayResult);
     buffer.open(QIODevice::ReadOnly);
     QDataStream in(&buffer);

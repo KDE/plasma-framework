@@ -69,11 +69,11 @@ void ServiceProvider::startOperationCall(Jolie::Message message)
     kDebug() << "starting operation call";
 
     KConfigGroup description =
-       m_service->operationDescription(QString(Message::field(Message::Field::OPERATION, message)));
+       m_service->operationDescription(QString(JolieMessage::field(JolieMessage::Field::OPERATION, message)));
 
     //deserialize the parameters
     QByteArray parametersByteArray;
-    parametersByteArray = Message::field(Message::Field::PARAMETERS, message);
+    parametersByteArray = JolieMessage::field(JolieMessage::Field::PARAMETERS, message);
     kDebug() << "parameters byte array: " << parametersByteArray.toBase64();
     QBuffer buffer(&parametersByteArray);
     buffer.open(QIODevice::ReadOnly);
@@ -93,9 +93,9 @@ void ServiceProvider::startOperationCall(Jolie::Message message)
         description.writeEntry(key, parameters.value(key));
     }
 
-    m_service->setDestination(Message::field(Message::Field::DESTINATION, message));
+    m_service->setDestination(JolieMessage::field(JolieMessage::Field::DESTINATION, message));
     ServiceJob *job = m_service->startOperationCall(description);
-    QString identityID = Message::field(Message::Field::IDENTITYID, message);
+    QString identityID = JolieMessage::field(JolieMessage::Field::IDENTITYID, message);
     job->d->identity = AuthorizationManager::self()->d->getCredentials(identityID);
     kDebug() << "adding into messagemap:" << ((QObject*)job);
     m_messageMap[job] = message;
@@ -119,13 +119,13 @@ void ServiceProvider::sendOperations(Jolie::Message message)
         QFile file(path);
         file.open(QIODevice::ReadOnly);
         Jolie::Value value;
-        value.children(Message::Field::OPERATIONSDESCRIPTION) << Jolie::Value(file.readAll());
+        value.children(JolieMessage::Field::OPERATIONSDESCRIPTION) << Jolie::Value(file.readAll());
         file.close();
         response.setData(value);
     }
 
-    QByteArray id = Message::field(Message::Field::IDENTITYID, message);
-    QByteArray uuid = Message::field(Message::Field::UUID, message);
+    QByteArray id = JolieMessage::field(JolieMessage::Field::IDENTITYID, message);
+    QByteArray uuid = JolieMessage::field(JolieMessage::Field::UUID, message);
     response = appendToken(response, id, uuid);
     kDebug() << "caller = " << id.toBase64();
 
@@ -158,11 +158,11 @@ void ServiceProvider::sendEnabledOperations(Jolie::Message message)
     out << enabledOperationsList;
 
     Jolie::Value value;
-    value.children(Message::Field::ENABLEDOPERATIONS) << Jolie::Value(enabledOperationsArray);
+    value.children(JolieMessage::Field::ENABLEDOPERATIONS) << Jolie::Value(enabledOperationsArray);
     response.setData(value);
 
-    QByteArray id = Message::field(Message::Field::IDENTITYID, message);
-    QByteArray uuid = Message::field(Message::Field::UUID, message);
+    QByteArray id = JolieMessage::field(JolieMessage::Field::IDENTITYID, message);
+    QByteArray uuid = JolieMessage::field(JolieMessage::Field::UUID, message);
     response = appendToken(response, id, uuid);
     kDebug() << "caller = " << id.toBase64();
 
@@ -190,29 +190,29 @@ void ServiceProvider::relay(Jolie::Server *server, int descriptor,
         kDebug() << "reset token";
         //add the identity
         Credentials identity;
-        QByteArray identityByteArray = Message::field(Message::Field::IDENTITY, message);
+        QByteArray identityByteArray = JolieMessage::field(JolieMessage::Field::IDENTITY, message);
         QDataStream stream(&identityByteArray, QIODevice::ReadOnly);
         stream >> identity;
         AuthorizationManager::self()->d->addCredentials(identity);
 
         Jolie::Message response(message.resourcePath(), message.operationName(), message.id());
-        QByteArray uuid = Message::field(Message::Field::UUID, message);
+        QByteArray uuid = JolieMessage::field(JolieMessage::Field::UUID, message);
         response = appendToken(response, identity.id().toAscii(), uuid);
         AuthorizationManager::self()->d->server->sendReply(descriptor, response);
 
         return;
     }
     
-    if (Message::field(Message::Field::TOKEN, message).isEmpty()) {
+    if (JolieMessage::field(JolieMessage::Field::TOKEN, message).isEmpty()) {
         Jolie::Message response(message.resourcePath(), message.operationName(), message.id());
-        response.setFault(Jolie::Fault(Message::Error::INVALIDTOKEN));
+        response.setFault(Jolie::Fault(JolieMessage::Error::INVALIDTOKEN));
         AuthorizationManager::self()->d->server->sendReply(descriptor, response);
         return;
     }
     
     //m_descriptor = descriptor;
-    QByteArray id = Message::field(Message::Field::IDENTITYID, message);
-    QByteArray uuid = Message::field(Message::Field::UUID, message);
+    QByteArray id = JolieMessage::field(JolieMessage::Field::IDENTITYID, message);
+    QByteArray uuid = JolieMessage::field(JolieMessage::Field::UUID, message);
     m_descriptorMap[id + uuid] = descriptor;
     authorize(message, m_tokens[id + uuid]);
 }
@@ -239,14 +239,14 @@ void ServiceProvider::operationCompleted(Plasma::ServiceJob *job)
     out << variantResult;
 
     Jolie::Value data;
-    data.children(Message::Field::RESULT) << Jolie::Value(byteArrayResult);
+    data.children(JolieMessage::Field::RESULT) << Jolie::Value(byteArrayResult);
     response.setData(data);
     if (job->error()) {
         response.setFault(Jolie::Fault(job->errorString().toAscii()));
     }
 
-    QByteArray id = Message::field(Message::Field::IDENTITYID, message);
-    QByteArray uuid = Message::field(Message::Field::UUID, message);
+    QByteArray id = JolieMessage::field(JolieMessage::Field::IDENTITYID, message);
+    QByteArray uuid = JolieMessage::field(JolieMessage::Field::UUID, message);
     response = appendToken(response, id, uuid);
 
     //hack around the not yet async service adaptor api in qtjolie
@@ -263,14 +263,14 @@ void ServiceProvider::ruleChanged(Plasma::AuthorizationRule *rule)
 {
     int i = 0;
     foreach (const Jolie::Message &message, m_messagesPendingAuthorization) {
-        QByteArray id = Message::field(Message::Field::IDENTITYID, message);
+        QByteArray id = JolieMessage::field(JolieMessage::Field::IDENTITYID, message);
         //Credentials identity = AuthorizationManager::self()->d->getCredentials(id);
 
         bool matches = rule->d->matches(message.resourcePath(), id);
         if (matches && rule->policy() == AuthorizationRule::PinRequired &&
-            Message::field(Message::Field::PIN, message) != rule->pin()) {
+            JolieMessage::field(JolieMessage::Field::PIN, message) != rule->pin()) {
             kDebug() << "we need a pin";
-            authorizationFailed(message, Message::Error::REQUIREPIN);
+            authorizationFailed(message, JolieMessage::Error::REQUIREPIN);
             m_messagesPendingAuthorization.removeAt(i);
             return;
         /**
@@ -290,7 +290,7 @@ void ServiceProvider::ruleChanged(Plasma::AuthorizationRule *rule)
             return;
         } else if (matches && rule->policy() == AuthorizationRule::Deny) {
             kDebug() << "AUTHORIZATION: Service is never accessable for verified caller.";
-            authorizationFailed(message, Message::Error::ACCESSDENIED);
+            authorizationFailed(message, JolieMessage::Error::ACCESSDENIED);
             m_messagesPendingAuthorization.removeAt(i);
             return;
         } else {
@@ -311,7 +311,7 @@ Jolie::Message ServiceProvider::appendToken(Jolie::Message message,
              //<< " with uuid caller: " << uuid.toBase64();
     
     Jolie::Value data = message.data();
-    data.children(Message::Field::TOKEN) << Jolie::Value(m_tokens[caller + uuid]);
+    data.children(JolieMessage::Field::TOKEN) << Jolie::Value(m_tokens[caller + uuid]);
     message.setData(data);
     return message;
 }
@@ -320,7 +320,7 @@ Jolie::Message ServiceProvider::appendToken(Jolie::Message message,
 void ServiceProvider::authorize(const Jolie::Message &message, const QByteArray &validToken)
 {
     kDebug() << "VALIDATING MESSAGE:";
-    //kDebug() << Message::print(message);
+    //kDebug() << JolieMessage::print(message);
 
     //Authorization step 1: is the service accessable to all callers? In that case we can skip the
     //verification of the signature
@@ -334,28 +334,28 @@ void ServiceProvider::authorize(const Jolie::Message &message, const QByteArray 
         return;
     } else if (rule && rule->policy() == AuthorizationRule::Deny) {
         kDebug() << "AUTHORIZATION: Service is never accessable.";
-        authorizationFailed(message, Message::Error::ACCESSDENIED);
+        authorizationFailed(message, JolieMessage::Error::ACCESSDENIED);
         return;
     }
 
     //Authorization step 2: see if the token matches. If it doesn't we can't safely identify the
     //caller and are finished.
     kDebug() << "STEP2";
-    if (Message::field(Message::Field::TOKEN, message) != validToken && !validToken.isEmpty()) {
+    if (JolieMessage::field(JolieMessage::Field::TOKEN, message) != validToken && !validToken.isEmpty()) {
         kDebug() << "AUTHORIZATION: Message token doesn't match.";
         kDebug() << "expected: " << validToken.toBase64();
-        authorizationFailed(message, Message::Error::INVALIDTOKEN);
+        authorizationFailed(message, JolieMessage::Error::INVALIDTOKEN);
         return;
     }
 
-    QByteArray payload = Message::payload(message);
-    QByteArray signature = Message::field(Message::Field::SIGNATURE, message);
+    QByteArray payload = JolieMessage::payload(message);
+    QByteArray signature = JolieMessage::field(JolieMessage::Field::SIGNATURE, message);
     Credentials identity = AuthorizationManager::self()->d->getCredentials(
-            Message::field(Message::Field::IDENTITYID, message));
+            JolieMessage::field(JolieMessage::Field::IDENTITYID, message));
 
     if (!identity.isValid()) {
         kDebug() << "no identity";
-        authorizationFailed(message, Message::Error::INVALIDTOKEN);
+        authorizationFailed(message, JolieMessage::Error::INVALIDTOKEN);
         return;
     }
 
@@ -364,7 +364,7 @@ void ServiceProvider::authorize(const Jolie::Message &message, const QByteArray 
     //either the public key has changed, or somebody is doing something nasty, and we're finished.
     if ((!identity.isValidSignature(signature, payload))) {
         kDebug() << "AUTHORIZATION: signature invalid.";
-        authorizationFailed(message, Message::Error::ACCESSDENIED);
+        authorizationFailed(message, JolieMessage::Error::ACCESSDENIED);
         return;
     }
 
@@ -373,12 +373,12 @@ void ServiceProvider::authorize(const Jolie::Message &message, const QByteArray 
     rule = AuthorizationManager::self()->d->matchingRule(message.resourcePath(), identity);
     if (rule && rule->policy() == AuthorizationRule::PinRequired) {
         kDebug() << "we expect a pin!";
-        QByteArray pin = Message::field(Message::Field::PIN, message);
+        QByteArray pin = JolieMessage::field(JolieMessage::Field::PIN, message);
         if (rule->pin() == QString(pin)) {
             authorizationSuccess(message);
             rule->setPolicy(AuthorizationRule::Allow);
         } else {
-            authorizationFailed(message, Message::Error::ACCESSDENIED);
+            authorizationFailed(message, JolieMessage::Error::ACCESSDENIED);
             AuthorizationManager::self()->d->rules.removeAll(rule);
             delete rule;
         }
@@ -388,7 +388,7 @@ void ServiceProvider::authorize(const Jolie::Message &message, const QByteArray 
         return;
     } else if (rule && rule->policy() == AuthorizationRule::Deny) {
         kDebug() << "AUTHORIZATION: Service is not accessable for validated sender.";
-        authorizationFailed(message, Message::Error::ACCESSDENIED);
+        authorizationFailed(message, JolieMessage::Error::ACCESSDENIED);
         return;
     } else {
         //- let the shell set the rule matching this request:
@@ -425,8 +425,8 @@ void ServiceProvider::authorizationFailed(const Jolie::Message &message, const Q
     Jolie::Message response(message.resourcePath(), message.operationName(), message.id());
     response.setFault(Jolie::Fault(error));
 
-    QByteArray id = Message::field(Message::Field::IDENTITYID, message);
-    QByteArray uuid = Message::field(Message::Field::UUID, message);
+    QByteArray id = JolieMessage::field(JolieMessage::Field::IDENTITYID, message);
+    QByteArray uuid = JolieMessage::field(JolieMessage::Field::UUID, message);
     AuthorizationManager::self()->d->server->sendReply(
                             m_descriptorMap.value(id + uuid), response);
     return;
