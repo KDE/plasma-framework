@@ -28,6 +28,7 @@
 #include <QDebug>
 #include <QGraphicsWidget>
 #include <QPoint>
+#include <QCursor>
 
 #include <kdebug.h>
 
@@ -56,6 +57,13 @@ public:
         Right
     };
 
+    enum Gesture {
+        GestureNone = 0,
+        GestureUndefined = 1,
+        GestureScroll = 2,
+        GestureZoom = 3
+    };
+
     KineticScrollingPrivate()
         : timerID(0),
         overshoot(20),
@@ -63,7 +71,8 @@ public:
         hasOvershoot(true),
         parent(0),
         friction(0.8),
-        forwardingEvent(false)
+        forwardingEvent(false),
+        multitouchGesture(GestureNone)
     {
         maximum = 100 + overshoot;
         minimum = -overshoot;
@@ -121,6 +130,7 @@ public:
     int maximum, minimum;
     qreal friction;
     bool forwardingEvent;
+    Gesture multitouchGesture;
 
     QTime t;
 };
@@ -392,15 +402,18 @@ bool KineticScrolling::eventFilter(QObject *watched, QEvent *event)
     }
 
     bool notBlocked = true;
-    if (d->parent && d->parent->scene()) {
+    if (d->multitouchGesture == KineticScrollingPrivate::GestureNone && d->parent && d->parent->scene()) {
         d->forwardingEvent = true;
         notBlocked = d->parent->scene()->sendEvent(d->parent, event);
         d->forwardingEvent = false;
     }
 
-   if (!notBlocked ||
+   if (event->type() != QEvent::TouchBegin &&
+       event->type() != QEvent::TouchUpdate &&
+       event->type() != QEvent::TouchEnd &&
+       (!notBlocked ||
        ((event->type() != QEvent::GraphicsSceneMousePress && event->isAccepted()) &&
-       (event->type() != QEvent::GraphicsSceneWheel && event->isAccepted()))) {
+        (event->type() != QEvent::GraphicsSceneWheel && event->isAccepted())))) {
        return true;
    }
 
@@ -416,6 +429,55 @@ bool KineticScrolling::eventFilter(QObject *watched, QEvent *event)
         break;
     case QEvent::GraphicsSceneMouseMove:
         mouseMoveEvent(me);
+        break;
+    case QEvent::TouchBegin:
+        mousePressEvent(0);
+        break;
+    case QEvent::TouchUpdate: {
+        QList<QTouchEvent::TouchPoint> touchPoints = static_cast<QTouchEvent *>(event)->touchPoints();
+        if (touchPoints.count() == 2) {
+            const QTouchEvent::TouchPoint &touchPoint0 = touchPoints.first();
+            const QTouchEvent::TouchPoint &touchPoint1 = touchPoints.last();
+            const QLineF line0(touchPoint0.lastPos(), touchPoint1.lastPos());
+            const QLineF line1(touchPoint0.pos(), touchPoint1.pos());
+            const QLineF startLine(touchPoint0.startPos(), touchPoint1.startPos());
+            const QPointF point = line1.pointAt(0.5);
+            const QPointF lastPoint = line0.pointAt(0.5);
+
+            if (d->multitouchGesture == KineticScrollingPrivate::GestureNone) {
+                d->multitouchGesture = KineticScrollingPrivate::GestureUndefined;
+            }
+            if (d->multitouchGesture == KineticScrollingPrivate::GestureUndefined) {
+                const int zoomDistance = qAbs(line1.length() - startLine.length());
+                const int dragDistance = (startLine.pointAt(0.5) - point).manhattanLength();
+
+                if (zoomDistance - dragDistance > 30) {
+                    d->multitouchGesture = KineticScrollingPrivate::GestureZoom;
+                } else if (dragDistance - zoomDistance > 30) {
+                    d->multitouchGesture = KineticScrollingPrivate::GestureScroll;
+                }
+            }
+
+            if (d->multitouchGesture ==  KineticScrollingPrivate::GestureScroll) {
+                QGraphicsSceneMouseEvent fakeEvent;
+                fakeEvent.setPos(point);
+                fakeEvent.setLastPos(lastPoint);
+                mouseMoveEvent(&fakeEvent);
+            } else if (d->multitouchGesture == KineticScrollingPrivate::GestureZoom) {
+                qreal scaleFactor = 1;
+                if (line0.length() > 0) {
+                    scaleFactor = line1.length() / line0.length();
+                }
+
+                qreal zoom = d->parent->property("zoomFactor").toReal();
+                d->parent->setProperty("zoomFactor", zoom * scaleFactor);
+            }
+        }
+        break;
+    }
+    case QEvent::TouchEnd:
+        mouseReleaseEvent(0);
+        d->multitouchGesture = KineticScrollingPrivate::GestureNone;
         break;
     case QEvent::GraphicsSceneWheel:
         wheelReleaseEvent(we);
