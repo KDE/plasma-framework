@@ -268,6 +268,7 @@ void Wallpaper::restore(const KConfigGroup &config)
 void Wallpaper::init(const KConfigGroup &config)
 {
     if (d->script) {
+        d->initScript();
         d->script->initWallpaper(config);
     }
 }
@@ -398,7 +399,8 @@ WallpaperPrivate::WallpaperPrivate(KService::Ptr service, Wallpaper *wallpaper) 
     script(0),
     cacheRendering(false),
     initialized(false),
-    needsConfig(false)
+    needsConfig(false),
+    scriptInitialized(false)
 {
     if (wallpaperDescription.isValid()) {
         QString api = wallpaperDescription.property("X-Plasma-API").toString();
@@ -417,8 +419,6 @@ WallpaperPrivate::WallpaperPrivate(KService::Ptr service, Wallpaper *wallpaper) 
                         << wallpaperDescription.name() << "Wallpaper.";
                 delete package;
                 package = 0;
-            } else {
-                QTimer::singleShot(0, q, SLOT(initScript()));
             }
        }
     }
@@ -475,9 +475,10 @@ void WallpaperPrivate::setupScriptSupport()
 
 void WallpaperPrivate::initScript()
 {
-    if (script) {
+    if (script && !scriptInitialized) {
         setupScriptSupport();
         script->init();
+        scriptInitialized = true;
     }
 }
 

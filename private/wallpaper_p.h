@@ -58,6 +58,7 @@ public:
     bool cacheRendering : 1;
     bool initialized : 1;
     bool needsConfig : 1;
+    bool scriptInitialized : 1;
 };
 
 } // namespace Plasma
