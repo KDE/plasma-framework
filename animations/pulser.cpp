@@ -82,6 +82,8 @@ void PulseAnimation::setCopy()
     ShadowFake *shadow = 0;
     if (!d->under)
         shadow  = new ShadowFake;
+    else
+        shadow = dynamic_cast<ShadowFake*>(d->under);
 
     shadow->copyTarget(target);
 
@@ -125,10 +127,6 @@ void PulseAnimation::createAnimation(qreal duration, qreal scale)
         d->opacityAnimation->setEndValue(0);
         group->addAnimation(d->opacityAnimation);
 
-        QRectF initial(d->under->geometry());
-        QPointF tmp(initial.width() * 0.5, initial.height() * 0.5);
-        d->under->setTransformOriginPoint(tmp);
-
         d->scaleAnimation = new QPropertyAnimation(d->under, "scale");
         d->scaleAnimation->setDuration(duration);
         d->scaleAnimation->setStartValue(d->mscale);
@@ -149,12 +147,8 @@ void PulseAnimation::createAnimation(qreal duration, qreal scale)
              * and *then* reset the geometry
              */
         } else {
-            if ((*d->pulseGeometry) != widgetToAnimate()->geometry()) {
-                /*FIXME: it crashes when deleting old the image in ShadowFake
-                 * setCopy();
-                 */
-                qDebug() << "PulseAnimation:: it should update the geom....";
-            }
+            if ((*d->pulseGeometry) != widgetToAnimate()->geometry())
+                setCopy();
 
             d->opacityAnimation->setEndValue(0);
             d->scaleAnimation->setEndValue(scale);
