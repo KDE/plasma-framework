@@ -42,6 +42,69 @@ static QScriptValue toString(QScriptContext *ctx, QScriptEngine *eng)
     return QScriptValue(eng, self->prettyUrl());
 }
 
+static QScriptValue protocol(QScriptContext *ctx, QScriptEngine *eng)
+{
+    DECLARE_SELF(KUrl, protocol);
+    if (ctx->argumentCount()) {
+        QString v = ctx->argument(0).toString();
+        self->setProtocol(v);
+    }
+
+    return QScriptValue(eng, self->protocol());
+}
+
+static QScriptValue setProtocol(QScriptContext *ctx, QScriptEngine *)
+{
+    DECLARE_SELF(KUrl, setProtocol);
+    QString v = ctx->argument(0).toString();
+    self->setProtocol(v);
+    return QScriptValue();
+}
+
+static QScriptValue host(QScriptContext *ctx, QScriptEngine *eng)
+{
+    DECLARE_SELF(KUrl, protocol);
+    if (ctx->argumentCount()) {
+        QString v = ctx->argument(0).toString();
+        self->setHost(v);
+    }
+
+    return QScriptValue(eng, self->host());
+}
+
+static QScriptValue path(QScriptContext *ctx, QScriptEngine *eng)
+{
+    DECLARE_SELF(KUrl, path);
+    if (ctx->argumentCount()) {
+        QString v = ctx->argument(0).toString();
+        self->setPath(v);
+    }
+
+    return QScriptValue(eng, self->path());
+}
+
+static QScriptValue user(QScriptContext *ctx, QScriptEngine *eng)
+{
+    DECLARE_SELF(KUrl, user);
+    if (ctx->argumentCount()) {
+        QString v = ctx->argument(0).toString();
+        self->setUser(v);
+    }
+
+    return QScriptValue(eng, self->user());
+}
+
+static QScriptValue password(QScriptContext *ctx, QScriptEngine *eng)
+{
+    DECLARE_SELF(KUrl, password);
+    if (ctx->argumentCount()) {
+        QString v = ctx->argument(0).toString();
+        self->setPassword(v);
+    }
+
+    return QScriptValue(eng, self->password());
+}
+
 QScriptValue constructKUrlClass(QScriptEngine *eng)
 {
     QScriptValue proto = qScriptValueFromValue(eng, KUrl());
@@ -49,7 +112,13 @@ QScriptValue constructKUrlClass(QScriptEngine *eng)
     QScriptValue::PropertyFlags setter = QScriptValue::PropertySetter;
 
     proto.setProperty("toString", eng->newFunction(toString), getter);
+    proto.setProperty("protocol", eng->newFunction(protocol), getter | setter);
+    proto.setProperty("host", eng->newFunction(host), getter | setter);
+    proto.setProperty("path", eng->newFunction(path), getter | setter);
+    proto.setProperty("user", eng->newFunction(user), getter | setter);
+    proto.setProperty("password", eng->newFunction(password), getter | setter);
 
+    eng->setDefaultPrototype(qMetaTypeId<KUrl*>(), proto);
     eng->setDefaultPrototype(qMetaTypeId<KUrl>(), proto);
 
     return eng->newFunction(ctor, proto);
