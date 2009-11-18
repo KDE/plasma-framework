@@ -54,7 +54,6 @@ void ShadowFake::copyTarget(QGraphicsWidget *target)
     target->paint(&painter, 0, 0);
     painter.end();
 
-    qDebug() << "ShadowFake: copy....";
 }
 
 
@@ -63,7 +62,6 @@ void ShadowFake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 {
     Q_UNUSED(widget);
     Q_UNUSED(option);
-    qDebug() << "ShadowFake: painter..." << photo->rect();
 
     painter->setRenderHint(QPainter::Antialiasing);
     painter->drawPixmap(0, 0, *photo);
