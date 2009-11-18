@@ -22,6 +22,7 @@
 #include <QAction>
 #include <QFile>
 #include <QSignalMapper>
+#include <QTimer>
 
 #include <KIcon>
 #include <KService>
