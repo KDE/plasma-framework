@@ -79,6 +79,26 @@ public:
         contentsSize = parent->property("contentsSize").toSizeF();
         viewportGeometry = parent->property("viewportGeometry").toRectF();
     }
+    
+    bool canScroll(Direction direction, bool hasOvershoot = false) const
+    {
+        QPointF scrollPosition = -parent->property("scrollPosition").value<QPointF>();
+        int offset = (hasOvershoot?overshoot*2:0);
+
+        switch (direction) {
+        case Up:
+            return (scrollPosition.y() < offset);
+        case Down:
+            return (scrollPosition.y() + contentsSize.height() + offset >= viewportGeometry.bottom());
+        case Left:
+            return (scrollPosition.x() < offset);
+        case Right:
+            return (scrollPosition.x() + contentsSize.width() + offset >= viewportGeometry.right());
+        default:
+            return true;
+        }
+    }
+
 
     QPointF kinMovement;
 
@@ -265,10 +285,23 @@ void KineticScrolling::wheelReleaseEvent(QGraphicsSceneWheelEvent *event)
     d->syncViewportRect();
     d->kinMovement = QPointF(0,0);
 
-    if(event->orientation() == Qt::Vertical) {
+    if((event->orientation() == Qt::Vertical) &&
+       ((event->delta() < 0) && d->canScroll(KineticScrollingPrivate::Down) ||
+       (event->delta() > 0) && d->canScroll(KineticScrollingPrivate::Up))) {
         d->kinMovement.setY(d->kinMovement.y() - event->delta());
+    } else if ((event->orientation() == Qt::Vertical) ||
+               (!d->canScroll(KineticScrollingPrivate::Down) &&
+               !d->canScroll(KineticScrollingPrivate::Up))) {
+        if (((event->delta() < 0) &&
+            d->canScroll(KineticScrollingPrivate::Right)) ||
+            (event->delta() > 0 && d->canScroll(KineticScrollingPrivate::Left))) {
+            d->kinMovement.setX(d->kinMovement.x() - event->delta());
+        } else {
+            event->ignore( );
+        }
     } else {
-        d->kinMovement.setX(d->kinMovement.x() - event->delta());
+        event->ignore( );
+        return;
     }
 
     const QPointF scrollPosition = -d->parent->property("scrollPosition").value<QPointF>();
