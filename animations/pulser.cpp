@@ -152,10 +152,6 @@ void PulseAnimation::createAnimation(qreal duration, qreal scale)
 
             d->opacityAnimation->setEndValue(0);
             d->scaleAnimation->setEndValue(scale);
-
-            QRectF initial(d->under->geometry());
-            QPointF tmp(initial.width() * 0.5, initial.height() * 0.5);
-            d->under->setTransformOriginPoint(tmp);
         }
     }
 
