@@ -501,7 +501,7 @@ void Meter::paint(QPainter *p,
             clipRect.setHeight(clipRect.height() * percentage);
             clipRect.moveBottom(bottom);
         }
-        p->setClipRect(clipRect);
+        p->setClipRect(clipRect, Qt::IntersectClip);
 
         //be retrocompatible
         if (d->image->hasElement("bar-active-center")) {
