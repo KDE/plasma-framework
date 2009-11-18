@@ -1498,6 +1498,7 @@ void Applet::setAspectRatioMode(Plasma::AspectRatioMode mode)
     PopupApplet *popup = qobject_cast<PopupApplet *>(this);
     if (popup && popup->d->dialogPtr) {
         popup->d->dialogPtr.data()->setAspectRatioMode(mode);
+        popup->d->savedAspectRatio = mode;
     }
 
     d->aspectRatioMode = mode;
