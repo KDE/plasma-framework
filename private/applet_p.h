@@ -22,6 +22,7 @@
 #ifndef PLASMA_APPLET_P_H
 #define PLASMA_APPLET_P_H
 
+#include <QBasicTimer>
 #include <QGraphicsProxyWidget>
 
 #include <kactioncollection.h>
@@ -164,8 +165,9 @@ public:
     Ui::publishWidget publishUI;
 
     // timerEvent bookkeeping
-    int constraintsTimerId;
-    int modificationsTimerId;
+    QBasicTimer constraintsTimer;
+    QBasicTimer busyWidgetTimer;
+    QBasicTimer *modificationsTimer;
 
     // a great green field of booleans :)
     bool hasConfigurationInterface : 1;

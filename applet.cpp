@@ -752,30 +752,21 @@ Extender *Applet::extender() const
 void Applet::setBusy(bool busy)
 {
     if (busy) {
-        if (!d->busyWidget) {
-            d->createMessageOverlay(false);
-            d->messageOverlay->opacity = 0;
-
-            QGraphicsLinearLayout *mainLayout = new QGraphicsLinearLayout(d->messageOverlay);
-            d->busyWidget = new Plasma::BusyWidget(d->messageOverlay);
-            d->busyWidget->setAcceptHoverEvents(false);
-            d->busyWidget->setAcceptedMouseButtons(Qt::NoButton);
-            d->messageOverlay->setAcceptHoverEvents(false);
-
-            mainLayout->addStretch();
-            mainLayout->addItem(d->busyWidget);
-            mainLayout->addStretch();
+        if (!d->busyWidget && !d->busyWidgetTimer.isActive()) {
+            d->busyWidgetTimer.start(500, this);
         }
-    } else if (d->busyWidget) {
-        //will be deleted by its parent
-        d->busyWidget = 0;
-        d->destroyMessageOverlay();
+    } else {
+        d->busyWidgetTimer.stop();
+        if (d->busyWidget) {
+            d->busyWidget = 0;
+            d->destroyMessageOverlay();
+        }
     }
 }
 
 bool Applet::isBusy() const
 {
-    return d->busyWidget && d->busyWidget->isVisible();
+    return d->busyWidgetTimer.isActive() || (d->busyWidget && d->busyWidget->isVisible());
 }
 
 QString Applet::name() const
@@ -1154,9 +1145,8 @@ void Applet::flushPendingConstraintsEvents()
         return;
     }
 
-    if (d->constraintsTimerId) {
-        killTimer(d->constraintsTimerId);
-        d->constraintsTimerId = 0;
+    if (d->constraintsTimer.isActive()) {
+        d->constraintsTimer.stop();
     }
 
     //kDebug() << "fushing constraints: " << d->pendingConstraints << "!!!!!!!!!!!!!!!!!!!!!!!!!!!";
@@ -1273,11 +1263,13 @@ void Applet::flushPendingConstraintsEvents()
 
     if (c & StartupCompletedConstraint) {
         // start up is done, we can now go do a mod timer
-        if (d->modificationsTimerId > 0) {
-            killTimer(d->modificationsTimerId);
+        if (d->modificationsTimer) {
+            if (d->modificationsTimer->isActive()) {
+                d->modificationsTimer->stop();
+            }
+        } else {
+            d->modificationsTimer = new QBasicTimer;
         }
-
-        d->modificationsTimerId = 0;
     }
 }
 
@@ -2405,28 +2397,44 @@ void Applet::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 void Applet::timerEvent(QTimerEvent *event)
 {
     if (d->transient) {
-        killTimer(d->constraintsTimerId);
-        killTimer(d->modificationsTimerId);
+        d->constraintsTimer.stop();
+        d->busyWidgetTimer.stop();
+        if (d->modificationsTimer) {
+            d->modificationsTimer->stop();
+        }
         return;
     }
 
-    if (event->timerId() == d->constraintsTimerId) {
-        killTimer(d->constraintsTimerId);
-        d->constraintsTimerId = 0;
+    if (event->timerId() == d->constraintsTimer.timerId()) {
+        d->constraintsTimer.stop();
 
         // Don't flushPendingConstraints if we're just starting up
         // flushPendingConstraints will be called by Corona
         if(!(d->pendingConstraints & Plasma::StartupCompletedConstraint)) {
             flushPendingConstraintsEvents();
         }
-    } else if (event->timerId() == d->modificationsTimerId) {
-        killTimer(d->modificationsTimerId);
-        d->modificationsTimerId = 0;
+    } else if (d->modificationsTimer && event->timerId() == d->modificationsTimer->timerId()) {
+        d->modificationsTimer->stop();
         // invalid group, will result in save using the default group
         KConfigGroup cg;
 
         save(cg);
         emit configNeedsSaving();
+    } else if (event->timerId() == d->busyWidgetTimer.timerId()) {
+        if (!d->busyWidget) {
+            d->createMessageOverlay(false);
+            d->messageOverlay->opacity = 0;
+
+            QGraphicsLinearLayout *mainLayout = new QGraphicsLinearLayout(d->messageOverlay);
+            d->busyWidget = new Plasma::BusyWidget(d->messageOverlay);
+            d->busyWidget->setAcceptHoverEvents(false);
+            d->busyWidget->setAcceptedMouseButtons(Qt::NoButton);
+            d->messageOverlay->setAcceptHoverEvents(false);
+
+            mainLayout->addStretch();
+            mainLayout->addItem(d->busyWidget);
+            mainLayout->addStretch();
+        }
     }
 }
 
@@ -2504,8 +2512,7 @@ AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet
           activationAction(0),
           shortcutEditor(0),
           itemStatus(UnknownStatus),
-          constraintsTimerId(0),
-          modificationsTimerId(-1),
+          modificationsTimer(0),
           hasConfigurationInterface(false),
           failed(false),
           isContainment(false),
@@ -2522,8 +2529,6 @@ AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet
 
 AppletPrivate::~AppletPrivate()
 {
-    modificationsTimerId = -1;
-
     if (activationAction && activationAction->isGlobalShortcutEnabled()) {
         //kDebug() << "reseting global action for" << q->name() << activationAction->objectName();
         activationAction->forgetGlobalShortcut();
@@ -2542,6 +2547,7 @@ AppletPrivate::~AppletPrivate()
     configLoader = 0;
     delete mainConfig;
     mainConfig = 0;
+    delete modificationsTimer;
 }
 
 void AppletPrivate::init(const QString &packagePath)
@@ -2692,8 +2698,8 @@ void AppletPrivate::scheduleConstraintsUpdate(Plasma::Constraints c)
 {
     // Don't start up a timer if we're just starting up
     // flushPendingConstraints will be called by Corona
-    if (started && !constraintsTimerId && !(c & Plasma::StartupCompletedConstraint)) {
-        constraintsTimerId = q->startTimer(0);
+    if (started && !constraintsTimer.isActive() && !(c & Plasma::StartupCompletedConstraint)) {
+        constraintsTimer.start(0, q);
     }
 
     if (c & Plasma::StartupCompletedConstraint) {
@@ -2705,14 +2711,14 @@ void AppletPrivate::scheduleConstraintsUpdate(Plasma::Constraints c)
 
 void AppletPrivate::scheduleModificationNotification()
 {
-    // modificationsTimerId is -1 until we get our notice of being started
-    if (modificationsTimerId != -1) {
+    // modificationsTimer is not allocated until we get our notice of being started
+    if (modificationsTimer) {
         // schedule a save
-        if (modificationsTimerId) {
-            q->killTimer(modificationsTimerId);
+        if (modificationsTimer->isActive()) {
+            modificationsTimer->stop();
         }
 
-        modificationsTimerId = q->startTimer(1000);
+        modificationsTimer->start(1000, q);
     }
 }
 
