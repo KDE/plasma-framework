@@ -17,7 +17,7 @@
  */
 
 /* TODO:
- * - fix centering of pulsed shadow object
+ * - fix opacity (for some reason is not working)
  */
 
 #include "pulser_p.h"
@@ -39,7 +39,6 @@ public :
     PulseAnimationPrivate()
         : animation(0),
           under(0),
-          pulseGeometry(0),
           zvalue(0),
           mscale(0),
           opacityAnimation(0),
@@ -48,14 +47,10 @@ public :
     {}
 
     ~PulseAnimationPrivate()
-    {
-        if (pulseGeometry)
-            delete pulseGeometry;
-    }
+    { }
 
     QAbstractAnimation *animation;
     QGraphicsWidget *under;
-    QRectF *pulseGeometry;
     qreal zvalue, mscale, mopacity;
     QPropertyAnimation *opacityAnimation;
     QPropertyAnimation *geometryAnimation;
@@ -86,10 +81,6 @@ void PulseAnimation::setCopy()
         shadow = dynamic_cast<ShadowFake*>(d->under);
 
     shadow->copyTarget(target);
-
-    if (d->pulseGeometry)
-        delete d->pulseGeometry;
-    d->pulseGeometry = new QRectF(target->geometry());
 
     d->mopacity = 0;
     d->zvalue = target->zValue();
@@ -146,7 +137,7 @@ void PulseAnimation::createAnimation(qreal duration, qreal scale)
              * and *then* reset the geometry
              */
         } else {
-            if ((*d->pulseGeometry) != widgetToAnimate()->geometry())
+            if (d->under->size() != widgetToAnimate()->size())
                 setCopy();
 
             d->opacityAnimation->setEndValue(0);
