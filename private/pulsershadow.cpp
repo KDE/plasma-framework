@@ -38,12 +38,9 @@ ShadowFake::~ShadowFake()
 
 void ShadowFake::copyTarget(QGraphicsWidget *target)
 {
-    QRectF initial(target->geometry());
-    QPointF tmp(initial.width() * 0.5, initial.height() * 0.5);
-    setTransformOriginPoint(tmp);
-
     setParentItem(target);
-    setGeometry(target->geometry());
+    resize(target->size());
+    setTransformOriginPoint(geometry().center());
     QSize size(target->size().toSize());
 
     if (photo)

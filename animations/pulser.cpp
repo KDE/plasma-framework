@@ -105,7 +105,6 @@ void PulseAnimation::setCopy()
 
 void PulseAnimation::resetPulser()
 {
-    d->under->setGeometry(*(d->pulseGeometry));
     d->under->setOpacity(d->mopacity);
     d->under->setScale(d->mscale);
     d->under->setZValue(d->zvalue);
