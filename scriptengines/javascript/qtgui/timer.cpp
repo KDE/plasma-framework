@@ -42,11 +42,40 @@ static QScriptValue toString(QScriptContext *ctx, QScriptEngine *eng)
                         .arg(self->interval()));
 }
 
+static QScriptValue singleShot(QScriptContext *ctx, QScriptEngine *eng)
+{
+    DECLARE_SELF(QTimer, start);
+    if (ctx->argumentCount()) {
+        self->setSingleShot(ctx->argument(0).toBool());
+    }
+    return QScriptValue(eng, self->isSingleShot());
+}
+
+static QScriptValue interval(QScriptContext *ctx, QScriptEngine *eng)
+{
+    DECLARE_SELF(QTimer, interval);
+    if (ctx->argumentCount()) {
+        self->setInterval(ctx->argument(0).toInt32());
+    }
+    return QScriptValue(eng, self->interval());
+}
+
+static QScriptValue isActive(QScriptContext *ctx, QScriptEngine *eng)
+{
+    DECLARE_SELF(QTimer, isActive);
+    return QScriptValue(eng, self->isActive());
+}
+
 QScriptValue constructTimerClass(QScriptEngine *eng)
 {
     QScriptValue proto = newTimer(eng, new QTimer());
     ADD_METHOD(proto, toString);
     eng->setDefaultPrototype(qMetaTypeId<QTimer*>(), proto);
+    QScriptValue::PropertyFlags getter = QScriptValue::PropertyGetter;
+    QScriptValue::PropertyFlags setter = QScriptValue::PropertySetter;
+    proto.setProperty("singleShot", eng->newFunction(singleShot), getter | setter);
+    proto.setProperty("interval", eng->newFunction(interval), getter | setter);
+    proto.setProperty("isActive", eng->newFunction(isActive), getter);
 
     return eng->newFunction(ctor, proto);
 }
