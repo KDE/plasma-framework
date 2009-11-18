@@ -68,7 +68,8 @@ public:
               graphicsWidget(0),
               resizeCorners(Dialog::NoCorner),
               resizeStartCorner(Dialog::NoCorner),
-              moveTimer(0)
+              moveTimer(0),
+              aspectRatioMode(Plasma::IgnoreAspectRatio)
     {
     }
 
@@ -79,6 +80,7 @@ public:
     void themeChanged();
     void adjustView();
     void updateResizeCorners();
+    int calculateWidthForHeightAndRatio(int height, qreal ratio);
 
     Plasma::Dialog *q;
 
@@ -93,6 +95,7 @@ public:
     QMap<Dialog::ResizeCorner, QRect> resizeAreas;
     int resizeStartCorner;
     QTimer *moveTimer;
+    Plasma::AspectRatioMode aspectRatioMode;
 };
 
 void DialogPrivate::themeChanged()
@@ -113,7 +116,7 @@ void DialogPrivate::themeChanged()
     } else if (graphicsWidget) {
         QObject *pw = graphicsWidget;
 
-        while (pw = pw->parent()) {
+        while ((pw = pw->parent())) {
             applet = dynamic_cast<Plasma::Applet *>(pw);
             if (applet) {
                 break;
@@ -245,6 +248,23 @@ void DialogPrivate::adjustView()
     }
 }
 
+int DialogPrivate::calculateWidthForHeightAndRatio(int height, qreal ratio)
+{
+    switch (aspectRatioMode) {
+        case KeepAspectRatio:
+            return qRound(height * ratio);
+            break;
+        case Square:
+            return height;
+            break;
+        case ConstrainedSquare:
+            return height;
+            break;
+        default:
+            return -1;
+    }
+}
+
 Dialog::Dialog(QWidget *parent, Qt::WindowFlags f)
     : QWidget(parent, f),
       d(new DialogPrivate(this))
@@ -300,35 +320,54 @@ void Dialog::mouseMoveEvent(QMouseEvent *event)
         int newHeight;
         QPoint position;
 
+        qreal aspectRatio = (qreal)width() / (qreal)height();
+
         switch(d->resizeStartCorner) {
             case Dialog::NorthEast:
-                newWidth = qMin(maximumWidth(), qMax(minimumWidth(), event->x()));
                 newHeight = qMin(maximumHeight(), qMax(minimumHeight(), height() - event->y()));
+                newWidth = d->calculateWidthForHeightAndRatio(newHeight, aspectRatio);
+                if (newWidth == -1) {
+                    newWidth = qMin(maximumWidth(), qMax(minimumWidth(), event->x()));
+                }
                 position = QPoint(x(), y() + height() - newHeight);
                 break;
             case Dialog::NorthWest:
-                newWidth = qMin(maximumWidth(), qMax(minimumWidth(), width() - event->x()));
                 newHeight = qMin(maximumHeight(), qMax(minimumHeight(), height() - event->y()));
+                newWidth = d->calculateWidthForHeightAndRatio(newHeight, aspectRatio);
+                if (newWidth == -1) {
+                    newWidth = qMin(maximumWidth(), qMax(minimumWidth(), width() - event->x()));
+                }
                 position = QPoint(x() + width() - newWidth, y() + height() - newHeight);
                 break;
             case Dialog::SouthWest:
-                newWidth = qMin(maximumWidth(), qMax(minimumWidth(), width() - event->x()));
                 newHeight = qMin(maximumHeight(), qMax(minimumHeight(), event->y()));
+                newWidth = d->calculateWidthForHeightAndRatio(newHeight, aspectRatio);
+                if (newWidth == -1) {
+                    newWidth = qMin(maximumWidth(), qMax(minimumWidth(), width() - event->x()));
+                }
                 position = QPoint(x() + width() - newWidth, y());
                 break;
             case Dialog::SouthEast:
-                newWidth = qMin(maximumWidth(), qMax(minimumWidth(), event->x()));
                 newHeight = qMin(maximumHeight(), qMax(minimumHeight(), event->y()));
+                newWidth = d->calculateWidthForHeightAndRatio(newHeight, aspectRatio);
+                if (newWidth == -1) {
+                    newWidth = qMin(maximumWidth(), qMax(minimumWidth(), event->x()));
+                }
                 position = QPoint(x(), y());
                 break;
              default:
-                newWidth = qMin(maximumWidth(), qMax(minimumWidth(), width()));
                 newHeight = qMin(maximumHeight(), qMax(minimumHeight(), height()));
+                newWidth = d->calculateWidthForHeightAndRatio(newHeight, aspectRatio);
+                if (newWidth == -1) {
+                    newWidth = qMin(maximumWidth(), qMax(minimumWidth(), width()));
+                }
                 position = QPoint(x(), y());
                 break;
         }
 
-        setGeometry(QRect(position, QSize(newWidth, newHeight)));
+        if ((newWidth >= minimumSize().width()) && (newHeight >= minimumSize().height())) {
+            setGeometry(QRect(position, QSize(newWidth, newHeight)));
+        }
     }
 
     QWidget::mouseMoveEvent(event);
@@ -551,7 +590,7 @@ void Dialog::moveEvent(QMoveEvent *event)
 
 void Dialog::setResizeHandleCorners(ResizeCorners corners)
 {
-    if (d->resizeCorners != corners) {
+    if ((d->resizeCorners != corners) && (aspectRatioMode() != FixedSize)) {
         d->resizeCorners = corners;
         d->updateResizeCorners();
     }
@@ -632,6 +671,20 @@ bool Dialog::inControlArea(const QPoint &point)
         }
     }
     return false;
+}
+
+Plasma::AspectRatioMode Dialog::aspectRatioMode() const
+{
+    return d->aspectRatioMode;
+}
+
+void Dialog::setAspectRatioMode(Plasma::AspectRatioMode mode)
+{
+    if (mode == FixedSize) {
+        setResizeHandleCorners(NoCorner);
+    }
+
+    d->aspectRatioMode = mode;
 }
 
 }

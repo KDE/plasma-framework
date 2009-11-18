@@ -112,6 +112,18 @@ class PLASMA_EXPORT Dialog : public QWidget
          */
         void animatedShow(Plasma::Direction direction);
 
+        /**
+         * @return the preferred aspect ratio mode for placement and resizing
+         * @since 4.4
+         */
+        Plasma::AspectRatioMode aspectRatioMode() const;
+
+        /**
+         * Sets the preferred aspect ratio mode for placement and resizing
+         * @since 4.4
+        */
+        void setAspectRatioMode(Plasma::AspectRatioMode mode);
+
     Q_SIGNALS:
         /**
          * Fires when the dialog automatically resizes.

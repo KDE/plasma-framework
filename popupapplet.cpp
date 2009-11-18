@@ -330,22 +330,24 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
         //Applet on popup
         } else {
             //kDebug() << "about to switch to a popup";
-            //save the aspect ratio mode in case we drag'n drop in the Desktop later
-            savedAspectRatio = q->aspectRatioMode();
-
-            if (icon) {
-                icon->show();
-                q->setAspectRatioMode(Plasma::ConstrainedSquare);
-            }
-
             if (proxy) {
                 proxy.data()->setWidget(0); // prevent it from deleting our widget!
                 delete proxy.data();
             }
 
             if (!dialogPtr) {
+                //save the aspect ratio mode in case we drag'n drop in the Desktop later
+                savedAspectRatio = q->aspectRatioMode();
+
+                if (icon) {
+                    icon->show();
+                    q->setAspectRatioMode(Plasma::ConstrainedSquare);
+                }
+
                 Dialog *dialog = new Plasma::Dialog();
                 dialogPtr = dialog;
+
+                dialog->setAspectRatioMode(savedAspectRatio);
 
                 //no longer use Qt::Popup since that seems to cause a lot of problem when you drag
                 //stuff out of your Dialog (extenders). Monitor WindowDeactivate events so we can
@@ -622,6 +624,8 @@ void PopupAppletPrivate::internalTogglePopup()
 
         KWindowSystem::setOnAllDesktops(d->winId(), true);
         KWindowSystem::setState(d->winId(), NET::SkipTaskbar | NET::SkipPager);
+
+        d->setAspectRatioMode(savedAspectRatio);
 
         if (q->location() != Floating) {
             d->animatedShow(locationToDirection(q->location()));
