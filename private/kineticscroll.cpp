@@ -158,7 +158,7 @@ void KineticScrolling::setScrollValue(QPointF value)
     }
 }
 
-QPointF KineticScrolling::thresholdPosition(QPointF value)
+QPointF KineticScrolling::thresholdPosition(QPointF value) const
 {
     d->minimum.setX(-d->contentsSize.width() + d->viewportGeometry.width());
     d->minimum.setY(-d->contentsSize.height() + d->viewportGeometry.height()
@@ -245,11 +245,12 @@ void KineticScrolling::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void KineticScrolling::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
+    Q_UNUSED(event);
 
     if (d->scrollAnimation->state() != QAbstractAnimation::Running) {
         duration();
 
-        if(d->kinMovement != QPointF(0, 0)) {
+        if (d->kinMovement != QPointF(0, 0)) {
             const QPointF scrollPosition = -d->parent->property("scrollPosition").toPointF();
             d->kinMovement = QPointF(d->kinMovement.x()*3, d->kinMovement.y()*3);
             const QPointF finalPos = thresholdPosition(scrollPosition - d->kinMovement);
@@ -280,29 +281,31 @@ void KineticScrolling::wheelReleaseEvent(QGraphicsSceneWheelEvent *event)
 
 void KineticScrolling::keyPressEvent(QKeyEvent *event)
 {
+    const int movement = 30;
+    const int duration = 900;
 
     QPointF scrollPosition = -d->parent->property("scrollPosition").value<QPointF>();
     QPointF finalPos;
     switch (event->key()) {
     case Qt::Key_Left:
-        scrollPosition.setX(scrollPosition.x() + 30);
+        scrollPosition.setX(scrollPosition.x() + movement);
         finalPos = thresholdPosition(scrollPosition);
-        resetAnimation(-finalPos, 900);
+        resetAnimation(-finalPos, duration);
         break;
     case Qt::Key_Right:
-        scrollPosition.setX(scrollPosition.x() - 30);
+        scrollPosition.setX(scrollPosition.x() - movement);
         finalPos = thresholdPosition(scrollPosition);
-        resetAnimation(-finalPos, 900);
+        resetAnimation(-finalPos, duration);
         break;
     case Qt::Key_Up:
-        scrollPosition.setY(scrollPosition.y() + 30);
+        scrollPosition.setY(scrollPosition.y() + movement);
         finalPos = thresholdPosition(scrollPosition);
-        resetAnimation(-finalPos, 900);
+        resetAnimation(-finalPos, duration);
         break;
     case Qt::Key_Down:
-        scrollPosition.setY(scrollPosition.y() - 30);
+        scrollPosition.setY(scrollPosition.y() - movement);
         finalPos = thresholdPosition(scrollPosition);
-        resetAnimation(-finalPos, 900);
+        resetAnimation(-finalPos, duration);
         break;
     default:
         break;
@@ -333,6 +336,9 @@ void KineticScrolling::setWidget(QGraphicsWidget *parent)
 
 bool KineticScrolling::eventFilter(QObject *watched, QEvent *event)
 {
+    Q_UNUSED(watched);
+    Q_UNUSED(event);
+
     if (d->forwardingEvent) {
         return false;
     }

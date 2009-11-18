@@ -54,7 +54,7 @@ private:
     KineticScrollingPrivate *d;
     void resetAnimation(QPointF finalPosition, int duration);
     void setScrollValue(QPointF value);
-    QPointF thresholdPosition(QPointF value);
+    QPointF thresholdPosition(QPointF value) const;
     void duration();
 
 private Q_SLOTS:
