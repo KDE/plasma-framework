@@ -72,6 +72,7 @@ public Q_SLOTS:
     void show();
 
 Q_SIGNALS:
+    void accepted(FileDialogProxy *);
     void finished(FileDialogProxy *);
 
 private Q_SLOTS:

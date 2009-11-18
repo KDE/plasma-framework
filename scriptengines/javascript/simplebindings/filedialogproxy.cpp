@@ -28,12 +28,12 @@ FileDialogProxy::FileDialogProxy(KFileDialog::OperationMode mode, QObject *paren
 {
     kDebug() << "hello beautiful";
     m_dialog->setOperationMode(mode);
-    connect(m_dialog, SIGNAL(okClicked()), this, SLOT(dialogFinished()));
+    connect(m_dialog, SIGNAL(finished()), this, SLOT(dialogFinished()));
 }
 
 FileDialogProxy::~FileDialogProxy()
 {
-    kDebug() << "bye bye";
+    kDebug() << this << "bye bye";
     delete m_dialog;
 }
 
@@ -126,6 +126,9 @@ void FileDialogProxy::show()
 
 void FileDialogProxy::dialogFinished()
 {
+    if (m_dialog->result() == QDialog::Accepted) {
+        emit accepted(this);
+    }
     emit finished(this);
 }
 
