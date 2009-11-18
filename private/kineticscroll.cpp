@@ -250,7 +250,7 @@ void KineticScrolling::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 (d->contentsSize.height() < d->viewportGeometry.height())) {
             d->kinMovement = QPointF(0, 0);
             movement = QPointF(0, 0);
-        } else if (d->viewportGeometry.height() < d->viewportGeometry.height()) {
+        } else if (d->contentsSize.height() < d->viewportGeometry.height()) {
             d->kinMovement += QPointF(movement.x(), 0);
             movement.setY(0);
         } else if (d->contentsSize.width() < d->viewportGeometry.width()) {
