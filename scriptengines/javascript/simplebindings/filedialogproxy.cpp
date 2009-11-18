@@ -133,7 +133,8 @@ Q_DECLARE_METATYPE(FileDialogProxy *)
 typedef FileDialogProxy* FileDialogProxyPtr;
 QScriptValue qScriptValueFromFileDialogProxy(QScriptEngine *engine, const FileDialogProxyPtr &fd)
 {
-    return engine->newQObject(const_cast<FileDialogProxy *>(fd));
+    return engine->newQObject(const_cast<FileDialogProxy *>(fd), QScriptEngine::AutoOwnership,
+                              QScriptEngine::PreferExistingWrapperObject | QScriptEngine::ExcludeSuperClassContents);
 }
 
 void fileDialogProxyFromQScriptValue(const QScriptValue &scriptValue, FileDialogProxyPtr &fd)
@@ -158,7 +159,7 @@ QScriptValue FileDialogProxy::fileDialogSave(QScriptContext *context, QScriptEng
     }
 
     FileDialogProxy *fd = new FileDialogProxy(KFileDialog::Saving, parent);
-    return engine->newQObject(fd, QScriptEngine::ScriptOwnership, QScriptEngine::ExcludeSuperClassContents);
+    return engine->newQObject(fd, QScriptEngine::AutoOwnership, QScriptEngine::ExcludeSuperClassContents);
 }
 
 QScriptValue FileDialogProxy::fileDialogOpen(QScriptContext *context, QScriptEngine *engine)
@@ -169,7 +170,7 @@ QScriptValue FileDialogProxy::fileDialogOpen(QScriptContext *context, QScriptEng
     }
 
     FileDialogProxy *fd = new FileDialogProxy(KFileDialog::Opening, parent);
-    return engine->newQObject(fd, QScriptEngine::ScriptOwnership, QScriptEngine::ExcludeSuperClassContents);
+    return engine->newQObject(fd, QScriptEngine::AutoOwnership, QScriptEngine::ExcludeSuperClassContents);
 }
 
 #include "filedialogproxy.moc"
