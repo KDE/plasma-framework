@@ -1,2 +1,2 @@
 #! /usr/bin/env bash
-$XGETTEXT *.cpp qtgui/*.cpp -o $podir/plasma_scriptengine_qscript.pot
+$XGETTEXT *.cpp simplebindings/*.cpp -o $podir/plasma_scriptengine_qscript.pot

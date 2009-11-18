@@ -4,19 +4,19 @@ set(simple_javascript_engine_SRCS
     simplejavascriptapplet.cpp
     appletinterface.cpp
     uiloader.cpp
-    qtgui/anchorlayout.cpp
-    qtgui/color.cpp
-    qtgui/font.cpp
-    qtgui/filedialogproxy.cpp
-    qtgui/graphicsitem.cpp
-    qtgui/linearlayout.cpp
-    qtgui/painter.cpp
-    qtgui/pixmap.cpp
-    qtgui/point.cpp
-    qtgui/rect.cpp
-    qtgui/size.cpp
-    qtgui/timer.cpp
-    qtgui/url.cpp
+    simplebindings/anchorlayout.cpp
+    simplebindings/color.cpp
+    simplebindings/font.cpp
+    simplebindings/filedialogproxy.cpp
+    simplebindings/graphicsitem.cpp
+    simplebindings/linearlayout.cpp
+    simplebindings/painter.cpp
+    simplebindings/pixmap.cpp
+    simplebindings/point.cpp
+    simplebindings/rect.cpp
+    simplebindings/size.cpp
+    simplebindings/timer.cpp
+    simplebindings/url.cpp
 )
 
 include_directories(${PHONON_INCLUDES})
