@@ -52,18 +52,16 @@ protected:
 
 private:
     KineticScrollingPrivate *d;
-    void timerEvent(QTimerEvent *event);
-    void bounceTimer();
+    void resetAnimation(QPointF finalPosition, int duration);
+    void setScrollValue(QPointF value);
+    QPointF thresholdPosition(QPointF value);
     void duration();
-    QPointF kinMovement();
-    void startAnimationTimer(int interval);
-    void doneOvershoot(void);
+
+private Q_SLOTS:
+    void overshoot();
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
-
-public Q_SLOTS:
-    void setKineticScrollValue(QPointF value);
 
 };
 
