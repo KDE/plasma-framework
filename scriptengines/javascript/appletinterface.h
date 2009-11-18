@@ -171,6 +171,7 @@ enum QtScrollBarPolicy {
 };
 //-------------------------------------------------------------------
 
+    Q_INVOKABLE void gc();
     Q_INVOKABLE FormFactor formFactor() const;
 
     Location location() const;

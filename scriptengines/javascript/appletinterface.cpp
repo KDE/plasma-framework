@@ -336,4 +336,9 @@ void AppletInterface::debug(const QString &msg)
     kDebug() << msg;
 }
 
+void AppletInterface::gc()
+{
+    QTimer::singleShot(0, m_appletScriptEngine, SLOT(collectGarbage()));
+}
+
 #include "appletinterface.moc"

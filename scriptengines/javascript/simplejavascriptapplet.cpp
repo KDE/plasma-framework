@@ -42,7 +42,7 @@
 #include <Plasma/VideoWidget>
 
 #include "appletinterface.h"
-#include "qtgui/filedialogproxy.h"
+#include "simplebindings/filedialogproxy.h"
 
 using namespace Plasma;
 
@@ -913,6 +913,12 @@ QScriptValue SimpleJavaScriptApplet::createPrototype(QScriptEngine *engine, cons
 QScriptValue SimpleJavaScriptApplet::variantToScriptValue(QVariant var)
 {
     return ::variantToScriptValue(m_engine, var);
+}
+
+void SimpleJavaScriptApplet::collectGarbage()
+{
+    kDebug();
+    m_engine->collectGarbage();
 }
 
 K_EXPORT_PLASMA_APPLETSCRIPTENGINE(qscriptapplet, SimpleJavaScriptApplet)
