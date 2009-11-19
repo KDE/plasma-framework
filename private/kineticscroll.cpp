@@ -357,7 +357,7 @@ void KineticScrolling::setWidget(QGraphicsWidget *parent)
 
     d->parent = parent;
 
-    d->scrollAnimation = new QPropertyAnimation(parent, "scrollPosition");
+    d->scrollAnimation = new QPropertyAnimation(parent, "scrollPosition", parent);
     connect(d->scrollAnimation, SIGNAL(finished()), this, SLOT(overshoot()));
     d->scrollAnimation->setEasingCurve(QEasingCurve::OutCirc);
 
