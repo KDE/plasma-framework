@@ -101,6 +101,12 @@ protected:
      */
     KPluginInfo description() const;
 
+    /**
+     * @return a Plasma::DataEngine matchin name
+     * @since 4.4
+     */
+    DataEngine *dataEngine(const QString &name);
+
     KConfigGroup config() const;
     void setIgnoredTypes(RunnerContext::Types types);
     void setHasRunOptions(bool hasRunOptions);

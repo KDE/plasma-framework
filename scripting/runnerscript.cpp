@@ -19,8 +19,9 @@
 
 #include "plasma/scripting/runnerscript.h"
 
-#include "plasma/package.h"
 #include "plasma/abstractrunner.h"
+#include "plasma/dataenginemanager.h"
+#include "plasma/package.h"
 #include "plasma/private/abstractrunner_p.h"
 
 namespace Plasma
@@ -64,6 +65,15 @@ void RunnerScript::run(const Plasma::RunnerContext &search, const Plasma::QueryM
 {
     Q_UNUSED(search);
     Q_UNUSED(action);
+}
+
+DataEngine *RunnerScript::dataEngine(const QString &name)
+{
+    if (d->runner) {
+        return d->runner->dataEngine(name);
+    }
+
+    return DataEngineManager::self()->engine(QString());
 }
 
 KConfigGroup RunnerScript::config() const
