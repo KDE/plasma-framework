@@ -349,7 +349,7 @@ void KineticScrolling::setWidget(QGraphicsWidget *parent)
 {
     if (d->parent) {
         d->parent->removeEventFilter(this);
-        d->scrollAnimation->disconnect(SIGNAL(finished()));
+        disconnect(d->scrollAnimation, SIGNAL(finished()), this, SLOT(overshoot()));
         delete d->scrollAnimation;
     }
 
