@@ -404,7 +404,7 @@ QSizeF ScrollWidget::contentsSize() const
 void ScrollWidget::setScrollPosition(const QPointF &position)
 {
     if (d->widget) {
-        d->widget->setPos(-position);
+        d->widget->setPos(-position.toPoint());
     }
 }
 
