@@ -303,6 +303,11 @@ void AbstractRunner::init()
     }
 }
 
+DataEngine *AbstractRunner::dataEngine(const QString &name) const
+{
+    return d->dataEngine(name);
+}
+
 AbstractRunnerPrivate::AbstractRunnerPrivate(AbstractRunner *r, KService::Ptr service)
     : priority(AbstractRunner::NormalPriority),
       speed(AbstractRunner::NormalSpeed),

@@ -22,12 +22,14 @@
 
 #include <QReadWriteLock>
 
+#include "dataengineconsumer_p.h"
+
 namespace Plasma
 {
 
 class AbstractRunner;
 
-class AbstractRunnerPrivate
+class AbstractRunnerPrivate : public DataEngineConsumer
 {
 public:
     AbstractRunnerPrivate(AbstractRunner *r, KService::Ptr service);
