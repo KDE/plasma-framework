@@ -146,6 +146,11 @@ void KineticScrolling::overshoot()
 {
     QPointF scrollPosition = -d->parent->property("scrollPosition").value<QPointF>();
 
+    if (!d->canScroll(KineticScrollingPrivate::Down) &&
+        !d->canScroll(KineticScrollingPrivate::Up)) {
+        return;
+    }
+
     if (d->bounceStatus != KineticScrollingPrivate::Running) {
         if ((d->cposition.y() > 0 ) || (d->cposition.y() <= d->minimum.y() + d->overshoot)) {
             QPointF finalPosition;
