@@ -46,6 +46,7 @@ Separator::Separator(QGraphicsItem *parent, Qt::WindowFlags wFlags)
 
 Separator::~Separator()
 {
+    delete d->svg;
     delete d;
 }
 

@@ -87,6 +87,8 @@ DataEngineConsumer::~DataEngineConsumer()
     foreach (const QString &engine, m_loadedEngines) {
         DataEngineManager::self()->unloadEngine(engine);
     }
+
+    delete m_monitor;
 }
 
 DataEngine *DataEngineConsumer::dataEngine(const QString &name)
