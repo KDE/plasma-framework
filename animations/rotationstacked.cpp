@@ -54,10 +54,6 @@ RotationStackedAnimation::RotationStackedAnimation(QObject *parent)
 
 RotationStackedAnimation::~RotationStackedAnimation()
 {
-    /* XXX: do we need to delete the layout if the 'parent' layout is
-     * deleted too ?
-     */
-    delete d->sLayout;
     delete d;
 }
 
