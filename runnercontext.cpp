@@ -186,6 +186,10 @@ class RunnerContextPrivate : public QSharedData
                 // that it has arguments!
                 type = (space > 0) ? RunnerContext::ShellCommand :
                                      RunnerContext::Executable;
+            } else if (path.indexOf('/') == -1 && path.indexOf('\\') == -1 ) {
+                //if a path doesn't have any slashes is a single word or
+                //sentence: is too ambiguous to be sure we're in a filesystem context
+                return;
             } else {
                 KUrl url(term);
                 QString correctCasePath;
@@ -194,6 +198,7 @@ class RunnerContextPrivate : public QSharedData
                 } else if (correctPathCase(path, correctCasePath)) {
                     path = correctCasePath;
                     QFileInfo info(path);
+
                     if (info.isSymLink()) {
                         path = info.canonicalFilePath();
                         info = QFileInfo(path);
