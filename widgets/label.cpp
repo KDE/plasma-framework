@@ -255,7 +255,8 @@ void Label::paint(QPainter *painter,
     QLabel *native = nativeWidget();
     QFontMetrics fm = native->font();
 
-    if (native->wordWrap() || native->text().isEmpty() || size().width() >= fm.width(native->text())) {
+    //FIXME: using QGraphicsProxyWidget::paint directly with opacity<1 produces uninitialized random gibberish
+    if (qFuzzyCompare((qreal)1.0, opacity()) && (native->wordWrap() || native->text().isEmpty() || size().width() >= fm.width(native->text()))) {
         QGraphicsProxyWidget::paint(painter, option, widget);
     } else {
         const int gradientLength = 25;
