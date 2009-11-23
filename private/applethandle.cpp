@@ -760,12 +760,13 @@ bool AppletHandle::sceneEvent(QEvent *event)
             //scaling
             qreal scaleFactor = 1;
             if (line0.length() > 0) {
-            	scaleFactor = line1.length() / line0.length();
+                scaleFactor = line1.length() / line0.length();
             }
             QRectF geom = m_applet->geometry();
+            QPointF oldCenter(geom.center());
             geom.setWidth(geom.width()*scaleFactor);
             geom.setHeight(geom.height()*scaleFactor);
-            geom.moveCenter(line1.pointAt(0.5));
+            geom.moveCenter(oldCenter);
             m_applet->setGeometry(geom);
         }
         return true;
