@@ -31,6 +31,7 @@
 #include <kdebug.h>
 
 #include <plasma/animator.h>
+#include <plasma/theme.h>
 
 using namespace Plasma;
 
@@ -50,7 +51,7 @@ class Plasma::FlashingLabelPrivate
             : q(flash),
               defaultDuration(3000),
               type(FlashingLabelPrivate::Text),
-              color(Qt::black),
+              color(Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor)),
               animId(0),
               state(FlashingLabelPrivate::Invisible),
               autohide(false)
@@ -59,6 +60,7 @@ class Plasma::FlashingLabelPrivate
             fadeOutTimer.setSingleShot(true);
             fadeInTimer.setInterval(0);
             fadeInTimer.setSingleShot(true);
+            QObject::connect(Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(setPalette()));
         }
 
         ~FlashingLabelPrivate() { }
@@ -66,6 +68,7 @@ class Plasma::FlashingLabelPrivate
         void renderPixmap(const QSize &size);
         void setupFlash(int duration);
         void elementAnimationFinished(int);
+        void setPalette();
 
         FlashingLabel *q;
         int defaultDuration;
@@ -298,6 +301,12 @@ void FlashingLabelPrivate::elementAnimationFinished(int id)
     if (autohide && state == FlashingLabelPrivate::Invisible && id == animId) {
         q->hide();
     }
+}
+
+void FlashingLabelPrivate::setPalette()
+{
+    color = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
+    q->update();
 }
 
 #include "flashinglabel.moc"
