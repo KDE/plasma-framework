@@ -146,7 +146,7 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
 
     if (value == 0) {
         return from;
-    } else if (value == 1) {
+    } else if (value == 0xff) {
         return to;
     }
 
