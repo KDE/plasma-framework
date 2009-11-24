@@ -85,15 +85,6 @@ ItemBackground::ItemBackground(QGraphicsWidget *parent)
 
     setAcceptedMouseButtons(0);
     setZValue(-800);
-
-    /***************
-     * HACK: this is needed in order to show the itemBackground correctly the first time
-     * it appears to be a workaround for some other qt 4.5 clipping bug
-     * will be removed when trunk depends on 4.6
-     */
-    resize( 1, 1 );
-    hide();
-    //**************
 }
 
 ItemBackground::~ItemBackground()
@@ -158,6 +149,10 @@ void ItemBackground::setTargetItem(QGraphicsItem *target)
         }
     }
 
+    if (!target) {
+        hide();
+    }
+
     bool newTarget = (d->target != target);
     d->target = target;
     if (target) {
@@ -189,8 +184,6 @@ void ItemBackground::setTargetItem(QGraphicsItem *target)
                 connect(obj, SIGNAL(destroyed(QObject*)), this, SLOT(targetDestroyed(QObject*)));
             }
         }
-    } else {
-        hide();
     }
 }
 
