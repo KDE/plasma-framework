@@ -155,6 +155,30 @@ class PLASMA_EXPORT RunnerContext : public QObject
         bool addMatch(const QString &term, const QueryMatch &match);
 
         /**
+         * Removes a match from the existing list of matches.
+         *
+         * If you are going to be removing multiple matches, use removeMatches instead.
+         *
+         * @arg matchId the id of match to remove
+         *
+         * @return true if the match was removed, false otherwise.
+	 * @since 4.4
+         */
+	bool removeMatch(const QString matchId);
+
+        /**
+         * Removes lists of matches from the existing list of matches.
+         *
+         * This method is thread safe and causes the matchesChanged() signal to be emitted.
+         *
+         * @arg matchIdList the list of matches id to remove
+         *
+         * @return true if at least one match was removed, false otherwise.
+         * @since 4.4
+         */
+        bool removeMatches(const QStringList matchIdList);
+
+        /**
          * Retrieves all available matches for the current search term.
          *
          * @return a list of matches
