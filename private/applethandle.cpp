@@ -734,9 +734,27 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 bool AppletHandle::sceneEvent(QEvent *event)
 {
     switch (event->type()) {
+    case QEvent::TouchEnd: {
+        QTransform t = m_applet->transform();
+        QRectF geom = m_applet->geometry();
+        QPointF translation(t.m31(), t.m32());
+        QPointF center = geom.center();
+        geom.setWidth(geom.width()*qAbs(t.m11()));
+        geom.setHeight(geom.height()*qAbs(t.m22()));
+        geom.moveCenter(center);
+
+        m_applet->setGeometry(geom);
+        t.reset();
+        t.translate(m_applet->size().width()/2, m_applet->size().height()/2);
+        t.rotateRadians(m_angle);
+        t.translate(-m_applet->size().width()/2, -m_applet->size().height()/2);
+
+
+        m_applet->setTransform(t);
+        return true;
+    }
     case QEvent::TouchBegin:
     case QEvent::TouchUpdate:
-    case QEvent::TouchEnd:
     {
         QList<QTouchEvent::TouchPoint> touchPoints = static_cast<QTouchEvent *>(event)->touchPoints();
         if (touchPoints.count() == 2) {
@@ -746,28 +764,21 @@ bool AppletHandle::sceneEvent(QEvent *event)
             //rotation
             QLineF line0(touchPoint0.lastScenePos(), touchPoint1.lastScenePos());
             QLineF line1(touchPoint0.scenePos(), touchPoint1.scenePos());
-            //m_applet->setTransformOriginPoint(m_applet->boundingRect().center());
-            m_angle = m_applet->rotation()+line1.angleTo(line0);
-            //m_applet->setRotation(m_angle);
-            //m_applet->setTransformOriginPoint(QPointF(0,0));
+            m_angle = m_angle+(line1.angleTo(line0)*M_PI_2/90);
             QTransform t = m_applet->transform();
             t.translate(m_applet->size().width()/2, m_applet->size().height()/2);
-            t.rotate(m_angle);
-            t.translate(-m_applet->size().width()/2, -m_applet->size().height()/2);
-            m_applet->setTransform(t);
-
+            t.rotate(line1.angleTo(line0));
 
             //scaling
             qreal scaleFactor = 1;
             if (line0.length() > 0) {
                 scaleFactor = line1.length() / line0.length();
             }
-            QRectF geom = m_applet->geometry();
-            QPointF oldCenter(geom.center());
-            geom.setWidth(geom.width()*scaleFactor);
-            geom.setHeight(geom.height()*scaleFactor);
-            geom.moveCenter(oldCenter);
-            m_applet->setGeometry(geom);
+
+            t.scale(scaleFactor, scaleFactor);
+            t.translate(-m_applet->size().width()/2, -m_applet->size().height()/2);
+            m_applet->setTransform(t);
+
         }
         return true;
     }
