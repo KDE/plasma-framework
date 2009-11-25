@@ -227,15 +227,15 @@ void Containment::init()
         }
 
         if (d->type == DesktopContainment && d->toolBox) {
-            d->toolBox->addTool(this->action("add widgets"));
-            d->toolBox->addTool(this->action("zoom in"));
+            d->toolBox.data()->addTool(this->action("add widgets"));
+            d->toolBox.data()->addTool(this->action("zoom in"));
 
             //TODO: do we need some way to allow this be overridden?
             //      it's always available because shells rely on this
             //      to offer their own custom configuration as well
             QAction *configureContainment = this->action("configure");
             if (configureContainment) {
-                d->toolBox->addTool(configureContainment);
+                d->toolBox.data()->addTool(configureContainment);
             }
         }
 
@@ -379,7 +379,7 @@ void Containment::restore(KConfigGroup &group)
     setWallpaper(group.readEntry("wallpaperplugin", defaultWallpaper),
                  group.readEntry("wallpaperpluginmode", defaultWallpaperMode));
 
-    InternalToolBox *toolBox = qobject_cast<InternalToolBox *>(d->toolBox);
+    InternalToolBox *toolBox = qobject_cast<InternalToolBox *>(d->toolBox.data());
     if (toolBox) {
         toolBox->load(group);
     }
@@ -426,7 +426,7 @@ void Containment::save(KConfigGroup &g) const
     group.writeEntry("location", (int)d->location);
     group.writeEntry("activity", d->context()->currentActivity());
 
-    InternalToolBox *toolBox = qobject_cast<InternalToolBox *>(d->toolBox);
+    InternalToolBox *toolBox = qobject_cast<InternalToolBox *>(d->toolBox.data());
     if (toolBox) {
         toolBox->save(group);
     }
@@ -496,8 +496,7 @@ void Containment::setContainmentType(Containment::Type type)
         return;
     }
 
-    delete d->toolBox;
-    d->toolBox = 0;
+    delete d->toolBox.data();
     d->type = type;
 
     if (!isContainment()) {
@@ -814,7 +813,7 @@ void Containment::setFormFactor(FormFactor formFactor)
         d->positionPanel(true);
     }
 
-    InternalToolBox *toolBox = qobject_cast<InternalToolBox *>(d->toolBox);
+    InternalToolBox *toolBox = qobject_cast<InternalToolBox *>(d->toolBox.data());
     if (toolBox) {
         if (d->formFactor == Vertical) {
             toolBox->setCorner(InternalToolBox::Bottom);
@@ -1219,7 +1218,7 @@ void ContainmentPrivate::showDropZoneDelayed()
 void Containment::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
     QGraphicsItem *item = scene()->itemAt(event->scenePos());
-    event->setAccepted(item == this || item == d->toolBox || !item);
+    event->setAccepted(item == this || item == d->toolBox.data() || !item);
     //kDebug() << event->isAccepted() << d->showDropZoneDelayTimer->isActive();
     if (!event->isAccepted()) {
         if (d->showDropZoneDelayTimer) {
@@ -1561,20 +1560,20 @@ void ContainmentPrivate::mimeTypeRetrieved(KIO::Job *job, const QString &mimetyp
 
 const QGraphicsItem *Containment::toolBoxItem() const
 {
-    return d->toolBox;
+    return d->toolBox.data();
 }
 
 void Containment::setToolBox(AbstractToolBox *toolBox)
 {
-    if (d->toolBox) {
-        d->toolBox->deleteLater();
+    if (d->toolBox.data()) {
+        d->toolBox.data()->deleteLater();
     }
     d->toolBox = toolBox;
 }
 
 AbstractToolBox *Containment::toolBox() const
 {
-    return d->toolBox;
+    return d->toolBox.data();
 }
 
 void Containment::resizeEvent(QGraphicsSceneResizeEvent *event)
@@ -1729,14 +1728,14 @@ void Containment::addToolBoxAction(QAction *action)
     }
 
     if (d->toolBox) {
-        d->toolBox->addTool(action);
+        d->toolBox.data()->addTool(action);
     }
 }
 
 void Containment::removeToolBoxAction(QAction *action)
 {
     if (d->toolBox) {
-        d->toolBox->removeTool(action);
+        d->toolBox.data()->removeTool(action);
     }
 }
 
@@ -1751,16 +1750,16 @@ void Containment::setToolBoxOpen(bool open)
 
 void Containment::openToolBox()
 {
-    if (d->toolBox && !d->toolBox->isShowing()) {
-        d->toolBox->setShowing(true);
+    if (d->toolBox && !d->toolBox.data()->isShowing()) {
+        d->toolBox.data()->setShowing(true);
         emit toolBoxVisibilityChanged(true);
     }
 }
 
 void Containment::closeToolBox()
 {
-    if (d->toolBox && d->toolBox->isShowing()) {
-        d->toolBox->setShowing(false);
+    if (d->toolBox && d->toolBox.data()->isShowing()) {
+        d->toolBox.data()->setShowing(false);
         emit toolBoxVisibilityChanged(false);
     }
 }
@@ -1951,7 +1950,7 @@ void Containment::setActivity(const QString &activity)
         c.writeEntry("activity", activity);
 
         if (d->toolBox) {
-            d->toolBox->update();
+            d->toolBox.data()->update();
         }
         emit configNeedsSaving();
     }
@@ -2109,9 +2108,9 @@ AbstractToolBox *ContainmentPrivate::createToolBox()
         }
 
         if (toolBox) {
-            InternalToolBox *internalToolBox = qobject_cast<InternalToolBox *>(toolBox);
-            QObject::connect(toolBox, SIGNAL(toggled()), q, SIGNAL(toolBoxToggled()));
-            QObject::connect(toolBox, SIGNAL(toggled()), q, SLOT(updateToolBoxVisibility()));
+            InternalToolBox *internalToolBox = qobject_cast<InternalToolBox *>(toolBox.data());
+            QObject::connect(toolBox.data(), SIGNAL(toggled()), q, SIGNAL(toolBoxToggled()));
+            QObject::connect(toolBox.data(), SIGNAL(toggled()), q, SLOT(updateToolBoxVisibility()));
             if (internalToolBox) {
                 internalToolBox->load();
                 positionToolBox();
@@ -2119,12 +2118,12 @@ AbstractToolBox *ContainmentPrivate::createToolBox()
         }
     }
 
-    return toolBox;
+    return toolBox.data();
 }
 
 void ContainmentPrivate::positionToolBox()
 {
-    InternalToolBox *internalToolBox = qobject_cast<InternalToolBox *>(toolBox);
+    InternalToolBox *internalToolBox = qobject_cast<InternalToolBox *>(toolBox.data());
     if (internalToolBox) {
         internalToolBox->reposition();
     }
@@ -2132,7 +2131,7 @@ void ContainmentPrivate::positionToolBox()
 
 void ContainmentPrivate::updateToolBoxVisibility()
 {
-    emit q->toolBoxVisibilityChanged(toolBox->isShowing());
+    emit q->toolBoxVisibilityChanged(toolBox.data()->isShowing());
 }
 
 void ContainmentPrivate::triggerShowAddWidgets()
@@ -2178,9 +2177,9 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
 
         if (toolBox) {
             if (type == Containment::PanelContainment || type == Containment::CustomPanelContainment) {
-                toolBox->setVisible(unlocked);
+                toolBox.data()->setVisible(unlocked);
             } else {
-                InternalToolBox *internalToolBox = qobject_cast<InternalToolBox *>(toolBox);
+                InternalToolBox *internalToolBox = qobject_cast<InternalToolBox *>(toolBox.data());
                 if (internalToolBox) {
                     internalToolBox->setIsMovable(unlocked);
                 }
@@ -2221,7 +2220,7 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
     if (toolBox &&
         constraints & Plasma::StartupCompletedConstraint &&
         type < Containment::CustomContainment) {
-        toolBox->addTool(q->action("remove"));
+        toolBox.data()->addTool(q->action("remove"));
         checkRemoveAction();
     }
 }

@@ -48,7 +48,6 @@ public:
           wallpaper(0),
           screen(-1), // no screen
           desktop(-1), // all desktops
-          toolBox(0),
           con(0),
           type(Containment::NoContainmentType),
           showDropZoneDelayTimer(0),
@@ -157,7 +156,7 @@ public:
     QHash<QString, ContainmentActions*> actionPlugins;
     int screen;
     int desktop;
-    AbstractToolBox *toolBox;
+    QWeakPointer<AbstractToolBox> toolBox;
     Context *con;
     Containment::Type type;
     QHash<KJob*, QPointF> dropPoints;
