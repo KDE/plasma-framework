@@ -60,16 +60,33 @@ class PLASMA_EXPORT RunnerManager : public QObject
          */
         AbstractRunner *runner(const QString &name) const;
 
+	/**
+	 * Returns the single runner enabled runner given by
+	 * the argument or NULL if not valid; the runner will be loaded
+         * if necessary
+         * @arg name the name of the runner
+         * @return Pointer to the runner
+	 */
+	AbstractRunner *retrieveSingleRunner(const QString &name);
+	
+	/**
+         * Returns the translated name of a runner
+	 * @arg id the id of the runner
+	 *
+	 * @since 4.4
+	 */
+        QString runnerName(const QString &id) const;
+
         /**
          * @return the list of all currently loaded runners
          */
         QList<AbstractRunner *> runners() const;
 
 	/**
-         * @return the list of all single query mode enabled runners
+         * @return the names of all single query mode enabled runners
          * @since 4.4
          */
-        QList<AbstractRunner *> singleQueryModeEnabledRunners() const;
+        QStringList singleRunnerEnabledIds() const;
 
         /**
          * Retrieves the current context
