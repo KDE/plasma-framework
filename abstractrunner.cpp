@@ -84,6 +84,12 @@ void AbstractRunner::addSyntax(const RunnerSyntax &syntax)
     d->syntaxes.append(syntax);
 }
 
+void AbstractRunner::setDefaultSyntax(const RunnerSyntax &syntax)
+{
+    d->syntaxes.append(syntax);
+    d->defaultSyntax = &(d->syntaxes.last());
+}
+
 void AbstractRunner::setSyntaxes(const QList<RunnerSyntax> &syntaxes)
 {
     d->syntaxes = syntaxes;
@@ -92,6 +98,11 @@ void AbstractRunner::setSyntaxes(const QList<RunnerSyntax> &syntaxes)
 QList<RunnerSyntax> AbstractRunner::syntaxes() const
 {
     return d->syntaxes;
+}
+
+RunnerSyntax *AbstractRunner::defaultSyntax() const
+{
+    return d->defaultSyntax;
 }
 
 void AbstractRunner::performMatch(Plasma::RunnerContext &localContext)
@@ -295,6 +306,7 @@ const Package* AbstractRunner::package() const
     return d->package;
 }
 
+
 void AbstractRunner::init()
 {
     if (d->script) {
@@ -317,7 +329,8 @@ AbstractRunnerPrivate::AbstractRunnerPrivate(AbstractRunner *r, KService::Ptr se
       runner(r),
       fastRuns(0),
       package(0),
-      hasRunOptions(false)
+      hasRunOptions(false),
+      defaultSyntax(0)
 {
     if (runnerDescription.isValid()) {
         const QString api = runnerDescription.property("X-Plasma-API").toString();

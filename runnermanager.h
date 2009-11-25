@@ -65,6 +65,12 @@ class PLASMA_EXPORT RunnerManager : public QObject
          */
         QList<AbstractRunner *> runners() const;
 
+	/**
+         * @return the list of all single query mode enabled runners
+         * @since 4.4
+         */
+        QList<AbstractRunner *> singleQueryModeEnabledRunners() const;
+
         /**
          * Retrieves the current context
          * @return pointer to the current context

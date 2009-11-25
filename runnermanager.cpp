@@ -144,6 +144,8 @@ public:
             const bool selected = loadAll ||
                             (description.isPluginEnabled() && (noWhiteList || whiteList.contains(runnerName)));
 
+            const bool singleQueryModeEnabled = service->property("SingleRunnerQueryMode", QVariant::Bool).toBool();
+
             //kDebug() << loadAll << description.isPluginEnabled() << noWhiteList << whiteList.contains(runnerName);
             if (selected) {
                 if (!loaded) {
@@ -176,7 +178,14 @@ public:
                     } else {
                         kDebug() << "failed to load runner:" << service->name()
                                  << ". error reported:" << error;
+                        continue;
                     }
+                }
+
+                if (singleQueryModeEnabled) {
+                    singleQueryModeEnabledRunners.insert(runnerName, runners.value(runnerName));
+                } else {
+                    singleQueryModeEnabledRunners.remove(runnerName);
                 }
             } else if (loaded) {
                 //Remove runner
@@ -267,6 +276,7 @@ public:
     QTimer matchChangeTimer;
     QTimer delayTimer; // Timer to control when to run slow runners
     QHash<QString, AbstractRunner*> runners;
+    QHash<QString, AbstractRunner*> singleQueryModeEnabledRunners;
     QSet<FindMatchesJob*> searchJobs;
     QSet<FindMatchesJob*> oldSearchJobs;
     KConfigGroup conf;
@@ -340,6 +350,11 @@ AbstractRunner* RunnerManager::runner(const QString &name) const
 QList<AbstractRunner *> RunnerManager::runners() const
 {
     return d->runners.values();
+}
+
+QList<AbstractRunner *> RunnerManager::singleQueryModeEnabledRunners() const
+{
+    return d->singleQueryModeEnabledRunners.values();
 }
 
 RunnerContext* RunnerManager::searchContext() const
@@ -426,6 +441,15 @@ void RunnerManager::launchQuery(const QString &untrimmedTerm, const QString &run
     setupMatchSession();
     QString term = untrimmedTerm.trimmed();
 
+    AbstractRunner *singleRunner = 0;
+    if (!runnerName.isEmpty()) {
+        singleRunner = runner(runnerName);
+    }
+
+    if (term.isEmpty() && singleRunner && singleRunner->defaultSyntax()) {
+        term = singleRunner->defaultSyntax()->exampleQueries().first().remove(QRegExp(":q:"));
+    }
+
     if (term.isEmpty()) {
         reset();
         return;
@@ -447,11 +471,9 @@ void RunnerManager::launchQuery(const QString &untrimmedTerm, const QString &run
     AbstractRunner::List runable;
 
     //if the name is not empty we will launch only the specified runner
-    if (!runnerName.isEmpty()) {
-        AbstractRunner *r = runner(runnerName);
-        if (r) {
-            runable.append(r);
-        }
+    if (singleRunner) {
+        runable.append(singleRunner);
+        d->context.setSingleRunnerQueryMode(true);
     } else {
         runable = d->runners.values();
     }

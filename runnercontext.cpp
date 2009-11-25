@@ -152,7 +152,8 @@ class RunnerContextPrivate : public QSharedData
         RunnerContextPrivate(RunnerContext *context)
             : QSharedData(),
               type(RunnerContext::UnknownType),
-              q(context)
+              q(context),
+              singleRunnerQueryMode(false)
         {
         }
 
@@ -160,7 +161,8 @@ class RunnerContextPrivate : public QSharedData
             : QSharedData(),
               launchCounts(p.launchCounts),
               type(RunnerContext::None),
-              q(p.q)
+              q(p.q),
+              singleRunnerQueryMode(false)
         {
             //kDebug() << "¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿boo yeah" << type;
         }
@@ -231,6 +233,7 @@ class RunnerContextPrivate : public QSharedData
         RunnerContext::Type type;
         RunnerContext * q;
         static RunnerContext s_dummyContext;
+        bool singleRunnerQueryMode;
 };
 
 RunnerContext RunnerContextPrivate::s_dummyContext;
@@ -297,6 +300,7 @@ void RunnerContext::reset()
     d->term.clear();
     d->mimeType.clear();
     d->type = UnknownType;
+    d->singleRunnerQueryMode = false;
     //kDebug() << "match count" << d->matches.count();
 }
 
@@ -472,6 +476,16 @@ QueryMatch RunnerContext::match(const QString &id) const
     }
 
     return QueryMatch(0);
+}
+
+void RunnerContext::setSingleRunnerQueryMode(bool enabled)
+{
+    d->singleRunnerQueryMode = enabled;
+}
+
+bool RunnerContext::singleRunnerQueryMode() const
+{
+    return d->singleRunnerQueryMode;
 }
 
 void RunnerContext::restore(const KConfigGroup &config)

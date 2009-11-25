@@ -79,7 +79,8 @@ class PLASMA_EXPORT RunnerContext : public QObject
 
         /**
          * Resets the search term for this object.
-         * This removes all current matches in the process.
+         * This removes all current matches in the process and
+         * turns off single runner query mode.
          */
         void reset();
 
@@ -193,6 +194,21 @@ class PLASMA_EXPORT RunnerContext : public QObject
          *         if the id does not eixst
          */
         QueryMatch match(const QString &id) const;
+
+        /**
+         * Sets single runner query mode. Note that a call to reset() will
+         * turn off single runner query mode.
+         *
+         * @see reset()
+         * @since 4.4
+         */
+         void setSingleRunnerQueryMode(bool enabled);
+
+        /**
+         * @return true if the current query is a single runner query
+         * @since 4.4
+         */
+        bool singleRunnerQueryMode() const;
 
         /**
          * Sets the launch counts for the associated match ids

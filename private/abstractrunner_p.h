@@ -48,6 +48,7 @@ public:
     QList<RunnerSyntax> syntaxes;
     bool hasRunOptions;
     QReadWriteLock speedLock;
+    RunnerSyntax *defaultSyntax;
 };
 
 } // namespace Plasma
