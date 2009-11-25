@@ -19,30 +19,22 @@
 #ifndef GETSOURCE_H
 #define GETSOURCE_H
 
-#include "dataengineservice.h"
-
-#include "../dataengine.h"
 #include "../servicejob.h"
 
 namespace Plasma
 {
 
 class DataEngine;
+class DataEngineService;
 
 class GetSource : public Plasma::ServiceJob
 {
     Q_OBJECT
 
     public:
-        GetSource(DataEngine *engine,
-                  const QString& operation,
+        GetSource(DataEngine *engine, const QString& operation,
                   QMap<QString,QVariant>& parameters,
-                  DataEngineService *service = 0)
-        : ServiceJob(QString("publickey"), operation, parameters, service),
-          m_engine(engine),
-          m_service(service)
-        {
-        }
+                  DataEngineService *service = 0);
 
         void start();
 

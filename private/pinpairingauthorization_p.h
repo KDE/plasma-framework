@@ -20,12 +20,10 @@
 #ifndef PLASMA_PINPAIRINGAUTHORIZATION_H
 #define PLASMA_PINPAIRINGAUTHORIZATION_H
 
-#include "plasma_export.h"
-
-#include "authorizationinterface.h"
-#include "pinpairingauthorization.h"
-
 #include <QtCore/QObject>
+
+#include "plasma_export.h"
+#include "authorizationinterface.h"
 
 namespace Plasma
 {

@@ -16,7 +16,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "plasmoidservice.h"
+#include "plasmoidservice_p.h"
 
 #include "authorizationmanager_p.h"
 #include "dataengineconsumer_p.h"
@@ -145,5 +145,5 @@ Plasma::ServiceJob* PlasmoidService::createJob(const QString& operation,
 
 }
 
-#include "plasmoidservice.moc"
+#include "plasmoidservice_p.moc"
 

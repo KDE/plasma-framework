@@ -16,7 +16,7 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "pinpairingdialog.h"
+#include "pinpairingdialog_p.h"
 
 #include "authorizationrule.h"
 #include "clientpinrequest.h"
@@ -116,4 +116,4 @@ PinPairingDialog::~PinPairingDialog()
 
 }
 
-#include "pinpairingdialog.moc"
+#include "pinpairingdialog_p.moc"

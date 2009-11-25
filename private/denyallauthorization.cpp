@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-#include "denyallauthorization.h"
+#include "denyallauthorization_p.h"
 
 #include "authorizationrule.h"
 #include "clientpinrequest.h"

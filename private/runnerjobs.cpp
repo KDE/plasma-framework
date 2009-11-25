@@ -26,7 +26,7 @@
 //#include <Weaver/DebuggingAids.h>
 #include <Weaver/ThreadWeaver.h>
 
-#include "runnerjobs.h"
+#include "runnerjobs_p.h"
 #include "plasma/querymatch.h"
 
 using ThreadWeaver::Job;

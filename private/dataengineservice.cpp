@@ -16,10 +16,10 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "dataengineservice.h"
+#include "dataengineservice_p.h"
 
 #include "../dataengine.h"
-#include "getsource.h"
+#include "getsource_p.h"
 
 #include <kdebug.h>
 
@@ -56,5 +56,5 @@ void DataEngineService::sourceAdded(QString source)
 
 }
 
-#include "dataengineservice.moc"
+#include "dataengineservice_p.moc"
 

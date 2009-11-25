@@ -16,9 +16,10 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "getsource.h"
+#include "getsource_p.h"
 
 #include "authorizationmanager_p.h"
+#include "dataengineservice_p.h"
 #include "service_p.h"
 
 #include "../remote/authorizationmanager.h"
@@ -30,6 +31,15 @@
 
 namespace Plasma
 {
+
+GetSource::GetSource(DataEngine *engine, const QString& operation,
+                    QMap<QString,QVariant>& parameters,
+                    DataEngineService *service)
+    : ServiceJob(QString("publickey"), operation, parameters, service),
+      m_engine(engine),
+      m_service(service)
+{
+}
 
 void GetSource::start()
 {
@@ -65,5 +75,5 @@ void GetSource::start()
 
 }
 
-#include "getsource.moc"
+#include "getsource_p.moc"
 

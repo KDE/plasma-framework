@@ -17,10 +17,10 @@
  * Boston, MA  02110-1301  USA
  */
 
-#include "trustedonlyauthorization.h"
+#include "trustedonlyauthorization_p.h"
 
 #include "authorizationrule.h"
-#include "pinpairingdialog.h"
+#include "pinpairingdialog_p.h"
 
 #include <kdebug.h>
 #include <credentials.h>

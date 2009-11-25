@@ -17,11 +17,11 @@
  * Boston, MA  02110-1301  USA
  */
 
-#include "pinpairingauthorization.h"
+#include "pinpairingauthorization_p.h"
 
 #include "authorizationrule.h"
 #include "clientpinrequest.h"
-#include "pinpairingdialog.h"
+#include "pinpairingdialog_p.h"
 
 #include "../remote/credentials.h"
 

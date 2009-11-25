@@ -27,10 +27,10 @@
 #include "servicejob.h"
 
 #include "private/authorizationrule_p.h"
-#include "private/denyallauthorization.h"
+#include "private/denyallauthorization_p.h"
 #include "private/joliemessagehelper_p.h"
-#include "private/pinpairingauthorization.h"
-#include "private/trustedonlyauthorization.h"
+#include "private/pinpairingauthorization_p.h"
+#include "private/trustedonlyauthorization_p.h"
 
 #include <QtCore/QBuffer>
 #include <QtCore/QMap>
