@@ -50,7 +50,7 @@
 #include "packagemetadata.h"
 #include "private/authorizationmanager_p.h"
 #include "private/package_p.h"
-#include "private/plasmoidservice.h"
+#include "private/plasmoidservice_p.h"
 #include "private/service_p.h"
 
 namespace Plasma

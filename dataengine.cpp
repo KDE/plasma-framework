@@ -38,7 +38,7 @@
 #include "scripting/dataenginescript.h"
 
 #include "private/authorizationmanager_p.h"
-#include "private/dataengineservice.h"
+#include "private/dataengineservice_p.h"
 #include "private/service_p.h"
 
 namespace Plasma

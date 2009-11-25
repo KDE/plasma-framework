@@ -101,7 +101,7 @@
 #include "private/extenderapplet_p.h"
 #include "private/package_p.h"
 #include "private/packages_p.h"
-#include "private/plasmoidservice.h"
+#include "private/plasmoidservice_p.h"
 #include "private/popupapplet_p.h"
 #include "private/remotedataengine_p.h"
 #include "private/service_p.h"
@@ -318,7 +318,7 @@ void Applet::restore(KConfigGroup &group)
     //TODO: implement; the shortcut will need to be registered with the containment
     /*
 #include "accessmanager.h"
-#include "private/plasmoidservice.h"
+#include "private/plasmoidservice_p.h"
 #include "authorizationmanager.h"
 #include "authorizationmanager.h"
     shortcutText = shortcutConfig.readEntryUntranslated("local", QString());
