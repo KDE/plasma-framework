@@ -34,10 +34,11 @@
 #include <solid/deviceinterface.h>
 
 #include <Weaver/DebuggingAids.h>
+#include <Weaver/State.h>
 #include <Weaver/Thread.h>
 #include <Weaver/ThreadWeaver.h>
 
-#include "private/runnerjobs.h"
+#include "private/runnerjobs_p.h"
 #include "querymatch.h"
 
 using ThreadWeaver::Weaver;
@@ -225,6 +226,13 @@ public:
             return;
         }
 
+        if (Weaver::instance()->isIdle()) {
+            qDeleteAll(searchJobs);
+            searchJobs.clear();
+            qDeleteAll(oldSearchJobs);
+            oldSearchJobs.clear();
+        }
+
         if (searchJobs.isEmpty() && oldSearchJobs.isEmpty()) {
             foreach (AbstractRunner *runner, runners) {
                 emit runner->teardown();
@@ -238,7 +246,13 @@ public:
     void unblockJobs()
     {
         // WORKAROUND: Queue an empty job to force ThreadWeaver to awaken threads
-        // kDebug() << "- Unblocking jobs -" << endl;
+        if (searchJobs.isEmpty() && Weaver::instance()->isIdle()) {
+            qDeleteAll(oldSearchJobs);
+            oldSearchJobs.clear();
+            checkTearDown();
+            return;
+        }
+
         DummyJob *dummy = new DummyJob(q);
         Weaver::instance()->enqueue(dummy);
         QObject::connect(dummy, SIGNAL(done(ThreadWeaver::Job*)), dummy, SLOT(deleteLater()));
