@@ -95,7 +95,7 @@ void IconWidgetPrivate::readColors()
     }
 
     if (!textBgCustomized) {
-        textBgColor = Theme::defaultTheme()->color(Theme::HighlightColor);
+        textBgColor = QColor();
     }
 }
 
@@ -913,8 +913,18 @@ void IconWidgetPrivate::layoutTextItems(const QStyleOptionGraphicsItem *option,
         QStyle::alignedRect(iconDirection(option), alignment, size.toSize(), textRect.toRect());
 
     // Compute the positions where we should draw the layouts
+    haloRects.clear();
     labelLayout->setPosition(QPointF(textRect.x(), textBoundingRect->y()));
+    QTextLine line;
+    for (int i = 0; i < labelLayout->lineCount(); ++i) {
+        line = labelLayout->lineAt(i);
+        haloRects.append(line.naturalTextRect().translated(labelLayout->position().toPoint()).toRect());
+    }
     infoLayout->setPosition(QPointF(textRect.x(), textBoundingRect->y() + labelSize.height()));
+    for (int i = 0; i < infoLayout->lineCount(); ++i) {
+        line = infoLayout->lineAt(i);
+        haloRects.append(line.naturalTextRect().translated(infoLayout->position().toPoint()).toRect());
+    }
     //kDebug() << "final position is" << labelLayout->position();
 }
 
@@ -1010,21 +1020,6 @@ void IconWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
     d->layoutTextItems(option, icon, &labelLayout, &infoLayout, &textBoundingRect);
 
-    QImage shadow(textBoundingRect.size().toSize() + QSize(4, 4),
-                  QImage::Format_ARGB32_Premultiplied);
-    shadow.fill(Qt::transparent);
-    {
-        QPainter buffPainter(&shadow);
-        buffPainter.translate(-textBoundingRect.x(), -textBoundingRect.y());
-        d->drawTextItems(&buffPainter, option, labelLayout, infoLayout);
-    }
-
-    QPoint shadowOffset = QPoint(1, 2);
-    if (d->shadowColor.value() > 128) {
-        shadowOffset = QPoint(0, 1);
-    }
-
-
     if (d->textBgColor != QColor() &&
         !(d->text.isEmpty() && d->infoText.isEmpty()) &&
         !textBoundingRect.isEmpty() &&
@@ -1044,8 +1039,33 @@ void IconWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
         painter->drawPath(PaintUtils::roundedRectangle(rect.translated(0.5, 0.5), 4));
     }
 
-    PaintUtils::shadowBlur(shadow, 2, d->shadowColor);
-    painter->drawImage(textBoundingRect.topLeft() + shadowOffset, shadow);
+
+    if (d->shadowColor.value() < 128 || textBackgroundColor() != QColor()) {
+        QPoint shadowPos;
+        if (d->shadowColor.value() < 128) {
+            shadowPos = QPoint(1, 2);
+        } else {
+            shadowPos = QPoint(0, 0);
+        }
+
+        QImage shadow(textBoundingRect.size().toSize() + QSize(4, 4),
+                    QImage::Format_ARGB32_Premultiplied);
+        shadow.fill(Qt::transparent);
+        {
+            QPainter buffPainter(&shadow);
+            buffPainter.translate(-textBoundingRect.x(), -textBoundingRect.y());
+            d->drawTextItems(&buffPainter, option, labelLayout, infoLayout);
+        }
+
+        PaintUtils::shadowBlur(shadow, 2, d->shadowColor);
+        painter->drawImage(textBoundingRect.topLeft() + shadowPos, shadow);
+    } else if (!(d->text.isEmpty() && d->infoText.isEmpty())) {
+        QRect labelRect = d->labelRectangle(option, icon, d->text).toRect();
+
+        foreach (QRect rect, d->haloRects) {
+            Plasma::PaintUtils::drawHalo(painter, rect);
+        }
+    }
     d->drawTextItems(painter, option, labelLayout, infoLayout);
 }
 

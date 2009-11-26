@@ -212,6 +212,7 @@ public:
     int numDisplayLines;
     QSizeF currentSize;
     QPointF clickStartPos;
+    mutable QList<QRect> haloRects;
 
     QList<IconAction*> cornerActions;
 

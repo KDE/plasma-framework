@@ -26,6 +26,7 @@
 #include <QPixmap>
 
 #include "private/effects/blur.cpp"
+#include "private/effects/halopainter_p.h"
 
 namespace Plasma
 {
@@ -119,6 +120,11 @@ QPixmap shadowText(QString text, const QFont &font, QColor textColor, QColor sha
     p.end();
 
     return finalPixmap;
+}
+
+void drawHalo(QPainter *painter, const QRectF &rect)
+{
+    HaloPainter::instance()->drawHalo(painter, rect.toRect());
 }
 
 QPainterPath roundedRectangle(const QRectF &rect, qreal radius)

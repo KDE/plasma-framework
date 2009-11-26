@@ -107,6 +107,7 @@ set(plasma_LIB_SRCS
     private/windowpreview.cpp
     private/kineticscroll.cpp
     private/pulsershadow.cpp
+    private/effects/halopainter.cpp
     querymatch.cpp
     remote/accessmanager.cpp
     remote/accessappletjob.cpp

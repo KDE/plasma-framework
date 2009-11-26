@@ -61,6 +61,8 @@ PLASMA_EXPORT QPixmap shadowText(QString text,
     QPoint offset = QPoint(1,1),
     int radius = 2);
 
+PLASMA_EXPORT void drawHalo(QPainter *painter, const QRectF &rect);
+
 /**
  * Returns a nicely rounded rectanglular path for painting.
  */
