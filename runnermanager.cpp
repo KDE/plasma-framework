@@ -207,7 +207,7 @@ public:
             const bool selected = loadAll ||
                             (description.isPluginEnabled() && (noWhiteList || whiteList.contains(runnerName)));
 
-            const bool singleQueryModeEnabled = service->property("SingleRunnerQueryMode", QVariant::Bool).toBool();
+            const bool singleQueryModeEnabled = service->property("X-Plasma-SingleRunnerQueryMode", QVariant::Bool).toBool();
 
             if (singleQueryModeEnabled) {
                 enabledSingleRunnerIds.insert(runnerName, description.name());
