@@ -453,6 +453,7 @@ void RunnerManager::setSingleMode(bool singleMode)
         return;
     }
 
+
     Plasma::AbstractRunner *prevSingleRunner = d->currentSingleRunner;
     d->singleMode = singleMode;
     d->loadSingleRunner();
@@ -461,7 +462,10 @@ void RunnerManager::setSingleMode(bool singleMode)
     if (prevSingleRunner != d->currentSingleRunner) {
         if (d->prepped) {
             matchSessionComplete();
-            setupMatchSession();
+
+            if (d->singleMode) {
+                setupMatchSession();
+            }
         }
     }
 }
