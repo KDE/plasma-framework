@@ -129,7 +129,7 @@ public:
     void loadSingleRunner()
     {
         if (!singleMode || singleModeRunnerId.isEmpty() ||
-            !enabledSingleRunnerNames.contains(singleModeRunnerId)) {
+            !enabledSingleRunnerIds.contains(singleModeRunnerId)) {
             clearSingleRunner();
             return;
         }
@@ -188,7 +188,7 @@ public:
             pluginConf = KConfigGroup(KGlobal::config(), "Plugins");
         }
 
-        enabledSingleRunnerNames.clear();
+        enabledSingleRunnerIds.clear();
 
         foreach (const KService::Ptr &service, offers) {
             //kDebug() << "Loading runner: " << service->name() << service->storageId();
@@ -210,7 +210,7 @@ public:
             const bool singleQueryModeEnabled = service->property("SingleRunnerQueryMode", QVariant::Bool).toBool();
 
             if (singleQueryModeEnabled) {
-                enabledSingleRunnerNames.insert(runnerName, description.name());
+                enabledSingleRunnerIds.insert(runnerName, description.name());
             }
 
             //kDebug() << loadAll << description.isPluginEnabled() << noWhiteList << whiteList.contains(runnerName);
@@ -349,7 +349,7 @@ public:
     QTimer matchChangeTimer;
     QTimer delayTimer; // Timer to control when to run slow runners
     QHash<QString, AbstractRunner*> runners;
-    QHash<QString, QString> enabledSingleRunnerNames;
+    QHash<QString, QString> enabledSingleRunnerIds;
     AbstractRunner* currentSingleRunner;
     QSet<FindMatchesJob*> searchJobs;
     QSet<FindMatchesJob*> oldSearchJobs;
@@ -473,7 +473,7 @@ QList<AbstractRunner *> RunnerManager::runners() const
 
 QStringList RunnerManager::enabledSingleModeRunnerIds() const
 {
-    return d->enabledSingleRunnerNames.keys();
+    return d->enabledSingleRunnerIds.keys();
 }
 
 QString RunnerManager::runnerName(const QString &id) const
@@ -481,7 +481,7 @@ QString RunnerManager::runnerName(const QString &id) const
     if (runner(id)) {
         return runner(id)->name();
     } else {
-        return d->enabledSingleRunnerNames.value(id, QString());
+        return d->enabledSingleRunnerIds.value(id, QString());
     }
 }
 
