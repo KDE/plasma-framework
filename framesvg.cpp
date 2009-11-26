@@ -430,6 +430,10 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
         //Random pos, stretched and tiled are mutually exclusive
         if (q->hasElement(prefix + "hint-overlay-random-pos")) {
             pos = overlayPos;
+        } else if (q->hasElement(prefix + "hint-overlay-pos-right")) {
+            pos.setX(frame->frameSize.width() - overlaySize.width());
+        } else if (q->hasElement(prefix + "hint-overlay-pos-bottom")) {
+            pos.setY(frame->frameSize.height() - overlaySize.height());
         //Stretched or Tiled?
         } else if (q->hasElement(prefix + "hint-overlay-stretch")) {
             overlaySize = frameSize(frame).toSize();
