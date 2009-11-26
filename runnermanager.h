@@ -60,21 +60,48 @@ class PLASMA_EXPORT RunnerManager : public QObject
          */
         AbstractRunner *runner(const QString &name) const;
 
-	/**
-	 * Returns the single runner enabled runner given by
-	 * the argument or NULL if not valid; the runner will be loaded
-         * if necessary
-         * @arg name the name of the runner
-         * @return Pointer to the runner
-	 */
-	AbstractRunner *retrieveSingleRunner(const QString &name);
-	
-	/**
+        /**
+         * @return the currently active "single mode" runner, or null if none
+         * @since 4.4
+         */
+        AbstractRunner *singleModeRunner() const;
+
+        /**
+         * Puts the manager into "single runner" mode using the given
+         * runner; if the runner does not exist or can not be loaded then
+         * the single runner mode will not be started and singleModeRunner()
+         * will return NULL
+         * @arg id the id of the runner to use
+         * @since 4.4
+         */
+        void setSingleModeRunnerId(const QString &id);
+
+        /**
+         * @return the id of the runner to use in single mode
+         * @since 4.4
+         */
+        QString singleModeRunnerId() const;
+
+        /**
+         * @return true if the manager is set to run in single runner mode
+         * @since 4.4
+         */
+        bool singleMode() const;
+
+        /**
+         * Sets whether or not the manager is in single mode.
+         *
+         * @arg singleMode true if the manager should be in single mode, false otherwise
+         * @since 4.4
+         */
+        void setSingleMode(bool singleMode);
+
+        /**
          * Returns the translated name of a runner
-	 * @arg id the id of the runner
-	 *
-	 * @since 4.4
-	 */
+         * @arg id the id of the runner
+         *
+         * @since 4.4
+         */
         QString runnerName(const QString &id) const;
 
         /**
@@ -82,11 +109,11 @@ class PLASMA_EXPORT RunnerManager : public QObject
          */
         QList<AbstractRunner *> runners() const;
 
-	/**
+        /**
          * @return the names of all single query mode enabled runners
          * @since 4.4
          */
-        QStringList singleRunnerEnabledIds() const;
+        QStringList enabledSingleModeRunnerIds() const;
 
         /**
          * Retrieves the current context
@@ -165,9 +192,10 @@ class PLASMA_EXPORT RunnerManager : public QObject
          * matchesChanged signal.
          *
          * @arg term the term we want to find matches for
-         * @arg runner optional, if only one specific runner is to be used
+         * @arg runnerId optional, if only one specific runner is to be used;
+         *               providing an id will put the manager into single runner mode
          */
-        void launchQuery(const QString &term, const QString &runnerName);
+        void launchQuery(const QString &term, const QString &runnerId);
 
         /**
          * Convenience version of above
