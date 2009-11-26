@@ -99,6 +99,9 @@ bool FocusIndicator::eventFilter(QObject *watched, QEvent *event)
 
 void FocusIndicator::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
+    m_background->setElementPrefix("hover");
+    m_background->resizeFrame(event->newSize());
+    m_background->setElementPrefix("focus");
     m_background->resizeFrame(event->newSize());
 }
 
