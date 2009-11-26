@@ -52,7 +52,7 @@ public:
     void setPalette()
     {
         QSpinBox *native = q->nativeWidget();
-        QColor color = Theme::defaultTheme()->color(Theme::TextColor);
+        QColor color = Theme::defaultTheme()->color(Theme::ButtonTextColor);
         QPalette p = native->palette();
 
         p.setColor(QPalette::Normal, QPalette::Text, color);
