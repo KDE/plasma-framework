@@ -37,6 +37,7 @@ public:
     ~FocusIndicator();
 
     void setCustomGeometry(const QRectF &geometry);
+    void setCustomPrefix(const QString &prefix);
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
@@ -53,6 +54,7 @@ private:
     AbstractAnimation *m_fade;
     QRectF m_customGeometry;
     QString m_prefix;
+    QString m_customPrefix;
 };
 }
 #endif

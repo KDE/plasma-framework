@@ -1066,6 +1066,7 @@ void IconWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
             Plasma::PaintUtils::drawHalo(painter, rect);
         }
     }
+
     d->drawTextItems(painter, option, labelLayout, infoLayout);
 }
 

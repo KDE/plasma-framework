@@ -64,6 +64,11 @@ void FocusIndicator::setCustomGeometry(const QRectF &geometry)
     syncGeometry();
 }
 
+void FocusIndicator::setCustomPrefix(const QString &prefix)
+{
+    m_customPrefix = prefix;
+}
+
 bool FocusIndicator::eventFilter(QObject *watched, QEvent *event)
 {
     if (static_cast<QGraphicsWidget *>(watched) != m_parent) {
@@ -72,7 +77,7 @@ bool FocusIndicator::eventFilter(QObject *watched, QEvent *event)
 
     if (!m_parent->hasFocus() && event->type() == QEvent::GraphicsSceneHoverEnter) {
         m_background->setElementPrefix("hover");
-        m_prefix = "hover";
+        m_prefix = m_customPrefix + "hover";
         m_fade->setProperty("startOpacity", 0.0);
         m_fade->setProperty("targetOpacity", 1.0);
         m_fade->start();
@@ -84,7 +89,7 @@ bool FocusIndicator::eventFilter(QObject *watched, QEvent *event)
         syncGeometry();
     } else if (event->type() == QEvent::FocusIn) {
         m_background->setElementPrefix("focus");
-        m_prefix = "focus";
+        m_prefix = m_customPrefix + "focus";
         m_fade->setProperty("startOpacity", 0.0);
         m_fade->setProperty("targetOpacity", 1.0);
         m_fade->start();

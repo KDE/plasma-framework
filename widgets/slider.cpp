@@ -157,6 +157,11 @@ void Slider::paint(QPainter *painter,
 
     QRect elementRect = d->background->elementRect(handle).toRect();
     elementRect.moveCenter(handleRect.center());
+    if (orientation() == Qt::Vertical) {
+        d->focusIndicator->setCustomPrefix("vertical-slider");
+    } else {
+        d->focusIndicator->setCustomPrefix("horizontal-slider");
+    }
     d->focusIndicator->setCustomGeometry(elementRect);
     d->background->paint(painter, elementRect, handle);
 
