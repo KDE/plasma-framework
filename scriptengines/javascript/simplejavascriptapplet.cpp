@@ -461,7 +461,6 @@ bool SimpleJavaScriptApplet::importExtensions()
             m_engine->importExtension(extension);
         }
 
-        m_engine->importExtension(extension);
         if (m_engine->hasUncaughtException()) {
             reportError(m_engine);
         } else {
