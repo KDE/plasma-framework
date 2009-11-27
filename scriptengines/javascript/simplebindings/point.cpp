@@ -52,29 +52,25 @@ static QScriptValue manhattanLength(QScriptContext *ctx, QScriptEngine *eng)
 static QScriptValue x(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(QPoint, x);
+
+    if (ctx->argumentCount() > 0) {
+        int x = ctx->argument(0).toInt32();
+        self->setX(x);
+    }
+
     return QScriptValue(eng, self->x());
 }
 
 static QScriptValue y(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(QPoint, y);
+
+    if (ctx->argumentCount() > 0) {
+        int y = ctx->argument(0).toInt32();
+        self->setY(y);
+    }
+
     return QScriptValue(eng, self->y());
-}
-
-static QScriptValue setX(QScriptContext *ctx, QScriptEngine *)
-{
-    DECLARE_SELF(QPoint, setX);
-    int x = ctx->argument(0).toInt32();
-    self->setX(x);
-    return QScriptValue();
-}
-
-static QScriptValue setY(QScriptContext *ctx, QScriptEngine *)
-{
-    DECLARE_SELF(QPoint, setY);
-    int y = ctx->argument(0).toInt32();
-    self->setY(y);
-    return QScriptValue();
 }
 
 QScriptValue constructQPointClass(QScriptEngine *eng)
@@ -83,12 +79,10 @@ QScriptValue constructQPointClass(QScriptEngine *eng)
     QScriptValue::PropertyFlags getter = QScriptValue::PropertyGetter;
     QScriptValue::PropertyFlags setter = QScriptValue::PropertySetter;
 
-    proto.setProperty("isNull", eng->newFunction(isNull));
-    proto.setProperty("manhattanLength", eng->newFunction(manhattanLength));
-    proto.setProperty("x", eng->newFunction(x));
-    proto.setProperty("y", eng->newFunction(y));
-    proto.setProperty("setX", eng->newFunction(setX));
-    proto.setProperty("setY", eng->newFunction(setY));
+    proto.setProperty("isNull", eng->newFunction(isNull), getter);
+    proto.setProperty("manhattanLength", eng->newFunction(manhattanLength), getter);
+    proto.setProperty("x", eng->newFunction(x), getter | setter);
+    proto.setProperty("y", eng->newFunction(y), getter | setter);
 
     eng->setDefaultPrototype(qMetaTypeId<QPoint>(), proto);
     eng->setDefaultPrototype(qMetaTypeId<QPoint*>(), proto);
