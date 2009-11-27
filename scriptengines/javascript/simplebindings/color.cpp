@@ -55,57 +55,49 @@ static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
 static QScriptValue red(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(QColor, red);
-    return QScriptValue(eng, self->red());
-}
 
-static QScriptValue setRed(QScriptContext *ctx, QScriptEngine *)
-{
-    DECLARE_SELF(QColor, setRed);
-    QScriptValue arg = ctx->argument(0);
-    self->setRed(arg.toInt32());
-    return arg;
+    if (ctx->argumentCount() > 0) {
+        QScriptValue arg = ctx->argument(0);
+        self->setRed(arg.toInt32());
+    }
+
+    return QScriptValue(eng, self->red());
 }
 
 static QScriptValue green(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(QColor, green);
-    return QScriptValue(eng, self->green());
-}
 
-static QScriptValue setGreen(QScriptContext *ctx, QScriptEngine *)
-{
-    DECLARE_SELF(QColor, setGreen);
-    QScriptValue arg = ctx->argument(0);
-    self->setGreen(arg.toInt32());
-    return arg;
+    if (ctx->argumentCount() > 0) {
+        QScriptValue arg = ctx->argument(0);
+        self->setGreen(arg.toInt32());
+    }
+
+    return QScriptValue(eng, self->green());
 }
 
 static QScriptValue blue(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(QColor, blue);
-    return QScriptValue(eng, self->blue());
-}
 
-static QScriptValue setBlue(QScriptContext *ctx, QScriptEngine *)
-{
-    DECLARE_SELF(QColor, setBlue);
-    QScriptValue arg = ctx->argument(0);
-    self->setBlue(arg.toInt32());
-    return arg;
+    if (ctx->argumentCount() > 0) {
+        QScriptValue arg = ctx->argument(0);
+        self->setBlue(arg.toInt32());
+    }
+
+    return QScriptValue(eng, self->blue());
 }
 
 static QScriptValue alpha(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(QColor, alpha);
-    return QScriptValue(eng, self->alpha());
-}
 
-static QScriptValue setAlpha(QScriptContext *ctx, QScriptEngine *)
-{
-    DECLARE_SELF(QColor, setAlpha);
-    QScriptValue arg = ctx->argument(0);
-    self->setAlpha(arg.toInt32());
-    return arg;
+    if (ctx->argumentCount() > 0) {
+        QScriptValue arg = ctx->argument(0);
+        self->setAlpha(arg.toInt32());
+    }
+
+    return QScriptValue(eng, self->alpha());
 }
 
 static QScriptValue isValid(QScriptContext *ctx, QScriptEngine *eng)
@@ -119,15 +111,11 @@ QScriptValue constructColorClass(QScriptEngine *eng)
     QScriptValue proto = qScriptValueFromValue(eng, QColor());
     QScriptValue::PropertyFlags getter = QScriptValue::PropertyGetter;
     QScriptValue::PropertyFlags setter = QScriptValue::PropertySetter;
-    proto.setProperty("red", eng->newFunction(red), getter);
-    proto.setProperty("setRed", eng->newFunction(setRed));
-    proto.setProperty("green", eng->newFunction(green), getter);
-    proto.setProperty("setGreen", eng->newFunction(setGreen));
-    proto.setProperty("blue", eng->newFunction(blue), getter);
-    proto.setProperty("setBlue", eng->newFunction(setBlue));
-    proto.setProperty("alpha", eng->newFunction(alpha, getter));
-    proto.setProperty("setAlpha", eng->newFunction(setAlpha));
-    proto.setProperty("isValid", eng->newFunction(red), getter);
+    proto.setProperty("red", eng->newFunction(red), getter | setter);
+    proto.setProperty("green", eng->newFunction(green), getter | setter);
+    proto.setProperty("blue", eng->newFunction(blue), getter | setter);
+    proto.setProperty("alpha", eng->newFunction(alpha), getter | setter);
+    proto.setProperty("isValid", eng->newFunction(isValid), getter);
 
     eng->setDefaultPrototype(qMetaTypeId<QColor>(), proto);
     eng->setDefaultPrototype(qMetaTypeId<QColor*>(), proto);
