@@ -10,6 +10,7 @@ set(simple_javascript_engine_SRCS
     simplebindings/graphicsitem.cpp
     simplebindings/linearlayout.cpp
     simplebindings/painter.cpp
+    simplebindings/pen.cpp
     simplebindings/pixmap.cpp
     simplebindings/point.cpp
     simplebindings/rect.cpp
