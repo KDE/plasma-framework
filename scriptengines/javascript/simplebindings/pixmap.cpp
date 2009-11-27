@@ -65,9 +65,11 @@ static QScriptValue scaled(QScriptContext *ctx, QScriptEngine *eng)
 QScriptValue constructQPixmapClass(QScriptEngine *eng)
 {
     QScriptValue proto = qScriptValueFromValue(eng, QPixmap());
-    proto.setProperty("isNull", eng->newFunction(isNull));
-    proto.setProperty("rect", eng->newFunction(rect));
-    proto.setProperty("scaled", eng->newFunction(scaled));
+    QScriptValue::PropertyFlags getter = QScriptValue::PropertyGetter;
+    QScriptValue::PropertyFlags setter = QScriptValue::PropertySetter;
+    proto.setProperty("isNull", eng->newFunction(isNull), getter);
+    proto.setProperty("rect", eng->newFunction(rect), getter);
+    proto.setProperty("scaled", eng->newFunction(scaled), getter);
 
     eng->setDefaultPrototype(qMetaTypeId<QPixmap>(), proto);
     eng->setDefaultPrototype(qMetaTypeId<QPixmap*>(), proto);
