@@ -164,30 +164,6 @@ static QScriptValue compositionMode(QScriptContext *ctx, QScriptEngine *eng)
 
 /////////////////////////////////////////////////////////////
 
-static QScriptValue device(QScriptContext *ctx, QScriptEngine *eng)
-{
-    DECLARE_SELF(QPainter, device);
-    return qScriptValueFromValue(eng, self->device());
-}
-
-/////////////////////////////////////////////////////////////
-
-static QScriptValue deviceMatrix(QScriptContext *ctx, QScriptEngine *eng)
-{
-    DECLARE_SELF(QPainter, deviceMatrix);
-    return qScriptValueFromValue(eng, self->deviceMatrix());
-}
-
-/////////////////////////////////////////////////////////////
-
-static QScriptValue deviceTransform(QScriptContext *ctx, QScriptEngine *eng)
-{
-    DECLARE_SELF(QPainter, deviceTransform);
-    return qScriptValueFromValue(eng, self->deviceTransform());
-}
-
-/////////////////////////////////////////////////////////////
-
 static QScriptValue drawArc(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(QPainter, drawArc);
@@ -601,40 +577,10 @@ static QScriptValue font(QScriptContext *ctx, QScriptEngine *eng)
 
 /////////////////////////////////////////////////////////////
 
-static QScriptValue fontInfo(QScriptContext *ctx, QScriptEngine *)
-{
-    DECLARE_SELF(QPainter, fontInfo);
-    return ctx->throwError("QPainter.prototype.fontInfo is not implemented");
-}
-
-/////////////////////////////////////////////////////////////
-
-static QScriptValue fontMetrics(QScriptContext *ctx, QScriptEngine *)
-{
-    DECLARE_SELF(QPainter, fontMetrics);
-    return ctx->throwError("QPainter.prototype.fontMetrics is not implemented");
-}
-
-/////////////////////////////////////////////////////////////
-
 static QScriptValue hasClipping(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(QPainter, hasClipping);
     return QScriptValue(eng, self->hasClipping());
-}
-
-/////////////////////////////////////////////////////////////
-
-static QScriptValue initFrom(QScriptContext *ctx, QScriptEngine *eng)
-{
-    DECLARE_SELF(QPainter, initFrom);
-    QWidget *widget = qscriptvalue_cast<QWidget*>(ctx->argument(0));
-    if (!widget) {
-        return ctx->throwError(QScriptContext::TypeError,
-                               "QPainter.prototype.initFrom: argument is not a Widget");
-    }
-    self->initFrom(widget);
-    return eng->undefinedValue();
 }
 
 /////////////////////////////////////////////////////////////
@@ -659,14 +605,6 @@ static QScriptValue opacity(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(QPainter, opacity);
     return QScriptValue(eng, self->opacity());
-}
-
-/////////////////////////////////////////////////////////////
-
-static QScriptValue paintEngine(QScriptContext *ctx, QScriptEngine *eng)
-{
-    DECLARE_SELF(QPainter, paintEngine);
-    return qScriptValueFromValue(eng, self->paintEngine());
 }
 
 /////////////////////////////////////////////////////////////
@@ -1089,20 +1027,76 @@ static QScriptValue toString(QScriptContext *ctx, QScriptEngine *eng)
 QScriptValue constructPainterClass(QScriptEngine *eng)
 {
     QScriptValue proto = newPainter(eng, new QPainter());
-    ADD_METHOD(proto, background);
-    ADD_METHOD(proto, backgroundMode);
+    QScriptValue::PropertyFlags getter = QScriptValue::PropertyGetter;
+    QScriptValue::PropertyFlags setter = QScriptValue::PropertySetter;
+
+    proto.setProperty("background", eng->newFunction(background), getter);
+    proto.setProperty("background", eng->newFunction(setBackground), setter);
+
+    proto.setProperty("backgroundMode", eng->newFunction(backgroundMode), getter);
+    proto.setProperty("backgroundMode", eng->newFunction(setBackgroundMode), setter);
+
+    proto.setProperty("brush", eng->newFunction(brush), getter);
+    proto.setProperty("setBrush", eng->newFunction(setBrush), setter);
+
+    proto.setProperty("brushOrigin", eng->newFunction(brushOrigin), getter);
+    proto.setProperty("brushOrigin", eng->newFunction(setBrushOrigin), setter);
+
+    proto.setProperty("clipping", eng->newFunction(hasClipping), getter);
+    proto.setProperty("clipping", eng->newFunction(setClipping), getter);
+
+    proto.setProperty("clipPath", eng->newFunction(clipPath), getter);
+    proto.setProperty("clipPath", eng->newFunction(setClipPath), setter);
+
+    proto.setProperty("clipRegion", eng->newFunction(clipRegion), getter);
+    proto.setProperty("clipRegion", eng->newFunction(setClipRegion), setter);
+
+    proto.setProperty("compositionMode", eng->newFunction(compositionMode), getter);
+    proto.setProperty("compositionMode", eng->newFunction(setCompositionMode), setter);
+
+    proto.setProperty("font", eng->newFunction(font), getter);
+    proto.setProperty("font", eng->newFunction(setFont), setter);
+
+    proto.setProperty("layoutDirection", eng->newFunction(layoutDirection), getter);
+    proto.setProperty("layoutDirection", eng->newFunction(setLayoutDirection), setter);
+
+    proto.setProperty("opacity", eng->newFunction(opacity), getter);
+    proto.setProperty("opacity", eng->newFunction(setOpacity), setter);
+
+    proto.setProperty("pen", eng->newFunction(pen), getter);
+    proto.setProperty("pen", eng->newFunction(setPen), setter);
+
+    proto.setProperty("renderHints", eng->newFunction(renderHints), getter);
+    proto.setProperty("renderHints", eng->newFunction(setRenderHints), setter);
+
+    proto.setProperty("transform", eng->newFunction(transform), getter);
+    proto.setProperty("transform", eng->newFunction(setTransform), getter);
+
+    proto.setProperty("viewport", eng->newFunction(viewport), getter);
+    proto.setProperty("viewport", eng->newFunction(setViewport), setter);
+
+    proto.setProperty("viewTransformEnabled", eng->newFunction(viewTransformEnabled), getter);
+    proto.setProperty("viewTransformEnabled", eng->newFunction(setViewTransformEnabled), setter);
+
+    proto.setProperty("window", eng->newFunction(window), getter);
+    proto.setProperty("window", eng->newFunction(setWindow), setter);
+
+    proto.setProperty("worldMatrix", eng->newFunction(worldMatrix), getter);
+    proto.setProperty("worldMatrix", eng->newFunction(setWorldMatrix), setter);
+
+    proto.setProperty("worldTransform", eng->newFunction(worldTransform), getter);
+    proto.setProperty("worldTransform", eng->newFunction(setWorldTransform), setter);
+
+    proto.setProperty("worldMatrixEnabled", eng->newFunction(worldMatrixEnabled), getter);
+    proto.setProperty("worldMatrixEnabled", eng->newFunction(setWorldMatrixEnabled), setter);
+
+    proto.setProperty("combinedMatrix", eng->newFunction(combinedMatrix), getter);
+    proto.setProperty("combinedTransform", eng->newFunction(combinedTransform), getter);
+    proto.setProperty("isActive", eng->newFunction(isActive), getter);
+
     ADD_METHOD(proto, begin);
+    ADD_METHOD(proto, end);
     ADD_METHOD(proto, boundingRect);
-    ADD_METHOD(proto, brush);
-    ADD_METHOD(proto, brushOrigin);
-    ADD_METHOD(proto, clipPath);
-    ADD_METHOD(proto, clipRegion);
-    ADD_METHOD(proto, combinedMatrix);
-    ADD_METHOD(proto, combinedTransform);
-    ADD_METHOD(proto, compositionMode);
-    ADD_METHOD(proto, device);
-    ADD_METHOD(proto, deviceMatrix);
-    ADD_METHOD(proto, deviceTransform);
     ADD_METHOD(proto, drawChord);
     ADD_METHOD(proto, drawConvexPolygon);
     ADD_METHOD(proto, drawArc);
@@ -1123,61 +1117,22 @@ QScriptValue constructPainterClass(QScriptEngine *eng)
     ADD_METHOD(proto, drawRoundRect);
     ADD_METHOD(proto, drawText);
     ADD_METHOD(proto, drawTiledPixmap);
-    ADD_METHOD(proto, end);
     ADD_METHOD(proto, eraseRect);
     ADD_METHOD(proto, fillPath);
     ADD_METHOD(proto, fillRect);
-    ADD_METHOD(proto, font);
-    ADD_METHOD(proto, fontInfo);
-    ADD_METHOD(proto, fontMetrics);
-    ADD_METHOD(proto, hasClipping);
-    ADD_METHOD(proto, initFrom);
-    ADD_METHOD(proto, isActive);
-    ADD_METHOD(proto, layoutDirection);
-    ADD_METHOD(proto, opacity);
-    ADD_METHOD(proto, paintEngine);
-    ADD_METHOD(proto, pen);
-    ADD_METHOD(proto, renderHints);
     ADD_METHOD(proto, resetMatrix);
     ADD_METHOD(proto, resetTransform);
     ADD_METHOD(proto, restore);
     ADD_METHOD(proto, rotate);
     ADD_METHOD(proto, save);
     ADD_METHOD(proto, scale);
-    ADD_METHOD(proto, setBackground);
-    ADD_METHOD(proto, setBackgroundMode);
-    ADD_METHOD(proto, setBrush);
-    ADD_METHOD(proto, setBrushOrigin);
-    ADD_METHOD(proto, setClipPath);
     ADD_METHOD(proto, setClipRect);
-    ADD_METHOD(proto, setClipRegion);
-    ADD_METHOD(proto, setClipping);
-    ADD_METHOD(proto, setCompositionMode);
-    ADD_METHOD(proto, setFont);
-    ADD_METHOD(proto, setLayoutDirection);
-    ADD_METHOD(proto, setOpacity);
-    ADD_METHOD(proto, setPen);
     ADD_METHOD(proto, setRenderHint);
-    ADD_METHOD(proto, setRenderHints);
-    ADD_METHOD(proto, setTransform);
-    ADD_METHOD(proto, setViewTransformEnabled);
-    ADD_METHOD(proto, setViewport);
-    ADD_METHOD(proto, setWindow);
-    ADD_METHOD(proto, setWorldMatrix);
-    ADD_METHOD(proto, setWorldMatrixEnabled);
-    ADD_METHOD(proto, setWorldTransform);
     ADD_METHOD(proto, shear);
     ADD_METHOD(proto, strokePath);
     ADD_METHOD(proto, testRenderHint);
     ADD_METHOD(proto, toString);
-    ADD_METHOD(proto, transform);
     ADD_METHOD(proto, translate);
-    ADD_METHOD(proto, viewTransformEnabled);
-    ADD_METHOD(proto, viewport);
-    ADD_METHOD(proto, window);
-    ADD_METHOD(proto, worldMatrix);
-    ADD_METHOD(proto, worldMatrixEnabled);
-    ADD_METHOD(proto, worldTransform);
 
     QScript::registerPointerMetaType<QPainter>(eng, proto);
 
