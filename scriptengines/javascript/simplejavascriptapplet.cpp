@@ -454,9 +454,6 @@ bool SimpleJavaScriptApplet::importExtensions()
         }
 
         if (!applet()->hasAuthorization(extension)) {
-            setFailedToLaunch(true,
-                              i18n("Authorization for required extension '%1' was denied.",
-                                   extension));
             continue;
         }
 
