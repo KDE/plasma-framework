@@ -151,9 +151,15 @@ QScriptValue constructAnchorLayoutClass(QScriptEngine *eng)
         QScript::wrapPointer<QGraphicsAnchorLayout>(eng,
                                                     new QGraphicsAnchorLayout(),
                                                     QScript::UserOwnership);
+    const QScriptValue::PropertyFlags getter = QScriptValue::PropertyGetter;
+    const QScriptValue::PropertyFlags setter = QScriptValue::PropertySetter;
+
+    proto.setProperty("horizontalSpacing", eng->newFunction(horizontalSpacing), getter);
+    proto.setProperty("horizontalSpacing", eng->newFunction(setHorizontalSpacing), setter);
+    proto.setProperty("verticalSpacing", eng->newFunction(verticalSpacing), getter);
+    proto.setProperty("verticalSpacing", eng->newFunction(setVerticalSpacing), setter);
+
     ADD_METHOD(proto, setSpacing);
-    ADD_GET_SET_METHODS(proto, horizontalSpacing, setHorizontalSpacing);
-    ADD_GET_SET_METHODS(proto, verticalSpacing, setVerticalSpacing);
     ADD_METHOD(proto, removeAt);
     ADD_METHOD(proto, addAnchor);
     ADD_METHOD(proto, anchor);
