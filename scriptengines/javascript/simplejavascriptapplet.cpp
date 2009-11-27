@@ -41,7 +41,7 @@
 #include <Plasma/Package>
 #include <Plasma/VideoWidget>
 
-#include "appletinterface.h"
+#include "simplebindings/appletinterface.h"
 #include "simplebindings/filedialogproxy.h"
 
 using namespace Plasma;

@@ -2,7 +2,7 @@
 
 set(simple_javascript_engine_SRCS
     simplejavascriptapplet.cpp
-    appletinterface.cpp
+    simplebindings/appletinterface.cpp
     simplebindings/anchorlayout.cpp
     simplebindings/color.cpp
     simplebindings/font.cpp
