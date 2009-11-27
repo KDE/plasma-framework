@@ -84,6 +84,7 @@ private:
     static QScriptValue notSupported(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue print(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue createPrototype(QScriptEngine *engine, const QString &name);
+    static QScriptValue widgetAdjustSize(QScriptContext *context, QScriptEngine *engine);
 
 private:
     static KSharedPtr<UiLoader> s_widgetLoader;

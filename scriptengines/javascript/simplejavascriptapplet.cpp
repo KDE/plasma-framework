@@ -810,6 +810,15 @@ QScriptValue SimpleJavaScriptApplet::newPlasmaFrameSvg(QScriptContext *context, 
     return engine->newQObject(frameSvg);
 }
 
+QScriptValue SimpleJavaScriptApplet::widgetAdjustSize(QScriptContext *context, QScriptEngine *engine)
+{
+    QGraphicsWidget *widget = qobject_cast<QGraphicsWidget*>(context->thisObject().toQObject());
+    if (widget) {
+        widget->adjustSize();
+    }
+    return engine->undefinedValue();
+}
+
 void SimpleJavaScriptApplet::installWidgets(QScriptEngine *engine)
 {
     QScriptValue globalObject = engine->globalObject();
@@ -874,6 +883,7 @@ QScriptValue SimpleJavaScriptApplet::createWidget(QScriptContext *context, QScri
 
     QScriptValue fun = engine->newQObject(w);
     fun.setPrototype(context->callee().property("prototype"));
+    fun.setProperty("adjustSize", engine->newFunction(widgetAdjustSize));
 
     //register enums will be accessed for instance as frame.Sunken for Frame shadow...
     registerEnums(engine, fun, *w->metaObject());
