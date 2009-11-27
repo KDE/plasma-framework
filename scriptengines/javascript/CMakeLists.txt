@@ -3,7 +3,6 @@
 set(simple_javascript_engine_SRCS
     simplejavascriptapplet.cpp
     appletinterface.cpp
-    uiloader.cpp
     simplebindings/anchorlayout.cpp
     simplebindings/color.cpp
     simplebindings/font.cpp
@@ -16,6 +15,7 @@ set(simple_javascript_engine_SRCS
     simplebindings/rect.cpp
     simplebindings/size.cpp
     simplebindings/timer.cpp
+    simplebindings/uiloader.cpp
     simplebindings/url.cpp
 )
 

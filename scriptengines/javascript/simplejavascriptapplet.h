@@ -25,7 +25,7 @@
 #include <Plasma/AppletScript>
 #include <Plasma/DataEngine>
 
-#include "uiloader.h"
+#include "simplebindings/uiloader.h"
 
 class QScriptEngine;
 class QScriptContext;
