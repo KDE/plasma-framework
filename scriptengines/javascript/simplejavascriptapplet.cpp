@@ -566,6 +566,8 @@ void SimpleJavaScriptApplet::setupObjects()
     // Add stuff from Plasma
     global.setProperty("PlasmaSvg", m_engine->newFunction(SimpleJavaScriptApplet::newPlasmaSvg));
     global.setProperty("PlasmaFrameSvg", m_engine->newFunction(SimpleJavaScriptApplet::newPlasmaFrameSvg));
+    global.setProperty("Svg", m_engine->newFunction(SimpleJavaScriptApplet::newPlasmaSvg));
+    global.setProperty("FrameSvg", m_engine->newFunction(SimpleJavaScriptApplet::newPlasmaFrameSvg));
 
     installWidgets(m_engine);
 }
@@ -917,7 +919,6 @@ QScriptValue SimpleJavaScriptApplet::variantToScriptValue(QVariant var)
 
 void SimpleJavaScriptApplet::collectGarbage()
 {
-    kDebug();
     m_engine->collectGarbage();
 }
 
