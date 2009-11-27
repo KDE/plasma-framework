@@ -66,12 +66,24 @@ static QScriptValue adjusted(QScriptContext *ctx, QScriptEngine *eng)
 static QScriptValue bottom(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(QRectF, bottom);
+
+    if (ctx->argumentCount() > 0) {
+        int bottom = ctx->argument(0).toInt32();
+        self->setBottom(bottom);
+    }
+
     return QScriptValue(eng, self->bottom());
 }
 
 static QScriptValue top(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(QRectF, top);
+
+    if (ctx->argumentCount() > 0) {
+        int top = ctx->argument(0).toInt32();
+        self->setTop(top);
+    }
+
     return QScriptValue(eng, self->top());
 }
 
@@ -86,6 +98,12 @@ static QScriptValue contains(QScriptContext *ctx, QScriptEngine *eng)
 static QScriptValue height(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(QRectF, height);
+
+    if (ctx->argumentCount() > 0) {
+        int height = ctx->argument(0).toInt32();
+        self->setHeight(height);
+    }
+
     return QScriptValue(eng, self->height());
 }
 
@@ -110,6 +128,12 @@ static QScriptValue isValid(QScriptContext *ctx, QScriptEngine *eng)
 static QScriptValue left(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(QRectF, left);
+
+    if (ctx->argumentCount() > 0) {
+        int left = ctx->argument(0).toInt32();
+        self->setLeft(left);
+    }
+
     return QScriptValue(eng, self->left());
 }
 
@@ -158,15 +182,13 @@ static QScriptValue moveTop(QScriptContext *ctx, QScriptEngine *)
 static QScriptValue right(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(QRectF, right);
-    return QScriptValue(eng, self->right());
-}
 
-static QScriptValue setBottom(QScriptContext *ctx, QScriptEngine *)
-{
-    DECLARE_SELF(QRectF, setBottom);
-    qreal bottom = ctx->argument(0).toNumber();
-    self->setBottom(bottom);
-    return QScriptValue();
+    if (ctx->argumentCount() > 0) {
+        int right = ctx->argument(0).toInt32();
+        self->setRight(right);
+    }
+
+    return QScriptValue(eng, self->right());
 }
 
 static QScriptValue setCoords(QScriptContext *ctx, QScriptEngine *)
@@ -180,22 +202,6 @@ static QScriptValue setCoords(QScriptContext *ctx, QScriptEngine *)
     return QScriptValue();
 }
 
-static QScriptValue setHeight(QScriptContext *ctx, QScriptEngine *)
-{
-    DECLARE_SELF(QRectF, setHeight);
-    qreal height = ctx->argument(0).toNumber();
-    self->setHeight(height);
-    return QScriptValue();
-}
-
-static QScriptValue setLeft(QScriptContext *ctx, QScriptEngine *)
-{
-    DECLARE_SELF(QRectF, setLeft);
-    qreal left = ctx->argument(0).toNumber();
-    self->setLeft(left);
-    return QScriptValue();
-}
-
 static QScriptValue setRect(QScriptContext *ctx, QScriptEngine *)
 {
     DECLARE_SELF(QRectF, setRect);
@@ -204,46 +210,6 @@ static QScriptValue setRect(QScriptContext *ctx, QScriptEngine *)
     qreal width = ctx->argument(2).toNumber();
     qreal height = ctx->argument(3).toNumber();
     self->setRect(x, y, width, height);
-    return QScriptValue();
-}
-
-static QScriptValue setRight(QScriptContext *ctx, QScriptEngine *)
-{
-    DECLARE_SELF(QRectF, setRight);
-    qreal right = ctx->argument(0).toNumber();
-    self->setRight(right);
-    return QScriptValue();
-}
-
-static QScriptValue setTop(QScriptContext *ctx, QScriptEngine *)
-{
-    DECLARE_SELF(QRectF, setTop);
-    qreal top = ctx->argument(0).toNumber();
-    self->setTop(top);
-    return QScriptValue();
-}
-
-static QScriptValue setWidth(QScriptContext *ctx, QScriptEngine *)
-{
-    DECLARE_SELF(QRectF, setWidth);
-    qreal width = ctx->argument(0).toNumber();
-    self->setWidth(width);
-    return QScriptValue();
-}
-
-static QScriptValue setX(QScriptContext *ctx, QScriptEngine *)
-{
-    DECLARE_SELF(QRectF, setX);
-    qreal x = ctx->argument(0).toNumber();
-    self->setX(x);
-    return QScriptValue();
-}
-
-static QScriptValue setY(QScriptContext *ctx, QScriptEngine *)
-{
-    DECLARE_SELF(QRectF, setY);
-    qreal y = ctx->argument(0).toNumber();
-    self->setY(y);
     return QScriptValue();
 }
 
@@ -259,18 +225,36 @@ static QScriptValue translate(QScriptContext *ctx, QScriptEngine *)
 static QScriptValue width(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(QRectF, width);
+
+    if (ctx->argumentCount() > 0) {
+        int width = ctx->argument(0).toInt32();
+        self->setWidth(width);
+    }
+
     return QScriptValue(eng, self->width());
 }
 
 static QScriptValue x(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(QRectF, x);
+
+    if (ctx->argumentCount() > 0) {
+        int x = ctx->argument(0).toInt32();
+        self->setX(x);
+    }
+
     return QScriptValue(eng, self->x());
 }
 
 static QScriptValue y(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(QRectF, y);
+
+    if (ctx->argumentCount() > 0) {
+        int y = ctx->argument(0).toInt32();
+        self->setY(y);
+    }
+
     return QScriptValue(eng, self->y());
 }
 
@@ -313,34 +297,31 @@ QScriptValue constructQRectFClass(QScriptEngine *eng)
     QScriptValue::PropertyFlags setter = QScriptValue::PropertySetter;
 
     proto.setProperty("adjust", eng->newFunction(adjust));
-    proto.setProperty("bottom", eng->newFunction(bottom));
+    proto.setProperty("adjusted", eng->newFunction(adjusted), getter);
+    proto.setProperty("translate", eng->newFunction(translate));
+    proto.setProperty("setCoords", eng->newFunction(setCoords));
+    proto.setProperty("setRect", eng->newFunction(setRect));
+
     proto.setProperty("contains", eng->newFunction(contains));
-    proto.setProperty("height", eng->newFunction(height));
-    proto.setProperty("isEmpty", eng->newFunction(isEmpty));
-    proto.setProperty("isNull", eng->newFunction(isNull));
-    proto.setProperty("isValid", eng->newFunction(isValid));
-    proto.setProperty("left", eng->newFunction(left));
+
     proto.setProperty("moveBottom", eng->newFunction(moveBottom));
     proto.setProperty("moveLeft", eng->newFunction(moveLeft));
     proto.setProperty("moveRight", eng->newFunction(moveRight));
     proto.setProperty("moveTo", eng->newFunction(moveTo));
     proto.setProperty("moveTop", eng->newFunction(moveTop));
-    proto.setProperty("right", eng->newFunction(right));
-    proto.setProperty("setBottom", eng->newFunction(setBottom));
-    proto.setProperty("setCoords", eng->newFunction(setCoords));
-    proto.setProperty("setHeight", eng->newFunction(setHeight));
-    proto.setProperty("setLeft", eng->newFunction(setLeft));
-    proto.setProperty("setRect", eng->newFunction(setRect));
-    proto.setProperty("setRight", eng->newFunction(setRight));
-    proto.setProperty("setTop", eng->newFunction(setTop));
-    proto.setProperty("setWidth", eng->newFunction(setWidth));
-    proto.setProperty("setX", eng->newFunction(setX));
-    proto.setProperty("setY", eng->newFunction(setY));
-    proto.setProperty("top", eng->newFunction(top));
-    proto.setProperty("translate", eng->newFunction(translate));
-    proto.setProperty("width", eng->newFunction(width));
-    proto.setProperty("x", eng->newFunction(x));
-    proto.setProperty("y", eng->newFunction(y));
+
+    proto.setProperty("isEmpty", eng->newFunction(isEmpty), getter);
+    proto.setProperty("isNull", eng->newFunction(isNull), getter);
+    proto.setProperty("isValid", eng->newFunction(isValid), getter);
+
+    proto.setProperty("left", eng->newFunction(left), getter | setter);
+    proto.setProperty("top", eng->newFunction(top), getter | setter);
+    proto.setProperty("bottom", eng->newFunction(bottom), getter | setter);
+    proto.setProperty("right", eng->newFunction(right), getter | setter);
+    proto.setProperty("height", eng->newFunction(height), getter | setter);
+    proto.setProperty("width", eng->newFunction(width), getter | setter);
+    proto.setProperty("x", eng->newFunction(x), getter | setter);
+    proto.setProperty("y", eng->newFunction(y), getter | setter);
 
     eng->setDefaultPrototype(qMetaTypeId<QRectF>(), proto);
     eng->setDefaultPrototype(qMetaTypeId<QRectF*>(), proto);
