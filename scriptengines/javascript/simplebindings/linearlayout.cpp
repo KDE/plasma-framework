@@ -26,7 +26,7 @@
 #include <Plasma/Applet>
 
 #include "../backportglobal.h"
-#include "../appletinterface.h"
+#include "appletinterface.h"
 
 Q_DECLARE_METATYPE(QScript::Pointer<QGraphicsItem>::wrapped_pointer_type)
 Q_DECLARE_METATYPE(QGraphicsWidget*)
@@ -163,8 +163,12 @@ QScriptValue constructLinearLayoutClass(QScriptEngine *eng)
 {
 //    QScriptValue proto = QScript::wrapGVPointer<QGraphicsLinearLayout>(eng, new QGraphicsLinearLayout(), );
     QScriptValue proto = QScript::wrapPointer<QGraphicsLinearLayout>(eng, new QGraphicsLinearLayout(), QScript::UserOwnership);
-    ADD_GET_SET_METHODS(proto, spacing, setSpacing);
-    ADD_GET_SET_METHODS(proto, orientation, setOrientation);
+    const QScriptValue::PropertyFlags getter = QScriptValue::PropertyGetter;
+    const QScriptValue::PropertyFlags setter = QScriptValue::PropertySetter;
+    proto.setProperty("spacing", eng->newFunction(spacing), getter);
+    proto.setProperty("spacing", eng->newFunction(setSpacing), setter);
+    proto.setProperty("orientation", eng->newFunction(orientation), getter);
+    proto.setProperty("orientation", eng->newFunction(setOrientation), setter);
     ADD_METHOD(proto, removeAt);
     ADD_METHOD(proto, addStretch);
     ADD_METHOD(proto, setStretchFactor);
