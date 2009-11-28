@@ -91,6 +91,10 @@ class ExtenderItemPrivate
 
         QPoint mousePos;
 
+        QSizeF minimumSize;
+        QSizeF maximumSize;
+        QSizeF preferredSize;
+
         bool mouseOver;
         bool dragStarted;
         bool destroyActionVisibility;
