@@ -943,9 +943,9 @@ void ExtenderItemPrivate::updateSizeHints()
 
     if (widget->isWidget()) {
         QGraphicsWidget *graphicsWidget = static_cast<QGraphicsWidget*>(widget);
-        min = graphicsWidget->minimumSize();
-        pref = graphicsWidget->preferredSize();
-        max = graphicsWidget->maximumSize();
+        min = graphicsWidget->effectiveSizeHint(Qt::MinimumSize);
+        pref = graphicsWidget->effectiveSizeHint(Qt::PreferredSize);
+        max = graphicsWidget->effectiveSizeHint(Qt::MaximumSize);
     } else {
         min = widget->boundingRect().size();
         pref = widget->boundingRect().size();
