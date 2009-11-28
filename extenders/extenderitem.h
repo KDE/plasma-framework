@@ -270,6 +270,8 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
 
         bool sceneEventFilter(QGraphicsItem *watched, QEvent *event);
 
+        QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint) const;
+
     private:
         Q_PRIVATE_SLOT(d, void toggleCollapse())
         Q_PRIVATE_SLOT(d, void updateToolBox())

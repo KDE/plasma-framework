@@ -680,6 +680,19 @@ void ExtenderItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     }
 }
 
+QSizeF ExtenderItem::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
+{
+    switch (which) {
+    case Qt::MinimumSize:
+        return d->minimumSize;
+    case Qt::MaximumSize:
+        return d->maximumSize;
+    case Qt::PreferredSize:
+    default:
+        return d->preferredSize;
+    }
+}
+
 ExtenderItemPrivate::ExtenderItemPrivate(ExtenderItem *extenderItem, Extender *hostExtender)
     : q(extenderItem),
       widget(0),
@@ -953,24 +966,24 @@ void ExtenderItemPrivate::updateSizeHints()
     }
 
     if (collapsed) {
-        q->setPreferredSize(QSizeF(pref.width() + marginWidth,
-                                   dragHandleRect().height() + marginHeight));
-        q->setMinimumSize(QSizeF(min.width() + marginWidth,
-                                 dragHandleRect().height() + marginHeight));
-        q->setMaximumSize(QSizeF(max.width() + marginWidth,
-                                 dragHandleRect().height() + marginHeight));
+        preferredSize = QSizeF(pref.width() + marginWidth,
+                               dragHandleRect().height() + marginHeight);
+        minimumSize = QSizeF(min.width() + marginWidth,
+                             dragHandleRect().height() + marginHeight);
+        maximumSize = QSizeF(max.width() + marginWidth,
+                             dragHandleRect().height() + marginHeight);
         q->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
 
         if (collapseIcon) {
             collapseIcon->setToolTip(i18n("Expand this widget"));
         }
     } else {
-        q->setPreferredSize(QSizeF(pref.width() + marginWidth,
-                            pref.height() + dragHandleRect().height() + marginHeight));
-        q->setMinimumSize(QSizeF(min.width() + marginWidth,
-                          min.height() + dragHandleRect().height() + marginHeight));
-        q->setMaximumSize(QSizeF(max.width() + marginWidth,
-                          max.height() + dragHandleRect().height() + marginHeight));
+        preferredSize = QSizeF(pref.width() + marginWidth,
+                               pref.height() + dragHandleRect().height() + marginHeight);
+        minimumSize = QSizeF(min.width() + marginWidth,
+                             min.height() + dragHandleRect().height() + marginHeight);
+        maximumSize = QSizeF(max.width() + marginWidth,
+                             max.height() + dragHandleRect().height() + marginHeight);
 
         //set sane size policies depending on the appearence.
         if (extender->d->appearance == Extender::TopDownStacked ||
@@ -988,6 +1001,10 @@ void ExtenderItemPrivate::updateSizeHints()
     }
 
     q->updateGeometry();
+    //FIXME: it should be done from updateGeometry() ??!!??
+    if (extender && extender->layout()) {
+        extender->layout()->activate();
+    }
 }
 
 uint ExtenderItemPrivate::s_maxExtenderItemId = 0;
