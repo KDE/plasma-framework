@@ -948,7 +948,7 @@ void ExtenderItemPrivate::updateSizeHints()
     }
 
     qreal marginWidth = bgLeft + bgRight + dragLeft + dragRight;
-    qreal marginHeight = bgTop + bgBottom + dragTop + dragBottom;
+    qreal marginHeight = bgTop + bgBottom + dragTop + dragBottom + 4;
 
     QSizeF min;
     QSizeF pref;
