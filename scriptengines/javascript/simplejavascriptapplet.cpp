@@ -26,12 +26,15 @@
 #include <QGraphicsLayout>
 #include <QWidget>
 
+#include <KConfigGroup>
 #include <KDebug>
 #include <KFileDialog>
 #include <KIcon>
-#include <KLocale>
+#include <KMimeType>
+#include <KShell>
 #include <KStandardDirs>
-#include <KConfigGroup>
+#include <KLocale>
+#include <KRun>
 
 #include <Plasma/AbstractAnimation>
 #include <Plasma/AnimationGroup>
@@ -395,6 +398,72 @@ bool SimpleJavaScriptApplet::init()
     return include(mainScript());
 }
 
+QScriptValue SimpleJavaScriptApplet::runApplication(QScriptContext *context, QScriptEngine *engine)
+{
+    Q_UNUSED(engine)
+    if (context->argumentCount() == 0) {
+        return false;
+    }
+
+    KUrl::List urls;
+    if (context->argumentCount() > 1) {
+        urls = qscriptvalue_cast<KUrl::List>(context->argument(1));
+    }
+
+    const QString app = context->argument(0).toString();
+
+    KService::Ptr service = KService::serviceByStorageId(app);
+    if (service) {
+        return KRun::run(*service, urls, 0);
+    }
+
+    const QString exec = KGlobal::dirs()->findExe(app);
+    if (!exec.isEmpty()) {
+        return KRun::run(exec, urls, 0);
+    }
+
+    return false;
+}
+
+QScriptValue SimpleJavaScriptApplet::runCommand(QScriptContext *context, QScriptEngine *engine)
+{
+    Q_UNUSED(engine)
+    if (context->argumentCount() == 0) {
+        return false;
+    }
+
+    const QString exec = KGlobal::dirs()->findExe(context->argument(0).toString());
+    if (!exec.isEmpty()) {
+        QString args;
+        if (context->argumentCount() > 1) {
+            const QStringList argList = qscriptvalue_cast<QStringList>(context->argument(1));
+            if (!argList.isEmpty()) {
+                args = ' ' + KShell::joinArgs(argList);
+            }
+        }
+
+        return KRun::runCommand(exec + args, 0);
+    }
+
+    return false;
+}
+
+QScriptValue SimpleJavaScriptApplet::openUrl(QScriptContext *context, QScriptEngine *engine)
+{
+    Q_UNUSED(engine)
+    if (context->argumentCount() == 0) {
+        return false;
+    }
+
+    QScriptValue v = context->argument(0);
+    KUrl url = v.isString() ? KUrl(v.toString()) : qscriptvalue_cast<KUrl>(v);
+    if (url.isValid()) {
+        return KRun::runUrl(url, KMimeType::findByUrl(url)->name(), 0);
+    }
+
+    return false;
+}
+
 bool SimpleJavaScriptApplet::importBuiltinExtesion(const QString &extension)
 {
     kDebug() << extension;
@@ -402,6 +471,9 @@ bool SimpleJavaScriptApplet::importBuiltinExtesion(const QString &extension)
         FileDialogProxy::registerWithRuntime(m_engine);
         return true;
     } else if ("launchapp" == extension) {
+        m_self.setProperty("runApplication", m_engine->newFunction(SimpleJavaScriptApplet::runApplication));
+        m_self.setProperty("runCommand", m_engine->newFunction(SimpleJavaScriptApplet::runCommand));
+        m_self.setProperty("openUrl", m_engine->newFunction(SimpleJavaScriptApplet::openUrl));
         return true;
     } else if ("http" == extension) {
         return true;
@@ -445,8 +517,8 @@ bool SimpleJavaScriptApplet::importExtensions()
     }
 
     QStringList optionalExtensions = info.service()->property("X-Plasma-OptionalExtensions", QVariant::StringList).toStringList();
-    kDebug() << "extensions are" << optionalExtensions;
-    foreach (const QString &ext, requiredExtensions) {
+    kDebug() << "optional extensions are" << optionalExtensions;
+    foreach (const QString &ext, optionalExtensions) {
         QString extension = ext.toLower();
 
         if (m_extensions.contains(extension)) {
@@ -559,6 +631,7 @@ void SimpleJavaScriptApplet::setupObjects()
     global.setProperty("AnchorLayout", constructAnchorLayoutClass(m_engine));
 
     // Add stuff from KDE libs
+    qScriptRegisterSequenceMetaType<KUrl::List>(m_engine);
     global.setProperty("Url", constructKUrlClass(m_engine));
 
     // Add stuff from Plasma

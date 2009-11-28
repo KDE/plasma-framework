@@ -86,6 +86,11 @@ private:
     static QScriptValue createPrototype(QScriptEngine *engine, const QString &name);
     static QScriptValue widgetAdjustSize(QScriptContext *context, QScriptEngine *engine);
 
+    // run extension
+    static QScriptValue runApplication(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue runCommand(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue openUrl(QScriptContext *context, QScriptEngine *engine);
+
 private:
     static KSharedPtr<UiLoader> s_widgetLoader;
     static QHash<QString, Plasma::Animator::Animation> s_animationDefs;
