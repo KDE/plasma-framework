@@ -142,28 +142,35 @@ public:
     { }
 };
 
-#define ADD_PROTO_PROPERTY(Property, __get__, __set__) \
-    proto.setProperty(Property, eng->newFunction(__get__), QScriptValue::PropertyGetter); \
-    proto.setProperty(Property, eng->newFunction(__set__), QScriptValue::PropertySetter);
-
 QScriptValue constructGridLayoutClass(QScriptEngine *eng)
 {
     QScriptValue proto = QScript::wrapPointer<QGraphicsGridLayout>(eng, new QGraphicsGridLayout(), QScript::UserOwnership);
+    const QScriptValue::PropertyFlags getter = QScriptValue::PropertyGetter;
+    const QScriptValue::PropertyFlags setter = QScriptValue::PropertySetter;
+    proto.setProperty("horizontalSpacing", eng->newFunction(horizontalSpacing), getter);
+    proto.setProperty("horizontalSpacing", eng->newFunction(setHorizontalSpacing), setter);
+    proto.setProperty("verticalSpacing", eng->newFunction(verticalSpacing), getter);
+    proto.setProperty("verticalSpacing", eng->newFunction(setVerticalSpacing), setter);
 
-    ADD_PROTO_PROPERTY("horizontalSpacing", horizontalSpacing, setHorizontalSpacing);
-    ADD_PROTO_PROPERTY("verticalSpacing", verticalSpacing, setVerticalSpacing);
+    ADD_METHOD(proto, rowSpacing);
+    ADD_METHOD(proto, setRowSpacing);
+    ADD_METHOD(proto, columnSpacing);
+    ADD_METHOD(proto, setColumnSpacing);
 
-    ADD_PROTO_PROPERTY("rowSpacing", rowSpacing, setRowSpacing);
-    ADD_PROTO_PROPERTY("columnSpacing", columnSpacing, setColumnSpacing);
-
-    ADD_PROTO_PROPERTY("rowMinimumHeight", rowMinimumHeight, setRowMinimumHeight);
-    ADD_PROTO_PROPERTY("rowPreferredHeight", rowPreferredHeight, setRowPreferredHeight);
-    ADD_PROTO_PROPERTY("rowMaximumHeight", rowMaximumHeight, setRowMaximumHeight);
+    ADD_METHOD(proto, rowMinimumHeight);
+    ADD_METHOD(proto, setRowMinimumHeight);
+    ADD_METHOD(proto, rowPreferredHeight);
+    ADD_METHOD(proto, setRowPreferredHeight);
+    ADD_METHOD(proto, rowMaximumHeight);
+    ADD_METHOD(proto, setRowMaximumHeight);
     ADD_METHOD(proto, setRowFixedHeight);
 
-    ADD_PROTO_PROPERTY("columnMinimumWidth", columnMinimumWidth, setColumnMinimumWidth);
-    ADD_PROTO_PROPERTY("columnPreferredWidth", columnPreferredWidth, setColumnPreferredWidth);
-    ADD_PROTO_PROPERTY("columnMaximumWidth", columnMaximumWidth, setColumnMaximumWidth);
+    ADD_METHOD(proto, columnMinimumWidth);
+    ADD_METHOD(proto, setColumnMinimumWidth);
+    ADD_METHOD(proto, columnPreferredWidth);
+    ADD_METHOD(proto, setColumnPreferredWidth);
+    ADD_METHOD(proto, columnMaximumWidth);
+    ADD_METHOD(proto, setColumnMaximumWidth);
     ADD_METHOD(proto, setColumnFixedWidth);
 
     ADD_METHOD(proto, removeAt);
