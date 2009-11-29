@@ -9,6 +9,7 @@ set(simple_javascript_engine_SRCS
     simplebindings/filedialogproxy.cpp
     simplebindings/graphicsitem.cpp
     simplebindings/linearlayout.cpp
+    simplebindings/gridlayout.cpp
     simplebindings/painter.cpp
     simplebindings/pen.cpp
     simplebindings/pixmap.cpp

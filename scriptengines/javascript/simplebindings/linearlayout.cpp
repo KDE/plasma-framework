@@ -20,8 +20,8 @@
 #include <QtScript/QScriptEngine>
 #include <QtScript/QScriptContext>
 #include <QtGui/QGraphicsWidget>
-#include <QtGui/QGraphicsGridLayout>
 #include <QtGui/QGraphicsLinearLayout>
+#include <QtGui/QGraphicsLayout>
 
 #include <Plasma/Applet>
 
@@ -30,7 +30,7 @@
 
 Q_DECLARE_METATYPE(QScript::Pointer<QGraphicsItem>::wrapped_pointer_type)
 Q_DECLARE_METATYPE(QGraphicsWidget*)
-Q_DECLARE_METATYPE(QGraphicsGridLayout*)
+Q_DECLARE_METATYPE(QGraphicsLayout*)
 Q_DECLARE_METATYPE(QGraphicsLayoutItem*)
 DECLARE_POINTER_METATYPE(QGraphicsLinearLayout)
 
@@ -49,11 +49,7 @@ QGraphicsLayoutItem *layoutItem(QScriptContext *ctx, int index = 0)
     QGraphicsLayoutItem *item = qobject_cast<QGraphicsWidget*>(object);
 
     if (!item) {
-        item = qscriptvalue_cast<QGraphicsLinearLayout*>(ctx->argument(index));
-    }
-
-    if (!item) {
-        item = qscriptvalue_cast<QGraphicsGridLayout*>(ctx->argument(index));
+        item = qscriptvalue_cast<QGraphicsLayout*>(ctx->argument(index));
     }
 
     if (!item) {
