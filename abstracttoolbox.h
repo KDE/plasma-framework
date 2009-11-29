@@ -47,7 +47,7 @@ public:
 
     /**
      * create a toolbox tool from the given action
-     * @p action the action to associate hte tool with
+     * @p action the action to associate the tool with
      */
     virtual void addTool(QAction *action) = 0;
     /**
