@@ -56,18 +56,18 @@ DECLARE_VOID_QUAD_NUMBER_METHOD(QGraphicsGridLayout, setContentsMargins)
 DECLARE_NUMBER_GET_SET_METHODS(QGraphicsGridLayout, horizontalSpacing, setHorizontalSpacing)
 DECLARE_NUMBER_GET_SET_METHODS(QGraphicsGridLayout, verticalSpacing, setVerticalSpacing)
 
-DECLARE_INT_NUMBER_GET_SET_METHODS(QGraphicsGridLayout, rowSpacing, setRowSpacing);
-DECLARE_INT_NUMBER_GET_SET_METHODS(QGraphicsGridLayout, columnSpacing, setColumnSpacing);
+DECLARE_INT_NUMBER_GET_SET_METHODS(QGraphicsGridLayout, rowSpacing, setRowSpacing)
+DECLARE_INT_NUMBER_GET_SET_METHODS(QGraphicsGridLayout, columnSpacing, setColumnSpacing)
 
-DECLARE_INT_NUMBER_GET_SET_METHODS(QGraphicsGridLayout, rowMinimumHeight, setRowMinimumHeight);
-DECLARE_INT_NUMBER_GET_SET_METHODS(QGraphicsGridLayout, rowPreferredHeight, setRowPreferredHeight);
-DECLARE_INT_NUMBER_GET_SET_METHODS(QGraphicsGridLayout, rowMaximumHeight, setRowMaximumHeight);
-DECLARE_INT_NUMBER_SET_METHOD(QGraphicsGridLayout, setRowFixedHeight);
+DECLARE_INT_NUMBER_GET_SET_METHODS(QGraphicsGridLayout, rowMinimumHeight, setRowMinimumHeight)
+DECLARE_INT_NUMBER_GET_SET_METHODS(QGraphicsGridLayout, rowPreferredHeight, setRowPreferredHeight)
+DECLARE_INT_NUMBER_GET_SET_METHODS(QGraphicsGridLayout, rowMaximumHeight, setRowMaximumHeight)
+DECLARE_INT_NUMBER_SET_METHOD(QGraphicsGridLayout, setRowFixedHeight)
 
-DECLARE_INT_NUMBER_GET_SET_METHODS(QGraphicsGridLayout, columnMinimumWidth, setColumnMinimumWidth);
-DECLARE_INT_NUMBER_GET_SET_METHODS(QGraphicsGridLayout, columnPreferredWidth, setColumnPreferredWidth);
-DECLARE_INT_NUMBER_GET_SET_METHODS(QGraphicsGridLayout, columnMaximumWidth, setColumnMaximumWidth);
-DECLARE_INT_NUMBER_SET_METHOD(QGraphicsGridLayout, setColumnFixedWidth);
+DECLARE_INT_NUMBER_GET_SET_METHODS(QGraphicsGridLayout, columnMinimumWidth, setColumnMinimumWidth)
+DECLARE_INT_NUMBER_GET_SET_METHODS(QGraphicsGridLayout, columnPreferredWidth, setColumnPreferredWidth)
+DECLARE_INT_NUMBER_GET_SET_METHODS(QGraphicsGridLayout, columnMaximumWidth, setColumnMaximumWidth)
+DECLARE_INT_NUMBER_SET_METHOD(QGraphicsGridLayout, setColumnFixedWidth)
 
 
 /////////////////////////////////////////////////////////////
