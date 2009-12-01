@@ -1020,7 +1020,7 @@ void IconWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
     d->layoutTextItems(option, icon, &labelLayout, &infoLayout, &textBoundingRect);
 
-    if (d->textBgColor != QColor() &&
+    if (d->textBgColor != QColor() && d->textBgColor.alpha() > 0 &&
         !(d->text.isEmpty() && d->infoText.isEmpty()) &&
         !textBoundingRect.isEmpty() &&
         !qFuzzyCompare(d->hoverAlpha, (qreal)1.0)) {
