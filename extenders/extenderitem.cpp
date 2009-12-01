@@ -497,7 +497,12 @@ void ExtenderItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     font.setWeight(QFont::Bold);
 
     //create a pixmap with the title that is faded out at the right side of the titleRect.
-    QRectF rect = QRectF(d->titleRect().width() - 30, 0, 30, d->titleRect().height());
+    QRectF rect;
+    if (option->direction == Qt::LeftToRight) {
+        rect = QRectF(d->titleRect().width() - 30, 0, 30, d->titleRect().height());
+    } else {
+        rect = QRectF(0, 0, 30, d->titleRect().height());
+    }
 
     QPixmap pixmap(d->titleRect().size().toSize());
     pixmap.fill(Qt::transparent);
@@ -513,8 +518,13 @@ void ExtenderItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     QLinearGradient alphaGradient(0, 0, 1, 0);
     alphaGradient.setCoordinateMode(QGradient::ObjectBoundingMode);
     //TODO: correct handling of right to left text.
-    alphaGradient.setColorAt(0, QColor(0, 0, 0, 255));
-    alphaGradient.setColorAt(1, QColor(0, 0, 0, 0));
+    if (option->direction == Qt::LeftToRight) {
+        alphaGradient.setColorAt(0, QColor(0, 0, 0, 255));
+        alphaGradient.setColorAt(1, QColor(0, 0, 0, 0));
+    } else {
+        alphaGradient.setColorAt(1, QColor(0, 0, 0, 255));
+        alphaGradient.setColorAt(0, QColor(0, 0, 0, 0));
+    }
 
     p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
     p.fillRect(rect, alphaGradient);
