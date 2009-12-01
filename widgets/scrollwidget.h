@@ -198,6 +198,7 @@ private:
     Q_PRIVATE_SLOT(d, void verticalScroll(int value))
     Q_PRIVATE_SLOT(d, void horizontalScroll(int value))
     Q_PRIVATE_SLOT(d, void makeRectVisible())
+    Q_PRIVATE_SLOT(d, void makeItemVisible())
     Q_PRIVATE_SLOT(d, void cleanupDragHandles(QObject *destroyed))
 };
 

@@ -214,6 +214,14 @@ public:
                                                 (widget->pos() + delta).toPoint());
     }
 
+    void makeItemVisible()
+    {
+        QRectF rect(widget->mapFromScene(itemToBeVisible->scenePos()), itemToBeVisible->boundingRect().size());
+        rectToBeVisible = rect;
+
+        makeRectVisible();
+    }
+
     void cleanupDragHandles(QObject *destroyed)
     {
         dragHandles.remove(static_cast<QGraphicsWidget *>(destroyed));
@@ -233,6 +241,7 @@ public:
     ScrollBar *horizontalScrollBar;
     Qt::ScrollBarPolicy horizontalScrollBarPolicy;
     QString styleSheet;
+    QGraphicsItem *itemToBeVisible;
     QRectF rectToBeVisible;
     QPointF dragHandleClicked;
     QSet<QGraphicsWidget *>dragHandles;
@@ -351,11 +360,10 @@ void ScrollWidget::ensureItemVisible(QGraphicsItem *item)
         parentOfItem = parentOfItem->parentItem();
     }
 
-    QRectF rect(d->widget->mapFromScene(item->scenePos()), item->boundingRect().size());
-    d->rectToBeVisible = rect;
+    d->itemToBeVisible = item;
 
     // We need to wait for the parent item to resize...
-    QTimer::singleShot(0, this, SLOT(makeRectVisible()));
+    QTimer::singleShot(0, this, SLOT(makeItemVisible()));
 }
 
 void ScrollWidget::registerAsDragHandle(QGraphicsWidget *item)
