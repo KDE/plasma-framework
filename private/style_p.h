@@ -56,6 +56,9 @@ protected:
     QRect subControlRect(ComplexControl control, const QStyleOptionComplex *option,
                          SubControl subControl, const QWidget *widget) const;
 
+    QRect subElementRect(SubElement element, const QStyleOption * option, const QWidget *widget = 0) const;
+    QSize sizeFromContents(ContentsType, const QStyleOption *option, const QSize &contentsSize,
+                           const QWidget *widget = 0) const;
 private:
     StylePrivate *d;
 };

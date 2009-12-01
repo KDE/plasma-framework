@@ -335,6 +335,40 @@ int Style::pixelMetric(PixelMetric metric, const QStyleOption *option, const QWi
     }
 }
 
+QRect Style::subElementRect(SubElement element, const QStyleOption *option, const QWidget *widget) const
+{
+    switch (element) {
+    case SE_LineEditContents: {
+        d->createTextBox();
+        d->textBox->setElementPrefix("base");
+
+        qreal left, top, right, bottom;
+        d->textBox->getMargins(left, top, right, bottom);
+        return option->rect.adjusted(left + 2, top + 2, -(right + 2), -(bottom + 2)); 
+    }
+    default:
+        return qApp->style()->subElementRect(element, option, widget);
+    }
+}
+
+QSize Style::sizeFromContents(ContentsType type, const QStyleOption *option,
+                              const QSize &contentsSize, const QWidget *widget) const
+{
+    switch (type) {
+    case CT_LineEdit: {
+        d->createTextBox();
+        d->textBox->setElementPrefix("base");
+
+        qreal left, top, right, bottom;
+        d->textBox->getMargins(left, top, right, bottom);
+        return contentsSize + QSize(left + right + 4, top + bottom + 4);
+    }
+    default:
+        return qApp->style()->sizeFromContents(type, option, contentsSize, widget);
+    }
+    
+}
+
 }
 
 #include "style_p.moc"
