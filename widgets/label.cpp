@@ -134,6 +134,7 @@ Label::~Label()
 void Label::setText(const QString &text)
 {
     static_cast<QLabel*>(widget())->setText(text);
+    updateGeometry();
 }
 
 QString Label::text() const
