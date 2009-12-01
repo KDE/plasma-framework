@@ -49,6 +49,10 @@
 namespace Plasma
 {
 
+static const int buttonHMargin = 4;
+static const int buttonVMargin = 3;
+static const int iconSpacing = 4;
+
 class NativeTabBarPrivate
 {
 public:
@@ -255,8 +259,8 @@ void NativeTabBar::paintEvent(QPaintEvent *event)
     }
 
     for (int i = 0; i < count(); ++i) {
-        QRect rect = tabRect(i).adjusted(d->buttonLeft, d->buttonTop,
-                                         -d->buttonRight, -d->buttonBottom);
+        QRect rect = tabRect(i).adjusted(d->buttonLeft + buttonHMargin, d->buttonTop + buttonVMargin,
+                                         -(d->buttonRight + buttonHMargin), -(d->buttonBottom + buttonVMargin));
         // draw tab icon
         QRect iconRect = QRect(rect.x(), rect.y(), iconSize().width(), iconSize().height());
 
@@ -277,7 +281,7 @@ void NativeTabBar::paintEvent(QPaintEvent *event)
         QRect textRect = rect;
 
         if (!tabIcon(i).isNull()) {
-            textRect.setLeft(iconRect.right());
+            textRect.setLeft(iconRect.right() + iconSpacing);
         }
 
 
@@ -432,8 +436,8 @@ QSize NativeTabBar::tabSize(int index) const
     QSize hint;
     const QFontMetrics metrics(QApplication::font());
     const QSize textSize = metrics.size(Qt::TextHideMnemonic, tabText(index));
-    hint.rwidth() = textSize.width() + iconSize().width();
-    hint.rheight() = qMax(iconSize().height(), textSize.height());
+    hint.rwidth() = textSize.width() + iconSpacing + iconSize().width() + buttonHMargin * 2;
+    hint.rheight() = qMax(iconSize().height(), textSize.height()) + buttonVMargin * 2;
     hint.rwidth() += d->buttonLeft + d->buttonRight;
     hint.rheight() += d->buttonTop + d->buttonBottom;
 
