@@ -1287,7 +1287,6 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
             Applet *applet = q->addApplet("internal:extender", QVariantList(), geometry);
             item->setExtender(applet->extender());
         }
-
     } else if (KUrl::List::canDecode(mimeData)) {
         //TODO: collect the mimetypes of available script engines and offer
         //      to create widgets out of the matching URLs, if any
@@ -1370,8 +1369,17 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
         }
 
         if (!selectedPlugin.isEmpty()) {
+            if (!dropEvent) {
+                // since we may have entered an event loop up above with the menu,
+                // the clipboard item may no longer be valid, as QClipboard resets
+                // the object behind the back of the application with a zero timer
+                // so we fetch it again here
+                QClipboard *clipboard = QApplication::clipboard();
+                mimeData = clipboard->mimeData(QClipboard::Selection);
+            }
+
             KTemporaryFile tempFile;
-            if (tempFile.open()) {
+            if (mimeData && tempFile.open()) {
                 //TODO: what should we do with files after the applet is done with them??
                 tempFile.setAutoRemove(false);
 
