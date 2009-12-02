@@ -711,10 +711,17 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         if (m_pressedButton == ResizeButton) {
             // set applet size
             //kDebug() << newCenter << m_originalGeom.topLeft() << newSize;
-            QPointF newPos = m_originalGeom.topLeft() + _k_rotatePoint(newCenter, m_angle);
-            m_applet->setPos(newPos);
-           // m_applet->moveBy(newCenter.x(), newCenter.y());
-            m_applet->resize(newSize.x(), newSize.y());
+
+            // Prevent the plasmoid from resizing itself to a smaller value than the minimumsize
+            if (newSize.x() > m_applet->minimumSize().width() &&
+                 newSize.y() > m_applet->minimumSize().height() &&
+                 newSize.x() > m_applet->effectiveSizeHint(Qt::MinimumSize).width() &&
+                 newSize.y() > m_applet->effectiveSizeHint(Qt::MinimumSize).height()) {
+                QPointF newPos = m_originalGeom.topLeft() + _k_rotatePoint(newCenter, m_angle);
+                m_applet->setPos(newPos);
+                // m_applet->moveBy(newCenter.x(), newCenter.y());
+                m_applet->resize(newSize.x(), newSize.y());
+            }
         } else {
             // set applet handle rotation - rotate around center of applet
             QRectF appletGeomLocal = m_originalGeom;
