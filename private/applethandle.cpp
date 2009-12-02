@@ -232,7 +232,7 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
                     1 - ((m_background->marginSize(RightMargin) + translation) / m_decorationRect.width());
                 g.setColorAt(1.0, Qt::transparent);
                 g.setColorAt(opaquePoint + 0.05, Qt::transparent);
-                g.setColorAt(qMax(0.0, opaquePoint), transparencyColor);
+                g.setColorAt(qMax(qreal(0), opaquePoint), transparencyColor);
                 g.setColorAt(0.0, transparencyColor);
             }
         //complete panel
