@@ -14,6 +14,7 @@ Comment[et]=Plasma konteineritoimingud
 Comment[eu]=Plasma ContainmentActions
 Comment[gl]=ContainmentActions de Plasma 
 Comment[hr]=Plasma ContainmentActions
+Comment[hu]=Plasma tartóműveletek
 Comment[id]=Plasma Aksi Berisi
 Comment[is]=Plasma ContainmentActions
 Comment[ko]=Plasma ContainmentActions
@@ -27,6 +28,7 @@ Comment[sv]=Plasma omgivningsåtgärder
 Comment[tr]=Plasma İçerici Eylemleri
 Comment[uk]=Дії контейнерів Плазми
 Comment[x-test]=xxPlasma ContainmentActionsxx
+Comment[zh_CN]=Plasma 容器动作
 Comment[zh_TW]=Plasma 容器動作
 
 [PropertyDef::X-Plasma-HasConfigurationInterface]
