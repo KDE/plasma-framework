@@ -29,7 +29,7 @@
 #include <QPainter>
 #include <QPalette>
 #include <QTextDocument>
-#include <QTimeLine>
+#include <QPropertyAnimation>
 #ifdef Q_WS_X11
 #include <QX11Info>
 #include <netwm.h>
@@ -135,7 +135,6 @@ class ToolTipPrivate
         : text(0),
           imageLabel(0),
           preview(0),
-          timeline(0),
           direction(Plasma::Up),
           autohide(true)
     { }
@@ -145,9 +144,7 @@ class ToolTipPrivate
     WindowPreview *preview;
     FrameSvg *background;
     QWeakPointer<QObject> source;
-    QTimeLine *timeline;
-    QPoint to;
-    QPoint from;
+    QPropertyAnimation *animation;
     Plasma::Direction direction;
     bool autohide;
 };
@@ -162,6 +159,10 @@ ToolTip::ToolTip(QWidget *parent)
     d->text = new TipTextWidget(this);
     d->imageLabel = new QLabel(this);
     d->imageLabel->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+
+    d->animation = new QPropertyAnimation(this, "pos", this);
+    d->animation->setEasingCurve(QEasingCurve::InOutQuad);
+    d->animation->setDuration(250);
 
     d->background = new FrameSvg(this);
     d->background->setImagePath("widgets/tooltip");
@@ -319,33 +320,11 @@ void ToolTip::moveTo(const QPoint &to)
         return;
     }
 
-    d->from = QPoint();
-    d->to = to;
-
-    if (!d->timeline) {
-        d->timeline = new QTimeLine(250, this);
-        d->timeline->setFrameRange(0, 10);
-        d->timeline->setCurveShape(QTimeLine::EaseInCurve);
-        connect(d->timeline, SIGNAL(valueChanged(qreal)), this, SLOT(animateMove(qreal)));
+    if (d->animation->state() == QAbstractAnimation::Running) {
+        d->animation->stop();
     }
-
-    d->timeline->stop();
-    d->timeline->start();
-}
-
-void ToolTip::animateMove(qreal progress)
-{
-    if (d->from.isNull()) {
-        d->from = pos();
-    }
-
-    if (qFuzzyCompare(progress, qreal(1.0))) {
-        move(d->to);
-        return;
-    }
-
-    move(d->from.x() + ((d->to.x() - d->from.x()) * progress),
-         d->from.y() + ((d->to.y() - d->from.y()) * progress));
+    d->animation->setEndValue(to);
+    d->animation->start();
 }
 
 void ToolTip::resizeEvent(QResizeEvent *e)
