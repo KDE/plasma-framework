@@ -21,6 +21,7 @@
 #define PLASMA_ABSTRACTTOOLBOX_H
 
 #include <QGraphicsWidget>
+#include <QGraphicsItem>
 
 #include "containment.h"
 
