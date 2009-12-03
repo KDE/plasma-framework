@@ -571,6 +571,12 @@ qreal _k_pointAngle(QPointF in)
 
 QPointF _k_rotatePoint(QPointF in, qreal rotateAngle)
 {
+    // if the point is 0, 0 it should always be the same even if rotated
+    // without this the function would return a NaN
+    if (in == QPointF(0, 0)) {
+        return in;
+    }
+
     qreal r = sqrt(in.x()*in.x() + in.y()*in.y());
     qreal cosine = in.x()/r;
     qreal sine = in.y()/r;
@@ -711,17 +717,10 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         if (m_pressedButton == ResizeButton) {
             // set applet size
             //kDebug() << newCenter << m_originalGeom.topLeft() << newSize;
-
-            // Prevent the plasmoid from resizing itself to a smaller value than the minimumsize
-            if (newSize.x() > m_applet->minimumSize().width() &&
-                 newSize.y() > m_applet->minimumSize().height() &&
-                 newSize.x() > m_applet->effectiveSizeHint(Qt::MinimumSize).width() &&
-                 newSize.y() > m_applet->effectiveSizeHint(Qt::MinimumSize).height()) {
-                QPointF newPos = m_originalGeom.topLeft() + _k_rotatePoint(newCenter, m_angle);
-                m_applet->setPos(newPos);
-                // m_applet->moveBy(newCenter.x(), newCenter.y());
-                m_applet->resize(newSize.x(), newSize.y());
-            }
+            QPointF newPos = m_originalGeom.topLeft() + _k_rotatePoint(newCenter, m_angle);
+            m_applet->setPos(newPos);
+           // m_applet->moveBy(newCenter.x(), newCenter.y());
+            m_applet->resize(newSize.x(), newSize.y());
         } else {
             // set applet handle rotation - rotate around center of applet
             QRectF appletGeomLocal = m_originalGeom;
