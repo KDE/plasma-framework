@@ -97,11 +97,6 @@ void Animation::setVisible(bool isVisible)
     d->animVisible = isVisible;
 }
 
-bool Animation::isVisible() const
-{
-    return d->animVisible;
-}
-
 void Animation::start(QAbstractAnimation::DeletionPolicy policy)
 {
     /* TODO: Actually treat policy parameter */

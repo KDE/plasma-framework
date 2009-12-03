@@ -54,7 +54,6 @@ SlideAnimation::SlideAnimation(QObject *parent,
 {
     setMovementDirection(direction);
     setDistance(distance);
-    setVisible(true);
 }
 
 void SlideAnimation::setMovementDirection(const qint8 &direction)
@@ -138,11 +137,6 @@ QAbstractAnimation* SlideAnimation::render(QObject* parent)
 
     return anim;
 
-}
-
-void SlideAnimation::setVisibleAtEnd(bool visibility)
-{
-    setVisible(visibility);
 }
 
 } //namespace Plasma

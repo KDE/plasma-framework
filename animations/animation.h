@@ -30,6 +30,7 @@
 #include <QPropertyAnimation>
 #include <QAbstractAnimation>
 #include <plasma/plasma_export.h>
+#include <plasma/plasma.h>
 
 namespace Plasma
 {
@@ -46,7 +47,6 @@ class PLASMA_EXPORT Animation : public QAbstractAnimation
     Q_OBJECT
     Q_PROPERTY(int duration READ duration WRITE setDuration)
     Q_PROPERTY(QEasingCurve::Type easingCurveType READ easingCurveType WRITE setEasingCurveType)
-    Q_PROPERTY(bool isVisible READ isVisible WRITE setVisible)
     Q_PROPERTY(QGraphicsWidget *widgetToAnimate READ widgetToAnimate WRITE setWidgetToAnimate)
 
 public:
