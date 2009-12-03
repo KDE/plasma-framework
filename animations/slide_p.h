@@ -24,8 +24,10 @@
 #ifndef PLASMA_ANIMATIONS_SLIDE_H
 #define PLASMA_ANIMATIONS_SLIDE_H
 
-#include <plasma/animations/animation.h>
-#include <plasma/plasma_export.h>
+#include "plasma/animations/animation.h"
+#include "plasma/plasma_export.h"
+#include "plasma/plasma.h"
+
 
 namespace Plasma
 {
