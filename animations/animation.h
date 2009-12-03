@@ -92,23 +92,8 @@ public:
      */
     QEasingCurve::Type easingCurveType() const;
 
-    /**
-     * set the animation visibility
-     * @arg isVisible animation visibility
-     */
-    void setVisible(bool isVisible);
-
-    /**
-     * get the animation visibility
-     */
-    bool isVisible() const;
-
 public Q_SLOTS:
-    /**
-     * Start the animation.
-     */
     void start(QAbstractAnimation::DeletionPolicy policy = KeepWhenStopped);
-
     /**
      * Each individual class must override this function to place their main
      * functionality. This function must take the values from the constructor,

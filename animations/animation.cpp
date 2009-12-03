@@ -33,8 +33,7 @@ namespace Plasma
 
 
 AnimationPrivate::AnimationPrivate()
-    : animVisible(true),
-      dirtyFlag(false),
+    : dirtyFlag(false),
       easingCurve(QEasingCurve::Linear),
       forwards(QAbstractAnimation::Forward),
       duration(250)
@@ -52,14 +51,14 @@ Animation::~Animation()
     delete d;
 }
 
-void Animation::setDuration(int duration)
-{
-    d->duration = duration;
-}
-
 int Animation::duration() const
 {
     return d->duration;
+}
+
+void Animation::setDuration(int duration)
+{
+    d->duration = qMax(0, duration);
 }
 
 void Animation::setWidgetToAnimate(QGraphicsWidget* receiver)
@@ -90,11 +89,6 @@ QAbstractAnimation::Direction Animation::direction() const
 void Animation::updateDirection(QAbstractAnimation::Direction direction)
 {
     d->forwards = direction;
-}
-
-void Animation::setVisible(bool isVisible)
-{
-    d->animVisible = isVisible;
 }
 
 void Animation::start(QAbstractAnimation::DeletionPolicy policy)

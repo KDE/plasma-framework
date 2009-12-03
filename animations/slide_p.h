@@ -63,12 +63,6 @@ public:
     qreal distance() const;
 
     /**
-     * Set if the widget is visible at the end of the animation (default True).
-     * @param visibility True for visible, False for not.
-     */
-    void setVisibleAtEnd(bool visibility);
-
-    /**
      * Set the animation direction
      * @arg direction animation direction
      */
