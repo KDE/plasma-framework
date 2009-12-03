@@ -75,7 +75,7 @@ void AnimationGroup::setParallel(bool parallel)
         newGroup = new QSequentialAnimationGroup(this);
 
     while (d->anim->animationCount()) {
-        newGroup->addAnimation(d->anim->takeAnimation(0));
+        newGroup->addAnimation(d->anim->takeAnimationAt(0));
     }
 
     delete d->anim;
