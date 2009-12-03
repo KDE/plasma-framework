@@ -48,6 +48,7 @@ AnimationGroup::AnimationGroup(QObject* parent)
       d(new AnimationGroupPrivate)
 {
     d->anim = new QSequentialAnimationGroup(this);
+    connect(d->anim, SIGNAL(finished()), this, SIGNAL(finished()));
 }
 
 AnimationGroup::~AnimationGroup()
@@ -75,11 +76,13 @@ void AnimationGroup::setParallel(bool parallel)
         newGroup = new QSequentialAnimationGroup(this);
 
     while (d->anim->animationCount()) {
-        newGroup->addAnimation(d->anim->takeAnimationAt(0));
+        newGroup->addAnimation(d->anim->takeAnimation(0));
     }
 
+    disconnect(d->anim, SIGNAL(finished()), this, SIGNAL(finished()));
     delete d->anim;
     d->anim = newGroup;
+    connect(d->anim, SIGNAL(finished()), this, SIGNAL(finished()));
 }
 
 bool AnimationGroup::isParallel() const
@@ -138,10 +141,12 @@ void AnimationGroup::updateCurrentTime(int currentTime)
     if (d->forwards == QAbstractAnimation::Forward) {
         if (currentTime == duration()) {
             d->dirtyFlag = false;
+            emit finished();
         }
     } else if (d->forwards == QAbstractAnimation::Backward) {
         if (currentTime == 0) {
             d->dirtyFlag = false;
+            emit finished();
         }
     }
 }

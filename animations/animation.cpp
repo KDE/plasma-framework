@@ -125,10 +125,12 @@ void Animation::updateCurrentTime(int currentTime)
      if (d->forwards == QAbstractAnimation::Forward) {
         if (currentTime == duration()) {
             d->dirtyFlag = false;
+            emit finished();
         }
     } else if (d->forwards == QAbstractAnimation::Backward) {
         if (currentTime == 0) {
             d->dirtyFlag = false;
+            emit finished();
         }
     }
 
