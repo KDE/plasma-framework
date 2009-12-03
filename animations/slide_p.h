@@ -76,21 +76,23 @@ public:
     void setWidgetToAnimate(QGraphicsWidget *widget);
 
 protected:
+    void start(QAbstractAnimation::DeletionPolicy policy = KeepWhenStopped);
     virtual QAbstractAnimation* render(QObject* parent = 0);
+    void syncProperties();
 
 private:
     /**
      * Animation direction: where the animation will move.
      */
-    Plasma::AnimationDirection animDirection;
+    Plasma::AnimationDirection m_animDirection;
 
     /**
      * Animation distance: displacement factor for animations where
      * there is change in the position of animated widget.
      */
-    qreal animDistance;
+    qreal m_animDistance;
 
-    QWeakPointer<QPropertyAnimation> animation;
+    QPropertyAnimation *m_animation;
 };
 
 }

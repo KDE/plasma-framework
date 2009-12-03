@@ -91,18 +91,6 @@ void Animation::updateDirection(QAbstractAnimation::Direction direction)
     d->forwards = direction;
 }
 
-void Animation::start(QAbstractAnimation::DeletionPolicy policy)
-{
-    /* TODO: Actually treat policy parameter */
-
-    QAbstractAnimation* anim = render(parent());
-    if (anim) {
-        anim->setDirection(direction());
-        anim->start();
-    }
-}
-
-
 void Animation::updateCurrentTime(int currentTime)
 {
     /**

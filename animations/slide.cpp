@@ -28,50 +28,23 @@ namespace Plasma
 void SlideAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
 {
     Animation::setWidgetToAnimate(widget);
-    if (animation.data()) {
-        delete animation.data();
-        animation.clear();
+    if (m_animation) {
+        delete m_animation;
     }
 
-}
-void SlideAnimation::setDistance(qreal distance)
-{
-    animDistance = distance;
+    m_animation = new QPropertyAnimation(widget, "pos", widget);
+
+    syncProperties();
+
+    QObject::connect(m_animation, SIGNAL(finished()), widget, SLOT(show()));
+    QObject::connect(m_animation, SIGNAL(finished()), this, SIGNAL(finished()));
 }
 
-qreal SlideAnimation::distance() const
+void SlideAnimation::syncProperties()
 {
-    return animDistance;
-}
-
-SlideAnimation::~SlideAnimation()
-{
-}
-
-SlideAnimation::SlideAnimation(QObject *parent,
-                               AnimationDirection direction,
-                               qreal distance) : Animation(parent)
-{
-    setMovementDirection(direction);
-    setDistance(distance);
-}
-
-void SlideAnimation::setMovementDirection(const qint8 &direction)
-{
-    animDirection = static_cast<Plasma::AnimationDirection>(direction);
-}
-
-qint8 SlideAnimation::movementDirection() const
-{
-    return static_cast<qint8>(animDirection);
-}
-
-QAbstractAnimation* SlideAnimation::render(QObject* parent)
-{
-    bool dirty = false;
-    QGraphicsWidget *m_object = widgetToAnimate();
-    qreal x = m_object->x();
-    qreal y = m_object->y();
+    QGraphicsWidget *widget = widgetToAnimate();
+    qreal x = widget->x();
+    qreal y = widget->y();
 
     qreal newX = x;
     qreal newY = y;
@@ -117,26 +90,61 @@ QAbstractAnimation* SlideAnimation::render(QObject* parent)
 
     default:
         kDebug()<<"Compound direction is not supported";
-        return 0;
+        return;
     }
 
-    //Recreate only if needed
-    QPropertyAnimation* anim = animation.data();
-    if (!anim) {
-        anim = new QPropertyAnimation(m_object, "pos", parent);
-        dirty = true;
-        animation = anim;
-    }
-    anim->setEndValue(QPointF(newX, newY));
-    anim->setDuration(duration());
+    m_animation->setEndValue(QPointF(newX, newY));
+    m_animation->setDuration(duration());
+}
 
+void SlideAnimation::setDistance(qreal distance)
+{
+    m_animDistance = distance;
+    syncProperties();
+}
 
-    if (dirty) {
-        QObject::connect(anim, SIGNAL(finished()), m_object, SLOT(show()));
-    }
+qreal SlideAnimation::distance() const
+{
+    return m_animDistance;
+}
 
-    return anim;
+SlideAnimation::~SlideAnimation()
+{
+}
 
+SlideAnimation::SlideAnimation(QObject *parent,
+                               AnimationDirection direction,
+                               qreal distance)
+          : Animation(parent),
+          m_animation(0)
+{
+    setMovementDirection(direction);
+    setDistance(distance);
+}
+
+void SlideAnimation::setMovementDirection(const qint8 &direction)
+{
+    m_animDirection = static_cast<Plasma::AnimationDirection>(direction);
+    syncProperties();
+}
+
+qint8 SlideAnimation::movementDirection() const
+{
+    return static_cast<qint8>(m_animDirection);
+}
+
+void SlideAnimation::start(QAbstractAnimation::DeletionPolicy policy)
+{
+   /* TODO: Actually treat policy parameter */
+
+   if (m_animation) {
+       m_animation->setDirection(direction());
+       m_animation->start();
+   }
+}
+
+QAbstractAnimation* SlideAnimation::render(QObject* parent)
+{
 }
 
 } //namespace Plasma

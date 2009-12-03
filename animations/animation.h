@@ -92,8 +92,12 @@ public:
      */
     QEasingCurve::Type easingCurveType() const;
 
+    /**
+     * get the animation visibility
+     */
+    bool isVisible() const;
+
 public Q_SLOTS:
-    void start(QAbstractAnimation::DeletionPolicy policy = KeepWhenStopped);
     /**
      * Each individual class must override this function to place their main
      * functionality. This function must take the values from the constructor,
@@ -101,7 +105,6 @@ public Q_SLOTS:
      * QPropertyAnimation initialized with the given parent.
      */
     virtual QAbstractAnimation* render(QObject* parent = 0) = 0;
-
 
 
 protected:
