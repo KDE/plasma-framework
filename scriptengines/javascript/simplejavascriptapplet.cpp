@@ -60,7 +60,7 @@ Q_DECLARE_METATYPE(Applet*)
 Q_DECLARE_METATYPE(QGraphicsWidget*)
 Q_DECLARE_METATYPE(QGraphicsLayout*)
 Q_DECLARE_METATYPE(KConfigGroup)
-Q_DECLARE_METATYPE(Plasma::AbstractAnimation *)
+Q_DECLARE_METATYPE(Plasma::Animation *)
 Q_DECLARE_METATYPE(Plasma::AnimationGroup *)
 
 Q_SCRIPT_DECLARE_QMETAOBJECT(AppletInterface, SimpleJavaScriptApplet*)
@@ -543,16 +543,16 @@ bool SimpleJavaScriptApplet::importExtensions()
     return true;
 }
 
-typedef AbstractAnimation* AbstractAnimationPtr;
-QScriptValue qScriptValueFromAbstractAnimation(QScriptEngine *engine, const AbstractAnimationPtr &anim)
+typedef Animation* AnimationPtr;
+QScriptValue qScriptValueFromAnimation(QScriptEngine *engine, const AnimationPtr &anim)
 {
-    return engine->newQObject(const_cast<AbstractAnimation *>(anim));
+    return engine->newQObject(const_cast<Animation *>(anim));
 }
 
-void abstractAnimationFromQScriptValue(const QScriptValue &scriptValue, AbstractAnimationPtr &anim)
+void abstractAnimationFromQScriptValue(const QScriptValue &scriptValue, AnimationPtr &anim)
 {
     QObject *obj = scriptValue.toQObject();
-    anim = static_cast<AbstractAnimation *>(obj);
+    anim = static_cast<Animation *>(obj);
 }
 
 typedef QGraphicsWidget * QGraphicsWidgetPtr;
@@ -573,7 +573,7 @@ void SimpleJavaScriptApplet::setupObjects()
 
     // Bindings for animations
     global.setProperty("animation", m_engine->newFunction(SimpleJavaScriptApplet::animation));
-    qScriptRegisterMetaType<AbstractAnimation*>(m_engine, qScriptValueFromAbstractAnimation, abstractAnimationFromQScriptValue);
+    qScriptRegisterMetaType<Animation*>(m_engine, qScriptValueFromAnimation, abstractAnimationFromQScriptValue);
     global.setProperty("AnimationGroup", m_engine->newFunction(SimpleJavaScriptApplet::animationGroup));
 
     // Bindings for data engine
