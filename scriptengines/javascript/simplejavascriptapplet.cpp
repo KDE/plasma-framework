@@ -36,7 +36,7 @@
 #include <KLocale>
 #include <KRun>
 
-#include <Plasma/AbstractAnimation>
+#include <Plasma/Animation>
 #include <Plasma/AnimationGroup>
 #include <Plasma/Applet>
 #include <Plasma/Svg>
@@ -375,7 +375,6 @@ void SimpleJavaScriptApplet::populateAnimationsHash()
     if (s_animationDefs.isEmpty()) {
         s_animationDefs.insert("fade", Plasma::Animator::FadeAnimation);
         s_animationDefs.insert("grow", Plasma::Animator::GrowAnimation);
-        s_animationDefs.insert("expand", Plasma::Animator::ExpandAnimation);
         s_animationDefs.insert("pause", Plasma::Animator::PauseAnimation);
         s_animationDefs.insert("pulse", Plasma::Animator::PulseAnimation);
         s_animationDefs.insert("rotate", Plasma::Animator::RotationAnimation);
@@ -728,7 +727,7 @@ QScriptValue SimpleJavaScriptApplet::animation(QScriptContext *context, QScriptE
         return context->throwError(i18n("Could not extract the Applet"));
     }
 
-    Plasma::AbstractAnimation *anim = Plasma::Animator::create(s_animationDefs.value(animName), interface->applet());
+    Plasma::Animation *anim = Plasma::Animator::create(s_animationDefs.value(animName), interface->applet());
     anim->setWidgetToAnimate(interface->applet());
     return engine->newQObject(anim);
 }
