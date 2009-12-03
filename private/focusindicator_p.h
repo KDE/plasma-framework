@@ -22,7 +22,7 @@
 
 #include <QGraphicsWidget>
 
-#include <plasma/animations/abstractanimation.h>
+#include <plasma/animations/animation.h>
 
 namespace Plasma
 {
@@ -51,7 +51,7 @@ private Q_SLOTS:
 private:
     QGraphicsWidget *m_parent;
     Plasma::FrameSvg *m_background;
-    AbstractAnimation *m_fade;
+    Animation *m_fade;
     QRectF m_customGeometry;
     QString m_prefix;
     QString m_customPrefix;

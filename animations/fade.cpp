@@ -59,26 +59,30 @@ qreal FadeAnimation::targetOpacity() const
 
 void FadeAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
 {
-
     Animation::setWidgetToAnimate(widget);
-
     if (widget) {
         widget->setOpacity(m_startOpacity);
-        m_widget = widget;
+    }
+
+    if (animation.data()) {
+        delete animation.data();
+        animation.clear();
     }
 }
 
 QAbstractAnimation* FadeAnimation::render(QObject* parent)
 {
     //create animation
-    QPropertyAnimation* anim = dynamic_cast<QPropertyAnimation* >(animation());
+    QPropertyAnimation* anim = animation.data();
     if (!anim) {
-        anim = new QPropertyAnimation(m_widget.data(), "opacity", parent);
-        setAnimation(anim);
+        QGraphicsWidget *widget = widgetToAnimate();
+        anim = new QPropertyAnimation(widget, "opacity", widget);
+        animation = anim;
+        qDebug()<<"creating";
     }
 
-    anim->setStartValue(m_startOpacity);
-    anim->setEndValue(m_targetOpacity);
+    anim->setStartValue(startOpacity());
+    anim->setEndValue(targetOpacity());
     anim->setDuration(duration());
 
     return anim;

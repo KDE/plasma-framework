@@ -29,8 +29,7 @@
 #include <QGraphicsWidget>
 #include <QList>
 #include <QObject>
-
-#include <plasma/animations/abstractanimation.h>
+#include <plasma/animations/animation.h>
 #include <plasma/plasma_export.h>
 
 namespace Plasma
@@ -42,18 +41,25 @@ class AnimationGroupPrivate;
  * @brief A group of Animations and / or AnimationGroups.
  * @since 4.4
  */
-class PLASMA_EXPORT AnimationGroup : public AbstractAnimation
+class PLASMA_EXPORT AnimationGroup : public QAbstractAnimation
 {
     Q_OBJECT
     Q_PROPERTY(bool parallel READ isParallel WRITE setParallel)
 
 public:
 
+    QAbstractAnimation::Direction direction() const;
+
+    //void setDirection(QAbstractAnimation::Direction direction);
+
     explicit AnimationGroup(QObject* parent = 0);
     virtual ~AnimationGroup();
 
+    int duration() const;
+
     /**
-     * @arg parallelness whether the animation should be in parallel or not
+     * @arg parallelness whether the animation should be in parallel or not,
+     * by default, it is not parallel
      */
     void setParallel(bool parallelness);
 
@@ -62,32 +68,25 @@ public:
      */
     bool isParallel() const;
 
-    /**
-     * Take the animation object and turn it into a QAnimationGroup. More
-     * specifically, a QSerialAnimation or QParallelAnimation depending on
-     * the value of m_parallel at the time of invocation. Returns NULL on error.
-     */
-    QAnimationGroup* toQAbstractAnimation(QObject* parent = 0);
-
 public Q_SLOTS:
     /**
      * Add an Animation or AnimationGroup to the group
      * @arg elem element to add
      * @return id of element added
      */
-    Q_INVOKABLE int add(Plasma::AbstractAnimation* elem);
+    Q_INVOKABLE int add(QAbstractAnimation* elem);
 
     /**
      * Remove an Animation or AnimationGroup from this group
      * @arg eleme element to remove
      */
-    Q_INVOKABLE void remove(Plasma::AbstractAnimation* elem);
+    Q_INVOKABLE void remove(QAbstractAnimation* elem);
 
     /**
      * Return element with given id
      * @return id of element to get
      */
-    Q_INVOKABLE AbstractAnimation* at(int id) const;
+    Q_INVOKABLE QAbstractAnimation* at(int id) const;
 
     /**
      * Remove element with given id
@@ -95,8 +94,21 @@ public Q_SLOTS:
      */
     Q_INVOKABLE void remove(int id);
 
+    /**
+     * Start the animation.
+     */
+    void start(QAbstractAnimation::DeletionPolicy policy = KeepWhenStopped);
+
+
+protected:
+    void updateCurrentTime(int currentTime);
+    void calculateGroupDuration();
+    void updateDirection(QAbstractAnimation::Direction direction);
+    void updateState(QAbstractAnimation::State oldState,
+                     QAbstractAnimation::State newState);
+
 private:
-    AnimationGroupPrivate * const d;
+    AnimationGroupPrivate *const d;
 };
 
 

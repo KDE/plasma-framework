@@ -30,6 +30,7 @@
 namespace Plasma
 {
 
+class SlideAnimationPrivate;
 /**
  * @class Slide plasma/animations/slide.h
  * @short Slide effect
@@ -40,19 +41,60 @@ namespace Plasma
 class SlideAnimation : public Animation
 {
     Q_OBJECT
+    Q_PROPERTY(qint8 movementDirection READ movementDirection WRITE setMovementDirection)
+    Q_PROPERTY(qreal distance READ distance WRITE setDistance)
 
 public:
-    SlideAnimation(AnimationDirection direction = MoveUp, qreal distance = 0);
-    virtual ~SlideAnimation(){};
+    SlideAnimation(QObject *parent = 0,
+                   AnimationDirection direction = MoveUp, qreal distance = 0);
+    ~SlideAnimation();
+
+    /**
+     * Set the animation distance
+     * @distance animation distance
+     */
+    void setDistance(qreal distance);
+
+    /**
+     * Get the animation distance
+     */
+    qreal distance() const;
+
     /**
      * Set if the widget is visible at the end of the animation (default True).
      * @param visibility True for visible, False for not.
      */
     void setVisibleAtEnd(bool visibility);
 
+    /**
+     * Set the animation direction
+     * @arg direction animation direction
+     */
+    void setMovementDirection(const qint8 &direction);
+
+    /**
+     * Get the animation direction
+     */
+    qint8 movementDirection() const;
+
+    void setWidgetToAnimate(QGraphicsWidget *widget);
+
 protected:
     virtual QAbstractAnimation* render(QObject* parent = 0);
 
+private:
+    /**
+     * Animation direction: where the animation will move.
+     */
+    Plasma::AnimationDirection animDirection;
+
+    /**
+     * Animation distance: displacement factor for animations where
+     * there is change in the position of animated widget.
+     */
+    qreal animDistance;
+
+    QWeakPointer<QPropertyAnimation> animation;
 };
 
 }

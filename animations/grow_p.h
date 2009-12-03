@@ -45,19 +45,21 @@ class GrowAnimation : public Animation
 
 public:
 
-    GrowAnimation(qreal factor = 2);
+    GrowAnimation(QObject *parent = 0, qreal factor = 2);
     virtual ~GrowAnimation(){};
 
     qreal factor() const;
 
     void setFactor(const qreal factor);
 
+    void setWidgetToAnimate(QGraphicsWidget *widget);
 
 protected:
     virtual QAbstractAnimation* render(QObject* parent = 0);
 
 private:
     qreal m_animFactor;
+    QWeakPointer<QPropertyAnimation> animation;
 };
 
 }

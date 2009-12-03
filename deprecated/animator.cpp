@@ -80,6 +80,8 @@ qreal AnimatorPrivate::calculateProgress(int time, int duration, Animator::Curve
 
 void AnimatorPrivate::performAnimation(qreal amount, const AnimationState *state)
 {
+    /* TODO: write new animations to replace this.
+     */
     switch (state->animation) {
         case Animator::AppearAnimation:
             driver->itemAppear(amount, state->item);
@@ -93,6 +95,9 @@ void AnimatorPrivate::performAnimation(qreal amount, const AnimationState *state
         case Animator::ActivateAnimation:
             driver->itemActivated(amount, state->item);
             break;
+        default:
+            kDebug() << "Unsupported animation type.";
+
     }
 }
 
@@ -505,6 +510,9 @@ QPixmap Animator::currentPixmap(int id)
             break;
         case ActivateAnimation:
             break;
+        default:
+            kDebug() << "Unsupported animation type.";
+
     }
 
     return state->pixmap;

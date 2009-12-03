@@ -52,12 +52,25 @@ public:
      */
     qint8 reference;
 
+    QWeakPointer<QPropertyAnimation> animation;
+
 
 };
 
+void RotationAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
+{
+    Animation::setWidgetToAnimate(widget);
+    if (d->animation.data()) {
+        delete d->animation.data();
+        d->animation.clear();
+    }
+}
 
-RotationAnimation::RotationAnimation(const qint8 &reference, const Qt::Axis &axis, const qreal &angle)
-    : d(new RotationAnimationPrivate)
+RotationAnimation::RotationAnimation(QObject *parent,
+                                     const qint8 &reference,
+                                     const Qt::Axis &axis,
+                                     const qreal &angle)
+    : Animation(parent), d(new RotationAnimationPrivate)
 {
     setAngle(angle);
     setAxis(axis);
@@ -143,10 +156,10 @@ QPropertyAnimation *RotationAnimation::render(QObject *parent)
     transformation.append(d->rotation);
     m_object->setTransformations(transformation);
 
-    QPropertyAnimation *rotationAnimation = dynamic_cast<QPropertyAnimation* >(animation());
+    QPropertyAnimation *rotationAnimation = d->animation.data();
     if (!rotationAnimation) {
         rotationAnimation = new QPropertyAnimation(d->rotation, "angle", m_object);
-        setAnimation(rotationAnimation);
+        d->animation = rotationAnimation;
     }
 
     rotationAnimation->setStartValue(0);

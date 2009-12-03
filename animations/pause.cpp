@@ -29,13 +29,22 @@ PauseAnimation::PauseAnimation(QObject *parent)
 {
 }
 
+void PauseAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
+{
+    Animation::setWidgetToAnimate(widget);
+    if (animation.data()) {
+        delete animation.data();
+        animation.clear();
+    }
+}
+
 QAbstractAnimation* PauseAnimation::render(QObject* parent)
 {
     //Recreate only if needed
-    QPauseAnimation *anim = dynamic_cast<QPauseAnimation* >(animation());
+    QPauseAnimation *anim = animation.data();
     if (!anim) {
         anim = new QPauseAnimation(duration(), parent);
-        setAnimation(anim);
+        animation = anim;
     }
 
     return anim;

@@ -32,19 +32,21 @@ class PulseAnimation : public Animation
     Q_OBJECT
 
 public:
-    PulseAnimation();
+    PulseAnimation(QObject *parent = 0);
     ~PulseAnimation();
 
     void updateGeometry(QRectF updated, qreal zCoordinate = 0, qreal scale = 1.5);
-    void setCopy();
+    void setWidgetToAnimate(QGraphicsWidget *widget);
 
 public Q_SLOTS:
     void resetPulser();
 
 protected:
     virtual QAbstractAnimation* render(QObject* parent = 0);
+    void setCopy();
 
 private:
+
     void createAnimation(qreal _duration = 500, qreal _scale = 1.5);
 
     PulseAnimationPrivate *d;

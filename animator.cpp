@@ -22,9 +22,7 @@
 
 #include <kdebug.h>
 
-#include "animations/abstractanimation.h"
 #include "animations/animation.h"
-#include "animations/expand_p.h"
 #include "animations/fade_p.h"
 #include "animations/grow_p.h"
 #include "animations/pause_p.h"
@@ -36,9 +34,9 @@
 namespace Plasma
 {
 
-AbstractAnimation *Animator::create(Animation type, QObject *parent)
+Plasma::Animation* Animator::create(Animator::Animation type, QObject *parent)
 {
-    AbstractAnimation *result = 0;
+    Plasma::Animation *result = 0;
 
     switch (type) {
 
@@ -48,10 +46,6 @@ AbstractAnimation *Animator::create(Animation type, QObject *parent)
 
     case GrowAnimation:
         result = new Plasma::GrowAnimation;
-        break;
-
-    case ExpandAnimation:
-        result = new Plasma::ExpandAnimation;
         break;
 
     case PulseAnimation:

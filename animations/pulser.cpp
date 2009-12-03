@@ -23,7 +23,6 @@
 #include "pulser_p.h"
 #include "plasma/private/pulsershadow_p.h"
 #include <QAbstractAnimation>
-#include <QDebug>
 #include <QEvent>
 #include <QGraphicsWidget>
 #include <QParallelAnimationGroup>
@@ -37,8 +36,7 @@ class PulseAnimationPrivate
 {
 public :
     PulseAnimationPrivate()
-        : animation(0),
-          under(0),
+        : under(0),
           zvalue(0),
           mscale(0),
           opacityAnimation(0),
@@ -49,16 +47,26 @@ public :
     ~PulseAnimationPrivate()
     { }
 
-    QAbstractAnimation *animation;
     QGraphicsWidget *under;
     qreal zvalue, mscale, mopacity;
     QPropertyAnimation *opacityAnimation;
     QPropertyAnimation *geometryAnimation;
     QPropertyAnimation *scaleAnimation;
+    QWeakPointer<QParallelAnimationGroup> animation;
 };
 
 
-PulseAnimation::PulseAnimation(): d(new PulseAnimationPrivate)
+void PulseAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
+{
+    Animation::setWidgetToAnimate(widget);
+    if (d->animation.data()) {
+        delete d->animation.data();
+        d->animation.clear();
+    }
+}
+
+PulseAnimation::PulseAnimation(QObject *parent)
+        : Animation(parent), d(new PulseAnimationPrivate)
 {
 
 }
@@ -108,12 +116,12 @@ void PulseAnimation::createAnimation(qreal duration, qreal scale)
     if (!d->under)
         setCopy();
 
-    QParallelAnimationGroup *anim = dynamic_cast<QParallelAnimationGroup* >(animation());
+    QParallelAnimationGroup *anim = d->animation.data();
     if (!anim) {
         QParallelAnimationGroup *group = new QParallelAnimationGroup(this);
         d->opacityAnimation = new QPropertyAnimation(d->under, "opacity");
         d->opacityAnimation->setDuration(duration);
-        d->opacityAnimation->setStartValue(100);
+        d->opacityAnimation->setStartValue(1);
         d->opacityAnimation->setEndValue(0);
         group->addAnimation(d->opacityAnimation);
 
@@ -125,7 +133,6 @@ void PulseAnimation::createAnimation(qreal duration, qreal scale)
         /* The group takes ownership of all animations */
         group->addAnimation(d->scaleAnimation);
         d->animation = group;
-        setAnimation(d->animation);
         dirty = true;
 
     } else {
@@ -146,15 +153,15 @@ void PulseAnimation::createAnimation(qreal duration, qreal scale)
     }
 
     if (dirty)
-        connect(d->animation, SIGNAL(finished()), this, SLOT(resetPulser()));
+        connect(d->animation.data(), SIGNAL(finished()), this, SLOT(resetPulser()));
 }
 
 QAbstractAnimation* PulseAnimation::render(QObject* parent)
 {
-    Q_UNUSED(parent)
+    Q_UNUSED(parent);
 
     createAnimation(duration());
-    return d->animation;
+    return d->animation.data();
 }
 
 } //namespace Plasma

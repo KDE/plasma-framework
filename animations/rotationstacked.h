@@ -38,7 +38,7 @@ class RotationStackedAnimationPrivate;
 class RotationStackedAnimation : public Animation
 {
     Q_OBJECT
-
+    Q_PROPERTY(qint8 movementDirection READ movementDirection WRITE setMovementDirection)
     Q_PROPERTY(QGraphicsLayoutItem* layout READ layout)
     Q_PROPERTY(qint8 reference READ reference WRITE setReference)
     Q_PROPERTY(QGraphicsWidget* backWidget READ backWidget WRITE setBackWidget)
@@ -49,6 +49,17 @@ class RotationStackedAnimation : public Animation
 
         QAbstractAnimation *render(QObject *parent = 0);
 
+        /**
+         * Set the animation direction
+         * @arg direction animation direction
+         */
+        void setMovementDirection(const qint8 &direction);
+
+        /**
+         * Get the animation direction
+         */
+        qint8 movementDirection() const;
+
         void setReference(const qint8 &reference);
         qint8 reference() const;
 
@@ -57,9 +68,11 @@ class RotationStackedAnimation : public Animation
         QGraphicsWidget *backWidget();
         void setBackWidget(QGraphicsWidget *backWidget);
 
+        void setWidgetToAnimate(QGraphicsWidget *widget);
+
     public Q_SLOTS:
-        void animationStateChange(QAbstractAnimation::State oldState,
-                QAbstractAnimation::State newState);
+        void animationStateChange(QAbstractAnimation::State newState,
+                QAbstractAnimation::State oldState);
 
     private:
         RotationStackedAnimationPrivate *d;

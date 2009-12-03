@@ -44,10 +44,8 @@ set(plasma_LIB_SRCS
     abstractrunner.cpp
     abstracttoolbox.cpp
     animator.cpp
-    animations/abstractanimation.cpp
     animations/animation.cpp
     animations/animationgroup.cpp
-    animations/expand.cpp
     animations/fade.cpp
     animations/grow.cpp
     animations/slide.cpp
@@ -255,7 +253,6 @@ set(plasma_LIB_INCLUDES
     abstractrunner.h
     abstracttoolbox.h
     animationdriver.h
-    animations/abstractanimation.h
     animations/animation.h
     animations/animationgroup.h
     animator.h
@@ -356,7 +353,6 @@ if(PHONON_FOUND)
 endif(PHONON_FOUND)
 
 install(FILES
-    animations/abstractanimation.h
     animations/animation.h
     animations/animationgroup.h
     animations/rotationstacked.h

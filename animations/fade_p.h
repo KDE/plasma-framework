@@ -60,7 +60,7 @@ protected:
     virtual QAbstractAnimation* render(QObject* parent = 0);
 
 private:
-    QWeakPointer<QGraphicsWidget> m_widget;
+    QWeakPointer<QPropertyAnimation> animation;
     qreal m_startOpacity;
     qreal m_targetOpacity;
 };

@@ -41,7 +41,8 @@ class RotationAnimation : public Animation
     Q_PROPERTY(qreal angle READ angle WRITE setAngle)
 
 public:
-    RotationAnimation(const qint8 &reference = Up,
+    RotationAnimation(QObject *parent = 0,
+                      const qint8 &reference = Up,
 		      const Qt::Axis &axis = Qt::ZAxis,
 		      const qreal &angle = 180);
 
@@ -84,9 +85,9 @@ public:
      */
     void setAngle(const qreal &angle);
 
+    void setWidgetToAnimate(QGraphicsWidget *widget);
 
-
-    private:
+private:
         RotationAnimationPrivate *const d;
 };
 } // Plasma

@@ -22,7 +22,7 @@
 #include <QPainter>
 #include <QImage>
 #include <QPixmap>
-#include <QDebug>
+#include <QStyleOptionGraphicsItem>
 
 namespace Plasma
 {
@@ -51,7 +51,9 @@ void ShadowFake::copyTarget(QGraphicsWidget *target)
     QPainter painter(photo);
     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
     painter.fillRect(target->rect(), Qt::transparent);
-    target->paint(&painter, 0, 0);
+    /* Does it need any special initialization for KDE? */
+    QStyleOptionGraphicsItem style;
+    target->paint(&painter, &style, 0);
     painter.end();
 
 }

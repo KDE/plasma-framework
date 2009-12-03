@@ -26,6 +26,7 @@
 
 #include <plasma/animations/animation.h>
 #include <plasma/plasma_export.h>
+class QPauseAnimation;
 
 namespace Plasma
 {
@@ -40,9 +41,13 @@ class PauseAnimation : public Animation
 
 public:
     PauseAnimation(QObject *parent = 0);
+    void setWidgetToAnimate(QGraphicsWidget *widget);
 
 protected:
     virtual QAbstractAnimation* render(QObject* parent = 0);
+
+private:
+    QWeakPointer<QPauseAnimation> animation;
 };
 
 }

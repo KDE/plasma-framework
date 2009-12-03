@@ -18,10 +18,10 @@
  */
 
 #include "animationgroup.h"
-
 #include <QMapIterator>
 #include <QParallelAnimationGroup>
 #include <QSequentialAnimationGroup>
+#include <QDebug>
 
 namespace Plasma
 {
@@ -29,22 +29,25 @@ namespace Plasma
 class AnimationGroupPrivate
 {
 public:
-    /**
-     * Boolean determining if the animation is parallel. Default is false.
-     */
-    bool parallel;
+    AnimationGroupPrivate(): forwards(QAbstractAnimation::Forward),
+                             parallel(false),
+                             dirtyFlag(false), duration(0),
+                             anim(0)
+    { }
 
-    /**
-     * Map of AbstractAnimations to be run, by id.
-     */
-    QList<AbstractAnimation *> anims;
+    QAbstractAnimation::Direction forwards;
+    bool parallel;
+    bool dirtyFlag;
+    int duration;
+    QAnimationGroup *anim;
+
 };
 
 AnimationGroup::AnimationGroup(QObject* parent)
-    : AbstractAnimation(parent),
+    : QAbstractAnimation(parent),
       d(new AnimationGroupPrivate)
 {
-    d->parallel = false;
+    d->anim = new QSequentialAnimationGroup(this);
 }
 
 AnimationGroup::~AnimationGroup()
@@ -52,9 +55,31 @@ AnimationGroup::~AnimationGroup()
     delete d;
 }
 
-void AnimationGroup::setParallel(bool parallelness)
+QAbstractAnimation::Direction AnimationGroup::direction() const
 {
-    d->parallel = parallelness;
+    return d->forwards;
+}
+
+void AnimationGroup::setParallel(bool parallel)
+{
+    if (isParallel() == parallel) {
+        return;
+    }
+
+    d->parallel = parallel;
+
+    QAnimationGroup *newGroup;
+    if (parallel)
+        newGroup = new QParallelAnimationGroup(this);
+    else
+        newGroup = new QSequentialAnimationGroup(this);
+
+    while (d->anim->animationCount()) {
+        newGroup->addAnimation(d->anim->takeAnimation(0));
+    }
+
+    delete d->anim;
+    d->anim = newGroup;
 }
 
 bool AnimationGroup::isParallel() const
@@ -62,52 +87,104 @@ bool AnimationGroup::isParallel() const
     return d->parallel;
 }
 
-int AnimationGroup::add(AbstractAnimation* elem)
+int AnimationGroup::add(QAbstractAnimation* elem)
 {
-    d->anims.insert(d->anims.count(), elem);
-    return d->anims.count();
+    d->anim->addAnimation(elem);
+    calculateGroupDuration();
+    return d->anim->animationCount();
 }
 
-void AnimationGroup::remove(Plasma::AbstractAnimation* elem)
+void AnimationGroup::remove(QAbstractAnimation* elem)
 {
-    d->anims.removeAll(elem);
+    d->anim->removeAnimation(elem);
+    calculateGroupDuration();
 }
 
-AbstractAnimation* AnimationGroup::at(int id) const
+QAbstractAnimation* AnimationGroup::at(int id) const
 {
-    return d->anims.value(id);
+    return d->anim->animationAt(id);
 }
 
 void AnimationGroup::remove(int id)
 {
-    if (id >= d->anims.count() || id < 0) {
-        return;
-    }
-
-    d->anims.removeAt(id);
+    //This used to save some code...
+    //d->anim->takeAnimationAt(id);
+    d->anim->removeAnimation(d->anim->animationAt(id));
+    calculateGroupDuration();
 }
 
-QAnimationGroup* AnimationGroup::toQAbstractAnimation(QObject* parent)
+void AnimationGroup::start(QAbstractAnimation::DeletionPolicy policy)
 {
-    //if supplied, use parent given in args.
-    if (!parent){
-        parent = this->parent();
+    if (d->anim) {
+        d->anim->setDirection(d->forwards);
+        d->anim->start(policy);
+    }
+}
+
+void AnimationGroup::updateCurrentTime(int currentTime)
+{
+
+    /**
+     * XXX: not sure if is a bug in my code or Qt, but 'start()' is not being
+     * called when the animation is inside of an animatin group.
+     * The solution for while is to explicitly call it in 'updateCurrentTime'
+     * and use this flag for control.
+     */
+    if (!d->dirtyFlag) {
+        d->dirtyFlag = true;
+        start();
     }
 
-    QAnimationGroup* g;
+    if (d->forwards == QAbstractAnimation::Forward) {
+        if (currentTime == duration()) {
+            d->dirtyFlag = false;
+        }
+    } else if (d->forwards == QAbstractAnimation::Backward) {
+        if (currentTime == 0) {
+            d->dirtyFlag = false;
+        }
+    }
+}
+
+void AnimationGroup::calculateGroupDuration()
+{
+    QAbstractAnimation *tmp;
+    d->duration = 0;
     if (d->parallel) {
-        g = new QParallelAnimationGroup(parent);
+        for (int i = 0; i < d->anim->animationCount(); ++i) {
+            tmp = d->anim->animationAt(i);
+            if (d->duration < tmp->duration())
+                d->duration = tmp->duration();
+        }
+
     } else {
-        g = new QSequentialAnimationGroup(parent);
+        for (int i = 0; i < d->anim->animationCount(); ++i) {
+            tmp = d->anim->animationAt(i);
+            d->duration += tmp->duration();
+        }
+
+    }
+}
+
+int AnimationGroup::duration() const
+{
+    return d->duration;
+}
+
+void AnimationGroup::updateDirection(QAbstractAnimation::Direction direction)
+{
+    d->forwards = direction;
+    QAbstractAnimation *tmp;
+    for (int i = 0; i < d->anim->animationCount(); ++i) {
+        tmp = d->anim->animationAt(i);
+        tmp->setDirection(d->forwards);
     }
 
-    QListIterator<AbstractAnimation*> it(d->anims);
-    while (it.hasNext()) {
-        //add with group as owner
-        g->addAnimation(it.next()->toQAbstractAnimation(g));
-    }
+}
 
-    return g;
+void AnimationGroup::updateState(QAbstractAnimation::State oldState, QAbstractAnimation::State newState)
+{
+    /* TODO: watch animation state and eventually emit 'finished' signal */
 }
 
 } //namespace Plasma

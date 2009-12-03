@@ -33,9 +33,8 @@ class QTimeLine;
 namespace Plasma
 {
 
-class AbstractAnimation;
-
 class AnimatorPrivate;
+class Animation;
 
 /**
  * @class Animator plasma/animator.h <Plasma/Animator>
@@ -60,7 +59,6 @@ public:
         /* TODO: change the names of animation classes */
         FadeAnimation, /*<< Can be used for both fade in and out */
         GrowAnimation, /*<< Grow animated object geometry */
-        ExpandAnimation, /*<< Not sure if we need this (should ask Mehmet A. Akmanalp) */
         PulseAnimation, /*<< Pulse animated object (opacity/geometry/scale) */
         RotationAnimation, /*<< Rotate an animated object */
         RotationStackedAnimation, /*<< TODO: for flipping one object with another */
@@ -91,7 +89,7 @@ public:
      * Factory to build new animation objects. To control their behavior,
      * check \ref AbstractAnimation properties.
      **/
-    static AbstractAnimation *create(Animation type, QObject *parent = 0);
+    static Plasma::Animation *create(Animator::Animation type, QObject *parent = 0);
 
     /**
      * Starts a standard animation on a QGraphicsItem.

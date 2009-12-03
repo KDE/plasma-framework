@@ -28,7 +28,7 @@
 #include <QGraphicsWidget>
 #include <QObject>
 #include <QPropertyAnimation>
-
+#include <QAbstractAnimation>
 #include <plasma/animations/abstractanimation.h>
 #include <plasma/plasma_export.h>
 
@@ -41,36 +41,74 @@ class AnimationPrivate;
  * @brief Abstract representation of a single animation.
  * @since 4.4
  */
-class PLASMA_EXPORT Animation : public AbstractAnimation
+class PLASMA_EXPORT Animation : public QAbstractAnimation
 {
 
     Q_OBJECT
     Q_PROPERTY(int duration READ duration WRITE setDuration)
+    Q_PROPERTY(QEasingCurve::Type easingCurveType READ easingCurveType WRITE setEasingCurveType)
+    Q_PROPERTY(bool isVisible READ isVisible WRITE setVisible)
+    Q_PROPERTY(QGraphicsWidget *widgetToAnimate READ widgetToAnimate WRITE setWidgetToAnimate)
 
 public:
 
-    explicit Animation(QObject* parent = 0);
-    virtual ~Animation() = 0;
-
-    /**
-     * Take the animation object and turn it into a QPropertyAnimation. Returns
-     * NULL on error. This function just does some boilerplate checking and then
-     * calls render().
-     */
-    QAbstractAnimation* toQAbstractAnimation(QObject* parent = 0);
-
-protected:
-    /**
-     * Change the animation duration. Default is 1000ms.
-     * @arg duration The new duration of the animation.
-     */
-    virtual void setDuration(int duration = 250);
+    QAbstractAnimation::Direction direction() const;
 
     /**
      * Get the animation duration.
      * @return duration in ms.
      */
     int duration() const;
+
+    /* FIXME: find a better place and name for it. */
+    enum Reference{
+        Center,
+        Up,
+        Down,
+        Left,
+        Right
+    };
+
+    explicit Animation(QObject* parent = 0);
+    virtual ~Animation() = 0;
+
+    /**
+     * Set the widget on which the animation is to be performed.
+     * @arg receiver The QGraphicsWidget to be animated.
+     */
+    virtual void setWidgetToAnimate(QGraphicsWidget* receiver);
+
+    /**
+     * The widget that the animation will be performed upon
+     */
+    QGraphicsWidget *widgetToAnimate();
+
+    /**
+     * Set the animation easing curve type
+     */
+    void setEasingCurveType(QEasingCurve::Type easingCurve);
+
+    /**
+     * Get the animation easing curve type
+     */
+    QEasingCurve::Type easingCurveType() const;
+
+    /**
+     * set the animation visibility
+     * @arg isVisible animation visibility
+     */
+    void setVisible(bool isVisible);
+
+    /**
+     * get the animation visibility
+     */
+    bool isVisible() const;
+
+public Q_SLOTS:
+    /**
+     * Start the animation.
+     */
+    void start(QAbstractAnimation::DeletionPolicy policy = KeepWhenStopped);
 
     /**
      * Each individual class must override this function to place their main
@@ -80,8 +118,23 @@ protected:
      */
     virtual QAbstractAnimation* render(QObject* parent = 0) = 0;
 
+
+
+protected:
+
+    /**
+     * Change the animation duration. Default is 1000ms.
+     * @arg duration The new duration of the animation.
+     */
+    virtual void setDuration(int duration = 250);
+
+    void updateDirection(QAbstractAnimation::Direction direction);
+
+    void updateCurrentTime(int currentTime);
+
 private:
-    AnimationPrivate * const d;
+    AnimationPrivate *const d;
+
 };
 
 } //namespace Plasma

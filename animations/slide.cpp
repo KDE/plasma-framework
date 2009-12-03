@@ -25,11 +25,46 @@
 namespace Plasma
 {
 
-SlideAnimation::SlideAnimation(AnimationDirection direction, qreal distance)
+void SlideAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
 {
-    setDirection(direction);
+    Animation::setWidgetToAnimate(widget);
+    if (animation.data()) {
+        delete animation.data();
+        animation.clear();
+    }
+
+}
+void SlideAnimation::setDistance(qreal distance)
+{
+    animDistance = distance;
+}
+
+qreal SlideAnimation::distance() const
+{
+    return animDistance;
+}
+
+SlideAnimation::~SlideAnimation()
+{
+}
+
+SlideAnimation::SlideAnimation(QObject *parent,
+                               AnimationDirection direction,
+                               qreal distance) : Animation(parent)
+{
+    setMovementDirection(direction);
     setDistance(distance);
     setVisible(true);
+}
+
+void SlideAnimation::setMovementDirection(const qint8 &direction)
+{
+    animDirection = static_cast<Plasma::AnimationDirection>(direction);
+}
+
+qint8 SlideAnimation::movementDirection() const
+{
+    return static_cast<qint8>(animDirection);
 }
 
 QAbstractAnimation* SlideAnimation::render(QObject* parent)
@@ -42,8 +77,8 @@ QAbstractAnimation* SlideAnimation::render(QObject* parent)
     qreal newX = x;
     qreal newY = y;
 
-    kDebug()<<direction();
-    switch (direction()) {
+    kDebug()<<movementDirection();
+    switch (movementDirection()) {
     case MoveUp:
         newY -= distance();
         break;
@@ -87,24 +122,20 @@ QAbstractAnimation* SlideAnimation::render(QObject* parent)
     }
 
     //Recreate only if needed
-    QPropertyAnimation* anim = dynamic_cast<QPropertyAnimation* >(animation());
+    QPropertyAnimation* anim = animation.data();
     if (!anim) {
         anim = new QPropertyAnimation(m_object, "pos", parent);
-        setAnimation(anim);
         dirty = true;
+        animation = anim;
     }
     anim->setEndValue(QPointF(newX, newY));
     anim->setDuration(duration());
 
-    //QObject::connect(anim, SIGNAL(finished()), anim, SLOT(deleteLater()));
 
     if (dirty) {
-        if (isVisible()) {
-            QObject::connect(anim, SIGNAL(finished()), m_object, SLOT(show()));
-        } else {
-            QObject::connect(anim, SIGNAL(finished()), m_object, SLOT(hide()));
-        }
+        QObject::connect(anim, SIGNAL(finished()), m_object, SLOT(show()));
     }
+
     return anim;
 
 }
