@@ -20,13 +20,15 @@
 /***********************************************************************/
 
 #include "rotationstacked.h"
-#include "stackedlayout.h"
 
 #include <QGraphicsRotation>
 #include <QSequentialAnimationGroup>
 #include <QWeakPointer>
 
 #include <kdebug.h>
+
+#include "stackedlayout.h"
+#include "plasma.h"
 
 namespace Plasma
 {
