@@ -546,7 +546,7 @@ bool SimpleJavaScriptApplet::importExtensions()
 typedef Animation* AnimationPtr;
 QScriptValue qScriptValueFromAnimation(QScriptEngine *engine, const AnimationPtr &anim)
 {
-    return engine->newQObject(const_cast<Animation *>(anim));
+    return engine->newQObject(const_cast<Animation *>(anim), QScriptEngine::AutoOwnership, QScriptEngine::PreferExistingWrapperObject);
 }
 
 void abstractAnimationFromQScriptValue(const QScriptValue &scriptValue, AnimationPtr &anim)
@@ -558,7 +558,7 @@ void abstractAnimationFromQScriptValue(const QScriptValue &scriptValue, Animatio
 typedef QGraphicsWidget * QGraphicsWidgetPtr;
 QScriptValue qScriptValueFromQGraphicsWidget(QScriptEngine *engine, const QGraphicsWidgetPtr &anim)
 {
-    return engine->newQObject(const_cast<QGraphicsWidget *>(anim));
+    return engine->newQObject(const_cast<QGraphicsWidget *>(anim), QScriptEngine::AutoOwnership, QScriptEngine::PreferExistingWrapperObject);
 }
 
 void qGraphicsWidgetFromQScriptValue(const QScriptValue &scriptValue, QGraphicsWidgetPtr &anim)
@@ -577,9 +577,11 @@ void SimpleJavaScriptApplet::setupObjects()
     global.setProperty("AnimationGroup", m_engine->newFunction(SimpleJavaScriptApplet::animationGroup));
 
     // Bindings for data engine
-    m_engine->setDefaultPrototype(qMetaTypeId<DataEngine*>(), m_engine->newQObject(new DataEngine()));
-    m_engine->setDefaultPrototype(qMetaTypeId<Service*>(), m_engine->newQObject(new DummyService()));
-    m_engine->setDefaultPrototype(qMetaTypeId<ServiceJob*>(), m_engine->newQObject(new ServiceJob(QString(), QString(), QMap<QString, QVariant>())));
+    m_engine->setDefaultPrototype(qMetaTypeId<DataEngine*>(), m_engine->newQObject(new DataEngine(), QScriptEngine::ScriptOwnership));
+    m_engine->setDefaultPrototype(qMetaTypeId<Service*>(), m_engine->newQObject(new DummyService(), QScriptEngine::ScriptOwnership));
+    m_engine->setDefaultPrototype(qMetaTypeId<ServiceJob*>(),
+                                  m_engine->newQObject(new ServiceJob(QString(), QString(), QMap<QString, QVariant>()),
+                                                       QScriptEngine::ScriptOwnership ));
 
     bindI18N(m_engine);
     global.setProperty("dataEngine", m_engine->newFunction(SimpleJavaScriptApplet::dataEngine));
@@ -699,10 +701,9 @@ QScriptValue SimpleJavaScriptApplet::service(QScriptContext *context, QScriptEng
     QString source = context->argument(1).toString();
     Service *service = data->serviceForSource(source);
     //kDebug( )<< "lets try to get" << source << "from" << dataEngine;
-    return engine->newQObject(service);
+    return engine->newQObject(service, QScriptEngine::AutoOwnership);
 }
 
-#include <Plasma/Animation>
 QScriptValue SimpleJavaScriptApplet::animation(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() != 1) {
@@ -767,7 +768,7 @@ QScriptValue SimpleJavaScriptApplet::loadui(QScriptContext *context, QScriptEngi
     QWidget *w = loader.load(&f);
     f.close();
 
-    return engine->newQObject(w);
+    return engine->newQObject(w, QScriptEngine::AutoOwnership);
 }
 
 QString SimpleJavaScriptApplet::findImageFile(QScriptEngine *engine, const QString &file)
