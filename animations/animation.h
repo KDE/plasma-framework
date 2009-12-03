@@ -29,7 +29,6 @@
 #include <QObject>
 #include <QPropertyAnimation>
 #include <QAbstractAnimation>
-#include <plasma/animations/abstractanimation.h>
 #include <plasma/plasma_export.h>
 
 namespace Plasma

@@ -90,7 +90,7 @@ QAbstractAnimation::Direction Animation::direction() const
 void Animation::updateDirection(QAbstractAnimation::Direction direction)
 {
     d->forwards = direction;
-
+}
 
 void Animation::setVisible(bool isVisible)
 {
