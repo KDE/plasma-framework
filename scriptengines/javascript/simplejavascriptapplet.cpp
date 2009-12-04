@@ -375,7 +375,6 @@ void SimpleJavaScriptApplet::populateAnimationsHash()
     if (s_animationDefs.isEmpty()) {
         s_animationDefs.insert("fade", Plasma::Animator::FadeAnimation);
         s_animationDefs.insert("grow", Plasma::Animator::GrowAnimation);
-        s_animationDefs.insert("pause", Plasma::Animator::PauseAnimation);
         s_animationDefs.insert("pulse", Plasma::Animator::PulseAnimation);
         s_animationDefs.insert("rotate", Plasma::Animator::RotationAnimation);
         s_animationDefs.insert("rotateStacked", Plasma::Animator::RotationStackedAnimation);
@@ -386,7 +385,6 @@ void SimpleJavaScriptApplet::populateAnimationsHash()
 bool SimpleJavaScriptApplet::init()
 {
     setupObjects();
-    populateAnimationsHash();
 
     if (!importExtensions()) {
         return false;
@@ -710,8 +708,10 @@ QScriptValue SimpleJavaScriptApplet::animation(QScriptContext *context, QScriptE
         return context->throwError(i18n("animation() takes one argument"));
     }
 
+    populateAnimationsHash();
     QString animName = context->argument(0).toString().toLower();
-    if (!s_animationDefs.contains(animName)) {
+    const bool isPause = animName == "pause";
+    if (!isPause && !s_animationDefs.contains(animName)) {
         return context->throwError(i18n("%1 is not a known animation type", animName));
     }
 
@@ -728,9 +728,14 @@ QScriptValue SimpleJavaScriptApplet::animation(QScriptContext *context, QScriptE
         return context->throwError(i18n("Could not extract the Applet"));
     }
 
-    Plasma::Animation *anim = Plasma::Animator::create(s_animationDefs.value(animName), interface->applet());
-    anim->setWidgetToAnimate(interface->applet());
-    return engine->newQObject(anim);
+    if (isPause) {
+        QPauseAnimation *pause = new QPauseAnimation(interface->applet());
+        return engine->newQObject(pause);
+    } else {
+        Plasma::Animation *anim = Plasma::Animator::create(s_animationDefs.value(animName), interface->applet());
+        anim->setWidgetToAnimate(interface->applet());
+        return engine->newQObject(anim);
+    }
 }
 
 QScriptValue SimpleJavaScriptApplet::animationGroup(QScriptContext *context, QScriptEngine *engine)
