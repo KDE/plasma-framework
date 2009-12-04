@@ -25,7 +25,6 @@
 #include "animations/animation.h"
 #include "animations/fade_p.h"
 #include "animations/grow_p.h"
-#include "animations/pause_p.h"
 #include "animations/pulser_p.h"
 #include "animations/rotation_p.h"
 #include "animations/slide_p.h"
@@ -62,10 +61,6 @@ Plasma::Animation* Animator::create(Animator::Animation type, QObject *parent)
 
     case SlideAnimation:
         result = new Plasma::SlideAnimation;
-        break;
-
-    case PauseAnimation:
-        result = new Plasma::PauseAnimation;
         break;
 
     default:
