@@ -39,37 +39,14 @@ public:
     QWeakPointer<QGraphicsWidget> animObject;
 
     /**
-     * Animation visibility: whether to end the animation being visible
-     * or not.
-     */
-    bool animVisible;
-
-    /**
-     * XXX: not sure if is a bug in my code or Qt, but 'start()' is not being
-     * called when the animation is inside of an animatin group.
-     * The solution for while is to explicitly call it in 'updateCurrentTime'
-     * and use this flag for control.
-     */
-    bool dirtyFlag;
-
-    /**
      * Animation easing curve type
      */
     QEasingCurve::Type easingCurve;
 
     /**
-     * Animation direction, the idea is to offer a way
-     * to rewind the animation by setDirection(QAbstractAnimation::Backward).
-     * TODO: map this to QAbstractAnimation::Direction
-     */
-    QAbstractAnimation::Direction forwards;
-
-    /**
      * Duration of the animation. Default is 250ms.
-     * TODO: map this to QAbstractAnimation::duration
      */
     int duration;
-
 };
 
 }
