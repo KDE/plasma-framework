@@ -89,11 +89,6 @@ public:
      */
     QEasingCurve::Type easingCurveType() const;
 
-    /**
-     * get the animation visibility
-     */
-    bool isVisible() const;
-
 protected:
 
     /**
