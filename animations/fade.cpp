@@ -65,7 +65,7 @@ void FadeAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
 
     Animation::setWidgetToAnimate(widget);
     if (widget) {
-        widget->setOpacity(m_startOpacity);
+        //widget->setOpacity(m_startOpacity);
     }
 
     if(m_anim.data()) {
@@ -84,6 +84,7 @@ void FadeAnimation::updateState(QAbstractAnimation::State oldState, QAbstractAni
 {
     QGraphicsWidget *w = widgetToAnimate();
     if (!w) {
+        w->setOpacity(startOpacity());
         return;
     }
 
@@ -92,6 +93,8 @@ void FadeAnimation::updateState(QAbstractAnimation::State oldState, QAbstractAni
         QPropertyAnimation *anim = m_anim.data();
 
         anim->setDirection(direction());
+        anim->setStartValue(startOpacity());
+        anim->setEndValue(targetOpacity());
         anim->start();
     }
 }
