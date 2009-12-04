@@ -29,25 +29,8 @@ PauseAnimation::PauseAnimation(QObject *parent)
 {
 }
 
-void PauseAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
+void PauseAnimation::updateCurrentTime(int)
 {
-    Animation::setWidgetToAnimate(widget);
-    if (animation.data()) {
-        delete animation.data();
-        animation.clear();
-    }
-}
-
-QAbstractAnimation* PauseAnimation::render(QObject* parent)
-{
-    //Recreate only if needed
-    QPauseAnimation *anim = animation.data();
-    if (!anim) {
-        anim = new QPauseAnimation(duration(), parent);
-        animation = anim;
-    }
-
-    return anim;
 }
 
 } //namespace Plasma
