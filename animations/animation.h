@@ -102,7 +102,7 @@ protected:
      */
     virtual void setDuration(int duration = 250);
 
-    void updateCurrentTime(int currentTime);
+    virtual void updateCurrentTime(int currentTime);
 
 private:
     AnimationPrivate *const d;
