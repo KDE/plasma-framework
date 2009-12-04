@@ -77,7 +77,6 @@ public:
 
 protected:
     void start(QAbstractAnimation::DeletionPolicy policy = KeepWhenStopped);
-    virtual QAbstractAnimation* render(QObject* parent = 0);
     void syncProperties();
 
 private:

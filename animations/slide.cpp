@@ -36,13 +36,16 @@ void SlideAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
 
     syncProperties();
 
-    QObject::connect(m_animation, SIGNAL(finished()), widget, SLOT(show()));
     QObject::connect(m_animation, SIGNAL(finished()), this, SIGNAL(finished()));
 }
 
 void SlideAnimation::syncProperties()
 {
     QGraphicsWidget *widget = widgetToAnimate();
+    if (!widget) {
+        return;
+    }
+
     qreal x = widget->x();
     qreal y = widget->y();
 
@@ -141,10 +144,6 @@ void SlideAnimation::start(QAbstractAnimation::DeletionPolicy policy)
        m_animation->setDirection(direction());
        m_animation->start();
    }
-}
-
-QAbstractAnimation* SlideAnimation::render(QObject* parent)
-{
 }
 
 } //namespace Plasma
