@@ -109,8 +109,6 @@ void AnimationGroup::updateCurrentTime(int currentTime)
 {
     Q_UNUSED(currentTime)
 
-    //we really need it?
-    d->anim->setCurrentTime(currentTime);
 }
 
 void AnimationGroup::calculateGroupDuration()
