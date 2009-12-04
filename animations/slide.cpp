@@ -28,26 +28,18 @@ namespace Plasma
 void SlideAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
 {
     Animation::setWidgetToAnimate(widget);
-    if (m_animation) {
-        delete m_animation;
-    }
-
-    m_animation = new QPropertyAnimation(widget, "pos", widget);
 
     syncProperties();
-
-    QObject::connect(m_animation, SIGNAL(finished()), this, SIGNAL(finished()));
 }
 
 void SlideAnimation::syncProperties()
 {
-    QGraphicsWidget *widget = widgetToAnimate();
-    if (!widget) {
+    if (!widgetToAnimate()) {
         return;
     }
-
-    qreal x = widget->x();
-    qreal y = widget->y();
+    qreal x = widgetToAnimate()->x();
+    qreal y = widgetToAnimate()->y();
+    m_startPos = QPointF(x, y);
 
     qreal newX = x;
     qreal newY = y;
@@ -96,8 +88,7 @@ void SlideAnimation::syncProperties()
         return;
     }
 
-    m_animation->setEndValue(QPointF(newX, newY));
-    m_animation->setDuration(duration());
+    m_target = QPointF(newX, newY);
 }
 
 void SlideAnimation::setDistance(qreal distance)
@@ -118,8 +109,7 @@ SlideAnimation::~SlideAnimation()
 SlideAnimation::SlideAnimation(QObject *parent,
                                AnimationDirection direction,
                                qreal distance)
-          : Animation(parent),
-          m_animation(0)
+          : Animation(parent)
 {
     setMovementDirection(direction);
     setDistance(distance);
@@ -136,14 +126,17 @@ qint8 SlideAnimation::movementDirection() const
     return static_cast<qint8>(m_animDirection);
 }
 
-void SlideAnimation::start(QAbstractAnimation::DeletionPolicy policy)
+void SlideAnimation::updateCurrentTime(int currentTime)
 {
-   /* TODO: Actually treat policy parameter */
+    QGraphicsWidget *w = widgetToAnimate();
+    if (w) {
+        qreal delta = currentTime / qreal(duration());
+        if (qFuzzyCompare((qreal)1.0, delta) || qFuzzyCompare((qreal)1.0, 1+delta)) {
+            syncProperties();
+        }
 
-   if (m_animation) {
-       m_animation->setDirection(direction());
-       m_animation->start();
-   }
+        w->setPos(m_startPos * (1-delta) + (m_target * delta));
+    }
 }
 
 } //namespace Plasma

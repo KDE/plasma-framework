@@ -78,6 +78,7 @@ public:
 protected:
     void start(QAbstractAnimation::DeletionPolicy policy = KeepWhenStopped);
     void syncProperties();
+    void updateCurrentTime(int currentTime);
 
 private:
     /**
@@ -91,7 +92,8 @@ private:
      */
     qreal m_animDistance;
 
-    QPropertyAnimation *m_animation;
+    QPointF m_startPos;
+    QPointF m_target;
 };
 
 }
