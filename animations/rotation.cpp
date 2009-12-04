@@ -51,19 +51,15 @@ public:
      * be combined (i.e. Center|Up)
      */
     qint8 reference;
-
-    QWeakPointer<QPropertyAnimation> animation;
-
-
 };
 
 void RotationAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
 {
-    Animation::setWidgetToAnimate(widget);
-    if (d->animation.data()) {
-        delete d->animation.data();
-        d->animation.clear();
+    if(widget == widgetToAnimate()) {
+        return;
     }
+
+    Animation::setWidgetToAnimate(widget);
 }
 
 RotationAnimation::RotationAnimation(QObject *parent,
@@ -84,10 +80,43 @@ RotationAnimation::~RotationAnimation()
     delete d;
 }
 
-QPropertyAnimation *RotationAnimation::render(QObject *parent)
+Qt::Axis RotationAnimation::axis() const
 {
-    Q_UNUSED(parent);
+    return d->axis;
+}
+
+void RotationAnimation::setAxis(const Qt::Axis &axis)
+{
+    d->axis = axis;
+}
+
+qint8 RotationAnimation::reference() const
+{
+    return d->reference;
+}
+
+void RotationAnimation::setReference(const qint8 &reference)
+{
+    d->reference = reference;
+}
+
+qreal RotationAnimation::angle() const
+{
+    return d->angle;
+}
+
+void RotationAnimation::setAngle(const qreal &angle)
+{
+    d->angle = angle;
+}
+
+void RotationAnimation::updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
+{
     QGraphicsWidget *m_object = widgetToAnimate();
+
+    if (!m_object) {
+        return;
+    }
 
     QVector3D vector(0, 0, 0);
 
@@ -156,47 +185,21 @@ QPropertyAnimation *RotationAnimation::render(QObject *parent)
     transformation.append(d->rotation);
     m_object->setTransformations(transformation);
 
-    QPropertyAnimation *rotationAnimation = d->animation.data();
-    if (!rotationAnimation) {
-        rotationAnimation = new QPropertyAnimation(d->rotation, "angle", m_object);
-        d->animation = rotationAnimation;
+    if ((oldState == Stopped) && (newState == Running)) {
+        d->rotation->setAngle(direction() == Forward ? 0 : angle());
+    } else if (newState == Stopped) {
+        d->rotation->setAngle(direction() == Forward ? angle() : 0);
     }
-
-    rotationAnimation->setStartValue(0);
-    rotationAnimation->setEndValue(angle());
-    rotationAnimation->setDuration(duration());
-
-    return rotationAnimation;
 }
 
-Qt::Axis RotationAnimation::axis() const
+void RotationAnimation::updateCurrentTime(int currentTime)
 {
-    return d->axis;
-}
-
-void RotationAnimation::setAxis(const Qt::Axis &axis)
-{
-    d->axis = axis;
-}
-
-qint8 RotationAnimation::reference() const
-{
-    return d->reference;
-}
-
-void RotationAnimation::setReference(const qint8 &reference)
-{
-    d->reference = reference;
-}
-
-qreal RotationAnimation::angle() const
-{
-    return d->angle;
-}
-
-void RotationAnimation::setAngle(const qreal &angle)
-{
-    d->angle = angle;
+    QGraphicsWidget *w = widgetToAnimate();
+    if (w) {
+        qreal delta = currentTime / qreal(duration());
+        delta = angle() * delta;
+        d->rotation->setAngle(delta);
+    }
 }
 
 }
