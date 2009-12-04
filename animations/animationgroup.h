@@ -47,11 +47,6 @@ class PLASMA_EXPORT AnimationGroup : public QAbstractAnimation
     Q_PROPERTY(bool parallel READ isParallel WRITE setParallel)
 
 public:
-
-    QAbstractAnimation::Direction direction() const;
-
-    //void setDirection(QAbstractAnimation::Direction direction);
-
     explicit AnimationGroup(QObject* parent = 0);
     virtual ~AnimationGroup();
 
