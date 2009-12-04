@@ -356,6 +356,7 @@ bool Package::installPackage(const QString &package,
 
         if (!archive->open(QIODevice::ReadOnly)) {
             kWarning() << "Could not open package file:" << package;
+	    delete archive;
             return false;
         }
 
@@ -372,6 +373,7 @@ bool Package::installPackage(const QString &package,
                 path.append(entry->name()).append("/");
             }
         }
+	delete archive;
     }
 
     QString metadataPath = path + "metadata.desktop";
