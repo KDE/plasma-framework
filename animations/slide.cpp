@@ -29,7 +29,6 @@ void SlideAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
 {
     Animation::setWidgetToAnimate(widget);
     if (m_animation) {
-        disconnect(m_animation, SIGNAL(finished()), this, SIGNAL(finished()));
         delete m_animation;
     }
 
