@@ -179,7 +179,7 @@ void SpinBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     update();
 }
 
-void SpinBox::resizeEvent(QGraphicsSceneResizeEvent *event)
+void SpinBox::resizeEvent(QGraphicsSceneResizeEvent *)
 {
     QStyleOptionSpinBox spinOpt;
     spinOpt.initFrom(nativeWidget());

@@ -502,7 +502,7 @@ void ScrollWidget::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     event->ignore();
 }
 
-void ScrollWidget::wheelEvent(QGraphicsSceneWheelEvent *event)
+void ScrollWidget::wheelEvent(QGraphicsSceneWheelEvent *)
 {
     if (d->animId) {
         Animator::self()->stopItemMovement(d->animId);

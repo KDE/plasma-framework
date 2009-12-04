@@ -692,6 +692,7 @@ void ExtenderItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 QSizeF ExtenderItem::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
+    Q_UNUSED(constraint)
     switch (which) {
     case Qt::MinimumSize:
         return d->minimumSize;
