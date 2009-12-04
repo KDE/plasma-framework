@@ -57,10 +57,10 @@ public:
     void setWidgetToAnimate(QGraphicsWidget *widget);
 
 protected:
-    virtual QAbstractAnimation* render(QObject* parent = 0);
+    void updateState(QAbstractAnimation::State oldState, QAbstractAnimation::State newState);
+    void updateCurrentTime(int currentTime);
 
 private:
-    QWeakPointer<QPropertyAnimation> animation;
     qreal m_startOpacity;
     qreal m_targetOpacity;
 };

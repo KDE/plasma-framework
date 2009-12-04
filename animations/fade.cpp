@@ -59,33 +59,40 @@ qreal FadeAnimation::targetOpacity() const
 
 void FadeAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
 {
+    if (widget == widgetToAnimate()) {
+        return;
+    }
+
     Animation::setWidgetToAnimate(widget);
     if (widget) {
         widget->setOpacity(m_startOpacity);
     }
+}
 
-    if (animation.data()) {
-        delete animation.data();
-        animation.clear();
+void FadeAnimation::updateState(QAbstractAnimation::State oldState, QAbstractAnimation::State newState)
+{
+    QGraphicsWidget *w = widgetToAnimate();
+    if (!w) {
+        return;
+    }
+
+    if (oldState == Stopped && newState == Running) {
+        w->setOpacity(direction() == Forward ? m_startOpacity : m_targetOpacity);
+    } else if (newState == Stopped) {
+        w->setOpacity(direction() == Forward ? m_targetOpacity : m_startOpacity);
     }
 }
 
-QAbstractAnimation* FadeAnimation::render(QObject* parent)
+void FadeAnimation::updateCurrentTime(int currentTime)
 {
-    //create animation
-    QPropertyAnimation* anim = animation.data();
-    if (!anim) {
-        QGraphicsWidget *widget = widgetToAnimate();
-        anim = new QPropertyAnimation(widget, "opacity", widget);
-        animation = anim;
-        qDebug()<<"creating";
+    QGraphicsWidget *w = widgetToAnimate();
+    if (w) {
+        qreal delta = currentTime / qreal(duration());
+        delta = (m_startOpacity - m_targetOpacity) * delta;
+        w->setOpacity(m_startOpacity - delta);
     }
 
-    anim->setStartValue(startOpacity());
-    anim->setEndValue(targetOpacity());
-    anim->setDuration(duration());
-
-    return anim;
+    Animation::updateCurrentTime(currentTime);
 }
 
 } //namespace Plasma
