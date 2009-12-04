@@ -94,12 +94,6 @@ public Q_SLOTS:
      */
     Q_INVOKABLE void remove(int id);
 
-    /**
-     * Start the animation.
-     */
-    void start(QAbstractAnimation::DeletionPolicy policy = KeepWhenStopped);
-
-
 protected:
     void updateCurrentTime(int currentTime);
     void calculateGroupDuration();

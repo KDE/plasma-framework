@@ -29,15 +29,13 @@ namespace Plasma
 class AnimationGroupPrivate
 {
 public:
-    AnimationGroupPrivate(): forwards(QAbstractAnimation::Forward),
-                             parallel(false),
-                             dirtyFlag(false), duration(0),
-                             anim(0)
+    AnimationGroupPrivate()
+        : parallel(false),
+          duration(0),
+          anim(0)
     { }
 
-    QAbstractAnimation::Direction forwards;
     bool parallel;
-    bool dirtyFlag;
     int duration;
     QAnimationGroup *anim;
 
@@ -48,17 +46,11 @@ AnimationGroup::AnimationGroup(QObject* parent)
       d(new AnimationGroupPrivate)
 {
     d->anim = new QSequentialAnimationGroup(this);
-    connect(d->anim, SIGNAL(finished()), this, SIGNAL(finished()));
 }
 
 AnimationGroup::~AnimationGroup()
 {
     delete d;
-}
-
-QAbstractAnimation::Direction AnimationGroup::direction() const
-{
-    return d->forwards;
 }
 
 void AnimationGroup::setParallel(bool parallel)
@@ -70,19 +62,18 @@ void AnimationGroup::setParallel(bool parallel)
     d->parallel = parallel;
 
     QAnimationGroup *newGroup;
-    if (parallel)
+    if (parallel) {
         newGroup = new QParallelAnimationGroup(this);
-    else
+    } else {
         newGroup = new QSequentialAnimationGroup(this);
+    }
 
     while (d->anim->animationCount()) {
         newGroup->addAnimation(d->anim->takeAnimation(0));
     }
 
-    disconnect(d->anim, SIGNAL(finished()), this, SIGNAL(finished()));
     delete d->anim;
     d->anim = newGroup;
-    connect(d->anim, SIGNAL(finished()), this, SIGNAL(finished()));
 }
 
 bool AnimationGroup::isParallel() const
@@ -110,45 +101,13 @@ QAbstractAnimation* AnimationGroup::at(int id) const
 
 void AnimationGroup::remove(int id)
 {
-    //This used to save some code...
-    //d->anim->takeAnimationAt(id);
     d->anim->removeAnimation(d->anim->animationAt(id));
     calculateGroupDuration();
 }
 
-void AnimationGroup::start(QAbstractAnimation::DeletionPolicy policy)
-{
-    if (d->anim) {
-        d->anim->setDirection(d->forwards);
-        d->anim->start(policy);
-    }
-}
-
 void AnimationGroup::updateCurrentTime(int currentTime)
 {
-
-    /**
-     * XXX: not sure if is a bug in my code or Qt, but 'start()' is not being
-     * called when the animation is inside of an animatin group.
-     * The solution for while is to explicitly call it in 'updateCurrentTime'
-     * and use this flag for control.
-     */
-    if (!d->dirtyFlag) {
-        d->dirtyFlag = true;
-        start();
-    }
-
-    if (d->forwards == QAbstractAnimation::Forward) {
-        if (currentTime == duration()) {
-            d->dirtyFlag = false;
-            emit finished();
-        }
-    } else if (d->forwards == QAbstractAnimation::Backward) {
-        if (currentTime == 0) {
-            d->dirtyFlag = false;
-            emit finished();
-        }
-    }
+    Q_UNUSED(currentTime)
 }
 
 void AnimationGroup::calculateGroupDuration()
@@ -158,16 +117,15 @@ void AnimationGroup::calculateGroupDuration()
     if (d->parallel) {
         for (int i = 0; i < d->anim->animationCount(); ++i) {
             tmp = d->anim->animationAt(i);
-            if (d->duration < tmp->duration())
+            if (d->duration < tmp->duration()) {
                 d->duration = tmp->duration();
+            }
         }
-
     } else {
         for (int i = 0; i < d->anim->animationCount(); ++i) {
             tmp = d->anim->animationAt(i);
             d->duration += tmp->duration();
         }
-
     }
 }
 
@@ -178,18 +136,25 @@ int AnimationGroup::duration() const
 
 void AnimationGroup::updateDirection(QAbstractAnimation::Direction direction)
 {
-    d->forwards = direction;
-    QAbstractAnimation *tmp;
-    for (int i = 0; i < d->anim->animationCount(); ++i) {
-        tmp = d->anim->animationAt(i);
-        tmp->setDirection(d->forwards);
-    }
-
+    d->anim->setDirection(direction);
 }
 
 void AnimationGroup::updateState(QAbstractAnimation::State oldState, QAbstractAnimation::State newState)
 {
-    /* TODO: watch animation state and eventually emit 'finished' signal */
+    Q_UNUSED(oldState)
+    switch (newState) {
+        case Running:
+            d->anim->start();
+        break;
+
+        case Paused:
+            d->anim->pause();
+        break;
+
+        case Stopped:
+            d->anim->stop();
+        break;
+    }
 }
 
 } //namespace Plasma
