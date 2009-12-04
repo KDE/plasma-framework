@@ -57,13 +57,12 @@ public:
     void setWidgetToAnimate(QGraphicsWidget *widget);
 
 protected:
-    void updateState(QAbstractAnimation::State oldState, QAbstractAnimation::State newState);
+    void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
     void updateCurrentTime(int currentTime);
 
 private:
     qreal m_startOpacity;
     qreal m_targetOpacity;
-    QWeakPointer<QPropertyAnimation> m_anim;
 };
 
 }
