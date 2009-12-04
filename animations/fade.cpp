@@ -84,7 +84,6 @@ void FadeAnimation::updateState(QAbstractAnimation::State oldState, QAbstractAni
 {
     QGraphicsWidget *w = widgetToAnimate();
     if (!w) {
-        w->setOpacity(startOpacity());
         return;
     }
 
