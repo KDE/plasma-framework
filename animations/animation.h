@@ -50,9 +50,6 @@ class PLASMA_EXPORT Animation : public QAbstractAnimation
     Q_PROPERTY(QGraphicsWidget *widgetToAnimate READ widgetToAnimate WRITE setWidgetToAnimate)
 
 public:
-
-    QAbstractAnimation::Direction direction() const;
-
     /**
      * Get the animation duration.
      * @return duration in ms.
@@ -97,16 +94,6 @@ public:
      */
     bool isVisible() const;
 
-public Q_SLOTS:
-    /**
-     * Each individual class must override this function to place their main
-     * functionality. This function must take the values from the constructor,
-     * do the appropriate calculations, and return a corresponding
-     * QPropertyAnimation initialized with the given parent.
-     */
-    virtual QAbstractAnimation* render(QObject* parent = 0) = 0;
-
-
 protected:
 
     /**
@@ -114,8 +101,6 @@ protected:
      * @arg duration The new duration of the animation.
      */
     virtual void setDuration(int duration = 250);
-
-    void updateDirection(QAbstractAnimation::Direction direction);
 
     void updateCurrentTime(int currentTime);
 

@@ -33,9 +33,7 @@ namespace Plasma
 
 
 AnimationPrivate::AnimationPrivate()
-    : dirtyFlag(false),
-      easingCurve(QEasingCurve::Linear),
-      forwards(QAbstractAnimation::Forward),
+    : easingCurve(QEasingCurve::Linear),
       duration(250)
 {
 }
@@ -81,41 +79,9 @@ QEasingCurve::Type Animation::easingCurveType() const
     return d->easingCurve;
 }
 
-QAbstractAnimation::Direction Animation::direction() const
-{
-    return d->forwards;
-}
-
-void Animation::updateDirection(QAbstractAnimation::Direction direction)
-{
-    d->forwards = direction;
-}
-
 void Animation::updateCurrentTime(int currentTime)
 {
-    /**
-     * XXX: not sure if is a bug in my code or Qt, but 'start()' is not being
-     * called when the animation is inside of an animatin group.
-     * The solution for while is to explicitly call it in 'updateCurrentTime'
-     * and use this flag for control.
-     */
-    if (!d->dirtyFlag) {
-        d->dirtyFlag = true;
-        start();
-    }
-
-     if (d->forwards == QAbstractAnimation::Forward) {
-        if (currentTime == duration()) {
-            d->dirtyFlag = false;
-            emit finished();
-        }
-    } else if (d->forwards == QAbstractAnimation::Backward) {
-        if (currentTime == 0) {
-            d->dirtyFlag = false;
-            emit finished();
-        }
-    }
-
+    Q_UNUSED(currentTime)
 }
 
 } //namespace Plasma
