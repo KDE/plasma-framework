@@ -66,8 +66,6 @@ class RotationStackedAnimation : public Animation
         QGraphicsWidget *backWidget();
         void setBackWidget(QGraphicsWidget *backWidget);
 
-        void setWidgetToAnimate(QGraphicsWidget *widget);
-
     protected:
         void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
         void updateCurrentTime(int currentTime);

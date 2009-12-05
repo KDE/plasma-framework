@@ -75,11 +75,6 @@ RotationStackedAnimation::~RotationStackedAnimation()
     delete d;
 }
 
-void RotationStackedAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
-{
-    Animation::setWidgetToAnimate(widget);
-}
-
 void RotationStackedAnimation::setReference(const qint8 &reference)
 {
     d->reference = reference;
