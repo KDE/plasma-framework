@@ -30,8 +30,6 @@
 namespace Plasma
 {
 
-class ZoomAnimationPrivate;
-
 /**
  * @class GeoAnimation plasma/animations/geo_p.h
  * @short Geometry Animation
