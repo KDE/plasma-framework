@@ -40,68 +40,61 @@ qreal GrowAnimation::factor() const
     return m_animFactor;
 }
 
-void GrowAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
+void GrowAnimation::updateCurrentTime(int currentTime)
 {
-    Animation::setWidgetToAnimate(widget);
-    if (animation.data()) {
-        delete animation.data();
-        animation.clear();
+    QGraphicsWidget *w = widgetToAnimate();
+    if (w && state() == QAbstractAnimation::Running) {
+        qreal delta = currentTime / qreal(duration());
+        QRectF geometry;
+        geometry.setTopLeft(m_startGeometry.topLeft() * (1-delta) + (m_targetGeometry.topLeft() * delta));
+        geometry.setSize(m_startGeometry.size() * (1-delta) + (m_targetGeometry.size() * delta));
+        w->setGeometry(geometry);
     }
 }
 
-QAbstractAnimation* GrowAnimation::render(QObject* parent){
+void GrowAnimation::updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
+{
+    if (oldState == QAbstractAnimation::Stopped && newState == QAbstractAnimation::Running) {
+        QGraphicsWidget *widget = widgetToAnimate();
+        if (!widget) {
+            return;
+        }
 
-    //get current geometry values
-    QGraphicsWidget *m_object = widgetToAnimate();
-    QRectF geometry = m_object->geometry();
-    QSizeF minimum = m_object->effectiveSizeHint(Qt::MinimumSize);
-    QSizeF maximum = m_object->effectiveSizeHint(Qt::MaximumSize);
-    qreal w = geometry.width();
-    qreal h = geometry.height();
-    qreal factor = m_animFactor;
+        QSizeF minimum = widget->effectiveSizeHint(Qt::MinimumSize);
+        QSizeF maximum = widget->effectiveSizeHint(Qt::MaximumSize);
+        m_startGeometry = widget->geometry();
+        qreal w = m_startGeometry.width();
+        qreal h = m_startGeometry.height();
+        qreal factor = m_animFactor;
 
-    //compute new geometry values
-    qreal newWidth;
-    qreal newHeight;
-    if (direction() == QAbstractAnimation::Forward) {
-        newWidth = qBound(minimum.width(), w * factor, maximum.width());
-        newHeight = qBound(minimum.height(), h * factor, maximum.height());
-    } else {
-        newWidth = qBound(minimum.width(), w / factor, maximum.width());
-        newHeight = qBound(minimum.height(), h / factor, maximum.height());
+        //compute new geometry values
+        qreal newWidth;
+        qreal newHeight;
+        if (direction() == QAbstractAnimation::Forward) {
+            newWidth = qBound(minimum.width(), w * factor, maximum.width());
+            newHeight = qBound(minimum.height(), h * factor, maximum.height());
+        } else {
+            newWidth = qBound(minimum.width(), w / factor, maximum.width());
+            newHeight = qBound(minimum.height(), h / factor, maximum.height());
+        }
+
+        qreal newX;
+        qreal newY;
+        newX = m_startGeometry.x() - (newWidth - w)/2;
+        newY = m_startGeometry.y() - (newHeight - h)/2;
+
+        if (direction() == QAbstractAnimation::Forward) {
+            //the end geometry gets rounded to prevent things looking ugly
+            m_targetGeometry = QRect(newX, newY, newWidth, newHeight);
+        } else {
+            m_targetGeometry = m_startGeometry;
+            m_startGeometry = QRectF(newX, newY, newWidth, newHeight);
+        }
+
+        kDebug()<<"start value:"<<m_startGeometry<<"end value:"<<m_targetGeometry;
+
     }
 
-    qreal newX;
-    qreal newY;
-    newX = geometry.x() - (newWidth - w)/2;
-    newY = geometry.y() - (newHeight - h)/2;
-
-    //Recreate only if needed
-    QPropertyAnimation *anim = animation.data();
-    if (!anim) {
-        anim = new QPropertyAnimation(m_object, "geometry", m_object);
-        animation = anim;
-    }
-
-    //Prevents from deforming (with multiple clicks)
-    QAbstractAnimation::State temp = anim->state();
-    if (temp == QAbstractAnimation::Running) {
-        return anim;
-    }
-
-    if (direction() == QAbstractAnimation::Forward) {
-        anim->setStartValue(QRectF(geometry.x(), geometry.y(), w, h));
-        anim->setEndValue(QRectF(newX, newY, newWidth, newHeight));
-    } else {
-        anim->setStartValue(QRectF(newX, newY, newWidth, newHeight));
-        anim->setEndValue(QRectF(geometry.x(), geometry.y(), w, h));
-    }
-
-    qDebug()<<"start value:"<<anim->startValue()<<"end value:"<<anim->endValue();
-
-    anim->setDuration(duration());
-
-    return anim;
 }
 
 } //namespace Plasma

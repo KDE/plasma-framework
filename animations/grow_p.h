@@ -52,14 +52,15 @@ public:
 
     void setFactor(const qreal factor);
 
-    void setWidgetToAnimate(QGraphicsWidget *widget);
-
 protected:
-    virtual QAbstractAnimation* render(QObject* parent = 0);
+    void updateCurrentTime(int currentTime);
+    void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
 
 private:
     qreal m_animFactor;
-    QWeakPointer<QPropertyAnimation> animation;
+
+    QRectF m_startGeometry;
+    QRectF m_targetGeometry;
 };
 
 }
