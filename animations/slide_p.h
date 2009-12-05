@@ -78,7 +78,7 @@ public:
 protected:
     void start(QAbstractAnimation::DeletionPolicy policy = KeepWhenStopped);
     void updateCurrentTime(int currentTime);
-    void updateState(QAbstractAnimation::State oldState, QAbstractAnimation::State newState);
+    void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
 
 private:
     /**
