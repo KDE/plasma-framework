@@ -63,7 +63,7 @@ void SlideAnimation::updateCurrentTime(int currentTime)
     QGraphicsWidget *w = widgetToAnimate();
     if (w && state() == QAbstractAnimation::Running) {
         qreal delta = currentTime / qreal(duration());
-        w->setPos(m_startPos * (1-delta) + (m_target * delta));
+        w->setPos(m_startPos * (1-delta) + (m_targetPos * delta));
     }
 }
 
@@ -78,43 +78,43 @@ void SlideAnimation::updateState(QAbstractAnimation::State newState, QAbstractAn
         qreal newX = m_startPos.x();
         qreal newY = m_startPos.y();
 
-        kDebug()<<movementDirection();
+        int actualDistance = (direction() == QAbstractAnimation::Forward?distance():-distance());
         switch (movementDirection()) {
         case MoveUp:
-            newY -= distance();
+            newY -= actualDistance;
             break;
 
         case MoveRight:
-            newX += distance();
+            newX += actualDistance;
             break;
 
         case MoveDown:
-            newY += distance();
+            newY += actualDistance;
             break;
 
         case MoveLeft:
-            newX -= distance();
+            newX -= actualDistance;
             break;
 
         case MoveUpRight:
-            newX += distance();
-            newY -= distance();
+            newX += actualDistance;
+            newY -= actualDistance;
             break;
 
         case MoveDownRight:
-            newX += distance();
-            newY += distance();
+            newX += actualDistance;
+            newY += actualDistance;
             break;
 
         case MoveDownLeft:
-            newX -= distance();
-            newY += distance();
+            newX -= actualDistance;
+            newY += actualDistance;
             break;
 
 
         case MoveUpLeft:
-            newX -= distance();
-            newY -= distance();
+            newX -= actualDistance;
+            newY -= actualDistance;
             break;
 
         default:
@@ -122,7 +122,12 @@ void SlideAnimation::updateState(QAbstractAnimation::State newState, QAbstractAn
             return;
         }
 
-        m_target = QPointF(newX, newY);
+        if (direction() == QAbstractAnimation::Forward) {
+            m_targetPos = QPointF(newX, newY);
+        } else {
+            m_targetPos = m_startPos;
+            m_startPos = QPointF(newX, newY);
+        }
     }
 }
 

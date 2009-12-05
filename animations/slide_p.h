@@ -90,7 +90,7 @@ private:
     qreal m_animDistance;
 
     QPointF m_startPos;
-    QPointF m_target;
+    QPointF m_targetPos;
 };
 
 }
