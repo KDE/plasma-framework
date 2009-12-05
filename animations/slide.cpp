@@ -28,73 +28,11 @@ namespace Plasma
 void SlideAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
 {
     Animation::setWidgetToAnimate(widget);
-
-    syncProperties();
-}
-
-void SlideAnimation::syncProperties()
-{
-    if (!widgetToAnimate()) {
-        return;
-    }
-    qreal x = widgetToAnimate()->x();
-    qreal y = widgetToAnimate()->y();
-    m_startPos = QPointF(x, y);
-
-    qreal newX = x;
-    qreal newY = y;
-
-    kDebug()<<movementDirection();
-    switch (movementDirection()) {
-    case MoveUp:
-        newY -= distance();
-        break;
-
-    case MoveRight:
-        newX += distance();
-        break;
-
-    case MoveDown:
-        newY += distance();
-        break;
-
-    case MoveLeft:
-        newX -= distance();
-        break;
-
-    case MoveUpRight:
-        newX += distance();
-        newY -= distance();
-        break;
-
-    case MoveDownRight:
-        newX += distance();
-        newY += distance();
-        break;
-
-    case MoveDownLeft:
-        newX -= distance();
-        newY += distance();
-        break;
-
-
-    case MoveUpLeft:
-        newX -= distance();
-        newY -= distance();
-        break;
-
-    default:
-        kDebug()<<"Compound direction is not supported";
-        return;
-    }
-
-    m_target = QPointF(newX, newY);
 }
 
 void SlideAnimation::setDistance(qreal distance)
 {
     m_animDistance = distance;
-    syncProperties();
 }
 
 qreal SlideAnimation::distance() const
@@ -118,7 +56,6 @@ SlideAnimation::SlideAnimation(QObject *parent,
 void SlideAnimation::setMovementDirection(const qint8 &direction)
 {
     m_animDirection = static_cast<Plasma::AnimationDirection>(direction);
-    syncProperties();
 }
 
 qint8 SlideAnimation::movementDirection() const
@@ -129,13 +66,69 @@ qint8 SlideAnimation::movementDirection() const
 void SlideAnimation::updateCurrentTime(int currentTime)
 {
     QGraphicsWidget *w = widgetToAnimate();
-    if (w) {
+    if (w && state() == QAbstractAnimation::Running) {
         qreal delta = currentTime / qreal(duration());
-        if (qFuzzyCompare((qreal)1.0, delta) || qFuzzyCompare((qreal)1.0, 1+delta)) {
-            syncProperties();
+        w->setPos(m_startPos * (1-delta) + (m_target * delta));
+    }
+}
+
+//FIXME: oldstate and newstate appears to be swapped in the documentation
+void SlideAnimation::updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
+{
+    if (oldState == QAbstractAnimation::Stopped && newState == QAbstractAnimation::Running) {
+        if (!widgetToAnimate()) {
+            return;
+        }
+        m_startPos = widgetToAnimate()->pos();
+
+        qreal newX = m_startPos.x();
+        qreal newY = m_startPos.y();
+
+        kDebug()<<movementDirection();
+        switch (movementDirection()) {
+        case MoveUp:
+            newY -= distance();
+            break;
+
+        case MoveRight:
+            newX += distance();
+            break;
+
+        case MoveDown:
+            newY += distance();
+            break;
+
+        case MoveLeft:
+            newX -= distance();
+            break;
+
+        case MoveUpRight:
+            newX += distance();
+            newY -= distance();
+            break;
+
+        case MoveDownRight:
+            newX += distance();
+            newY += distance();
+            break;
+
+        case MoveDownLeft:
+            newX -= distance();
+            newY += distance();
+            break;
+
+
+        case MoveUpLeft:
+            newX -= distance();
+            newY -= distance();
+            break;
+
+        default:
+            kDebug()<<"Compound direction is not supported";
+            return;
         }
 
-        w->setPos(m_startPos * (1-delta) + (m_target * delta));
+        m_target = QPointF(newX, newY);
     }
 }
 
