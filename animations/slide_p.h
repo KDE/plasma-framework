@@ -73,8 +73,6 @@ public:
      */
     qint8 movementDirection() const;
 
-    void setWidgetToAnimate(QGraphicsWidget *widget);
-
 protected:
     void updateCurrentTime(int currentTime);
     void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);

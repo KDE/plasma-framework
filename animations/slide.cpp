@@ -25,11 +25,6 @@
 namespace Plasma
 {
 
-void SlideAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
-{
-    Animation::setWidgetToAnimate(widget);
-}
-
 void SlideAnimation::setDistance(qreal distance)
 {
     m_animDistance = distance;
