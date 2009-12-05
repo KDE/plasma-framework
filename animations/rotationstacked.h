@@ -47,8 +47,6 @@ class RotationStackedAnimation : public Animation
         RotationStackedAnimation(QObject *parent = 0);
         ~RotationStackedAnimation();
 
-        QAbstractAnimation *render(QObject *parent = 0);
-
         /**
          * Set the animation direction
          * @arg direction animation direction
@@ -70,9 +68,9 @@ class RotationStackedAnimation : public Animation
 
         void setWidgetToAnimate(QGraphicsWidget *widget);
 
-    public Q_SLOTS:
-        void animationStateChange(QAbstractAnimation::State newState,
-                QAbstractAnimation::State oldState);
+    protected:
+        void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
+        void updateCurrentTime(int currentTime);
 
     private:
         RotationStackedAnimationPrivate *d;
