@@ -76,7 +76,6 @@ public:
     void setWidgetToAnimate(QGraphicsWidget *widget);
 
 protected:
-    void start(QAbstractAnimation::DeletionPolicy policy = KeepWhenStopped);
     void updateCurrentTime(int currentTime);
     void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
 
