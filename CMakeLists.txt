@@ -53,6 +53,7 @@ set(plasma_LIB_SRCS
     animations/rotation.cpp
     animations/rotationstacked.cpp
     animations/stackedlayout.cpp
+    animations/geo.cpp
     applet.cpp
     configloader.cpp
     containment.cpp

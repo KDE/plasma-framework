@@ -61,8 +61,9 @@ public:
         GrowAnimation, /*<< Grow animated object geometry */
         PulseAnimation, /*<< Pulse animated object (opacity/geometry/scale) */
         RotationAnimation, /*<< Rotate an animated object */
-        RotationStackedAnimation, /*<< TODO: for flipping one object with another */
-        SlideAnimation /*<< Move the position of animated object */
+        RotationStackedAnimation, /*<< for flipping one object with another */
+        SlideAnimation, /*<< Move the position of animated object */
+        GeoAnimation /*<< Geometry animation*/
     };
 
     enum CurveShape {
