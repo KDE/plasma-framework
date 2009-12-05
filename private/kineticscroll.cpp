@@ -234,12 +234,6 @@ void KineticScrolling::mousePressEvent(QGraphicsSceneMouseEvent *event)
     d->syncViewportRect();
     d->cposition = -d->parent->property("scrollPosition").value<QPointF>();
 
-    if (event && d->cposition == QPointF(0, 0) &&
-            d->viewportGeometry.width() + 2 >= d->contentsSize.width() &&
-            d->viewportGeometry.height() + 2 >= d->contentsSize.height()) {
-        event->ignore( );
-    }
-
     d->count();
     d->kinMovement = QPointF(0,0);
     d->scrollAnimation->setEasingCurve(QEasingCurve::OutCirc);
