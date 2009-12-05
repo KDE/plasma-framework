@@ -72,7 +72,6 @@ void SlideAnimation::updateCurrentTime(int currentTime)
     }
 }
 
-//FIXME: oldstate and newstate appears to be swapped in the documentation
 void SlideAnimation::updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
 {
     if (oldState == QAbstractAnimation::Stopped && newState == QAbstractAnimation::Running) {
