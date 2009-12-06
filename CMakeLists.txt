@@ -45,7 +45,6 @@ set(plasma_LIB_SRCS
     abstracttoolbox.cpp
     animator.cpp
     animations/animation.cpp
-    animations/animationgroup.cpp
     animations/fade.cpp
     animations/grow.cpp
     animations/slide.cpp
@@ -255,7 +254,6 @@ set(plasma_LIB_INCLUDES
     abstracttoolbox.h
     animationdriver.h
     animations/animation.h
-    animations/animationgroup.h
     animator.h
     applet.h
     configloader.h
@@ -355,7 +353,6 @@ endif(PHONON_FOUND)
 
 install(FILES
     animations/animation.h
-    animations/animationgroup.h
     animations/rotationstacked.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/animations COMPONENT Devel)
 
