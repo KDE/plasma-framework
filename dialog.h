@@ -106,8 +106,8 @@ class PLASMA_EXPORT Dialog : public QWidget
         void animatedHide(Plasma::Direction direction);
 
         /**
-         * Causes an animated hide; requires compositing to work, otherwise
-         * the dialog will simply hide.
+         * Causes an animated show; requires compositing to work, otherwise
+         * the dialog will simply show.
          * @since 4.3
          */
         void animatedShow(Plasma::Direction direction);
