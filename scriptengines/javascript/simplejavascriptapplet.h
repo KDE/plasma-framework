@@ -69,6 +69,7 @@ private:
     static QString findSvg(QScriptEngine *engine, const QString &file);
     static QScriptValue animation(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue animationGroup(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue parallelAnimationGroup(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue jsi18n(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue jsi18nc(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue jsi18np(QScriptContext *context, QScriptEngine *engine);
@@ -90,6 +91,11 @@ private:
     static QScriptValue runApplication(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue runCommand(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue openUrl(QScriptContext *context, QScriptEngine *engine);
+
+    static QGraphicsWidget *extractParent(QScriptContext *context,
+                                          QScriptEngine *engine,
+                                          int parentIndex = 0,
+                                          bool *parentedToApplet = 0);
 
 private:
     static KSharedPtr<UiLoader> s_widgetLoader;

@@ -24,6 +24,8 @@
 #include <QFile>
 #include <QUiLoader>
 #include <QGraphicsLayout>
+#include <QParallelAnimationGroup>
+#include <QSequentialAnimationGroup>
 #include <QWidget>
 
 #include <KConfigGroup>
@@ -573,6 +575,7 @@ void SimpleJavaScriptApplet::setupObjects()
     global.setProperty("animation", m_engine->newFunction(SimpleJavaScriptApplet::animation));
     qScriptRegisterMetaType<Animation*>(m_engine, qScriptValueFromAnimation, abstractAnimationFromQScriptValue);
     global.setProperty("AnimationGroup", m_engine->newFunction(SimpleJavaScriptApplet::animationGroup));
+    global.setProperty("ParallelAnimationGroup", m_engine->newFunction(SimpleJavaScriptApplet::parallelAnimationGroup));
 
     // Bindings for data engine
     m_engine->setDefaultPrototype(qMetaTypeId<DataEngine*>(), m_engine->newQObject(new DataEngine(), QScriptEngine::ScriptOwnership));
@@ -715,45 +718,28 @@ QScriptValue SimpleJavaScriptApplet::animation(QScriptContext *context, QScriptE
         return context->throwError(i18n("%1 is not a known animation type", animName));
     }
 
-    QScriptValue appletValue = engine->globalObject().property("plasmoid");
-    //kDebug() << "appletValue is " << appletValue.toString();
-
-    QObject *appletObject = appletValue.toQObject();
-    if (!appletObject) {
-        return context->throwError(i18n("Could not extract the AppletObject"));
-    }
-
-    AppletInterface *interface = qobject_cast<AppletInterface*>(appletObject);
-    if (!interface) {
-        return context->throwError(i18n("Could not extract the Applet"));
-    }
-
+    QGraphicsWidget *parent = extractParent(context, engine);
     if (isPause) {
-        QPauseAnimation *pause = new QPauseAnimation(interface->applet());
+        QPauseAnimation *pause = new QPauseAnimation(parent);
         return engine->newQObject(pause);
     } else {
-        Plasma::Animation *anim = Plasma::Animator::create(s_animationDefs.value(animName), interface->applet());
-        anim->setWidgetToAnimate(interface->applet());
+        Plasma::Animation *anim = Plasma::Animator::create(s_animationDefs.value(animName), parent);
+        anim->setWidgetToAnimate(parent);
         return engine->newQObject(anim);
     }
 }
 
 QScriptValue SimpleJavaScriptApplet::animationGroup(QScriptContext *context, QScriptEngine *engine)
 {
-    QScriptValue appletValue = engine->globalObject().property("plasmoid");
-    //kDebug() << "appletValue is " << appletValue.toString();
+    QGraphicsWidget *parent = extractParent(context, engine);
+    QSequentialAnimationGroup *group = new QSequentialAnimationGroup(parent);
+    return engine->newQObject(group);
+}
 
-    QObject *appletObject = appletValue.toQObject();
-    if (!appletObject) {
-        return context->throwError(i18n("Could not extract the AppletObject"));
-    }
-
-    AppletInterface *interface = qobject_cast<AppletInterface*>(appletObject);
-    if (!interface) {
-        return context->throwError(i18n("Could not extract the Applet"));
-    }
-
-    Plasma::AnimationGroup *group = new Plasma::AnimationGroup(interface->applet());
+QScriptValue SimpleJavaScriptApplet::parallelAnimationGroup(QScriptContext *context, QScriptEngine *engine)
+{
+    QGraphicsWidget *parent = extractParent(context, engine);
+    QParallelAnimationGroup *group = new QParallelAnimationGroup(parent);
     return engine->newQObject(group);
 }
 
@@ -827,27 +813,9 @@ QScriptValue SimpleJavaScriptApplet::newPlasmaSvg(QScriptContext *context, QScri
         return context->throwError(i18n("Constructor takes at least 1 argument"));
     }
 
-    QString filename = context->argument(0).toString();
-    QObject *parent = 0;
-
-    QScriptValue appletValue = engine->globalObject().property("plasmoid");
-    QObject *appletObject = appletValue.toQObject();
-    AppletInterface *interface = 0;
-    if (appletObject) {
-        interface = qobject_cast<AppletInterface*>(appletObject);
-    }
-
+    const QString filename = context->argument(0).toString();
     bool parentedToApplet = false;
-    if (context->argumentCount() == 2) {
-        parent = context->argument(1).toQObject();
-        parentedToApplet = parent == interface;
-    }
-
-    if (!parent && interface) {
-        parentedToApplet = true;
-        parent = interface->applet();
-    }
-
+    QGraphicsWidget *parent = extractParent(context, engine, 1, &parentedToApplet);
     Svg *svg = new Svg(parent);
     svg->setImagePath(parentedToApplet ? findSvg(engine, filename) : filename);
     return engine->newQObject(svg);
@@ -860,27 +828,9 @@ QScriptValue SimpleJavaScriptApplet::newPlasmaFrameSvg(QScriptContext *context, 
     }
 
     QString filename = context->argument(0).toString();
-    QObject *parent = 0;
-
-    if (context->argumentCount() == 2) {
-        parent = context->argument(1).toQObject();
-    }
 
     bool parentedToApplet = false;
-    if (!parent) {
-        QScriptValue appletValue = engine->globalObject().property("plasmoid");
-        //kDebug() << "appletValue is " << appletValue.toString();
-
-        QObject *appletObject = appletValue.toQObject();
-        if (appletObject) {
-            AppletInterface *interface = qobject_cast<AppletInterface*>(appletObject);
-            if (interface) {
-                parentedToApplet = true;
-                parent = interface->applet();
-            }
-        }
-    }
-
+    QGraphicsWidget *parent = extractParent(context, engine, 1, &parentedToApplet);
     FrameSvg *frameSvg = new FrameSvg(parent);
     frameSvg->setImagePath(parentedToApplet ? filename : findSvg(engine, filename));
     return engine->newQObject(frameSvg);
@@ -913,19 +863,16 @@ void SimpleJavaScriptApplet::installWidgets(QScriptEngine *engine)
     }
 }
 
-QScriptValue SimpleJavaScriptApplet::createWidget(QScriptContext *context, QScriptEngine *engine)
+QGraphicsWidget *SimpleJavaScriptApplet::extractParent(QScriptContext *context, QScriptEngine *engine,
+                                                       int argIndex, bool *parentedToApplet)
 {
-    if (context->argumentCount() > 1) {
-        return context->throwError(i18n("CreateWidget takes one argument"));
+    if (parentedToApplet) {
+        *parentedToApplet = false;
     }
 
     QGraphicsWidget *parent = 0;
-    if (context->argumentCount()) {
-        parent = qobject_cast<QGraphicsWidget*>(context->argument(0).toQObject());
-
-        if (!parent) {
-            context->throwError(i18n("The parent must be a QGraphicsWidget"));
-        }
+    if (context->argumentCount() >= argIndex) {
+        parent = qobject_cast<QGraphicsWidget*>(context->argument(argIndex).toQObject());
     }
 
     if (!parent) {
@@ -934,18 +881,28 @@ QScriptValue SimpleJavaScriptApplet::createWidget(QScriptContext *context, QScri
 
         QObject *appletObject = appletValue.toQObject();
         if (!appletObject) {
-            return context->throwError(i18n("Could not extract the AppletObject"));
+            return 0;
         }
 
         AppletInterface *interface = qobject_cast<AppletInterface*>(appletObject);
         if (!interface) {
-            return context->throwError(i18n("Could not extract the Applet"));
+            return 0;
         }
 
         //kDebug() << "got the applet!";
         parent = interface->applet();
+
+        if (parentedToApplet) {
+            *parentedToApplet = true;
+        }
     }
 
+    return parent;
+}
+
+QScriptValue SimpleJavaScriptApplet::createWidget(QScriptContext *context, QScriptEngine *engine)
+{
+    QGraphicsWidget *parent = extractParent(context, engine);
     QString self = context->callee().property("functionName").toString();
     if (!s_widgetLoader) {
         s_widgetLoader = new UiLoader;
