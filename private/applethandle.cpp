@@ -62,7 +62,6 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &h
       m_opacity(0.0),
       m_anim(FadeIn),
       m_animId(0),
-      m_angle(0.0),
       m_backgroundBuffer(0),
       m_currentView(applet->view()),
       m_entryPos(hoverPos),
@@ -76,6 +75,9 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &h
     m_gradientColor = colorScheme.background(KColorScheme::NormalBackground).color();
     m_originalGeom = m_applet->geometry();
     m_originalTransform = m_applet->transform();
+
+    QPointF center = QRectF(QPointF(), m_applet->size()).center();
+    m_angle = _k_pointAngle(m_originalTransform.map(center + QPointF(1.0, 0.0)) - center);
 
     m_hoverTimer = new QTimer(this);
     m_hoverTimer->setSingleShot(true);
@@ -571,25 +573,9 @@ qreal _k_pointAngle(QPointF in)
 
 QPointF _k_rotatePoint(QPointF in, qreal rotateAngle)
 {
-    // if the point is 0, 0 it should always be the same even if rotated
-    // without this the function would return a NaN
-    if (in == QPointF(0, 0)) {
-        return in;
-    }
-
-    qreal r = sqrt(in.x()*in.x() + in.y()*in.y());
-    qreal cosine = in.x()/r;
-    qreal sine = in.y()/r;
-
-    qreal angle;
-    if (sine>=0) {
-        angle = acos(cosine);
-    } else {
-        angle = -acos(cosine);
-    }
-
-    qreal newAngle = angle + rotateAngle;
-    return QPointF(r*cos(newAngle), r*sin(newAngle));
+    QTransform trans;
+    trans.rotateRadians(rotateAngle);
+    return trans.map(in);
 }
 
 void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
