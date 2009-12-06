@@ -39,7 +39,6 @@
 #include <KRun>
 
 #include <Plasma/Animation>
-#include <Plasma/AnimationGroup>
 #include <Plasma/Applet>
 #include <Plasma/Svg>
 #include <Plasma/FrameSvg>
@@ -63,7 +62,6 @@ Q_DECLARE_METATYPE(QGraphicsWidget*)
 Q_DECLARE_METATYPE(QGraphicsLayout*)
 Q_DECLARE_METATYPE(KConfigGroup)
 Q_DECLARE_METATYPE(Plasma::Animation *)
-Q_DECLARE_METATYPE(Plasma::AnimationGroup *)
 
 Q_SCRIPT_DECLARE_QMETAOBJECT(AppletInterface, SimpleJavaScriptApplet*)
 
