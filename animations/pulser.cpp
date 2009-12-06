@@ -112,13 +112,15 @@ void PulseAnimation::resetPulser()
 
 void PulseAnimation::createAnimation(qreal duration, qreal scale)
 {
-    bool dirty = false;
-    if (!d->under)
+    if (!d->under) {
         setCopy();
+    }
 
     QParallelAnimationGroup *anim = d->animation.data();
     if (!anim) {
         QParallelAnimationGroup *group = new QParallelAnimationGroup(this);
+        connect(group, SIGNAL(finished()), this, SLOT(resetPulser()));
+
         d->opacityAnimation = new QPropertyAnimation(d->under, "opacity");
         d->opacityAnimation->setDuration(duration);
         d->opacityAnimation->setStartValue(1);
@@ -133,10 +135,7 @@ void PulseAnimation::createAnimation(qreal duration, qreal scale)
         /* The group takes ownership of all animations */
         group->addAnimation(d->scaleAnimation);
         d->animation = group;
-        dirty = true;
-
     } else {
-
         QAbstractAnimation::State temp = anim->state();
         if (temp == QAbstractAnimation::Running) {
             anim->stop();
@@ -144,16 +143,14 @@ void PulseAnimation::createAnimation(qreal duration, qreal scale)
              * and *then* reset the geometry
              */
         } else {
-            if (d->under->size() != widgetToAnimate()->size())
+            if (d->under->size() != widgetToAnimate()->size()) {
                 setCopy();
+            }
 
             d->opacityAnimation->setEndValue(0);
             d->scaleAnimation->setEndValue(scale);
         }
     }
-
-    if (dirty)
-        connect(d->animation.data(), SIGNAL(finished()), this, SLOT(resetPulser()));
 }
 
 QAbstractAnimation* PulseAnimation::render(QObject* parent)
