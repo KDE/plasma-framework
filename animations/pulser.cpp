@@ -40,9 +40,7 @@ public :
           zvalue(0),
           scale(0),
           mopacity(0),
-          endScale(1.5),
-          opacityAnimation(0),
-          scaleAnimation(0)
+          endScale(1.5)
     {}
 
     ~PulseAnimationPrivate()
@@ -51,9 +49,6 @@ public :
     QGraphicsWidget *under;
     qreal zvalue, scale, mopacity;
     qreal endScale;
-    QPropertyAnimation *opacityAnimation;
-    QPropertyAnimation *scaleAnimation;
-    QWeakPointer<QParallelAnimationGroup> animation;
 };
 
 
@@ -115,34 +110,6 @@ void PulseAnimation::resetPulser()
     d->under->setZValue(d->zvalue);
 }
 
-
-void PulseAnimation::createAnimation(qreal duration, qreal scale)
-{
-    if (!d->under) {
-        setCopy();
-    }
-
-    QParallelAnimationGroup *anim = d->animation.data();
-    if (!anim) {
-        QParallelAnimationGroup *group = new QParallelAnimationGroup(this);
-        connect(group, SIGNAL(finished()), this, SLOT(resetPulser()));
-
-        d->opacityAnimation = new QPropertyAnimation(d->under, "opacity");
-        d->opacityAnimation->setDuration(duration);
-        d->opacityAnimation->setStartValue(1);
-        d->opacityAnimation->setEndValue(0);
-        group->addAnimation(d->opacityAnimation);
-
-        d->scaleAnimation = new QPropertyAnimation(d->under, "scale");
-        d->scaleAnimation->setDuration(duration);
-        d->scaleAnimation->setStartValue(d->scale);
-        d->scaleAnimation->setEndValue(scale);
-
-        /* The group takes ownership of all animations */
-        group->addAnimation(d->scaleAnimation);
-        d->animation = group;
-    }
-}
 
 void PulseAnimation::updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
 {
