@@ -160,8 +160,7 @@ void PulseAnimation::updateState(QAbstractAnimation::State newState, QAbstractAn
                setCopy();
            }
            d->opacityAnimation->setEndValue(0);
-           /* TODO: save the scale factor somewhere */
-           d->scaleAnimation->setEndValue(1.5);
+           d->scaleAnimation->setEndValue(d->endScale);
        }
 
        d->animation.data()->start();
