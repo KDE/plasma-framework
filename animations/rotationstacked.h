@@ -26,15 +26,14 @@
 #include <plasma/plasma_export.h>
 
 #include <QGraphicsLayoutItem>
+class QGraphicsRotation;
+class StackedLayout;
 
 namespace Plasma {
-
-class RotationStackedAnimationPrivate;
 
 /* TODO:
  * create a parent class for rotations
  */
-
 class RotationStackedAnimation : public Animation
 {
     Q_OBJECT
@@ -43,35 +42,49 @@ class RotationStackedAnimation : public Animation
     Q_PROPERTY(qint8 reference READ reference WRITE setReference)
     Q_PROPERTY(QGraphicsWidget* backWidget READ backWidget WRITE setBackWidget)
 
-    public:
-        RotationStackedAnimation(QObject *parent = 0);
-        ~RotationStackedAnimation();
+public:
+    RotationStackedAnimation(QObject *parent = 0);
 
-        /**
-         * Set the animation direction
-         * @arg direction animation direction
-         */
-        void setMovementDirection(const qint8 &direction);
+    ~RotationStackedAnimation();
 
-        /**
-         * Get the animation direction
-         */
-        qint8 movementDirection() const;
+    /**
+     * Set the animation direction
+     * @arg direction animation direction
+     */
+    void setMovementDirection(const qint8 &direction);
 
-        void setReference(const qint8 &reference);
-        qint8 reference() const;
+    /**
+     * Get the animation direction
+     */
+    qint8 movementDirection() const;
 
-        QGraphicsLayoutItem *layout();
+    void setReference(const qint8 &reference);
+    qint8 reference() const;
 
-        QGraphicsWidget *backWidget();
-        void setBackWidget(QGraphicsWidget *backWidget);
+    QGraphicsLayoutItem *layout();
 
-    protected:
-        void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
-        void updateCurrentTime(int currentTime);
+    QGraphicsWidget *backWidget();
+    void setBackWidget(QGraphicsWidget *backWidget);
 
-    private:
-        RotationStackedAnimationPrivate *d;
+protected:
+    void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
+    void updateCurrentTime(int currentTime);
+
+private:
+    qint8 m_reference;
+    /**
+     * Animation direction: where the animation will move.
+     */
+    Plasma::AnimationDirection animDirection;
+    int frontStartAngle;
+    int frontEndAngle;
+    int backStartAngle;
+    int backEndAngle;
+    QWeakPointer<QGraphicsWidget> m_backWidget;
+    QGraphicsRotation *backRotation;
+    QGraphicsRotation *frontRotation;
+    StackedLayout *sLayout;
+
 };
 } // Plasma
 

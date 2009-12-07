@@ -20,11 +20,9 @@
 /***********************************************************************/
 
 #include "rotationstacked.h"
-
 #include <QGraphicsRotation>
 #include <QSequentialAnimationGroup>
 #include <QWeakPointer>
-
 #include <kdebug.h>
 
 #include "stackedlayout.h"
@@ -33,77 +31,58 @@
 namespace Plasma
 {
 
-class RotationStackedAnimationPrivate {
-public:
-    QGraphicsRotation *backRotation;
-    QGraphicsRotation *frontRotation;
-    int frontStartAngle, frontEndAngle;
-    int backStartAngle, backEndAngle;
-
-    qint8 reference;
-    /**
-     * Animation direction: where the animation will move.
-     */
-    Plasma::AnimationDirection animDirection;
-
-    QWeakPointer<QGraphicsWidget> backWidget;
-    StackedLayout *sLayout;
-};
-
 RotationStackedAnimation::RotationStackedAnimation(QObject *parent)
-    : Animation(parent),
-      d(new RotationStackedAnimationPrivate)
+    : Animation(parent)
 {
-    d->backRotation = new QGraphicsRotation(this);
-    d->frontRotation = new QGraphicsRotation(this);
-
-    d->sLayout = new StackedLayout;
-}
-
-void RotationStackedAnimation::setMovementDirection(const qint8 &direction)
-{
-    d->animDirection = static_cast<Plasma::AnimationDirection>(direction);
-}
-
-qint8 RotationStackedAnimation::movementDirection() const
-{
-    return static_cast<qint8>(d->animDirection);
+    backRotation = new QGraphicsRotation(this);
+    frontRotation = new QGraphicsRotation(this);
+    sLayout = new StackedLayout;
 }
 
 RotationStackedAnimation::~RotationStackedAnimation()
 {
-    delete d;
+    /* TODO: test what is lacking a parent and delete it */
 }
+
+void RotationStackedAnimation::setMovementDirection(const qint8 &direction)
+{
+    animDirection = static_cast<Plasma::AnimationDirection>(direction);
+}
+
+qint8 RotationStackedAnimation::movementDirection() const
+{
+    return static_cast<qint8>(animDirection);
+}
+
 
 void RotationStackedAnimation::setReference(const qint8 &reference)
 {
-    d->reference = reference;
+    m_reference = reference;
 }
 
 qint8 RotationStackedAnimation::reference() const
 {
-    return d->reference;
+    return m_reference;
 }
 
 QGraphicsWidget *RotationStackedAnimation::backWidget()
 {
-    return d->backWidget.data();
+    return m_backWidget.data();
 }
 
 void RotationStackedAnimation::setBackWidget(QGraphicsWidget *backWidget)
 {
-    d->backWidget = backWidget;
+    m_backWidget = backWidget;
 
     if(widgetToAnimate()) {
-        d->sLayout->addWidget(widgetToAnimate());
-        d->sLayout->addWidget(d->backWidget.data());
+        sLayout->addWidget(widgetToAnimate());
+        sLayout->addWidget(m_backWidget.data());
     }
-    //render(parent());
 }
 
 QGraphicsLayoutItem *RotationStackedAnimation::layout()
 {
-    return d->sLayout;
+    return sLayout;
 }
 
 void RotationStackedAnimation::updateState(
@@ -128,40 +107,40 @@ void RotationStackedAnimation::updateState(
         vector.first = QVector3D(widgetFrontWidth/2, widgetFrontHeight/2, 0);
         vector.second = QVector3D(widgetBackWidth/2, widgetBackHeight/2, 0);
 
-        if (d->animDirection == MoveLeft || d->animDirection == MoveRight) {
-            d->frontRotation->setAxis(Qt::YAxis);
-            d->backRotation->setAxis(Qt::YAxis);
+        if (animDirection == MoveLeft || animDirection == MoveRight) {
+            frontRotation->setAxis(Qt::YAxis);
+            backRotation->setAxis(Qt::YAxis);
 
-            if (d->animDirection == MoveLeft) {
+            if (animDirection == MoveLeft) {
                 /* TODO: the order way */
 
             } else {
-                d->frontStartAngle = 0;
-                d->frontEndAngle = 90;
-                d->backStartAngle = 265; //hack
-                d->backEndAngle = 360;
+                frontStartAngle = 0;
+                frontEndAngle = 90;
+                backStartAngle = 265; //hack
+                backEndAngle = 360;
             }
         }
     }
 
-    d->frontRotation->setOrigin(vector.first);
-    d->backRotation->setOrigin(vector.second);
+    frontRotation->setOrigin(vector.first);
+    backRotation->setOrigin(vector.second);
 
     QList<QGraphicsTransform *> backTransformation;
     QList<QGraphicsTransform *> frontTransformation;
 
-    frontTransformation.append(d->frontRotation);
-    backTransformation.append(d->backRotation);
+    frontTransformation.append(frontRotation);
+    backTransformation.append(backRotation);
 
     widgets.first->setTransformations(frontTransformation);
     widgets.second->setTransformations(backTransformation);
 
     if (oldState == Stopped && newState == Running) {
-        d->frontRotation->setAngle(direction() == Forward ? d->frontStartAngle : d->frontEndAngle);
-        d->backRotation->setAngle(direction() == Forward ? d->backStartAngle : d->backEndAngle);
+        frontRotation->setAngle(direction() == Forward ? frontStartAngle : frontEndAngle);
+        backRotation->setAngle(direction() == Forward ? backStartAngle : backEndAngle);
     } else if(newState == Stopped) {
-        d->frontRotation->setAngle(direction() == Forward ? d->frontEndAngle : d->frontStartAngle);
-        d->backRotation->setAngle(direction() == Forward ? d->backEndAngle : d->backStartAngle);
+        frontRotation->setAngle(direction() == Forward ? frontEndAngle : frontStartAngle);
+        backRotation->setAngle(direction() == Forward ? backEndAngle : backStartAngle);
     }
 }
 
@@ -172,14 +151,14 @@ void RotationStackedAnimation::updateCurrentTime(int currentTime)
         qreal delta;
         if (currentTime <= duration()/2) {
             delta = (currentTime*2)/qreal(duration());
-            d->sLayout->setCurrentWidgetIndex(0);
-            delta = d->frontEndAngle * delta;
-            d->frontRotation->setAngle(delta);
+            sLayout->setCurrentWidgetIndex(0);
+            delta = frontEndAngle * delta;
+            frontRotation->setAngle(delta);
         } else {
             delta = (currentTime/2) / qreal(duration());
-            d->sLayout->setCurrentWidgetIndex(1);
-            delta = d->backEndAngle * delta;
-            d->backRotation->setAngle(delta);
+            sLayout->setCurrentWidgetIndex(1);
+            delta = backEndAngle * delta;
+            backRotation->setAngle(delta);
         }
     }
 }
