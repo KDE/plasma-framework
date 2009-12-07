@@ -90,11 +90,7 @@ void GrowAnimation::updateState(QAbstractAnimation::State newState, QAbstractAni
             m_targetGeometry = m_startGeometry;
             m_startGeometry = QRectF(newX, newY, newWidth, newHeight);
         }
-
-        kDebug()<<"start value:"<<m_startGeometry<<"end value:"<<m_targetGeometry;
-
     }
-
 }
 
 } //namespace Plasma
