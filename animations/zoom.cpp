@@ -53,6 +53,7 @@ void ZoomAnimation::updateState(QAbstractAnimation::State newState, QAbstractAni
     }
 
     if (oldState == Stopped && newState == Running) {
+        w->setTransformOriginPoint(w->size().width()/2, w->size().height()/2);
         w->setScale(direction() == Forward ? 1 : m_zoom);
     } else if (newState == Stopped) {
         w->setScale(direction() == Forward ? m_zoom : 1);
