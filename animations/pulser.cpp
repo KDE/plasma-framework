@@ -58,10 +58,18 @@ public :
 
 void PulseAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
 {
+    if (widget == widgetToAnimate()) {
+        return;
+    }
+
     Animation::setWidgetToAnimate(widget);
-    if (d->animation.data()) {
-        delete d->animation.data();
-        d->animation.clear();
+    if (widget) {
+        if (d->under) {
+            delete d->under;
+            d->under = 0;
+        }
+
+        createAnimation();
     }
 }
 
@@ -135,30 +143,41 @@ void PulseAnimation::createAnimation(qreal duration, qreal scale)
         /* The group takes ownership of all animations */
         group->addAnimation(d->scaleAnimation);
         d->animation = group;
-    } else {
-        QAbstractAnimation::State temp = anim->state();
-        if (temp == QAbstractAnimation::Running) {
-            anim->stop();
-            /* TODO: will need to watch stateChanged signal
-             * and *then* reset the geometry
-             */
-        } else {
-            if (d->under->size() != widgetToAnimate()->size()) {
-                setCopy();
-            }
-
-            d->opacityAnimation->setEndValue(0);
-            d->scaleAnimation->setEndValue(scale);
-        }
     }
 }
 
-QAbstractAnimation* PulseAnimation::render(QObject* parent)
+void PulseAnimation::updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
 {
-    Q_UNUSED(parent);
 
-    createAnimation(duration());
-    return d->animation.data();
+   if (oldState == Stopped && newState == Running) {
+       QParallelAnimationGroup *anim = d->animation.data();
+       QAbstractAnimation::State temp = anim->state();
+       if (temp == QAbstractAnimation::Running) {
+           anim->stop();
+           /* TODO: will need to watch stateChanged signal
+            * and *then* reset the geometry
+            */
+       } else {
+           if (d->under->size() != widgetToAnimate()->size()) {
+               setCopy();
+           }
+           d->opacityAnimation->setEndValue(0);
+           /* TODO: save the scale factor somewhere */
+           d->scaleAnimation->setEndValue(1.5);
+       }
+
+       d->animation.data()->start();
+
+   } else if (newState == Stopped) {
+       //d->animation.data()->stop();
+   }
+
+}
+
+void PulseAnimation::updateCurrentTime(int currentTime)
+{
+
+    qDebug() << "\t: " << currentTime;
 }
 
 } //namespace Plasma

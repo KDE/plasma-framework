@@ -42,7 +42,8 @@ public Q_SLOTS:
     void resetPulser();
 
 protected:
-    virtual QAbstractAnimation* render(QObject* parent = 0);
+    void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
+    void updateCurrentTime(int currentTime);
     void setCopy();
 
 private:
