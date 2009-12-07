@@ -26,25 +26,16 @@
 namespace Plasma
 {
 
-class PulseAnimationPrivate
+PulseAnimation::PulseAnimation(QObject *parent)
+        : Animation(parent),
+          zvalue(0), scale(0), mopacity(0), endScale(1.5),
+          under(0)
 {
-public :
-    PulseAnimationPrivate()
-        : under(0),
-          zvalue(0),
-          scale(0),
-          mopacity(0),
-          endScale(1.5)
-    {}
+}
 
-    ~PulseAnimationPrivate()
-    { }
-
-    QGraphicsWidget *under;
-    qreal zvalue, scale, mopacity;
-    qreal endScale;
-};
-
+PulseAnimation::~PulseAnimation()
+{
+}
 
 void PulseAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
 {
@@ -58,45 +49,31 @@ void PulseAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
     }
 }
 
-PulseAnimation::PulseAnimation(QObject *parent)
-        : Animation(parent), d(new PulseAnimationPrivate)
-{
-}
-
-PulseAnimation::~PulseAnimation()
-{
-    delete d;
-}
-
 void PulseAnimation::setCopy()
 {
     QGraphicsWidget *target = widgetToAnimate();
     /* the parent to an image, the animation will happen on the pixmap copy.
      */
-    ShadowFake *shadow = 0;
-    if (!d->under)
-        shadow  = new ShadowFake;
-    else
-        shadow = dynamic_cast<ShadowFake*>(d->under);
+    if (!under)
+        under  = new ShadowFake;
 
-    shadow->copyTarget(target);
+    under->copyTarget(target);
 
-    d->zvalue = target->zValue();
-    --d->zvalue;
-    d->scale = target->scale();
+    zvalue = target->zValue();
+    --zvalue;
+    scale = target->scale();
 
-    d->under = shadow;
-    d->under->setOpacity(d->mopacity);
-    d->under->setScale(d->scale);
-    d->under->setZValue(d->zvalue);
+    under->setOpacity(mopacity);
+    under->setScale(scale);
+    under->setZValue(zvalue);
 
 }
 
 void PulseAnimation::resetPulser()
 {
-    d->under->setOpacity(d->mopacity);
-    d->under->setScale(d->scale);
-    d->under->setZValue(d->zvalue);
+    under->setOpacity(mopacity);
+    under->setScale(scale);
+    under->setZValue(zvalue);
 }
 
 
@@ -104,12 +81,12 @@ void PulseAnimation::updateState(QAbstractAnimation::State newState, QAbstractAn
 {
 
    if (oldState == Stopped && newState == Running) {
-       if (d->under->size() != widgetToAnimate()->size()) {
+       if (under->size() != widgetToAnimate()->size()) {
            setCopy();
        }
 
-       d->under->setOpacity(direction() == Forward ? 1 : 0);
-       d->under->setScale(direction() == Forward ? d->scale : d->endScale);
+       under->setOpacity(direction() == Forward ? 1 : 0);
+       under->setScale(direction() == Forward ? scale : endScale);
 
    } else if (newState == Stopped) {
        resetPulser();
@@ -119,10 +96,10 @@ void PulseAnimation::updateState(QAbstractAnimation::State newState, QAbstractAn
 
 void PulseAnimation::updateCurrentTime(int currentTime)
 {
-    QGraphicsWidget *w = d->under;
+    QGraphicsWidget *w = under;
     if (w) {
         qreal delta = currentTime / qreal(duration());
-        delta = (1 - d->endScale) * delta;
+        delta = (1 - endScale) * delta;
         w->setScale(1 - delta);
     }
 

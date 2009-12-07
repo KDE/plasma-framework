@@ -25,7 +25,7 @@
 namespace Plasma
 {
 
-class PulseAnimationPrivate;
+class ShadowFake;
 
 class PulseAnimation : public Animation
 {
@@ -46,8 +46,11 @@ protected:
     void setCopy();
 
 private:
-
-    PulseAnimationPrivate *d;
+    qreal zvalue;
+    qreal scale;
+    qreal mopacity;
+    qreal endScale;
+    ShadowFake *under;
 };
 
 }
