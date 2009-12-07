@@ -167,7 +167,7 @@ void PulseAnimation::updateState(QAbstractAnimation::State newState, QAbstractAn
        d->animation.data()->start();
 
    } else if (newState == Stopped) {
-       //d->animation.data()->stop();
+
    }
 
 }
@@ -175,7 +175,9 @@ void PulseAnimation::updateState(QAbstractAnimation::State newState, QAbstractAn
 void PulseAnimation::updateCurrentTime(int currentTime)
 {
 
-    qDebug() << "\t: " << currentTime;
+    /* TODO: reuse this time and update properties without the
+     * the need of an internal animation group.
+     */
 }
 
 } //namespace Plasma

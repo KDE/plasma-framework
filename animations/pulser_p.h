@@ -35,7 +35,6 @@ public:
     PulseAnimation(QObject *parent = 0);
     ~PulseAnimation();
 
-    void updateGeometry(QRectF updated, qreal zCoordinate = 0, qreal scale = 1.5);
     void setWidgetToAnimate(QGraphicsWidget *widget);
 
 public Q_SLOTS:
