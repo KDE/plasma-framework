@@ -47,7 +47,7 @@ protected:
 
 private:
 
-    void createAnimation(qreal _duration = 500, qreal _scale = 1.5);
+    void createAnimation(qreal _duration, qreal _scale);
 
     PulseAnimationPrivate *d;
 };

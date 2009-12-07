@@ -38,7 +38,8 @@ public :
     PulseAnimationPrivate()
         : under(0),
           zvalue(0),
-          mscale(0),
+          scale(0),
+          endScale(1.5),
           opacityAnimation(0),
           scaleAnimation(0)
     {}
@@ -47,7 +48,8 @@ public :
     { }
 
     QGraphicsWidget *under;
-    qreal zvalue, mscale, mopacity;
+    qreal zvalue, scale, mopacity;
+    qreal endScale;
     QPropertyAnimation *opacityAnimation;
     QPropertyAnimation *scaleAnimation;
     QWeakPointer<QParallelAnimationGroup> animation;
@@ -66,15 +68,13 @@ void PulseAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
             delete d->under;
             d->under = 0;
         }
-
-        createAnimation();
+        createAnimation(Animation::duration(), d->endScale);
     }
 }
 
 PulseAnimation::PulseAnimation(QObject *parent)
         : Animation(parent), d(new PulseAnimationPrivate)
 {
-
 }
 
 PulseAnimation::~PulseAnimation()
@@ -99,11 +99,11 @@ void PulseAnimation::setCopy()
     d->mopacity = 0;
     d->zvalue = target->zValue();
     --d->zvalue;
-    d->mscale = target->scale();
+    d->scale = target->scale();
 
     d->under = shadow;
     d->under->setOpacity(d->mopacity);
-    d->under->setScale(d->mscale);
+    d->under->setScale(d->scale);
     d->under->setZValue(d->zvalue);
 
 }
@@ -111,7 +111,7 @@ void PulseAnimation::setCopy()
 void PulseAnimation::resetPulser()
 {
     d->under->setOpacity(d->mopacity);
-    d->under->setScale(d->mscale);
+    d->under->setScale(d->scale);
     d->under->setZValue(d->zvalue);
 }
 
@@ -135,7 +135,7 @@ void PulseAnimation::createAnimation(qreal duration, qreal scale)
 
         d->scaleAnimation = new QPropertyAnimation(d->under, "scale");
         d->scaleAnimation->setDuration(duration);
-        d->scaleAnimation->setStartValue(d->mscale);
+        d->scaleAnimation->setStartValue(d->scale);
         d->scaleAnimation->setEndValue(scale);
 
         /* The group takes ownership of all animations */
