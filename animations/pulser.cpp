@@ -39,6 +39,7 @@ public :
         : under(0),
           zvalue(0),
           scale(0),
+          mopacity(0),
           endScale(1.5),
           opacityAnimation(0),
           scaleAnimation(0)
@@ -68,7 +69,7 @@ void PulseAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
             delete d->under;
             d->under = 0;
         }
-        createAnimation(Animation::duration(), d->endScale);
+        setCopy();
     }
 }
 
@@ -96,7 +97,6 @@ void PulseAnimation::setCopy()
 
     shadow->copyTarget(target);
 
-    d->mopacity = 0;
     d->zvalue = target->zValue();
     --d->zvalue;
     d->scale = target->scale();
@@ -148,35 +148,39 @@ void PulseAnimation::updateState(QAbstractAnimation::State newState, QAbstractAn
 {
 
    if (oldState == Stopped && newState == Running) {
-       QParallelAnimationGroup *anim = d->animation.data();
-       QAbstractAnimation::State temp = anim->state();
-       if (temp == QAbstractAnimation::Running) {
-           anim->stop();
-           /* TODO: will need to watch stateChanged signal
-            * and *then* reset the geometry
-            */
-       } else {
-           if (d->under->size() != widgetToAnimate()->size()) {
-               setCopy();
-           }
-           d->opacityAnimation->setEndValue(0);
-           d->scaleAnimation->setEndValue(d->endScale);
+       if (d->under->size() != widgetToAnimate()->size()) {
+           setCopy();
        }
-
-       d->animation.data()->start();
-
+       d->under->setOpacity(direction() == Forward ? 1 : 0);
+       d->under->setScale(direction() == Forward ? d->scale : d->endScale);
    } else if (newState == Stopped) {
-
+       resetPulser();
    }
 
 }
 
 void PulseAnimation::updateCurrentTime(int currentTime)
 {
+    QGraphicsWidget *w = d->under;
+    if (w) {
+        qreal delta = currentTime / qreal(duration());
+        delta = (1 - d->endScale) * delta;
+        w->setScale(1 - delta);
+    }
 
-    /* TODO: reuse this time and update properties without the
-     * the need of an internal animation group.
-     */
+    if (w) {
+        qreal delta = currentTime / qreal(duration());
+        if (direction() == Forward) {
+            w->setOpacity(1.0 - delta);
+        } else if (direction() == Backward) {
+            w->setOpacity(delta);
+        }
+
+
+    }
+
+    Animation::updateCurrentTime(currentTime);
+
 }
 
 } //namespace Plasma
