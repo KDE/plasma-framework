@@ -27,6 +27,8 @@
 #include <QtGui/QApplication>
 #include <QtGui/QMenu>
 #include <QTouchEvent>
+#include <QMatrix>
+#include <QTransform>
 
 #include <kcolorscheme.h>
 #include <kglobalsettings.h>
@@ -50,8 +52,9 @@ namespace Plasma
 {
 
 qreal _k_distanceForPoint(QPointF point);
-qreal _k_pointAngle(QPointF in);
-QPointF _k_rotatePoint(QPointF in, qreal rotateAngle);
+qreal _k_pointAngle(QPointF point);
+QPointF _k_rotatePoint(QPointF point, qreal angle);
+QPointF _k_projectPoint(QPointF point, QPointF v);
 
 AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &hoverPos)
     : QGraphicsObject(applet),
@@ -558,24 +561,30 @@ qreal _k_distanceForPoint(QPointF point)
     return std::sqrt(point.x() * point.x() + point.y() * point.y());
 }
 
-qreal _k_pointAngle(QPointF in)
+qreal _k_pointAngle(QPointF point)
 {
-    qreal r = sqrt(in.x()*in.x() + in.y()*in.y());
-    qreal cosine = in.x()/r;
-    qreal sine = in.y()/r;
+    qreal r = sqrt(point.x() * point.x() + point.y() * point.y());
+    qreal cosine = point.x() / r;
 
-    if (sine >= 0) {
+    if (point.y() >= 0) {
         return acos(cosine);
     } else {
         return -acos(cosine);
     }
 }
 
-QPointF _k_rotatePoint(QPointF in, qreal rotateAngle)
+QPointF _k_rotatePoint(QPointF point, qreal angle)
 {
-    QTransform trans;
-    trans.rotateRadians(rotateAngle);
-    return trans.map(in);
+    return QTransform().rotateRadians(angle).map(point);
+}
+
+QPointF _k_projectPoint(QPointF point, QPointF v)
+{
+    v /= sqrt(v.x() * v.x() + v.y() * v.y());
+    qreal a = v.x() * v.x();
+    qreal b = v.x() * v.y();
+    qreal d = v.y() * v.y();
+    return QMatrix(a, b, b, d, 0., 0.).map(point);
 }
 
 void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -662,26 +671,19 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 newSize = m_origAppletSize + QPointF(rGrabPoint.x() - rCursorPoint.x(), rGrabPoint.y() - rCursorPoint.y());
             }
 
-            // if preserving aspect ratio, project the calculated size point to the line
-            // theough the origin and the original size point
+            // preserving aspect ratio?
             if ((m_applet->aspectRatioMode() != Plasma::IgnoreAspectRatio &&
                  !(event->modifiers() & Qt::ControlModifier)) ||
                  (m_applet->aspectRatioMode() == Plasma::IgnoreAspectRatio &&
                   (event->modifiers() & Qt::ControlModifier))) {
-                qreal ox = m_origAppletSize.x();
-                qreal oy = m_origAppletSize.y();
-                qreal sx = newSize.x();
-                qreal sy = newSize.y();
-
-                qreal x = ox*(sx*ox+sy*oy)/(ox*ox+oy*oy);
-                qreal y = (oy/ox)*x;
-                newSize = QPointF(x, y);
-
-                // limit size, preserve ratio
+                // project size to keep ratio
+                newSize = _k_projectPoint(newSize, m_origAppletSize);
+                // limit size, presering ratio
+                qreal ratio = m_origAppletSize.y() / m_origAppletSize.x();
                 newSize.rx() = qMin(max.width(), qMax(min.width(), newSize.x()));
-                newSize.ry() = newSize.x()*(oy/ox);
+                newSize.ry() = newSize.x() * ratio;
                 newSize.ry() = qMin(max.height(), qMax(min.height(), newSize.y()));
-                newSize.rx() = newSize.y()/(oy/ox);
+                newSize.rx() = newSize.y() / ratio;
             } else {
                 // limit size
                 newSize.rx() = qMin(max.width(), qMax(min.width(), newSize.x()));
