@@ -155,7 +155,6 @@ void WallpaperRenderThread::run()
         switch (method)
         {
         case Wallpaper::ScaledResize:
-            imgSize *= ratio;
             scaledSize = size;
             break;
         case Wallpaper::CenteredResize:
@@ -180,7 +179,6 @@ void WallpaperRenderThread::run()
 
             break;
         case Wallpaper::MaxpectResize: {
-            imgSize *= ratio;
             float xratio = (float) size.width() / imgSize.width();
             float yratio = (float) size.height() / imgSize.height();
             if (xratio > yratio) {
@@ -197,7 +195,6 @@ void WallpaperRenderThread::run()
             break;
         }
         case Wallpaper::ScaledAndCroppedResize: {
-            imgSize *= ratio;
             float xratio = (float) size.width() / imgSize.width();
             float yratio = (float) size.height() / imgSize.height();
             if (xratio > yratio) {
