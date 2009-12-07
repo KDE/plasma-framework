@@ -19,7 +19,7 @@
 /* 02110-1301  USA                                                     */
 /***********************************************************************/
 
-#include "rotationstacked.h"
+#include "rotationstacked_p.h"
 #include <QGraphicsRotation>
 #include <QSequentialAnimationGroup>
 #include <QWeakPointer>

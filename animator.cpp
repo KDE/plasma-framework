@@ -28,7 +28,7 @@
 #include "animations/pulser_p.h"
 #include "animations/rotation_p.h"
 #include "animations/slide_p.h"
-#include "animations/rotationstacked.h"
+#include "animations/rotationstacked_p.h"
 #include "animations/geo_p.h"
 #include "animations/zoom_p.h"
 
