@@ -353,7 +353,6 @@ endif(PHONON_FOUND)
 
 install(FILES
     animations/animation.h
-    animations/rotationstacked.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/animations COMPONENT Devel)
 
 
