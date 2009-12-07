@@ -15,14 +15,8 @@
  *   Free Software Foundation, Inc.,
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
-/* TODO:
- * - fix opacity (for some reason is not working)
- */
-
 #include "pulser_p.h"
 #include "plasma/private/pulsershadow_p.h"
-#include <QAbstractAnimation>
 #include <QEvent>
 #include <QGraphicsWidget>
 #include <QParallelAnimationGroup>
@@ -60,10 +54,6 @@ void PulseAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
 
     Animation::setWidgetToAnimate(widget);
     if (widget) {
-        if (d->under) {
-            delete d->under;
-            d->under = 0;
-        }
         setCopy();
     }
 }
@@ -81,8 +71,7 @@ PulseAnimation::~PulseAnimation()
 void PulseAnimation::setCopy()
 {
     QGraphicsWidget *target = widgetToAnimate();
-    /* copy the parent to an image, the animation will happen on the
-     * pixmap copy.
+    /* the parent to an image, the animation will happen on the pixmap copy.
      */
     ShadowFake *shadow = 0;
     if (!d->under)
@@ -118,8 +107,10 @@ void PulseAnimation::updateState(QAbstractAnimation::State newState, QAbstractAn
        if (d->under->size() != widgetToAnimate()->size()) {
            setCopy();
        }
+
        d->under->setOpacity(direction() == Forward ? 1 : 0);
        d->under->setScale(direction() == Forward ? d->scale : d->endScale);
+
    } else if (newState == Stopped) {
        resetPulser();
    }
@@ -142,12 +133,9 @@ void PulseAnimation::updateCurrentTime(int currentTime)
         } else if (direction() == Backward) {
             w->setOpacity(delta);
         }
-
-
     }
 
     Animation::updateCurrentTime(currentTime);
-
 }
 
 } //namespace Plasma
