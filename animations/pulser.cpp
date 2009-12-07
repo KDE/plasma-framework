@@ -40,7 +40,6 @@ public :
           zvalue(0),
           mscale(0),
           opacityAnimation(0),
-          geometryAnimation(0),
           scaleAnimation(0)
     {}
 
@@ -50,7 +49,6 @@ public :
     QGraphicsWidget *under;
     qreal zvalue, mscale, mopacity;
     QPropertyAnimation *opacityAnimation;
-    QPropertyAnimation *geometryAnimation;
     QPropertyAnimation *scaleAnimation;
     QWeakPointer<QParallelAnimationGroup> animation;
 };
