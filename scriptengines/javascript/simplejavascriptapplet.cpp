@@ -374,11 +374,13 @@ void SimpleJavaScriptApplet::populateAnimationsHash()
 {
     if (s_animationDefs.isEmpty()) {
         s_animationDefs.insert("fade", Plasma::Animator::FadeAnimation);
+        s_animationDefs.insert("geometry", Plasma::Animator::GeometryAnimation);
         s_animationDefs.insert("grow", Plasma::Animator::GrowAnimation);
         s_animationDefs.insert("pulse", Plasma::Animator::PulseAnimation);
         s_animationDefs.insert("rotate", Plasma::Animator::RotationAnimation);
         s_animationDefs.insert("rotateStacked", Plasma::Animator::RotationStackedAnimation);
         s_animationDefs.insert("slide", Plasma::Animator::SlideAnimation);
+        s_animationDefs.insert("zoom", Plasma::Animator::ZoomAnimation);
     }
 }
 
