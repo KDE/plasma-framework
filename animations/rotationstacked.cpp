@@ -150,12 +150,14 @@ void RotationStackedAnimation::updateCurrentTime(int currentTime)
     if(w) {
         qreal delta;
         if (currentTime <= duration()/2) {
-            delta = (currentTime*2)/qreal(duration());
+            delta = easingCurve().valueForProgress(
+                    (currentTime * 2) / qreal(duration()));
             sLayout->setCurrentWidgetIndex(0);
             delta = frontEndAngle * delta;
             frontRotation->setAngle(delta);
         } else {
-            delta = (currentTime/2) / qreal(duration());
+            delta = easingCurve().valueForProgress(
+                    (currentTime/2) / qreal(duration()));
             sLayout->setCurrentWidgetIndex(1);
             delta = backEndAngle * delta;
             backRotation->setAngle(delta);

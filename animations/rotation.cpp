@@ -22,6 +22,7 @@
 #include "rotation_p.h"
 
 #include <QGraphicsRotation>
+#include <QEasingCurve>
 
 #include <kdebug.h>
 
@@ -196,7 +197,8 @@ void RotationAnimation::updateCurrentTime(int currentTime)
 {
     QGraphicsWidget *w = widgetToAnimate();
     if (w) {
-        qreal delta = currentTime / qreal(duration());
+        qreal delta = easingCurve().valueForProgress(
+                currentTime / qreal(duration()));
         delta = angle() * delta;
         d->rotation->setAngle(delta);
     }

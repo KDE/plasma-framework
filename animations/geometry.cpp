@@ -78,7 +78,8 @@ void GeometryAnimation::updateCurrentTime(int currentTime)
 {
     QGraphicsWidget *w = widgetToAnimate();
     if (w) {
-        qreal delta = currentTime / qreal(duration());
+        qreal delta = easingCurve().valueForProgress(
+                currentTime / qreal(duration()));
 
         QRectF newGeo = m_startGeometry;
         newGeo.adjust((-m_startGeometry.x() + m_targetGeometry.x()) * delta,

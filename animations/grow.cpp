@@ -44,7 +44,8 @@ void GrowAnimation::updateCurrentTime(int currentTime)
 {
     QGraphicsWidget *w = widgetToAnimate();
     if (w && state() == QAbstractAnimation::Running) {
-        qreal delta = currentTime / qreal(duration());
+        qreal delta = easingCurve().valueForProgress(
+                currentTime / qreal(duration()));
         QRectF geometry;
         geometry.setTopLeft(m_startGeometry.topLeft() * (1-delta) + (m_targetGeometry.topLeft() * delta));
         geometry.setSize(m_startGeometry.size() * (1-delta) + (m_targetGeometry.size() * delta));

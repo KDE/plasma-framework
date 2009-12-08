@@ -41,7 +41,7 @@ public:
     /**
      * Animation easing curve type
      */
-    QEasingCurve::Type easingCurve;
+    QEasingCurve easingCurve;
 
     /**
      * Duration of the animation. Default is 250ms.
