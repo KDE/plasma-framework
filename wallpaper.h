@@ -469,6 +469,8 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * Sets the contextual actions for this wallpaper.
          *
          * @param actions A list of contextual actions for this wallpaper
+         *
+         * @since 4.4
          **/
         void setContextualActions(const QList<QAction*> &actions);
 
