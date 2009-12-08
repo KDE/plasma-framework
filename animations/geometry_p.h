@@ -31,19 +31,19 @@ namespace Plasma
 {
 
 /**
- * @class GeoAnimation plasma/animations/geo_p.h
+ * @class GeometryAnimation plasma/animations/geo_p.h
  * @short Geometry Animation
  *
  */
-class GeoAnimation : public Animation
+class GeometryAnimation : public Animation
 {
     Q_OBJECT
     Q_PROPERTY(QRectF startGeometry READ startGeometry WRITE setStartGeometry)
     Q_PROPERTY(QRectF targetGeometry READ targetGeometry WRITE setTargetGeometry)
 
 public:
-    GeoAnimation(QObject *parent = 0);
-    virtual ~GeoAnimation();
+    GeometryAnimation(QObject *parent = 0);
+    virtual ~GeometryAnimation();
 
     QRectF startGeometry() const;
     void setStartGeometry(const QRectF &);

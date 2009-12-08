@@ -63,7 +63,7 @@ public:
         RotationAnimation, /*<< Rotate an animated object */
         RotationStackedAnimation, /*<< for flipping one object with another */
         SlideAnimation, /*<< Move the position of animated object */
-        GeoAnimation, /*<< Geometry animation*/
+        GeometryAnimation, /*<< Geometry animation*/
         ZoomAnimation /*<<Zoom animation */
     };
 

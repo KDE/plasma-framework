@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "geo_p.h"
+#include "geometry_p.h"
 
 #include <QRect>
 
@@ -26,37 +26,37 @@
 namespace Plasma
 {
 
-GeoAnimation::GeoAnimation(QObject *parent)
+GeometryAnimation::GeometryAnimation(QObject *parent)
              : Animation(parent),
              m_startGeometry(-1, -1, -1, -1)
 {
 }
 
-GeoAnimation::~GeoAnimation()
+GeometryAnimation::~GeometryAnimation()
 {
 }
 
-void GeoAnimation::setStartGeometry(const QRectF &geometry)
+void GeometryAnimation::setStartGeometry(const QRectF &geometry)
 {
     m_startGeometry = geometry;
 }
 
-QRectF GeoAnimation::startGeometry() const
+QRectF GeometryAnimation::startGeometry() const
 {
     return m_startGeometry;
 }
 
-void GeoAnimation::setTargetGeometry(const QRectF &geometry)
+void GeometryAnimation::setTargetGeometry(const QRectF &geometry)
 {
     m_targetGeometry = geometry;
 }
 
-QRectF GeoAnimation::targetGeometry() const
+QRectF GeometryAnimation::targetGeometry() const
 {
     return m_targetGeometry;
 }
 
-void GeoAnimation::updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
+void GeometryAnimation::updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
 {
     QGraphicsWidget *w = widgetToAnimate();
     if (!w) {
@@ -74,7 +74,7 @@ void GeoAnimation::updateState(QAbstractAnimation::State newState, QAbstractAnim
     }
 }
 
-void GeoAnimation::updateCurrentTime(int currentTime)
+void GeometryAnimation::updateCurrentTime(int currentTime)
 {
     QGraphicsWidget *w = widgetToAnimate();
     if (w) {

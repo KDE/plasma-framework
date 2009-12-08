@@ -29,7 +29,7 @@
 #include "animations/rotation_p.h"
 #include "animations/slide_p.h"
 #include "animations/rotationstacked_p.h"
-#include "animations/geo_p.h"
+#include "animations/geometry_p.h"
 #include "animations/zoom_p.h"
 
 namespace Plasma
@@ -64,9 +64,11 @@ Plasma::Animation* Animator::create(Animator::Animation type, QObject *parent)
     case SlideAnimation:
         result = new Plasma::SlideAnimation;
         break;
-    case GeoAnimation:
-        result = new Plasma::GeoAnimation;
+
+    case GeometryAnimation:
+        result = new Plasma::GeometryAnimation;
         break;
+
     case ZoomAnimation:
         result = new Plasma::ZoomAnimation;
         break;
