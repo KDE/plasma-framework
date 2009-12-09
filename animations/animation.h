@@ -52,12 +52,14 @@ class PLASMA_EXPORT Animation : public QAbstractAnimation
 
 public:
     /**
-     * Get the animation duration.
+     * Get the animation duration. It can be set using the property duration.
      * @return duration in ms.
      */
     int duration() const;
 
-    /* FIXME: find a better place and name for it. */
+    /**
+     * Animation movement reference (used by \ref RotationAnimation).
+     */
     enum Reference{
         Center,
         Up,
@@ -66,14 +68,29 @@ public:
         Right
     };
 
+    /**
+     * Default constructor.
+     *
+     * @param parent Object parent (might be set when using
+     * \ref Animator::create factory).
+     *
+     */
     explicit Animation(QObject* parent = 0);
+
+    /**
+     * Destructor.
+     */
     virtual ~Animation() = 0;
 
     /**
      * Set the widget on which the animation is to be performed.
+     *
+     * If the animation class has any special initialization to be done
+     * in the target widget, you should reimplement this method in
+     * the derived class.
      * @arg receiver The QGraphicsWidget to be animated.
      */
-    virtual void setWidgetToAnimate(QGraphicsWidget* receiver);
+    virtual void setWidgetToAnimate(QGraphicsWidget* widget);
 
     /**
      * The widget that the animation will be performed upon
@@ -93,16 +110,36 @@ public:
 protected:
 
     /**
-     * Change the animation duration. Default is 1000ms.
+     * Change the animation duration. Default is 250ms.
      * @arg duration The new duration of the animation.
      */
     virtual void setDuration(int duration = 250);
 
+    /**
+     * QAbstractAnimation will call this method while the animation
+     * is running. Each specialized animation class should implement
+     * the correct behavior for it.
+     * @param currentTime Slapsed time using the \ref duration as reference
+     * (it will be from duration up to zero if the animation is running
+     * backwards).
+     */
     virtual void updateCurrentTime(int currentTime);
 
+    /**
+     * Internal use only, access the easing curve object (see
+     * \ref AnimationPrivate). Commonly used if a non-linear
+     * animation is desired while setting the delta in \ref updateCurrentTime.
+     *
+     * @return An internal easing curve (default is Type::Linear).
+     */
     QEasingCurve &easingCurve();
 
 private:
+
+    /**
+     * Internal pimple (actually is used as a data structure, see
+     * \ref AnimationPrivate).
+     */
     AnimationPrivate *const d;
 
 };

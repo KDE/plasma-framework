@@ -34,7 +34,9 @@ namespace Plasma
  * @class Fade plasma/animations/fade.h
  * @short Fade effect
  *
- * Effect that slowly transforms the opacity of the object to the given value.
+ * Effect that slowly transforms the opacity of the object from a starting
+ * value to a target value. The range is 0 (full translucent) to 1 (full
+ * opaque).
  */
 class FadeAnimation : public Animation
 {
@@ -43,15 +45,50 @@ class FadeAnimation : public Animation
     Q_PROPERTY(qreal targetOpacity READ targetOpacity WRITE setTargetOpacity)
 
 public:
+    /** Default constructor */
     FadeAnimation(QObject *parent = 0);
+    /** Destructor */
     virtual ~FadeAnimation();
 
+    /**
+     * Access start opacity of the target widget.
+     *
+     * You can set both a start and an end opacity for an widget when
+     * using this animation class. See \ref setStartOpacity.
+     * @return The opacity (range is 0 to 1).
+     */
     qreal startOpacity() const;
+    /**
+     * Set the start opacity of the target widget.
+     *
+     * See also \ref targetOpacity.
+     * @param qreal The opacity (range is 0 to 1).
+     */
     void setStartOpacity(qreal);
 
+    /**
+     * Access final opacity of the target widget.
+     *
+     * You can set both a start and an end opacity for an widget when
+     * using this animation class. See \ref setTargetOpacity.
+     * @return The opacity (range is 0 to 1).
+     */
     qreal targetOpacity() const;
+    /**
+     * Set the final opacity of the target widget.
+     *
+     * See also \ref startOpacity.
+     * @param qreal The opacity (range is 0 to 1).
+     */
     void setTargetOpacity(qreal);
 
+    /**
+     * Set the widget on which the animation is to be performed.
+     *
+     * This animation reimplements it to make possible to apply the
+     * start opacity in the widget (see \ref setStartOpacity).
+     * @arg receiver The QGraphicsWidget to be animated.
+     */
     void setWidgetToAnimate(QGraphicsWidget *widget);
 
 protected:
@@ -59,7 +96,9 @@ protected:
     void updateCurrentTime(int currentTime);
 
 private:
+    /** Initial opacity */
     qreal m_startOpacity;
+    /** Final opacity */
     qreal m_targetOpacity;
 };
 

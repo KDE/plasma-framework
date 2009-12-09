@@ -59,9 +59,9 @@ void Animation::setDuration(int duration)
     d->duration = qMax(0, duration);
 }
 
-void Animation::setWidgetToAnimate(QGraphicsWidget* receiver)
+void Animation::setWidgetToAnimate(QGraphicsWidget* widget)
 {
-    d->animObject = receiver;
+    d->animObject = widget;
 }
 
 QGraphicsWidget* Animation::widgetToAnimate()
