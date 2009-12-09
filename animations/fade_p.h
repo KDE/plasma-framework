@@ -30,8 +30,6 @@
 namespace Plasma
 {
 
-class FadeAnimationPrivate;
-
 /**
  * @class Fade plasma/animations/fade.h
  * @short Fade effect
