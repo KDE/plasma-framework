@@ -16,6 +16,10 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+/**
+ * @file This file contains the definition for the Pulse effect.
+ */
+
 #ifndef PLASMA_ANIMATIONS_PULSE_H
 #define PLASMA_ANIMATIONS_PULSE_H
 
@@ -27,17 +31,39 @@ namespace Plasma
 
 class ShadowFake;
 
+/**
+ * @class PulseAnimation plasma/animations/pulser_p.h
+ * @short Pulse effect
+ *
+ * Effect that pulses a shadow copy of any QGraphicsWidget making
+ * it more translucent and bigger along the time until it vanishes.
+ */
 class PulseAnimation : public Animation
 {
     Q_OBJECT
 
 public:
+    /** Default Constructor */
     PulseAnimation(QObject *parent = 0);
+    /** Destructor */
     ~PulseAnimation();
 
+    /**
+     * Set the widget on which the animation is to be performed.
+     *
+     * This animation reimplements it to create the shadow copy of
+     * the animated widget. The shadow is the one that is actually
+     * animated (see \ref ShadowFake).
+     * @arg receiver The QGraphicsWidget to be animated.
+     */
     void setWidgetToAnimate(QGraphicsWidget *widget);
 
 public Q_SLOTS:
+    /**
+     * Resets the shadow widget to its initial state (full translucent
+     * and with same geometry as the target widget). It is executed
+     * when the animation is over.
+     */
     void resetPulser();
 
 protected:
@@ -46,10 +72,19 @@ protected:
     void setCopy();
 
 private:
+    /** Zvalue (tipically -1 than the target widget) */
     qreal zvalue;
+    /** Original widget scale */
     qreal scale;
+    /** Opacity of shadow widget (full translucent) */
     qreal mopacity;
+    /** Target scale of shadow widget (default is 1.5x the animated
+     * widget scale).
+     */
     qreal endScale;
+    /** The shadow copy (it really is a QGraphicsWidget with a pixmap
+     * copy of the original widget).
+     */
     ShadowFake *under;
 };
 

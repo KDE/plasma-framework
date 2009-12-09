@@ -18,7 +18,7 @@
  */
 
 /**
- * @file This file contains the definition for the Fade effect.
+ * @file This file contains the definition for the Geometry effect.
  */
 
 #ifndef PLASMA_ANIMATIONS_GEO_H

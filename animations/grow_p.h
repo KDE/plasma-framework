@@ -31,12 +31,13 @@ namespace Plasma
 {
 
 /**
- * @class Grow plasma/animations/grow.h
+ * @class GrowAnimation plasma/animations/grow.h
  * @short Grow effect
  *
  * Effect that grows any QGraphicsWidget by a multiple given in the
- * constructor. The center of the object stays in place while the sides grow.
- *
+ * constructor. The center of the object stays in place while the sides grow
+ * (it does the animation by changing the objects geometry). Also see
+ * \ref ZoomAnimation.
  */
 class GrowAnimation : public Animation
 {
@@ -44,12 +45,29 @@ class GrowAnimation : public Animation
     Q_PROPERTY(qreal factor READ factor WRITE setFactor)
 
 public:
-
+    /** Default Constructor
+     * @param parent Animation object parent.
+     * @param factor Expand factor (default is twice the size of
+     * animated widget).
+     */
     GrowAnimation(QObject *parent = 0, qreal factor = 2);
+    /** Destructor */
     virtual ~GrowAnimation(){};
 
+    /**
+     * Access expansion factor of the shadow pulsable copy.
+     *
+     * If not set, the default is twice (2x) the size of animated widget.
+     * See \ref setFactor.
+     * @return Expansion factor.
+     */
     qreal factor() const;
-
+    /**
+     * Set expansion factor of target widget.
+     *
+     * If not set, the default is twice (2x) the size of animated widget.
+     * @param factor A expansion factor
+     */
     void setFactor(const qreal factor);
 
 protected:
@@ -57,8 +75,11 @@ protected:
     void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
 
 private:
+    /** Animation grow factor */
     qreal m_animFactor;
+    /** Widget start geometry */
     QRectF m_startGeometry;
+    /** Widget final geometry */
     QRectF m_targetGeometry;
 };
 

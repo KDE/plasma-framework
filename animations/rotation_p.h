@@ -19,9 +19,12 @@
 /* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA       */
 /* 02110-1301  USA                                                     */
 /***********************************************************************/
+/**
+ * @file This file contains the definition for the 2D Rotation effect.
+ */
 
-#ifndef ROTATION_P_H
-#define ROTATION_P_H
+#ifndef PLASMA_ROTATION_P_H
+#define PLASMA_ROTATION_P_H
 
 #include <plasma/animations/animation.h>
 #include <plasma/plasma_export.h>
@@ -31,7 +34,14 @@
 class QGraphicsRotation;
 
 namespace Plasma {
-
+/**
+ * @class RotationAnimation plasma/animations/rotation_p.h
+ * @short 2D rotation animation.
+ *
+ * This animation rotates a QGraphicsWidget in a axis (reference and
+ * axis can be defined using properties). See also
+ * \ref StackedRotationAnimation.
+ */
 class RotationAnimation : public Animation
 {
 
@@ -41,11 +51,20 @@ class RotationAnimation : public Animation
     Q_PROPERTY(qreal angle READ angle WRITE setAngle)
 
 public:
+    /** Default constructor
+     *
+     * @param parent Animation object parent.
+     * @param reference See \ref Animation::Reference.
+     * @param axis Which axis to rotate (XAxis, YAxis, ZAxis).
+     * @param angle Rotation angle (0 to 360)
+     *
+     */
     RotationAnimation(QObject *parent = 0,
                       const qint8 &reference = Up,
 		      const Qt::Axis &axis = Qt::ZAxis,
 		      const qreal &angle = 180);
 
+    /** Destructor */
     ~RotationAnimation();
 
     /**
@@ -88,9 +107,13 @@ protected:
     void updateCurrentTime(int currentTime);
 
 private:
+    /** Rotation transform object */
     QGraphicsRotation *m_rotation;
+    /** Rotation angle */
     qreal m_angle;
+    /** Axis where to perform the rotation */
     Qt::Axis m_axis;
+    /** Reference, the default is Up (see \ref Animation::Reference) */
     qint8 m_reference;
 };
 } // Plasma

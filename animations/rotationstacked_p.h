@@ -19,6 +19,10 @@
 // 02110-1301  USA                                                     //
 /////////////////////////////////////////////////////////////////////////
 
+/**
+ * @file This file contains the definition for the StackedRotationAnimation.
+ */
+
 #ifndef PLASMA_ROTATIONSTACKED_H
 #define PLASMA_ROTATIONSTACKED_H
 
@@ -33,6 +37,12 @@ namespace Plasma {
 
 /* TODO:
  * create a parent class for rotations
+ */
+/**
+ * @class RotationStackedAnimation plasma/animations/rotationstacked_p.h
+ * @short 3D like rotation animation
+ * Use this class when you want to rotate a widget along an axis (e.g. Y)
+ * and display a 'hidden' widget behind it. See also \ref RotationAnimation.
  */
 class RotationStackedAnimation : public Animation
 {
