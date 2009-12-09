@@ -29,86 +29,51 @@
 namespace Plasma
 {
 
-class RotationAnimationPrivate {
-public:
-
-    /* TODO: check if the rotation object will be deleted
-     * when the animation runs
-     */
-    QGraphicsRotation *rotation;
-
-    /**
-     * Animation rotation angle (e.g. 45, 180, etc)
-     */
-    qreal angle;
-
-    /**
-     * Rotation axis (e.g. X, Y, Z)
-     */
-    Qt::Axis axis;
-
-    /**
-     * Rotation reference (e.g. Center, Up, Down, Left, Right) can
-     * be combined (i.e. Center|Up)
-     */
-    qint8 reference;
-};
-
-void RotationAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
-{
-    if(widget == widgetToAnimate()) {
-        return;
-    }
-
-    Animation::setWidgetToAnimate(widget);
-}
-
 RotationAnimation::RotationAnimation(QObject *parent,
                                      const qint8 &reference,
                                      const Qt::Axis &axis,
                                      const qreal &angle)
-    : Animation(parent), d(new RotationAnimationPrivate)
+    : Animation(parent)
 {
     setAngle(angle);
     setAxis(axis);
     setReference(reference);
 
-    d->rotation = new QGraphicsRotation(this);
+    m_rotation = new QGraphicsRotation(this);
 }
 
 RotationAnimation::~RotationAnimation()
 {
-    delete d;
 }
 
 Qt::Axis RotationAnimation::axis() const
 {
-    return d->axis;
+    return m_axis;
 }
 
 void RotationAnimation::setAxis(const Qt::Axis &axis)
 {
-    d->axis = axis;
+    m_axis = axis;
 }
 
 qint8 RotationAnimation::reference() const
 {
-    return d->reference;
+    return m_reference;
 }
 
 void RotationAnimation::setReference(const qint8 &reference)
 {
-    d->reference = reference;
+    m_reference = reference;
 }
 
 qreal RotationAnimation::angle() const
 {
-    return d->angle;
+    return m_angle;
 }
 
 void RotationAnimation::setAngle(const qreal &angle)
 {
-    d->angle = angle;
+    m_angle = angle;
 }
 
 void RotationAnimation::updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
@@ -179,17 +144,17 @@ void RotationAnimation::updateState(QAbstractAnimation::State newState, QAbstrac
         }
     }
 
-    d->rotation->setOrigin(vector);
-    d->rotation->setAxis(axis());
+    m_rotation->setOrigin(vector);
+    m_rotation->setAxis(axis());
 
     QList<QGraphicsTransform *> transformation;
-    transformation.append(d->rotation);
+    transformation.append(m_rotation);
     m_object->setTransformations(transformation);
 
     if ((oldState == Stopped) && (newState == Running)) {
-        d->rotation->setAngle(direction() == Forward ? 0 : angle());
+        m_rotation->setAngle(direction() == Forward ? 0 : angle());
     } else if (newState == Stopped) {
-        d->rotation->setAngle(direction() == Forward ? angle() : 0);
+        m_rotation->setAngle(direction() == Forward ? angle() : 0);
     }
 }
 
@@ -200,7 +165,7 @@ void RotationAnimation::updateCurrentTime(int currentTime)
         qreal delta = easingCurve().valueForProgress(
                 currentTime / qreal(duration()));
         delta = angle() * delta;
-        d->rotation->setAngle(delta);
+        m_rotation->setAngle(delta);
     }
 }
 

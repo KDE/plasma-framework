@@ -23,14 +23,14 @@
 #ifndef ROTATION_P_H
 #define ROTATION_P_H
 
-#include <plasma/plasma_export.h>
 #include <plasma/animations/animation.h>
+#include <plasma/plasma_export.h>
 
 #include <QVector3D>
 
-namespace Plasma {
+class QGraphicsRotation;
 
-class RotationAnimationPrivate;
+namespace Plasma {
 
 class RotationAnimation : public Animation
 {
@@ -47,8 +47,6 @@ public:
 		      const qreal &angle = 180);
 
     ~RotationAnimation();
-
-    QPropertyAnimation* render(QObject* parent = 0);
 
     /**
      * get animation rotation axis (e.g. YAxis, ZAxis, XAxis)
@@ -85,14 +83,15 @@ public:
      */
     void setAngle(const qreal &angle);
 
-    void setWidgetToAnimate(QGraphicsWidget *widget);
-
 protected:
     void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
     void updateCurrentTime(int currentTime);
 
 private:
-        RotationAnimationPrivate *const d;
+    QGraphicsRotation *m_rotation;
+    qreal m_angle;
+    Qt::Axis m_axis;
+    qint8 m_reference;
 };
 } // Plasma
 
