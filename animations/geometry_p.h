@@ -33,7 +33,8 @@ namespace Plasma
 /**
  * @class GeometryAnimation plasma/animations/geo_p.h
  * @short Geometry Animation
- *
+ * Use this class when you want to change the geometry of an QGraphicsWidget
+ * in an animated way (you should at least set the target geometry).
  */
 class GeometryAnimation : public Animation
 {
@@ -42,21 +43,51 @@ class GeometryAnimation : public Animation
     Q_PROPERTY(QRectF targetGeometry READ targetGeometry WRITE setTargetGeometry)
 
 public:
+    /** Default constructor */
     GeometryAnimation(QObject *parent = 0);
+    /** Destructor */
     virtual ~GeometryAnimation();
 
+    /**
+     * Access the initial geometry of animated widget.
+     *
+     * If no geometry is set, it will use the widget current geometry
+     * when the animation is first run).
+     * @return Start geometry.
+     */
     QRectF startGeometry() const;
-    void setStartGeometry(const QRectF &);
+    /**
+     * Set the initial geometry of animated widget.
+     *
+     * If no geometry is set, it will use the widget current geometry
+     * when the animation is first run).
+     * @arg geometry The initial geometry.
+     */
+    void setStartGeometry(const QRectF &geometry);
 
+    /**
+     * Acess the final geometry of animated widget.
+     *
+     * \todo: check if it was set and case negative, handle the error.
+     * @return Target geometry.
+     */
     QRectF targetGeometry() const;
-    void setTargetGeometry(const QRectF &);
+    /**
+     * Set the final geometry of animated widget.
+     *
+     * See also \ref setStartGeometry.
+     * @param geometry Returns the target geometry of animated widget.
+     */
+    void setTargetGeometry(const QRectF &geometry);
 
 protected:
     void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
     void updateCurrentTime(int currentTime);
 
 private:
+    /** Initial geometry */
     QRectF m_startGeometry;
+    /** Final geometry */
     QRectF m_targetGeometry;
 };
 
