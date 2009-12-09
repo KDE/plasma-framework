@@ -162,8 +162,8 @@ void RotationAnimation::updateCurrentTime(int currentTime)
 {
     QGraphicsWidget *w = widgetToAnimate();
     if (w) {
-        qreal delta = easingCurve().valueForProgress(
-                currentTime / qreal(duration()));
+        qreal delta = Animation::easingCurve().valueForProgress(
+            currentTime / qreal(duration()));
         delta = angle() * delta;
         m_rotation->setAngle(delta);
     }

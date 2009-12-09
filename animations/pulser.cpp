@@ -98,8 +98,8 @@ void PulseAnimation::updateCurrentTime(int currentTime)
 {
     QGraphicsWidget *w = under;
     if (w) {
-        qreal delta = easingCurve().valueForProgress(
-                currentTime / qreal(duration()));
+        qreal delta = Animation::easingCurve().valueForProgress(
+            currentTime / qreal(duration()));
         delta = (1 - endScale) * delta;
         w->setScale(1 - delta);
     }
