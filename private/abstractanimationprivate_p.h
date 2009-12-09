@@ -39,11 +39,6 @@ public:
     QWeakPointer<QGraphicsWidget> animObject;
 
     /**
-     * All animations will have *at least* one animation property
-     */
-    QWeakPointer<QAbstractAnimation> animation;
-
-    /**
      * Animation direction: where the animation will move.
      */
     qint8 animDirection;
@@ -53,12 +48,6 @@ public:
      * there is change in the position of animated widget.
      */
     qreal animDistance;
-
-    /**
-     * Animation visibility: whether to end the animation being visible
-     * or not.
-     */
-    bool animVisible;
 
     /**
      * Animation easing curve type
