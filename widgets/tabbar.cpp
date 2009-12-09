@@ -346,10 +346,6 @@ void TabBar::setCurrentIndex(int index)
         d->newPage = 0;
     }
 
-    if (d->newPage && d->oldPage) {
-        d->newPage->resize(d->oldPage->size());
-    }
-
     setFlags(QGraphicsItem::ItemClipsChildrenToShape);
 
     //if an animation was in rogress hide everything to avoid an inconsistent state
@@ -376,6 +372,10 @@ void TabBar::setCurrentIndex(int index)
     }
 
     if (d->newPage && d->oldPage) {
+        //FIXME: it seems necessary to resiz the thing 2 times to have effect
+        d->newPage->resize(1,1);
+        d->newPage->resize(d->oldPage->size());
+
         QRect beforeCurrentGeom(d->oldPage->geometry().toRect());
         beforeCurrentGeom.moveTopRight(beforeCurrentGeom.topLeft());
 
