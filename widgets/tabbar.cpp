@@ -332,13 +332,13 @@ void TabBar::setCurrentIndex(int index)
         return;
     }
 
-    d->tabWidgetLayout->removeAt(1);
-
     if (d->currentIndex >= 0) {
         d->oldPage = d->pages[d->currentIndex];
     } else {
         d->oldPage = 0;
     }
+
+    d->tabWidgetLayout->removeItem(d->oldPage);
 
     if (index >= 0) {
         d->newPage = d->pages[index];
