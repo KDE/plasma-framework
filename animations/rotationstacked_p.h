@@ -1,4 +1,4 @@
-#////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
 // rotationstacked.h                                                   //
 //                                                                     //
 // Copyright(C) 2009 Igor Trindade Oliveira <igor.oliveira@indt.org.br>//
@@ -19,8 +19,8 @@
 // 02110-1301  USA                                                     //
 /////////////////////////////////////////////////////////////////////////
 
-#ifndef ROTATIONSTACKED_H
-#define ROTATIONSTACKED_H
+#ifndef PLASMA_ROTATIONSTACKED_H
+#define PLASMA_ROTATIONSTACKED_H
 
 #include <plasma/animations/animation.h>
 #include <plasma/plasma_export.h>
