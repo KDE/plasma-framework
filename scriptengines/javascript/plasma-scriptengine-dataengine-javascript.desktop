@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=JavaScript DataEngine
+Name[ca]=Motor de dades de JavaScript
 Name[csb]=Mòtór JavaScript
 Name[da]=JavaScript-datamotor
 Name[de]=JavaScript-Datenmodul
@@ -27,6 +28,7 @@ Name[pt]=Motor de Dados do JavaScript
 Name[pt_BR]=Mecanismo de dados JavaScript
 Name[ro]=MotorDate JavaScript
 Name[ru]=Поставщик данных (JavaScript)
+Name[sl]=Podatkovni pogon za JavaScript
 Name[sr]=јаваскриптни датомотор
 Name[sr@latin]=javascript datomotor
 Name[sv]=Javascript-datagränssnitt
