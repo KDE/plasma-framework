@@ -73,7 +73,6 @@ public:
      * be combined (i.e. Center|Up)
      * @arg reference The reference
      */
- 
     void setReference(const qint8 &reference);
 
     /**
@@ -104,18 +103,27 @@ protected:
     void updateCurrentTime(int currentTime);
 
 private:
+    /** Reference, the default is Up (see \ref Animation::Reference) */
     qint8 m_reference;
     /**
      * Animation direction: where the animation will move.
      */
     Plasma::AnimationDirection animDirection;
+    /** Initial rotation angle from front widget */
     int frontStartAngle;
+    /** End value of the rotation angle of the front widget */
     int frontEndAngle;
+     /** Initial rotation angle from back widget */
     int backStartAngle;
+    /** End value of the rotation angle of the back widget */
     int backEndAngle;
+    /**  Object the animation(s) should act upon. */
     QWeakPointer<QGraphicsWidget> m_backWidget;
+    /** Back Widget Rotation transform object */
     QGraphicsRotation *backRotation;
+    /** Front Widget Rotation transform object */
     QGraphicsRotation *frontRotation;
+    /** rotation stacked layout where the widget would be added */
     StackedLayout *sLayout;
 
 };
