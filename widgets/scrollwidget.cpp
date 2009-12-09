@@ -451,6 +451,7 @@ void ScrollWidget::focusInEvent(QFocusEvent *event)
 void ScrollWidget::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
     if (!d->widget) {
+        QGraphicsWidget::resizeEvent(event);
         return;
     }
 
