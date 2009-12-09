@@ -215,9 +215,11 @@ TabBar::TabBar(QGraphicsWidget *parent)
     : QGraphicsWidget(parent),
       d(new TabBarPrivate(this))
 {
+    setContentsMargins(0,0,0,0);
     d->tabProxy = new TabBarProxy(this);
     d->tabWidgetLayout = new QGraphicsLinearLayout(Qt::Vertical);
     d->tabBarLayout = new QGraphicsLinearLayout(Qt::Horizontal);
+    d->tabWidgetLayout->setContentsMargins(0,0,0,0);
 
     d->mainLayout = new QGraphicsLinearLayout(Qt::Horizontal);
     d->mainLayout->addItem(d->tabWidgetLayout);
@@ -231,6 +233,7 @@ TabBar::TabBar(QGraphicsWidget *parent)
     d->tabBarLayout->addStretch();
     d->tabBarLayout->addItem(d->tabProxy);
     d->tabBarLayout->addStretch();
+    d->tabBarLayout->setContentsMargins(0,0,0,0);
     //d->tabBarLayout->setStretchFactor(d->tabProxy, 2);
 
     connect(d->tabProxy->native, SIGNAL(currentChanged(int)),
@@ -253,12 +256,14 @@ int TabBar::insertTab(int index, const QIcon &icon, const QString &label,
                       QGraphicsLayoutItem *content)
 {
     QGraphicsWidget *page = new QGraphicsWidget(this);
+    page->setContentsMargins(0,0,0,0);
     page->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     if (content) {
         if (content->isLayout()) {
             page->setLayout(static_cast<QGraphicsLayout *>(content));
         } else {
             QGraphicsLinearLayout *layout = new QGraphicsLinearLayout(Qt::Vertical, page);
+            layout->setContentsMargins(0,0,0,0);
             layout->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
             layout->addItem(content);
             page->setLayout(layout);
@@ -526,10 +531,10 @@ void TabBar::setTabBarShown(bool show)
 
     if (!show && d->tabProxy->isVisible()) {
         d->tabProxy->hide();
-        d->tabBarLayout->removeItem(d->tabProxy);
+        d->tabWidgetLayout->removeItem(d->tabBarLayout);
     } else if (show && !d->tabProxy->isVisible()) {
         d->tabProxy->show();
-        d->tabBarLayout->insertItem(0, d->tabProxy);
+        d->tabWidgetLayout->insertItem(0, d->tabBarLayout);
     }
 }
 
