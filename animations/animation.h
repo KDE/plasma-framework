@@ -31,6 +31,7 @@
 #include <QAbstractAnimation>
 #include <plasma/plasma_export.h>
 #include <plasma/plasma.h>
+#include <QEasingCurve>
 
 namespace Plasma
 {
@@ -46,7 +47,7 @@ class PLASMA_EXPORT Animation : public QAbstractAnimation
 
     Q_OBJECT
     Q_PROPERTY(int duration READ duration WRITE setDuration)
-    Q_PROPERTY(QEasingCurve easingCurve READ easingCurve WRITE setEasingCurve)
+    Q_PROPERTY(QEasingCurve::Type easingCurveType READ easingCurveType WRITE setEasingCurveType)
     Q_PROPERTY(QGraphicsWidget *widgetToAnimate READ widgetToAnimate WRITE setWidgetToAnimate)
 
 public:
@@ -82,12 +83,12 @@ public:
     /**
      * Set the animation easing curve type
      */
-    void setEasingCurve(QEasingCurve easingCurve);
+    void setEasingCurveType(QEasingCurve::Type type);
 
     /**
      * Get the animation easing curve type
      */
-    QEasingCurve easingCurve() const;
+    QEasingCurve::Type easingCurveType() const;
 
 protected:
 
@@ -98,6 +99,8 @@ protected:
     virtual void setDuration(int duration = 250);
 
     virtual void updateCurrentTime(int currentTime);
+
+    QEasingCurve &easingCurve();
 
 private:
     AnimationPrivate *const d;

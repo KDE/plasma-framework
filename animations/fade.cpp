@@ -67,6 +67,7 @@ void FadeAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
     if (widget) {
         widget->setOpacity(m_startOpacity);
     }
+
 }
 
 void FadeAnimation::updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
@@ -89,7 +90,7 @@ void FadeAnimation::updateCurrentTime(int currentTime)
     if (w) {
         qreal delta = currentTime / qreal(duration());
         delta = (m_startOpacity - m_targetOpacity) *
-            easingCurve().valueForProgress(delta);
+                Animation::easingCurve().valueForProgress(delta);
         w->setOpacity(m_startOpacity - delta);
     }
 

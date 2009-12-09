@@ -41,8 +41,7 @@ SlideAnimation::~SlideAnimation()
 
 SlideAnimation::SlideAnimation(QObject *parent,
                                AnimationDirection direction,
-                               qreal distance)
-          : Animation(parent)
+                               qreal distance) : Animation(parent)
 {
     setMovementDirection(direction);
     setDistance(distance);
@@ -62,7 +61,7 @@ void SlideAnimation::updateCurrentTime(int currentTime)
 {
     QGraphicsWidget *w = widgetToAnimate();
     if (w && state() == QAbstractAnimation::Running) {
-        qreal delta = easingCurve().valueForProgress(
+        qreal delta = Animation::easingCurve().valueForProgress(
                 currentTime / qreal(duration()));
         w->setPos(m_startPos * (1-delta) + (m_targetPos * delta));
     }

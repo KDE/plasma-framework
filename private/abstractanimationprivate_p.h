@@ -52,7 +52,7 @@ public:
     /**
      * Animation easing curve type
      */
-    QEasingCurve::Type easingCurve;
+    QEasingCurve easingCurve;
 
     /**
      * Animation direction, the idea is to offer a way

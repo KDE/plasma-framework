@@ -58,7 +58,6 @@ protected:
 
 private:
     qreal m_animFactor;
-
     QRectF m_startGeometry;
     QRectF m_targetGeometry;
 };

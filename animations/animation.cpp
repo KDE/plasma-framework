@@ -69,12 +69,17 @@ QGraphicsWidget* Animation::widgetToAnimate()
     return d->animObject.data();
 }
 
-void Animation::setEasingCurve(QEasingCurve easingCurve)
+void Animation::setEasingCurveType(QEasingCurve::Type type)
 {
-    d->easingCurve = easingCurve;
+    d->easingCurve.setType(type);
 }
 
-QEasingCurve Animation::easingCurve() const
+QEasingCurve::Type Animation::easingCurveType() const
+{
+    return d->easingCurve.type();
+}
+
+QEasingCurve& Animation::easingCurve()
 {
     return d->easingCurve;
 }

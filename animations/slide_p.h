@@ -28,7 +28,6 @@
 #include "plasma/plasma_export.h"
 #include "plasma/plasma.h"
 
-
 namespace Plasma
 {
 
@@ -88,7 +87,6 @@ private:
      * there is change in the position of animated widget.
      */
     qreal m_animDistance;
-
     QPointF m_startPos;
     QPointF m_targetPos;
 };
