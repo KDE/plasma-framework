@@ -1364,7 +1364,7 @@ QSizeF IconWidget::sizeFromIconSize(const qreal iconWidth) const
         // make room for at most 14 characters
         width = qMax(d->maxWordWidth(d->text),
                      d->maxWordWidth(d->infoText)) +
-                     fm.width("xx") +
+                     fm.width("xxx") +
                      d->horizontalMargin[IconWidgetPrivate::TextMargin].left +
                      d->horizontalMargin[IconWidgetPrivate::TextMargin].right;
 
@@ -1376,7 +1376,7 @@ QSizeF IconWidget::sizeFromIconSize(const qreal iconWidth) const
         width = iconWidth +
                 d->horizontalMargin[IconWidgetPrivate::IconMargin].left +
                 d->horizontalMargin[IconWidgetPrivate::IconMargin].right +
-                qMax(fm.width(d->text), fm.width(d->infoText)) + fm.width("xx") +
+                qMax(fm.width(d->text), fm.width(d->infoText)) + fm.width("xxx") +
                 d->horizontalMargin[IconWidgetPrivate::TextMargin].left +
                 d->horizontalMargin[IconWidgetPrivate::TextMargin].right;
     }
@@ -1386,7 +1386,7 @@ QSizeF IconWidget::sizeFromIconSize(const qreal iconWidth) const
 
     QStyleOptionGraphicsItem option;
     option.state = QStyle::State_None;
-    option.rect = boundingRect().toRect();
+    option.rect = QRect(0, 0, width, QWIDGETSIZE_MAX);
     textHeight = d->displaySizeHint(&option, width).height();
 
     if (d->orientation == Qt::Vertical) {
