@@ -68,12 +68,35 @@ public:
      */
     qint8 movementDirection() const;
 
+    /**
+     * Set rotation reference (e.g. Center, Up, Down, Left, Right) can
+     * be combined (i.e. Center|Up)
+     * @arg reference The reference
+     */
+ 
     void setReference(const qint8 &reference);
+
+    /**
+     * Rotation reference (e.g. Center, Up, Down, Left, Right) can
+     * be combined (i.e. Center|Up)
+     */
     qint8 reference() const;
 
+    /**
+     * Get the layout where the widgetToAnimate and backWidget are.
+     */
     QGraphicsLayoutItem *layout();
 
+    /**
+     * Get the back widget
+     */
+
     QGraphicsWidget *backWidget();
+
+    /**
+     * Set the back widget that is used after the animation to be finished
+     * @arg backWidget The back widget
+     */
     void setBackWidget(QGraphicsWidget *backWidget);
 
 protected:
