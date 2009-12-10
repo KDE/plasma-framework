@@ -1294,7 +1294,10 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
         foreach (const KUrl &url, urls) {
             if (AccessManager::supportedProtocols().contains(url.protocol())) {
                 AccessAppletJob *job = AccessManager::self()->accessRemoteApplet(url);
-                dropPoints[job] = dropEvent->pos();
+                if (dropEvent)
+                    dropPoints[job] = dropEvent->pos();
+                else
+                    dropPoints[job] = scenePos;
                 QObject::connect(AccessManager::self(), SIGNAL(finished(Plasma::AccessAppletJob*)),
                                  q, SLOT(remoteAppletReady(Plasma::AccessAppletJob*)));
             } else {
@@ -1308,14 +1311,20 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
                 // It may be a directory or a file, let's stat
                 KIO::JobFlags flags = KIO::HideProgressInfo;
                 KIO::TransferJob *job = KIO::get(url, KIO::NoReload, flags);
-                dropPoints[job] = dropEvent->pos();
+                if (dropEvent)
+                    dropPoints[job] = dropEvent->pos();
+                else
+                    dropPoints[job] = scenePos;
                 QObject::connect(job, SIGNAL(result(KJob*)), q, SLOT(dropJobResult(KJob*)));
                 QObject::connect(job, SIGNAL(mimetype(KIO::Job *, const QString&)),
                                  q, SLOT(mimeTypeRetrieved(KIO::Job *, const QString&)));
 
                 KMenu *choices = new KMenu("Content dropped");
                 choices->addAction(KIcon("process-working"), i18n("Fetching file type..."));
-                choices->popup(dropEvent->screenPos());
+                if (dropEvent)
+                    choices->popup(dropEvent->screenPos());
+                else
+                    choices->popup(screenPos);
                 dropMenus[job] = choices;
             }
         }
