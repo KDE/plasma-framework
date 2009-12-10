@@ -134,7 +134,7 @@ bool correctPathCase(const QString& path, QString &corrected)
         const QString tmp = components[0] + QDir::separator() + components[1];
 
         if (!correctLastComponentCase(tmp, correctPath, components.size() > 2 || mustBeDir)) {
-            //kDebug() << "search was not successfull";
+            //kDebug() << "search was not successful";
             return false;
         }
 

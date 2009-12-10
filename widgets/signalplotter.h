@@ -393,7 +393,7 @@ public:
     void setThinFrame(bool set);
 
     /**
-     * show a white line on the left and botton of the widget for a 3D effect
+     * show a white line on the left and bottom of the widget for a 3D effect
      * @return true if frame show be draw
      * @since 4.3
      */

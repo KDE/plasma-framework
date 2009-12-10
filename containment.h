@@ -154,7 +154,7 @@ class PLASMA_EXPORT Containment : public Applet
          *
          * @param category Only containments matching this category will be returned.
          *                 Useful in conjunction with knownCategories.
-         *                 If "Miscelaneous" is passed in, then applets without a
+         *                 If "Miscellaneous" is passed in, then applets without a
          *                 Categories= entry are also returned.
          *                 If an empty string is passed in, all applets are
          *                 returned.
@@ -176,7 +176,7 @@ class PLASMA_EXPORT Containment : public Applet
          *             desktop
          * @param category Only applets matchin this category will be returned.
          *                 Useful in conjunction with knownCategories.
-         *                 If "Miscelaneous" is passed in, then applets without a
+         *                 If "Miscellaneous" is passed in, then applets without a
          *                 Categories= entry are also returned.
          *                 If an empty string is passed in, all applets are
          *                 returned.

@@ -76,7 +76,7 @@ public:
 
 Q_SIGNALS:
     /**
-     * Emitted when the visual layout and appearance changes. Useful for syncronizing
+     * Emitted when the visual layout and appearance changes. Useful for synchronizing
      * content margins.
      */
     void appearanceChanged();

@@ -129,7 +129,7 @@ class PLASMA_EXPORT Theme : public QObject
         Q_INVOKABLE QString imagePath(const QString &name) const;
 
         /**
-         * Retreives the default wallpaper associated with this theme.
+         * Retrieves the default wallpaper associated with this theme.
          *
          * @arg size the target height and width of the wallpaper; if an invalid size
          *           is passed in, then a default size will be provided instead.

@@ -996,7 +996,7 @@ void ExtenderItemPrivate::updateSizeHints()
         maximumSize = QSizeF(max.width() + marginWidth,
                              max.height() + dragHandleRect().height() + marginHeight);
 
-        //set sane size policies depending on the appearence.
+        //set sane size policies depending on the appearance.
         if (extender->d->appearance == Extender::TopDownStacked ||
             extender->d->appearance == Extender::BottomUpStacked) {
             //used in popups, so fixed make sense.

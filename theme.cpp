@@ -263,7 +263,7 @@ public:
     {
         self.d->isDefault = true;
 
-        //FIXME: if/when kconfig gets change notification, this will be unecessary
+        //FIXME: if/when kconfig gets change notification, this will be unnecessary
         KDirWatch::self()->addFile(KStandardDirs::locateLocal("config", ThemePrivate::themeRcFile));
         QObject::connect(KDirWatch::self(), SIGNAL(created(QString)), &self, SLOT(settingsFileChanged(QString)));
         QObject::connect(KDirWatch::self(), SIGNAL(dirty(QString)), &self, SLOT(settingsFileChanged(QString)));

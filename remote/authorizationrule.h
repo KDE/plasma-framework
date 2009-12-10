@@ -46,7 +46,7 @@ class Credentials;
  * machine.
  *
  * Rules allow you to have control over which computers are allowed to access which
- * services. Everytime a message get's in, AuthorizationManager validates it's sender, and then
+ * services. Every time a message get's in, AuthorizationManager validates it's sender, and then
  * checks it's list of rules for rules matching the sender and/or the service. If no rules match,
  * or all matching rules have the value Unspecified, AuthorizationManager will create a new rule
  * for this message, and invoke authorize on your shells implementation of AuthorizationInterface.

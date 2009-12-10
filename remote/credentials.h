@@ -89,7 +89,7 @@ public:
     QString id() const;
 
     /**
-     * @return wheter or not @p signature is correct for @p message.
+     * @return whether or not @p signature is correct for @p message.
      */
     bool isValidSignature(const QByteArray &signature, const QByteArray &message);
 

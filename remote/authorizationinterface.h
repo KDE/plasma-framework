@@ -63,7 +63,7 @@ class PLASMA_EXPORT AuthorizationInterface
 
         /**
          * Implement this function to respond to an outgoing connection that needs a password to
-         * connect succesfully. As a response to this you'll probably want to show a dialog.
+         * connect successfully. As a response to this you'll probably want to show a dialog.
          * @param request a ClientPinRequest where you can call setPin on to set the pin for the
          * outgoing connection.
          */
