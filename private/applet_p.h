@@ -61,7 +61,7 @@ protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
 protected Q_SLOTS:
-    void overlayAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation);
+    void overlayAnimationComplete();
 };
 
 class AppletPrivate : public DataEngineConsumer
@@ -90,7 +90,7 @@ public:
     void checkImmutability();
     void themeChanged();
     void resetConfigurationObject();
-    void appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim);
+    void appletAnimationComplete();
     void selectItemToDestroy();
     void updateRect(const QRectF &rect);
     void setFocus();

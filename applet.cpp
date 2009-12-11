@@ -22,6 +22,7 @@
 
 #include "applet.h"
 #include "private/applet_p.h"
+#include <plasma/animations/animation.h>
 
 #include <cmath>
 #include <limits>
@@ -452,9 +453,11 @@ void Applet::destroy()
     if (isContainment()) {
         d->cleanUpAndDelete();
     } else {
-        connect(Animator::self(), SIGNAL(animationFinished(QGraphicsItem*,Plasma::Animator::Animation)),
-                this, SLOT(appletAnimationComplete(QGraphicsItem*,Plasma::Animator::Animation)));
-        Animator::self()->animateItem(this, Animator::DisappearAnimation);
+        Animation *zoomAnim =
+        Plasma::Animator::create(Plasma::Animator::ZoomAnimation);
+        connect(zoomAnim, SIGNAL(finished()), this, SLOT(appletAnimationComplete()));
+        zoomAnim->setWidgetToAnimate(this);
+        zoomAnim->start();
     }
 }
 
@@ -463,11 +466,9 @@ bool Applet::destroyed() const
     return d->transient;
 }
 
-void AppletPrivate::appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim)
+void AppletPrivate::appletAnimationComplete()
 {
-    if (anim == Animator::DisappearAnimation && item == q) {
-        cleanUpAndDelete();
-    }
+    cleanUpAndDelete();
 }
 
 void AppletPrivate::selectItemToDestroy()
@@ -2856,26 +2857,23 @@ AppletOverlayWidget::AppletOverlayWidget(QGraphicsWidget *parent)
       opacity(0.4)
 {
     resize(parent->size());
-    Animator::self()->animateItem(this, Animator::AppearAnimation);
 }
 
 void AppletOverlayWidget::destroy()
 {
-    connect(Animator::self(),
-            SIGNAL(animationFinished(QGraphicsItem*,Plasma::Animator::Animation)),
-            this,
-            SLOT(overlayAnimationComplete(QGraphicsItem*,Plasma::Animator::Animation)));
-    Animator::self()->animateItem(this, Animator::DisappearAnimation);
+    Animation *zoomAnim =
+        Plasma::Animator::create(Plasma::Animator::ZoomAnimation);
+    connect(zoomAnim, SIGNAL(finished()), this, SLOT(overlayAnimationComplete()));
+    zoomAnim->setWidgetToAnimate(this);
+    zoomAnim->start();
 }
 
-void AppletOverlayWidget::overlayAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation)
+void AppletOverlayWidget::overlayAnimationComplete()
 {
-    if (item == this) {
-        if (scene()) {
-            scene()->removeItem(this);
-        }
-        deleteLater();
+    if (scene()) {
+        scene()->removeItem(this);
     }
+    deleteLater();
 }
 
 void AppletOverlayWidget::paint(QPainter *painter,
