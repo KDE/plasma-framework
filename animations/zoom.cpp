@@ -28,6 +28,7 @@ ZoomAnimation::ZoomAnimation(QObject *parent)
              : Animation(parent),
              m_zoom(1)
 {
+    Animation::setEasingCurveType(QEasingCurve::OutBounce);
 }
 
 ZoomAnimation::~ZoomAnimation()

@@ -45,6 +45,7 @@ SlideAnimation::SlideAnimation(QObject *parent,
 {
     setMovementDirection(direction);
     setDistance(distance);
+    Animation::setEasingCurveType(QEasingCurve::OutCirc);
 }
 
 void SlideAnimation::setMovementDirection(const qint8 &direction)
