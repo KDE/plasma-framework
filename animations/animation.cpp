@@ -62,6 +62,8 @@ void Animation::setDuration(int duration)
 void Animation::setWidgetToAnimate(QGraphicsWidget* widget)
 {
     d->animObject = widget;
+    if (parent() == 0)
+        setParent(widget);
 }
 
 QGraphicsWidget* Animation::widgetToAnimate()
