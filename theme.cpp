@@ -47,7 +47,7 @@
 namespace Plasma
 {
 
-#define DEFAULT_WALLPAPER_THEME "Air"
+#define DEFAULT_WALLPAPER_THEME "Quadros"
 #define DEFAULT_WALLPAPER_SUFFIX ".jpg"
 static const int DEFAULT_WALLPAPER_WIDTH = 1920;
 static const int DEFAULT_WALLPAPER_HEIGHT = 1200;
