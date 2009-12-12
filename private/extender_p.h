@@ -47,6 +47,7 @@ class ExtenderPrivate
         ~ExtenderPrivate();
 
         void addExtenderItem(ExtenderItem *item, const QPointF &pos = QPointF(-1, -1));
+        void extenderItemDestroyed(QObject *object);
         void removeExtenderItem(ExtenderItem *item);
         int insertIndexFromPos(const QPointF &pos) const;
         void loadExtenderItems();
