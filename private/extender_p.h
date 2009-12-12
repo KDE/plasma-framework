@@ -54,7 +54,6 @@ class ExtenderPrivate
         void updateBorders();
         void updateEmptyExtenderLabel();
         ExtenderGroup *findGroup(const QString &name) const;
-        void extenderItemDestroyed(QObject *);
 
         Extender *q;
 
