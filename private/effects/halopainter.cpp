@@ -222,8 +222,18 @@ void HaloPainter::paint(QPainter *painter, const QRect &textRect) const
         p.setCompositionMode(QPainter::CompositionMode_Source);
         halo->paint(&p, pixmap->rect());
         QLinearGradient g(0, 0, pixmap->width(), 0);
-        for (int i = 0; i <= 16; i++)
-            g.setColorAt(i / 16., QColor(0, 0, 0, 164 * (1 - std::pow((i - 8) / 8., 2))));
+        if (hr.width() < 80) {
+            for (int i = 0; i <= 16; i++) {
+                g.setColorAt(i / 16., QColor(0, 0, 0, 164 * (1 - std::pow((i - 8) / 8., 2))));
+            }
+        } else {
+            const qreal pixel = 1. / hr.width();
+            for (int i = 0; i <= 8; i++) {
+                const QColor color(0, 0, 0, 164 * (1 - std::pow((i - 8) / 8., 2)));
+                g.setColorAt(i * (pixel * 40) / 8, color);
+                g.setColorAt(1 - i * (pixel * 40) / 8, color);
+            }
+        }
         p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
         p.fillRect(pixmap->rect(), g);
         p.end();
