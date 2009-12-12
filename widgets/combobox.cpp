@@ -139,6 +139,7 @@ ComboBox::ComboBox(QGraphicsWidget *parent)
     d->lineEditBackground = new FrameSvg(this);
     d->lineEditBackground->setImagePath("widgets/lineedit");
     d->lineEditBackground->setCacheAllRenderedFrames(true);
+    setZValue(900);
 
     setAcceptHoverEvents(true);
 
