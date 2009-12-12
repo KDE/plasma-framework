@@ -1310,11 +1310,13 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
 
                 // It may be a directory or a file, let's stat
                 KIO::JobFlags flags = KIO::HideProgressInfo;
-                KIO::TransferJob *job = KIO::get(url, KIO::NoReload, flags);
-                if (dropEvent)
+                KIO::MimetypeJob *job = KIO::mimetype(url, flags);
+                if (dropEvent) {
                     dropPoints[job] = dropEvent->pos();
-                else
+                } else {
                     dropPoints[job] = scenePos;
+                }
+
                 QObject::connect(job, SIGNAL(result(KJob*)), q, SLOT(dropJobResult(KJob*)));
                 QObject::connect(job, SIGNAL(mimetype(KIO::Job *, const QString&)),
                                  q, SLOT(mimeTypeRetrieved(KIO::Job *, const QString&)));
