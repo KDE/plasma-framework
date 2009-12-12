@@ -121,6 +121,8 @@ void ItemBackground::setTarget(const QRectF &newGeometry)
     }
 
     if (d->target && d->target->isVisible() && !isVisible()) {
+        //draw behind the target
+        setZValue(d->target->zValue()-1);
         setGeometry(newGeometry);
         d->oldGeometry = newGeometry;
         show();
