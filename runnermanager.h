@@ -110,10 +110,10 @@ class PLASMA_EXPORT RunnerManager : public QObject
         QList<AbstractRunner *> runners() const;
 
         /**
-         * @return the names of all single query mode enabled runners
+         * @return the names of all runners that advertise single query mode
          * @since 4.4
          */
-        QStringList enabledSingleModeRunnerIds() const;
+        QStringList singleModeAdvertisedRunnerIds() const;
 
         /**
          * Retrieves the current context
