@@ -582,10 +582,8 @@ void RunnerManager::launchQuery(const QString &untrimmedTerm, const QString &run
     setupMatchSession();
     QString term = untrimmedTerm.trimmed();
 
-    if (!runnerName.isEmpty()) {
-        setSingleModeRunnerId(runnerName);
-        setSingleMode(true);
-    }
+    setSingleModeRunnerId(runnerName);
+    setSingleMode(!runnerName.isEmpty());
 
     if (term.isEmpty()) {
         if (d->singleMode && d->currentSingleRunner && d->currentSingleRunner->defaultSyntax()) {
