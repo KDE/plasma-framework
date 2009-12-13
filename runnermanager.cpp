@@ -128,8 +128,7 @@ public:
 
     void loadSingleRunner()
     {
-        if (!singleMode || singleModeRunnerId.isEmpty() ||
-            !enabledSingleRunnerIds.contains(singleModeRunnerId)) {
+        if (!singleMode || singleModeRunnerId.isEmpty()) {
             clearSingleRunner();
             return;
         }
