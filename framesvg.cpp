@@ -423,17 +423,18 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
 
     //Overlays
     QSize overlaySize;
+    QPoint actualOverlayPos = QPoint(0, 0);
     if (overlayAvailable && !overlayCached) {
         QPoint pos = QPoint(0, 0);
         overlaySize = q->elementSize(prefix+"overlay");
 
         //Random pos, stretched and tiled are mutually exclusive
         if (q->hasElement(prefix + "hint-overlay-random-pos")) {
-            pos = overlayPos;
+            actualOverlayPos = overlayPos;
         } else if (q->hasElement(prefix + "hint-overlay-pos-right")) {
-            pos.setX(frame->frameSize.width() - overlaySize.width());
+            actualOverlayPos.setX(frame->frameSize.width() - overlaySize.width());
         } else if (q->hasElement(prefix + "hint-overlay-pos-bottom")) {
-            pos.setY(frame->frameSize.height() - overlaySize.height());
+            actualOverlayPos.setY(frame->frameSize.height() - overlaySize.height());
         //Stretched or Tiled?
         } else if (q->hasElement(prefix + "hint-overlay-stretch")) {
             overlaySize = frameSize(frame).toSize();
@@ -459,7 +460,7 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
             overlayPainter.drawTiledPixmap(QRect(QPoint(0,0), overlaySize), q->pixmap(prefix+"overlay"));
             q->resize(s);
         } else {
-            q->paint(&overlayPainter, QRect(overlayPos, overlaySize), prefix+"overlay");
+            q->paint(&overlayPainter, QRect(actualOverlayPos, overlaySize), prefix+"overlay");
         }
 
         overlayPainter.end();
@@ -472,7 +473,7 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
     if (!overlay.isNull()) {
         QPainter p(&frame->cachedBackground);
         p.setCompositionMode(QPainter::CompositionMode_SourceOver);
-        p.drawPixmap(overlayPos, overlay, QRect(overlayPos, overlaySize));
+        p.drawPixmap(actualOverlayPos, overlay, QRect(actualOverlayPos, overlaySize));
     }
 }
 
