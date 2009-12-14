@@ -45,6 +45,7 @@
 #include <Plasma/Package>
 #include <Plasma/VideoWidget>
 
+#include "simplebindings/animationgroup.h"
 #include "simplebindings/appletinterface.h"
 #include "simplebindings/filedialogproxy.h"
 
@@ -740,14 +741,14 @@ QScriptValue SimpleJavaScriptApplet::animation(QScriptContext *context, QScriptE
 QScriptValue SimpleJavaScriptApplet::animationGroup(QScriptContext *context, QScriptEngine *engine)
 {
     QGraphicsWidget *parent = extractParent(context, engine);
-    QSequentialAnimationGroup *group = new QSequentialAnimationGroup(parent);
+    SequentialAnimationGroup *group = new SequentialAnimationGroup(parent);
     return engine->newQObject(group);
 }
 
 QScriptValue SimpleJavaScriptApplet::parallelAnimationGroup(QScriptContext *context, QScriptEngine *engine)
 {
     QGraphicsWidget *parent = extractParent(context, engine);
-    QParallelAnimationGroup *group = new QParallelAnimationGroup(parent);
+    ParallelAnimationGroup *group = new ParallelAnimationGroup(parent);
     return engine->newQObject(group);
 }
 

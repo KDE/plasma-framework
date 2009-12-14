@@ -2,6 +2,7 @@
 
 set(simple_javascript_engine_SRCS
     simplejavascriptapplet.cpp
+    simplebindings/animationgroup.cpp
     simplebindings/appletinterface.cpp
     simplebindings/anchorlayout.cpp
     simplebindings/color.cpp
