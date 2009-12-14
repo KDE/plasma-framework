@@ -718,15 +718,23 @@ QScriptValue SimpleJavaScriptApplet::animation(QScriptContext *context, QScriptE
         return context->throwError(i18n("%1 is not a known animation type", animName));
     }
 
-    QGraphicsWidget *parent = extractParent(context, engine);
+    bool parentIsApplet = false;
+    QGraphicsWidget *parent = extractParent(context, engine, 0, &parentIsApplet);
     if (isPause) {
         QPauseAnimation *pause = new QPauseAnimation(parent);
         return engine->newQObject(pause);
     } else {
         Plasma::Animation *anim = Plasma::Animator::create(s_animationDefs.value(animName), parent);
-        anim->setWidgetToAnimate(parent);
-        return engine->newQObject(anim);
+        if (anim) {
+            if (!parentIsApplet) {
+                anim->setWidgetToAnimate(parent);
+            }
+
+            return engine->newQObject(anim);
+        }
     }
+
+    return context->throwError(i18n("%1 is not a known animation type", animName));
 }
 
 QScriptValue SimpleJavaScriptApplet::animationGroup(QScriptContext *context, QScriptEngine *engine)
