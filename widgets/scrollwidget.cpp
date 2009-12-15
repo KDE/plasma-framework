@@ -45,7 +45,6 @@ class ScrollWidgetPrivate
 public:
     ScrollWidgetPrivate(ScrollWidget *parent)
         : q(parent),
-          widget(0),
           topBorder(0),
           bottomBorder(0),
           leftBorder(0),
@@ -61,7 +60,11 @@ public:
 
     void adjustScrollbars()
     {
-        verticalScrollBar->nativeWidget()->setMaximum(qMax(0, int((widget->size().height() - scrollingWidget->size().height())/10)));
+        if (!widget) {
+            return;
+        }
+
+        verticalScrollBar->nativeWidget()->setMaximum(qMax(0, int((widget.data()->size().height() - scrollingWidget->size().height())/10)));
 
         if (verticalScrollBarPolicy == Qt::ScrollBarAlwaysOff ||
             verticalScrollBar->nativeWidget()->maximum() == 0) {
@@ -76,7 +79,7 @@ public:
             verticalScrollBar->show();
         }
 
-        horizontalScrollBar->nativeWidget()->setMaximum(qMax(0, int((widget->size().width() - scrollingWidget->size().width())/10)));
+        horizontalScrollBar->nativeWidget()->setMaximum(qMax(0, int((widget.data()->size().width() - scrollingWidget->size().width())/10)));
 
         if (horizontalScrollBarPolicy == Qt::ScrollBarAlwaysOff ||
             horizontalScrollBar->nativeWidget()->maximum() == 0) {
@@ -91,7 +94,7 @@ public:
             horizontalScrollBar->show();
         }
 
-         if (widget && !topBorder && widget->size().height() > q->size().height()) {
+         if (widget && !topBorder && widget.data()->size().height() > q->size().height()) {
             topBorder = new Plasma::SvgWidget(q);
             topBorder->setSvg(borderSvg);
             topBorder->setElementID("border-top");
@@ -104,7 +107,7 @@ public:
             bottomBorder->setZValue(900);
             bottomBorder->resize(bottomBorder->effectiveSizeHint(Qt::PreferredSize));
             bottomBorder->show();
-        } else if (topBorder && widget && widget->size().height() <= q->size().height()) {
+        } else if (topBorder && widget && widget.data()->size().height() <= q->size().height()) {
             //FIXME: in some cases topBorder->deleteLater() is deleteNever(), why?
             topBorder->hide();
             bottomBorder->hide();
@@ -115,7 +118,7 @@ public:
         }
 
 
-        if (widget && !leftBorder && widget->size().width() > q->size().width()) {
+        if (widget && !leftBorder && widget.data()->size().width() > q->size().width()) {
             leftBorder = new Plasma::SvgWidget(q);
             leftBorder->setSvg(borderSvg);
             leftBorder->setElementID("border-left");
@@ -128,7 +131,7 @@ public:
             rightBorder->setZValue(900);
             rightBorder->resize(rightBorder->effectiveSizeHint(Qt::PreferredSize));
             rightBorder->show();
-        } else if (leftBorder && widget && widget->size().width() <= q->size().width()) {
+        } else if (leftBorder && widget && widget.data()->size().width() <= q->size().width()) {
             leftBorder->hide();
             rightBorder->hide();
             leftBorder->deleteLater();
@@ -150,46 +153,62 @@ public:
             rightBorder->setPos(q->size().width() - rightBorder->size().width(), 0);
         }
 
-        QSizeF widgetSize = widget->size();
-        if (widget->sizePolicy().expandingDirections() & Qt::Horizontal) {
+        QSizeF widgetSize = widget.data()->size();
+        if (widget.data()->sizePolicy().expandingDirections() & Qt::Horizontal) {
             //keep a 1 pixel border
             widgetSize.setWidth(scrollingWidget->size().width()-borderSize);
         }
-        if (widget->sizePolicy().expandingDirections() & Qt::Vertical) {
+        if (widget.data()->sizePolicy().expandingDirections() & Qt::Vertical) {
             widgetSize.setHeight(scrollingWidget->size().height()-borderSize);
         }
-        widget->resize(widgetSize);
+        widget.data()->resize(widgetSize);
     }
 
     void verticalScroll(int value)
     {
+        if (!widget) {
+            return;
+        }
+
         if (!dragging) {
-            widget->setPos(QPoint(widget->pos().x(), -value*10));
+            widget.data()->setPos(QPoint(widget.data()->pos().x(), -value*10));
         }
     }
 
     void horizontalScroll(int value)
     {
+        if (!widget) {
+            return;
+        }
+
         if (!dragging) {
-            widget->setPos(QPoint(-value*10, widget->pos().y()));
+            widget.data()->setPos(QPoint(-value*10, widget.data()->pos().y()));
         }
     }
 
     void adjustClipping()
     {
-         const bool clip = widget->size().width() > scrollingWidget->size().width() || widget->size().height() > scrollingWidget->size().height();
+        if (!widget) {
+            return;
+        }
 
-         scrollingWidget->setFlag(QGraphicsItem::ItemClipsChildrenToShape, clip);
+        const bool clip = widget.data()->size().width() > scrollingWidget->size().width() || widget.data()->size().height() > scrollingWidget->size().height();
+
+        scrollingWidget->setFlag(QGraphicsItem::ItemClipsChildrenToShape, clip);
     }
 
     void makeRectVisible()
     {
+        if (!widget) {
+            return;
+        }
+
         QRectF viewRect = scrollingWidget->boundingRect();
         //ensure the rect is not outside the widget bounding rect
-        QRectF mappedRect = QRectF(QPointF(qBound((qreal)0.0, rectToBeVisible.x(), widget->size().width() - rectToBeVisible.width()),
-                                           qBound((qreal)0.0, rectToBeVisible.y(), widget->size().height() - rectToBeVisible.height())),
+        QRectF mappedRect = QRectF(QPointF(qBound((qreal)0.0, rectToBeVisible.x(), widget.data()->size().width() - rectToBeVisible.width()),
+                                           qBound((qreal)0.0, rectToBeVisible.y(), widget.data()->size().height() - rectToBeVisible.height())),
                                            rectToBeVisible.size());
-        mappedRect = widget->mapToItem(scrollingWidget, mappedRect).boundingRect();
+        mappedRect = widget.data()->mapToItem(scrollingWidget, mappedRect).boundingRect();
 
         if (viewRect.contains(mappedRect)) {
             return;
@@ -210,13 +229,17 @@ public:
         }
 
         animId = Animator::self()->moveItem(
-        widget, Plasma::Animator::SlideOutMovement,
-                                                (widget->pos() + delta).toPoint());
+        widget.data(), Plasma::Animator::SlideOutMovement,
+                                                (widget.data()->pos() + delta).toPoint());
     }
 
     void makeItemVisible()
     {
-        QRectF rect(widget->mapFromScene(itemToBeVisible->scenePos()), itemToBeVisible->boundingRect().size());
+        if (!widget) {
+            return;
+        }
+
+        QRectF rect(widget.data()->mapFromScene(itemToBeVisible->scenePos()), itemToBeVisible->boundingRect().size());
         rectToBeVisible = rect;
 
         makeRectVisible();
@@ -229,7 +252,7 @@ public:
 
     ScrollWidget *q;
     QGraphicsWidget *scrollingWidget;
-    QGraphicsWidget *widget;
+    QWeakPointer<QGraphicsWidget> widget;
     Plasma::Svg *borderSvg;
     Plasma::SvgWidget *topBorder;
     Plasma::SvgWidget *bottomBorder;
@@ -289,9 +312,9 @@ ScrollWidget::~ScrollWidget()
 
 void ScrollWidget::setWidget(QGraphicsWidget *widget)
 {
-    if (d->widget && d->widget != widget) {
-        d->widget->removeEventFilter(this);
-        delete d->widget;
+    if (d->widget && d->widget.data() != widget) {
+        d->widget.data()->removeEventFilter(this);
+        delete d->widget.data();
     }
 
     d->widget = widget;
@@ -309,7 +332,7 @@ void ScrollWidget::setWidget(QGraphicsWidget *widget)
 
 QGraphicsWidget *ScrollWidget::widget() const
 {
-    return d->widget;
+    return d->widget.data();
 }
 
 
@@ -352,7 +375,7 @@ void ScrollWidget::ensureItemVisible(QGraphicsItem *item)
     }
 
     QGraphicsItem *parentOfItem = item->parentItem();
-    while (parentOfItem != d->widget) {
+    while (parentOfItem != d->widget.data()) {
         if (!parentOfItem) {
             return;
         }
@@ -373,7 +396,7 @@ void ScrollWidget::registerAsDragHandle(QGraphicsWidget *item)
     }
 
     QGraphicsItem *parentOfItem = item->parentItem();
-    while (parentOfItem != d->widget) {
+    while (parentOfItem != d->widget.data()) {
         if (!parentOfItem) {
             return;
         }
@@ -406,19 +429,19 @@ QRectF ScrollWidget::viewportGeometry() const
 
 QSizeF ScrollWidget::contentsSize() const
 {
-    return d->widget ? d->widget->size() : QSizeF();
+    return d->widget ? d->widget.data()->size() : QSizeF();
 }
 
 void ScrollWidget::setScrollPosition(const QPointF &position)
 {
     if (d->widget) {
-        d->widget->setPos(-position.toPoint());
+        d->widget.data()->setPos(-position.toPoint());
     }
 }
 
 QPointF ScrollWidget::scrollPosition() const
 {
-    return d->widget ? -d->widget->pos() : QPointF();
+    return d->widget ? -d->widget.data()->pos() : QPointF();
 }
 
 void ScrollWidget::setStyleSheet(const QString &styleSheet)
@@ -443,7 +466,7 @@ void ScrollWidget::focusInEvent(QFocusEvent *event)
     Q_UNUSED(event)
 
     if (d->widget) {
-        d->widget->setFocus();
+        d->widget.data()->setFocus();
     }
 }
 
@@ -517,16 +540,16 @@ bool ScrollWidget::eventFilter(QObject *watched, QEvent *event)
         return false;
     }
 
-    if (watched == d->widget && event->type() == QEvent::GraphicsSceneResize) {
+    if (watched == d->widget.data() && event->type() == QEvent::GraphicsSceneResize) {
         d->adjustScrollbars();
         d->adjustClipping();
         //force to refresh the size hint
         layout()->invalidate();
-    } else if (watched == d->widget && event->type() == QEvent::GraphicsSceneMove) {
+    } else if (watched == d->widget.data() && event->type() == QEvent::GraphicsSceneMove) {
         d->horizontalScrollBar->blockSignals(true);
         d->verticalScrollBar->blockSignals(true);
-        d->horizontalScrollBar->setValue(-d->widget->pos().x()/10);
-        d->verticalScrollBar->setValue(-d->widget->pos().y()/10);
+        d->horizontalScrollBar->setValue(-d->widget.data()->pos().x()/10);
+        d->verticalScrollBar->setValue(-d->widget.data()->pos().y()/10);
         d->horizontalScrollBar->blockSignals(false);
         d->verticalScrollBar->blockSignals(false);
     } else if (d->dragHandles.contains(static_cast<QGraphicsWidget *>(watched))) {
@@ -555,7 +578,7 @@ QSizeF ScrollWidget::sizeHint(Qt::SizeHint which, const QSizeF & constraint) con
     QSizeF hint = QGraphicsWidget::sizeHint(which, constraint);
 
     if (which == Qt::PreferredSize && d->widget) {
-        return (d->widget->size()+QSize(d->borderSize, d->borderSize)).expandedTo(d->widget->effectiveSizeHint(Qt::PreferredSize));
+        return (d->widget.data()->size()+QSize(d->borderSize, d->borderSize)).expandedTo(d->widget.data()->effectiveSizeHint(Qt::PreferredSize));
     }
 
     return hint;
