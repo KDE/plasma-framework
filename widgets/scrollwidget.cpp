@@ -162,6 +162,8 @@ public:
             widgetSize.setHeight(scrollingWidget->size().height()-borderSize);
         }
         widget.data()->resize(widgetSize);
+
+        adjustClipping();
     }
 
     void verticalScroll(int value)
@@ -270,6 +272,7 @@ public:
     QSet<QGraphicsWidget *>dragHandles;
     bool dragging;
     int animId;
+    QTimer *adjustScrollbarsTimer;
     static const int borderSize = 4;
 };
 
@@ -286,6 +289,10 @@ ScrollWidget::ScrollWidget(QGraphicsWidget *parent)
     d->layout->addItem(d->scrollingWidget, 0, 0);
     d->borderSvg = new Plasma::Svg(this);
     d->borderSvg->setImagePath("widgets/scrollwidget");
+
+    d->adjustScrollbarsTimer = new QTimer(this);
+    d->adjustScrollbarsTimer->setSingleShot(true);
+    connect(d->adjustScrollbarsTimer, SIGNAL(timeout()), this, SLOT(adjustScrollbars()));
 
     d->verticalScrollBarPolicy = Qt::ScrollBarAsNeeded;
     d->verticalScrollBar = new Plasma::ScrollBar(this);
@@ -326,7 +333,7 @@ void ScrollWidget::setWidget(QGraphicsWidget *widget)
         widget->setParentItem(d->scrollingWidget);
         widget->setPos(QPoint(0,0));
         widget->installEventFilter(this);
-        d->adjustScrollbars();
+        d->adjustScrollbarsTimer->start(200);
     }
 }
 
@@ -478,9 +485,7 @@ void ScrollWidget::resizeEvent(QGraphicsSceneResizeEvent *event)
         return;
     }
 
-    d->adjustScrollbars();
-
-    d->adjustClipping();
+    d->adjustScrollbarsTimer->start(200);
 
     //if topBorder exists bottomBorder too
     if (d->topBorder) {
@@ -541,10 +546,7 @@ bool ScrollWidget::eventFilter(QObject *watched, QEvent *event)
     }
 
     if (watched == d->widget.data() && event->type() == QEvent::GraphicsSceneResize) {
-        d->adjustScrollbars();
-        d->adjustClipping();
-        //force to refresh the size hint
-        layout()->invalidate();
+        d->adjustScrollbarsTimer->start(200);
     } else if (watched == d->widget.data() && event->type() == QEvent::GraphicsSceneMove) {
         d->horizontalScrollBar->blockSignals(true);
         d->verticalScrollBar->blockSignals(true);

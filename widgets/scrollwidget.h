@@ -58,6 +58,7 @@ public:
      * @arg parent the parent of this widget
      */
     explicit ScrollWidget(QGraphicsWidget *parent = 0);
+    explicit ScrollWidget(QGraphicsItem *parent = 0);
     ~ScrollWidget();
 
     /**
@@ -200,6 +201,7 @@ private:
     Q_PRIVATE_SLOT(d, void makeRectVisible())
     Q_PRIVATE_SLOT(d, void makeItemVisible())
     Q_PRIVATE_SLOT(d, void cleanupDragHandles(QObject *destroyed))
+    Q_PRIVATE_SLOT(d, void adjustScrollbars())
 };
 
 } // namespace Plasma
