@@ -40,9 +40,9 @@ int ParallelAnimationGroup::animationCount() const
     return QParallelAnimationGroup::animationCount();
 }
 
-void ParallelAnimationGroup::clearAnimations()
+void ParallelAnimationGroup::clear()
 {
-    QParallelAnimationGroup::clearAnimations();
+    QParallelAnimationGroup::clear();
 }
 
 int ParallelAnimationGroup::indexOfAnimation(QAbstractAnimation *animation) const
@@ -50,9 +50,9 @@ int ParallelAnimationGroup::indexOfAnimation(QAbstractAnimation *animation) cons
     return QParallelAnimationGroup::indexOfAnimation(animation);
 }
 
-void ParallelAnimationGroup::insertAnimationAt(int index, QAbstractAnimation *animation)
+void ParallelAnimationGroup::insertAnimation(int index, QAbstractAnimation *animation)
 {
-    QParallelAnimationGroup::insertAnimationAt(index, animation);
+    QParallelAnimationGroup::insertAnimation(index, animation);
 }
 
 void ParallelAnimationGroup::removeAnimation(QAbstractAnimation *animation)
@@ -81,9 +81,9 @@ int SequentialAnimationGroup::animationCount() const
     return QSequentialAnimationGroup::animationCount();
 }
 
-void SequentialAnimationGroup::clearAnimations()
+void SequentialAnimationGroup::clear()
 {
-    QSequentialAnimationGroup::clearAnimations();
+    QSequentialAnimationGroup::clear();
 }
 
 int SequentialAnimationGroup::indexOfAnimation(QAbstractAnimation *animation) const
@@ -91,9 +91,9 @@ int SequentialAnimationGroup::indexOfAnimation(QAbstractAnimation *animation) co
     return QSequentialAnimationGroup::indexOfAnimation(animation);
 }
 
-void SequentialAnimationGroup::insertAnimationAt(int index, QAbstractAnimation *animation)
+void SequentialAnimationGroup::insertAnimation(int index, QAbstractAnimation *animation)
 {
-    QSequentialAnimationGroup::insertAnimationAt(index, animation);
+    QSequentialAnimationGroup::insertAnimation(index, animation);
 }
 
 void SequentialAnimationGroup::removeAnimation(QAbstractAnimation *animation)

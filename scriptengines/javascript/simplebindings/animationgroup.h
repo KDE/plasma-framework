@@ -34,9 +34,9 @@ public Q_SLOTS:
     void addAnimation(QAbstractAnimation * animation);
     QAbstractAnimation *animationAt(int index) const;
     int animationCount() const;
-    void clearAnimations();
+    void clear();
     int indexOfAnimation(QAbstractAnimation *animation) const;
-    void insertAnimationAt(int index, QAbstractAnimation * animation);
+    void insertAnimation(int index, QAbstractAnimation * animation);
     void removeAnimation(QAbstractAnimation * animation);
 };
 
@@ -51,9 +51,9 @@ public Q_SLOTS:
     void addAnimation(QAbstractAnimation * animation);
     QAbstractAnimation *animationAt(int index) const;
     int animationCount() const;
-    void clearAnimations();
+    void clear();
     int indexOfAnimation(QAbstractAnimation *animation) const;
-    void insertAnimationAt(int index, QAbstractAnimation * animation);
+    void insertAnimation(int index, QAbstractAnimation * animation);
     void removeAnimation(QAbstractAnimation * animation);
 };
 
