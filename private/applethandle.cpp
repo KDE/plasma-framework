@@ -74,9 +74,9 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &h
     setFlags(flags() | QGraphicsItem::ItemStacksBehindParent);
     KColorScheme colorScheme(QPalette::Active, KColorScheme::View,
                              Theme::defaultTheme()->colorScheme());
-	setAcceptTouchEvents(true);
+    setAcceptTouchEvents(true);
     m_gradientColor = colorScheme.background(KColorScheme::NormalBackground).color();
-    m_originalGeom = m_applet->geometry();
+    m_originalGeom = mapToScene(QRectF(QPoint(0,0), m_applet->size())).boundingRect();
     m_originalTransform = m_applet->transform();
 
     QPointF center = QRectF(QPointF(), m_applet->size()).center();
@@ -443,7 +443,7 @@ void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
         }
 
         if (m_pressedButton == ResizeButton || m_pressedButton == RotateButton) {
-            m_originalGeom = m_applet->geometry();
+            m_originalGeom = mapToScene(QRectF(QPoint(0,0), m_applet->size())).boundingRect();
             m_origAppletCenter = m_originalGeom.center();
             m_origAppletSize = QPointF(m_applet->size().width(), m_applet->size().height());
 
@@ -704,8 +704,11 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
         // apply size
         m_applet->resize(newSize.x(), newSize.y());
-        // apply position
-        m_applet->setPos(newCenter - newSize/2);
+        // apply position, no need if we're rotating
+        if (m_pressedButton != RotateButton) {
+            m_applet->setPos(m_containment->mapFromScene(newCenter - newSize/2));
+        }
+
         // apply angle
         QTransform at;
         at.translate(newSize.x()/2, newSize.y()/2);
