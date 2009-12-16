@@ -47,7 +47,7 @@ public:
           trackChanges(true),
           init(false)
     {
-        if (uniqueId > s_maxViewId) {
+        if (uniqueId > 0 && !viewIds.contains(uniqueId)) {
             s_maxViewId = uniqueId;
             viewId = uniqueId;
         }
@@ -57,6 +57,7 @@ public:
             // grab the next available id
             viewId = ++s_maxViewId;
         }
+        viewIds.insert(viewId);
     }
 
     ~ViewPrivate()
@@ -118,6 +119,8 @@ public:
     }
 
     static int s_maxViewId;
+    //ugly but the only reliable way to do collision detection of ids
+    static QSet<int> viewIds;
 
     Plasma::View *q;
     Plasma::Containment *containment;
@@ -130,6 +133,7 @@ public:
 };
 
 int ViewPrivate::s_maxViewId(0);
+QSet<int> ViewPrivate::viewIds;
 
 View::View(Containment *containment, QWidget *parent)
     : QGraphicsView(parent),
