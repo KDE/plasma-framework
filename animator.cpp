@@ -40,46 +40,40 @@ Plasma::Animation* Animator::create(Animator::Animation type, QObject *parent)
     Plasma::Animation *result = 0;
 
     switch (type) {
-
     case FadeAnimation:
-        result = new Plasma::FadeAnimation;
+        result = new Plasma::FadeAnimation(parent);
         break;
 
     case GrowAnimation:
-        result = new Plasma::GrowAnimation;
+        result = new Plasma::GrowAnimation(parent);
         break;
 
     case PulseAnimation:
-        result = new Plasma::PulseAnimation;
+        result = new Plasma::PulseAnimation(parent);
         break;
 
     case RotationAnimation:
-        result = new Plasma::RotationAnimation;
+        result = new Plasma::RotationAnimation(parent);
         break;
 
     case RotationStackedAnimation:
-        result = new Plasma::RotationStackedAnimation;
+        result = new Plasma::RotationStackedAnimation(parent);
         break;
 
     case SlideAnimation:
-        result = new Plasma::SlideAnimation;
+        result = new Plasma::SlideAnimation(parent);
         break;
 
     case GeometryAnimation:
-        result = new Plasma::GeometryAnimation;
+        result = new Plasma::GeometryAnimation(parent);
         break;
 
     case ZoomAnimation:
-        result = new Plasma::ZoomAnimation;
+        result = new Plasma::ZoomAnimation(parent);
         break;
 
     default:
         kDebug() << "Unsupported animation type.";
-
-    }
-
-    if (result) {
-        result->setParent(parent);
     }
 
     return result;
