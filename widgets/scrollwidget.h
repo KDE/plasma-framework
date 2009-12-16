@@ -58,7 +58,7 @@ public:
      * @arg parent the parent of this widget
      */
     explicit ScrollWidget(QGraphicsWidget *parent = 0);
-    explicit ScrollWidget(QGraphicsItem *parent = 0);
+    explicit ScrollWidget(QGraphicsItem *parent);
     ~ScrollWidget();
 
     /**
