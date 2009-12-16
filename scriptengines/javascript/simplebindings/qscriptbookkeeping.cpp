@@ -75,6 +75,19 @@ void controlsFromScriptValue(const QScriptValue& obj, Plasma::VideoWidget::Contr
     }
 }
 
+Q_DECLARE_METATYPE(KJob *)
+typedef KJob* KJobPtr;
+QScriptValue qScriptValueFromKJob(QScriptEngine *engine, const KJobPtr &job)
+{
+    return engine->newQObject(const_cast<KJob *>(job), QScriptEngine::AutoOwnership, QScriptEngine::PreferExistingWrapperObject);
+}
+
+void qKJobFromQScriptValue(const QScriptValue &scriptValue, KJobPtr &job)
+{
+    QObject *obj = scriptValue.toQObject();
+    job = static_cast<KJob *>(obj);
+}
+
 Q_DECLARE_METATYPE(KIO::Job *)
 typedef KIO::Job* KioJobPtr;
 QScriptValue qScriptValueFromKIOJob(QScriptEngine *engine, const KioJobPtr &job)
@@ -160,6 +173,7 @@ void registerSimpleAppletMetaTypes(QScriptEngine *engine)
     qScriptRegisterMetaType<Plasma::DataEngine::Data>(engine, qScriptValueFromData, 0, QScriptValue());
     qScriptRegisterMetaType<KConfigGroup>(engine, qScriptValueFromKConfigGroup, kConfigGroupFromScriptValue, QScriptValue());
     qScriptRegisterMetaType<Plasma::VideoWidget::Controls>(engine, qScriptValueFromControls, controlsFromScriptValue, QScriptValue());
+    qScriptRegisterMetaType<KJob *>(engine, qScriptValueFromKJob, qKJobFromQScriptValue);
     qScriptRegisterMetaType<KIO::Job *>(engine, qScriptValueFromKIOJob, qKIOJobFromQScriptValue);
     qScriptRegisterMetaType<Plasma::Animation*>(engine, qScriptValueFromAnimation, abstractAnimationFromQScriptValue);
     qScriptRegisterMetaType<QGraphicsWidget*>(engine, qScriptValueFromQGraphicsWidget, qGraphicsWidgetFromQScriptValue);
