@@ -66,8 +66,11 @@ void ZoomAnimation::updateCurrentTime(int currentTime)
     if (w) {
         qreal delta = Animation::easingCurve().valueForProgress(
             currentTime / qreal(duration()));
-        delta = (1 - m_zoom) * delta;
-        w->setScale( 1 - delta);
+        if (m_zoom != 1) {
+            delta = (1 - m_zoom) * delta;
+            w->setScale(1 - delta);
+        } else
+            w->setScale(delta);
     }
 
     Animation::updateCurrentTime(currentTime);
