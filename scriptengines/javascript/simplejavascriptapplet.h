@@ -37,7 +37,13 @@ class SimpleJavaScriptApplet : public Plasma::AppletScript
     Q_OBJECT
 
 public:
-    SimpleJavaScriptApplet( QObject *parent, const QVariantList &args );
+    enum AllowedUrl { NoUrls = 0,
+                      HttpUrls = 1,
+                      NetworkUrls = 2,
+                      LocalUrls = 4 };
+    Q_DECLARE_FLAGS(AllowedUrls, AllowedUrl)
+
+    SimpleJavaScriptApplet(QObject *parent, const QVariantList &args);
     ~SimpleJavaScriptApplet();
     bool init();
 
@@ -48,7 +54,6 @@ public:
     void constraintsEvent(Plasma::Constraints constraints);
     bool include(const QString &path);
     QSet<QString> loadedExtensions() const;
-
     QScriptValue variantToScriptValue(QVariant var);
 
     static QString findImageFile(QScriptEngine *engine, const QString &file);
@@ -60,6 +65,7 @@ public slots:
     void collectGarbage();
 
 private:
+    void registerGetUrl();
     bool importExtensions();
     bool importBuiltinExtesion(const QString &extension);
     void setupObjects();
@@ -80,11 +86,10 @@ private:
     static QScriptValue newPlasmaSvg(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue newPlasmaFrameSvg(QScriptContext *context, QScriptEngine *engine);
 
-    void installWidgets( QScriptEngine *engine );
+    void installWidgets(QScriptEngine *engine);
     static QScriptValue createWidget(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue notSupported(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue print(QScriptContext *context, QScriptEngine *engine);
-    static QScriptValue createPrototype(QScriptEngine *engine, const QString &name);
     static QScriptValue widgetAdjustSize(QScriptContext *context, QScriptEngine *engine);
 
     // run extension
@@ -92,6 +97,10 @@ private:
     static QScriptValue runCommand(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue openUrl(QScriptContext *context, QScriptEngine *engine);
 
+    // file io extensions
+    static QScriptValue getUrl(QScriptContext *context, QScriptEngine *engine);
+
+    static AppletInterface *extractAppletInterface(QScriptEngine *engine);
     static QGraphicsWidget *extractParent(QScriptContext *context,
                                           QScriptEngine *engine,
                                           int parentIndex = 0,
@@ -108,6 +117,7 @@ private:
     friend class AppletInterface;
 };
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(SimpleJavaScriptApplet::AllowedUrls)
 
 #endif // SCRIPT_H
 

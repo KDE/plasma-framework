@@ -1,5 +1,6 @@
 /*
  *   Copyright 2007-2008 Richard J. Moore <rich@kde.org>
+ *   Copyright 2009 Aaron J. Seigo <aseigo@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License version 2 as
@@ -32,6 +33,7 @@
 #include <KDebug>
 #include <KFileDialog>
 #include <KIcon>
+#include <KIO/Job>
 #include <KMimeType>
 #include <KShell>
 #include <KStandardDirs>
@@ -43,28 +45,22 @@
 #include <Plasma/Svg>
 #include <Plasma/FrameSvg>
 #include <Plasma/Package>
+#include <Plasma/PopupApplet>
 #include <Plasma/VideoWidget>
 
 #include "simplebindings/animationgroup.h"
+#include "simplebindings/dataengine.h"
+#include "simplebindings/i18n.h"
 #include "simplebindings/appletinterface.h"
+#include "simplebindings/bytearrayclass.h"
 #include "simplebindings/filedialogproxy.h"
+#include "simplebindings/variant.h"
 
 using namespace Plasma;
 
-#include "bind_dataengine.h"
-#include "bind_i18n.h"
 
 Q_DECLARE_METATYPE(QPainter*)
 Q_DECLARE_METATYPE(QStyleOptionGraphicsItem*)
-Q_DECLARE_METATYPE(SimpleJavaScriptApplet*)
-Q_DECLARE_METATYPE(AppletInterface*)
-Q_DECLARE_METATYPE(Applet*)
-Q_DECLARE_METATYPE(QGraphicsWidget*)
-Q_DECLARE_METATYPE(QGraphicsLayout*)
-Q_DECLARE_METATYPE(KConfigGroup)
-Q_DECLARE_METATYPE(Plasma::Animation *)
-
-Q_SCRIPT_DECLARE_QMETAOBJECT(AppletInterface, SimpleJavaScriptApplet*)
 
 QScriptValue constructColorClass(QScriptEngine *engine);
 QScriptValue constructFontClass(QScriptEngine *engine);
@@ -80,10 +76,7 @@ QScriptValue constructQPointClass(QScriptEngine *engine);
 QScriptValue constructQRectFClass(QScriptEngine *engine);
 QScriptValue constructQSizeFClass(QScriptEngine *engine);
 QScriptValue constructTimerClass(QScriptEngine *engine);
-
-//typedef VideoWidget::Control Control;
-Q_DECLARE_FLAGS(Controls, VideoWidget::Control)
-Q_DECLARE_METATYPE(Controls)
+void registerSimpleAppletMetaTypes(QScriptEngine *engine);
 
 class DummyService : public Service
 {
@@ -95,81 +88,6 @@ public:
         return 0;
     }
 };
-
-QScriptValue qScriptValueFromControls(QScriptEngine *engine, const Controls &controls)
-{
-    return QScriptValue(engine, controls);
-}
-
-void controlsFromScriptValue(const QScriptValue& obj, Controls &controls)
-{
-    int flagValue = obj.toInteger();
-    //FIXME: it has to be a less ugly way to do that :)
-    if (flagValue&VideoWidget::Play) {
-        controls |= VideoWidget::Play;
-    }
-    if (flagValue&VideoWidget::Pause) {
-        controls |= VideoWidget::Pause;
-    }
-    if (flagValue&VideoWidget::Stop) {
-        controls |= VideoWidget::Stop;
-    }
-    if (flagValue&VideoWidget::PlayPause) {
-        controls |= VideoWidget::PlayPause;
-    }
-    if (flagValue&VideoWidget::Progress) {
-        controls |= VideoWidget::Progress;
-    }
-    if (flagValue&VideoWidget::Volume) {
-        controls |= VideoWidget::Volume;
-    }
-    if (flagValue&VideoWidget::OpenFile) {
-        controls |= VideoWidget::OpenFile;
-    }
-}
-
-QScriptValue qScriptValueFromKConfigGroup(QScriptEngine *engine, const KConfigGroup &config)
-{
-    QScriptValue obj = engine->newObject();
-
-    if (!config.isValid()) {
-        return obj;
-    }
-
-    QMap<QString, QString> entryMap = config.entryMap();
-    QMap<QString, QString>::const_iterator it = entryMap.constBegin();
-    QMap<QString, QString>::const_iterator begin = it;
-    QMap<QString, QString>::const_iterator end = entryMap.constEnd();
-
-    //setting the group name
-    obj.setProperty("__name", QScriptValue(engine, config.name()));
-
-    //setting the key/value pairs
-    for (it = begin; it != end; ++it) {
-        //kDebug() << "setting" << it.key() << "to" << it.value();
-        QString prop = it.key();
-        prop.replace(' ', '_');
-        obj.setProperty(prop, variantToScriptValue(engine, it.value()));
-    }
-
-    return obj;
-}
-
-void kConfigGroupFromScriptValue(const QScriptValue& obj, KConfigGroup &config)
-{
-    KConfigSkeleton *skel = new KConfigSkeleton();
-    config = KConfigGroup(skel->config(), obj.property("__name").toString());
-
-    QScriptValueIterator it(obj);
-
-    while (it.hasNext()) {
-        it.next();
-        //kDebug() << it.name() << "is" << it.value().toString();
-        if (it.name() != "__name") {
-            config.writeEntry(it.name(), it.value().toString());
-        }
-    }
-}
 
 void registerEnums(QScriptEngine *engine, QScriptValue &scriptValue, const QMetaObject &meta)
 {
@@ -465,6 +383,42 @@ QScriptValue SimpleJavaScriptApplet::openUrl(QScriptContext *context, QScriptEng
     return false;
 }
 
+QScriptValue SimpleJavaScriptApplet::getUrl(QScriptContext *context, QScriptEngine *engine)
+{
+    if (context->argumentCount() == 0) {
+        return engine->undefinedValue();
+    }
+
+    QScriptValue v = context->argument(0);
+    KUrl url = v.isString() ? KUrl(v.toString()) : qscriptvalue_cast<KUrl>(v);
+
+    if (!url.isValid()) {
+        return engine->undefinedValue();
+    }
+
+    AppletInterface *interface = extractAppletInterface(engine);
+    AllowedUrls allowed = interface ? interface->allowedUrls() : NoUrls;
+    if (url.isLocalFile()) {
+        if (!(allowed & LocalUrls)) {
+            return engine->undefinedValue();
+        }
+    } else if (!(allowed & NetworkUrls) &&
+               !((allowed & HttpUrls) && (url.protocol() == "http" || url.protocol() == "https"))) {
+        return engine->undefinedValue();
+    }
+
+    KIO::Job *job = KIO::get(url);
+    return engine->newQObject(job);
+}
+
+void SimpleJavaScriptApplet::registerGetUrl()
+{
+    QScriptValue get = m_self.property("getUrl");
+    if (!get.isValid()) {
+        m_self.setProperty("getUrl", m_engine->newFunction(SimpleJavaScriptApplet::getUrl));
+    }
+}
+
 bool SimpleJavaScriptApplet::importBuiltinExtesion(const QString &extension)
 {
     kDebug() << extension;
@@ -477,10 +431,16 @@ bool SimpleJavaScriptApplet::importBuiltinExtesion(const QString &extension)
         m_self.setProperty("openUrl", m_engine->newFunction(SimpleJavaScriptApplet::openUrl));
         return true;
     } else if ("http" == extension) {
+        m_interface->setAllowedUrls(m_interface->allowedUrls() | HttpUrls);
+        registerGetUrl();
         return true;
     } else if ("networkio" == extension) {
+        m_interface->setAllowedUrls(m_interface->allowedUrls() | HttpUrls | NetworkUrls);
+        registerGetUrl();
         return true;
     } else if ("localio" == extension) {
+        m_interface->setAllowedUrls(m_interface->allowedUrls() | LocalUrls);
+        registerGetUrl();
         return true;
     }
 
@@ -544,37 +504,12 @@ bool SimpleJavaScriptApplet::importExtensions()
     return true;
 }
 
-typedef Animation* AnimationPtr;
-QScriptValue qScriptValueFromAnimation(QScriptEngine *engine, const AnimationPtr &anim)
-{
-    return engine->newQObject(const_cast<Animation *>(anim), QScriptEngine::AutoOwnership, QScriptEngine::PreferExistingWrapperObject);
-}
-
-void abstractAnimationFromQScriptValue(const QScriptValue &scriptValue, AnimationPtr &anim)
-{
-    QObject *obj = scriptValue.toQObject();
-    anim = static_cast<Animation *>(obj);
-}
-
-typedef QGraphicsWidget * QGraphicsWidgetPtr;
-QScriptValue qScriptValueFromQGraphicsWidget(QScriptEngine *engine, const QGraphicsWidgetPtr &anim)
-{
-    return engine->newQObject(const_cast<QGraphicsWidget *>(anim), QScriptEngine::AutoOwnership, QScriptEngine::PreferExistingWrapperObject);
-}
-
-void qGraphicsWidgetFromQScriptValue(const QScriptValue &scriptValue, QGraphicsWidgetPtr &anim)
-{
-    QObject *obj = scriptValue.toQObject();
-    anim = static_cast<QGraphicsWidget *>(obj);
-}
-
 void SimpleJavaScriptApplet::setupObjects()
 {
     QScriptValue global = m_engine->globalObject();
 
     // Bindings for animations
     global.setProperty("animation", m_engine->newFunction(SimpleJavaScriptApplet::animation));
-    qScriptRegisterMetaType<Animation*>(m_engine, qScriptValueFromAnimation, abstractAnimationFromQScriptValue);
     global.setProperty("AnimationGroup", m_engine->newFunction(SimpleJavaScriptApplet::animationGroup));
     global.setProperty("ParallelAnimationGroup", m_engine->newFunction(SimpleJavaScriptApplet::parallelAnimationGroup));
 
@@ -588,11 +523,10 @@ void SimpleJavaScriptApplet::setupObjects()
     bindI18N(m_engine);
     global.setProperty("dataEngine", m_engine->newFunction(SimpleJavaScriptApplet::dataEngine));
     global.setProperty("service", m_engine->newFunction(SimpleJavaScriptApplet::service));
-    qScriptRegisterMetaType<DataEngine::Data>(m_engine, qScriptValueFromData, 0, QScriptValue());
-    qScriptRegisterMetaType<KConfigGroup>(m_engine, qScriptValueFromKConfigGroup, kConfigGroupFromScriptValue, QScriptValue());
 
     // Expose applet interface
-    m_interface = new AppletInterface(this);
+    const bool isPopupApplet = qobject_cast<Plasma::PopupApplet *>(applet());
+    m_interface = isPopupApplet ? new PopupAppletInterface(this) : new AppletInterface(this);
     m_self = m_engine->newQObject(m_interface);
     m_self.setScope(global);
     global.setProperty("plasmoid", m_self);
@@ -600,7 +534,7 @@ void SimpleJavaScriptApplet::setupObjects()
     QScriptValue args = m_engine->newArray();
     int i = 0;
     foreach (const QVariant &arg, applet()->startupArguments()) {
-        args.setProperty(i, variantToScriptValue(arg));
+        args.setProperty(i, ::variantToScriptValue(m_engine, arg));
         ++i;
     }
     global.setProperty("startupArguments", args);
@@ -609,13 +543,11 @@ void SimpleJavaScriptApplet::setupObjects()
 
 
     // Add a global loadui method for ui files
-    qScriptRegisterMetaType<QGraphicsWidget*>(m_engine, qScriptValueFromQGraphicsWidget, qGraphicsWidgetFromQScriptValue);
     QScriptValue fun = m_engine->newFunction(SimpleJavaScriptApplet::loadui);
     global.setProperty("loadui", fun);
 
     fun = m_engine->newFunction(SimpleJavaScriptApplet::print);
     global.setProperty("print", fun);
-
 
     // Work around bug in 4.3.0
     qMetaTypeId<QVariant>();
@@ -634,6 +566,8 @@ void SimpleJavaScriptApplet::setupObjects()
     global.setProperty("LinearLayout", constructLinearLayoutClass(m_engine));
     global.setProperty("GridLayout", constructGridLayoutClass(m_engine));
     global.setProperty("AnchorLayout", constructAnchorLayoutClass(m_engine));
+    ByteArrayClass *baClass = new ByteArrayClass(m_engine);
+    global.setProperty("ByteArray", baClass->constructor());
 
     // Add stuff from KDE libs
     qScriptRegisterSequenceMetaType<KUrl::List>(m_engine);
@@ -645,6 +579,7 @@ void SimpleJavaScriptApplet::setupObjects()
     global.setProperty("Svg", m_engine->newFunction(SimpleJavaScriptApplet::newPlasmaSvg));
     global.setProperty("FrameSvg", m_engine->newFunction(SimpleJavaScriptApplet::newPlasmaFrameSvg));
 
+    registerSimpleAppletMetaTypes(m_engine);
     installWidgets(m_engine);
 }
 
@@ -653,27 +588,24 @@ QSet<QString> SimpleJavaScriptApplet::loadedExtensions() const
     return m_extensions;
 }
 
+AppletInterface *SimpleJavaScriptApplet::extractAppletInterface(QScriptEngine *engine)
+{
+    QScriptValue appletValue = engine->globalObject().property("plasmoid");
+    return qobject_cast<AppletInterface*>(appletValue.toQObject());
+}
+
 QScriptValue SimpleJavaScriptApplet::dataEngine(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() != 1) {
         return context->throwError(i18n("dataEngine() takes one argument"));
     }
 
-    QString dataEngine = context->argument(0).toString();
-
-    QScriptValue appletValue = engine->globalObject().property("plasmoid");
-    //kDebug() << "appletValue is " << appletValue.toString();
-
-    QObject *appletObject = appletValue.toQObject();
-    if (!appletObject) {
-        return context->throwError(i18n("Could not extract the AppletObject"));
-    }
-
-    AppletInterface *interface = qobject_cast<AppletInterface*>(appletObject);
+    AppletInterface *interface = extractAppletInterface(engine);
     if (!interface) {
         return context->throwError(i18n("Could not extract the Applet"));
     }
 
+    const QString dataEngine = context->argument(0).toString();
     DataEngine *data = interface->dataEngine(dataEngine);
     return engine->newQObject(data);
 }
@@ -686,15 +618,7 @@ QScriptValue SimpleJavaScriptApplet::service(QScriptContext *context, QScriptEng
 
     QString dataEngine = context->argument(0).toString();
 
-    QScriptValue appletValue = engine->globalObject().property("plasmoid");
-    //kDebug() << "appletValue is " << appletValue.toString();
-
-    QObject *appletObject = appletValue.toQObject();
-    if (!appletObject) {
-        return context->throwError(i18n("Could not extract the AppletObject"));
-    }
-
-    AppletInterface *interface = qobject_cast<AppletInterface*>(appletObject);
+    AppletInterface *interface = extractAppletInterface(engine);
     if (!interface) {
         return context->throwError(i18n("Could not extract the Applet"));
     }
@@ -773,15 +697,7 @@ QScriptValue SimpleJavaScriptApplet::loadui(QScriptContext *context, QScriptEngi
 
 QString SimpleJavaScriptApplet::findImageFile(QScriptEngine *engine, const QString &file)
 {
-    QScriptValue appletValue = engine->globalObject().property("plasmoid");
-    //kDebug() << "appletValue is " << appletValue.toString();
-
-    QObject *appletObject = appletValue.toQObject();
-    if (!appletObject) {
-        return QString();
-    }
-
-    AppletInterface *interface = qobject_cast<AppletInterface*>(appletObject);
+    AppletInterface *interface = extractAppletInterface(engine);
     if (!interface) {
         return QString();
     }
@@ -791,15 +707,7 @@ QString SimpleJavaScriptApplet::findImageFile(QScriptEngine *engine, const QStri
 
 QString SimpleJavaScriptApplet::findSvg(QScriptEngine *engine, const QString &file)
 {
-    QScriptValue appletValue = engine->globalObject().property("plasmoid");
-    //kDebug() << "appletValue is " << appletValue.toString();
-
-    QObject *appletObject = appletValue.toQObject();
-    if (!appletObject) {
-        return file;
-    }
-
-    AppletInterface *interface = qobject_cast<AppletInterface*>(appletObject);
+    AppletInterface *interface = extractAppletInterface(engine);
     if (!interface) {
         return file;
     }
@@ -866,8 +774,7 @@ void SimpleJavaScriptApplet::installWidgets(QScriptEngine *engine)
         QScriptValue name = engine->toScriptValue(widget);
         fun.setProperty(QString("functionName"), name,
                          QScriptValue::ReadOnly | QScriptValue::Undeletable | QScriptValue::SkipInEnumeration);
-        fun.setProperty(QString("prototype"), createPrototype(engine, name.toString()));
-
+        fun.setProperty(QString("prototype"), engine->newObject());
         globalObject.setProperty(widget, fun);
     }
 }
@@ -885,15 +792,7 @@ QGraphicsWidget *SimpleJavaScriptApplet::extractParent(QScriptContext *context, 
     }
 
     if (!parent) {
-        QScriptValue appletValue = engine->globalObject().property("plasmoid");
-        //kDebug() << "appletValue is " << appletValue.toString();
-
-        QObject *appletObject = appletValue.toQObject();
-        if (!appletObject) {
-            return 0;
-        }
-
-        AppletInterface *interface = qobject_cast<AppletInterface*>(appletObject);
+        AppletInterface *interface = extractAppletInterface(engine);
         if (!interface) {
             return 0;
         }
@@ -929,12 +828,6 @@ QScriptValue SimpleJavaScriptApplet::createWidget(QScriptContext *context, QScri
 
     //register enums will be accessed for instance as frame.Sunken for Frame shadow...
     registerEnums(engine, fun, *w->metaObject());
-
-    //FIXME: still don't have a better approach than try to cast for every widget that could have flags..
-    if (qobject_cast<VideoWidget *>(w)) {
-        qScriptRegisterMetaType<Controls>(engine, qScriptValueFromControls, controlsFromScriptValue, QScriptValue());
-    }
-
     return fun;
 }
 
@@ -957,27 +850,18 @@ QScriptValue SimpleJavaScriptApplet::print(QScriptContext *context, QScriptEngin
     return engine->undefinedValue();
 }
 
-QScriptValue SimpleJavaScriptApplet::createPrototype(QScriptEngine *engine, const QString &name)
-{
-    Q_UNUSED(name)
-    QScriptValue proto = engine->newObject();
-
-    // Hook for adding extra properties/methods
-    return proto;
-}
-
-QScriptValue SimpleJavaScriptApplet::variantToScriptValue(QVariant var)
-{
-    return ::variantToScriptValue(m_engine, var);
-}
-
 void SimpleJavaScriptApplet::collectGarbage()
 {
     m_engine->collectGarbage();
 }
 
+/*
+ * Workaround the fact that QtScripts handling of variants seems a bit broken.
+ */
+QScriptValue SimpleJavaScriptApplet::variantToScriptValue(QVariant var)
+{
+    return ::variantToScriptValue(m_engine, var);
+}
+
 K_EXPORT_PLASMA_APPLETSCRIPTENGINE(qscriptapplet, SimpleJavaScriptApplet)
-
 #include "simplejavascriptapplet.moc"
-
-

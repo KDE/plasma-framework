@@ -5,7 +5,10 @@ set(simple_javascript_engine_SRCS
     simplebindings/animationgroup.cpp
     simplebindings/appletinterface.cpp
     simplebindings/anchorlayout.cpp
+    simplebindings/bytearrayclass.cpp
+    simplebindings/bytearrayprototype.cpp
     simplebindings/color.cpp
+    simplebindings/dataengine.cpp
     simplebindings/font.cpp
     simplebindings/filedialogproxy.cpp
     simplebindings/graphicsitem.cpp
@@ -16,10 +19,12 @@ set(simple_javascript_engine_SRCS
     simplebindings/pixmap.cpp
     simplebindings/point.cpp
     simplebindings/rect.cpp
+    simplebindings/qscriptbookkeeping.cpp
     simplebindings/size.cpp
     simplebindings/timer.cpp
     simplebindings/uiloader.cpp
     simplebindings/url.cpp
+    simplebindings/variant.cpp
 )
 
 include_directories(${PHONON_INCLUDES})
@@ -63,6 +68,8 @@ install(FILES plasma-scriptengine-runner-javascript.desktop DESTINATION ${SERVIC
 
 set(javascript_dataengine_engine_SRCS
     javascriptdataengine.cpp
+    simplebindings/dataengine.cpp
+    simplebindings/variant.cpp
 )
 kde4_add_plugin(plasma_dataenginescript_javascript ${javascript_dataengine_engine_SRCS})
 

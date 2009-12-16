@@ -26,6 +26,7 @@
 #include <QScriptValue>
 
 #include <Plasma/Applet>
+#include <Plasma/PopupApplet>
 #include <Plasma/DataEngine>
 
 #include "simplejavascriptapplet.h"
@@ -233,22 +234,44 @@ enum QtScrollBarPolicy {
     bool immutable() const;
     int apiVersion() const;
 
+    SimpleJavaScriptApplet::AllowedUrls allowedUrls() const;
+    void setAllowedUrls(const SimpleJavaScriptApplet::AllowedUrls &allowedUrls);
+
     inline Plasma::Applet *applet() const { return m_appletScriptEngine->applet(); }
 
 Q_SIGNALS:
     void releaseVisualFocus();
-
     void configNeedsSaving();
 
 public Q_SLOTS:
     void dataUpdated(QString source, Plasma::DataEngine::Data data);
 
-private:
+protected:
     SimpleJavaScriptApplet *m_appletScriptEngine;
+
+private:
     QSet<QString> m_actions;
     QSignalMapper *m_actionSignals;
     QString m_currentConfig;
     QMap<QString, Plasma::ConfigLoader*> m_configs;
+    SimpleJavaScriptApplet::AllowedUrls m_allowedUrls;
+};
+
+class PopupAppletInterface : public AppletInterface
+{
+    Q_OBJECT
+    Q_PROPERTY(QIcon popupIcon READ popupIcon WRITE setPopupIcon)
+
+public:
+    PopupAppletInterface(SimpleJavaScriptApplet *parent);
+
+    void setPopupIcon(const QIcon &icon);
+    QIcon popupIcon();
+
+    inline Plasma::PopupApplet *popupApplet() const { return static_cast<Plasma::PopupApplet *>(m_appletScriptEngine->applet()); }
+
+public Q_SLOTS:
+    void setPopupIconByName(const QString &name);
 };
 
 #endif

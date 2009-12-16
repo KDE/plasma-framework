@@ -22,8 +22,8 @@
 #include <QScriptEngine>
 #include <QScriptContext>
 
-#include "bind_dataengine.h"
-#include "bind_i18n.h"
+#include "simplebindings/dataengine.h"
+#include "simplebindings/i18n.h"
 
 JavaScriptDataEngine::JavaScriptDataEngine(QObject *parent, const QVariantList &args)
     : DataEngineScript(parent),

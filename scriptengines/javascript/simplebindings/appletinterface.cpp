@@ -21,6 +21,7 @@
 
 #include <QAction>
 #include <QFile>
+#include <QScriptEngine>
 #include <QSignalMapper>
 #include <QTimer>
 
@@ -37,7 +38,8 @@
 AppletInterface::AppletInterface(SimpleJavaScriptApplet *parent)
     : QObject(parent),
       m_appletScriptEngine(parent),
-      m_actionSignals(0)
+      m_actionSignals(0),
+      m_allowedUrls(SimpleJavaScriptApplet::NoUrls)
 {
     connect(this, SIGNAL(releaseVisualFocus()), applet(), SIGNAL(releaseVisualFocus()));
     connect(this, SIGNAL(configNeedsSaving()), applet(), SIGNAL(configNeedsSaving()));
@@ -317,6 +319,16 @@ int AppletInterface::apiVersion() const
     return offers.first()->property("X-KDE-PluginInfo-Version", QVariant::Int).toInt();
 }
 
+SimpleJavaScriptApplet::AllowedUrls AppletInterface::allowedUrls() const
+{
+    return m_allowedUrls;
+}
+
+void AppletInterface::setAllowedUrls(const SimpleJavaScriptApplet::AllowedUrls &allowedUrls)
+{
+    m_allowedUrls = allowedUrls;
+}
+
 bool AppletInterface::include(const QString &script)
 {
     const QString path = package()->filePath("scripts", script);
@@ -340,6 +352,27 @@ void AppletInterface::debug(const QString &msg)
 void AppletInterface::gc()
 {
     QTimer::singleShot(0, m_appletScriptEngine, SLOT(collectGarbage()));
+}
+
+
+PopupAppletInterface::PopupAppletInterface(SimpleJavaScriptApplet *parent)
+    : AppletInterface(parent)
+{
+}
+
+void PopupAppletInterface::setPopupIcon(const QIcon &icon)
+{
+    popupApplet()->setPopupIcon(icon);
+}
+
+QIcon PopupAppletInterface::popupIcon()
+{
+    return popupApplet()->popupIcon();
+}
+
+void PopupAppletInterface::setPopupIconByName(const QString &name)
+{
+    return popupApplet()->setPopupIcon(name);
 }
 
 #include "appletinterface.moc"
