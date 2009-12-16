@@ -67,6 +67,9 @@
 #include "private/extenderitemmimedata_p.h"
 #include "private/paneltoolbox_p.h"
 
+#include "plasma/plasma.h"
+#include "animations/animation.h"
+
 namespace Plasma
 {
 
@@ -153,10 +156,6 @@ void Containment::init()
     setFlag(QGraphicsItem::ItemClipsChildrenToShape, false);
     setAcceptDrops(true);
     setAcceptsHoverEvents(true);
-
-    //TODO: would be nice to not do this on init, as it causes Animator to init
-    connect(Animator::self(), SIGNAL(animationFinished(QGraphicsItem*,Plasma::Animator::Animation)),
-            this, SLOT(containmentAppletAnimationComplete(QGraphicsItem*,Plasma::Animator::Animation)));
 
     if (d->type == NoContainmentType) {
         setContainmentType(DesktopContainment);
@@ -953,17 +952,21 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
             applet->installSceneEventFilter(this);
             //applet->setWindowFlags(Qt::Window);
         }
+
     } else {
         applet->init();
-        Animator::self()->animateItem(applet, Animator::AppearAnimation);
+        applet->setScale(0);
+        d->zoomAnim = Plasma::Animator::create(Plasma::Animator::ZoomAnimation);
+        connect(d->zoomAnim, SIGNAL(finished()), this, SLOT(containmentAppletAnimationComplete()));
+        d->zoomAnim->setWidgetToAnimate(applet);
+        d->zoomAnim->setProperty("zoom", 1.0);
+        d->zoomAnim->start();
     }
 
     applet->updateConstraints(Plasma::AllConstraints);
-
     if (!delayInit) {
         applet->flushPendingConstraintsEvents();
     }
-
     emit appletAdded(applet, pos);
 
     if (!currentContainment) {
@@ -972,7 +975,6 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
             applet->flushPendingConstraintsEvents();
         }
     }
-
     if (!delayInit) {
         applet->d->scheduleModificationNotification();
     }
@@ -2307,22 +2309,17 @@ void ContainmentPrivate::appletDestroyed(Plasma::Applet *applet)
     emit q->configNeedsSaving();
 }
 
-void ContainmentPrivate::containmentAppletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim)
+void ContainmentPrivate::containmentAppletAnimationComplete()
 {
-    if (anim == Animator::AppearAnimation &&
-        item->parentItem() == q) {
-        Applet *applet = qgraphicsitem_cast<Applet*>(item);
-
-        if (applet) {
-            if (type == Containment::DesktopContainment) {
-                applet->installSceneEventFilter(q);
-            }
-
-            KConfigGroup *cg = applet->d->mainConfigGroup();
-            applet->save(*cg);
-            emit q->configNeedsSaving();
-            //applet->setWindowFlags(Qt::Window);
+    Applet *applet = qgraphicsitem_cast<Applet*>(zoomAnim->widgetToAnimate());
+    if (applet->parentItem() == q) {
+        if (type == Containment::DesktopContainment) {
+            applet->installSceneEventFilter(q);
         }
+
+        KConfigGroup *cg = applet->d->mainConfigGroup();
+        applet->save(*cg);
+        emit q->configNeedsSaving();
     }
 }
 

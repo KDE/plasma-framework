@@ -36,6 +36,7 @@ namespace Plasma
 class AccessAppletJob;
 class Containment;
 class AbstractToolBox;
+class Animation;
 
 class ContainmentPrivate
 {
@@ -83,7 +84,7 @@ public:
     void setLockToolText();
     void handleDisappeared(AppletHandle *handle);
     void appletDestroyed(Plasma::Applet*);
-    void containmentAppletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim);
+    void containmentAppletAnimationComplete();
     void zoomIn();
     void zoomOut();
     void clearDataForMimeJob(KIO::Job *job);
@@ -164,6 +165,7 @@ public:
     QTimer *showDropZoneDelayTimer;
     bool drawWallpaper : 1;
     bool dropZoneStarted : 1;
+    Animation *zoomAnim;
 };
 
 } // Plasma namespace
