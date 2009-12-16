@@ -95,6 +95,7 @@ public:
     QMap<Dialog::ResizeCorner, QRect> resizeAreas;
     int resizeStartCorner;
     QTimer *moveTimer;
+    QTimer *adjustViewTimer;
     Plasma::AspectRatioMode aspectRatioMode;
 };
 
@@ -279,6 +280,10 @@ Dialog::Dialog(QWidget *parent, Qt::WindowFlags f)
     QPalette pal = palette();
     pal.setColor(backgroundRole(), Qt::transparent);
     setPalette(pal);
+
+    d->adjustViewTimer = new QTimer(this);
+    d->adjustViewTimer->setSingleShot(true);
+    connect(d->adjustViewTimer, SIGNAL(timeout()), this, SLOT(adjustView()));
 
     connect(d->background, SIGNAL(repaintNeeded()), this, SLOT(update()));
 
@@ -527,7 +532,7 @@ bool Dialog::eventFilter(QObject *watched, QEvent *event)
 {
     if (d->resizeStartCorner == Dialog::NoCorner && watched == d->graphicsWidget &&
         (event->type() == QEvent::GraphicsSceneResize || event->type() == QEvent::GraphicsSceneMove)) {
-        d->adjustView();
+        d->adjustViewTimer->start(150);
     }
 
     return QWidget::eventFilter(watched, event);
