@@ -44,7 +44,7 @@ static QScriptValue toString(QScriptContext *ctx, QScriptEngine *eng)
 
 static QScriptValue singleShot(QScriptContext *ctx, QScriptEngine *eng)
 {
-    DECLARE_SELF(QTimer, start);
+    DECLARE_SELF(QTimer, singleShot);
 
     if (ctx->argumentCount()) {
         self->setSingleShot(ctx->argument(0).toBool());
