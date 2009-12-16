@@ -45,6 +45,7 @@
 #include "plasma/dialog.h"
 #include "plasma/extenders/extender.h"
 #include "plasma/extenders/extenderitem.h"
+#include "plasma/package.h"
 #include "plasma/tooltipmanager.h"
 #include "plasma/widgets/iconwidget.h"
 
@@ -109,6 +110,14 @@ void PopupApplet::setPopupIcon(const QIcon &icon)
 
 void PopupApplet::setPopupIcon(const QString &iconName)
 {
+    if (package()) {
+        const QString file = package()->filePath("images", iconName);
+        if (!file.isEmpty()) {
+            setPopupIcon(KIcon(file));
+            return;
+        }
+    }
+
     setPopupIcon(KIcon(iconName));
 }
 
