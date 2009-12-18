@@ -51,8 +51,9 @@ void ShadowFake::copyTarget(QGraphicsWidget *target)
     QPainter painter(photo);
     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
     painter.fillRect(target->rect(), Qt::transparent);
-    /* Does it need any special initialization for KDE? */
     QStyleOptionGraphicsItem style;
+    //XXX: some widgets follow exposedRect viewport (e.g. QGraphicsWebView)
+    style.exposedRect = target->boundingRect();
     target->paint(&painter, &style, 0);
     painter.end();
 
