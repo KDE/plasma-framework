@@ -201,6 +201,8 @@ bool ItemBackground::eventFilter(QObject *watched, QEvent *event)
             event->type() == QEvent::GraphicsSceneMove) {
             // We need to wait for the parent widget to resize...
             QTimer::singleShot(0, this, SLOT(refreshCurrentTarget()) );
+        } else if (event->type() == QEvent::Show) {
+            setTargetItem(targetWidget);
         }
     }
 
