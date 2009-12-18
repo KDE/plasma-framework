@@ -58,6 +58,39 @@ public:
     {
     }
 
+    void commonConstructor()
+    {
+        q->setFocusPolicy(Qt::StrongFocus);
+        layout = new QGraphicsGridLayout(q);
+        q->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        layout->setContentsMargins(1, 1, 1, 1);
+        scrollingWidget = new QGraphicsWidget(q);
+        layout->addItem(scrollingWidget, 0, 0);
+        borderSvg = new Plasma::Svg(q);
+        borderSvg->setImagePath("widgets/scrollwidget");
+
+        adjustScrollbarsTimer = new QTimer(q);
+        adjustScrollbarsTimer->setSingleShot(true);
+        QObject::connect(adjustScrollbarsTimer, SIGNAL(timeout()), q, SLOT(adjustScrollbars()));
+
+        verticalScrollBarPolicy = Qt::ScrollBarAsNeeded;
+        verticalScrollBar = new Plasma::ScrollBar(q);
+        verticalScrollBar->setFocusPolicy(Qt::NoFocus);
+        layout->addItem(verticalScrollBar, 0, 1);
+        verticalScrollBar->nativeWidget()->setMinimum(0);
+        verticalScrollBar->nativeWidget()->setMaximum(100);
+        QObject::connect(verticalScrollBar, SIGNAL(valueChanged(int)), q, SLOT(verticalScroll(int)));
+
+        horizontalScrollBarPolicy = Qt::ScrollBarAsNeeded;
+        horizontalScrollBar = new Plasma::ScrollBar(q);
+        verticalScrollBar->setFocusPolicy(Qt::NoFocus);
+        horizontalScrollBar->setOrientation(Qt::Horizontal);
+        layout->addItem(horizontalScrollBar, 1, 0);
+        horizontalScrollBar->nativeWidget()->setMinimum(0);
+        horizontalScrollBar->nativeWidget()->setMaximum(100);
+        QObject::connect(horizontalScrollBar, SIGNAL(valueChanged(int)), q, SLOT(horizontalScroll(int)));
+    }
+
     void adjustScrollbars()
     {
         if (!widget) {
@@ -277,39 +310,18 @@ public:
 };
 
 
+ScrollWidget::ScrollWidget(QGraphicsItem *parent)
+    : QGraphicsWidget(parent),
+      d(new ScrollWidgetPrivate(this))
+{
+    d->commonConstructor();
+}
+
 ScrollWidget::ScrollWidget(QGraphicsWidget *parent)
     : QGraphicsWidget(parent),
       d(new ScrollWidgetPrivate(this))
 {
-    setFocusPolicy(Qt::StrongFocus);
-    d->layout = new QGraphicsGridLayout(this);
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    d->layout->setContentsMargins(1, 1, 1, 1);
-    d->scrollingWidget = new QGraphicsWidget(this);
-    d->layout->addItem(d->scrollingWidget, 0, 0);
-    d->borderSvg = new Plasma::Svg(this);
-    d->borderSvg->setImagePath("widgets/scrollwidget");
-
-    d->adjustScrollbarsTimer = new QTimer(this);
-    d->adjustScrollbarsTimer->setSingleShot(true);
-    connect(d->adjustScrollbarsTimer, SIGNAL(timeout()), this, SLOT(adjustScrollbars()));
-
-    d->verticalScrollBarPolicy = Qt::ScrollBarAsNeeded;
-    d->verticalScrollBar = new Plasma::ScrollBar(this);
-    d->verticalScrollBar->setFocusPolicy(Qt::NoFocus);
-    d->layout->addItem(d->verticalScrollBar, 0, 1);
-    d->verticalScrollBar->nativeWidget()->setMinimum(0);
-    d->verticalScrollBar->nativeWidget()->setMaximum(100);
-    connect(d->verticalScrollBar, SIGNAL(valueChanged(int)), this, SLOT(verticalScroll(int)));
-
-    d->horizontalScrollBarPolicy = Qt::ScrollBarAsNeeded;
-    d->horizontalScrollBar = new Plasma::ScrollBar(this);
-    d->verticalScrollBar->setFocusPolicy(Qt::NoFocus);
-    d->horizontalScrollBar->setOrientation(Qt::Horizontal);
-    d->layout->addItem(d->horizontalScrollBar, 1, 0);
-    d->horizontalScrollBar->nativeWidget()->setMinimum(0);
-    d->horizontalScrollBar->nativeWidget()->setMaximum(100);
-    connect(d->horizontalScrollBar, SIGNAL(valueChanged(int)), this, SLOT(horizontalScroll(int)));
+    d->commonConstructor();
 }
 
 ScrollWidget::~ScrollWidget()
