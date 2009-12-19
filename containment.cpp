@@ -1028,7 +1028,10 @@ void Containment::setScreen(int newScreen, int newDesktop)
                          << "and is" << currently->activity()
                          << (QObject*)currently << "i'm" << (QObject*)this;
                 //kDebug() << "setScreen due to swap";
+                //make the view completely forget about us
+                emit screenChanged(d->screen, -1, this);
                 currently->setScreen(-1, newDesktop);
+                emit screenChanged(-1, newDesktop, currently);
                 swapScreensWith = currently;
             }
         }
@@ -1050,9 +1053,7 @@ void Containment::setScreen(int newScreen, int newDesktop)
     updateConstraints(Plasma::ScreenConstraint);
 
     if (oldScreen != newScreen || oldDesktop != newDesktop) {
-        if (oldScreen != newScreen) {
-            emit screenChanged(oldScreen, newScreen, this);
-        }
+        emit screenChanged(oldScreen, newScreen, this);
 
         KConfigGroup c = config();
         c.writeEntry("screen", d->screen);
