@@ -150,18 +150,32 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
 
     int value = int(0xff * amount);
 
-    if (value == 0) {
-        return from;
-    } else if (value == 0xff) {
-        return to;
+    //paint to in the center of from
+    QRect toRect = to.rect();
+    toRect.moveCenter(from.rect().center());
+
+    if (from.size() == to.size()) {
+        if (value == 0) {
+            return from;
+        } else if (value == 0xff) {
+            return to;
+        }
+    } else {
+        if (value == 0) {
+            return from;
+        } else if (value == 0xff) {
+            QPixmap result(from.size());
+            result.fill(Qt::transparent);
+            QPainter p(&result);
+            p.setCompositionMode(QPainter::CompositionMode_Source);
+            p.drawPixmap(toRect.topLeft(), to);
+            p.end();
+        }
     }
 
     QColor color;
     color.setAlphaF(amount);
 
-    //paint to in the center of from
-    QRect toRect = to.rect();
-    toRect.moveCenter(from.rect().center());
 
     // If the native paint engine supports Porter/Duff compositing and CompositionMode_Plus
     if (from.paintEngine()->hasFeature(QPaintEngine::PorterDuff) &&
