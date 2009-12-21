@@ -28,6 +28,7 @@ class QGraphicsSceneWheelEvent;
 class QKeyEvent;
 #include <QObject>
 #include <QPointF>
+#include <QtCore/QAbstractAnimation>
 
 
 namespace Plasma
@@ -42,6 +43,10 @@ public:
     KineticScrolling(QGraphicsWidget *parent);
     ~KineticScrolling();
     void setWidget(QGraphicsWidget *parent);
+
+Q_SIGNALS:
+    void stateChanged(QAbstractAnimation::State newState,
+            QAbstractAnimation::State oldState);
 
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);

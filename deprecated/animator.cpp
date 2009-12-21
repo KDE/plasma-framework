@@ -40,8 +40,9 @@ namespace Plasma
 static const int MIN_TICK_RATE_INT = 10;
 static const qreal MIN_TICK_RATE = 10;
 
-AnimatorPrivate::AnimatorPrivate()
-    : driver(0),
+AnimatorPrivate::AnimatorPrivate(Animator *parent)
+    : q(parent),
+      driver(0),
       animId(0),
       timerId(0)
 {
@@ -117,6 +118,18 @@ void AnimatorPrivate::performMovement(qreal amount, const MovementState *state)
     }
 }
 
+void AnimatorPrivate::scrollStateChanged(QAbstractAnimation::State newState,
+        QAbstractAnimation::State oldState)
+{
+    KineticScrolling *scroll = qobject_cast<KineticScrolling*>(q->sender());
+    if (!scroll) {
+        kDebug() << "Could not find KineticScrolling object";
+        return;
+    }
+
+    emit q->scrollStateChanged(scrollingManagers.key(scroll), newState, oldState);
+}
+
 class AnimatorSingleton
 {
     public:
@@ -132,7 +145,7 @@ Animator *Animator::self()
 
 Animator::Animator(QObject *parent)
     : QObject(parent),
-      d(new AnimatorPrivate)
+      d(new AnimatorPrivate(this))
 {
     d->init(this);
 }
@@ -752,12 +765,18 @@ void Animator::registerScrollingManager(QGraphicsWidget *widget)
     if (!d->scrollingManagers.contains(widget)) {
         KineticScrolling *scroll = new KineticScrolling(widget);
         d->scrollingManagers.insert(widget, scroll);
+        connect(scroll,
+                SIGNAL(stateChanged(QAbstractAnimation::State, QAbstractAnimation::State)), this,
+                SLOT(scrollStateChanged(QAbstractAnimation::State, QAbstractAnimation::State)));
     }
 }
 
 void Animator::unregisterScrollingManager(QGraphicsWidget *widget)
 {
     if (d->scrollingManagers.contains(widget)) {
+        disconnect(d->scrollingManagers.value(widget),
+                SIGNAL(stateChanged(QAbstractAnimation::State, QAbstractAnimation::State)), this,
+                SLOT(scrollStateChanged(QAbstractAnimation::State, QAbstractAnimation::State)));
         d->scrollingManagers.value(widget)->deleteLater();
         d->scrollingManagers.remove(widget);
     }

@@ -90,10 +90,12 @@ struct CustomAnimationState
     char *slot;
 };
 
+class Animator;
+
 class AnimatorPrivate
 {
     public:
-        AnimatorPrivate();
+        AnimatorPrivate(Animator *parent);
         ~AnimatorPrivate();
 
         qreal calculateProgress(int time, int duration, Animator::CurveShape curve);
@@ -107,6 +109,10 @@ class AnimatorPrivate
         void animatedElementDestroyed(QObject*);
         void customAnimReceiverDestroyed(QObject*);
 
+        void scrollStateChanged(QAbstractAnimation::State newState,
+                QAbstractAnimation::State oldState);
+
+        Animator *q;
         AnimationDriver *driver;
         int animId;
         int timerId;

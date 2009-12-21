@@ -285,6 +285,14 @@ public:
         dragHandles.remove(static_cast<QGraphicsWidget *>(destroyed));
     }
 
+    void scrollStateChanged(QGraphicsWidget *widget, QAbstractAnimation::State newState,
+            QAbstractAnimation::State oldState)
+    {
+        if (widget == q) {
+            emit q->scrollStateChanged(newState, oldState);
+        }
+    }
+
     ScrollWidget *q;
     QGraphicsWidget *scrollingWidget;
     QWeakPointer<QGraphicsWidget> widget;
@@ -338,6 +346,11 @@ void ScrollWidget::setWidget(QGraphicsWidget *widget)
 
     d->widget = widget;
     Plasma::Animator::self()->registerScrollingManager(this);
+    connect(Plasma::Animator::self(),
+            SIGNAL(scrollStateChanged(QGraphicsWidget *, QAbstractAnimation::State,
+                    QAbstractAnimation::State)), this,
+            SLOT(scrollStateChanged(QGraphicsWidget *, QAbstractAnimation::State,
+                    QAbstractAnimation::State)));
     //it's not good it's setting a size policy here, but it's done to be retrocompatible with older applications
 
     if (widget) {

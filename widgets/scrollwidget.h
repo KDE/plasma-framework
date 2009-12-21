@@ -20,6 +20,7 @@
 #ifndef PLASMA_SCROLLWIDGET_H
 #define PLASMA_SCROLLWIDGET_H
 
+#include <QtCore/QAbstractAnimation>
 #include <QtGui/QGraphicsWidget>
 
 #include <plasma/plasma_export.h>
@@ -181,6 +182,10 @@ public:
      */
     QWidget *nativeWidget() const;
 
+Q_SIGNALS:
+    void scrollStateChanged(QAbstractAnimation::State newState,
+            QAbstractAnimation::State oldState);
+
 protected:
 
     void resizeEvent(QGraphicsSceneResizeEvent *event);
@@ -202,6 +207,10 @@ private:
     Q_PRIVATE_SLOT(d, void makeItemVisible())
     Q_PRIVATE_SLOT(d, void cleanupDragHandles(QObject *destroyed))
     Q_PRIVATE_SLOT(d, void adjustScrollbars())
+    Q_PRIVATE_SLOT(d, void scrollStateChanged(QGraphicsWidget *, QAbstractAnimation::State,
+                QAbstractAnimation::State))
+
+    friend class ScrollWidgetPrivate;
 };
 
 } // namespace Plasma

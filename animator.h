@@ -23,6 +23,7 @@
 
 #include <QtGui/QImage>
 #include <QtCore/QObject>
+#include <QtCore/QAbstractAnimation>
 
 #include <plasma/plasma_export.h>
 
@@ -201,6 +202,8 @@ Q_SIGNALS:
     void movementFinished(QGraphicsItem *item);
     void elementAnimationFinished(int id);
     void customAnimationFinished(int id);
+    void scrollStateChanged(QGraphicsWidget *widget, QAbstractAnimation::State newState,
+            QAbstractAnimation::State oldState);
 
 protected:
     void timerEvent(QTimerEvent *event);
@@ -214,7 +217,10 @@ private:
     Q_PRIVATE_SLOT(d, void movingItemDestroyed(QObject*))
     Q_PRIVATE_SLOT(d, void animatedElementDestroyed(QObject*))
     Q_PRIVATE_SLOT(d, void customAnimReceiverDestroyed(QObject*))
+    Q_PRIVATE_SLOT(d, void scrollStateChanged(QAbstractAnimation::State,
+                QAbstractAnimation::State))
 
+    friend class AnimatorPrivate;
     AnimatorPrivate * const d;
 };
 
