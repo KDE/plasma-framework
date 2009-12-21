@@ -126,9 +126,6 @@ SignalPlotter::SignalPlotter(QGraphicsItem *parent)
     d->scaledBy = 1;
     d->showThinFrame = true;
 
-    // Anything smaller than this does not make sense.
-    setMinimumSize(QSizeF(KIconLoader::SizeSmall, KIconLoader::SizeSmall));
-
     d->showVerticalLines = true;
     d->verticalLinesDistance = 30;
     d->verticalLinesScroll = true;
@@ -142,6 +139,9 @@ SignalPlotter::SignalPlotter(QGraphicsItem *parent)
     d->showTopBar = true;
     d->stackPlots = true;
     d->fillPlots = true;
+
+    // Anything smaller than this does not make sense.
+    setMinimumSize(QSizeF(KIconLoader::SizeSmall, KIconLoader::SizeSmall));
 
     setSvgBackground("widgets/plot-background");
 
