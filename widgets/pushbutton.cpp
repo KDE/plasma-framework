@@ -168,6 +168,11 @@ PushButton::PushButton(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
       d(new PushButtonPrivate(this))
 {
+    d->background = new FrameSvg(this);
+    d->background->setImagePath("widgets/button");
+    d->background->setCacheAllRenderedFrames(true);
+    d->background->setElementPrefix("normal");
+
     KPushButton *native = new KPushButton;
     connect(native, SIGNAL(pressed()), this, SIGNAL(pressed()));
     connect(native, SIGNAL(released()), this, SIGNAL(released()));
@@ -178,10 +183,6 @@ PushButton::PushButton(QGraphicsWidget *parent)
 
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    d->background = new FrameSvg(this);
-    d->background->setImagePath("widgets/button");
-    d->background->setCacheAllRenderedFrames(true);
-    d->background->setElementPrefix("normal");
     d->syncBorders();
     setAcceptHoverEvents(true);
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(syncBorders()));
