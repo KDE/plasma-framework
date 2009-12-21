@@ -80,6 +80,7 @@ bool FocusIndicator::eventFilter(QObject *watched, QEvent *event)
         m_prefix = m_customPrefix + "hover";
         m_fade->setProperty("startOpacity", 0.0);
         m_fade->setProperty("targetOpacity", 1.0);
+        syncGeometry();
         m_fade->start();
     } else if (!m_parent->hasFocus() && event->type() == QEvent::GraphicsSceneHoverLeave) {
         m_fade->setProperty("startOpacity", 1.0);
@@ -92,6 +93,7 @@ bool FocusIndicator::eventFilter(QObject *watched, QEvent *event)
         m_prefix = m_customPrefix + "focus";
         m_fade->setProperty("startOpacity", 0.0);
         m_fade->setProperty("targetOpacity", 1.0);
+        syncGeometry();
         m_fade->start();
     } else if (!m_parent->isUnderMouse() && event->type() == QEvent::FocusOut) {
         m_fade->setProperty("startOpacity", 1.0);
