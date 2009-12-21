@@ -268,7 +268,7 @@ public:
                                                 (widget.data()->pos() + delta).toPoint());
     }
 
-    void makeItemVisible()
+    void makeItemVisible(QGraphicsItem *itemToBeVisible)
     {
         if (!widget) {
             return;
@@ -278,6 +278,13 @@ public:
         rectToBeVisible = rect;
 
         makeRectVisible();
+    }
+
+    void makeItemVisible()
+    {
+        if (widgetToBeVisible) {
+            makeItemVisible(widgetToBeVisible.data());
+        }
     }
 
     void cleanupDragHandles(QObject *destroyed)
@@ -307,7 +314,7 @@ public:
     ScrollBar *horizontalScrollBar;
     Qt::ScrollBarPolicy horizontalScrollBarPolicy;
     QString styleSheet;
-    QGraphicsItem *itemToBeVisible;
+    QWeakPointer<QGraphicsWidget> widgetToBeVisible;
     QRectF rectToBeVisible;
     QPointF dragHandleClicked;
     QSet<QGraphicsWidget *>dragHandles;
@@ -415,10 +422,16 @@ void ScrollWidget::ensureItemVisible(QGraphicsItem *item)
         parentOfItem = parentOfItem->parentItem();
     }
 
-    d->itemToBeVisible = item;
+    //since we can't ensure it'll stay alive we can delay only if it's a qgraphicswidget
+    QGraphicsWidget *widget = qgraphicsitem_cast<QGraphicsWidget *>(item);
+    if (widget) {
+        d->widgetToBeVisible = widget;
 
-    // We need to wait for the parent item to resize...
-    QTimer::singleShot(0, this, SLOT(makeItemVisible()));
+        // We need to wait for the parent item to resize...
+        QTimer::singleShot(0, this, SLOT(makeItemVisible()));
+    } else {
+        d->makeItemVisible(item);
+    }
 }
 
 void ScrollWidget::registerAsDragHandle(QGraphicsWidget *item)
