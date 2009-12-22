@@ -36,6 +36,10 @@
 namespace Plasma
 {
 
+// Any attempt to generate a frame whose width or height is larger than this
+// will be rejected
+static const int MAX_FRAME_SIZE = 100000;
+
 FrameSvg::FrameSvg(QObject *parent)
     : Svg(parent),
       d(new FrameSvgPrivate(this))
@@ -489,6 +493,10 @@ void FrameSvgPrivate::generateFrameBackground(FrameData *frame)
 
     if (!size.isValid()) {
         kWarning() << "Invalid frame size" << size;
+        return;
+    }
+    if (size.width() >= MAX_FRAME_SIZE || size.height() >= MAX_FRAME_SIZE) {
+        kWarning() << "Not generating frame background for a size whose width or height is more than" << MAX_FRAME_SIZE << size;
         return;
     }
 
