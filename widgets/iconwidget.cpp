@@ -1059,7 +1059,8 @@ void IconWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
         PaintUtils::shadowBlur(shadow, 2, d->shadowColor);
         painter->drawImage(textBoundingRect.topLeft() + shadowPos, shadow);
-    } else if (!(d->text.isEmpty() && d->infoText.isEmpty())) {
+    } else if (!(d->text.isEmpty() && d->infoText.isEmpty()) &&
+               !textBoundingRect.isEmpty()) {
         QRect labelRect = d->labelRectangle(option, icon, d->text).toRect();
 
         foreach (QRect rect, d->haloRects) {
