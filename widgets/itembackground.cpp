@@ -102,7 +102,7 @@ void ItemBackground::setTarget(const QRectF &newGeometry)
     d->oldGeometry = geometry();
     d->newGeometry = newGeometry;
 
-    if (!isVisible() && (!d->target || !d->target->isVisible())) {
+    if (!isVisible() || (d->target && !d->target->isVisible())) {
         setGeometry(d->newGeometry);
         targetReached(newGeometry);
         if (d->target) {
@@ -169,7 +169,9 @@ void ItemBackground::setTargetItem(QGraphicsItem *target)
 
         QRectF rect = target->boundingRect();
         rect.moveTopLeft(mapToParent(mapFromScene(target->mapToScene(QPointF(0, 0)))));
+
         setTarget(rect);
+
 
         if (newTarget) {
             QObject *obj = 0;
