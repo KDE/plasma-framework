@@ -1297,10 +1297,11 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
         foreach (const KUrl &url, urls) {
             if (AccessManager::supportedProtocols().contains(url.protocol())) {
                 AccessAppletJob *job = AccessManager::self()->accessRemoteApplet(url);
-                if (dropEvent)
+                if (dropEvent) {
                     dropPoints[job] = dropEvent->pos();
-                else
+                } else {
                     dropPoints[job] = scenePos;
+                }
                 QObject::connect(AccessManager::self(), SIGNAL(finished(Plasma::AccessAppletJob*)),
                                  q, SLOT(remoteAppletReady(Plasma::AccessAppletJob*)));
             } else {
