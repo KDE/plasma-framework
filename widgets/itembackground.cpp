@@ -102,7 +102,7 @@ void ItemBackground::setTarget(const QRectF &newGeometry)
     d->oldGeometry = geometry();
     d->newGeometry = newGeometry;
 
-    if (!isVisible() || (d->target && !d->target->isVisible())) {
+    if (!isVisible() && (!d->target || !d->target->isVisible())) {
         setGeometry(d->newGeometry);
         targetReached(newGeometry);
         if (d->target) {
