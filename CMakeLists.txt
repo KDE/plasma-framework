@@ -1,3 +1,7 @@
+# strange conversion error in pushbutton.cpp
+kde4_no_enable_final(plasma)
+
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${KDE4_KDECORE_INCLUDES}
                     ${KDE4_KDEUI_INCLUDES}
