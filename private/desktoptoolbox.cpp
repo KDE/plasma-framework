@@ -748,10 +748,6 @@ void DesktopToolBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 void DesktopToolBox::hideToolBox()
 {
-    if (!isShowing()) {
-        return;
-    }
-
     Plasma::Animator *animdriver = Plasma::Animator::self();
     foreach (QGraphicsItem *tool, QGraphicsItem::children()) {
         if (tool == d->toolBacker) {
