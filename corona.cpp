@@ -433,7 +433,7 @@ Containment *Corona::containmentForScreen(int screen, int desktop) const
         if (containment->screen() == screen &&
             (desktop < 0 || containment->desktop() == desktop) &&
             (containment->containmentType() == Containment::DesktopContainment ||
-             containment->containmentType() >= Containment::CustomContainment)) {
+             containment->containmentType() == Containment::CustomContainment)) {
             return containment;
         }
     }
