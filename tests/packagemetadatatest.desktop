@@ -2,6 +2,7 @@
 Name=Package metadata test file
 Name[ar]=ملف اختبار البيانات الوصفية للحزمة
 Name[as]=সৰঞ্জাম মিটাডাটাৰ পৰীক্ষাৰ নথিপত্ৰ
+Name[ast]=Ficheru de prueba de metadatos de paquete
 Name[be@latin]=Fajł spraŭdžvańnia metaźviestak pakunka
 Name[bg]=Пробен файл за пакетни метаданни
 Name[ca]=Fitxer de proves de metadades de paquet
@@ -64,6 +65,7 @@ Name[zh_TW]=套件中繼資料測試檔
 Comment=A test desktop file to test the PackageMetaData class.
 Comment[ar]=ملف اختبار سطح المكتب لاختبار صف  PackageMetaData
 Comment[as]=PackageMetaData class পৰীক্ষা কৰিবলৈ এটা ডেষ্কট'প পৰীক্ষাৰ নথিপত্ৰ ।
+Comment[ast]=Un ficheru d'escritoriu de prueba pa comprobar la clase PackageMetaData.
 Comment[be@latin]=Testavy fajł rabočaha stała dla spraŭdžvańnia klasy „PackageMetaData”.
 Comment[bg]=Пробен файл за работиня плот за тестване на класа PackageMetaData
 Comment[ca]=Un fitxer d'escriptori de proves per provar la classe PackageMetaData.
