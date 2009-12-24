@@ -142,6 +142,20 @@ public:
      */
     QList<WId> windowsToPreview() const;
 
+    /**
+     * sets if when the mouse will be over a thumbnail the corresponding window
+     * will be highlighted by reducing opacity of all the other windows
+     * @since 4.4
+     */
+    void setHighlightWindows(bool highlight);
+
+    /**
+     * true if when the mouse will be over a thumbnail the corresponding window
+     * will be highlighted by reducing opacity of all the other windows
+     * @since 4.4
+     */
+    bool highlightWindows() const;
+
     /** Sets whether or not to autohide the tooltip, defaults to true
      */
     void setAutohide(bool autohide);

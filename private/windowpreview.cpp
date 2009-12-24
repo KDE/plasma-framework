@@ -40,7 +40,8 @@
 namespace Plasma {
 
 WindowPreview::WindowPreview(QWidget *parent)
-    : QWidget(parent)
+    : QWidget(parent),
+      m_highlightWindows(false)
 {
     m_background = new Plasma::FrameSvg(this);
     m_background->setImagePath("widgets/frame");
@@ -117,6 +118,17 @@ bool WindowPreview::isEmpty() const
   }
 
   return true;
+}
+
+
+void WindowPreview::setHighlightWindows(const bool highlight)
+{
+    m_highlightWindows = highlight;
+}
+
+bool WindowPreview::highlightWindows() const
+{
+    return m_highlightWindows;
 }
 
 void WindowPreview::setInfo()
@@ -196,6 +208,10 @@ void WindowPreview::mousePressEvent(QMouseEvent *event)
 
 void WindowPreview::mouseMoveEvent(QMouseEvent *event)
 {
+    if (!m_highlightWindows) {
+        return;
+    }
+
     int i = 0;
     foreach (QRect rect, m_thumbnailRects) {
         if (rect.contains(event->pos())) {
@@ -210,6 +226,9 @@ void WindowPreview::mouseMoveEvent(QMouseEvent *event)
 void WindowPreview::leaveEvent(QEvent *event)
 {
     Q_UNUSED(event)
+    if (!m_highlightWindows) {
+        return;
+    }
     WindowEffects::highlightWindows(effectiveWinId(), QList<WId>());
 }
 

@@ -49,6 +49,8 @@ public:
     void setInfo();
     bool isEmpty() const;
     virtual QSize sizeHint() const;
+    void setHighlightWindows(const bool highlight);
+    bool highlightWindows() const;
 
 Q_SIGNALS:
     void windowPreviewClicked(WId wid, Qt::MouseButtons buttons, Qt::KeyboardModifiers keys, const QPoint &screenPos);
@@ -65,6 +67,7 @@ private:
     mutable QList<QSize> windowSizes;
     QList <QRect> m_thumbnailRects;
     FrameSvg *m_background;
+    bool m_highlightWindows;
 
     static const int WINDOW_MARGIN = 10;
     static const int WINDOW_WIDTH = 200;

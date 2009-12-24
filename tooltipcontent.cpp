@@ -48,7 +48,8 @@ class ToolTipContentPrivate
 public:
     ToolTipContentPrivate()
       : autohide(true),
-        clickable(false)
+        clickable(false),
+        highlightWindows(false)
     {
     }
 
@@ -59,6 +60,7 @@ public:
     QHash<QString, ToolTipResource> resources;
     bool autohide : 1;
     bool clickable : 1;
+    bool highlightWindows : 1;
 };
 
 ToolTipContent::ToolTipContent()
@@ -168,6 +170,16 @@ void ToolTipContent::setWindowsToPreview(const QList<WId> & ids)
 QList<WId> ToolTipContent::windowsToPreview() const
 {
     return d->windowsToPreview;
+}
+
+void ToolTipContent::setHighlightWindows(bool highlight)
+{
+    d->highlightWindows = highlight;
+}
+
+bool ToolTipContent::highlightWindows() const
+{
+    return d->highlightWindows;
 }
 
 void ToolTipContent::setAutohide(bool autohide)
