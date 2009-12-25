@@ -112,6 +112,7 @@ Comment[sv]=Ett exempelinsticksprogram för test
 Comment[tr]=Test için sahte bir eklenti
 Comment[uk]=Додаток для тестування
 Comment[x-test]=xxA dummy plugin for testingxx
+Comment[zh_CN]=测试用的虚拟插件
 Comment[zh_TW]=測試用外掛程式
 Type=Service
 Icon=preferences-desktop-color
