@@ -450,6 +450,10 @@ void ExtenderItem::destroy()
 
 void ExtenderItem::setCollapsed(bool collapsed)
 {
+    if (d->collapsed == collapsed) {
+        return;
+    }
+
     config().writeEntry("isCollapsed", collapsed);
     d->collapsed = collapsed;
     if (d->widget) {

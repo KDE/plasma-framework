@@ -116,6 +116,10 @@ void ExtenderGroup::setAutoHide(bool autoHide)
 
 void ExtenderGroup::expandGroup()
 {
+    if (d->collapsed == false) {
+        return;
+    }
+
     d->collapsed = false;
     config().writeEntry("groupCollapsed", d->collapsed);
     action("collapse")->setVisible(true);
@@ -130,6 +134,10 @@ void ExtenderGroup::expandGroup()
 
 void ExtenderGroup::collapseGroup()
 {
+    if (d->collapsed == true) {
+        return;
+    }
+
     d->collapsed = true;
     config().writeEntry("groupCollapsed", d->collapsed);
     action("collapse")->setVisible(false);
