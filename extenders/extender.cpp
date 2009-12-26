@@ -732,10 +732,16 @@ void ExtenderPrivate::extenderItemDestroyed(QObject *object)
 
 bool Extender::isEmpty() const
 {
-    //If there are no items or only groups, consider this extender empty
+    //It's empty if it doesn't have items or has only group that are empty and autohide
     foreach (ExtenderItem *item, d->attachedExtenderItems) {
         if (!item->isGroup()) {
             return false;
+        } else {
+            //a static_cast here should be safe, it's not the case apparently
+            ExtenderGroup *group = qobject_cast<ExtenderGroup *>(item);
+            if (group && (!group->autoHide() || group->items().size() > 0)) {
+                return false;
+            }
         }
     }
 
