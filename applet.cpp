@@ -383,7 +383,6 @@ void Applet::setFailedToLaunch(bool failed, const QString &reason)
 
         setLayout(failureLayout);
         resize(300, 250);
-        setMinimumSize(failureLayout->minimumSize());
         d->background->resizeFrame(geometry().size());
     }
 
@@ -915,9 +914,6 @@ void Applet::setBackgroundHints(const BackgroundHints hints)
         d->background->getMargins(left, top, right, bottom);
         setContentsMargins(left, right, top, bottom);
         QSizeF fitSize(left + right, top + bottom);
-        if (minimumSize().expandedTo(fitSize) != minimumSize()) {
-            setMinimumSize(minimumSize().expandedTo(fitSize));
-        }
         d->background->resizeFrame(boundingRect().size());
 
         //if the background has an "overlay" element decide a random position for it and then save it so it's consistent across plasma starts
@@ -934,10 +930,6 @@ void Applet::setBackgroundHints(const BackgroundHints hints)
     } else if (d->background) {
         qreal left, top, right, bottom;
         d->background->getMargins(left, top, right, bottom);
-        //Setting a minimum size of 0,0 would result in the panel to be only
-        //on the first virtual desktop
-        setMinimumSize(qMax(minimumSize().width() - left - right, qreal(1.0)),
-                       qMax(minimumSize().height() - top - bottom, qreal(1.0)));
 
         delete d->background;
         d->background = 0;
@@ -1229,7 +1221,6 @@ void Applet::flushPendingConstraintsEvents()
 
         if (d->failed) {
             if (f == Vertical || f == Horizontal) {
-                setMinimumSize(0, 0);
                 QGraphicsLayoutItem *item = layout()->itemAt(1);
                 layout()->removeAt(1);
                 delete item;
