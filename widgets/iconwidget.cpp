@@ -594,6 +594,8 @@ QSizeF IconWidget::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
 {
     if (which == Qt::PreferredSize) {
         return sizeFromIconSize(KIconLoader::SizeMedium);
+    } else if (which == Qt::MinimumSize) {
+        return sizeFromIconSize(KIconLoader::SizeSmall);
     } else {
         return QGraphicsWidget::sizeHint(which, constraint);
     }
@@ -1119,6 +1121,7 @@ void IconWidget::setText(const QString &text)
         d->layoutIcons(&styleoption);
     }
     resize(sizeFromIconSize(d->iconSize.width()));
+    updateGeometry();
 }
 
 QString IconWidget::text() const
@@ -1136,6 +1139,7 @@ void IconWidget::setInfoText(const QString &text)
         d->layoutIcons(new QStyleOptionGraphicsItem);
     }
     resize(sizeFromIconSize(d->iconSize.width()));
+    updateGeometry();
 }
 
 QString IconWidget::infoText() const
