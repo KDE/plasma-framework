@@ -30,6 +30,7 @@
 #include <kmimetype.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
+#include <kiconloader.h>
 
 //Plasma
 #include <plasma/widgets/scrollbar.h>
@@ -619,6 +620,8 @@ QSizeF ScrollWidget::sizeHint(Qt::SizeHint which, const QSizeF & constraint) con
 
     if (which == Qt::PreferredSize && d->widget) {
         return (d->widget.data()->size()+QSize(d->borderSize, d->borderSize)).expandedTo(d->widget.data()->effectiveSizeHint(Qt::PreferredSize));
+    } else if (which == Qt::MinimumSize) {
+        return QSizeF(KIconLoader::SizeEnormous, KIconLoader::SizeEnormous);
     }
 
     return hint;
