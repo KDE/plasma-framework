@@ -41,6 +41,7 @@ class ExtenderGroupPrivate
         Plasma::Svg *svg;
         bool collapsed;
         bool autoHide;
+        bool autoCollapse;
 };
 }
 

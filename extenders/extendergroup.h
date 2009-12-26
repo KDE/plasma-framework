@@ -51,6 +51,8 @@ class PLASMA_EXPORT ExtenderGroup : public ExtenderItem
 {
     Q_OBJECT
     Q_PROPERTY(bool autoHide READ autoHide WRITE setAutoHide)
+    Q_PROPERTY(bool groupCollapsed READ isGroupCollapsed WRITE setGroupCollapsed)
+    Q_PROPERTY(bool autoCollapse READ isAutoCollapse WRITE setAutoCollapse)
 
     public:
         /**
@@ -72,11 +74,35 @@ class PLASMA_EXPORT ExtenderGroup : public ExtenderItem
         bool autoHide() const;
 
         /**
-         * @param autoHide whether or not this item hides itself if less then 2 items belong to this group.
+         * @param autoHide whether or not this item hides itself if less then 2 items belong to this group. The default value is true.
          */
         void setAutoHide(bool autoHide);
 
+        /**
+         * @return if the group is collapsed
+         * @since 4.4
+         */
+        bool isGroupCollapsed() const;
+
+        /**
+         * @return whether or not this item collapses itself when the group gets collapsed
+         * @since 4.4
+         */
+        bool isAutoCollapse() const;
+
+        /**
+         * @param autoCollapse whether or not this item collapses itself when the group gets collapsed, the default value is false
+         * @since 4.4
+         */
+        void setAutoCollapse(bool collapse);
+
     public Q_SLOTS:
+        /**
+         * expands or collapses this group
+         * @since 4.4
+         */
+        void setGroupCollapsed(bool collapsed);
+
         /**
          * Expands this group to show all ExtenderItems that are contained in this group.
          */

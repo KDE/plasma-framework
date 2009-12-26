@@ -114,8 +114,38 @@ void ExtenderGroup::setAutoHide(bool autoHide)
     }
 }
 
+bool ExtenderGroup::isAutoCollapse() const
+{
+    return d->autoCollapse;
+}
+
+void ExtenderGroup::setAutoCollapse(bool collapse)
+{
+    d->autoCollapse = collapse;
+    if (collapse) {
+        setCollapsed(d->collapsed);
+    }
+}
+
+bool ExtenderGroup::isGroupCollapsed() const
+{
+    return d->collapsed;
+}
+
+void ExtenderGroup::setGroupCollapsed(bool collapsed)
+{
+    if (collapsed) {
+        collapseGroup();
+    } else {
+        expandGroup();
+    }
+}
+
 void ExtenderGroup::expandGroup()
 {
+    if (d->autoCollapse) {
+        setCollapsed(false);
+    }
     if (d->collapsed == false) {
         return;
     }
@@ -134,6 +164,9 @@ void ExtenderGroup::expandGroup()
 
 void ExtenderGroup::collapseGroup()
 {
+    if (d->autoCollapse) {
+        setCollapsed(true);
+    }
     if (d->collapsed == true) {
         return;
     }
@@ -155,7 +188,8 @@ ExtenderGroupPrivate::ExtenderGroupPrivate(ExtenderGroup *group)
     : q(group),
       svg(new Svg(group)),
       collapsed(true),
-      autoHide(true)
+      autoHide(true),
+      autoCollapse(true)
 {
 }
 

@@ -198,6 +198,7 @@ void ExtenderItem::setWidget(QGraphicsItem *widget)
     widget->setPos(QPointF(d->bgLeft + d->dragLeft, panelSize.height() + d->bgTop));
     d->widget = widget;
     d->updateSizeHints();
+    d->widget->setVisible(!d->collapsed);
 }
 
 QGraphicsItem *ExtenderItem::widget() const
