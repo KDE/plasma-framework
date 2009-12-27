@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_TOOLBOX_P_H
-#define PLASMA_TOOLBOX_P_H
+#ifndef PLASMA_INTERNALTOOLBOX_P_H
+#define PLASMA_INTERNALTOOLBOX_P_H
 
 #include <QGraphicsWidget>
 
@@ -116,5 +116,6 @@ private:
 };
 
 } // Plasma namespace
-#endif // multiple inclusion guard
+
+#endif // PLASMA_INTERNALTOOLBOX_P_H
 

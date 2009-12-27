@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_RUNNERJOBS_H
-#define PLASMA_RUNNERJOBS_H
+#ifndef PLASMA_RUNNERJOBS_P_H
+#define PLASMA_RUNNERJOBS_P_H
 
 #include <QHash>
 #include <QMutex>
@@ -26,6 +26,8 @@
 
 #include <Weaver/Job.h>
 #include <Weaver/QueuePolicy.h>
+
+#include "abstractrunner.h"
 
 using ThreadWeaver::Job;
 
@@ -138,4 +140,4 @@ private:
 
 }
 
-#endif
+#endif // PLASMA_RUNNERJOBS_P_H

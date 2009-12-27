@@ -21,8 +21,8 @@
  * @file This file contains the definition for the Geometry effect.
  */
 
-#ifndef PLASMA_ANIMATIONS_GEO_H
-#define PLASMA_ANIMATIONS_GEO_H
+#ifndef PLASMA_ANIMATIONS_GEOMETRY_P_H
+#define PLASMA_ANIMATIONS_GEOMETRY_P_H
 
 #include <plasma/animations/animation.h>
 #include <plasma/plasma_export.h>
@@ -66,7 +66,7 @@ public:
     void setStartGeometry(const QRectF &geometry);
 
     /**
-     * Acess the final geometry of animated widget.
+     * Access the final geometry of animated widget.
      *
      * \todo: check if it was set and case negative, handle the error.
      * @return Target geometry.
@@ -91,6 +91,6 @@ private:
     QRectF m_targetGeometry;
 };
 
-}
+} // PLASMA_ANIMATIONS_GEOMETRY_P_H
 
 #endif

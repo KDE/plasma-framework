@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "runnermanager.h"
+#include "runnerjobs_p.h"
 
 #include <QTimer>
 
@@ -26,7 +26,7 @@
 //#include <Weaver/DebuggingAids.h>
 #include <Weaver/ThreadWeaver.h>
 
-#include "runnerjobs_p.h"
+#include "runnermanager.h"
 #include "plasma/querymatch.h"
 
 using ThreadWeaver::Job;

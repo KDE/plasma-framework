@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_WALLPAPERRENDERTHREAD_H
-#define PLASMA_WALLPAPERRENDERTHREAD_H
+#ifndef PLASMA_WALLPAPERRENDERTHREAD_P_H
+#define PLASMA_WALLPAPERRENDERTHREAD_P_H
 
 #include <QColor>
 #include <QImage>
@@ -70,4 +70,5 @@ private:
 };
 
 } // namespace Plasma
-#endif // RENDERTHREAD_H
+
+#endif // PLASMA_WALLPAPERRENDERTHREAD_P_H

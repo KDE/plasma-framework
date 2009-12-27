@@ -16,8 +16,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef SERVICEPROVIDER_H
-#define SERVICEPROVIDER_H
+#ifndef PLASMA_SERVICEPROVIDER_P_H
+#define PLASMA_SERVICEPROVIDER_P_H
 
 #include <QtCore/QMap>
 
@@ -59,11 +59,11 @@ class ServiceProvider : public Jolie::AbstractAdaptor
         void authorize(const Jolie::Message &message, const QByteArray &validToken);
         void authorizationSuccess(const Jolie::Message &message);
         void authorizationFailed(const Jolie::Message &message, const QByteArray &error);
-        
+
         Service                           *m_service;
         int                               m_descriptor;
         QString                           m_providerName;
-        
+
         QMap<ServiceJob*, Jolie::Message> m_messageMap;
         QMap<QString, QByteArray>         m_tokens;
         QMap<QByteArray, int>             m_descriptorMap;
@@ -73,4 +73,4 @@ class ServiceProvider : public Jolie::AbstractAdaptor
 
 } //namespace Plasma
 
-#endif //SERVICEPROVIDER_H
+#endif //PLASMA_SERVICEPROVIDER_P_H

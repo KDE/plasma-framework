@@ -21,8 +21,8 @@
  * @file This file contains the definition for the Slide effect.
  */
 
-#ifndef PLASMA_ANIMATIONS_SLIDE_H
-#define PLASMA_ANIMATIONS_SLIDE_H
+#ifndef PLASMA_ANIMATIONS_SLIDE_P_H
+#define PLASMA_ANIMATIONS_SLIDE_P_H
 
 #include "plasma/animations/animation.h"
 #include "plasma/plasma_export.h"
@@ -93,4 +93,4 @@ private:
 
 }
 
-#endif
+#endif // PLASMA_ANIMATIONS_SLIDE_P_H

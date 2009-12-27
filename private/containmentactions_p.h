@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_CONTEXTACTIONPRIVATE_H
-#define PLASMA_CONTEXTACTIONPRIVATE_H
+#ifndef PLASMA_CONTAINMENTACTIONSPRIVATE_H
+#define PLASMA_CONTAINMENTACTIONSPRIVATE_H
 
 #include "plasma/private/dataengineconsumer_p.h"
 
@@ -47,5 +47,5 @@ public:
 };
 
 } // namespace Plasma
-#endif
+#endif //PLASMA_CONTAINMENTACTIONSPRIVATE_H
 

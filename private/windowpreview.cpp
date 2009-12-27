@@ -213,7 +213,7 @@ void WindowPreview::mouseMoveEvent(QMouseEvent *event)
     }
 
     int i = 0;
-    foreach (QRect rect, m_thumbnailRects) {
+    foreach (const QRect &rect, m_thumbnailRects) {
         if (rect.contains(event->pos())) {
             WindowEffects::highlightWindows(effectiveWinId(), QList<WId>()<<effectiveWinId()<<ids[i]);
             return;

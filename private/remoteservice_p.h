@@ -16,8 +16,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_REMOTESERVICE_H
-#define PLASMA_REMOTESERVICE_H
+#ifndef PLASMA_REMOTESERVICE_P_H
+#define PLASMA_REMOTESERVICE_P_H
 
 #include <QtCore/QQueue>
 #include <QtJolie/Message>
@@ -83,4 +83,4 @@ class RemoteService : public Plasma::Service
 
 } //namespace Plasma
 
-#endif // REMOTESERVICE_H
+#endif // PLASMA_REMOTESERVICE_P_H

@@ -1065,7 +1065,7 @@ void IconWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
                !textBoundingRect.isEmpty()) {
         QRect labelRect = d->labelRectangle(option, icon, d->text).toRect();
 
-        foreach (QRect rect, d->haloRects) {
+        foreach (const QRect &rect, d->haloRects) {
             Plasma::PaintUtils::drawHalo(painter, rect);
         }
     }

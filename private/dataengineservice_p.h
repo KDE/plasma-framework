@@ -16,8 +16,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PUBLICKEYSERVICE_H
-#define PUBLICKEYSERVICE_H
+#ifndef PLASMA_DATAENGINESERVICE_P_H
+#define PLASMA_DATAENGINESERVICE_P_H
 
 #include <QStringList>
 
@@ -57,4 +57,4 @@ class DataEngineService : public Plasma::Service
 
 }
 
-#endif 
+#endif // PLASMA_DATAENGINESERVICE_P_H

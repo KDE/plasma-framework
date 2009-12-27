@@ -28,7 +28,6 @@
 #include <plasma/packagemetadata.h>
 #include <plasma/service.h>
 #include <plasma/servicejob.h>
-#include <plasma/packagemetadata.h>
 
 #include <kdebug.h>
 #include <ktemporaryfile.h>

@@ -207,7 +207,7 @@ void showWindowThumbnails(WId parent, const QList<WId> &windows, const QList<QRe
 #endif
 }
 
-void presentWindows(WId controler, const QList<WId> &ids)
+void presentWindows(WId controller, const QList<WId> &ids)
 {
 #ifdef Q_WS_X11
     const int numWindows = ids.count();
@@ -227,20 +227,20 @@ void presentWindows(WId controler, const QList<WId> &ids)
     if (!data.isEmpty()) {
         Display *dpy = QX11Info::display();
         Atom atom = XInternAtom(dpy, "_KDE_PRESENT_WINDOWS_GROUP", False);
-        XChangeProperty(dpy, controler, atom, atom, 32, PropModeReplace,
+        XChangeProperty(dpy, controller, atom, atom, 32, PropModeReplace,
                         reinterpret_cast<unsigned char *>(data.data()), data.size());
     }
 #endif
 }
 
-void presentWindows(WId controler, int desktop)
+void presentWindows(WId controller, int desktop)
 {
 #ifdef Q_WS_X11
     QVarLengthArray<long, 32> data(1);
     data[0] = desktop;
     Display *dpy = QX11Info::display();
     Atom atom = XInternAtom(dpy, "_KDE_PRESENT_WINDOWS_DESKTOP", False);
-    XChangeProperty(dpy, controler, atom, atom, 32, PropModeReplace,
+    XChangeProperty(dpy, controller, atom, atom, 32, PropModeReplace,
                     reinterpret_cast<unsigned char *>(data.data()), data.size());
 #endif
 }

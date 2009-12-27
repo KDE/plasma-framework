@@ -49,7 +49,7 @@ void ServiceMonitor::slotJobFinished(Plasma::ServiceJob *job)
     QPair<QString, QString> pair(location, engineName);
     kDebug() << "pair = " << pair;
     if (!m_consumer->m_remoteEngines.contains(pair)) {
-        kDebug() << "engine doesnt exist yet!";
+        kDebug() << "engine does not exist yet!";
     } else {
         KUrl engineLocation(location);
         engineLocation.setFileName(job->result().toString());

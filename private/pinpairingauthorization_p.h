@@ -17,8 +17,8 @@
  * Boston, MA  02110-1301  USA
  */
 
-#ifndef PLASMA_PINPAIRINGAUTHORIZATION_H
-#define PLASMA_PINPAIRINGAUTHORIZATION_H
+#ifndef PLASMA_PINPAIRINGAUTHORIZATION_P_H
+#define PLASMA_PINPAIRINGAUTHORIZATION_P_H
 
 #include <QtCore/QObject>
 
@@ -47,5 +47,5 @@ class PLASMA_EXPORT PinPairingAuthorization : public AuthorizationInterface
 };
 } // Plasma namespace
 
-#endif
+#endif // PLASMA_PINPAIRINGAUTHORIZATION_P_H
 

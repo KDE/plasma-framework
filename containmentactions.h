@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_CONTEXTACTION_H
-#define PLASMA_CONTEXTACTION_H
+#ifndef PLASMA_CONTAINMENTACTIONS_H
+#define PLASMA_CONTAINMENTACTIONS_H
 
 #include <QList>
 
@@ -256,4 +256,4 @@ K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
 K_EXPORT_PLUGIN(factory("plasma_containmentactions_" #libname)) \
 K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
 
-#endif // multiple inclusion guard
+#endif // PLASMA_CONTAINMENTACTIONS_H

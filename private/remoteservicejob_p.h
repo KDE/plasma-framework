@@ -16,8 +16,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_REMOTESERVICEJOB_H
-#define PLASMA_REMOTESERVICEJOB_H
+#ifndef PLASMA_REMOTESERVICEJOB_P_H
+#define PLASMA_REMOTESERVICEJOB_P_H
 
 #include <QtCore/QByteArray>
 #include <kurl.h>
@@ -67,4 +67,4 @@ class RemoteServiceJob : public Plasma::ServiceJob
 
 } // namespace Plasma
 
-#endif //REMOTESERVICEJOB_H
+#endif // PLASMA_REMOTESERVICEJOB_P_H

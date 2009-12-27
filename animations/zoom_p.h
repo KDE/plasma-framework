@@ -21,8 +21,8 @@
  * @file This file contains the definition for the Zoom animation.
  */
 
-#ifndef PLASMA_ANIMATIONS_ZOOM_H
-#define PLASMA_ANIMATIONS_ZOOM_H
+#ifndef PLASMA_ANIMATIONS_ZOOM_P_H
+#define PLASMA_ANIMATIONS_ZOOM_P_H
 
 #include <plasma/animations/animation.h>
 #include <plasma/plasma_export.h>
@@ -57,4 +57,4 @@ private:
 
 }
 
-#endif
+#endif // PLASMA_ANIMATIONS_ZOOM_P_H

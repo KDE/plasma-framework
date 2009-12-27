@@ -21,8 +21,8 @@
  * @file This file contains the definition for the Grow effect.
  */
 
-#ifndef PLASMA_ANIMATIONS_GROW_H
-#define PLASMA_ANIMATIONS_GROW_H
+#ifndef PLASMA_ANIMATIONS_GROW_P_H
+#define PLASMA_ANIMATIONS_GROW_P_H
 
 #include <plasma/animations/animation.h>
 #include <plasma/plasma_export.h>
@@ -85,4 +85,4 @@ private:
 
 }
 
-#endif
+#endif // PLASMA_ANIMATIONS_GROW_P_H

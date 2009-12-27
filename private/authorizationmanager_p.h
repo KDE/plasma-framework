@@ -17,8 +17,8 @@
  * Boston, MA  02110-1301  USA
  */
 
-#ifndef AUTHORIZATIONMANAGER_P_H
-#define AUTHORIZATIONMANAGER_P_H
+#ifndef PLASMA_AUTHORIZATIONMANAGER_P_H
+#define PLASMA_AUTHORIZATIONMANAGER_P_H
 
 #include "config-plasma.h"
 
@@ -90,4 +90,4 @@ class AuthorizationManagerPrivate
 
 }
 
-#endif
+#endif // PLASMA_AUTHORIZATIONMANAGER_P_H
