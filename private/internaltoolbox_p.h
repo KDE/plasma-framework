@@ -40,9 +40,7 @@ class InternalToolBoxPrivate;
 class InternalToolBox : public AbstractToolBox
 {
     Q_OBJECT
-#if QT_VERSION >= 0x040600
     Q_INTERFACES(QGraphicsItem)
-#endif
 public:
     enum Corner {
         Top = 0,
