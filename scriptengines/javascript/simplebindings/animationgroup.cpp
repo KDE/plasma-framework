@@ -16,9 +16,9 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "filedialogproxy.h"
 #include "animationgroup.h"
 
+#include "filedialogproxy.h"
 
 ParallelAnimationGroup::ParallelAnimationGroup(QObject *parent)
     : QParallelAnimationGroup(parent)

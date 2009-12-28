@@ -1,5 +1,5 @@
 /*
- *   Copyright 2009 Aaron J. Seigo
+ *   Copyright (c) 2009 Aaron J. Seigo <aseigo@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License version 2 as

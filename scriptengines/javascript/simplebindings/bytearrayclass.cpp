@@ -39,9 +39,11 @@
 **
 ****************************************************************************/
 
+#include "bytearrayclass.h"
+
 #include <QtScript/QScriptClassPropertyIterator>
 #include <QtScript/QScriptEngine>
-#include "bytearrayclass.h"
+
 #include "bytearrayprototype.h"
 
 #include <stdlib.h>

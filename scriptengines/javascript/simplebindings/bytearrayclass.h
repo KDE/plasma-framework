@@ -45,6 +45,7 @@
 #include <QtCore/QObject>
 #include <QtScript/QScriptClass>
 #include <QtScript/QScriptString>
+#include <QtScript/QScriptEngine>
 
 class ByteArrayClass : public QObject, public QScriptClass
 {

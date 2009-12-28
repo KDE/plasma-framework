@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef RUNNERSCRIPTQSCRIPT_H
-#define RUNNERSCRIPTQSCRIPT_H
+#ifndef JAVASCRIPTRUNNER_H
+#define JAVASCRIPTRUNNER_H
 
 #include <QScriptValue>
 
@@ -58,4 +58,4 @@ private:
 
 K_EXPORT_PLASMA_RUNNERSCRIPTENGINE(qscriptrunner, JavaScriptRunner)
 
-#endif // RUNNERSCRIPTQSCRIPT_H
+#endif // JAVASCRIPTRUNNER_H
