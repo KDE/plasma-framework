@@ -109,6 +109,7 @@ Q_SIGNALS:
 protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
     void changeEvent(QEvent *event);
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
 
 private:
     TextEditPrivate * const d;

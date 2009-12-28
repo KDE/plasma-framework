@@ -118,6 +118,9 @@ public:
      */
     QScrollBar *nativeWidget() const;
 
+protected:
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+
 public Q_SLOTS:
     /**
      * Sets the current value for the ScrollBar

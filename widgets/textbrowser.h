@@ -101,6 +101,7 @@ protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
     void wheelEvent(QGraphicsSceneWheelEvent *event);
     void changeEvent(QEvent *event);
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
 
 private:
     TextBrowserPrivate * const d;

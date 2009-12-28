@@ -25,6 +25,7 @@
 #include <QDir>
 #include <QStyleOptionGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
+#include <QMenu>
 
 #include <kmimetype.h>
 #include <kglobalsettings.h>
@@ -113,6 +114,7 @@ Label::Label(QGraphicsWidget *parent)
       d(new LabelPrivate(this))
 {
     QLabel *native = new QLabel;
+    native->setWindowFlags(native->windowFlags()|Qt::BypassGraphicsProxyWidget);
     d->textSelectable = false;
     connect(native, SIGNAL(linkActivated(QString)), this, SIGNAL(linkActivated(QString)));
     connect(native, SIGNAL(linkHovered(QString)), this, SIGNAL(linkHovered(QString)));
@@ -232,6 +234,13 @@ void Label::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Dat
     }
 
     setText(texts.join(" "));
+}
+
+void Label::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+{
+    QContextMenuEvent contextMenuEvent(QContextMenuEvent::Reason(event->reason()),
+                                       event->pos().toPoint(), event->screenPos(), event->modifiers());
+    QApplication::sendEvent(nativeWidget(), &contextMenuEvent);
 }
 
 void Label::resizeEvent(QGraphicsSceneResizeEvent *event)

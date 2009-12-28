@@ -20,6 +20,10 @@
 
 #include "scrollbar.h"
 
+#include <QApplication>
+#include <QContextMenuEvent>
+#include <QGraphicsSceneContextMenuEvent>
+
 #include <plasma/private/style_p.h>
 
 namespace Plasma
@@ -36,6 +40,7 @@ ScrollBar::ScrollBar(QGraphicsWidget *parent)
       d(new ScrollBarPrivate)
 {
    QScrollBar *scrollbar = new QScrollBar();
+   scrollbar->setWindowFlags(scrollbar->windowFlags()|Qt::BypassGraphicsProxyWidget);
    scrollbar->setAttribute(Qt::WA_NoSystemBackground);
    setWidget(scrollbar);
    d->style = Plasma::Style::sharedStyle();
@@ -116,6 +121,13 @@ void ScrollBar::setOrientation(Qt::Orientation orientation)
    QScrollBar *native = static_cast<QScrollBar *>(widget());
    native->setOrientation(orientation);
    resize(native->sizeHint());
+}
+
+void ScrollBar::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+{
+    QContextMenuEvent contextMenuEvent(QContextMenuEvent::Reason(event->reason()),
+                                       event->pos().toPoint(), event->screenPos(), event->modifiers());
+    QApplication::sendEvent(nativeWidget(), &contextMenuEvent);
 }
 
 }

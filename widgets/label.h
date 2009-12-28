@@ -152,6 +152,7 @@ protected:
                QWidget *widget);
     void changeEvent(QEvent *event);
     bool event(QEvent *event);
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
 
 private:
     Q_PRIVATE_SLOT(d, void setPalette())

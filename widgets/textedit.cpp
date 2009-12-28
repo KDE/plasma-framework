@@ -21,6 +21,8 @@
 
 #include <QPainter>
 #include <QScrollBar>
+#include <QMenu>
+#include <QGraphicsSceneContextMenuEvent>
 
 #include <kmimetype.h>
 #include <ktextedit.h>
@@ -75,7 +77,9 @@ TextEdit::TextEdit(QGraphicsWidget *parent)
 {
     d->style = Plasma::Style::sharedStyle();
 
-    setNativeWidget(new KTextEdit);
+    KTextEdit *nativeWidget = new KTextEdit;
+    nativeWidget->setWindowFlags(nativeWidget->windowFlags()|Qt::BypassGraphicsProxyWidget);
+    setNativeWidget(nativeWidget);
     connect(Theme::defaultTheme(), SIGNAL(themeChanged()),
             this, SLOT(setPalette()));
 }
@@ -151,6 +155,13 @@ void TextEdit::dataUpdated(const QString &sourceName, const Plasma::DataEngine::
             te->append(v.toString() + '\n');
         }
     }
+}
+
+void TextEdit::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+{
+    QMenu *popup = nativeWidget()->mousePopupMenu();
+    popup->exec(event->screenPos());
+    delete popup;
 }
 
 void TextEdit::resizeEvent(QGraphicsSceneResizeEvent *event)

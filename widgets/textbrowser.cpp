@@ -22,6 +22,7 @@
 #include <QPainter>
 #include <QScrollBar>
 #include <QGraphicsSceneWheelEvent>
+#include <QMenu>
 
 #include <kmimetype.h>
 #include <ktextbrowser.h>
@@ -101,6 +102,7 @@ TextBrowser::TextBrowser(QGraphicsWidget *parent)
       d(new TextBrowserPrivate(this))
 {
     KTextBrowser *native = new KTextBrowser;
+    native->setWindowFlags(native->windowFlags()|Qt::BypassGraphicsProxyWidget);
     connect(native, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
     connect(native, SIGNAL(textChanged()), this, SLOT(setFixedHeight()));
     setWidget(native);
@@ -169,6 +171,13 @@ void TextBrowser::dataUpdated(const QString &sourceName, const Plasma::DataEngin
             te->append(v.toString() + '\n');
         }
     }
+}
+
+void TextBrowser::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+{
+    QMenu *popup = nativeWidget()->createStandardContextMenu(event->screenPos());
+    popup->exec(event->screenPos());
+    delete popup;
 }
 
 void TextBrowser::resizeEvent(QGraphicsSceneResizeEvent *event)
