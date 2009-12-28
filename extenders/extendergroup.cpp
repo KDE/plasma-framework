@@ -189,7 +189,7 @@ ExtenderGroupPrivate::ExtenderGroupPrivate(ExtenderGroup *group)
       svg(new Svg(group)),
       collapsed(true),
       autoHide(true),
-      autoCollapse(true)
+      autoCollapse(false)
 {
 }
 
