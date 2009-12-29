@@ -188,9 +188,9 @@ Applet::~Applet()
         //problem with calling saveState(). Doing this in saveState() might be a possibility, but
         //that would require every extender savestate implementation to call it's parent function,
         //which isn't very nice.
-        d->extender->saveState();
+        d->extender.data()->saveState();
 
-        foreach (ExtenderItem *item, d->extender->attachedItems()) {
+        foreach (ExtenderItem *item, d->extender.data()->attachedItems()) {
             if (item->autoExpireDelay()) {
                 //destroy temporary extender items, or items that aren't detached, so their
                 //configuration won't linger after a plasma restart.
@@ -543,7 +543,7 @@ void AppletPrivate::createMessageOverlay(bool usePopup)
                 messageOverlayProxy->setWidget(popup->widget());
                 messageOverlay = new AppletOverlayWidget(messageOverlayProxy);
             } else if (popup->graphicsWidget() &&
-                       popup->graphicsWidget() != extender) {
+                       popup->graphicsWidget() != extender.data()) {
                 messageOverlay = new AppletOverlayWidget(popup->graphicsWidget());
             }
         }
@@ -570,7 +570,7 @@ void AppletPrivate::positionMessageOverlay()
         // popupapplet with widget()
         topItem = popup->d->proxy.data();
         messageOverlay->setGeometry(popup->widget()->contentsRect());
-    } else if (usePopup && popup->graphicsWidget() && popup->graphicsWidget() != extender) {
+    } else if (usePopup && popup->graphicsWidget() && popup->graphicsWidget() != extender.data()) {
         // popupapplet with graphicsWidget()
         topItem = popup->graphicsWidget();
         QGraphicsWidget *w = dynamic_cast<QGraphicsWidget *>(topItem);
@@ -746,7 +746,7 @@ Extender *Applet::extender() const
         new Extender(const_cast<Applet*>(this));
     }
 
-    return d->extender;
+    return d->extender.data();
 }
 
 void Applet::setBusy(bool busy)
@@ -2490,7 +2490,6 @@ bool Applet::isContainment() const
 AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet)
         : appletId(uniqueID),
           q(applet),
-          extender(0),
           service(0),
           preferredBackgroundHints(Applet::StandardBackground),
           backgroundHints(Applet::NoBackground),
@@ -2533,8 +2532,7 @@ AppletPrivate::~AppletPrivate()
     }
 
     if (extender) {
-        delete extender;
-        extender = 0;
+        delete extender.data();
     }
 
     delete script;

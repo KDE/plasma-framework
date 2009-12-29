@@ -167,7 +167,7 @@ QGraphicsWidget *PopupApplet::graphicsWidget()
     if (d->graphicsWidget != 0) {
         return d->graphicsWidget;
     } else {
-        return static_cast<Applet*>(this)->d->extender;
+        return static_cast<Applet*>(this)->d->extender.data();
     }
 }
 
@@ -617,8 +617,8 @@ void PopupAppletPrivate::internalTogglePopup()
         d->clearFocus();
     } else {
         if (q->graphicsWidget() &&
-            q->graphicsWidget() == static_cast<Applet*>(q)->d->extender &&
-            static_cast<Applet*>(q)->d->extender->isEmpty()) {
+            q->graphicsWidget() == static_cast<Applet*>(q)->d->extender.data() &&
+            static_cast<Applet*>(q)->d->extender.data()->isEmpty()) {
             // we have nothing to show, so let's not.
             return;
         }

@@ -125,7 +125,7 @@ public:
     Applet *q;
 
     // applet attributes
-    Extender *extender;
+    QWeakPointer<Extender> extender;
     Service *service;
     Applet::BackgroundHints preferredBackgroundHints;
     Applet::BackgroundHints backgroundHints;

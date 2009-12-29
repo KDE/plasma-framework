@@ -37,6 +37,7 @@
 #include "svg.h"
 #include "theme.h"
 #include "widgets/label.h"
+#include "widgets/scrollwidget.h"
 
 #include "private/applet_p.h"
 #include "private/applethandle_p.h"
@@ -100,7 +101,7 @@ Extender::Extender(Applet *applet)
     if (applet->d->extender) {
         kWarning() << "Applet already has an extender, and can have only one extender."
                    << "The previous extender will be destroyed.";
-        delete applet->d->extender;
+        delete applet->d->extender.data();
     }
     applet->d->extender = this;
 
@@ -118,7 +119,6 @@ Extender::Extender(Applet *applet)
 
 Extender::~Extender()
 {
-    d->applet->d->extender = 0;
     delete d;
 }
 
@@ -150,7 +150,7 @@ QList<ExtenderItem*> Extender::items() const
     foreach (Containment *c, containment->corona()->containments()) {
         foreach (Applet *applet, c->applets()) {
             if (applet->d->extender) {
-                foreach (ExtenderItem *item, applet->d->extender->attachedItems()) {
+                foreach (ExtenderItem *item, applet->d->extender.data()->attachedItems()) {
                     if (item->d->sourceApplet == d->applet) {
                         result.append(item);
                     }
@@ -181,7 +181,7 @@ QList<ExtenderItem*> Extender::detachedItems() const
     foreach (Containment *c, containment->corona()->containments()) {
         foreach (Applet *applet, c->applets()) {
             if (applet->d->extender) {
-                foreach (ExtenderItem *item, applet->d->extender->attachedItems()) {
+                foreach (ExtenderItem *item, applet->d->extender.data()->attachedItems()) {
                     if (item->d->sourceApplet == d->applet && item->isDetached()) {
                         result.append(item);
                     }
@@ -213,12 +213,12 @@ ExtenderItem *Extender::item(const QString &name) const
     foreach (Containment *c, containment->corona()->containments()) {
         foreach (Applet *applet, c->applets()) {
             if (applet->d->extender) {
-                if (applet->d->extender == this) {
+                if (applet->d->extender.data() == this) {
                     // skip it, we checked it already
                     continue;
                 }
 
-                foreach (ExtenderItem *item, applet->d->extender->attachedItems()) {
+                foreach (ExtenderItem *item, applet->d->extender.data()->attachedItems()) {
                     if (item->d->sourceApplet == d->applet && item->name() == name) {
                         return item;
                     }
@@ -418,16 +418,32 @@ void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
     if (pos == QPointF(-1, -1)) {
         //if just plain adding an item, add it at a sane position:
         if (!item->group()) {
+            ScrollWidget *scroll;
+            if (item->isGroup()) {
+                scroll = new Plasma::ScrollWidget(this);
+                QGraphicsWidget *mainWidget = new QGraphicsWidget(scroll);
+                QGraphicsLinearLayout *lay = new QGraphicsLinearLayout(mainWidget);
+            }
             if (appearance() == BottomUpStacked) {
                 //at the top
+                if (item->isGroup()) {
+                    d->layout->insertItem(0, scroll);
+                }
                 d->layout->insertItem(0, item);
             } else {
                 //at the bottom
                 d->layout->addItem(item);
+                if (item->isGroup()) {
+                    d->layout->addItem(scroll);
+                }
             }
         } else {
             //at the top in the group it belongs to
-            d->layout->insertItem(d->insertIndexFromPos(item->group()->pos()) + 1, item);
+//d->layout->insertItem(d->insertIndexFromPos(item->group()->pos()) + 1, item);
+            Plasma::ScrollWidget *scroll = dynamic_cast<Plasma::ScrollWidget *>(d->layout->itemAt(d->insertIndexFromPos(item->group()->pos()) + 1));
+            if (scroll) {
+                static_cast<QGraphicsLinearLayout *>(scroll->widget()->layout())->insertItem(0, item);
+            }
         }
     } else {
         d->layout->insertItem(d->insertIndexFromPos(pos), item);
@@ -440,6 +456,13 @@ void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
 
 void Extender::itemRemovedEvent(ExtenderItem *item)
 {
+    if (item->isGroup()) {
+        QGraphicsLayoutItem *layoutItem = d->layout->itemAt(d->insertIndexFromPos(item->pos()) + 1);
+        if (dynamic_cast<ScrollWidget *>(layoutItem)) {
+            d->layout->removeItem(layoutItem);
+            delete item;
+        }
+    }
     d->layout->removeItem(item);
 
     if (d->spacerWidget) {
