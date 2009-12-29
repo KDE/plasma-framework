@@ -1639,16 +1639,6 @@ void Containment::wheelEvent(QGraphicsSceneWheelEvent *event)
         return; //no unexpected click-throughs
     }
 
-    QString trigger = ContainmentActions::eventToString(event);
-
-    if (d->actionPlugins.contains(trigger)) {
-        if (d->prepareContainmentActions(trigger, event->screenPos())) {
-            d->actionPlugins.value(trigger)->contextEvent(event);
-        }
-        event->accept();
-        return;
-    }
-
     if (d->wallpaper && d->wallpaper->isInitialized()) {
         QGraphicsItem *item = scene()->itemAt(event->scenePos());
         if (item == this) {
@@ -1659,6 +1649,16 @@ void Containment::wheelEvent(QGraphicsSceneWheelEvent *event)
                 return;
             }
         }
+    }
+
+    QString trigger = ContainmentActions::eventToString(event);
+
+    if (d->actionPlugins.contains(trigger)) {
+        if (d->prepareContainmentActions(trigger, event->screenPos())) {
+            d->actionPlugins.value(trigger)->contextEvent(event);
+        }
+        event->accept();
+        return;
     }
 
     event->ignore();
