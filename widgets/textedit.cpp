@@ -77,9 +77,7 @@ TextEdit::TextEdit(QGraphicsWidget *parent)
 {
     d->style = Plasma::Style::sharedStyle();
 
-    KTextEdit *nativeWidget = new KTextEdit;
-    nativeWidget->setWindowFlags(nativeWidget->windowFlags()|Qt::BypassGraphicsProxyWidget);
-    setNativeWidget(nativeWidget);
+    setNativeWidget(new KTextEdit);
     connect(Theme::defaultTheme(), SIGNAL(themeChanged()),
             this, SLOT(setPalette()));
 }
@@ -125,6 +123,8 @@ void TextEdit::setNativeWidget(KTextEdit *nativeWidget)
     if (widget()) {
         widget()->deleteLater();
     }
+
+    nativeWidget->setWindowFlags(nativeWidget->windowFlags()|Qt::BypassGraphicsProxyWidget);
 
     connect(nativeWidget, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
 
