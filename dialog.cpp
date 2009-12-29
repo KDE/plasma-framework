@@ -207,12 +207,16 @@ void DialogPrivate::adjustView()
         int left, top, right, bottom;
         q->getContentsMargins(&left, &top, &right, &bottom);
 
-        q->setMinimumSize(qMin(int(graphicsWidget->minimumSize().width()) + left + right, QWIDGETSIZE_MAX),
-                          qMin(int(graphicsWidget->minimumSize().height()) + top + bottom, QWIDGETSIZE_MAX));
-        q->setMaximumSize(qMin(int(graphicsWidget->maximumSize().width()) + left + right, QWIDGETSIZE_MAX),
-                          qMin(int(graphicsWidget->maximumSize().height()) + top + bottom, QWIDGETSIZE_MAX));
-        q->resize(qMin(int(graphicsWidget->size().width()) + left + right, QWIDGETSIZE_MAX),
-                  qMin(int(graphicsWidget->size().height()) + top + bottom, QWIDGETSIZE_MAX));
+        QDesktopWidget *desktop = QApplication::desktop();
+        QSize maxSize = desktop->availableGeometry(desktop->screenNumber(q)).size();
+
+
+        q->setMinimumSize(qMin(int(graphicsWidget->minimumSize().width()) + left + right, maxSize.width()),
+                          qMin(int(graphicsWidget->minimumSize().height()) + top + bottom, maxSize.height()));
+        q->setMaximumSize(qMin(int(graphicsWidget->maximumSize().width()) + left + right, maxSize.width()),
+                          qMin(int(graphicsWidget->maximumSize().height()) + top + bottom, maxSize.height()));
+        q->resize(qMin(int(graphicsWidget->size().width()) + left + right, maxSize.width()),
+                  qMin(int(graphicsWidget->size().height()) + top + bottom, maxSize.height()));
         q->updateGeometry();
 
         //reposition and resize the view.
