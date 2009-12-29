@@ -37,7 +37,6 @@
 #include "svg.h"
 #include "theme.h"
 #include "widgets/label.h"
-#include "widgets/scrollwidget.h"
 
 #include "private/applet_p.h"
 #include "private/applethandle_p.h"
@@ -418,32 +417,16 @@ void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
     if (pos == QPointF(-1, -1)) {
         //if just plain adding an item, add it at a sane position:
         if (!item->group()) {
-            ScrollWidget *scroll;
-            if (item->isGroup()) {
-                scroll = new Plasma::ScrollWidget(this);
-                QGraphicsWidget *mainWidget = new QGraphicsWidget(scroll);
-                QGraphicsLinearLayout *lay = new QGraphicsLinearLayout(mainWidget);
-            }
             if (appearance() == BottomUpStacked) {
                 //at the top
-                if (item->isGroup()) {
-                    d->layout->insertItem(0, scroll);
-                }
                 d->layout->insertItem(0, item);
             } else {
                 //at the bottom
                 d->layout->addItem(item);
-                if (item->isGroup()) {
-                    d->layout->addItem(scroll);
-                }
             }
         } else {
             //at the top in the group it belongs to
-//d->layout->insertItem(d->insertIndexFromPos(item->group()->pos()) + 1, item);
-            Plasma::ScrollWidget *scroll = dynamic_cast<Plasma::ScrollWidget *>(d->layout->itemAt(d->insertIndexFromPos(item->group()->pos()) + 1));
-            if (scroll) {
-                static_cast<QGraphicsLinearLayout *>(scroll->widget()->layout())->insertItem(0, item);
-            }
+            d->layout->insertItem(d->insertIndexFromPos(item->group()->pos()) + 1, item);
         }
     } else {
         d->layout->insertItem(d->insertIndexFromPos(pos), item);
@@ -456,13 +439,6 @@ void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
 
 void Extender::itemRemovedEvent(ExtenderItem *item)
 {
-    if (item->isGroup()) {
-        QGraphicsLayoutItem *layoutItem = d->layout->itemAt(d->insertIndexFromPos(item->pos()) + 1);
-        if (dynamic_cast<ScrollWidget *>(layoutItem)) {
-            d->layout->removeItem(layoutItem);
-            delete item;
-        }
-    }
     d->layout->removeItem(item);
 
     if (d->spacerWidget) {
