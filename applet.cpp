@@ -1046,7 +1046,7 @@ void Applet::showMessage(const QIcon &icon, const QString &message, const Messag
 
     if (buttons & ButtonOk) {
         PushButton *ok = new PushButton(mainWidget);
-        ok->setText(i18n("Ok"));
+        ok->setText(i18n("OK"));
         ok->setIcon(KIcon("dialog-ok"));
         buttonLayout->addItem(ok);
         connect(ok, SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
