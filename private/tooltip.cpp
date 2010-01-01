@@ -91,7 +91,7 @@ public:
         QTextLine line;
         for (int i = 0; i < layout->lineCount(); ++i) {
             line = layout->lineAt(i);
-            m_haloRects.append(line.naturalTextRect().translated(layout->position().toPoint()).toRect());
+            m_haloRects.append(line.naturalTextRect().translated(layout->position().toPoint()).toRect().translated(m_margin, m_margin));
         }
 
         update();
@@ -99,7 +99,7 @@ public:
 
     QSize minimumSizeHint() const
     {
-        return m_document->size().toSize();
+        return m_document->size().toSize() + QSize(m_margin, m_margin)*2;
     }
 
     QSize maximumSizeHint() const
@@ -115,6 +115,7 @@ public:
             Plasma::PaintUtils::drawHalo(&p, rect);
         }
 
+        p.translate(m_margin, m_margin);
         m_document->drawContents(&p, event->rect());
     }
 
@@ -145,6 +146,7 @@ private:
     QTextDocument *m_document;
     QString m_anchor;
     QList<QRectF> m_haloRects;
+    static const int m_margin = 6;
 };
 
 class ToolTipPrivate
