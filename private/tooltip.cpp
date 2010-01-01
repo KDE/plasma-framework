@@ -111,11 +111,13 @@ public:
     {
         QPainter p(this);
 
-        foreach (const QRectF &rect, m_haloRects) {
-            Plasma::PaintUtils::drawHalo(&p, rect);
-        }
+        if (Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor).value() < 128) {
+            foreach (const QRectF &rect, m_haloRects) {
+                Plasma::PaintUtils::drawHalo(&p, rect);
+            }
 
-        p.translate(m_margin, m_margin);
+            p.translate(m_margin, m_margin);
+        }
         m_document->drawContents(&p, event->rect());
     }
 
