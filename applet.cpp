@@ -1047,6 +1047,7 @@ void Applet::showMessage(const QIcon &icon, const QString &message, const Messag
     if (buttons & ButtonOk) {
         PushButton *ok = new PushButton(mainWidget);
         ok->setText(i18n("Ok"));
+        ok->setIcon(KIcon("dialog-ok"));
         buttonLayout->addItem(ok);
         connect(ok, SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
     }
@@ -1068,6 +1069,7 @@ void Applet::showMessage(const QIcon &icon, const QString &message, const Messag
     if (buttons & ButtonCancel) {
         PushButton *cancel = new PushButton(mainWidget);
         cancel->setText(i18n("Cancel"));
+        cancel->setIcon(KIcon("dialog-cancel"));
         buttonLayout->addItem(cancel);
         connect(cancel, SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
     }
