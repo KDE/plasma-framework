@@ -30,6 +30,7 @@
 #include <QPalette>
 #include <QTextDocument>
 #include <QPropertyAnimation>
+#include <QTextBlock>
 #ifdef Q_WS_X11
 #include <QX11Info>
 #include <netwm.h>
@@ -40,6 +41,7 @@
 #include <kglobalsettings.h>
 
 #include <plasma/plasma.h>
+#include <plasma/paintutils.h>
 #include <plasma/theme.h>
 #include <plasma/framesvg.h>
 #include <plasma/windoweffects.h>
@@ -82,6 +84,16 @@ public:
         data.registerResources(m_document);
         m_document->setHtml("<p>" + html + "</p>");
         m_document->adjustSize();
+
+        m_haloRects.clear();
+        QTextLayout *layout = m_document->begin().layout();
+        //layout->setPosition(QPointF(textRect.x(), textBoundingRect->y()));
+        QTextLine line;
+        for (int i = 0; i < layout->lineCount(); ++i) {
+            line = layout->lineAt(i);
+            m_haloRects.append(line.naturalTextRect().translated(layout->position().toPoint()).toRect());
+        }
+
         update();
     }
 
@@ -98,6 +110,11 @@ public:
     void paintEvent(QPaintEvent *event)
     {
         QPainter p(this);
+
+        foreach (const QRectF &rect, m_haloRects) {
+            Plasma::PaintUtils::drawHalo(&p, rect);
+        }
+
         m_document->drawContents(&p, event->rect());
     }
 
@@ -122,10 +139,12 @@ public:
         }
     }
 
+
 private:
     ToolTip *m_toolTip;
     QTextDocument *m_document;
     QString m_anchor;
+    QList<QRectF> m_haloRects;
 };
 
 class ToolTipPrivate
