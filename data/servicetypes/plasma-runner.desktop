@@ -77,3 +77,6 @@ Comment[zh_TW]=KRunner 外掛程式
 [PropertyDef::TryExec]
 Type=QString
 
+[PropertyDef::X-Plasma-Args]
+Type=QStringList
+
