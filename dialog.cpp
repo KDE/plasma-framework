@@ -97,7 +97,6 @@ public:
     QTimer *moveTimer;
     QTimer *adjustViewTimer;
     Plasma::AspectRatioMode aspectRatioMode;
-    bool compositingActive;
 };
 
 void DialogPrivate::themeChanged()
@@ -107,8 +106,12 @@ void DialogPrivate::themeChanged()
     qreal rightWidth;
     qreal bottomHeight;
 
-    compositingActive = KWindowSystem::compositingActive();
     //kDebug() << leftWidth << topHeight << rightWidth << bottomHeight;
+    if (Plasma::Theme::defaultTheme()->windowTranslucencyEnabled()) {
+        q->setMask(background->mask());
+    } else {
+        q->setMask(QRect(QPoint(0, 0), q->size()));
+    }
 
     FrameSvg::EnabledBorders borders = FrameSvg::AllBorders;
 
@@ -287,8 +290,6 @@ Dialog::Dialog(QWidget *parent, Qt::WindowFlags f)
     pal.setColor(backgroundRole(), Qt::transparent);
     setPalette(pal);
 
-    d->compositingActive = KWindowSystem::compositingActive();
-
     d->adjustViewTimer = new QTimer(this);
     d->adjustViewTimer->setSingleShot(true);
     connect(d->adjustViewTimer, SIGNAL(timeout()), this, SLOT(adjustView()));
@@ -436,7 +437,7 @@ void Dialog::resizeEvent(QResizeEvent *e)
 {
     d->background->resizeFrame(e->size());
 
-    if (!d->compositingActive) {
+    if (Plasma::Theme::defaultTheme()->windowTranslucencyEnabled()) {
         setMask(d->background->mask());
     } else {
         setMask(QRect(QPoint(0, 0), size()));
