@@ -355,11 +355,10 @@ void FrameSvg::paintFrame(QPainter *painter, const QPointF &pos)
 QPixmap FrameSvgPrivate::alphaMask(const QString &maskType)
 {
     FrameData *frame = frames[prefix];
-
     QString maskPrefix;
 
-    if (q->hasElement("mask-" + maskType + '-' + prefix + "center")) {
-        maskPrefix = "mask-" + QString("-") + maskType;
+    if (!maskType.isEmpty() && q->hasElement("mask-" + maskType + '-' + prefix + "center")) {
+        maskPrefix = "mask-" + maskType + '-';
     } else if (q->hasElement("mask-" + prefix + "center")) {
         maskPrefix = "mask-";
     }
