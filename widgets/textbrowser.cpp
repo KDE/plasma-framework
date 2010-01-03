@@ -159,6 +159,11 @@ KTextBrowser *TextBrowser::nativeWidget() const
     return static_cast<KTextBrowser*>(widget());
 }
 
+void TextBrowser::append(const QString &text)
+{
+    return nativeWidget()->append(text);
+}
+
 void TextBrowser::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
 {
     Q_UNUSED(sourceName)

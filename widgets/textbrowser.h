@@ -92,6 +92,12 @@ public:
     KTextBrowser *nativeWidget() const;
 
 public Q_SLOTS:
+    /**
+     * Allows appending text to the text browser
+     * @since 4.4
+     */
+    void append(const QString &text);
+
     void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
 
 Q_SIGNALS:

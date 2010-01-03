@@ -143,6 +143,11 @@ KTextEdit *TextEdit::nativeWidget() const
     return static_cast<KTextEdit*>(widget());
 }
 
+void TextEdit::append(const QString &text)
+{
+    return nativeWidget()->append(text);
+}
+
 void TextEdit::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
 {
     Q_UNUSED(sourceName)
