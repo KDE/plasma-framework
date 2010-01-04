@@ -86,6 +86,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
     Q_PROPERTY(bool configurationRequired READ configurationRequired WRITE setConfigurationRequired)
     Q_PROPERTY(QRectF geometry READ geometry WRITE setGeometry)
     Q_PROPERTY(bool shouldConserveResources READ shouldConserveResources)
+    Q_PROPERTY(uint id READ id)
 
     public:
         typedef QList<Applet*> List;
