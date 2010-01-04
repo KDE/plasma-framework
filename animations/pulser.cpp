@@ -69,6 +69,7 @@ void PulseAnimation::resetPulser()
         m_under.data()->setOpacity(m_opacity);
         m_under.data()->setScale(m_scale);
         m_under.data()->setZValue(m_zvalue);
+        m_under.data()->hide();
     }
 }
 
@@ -81,6 +82,10 @@ void PulseAnimation::updateState(QAbstractAnimation::State newState, QAbstractAn
     if (oldState == Stopped && newState == Running) {
         if (!m_under.data() || m_under.data()->target() != targetWidget() || m_under.data()->size() != targetWidget()->size()) {
             setCopy();
+        }
+
+        if (m_under.data()->isVisible() == false) {
+            m_under.data()->setVisible(true);
         }
 
         m_under.data()->setOpacity(direction() == Forward ? 1 : 0);
