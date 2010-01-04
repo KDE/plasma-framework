@@ -53,6 +53,7 @@ set(plasma_LIB_SRCS
     animations/grow.cpp
     animations/slide.cpp
     animations/pulser.cpp
+    animations/pulsershadow.cpp
     animations/rotation.cpp
     animations/rotationstacked.cpp
     animations/stackedlayout.cpp
@@ -108,7 +109,6 @@ set(plasma_LIB_SRCS
     private/wallpaperrenderthread.cpp
     private/windowpreview.cpp
     private/kineticscroll.cpp
-    private/pulsershadow.cpp
     private/effects/halopainter.cpp
     querymatch.cpp
     remote/accessmanager.cpp
