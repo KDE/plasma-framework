@@ -70,8 +70,8 @@ void RotationStackedAnimation::setBackWidget(QGraphicsWidget *backWidget)
 {
     m_backWidget = backWidget;
 
-    if(widgetToAnimate()) {
-        sLayout->addWidget(widgetToAnimate());
+    if(targetWidget()) {
+        sLayout->addWidget(targetWidget());
         sLayout->addWidget(m_backWidget.data());
     }
 }
@@ -88,7 +88,7 @@ void RotationStackedAnimation::updateState(
         return;
     }
 
-    QPair<QGraphicsWidget *,QGraphicsWidget *> widgets = qMakePair(widgetToAnimate(), backWidget());
+    QPair<QGraphicsWidget *,QGraphicsWidget *> widgets = qMakePair(targetWidget(), backWidget());
 
     const qreal widgetFrontWidth = widgets.first->size().width();
     const qreal widgetFrontHeight = widgets.first->size().height();
@@ -142,7 +142,7 @@ void RotationStackedAnimation::updateState(
 
 void RotationStackedAnimation::updateCurrentTime(int currentTime)
 {
-    QGraphicsWidget *w = widgetToAnimate();
+    QGraphicsWidget *w = targetWidget();
     if(w) {
         qreal delta;
         if (currentTime <= duration()/2) {

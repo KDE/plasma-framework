@@ -60,7 +60,7 @@ qint8 SlideAnimation::movementDirection() const
 
 void SlideAnimation::updateCurrentTime(int currentTime)
 {
-    QGraphicsWidget *w = widgetToAnimate();
+    QGraphicsWidget *w = targetWidget();
     if (w && state() == QAbstractAnimation::Running) {
         qreal delta = Animation::easingCurve().valueForProgress(
                 currentTime / qreal(duration()));
@@ -71,10 +71,10 @@ void SlideAnimation::updateCurrentTime(int currentTime)
 void SlideAnimation::updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
 {
     if (oldState == QAbstractAnimation::Stopped && newState == QAbstractAnimation::Running) {
-        if (!widgetToAnimate()) {
+        if (!targetWidget()) {
             return;
         }
-        m_startPos = widgetToAnimate()->pos();
+        m_startPos = targetWidget()->pos();
 
         qreal newX = m_startPos.x();
         qreal newY = m_startPos.y();

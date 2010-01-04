@@ -47,7 +47,7 @@ qreal ZoomAnimation::zoom() const
 
 void ZoomAnimation::updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
 {
-    QGraphicsWidget *w = widgetToAnimate();
+    QGraphicsWidget *w = targetWidget();
     if (!w) {
         return;
     }
@@ -62,7 +62,7 @@ void ZoomAnimation::updateState(QAbstractAnimation::State newState, QAbstractAni
 
 void ZoomAnimation::updateCurrentTime(int currentTime)
 {
-    QGraphicsWidget *w = widgetToAnimate();
+    QGraphicsWidget *w = targetWidget();
     if (w) {
         qreal delta = Animation::easingCurve().valueForProgress(
             currentTime / qreal(duration()));

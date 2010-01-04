@@ -57,22 +57,9 @@ qreal FadeAnimation::targetOpacity() const
     return m_targetOpacity;
 }
 
-void FadeAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
-{
-    if (widget == widgetToAnimate()) {
-        return;
-    }
-
-    Animation::setWidgetToAnimate(widget);
-    if (widget) {
-        widget->setOpacity(m_startOpacity);
-    }
-
-}
-
 void FadeAnimation::updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
 {
-    QGraphicsWidget *w = widgetToAnimate();
+    QGraphicsWidget *w = targetWidget();
     if (!w) {
         return;
     }
@@ -86,7 +73,7 @@ void FadeAnimation::updateState(QAbstractAnimation::State newState, QAbstractAni
 
 void FadeAnimation::updateCurrentTime(int currentTime)
 {
-    QGraphicsWidget *w = widgetToAnimate();
+    QGraphicsWidget *w = targetWidget();
     if (w) {
         qreal delta = currentTime / qreal(duration());
         delta = (m_startOpacity - m_targetOpacity) *

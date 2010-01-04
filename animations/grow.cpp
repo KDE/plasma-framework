@@ -42,7 +42,7 @@ qreal GrowAnimation::factor() const
 
 void GrowAnimation::updateCurrentTime(int currentTime)
 {
-    QGraphicsWidget *w = widgetToAnimate();
+    QGraphicsWidget *w = targetWidget();
     if (w && state() == QAbstractAnimation::Running) {
         qreal delta = Animation::easingCurve().valueForProgress(
                 currentTime / qreal(duration()));
@@ -56,7 +56,7 @@ void GrowAnimation::updateCurrentTime(int currentTime)
 void GrowAnimation::updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
 {
     if (oldState == QAbstractAnimation::Stopped && newState == QAbstractAnimation::Running) {
-        QGraphicsWidget *widget = widgetToAnimate();
+        QGraphicsWidget *widget = targetWidget();
         if (!widget) {
             return;
         }

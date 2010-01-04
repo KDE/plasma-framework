@@ -75,7 +75,7 @@ void RotationAnimation::setAngle(const qreal &angle)
 
 void RotationAnimation::updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
 {
-    QGraphicsWidget *m_object = widgetToAnimate();
+    QGraphicsWidget *m_object = targetWidget();
 
     if (!m_object) {
         return;
@@ -157,7 +157,7 @@ void RotationAnimation::updateState(QAbstractAnimation::State newState, QAbstrac
 
 void RotationAnimation::updateCurrentTime(int currentTime)
 {
-    QGraphicsWidget *w = widgetToAnimate();
+    QGraphicsWidget *w = targetWidget();
     if (w) {
         qreal delta = Animation::easingCurve().valueForProgress(
             currentTime / qreal(duration()));

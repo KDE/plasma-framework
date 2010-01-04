@@ -82,15 +82,6 @@ public:
      */
     void setTargetOpacity(qreal);
 
-    /**
-     * Set the widget on which the animation is to be performed.
-     *
-     * This animation reimplements it to make possible to apply the
-     * start opacity in the widget (see \ref setStartOpacity).
-     * @arg receiver The QGraphicsWidget to be animated.
-     */
-    void setWidgetToAnimate(QGraphicsWidget *widget);
-
 protected:
     void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
     void updateCurrentTime(int currentTime);
