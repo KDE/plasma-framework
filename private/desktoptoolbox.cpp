@@ -514,7 +514,6 @@ void DesktopToolBox::showToolBox()
 {
     setFlag(ItemIgnoresTransformations, isToolbar());
 
-    kDebug() << "huh?" << isShowing();
     if (isShowing() && !isToolbar()) {
         return;
     }
@@ -704,7 +703,6 @@ void DesktopToolBox::toggle()
         return;
     }
 
-    kDebug() << "toggle, so let's show?" << !isShowing();
     setShowing(!isShowing());
 }
 
