@@ -1588,12 +1588,14 @@ KActionCollection* AppletPrivate::defaultActions(QObject *parent)
     configAction->setText(i18n("Widget Settings"));
     configAction->setIcon(KIcon("configure"));
     configAction->setShortcut(KShortcut("alt+d, s"));
+    configAction->setData(AbstractToolBox::ConfigureTool);
 
     KAction *closeApplet = actions->addAction("remove");
     closeApplet->setAutoRepeat(false);
     closeApplet->setText(i18n("Remove this Widget"));
     closeApplet->setIcon(KIcon("edit-delete"));
     closeApplet->setShortcut(KShortcut("alt+d, r"));
+    closeApplet->setData(AbstractToolBox::DestructiveTool);
 
     KAction *runAssociatedApplication = actions->addAction("run associated application");
     runAssociatedApplication->setAutoRepeat(false);
@@ -1602,6 +1604,7 @@ KActionCollection* AppletPrivate::defaultActions(QObject *parent)
     runAssociatedApplication->setShortcut(KShortcut("alt+d, t"));
     runAssociatedApplication->setVisible(false);
     runAssociatedApplication->setEnabled(false);
+    runAssociatedApplication->setData(AbstractToolBox::ControlTool);
 
     return actions;
 }

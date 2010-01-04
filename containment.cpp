@@ -298,16 +298,19 @@ void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containme
     appletBrowserAction->setText(i18n("Add Widgets..."));
     appletBrowserAction->setIcon(KIcon("list-add"));
     appletBrowserAction->setShortcut(KShortcut("alt+d, a"));
+    appletBrowserAction->setData(AbstractToolBox::AddTool);
 
     KAction *action = actions->addAction("next applet");
     action->setText(i18n("Next Widget"));
     //no icon
     action->setShortcut(KShortcut("alt+d, n"));
+    action->setData(AbstractToolBox::ControlTool);
 
     action = actions->addAction("previous applet");
     action->setText(i18n("Previous Widget"));
     //no icon
     action->setShortcut(KShortcut("alt+d, p"));
+    action->setData(AbstractToolBox::ControlTool);
 
     KAction *zoomAction = actions->addAction("zoom in");
     zoomAction->setAutoRepeat(false);
@@ -315,6 +318,7 @@ void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containme
     zoomAction->setIcon(KIcon("zoom-in"));
     //two shortcuts because I hate ctrl-+ but others expect it
     zoomAction->setShortcuts(KShortcut("alt+d, +; alt+d, ="));
+    zoomAction->setData(AbstractToolBox::ControlTool);
 
 }
 
@@ -2240,9 +2244,7 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
         positionToolBox();
     }
 
-    if (toolBox &&
-        constraints & Plasma::StartupCompletedConstraint &&
-        type < Containment::CustomContainment) {
+    if (toolBox && constraints & Plasma::StartupCompletedConstraint && type < Containment::CustomContainment) {
         toolBox.data()->addTool(q->action("remove"));
         checkRemoveAction();
     }

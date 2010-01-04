@@ -40,6 +40,7 @@
 #include <kaction.h>
 #include <kshortcutsdialog.h>
 
+#include "abstracttoolbox.h"
 #include "containment.h"
 #include "containmentactionspluginsconfig.h"
 #include "view.h"
@@ -87,10 +88,10 @@ public:
         actions.setConfigGroup("Shortcuts");
 
         KAction *lockAction = actions.addAction("lock widgets");
+        QObject::connect(lockAction, SIGNAL(triggered(bool)), q, SLOT(toggleImmutability()));
         lockAction->setText(i18n("Lock Widgets"));
         lockAction->setIcon(KIcon("object-locked"));
-        QObject::connect(lockAction, SIGNAL(triggered(bool)),
-                q, SLOT(toggleImmutability()));
+        lockAction->setData(AbstractToolBox::ControlTool);
         lockAction->setShortcut(KShortcut("alt+d, l"));
         lockAction->setShortcutContext(Qt::ApplicationShortcut);
 
@@ -98,11 +99,11 @@ public:
         //but should the shortcuts be per-app or really-global?
         //I don't know how to make kactioncollections use plasmarc
         KAction *action = actions.addAction("configure shortcuts");
+        QObject::connect(action, SIGNAL(triggered()), q, SLOT(showShortcutConfig()));
         action->setText(i18n("Shortcut Settings"));
         action->setIcon(KIcon("configure"));
         action->setAutoRepeat(false);
-        QObject::connect(action, SIGNAL(triggered()),
-                q, SLOT(showShortcutConfig()));
+        action->setData(AbstractToolBox::ConfigureTool);
         //action->setShortcut(KShortcut("ctrl+h"));
         action->setShortcutContext(Qt::ApplicationShortcut);
 
