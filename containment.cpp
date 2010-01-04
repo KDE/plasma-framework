@@ -2316,6 +2316,12 @@ void ContainmentPrivate::appletDestroyed(Plasma::Applet *applet)
 void ContainmentPrivate::containmentAppletAnimationComplete()
 {
     Applet *applet = qgraphicsitem_cast<Applet*>(zoomAnim->targetWidget());
+    Animation *pulse = Plasma::Animator::create(Plasma::Animator::PulseAnimation);
+    pulse->setTargetWidget(applet);
+    pulse->setProperty("duration", 300);
+    pulse->setProperty("targetScale", 1.3);
+    pulse->start(QAbstractAnimation::DeleteWhenStopped);
+
     if (applet->parentItem() == q) {
         if (type == Containment::DesktopContainment) {
             applet->installSceneEventFilter(q);
