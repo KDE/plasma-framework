@@ -16,13 +16,16 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include "pulser_p.h"
-#include "pulsershadow_p.h"
+
 #include <QEvent>
 #include <QGraphicsWidget>
 #include <QParallelAnimationGroup>
 #include <QPropertyAnimation>
 #include <QWeakPointer>
+
 #include <kdebug.h>
+
+#include "pulsershadow_p.h"
 
 namespace Plasma
 {
@@ -38,6 +41,16 @@ PulseAnimation::PulseAnimation(QObject *parent)
 
 PulseAnimation::~PulseAnimation()
 {
+}
+
+void PulseAnimation::setTargetScale(qreal scale)
+{
+    m_endScale = scale;
+}
+
+qreal PulseAnimation::targetScale() const
+{
+    return m_endScale;
 }
 
 void PulseAnimation::setCopy()

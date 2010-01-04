@@ -41,12 +41,16 @@ class ShadowFake;
 class PulseAnimation : public Animation
 {
     Q_OBJECT
+    Q_PROPERTY(qreal targetScale READ targetScale WRITE setTargetScale)
 
 public:
     /** Default Constructor */
     PulseAnimation(QObject *parent = 0);
     /** Destructor */
     ~PulseAnimation();
+
+    void setTargetScale(qreal scale);
+    qreal targetScale() const;
 
 public Q_SLOTS:
     /**
