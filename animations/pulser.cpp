@@ -28,92 +28,84 @@ namespace Plasma
 
 PulseAnimation::PulseAnimation(QObject *parent)
         : Animation(parent),
-          zvalue(0), scale(0), mopacity(0), endScale(1.5),
-          under(0)
+          m_zvalue(0),
+          m_scale(0),
+          m_opacity(0),
+          m_endScale(1.5),
+          m_under(0)
 {
 }
 
 PulseAnimation::~PulseAnimation()
 {
-}
-
-void PulseAnimation::setWidgetToAnimate(QGraphicsWidget *widget)
-{
-    if (widget == widgetToAnimate()) {
-        return;
-    }
-
-    Animation::setWidgetToAnimate(widget);
-    if (widget) {
-        setCopy();
-    }
+    delete m_under;
 }
 
 void PulseAnimation::setCopy()
 {
-    QGraphicsWidget *target = widgetToAnimate();
-    /* the parent to an image, the animation will happen on the pixmap copy.
-     */
-    if (!under)
-        under  = new ShadowFake;
+    QGraphicsWidget *target = targetWidget();
 
-    under->copyTarget(target);
+    if (!target) {
+        delete m_under;
+        m_under = 0;
+        return;
+    }
 
-    zvalue = target->zValue();
-    --zvalue;
-    scale = target->scale();
+    if (!m_under) {
+        m_under = new ShadowFake;
+    }
 
-    under->setOpacity(mopacity);
-    under->setScale(scale);
-    under->setZValue(zvalue);
+    m_under->setTarget(target);
 
+    m_zvalue = target->zValue() - 1;
+    m_scale = target->scale();
+
+    m_under->setOpacity(m_opacity);
+    m_under->setScale(m_scale);
+    m_under->setZValue(m_zvalue);
 }
 
 void PulseAnimation::resetPulser()
 {
-    under->setOpacity(mopacity);
-    under->setScale(scale);
-    under->setZValue(zvalue);
+    if (m_under) {
+        m_under->setOpacity(m_opacity);
+        m_under->setScale(m_scale);
+        m_under->setZValue(m_zvalue);
+    }
 }
-
 
 void PulseAnimation::updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
 {
+    if (!targetWidget()) {
+        return;
+    }
 
-   if (oldState == Stopped && newState == Running) {
-       if (under->size() != widgetToAnimate()->size()) {
-           setCopy();
-       }
+    if (oldState == Stopped && newState == Running) {
+        if (m_under->target() != targetWidget() || m_under->size() != targetWidget()->size()) {
+            setCopy();
+        }
 
-       under->setOpacity(direction() == Forward ? 1 : 0);
-       under->setScale(direction() == Forward ? scale : endScale);
-
-   } else if (newState == Stopped) {
-       resetPulser();
-   }
-
+        m_under->setOpacity(direction() == Forward ? 1 : 0);
+        m_under->setScale(direction() == Forward ? m_scale : m_endScale);
+    } else if (newState == Stopped) {
+        resetPulser();
+    }
 }
 
 void PulseAnimation::updateCurrentTime(int currentTime)
 {
-    QGraphicsWidget *w = under;
-    if (w) {
-        qreal delta = Animation::easingCurve().valueForProgress(
-            currentTime / qreal(duration()));
-        delta = (1 - endScale) * delta;
-        w->setScale(1 - delta);
-    }
+    if (m_under) {
+        qreal delta = Animation::easingCurve().valueForProgress( currentTime / qreal(duration()));
+        delta = (1 - m_endScale) * delta;
+        m_under->setScale(1 - delta);
 
-    if (w) {
-        qreal delta = currentTime / qreal(duration());
+        delta = currentTime / qreal(duration());
         if (direction() == Forward) {
-            w->setOpacity(1.0 - delta);
+            m_under->setOpacity(1.0 - delta);
         } else if (direction() == Backward) {
-            w->setOpacity(delta);
+            m_under->setOpacity(delta);
         }
     }
-
-    Animation::updateCurrentTime(currentTime);
 }
 
 } //namespace Plasma

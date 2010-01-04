@@ -26,19 +26,21 @@ namespace Plasma
 class ShadowFake: public QGraphicsWidget
 {
     Q_OBJECT
+    Q_PROPERTY(QGraphicsWidget *target READ target WRITE setTarget)
 
 public:
     ShadowFake(QGraphicsItem *parent = 0);
-
     ~ShadowFake();
 
-    void copyTarget(QGraphicsWidget *target);
+    void setTarget(QGraphicsWidget *target);
+    QGraphicsWidget *target() const;
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                QWidget *widget);
 
 private:
-    QPixmap *photo;
+    QPixmap m_photo;
+    QGraphicsWidget *m_target;
 };
 
 

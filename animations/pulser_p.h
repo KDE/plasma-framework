@@ -48,16 +48,6 @@ public:
     /** Destructor */
     ~PulseAnimation();
 
-    /**
-     * Set the widget on which the animation is to be performed.
-     *
-     * This animation reimplements it to create the shadow copy of
-     * the animated widget. The shadow is the one that is actually
-     * animated (see \ref ShadowFake).
-     * @arg receiver The QGraphicsWidget to be animated.
-     */
-    void setWidgetToAnimate(QGraphicsWidget *widget);
-
 public Q_SLOTS:
     /**
      * Resets the shadow widget to its initial state (full translucent
@@ -73,19 +63,23 @@ protected:
 
 private:
     /** Zvalue (tipically -1 than the target widget) */
-    qreal zvalue;
+    qreal m_zvalue;
+
     /** Original widget scale */
-    qreal scale;
+    qreal m_scale;
+
     /** Opacity of shadow widget (full translucent) */
-    qreal mopacity;
+    qreal m_opacity;
+
     /** Target scale of shadow widget (default is 1.5x the animated
      * widget scale).
      */
-    qreal endScale;
+    qreal m_endScale;
+
     /** The shadow copy (it really is a QGraphicsWidget with a pixmap
      * copy of the original widget).
      */
-    ShadowFake *under;
+    ShadowFake *m_under;
 };
 
 }

@@ -24,47 +24,49 @@
 namespace Plasma
 {
 
-ShadowFake::ShadowFake(QGraphicsItem *parent): QGraphicsWidget(parent),
-                                                   photo(0)
-{ }
+ShadowFake::ShadowFake(QGraphicsItem *parent)
+    : QGraphicsWidget(parent),
+      m_target(0)
+{
+}
 
 ShadowFake::~ShadowFake()
 {
-    delete photo;
 }
 
-void ShadowFake::copyTarget(QGraphicsWidget *target)
+void ShadowFake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(widget);
+
+    painter->setRenderHint(QPainter::Antialiasing);
+    painter->drawPixmap(option->exposedRect, m_photo, option->exposedRect);
+}
+
+void ShadowFake::setTarget(QGraphicsWidget *target)
+{
+    m_target = target;
     setParentItem(target);
     resize(target->size());
     setTransformOriginPoint(geometry().center());
     QSize size(target->size().toSize());
 
-    if (photo)
-        delete photo;
-    photo = new QPixmap(size);
-    photo->fill(Qt::transparent);
+    m_photo = QPixmap(size);
+    m_photo.fill(Qt::transparent);
 
-    QPainter painter(photo);
+    QPainter painter(&m_photo);
     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
     painter.fillRect(target->rect(), Qt::transparent);
     QStyleOptionGraphicsItem style;
-    //XXX: some widgets follow exposedRect viewport (e.g. QGraphicsWebView)
+    //FIXME: some widgets follow exposedRect viewport (e.g. QGraphicsWebView)
     style.exposedRect = target->boundingRect();
     target->paint(&painter, &style, 0);
     painter.end();
-
 }
 
-
-void ShadowFake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                       QWidget *widget)
+QGraphicsWidget *ShadowFake::target() const
 {
-    Q_UNUSED(widget);
-    Q_UNUSED(option);
-
-    painter->setRenderHint(QPainter::Antialiasing);
-    painter->drawPixmap(0, 0, *photo);
+    return m_target;
 }
 
 }
+
