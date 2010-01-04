@@ -42,11 +42,11 @@ class PLASMA_EXPORT AbstractToolBox : public QGraphicsWidget
 public:
     enum ToolType {
         AddTool = 0,
-        ConfigureTool,
-        ControlTool,
-        MiscTool,
-        DestructiveTool,
-        LastToolType = DestructiveTool + 1
+        ConfigureTool = 100,
+        ControlTool = 200,
+        MiscTool = 300,
+        DestructiveTool = 400,
+        UserToolType = DestructiveTool + 1000
     };
     Q_ENUMS(ToolType)
 

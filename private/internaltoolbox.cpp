@@ -155,7 +155,7 @@ void InternalToolBox::addTool(QAction *action)
     ToolType type = AbstractToolBox::MiscTool;
     if (!action->data().isNull() && action->data().type() == QVariant::Int) {
         int t = action->data().toInt();
-        if (t >= 0 && t < AbstractToolBox::LastToolType) {
+        if (t >= 0 && t < AbstractToolBox::UserToolType) {
             type = static_cast<AbstractToolBox::ToolType>(t);
         }
     }
