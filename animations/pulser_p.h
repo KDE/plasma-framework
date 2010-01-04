@@ -79,7 +79,7 @@ private:
     /** The shadow copy (it really is a QGraphicsWidget with a pixmap
      * copy of the original widget).
      */
-    ShadowFake *m_under;
+    QWeakPointer<ShadowFake> m_under;
 };
 
 }

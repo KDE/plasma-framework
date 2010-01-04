@@ -21,8 +21,9 @@
 #include <QGraphicsWidget>
 #include <QParallelAnimationGroup>
 #include <QPropertyAnimation>
-
+#include <QWeakPointer>
 #include <kdebug.h>
+
 namespace Plasma
 {
 
@@ -31,14 +32,12 @@ PulseAnimation::PulseAnimation(QObject *parent)
           m_zvalue(0),
           m_scale(0),
           m_opacity(0),
-          m_endScale(1.5),
-          m_under(0)
+          m_endScale(1.5)
 {
 }
 
 PulseAnimation::~PulseAnimation()
 {
-    delete m_under;
 }
 
 void PulseAnimation::setCopy()
@@ -46,31 +45,30 @@ void PulseAnimation::setCopy()
     QGraphicsWidget *target = targetWidget();
 
     if (!target) {
-        delete m_under;
-        m_under = 0;
+        m_under.clear();
         return;
     }
 
-    if (!m_under) {
+    if (!m_under.data()) {
         m_under = new ShadowFake;
     }
 
-    m_under->setTarget(target);
+    m_under.data()->setTarget(target);
 
     m_zvalue = target->zValue() - 1;
     m_scale = target->scale();
 
-    m_under->setOpacity(m_opacity);
-    m_under->setScale(m_scale);
-    m_under->setZValue(m_zvalue);
+    m_under.data()->setOpacity(m_opacity);
+    m_under.data()->setScale(m_scale);
+    m_under.data()->setZValue(m_zvalue);
 }
 
 void PulseAnimation::resetPulser()
 {
-    if (m_under) {
-        m_under->setOpacity(m_opacity);
-        m_under->setScale(m_scale);
-        m_under->setZValue(m_zvalue);
+    if (m_under.data()) {
+        m_under.data()->setOpacity(m_opacity);
+        m_under.data()->setScale(m_scale);
+        m_under.data()->setZValue(m_zvalue);
     }
 }
 
@@ -81,12 +79,12 @@ void PulseAnimation::updateState(QAbstractAnimation::State newState, QAbstractAn
     }
 
     if (oldState == Stopped && newState == Running) {
-        if (!m_under || m_under->target() != targetWidget() || m_under->size() != targetWidget()->size()) {
+        if (!m_under.data() || m_under.data()->target() != targetWidget() || m_under.data()->size() != targetWidget()->size()) {
             setCopy();
         }
 
-        m_under->setOpacity(direction() == Forward ? 1 : 0);
-        m_under->setScale(direction() == Forward ? m_scale : m_endScale);
+        m_under.data()->setOpacity(direction() == Forward ? 1 : 0);
+        m_under.data()->setScale(direction() == Forward ? m_scale : m_endScale);
     } else if (newState == Stopped) {
         resetPulser();
     }
@@ -94,16 +92,16 @@ void PulseAnimation::updateState(QAbstractAnimation::State newState, QAbstractAn
 
 void PulseAnimation::updateCurrentTime(int currentTime)
 {
-    if (m_under) {
+    if (m_under.data()) {
         qreal delta = Animation::easingCurve().valueForProgress( currentTime / qreal(duration()));
         delta = (1 - m_endScale) * delta;
-        m_under->setScale(1 - delta);
+        m_under.data()->setScale(1 - delta);
 
         delta = currentTime / qreal(duration());
         if (direction() == Forward) {
-            m_under->setOpacity(1.0 - delta);
+            m_under.data()->setOpacity(1.0 - delta);
         } else if (direction() == Backward) {
-            m_under->setOpacity(delta);
+            m_under.data()->setOpacity(delta);
         }
     }
 }
