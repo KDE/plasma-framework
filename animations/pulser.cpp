@@ -16,7 +16,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include "pulser_p.h"
-#include "plasma/private/pulsershadow_p.h"
+#include "pulsershadow_p.h"
 #include <QEvent>
 #include <QGraphicsWidget>
 #include <QParallelAnimationGroup>
