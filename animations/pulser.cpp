@@ -81,7 +81,7 @@ void PulseAnimation::updateState(QAbstractAnimation::State newState, QAbstractAn
     }
 
     if (oldState == Stopped && newState == Running) {
-        if (m_under->target() != targetWidget() || m_under->size() != targetWidget()->size()) {
+        if (!m_under || m_under->target() != targetWidget() || m_under->size() != targetWidget()->size()) {
             setCopy();
         }
 
