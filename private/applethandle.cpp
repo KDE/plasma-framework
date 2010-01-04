@@ -185,6 +185,8 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
+    painter->save();
+
     //kDebug() << m_opacity << m_anim << FadeOut;
     if (qFuzzyCompare(m_opacity + 1.0, 1.0)) {
         if (m_anim == FadeOut) {
@@ -207,7 +209,7 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     painter->translate(translation, 0);
 
     painter->setPen(Qt::NoPen);
-    painter->setRenderHints(QPainter::Antialiasing);
+    painter->setRenderHints(QPainter::Antialiasing|QPainter::SmoothPixmapTransform);
 
     int iconMargin = m_iconSize / 2;
 
@@ -368,6 +370,7 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     basePoint = m_rect.bottomLeft() + QPointF(HANDLE_MARGIN, 0) - step;
     sourceIconRect.translate(0, m_iconSize);
     painter->drawPixmap(QRectF(basePoint + shiftD, iconSize), *m_backgroundBuffer, sourceIconRect);
+    painter->restore();
 }
 
 void AppletHandle::emitDisappear()
