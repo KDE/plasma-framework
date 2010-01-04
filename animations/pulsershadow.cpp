@@ -44,6 +44,8 @@ void ShadowFake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
 void ShadowFake::setTarget(QGraphicsWidget *target)
 {
+    //TODO: use childItems() and also draw child elements in the shadow
+    //if it is > 0
     m_target = target;
     setParentItem(target);
     resize(target->size());
