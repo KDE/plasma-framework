@@ -23,26 +23,33 @@
 #include <QGraphicsWidget>
 #include <QGraphicsItem>
 
-#include "containment.h"
-
-#include "plasma_export.h"
+#include "plasma/plasma_export.h"
 
 class QAction;
 
 namespace Plasma
 {
 
-//class Widget;
-//class EmptyGraphicsItem;
 class AbstractToolBoxPrivate;
+class Containment;
 
 class PLASMA_EXPORT AbstractToolBox : public QGraphicsWidget
 {
     Q_OBJECT
     Q_INTERFACES(QGraphicsItem)
-    Q_PROPERTY(bool showing READ isShowing WRITE setShowing )
+    Q_PROPERTY(bool showing READ isShowing WRITE setShowing)
 
 public:
+    enum ToolType {
+        AddTool = 0,
+        ConfigureTool,
+        ControlTool,
+        MiscTool,
+        DestructiveTool,
+        LastToolType = DestructiveTool + 1
+    };
+    Q_ENUMS(ToolType)
+
     explicit AbstractToolBox(Containment *parent);
     ~AbstractToolBox();
 
@@ -51,6 +58,7 @@ public:
      * @p action the action to associate the tool with
      */
     virtual void addTool(QAction *action) = 0;
+
     /**
      * remove the tool associated with this action
      */
