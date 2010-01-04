@@ -59,14 +59,15 @@ void Animation::setDuration(int duration)
     d->duration = qMax(0, duration);
 }
 
-void Animation::setWidgetToAnimate(QGraphicsWidget* widget)
+void Animation::setTargetWidget(QGraphicsWidget* widget)
 {
     d->animObject = widget;
-    if (parent() == 0)
+    if (parent() == 0) {
         setParent(widget);
+    }
 }
 
-QGraphicsWidget* Animation::widgetToAnimate()
+QGraphicsWidget* Animation::targetWidget() const
 {
     return d->animObject.data();
 }

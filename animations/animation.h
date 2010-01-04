@@ -49,7 +49,7 @@ class PLASMA_EXPORT Animation : public QAbstractAnimation
     Q_OBJECT
     Q_PROPERTY(int duration READ duration WRITE setDuration)
     Q_PROPERTY(QEasingCurve::Type easingCurveType READ easingCurveType WRITE setEasingCurveType)
-    Q_PROPERTY(QGraphicsWidget *widgetToAnimate READ widgetToAnimate WRITE setWidgetToAnimate)
+    Q_PROPERTY(QGraphicsWidget *targetWidget READ targetWidget WRITE setTargetWidget)
 
 public:
     /**
@@ -81,22 +81,18 @@ public:
     /**
      * Destructor.
      */
-    virtual ~Animation() = 0;
+    ~Animation() = 0;
 
     /**
      * Set the widget on which the animation is to be performed.
-     *
-     * If the animation class has any special initialization to be done
-     * in the target widget, you should reimplement this method in
-     * the derived class.
-     * @arg receiver The QGraphicsWidget to be animated.
+     * @arg widget The QGraphicsWidget to be animated.
      */
-    virtual void setWidgetToAnimate(QGraphicsWidget* widget);
+    void setTargetWidget(QGraphicsWidget* widget);
 
     /**
-     * The widget that the animation will be performed upon
+     * @return The widget that the animation will be performed upon
      */
-    QGraphicsWidget *widgetToAnimate();
+    QGraphicsWidget *targetWidget() const;
 
     /**
      * Set the animation easing curve type
@@ -109,7 +105,6 @@ public:
     QEasingCurve::Type easingCurveType() const;
 
 protected:
-
     /**
      * Change the animation duration. Default is 250ms.
      * @arg duration The new duration of the animation.
