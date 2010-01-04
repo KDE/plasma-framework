@@ -960,11 +960,11 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
     } else {
         applet->init();
         applet->setScale(0);
-        d->zoomAnim = Plasma::Animator::create(Plasma::Animator::ZoomAnimation);
-        connect(d->zoomAnim, SIGNAL(finished()), this, SLOT(containmentAppletAnimationComplete()));
-        d->zoomAnim->setTargetWidget(applet);
-        d->zoomAnim->setProperty("zoom", 1.0);
-        d->zoomAnim->start();
+        Plasma::Animation *zoomAnim = Plasma::Animator::create(Plasma::Animator::ZoomAnimation);
+        connect(zoomAnim, SIGNAL(finished()), this, SLOT(appletAppearAnimationComplete()));
+        zoomAnim->setTargetWidget(applet);
+        zoomAnim->setProperty("zoom", 1.0);
+        zoomAnim->start(QAbstractAnimation::DeleteWhenStopped);
     }
 
     applet->updateConstraints(Plasma::AllConstraints);
@@ -2313,9 +2313,18 @@ void ContainmentPrivate::appletDestroyed(Plasma::Applet *applet)
     emit q->configNeedsSaving();
 }
 
-void ContainmentPrivate::containmentAppletAnimationComplete()
+void ContainmentPrivate::appletAppearAnimationComplete()
 {
-    Applet *applet = qgraphicsitem_cast<Applet*>(zoomAnim->targetWidget());
+    Animation *anim = qobject_cast<Animation *>(q->sender());
+    if (!anim) {
+        return;
+    }
+
+    Applet *applet = qobject_cast<Applet*>(anim->targetWidget());
+    if (!applet) {
+        return;
+    }
+
     Animation *pulse = Plasma::Animator::create(Plasma::Animator::PulseAnimation);
     pulse->setTargetWidget(applet);
     pulse->setProperty("duration", 300);

@@ -84,7 +84,7 @@ public:
     void setLockToolText();
     void handleDisappeared(AppletHandle *handle);
     void appletDestroyed(Plasma::Applet*);
-    void containmentAppletAnimationComplete();
+    void appletAppearAnimationComplete();
     void zoomIn();
     void zoomOut();
     void clearDataForMimeJob(KIO::Job *job);
@@ -165,7 +165,6 @@ public:
     QTimer *showDropZoneDelayTimer;
     bool drawWallpaper : 1;
     bool dropZoneStarted : 1;
-    Animation *zoomAnim;
 };
 
 } // Plasma namespace
