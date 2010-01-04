@@ -962,7 +962,7 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
         applet->setScale(0);
         d->zoomAnim = Plasma::Animator::create(Plasma::Animator::ZoomAnimation);
         connect(d->zoomAnim, SIGNAL(finished()), this, SLOT(containmentAppletAnimationComplete()));
-        d->zoomAnim->setWidgetToAnimate(applet);
+        d->zoomAnim->setTargetWidget(applet);
         d->zoomAnim->setProperty("zoom", 1.0);
         d->zoomAnim->start();
     }
@@ -2315,7 +2315,7 @@ void ContainmentPrivate::appletDestroyed(Plasma::Applet *applet)
 
 void ContainmentPrivate::containmentAppletAnimationComplete()
 {
-    Applet *applet = qgraphicsitem_cast<Applet*>(zoomAnim->widgetToAnimate());
+    Applet *applet = qgraphicsitem_cast<Applet*>(zoomAnim->targetWidget());
     if (applet->parentItem() == q) {
         if (type == Containment::DesktopContainment) {
             applet->installSceneEventFilter(q);

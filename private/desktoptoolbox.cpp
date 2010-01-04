@@ -629,7 +629,7 @@ void DesktopToolBox::showToolBox()
     d->toolBacker->setOpacity(0);
     d->toolBacker->show();
     Plasma::Animation *fadeAnim = Animator::create(Animator::FadeAnimation, d->toolBacker);
-    fadeAnim->setWidgetToAnimate(d->toolBacker);
+    fadeAnim->setTargetWidget(d->toolBacker);
     fadeAnim->setProperty("startOpacity", 0);
     fadeAnim->setProperty("targetOpacity", 1);
     fadeAnim->start(QAbstractAnimation::DeleteWhenStopped);
@@ -670,7 +670,7 @@ void DesktopToolBox::hideToolBox()
     if (d->toolBacker) {
         Plasma::Animation *fadeAnim = Animator::create(Animator::FadeAnimation, d->toolBacker);
         connect(fadeAnim, SIGNAL(finished()), this, SLOT(hideToolBacker()));
-        fadeAnim->setWidgetToAnimate(d->toolBacker);
+        fadeAnim->setTargetWidget(d->toolBacker);
         fadeAnim->setProperty("startOpacity", 1);
         fadeAnim->setProperty("targetOpacity", 0);
         fadeAnim->start(QAbstractAnimation::DeleteWhenStopped);

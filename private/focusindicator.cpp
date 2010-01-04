@@ -44,7 +44,7 @@ FocusIndicator::FocusIndicator(QGraphicsWidget *parent, QString widget)
     m_background->setCacheAllRenderedFrames(true);
 
     m_fade = Animator::create(Animator::FadeAnimation, this);
-    m_fade->setWidgetToAnimate(this);
+    m_fade->setTargetWidget(this);
     m_fade->setProperty("startOpacity", 0.0);
     m_fade->setProperty("targetOpacity", 1.0);
 

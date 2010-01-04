@@ -455,7 +455,7 @@ void Applet::destroy()
         Animation *zoomAnim =
         Plasma::Animator::create(Plasma::Animator::ZoomAnimation);
         connect(zoomAnim, SIGNAL(finished()), this, SLOT(appletAnimationComplete()));
-        zoomAnim->setWidgetToAnimate(this);
+        zoomAnim->setTargetWidget(this);
         zoomAnim->start();
     }
 }
@@ -2858,7 +2858,7 @@ void AppletOverlayWidget::destroy()
     Animation *zoomAnim =
         Plasma::Animator::create(Plasma::Animator::ZoomAnimation);
     connect(zoomAnim, SIGNAL(finished()), this, SLOT(overlayAnimationComplete()));
-    zoomAnim->setWidgetToAnimate(this);
+    zoomAnim->setTargetWidget(this);
     zoomAnim->start();
 }
 
