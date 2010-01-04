@@ -652,7 +652,7 @@ QScriptValue SimpleJavaScriptApplet::animation(QScriptContext *context, QScriptE
         Plasma::Animation *anim = Plasma::Animator::create(s_animationDefs.value(animName), parent);
         if (anim) {
             if (!parentIsApplet) {
-                anim->setWidgetToAnimate(parent);
+                anim->setTargetWidget(parent);
             }
 
             return engine->newQObject(anim);
