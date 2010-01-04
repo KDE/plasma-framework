@@ -44,8 +44,6 @@ void ShadowFake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
 void ShadowFake::setTarget(QGraphicsWidget *target)
 {
-    //TODO: use childItems() and also draw child elements in the shadow
-    //if it is > 0
     m_target = target;
     setParentItem(target);
     resize(target->size());
@@ -62,6 +60,13 @@ void ShadowFake::setTarget(QGraphicsWidget *target)
     //FIXME: some widgets follow exposedRect viewport (e.g. QGraphicsWebView)
     style.exposedRect = target->boundingRect();
     target->paint(&painter, &style, 0);
+
+    QList<QGraphicsItem *> list = target->childItems();
+    if (list.size() > 0) {
+        for (int i = 0; i < list.size(); ++i) {
+            list.value(i)->paint(&painter, &style, 0);
+        }
+    }
     painter.end();
 }
 
