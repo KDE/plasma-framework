@@ -61,6 +61,7 @@ public:
     QSize iconSize;
     QPoint dragStartRelative;
     QTransform viewTransform;
+    QMultiMap<AbstractToolBox::ToolType, IconWidget *> tools;
     bool hidden : 1;
     bool showing : 1;
     bool movable : 1;
@@ -110,21 +111,30 @@ QPoint InternalToolBox::toolPosition(int toolHeight)
     }
 }
 
+QMap<AbstractToolBox::ToolType, IconWidget *> InternalToolBox::tools() const
+{
+    return d->tools;
+}
+
+QGraphicsWidget *InternalToolBox::toolParent()
+{
+    return this;
+}
+
 void InternalToolBox::addTool(QAction *action)
 {
     if (!action) {
         return;
     }
 
-    foreach (QGraphicsItem *child, QGraphicsItem::children()) {
+    foreach (IconWidget *tool, d->tools) {
         //kDebug() << "checking tool" << child << child->data(ToolName);
-        Plasma::IconWidget *tool = dynamic_cast<Plasma::IconWidget*>(child);
-        if (tool && tool->action() == action) {
+        if (tool->action() == action) {
             return;
         }
     }
 
-    Plasma::IconWidget *tool = new Plasma::IconWidget(this);
+    Plasma::IconWidget *tool = new Plasma::IconWidget(toolParent());
 
     tool->setTextBackgroundColor(QColor());
     tool->setAction(action);
@@ -141,7 +151,17 @@ void InternalToolBox::addTool(QAction *action)
     //make enabled/disabled tools appear/disappear instantly
     connect(tool, SIGNAL(changed()), this, SLOT(updateToolBox()));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(toolTriggered(bool)));
-    //kDebug() << "added tool" << action->text() << (QGraphicsItem*)tool;
+
+    ToolType type = AbstractToolBox::MiscTool;
+    if (!action->data().isNull() && action->data().type() == QVariant::Int) {
+        int t = action->data().toInt();
+        if (t >= 0 && t < AbstractToolBox::LastToolType) {
+            type = static_cast<AbstractToolBox::ToolType>(t);
+        }
+    }
+
+    d->tools.insert(type, tool);
+    //kDebug() << "added tool" << type << action->text();
 }
 
 void InternalToolBox::updateToolBox()
@@ -166,12 +186,15 @@ void InternalToolBox::toolTriggered(bool)
 
 void InternalToolBox::removeTool(QAction *action)
 {
-    foreach (QGraphicsItem *child, QGraphicsItem::children()) {
-        //kDebug() << "checking tool" << child << child->data(ToolName);
-        Plasma::IconWidget *tool = dynamic_cast<Plasma::IconWidget*>(child);
+    QMutableMapIterator<ToolType, IconWidget *> it(d->tools);
+    while (it.hasNext()) {
+        it.next();
+        IconWidget *tool = it.value();
+        //kDebug() << "checking tool" << tool
         if (tool && tool->action() == action) {
             //kDebug() << "tool found!";
             tool->deleteLater();
+            it.remove();
             break;
         }
     }
@@ -204,6 +227,13 @@ bool InternalToolBox::isShowing() const
 
 void InternalToolBox::setShowing(const bool show)
 {
+    if (show) {
+        kDebug() << "showing";
+        showToolBox();
+    } else {
+        kDebug() << "hiding";
+        hideToolBox();
+    }
     d->showing = show;
 }
 
@@ -336,6 +366,7 @@ void InternalToolBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton && !d->dragging && boundingRect().contains(event->pos())) {
         emit toggled();
+        return;
     }
 
     d->dragging = false;

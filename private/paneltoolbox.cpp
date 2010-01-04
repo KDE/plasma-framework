@@ -230,12 +230,10 @@ void PanelToolBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 void PanelToolBox::showToolBox()
 {
-    setShowing(true);
 }
 
 void PanelToolBox::hideToolBox()
 {
-    setShowing(false);
 }
 
 void PanelToolBox::setShowing(bool show)

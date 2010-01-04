@@ -55,6 +55,8 @@ public:
     QSize fullWidth() const;
     QSize fullHeight() const;
 
+    QGraphicsWidget *toolParent();
+
 public Q_SLOTS:
     void toolTipAboutToShow();
     void toolTipHidden();
@@ -64,11 +66,11 @@ protected:
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
-protected slots:
+protected Q_SLOTS:
     void animateHighlight(qreal progress);
-    void toolMoved(QGraphicsItem*);
     void updateTheming();
     void toolTriggered(bool);
+    void hideToolBacker();
     /**
      * show/hide the toolbox
      */

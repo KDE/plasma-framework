@@ -33,8 +33,7 @@ class KConfigGroup;
 namespace Plasma
 {
 
-//class Widget;
-//class EmptyGraphicsItem;
+class IconWidget;
 class InternalToolBoxPrivate;
 
 class InternalToolBox : public AbstractToolBox
@@ -72,6 +71,8 @@ public:
     bool isShowing() const;
     void setShowing(const bool show);
 
+    virtual QGraphicsWidget *toolParent();
+
     virtual void setCorner(const Corner corner);
     virtual Corner corner() const;
 
@@ -103,6 +104,8 @@ public Q_SLOTS:
 protected:
     Containment *containment();
     QPoint toolPosition(int toolHeight);
+    QMap<AbstractToolBox::ToolType, IconWidget *> tools() const;
+
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
@@ -112,7 +115,6 @@ protected Q_SLOTS:
 
 private:
     InternalToolBoxPrivate *d;
-
 };
 
 } // Plasma namespace
