@@ -42,6 +42,24 @@ void ShadowFake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     painter->drawPixmap(option->exposedRect, m_photo, option->exposedRect);
 }
 
+void ShadowFake::paintSubChildren(QPainter *painter,
+                                  const QStyleOptionGraphicsItem *option,
+                                  QGraphicsItem *target)
+{
+    QList<QGraphicsItem *> list = target->childItems();
+    QGraphicsItem *tmp;
+    if (list.size() > 0) {
+        for (int i = 0; i < list.size(); ++i) {
+            tmp = list.value(i);
+            if (tmp->childItems().size() > 0) {
+                paintSubChildren(painter, option, tmp);
+            } else {
+                tmp->paint(painter, option, 0);
+            }
+        }
+    }
+}
+
 void ShadowFake::setTarget(QGraphicsWidget *target)
 {
     m_target = target;
@@ -60,13 +78,7 @@ void ShadowFake::setTarget(QGraphicsWidget *target)
     //FIXME: some widgets follow exposedRect viewport (e.g. QGraphicsWebView)
     style.exposedRect = target->boundingRect();
     target->paint(&painter, &style, 0);
-
-    QList<QGraphicsItem *> list = target->childItems();
-    if (list.size() > 0) {
-        for (int i = 0; i < list.size(); ++i) {
-            list.value(i)->paint(&painter, &style, 0);
-        }
-    }
+    paintSubChildren(&painter, &style, target);
     painter.end();
 }
 

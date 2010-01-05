@@ -39,6 +39,9 @@ public:
                QWidget *widget);
 
 private:
+    void paintSubChildren(QPainter *painter,
+                          const QStyleOptionGraphicsItem *option,
+                          QGraphicsItem *target);
     QPixmap m_photo;
     QGraphicsWidget *m_target;
 };
