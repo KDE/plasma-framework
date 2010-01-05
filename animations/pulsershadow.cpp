@@ -20,12 +20,14 @@
 #include <QImage>
 #include <QPixmap>
 #include <QStyleOptionGraphicsItem>
+static const int RECURSION_MAX = 20;
 
 namespace Plasma
 {
 
 ShadowFake::ShadowFake(QGraphicsItem *parent)
     : QGraphicsWidget(parent),
+      stack(0),
       m_target(0)
 {
 }
@@ -46,22 +48,25 @@ void ShadowFake::paintSubChildren(QPainter *painter,
                                   const QStyleOptionGraphicsItem *option,
                                   QGraphicsItem *target)
 {
+    ++stack;
     QList<QGraphicsItem *> list = target->childItems();
     QGraphicsItem *tmp;
     if (list.size() > 0) {
         for (int i = 0; i < list.size(); ++i) {
             tmp = list.value(i);
-            if (tmp->childItems().size() > 0) {
+            if ((tmp->childItems().size() > 0) && (stack < RECURSION_MAX)) {
                 paintSubChildren(painter, option, tmp);
-            } else {
-                tmp->paint(painter, option, 0);
             }
+
+            tmp->paint(painter, option, 0);
         }
     }
+    --stack;
 }
 
 void ShadowFake::setTarget(QGraphicsWidget *target)
 {
+    stack = 0;
     m_target = target;
     setParentItem(target);
     resize(target->size());

@@ -42,6 +42,7 @@ private:
     void paintSubChildren(QPainter *painter,
                           const QStyleOptionGraphicsItem *option,
                           QGraphicsItem *target);
+    int stack;
     QPixmap m_photo;
     QGraphicsWidget *m_target;
 };
