@@ -40,7 +40,8 @@ namespace WindowEffects
         WindowPreview = 2,
         PresentWindows = 3,
         PresentWindowsGroup = 4,
-        HighlightWindows = 5
+        HighlightWindows = 5,
+        OverrideShadow = 6
     };
 
     /**
@@ -123,6 +124,15 @@ namespace WindowEffects
     * @since 4.4
     */
     PLASMA_EXPORT void highlightWindows(WId controller, const QList<WId> &ids);
+
+    /**
+     * Forbid te windowmanager to automatically generate a shadow for this window
+     * @param window the window that won't have shadow
+     * @param override true if it won't have shadow, false enables it again
+     *
+     * @since 4.4
+     */
+    PLASMA_EXPORT void overrideShadow(WId window, bool override);
 }
 
 } // namespace Plasma

@@ -59,6 +59,8 @@ bool isEffectAvailable(Effect effect)
     case HighlightWindows:
         effectName = "_KDE_WINDOW_HIGHLIGHT";
         break;
+    case OverrideShadow:
+        effectName = "_KDE_SHADOW_OVERRIDE";
     default:
         return false;
     }
@@ -272,6 +274,23 @@ void highlightWindows(WId controller, const QList<WId> &ids)
 
     if (!data.isEmpty()) {
         XChangeProperty(dpy, controller, atom, atom, 32, PropModeReplace,
+                        reinterpret_cast<unsigned char *>(data.data()), data.size());
+    }
+#endif
+}
+
+void shadowOverride(WId window, bool override)
+{
+#ifdef Q_WS_X11
+    Display *dpy = QX11Info::display();
+    Atom atom = XInternAtom( dpy, "_KDE_SHADOW_OVERRIDE", False );
+    QVarLengthArray<long, 1024> data(1);
+    data[0] = 1;
+
+    if (!override) {
+        XDeleteProperty(dpy, window, atom);
+    } else {
+        XChangeProperty(dpy, window, atom, atom, 32, PropModeReplace,
                         reinterpret_cast<unsigned char *>(data.data()), data.size());
     }
 #endif
