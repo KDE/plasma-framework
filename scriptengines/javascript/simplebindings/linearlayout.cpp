@@ -39,7 +39,6 @@ DECLARE_VOID_NUMBER_METHOD(QGraphicsLinearLayout, addStretch)
 DECLARE_VOID_NUMBER_NUMBER_METHOD(QGraphicsLinearLayout, insertStretch)
 DECLARE_VOID_NUMBER_NUMBER_METHOD(QGraphicsLinearLayout, setItemSpacing)
 DECLARE_VOID_QUAD_NUMBER_METHOD(QGraphicsLinearLayout, setContentsMargins)
-DECLARE_NUMBER_GET_SET_METHODS(QGraphicsLinearLayout, spacing, setSpacing)
 
 /////////////////////////////////////////////////////////////
 
@@ -79,12 +78,11 @@ static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
 }
 
 BEGIN_DECLARE_METHOD(QGraphicsLinearLayout, orientation) {
-    return QScriptValue(eng, static_cast<int>(self->orientation()));
-} END_DECLARE_METHOD
+    if (ctx->argumentCount() > 0) {
+        self->setOrientation(static_cast<Qt::Orientation>(ctx->argument(0).toInt32()));
+    }
 
-BEGIN_DECLARE_METHOD(QGraphicsLinearLayout, setOrientation) {
-    self->setOrientation(static_cast<Qt::Orientation>(ctx->argument(0).toInt32()));
-    return eng->undefinedValue();
+    return QScriptValue(eng, static_cast<int>(self->orientation()));
 } END_DECLARE_METHOD
 
 BEGIN_DECLARE_METHOD(QGraphicsLinearLayout, setAlignment) {
@@ -146,14 +144,29 @@ BEGIN_DECLARE_METHOD(QGraphicsItem, toString) {
     return QScriptValue(eng, "QGraphicsLinearLayout");
 } END_DECLARE_METHOD
 
-/////////////////////////////////////////////////////////////
+BEGIN_DECLARE_METHOD(QGraphicsLinearLayout, count) {
+    return QScriptValue(eng, self->count());
+} END_DECLARE_METHOD
 
-class PrototypeLinearLayout : public QGraphicsLinearLayout
-{
-public:
-    PrototypeLinearLayout()
-    { }
-};
+BEGIN_DECLARE_METHOD(QGraphicsLinearLayout, itemAt) {
+    if (ctx->argumentCount() < 1) {
+        return eng->undefinedValue();
+    }
+
+    int index = ctx->argument(0).toInt32();
+    return qScriptValueFromValue(eng, self->itemAt(index));
+} END_DECLARE_METHOD
+
+BEGIN_DECLARE_METHOD(QGraphicsLinearLayout, spacing) {
+    if (ctx->argumentCount() > 0) {
+        int pixels = ctx->argument(0).toInt32();
+        self->setSpacing(pixels);
+    }
+
+    return QScriptValue(eng, self->spacing());
+} END_DECLARE_METHOD
+
+/////////////////////////////////////////////////////////////
 
 QScriptValue constructLinearLayoutClass(QScriptEngine *eng)
 {
@@ -161,10 +174,10 @@ QScriptValue constructLinearLayoutClass(QScriptEngine *eng)
     QScriptValue proto = QScript::wrapPointer<QGraphicsLinearLayout>(eng, new QGraphicsLinearLayout(), QScript::UserOwnership);
     const QScriptValue::PropertyFlags getter = QScriptValue::PropertyGetter;
     const QScriptValue::PropertyFlags setter = QScriptValue::PropertySetter;
-    proto.setProperty("spacing", eng->newFunction(spacing), getter);
-    proto.setProperty("spacing", eng->newFunction(setSpacing), setter);
-    proto.setProperty("orientation", eng->newFunction(orientation), getter);
-    proto.setProperty("orientation", eng->newFunction(setOrientation), setter);
+    proto.setProperty("count", eng->newFunction(count), getter);
+    proto.setProperty("spacing", eng->newFunction(spacing), getter | setter);
+    proto.setProperty("orientation", eng->newFunction(orientation), getter | setter);
+    ADD_METHOD(proto, itemAt);
     ADD_METHOD(proto, removeAt);
     ADD_METHOD(proto, addStretch);
     ADD_METHOD(proto, setStretchFactor);
