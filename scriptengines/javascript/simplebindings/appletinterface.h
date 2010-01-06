@@ -224,6 +224,7 @@ enum QtScrollBarPolicy {
     Q_INVOKABLE bool hasExtension(const QString &extension) const;
 
     Q_INVOKABLE void debug(const QString &msg);
+    Q_INVOKABLE QObject *findChild(const QString &name) const;
 
     Plasma::DataEngine *dataEngine(const QString &name);
 

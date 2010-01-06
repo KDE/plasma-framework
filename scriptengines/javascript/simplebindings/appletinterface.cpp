@@ -349,6 +349,22 @@ void AppletInterface::debug(const QString &msg)
     kDebug() << msg;
 }
 
+QObject *AppletInterface::findChild(const QString &name) const
+{
+    if (name.isEmpty()) {
+        return 0;
+    }
+
+    foreach (QGraphicsItem *item, applet()->childItems()) {
+        QGraphicsWidget *widget = dynamic_cast<QGraphicsWidget *>(item);
+        if (widget && widget->objectName() == name) {
+            return widget;
+        }
+    }
+
+    return 0;
+}
+
 void AppletInterface::gc()
 {
     QTimer::singleShot(0, m_appletScriptEngine, SLOT(collectGarbage()));
