@@ -279,7 +279,7 @@ void highlightWindows(WId controller, const QList<WId> &ids)
 #endif
 }
 
-void shadowOverride(WId window, bool override)
+void overrideShadow(WId window, bool override)
 {
 #ifdef Q_WS_X11
     Display *dpy = QX11Info::display();

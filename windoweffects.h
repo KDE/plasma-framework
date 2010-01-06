@@ -24,7 +24,7 @@
 
 #include <plasma/plasma.h>
 
-/** @headerfile plasma/windoweffect.h <Plasma/PaintUtils> */
+/** @headerfile plasma/windoweffect.h <Plasma/WindowEffect> */
 
 namespace Plasma
 {

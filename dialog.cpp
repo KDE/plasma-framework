@@ -289,6 +289,7 @@ Dialog::Dialog(QWidget *parent, Qt::WindowFlags f)
     QPalette pal = palette();
     pal.setColor(backgroundRole(), Qt::transparent);
     setPalette(pal);
+    WindowEffects::overrideShadow(winId(), true);
 
     d->adjustViewTimer = new QTimer(this);
     d->adjustViewTimer->setSingleShot(true);
@@ -438,7 +439,7 @@ void Dialog::resizeEvent(QResizeEvent *e)
     d->background->resizeFrame(e->size());
 
     if (Plasma::Theme::defaultTheme()->windowTranslucencyEnabled()) {
-        setMask(d->background->mask());
+        clearMask();
     } else {
         setMask(QRect(QPoint(0, 0), size()));
     }
