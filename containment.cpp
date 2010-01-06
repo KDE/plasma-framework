@@ -624,7 +624,7 @@ void Containment::showContextMenu(const QPointF &containmentPos, const QPoint &s
 void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
     //kDebug() << "let's see if we manage to get a context menu here, huh";
-    if (!isContainment() || !scene() || !KAuthorized::authorizeKAction("desktop_contextmenu")) {
+    if (!isContainment() || !scene() || !KAuthorized::authorizeKAction("plasma/containment_context_menu")) {
         Applet::contextMenuEvent(event);
         return;
     }
@@ -640,7 +640,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 void ContainmentPrivate::containmentActions(KMenu &desktopMenu)
 {
     if (static_cast<Corona*>(q->scene())->immutability() != Mutable &&
-        !KAuthorized::authorizeKAction("unlock_desktop")) {
+        !KAuthorized::authorizeKAction("plasma/containment_actions")) {
         //kDebug() << "immutability";
         return;
     }

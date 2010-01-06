@@ -1169,7 +1169,7 @@ void Applet::flushPendingConstraintsEvents()
                 connect(configAction, SIGNAL(triggered(bool)), this, SLOT(showConfigurationInterface()));
             }
 
-            bool canConfig = unlocked || KAuthorized::authorize("PlasmaAllowConfigureWhenLocked");
+            bool canConfig = unlocked || KAuthorized::authorize("plasma/allow_configure_when_locked");
             configAction->setVisible(canConfig);
             configAction->setEnabled(canConfig);
         }
