@@ -170,6 +170,11 @@ ToolButton::ToolButton(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
       d(new ToolButtonPrivate(this))
 {
+    d->background = new FrameSvg(this);
+    d->background->setImagePath("widgets/button");
+    d->background->setCacheAllRenderedFrames(true);
+    d->background->setElementPrefix("normal");
+
     QToolButton *native = new QToolButton;
     connect(native, SIGNAL(clicked()), this, SIGNAL(clicked()));
     connect(native, SIGNAL(pressed()), this, SIGNAL(pressed()));
@@ -178,10 +183,6 @@ ToolButton::ToolButton(QGraphicsWidget *parent)
     native->setAttribute(Qt::WA_NoSystemBackground);
     native->setAutoRaise(true);
 
-    d->background = new FrameSvg(this);
-    d->background->setImagePath("widgets/button");
-    d->background->setCacheAllRenderedFrames(true);
-    d->background->setElementPrefix("normal");
     d->syncBorders();
     setAcceptHoverEvents(true);
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(syncBorders()));
@@ -215,6 +216,7 @@ bool ToolButton::autoRaise() const
 void ToolButton::setText(const QString &text)
 {
     static_cast<QToolButton*>(widget())->setText(text);
+    updateGeometry();
 }
 
 QString ToolButton::text() const
@@ -428,6 +430,20 @@ void ToolButton::changeEvent(QEvent *event)
     }
 
     QGraphicsProxyWidget::changeEvent(event);
+}
+
+QSizeF ToolButton::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
+{
+    QSizeF hint = QGraphicsProxyWidget::sizeHint(which, constraint);
+
+    //replace the native margin with the Svg one
+    QStyleOption option;
+    option.initFrom(nativeWidget());
+    int nativeMargin = nativeWidget()->style()->pixelMetric(QStyle::PM_ButtonMargin, &option, nativeWidget());
+    qreal left, top, right, bottom;
+    d->background->getMargins(left, top, right, bottom);
+    hint = hint - QSize(nativeMargin, nativeMargin) + QSize(left+right, top+bottom);
+    return hint;
 }
 
 } // namespace Plasma
