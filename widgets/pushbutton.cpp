@@ -196,6 +196,7 @@ PushButton::~PushButton()
 void PushButton::setText(const QString &text)
 {
     static_cast<KPushButton*>(widget())->setText(text);
+    updateGeometry();
 }
 
 QString PushButton::text() const
@@ -507,6 +508,24 @@ void PushButton::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     d->background->setElementPrefix("active");
 
     QGraphicsProxyWidget::hoverLeaveEvent(event);
+}
+
+QSizeF PushButton::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
+{
+    QSizeF hint = QGraphicsProxyWidget::sizeHint(which, constraint);
+
+    if (hint.isEmpty()) {
+        return hint;
+    }
+
+    //replace the native margin with the Svg one
+    QStyleOption option;
+    option.initFrom(nativeWidget());
+    int nativeMargin = nativeWidget()->style()->pixelMetric(QStyle::PM_ButtonMargin, &option, nativeWidget());
+    qreal left, top, right, bottom;
+    d->background->getMargins(left, top, right, bottom);
+    hint = hint - QSize(nativeMargin, nativeMargin) + QSize(left+right, top+bottom);
+    return hint;
 }
 
 } // namespace Plasma
