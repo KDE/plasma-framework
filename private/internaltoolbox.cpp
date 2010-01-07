@@ -228,10 +228,8 @@ bool InternalToolBox::isShowing() const
 void InternalToolBox::setShowing(const bool show)
 {
     if (show) {
-        kDebug() << "showing";
         showToolBox();
     } else {
-        kDebug() << "hiding";
         hideToolBox();
     }
     d->showing = show;
