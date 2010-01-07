@@ -436,6 +436,10 @@ QSizeF ToolButton::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
 {
     QSizeF hint = QGraphicsProxyWidget::sizeHint(which, constraint);
 
+    if (hint.isEmpty()) {
+        return hint;
+    }
+
     //replace the native margin with the Svg one
     QStyleOption option;
     option.initFrom(nativeWidget());
