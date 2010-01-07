@@ -558,37 +558,37 @@ void DesktopToolBox::showToolBox()
     const int iconWidth = KIconLoader::SizeMedium;
     switch (corner()) {
     case TopRight:
-        x = (int)boundingRect().right() - iconWidth - 5 - d->toolBacker->size().width();
-        y = (int)boundingRect().top() + 10;
+        x = (int)boundingRect().left() - d->toolBacker->size().width();
+        y = (int)boundingRect().top();
         break;
     case Top:
-        x = (int)boundingRect().center().x() - iconWidth - (d->toolBacker->size().width() / 2);
-        y = (int)boundingRect().top() + iconWidth + 10;
+        x = (int)boundingRect().center().x() - (d->toolBacker->size().width() / 2);
+        y = (int)boundingRect().bottom();
         break;
     case TopLeft:
-        x = (int)boundingRect().left() + iconWidth + 5;
-        y = (int)boundingRect().top() + 10;
+        x = (int)boundingRect().right();
+        y = (int)boundingRect().top();
         break;
     case Left:
-        x = (int)boundingRect().left() + iconWidth + 5;
-        y = (int)boundingRect().center().y() - iconWidth;
+        x = (int)boundingRect().left() + iconWidth;
+        y = (int)boundingRect().y();
         break;
     case Right:
-        x = (int)boundingRect().right() - iconWidth - 5 - d->toolBacker->size().width();
-        y = (int)boundingRect().center().y() - iconWidth;
+        x = (int)boundingRect().right() - iconWidth - d->toolBacker->size().width();
+        y = (int)boundingRect().y();
         break;
     case BottomLeft:
-        x = (int)boundingRect().left() + iconWidth + 5;
-        y = (int)boundingRect().bottom() - 5;
+        x = (int)boundingRect().left() + iconWidth;
+        y = (int)boundingRect().bottom();
         break;
     case Bottom:
-        x = (int)boundingRect().center().x() - iconWidth - (d->toolBacker->size().width() / 2);
-        y = (int)boundingRect().bottom() - iconWidth - 5;
+        x = (int)boundingRect().center().x() - (d->toolBacker->size().width() / 2);
+        y = (int)boundingRect().top();
         break;
     case BottomRight:
     default:
-        x = (int)boundingRect().right() - iconWidth - 5 - d->toolBacker->size().width();
-        y = (int)boundingRect().bottom() - iconWidth - 5;
+        x = (int)boundingRect().right() - iconWidth - d->toolBacker->size().width();
+        y = (int)boundingRect().top();
         break;
     }
 
@@ -611,19 +611,16 @@ void DesktopToolBox::showToolBox()
         QRectF backerRect = mapToParent(d->toolBacker->geometry()).boundingRect();
         QSizeF parentSize = parentWidget()->size();
         if (backerRect.x() < 5) {
-            d->toolBacker->setPos(5, y);
+            d->toolBacker->setPos(mapFromParent(QPointF(5, 0)).x(), y);
         } else if (backerRect.right() > parentSize.width() - 5) {
-            d->toolBacker->setPos(parentSize.width() - 5 - backerRect.width(), y);
+            d->toolBacker->setPos(mapFromParent(QPointF(parentSize.width() - 5 - backerRect.width(), 0)).x(), y);
         }
 
         if (backerRect.y() < 5) {
-            d->toolBacker->setPos(x, 5);
+            d->toolBacker->setPos(x, mapFromParent(QPointF(0, 5)).y());
         } else if (backerRect.bottom() > parentSize.height() - 5) {
-            d->toolBacker->setPos(x, parentSize.height() - 5 - backerRect.height());
+            d->toolBacker->setPos(x, mapFromParent(QPointF(0, parentSize.height() - 5 - backerRect.height())).y());
         }
-
-        // re-map our starting points back to our coordinate system
-        backerRect = mapFromParent(backerRect).boundingRect();
     }
 
     d->toolBacker->setOpacity(0);
@@ -658,7 +655,6 @@ void DesktopToolBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 void DesktopToolBox::hideToolBox()
 {
-    Plasma::Animator *animdriver = Plasma::Animator::self();
     foreach (QGraphicsItem *tool, tools()) {
         const int height = static_cast<int>(tool->boundingRect().height());
         if (isToolbar()) {
