@@ -217,6 +217,7 @@ protected:
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
     void changeEvent(QEvent *event);
+    QSizeF sizeHint(Qt::SizeHint which, const QSizeF & constraint) const;
 
 private:
     Q_PRIVATE_SLOT(d, void syncBorders())
