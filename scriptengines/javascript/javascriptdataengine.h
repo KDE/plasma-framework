@@ -24,7 +24,7 @@
 
 #include <QScriptValue>
 
-class QScriptEngine;
+class ScriptEnv;
 class QScriptContext;
 
 class JavaScriptDataEngine : public Plasma::DataEngineScript
@@ -50,6 +50,9 @@ public:
     void jsSetPollingInterval(int interval);
     int pollingInterval() const;
 
+private Q_SLOTS:
+    void reportError(ScriptEnv *engine, bool fatal) const;
+
 private:
     static JavaScriptDataEngine *extractIFace(QScriptEngine *engine, QString &error);
     static QScriptValue jsSetData(QScriptContext *context, QScriptEngine *engine);
@@ -58,10 +61,9 @@ private:
     static QScriptValue jsRemoveAllSources(QScriptContext *context, QScriptEngine *engine);
 
     QScriptValue callFunction(const QString &functionName, const QScriptValueList &args) const;
-    void reportError() const;
 
-    QScriptEngine *m_qscriptEngine;
-    QScriptValue m_iface;
+    ScriptEnv *m_qscriptEngine;
+    QScriptValue iface;
 };
 
 #endif

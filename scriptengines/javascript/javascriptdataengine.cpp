@@ -20,16 +20,18 @@
 #include "javascriptdataengine.h"
 
 #include <QScriptEngine>
-#include <QScriptContext>
 
+#include "authorization.h"
+#include "scriptenv.h"
 #include "simplebindings/dataengine.h"
 #include "simplebindings/i18n.h"
 
 JavaScriptDataEngine::JavaScriptDataEngine(QObject *parent, const QVariantList &args)
     : DataEngineScript(parent),
-      m_qscriptEngine(new QScriptEngine(this))
+      m_qscriptEngine(new ScriptEnv(this))
 {
     Q_UNUSED(args)
+    connect(m_qscriptEngine, SIGNAL(reportError(ScriptEnv*,bool)), this, SLOT(reportError(ScriptEnv*,bool)));
 }
 
 bool JavaScriptDataEngine::init()
@@ -38,9 +40,9 @@ bool JavaScriptDataEngine::init()
 
     bindI18N(m_qscriptEngine);
 
-    QScriptValue m_iface = m_qscriptEngine->newQObject(this);
-    m_iface.setScope(global);
-    global.setProperty("engine", m_iface);
+    QScriptValue iface = m_qscriptEngine->newQObject(this);
+    iface.setScope(global);
+    global.setProperty("engine", iface);
 
     global.setProperty("setData", m_qscriptEngine->newFunction(JavaScriptDataEngine::jsSetData));
     global.setProperty("removeAllData", m_qscriptEngine->newFunction(JavaScriptDataEngine::jsRemoveAllData));
@@ -53,6 +55,11 @@ TODO: Service bindings
 m_qscriptEngine->setDefaultPrototype(qMetaTypeId<Service*>(), m_qscriptEngine->newQObject(new DummyService()));
 m_qscriptEngine->setDefaultPrototype(qMetaTypeId<ServiceJob*>(), m_qscriptEngine->newQObject(new ServiceJob(QString(), QString(), QMap<QString, QVariant>())));
      */
+
+    Authorization auth;
+    if (!m_qscriptEngine->importExtensions(description(), iface, auth)) {
+        return false;
+    }
 
     return true;
 }
@@ -184,15 +191,15 @@ QScriptValue JavaScriptDataEngine::jsRemoveAllSources(QScriptContext *context, Q
 
 QScriptValue JavaScriptDataEngine::callFunction(const QString &functionName, const QScriptValueList &args) const
 {
-    QScriptValue fun = m_iface.property(functionName);
+    QScriptValue fun = iface.property(functionName);
     if (fun.isFunction()) {
         QScriptContext *ctx = m_qscriptEngine->pushContext();
-        ctx->setActivationObject(m_iface);
-        QScriptValue rv = fun.call(m_iface, args);
+        ctx->setActivationObject(iface);
+        QScriptValue rv = fun.call(iface, args);
         m_qscriptEngine->popContext();
 
         if (m_qscriptEngine->hasUncaughtException()) {
-            reportError();
+            reportError(m_qscriptEngine, false);
         } else {
             return rv;
         }
@@ -201,11 +208,13 @@ QScriptValue JavaScriptDataEngine::callFunction(const QString &functionName, con
     return QScriptValue();
 }
 
-void JavaScriptDataEngine::reportError() const
+void JavaScriptDataEngine::reportError(ScriptEnv *engine, bool fatal) const
 {
-    kDebug() << "Error: " << m_qscriptEngine->uncaughtException().toString()
-             << " at line " << m_qscriptEngine->uncaughtExceptionLineNumber() << endl;
-    kDebug() << m_qscriptEngine->uncaughtExceptionBacktrace();
+    Q_UNUSED(fatal)
+
+    kDebug() << "Error: " << engine->uncaughtException().toString()
+             << " at line " << engine->uncaughtExceptionLineNumber() << endl;
+    kDebug() << engine->uncaughtExceptionBacktrace();
 }
 
 QStringList JavaScriptDataEngine::sources() const
