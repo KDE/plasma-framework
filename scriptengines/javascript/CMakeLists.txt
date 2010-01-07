@@ -49,17 +49,16 @@ install(FILES plasma-scriptengine-applet-simple-javascript.desktop DESTINATION $
 
 set(javascript_runner_engine_SRCS
     javascriptrunner.cpp
+    scriptenv.cpp
 )
 
 kde4_add_plugin(plasma_runnerscript_javascript ${javascript_runner_engine_SRCS})
 
 target_link_libraries(plasma_runnerscript_javascript
-                       ${KDE4_KDECORE_LIBS}
-                       ${KDE4_PLASMA_LIBS}
-                       ${QT_QTSCRIPT_LIBRARY}
-                       ${QT_QTUITOOLS_LIBRARY}
-                       ${QT_QTXML_LIBRARY}
-                       )
+                      ${KDE4_KDECORE_LIBS}
+                      ${KDE4_KIO_LIBS}
+                      ${KDE4_PLASMA_LIBS}
+                      ${QT_QTSCRIPT_LIBRARY})
 
 install(TARGETS plasma_runnerscript_javascript DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES plasma-scriptengine-runner-javascript.desktop DESTINATION ${SERVICES_INSTALL_DIR})
@@ -76,10 +75,10 @@ set(javascript_dataengine_engine_SRCS
 kde4_add_plugin(plasma_dataenginescript_javascript ${javascript_dataengine_engine_SRCS})
 
 target_link_libraries(plasma_dataenginescript_javascript
-                       ${KDE4_KDECORE_LIBS}
-                       ${KDE4_KIO_LIBS}
-                       ${KDE4_PLASMA_LIBS}
-                       ${QT_QTSCRIPT_LIBRARY})
+                      ${KDE4_KDECORE_LIBS}
+                      ${KDE4_KIO_LIBS}
+                      ${KDE4_PLASMA_LIBS}
+                      ${QT_QTSCRIPT_LIBRARY})
 
 install(TARGETS plasma_dataenginescript_javascript DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES plasma-scriptengine-dataengine-javascript.desktop DESTINATION ${SERVICES_INSTALL_DIR})

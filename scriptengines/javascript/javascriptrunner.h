@@ -25,7 +25,7 @@
 
 #include <Plasma/RunnerScript>
 
-class QScriptEngine;
+class ScriptEnv;
 
 class JavaScriptRunner : public Plasma::RunnerScript
 {
@@ -41,7 +41,7 @@ public:
     Q_INVOKABLE Plasma::AbstractRunner* runner() const;
 
     /** Reimplemented to forward to script. */
-    void match(Plasma::RunnerContext *search);
+    void match(Plasma::RunnerContext &search);
 
     /** Reimplemented to forward to script. */
     void exec(const Plasma::RunnerContext *search, const Plasma::QueryMatch *action);
@@ -49,10 +49,10 @@ public:
 protected:
     void setupObjects();
     void importExtensions();
-    void reportError();
+    void reportError(ScriptEnv *engine, bool fatal);
 
 private:
-    QScriptEngine *m_engine;
+    ScriptEnv *m_engine;
     QScriptValue m_self;
 };
 

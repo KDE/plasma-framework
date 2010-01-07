@@ -18,12 +18,13 @@
 
 #include "javascriptrunner.h"
 
-#include <QScriptEngine>
 #include <QFile>
 
 #include <Plasma/AbstractRunner>
 #include <Plasma/QueryMatch>
 
+#include "authorization.h"
+#include "scriptenv.h"
 
 typedef const Plasma::RunnerContext* ConstRunnerContextStar;
 typedef const Plasma::QueryMatch* ConstSearchMatchStar;
@@ -34,11 +35,11 @@ Q_DECLARE_METATYPE(ConstRunnerContextStar)
 Q_DECLARE_METATYPE(ConstSearchMatchStar)
 
 JavaScriptRunner::JavaScriptRunner(QObject *parent, const QVariantList &args)
-    : RunnerScript(parent)
+    : RunnerScript(parent),
+      m_engine(new ScriptEnv(this))
 {
     Q_UNUSED(args);
-    m_engine = new QScriptEngine(this);
-    importExtensions();
+    connect(m_engine, SIGNAL(reportError(ScriptEnv*,bool)), this, SLOT(reportError(ScriptEnv*,bool)));
 }
 
 JavaScriptRunner::~JavaScriptRunner()
@@ -54,6 +55,11 @@ bool JavaScriptRunner::init()
 {
     setupObjects();
 
+    Authorization auth;
+    if (!m_engine->importExtensions(description(), m_self, auth)) {
+        return false;
+    }
+
     QFile file(mainScript());
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text) ) {
         kWarning() << "Unable to load script file";
@@ -65,14 +71,14 @@ bool JavaScriptRunner::init()
 
     m_engine->evaluate(script);
     if (m_engine->hasUncaughtException()) {
-        reportError();
+        reportError(m_engine, true);
         return false;
     }
 
     return true;
 }
 
-void JavaScriptRunner::match(Plasma::RunnerContext *search)
+void JavaScriptRunner::match(Plasma::RunnerContext &search)
 {
     QScriptValue fun = m_self.property("match");
     if (!fun.isFunction()) {
@@ -81,7 +87,7 @@ void JavaScriptRunner::match(Plasma::RunnerContext *search)
     }
 
     QScriptValueList args;
-    args << m_engine->toScriptValue(search);
+    args << m_engine->toScriptValue(&search);
 
     QScriptContext *ctx = m_engine->pushContext();
     ctx->setActivationObject(m_self);
@@ -89,7 +95,7 @@ void JavaScriptRunner::match(Plasma::RunnerContext *search)
     m_engine->popContext();
 
     if (m_engine->hasUncaughtException()) {
-        reportError();
+        reportError(m_engine, false);
     }
 }
 
@@ -111,7 +117,7 @@ void JavaScriptRunner::exec(const Plasma::RunnerContext *search, const Plasma::Q
     m_engine->popContext();
 
     if (m_engine->hasUncaughtException()) {
-        reportError();
+        reportError(m_engine, false);
     }
 }
 
@@ -126,26 +132,12 @@ void JavaScriptRunner::setupObjects()
     global.setProperty("runner", m_self);
 }
 
-void JavaScriptRunner::importExtensions()
+void JavaScriptRunner::reportError(ScriptEnv *engine, bool fatal)
 {
-    QStringList extensions;
-    //extensions << "qt.core" << "qt.gui" << "qt.svg" << "qt.xml" << "org.kde.plasma";
-    //extensions << "qt.core" << "qt.gui" << "qt.xml";
-    foreach (const QString &ext, extensions) {
-        kDebug() << "importing " << ext << "...";
-        QScriptValue ret = m_engine->importExtension(ext);
-        if (ret.isError()) {
-            kDebug() << "failed to import extension" << ext << ":" << ret.toString();
-        }
-    }
-    kDebug() << "done importing extensions.";
-}
-
-void JavaScriptRunner::reportError()
-{
-    kDebug() << "Error: " << m_engine->uncaughtException().toString()
-             << " at line " << m_engine->uncaughtExceptionLineNumber() << endl;
-    kDebug() << m_engine->uncaughtExceptionBacktrace();
+    Q_UNUSED(fatal)
+    kDebug() << "Error: " << engine->uncaughtException().toString()
+             << " at line " << engine->uncaughtExceptionLineNumber() << endl;
+    kDebug() << engine->uncaughtExceptionBacktrace();
 }
 
 #include "javascriptrunner.moc"
