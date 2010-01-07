@@ -21,7 +21,6 @@
 
 #include <iostream>
 
-#include <QScriptEngine>
 #include <QFile>
 #include <QUiLoader>
 #include <QGraphicsLayout>
@@ -48,12 +47,13 @@
 #include <Plasma/PopupApplet>
 #include <Plasma/VideoWidget>
 
+#include "appletauthorization.h"
+#include "scriptenv.h"
 #include "simplebindings/animationgroup.h"
 #include "simplebindings/dataengine.h"
 #include "simplebindings/i18n.h"
 #include "simplebindings/appletinterface.h"
 #include "simplebindings/bytearrayclass.h"
-#include "simplebindings/filedialogproxy.h"
 #include "simplebindings/variant.h"
 
 using namespace Plasma;
@@ -89,19 +89,6 @@ public:
     }
 };
 
-void registerEnums(QScriptEngine *engine, QScriptValue &scriptValue, const QMetaObject &meta)
-{
-    //manually create enum values. ugh
-    for (int i = 0; i < meta.enumeratorCount(); ++i) {
-        QMetaEnum e = meta.enumerator(i);
-        //kDebug() << e.name();
-        for (int i=0; i < e.keyCount(); ++i) {
-            //kDebug() << e.key(i) << e.value(i);
-            scriptValue.setProperty(e.key(i), QScriptValue(engine, e.value(i)));
-        }
-    }
-}
-
 KSharedPtr<UiLoader> SimpleJavaScriptApplet::s_widgetLoader;
 QHash<QString, Plasma::Animator::Animation> SimpleJavaScriptApplet::s_animationDefs;
 
@@ -111,7 +98,8 @@ SimpleJavaScriptApplet::SimpleJavaScriptApplet(QObject *parent, const QVariantLi
     Q_UNUSED(args)
 //    kDebug() << "Script applet launched, args" << applet()->startupArguments();
 
-    m_engine = new QScriptEngine(this);
+    m_engine = new ScriptEnv(this);
+    connect(m_engine, SIGNAL(reportError(ScriptEnv*,bool)), this, SLOT(engineReportsError(ScriptEnv*,bool)));
 }
 
 SimpleJavaScriptApplet::~SimpleJavaScriptApplet()
@@ -119,6 +107,11 @@ SimpleJavaScriptApplet::~SimpleJavaScriptApplet()
     if (s_widgetLoader.count() == 1) {
         s_widgetLoader.clear();
     }
+}
+
+void SimpleJavaScriptApplet::engineReportsError(ScriptEnv *engine, bool fatal)
+{
+    reportError(engine, fatal);
 }
 
 void SimpleJavaScriptApplet::reportError(QScriptEngine *engine, bool fatal)
@@ -271,22 +264,7 @@ void SimpleJavaScriptApplet::constraintsEvent(Plasma::Constraints constraints)
 
 bool SimpleJavaScriptApplet::include(const QString &path)
 {
-    QFile file(path);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        kWarning() << i18n("Unable to load script file: %1", path);
-        return false;
-    }
-
-    QString script = file.readAll();
-    //kDebug() << "Script says" << script;
-
-    m_engine->evaluate(script);
-    if (m_engine->hasUncaughtException()) {
-        reportError(m_engine, true);
-        return false;
-    }
-
-    return true;
+    return m_engine->include(path);
 }
 
 void SimpleJavaScriptApplet::populateAnimationsHash()
@@ -307,201 +285,15 @@ bool SimpleJavaScriptApplet::init()
 {
     setupObjects();
 
-    if (!importExtensions()) {
+    AppletAuthorization auth(this);
+    if (!m_engine->importExtensions(description(), m_self, auth)) {
         return false;
     }
 
     kDebug() << "ScriptName:" << applet()->name();
     kDebug() << "ScriptCategory:" << applet()->category();
 
-    return include(mainScript());
-}
-
-QScriptValue SimpleJavaScriptApplet::runApplication(QScriptContext *context, QScriptEngine *engine)
-{
-    Q_UNUSED(engine)
-    if (context->argumentCount() == 0) {
-        return false;
-    }
-
-    KUrl::List urls;
-    if (context->argumentCount() > 1) {
-        urls = qscriptvalue_cast<KUrl::List>(context->argument(1));
-    }
-
-    const QString app = context->argument(0).toString();
-
-    KService::Ptr service = KService::serviceByStorageId(app);
-    if (service) {
-        return KRun::run(*service, urls, 0);
-    }
-
-    const QString exec = KGlobal::dirs()->findExe(app);
-    if (!exec.isEmpty()) {
-        return KRun::run(exec, urls, 0);
-    }
-
-    return false;
-}
-
-QScriptValue SimpleJavaScriptApplet::runCommand(QScriptContext *context, QScriptEngine *engine)
-{
-    Q_UNUSED(engine)
-    if (context->argumentCount() == 0) {
-        return false;
-    }
-
-    const QString exec = KGlobal::dirs()->findExe(context->argument(0).toString());
-    if (!exec.isEmpty()) {
-        QString args;
-        if (context->argumentCount() > 1) {
-            const QStringList argList = qscriptvalue_cast<QStringList>(context->argument(1));
-            if (!argList.isEmpty()) {
-                args = ' ' + KShell::joinArgs(argList);
-            }
-        }
-
-        return KRun::runCommand(exec + args, 0);
-    }
-
-    return false;
-}
-
-QScriptValue SimpleJavaScriptApplet::openUrl(QScriptContext *context, QScriptEngine *engine)
-{
-    Q_UNUSED(engine)
-    if (context->argumentCount() == 0) {
-        return false;
-    }
-
-    QScriptValue v = context->argument(0);
-    KUrl url = v.isString() ? KUrl(v.toString()) : qscriptvalue_cast<KUrl>(v);
-    if (url.isValid()) {
-        return KRun::runUrl(url, KMimeType::findByUrl(url)->name(), 0);
-    }
-
-    return false;
-}
-
-QScriptValue SimpleJavaScriptApplet::getUrl(QScriptContext *context, QScriptEngine *engine)
-{
-    if (context->argumentCount() == 0) {
-        return engine->undefinedValue();
-    }
-
-    QScriptValue v = context->argument(0);
-    KUrl url = v.isString() ? KUrl(v.toString()) : qscriptvalue_cast<KUrl>(v);
-
-    if (!url.isValid()) {
-        return engine->undefinedValue();
-    }
-
-    AppletInterface *interface = extractAppletInterface(engine);
-    AllowedUrls allowed = interface ? interface->allowedUrls() : NoUrls;
-    if (url.isLocalFile()) {
-        if (!(allowed & LocalUrls)) {
-            return engine->undefinedValue();
-        }
-    } else if (!(allowed & NetworkUrls) &&
-               !((allowed & HttpUrls) && (url.protocol() == "http" || url.protocol() == "https"))) {
-        return engine->undefinedValue();
-    }
-
-    KIO::Job *job = KIO::get(url);
-    return engine->newQObject(job);
-}
-
-void SimpleJavaScriptApplet::registerGetUrl()
-{
-    QScriptValue get = m_self.property("getUrl");
-    if (!get.isValid()) {
-        m_self.setProperty("getUrl", m_engine->newFunction(SimpleJavaScriptApplet::getUrl));
-    }
-}
-
-bool SimpleJavaScriptApplet::importBuiltinExtesion(const QString &extension)
-{
-    kDebug() << extension;
-    if ("filedialog" == extension) {
-        FileDialogProxy::registerWithRuntime(m_engine);
-        return true;
-    } else if ("launchapp" == extension) {
-        m_self.setProperty("runApplication", m_engine->newFunction(SimpleJavaScriptApplet::runApplication));
-        m_self.setProperty("runCommand", m_engine->newFunction(SimpleJavaScriptApplet::runCommand));
-        m_self.setProperty("openUrl", m_engine->newFunction(SimpleJavaScriptApplet::openUrl));
-        return true;
-    } else if ("http" == extension) {
-        m_interface->setAllowedUrls(m_interface->allowedUrls() | HttpUrls);
-        registerGetUrl();
-        return true;
-    } else if ("networkio" == extension) {
-        m_interface->setAllowedUrls(m_interface->allowedUrls() | HttpUrls | NetworkUrls);
-        registerGetUrl();
-        return true;
-    } else if ("localio" == extension) {
-        m_interface->setAllowedUrls(m_interface->allowedUrls() | LocalUrls);
-        registerGetUrl();
-        return true;
-    }
-
-    return false;
-}
-
-bool SimpleJavaScriptApplet::importExtensions()
-{
-    KPluginInfo info = description();
-    QStringList requiredExtensions = info.service()->property("X-Plasma-RequiredExtensions", QVariant::StringList).toStringList();
-    kDebug() << "required extensions are" << requiredExtensions;
-    foreach (const QString &ext, requiredExtensions) {
-        QString extension = ext.toLower();
-        if (m_extensions.contains(extension)) {
-            continue;
-        }
-
-        if (!applet()->hasAuthorization(extension)) {
-            setFailedToLaunch(true,
-                              i18n("Authorization for required extension '%1' was denied.",
-                                   extension));
-            return false;
-        }
-
-        if (!importBuiltinExtesion(extension)) {
-            m_engine->importExtension(extension);
-        }
-
-        if (m_engine->hasUncaughtException()) {
-            reportError(m_engine, true);
-            return false;
-        } else {
-            m_extensions << extension;
-        }
-    }
-
-    QStringList optionalExtensions = info.service()->property("X-Plasma-OptionalExtensions", QVariant::StringList).toStringList();
-    kDebug() << "optional extensions are" << optionalExtensions;
-    foreach (const QString &ext, optionalExtensions) {
-        QString extension = ext.toLower();
-
-        if (m_extensions.contains(extension)) {
-            continue;
-        }
-
-        if (!applet()->hasAuthorization(extension)) {
-            continue;
-        }
-
-        if (!importBuiltinExtesion(extension)) {
-            m_engine->importExtension(extension);
-        }
-
-        if (m_engine->hasUncaughtException()) {
-            reportError(m_engine);
-        } else {
-            m_extensions << extension;
-        }
-    }
-
-    return true;
+    return m_engine->include(mainScript());
 }
 
 void SimpleJavaScriptApplet::setupObjects()
@@ -539,15 +331,12 @@ void SimpleJavaScriptApplet::setupObjects()
     }
     global.setProperty("startupArguments", args);
 
-    registerEnums(m_engine, global, AppletInterface::staticMetaObject);
+    m_engine->registerEnums(global, AppletInterface::staticMetaObject);
 
 
     // Add a global loadui method for ui files
     QScriptValue fun = m_engine->newFunction(SimpleJavaScriptApplet::loadui);
     global.setProperty("loadui", fun);
-
-    fun = m_engine->newFunction(SimpleJavaScriptApplet::print);
-    global.setProperty("print", fun);
 
     // Work around bug in 4.3.0
     qMetaTypeId<QVariant>();
@@ -585,7 +374,7 @@ void SimpleJavaScriptApplet::setupObjects()
 
 QSet<QString> SimpleJavaScriptApplet::loadedExtensions() const
 {
-    return m_extensions;
+    return m_engine->loadedExtensions();
 }
 
 AppletInterface *SimpleJavaScriptApplet::extractAppletInterface(QScriptEngine *engine)
@@ -827,27 +616,8 @@ QScriptValue SimpleJavaScriptApplet::createWidget(QScriptContext *context, QScri
     fun.setProperty("adjustSize", engine->newFunction(widgetAdjustSize));
 
     //register enums will be accessed for instance as frame.Sunken for Frame shadow...
-    registerEnums(engine, fun, *w->metaObject());
+    static_cast<ScriptEnv*>(engine)->registerEnums(fun, *w->metaObject());
     return fun;
-}
-
-QScriptValue SimpleJavaScriptApplet::notSupported(QScriptContext *context, QScriptEngine *engine)
-{
-    Q_UNUSED(engine)
-    QString message = context->callee().property("message").toString();
-    return context->throwError(i18n("This operation was not supported, %1", message) );
-}
-
-
-QScriptValue SimpleJavaScriptApplet::print(QScriptContext *context, QScriptEngine *engine)
-{
-    if (context->argumentCount() != 1) {
-        return context->throwError(i18n("print() takes one argument"));
-    }
-
-    //TODO: a GUI console? :)
-    std::cout << context->argument(0).toString().toLocal8Bit().constData() << std::endl;
-    return engine->undefinedValue();
 }
 
 void SimpleJavaScriptApplet::collectGarbage()

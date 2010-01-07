@@ -1,6 +1,8 @@
 # APPLET
 
 set(simple_javascript_engine_SRCS
+    appletauthorization.cpp
+    scriptenv.cpp
     simplejavascriptapplet.cpp
     simplebindings/animationgroup.cpp
     simplebindings/appletinterface.cpp

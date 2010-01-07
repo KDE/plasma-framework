@@ -38,8 +38,7 @@
 AppletInterface::AppletInterface(SimpleJavaScriptApplet *parent)
     : QObject(parent),
       m_appletScriptEngine(parent),
-      m_actionSignals(0),
-      m_allowedUrls(SimpleJavaScriptApplet::NoUrls)
+      m_actionSignals(0)
 {
     connect(this, SIGNAL(releaseVisualFocus()), applet(), SIGNAL(releaseVisualFocus()));
     connect(this, SIGNAL(configNeedsSaving()), applet(), SIGNAL(configNeedsSaving()));
@@ -317,16 +316,6 @@ int AppletInterface::apiVersion() const
     }
 
     return offers.first()->property("X-KDE-PluginInfo-Version", QVariant::Int).toInt();
-}
-
-SimpleJavaScriptApplet::AllowedUrls AppletInterface::allowedUrls() const
-{
-    return m_allowedUrls;
-}
-
-void AppletInterface::setAllowedUrls(const SimpleJavaScriptApplet::AllowedUrls &allowedUrls)
-{
-    m_allowedUrls = allowedUrls;
 }
 
 bool AppletInterface::include(const QString &script)

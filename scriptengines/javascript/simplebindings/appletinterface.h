@@ -235,9 +235,6 @@ enum QtScrollBarPolicy {
     bool immutable() const;
     int apiVersion() const;
 
-    SimpleJavaScriptApplet::AllowedUrls allowedUrls() const;
-    void setAllowedUrls(const SimpleJavaScriptApplet::AllowedUrls &allowedUrls);
-
     inline Plasma::Applet *applet() const { return m_appletScriptEngine->applet(); }
 
 Q_SIGNALS:
@@ -255,7 +252,6 @@ private:
     QSignalMapper *m_actionSignals;
     QString m_currentConfig;
     QMap<QString, Plasma::ConfigLoader*> m_configs;
-    SimpleJavaScriptApplet::AllowedUrls m_allowedUrls;
 };
 
 class PopupAppletInterface : public AppletInterface

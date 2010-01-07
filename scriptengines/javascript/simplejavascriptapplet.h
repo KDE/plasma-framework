@@ -27,22 +27,16 @@
 
 #include "simplebindings/uiloader.h"
 
-class QScriptEngine;
 class QScriptContext;
 
 class AppletInterface;
+class ScriptEnv;
 
 class SimpleJavaScriptApplet : public Plasma::AppletScript
 {
     Q_OBJECT
 
 public:
-    enum AllowedUrl { NoUrls = 0,
-                      HttpUrls = 1,
-                      NetworkUrls = 2,
-                      LocalUrls = 4 };
-    Q_DECLARE_FLAGS(AllowedUrls, AllowedUrl)
-
     SimpleJavaScriptApplet(QObject *parent, const QVariantList &args);
     ~SimpleJavaScriptApplet();
     bool init();
@@ -58,16 +52,18 @@ public:
 
     static QString findImageFile(QScriptEngine *engine, const QString &file);
 
-public slots:
+public Q_SLOTS:
     void dataUpdated( const QString &name, const Plasma::DataEngine::Data &data );
     void configChanged();
     void executeAction(const QString &name);
     void collectGarbage();
 
+private Q_SLOTS:
+    void engineReportsError(ScriptEnv *engine, bool fatal);
+
 private:
-    void registerGetUrl();
     bool importExtensions();
-    bool importBuiltinExtesion(const QString &extension);
+    bool importBuiltinExtension(const QString &extension);
     void setupObjects();
     void callFunction(const QString &functionName, const QScriptValueList &args = QScriptValueList());
     static void populateAnimationsHash();
@@ -88,17 +84,7 @@ private:
 
     void installWidgets(QScriptEngine *engine);
     static QScriptValue createWidget(QScriptContext *context, QScriptEngine *engine);
-    static QScriptValue notSupported(QScriptContext *context, QScriptEngine *engine);
-    static QScriptValue print(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue widgetAdjustSize(QScriptContext *context, QScriptEngine *engine);
-
-    // run extension
-    static QScriptValue runApplication(QScriptContext *context, QScriptEngine *engine);
-    static QScriptValue runCommand(QScriptContext *context, QScriptEngine *engine);
-    static QScriptValue openUrl(QScriptContext *context, QScriptEngine *engine);
-
-    // file io extensions
-    static QScriptValue getUrl(QScriptContext *context, QScriptEngine *engine);
 
     static AppletInterface *extractAppletInterface(QScriptEngine *engine);
     static QGraphicsWidget *extractParent(QScriptContext *context,
@@ -109,15 +95,12 @@ private:
 private:
     static KSharedPtr<UiLoader> s_widgetLoader;
     static QHash<QString, Plasma::Animator::Animation> s_animationDefs;
-    QScriptEngine *m_engine;
+    ScriptEnv *m_engine;
     QScriptValue m_self;
     QVariantList m_args;
-    QSet<QString> m_extensions;
     AppletInterface *m_interface;
     friend class AppletInterface;
 };
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(SimpleJavaScriptApplet::AllowedUrls)
 
 #endif // SCRIPT_H
 
