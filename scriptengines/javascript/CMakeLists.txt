@@ -2,7 +2,7 @@
 
 set(simple_javascript_engine_SRCS
     appletauthorization.cpp
-    scriptenv.cpp
+    scriptenvui.cpp
     simplejavascriptapplet.cpp
     simplebindings/animationgroup.cpp
     simplebindings/appletinterface.cpp
@@ -30,7 +30,6 @@ set(simple_javascript_engine_SRCS
 )
 
 include_directories(${PHONON_INCLUDES})
-
 
 kde4_add_plugin(plasma_appletscript_simple_javascript ${simple_javascript_engine_SRCS})
 
@@ -70,6 +69,7 @@ install(FILES plasma-scriptengine-runner-javascript.desktop DESTINATION ${SERVIC
 
 set(javascript_dataengine_engine_SRCS
     javascriptdataengine.cpp
+    scriptenv.cpp
     simplebindings/dataengine.cpp
     simplebindings/variant.cpp
 )
@@ -77,6 +77,7 @@ kde4_add_plugin(plasma_dataenginescript_javascript ${javascript_dataengine_engin
 
 target_link_libraries(plasma_dataenginescript_javascript
                        ${KDE4_KDECORE_LIBS}
+                       ${KDE4_KIO_LIBS}
                        ${KDE4_PLASMA_LIBS}
                        ${QT_QTSCRIPT_LIBRARY})
 

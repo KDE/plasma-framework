@@ -58,7 +58,6 @@
 
 using namespace Plasma;
 
-
 Q_DECLARE_METATYPE(QPainter*)
 Q_DECLARE_METATYPE(QStyleOptionGraphicsItem*)
 

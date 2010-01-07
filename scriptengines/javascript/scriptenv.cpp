@@ -25,7 +25,6 @@
 #include <QMetaEnum>
 
 #include <KDebug>
-#include <KFileDialog>
 #include <KIO/Job>
 #include <KLocale>
 #include <KMimeType>
@@ -34,8 +33,9 @@
 #include <KStandardDirs>
 #include <KRun>
 
-#include "simplejavascriptapplet.h"
+#ifdef USEGUI
 #include "simplebindings/filedialogproxy.h"
+#endif
 
 ScriptEnv::ScriptEnv(QObject *parent)
     : QScriptEngine(parent),
@@ -187,8 +187,10 @@ bool ScriptEnv::importBuiltinExtension(const QString &extension, QScriptValue &o
 {
     kDebug() << extension;
     if ("filedialog" == extension) {
+#ifdef USEGUI
         FileDialogProxy::registerWithRuntime(this);
         return true;
+#endif
     } else if ("launchapp" == extension) {
         obj.setProperty("runApplication", newFunction(ScriptEnv::runApplication));
         obj.setProperty("runCommand", newFunction(ScriptEnv::runCommand));
