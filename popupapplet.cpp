@@ -705,7 +705,6 @@ void PopupAppletPrivate::updateDialogPosition()
         preferredHeight = dialog->graphicsWidget()->preferredSize().height();
     }
 
-    kDebug() << "about to use sizeGroup which is" << (sizeGroup.isValid() ? "valid" : "not valid");
     const int width = qMin(sizeGroup.readEntry("DialogWidth", preferredWidth),
                            corona->screenGeometry(-1).width() - 50);
     const int height = qMin(sizeGroup.readEntry("DialogHeight", preferredHeight),
