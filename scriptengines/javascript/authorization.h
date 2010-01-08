@@ -21,6 +21,8 @@
 
 #include <QString>
 
+#include <KAuthorized>
+
 class Authorization 
 {
 public:
@@ -29,6 +31,7 @@ public:
 
     virtual bool authorizeRequiredExtension(const QString &) { return true; }
     virtual bool authorizeOptionalExtension(const QString &) { return true; }
+    virtual bool authorizeExternalExtensions() { return KAuthorized::authorize("plasma/external_script_extensions"); }
 };
 
 #endif

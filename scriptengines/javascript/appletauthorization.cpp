@@ -16,6 +16,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include <KAuthorized>
+
 #include "appletauthorization.h"
 #include "simplejavascriptapplet.h"
 
@@ -42,4 +44,9 @@ bool AppletAuthorization::authorizeOptionalExtension(const QString &extension)
 {
     return m_scriptEngine->applet()->hasAuthorization(extension);
 }
+
+bool AppletAuthorization::authorizeExternalExtensions()
+{
+}
+
 

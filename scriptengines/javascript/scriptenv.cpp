@@ -228,7 +228,9 @@ bool ScriptEnv::importExtensions(const KPluginInfo &info, QScriptValue &obj, Aut
         }
 
         if (!importBuiltinExtension(extension, obj)) {
-            importExtension(extension);
+            if (auth.authorizeExternalExtensions()) {
+                importExtension(extension);
+            }
         }
 
         if (hasUncaughtException()) {
@@ -253,7 +255,9 @@ bool ScriptEnv::importExtensions(const KPluginInfo &info, QScriptValue &obj, Aut
         }
 
         if (!importBuiltinExtension(extension, obj)) {
-            importExtension(extension);
+            if (auth.authorizeExternalExtensions()) {
+                importExtension(extension);
+            }
         }
 
         if (hasUncaughtException()) {

@@ -30,6 +30,7 @@ public:
 
     bool authorizeRequiredExtension(const QString &extension);
     bool authorizeOptionalExtension(const QString &extension);
+    bool authorizeExternalExtensions();
 
 private:
     SimpleJavaScriptApplet *m_scriptEngine;
