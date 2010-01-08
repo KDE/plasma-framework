@@ -2741,7 +2741,7 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
             containmentConfig =  KConfigGroup(KGlobal::config(), "Containments");
         }
 
-        if (!containmentConfig.hasGroup(QString::number(appletId))) {
+        if (package && !containmentConfig.hasGroup(QString::number(appletId))) {
             newGroup = true;
         }
 
@@ -2765,14 +2765,14 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
             appletConfig = KConfigGroup(KGlobal::config(), "Applets");
         }
 
-        if (!appletConfig.hasGroup(QString::number(appletId))) {
+        if (package && !appletConfig.hasGroup(QString::number(appletId))) {
             newGroup = true;
         }
 
         mainConfig = new KConfigGroup(&appletConfig, QString::number(appletId));
     }
 
-    if (newGroup && package) {
+    if (newGroup) {
         //see if we have a default configuration in our package
         const QString defaultConfigFile = q->package()->filePath("defaultconfig");
         if (!defaultConfigFile.isEmpty()) {
