@@ -2749,17 +2749,16 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
     } else {
         KConfigGroup appletConfig;
 
-        if (Containment *c = q->containment()) {
-            Plasma::Applet *parentApplet = qobject_cast<Applet *>(q->parent());
-            if (parentApplet && parentApplet != static_cast<Applet *>(c)) {
-                // this applet is nested inside another applet! use it's config
-                // as the parent group in the config
-                appletConfig = parentApplet->config();
-            } else {
-                // applet directly in a Containment, as usual
-                appletConfig = c->config();
-            }
-
+        Containment *c = q->containment();
+        Applet *parentApplet = qobject_cast<Applet *>(q->parent());
+        if (parentApplet && parentApplet != static_cast<Applet *>(c)) {
+            // this applet is nested inside another applet! use it's config
+            // as the parent group in the config
+            appletConfig = parentApplet->config();
+            appletConfig = KConfigGroup(&appletConfig, "Applets");
+        } else if (c) {
+            // applet directly in a Containment, as usual
+            appletConfig = c->config();
             appletConfig = KConfigGroup(&appletConfig, "Applets");
         } else {
             kWarning() << "requesting config for" << q->name() << "without a containment!";
