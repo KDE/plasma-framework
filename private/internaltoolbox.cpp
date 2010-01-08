@@ -411,6 +411,12 @@ InternalToolBox::Corner InternalToolBox::corner() const
 
 void InternalToolBox::setViewTransform(const QTransform &transform)
 {
+    if (d->viewTransform == transform) {
+        return;
+    }
+
+    d->viewTransform = transform;
+
     if (transform.isScaling()) {
         d->toolbar = true;
         showToolBox();
@@ -420,7 +426,6 @@ void InternalToolBox::setViewTransform(const QTransform &transform)
             hideToolBox();
         }
     }
-    d->viewTransform = transform;
 }
 
 void InternalToolBox::save(KConfigGroup &cg) const
