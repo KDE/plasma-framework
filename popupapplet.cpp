@@ -690,10 +690,13 @@ void PopupAppletPrivate::updateDialogPosition()
         return;
     }
 
-    KConfigGroup sizeGroup = popupConfigGroup();
 
     Corona *corona = qobject_cast<Corona *>(q->scene());
-    Q_ASSERT(corona);
+    if (!corona) {
+        return;
+    }
+
+    KConfigGroup sizeGroup = popupConfigGroup();
 
     int preferredWidth = 0;
     int preferredHeight = 0;
