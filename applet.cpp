@@ -2772,12 +2772,14 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
         mainConfig = new KConfigGroup(&appletConfig, QString::number(appletId));
     }
 
-    if (newGroup && q->package()) {
+    if (newGroup && package) {
         //see if we have a default configuration in our package
-        kDebug() << "copying default config: " << q->package()->filePath("defaultconfig");
-        KConfigGroup defaultConfig(KSharedConfig::openConfig(q->package()->filePath("config",
-                                    "default-configrc"))->group("Configuration"));
-        defaultConfig.copyTo(mainConfig);
+        const QString defaultConfigFile = q->package()->filePath("defaultconfig");
+        if (!defaultConfigFile.isEmpty()) {
+            kDebug() << "copying default config: " << q->package()->filePath("defaultconfig");
+            KConfigGroup defaultConfig(KSharedConfig::openConfig(defaultConfigFile)->group("Configuration"));
+            defaultConfig.copyTo(mainConfig);
+        }
     }
 
     return mainConfig;
