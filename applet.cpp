@@ -2751,6 +2751,7 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
 
         Containment *c = q->containment();
         Applet *parentApplet = qobject_cast<Applet *>(q->parent());
+        kDebug() << "going to make the appletConfig" << parentApplet << c;
         if (parentApplet && parentApplet != static_cast<Applet *>(c)) {
             // this applet is nested inside another applet! use it's config
             // as the parent group in the config
@@ -2769,7 +2770,9 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
             newGroup = true;
         }
 
+        kDebug() << "appletConfig is" << (appletConfig.isValid() ? "valid" : "not valid");
         mainConfig = new KConfigGroup(&appletConfig, QString::number(appletId));
+        kDebug() << "mainConfig is" << (mainConfig->isValid() ? "valid" : "not valid");
     }
 
     if (newGroup) {
