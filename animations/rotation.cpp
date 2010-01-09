@@ -89,12 +89,15 @@ void RotationAnimation::updateState(QAbstractAnimation::State newState, QAbstrac
     if (axis() == Qt::XAxis) {
         switch (reference()) {
             case Center:
+                vector.setX(widgetWidth/2);
                 vector.setY(widgetHeight/2);
                 break;
             case Up:
+                vector.setX(widgetWidth/2);
                 vector.setY(0);
                 break;
             case Down:
+                vector.setX(widgetWidth/2);
                 vector.setY(widgetHeight);
                 break;
         }
@@ -103,12 +106,15 @@ void RotationAnimation::updateState(QAbstractAnimation::State newState, QAbstrac
         switch (reference()) {
             case Center:
                 vector.setX(widgetWidth/2);
+                vector.setY(widgetHeight/2);
                 break;
             case Left:
                 vector.setX(0);
+                vector.setY(widgetHeight/2);
                 break;
             case Right:
                 vector.setX(widgetWidth);
+                vector.setY(widgetHeight/2);
                 break;
         }
 
