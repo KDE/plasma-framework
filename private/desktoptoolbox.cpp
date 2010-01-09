@@ -597,13 +597,12 @@ void DesktopToolBox::showToolBox()
 
         //could that cast ever fail?
         if (d->containment) {
-            topRight = viewTransform().map(mapFromParent(d->containment->boundingRect().bottomRight()));
+            topRight = d->containment->geometry().bottomRight();
         } else {
             topRight = boundingRect().topRight();
         }
 
-
-        d->toolBacker->setPos(topRight.x() - d->toolBacker->size().width(), topRight.y());
+        d->toolBacker->setPos(viewTransform().map(mapFromScene(topRight))-QPoint(d->toolBacker->size().width(), 0));
     } else {
         //kDebug() << "starting at" <<  x << startY;
         d->toolBacker->setPos(x, y);
