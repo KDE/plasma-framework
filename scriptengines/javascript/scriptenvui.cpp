@@ -18,4 +18,4 @@
 
 #define USEGUI
 #include "scriptenv.cpp"
-
+#include "scriptenv.moc"

@@ -295,4 +295,6 @@ QScriptValue ScriptEnv::print(QScriptContext *context, QScriptEngine *engine)
     return engine->undefinedValue();
 }
 
+#ifndef USEGUI
 #include "scriptenv.moc"
+#endif
