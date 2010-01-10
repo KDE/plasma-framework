@@ -225,6 +225,10 @@ void IconAction::rebuildPixmap()
 
 bool IconAction::event(QEvent::Type type, const QPointF &pos)
 {
+    if (!m_action->isVisible() || !m_action->isEnabled()) {
+        return false;
+    }
+
     if (m_icon->size().width() < m_rect.width() * 2.0 ||
         m_icon->size().height() < m_rect.height() * 2.0) {
         return false;
@@ -289,6 +293,10 @@ QAction *IconAction::action() const
 
 void IconAction::paint(QPainter *painter) const
 {
+    if (!m_action->isVisible() || !m_action->isEnabled()) {
+        return;
+    }
+
     if (m_icon->size().width() < m_rect.width() * 2.0 ||
         m_icon->size().height() < m_rect.height() * 2.0) {
         return;
