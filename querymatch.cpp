@@ -40,9 +40,10 @@ class QueryMatchPrivate : public QSharedData
             : QSharedData(),
               runner(r),
               type(QueryMatch::ExactMatch),
-              enabled(true),
               relevance(.7),
-              selAction(0)
+              selAction(0),
+              enabled(true),
+              idSetByData(false)
         {
         }
 
@@ -53,9 +54,10 @@ class QueryMatchPrivate : public QSharedData
         QString subtext;
         QIcon icon;
         QVariant data;
-        bool enabled;
         qreal relevance;
         QAction *selAction;
+        bool enabled : 1;
+        bool idSetByData : 1;
 };
 
 QueryMatch::QueryMatch(AbstractRunner *runner)
@@ -125,7 +127,14 @@ void QueryMatch::setSubtext(const QString &subtext)
 void QueryMatch::setData(const QVariant & data)
 {
     d->data = data;
-    setId(data.toString());
+
+    if (d->id.isEmpty() || d->idSetByData) {
+        const QString id = data.toString();
+        if (!id.isEmpty()) {
+            setId(data.toString());
+            d->idSetByData = true;
+        }
+    }
 }
 
 void QueryMatch::setId(const QString &id)
@@ -137,6 +146,8 @@ void QueryMatch::setId(const QString &id)
     if (!id.isEmpty()) {
         d->id.append('_').append(id);
     }
+
+    d->idSetByData = false;
 }
 
 void QueryMatch::setIcon(const QIcon &icon)
