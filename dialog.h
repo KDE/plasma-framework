@@ -135,6 +135,17 @@ class PLASMA_EXPORT Dialog : public QWidget
          */
         void dialogVisible(bool status);
 
+    public Q_SLOTS:
+        /**
+         * Adjusts the dialog to the associated QGraphicsWidget's geometry
+         * Should not normally need to be called by users of Dialog as Dialog
+         * does it automatically. Event compression may cause unwanted delays,
+         * however, and so this method may be called to immediately cause a
+         * synchronization.
+         * @since 4.5
+         */
+        void syncToGraphicsWidget();
+
     protected:
         /**
          * Reimplemented from QWidget
@@ -167,7 +178,6 @@ class PLASMA_EXPORT Dialog : public QWidget
          * React to theme changes
          */
         Q_PRIVATE_SLOT(d, void themeChanged())
-        Q_PRIVATE_SLOT(d, void adjustView())
 };
 
 } // Plasma namespace
