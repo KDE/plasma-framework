@@ -29,7 +29,6 @@
 #include "animations/rotationstacked_p.h"
 #include "animations/geometry_p.h"
 #include "animations/zoom_p.h"
-#include "animations/woobly_p.h"
 #include "animations/customanimation_p.h"
 
 namespace Plasma
