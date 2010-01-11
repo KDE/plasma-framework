@@ -59,7 +59,6 @@ set(plasma_LIB_SRCS
     animations/stackedlayout.cpp
     animations/geometry.cpp
     animations/zoom.cpp
-    animations/customanimation.cpp
     applet.cpp
     configloader.cpp
     containment.cpp
