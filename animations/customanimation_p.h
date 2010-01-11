@@ -38,7 +38,7 @@ class CustomAnimation : public Animation
     Q_PROPERTY(QVariant endValue READ endValue WRITE setEndValue)
 
 public:
-    CustomAnimation(QObject *parent);
+    CustomAnimation(QObject *parent = 0);
 
     QString callback() const;
     void setCallback(const QString &method);

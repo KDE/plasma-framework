@@ -65,7 +65,8 @@ public:
         RotationStackedAnimation, /*<< for flipping one object with another */
         SlideAnimation, /*<< Move the position of animated object */
         GeometryAnimation, /*<< Geometry animation*/
-        ZoomAnimation /*<<Zoom animation */
+        ZoomAnimation, /*<<Zoom animation */
+        CustomAnimation
     };
 
     enum CurveShape {
