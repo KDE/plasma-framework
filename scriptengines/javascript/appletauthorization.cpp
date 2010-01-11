@@ -47,6 +47,7 @@ bool AppletAuthorization::authorizeOptionalExtension(const QString &extension)
 
 bool AppletAuthorization::authorizeExternalExtensions()
 {
+    return false;
 }
 
 
