@@ -40,7 +40,7 @@ SlideAnimation::~SlideAnimation()
 }
 
 SlideAnimation::SlideAnimation(QObject *parent,
-                               AnimationDirection direction,
+                               Direction direction,
                                qreal distance) : Animation(parent)
 {
     setMovementDirection(direction);
@@ -50,7 +50,7 @@ SlideAnimation::SlideAnimation(QObject *parent,
 
 void SlideAnimation::setMovementDirection(const qint8 &direction)
 {
-    m_animDirection = static_cast<Plasma::AnimationDirection>(direction);
+    m_animDirection = static_cast<Direction>(direction);
 }
 
 qint8 SlideAnimation::movementDirection() const

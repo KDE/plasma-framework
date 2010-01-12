@@ -104,7 +104,7 @@ private:
     /**
      * Animation direction: where the animation will move.
      */
-    Plasma::AnimationDirection animDirection;
+    Direction animDirection;
     /** Initial rotation angle from front widget */
     int frontStartAngle;
     /** End value of the rotation angle of the front widget */
