@@ -33,6 +33,7 @@
 #include <kshell.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
+#include <kprotocolinfo.h>
 
 #include "abstractrunner.h"
 #include "querymatch.h"
@@ -188,16 +189,16 @@ class RunnerContextPrivate : public QSharedData
                 // that it has arguments!
                 type = (space > 0) ? RunnerContext::ShellCommand :
                                      RunnerContext::Executable;
-            } else if (path.indexOf('/') == -1 && path.indexOf('\\') == -1 ) {
-                //if a path doesn't have any slashes is a single word or
-                //sentence: is too ambiguous to be sure we're in a filesystem context
-                return;
             } else {
                 KUrl url(term);
                 QString correctCasePath;
-                if (!url.protocol().isEmpty() && !url.isLocalFile()) {
+                // check if we have a local network location first, otherwise assume a path,
+                // but if a path doesn't have any slashes is a single word or
+                // sentence: it's too ambiguous to be sure we're in a filesystem context
+                if (KProtocolInfo::protocolClass(url.protocol()) == ":local" && !url.isLocalFile()) {
                     type = RunnerContext::NetworkLocation;
-                } else if (correctPathCase(path, correctCasePath)) {
+                } else if ((path.indexOf('/') != -1 || path.indexOf('\\') != -1) &&
+                           correctPathCase(path, correctCasePath)) {
                     path = correctCasePath;
                     QFileInfo info(path);
 
