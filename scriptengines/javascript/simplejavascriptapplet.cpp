@@ -62,6 +62,7 @@ Q_DECLARE_METATYPE(QPainter*)
 Q_DECLARE_METATYPE(QStyleOptionGraphicsItem*)
 
 QScriptValue constructColorClass(QScriptEngine *engine);
+QScriptValue constructEasingCurveClass(QScriptEngine *engine);
 QScriptValue constructFontClass(QScriptEngine *engine);
 QScriptValue constructGraphicsItemClass(QScriptEngine *engine);
 QScriptValue constructKUrlClass(QScriptEngine *engine);
@@ -346,6 +347,7 @@ void SimpleJavaScriptApplet::setupObjects()
     global.setProperty("QTimer", constructTimerClass(m_engine));
     global.setProperty("QFont", constructFontClass(m_engine));
     global.setProperty("QColor", constructColorClass(m_engine));
+    global.setProperty("QEasingCurve", constructEasingCurveClass(m_engine));
     global.setProperty("QRectF", constructQRectFClass(m_engine));
     global.setProperty("QPen", constructPenClass(m_engine));
     global.setProperty("QPixmap", constructQPixmapClass(m_engine));
