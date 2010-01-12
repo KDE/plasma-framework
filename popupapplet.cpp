@@ -59,7 +59,7 @@ PopupApplet::PopupApplet(QObject *parent, const QVariantList &args)
     int iconSize = IconSize(KIconLoader::Desktop);
     resize(iconSize, iconSize);
     disconnect(this, SIGNAL(activate()), (Applet*)this, SLOT(setFocus()));
-    connect(this, SIGNAL(activate()), this, SLOT(showPopup()));
+    connect(this, SIGNAL(activate()), this, SLOT(togglePopup()));
     setAcceptDrops(true);
 }
 
@@ -70,7 +70,7 @@ PopupApplet::PopupApplet(const QString &packagePath, uint appletId, const QVaria
     int iconSize = IconSize(KIconLoader::Desktop);
     resize(iconSize, iconSize);
     disconnect(this, SIGNAL(activate()), (Applet*)this, SLOT(setFocus()));
-    connect(this, SIGNAL(activate()), this, SLOT(showPopup()));
+    connect(this, SIGNAL(activate()), this, SLOT(togglePopup()));
     setAcceptDrops(true);
 }
 
@@ -512,10 +512,6 @@ void PopupApplet::showPopup(uint popupDuration)
             d->internalTogglePopup();
         }
 
-        if (d->timer) {
-            d->timer->stop();
-        }
-
         if (popupDuration > 0) {
             if (!d->timer) {
                 d->timer = new QTimer(this);
@@ -593,8 +589,12 @@ PopupAppletPrivate::~PopupAppletPrivate()
 
 void PopupAppletPrivate::internalTogglePopup()
 {
-    Plasma::Dialog *d = dialogPtr.data();
-    if (!d) {
+    if (timer) {
+        timer->stop();
+    }
+
+    Plasma::Dialog *dialog = dialogPtr.data();
+    if (!dialog) {
         q->setFocus(Qt::ShortcutFocusReason);
         return;
     }
@@ -607,14 +607,14 @@ void PopupAppletPrivate::internalTogglePopup()
         timer->stop();
     }
 
-    if (d->isVisible()) {
+    if (dialog->isVisible()) {
         if (q->location() != Floating) {
-            d->animatedHide(locationToInverseDirection(q->location()));
+            dialog->animatedHide(locationToInverseDirection(q->location()));
         } else {
-            d->hide();
+            dialog->hide();
         }
 
-        d->clearFocus();
+        dialog->clearFocus();
     } else {
         if (q->graphicsWidget() &&
             q->graphicsWidget() == static_cast<Applet*>(q)->d->extender.data() &&
@@ -626,19 +626,19 @@ void PopupAppletPrivate::internalTogglePopup()
         ToolTipManager::self()->hide(q);
         updateDialogPosition();
 
-        KWindowSystem::setOnAllDesktops(d->winId(), true);
-        KWindowSystem::setState(d->winId(), NET::SkipTaskbar | NET::SkipPager);
+        KWindowSystem::setOnAllDesktops(dialog->winId(), true);
+        KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
 
-        d->setAspectRatioMode(savedAspectRatio);
+        dialog->setAspectRatioMode(savedAspectRatio);
 
         if (q->location() != Floating) {
-            d->animatedShow(locationToDirection(q->location()));
+            dialog->animatedShow(locationToDirection(q->location()));
         } else {
-            d->show();
+            dialog->show();
         }
 
-        if (!(d->windowFlags() & Qt::X11BypassWindowManagerHint)) {
-            KWindowSystem::activateWindow(d->winId());
+        if (!(dialog->windowFlags() & Qt::X11BypassWindowManagerHint)) {
+            KWindowSystem::activateWindow(dialog->winId());
         }
     }
 }
