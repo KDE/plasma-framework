@@ -234,7 +234,7 @@ QScriptValue ByteArrayClass::toScriptValue(QScriptEngine *eng, const QByteArray 
 
 void ByteArrayClass::fromScriptValue(const QScriptValue &obj, QByteArray &ba)
 {
-    ba = qvariant_cast<QByteArray>(obj.data().toVariant());
+    ba = obj.toVariant().toByteArray();
 }
 
 
