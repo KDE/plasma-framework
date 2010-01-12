@@ -639,7 +639,8 @@ QScriptValue SimpleJavaScriptApplet::animation(QScriptContext *context, QScriptE
     populateAnimationsHash();
     QString animName = context->argument(0).toString().toLower();
     const bool isPause = animName == "pause";
-    if (!isPause && !s_animationDefs.contains(animName)) {
+    const bool isProperty = animName == "property";
+    if (!isPause && !isProperty && !s_animationDefs.contains(animName)) {
         return context->throwError(i18n("%1 is not a known animation type", animName));
     }
 
@@ -648,6 +649,9 @@ QScriptValue SimpleJavaScriptApplet::animation(QScriptContext *context, QScriptE
     if (isPause) {
         QPauseAnimation *pause = new QPauseAnimation(parent);
         return engine->newQObject(pause);
+    } else if (isProperty) {
+        QPropertyAnimation *propertyAnim = new QPropertyAnimation(parent);
+        return engine->newQObject(propertyAnim);
     } else {
         Plasma::Animation *anim = Plasma::Animator::create(s_animationDefs.value(animName), parent);
         if (anim) {
