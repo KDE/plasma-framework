@@ -9,6 +9,7 @@ set(simple_javascript_engine_SRCS
     simplebindings/bytearrayprototype.cpp
     simplebindings/color.cpp
     simplebindings/dataengine.cpp
+    simplebindings/easingcurve.cpp
     simplebindings/font.cpp
     simplebindings/filedialogproxy.cpp
     simplebindings/graphicsitem.cpp
