@@ -176,7 +176,7 @@ enum EasingCurveType {
     InCurveEasingCurve = QEasingCurve::InCurve,
     OutCurveEasingCurve = QEasingCurve::OutCurve,
     SineCurveEasingCurve = QEasingCurve::SineCurve,
-    CosineCurveEasingCurve = QEasingCurve::CosineCurve,
+    CosineCurveEasingCurve = QEasingCurve::CosineCurve
 };
 
 //From Qt namespace
