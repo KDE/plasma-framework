@@ -47,6 +47,7 @@ class PLASMA_EXPORT Animation : public QAbstractAnimation
 {
 
     Q_OBJECT
+    Q_ENUMS(Reference)
     Q_PROPERTY(int duration READ duration WRITE setDuration)
     Q_PROPERTY(QEasingCurve::Type easingCurveType READ easingCurveType WRITE setEasingCurveType)
     Q_PROPERTY(QGraphicsWidget *targetWidget READ targetWidget WRITE setTargetWidget)
