@@ -47,7 +47,7 @@ class SlideAnimation : public Animation
 
 public:
     SlideAnimation(QObject *parent = 0,
-                   AnimationDirection direction = MoveUp, qreal distance = 0);
+                   Direction direction = MoveUp, qreal distance = 0);
     ~SlideAnimation();
 
     /**
@@ -80,7 +80,7 @@ private:
     /**
      * Animation direction: where the animation will move.
      */
-    Plasma::AnimationDirection m_animDirection;
+    Direction m_animDirection;
 
     /**
      * Animation distance: displacement factor for animations where

@@ -42,7 +42,7 @@ RotationStackedAnimation::~RotationStackedAnimation()
 
 void RotationStackedAnimation::setMovementDirection(const qint8 &direction)
 {
-    animDirection = static_cast<Plasma::AnimationDirection>(direction);
+    animDirection = static_cast<Direction>(direction);
 }
 
 qint8 RotationStackedAnimation::movementDirection() const
