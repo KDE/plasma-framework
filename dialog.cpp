@@ -65,7 +65,6 @@ public:
             : q(dialog),
               background(0),
               view(0),
-              graphicsWidget(0),
               resizeCorners(Dialog::NoCorner),
               resizeStartCorner(Dialog::NoCorner),
               moveTimer(0),
@@ -90,7 +89,7 @@ public:
      */
     Plasma::FrameSvg *background;
     QGraphicsView *view;
-    QGraphicsWidget *graphicsWidget;
+    QWeakPointer<QGraphicsWidget> graphicsWidgetPtr;
     Dialog::ResizeCorners resizeCorners;
     QMap<Dialog::ResizeCorner, QRect> resizeAreas;
     int resizeStartCorner;
@@ -101,6 +100,8 @@ public:
 
 void DialogPrivate::themeChanged()
 {
+    QGraphicsWidget *graphicsWidget = graphicsWidgetPtr.data();
+
     qreal topHeight;
     qreal leftWidth;
     qreal rightWidth;
@@ -197,6 +198,7 @@ void DialogPrivate::themeChanged()
 
 void DialogPrivate::adjustView()
 {
+    QGraphicsWidget *graphicsWidget = graphicsWidgetPtr.data();
     if (view && graphicsWidget) {
         const int prevStartCorner = resizeStartCorner;
         resizeStartCorner = -1;
@@ -444,14 +446,15 @@ void Dialog::resizeEvent(QResizeEvent *e)
         setMask(QRect(QPoint(0, 0), size()));
     }
 
-    if (d->resizeStartCorner != -1 && d->view && d->graphicsWidget) {
-        d->graphicsWidget->resize(d->view->size());
+    if (d->resizeStartCorner != -1 && d->view && d->graphicsWidgetPtr) {
+        QGraphicsWidget *graphicsWidget = d->graphicsWidgetPtr.data();
+        graphicsWidget->resize(d->view->size());
 
-        QRectF sceneRect(d->graphicsWidget->sceneBoundingRect());
+        QRectF sceneRect(graphicsWidget->sceneBoundingRect());
         sceneRect.setWidth(qMax(qreal(1), sceneRect.width()));
         sceneRect.setHeight(qMax(qreal(1), sceneRect.height()));
         d->view->setSceneRect(sceneRect);
-        d->view->centerOn(d->graphicsWidget);
+        d->view->centerOn(graphicsWidget);
     }
 
     d->updateResizeCorners();
@@ -500,11 +503,11 @@ void DialogPrivate::updateResizeCorners()
 
 void Dialog::setGraphicsWidget(QGraphicsWidget *widget)
 {
-    if (d->graphicsWidget) {
-        d->graphicsWidget->removeEventFilter(this);
+    if (d->graphicsWidgetPtr) {
+        d->graphicsWidgetPtr.data()->removeEventFilter(this);
     }
 
-    d->graphicsWidget = widget;
+    d->graphicsWidgetPtr = widget;
 
     if (widget) {
         if (!layout()) {
@@ -539,12 +542,12 @@ void Dialog::setGraphicsWidget(QGraphicsWidget *widget)
 //BIC FIXME: should be const
 QGraphicsWidget *Dialog::graphicsWidget()
 {
-    return d->graphicsWidget;
+    return d->graphicsWidgetPtr.data();
 }
 
 bool Dialog::eventFilter(QObject *watched, QEvent *event)
 {
-    if (d->resizeStartCorner == Dialog::NoCorner && watched == d->graphicsWidget &&
+    if (d->resizeStartCorner == Dialog::NoCorner && watched == d->graphicsWidgetPtr.data() &&
         (event->type() == QEvent::GraphicsSceneResize || event->type() == QEvent::GraphicsSceneMove)) {
         d->adjustViewTimer->start(150);
     }
@@ -566,7 +569,8 @@ void Dialog::showEvent(QShowEvent * event)
     d->themeChanged();
     d->updateResizeCorners();
 
-    if (d->graphicsWidget && d->view && d->graphicsWidget->size().toSize() != d->view->size()) {
+    QGraphicsWidget *graphicsWidget = d->graphicsWidgetPtr.data();
+    if (graphicsWidget && d->view && graphicsWidget->size().toSize() != d->view->size()) {
         d->adjustView();
     }
 
@@ -574,8 +578,8 @@ void Dialog::showEvent(QShowEvent * event)
         d->view->setFocus();
     }
 
-    if (d->graphicsWidget) {
-        d->graphicsWidget->setFocus();
+    if (graphicsWidget) {
+        graphicsWidget->setFocus();
     }
 
     emit dialogVisible(true);
@@ -589,8 +593,9 @@ void Dialog::focusInEvent(QFocusEvent *event)
         d->view->setFocus();
     }
 
-    if (d->graphicsWidget) {
-        d->graphicsWidget->setFocus();
+    QGraphicsWidget *graphicsWidget = d->graphicsWidgetPtr.data();
+    if (graphicsWidget) {
+        graphicsWidget->setFocus();
     }
 }
 
