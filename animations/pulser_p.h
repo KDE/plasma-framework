@@ -45,7 +45,8 @@ class PulseAnimation : public Animation
 
 public:
     /** Default Constructor */
-    PulseAnimation(QObject *parent = 0);
+    explicit PulseAnimation(QObject *parent = 0);
+
     /** Destructor */
     ~PulseAnimation();
 

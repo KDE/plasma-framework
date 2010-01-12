@@ -46,8 +46,7 @@ class SlideAnimation : public Animation
     Q_PROPERTY(qreal distance READ distance WRITE setDistance)
 
 public:
-    SlideAnimation(QObject *parent = 0,
-                   Direction direction = MoveUp, qreal distance = 0);
+    explicit SlideAnimation(QObject *parent = 0, MovementDirection direction = MoveUp, qreal distance = 0);
     ~SlideAnimation();
 
     /**
@@ -80,7 +79,7 @@ private:
     /**
      * Animation direction: where the animation will move.
      */
-    Direction m_animDirection;
+    MovementDirection m_animDirection;
 
     /**
      * Animation distance: displacement factor for animations where

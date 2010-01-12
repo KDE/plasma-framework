@@ -49,7 +49,7 @@ class RotationStackedAnimation : public Animation
     Q_PROPERTY(QGraphicsWidget* backWidget READ backWidget WRITE setBackWidget)
 
 public:
-    RotationStackedAnimation(QObject *parent = 0);
+    explicit RotationStackedAnimation(QObject *parent = 0);
 
     ~RotationStackedAnimation();
 
@@ -104,23 +104,23 @@ private:
     /**
      * Animation direction: where the animation will move.
      */
-    Direction animDirection;
+    MovementDirection m_animDirection;
     /** Initial rotation angle from front widget */
-    int frontStartAngle;
+    int m_frontStartAngle;
     /** End value of the rotation angle of the front widget */
-    int frontEndAngle;
+    int m_frontEndAngle;
      /** Initial rotation angle from back widget */
-    int backStartAngle;
+    int m_backStartAngle;
     /** End value of the rotation angle of the back widget */
-    int backEndAngle;
+    int m_backEndAngle;
     /**  Object the animation(s) should act upon. */
     QWeakPointer<QGraphicsWidget> m_backWidget;
     /** Back Widget Rotation transform object */
-    QGraphicsRotation *backRotation;
+    QGraphicsRotation *m_backRotation;
     /** Front Widget Rotation transform object */
-    QGraphicsRotation *frontRotation;
+    QGraphicsRotation *m_frontRotation;
     /** rotation stacked layout where the widget would be added */
-    StackedLayout *sLayout;
+    StackedLayout *m_sLayout;
 
 };
 } // Plasma

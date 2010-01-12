@@ -56,10 +56,10 @@ public:
      * @param angle Rotation angle (0 to 360)
      *
      */
-    RotationAnimation(QObject *parent = 0,
-                      const qint8 &reference = Center,
-		      const Qt::Axis &axis = Qt::ZAxis,
-		      const qreal &angle = 180);
+    explicit RotationAnimation(QObject *parent = 0,
+                               qint8 reference = Center,
+                               Qt::Axis axis = Qt::ZAxis,
+                               qreal angle = 180);
 
     /** Destructor */
     ~RotationAnimation();

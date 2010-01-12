@@ -41,7 +41,7 @@ class ZoomAnimation : public Animation
     Q_PROPERTY(qreal zoom READ zoom WRITE setZoom)
 
 public:
-    ZoomAnimation(QObject *parent = 0);
+    explicit ZoomAnimation(QObject *parent = 0);
     virtual ~ZoomAnimation();
 
     qreal zoom() const;
