@@ -21,6 +21,7 @@
 #ifndef APPLETINTERFACE_H
 #define APPLETINTERFACE_H
 
+#include <QAbstractAnimation>
 #include <QObject>
 #include <QSizePolicy>
 #include <QScriptValue>
@@ -54,6 +55,7 @@ class AppletInterface : public QObject
     Q_ENUMS(QtCorner)
     Q_ENUMS(QtSizePolicy)
     Q_ENUMS(QtAlignment)
+    Q_ENUMS(AnimationDirection)
     Q_PROPERTY(AspectRatioMode aspectRatioMode READ aspectRatioMode WRITE setAspectRatioMode)
     Q_PROPERTY(FormFactor formFactor READ formFactor)
     Q_PROPERTY(Location location READ location)
@@ -169,6 +171,11 @@ enum QtScrollBarPolicy {
     QtScrollBarAsNeeded = Qt::ScrollBarAsNeeded,
     QtScrollBarAlwaysOff = Qt::ScrollBarAlwaysOff,
     QtScrollBarAlwaysOn = Qt::ScrollBarAlwaysOn
+};
+
+enum AnimationDirection {
+    AnimationForward = QAbstractAnimation::Forward,
+    AnimationBackward = QAbstractAnimation::Backward
 };
 //-------------------------------------------------------------------
 
