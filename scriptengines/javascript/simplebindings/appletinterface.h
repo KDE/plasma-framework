@@ -22,7 +22,6 @@
 #define APPLETINTERFACE_H
 
 #include <QAbstractAnimation>
-#include <QEasingCurve>
 #include <QObject>
 #include <QSizePolicy>
 #include <QScriptValue>
@@ -57,7 +56,6 @@ class AppletInterface : public QObject
     Q_ENUMS(QtSizePolicy)
     Q_ENUMS(QtAlignment)
     Q_ENUMS(AnimationDirection)
-    Q_ENUMS(EasingCurveType)
     Q_PROPERTY(AspectRatioMode aspectRatioMode READ aspectRatioMode WRITE setAspectRatioMode)
     Q_PROPERTY(FormFactor formFactor READ formFactor)
     Q_PROPERTY(Location location READ location)
@@ -118,65 +116,6 @@ enum AspectRatioMode {
                                     formfactors) or no higher (in vertical
                                     ones) than a square */
     FixedSize = 4                /** The applet cannot be resized */
-};
-
-enum EasingCurveType {
-    LinearEasingCurve = QEasingCurve::Linear,
-
-    InQuadEasingCurve = QEasingCurve::InQuad,
-    OutQuadEasingCurve = QEasingCurve::OutQuad,
-    InOutQuadEasingCurve = QEasingCurve::InOutQuad,
-    OutInQuadEasingCurve = QEasingCurve::OutInQuad,
-
-    InCubicEasingCurve = QEasingCurve::InCubic,
-    OutCubicEasingCurve = QEasingCurve::OutCubic,
-    InOutCubicEasingCurve = QEasingCurve::InOutCubic,
-    OutInCubicEasingCurve = QEasingCurve::OutInCubic,
-
-    InQuartEasingCurve = QEasingCurve::InQuart,
-    OutQuartEasingCurve = QEasingCurve::OutQuart,
-    InOutQuartEasingCurve = QEasingCurve::InOutQuart,
-    OutInQuartEasingCurve = QEasingCurve::OutInQuart,
-
-    InQuintEasingCurve = QEasingCurve::InQuint,
-    OutQuintEasingCurve = QEasingCurve::OutQuint,
-    InOutQuintEasingCurve = QEasingCurve::InOutQuint,
-    OutInQuintEasingCurve = QEasingCurve::OutInQuint,
-
-    InSizeEasingCurve = QEasingCurve::InSine,
-    OutSineEasingCurve = QEasingCurve::OutSine,
-    InOutSineEasingCurve = QEasingCurve::InOutSine,
-    OutInSineEasingCurve = QEasingCurve::OutInSine,
-
-    InExpoEasingCurve = QEasingCurve::InExpo,
-    OutExpoEasingCurve = QEasingCurve::OutExpo,
-    InOutExpoEasingCurve = QEasingCurve::InOutExpo,
-    OutInExpoEasingCurve = QEasingCurve::OutInExpo,
-
-    InCircEasingCurve = QEasingCurve::InCirc,
-    OutCircEasingCurve = QEasingCurve::OutCirc,
-    InOutCircEasingCurve = QEasingCurve::InOutCirc,
-    OutInCircEasingCurve = QEasingCurve::OutInCirc,
-
-    InElasticEasingCurve = QEasingCurve::InElastic,
-    OutElasticEasingCurve = QEasingCurve::OutElastic,
-    InOutElasticEasingCurve = QEasingCurve::InOutElastic,
-    OutInElasticEasingCurve = QEasingCurve::OutInElastic,
-
-    InBackEasingCurve = QEasingCurve::InBack,
-    OutBackEasingCurve = QEasingCurve::OutBack,
-    InOutBackEasingCurve = QEasingCurve::InOutBack,
-    OutInBackEasingCurve = QEasingCurve::OutInBack,
-
-    InBouncEasingCurve = QEasingCurve::InBounce,
-    OutBounceEasingCurve = QEasingCurve::OutBounce,
-    InOutBounceEasingCurve = QEasingCurve::InOutBounce,
-    OutInBounceEasingCurve = QEasingCurve::OutInBounce,
-
-    InCurveEasingCurve = QEasingCurve::InCurve,
-    OutCurveEasingCurve = QEasingCurve::OutCurve,
-    SineCurveEasingCurve = QEasingCurve::SineCurve,
-    CosineCurveEasingCurve = QEasingCurve::CosineCurve
 };
 
 //From Qt namespace
