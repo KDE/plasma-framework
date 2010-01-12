@@ -83,11 +83,6 @@ QEasingCurve Animation::easingCurve() const
     return d->easingCurve;
 }
 
-QEasingCurve& Animation::easingCurve()
-{
-    return d->easingCurve;
-}
-
 void Animation::updateCurrentTime(int currentTime)
 {
     Q_UNUSED(currentTime)
