@@ -57,7 +57,7 @@ public:
      *
      */
     RotationAnimation(QObject *parent = 0,
-                      const qint8 &reference = Up,
+                      const qint8 &reference = Center,
 		      const Qt::Axis &axis = Qt::ZAxis,
 		      const qreal &angle = 180);
 
