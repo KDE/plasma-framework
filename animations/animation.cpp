@@ -72,14 +72,15 @@ QGraphicsWidget* Animation::targetWidget() const
     return d->animObject.data();
 }
 
-void Animation::setEasingCurveType(QEasingCurve::Type type)
+void Animation::setEasingCurve(const QEasingCurve &curve)
 {
-    d->easingCurve.setType(type);
+    kDebug() << "setting easing curve to type" << curve.type();
+    d->easingCurve = curve;
 }
 
-QEasingCurve::Type Animation::easingCurveType() const
+QEasingCurve Animation::easingCurve() const
 {
-    return d->easingCurve.type();
+    return d->easingCurve;
 }
 
 QEasingCurve& Animation::easingCurve()

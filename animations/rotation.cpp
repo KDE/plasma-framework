@@ -26,10 +26,7 @@
 namespace Plasma
 {
 
-RotationAnimation::RotationAnimation(QObject *parent,
-                                     const qint8 &reference,
-                                     const Qt::Axis &axis,
-                                     const qreal &angle)
+RotationAnimation::RotationAnimation(QObject *parent, qint8 reference, Qt::Axis axis, qreal angle)
     : Animation(parent)
 {
     setAngle(angle);

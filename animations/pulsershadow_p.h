@@ -29,7 +29,7 @@ class ShadowFake: public QGraphicsWidget
     Q_PROPERTY(QGraphicsWidget *target READ target WRITE setTarget)
 
 public:
-    ShadowFake(QGraphicsItem *parent = 0);
+    explicit ShadowFake(QGraphicsItem *parent = 0);
     ~ShadowFake();
 
     void setTarget(QGraphicsWidget *target);

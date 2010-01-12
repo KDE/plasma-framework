@@ -46,7 +46,8 @@ class FadeAnimation : public Animation
 
 public:
     /** Default constructor */
-    FadeAnimation(QObject *parent = 0);
+    explicit FadeAnimation(QObject *parent = 0);
+
     /** Destructor */
     virtual ~FadeAnimation();
 

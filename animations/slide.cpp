@@ -40,17 +40,17 @@ SlideAnimation::~SlideAnimation()
 }
 
 SlideAnimation::SlideAnimation(QObject *parent,
-                               Direction direction,
+                               MovementDirection direction,
                                qreal distance) : Animation(parent)
 {
     setMovementDirection(direction);
     setDistance(distance);
-    Animation::setEasingCurveType(QEasingCurve::OutCirc);
+    setEasingCurve(QEasingCurve::OutCirc);
 }
 
 void SlideAnimation::setMovementDirection(const qint8 &direction)
 {
-    m_animDirection = static_cast<Direction>(direction);
+    m_animDirection = static_cast<MovementDirection>(direction);
 }
 
 qint8 SlideAnimation::movementDirection() const

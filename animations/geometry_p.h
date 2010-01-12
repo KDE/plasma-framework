@@ -44,7 +44,8 @@ class GeometryAnimation : public Animation
 
 public:
     /** Default constructor */
-    GeometryAnimation(QObject *parent = 0);
+    explicit GeometryAnimation(QObject *parent = 0);
+
     /** Destructor */
     virtual ~GeometryAnimation();
 

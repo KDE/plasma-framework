@@ -50,7 +50,8 @@ public:
      * @param factor Expand factor (default is twice the size of
      * animated widget).
      */
-    GrowAnimation(QObject *parent = 0, qreal factor = 2);
+    explicit GrowAnimation(QObject *parent = 0, qreal factor = 2);
+
     /** Destructor */
     virtual ~GrowAnimation(){};
 

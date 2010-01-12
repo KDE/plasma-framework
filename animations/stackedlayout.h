@@ -23,7 +23,7 @@
 
 class StackedLayout : public QGraphicsLayout {
     public:
-        StackedLayout(QGraphicsLayoutItem *parent = 0);
+        explicit StackedLayout(QGraphicsLayoutItem *parent = 0);
         ~StackedLayout();
 
         void setGeometry(const QRectF &rect);

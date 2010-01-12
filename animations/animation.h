@@ -48,9 +48,9 @@ class PLASMA_EXPORT Animation : public QAbstractAnimation
 
     Q_OBJECT
     Q_ENUMS(Reference)
-    Q_ENUMS(Direction)
+    Q_ENUMS(MovementDirection)
     Q_PROPERTY(int duration READ duration WRITE setDuration)
-    Q_PROPERTY(QEasingCurve::Type easingCurveType READ easingCurveType WRITE setEasingCurveType)
+    Q_PROPERTY(QEasingCurve easingCurve READ easingCurve WRITE setEasingCurve)
     Q_PROPERTY(QGraphicsWidget *targetWidget READ targetWidget WRITE setTargetWidget)
 
 public:
@@ -74,7 +74,7 @@ public:
     /**
      * The movement direction of an animation.
      */
-    enum Direction {
+    enum MovementDirection {
         MoveUp = 0,     /**< Move up */
         MoveUpRight,    /**< Move up and right */
         MoveRight,      /**< Move right */
@@ -114,12 +114,12 @@ public:
     /**
      * Set the animation easing curve type
      */
-    void setEasingCurveType(QEasingCurve::Type type);
+    void setEasingCurve(const QEasingCurve &curve);
 
     /**
      * Get the animation easing curve type
      */
-    QEasingCurve::Type easingCurveType() const;
+    QEasingCurve easingCurve() const;
 
 protected:
     /**
