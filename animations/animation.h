@@ -138,15 +138,6 @@ protected:
      */
     virtual void updateCurrentTime(int currentTime);
 
-    /**
-     * Internal use only, access the easing curve object (see
-     * \ref AnimationPrivate). Commonly used if a non-linear
-     * animation is desired while setting the delta in \ref updateCurrentTime.
-     *
-     * @return An internal easing curve (default is Type::Linear).
-     */
-    QEasingCurve &easingCurve();
-
 private:
 
     /**
