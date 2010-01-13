@@ -77,7 +77,8 @@ class PLASMA_EXPORT FrameSvg : public Svg
 {
     Q_OBJECT
 
-    friend class Applet;
+    Q_FLAGS(EnabledBorders)
+    Q_PROPERTY(EnabledBorders enabledBorders READ enabledBorders WRITE setEnabledBorders)
 
     public:
         /**
@@ -115,13 +116,13 @@ class PLASMA_EXPORT FrameSvg : public Svg
          * Sets what borders should be painted
          * @arg flags borders we want to paint
          */
-        Q_INVOKABLE void setEnabledBorders(const EnabledBorders borders);
+        void setEnabledBorders(const EnabledBorders borders);
 
         /**
          * Convenience method to get the enabled borders
          * @return what borders are painted
          */
-        Q_INVOKABLE EnabledBorders enabledBorders() const;
+        EnabledBorders enabledBorders() const;
 
         /**
          * Resize the frame maintaining the same border size
@@ -259,6 +260,7 @@ class PLASMA_EXPORT FrameSvg : public Svg
 
     private:
         FrameSvgPrivate *const d;
+        friend class Applet;
 
         Q_PRIVATE_SLOT(d, void updateSizes())
         Q_PRIVATE_SLOT(d, void updateNeeded())
