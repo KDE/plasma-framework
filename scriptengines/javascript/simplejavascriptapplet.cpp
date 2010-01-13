@@ -529,7 +529,9 @@ QScriptValue SimpleJavaScriptApplet::newPlasmaSvg(QScriptContext *context, QScri
     QGraphicsWidget *parent = extractParent(context, engine, 1, &parentedToApplet);
     Svg *svg = new Svg(parent);
     svg->setImagePath(parentedToApplet ? findSvg(engine, filename) : filename);
-    return engine->newQObject(svg);
+    QScriptValue fun = engine->newQObject(svg);
+    static_cast<ScriptEnv*>(engine)->registerEnums(fun, *svg->metaObject());
+    return fun;
 }
 
 QScriptValue SimpleJavaScriptApplet::newPlasmaFrameSvg(QScriptContext *context, QScriptEngine *engine)
@@ -544,7 +546,11 @@ QScriptValue SimpleJavaScriptApplet::newPlasmaFrameSvg(QScriptContext *context, 
     QGraphicsWidget *parent = extractParent(context, engine, 1, &parentedToApplet);
     FrameSvg *frameSvg = new FrameSvg(parent);
     frameSvg->setImagePath(parentedToApplet ? filename : findSvg(engine, filename));
-    return engine->newQObject(frameSvg);
+
+    QScriptValue fun = engine->newQObject(frameSvg);
+    // FIXME: why is this necessary when it is clearly declared in FrameSvg's moc?
+    static_cast<ScriptEnv*>(engine)->registerEnums(fun, *frameSvg->metaObject());
+    return fun;
 }
 
 QScriptValue SimpleJavaScriptApplet::widgetAdjustSize(QScriptContext *context, QScriptEngine *engine)
