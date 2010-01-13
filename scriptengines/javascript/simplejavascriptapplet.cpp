@@ -742,7 +742,7 @@ QScriptValue SimpleJavaScriptApplet::newPlasmaSvg(QScriptContext *context, QScri
     Svg *svg = new Svg(parent);
     svg->setImagePath(parentedToApplet ? findSvg(engine, filename) : filename);
     QScriptValue fun = engine->newQObject(svg);
-    registerEnums(fun, *svg->metaObject());
+    registerEnums(engine, fun, *svg->metaObject());
     return fun;
 }
 
@@ -761,7 +761,7 @@ QScriptValue SimpleJavaScriptApplet::newPlasmaFrameSvg(QScriptContext *context, 
 
     QScriptValue fun = engine->newQObject(frameSvg);
     // FIXME: why is this necessary when it is clearly declared in FrameSvg's moc?
-    registerEnums(fun, *frameSvg->metaObject());
+    registerEnums(engine, fun, *frameSvg->metaObject());
     return fun;
 }
 
