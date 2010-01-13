@@ -444,7 +444,7 @@ void Dialog::resizeEvent(QResizeEvent *e)
     if (Plasma::Theme::defaultTheme()->windowTranslucencyEnabled()) {
         clearMask();
     } else {
-        setMask(QRect(QPoint(0, 0), size()));
+        setMask(d->background->mask());
     }
 
     if (d->resizeStartCorner != -1 && d->view && d->graphicsWidgetPtr) {
