@@ -281,7 +281,16 @@ bool SimpleJavaScriptApplet::include(const QString &path)
     QString script = file.readAll();
     //kDebug() << "Script says" << script;
 
-    m_engine->evaluate(script);
+    // change the context to the parent context so that the include is actually
+    // executed in the same context as the caller; seems to be what javascript
+    // coders expect :)
+    QScriptContext *ctx = m_engine->currentContext();
+    if (ctx && ctx->parentContext()) {
+        ctx->setActivationObject(ctx->parentContext()->activationObject());
+        ctx->setThisObject(ctx->parentContext()->thisObject());
+    }
+
+    m_engine->evaluate(script, path);
     if (m_engine->hasUncaughtException()) {
         reportError(m_engine, true);
         return false;
