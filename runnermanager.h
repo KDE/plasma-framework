@@ -229,6 +229,12 @@ class PLASMA_EXPORT RunnerManager : public QObject
          */
         void matchesChanged(const QList<Plasma::QueryMatch> &matches);
 
+        /**
+         * Emitted when the launchQuery finish
+         * @since 4.5
+         */
+        void queryFinished();
+
     private:
         Q_PRIVATE_SLOT(d, void scheduleMatchesChanged())
         Q_PRIVATE_SLOT(d, void matchesChanged())

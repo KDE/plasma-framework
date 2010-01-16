@@ -319,6 +319,8 @@ public:
                 singleRunnerPrepped = false;
             }
 
+            emit q->queryFinished();
+
             prepped = false;
             teardownRequested = false;
         }
