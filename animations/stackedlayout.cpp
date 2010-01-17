@@ -46,7 +46,11 @@ QSizeF StackedLayout::sizeHint(Qt::SizeHint which, const QSizeF &constraint) con
     qreal left, top, right, bottom;
     getContentsMargins(&left, &top, &right, &bottom);
 
-    QSizeF currentWidgetSize = itemAt(m_currentWidgetIndex)->effectiveSizeHint(which, constraint);
+    if (m_currentWidgetIndex <= 0 || !itemAt(m_currentWidgetIndex)) {
+        return QSizeF();
+    }
+
+     QSizeF currentWidgetSize = itemAt(m_currentWidgetIndex)->effectiveSizeHint(which, constraint);
 
     return QSizeF( left + right + currentWidgetSize.width(), right + bottom + currentWidgetSize.height());
 }
