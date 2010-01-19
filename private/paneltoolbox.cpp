@@ -24,6 +24,8 @@
 #include <QPainter>
 #include <QRadialGradient>
 #include <QApplication>
+#include <QPropertyAnimation>
+#include <QWeakPointer>
 
 #include <kcolorscheme.h>
 #include <kdebug.h>
@@ -43,15 +45,13 @@ class PanelToolBoxPrivate
 public:
     PanelToolBoxPrivate()
       : icon("plasma"),
-        animId(0),
         animFrame(0),
         highlighting(false)
     {
     }
 
-
     KIcon icon;
-    int animId;
+    QWeakPointer<QPropertyAnimation> anim;
     qreal animFrame;
     QColor fgColor;
     QColor bgColor;
@@ -83,6 +83,7 @@ PanelToolBox::PanelToolBox(Containment *parent)
 
 PanelToolBox::~PanelToolBox()
 {
+    d->anim.clear();
     delete d;
 }
 
@@ -267,34 +268,44 @@ void PanelToolBox::highlight(bool highlighting)
         return;
     }
 
-    Plasma::Animator *animdriver = Plasma::Animator::self();
+    d->highlighting = highlighting;
 
-    if (d->animId) {
-        animdriver->stopCustomAnimation(d->animId);
+    QPropertyAnimation *anim = d->anim.data();
+    if (d->highlighting) {
+        if (anim) {
+            anim->stop();
+            d->anim.clear();
+        }
+        anim = new QPropertyAnimation(this, "highlight", this);
+        d->anim = anim;
     }
 
-    d->highlighting = highlighting;
-    d->animId = animdriver->customAnimation(10, 240, 
-                                            highlighting ? Plasma::Animator::EaseInCurve 
-                                                         : Plasma::Animator::EaseOutCurve,
-                                            this, "animate");
+    if (anim->state() != QAbstractAnimation::Stopped) {
+        anim->stop();
+    }
+
+    anim->setDuration(240);
+    anim->setStartValue(0);
+    anim->setEndValue(size());
+
+    if(d->highlighting) {
+        anim->start();
+    } else {
+        anim->setDirection(QAbstractAnimation::Backward);
+        anim->start(QAbstractAnimation::DeleteWhenStopped);
+
+    }
 }
 
-void PanelToolBox::animate(qreal progress)
+void PanelToolBox::setHighlightValue(qreal progress)
 {
-    if (d->highlighting) {
-        d->animFrame = size() * progress;
-    } else {
-        d->animFrame = size() * (1.0 - progress);
-    }
-
-    //kDebug() << "animating at" << progress << "for" << d->animFrame;
-
-    if (progress >= 1) {
-        d->animId = 0;
-    }
-
+    d->animFrame = progress;
     update();
+}
+
+qreal PanelToolBox::highlightValue() const
+{
+    return d->animFrame;
 }
 
 void PanelToolBox::toggle()

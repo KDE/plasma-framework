@@ -41,6 +41,7 @@ class PanelToolBoxPrivate;
 class PanelToolBox : public InternalToolBox
 {
     Q_OBJECT
+    Q_PROPERTY(qreal highlight READ highlightValue WRITE setHighlightValue)
 
 public:
     explicit PanelToolBox(Containment *parent);
@@ -62,7 +63,8 @@ protected:
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
 protected slots:
-    void animate(qreal progress);
+    void setHighlightValue(qreal progress);
+    qreal highlightValue() const;
     void toggle();
     void assignColors();
 
