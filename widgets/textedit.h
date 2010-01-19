@@ -43,7 +43,7 @@ class PLASMA_EXPORT TextEdit : public QGraphicsProxyWidget
 
     Q_PROPERTY(QGraphicsWidget *parentWidget READ parentWidget)
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
-    Q_PROPERTY(QString stylesheet READ styleSheet WRITE setStyleSheet)
+    Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(KTextEdit *nativeWidget READ nativeWidget WRITE setNativeWidget)
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
 
