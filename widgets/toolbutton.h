@@ -47,6 +47,7 @@ class PLASMA_EXPORT ToolButton : public QGraphicsProxyWidget
     Q_PROPERTY(QString stylesheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(QToolButton *nativeWidget READ nativeWidget)
     Q_PROPERTY(QAction *action READ action WRITE setAction)
+    Q_PROPERTY(bool isDown READ isDown WRITE setDown)
 
 public:
     explicit ToolButton(QGraphicsWidget *parent = 0);
