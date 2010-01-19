@@ -1832,8 +1832,8 @@ void AppletPrivate::addGlobalShortcutsPage(KConfigDialog *dialog)
 
     //TODO: Apply button does not correctly work for now, so do not show it
     dialog->showButton(KDialog::Apply, false);
-    QObject::connect(dialog, SIGNAL(applyClicked()), q, SLOT(configDialogFinished()));
-    QObject::connect(dialog, SIGNAL(okClicked()), q, SLOT(configDialogFinished()));
+    QObject::connect(dialog, SIGNAL(applyClicked()), q, SLOT(configDialogFinished()), Qt::UniqueConnection);
+    QObject::connect(dialog, SIGNAL(okClicked()), q, SLOT(configDialogFinished()), Qt::UniqueConnection);
 }
 
 void AppletPrivate::addPublishPage(KConfigDialog *dialog)
