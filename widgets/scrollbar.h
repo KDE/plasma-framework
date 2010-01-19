@@ -45,7 +45,7 @@ class PLASMA_EXPORT ScrollBar : public QGraphicsProxyWidget
     Q_PROPERTY(int value READ value WRITE setValue NOTIFY valueChanged)
     Q_PROPERTY(int minimum READ minimum)
     Q_PROPERTY(int maximum READ maximum)
-    Q_PROPERTY(QString stylesheet READ styleSheet WRITE setStyleSheet)
+    Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(QScrollBar *nativeWidget READ nativeWidget)
 
 public:
