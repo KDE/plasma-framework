@@ -273,6 +273,11 @@ QString ToolButton::image() const
     return d->imagePath;
 }
 
+void ToolButton::setDown(bool down)
+{
+    nativeWidget()->setDown(down);
+}
+
 bool ToolButton::isDown() const
 {
     return nativeWidget()->isDown();

@@ -99,6 +99,14 @@ public:
     QString image() const;
 
     /**
+     * Sets the status of the button to pressed
+     *
+     * @arg down
+     * @since 4.5
+     */
+    void setDown(bool down);
+
+    /**
      * @return true if the button is pressed down
      * @since 4.4
      */
