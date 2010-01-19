@@ -2899,10 +2899,8 @@ void AppletOverlayWidget::paint(QPainter *painter,
         backgroundShape = shape();
     }
 
-    painter->save();
     painter->setRenderHints(QPainter::Antialiasing);
     painter->fillPath(backgroundShape, wash);
-    painter->restore();
 }
 
 } // Plasma namespace
