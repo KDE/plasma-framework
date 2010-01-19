@@ -29,6 +29,8 @@
 #include <QTouchEvent>
 #include <QMatrix>
 #include <QTransform>
+#include <QWeakPointer>
+#include <QPropertyAnimation>
 
 #include <kcolorscheme.h>
 #include <kglobalsettings.h>
@@ -63,8 +65,7 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &h
       m_applet(applet),
       m_iconSize(KIconLoader::SizeSmall),
       m_opacity(0.0),
-      m_anim(FadeIn),
-      m_animId(0),
+      m_animType(FadeIn),
       m_backgroundBuffer(0),
       m_currentView(applet->view()),
       m_entryPos(hoverPos),
@@ -187,7 +188,7 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
     //kDebug() << m_opacity << m_anim << FadeOut;
     if (qFuzzyCompare(m_opacity + 1.0, 1.0)) {
-        if (m_anim == FadeOut) {
+        if (m_animType == FadeOut) {
             //kDebug() << "WOOOOOOOOO";
             QTimer::singleShot(0, this, SLOT(emitDisappear()));
         }
@@ -215,8 +216,14 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
                            int(m_decorationRect.height()) + m_iconSize * 5 + 1);
     const QSize iconSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall);
 
+    bool isRunning = false;
+    if (m_anim.data()) {
+        isRunning = m_anim.data()->state() == QAbstractAnimation::Running ? \
+                    true : false;
+    }
+
     //regenerate our buffer?
-    if (m_animId > 0 || !m_backgroundBuffer || m_backgroundBuffer->size() != pixmapSize) {
+    if (isRunning || !m_backgroundBuffer || m_backgroundBuffer->size() != pixmapSize) {
         QColor transparencyColor = Qt::black;
         transparencyColor.setAlphaF(qMin(m_opacity, qreal(0.99)));
 
@@ -802,7 +809,7 @@ void AppletHandle::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
         m_leaveTimer->stop();
     }
     // if we're already fading out, fade back in
-    else if (m_animId != 0 && m_anim == FadeOut) {
+    else if (!m_anim.data() && m_animType == FadeOut) {
         startFading(FadeIn, m_entryPos, true);
     }
 }
@@ -846,23 +853,21 @@ bool AppletHandle::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
     return false;
 }
 
-void AppletHandle::fadeAnimation(qreal progress)
+void AppletHandle::setFadeAnimation(qreal progress)
 {
-    //qreal endOpacity = (m_anim == FadeIn) ? 1.0 : -1.0;
-    if (m_anim == FadeIn) {
-        m_opacity = progress;
-    } else {
-        m_opacity = 1 - progress;
-    }
-
+    m_opacity = progress;
     //kDebug() << "progress" << progress << "m_opacity" << m_opacity << m_anim << "(" << FadeIn << ")";
-    if (qFuzzyCompare(progress, qreal(1.0))) {
-        m_animId = 0;
+    if (qFuzzyCompare(progress, 1.0)) {
         delete m_backgroundBuffer;
         m_backgroundBuffer = 0;
     }
 
     update();
+}
+
+qreal AppletHandle::fadeAnimation() const
+{
+    return m_opacity;
 }
 
 void AppletHandle::hoverTimeout()
@@ -896,16 +901,23 @@ void AppletHandle::setHoverPos(const QPointF &hoverPos)
 
 void AppletHandle::startFading(FadeType anim, const QPointF &hoverPos, bool preserveSide)
 {
-    if (m_animId != 0) {
-        Animator::self()->stopCustomAnimation(m_animId);
+    QPropertyAnimation *propAnim = m_anim.data();
+
+    if (anim == FadeIn) {
+        if (propAnim) {
+            propAnim->stop();
+        } else {
+            propAnim = new QPropertyAnimation(this, "fadeAnimation", this);
+            m_anim = propAnim;
+        }
     }
 
     m_entryPos = hoverPos;
     qreal time = 100;
 
     if (!m_applet) {
-        m_anim = FadeOut;
-        fadeAnimation(1.0);
+        m_animType = FadeOut;
+        setFadeAnimation(1.0);
         return;
     }
 
@@ -940,7 +952,7 @@ void AppletHandle::startFading(FadeType anim, const QPointF &hoverPos, bool pres
         }
 
         if (wasOnRight != m_buttonsOnRight &&
-            m_anim == FadeIn &&
+            m_animType == FadeIn &&
             anim == FadeIn &&
             m_opacity <= 1) {
             m_opacity = 0.0;
@@ -951,10 +963,19 @@ void AppletHandle::startFading(FadeType anim, const QPointF &hoverPos, bool pres
         time *= m_opacity;
     }
 
-    m_anim = anim;
+    propAnim->setStartValue(0);
+    propAnim->setEndValue(1);
+    propAnim->setDuration(time);
+
+    m_animType = anim;
     //kDebug() << "animating for " << time << "ms";
-    m_animId = Animator::self()->customAnimation(80 * (time / 1000.0), (int)time,
-                                                 Animator::EaseInCurve, this, "fadeAnimation");
+    if (m_animType == FadeIn) {
+        propAnim->setDirection(QAbstractAnimation::Forward);
+        propAnim->start();
+    } else {
+        propAnim->setDirection(QAbstractAnimation::Backward);
+        propAnim->start(QAbstractAnimation::DeleteWhenStopped);
+    }
 }
 
 void AppletHandle::forceDisappear()

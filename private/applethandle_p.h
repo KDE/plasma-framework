@@ -23,6 +23,8 @@
 #include <QtCore/QObject>
 #include <QtGui/QGraphicsObject>
 #include <QTimer>
+#include <QWeakPointer>
+#include <QPropertyAnimation>
 
 #include "animator.h"
 #include "svg.h"
@@ -39,6 +41,7 @@ class View;
 class AppletHandle : public QGraphicsObject
 {
     Q_OBJECT
+    Q_PROPERTY(qreal fadeAnimation READ fadeAnimation WRITE setFadeAnimation);
     Q_INTERFACES(QGraphicsItem)
     public:
         enum FadeType {
@@ -82,7 +85,8 @@ class AppletHandle : public QGraphicsObject
        void disappearDone(AppletHandle *self);
 
     private Q_SLOTS:
-        void fadeAnimation(qreal progress);
+        void setFadeAnimation(qreal progress);
+        qreal fadeAnimation() const;
         void appletDestroyed();
         void appletResized();
         void hoverTimeout();
@@ -113,8 +117,8 @@ class AppletHandle : public QGraphicsObject
         Applet *m_applet;
         int m_iconSize;
         qreal m_opacity;
-        FadeType m_anim;
-        int m_animId;
+        FadeType m_animType;;
+        QWeakPointer<QPropertyAnimation> m_anim;
         qreal m_angle;
         QColor m_gradientColor;
         QTimer *m_hoverTimer;
