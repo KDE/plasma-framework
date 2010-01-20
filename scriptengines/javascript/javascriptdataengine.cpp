@@ -52,11 +52,10 @@ bool JavaScriptDataEngine::init()
     qRegisterMetaType<DataEngine::Data>("Plasma::DataEngine::Data");
     qRegisterMetaType<DataEngine::Data>("DataEngine::Data");
     qScriptRegisterMapMetaType<Plasma::DataEngine::Data>(m_qscriptEngine);
-    /**
-TODO: Service bindings
-m_qscriptEngine->setDefaultPrototype(qMetaTypeId<Service*>(), m_qscriptEngine->newQObject(new DummyService()));
-m_qscriptEngine->setDefaultPrototype(qMetaTypeId<ServiceJob*>(), m_qscriptEngine->newQObject(new ServiceJob(QString(), QString(), QMap<QString, QVariant>())));
-     */
+    m_qscriptEngine->setDefaultPrototype(qMetaTypeId<Service*>(), m_qscriptEngine->newQObject(new DummyService(), QScriptEngine::ScriptOwnership));
+    m_qscriptEngine->setDefaultPrototype(qMetaTypeId<ServiceJob*>(),
+                                         m_qscriptEngine->newQObject(new ServiceJob(QString(), QString(), QMap<QString, QVariant>()),
+                                                                     QScriptEngine::ScriptOwnership ));
 
     Authorization auth;
     if (!m_qscriptEngine->importExtensions(description(), iface, auth)) {
@@ -254,17 +253,18 @@ bool JavaScriptDataEngine::updateSourceEvent(const QString &source)
     return false;
 }
 
-/*
 Plasma::Service *JavaScriptDataEngine::serviceForSource(const QString &source)
 {
-    QScriptValue rv = callFunction("updateSourceEvent");
-    if (rv.isValid() && rv.isVariant()) {
-        return rv.toVariant().value<Plasma::Service*>();
+    QScriptValueList args;
+    args << source;
+    QScriptValue rv = callFunction("updateSourceEvent", args);
+    if (rv.isValid() && rv.isQObject()) {
+        return qobject_cast<Plasma::Service *>(rv.toQObject());
     }
 
     return 0;
 }
-*/
+
 K_EXPORT_PLASMA_DATAENGINESCRIPTENGINE(javascriptdataengine, JavaScriptDataEngine)
 
 #include <javascriptdataengine.moc>

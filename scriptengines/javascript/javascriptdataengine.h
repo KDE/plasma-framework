@@ -41,7 +41,7 @@ public:
     QStringList sources() const;
     bool sourceRequestEvent(const QString &name);
     bool updateSourceEvent(const QString &source);
-    //TODO: Plasma::Service *serviceForSource(const QString &source);
+    Plasma::Service *serviceForSource(const QString &source);
 
     int maxSourceCount() const;
     void jsSetMaxSourceCount(int count);
