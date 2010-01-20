@@ -32,6 +32,11 @@ class QScriptContext;
 
 class AppletInterface;
 
+namespace Plasma
+{
+    class ExtenderItem;
+} // namespace Plasma
+
 class SimpleJavaScriptApplet : public Plasma::AppletScript
 {
     Q_OBJECT
@@ -63,6 +68,7 @@ public slots:
     void configChanged();
     void executeAction(const QString &name);
     void collectGarbage();
+    void extenderItemRestored(Plasma::ExtenderItem* item);
 
 private:
     void registerGetUrl();
@@ -85,6 +91,7 @@ private:
     static QScriptValue loadui(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue newPlasmaSvg(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue newPlasmaFrameSvg(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue newPlasmaExtenderItem(QScriptContext *context, QScriptEngine *engine);
 
     void installWidgets(QScriptEngine *engine);
     static QScriptValue createWidget(QScriptContext *context, QScriptEngine *engine);

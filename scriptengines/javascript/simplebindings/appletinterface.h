@@ -41,6 +41,7 @@ class QSizeF;
 namespace Plasma
 {
     class ConfigLoader;
+    class Extender;
 } // namespace Plasa
 
 class AppletInterface : public QObject
@@ -232,6 +233,8 @@ enum AnimationDirection {
 
     Q_INVOKABLE void debug(const QString &msg);
     Q_INVOKABLE QObject *findChild(const QString &name) const;
+
+    Q_INVOKABLE Plasma::Extender *extender() const;
 
     Plasma::DataEngine *dataEngine(const QString &name);
 
