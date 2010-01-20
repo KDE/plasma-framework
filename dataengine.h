@@ -61,6 +61,7 @@ class PLASMA_EXPORT DataEngine : public QObject
     Q_PROPERTY(QStringList sources READ sources)
     Q_PROPERTY(bool valid READ isValid)
     Q_PROPERTY(QString icon READ icon WRITE setIcon)
+    Q_PROPERTY(QString name READ name)
 
     public:
         typedef QHash<QString, DataEngine*> Dict;
@@ -92,7 +93,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          *         the default implementation provides) or not is up to the
          *         DataEngine to decide.
          **/
-        Q_INVOKABLE virtual QStringList sources() const;
+        virtual QStringList sources() const;
 
         /**
          * @param source the source to target the Service at
@@ -105,7 +106,7 @@ class PLASMA_EXPORT DataEngine : public QObject
         /**
          * Returns the engine name for the DataEngine
          */
-        Q_INVOKABLE QString name() const;
+        QString name() const;
 
         /**
          * Connects a source to an object for data updates. The object must
