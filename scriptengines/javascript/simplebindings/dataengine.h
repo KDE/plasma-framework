@@ -74,7 +74,5 @@ int qScriptRegisterMapMetaType(
                                       qScriptValueToMap, prototype);
 }
 
-QScriptValue qScriptValueFromData(QScriptEngine *engine, const DataEngine::Data &data);
-
 #endif // DATAENGINE_H
 

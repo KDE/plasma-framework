@@ -194,7 +194,9 @@ void registerSimpleAppletMetaTypes(QScriptEngine *engine)
     qScriptRegisterMetaType<KIO::Job *>(engine, qScriptValueFromKIOJob, qKIOJobFromQScriptValue);
 
     qScriptRegisterMetaType<Plasma::Animation *>(engine, qScriptValueFromAnimation, abstractAnimationFromQScriptValue);
-    qScriptRegisterMetaType<Plasma::DataEngine::Data>(engine, qScriptValueFromData, 0, QScriptValue());
+    qRegisterMetaType<DataEngine::Data>("Plasma::DataEngine::Data");
+    qRegisterMetaType<DataEngine::Data>("DataEngine::Data");
+    qScriptRegisterMapMetaType<DataEngine::Data>(engine);
     qScriptRegisterMetaType<Plasma::Extender *>(engine, qScriptValueFromExtender , extenderFromQScriptValue);
     qScriptRegisterMetaType<Plasma::VideoWidget::Controls>(engine, qScriptValueFromControls, controlsFromScriptValue, QScriptValue());
 }
