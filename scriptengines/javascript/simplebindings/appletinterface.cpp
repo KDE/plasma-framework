@@ -32,7 +32,6 @@
 #include <Plasma/Plasma>
 #include <Plasma/Applet>
 #include <Plasma/Context>
-#include <Plasma/DataEngine>
 #include <Plasma/Package>
 
 AppletInterface::AppletInterface(SimpleJavaScriptApplet *parent)
@@ -352,6 +351,11 @@ QObject *AppletInterface::findChild(const QString &name) const
     }
 
     return 0;
+}
+
+Plasma::Extender *AppletInterface::extender() const
+{
+    return m_appletScriptEngine->extender();
 }
 
 void AppletInterface::gc()

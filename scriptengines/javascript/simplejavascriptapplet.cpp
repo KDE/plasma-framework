@@ -41,10 +41,12 @@
 
 #include <Plasma/Animation>
 #include <Plasma/Applet>
-#include <Plasma/Svg>
+#include <Plasma/Extender>
+#include <Plasma/ExtenderItem>
 #include <Plasma/FrameSvg>
 #include <Plasma/Package>
 #include <Plasma/PopupApplet>
+#include <Plasma/Svg>
 #include <Plasma/VideoWidget>
 
 #include "appletauthorization.h"
@@ -173,6 +175,13 @@ void SimpleJavaScriptApplet::dataUpdated(const QString &name, const DataEngine::
     }
 }
 
+void SimpleJavaScriptApplet::extenderItemRestored(Plasma::ExtenderItem* item)
+{
+    QScriptValueList args;
+    args << m_engine->newQObject(item, QScriptEngine::AutoOwnership, QScriptEngine::PreferExistingWrapperObject);
+    callFunction("initExtenderItem", args);
+}
+
 void SimpleJavaScriptApplet::executeAction(const QString &name)
 {
     //callFunction("action_" + name);
@@ -283,6 +292,8 @@ void SimpleJavaScriptApplet::populateAnimationsHash()
 
 bool SimpleJavaScriptApplet::init()
 {
+    connect(applet(), SIGNAL(extenderItemRestored(Plasma::ExtenderItem*)),
+            this, SLOT(extenderItemRestored(Plasma::ExtenderItem*)));
     setupObjects();
 
     AppletAuthorization auth(this);
@@ -368,6 +379,7 @@ void SimpleJavaScriptApplet::setupObjects()
     global.setProperty("PlasmaFrameSvg", m_engine->newFunction(SimpleJavaScriptApplet::newPlasmaFrameSvg));
     global.setProperty("Svg", m_engine->newFunction(SimpleJavaScriptApplet::newPlasmaSvg));
     global.setProperty("FrameSvg", m_engine->newFunction(SimpleJavaScriptApplet::newPlasmaFrameSvg));
+    global.setProperty("ExtenderItem", m_engine->newFunction(SimpleJavaScriptApplet::newPlasmaExtenderItem));
 
     registerSimpleAppletMetaTypes(m_engine);
     installWidgets(m_engine);
@@ -550,6 +562,28 @@ QScriptValue SimpleJavaScriptApplet::newPlasmaFrameSvg(QScriptContext *context, 
     QScriptValue fun = engine->newQObject(frameSvg);
     // FIXME: why is this necessary when it is clearly declared in FrameSvg's moc?
     static_cast<ScriptEnv*>(engine)->registerEnums(fun, *frameSvg->metaObject());
+    return fun;
+}
+
+QScriptValue SimpleJavaScriptApplet::newPlasmaExtenderItem(QScriptContext *context, QScriptEngine *engine)
+{
+    Plasma::Extender *extender = 0;
+    if (context->argumentCount() > 0) {
+        extender = qobject_cast<Plasma::Extender *>(context->argument(0).toQObject());
+    }
+
+    if (!extender) {
+        AppletInterface *interface = extractAppletInterface(engine);
+        if (!interface) {
+            engine->undefinedValue();
+        }
+
+        extender = interface->extender();
+    }
+
+    Plasma::ExtenderItem *extenderItem = new Plasma::ExtenderItem(extender);
+    QScriptValue fun = engine->newQObject(extenderItem);
+    static_cast<ScriptEnv*>(engine)->registerEnums(fun, *extenderItem->metaObject());
     return fun;
 }
 
