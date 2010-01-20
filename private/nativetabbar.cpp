@@ -28,6 +28,8 @@
 #include <QApplication>
 #include <QStyleOption>
 #include <QToolButton>
+#include <QPropertyAnimation>
+#include <QWeakPointer>
 
 #include <QGradient>
 #include <QLinearGradient>
@@ -85,6 +87,7 @@ public:
     KIcon closeIcon;
 
     int animationId;
+    QWeakPointer<QPropertyAnimation> anim;
 
     QRect currentAnimRect;
     QRect startAnimRect;
@@ -131,6 +134,7 @@ NativeTabBar::NativeTabBar(QWidget *parent)
 
 NativeTabBar::~NativeTabBar()
 {
+    d->anim.clear();
     delete d;
 }
 
@@ -385,26 +389,45 @@ void NativeTabBar::tabLayoutChange()
 void NativeTabBar::startAnimation()
 {
     d->storeLastIndex();
-    Plasma::Animator::self()->customAnimation(
-        10, 150, Plasma::Animator::EaseInOutCurve, this, "onValueChanged");
+
+    QPropertyAnimation *anim = d->anim.data();
+    if (anim) {
+        anim->stop();
+        d->anim.clear();
+    }
+
+    anim = new QPropertyAnimation(this,  "onValueChanged",  this);
+    d->anim = anim;
+    anim->setDuration(150);
+
+    QRect rect = tabRect(currentIndex());
+    QRect lastRect = d->startAnimRect.isNull() ? tabRect(lastIndex())
+                                               : d->startAnimRect;
+    int x = isHorizontal() ? (int)(lastRect.x() -  (lastRect.x() - rect.x())) : rect.x();
+    int y = isHorizontal() ? rect.y() : (int)(lastRect.y() -  (lastRect.y() - rect.y()));
+    QSizeF sz = lastRect.size() - (lastRect.size() - rect.size());
+    d->currentAnimRect = QRect(x, y, (int)(sz.width()), (int)(sz.height()));
+
+    anim->setStartValue(lastRect);
+    anim->setEndValue(d->currentAnimRect);
+    anim->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
-void NativeTabBar::onValueChanged(qreal value)
+void NativeTabBar::setOnValueChanged(QRectF value)
 {
-    if ((d->animProgress = value) == 1.0) {
+    if (value == d->anim.data()->endValue()) {
+        d->animProgress = 1;
         animationFinished();
         return;
     }
 
-    // animation rect
-    QRect rect = tabRect(currentIndex());
-    QRect lastRect = d->startAnimRect.isNull() ? tabRect(lastIndex())
-                                               : d->startAnimRect;
-    int x = isHorizontal() ? (int)(lastRect.x() - value * (lastRect.x() - rect.x())) : rect.x();
-    int y = isHorizontal() ? rect.y() : (int)(lastRect.y() - value * (lastRect.y() - rect.y()));
-    QSizeF sz = lastRect.size() - value * (lastRect.size() - rect.size());
-    d->currentAnimRect = QRect(x, y, (int)(sz.width()), (int)(sz.height()));
+    d->currentAnimRect = value.toRect();
     update();
+}
+
+QRectF NativeTabBar::onValueChanged() const
+{
+    return d->currentAnimRect;
 }
 
 void NativeTabBar::animationFinished()

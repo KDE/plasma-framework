@@ -31,6 +31,7 @@ class NativeTabBarPrivate;
 class NativeTabBar : public KTabBar
 {
     Q_OBJECT
+    Q_PROPERTY(QRectF onValueChanged READ onValueChanged WRITE setOnValueChanged)
 
 public:
     NativeTabBar(QWidget *parent = 0);
@@ -61,7 +62,8 @@ protected:
 protected slots:
     void animationFinished();
     void startAnimation();
-    void onValueChanged(qreal val);
+    void setOnValueChanged(QRectF val);
+    QRectF onValueChanged() const;
 
 Q_SIGNALS:
     void sizeHintChanged();
