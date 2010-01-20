@@ -45,6 +45,8 @@ class PLASMA_EXPORT ComboBox : public QGraphicsProxyWidget
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(KComboBox *nativeWidget READ nativeWidget WRITE setNativeWidget)
 
+    Q_PROPERTY(qreal animationUpdate READ animationUpdate WRITE setAnimationUpdate)
+
 public:
     explicit ComboBox(QGraphicsWidget *parent = 0);
     ~ComboBox();
@@ -113,13 +115,15 @@ protected:
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
     void changeEvent(QEvent *event);
 
+private slots:
+    void setAnimationUpdate(qreal progress);
+    qreal animationUpdate() const;
+
 private:
     ComboBoxPrivate * const d;
 
     friend class ComboBoxPrivate;
     Q_PRIVATE_SLOT(d, void syncBorders())
-    Q_PRIVATE_SLOT(d, void animationUpdate(qreal progress))
-    Q_PRIVATE_SLOT(d, void animationFinished(int id))
 };
 
 } // namespace Plasma

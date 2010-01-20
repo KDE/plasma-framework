@@ -21,6 +21,7 @@
 
 #include <QPainter>
 #include <QApplication>
+#include <QPropertyAnimation>
 
 #include <kcombobox.h>
 #include <kmimetype.h>
@@ -54,14 +55,13 @@ public:
     void syncActiveRect();
     void syncBorders();
     void animationUpdate(qreal progress);
-    void animationFinished(int id);
 
     ComboBox *q;
 
     FrameSvg *background;
     FrameSvg *lineEditBackground;
     int animId;
-    bool fadeIn;
+    QPropertyAnimation *animation;
     qreal opacity;
     QRectF activeRect;
     Style::Ptr style;
@@ -109,23 +109,10 @@ void ComboBoxPrivate::syncBorders()
 
 void ComboBoxPrivate::animationUpdate(qreal progress)
 {
-    if (progress == 1) {
-        animId = -1;
-        fadeIn = true;
-    }
-
-    opacity = fadeIn ? progress : 1 - progress;
+    opacity = progress;
 
     // explicit update
     q->update();
-}
-
-
-void ComboBoxPrivate::animationFinished(int id)
-{
-    if (id == animId) {
-        animId = -1;
-    }
 }
 
 ComboBox::ComboBox(QGraphicsWidget *parent)
@@ -147,8 +134,11 @@ ComboBox::ComboBox(QGraphicsWidget *parent)
 
     setNativeWidget(new KComboBox);
 
+    d->animation = new QPropertyAnimation(this, "animationUpdate", this);
+    d->animation->setStartValue(0);
+    d->animation->setEndValue(1);
+
     connect(Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(syncBorders()));
-    connect(Plasma::Animator::self(), SIGNAL(customAnimationFinished(int)), this, SLOT(animationFinished(int)));
 }
 
 ComboBox::~ComboBox()
@@ -228,6 +218,8 @@ void ComboBox::paint(QPainter *painter,
                      const QStyleOptionGraphicsItem *option,
                      QWidget *widget)
 {
+    QAbstractAnimation::State animState = d->animation->state();
+
     if (!styleSheet().isNull() ||
         Theme::defaultTheme()->useNativeWidgetStyle()) {
         QGraphicsProxyWidget::paint(painter, option, widget);
@@ -235,7 +227,7 @@ void ComboBox::paint(QPainter *painter,
     }
 
     if (nativeWidget()->isEditable()) {
-        if (d->animId != -1 || hasFocus() || d->underMouse) {
+        if (animState != QAbstractAnimation::Stopped || hasFocus() || d->underMouse) {
             if (hasFocus()) {
                 d->lineEditBackground->setElementPrefix("focus");
             } else {
@@ -265,7 +257,7 @@ void ComboBox::paint(QPainter *painter,
     if (isEnabled()) {
         d->background->setElementPrefix("normal");
 
-        if (d->animId == -1) {
+        if (animState == QAbstractAnimation::Stopped) {
             d->background->paintFrame(painter);
         }
     //disabled widget
@@ -283,7 +275,7 @@ void ComboBox::paint(QPainter *painter,
 
     //if is under mouse draw the animated glow overlay
     if (isEnabled() && acceptHoverEvents()) {
-        if (d->animId != -1) {
+        if (animState!= QAbstractAnimation::Stopped) {
             d->background->setElementPrefix("normal");
             QPixmap normalPix = d->background->framePixmap();
             d->background->setElementPrefix("active");
@@ -323,17 +315,27 @@ void ComboBox::paint(QPainter *painter,
         QStyle::PE_IndicatorArrowDown, &comboOpt, painter, nativeWidget());
 }
 
+void ComboBox::setAnimationUpdate(qreal progress)
+{
+    d->animationUpdate(progress);
+}
+
+qreal ComboBox::animationUpdate() const
+{
+    return d->opacity;
+}
+
 void ComboBox::focusInEvent(QFocusEvent *event)
 {
     if (nativeWidget()->isEditable() && !d->underMouse) {
         const int FadeInDuration = 75;
 
-        if (d->animId != -1) {
-            Animator::self()->stopCustomAnimation(d->animId);
+        if (d->animation->state() != QAbstractAnimation::Stopped) {
+            d->animation->stop();
         }
-        d->animId = Animator::self()->customAnimation(
-            40 / (1000 / FadeInDuration), FadeInDuration,
-            Animator::LinearCurve, this, "animationUpdate");
+        d->animation->setDuration(FadeInDuration);
+        d->animation->setDirection(QAbstractAnimation::Forward);
+        d->animation->start();
     }
 
     QGraphicsProxyWidget::focusInEvent(event);
@@ -344,15 +346,14 @@ void ComboBox::focusOutEvent(QFocusEvent *event)
     if (nativeWidget()->isEditable() && !d->underMouse) {
         const int FadeOutDuration = 150;
 
-        if (d->animId != -1) {
-            Animator::self()->stopCustomAnimation(d->animId != -1);
+        if (d->animation->state() != QAbstractAnimation::Stopped) {
+            d->animation->stop();
         }
-
-        d->fadeIn = false;
-        d->animId = Animator::self()->customAnimation(
-            40 / (1000 / FadeOutDuration),
-            FadeOutDuration, Animator::LinearCurve, this, "animationUpdate");
+        d->animation->setDuration(FadeOutDuration);
+        d->animation->setDirection(QAbstractAnimation::Backward);
+        d->animation->start();
     }
+
 
     QGraphicsProxyWidget::focusInEvent(event);
 }
@@ -363,15 +364,14 @@ void ComboBox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     if (nativeWidget()->isEditable() && hasFocus()) {
         return;
     }
-
     const int FadeInDuration = 75;
 
-    if (d->animId != -1) {
-        Animator::self()->stopCustomAnimation(d->animId);
+    if (d->animation->state() != QAbstractAnimation::Stopped) {
+        d->animation->stop();
     }
-    d->animId = Animator::self()->customAnimation(
-        40 / (1000 / FadeInDuration), FadeInDuration,
-        Animator::LinearCurve, this, "animationUpdate");
+    d->animation->setDuration(FadeInDuration);
+    d->animation->setDirection(QAbstractAnimation::Forward);
+    d->animation->start();
 
     d->background->setElementPrefix("active");
 
@@ -387,14 +387,12 @@ void ComboBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
     const int FadeOutDuration = 150;
 
-    if (d->animId != -1) {
-        Animator::self()->stopCustomAnimation(d->animId != -1);
+    if (d->animation->state() != QAbstractAnimation::Stopped) {
+        d->animation->stop();
     }
-
-    d->fadeIn = false;
-    d->animId = Animator::self()->customAnimation(
-        40 / (1000 / FadeOutDuration),
-        FadeOutDuration, Animator::LinearCurve, this, "animationUpdate");
+    d->animation->setDuration(FadeOutDuration);
+    d->animation->setDirection(QAbstractAnimation::Backward);
+    d->animation->start();
 
     d->background->setElementPrefix("active");
 
