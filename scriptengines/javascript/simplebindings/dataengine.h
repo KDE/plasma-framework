@@ -40,20 +40,22 @@ Q_DECLARE_METATYPE(DataEngine::Data)
 template <class M>
 QScriptValue qScriptValueFromMap(QScriptEngine *eng, const M &map)
 {
-    kDebug() << "qScriptValueFromMap called";
-
+    //kDebug() << "qScriptValueFromMap called";
     QScriptValue obj = eng->newObject();
     typename M::const_iterator begin = map.constBegin();
     typename M::const_iterator end = map.constEnd();
     typename M::const_iterator it;
-    for (it = begin; it != end; ++it)
+    for (it = begin; it != end; ++it) {
         obj.setProperty(it.key(), qScriptValueFromValue(eng, it.value()));
+    }
+
     return obj;
 }
 
 template <class M>
 void qScriptValueToMap(const QScriptValue &value, M &map)
 {
+    //kDebug() << "qScriptValueToMap called";
     QScriptValueIterator it(value);
     while (it.hasNext()) {
         it.next();
@@ -70,11 +72,8 @@ int qScriptRegisterMapMetaType(
 #endif
 )
 {
-    return qScriptRegisterMetaType<T>(engine, qScriptValueFromMap,
-                                      qScriptValueToMap, prototype);
+    return qScriptRegisterMetaType<T>(engine, qScriptValueFromMap, qScriptValueToMap, prototype);
 }
-
-QScriptValue qScriptValueFromData(QScriptEngine *engine, const DataEngine::Data &data);
 
 #endif // DATAENGINE_H
 

@@ -49,7 +49,9 @@ bool JavaScriptDataEngine::init()
     global.setProperty("removeData", m_qscriptEngine->newFunction(JavaScriptDataEngine::jsRemoveData));
     global.setProperty("removeAllSources", m_qscriptEngine->newFunction(JavaScriptDataEngine::jsRemoveAllSources));
 
-    qScriptRegisterMetaType<DataEngine::Data>(m_qscriptEngine, qScriptValueFromData, 0, QScriptValue());
+    qRegisterMetaType<DataEngine::Data>("Plasma::DataEngine::Data");
+    qRegisterMetaType<DataEngine::Data>("DataEngine::Data");
+    qScriptRegisterMapMetaType<Plasma::DataEngine::Data>(m_qscriptEngine);
     /**
 TODO: Service bindings
 m_qscriptEngine->setDefaultPrototype(qMetaTypeId<Service*>(), m_qscriptEngine->newQObject(new DummyService()));
