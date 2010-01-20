@@ -66,6 +66,11 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
 {
     Q_OBJECT
     Q_PROPERTY(QString emptyExtenderMessage READ emptyExtenderMessage WRITE setEmptyExtenderMessage)
+    Q_PROPERTY(QList<ExtenderItem*> items READ items())
+    Q_PROPERTY(QList<ExtenderItem*> attachedItems READ attachedItems())
+    Q_PROPERTY(QList<ExtenderItem*> detachedItems READ detachedItems())
+    Q_PROPERTY(QList<ExtenderGroup*> groups READ groups())
+    Q_PROPERTY(bool empty READ isEmpty())
 
     public:
         /**
@@ -136,7 +141,7 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
          * even if the requested item isn't instantiated yet.
          * @returns the requested item
          */
-        ExtenderItem *item(const QString &name) const;
+        Q_INVOKABLE ExtenderItem *item(const QString &name) const;
 
         /**
          * Extra convenience function for obtaining groups specified by name. This will avoid needed
@@ -144,7 +149,7 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
          * @returns the requested group
          * @since 4.3
          */
-        ExtenderGroup *group(const QString &name) const;
+        Q_INVOKABLE ExtenderGroup *group(const QString &name) const;
 
         /**
          * This function can be used for easily determining if a certain item is already displayed
@@ -154,7 +159,7 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
          * @returns whether or not this item already exists.
          * @since 4.3
          */
-        bool hasItem(const QString &name) const;
+        Q_INVOKABLE bool hasItem(const QString &name) const;
 
         /**
          * @return true if the Extender is visually empty (though it may have items such as
