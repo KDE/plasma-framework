@@ -41,6 +41,7 @@ class DesktopToolBoxPrivate;
 class DesktopToolBox : public InternalToolBox
 {
     Q_OBJECT
+    Q_PROPERTY(qreal highlight READ highlight WRITE setHighlight)
 
 public:
     explicit DesktopToolBox(Containment *parent = 0);
@@ -67,7 +68,8 @@ protected:
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
 protected Q_SLOTS:
-    void animateHighlight(qreal progress);
+    void setHighlight(qreal progress);
+    qreal highlight();
     void updateTheming();
     void toolTriggered(bool);
     void hideToolBacker();
@@ -76,6 +78,7 @@ protected Q_SLOTS:
      */
     void toggle();
 private:
+    void highlight(bool highlighting);
     DesktopToolBoxPrivate *d;
 };
 

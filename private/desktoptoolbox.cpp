@@ -25,6 +25,8 @@
 #include <QPainter>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsView>
+#include <QWeakPointer>
+#include <QPropertyAnimation>
 
 #include <kcolorscheme.h>
 #include <kdebug.h>
@@ -132,10 +134,9 @@ public:
         containment(0),
         icon("plasma"),
         toolBacker(0),
-        animHighlightId(0),
         animCircleFrame(0),
         animHighlightFrame(0),
-        hovering(0)
+        hovering(false)
     {}
 
     void adjustBackgroundBorders()
@@ -174,7 +175,7 @@ public:
     Containment *containment;
     KIcon icon;
     EmptyGraphicsItem *toolBacker;
-    int animHighlightId;
+    QWeakPointer<QPropertyAnimation> anim;
     qreal animCircleFrame;
     qreal animHighlightFrame;
     QRect shapeRect;
@@ -488,14 +489,8 @@ void DesktopToolBox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
         QGraphicsItem::hoverEnterEvent(event);
         return;
     }
-    Plasma::Animator *animdriver = Plasma::Animator::self();
-    if (d->animHighlightId) {
-        animdriver->stopCustomAnimation(d->animHighlightId);
-    }
-    d->hovering = true;
-    d->animHighlightId =
-        animdriver->customAnimation(
-            10, 240, Plasma::Animator::EaseInCurve, this, "animateHighlight");
+
+    highlight(true);
 
     QGraphicsItem::hoverEnterEvent(event);
 }
@@ -640,14 +635,7 @@ void DesktopToolBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
         return;
     }
 
-    Plasma::Animator *animdriver = Plasma::Animator::self();
-    if (d->animHighlightId) {
-        animdriver->stopCustomAnimation(d->animHighlightId);
-    }
-    d->hovering = false;
-    d->animHighlightId =
-        animdriver->customAnimation(
-            10, 240, Plasma::Animator::EaseOutCurve, this, "animateHighlight");
+    highlight(false);
 
     QGraphicsItem::hoverLeaveEvent(event);
 }
@@ -677,19 +665,50 @@ void DesktopToolBox::hideToolBacker()
     d->toolBacker->hide();
 }
 
-void DesktopToolBox::animateHighlight(qreal progress)
+void DesktopToolBox::highlight(bool highlighting)
 {
+    if (d->hovering == highlighting) {
+        return;
+    }
+
+    d->hovering = highlighting;
+
+    QPropertyAnimation *anim = d->anim.data();
     if (d->hovering) {
-        d->animHighlightFrame = progress;
+        if (anim) {
+            anim->stop();
+            d->anim.clear();
+        }
+        anim = new QPropertyAnimation(this, "highlight", this);
+        d->anim = anim;
+    }
+
+    if (anim->state() != QAbstractAnimation::Stopped) {
+        anim->stop();
+    }
+
+    anim->setDuration(250);
+    anim->setStartValue(0);
+    anim->setEndValue(1);
+
+    if(d->hovering) {
+        anim->start();
     } else {
-        d->animHighlightFrame = 1.0 - progress;
-    }
+        anim->setDirection(QAbstractAnimation::Backward);
+        anim->start(QAbstractAnimation::DeleteWhenStopped);
 
-    if (progress >= 1) {
-        d->animHighlightId = 0;
     }
+}
 
+void DesktopToolBox::setHighlight(qreal progress)
+{
+    d->animHighlightFrame = progress;
     update();
+}
+
+qreal DesktopToolBox::highlight()
+{
+    return d->animHighlightFrame;
 }
 
 void DesktopToolBox::toggle()
