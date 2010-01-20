@@ -24,6 +24,7 @@
 #include <QDir>
 #include <QToolButton>
 #include <QApplication>
+#include <QPropertyAnimation>
 
 #include <kicon.h>
 #include <kiconeffect.h>
@@ -47,8 +48,6 @@ public:
         : ActionWidgetInterface<ToolButton>(toolButton),
           q(toolButton),
           background(0),
-          animId(0),
-          fadeIn(false),
           svg(0),
           customFont(false),
           underMouse(false)
@@ -109,8 +108,7 @@ public:
     ToolButton *q;
 
     FrameSvg *background;
-    int animId;
-    bool fadeIn;
+    QPropertyAnimation *animation;
     qreal opacity;
     QRectF activeRect;
 
@@ -155,12 +153,7 @@ void ToolButtonPrivate::syncBorders()
 
 void ToolButtonPrivate::animationUpdate(qreal progress)
 {
-    if (progress == 1) {
-        animId = 0;
-        fadeIn = true;
-    }
-
-    opacity = fadeIn ? progress : 1 - progress;
+    opacity = progress;
 
     // explicit update
     q->update();
@@ -186,11 +179,26 @@ ToolButton::ToolButton(QGraphicsWidget *parent)
     d->syncBorders();
     setAcceptHoverEvents(true);
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(syncBorders()));
+
+    d->animation = new QPropertyAnimation(this, "animationUpdate");
+    d->animation->setStartValue(0);
+    d->animation->setEndValue(1);
 }
 
 ToolButton::~ToolButton()
 {
+    delete d->animation;
     delete d;
+}
+
+void ToolButton::setAnimationUpdate(qreal progress)
+{
+    d->animationUpdate(progress);
+}
+
+qreal ToolButton::animationUpdate() const
+{
+    return d->opacity;
 }
 
 void ToolButton::setAction(QAction *action)
@@ -339,8 +347,9 @@ void ToolButton::paint(QPainter *painter,
     buttonOpt.iconSize = button->iconSize();
     buttonOpt.toolButtonStyle = button->toolButtonStyle();
 
-
-    if (button->isEnabled() && (d->animId || !button->autoRaise() || d->underMouse || (buttonOpt.state & QStyle::State_On) || button->isChecked() || button->isDown())) {
+    bool animationState = (d->animation->state() == QAbstractAnimation::Running)? \
+                          1:0;
+    if (button->isEnabled() && (animationState || !button->autoRaise() || d->underMouse || (buttonOpt.state & QStyle::State_On) || button->isChecked() || button->isDown())) {
         if (button->isDown() || (buttonOpt.state & QStyle::State_On) || button->isChecked()) {
             d->background->setElementPrefix("pressed");
         } else {
@@ -348,7 +357,7 @@ void ToolButton::paint(QPainter *painter,
         }
         d->background->resizeFrame(size());
 
-        if (d->animId) {
+        if (animationState) {
             QPixmap buffer = d->background->framePixmap();
 
             QPainter bufferPainter(&buffer);
@@ -391,12 +400,12 @@ void ToolButton::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
     const int FadeInDuration = 75;
 
-    if (d->animId) {
-        Plasma::Animator::self()->stopCustomAnimation(d->animId);
+    if (d->animation->state() != QAbstractAnimation::Stopped) {
+        d->animation->stop();
     }
-    d->animId = Plasma::Animator::self()->customAnimation(
-        40 / (1000 / FadeInDuration), FadeInDuration,
-        Plasma::Animator::LinearCurve, this, "animationUpdate");
+    d->animation->setDuration(FadeInDuration);
+    d->animation->setDirection(QAbstractAnimation::Forward);
+    d->animation->start();
 
     d->background->setElementPrefix("active");
 
@@ -412,14 +421,13 @@ void ToolButton::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
     const int FadeOutDuration = 150;
 
-    if (d->animId) {
-        Plasma::Animator::self()->stopCustomAnimation(d->animId);
+    if (d->animation->state() != QAbstractAnimation::Stopped) {
+        d->animation->stop();
     }
 
-    d->fadeIn = false;
-    d->animId = Plasma::Animator::self()->customAnimation(
-        40 / (1000 / FadeOutDuration), FadeOutDuration,
-        Plasma::Animator::LinearCurve, this, "animationUpdate");
+    d->animation->setDuration(FadeOutDuration);
+    d->animation->setDirection(QAbstractAnimation::Backward);
+    d->animation->start();
 
     d->background->setElementPrefix("active");
 

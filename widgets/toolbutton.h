@@ -49,6 +49,8 @@ class PLASMA_EXPORT ToolButton : public QGraphicsProxyWidget
     Q_PROPERTY(QAction *action READ action WRITE setAction)
     Q_PROPERTY(bool down READ isDown WRITE setDown)
 
+    Q_PROPERTY(qreal animationUpdate READ animationUpdate WRITE setAnimationUpdate)
+
 public:
     explicit ToolButton(QGraphicsWidget *parent = 0);
     ~ToolButton();
@@ -183,9 +185,12 @@ protected:
     void changeEvent(QEvent *event);
     QSizeF sizeHint(Qt::SizeHint which, const QSizeF & constraint) const;
 
+private slots:
+    void setAnimationUpdate(qreal progress);
+    qreal animationUpdate() const;
+
 private:
     Q_PRIVATE_SLOT(d, void syncBorders())
-    Q_PRIVATE_SLOT(d, void animationUpdate(qreal progress))
     Q_PRIVATE_SLOT(d, void syncToAction())
     Q_PRIVATE_SLOT(d, void clearAction())
     Q_PRIVATE_SLOT(d, void setPixmap())
