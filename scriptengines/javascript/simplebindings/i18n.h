@@ -22,22 +22,26 @@
 
 QScriptValue jsi18n(QScriptContext *context, QScriptEngine *engine)
 {
+    Q_UNUSED(engine)
+
     if (context->argumentCount() < 1) {
         return context->throwError(i18n("i18n() takes at least one argument"));
     }
 
     KLocalizedString message = ki18n(context->argument(0).toString().toUtf8());
 
-    int numArgs = context->argumentCount();
+    const int numArgs = context->argumentCount();
     for (int i = 1; i < numArgs; ++i) {
-        message.subs(context->argument(i).toString());
+        message = message.subs(context->argument(i).toString());
     }
 
-    return engine->newVariant(message.toString());
+    return message.toString();
 }
 
 QScriptValue jsi18nc(QScriptContext *context, QScriptEngine *engine)
 {
+    Q_UNUSED(engine)
+
     if (context->argumentCount() < 2) {
         return context->throwError(i18n("i18nc() takes at least two arguments"));
     }
@@ -45,16 +49,18 @@ QScriptValue jsi18nc(QScriptContext *context, QScriptEngine *engine)
     KLocalizedString message = ki18nc(context->argument(0).toString().toUtf8(),
                                       context->argument(1).toString().toUtf8());
 
-    int numArgs = context->argumentCount();
+    const int numArgs = context->argumentCount();
     for (int i = 2; i < numArgs; ++i) {
-        message.subs(context->argument(i).toString());
+        message = message.subs(context->argument(i).toString());
     }
 
-    return engine->newVariant(message.toString());
+    return message.toString();
 }
 
 QScriptValue jsi18np(QScriptContext *context, QScriptEngine *engine)
 {
+    Q_UNUSED(engine)
+
     if (context->argumentCount() < 2) {
         return context->throwError(i18n("i18np() takes at least two arguments"));
     }
@@ -62,16 +68,18 @@ QScriptValue jsi18np(QScriptContext *context, QScriptEngine *engine)
     KLocalizedString message = ki18np(context->argument(0).toString().toUtf8(),
                                       context->argument(1).toString().toUtf8());
 
-    int numArgs = context->argumentCount();
+    const int numArgs = context->argumentCount();
     for (int i = 2; i < numArgs; ++i) {
-        message.subs(context->argument(i).toString());
+        message = message.subs(context->argument(i).toString());
     }
 
-    return engine->newVariant(message.toString());
+    return message.toString();
 }
 
 QScriptValue jsi18ncp(QScriptContext *context, QScriptEngine *engine)
 {
+    Q_UNUSED(engine)
+
     if (context->argumentCount() < 3) {
         return context->throwError(i18n("i18ncp() takes at least three arguments"));
     }
@@ -80,12 +88,12 @@ QScriptValue jsi18ncp(QScriptContext *context, QScriptEngine *engine)
                                        context->argument(1).toString().toUtf8(),
                                        context->argument(2).toString().toUtf8());
 
-    int numArgs = context->argumentCount();
+    const int numArgs = context->argumentCount();
     for (int i = 3; i < numArgs; ++i) {
-        message.subs(context->argument(i).toString());
+        message = message.subs(context->argument(i).toString());
     }
 
-    return engine->newVariant(message.toString());
+    return message.toString();
 }
 
 void bindI18N(QScriptEngine *engine)
