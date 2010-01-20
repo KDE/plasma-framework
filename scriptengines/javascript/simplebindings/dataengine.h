@@ -75,5 +75,16 @@ int qScriptRegisterMapMetaType(
     return qScriptRegisterMetaType<T>(engine, qScriptValueFromMap, qScriptValueToMap, prototype);
 }
 
+class DummyService : public Plasma::Service
+{
+public:
+    ServiceJob *createJob(const QString &operation, QMap<QString, QVariant> &parameters)
+    {
+        Q_UNUSED(operation)
+        Q_UNUSED(parameters)
+        return 0;
+    }
+};
+
 #endif // DATAENGINE_H
 

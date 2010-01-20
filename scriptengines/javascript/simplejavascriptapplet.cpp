@@ -80,17 +80,6 @@ QScriptValue constructQSizeFClass(QScriptEngine *engine);
 QScriptValue constructTimerClass(QScriptEngine *engine);
 void registerSimpleAppletMetaTypes(QScriptEngine *engine);
 
-class DummyService : public Service
-{
-public:
-    ServiceJob *createJob(const QString &operation, QMap<QString, QVariant> &parameters)
-    {
-        Q_UNUSED(operation)
-        Q_UNUSED(parameters)
-        return 0;
-    }
-};
-
 KSharedPtr<UiLoader> SimpleJavaScriptApplet::s_widgetLoader;
 QHash<QString, Plasma::Animator::Animation> SimpleJavaScriptApplet::s_animationDefs;
 
