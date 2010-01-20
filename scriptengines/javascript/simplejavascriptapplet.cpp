@@ -164,9 +164,9 @@ void SimpleJavaScriptApplet::configChanged()
 
 void SimpleJavaScriptApplet::dataUpdated(const QString &name, const DataEngine::Data &data)
 {
-    QScriptValue fun = m_self.property("dataUpdate");
+    QScriptValue fun = m_self.property("dataUpdated");
     if (!fun.isFunction()) {
-        kDebug() << "Script: dataUpdate is not a function, " << fun.toString();
+        kDebug() << "Script: dataUpdated is not a function, " << fun.toString();
         return;
     }
 
