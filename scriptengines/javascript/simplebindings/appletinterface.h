@@ -56,6 +56,7 @@ class AppletInterface : public QObject
     Q_ENUMS(QtCorner)
     Q_ENUMS(QtSizePolicy)
     Q_ENUMS(QtAlignment)
+    Q_ENUMS(QtMouseButton)
     Q_ENUMS(AnimationDirection)
     Q_PROPERTY(AspectRatioMode aspectRatioMode READ aspectRatioMode WRITE setAspectRatioMode)
     Q_PROPERTY(FormFactor formFactor READ formFactor)
@@ -166,6 +167,15 @@ enum QtAlignment {
     QtAlignTop = 0x0020,
     QtAlignBottom = 0x0020,
     QtAlignVCenter = 0x0080
+};
+
+enum QtMouseButton {
+    QtNoButton = Qt::NoButton,
+    QtLeftButton = Qt::LeftButton,
+    QtRightButton = Qt::RightButton,
+    QtMidButton = Qt::MidButton,
+    QtXButton1 = Qt::XButton1,
+    QtXButton2 = Qt::XButton2
 };
 
 enum QtScrollBarPolicy {
