@@ -47,6 +47,7 @@ class PLASMA_EXPORT ScrollBar : public QGraphicsProxyWidget
     Q_PROPERTY(int maximum READ maximum)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(QScrollBar *nativeWidget READ nativeWidget)
+    Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation)
 
 public:
     /**
@@ -117,6 +118,12 @@ public:
      * @return the native widget wrapped by this ScrollBar
      */
     QScrollBar *nativeWidget() const;
+
+    /**
+     * @return the orientation of the scrollbar
+     * @since 4.4
+     */
+    Qt::Orientation orientation() const;
 
 protected:
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
