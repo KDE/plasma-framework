@@ -116,6 +116,11 @@ QScrollBar *ScrollBar::nativeWidget() const
    return static_cast<QScrollBar *>(widget());
 }
 
+Qt::Orientation ScrollBar::orientation() const
+{
+    return nativeWidget()->orientation();
+}
+
 void ScrollBar::setOrientation(Qt::Orientation orientation)
 {
    QScrollBar *native = static_cast<QScrollBar *>(widget());
