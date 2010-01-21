@@ -52,6 +52,7 @@ set(plasma_LIB_SRCS
     animations/fade.cpp
     animations/grow.cpp
     animations/slide.cpp
+    animations/pixmaptransition.cpp
     animations/pulser.cpp
     animations/pulsershadow.cpp
     animations/rotation.cpp
