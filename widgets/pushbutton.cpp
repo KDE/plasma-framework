@@ -25,6 +25,9 @@
 #include <QDir>
 #include <QApplication>
 
+#include <QWeakPointer>
+#include <QPropertyAnimation>
+
 #include <kicon.h>
 #include <kiconeffect.h>
 #include <kmimetype.h>
@@ -118,6 +121,7 @@ public:
     Svg *svg;
     QString svgElement;
     bool customFont;
+    QWeakPointer<QPropertyAnimation> anim;
 };
 
 void PushButtonPrivate::syncActiveRect()
@@ -159,6 +163,7 @@ void PushButtonPrivate::animationUpdate(qreal progress)
     }
 
     opacity = fadeIn ? progress : 1 - progress;
+    qDebug()<<"opacity:"<<opacity;
 
     // explicit update
     q->update();
@@ -467,13 +472,21 @@ void PushButton::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
     const int FadeInDuration = 75;
 
-    if (d->animId != -1) {
-        Plasma::Animator::self()->stopCustomAnimation(d->animId);
+    QPropertyAnimation *anim = d->anim.data();
+    if (anim && (anim->direction() != QAbstractAnimation::Forward)) {
+        anim->stop();
+        anim = new QPropertyAnimation(this, "animationUpdate", this);
+    } else if (!anim) {
+        anim = new QPropertyAnimation(this, "animationUpdate", this);
     }
-    d->animId = Plasma::Animator::self()->customAnimation(
-        40 / (1000 / FadeInDuration), FadeInDuration,
-        Plasma::Animator::LinearCurve, this, "animationUpdate");
 
+    d->anim = anim;
+
+    anim->setDuration(FadeInDuration);
+    anim->setStartValue(0);
+    anim->setEndValue(1);
+
+    anim->start();
     d->background->setElementPrefix("active");
 
     QGraphicsProxyWidget::hoverEnterEvent(event);
@@ -490,24 +503,29 @@ void PushButton::changeEvent(QEvent *event)
 
 void PushButton::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-    if (nativeWidget()->isDown()) {
+    QPropertyAnimation *anim = d->anim.data();
+    if (nativeWidget()->isDown() || !anim) {
         return;
     }
 
     const int FadeOutDuration = 150;
 
-    if (d->animId != -1) {
-        Plasma::Animator::self()->stopCustomAnimation(d->animId != -1);
-    }
-
-    d->fadeIn = false;
-    d->animId = Plasma::Animator::self()->customAnimation(
-        40 / (1000 / FadeOutDuration), FadeOutDuration,
-        Plasma::Animator::LinearCurve, this, "animationUpdate");
-
+    anim->setDuration(FadeOutDuration);
+    anim->setDirection(QAbstractAnimation::Backward);
+    anim->start(QAbstractAnimation::DeleteWhenStopped);
     d->background->setElementPrefix("active");
 
     QGraphicsProxyWidget::hoverLeaveEvent(event);
+}
+
+void PushButton::setAnimationUpdate(qreal progress)
+{
+    d->animationUpdate(progress);
+}
+
+qreal PushButton::animationUpdate() const
+{
+    return d->opacity;
 }
 
 QSizeF PushButton::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
