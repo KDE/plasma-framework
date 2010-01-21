@@ -1196,7 +1196,7 @@ void Applet::flushPendingConstraintsEvents()
 
         action = d->actions->action("configure");
         if (action) {
-            bool canConfig = unlocked || KAuthorized::authorize("PlasmaAllowConfigureWhenLocked");
+            bool canConfig = unlocked || KAuthorized::authorize("plasma/allow_configure_when_locked");
             action->setVisible(canConfig);
             action->setEnabled(canConfig);
         }
@@ -1698,7 +1698,7 @@ void Applet::showConfigurationInterface()
         return;
     }
 
-    if (immutability() != Mutable && !KAuthorized::authorize("PlasmaAllowConfigureWhenLocked")) {
+    if (immutability() != Mutable && !KAuthorized::authorize("plasma/allow_configure_when_locked")) {
         //FIXME: in 4.3 add an explanatory dialog
         return;
     }
