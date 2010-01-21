@@ -40,8 +40,13 @@ PixmapTransition::~PixmapTransition()
 
 void PixmapTransition::setStartPixmap(const QPixmap &pixmap)
 {
-    m_startPixmap = pixmap;
-    m_currentPixmap = pixmap;
+    if (state() != Running) {
+        m_startPixmap = pixmap;
+        m_currentPixmap = pixmap;
+    } else {
+        m_startPixmap = m_currentPixmap;
+        stop();
+    }
 }
 
 QPixmap PixmapTransition::startPixmap() const
@@ -72,6 +77,7 @@ void PixmapTransition::updateState(QAbstractAnimation::State newState, QAbstract
     }
 
     if (oldState == Stopped && newState == Running) {
+        Plasma::PaintUtils::centerPixmaps(m_startPixmap, m_targetPixmap);
         m_currentPixmap = (direction() == Forward ? m_startPixmap : m_targetPixmap);
     } else if (newState == Stopped) {
         m_currentPixmap = (direction() == Forward ? m_targetPixmap : m_startPixmap);
