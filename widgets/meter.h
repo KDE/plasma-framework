@@ -61,6 +61,8 @@ class PLASMA_EXPORT Meter : public QGraphicsWidget
     Q_PROPERTY(QString svg READ svg WRITE setSvg)
     Q_PROPERTY(MeterType meterType READ meterType WRITE setMeterType)
 
+    Q_PROPERTY(int meterValue READ value WRITE setMeterValue)
+
 public:
     /**
      * Meter types enum
@@ -210,7 +212,9 @@ protected:
                        QWidget *widget = 0);
 
 private:
-    Q_PRIVATE_SLOT(d, void progressChanged(qreal))
+    void setMeterValue(int value);
+
+private:
     MeterPrivate *const d;
 };
 

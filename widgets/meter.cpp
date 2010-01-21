@@ -23,6 +23,7 @@
 
 #include <QPainter>
 #include <QTimeLine>
+#include <QPropertyAnimation>
 
 #include <kdebug.h>
 #include <kglobalsettings.h>
@@ -45,34 +46,13 @@ public:
           image(0),
           minrotate(0),
           maxrotate(360),
-          meter(m),
-          movementId(0)
+          meter(m)
     {
     }
 
-    void progressChanged(qreal progress)
+    void progressChanged(int progress)
     {
-        bool over = qFuzzyCompare(progress, qreal(1.0));
-
-        if (value == targetValue) {
-            if (!over && movementId) {
-                Animator::self()->stopCustomAnimation(movementId);
-            }
-
-            return;
-        }
-
-        if (over) {
-            value = targetValue;
-            //kDebug() << "done";
-            movementId = 0;
-        } else {
-            int frame = progress * 10;
-            int delta = targetValue - value;
-            value += (delta / qreal(10 - frame));
-            //kDebug() << frame << value << targetValue;
-        }
-
+        value = progress;
         meter->update();
     }
 
@@ -282,6 +262,7 @@ public:
     int maxrotate;
     Meter *meter;
     int movementId;
+    QPropertyAnimation *animation;
 };
 
 Meter::Meter(QGraphicsItem *parent) :
@@ -289,10 +270,13 @@ Meter::Meter(QGraphicsItem *parent) :
         d(new MeterPrivate(this))
 {
     d->setSizePolicyAndPreferredSize();
+
+    d->animation = new QPropertyAnimation(this, "progressChanged");
 }
 
 Meter::~Meter()
 {
+    delete d->animation;
     delete d;
 }
 
@@ -325,9 +309,8 @@ void Meter::setValue(int value)
     d->targetValue = qBound(d->minimum, value, d->maximum);
     int delta = abs(d->value - d->targetValue);
 
-    if (d->movementId) {
-        Animator::self()->stopCustomAnimation(d->movementId);
-        d->movementId = 0;
+    if (d->animation->state() != QAbstractAnimation::Running) {
+        d->animation->stop();
     }
 
     //kDebug() << d->targetValue << d->value << delta;
@@ -336,14 +319,20 @@ void Meter::setValue(int value)
         d->value = value;
         update();
     } else  {
-        d->movementId = Animator::self()->customAnimation(10, 100, Animator::EaseOutCurve,
-                                                          this, "progressChanged");
+        d->animation->setStartValue(0);
+        d->animation->setEndValue(value);
+        d->animation->start();
     }
 }
 
 int Meter::value() const
 {
     return d->value;
+}
+
+void Meter::setMeterValue(int value)
+{
+    d->progressChanged(value);
 }
 
 void Meter::setLabel(int index, const QString &text)
