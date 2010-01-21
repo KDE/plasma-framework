@@ -271,7 +271,7 @@ Meter::Meter(QGraphicsItem *parent) :
 {
     d->setSizePolicyAndPreferredSize();
 
-    d->animation = new QPropertyAnimation(this, "progressChanged");
+    d->animation = new QPropertyAnimation(this, "meterValue");
 }
 
 Meter::~Meter()
