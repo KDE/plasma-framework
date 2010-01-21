@@ -133,26 +133,25 @@ void RotationStackedAnimation::updateState(
     if (oldState == Stopped && newState == Running) {
         m_frontRotation->setAngle(direction() == Forward ? m_frontStartAngle : m_frontEndAngle);
         m_backRotation->setAngle(direction() == Forward ? m_backStartAngle : m_backEndAngle);
-    } else if(newState == Stopped) {
-    m_frontRotation->setAngle(direction() == Forward ? m_frontEndAngle : m_frontStartAngle);
-    m_backRotation->setAngle(direction() == Forward ? m_backEndAngle : m_backStartAngle);
-}
+    } else if (newState == Stopped) {
+        m_frontRotation->setAngle(direction() == Forward ? m_frontEndAngle : m_frontStartAngle);
+        m_backRotation->setAngle(direction() == Forward ? m_backEndAngle : m_backStartAngle);
+    }
 }
 
 void RotationStackedAnimation::updateCurrentTime(int currentTime)
 {
-QGraphicsWidget *w = targetWidget();
-if(w) {
-    qreal delta;
-    if (currentTime <= duration()/2) {
-        delta = Animation::easingCurve().valueForProgress(
-                (currentTime * 2) / qreal(duration()));
-        m_sLayout->setCurrentWidgetIndex(0);
-        delta = m_frontEndAngle * delta;
+    QGraphicsWidget *w = targetWidget();
+
+    if (w) {
+        qreal delta;
+        if (currentTime <= duration()/2) {
+            delta = Animation::easingCurve().valueForProgress((currentTime * 2) / qreal(duration()));
+            m_sLayout->setCurrentWidgetIndex(0);
+            delta = m_frontEndAngle * delta;
             m_frontRotation->setAngle(delta);
         } else {
-            delta = Animation::easingCurve().valueForProgress(
-                    (currentTime/2) / qreal(duration()));
+            delta = 0.5 + Animation::easingCurve().valueForProgress((currentTime/2) / qreal(duration()));
             m_sLayout->setCurrentWidgetIndex(1);
             delta = m_backEndAngle * delta;
             m_backRotation->setAngle(delta);
