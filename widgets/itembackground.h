@@ -43,6 +43,8 @@ class PLASMA_EXPORT ItemBackground : public QGraphicsWidget
     Q_PROPERTY(QRectF target READ target WRITE setTarget)
     Q_PROPERTY(QGraphicsItem* targetItem READ targetItem WRITE setTargetItem)
 
+    Q_PROPERTY(qreal animationUpdate READ animationUpdate WRITE setAnimationUpdate)
+
 public:
     ItemBackground(QGraphicsWidget *parent = 0);
     ~ItemBackground();
@@ -120,7 +122,10 @@ protected:
     void resizeEvent(QGraphicsSceneResizeEvent *);
 
 private:
-    Q_PRIVATE_SLOT(d, void animationUpdate(qreal progress))
+    void setAnimationUpdate(qreal progress);
+    qreal animationUpdate() const;
+
+private:
     Q_PRIVATE_SLOT(d, void targetDestroyed(QObject*))
     Q_PRIVATE_SLOT(d, void frameSvgChanged())
     Q_PRIVATE_SLOT(d, void refreshCurrentTarget())

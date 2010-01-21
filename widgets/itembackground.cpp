@@ -23,6 +23,8 @@
 #include <QTimer>
 #include <QStyleOptionGraphicsItem>
 
+#include <QPropertyAnimation>
+
 #include <kdebug.h>
 
 #include <plasma/framesvg.h>
@@ -49,7 +51,7 @@ public:
     Plasma::FrameSvg *frameSvg;
     QRectF oldGeometry;
     QRectF newGeometry;
-    int animId;
+    QPropertyAnimation *anim;
     qreal opacity;
     bool fading;
     bool fadeIn;
@@ -66,7 +68,9 @@ ItemBackground::ItemBackground(QGraphicsWidget *parent)
     setFlag(ItemIsFocusable, false);
 
     d->frameSvg = new Plasma::FrameSvg(this);
-    d->animId = 0;
+    d->anim = new QPropertyAnimation(this, "animationUpdate", this);
+    d->anim->setStartValue(0);
+    d->anim->setEndValue(1);
     d->opacity = 1;
     d->fading = false;
     d->fadeIn = false;
@@ -116,12 +120,11 @@ void ItemBackground::setTarget(const QRectF &newGeometry)
         d->newGeometry = d->newGeometry.intersected(QRectF(QPointF(0,0), pw->size()));
     }
 
-    if (d->animId != 0) {
-        Plasma::Animator::self()->stopCustomAnimation(d->animId);
+    if (d->anim->state() != QAbstractAnimation::Stopped) {
+        d->anim->stop();
     }
 
     if (d->target && d->target->isVisible() && !isVisible()) {
-        //draw behind the target
         setZValue(d->target->zValue()-1);
         setGeometry(newGeometry);
         d->oldGeometry = newGeometry;
@@ -129,9 +132,9 @@ void ItemBackground::setTarget(const QRectF &newGeometry)
     } else {
         d->fading = false;
         d->opacity = 1;
-        d->animId = Plasma::Animator::self()->customAnimation(
-            15, 250, Plasma::Animator::EaseInOutCurve, this, "animationUpdate");
+        d->anim->start();
     }
+
 }
 
 void ItemBackground::setTargetItem(QGraphicsItem *target)
@@ -236,19 +239,21 @@ QVariant ItemBackground::itemChange(GraphicsItemChange change, const QVariant &v
     if (change == ItemVisibleChange) {
         bool visible = value.toBool();
         bool retVisible = visible;
-        if (visible == isVisible() || d->animId == 0) {
+        if (visible == isVisible() || d->anim->state() == QAbstractAnimation::Stopped) {
             retVisible = true;
         }
         d->fading = true;
         d->fadeIn = visible;
 
-        if (d->animId != 0) {
-            Plasma::Animator::self()->stopCustomAnimation(d->animId);
+        if (d->anim->state() != QAbstractAnimation::Stopped) {
+            d->anim->stop();
         }
 
-        d->animId = Plasma::Animator::self()->customAnimation(
-                  10, 250, Plasma::Animator::EaseInCurve, this, "animationUpdate");
+        d->anim->setDuration(250);
+        d->anim->start();
+
         return retVisible;
+
     }
     return value;
 }
@@ -271,10 +276,19 @@ void ItemBackground::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     }
 }
 
+void ItemBackground::setAnimationUpdate(qreal progress)
+{
+    d->animationUpdate(progress);
+}
+
+qreal ItemBackground::animationUpdate() const
+{
+    return d->opacity;
+}
+
 void ItemBackgroundPrivate::animationUpdate(qreal progress)
 {
     if (progress == 1) {
-        animId = 0;
         if ((!fading) || (fadeIn)) {
             emit q->targetReached(newGeometry);
             if (target) {
