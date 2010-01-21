@@ -69,6 +69,12 @@ PLASMA_EXPORT void drawHalo(QPainter *painter, const QRectF &rect);
 PLASMA_EXPORT QPainterPath roundedRectangle(const QRectF &rect, qreal radius);
 
 /**
+ * center two pixmap together in the biggest rectangle
+ * @since 4.5
+ */
+PLASMA_EXPORT void centerPixmaps(QPixmap &from, QPixmap &to);
+
+/**
  * Blends a pixmap into another
  */
 PLASMA_EXPORT QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount);

@@ -142,6 +142,39 @@ QPainterPath roundedRectangle(const QRectF &rect, qreal radius)
     return path;
 }
 
+void centerPixmaps(QPixmap &from, QPixmap &to)
+{
+    if (from.size() == to.size()) {
+        return;
+    }
+    QRect fromRect(from.rect());
+    QRect toRect(to.rect());
+ 
+    QRect actualRect = QRect(QPoint(0,0), fromRect.size().expandedTo(toRect.size()));
+    fromRect.moveCenter(actualRect.center());
+    toRect.moveCenter(actualRect.center());
+
+    if (from.size() != actualRect.size()) {
+        QPixmap result(actualRect.size());
+        result.fill(Qt::transparent);
+        QPainter p(&result);
+        p.setCompositionMode(QPainter::CompositionMode_Source);
+        p.drawPixmap(fromRect.topLeft(), from);
+        p.end();
+        from = result;
+    }
+
+    if (to.size() != actualRect.size()) {
+        QPixmap result(actualRect.size());
+        result.fill(Qt::transparent);
+        QPainter p(&result);
+        p.setCompositionMode(QPainter::CompositionMode_Source);
+        p.drawPixmap(toRect.topLeft(), to);
+        p.end();
+        to = result;
+    }
+}
+
 QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
 {
     if (from.isNull() || to.isNull()) {
@@ -150,28 +183,15 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
 
     int value = int(0xff * amount);
 
+    QPixmap startPixmap(from);
+    QPixmap targetPixmap(to);
+
+    if (from.size() != to.size()) {
+        centerPixmaps(startPixmap, targetPixmap);
+    }
+
     //paint to in the center of from
     QRect toRect = to.rect();
-    toRect.moveCenter(from.rect().center());
-
-    if (from.size() == to.size()) {
-        if (value == 0) {
-            return from;
-        } else if (value == 0xff) {
-            return to;
-        }
-    } else {
-        if (value == 0) {
-            return from;
-        } else if (value == 0xff) {
-            QPixmap result(from.size());
-            result.fill(Qt::transparent);
-            QPainter p(&result);
-            p.setCompositionMode(QPainter::CompositionMode_Source);
-            p.drawPixmap(toRect.topLeft(), to);
-            p.end();
-        }
-    }
 
     QColor color;
     color.setAlphaF(amount);
@@ -180,23 +200,21 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
     // If the native paint engine supports Porter/Duff compositing and CompositionMode_Plus
     if (from.paintEngine()->hasFeature(QPaintEngine::PorterDuff) &&
         from.paintEngine()->hasFeature(QPaintEngine::BlendModes)) {
-        QPixmap under = from;
-        QPixmap over  = to;
 
         QPainter p;
-        p.begin(&over);
+        p.begin(&targetPixmap);
         p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-        p.fillRect(over.rect(), color);
+        p.fillRect(targetPixmap.rect(), color);
         p.end();
 
-        p.begin(&under);
+        p.begin(&startPixmap);
         p.setCompositionMode(QPainter::CompositionMode_DestinationOut);
-        p.fillRect(under.rect(), color);
+        p.fillRect(startPixmap.rect(), color);
         p.setCompositionMode(QPainter::CompositionMode_Plus);
-        p.drawPixmap(toRect.topLeft(), over);
+        p.drawPixmap(toRect.topLeft(), targetPixmap);
         p.end();
 
-        return under;
+        return startPixmap;
     }
 #if defined(Q_WS_X11) && defined(HAVE_XRENDER)
     // We have Xrender support
@@ -212,7 +230,7 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
         //
         // This specialization can be removed when QX11PaintEngine supports
         // CompositionMode_Plus.
-        QPixmap source(to), destination(from);
+        QPixmap source(targetPixmap), destination(startPixmap);
 
         source.detach();
         destination.detach();
@@ -248,8 +266,8 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
 #endif
     else {
         // Fall back to using QRasterPaintEngine to do the transition.
-        QImage under = from.toImage();
-        QImage over  = to.toImage();
+        QImage under = startPixmap.toImage();
+        QImage over  = targetPixmap.toImage();
 
         QPainter p;
         p.begin(&over);
