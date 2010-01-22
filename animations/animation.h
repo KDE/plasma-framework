@@ -82,7 +82,8 @@ public:
         MoveDown,       /**< Move down */
         MoveDownLeft,   /**< Move down and left */
         MoveLeft,       /**< Move left */
-        MoveUpLeft      /**< Move up and left */
+        MoveUpLeft,     /**< Move up and left */
+        MoveAny         /**< Move in any direction*/
     };
 
 

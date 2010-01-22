@@ -27,10 +27,20 @@ namespace Plasma
 
 void SlideAnimation::setDistance(qreal distance)
 {
-    m_animDistance = distance;
+    m_animDistance = QPointF(distance,  0.0);
 }
 
 qreal SlideAnimation::distance() const
+{
+    return m_animDistance.x();
+}
+
+void SlideAnimation::setDistancePointF(const QPointF &distance)
+{
+    m_animDistance = distance;
+}
+
+QPointF SlideAnimation::distancePointF() const
 {
     return m_animDistance;
 }
@@ -79,43 +89,50 @@ void SlideAnimation::updateState(QAbstractAnimation::State newState, QAbstractAn
         qreal newX = m_startPos.x();
         qreal newY = m_startPos.y();
 
-        int actualDistance = (direction() == QAbstractAnimation::Forward?distance():-distance());
+        QPointF actualDistance = (direction() == \
+                                  QAbstractAnimation::Forward ? \
+                                  distancePointF():-distancePointF());
         switch (movementDirection()) {
         case MoveUp:
-            newY -= actualDistance;
+            newY -= actualDistance.x();
             break;
 
         case MoveRight:
-            newX += actualDistance;
+            newX += actualDistance.x();
             break;
 
         case MoveDown:
-            newY += actualDistance;
+            newY += actualDistance.x();
             break;
 
         case MoveLeft:
-            newX -= actualDistance;
+            newX -= actualDistance.x();
             break;
 
         case MoveUpRight:
-            newX += actualDistance;
-            newY -= actualDistance;
+            newX += actualDistance.x();
+            newY -= actualDistance.y();
             break;
 
         case MoveDownRight:
-            newX += actualDistance;
-            newY += actualDistance;
+            newX += actualDistance.x();
+            newY += actualDistance.y();
             break;
 
         case MoveDownLeft:
-            newX -= actualDistance;
-            newY += actualDistance;
+            newX -= actualDistance.x();
+            newY += actualDistance.y();
             break;
 
 
         case MoveUpLeft:
-            newX -= actualDistance;
-            newY -= actualDistance;
+            newX -= actualDistance.x();
+            newY -= actualDistance.y();
+            break;
+
+        case MoveAny:
+            newX = actualDistance.x();
+            newY = actualDistance.y();
             break;
 
         default:

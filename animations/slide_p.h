@@ -44,6 +44,7 @@ class SlideAnimation : public Animation
     Q_OBJECT
     Q_PROPERTY(qint8 movementDirection READ movementDirection WRITE setMovementDirection)
     Q_PROPERTY(qreal distance READ distance WRITE setDistance)
+    Q_PROPERTY(QPointF distancePointF READ distancePointF WRITE setDistancePointF)
 
 public:
     explicit SlideAnimation(QObject *parent = 0, MovementDirection direction = MoveUp, qreal distance = 0);
@@ -59,6 +60,9 @@ public:
      * Get the animation distance
      */
     qreal distance() const;
+
+    void setDistancePointF(const QPointF &distance);
+    QPointF distancePointF() const;
 
     /**
      * Set the animation direction
@@ -85,7 +89,7 @@ private:
      * Animation distance: displacement factor for animations where
      * there is change in the position of animated widget.
      */
-    qreal m_animDistance;
+    QPointF m_animDistance;
     QPointF m_startPos;
     QPointF m_targetPos;
 };
