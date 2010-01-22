@@ -163,7 +163,6 @@ void PushButtonPrivate::animationUpdate(qreal progress)
     }
 
     opacity = fadeIn ? progress : 1 - progress;
-    qDebug()<<"opacity:"<<opacity;
 
     // explicit update
     q->update();
