@@ -28,10 +28,12 @@
 #include <QIcon>
 #include <QStyleOption>
 #include <QPainter>
+#include <QSequentialAnimationGroup>
 
 #include <kdebug.h>
 
 #include <plasma/animator.h>
+#include <plasma/animations/animation.h>
 #include <plasma/theme.h>
 
 #include "private/nativetabbar_p.h"
@@ -87,6 +89,8 @@ public:
 
     void updateTabWidgetMode();
     void slidingCompleted(QGraphicsItem *item);
+    void slidingNewPageCompleted();
+    void slidingOldPageCompleted();
     void shapeChanged(const KTabBar::Shape shape);
     void setPalette();
 
@@ -103,6 +107,9 @@ public:
     QGraphicsWidget *newPage;
     int oldPageAnimId;
     int newPageAnimId;
+    Animation *oldPageAnim;
+    Animation *newPageAnim;
+    QSequentialAnimationGroup *animGroup;
     bool customFont;
 };
 
@@ -139,20 +146,25 @@ void TabBarPrivate::updateTabWidgetMode()
     tabWidgetMode = tabWidget;
 }
 
-void TabBarPrivate::slidingCompleted(QGraphicsItem *item)
+void TabBarPrivate::slidingNewPageCompleted()
 {
-    if (item == oldPage || item == newPage) {
-        if (item == newPage) {
-            tabWidgetLayout->addItem(newPage);
-            newPageAnimId = -1;
-            mainLayout->invalidate();
-            emit q->currentChanged(currentIndex);
-        } else {
-            oldPageAnimId = -1;
-            item->hide();
-        }
-        q->setFlags(0);
-    }
+    qDebug()<<"yuup";
+    tabWidgetLayout->addItem(newPage);
+    newPageAnimId = -1;
+    mainLayout->invalidate();
+    emit q->currentChanged(currentIndex);
+
+   q->setFlags(0);
+}
+
+void TabBarPrivate::slidingOldPageCompleted()
+{
+    qDebug()<<"blurp";
+    QGraphicsWidget *item = newPageAnim->targetWidget();
+
+    oldPageAnimId = -1;
+    item->hide();
+    q->setFlags(0);
 }
 
 void TabBarPrivate::shapeChanged(const QTabBar::Shape shape)
@@ -236,12 +248,20 @@ TabBar::TabBar(QGraphicsWidget *parent)
     d->tabBarLayout->setContentsMargins(0,0,0,0);
     //d->tabBarLayout->setStretchFactor(d->tabProxy, 2);
 
+
+    d->newPageAnim = Animator::create(Animator::SlideAnimation);
+    d->oldPageAnim = Animator::create(Animator::SlideAnimation);
+    d->animGroup = new QSequentialAnimationGroup(this);
+
+    d->animGroup->addAnimation(d->newPageAnim);
+    d->animGroup->addAnimation(d->oldPageAnim);
+
     connect(d->tabProxy->native, SIGNAL(currentChanged(int)),
             this, SLOT(setCurrentIndex(int)));
     connect(d->tabProxy->native, SIGNAL(shapeChanged(QTabBar::Shape)),
             this, SLOT(shapeChanged(QTabBar::Shape)));
-    connect(Plasma::Animator::self(), SIGNAL(movementFinished(QGraphicsItem*)),
-            this, SLOT(slidingCompleted(QGraphicsItem*)));
+    connect(d->newPageAnim, SIGNAL(finished()), this, SLOT(slidingNewPageCompleted()));
+    connect(d->oldPageAnim, SIGNAL(finished()), this, SLOT(slidingOldPageCompleted()));
     connect(Theme::defaultTheme(), SIGNAL(themeChanged()),
             this, SLOT(setPalette()));
 }
@@ -349,16 +369,12 @@ void TabBar::setCurrentIndex(int index)
     setFlags(QGraphicsItem::ItemClipsChildrenToShape);
 
     //if an animation was in rogress hide everything to avoid an inconsistent state
-    if (d->newPageAnimId != -1 || d->oldPageAnimId != -1) {
+
+    if (d->animGroup->state() != QAbstractAnimation::Stopped) {
         foreach (QGraphicsWidget *page, d->pages) {
             page->hide();
         }
-        if (d->newPageAnimId != -1) {
-            Animator::self()->stopItemMovement(d->newPageAnimId);
-        }
-        if (d->oldPageAnimId != -1) {
-            Animator::self()->stopItemMovement(d->oldPageAnimId);
-        }
+        d->animGroup->stop();
     }
 
     if (d->newPage) {
@@ -381,20 +397,27 @@ void TabBar::setCurrentIndex(int index)
 
         if (index > d->currentIndex) {
             d->newPage->setPos(d->oldPage->geometry().topRight());
-            d->newPageAnimId = Animator::self()->moveItem(
-            d->newPage, Plasma::Animator::SlideOutMovement,
-            d->oldPage->pos().toPoint());
-            d->oldPageAnimId = Animator::self()->moveItem(
-                d->oldPage, Plasma::Animator::SlideOutMovement,
-                beforeCurrentGeom.topLeft());
+            d->newPageAnim->setProperty("movementDirection", Animation::MoveAny);
+            d->newPageAnim->setProperty("distancePointF", d->oldPage->pos());
+            d->newPageAnim->setTargetWidget(d->newPage);
+
+            d->oldPageAnim->setProperty("movementDirection", Animation::MoveAny);
+            d->oldPageAnim->setProperty("distancePointF", beforeCurrentGeom.topLeft());
+            d->oldPageAnim->setTargetWidget(d->oldPage);
+
+            d->animGroup->start();
         } else {
             d->newPage->setPos(beforeCurrentGeom.topLeft());
-            d->newPageAnimId = Animator::self()->moveItem(
-            d->newPage, Plasma::Animator::SlideOutMovement,
-            d->oldPage->pos().toPoint());
-            d->oldPageAnimId = Animator::self()->moveItem(
-                d->oldPage, Plasma::Animator::SlideOutMovement,
-                d->oldPage->geometry().topRight().toPoint());
+            d->newPageAnim->setProperty("movementDirection", Animation::MoveAny);
+            d->newPageAnim->setProperty("distancePointF", d->oldPage->pos());
+            d->newPageAnim->setTargetWidget(d->newPage);
+
+            d->oldPageAnim->setProperty("movementDirection", Animation::MoveAny);
+            d->oldPageAnim->setProperty("distancePointF",
+                                        d->oldPage->geometry().topRight());
+            d->oldPageAnim->setTargetWidget(d->oldPage);
+
+            d->animGroup->start();
         }
     } else {
         d->tabWidgetLayout->addItem(d->newPage);

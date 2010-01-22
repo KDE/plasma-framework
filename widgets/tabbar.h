@@ -233,7 +233,8 @@ private:
 
     friend class TabBarPrivate;
 
-    Q_PRIVATE_SLOT(d, void slidingCompleted(QGraphicsItem *item))
+    Q_PRIVATE_SLOT(d, void slidingNewPageCompleted())
+    Q_PRIVATE_SLOT(d, void slidingOldPageCompleted())
     Q_PRIVATE_SLOT(d, void shapeChanged(const QTabBar::Shape shape))
     Q_PRIVATE_SLOT(d, void setPalette())
 };
