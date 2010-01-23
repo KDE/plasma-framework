@@ -47,6 +47,7 @@ FocusIndicator::FocusIndicator(QGraphicsWidget *parent, QString widget)
     m_fade->setTargetWidget(this);
     m_fade->setProperty("startOpacity", 0.0);
     m_fade->setProperty("targetOpacity", 1.0);
+    setOpacity(0);
 
     parent->installEventFilter(this);
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(syncGeometry()));
