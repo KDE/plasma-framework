@@ -39,6 +39,7 @@
 #include "animator.h"
 #include "paintutils.h"
 #include "private/actionwidgetinterface_p.h"
+#include "animations/animation.h"
 
 namespace Plasma
 {
@@ -50,7 +51,6 @@ public:
         : ActionWidgetInterface<PushButton>(pushButton),
           q(pushButton),
           background(0),
-          animId(-1),
           fadeIn(false),
           svg(0),
           customFont(false)
@@ -106,22 +106,21 @@ public:
 
     void syncActiveRect();
     void syncBorders();
-    void animationUpdate(qreal progress);
 
     PushButton *q;
 
     FrameSvg *background;
-    int animId;
     bool fadeIn;
     qreal opacity;
     QRectF activeRect;
+    
+    Animation *hoverAnimation;
 
     QString imagePath;
     QString absImagePath;
     Svg *svg;
     QString svgElement;
     bool customFont;
-    QWeakPointer<QPropertyAnimation> anim;
 };
 
 void PushButtonPrivate::syncActiveRect()
@@ -155,18 +154,6 @@ void PushButtonPrivate::syncBorders()
     syncActiveRect();
 }
 
-void PushButtonPrivate::animationUpdate(qreal progress)
-{
-    if (progress == 1) {
-        animId = -1;
-        fadeIn = true;
-    }
-
-    opacity = fadeIn ? progress : 1 - progress;
-
-    // explicit update
-    q->update();
-}
 
 PushButton::PushButton(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
@@ -176,6 +163,11 @@ PushButton::PushButton(QGraphicsWidget *parent)
     d->background->setImagePath("widgets/button");
     d->background->setCacheAllRenderedFrames(true);
     d->background->setElementPrefix("normal");
+
+    d->hoverAnimation = Animator::create(Animator::PixmapTransitionAnimation);
+    d->hoverAnimation->setTargetWidget(this);
+    d->background->setElementPrefix("normal");
+    d->hoverAnimation->setProperty("startPixmap", d->background->framePixmap());
 
     KPushButton *native = new KPushButton;
     connect(native, SIGNAL(pressed()), this, SIGNAL(pressed()));
@@ -325,11 +317,13 @@ void PushButton::resizeEvent(QGraphicsSceneResizeEvent *event)
 
         d->background->setElementPrefix("active");
         d->background->resizeFrame(d->activeRect.size());
+        d->hoverAnimation->setProperty("targetPixmap", d->background->framePixmap());
         d->background->setElementPrefix("focus");
         d->background->resizeFrame(d->activeRect.size());
 
         d->background->setElementPrefix("normal");
         d->background->resizeFrame(size());
+        d->hoverAnimation->setProperty("startPixmap", d->background->framePixmap());
    }
 
    QGraphicsProxyWidget::resizeEvent(event);
@@ -353,9 +347,7 @@ void PushButton::paint(QPainter *painter,
         } else {
             d->background->setElementPrefix("normal");
         }
-        if (d->animId == -1) {
-            d->background->paintFrame(painter);
-        }
+
     //flat or disabled
     } else if (!isEnabled() || nativeWidget()->isFlat()) {
         bufferPixmap = QPixmap(rect().size().toSize());
@@ -369,17 +361,16 @@ void PushButton::paint(QPainter *painter,
         painter->drawPixmap(0, 0, bufferPixmap);
     }
 
+
     //if is under mouse draw the animated glow overlay
     if (!nativeWidget()->isDown() && !nativeWidget()->isChecked() && isEnabled() && acceptHoverEvents()) {
-        if (d->animId != -1) {
-            QPixmap normalPix = d->background->framePixmap();
-            d->background->setElementPrefix("active");
-            painter->drawPixmap(
-                d->activeRect.topLeft(),
-                PaintUtils::transition(d->background->framePixmap(), normalPix, 1 - d->opacity));
-        } else if (isUnderMouse() || nativeWidget()->isDefault()) {
+        if (d->hoverAnimation->state() == QAbstractAnimation::Running && !isUnderMouse() && !nativeWidget()->isDefault()) {
             d->background->setElementPrefix("active");
             d->background->paintFrame(painter, d->activeRect.topLeft());
+        } else {
+            painter->drawPixmap(
+                d->activeRect.topLeft(),
+                d->hoverAnimation->property("currentPixmap").value<QPixmap>());
         }
     }
 
@@ -469,24 +460,15 @@ void PushButton::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
         return;
     }
 
-    const int FadeInDuration = 75;
+    d->hoverAnimation->setProperty("duration", 75);
+    
+    d->background->setElementPrefix("normal");
+    d->hoverAnimation->setProperty("startPixmap", d->background->framePixmap());
 
-    QPropertyAnimation *anim = d->anim.data();
-    if (anim && (anim->direction() != QAbstractAnimation::Forward)) {
-        anim->stop();
-        anim = new QPropertyAnimation(this, "animationUpdate", this);
-    } else if (!anim) {
-        anim = new QPropertyAnimation(this, "animationUpdate", this);
-    }
-
-    d->anim = anim;
-
-    anim->setDuration(FadeInDuration);
-    anim->setStartValue(0);
-    anim->setEndValue(1);
-
-    anim->start();
     d->background->setElementPrefix("active");
+    d->hoverAnimation->setProperty("targetPixmap", d->background->framePixmap());
+
+    d->hoverAnimation->start();
 
     QGraphicsProxyWidget::hoverEnterEvent(event);
 }
@@ -502,30 +484,24 @@ void PushButton::changeEvent(QEvent *event)
 
 void PushButton::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-    QPropertyAnimation *anim = d->anim.data();
-    if (nativeWidget()->isDown() || !anim) {
+    if (nativeWidget()->isDown()) {
         return;
     }
 
-    const int FadeOutDuration = 150;
-
-    anim->setDuration(FadeOutDuration);
-    anim->setDirection(QAbstractAnimation::Backward);
-    anim->start(QAbstractAnimation::DeleteWhenStopped);
+    d->hoverAnimation->setProperty("duration", 150);
+    
     d->background->setElementPrefix("active");
+    d->hoverAnimation->setProperty("startPixmap", d->background->framePixmap());
+
+    d->background->setElementPrefix("normal");
+    d->hoverAnimation->setProperty("targetPixmap", d->background->framePixmap());
+    
+    d->hoverAnimation->start();
+    
 
     QGraphicsProxyWidget::hoverLeaveEvent(event);
 }
 
-void PushButton::setAnimationUpdate(qreal progress)
-{
-    d->animationUpdate(progress);
-}
-
-qreal PushButton::animationUpdate() const
-{
-    return d->opacity;
-}
 
 QSizeF PushButton::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
 {

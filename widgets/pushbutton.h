@@ -227,7 +227,6 @@ private:
 
 private:
     Q_PRIVATE_SLOT(d, void syncBorders())
-    Q_PRIVATE_SLOT(d, void animationUpdate(qreal progress))
     Q_PRIVATE_SLOT(d, void setPixmap())
 
     friend class PushButtonPrivate;
