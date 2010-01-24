@@ -53,8 +53,6 @@ class PLASMA_EXPORT PushButton : public QGraphicsProxyWidget
     Q_PROPERTY(bool checked READ isChecked WRITE setChecked)
     Q_PROPERTY(bool down READ isDown)
 
-    Q_PROPERTY(qreal animationUpdate READ animationUpdate WRITE setAnimationUpdate)
-
 public:
     explicit PushButton(QGraphicsWidget *parent = 0);
     ~PushButton();
@@ -220,10 +218,6 @@ protected:
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
     void changeEvent(QEvent *event);
     QSizeF sizeHint(Qt::SizeHint which, const QSizeF & constraint) const;
-
-private:
-    void setAnimationUpdate(qreal progress);
-    qreal animationUpdate() const;
 
 private:
     Q_PRIVATE_SLOT(d, void syncBorders())
