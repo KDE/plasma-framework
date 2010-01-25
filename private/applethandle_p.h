@@ -41,7 +41,7 @@ class View;
 class AppletHandle : public QGraphicsObject
 {
     Q_OBJECT
-    Q_PROPERTY(qreal fadeAnimation READ fadeAnimation WRITE setFadeAnimation);
+    Q_PROPERTY(qreal fadeAnimation READ fadeAnimation WRITE setFadeAnimation)
     Q_INTERFACES(QGraphicsItem)
     public:
         enum FadeType {
@@ -117,7 +117,7 @@ class AppletHandle : public QGraphicsObject
         Applet *m_applet;
         int m_iconSize;
         qreal m_opacity;
-        FadeType m_animType;;
+        FadeType m_animType;
         QWeakPointer<QPropertyAnimation> m_anim;
         qreal m_angle;
         QColor m_gradientColor;
