@@ -63,8 +63,8 @@ public:
     /**
      * Animation movement reference (used by \ref RotationAnimation).
      */
-    enum Reference{
-        Center,
+    enum Reference {
+        Center = 0,
         Up,
         Down,
         Left,

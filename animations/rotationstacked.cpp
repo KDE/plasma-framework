@@ -24,6 +24,8 @@
 #include "stackedlayout.h"
 #include "plasma.h"
 
+const int sideAngle = 90;
+
 namespace Plasma
 {
 
@@ -43,6 +45,51 @@ RotationStackedAnimation::~RotationStackedAnimation()
 void RotationStackedAnimation::setMovementDirection(const qint8 &direction)
 {
     m_animDirection = static_cast<MovementDirection>(direction);
+
+    QVector3D animDirection(0, 0, 0);
+
+    switch (m_animDirection) {
+    case MoveLeft:
+        animDirection.setY(-1);
+        break;
+
+    case MoveRight:
+        animDirection.setY(1);
+        break;
+
+    case MoveUp:
+        animDirection.setX(1);
+        break;
+
+    case MoveDown:
+        animDirection.setX(-1);
+        break;
+
+    case MoveUpLeft:
+        animDirection.setX(1);
+        animDirection.setY(-1);
+        break;
+
+    case MoveUpRight:
+        animDirection.setX(1);
+        animDirection.setY(1);
+        break;
+
+    case MoveDownLeft:
+        animDirection.setX(-1);
+        animDirection.setY(-1);
+        break;
+
+    case MoveDownRight:
+        animDirection.setX(-1);
+        animDirection.setY(1);
+        break;
+    }
+
+    m_frontRotation->setAxis(animDirection);
+    m_backRotation->setAxis(animDirection);
+
+    updateTransformations();
 }
 
 qint8 RotationStackedAnimation::movementDirection() const
@@ -53,6 +100,40 @@ qint8 RotationStackedAnimation::movementDirection() const
 void RotationStackedAnimation::setReference(const qint8 &reference)
 {
     m_reference = reference;
+
+    if (!targetWidget() || !backWidget()) {
+        return;
+    }
+
+    const qreal widgetFrontWidth = targetWidget()->size().width();
+    const qreal widgetFrontHeight = targetWidget()->size().height();
+
+    const qreal widgetBackWidth = backWidget()->size().width();
+    const qreal widgetBackHeight = backWidget()->size().height();
+
+    QVector3D frontTransformOrigin(widgetFrontWidth/2, widgetFrontHeight/2, 0);
+    QVector3D backTransformOrigin(widgetBackWidth/2, widgetBackHeight/2, 0);
+
+    if ((m_reference & Left) == Left) {
+        frontTransformOrigin.setX(0);
+        backTransformOrigin.setX(0);
+    } else if ((m_reference & Right) == Right) {
+        frontTransformOrigin.setX(widgetFrontWidth);
+        backTransformOrigin.setX(widgetBackWidth);
+    }
+
+    if ((m_reference & Up) == Up) {
+        frontTransformOrigin.setY(0);
+        backTransformOrigin.setY(0);
+    } else if ((m_reference & Down) == Down) {
+        frontTransformOrigin.setY(widgetFrontHeight);
+        backTransformOrigin.setY(widgetBackHeight);
+    }
+
+    m_frontRotation->setOrigin(frontTransformOrigin);
+    m_backRotation->setOrigin(backTransformOrigin);
+
+    updateTransformations();
 }
 
 qint8 RotationStackedAnimation::reference() const
@@ -80,82 +161,39 @@ QGraphicsLayoutItem *RotationStackedAnimation::layout()
     return m_sLayout;
 }
 
-void RotationStackedAnimation::updateState(
-        QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
+void RotationStackedAnimation::updateCurrentTime(int currentTime)
 {
-    if (!backWidget()) {
+    if (!targetWidget() || !backWidget()) {
         return;
     }
 
-    QPair<QGraphicsWidget *,QGraphicsWidget *> widgets = qMakePair(targetWidget(), backWidget());
+    qreal delta;
+    if (currentTime <= duration()/2) {
+        m_sLayout->setCurrentWidgetIndex(0);
+        delta = easingCurve().valueForProgress((currentTime*2) / qreal(duration()));
+        delta *= sideAngle;
+        m_frontRotation->setAngle(delta);
+    } else {
+        m_sLayout->setCurrentWidgetIndex(1);
+        delta = 1 - easingCurve().valueForProgress(((currentTime*2) - duration()) / qreal(duration()));
+        delta *= sideAngle;
+        m_backRotation->setAngle(delta);
+    }
+}
 
-    const qreal widgetFrontWidth = widgets.first->size().width();
-    const qreal widgetFrontHeight = widgets.first->size().height();
-
-    const qreal widgetBackWidth = widgets.second->size().width();
-    const qreal widgetBackHeight = widgets.second->size().height();
-
-    QPair<QVector3D, QVector3D> vector;
-
-    if (reference() == Center) {
-
-        vector.first = QVector3D(widgetFrontWidth/2, widgetFrontHeight/2, 0);
-        vector.second = QVector3D(widgetBackWidth/2, widgetBackHeight/2, 0);
-
-        if (m_animDirection == MoveLeft || m_animDirection == MoveRight) {
-            m_frontRotation->setAxis(Qt::YAxis);
-            m_backRotation->setAxis(Qt::YAxis);
-
-            if (m_animDirection == MoveLeft) {
-                /* TODO: the order way */
-
-            } else {
-                m_frontStartAngle = 0;
-                m_frontEndAngle = 90;
-                m_backStartAngle = 265; //hack
-                m_backEndAngle = 360;
-            }
-        }
+void RotationStackedAnimation::updateTransformations()
+{
+    if (!targetWidget() || !backWidget()) {
+        return;
     }
 
-    m_frontRotation->setOrigin(vector.first);
-    m_backRotation->setOrigin(vector.second);
-
-    QList<QGraphicsTransform *> backTransformation;
     QList<QGraphicsTransform *> frontTransformation;
+    QList<QGraphicsTransform *> backTransformation;
 
     frontTransformation.append(m_frontRotation);
     backTransformation.append(m_backRotation);
 
-    widgets.first->setTransformations(frontTransformation);
-    widgets.second->setTransformations(backTransformation);
-
-    if (oldState == Stopped && newState == Running) {
-        m_frontRotation->setAngle(direction() == Forward ? m_frontStartAngle : m_frontEndAngle);
-        m_backRotation->setAngle(direction() == Forward ? m_backStartAngle : m_backEndAngle);
-    } else if (newState == Stopped) {
-        m_frontRotation->setAngle(direction() == Forward ? m_frontEndAngle : m_frontStartAngle);
-        m_backRotation->setAngle(direction() == Forward ? m_backEndAngle : m_backStartAngle);
-    }
-}
-
-void RotationStackedAnimation::updateCurrentTime(int currentTime)
-{
-    QGraphicsWidget *w = targetWidget();
-
-    if (w) {
-        qreal delta;
-        if (currentTime <= duration()/2) {
-            delta = Animation::easingCurve().valueForProgress((currentTime * 2) / qreal(duration()));
-            m_sLayout->setCurrentWidgetIndex(0);
-            delta = m_frontEndAngle * delta;
-            m_frontRotation->setAngle(delta);
-        } else {
-            delta = 0.5 + Animation::easingCurve().valueForProgress((currentTime/2) / qreal(duration()));
-            m_sLayout->setCurrentWidgetIndex(1);
-            delta = m_backEndAngle * delta;
-            m_backRotation->setAngle(delta);
-        }
-    }
+    targetWidget()->setTransformations(frontTransformation);
+    backWidget()->setTransformations(backTransformation);
 }
 }

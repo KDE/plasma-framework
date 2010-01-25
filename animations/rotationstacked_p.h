@@ -26,6 +26,7 @@
 #include <plasma/plasma_export.h>
 
 #include <QGraphicsLayoutItem>
+
 class QGraphicsRotation;
 class StackedLayout;
 
@@ -95,24 +96,19 @@ public:
     void setBackWidget(QGraphicsWidget *backWidget);
 
 protected:
-    void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
     void updateCurrentTime(int currentTime);
 
 private:
-    /** Reference, the default is Up (see \ref Animation::Reference) */
-    qint8 m_reference;
     /**
-     * Animation direction: where the animation will move.
+     * Updates the front and back widget rotation animation transformations,
+     * according to the given animation reference point and direction.
      */
+    void updateTransformations();
+
+    /** Reference, the default is Center (see \ref Animation::Reference) */
+    qint8 m_reference;
+    /** Animation direction, the default is MoveUp (see \ref Animation::MovementDirection) */
     MovementDirection m_animDirection;
-    /** Initial rotation angle from front widget */
-    int m_frontStartAngle;
-    /** End value of the rotation angle of the front widget */
-    int m_frontEndAngle;
-     /** Initial rotation angle from back widget */
-    int m_backStartAngle;
-    /** End value of the rotation angle of the back widget */
-    int m_backEndAngle;
     /**  Object the animation(s) should act upon. */
     QWeakPointer<QGraphicsWidget> m_backWidget;
     /** Back Widget Rotation transform object */
