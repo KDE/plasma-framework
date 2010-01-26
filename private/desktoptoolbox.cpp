@@ -538,6 +538,7 @@ void DesktopToolBox::showToolBox()
 
 void DesktopToolBox::updateToolBox()
 {
+    InternalToolBox::updateToolBox();
     adjustToolBackerGeometry();
 }
 
