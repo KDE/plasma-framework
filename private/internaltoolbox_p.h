@@ -99,7 +99,7 @@ public Q_SLOTS:
     /**
      * re-show the toolbox, in case any tools have changed
      */
-    void updateToolBox();
+    virtual void updateToolBox();
 
 protected:
     Containment *containment();

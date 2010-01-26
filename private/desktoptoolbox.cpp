@@ -518,9 +518,31 @@ void DesktopToolBox::showToolBox()
     }
 
     d->toolBacker->setZValue(zValue() + 1);
-    d->toolBacker->clearLayout();
     d->toolBacker->setIsToolbar(isToolbar());
 
+    adjustToolBackerGeometry();
+
+    d->toolBacker->setOpacity(0);
+    d->toolBacker->show();
+    Plasma::Animation *fadeAnim = Animator::create(Animator::FadeAnimation, d->toolBacker);
+    fadeAnim->setTargetWidget(d->toolBacker);
+    fadeAnim->setProperty("startOpacity", 0);
+    fadeAnim->setProperty("targetOpacity", 1);
+    fadeAnim->start(QAbstractAnimation::DeleteWhenStopped);
+}
+
+void DesktopToolBox::updateToolBox()
+{
+    adjustToolBackerGeometry();
+}
+
+void DesktopToolBox::adjustToolBackerGeometry()
+{
+    if (!d->toolBacker) {
+        return;
+    }
+
+    d->toolBacker->clearLayout();
     QMap<ToolType, IconWidget *> t = tools();
     QMapIterator<ToolType, IconWidget *> it(t);
     while (it.hasNext()) {
@@ -616,14 +638,6 @@ void DesktopToolBox::showToolBox()
             d->toolBacker->setPos(x, mapFromParent(QPointF(0, parentSize.height() - 5 - backerRect.height())).y());
         }
     }
-
-    d->toolBacker->setOpacity(0);
-    d->toolBacker->show();
-    Plasma::Animation *fadeAnim = Animator::create(Animator::FadeAnimation, d->toolBacker);
-    fadeAnim->setTargetWidget(d->toolBacker);
-    fadeAnim->setProperty("startOpacity", 0);
-    fadeAnim->setProperty("targetOpacity", 1);
-    fadeAnim->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
 void DesktopToolBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)

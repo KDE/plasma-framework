@@ -61,6 +61,7 @@ public:
 public Q_SLOTS:
     void toolTipAboutToShow();
     void toolTipHidden();
+    void updateToolBox();
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
@@ -79,6 +80,7 @@ protected Q_SLOTS:
     void toggle();
 private:
     void highlight(bool highlighting);
+    void adjustToolBackerGeometry();
     DesktopToolBoxPrivate *d;
 };
 
