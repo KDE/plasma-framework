@@ -33,8 +33,10 @@ void StackedLayout::setGeometry(const QRectF &rect)
 {
     QGraphicsLayout::setGeometry(rect);
 
+    const QRectF effectiveRect = geometry();
+
     for(int i = 0; i < items.size(); i++) {
-        itemAt(i)->setGeometry(rect);
+        itemAt(i)->setGeometry(effectiveRect);
     }
 }
 
@@ -50,7 +52,7 @@ QSizeF StackedLayout::sizeHint(Qt::SizeHint which, const QSizeF &constraint) con
         return QSizeF();
     }
 
-     QSizeF currentWidgetSize = itemAt(m_currentWidgetIndex)->effectiveSizeHint(which, constraint);
+    QSizeF currentWidgetSize = itemAt(m_currentWidgetIndex)->effectiveSizeHint(which, constraint);
 
     return QSizeF( left + right + currentWidgetSize.width(), right + bottom + currentWidgetSize.height());
 }
@@ -74,6 +76,7 @@ void StackedLayout::insertWidget(QGraphicsLayoutItem *item, int pos)
     }
 
     items.insert(pos, item);
+    activate();
 }
 
 void StackedLayout::addWidget(QGraphicsLayoutItem *item)
@@ -89,10 +92,10 @@ void StackedLayout::removeAt(int index)
 void StackedLayout::setCurrentWidgetIndex(qint32 index)
 {
     QGraphicsItem *currentWidget = itemAt(m_currentWidgetIndex)->graphicsItem();
-    QGraphicsItem *hidenWidget = itemAt(index)->graphicsItem();
+    QGraphicsItem *hiddenWidget = itemAt(index)->graphicsItem();
 
     currentWidget->hide();
-    hidenWidget->show();
+    hiddenWidget->show();
 
     m_currentWidgetIndex = index;
 }
