@@ -255,6 +255,8 @@ void Frame::resizeEvent(QGraphicsSceneResizeEvent *event)
     if (d->image) {
         d->image->resize(contentsRect().size());
     }
+
+    GraphicsWidget::resizeEvent(event);
 }
 
 QSizeF Frame::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
