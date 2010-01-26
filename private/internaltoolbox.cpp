@@ -50,7 +50,6 @@ public:
         hidden(false),
         showing(false),
         movable(false),
-        toolbar(false),
         dragging(false),
         userMoved(false)
     {}
@@ -65,7 +64,6 @@ public:
     bool hidden : 1;
     bool showing : 1;
     bool movable : 1;
-    bool toolbar : 1;
     bool dragging : 1;
     bool userMoved : 1;
 };
@@ -263,7 +261,7 @@ QSize  InternalToolBox::fullHeight() const
 
 void InternalToolBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (!d->movable || (!d->dragging && boundingRect().contains(event->pos())) || isToolbar()) {
+    if (!d->movable || (!d->dragging && boundingRect().contains(event->pos()))) {
         return;
     }
 
@@ -382,21 +380,6 @@ void InternalToolBox::setIsMovable(bool movable)
     d->movable = movable;
 }
 
-bool InternalToolBox::isToolbar() const
-{
-    return d->toolbar;
-}
-
-void InternalToolBox::setIsToolbar(bool toolbar)
-{
-    d->toolbar = toolbar;
-}
-
-QTransform InternalToolBox::viewTransform() const
-{
-    return d->viewTransform;
-}
-
 void InternalToolBox::setCorner(const Corner corner)
 {
     d->corner = corner;
@@ -405,25 +388,6 @@ void InternalToolBox::setCorner(const Corner corner)
 InternalToolBox::Corner InternalToolBox::corner() const
 {
     return d->corner;
-}
-
-void InternalToolBox::setViewTransform(const QTransform &transform)
-{
-    if (d->viewTransform == transform) {
-        return;
-    }
-
-    d->viewTransform = transform;
-
-    if (transform.isScaling()) {
-        d->toolbar = true;
-        showToolBox();
-    } else {
-        d->toolbar = false;
-        if (d->viewTransform != transform) {
-            hideToolBox();
-        }
-    }
 }
 
 void InternalToolBox::save(KConfigGroup &cg) const
@@ -451,7 +415,7 @@ void InternalToolBox::save(KConfigGroup &cg) const
     group.writeEntry("offset", offset);
 }
 
-void InternalToolBox::load(const KConfigGroup &containmentGroup)
+void InternalToolBox::restore(const KConfigGroup &containmentGroup)
 {
     if (!d->movable) {
         return;
@@ -508,7 +472,7 @@ void InternalToolBox::reposition()
 {
     if (d->userMoved) {
         //FIXME: adjust for situations like changing of the available space
-        load();
+        restore();
         return;
     }
 

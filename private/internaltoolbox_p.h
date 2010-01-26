@@ -79,14 +79,8 @@ public:
     bool isMovable() const;
     void setIsMovable(bool movable);
 
-    bool isToolbar() const;
-    void setIsToolbar(bool toolbar);
-
-    QTransform viewTransform() const;
-    void setViewTransform(const QTransform &transform);
-
     void save(KConfigGroup &cg) const;
-    void load(const KConfigGroup &containmentGroup = KConfigGroup());
+    void restore(const KConfigGroup &containmentGroup = KConfigGroup());
     void reposition();
 
     virtual QSize fullWidth() const;

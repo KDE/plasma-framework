@@ -85,8 +85,6 @@ public:
     void handleDisappeared(AppletHandle *handle);
     void appletDestroyed(Plasma::Applet*);
     void appletAppearAnimationComplete();
-    void zoomIn();
-    void zoomOut();
     void clearDataForMimeJob(KIO::Job *job);
     void remoteAppletReady(Plasma::AccessAppletJob *job);
     void mimeTypeRetrieved(KIO::Job *job, const QString &mimetype);

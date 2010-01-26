@@ -402,6 +402,7 @@ class PLASMA_EXPORT Containment : public Applet
 
         /**
          * Emitted when the containment requests zooming in or out one step.
+         * @deprecated
          */
         void zoomRequested(Plasma::Containment *containment, Plasma::ZoomDirection direction);
 
@@ -608,8 +609,6 @@ class PLASMA_EXPORT Containment : public Applet
         Q_PRIVATE_SLOT(d, void triggerShowAddWidgets())
         Q_PRIVATE_SLOT(d, void handleDisappeared(AppletHandle *handle))
         Q_PRIVATE_SLOT(d, void positionToolBox())
-        Q_PRIVATE_SLOT(d, void zoomIn())
-        Q_PRIVATE_SLOT(d, void zoomOut())
         Q_PRIVATE_SLOT(d, void requestConfiguration())
         Q_PRIVATE_SLOT(d, void updateToolBoxVisibility())
         Q_PRIVATE_SLOT(d, void showDropZoneDelayed())

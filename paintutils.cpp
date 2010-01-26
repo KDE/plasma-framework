@@ -181,8 +181,6 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
         return from;
     }
 
-    int value = int(0xff * amount);
-
     QPixmap startPixmap(from);
     QPixmap targetPixmap(to);
 

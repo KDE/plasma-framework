@@ -202,37 +202,26 @@ void Containment::init()
         }
     }
 
-    if (d->type == PanelContainment ||
-        d->type == CustomPanelContainment) {
-        d->actions()->removeAction(action("zoom in"));
-    } else {
-        QAction *zoomAction = action("zoom in");
-        connect(zoomAction, SIGNAL(triggered()), this, SLOT(zoomIn()));
-
+    if (d->type != PanelContainment && d->type != CustomPanelContainment) {
         if (corona()) {
-            QAction *action = corona()->action("zoom out");
-            if (action) {
-                d->actions()->addAction("zoom out", action);
-            }
-            action = corona()->action("add sibling containment");
-            if (action) {
-                d->actions()->addAction("add sibling containment", action);
+            act = corona()->action("add sibling containment");
+            if (act) {
+                d->actions()->addAction("add sibling containment", act);
             }
             //a stupid hack to make this one's keyboard shortcut work
-            action = corona()->action("configure shortcuts");
-            if (action) {
-                d->actions()->addAction("configure shortcuts", action);
+            act = corona()->action("configure shortcuts");
+            if (act) {
+                d->actions()->addAction("configure shortcuts", act);
             }
         }
 
         if (d->type == DesktopContainment && d->toolBox) {
-            d->toolBox.data()->addTool(this->action("add widgets"));
-            d->toolBox.data()->addTool(this->action("zoom in"));
+            d->toolBox.data()->addTool(action("add widgets"));
 
             //TODO: do we need some way to allow this be overridden?
             //      it's always available because shells rely on this
             //      to offer their own custom configuration as well
-            QAction *configureContainment = this->action("configure");
+            QAction *configureContainment = action("configure");
             if (configureContainment) {
                 d->toolBox.data()->addTool(configureContainment);
             }
@@ -311,15 +300,6 @@ void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containme
     //no icon
     action->setShortcut(KShortcut("alt+d, p"));
     action->setData(AbstractToolBox::ControlTool);
-
-    KAction *zoomAction = actions->addAction("zoom in");
-    zoomAction->setAutoRepeat(false);
-    zoomAction->setText(i18n("Zoom In"));
-    zoomAction->setIcon(KIcon("zoom-in"));
-    //two shortcuts because I hate ctrl-+ but others expect it
-    zoomAction->setShortcuts(KShortcut("alt+d, +; alt+d, ="));
-    zoomAction->setData(AbstractToolBox::ControlTool);
-
 }
 
 // helper function for sorting the list of applets
@@ -382,9 +362,9 @@ void Containment::restore(KConfigGroup &group)
     setWallpaper(group.readEntry("wallpaperplugin", defaultWallpaper),
                  group.readEntry("wallpaperpluginmode", defaultWallpaperMode));
 
-    InternalToolBox *toolBox = qobject_cast<InternalToolBox *>(d->toolBox.data());
-    if (toolBox) {
-        toolBox->load(group);
+    InternalToolBox *internalToolBox = qobject_cast<InternalToolBox *>(d->toolBox.data());
+    if (internalToolBox) {
+        internalToolBox->restore(group);
     }
 
     KConfigGroup cfg(&group, "ActionPlugins");
@@ -2094,20 +2074,6 @@ void Containment::destroy(bool confirm)
     }
 }
 
-void ContainmentPrivate::zoomIn()
-{
-    emit q->zoomRequested(q, Plasma::ZoomIn);
-    positionToolBox();
-}
-
-
-
-void ContainmentPrivate::zoomOut()
-{
-    emit q->zoomRequested(q, Plasma::ZoomOut);
-    positionToolBox();
-}
-
 AbstractToolBox *ContainmentPrivate::createToolBox()
 {
     if (!toolBox) {
@@ -2135,11 +2101,11 @@ AbstractToolBox *ContainmentPrivate::createToolBox()
         }
 
         if (toolBox) {
-            InternalToolBox *internalToolBox = qobject_cast<InternalToolBox *>(toolBox.data());
             QObject::connect(toolBox.data(), SIGNAL(toggled()), q, SIGNAL(toolBoxToggled()));
             QObject::connect(toolBox.data(), SIGNAL(toggled()), q, SLOT(updateToolBoxVisibility()));
+            InternalToolBox *internalToolBox = qobject_cast<InternalToolBox *>(toolBox.data());
             if (internalToolBox) {
-                internalToolBox->load();
+                internalToolBox->restore();
                 positionToolBox();
             }
         }
@@ -2152,6 +2118,7 @@ void ContainmentPrivate::positionToolBox()
 {
     InternalToolBox *internalToolBox = qobject_cast<InternalToolBox *>(toolBox.data());
     if (internalToolBox) {
+        internalToolBox->updateToolBox();
         internalToolBox->reposition();
     }
 }

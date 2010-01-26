@@ -49,51 +49,33 @@ class EmptyGraphicsItem : public QGraphicsWidget
 {
     public:
         EmptyGraphicsItem(QGraphicsItem *parent)
-            : QGraphicsWidget(parent),
-              m_toolbar(true)
+            : QGraphicsWidget(parent)
         {
             setAcceptsHoverEvents(true);
             m_layout = new QGraphicsLinearLayout(this);
             m_layout->setContentsMargins(0, 0, 0, 0);
             m_layout->setSpacing(0);
             m_background = new Plasma::FrameSvg(this);
-            setIsToolbar(false);
+            m_background->setImagePath("widgets/background");
+            m_background->setEnabledBorders(FrameSvg::AllBorders);
+            m_layout->setOrientation(Qt::Vertical);
+            updateMargins();
         }
 
         ~EmptyGraphicsItem()
         {
         }
 
-        void setIsToolbar(bool toolbar)
+        void updateMargins()
         {
-            if (m_toolbar == toolbar) {
-                return;
-            }
-
-            m_toolbar = toolbar;
-            if (m_toolbar) {
-                m_background->setImagePath("widgets/toolbox");
-                m_background->setEnabledBorders(FrameSvg::LeftBorder|FrameSvg::RightBorder|FrameSvg::BottomBorder);
-                m_layout->setOrientation(Qt::Horizontal);
-            } else {
-                m_background->setImagePath("widgets/background");
-                m_background->setEnabledBorders(FrameSvg::AllBorders);
-                m_layout->setOrientation(Qt::Vertical);
-            }
-
             qreal left, top, right, bottom;
             m_background->getMargins(left, top, right, bottom);
             setContentsMargins(left, top, right, bottom);
         }
 
-        bool isToolbar() const
+        void paint(QPainter *p, const QStyleOptionGraphicsItem *option, QWidget *)
         {
-            return m_toolbar;
-        }
-
-        void paint(QPainter *p, const QStyleOptionGraphicsItem *, QWidget *)
-        {
-            m_background->paintFrame(p);
+            m_background->paintFrame(p, option->rect, option->rect);
         }
 
         void clearLayout()
@@ -115,9 +97,7 @@ class EmptyGraphicsItem : public QGraphicsWidget
         }
 
     private:
-        bool m_toolbar;
         QRectF m_rect;
-        Plasma::FrameSvg *m_toolbarBackground;
         Plasma::FrameSvg *m_background;
         QGraphicsLinearLayout *m_layout;
 };
@@ -250,7 +230,7 @@ QSize DesktopToolBox::fullHeight() const
 
 void DesktopToolBox::toolTipAboutToShow()
 {
-    if (isToolbar() || isShowing()) {
+    if (isShowing()) {
         return;
     }
 
@@ -315,10 +295,6 @@ void DesktopToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
-
-    if (isToolbar()){
-        return;
-    }
 
     QPainterPath p = shape();
 
@@ -507,9 +483,7 @@ QGraphicsWidget *DesktopToolBox::toolParent()
 
 void DesktopToolBox::showToolBox()
 {
-    setFlag(ItemIgnoresTransformations, isToolbar());
-
-    if (isShowing() && !isToolbar()) {
+    if (isShowing()) {
         return;
     }
 
@@ -518,7 +492,6 @@ void DesktopToolBox::showToolBox()
     }
 
     d->toolBacker->setZValue(zValue() + 1);
-    d->toolBacker->setIsToolbar(isToolbar());
 
     adjustToolBackerGeometry();
 
@@ -533,6 +506,7 @@ void DesktopToolBox::showToolBox()
 
 void DesktopToolBox::updateToolBox()
 {
+    InternalToolBox::updateToolBox();
     adjustToolBackerGeometry();
 }
 
@@ -554,15 +528,6 @@ void DesktopToolBox::adjustToolBackerGeometry()
             d->toolBacker->addToLayout(icon);
         } else {
             icon->hide();
-        }
-
-        if (viewTransform().m11() != Plasma::scalingFactor(Plasma::OverviewZoom) &&
-            (viewTransform().m11() == Plasma::scalingFactor(Plasma::DesktopZoom) ||
-            icon->action() == d->containment->action("add sibling containment") ||
-            icon->action() == d->containment->action("add widgets"))) {
-            icon->setText(icon->action()->text());
-        } else {
-            icon->setText(QString());
         }
     }
 
@@ -609,34 +574,21 @@ void DesktopToolBox::adjustToolBackerGeometry()
         break;
     }
 
-    if (isToolbar()) {
-        QPointF topRight;
+    //kDebug() << "starting at" <<  x << startY;
+    d->toolBacker->setPos(x, y);
+    // now check that it actually fits within the parent's boundaries
+    QRectF backerRect = mapToParent(d->toolBacker->geometry()).boundingRect();
+    QSizeF parentSize = parentWidget()->size();
+    if (backerRect.x() < 5) {
+        d->toolBacker->setPos(mapFromParent(QPointF(5, 0)).x(), y);
+    } else if (backerRect.right() > parentSize.width() - 5) {
+        d->toolBacker->setPos(mapFromParent(QPointF(parentSize.width() - 5 - backerRect.width(), 0)).x(), y);
+    }
 
-        //could that cast ever fail?
-        if (d->containment) {
-            topRight = d->containment->geometry().bottomRight();
-        } else {
-            topRight = boundingRect().topRight();
-        }
-
-        d->toolBacker->setPos(viewTransform().map(mapFromScene(topRight))-QPoint(d->toolBacker->size().width(), 0));
-    } else {
-        //kDebug() << "starting at" <<  x << startY;
-        d->toolBacker->setPos(x, y);
-        // now check that it actually fits within the parent's boundaries
-        QRectF backerRect = mapToParent(d->toolBacker->geometry()).boundingRect();
-        QSizeF parentSize = parentWidget()->size();
-        if (backerRect.x() < 5) {
-            d->toolBacker->setPos(mapFromParent(QPointF(5, 0)).x(), y);
-        } else if (backerRect.right() > parentSize.width() - 5) {
-            d->toolBacker->setPos(mapFromParent(QPointF(parentSize.width() - 5 - backerRect.width(), 0)).x(), y);
-        }
-
-        if (backerRect.y() < 5) {
-            d->toolBacker->setPos(x, mapFromParent(QPointF(0, 5)).y());
-        } else if (backerRect.bottom() > parentSize.height() - 5) {
-            d->toolBacker->setPos(x, mapFromParent(QPointF(0, parentSize.height() - 5 - backerRect.height())).y());
-        }
+    if (backerRect.y() < 5) {
+        d->toolBacker->setPos(x, mapFromParent(QPointF(0, 5)).y());
+    } else if (backerRect.bottom() > parentSize.height() - 5) {
+        d->toolBacker->setPos(x, mapFromParent(QPointF(0, parentSize.height() - 5 - backerRect.height())).y());
     }
 }
 
@@ -644,7 +596,7 @@ void DesktopToolBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     //kDebug() << event->pos() << event->scenePos()
     //         << d->toolBacker->rect().contains(event->scenePos().toPoint());
-    if (!d->hovering || isShowing() || isToolbar()) {
+    if (!d->hovering || isShowing()) {
         QGraphicsItem::hoverLeaveEvent(event);
         return;
     }
@@ -656,14 +608,6 @@ void DesktopToolBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 void DesktopToolBox::hideToolBox()
 {
-    foreach (QGraphicsItem *tool, tools()) {
-        const int height = static_cast<int>(tool->boundingRect().height());
-        if (isToolbar()) {
-            tool->setPos(toolPosition(height));
-            tool->hide();
-        }
-    }
-
     if (d->toolBacker) {
         Plasma::Animation *fadeAnim = Animator::create(Animator::FadeAnimation, d->toolBacker);
         connect(fadeAnim, SIGNAL(finished()), this, SLOT(hideToolBacker()));
@@ -672,6 +616,8 @@ void DesktopToolBox::hideToolBox()
         fadeAnim->setProperty("targetOpacity", 0);
         fadeAnim->start(QAbstractAnimation::DeleteWhenStopped);
     }
+
+    highlight(false);
 }
 
 void DesktopToolBox::hideToolBacker()
@@ -727,10 +673,6 @@ qreal DesktopToolBox::highlight()
 
 void DesktopToolBox::toggle()
 {
-    if (isToolbar()) {
-        return;
-    }
-
     setShowing(!isShowing());
 }
 

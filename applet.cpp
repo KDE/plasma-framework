@@ -69,6 +69,7 @@
 
 #include <solid/powermanagement.h>
 
+#include "abstracttoolbox.h"
 #include "authorizationmanager.h"
 #include "authorizationrule.h"
 #include "configloader.h"
@@ -106,7 +107,6 @@
 #include "private/popupapplet_p.h"
 #include "private/remotedataengine_p.h"
 #include "private/service_p.h"
-#include "private/internaltoolbox_p.h"
 #include "ui_publish.h"
 
 #include "config-plasma.h"
@@ -394,6 +394,7 @@ void Applet::saveState(KConfigGroup &group) const
     if (d->script) {
         emit d->script->saveState(group);
     }
+
     if (group.config()->name() != config().config()->name()) {
         // we're being saved to a different file!
         // let's just copy the current values in our configuration over
@@ -452,8 +453,7 @@ void Applet::destroy()
     if (isContainment()) {
         d->cleanUpAndDelete();
     } else {
-        Animation *zoomAnim =
-        Plasma::Animator::create(Plasma::Animator::ZoomAnimation);
+        Animation *zoomAnim = Plasma::Animator::create(Plasma::Animator::ZoomAnimation);
         connect(zoomAnim, SIGNAL(finished()), this, SLOT(appletAnimationComplete()));
         zoomAnim->setTargetWidget(this);
         zoomAnim->start();
@@ -1322,17 +1322,6 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         View* v = qobject_cast<Plasma::View*>(widget->parent());
         Containment* c = qobject_cast<Plasma::Containment*>(this);
 
-        //update the view transform of the toolbox, since it ignores transforms
-        if (v && c && c->d->toolBox) {
-            InternalToolBox *toolBox = qobject_cast<InternalToolBox *>(c->d->toolBox.data());
-            if (toolBox && toolBox->viewTransform().isScaling() && !v->transform().isScaling()) {
-                c->d->positionToolBox();
-            }
-            if (toolBox && v) {
-                toolBox->setViewTransform(v->transform());
-            }
-        }
-
         if (!v || v->isWallpaperEnabled()) {
 
             // paint the wallpaper
@@ -1923,7 +1912,7 @@ void AppletPrivate::updateShortcuts()
         //we pull them out, then read, then put them back
         QList<QString> names;
         QList<QAction*> qactions;
-        names << "zoom out" << "add sibling containment" << "configure shortcuts" << "lock widgets";
+        names << "add sibling containment" << "configure shortcuts" << "lock widgets";
         foreach (const QString &name, names) {
             QAction *a = actions->action(name);
             actions->takeAction(a); //FIXME this is stupid, KActionCollection needs a takeAction(QString) method
@@ -2856,8 +2845,7 @@ AppletOverlayWidget::AppletOverlayWidget(QGraphicsWidget *parent)
 
 void AppletOverlayWidget::destroy()
 {
-    Animation *zoomAnim =
-        Plasma::Animator::create(Plasma::Animator::ZoomAnimation);
+    Animation *zoomAnim = Plasma::Animator::create(Plasma::Animator::ZoomAnimation);
     connect(zoomAnim, SIGNAL(finished()), this, SLOT(overlayAnimationComplete()));
     zoomAnim->setTargetWidget(this);
     zoomAnim->start();
