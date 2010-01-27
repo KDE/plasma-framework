@@ -1970,6 +1970,7 @@ void Applet::setAssociatedApplication(const QString &string)
     QAction *runAssociatedApplication = d->actions->action("run associated application");
     if (runAssociatedApplication) {
         bool valid = AssociatedApplicationManager::self()->appletHasValidAssociatedApplication(this);
+        valid = valid && hasAuthorization("LaunchApp"); //obey security!
         runAssociatedApplication->setVisible(valid);
         runAssociatedApplication->setEnabled(valid);
     }
@@ -1982,6 +1983,7 @@ void Applet::setAssociatedApplicationUrls(const KUrl::List &urls)
     QAction *runAssociatedApplication = d->actions->action("run associated application");
     if (runAssociatedApplication) {
         bool valid = AssociatedApplicationManager::self()->appletHasValidAssociatedApplication(this);
+        valid = valid && hasAuthorization("LaunchApp"); //obey security!
         runAssociatedApplication->setVisible(valid);
         runAssociatedApplication->setEnabled(valid);
     }
@@ -1999,7 +2001,9 @@ KUrl::List Applet::associatedApplicationUrls() const
 
 void Applet::runAssociatedApplication()
 {
-    AssociatedApplicationManager::self()->run(this);
+    if (hasAuthorization("LaunchApp")) {
+        AssociatedApplicationManager::self()->run(this);
+    }
 }
 
 bool Applet::hasValidAssociatedApplication() const
