@@ -61,8 +61,6 @@ class PLASMA_EXPORT Meter : public QGraphicsWidget
     Q_PROPERTY(QString svg READ svg WRITE setSvg)
     Q_PROPERTY(MeterType meterType READ meterType WRITE setMeterType)
 
-    Q_PROPERTY(int meterValue READ value WRITE setMeterValue)
-
 public:
     /**
      * Meter types enum
@@ -210,9 +208,6 @@ protected:
     virtual void paint(QPainter *p,
                        const QStyleOptionGraphicsItem *option,
                        QWidget *widget = 0);
-
-private:
-    void setMeterValue(int value);
 
 private:
     MeterPrivate *const d;

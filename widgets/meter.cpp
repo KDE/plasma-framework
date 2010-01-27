@@ -18,6 +18,7 @@
  */
 
 #include "meter.h"
+#include "private/meter_p.h"
 
 #include <cmath>
 
@@ -34,11 +35,9 @@
 
 namespace Plasma {
 
-class MeterPrivate
-{
-public:
-    MeterPrivate(Meter *m)
-        : minimum(0),
+MeterPrivate::MeterPrivate(Meter *m)
+        : QObject(m),
+          minimum(0),
           maximum(100),
           value(0),
           targetValue(0),
@@ -47,16 +46,16 @@ public:
           minrotate(0),
           maxrotate(360),
           meter(m)
-    {
-    }
+{
+}
 
-    void progressChanged(int progress)
+void MeterPrivate::progressChanged(int progress)
     {
         value = progress;
         meter->update();
     }
 
-    void paint(QPainter *p, const QString &elementID)
+void MeterPrivate::paint(QPainter *p, const QString &elementID)
     {
         if (image->hasElement(elementID)) {
             QRectF elementRect = image->elementRect(elementID);
@@ -64,7 +63,7 @@ public:
         }
     }
 
-    void text(QPainter *p, int index)
+void MeterPrivate::text(QPainter *p, int index)
     {
         QString elementID = QString("label%1").arg(index);
         QString text = labels[index];
@@ -100,7 +99,7 @@ public:
         }
     }
 
-    QRectF barRect()
+QRectF MeterPrivate::barRect()
     {
         QRectF elementRect;
 
@@ -140,7 +139,7 @@ public:
         return elementRect;
     }
 
-    void paintBackground(QPainter *p)
+void MeterPrivate::paintBackground(QPainter *p)
     {
         //be retrocompatible with themes for kde <= 4.1
         if (image->hasElement("background-center")) {
@@ -163,7 +162,7 @@ public:
         }
     }
 
-    void paintBar(QPainter *p, const QString &prefix)
+void MeterPrivate::paintBar(QPainter *p, const QString &prefix)
     {
         QRectF elementRect = barRect();
 
@@ -194,7 +193,7 @@ public:
         image->setUsingRenderingCache(true);
     }
 
-    void paintForeground(QPainter *p)
+void MeterPrivate::paintForeground(QPainter *p)
     {
         for (int i = 0; i < labels.count(); ++i) {
             text(p, i);
@@ -203,7 +202,7 @@ public:
         paint(p, "foreground");
     }
 
-    void setSizePolicyAndPreferredSize()
+void MeterPrivate::setSizePolicyAndPreferredSize()
     {
         switch (meterType) {
             case Meter::BarMeterHorizontal:
@@ -247,31 +246,13 @@ public:
         }
     }
 
-    int minimum;
-    int maximum;
-    int value;
-    int targetValue;
-    QStringList labels;
-    QList<Qt::Alignment> alignments;
-    QList<QColor> colors;
-    QList<QFont> fonts;
-    QString svg;
-    Meter::MeterType meterType;
-    Plasma::FrameSvg *image;
-    int minrotate;
-    int maxrotate;
-    Meter *meter;
-    int movementId;
-    QPropertyAnimation *animation;
-};
-
 Meter::Meter(QGraphicsItem *parent) :
         QGraphicsWidget(parent),
         d(new MeterPrivate(this))
 {
     d->setSizePolicyAndPreferredSize();
 
-    d->animation = new QPropertyAnimation(this, "meterValue");
+    d->animation = new QPropertyAnimation(d, "meterValue");
 }
 
 Meter::~Meter()
@@ -300,6 +281,11 @@ int Meter::minimum() const
     return d->minimum;
 }
 
+int Meter::value() const
+{
+    return d->value;
+}
+
 void Meter::setValue(int value)
 {
     if (value == d->targetValue) {
@@ -325,14 +311,14 @@ void Meter::setValue(int value)
     }
 }
 
-int Meter::value() const
+int MeterPrivate::meterValue() const
 {
-    return d->value;
+    return value;
 }
 
-void Meter::setMeterValue(int value)
+void MeterPrivate::setMeterValue(int value)
 {
-    d->progressChanged(value);
+    progressChanged(value);
 }
 
 void Meter::setLabel(int index, const QString &text)
@@ -538,3 +524,4 @@ void Meter::paint(QPainter *p,
 } // End of namepace
 
 #include "meter.moc"
+#include "../private/meter_p.moc"
