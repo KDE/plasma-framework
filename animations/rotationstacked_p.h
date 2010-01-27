@@ -96,6 +96,7 @@ public:
     void setBackWidget(QGraphicsWidget *backWidget);
 
 protected:
+    void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
     void updateCurrentTime(int currentTime);
 
 private:
