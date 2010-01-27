@@ -124,7 +124,8 @@ void TextEdit::setNativeWidget(KTextEdit *nativeWidget)
         widget()->deleteLater();
     }
 
-    nativeWidget->setWindowFlags(nativeWidget->windowFlags()|Qt::BypassGraphicsProxyWidget);
+    //disabled for now: triggers Qt bug 7254
+    //nativeWidget->setWindowFlags(nativeWidget->windowFlags()|Qt::BypassGraphicsProxyWidget);
 
     connect(nativeWidget, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
 
@@ -164,9 +165,11 @@ void TextEdit::dataUpdated(const QString &sourceName, const Plasma::DataEngine::
 
 void TextEdit::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
+    /*disabled for now: triggers Qt bug 7254
     QMenu *popup = nativeWidget()->mousePopupMenu();
     popup->exec(event->screenPos());
-    delete popup;
+    delete popup;*/
+    QGraphicsProxyWidget::contextMenuEvent(event);
 }
 
 void TextEdit::resizeEvent(QGraphicsSceneResizeEvent *event)

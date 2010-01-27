@@ -40,7 +40,8 @@ ScrollBar::ScrollBar(QGraphicsWidget *parent)
       d(new ScrollBarPrivate)
 {
    QScrollBar *scrollbar = new QScrollBar();
-   scrollbar->setWindowFlags(scrollbar->windowFlags()|Qt::BypassGraphicsProxyWidget);
+   //disabled for now: triggers Qt bug 7254
+   //scrollbar->setWindowFlags(scrollbar->windowFlags()|Qt::BypassGraphicsProxyWidget);
    scrollbar->setAttribute(Qt::WA_NoSystemBackground);
    setWidget(scrollbar);
    d->style = Plasma::Style::sharedStyle();
@@ -130,9 +131,12 @@ void ScrollBar::setOrientation(Qt::Orientation orientation)
 
 void ScrollBar::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
+    /*disabled for now: triggers Qt bug 7254
     QContextMenuEvent contextMenuEvent(QContextMenuEvent::Reason(event->reason()),
                                        event->pos().toPoint(), event->screenPos(), event->modifiers());
     QApplication::sendEvent(nativeWidget(), &contextMenuEvent);
+    */
+    QGraphicsProxyWidget::contextMenuEvent(event);
 }
 
 }

@@ -102,7 +102,8 @@ TextBrowser::TextBrowser(QGraphicsWidget *parent)
       d(new TextBrowserPrivate(this))
 {
     KTextBrowser *native = new KTextBrowser;
-    native->setWindowFlags(native->windowFlags()|Qt::BypassGraphicsProxyWidget);
+    //disabled for now: triggers Qt bug 7254
+    //native->setWindowFlags(native->windowFlags()|Qt::BypassGraphicsProxyWidget);
     connect(native, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
     connect(native, SIGNAL(textChanged()), this, SLOT(setFixedHeight()));
     setWidget(native);
@@ -180,9 +181,12 @@ void TextBrowser::dataUpdated(const QString &sourceName, const Plasma::DataEngin
 
 void TextBrowser::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
+    /*disabled for now: triggers Qt bug 7254
     QMenu *popup = nativeWidget()->createStandardContextMenu(event->screenPos());
     popup->exec(event->screenPos());
     delete popup;
+    */
+    QGraphicsProxyWidget::contextMenuEvent(event);
 }
 
 void TextBrowser::resizeEvent(QGraphicsSceneResizeEvent *event)
