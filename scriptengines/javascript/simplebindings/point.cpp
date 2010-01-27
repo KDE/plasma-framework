@@ -37,9 +37,9 @@ static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
     return qScriptValueFromValue(eng, QPoint());
 }
 
-static QScriptValue isNull(QScriptContext *ctx, QScriptEngine *eng)
+static QScriptValue null(QScriptContext *ctx, QScriptEngine *eng)
 {
-    DECLARE_SELF(QPoint, isNull);
+    DECLARE_SELF(QPoint, null);
     return QScriptValue(eng, self->isNull());
 }
 
@@ -79,7 +79,7 @@ QScriptValue constructQPointClass(QScriptEngine *eng)
     QScriptValue::PropertyFlags getter = QScriptValue::PropertyGetter;
     QScriptValue::PropertyFlags setter = QScriptValue::PropertySetter;
 
-    proto.setProperty("isNull", eng->newFunction(isNull), getter);
+    proto.setProperty("null", eng->newFunction(null), getter);
     proto.setProperty("manhattanLength", eng->newFunction(manhattanLength), getter);
     proto.setProperty("x", eng->newFunction(x), getter | setter);
     proto.setProperty("y", eng->newFunction(y), getter | setter);

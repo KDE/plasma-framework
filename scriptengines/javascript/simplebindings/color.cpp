@@ -100,9 +100,9 @@ static QScriptValue alpha(QScriptContext *ctx, QScriptEngine *eng)
     return QScriptValue(eng, self->alpha());
 }
 
-static QScriptValue isValid(QScriptContext *ctx, QScriptEngine *eng)
+static QScriptValue valid(QScriptContext *ctx, QScriptEngine *eng)
 {
-    DECLARE_SELF(QColor, isValid);
+    DECLARE_SELF(QColor, valid);
     return QScriptValue(eng, self->isValid());
 }
 
@@ -115,7 +115,7 @@ QScriptValue constructColorClass(QScriptEngine *eng)
     proto.setProperty("green", eng->newFunction(green), getter | setter);
     proto.setProperty("blue", eng->newFunction(blue), getter | setter);
     proto.setProperty("alpha", eng->newFunction(alpha), getter | setter);
-    proto.setProperty("isValid", eng->newFunction(isValid), getter);
+    proto.setProperty("valid", eng->newFunction(valid), getter);
 
     eng->setDefaultPrototype(qMetaTypeId<QColor>(), proto);
     eng->setDefaultPrototype(qMetaTypeId<QColor*>(), proto);

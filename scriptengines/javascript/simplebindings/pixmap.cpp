@@ -48,9 +48,9 @@ static QScriptValue rect(QScriptContext *ctx, QScriptEngine *eng)
     return qScriptValueFromValue(eng, QRectF(self->rect()));
 }
 
-static QScriptValue isNull(QScriptContext *ctx, QScriptEngine *eng)
+static QScriptValue null(QScriptContext *ctx, QScriptEngine *eng)
 {
-    DECLARE_SELF(QPixmap, isNull);
+    DECLARE_SELF(QPixmap, null);
     return QScriptValue(eng, self->isNull());
 }
 
@@ -67,7 +67,7 @@ QScriptValue constructQPixmapClass(QScriptEngine *eng)
     QScriptValue proto = qScriptValueFromValue(eng, QPixmap());
     QScriptValue::PropertyFlags getter = QScriptValue::PropertyGetter;
     QScriptValue::PropertyFlags setter = QScriptValue::PropertySetter;
-    proto.setProperty("isNull", eng->newFunction(isNull), getter);
+    proto.setProperty("null", eng->newFunction(null), getter);
     proto.setProperty("rect", eng->newFunction(rect), getter);
     proto.setProperty("scaled", eng->newFunction(scaled), getter);
 
