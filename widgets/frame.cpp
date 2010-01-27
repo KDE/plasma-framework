@@ -53,6 +53,7 @@ public:
         delete pixmap;
     }
 
+    void init();
     void syncBorders();
     QFont widgetFont() const;
 
@@ -67,6 +68,16 @@ public:
     QPixmap *pixmap;
     bool customFont;
 };
+
+void FramePrivate::init()
+{
+    svg = new Plasma::FrameSvg(q);
+    svg->setImagePath("widgets/frame");
+    svg->setElementPrefix("plain");
+    syncBorders();
+
+    QObject::connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(syncBorders()));
+}
 
 QFont FramePrivate::widgetFont() const
 {
@@ -96,12 +107,14 @@ Frame::Frame(QGraphicsWidget *parent)
     : QGraphicsWidget(parent),
       d(new FramePrivate(this))
 {
-    d->svg = new Plasma::FrameSvg(this);
-    d->svg->setImagePath("widgets/frame");
-    d->svg->setElementPrefix("plain");
-    d->syncBorders();
+    d->init();
+}
 
-    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(syncBorders()));
+Frame::Frame(QGraphicsItem *parent)
+    : QGraphicsWidget(parent),
+      d(new FramePrivate(this))
+{
+    d->init();
 }
 
 Frame::~Frame()

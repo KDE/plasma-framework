@@ -62,6 +62,11 @@ public:
      * @arg parent the parent of this widget
      */
     explicit Frame(QGraphicsWidget *parent = 0);
+
+    /**
+     * @since 4.5
+     */
+    explicit Frame(QGraphicsItem *parent = 0);
     ~Frame();
 
    /**
