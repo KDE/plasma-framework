@@ -107,21 +107,21 @@ static QScriptValue height(QScriptContext *ctx, QScriptEngine *eng)
     return QScriptValue(eng, self->height());
 }
 
-static QScriptValue isEmpty(QScriptContext *ctx, QScriptEngine *eng)
+static QScriptValue empty(QScriptContext *ctx, QScriptEngine *eng)
 {
-    DECLARE_SELF(QRectF, isEmpty);
+    DECLARE_SELF(QRectF, empty);
     return QScriptValue(eng, self->isEmpty());
 }
 
-static QScriptValue isNull(QScriptContext *ctx, QScriptEngine *eng)
+static QScriptValue null(QScriptContext *ctx, QScriptEngine *eng)
 {
-    DECLARE_SELF(QRectF, isNull);
+    DECLARE_SELF(QRectF, null);
     return QScriptValue(eng, self->isNull());
 }
 
-static QScriptValue isValid(QScriptContext *ctx, QScriptEngine *eng)
+static QScriptValue valid(QScriptContext *ctx, QScriptEngine *eng)
 {
-    DECLARE_SELF(QRectF, isValid);
+    DECLARE_SELF(QRectF, valid);
     return QScriptValue(eng, self->isValid());
 }
 
@@ -310,9 +310,9 @@ QScriptValue constructQRectFClass(QScriptEngine *eng)
     proto.setProperty("moveTo", eng->newFunction(moveTo));
     proto.setProperty("moveTop", eng->newFunction(moveTop));
 
-    proto.setProperty("isEmpty", eng->newFunction(isEmpty), getter);
-    proto.setProperty("isNull", eng->newFunction(isNull), getter);
-    proto.setProperty("isValid", eng->newFunction(isValid), getter);
+    proto.setProperty("empty", eng->newFunction(empty), getter);
+    proto.setProperty("null", eng->newFunction(null), getter);
+    proto.setProperty("valid", eng->newFunction(valid), getter);
 
     proto.setProperty("left", eng->newFunction(left), getter | setter);
     proto.setProperty("top", eng->newFunction(top), getter | setter);

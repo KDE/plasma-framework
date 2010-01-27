@@ -126,9 +126,9 @@ static QScriptValue width(QScriptContext *ctx, QScriptEngine *eng)
     return QScriptValue(eng, self->width());
 }
 
-static QScriptValue isSolid(QScriptContext *ctx, QScriptEngine *eng)
+static QScriptValue solid(QScriptContext *ctx, QScriptEngine *eng)
 {
-    DECLARE_SELF(QPen, isSolid);
+    DECLARE_SELF(QPen, solid);
     return QScriptValue(eng, self->isSolid());
 }
 
@@ -145,7 +145,7 @@ QScriptValue constructPenClass(QScriptEngine *eng)
     proto.setProperty("dashOffset", eng->newFunction(dashOffset), getter | setter);
     proto.setProperty("miterLimit", eng->newFunction(miterLimit), getter | setter);
     proto.setProperty("width", eng->newFunction(width), getter | setter);
-    proto.setProperty("isSolid", eng->newFunction(isSolid), getter);
+    proto.setProperty("solid", eng->newFunction(solid), getter);
 
     QScriptValue ctorFun = eng->newFunction(ctor, proto);
     ADD_ENUM_VALUE(ctorFun, Qt, FlatCap);

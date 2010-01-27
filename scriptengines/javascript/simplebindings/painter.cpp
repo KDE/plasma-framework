@@ -585,9 +585,9 @@ static QScriptValue hasClipping(QScriptContext *ctx, QScriptEngine *eng)
 
 /////////////////////////////////////////////////////////////
 
-static QScriptValue isActive(QScriptContext *ctx, QScriptEngine *eng)
+static QScriptValue active(QScriptContext *ctx, QScriptEngine *eng)
 {
-    DECLARE_SELF(QPainter, isActive);
+    DECLARE_SELF(QPainter, active);
     return QScriptValue(eng, self->isActive());
 }
 
@@ -1092,7 +1092,7 @@ QScriptValue constructPainterClass(QScriptEngine *eng)
 
     proto.setProperty("combinedMatrix", eng->newFunction(combinedMatrix), getter);
     proto.setProperty("combinedTransform", eng->newFunction(combinedTransform), getter);
-    proto.setProperty("isActive", eng->newFunction(isActive), getter);
+    proto.setProperty("active", eng->newFunction(active), getter);
 
     ADD_METHOD(proto, begin);
     ADD_METHOD(proto, end);

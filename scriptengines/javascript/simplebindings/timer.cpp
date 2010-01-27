@@ -42,9 +42,9 @@ static QScriptValue toString(QScriptContext *ctx, QScriptEngine *eng)
                         .arg(self->interval()));
 }
 
-static QScriptValue isActive(QScriptContext *ctx, QScriptEngine *eng)
+static QScriptValue active(QScriptContext *ctx, QScriptEngine *eng)
 {
-    DECLARE_SELF(QTimer, isActive);
+    DECLARE_SELF(QTimer, active);
 
     if (ctx->argumentCount()) {
         if (ctx->argument(0).toBool()) {
@@ -64,7 +64,7 @@ QScriptValue constructTimerClass(QScriptEngine *eng)
     eng->setDefaultPrototype(qMetaTypeId<QTimer*>(), proto);
     QScriptValue::PropertyFlags getter = QScriptValue::PropertyGetter;
     QScriptValue::PropertyFlags setter = QScriptValue::PropertySetter;
-    proto.setProperty("isActive", eng->newFunction(isActive), getter | setter);
+    proto.setProperty("active", eng->newFunction(active), getter | setter);
 
     return eng->newFunction(ctor, proto);
 }
