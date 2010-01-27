@@ -178,8 +178,10 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
 
 
     // If the native paint engine supports Porter/Duff compositing and CompositionMode_Plus
-    if (from.paintEngine()->hasFeature(QPaintEngine::PorterDuff) &&
-        from.paintEngine()->hasFeature(QPaintEngine::BlendModes)) {
+    QPaintEngine *paintEngine = from.paintEngine();
+    if (paintEngine &&
+        paintEngine->hasFeature(QPaintEngine::PorterDuff) &&
+        paintEngine->hasFeature(QPaintEngine::BlendModes)) {
         QPixmap under = from;
         QPixmap over  = to;
 
@@ -200,7 +202,7 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
     }
 #if defined(Q_WS_X11) && defined(HAVE_XRENDER)
     // We have Xrender support
-    else if (from.paintEngine()->hasFeature(QPaintEngine::PorterDuff)) {
+    else if (paintEngine && paintEngine->hasFeature(QPaintEngine::PorterDuff)) {
         // QX11PaintEngine doesn't implement CompositionMode_Plus in Qt 4.3,
         // which we need to be able to do a transition from one pixmap to
         // another.
