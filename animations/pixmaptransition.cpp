@@ -20,6 +20,7 @@
 
 #include "pixmaptransition_p.h"
 
+#include <QPainter>
 #include <QPixmap>
 
 #include <kdebug.h>
@@ -76,11 +77,45 @@ void PixmapTransition::updateState(QAbstractAnimation::State newState, QAbstract
         return;
     }
 
-    if (oldState == Stopped && newState == Running) {
-        Plasma::PaintUtils::centerPixmaps(m_startPixmap, m_targetPixmap);
-        m_currentPixmap = (direction() == Forward ? m_startPixmap : m_targetPixmap);
-    } else if (newState == Stopped) {
-        m_currentPixmap = (direction() == Forward ? m_targetPixmap : m_startPixmap);
+    if (!m_startPixmap.isNull() && !m_targetPixmap.isNull()) {
+        if (oldState == Stopped && newState == Running) {
+            Plasma::PaintUtils::centerPixmaps(m_startPixmap, m_targetPixmap);
+            m_currentPixmap = (direction() == Forward ? m_startPixmap : m_targetPixmap);
+        } else if (newState == Stopped) {
+            m_currentPixmap = (direction() == Forward ? m_targetPixmap : m_startPixmap);
+        }
+    } else if (m_startPixmap.isNull()) {
+        if (oldState == Stopped && newState == Running) {
+            if (direction() == Forward) {
+                m_currentPixmap = QPixmap(m_targetPixmap.size());
+                m_currentPixmap.fill(Qt::transparent);
+            } else {
+                m_currentPixmap = m_targetPixmap;
+            }
+        } else if (newState == Stopped) {
+            if (direction() == Forward) {
+                m_currentPixmap = m_targetPixmap;
+            } else {
+                m_currentPixmap = QPixmap(m_targetPixmap.size());
+                m_currentPixmap.fill(Qt::transparent);
+            }
+        }
+    } else if (m_targetPixmap.isNull()) {
+        if (oldState == Stopped && newState == Running) {
+            if (direction() == Forward) {
+                m_currentPixmap = m_targetPixmap;
+            } else {
+                m_currentPixmap = QPixmap(m_targetPixmap.size());
+                m_currentPixmap.fill(Qt::transparent);
+            }
+        } else if (newState == Stopped) {
+            if (direction() == Forward) {
+                m_currentPixmap = QPixmap(m_targetPixmap.size());
+                m_currentPixmap.fill(Qt::transparent);
+            } else {
+                m_currentPixmap = m_targetPixmap;
+            }
+        }
     }
 
     w->update();
@@ -91,8 +126,22 @@ void PixmapTransition::updateCurrentTime(int currentTime)
     QGraphicsWidget *w = targetWidget();
     if (w) {
         qreal delta = currentTime / qreal(duration());
-              delta *= Animation::easingCurve().valueForProgress(delta);
-        m_currentPixmap = Plasma::PaintUtils::transition(m_startPixmap, m_targetPixmap, delta);
+        delta *= Animation::easingCurve().valueForProgress(delta);
+        if (!m_startPixmap.isNull() && !m_targetPixmap.isNull()) {
+            m_currentPixmap = Plasma::PaintUtils::transition(m_startPixmap, m_targetPixmap, delta);
+        } else if (m_startPixmap.isNull()) {
+            m_currentPixmap.fill(QColor(0, 0, 0, (int)(((qreal)255)*delta)));
+            QPainter p(&m_currentPixmap);
+            p.setCompositionMode(QPainter::CompositionMode_SourceIn);
+            p.drawPixmap(m_currentPixmap.rect(), m_targetPixmap, m_targetPixmap.rect());
+            p.end();
+        } else if (m_targetPixmap.isNull()) {
+            m_currentPixmap = m_targetPixmap;
+            QPainter p(&m_currentPixmap);
+            p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+            p.fillRect(m_currentPixmap.rect(), QColor(0, 0, 0, (int)(((qreal)255)*delta)));
+            p.end();
+        }
     }
 
     Animation::updateCurrentTime(currentTime);
