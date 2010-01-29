@@ -1681,6 +1681,11 @@ void Applet::resizeEvent(QGraphicsSceneResizeEvent *event)
     emit geometryChanged();
 }
 
+bool Applet::isUserConfiguring() const
+{
+    return KConfigDialog::exists(d->configDialogId());
+}
+
 void Applet::showConfigurationInterface()
 {
     if (!hasConfigurationInterface()) {

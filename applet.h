@@ -87,6 +87,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
     Q_PROPERTY(QRectF geometry READ geometry WRITE setGeometry)
     Q_PROPERTY(bool shouldConserveResources READ shouldConserveResources)
     Q_PROPERTY(uint id READ id)
+    Q_PROPERTY(bool userConfiguring READ isUserConfiguring)
 
     public:
         typedef QList<Applet*> List;
@@ -795,6 +796,12 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * as KPropertiesDialog from libkfile.
          */
         virtual void showConfigurationInterface();
+
+        /**
+         * @return true when the configuration interface is being shown
+         * @since 4.5
+         */
+        bool isUserConfiguring() const;
 
         /**
          * Causes this applet to raise above all other applets.
