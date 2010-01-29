@@ -115,13 +115,12 @@ private:
     int m_backEndAngle;
     /**  Object the animation(s) should act upon. */
     QWeakPointer<QGraphicsWidget> m_backWidget;
+    /** Layout where widget would be added */
+    QWeakPointer<StackedLayout> m_wLayout;
     /** Back Widget Rotation transform object */
     QGraphicsRotation *m_backRotation;
     /** Front Widget Rotation transform object */
     QGraphicsRotation *m_frontRotation;
-    /** rotation stacked layout where the widget would be added */
-    StackedLayout *m_sLayout;
-
 };
 } // Plasma
 

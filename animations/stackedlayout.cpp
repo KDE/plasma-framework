@@ -21,7 +21,7 @@
 #include <QDebug>
 
 StackedLayout::StackedLayout(QGraphicsLayoutItem *parent)
-    : QGraphicsLayout(parent), m_currentWidgetIndex(-1)
+    : QObject(0), m_currentWidgetIndex(-1), QGraphicsLayout(parent)
 {
 }
 
