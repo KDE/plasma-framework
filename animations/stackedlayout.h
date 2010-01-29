@@ -20,8 +20,11 @@
 
 #include <QGraphicsLayout>
 #include <QList>
+#include <QObject>
 
-class StackedLayout : public QGraphicsLayout {
+class StackedLayout : public QObject, public QGraphicsLayout
+{
+Q_OBJECT
     public:
         explicit StackedLayout(QGraphicsLayoutItem *parent = 0);
         ~StackedLayout();

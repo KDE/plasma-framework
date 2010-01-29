@@ -34,12 +34,12 @@ RotationStackedAnimation::RotationStackedAnimation(QObject *parent)
 {
     m_backRotation = new QGraphicsRotation(this);
     m_frontRotation = new QGraphicsRotation(this);
-    m_sLayout = new StackedLayout;
+    m_wLayout = new StackedLayout;
 }
 
 RotationStackedAnimation::~RotationStackedAnimation()
 {
-    delete m_sLayout;
+    delete m_wLayout.data();
 }
 
 void RotationStackedAnimation::setMovementDirection(const qint8 &direction)
@@ -147,15 +147,17 @@ void RotationStackedAnimation::setBackWidget(QGraphicsWidget *backWidget)
 {
     m_backWidget = backWidget;
 
-    if(targetWidget()) {
-        m_sLayout->addWidget(targetWidget());
-        m_sLayout->addWidget(m_backWidget.data());
+    StackedLayout *layout = m_wLayout.data();
+
+    if(targetWidget() && backWidget && layout) {
+        layout->addWidget(targetWidget());
+        layout->addWidget(backWidget);
     }
 }
 
 QGraphicsLayoutItem *RotationStackedAnimation::layout()
 {
-    return m_sLayout;
+    return m_wLayout.data();
 }
 
 void RotationStackedAnimation::updateState(QAbstractAnimation::State newState,
@@ -172,14 +174,19 @@ void RotationStackedAnimation::updateCurrentTime(int currentTime)
         return;
     }
 
+    StackedLayout *layout = m_wLayout.data();
+    if (!layout) {
+        return;
+    }
+
     qreal delta;
     if (currentTime <= duration()/2) {
-        m_sLayout->setCurrentWidgetIndex(0);
+        layout->setCurrentWidgetIndex(0);
         delta = easingCurve().valueForProgress((currentTime*2) / qreal(duration()));
         delta *= sideAngle;
         m_frontRotation->setAngle(delta);
     } else {
-        m_sLayout->setCurrentWidgetIndex(1);
+        layout->setCurrentWidgetIndex(1);
         delta = 1 - easingCurve().valueForProgress(((currentTime*2) - duration()) / qreal(duration()));
         delta = -delta;
         delta *= sideAngle;
