@@ -49,7 +49,6 @@ PlasmoidPackage::PlasmoidPackage(QObject *parent)
     mimetypes.clear();
     mimetypes << "text/xml";
     setMimetypes("config", mimetypes);
-    setMimetypes("configui", mimetypes);
 
     addDirectoryDefinition("ui", "ui", i18n("User Interface"));
     setMimetypes("ui", mimetypes);
