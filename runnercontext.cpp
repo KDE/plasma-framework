@@ -192,10 +192,15 @@ class RunnerContextPrivate : public QSharedData
             } else {
                 KUrl url(term);
                 QString correctCasePath;
+                // check for a normal URL first
+                if (KProtocolInfo::protocolClass(url.protocol()) == ":internet" &&
+                    url.hasHost()) {
+                    type = RunnerContext::NetworkLocation;
                 // check if we have a local network location first, otherwise assume a path,
                 // but if a path doesn't have any slashes is a single word or
                 // sentence: it's too ambiguous to be sure we're in a filesystem context
-                if (KProtocolInfo::protocolClass(url.protocol()) == ":local" && !url.isLocalFile()) {
+                } else if (KProtocolInfo::protocolClass(url.protocol()) == ":local" &&
+                         !url.isLocalFile()) {
                     type = RunnerContext::NetworkLocation;
                 } else if ((path.indexOf('/') != -1 || path.indexOf('\\') != -1) &&
                            correctPathCase(path, correctCasePath)) {
