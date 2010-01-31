@@ -24,8 +24,10 @@
 
 class StackedLayout : public QObject, public QGraphicsLayout
 {
-Q_OBJECT
-    public:
+    Q_OBJECT
+    Q_INTERFACES(QGraphicsLayout)
+
+public:
         explicit StackedLayout(QGraphicsLayoutItem *parent = 0);
         ~StackedLayout();
 
