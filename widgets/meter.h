@@ -208,6 +208,7 @@ protected:
     virtual void paint(QPainter *p,
                        const QStyleOptionGraphicsItem *option,
                        QWidget *widget = 0);
+    QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
 
 private:
     MeterPrivate *const d;

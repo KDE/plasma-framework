@@ -82,7 +82,11 @@ void MeterPrivate::text(QPainter *p, int index)
                 align = alignments[index];
             }
             if (elementRect.width() > elementRect.height()) {
-                p->drawText(elementRect, align, text);
+                if (align&Qt::AlignLeft) {
+                    p->drawText(elementRect.bottomLeft(), text);
+                } else {
+                    p->drawText(elementRect, align, text);
+                }
             } else {
                 p->save();
                 QPointF rotateCenter(
@@ -518,6 +522,15 @@ void Meter::paint(QPainter *p,
 
         d->paintForeground(p);
         break;
+    }
+}
+
+QSizeF Meter::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
+{return QGraphicsWidget::sizeHint(which, constraint);
+    if (which == Qt::PreferredSize) {
+        return QSizeF(200, 32);
+    } else {
+        return QGraphicsWidget::sizeHint(which, constraint);
     }
 }
 
