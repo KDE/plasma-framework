@@ -12,6 +12,7 @@ PLASMA_UNIT_TESTS(
     packagestructuretest
     packagemetadatatest
     plasmoidpackagetest
+    runnercontexttest
 )
 if(QCA2_FOUND)
   target_link_libraries(plasmoidpackagetest ${QCA2_LIBRARIES})
