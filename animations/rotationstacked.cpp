@@ -24,10 +24,10 @@
 #include "stackedlayout.h"
 #include "plasma.h"
 
-const int sideAngle = 90;
-
 namespace Plasma
 {
+
+const int RotationStackedAnimation::s_sideAngle = 90;
 
 RotationStackedAnimation::RotationStackedAnimation(QObject *parent)
     : Animation(parent)
@@ -183,13 +183,13 @@ void RotationStackedAnimation::updateCurrentTime(int currentTime)
     if (currentTime <= duration()/2) {
         layout->setCurrentWidgetIndex(0);
         delta = easingCurve().valueForProgress((currentTime*2) / qreal(duration()));
-        delta *= sideAngle;
+        delta *= s_sideAngle;
         m_frontRotation->setAngle(delta);
     } else {
         layout->setCurrentWidgetIndex(1);
         delta = 1 - easingCurve().valueForProgress(((currentTime*2) - duration()) / qreal(duration()));
         delta = -delta;
-        delta *= sideAngle;
+        delta *= s_sideAngle;
         m_backRotation->setAngle(delta);
     }
 }

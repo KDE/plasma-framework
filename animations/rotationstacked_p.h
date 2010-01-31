@@ -118,6 +118,8 @@ private:
     QGraphicsRotation *m_backRotation;
     /** Front Widget Rotation transform object */
     QGraphicsRotation *m_frontRotation;
+
+    static const int s_sideAngle;
 };
 } // Plasma
 
