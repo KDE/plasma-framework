@@ -270,6 +270,7 @@ Corona::Corona(QObject *parent)
     : QGraphicsScene(parent),
       d(new CoronaPrivate(this))
 {
+    kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Corona ctor start";
     d->init();
     ToolTipManager::self()->m_corona = this;
     //setViewport(new QGLWidget(QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)));
@@ -403,6 +404,7 @@ void Corona::loadLayout(const QString &configName)
     }
 
     foreach (Containment *containment, d->containments) {
+      
         QString cid = QString::number(containment->id());
         KConfigGroup *appletsConfigGroup = 0;
         if (mergeConfig) {
@@ -419,12 +421,14 @@ void Corona::loadLayout(const QString &configName)
             applet->init();
             // We have to flush the applet constraints manually
             applet->flushPendingConstraintsEvents();
+            kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Applet" << applet->name();
         }
 
         delete appletsConfigGroup;
         containment->updateConstraints(Plasma::StartupCompletedConstraint);
         containment->flushPendingConstraintsEvents();
         emit containmentAdded(containment);
+        kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Containment" << containment->name();
     }
 }
 
