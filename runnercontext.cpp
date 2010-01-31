@@ -116,7 +116,7 @@ bool correctPathCase(const QString& path, QString &corrected)
     // path components
     QStringList components = QString(path).split(QDir::separator());
 
-    if (components.size() < 2) {
+    if (components.size() < 1) {
         return false;
     }
 
@@ -124,12 +124,11 @@ bool correctPathCase(const QString& path, QString &corrected)
 
     //kDebug() << "Components are" << components;
 
-    QString correctPath;
-
-    if (components.back().isEmpty()) {
+    if (mustBeDir) {
         components.pop_back();
     }
 
+    QString correctPath;
     const unsigned initialComponents = components.size();
     for (unsigned i = 0; i < initialComponents - 1; i ++) {
         const QString tmp = components[0] + QDir::separator() + components[1];
@@ -174,6 +173,7 @@ class RunnerContextPrivate : public QSharedData
 
         /**
          * Determines type of query
+                    &&
          */
         void determineType()
         {
@@ -191,38 +191,51 @@ class RunnerContextPrivate : public QSharedData
                                      RunnerContext::Executable;
             } else {
                 KUrl url(term);
-                QString correctCasePath;
                 // check for a normal URL first
-                if (KProtocolInfo::protocolClass(url.protocol()) == ":internet" &&
-                    url.hasHost()) {
+                //kDebug() << url << KProtocolInfo::protocolClass(url.protocol()) << url.hasHost() <<
+                //    url.host() << url.isLocalFile() << path << path.indexOf('/');
+                const bool hasProtocol = !url.protocol().isEmpty();
+                const bool isLocalProtocol = KProtocolInfo::protocolClass(url.protocol()) == ":local";
+                if (hasProtocol && 
+                    ((!isLocalProtocol && url.hasHost()) ||
+                     (isLocalProtocol && url.protocol() != "file"))) {
+                    // we either have a network protocol with a host, so we can show matches for it
+                    // or we have a non-file url that may be local so a host isn't required
                     type = RunnerContext::NetworkLocation;
-                // check if we have a local network location first, otherwise assume a path,
-                // but if a path doesn't have any slashes is a single word or
-                // sentence: it's too ambiguous to be sure we're in a filesystem context
-                } else if (KProtocolInfo::protocolClass(url.protocol()) == ":local" &&
-                         !url.isLocalFile()) {
-                    type = RunnerContext::NetworkLocation;
-                } else if ((path.indexOf('/') != -1 || path.indexOf('\\') != -1) &&
-                           correctPathCase(path, correctCasePath)) {
-                    path = correctCasePath;
-                    QFileInfo info(path);
+                } else if (isLocalProtocol) {
+                    // at this point in the game, we assume we have a path,
+                    // but if a path doesn't have any slashes
+                    // it's too ambiguous to be sure we're in a filesystem context
+                    path = QDir::cleanPath(url.toLocalFile());
+                    //kDebug( )<< "slash check" << path;
+                    if (hasProtocol || ((path.indexOf('/') != -1 || path.indexOf('\\') != -1))) {
+                        QString correctCasePath;
+                        if (correctPathCase(path, correctCasePath)) {
+                            path = correctCasePath;
+                            QFileInfo info(path);
+                            //kDebug( )<< "correct cas epath is" << correctCasePath << info.isSymLink() <<
+                            //    info.isDir() << info.isFile();
 
-                    if (info.isSymLink()) {
-                        path = info.canonicalFilePath();
-                        info = QFileInfo(path);
-                    }
-                    if (info.isDir()) {
-                        type = RunnerContext::Directory;
-                        mimeType = "inode/folder";
-                    } else if (info.isFile()) {
-                        type = RunnerContext::File;
-                        KMimeType::Ptr mimeTypePtr = KMimeType::findByPath(path);
-                        if (mimeTypePtr) {
-                            mimeType = mimeTypePtr->name();
+                            if (info.isSymLink()) {
+                                path = info.canonicalFilePath();
+                                info = QFileInfo(path);
+                            }
+                            if (info.isDir()) {
+                                type = RunnerContext::Directory;
+                                mimeType = "inode/folder";
+                            } else if (info.isFile()) {
+                                type = RunnerContext::File;
+                                KMimeType::Ptr mimeTypePtr = KMimeType::findByPath(path);
+                                if (mimeTypePtr) {
+                                    mimeType = mimeTypePtr->name();
+                                }
+                            }
                         }
                     }
                 }
             }
+
+            //kDebug() << "term2type" << term << type;
         }
 
         void invalidate()
