@@ -43,7 +43,7 @@ ScriptEnv::ScriptEnv(QObject *parent)
 {
     QScriptValue global = globalObject();
     global.setProperty("print", newFunction(ScriptEnv::print));
-    global.setProperty("debug", newFunction(ScriptEnv::print));
+    global.setProperty("debug", newFunction(ScriptEnv::debug));
 }
 
 ScriptEnv::~ScriptEnv()
