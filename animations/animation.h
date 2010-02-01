@@ -65,27 +65,22 @@ public:
      */
     enum Reference {
         Center = 0,
-        Up,
-        Down,
-        Left,
-        Right
+        Up = 0x1,
+        Down = 0x2,
+        Left = 0x4,
+        Right = 0x8
     };
 
     /**
-     * The movement direction of an animation.
+     * Animation movement direction.
      */
     enum MovementDirection {
-        MoveUp = 0,     /**< Move up */
-        MoveUpRight,    /**< Move up and right */
-        MoveRight,      /**< Move right */
-        MoveDownRight,  /**< Move down and right */
-        MoveDown,       /**< Move down */
-        MoveDownLeft,   /**< Move down and left */
-        MoveLeft,       /**< Move left */
-        MoveUpLeft,     /**< Move up and left */
-        MoveAny         /**< Move in any direction*/
+        MoveAny = 0,
+        MoveUp = 0x1,
+        MoveRight = 0x2,
+        MoveDown = 0x4,
+        MoveLeft = 0x8
     };
-
 
     /**
      * Default constructor.
