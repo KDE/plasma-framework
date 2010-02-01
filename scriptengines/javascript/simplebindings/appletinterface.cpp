@@ -343,11 +343,6 @@ bool AppletInterface::hasExtension(const QString &extension) const
     return m_appletScriptEngine->loadedExtensions().contains(extension.toLower());
 }
 
-void AppletInterface::debug(const QString &msg)
-{
-    kDebug() << msg;
-}
-
 QObject *AppletInterface::findChild(const QString &name) const
 {
     if (name.isEmpty()) {

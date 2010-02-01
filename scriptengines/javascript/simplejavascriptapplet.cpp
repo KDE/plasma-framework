@@ -569,6 +569,8 @@ void SimpleJavaScriptApplet::setupObjects()
 
     fun = m_engine->newFunction(SimpleJavaScriptApplet::print);
     global.setProperty("print", fun);
+    fun = m_engine->newFunction(SimpleJavaScriptApplet::debug);
+    global.setProperty("print", debug);
 
     // Work around bug in 4.3.0
     qMetaTypeId<QVariant>();
@@ -902,6 +904,16 @@ QScriptValue SimpleJavaScriptApplet::print(QScriptContext *context, QScriptEngin
 
     //TODO: a GUI console? :)
     std::cout << context->argument(0).toString().toLocal8Bit().constData() << std::endl;
+    return engine->undefinedValue();
+}
+
+QScriptValue SimpleJavaScriptApplet::debug(QScriptContext *context, QScriptEngine *engine)
+{
+    if (context->argumentCount() < 1) {
+        return engine->undefinedValue();
+    }
+
+    kDebug() << context->argument(0).toString();
     return engine->undefinedValue();
 }
 

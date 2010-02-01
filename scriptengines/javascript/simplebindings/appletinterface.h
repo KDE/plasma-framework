@@ -241,7 +241,6 @@ enum AnimationDirection {
     Q_INVOKABLE bool include(const QString &script);
     Q_INVOKABLE bool hasExtension(const QString &extension) const;
 
-    Q_INVOKABLE void debug(const QString &msg);
     Q_INVOKABLE QObject *findChild(const QString &name) const;
 
     Q_INVOKABLE Plasma::Extender *extender() const;

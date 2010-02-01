@@ -97,6 +97,7 @@ private:
     static QScriptValue createWidget(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue notSupported(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue print(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue debug(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue widgetAdjustSize(QScriptContext *context, QScriptEngine *engine);
 
     // run extension
