@@ -398,7 +398,7 @@ QScriptValue SimpleJavaScriptApplet::dataEngine(QScriptContext *context, QScript
 
     const QString dataEngine = context->argument(0).toString();
     DataEngine *data = interface->dataEngine(dataEngine);
-    return engine->newQObject(data);
+    return engine->newQObject(data, QScriptEngine::QtOwnership, QScriptEngine::PreferExistingWrapperObject);
 }
 
 QScriptValue SimpleJavaScriptApplet::service(QScriptContext *context, QScriptEngine *engine)
