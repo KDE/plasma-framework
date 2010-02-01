@@ -45,6 +45,7 @@
 
 #include "plasma/applet.h"
 #include "plasma/animator.h"
+#include "plasma/containment.h"
 #include "plasma/extenders/extender.h"
 #include "plasma/private/extender_p.h"
 #include "plasma/framesvg.h"
@@ -129,34 +130,58 @@ void DialogPrivate::themeChanged()
             }
         }
     }
+
+    //used to remove borders at the edge of the desktop
+    QDesktopWidget *desktop = QApplication::desktop();
+    QRect avail = desktop->availableGeometry(desktop->screenNumber(q));
+    QRect screenGeom = desktop->screenGeometry(desktop->screenNumber(q));
+    QRect dialogGeom = q->geometry();
+
+    //decide about disabling the border attached to the panel
     if (applet) {
         background->getMargins(leftWidth, topHeight, rightWidth, bottomHeight);
 
         switch (applet->location()) {
         case BottomEdge:
-            borders &= ~FrameSvg::BottomBorder;
-            leftWidth = 0;
-            rightWidth = 0;
-            bottomHeight = 0;
+            if (applet->containment() &&
+                dialogGeom.bottom() + 2 >= screenGeom.bottom() - applet->containment()->size().height() &&
+                dialogGeom.width() <= applet->containment()->size().width()) {
+                borders &= ~FrameSvg::BottomBorder;
+                leftWidth = 0;
+                rightWidth = 0;
+                bottomHeight = 0;
+            }
         break;
 
         case TopEdge:
-            borders &= ~FrameSvg::TopBorder;
-            topHeight = 0;
-            leftWidth = 0;
-            rightWidth = 0;
+            if (applet->containment() &&
+                dialogGeom.top() <= screenGeom.top() + applet->containment()->size().height() &&
+                dialogGeom.width() <= applet->containment()->size().width()) {
+                borders &= ~FrameSvg::TopBorder;
+                topHeight = 0;
+                leftWidth = 0;
+                rightWidth = 0;
+            }
         break;
 
         case LeftEdge:
-            borders &= ~FrameSvg::LeftBorder;
-            leftWidth = 0;
-            rightWidth = 0;
+            if (applet->containment() &&
+                dialogGeom.left() <= screenGeom.left() + applet->containment()->size().width() &&
+                dialogGeom.height() <= applet->containment()->size().height()) {
+                borders &= ~FrameSvg::LeftBorder;
+                leftWidth = 0;
+                rightWidth = 0;
+            }
         break;
 
         case RightEdge:
-            borders &= ~FrameSvg::RightBorder;
-            leftWidth = 0;
-            rightWidth = 0;
+            if (applet->containment() &&
+                dialogGeom.right() + 2 >= screenGeom.right() - applet->containment()->size().width() &&
+                dialogGeom.height() <= applet->containment()->size().height()) {
+                borders &= ~FrameSvg::RightBorder;
+                leftWidth = 0;
+                rightWidth = 0;
+            }
         break;
 
         default:
@@ -164,23 +189,26 @@ void DialogPrivate::themeChanged()
         }
     }
 
+    //decide if to disable the other borders
     if (!extender && q->isVisible()) {
-        //remove borders at the edge of the desktop
-        QDesktopWidget *desktop = QApplication::desktop();
-        QRect avail = desktop->availableGeometry(desktop->screenNumber(q));
-        QRect dialogGeom = q->geometry();
+        QRect geom;
+        if (applet) {
+            geom = screenGeom;
+        } else {
+            geom = avail;
+        }
 
-        if (dialogGeom.left() <= avail.left()) {
+        if (dialogGeom.left() <= geom.left()) {
             borders &= ~FrameSvg::LeftBorder;
         }
-        if (dialogGeom.top() <= avail.top()) {
+        if (dialogGeom.top() <= geom.top()) {
             borders &= ~FrameSvg::TopBorder;
         }
         //FIXME: that 2 pixels offset has probably something to do with kwin
-        if (dialogGeom.right() + 2 > avail.right()) {
+        if (dialogGeom.right() + 2 > geom.right()) {
             borders &= ~FrameSvg::RightBorder;
         }
-        if (dialogGeom.bottom() + 2 > avail.bottom()) {
+        if (dialogGeom.bottom() + 2 > geom.bottom()) {
             borders &= ~FrameSvg::BottomBorder;
         }
     }
