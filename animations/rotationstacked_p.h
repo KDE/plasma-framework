@@ -55,26 +55,26 @@ public:
     ~RotationStackedAnimation();
 
     /**
-     * Set the animation direction
+     * Set the animation movement direction (e.g. MoveAny, MoveUp, MoveDown,
+     * MoveLeft, MoveRight) which can be combined (i.e. MoveUp|MoveLeft).
      * @arg direction animation direction
      */
     void setMovementDirection(const qint8 &direction);
 
     /**
-     * Get the animation direction
+     * Get the animation movement direction.
      */
     qint8 movementDirection() const;
 
     /**
-     * Set rotation reference (e.g. Center, Up, Down, Left, Right) can
-     * be combined (i.e. Center|Up)
-     * @arg reference The reference
+     * Set the animation rotation reference (e.g. Center, Up, Down, Left,
+     * Right) which can be combined (i.e. Center|Up).
+     * @arg reference animation reference
      */
     void setReference(const qint8 &reference);
 
     /**
-     * Rotation reference (e.g. Center, Up, Down, Left, Right) can
-     * be combined (i.e. Center|Up)
+     * Get the animation rotation reference.
      */
     qint8 reference() const;
 
@@ -106,10 +106,10 @@ private:
      */
     void updateTransformations();
 
-    /** Reference, the default is Center (see \ref Animation::Reference) */
-    qint8 m_reference;
-    /** Animation direction, the default is MoveUp (see \ref Animation::MovementDirection) */
-    MovementDirection m_animDirection;
+    /** Animation reference (see \ref Animation::Reference) */
+    qint8 m_animReference;
+    /** Animation movement direction (see \ref Animation::MovementDirection) */
+    qint8 m_animDirection;
     /**  Object the animation(s) should act upon. */
     QWeakPointer<QGraphicsWidget> m_backWidget;
     /** Layout where widget would be added */

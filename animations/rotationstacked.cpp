@@ -44,47 +44,20 @@ RotationStackedAnimation::~RotationStackedAnimation()
 
 void RotationStackedAnimation::setMovementDirection(const qint8 &direction)
 {
-    m_animDirection = static_cast<MovementDirection>(direction);
+    m_animDirection = direction;
 
     QVector3D animDirection(0, 0, 0);
 
-    switch (m_animDirection) {
-    case MoveLeft:
-        animDirection.setY(-1);
-        break;
-
-    case MoveRight:
-        animDirection.setY(1);
-        break;
-
-    case MoveAny:
-    case MoveUp:
+    if ((m_animDirection & MoveUp) == MoveUp) {
         animDirection.setX(1);
-        break;
-
-    case MoveDown:
+    } else if ((m_animDirection & MoveDown) == MoveDown) {
         animDirection.setX(-1);
-        break;
+    }
 
-    case MoveUpLeft:
-        animDirection.setX(1);
+    if ((m_animDirection & MoveLeft) == MoveLeft) {
         animDirection.setY(-1);
-        break;
-
-    case MoveUpRight:
-        animDirection.setX(1);
+    } else if ((m_animDirection & MoveRight) == MoveRight) {
         animDirection.setY(1);
-        break;
-
-    case MoveDownLeft:
-        animDirection.setX(-1);
-        animDirection.setY(-1);
-        break;
-
-    case MoveDownRight:
-        animDirection.setX(-1);
-        animDirection.setY(1);
-        break;
     }
 
     m_frontRotation->setAxis(animDirection);
@@ -95,12 +68,12 @@ void RotationStackedAnimation::setMovementDirection(const qint8 &direction)
 
 qint8 RotationStackedAnimation::movementDirection() const
 {
-    return static_cast<qint8>(m_animDirection);
+    return m_animDirection;
 }
 
 void RotationStackedAnimation::setReference(const qint8 &reference)
 {
-    m_reference = reference;
+    m_animReference = reference;
 
     if (!targetWidget() || !backWidget()) {
         return;
@@ -111,20 +84,20 @@ void RotationStackedAnimation::setReference(const qint8 &reference)
     QVector3D frontTransformOrigin(transformArea.width()/2, transformArea.height()/2, 0);
     QVector3D backTransformOrigin(transformArea.width()/2, transformArea.height()/2, 0);
 
-    if ((m_reference & Left) == Left) {
-        frontTransformOrigin.setX(0);
-        backTransformOrigin.setX(0);
-    } else if ((m_reference & Right) == Right) {
-        frontTransformOrigin.setX(transformArea.width());
-        backTransformOrigin.setX(transformArea.width());
-    }
-
-    if ((m_reference & Up) == Up) {
+    if ((m_animReference & Up) == Up) {
         frontTransformOrigin.setY(0);
         backTransformOrigin.setY(0);
-    } else if ((m_reference & Down) == Down) {
+    } else if ((m_animReference & Down) == Down) {
         frontTransformOrigin.setY(transformArea.height());
         backTransformOrigin.setY(transformArea.height());
+    }
+
+    if ((m_animReference & Left) == Left) {
+        frontTransformOrigin.setX(0);
+        backTransformOrigin.setX(0);
+    } else if ((m_animReference & Right) == Right) {
+        frontTransformOrigin.setX(transformArea.width());
+        backTransformOrigin.setX(transformArea.width());
     }
 
     m_frontRotation->setOrigin(frontTransformOrigin);
@@ -135,7 +108,7 @@ void RotationStackedAnimation::setReference(const qint8 &reference)
 
 qint8 RotationStackedAnimation::reference() const
 {
-    return m_reference;
+    return m_animReference;
 }
 
 QGraphicsWidget *RotationStackedAnimation::backWidget()
