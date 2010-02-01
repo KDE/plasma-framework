@@ -116,7 +116,7 @@ namespace WindowEffects
     PLASMA_EXPORT void presentWindows(WId controller, int desktop = -1);
 
    /**
-    * Highlight the selected windos, making all the others translucent
+    * Highlight the selected windows, making all the others translucent
     *
     * @param controller The window which is the controller of this effect. The property
     *                   will be set on this window. It will be removed by the effect
