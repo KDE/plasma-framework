@@ -306,6 +306,11 @@ bool AppletInterface::immutable() const
     return applet()->immutability() != Plasma::Mutable;
 }
 
+bool AppletInterface::userConfiguring() const
+{
+    return applet()->isUserConfiguring();
+}
+
 int AppletInterface::apiVersion() const
 {
     const QString constraint("[X-Plasma-API] == 'javascript' and 'Applet' in [X-Plasma-ComponentTypes]");

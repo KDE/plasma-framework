@@ -68,6 +68,7 @@ class AppletInterface : public QObject
     Q_PROPERTY(BackgroundHints backgroundHints WRITE setBackgroundHints READ backgroundHints)
     Q_PROPERTY(QGraphicsLayout *layout WRITE setLayout READ layout)
     Q_PROPERTY(bool immutable READ immutable)
+    Q_PROPERTY(bool userConfiguring READ userConfiguring) // @since 4.5
     Q_PROPERTY(int apiVersion READ apiVersion)
     Q_PROPERTY(QObject *sender READ sender)
 
@@ -253,6 +254,7 @@ enum AnimationDirection {
     QGraphicsLayout *layout() const;
     void setLayout(QGraphicsLayout *);
     bool immutable() const;
+    bool userConfiguring() const;
     int apiVersion() const;
 
     inline Plasma::Applet *applet() const { return m_appletScriptEngine->applet(); }
