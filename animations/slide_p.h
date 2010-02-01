@@ -83,7 +83,7 @@ private:
     /**
      * Animation direction: where the animation will move.
      */
-    MovementDirection m_animDirection;
+    qint8 m_animDirection;
 
     /**
      * Animation distance: displacement factor for animations where
