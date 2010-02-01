@@ -148,7 +148,6 @@ void TabBarPrivate::updateTabWidgetMode()
 
 void TabBarPrivate::slidingNewPageCompleted()
 {
-    qDebug()<<"yuup";
     tabWidgetLayout->addItem(newPage);
     newPageAnimId = -1;
     mainLayout->invalidate();
@@ -159,7 +158,6 @@ void TabBarPrivate::slidingNewPageCompleted()
 
 void TabBarPrivate::slidingOldPageCompleted()
 {
-    qDebug()<<"blurp";
     QGraphicsWidget *item = newPageAnim->targetWidget();
 
     oldPageAnimId = -1;
