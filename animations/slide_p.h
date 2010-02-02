@@ -42,8 +42,8 @@ class SlideAnimationPrivate;
 class SlideAnimation : public Animation
 {
     Q_OBJECT
-    Q_PROPERTY(qint8 movementDirection READ movementDirection WRITE setMovementDirection)
     Q_PROPERTY(qreal distance READ distance WRITE setDistance)
+    Q_PROPERTY(MovementDirection movementDirection READ movementDirection WRITE setMovementDirection)
 
 public:
     explicit SlideAnimation(QObject *parent = 0, MovementDirection direction = MoveUp, qreal distance = 0);
@@ -64,12 +64,12 @@ public:
      * Set the animation direction
      * @arg direction animation direction
      */
-    void setMovementDirection(const qint8 &direction);
+    void setMovementDirection(const Animation::MovementDirection &direction);
 
     /**
      * Get the animation direction
      */
-    qint8 movementDirection() const;
+    Animation::MovementDirection movementDirection() const;
 
 protected:
     void updateCurrentTime(int currentTime);
@@ -79,7 +79,7 @@ private:
     /**
      * Animation direction: where the animation will move.
      */
-    MovementDirection m_animDirection;
+    Animation::MovementDirection m_animDirection;
 
     /**
      * Animation distance: displacement factor for animations where

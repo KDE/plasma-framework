@@ -40,22 +40,22 @@ RotationStackedAnimation::~RotationStackedAnimation()
     delete m_wLayout.data();
 }
 
-void RotationStackedAnimation::setMovementDirection(const qint8 &direction)
+void RotationStackedAnimation::setMovementDirection(const Animation::MovementDirection &direction)
 {
-    m_animDirection = static_cast<MovementDirection>(direction);
+    m_animDirection = direction;
 }
 
-qint8 RotationStackedAnimation::movementDirection() const
+Animation::MovementDirection RotationStackedAnimation::movementDirection() const
 {
-    return static_cast<qint8>(m_animDirection);
+    return m_animDirection;
 }
 
-void RotationStackedAnimation::setReference(const qint8 &reference)
+void RotationStackedAnimation::setReference(const Animation::Reference &reference)
 {
     m_reference = reference;
 }
 
-qint8 RotationStackedAnimation::reference() const
+Animation::Reference RotationStackedAnimation::reference() const
 {
     return m_reference;
 }
@@ -104,11 +104,11 @@ void RotationStackedAnimation::updateState(
         vector.first = QVector3D(widgetFrontWidth/2, widgetFrontHeight/2, 0);
         vector.second = QVector3D(widgetBackWidth/2, widgetBackHeight/2, 0);
 
-        if (m_animDirection == MoveLeft || m_animDirection == MoveRight) {
+        if (m_animDirection.testFlag(MoveLeft) || m_animDirection.testFlag(MoveRight)) {
             m_frontRotation->setAxis(Qt::YAxis);
             m_backRotation->setAxis(Qt::YAxis);
 
-            if (m_animDirection == MoveLeft) {
+            if (m_animDirection.testFlag(MoveLeft)) {
                 /* TODO: the order way */
 
             } else {

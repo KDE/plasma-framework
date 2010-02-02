@@ -48,14 +48,14 @@ SlideAnimation::SlideAnimation(QObject *parent,
     setEasingCurve(QEasingCurve::OutCirc);
 }
 
-void SlideAnimation::setMovementDirection(const qint8 &direction)
+void SlideAnimation::setMovementDirection(const Animation::MovementDirection &direction)
 {
-    m_animDirection = static_cast<MovementDirection>(direction);
+    m_animDirection = direction;
 }
 
-qint8 SlideAnimation::movementDirection() const
+Animation::MovementDirection SlideAnimation::movementDirection() const
 {
-    return static_cast<qint8>(m_animDirection);
+    return m_animDirection;
 }
 
 void SlideAnimation::updateCurrentTime(int currentTime)
@@ -80,47 +80,28 @@ void SlideAnimation::updateState(QAbstractAnimation::State newState, QAbstractAn
         qreal newY = m_startPos.y();
 
         int actualDistance = (direction() == QAbstractAnimation::Forward?distance():-distance());
-        switch (movementDirection()) {
-        case MoveUp:
+
+        bool moveAnyOnly = true;
+
+        if (m_animDirection.testFlag(MoveUp)) {
             newY -= actualDistance;
-            break;
-
-        case MoveRight:
-            newX += actualDistance;
-            break;
-
-        case MoveDown:
+            moveAnyOnly = false;
+        } else if (m_animDirection.testFlag(MoveDown)) {
             newY += actualDistance;
-            break;
+            moveAnyOnly = false;
+        }
 
-        case MoveLeft:
-            newX -= actualDistance;
-            break;
-
-        case MoveUpRight:
+        if (m_animDirection.testFlag(MoveRight)) {
             newX += actualDistance;
-            newY -= actualDistance;
-            break;
-
-        case MoveDownRight:
-            newX += actualDistance;
-            newY += actualDistance;
-            break;
-
-        case MoveDownLeft:
+            moveAnyOnly = false;
+        } else if (m_animDirection.testFlag(MoveLeft)) {
             newX -= actualDistance;
-            newY += actualDistance;
-            break;
+            moveAnyOnly = false;
+        }
 
-
-        case MoveUpLeft:
-            newX -= actualDistance;
-            newY -= actualDistance;
-            break;
-
-        default:
-            kDebug()<<"Compound direction is not supported";
-            return;
+        if (moveAnyOnly && m_animDirection.testFlag(MoveAny)) {
+            newX = actualDistance;
+            newY = actualDistance;
         }
 
         if (direction() == QAbstractAnimation::Forward) {

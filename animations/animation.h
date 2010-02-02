@@ -63,28 +63,28 @@ public:
     /**
      * Animation movement reference (used by \ref RotationAnimation).
      */
-    enum Reference{
-        Center,
-        Up,
-        Down,
-        Left,
-        Right
+    enum ReferenceFlag {
+        Center = 0,
+        Up = 0x1,
+        Down = 0x2,
+        Left = 0x4,
+        Right = 0x8
     };
+
+    Q_DECLARE_FLAGS(Reference, ReferenceFlag)
 
     /**
-     * The movement direction of an animation.
+     * Animation movement direction.
      */
-    enum MovementDirection {
-        MoveUp = 0,     /**< Move up */
-        MoveUpRight,    /**< Move up and right */
-        MoveRight,      /**< Move right */
-        MoveDownRight,  /**< Move down and right */
-        MoveDown,       /**< Move down */
-        MoveDownLeft,   /**< Move down and left */
-        MoveLeft,       /**< Move left */
-        MoveUpLeft      /**< Move up and left */
+    enum MovementDirectionFlag {
+        MoveAny = 0,
+        MoveUp = 0x1,
+        MoveRight = 0x2,
+        MoveDown = 0x4,
+        MoveLeft = 0x8
     };
 
+    Q_DECLARE_FLAGS(MovementDirection, MovementDirectionFlag)
 
     /**
      * Default constructor.

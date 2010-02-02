@@ -43,9 +43,9 @@ namespace Plasma {
 class RotationStackedAnimation : public Animation
 {
     Q_OBJECT
-    Q_PROPERTY(qint8 movementDirection READ movementDirection WRITE setMovementDirection)
+    Q_PROPERTY(MovementDirection movementDirection READ movementDirection WRITE setMovementDirection)
+    Q_PROPERTY(Reference reference READ reference WRITE setReference)
     Q_PROPERTY(QGraphicsLayoutItem* layout READ layout)
-    Q_PROPERTY(qint8 reference READ reference WRITE setReference)
     Q_PROPERTY(QGraphicsWidget* backWidget READ backWidget WRITE setBackWidget)
 
 public:
@@ -57,25 +57,25 @@ public:
      * Set the animation direction
      * @arg direction animation direction
      */
-    void setMovementDirection(const qint8 &direction);
+    void setMovementDirection(const Animation::MovementDirection &direction);
 
     /**
      * Get the animation direction
      */
-    qint8 movementDirection() const;
+    Animation::MovementDirection movementDirection() const;
 
     /**
      * Set rotation reference (e.g. Center, Up, Down, Left, Right) can
      * be combined (i.e. Center|Up)
      * @arg reference The reference
      */
-    void setReference(const qint8 &reference);
+    void setReference(const Animation::Reference &reference);
 
     /**
      * Rotation reference (e.g. Center, Up, Down, Left, Right) can
      * be combined (i.e. Center|Up)
      */
-    qint8 reference() const;
+    Animation::Reference reference() const;
 
     /**
      * Get the layout where the widgetToAnimate and backWidget are.
@@ -100,11 +100,11 @@ protected:
 
 private:
     /** Reference, the default is Up (see \ref Animation::Reference) */
-    qint8 m_reference;
+    Animation::Reference m_reference;
     /**
      * Animation direction: where the animation will move.
      */
-    MovementDirection m_animDirection;
+    Animation::MovementDirection m_animDirection;
     /** Initial rotation angle from front widget */
     int m_frontStartAngle;
     /** End value of the rotation angle of the front widget */
