@@ -58,12 +58,12 @@ SlideAnimation::SlideAnimation(QObject *parent,
     setEasingCurve(QEasingCurve::OutCirc);
 }
 
-void SlideAnimation::setMovementDirection(const qint8 &direction)
+void SlideAnimation::setMovementDirection(const Animation::MovementDirection &direction)
 {
     m_animDirection = direction;
 }
 
-qint8 SlideAnimation::movementDirection() const
+Animation::MovementDirection SlideAnimation::movementDirection() const
 {
     return m_animDirection;
 }
@@ -95,23 +95,23 @@ void SlideAnimation::updateState(QAbstractAnimation::State newState, QAbstractAn
 
         bool moveAnyOnly = true;
 
-        if ((m_animDirection & MoveUp) == MoveUp) {
+        if (m_animDirection.testFlag(MoveUp)) {
             newY -= actualDistance.x();
             moveAnyOnly = false;
-        } else if ((m_animDirection & MoveDown) == MoveDown) {
+        } else if (m_animDirection.testFlag(MoveDown)) {
             newY += actualDistance.x();
             moveAnyOnly = false;
         }
 
-        if ((m_animDirection & MoveRight) == MoveRight) {
+        if (m_animDirection.testFlag(MoveRight)) {
             newX += actualDistance.x();
             moveAnyOnly = false;
-        } else if ((m_animDirection & MoveLeft) == MoveLeft) {
+        } else if (m_animDirection.testFlag(MoveLeft)) {
             newX -= actualDistance.x();
             moveAnyOnly = false;
         }
 
-        if (moveAnyOnly && (m_animDirection & MoveAny) == MoveAny) {
+        if (moveAnyOnly && m_animDirection.testFlag(MoveAny)) {
             newX = actualDistance.x();
             newY = actualDistance.y();
         }

@@ -44,9 +44,9 @@ namespace Plasma {
 class RotationStackedAnimation : public Animation
 {
     Q_OBJECT
-    Q_PROPERTY(qint8 movementDirection READ movementDirection WRITE setMovementDirection)
+    Q_PROPERTY(MovementDirection movementDirection READ movementDirection WRITE setMovementDirection)
+    Q_PROPERTY(Reference reference READ reference WRITE setReference)
     Q_PROPERTY(QGraphicsLayoutItem* layout READ layout)
-    Q_PROPERTY(qint8 reference READ reference WRITE setReference)
     Q_PROPERTY(QGraphicsWidget* backWidget READ backWidget WRITE setBackWidget)
 
 public:
@@ -59,24 +59,24 @@ public:
      * MoveLeft, MoveRight) which can be combined (i.e. MoveUp|MoveLeft).
      * @arg direction animation direction
      */
-    void setMovementDirection(const qint8 &direction);
+    void setMovementDirection(const Animation::MovementDirection &direction);
 
     /**
      * Get the animation movement direction.
      */
-    qint8 movementDirection() const;
+    Animation::MovementDirection movementDirection() const;
 
     /**
      * Set the animation rotation reference (e.g. Center, Up, Down, Left,
      * Right) which can be combined (i.e. Center|Up).
      * @arg reference animation reference
      */
-    void setReference(const qint8 &reference);
+    void setReference(const Animation::Reference &reference);
 
     /**
      * Get the animation rotation reference.
      */
-    qint8 reference() const;
+    Animation::Reference reference() const;
 
     /**
      * Get the layout where the widgetToAnimate and backWidget are.
@@ -107,9 +107,9 @@ private:
     void updateTransformations();
 
     /** Animation reference (see \ref Animation::Reference) */
-    qint8 m_animReference;
+    Animation::Reference m_animReference;
     /** Animation movement direction (see \ref Animation::MovementDirection) */
-    qint8 m_animDirection;
+    Animation::MovementDirection m_animDirection;
     /**  Object the animation(s) should act upon. */
     QWeakPointer<QGraphicsWidget> m_backWidget;
     /** Layout where widget would be added */

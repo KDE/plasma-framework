@@ -42,21 +42,21 @@ RotationStackedAnimation::~RotationStackedAnimation()
     delete m_wLayout.data();
 }
 
-void RotationStackedAnimation::setMovementDirection(const qint8 &direction)
+void RotationStackedAnimation::setMovementDirection(const Animation::MovementDirection &direction)
 {
     m_animDirection = direction;
 
     QVector3D animDirection(0, 0, 0);
 
-    if ((m_animDirection & MoveUp) == MoveUp) {
+    if (m_animDirection.testFlag(MoveUp)) {
         animDirection.setX(1);
-    } else if ((m_animDirection & MoveDown) == MoveDown) {
+    } else if (m_animDirection.testFlag(MoveDown)) {
         animDirection.setX(-1);
     }
 
-    if ((m_animDirection & MoveLeft) == MoveLeft) {
+    if (m_animDirection.testFlag(MoveLeft)) {
         animDirection.setY(-1);
-    } else if ((m_animDirection & MoveRight) == MoveRight) {
+    } else if (m_animDirection.testFlag(MoveRight)) {
         animDirection.setY(1);
     }
 
@@ -66,12 +66,12 @@ void RotationStackedAnimation::setMovementDirection(const qint8 &direction)
     updateTransformations();
 }
 
-qint8 RotationStackedAnimation::movementDirection() const
+Animation::MovementDirection RotationStackedAnimation::movementDirection() const
 {
     return m_animDirection;
 }
 
-void RotationStackedAnimation::setReference(const qint8 &reference)
+void RotationStackedAnimation::setReference(const Animation::Reference &reference)
 {
     m_animReference = reference;
 
@@ -84,18 +84,18 @@ void RotationStackedAnimation::setReference(const qint8 &reference)
     QVector3D frontTransformOrigin(transformArea.width()/2, transformArea.height()/2, 0);
     QVector3D backTransformOrigin(transformArea.width()/2, transformArea.height()/2, 0);
 
-    if ((m_animReference & Up) == Up) {
+    if (m_animReference.testFlag(Up)) {
         frontTransformOrigin.setY(0);
         backTransformOrigin.setY(0);
-    } else if ((m_animReference & Down) == Down) {
+    } else if (m_animReference.testFlag(Down)) {
         frontTransformOrigin.setY(transformArea.height());
         backTransformOrigin.setY(transformArea.height());
     }
 
-    if ((m_animReference & Left) == Left) {
+    if (m_animReference.testFlag(Left)) {
         frontTransformOrigin.setX(0);
         backTransformOrigin.setX(0);
-    } else if ((m_animReference & Right) == Right) {
+    } else if (m_animReference.testFlag(Right)) {
         frontTransformOrigin.setX(transformArea.width());
         backTransformOrigin.setX(transformArea.width());
     }
@@ -106,7 +106,7 @@ void RotationStackedAnimation::setReference(const qint8 &reference)
     updateTransformations();
 }
 
-qint8 RotationStackedAnimation::reference() const
+Animation::Reference RotationStackedAnimation::reference() const
 {
     return m_animReference;
 }
