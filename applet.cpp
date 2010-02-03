@@ -1707,31 +1707,27 @@ void Applet::showConfigurationInterface()
     }
 
     if (d->package && d->configLoader) {
-        KConfigDialog *dialog = new KConfigDialog(0, d->configDialogId(), d->configLoader);
+        KConfigDialog *dialog = 0;
 
         QString uiFile = d->package->filePath("mainconfigui");
         if (!uiFile.isEmpty()) {
             QFile f(uiFile);
             QUiLoader loader;
             QWidget *w = loader.load(&f);
-            if (!w) {
-                delete dialog;
-
-                if (d->script) {
-                    d->script->showConfigurationInterface();
-                }
-
-                return;
+            if (w) {
+                dialog = new KConfigDialog(0, d->configDialogId(), d->configLoader);
+                dialog->setWindowTitle(d->configWindowTitle());
+                dialog->setAttribute(Qt::WA_DeleteOnClose, true);
+                dialog->addPage(w, i18n("Settings"), icon(), i18n("%1 Settings", name()));
+                d->addGlobalShortcutsPage(dialog);
+                d->addPublishPage(dialog);
+                dialog->show();
             }
-
-            dialog->setWindowTitle(d->configWindowTitle());
-            dialog->setAttribute(Qt::WA_DeleteOnClose, true);
-            dialog->addPage(w, i18n("Settings"), icon(), i18n("%1 Settings", name()));
         }
 
-        d->addGlobalShortcutsPage(dialog);
-        d->addPublishPage(dialog);
-        dialog->show();
+        if (!dialog && d->script) {
+            d->script->showConfigurationInterface();
+        }
     } else if (d->script) {
         d->script->showConfigurationInterface();
     } else {
