@@ -304,11 +304,11 @@ void NativeTabBar::paintEvent(QPaintEvent *event)
 
                 if (textRect.left() < contentsRect().left()) {
                     gradient.setColorAt(0, Qt::transparent);
-                    gradient.setColorAt((-(qreal)textRect.left())/(qreal)textRect.width(), Qt::transparent);
+                    gradient.setColorAt(qBound(qreal(0), (-(qreal)textRect.left())/(qreal)textRect.width(), qreal(1)), Qt::transparent);
                     gradient.setColorAt(1, Qt::black);
                 } else {
                     gradient.setColorAt(0, Qt::black);
-                    gradient.setColorAt(1 - (qreal)(textRect.right() - endTabSpace)/(qreal)textRect.width(), Qt::transparent);
+                    gradient.setColorAt(qBound(qreal(0), 1 - (qreal)(textRect.right() - endTabSpace)/(qreal)textRect.width(), qreal(1)), Qt::transparent);
                     gradient.setColorAt(1, Qt::transparent);
                 }
 
