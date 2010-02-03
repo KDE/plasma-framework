@@ -1299,6 +1299,9 @@ void IconWidget::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
         action->event(event->type(), event->pos());
     }
     // d->states &= ~IconWidgetPrivate::HoverState; // Will be set once progress is zero again ...
+    //if an eventfilter stolen the mousereleaseevent remove the pressed state here
+    d->states &= ~IconWidgetPrivate::PressedState;
+
     d->hoverEffect(false);
     update();
 
