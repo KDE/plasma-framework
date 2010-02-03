@@ -597,15 +597,31 @@ bool ScrollWidget::eventFilter(QObject *watched, QEvent *event)
         if (event->type() == QEvent::GraphicsSceneMousePress ||
             event->type() == QEvent::GraphicsSceneMouseMove ||
             event->type() == QEvent::GraphicsSceneMouseRelease) {
-            if (scene()) {
+
+            QGraphicsSceneMouseEvent *me = static_cast<QGraphicsSceneMouseEvent *>(event);
+
+            if (event->type() == QEvent::GraphicsSceneMousePress) {
+                d->dragHandleClicked = me->scenePos();
+            }
+
+            d->dragging = (d->dragging | (d->dragHandleClicked.toPoint() - me->scenePos().toPoint()).manhattanLength() > (KGlobalSettings::dndEventDelay()));
+
+            if (scene() && event->type() != QEvent::GraphicsSceneMouseMove) {
                 scene()->sendEvent(this, event);
             }
 
-            QGraphicsSceneMouseEvent *me = static_cast<QGraphicsSceneMouseEvent *>(event);
-            if (event->type() == QEvent::GraphicsSceneMousePress) {
-                d->dragHandleClicked = me->scenePos();
-            } else if (event->type() == QEvent::GraphicsSceneMouseRelease &&
-                       (d->dragHandleClicked.toPoint() - me->scenePos().toPoint()).manhattanLength() > KGlobalSettings::dndEventDelay()) {
+            if (!d->dragging) {
+                return false;
+            }
+
+            if (scene() && event->type() == QEvent::GraphicsSceneMouseMove) {
+                scene()->sendEvent(this, event);
+            }
+
+
+            if (event->type() == QEvent::GraphicsSceneMouseRelease) {
+
+                d->dragging = false;
                 return true;
             }
         }
