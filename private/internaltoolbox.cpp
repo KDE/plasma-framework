@@ -167,7 +167,16 @@ void InternalToolBox::addTool(QAction *action)
 void InternalToolBox::updateToolBox()
 {
     Plasma::IconWidget *tool = qobject_cast<Plasma::IconWidget *>(sender());
-    if (tool && tool->action() == 0) {
+    if (tool && !tool->action()) {
+        QMutableMapIterator<ToolType, IconWidget *> it(d->tools);
+        while (it.hasNext()) {
+            it.next();
+            if (it.value() == tool) {
+                it.remove();
+                break;
+            }
+        }
+
         tool->deleteLater();
         tool = 0;
     }
