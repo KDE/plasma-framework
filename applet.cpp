@@ -1717,26 +1717,22 @@ void Applet::showConfigurationInterface()
 
         QString uiFile = d->package->filePath("mainconfigui");
         if (!uiFile.isEmpty()) {
-            dialog->setWindowTitle(d->configWindowTitle());
-            dialog->setAttribute(Qt::WA_DeleteOnClose, true);
-
-            QUiLoader loader;
             QFile f(uiFile);
-            if (!f.open(QIODevice::ReadOnly)) {
+            QUiLoader loader;
+            QWidget *w = loader.load(&f);
+            if (!w) {
                 delete dialog;
 
                 if (d->script) {
                     d->script->showConfigurationInterface();
                 }
+
                 return;
             }
 
-            QWidget *w = loader.load(&f);
-            f.close();
-
-            if (w) {
-                dialog->addPage(w, i18n("Settings"), icon(), i18n("%1 Settings", name()));
-            }
+            dialog->setWindowTitle(d->configWindowTitle());
+            dialog->setAttribute(Qt::WA_DeleteOnClose, true);
+            dialog->addPage(w, i18n("Settings"), icon(), i18n("%1 Settings", name()));
         }
 
         d->addGlobalShortcutsPage(dialog);
