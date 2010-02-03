@@ -29,7 +29,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include <knewstuff2/engine.h>
+#include <knewstuff3/downloaddialog.h>
 
 #include "plasma/private/wallpaper_p.h"
 
@@ -37,8 +37,7 @@ namespace Plasma
 {
 
 PlasmoidPackage::PlasmoidPackage(QObject *parent)
-    : Plasma::PackageStructure(parent, QString("Plasmoid")),
-      m_knsEngine(0)
+    : Plasma::PackageStructure(parent, QString("Plasmoid"))
 {
     addDirectoryDefinition("images", "images/", i18n("Images"));
     QStringList mimetypes;
@@ -69,11 +68,7 @@ PlasmoidPackage::PlasmoidPackage(QObject *parent)
 
 PlasmoidPackage::~PlasmoidPackage()
 {
-    delete m_knsEngine;
-}
-
-void PlasmoidPackage::deleteNewStuffEngine()
-{
+    delete m_knsDialog.data();
 }
 
 void PlasmoidPackage::pathChanged()
@@ -89,25 +84,14 @@ void PlasmoidPackage::pathChanged()
 
 void PlasmoidPackage::createNewWidgetBrowser(QWidget *parent)
 {
-//FIXME: memory leak below: it creates a new KNS::Engine every time it's called
-//       however, due to issues in the KNS2 library, reusing the same engine causes crashes :(
-//    if (!m_knsEngine) {
-        m_knsEngine = new KNS::Engine(parent);
-        kDebug() << "creating new kns engine" << m_knsEngine;
-        if (!m_knsEngine->init("plasmoids.knsrc")) {
-            delete m_knsEngine;
-            m_knsEngine = 0;
-            return;
-        }
-//    }
+    KNS3::DownloadDialog *knsDialog = m_knsDialog.data();
+    if (!knsDialog) {
+        m_knsDialog = knsDialog = new KNS3::DownloadDialog("plasmoids.knsrc", parent);
+        connect(knsDialog, SIGNAL(accepted()), this, SIGNAL(newWidgetBrowserFinished()));
+    }
 
-    kDebug() << "successful kns engine" << m_knsEngine;
-    m_knsEngine->downloadDialog(this, SLOT(widgetBrowserFinished()));
-}
-
-void PlasmoidPackage::widgetBrowserFinished()
-{
-    emit newWidgetBrowserFinished();
+    knsDialog->show();
+    knsDialog->raise();
 }
 
 ThemePackage::ThemePackage(QObject *parent)
