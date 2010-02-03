@@ -41,13 +41,14 @@ PixmapTransition::~PixmapTransition()
 
 void PixmapTransition::setStartPixmap(const QPixmap &pixmap)
 {
-    if (state() != Running) {
-        m_startPixmap = pixmap;
-        m_currentPixmap = pixmap;
-    } else {
-        m_startPixmap = m_currentPixmap;
+    if (state() == Running) {
         stop();
     }
+
+    m_startPixmap = pixmap;
+
+    //this will center the pixmaps if needed
+    updateCurrentTime(0);
 }
 
 QPixmap PixmapTransition::startPixmap() const
@@ -57,7 +58,13 @@ QPixmap PixmapTransition::startPixmap() const
 
 void PixmapTransition::setTargetPixmap(const QPixmap &pixmap)
 {
+    if (state() == Running) {
+        stop();
+    }
+
     m_targetPixmap = pixmap;
+
+    updateCurrentTime(0);
 }
 
 QPixmap PixmapTransition::targetPixmap() const
