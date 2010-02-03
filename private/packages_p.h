@@ -24,9 +24,9 @@
 #include "plasma/wallpaper.h"
 #include "plasma/plasma.h"
 
-namespace KNS
+namespace KNS3
 {
-    class Engine;
+    class DownloadDialog;
 } // namespace KNS
 
 namespace Plasma
@@ -43,12 +43,8 @@ public:
 protected:
     void pathChanged();
 
-protected Q_SLOTS:
-    void widgetBrowserFinished();
-    void deleteNewStuffEngine();
-
 private:
-    KNS::Engine *m_knsEngine;
+    QWeakPointer<KNS3::DownloadDialog> m_knsDialog;
 };
 
 class ThemePackage : public PackageStructure
