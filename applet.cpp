@@ -1734,7 +1734,9 @@ void Applet::showConfigurationInterface()
             QWidget *w = loader.load(&f);
             f.close();
 
-            dialog->addPage(w, i18n("Settings"), icon(), i18n("%1 Settings", name()));
+            if (w) {
+                dialog->addPage(w, i18n("Settings"), icon(), i18n("%1 Settings", name()));
+            }
         }
 
         d->addGlobalShortcutsPage(dialog);
