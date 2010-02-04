@@ -32,6 +32,7 @@
 #include <phonon/mediasource.h>
 #include <phonon/audiooutput.h>
 
+#include <plasma/animations/animation.h>
 #include <plasma/widgets/iconwidget.h>
 #include <plasma/widgets/slider.h>
 #include <plasma/widgets/frame.h>
@@ -46,7 +47,7 @@ public:
          : q(video),
            ticking(false),
            forceControlsVisible(false),
-           animId(0),
+           animation(0),
            hideTimer(0),
            shownControls(VideoWidget::NoControls),
            controlsWidget(0),
@@ -77,7 +78,7 @@ public:
     void stateChanged(Phonon::State newState, Phonon::State oldState);
     void animateControlWidget(bool show);
     void hideControlWidget();
-    void slidingCompleted(QGraphicsItem *item);
+    void slidingCompleted();
     bool spaceForControlsAvailable();
 
 
@@ -91,7 +92,7 @@ public:
     bool forceControlsVisible;
 
     //control widgets
-    int animId;
+    Plasma::Animation *animation;
     QTimer *hideTimer;
     VideoWidget::Controls shownControls;
     Plasma::Frame *controlsWidget;
@@ -177,24 +178,25 @@ void VideoWidgetPrivate::animateControlWidget(bool show)
         return;
     }
 
-    QPoint oldPos(0,0);
-    QPoint newPos(0,0);
-
-    if (show) {
-        oldPos = QPoint(0, -controlsWidget->size().height());
-    } else {
-        newPos = QPoint(0, -controlsWidget->size().height());
+    const int distance = controlsWidget->size().height();
+    if (!controlsWidget->isVisible()) {
+        controlsWidget->setPos(0, -distance);
+        controlsWidget->show();
     }
 
     //clip only when animating
     q->setFlags(q->flags()|QGraphicsItem::ItemClipsChildrenToShape);
 
-    controlsWidget->setPos(oldPos);
-    controlsWidget->show();
+    if (!animation) {
+        animation = Plasma::Animator::create(Plasma::Animator::SlideAnimation, q);
+        animation->setTargetWidget(controlsWidget);
+        animation->setProperty("movementDirection", Animation::MoveDown);
+        q->connect(animation, SIGNAL(finished()), q, SLOT(slidingCompleted()));
+    }
 
-    animId = Animator::self()->moveItem(
-              controlsWidget, Plasma::Animator::SlideOutMovement,
-              newPos);
+    animation->setProperty("distance", distance);
+    animation->setProperty("direction", show? QAbstractAnimation::Forward : QAbstractAnimation::Backward);
+    animation->start();
 }
 
 void VideoWidgetPrivate::hideControlWidget()
@@ -202,12 +204,8 @@ void VideoWidgetPrivate::hideControlWidget()
     animateControlWidget(false);
 }
 
-void VideoWidgetPrivate::slidingCompleted(QGraphicsItem *item)
+void VideoWidgetPrivate::slidingCompleted()
 {
-    Q_UNUSED(item)
-
-    animId = 0;
-
     if (!controlsWidget) {
         return;
     }
@@ -252,8 +250,6 @@ VideoWidget::VideoWidget(QGraphicsWidget *parent)
 
     connect(d->media, SIGNAL(tick(qint64)), this, SIGNAL(tick(qint64)));
     connect(d->media, SIGNAL(aboutToFinish()), this, SIGNAL(aboutToFinish()));
-    connect(Plasma::Animator::self(), SIGNAL(movementFinished(QGraphicsItem*)),
-           this, SLOT(slidingCompleted(QGraphicsItem*)));
 }
 
 VideoWidget::~VideoWidget()

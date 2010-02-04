@@ -224,7 +224,7 @@ private:
     Q_PRIVATE_SLOT(d, void showOpenFileDialog())
     Q_PRIVATE_SLOT(d, void stateChanged(Phonon::State newState, Phonon::State oldState))
     Q_PRIVATE_SLOT(d, void hideControlWidget())
-    Q_PRIVATE_SLOT(d, void slidingCompleted(QGraphicsItem *item))
+    Q_PRIVATE_SLOT(d, void slidingCompleted())
 };
 
 } // namespace Plasma
