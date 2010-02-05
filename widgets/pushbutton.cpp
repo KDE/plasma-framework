@@ -372,6 +372,8 @@ void PushButton::paint(QPainter *painter,
                 d->activeRect.topLeft(),
                 d->hoverAnimation->property("currentPixmap").value<QPixmap>());
         }
+    } else if (nativeWidget()->isDown()) {
+        d->background->paintFrame(painter);
     }
 
     if (nativeWidget()->hasFocus()) {
