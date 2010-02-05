@@ -28,7 +28,7 @@
 #include <QIcon>
 #include <QStyleOption>
 #include <QPainter>
-#include <QSequentialAnimationGroup>
+#include <QParallelAnimationGroup>
 
 #include <kdebug.h>
 
@@ -109,7 +109,7 @@ public:
     int newPageAnimId;
     Animation *oldPageAnim;
     Animation *newPageAnim;
-    QSequentialAnimationGroup *animGroup;
+    QParallelAnimationGroup *animGroup;
     bool customFont;
 };
 
@@ -158,7 +158,7 @@ void TabBarPrivate::slidingNewPageCompleted()
 
 void TabBarPrivate::slidingOldPageCompleted()
 {
-    QGraphicsWidget *item = newPageAnim->targetWidget();
+    QGraphicsWidget *item = oldPageAnim->targetWidget();
 
     oldPageAnimId = -1;
     item->hide();
@@ -249,7 +249,7 @@ TabBar::TabBar(QGraphicsWidget *parent)
 
     d->newPageAnim = Animator::create(Animator::SlideAnimation);
     d->oldPageAnim = Animator::create(Animator::SlideAnimation);
-    d->animGroup = new QSequentialAnimationGroup(this);
+    d->animGroup = new QParallelAnimationGroup(this);
 
     d->animGroup->addAnimation(d->newPageAnim);
     d->animGroup->addAnimation(d->oldPageAnim);
