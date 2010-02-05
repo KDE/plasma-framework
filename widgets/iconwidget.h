@@ -24,6 +24,7 @@
 #define PLASMA_ICONWIDGET_H
 
 #include <QtCore/QObject>
+#include <QtCore/QWeakPointer>
 #include <QtGui/QGraphicsTextItem>
 #include <QtGui/QIcon>
 #include <QtGui/QGraphicsWidget>
@@ -33,6 +34,7 @@
 #include <plasma/plasma_export.h>
 
 class QAction;
+class QPropertyAnimation;
 
 /**
  * @class IconWidget plasma/widgets/iconwidget.h <Plasma/Widgets/IconWidget>
@@ -50,6 +52,31 @@ namespace Plasma
 {
 
 class IconWidgetPrivate;
+
+class IconHoverAnimation : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(qreal value READ value WRITE setValue)
+
+public:
+    IconHoverAnimation(QObject *parent = 0);
+
+    qreal value() const;
+
+    bool fadeIn() const;
+    void setFadeIn(bool fadeIn);
+
+    QPropertyAnimation *animation() const;
+    void setAnimation(QPropertyAnimation *animation);
+
+protected slots:
+    void setValue(qreal value);
+
+private:
+    qreal m_value;
+    bool m_fadeIn;
+    QWeakPointer<QPropertyAnimation> m_animation;
+};
 
 class PLASMA_EXPORT IconWidget : public QGraphicsWidget
 {
@@ -319,7 +346,7 @@ private:
     Q_PRIVATE_SLOT(d, void clearAction())
     Q_PRIVATE_SLOT(d, void svgChanged())
     Q_PRIVATE_SLOT(d, void actionDestroyed(QObject *obj))
-    Q_PRIVATE_SLOT(d, void hoverAnimationUpdate(qreal progress))
+    Q_PRIVATE_SLOT(d, void hoverAnimationFinished())
     Q_PRIVATE_SLOT(d, void colorConfigChanged())
     Q_PRIVATE_SLOT(d, void iconConfigChanged())
 

@@ -23,6 +23,7 @@
 #define PLASMA_ICONWIDGET_P_H
 
 #include <QtCore/QEvent>
+#include <QtCore/QWeakPointer>
 #include <QtGui/QApplication>
 #include <QtGui/QIcon>
 #include <QtGui/QStyleOptionGraphicsItem>
@@ -35,15 +36,18 @@
 #include <plasma/svg.h>
 
 #include "iconwidget.h"
-#include "animator.h"
 #include "private/actionwidgetinterface_p.h"
 
 class QAction;
 class QPainter;
 class QTextLayout;
+class QPropertyAnimation;
 
 namespace Plasma
 {
+
+class Animation;
+class IconHoverAnimation;
 
 class PLASMA_EXPORT IconAction
 {
@@ -53,8 +57,8 @@ public:
     void show();
     void hide();
     bool isVisible() const;
+    bool isAnimating() const;
 
-    int animationId() const;
     QAction *action() const;
 
     void paint(QPainter *painter) const;
@@ -82,7 +86,7 @@ private:
     bool m_selected;
     bool m_visible;
 
-    int m_animationId;
+    QWeakPointer<Animation> m_animation;
 };
 
 struct Margin
@@ -188,7 +192,7 @@ public:
     void colorConfigChanged();
     void iconConfigChanged();
     QFont widgetFont() const;
-    void hoverAnimationUpdate(qreal progress);
+    void hoverAnimationFinished();
     void init();
     void layoutIcons(const QStyleOptionGraphicsItem *option);
     void hoverEffect(bool);
@@ -203,8 +207,7 @@ public:
     QColor textColor;
     QColor textBgColor;
     QColor shadowColor;
-    int hoverAnimId;
-    qreal hoverAlpha;
+    IconHoverAnimation *hoverAnimation;
     QSizeF iconSize;
     QIcon icon;
     IconWidgetStates states;
@@ -221,7 +224,6 @@ public:
     Margin *activeMargins;
 
     bool iconSvgElementChanged : 1;
-    bool fadeIn : 1;
     bool invertLayout : 1;
     bool drawBg : 1;
     bool textBgCustomized : 1;

@@ -43,10 +43,11 @@
 #include <kdebug.h>
 #include <kcolorscheme.h>
 
+#include <plasma/animator.h>
+#include <plasma/animations/animation.h>
 #include <plasma/paintutils.h>
 #include <plasma/theme.h>
 
-#include "animator.h"
 #include "svg.h"
 
 /*
@@ -59,19 +60,55 @@ TODO:
 namespace Plasma
 {
 
+IconHoverAnimation::IconHoverAnimation(QObject *parent)
+    : QObject(parent), m_value(0), m_fadeIn(false)
+{
+}
+
+qreal IconHoverAnimation::value() const
+{
+    return m_value;
+}
+
+bool IconHoverAnimation::fadeIn() const
+{
+    return m_fadeIn;
+}
+
+QPropertyAnimation *IconHoverAnimation::animation() const
+{
+    return m_animation.data();
+}
+
+void IconHoverAnimation::setValue(qreal value)
+{
+    m_value = value;
+
+    QGraphicsItem *item = qobject_cast<QGraphicsItem*>(parent());
+    item->update();
+}
+
+void IconHoverAnimation::setFadeIn(bool fadeIn)
+{
+    m_fadeIn = fadeIn;
+}
+
+void IconHoverAnimation::setAnimation(QPropertyAnimation *animation)
+{
+    m_animation = animation;
+}
+
 IconWidgetPrivate::IconWidgetPrivate(IconWidget *i)
     : ActionWidgetInterface<IconWidget>(i),
       q(i),
       iconSvg(0),
-      hoverAnimId(-1),
-      hoverAlpha(20 / 255),
+      hoverAnimation(new IconHoverAnimation(q)),
       iconSize(48, 48),
       states(IconWidgetPrivate::NoState),
       orientation(Qt::Vertical),
       numDisplayLines(2),
       activeMargins(0),
       iconSvgElementChanged(false),
-      fadeIn(false),
       invertLayout(false),
       drawBg(false),
       textBgCustomized(false),
@@ -82,6 +119,7 @@ IconWidgetPrivate::IconWidgetPrivate(IconWidget *i)
 IconWidgetPrivate::~IconWidgetPrivate()
 {
     qDeleteAll(cornerActions);
+    delete hoverAnimation;
 }
 
 void IconWidgetPrivate::readColors()
@@ -133,40 +171,54 @@ IconAction::IconAction(IconWidget *icon, QAction *action)
       m_hovered(false),
       m_pressed(false),
       m_selected(false),
-      m_visible(false),
-      m_animationId(-1)
+      m_visible(false)
 {
 }
 
 void IconAction::show()
 {
-    if (m_animationId) {
-        Animator::self()->stopElementAnimation(m_animationId);
+    Animation *animation = m_animation.data();
+    if (!animation) {
+        animation = Plasma::Animator::create(Plasma::Animator::PixmapTransitionAnimation);
+        animation->setTargetWidget(m_icon);
+        animation->setProperty("targetPixmap", m_pixmap);
+    } else if (animation->state() == QAbstractAnimation::Running) {
+        animation->pause();
     }
 
     rebuildPixmap();
 
-    m_animationId = Animator::self()->animateElement(m_icon, Animator::AppearAnimation);
-    Animator::self()->setInitialPixmap(m_animationId, m_pixmap);
+    animation->setDirection(QAbstractAnimation::Forward);
+    animation->start(QAbstractAnimation::DeleteWhenStopped);
     m_visible = true;
 }
 
 void IconAction::hide()
 {
-    if (m_animationId) {
-        Animator::self()->stopElementAnimation(m_animationId);
+    Animation *animation = m_animation.data();
+    if (!animation) {
+        animation = Plasma::Animator::create(Plasma::Animator::ZoomAnimation);
+        animation->setTargetWidget(m_icon);
+        animation->setProperty("targetPixmap", m_pixmap);
+    } else if (animation->state() == QAbstractAnimation::Running) {
+        animation->pause();
     }
 
     rebuildPixmap();
 
-    m_animationId = Animator::self()->animateElement(m_icon, Animator::DisappearAnimation);
-    Animator::self()->setInitialPixmap(m_animationId, m_pixmap);
+    animation->setDirection(QAbstractAnimation::Backward);
+    animation->start(QAbstractAnimation::DeleteWhenStopped);
     m_visible = false;
 }
 
 bool IconAction::isVisible() const
 {
     return m_visible;
+}
+
+bool IconAction::isAnimating() const
+{
+    return (m_animation.data() && m_animation.data()->state() == QAbstractAnimation::Running);
 }
 
 bool IconAction::isPressed() const
@@ -281,11 +333,6 @@ bool IconAction::event(QEvent::Type type, const QPointF &pos)
     return false;
 }
 
-int IconAction::animationId() const
-{
-    return m_animationId;
-}
-
 QAction *IconAction::action() const
 {
     return m_action;
@@ -302,12 +349,12 @@ void IconAction::paint(QPainter *painter) const
         return;
     }
 
-    QPixmap animPixmap = Animator::self()->currentPixmap(m_animationId);
-
-    if (m_visible && animPixmap.isNull()) {
+    Animation *animation = m_animation.data();
+    if (m_visible && animation->property("currentPixmap").isNull()) {
         painter->drawPixmap(m_rect.toRect(), m_pixmap);
     } else {
-        painter->drawPixmap(m_rect.toRect(), animPixmap);
+        painter->drawPixmap(m_rect.toRect(),
+                animation->property("currentPixmap").value<QPixmap>());
     }
 }
 
@@ -618,37 +665,32 @@ void IconWidgetPrivate::hoverEffect(bool show)
         states |= IconWidgetPrivate::HoverState;
     }
 
-    fadeIn = show;
-    const int FadeInDuration = 150;
+    hoverAnimation->setFadeIn(show);
 
-    if (hoverAnimId != -1) {
-        Animator::self()->stopCustomAnimation(hoverAnimId);
+    QPropertyAnimation *animation = hoverAnimation->animation();
+    if (!animation) {
+        animation = new QPropertyAnimation(hoverAnimation, "value");
+        animation->setProperty("duration", 150);
+        animation->setProperty("easingCurve", QEasingCurve::OutQuad);
+        animation->setProperty("startValue", 0.0);
+        animation->setProperty("endValue", 1.0);
+        hoverAnimation->setAnimation(animation);
+        q->connect(animation, SIGNAL(finished()), q, SLOT(hoverAnimationFinished()));
+    } else if (animation->state() == QAbstractAnimation::Running) {
+        animation->pause();
     }
 
-    hoverAnimId = Animator::self()->customAnimation(
-        40 / (1000 / FadeInDuration), FadeInDuration,
-        Animator::EaseOutCurve, q, "hoverAnimationUpdate");
+    animation->setProperty("direction", show ?
+            QAbstractAnimation::Forward : QAbstractAnimation::Backward);
+    animation->start(show ?
+            QAbstractAnimation::KeepWhenStopped : QAbstractAnimation::DeleteWhenStopped);
 }
 
-void IconWidgetPrivate::hoverAnimationUpdate(qreal progress)
+void IconWidgetPrivate::hoverAnimationFinished()
 {
-    if (fadeIn) {
-        hoverAlpha = progress;
-    } else {
-        // If we mouse leaves before the fade in is done, fade out from where we were,
-        // not from fully faded in
-        hoverAlpha = qMin(1 - progress, hoverAlpha);
+    if (!hoverAnimation->fadeIn()) {
+        states &= ~IconWidgetPrivate::HoverState;
     }
-
-    if (qFuzzyCompare(qreal(1.0), progress)) {
-        hoverAnimId = -1;
-
-        if (!fadeIn) {
-            states &= ~IconWidgetPrivate::HoverState;
-        }
-    }
-
-    q->update();
 }
 
 void IconWidgetPrivate::drawBackground(QPainter *painter, IconWidgetState state)
@@ -663,15 +705,15 @@ void IconWidgetPrivate::drawBackground(QPainter *painter, IconWidgetState state)
         background->setElementPrefix("hover");
     }
 
-    if (qFuzzyCompare(hoverAlpha, 1)) {
+    if (qFuzzyCompare(hoverAnimation->value(), 1)) {
         background->resizeFrame(currentSize);
         background->paintFrame(painter);
-    } else if (!qFuzzyCompare(hoverAlpha+1, 1)) {
+    } else if (!qFuzzyCompare(hoverAnimation->value()+1, 1)) {
         background->resizeFrame(currentSize);
         QPixmap frame = background->framePixmap();
         QPainter bufferPainter(&frame);
         bufferPainter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-        bufferPainter.fillRect(frame.rect(), QColor(0,0,0, 255*hoverAlpha));
+        bufferPainter.fillRect(frame.rect(), QColor(0,0,0, 255*hoverAnimation->value()));
         bufferPainter.end();
         painter->drawPixmap(QPoint(0,0), frame);
     }
@@ -712,13 +754,13 @@ QPixmap IconWidgetPrivate::decoration(const QStyleOptionGraphicsItem *option, bo
         // We're assuming that the icon group is desktop/filemanager, since this
         // is KFileItemDelegate.
         if (effect->hasEffect(KIconLoader::Desktop, KIconLoader::ActiveState)) {
-            if (qFuzzyCompare(qreal(1.0), hoverAlpha)) {
+            if (qFuzzyCompare(qreal(1.0), hoverAnimation->value())) {
                 result = effect->apply(result, KIconLoader::Desktop, KIconLoader::ActiveState);
             } else {
                 result = PaintUtils::transition(
                     result,
                     effect->apply(result, KIconLoader::Desktop,
-                                  KIconLoader::ActiveState), hoverAlpha);
+                                  KIconLoader::ActiveState), hoverAnimation->value());
             }
         }
     }
@@ -1022,7 +1064,7 @@ void IconWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
     // Draw corner actions
     foreach (const IconAction *action, d->cornerActions) {
-        if (action->animationId()) {
+        if (action->isAnimating()) {
             action->paint(painter);
         }
     }
@@ -1036,11 +1078,11 @@ void IconWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     if (d->textBgColor != QColor() && d->textBgColor.alpha() > 0 &&
         !(d->text.isEmpty() && d->infoText.isEmpty()) &&
         !textBoundingRect.isEmpty() &&
-        !qFuzzyCompare(d->hoverAlpha, (qreal)1.0)) {
+        !qFuzzyCompare(d->hoverAnimation->value(), (qreal)1.0)) {
         QRectF rect = textBoundingRect.adjusted(-2, -2, 4, 4).toAlignedRect();
         painter->setPen(Qt::transparent);
         QColor color = d->textBgColor;
-        color.setAlpha(60 * (1.0 - d->hoverAlpha));
+        color.setAlpha(60 * (1.0 - d->hoverAnimation->value()));
         QLinearGradient gradient(rect.topLeft(), rect.bottomLeft());
         gradient.setColorAt(0, color.lighter(120));
         gradient.setColorAt(1, color.darker(120));
