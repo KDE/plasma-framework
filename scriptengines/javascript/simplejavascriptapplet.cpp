@@ -570,7 +570,7 @@ void SimpleJavaScriptApplet::setupObjects()
     fun = m_engine->newFunction(SimpleJavaScriptApplet::print);
     global.setProperty("print", fun);
     fun = m_engine->newFunction(SimpleJavaScriptApplet::debug);
-    global.setProperty("print", debug);
+    global.setProperty("debug", fun);
 
     // Work around bug in 4.3.0
     qMetaTypeId<QVariant>();
