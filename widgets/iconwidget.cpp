@@ -196,6 +196,10 @@ void IconAction::show()
 
 void IconAction::hide()
 {
+    if (!m_animation) {
+        return;
+    }
+
     Animation *animation = m_animation.data();
     if (animation->state() == QAbstractAnimation::Running) {
         animation->pause();
