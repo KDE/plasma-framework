@@ -179,36 +179,32 @@ void IconAction::show()
 {
     Animation *animation = m_animation.data();
     if (!animation) {
-        animation = Plasma::Animator::create(Plasma::Animator::PixmapTransitionAnimation);
+        animation = Plasma::Animator::create(Plasma::Animator::PixmapTransitionAnimation, m_icon);
         animation->setTargetWidget(m_icon);
-        animation->setProperty("targetPixmap", m_pixmap);
+        m_animation = animation;
     } else if (animation->state() == QAbstractAnimation::Running) {
         animation->pause();
     }
 
     rebuildPixmap();
-
-    animation->setDirection(QAbstractAnimation::Forward);
-    animation->start(QAbstractAnimation::DeleteWhenStopped);
     m_visible = true;
+
+    animation->setProperty("targetPixmap", m_pixmap);
+    animation->setDirection(QAbstractAnimation::Forward);
+    animation->start();
 }
 
 void IconAction::hide()
 {
     Animation *animation = m_animation.data();
-    if (!animation) {
-        animation = Plasma::Animator::create(Plasma::Animator::ZoomAnimation);
-        animation->setTargetWidget(m_icon);
-        animation->setProperty("targetPixmap", m_pixmap);
-    } else if (animation->state() == QAbstractAnimation::Running) {
+    if (animation->state() == QAbstractAnimation::Running) {
         animation->pause();
     }
 
-    rebuildPixmap();
+    m_visible = false;
 
     animation->setDirection(QAbstractAnimation::Backward);
     animation->start(QAbstractAnimation::DeleteWhenStopped);
-    m_visible = false;
 }
 
 bool IconAction::isVisible() const
@@ -218,7 +214,7 @@ bool IconAction::isVisible() const
 
 bool IconAction::isAnimating() const
 {
-    return (m_animation.data() && m_animation.data()->state() == QAbstractAnimation::Running);
+    return !m_animation.isNull();
 }
 
 bool IconAction::isPressed() const
@@ -254,10 +250,7 @@ QRectF IconAction::rect() const
 void IconAction::rebuildPixmap()
 {
     // Determine proper QIcon mode based on selection status
-    QIcon::Mode mode = QIcon::Normal;
-    if (m_selected) {
-        mode = QIcon::Selected;
-    }
+    QIcon::Mode mode = m_selected ? QIcon::Selected : QIcon::Normal;
 
     // Draw everything
     m_pixmap = QPixmap(26, 26);
@@ -350,7 +343,7 @@ void IconAction::paint(QPainter *painter) const
     }
 
     Animation *animation = m_animation.data();
-    if (m_visible && animation->property("currentPixmap").isNull()) {
+    if (m_visible && !animation) {
         painter->drawPixmap(m_rect.toRect(), m_pixmap);
     } else {
         painter->drawPixmap(m_rect.toRect(),
