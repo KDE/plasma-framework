@@ -44,6 +44,8 @@
 using ThreadWeaver::Weaver;
 using ThreadWeaver::Job;
 
+#define MEASURE_PREPTIME
+
 namespace Plasma
 {
 
@@ -556,7 +558,14 @@ void RunnerManager::setupMatchSession()
         }
     } else {
         foreach (AbstractRunner *runner, d->runners) {
+#ifdef MEASURE_PREPTIME
+            QTime t;
+            t.start();
+#endif
             emit runner->prepare();
+#ifdef MEASURE_PREPTIME
+            kDebug() << t.elapsed() << runner->name();
+#endif
         }
 
         d->allRunnersPrepped = true;
