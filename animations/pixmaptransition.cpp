@@ -137,6 +137,10 @@ void PixmapTransition::updateCurrentTime(int currentTime)
         if (!m_startPixmap.isNull() && !m_targetPixmap.isNull()) {
             m_currentPixmap = Plasma::PaintUtils::transition(m_startPixmap, m_targetPixmap, delta);
         } else if (m_startPixmap.isNull()) {
+            if (qFuzzyCompare(delta, 1.0)) {
+                m_currentPixmap = m_targetPixmap;
+                return;
+            }
             if (m_currentPixmap.isNull()) {
                 m_currentPixmap = QPixmap(m_targetPixmap.size());
             }
