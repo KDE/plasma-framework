@@ -124,7 +124,7 @@ QString WebView::html() const
 QRectF WebView::geometry() const
 {
     if (d->loaded && d->page) {
-        return d->page->mainFrame()->geometry();
+        return QRectF(pos(), d->page->mainFrame()->geometry().size());
     }
 
     return QGraphicsWidget::geometry();
