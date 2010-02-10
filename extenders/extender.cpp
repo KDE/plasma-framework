@@ -550,7 +550,7 @@ void ExtenderPrivate::addExtenderItem(ExtenderItem *item, const QPointF &pos)
         return;
     }
 
-    QObject::connect(item, SIGNAL(destroyed(QObject *)), q, SLOT(extenderItemDestroyed(QObject *)));
+    QObject::connect(item, SIGNAL(destroyed(ExtenderItem*)), q, SLOT(extenderItemDestroyed(ExtenderItem*)));
     attachedExtenderItems.append(item);
     q->itemHoverLeaveEvent(item);
     q->itemAddedEvent(item, pos);
@@ -721,9 +721,8 @@ ExtenderGroup *ExtenderPrivate::findGroup(const QString &name) const
     return 0;
 }
 
-void ExtenderPrivate::extenderItemDestroyed(QObject *object)
+void ExtenderPrivate::extenderItemDestroyed(ExtenderItem *item)
 {
-    ExtenderItem *item = qobject_cast<ExtenderItem *>(object);
     if (item && attachedExtenderItems.contains(item)) {
         removeExtenderItem(item);
     }

@@ -141,6 +141,7 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
 
 ExtenderItem::~ExtenderItem()
 {
+    emit destroyed(this);
     //make sure the original mousepointer always get's restored.
     if (d->mouseOver) {
         QApplication::restoreOverrideCursor();
