@@ -209,7 +209,14 @@ ExtenderItem *Extender::item(const QString &name) const
         return 0;
     }
 
-    foreach (Containment *c, containment->corona()->containments()) {
+    QList<Containment *> containments;
+    if (containment->corona()) {
+        containments = containment->corona()->containments();
+    } else {
+        containments << containment;
+    }
+
+    foreach (Containment *c, containments) {
         foreach (Applet *applet, c->applets()) {
             if (applet->d->extender) {
                 if (applet->d->extender.data() == this) {
