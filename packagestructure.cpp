@@ -535,6 +535,7 @@ void PackageStructurePrivate::createPackageMetadata(const QString &path)
     metadata = new PackageMetadata(metadataPath);
 }
 
+//FIXME KDE5: should be const
 PackageMetadata PackageStructure::metadata()
 {
     if (!d->metadata && !d->path.isEmpty()) {
