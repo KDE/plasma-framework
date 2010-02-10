@@ -254,6 +254,13 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
          */
         void hideCloseButton();
 
+    Q_SIGNALS:
+        /**
+         * Emitted when the extender item is destroyed
+         * @since 4.4.1
+         */
+        void destroyed(ExtenderItem *item);
+
     protected:
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
