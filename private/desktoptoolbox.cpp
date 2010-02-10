@@ -566,7 +566,9 @@ void DesktopToolBox::adjustToolBackerGeometry()
             (viewTransform().m11() == Plasma::scalingFactor(Plasma::DesktopZoom) ||
             icon->action() == d->containment->action("add sibling containment") ||
             icon->action() == d->containment->action("add widgets"))) {
-            icon->setText(icon->action()->text());
+            if (icon->action()) {
+                icon->setText(icon->action()->text());
+            }
         } else {
             icon->setText(QString());
         }
