@@ -78,7 +78,7 @@ protected Q_SLOTS:
     void fadeOut();
 
 private:
-    Q_PRIVATE_SLOT(d, void elementAnimationFinished(int))
+    Q_PRIVATE_SLOT(d, void elementAnimationFinished())
     Q_PRIVATE_SLOT(d, void setPalette())
     FlashingLabelPrivate *const d;
 };
