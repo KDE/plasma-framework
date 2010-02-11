@@ -358,7 +358,10 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 //emulate the same kind of behavior as Qt::Popup (close when you click somewhere
                 //else.
 
-                q->setMinimumSize(QSize(0, 0));
+                if (icon) {
+                    q->setMinimumSize(QSize(0, 0));
+                }
+
                 if (gWidget) {
                     Corona *corona = qobject_cast<Corona *>(gWidget->scene());
 
@@ -392,7 +395,9 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 lay->addItem(icon);
             }
 
-            q->setMinimumSize(0,0);
+            if (icon) {
+                q->setMinimumSize(0,0);
+            }
         }
     }
 
