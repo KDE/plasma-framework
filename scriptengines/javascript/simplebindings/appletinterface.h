@@ -69,6 +69,8 @@ class AppletInterface : public QObject
     Q_PROPERTY(QGraphicsLayout *layout WRITE setLayout READ layout)
     Q_PROPERTY(bool immutable READ immutable)
     Q_PROPERTY(int apiVersion READ apiVersion)
+    Q_PROPERTY(QRectF rect READ rect)
+    Q_PROPERTY(QSizeF size READ size)
     Q_PROPERTY(QObject *sender READ sender)
 
 public:
