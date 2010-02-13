@@ -49,13 +49,7 @@ bool JavaScriptDataEngine::init()
     global.setProperty("removeData", m_qscriptEngine->newFunction(JavaScriptDataEngine::jsRemoveData));
     global.setProperty("removeAllSources", m_qscriptEngine->newFunction(JavaScriptDataEngine::jsRemoveAllSources));
 
-    qRegisterMetaType<DataEngine::Data>("Plasma::DataEngine::Data");
-    qRegisterMetaType<DataEngine::Data>("DataEngine::Data");
-    qScriptRegisterMapMetaType<Plasma::DataEngine::Data>(m_qscriptEngine);
-    m_qscriptEngine->setDefaultPrototype(qMetaTypeId<Service*>(), m_qscriptEngine->newQObject(new DummyService(), QScriptEngine::ScriptOwnership));
-    m_qscriptEngine->setDefaultPrototype(qMetaTypeId<ServiceJob*>(),
-                                         m_qscriptEngine->newQObject(new ServiceJob(QString(), QString(), QMap<QString, QVariant>()),
-                                                                     QScriptEngine::ScriptOwnership ));
+    registerDataEngineMetaTypes(m_qscriptEngine);
 
     Authorization auth;
     if (!m_qscriptEngine->importExtensions(description(), iface, auth)) {

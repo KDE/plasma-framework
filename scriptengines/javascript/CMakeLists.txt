@@ -10,6 +10,7 @@ set(simple_javascript_engine_SRCS
     simplebindings/bytearrayclass.cpp
     simplebindings/bytearrayprototype.cpp
     simplebindings/color.cpp
+    simplebindings/dataengine.cpp
     simplebindings/easingcurve.cpp
     simplebindings/font.cpp
     simplebindings/filedialogproxy.cpp
@@ -69,6 +70,7 @@ install(FILES plasma-scriptengine-runner-javascript.desktop DESTINATION ${SERVIC
 set(javascript_dataengine_engine_SRCS
     javascriptdataengine.cpp
     scriptenv.cpp
+    simplebindings/dataengine.cpp
     simplebindings/variant.cpp
 )
 kde4_add_plugin(plasma_dataenginescript_javascript ${javascript_dataengine_engine_SRCS})

@@ -25,6 +25,7 @@
 #include <QUiLoader>
 #include <QGraphicsLayout>
 #include <QParallelAnimationGroup>
+#include <QPauseAnimation>
 #include <QSequentialAnimationGroup>
 #include <QWidget>
 

@@ -19,7 +19,9 @@
 #ifndef DATAENGINE_H
 #define DATAENGINE_H
 
-#include <QtScript/QtScript>
+#include <QScriptEngine>
+#include <QScriptValue>
+#include <QScriptValueIterator>
 #include <KDebug>
 
 #include <Plasma/DataEngine>
@@ -75,16 +77,7 @@ int qScriptRegisterMapMetaType(
     return qScriptRegisterMetaType<T>(engine, qScriptValueFromMap, qScriptValueToMap, prototype);
 }
 
-class DummyService : public Plasma::Service
-{
-public:
-    ServiceJob *createJob(const QString &operation, QMap<QString, QVariant> &parameters)
-    {
-        Q_UNUSED(operation)
-        Q_UNUSED(parameters)
-        return 0;
-    }
-};
+void registerDataEngineMetaTypes(QScriptEngine *engine);
 
 #endif // DATAENGINE_H
 
