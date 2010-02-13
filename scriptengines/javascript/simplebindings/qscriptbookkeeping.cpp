@@ -184,9 +184,46 @@ void extenderFromQScriptValue(const QScriptValue &scriptValue, ExtenderPtr &exte
     QObject *obj = scriptValue.toQObject();
     extender = static_cast<Plasma::Extender *>(obj);
 }
+
+typedef Plasma::Service *ServicePtr;
+QScriptValue qScriptValueFromService(QScriptEngine *engine, const ServicePtr &service)
+{
+    return engine->newQObject(const_cast<Plasma::Service *>(service), QScriptEngine::AutoOwnership, QScriptEngine::PreferExistingWrapperObject);
+}
+
+void serviceFromQScriptValue(const QScriptValue &scriptValue, ServicePtr &service)
+{
+    QObject *obj = scriptValue.toQObject();
+    service = static_cast<Plasma::Service *>(obj);
+}
+
+typedef Plasma::DataEngine *DataEnginePtr;
+QScriptValue qScriptValueFromDataEngine(QScriptEngine *engine, const DataEnginePtr &dataEngine)
+{
+    return engine->newQObject(const_cast<Plasma::DataEngine *>(dataEngine), QScriptEngine::AutoOwnership, QScriptEngine::PreferExistingWrapperObject);
+}
+
+void dataEngineFromQScriptValue(const QScriptValue &scriptValue, DataEnginePtr &dataEngine)
+{
+    QObject *obj = scriptValue.toQObject();
+    dataEngine = static_cast<Plasma::DataEngine *>(obj);
+}
+
+typedef Plasma::ServiceJob *ServiceJobPtr;
+QScriptValue qScriptValueFromServiceJob(QScriptEngine *engine, const ServiceJobPtr &serviceJob)
+{
+    return engine->newQObject(const_cast<Plasma::ServiceJob *>(serviceJob), QScriptEngine::AutoOwnership, QScriptEngine::PreferExistingWrapperObject);
+}
+
+void serviceJobFromQScriptValue(const QScriptValue &scriptValue, ServiceJobPtr &serviceJob)
+{
+    QObject *obj = scriptValue.toQObject();
+    serviceJob = static_cast<Plasma::ServiceJob *>(obj);
+}
+
 using namespace Plasma;
 
-void registerSimpleAppletMetaTypes(QScriptEngine *engine)
+void registerSimpleAppletMetaTypes(QScriptEngine *engine, bool includeUi)
 {
     qScriptRegisterMetaType<QGraphicsWidget*>(engine, qScriptValueFromQGraphicsWidget, qGraphicsWidgetFromQScriptValue);
 
@@ -200,4 +237,7 @@ void registerSimpleAppletMetaTypes(QScriptEngine *engine)
     qScriptRegisterMapMetaType<DataEngine::Data>(engine);
     qScriptRegisterMetaType<Plasma::Extender *>(engine, qScriptValueFromExtender, extenderFromQScriptValue);
     qScriptRegisterMetaType<Plasma::VideoWidget::Controls>(engine, qScriptValueFromControls, controlsFromScriptValue, QScriptValue());
+    qScriptRegisterMetaType<Plasma::Service *>(engine, qScriptValueFromService, serviceFromQScriptValue);
+    qScriptRegisterMetaType<Plasma::DataEngine *>(engine, qScriptValueFromDataEngine, dataEngineFromQScriptValue);
+    qScriptRegisterMetaType<Plasma::ServiceJob *>(engine, qScriptValueFromServiceJob, serviceJobFromQScriptValue);
 }
