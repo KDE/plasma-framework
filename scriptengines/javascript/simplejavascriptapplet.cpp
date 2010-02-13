@@ -534,13 +534,6 @@ void SimpleJavaScriptApplet::setupObjects()
     global.setProperty("AnimationGroup", m_engine->newFunction(SimpleJavaScriptApplet::animationGroup));
     global.setProperty("ParallelAnimationGroup", m_engine->newFunction(SimpleJavaScriptApplet::parallelAnimationGroup));
 
-    // Bindings for data engine
-    m_engine->setDefaultPrototype(qMetaTypeId<DataEngine*>(), m_engine->newQObject(new DataEngine(), QScriptEngine::ScriptOwnership));
-    m_engine->setDefaultPrototype(qMetaTypeId<Service*>(), m_engine->newQObject(new DummyService(), QScriptEngine::ScriptOwnership));
-    m_engine->setDefaultPrototype(qMetaTypeId<ServiceJob*>(),
-                                  m_engine->newQObject(new ServiceJob(QString(), QString(), QMap<QString, QVariant>()),
-                                                       QScriptEngine::ScriptOwnership ));
-
     bindI18N(m_engine);
     global.setProperty("dataEngine", m_engine->newFunction(SimpleJavaScriptApplet::dataEngine));
     global.setProperty("service", m_engine->newFunction(SimpleJavaScriptApplet::service));
