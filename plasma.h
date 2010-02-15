@@ -333,6 +333,7 @@ PLASMA_EXPORT QList<QAction*> actionsFromMenu(QMenu *menu,
 Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Constraints)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Flip)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::ComponentTypes)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::MessageButtons)
 
 
 #endif // multiple inclusion guard
