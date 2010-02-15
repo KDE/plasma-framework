@@ -19,6 +19,8 @@
 
 #include "svg.h"
 
+#include <cmath>
+
 #include <QDir>
 #include <QMatrix>
 #include <QPainter>
@@ -217,16 +219,22 @@ class SvgPrivate
             //kDebug() << "size for " << elementId << " is " << s;
             // we have to re-render this puppy
 
+            createRenderer();
+
+            QRectF finalRect = makeUniform(renderer->boundsOnElement(elementId), QRect(QPoint(0,0), size));
+
+
+            //don't alter the pixmap size or it won't connect animre different parts of framesvg
+            //but makeUniform should never change the size so much to make necessary to gain or remove a whole pixel
             p = QPixmap(size);
 
             p.fill(Qt::transparent);
             QPainter renderPainter(&p);
 
-            createRenderer();
             if (elementId.isEmpty()) {
-                renderer->render(&renderPainter);
+                renderer->render(&renderPainter, finalRect);
             } else {
-                renderer->render(&renderPainter, elementId);
+                renderer->render(&renderPainter, elementId, finalRect);
             }
 
             renderPainter.end();
@@ -369,6 +377,69 @@ class SvgPrivate
             applyColors = elementRect("hint-apply-color-scheme").isValid();
         }
 
+        //Folowing two are utility functions to snap rendered elements to the pixel grid
+        //to and from are always 0 <= val <= 1
+        qreal closestDistance(qreal to, qreal from)
+        {
+                qreal a = to - from;
+                if (qFuzzyCompare(to, from))
+                    return 0;
+                else if ( to > from ) {
+                    qreal b = to - from - 1;
+                    return (qAbs(a) > qAbs(b)) ?  b : a;
+                } else {
+                    qreal b = 1 + to - from;
+                    return (qAbs(a) > qAbs(b)) ? b : a;
+                }
+        }
+
+        QRectF makeUniform(const QRectF &orig, const QRectF &dst)
+        {
+            if (qFuzzyIsNull(orig.x()) || qFuzzyIsNull(orig.y())) {
+                return dst;
+            }
+
+            QRectF res(dst);
+            qreal div_w = dst.width() / orig.width();
+            qreal div_h = dst.height() / orig.height();
+
+            qreal div_x = dst.x() / orig.x();
+            qreal div_y = dst.y() / orig.y();
+
+            //horizontal snap
+            if (!qFuzzyIsNull(div_x) && !qFuzzyCompare(div_w, div_x)) {
+                qreal rem_orig = orig.x() - (floor(orig.x()));
+                qreal rem_dst = dst.x() - (floor(dst.x()));
+                qreal offset = closestDistance(rem_dst, rem_orig);
+                res.translate(offset + offset*div_w, 0);
+            }
+            //vertical snap
+            if (!qFuzzyIsNull(div_y) && !qFuzzyCompare(div_h, div_y)) {
+                qreal rem_orig = orig.y() - (floor(orig.y()));
+                qreal rem_dst = dst.y() - (floor(dst.y()));
+                qreal offset = closestDistance(rem_dst, rem_orig);
+                res.translate(0, offset + offset*div_h);
+            }
+
+            if (!qFuzzyIsNull(div_w)) {
+                qreal rem_orig = orig.width() - (floor(orig.width()));
+                qreal rem_dst = dst.width() - (floor(dst.width()));
+                qreal offset = closestDistance(rem_dst, rem_orig);
+                res.setWidth(res.width() + offset);
+            }
+
+            if (!qFuzzyIsNull(div_h)) {
+                qreal rem_orig = orig.height() - (floor(orig.height()));
+                qreal rem_dst = dst.height() - (floor(dst.height()));
+                qreal offset = closestDistance(rem_dst, rem_orig);
+                res.setHeight(res.height() + offset);
+            }
+
+            kDebug()<<"Aligning Rects, origin:"<<orig<<"destination:"<<dst<<"result:"<<res;
+            return res;
+        }
+
+        //Slots
         void themeChanged()
         {
             // check if new theme svg wants colorscheme applied
