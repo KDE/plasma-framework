@@ -53,14 +53,6 @@ static QScriptValue protocol(QScriptContext *ctx, QScriptEngine *eng)
     return QScriptValue(eng, self->protocol());
 }
 
-static QScriptValue setProtocol(QScriptContext *ctx, QScriptEngine *)
-{
-    DECLARE_SELF(KUrl, setProtocol);
-    QString v = ctx->argument(0).toString();
-    self->setProtocol(v);
-    return QScriptValue();
-}
-
 static QScriptValue host(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(KUrl, protocol);
