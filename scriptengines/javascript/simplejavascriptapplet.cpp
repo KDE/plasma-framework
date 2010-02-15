@@ -677,7 +677,9 @@ QScriptValue SimpleJavaScriptApplet::animation(QScriptContext *context, QScriptE
                 anim->setTargetWidget(parent);
             }
 
-            return engine->newQObject(anim);
+            QScriptValue value = engine->newQObject(anim);
+            registerEnums(engine, value, *anim->metaObject());
+            return value;
         }
     }
 
