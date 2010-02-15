@@ -188,10 +188,18 @@ class SvgPrivate
         QPixmap findInCache(const QString &elementId, const QSizeF &s = QSizeF())
         {
             QSize size;
+            QString actualElementId;
+
+            if (elementId.isEmpty() || !q->hasElement(actualElementId)) {
+                actualElementId = elementId;
+            } else {
+                actualElementId = QString("%1-%2-%3").arg(qRound(s.width())).arg( qRound(s.height())).arg(elementId);
+            }
+
             if (elementId.isEmpty() || (multipleImages && s.isValid())) {
                 size = s.toSize();
             } else {
-                size = elementRect(elementId).size().toSize();
+                size = elementRect(actualElementId).size().toSize();
             }
 
             if (size.isEmpty()) {
@@ -200,8 +208,8 @@ class SvgPrivate
 
             QString id = cachePath(path, size);
 
-            if (!elementId.isEmpty()) {
-                id.append(elementId);
+            if (!actualElementId.isEmpty()) {
+                id.append(actualElementId);
             }
 
             //kDebug() << "id is " << id;
@@ -216,12 +224,12 @@ class SvgPrivate
 
             //kDebug() << "didn't find cached version of " << id << ", so re-rendering";
 
-            //kDebug() << "size for " << elementId << " is " << s;
+            //kDebug() << "size for " << actualElementId << " is " << s;
             // we have to re-render this puppy
 
             createRenderer();
 
-            QRectF finalRect = makeUniform(renderer->boundsOnElement(elementId), QRect(QPoint(0,0), size));
+            QRectF finalRect = makeUniform(renderer->boundsOnElement(actualElementId), QRect(QPoint(0,0), size));
 
 
             //don't alter the pixmap size or it won't connect animre different parts of framesvg
@@ -231,10 +239,10 @@ class SvgPrivate
             p.fill(Qt::transparent);
             QPainter renderPainter(&p);
 
-            if (elementId.isEmpty()) {
+            if (actualElementId.isEmpty()) {
                 renderer->render(&renderPainter, finalRect);
             } else {
-                renderer->render(&renderPainter, elementId, finalRect);
+                renderer->render(&renderPainter, actualElementId, finalRect);
             }
 
             renderPainter.end();
@@ -247,7 +255,7 @@ class SvgPrivate
             }
 
             if (cacheRendering) {
-                actualTheme()->insertIntoCache(id, p, QString::number((qint64)q, 16)+elementId);
+                actualTheme()->insertIntoCache(id, p, QString::number((qint64)q, 16)+actualElementId);
             }
 
             return p;
