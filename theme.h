@@ -252,7 +252,10 @@ class PLASMA_EXPORT Theme : public QObject
          *
          * @param key the name to use in the cache for this pixmap
          * @param pix the pixmap data to store in the cache
-         * @param id a name that identifies the caller class of this function in an unique fashion
+         * @param id a name that identifies the caller class of this function in an unique fashion.
+         *           This is needed to limit disk writes of the cache.
+         *           If an image with the same id changes quickly,
+         *           only the last size where insertIntoCache was called is actually stored on disk
          * @since 4.3
          **/
         void insertIntoCache(const QString& key, const QPixmap& pix, const QString& id);
