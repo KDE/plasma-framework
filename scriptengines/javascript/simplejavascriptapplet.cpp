@@ -215,7 +215,7 @@ void SimpleJavaScriptApplet::paintInterface(QPainter *p, const QStyleOptionGraph
     QScriptValueList args;
     args << m_engine->toScriptValue(p);
     args << m_engine->toScriptValue(const_cast<QStyleOptionGraphicsItem*>(option));
-    args << m_engine->toScriptValue(contentsRect);
+    args << m_engine->toScriptValue(QRectF(contentsRect));
 
     QScriptContext *ctx = m_engine->pushContext();
     ctx->setActivationObject(m_self);
