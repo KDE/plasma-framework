@@ -69,7 +69,7 @@ QScriptValue constructQPixmapClass(QScriptEngine *eng)
     QScriptValue::PropertyFlags setter = QScriptValue::PropertySetter;
     proto.setProperty("null", eng->newFunction(null), getter);
     proto.setProperty("rect", eng->newFunction(rect), getter);
-    proto.setProperty("scaled", eng->newFunction(scaled), getter);
+    proto.setProperty("scaled", eng->newFunction(scaled));
 
     eng->setDefaultPrototype(qMetaTypeId<QPixmap>(), proto);
     eng->setDefaultPrototype(qMetaTypeId<QPixmap*>(), proto);
