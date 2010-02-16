@@ -195,7 +195,7 @@ public:
     void hoverAnimationFinished();
     void init();
     void layoutIcons(const QStyleOptionGraphicsItem *option);
-    void hoverEffect(bool);
+    void animateMainIcon(bool, const IconWidgetStates state);
 
     IconWidget *q;
     QString text;
@@ -210,6 +210,7 @@ public:
     IconHoverAnimation *hoverAnimation;
     QSizeF iconSize;
     QIcon icon;
+    QIcon oldIcon;
     IconWidgetStates states;
     Qt::Orientation orientation;
     int numDisplayLines;

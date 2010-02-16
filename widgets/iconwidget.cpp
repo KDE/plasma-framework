@@ -656,10 +656,10 @@ QSizeF IconWidget::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
     }
 }
 
-void IconWidgetPrivate::hoverEffect(bool show)
+void IconWidgetPrivate::animateMainIcon(bool show, const IconWidgetStates state)
 {
     if (show) {
-        states |= IconWidgetPrivate::HoverState;
+        states = state;
     }
 
     hoverAnimation->setFadeIn(show);
@@ -753,6 +753,14 @@ QPixmap IconWidgetPrivate::decoration(const QStyleOptionGraphicsItem *option, bo
                     effect->apply(result, KIconLoader::Desktop,
                                   KIconLoader::ActiveState), hoverAnimation->value());
             }
+        }
+    } else if (!result.isNull() && !oldIcon.isNull()) {
+        if (qFuzzyCompare(qreal(1.0), hoverAnimation->value())) {
+            oldIcon = QIcon();
+        } else {
+            result = PaintUtils::transition(
+                oldIcon.pixmap(iconSize.toSize(), mode, state),
+                result, hoverAnimation->value());
         }
     }
 
@@ -1208,6 +1216,14 @@ void IconWidget::setIcon(const QString &icon)
 
 void IconWidget::setIcon(const QIcon &icon)
 {
+    /*fade to the new icon, but to not bee a too big hog, not do that when:
+      - the fade animation is already running
+      - the icon is under mouse
+      - one betwen the old and new icon is null*/
+    if (!(d->states & IconWidgetPrivate::HoverState) && d->oldIcon.isNull() && !d->icon.isNull() && !icon.isNull()) {
+        d->oldIcon = d->icon;
+        d->animateMainIcon(true, d->states);
+    }
     d->icon = icon;
     update();
 }
@@ -1318,7 +1334,7 @@ void IconWidget::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
         action->event(event->type(), event->pos());
     }
 
-    d->hoverEffect(true);
+    d->animateMainIcon(true, d->states|IconWidgetPrivate::HoverState);
     update();
 
     QGraphicsWidget::hoverEnterEvent(event);
@@ -1335,7 +1351,7 @@ void IconWidget::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     //if an eventfilter stolen the mousereleaseevent remove the pressed state here
     d->states &= ~IconWidgetPrivate::PressedState;
 
-    d->hoverEffect(false);
+    d->animateMainIcon(false, d->states|IconWidgetPrivate::HoverState);
     update();
 
     QGraphicsWidget::hoverLeaveEvent(event);
@@ -1346,10 +1362,10 @@ bool IconWidget::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
     Q_UNUSED(watched)
 
     if (event->type() == QEvent::GraphicsSceneDragEnter) {
-        d->hoverEffect(true);
+        d->animateMainIcon(true, d->states|IconWidgetPrivate::HoverState);
         update();
     } else if (event->type() == QEvent::GraphicsSceneDragLeave) {
-        d->hoverEffect(false);
+        d->animateMainIcon(false, d->states|IconWidgetPrivate::HoverState);
         update();
     }
 
