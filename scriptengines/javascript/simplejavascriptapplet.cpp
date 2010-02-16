@@ -140,6 +140,7 @@ void SimpleJavaScriptApplet::reportError(QScriptEngine *engine, bool fatal)
         kDebug() << failureMsg;
     }
 
+    kDebug() << "Error in " << engine->uncaughtException().property("fileName").toString() << "on line" << engine->uncaughtExceptionLineNumber();
     kDebug() << engine->uncaughtExceptionBacktrace();
 }
 
