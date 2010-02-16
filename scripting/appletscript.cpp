@@ -145,7 +145,6 @@ void AppletScript::addStandardConfigurationPages(KConfigDialog *dialog)
     if (applet()) {
         applet()->d->addStandardConfigurationPages(dialog);
     }
-
 }
 
 void AppletScript::showMessage(const QIcon &icon, const QString &message, const MessageButtons buttons)
