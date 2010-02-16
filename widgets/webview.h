@@ -211,6 +211,7 @@ class PLASMA_EXPORT WebView : public QGraphicsWidget
         void dragLeaveEvent(QGraphicsSceneDragDropEvent * event);
         void dragMoveEvent(QGraphicsSceneDragDropEvent * event);
         void dropEvent(QGraphicsSceneDragDropEvent * event);
+        QVariant itemChange(GraphicsItemChange change, const QVariant &value);
         QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint) const;
 
     private:
