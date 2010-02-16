@@ -22,6 +22,7 @@
 #include <QtGui/QGraphicsSceneDragDropEvent>
 #include <QtGui/QGraphicsSceneMouseEvent>
 #include <QtGui/QGraphicsSceneWheelEvent>
+#include <QtGui/QGraphicsView>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QStyleOptionGraphicsItem>
 
@@ -35,9 +36,9 @@
 #include <kio/accessmanager.h>
 #include <accessmanager.h>
 
-#include "plasma/widgets/webview.h"
-
-#include "plasma/animator.h"
+#include "animator.h"
+#include "plasma.h"
+#include "widgets/webview.h"
 
 namespace Plasma
 {
@@ -201,6 +202,10 @@ void WebView::setPage(QWebPage *page)
     }
 
     d->page = page;
+    //FIXME: QWebPage _requires_ a QWidget view to not crash in places such as 
+    // WebCore::PopupMenu::show() due to hostWindow()->platformPageClient() == NULL
+    // because QWebPage::d->client is NULL
+    d->page->setView(viewFor(this));
 
     if (d->page) {
         connect(d->page, SIGNAL(loadProgress(int)),
@@ -290,6 +295,7 @@ void WebView::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     QMouseEvent me(QEvent::MouseButtonPress, event->pos().toPoint(), 
             event->button(), event->buttons(), event->modifiers());
+//    d->page->event(event);
     d->page->event(&me);
     if (me.isAccepted() && !d->dragToScroll) {
         event->accept();
@@ -475,6 +481,18 @@ void WebView::dropEvent(QGraphicsSceneDragDropEvent * event)
     if (de.isAccepted()) {
         event->accept();
     }
+}
+
+QVariant WebView::itemChange(GraphicsItemChange change, const QVariant &value)
+{
+    if (change == QGraphicsItem::ItemSceneHasChanged && d->page) {
+        //FIXME: QWebPage _requires_ a QWidget view to not crash in places such as 
+        // WebCore::PopupMenu::show() due to hostWindow()->platformPageClient() == NULL
+        // because QWebPage::d->client is NULL
+        d->page->setView(viewFor(this));
+    }
+
+    return QGraphicsWidget::itemChange(change, value);
 }
 
 void WebView::setGeometry(const QRectF &geometry)
