@@ -297,7 +297,7 @@ QScriptValue constructQRectFClass(QScriptEngine *eng)
     QScriptValue::PropertyFlags setter = QScriptValue::PropertySetter;
 
     proto.setProperty("adjust", eng->newFunction(adjust));
-    proto.setProperty("adjusted", eng->newFunction(adjusted), getter);
+    proto.setProperty("adjusted", eng->newFunction(adjusted));
     proto.setProperty("translate", eng->newFunction(translate));
     proto.setProperty("setCoords", eng->newFunction(setCoords));
     proto.setProperty("setRect", eng->newFunction(setRect));
