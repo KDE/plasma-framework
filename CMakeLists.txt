@@ -6,6 +6,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${KDE4_KDECORE_INCLUDES}
                     ${KDE4_KDEUI_INCLUDES}
                     ${KDE4_KIO_INCLUDES}
+                    ${CMAKE_SOURCE_DIR}/kdewebkit/
                     ${CMAKE_SOURCE_DIR}/knewstuff/
                     ${CMAKE_BINARY_DIR}/solid/
                     ${CMAKE_SOURCE_DIR}/solid/
@@ -210,7 +211,7 @@ endif(PHONON_FOUND)
 kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
 
 target_link_libraries(plasma ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS} knewstuff3
-                             ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
+                             ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY} kdewebkit
                              kdnssd threadweaver ${KDE4_SOLID_LIBS} )
 
 if(QCA2_FOUND)

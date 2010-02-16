@@ -28,11 +28,11 @@
 
 #include <fixx11h.h>
 #include <QtWebKit/QWebFrame>
-#include <QtWebKit/QWebPage>
 
 #include <QtCore/QTimer>
 
 #include <kdebug.h>
+#include <kwebpage.h>
 #include <kio/accessmanager.h>
 #include <accessmanager.h>
 
@@ -75,7 +75,7 @@ WebView::WebView(QGraphicsItem *parent)
     setAcceptsHoverEvents(true);
     setFlags(QGraphicsItem::ItemIsFocusable);
 
-    QWebPage *page = new QWebPage(this);
+    QWebPage *page = new KWebPage(this);
     page->setNetworkAccessManager(new KIO::AccessManager(page));
     QPalette palette = qApp->palette();
     palette.setBrush(QPalette::Base, Qt::transparent);
