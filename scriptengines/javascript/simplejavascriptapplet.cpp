@@ -109,9 +109,16 @@ void SimpleJavaScriptApplet::engineReportsError(ScriptEnv *engine, bool fatal)
 void SimpleJavaScriptApplet::reportError(QScriptEngine *engine, bool fatal)
 {
     SimpleJavaScriptApplet *jsApplet = qobject_cast<SimpleJavaScriptApplet *>(engine->parent());
-    const QString failureMsg = i18n("Script failure on line %1:\n%2",
-                                    QString::number(engine->uncaughtExceptionLineNumber()),
-                                    engine->uncaughtException().toString());
+    AppletInterface *interface = extractAppletInterface(engine);
+    const QScriptValue error = engine->uncaughtException();
+    QString file = error.property("fileName").toString();
+    if (interface) {
+        file.remove(interface->package()->path());
+    }
+
+    const QString failureMsg = i18n("Error in %1 on line %2.<br><br>%3",
+                                    file, error.property("lineNumber").toString(),
+                                    error.toString());
     if (jsApplet) {
         if (fatal) {
             jsApplet->setFailedToLaunch(true, failureMsg);
@@ -666,4 +673,4 @@ QScriptValue SimpleJavaScriptApplet::variantToScriptValue(QVariant var)
 }
 
 K_EXPORT_PLASMA_APPLETSCRIPTENGINE(qscriptapplet, SimpleJavaScriptApplet)
-#include "simplejavascriptapplet.moc"
+
