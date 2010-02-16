@@ -1706,6 +1706,7 @@ void Applet::showConfigurationInterface()
         return;
     }
 
+    d->publishUI.publishCheckbox = 0;
     if (d->package && d->configLoader) {
         KConfigDialog *dialog = 0;
 
@@ -1872,29 +1873,31 @@ void AppletPrivate::configDialogFinished()
     }
 
 #ifdef ENABLE_REMOTE_WIDGETS
-    q->config().writeEntry("Share", publishUI.publishCheckbox->isChecked());
+    if (publishUI.publishCheckbox) {
+        q->config().writeEntry("Share", publishUI.publishCheckbox->isChecked());
 
-    if (publishUI.publishCheckbox->isChecked()) {
-        QString resourceName =
-        i18nc("%1 is the name of a plasmoid, %2 the name of the machine that plasmoid is published on",
-              "%1 on %2", q->name(), QHostInfo::localHostName());
-        q->publish(Plasma::ZeroconfAnnouncement, resourceName);
-        if (publishUI.allUsersCheckbox->isChecked()) {
-            if (!AuthorizationManager::self()->d->matchingRule(resourceName, Credentials())) {
-                AuthorizationRule *rule = new AuthorizationRule(resourceName, "");
-                rule->setPolicy(AuthorizationRule::Allow);
-                rule->setTargets(AuthorizationRule::AllUsers);
-                AuthorizationManager::self()->d->rules.append(rule);
+        if (publishUI.publishCheckbox->isChecked()) {
+            QString resourceName =
+                i18nc("%1 is the name of a plasmoid, %2 the name of the machine that plasmoid is published on",
+                        "%1 on %2", q->name(), QHostInfo::localHostName());
+            q->publish(Plasma::ZeroconfAnnouncement, resourceName);
+            if (publishUI.allUsersCheckbox->isChecked()) {
+                if (!AuthorizationManager::self()->d->matchingRule(resourceName, Credentials())) {
+                    AuthorizationRule *rule = new AuthorizationRule(resourceName, "");
+                    rule->setPolicy(AuthorizationRule::Allow);
+                    rule->setTargets(AuthorizationRule::AllUsers);
+                    AuthorizationManager::self()->d->rules.append(rule);
+                }
+            } else {
+                AuthorizationRule *matchingRule =
+                    AuthorizationManager::self()->d->matchingRule(resourceName, Credentials());
+                if (matchingRule) {
+                    AuthorizationManager::self()->d->rules.removeAll(matchingRule);
+                }
             }
         } else {
-            AuthorizationRule *matchingRule =
-                AuthorizationManager::self()->d->matchingRule(resourceName, Credentials());
-            if (matchingRule) {
-                AuthorizationManager::self()->d->rules.removeAll(matchingRule);
-            }
+            q->unpublish();
         }
-    } else {
-        q->unpublish();
     }
 #endif
 
