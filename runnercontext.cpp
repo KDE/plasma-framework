@@ -128,6 +128,10 @@ bool correctPathCase(const QString& path, QString &corrected)
         components.pop_back();
     }
 
+    if (components.isEmpty()) {
+        return true;
+    }
+
     QString correctPath;
     const unsigned initialComponents = components.size();
     for (unsigned i = 0; i < initialComponents - 1; i ++) {
