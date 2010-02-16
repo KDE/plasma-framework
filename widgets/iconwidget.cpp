@@ -725,14 +725,8 @@ QPixmap IconWidgetPrivate::decoration(const QStyleOptionGraphicsItem *option, bo
 
     if (iconSvg) {
         if (iconSvgElementChanged || iconSvgPixmap.size() != iconSize.toSize()) {
-            QImage img(iconSize.toSize(), QImage::Format_ARGB32_Premultiplied);
-            {
-                img.fill(0);
-                QPainter p(&img);
-                iconSvg->resize(iconSize);
-                iconSvg->paint(&p, img.rect(), iconSvgElement);
-            }
-            iconSvgPixmap = QPixmap::fromImage(img);
+            iconSvg->resize(iconSize);
+            iconSvgPixmap = iconSvg->pixmap(iconSvgElement);
             iconSvgElementChanged = false;
         }
         result = iconSvgPixmap;
