@@ -44,7 +44,7 @@
 using ThreadWeaver::Weaver;
 using ThreadWeaver::Job;
 
-#define MEASURE_PREPTIME
+//#define MEASURE_PREPTIME
 
 namespace Plasma
 {
