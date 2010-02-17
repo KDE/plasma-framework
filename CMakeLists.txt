@@ -82,6 +82,7 @@ set(plasma_LIB_SRCS
     framesvg.cpp
     plasma.cpp
     popupapplet.cpp
+    private/animablegraphicswebview.cpp
     private/applethandle.cpp
     private/associatedapplicationmanager.cpp
     private/datacontainer_p.cpp
