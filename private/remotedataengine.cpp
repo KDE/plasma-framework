@@ -136,7 +136,6 @@ void RemoteDataEngine::remoteCallFinished(Plasma::ServiceJob *job)
             foreach (const QString &source, m_sources) {
                 if (!oldsources.contains(source) && !s.contains(source)) {
                     kDebug() << "new source = " << source;
-                    setData(source, DataEngine::Data());
                     emit sourceAdded(source);
                 }
             }
