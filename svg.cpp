@@ -441,7 +441,7 @@ class SvgPrivate
                 res.setHeight(res.height() + offset);
             }
 
-            kDebug()<<"Aligning Rects, origin:"<<orig<<"destination:"<<dst<<"result:"<<res;
+            //kDebug()<<"Aligning Rects, origin:"<<orig<<"destination:"<<dst<<"result:"<<res;
             return res;
         }
 
