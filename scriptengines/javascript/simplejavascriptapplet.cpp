@@ -429,7 +429,7 @@ QScriptValue SimpleJavaScriptApplet::getUrl(QScriptContext *context, QScriptEngi
         return engine->undefinedValue();
     }
 
-    KIO::Job *job = KIO::get(url);
+    KIO::Job *job = KIO::get(url, KIO::NoReload, KIO::HideProgressInfo);
     return engine->newQObject(job);
 }
 
