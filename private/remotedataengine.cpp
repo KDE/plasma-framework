@@ -120,6 +120,7 @@ void RemoteDataEngine::remoteCallFinished(Plasma::ServiceJob *job)
             if (!m_sources.contains(source)) {
                 kDebug() << "source no longer exists... remove that data.";
                 removeSource(source);
+                emit sourceRemoved(source);
             }
         }
 
@@ -135,12 +136,12 @@ void RemoteDataEngine::remoteCallFinished(Plasma::ServiceJob *job)
             foreach (const QString &source, m_sources) {
                 if (!oldsources.contains(source) && !s.contains(source)) {
                     kDebug() << "new source = " << source;
-                    setData(source, DataEngine::Data());
+                    emit sourceAdded(source);
                 }
             }
         }
 
-        //and now check and update any nding resources
+        //and now check and update any pending resources
         foreach (const QString &pendingSource, m_pendingSources) {
             createSource(pendingSource);
         }
@@ -154,11 +155,13 @@ void RemoteDataEngine::remoteCallFinished(Plasma::ServiceJob *job)
             if (newSource) {
                 // the source doesn't exist on the remote side!
                 removeSource(source);
+                emit sourceRemoved(source);
                 m_pendingServices.remove(source);
             }
         } else {
             if (newSource) {
                 m_sources.insert(source);
+                emit sourceAdded(source);
 
                 RemoteService *rs = m_pendingServices.value(source);
                 if (rs) {
