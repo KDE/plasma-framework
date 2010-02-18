@@ -264,9 +264,8 @@ QVariant WebView::itemChange(GraphicsItemChange change, const QVariant &value)
         // WebCore::PopupMenu::show() due to hostWindow()->platformPageClient() == NULL
         // because QWebPage::d->client is NULL
         d->webView->page()->setView(viewFor(this));
-    } else {
-        return QGraphicsWidget::itemChange(change, value);
     }
+    return QGraphicsWidget::itemChange(change, value);
 }
 
 void WebView::setGeometry(const QRectF &geometry)
