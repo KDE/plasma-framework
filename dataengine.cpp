@@ -39,6 +39,7 @@
 
 #include "private/authorizationmanager_p.h"
 #include "private/dataengineservice_p.h"
+#include "private/remotedataengine_p.h"
 #include "private/service_p.h"
 
 namespace Plasma
@@ -628,6 +629,11 @@ void DataEnginePrivate::connectSource(DataContainer *s, QObject *visualization,
                                       bool immediateCall)
 {
     //kDebug() << "connect source called" << s->objectName() << "with interval" << pollingInterval;
+
+    //FIXME: at the moment a remote dataengine can only poll, a push mechanism will be needed instead
+    if (pollingInterval == 0 && qobject_cast<RemoteDataEngine *>(q)) {
+        pollingInterval = 5000;
+    }
     if (pollingInterval > 0) {
         // never more frequently than allowed, never more than 20 times per second
         uint min = qMax(50, minPollingInterval); // for qMax below
