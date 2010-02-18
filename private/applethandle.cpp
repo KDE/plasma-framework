@@ -857,7 +857,7 @@ void AppletHandle::setFadeAnimation(qreal progress)
 {
     m_opacity = progress;
     //kDebug() << "progress" << progress << "m_opacity" << m_opacity << m_anim << "(" << FadeIn << ")";
-    if (qFuzzyCompare(progress, 1.0)) {
+    if (qFuzzyCompare(progress, qreal(1.0))) {
         delete m_backgroundBuffer;
         m_backgroundBuffer = 0;
     }
