@@ -387,6 +387,10 @@ IconWidget::~IconWidget()
 void IconWidgetPrivate::init()
 {
     readColors();
+
+    iconChangeTimer = new QTimer(q);
+    iconChangeTimer->setSingleShot(true);
+
     QObject::connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(colorConfigChanged()));
     QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), q, SLOT(colorConfigChanged()));
     QObject::connect(KGlobalSettings::self(), SIGNAL(iconChanged(int)), q, SLOT(iconConfigChanged()));
@@ -1220,9 +1224,12 @@ void IconWidget::setIcon(const QIcon &icon)
       - the fade animation is already running
       - the icon is under mouse
       - one betwen the old and new icon is null*/
-    if (!(d->states & IconWidgetPrivate::HoverState) && d->oldIcon.isNull() && !d->icon.isNull() && !icon.isNull()) {
+    if (!(d->states & IconWidgetPrivate::HoverState) && !d->iconChangeTimer->isActive() && d->oldIcon.isNull() && !d->icon.isNull() && !icon.isNull()) {
         d->oldIcon = d->icon;
         d->animateMainIcon(true, d->states);
+        d->iconChangeTimer->start(300);
+    } else {
+        d->oldIcon = QIcon();
     }
     d->icon = icon;
     update();

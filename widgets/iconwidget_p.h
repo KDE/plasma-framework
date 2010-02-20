@@ -217,6 +217,7 @@ public:
     QSizeF currentSize;
     QPointF clickStartPos;
     mutable QList<QRect> haloRects;
+    QTimer *iconChangeTimer;
 
     QList<IconAction*> cornerActions;
 
