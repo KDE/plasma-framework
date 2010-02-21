@@ -554,7 +554,7 @@ QMimeData * RunnerManager::mimeDataForMatch(const QueryMatch &match) const
     QMimeData * mimeData;
     if (runner && QMetaObject::invokeMethod(
             runner,
-            "setupMimeDataForMatch", Qt::DirectConnection,
+            "mimeDataForMatch", Qt::DirectConnection,
             Q_RETURN_ARG(QMimeData*, mimeData),
             Q_ARG(const Plasma::QueryMatch *, & match)
     )) {

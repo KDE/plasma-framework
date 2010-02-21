@@ -447,8 +447,9 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         /**
          * Reimplement this slot if you want your runner
          * to support serialization and drag and drop
+         * @since 4.5
          */
-        QMimeData * setupMimeDataForMatch(const Plasma::QueryMatch *match);
+        QMimeData * mimeDataForMatch(const Plasma::QueryMatch *match);
 
     private:
         friend class RunnerScript;
