@@ -34,6 +34,7 @@
 #include <plasma/version.h>
 
 class QAction;
+class QMimeData;
 
 class KCompletion;
 
@@ -442,6 +443,12 @@ class PLASMA_EXPORT AbstractRunner : public QObject
 
     protected Q_SLOTS:
         void init();
+
+        /**
+         * Reimplement this slot if you want your runner
+         * to support serialization and drag and drop
+         */
+        QMimeData * setupMimeDataForMatch(const Plasma::QueryMatch *match);
 
     private:
         friend class RunnerScript;

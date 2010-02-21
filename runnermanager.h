@@ -168,6 +168,18 @@ class PLASMA_EXPORT RunnerManager : public QObject
          */
         QStringList allowedRunners() const;
 
+        /**
+         * @return mime data of the specified match
+         * @since 4.5
+         */
+        QMimeData * mimeDataForMatch(const QueryMatch &match) const;
+
+        /**
+         * @return mime data of the specified match
+         * @since 4.5
+         */
+        QMimeData * mimeDataForMatch(const QString &id) const;
+
     public Q_SLOTS:
         /**
          * Call this method when the runners should be prepared for a query session.

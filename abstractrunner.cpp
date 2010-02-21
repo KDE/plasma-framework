@@ -22,6 +22,7 @@
 #include <QAction>
 #include <QHash>
 #include <QMenu>
+#include <QMimeData>
 #include <QMutex>
 #include <QMutexLocker>
 #include <QTimer>
@@ -182,6 +183,11 @@ void AbstractRunner::clearActions()
 {
     qDeleteAll(d->actions);
     d->actions.clear();
+}
+
+QMimeData * AbstractRunner::setupMimeDataForMatch(const QueryMatch *match)
+{
+    return 0;
 }
 
 bool AbstractRunner::hasRunOptions()
