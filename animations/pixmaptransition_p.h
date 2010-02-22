@@ -68,7 +68,10 @@ public:
      * Set the pixmap the animation will evolve to
      */
     void setTargetPixmap(const QPixmap &);
-    
+
+    /**
+     * Returns the current pixmap
+     */
     QPixmap currentPixmap() const;
 
 protected:
