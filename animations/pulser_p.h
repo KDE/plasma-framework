@@ -50,7 +50,20 @@ public:
     /** Destructor */
     ~PulseAnimation();
 
+    /** Pulse scale factor.
+     *
+     * How much the pulsed shadow will expand (the default is 1.5x the
+     * size of pulsed widget).
+     *
+     * @param scale Pulse scale value (should be bigger than 1.0).
+     */
     void setTargetScale(qreal scale);
+
+    /** Returns pulsed scale factor.
+     *
+     * The amount of pulsed shadow factor used (default is 1.5x the size
+     * of widget).
+     */
     qreal targetScale() const;
 
 public Q_SLOTS:
