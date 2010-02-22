@@ -731,6 +731,7 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 bool AppletHandle::sceneEvent(QEvent *event)
 {
     switch (event->type()) {
+#if 0
     case QEvent::TouchEnd: {
         QTransform t = m_applet->transform();
         QRectF geom = m_applet->geometry();
@@ -778,6 +779,11 @@ bool AppletHandle::sceneEvent(QEvent *event)
 
         }
         return true;
+#endif
+    case QEvent::Gesture
+    {
+      QGesture *gesture = static_cast<QGestureEvent*>(event);
+            return true;
     }
     default:
         break;

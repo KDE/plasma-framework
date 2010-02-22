@@ -166,7 +166,7 @@ bool AnimableGraphicsWebView::event(QEvent * event)
 
 void AnimableGraphicsWebView::gestureEvent(QGestureEvent *event)
 {
-    if (QGesture *pinch == event->gesture(Qt::PinchGesture)){
+    if (QGesture *pinch = event->gesture(Qt::PinchGesture)){
         QPinchGesture *pinchGesture = static_cast<QPinchGesture *>(pinch);
         setZoomFactor(zoomFactor() * pinchGesture->scaleFactor());
     }
