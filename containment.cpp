@@ -1081,7 +1081,7 @@ KPluginInfo::List Containment::listContainmentsOfType(const QString &type,
     QString constraint;
 
     if (parentApp.isEmpty()) {
-        constraint.append("not exist [X-KDE-ParentApp]");
+        constraint.append("(not exist [X-KDE-ParentApp] or [X-KDE-ParentApp] == '')");
     } else {
         constraint.append("[X-KDE-ParentApp] == '").append(parentApp).append("'");
     }
