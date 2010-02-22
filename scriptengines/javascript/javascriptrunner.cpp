@@ -35,10 +35,13 @@ Q_DECLARE_METATYPE(ConstRunnerContextStar)
 Q_DECLARE_METATYPE(ConstSearchMatchStar)
 
 JavaScriptRunner::JavaScriptRunner(QObject *parent, const QVariantList &args)
-    : RunnerScript(parent),
-      m_engine(new ScriptEnv(this))
+    : RunnerScript(parent)
 {
     Q_UNUSED(args);
+
+    m_engine = new QScriptEngine(this);
+    m_env = new ScriptEnv(this, m_engine);
+
     connect(m_engine, SIGNAL(reportError(ScriptEnv*,bool)), this, SLOT(reportError(ScriptEnv*,bool)));
 }
 
@@ -56,7 +59,7 @@ bool JavaScriptRunner::init()
     setupObjects();
 
     Authorization auth;
-    if (!m_engine->importExtensions(description(), m_self, auth)) {
+    if (!m_env->importExtensions(description(), m_self, auth)) {
         return false;
     }
 
@@ -71,7 +74,7 @@ bool JavaScriptRunner::init()
 
     m_engine->evaluate(script);
     if (m_engine->hasUncaughtException()) {
-        reportError(m_engine, true);
+        reportError(m_env, true);
         return false;
     }
 
@@ -95,7 +98,7 @@ void JavaScriptRunner::match(Plasma::RunnerContext &search)
     m_engine->popContext();
 
     if (m_engine->hasUncaughtException()) {
-        reportError(m_engine, false);
+        reportError(m_env, false);
     }
 }
 
@@ -117,7 +120,7 @@ void JavaScriptRunner::exec(const Plasma::RunnerContext *search, const Plasma::Q
     m_engine->popContext();
 
     if (m_engine->hasUncaughtException()) {
-        reportError(m_engine, false);
+        reportError(m_env, false);
     }
 }
 
@@ -132,12 +135,12 @@ void JavaScriptRunner::setupObjects()
     global.setProperty("runner", m_self);
 }
 
-void JavaScriptRunner::reportError(ScriptEnv *engine, bool fatal)
+void JavaScriptRunner::reportError(ScriptEnv *env, bool fatal)
 {
     Q_UNUSED(fatal)
-    kDebug() << "Error: " << engine->uncaughtException().toString()
-             << " at line " << engine->uncaughtExceptionLineNumber() << endl;
-    kDebug() << engine->uncaughtExceptionBacktrace();
+    kDebug() << "Error: " << env->engine()->uncaughtException().toString()
+             << " at line " << env->engine()->uncaughtExceptionLineNumber() << endl;
+    kDebug() << env->engine()->uncaughtExceptionBacktrace();
 }
 
 #include "javascriptrunner.moc"

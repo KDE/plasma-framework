@@ -27,10 +27,13 @@
 #include "simplebindings/i18n.h"
 
 JavaScriptDataEngine::JavaScriptDataEngine(QObject *parent, const QVariantList &args)
-    : DataEngineScript(parent),
-      m_qscriptEngine(new ScriptEnv(this))
+    : DataEngineScript(parent)
 {
-    Q_UNUSED(args)
+    Q_UNUSED(args);
+    
+    m_qscriptEngine = new QScriptEngine(this);
+    m_env = new ScriptEnv(this, m_qscriptEngine);
+
     connect(m_qscriptEngine, SIGNAL(reportError(ScriptEnv*,bool)), this, SLOT(reportError(ScriptEnv*,bool)));
 }
 
@@ -52,7 +55,7 @@ bool JavaScriptDataEngine::init()
     registerDataEngineMetaTypes(m_qscriptEngine);
 
     Authorization auth;
-    if (!m_qscriptEngine->importExtensions(description(), iface, auth)) {
+    if (!m_env->importExtensions(description(), iface, auth)) {
         return false;
     }
 
@@ -194,7 +197,7 @@ QScriptValue JavaScriptDataEngine::callFunction(const QString &functionName, con
         m_qscriptEngine->popContext();
 
         if (m_qscriptEngine->hasUncaughtException()) {
-            reportError(m_qscriptEngine, false);
+            reportError(m_env, false);
         } else {
             return rv;
         }
@@ -203,13 +206,13 @@ QScriptValue JavaScriptDataEngine::callFunction(const QString &functionName, con
     return QScriptValue();
 }
 
-void JavaScriptDataEngine::reportError(ScriptEnv *engine, bool fatal) const
+void JavaScriptDataEngine::reportError(ScriptEnv *env, bool fatal) const
 {
     Q_UNUSED(fatal)
 
-    kDebug() << "Error: " << engine->uncaughtException().toString()
-             << " at line " << engine->uncaughtExceptionLineNumber() << endl;
-    kDebug() << engine->uncaughtExceptionBacktrace();
+    kDebug() << "Error: " << env->engine()->uncaughtException().toString()
+             << " at line " << env->engine()->uncaughtExceptionLineNumber() << endl;
+    kDebug() << env->engine()->uncaughtExceptionBacktrace();
 }
 
 QStringList JavaScriptDataEngine::sources() const

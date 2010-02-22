@@ -37,17 +37,38 @@
 #include "simplebindings/filedialogproxy.h"
 #endif
 
-ScriptEnv::ScriptEnv(QObject *parent)
-    : QScriptEngine(parent),
-      m_allowedUrls(NoUrls)
+Q_DECLARE_METATYPE(ScriptEnv*)
+
+ScriptEnv::ScriptEnv(QObject *parent, QScriptEngine *engine)
+    : QObject(parent),
+      m_allowedUrls(NoUrls),
+      m_engine(engine)
 {
-    QScriptValue global = globalObject();
-    global.setProperty("print", newFunction(ScriptEnv::print));
-    global.setProperty("debug", newFunction(ScriptEnv::debug));
+    QScriptValue global = m_engine->globalObject();
+
+    // Add utility functions
+    global.setProperty("print", m_engine->newFunction(ScriptEnv::print));
+    global.setProperty("debug", m_engine->newFunction(ScriptEnv::debug));
+
+    // Add an accessor so we can find the scriptenv given only the engine. The
+    // property is hidden from scripts.
+    global.setProperty("__plasma_scriptenv", m_engine->newQObject(this),
+		       QScriptValue::ReadOnly|QScriptValue::Undeletable|QScriptValue::SkipInEnumeration);
 }
 
 ScriptEnv::~ScriptEnv()
 {
+}
+
+QScriptEngine *ScriptEnv::engine() const
+{
+    return m_engine;
+}
+
+ScriptEnv *ScriptEnv::findScriptEnv( QScriptEngine *engine )
+{
+    QScriptValue global = engine->globalObject();
+    return qscriptvalue_cast<ScriptEnv*>(global.property("__plasma_scriptenv"));
 }
 
 void ScriptEnv::registerEnums(QScriptValue &scriptValue, const QMetaObject &meta)
@@ -58,7 +79,7 @@ void ScriptEnv::registerEnums(QScriptValue &scriptValue, const QMetaObject &meta
         //kDebug() << e.name();
         for (int i=0; i < e.keyCount(); ++i) {
             //kDebug() << e.key(i) << e.value(i);
-            scriptValue.setProperty(e.key(i), QScriptValue(this, e.value(i)));
+            scriptValue.setProperty(e.key(i), QScriptValue(m_engine, e.value(i)));
         }
     }
 }
@@ -77,15 +98,15 @@ bool ScriptEnv::include(const QString &path)
     // change the context to the parent context so that the include is actually
     // executed in the same context as the caller; seems to be what javascript
     // coders expect :)
-    QScriptContext *ctx = currentContext();
+    QScriptContext *ctx = m_engine->currentContext();
     if (ctx && ctx->parentContext()) {
         ctx->setActivationObject(ctx->parentContext()->activationObject());
         ctx->setThisObject(ctx->parentContext()->thisObject());
     }
 
-    evaluate(script, path);
+    m_engine->evaluate(script, path);
 
-    if (hasUncaughtException()) {
+    if (m_engine->hasUncaughtException()) {
         emit reportError(this, true);
         return false;
     }
@@ -122,7 +143,8 @@ QScriptValue ScriptEnv::runApplication(QScriptContext *context, QScriptEngine *e
 
 QScriptValue ScriptEnv::runCommand(QScriptContext *context, QScriptEngine *engine)
 {
-    Q_UNUSED(engine)
+    Q_UNUSED(engine);
+
     if (context->argumentCount() == 0) {
         return false;
     }
@@ -159,6 +181,7 @@ QScriptValue ScriptEnv::openUrl(QScriptContext *context, QScriptEngine *engine)
     return false;
 }
 
+// TODO these should throw an exception
 QScriptValue ScriptEnv::getUrl(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() == 0) {
@@ -172,12 +195,18 @@ QScriptValue ScriptEnv::getUrl(QScriptContext *context, QScriptEngine *engine)
         return engine->undefinedValue();
     }
 
+    ScriptEnv *env = ScriptEnv::findScriptEnv(engine);
+    if (!env) {
+	kDebug() << "findScriptEnv failed";
+        return engine->undefinedValue();
+    }
+
     if (url.isLocalFile()) {
-        if (!(static_cast<ScriptEnv*>(engine)->m_allowedUrls & LocalUrls)) {
+        if (!(env->m_allowedUrls & LocalUrls)) {
             return engine->undefinedValue();
         }
-    } else if (!(static_cast<ScriptEnv*>(engine)->m_allowedUrls & NetworkUrls) &&
-               !((static_cast<ScriptEnv*>(engine)->m_allowedUrls & HttpUrls) && (url.protocol() == "http" || url.protocol() == "https"))) {
+    } else if (!(env->m_allowedUrls & NetworkUrls) &&
+               !((env->m_allowedUrls & HttpUrls) && (url.protocol() == "http" || url.protocol() == "https"))) {
         return engine->undefinedValue();
     }
 
@@ -189,7 +218,7 @@ void ScriptEnv::registerGetUrl(QScriptValue &obj)
 {
     QScriptValue get = obj.property("getUrl");
     if (!get.isValid()) {
-        obj.setProperty("getUrl", newFunction(ScriptEnv::getUrl));
+        obj.setProperty("getUrl", m_engine->newFunction(ScriptEnv::getUrl));
     }
 }
 
@@ -198,13 +227,13 @@ bool ScriptEnv::importBuiltinExtension(const QString &extension, QScriptValue &o
     kDebug() << extension;
     if ("filedialog" == extension) {
 #ifdef USEGUI
-        FileDialogProxy::registerWithRuntime(this);
+        FileDialogProxy::registerWithRuntime(m_engine);
         return true;
 #endif
     } else if ("launchapp" == extension) {
-        obj.setProperty("runApplication", newFunction(ScriptEnv::runApplication));
-        obj.setProperty("runCommand", newFunction(ScriptEnv::runCommand));
-        obj.setProperty("openUrl", newFunction(ScriptEnv::openUrl));
+        obj.setProperty("runApplication", m_engine->newFunction(ScriptEnv::runApplication));
+        obj.setProperty("runCommand", m_engine->newFunction(ScriptEnv::runCommand));
+        obj.setProperty("openUrl", m_engine->newFunction(ScriptEnv::openUrl));
         return true;
     } else if ("http" == extension) {
         m_allowedUrls |= HttpUrls;
@@ -239,11 +268,11 @@ bool ScriptEnv::importExtensions(const KPluginInfo &info, QScriptValue &obj, Aut
 
         if (!importBuiltinExtension(extension, obj)) {
             if (auth.authorizeExternalExtensions()) {
-                importExtension(extension);
+                m_engine->importExtension(extension);
             }
         }
 
-        if (hasUncaughtException()) {
+        if (m_engine->hasUncaughtException()) {
             emit reportError(this, true);
             return false;
         } else {
@@ -266,11 +295,11 @@ bool ScriptEnv::importExtensions(const KPluginInfo &info, QScriptValue &obj, Aut
 
         if (!importBuiltinExtension(extension, obj)) {
             if (auth.authorizeExternalExtensions()) {
-                importExtension(extension);
+                m_engine->importExtension(extension);
             }
         }
 
-        if (hasUncaughtException()) {
+        if (m_engine->hasUncaughtException()) {
             emit reportError(this, false);
         } else {
             m_extensions << extension;

@@ -26,6 +26,7 @@
 
 class ScriptEnv;
 class QScriptContext;
+class QScriptEngine;
 
 class JavaScriptDataEngine : public Plasma::DataEngineScript
 {
@@ -62,7 +63,8 @@ private:
 
     QScriptValue callFunction(const QString &functionName, const QScriptValueList &args) const;
 
-    ScriptEnv *m_qscriptEngine;
+    QScriptEngine *m_qscriptEngine;
+    ScriptEnv *m_env;
     QScriptValue iface;
 };
 

@@ -25,6 +25,8 @@
 
 #include <Plasma/RunnerScript>
 
+class QScriptEngine;
+
 class ScriptEnv;
 
 class JavaScriptRunner : public Plasma::RunnerScript
@@ -52,7 +54,8 @@ protected:
     void reportError(ScriptEnv *engine, bool fatal);
 
 private:
-    ScriptEnv *m_engine;
+    QScriptEngine *m_engine;
+    ScriptEnv *m_env;
     QScriptValue m_self;
 };
 

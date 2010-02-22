@@ -27,7 +27,7 @@
 
 #include "authorization.h"
 
-class ScriptEnv : public QScriptEngine
+class ScriptEnv : public QObject
 {
     Q_OBJECT
 public:
@@ -37,8 +37,14 @@ public:
                       LocalUrls = 4 };
     Q_DECLARE_FLAGS(AllowedUrls, AllowedUrl)
 
-    ScriptEnv(QObject *parent);
+    ScriptEnv(QObject *parent, QScriptEngine *engine);
     ~ScriptEnv();
+
+    /** Returns the QScriptEngine in use. */
+    QScriptEngine *engine() const;
+
+    /** Returns the ScriptEnv in use for a given QScriptEngine or 0. */
+    static ScriptEnv *findScriptEnv( QScriptEngine *engine );
 
     void registerEnums(QScriptValue &scriptValue, const QMetaObject &meta);
     bool include(const QString &path);
@@ -62,6 +68,7 @@ private:
 
     QSet<QString> m_extensions;
     AllowedUrls m_allowedUrls;
+    QScriptEngine *m_engine;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ScriptEnv::AllowedUrls)

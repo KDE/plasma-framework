@@ -1,5 +1,5 @@
 /*
- *   Copyright 2007 Richard J. Moore <rich@kde.org>
+ *   Copyright 2007, 2010 Richard J. Moore <rich@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License version 2 as
@@ -28,6 +28,7 @@
 #include "simplebindings/uiloader.h"
 
 class QScriptContext;
+class QScriptEngine;
 
 class AppletInterface;
 class ScriptEnv;
@@ -46,7 +47,7 @@ public:
     ~SimpleJavaScriptApplet();
     bool init();
 
-    static void reportError(QScriptEngine *error, bool fatal = false);
+    static void reportError(ScriptEnv *error, bool fatal = false);
 
     void paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, const QRect &contentsRect);
     QList<QAction*> contextualActions();
@@ -102,7 +103,8 @@ private:
 private:
     static KSharedPtr<UiLoader> s_widgetLoader;
     static QHash<QString, Plasma::Animator::Animation> s_animationDefs;
-    ScriptEnv *m_engine;
+    ScriptEnv *m_env;
+    QScriptEngine *m_engine;
     QScriptValue m_self;
     QVariantList m_args;
     AppletInterface *m_interface;

@@ -1,5 +1,5 @@
 /*
- *   Copyright 2007-2008 Richard J. Moore <rich@kde.org>
+ *   Copyright 2007-2008,2010 Richard J. Moore <rich@kde.org>
  *   Copyright 2009 Aaron J. Seigo <aseigo@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -28,6 +28,7 @@
 #include <QPauseAnimation>
 #include <QSequentialAnimationGroup>
 #include <QWidget>
+#include <QScriptEngine>
 
 #include <KConfigGroup>
 #include <KDebug>
@@ -87,11 +88,13 @@ QHash<QString, Plasma::Animator::Animation> SimpleJavaScriptApplet::s_animationD
 SimpleJavaScriptApplet::SimpleJavaScriptApplet(QObject *parent, const QVariantList &args)
     : Plasma::AppletScript(parent)
 {
-    Q_UNUSED(args)
+    Q_UNUSED(args);
 //    kDebug() << "Script applet launched, args" << applet()->startupArguments();
 
-    m_engine = new ScriptEnv(this);
-    connect(m_engine, SIGNAL(reportError(ScriptEnv*,bool)), this, SLOT(engineReportsError(ScriptEnv*,bool)));
+    // TODO this will be set to the engine we get from QML
+    m_engine = new QScriptEngine(this);
+    m_env = new ScriptEnv(this, m_engine);
+    connect(m_env, SIGNAL(reportError(ScriptEnv*,bool)), this, SLOT(engineReportsError(ScriptEnv*,bool)));
 }
 
 SimpleJavaScriptApplet::~SimpleJavaScriptApplet()
@@ -106,11 +109,11 @@ void SimpleJavaScriptApplet::engineReportsError(ScriptEnv *engine, bool fatal)
     reportError(engine, fatal);
 }
 
-void SimpleJavaScriptApplet::reportError(QScriptEngine *engine, bool fatal)
+void SimpleJavaScriptApplet::reportError(ScriptEnv *env, bool fatal)
 {
-    SimpleJavaScriptApplet *jsApplet = qobject_cast<SimpleJavaScriptApplet *>(engine->parent());
-    AppletInterface *interface = extractAppletInterface(engine);
-    const QScriptValue error = engine->uncaughtException();
+    SimpleJavaScriptApplet *jsApplet = qobject_cast<SimpleJavaScriptApplet *>(env->parent());
+    AppletInterface *interface = extractAppletInterface(env->engine());
+    const QScriptValue error = env->engine()->uncaughtException();
     QString file = error.property("fileName").toString();
     if (interface) {
         file.remove(interface->package()->path());
@@ -129,7 +132,7 @@ void SimpleJavaScriptApplet::reportError(QScriptEngine *engine, bool fatal)
         kDebug() << failureMsg;
     }
 
-    kDebug() << engine->uncaughtExceptionBacktrace();
+    kDebug() << env->engine()->uncaughtExceptionBacktrace();
 }
 
 void SimpleJavaScriptApplet::configChanged()
@@ -147,7 +150,7 @@ void SimpleJavaScriptApplet::configChanged()
     m_engine->popContext();
 
     if (m_engine->hasUncaughtException()) {
-        reportError(m_engine);
+        reportError(m_env);
     }
 }
 
@@ -168,7 +171,7 @@ void SimpleJavaScriptApplet::dataUpdated(const QString &name, const DataEngine::
     m_engine->popContext();
 
     if (m_engine->hasUncaughtException()) {
-        reportError(m_engine);
+        reportError(m_env);
     }
 }
 
@@ -190,7 +193,7 @@ void SimpleJavaScriptApplet::executeAction(const QString &name)
         m_engine->popContext();
 
         if (m_engine->hasUncaughtException()) {
-            reportError(m_engine);
+            reportError(m_env);
         }
     }
 }
@@ -219,7 +222,7 @@ void SimpleJavaScriptApplet::paintInterface(QPainter *p, const QStyleOptionGraph
     m_engine->popContext();
 
     if (m_engine->hasUncaughtException()) {
-        reportError(m_engine);
+        reportError(m_env);
     }
 }
 
@@ -238,7 +241,7 @@ void SimpleJavaScriptApplet::callFunction(const QString &functionName, const QSc
         m_engine->popContext();
 
         if (m_engine->hasUncaughtException()) {
-            reportError(m_engine);
+            reportError(m_env);
         }
     }
 }
@@ -270,7 +273,7 @@ void SimpleJavaScriptApplet::constraintsEvent(Plasma::Constraints constraints)
 
 bool SimpleJavaScriptApplet::include(const QString &path)
 {
-    return m_engine->include(path);
+    return m_env->include(path);
 }
 
 void SimpleJavaScriptApplet::populateAnimationsHash()
@@ -294,14 +297,14 @@ bool SimpleJavaScriptApplet::init()
     setupObjects();
 
     AppletAuthorization auth(this);
-    if (!m_engine->importExtensions(description(), m_self, auth)) {
+    if (!m_env->importExtensions(description(), m_self, auth)) {
         return false;
     }
 
     kDebug() << "ScriptName:" << applet()->name();
     kDebug() << "ScriptCategory:" << applet()->category();
 
-    return m_engine->include(mainScript());
+    return m_env->include(mainScript());
 }
 
 void SimpleJavaScriptApplet::setupObjects()
@@ -334,7 +337,7 @@ void SimpleJavaScriptApplet::setupObjects()
     }
     global.setProperty("startupArguments", args);
 
-    m_engine->registerEnums(global, AppletInterface::staticMetaObject);
+    m_env->registerEnums(global, AppletInterface::staticMetaObject);
 
 
     // Add a global loadui method for ui files
@@ -379,7 +382,7 @@ void SimpleJavaScriptApplet::setupObjects()
 
 QSet<QString> SimpleJavaScriptApplet::loadedExtensions() const
 {
-    return m_engine->loadedExtensions();
+    return m_env->loadedExtensions();
 }
 
 AppletInterface *SimpleJavaScriptApplet::extractAppletInterface(QScriptEngine *engine)
@@ -454,7 +457,7 @@ QScriptValue SimpleJavaScriptApplet::animation(QScriptContext *context, QScriptE
             }
 
             QScriptValue value = engine->newQObject(anim);
-            static_cast<ScriptEnv*>(engine)->registerEnums(value, *anim->metaObject());
+	    ScriptEnv::findScriptEnv(engine)->registerEnums(value, *anim->metaObject());
             return value;
         }
     }
@@ -536,7 +539,7 @@ QScriptValue SimpleJavaScriptApplet::newPlasmaSvg(QScriptContext *context, QScri
     Svg *svg = new Svg(parent);
     svg->setImagePath(parentedToApplet ? findSvg(engine, filename) : filename);
     QScriptValue fun = engine->newQObject(svg);
-    static_cast<ScriptEnv*>(engine)->registerEnums(fun, *svg->metaObject());
+    ScriptEnv::findScriptEnv(engine)->registerEnums(fun, *svg->metaObject());
     return fun;
 }
 
@@ -555,7 +558,7 @@ QScriptValue SimpleJavaScriptApplet::newPlasmaFrameSvg(QScriptContext *context, 
 
     QScriptValue fun = engine->newQObject(frameSvg);
     // FIXME: why is this necessary when it is clearly declared in FrameSvg's moc?
-    static_cast<ScriptEnv*>(engine)->registerEnums(fun, *frameSvg->metaObject());
+    ScriptEnv::findScriptEnv(engine)->registerEnums(fun, *frameSvg->metaObject());
     return fun;
 }
 
@@ -577,7 +580,7 @@ QScriptValue SimpleJavaScriptApplet::newPlasmaExtenderItem(QScriptContext *conte
 
     Plasma::ExtenderItem *extenderItem = new Plasma::ExtenderItem(extender);
     QScriptValue fun = engine->newQObject(extenderItem);
-    static_cast<ScriptEnv*>(engine)->registerEnums(fun, *extenderItem->metaObject());
+    ScriptEnv::findScriptEnv(engine)->registerEnums(fun, *extenderItem->metaObject());
     return fun;
 }
 
@@ -655,7 +658,7 @@ QScriptValue SimpleJavaScriptApplet::createWidget(QScriptContext *context, QScri
     fun.setProperty("adjustSize", engine->newFunction(widgetAdjustSize));
 
     //register enums will be accessed for instance as frame.Sunken for Frame shadow...
-    static_cast<ScriptEnv*>(engine)->registerEnums(fun, *w->metaObject());
+    ScriptEnv::findScriptEnv(engine)->registerEnums(fun, *w->metaObject());
     return fun;
 }
 
