@@ -79,9 +79,11 @@ void ShadowFake::setTarget(QGraphicsWidget *target)
     QPainter painter(&m_photo);
     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
     painter.fillRect(target->rect(), Qt::transparent);
+
     QStyleOptionGraphicsItem style;
-    //FIXME: some widgets follow exposedRect viewport (e.g. QGraphicsWebView)
     style.exposedRect = target->boundingRect();
+    style.rect = target->rect().toRect();
+
     target->paint(&painter, &style, 0);
     paintSubChildren(&painter, &style, target);
     painter.end();
