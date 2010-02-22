@@ -123,7 +123,7 @@ void PulseAnimation::updateCurrentTime(int currentTime)
         qreal delta = Animation::easingCurve().valueForProgress( currentTime / qreal(duration()));
 
         if (m_under.data()->isIconBigger()) {
-            /* TODO: calculate the scale for bigger icon */
+            m_under.data()->setScale(delta);
 
         } else {
             m_under.data()->setScale(delta);
