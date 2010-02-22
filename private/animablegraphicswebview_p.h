@@ -60,7 +60,7 @@ protected:
     void wheelEvent(QGraphicsSceneWheelEvent *event);
 
 private:
-    bool gestureEvent(QGestureEvent *event);
+    void gestureEvent(QGestureEvent *event);
     bool m_dragToScroll;
     QPointF m_lastScrollPosition;
 };
