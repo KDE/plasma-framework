@@ -77,28 +77,30 @@ void ShadowFake::setTarget(QGraphicsWidget *target)
         m_iconBig = true;
         m_photo = QPixmap::fromImage(
             m_target->property("iconRepresentation").value<QImage>());
-        resize(m_photo.size());
-        setTransformOriginPoint(target->geometry().center());
-    } else {
-
-        resize(target->size());
-
-        m_photo = QPixmap(size);
-        m_photo.fill(Qt::transparent);
-
-        QPainter painter(&m_photo);
-        painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-        painter.fillRect(target->rect(), Qt::transparent);
-
-        QStyleOptionGraphicsItem style;
-        style.exposedRect = target->boundingRect();
-        style.rect = target->rect().toRect();
-
-        target->paint(&painter, &style, 0);
-        paintSubChildren(&painter, &style, target);
-        painter.end();
-        setTransformOriginPoint(geometry().center());
+        if ((m_photo.height() > 0) && (m_photo.width() > 0)) {
+            resize(m_photo.size());
+            setTransformOriginPoint(target->geometry().center());
+            return;
+        }
     }
+
+    resize(target->size());
+
+    m_photo = QPixmap(size);
+    m_photo.fill(Qt::transparent);
+
+    QPainter painter(&m_photo);
+    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    painter.fillRect(target->rect(), Qt::transparent);
+
+    QStyleOptionGraphicsItem style;
+    style.exposedRect = target->boundingRect();
+    style.rect = target->rect().toRect();
+
+    target->paint(&painter, &style, 0);
+    paintSubChildren(&painter, &style, target);
+    painter.end();
+    setTransformOriginPoint(geometry().center());
 }
 
 QGraphicsWidget *ShadowFake::target() const
