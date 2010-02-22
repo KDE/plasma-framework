@@ -78,7 +78,7 @@ void ShadowFake::setTarget(QGraphicsWidget *target)
         m_photo = QPixmap::fromImage(
             m_target->property("iconRepresentation").value<QImage>());
         resize(m_photo.size());
-
+        setTransformOriginPoint(target->geometry().center());
     } else {
 
         resize(target->size());
@@ -97,10 +97,8 @@ void ShadowFake::setTarget(QGraphicsWidget *target)
         target->paint(&painter, &style, 0);
         paintSubChildren(&painter, &style, target);
         painter.end();
-
+        setTransformOriginPoint(geometry().center());
     }
-
-    setTransformOriginPoint(geometry().center());
 }
 
 QGraphicsWidget *ShadowFake::target() const
