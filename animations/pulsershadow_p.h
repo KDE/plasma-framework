@@ -38,10 +38,13 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                QWidget *widget);
 
+    bool isIconBigger();
+
 private:
     void paintSubChildren(QPainter *painter,
                           const QStyleOptionGraphicsItem *option,
                           QGraphicsItem *target);
+    bool m_iconBig;
     int stack;
     QPixmap m_photo;
     QGraphicsWidget *m_target;
