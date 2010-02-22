@@ -18,6 +18,8 @@
 #ifndef STACKEDLAYOUT_H
 #define STACKEDLAYOUT_H
 
+/* TODO: document the methods */
+
 #include <QGraphicsLayout>
 #include <QList>
 #include <QObject>
