@@ -378,6 +378,11 @@ bool KineticScrolling::eventFilter(QObject *watched, QEvent *event)
         return false;
     }
 
+    if (event->type() == QEvent::GraphicsSceneMove) {
+        d->scrollAnimation->stop();
+        return false;
+    }
+
     bool notBlocked = true;
     if (d->multitouchGesture == KineticScrollingPrivate::GestureNone &&
             d->parent && d->parent->scene()) {
