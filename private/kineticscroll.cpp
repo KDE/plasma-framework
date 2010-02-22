@@ -369,17 +369,18 @@ void KineticScrolling::setWidget(QGraphicsWidget *parent)
     /* TODO: add a new property in plasma::ScrollWidget 'hasOvershoot' */
 }
 
+void KineticScrolling::stop()
+{
+    d->scrollAnimation->stop();
+}
+
+
 bool KineticScrolling::eventFilter(QObject *watched, QEvent *event)
 {
     Q_UNUSED(watched);
     Q_UNUSED(event);
 
     if (d->forwardingEvent) {
-        return false;
-    }
-
-    if (event->type() == QEvent::GraphicsSceneMove) {
-        d->scrollAnimation->stop();
         return false;
     }
 

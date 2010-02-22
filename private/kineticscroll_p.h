@@ -40,6 +40,7 @@ public:
     KineticScrolling(QGraphicsWidget *parent);
     ~KineticScrolling();
     void setWidget(QGraphicsWidget *parent);
+    void stop();
 
 Q_SIGNALS:
     void stateChanged(QAbstractAnimation::State newState,

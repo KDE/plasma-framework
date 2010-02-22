@@ -782,5 +782,12 @@ void Animator::unregisterScrollingManager(QGraphicsWidget *widget)
     }
 }
 
+void Animator::stopScrollingWidget(QGraphicsWidget *widget)
+{
+    if (d->scrollingManagers.contains(widget)) {
+        d->scrollingManagers.value(widget)->stop();
+    }
+}
+
 } // namespace Plasma
 

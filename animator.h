@@ -198,6 +198,14 @@ public:
      */
     void unregisterScrollingManager(QGraphicsWidget *widget);
 
+    /**
+     * Stop any scrolling that could be happening on widget
+     *
+     * @param the widget that must stop animating
+     * @since 4.5
+     */
+    void stopScrollingWidget(QGraphicsWidget *widget);
+
 Q_SIGNALS:
     void animationFinished(QGraphicsItem *item, Plasma::Animator::Animation anim);
     void movementFinished(QGraphicsItem *item);
