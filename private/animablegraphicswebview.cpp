@@ -21,6 +21,8 @@
 #include "animablegraphicswebview_p.h"
 
 #include <QtGui/QApplication>
+#include <QGestureEvent>
+#include <QPinchGesture>
 #include <QtWebKit/QWebFrame>
 
 #include <kwebpage.h>
@@ -150,6 +152,24 @@ void AnimableGraphicsWebView::wheelEvent(QGraphicsSceneWheelEvent *event)
     page()->event(&we);
 
     event->setAccepted(!m_dragToScroll);
+}
+
+bool AnimableGraphicsWebView::event(QEvent * event)
+{
+    if (event->type() == QEvent::Gesture) {
+        gestureEvent(static_cast<QGestureEvent*>(event));
+            return true;
+    }
+
+    return KGraphicsWebView::event(event);
+}
+
+bool AnimableGraphicsWebView::gestureEvent(QGestureEvent *event)
+{
+    if (QGesture *pinch = event->gesture(Qt::PinchGesture)){
+        QPinchGesture *pinchGesture = static_cast<QPinchGesture *>(pinch);
+        setZoomFactor(zoomFactor() * pinchGesture->scaleFactor());
+    }
 }
 
 #include "animablegraphicswebview_p.moc"

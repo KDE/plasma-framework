@@ -29,6 +29,8 @@
 
 #include <kgraphicswebview.h>
 
+class QGestureEvent;
+
 namespace Plasma
 {
 
@@ -51,12 +53,14 @@ public:
     bool dragToScroll() const;
 
 protected:
+    bool event(QEvent * event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     void wheelEvent(QGraphicsSceneWheelEvent *event);
 
 private:
+    bool gestureEvent(QGestureEvent *event);
     bool m_dragToScroll;
     QPointF m_lastScrollPosition;
 };
