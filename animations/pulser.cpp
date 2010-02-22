@@ -97,6 +97,15 @@ void PulseAnimation::updateState(QAbstractAnimation::State newState, QAbstractAn
             setCopy();
         }
 
+        if (m_under.data()->isIconBigger()) {
+            m_under.data()->setScale(0);
+            m_endScale = 1.0;
+
+        } else {
+            m_scale = 0;
+            m_endScale = 1.5;
+        }
+
         if (m_under.data()->isVisible() == false) {
             m_under.data()->setVisible(true);
         }
@@ -112,8 +121,15 @@ void PulseAnimation::updateCurrentTime(int currentTime)
 {
     if (m_under.data()) {
         qreal delta = Animation::easingCurve().valueForProgress( currentTime / qreal(duration()));
-        delta = (1 - m_endScale) * delta;
-        m_under.data()->setScale(1 - delta);
+
+        if (m_under.data()->isIconBigger()) {
+            /* TODO: calculate the scale for bigger icon */
+
+        } else {
+            m_under.data()->setScale(delta);
+            delta = (1 - m_endScale) * delta;
+            m_under.data()->setScale(1 - delta);
+        }
 
         delta = currentTime / qreal(duration());
         if (direction() == Forward) {
