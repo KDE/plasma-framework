@@ -32,6 +32,7 @@ using namespace Plasma;
 AnimableGraphicsWebView::AnimableGraphicsWebView(QGraphicsItem * parent)
     : KGraphicsWebView(parent)
 {
+    grabGesture(Qt::PinchGesture);
     m_dragToScroll = false;
 }
 
