@@ -421,6 +421,10 @@ void Meter::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Dat
 
 void Meter::setSvg(const QString &svg)
 {
+    if (d->svg == svg) {
+        return;
+    }
+
     d->svg = svg;
     delete d->image;
     d->image = new Plasma::FrameSvg(this);
@@ -466,6 +470,10 @@ void Meter::paint(QPainter *p,
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
+
+    if (d->svg.isEmpty()) {
+        setMeterType(d->meterType);
+    }
 
     if (!d->image) {
         return;
