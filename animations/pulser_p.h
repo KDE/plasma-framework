@@ -66,7 +66,6 @@ public:
      */
     qreal targetScale() const;
 
-public Q_SLOTS:
     /**
      * Resets the shadow widget to its initial state (full translucent
      * and with same geometry as the target widget). It is executed
