@@ -137,7 +137,10 @@ int main(int argc, char **argv)
         package.setPath(packageFile);
         QString serviceType = package.metadata().serviceType();
         if (!serviceType.isEmpty()) {
-            if (serviceType == "Plasma/Applet" || serviceType == "Plasma/PopupApplet") {
+            if (    serviceType == "Plasma/Applet" 
+                    || serviceType == "Plasma/Containment"
+                    || serviceType == "Plasma/PopupApplet" ) 
+            {
                 type = "plasmoid";
             } else if (serviceType == "Plasma/DataEngine") {
                 type = "dataengine";
@@ -157,6 +160,7 @@ int main(int argc, char **argv)
         servicePrefix = "plasma-applet-";
         pluginTypes << "Applet";
         pluginTypes << "PopupApplet";
+        pluginTypes << "Containment";
     } else if (type == i18nc("package type", "theme") || type == "theme") {
         packageRoot = "desktoptheme/";
     } else if (type == i18nc("package type", "wallpaper") || type == "wallpaper") {
