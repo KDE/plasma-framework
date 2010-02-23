@@ -19,9 +19,11 @@
 #include <QtScript/QScriptValue>
 #include <QtScript/QScriptEngine>
 #include <QtScript/QScriptContext>
-#include <QtGui/QGraphicsWidget>
-#include <QtGui/QGraphicsLinearLayout>
+#include <QtGui/QGraphicsAnchorLayout>
 #include <QtGui/QGraphicsLayout>
+#include <QtGui/QGraphicsLinearLayout>
+#include <QtGui/QGraphicsGridLayout>
+#include <QtGui/QGraphicsWidget>
 
 #include <Plasma/Applet>
 
@@ -32,6 +34,8 @@ Q_DECLARE_METATYPE(QScript::Pointer<QGraphicsItem>::wrapped_pointer_type)
 Q_DECLARE_METATYPE(QGraphicsWidget*)
 Q_DECLARE_METATYPE(QGraphicsLayout*)
 Q_DECLARE_METATYPE(QGraphicsLayoutItem*)
+Q_DECLARE_METATYPE(QGraphicsAnchorLayout*)
+Q_DECLARE_METATYPE(QGraphicsGridLayout*)
 DECLARE_POINTER_METATYPE(QGraphicsLinearLayout)
 
 DECLARE_VOID_NUMBER_METHOD(QGraphicsLinearLayout, removeAt)
@@ -42,24 +46,45 @@ DECLARE_VOID_QUAD_NUMBER_METHOD(QGraphicsLinearLayout, setContentsMargins)
 
 /////////////////////////////////////////////////////////////
 
-QGraphicsLayoutItem *layoutItem(QScriptContext *ctx, int index = 0)
+//    Q_DECLARE_METATYPE(QGraphicsLayoutItem*)
+QGraphicsLayoutItem *extractLayoutItem(QScriptContext *ctx, int index = 0)
 {
-    QObject *object = ctx->argument(index).toQObject();
-    QGraphicsLayoutItem *item = qobject_cast<QGraphicsWidget*>(object);
+    QScriptValue v = ctx->argument(index);
+    if (ctx->argumentCount() == 0 || v.isQObject()) {
+        QObject *object = v.toQObject();
+        QGraphicsWidget *w = qobject_cast<QGraphicsWidget *>(object);
+        if (!w) {
+            AppletInterface *interface = qobject_cast<AppletInterface*>(object);
+            if (!interface) {
+                interface =  qobject_cast<AppletInterface*>(ctx->engine()->globalObject().property("plasmoid").toQObject());
+            }
 
-    if (!item) {
-        item = qscriptvalue_cast<QGraphicsLayout*>(ctx->argument(index));
-    }
-
-    if (!item) {
-        AppletInterface *interface = qobject_cast<AppletInterface*>(object);
-
-        if (!interface) {
-            interface = qobject_cast<AppletInterface*>(ctx->engine()->globalObject().property("plasmoid").toQObject());
+            if (interface) {
+                w = interface->applet();
+            }
         }
 
-        if (interface) {
-            item = interface->applet();
+        return w;
+    }
+
+    QVariant variant = v.toVariant();
+    QGraphicsLayoutItem *item = variant.value<QGraphicsLayoutItem *>();
+    //this is horribly ugly code, but when a QLinearLayout* is stuffed into a QVariant,
+    //QVariant does not know that it is a QGraphicsLayoutItem. repeat for all subclasses
+    //of same
+    if (!item) {
+        item = variant.value<QGraphicsLayout *>();
+
+        if (!item) {
+            item = variant.value<QGraphicsLinearLayout *>();
+
+            if (!item) {
+                item = variant.value<QGraphicsGridLayout *>();
+
+                if (!item) {
+                    item = variant.value<QGraphicsAnchorLayout *>();
+                }
+            }
         }
     }
 
@@ -68,7 +93,7 @@ QGraphicsLayoutItem *layoutItem(QScriptContext *ctx, int index = 0)
 
 static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
 {
-    QGraphicsLayoutItem *parent = layoutItem(ctx);
+    QGraphicsLayoutItem *parent = extractLayoutItem(ctx);
 
     if (!parent) {
         return ctx->throwError(i18n("The parent must be a QGraphicsLayoutItem"));
@@ -86,7 +111,7 @@ BEGIN_DECLARE_METHOD(QGraphicsLinearLayout, orientation) {
 } END_DECLARE_METHOD
 
 BEGIN_DECLARE_METHOD(QGraphicsLinearLayout, setAlignment) {
-    QGraphicsLayoutItem *item = layoutItem(ctx);
+    QGraphicsLayoutItem *item = extractLayoutItem(ctx);
 
     if (!item) {
         return eng->undefinedValue();
@@ -97,7 +122,7 @@ BEGIN_DECLARE_METHOD(QGraphicsLinearLayout, setAlignment) {
 } END_DECLARE_METHOD
 
 BEGIN_DECLARE_METHOD(QGraphicsLinearLayout, insertItem) {
-    QGraphicsLayoutItem *item = layoutItem(ctx, 1);
+    QGraphicsLayoutItem *item = extractLayoutItem(ctx, 1);
 
     if (!item) {
         return eng->undefinedValue();
@@ -108,7 +133,7 @@ BEGIN_DECLARE_METHOD(QGraphicsLinearLayout, insertItem) {
 } END_DECLARE_METHOD
 
 BEGIN_DECLARE_METHOD(QGraphicsLinearLayout, removeItem) {
-    QGraphicsLayoutItem *item = layoutItem(ctx);
+    QGraphicsLayoutItem *item = extractLayoutItem(ctx);
 
     if (!item) {
         return eng->undefinedValue();
@@ -130,7 +155,7 @@ BEGIN_DECLARE_METHOD(QGraphicsLinearLayout, setStretchFactor) {
 } END_DECLARE_METHOD
 
 BEGIN_DECLARE_METHOD(QGraphicsLinearLayout, addItem) {
-    QGraphicsLayoutItem *item = layoutItem(ctx);
+    QGraphicsLayoutItem *item = extractLayoutItem(ctx);
     if (!item) {
         return ctx->throwError(QScriptContext::TypeError,
                                "QGraphicsLinearLayout.prototype.addItem: argument is not a GraphicsLayoutItem");
@@ -171,6 +196,11 @@ BEGIN_DECLARE_METHOD(QGraphicsLinearLayout, spacing) {
 QScriptValue constructLinearLayoutClass(QScriptEngine *eng)
 {
 //    QScriptValue proto = QScript::wrapGVPointer<QGraphicsLinearLayout>(eng, new QGraphicsLinearLayout(), );
+    qRegisterMetaType<QGraphicsLayoutItem*>();
+    QGraphicsLayoutItem * i = new QGraphicsLinearLayout;
+    QVariant v;
+    ///v.setValue<QGraphicsLayoutItem*>(i);
+    v.setValue<void*>(i);
     QScriptValue proto = QScript::wrapPointer<QGraphicsLinearLayout>(eng, new QGraphicsLinearLayout(), QScript::UserOwnership);
     const QScriptValue::PropertyFlags getter = QScriptValue::PropertyGetter;
     const QScriptValue::PropertyFlags setter = QScriptValue::PropertySetter;
