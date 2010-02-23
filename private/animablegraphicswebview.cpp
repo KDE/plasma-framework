@@ -32,7 +32,6 @@ using namespace Plasma;
 AnimableGraphicsWebView::AnimableGraphicsWebView(QGraphicsItem * parent)
     : KGraphicsWebView(parent)
 {
-    grabGesture(Qt::PinchGesture);
     m_dragToScroll = false;
 }
 
@@ -71,6 +70,16 @@ QPointF AnimableGraphicsWebView::scrollPosition() const
     } else {
         return page()->mainFrame()->scrollPosition();
     }
+}
+
+qreal AnimableGraphicsWebView::zoom() const
+{
+    return KGraphicsWebView::zoomFactor();
+}
+
+void AnimableGraphicsWebView::setZoom(const qreal zoom)
+{
+    KGraphicsWebView::setZoomFactor(zoom);
 }
 
 QRectF AnimableGraphicsWebView::viewportGeometry() const
@@ -153,24 +162,6 @@ void AnimableGraphicsWebView::wheelEvent(QGraphicsSceneWheelEvent *event)
     page()->event(&we);
 
     event->setAccepted(!m_dragToScroll);
-}
-
-bool AnimableGraphicsWebView::event(QEvent * event)
-{
-    if (event->type() == QEvent::Gesture) {
-        gestureEvent(static_cast<QGestureEvent*>(event));
-            return true;
-    }
-
-    return KGraphicsWebView::event(event);
-}
-
-void AnimableGraphicsWebView::gestureEvent(QGestureEvent *event)
-{
-    if (QGesture *pinch = event->gesture(Qt::PinchGesture)){
-        QPinchGesture *pinchGesture = static_cast<QPinchGesture *>(pinch);
-        setZoomFactor(zoomFactor() * pinchGesture->scaleFactor());
-    }
 }
 
 #include "animablegraphicswebview_p.moc"

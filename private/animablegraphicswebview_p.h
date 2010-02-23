@@ -29,8 +29,6 @@
 
 #include <kgraphicswebview.h>
 
-class QGestureEvent;
-
 namespace Plasma
 {
 
@@ -38,6 +36,7 @@ class AnimableGraphicsWebView : public KGraphicsWebView
 {
     Q_OBJECT
 
+    Q_PROPERTY(qreal zoomFactor READ zoom WRITE setZoom)
     Q_PROPERTY(QPointF scrollPosition READ scrollPosition WRITE setScrollPosition)
     Q_PROPERTY(QSizeF contentsSize READ contentsSize)
     Q_PROPERTY(QRectF viewportGeometry READ viewportGeometry)
@@ -51,16 +50,16 @@ public:
     QRectF viewportGeometry() const;
     void setDragToScroll(bool enable);
     bool dragToScroll() const;
+    qreal zoom() const;
+    void setZoom(const qreal zoom);
 
 protected:
-    bool event(QEvent * event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     void wheelEvent(QGraphicsSceneWheelEvent *event);
 
 private:
-    void gestureEvent(QGestureEvent *event);
     bool m_dragToScroll;
     QPointF m_lastScrollPosition;
 };
