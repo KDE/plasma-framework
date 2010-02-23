@@ -141,3 +141,5 @@ void PulseAnimation::updateCurrentTime(int currentTime)
 }
 
 } //namespace Plasma
+
+#include <../pulser_p.moc>

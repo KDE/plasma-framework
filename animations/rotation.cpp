@@ -170,3 +170,5 @@ void RotationAnimation::updateCurrentTime(int currentTime)
 }
 
 }
+
+#include <../rotation_p.moc>

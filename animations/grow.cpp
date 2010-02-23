@@ -96,3 +96,5 @@ void GrowAnimation::updateState(QAbstractAnimation::State newState, QAbstractAni
 
 } //namespace Plasma
 
+#include <../grow_p.moc>
+

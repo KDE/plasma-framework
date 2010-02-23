@@ -182,4 +182,7 @@ void RotationStackedAnimation::updateTransformations()
     targetWidget()->setTransformations(frontTransformation);
     backWidget()->setTransformations(backTransformation);
 }
-}
+
+} //namespace Plasma
+
+#include <../rotationstacked_p.moc>

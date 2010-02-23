@@ -94,3 +94,5 @@ void GeometryAnimation::updateCurrentTime(int currentTime)
 }
 
 } //namespace Plasma
+
+#include <../geometry_p.moc>
