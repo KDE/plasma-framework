@@ -32,6 +32,7 @@ using namespace Plasma;
 AnimableGraphicsWebView::AnimableGraphicsWebView(QGraphicsItem * parent)
     : KGraphicsWebView(parent)
 {
+    setAcceptTouchEvents(true);
     m_dragToScroll = false;
 }
 
