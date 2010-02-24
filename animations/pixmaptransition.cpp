@@ -144,16 +144,19 @@ void PixmapTransition::updateCurrentTime(int currentTime)
             if (m_currentPixmap.isNull()) {
                 m_currentPixmap = QPixmap(m_targetPixmap.size());
             }
-            m_currentPixmap.fill(QColor(0, 0, 0, (int)(((qreal)255)*qMin((qreal)0.98, delta))));
+            m_currentPixmap.fill(QColor(0, 0, 0, (int)(((qreal)255)*delta)));
             QPainter p(&m_currentPixmap);
             p.setCompositionMode(QPainter::CompositionMode_SourceIn);
             p.drawPixmap(m_currentPixmap.rect(), m_targetPixmap, m_targetPixmap.rect());
             p.end();
         } else if (m_targetPixmap.isNull()) {
             m_currentPixmap = m_startPixmap;
+            if (qFuzzyCompare(delta, qreal(1.0))) {
+                return;
+            }
             QPainter p(&m_currentPixmap);
             p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-            p.fillRect(m_currentPixmap.rect(), QColor(0, 0, 0, (int)(((qreal)255)*qMin((qreal)0.98, delta))));
+            p.fillRect(m_currentPixmap.rect(), QColor(0, 0, 0, (int)(((qreal)255)*delta)));
             p.end();
         }
     }
