@@ -257,7 +257,11 @@ void Label::resizeEvent(QGraphicsSceneResizeEvent *event)
 void Label::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsProxyWidget::mousePressEvent(event);
-    event->accept();
+    //FIXME: when QTextControl accept()s mouse press events (as of Qt 4.6.2, it processes them
+    //but never marks them as accepted) the following event->accept() can be removed
+    if (d->textSelectable) {
+        event->accept();
+    }
 }
 
 void Label::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
