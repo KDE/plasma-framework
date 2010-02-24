@@ -1037,7 +1037,7 @@ QScriptValue constructPainterClass(QScriptEngine *eng)
     proto.setProperty("backgroundMode", eng->newFunction(setBackgroundMode), setter);
 
     proto.setProperty("brush", eng->newFunction(brush), getter);
-    proto.setProperty("setBrush", eng->newFunction(setBrush), setter);
+    proto.setProperty("brush", eng->newFunction(setBrush), setter);
 
     proto.setProperty("brushOrigin", eng->newFunction(brushOrigin), getter);
     proto.setProperty("brushOrigin", eng->newFunction(setBrushOrigin), setter);
