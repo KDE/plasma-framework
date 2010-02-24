@@ -143,7 +143,7 @@ public:
      */
     void showDropZoneDelayed();
 
-    static bool s_positioning;
+    static bool s_positioningPanels;
 
     Containment *q;
     FormFactor formFactor;

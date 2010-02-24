@@ -253,6 +253,8 @@ public:
 
     void offscreenWidgetDestroyed(QObject *);
 
+    static bool s_positioningContainments;
+
     Corona *q;
     ImmutabilityType immutability;
     QString mimetype;
@@ -265,6 +267,8 @@ public:
     KShortcutsDialog shortcutsDlg;
     QMap<Containment::Type, ContainmentActionsPluginsConfig> containmentActionsDefaults;
 };
+
+bool CoronaPrivate::s_positioningContainments = false;
 
 Corona::Corona(QObject *parent)
     : QGraphicsScene(parent),
@@ -349,6 +353,77 @@ void Corona::initializeLayout(const QString &configName)
     KConfigGroup coronaConfig(config(), "General");
     setImmutability((ImmutabilityType)coronaConfig.readEntry("immutability", (int)Mutable));
 }
+
+bool containmentSortByPosition(const Containment *c1, const Containment *c2)
+{
+    return c1->id() < c2->id();
+}
+
+void Corona::layoutContainments()
+{
+    if (CoronaPrivate::s_positioningContainments) {
+        return;
+    }
+
+    CoronaPrivate::s_positioningContainments = true;
+
+    //TODO: we should avoid running this too often; consider compressing requests
+    //      with a timer.
+    QList<Containment*> c = containments();
+    QMutableListIterator<Containment*> it(c);
+
+    while (it.hasNext()) {
+        Containment *containment = it.next();
+        if (containment->containmentType() == Containment::PanelContainment ||
+            containment->containmentType() == Containment::CustomPanelContainment ||
+            offscreenWidgets().contains(containment)) {
+            // weed out all containments we don't care about at all
+            // e.g. Panels and ourself
+            it.remove();
+            continue;
+        }
+    }
+
+    qSort(c.begin(), c.end(), containmentSortByPosition);
+
+    if (c.isEmpty()) {
+        CoronaPrivate::s_positioningContainments = false;
+        return;
+    }
+
+    int column = 0;
+    int x = 0;
+    int y = 0;
+    int rowHeight = 0;
+
+    it.toFront();
+    while (it.hasNext()) {
+        Containment *containment = it.next();
+        containment->setPos(x, y);
+        //kDebug() << ++count << "setting to" << x << y;
+
+        int height = containment->size().height();
+        if (height > rowHeight) {
+            rowHeight = height;
+        }
+
+        ++column;
+
+        if (column == CONTAINMENT_COLUMNS) {
+            column = 0;
+            x = 0;
+            y += rowHeight + INTER_CONTAINMENT_MARGIN + TOOLBOX_MARGIN;
+            rowHeight = 0;
+        } else {
+            x += containment->size().width() + INTER_CONTAINMENT_MARGIN;
+        }
+        //kDebug() << "column: " << column << "; x " << x << "; y" << y << "; width was"
+        //         << containment->size().width();
+    }
+
+    CoronaPrivate::s_positioningContainments = false;
+}
+
 
 void Corona::loadLayout(const QString &configName)
 {

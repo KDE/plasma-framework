@@ -73,7 +73,7 @@
 namespace Plasma
 {
 
-bool ContainmentPrivate::s_positioning = false;
+bool ContainmentPrivate::s_positioningPanels = false;
 static const char defaultWallpaper[] = "image";
 static const char defaultWallpaperMode[] = "SingleImage";
 
@@ -1588,16 +1588,16 @@ void Containment::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
     Applet::resizeEvent(event);
 
-    if (!ContainmentPrivate::s_positioning) {
-        switch (d->type) {
-            case Containment::PanelContainment:
-            case Containment::CustomPanelContainment:
-                d->positionPanel();
-                break;
-            default:
-                d->positionContainments();
-                break;
-        }
+    switch (d->type) {
+        case Containment::PanelContainment:
+        case Containment::CustomPanelContainment:
+            d->positionPanel();
+            break;
+        default:
+            if (corona()) {
+                corona()->layoutContainments();
+            }
+            break;
     }
 
     if (d->wallpaper) {
@@ -1704,15 +1704,18 @@ QVariant Containment::itemChange(GraphicsItemChange change, const QVariant &valu
 {
     //FIXME if the applet is moved to another containment we need to unfocus it
 
-    if (isContainment() && !ContainmentPrivate::s_positioning &&
-        (change == QGraphicsItem::ItemSceneHasChanged || change == QGraphicsItem::ItemPositionHasChanged)) {
+    if (isContainment() &&
+        (change == QGraphicsItem::ItemSceneHasChanged ||
+         change == QGraphicsItem::ItemPositionHasChanged)) {
         switch (d->type) {
             case PanelContainment:
             case CustomPanelContainment:
                 d->positionPanel();
                 break;
             default:
-                d->positionContainments();
+                if (corona()) {
+                    corona()->layoutContainments();
+                }
                 break;
         }
     }
@@ -2310,84 +2313,15 @@ void ContainmentPrivate::appletAppearAnimationComplete()
     }
 }
 
-bool containmentSortByPosition(const Containment *c1, const Containment *c2)
-{
-    return c1->id() < c2->id();
-}
-
-void ContainmentPrivate::positionContainments()
-{
-    Corona *c = q->corona();
-    if (!c || ContainmentPrivate::s_positioning) {
-        return;
-    }
-
-    ContainmentPrivate::s_positioning = true;
-
-    //TODO: we should avoid running this too often; consider compressing requests
-    //      with a timer.
-    QList<Containment*> containments = c->containments();
-    QMutableListIterator<Containment*> it(containments);
-
-    while (it.hasNext()) {
-        Containment *containment = it.next();
-        if (containment->d->type == Containment::PanelContainment ||
-            containment->d->type == Containment::CustomPanelContainment ||
-            q->corona()->offscreenWidgets().contains(containment)) {
-            // weed out all containments we don't care about at all
-            // e.g. Panels and ourself
-            it.remove();
-            continue;
-        }
-    }
-
-    if (containments.isEmpty()) {
-        ContainmentPrivate::s_positioning = false;
-        return;
-    }
-
-    qSort(containments.begin(), containments.end(), containmentSortByPosition);
-    it.toFront();
-
-    int column = 0;
-    int x = 0;
-    int y = 0;
-    int rowHeight = 0;
-    //int count = 0;
-
-    //kDebug() << "+++++++++++++++++++++++++++++++++++++++++++++++++++" << containments.count();
-    while (it.hasNext()) {
-        Containment *containment = it.next();
-        containment->setPos(x, y);
-        //kDebug() << ++count << "setting to" << x << y;
-
-        int height = containment->size().height();
-        if (height > rowHeight) {
-            rowHeight = height;
-        }
-
-        ++column;
-
-        if (column == CONTAINMENT_COLUMNS) {
-            column = 0;
-            x = 0;
-            y += rowHeight + INTER_CONTAINMENT_MARGIN + TOOLBOX_MARGIN;
-            rowHeight = 0;
-        } else {
-            x += containment->size().width() + INTER_CONTAINMENT_MARGIN;
-        }
-        //kDebug() << "column: " << column << "; x " << x << "; y" << y << "; width was"
-        //         << containment->size().width();
-    }
-    //kDebug() << "+++++++++++++++++++++++++++++++++++++++++++++++++++";
-
-    ContainmentPrivate::s_positioning = false;
-}
-
 void ContainmentPrivate::positionPanel(bool force)
 {
     if (!q->scene()) {
         kDebug() << "no scene yet";
+        return;
+    }
+
+    // already positioning the panel - avoid infinite loops
+    if (ContainmentPrivate::s_positioningPanels) {
         return;
     }
 
@@ -2454,9 +2388,9 @@ void ContainmentPrivate::positionPanel(bool force)
     }
 
     if (p != newPos) {
-        ContainmentPrivate::s_positioning = true;
+        ContainmentPrivate::s_positioningPanels = true;
         q->setPos(newPos);
-        ContainmentPrivate::s_positioning = false;
+        ContainmentPrivate::s_positioningPanels = false;
     }
 }
 

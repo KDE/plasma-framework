@@ -289,6 +289,14 @@ public Q_SLOTS:
      */
     void requireConfigSync();
 
+    /**
+     * @since 4.5
+     * Layout the containments on this corona. The default implementation
+     * organizes them in a grid-like view, but subclasses can reimplement
+     * this slot to provide their own layout.
+     */
+    void layoutContainments();
+
 Q_SIGNALS:
     /**
      * This signal indicates a new containment has been added to
