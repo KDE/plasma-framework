@@ -1595,7 +1595,7 @@ void Containment::resizeEvent(QGraphicsSceneResizeEvent *event)
             break;
         default:
             if (corona()) {
-                corona()->layoutContainments();
+                QMetaObject::invokeMethod(corona(), "layoutContainments");
             }
             break;
     }
@@ -1714,7 +1714,7 @@ QVariant Containment::itemChange(GraphicsItemChange change, const QVariant &valu
                 break;
             default:
                 if (corona()) {
-                    corona()->layoutContainments();
+                    QMetaObject::invokeMethod(corona(), "layoutContainments");
                 }
                 break;
         }
