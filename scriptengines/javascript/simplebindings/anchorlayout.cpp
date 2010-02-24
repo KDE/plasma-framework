@@ -43,33 +43,11 @@ DECLARE_VOID_NUMBER_METHOD(QGraphicsAnchorLayout, removeAt)
 
 /////////////////////////////////////////////////////////////
 
-QGraphicsLayoutItem *convertToLayoutItem (QScriptContext *ctx, int index = 0)
-{
-    QObject *object = ctx->argument(index).toQObject();
-    QGraphicsLayoutItem *item = qobject_cast<QGraphicsWidget*>(object);
-
-    if (!item) {
-        item = qscriptvalue_cast<QGraphicsAnchorLayout*>(ctx->argument(index));
-    }
-
-    if (!item) {
-        AppletInterface *interface = qobject_cast<AppletInterface*>(object);
-
-        if (!interface) {
-            interface = qobject_cast<AppletInterface*>(ctx->engine()->globalObject().property("plasmoid").toQObject());
-        }
-
-        if (interface) {
-            item = interface->applet();
-        }
-    }
-
-    return item;
-}
+QGraphicsLayoutItem *extractLayoutItem (QScriptContext *ctx, int index = 0);
 
 static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
 {
-    QGraphicsLayoutItem *parent = convertToLayoutItem(ctx);
+    QGraphicsLayoutItem *parent = extractLayoutItem(ctx);
 
     if (!parent) {
         return ctx->throwError(i18n("The parent must be a QGraphicsLayoutItem"));
@@ -79,8 +57,8 @@ static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
 }
 
 BEGIN_DECLARE_METHOD(QGraphicsAnchorLayout, addAnchor) {
-    QGraphicsLayoutItem *item1 = convertToLayoutItem(ctx, 0);
-    QGraphicsLayoutItem *item2 = convertToLayoutItem(ctx, 2);
+    QGraphicsLayoutItem *item1 = extractLayoutItem(ctx, 0);
+    QGraphicsLayoutItem *item2 = extractLayoutItem(ctx, 2);
 
     if (!item1 || !item2) {
         return eng->undefinedValue();
@@ -93,8 +71,8 @@ BEGIN_DECLARE_METHOD(QGraphicsAnchorLayout, addAnchor) {
 } END_DECLARE_METHOD
 
 BEGIN_DECLARE_METHOD(QGraphicsAnchorLayout, anchor) {
-    QGraphicsLayoutItem *item1 = convertToLayoutItem(ctx, 0);
-    QGraphicsLayoutItem *item2 = convertToLayoutItem(ctx, 2);
+    QGraphicsLayoutItem *item1 = extractLayoutItem(ctx, 0);
+    QGraphicsLayoutItem *item2 = extractLayoutItem(ctx, 2);
 
     if (!item1 || !item2) {
         return eng->undefinedValue();
@@ -107,8 +85,8 @@ BEGIN_DECLARE_METHOD(QGraphicsAnchorLayout, anchor) {
 } END_DECLARE_METHOD
 
 BEGIN_DECLARE_METHOD(QGraphicsAnchorLayout, addCornerAnchors) {
-    QGraphicsLayoutItem *item1 = convertToLayoutItem(ctx, 0);
-    QGraphicsLayoutItem *item2 = convertToLayoutItem(ctx, 2);
+    QGraphicsLayoutItem *item1 = extractLayoutItem(ctx, 0);
+    QGraphicsLayoutItem *item2 = extractLayoutItem(ctx, 2);
 
     if (!item1 || !item2) {
         return eng->undefinedValue();
@@ -121,8 +99,8 @@ BEGIN_DECLARE_METHOD(QGraphicsAnchorLayout, addCornerAnchors) {
 } END_DECLARE_METHOD
 
 BEGIN_DECLARE_METHOD(QGraphicsAnchorLayout, addAnchors) {
-    QGraphicsLayoutItem *item1 = convertToLayoutItem(ctx, 0);
-    QGraphicsLayoutItem *item2 = convertToLayoutItem(ctx, 1);
+    QGraphicsLayoutItem *item1 = extractLayoutItem(ctx, 0);
+    QGraphicsLayoutItem *item2 = extractLayoutItem(ctx, 1);
 
     if (!item1 || !item2) {
         return eng->undefinedValue();

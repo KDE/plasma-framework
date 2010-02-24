@@ -72,33 +72,11 @@ DECLARE_INT_NUMBER_SET_METHOD(QGraphicsGridLayout, setColumnFixedWidth)
 
 /////////////////////////////////////////////////////////////
 
-QGraphicsLayoutItem *getLayoutItem(QScriptContext *ctx, int index = 0)
-{
-    QObject *object = ctx->argument(index).toQObject();
-    QGraphicsLayoutItem *item = qobject_cast<QGraphicsWidget*>(object);
-
-    if (!item) {
-        item = qscriptvalue_cast<QGraphicsLayout*>(ctx->argument(index));
-    }
-
-    if (!item) {
-        AppletInterface *interface = qobject_cast<AppletInterface*>(object);
-
-        if (!interface) {
-            interface = qobject_cast<AppletInterface*>(ctx->engine()->globalObject().property("plasmoid").toQObject());
-        }
-
-        if (interface) {
-            item = interface->applet();
-        }
-    }
-
-    return item;
-}
+QGraphicsLayoutItem *extractLayoutItem(QScriptContext *ctx, int index = 0);
 
 static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
 {
-    QGraphicsLayoutItem *parent = getLayoutItem(ctx);
+    QGraphicsLayoutItem *parent = extractLayoutItem(ctx);
 
     if (!parent) {
         return ctx->throwError(i18n("The parent must be a QGraphicsLayoutItem"));
@@ -108,7 +86,7 @@ static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
 }
 
 BEGIN_DECLARE_METHOD(QGraphicsGridLayout, setAlignment) {
-    QGraphicsLayoutItem *item = getLayoutItem(ctx);
+    QGraphicsLayoutItem *item = extractLayoutItem(ctx);
 
     if (!item) {
         return eng->undefinedValue();
@@ -119,7 +97,7 @@ BEGIN_DECLARE_METHOD(QGraphicsGridLayout, setAlignment) {
 } END_DECLARE_METHOD
 
 BEGIN_DECLARE_METHOD(QGraphicsGridLayout, addItem) {
-    QGraphicsLayoutItem *item = getLayoutItem(ctx);
+    QGraphicsLayoutItem *item = extractLayoutItem(ctx);
 
     if (!item) {
         return eng->undefinedValue();
