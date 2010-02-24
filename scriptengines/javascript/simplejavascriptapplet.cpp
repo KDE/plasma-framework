@@ -68,6 +68,7 @@ QScriptValue constructColorClass(QScriptEngine *engine);
 QScriptValue constructEasingCurveClass(QScriptEngine *engine);
 QScriptValue constructFontClass(QScriptEngine *engine);
 QScriptValue constructGraphicsItemClass(QScriptEngine *engine);
+QScriptValue constructIconClass(QScriptEngine *engine);
 QScriptValue constructKUrlClass(QScriptEngine *engine);
 QScriptValue constructLinearLayoutClass(QScriptEngine *engine);
 QScriptValue constructGridLayoutClass(QScriptEngine *engine);
@@ -572,6 +573,7 @@ void SimpleJavaScriptApplet::setupObjects()
     // Add stuff from Qt
     global.setProperty("QPainter", constructPainterClass(m_engine));
     global.setProperty("QGraphicsItem", constructGraphicsItemClass(m_engine));
+    global.setProperty("QIcon", constructIconClass(m_engine));
     global.setProperty("QTimer", constructTimerClass(m_engine));
     global.setProperty("QFont", constructFontClass(m_engine));
     global.setProperty("QColor", constructColorClass(m_engine));

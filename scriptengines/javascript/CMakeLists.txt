@@ -12,6 +12,7 @@ set(simple_javascript_engine_SRCS
     simplebindings/font.cpp
     simplebindings/filedialogproxy.cpp
     simplebindings/graphicsitem.cpp
+    simplebindings/icon.cpp
     simplebindings/linearlayout.cpp
     simplebindings/gridlayout.cpp
     simplebindings/painter.cpp
