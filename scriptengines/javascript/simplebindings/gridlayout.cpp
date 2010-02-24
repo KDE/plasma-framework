@@ -125,7 +125,23 @@ BEGIN_DECLARE_METHOD(QGraphicsGridLayout, addItem) {
         return eng->undefinedValue();
     }
 
-    self->addItem(item, ctx->argument(1).toInt32(), ctx->argument(2).toInt32());
+    int rowSpan = 1;
+    int colSpan = 1;
+    Qt::Alignment alignment = 0;
+    const int argCount = ctx->argumentCount();
+    if (argCount > 3) {
+        rowSpan = ctx->argument(3).toInt32();
+        if (argCount > 4) {
+            colSpan = ctx->argument(4).toInt32();
+
+            if (argCount > 5) {
+                alignment = static_cast<Qt::Alignment>(ctx->argument(5).toInt32());
+            }
+        }
+    }
+
+    self->addItem(item, ctx->argument(1).toInt32(), ctx->argument(2).toInt32(),
+                  rowSpan, colSpan, alignment);
     return eng->undefinedValue();
 } END_DECLARE_METHOD
 

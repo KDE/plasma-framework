@@ -184,6 +184,28 @@ static QScriptValue drawArc(QScriptContext *ctx, QScriptEngine *eng)
     return eng->undefinedValue();
 }
 
+static QScriptValue fillArc(QScriptContext *ctx, QScriptEngine *eng)
+{
+    DECLARE_SELF(QPainter, fillArc);
+    QPainterPath path;
+    if (ctx->argumentCount() == 6) {
+        // drawArc(x, y, height, width, startAngle, spanAngle)
+        path.arcTo(ctx->argument(0).toInt32(),
+                   ctx->argument(1).toInt32(),
+                   ctx->argument(2).toInt32(),
+                   ctx->argument(3).toInt32(),
+                   ctx->argument(4).toInt32(),
+                   ctx->argument(5).toInt32());
+    } else if (ctx->argumentCount() == 3) {
+        // drawArc(rectangle, startAngle, spanAngle)
+        path.arcTo(qscriptvalue_cast<QRectF>(ctx->argument(0)),
+                   ctx->argument(1).toInt32(),
+                   ctx->argument(2).toInt32());
+    }
+    self->fillPath(path, self->brush());
+    return eng->undefinedValue();
+}
+
 /////////////////////////////////////////////////////////////
 
 static QScriptValue drawChord(QScriptContext *ctx, QScriptEngine *eng)
@@ -230,6 +252,25 @@ static QScriptValue drawEllipse(QScriptContext *ctx, QScriptEngine *eng)
         // drawEllipse(rect)
         self->drawEllipse(qscriptvalue_cast<QRectF>(ctx->argument(0)));
     }
+    return eng->undefinedValue();
+}
+
+static QScriptValue fillEllipse(QScriptContext *ctx, QScriptEngine *eng)
+{
+    DECLARE_SELF(QPainter, fill);
+    QPainterPath path;
+    if (ctx->argumentCount() == 4) {
+        // drawEllipse(x, y, width, height)
+        path.addEllipse(ctx->argument(0).toInt32(),
+                        ctx->argument(1).toInt32(),
+                        ctx->argument(2).toInt32(),
+                        ctx->argument(3).toInt32());
+    } else if (ctx->argumentCount() == 1) {
+        // drawEllipse(rect)
+        path.addEllipse(qscriptvalue_cast<QRectF>(ctx->argument(0)));
+    }
+
+    self->fillPath(path, self->brush());
     return eng->undefinedValue();
 }
 
@@ -403,8 +444,20 @@ static QScriptValue drawPoints(QScriptContext *ctx, QScriptEngine *eng)
 static QScriptValue drawPolygon(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(QPainter, drawPolygon);
-    // ### fillRule (2nd argument)
-    self->drawPolygon(qscriptvalue_cast<QPolygonF>(ctx->argument(0)));
+
+    if (ctx->argumentCount() < 1) {
+        return eng->undefinedValue();
+    }
+
+    if (ctx->argumentCount() == 1) {
+        self->drawPolygon(qscriptvalue_cast<QPolygonF>(ctx->argument(0)));
+    } else {
+        QPointF *points = new QPointF[ctx->argumentCount()];
+        for (int i = 0; i < ctx->argumentCount(); ++i) {
+            points[i] = qscriptvalue_cast<QPointF>(ctx->argument(i));
+        }
+        delete[] points;
+    }
     return eng->undefinedValue();
 }
 
@@ -928,7 +981,7 @@ static QScriptValue strokePath(QScriptContext *ctx, QScriptEngine *eng)
     QPainterPath *path = qscriptvalue_cast<QPainterPath*>(ctx->argument(0));
     if (!path) {
         return ctx->throwError(QScriptContext::TypeError,
-                               "QPainter.prototype.strokePath: argument is not a PainterPath");
+                               "QPainter.prototype.fillPath: argument is not a PainterPath");
     }
     self->strokePath(*path, qscriptvalue_cast<QPen>(ctx->argument(1)));
     return eng->undefinedValue();
@@ -1117,6 +1170,8 @@ QScriptValue constructPainterClass(QScriptEngine *eng)
     ADD_METHOD(proto, drawRoundRect);
     ADD_METHOD(proto, drawText);
     ADD_METHOD(proto, drawTiledPixmap);
+    ADD_METHOD(proto, fillArc);
+    ADD_METHOD(proto, fillEllipse);
     ADD_METHOD(proto, eraseRect);
     ADD_METHOD(proto, fillPath);
     ADD_METHOD(proto, fillRect);
