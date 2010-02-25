@@ -85,7 +85,7 @@ public:
      * Adds an item to the combo box with the given text. The
      * item is appended to the list of existing items.
      */
-    void addItem(const QString &text);
+    Q_INVOKABLE void addItem(const QString &text);
 
 public Q_SLOTS:
     void clear();
