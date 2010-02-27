@@ -116,7 +116,6 @@ Label::Label(QGraphicsWidget *parent)
     QLabel *native = new QLabel;
     //disabled for now: triggers Qt bug 7254
     //native->setWindowFlags(native->windowFlags()|Qt::BypassGraphicsProxyWidget);
-    native->setTextInteractionFlags(Qt::TextBrowserInteraction);
     d->textSelectable = false;
     connect(native, SIGNAL(linkActivated(QString)), this, SIGNAL(linkActivated(QString)));
     connect(native, SIGNAL(linkHovered(QString)), this, SIGNAL(linkHovered(QString)));
@@ -191,6 +190,12 @@ bool Label::hasScaledContents() const
 
 void Label::setTextSelectable(bool enable)
 {
+    if (enable) {
+        native->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    } else {
+        native->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
+    }
+
     d->textSelectable = enable;
 }
 
