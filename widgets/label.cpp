@@ -115,7 +115,6 @@ Label::Label(QGraphicsWidget *parent)
 {
     QLabel *native = new QLabel;
     native->setWindowFlags(native->windowFlags()|Qt::BypassGraphicsProxyWidget);
-    native->setTextInteractionFlags(Qt::TextBrowserInteraction);
     d->textSelectable = false;
     connect(native, SIGNAL(linkActivated(QString)), this, SIGNAL(linkActivated(QString)));
     connect(native, SIGNAL(linkHovered(QString)), this, SIGNAL(linkHovered(QString)));
@@ -190,6 +189,12 @@ bool Label::hasScaledContents() const
 
 void Label::setTextSelectable(bool enable)
 {
+    if (enable) {
+        nativeWidget()->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    } else {
+        nativeWidget()->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
+    }
+
     d->textSelectable = enable;
 }
 
@@ -256,7 +261,10 @@ void Label::mousePressEvent(QGraphicsSceneMouseEvent *event)
     //FIXME: when QTextControl accept()s mouse press events (as of Qt 4.6.2, it processes them
     //but never marks them as accepted) the following event->accept() can be removed
     if (d->textSelectable) {
+        kDebug() << "accepting event";
         event->accept();
+    } else {
+        kDebug() << "not accepting event";
     }
 }
 
