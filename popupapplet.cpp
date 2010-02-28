@@ -46,6 +46,7 @@
 #include "plasma/extenders/extender.h"
 #include "plasma/extenders/extenderitem.h"
 #include "plasma/package.h"
+#include "plasma/scripting/appletscript.h"
 #include "plasma/tooltipmanager.h"
 #include "plasma/widgets/iconwidget.h"
 
@@ -550,8 +551,11 @@ Plasma::PopupPlacement PopupApplet::popupPlacement() const
     return d->popupPlacement;
 }
 
-void PopupApplet::popupEvent(bool)
+void PopupApplet::popupEvent(bool popped)
 {
+    if (Applet::d->script) {
+        emit Applet::d->script->popupEvent(popped);
+    }
 }
 
 void PopupApplet::setPassivePopup(bool passive)

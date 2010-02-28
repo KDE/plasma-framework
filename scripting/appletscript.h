@@ -148,6 +148,11 @@ Q_SIGNALS:
      */
     void saveState(KConfigGroup &group) const;
 
+    /**
+     * @see PopupApplet
+     */
+    void popupEvent(bool popped) const;
+
 public Q_SLOTS:
 
     /**
@@ -222,6 +227,7 @@ protected:
 
 private:
     friend class Applet;
+    friend class PopupApplet;
 
     AppletScriptPrivate *const d;
 };
