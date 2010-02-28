@@ -191,9 +191,9 @@ bool Label::hasScaledContents() const
 void Label::setTextSelectable(bool enable)
 {
     if (enable) {
-        native->setTextInteractionFlags(Qt::TextBrowserInteraction);
+        nativeWidget()->setTextInteractionFlags(Qt::TextBrowserInteraction);
     } else {
-        native->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
+        nativeWidget()->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
     }
 
     d->textSelectable = enable;
