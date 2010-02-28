@@ -141,4 +141,4 @@ Icon=text-x-script
 X-KDE-Library=plasma_appletscript_simple_javascript
 X-Plasma-API=javascript
 X-Plasma-ComponentTypes=Applet
-X-KDE-PluginInfo-Version=1
+X-KDE-PluginInfo-Version=2
