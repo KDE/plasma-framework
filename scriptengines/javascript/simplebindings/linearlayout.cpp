@@ -47,7 +47,7 @@ DECLARE_VOID_QUAD_NUMBER_METHOD(QGraphicsLinearLayout, setContentsMargins)
 /////////////////////////////////////////////////////////////
 
 //    Q_DECLARE_METATYPE(QGraphicsLayoutItem*)
-QGraphicsLayoutItem *extractLayoutItem(QScriptContext *ctx, int index = 0)
+QGraphicsLayoutItem *extractLayoutItem(QScriptContext *ctx, int index = 0, bool noExistingLayout = false)
 {
     QScriptValue v = ctx->argument(index);
     if (ctx->argumentCount() == 0 || v.isQObject()) {
@@ -64,7 +64,7 @@ QGraphicsLayoutItem *extractLayoutItem(QScriptContext *ctx, int index = 0)
             }
         }
 
-        if (w->layout()) {
+        if (noExistingLayout && w->layout()) {
             return 0;
         }
 
@@ -93,7 +93,7 @@ QGraphicsLayoutItem *extractLayoutItem(QScriptContext *ctx, int index = 0)
     }
 
     QGraphicsWidget *w = dynamic_cast<QGraphicsWidget *>(item);
-    if (w && w->layout()) {
+    if (noExistingLayout && w && w->layout()) {
         return 0;
     }
 
@@ -102,7 +102,7 @@ QGraphicsLayoutItem *extractLayoutItem(QScriptContext *ctx, int index = 0)
 
 static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
 {
-    QGraphicsLayoutItem *parent = extractLayoutItem(ctx);
+    QGraphicsLayoutItem *parent = extractLayoutItem(ctx, 0, true);
     //FIXME: don't leak memory when parent is 0
     return qScriptValueFromValue(eng, new QGraphicsLinearLayout(parent));
 }

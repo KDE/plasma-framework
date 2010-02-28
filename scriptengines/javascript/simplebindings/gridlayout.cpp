@@ -72,11 +72,11 @@ DECLARE_INT_NUMBER_SET_METHOD(QGraphicsGridLayout, setColumnFixedWidth)
 
 /////////////////////////////////////////////////////////////
 
-QGraphicsLayoutItem *extractLayoutItem(QScriptContext *ctx, int index = 0);
+QGraphicsLayoutItem *extractLayoutItem(QScriptContext *ctx, int index = 0, bool noExistingLayout = false);
 
 static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
 {
-    QGraphicsLayoutItem *parent = extractLayoutItem(ctx);
+    QGraphicsLayoutItem *parent = extractLayoutItem(ctx, 0, true);
     //FIXME: don't leak memory when parent is 0
     return qScriptValueFromValue(eng, new QGraphicsGridLayout(parent));
 }
