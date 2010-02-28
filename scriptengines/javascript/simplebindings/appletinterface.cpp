@@ -389,4 +389,39 @@ void PopupAppletInterface::setPopupIconByName(const QString &name)
     return popupApplet()->setPopupIcon(name);
 }
 
+void PopupAppletInterface::setPassivePopup(bool passive)
+{
+    popupApplet()->setPassivePopup(passive);
+}
+
+bool PopupAppletInterface::isPassivePopup() const
+{
+    return popupApplet()->isPassivePopup();
+}
+
+void PopupAppletInterface::togglePopup()
+{
+    popupApplet()->togglePopup();
+}
+
+void PopupAppletInterface::hidePopup()
+{
+    popupApplet()->hidePopup();
+}
+
+void PopupAppletInterface::showPopup()
+{
+    popupApplet()->showPopup();
+}
+
+void PopupAppletInterface::setPopupWidget(QGraphicsWidget *widget)
+{
+    popupApplet()->setGraphicsWidget(widget);
+}
+
+QGraphicsWidget *PopupAppletInterface::popupWidget()
+{
+    return popupApplet()->graphicsWidget();
+}
+
 #include "appletinterface.moc"

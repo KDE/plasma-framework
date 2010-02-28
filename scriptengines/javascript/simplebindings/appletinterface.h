@@ -282,6 +282,8 @@ class PopupAppletInterface : public AppletInterface
 {
     Q_OBJECT
     Q_PROPERTY(QIcon popupIcon READ popupIcon WRITE setPopupIcon)
+    Q_PROPERTY(bool passivePopup READ isPassivePopup WRITE setPassivePopup)
+    Q_PROPERTY(QGraphicsWidget *popupWidget READ popupWidget WRITE setPopupWidget)
 
 public:
     PopupAppletInterface(SimpleJavaScriptApplet *parent);
@@ -291,8 +293,17 @@ public:
 
     inline Plasma::PopupApplet *popupApplet() const { return static_cast<Plasma::PopupApplet *>(m_appletScriptEngine->applet()); }
 
+    void setPassivePopup(bool passive);
+    bool isPassivePopup() const;
+
+    void setPopupWidget(QGraphicsWidget *widget);
+    QGraphicsWidget *popupWidget();
+
 public Q_SLOTS:
     void setPopupIconByName(const QString &name);
+    void togglePopup();
+    void hidePopup();
+    void showPopup();
 };
 
 #endif

@@ -183,6 +183,13 @@ void SimpleJavaScriptApplet::extenderItemRestored(Plasma::ExtenderItem* item)
     callFunction("initExtenderItem", args);
 }
 
+void SimpleJavaScriptApplet::popupEvent(bool popped)
+{
+    QScriptValueList args;
+    args << popped;
+    callFunction("popupEvent", args);
+}
+
 void SimpleJavaScriptApplet::executeAction(const QString &name)
 {
     //callFunction("action_" + name);
@@ -329,6 +336,10 @@ void SimpleJavaScriptApplet::setupObjects()
     m_self = m_engine->newQObject(m_interface);
     m_self.setScope(global);
     global.setProperty("plasmoid", m_self);
+
+    if (isPopupApplet) {
+        connect(applet(), SIGNAL(popupEvent(bool)), this, SLOT(popupEvent(bool)));
+    }
 
     QScriptValue args = m_engine->newArray();
     int i = 0;
