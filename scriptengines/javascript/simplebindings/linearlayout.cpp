@@ -64,6 +64,10 @@ QGraphicsLayoutItem *extractLayoutItem(QScriptContext *ctx, int index = 0)
             }
         }
 
+        if (w->layout()) {
+            return 0;
+        }
+
         return w;
     }
 
@@ -88,17 +92,18 @@ QGraphicsLayoutItem *extractLayoutItem(QScriptContext *ctx, int index = 0)
         }
     }
 
+    QGraphicsWidget *w = dynamic_cast<QGraphicsWidget *>(item);
+    if (w && w->layout()) {
+        return 0;
+    }
+
     return item;
 }
 
 static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
 {
     QGraphicsLayoutItem *parent = extractLayoutItem(ctx);
-
-    if (!parent) {
-        return ctx->throwError(i18n("The parent must be a QGraphicsLayoutItem"));
-    }
-
+    //FIXME: don't leak memory when parent is 0
     return qScriptValueFromValue(eng, new QGraphicsLinearLayout(parent));
 }
 

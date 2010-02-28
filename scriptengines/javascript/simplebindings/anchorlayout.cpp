@@ -48,11 +48,7 @@ QGraphicsLayoutItem *extractLayoutItem (QScriptContext *ctx, int index = 0);
 static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
 {
     QGraphicsLayoutItem *parent = extractLayoutItem(ctx);
-
-    if (!parent) {
-        return ctx->throwError(i18n("The parent must be a QGraphicsLayoutItem"));
-    }
-
+    //FIXME: don't leak memory when parent is 0
     return qScriptValueFromValue(eng, new QGraphicsAnchorLayout(parent));
 }
 
