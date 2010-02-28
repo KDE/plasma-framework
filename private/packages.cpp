@@ -52,6 +52,8 @@ PlasmoidPackage::PlasmoidPackage(QObject *parent)
     addDirectoryDefinition("ui", "ui", i18n("User Interface"));
     setMimetypes("ui", mimetypes);
 
+    addDirectoryDefinition("data", "data", i18n("Data Files"));
+
     addDirectoryDefinition("scripts", "code", i18n("Executable Scripts"));
     mimetypes.clear();
     mimetypes << "text/plain";
