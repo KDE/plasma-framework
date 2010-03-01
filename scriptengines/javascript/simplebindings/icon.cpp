@@ -34,7 +34,8 @@ static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
     if (ctx->argumentCount() > 0) {
         QScriptValue v = ctx->argument(0);
         if (v.isString()) {
-            return qScriptValueFromValue(eng, KIcon(v.toString()));
+            QIcon icon = KIcon(v.toString());
+            return qScriptValueFromValue(eng, icon);
         } else if (v.isVariant()) {
             QVariant variant = v.toVariant();
             QPixmap p = variant.value<QPixmap>();
