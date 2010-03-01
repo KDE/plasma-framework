@@ -127,7 +127,9 @@ void AppletScript::configNeedsSaving() const
 void AppletScript::showConfigurationInterface()
 {
     if (applet()) {
-        applet()->d->generateGenericConfigDialog()->show();
+        KConfigDialog *dialog = applet()->d->generateGenericConfigDialog();
+        applet()->d->addStandardConfigurationPages(dialog);
+        dialog->show();
     }
 }
 
