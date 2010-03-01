@@ -128,14 +128,14 @@ QScriptValue ScriptEnv::runApplication(QScriptContext *context, QScriptEngine *e
 
     const QString app = context->argument(0).toString();
 
-    KService::Ptr service = KService::serviceByStorageId(app);
-    if (service) {
-        return KRun::run(*service, urls, 0);
-    }
-
     const QString exec = KGlobal::dirs()->findExe(app);
     if (!exec.isEmpty()) {
         return KRun::run(exec, urls, 0);
+    }
+
+    KService::Ptr service = KService::serviceByStorageId(app);
+    if (service) {
+        return KRun::run(*service, urls, 0);
     }
 
     return false;
