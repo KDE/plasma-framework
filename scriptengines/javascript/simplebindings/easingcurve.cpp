@@ -17,6 +17,7 @@
  */
 
 #include <QEasingCurve>
+#include <QMetaEnum>
 #include <QScriptValue>
 #include <QScriptEngine>
 #include <QScriptContext>
@@ -55,13 +56,20 @@ static QScriptValue type(QScriptContext *ctx, QScriptEngine *eng)
 
     if (ctx->argumentCount()) {
         QScriptValue arg = ctx->argument(0);
+
+        qint32 type = -1;
         if (arg.isNumber()) {
-            qint32 type = arg.toInt32();
+            type = arg.toInt32();
+        } else if (arg.isString()) {
+            QMetaObject meta = QEasingCurve::staticMetaObject;
+            QMetaEnum easingCurveEnum = meta.enumerator(meta.indexOfEnumerator("Type"));
+
+            type = easingCurveEnum.keyToValue(arg.toString().toAscii().data());
+        }
             if (type > -1 && type < QEasingCurve::Custom) {
                 self->setType(static_cast<QEasingCurve::Type>(type));
             }
         }
-    }
 
     return QScriptValue(eng, self->type());
 }
