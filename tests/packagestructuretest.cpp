@@ -43,11 +43,12 @@ void PackageStructureTest::type()
 void PackageStructureTest::directories()
 {
     QList<const char*> dirs;
-    dirs << "config" << "images" << "scripts" << "translations" << "ui";
+    dirs << "config" << "data" << "images" << "scripts" << "translations" << "ui";
 
     QList<const char*> psDirs = ps->directories();
 
     QCOMPARE(dirs.count(), psDirs.count());
+    
     for (int i = 0; i < psDirs.count(); ++i) {
         QVERIFY(qstrcmp(dirs[i], psDirs[i]) == 0);
     }
@@ -167,7 +168,7 @@ void PackageStructureTest::write()
 
     // check groups
     QStringList groups;
-    groups << "images" << "config" << "defaultconfig" << "scripts"
+    groups << "images" << "config" << "data" << "defaultconfig" << "scripts"
            << "mainconfigui" << "mainconfigxml" << "mainscript"
            << "translations" << "ui";
     groups.sort();
