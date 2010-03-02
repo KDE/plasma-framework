@@ -56,9 +56,9 @@ void serviceJobFromQScriptValue(const QScriptValue &scriptValue, ServiceJobPtr &
 
 void registerDataEngineMetaTypes(QScriptEngine *engine)
 {
-    qRegisterMetaType<DataEngine::Data>("Plasma::DataEngine::Data");
-    qRegisterMetaType<DataEngine::Data>("DataEngine::Data");
-    qScriptRegisterMapMetaType<DataEngine::Data>(engine);
+    qRegisterMetaType<Plasma::DataEngine::Data>("Plasma::DataEngine::Data");
+    qRegisterMetaType<Plasma::DataEngine::Data>("DataEngine::Data");
+    qScriptRegisterMapMetaType<Plasma::DataEngine::Data>(engine);
     qScriptRegisterMetaType<Plasma::Service *>(engine, qScriptValueFromService, serviceFromQScriptValue);
     qScriptRegisterMetaType<Plasma::DataEngine *>(engine, qScriptValueFromDataEngine, dataEngineFromQScriptValue);
     qScriptRegisterMetaType<Plasma::ServiceJob *>(engine, qScriptValueFromServiceJob, serviceJobFromQScriptValue);
