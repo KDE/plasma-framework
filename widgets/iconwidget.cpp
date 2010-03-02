@@ -795,7 +795,7 @@ QSizeF IconWidgetPrivate::layoutText(QTextLayout &layout, const QStyleOptionGrap
 
     if (size.width() > constraints.width() || size.height() > constraints.height()) {
         if (action) {
-            q->setToolTip(KGlobal::locale()->removeAcceleratorMarker(action->text()));
+            q->setToolTip(action->toolTip());
         }
         const QString elided = elidedText(layout, option, constraints);
         return layoutText(layout, elided, constraints.width());
