@@ -348,7 +348,9 @@ void Dialog::paintEvent(QPaintEvent *e)
 
 void Dialog::mouseMoveEvent(QMouseEvent *event)
 {
-    if (d->resizeAreas[Dialog::NorthEast].contains(event->pos())) {
+    if (event->modifiers() == Qt::AltModifier) {
+        unsetCursor();
+    } else if (d->resizeAreas[Dialog::NorthEast].contains(event->pos())) {
         setCursor(Qt::SizeBDiagCursor);
     } else if (d->resizeAreas[Dialog::NorthWest].contains(event->pos())) {
         setCursor(Qt::SizeFDiagCursor);
