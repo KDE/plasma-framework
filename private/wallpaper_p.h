@@ -21,6 +21,9 @@
 #ifndef PLASMA_WALLPAPERPRIVATE_H
 #define PLASMA_WALLPAPERPRIVATE_H
 
+#include <QtCore/QQueue>
+#include <QtCore/QWeakPointer>
+
 #include "plasma/scripting/wallpaperscript.h"
 #include "plasma/private/dataengineconsumer_p.h"
 #include "plasma/private/wallpaperrenderthread_p.h"
@@ -31,6 +34,16 @@ namespace Plasma
 class WallpaperPrivate : public DataEngineConsumer
 {
 public:
+    class RenderRequest
+    {
+        public:
+            QWeakPointer<Wallpaper> parent;
+            QString file;
+            QSize size;
+            Wallpaper::ResizeMethod resizeMethod;
+            QColor color;
+    };
+
     WallpaperPrivate(KService::Ptr service, Wallpaper *wallpaper);
 
     QString cachePath(const QString &key) const;
@@ -38,12 +51,13 @@ public:
                      int resizeMethod, const QColor &color) const;
     void initScript();
 
-    void renderCompleted(int token, const QImage &image,
+    void renderCompleted(WallpaperRenderThread *renderer,int token, const QImage &image,
                          const QString &sourceImagePath, const QSize &size,
                          int resizeMethod, const QColor &color);
     void setupScriptSupport();
 
-    static WallpaperRenderThread s_renderer;
+    static QList<WallpaperRenderThread *> s_renderers;
+    static QQueue<RenderRequest> s_renderQueue;
     static PackageStructure::Ptr s_packageStructure;
 
     Wallpaper *q;

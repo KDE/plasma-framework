@@ -477,7 +477,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
         QList<QAction*> contextActions;
 
     private:
-        Q_PRIVATE_SLOT(d, void renderCompleted(int token, const QImage &image,
+        Q_PRIVATE_SLOT(d, void renderCompleted(WallpaperRenderThread *renderer, int token, const QImage &image,
                                                const QString &sourceImagePath, const QSize &size,
                                                int resizeMethod, const QColor &color))
         Q_PRIVATE_SLOT(d, void initScript())

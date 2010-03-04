@@ -45,9 +45,10 @@ public:
 
     void setSize(const QSize &size);
     void setRatio(float ratio);
+    int currentToken();
 
 Q_SIGNALS:
-    void done(int token, const QImage &pixmap,
+    void done(WallpaperRenderThread *renderer,int token, const QImage &pixmap,
               const QString &sourceImagePath, const QSize &size,
               int resizeMethod, const QColor &color);
 protected:

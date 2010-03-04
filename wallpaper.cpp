@@ -25,6 +25,7 @@
 #include <QFileInfo>
 #include <QImage>
 #include <QAction>
+#include <QQueue>
 #include <QTimer>
 
 #include <kdebug.h>
@@ -33,6 +34,9 @@
 #include <kstandarddirs.h>
 
 #include <kio/job.h>
+
+#include <solid/device.h>
+#include <solid/deviceinterface.h>
 
 #include <version.h>
 
@@ -60,15 +64,14 @@ public:
     }
 };
 
-WallpaperRenderThread WallpaperPrivate::s_renderer;
+QList<WallpaperRenderThread *> WallpaperPrivate::s_renderers;
+QQueue<WallpaperPrivate::RenderRequest> WallpaperPrivate::s_renderQueue;
 PackageStructure::Ptr WallpaperPrivate::s_packageStructure(0);
 
 Wallpaper::Wallpaper(QObject * parentObject)
     : d(new WallpaperPrivate(KService::serviceByStorageId(QString()), this))
 {
     setParent(parentObject);
-    connect(&WallpaperPrivate::s_renderer, SIGNAL(done(int,QImage,QString,QSize,int,QColor)),
-            this, SLOT(renderCompleted(int,QImage,QString,QSize,int,QColor)));
 }
 
 Wallpaper::Wallpaper(QObject *parentObject, const QVariantList &args)
@@ -84,8 +87,6 @@ Wallpaper::Wallpaper(QObject *parentObject, const QVariantList &args)
     }
 
     setParent(parentObject);
-    connect(&WallpaperPrivate::s_renderer, SIGNAL(done(int,QImage,QString,QSize,int,QColor)),
-            this, SLOT(renderCompleted(int,QImage,QString,QSize,int,QColor)));
 }
 
 Wallpaper::~Wallpaper()
@@ -386,7 +387,35 @@ void Wallpaper::render(const QString &sourceImagePath, const QSize &size,
         }
     }
 
-    d->renderToken = WallpaperPrivate::s_renderer.render(sourceImagePath, size, resizeMethod, color);
+    for (int i = 0; i < WallpaperPrivate::s_renderers.size(); i++) {
+        if (d->renderToken == WallpaperPrivate::s_renderers[i]->currentToken()) {
+            d->renderToken = WallpaperPrivate::s_renderers[i]->render(sourceImagePath, size, resizeMethod, color);
+            return;
+        }
+    }
+
+    if (WallpaperPrivate::s_renderers.size() < qMax(Solid::Device::listFromType(Solid::DeviceInterface::Processor).count(), 1)) {
+        WallpaperRenderThread *renderThread = new WallpaperRenderThread();
+        WallpaperPrivate::s_renderers.append(renderThread);
+        d->renderToken = renderThread->render(sourceImagePath, size, resizeMethod, color);
+        connect(renderThread, SIGNAL(done(WallpaperRenderThread*,int,QImage,QString,QSize,int,QColor)),
+                this, SLOT(renderCompleted(WallpaperRenderThread*,int,QImage,QString,QSize,int,QColor)), Qt::UniqueConnection);
+    } else {
+         WallpaperPrivate::RenderRequest request;
+         request.parent = this;
+         request.file = sourceImagePath;
+         request.size = size;
+         request.resizeMethod = resizeMethod;
+         request.color = color;
+
+         for (int i = 0; i < WallpaperPrivate::s_renderQueue.size(); i++) {
+            if (WallpaperPrivate::s_renderQueue[i].parent.data() == this){
+                WallpaperPrivate::s_renderQueue[i] = request;
+                return;
+            }
+         }
+         WallpaperPrivate::s_renderQueue.append(request);
+    }
     //kDebug() << "rendering" << sourceImagePath << ", token is" << d->renderToken;
 }
 
@@ -438,10 +467,38 @@ QString WallpaperPrivate::cachePath(const QString &key) const
     return KGlobal::dirs()->locateLocal("cache", "plasma-wallpapers/" + key + ".png");
 }
 
-void WallpaperPrivate::renderCompleted(int token, const QImage &image,
+void WallpaperPrivate::renderCompleted(WallpaperRenderThread *currentRenderer, int token, const QImage &image,
                                        const QString &sourceImagePath, const QSize &size,
                                        int resizeMethod, const QColor &color)
 {
+    q->disconnect(currentRenderer, SIGNAL(done(WallpaperRenderThread*,int,QImage,QString,QSize,int,QColor)),
+                    q, SLOT(renderCompleted(WallpaperRenderThread*,int,QImage,QString,QSize,int,QColor)));
+
+    if (!s_renderQueue.isEmpty()) {
+        while (!s_renderQueue.isEmpty()) {
+            WallpaperPrivate::RenderRequest request = s_renderQueue.dequeue();
+
+            if (!request.parent) {
+                continue;
+            }
+
+            currentRenderer->wait();
+            request.parent.data()->d->renderToken = currentRenderer->render(request.file, request.size, request.resizeMethod, request.color);
+            QObject::connect(currentRenderer, SIGNAL(done(WallpaperRenderThread*,int,QImage,QString,QSize,int,QColor)),
+                    request.parent.data(), SLOT(renderCompleted(WallpaperRenderThread*,int,QImage,QString,QSize,int,QColor)), Qt::UniqueConnection);
+
+            break;
+        }
+    } else {
+         for (int i = 0; i < s_renderers.size(); i++) {
+            if (s_renderers[i] == currentRenderer){
+                s_renderers.removeAt(i);
+            }
+         }
+         currentRenderer->deleteLater();
+         currentRenderer = 0;
+    }
+
     if (token != renderToken) {
         //kDebug() << "render token mismatch" << token << renderToken;
         return;

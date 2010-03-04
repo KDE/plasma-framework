@@ -116,7 +116,7 @@ void WallpaperRenderThread::run()
         result.fill(color.rgba());
 
         if (file.isEmpty() || !QFile::exists(file)) {
-            emit done(token, result, file, size, method, color);
+            emit done(this, token, result, file, size, method, color);
             break;
         }
 
@@ -258,9 +258,14 @@ void WallpaperRenderThread::run()
         }
 
         // signal we're done
-        emit done(token, result, file, size, method, color);
+        emit done(this, token, result, file, size, method, color);
         break;
     }
+}
+
+int WallpaperRenderThread::currentToken()
+{
+    return m_currentToken;
 }
 
 } // namespace Plasma
