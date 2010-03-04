@@ -22,6 +22,7 @@
 #define PLASMA_WALLPAPERPRIVATE_H
 
 #include <QtCore/QQueue>
+#include <QtCore/QRunnable>
 #include <QtCore/QWeakPointer>
 
 #include "plasma/scripting/wallpaperscript.h"
@@ -51,6 +52,8 @@ public:
                      int resizeMethod, const QColor &color) const;
     void initScript();
 
+    bool findInCache(const QString &key, unsigned int lastModified = 0);
+
     void renderCompleted(WallpaperRenderThread *renderer,int token, const QImage &image,
                          const QString &sourceImagePath, const QSize &size,
                          int resizeMethod, const QColor &color);
@@ -73,6 +76,21 @@ public:
     bool initialized : 1;
     bool needsConfig : 1;
     bool scriptInitialized : 1;
+};
+
+class LoadImageThread : public QObject, public QRunnable
+{
+    Q_OBJECT
+    
+    private:
+        QString m_filePath;
+
+    Q_SIGNALS:
+        void done(const QImage &pixmap);
+
+    public:        
+        LoadImageThread(const QString &filePath);
+        void run();
 };
 
 } // namespace Plasma

@@ -67,6 +67,18 @@ class SaveImageThread : public QRunnable
         m_image.save(m_filePath);
     }
 };
+    
+LoadImageThread::LoadImageThread(const QString &filePath)
+{
+    m_filePath = filePath;
+}
+
+void LoadImageThread::run()
+{
+    QImage image;
+    image.load(m_filePath);
+    emit done(image);
+}
 
 class WallpaperWithPaint : public Wallpaper
 {
@@ -400,9 +412,7 @@ void Wallpaper::render(const QString &sourceImagePath, const QSize &size,
     if (d->cacheRendering) {
         QFileInfo info(sourceImagePath);
         QString cache = d->cacheKey(sourceImagePath, size, resizeMethod, color);
-        QImage img;
-        if (findInCache(cache, img, info.lastModified().toTime_t())) {
-            emit renderCompleted(img);
+        if (d->findInCache(cache, info.lastModified().toTime_t())) {
             return;
         }
     }
@@ -559,6 +569,29 @@ void WallpaperPrivate::initScript()
     }
 }
 
+bool WallpaperPrivate::findInCache(const QString &key, unsigned int lastModified)
+{
+    if (cacheRendering) {
+        QString cache = cachePath(key);
+        if (QFile::exists(cache)) {
+            if (lastModified > 0) {
+                QFileInfo info(cache);
+                if (info.lastModified().toTime_t() < lastModified) {
+                    return false;
+                }
+            }
+
+            LoadImageThread *loadImageT = new LoadImageThread(cache);
+            q->connect(loadImageT, SIGNAL(done(const QImage&)), q, SIGNAL(renderCompleted(const QImage&)));
+            QThreadPool::globalInstance()->start(loadImageT);
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
 bool Wallpaper::findInCache(const QString &key, QImage &image, unsigned int lastModified)
 {
     if (d->cacheRendering) {
@@ -613,3 +646,4 @@ const Package *Wallpaper::package() const
 } // Plasma namespace
 
 #include "wallpaper.moc"
+#include "private/wallpaper_p.moc"
