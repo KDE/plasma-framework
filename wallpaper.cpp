@@ -27,6 +27,8 @@
 #include <QAction>
 #include <QQueue>
 #include <QTimer>
+#include <QRunnable>
+#include <QThreadPool>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -47,6 +49,24 @@
 
 namespace Plasma
 {
+
+class SaveImageThread : public QRunnable
+{
+    QImage m_image;
+    QString m_filePath;
+
+    public:
+    SaveImageThread(const QImage &image, const QString &filePath)
+    {
+        m_image = image;
+        m_filePath = filePath;
+    }
+
+    void run()
+    {
+        m_image.save(m_filePath);
+    }
+};
 
 class WallpaperWithPaint : public Wallpaper
 {
@@ -570,7 +590,7 @@ void Wallpaper::insertIntoCache(const QString& key, const QImage &image)
         if (image.isNull()) {
             KIO::file_delete(d->cachePath(key));
         } else {
-            image.save(d->cachePath(key));
+            QThreadPool::globalInstance()->start(new SaveImageThread(image, d->cachePath(key)));
         }
     }
 }
