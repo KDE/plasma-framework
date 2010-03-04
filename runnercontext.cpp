@@ -382,7 +382,7 @@ bool RunnerContext::addMatches(const QString &term, const QList<QueryMatch> &mat
         d->matches.append(match);
 #ifndef NDEBUG
         if (d->matchesById.contains(match.id())) {
-                kDebug() << "Duplicate match id " << match.id() << "from" << match.runner()->name();
+            kDebug() << "Duplicate match id " << match.id() << "from" << match.runner()->name();
         }
 #endif
         d->matchesById.insert(match.id(), &d->matches.at(d->matches.size() - 1));
