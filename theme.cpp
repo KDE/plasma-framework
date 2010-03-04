@@ -128,6 +128,7 @@ public:
     bool useCache();
     void settingsFileChanged(const QString &);
     void setThemeName(const QString &themeName, bool writeSettings);
+    void onAppExitCleanup();
 
     static const char *defaultTheme;
     static const char *themeRcFile;
@@ -179,6 +180,14 @@ bool ThemePrivate::useCache()
     }
 
     return cacheTheme;
+}
+
+void ThemePrivate::onAppExitCleanup()
+{
+    pixmapsToCache.clear();
+    delete pixmapCache;
+    pixmapCache = 0;
+    cacheTheme = false;
 }
 
 QString ThemePrivate::findInTheme(const QString &image, const QString &theme) const
@@ -284,6 +293,10 @@ Theme::Theme(QObject *parent)
       d(new ThemePrivate(this))
 {
     settingsChanged();
+    if (QCoreApplication::instance()) {
+        connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()),
+                this, SLOT(onAppExitCleanup()));
+    }
 }
 
 Theme::Theme(const QString &themeName, QObject *parent)
@@ -295,6 +308,10 @@ Theme::Theme(const QString &themeName, QObject *parent)
     d->cacheTheme = false;
     setThemeName(themeName);
     d->cacheTheme = useCache;
+    if (QCoreApplication::instance()) {
+        connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()),
+                this, SLOT(onAppExitCleanup()));
+    }
 }
 
 Theme::~Theme()
