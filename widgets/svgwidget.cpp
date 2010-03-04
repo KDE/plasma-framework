@@ -57,9 +57,9 @@ SvgWidget::~SvgWidget()
 
 void SvgWidget::mouseReleaseEvent ( QGraphicsSceneMouseEvent * event  )
 {
-    if (receivers(SIGNAL(clicked(Qt::MouseButton)))){
+    if (receivers(SIGNAL(clicked(Qt::MouseButton)))) {
         emit clicked(event->button());
-    }else{
+    } else {
         event->accept();
     }
 }
