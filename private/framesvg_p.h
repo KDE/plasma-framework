@@ -106,7 +106,7 @@ public:
         frames.clear();
     }
 
-    QPixmap alphaMask(const QString &maskType);
+    QPixmap alphaMask();
     void generateBackground(FrameData *frame);
     void generateFrameBackground(FrameData *frame);
     QString cacheId(FrameData *frame, const QString &prefixToUse) const;

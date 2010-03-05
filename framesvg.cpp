@@ -271,13 +271,14 @@ QRectF FrameSvg::contentsRect() const
 
 QPixmap FrameSvg::alphaMask() const
 {
-    return d->alphaMask(QString());
+    //FIXME: the distinction between overlay and 
+    return d->alphaMask();
 }
 
 QRegion FrameSvg::mask() const
 {
     FrameData *frame = d->frames[d->prefix];
-    frame->cachedMask = QRegion(QBitmap(d->alphaMask(QString()).alphaChannel().createMaskFromColor(Qt::black)));
+    frame->cachedMask = QRegion(QBitmap(d->alphaMask().alphaChannel().createMaskFromColor(Qt::black)));
     return frame->cachedMask;
 }
 
@@ -352,14 +353,12 @@ void FrameSvg::paintFrame(QPainter *painter, const QPointF &pos)
     painter->drawPixmap(pos, frame->cachedBackground);
 }
 
-QPixmap FrameSvgPrivate::alphaMask(const QString &maskType)
+QPixmap FrameSvgPrivate::alphaMask()
 {
     FrameData *frame = frames[prefix];
     QString maskPrefix;
 
-    if (!maskType.isEmpty() && q->hasElement("mask-" + maskType + '-' + prefix + "center")) {
-        maskPrefix = "mask-" + maskType + '-';
-    } else if (q->hasElement("mask-" + prefix + "center")) {
+    if (q->hasElement("mask-" + prefix + "center")) {
         maskPrefix = "mask-";
     }
 
@@ -450,7 +449,7 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
             }
         }
 
-        overlay = alphaMask("overlay");
+        overlay = alphaMask();
         QPainter overlayPainter(&overlay);
         overlayPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
         //Tiling?
