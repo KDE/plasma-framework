@@ -109,9 +109,9 @@ void DialogPrivate::themeChanged()
 
     //kDebug() << leftWidth << topHeight << rightWidth << bottomHeight;
     if (Plasma::Theme::defaultTheme()->windowTranslucencyEnabled()) {
-        q->setMask(background->mask());
+        q->clearMask();
     } else {
-        q->setMask(QRect(QPoint(0, 0), q->size()));
+        q->setMask(background->mask());
     }
 
     FrameSvg::EnabledBorders borders = FrameSvg::AllBorders;
@@ -616,6 +616,7 @@ void Dialog::showEvent(QShowEvent * event)
     }
 
     emit dialogVisible(true);
+    WindowEffects::overrideShadow(winId(), true);
 }
 
 void Dialog::focusInEvent(QFocusEvent *event)
