@@ -222,6 +222,7 @@ void ToolTip::showEvent(QShowEvent *e)
     checkSize();
     QWidget::showEvent(e);
     d->preview->setInfo();
+    WindowEffects::overrideShadow(winId(), true);
 }
 
 void ToolTip::hideEvent(QHideEvent *e)
@@ -355,7 +356,11 @@ void ToolTip::resizeEvent(QResizeEvent *e)
 {
     QWidget::resizeEvent(e);
     d->background->resizeFrame(size());
-    setMask(d->background->mask());
+    if (Plasma::Theme::defaultTheme()->windowTranslucencyEnabled()) {
+        clearMask();
+    } else {
+        setMask(d->background->mask());
+    }
     d->preview->setInfo();
 
     if (isVisible()) {
