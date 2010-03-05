@@ -47,6 +47,7 @@ class PLASMA_EXPORT Label : public QGraphicsProxyWidget
     Q_PROPERTY(Qt::Alignment alignment READ alignment WRITE setAlignment)
     Q_PROPERTY(bool hasScaledContents READ hasScaledContents WRITE setScaledContents)
     Q_PROPERTY(bool textSelectable READ textSelectable WRITE setTextSelectable)
+    Q_PROPERTY(bool wordWrap READ wordWrap WRITE setWordWrap)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(QLabel *nativeWidget READ nativeWidget)
 
@@ -120,6 +121,20 @@ public:
      * @since 4.4
      */
     bool textSelectable() const;
+
+    /**
+     * Sets if the text of the label can wrap in multiple lines
+     *
+     * @arg wrap multiple lines or not
+     * @since 4.5
+     */
+    void setWordWrap(bool wrap);
+
+    /**
+     * @return true if the label text can wrap in multiple lines if too long
+     * @since 4.5
+     */
+    bool wordWrap() const;
 
     /**
      * Sets the stylesheet used to control the visual display of this Label

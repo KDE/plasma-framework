@@ -213,6 +213,16 @@ Qt::Alignment Label::alignment() const
     return nativeWidget()->alignment();
 }
 
+void Label::setWordWrap(bool wrap)
+{
+    nativeWidget()->setWordWrap(wrap);
+}
+
+bool Label::wordWrap() const
+{
+    return nativeWidget()->wordWrap();
+}
+
 void Label::setStyleSheet(const QString &stylesheet)
 {
     widget()->setStyleSheet(stylesheet);
