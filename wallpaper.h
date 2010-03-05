@@ -339,6 +339,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
 
         /**
          * Puts the wallpaper into preview mode
+         * @since 4.5
          */
         void setPreviewing(bool previewing);
 
