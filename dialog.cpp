@@ -311,6 +311,8 @@ Dialog::Dialog(QWidget *parent, Qt::WindowFlags f)
       d(new DialogPrivate(this))
 {
     setAttribute(Qt::WA_TranslucentBackground);
+    //WA_NoSystemBackground is going to fail combined with sliding popups
+    setAttribute(Qt::WA_NoSystemBackground, false);
     setWindowFlags(Qt::FramelessWindowHint);
     d->background = new FrameSvg(this);
     d->background->setImagePath("dialogs/background");
