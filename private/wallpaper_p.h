@@ -76,6 +76,7 @@ public:
     bool initialized : 1;
     bool needsConfig : 1;
     bool scriptInitialized : 1;
+    bool previewing : 1;
 };
 
 class LoadImageThread : public QObject, public QRunnable

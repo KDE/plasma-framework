@@ -62,6 +62,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
     Q_PROPERTY(KServiceAction renderingMode READ renderingMode)
     Q_PROPERTY(QList<KServiceAction> listRenderingModes READ listRenderingModes)
     Q_PROPERTY(bool usingRenderingCache READ isUsingRenderingCache WRITE setUsingRenderingCache)
+    Q_PROPERTY(bool previewing READ isPreviewing WRITE setPreviewing)
 
     public:
         /**
@@ -329,6 +330,17 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * Returns a list of wallpaper contextual actions (nothing by default)
          */
         QList<QAction*> contextualActions() const;
+
+        /**
+         * @return true if in preview mode, such as in a configuation dialog
+         * @since 4.5
+         */
+        bool isPreviewing() const;
+
+        /**
+         * Puts the wallpaper into preview mode
+         */
+        void setPreviewing(bool previewing);
 
     Q_SIGNALS:
         /**

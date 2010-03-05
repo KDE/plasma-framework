@@ -459,7 +459,8 @@ WallpaperPrivate::WallpaperPrivate(KService::Ptr service, Wallpaper *wallpaper) 
     cacheRendering(false),
     initialized(false),
     needsConfig(false),
-    scriptInitialized(false)
+    scriptInitialized(false),
+    previewing(false)
 {
     if (wallpaperDescription.isValid()) {
         QString api = wallpaperDescription.property("X-Plasma-API").toString();
@@ -636,6 +637,16 @@ QList<QAction*> Wallpaper::contextualActions() const
 void Wallpaper::setContextualActions(const QList<QAction*> &actions)
 {
     contextActions = actions;
+}
+
+bool Wallpaper::isPreviewing() const
+{
+    return d->previewing;
+}
+
+void Wallpaper::setPreviewing(bool previewing)
+{
+    d->previewing = previewing;
 }
 
 const Package *Wallpaper::package() const
