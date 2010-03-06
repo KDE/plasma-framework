@@ -109,6 +109,7 @@ void DialogPrivate::themeChanged()
 
     //kDebug() << leftWidth << topHeight << rightWidth << bottomHeight;
     if (Plasma::Theme::defaultTheme()->windowTranslucencyEnabled()) {
+        WindowEffects::enableBlurBehind(q->winId(), true, background->mask());
         q->clearMask();
     } else {
         q->setMask(background->mask());
@@ -474,6 +475,7 @@ void Dialog::resizeEvent(QResizeEvent *e)
     d->background->resizeFrame(e->size());
 
     if (Plasma::Theme::defaultTheme()->windowTranslucencyEnabled()) {
+        WindowEffects::enableBlurBehind(winId(), true, d->background->mask());
         clearMask();
     } else {
         setMask(d->background->mask());

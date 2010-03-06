@@ -357,6 +357,7 @@ void ToolTip::resizeEvent(QResizeEvent *e)
     QWidget::resizeEvent(e);
     d->background->resizeFrame(size());
     if (Plasma::Theme::defaultTheme()->windowTranslucencyEnabled()) {
+        WindowEffects::enableBlurBehind(winId(), true, d->background->mask());
         clearMask();
     } else {
         setMask(d->background->mask());
