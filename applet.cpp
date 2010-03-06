@@ -1162,7 +1162,7 @@ void Applet::flushPendingConstraintsEvents()
         }
 
         QAction *configAction = d->actions->action("configure");
-        if (configAction) {
+        if (configAction && configAction->isEnabled()) {
             if (d->isContainment) {
                 connect(configAction, SIGNAL(triggered()), this, SLOT(requestConfiguration()));
             } else {
@@ -1195,7 +1195,7 @@ void Applet::flushPendingConstraintsEvents()
         }
 
         action = d->actions->action("configure");
-        if (action) {
+        if (action && action->isEnabled()) {
             bool canConfig = unlocked || KAuthorized::authorize("plasma/allow_configure_when_locked");
             action->setVisible(canConfig);
             action->setEnabled(canConfig);
@@ -1556,12 +1556,20 @@ bool Applet::isPublished() const
     }
 }
 
-//it bugs me that this can get turned on and off at will. I don't see it being useful and it just
-//makes more work for me and more code duplication.
 void Applet::setHasConfigurationInterface(bool hasInterface)
 {
-    if (d->hasConfigurationInterface == hasInterface) {
+    if (hasInterface == d->hasConfigurationInterface) {
         return;
+    }
+
+    QAction *configAction = d->actions->action("configure");
+    if (configAction) {
+        bool enable = hasInterface;
+        if (enable) {
+            const bool unlocked = immutability() == Mutable;
+            enable = unlocked || KAuthorized::authorize("plasma/allow_configure_when_locked");
+        }
+        configAction->setEnabled(enable);
     }
 
     d->hasConfigurationInterface = hasInterface;
