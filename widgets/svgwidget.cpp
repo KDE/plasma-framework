@@ -77,7 +77,9 @@ Svg *SvgWidget::svg() const
 
 void SvgWidget::setElementID(const QString &elementID)
 {
-    d->svg->setContainsMultipleImages(!elementID.isNull());
+    if (d->svg) {
+        d->svg->setContainsMultipleImages(!elementID.isNull());
+    }
     d->elementID = elementID;
     update();
 }
