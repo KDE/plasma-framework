@@ -53,6 +53,7 @@
 #include "containmentactions.h"
 #include "containmentactionspluginsconfig.h"
 #include "corona.h"
+#include "extender.h"
 #include "extenderitem.h"
 #include "svg.h"
 #include "wallpaper.h"
@@ -65,6 +66,7 @@
 #include "private/containmentactionspluginsconfig_p.h"
 #include "private/desktoptoolbox_p.h"
 #include "private/extenderitemmimedata_p.h"
+#include "private/extenderapplet_p.h"
 #include "private/paneltoolbox_p.h"
 
 #include "plasma/plasma.h"
@@ -660,11 +662,8 @@ void ContainmentPrivate::containmentActions(KMenu &desktopMenu)
 
 void ContainmentPrivate::appletActions(KMenu &desktopMenu, Applet *applet, bool includeApplet)
 {
-    QList<QAction*> actions;
-
     if (includeApplet) {
-        actions = applet->contextualActions();
-        foreach (QAction *action, actions) {
+        foreach (QAction *action, applet->contextualActions()) {
             if (action) {
                 desktopMenu.addAction(action);
             }
@@ -960,6 +959,7 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
             applet->flushPendingConstraintsEvents();
         }
     }
+
     if (!delayInit) {
         applet->d->scheduleModificationNotification();
     }
@@ -1270,9 +1270,17 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
         const ExtenderItemMimeData *extenderData = qobject_cast<const ExtenderItemMimeData*>(mimeData);
         if (extenderData) {
             ExtenderItem *item = extenderData->extenderItem();
-            QRectF geometry(pos, item->size());
+            QRectF geometry(pos - extenderData->pointerOffset(), item->size());
             kDebug() << "desired geometry: " << geometry;
-            Applet *applet = q->addApplet("internal:extender", QVariantList(), geometry);
+            Applet *applet = qobject_cast<ExtenderApplet *>(item->extender() ?  item->extender()->applet() : 0);
+            if (applet) {
+                qreal left, top, right, bottom;
+                applet->getContentsMargins(&left, &top, &right, &bottom);
+                applet->setPos(geometry.topLeft() - QPointF(int(left), int(top)));
+                applet->show();
+            } else {
+                applet = q->addApplet("internal:extender", QVariantList(), geometry);
+            }
             item->setExtender(applet->extender());
         }
     } else if (KUrl::List::canDecode(mimeData)) {
@@ -2142,8 +2150,9 @@ void ContainmentPrivate::handleDisappeared(AppletHandle *handle)
     if (handles.contains(handle->applet())) {
         handles.remove(handle->applet());
         handle->detachApplet();
-        if (q->scene()) {
-            q->scene()->removeItem(handle);
+        QGraphicsScene *scene = q->scene();
+        if (scene && handle->scene() == scene) {
+            scene->removeItem(handle);
         }
         handle->deleteLater();
     }
