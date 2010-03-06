@@ -21,6 +21,7 @@
 #define EXTENDERITEMMIMEDATA_H
 
 #include <QMimeData>
+#include <QPoint>
 
 namespace Plasma
 {
@@ -45,8 +46,12 @@ class ExtenderItemMimeData : public QMimeData
 
         static QString mimeType();
 
+        void setPointerOffset(const QPoint &p);
+        QPoint pointerOffset() const;
+
     private:
         ExtenderItem *m_extenderItem;
+        QPoint m_offset;
 };
 
 } // namespace Plasma

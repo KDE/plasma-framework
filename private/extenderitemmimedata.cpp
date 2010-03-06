@@ -51,6 +51,16 @@ void ExtenderItemMimeData::setExtenderItem(ExtenderItem *item)
     m_extenderItem = item;
 }
 
+void ExtenderItemMimeData::setPointerOffset(const QPoint &p)
+{
+    m_offset = p;
+}
+
+QPoint ExtenderItemMimeData::pointerOffset() const
+{
+    return m_offset;
+}
+
 ExtenderItem *ExtenderItemMimeData::extenderItem() const
 {
     return m_extenderItem;
