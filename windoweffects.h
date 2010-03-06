@@ -41,7 +41,8 @@ namespace WindowEffects
         PresentWindows = 3,
         PresentWindowsGroup = 4,
         HighlightWindows = 5,
-        OverrideShadow = 6
+        OverrideShadow = 6,
+        BlurBehind = 7
     };
 
     /**
@@ -133,6 +134,22 @@ namespace WindowEffects
      * @since 4.4
      */
     PLASMA_EXPORT void overrideShadow(WId window, bool override);
+
+    /**
+     * Instructs the window manager to blur the background in the specified region
+     * behind the given window. Passing a null region will enable the blur effect
+     * for the whole window. The region is relative to the top-left corner of the
+     * client area.
+     *
+     * Note that you will usually want to set the region to the shape of the window,
+     * excluding any shadow or halo.
+     *
+     * @param window The window for which to enable the blur effect
+     * @param enable Enable the effect if @a true, disable it if @false 
+     * @param region The region within the window where the background will be blurred
+     * @since 4.5
+     */
+    PLASMA_EXPORT void enableBlurBehind(WId window, bool enable = true, const QRegion &region = QRegion());
 }
 
 } // namespace Plasma

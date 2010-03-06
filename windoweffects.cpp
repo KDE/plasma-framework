@@ -25,6 +25,7 @@
 
 #ifdef Q_WS_X11
 #include <X11/Xlib.h>
+#include <X11/Xatom.h>
 #include <QX11Info>
 #endif
 
@@ -61,6 +62,10 @@ bool isEffectAvailable(Effect effect)
         break;
     case OverrideShadow:
         effectName = "_KDE_SHADOW_OVERRIDE";
+        break;
+    case BlurBehind:
+        effectName = "_KDE_NET_WM_BLUR_REGION";
+        break;
     default:
         return false;
     }
@@ -292,6 +297,28 @@ void overrideShadow(WId window, bool override)
     } else {
         XChangeProperty(dpy, window, atom, atom, 32, PropModeReplace,
                         reinterpret_cast<unsigned char *>(data.data()), data.size());
+    }
+#endif
+}
+
+void enableBlurBehind(WId window, bool enable, const QRegion &region)
+{
+#ifdef Q_WS_X11
+    Display *dpy = QX11Info::display();
+    Atom atom = XInternAtom(dpy, "_KDE_NET_WM_BLUR_REGION", False);
+
+    if (enable) {
+        QVector<QRect> rects = region.rects();
+        QVector<quint32> data;
+        for (int i = 0; i < rects.count(); i++) {
+            const QRect r = rects[i];
+            data << r.x() << r.y() << r.width() << r.height();
+        }
+
+        XChangeProperty(dpy, window, atom, XA_CARDINAL, 32, PropModeReplace,
+                        reinterpret_cast<const unsigned char *>(data.constData()), data.size());
+    } else {
+        XDeleteProperty(dpy, window, atom);
     }
 #endif
 }
