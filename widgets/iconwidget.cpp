@@ -1227,10 +1227,10 @@ void IconWidget::setIcon(const QIcon &icon)
     if (!(d->states & IconWidgetPrivate::HoverState) && !d->iconChangeTimer->isActive() && d->oldIcon.isNull() && !d->icon.isNull() && !icon.isNull()) {
         d->oldIcon = d->icon;
         d->animateMainIcon(true, d->states);
-        d->iconChangeTimer->start(300);
     } else {
         d->oldIcon = QIcon();
     }
+    d->iconChangeTimer->start(300);
     d->icon = icon;
     update();
 }
