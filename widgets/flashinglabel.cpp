@@ -240,7 +240,7 @@ void FlashingLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
     Q_UNUSED(option)
     Q_UNUSED(widget)
 
-    if (d->anim.data()) {
+    if (d->anim.data() && d->anim.data()->state() == QAbstractAnimation::Running) {
         Plasma::Animation *animation = d->anim.data();
         painter->drawPixmap(0, 0, qvariant_cast<QPixmap>(animation->property("currentPixmap")));
     } else {
