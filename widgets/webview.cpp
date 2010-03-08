@@ -50,7 +50,6 @@ public:
 
     void loadingFinished(bool success);
     void dragTimeoutExpired();
-    void delayedViewSync();
 
     WebView *q;
     AnimableGraphicsWebView *webView;
@@ -264,7 +263,7 @@ QVariant WebView::itemChange(GraphicsItemChange change, const QVariant &value)
         //FIXME: QWebPage _requires_ a QWidget view to not crash in places such as 
         // WebCore::PopupMenu::show() due to hostWindow()->platformPageClient() == NULL
         // because QWebPage::d->client is NULL
-        QTimer::singleShot(0, this, SLOT(delayedViewSync()));
+        d->webView->page()->setView(viewFor(this));
     }
     return QGraphicsWidget::itemChange(change, value);
 }
@@ -290,11 +289,6 @@ void WebViewPrivate::loadingFinished(bool success)
     q->updateGeometry();
     emit q->loadFinished(success);
     q->update();
-}
-
-void WebViewPrivate::delayedViewSync()
-{
-    webView->page()->setView(viewFor(q));
 }
 
 } // namespace Plasma

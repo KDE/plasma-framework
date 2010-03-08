@@ -216,7 +216,6 @@ class PLASMA_EXPORT WebView : public QGraphicsWidget
 
     private:
         Q_PRIVATE_SLOT(d, void loadingFinished(bool success))
-        Q_PRIVATE_SLOT(d, void delayedViewSync())
 
         WebViewPrivate * const d;
         friend class WebViewPrivate;
