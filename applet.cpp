@@ -1096,6 +1096,15 @@ void Applet::showMessage(const QIcon &icon, const QString &message, const Messag
         KWindowSystem::setState(d->messageDialog.data()->winId(), NET::SkipTaskbar | NET::SkipPager);
         d->messageDialog.data()->setGraphicsWidget(mainWidget);
         connect(d->messageDialog.data(), SIGNAL(destroyed(QObject*)), mainWidget, SLOT(deleteLater()));
+
+        // if we are going to show it in a popup, then at least make sure it can be dismissed
+        if (buttonLayout->count() < 1) {
+            PushButton *ok = new PushButton(mainWidget);
+            ok->setText(i18n("OK"));
+            ok->setIcon(KIcon("dialog-ok"));
+            buttonLayout->addItem(ok);
+            connect(ok, SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
+        }
     } else {
         delete d->messageDialog.data();
         d->createMessageOverlay();
