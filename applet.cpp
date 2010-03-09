@@ -352,15 +352,22 @@ void Applet::setFailedToLaunch(bool failed, const QString &reason)
     d->failed = failed;
     prepareGeometryChange();
 
+
     foreach (QGraphicsItem *item, childItems()) {
         if (!dynamic_cast<AppletHandle *>(item)) {
             delete item;
         }
     }
+
+    d->messageOverlay = 0;
+    if (d->messageDialog) {
+        d->messageDialog.data()->deleteLater();
+        d->messageDialog.clear();
+    }
+
     setLayout(0);
 
     if (failed) {
-        d->destroyMessageOverlay();
         setBackgroundHints(d->backgroundHints|StandardBackground);
 
         QGraphicsLinearLayout *failureLayout = new QGraphicsLinearLayout(this);
