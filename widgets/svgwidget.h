@@ -36,7 +36,7 @@ class PLASMA_EXPORT SvgWidget : public QGraphicsWidget
 {
     Q_OBJECT
 
-    Q_PROPERTY(Svg *svg READ svg WRITE setSvg)
+    Q_PROPERTY(Plasma::Svg *svg READ svg WRITE setSvg)
     Q_PROPERTY(QString elementID READ elementID WRITE setElementID)
 
     public:
