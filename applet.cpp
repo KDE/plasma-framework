@@ -1167,15 +1167,15 @@ void Applet::flushPendingConstraintsEvents()
         if (closeApplet) {
             closeApplet->setEnabled(unlocked);
             closeApplet->setVisible(unlocked);
-            connect(closeApplet, SIGNAL(triggered(bool)), this, SLOT(selectItemToDestroy()));
+            connect(closeApplet, SIGNAL(triggered(bool)), this, SLOT(selectItemToDestroy()), Qt::UniqueConnection);
         }
 
         QAction *configAction = d->actions->action("configure");
         if (configAction && configAction->isEnabled()) {
             if (d->isContainment) {
-                connect(configAction, SIGNAL(triggered()), this, SLOT(requestConfiguration()));
+                connect(configAction, SIGNAL(triggered(bool)), this, SLOT(requestConfiguration()), Qt::UniqueConnection);
             } else {
-                connect(configAction, SIGNAL(triggered(bool)), this, SLOT(showConfigurationInterface()));
+                connect(configAction, SIGNAL(triggered(bool)), this, SLOT(showConfigurationInterface()), Qt::UniqueConnection);
             }
 
             bool canConfig = unlocked || KAuthorized::authorize("plasma/allow_configure_when_locked");
@@ -1185,13 +1185,13 @@ void Applet::flushPendingConstraintsEvents()
 
         QAction *runAssociatedApplication = d->actions->action("run associated application");
         if (runAssociatedApplication) {
-            connect(runAssociatedApplication, SIGNAL(triggered(bool)), this, SLOT(runAssociatedApplication()));
+            connect(runAssociatedApplication, SIGNAL(triggered(bool)), this, SLOT(runAssociatedApplication()), Qt::UniqueConnection);
         }
 
         d->updateShortcuts();
         Corona * corona = qobject_cast<Corona*>(scene());
         if (corona) {
-            connect(corona, SIGNAL(shortcutsChanged()), this, SLOT(updateShortcuts()));
+            connect(corona, SIGNAL(shortcutsChanged()), this, SLOT(updateShortcuts()), Qt::UniqueConnection);
         }
     }
 
