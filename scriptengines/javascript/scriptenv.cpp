@@ -65,7 +65,7 @@ QScriptEngine *ScriptEnv::engine() const
     return m_engine;
 }
 
-ScriptEnv *ScriptEnv::findScriptEnv( QScriptEngine *engine )
+ScriptEnv *ScriptEnv::findScriptEnv(QScriptEngine *engine)
 {
     QScriptValue global = engine->globalObject();
     return qscriptvalue_cast<ScriptEnv*>(global.property("__plasma_scriptenv"));
@@ -106,12 +106,17 @@ bool ScriptEnv::include(const QString &path)
 
     m_engine->evaluate(script, path);
 
+    return !checkForErrors(true);
+}
+
+bool ScriptEnv::checkForErrors(bool fatal)
+{
     if (m_engine->hasUncaughtException()) {
-        emit reportError(this, true);
-        return false;
+        emit reportError(this, fatal);
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 QScriptValue ScriptEnv::runApplication(QScriptContext *context, QScriptEngine *engine)
@@ -272,8 +277,7 @@ bool ScriptEnv::importExtensions(const KPluginInfo &info, QScriptValue &obj, Aut
             }
         }
 
-        if (m_engine->hasUncaughtException()) {
-            emit reportError(this, true);
+        if (checkForErrors(true)) {
             return false;
         } else {
             m_extensions << extension;
@@ -299,9 +303,7 @@ bool ScriptEnv::importExtensions(const KPluginInfo &info, QScriptValue &obj, Aut
             }
         }
 
-        if (m_engine->hasUncaughtException()) {
-            emit reportError(this, false);
-        } else {
+        if (!checkForErrors(false)) {
             m_extensions << extension;
         }
     }

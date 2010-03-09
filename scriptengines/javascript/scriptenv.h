@@ -44,13 +44,15 @@ public:
     QScriptEngine *engine() const;
 
     /** Returns the ScriptEnv in use for a given QScriptEngine or 0. */
-    static ScriptEnv *findScriptEnv( QScriptEngine *engine );
+    static ScriptEnv *findScriptEnv(QScriptEngine *engine);
 
     void registerEnums(QScriptValue &scriptValue, const QMetaObject &meta);
     bool include(const QString &path);
 
     bool importExtensions(const KPluginInfo &info, QScriptValue &obj, Authorization &authorizer);
     QSet<QString> loadedExtensions() const;
+
+    bool checkForErrors(bool fatal);
 
 Q_SIGNALS:
     void reportError(ScriptEnv *engine, bool fatal);
