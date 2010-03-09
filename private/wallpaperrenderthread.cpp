@@ -35,6 +35,8 @@ WallpaperRenderThread::WallpaperRenderThread(QObject *parent)
 {
     m_abort = false;
     m_restart = false;
+    
+    setPriority(QThread::LowPriority);
 }
 
 WallpaperRenderThread::~WallpaperRenderThread()
