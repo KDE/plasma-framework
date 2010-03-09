@@ -183,6 +183,12 @@ void SimpleJavaScriptApplet::extenderItemRestored(Plasma::ExtenderItem* item)
     callFunction("initExtenderItem", args);
 }
 
+void SimpleJavaScriptApplet::activate()
+{
+    QScriptValueList args;
+    callFunction("activate", args);
+}
+
 void SimpleJavaScriptApplet::popupEvent(bool popped)
 {
     QScriptValueList args;
@@ -302,6 +308,8 @@ bool SimpleJavaScriptApplet::init()
 {
     connect(applet(), SIGNAL(extenderItemRestored(Plasma::ExtenderItem*)),
             this, SLOT(extenderItemRestored(Plasma::ExtenderItem*)));
+    connect(applet(), SIGNAL(activate()),
+            this, SLOT(activate()));
     setupObjects();
 
     AppletAuthorization auth(this);

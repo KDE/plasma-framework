@@ -65,6 +65,7 @@ public Q_SLOTS:
     void collectGarbage();
     void extenderItemRestored(Plasma::ExtenderItem* item);
     void popupEvent(bool popped);
+    void activate();
 
 private Q_SLOTS:
     void engineReportsError(ScriptEnv *engine, bool fatal);
