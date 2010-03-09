@@ -219,7 +219,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
          (f == Plasma::Vertical || f == Plasma::Horizontal))) {
         QGraphicsLinearLayout *lay = dynamic_cast<QGraphicsLinearLayout *>(q->layout());
 
-        if (icon && !icon->icon().isNull() && lay) {
+        if (icon && !icon->icon().isNull() && lay && lay->count() > 0) {
             lay->removeAt(0);
         }
 
