@@ -1171,16 +1171,18 @@ void Applet::flushPendingConstraintsEvents()
         }
 
         QAction *configAction = d->actions->action("configure");
-        if (configAction && configAction->isEnabled()) {
+        if (configAction) {
             if (d->isContainment) {
                 connect(configAction, SIGNAL(triggered(bool)), this, SLOT(requestConfiguration()), Qt::UniqueConnection);
             } else {
                 connect(configAction, SIGNAL(triggered(bool)), this, SLOT(showConfigurationInterface()), Qt::UniqueConnection);
             }
 
-            bool canConfig = unlocked || KAuthorized::authorize("plasma/allow_configure_when_locked");
-            configAction->setVisible(canConfig);
-            configAction->setEnabled(canConfig);
+            if (configAction->isEnabled()) {
+                bool canConfig = unlocked || KAuthorized::authorize("plasma/allow_configure_when_locked");
+                configAction->setVisible(canConfig);
+                configAction->setEnabled(canConfig);
+            }
         }
 
         QAction *runAssociatedApplication = d->actions->action("run associated application");
