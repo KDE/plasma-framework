@@ -58,6 +58,7 @@ class AppletInterface : public QObject
     Q_ENUMS(QtAlignment)
     Q_ENUMS(QtMouseButton)
     Q_ENUMS(AnimationDirection)
+    Q_ENUMS(IntervalAlignment)
     Q_PROPERTY(AspectRatioMode aspectRatioMode READ aspectRatioMode WRITE setAspectRatioMode)
     Q_PROPERTY(FormFactor formFactor READ formFactor)
     Q_PROPERTY(Location location READ location)
@@ -190,6 +191,12 @@ enum QtScrollBarPolicy {
 enum AnimationDirection {
     AnimationForward = QAbstractAnimation::Forward,
     AnimationBackward = QAbstractAnimation::Backward
+};
+
+enum IntervalAlignment {
+    NoAlignment = 0,
+    AlignToMinute,
+    AlignToHour
 };
 //-------------------------------------------------------------------
 
