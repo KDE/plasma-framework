@@ -78,15 +78,6 @@ public:
     double niceVertMax;
     double niceVertRange;
 
-    bool fillPlots;
-    bool showLabels;
-    bool showTopBar;
-    bool stackPlots;
-    bool useAutoRange;
-    bool showThinFrame;
-
-    bool showVerticalLines;
-    bool verticalLinesScroll;
     uint verticalLinesOffset;
     uint verticalLinesDistance;
     QColor verticalLinesColor;
@@ -110,6 +101,16 @@ public:
 
     QList<PlotColor> plotColors;
     QList<QList<double> > plotData;
+
+    bool fillPlots : 1;
+    bool showLabels : 1;
+    bool showTopBar : 1;
+    bool stackPlots : 1;
+    bool useAutoRange : 1;
+    bool showThinFrame : 1;
+
+    bool showVerticalLines : 1;
+    bool verticalLinesScroll : 1;
 };
 
 SignalPlotter::SignalPlotter(QGraphicsItem *parent)
