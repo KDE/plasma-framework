@@ -250,8 +250,14 @@ void AppletInterface::setAction(const QString &name, const QString &text, const 
         m_actionSignals->setMapping(action, name);
     }
 
-    action->setIcon(icon.isEmpty() ? QIcon() : KIcon(icon));
-    action->setShortcut(shortcut);
+    if (!icon.isEmpty()) {
+        action->setIcon(KIcon(icon));
+    }
+
+    if (!shortcut.isEmpty()) {
+        action->setShortcut(shortcut);
+    }
+
     action->setObjectName(name);
 }
 

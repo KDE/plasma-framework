@@ -198,18 +198,8 @@ void SimpleJavaScriptApplet::popupEvent(bool popped)
 
 void SimpleJavaScriptApplet::executeAction(const QString &name)
 {
-    //callFunction("action_" + name);
-    QScriptValue fun = m_self.property("action_" + name);
-    if (fun.isFunction()) {
-        QScriptContext *ctx = m_engine->pushContext();
-        ctx->setActivationObject(m_self);
-        fun.call(m_self);
-        m_engine->popContext();
-
-        if (m_engine->hasUncaughtException()) {
-            reportError(m_env);
-        }
-    }
+    QScriptValueList args;
+    callFunction("action_" + name, args);
 }
 
 void SimpleJavaScriptApplet::paintInterface(QPainter *p, const QStyleOptionGraphicsItem *option, const QRect &contentsRect)
