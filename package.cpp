@@ -105,11 +105,15 @@ QString Package::filePath(const char *fileType, const QString &filename) const
         return QString();
     }
 
-    QString path = d->structure->path(fileType);
+    QString path;
 
-    if (path.isEmpty()) {
-        kDebug() << "no matching path came of it, while looking for" << fileType << filename;
-        return QString();
+    if (qstrlen(fileType) != 0) {
+        path = d->structure->path(fileType);
+
+        if (path.isEmpty()) {
+            kDebug() << "no matching path came of it, while looking for" << fileType << filename;
+            return QString();
+        }
     }
 
     path.prepend(d->structure->path() + d->structure->contentsPrefix());
