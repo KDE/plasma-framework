@@ -42,6 +42,7 @@ Q_DECLARE_METATYPE(Plasma::Animation*)
 Q_DECLARE_METATYPE(Plasma::Applet*)
 Q_DECLARE_METATYPE(Plasma::Extender*)
 Q_DECLARE_METATYPE(Plasma::VideoWidget::Controls)
+Q_DECLARE_METATYPE(Plasma::Svg*)
 
 Q_DECLARE_METATYPE(AppletInterface*)
 
@@ -167,10 +168,22 @@ QScriptValue qScriptValueFromQGraphicsWidget(QScriptEngine *engine, const QGraph
     return engine->newQObject(const_cast<QGraphicsWidget *>(anim), QScriptEngine::AutoOwnership, QScriptEngine::PreferExistingWrapperObject);
 }
 
-void qGraphicsWidgetFromQScriptValue(const QScriptValue &scriptValue, QGraphicsWidgetPtr &anim)
+void graphicsWidgetFromQScriptValue(const QScriptValue &scriptValue, QGraphicsWidgetPtr &anim)
 {
     QObject *obj = scriptValue.toQObject();
     anim = static_cast<QGraphicsWidget *>(obj);
+}
+
+typedef Plasma::Svg * SvgPtr;
+QScriptValue qScriptValueFromSvg(QScriptEngine *engine, const SvgPtr &anim)
+{
+    return engine->newQObject(const_cast<Plasma::Svg *>(anim), QScriptEngine::AutoOwnership, QScriptEngine::PreferExistingWrapperObject);
+}
+
+void svgFromQScriptValue(const QScriptValue &scriptValue, SvgPtr &anim)
+{
+    QObject *obj = scriptValue.toQObject();
+    anim = static_cast<Plasma::Svg *>(obj);
 }
 
 typedef Plasma::Extender *ExtenderPtr;
@@ -189,7 +202,8 @@ using namespace Plasma;
 
 void registerSimpleAppletMetaTypes(QScriptEngine *engine)
 {
-    qScriptRegisterMetaType<QGraphicsWidget*>(engine, qScriptValueFromQGraphicsWidget, qGraphicsWidgetFromQScriptValue);
+    qScriptRegisterMetaType<QGraphicsWidget*>(engine, qScriptValueFromQGraphicsWidget, graphicsWidgetFromQScriptValue);
+    qScriptRegisterMetaType<Plasma::Svg*>(engine, qScriptValueFromSvg, svgFromQScriptValue);
 
     qScriptRegisterMetaType<KConfigGroup>(engine, qScriptValueFromKConfigGroup, kConfigGroupFromScriptValue, QScriptValue());
     qScriptRegisterMetaType<KJob *>(engine, qScriptValueFromKJob, qKJobFromQScriptValue);
