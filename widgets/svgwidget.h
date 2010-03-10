@@ -28,10 +28,14 @@
 
 namespace Plasma
 {
-
 class Svg;
 class SvgWidgetPrivate;
+}
 
+Q_DECLARE_METATYPE(Plasma::Svg*)
+
+namespace Plasma
+{
 class PLASMA_EXPORT SvgWidget : public QGraphicsWidget
 {
     Q_OBJECT
