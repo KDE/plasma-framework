@@ -851,10 +851,6 @@ QString Applet::category(const QString &appletName)
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
 
     if (offers.isEmpty()) {
-        offers = KServiceTypeTrader::self()->query("Plasma/PopupApplet", constraint);
-    }
-
-    if (offers.isEmpty()) {
         return QString();
     }
 
@@ -2061,8 +2057,7 @@ void AppletPrivate::filterOffers(QList<KService::Ptr> &offers)
     }
 }
 
-KPluginInfo::List Applet::listAppletInfo(const QString &category,
-                                         const QString &parentApp)
+KPluginInfo::List Applet::listAppletInfo(const QString &category, const QString &parentApp)
 {
     QString constraint;
 
@@ -2089,7 +2084,6 @@ KPluginInfo::List Applet::listAppletInfo(const QString &category,
     }
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
-    offers << KServiceTypeTrader::self()->query("Plasma/PopupApplet", constraint);
 
     //now we have to do some manual filtering because the constraint can't handle everything
     AppletPrivate::filterOffers(offers);
@@ -2104,7 +2098,6 @@ KPluginInfo::List Applet::listAppletInfoForMimetype(const QString &mimetype)
     QString constraint = QString("'%1' in [X-Plasma-DropMimeTypes]").arg(mimetype);
     //kDebug() << "listAppletInfoForMimetype with" << mimetype << constraint;
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
-    offers << KServiceTypeTrader::self()->query("Plasma/PopupApplet", constraint);
     AppletPrivate::filterOffers(offers);
     return KPluginInfo::fromServices(offers);
 }
@@ -2113,7 +2106,6 @@ KPluginInfo::List Applet::listAppletInfoForUrl(const QUrl &url)
 {
     QString constraint = "exist [X-Plasma-DropUrlPatterns]";
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
-    offers << KServiceTypeTrader::self()->query("Plasma/PopupApplet", constraint);
     AppletPrivate::filterOffers(offers);
 
     KPluginInfo::List allApplets = KPluginInfo::fromServices(offers);
@@ -2150,7 +2142,6 @@ QStringList Applet::listCategories(const QString &parentApp, bool visibleOnly)
     }
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
-    offers << KServiceTypeTrader::self()->query("Plasma/PopupApplet", constraint);
     AppletPrivate::filterOffers(offers);
 
     QStringList categories;
@@ -2237,14 +2228,6 @@ Applet *Applet::load(const QString &appletName, uint appletId, const QVariantLis
         }
     }
 
-    bool isPopupApplet = false;
-    if (offers.isEmpty()) {
-        offers = KServiceTypeTrader::self()->query("Plasma/PopupApplet", constraint);
-        if (offers.count() > 0) {
-            isPopupApplet = true;
-        }
-    }
-
     /* if (offers.count() > 1) {
         kDebug() << "hey! we got more than one! let's blindly take the first one";
     } */
@@ -2269,10 +2252,12 @@ Applet *Applet::load(const QString &appletName, uint appletId, const QVariantLis
                  << offer->property("X-Plasma-API").toString() << "API";
         if (isContainment) {
             return new Containment(0, allArgs);
-        } else if (isPopupApplet) {
-            return new PopupApplet(0, allArgs);
         } else {
-            return new Applet(0, allArgs);
+            if (offer->serviceTypes().contains("Plasma/PopupApplet")) {
+                return new PopupApplet(0, allArgs);
+            } else {
+                return new Applet(0, allArgs);
+            }
         }
     }
 
