@@ -353,6 +353,7 @@ private:
 
     IconWidgetPrivate * const d;
     friend class IconWidgetPrivate;
+    friend class PopupAppletPrivate;
 };
 
 } // namespace Plasma

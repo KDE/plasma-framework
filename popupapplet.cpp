@@ -435,7 +435,6 @@ bool PopupApplet::eventFilter(QObject *watched, QEvent *event)
 {
     if (!d->passive && watched == d->dialogPtr.data() && (event->type() == QEvent::WindowDeactivate)) {
         d->popupLostFocus = true;
-        hidePopup();
         QTimer::singleShot(100, this, SLOT(clearPopupLostFocus()));
     }
 
@@ -660,6 +659,9 @@ void PopupAppletPrivate::hideTimedPopup()
 
 void PopupAppletPrivate::clearPopupLostFocus()
 {
+    if (!icon || !icon->isDown()) {
+        q->hidePopup();
+    }
     popupLostFocus = false;
 }
 
