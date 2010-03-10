@@ -75,10 +75,13 @@ QStringList DataEngine::sources() const
 Service *DataEngine::serviceForSource(const QString &source)
 {
     if (d->script) {
-        return d->script->serviceForSource(source);
-    } else {
-        return new NullService(source, this);
+        Service * s = d->script->serviceForSource(source);
+        if (s) {
+            return s;
+        }
     }
+
+    return new NullService(source, this);
 }
 
 void DataEngine::connectSource(const QString &source, QObject *visualization,
