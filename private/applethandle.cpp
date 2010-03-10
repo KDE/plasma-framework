@@ -963,16 +963,18 @@ void AppletHandle::startFading(FadeType anim, const QPointF &hoverPos, bool pres
         time *= m_opacity;
     }
 
-    propAnim->setStartValue(0);
-    propAnim->setEndValue(1);
-    propAnim->setDuration(time);
+    if (propAnim) {
+        propAnim->setStartValue(0);
+        propAnim->setEndValue(1);
+        propAnim->setDuration(time);
+    }
 
     m_animType = anim;
     //kDebug() << "animating for " << time << "ms";
     if (m_animType == FadeIn) {
         propAnim->setDirection(QAbstractAnimation::Forward);
         propAnim->start();
-    } else {
+    } else if (propAnim) {
         propAnim->setDirection(QAbstractAnimation::Backward);
         propAnim->start(QAbstractAnimation::DeleteWhenStopped);
     }
