@@ -139,6 +139,8 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
 void DataContainer::disconnectVisualization(QObject *visualization)
 {
     QMap<QObject *, SignalRelay *>::iterator objIt = d->relayObjects.find(visualization);
+    disconnect(visualization, SIGNAL(destroyed(QObject*)),
+              this, SLOT(disconnectVisualization(QObject*)));//, Qt::QueuedConnection);
 
     if (objIt == d->relayObjects.end() || !objIt.value()) {
         // it is connected directly to the DataContainer itself
