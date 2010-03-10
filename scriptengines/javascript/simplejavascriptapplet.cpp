@@ -55,6 +55,7 @@
 #include "scriptenv.h"
 #include "simplebindings/animationgroup.h"
 #include "simplebindings/dataengine.h"
+#include "simplebindings/dataenginereceiver.h"
 #include "simplebindings/i18n.h"
 #include "simplebindings/appletinterface.h"
 #include "simplebindings/bytearrayclass.h"
@@ -157,23 +158,9 @@ void SimpleJavaScriptApplet::configChanged()
 
 void SimpleJavaScriptApplet::dataUpdated(const QString &name, const DataEngine::Data &data)
 {
-    QScriptValue fun = m_self.property("dataUpdated");
-    if (!fun.isFunction()) {
-        kDebug() << "Script: dataUpdated is not a function, " << fun.toString();
-        return;
-    }
-
     QScriptValueList args;
     args << m_engine->toScriptValue(name) << m_engine->toScriptValue(data);
-
-    QScriptContext *ctx = m_engine->pushContext();
-    ctx->setActivationObject(m_self);
-    fun.call(m_self, args);
-    m_engine->popContext();
-
-    if (m_engine->hasUncaughtException()) {
-        reportError(m_env);
-    }
+    callFunction("dataUpdated", args);
 }
 
 void SimpleJavaScriptApplet::extenderItemRestored(Plasma::ExtenderItem* item)
@@ -413,9 +400,12 @@ QScriptValue SimpleJavaScriptApplet::dataEngine(QScriptContext *context, QScript
         return context->throwError(i18n("Could not extract the Applet"));
     }
 
-    const QString dataEngine = context->argument(0).toString();
-    DataEngine *data = interface->dataEngine(dataEngine);
-    return engine->newQObject(data, QScriptEngine::QtOwnership, QScriptEngine::PreferExistingWrapperObject);
+    const QString dataEngineName = context->argument(0).toString();
+    DataEngine *dataEngine = interface->dataEngine(dataEngineName);
+    QScriptValue v = engine->newQObject(dataEngine, QScriptEngine::QtOwnership, QScriptEngine::PreferExistingWrapperObject);
+    v.setProperty("connectSource", engine->newFunction(DataEngineReceiver::connectSource));
+    v.setProperty("disconnectSource", engine->newFunction(DataEngineReceiver::disconnectSource));
+    return v;
 }
 
 QScriptValue SimpleJavaScriptApplet::service(QScriptContext *context, QScriptEngine *engine)

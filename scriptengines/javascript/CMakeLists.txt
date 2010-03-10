@@ -7,6 +7,7 @@ set(simple_javascript_engine_SRCS
     simplebindings/animationgroup.cpp
     simplebindings/appletinterface.cpp
     simplebindings/anchorlayout.cpp
+    simplebindings/dataenginereceiver.cpp
     simplebindings/bytearrayclass.cpp
     simplebindings/bytearrayprototype.cpp
     simplebindings/color.cpp
