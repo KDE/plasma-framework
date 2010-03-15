@@ -487,6 +487,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
          **/
         void setContextualActions(const QList<QAction*> &actions);
 
+        //FIXME: KDE5, this must be moved to the dptr
         QList<QAction*> contextActions;
 
     private:
