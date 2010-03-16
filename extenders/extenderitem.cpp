@@ -772,16 +772,15 @@ void ExtenderItemPrivate::updateToolBox()
     }
 
     //add the actions that are actually set to visible.
+    QAction *closeAction = actions.value("close");
     foreach (QAction *action, actionsInOrder) {
-        if (action->isVisible()) {
+        if (action->isVisible() && action != closeAction) {
             IconWidget *icon = new IconWidget(q);
             icon->setAction(action);
             QSizeF size = icon->sizeFromIconSize(iconSize);
             icon->setMinimumSize(size);
             icon->setMaximumSize(size);
-            if (action != actions.value("close")) {
-                toolboxLayout->addItem(icon);
-            }
+            toolboxLayout->addItem(icon);
         }
     }
 
@@ -800,23 +799,21 @@ void ExtenderItemPrivate::updateToolBox()
     //add the close icon if desired.
     if (destroyActionVisibility) {
         destroyButton = new IconWidget(q);
-        if (!actions.contains("close")) {
-            QAction *destroyAction = new QAction(q);
-            actions["close"] = destroyAction;
+        if (!closeAction) {
+            closeAction = new QAction(q);
+            actions.insert("close", closeAction);
+            QObject::connect(closeAction, SIGNAL(triggered()), q, SLOT(destroy()));
         }
-        destroyButton->setAction(actions["close"]);
+        destroyButton->setAction(closeAction);
         destroyButton->setSvg("widgets/configuration-icons", "close");
         QSizeF size = destroyButton->sizeFromIconSize(iconSize);
         destroyButton->setMinimumSize(size);
         destroyButton->setMaximumSize(size);
-
         toolboxLayout->addItem(destroyButton);
-
-        QObject::connect(actions["close"], SIGNAL(triggered()), q, SLOT(destroy()));
-    } else if (actions.contains("close")) {
-        QAction *destroyAction = actions["close"];
+    } else if (closeAction) {
         actions.remove("close");
-        destroyAction->deleteLater();
+        closeAction->deleteLater();
+        closeAction = 0;
     }
 
     toolboxLayout->updateGeometry();
