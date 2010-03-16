@@ -69,7 +69,8 @@ public:
               resizeCorners(Dialog::NoCorner),
               resizeStartCorner(Dialog::NoCorner),
               moveTimer(0),
-              aspectRatioMode(Plasma::IgnoreAspectRatio)
+              aspectRatioMode(Plasma::IgnoreAspectRatio),
+              resizeChecksWithBorderCheck(false)
     {
     }
 
@@ -77,7 +78,11 @@ public:
     {
     }
 
+    void scheduleBorderCheck(bool triggeredByResize = false);
     void themeChanged();
+    void updateMask();
+    void checkBorders();
+    void checkBorders(bool updateMaskIfNeeded);
     void updateResizeCorners();
     int calculateWidthForHeightAndRatio(int height, qreal ratio);
 
@@ -96,25 +101,73 @@ public:
     QTimer *moveTimer;
     QTimer *adjustViewTimer;
     Plasma::AspectRatioMode aspectRatioMode;
+    bool resizeChecksWithBorderCheck;
 };
+
+void DialogPrivate::scheduleBorderCheck(bool triggeredByResize)
+{
+    //kDebug();
+    if (triggeredByResize) {
+        resizeChecksWithBorderCheck = true;
+
+        // to keep the UI as fluid as possible, we call checkBorders
+        // immediately when there is a resize, and therefore stop any
+        // move-triggered scheduled calls to it. this keeps things
+        // looking reasonable during resize while avoiding as many
+        // calls to checkBorders as possible
+        if (moveTimer) {
+            moveTimer->stop();
+        }
+
+        checkBorders();
+        return;
+    }
+
+    if (!moveTimer) {
+        moveTimer = new QTimer(q);
+        moveTimer->setSingleShot(true);
+        QObject::connect(moveTimer, SIGNAL(timeout()), q, SLOT(checkBorders()));
+    }
+
+    moveTimer->start(triggeredByResize ? 0 : 200);
+}
 
 void DialogPrivate::themeChanged()
 {
-    QGraphicsWidget *graphicsWidget = graphicsWidgetPtr.data();
+    checkBorders(false);
 
-    qreal topHeight;
-    qreal leftWidth;
-    qreal rightWidth;
-    qreal bottomHeight;
+    const bool translucency = Plasma::Theme::defaultTheme()->windowTranslucencyEnabled();
+    // WA_NoSystemBackground is going to fail combined with sliding popups, but is needed
+    // when we aren't compositing
+    q->setAttribute(Qt::WA_NoSystemBackground, !translucency);
+    updateMask();
+}
 
-    //kDebug() << leftWidth << topHeight << rightWidth << bottomHeight;
-    if (Plasma::Theme::defaultTheme()->windowTranslucencyEnabled()) {
-        WindowEffects::enableBlurBehind(q->winId(), true, background->mask());
+void DialogPrivate::updateMask()
+{
+    const bool translucency = Plasma::Theme::defaultTheme()->windowTranslucencyEnabled();
+    WindowEffects::enableBlurBehind(q->winId(), translucency,
+                                    translucency ? background->mask() : QRegion());
+    if (translucency) {
         q->clearMask();
     } else {
         q->setMask(background->mask());
     }
+}
 
+void DialogPrivate::checkBorders()
+{
+    checkBorders(true);
+}
+
+void DialogPrivate::checkBorders(bool updateMaskIfNeeded)
+{
+    if (resizeChecksWithBorderCheck) {
+        background->resizeFrame(q->size());
+    }
+
+    QGraphicsWidget *graphicsWidget = graphicsWidgetPtr.data();
+    const FrameSvg::EnabledBorders currentBorders = background->enabledBorders();
     FrameSvg::EnabledBorders borders = FrameSvg::AllBorders;
 
     Extender *extender = qobject_cast<Extender*>(graphicsWidget);
@@ -137,6 +190,11 @@ void DialogPrivate::themeChanged()
     QRect avail = desktop->availableGeometry(desktop->screenNumber(q));
     QRect screenGeom = desktop->screenGeometry(desktop->screenNumber(q));
     QRect dialogGeom = q->geometry();
+
+    qreal topHeight(0);
+    qreal leftWidth(0);
+    qreal rightWidth(0);
+    qreal bottomHeight(0);
 
     //decide about disabling the border attached to the panel
     if (applet) {
@@ -220,8 +278,22 @@ void DialogPrivate::themeChanged()
         background->getMargins(leftWidth, topHeight, rightWidth, bottomHeight);
     }
 
+    //kDebug() << leftWidth << topHeight << rightWidth << bottomHeight;
     q->setContentsMargins(leftWidth, topHeight, rightWidth, bottomHeight);
-    q->update();
+
+    if (resizeChecksWithBorderCheck) {
+        updateResizeCorners();
+        updateMask();
+        q->update();
+    } else if (currentBorders != borders) {
+        if (updateMaskIfNeeded) {
+            updateMask();
+        }
+
+        q->update();
+    } 
+
+    resizeChecksWithBorderCheck = false;
 }
 
 void Dialog::syncToGraphicsWidget()
@@ -312,8 +384,6 @@ Dialog::Dialog(QWidget *parent, Qt::WindowFlags f)
       d(new DialogPrivate(this))
 {
     setAttribute(Qt::WA_TranslucentBackground);
-    //WA_NoSystemBackground is going to fail combined with sliding popups
-    setAttribute(Qt::WA_NoSystemBackground, false);
     setWindowFlags(Qt::FramelessWindowHint);
     d->background = new FrameSvg(this);
     d->background->setImagePath("dialogs/background");
@@ -470,16 +540,11 @@ bool Dialog::event(QEvent *event)
     return QWidget::event(event);
 }
 
-void Dialog::resizeEvent(QResizeEvent *e)
+void Dialog::resizeEvent(QResizeEvent *event)
 {
-    d->background->resizeFrame(e->size());
-
-    if (Plasma::Theme::defaultTheme()->windowTranslucencyEnabled()) {
-        WindowEffects::enableBlurBehind(winId(), true, d->background->mask());
-        clearMask();
-    } else {
-        setMask(d->background->mask());
-    }
+    Q_UNUSED(event)
+    //kDebug();
+    d->scheduleBorderCheck(true);
 
     if (d->resizeStartCorner != -1 && d->view && d->graphicsWidgetPtr) {
         QGraphicsWidget *graphicsWidget = d->graphicsWidgetPtr.data();
@@ -491,8 +556,6 @@ void Dialog::resizeEvent(QResizeEvent *e)
         d->view->setSceneRect(sceneRect);
         d->view->centerOn(graphicsWidget);
     }
-
-    d->updateResizeCorners();
 }
 
 void DialogPrivate::updateResizeCorners()
@@ -533,7 +596,6 @@ void DialogPrivate::updateResizeCorners()
         resizeAreas[Dialog::SouthWest] = QRect(0, r.bottom() - resizeAreaMargin,
                                                resizeAreaMargin, resizeAreaMargin);
     }
-
 }
 
 void Dialog::setGraphicsWidget(QGraphicsWidget *widget)
@@ -551,7 +613,7 @@ void Dialog::setGraphicsWidget(QGraphicsWidget *widget)
             lay->setSpacing(0);
         }
 
-        d->themeChanged();
+        d->checkBorders();
 
         if (!d->view) {
             d->view = new QGraphicsView(this);
@@ -601,7 +663,7 @@ void Dialog::showEvent(QShowEvent * event)
     Q_UNUSED(event);
 
     //check if the widget size is still synced with the view
-    d->themeChanged();
+    d->checkBorders();
     d->updateResizeCorners();
 
     QGraphicsWidget *graphicsWidget = d->graphicsWidgetPtr.data();
@@ -638,14 +700,8 @@ void Dialog::focusInEvent(QFocusEvent *event)
 void Dialog::moveEvent(QMoveEvent *event)
 {
     Q_UNUSED(event)
-
-    if (!d->moveTimer) {
-        d->moveTimer = new QTimer(this);
-        d->moveTimer->setSingleShot(true);
-        connect(d->moveTimer, SIGNAL(timeout()), this, SLOT(themeChanged()));
-    }
-
-    d->moveTimer->start(200);
+    //kDebug();
+    d->scheduleBorderCheck();
 }
 
 void Dialog::setResizeHandleCorners(ResizeCorners corners)
