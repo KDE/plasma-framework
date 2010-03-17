@@ -161,7 +161,10 @@ class PLASMA_EXPORT FrameSvg : public Svg
          * Sets the prefix (@see setElementPrefix) to 'north', 'south', 'west' and 'east'
          * when the location is TopEdge, BottomEdge, LeftEdge and RightEdge,
          * respectively. Clears the prefix in other cases.
-         * @arg location location
+         *
+         * The prefix must exist in the SVG document, which means that this can only be
+         * called successfully after setImagePath is called.
+         * @arg location location in the UI this frame will be drawn
          */
         Q_INVOKABLE void setElementPrefix(Plasma::Location location);
 
@@ -175,8 +178,11 @@ class PLASMA_EXPORT FrameSvg : public Svg
          * (for the sake of speed, the test is present only for the 'center' element)
          *
          * Setting the prefix manually resets the location to Floating.
-         * If the
-         * @arg prefix prefix for the SVG element names
+         *
+         * The prefix must exist in the SVG document, which means that this can only be
+         * called successfully after setImagePath is called.
+         *
+         * @arg prefix prefix for the SVG elements that make up the frame
          */
         Q_INVOKABLE void setElementPrefix(const QString & prefix);
 
