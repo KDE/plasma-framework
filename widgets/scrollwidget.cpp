@@ -488,11 +488,6 @@ public:
         }
     }
 
-    void cleanupDragHandles(QObject *destroyed)
-    {
-        dragHandles.remove(static_cast<QGraphicsWidget *>(destroyed));
-    }
-
     void stopAnimations()
     {
         flickAnimationX->stop();
@@ -867,7 +862,6 @@ public:
     QWeakPointer<QGraphicsWidget> widgetToBeVisible;
     QRectF rectToBeVisible;
     QPointF dragHandleClicked;
-    QSet<QGraphicsWidget *>dragHandles;
     bool dragging;
     QTimer *adjustScrollbarsTimer;
     static const int borderSize = 4;
@@ -1005,30 +999,12 @@ void ScrollWidget::ensureItemVisible(QGraphicsItem *item)
 
 void ScrollWidget::registerAsDragHandle(QGraphicsWidget *item)
 {
-    if (!d->widget || !item || d->dragHandles.contains(item)) {
-        return;
-    }
-
-    QGraphicsItem *parentOfItem = item->parentItem();
-    while (parentOfItem != d->widget.data()) {
-        if (!parentOfItem) {
-            return;
-        }
-
-        parentOfItem = parentOfItem->parentItem();
-    }
-
-    connect(item, SIGNAL(destroyed(QObject *)), this, SLOT(cleanupDragHandles(QObject *)));
-    item->installEventFilter(this);
-    d->dragHandles.insert(item);
+    return;
 }
 
 void ScrollWidget::unregisterAsDragHandle(QGraphicsWidget *item)
 {
-    if (item) {
-        item->removeEventFilter(this);
-        d->dragHandles.remove(item);
-    }
+    return;
 }
 
 QRectF ScrollWidget::viewportGeometry() const
@@ -1165,39 +1141,6 @@ bool ScrollWidget::eventFilter(QObject *watched, QEvent *event)
         d->verticalScrollBar->setValue(-d->widget.data()->pos().y()/10);
         d->horizontalScrollBar->blockSignals(false);
         d->verticalScrollBar->blockSignals(false);
-    } else if (d->dragHandles.contains(static_cast<QGraphicsWidget *>(watched))) {
-        if (event->type() == QEvent::GraphicsSceneMousePress ||
-            event->type() == QEvent::GraphicsSceneMouseMove ||
-            event->type() == QEvent::GraphicsSceneMouseRelease) {
-
-            QGraphicsSceneMouseEvent *me = static_cast<QGraphicsSceneMouseEvent *>(event);
-            qreal dragDistance = (d->dragHandleClicked - me->scenePos()).manhattanLength();
-
-            if (event->type() == QEvent::GraphicsSceneMousePress) {
-                d->dragHandleClicked = me->scenePos();
-            }
-
-            d->dragging = (d->dragging ||  dragDistance > (KGlobalSettings::dndEventDelay()));
-
-            if (scene() && event->type() != QEvent::GraphicsSceneMouseMove) {
-                scene()->sendEvent(this, event);
-            }
-
-            if (!d->dragging) {
-                return false;
-            }
-
-            if (scene() && event->type() == QEvent::GraphicsSceneMouseMove) {
-                scene()->sendEvent(this, event);
-            }
-
-
-            if (event->type() == QEvent::GraphicsSceneMouseRelease) {
-
-                d->dragging = false;
-                return true;
-            }
-        }
     }
 
     return false;

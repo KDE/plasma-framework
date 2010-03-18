@@ -155,18 +155,25 @@ public:
      * The item will still receive mouse clicks if the mouse didn't move
      * between press and release.
      *
+     * This function is no more necessary, since it's the authomatic behaviour
+     * for all children items, the implementation has now no effect
+     *
      * @param item the drag handle item. widget() must be an ancestor if it in
      *             the parent hierarchy. if item doesn't accept mose press events
      *             it's not necessary to call this function.
      * @since 4.4
      */
-    Q_INVOKABLE void registerAsDragHandle(QGraphicsWidget *item);
+    KDE_DEPRECATED Q_INVOKABLE void registerAsDragHandle(QGraphicsWidget *item);
 
     /**
      * Unregister the given item as drag handle (if it was registered)
+     *
+     * This function is no more necessary, since it's the authomatic behaviour
+     * for all children items, the implementation has now no effect
+     *
      * @since 4.4
      */
-    Q_INVOKABLE void unregisterAsDragHandle(QGraphicsWidget *item);
+    KDE_DEPRECATED Q_INVOKABLE void unregisterAsDragHandle(QGraphicsWidget *item);
 
     /**
      * The geometry of the viewport.
@@ -235,7 +242,6 @@ private:
     Q_PRIVATE_SLOT(d, void horizontalScroll(int value))
     Q_PRIVATE_SLOT(d, void makeRectVisible())
     Q_PRIVATE_SLOT(d, void makeItemVisible())
-    Q_PRIVATE_SLOT(d, void cleanupDragHandles(QObject *destroyed))
     Q_PRIVATE_SLOT(d, void adjustScrollbars())
     Q_PRIVATE_SLOT(d, void fixupX())
     Q_PRIVATE_SLOT(d, void fixupY())
