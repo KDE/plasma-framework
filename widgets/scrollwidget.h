@@ -51,6 +51,7 @@ class PLASMA_EXPORT ScrollWidget : public QGraphicsWidget
     Q_PROPERTY(QRectF viewportGeometry READ viewportGeometry)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(Qt::Alignment alignment READ alignment WRITE setAlignment)
+    Q_PROPERTY(bool overShoot READ hasOverShoot WRITE setOverShoot)
 
 public:
 
@@ -84,13 +85,29 @@ public:
      * Sets the alignment for the inner widget.
      * It is only meaningful if the inner widget is smaller
      * than the viewport.
+     * @since 4.5
      */
     void setAlignment(Qt::Alignment align);
 
     /**
-     * @return currently set alignment for the inner widget 
+     * @return currently set alignment for the inner widget
+     * @since 4.5
      */
     Qt::Alignment alignment() const;
+
+    /**
+     * Tells the scrollwidget whether the widget can scroll a little
+     * beyond its boundaries and then automatically snap back or
+     * whether the widget scrolling always stops at the edges.
+     * @since 4.5
+     */
+    void setOverShoot(bool enable);
+
+    /**
+     * @return true if overshoot is enabled
+     * @since 4.5
+     */
+    bool hasOverShoot() const;
 
     /**
      * Sets the horizontal scrollbar policy

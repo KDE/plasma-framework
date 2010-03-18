@@ -642,6 +642,37 @@ public:
         lastPosTime = QTime();
     }
 
+    void handleWheelEvent(QGraphicsSceneWheelEvent *event)
+    {
+        if (!widget.data())
+            return;
+
+        QPointF start = widget.data()->pos();
+        QPointF end = start;
+        qreal step = event->delta()/3;
+
+        //At some point we should switch to
+        // step = QApplication::wheelScrollLines() *
+        //      (event->delta()/120) *
+        //      scrollBar->singleStep();
+        // which gives us exactly the number of lines to scroll but the issue
+        // is that at this point we don't have any clue what a "line" is and if
+        // we make it a pixel then scrolling by 3 (default) pixels will be
+        // very painful
+        if(event->orientation() == Qt::Vertical) {
+            end += QPointF(0, step);
+        } else if (event->orientation() == Qt::Horizontal) {
+            end += QPointF(step, 0);
+        } else {
+            return;
+        }
+
+        directMoveAnimation->setStartValue(start);
+        directMoveAnimation->setEndValue(end);
+        directMoveAnimation->setDuration(200);
+        directMoveAnimation->start();
+    }
+
     qreal minXExtent() const
     {
         if (alignment & Qt::AlignLeft)
@@ -1110,11 +1141,13 @@ void ScrollWidget::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     event->accept();
 }
 
-void ScrollWidget::wheelEvent(QGraphicsSceneWheelEvent *)
+void ScrollWidget::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
     if (!d->widget) {
         return;
     }
+    d->handleWheelEvent(event);
+    event->accept();
 }
 
 bool ScrollWidget::eventFilter(QObject *watched, QEvent *event)
@@ -1209,6 +1242,8 @@ bool ScrollWidget::sceneEventFilter(QGraphicsItem *i, QEvent *e)
     case QEvent::GraphicsSceneMouseRelease:
         d->handleMouseReleaseEvent(static_cast<QGraphicsSceneMouseEvent*>(e));
         break;
+    case QEvent::GraphicsSceneWheel:
+        d->handleWheelEvent(static_cast<QGraphicsSceneWheelEvent*>(e));
     default:
         break;
     }
@@ -1230,6 +1265,16 @@ void Plasma::ScrollWidget::setAlignment(Qt::Alignment align)
 Qt::Alignment Plasma::ScrollWidget::alignment() const
 {
     return d->alignment;
+}
+
+void ScrollWidget::setOverShoot(bool enable)
+{
+    d->hasOvershoot = enable;
+}
+
+bool ScrollWidget::hasOverShoot() const
+{
+    return d->hasOvershoot;
 }
 
 } // namespace Plasma
