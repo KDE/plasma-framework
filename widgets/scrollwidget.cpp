@@ -25,6 +25,9 @@
 #include <QApplication>
 #include <QWidget>
 #include <QTimer>
+#include <QTime>
+#include <QPropertyAnimation>
+#include <QSequentialAnimationGroup>
 
 //KDE
 #include <kmimetype.h>
@@ -38,6 +41,39 @@
 #include <plasma/animator.h>
 #include <plasma/svg.h>
 
+#define DEBUG 0
+
+/*
+  The flicking code is largely based on the behavior of
+  the flickable widget in QDeclerative so porting between
+  the two should preserve the behavior.
+  The code that figures out velocity could use some
+  improvements, in particular IGNORE_SUSPICIOUS_MOVES
+  is a hack that shouldn't be necessary.
+ */
+
+//XXX fixme
+//    we use a timer between move events to figure out
+//    the velocity of a move, but sometimes we're getting move
+//    events with big positional changes with no break
+//    in between them, which causes us to compute
+//    huge velocities. this define just filters out
+//    events which come at insanly small time intervals.
+//    at some point we need to figure out how to do it properly
+#define IGNORE_SUSPICIOUS_MOVES 1
+
+// FlickThreshold determines how far the "mouse" must have moved
+// before we perform a flick.
+static const int FlickThreshold = 20;
+
+
+static const qreal MinimumFlickVelocity = 200;
+static const qreal MaxVelocity = 2000;
+
+// time it takes the widget to flick back to its
+//  bounds when overshot
+static const qreal FixupDuration = 600;
+
 namespace Plasma
 {
 
@@ -50,8 +86,7 @@ public:
           bottomBorder(0),
           leftBorder(0),
           rightBorder(0),
-          dragging(false),
-          animId(0)
+          dragging(false)
     {
     }
 
@@ -62,6 +97,7 @@ public:
     void commonConstructor()
     {
         q->setFocusPolicy(Qt::StrongFocus);
+        q->setFiltersChildEvents(true);
         layout = new QGraphicsGridLayout(q);
         q->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         layout->setContentsMargins(1, 1, 1, 1);
@@ -90,6 +126,20 @@ public:
         horizontalScrollBar->nativeWidget()->setMinimum(0);
         horizontalScrollBar->nativeWidget()->setMaximum(100);
         QObject::connect(horizontalScrollBar, SIGNAL(valueChanged(int)), q, SLOT(horizontalScroll(int)));
+
+        flickAnimationX = 0;
+        flickAnimationY = 0;
+        fixupAnimation.groupX = 0;
+        fixupAnimation.startX = 0;
+        fixupAnimation.endX = 0;
+        fixupAnimation.groupY = 0;
+        fixupAnimation.startY = 0;
+        fixupAnimation.endY = 0;
+        directMoveAnimation = 0;
+        stealEvent = false;
+        hasOvershoot = true;
+
+        alignment = Qt::AlignLeft | Qt::AlignTop;
     }
 
     void adjustScrollbars()
@@ -233,6 +283,158 @@ public:
         scrollingWidget->setFlag(QGraphicsItem::ItemClipsChildrenToShape, clip);
     }
 
+    qreal overShootDistance(qreal velocity, qreal size) const
+    {
+        if (MaxVelocity <= 0)
+            return 0.0;
+
+        velocity = qAbs(velocity);
+        if (velocity > MaxVelocity)
+            velocity = MaxVelocity;
+        qreal dist = size / 4 * velocity / MaxVelocity;
+        return dist;
+    }
+
+    void animateMoveTo(const QPointF &pos)
+    {
+        qreal duration = 800;
+        QPointF start = widget.data()->pos();
+        QSizeF threshold = q->viewportGeometry().size();
+        QPointF diff = pos - start;
+
+        //reduce if it's within the viewport
+        if (qAbs(diff.x()) < threshold.width() ||
+            qAbs(diff.y()) < threshold.height())
+            duration /= 2;
+
+        directMoveAnimation->setStartValue(start);
+        directMoveAnimation->setEndValue(pos);
+        directMoveAnimation->setDuration(duration);
+        directMoveAnimation->start();
+    }
+
+    void flick(QPropertyAnimation *anim,
+               qreal velocity,
+               qreal val,
+               qreal minExtent,
+               qreal maxExtent,
+               qreal size)
+    {
+        qreal deceleration = 500;
+        qreal maxDistance = -1;
+        qreal target = 0;
+        // -ve velocity means list is moving up
+        if (velocity > 0) {
+            if (val < minExtent)
+                maxDistance = qAbs(minExtent - val + (hasOvershoot?overShootDistance(velocity,size):0));
+            target = minExtent;
+            deceleration = -deceleration;
+        } else {
+            if (val > maxExtent)
+                maxDistance = qAbs(maxExtent - val) + (hasOvershoot?overShootDistance(velocity,size):0);
+            target = maxExtent;
+        }
+        if (maxDistance > 0) {
+            qreal v = velocity;
+            if (MaxVelocity != -1 && MaxVelocity < qAbs(v)) {
+                if (v < 0)
+                    v = -MaxVelocity;
+                else
+                    v = MaxVelocity;
+            }
+            qreal duration = qAbs(v / deceleration);
+            qreal diffY = v * duration + (0.5  * deceleration * duration * duration);
+            qreal startY = val;
+            qreal endY = startY + diffY;
+
+            if (velocity > 0) {
+                if (endY > target)
+                    endY = startY + maxDistance;
+            } else {
+                if (endY < target)
+                    endY = startY - maxDistance;
+            }
+            duration = qAbs((endY-startY)/ (-v/2));
+
+#if DEBUG
+            qDebug()<<"XXX velocity = "<<v <<", target = "<< target
+                    <<", maxDist = "<<maxDistance;
+            qDebug()<<"duration = "<<duration<<" secs, ("
+                    << (duration * 1000) <<" msecs)";
+            qDebug()<<"startY = "<<startY;
+            qDebug()<<"endY = "<<endY;
+            qDebug()<<"overshoot = "<<overShootDistance(v, size);
+            qDebug()<<"avg velocity = "<< ((endY-startY)/duration);
+#endif
+
+            anim->setStartValue(startY);
+            anim->setEndValue(endY);
+            anim->setDuration(duration * 1000);
+            anim->start();
+        } else {
+            if (anim == flickAnimationX)
+                fixupX();
+            else
+                fixupY();
+        }
+    }
+    void flickX(qreal velocity)
+    {
+        flick(flickAnimationX, velocity, widget.data()->x(), minXExtent(), maxXExtent(),
+              q->viewportGeometry().width());
+    }
+    void flickY(qreal velocity)
+    {
+        flick(flickAnimationY, velocity, widget.data()->y(),minYExtent(), maxYExtent(),
+              q->viewportGeometry().height());
+    }
+    void fixup(QAnimationGroup *group,
+               QPropertyAnimation *start, QPropertyAnimation *end,
+               qreal val, qreal minExtent, qreal maxExtent)
+    {
+        if (val > minExtent || maxExtent > minExtent) {
+            if (!qFuzzyCompare(val, minExtent)) {
+                if (FixupDuration) {
+                    qreal dist = minExtent - val;
+                    start->setStartValue(val);
+                    start->setEndValue(minExtent - dist/2);
+                    end->setStartValue(minExtent - dist/2);
+                    end->setEndValue(minExtent);
+                    start->setDuration(FixupDuration/4);
+                    end->setDuration(3*FixupDuration/4);
+                    group->start();
+                } else {
+                    QObject *obj = start->targetObject();
+                    obj->setProperty(start->propertyName(), minExtent);
+                }
+            }
+        } else if (val < maxExtent) {
+            if (FixupDuration) {
+                qreal dist = maxExtent - val;
+                start->setStartValue(val);
+                start->setEndValue(maxExtent - dist/2);
+                end->setStartValue(maxExtent - dist/2);
+                end->setEndValue(maxExtent);
+                start->setDuration(FixupDuration/4);
+                end->setDuration(3*FixupDuration/4);
+                group->start();
+            } else {
+                QObject *obj = start->targetObject();
+                obj->setProperty(start->propertyName(), maxExtent);
+            }
+        }
+    }
+    void fixupX()
+    {
+        fixup(fixupAnimation.groupX, fixupAnimation.startX, fixupAnimation.endX,
+              widget.data()->x(), minXExtent(), maxXExtent());
+    }
+    void fixupY()
+    {
+        fixup(fixupAnimation.groupY, fixupAnimation.startY, fixupAnimation.endY,
+              widget.data()->y(), minYExtent(), maxYExtent());
+    }
+
     void makeRectVisible()
     {
         if (!widget) {
@@ -264,9 +466,7 @@ public:
             delta.setX(viewRect.right() - mappedRect.right());
         }
 
-        animId = Animator::self()->moveItem(
-        widget.data(), Plasma::Animator::SlideOutMovement,
-                                                (widget.data()->pos() + delta).toPoint());
+        animateMoveTo(widget.data()->pos() + delta);
     }
 
     void makeItemVisible(QGraphicsItem *itemToBeVisible)
@@ -293,11 +493,329 @@ public:
         dragHandles.remove(static_cast<QGraphicsWidget *>(destroyed));
     }
 
-    void scrollStateChanged(QGraphicsWidget *widget, QAbstractAnimation::State newState,
-            QAbstractAnimation::State oldState)
+    void stopAnimations()
     {
-        if (widget == q) {
-            emit q->scrollStateChanged(newState, oldState);
+        flickAnimationX->stop();
+        flickAnimationY->stop();
+        fixupAnimation.groupX->stop();
+        fixupAnimation.groupY->stop();
+    }
+
+    void handleMousePressEvent(QGraphicsSceneMouseEvent *event)
+    {
+        lastPos = QPoint();
+        lastPosTime = QTime::currentTime();
+        pressPos = event->scenePos();
+        pressScrollPos = -q->scrollPosition();
+        pressTime = QTime::currentTime();
+        velocity = QPointF();
+        stopAnimations();
+    }
+    void handleMouseMoveEvent(QGraphicsSceneMouseEvent *event)
+    {
+        if (lastPosTime.isNull())
+            return;
+        bool rejectY = false;
+        bool rejectX = false;
+        bool moved = false;
+
+        if (canYFlick()) {
+            int dy = int(event->scenePos().y() - pressPos.y());
+            if (qAbs(dy) > QApplication::startDragDistance() || elapsed(pressTime) > 200) {
+                qreal newY = dy + pressScrollPos.y();
+                const qreal minY = minYExtent();
+                const qreal maxY = maxYExtent();
+                if (newY > minY)
+                    newY = minY + (newY - minY) / 2;
+                if (newY < maxY && maxY - minY <= 0)
+                    newY = maxY + (newY - maxY) / 2;
+                if (!hasOvershoot && (newY > minY || newY < maxY)) {
+                    if (newY > minY)
+                        newY = minY;
+                    else if (newY < maxY)
+                        newY = maxY;
+                    else
+                        rejectY = true;
+                }
+                if (!rejectY && stealEvent) {
+                    widget.data()->setY(qRound(newY));
+                    moved = true;
+                }
+                if (qAbs(dy) > QApplication::startDragDistance())
+                    stealEvent = true;
+            }
+        }
+
+        if (canXFlick()) {
+            int dx = int(event->scenePos().x() - pressPos.x());
+            if (qAbs(dx) > QApplication::startDragDistance() || elapsed(pressTime) > 200) {
+                qreal newX = dx + pressScrollPos.x();
+                const qreal minX = minXExtent();
+                const qreal maxX = maxXExtent();
+                if (newX > minX)
+                    newX = minX + (newX - minX) / 2;
+                if (newX < maxX && maxX - minX <= 0)
+                    newX = maxX + (newX - maxX) / 2;
+                if (!hasOvershoot && (newX > minX || newX < maxX)) {
+                    if (newX > minX)
+                        newX = minX;
+                    else if (newX < maxX)
+                        newX = maxX;
+                    else
+                        rejectX = true;
+                }
+                if (!rejectX && stealEvent) {
+                    widget.data()->setX(qRound(newX));
+                    moved = true;
+                }
+
+                if (qAbs(dx) > QApplication::startDragDistance())
+                    stealEvent = true;
+            }
+        }
+
+        if (!lastPos.isNull()) {
+            qreal msecs = qreal(restart(lastPosTime));
+            qreal elapsed =  msecs / 1000.;
+#if IGNORE_SUSPICIOUS_MOVES
+            if (msecs > 3) {
+#endif
+            if (elapsed <= 0)
+                elapsed = 1;
+            if (canYFlick()) {
+                qreal diff = event->scenePos().y() - lastPos.y();
+                // average to reduce the effect of spurious moves
+                velocity.setY( velocity.y() + (diff / elapsed) );
+                velocity.setY( velocity.y() / 2 );
+            }
+
+            if (canXFlick()) {
+                qreal diff = event->scenePos().x() - lastPos.x();
+                // average to reduce the effect of spurious moves
+                velocity.setX( velocity.x() + (diff / elapsed) );
+                velocity.setX( velocity.x() / 2 );
+            }
+#if IGNORE_SUSPICIOUS_MOVES
+            }
+#endif
+        }
+
+        if (rejectX) velocity.setX(0);
+        if (rejectY) velocity.setY(0);
+
+        lastPos = event->scenePos();
+    }
+
+    void handleMouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+    {
+        stealEvent = false;
+        if (lastPosTime.isNull())
+            return;
+
+        if (elapsed(lastPosTime) > 100) {
+            // if we drag then pause before release we should not cause a flick.
+            velocity = QPointF();
+        }
+
+        if (qAbs(velocity.y()) > 10 &&
+            qAbs(event->scenePos().y() - pressPos.y()) > FlickThreshold) {
+            qreal vVelocity = velocity.y();
+            // Minimum velocity to avoid annoyingly slow flicks.
+            if (qAbs(vVelocity) < MinimumFlickVelocity)
+                vVelocity = vVelocity < 0 ? -MinimumFlickVelocity : MinimumFlickVelocity;
+            flickY(vVelocity);
+        } else {
+            fixupY();
+        }
+
+        if (qAbs(velocity.x()) > 10 &&
+            qAbs(event->scenePos().x() - pressPos.x()) > FlickThreshold) {
+            qreal hVelocity = velocity.x();
+            // Minimum velocity to avoid annoyingly slow flicks.
+            if (qAbs(hVelocity) < MinimumFlickVelocity)
+                hVelocity = hVelocity < 0 ? -MinimumFlickVelocity : MinimumFlickVelocity;
+            flickX(hVelocity);
+        } else {
+            fixupX();
+        }
+
+        lastPosTime = QTime();
+    }
+
+    qreal minXExtent() const
+    {
+        if (alignment & Qt::AlignLeft)
+            return 0;
+        else {
+            qreal vWidth = q->viewportGeometry().width();
+            qreal cWidth = q->contentsSize().width();
+            if (cWidth < vWidth) {
+                if (alignment & Qt::AlignRight)
+                    return  vWidth - cWidth;
+                else if (alignment & Qt::AlignHCenter)
+                    return vWidth / 2 - cWidth / 2;
+            }
+        }
+
+        return 0;
+    }
+    qreal maxXExtent() const
+    {
+        return q->viewportGeometry().width() -
+            q->contentsSize().width();
+    }
+    qreal minYExtent() const
+    {
+        if (alignment & Qt::AlignTop)
+            return 0;
+        else {
+            qreal vHeight = q->viewportGeometry().height();
+            qreal cHeight = q->contentsSize().height();
+            if (cHeight < vHeight) {
+                if (alignment & Qt::AlignBottom)
+                    return  vHeight - cHeight;
+                else if (alignment & Qt::AlignVCenter)
+                    return vHeight / 2 - cHeight / 2;
+            }
+        }
+
+        return 0;
+    }
+    qreal maxYExtent() const
+    {
+        return q->viewportGeometry().height() -
+            q->contentsSize().height();
+    }
+    bool canXFlick() const
+    {
+        return !qFuzzyCompare(q->contentsSize().width() + borderSize,
+                             q->viewportGeometry().width());
+    }
+    bool canYFlick() const
+    {
+        return !qFuzzyCompare(q->contentsSize().height() + borderSize,
+                             q->viewportGeometry().height());
+    }
+
+    int elapsed(const QTime &t) const
+    {
+        int n = t.msecsTo(QTime::currentTime());
+        if (n < 0) // passed midnight
+            n += 86400 * 1000;
+        return n;
+    }
+    int restart(QTime &t) const
+    {
+        QTime time = QTime::currentTime();
+        int n = t.msecsTo(time);
+        if (n < 0) // passed midnight
+            n += 86400*1000;
+        t = time;
+        return n;
+    }
+    void createFlickAnimations()
+    {
+        if (widget.data()) {
+            flickAnimationX = new QPropertyAnimation(widget.data(),
+                                                     "x", widget.data());
+            flickAnimationY = new QPropertyAnimation(widget.data(),
+                                                     "y", widget.data());
+            QObject::connect(flickAnimationX, SIGNAL(finished()),
+                             q, SLOT(fixupX()));
+            QObject::connect(flickAnimationY, SIGNAL(finished()),
+                             q, SLOT(fixupY()));
+
+            QObject::connect(flickAnimationX,
+                             SIGNAL(stateChanged(QAbstractAnimation::State,
+                                                 QAbstractAnimation::State)),
+                             q, SIGNAL(scrollStateChanged(QAbstractAnimation::State,
+                                                          QAbstractAnimation::State)));
+            QObject::connect(flickAnimationY,
+                             SIGNAL(stateChanged(QAbstractAnimation::State,
+                                                 QAbstractAnimation::State)),
+                             q, SIGNAL(scrollStateChanged(QAbstractAnimation::State,
+                                                          QAbstractAnimation::State)));
+
+            flickAnimationX->setEasingCurve(QEasingCurve::OutCirc);
+            flickAnimationY->setEasingCurve(QEasingCurve::OutCirc);
+
+
+            fixupAnimation.groupX = new QSequentialAnimationGroup(widget.data());
+            fixupAnimation.groupY = new QSequentialAnimationGroup(widget.data());
+            fixupAnimation.startX  = new QPropertyAnimation(widget.data(),
+                                                            "x", widget.data());
+            fixupAnimation.startY  = new QPropertyAnimation(widget.data(),
+                                                            "y", widget.data());
+            fixupAnimation.endX = new QPropertyAnimation(widget.data(),
+                                                         "x", widget.data());
+            fixupAnimation.endY = new QPropertyAnimation(widget.data(),
+                                                         "y", widget.data());
+            fixupAnimation.groupX->addAnimation(
+                fixupAnimation.startX);
+            fixupAnimation.groupY->addAnimation(
+                fixupAnimation.startY);
+            fixupAnimation.groupX->addAnimation(
+                fixupAnimation.endX);
+            fixupAnimation.groupY->addAnimation(
+                fixupAnimation.endY);
+
+            fixupAnimation.startX->setEasingCurve(QEasingCurve::InQuad);
+            fixupAnimation.endX->setEasingCurve(QEasingCurve::OutQuint);
+            fixupAnimation.startY->setEasingCurve(QEasingCurve::InQuad);
+            fixupAnimation.endY->setEasingCurve(QEasingCurve::OutQuint);
+
+            QObject::connect(fixupAnimation.groupX,
+                             SIGNAL(stateChanged(QAbstractAnimation::State,
+                                                 QAbstractAnimation::State)),
+                             q, SIGNAL(scrollStateChanged(QAbstractAnimation::State,
+                                                          QAbstractAnimation::State)));
+            QObject::connect(fixupAnimation.groupY,
+                             SIGNAL(stateChanged(QAbstractAnimation::State,
+                                                 QAbstractAnimation::State)),
+                             q, SIGNAL(scrollStateChanged(QAbstractAnimation::State,
+                                                          QAbstractAnimation::State)));
+
+            directMoveAnimation = new QPropertyAnimation(widget.data(),
+                                                         "pos",
+                                                         widget.data());
+            QObject::connect(directMoveAnimation, SIGNAL(finished()),
+                             q, SLOT(fixupX()));
+            QObject::connect(directMoveAnimation, SIGNAL(finished()),
+                             q, SLOT(fixupY()));
+            QObject::connect(directMoveAnimation,
+                             SIGNAL(stateChanged(QAbstractAnimation::State,
+                                                 QAbstractAnimation::State)),
+                             q, SIGNAL(scrollStateChanged(QAbstractAnimation::State,
+                                                          QAbstractAnimation::State)));
+            directMoveAnimation->setEasingCurve(QEasingCurve::OutCirc);
+        }
+    }
+    void deleteFlickAnimations()
+    {
+        if (flickAnimationX)
+            flickAnimationX->stop();
+        if (flickAnimationY)
+            flickAnimationY->stop();
+        delete flickAnimationX;
+        delete flickAnimationY;
+        delete fixupAnimation.groupX;
+        delete fixupAnimation.groupY;
+        delete directMoveAnimation;
+    }
+    void setScrollX()
+    {
+        if (horizontalScrollBarPolicy != Qt::ScrollBarAlwaysOff) {
+            horizontalScrollBar->blockSignals(true);
+            horizontalScrollBar->setValue(-widget.data()->pos().x()/10.);
+            horizontalScrollBar->blockSignals(false);
+        }
+    }
+    void setScrollY()
+    {
+        if (verticalScrollBarPolicy != Qt::ScrollBarAlwaysOff) {
+            verticalScrollBar->blockSignals(true);
+            verticalScrollBar->setValue(-widget.data()->pos().y()/10.);
+            verticalScrollBar->blockSignals(false);
         }
     }
 
@@ -320,9 +838,31 @@ public:
     QPointF dragHandleClicked;
     QSet<QGraphicsWidget *>dragHandles;
     bool dragging;
-    int animId;
     QTimer *adjustScrollbarsTimer;
     static const int borderSize = 4;
+
+    QPointF pressPos;
+    QPointF pressScrollPos;
+    QPointF velocity;
+    QPointF lastPos;
+    QTime pressTime;
+    QTime lastPosTime;
+    QPropertyAnimation *flickAnimationX;
+    QPropertyAnimation *flickAnimationY;
+    struct {
+        QAnimationGroup *groupX;
+        QPropertyAnimation *startX;
+        QPropertyAnimation *endX;
+
+        QAnimationGroup *groupY;
+        QPropertyAnimation *startY;
+        QPropertyAnimation *endY;
+    } fixupAnimation;
+    QPropertyAnimation *directMoveAnimation;
+    bool stealEvent;
+    bool hasOvershoot;
+
+    Qt::Alignment alignment;
 };
 
 
@@ -348,23 +888,20 @@ ScrollWidget::~ScrollWidget()
 void ScrollWidget::setWidget(QGraphicsWidget *widget)
 {
     if (d->widget && d->widget.data() != widget) {
+        d->deleteFlickAnimations();
         d->widget.data()->removeEventFilter(this);
         delete d->widget.data();
     }
 
     d->widget = widget;
-    Plasma::Animator::self()->registerScrollingManager(this);
-    connect(Plasma::Animator::self(),
-            SIGNAL(scrollStateChanged(QGraphicsWidget *, QAbstractAnimation::State,
-                    QAbstractAnimation::State)), this,
-            SLOT(scrollStateChanged(QGraphicsWidget *, QAbstractAnimation::State,
-                    QAbstractAnimation::State)));
+    d->createFlickAnimations();
     //it's not good it's setting a size policy here, but it's done to be retrocompatible with older applications
-
     if (widget) {
+        connect(widget, SIGNAL(xChanged()), this, SLOT(setScrollX()));
+        connect(widget, SIGNAL(yChanged()), this, SLOT(setScrollY()));
         widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         widget->setParentItem(d->scrollingWidget);
-        widget->setPos(QPoint(0,0));
+        widget->setPos(d->minXExtent(), d->minYExtent());
         widget->installEventFilter(this);
         d->adjustScrollbarsTimer->start(200);
     }
@@ -547,35 +1084,37 @@ void ScrollWidget::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
 
-    if (d->animId) {
-        Animator::self()->stopItemMovement(d->animId);
-    }
+    d->handleMouseMoveEvent(event);
+    event->accept();
 
-    event->ignore();
+    return QGraphicsWidget::mouseMoveEvent(event);
 }
 
 void ScrollWidget::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (!(event->buttons() & Qt::LeftButton)) {
-        event->ignore();
+    if (!d->widget) {
+        return;
     }
 
-    if (d->animId) {
-        Animator::self()->stopItemMovement(d->animId);
-    }
+    d->handleMousePressEvent(event);
+    event->accept();
 }
 
 void ScrollWidget::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    event->ignore();
+    if (!d->widget) {
+        return;
+    }
+
+    d->handleMouseReleaseEvent(event);
+    event->accept();
 }
 
 void ScrollWidget::wheelEvent(QGraphicsSceneWheelEvent *)
 {
-    if (d->animId) {
-        Animator::self()->stopItemMovement(d->animId);
+    if (!d->widget) {
+        return;
     }
-
 }
 
 bool ScrollWidget::eventFilter(QObject *watched, QEvent *event)
@@ -599,12 +1138,13 @@ bool ScrollWidget::eventFilter(QObject *watched, QEvent *event)
             event->type() == QEvent::GraphicsSceneMouseRelease) {
 
             QGraphicsSceneMouseEvent *me = static_cast<QGraphicsSceneMouseEvent *>(event);
+            qreal dragDistance = (d->dragHandleClicked - me->scenePos()).manhattanLength();
 
             if (event->type() == QEvent::GraphicsSceneMousePress) {
                 d->dragHandleClicked = me->scenePos();
             }
 
-            d->dragging = (d->dragging | (d->dragHandleClicked.toPoint() - me->scenePos().toPoint()).manhattanLength() > (KGlobalSettings::dndEventDelay()));
+            d->dragging = (d->dragging ||  dragDistance > (KGlobalSettings::dndEventDelay()));
 
             if (scene() && event->type() != QEvent::GraphicsSceneMouseMove) {
                 scene()->sendEvent(this, event);
@@ -643,7 +1183,57 @@ QSizeF ScrollWidget::sizeHint(Qt::SizeHint which, const QSizeF & constraint) con
     return hint;
 }
 
+
+bool ScrollWidget::sceneEventFilter(QGraphicsItem *i, QEvent *e)
+{
+    //only the scrolling widget and its children
+    if (!d->widget.data() ||
+        (!d->widget.data()->isAncestorOf(i) && i != d->scrollingWidget))
+        return false;
+
+    bool stealThisEvent = d->stealEvent;
+    stealThisEvent &= (e->type() == QEvent::GraphicsSceneMousePress ||
+                       e->type() == QEvent::GraphicsSceneMouseMove ||
+                       e->type() == QEvent::GraphicsSceneMouseRelease);
+#if DEBUG
+    qDebug()<<"sceneEventFilter = " <<i<<", "
+            <<QTime::currentTime().toString(QString::fromLatin1("hh:mm:ss.zzz"));
+#endif
+    switch (e->type()) {
+    case QEvent::GraphicsSceneMousePress:
+        d->handleMousePressEvent(static_cast<QGraphicsSceneMouseEvent*>(e));
+        break;
+    case QEvent::GraphicsSceneMouseMove:
+        d->handleMouseMoveEvent(static_cast<QGraphicsSceneMouseEvent*>(e));
+        break;
+    case QEvent::GraphicsSceneMouseRelease:
+        d->handleMouseReleaseEvent(static_cast<QGraphicsSceneMouseEvent*>(e));
+        break;
+    default:
+        break;
+    }
+    if (stealThisEvent)
+        return true;
+    return QGraphicsWidget::sceneEventFilter(i, e);
+}
+
+void Plasma::ScrollWidget::setAlignment(Qt::Alignment align)
+{
+    d->alignment = align;
+    if (d->widget.data() &&
+        d->widget.data()->isVisible()) {
+        d->widget.data()->setPos(d->minXExtent(),
+                                 d->minYExtent());
+    }
+}
+
+Qt::Alignment Plasma::ScrollWidget::alignment() const
+{
+    return d->alignment;
+}
+
 } // namespace Plasma
+
 
 #include <scrollwidget.moc>
 

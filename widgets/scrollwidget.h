@@ -50,6 +50,7 @@ class PLASMA_EXPORT ScrollWidget : public QGraphicsWidget
     Q_PROPERTY(QSizeF contentsSize READ contentsSize)
     Q_PROPERTY(QRectF viewportGeometry READ viewportGeometry)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
+    Q_PROPERTY(Qt::Alignment alignment READ alignment WRITE setAlignment)
 
 public:
 
@@ -78,6 +79,18 @@ public:
      * @return the main widget
      */
     QGraphicsWidget *widget() const;
+
+    /**
+     * Sets the alignment for the inner widget.
+     * It is only meaningful if the inner widget is smaller
+     * than the viewport.
+     */
+    void setAlignment(Qt::Alignment align);
+
+    /**
+     * @return currently set alignment for the inner widget 
+     */
+    Qt::Alignment alignment() const;
 
     /**
      * Sets the horizontal scrollbar policy
@@ -196,6 +209,7 @@ protected:
     bool eventFilter(QObject *watched, QEvent *event);
     void focusInEvent(QFocusEvent *event);
     QSizeF sizeHint(Qt::SizeHint which, const QSizeF & constraint) const;
+    bool sceneEventFilter(QGraphicsItem *i, QEvent *e);
 
 private:
     ScrollWidgetPrivate * const d;
@@ -206,8 +220,10 @@ private:
     Q_PRIVATE_SLOT(d, void makeItemVisible())
     Q_PRIVATE_SLOT(d, void cleanupDragHandles(QObject *destroyed))
     Q_PRIVATE_SLOT(d, void adjustScrollbars())
-    Q_PRIVATE_SLOT(d, void scrollStateChanged(QGraphicsWidget *, QAbstractAnimation::State,
-                QAbstractAnimation::State))
+    Q_PRIVATE_SLOT(d, void fixupX())
+    Q_PRIVATE_SLOT(d, void fixupY())
+    Q_PRIVATE_SLOT(d, void setScrollX())
+    Q_PRIVATE_SLOT(d, void setScrollY())
 
     friend class ScrollWidgetPrivate;
 };
