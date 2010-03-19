@@ -20,6 +20,7 @@
 #include <QImage>
 #include <QPixmap>
 #include <QStyleOptionGraphicsItem>
+#include <QDebug>
 static const int RECURSION_MAX = 20;
 
 namespace Plasma
@@ -55,11 +56,14 @@ void ShadowFake::paintSubChildren(QPainter *painter,
     if (list.size() > 0) {
         for (int i = 0; i < list.size(); ++i) {
             tmp = list.value(i);
+
             if ((tmp->childItems().size() > 0) && (stack < RECURSION_MAX)) {
                 paintSubChildren(painter, option, tmp);
             }
 
-            tmp->paint(painter, option, 0);
+            if (tmp->isVisible()) {
+                tmp->paint(painter, option, 0);
+            }
         }
     }
     --stack;
