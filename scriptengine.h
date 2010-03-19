@@ -42,6 +42,9 @@ public:
     ScriptEngine(Plasma::Corona *corona, QObject *parent = 0);
     ~ScriptEngine();
 
+    static QStringList pendingUpdateScripts();
+    static QStringList defaultLayoutScripts();
+
     void evaluateScript(const QString &script);
     static bool isPanel(const Plasma::Containment *c);
     QScriptValue wrap(Plasma::Applet *w, QScriptEngine *engine);

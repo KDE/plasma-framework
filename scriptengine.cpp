@@ -20,9 +20,11 @@
 #include "scriptengine.h"
 
 #include <QFile>
+#include <QFileInfo>
 #include <QScriptValueIterator>
 
 #include <KShell>
+#include <KStandardDirs>
 
 #include <Plasma/Applet>
 #include <Plasma/Containment>
@@ -247,6 +249,74 @@ void ScriptEngine::exception(const QScriptValue &value)
 {
     //kDebug() << "exception caught!" << value.toVariant();
     emit printError(value.toVariant().toString());
+}
+
+QStringList ScriptEngine::pendingUpdateScripts()
+{
+    const QString appName = KGlobal::activeComponent().aboutData()->appName();
+    QStringList scripts = KGlobal::dirs()->findAllResources("data", appName + "/updates/*.js");
+    QStringList scriptPaths;
+
+    if (scripts.isEmpty()) {
+        //kDebug() << "no update scripts";
+        return scriptPaths;
+    }
+
+    KConfigGroup cg(KGlobal::config(), "Updates");
+    QStringList performed = cg.readEntry("performed", QStringList());
+    const QString localDir = KGlobal::dirs()->localkdedir();
+    const QString localXdgDir = KGlobal::dirs()->localxdgdatadir();
+
+    foreach (const QString &script, scripts) {
+        if (performed.contains(script)) {
+            continue;
+        }
+
+        if (script.startsWith(localDir) || script.startsWith(localXdgDir)) {
+            kDebug() << "skipping user local script: " << script;
+            continue;
+        }
+
+        scriptPaths.append(script);
+        performed.append(script);
+    }
+
+    cg.writeEntry("performed", performed);
+    KGlobal::config()->sync();
+    return scriptPaths;
+}
+
+QStringList ScriptEngine::defaultLayoutScripts()
+{
+    const QString appName = KGlobal::activeComponent().aboutData()->appName();
+    QStringList scripts = KGlobal::dirs()->findAllResources("data", appName + "/init/*.js");
+    QStringList scriptPaths;
+
+    if (scripts.isEmpty()) {
+        //kDebug() << "no javascript based layouts";
+        return scriptPaths;
+    }
+
+    const QString localDir = KGlobal::dirs()->localkdedir();
+    const QString localXdgDir = KGlobal::dirs()->localxdgdatadir();
+
+    QSet<QString> scriptNames;
+    foreach (const QString &script, scripts) {
+        if (script.startsWith(localDir) || script.startsWith(localXdgDir)) {
+            kDebug() << "skipping user local script: " << script;
+            kDebug() << "skipping user local script: " << script;
+            continue;
+        }
+
+        QFileInfo f(script);
+        QString filename = f.fileName();
+        if (!scriptNames.contains(filename)) {
+            scriptNames.insert(filename);
+            scriptPaths.append(script);
+        }
+    }
+
+    return scriptPaths;
 }
 
 #include "scriptengine.moc"
