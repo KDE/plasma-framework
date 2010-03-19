@@ -714,13 +714,12 @@ public:
     }
     bool canXFlick() const
     {
-        return !qFuzzyCompare(q->contentsSize().width() + borderSize,
-                             q->viewportGeometry().width());
+        //make the thing feel quite "fixed" don't permit to flick when the contents size is less than the viewport
+        return q->contentsSize().width() + borderSize > q->viewportGeometry().width();
     }
     bool canYFlick() const
     {
-        return !qFuzzyCompare(q->contentsSize().height() + borderSize,
-                             q->viewportGeometry().height());
+        return q->contentsSize().height() + borderSize > q->viewportGeometry().height();
     }
 
     int elapsed(const QTime &t) const
@@ -1168,8 +1167,8 @@ bool ScrollWidget::sceneEventFilter(QGraphicsItem *i, QEvent *e)
         return false;
 
     bool stealThisEvent = d->stealEvent;
+    //still pass around mouse moves: try to make still possible to make items start a drag event. thi could be either necessary or annoying, let's see how it goes. (add QEvent::GraphicsSceneMouseMove to block them)
     stealThisEvent &= (e->type() == QEvent::GraphicsSceneMousePress ||
-                       e->type() == QEvent::GraphicsSceneMouseMove ||
                        e->type() == QEvent::GraphicsSceneMouseRelease);
 #if DEBUG
     qDebug()<<"sceneEventFilter = " <<i<<", "

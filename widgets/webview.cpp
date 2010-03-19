@@ -263,7 +263,7 @@ QVariant WebView::itemChange(GraphicsItemChange change, const QVariant &value)
         //FIXME: QWebPage _requires_ a QWidget view to not crash in places such as 
         // WebCore::PopupMenu::show() due to hostWindow()->platformPageClient() == NULL
         // because QWebPage::d->client is NULL
-        d->webView->page()->setView(viewFor(this));
+        //d->webView->page()->setView(viewFor(this));
     }
     return QGraphicsWidget::itemChange(change, value);
 }
