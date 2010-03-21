@@ -166,7 +166,6 @@ PushButton::PushButton(QGraphicsWidget *parent)
 
     d->hoverAnimation = Animator::create(Animator::PixmapTransitionAnimation);
     d->hoverAnimation->setTargetWidget(this);
-    d->background->setElementPrefix("normal");
     d->hoverAnimation->setProperty("startPixmap", d->background->framePixmap());
 
     KPushButton *native = new KPushButton;
