@@ -644,7 +644,6 @@ public:
 
         QPointF start = widget.data()->pos();
         QPointF end = start;
-        qreal step = event->delta()/3;
 
         //At some point we should switch to
         // step = QApplication::wheelScrollLines() *
@@ -654,12 +653,26 @@ public:
         // is that at this point we don't have any clue what a "line" is and if
         // we make it a pixel then scrolling by 3 (default) pixels will be
         // very painful
-        if(event->orientation() == Qt::Vertical) {
-            end += QPointF(0, step);
-        } else if (event->orientation() == Qt::Horizontal) {
-            end += QPointF(step, 0);
+        qreal step = event->delta()/3;
+
+        //ifthe widget can scroll in a single axis and the wheel is the other one, scroll the other one
+        Qt::Orientation orientation = event->orientation();
+        if (orientation == Qt::Vertical) {
+            if (!canYFlick() && canXFlick()) {
+                end += QPointF(step, 0);
+            } else if (canYFlick()) {
+                end += QPointF(0, step);
+            } else {
+                return;
+            }
         } else {
-            return;
+            if (canYFlick() && !canXFlick()) {
+                end += QPointF(0, step);
+            } else if (canXFlick()) {
+                end += QPointF(step, 0);
+            } else {
+                return;
+            }
         }
 
         directMoveAnimation->setStartValue(start);
