@@ -64,7 +64,7 @@ bool isEffectAvailable(Effect effect)
         effectName = "_KDE_SHADOW_OVERRIDE";
         break;
     case BlurBehind:
-        effectName = "_KDE_NET_WM_BLUR_REGION";
+        effectName = "_KDE_NET_WM_BLUR_BEHIND_REGION";
         break;
     default:
         return false;
@@ -305,7 +305,7 @@ void enableBlurBehind(WId window, bool enable, const QRegion &region)
 {
 #ifdef Q_WS_X11
     Display *dpy = QX11Info::display();
-    Atom atom = XInternAtom(dpy, "_KDE_NET_WM_BLUR_REGION", False);
+    Atom atom = XInternAtom(dpy, "_KDE_NET_WM_BLUR_BEHIND_REGION", False);
 
     if (enable) {
         QVector<QRect> rects = region.rects();
