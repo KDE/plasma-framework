@@ -108,6 +108,18 @@ public:
     void setDescription(const QString &);
 
     /**
+     * Returns the icon name associated with this package, or QString() if none
+     * @since 4.5
+     */
+    QString icon() const;
+
+    /**
+     * Set the icon name to be used with this package
+     * @since 4.5
+     */
+    void setIcon(const QString &icon);
+
+    /**
      * Set the keywords used to provide search and categorizations
      * @param keywords the keywords to associate with this package
      */

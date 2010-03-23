@@ -36,6 +36,7 @@ class PackageMetadataPrivate
         }
 
         QString name;
+        QString icon;
         QString description;
         QStringList keywords;
         QString author;
@@ -116,6 +117,7 @@ void PackageMetadata::read(const QString &filename)
     KConfigGroup config = cfg.desktopGroup();
 
     d->name = config.readEntry("Name", d->name);
+    d->icon = config.readEntry("Icon", d->name);
     d->description = config.readEntry("Comment", d->description);
     d->keywords = config.readEntry("Keywords", d->keywords);
     d->serviceType = config.readEntry("X-KDE-ServiceTypes", d->serviceType);
@@ -155,6 +157,16 @@ QString PackageMetadata::author() const
 QString PackageMetadata::email() const
 {
     return d->email;
+}
+
+QString PackageMetadata::icon() const
+{
+    return d->icon;
+}
+
+void PackageMetadata::setIcon(const QString &icon)
+{
+    d->icon = icon;
 }
 
 QString PackageMetadata::version() const
