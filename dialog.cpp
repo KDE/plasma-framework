@@ -46,6 +46,7 @@
 #include "plasma/applet.h"
 #include "plasma/animator.h"
 #include "plasma/containment.h"
+#include "plasma/corona.h"
 #include "plasma/extenders/extender.h"
 #include "plasma/private/extender_p.h"
 #include "plasma/framesvg.h"
@@ -198,6 +199,10 @@ void DialogPrivate::checkBorders(bool updateMaskIfNeeded)
 
     //decide about disabling the border attached to the panel
     if (applet) {
+        Plasma::Corona *corona = qobject_cast<Plasma::Corona *>(applet->scene());
+        if (corona) {
+            q->move(corona->popupPosition(applet, q->size()));
+        }
         background->getMargins(leftWidth, topHeight, rightWidth, bottomHeight);
 
         switch (applet->location()) {
