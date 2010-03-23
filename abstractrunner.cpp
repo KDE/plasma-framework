@@ -328,7 +328,7 @@ QString AbstractRunner::id() const
 
 QString AbstractRunner::description() const
 {
-    if (!d->runnerDescription.isValid()) {
+    if (d->runnerDescription.isValid()) {
         return d->runnerDescription.property("Comment").toString();
     }
 
