@@ -177,6 +177,14 @@ Applet::Applet(QObject *parentObject, const QVariantList &args)
     // inflexibility of KService::createInstance
 }
 
+Applet::Applet(const QString &packagePath, uint appletId, const QVariantList &args)
+    : QGraphicsWidget(0),
+      d(new AppletPrivate(KService::Ptr(new KService(packagePath + "/metadata.desktop")), appletId, this))
+{
+    Q_UNUSED(args) // FIXME?
+    d->init(packagePath);
+}
+
 Applet::~Applet()
 {
     //let people know that i will die
@@ -2181,14 +2189,6 @@ void Applet::setCustomCategories(const QStringList &categories)
 QStringList Applet::customCategories()
 {
     return AppletPrivate::s_customCategories.toList();
-}
-
-Applet::Applet(const QString &packagePath, uint appletId, const QVariantList &args)
-    : QGraphicsWidget(0),
-      d(new AppletPrivate(KService::Ptr(new KService(packagePath + "/metadata.desktop")), appletId, this))
-{
-    Q_UNUSED(args) // FIXME?
-    d->init(packagePath);
 }
 
 Applet *Applet::loadPlasmoid(const QString &path, uint appletId, const QVariantList &args)
