@@ -163,6 +163,29 @@ class PLASMA_EXPORT RunnerManager : public QObject
         void setAllowedRunners(const QStringList &runners);
 
         /**
+         * Attempts to add the AbstractRunner plugin represented
+         * by the KService passed in. Usually one can simply let
+         * the configuration of plugins handle loading Runner plugins,
+         * but in cases where specific runners should be loaded this
+         * allows for that to take place
+         *
+         * @arg service the service to use to load the plugin
+         * @since 4.5
+         */
+        void loadRunner(const KService::Ptr service);
+
+        /**
+         * Attempts to add the AbstractRunner from a Plasma::Package on disk.
+         * Usually one can simply let the configuration of plugins
+         * handle loading Runner plugins, but in cases where specific
+         * runners should be loaded this allows for that to take place
+         *
+         * @arg path the path to a Runner package to load
+         * @since 4.5
+         */
+        void loadRunner(const QString &path);
+
+        /**
          * @return the list of allowed plugins
          * @since 4.4
          */

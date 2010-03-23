@@ -45,16 +45,30 @@ namespace Plasma
 
 K_GLOBAL_STATIC(QMutex, s_bigLock)
 
-AbstractRunner::AbstractRunner(QObject *parent, const QString &serviceId)
+AbstractRunner::AbstractRunner(QObject *parent, const QString &path)
     : QObject(parent),
-    d(new AbstractRunnerPrivate(this, KService::serviceByStorageId(serviceId)))
+      d(new AbstractRunnerPrivate(this))
 {
+    d->init(path);
+}
+
+AbstractRunner::AbstractRunner(const KService::Ptr service, QObject *parent)
+    : QObject(parent),
+      d(new AbstractRunnerPrivate(this))
+{
+    d->init(service);
 }
 
 AbstractRunner::AbstractRunner(QObject *parent, const QVariantList &args)
     : QObject(parent),
-      d(new AbstractRunnerPrivate(this, KService::serviceByStorageId(args.count() > 0 ? args[0].toString() : QString())))
+      d(new AbstractRunnerPrivate(this))
 {
+    if (args.count() > 0) {
+        KService::Ptr service = KService::serviceByStorageId(args[0].toString());
+        if (service) {
+            d->init(service);
+        }
+    }
 }
 
 AbstractRunner::~AbstractRunner()
@@ -187,6 +201,7 @@ void AbstractRunner::clearActions()
 
 QMimeData * AbstractRunner::mimeDataForMatch(const QueryMatch *match)
 {
+    Q_UNUSED(match)
     return 0;
 }
 
@@ -274,37 +289,54 @@ void AbstractRunner::match(Plasma::RunnerContext &search)
 
 QString AbstractRunner::name() const
 {
-    if (!d->runnerDescription.isValid()) {
-        return objectName();
+    if (d->runnerDescription.isValid()) {
+        return d->runnerDescription.name();
     }
 
-    return d->runnerDescription.name();
+    if (d->package) {
+        return d->package->metadata().name();
+    }
+
+    return objectName();
 }
 
 QIcon AbstractRunner::icon() const
 {
-    if (!d->runnerDescription.isValid()) {
-        return QIcon();
+    if (d->runnerDescription.isValid()) {
+        return KIcon(d->runnerDescription.icon());
     }
 
-    return KIcon(d->runnerDescription.icon());
+    if (d->package) {
+        return KIcon(d->package->metadata().icon());
+    }
+
+    return QIcon();
 }
 
 QString AbstractRunner::id() const
 {
-    if (!d->runnerDescription.isValid()) {
-        return objectName();
+    if (d->runnerDescription.isValid()) {
+        return d->runnerDescription.pluginName();
     }
-    return d->runnerDescription.pluginName();
+
+    if (d->package) {
+        return d->package->metadata().pluginName();
+    }
+
+    return objectName();
 }
 
 QString AbstractRunner::description() const
 {
     if (!d->runnerDescription.isValid()) {
-        return objectName();
+        return d->runnerDescription.property("Comment").toString();
     }
 
-    return d->runnerDescription.property("Comment").toString();
+    if (d->package) {
+        return d->package->metadata().description();
+    }
+
+    return objectName();
 }
 
 const Package* AbstractRunner::package() const
@@ -326,37 +358,17 @@ DataEngine *AbstractRunner::dataEngine(const QString &name) const
     return d->dataEngine(name);
 }
 
-AbstractRunnerPrivate::AbstractRunnerPrivate(AbstractRunner *r, KService::Ptr service)
+AbstractRunnerPrivate::AbstractRunnerPrivate(AbstractRunner *r)
     : priority(AbstractRunner::NormalPriority),
       speed(AbstractRunner::NormalSpeed),
       blackListed(0),
       script(0),
-      runnerDescription(service),
       runner(r),
       fastRuns(0),
       package(0),
       hasRunOptions(false),
       defaultSyntax(0)
 {
-    if (runnerDescription.isValid()) {
-        const QString api = runnerDescription.property("X-Plasma-API").toString();
-        if (!api.isEmpty()) {
-            const QString path = KStandardDirs::locate("data",
-                    "plasma/runners/" + runnerDescription.pluginName() + '/');
-            PackageStructure::Ptr structure =
-                Plasma::packageStructure(api, Plasma::RunnerComponent);
-            structure->setPath(path);
-            package = new Package(path, structure);
-
-            script = Plasma::loadScriptEngine(api, runner);
-            if (!script) {
-                kDebug() << "Could not create a(n)" << api << "ScriptEngine for the"
-                    << runnerDescription.name() << "Runner.";
-                delete package;
-                package = 0;
-            }
-        }
-    }
 }
 
 AbstractRunnerPrivate::~AbstractRunnerPrivate()
@@ -365,6 +377,58 @@ AbstractRunnerPrivate::~AbstractRunnerPrivate()
     script = 0;
     delete package;
     package = 0;
+}
+
+void AbstractRunnerPrivate::init(const KService::Ptr service)
+{
+    runnerDescription = KPluginInfo(service);
+    if (runnerDescription.isValid()) {
+        const QString api = runnerDescription.property("X-Plasma-API").toString();
+        if (!api.isEmpty()) {
+            const QString path = KStandardDirs::locate("data", "plasma/runners/" + runnerDescription.pluginName() + '/');
+            prepScripting(path, api);
+            if (!script) {
+                kDebug() << "Could not create a(n)" << api << "ScriptEngine for the" << runnerDescription.name() << "Runner.";
+            }
+        }
+    }
+}
+
+void AbstractRunnerPrivate::init(const QString &path)
+{
+    prepScripting(path);
+}
+
+void AbstractRunnerPrivate::prepScripting(const QString &path, QString api)
+{
+    if (script) {
+        return;
+    }
+
+    if (package) {
+        delete package;
+    }
+
+    PackageStructure::Ptr structure = Plasma::packageStructure(api, Plasma::RunnerComponent);
+    structure->setPath(path);
+    package = new Package(path, structure);
+
+    if (!package->isValid()) {
+        kDebug() << "Invalid Runner package at" << path;
+        delete package;
+        package = 0;
+        return;
+    }
+
+    if (api.isEmpty()) {
+        api = package->metadata().implementationApi();
+    }
+
+    script = Plasma::loadScriptEngine(api, runner);
+    if (!script) {
+        delete package;
+        package = 0;
+    }
 }
 
 // put all setup routines for script here. at this point we can assume that

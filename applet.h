@@ -111,7 +111,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         ~Applet();
 
         /**
-         * @return a package structure representing a Theme
+         * @return a package structure representing an Applet
          */
         static PackageStructure::Ptr packageStructure();
 

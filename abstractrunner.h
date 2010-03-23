@@ -281,12 +281,9 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         friend class RunnerManager;
         friend class RunnerManagerPrivate;
 
-        /**
-         * Constructs a Runner object. Since AbstractRunner has pure virtuals,
-         * this constructor can not be called directly. Rather a subclass must
-         * be created
-         */
-        explicit AbstractRunner(QObject *parent = 0, const QString &serviceId = QString());
+        explicit AbstractRunner(QObject *parent = 0, const QString &path = QString());
+        explicit AbstractRunner(const KService::Ptr service, QObject *parent = 0);
+
         AbstractRunner(QObject *parent, const QVariantList &args);
 
         /**

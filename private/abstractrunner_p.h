@@ -32,8 +32,11 @@ class AbstractRunner;
 class AbstractRunnerPrivate : public DataEngineConsumer
 {
 public:
-    AbstractRunnerPrivate(AbstractRunner *r, KService::Ptr service);
+    AbstractRunnerPrivate(AbstractRunner *r);
     ~AbstractRunnerPrivate();
+    void init(const KService::Ptr service);
+    void init(const QString &path);
+    void prepScripting(const QString &path, QString api = QString());
     void setupScriptSupport();
 
     AbstractRunner::Priority priority;
