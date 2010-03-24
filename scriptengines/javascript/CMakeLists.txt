@@ -26,6 +26,7 @@ set(simple_javascript_engine_SRCS
     simplebindings/rect.cpp
     simplebindings/qscriptbookkeeping.cpp
     simplebindings/size.cpp
+    simplebindings/sizepolicy.cpp
     simplebindings/timer.cpp
     simplebindings/uiloader.cpp
     simplebindings/url.cpp

@@ -81,6 +81,7 @@ QScriptValue constructQPixmapClass(QScriptEngine *engine);
 QScriptValue constructQPointClass(QScriptEngine *engine);
 QScriptValue constructQRectFClass(QScriptEngine *engine);
 QScriptValue constructQSizeFClass(QScriptEngine *engine);
+QScriptValue constructQSizePolicyClass(QScriptEngine *engine);
 QScriptValue constructTimerClass(QScriptEngine *engine);
 void registerSimpleAppletMetaTypes(QScriptEngine *engine);
 
@@ -355,6 +356,7 @@ void SimpleJavaScriptApplet::setupObjects()
     global.setProperty("QPen", constructPenClass(m_engine));
     global.setProperty("QPixmap", constructQPixmapClass(m_engine));
     global.setProperty("QSizeF", constructQSizeFClass(m_engine));
+    global.setProperty("QSizePolicy", constructQSizePolicyClass(m_engine));
     global.setProperty("QPoint", constructQPointClass(m_engine));
     global.setProperty("LinearLayout", constructLinearLayoutClass(m_engine));
     global.setProperty("GridLayout", constructGridLayoutClass(m_engine));
