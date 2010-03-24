@@ -74,12 +74,13 @@ ScriptEnv *ScriptEnv::findScriptEnv(QScriptEngine *engine)
 void ScriptEnv::registerEnums(QScriptValue &scriptValue, const QMetaObject &meta)
 {
     //manually create enum values. ugh
+    QScriptEngine *engine = scriptValue.engine();
     for (int i = 0; i < meta.enumeratorCount(); ++i) {
         QMetaEnum e = meta.enumerator(i);
         //kDebug() << e.name();
         for (int i=0; i < e.keyCount(); ++i) {
             //kDebug() << e.key(i) << e.value(i);
-            scriptValue.setProperty(e.key(i), QScriptValue(m_engine, e.value(i)));
+            scriptValue.setProperty(e.key(i), QScriptValue(engine, e.value(i)));
         }
     }
 }

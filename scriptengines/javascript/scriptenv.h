@@ -46,7 +46,7 @@ public:
     /** Returns the ScriptEnv in use for a given QScriptEngine or 0. */
     static ScriptEnv *findScriptEnv(QScriptEngine *engine);
 
-    void registerEnums(QScriptValue &scriptValue, const QMetaObject &meta);
+    static void registerEnums(QScriptValue &scriptValue, const QMetaObject &meta);
     bool include(const QString &path);
 
     bool importExtensions(const KPluginInfo &info, QScriptValue &obj, Authorization &authorizer);

@@ -334,8 +334,7 @@ void SimpleJavaScriptApplet::setupObjects()
     }
     global.setProperty("startupArguments", args);
 
-    m_env->registerEnums(global, AppletInterface::staticMetaObject);
-
+    ScriptEnv::registerEnums(global, AppletInterface::staticMetaObject);
 
     // Add a global loadui method for ui files
     QScriptValue fun = m_engine->newFunction(SimpleJavaScriptApplet::loadui);
@@ -458,7 +457,7 @@ QScriptValue SimpleJavaScriptApplet::animation(QScriptContext *context, QScriptE
             }
 
             QScriptValue value = engine->newQObject(anim);
-	    ScriptEnv::findScriptEnv(engine)->registerEnums(value, *anim->metaObject());
+	    ScriptEnv::registerEnums(value, *anim->metaObject());
             return value;
         }
     }
@@ -540,7 +539,7 @@ QScriptValue SimpleJavaScriptApplet::newPlasmaSvg(QScriptContext *context, QScri
     Svg *svg = new Svg(parent);
     svg->setImagePath(parentedToApplet ? findSvg(engine, filename) : filename);
     QScriptValue fun = engine->newQObject(svg);
-    ScriptEnv::findScriptEnv(engine)->registerEnums(fun, *svg->metaObject());
+    ScriptEnv::registerEnums(fun, *svg->metaObject());
     return fun;
 }
 
@@ -558,8 +557,7 @@ QScriptValue SimpleJavaScriptApplet::newPlasmaFrameSvg(QScriptContext *context, 
     frameSvg->setImagePath(parentedToApplet ? filename : findSvg(engine, filename));
 
     QScriptValue fun = engine->newQObject(frameSvg);
-    // FIXME: why is this necessary when it is clearly declared in FrameSvg's moc?
-    ScriptEnv::findScriptEnv(engine)->registerEnums(fun, *frameSvg->metaObject());
+    ScriptEnv::registerEnums(fun, *frameSvg->metaObject());
     return fun;
 }
 
@@ -581,7 +579,7 @@ QScriptValue SimpleJavaScriptApplet::newPlasmaExtenderItem(QScriptContext *conte
 
     Plasma::ExtenderItem *extenderItem = new Plasma::ExtenderItem(extender);
     QScriptValue fun = engine->newQObject(extenderItem);
-    ScriptEnv::findScriptEnv(engine)->registerEnums(fun, *extenderItem->metaObject());
+    ScriptEnv::registerEnums(fun, *extenderItem->metaObject());
     return fun;
 }
 
@@ -659,7 +657,7 @@ QScriptValue SimpleJavaScriptApplet::createWidget(QScriptContext *context, QScri
     fun.setProperty("adjustSize", engine->newFunction(widgetAdjustSize));
 
     //register enums will be accessed for instance as frame.Sunken for Frame shadow...
-    ScriptEnv::findScriptEnv(engine)->registerEnums(fun, *w->metaObject());
+    ScriptEnv::registerEnums(fun, *w->metaObject());
     return fun;
 }
 
