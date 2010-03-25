@@ -118,6 +118,11 @@ Extender::Extender(Applet *applet)
 
 Extender::~Extender()
 {
+    foreach (ExtenderItem *item, d->attachedExtenderItems) {
+        disconnect(item, 0, this, 0);
+        delete item;
+    }
+
     delete d;
 }
 
