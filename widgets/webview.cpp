@@ -35,6 +35,7 @@
 #include "animator.h"
 #include "plasma.h"
 #include "widgets/webview.h"
+#include "widgets/scrollwidget.h"
 #include "private/animablegraphicswebview_p.h"
 
 namespace Plasma
@@ -53,6 +54,7 @@ public:
 
     WebView *q;
     AnimableGraphicsWebView *webView;
+    ScrollWidget *scrollWidget;
     bool loaded;
 };
 
@@ -66,13 +68,15 @@ WebView::WebView(QGraphicsItem *parent)
     setAcceptsHoverEvents(true);
     setFlags(QGraphicsItem::ItemIsFocusable);
 
-    d->webView = new AnimableGraphicsWebView(this);
-    d->webView->setDragToScroll(false);
+    d->scrollWidget = new Plasma::ScrollWidget(this);
+    d->webView = new AnimableGraphicsWebView(d->scrollWidget);
+    d->scrollWidget->setWidget(d->webView);
+    d->scrollWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    d->scrollWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setDragToScroll(false);
     QPalette palette = qApp->palette();
     palette.setBrush(QPalette::Base, Qt::transparent);
     d->webView->page()->setPalette(palette);
-
-    Plasma::Animator::self()->registerScrollingManager(d->webView);
 
     connect(d->webView, SIGNAL(loadProgress(int)),
             this, SIGNAL(loadProgress(int)));
@@ -170,6 +174,7 @@ QWebFrame *WebView::mainFrame() const
 void WebView::setDragToScroll(bool drag)
 {
     d->webView->setDragToScroll(drag);
+    d->scrollWidget->setFiltersChildEvents(drag);
 }
 
 bool WebView::dragToScroll()
@@ -271,7 +276,8 @@ QVariant WebView::itemChange(GraphicsItemChange change, const QVariant &value)
 void WebView::setGeometry(const QRectF &geometry)
 {
     QGraphicsWidget::setGeometry(geometry);
-    d->webView->setGeometry(QRectF(0, 0, geometry.width(), geometry.height()));
+    d->scrollWidget->setGeometry(QRectF(0, 0, geometry.width(), geometry.height()));
+    d->webView->setGeometry(d->scrollWidget->viewportGeometry());
 }
 
 QSizeF WebView::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const

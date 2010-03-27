@@ -165,5 +165,28 @@ void AnimableGraphicsWebView::wheelEvent(QGraphicsSceneWheelEvent *event)
     event->setAccepted(!m_dragToScroll);
 }
 
+qreal AnimableGraphicsWebView::scrollPositionX() const
+{
+    return page()->mainFrame()->scrollPosition().x();
+}
+
+void AnimableGraphicsWebView::setScrollPositionX(qreal position)
+{
+    QPointF pt(position, scrollPositionY());
+    setScrollPosition(pt);
+}
+
+qreal AnimableGraphicsWebView::scrollPositionY() const
+{
+    return page()->mainFrame()->scrollPosition().y();
+}
+
+void AnimableGraphicsWebView::setScrollPositionY(qreal position)
+{
+    QPointF pt(scrollPositionX(), position);
+    setScrollPosition(pt);
+}
+
+
 #include "animablegraphicswebview_p.moc"
 

@@ -140,6 +140,11 @@ public:
         hasOvershoot = true;
 
         alignment = Qt::AlignLeft | Qt::AlignTop;
+
+        hasContentsProperty = false;
+        hasOffsetProperty = false;
+        hasXProperty = false;
+        hasYProperty = false;
     }
 
     void adjustScrollbars()
@@ -298,7 +303,7 @@ public:
     void animateMoveTo(const QPointF &pos)
     {
         qreal duration = 800;
-        QPointF start = widget.data()->pos();
+        QPointF start = q->scrollPosition();
         QSizeF threshold = q->viewportGeometry().size();
         QPointF diff = pos - start;
 
@@ -345,6 +350,7 @@ public:
             qreal duration = qAbs(v / deceleration);
             qreal diffY = v * duration + (0.5  * deceleration * duration * duration);
             qreal startY = val;
+ 
             qreal endY = startY + diffY;
 
             if (velocity > 0) {
@@ -355,6 +361,12 @@ public:
                     endY = startY - maxDistance;
             }
             duration = qAbs((endY-startY)/ (-v/2));
+
+            if (hasYProperty) {
+                startY = -startY;
+                endY = -endY;
+            }
+
 
 #if DEBUG
             qDebug()<<"XXX velocity = "<<v <<", target = "<< target
@@ -380,12 +392,12 @@ public:
     }
     void flickX(qreal velocity)
     {
-        flick(flickAnimationX, velocity, widget.data()->x(), minXExtent(), maxXExtent(),
+        flick(flickAnimationX, velocity, widgetX(), minXExtent(), maxXExtent(),
               q->viewportGeometry().width());
     }
     void flickY(qreal velocity)
     {
-        flick(flickAnimationY, velocity, widget.data()->y(),minYExtent(), maxYExtent(),
+        flick(flickAnimationY, velocity, widgetY(),minYExtent(), maxYExtent(),
               q->viewportGeometry().height());
     }
     void fixup(QAnimationGroup *group,
@@ -427,12 +439,12 @@ public:
     void fixupX()
     {
         fixup(fixupAnimation.groupX, fixupAnimation.startX, fixupAnimation.endX,
-              widget.data()->x(), minXExtent(), maxXExtent());
+              widgetX(), minXExtent(), maxXExtent());
     }
     void fixupY()
     {
         fixup(fixupAnimation.groupY, fixupAnimation.startY, fixupAnimation.endY,
-              widget.data()->y(), minYExtent(), maxYExtent());
+              widgetY(), minYExtent(), maxYExtent());
     }
 
     void makeRectVisible()
@@ -466,7 +478,7 @@ public:
             delta.setX(viewRect.right() - mappedRect.right());
         }
 
-        animateMoveTo(widget.data()->pos() + delta);
+        animateMoveTo(q->scrollPosition() - delta);
     }
 
     void makeItemVisible(QGraphicsItem *itemToBeVisible)
@@ -494,6 +506,35 @@ public:
         flickAnimationY->stop();
         fixupAnimation.groupX->stop();
         fixupAnimation.groupY->stop();
+    }
+
+    void setWidgetX(qreal x)
+    {
+        if (hasXProperty) {
+            widget.data()->setProperty("scrollPositionX", -x);
+        } else
+            widget.data()->setX(x);
+    }
+    void setWidgetY(qreal y)
+    {
+        if (hasYProperty) {
+            widget.data()->setProperty("scrollPositionY", -y);
+        } else
+            widget.data()->setY(y);
+    }
+    qreal widgetX() const
+    {
+        if (hasXProperty) {
+            return -widget.data()->property("scrollPositionX").toReal();
+        } else
+            return widget.data()->x();
+    }
+    qreal widgetY() const
+    {
+        if (hasYProperty) {
+            return -widget.data()->property("scrollPositionY").toReal();
+        } else
+            return widget.data()->y();
     }
 
     void handleMousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -533,7 +574,7 @@ public:
                         rejectY = true;
                 }
                 if (!rejectY && stealEvent) {
-                    widget.data()->setY(qRound(newY));
+                    setWidgetY(qRound(newY));
                     moved = true;
                 }
                 if (qAbs(dy) > QApplication::startDragDistance())
@@ -560,7 +601,7 @@ public:
                         rejectX = true;
                 }
                 if (!rejectX && stealEvent) {
-                    widget.data()->setX(qRound(newX));
+                    setWidgetX(qRound(newX));
                     moved = true;
                 }
 
@@ -642,7 +683,7 @@ public:
         if (!widget.data())
             return;
 
-        QPointF start = widget.data()->pos();
+        QPointF start = q->scrollPosition();
         QPointF end = start;
 
         //At some point we should switch to
@@ -653,7 +694,7 @@ public:
         // is that at this point we don't have any clue what a "line" is and if
         // we make it a pixel then scrolling by 3 (default) pixels will be
         // very painful
-        qreal step = event->delta()/3;
+        qreal step = -event->delta()/3;
 
         //ifthe widget can scroll in a single axis and the wheel is the other one, scroll the other one
         Qt::Orientation orientation = event->orientation();
@@ -754,10 +795,18 @@ public:
     void createFlickAnimations()
     {
         if (widget.data()) {
+            QString xProp = QString::fromLatin1("x");
+            QString yProp = QString::fromLatin1("y");
+
+            if (hasXProperty)
+                xProp = QString::fromLatin1("scrollPositionX");
+            if (hasYProperty)
+                yProp = QString::fromLatin1("scrollPositionY");
+
             flickAnimationX = new QPropertyAnimation(widget.data(),
-                                                     "x", widget.data());
+                                                     xProp.toLatin1(), widget.data());
             flickAnimationY = new QPropertyAnimation(widget.data(),
-                                                     "y", widget.data());
+                                                     yProp.toLatin1(), widget.data());
             QObject::connect(flickAnimationX, SIGNAL(finished()),
                              q, SLOT(fixupX()));
             QObject::connect(flickAnimationY, SIGNAL(finished()),
@@ -781,13 +830,13 @@ public:
             fixupAnimation.groupX = new QSequentialAnimationGroup(widget.data());
             fixupAnimation.groupY = new QSequentialAnimationGroup(widget.data());
             fixupAnimation.startX  = new QPropertyAnimation(widget.data(),
-                                                            "x", widget.data());
+                                                            xProp.toLatin1(), widget.data());
             fixupAnimation.startY  = new QPropertyAnimation(widget.data(),
-                                                            "y", widget.data());
+                                                            yProp.toLatin1(), widget.data());
             fixupAnimation.endX = new QPropertyAnimation(widget.data(),
-                                                         "x", widget.data());
+                                                         xProp.toLatin1(), widget.data());
             fixupAnimation.endY = new QPropertyAnimation(widget.data(),
-                                                         "y", widget.data());
+                                                         yProp.toLatin1(), widget.data());
             fixupAnimation.groupX->addAnimation(
                 fixupAnimation.startX);
             fixupAnimation.groupY->addAnimation(
@@ -813,9 +862,9 @@ public:
                              q, SIGNAL(scrollStateChanged(QAbstractAnimation::State,
                                                           QAbstractAnimation::State)));
 
-            directMoveAnimation = new QPropertyAnimation(widget.data(),
-                                                         "pos",
-                                                         widget.data());
+            directMoveAnimation = new QPropertyAnimation(q,
+                                                         "scrollPosition",
+                                                         q);
             QObject::connect(directMoveAnimation, SIGNAL(finished()),
                              q, SLOT(fixupX()));
             QObject::connect(directMoveAnimation, SIGNAL(finished()),
@@ -900,6 +949,11 @@ public:
     bool hasOvershoot;
 
     Qt::Alignment alignment;
+
+    bool hasContentsProperty;
+    bool hasOffsetProperty;
+    bool hasXProperty;
+    bool hasYProperty;
 };
 
 
@@ -931,9 +985,14 @@ void ScrollWidget::setWidget(QGraphicsWidget *widget)
     }
 
     d->widget = widget;
-    d->createFlickAnimations();
     //it's not good it's setting a size policy here, but it's done to be retrocompatible with older applications
     if (widget) {
+        d->hasContentsProperty = widget->property("contentsSize").isValid();
+        d->hasOffsetProperty = widget->property("scrollPosition").isValid();
+        d->hasXProperty = widget->property("scrollPositionX").isValid();
+        d->hasYProperty = widget->property("scrollPositionY").isValid();
+        d->createFlickAnimations();
+
         connect(widget, SIGNAL(xChanged()), this, SLOT(setScrollX()));
         connect(widget, SIGNAL(yChanged()), this, SLOT(setScrollY()));
         widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -1011,11 +1070,13 @@ void ScrollWidget::ensureItemVisible(QGraphicsItem *item)
 
 void ScrollWidget::registerAsDragHandle(QGraphicsWidget *item)
 {
+    Q_UNUSED(item);
     return;
 }
 
 void ScrollWidget::unregisterAsDragHandle(QGraphicsWidget *item)
 {
+    Q_UNUSED(item);
     return;
 }
 
@@ -1031,19 +1092,37 @@ QRectF ScrollWidget::viewportGeometry() const
 
 QSizeF ScrollWidget::contentsSize() const
 {
-    return d->widget ? d->widget.data()->size() : QSizeF();
+    if (d->widget) {
+        if (d->hasContentsProperty) {
+            QVariant var = d->widget.data()->property("contentsSize");
+            return var.toSizeF();
+        } else
+            return d->widget.data()->size();
+    }
+    return QSizeF();
 }
 
 void ScrollWidget::setScrollPosition(const QPointF &position)
 {
     if (d->widget) {
-        d->widget.data()->setPos(-position.toPoint());
+        if (d->hasOffsetProperty)
+            d->widget.data()->setProperty("scrollPosition", position);
+        else
+            d->widget.data()->setPos(-position.toPoint());
     }
 }
 
 QPointF ScrollWidget::scrollPosition() const
 {
-    return d->widget ? -d->widget.data()->pos() : QPointF();
+    if (d->widget) {
+        if (d->hasOffsetProperty) {
+            QVariant var = d->widget.data()->property("scrollPosition");
+            return var.toPointF();
+        } else {
+            return -d->widget.data()->pos();
+        }
+    }
+    return QPointF();
 }
 
 void ScrollWidget::setStyleSheet(const QString &styleSheet)
@@ -1176,7 +1255,7 @@ bool ScrollWidget::sceneEventFilter(QGraphicsItem *i, QEvent *e)
 {
     //only the scrolling widget and its children
     if (!d->widget.data() ||
-        (!d->widget.data()->isAncestorOf(i) && i != d->scrollingWidget))
+        (!d->scrollingWidget->isAncestorOf(i) && i != d->scrollingWidget))
         return false;
 
     bool stealThisEvent = d->stealEvent;

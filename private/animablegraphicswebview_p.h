@@ -38,6 +38,8 @@ class AnimableGraphicsWebView : public KGraphicsWebView
 
     Q_PROPERTY(qreal zoomFactor READ zoom WRITE setZoom)
     Q_PROPERTY(QPointF scrollPosition READ scrollPosition WRITE setScrollPosition)
+    Q_PROPERTY(qreal scrollPositionX READ scrollPositionX WRITE setScrollPositionX)
+    Q_PROPERTY(qreal scrollPositionY READ scrollPositionY WRITE setScrollPositionY)
     Q_PROPERTY(QSizeF contentsSize READ contentsSize)
     Q_PROPERTY(QRectF viewportGeometry READ viewportGeometry)
 
@@ -46,6 +48,10 @@ public:
 
     QPointF scrollPosition() const;
     void setScrollPosition(const QPointF &position);
+    qreal scrollPositionX() const;
+    void setScrollPositionX(qreal position);
+    qreal scrollPositionY() const;
+    void setScrollPositionY(qreal position);
     QSizeF contentsSize() const;
     QRectF viewportGeometry() const;
     void setDragToScroll(bool enable);
