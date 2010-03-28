@@ -41,6 +41,8 @@
 #include <kstandarddirs.h>
 #include <kwindowsystem.h>
 
+
+#include "windoweffects.h"
 #include "private/packages_p.h"
 #include "libplasma-theme-global.h"
 
@@ -200,6 +202,9 @@ QString ThemePrivate::findInTheme(const QString &image, const QString &theme) co
         search =  KStandardDirs::locate("data", search);
     } else if (!compositingActive) {
         search = "desktoptheme/" + theme + "/opaque/" + image;
+        search =  KStandardDirs::locate("data", search);
+    } else if (WindowEffects::isEffectAvailable(WindowEffects::BlurBehind)) {
+        search = "desktoptheme/" + theme + "/translucent/" + image;
         search =  KStandardDirs::locate("data", search);
     }
 
