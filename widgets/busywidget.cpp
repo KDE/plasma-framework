@@ -159,7 +159,7 @@ void BusyWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
             if (d->svg->hasElement("busywidget-shadow")) {
                 buffPainter.save();
-                buffPainter.translate(2,2);
+                buffPainter.translate(1,1);
                 buffPainter.rotate(intRotation);
                 d->svg->paint(&buffPainter, QRect(-translatedPos.toPoint(), spinnerRect.size()), "busywidget-shadow");
                 buffPainter.restore();
