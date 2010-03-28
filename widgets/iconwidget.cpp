@@ -762,7 +762,7 @@ QPixmap IconWidgetPrivate::decoration(const QStyleOptionGraphicsItem *option, bo
             oldIcon = QIcon();
         } else {
             result = PaintUtils::transition(
-                oldIcon.pixmap(iconSize.toSize(), mode, state),
+                oldIcon.pixmap(result.size(), mode, state),
                 result, hoverAnimation->value());
         }
     }
