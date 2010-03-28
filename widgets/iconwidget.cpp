@@ -587,14 +587,18 @@ void IconWidgetPrivate::layoutIcons(const QStyleOptionGraphicsItem *option)
         }
 
         //aspect ratio very "tall"
-        if (currentSize.width() < heightAvail) {
-            iconWidth = currentSize.width() -
-                        horizontalMargin[IconWidgetPrivate::IconMargin].left -
-                        horizontalMargin[IconWidgetPrivate::IconMargin].right;
+        if (!text.isEmpty() || !infoText.isEmpty()) {
+	    if (currentSize.width() < heightAvail) {
+                iconWidth = currentSize.width() -
+                            horizontalMargin[IconWidgetPrivate::IconMargin].left -
+                            horizontalMargin[IconWidgetPrivate::IconMargin].right;
+            } else {
+                iconWidth = heightAvail -
+                            verticalMargin[IconWidgetPrivate::IconMargin].top -
+                            verticalMargin[IconWidgetPrivate::IconMargin].bottom;
+            }
         } else {
-            iconWidth = heightAvail -
-                        verticalMargin[IconWidgetPrivate::IconMargin].top -
-                        verticalMargin[IconWidgetPrivate::IconMargin].bottom;
+            iconWidth = qMin(heightAvail, currentSize.width());
         }
         iconWidth -= horizontalMargin[IconWidgetPrivate::ItemMargin].left + horizontalMargin[IconWidgetPrivate::ItemMargin].right;
     } else {
@@ -602,12 +606,7 @@ void IconWidgetPrivate::layoutIcons(const QStyleOptionGraphicsItem *option)
         //if there is text resize the icon in order to make room for the text
         if (text.isEmpty() && infoText.isEmpty()) {
             // with no text, we just take up the whole geometry
-            iconWidth = qMin(currentSize.height() -
-                            horizontalMargin[IconWidgetPrivate::IconMargin].left -
-                            horizontalMargin[IconWidgetPrivate::IconMargin].right,
-                             currentSize.width() -
-                            horizontalMargin[IconWidgetPrivate::IconMargin].left -
-                            horizontalMargin[IconWidgetPrivate::IconMargin].right);
+            iconWidth = qMin(currentSize.height(), currentSize.width());
         } else {
             iconWidth = currentSize.height() -
                         verticalMargin[IconWidgetPrivate::IconMargin].top -
