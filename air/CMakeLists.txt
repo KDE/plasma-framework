@@ -12,3 +12,6 @@ install( FILES ${opaque_dialogs} DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/de
 
 FILE(GLOB opaque_widgets opaque/widgets/*.svgz)
 install( FILES ${opaque_widgets} DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/default/opaque/widgets/ )
+
+FILE(GLOB icons icons/*.svgz)
+install( FILES ${icons} DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/default/icons/ )
