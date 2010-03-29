@@ -136,8 +136,8 @@ void BusyWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
     int intRotation = int(d->rotation);
 
-    QRect spinnerRect(QPoint(0, 0), QSize(qMin(size().width(), size().height()), qMin(size().width(), size().height())));
-    spinnerRect.moveCenter(QPoint(size().width()/2, size().height()/2));
+    QRectF spinnerRect(QPoint(0, 0), QSize(qMin(size().width(), size().height()), qMin(size().width(), size().height())));
+    spinnerRect.moveCenter(boundingRect().center());
 
     if (!isEnabled()) {
         painter->setOpacity(painter->opacity() / 2);
@@ -149,7 +149,7 @@ void BusyWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
         if (!d->frames[intRotation]) {
             QPointF translatedPos(spinnerRect.width()/2, spinnerRect.height()/2);
 
-            d->frames[intRotation] = QPixmap(spinnerRect.size());
+            d->frames[intRotation] = QPixmap(spinnerRect.size().toSize());
             d->frames[intRotation].fill(Qt::transparent);
 
             QPainter buffPainter(&d->frames[intRotation]);
@@ -161,15 +161,15 @@ void BusyWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
                 buffPainter.save();
                 buffPainter.translate(1,1);
                 buffPainter.rotate(intRotation);
-                d->svg->paint(&buffPainter, QRect(-translatedPos.toPoint(), spinnerRect.size()), "busywidget-shadow");
+                d->svg->paint(&buffPainter, QRectF(-translatedPos.toPoint(), spinnerRect.size()), "busywidget-shadow");
                 buffPainter.restore();
             }
 
             buffPainter.rotate(intRotation);
-            d->svg->paint(&buffPainter, QRect(-translatedPos.toPoint(), spinnerRect.size()), "busywidget");
+            d->svg->paint(&buffPainter, QRectF(-translatedPos.toPoint(), spinnerRect.size()), "busywidget");
         }
 
-        painter->drawPixmap(spinnerRect.topLeft(), d->frames[intRotation]);
+        painter->drawPixmap(spinnerRect.topLeft().toPoint(), d->frames[intRotation]);
     }
 
     painter->setPen(Plasma::Theme::defaultTheme()->color(Theme::TextColor));
