@@ -156,7 +156,7 @@ void PixmapTransition::updateCurrentTime(int currentTime)
             }
             QPainter p(&m_currentPixmap);
             p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-            p.fillRect(m_currentPixmap.rect(), QColor(0, 0, 0, (int)(((qreal)255)*delta)));
+            p.fillRect(m_currentPixmap.rect(), QColor(0, 0, 0, (int)(254 - ((qreal)254)*delta)));
             p.end();
         }
     }
