@@ -86,6 +86,7 @@ public:
     void checkBorders(bool updateMaskIfNeeded);
     void updateResizeCorners();
     int calculateWidthForHeightAndRatio(int height, qreal ratio);
+    Plasma::Applet *applet();
 
     Plasma::Dialog *q;
 
@@ -161,6 +162,25 @@ void DialogPrivate::checkBorders()
     checkBorders(true);
 }
 
+Plasma::Applet *DialogPrivate::applet()
+{
+    Extender *extender = qobject_cast<Extender*>(graphicsWidgetPtr.data());
+    Plasma::Applet *applet = 0;
+    if (extender) {
+        applet = extender->d->applet;
+    } else if (graphicsWidgetPtr) {
+        QObject *pw = graphicsWidgetPtr.data();
+
+        while ((pw = pw->parent())) {
+            applet = dynamic_cast<Plasma::Applet *>(pw);
+            if (applet) {
+                break;
+            }
+        }
+    }
+    return applet;
+}
+
 void DialogPrivate::checkBorders(bool updateMaskIfNeeded)
 {
     if (resizeChecksWithBorderCheck) {
@@ -172,19 +192,7 @@ void DialogPrivate::checkBorders(bool updateMaskIfNeeded)
     FrameSvg::EnabledBorders borders = FrameSvg::AllBorders;
 
     Extender *extender = qobject_cast<Extender*>(graphicsWidget);
-    Plasma::Applet *applet = 0;
-    if (extender) {
-        applet = extender->d->applet;
-    } else if (graphicsWidget) {
-        QObject *pw = graphicsWidget;
-
-        while ((pw = pw->parent())) {
-            applet = dynamic_cast<Plasma::Applet *>(pw);
-            if (applet) {
-                break;
-            }
-        }
-    }
+    Plasma::Applet *applet = this->applet();
 
     //used to remove borders at the edge of the desktop
     QDesktopWidget *desktop = QApplication::desktop();
@@ -199,10 +207,6 @@ void DialogPrivate::checkBorders(bool updateMaskIfNeeded)
 
     //decide about disabling the border attached to the panel
     if (applet) {
-        Plasma::Corona *corona = qobject_cast<Plasma::Corona *>(applet->scene());
-        if (corona) {
-            q->move(corona->popupPosition(applet, q->size()));
-        }
         background->getMargins(leftWidth, topHeight, rightWidth, bottomHeight);
 
         switch (applet->location()) {
@@ -560,6 +564,14 @@ void Dialog::resizeEvent(QResizeEvent *event)
         sceneRect.setHeight(qMax(qreal(1), sceneRect.height()));
         d->view->setSceneRect(sceneRect);
         d->view->centerOn(graphicsWidget);
+    }
+
+    Plasma::Applet *applet = d->applet();
+    if (applet) {
+        Plasma::Corona *corona = qobject_cast<Plasma::Corona *>(applet->scene());
+        if (corona) {
+            move(corona->popupPosition(applet, size()));
+        }
     }
 }
 
