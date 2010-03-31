@@ -140,21 +140,7 @@ void SimpleJavaScriptApplet::reportError(ScriptEnv *env, bool fatal)
 
 void SimpleJavaScriptApplet::configChanged()
 {
-    QScriptValue fun = m_self.property("configChanged");
-    if (!fun.isFunction()) {
-        kDebug() << "Script: plasmoid.configChanged is not a function, " << fun.toString();
-        return;
-    }
-
-    QScriptContext *ctx = m_engine->pushContext();
-    ctx->setActivationObject(m_self);
-    //kDebug() << "calling plasmoid";
-    fun.call(m_self);
-    m_engine->popContext();
-
-    if (m_engine->hasUncaughtException()) {
-        reportError(m_env);
-    }
+    callFunction("configChanged");
 }
 
 void SimpleJavaScriptApplet::dataUpdated(const QString &name, const DataEngine::Data &data)
@@ -173,8 +159,7 @@ void SimpleJavaScriptApplet::extenderItemRestored(Plasma::ExtenderItem* item)
 
 void SimpleJavaScriptApplet::activate()
 {
-    QScriptValueList args;
-    callFunction("activate", args);
+    callFunction("activate");
 }
 
 void SimpleJavaScriptApplet::popupEvent(bool popped)
@@ -186,36 +171,16 @@ void SimpleJavaScriptApplet::popupEvent(bool popped)
 
 void SimpleJavaScriptApplet::executeAction(const QString &name)
 {
-    QScriptValueList args;
-    callFunction("action_" + name, args);
+    callFunction("action_" + name);
 }
 
 void SimpleJavaScriptApplet::paintInterface(QPainter *p, const QStyleOptionGraphicsItem *option, const QRect &contentsRect)
 {
-    Q_UNUSED(option)
-    Q_UNUSED(contentsRect)
-
-    //kDebug() << "paintInterface() (c++)";
-    QScriptValue fun = m_self.property("paintInterface");
-    if (!fun.isFunction()) {
-        //kDebug() << "Script: paintInterface is not a function, " << fun.toString();
-        AppletScript::paintInterface(p, option, contentsRect);
-        return;
-    }
-
     QScriptValueList args;
     args << m_engine->toScriptValue(p);
     args << m_engine->toScriptValue(const_cast<QStyleOptionGraphicsItem*>(option));
     args << m_engine->toScriptValue(QRectF(contentsRect));
-
-    QScriptContext *ctx = m_engine->pushContext();
-    ctx->setActivationObject(m_self);
-    fun.call(m_self, args);
-    m_engine->popContext();
-
-    if (m_engine->hasUncaughtException()) {
-        reportError(m_env);
-    }
+    callFunction("paintInterface", args);
 }
 
 QList<QAction*> SimpleJavaScriptApplet::contextualActions()
