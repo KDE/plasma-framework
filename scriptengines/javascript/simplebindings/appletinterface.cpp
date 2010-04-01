@@ -369,6 +369,16 @@ Plasma::Extender *AppletInterface::extender() const
     return m_appletScriptEngine->extender();
 }
 
+void AppletInterface::addEventListener(const QString &event, const QScriptValue &func)
+{
+    m_appletScriptEngine->addEventListener(event, func);
+}
+
+void AppletInterface::removeEventListener(const QString &event, const QScriptValue &func)
+{
+    m_appletScriptEngine->removeEventListener(event, func);
+}
+
 void AppletInterface::gc()
 {
     QTimer::singleShot(0, m_appletScriptEngine, SLOT(collectGarbage()));

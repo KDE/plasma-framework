@@ -210,7 +210,6 @@ enum IntervalAlignment {
     Q_INVOKABLE AspectRatioMode aspectRatioMode() const;
     Q_INVOKABLE void setAspectRatioMode(AspectRatioMode mode);
 
-
     Q_INVOKABLE void setFailedToLaunch(bool failed, const QString &reason = QString());
 
     Q_INVOKABLE bool isBusy() const;
@@ -255,6 +254,9 @@ enum IntervalAlignment {
     Q_INVOKABLE QObject *findChild(const QString &name) const;
 
     Q_INVOKABLE Plasma::Extender *extender() const;
+
+    Q_INVOKABLE void addEventListener(const QString &event, const QScriptValue &func);
+    Q_INVOKABLE void removeEventListener(const QString &event, const QScriptValue &func);
 
     Plasma::DataEngine *dataEngine(const QString &name);
 

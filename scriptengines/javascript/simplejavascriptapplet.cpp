@@ -24,6 +24,7 @@
 #include <QFile>
 #include <QUiLoader>
 #include <QGraphicsLayout>
+#include <QGraphicsSceneHoverEvent>
 #include <QParallelAnimationGroup>
 #include <QPauseAnimation>
 #include <QSequentialAnimationGroup>
@@ -63,8 +64,12 @@
 
 using namespace Plasma;
 
+Q_DECLARE_METATYPE(QKeyEvent*)
 Q_DECLARE_METATYPE(QPainter*)
 Q_DECLARE_METATYPE(QStyleOptionGraphicsItem*)
+Q_DECLARE_METATYPE(QGraphicsSceneHoverEvent *)
+Q_DECLARE_METATYPE(QGraphicsSceneMouseEvent *)
+Q_DECLARE_METATYPE(QGraphicsSceneWheelEvent *)
 
 QScriptValue constructColorClass(QScriptEngine *engine);
 QScriptValue constructEasingCurveClass(QScriptEngine *engine);
@@ -140,38 +145,62 @@ void SimpleJavaScriptApplet::reportError(ScriptEnv *env, bool fatal)
 
 void SimpleJavaScriptApplet::configChanged()
 {
-    callFunction("configChanged");
+    if (m_eventListeners.contains("configchanged")) {
+        callEventListeners("configchanged");
+    } else {
+        callPlasmoidFunction("configChanged");
+    }
 }
 
 void SimpleJavaScriptApplet::dataUpdated(const QString &name, const DataEngine::Data &data)
 {
     QScriptValueList args;
     args << m_engine->toScriptValue(name) << m_engine->toScriptValue(data);
-    callFunction("dataUpdated", args);
+    if (m_eventListeners.contains("dataupdated")) {
+        callEventListeners("dataupdated");
+    } else {
+        callPlasmoidFunction("dataUpdated", args);
+    }
 }
 
 void SimpleJavaScriptApplet::extenderItemRestored(Plasma::ExtenderItem* item)
 {
     QScriptValueList args;
     args << m_engine->newQObject(item, QScriptEngine::AutoOwnership, QScriptEngine::PreferExistingWrapperObject);
-    callFunction("initExtenderItem", args);
+    if (m_eventListeners.contains("initextenderitem")) {
+        callEventListeners("initextenderitem");
+    } else {
+        callPlasmoidFunction("initExtenderItem", args);
+    }
 }
 
 void SimpleJavaScriptApplet::activate()
 {
-    callFunction("activate");
+    if (m_eventListeners.contains("activate")) {
+        callEventListeners("activate");
+    } else {
+        callPlasmoidFunction("activate");
+    }
 }
 
 void SimpleJavaScriptApplet::popupEvent(bool popped)
 {
     QScriptValueList args;
     args << popped;
-    callFunction("popupEvent", args);
+    if (m_eventListeners.contains("popup")) {
+        callEventListeners("popup");
+    } else {
+        callPlasmoidFunction("popupEvent", args);
+    }
 }
 
 void SimpleJavaScriptApplet::executeAction(const QString &name)
 {
-    callFunction("action_" + name);
+    if (m_eventListeners.contains("action_" + name)) {
+        callEventListeners("action_" + name);
+    } else {
+        callPlasmoidFunction("action_" + name);
+    }
 }
 
 void SimpleJavaScriptApplet::paintInterface(QPainter *p, const QStyleOptionGraphicsItem *option, const QRect &contentsRect)
@@ -180,7 +209,12 @@ void SimpleJavaScriptApplet::paintInterface(QPainter *p, const QStyleOptionGraph
     args << m_engine->toScriptValue(p);
     args << m_engine->toScriptValue(const_cast<QStyleOptionGraphicsItem*>(option));
     args << m_engine->toScriptValue(QRectF(contentsRect));
-    callFunction("paintInterface", args);
+
+    if (m_eventListeners.contains("paintinterface")) {
+        callEventListeners("paintinterface", args);
+    } else {
+        callPlasmoidFunction("paintInterface", args);
+    }
 }
 
 QList<QAction*> SimpleJavaScriptApplet::contextualActions()
@@ -188,18 +222,34 @@ QList<QAction*> SimpleJavaScriptApplet::contextualActions()
     return m_interface->contextualActions();
 }
 
-void SimpleJavaScriptApplet::callFunction(const QString &functionName, const QScriptValueList &args)
+void SimpleJavaScriptApplet::callPlasmoidFunction(const QString &functionName, const QScriptValueList &args)
 {
-    QScriptValue fun = m_self.property(functionName);
-    if (fun.isFunction()) {
-        QScriptContext *ctx = m_engine->pushContext();
-        ctx->setActivationObject(m_self);
-        fun.call(m_self, args);
-        m_engine->popContext();
+    QScriptValue func = m_self.property(functionName);
+    callFunction(func, args, m_self);
+}
 
-        if (m_engine->hasUncaughtException()) {
-            reportError(m_env);
-        }
+void SimpleJavaScriptApplet::callFunction(QScriptValue &func, const QScriptValueList &args, const QScriptValue &activator)
+{
+    if (!func.isFunction()) {
+        return;
+    }
+
+    QScriptContext *ctx = m_engine->pushContext();
+    ctx->setActivationObject(activator);
+    func.call(activator, args);
+    m_engine->popContext();
+
+    if (m_engine->hasUncaughtException()) {
+        reportError(m_env);
+    }
+}
+
+void SimpleJavaScriptApplet::callEventListeners(const QString &event, const QScriptValueList &args)
+{
+    QScriptValueList funcs = m_eventListeners.value(event);
+    QMutableListIterator<QScriptValue> it(funcs);
+    while (it.hasNext()) {
+        callFunction(it.next(), args);
     }
 }
 
@@ -208,23 +258,43 @@ void SimpleJavaScriptApplet::constraintsEvent(Plasma::Constraints constraints)
     QString functionName;
 
     if (constraints & Plasma::FormFactorConstraint) {
-        callFunction("formFactorChanged");
+        if (m_eventListeners.contains("formfactorchanged")) {
+            callEventListeners("formfactorchanged");
+        } else {
+            callPlasmoidFunction("formFactorChanged");
+        }
     }
 
     if (constraints & Plasma::LocationConstraint) {
-        callFunction("locationChanged");
+        if (m_eventListeners.contains("locationchanged")) {
+            callEventListeners("locationchanged");
+        } else {
+            callPlasmoidFunction("locationChanged");
+        }
     }
 
     if (constraints & Plasma::ContextConstraint) {
-        callFunction("currentActivityChanged");
+        if (m_eventListeners.contains("currentactivitychanged")) {
+            callEventListeners("currentactivitychanged");
+        } else {
+            callPlasmoidFunction("currentActivityChanged");
+        }
     }
 
     if (constraints & Plasma::SizeConstraint) {
-        callFunction("sizeChanged");
+        if (m_eventListeners.contains("sizechanged")) {
+            callEventListeners("sizechanged");
+        } else {
+            callPlasmoidFunction("sizeChanged");
+        }
     }
 
     if (constraints & Plasma::ImmutableConstraint) {
-        callFunction("immutabilityChanged");
+        if (m_eventListeners.contains("immutabilitychanged")) {
+            callEventListeners("immutabilitychanged");
+        } else {
+            callPlasmoidFunction("immutabilityChanged");
+        }
     }
 }
 
@@ -262,8 +332,143 @@ bool SimpleJavaScriptApplet::init()
 
     kDebug() << "ScriptName:" << applet()->name();
     kDebug() << "ScriptCategory:" << applet()->category();
-
+    applet()->installEventFilter(this);
     return m_env->include(mainScript());
+}
+
+bool SimpleJavaScriptApplet::eventFilter(QObject *watched, QEvent *event)
+{
+    switch (event->type()) {
+        case QEvent::KeyPress: {
+            if (m_eventListeners.contains("keypress")) {
+                QScriptValueList args;
+                args << m_engine->toScriptValue(static_cast<QKeyEvent *>(event));
+                callEventListeners("keypress", args);
+                return true;
+            }
+        }
+
+        case QEvent::KeyRelease: {
+            if (m_eventListeners.contains("keyrelease")) {
+                QScriptValueList args;
+                args << m_engine->toScriptValue(static_cast<QKeyEvent *>(event));
+                callEventListeners("keyrelease", args);
+                return true;
+            }
+        }
+        break;
+
+        case QEvent::GraphicsSceneHoverEnter: {
+            if (m_eventListeners.contains("hoverenter")) {
+                QScriptValueList args;
+                args << m_engine->toScriptValue(static_cast<QGraphicsSceneHoverEvent *>(event));
+                callEventListeners("hoverenter", args);
+                return true;
+            }
+        }
+        break;
+
+        case QEvent::GraphicsSceneHoverLeave: {
+            if (m_eventListeners.contains("hoverleave")) {
+                QScriptValueList args;
+                args << m_engine->toScriptValue(static_cast<QGraphicsSceneHoverEvent *>(event));
+                callEventListeners("hoverleave", args);
+                return true;
+            }
+        }
+        break;
+
+        case QEvent::GraphicsSceneHoverMove: {
+            if (m_eventListeners.contains("hovermove")) {
+                QScriptValueList args;
+                args << m_engine->toScriptValue(static_cast<QGraphicsSceneHoverEvent *>(event));
+                callEventListeners("hovermove", args);
+                return true;
+            }
+        }
+        break;
+
+        case QEvent::GraphicsSceneMousePress: {
+            if (m_eventListeners.contains("mousepress")) {
+                QScriptValueList args;
+                args << m_engine->toScriptValue(static_cast<QGraphicsSceneMouseEvent *>(event));
+                callEventListeners("mousepress", args);
+                return true;
+            }
+        }
+        break;
+
+        case QEvent::GraphicsSceneMouseRelease: {
+            if (m_eventListeners.contains("mouserelease")) {
+                QScriptValueList args;
+                args << m_engine->toScriptValue(static_cast<QGraphicsSceneMouseEvent *>(event));
+                callEventListeners("mouserelease", args);
+                return true;
+            }
+        }
+        break;
+
+        case QEvent::GraphicsSceneMouseMove: {
+            if (m_eventListeners.contains("mousemove")) {
+                QScriptValueList args;
+                args << m_engine->toScriptValue(static_cast<QGraphicsSceneMouseEvent *>(event));
+                callEventListeners("mousemove", args);
+                return true;
+            }
+        }
+        break;
+
+        case QEvent::GraphicsSceneMouseDoubleClick: {
+            if (m_eventListeners.contains("mousedoubleclick")) {
+                QScriptValueList args;
+                args << m_engine->toScriptValue(static_cast<QGraphicsSceneMouseEvent *>(event));
+                callEventListeners("mousedoubleclick", args);
+                return true;
+            }
+        }
+        break;
+
+        case QEvent::GraphicsSceneWheel: {
+            if (m_eventListeners.contains("wheel")) {
+                QScriptValueList args;
+                args << m_engine->toScriptValue(static_cast<QGraphicsSceneWheelEvent *>(event));
+                callEventListeners("wheel", args);
+                return true;
+            }
+        }
+        break;
+
+        default:
+        break;
+    }
+
+    return Plasma::AppletScript::eventFilter(watched, event);
+}
+
+void SimpleJavaScriptApplet::addEventListener(const QString &event, const QScriptValue &func)
+{
+    if (func.isFunction()) {
+        m_eventListeners[event.toLower()].append(func);
+    }
+}
+
+void SimpleJavaScriptApplet::removeEventListener(const QString &event, const QScriptValue &func)
+{
+    if (func.isFunction()) {
+        QScriptValueList funcs = m_eventListeners.value("mousepress");
+        QMutableListIterator<QScriptValue> it(funcs);//m_eventListeners.value("mousepress"));
+        while (it.hasNext()) {
+            if (it.next().equals(func)) {
+                it.remove();
+            }
+        }
+
+        if (funcs.isEmpty()) {
+            m_eventListeners.remove(event.toLower());
+        } else {
+            m_eventListeners.insert(event.toLower(), funcs);
+        }
+    }
 }
 
 void SimpleJavaScriptApplet::setupObjects()
