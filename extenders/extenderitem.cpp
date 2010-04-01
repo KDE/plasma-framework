@@ -203,7 +203,7 @@ void ExtenderItem::setWidget(QGraphicsItem *widget)
         if (d->widget && d->widget->isWidget()) {
             d->layout->removeItem(static_cast<QGraphicsWidget *>(d->widget));
         }
-        d->layout->addItem(static_cast<QGraphicsWidget *>(widget));
+        d->layout->insertItem(1, static_cast<QGraphicsWidget *>(widget));
         d->widget = widget;
     } else {
         widget->installSceneEventFilter(this);
@@ -857,6 +857,7 @@ void ExtenderItemPrivate::themeChanged()
     }
 
     background->getMargins(bgLeft, bgTop, bgRight, bgBottom);
+    layout->setContentsMargins(bgLeft, bgTop, bgRight, bgBottom);
 
     dragger->setImagePath("widgets/extender-dragger");
 
@@ -878,6 +879,7 @@ void ExtenderItemPrivate::themeChanged()
     QSizeF panelSize(QSizeF(q->size().width() - bgLeft - bgRight,
                      iconSize + dragTop + dragBottom));
 
+    //TODO: all this stuff will die after using the layout for everything
     //resize the collapse icon.
     collapseIcon->resize(collapseIcon->sizeFromIconSize(iconSize));
 

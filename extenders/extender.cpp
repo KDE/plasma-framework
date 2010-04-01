@@ -426,9 +426,9 @@ void Extender::dropEvent(QGraphicsSceneDragDropEvent *event)
 
 void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
 {
-    if (pos == QPointF(-1, -1)) {
-        //if just plain adding an item, add it at a sane position:
-        if (!item->group()) {
+    if (!item->group()) {
+        if (pos == QPointF(-1, -1)) {
+            //if just plain adding an item, add it at a sane position:
             if (appearance() == BottomUpStacked) {
                 //at the top
                 d->layout->insertItem(0, item);
@@ -437,11 +437,8 @@ void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
                 d->layout->addItem(item);
             }
         } else {
-            //at the top in the group it belongs to
-            d->layout->insertItem(d->insertIndexFromPos(item->group()->pos()) + 1, item);
+            d->layout->insertItem(d->insertIndexFromPos(pos), item);
         }
-    } else {
-        d->layout->insertItem(d->insertIndexFromPos(pos), item);
     }
 
     //remove the empty extender message if needed.

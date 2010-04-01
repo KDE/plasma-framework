@@ -23,6 +23,7 @@
 namespace Plasma 
 {
 
+class ScrollWidget;
 class ExtenderGroup;
 class ExtenderItem;
 class Svg;
@@ -39,6 +40,9 @@ class ExtenderGroupPrivate
 
         Plasma::ExtenderGroup *q;
         Plasma::Svg *svg;
+        Plasma::ScrollWidget *scrollWidget;
+        QGraphicsWidget *childsWidget;
+        QGraphicsLinearLayout *layout;
         bool collapsed;
         bool autoHide;
         bool autoCollapse;
