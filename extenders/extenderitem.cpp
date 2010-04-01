@@ -711,7 +711,7 @@ void ExtenderItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 QSizeF ExtenderItem::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
-    if (d->widget->isWidget()) {
+    if (d->widget && d->widget->isWidget()) {
         return QGraphicsWidget::sizeHint(which, constraint);
     } else {
         switch (which) {
