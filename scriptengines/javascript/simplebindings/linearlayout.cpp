@@ -39,7 +39,6 @@ Q_DECLARE_METATYPE(QGraphicsGridLayout*)
 DECLARE_POINTER_METATYPE(QGraphicsLinearLayout)
 
 DECLARE_VOID_NUMBER_METHOD(QGraphicsLinearLayout, removeAt)
-DECLARE_VOID_NUMBER_METHOD(QGraphicsLinearLayout, addStretch)
 DECLARE_VOID_NUMBER_NUMBER_METHOD(QGraphicsLinearLayout, insertStretch)
 DECLARE_VOID_NUMBER_NUMBER_METHOD(QGraphicsLinearLayout, setItemSpacing)
 DECLARE_VOID_QUAD_NUMBER_METHOD(QGraphicsLinearLayout, setContentsMargins)
@@ -145,6 +144,11 @@ BEGIN_DECLARE_METHOD(QGraphicsLinearLayout, removeItem) {
     }
 
     self->removeItem(item);
+    return eng->undefinedValue();
+} END_DECLARE_METHOD
+
+BEGIN_DECLARE_METHOD(QGraphicsLinearLayout, addStretch) {
+    self->addStretch(qMax(1, ctx->argument(0).toInt32()));
     return eng->undefinedValue();
 } END_DECLARE_METHOD
 
