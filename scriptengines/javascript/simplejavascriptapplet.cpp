@@ -187,8 +187,8 @@ void SimpleJavaScriptApplet::popupEvent(bool popped)
 {
     QScriptValueList args;
     args << popped;
-    if (m_eventListeners.contains("popup")) {
-        callEventListeners("popup");
+    if (m_eventListeners.contains("popupevent")) {
+        callEventListeners("popupevent");
     } else {
         callPlasmoidFunction("popupEvent", args);
     }
