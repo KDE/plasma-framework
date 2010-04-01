@@ -82,6 +82,10 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
     KConfigGroup cg = hostExtender->d->applet->config("ExtenderItems");
     KConfigGroup dg = KConfigGroup(&cg, QString::number(d->extenderItemId));
 
+    //create own layout
+    d->layout = new QGraphicsLinearLayout(Qt::Vertical, this);
+    d->layout->addItem(d->toolbox);
+
     uint sourceAppletId = dg.readEntry("sourceAppletId", 0);
 
     //check if we're creating a new item or reinstantiating an existing one.
@@ -192,13 +196,23 @@ void ExtenderItem::setWidget(QGraphicsItem *widget)
     }
 
     widget->setParentItem(this);
-    widget->installSceneEventFilter(this);
 
-    QSizeF panelSize(QSizeF(size().width() - d->bgLeft - d->bgRight,
-                     d->iconSize + d->dragTop + d->dragBottom));
-    widget->setPos(QPointF(d->bgLeft + d->dragLeft, panelSize.height() + d->bgTop));
-    d->widget = widget;
-    d->updateSizeHints();
+    if (widget->isWidget()) {
+        if (d->widget && d->widget->isWidget()) {
+            d->layout->removeItem(static_cast<QGraphicsWidget *>(d->widget));
+        }
+        d->layout->addItem(static_cast<QGraphicsWidget *>(widget));
+        d->widget = widget;
+    } else {
+        widget->installSceneEventFilter(this);
+
+        QSizeF panelSize(QSizeF(size().width() - d->bgLeft - d->bgRight,
+                        d->iconSize + d->dragTop + d->dragBottom));
+        widget->setPos(QPointF(d->bgLeft + d->dragLeft, panelSize.height() + d->bgTop));
+        d->widget = widget;
+        d->updateSizeHints();
+    }
+
     d->widget->setVisible(!d->collapsed);
 }
 
@@ -697,15 +711,18 @@ void ExtenderItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 QSizeF ExtenderItem::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
-    Q_UNUSED(constraint)
-    switch (which) {
-    case Qt::MinimumSize:
-        return d->minimumSize;
-    case Qt::MaximumSize:
-        return d->maximumSize;
-    case Qt::PreferredSize:
-    default:
-        return d->preferredSize;
+    if (d->widget->isWidget()) {
+        return QGraphicsWidget::sizeHint(which, constraint);
+    } else {
+        switch (which) {
+        case Qt::MinimumSize:
+            return d->minimumSize;
+        case Qt::MaximumSize:
+            return d->maximumSize;
+        case Qt::PreferredSize:
+        default:
+            return d->preferredSize;
+        }
     }
 }
 
@@ -965,16 +982,9 @@ void ExtenderItemPrivate::updateSizeHints()
     QSizeF pref;
     QSizeF max;
 
-    if (widget->isWidget()) {
-        QGraphicsWidget *graphicsWidget = static_cast<QGraphicsWidget*>(widget);
-        min = graphicsWidget->effectiveSizeHint(Qt::MinimumSize);
-        pref = graphicsWidget->effectiveSizeHint(Qt::PreferredSize);
-        max = graphicsWidget->effectiveSizeHint(Qt::MaximumSize);
-    } else {
-        min = widget->boundingRect().size();
-        pref = widget->boundingRect().size();
-        max = widget->boundingRect().size();
-    }
+    min = widget->boundingRect().size();
+    pref = widget->boundingRect().size();
+    max = widget->boundingRect().size();
 
     if (collapsed) {
         preferredSize = QSizeF(pref.width() + marginWidth,

@@ -63,6 +63,7 @@ class ExtenderItemPrivate
         QGraphicsItem *widget;
         QGraphicsWidget *toolbox;
         QGraphicsLinearLayout *toolboxLayout;
+        QGraphicsLinearLayout *layout;
 
         Extender *extender;
         Applet *sourceApplet;
