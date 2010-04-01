@@ -75,8 +75,10 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
 
     //create the toolbox.
     d->toolbox = new QGraphicsWidget(this);
-    d->toolboxLayout = new QGraphicsLinearLayout(d->toolbox);
-    d->toolbox->setLayout(d->toolboxLayout);
+    d->toolboxLayout = new QGraphicsLinearLayout();
+    QGraphicsLinearLayout *toolBoxMainLayout = new QGraphicsLinearLayout(d->toolbox);
+    toolBoxMainLayout->addStretch();
+    toolBoxMainLayout->addItem(d->toolboxLayout);
 
     //create items's configgroup
     KConfigGroup cg = hostExtender->d->applet->config("ExtenderItems");
@@ -205,7 +207,6 @@ void ExtenderItem::setWidget(QGraphicsItem *widget)
         d->widget = widget;
     } else {
         widget->installSceneEventFilter(this);
-
         QSizeF panelSize(QSizeF(size().width() - d->bgLeft - d->bgRight,
                         d->iconSize + d->dragTop + d->dragBottom));
         widget->setPos(QPointF(d->bgLeft + d->dragLeft, panelSize.height() + d->bgTop));
@@ -834,19 +835,6 @@ void ExtenderItemPrivate::updateToolBox()
     }
 
     toolboxLayout->updateGeometry();
-
-    //position the toolbox correctly.
-    QSizeF minimum = toolboxLayout->minimumSize();
-    toolbox->resize(minimum);
-    repositionToolbox();
-}
-
-void ExtenderItemPrivate::repositionToolbox()
-{
-    QSizeF minimum = toolboxLayout->minimumSize();
-    toolbox->setPos(q->size().width() - minimum.width() - bgRight,
-                    (dragHandleRect().height()/2) -
-                    (minimum.height()/2) + bgTop);
 }
 
 Applet *ExtenderItemPrivate::hostApplet() const
@@ -899,18 +887,16 @@ void ExtenderItemPrivate::themeChanged()
                          collapseIcon->size().height()/2 + bgTop);
 
     //reposition the widget based on the new margins.
-    if (widget) {
+    if (widget && !widget->isWidget()) {
         widget->setPos(QPointF(bgLeft + dragLeft, panelSize.height() +
                                                   bgTop));
     }
 
-    //reposition the toolbox.
-    repositionToolbox();
-
     updateSizeHints();
 
-    if (!q->size().isEmpty())
+    if (!q->size().isEmpty()) {
         resizeContent(q->size());
+    }
 }
 
 void ExtenderItemPrivate::sourceAppletRemoved()
@@ -942,9 +928,6 @@ void ExtenderItemPrivate::resizeContent(const QSizeF &newSize)
         QGraphicsWidget *graphicsWidget = static_cast<QGraphicsWidget*>(widget);
         graphicsWidget->resize(newWidgetSize);
     }
-
-    //reposition the toolbox.
-    repositionToolbox();
 
     q->update();
 }

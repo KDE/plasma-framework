@@ -50,7 +50,6 @@ class ExtenderItemPrivate
         QRectF titleRect();
         void toggleCollapse();
         void updateToolBox();
-        void repositionToolbox();
         Applet *hostApplet() const;
         void themeChanged();
         void sourceAppletRemoved();
