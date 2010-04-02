@@ -22,12 +22,15 @@
 #include <iostream>
 
 #include <QFile>
-#include <QUiLoader>
+#include <QKeyEvent>
 #include <QGraphicsLayout>
 #include <QGraphicsSceneHoverEvent>
+#include <QGraphicsSceneMouseEvent>
+#include <QGraphicsSceneWheelEvent>
 #include <QParallelAnimationGroup>
 #include <QPauseAnimation>
 #include <QSequentialAnimationGroup>
+#include <QUiLoader>
 #include <QWidget>
 #include <QScriptEngine>
 
@@ -336,13 +339,67 @@ bool SimpleJavaScriptApplet::init()
     return m_env->include(mainScript());
 }
 
+QScriptValue SimpleJavaScriptApplet::createKeyEventObject(QKeyEvent *event)
+{
+    QScriptValue v = m_env->engine()->newObject();
+    v.setProperty("count", event->count());
+    v.setProperty("key", event->key());
+    v.setProperty("modifiers", static_cast<int>(event->modifiers()));
+    v.setProperty("text", event->text());
+    return v;
+}
+
+QScriptValue SimpleJavaScriptApplet::createHoverEventObject(QGraphicsSceneHoverEvent *event)
+{
+    QScriptEngine *engine = m_env->engine();
+    QScriptValue v = engine->newObject();
+    v.setProperty("pos", engine->toScriptValue<QPoint>(event->pos().toPoint()));
+    v.setProperty("scenePos", engine->toScriptValue<QPoint>(event->scenePos().toPoint()));
+    v.setProperty("screenPos", engine->toScriptValue<QPoint>(event->screenPos()));
+    v.setProperty("lastPos", engine->toScriptValue<QPoint>(event->lastPos().toPoint()));
+    v.setProperty("lastScenePos", engine->toScriptValue<QPoint>(event->lastScenePos().toPoint()));
+    v.setProperty("lastScreenPos", engine->toScriptValue<QPoint>(event->lastScreenPos()));
+    v.setProperty("modifiers", static_cast<int>(event->modifiers()));
+    return v;
+}
+
+QScriptValue SimpleJavaScriptApplet::createMouseEventObject(QGraphicsSceneMouseEvent *event)
+{
+    QScriptEngine *engine = m_env->engine();
+    QScriptValue v = engine->newObject();
+    v.setProperty("button", static_cast<int>(event->button()));
+    v.setProperty("buttons", static_cast<int>(event->buttons()));
+    v.setProperty("modifiers", static_cast<int>(event->modifiers()));
+    v.setProperty("pos", engine->toScriptValue<QPoint>(event->pos().toPoint()));
+    v.setProperty("scenePos", engine->toScriptValue<QPoint>(event->scenePos().toPoint()));
+    v.setProperty("screenPos", engine->toScriptValue<QPoint>(event->screenPos()));
+    v.setProperty("lastPos", engine->toScriptValue<QPoint>(event->lastPos().toPoint()));
+    v.setProperty("lastScenePos", engine->toScriptValue<QPoint>(event->lastScenePos().toPoint()));
+    v.setProperty("lastScreenPos", engine->toScriptValue<QPoint>(event->lastScreenPos()));
+    return v;
+}
+
+QScriptValue SimpleJavaScriptApplet::createWheelEventObject(QGraphicsSceneWheelEvent *event)
+{
+    QScriptEngine *engine = m_env->engine();
+    QScriptValue v = engine->newObject();
+    v.setProperty("delta", event->delta());
+    v.setProperty("buttons", static_cast<int>(event->buttons()));
+    v.setProperty("modifiers", static_cast<int>(event->modifiers()));
+    v.setProperty("orientation", static_cast<int>(event->orientation()));
+    v.setProperty("pos", engine->toScriptValue<QPoint>(event->pos().toPoint()));
+    v.setProperty("scenePos", engine->toScriptValue<QPoint>(event->scenePos().toPoint()));
+    v.setProperty("screenPos", engine->toScriptValue<QPoint>(event->screenPos()));
+    return v;
+}
+
 bool SimpleJavaScriptApplet::eventFilter(QObject *watched, QEvent *event)
 {
     switch (event->type()) {
         case QEvent::KeyPress: {
             if (m_eventListeners.contains("keypress")) {
                 QScriptValueList args;
-                args << m_engine->toScriptValue(static_cast<QKeyEvent *>(event));
+                args << createKeyEventObject(static_cast<QKeyEvent *>(event));
                 callEventListeners("keypress", args);
                 return true;
             }
@@ -351,7 +408,7 @@ bool SimpleJavaScriptApplet::eventFilter(QObject *watched, QEvent *event)
         case QEvent::KeyRelease: {
             if (m_eventListeners.contains("keyrelease")) {
                 QScriptValueList args;
-                args << m_engine->toScriptValue(static_cast<QKeyEvent *>(event));
+                args << createKeyEventObject(static_cast<QKeyEvent *>(event));
                 callEventListeners("keyrelease", args);
                 return true;
             }
@@ -361,7 +418,7 @@ bool SimpleJavaScriptApplet::eventFilter(QObject *watched, QEvent *event)
         case QEvent::GraphicsSceneHoverEnter: {
             if (m_eventListeners.contains("hoverenter")) {
                 QScriptValueList args;
-                args << m_engine->toScriptValue(static_cast<QGraphicsSceneHoverEvent *>(event));
+                args << createHoverEventObject(static_cast<QGraphicsSceneHoverEvent *>(event));
                 callEventListeners("hoverenter", args);
                 return true;
             }
@@ -371,7 +428,7 @@ bool SimpleJavaScriptApplet::eventFilter(QObject *watched, QEvent *event)
         case QEvent::GraphicsSceneHoverLeave: {
             if (m_eventListeners.contains("hoverleave")) {
                 QScriptValueList args;
-                args << m_engine->toScriptValue(static_cast<QGraphicsSceneHoverEvent *>(event));
+                args << createHoverEventObject(static_cast<QGraphicsSceneHoverEvent *>(event));
                 callEventListeners("hoverleave", args);
                 return true;
             }
@@ -381,7 +438,7 @@ bool SimpleJavaScriptApplet::eventFilter(QObject *watched, QEvent *event)
         case QEvent::GraphicsSceneHoverMove: {
             if (m_eventListeners.contains("hovermove")) {
                 QScriptValueList args;
-                args << m_engine->toScriptValue(static_cast<QGraphicsSceneHoverEvent *>(event));
+                args << createHoverEventObject(static_cast<QGraphicsSceneHoverEvent *>(event));
                 callEventListeners("hovermove", args);
                 return true;
             }
@@ -391,7 +448,7 @@ bool SimpleJavaScriptApplet::eventFilter(QObject *watched, QEvent *event)
         case QEvent::GraphicsSceneMousePress: {
             if (m_eventListeners.contains("mousepress")) {
                 QScriptValueList args;
-                args << m_engine->toScriptValue(static_cast<QGraphicsSceneMouseEvent *>(event));
+                args << createMouseEventObject(static_cast<QGraphicsSceneMouseEvent *>(event));
                 callEventListeners("mousepress", args);
                 return true;
             }
@@ -401,7 +458,7 @@ bool SimpleJavaScriptApplet::eventFilter(QObject *watched, QEvent *event)
         case QEvent::GraphicsSceneMouseRelease: {
             if (m_eventListeners.contains("mouserelease")) {
                 QScriptValueList args;
-                args << m_engine->toScriptValue(static_cast<QGraphicsSceneMouseEvent *>(event));
+                args << createMouseEventObject(static_cast<QGraphicsSceneMouseEvent *>(event));
                 callEventListeners("mouserelease", args);
                 return true;
             }
@@ -411,7 +468,7 @@ bool SimpleJavaScriptApplet::eventFilter(QObject *watched, QEvent *event)
         case QEvent::GraphicsSceneMouseMove: {
             if (m_eventListeners.contains("mousemove")) {
                 QScriptValueList args;
-                args << m_engine->toScriptValue(static_cast<QGraphicsSceneMouseEvent *>(event));
+                args << createMouseEventObject(static_cast<QGraphicsSceneMouseEvent *>(event));
                 callEventListeners("mousemove", args);
                 return true;
             }
@@ -421,7 +478,7 @@ bool SimpleJavaScriptApplet::eventFilter(QObject *watched, QEvent *event)
         case QEvent::GraphicsSceneMouseDoubleClick: {
             if (m_eventListeners.contains("mousedoubleclick")) {
                 QScriptValueList args;
-                args << m_engine->toScriptValue(static_cast<QGraphicsSceneMouseEvent *>(event));
+                args << createMouseEventObject(static_cast<QGraphicsSceneMouseEvent *>(event));
                 callEventListeners("mousedoubleclick", args);
                 return true;
             }
@@ -431,7 +488,7 @@ bool SimpleJavaScriptApplet::eventFilter(QObject *watched, QEvent *event)
         case QEvent::GraphicsSceneWheel: {
             if (m_eventListeners.contains("wheel")) {
                 QScriptValueList args;
-                args << m_engine->toScriptValue(static_cast<QGraphicsSceneWheelEvent *>(event));
+                args << createWheelEventObject(static_cast<QGraphicsSceneWheelEvent *>(event));
                 callEventListeners("wheel", args);
                 return true;
             }

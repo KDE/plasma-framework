@@ -81,6 +81,10 @@ private:
     void callPlasmoidFunction(const QString &functionName, const QScriptValueList &args = QScriptValueList());
     void callFunction(QScriptValue &func, const QScriptValueList &args = QScriptValueList(), const QScriptValue &activator = QScriptValue());
     void callEventListeners(const QString &event, const QScriptValueList &args = QScriptValueList());
+    QScriptValue createKeyEventObject(QKeyEvent *event);
+    QScriptValue createHoverEventObject(QGraphicsSceneHoverEvent *event);
+    QScriptValue createMouseEventObject(QGraphicsSceneMouseEvent *event);
+    QScriptValue createWheelEventObject(QGraphicsSceneWheelEvent *event);
     static void populateAnimationsHash();
 
     static QString findSvg(QScriptEngine *engine, const QString &file);
