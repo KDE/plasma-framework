@@ -52,6 +52,7 @@ class AppletInterface : public QObject
     Q_ENUMS(AspectRatioMode)
     Q_ENUMS(BackgroundHints)
     Q_ENUMS(QtOrientation)
+    Q_ENUMS(QtModifiers)
     Q_ENUMS(QtAnchorPoint)
     Q_ENUMS(QtCorner)
     Q_ENUMS(QtSizePolicy)
@@ -125,6 +126,14 @@ enum AspectRatioMode {
 };
 
 //From Qt namespace
+enum QtModifiers {
+    QtNoModifier = Qt::NoModifier,
+    QtShiftModifier = Qt::ShiftModifier,
+    QtControlModifier = Qt::ControlModifier,
+    QtAltModifier = Qt::AltModifier,
+    QtMetaModifier = Qt::MetaModifier
+};
+
 enum QtOrientation {
     QtHorizontal= Qt::Horizontal,
     QtVertical = Qt::Vertical
