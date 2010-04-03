@@ -795,8 +795,20 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * instead. A good example of when this isn't plausible is
          * when using a dialog prepared by another library, such
          * as KPropertiesDialog from libkfile.
+         * You probably want to call showConfigurationInterface(QWidget*)
+         * with the custom widget you created to actually show your interface
          */
         virtual void showConfigurationInterface();
+
+        /**
+         * Actually show your custom configuration interface
+         * Use this only if you reimplemented showConfigurationInterface()
+         *
+         * @arg widget the widget representing your configuration interface
+         *
+         * @since 4.5
+         */
+        void showConfigurationInterface(QWidget *widget);
 
         /**
          * @return true when the configuration interface is being shown
@@ -1058,6 +1070,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * Reimplemented from QObject
          */
         void timerEvent (QTimerEvent *event);
+
 
     private:
         /**

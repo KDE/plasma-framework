@@ -47,6 +47,7 @@
 #include "private/applet_p.h"
 #include "private/containment_p.h"
 #include "tooltipmanager.h"
+#include "abstractdialogmanager.h"
 
 using namespace Plasma;
 
@@ -65,7 +66,8 @@ public:
           immutability(Mutable),
           mimetype("text/x-plasmoidservicename"),
           config(0),
-          actions(corona)
+          actions(corona),
+          dialogManager(0)
     {
         if (KGlobal::hasMainComponent()) {
             configName = KGlobal::mainComponent().componentName() + "-appletsrc";
@@ -266,6 +268,7 @@ public:
     KActionCollection actions;
     KShortcutsDialog shortcutsDlg;
     QMap<Containment::Type, ContainmentActionsPluginsConfig> containmentActionsDefaults;
+    AbstractDialogManager *dialogManager;
 };
 
 bool CoronaPrivate::s_positioningContainments = false;
@@ -890,6 +893,16 @@ void Corona::setContainmentActionsDefaults(Containment::Type containmentType, co
 ContainmentActionsPluginsConfig Corona::containmentActionsDefaults(Containment::Type containmentType)
 {
     return d->containmentActionsDefaults.value(containmentType);
+}
+
+void Corona::setDialogManager(AbstractDialogManager *dialogManager)
+{
+    d->dialogManager = dialogManager;
+}
+
+AbstractDialogManager *Corona::dialogManager()
+{
+    return d->dialogManager;
 }
 
 } // namespace Plasma

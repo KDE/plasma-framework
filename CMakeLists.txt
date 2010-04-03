@@ -75,6 +75,7 @@ set(plasma_LIB_SRCS
     deprecated/animationdriver.cpp
     deprecated/animator.cpp
     dialog.cpp
+    abstractdialogmanager.cpp
     extenders/extender.cpp
     extenders/extendergroup.cpp
     extenders/extenderitem.cpp
@@ -257,6 +258,7 @@ set(plasmagik_HEADERS
 install(FILES ${plasmagik_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/ COMPONENT Devel)
 
 set(plasma_LIB_INCLUDES
+    abstractdialogmanager.h
     abstractrunner.h
     abstracttoolbox.h
     animationdriver.h

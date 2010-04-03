@@ -96,6 +96,7 @@
 #include "tooltipmanager.h"
 #include "wallpaper.h"
 #include "paintutils.h"
+#include "abstractdialogmanager.h"
 
 #include "private/associatedapplicationmanager_p.h"
 #include "private/authorizationmanager_p.h"
@@ -1765,10 +1766,20 @@ void Applet::showConfigurationInterface()
         KConfigDialog *dialog = d->generateGenericConfigDialog();
         //createConfigurationInterface(dialog);
         d->addStandardConfigurationPages(dialog);
-        dialog->show();
+        showConfigurationInterface(dialog);
     }
 
     emit releaseVisualFocus();
+}
+
+void Applet::showConfigurationInterface(QWidget *widget)
+{
+    if (!containment() || !containment()->corona() ||
+        !containment()->corona()->dialogManager()) {
+        widget->show();
+        return;
+    }
+    containment()->corona()->dialogManager()->showDialog(widget, this);
 }
 
 QString AppletPrivate::configDialogId() const
