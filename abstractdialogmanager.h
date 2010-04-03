@@ -38,8 +38,8 @@ namespace Plasma
  * @short The AbstractDialogManager class shows the dialogs shown by applets and the rest of the shell.
  *   a AbstractDialogManager can manage aspects like positioning, sizing and widget style 
  *   of dialogs sich as the applet configuration dialog.
+ * @since 4.5
  */
-//TODO: useful a QObject? probably yes, it could want to hear signals from the dialog or filter its events
 class PLASMA_EXPORT AbstractDialogManager : public QObject
 {
     Q_OBJECT
@@ -48,9 +48,14 @@ public:
     explicit AbstractDialogManager(Plasma::Corona *parent=0);
     ~AbstractDialogManager();
 
-    //TODO: different methods for different types of dialogs?
-    //TODO: already think about qgraphicswidget based dialogs?
-    virtual void showDialog(QWidget *widget, Applet *applet) = 0;
+public Q_SLOTS:
+    /**
+     * This fake virtual slot shows a dialog belonging to an applet.
+     * There is no guarantee how the implementation will show it
+     * @param widget the dialog widget
+     * @param applet the applet that owns the dialog
+     */
+    void showDialog(QWidget *widget, Plasma::Applet *applet);
 
 private:
 

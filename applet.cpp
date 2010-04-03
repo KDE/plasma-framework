@@ -1779,7 +1779,8 @@ void Applet::showConfigurationInterface(QWidget *widget)
         widget->show();
         return;
     }
-    containment()->corona()->dialogManager()->showDialog(widget, this);
+
+    QMetaObject::invokeMethod(containment()->corona()->dialogManager(), "showDialog", Q_ARG(QWidget *, widget), Q_ARG(Plasma::Applet *, this));
 }
 
 QString AppletPrivate::configDialogId() const

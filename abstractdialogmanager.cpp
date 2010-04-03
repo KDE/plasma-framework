@@ -43,6 +43,12 @@ AbstractDialogManager::~AbstractDialogManager()
 {
 }
 
+void AbstractDialogManager::showDialog(QWidget *widget, Plasma::Applet *applet)
+{
+    Q_UNUSED(applet)
+    widget->show();
+}
+
 }
 
 #include "abstractdialogmanager.moc"
