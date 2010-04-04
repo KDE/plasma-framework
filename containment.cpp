@@ -2179,6 +2179,7 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
 
         // tell the applets too
         foreach (Applet *a, applets) {
+            a->setImmutability(q->immutability());
             a->updateConstraints(ImmutableConstraint);
         }
 
