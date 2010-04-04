@@ -66,8 +66,7 @@ public:
           immutability(Mutable),
           mimetype("text/x-plasmoidservicename"),
           config(0),
-          actions(corona),
-          dialogManager(0)
+          actions(corona)
     {
         if (KGlobal::hasMainComponent()) {
             configName = KGlobal::mainComponent().componentName() + "-appletsrc";
@@ -268,7 +267,7 @@ public:
     KActionCollection actions;
     KShortcutsDialog shortcutsDlg;
     QMap<Containment::Type, ContainmentActionsPluginsConfig> containmentActionsDefaults;
-    AbstractDialogManager *dialogManager;
+    QWeakPointer<AbstractDialogManager>dialogManager;
 };
 
 bool CoronaPrivate::s_positioningContainments = false;
@@ -902,7 +901,7 @@ void Corona::setDialogManager(AbstractDialogManager *dialogManager)
 
 AbstractDialogManager *Corona::dialogManager()
 {
-    return d->dialogManager;
+    return d->dialogManager.data();
 }
 
 } // namespace Plasma
