@@ -38,6 +38,7 @@ public:
     void clearPopupLostFocus();
     void dialogSizeChanged();
     void dialogStatusChanged(bool status);
+    void restoreDialogSize();
     void updateDialogPosition();
     void popupConstraintsEvent(Plasma::Constraints constraints);
     void checkExtenderAppearance(Plasma::FormFactor f);

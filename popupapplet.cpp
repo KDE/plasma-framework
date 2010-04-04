@@ -366,13 +366,12 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 if (gWidget) {
                     Corona *corona = qobject_cast<Corona *>(gWidget->scene());
 
-                    //could that cast ever fail??
                     if (corona) {
                         corona->addOffscreenWidget(gWidget);
-                        dialog->setGraphicsWidget(gWidget);
-                        gWidget->resize(gWidget->preferredSize());
                     }
 
+                    dialog->setGraphicsWidget(gWidget);
+                    gWidget->resize(gWidget->preferredSize());
                     dialog->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | (gWidget->windowFlags() & Qt::X11BypassWindowManagerHint));
                 } else if (qWidget) {
                     QVBoxLayout *l_layout = new QVBoxLayout(dialog);
@@ -385,6 +384,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                     dialog->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
                 }
 
+                restoreDialogSize();
                 KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
                 dialog->installEventFilter(q);
 
@@ -694,13 +694,12 @@ void PopupAppletPrivate::dialogStatusChanged(bool status)
     q->popupEvent(status);
 }
 
-void PopupAppletPrivate::updateDialogPosition()
+void PopupAppletPrivate::restoreDialogSize()
 {
     Plasma::Dialog *dialog = dialogPtr.data();
     if (!dialog) {
         return;
     }
-
 
     Corona *corona = qobject_cast<Corona *>(q->scene());
     if (!corona) {
@@ -731,6 +730,19 @@ void PopupAppletPrivate::updateDialogPosition()
 
     if (saved.width() != dialog->width() || saved.height() != dialog->height()) {
         dialog->resize(saved);
+    }
+}
+
+void PopupAppletPrivate::updateDialogPosition()
+{
+    Plasma::Dialog *dialog = dialogPtr.data();
+    if (!dialog) {
+        return;
+    }
+
+    Corona *corona = qobject_cast<Corona *>(q->scene());
+    if (!corona) {
+        return;
     }
 
     QGraphicsView *view = q->view();
