@@ -656,14 +656,14 @@ void RunnerManager::launchQuery(const QString &untrimmedTerm, const QString &run
 //    kDebug() << "runners searching for" << term << "on" << runnerName;
     d->context.setQuery(term);
 
-    AbstractRunner::List runable;
+    QHash<QString, AbstractRunner*> runable;
 
     //if the name is not empty we will launch only the specified runner
     if (d->singleMode && d->currentSingleRunner) {
-        runable.append(d->currentSingleRunner);
+        runable.insert(QString(), d->currentSingleRunner);
         d->context.setSingleRunnerQueryMode(true);
     } else {
-        runable = d->runners.values();
+        runable = d->runners;
     }
 
     foreach (Plasma::AbstractRunner *r, runable) {
