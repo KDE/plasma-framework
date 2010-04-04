@@ -682,9 +682,7 @@ void PopupAppletPrivate::dialogSizeChanged()
 
         updateDialogPosition();
 
-        // saving the dialog height/width on a popup isn't critical enough to warrant a hit to disk
-        // emit q->configNeedsSaving();
-
+        emit q->configNeedsSaving();
         emit q->appletTransformedByUser();
     }
 }
