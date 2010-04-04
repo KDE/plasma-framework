@@ -407,6 +407,11 @@ public:
         if (val > minExtent || maxExtent > minExtent) {
             if (!qFuzzyCompare(val, minExtent)) {
                 if (FixupDuration) {
+                    //TODO: we should consider the case where there is one axis available not the other
+                    if (hasXProperty && hasYProperty) {
+                        val = -val;
+                        minExtent = -minExtent;
+                    }
                     qreal dist = minExtent - val;
                     start->setStartValue(val);
                     start->setEndValue(minExtent - dist/2);
@@ -422,6 +427,10 @@ public:
             }
         } else if (val < maxExtent) {
             if (FixupDuration) {
+                if (hasXProperty && hasYProperty) {
+                    val = -val;
+                    maxExtent = -maxExtent;
+                }
                 qreal dist = maxExtent - val;
                 start->setStartValue(val);
                 start->setEndValue(maxExtent - dist/2);
