@@ -418,6 +418,7 @@ class SvgPrivate
                 qreal rem_dst = dst.x() - (floor(dst.x()));
                 qreal offset = closestDistance(rem_dst, rem_orig);
                 res.translate(offset + offset*div_w, 0);
+                res.setWidth(res.width() + offset);
             }
             //vertical snap
             if (!qFuzzyIsNull(div_y) && !qFuzzyCompare(div_h, div_y)) {
@@ -425,19 +426,6 @@ class SvgPrivate
                 qreal rem_dst = dst.y() - (floor(dst.y()));
                 qreal offset = closestDistance(rem_dst, rem_orig);
                 res.translate(0, offset + offset*div_h);
-            }
-
-            if (!qFuzzyIsNull(div_w)) {
-                qreal rem_orig = orig.width() - (floor(orig.width()));
-                qreal rem_dst = dst.width() - (floor(dst.width()));
-                qreal offset = closestDistance(rem_dst, rem_orig);
-                res.setWidth(res.width() + offset);
-            }
-
-            if (!qFuzzyIsNull(div_h)) {
-                qreal rem_orig = orig.height() - (floor(orig.height()));
-                qreal rem_dst = dst.height() - (floor(dst.height()));
-                qreal offset = closestDistance(rem_dst, rem_orig);
                 res.setHeight(res.height() + offset);
             }
 
