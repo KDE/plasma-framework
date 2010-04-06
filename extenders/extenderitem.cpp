@@ -75,10 +75,8 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
 
     //create the toolbox.
     d->toolbox = new QGraphicsWidget(this);
-    d->toolboxLayout = new QGraphicsLinearLayout();
-    QGraphicsLinearLayout *toolBoxMainLayout = new QGraphicsLinearLayout(d->toolbox);
-    toolBoxMainLayout->addStretch();
-    toolBoxMainLayout->addItem(d->toolboxLayout);
+    d->toolboxLayout = new QGraphicsLinearLayout(d->toolbox);
+    d->toolboxLayout->addStretch();
 
     //create items's configgroup
     KConfigGroup cg = hostExtender->d->applet->config("ExtenderItems");
@@ -789,57 +787,98 @@ void ExtenderItemPrivate::updateToolBox()
     Q_ASSERT(dragger);
     Q_ASSERT(toolboxLayout);
 
-    //TODO: only delete items that actually have to be deleted, current performance is horrible.
-    while (toolboxLayout->count()) {
-        QGraphicsLayoutItem *icon = toolboxLayout->itemAt(0);
-        QGraphicsWidget *widget = dynamic_cast<QGraphicsWidget*>(icon);
+    QAction *closeAction = actions.value("close");
+    QAction *returnToSourceAction = actions.value("extenderItemReturnToSource");
+    bool returnToSourceVisibility = q->isDetached() && sourceApplet;
+    int closeIndex = -1;
+    int returnToSourceIndex = -1;
+    const int startingIndex = 0;
+
+    QSet<QAction*> shownActions = actionsInOrder.toSet();
+    QHash<QAction *, IconWidget *> actionIcons;
+    for (int index = startingIndex; index < toolboxLayout->count(); ++index) {
+        IconWidget *widget = dynamic_cast<IconWidget*>(toolboxLayout->itemAt(index));
+
+        if (!widget) {
+            continue;
+        }
+
+        if (closeIndex == -1 && destroyActionVisibility &&
+            closeAction && widget->action() == closeAction) {
+            closeIndex = index;
+            continue;
+        }
+
+        if (returnToSourceIndex == -1 && returnToSourceVisibility &&
+            returnToSourceAction && widget->action() == returnToSourceAction) {
+            returnToSourceIndex = index;
+            continue;
+        }
+
+        if (shownActions.contains(widget->action())) {
+            actionIcons.insert(widget->action(), widget);
+            continue;
+        }
+
+        toolboxLayout->removeAt(index);
         widget->deleteLater();
-        toolboxLayout->removeAt(0);
     }
 
     //add the actions that are actually set to visible.
-    QAction *closeAction = actions.value("close");
     foreach (QAction *action, actionsInOrder) {
         if (action->isVisible() && action != closeAction) {
-            IconWidget *icon = new IconWidget(q);
-            icon->setAction(action);
-            QSizeF size = icon->sizeFromIconSize(iconSize);
-            icon->setMinimumSize(size);
-            icon->setMaximumSize(size);
-            toolboxLayout->addItem(icon);
+            IconWidget *icon = actionIcons.value(action);
+            if (!icon) {
+                icon = new IconWidget(q);
+                icon->setAction(action);
+                QSizeF size = icon->sizeFromIconSize(iconSize);
+                icon->setMinimumSize(size);
+                icon->setMaximumSize(size);
+            }
+
+            toolboxLayout->insertItem(startingIndex, icon);
         }
     }
 
     //add the returntosource icon if we are detached, and have a source applet.
-    if (q->isDetached() && sourceApplet) {
-        IconWidget *returnToSource = new IconWidget(q);
-        returnToSource->setSvg("widgets/configuration-icons", "return-to-source");
-        QSizeF size = returnToSource->sizeFromIconSize(iconSize);
-        returnToSource->setMinimumSize(size);
-        returnToSource->setMaximumSize(size);
+    if (returnToSourceVisibility && returnToSourceIndex == -1) {
+        IconWidget *returnToSourceIcon = new IconWidget(q);
+        if (!returnToSourceAction) {
+            returnToSourceAction = new QAction(q);
+            returnToSourceAction->setToolTip(i18n("Reattach"));
+            actions.insert("extenderItemReturnToSource", returnToSourceAction);
+            QObject::connect(returnToSourceAction, SIGNAL(triggered()), q, SLOT(returnToSource()));
+        }
 
-        toolboxLayout->addItem(returnToSource);
-        QObject::connect(returnToSource, SIGNAL(clicked()), q, SLOT(returnToSource()));
+        returnToSourceIcon->setAction(returnToSourceAction);
+        returnToSourceIcon->setSvg("widgets/configuration-icons", "return-to-source");
+        QSizeF size = returnToSourceIcon->sizeFromIconSize(iconSize);
+        returnToSourceIcon->setMinimumSize(size);
+        returnToSourceIcon->setMaximumSize(size);
+
+        if (closeIndex == -1) {
+            toolboxLayout->addItem(returnToSourceIcon);
+        } else {
+            toolboxLayout->insertItem(closeIndex - 1, returnToSourceIcon);
+        }
     }
 
     //add the close icon if desired.
-    if (destroyActionVisibility) {
+    if (destroyActionVisibility && closeIndex == -1) {
         destroyButton = new IconWidget(q);
         if (!closeAction) {
             closeAction = new QAction(q);
             actions.insert("close", closeAction);
+            returnToSourceAction->setToolTip(i18n("Close"));
             QObject::connect(closeAction, SIGNAL(triggered()), q, SLOT(destroy()));
         }
+
         destroyButton->setAction(closeAction);
         destroyButton->setSvg("widgets/configuration-icons", "close");
         QSizeF size = destroyButton->sizeFromIconSize(iconSize);
         destroyButton->setMinimumSize(size);
         destroyButton->setMaximumSize(size);
         toolboxLayout->addItem(destroyButton);
-    } else if (closeAction) {
-        actions.remove("close");
-        closeAction->deleteLater();
-        closeAction = 0;
     }
 
     toolboxLayout->updateGeometry();
@@ -880,11 +919,11 @@ void ExtenderItemPrivate::themeChanged()
 
     iconSize = qMax(size.height(), (qreal) fm.height());
 
-
     dragger->getMargins(dragLeft, dragTop, dragRight, dragBottom);
 
-    //the ugly +2 is the default one
-    layout->setContentsMargins(bgLeft, bgTop+dragTop+2, bgRight, bgBottom);
+    layout->setContentsMargins(bgLeft, bgTop, bgRight, bgBottom);
+    toolbox->setMinimumHeight(dragBottom + iconSize);
+    toolboxLayout->setContentsMargins(0, dragTop, 0, 0);
 
     QSizeF panelSize(QSizeF(q->size().width() - bgLeft - bgRight,
                      iconSize + dragTop + dragBottom));
@@ -925,8 +964,7 @@ void ExtenderItemPrivate::resizeContent(const QSizeF &newSize)
     qreal height = newSize.height();
 
     //resize the dragger
-    dragger->resizeFrame(QSizeF(width - bgLeft - bgRight,
-                         iconSize + dragTop + dragBottom));
+    dragger->resizeFrame(QSizeF(width - bgLeft - bgRight, iconSize + dragTop + dragBottom));
 
     //resize the applet background
     background->resizeFrame(newSize);
