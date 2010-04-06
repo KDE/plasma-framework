@@ -857,7 +857,6 @@ void ExtenderItemPrivate::themeChanged()
     }
 
     background->getMargins(bgLeft, bgTop, bgRight, bgBottom);
-    layout->setContentsMargins(bgLeft, bgTop, bgRight, bgBottom);
 
     dragger->setImagePath("widgets/extender-dragger");
 
@@ -875,6 +874,9 @@ void ExtenderItemPrivate::themeChanged()
 
 
     dragger->getMargins(dragLeft, dragTop, dragRight, dragBottom);
+
+    //the ugly +2 is the default one
+    layout->setContentsMargins(bgLeft, bgTop+dragTop+2, bgRight, bgBottom);
 
     QSizeF panelSize(QSizeF(q->size().width() - bgLeft - bgRight,
                      iconSize + dragTop + dragBottom));
