@@ -510,6 +510,13 @@ void ExtenderItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         return;
     }
 
+    QRectF titleRect = d->titleRect();
+    QSizeF titleSize = titleRect.size();
+    if (titleSize.isEmpty()) {
+        kDebug() << "title size is empty for" << d->title;
+        return;
+    }
+
     //set the font for the title.
     Plasma::Theme *theme = Plasma::Theme::defaultTheme();
     QFont font = theme->font(Plasma::Theme::DefaultFont);
@@ -518,42 +525,38 @@ void ExtenderItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     //create a pixmap with the title that is faded out at the right side of the titleRect.
     QRectF rect;
     if (option->direction == Qt::LeftToRight) {
-        rect = QRectF(d->titleRect().width() - 30, 0, 30, d->titleRect().height());
+        rect = QRectF(titleRect.width() - 30, 0, 30, titleRect.height());
     } else {
-        rect = QRectF(0, 0, 30, d->titleRect().height());
+        rect = QRectF(0, 0, 30, titleRect.height());
     }
 
-    QSize titleSize = d->titleRect().size().toSize();
-    if (!titleSize.isEmpty()) {
-        QPixmap pixmap(titleSize);
-        pixmap.fill(Qt::transparent);
+    QPixmap pixmap(titleSize.toSize());
+    pixmap.fill(Qt::transparent);
 
-        QPainter p(&pixmap);
-        p.setPen(theme->color(Plasma::Theme::TextColor));
-        p.setFont(font);
-        p.drawText(QRectF(QPointF(0, 0), d->titleRect().size()),
-                   Qt::TextSingleLine | Qt::AlignVCenter | Qt::AlignLeft,
-                   d->title);
+    QPainter p(&pixmap);
+    p.setPen(theme->color(Plasma::Theme::TextColor));
+    p.setFont(font);
+    p.drawText(QRectF(QPointF(0, 0), titleSize),
+            Qt::TextSingleLine | Qt::AlignVCenter | Qt::AlignLeft,
+            d->title);
 
-        // Create the alpha gradient for the fade out effect
-        QLinearGradient alphaGradient(0, 0, 1, 0);
-        alphaGradient.setCoordinateMode(QGradient::ObjectBoundingMode);
-        //TODO: correct handling of right to left text.
-        if (option->direction == Qt::LeftToRight) {
-            alphaGradient.setColorAt(0, QColor(0, 0, 0, 255));
-            alphaGradient.setColorAt(1, QColor(0, 0, 0, 0));
-        } else {
-            alphaGradient.setColorAt(1, QColor(0, 0, 0, 255));
-            alphaGradient.setColorAt(0, QColor(0, 0, 0, 0));
-        }
-
-        p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-        p.fillRect(rect, alphaGradient);
-
-        p.end();
-
-        painter->drawPixmap(d->titleRect().topLeft(), pixmap);
+    // Create the alpha gradient for the fade out effect
+    QLinearGradient alphaGradient(0, 0, 1, 0);
+    alphaGradient.setCoordinateMode(QGradient::ObjectBoundingMode);
+    //TODO: correct handling of right to left text.
+    if (option->direction == Qt::LeftToRight) {
+        alphaGradient.setColorAt(0, QColor(0, 0, 0, 255));
+        alphaGradient.setColorAt(1, QColor(0, 0, 0, 0));
+    } else {
+        alphaGradient.setColorAt(1, QColor(0, 0, 0, 255));
+        alphaGradient.setColorAt(0, QColor(0, 0, 0, 0));
     }
+
+    p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+    p.fillRect(rect, alphaGradient);
+    p.end();
+
+    painter->drawPixmap(titleRect.topLeft(), pixmap);
 }
 
 void ExtenderItem::moveEvent(QGraphicsSceneMoveEvent *event)
@@ -769,8 +772,10 @@ QRectF ExtenderItemPrivate::dragHandleRect()
 
 QRectF ExtenderItemPrivate::titleRect()
 {
-    return dragHandleRect().adjusted(dragLeft + collapseIcon->size().width() + 1, dragTop,
-                                     -toolbox->size().width() - dragRight, -dragBottom);
+    QRectF rect = dragHandleRect().adjusted(dragLeft + collapseIcon->size().width() + 1, dragTop,
+                                            -dragRight, -dragBottom);
+    //kDebug() << dragHandleRect() << rect;
+    return rect;
 }
 
 void ExtenderItemPrivate::toggleCollapse()
