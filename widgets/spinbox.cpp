@@ -179,7 +179,7 @@ void SpinBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     update();
 }
 
-void SpinBox::resizeEvent(QGraphicsSceneResizeEvent *)
+void SpinBox::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
     QStyleOptionSpinBox spinOpt;
     spinOpt.initFrom(nativeWidget());
@@ -187,6 +187,7 @@ void SpinBox::resizeEvent(QGraphicsSceneResizeEvent *)
     if (d->focusIndicator) {
         d->focusIndicator->setCustomGeometry(controlrect);
     }
+    QGraphicsProxyWidget::resizeEvent(event);
 }
 
 void SpinBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
