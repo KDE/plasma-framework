@@ -67,7 +67,7 @@ public:
           m_background(new FrameSvg(this))
     {
         m_background->setImagePath("widgets/extender-dragger");
-        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         updateTheme();
     }
 
@@ -114,6 +114,7 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
           d(new ExtenderItemPrivate(this, hostExtender))
 {
     Q_ASSERT(hostExtender);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     //set the extenderId
     if (extenderItemId) {

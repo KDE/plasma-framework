@@ -47,18 +47,17 @@ ExtenderGroup::ExtenderGroup(Extender *parent, uint groupId)
 
     config().writeEntry("isGroup", true);
 
-    //FIXME: this ain't pretty
-    setPreferredHeight(300);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
     QGraphicsLinearLayout *lay = static_cast<QGraphicsLinearLayout *>(layout());
     d->scrollWidget = new ScrollWidget(this);
     d->scrollWidget->show();
     lay->addItem(d->scrollWidget);
     d->scrollWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    d->scrollWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->childsWidget = new QGraphicsWidget(d->scrollWidget);
     d->scrollWidget->setWidget(d->childsWidget);
     d->layout = new QGraphicsLinearLayout(Qt::Vertical, d->childsWidget);
+    d->scrollWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
 
     QAction *expand = new QAction(this);
     expand->setVisible(true);
@@ -201,14 +200,12 @@ void ExtenderGroup::collapseGroup()
     }
     d->scrollWidget->hide();
     static_cast<QGraphicsLinearLayout *>(layout())->removeItem(d->scrollWidget);
-    extender()->resize(extender()->effectiveSizeHint(Qt::PreferredSize));
+    extender()->resize(extender()->effectiveSizeHint(Qt::MinimumSize));
 }
 
 void ExtenderGroup::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
     ExtenderItem::resizeEvent(event);
-
-    d->scrollWidget->setGeometry(0, 70, size().width(), 400);
 }
 
 ExtenderGroupPrivate::ExtenderGroupPrivate(ExtenderGroup *group)
@@ -227,8 +224,9 @@ ExtenderGroupPrivate::~ExtenderGroupPrivate()
 void ExtenderGroupPrivate::addItemToGroup(Plasma::ExtenderItem *item)
 {
     if (item->group() == q) {
-        layout->addItem(item);
         item->setParentItem(childsWidget);
+        layout->addItem(item);
+        q->extender()->resize(q->extender()->effectiveSizeHint(Qt::PreferredSize).width(), q->extender()->size().height());
         childsWidget->resize(childsWidget->size().width(),
                              childsWidget->effectiveSizeHint(Qt::PreferredSize).height());
 
