@@ -181,13 +181,13 @@ void SpinBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 void SpinBox::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
+    QGraphicsProxyWidget::resizeEvent(event);
     QStyleOptionSpinBox spinOpt;
     spinOpt.initFrom(nativeWidget());
     QRect controlrect = nativeWidget()->style()->subControlRect(QStyle::CC_SpinBox, &spinOpt, QStyle::SC_SpinBoxFrame, nativeWidget());
     if (d->focusIndicator) {
         d->focusIndicator->setCustomGeometry(controlrect);
     }
-    QGraphicsProxyWidget::resizeEvent(event);
 }
 
 void SpinBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
