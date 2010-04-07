@@ -33,17 +33,16 @@ class QGraphicsRotation;
 namespace Plasma {
 /**
  * @class RotationAnimation plasma/animations/rotation_p.h
- * @short 3D rotation animation.
+ * @short 2D rotation animation.
  *
- * This animation rotates a QGraphicsWidget in a axis (bounce, reference, axis
- * and angle can be defined using properties). See also
+ * This animation rotates a QGraphicsWidget in a axis (reference and
+ * axis can be defined using properties). See also
  * \ref StackedRotationAnimation.
  */
 class RotationAnimation : public Animation
 {
 
     Q_OBJECT
-    Q_PROPERTY(bool isBounceable READ isBounceable WRITE setBounceable)
     Q_PROPERTY(Qt::Axis axis READ axis WRITE setAxis)
     Q_PROPERTY(qint8 reference READ reference WRITE setReference)
     Q_PROPERTY(qreal angle READ angle WRITE setAngle)
@@ -52,32 +51,18 @@ public:
     /** Default constructor
      *
      * @param parent Animation object parent.
-     * @param isBounceable Animation bounce behavior.
      * @param reference See \ref Animation::Reference.
      * @param axis Which axis to rotate (XAxis, YAxis, ZAxis).
      * @param angle Rotation angle (0 to 360)
      *
      */
     explicit RotationAnimation(QObject *parent = 0,
-                               bool isBounceable = false,
                                qint8 reference = Center,
                                Qt::Axis axis = Qt::ZAxis,
                                qreal angle = 180);
 
     /** Destructor */
     ~RotationAnimation();
-
-    /**
-     * get animation bounce behavior
-     */
-    bool isBounceable() const;
-
-    /**
-     * set animation bounce behavior (it can be bounceable only if not part of
-     * an animation group)
-     * @arg isBounceable
-     */
-    void setBounceable(const bool isBounceable);
 
     /**
      * get animation rotation axis (e.g. YAxis, ZAxis, XAxis)
@@ -121,12 +106,6 @@ protected:
 private:
     /** Rotation transform object */
     QGraphicsRotation *m_rotation;
-    /** Actual number of bounce steps */
-    int m_bounceStep;
-    /** Number of bounce steps */
-    static const int s_bounceSteps;
-    /** Animation bounce behavior */
-    bool m_isBounceable;
     /** Rotation angle */
     qreal m_angle;
     /** Axis where to perform the rotation */
