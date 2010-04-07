@@ -805,7 +805,9 @@ void ExtenderItemPrivate::updateToolBox()
         if (!closeAction) {
             closeAction = new QAction(q);
             actions.insert("close", closeAction);
-            returnToSourceAction->setToolTip(i18n("Close"));
+            if (returnToSourceAction) {
+                returnToSourceAction->setToolTip(i18n("Close"));
+            }
             QObject::connect(closeAction, SIGNAL(triggered()), q, SLOT(destroy()));
         }
 
