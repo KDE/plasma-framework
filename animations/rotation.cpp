@@ -26,9 +26,13 @@
 namespace Plasma
 {
 
-RotationAnimation::RotationAnimation(QObject *parent, qint8 reference, Qt::Axis axis, qreal angle)
-    : Animation(parent)
+const int RotationAnimation::s_bounceSteps = 10;
+
+RotationAnimation::RotationAnimation(QObject *parent, bool isBounceable, qint8 reference, Qt::Axis axis, qreal angle)
+    : Animation(parent),
+      m_bounceStep(0)
 {
+    setBounceable(isBounceable);
     setAngle(angle);
     setAxis(axis);
     setReference(reference);
@@ -38,6 +42,16 @@ RotationAnimation::RotationAnimation(QObject *parent, qint8 reference, Qt::Axis 
 
 RotationAnimation::~RotationAnimation()
 {
+}
+
+bool RotationAnimation::isBounceable() const
+{
+    return m_isBounceable;
+}
+
+void RotationAnimation::setBounceable(const bool isBounceable)
+{
+    m_isBounceable = isBounceable;
 }
 
 Qt::Axis RotationAnimation::axis() const
@@ -154,7 +168,18 @@ void RotationAnimation::updateState(QAbstractAnimation::State newState, QAbstrac
     if ((oldState == Stopped) && (newState == Running)) {
         m_rotation->setAngle(direction() == Forward ? 0 : angle());
     } else if (newState == Stopped) {
-        m_rotation->setAngle(direction() == Forward ? angle() : 0);
+        // Do not bounce if animation is part of a group
+        if (!m_isBounceable || group()) {
+            m_rotation->setAngle(direction() == Forward ? angle() : 0);
+        } else {
+            setDirection(direction() == Forward ? Backward : Forward);
+            if (++m_bounceStep < s_bounceSteps) {
+                start();
+            } else {
+                m_rotation->setAngle(direction() == Forward ? 0 : angle());
+                m_bounceStep = 0;
+            }
+        }
     }
 }
 
@@ -164,7 +189,18 @@ void RotationAnimation::updateCurrentTime(int currentTime)
     if (w) {
         qreal delta = Animation::easingCurve().valueForProgress(
             currentTime / qreal(duration()));
-        delta = angle() * delta;
+        const qreal currentAngle = angle();
+        if (m_isBounceable) {
+            const qreal percentage = 1 - qBound(0.0, qreal(m_bounceStep) / qreal(s_bounceSteps), 1.0);
+            if (m_bounceStep == 0) { // initial bounce
+                delta = qBound(0.0, currentAngle * percentage * delta * 0.5, (currentAngle / 2.0));
+            } else {
+                delta -= 0.5;
+                delta = qBound(-(currentAngle / 2.0), currentAngle * percentage * delta, (currentAngle / 2.0));
+            }
+        } else {
+            delta = qBound(0.0, currentAngle * delta, currentAngle);
+        }
         m_rotation->setAngle(delta);
     }
 }
