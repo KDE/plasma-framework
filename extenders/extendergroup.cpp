@@ -175,6 +175,9 @@ void ExtenderGroup::expandGroup()
             extender()->itemAddedEvent(item);
         }
     }
+    d->scrollWidget->show();
+    static_cast<QGraphicsLinearLayout *>(layout())->addItem(d->scrollWidget);
+    extender()->resize(extender()->effectiveSizeHint(Qt::PreferredSize));
 }
 
 void ExtenderGroup::collapseGroup()
@@ -196,6 +199,9 @@ void ExtenderGroup::collapseGroup()
             extender()->itemRemovedEvent(item);
         }
     }
+    d->scrollWidget->hide();
+    static_cast<QGraphicsLinearLayout *>(layout())->removeItem(d->scrollWidget);
+    extender()->resize(extender()->effectiveSizeHint(Qt::PreferredSize));
 }
 
 void ExtenderGroup::resizeEvent(QGraphicsSceneResizeEvent *event)
@@ -241,6 +247,8 @@ void ExtenderGroupPrivate::removeItemFromGroup(Plasma::ExtenderItem *item)
             q->extender()->itemRemovedEvent(q);
             q->hide();
         }
+        childsWidget->resize(childsWidget->size().width(),
+                             childsWidget->effectiveSizeHint(Qt::PreferredSize).height());
         layout->removeItem(item);
     }
 }
