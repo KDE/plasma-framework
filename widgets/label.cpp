@@ -348,6 +348,15 @@ bool Label::event(QEvent *event)
     return QGraphicsProxyWidget::event(event);
 }
 
+QVariant Label::itemChange(GraphicsItemChange change, const QVariant & value)
+{
+    if (change == QGraphicsItem::ItemCursorHasChanged) {
+        nativeWidget()->setCursor(cursor());
+    }
+
+    return QGraphicsWidget::itemChange(change, value);
+}
+
 } // namespace Plasma
 
 #include <label.moc>

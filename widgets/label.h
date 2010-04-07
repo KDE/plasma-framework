@@ -169,6 +169,7 @@ protected:
                QWidget *widget);
     void changeEvent(QEvent *event);
     bool event(QEvent *event);
+    QVariant itemChange(GraphicsItemChange change, const QVariant & value);
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
 
 private:
