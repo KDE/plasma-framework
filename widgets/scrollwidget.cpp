@@ -1248,12 +1248,19 @@ bool ScrollWidget::eventFilter(QObject *watched, QEvent *event)
 
 QSizeF ScrollWidget::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
 {
-    QSizeF hint = QGraphicsWidget::sizeHint(which, constraint);
-
-    if (which == Qt::PreferredSize && d->widget) {
-        return (d->widget.data()->size()+QSize(d->borderSize, d->borderSize)).expandedTo(d->widget.data()->effectiveSizeHint(Qt::PreferredSize));
+    if (!d->widget || which == Qt::MaximumSize) {
+        return QGraphicsWidget::sizeHint(which, constraint);
+    //FIXME: it should ake the minimum hint of the contained widget, but the result is in a ridiculously big widget
     } else if (which == Qt::MinimumSize) {
         return QSizeF(KIconLoader::SizeEnormous, KIconLoader::SizeEnormous);
+    }
+
+    QSizeF hint = d->widget.data()->effectiveSizeHint(which, constraint)+QSize(d->borderSize, d->borderSize);
+    if (d->horizontalScrollBar && d->horizontalScrollBar->isVisible()) {
+        hint += QSize(0, d->horizontalScrollBar->size().height());
+    }
+    if (d->verticalScrollBar && d->verticalScrollBar->isVisible()) {
+        hint += QSize(d->horizontalScrollBar->size().width(), 0);
     }
 
     return hint;
