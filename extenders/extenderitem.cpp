@@ -512,6 +512,11 @@ void ExtenderItem::setCollapsed(bool collapsed)
     d->collapseIcon->setToolTip(collapsed ? i18n("Expand this widget") : i18n("Collapse this widget"));
     if (d->widget) {
         d->widget->setVisible(!collapsed);
+        if (collapsed) {
+            d->layout->removeItem(d->widget);
+        } else {
+            d->layout->insertItem(1, d->widget);
+        }
     }
 }
 
