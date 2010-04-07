@@ -33,12 +33,15 @@ class QTimer;
 
 namespace Plasma
 {
-    class Applet;
-    class ExtenderGroup;
-    class ExtenderItem;
-    class Extender;
-    class IconWidget;
-    class FrameSvg;
+
+class Applet;
+class ExtenderGroup;
+class ExtenderItem;
+class Extender;
+class Label;
+class IconWidget;
+class FrameSvg;
+class ExtenderItemToolbox;
 
 class ExtenderItemPrivate
 {
@@ -47,7 +50,6 @@ class ExtenderItemPrivate
         ~ExtenderItemPrivate();
 
         QRectF dragHandleRect();
-        QRectF titleRect();
         void toggleCollapse();
         void updateToolBox();
         Applet *hostApplet() const;
@@ -56,11 +58,12 @@ class ExtenderItemPrivate
         void resizeContent(const QSizeF &newSize);
         void actionDestroyed(QObject *o);
         void updateSizeHints();
+        void setMovable(bool movable);
 
         ExtenderItem *q;
 
-        QGraphicsItem *widget;
-        QGraphicsWidget *toolbox;
+        QGraphicsWidget *widget;
+        ExtenderItemToolbox *toolbox;
         QGraphicsLinearLayout *toolboxLayout;
         QGraphicsLinearLayout *layout;
 
@@ -70,39 +73,24 @@ class ExtenderItemPrivate
 
         KConfigGroup config;
 
-        FrameSvg *dragger;
         FrameSvg *background;
 
         IconWidget *collapseIcon;
+        Label *titleLabel;
 
         QHash<QString, QAction*> actions;
         QList<QAction*> actionsInOrder;
 
-        Plasma::IconWidget *destroyButton;
-
-        QString title;
         QString name;
         QString iconName;
 
         uint extenderItemId;
 
-        qreal dragLeft, dragTop, dragRight, dragBottom;
-        qreal bgLeft, bgTop, bgRight, bgBottom;
-
-        QPoint mousePos;
-
-        QSizeF minimumSize;
-        QSizeF maximumSize;
-        QSizeF preferredSize;
-
-        bool mouseOver;
         bool dragStarted;
         bool destroyActionVisibility;
         bool collapsed;
 
         QTimer *expirationTimer;
-
-        qreal iconSize;    //preferred size for the icon in the title bar.
 
         static uint s_maxExtenderItemId;
 };

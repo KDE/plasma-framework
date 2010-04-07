@@ -437,7 +437,9 @@ void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
                 d->layout->addItem(item);
             }
         } else {
+            kDebug() << "inserting at" << pos << d->insertIndexFromPos(pos) << item->size();
             d->layout->insertItem(d->insertIndexFromPos(pos), item);
+            kDebug() << item->size();
         }
     }
 

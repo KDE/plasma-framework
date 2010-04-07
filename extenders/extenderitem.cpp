@@ -54,9 +54,60 @@
 #include "private/extendergroup_p.h"
 #include "private/extenderitem_p.h"
 #include "private/extenderitemmimedata_p.h"
+#include "widgets/label.h"
 
 namespace Plasma
 {
+
+class ExtenderItemToolbox : public QGraphicsWidget
+{
+public:
+    ExtenderItemToolbox(QGraphicsWidget *parent)
+        : QGraphicsWidget(parent),
+          m_background(new FrameSvg(this))
+    {
+        m_background->setImagePath("widgets/extender-dragger");
+        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        updateTheme();
+    }
+
+    qreal iconSize()
+    {
+        return m_iconSize;
+    }
+
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
+    {
+        m_background->paintFrame(painter, option->exposedRect, option->exposedRect);
+    }
+
+    void updateTheme()
+    {
+        //Read the preferred icon size hint, look at the font size, and calculate the desired title bar
+        //icon height.
+        m_background->resize();
+        QSizeF size = m_background->elementSize("hint-preferred-icon-size");
+        size = size.expandedTo(QSizeF(KIconLoader::SizeSmall,KIconLoader::SizeSmall));
+
+        Plasma::Theme *theme = Plasma::Theme::defaultTheme();
+        QFont font = theme->font(Plasma::Theme::DefaultFont);
+        QFontMetrics fm(font);
+        m_iconSize = qMax(size.height(), (qreal) fm.height());
+    }
+
+protected:
+    void resizeEvent(QGraphicsSceneResizeEvent *)
+    {
+        m_background->resizeFrame(size());
+        qreal left, top, right, bottom;
+        m_background->getMargins(left, top, right, bottom);
+        setContentsMargins(0, top, 0, bottom);
+    }
+
+private:
+    FrameSvg *m_background;
+    qreal m_iconSize;
+};
 
 ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
         : QGraphicsWidget(hostExtender),
@@ -74,9 +125,8 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
     }
 
     //create the toolbox.
-    d->toolbox = new QGraphicsWidget(this);
+    d->toolbox = new ExtenderItemToolbox(this);
     d->toolboxLayout = new QGraphicsLinearLayout(d->toolbox);
-    d->toolboxLayout->addStretch();
 
     //create items's configgroup
     KConfigGroup cg = hostExtender->d->applet->config("ExtenderItems");
@@ -89,24 +139,31 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
     uint sourceAppletId = dg.readEntry("sourceAppletId", 0);
 
     //check if we're creating a new item or reinstantiating an existing one.
+    d->collapseIcon = new IconWidget(d->toolbox);
+    d->titleLabel = new Label(d->toolbox);
+
+    d->toolboxLayout->addItem(d->collapseIcon);
+    d->toolboxLayout->addItem(d->titleLabel);
+    d->toolboxLayout->setStretchFactor(d->titleLabel, 10);
+
     if (!sourceAppletId) {
         //The item is new
         dg.writeEntry("sourceAppletPluginName", hostExtender->d->applet->pluginName());
         dg.writeEntry("sourceAppletId", hostExtender->d->applet->id());
         dg.writeEntry("extenderIconName", hostExtender->d->applet->icon());
         d->sourceApplet = hostExtender->d->applet;
-        d->collapseIcon = new IconWidget(KIcon(hostExtender->d->applet->icon()), "", this);
+        d->collapseIcon->setIcon(KIcon(hostExtender->d->applet->icon()));
     } else {
         //The item already exists.
         d->name = dg.readEntry("extenderItemName", "");
-        d->title = dg.readEntry("extenderTitle", "");
+        d->titleLabel->setText(dg.readEntry("extenderTitle", ""));
         setCollapsed(dg.readEntry("isCollapsed", false));
 
         QString iconName = dg.readEntry("extenderIconName", "utilities-desktop-extra");
         if (iconName.isEmpty()) {
             iconName = "utilities-desktop-extra";
         }
-        d->collapseIcon = new IconWidget(KIcon(iconName), "", this);
+        d->collapseIcon->setIcon(iconName);
 
         //Find the group if it's already there.
         QString groupName = dg.readEntry("group", "");
@@ -132,24 +189,21 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
     //set the extender we want to move to.
     setExtender(hostExtender);
 
-    //show or hide the return to source icon.
-    d->updateToolBox();
-
-    //set the image paths, image sizes and collapseIcon position.
+    //set the image paths, image sizes
     d->themeChanged();
+
+    //show or hide the toolbox interface itmems
+    d->updateToolBox();
 
     setAcceptsHoverEvents(true);
 
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(themeChanged()));
+    d->setMovable(d->extender->d->applet->immutability() == Plasma::Mutable);
 }
 
 ExtenderItem::~ExtenderItem()
 {
     emit destroyed(this);
-    //make sure the original mousepointer always get's restored.
-    if (d->mouseOver) {
-        QApplication::restoreOverrideCursor();
-    }
     delete d;
 }
 
@@ -161,8 +215,8 @@ KConfigGroup ExtenderItem::config() const
 
 void ExtenderItem::setTitle(const QString &title)
 {
-    if (d->title != title) {
-        d->title = title;
+    if (d->titleLabel->text() != title) {
+        d->titleLabel->setText(title);
         config().writeEntry("extenderTitle", title);
         update();
     }
@@ -170,7 +224,7 @@ void ExtenderItem::setTitle(const QString &title)
 
 QString ExtenderItem::title() const
 {
-    return d->title;
+    return d->titleLabel->text();
 }
 
 void ExtenderItem::setName(const QString &name)
@@ -188,30 +242,17 @@ void ExtenderItem::setWidget(QGraphicsItem *widget)
 {
     if (d->widget) {
         d->widget->removeSceneEventFilter(this);
+        d->layout->removeItem(d->widget);
     }
 
-    if (!widget) {
+    if (!widget || !widget->isWidget()) {
         d->widget = 0;
         return;
     }
 
     widget->setParentItem(this);
-
-    if (widget->isWidget()) {
-        if (d->widget && d->widget->isWidget()) {
-            d->layout->removeItem(static_cast<QGraphicsWidget *>(d->widget));
-        }
-        d->layout->insertItem(1, static_cast<QGraphicsWidget *>(widget));
-        d->widget = widget;
-    } else {
-        widget->installSceneEventFilter(this);
-        QSizeF panelSize(QSizeF(size().width() - d->bgLeft - d->bgRight,
-                        d->iconSize + d->dragTop + d->dragBottom));
-        widget->setPos(QPointF(d->bgLeft + d->dragLeft, panelSize.height() + d->bgTop));
-        d->widget = widget;
-        d->updateSizeHints();
-    }
-
+    d->widget = static_cast<QGraphicsWidget *>(widget);
+    d->layout->insertItem(1, d->widget);
     d->widget->setVisible(!d->collapsed);
 }
 
@@ -468,9 +509,9 @@ void ExtenderItem::setCollapsed(bool collapsed)
 {
     config().writeEntry("isCollapsed", collapsed);
     d->collapsed = collapsed;
+    d->collapseIcon->setToolTip(collapsed ? i18n("Expand this widget") : i18n("Collapse this widget"));
     if (d->widget) {
         d->widget->setVisible(!collapsed);
-        d->updateSizeHints();
     }
 }
 
@@ -485,76 +526,14 @@ void ExtenderItem::returnToSource()
     }
 }
 
-void ExtenderItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                         QWidget *widget)
+void ExtenderItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
 {
-    Q_UNUSED(option);
-    Q_UNUSED(widget);
-
-    painter->setRenderHint(QPainter::TextAntialiasing, true);
-    painter->setRenderHint(QPainter::Antialiasing, true);
-
     if (d->background->enabledBorders() != (FrameSvg::LeftBorder | FrameSvg::RightBorder) &&
         d->background->enabledBorders()) {
         //Don't paint if only the left and right borders are enabled, we only use the left and right
         //border in this situation to set the correct margins on this item.
-        d->background->paintFrame(painter, QPointF(0, 0));
+        d->background->paintFrame(painter, option->exposedRect, option->exposedRect);
     }
-
-    d->dragger->paintFrame(painter, QPointF(d->bgLeft, d->bgTop));
-
-    //We don't need to paint a title if there is no title.
-    if (d->title.isEmpty()) {
-        return;
-    }
-
-    QRectF titleRect = d->titleRect();
-    QSizeF titleSize = titleRect.size();
-    if (titleSize.isEmpty()) {
-        kDebug() << "title size is empty for" << d->title;
-        return;
-    }
-
-    //set the font for the title.
-    Plasma::Theme *theme = Plasma::Theme::defaultTheme();
-    QFont font = theme->font(Plasma::Theme::DefaultFont);
-    font.setWeight(QFont::Bold);
-
-    //create a pixmap with the title that is faded out at the right side of the titleRect.
-    QRectF rect;
-    if (option->direction == Qt::LeftToRight) {
-        rect = QRectF(titleRect.width() - 30, 0, 30, titleRect.height());
-    } else {
-        rect = QRectF(0, 0, 30, titleRect.height());
-    }
-
-    QPixmap pixmap(titleSize.toSize());
-    pixmap.fill(Qt::transparent);
-
-    QPainter p(&pixmap);
-    p.setPen(theme->color(Plasma::Theme::TextColor));
-    p.setFont(font);
-    p.drawText(QRectF(QPointF(0, 0), titleSize),
-            Qt::TextSingleLine | Qt::AlignVCenter | Qt::AlignLeft,
-            d->title);
-
-    // Create the alpha gradient for the fade out effect
-    QLinearGradient alphaGradient(0, 0, 1, 0);
-    alphaGradient.setCoordinateMode(QGradient::ObjectBoundingMode);
-    //TODO: correct handling of right to left text.
-    if (option->direction == Qt::LeftToRight) {
-        alphaGradient.setColorAt(0, QColor(0, 0, 0, 255));
-        alphaGradient.setColorAt(1, QColor(0, 0, 0, 0));
-    } else {
-        alphaGradient.setColorAt(1, QColor(0, 0, 0, 255));
-        alphaGradient.setColorAt(0, QColor(0, 0, 0, 0));
-    }
-
-    p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-    p.fillRect(rect, alphaGradient);
-    p.end();
-
-    painter->drawPixmap(titleRect.topLeft(), pixmap);
 }
 
 void ExtenderItem::moveEvent(QGraphicsSceneMoveEvent *event)
@@ -566,7 +545,9 @@ void ExtenderItem::moveEvent(QGraphicsSceneMoveEvent *event)
 void ExtenderItem::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
     Q_UNUSED(event)
-    d->themeChanged();
+    //resize the applet background
+    d->background->resizeFrame(size());
+    //d->resizeContent(size());
 }
 
 void ExtenderItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -576,13 +557,12 @@ void ExtenderItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
         event->ignore();
         return;
     }
-
-    d->mousePos = event->pos().toPoint();
 }
 
 void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if ((event->pos().toPoint() - d->mousePos).manhattanLength()
+    QPoint mousePressPos = event->buttonDownPos(event->button()).toPoint();
+    if ((event->pos().toPoint() - mousePressPos).manhattanLength()
         < QApplication::startDragDistance()) {
         return;
     }
@@ -622,7 +602,7 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     //create the necesarry mimedata.
     ExtenderItemMimeData *mimeData = new ExtenderItemMimeData();
     mimeData->setExtenderItem(this);
-    mimeData->setPointerOffset(d->mousePos);
+    mimeData->setPointerOffset(mousePressPos);
 
     //Hide empty internal extender containers when we drag the last item away. Avoids having
     //an ugly empty applet on the desktop temporarily.
@@ -646,7 +626,7 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     QDrag *drag = new QDrag(dragParent);
     drag->setPixmap(pixmap);
     drag->setMimeData(mimeData);
-    drag->setHotSpot(d->mousePos);
+    drag->setHotSpot(mousePressPos);
     Qt::DropAction action = drag->exec();
 
     corona->removeOffscreenWidget(this);
@@ -669,16 +649,13 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void ExtenderItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (d->titleRect().contains(event->pos())) {
+    if (d->dragHandleRect().contains(event->pos())) {
         d->toggleCollapse();
     }
 }
 
-bool ExtenderItem::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
+bool ExtenderItem::sceneEventFilter(QGraphicsItem *, QEvent *)
 {
-    if (watched == d->widget && event->type() == QEvent::GraphicsSceneResize) {
-        d->updateSizeHints();
-    }
     return false;
 }
 
@@ -688,47 +665,17 @@ void ExtenderItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     //not needed anymore, but here for binary compatibility
 }
 
-void ExtenderItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
+void ExtenderItem::hoverMoveEvent(QGraphicsSceneHoverEvent *)
 {
-    if (d->titleRect().contains(event->pos()) &&
-        d->extender->d->applet->immutability() == Plasma::Mutable) {
-        if (!d->mouseOver) {
-            QApplication::setOverrideCursor(Qt::OpenHandCursor);
-            d->mouseOver = true;
-        }
-    } else {
-        if (d->mouseOver) {
-            QApplication::restoreOverrideCursor();
-            d->mouseOver = false;
-        }
-    }
 }
 
-void ExtenderItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+void ExtenderItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *)
 {
-    Q_UNUSED(event);
-
-    if (d->mouseOver) {
-        QApplication::restoreOverrideCursor();
-        d->mouseOver = false;
-    }
 }
 
 QSizeF ExtenderItem::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
-    if (d->widget && d->widget->isWidget()) {
-        return QGraphicsWidget::sizeHint(which, constraint);
-    } else {
-        switch (which) {
-        case Qt::MinimumSize:
-            return d->minimumSize;
-        case Qt::MaximumSize:
-            return d->maximumSize;
-        case Qt::PreferredSize:
-        default:
-            return d->preferredSize;
-        }
-    }
+    return QGraphicsWidget::sizeHint(which, constraint);
 }
 
 ExtenderItemPrivate::ExtenderItemPrivate(ExtenderItem *extenderItem, Extender *hostExtender)
@@ -738,20 +685,13 @@ ExtenderItemPrivate::ExtenderItemPrivate(ExtenderItem *extenderItem, Extender *h
       extender(hostExtender),
       sourceApplet(0),
       group(0),
-      dragger(new FrameSvg(extenderItem)),
       background(new FrameSvg(extenderItem)),
       collapseIcon(0),
-      destroyButton(0),
-      title(QString()),
-      mouseOver(false),
       dragStarted(false),
       destroyActionVisibility(false),
       collapsed(false),
-      expirationTimer(0),
-      iconSize(qreal(0))
+      expirationTimer(0)
 {
-    dragLeft = dragTop = dragRight = dragBottom = 0;
-    bgLeft = bgTop = bgRight = bgBottom = 0;
 }
 
 ExtenderItemPrivate::~ExtenderItemPrivate()
@@ -763,17 +703,7 @@ ExtenderItemPrivate::~ExtenderItemPrivate()
 //returns a Rect containing the area of the detachable where the draghandle will be drawn.
 QRectF ExtenderItemPrivate::dragHandleRect()
 {
-    QSizeF panelSize(QSizeF(q->size().width() - bgLeft - bgRight,
-                     iconSize + dragTop + dragBottom));
-    return QRectF(QPointF(bgLeft, bgTop), panelSize);
-}
-
-QRectF ExtenderItemPrivate::titleRect()
-{
-    QRectF rect = dragHandleRect().adjusted(dragLeft + collapseIcon->size().width() + 1, dragTop,
-                                            -dragRight, -dragBottom);
-    //kDebug() << dragHandleRect() << rect;
-    return rect;
+    return toolbox->boundingRect();
 }
 
 void ExtenderItemPrivate::toggleCollapse()
@@ -784,7 +714,6 @@ void ExtenderItemPrivate::toggleCollapse()
 void ExtenderItemPrivate::updateToolBox()
 {
     Q_ASSERT(toolbox);
-    Q_ASSERT(dragger);
     Q_ASSERT(toolboxLayout);
 
     QAction *closeAction = actions.value("close");
@@ -792,7 +721,8 @@ void ExtenderItemPrivate::updateToolBox()
     bool returnToSourceVisibility = q->isDetached() && sourceApplet;
     int closeIndex = -1;
     int returnToSourceIndex = -1;
-    const int startingIndex = 0;
+    const int startingIndex = 2; // collapse item is index 0, title label is 1
+    const QSizeF widgetSize = collapseIcon->sizeFromIconSize(toolbox->iconSize());
 
     QSet<QAction*> shownActions = actionsInOrder.toSet();
     QHash<QAction *, IconWidget *> actionIcons;
@@ -806,11 +736,15 @@ void ExtenderItemPrivate::updateToolBox()
         if (closeIndex == -1 && destroyActionVisibility &&
             closeAction && widget->action() == closeAction) {
             closeIndex = index;
+            widget->setMinimumSize(widgetSize);
+            widget->setMaximumSize(widgetSize);
             continue;
         }
 
         if (returnToSourceIndex == -1 && returnToSourceVisibility &&
             returnToSourceAction && widget->action() == returnToSourceAction) {
+            widget->setMinimumSize(widgetSize);
+            widget->setMaximumSize(widgetSize);
             returnToSourceIndex = index;
             continue;
         }
@@ -824,6 +758,10 @@ void ExtenderItemPrivate::updateToolBox()
         widget->deleteLater();
     }
 
+    // ensure the collapseIcon is the correct size.
+    collapseIcon->setMinimumSize(widgetSize);
+    collapseIcon->setMaximumSize(widgetSize);
+
     //add the actions that are actually set to visible.
     foreach (QAction *action, actionsInOrder) {
         if (action->isVisible() && action != closeAction) {
@@ -831,11 +769,10 @@ void ExtenderItemPrivate::updateToolBox()
             if (!icon) {
                 icon = new IconWidget(q);
                 icon->setAction(action);
-                QSizeF size = icon->sizeFromIconSize(iconSize);
-                icon->setMinimumSize(size);
-                icon->setMaximumSize(size);
             }
 
+            icon->setMinimumSize(widgetSize);
+            icon->setMaximumSize(widgetSize);
             toolboxLayout->insertItem(startingIndex, icon);
         }
     }
@@ -852,9 +789,8 @@ void ExtenderItemPrivate::updateToolBox()
 
         returnToSourceIcon->setAction(returnToSourceAction);
         returnToSourceIcon->setSvg("widgets/configuration-icons", "return-to-source");
-        QSizeF size = returnToSourceIcon->sizeFromIconSize(iconSize);
-        returnToSourceIcon->setMinimumSize(size);
-        returnToSourceIcon->setMaximumSize(size);
+        returnToSourceIcon->setMinimumSize(widgetSize);
+        returnToSourceIcon->setMaximumSize(widgetSize);
 
         if (closeIndex == -1) {
             toolboxLayout->addItem(returnToSourceIcon);
@@ -865,7 +801,7 @@ void ExtenderItemPrivate::updateToolBox()
 
     //add the close icon if desired.
     if (destroyActionVisibility && closeIndex == -1) {
-        destroyButton = new IconWidget(q);
+        IconWidget *destroyButton = new IconWidget(q);
         if (!closeAction) {
             closeAction = new QAction(q);
             actions.insert("close", closeAction);
@@ -875,13 +811,10 @@ void ExtenderItemPrivate::updateToolBox()
 
         destroyButton->setAction(closeAction);
         destroyButton->setSvg("widgets/configuration-icons", "close");
-        QSizeF size = destroyButton->sizeFromIconSize(iconSize);
-        destroyButton->setMinimumSize(size);
-        destroyButton->setMaximumSize(size);
+        destroyButton->setMinimumSize(widgetSize);
+        destroyButton->setMaximumSize(widgetSize);
         toolboxLayout->addItem(destroyButton);
     }
-
-    toolboxLayout->updateGeometry();
 }
 
 Applet *ExtenderItemPrivate::hostApplet() const
@@ -895,6 +828,7 @@ Applet *ExtenderItemPrivate::hostApplet() const
 
 void ExtenderItemPrivate::themeChanged()
 {
+    kDebug();
     if (dragStarted) {
         background->setImagePath("opaque/widgets/extender-background");
         background->setEnabledBorders(FrameSvg::AllBorders);
@@ -903,51 +837,11 @@ void ExtenderItemPrivate::themeChanged()
         background->setEnabledBorders(extender->enabledBordersForItem(q));
     }
 
-    background->getMargins(bgLeft, bgTop, bgRight, bgBottom);
+    qreal left, top, right, bottom;
+    background->getMargins(left, top, right, bottom);
+    layout->setContentsMargins(left, top, right, bottom);
 
-    dragger->setImagePath("widgets/extender-dragger");
-
-    //Read the preferred icon size hint, look at the font size, and calculate the desired title bar
-    //icon height.
-    dragger->resize();
-    QSizeF size = dragger->elementSize("hint-preferred-icon-size");
-    size = size.expandedTo(QSizeF(KIconLoader::SizeSmall,KIconLoader::SizeSmall));
-
-    Plasma::Theme *theme = Plasma::Theme::defaultTheme();
-    QFont font = theme->font(Plasma::Theme::DefaultFont);
-    QFontMetrics fm(font);
-
-    iconSize = qMax(size.height(), (qreal) fm.height());
-
-    dragger->getMargins(dragLeft, dragTop, dragRight, dragBottom);
-
-    layout->setContentsMargins(bgLeft, bgTop, bgRight, bgBottom);
-    toolbox->setMinimumHeight(dragBottom + iconSize);
-    toolboxLayout->setContentsMargins(0, dragTop, 0, 0);
-
-    QSizeF panelSize(QSizeF(q->size().width() - bgLeft - bgRight,
-                     iconSize + dragTop + dragBottom));
-
-    //TODO: all this stuff will die after using the layout for everything
-    //resize the collapse icon.
-    collapseIcon->resize(collapseIcon->sizeFromIconSize(iconSize));
-
-    //reposition the collapse icon based on the new margins and size.
-    collapseIcon->setPos(bgLeft + dragLeft,
-                         panelSize.height()/2 -
-                         collapseIcon->size().height()/2 + bgTop);
-
-    //reposition the widget based on the new margins.
-    if (widget && !widget->isWidget()) {
-        widget->setPos(QPointF(bgLeft + dragLeft, panelSize.height() +
-                                                  bgTop));
-    }
-
-    updateSizeHints();
-
-    if (!q->size().isEmpty()) {
-        resizeContent(q->size());
-    }
+    toolbox->updateTheme();
 }
 
 void ExtenderItemPrivate::sourceAppletRemoved()
@@ -956,30 +850,6 @@ void ExtenderItemPrivate::sourceAppletRemoved()
     //source icon.
     sourceApplet = 0;
     updateToolBox();
-}
-
-void ExtenderItemPrivate::resizeContent(const QSizeF &newSize)
-{
-    qreal width = newSize.width();
-    qreal height = newSize.height();
-
-    //resize the dragger
-    dragger->resizeFrame(QSizeF(width - bgLeft - bgRight, iconSize + dragTop + dragBottom));
-
-    //resize the applet background
-    background->resizeFrame(newSize);
-
-    //resize the widget
-    if (widget && widget->isWidget()) {
-        QSizeF newWidgetSize(width - bgLeft - bgRight - dragLeft - dragRight,
-                             height - dragHandleRect().height() - bgTop - bgBottom -
-                             dragTop - dragBottom);
-
-        QGraphicsWidget *graphicsWidget = static_cast<QGraphicsWidget*>(widget);
-        graphicsWidget->resize(newWidgetSize);
-    }
-
-    q->update();
 }
 
 void ExtenderItemPrivate::actionDestroyed(QObject *o)
@@ -1002,62 +872,14 @@ void ExtenderItemPrivate::actionDestroyed(QObject *o)
     }
 }
 
-void ExtenderItemPrivate::updateSizeHints()
+void ExtenderItemPrivate::setMovable(bool movable)
 {
-    if (!widget) {
-        return;
-    }
-
-    qreal marginWidth = bgLeft + bgRight + dragLeft + dragRight;
-    qreal marginHeight = bgTop + bgBottom + dragTop + dragBottom;
-
-    QSizeF min;
-    QSizeF pref;
-    QSizeF max;
-
-    min = widget->boundingRect().size();
-    pref = widget->boundingRect().size();
-    max = widget->boundingRect().size();
-
-    if (collapsed) {
-        preferredSize = QSizeF(pref.width() + marginWidth,
-                               dragHandleRect().height() + marginHeight);
-        minimumSize = QSizeF(min.width() + marginWidth,
-                             dragHandleRect().height() + marginHeight);
-        maximumSize = QSizeF(max.width() + marginWidth,
-                             dragHandleRect().height() + marginHeight);
-        q->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-
-        if (collapseIcon) {
-            collapseIcon->setToolTip(i18n("Expand this widget"));
-        }
+    if (movable) {
+        titleLabel->setCursor(Qt::OpenHandCursor);
+        toolbox->setCursor(Qt::OpenHandCursor);
     } else {
-        preferredSize = QSizeF(pref.width() + marginWidth,
-                               pref.height() + dragHandleRect().height() + marginHeight);
-        minimumSize = QSizeF(min.width() + marginWidth,
-                             min.height() + dragHandleRect().height() + marginHeight);
-        maximumSize = QSizeF(max.width() + marginWidth,
-                             max.height() + dragHandleRect().height() + marginHeight);
-
-        //set sane size policies depending on the appearance.
-        if (extender->d->appearance == Extender::TopDownStacked ||
-            extender->d->appearance == Extender::BottomUpStacked) {
-            //used in popups, so fixed make sense.
-            q->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-        } else if (extender->d->appearance == Extender::NoBorders) {
-            //on the desktop or panel so take all the space we want.
-            q->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-        }
-
-        if (collapseIcon) {
-            collapseIcon->setToolTip(i18n("Collapse this widget"));
-        }
-    }
-
-    q->updateGeometry();
-    //FIXME: it should be done from updateGeometry() ??!!??
-    if (extender && extender->layout()) {
-        extender->layout()->activate();
+        titleLabel->unsetCursor();
+        toolbox->unsetCursor();
     }
 }
 

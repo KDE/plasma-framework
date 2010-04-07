@@ -85,8 +85,9 @@
 #include "svg.h"
 #include "framesvg.h"
 #include "popupapplet.h"
-#include "private/framesvg_p.h"
 #include "private/applethandle_p.h"
+#include "private/extenderitem_p.h"
+#include "private/framesvg_p.h"
 #include "theme.h"
 #include "view.h"
 #include "widgets/iconwidget.h"
@@ -1223,6 +1224,13 @@ void Applet::flushPendingConstraintsEvents()
             action->setVisible(canConfig);
             action->setEnabled(canConfig);
         }
+
+        if (d->extender) {
+            foreach (ExtenderItem *item, d->extender.data()->attachedItems()) {
+                item->d->setMovable(unlocked);
+            }
+        }
+
         emit immutabilityChanged(immutability());
     }
 
