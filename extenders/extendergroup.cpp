@@ -176,7 +176,10 @@ void ExtenderGroup::expandGroup()
     }
     d->scrollWidget->show();
     static_cast<QGraphicsLinearLayout *>(layout())->addItem(d->scrollWidget);
-    extender()->resize(extender()->effectiveSizeHint(Qt::PreferredSize));
+
+    //resize to the bax between our hint and extender one
+    //TODO: do this on every childswidget resize?
+    extender()->resize(extender()->effectiveSizeHint(Qt::PreferredSize).expandedTo(effectiveSizeHint(Qt::PreferredSize)));
 }
 
 void ExtenderGroup::collapseGroup()
