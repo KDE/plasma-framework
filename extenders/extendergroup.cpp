@@ -226,7 +226,9 @@ void ExtenderGroupPrivate::addItemToGroup(Plasma::ExtenderItem *item)
     if (item->group() == q) {
         item->setParentItem(childsWidget);
         layout->addItem(item);
-        q->extender()->resize(q->extender()->effectiveSizeHint(Qt::PreferredSize).width(), q->extender()->size().height());
+        layout->activate();
+        //Assumption: extender has no margin so it's size hint will be the max between him or this group. it works only trying to resize to this group width because the first time this group is still not in the extender layout if it's autohide
+        q->extender()->resize(q->effectiveSizeHint(Qt::PreferredSize).width(), q->extender()->size().height());
         childsWidget->resize(childsWidget->size().width(),
                              childsWidget->effectiveSizeHint(Qt::PreferredSize).height());
 
