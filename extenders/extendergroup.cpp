@@ -47,8 +47,6 @@ ExtenderGroup::ExtenderGroup(Extender *parent, uint groupId)
 
     config().writeEntry("isGroup", true);
 
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-
     QGraphicsLinearLayout *lay = static_cast<QGraphicsLinearLayout *>(layout());
     d->scrollWidget = new ScrollWidget(this);
     d->scrollWidget->show();
