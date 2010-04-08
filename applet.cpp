@@ -2603,7 +2603,8 @@ void AppletPrivate::init(const QString &packagePath)
         // find where the Package is
         QString path = packagePath;
         if (path.isEmpty()) {
-            path = KStandardDirs::locate("data", "plasma/plasmoids/" + appletDescription.pluginName() + "/metadata.desktop");
+            path = q->packageStructure()->defaultPackageRoot() + '/' + appletDescription.pluginName() + "/metadata.desktop";
+            path = KStandardDirs::locate("data", path);
             path.replace(QString("/metadata.desktop"),QString("/"));
         } else if (!path.endsWith('/')) {
             path.append('/');
