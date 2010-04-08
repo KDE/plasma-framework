@@ -30,7 +30,7 @@ namespace Plasma
 const int RotationStackedAnimation::s_sideAngle = 90;
 
 RotationStackedAnimation::RotationStackedAnimation(QObject *parent)
-    : Animation(parent)
+    : EasingAnimation(parent)
 {
     m_backRotation = new QGraphicsRotation(this);
     m_frontRotation = new QGraphicsRotation(this);
@@ -141,7 +141,7 @@ void RotationStackedAnimation::updateState(QAbstractAnimation::State newState,
     }
 }
 
-void RotationStackedAnimation::updateCurrentTime(int currentTime)
+void RotationStackedAnimation::updateEffectiveTime(int currentTime)
 {
     if (!targetWidget() || !backWidget()) {
         return;

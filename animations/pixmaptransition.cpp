@@ -31,7 +31,7 @@ namespace Plasma
 {
 
 PixmapTransition::PixmapTransition(QObject *parent)
-             : Animation(parent)
+             : EasingAnimation(parent)
 {
 }
 
@@ -48,7 +48,7 @@ void PixmapTransition::setStartPixmap(const QPixmap &pixmap)
     m_startPixmap = pixmap;
 
     //this will center the pixmaps if needed
-    updateCurrentTime(0);
+    updateEffectiveTime(0);
 }
 
 QPixmap PixmapTransition::startPixmap() const
@@ -64,7 +64,7 @@ void PixmapTransition::setTargetPixmap(const QPixmap &pixmap)
 
     m_targetPixmap = pixmap;
 
-    updateCurrentTime(0);
+    updateEffectiveTime(0);
 }
 
 QPixmap PixmapTransition::targetPixmap() const
@@ -128,7 +128,7 @@ void PixmapTransition::updateState(QAbstractAnimation::State newState, QAbstract
     w->update();
 }
 
-void PixmapTransition::updateCurrentTime(int currentTime)
+void PixmapTransition::updateEffectiveTime(int currentTime)
 {
     QGraphicsWidget *w = targetWidget();
     if (w) {
@@ -161,7 +161,6 @@ void PixmapTransition::updateCurrentTime(int currentTime)
         }
     }
 
-    Animation::updateCurrentTime(currentTime);
     if (w) {
         w->update();
     }

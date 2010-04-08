@@ -23,10 +23,7 @@
 #ifndef PLASMA_ROTATION_P_H
 #define PLASMA_ROTATION_P_H
 
-#include <plasma/animations/animation.h>
-#include <plasma/plasma_export.h>
-
-#include <QVector3D>
+#include <plasma/animations/easinganimation_p.h>
 
 class QGraphicsRotation;
 
@@ -39,7 +36,7 @@ namespace Plasma {
  * axis can be defined using properties). See also
  * \ref StackedRotationAnimation.
  */
-class RotationAnimation : public Animation
+class RotationAnimation : public EasingAnimation
 {
 
     Q_OBJECT
@@ -101,7 +98,7 @@ public:
 
 protected:
     void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
-    void updateCurrentTime(int currentTime);
+    void updateEffectiveTime(int currentTime);
 
 private:
     /** Rotation transform object */

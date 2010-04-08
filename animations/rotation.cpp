@@ -20,6 +20,7 @@
 
 #include <QGraphicsRotation>
 #include <QEasingCurve>
+#include <QVector3D>
 
 #include <kdebug.h>
 
@@ -27,7 +28,7 @@ namespace Plasma
 {
 
 RotationAnimation::RotationAnimation(QObject *parent, qint8 reference, Qt::Axis axis, qreal angle)
-    : Animation(parent)
+    : EasingAnimation(parent)
 {
     setAngle(angle);
     setAxis(axis);
@@ -158,7 +159,7 @@ void RotationAnimation::updateState(QAbstractAnimation::State newState, QAbstrac
     }
 }
 
-void RotationAnimation::updateCurrentTime(int currentTime)
+void RotationAnimation::updateEffectiveTime(int currentTime)
 {
     QGraphicsWidget *w = targetWidget();
     if (w) {

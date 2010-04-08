@@ -27,7 +27,7 @@ namespace Plasma
 {
 
 FadeAnimation::FadeAnimation(QObject *parent)
-             : Animation(parent),
+             : EasingAnimation(parent),
                m_startOpacity(0),
                m_targetOpacity(1)
 {
@@ -71,7 +71,7 @@ void FadeAnimation::updateState(QAbstractAnimation::State newState, QAbstractAni
     }
 }
 
-void FadeAnimation::updateCurrentTime(int currentTime)
+void FadeAnimation::updateEffectiveTime(int currentTime)
 {
     QGraphicsWidget *w = targetWidget();
     if (w) {
@@ -80,8 +80,6 @@ void FadeAnimation::updateCurrentTime(int currentTime)
                 Animation::easingCurve().valueForProgress(delta);
         w->setOpacity(m_startOpacity - delta);
     }
-
-    Animation::updateCurrentTime(currentTime);
 }
 
 } //namespace Plasma

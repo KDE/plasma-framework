@@ -25,7 +25,7 @@ namespace Plasma
 {
 
 ZoomAnimation::ZoomAnimation(QObject *parent)
-             : Animation(parent),
+             : EasingAnimation(parent),
              m_zoom(0)
 {
 }
@@ -60,7 +60,7 @@ void ZoomAnimation::updateState(QAbstractAnimation::State newState, QAbstractAni
     }
 }
 
-void ZoomAnimation::updateCurrentTime(int currentTime)
+void ZoomAnimation::updateEffectiveTime(int currentTime)
 {
     QGraphicsWidget *w = targetWidget();
     if (w) {
@@ -73,8 +73,6 @@ void ZoomAnimation::updateCurrentTime(int currentTime)
             w->setScale(delta);
         }
     }
-
-    Animation::updateCurrentTime(currentTime);
 }
 
 } //namespace Plasma

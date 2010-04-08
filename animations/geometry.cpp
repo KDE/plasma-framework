@@ -27,7 +27,7 @@ namespace Plasma
 {
 
 GeometryAnimation::GeometryAnimation(QObject *parent)
-             : Animation(parent),
+             : EasingAnimation(parent),
              m_startGeometry(-1, -1, -1, -1)
 {
 }
@@ -74,7 +74,7 @@ void GeometryAnimation::updateState(QAbstractAnimation::State newState, QAbstrac
     }
 }
 
-void GeometryAnimation::updateCurrentTime(int currentTime)
+void GeometryAnimation::updateEffectiveTime(int currentTime)
 {
     QGraphicsWidget *w = targetWidget();
     if (w) {
@@ -89,8 +89,6 @@ void GeometryAnimation::updateCurrentTime(int currentTime)
 
         w->setGeometry(newGeo);
     }
-
-    Animation::updateCurrentTime(currentTime);
 }
 
 } //namespace Plasma

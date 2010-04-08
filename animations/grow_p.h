@@ -24,7 +24,7 @@
 #ifndef PLASMA_ANIMATIONS_GROW_P_H
 #define PLASMA_ANIMATIONS_GROW_P_H
 
-#include <plasma/animations/animation.h>
+#include <plasma/animations/easinganimation_p.h>
 #include <plasma/plasma_export.h>
 
 namespace Plasma
@@ -39,7 +39,7 @@ namespace Plasma
  * (it does the animation by changing the objects geometry). Also see
  * \ref ZoomAnimation.
  */
-class GrowAnimation : public Animation
+class GrowAnimation : public EasingAnimation
 {
     Q_OBJECT
     Q_PROPERTY(qreal factor READ factor WRITE setFactor)
@@ -72,7 +72,7 @@ public:
     void setFactor(const qreal factor);
 
 protected:
-    void updateCurrentTime(int currentTime);
+    void updateEffectiveTime(int currentTime);
     void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
 
 private:

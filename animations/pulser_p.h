@@ -23,7 +23,7 @@
 #ifndef PLASMA_ANIMATIONS_PULSER_P_H
 #define PLASMA_ANIMATIONS_PULSER_P_H
 
-#include <plasma/animations/animation.h>
+#include <plasma/animations/easinganimation_p.h>
 #include <plasma/plasma_export.h>
 
 namespace Plasma
@@ -38,7 +38,7 @@ class ShadowFake;
  * Effect that pulses a shadow copy of any QGraphicsWidget making
  * it more translucent and bigger along the time until it vanishes.
  */
-class PulseAnimation : public Animation
+class PulseAnimation : public EasingAnimation
 {
     Q_OBJECT
     Q_PROPERTY(qreal targetScale READ targetScale WRITE setTargetScale)
@@ -75,7 +75,7 @@ public:
 
 protected:
     void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
-    void updateCurrentTime(int currentTime);
+    void updateEffectiveTime(int currentTime);
     void setCopy();
 
 private:

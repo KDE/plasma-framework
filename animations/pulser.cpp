@@ -31,7 +31,7 @@ namespace Plasma
 {
 
 PulseAnimation::PulseAnimation(QObject *parent)
-        : Animation(parent),
+        : EasingAnimation(parent),
           m_zvalue(0),
           m_scale(0),
           m_opacity(0),
@@ -117,7 +117,7 @@ void PulseAnimation::updateState(QAbstractAnimation::State newState, QAbstractAn
     }
 }
 
-void PulseAnimation::updateCurrentTime(int currentTime)
+void PulseAnimation::updateEffectiveTime(int currentTime)
 {
     if (m_under.data()) {
         qreal delta = Animation::easingCurve().valueForProgress( currentTime / qreal(duration()));

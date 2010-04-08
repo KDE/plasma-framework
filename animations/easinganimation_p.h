@@ -1,5 +1,5 @@
 /*
- *   Copyright 2009 Igor Trindade Oliveira <igor.oliveira@indt.org.br>
+ *   Copyright 2010 Aaron Seigo <aseigo@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -17,44 +17,30 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * @file This file contains the definition for the Zoom animation.
- */
+#ifndef PLASMA_EASINGANIMATION_H
+#define PLASMA_EASINGANIMATION_H
 
-#ifndef PLASMA_ANIMATIONS_ZOOM_P_H
-#define PLASMA_ANIMATIONS_ZOOM_P_H
-
-#include <plasma/animations/easinganimation_p.h>
-#include <plasma/plasma_export.h>
+#include "animation.h"
 
 namespace Plasma
 {
 
-/**
- * @class ZoomAnimation plasma/animations/zoom_p.h
- * @short Zoom Animation
- *
- */
-class ZoomAnimation : public EasingAnimation
+
+class EasingAnimation : public Animation
 {
     Q_OBJECT
-    Q_PROPERTY(qreal zoom READ zoom WRITE setZoom)
 
 public:
-    explicit ZoomAnimation(QObject *parent = 0);
-    virtual ~ZoomAnimation();
-
-    qreal zoom() const;
-    void setZoom(qreal);
+    explicit EasingAnimation(QObject *parent = 0);
 
 protected:
-    void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
-    void updateEffectiveTime(int currentTime);
+    virtual void updateEffectiveTime(int currentTime) = 0;
 
 private:
-    qreal m_zoom;
+    void updateCurrentTime(int currentTime);
 };
 
-}
+} // namespace Plasma
 
-#endif // PLASMA_ANIMATIONS_ZOOM_P_H
+#endif // PLASMA_EASINGANIMATION_H
+

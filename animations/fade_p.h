@@ -24,7 +24,7 @@
 #ifndef PLASMA_ANIMATIONS_FADE_P_H
 #define PLASMA_ANIMATIONS_FADE_P_H
 
-#include <plasma/animations/animation.h>
+#include <plasma/animations/easinganimation_p.h>
 #include <plasma/plasma_export.h>
 
 namespace Plasma
@@ -38,7 +38,7 @@ namespace Plasma
  * value to a target value. The range is 0 (full translucent) to 1 (full
  * opaque).
  */
-class FadeAnimation : public Animation
+class FadeAnimation : public EasingAnimation
 {
     Q_OBJECT
     Q_PROPERTY(qreal startOpacity READ startOpacity WRITE setStartOpacity)
@@ -85,7 +85,7 @@ public:
 
 protected:
     void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
-    void updateCurrentTime(int currentTime);
+    void updateEffectiveTime(int currentTime);
 
 private:
     /** Initial opacity */

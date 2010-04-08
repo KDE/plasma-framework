@@ -26,7 +26,7 @@ namespace Plasma
 {
 
 GrowAnimation::GrowAnimation(QObject *parent, qreal factor)
-    : Animation(parent), m_animFactor(factor)
+    : EasingAnimation(parent), m_animFactor(factor)
 {
 }
 
@@ -40,7 +40,7 @@ qreal GrowAnimation::factor() const
     return m_animFactor;
 }
 
-void GrowAnimation::updateCurrentTime(int currentTime)
+void GrowAnimation::updateEffectiveTime(int currentTime)
 {
     QGraphicsWidget *w = targetWidget();
     if (w && state() == QAbstractAnimation::Running) {

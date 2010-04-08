@@ -22,7 +22,7 @@
 #ifndef PLASMA_ROTATIONSTACKED_P_H
 #define PLASMA_ROTATIONSTACKED_P_H
 
-#include <plasma/animations/animation.h>
+#include <plasma/animations/easinganimation_p.h>
 #include <plasma/plasma_export.h>
 
 #include <QGraphicsLayoutItem>
@@ -41,7 +41,7 @@ namespace Plasma {
  * Use this class when you want to rotate a widget along an axis (e.g. Y)
  * and display a 'hidden' widget behind it. See also \ref RotationAnimation.
  */
-class RotationStackedAnimation : public Animation
+class RotationStackedAnimation : public EasingAnimation
 {
     Q_OBJECT
     Q_PROPERTY(MovementDirection movementDirection READ movementDirection WRITE setMovementDirection)
@@ -97,7 +97,7 @@ public:
 
 protected:
     void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
-    void updateCurrentTime(int currentTime);
+    void updateEffectiveTime(int currentTime);
 
 private:
     /**

@@ -51,7 +51,7 @@ SlideAnimation::~SlideAnimation()
 
 SlideAnimation::SlideAnimation(QObject *parent,
                                MovementDirection direction,
-                               qreal distance) : Animation(parent)
+                               qreal distance) : EasingAnimation(parent)
 {
     setMovementDirection(direction);
     setDistance(distance);
@@ -68,7 +68,7 @@ Animation::MovementDirection SlideAnimation::movementDirection() const
     return m_animDirection;
 }
 
-void SlideAnimation::updateCurrentTime(int currentTime)
+void SlideAnimation::updateEffectiveTime(int currentTime)
 {
     QGraphicsWidget *w = targetWidget();
     if (w && state() == QAbstractAnimation::Running) {

@@ -24,7 +24,7 @@
 #ifndef PLASMA_ANIMATIONS_SLIDE_P_H
 #define PLASMA_ANIMATIONS_SLIDE_P_H
 
-#include "plasma/animations/animation.h"
+#include "plasma/animations/easinganimation_p.h"
 #include "plasma/plasma_export.h"
 #include "plasma/plasma.h"
 
@@ -39,7 +39,7 @@ class SlideAnimationPrivate;
  * Effect that moves the object a specific distance in a given direction. The
  * object is optionally made invisible at the beginning or at the end.
  */
-class SlideAnimation : public Animation
+class SlideAnimation : public EasingAnimation
 {
     Q_OBJECT
     Q_PROPERTY(qreal distance READ distance WRITE setDistance)
@@ -76,7 +76,7 @@ public:
     Animation::MovementDirection movementDirection() const;
 
 protected:
-    void updateCurrentTime(int currentTime);
+    void updateEffectiveTime(int currentTime);
     void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
 
 private:

@@ -50,6 +50,7 @@ set(plasma_LIB_SRCS
     abstracttoolbox.cpp
     animator.cpp
     animations/animation.cpp
+    animations/easinganimation.cpp
     animations/fade.cpp
     animations/grow.cpp
     animations/slide.cpp
