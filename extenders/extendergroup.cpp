@@ -55,6 +55,7 @@ ExtenderGroup::ExtenderGroup(Extender *parent, uint groupId)
     lay->addItem(d->scrollWidget);
     d->scrollWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     d->childsWidget = new QGraphicsWidget(d->scrollWidget);
+    d->childsWidget->installEventFilter(this);
     d->scrollWidget->setWidget(d->childsWidget);
     d->layout = new QGraphicsLinearLayout(Qt::Vertical, d->childsWidget);
     d->scrollWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
@@ -211,6 +212,16 @@ void ExtenderGroup::resizeEvent(QGraphicsSceneResizeEvent *event)
     ExtenderItem::resizeEvent(event);
 }
 
+bool ExtenderGroup::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == d->childsWidget && event->type() == QEvent::GraphicsSceneResize) {
+        //resize to the max between the extender size hint and ours (that's because the group can still not be in the extender layout)
+        extender()->resize(extender()->effectiveSizeHint(Qt::PreferredSize).expandedTo(effectiveSizeHint(Qt::PreferredSize)).width(), extender()->size().height());
+    }
+
+    return ExtenderItem::eventFilter(watched, event);
+}
+
 ExtenderGroupPrivate::ExtenderGroupPrivate(ExtenderGroup *group)
     : q(group),
       svg(new Svg(group)),
@@ -230,8 +241,7 @@ void ExtenderGroupPrivate::addItemToGroup(Plasma::ExtenderItem *item)
         item->setParentItem(childsWidget);
         layout->addItem(item);
         layout->activate();
-        //Assumption: extender has no margin so it's size hint will be the max between him or this group. it works only trying to resize to this group width because the first time this group is still not in the extender layout if it's autohide
-        q->extender()->resize(q->effectiveSizeHint(Qt::PreferredSize).width(), q->extender()->size().height());
+
         childsWidget->resize(childsWidget->size().width(),
                              childsWidget->effectiveSizeHint(Qt::PreferredSize).height());
 

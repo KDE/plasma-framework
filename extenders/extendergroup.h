@@ -116,6 +116,7 @@ class PLASMA_EXPORT ExtenderGroup : public ExtenderItem
 
     protected:
         void resizeEvent(QGraphicsSceneResizeEvent *event);
+        bool eventFilter(QObject *watched, QEvent *event);
 
     private:
         ExtenderGroupPrivate * const d;
