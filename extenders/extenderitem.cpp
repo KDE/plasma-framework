@@ -746,15 +746,11 @@ void ExtenderItemPrivate::updateToolBox()
         if (closeIndex == -1 && destroyActionVisibility &&
             closeAction && widget->action() == closeAction) {
             closeIndex = index;
-            widget->setMinimumSize(widgetSize);
-            widget->setMaximumSize(widgetSize);
             continue;
         }
 
         if (returnToSourceIndex == -1 && returnToSourceVisibility &&
             returnToSourceAction && widget->action() == returnToSourceAction) {
-            widget->setMinimumSize(widgetSize);
-            widget->setMaximumSize(widgetSize);
             returnToSourceIndex = index;
             continue;
         }
