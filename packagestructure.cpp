@@ -426,12 +426,16 @@ void PackageStructure::read(const KConfigBase *config)
 {
     d->contents.clear();
     d->mimetypes.clear();
-    d->type = config->group("").readEntry("Type", QString());
+    KConfigGroup general(config, "");
+    d->type = general.readEntry("Type", QString());
+    d->contentsPrefix = general.readEntry("ContentsPrefix", d->contentsPrefix);
+    d->packageRoot = general.readEntry("DefaultPackageRoot", d->packageRoot);
+    d->externalPaths = general.readEntry("AllowExternalPaths", d->externalPaths);
 
     QStringList groups = config->groupList();
     foreach (const QString &group, groups) {
+        KConfigGroup entry(config, "");
         QByteArray key = group.toAscii();
-        KConfigGroup entry = config->group(group);
 
         QString path = entry.readEntry("Path", QString());
         QString name = entry.readEntry("Name", QString());
@@ -452,7 +456,11 @@ void PackageStructure::read(const KConfigBase *config)
 
 void PackageStructure::write(KConfigBase *config) const
 {
-    config->group("").writeEntry("Type", type());
+    KConfigGroup general = KConfigGroup(config, "");
+    general.writeEntry("Type", type());
+    general.writeEntry("ContentsPrefix", d->contentsPrefix);
+    general.writeEntry("DefaultPackageRoot", d->packageRoot);
+    general.writeEntry("AllowExternalPaths", d->externalPaths);
 
     QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
     while (it != d->contents.constEnd()) {
