@@ -68,8 +68,12 @@ class ContentStructure
 class PackageStructurePrivate
 {
 public:
-    PackageStructurePrivate()
-        : metadata(0),
+    PackageStructurePrivate(const QString &t)
+        : type(t),
+          contentsPrefix("contents/"),
+          packageRoot("plasma/plasmoids"),
+          servicePrefix("plasma-applet-"),
+          metadata(0),
           externalPaths(false)
     {
     }
@@ -98,12 +102,8 @@ QHash<QString, PackageStructure::Ptr> PackageStructurePrivate::structures;
 
 PackageStructure::PackageStructure(QObject *parent, const QString &type)
     : QObject(parent),
-      d(new PackageStructurePrivate)
+      d(new PackageStructurePrivate(type))
 {
-    d->type = type;
-    d->contentsPrefix = "contents/";
-    d->packageRoot = "plasma/plasmoids/";
-    d->servicePrefix = "plasma-applet-";
 }
 
 PackageStructure::~PackageStructure()
