@@ -1234,6 +1234,7 @@ bool ScrollWidget::eventFilter(QObject *watched, QEvent *event)
 
     if (watched == d->widget.data() && event->type() == QEvent::GraphicsSceneResize) {
         d->adjustScrollbarsTimer->start(200);
+        updateGeometry();
     } else if (watched == d->widget.data() && event->type() == QEvent::GraphicsSceneMove) {
         d->horizontalScrollBar->blockSignals(true);
         d->verticalScrollBar->blockSignals(true);
@@ -1255,7 +1256,7 @@ QSizeF ScrollWidget::sizeHint(Qt::SizeHint which, const QSizeF & constraint) con
         return QSizeF(KIconLoader::SizeEnormous, KIconLoader::SizeEnormous);
     }
 
-    QSizeF hint = d->widget.data()->effectiveSizeHint(which, constraint)+QSize(d->borderSize, d->borderSize);
+    QSizeF hint = d->widget.data()->effectiveSizeHint(which, constraint)+QSize(d->borderSize*2, d->borderSize*2);
     if (d->horizontalScrollBar && d->horizontalScrollBar->isVisible()) {
         hint += QSize(0, d->horizontalScrollBar->size().height());
     }
