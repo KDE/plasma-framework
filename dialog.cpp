@@ -102,6 +102,8 @@ public:
     int resizeStartCorner;
     QTimer *moveTimer;
     QTimer *adjustViewTimer;
+    QSize oldGraphicsWidgetMinimumSize;
+    QSize oldGraphicsWidgetMaximumSize;
     Plasma::AspectRatioMode aspectRatioMode;
     bool resizeChecksWithBorderCheck;
 };
@@ -690,8 +692,13 @@ void Dialog::showEvent(QShowEvent * event)
     d->updateResizeCorners();
 
     QGraphicsWidget *graphicsWidget = d->graphicsWidgetPtr.data();
-    if (graphicsWidget && d->view && graphicsWidget->size().toSize() != d->view->size()) {
+    if (graphicsWidget &&
+        ((d->view && graphicsWidget->size().toSize() != d->view->size()) ||
+         d->oldGraphicsWidgetMinimumSize != graphicsWidget->minimumSize() ||
+         d->oldGraphicsWidgetMaximumSize != graphicsWidget->maximumSize())) {
         syncToGraphicsWidget();
+        d->oldGraphicsWidgetMinimumSize = graphicsWidget->minimumSize().toSize();
+        d->oldGraphicsWidgetMaximumSize = graphicsWidget->maximumSize().toSize();
     }
 
     if (d->view) {
