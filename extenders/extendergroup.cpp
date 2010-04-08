@@ -56,7 +56,7 @@ ExtenderGroup::ExtenderGroup(Extender *parent, uint groupId)
     d->childsWidget->installEventFilter(this);
     d->scrollWidget->setWidget(d->childsWidget);
     d->layout = new QGraphicsLinearLayout(Qt::Vertical, d->childsWidget);
-    d->scrollWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
+    d->scrollWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     QAction *expand = new QAction(this);
     expand->setVisible(true);
