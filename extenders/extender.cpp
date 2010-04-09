@@ -103,6 +103,7 @@ Extender::Extender(Applet *applet)
         delete applet->d->extender.data();
     }
     applet->d->extender = this;
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     setContentsMargins(0, 0, 0, 0);
     d->layout = new QGraphicsLinearLayout(this);

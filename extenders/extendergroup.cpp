@@ -56,7 +56,8 @@ ExtenderGroup::ExtenderGroup(Extender *parent, uint groupId)
     d->childsWidget->installEventFilter(this);
     d->scrollWidget->setWidget(d->childsWidget);
     d->layout = new QGraphicsLinearLayout(Qt::Vertical, d->childsWidget);
-    d->scrollWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    d->childsWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    d->scrollWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 
     QAction *expand = new QAction(this);
     expand->setVisible(true);
@@ -175,10 +176,6 @@ void ExtenderGroup::expandGroup()
     }
     d->scrollWidget->show();
     static_cast<QGraphicsLinearLayout *>(layout())->addItem(d->scrollWidget);
-
-    //resize to the bax between our hint and extender one
-    //TODO: do this on every childswidget resize?
-    extender()->resize(extender()->effectiveSizeHint(Qt::PreferredSize).expandedTo(effectiveSizeHint(Qt::PreferredSize)));
 }
 
 void ExtenderGroup::collapseGroup()
@@ -202,7 +199,6 @@ void ExtenderGroup::collapseGroup()
     }
     d->scrollWidget->hide();
     static_cast<QGraphicsLinearLayout *>(layout())->removeItem(d->scrollWidget);
-    extender()->resize(extender()->effectiveSizeHint(Qt::MinimumSize));
 }
 
 void ExtenderGroup::resizeEvent(QGraphicsSceneResizeEvent *event)
@@ -237,6 +233,7 @@ void ExtenderGroupPrivate::addItemToGroup(Plasma::ExtenderItem *item)
 {
     if (item->group() == q) {
         item->setParentItem(childsWidget);
+        item->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         layout->addItem(item);
         layout->activate();
 
@@ -261,6 +258,7 @@ void ExtenderGroupPrivate::removeItemFromGroup(Plasma::ExtenderItem *item)
         childsWidget->resize(childsWidget->size().width(),
                              childsWidget->effectiveSizeHint(Qt::PreferredSize).height());
         layout->removeItem(item);
+        item->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     }
 }
 

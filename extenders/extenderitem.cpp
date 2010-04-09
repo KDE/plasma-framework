@@ -114,7 +114,7 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
           d(new ExtenderItemPrivate(this, hostExtender))
 {
     Q_ASSERT(hostExtender);
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
     //set the extenderId
     if (extenderItemId) {
