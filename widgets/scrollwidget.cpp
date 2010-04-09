@@ -1261,7 +1261,7 @@ QSizeF ScrollWidget::sizeHint(Qt::SizeHint which, const QSizeF & constraint) con
         hint += QSize(0, d->horizontalScrollBar->size().height());
     }
     if (d->verticalScrollBar && d->verticalScrollBar->isVisible()) {
-        hint += QSize(d->horizontalScrollBar->size().width(), 0);
+        hint += QSize(d->verticalScrollBar->size().width(), 0);
     }
 
     return hint;
