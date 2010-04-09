@@ -234,7 +234,7 @@ void ExtenderGroupPrivate::addItemToGroup(Plasma::ExtenderItem *item)
     if (item->group() == q) {
         item->setParentItem(childsWidget);
         item->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        layout->addItem(item);
+        layout->insertItem(0, item);
         layout->activate();
 
         childsWidget->resize(childsWidget->size().width(),
