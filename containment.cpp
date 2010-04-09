@@ -23,60 +23,104 @@
 
 #include <Plasma/Corona>
 #include <Plasma/Containment>
+#include <Plasma/Wallpaper>
 
 #include "scriptengine.h"
 #include "widget.h"
 
+class Containment::Private
+{
+public:
+    QWeakPointer<Plasma::Containment> containment;
+    QString oldWallpaperPlugin;
+    QString wallpaperPlugin;
+    QString oldWallpaperMode;
+    QString wallpaperMode;
+};
+
 Containment::Containment(Plasma::Containment *containment, QObject *parent)
     : Applet(parent),
-      m_containment(containment)
+      d(new Containment::Private)
 {
+    d->containment = containment;
     setCurrentConfigGroup(QStringList());
+    if (containment && containment->wallpaper()) {
+        d->oldWallpaperPlugin = d->wallpaperPlugin = containment->wallpaper()->pluginName();
+        d->oldWallpaperMode = d->wallpaperMode = containment->wallpaper()->renderingMode().name();
+    }
 }
 
 Containment::~Containment()
 {
+    if (d->containment && (d->oldWallpaperPlugin != d->wallpaperPlugin ||
+                          d->oldWallpaperMode != d->wallpaperMode)) {
+        Plasma::Containment *containment = d->containment.data();
+        containment->setWallpaper(d->wallpaperPlugin, d->wallpaperMode);
+    }
+
+    delete d;
 }
 
 int Containment::screen() const
 {
-    if (!m_containment) {
+    if (!d->containment) {
         return -1;
     }
 
-    return m_containment.data()->screen();
+    return d->containment.data()->screen();
 }
 
 void Containment::setScreen(int screen)
 {
-    if (m_containment) {
-        m_containment.data()->setScreen(screen);
+    if (d->containment) {
+        d->containment.data()->setScreen(screen);
     }
 }
-                
+
+QString Containment::wallpaperPlugin() const
+{
+    return d->wallpaperPlugin;
+}
+
+void Containment::setWallpaperPlugin(const QString &wallpaperPlugin)
+{
+    d->wallpaperPlugin = wallpaperPlugin;
+}
+
+
+QString Containment::wallpaperMode() const
+{
+    return d->wallpaperMode;
+}
+
+void Containment::setWallpaperMode(const QString &wallpaperMode)
+{
+    d->wallpaperMode = wallpaperMode;
+}
+
 int Containment::desktop() const
 {
-    if (!m_containment) {
+    if (!d->containment) {
         return -1;
     }
 
-    return m_containment.data()->desktop();
+    return d->containment.data()->desktop();
 }
 
 void Containment::setDesktop(int desktop)
 {
-    if (m_containment) {
-        m_containment.data()->setScreen(m_containment.data()->screen(), desktop);
+    if (d->containment) {
+        d->containment.data()->setScreen(d->containment.data()->screen(), desktop);
     }
 }
 
 QString Containment::formFactor() const
 {
-    if (!m_containment) {
+    if (!d->containment) {
         return "Planar";
     }
 
-    switch (m_containment.data()->formFactor()) {
+    switch (d->containment.data()->formFactor()) {
         case Plasma::Planar:
             return "planar";
             break;
@@ -100,8 +144,8 @@ QList<int> Containment::widgetIds() const
     //       however QScript deals with QList<uint> very, very poory
     QList<int> w;
 
-    if (m_containment) {
-        foreach (const Plasma::Applet *applet, m_containment.data()->applets()) {
+    if (d->containment) {
+        foreach (const Plasma::Applet *applet, d->containment.data()->applets()) {
             w.append(applet->id());
         }
     }
@@ -122,8 +166,8 @@ QScriptValue Containment::widgetById(QScriptContext *context, QScriptEngine *eng
         return engine->undefinedValue();
     }
 
-    if (c->m_containment) {
-        foreach (Plasma::Applet *w, c->m_containment.data()->applets()) {
+    if (c->d->containment) {
+        foreach (Plasma::Applet *w, c->d->containment.data()->applets()) {
             if (w->id() == id) {
                 ScriptEngine *env = ScriptEngine::envFor(engine);
                 return env->wrap(w, engine);
@@ -142,21 +186,21 @@ QScriptValue Containment::addWidget(QScriptContext *context, QScriptEngine *engi
 
     Containment *c = qobject_cast<Containment*>(context->thisObject().toQObject());
 
-    if (!c || !c->m_containment) {
+    if (!c || !c->d->containment) {
         return engine->undefinedValue();
     }
 
     QScriptValue v = context->argument(0);
     Plasma::Applet *applet = 0;
     if (v.isString()) {
-        applet = c->m_containment.data()->addApplet(v.toString());
+        applet = c->d->containment.data()->addApplet(v.toString());
         if (applet) {
             ScriptEngine *env = ScriptEngine::envFor(engine);
             return env->wrap(applet, engine);
         }
     } else if (Widget *widget = qobject_cast<Widget*>(v.toQObject())) {
         applet = widget->applet();
-        c->m_containment.data()->addApplet(applet);
+        c->d->containment.data()->addApplet(applet);
         return v;
     }
 
@@ -165,49 +209,49 @@ QScriptValue Containment::addWidget(QScriptContext *context, QScriptEngine *engi
 
 uint Containment::id() const
 {
-    if (!m_containment) {
+    if (!d->containment) {
         return 0;
     }
 
-    return m_containment.data()->id();
+    return d->containment.data()->id();
 }
 
 QString Containment::name() const
 {
-    if (!m_containment) {
+    if (!d->containment) {
         return QString();
     }
 
-    return m_containment.data()->activity();
+    return d->containment.data()->activity();
 }
 
 void Containment::setName(const QString &name)
 {
-    if (m_containment) {
-        m_containment.data()->setActivity(name);
+    if (d->containment) {
+        d->containment.data()->setActivity(name);
     }
 }
 
 QString Containment::type() const
 {
-    if (!m_containment) {
+    if (!d->containment) {
         return QString();
     }
 
-    return m_containment.data()->pluginName();
+    return d->containment.data()->pluginName();
 }
 
 void Containment::remove()
 {
-    if (m_containment) {
-        m_containment.data()->destroy(false);
+    if (d->containment) {
+        d->containment.data()->destroy(false);
     }
 }
 
 void Containment::showConfigurationInterface()
 {
-    if (m_containment) {
-        QAction *configAction = m_containment.data()->action("configure");
+    if (d->containment) {
+        QAction *configAction = d->containment.data()->action("configure");
         if (configAction && configAction->isEnabled()) {
             configAction->trigger();
         }
@@ -216,12 +260,12 @@ void Containment::showConfigurationInterface()
 
 Plasma::Applet *Containment::applet() const
 {
-    return m_containment.data();
+    return d->containment.data();
 }
 
 Plasma::Containment *Containment::containment() const
 {
-    return m_containment.data();
+    return d->containment.data();
 }
 
 #include "containment.moc"

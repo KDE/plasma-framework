@@ -42,8 +42,9 @@ class PLASMAGENERICSHELL_EXPORT Containment : public Applet
     Q_PROPERTY(QStringList configKeys READ configKeys)
     Q_PROPERTY(QStringList configGroups READ configGroups)
     Q_PROPERTY(QStringList currentConfigGroup WRITE setCurrentConfigGroup READ currentConfigGroup)
-
     Q_PROPERTY(QString name READ name WRITE setName)
+    Q_PROPERTY(QString wallpaperPlugin READ wallpaperPlugin WRITE setWallpaperPlugin)
+    Q_PROPERTY(QString wallpaperMode READ wallpaperMode WRITE setWallpaperMode)
     Q_PROPERTY(QString type READ type)
     Q_PROPERTY(QString formFactor READ formFactor)
     Q_PROPERTY(QList<int> widgetIds READ widgetIds)
@@ -72,6 +73,11 @@ public:
     Plasma::Applet *applet() const;
     Plasma::Containment *containment() const;
 
+    QString wallpaperPlugin() const;
+    void setWallpaperPlugin(const QString &wallpaperPlugin);
+    QString wallpaperMode() const;
+    void setWallpaperMode(const QString &wallpaperMode);
+
     static QScriptValue widgetById(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue addWidget(QScriptContext *context, QScriptEngine *engine);
 
@@ -85,7 +91,8 @@ public Q_SLOTS:
     void reloadConfig() { Applet::reloadConfig(); }
 
 private:
-    QWeakPointer<Plasma::Containment> m_containment;
+    class Private;
+    Private * const d;
 };
 
 #endif
