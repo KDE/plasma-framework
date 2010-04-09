@@ -45,7 +45,7 @@ public:
     static QStringList pendingUpdateScripts();
     static QStringList defaultLayoutScripts();
 
-    void evaluateScript(const QString &script);
+    bool evaluateScript(const QString &script, const QString &path = QString());
     static bool isPanel(const Plasma::Containment *c);
     QScriptValue wrap(Plasma::Applet *w, QScriptEngine *engine);
     virtual QScriptValue wrap(Plasma::Containment *c, QScriptEngine *engine);
@@ -68,6 +68,7 @@ private:
     static QScriptValue activityForScreen(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue panelById(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue fileExists(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue loadTemplate(QScriptContext *context, QScriptEngine *engine);
 
     // helpers
     static QScriptValue createContainment(const QString &type, const QString &defautPlugin,

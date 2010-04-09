@@ -23,16 +23,19 @@
 #include <QFileInfo>
 #include <QScriptValueIterator>
 
+#include <KServiceTypeTrader>
 #include <KShell>
 #include <KStandardDirs>
 
 #include <Plasma/Applet>
 #include <Plasma/Containment>
 #include <Plasma/Corona>
+#include <Plasma/Package>
 
 #include "appinterface.h"
 #include "containment.h"
 #include "widget.h"
+#include "layouttemplatepackagestructure.h"
 
 QScriptValue constructQRectFClass(QScriptEngine *engine);
 
@@ -45,7 +48,6 @@ ScriptEngine::ScriptEngine(Plasma::Corona *corona, QObject *parent)
     connect(interface, SIGNAL(print(QString)), this, SIGNAL(print(QString)));
     m_scriptSelf = newQObject(interface, QScriptEngine::QtOwnership,
                               QScriptEngine::ExcludeSuperClassProperties | QScriptEngine::ExcludeSuperClassMethods);
-    kDebug( )<< "*****************************";
     setupEngine();
     connect(this, SIGNAL(signalHandlerException(QScriptValue)), this, SLOT(exception(QScriptValue)));
 }
@@ -202,6 +204,55 @@ QScriptValue ScriptEngine::fileExists(QScriptContext *context, QScriptEngine *en
     return f.exists();
 }
 
+QScriptValue ScriptEngine::loadTemplate(QScriptContext *context, QScriptEngine *engine)
+{
+    Q_UNUSED(engine)
+    if (context->argumentCount() == 0) {
+        return false;
+    }
+
+    const QString layout = context->argument(0).toString();
+    if (layout.isEmpty() || layout.contains("'")) {
+        return false;
+    }
+
+    const QString constraint = QString("[X-Plasma-Shell] == '%1' and [X-KDE-PluginInfo-Name] == '%2'")
+                                      .arg(KGlobal::mainComponent().componentName(),layout);
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/LayoutTemplate", constraint);
+
+    if (offers.isEmpty()) {
+        return false;
+    }
+
+    Plasma::PackageStructure::Ptr structure(new LayoutTemplatePackageStructure);
+    KPluginInfo info(offers.first());
+    const QString path = KStandardDirs::locate("data", structure->defaultPackageRoot() + '/' + info.pluginName() + '/');
+    if (path.isEmpty()) {
+        return false;
+    }
+
+    Plasma::Package p(path, structure);
+    const QString scriptFile = p.filePath("mainscript");
+    if (scriptFile.isEmpty()) {
+        return false;
+    }
+
+    QFile file(scriptFile);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        kWarning() << i18n("Unable to load script file: %1", path);
+        return false;
+    }
+
+    QString script = file.readAll();
+    if (script.isEmpty()) {
+        return false;
+    }
+
+    ScriptEngine *env = envFor(engine);
+    env->evaluateScript(script, path);
+    return true;
+}
+
 void ScriptEngine::setupEngine()
 {
     QScriptValue v = globalObject();
@@ -221,6 +272,7 @@ void ScriptEngine::setupEngine()
     m_scriptSelf.setProperty("activityForScreen", newFunction(ScriptEngine::activityForScreen));
     m_scriptSelf.setProperty("panelById", newFunction(ScriptEngine::panelById));
     m_scriptSelf.setProperty("fileExists", newFunction(ScriptEngine::fileExists));
+    m_scriptSelf.setProperty("loadTemplate", newFunction(ScriptEngine::loadTemplate));
 
     setGlobalObject(m_scriptSelf);
 }
@@ -231,10 +283,10 @@ bool ScriptEngine::isPanel(const Plasma::Containment *c)
            c->containmentType() == Plasma::Containment::CustomPanelContainment;
 }
 
-void ScriptEngine::evaluateScript(const QString &script)
+bool ScriptEngine::evaluateScript(const QString &script, const QString &path)
 {
     //kDebug() << "evaluating" << m_editor->toPlainText();
-    evaluate(script);
+    evaluate(script, path);
     if (hasUncaughtException()) {
         //kDebug() << "catch the exception!";
         QString error = i18n("Error: %1 at line %2\n\nBacktrace:\n%3",
@@ -242,7 +294,10 @@ void ScriptEngine::evaluateScript(const QString &script)
                              QString::number(uncaughtExceptionLineNumber()),
                              uncaughtExceptionBacktrace().join("\n  "));
         emit printError(error);
+        return false;
     }
+
+    return true;
 }
 
 void ScriptEngine::exception(const QScriptValue &value)
@@ -303,7 +358,6 @@ QStringList ScriptEngine::defaultLayoutScripts()
     QSet<QString> scriptNames;
     foreach (const QString &script, scripts) {
         if (script.startsWith(localDir) || script.startsWith(localXdgDir)) {
-            kDebug() << "skipping user local script: " << script;
             kDebug() << "skipping user local script: " << script;
             continue;
         }
