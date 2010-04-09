@@ -568,16 +568,18 @@ void Dialog::resizeEvent(QResizeEvent *event)
         d->view->centerOn(graphicsWidget);
     }
 
-    Plasma::Applet *applet = d->applet();
-    if (applet && !event->oldSize().isEmpty()) {
-        Plasma::Corona *corona = qobject_cast<Plasma::Corona *>(applet->scene());
-        if (corona) {
-            QSize deltaSize(event->size() - event->oldSize());
+    if (d->resizeStartCorner == -1) {
+        Plasma::Applet *applet = d->applet();
+        if (applet && !event->oldSize().isEmpty()) {
+            Plasma::Corona *corona = qobject_cast<Plasma::Corona *>(applet->scene());
+            if (corona) {
+                QSize deltaSize(event->size() - event->oldSize());
 
-            if (applet->location() == Plasma::BottomEdge) {
-                move(pos() - QPoint(0, deltaSize.height()));
-            } else if (applet->location() == Plasma::RightEdge) {
-                move(pos() - QPoint(deltaSize.width(), 0));
+                if (applet->location() == Plasma::BottomEdge) {
+                    move(pos() - QPoint(0, deltaSize.height()));
+                } else if (applet->location() == Plasma::RightEdge) {
+                    move(pos() - QPoint(deltaSize.width(), 0));
+                }
             }
         }
     }
