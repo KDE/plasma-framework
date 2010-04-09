@@ -245,6 +245,7 @@ void ExtenderGroupPrivate::addItemToGroup(Plasma::ExtenderItem *item)
             q->show();
         }
         scrollWidget->setVisible(!q->isCollapsed());
+        q->extender()->resize(q->extender()->effectiveSizeHint(Qt::PreferredSize));
     }
 }
 
@@ -259,6 +260,7 @@ void ExtenderGroupPrivate::removeItemFromGroup(Plasma::ExtenderItem *item)
                              childsWidget->effectiveSizeHint(Qt::PreferredSize).height());
         layout->removeItem(item);
         item->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        q->extender()->resize(q->extender()->effectiveSizeHint(Qt::PreferredSize));
     }
 }
 
