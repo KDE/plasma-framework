@@ -374,6 +374,7 @@ void ExtenderItem::setGroup(ExtenderGroup *group)
         return;
     }
 
+    ExtenderGroup *oldGroup = d->group;
     d->group = group;
 
     if (group) {
@@ -385,6 +386,9 @@ void ExtenderItem::setGroup(ExtenderGroup *group)
         }
         group->d->addItemToGroup(this);
     } else {
+        if (oldGroup) {
+            oldGroup->d->removeItemFromGroup(this);
+        }
         config().deleteEntry("group");
     }
 }
@@ -629,6 +633,10 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     if (isGroup()) {
         collapsedGroup = group->d->collapsed;
         group->collapseGroup();
+    }
+
+    if (!isGroup() && this->group()) {
+        setGroup(0);
     }
 
     //and execute the drag.
