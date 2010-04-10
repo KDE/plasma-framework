@@ -276,7 +276,7 @@ void ExtenderGroup::dropEvent(QGraphicsSceneDragDropEvent *event)
             qobject_cast<const ExtenderItemMimeData*>(event->mimeData());
 
         if (mimeData) {
-            mimeData->extenderItem()->setGroup(this);
+            mimeData->extenderItem()->setGroup(this, event->pos());
             QApplication::restoreOverrideCursor();
             d->layout->removeItem(d->spacerWidget);
             d->spacerWidget->deleteLater();
@@ -307,12 +307,12 @@ ExtenderGroupPrivate::~ExtenderGroupPrivate()
 {
 }
 
-void ExtenderGroupPrivate::addItemToGroup(Plasma::ExtenderItem *item)
+void ExtenderGroupPrivate::addItemToGroup(Plasma::ExtenderItem *item, const QPointF &pos)
 {
     if (item->group() == q) {
         item->setParentItem(childsWidget);
         item->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        layout->insertItem(0, item);
+        layout->insertItem(insertIndexFromPos(pos), item);
         layout->activate();
 
         childsWidget->resize(childsWidget->size().width(),

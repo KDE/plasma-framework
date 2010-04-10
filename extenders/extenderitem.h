@@ -180,6 +180,16 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
         void setGroup(ExtenderGroup *group);
 
         /**
+         * @param group the group you want this item to belong to. Note that you can't nest
+         * ExtenderGroups.
+         *
+         * @param group the new group
+         * @param pos position inside the extender group
+         * @since 4.5
+         */
+        void setGroup(ExtenderGroup *group, const QPointF &pos);
+
+        /**
          * @returns the group this item belongs to.
          * @since 4.3
          */

@@ -366,7 +366,13 @@ Extender *ExtenderItem::extender() const
     return d->extender;
 }
 
+//TODO KDE5: only one setGroup()
 void ExtenderItem::setGroup(ExtenderGroup *group)
+{
+    setGroup(group, QPointF(-1, -1));
+}
+
+void ExtenderItem::setGroup(ExtenderGroup *group, const QPointF &pos)
 {
     if (isGroup()) {
         //nesting extender groups is just insane. I don't think we'd even want to support that.
@@ -384,7 +390,7 @@ void ExtenderItem::setGroup(ExtenderGroup *group)
             kDebug() << "moving to another extender because we're joining a detached group.";
             setExtender(group->extender());
         }
-        group->d->addItemToGroup(this);
+        group->d->addItemToGroup(this, pos);
     } else {
         if (oldGroup) {
             oldGroup->d->removeItemFromGroup(this);

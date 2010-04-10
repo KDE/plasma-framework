@@ -37,8 +37,26 @@ class Extender;
 class ExtenderGroup;
 class ExtenderItem;
 class Label;
-class Spacer;
 class Svg;
+
+class Spacer : public QGraphicsWidget
+{
+public:
+    Spacer(QGraphicsItem *parent);
+    ~Spacer();
+
+    void setMargins(qreal left, qreal top, qreal right, qreal bottom);
+
+protected:
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
+
+
+private:
+    qreal m_left;
+    qreal m_top;
+    qreal m_right;
+    qreal m_bottom;
+};
 
 class ExtenderPrivate
 {

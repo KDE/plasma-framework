@@ -27,6 +27,7 @@ class ScrollWidget;
 class ExtenderGroup;
 class ExtenderItem;
 class Svg;
+class Spacer;
 
 class ExtenderGroupPrivate
 {
@@ -34,11 +35,13 @@ class ExtenderGroupPrivate
         ExtenderGroupPrivate(ExtenderGroup *group);
         ~ExtenderGroupPrivate();
 
-        void addItemToGroup(Plasma::ExtenderItem *item);
+        void addItemToGroup(Plasma::ExtenderItem *item, const QPointF &pos = QPointF(-1, -1));
         void removeItemFromGroup(Plasma::ExtenderItem *item);
         void themeChanged();
+        int insertIndexFromPos(const QPointF &pos) const;
 
         Plasma::ExtenderGroup *q;
+        Spacer *spacerWidget;
         Plasma::Svg *svg;
         Plasma::ScrollWidget *scrollWidget;
         QGraphicsWidget *childsWidget;
