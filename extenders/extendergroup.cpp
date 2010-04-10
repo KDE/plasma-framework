@@ -20,10 +20,12 @@
 #include "extendergroup.h"
 
 #include <QAction>
+#include <QApplication>
 #include <QString>
 #include <QList>
 #include <QtGui/QGraphicsWidget>
 #include <QtGui/QGraphicsLinearLayout>
+#include <QtGui/QGraphicsSceneDragDropEvent>
 
 #include "applet.h"
 #include "extender.h"
@@ -31,7 +33,9 @@
 #include "theme.h"
 #include "widgets/scrollwidget.h"
 
+#include "private/extender_p.h"
 #include "private/extendergroup_p.h"
+#include "private/extenderitemmimedata_p.h"
 
 namespace Plasma
 {
@@ -46,6 +50,8 @@ ExtenderGroup::ExtenderGroup(Extender *parent, uint groupId)
             this, SLOT(removeItemFromGroup(Plasma::ExtenderItem*)));
 
     config().writeEntry("isGroup", true);
+
+    setAcceptDrops(true);
 
     QGraphicsLinearLayout *lay = static_cast<QGraphicsLinearLayout *>(layout());
     d->scrollWidget = new ScrollWidget(this);
@@ -216,8 +222,80 @@ bool ExtenderGroup::eventFilter(QObject *watched, QEvent *event)
     return ExtenderItem::eventFilter(watched, event);
 }
 
+void ExtenderGroup::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
+{
+    if (event->mimeData()->hasFormat(ExtenderItemMimeData::mimeType())) {
+        event->accept();
+
+        dragMoveEvent(event);
+    }
+}
+
+void ExtenderGroup::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
+{
+    if (event->mimeData()->hasFormat(ExtenderItemMimeData::mimeType())) {
+        const ExtenderItemMimeData *mimeData =
+            qobject_cast<const ExtenderItemMimeData*>(event->mimeData());
+
+        if (mimeData) {
+            QPointF pos(event->pos());
+            if (d->spacerWidget && d->spacerWidget->geometry().contains(pos)) {
+                return;
+            }
+
+            //Make sure we remove any spacer that might already be in the layout.
+            if (d->spacerWidget) {
+                d->layout->removeItem(d->spacerWidget);
+            }
+
+            int insertIndex = d->insertIndexFromPos(pos);
+
+            //Create a widget that functions as spacer, and add that to the layout.
+            if (!d->spacerWidget) {
+                Spacer *widget = new Spacer(this);
+                ExtenderItem *item = mimeData->extenderItem();
+                qreal left, top, right, bottom;
+                extender()->d->background->getMargins(left, top, right, bottom);
+                widget->setMargins(left, 4, right, 4);
+
+                widget->setMinimumSize(item->minimumSize());
+                widget->setPreferredSize(item->preferredSize());
+                widget->setMaximumSize(item->maximumSize());
+                widget->setSizePolicy(item->sizePolicy());
+                d->spacerWidget = widget;
+            }
+            d->layout->insertItem(insertIndex, d->spacerWidget);
+        }
+    }
+}
+
+void ExtenderGroup::dropEvent(QGraphicsSceneDragDropEvent *event)
+{
+    if (event->mimeData()->hasFormat(ExtenderItemMimeData::mimeType())) {
+        const ExtenderItemMimeData *mimeData =
+            qobject_cast<const ExtenderItemMimeData*>(event->mimeData());
+
+        if (mimeData) {
+            mimeData->extenderItem()->setGroup(this);
+            QApplication::restoreOverrideCursor();
+            d->layout->removeItem(d->spacerWidget);
+            d->spacerWidget->deleteLater();
+        }
+    }
+}
+
+void ExtenderGroup::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
+{
+    if (event->mimeData()->hasFormat(ExtenderItemMimeData::mimeType())) {
+        if (d->spacerWidget) {
+            d->layout->removeItem(d->spacerWidget);
+        }
+    }
+}
+
 ExtenderGroupPrivate::ExtenderGroupPrivate(ExtenderGroup *group)
     : q(group),
+      spacerWidget(0),
       svg(new Svg(group)),
       collapsed(true),
       autoHide(true),
@@ -271,6 +349,28 @@ void ExtenderGroupPrivate::themeChanged()
 
     q->action("expand")->setIcon(QIcon(svg->pixmap("restore")));
     q->action("collapse")->setIcon(QIcon(svg->pixmap("collapse")));
+}
+
+int ExtenderGroupPrivate::insertIndexFromPos(const QPointF &pos) const
+{
+    int insertIndex = -1;
+
+    //XXX: duplicated from panel
+    if (pos != QPointF(-1, -1)) {
+        for (int i = 0; i < layout->count(); ++i) {
+            QRectF siblingGeometry = layout->itemAt(i)->geometry();
+            qreal middle = (siblingGeometry.top() + siblingGeometry.bottom()) / 2.0;
+            if (pos.y() < middle) {
+                insertIndex = i;
+                break;
+            } else if (pos.y() <= siblingGeometry.bottom()) {
+                insertIndex = i + 1;
+                break;
+            }
+        }
+    }
+
+    return insertIndex;
 }
 
 } // Plasma namespace

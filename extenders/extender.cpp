@@ -48,48 +48,38 @@
 namespace Plasma
 {
 
-//TODO: copied from panel containment. We'll probably want a spacer widget in libplasma for 4.3.
-class Spacer : public QGraphicsWidget
+Spacer::Spacer(QGraphicsItem *parent)
+    : QGraphicsWidget(parent)
 {
-    public:
-        Spacer(Extender *parent)
-                 : QGraphicsWidget(parent)
-       {
-       }
+}
 
-       ~Spacer()
-       {
-       }
+Spacer::~Spacer()
+{
+}
 
-        void setMargins(qreal left, qreal top, qreal right, qreal bottom)
-        {
-            m_left = left;
-            m_top = top;
-            m_right = right;
-            m_bottom = bottom;
-        }
+void Spacer::setMargins(qreal left, qreal top, qreal right, qreal bottom)
+{
+    m_left = left;
+    m_top = top;
+    m_right = right;
+    m_bottom = bottom;
+}
 
-    protected:
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0)
-        {
-            Q_UNUSED(option)
-            Q_UNUSED(widget)
 
-            painter->setRenderHint(QPainter::Antialiasing);
-            QPainterPath p = Plasma::PaintUtils::roundedRectangle(
-                                contentsRect().adjusted(m_left, m_top, -m_right, -m_bottom), 4);
+void Spacer::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    Q_UNUSED(option)
+    Q_UNUSED(widget)
 
-            QColor c = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
-            c.setAlphaF(0.3);
-            painter->fillPath(p, c);
-        }
+    painter->setRenderHint(QPainter::Antialiasing);
+    QPainterPath p = Plasma::PaintUtils::roundedRectangle(
+                        contentsRect().adjusted(m_left, m_top, -m_right, -m_bottom), 4);
 
-    private:
-        qreal m_left;
-        qreal m_top;
-        qreal m_right;
-        qreal m_bottom;
-};
+    QColor c = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
+    c.setAlphaF(0.3);
+    painter->fillPath(p, c);
+}
+
 
 Extender::Extender(Applet *applet)
         : QGraphicsWidget(applet),
