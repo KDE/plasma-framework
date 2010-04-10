@@ -41,6 +41,7 @@ AbstractDialogManager::AbstractDialogManager(Corona *parent)
 
 AbstractDialogManager::~AbstractDialogManager()
 {
+    delete d;
 }
 
 void AbstractDialogManager::showDialog(QWidget *widget, Plasma::Applet *applet)
