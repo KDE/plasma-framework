@@ -1401,14 +1401,23 @@ FormFactor Applet::formFactor() const
     QGraphicsWidget *p = dynamic_cast<QGraphicsWidget *>(parentItem());
 
 
+    const PopupApplet *pa = dynamic_cast<const PopupApplet *>(this);
+
     //if the applet is in a widget that isn't a containment
     //try to retrieve the formFactor from the parent size
-    //we can't use our own sizeHint here because it needs formFactor, so endless recursion
-    if (p && p != c && c != this && layout()) {
-        if (p->size().width() < layout()->effectiveSizeHint(Qt::MinimumSize).width()) {
-            return Plasma::Vertical;
-        } else if (p->size().height() < layout()->effectiveSizeHint(Qt::MinimumSize).height()) {
+    //we can't use our own sizeHint here because it needs formFactor, so endless recursion.
+    // a popupapplet can always be constrained.
+    // a normal applet should to but
+    //FIXME: not always constrained to not break systemmonitor
+    if (p && p != c && c != this && (pa || layout())) {
+        if (pa || (p->size().height() < layout()->effectiveSizeHint(Qt::MinimumSize).height())) {
             return Plasma::Horizontal;
+        } else if (p->size().width() < layout()->effectiveSizeHint(Qt::MinimumSize).width()) {
+            return Plasma::Vertical;
+        }
+        const Applet *a = qobject_cast<Applet *>(p);
+        if (a) {
+            return a->formFactor();
         }
     }
 
