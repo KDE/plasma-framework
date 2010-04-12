@@ -30,10 +30,6 @@ class PLASMAGENERICSHELL_EXPORT LayoutTemplatePackageStructure : public Plasma::
 public:
     LayoutTemplatePackageStructure(QObject *parent = 0);
     ~LayoutTemplatePackageStructure();
-/*
-    bool installPackage(const QString &archivePath, const QString &packageRoot);
-    bool uninstallPackage(const QString &packageName, const QString &packageRoot);
-    */
 };
 
 

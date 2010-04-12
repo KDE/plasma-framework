@@ -24,7 +24,7 @@ LayoutTemplatePackageStructure::LayoutTemplatePackageStructure(QObject *parent)
 {
     setServicePrefix("plasma-layout-template");
     setDefaultPackageRoot("plasma/layout-templates");
-    addFileDefinition("mainscript", "main.js", i18n("Main Script File"));
+    addFileDefinition("mainscript", "layout.js", i18n("Main Script File"));
     setRequired("mainscript", true);
 }
 
@@ -32,11 +32,6 @@ LayoutTemplatePackageStructure::~LayoutTemplatePackageStructure()
 {
 
 }
-
-/*
-    bool installPackage(const QString &archivePath, const QString &packageRoot);
-    bool uninstallPackage(const QString &packageName, const QString &packageRoot);
-    */
 
 #include "layouttemplatepackagestructure.moc"
 
