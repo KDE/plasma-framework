@@ -65,7 +65,7 @@ public:
         qDeleteAll(dropMenus);
     }
 
-    AbstractToolBox *createToolBox();
+    void createToolBox();
     void positionToolBox();
     void updateToolBoxVisibility();
     void triggerShowAddWidgets();
@@ -78,9 +78,12 @@ public:
      */
     void containmentConstraintsEvent(Plasma::Constraints constraints);
 
+    void checkContainmentFurniture();
     bool regionIsEmpty(const QRectF &region, Applet *ignoredApplet=0) const;
     void positionPanel(bool force = false);
-    void positionContainments();
+    bool isPanelContainment() const;
+    QPointF preferredPos(Corona *corona) const;
+    QPointF preferredPanelPos(Corona *corona) const;
     void setLockToolText();
     void handleDisappeared(AppletHandle *handle);
     void appletDestroyed(Plasma::Applet*);

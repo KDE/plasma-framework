@@ -484,16 +484,15 @@ void Containment::setContainmentType(Containment::Type type)
 
     delete d->toolBox.data();
     d->type = type;
+    d->checkContainmentFurniture();
+}
 
-    if (!isContainment()) {
-        return;
+void ContainmentPrivate::checkContainmentFurniture()
+{
+    if (q->isContainment() && 
+        (type == Containment::DesktopContainment || type == Containment::PanelContainment)) {
+        createToolBox();
     }
-
-    if (type == DesktopContainment || type == PanelContainment) {
-        d->createToolBox();
-    }
-
-    d->checkRemoveAction();
 }
 
 Corona *Containment::corona() const
@@ -1742,13 +1741,8 @@ void Containment::enableAction(const QString &name, bool enable)
 
 void Containment::addToolBoxAction(QAction *action)
 {
-    if (!d->toolBox && (d->type == CustomPanelContainment || d->type >= CustomContainment)) {
-        d->createToolBox();
-    }
-
-    if (d->toolBox) {
-        d->toolBox.data()->addTool(action);
-    }
+    d->createToolBox();
+    d->toolBox.data()->addTool(action);
 }
 
 void Containment::removeToolBoxAction(QAction *action)
@@ -2086,7 +2080,7 @@ void Containment::destroy(bool confirm)
     }
 }
 
-AbstractToolBox *ContainmentPrivate::createToolBox()
+void ContainmentPrivate::createToolBox()
 {
     if (!toolBox) {
         switch (type) {
@@ -2122,8 +2116,6 @@ AbstractToolBox *ContainmentPrivate::createToolBox()
             }
         }
     }
-
-    return toolBox.data();
 }
 
 void ContainmentPrivate::positionToolBox()
@@ -2348,6 +2340,38 @@ void ContainmentPrivate::positionPanel(bool force)
         return;
     }
 
+
+    QPointF newPos = preferredPanelPos(q->corona());
+    if (p != newPos) {
+        ContainmentPrivate::s_positioningPanels = true;
+        q->setPos(newPos);
+        ContainmentPrivate::s_positioningPanels = false;
+    }
+}
+
+bool ContainmentPrivate::isPanelContainment() const
+{
+    return type == Containment::PanelContainment || type == Containment::CustomPanelContainment;
+}
+
+QPointF ContainmentPrivate::preferredPos(Corona *corona) const
+{
+    Q_ASSERT(corona);
+
+    if (isPanelContainment()) {
+        kDebug() << "is a panel, so let's do it at" << preferredPanelPos(corona);
+        return preferredPanelPos(corona);
+    }
+
+    // FIXME
+    kDebug() << "not a panel";
+    return QPointF(0, 0);
+}
+
+QPointF ContainmentPrivate::preferredPanelPos(Corona *corona) const
+{
+    Q_ASSERT(corona);
+
     //TODO: research how non-Horizontal, non-Vertical (e.g. Planar) panels behave here
     bool horiz = formFactor == Plasma::Horizontal;
     qreal bottom = horiz ? 0 : VERTICAL_STACKING_OFFSET;
@@ -2356,7 +2380,7 @@ void ContainmentPrivate::positionPanel(bool force)
     // this should be ok for small numbers of panels, but if we ever end
     // up managing hundreds of them, this simplistic alogrithm will
     // likely be too slow.
-    foreach (const Containment *other, q->corona()->containments()) {
+    foreach (const Containment *other, corona->containments()) {
         if (other == q ||
             (other->d->type != Containment::PanelContainment &&
              other->d->type != Containment::CustomPanelContainment) ||
@@ -2381,7 +2405,6 @@ void ContainmentPrivate::positionPanel(bool force)
         }
     }
 
-    kDebug() << "positioning" << (horiz ? "" : "non-") << "horizontal panel; forced?" << force;
     // give a space equal to the height again of the last item so there is
     // room to grow.
     QPointF newPos;
@@ -2397,11 +2420,7 @@ void ContainmentPrivate::positionPanel(bool force)
         newPos = QPointF(bottom + q->size().width(), -INTER_CONTAINMENT_MARGIN - q->size().height());
     }
 
-    if (p != newPos) {
-        ContainmentPrivate::s_positioningPanels = true;
-        q->setPos(newPos);
-        ContainmentPrivate::s_positioningPanels = false;
-    }
+    return newPos;
 }
 
 
