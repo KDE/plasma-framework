@@ -2521,6 +2521,11 @@ void AppletPrivate::setIsContainment(bool nowIsContainment, bool forceUpdate)
 
     delete mainConfig;
     mainConfig = 0;
+
+    Containment *c = q->containment();
+    if (c) {
+        c->d->checkContainmentFurniture();
+    }
 }
 
 bool Applet::isContainment() const
