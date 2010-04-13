@@ -271,8 +271,7 @@ void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containme
     //adjust applet actions
     KAction *appAction = qobject_cast<KAction*>(actions->action("remove"));
     appAction->setShortcut(KShortcut("alt+d, alt+r"));
-    if (c && (c->d->type == Containment::PanelContainment ||
-              c->d->type == Containment::CustomPanelContainment)) {
+    if (c && c->d->isPanelContainment()) {
         appAction->setText(i18n("Remove this panel"));
     } else {
         appAction->setText(i18n("Remove this activity"));
@@ -489,7 +488,7 @@ void Containment::setContainmentType(Containment::Type type)
 
 void ContainmentPrivate::checkContainmentFurniture()
 {
-    if (q->isContainment() && 
+    if (q->isContainment() &&
         (type == Containment::DesktopContainment || type == Containment::PanelContainment)) {
         createToolBox();
     }
@@ -1595,16 +1594,10 @@ void Containment::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
     Applet::resizeEvent(event);
 
-    switch (d->type) {
-        case Containment::PanelContainment:
-        case Containment::CustomPanelContainment:
-            d->positionPanel();
-            break;
-        default:
-            if (corona()) {
-                QMetaObject::invokeMethod(corona(), "layoutContainments");
-            }
-            break;
+    if (d->isPanelContainment()) {
+        d->positionPanel();
+    } else if (corona()) {
+        QMetaObject::invokeMethod(corona(), "layoutContainments");
     }
 
     if (d->wallpaper) {
@@ -2083,10 +2076,7 @@ void Containment::destroy(bool confirm)
 void ContainmentPrivate::createToolBox()
 {
     if (!toolBox) {
-        switch (type) {
-        case Containment::PanelContainment:
-        case Containment::CustomPanelContainment:
-        {
+        if (isPanelContainment()) {
             PanelToolBox *pt = new PanelToolBox(q);
             toolBox = pt;
             pt->setSize(KIconLoader::SizeSmallMedium);
@@ -2094,16 +2084,11 @@ void ContainmentPrivate::createToolBox()
             if (q->immutability() != Mutable) {
                 pt->hide();
             }
-            break;
-        }
-        default:
-        {
+        } else  {
             DesktopToolBox *dt = new DesktopToolBox(q);
             toolBox = dt;
             dt->setSize(KIconLoader::SizeSmallMedium);
             dt->setIconSize(QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall));
-            break;
-        }
         }
 
         if (toolBox) {
@@ -2176,7 +2161,7 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
         }
 
         if (toolBox) {
-            if (type == Containment::PanelContainment || type == Containment::CustomPanelContainment) {
+            if (isPanelContainment()) {
                 toolBox.data()->setVisible(unlocked);
             } else {
                 InternalToolBox *internalToolBox = qobject_cast<InternalToolBox *>(toolBox.data());
@@ -2382,8 +2367,7 @@ QPointF ContainmentPrivate::preferredPanelPos(Corona *corona) const
     // likely be too slow.
     foreach (const Containment *other, corona->containments()) {
         if (other == q ||
-            (other->d->type != Containment::PanelContainment &&
-             other->d->type != Containment::CustomPanelContainment) ||
+            !other->d->isPanelContainment() ||
             horiz != (other->formFactor() == Plasma::Horizontal)) {
             // only line up with panels of the same orientation
             continue;
