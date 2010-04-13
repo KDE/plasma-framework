@@ -223,6 +223,7 @@ public:
         }
 
         static_cast<Applet*>(containment)->d->isContainment = true;
+        containment->setPos(containment->d->preferredPos(q));
         q->addItem(containment);
         static_cast<Applet*>(containment)->d->setIsContainment(true, true);
         containments.append(containment);
