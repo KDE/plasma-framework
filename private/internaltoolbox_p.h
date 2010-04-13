@@ -64,6 +64,7 @@ public:
      * remove the tool associated with this action
      */
     void removeTool(QAction *action);
+    bool isEmpty() const;
     int size() const;
     void setSize(const int newSize);
     QSize iconSize() const;

@@ -162,6 +162,11 @@ void InternalToolBox::addTool(QAction *action)
     //kDebug() << "added tool" << type << action->text();
 }
 
+bool InternalToolBox::isEmpty() const
+{
+    return d->tools.isEmpty();
+}
+
 void InternalToolBox::updateToolBox()
 {
     Plasma::IconWidget *tool = qobject_cast<Plasma::IconWidget *>(sender());
