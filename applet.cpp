@@ -1375,8 +1375,11 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 
             // .. and now paint the actual containment interface, but with
             //  a Containment style option based on the one we get
+            //  the view must be assigned only if its containment is actually our own
             Containment::StyleOption coption(*option);
-            coption.view = v;
+            if (v->containment() == containment()) {
+                coption.view = v;
+            }
             paintInterface(painter, &coption, contentsRect);
         }
     } else {
