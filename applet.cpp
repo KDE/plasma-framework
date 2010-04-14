@@ -1401,7 +1401,20 @@ void Applet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *o
 FormFactor Applet::formFactor() const
 {
     Containment *c = containment();
-    QGraphicsWidget *p = dynamic_cast<QGraphicsWidget *>(parentItem());
+    QGraphicsWidget *pw = qobject_cast<QGraphicsWidget *>(parent());
+    if (!pw) {
+        pw = dynamic_cast<QGraphicsWidget *>(parentItem());
+    }
+    Plasma::Applet *parentApplet = qobject_cast<Plasma::Applet *>(pw);
+    //assumption: this loop is usually is -really- short or doesn't run at all
+    while (!parentApplet && pw && pw->parentWidget()) {
+        QGraphicsWidget *parentWidget = qobject_cast<QGraphicsWidget *>(pw->parent());
+        if (!parentWidget) {
+            parentWidget = dynamic_cast<QGraphicsWidget *>(pw->parentItem());
+        }
+        pw = parentWidget;
+        parentApplet = qobject_cast<Plasma::Applet *>(pw);
+    }
 
 
     const PopupApplet *pa = dynamic_cast<const PopupApplet *>(this);
@@ -1412,16 +1425,13 @@ FormFactor Applet::formFactor() const
     // a popupapplet can always be constrained.
     // a normal applet should to but
     //FIXME: not always constrained to not break systemmonitor
-    if (p && p != c && c != this && (pa || layout())) {
-        if (pa || (p->size().height() < layout()->effectiveSizeHint(Qt::MinimumSize).height())) {
+    if (parentApplet && parentApplet != c && c != this && (pa || layout())) {
+        if (pa || (parentApplet->size().height() < layout()->effectiveSizeHint(Qt::MinimumSize).height())) {
             return Plasma::Horizontal;
-        } else if (p->size().width() < layout()->effectiveSizeHint(Qt::MinimumSize).width()) {
+        } else if (pa || (parentApplet->size().width() < layout()->effectiveSizeHint(Qt::MinimumSize).width())) {
             return Plasma::Vertical;
         }
-        const Applet *a = qobject_cast<Applet *>(p);
-        if (a) {
-            return a->formFactor();
-        }
+        return parentApplet->formFactor();
     }
 
     return c ? c->d->formFactor : Plasma::Planar;
