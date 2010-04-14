@@ -177,7 +177,7 @@ void centerPixmaps(QPixmap &from, QPixmap &to)
 
 QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
 {
-    if (from.isNull() || to.isNull()) {
+    if (from.isNull() && to.isNull()) {
         return from;
     }
 
