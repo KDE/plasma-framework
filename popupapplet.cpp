@@ -46,6 +46,7 @@
 #include "plasma/extenders/extender.h"
 #include "plasma/extenders/extenderitem.h"
 #include "plasma/package.h"
+#include "plasma/theme.h"
 #include "plasma/scripting/appletscript.h"
 #include "plasma/tooltipmanager.h"
 #include "plasma/widgets/iconwidget.h"
@@ -112,14 +113,34 @@ void PopupApplet::setPopupIcon(const QIcon &icon)
 void PopupApplet::setPopupIcon(const QString &iconName)
 {
     if (package()) {
+        //Attempt1: is it in the plasmoid package?
         const QString file = package()->filePath("images", iconName);
         if (!file.isEmpty()) {
             setPopupIcon(KIcon(file));
             return;
         }
+    //Attempt2: is it a svg in the icons directory?
     }
+    QString name = QString("icons/") + iconName.split("-").first();
+    if (!Plasma::Theme::defaultTheme()->imagePath(name).isEmpty()) {
+        if (!d->icon) {
+            d->icon = new Plasma::IconWidget(this);
+            d->icon->setSvg(name, iconName);
+            connect(d->icon, SIGNAL(clicked()), this, SLOT(internalTogglePopup()));
 
-    setPopupIcon(KIcon(iconName));
+            QGraphicsLinearLayout *layout = new QGraphicsLinearLayout();
+            layout->setContentsMargins(0, 0, 0, 0);
+            layout->setSpacing(0);
+            layout->setOrientation(Qt::Horizontal);
+
+            setLayout(layout);
+        } else {
+            d->icon->setSvg(name, iconName);
+        }
+    // Final Attempt: use KIcon
+    } else {
+        setPopupIcon(KIcon(iconName));
+    }
 }
 
 QIcon PopupApplet::popupIcon() const
