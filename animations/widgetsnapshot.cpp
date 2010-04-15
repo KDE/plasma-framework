@@ -15,18 +15,20 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "pulsershadow_p.h"
+#include "widgetsnapshot_p.h"
+
 #include <QPainter>
 #include <QImage>
 #include <QPixmap>
 #include <QStyleOptionGraphicsItem>
 #include <QDebug>
+
 static const int RECURSION_MAX = 20;
 
 namespace Plasma
 {
 
-ShadowFake::ShadowFake(QGraphicsItem *parent)
+WidgetSnapShot::WidgetSnapShot(QGraphicsItem *parent)
     : QGraphicsWidget(parent),
       m_iconBig(false),
       stack(0),
@@ -34,19 +36,19 @@ ShadowFake::ShadowFake(QGraphicsItem *parent)
 {
 }
 
-ShadowFake::~ShadowFake()
+WidgetSnapShot::~WidgetSnapShot()
 {
 }
 
-void ShadowFake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void WidgetSnapShot::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget);
 
     painter->setRenderHint(QPainter::Antialiasing);
-    painter->drawPixmap(option->exposedRect, m_photo, option->exposedRect);
+    painter->drawPixmap(option->exposedRect, m_snapShot, option->exposedRect);
 }
 
-void ShadowFake::paintSubChildren(QPainter *painter,
+void WidgetSnapShot::paintSubChildren(QPainter *painter,
                                   const QStyleOptionGraphicsItem *option,
                                   QGraphicsItem *target)
 {
@@ -69,7 +71,7 @@ void ShadowFake::paintSubChildren(QPainter *painter,
     --stack;
 }
 
-void ShadowFake::setTarget(QGraphicsWidget *target)
+void WidgetSnapShot::setTarget(QGraphicsWidget *target)
 {
     stack = 0;
     m_target = target;
@@ -79,10 +81,10 @@ void ShadowFake::setTarget(QGraphicsWidget *target)
 
     if (m_target->property("iconRepresentation").isValid()) {
         m_iconBig = true;
-        m_photo = QPixmap::fromImage(
+        m_snapShot = QPixmap::fromImage(
             m_target->property("iconRepresentation").value<QImage>());
-        if ((m_photo.height() > 0) && (m_photo.width() > 0)) {
-            resize(m_photo.size());
+        if ((m_snapShot.height() > 0) && (m_snapShot.width() > 0)) {
+            resize(m_snapShot.size());
             setTransformOriginPoint(target->geometry().center());
             return;
         }
@@ -90,10 +92,10 @@ void ShadowFake::setTarget(QGraphicsWidget *target)
 
     resize(target->size());
 
-    m_photo = QPixmap(size);
-    m_photo.fill(Qt::transparent);
+    m_snapShot = QPixmap(size);
+    m_snapShot.fill(Qt::transparent);
 
-    QPainter painter(&m_photo);
+    QPainter painter(&m_snapShot);
     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
     painter.fillRect(target->rect(), Qt::transparent);
 
@@ -107,17 +109,20 @@ void ShadowFake::setTarget(QGraphicsWidget *target)
     setTransformOriginPoint(geometry().center());
 }
 
-QGraphicsWidget *ShadowFake::target() const
+QGraphicsWidget *WidgetSnapShot::target() const
 {
     return m_target;
 }
 
 
-bool ShadowFake::isIconBigger()
+bool WidgetSnapShot::isIconBigger() const
 {
     return m_iconBig;
 }
 
-
+QPixmap WidgetSnapShot::snapShot() const
+{
+    return m_snapShot;
 }
 
+}

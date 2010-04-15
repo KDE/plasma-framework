@@ -56,7 +56,7 @@ set(plasma_LIB_SRCS
     animations/slide.cpp
     animations/pixmaptransition.cpp
     animations/pulser.cpp
-    animations/pulsershadow.cpp
+    animations/widgetsnapshot.cpp
     animations/rotation.cpp
     animations/rotationstacked.cpp
     animations/stackedlayout.cpp

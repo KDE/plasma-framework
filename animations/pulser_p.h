@@ -29,7 +29,7 @@
 namespace Plasma
 {
 
-class ShadowFake;
+class WidgetSnapShot;
 
 /**
  * @class PulseAnimation plasma/animations/pulser_p.h
@@ -96,7 +96,7 @@ private:
     /** The shadow copy (it really is a QGraphicsWidget with a pixmap
      * copy of the original widget).
      */
-    QWeakPointer<ShadowFake> m_under;
+    QWeakPointer<WidgetSnapShot> m_under;
 };
 
 }

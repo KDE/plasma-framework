@@ -15,6 +15,7 @@
  *   Free Software Foundation, Inc.,
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+#include "widgetsnapshot_p.h"
 #include "pulser_p.h"
 
 #include <QEvent>
@@ -24,8 +25,6 @@
 #include <QWeakPointer>
 
 #include <kdebug.h>
-
-#include "pulsershadow_p.h"
 
 namespace Plasma
 {
@@ -63,7 +62,7 @@ void PulseAnimation::setCopy()
     }
 
     if (!m_under.data()) {
-        m_under = new ShadowFake;
+        m_under = new WidgetSnapShot;
     }
 
     m_under.data()->setTarget(target);

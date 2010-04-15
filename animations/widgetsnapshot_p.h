@@ -15,42 +15,45 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PLASMA_PULSERSHADOW_P_H
-#define PLASMA_PULSERSHADOW_P_H
+#ifndef PLASMA_WIDGETSNAPSHOT_P_H
+#define PLASMA_WIDGETSNAPSHOT_P_H
 
 #include <QGraphicsWidget>
 
 namespace Plasma
 {
 
-class ShadowFake: public QGraphicsWidget
+class WidgetSnapShot : public QGraphicsWidget
 {
     Q_OBJECT
     Q_PROPERTY(QGraphicsWidget *target READ target WRITE setTarget)
 
 public:
-    explicit ShadowFake(QGraphicsItem *parent = 0);
-    ~ShadowFake();
+    explicit WidgetSnapShot(QGraphicsItem *parent = 0);
+    virtual ~WidgetSnapShot();
 
-    void setTarget(QGraphicsWidget *target);
+    virtual void setTarget(QGraphicsWidget *target);
     QGraphicsWidget *target() const;
 
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+    virtual void paint(QPainter *painter,
+               const QStyleOptionGraphicsItem *option,
                QWidget *widget);
 
-    bool isIconBigger();
+    bool isIconBigger() const;
+
+    QPixmap snapShot() const;
 
 private:
     void paintSubChildren(QPainter *painter,
                           const QStyleOptionGraphicsItem *option,
                           QGraphicsItem *target);
+
     bool m_iconBig;
     int stack;
-    QPixmap m_photo;
+    QPixmap m_snapShot;
     QGraphicsWidget *m_target;
 };
 
+} // namespace Plasma
 
-}
-
-#endif // PLASMA_PULSERSHADOW_P_H
+#endif // PLASMA_WIDGETSNAPSHOT_P_H
