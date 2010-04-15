@@ -657,6 +657,7 @@ void Dialog::setGraphicsWidget(QGraphicsWidget *widget)
         adjustSize();
 
         widget->installEventFilter(this);
+        d->view->installEventFilter(this);
     } else {
         delete d->view;
         d->view = 0;
@@ -676,6 +677,15 @@ bool Dialog::eventFilter(QObject *watched, QEvent *event)
         d->adjustViewTimer->start(150);
     }
 
+    // when moving the cursor with a 45° angle from the outside
+    // to the inside passing over a resize angle the cursor changes its
+    // shape to a resize cursor. As a side effect this is the only case
+    // when the cursor immediately enters the view without giving
+    // the dialog the chance to restore the original cursor shape.
+    if (event->type() == QEvent::Enter && watched == d->view) {
+        unsetCursor();
+    }
+        
     return QWidget::eventFilter(watched, event);
 }
 
