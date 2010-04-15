@@ -43,6 +43,7 @@ public:
     void popupConstraintsEvent(Plasma::Constraints constraints);
     void checkExtenderAppearance(Plasma::FormFactor f);
     KConfigGroup popupConfigGroup();
+    void appletActivated();
 
     PopupApplet *q;
     Plasma::IconWidget *icon;

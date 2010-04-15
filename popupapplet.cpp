@@ -61,7 +61,7 @@ PopupApplet::PopupApplet(QObject *parent, const QVariantList &args)
     int iconSize = IconSize(KIconLoader::Desktop);
     resize(iconSize, iconSize);
     disconnect(this, SIGNAL(activate()), (Applet*)this, SLOT(setFocus()));
-    connect(this, SIGNAL(activate()), this, SLOT(togglePopup()));
+    connect(this, SIGNAL(activate()), this, SLOT(appletActivated()));
     setAcceptDrops(true);
 }
 
@@ -430,6 +430,12 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
     emit q->sizeHintChanged(Qt::PreferredSize);
 }
 
+void PopupAppletPrivate::appletActivated()
+{
+    q->setStatus(Plasma::NeedsAttentionStatus);
+    q->showPopup();
+}
+
 void PopupApplet::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (!d->icon && !d->popupLostFocus && event->buttons() == Qt::LeftButton) {
@@ -772,7 +778,11 @@ void PopupAppletPrivate::updateDialogPosition()
     QSize s = dialog->size();
     QPoint pos = view->mapFromScene(q->scenePos());
 
-    pos = corona->popupPosition(q, s);
+    if (!q->containment() || view == q->containment()->view()) {
+        pos = corona->popupPosition(q, s);
+    } else {
+        pos = corona->popupPosition(q->parentItem(), s);
+    }
 
     bool reverse = false;
     if (q->formFactor() == Plasma::Vertical) {

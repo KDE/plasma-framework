@@ -168,6 +168,7 @@ private:
     Q_PRIVATE_SLOT(d, void dialogSizeChanged())
     Q_PRIVATE_SLOT(d, void dialogStatusChanged(bool))
     Q_PRIVATE_SLOT(d, void updateDialogPosition())
+    Q_PRIVATE_SLOT(d, void appletActivated())
 
     friend class Applet;
     friend class AppletPrivate;
