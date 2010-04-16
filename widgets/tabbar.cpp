@@ -205,6 +205,7 @@ void TabBarPrivate::shapeChanged(const QTabBar::Shape shape)
         }
         tabProxy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     }
+    tabProxy->setPreferredSize(tabProxy->native->sizeHint());
 }
 
 void TabBarPrivate::setPalette()
@@ -345,7 +346,6 @@ void TabBar::resizeEvent(QGraphicsSceneResizeEvent * event)
         setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
     } else {
         d->tabProxy->native->setMinimumSize(QSize(0,0));
-        d->tabProxy->setMinimumSize(QSize(0,0));
     }
 }
 
