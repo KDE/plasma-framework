@@ -18,6 +18,9 @@
  */
 
 #include "scrollwidget.h"
+
+#include <cmath>
+
 //Qt
 #include <QGraphicsSceneResizeEvent>
 #include <QGraphicsGridLayout>
@@ -443,6 +446,20 @@ public:
                 QObject *obj = start->targetObject();
                 obj->setProperty(start->propertyName(), maxExtent);
             }
+        } else if (group == fixupAnimation.groupX && snapSize.width() > 1 &&
+                   q->contentsSize().width() > q->viewportGeometry().width()) {
+            int target = snapSize.width() * round(val/snapSize.width());
+            end->setStartValue(val);
+            end->setEndValue(target);
+            end->setDuration(FixupDuration);
+            end->start();
+        } else if (group == fixupAnimation.groupY && snapSize.height() > 1 &&
+                   q->contentsSize().height() > q->viewportGeometry().height()) {
+            int target = snapSize.height() * round(val/snapSize.height());
+            end->setStartValue(val);
+            end->setEndValue(target);
+            end->setDuration(FixupDuration);
+            end->start();
         }
     }
     void fixupX()
@@ -954,6 +971,7 @@ public:
         QPropertyAnimation *endY;
     } fixupAnimation;
     QPropertyAnimation *directMoveAnimation;
+    QSizeF snapSize;
     bool stealEvent;
     bool hasOvershoot;
 
@@ -1132,6 +1150,16 @@ QPointF ScrollWidget::scrollPosition() const
         }
     }
     return QPointF();
+}
+
+void ScrollWidget::setSnapSize(const QSizeF &size)
+{
+    d->snapSize = size;
+}
+
+QSizeF ScrollWidget::snapSize() const
+{
+    return d->snapSize;
 }
 
 void ScrollWidget::setStyleSheet(const QString &styleSheet)

@@ -49,6 +49,7 @@ class PLASMA_EXPORT ScrollWidget : public QGraphicsWidget
     Q_PROPERTY(QPointF scrollPosition READ scrollPosition WRITE setScrollPosition)
     Q_PROPERTY(QSizeF contentsSize READ contentsSize)
     Q_PROPERTY(QRectF viewportGeometry READ viewportGeometry)
+    Q_PROPERTY(QSizeF snapSize READ snapSize WRITE setSnapSize)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(Qt::Alignment alignment READ alignment WRITE setAlignment)
     Q_PROPERTY(bool overShoot READ hasOverShoot WRITE setOverShoot)
@@ -200,6 +201,20 @@ public:
      */
     QPointF scrollPosition() const;
 
+    /**
+     * Set the nap size of the kinetic scrolling:
+     * the scrolling will always stop at multiples of that size.
+     *
+     * @arg the desired snap size
+     * @since 4.5
+     */
+    void setSnapSize(const QSizeF &size);
+
+    /**
+     * @return the snap size of the kinetic scrolling
+     * @since 4.5
+     */
+    QSizeF snapSize() const;
 
     /**
      * Sets the stylesheet used to control the visual display of this ScrollWidget
