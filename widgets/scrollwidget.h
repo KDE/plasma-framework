@@ -234,8 +234,19 @@ public:
     QWidget *nativeWidget() const;
 
 Q_SIGNALS:
+    /**
+     * The widget started or stopped an animated scroll
+     * @since 4.4
+     */
     void scrollStateChanged(QAbstractAnimation::State newState,
             QAbstractAnimation::State oldState);
+
+    /**
+     * The viewport geomety changed, for instance due a widget resize
+     *
+     * @since 4.5
+     */
+    void viewportGeometryChanged(const QRectF &geomety);
 
 protected:
 

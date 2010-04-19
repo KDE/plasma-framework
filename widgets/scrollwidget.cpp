@@ -1293,7 +1293,10 @@ bool ScrollWidget::eventFilter(QObject *watched, QEvent *event)
         return false;
     }
 
-    if (watched == d->widget.data() && event->type() == QEvent::GraphicsSceneResize) {
+    if (watched == d->scrollingWidget && (event->type() == QEvent::GraphicsSceneResize ||
+         event->type() == QEvent::Move)) {
+        emit viewportGeometryChanged(viewportGeometry());
+    } else if (watched == d->widget.data() && event->type() == QEvent::GraphicsSceneResize) {
         d->adjustScrollbarsTimer->start(200);
         updateGeometry();
     } else if (watched == d->widget.data() && event->type() == QEvent::GraphicsSceneMove) {
