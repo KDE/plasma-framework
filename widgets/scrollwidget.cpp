@@ -138,6 +138,8 @@ public:
         fixupAnimation.groupY = 0;
         fixupAnimation.startY = 0;
         fixupAnimation.endY = 0;
+        fixupAnimation.snapX = 0;
+        fixupAnimation.snapY = 0;
         directMoveAnimation = 0;
         stealEvent = false;
         hasOvershoot = true;
@@ -315,6 +317,11 @@ public:
             qAbs(diff.y()) < threshold.height())
             duration /= 2;
 
+        fixupAnimation.groupX->stop();
+        fixupAnimation.groupY->stop();
+        fixupAnimation.snapX->stop();
+        fixupAnimation.snapY->stop();
+
         directMoveAnimation->setStartValue(start);
         directMoveAnimation->setEndValue(pos);
         directMoveAnimation->setDuration(duration);
@@ -446,20 +453,20 @@ public:
                 QObject *obj = start->targetObject();
                 obj->setProperty(start->propertyName(), maxExtent);
             }
-        } else if (group == fixupAnimation.groupX && snapSize.width() > 1 &&
+        } else if (end == fixupAnimation.endX && snapSize.width() > 1 &&
                    q->contentsSize().width() > q->viewportGeometry().width()) {
-            int target = snapSize.width() * round(val/snapSize.width());
-            end->setStartValue(val);
-            end->setEndValue(target);
-            end->setDuration(FixupDuration);
-            end->start();
-        } else if (group == fixupAnimation.groupY && snapSize.height() > 1 &&
+            int target = snapSize.width() * round(val/snapSize.width());return;
+            fixupAnimation.snapX->setStartValue(val);
+            fixupAnimation.snapX->setEndValue(target);
+            fixupAnimation.snapX->setDuration(FixupDuration);
+            fixupAnimation.snapX->start();
+        } else if (end == fixupAnimation.endY && snapSize.height() > 1 &&
                    q->contentsSize().height() > q->viewportGeometry().height()) {
             int target = snapSize.height() * round(val/snapSize.height());
-            end->setStartValue(val);
-            end->setEndValue(target);
-            end->setDuration(FixupDuration);
-            end->start();
+            fixupAnimation.snapY->setStartValue(val);
+            fixupAnimation.snapY->setEndValue(target);
+            fixupAnimation.snapY->setDuration(FixupDuration);
+            fixupAnimation.snapY->start();
         }
     }
     void fixupX()
@@ -742,6 +749,10 @@ public:
             }
         }
 
+        fixupAnimation.groupX->stop();
+        fixupAnimation.groupY->stop();
+        fixupAnimation.snapX->stop();
+        fixupAnimation.snapY->stop();
         directMoveAnimation->setStartValue(start);
         directMoveAnimation->setEndValue(end);
         directMoveAnimation->setDuration(200);
@@ -765,11 +776,13 @@ public:
 
         return 0;
     }
+
     qreal maxXExtent() const
     {
         return q->viewportGeometry().width() -
             q->contentsSize().width();
     }
+
     qreal minYExtent() const
     {
         if (alignment & Qt::AlignTop)
@@ -787,16 +800,19 @@ public:
 
         return 0;
     }
+
     qreal maxYExtent() const
     {
         return q->viewportGeometry().height() -
             q->contentsSize().height();
     }
+
     bool canXFlick() const
     {
         //make the thing feel quite "fixed" don't permit to flick when the contents size is less than the viewport
         return q->contentsSize().width() + borderSize > q->viewportGeometry().width();
     }
+
     bool canYFlick() const
     {
         return q->contentsSize().height() + borderSize > q->viewportGeometry().height();
@@ -809,6 +825,7 @@ public:
             n += 86400 * 1000;
         return n;
     }
+
     int restart(QTime &t) const
     {
         QTime time = QTime::currentTime();
@@ -818,6 +835,7 @@ public:
         t = time;
         return n;
     }
+
     void createFlickAnimations()
     {
         if (widget.data()) {
@@ -877,6 +895,13 @@ public:
             fixupAnimation.startY->setEasingCurve(QEasingCurve::InQuad);
             fixupAnimation.endY->setEasingCurve(QEasingCurve::OutQuint);
 
+            fixupAnimation.snapX = new QPropertyAnimation(widget.data(),
+                                                          xProp.toLatin1(), widget.data());
+            fixupAnimation.snapY = new QPropertyAnimation(widget.data(),
+                                                          yProp.toLatin1(), widget.data());
+            fixupAnimation.snapX->setEasingCurve(QEasingCurve::InOutQuad);
+            fixupAnimation.snapY->setEasingCurve(QEasingCurve::InOutQuad);
+
             QObject::connect(fixupAnimation.groupX,
                              SIGNAL(stateChanged(QAbstractAnimation::State,
                                                  QAbstractAnimation::State)),
@@ -903,6 +928,7 @@ public:
             directMoveAnimation->setEasingCurve(QEasingCurve::OutCirc);
         }
     }
+
     void deleteFlickAnimations()
     {
         if (flickAnimationX)
@@ -914,7 +940,10 @@ public:
         delete fixupAnimation.groupX;
         delete fixupAnimation.groupY;
         delete directMoveAnimation;
+        delete fixupAnimation.snapX;
+        delete fixupAnimation.snapY;
     }
+
     void setScrollX()
     {
         if (horizontalScrollBarPolicy != Qt::ScrollBarAlwaysOff) {
@@ -923,6 +952,7 @@ public:
             horizontalScrollBar->blockSignals(false);
         }
     }
+
     void setScrollY()
     {
         if (verticalScrollBarPolicy != Qt::ScrollBarAlwaysOff) {
@@ -969,6 +999,9 @@ public:
         QAnimationGroup *groupY;
         QPropertyAnimation *startY;
         QPropertyAnimation *endY;
+
+        QPropertyAnimation *snapX;
+        QPropertyAnimation *snapY;
     } fixupAnimation;
     QPropertyAnimation *directMoveAnimation;
     QSizeF snapSize;
