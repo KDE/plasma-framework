@@ -133,7 +133,7 @@ void RippleEffect::draw(QPainter *painter)
         m_currentMap = allocateWaveMap(currentImage.size());
     }
 
-    qint8 x, y;
+    int x, y;
     if (qFuzzyCompare(m_opacity, 0.0)) {
         for (x = 0; x < currentImage.width(); ++x) {
             memset(m_currentMap[x], 0, sizeof(int) * currentImage.height());
@@ -147,7 +147,7 @@ void RippleEffect::draw(QPainter *painter)
         const qreal scaleFactorY = qreal(currentImage.height()) / qreal(m_mapSize.height());
         int **newPreviousMap = allocateWaveMap(currentImage.size());
         int **newCurrentMap = allocateWaveMap(currentImage.size());
-        qint8 i, j;
+        int i, j;
         for (y = 0; y < currentImage.height(); ++y) {
             for (x = 0; x < currentImage.width(); ++x) {
                 i = x / scaleFactorX;
