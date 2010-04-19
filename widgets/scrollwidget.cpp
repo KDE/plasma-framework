@@ -105,6 +105,7 @@ public:
         q->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         layout->setContentsMargins(1, 1, 1, 1);
         scrollingWidget = new QGraphicsWidget(q);
+        scrollingWidget->installEventFilter(q);
         layout->addItem(scrollingWidget, 0, 0);
         borderSvg = new Plasma::Svg(q);
         borderSvg->setImagePath("widgets/scrollwidget");
