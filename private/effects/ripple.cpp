@@ -18,7 +18,7 @@
 #include <QtCore/QObject>
 #include <QtGui/QPainter>
 
-#include <KDebug>
+#include "kdebug.h"
 
 #include "ripple_p.h"
 
