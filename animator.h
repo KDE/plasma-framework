@@ -66,7 +66,8 @@ public:
         SlideAnimation, /*<< Move the position of animated object */
         GeometryAnimation, /*<< Geometry animation*/
         ZoomAnimation, /*<<Zoom animation */
-        PixmapTransitionAnimation /*<< Transition between two pixmaps*/
+        PixmapTransitionAnimation, /*<< Transition between two pixmaps*/
+        WaterAnimation /*<< Water animation using ripple effect */
     };
 
     enum CurveShape {

@@ -30,6 +30,7 @@
 #include "animations/geometry_p.h"
 #include "animations/zoom_p.h"
 #include "animations/pixmaptransition_p.h"
+#include "animations/water_p.h"
 
 namespace Plasma
 {
@@ -73,6 +74,10 @@ Plasma::Animation* Animator::create(Animator::Animation type, QObject *parent)
 
     case PixmapTransitionAnimation:
         result = new Plasma::PixmapTransition(parent);
+        break;
+
+    case WaterAnimation:
+        result = new Plasma::WaterAnimation(parent);
         break;
 
     default:
