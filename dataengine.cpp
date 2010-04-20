@@ -97,6 +97,9 @@ void DataEngine::connectSource(const QString &source, QObject *visualization,
         // source was prexisting and they don't request delayed updates
         // (we want to do an immediate update in that case so they don't
         // have to wait for the first time out)
+        if (newSource && !s->data().isEmpty()) {
+            newSource = false;
+        }
         d->connectSource(s, visualization, pollingInterval, intervalAlignment,
                          !newSource || pollingInterval > 0);
         //kDebug() << " ==> source connected";
