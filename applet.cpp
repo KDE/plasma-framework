@@ -1263,10 +1263,16 @@ void Applet::flushPendingConstraintsEvents()
     if (c & Plasma::SizeConstraint || c & Plasma::FormFactorConstraint) {
         if (aspectRatioMode() == Plasma::Square || aspectRatioMode() == Plasma::ConstrainedSquare) {
             // enforce square size in panels
+            //save the old size policy. since ignored doesn't (yet) have a valid use case in containments, use it as special unset value
+            if (d->preferredSizePolicy == QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored)) {
+                d->preferredSizePolicy = sizePolicy();
+            }
             if (formFactor() == Horizontal) {
                 setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding));
             } else if (formFactor() == Vertical) {
                 setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
+            } else if (d->preferredSizePolicy != QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored)) {
+                setSizePolicy(d->preferredSizePolicy);
             }
         }
         updateGeometry();
@@ -2567,6 +2573,7 @@ AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet
           activationAction(0),
           shortcutEditor(0),
           itemStatus(UnknownStatus),
+          preferredSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored),
           modificationsTimer(0),
           hasConfigurationInterface(false),
           failed(false),

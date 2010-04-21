@@ -164,6 +164,9 @@ public:
     QString remoteLocation;
     Ui::publishWidget publishUI;
 
+    // the applet can change size policy by itself, so save the old one for eventual restore
+    QSizePolicy preferredSizePolicy;
+
     // timerEvent bookkeeping
     QBasicTimer constraintsTimer;
     QBasicTimer busyWidgetTimer;
