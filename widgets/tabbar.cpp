@@ -345,7 +345,7 @@ void TabBar::resizeEvent(QGraphicsSceneResizeEvent * event)
 {
     if (!d->tabWidgetMode) {
         d->tabProxy->setMinimumSize(event->newSize().toSize());
-        setMinimumSize(QSize(-1, -1));
+        setMinimumSize(QSize(0, 0));
         setMinimumHeight(d->tabProxy->widget()->minimumSizeHint().height());
         setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
     } else {
