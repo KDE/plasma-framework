@@ -347,7 +347,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             qreal left, top, right, bottom;
             q->getContentsMargins(&left, &top, &right, &bottom);
             QSizeF oldSize(q->size());
-            q->setMinimumSize(minimum + QSizeF(left+right, top+bottom));
+
             //size not saved/invalid size saved
             if (oldSize.width() < q->minimumSize().width() || oldSize.height() < q->minimumSize().height()) {
                 q->resize(prefSize);
@@ -380,10 +380,6 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 //emulate the same kind of behavior as Qt::Popup (close when you click somewhere
                 //else.
 
-                if (icon) {
-                    q->setMinimumSize(QSize(0, 0));
-                }
-
                 if (gWidget) {
                     Corona *corona = qobject_cast<Corona *>(gWidget->scene());
 
@@ -415,10 +411,6 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
 
             if (icon && lay) {
                 lay->addItem(icon);
-            }
-
-            if (icon) {
-                q->setMinimumSize(0,0);
             }
         }
     }
