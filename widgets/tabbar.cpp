@@ -182,11 +182,12 @@ void TabBarPrivate::shapeChanged(const QTabBar::Shape shape)
 
     case QTabBar::RoundedEast:
     case QTabBar::TriangularEast:
+        q->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
         tabBarLayout->setOrientation(Qt::Vertical);
         tabWidgetLayout->setOrientation(Qt::Horizontal);
         tabWidgetLayout->itemAt(0)->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
         if (tabWidgetLayout->count() > 1) {
-            tabWidgetLayout->itemAt(1)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+            tabWidgetLayout->itemAt(1)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
         }
         tabProxy->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
         break;
@@ -197,11 +198,12 @@ void TabBarPrivate::shapeChanged(const QTabBar::Shape shape)
     case QTabBar::RoundedNorth:
     case QTabBar::TriangularNorth:
     default:
+        q->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
         tabBarLayout->setOrientation(Qt::Horizontal);
         tabWidgetLayout->setOrientation(Qt::Vertical);
-        tabWidgetLayout->itemAt(0)->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+        tabWidgetLayout->itemAt(0)->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
         if (tabWidgetLayout->count() > 1) {
-            tabWidgetLayout->itemAt(1)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+            tabWidgetLayout->itemAt(1)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
         }
         tabProxy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     }
@@ -232,6 +234,7 @@ TabBar::TabBar(QGraphicsWidget *parent)
     : QGraphicsWidget(parent),
       d(new TabBarPrivate(this))
 {
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     setContentsMargins(0,0,0,0);
     d->tabProxy = new TabBarProxy(this);
     d->tabWidgetLayout = new QGraphicsLinearLayout(Qt::Vertical);
@@ -342,9 +345,11 @@ void TabBar::resizeEvent(QGraphicsSceneResizeEvent * event)
 {
     if (!d->tabWidgetMode) {
         d->tabProxy->setMinimumSize(event->newSize().toSize());
-        setMinimumSize(QSize(0, 0));
+        setMinimumSize(QSize(-1, -1));
+        setMinimumHeight(d->tabProxy->widget()->minimumSizeHint().height());
         setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
     } else {
+        setMinimumSize(QSize(-1, -1));
         d->tabProxy->native->setMinimumSize(QSize(0,0));
     }
 }
