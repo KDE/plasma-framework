@@ -133,7 +133,6 @@ void PixmapTransition::updateEffectiveTime(int currentTime)
     QGraphicsWidget *w = targetWidget();
     if (w) {
         qreal delta = currentTime / qreal(duration());
-        delta *= Animation::easingCurve().valueForProgress(delta);
         if (!m_startPixmap.isNull() && !m_targetPixmap.isNull()) {
             m_currentPixmap = Plasma::PaintUtils::transition(m_startPixmap, m_targetPixmap, delta);
         } else if (m_startPixmap.isNull()) {

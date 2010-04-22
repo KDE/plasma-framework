@@ -72,8 +72,7 @@ void SlideAnimation::updateEffectiveTime(int currentTime)
 {
     QGraphicsWidget *w = targetWidget();
     if (w && state() == QAbstractAnimation::Running) {
-        qreal delta = Animation::easingCurve().valueForProgress(
-                currentTime / qreal(duration()));
+        const qreal delta = currentTime / qreal(duration());
         w->setPos(m_startPos * (1-delta) + (m_targetPos * delta));
     }
 }

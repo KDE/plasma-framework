@@ -64,8 +64,7 @@ void ZoomAnimation::updateEffectiveTime(int currentTime)
 {
     QGraphicsWidget *w = targetWidget();
     if (w) {
-        qreal delta = Animation::easingCurve().valueForProgress(
-            currentTime / qreal(duration()));
+        qreal delta = currentTime / qreal(duration());
         if (m_zoom != 1) {
             delta = (1 - m_zoom) * delta;
             w->setScale(1 - delta);

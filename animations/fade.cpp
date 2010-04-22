@@ -76,8 +76,7 @@ void FadeAnimation::updateEffectiveTime(int currentTime)
     QGraphicsWidget *w = targetWidget();
     if (w) {
         qreal delta = currentTime / qreal(duration());
-        delta = (m_startOpacity - m_targetOpacity) *
-                Animation::easingCurve().valueForProgress(delta);
+        delta *= m_startOpacity - m_targetOpacity;
         w->setOpacity(m_startOpacity - delta);
     }
 }

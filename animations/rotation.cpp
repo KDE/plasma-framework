@@ -161,11 +161,8 @@ void RotationAnimation::updateState(QAbstractAnimation::State newState, QAbstrac
 
 void RotationAnimation::updateEffectiveTime(int currentTime)
 {
-    QGraphicsWidget *w = targetWidget();
-    if (w) {
-        qreal delta = Animation::easingCurve().valueForProgress(
-            currentTime / qreal(duration()));
-        delta = angle() * delta;
+    if (targetWidget()) {
+        qreal delta = currentTime * angle() / qreal(duration());
         m_rotation->setAngle(delta);
     }
 }

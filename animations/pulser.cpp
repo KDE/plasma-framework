@@ -119,11 +119,10 @@ void PulseAnimation::updateState(QAbstractAnimation::State newState, QAbstractAn
 void PulseAnimation::updateEffectiveTime(int currentTime)
 {
     if (m_under.data()) {
-        qreal delta = Animation::easingCurve().valueForProgress( currentTime / qreal(duration()));
+        qreal delta = currentTime / qreal(duration());
 
         if (m_under.data()->isIconBigger()) {
             m_under.data()->setScale(delta);
-
         } else {
             m_under.data()->setScale(delta);
             delta = (1 - m_endScale) * delta;
