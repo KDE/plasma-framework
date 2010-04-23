@@ -45,7 +45,8 @@ class RotationAnimation : public EasingAnimation
     Q_PROPERTY(qreal angle READ angle WRITE setAngle)
 
 public:
-    /** Default constructor
+    /**
+     * Default constructor
      *
      * @param parent Animation object parent.
      * @param reference See \ref Animation::Reference.
@@ -67,16 +68,28 @@ public:
     Qt::Axis axis() const;
 
     /**
-     * set animation rotation axis
-     * @arg axis Rotation (e.g. YAxis, ZAxis, XAxis)
-     */
-    void setAxis(const Qt::Axis &axis);
-
-    /**
      * Rotation reference (e.g. Center, Up, Down, Left, Right) can
      * be combined (i.e. Center|Up)
      */
     qint8 reference() const;
+
+    /**
+     * Animation rotation angle (e.g. 45, 180, etc)
+     */
+    qreal angle() const;
+
+    /**
+     * Reimplemented from Plasma::Animation
+     * @arg curve Easing curve
+     */
+    void setEasingCurve(const QEasingCurve &curve);
+
+public slots:
+    /**
+     * set animation rotation axis
+     * @arg axis Rotation (e.g. YAxis, ZAxis, XAxis)
+     */
+    void setAxis(const Qt::Axis &axis);
 
     /**
      * Set rotation reference (e.g. Center, Up, Down, Left, Right) can
@@ -84,11 +97,6 @@ public:
      * @arg reference The reference
      */
     void setReference(const qint8 &reference);
-
-    /**
-     * Animation rotation angle (e.g. 45, 180, etc)
-     */
-    qreal angle() const;
 
     /**
      * Set animation rotation angle (e.g. 45, 180, etc)

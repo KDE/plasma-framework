@@ -16,25 +16,24 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "rotation_p.h"
-
 #include <QGraphicsRotation>
 #include <QEasingCurve>
 #include <QVector3D>
 
-#include <kdebug.h>
+#include "kdebug.h"
+
+#include "rotation_p.h"
 
 namespace Plasma
 {
 
 RotationAnimation::RotationAnimation(QObject *parent, qint8 reference, Qt::Axis axis, qreal angle)
-    : EasingAnimation(parent)
+    : EasingAnimation(parent),
+      m_rotation(new QGraphicsRotation(this)),
+      m_angle(angle),
+      m_axis(axis),
+      m_reference(reference)
 {
-    setAngle(angle);
-    setAxis(axis);
-    setReference(reference);
-
-    m_rotation = new QGraphicsRotation(this);
 }
 
 RotationAnimation::~RotationAnimation()
@@ -151,12 +150,6 @@ void RotationAnimation::updateState(QAbstractAnimation::State newState, QAbstrac
     QList<QGraphicsTransform *> transformation;
     transformation.append(m_rotation);
     m_object->setTransformations(transformation);
-
-    if ((oldState == Stopped) && (newState == Running)) {
-        m_rotation->setAngle(direction() == Forward ? 0 : angle());
-    } else if (newState == Stopped) {
-        m_rotation->setAngle(direction() == Forward ? angle() : 0);
-    }
 }
 
 void RotationAnimation::updateEffectiveTime(int currentTime)

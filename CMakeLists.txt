@@ -51,6 +51,7 @@ set(plasma_LIB_SRCS
     animator.cpp
     animations/animation.cpp
     animations/easinganimation.cpp
+    animations/pendulumcurve.cpp
     animations/fade.cpp
     animations/grow.cpp
     animations/slide.cpp
@@ -365,6 +366,7 @@ endif(PHONON_FOUND)
 
 install(FILES
     animations/animation.h
+    animations/pendulumcurve.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/animations COMPONENT Devel)
 
 
