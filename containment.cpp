@@ -1021,11 +1021,9 @@ void Containment::setScreen(int newScreen, int newDesktop)
         }
     }
 
-    if (newScreen < numScreens && newScreen > -1) {
-        if (d->type == DesktopContainment ||
-            d->type >= CustomContainment) {
-            resize(corona()->screenGeometry(newScreen).size());
-        }
+    if (newScreen < numScreens && newScreen > -1 && 
+        (d->type == DesktopContainment || d->type >= CustomContainment)) {
+        resize(corona()->screenGeometry(newScreen).size());
     }
 
     int oldDesktop = d->desktop;
@@ -1595,14 +1593,16 @@ void Containment::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
     Applet::resizeEvent(event);
 
-    if (d->isPanelContainment()) {
-        d->positionPanel();
-    } else if (corona()) {
-        QMetaObject::invokeMethod(corona(), "layoutContainments");
-    }
+    if (isContainment()) {
+        if (d->isPanelContainment()) {
+            d->positionPanel();
+        } else if (corona()) {
+            QMetaObject::invokeMethod(corona(), "layoutContainments");
+        }
 
-    if (d->wallpaper) {
-        d->wallpaper->setBoundingRect(QRectF(QPointF(0, 0), size()));
+        if (d->wallpaper) {
+            d->wallpaper->setBoundingRect(QRectF(QPointF(0, 0), size()));
+        }
     }
 }
 
