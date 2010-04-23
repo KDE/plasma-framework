@@ -100,7 +100,7 @@ public:
     /**
      * Factory to build new custom easing curves.
      */
-    static QEasingCurve easingCurve(Animator::CurveShape type);
+    static QEasingCurve create(Animator::CurveShape type);
 
     /**
      * Starts a standard animation on a QGraphicsItem.

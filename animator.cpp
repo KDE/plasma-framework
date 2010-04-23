@@ -89,7 +89,7 @@ Plasma::Animation* Animator::create(Animator::Animation type, QObject *parent)
     return result;
 }
 
-QEasingCurve Animator::easingCurve(Animator::CurveShape type)
+QEasingCurve Animator::create(Animator::CurveShape type)
 {
     QEasingCurve result;
 
