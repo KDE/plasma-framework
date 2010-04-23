@@ -211,7 +211,7 @@ public:
                 q->removeItem(applet);
                 delete applet;
             }
-            containment = new Containment(0, 0, id);
+            applet = containment = new Containment(0, 0, id);
 
             if (pluginName == "null") {
                 containment->setDrawWallpaper(false);
@@ -222,10 +222,10 @@ public:
             containment->setFormFactor(Plasma::Planar);
         }
 
-        static_cast<Applet*>(containment)->d->isContainment = true;
+        applet->d->isContainment = true;
         containment->setPos(containment->d->preferredPos(q));
         q->addItem(containment);
-        static_cast<Applet*>(containment)->d->setIsContainment(true, true);
+        applet->d->setIsContainment(true, true);
         containments.append(containment);
 
         if (!delayedInit) {
@@ -482,7 +482,6 @@ void Corona::loadLayout(const QString &configName)
     }
 
     foreach (Containment *containment, d->containments) {
-      
         QString cid = QString::number(containment->id());
         KConfigGroup *appletsConfigGroup = 0;
         if (mergeConfig) {
