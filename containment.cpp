@@ -340,12 +340,13 @@ void Containment::restore(KConfigGroup &group)
     if (geo.size() != geo.size().boundedTo(maximumSize())) {
         setMaximumSize(maximumSize().expandedTo(geo.size()));
     }
+
     if (geo.size() != geo.size().expandedTo(minimumSize())) {
         setMinimumSize(minimumSize().boundedTo(geo.size()));
     }
 
 
-    setGeometry(geo);
+    resize(geo.size());
     //are we an offscreen containment?
     if (containmentType() != PanelContainment && containmentType() != CustomPanelContainment && geo.right() < 0) {
         corona()->addOffscreenWidget(this);
@@ -2344,13 +2345,19 @@ QPointF ContainmentPrivate::preferredPos(Corona *corona) const
     Q_ASSERT(corona);
 
     if (isPanelContainment()) {
-        kDebug() << "is a panel, so let's do it at" << preferredPanelPos(corona);
+        //kDebug() << "is a panel, so put it at" << preferredPanelPos(corona);
         return preferredPanelPos(corona);
     }
 
-    // FIXME
-    kDebug() << "not a panel";
-    return QPointF(0, 0);
+    int width = q->size().width();
+    QPointF pos(0, 0);
+    QTransform t;
+    while (corona->itemAt(pos, t)) {
+        pos.setX(pos.x() + width);
+    }
+
+    //kDebug() << "not a panel, put it at" << pos;
+    return pos;
 }
 
 QPointF ContainmentPrivate::preferredPanelPos(Corona *corona) const
