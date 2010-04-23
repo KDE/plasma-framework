@@ -15,7 +15,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "pendulumcurve.h"
+#include "pendulumcurve_p.h"
 
 /**
  * This static method is used to create a custom easing curve type.

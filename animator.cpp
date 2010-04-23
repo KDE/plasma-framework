@@ -32,6 +32,8 @@
 #include "animations/pixmaptransition_p.h"
 #include "animations/water_p.h"
 
+#include "animations/pendulumcurve_p.h"
+
 namespace Plasma
 {
 
@@ -82,6 +84,39 @@ Plasma::Animation* Animator::create(Animator::Animation type, QObject *parent)
 
     default:
         kDebug() << "Unsupported animation type.";
+    }
+
+    return result;
+}
+
+QEasingCurve Animator::easingCurve(Animator::CurveShape type)
+{
+    QEasingCurve result;
+
+    switch (type) {
+    case EaseInCurve:
+        result.setType(QEasingCurve::InQuad);
+        break;
+
+    case EaseOutCurve:
+        result.setType(QEasingCurve::OutQuad);
+        break;
+
+    case EaseInOutCurve:
+        result.setType(QEasingCurve::InOutQuad);
+        break;
+
+    case LinearCurve:
+        result.setType(QEasingCurve::Linear);
+        break;
+
+    case PendularCurve:
+        result = PendulumCurve();
+        break;
+
+    default:
+        kDebug() << "Unsupported easing curve type.";
+        break;
     }
 
     return result;

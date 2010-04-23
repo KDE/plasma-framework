@@ -24,6 +24,7 @@
 #include <QtGui/QImage>
 #include <QtCore/QObject>
 #include <QtCore/QAbstractAnimation>
+#include <QtCore/QEasingCurve>
 
 #include <plasma/plasma_export.h>
 
@@ -74,7 +75,8 @@ public:
         EaseInCurve = 0,
         EaseOutCurve,
         EaseInOutCurve,
-        LinearCurve
+        LinearCurve,
+        PendularCurve
     };
 
     enum Movement {
@@ -94,6 +96,11 @@ public:
      * check \ref AbstractAnimation properties.
      **/
     static Plasma::Animation *create(Animator::Animation type, QObject *parent = 0);
+
+    /**
+     * Factory to build new custom easing curves.
+     */
+    static QEasingCurve easingCurve(Animator::CurveShape type);
 
     /**
      * Starts a standard animation on a QGraphicsItem.

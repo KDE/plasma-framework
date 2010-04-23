@@ -15,12 +15,10 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PLASMA_ANIMATIONS_PENDULUMCURVE_H
-#define PLASMA_ANIMATIONS_PENDULUMCURVE_H
+#ifndef PLASMA_ANIMATIONS_PENDULUMCURVE_P_H
+#define PLASMA_ANIMATIONS_PENDULUMCURVE_P_H
 
 #include <QtCore/QEasingCurve>
-
-#include <plasma/plasma_export.h>
 
 namespace Plasma
 {
@@ -32,7 +30,7 @@ namespace Plasma
  * This easing curve provides values which are split in 4 parts:
  * from 0 to 1, from 1 to 0, from 0 to -1, and from -1 to 0, in a linear way.
  */
-class PLASMA_EXPORT PendulumCurve : public QEasingCurve
+class PendulumCurve : public QEasingCurve
 {
 public:
     /**
@@ -43,4 +41,4 @@ public:
 
 } // namespace Plasma
 
-#endif // PLASMA_ANIMATIONS_PENDULUMCURVE_H
+#endif // PLASMA_ANIMATIONS_PENDULUMCURVE_P_H
