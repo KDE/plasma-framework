@@ -626,6 +626,14 @@ void IconWidgetPrivate::layoutIcons(const QStyleOptionGraphicsItem *option)
 
 void IconWidget::setSvg(const QString &svgFilePath, const QString &elementId)
 {
+    if (svgFilePath.isEmpty()) {
+        if (d->iconSvg) {
+            d->iconSvg->deleteLater();
+            d->iconSvg = 0;
+        }
+        return;
+    }
+
     if (!d->iconSvg) {
         d->iconSvg = new Plasma::Svg(this);
         connect(d->iconSvg, SIGNAL(repaintNeeded()), this, SLOT(svgChanged()));
@@ -1219,6 +1227,8 @@ void IconWidget::setIcon(const QString &icon)
 
 void IconWidget::setIcon(const QIcon &icon)
 {
+    setSvg(QString());
+
     /*fade to the new icon, but to not bee a too big hog, not do that when:
       - the fade animation is already running
       - the icon is under mouse
