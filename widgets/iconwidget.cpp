@@ -588,10 +588,10 @@ void IconWidgetPrivate::layoutIcons(const QStyleOptionGraphicsItem *option)
 
         //aspect ratio very "tall"
         if (!text.isEmpty() || !infoText.isEmpty()) {
-	    if (currentSize.width() < heightAvail) {
+            if (currentSize.width() < heightAvail) {
                 iconWidth = currentSize.width() -
-                            horizontalMargin[IconWidgetPrivate::IconMargin].left -
-                            horizontalMargin[IconWidgetPrivate::IconMargin].right;
+                            verticalMargin[IconWidgetPrivate::IconMargin].left -
+                            verticalMargin[IconWidgetPrivate::IconMargin].right;
             } else {
                 iconWidth = heightAvail -
                             verticalMargin[IconWidgetPrivate::IconMargin].top -
@@ -600,7 +600,8 @@ void IconWidgetPrivate::layoutIcons(const QStyleOptionGraphicsItem *option)
         } else {
             iconWidth = qMin(heightAvail, currentSize.width());
         }
-        iconWidth -= horizontalMargin[IconWidgetPrivate::ItemMargin].left + horizontalMargin[IconWidgetPrivate::ItemMargin].right;
+
+        iconWidth -= verticalMargin[IconWidgetPrivate::ItemMargin].left + verticalMargin[IconWidgetPrivate::ItemMargin].right;
     } else {
         //Horizontal layout
         //if there is text resize the icon in order to make room for the text
@@ -609,12 +610,11 @@ void IconWidgetPrivate::layoutIcons(const QStyleOptionGraphicsItem *option)
             iconWidth = qMin(currentSize.height(), currentSize.width());
         } else {
             iconWidth = currentSize.height() -
-                        verticalMargin[IconWidgetPrivate::IconMargin].top -
-                        verticalMargin[IconWidgetPrivate::IconMargin].bottom;
+                        horizontalMargin[IconWidgetPrivate::IconMargin].top -
+                        horizontalMargin[IconWidgetPrivate::IconMargin].bottom;
         }
-        iconWidth -= verticalMargin[IconWidgetPrivate::ItemMargin].top + verticalMargin[IconWidgetPrivate::ItemMargin].bottom;
+        iconWidth -= horizontalMargin[IconWidgetPrivate::ItemMargin].top + horizontalMargin[IconWidgetPrivate::ItemMargin].bottom;
     }
-
     iconSize = QSizeF(iconWidth, iconWidth);
 
     int count = 0;
@@ -644,6 +644,7 @@ void IconWidget::setSvg(const QString &svgFilePath, const QString &elementId)
     d->iconSvgElement = elementId;
     d->iconSvgElementChanged = true;
     d->icon = QIcon();
+    updateGeometry();
     update();
 }
 
@@ -659,7 +660,18 @@ QString IconWidget::svg() const
 QSizeF IconWidget::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
 {
     if (which == Qt::PreferredSize) {
-        return sizeFromIconSize(KIconLoader::SizeMedium);
+        int iconSize = KIconLoader::SizeMedium;
+        if (d->iconSvg) {
+            QSizeF oldSize = d->iconSvg->size();
+            d->iconSvg->resize();
+            if (d->iconSvgElement.isNull()) {
+                iconSize = qMax(d->iconSvg->size().width(), d->iconSvg->size().height());
+            } else {
+                iconSize = qMax(d->iconSvg->elementSize(d->iconSvgElement).width(), d->iconSvg->elementSize(d->iconSvgElement).width());
+            }
+            d->iconSvg->resize(oldSize);
+        }
+        return sizeFromIconSize(iconSize);
     } else if (which == Qt::MinimumSize) {
         return sizeFromIconSize(KIconLoader::SizeSmall);
     } else {
@@ -1436,26 +1448,24 @@ QSizeF IconWidget::sizeFromIconSize(const qreal iconWidth) const
 {
     d->setActiveMargins();
     if (d->text.isEmpty() && d->infoText.isEmpty()) {
-        //no text, less calculations
-        return d->addMargin(d->addMargin(QSizeF(iconWidth, iconWidth), IconWidgetPrivate::IconMargin),
-                            IconWidgetPrivate::ItemMargin);
+        //no text, just the icon size
+        return QSizeF(iconWidth, iconWidth);
     }
 
     QFontMetricsF fm(d->widgetFont());
     qreal width = 0;
 
     if (d->orientation == Qt::Vertical) {
-        // make room for at most 14 characters
         width = qMax(d->maxWordWidth(d->text),
                      d->maxWordWidth(d->infoText)) +
                      fm.width("xxx") +
-                     d->horizontalMargin[IconWidgetPrivate::TextMargin].left +
-                     d->horizontalMargin[IconWidgetPrivate::TextMargin].right;
+                     d->verticalMargin[IconWidgetPrivate::TextMargin].left +
+                     d->verticalMargin[IconWidgetPrivate::TextMargin].right;
 
         width = qMax(width,
                      iconWidth +
-                     d->horizontalMargin[IconWidgetPrivate::IconMargin].left +
-                     d->horizontalMargin[IconWidgetPrivate::IconMargin].right);
+                     d->verticalMargin[IconWidgetPrivate::IconMargin].left +
+                     d->verticalMargin[IconWidgetPrivate::IconMargin].right);
     } else {
         width = iconWidth +
                 d->horizontalMargin[IconWidgetPrivate::IconMargin].left +
