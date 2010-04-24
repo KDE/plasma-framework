@@ -209,6 +209,7 @@ public:
     QColor shadowColor;
     IconHoverAnimation *hoverAnimation;
     QSizeF iconSize;
+    QSizeF preferredIconSize;
     QIcon icon;
     QIcon oldIcon;
     IconWidgetStates states;

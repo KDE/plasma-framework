@@ -91,6 +91,7 @@ class PLASMA_EXPORT IconWidget : public QGraphicsWidget
     Q_PROPERTY(QAction *action READ action WRITE setAction)
     Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation)
     Q_PROPERTY(int numDisplayLines READ numDisplayLines WRITE setNumDisplayLines)
+    Q_PROPERTY(QSizeF preferredIconSize READ preferredIconSize WRITE setPreferredIconSize)
 
 public:
     /**
@@ -189,6 +190,23 @@ public:
     * @return the size of this Plasma::IconWidget's graphical icon.
     */
     QSizeF iconSize() const;
+
+    /**
+     * Set the size you prefer the icon will be when positioned in a layout.
+     * @param preferred icon size, pass an invalid size to unset this value
+     *
+     * @since 4.5
+     */
+    void setPreferredIconSize(const QSizeF &size);
+
+    /**
+     * @return The size you prefer the icon will be when positioned in a layout.
+     *         The default is QSizeF(-1, -1); an invalid size means the icon
+     *         will attempt to be at its default  and "optimal" size
+     *
+     * @since 4.5
+     */
+    QSizeF preferredIconSize() const;
 
     /**
     * Plasma::IconWidget allows the user to specify a number of actions

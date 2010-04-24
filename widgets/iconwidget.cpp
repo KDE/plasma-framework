@@ -104,6 +104,7 @@ IconWidgetPrivate::IconWidgetPrivate(IconWidget *i)
       iconSvg(0),
       hoverAnimation(new IconHoverAnimation(q)),
       iconSize(48, 48),
+      preferredIconSize(-1, -1),
       states(IconWidgetPrivate::NoState),
       orientation(Qt::Vertical),
       numDisplayLines(2),
@@ -660,6 +661,9 @@ QString IconWidget::svg() const
 QSizeF IconWidget::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
 {
     if (which == Qt::PreferredSize) {
+        if (d->preferredIconSize.isValid()) {
+            return sizeFromIconSize(qMax(d->preferredIconSize.height(), d->preferredIconSize.height()));
+        }
         int iconSize = KIconLoader::SizeMedium;
         if (d->iconSvg) {
             QSizeF oldSize = d->iconSvg->size();
@@ -1259,6 +1263,17 @@ void IconWidget::setIcon(const QIcon &icon)
 QSizeF IconWidget::iconSize() const
 {
     return d->iconSize;
+}
+
+void IconWidget::setPreferredIconSize(const QSizeF &size)
+{
+    d->preferredIconSize = size;
+    updateGeometry();
+}
+
+QSizeF IconWidget::preferredIconSize() const
+{
+    return d->preferredIconSize;
 }
 
 bool IconWidget::isDown()
