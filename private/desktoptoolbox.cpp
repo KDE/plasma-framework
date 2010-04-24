@@ -98,6 +98,7 @@ class EmptyGraphicsItem : public QGraphicsWidget
             widget->installEventFilter(this);
 
             if (m_layout->count() == 1) {
+                m_itemBackground->hide();
                 m_itemBackground->setTargetItem(widget);
             }
         }
