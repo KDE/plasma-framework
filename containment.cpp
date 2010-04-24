@@ -207,9 +207,10 @@ void Containment::init()
 
     if (d->type != PanelContainment && d->type != CustomPanelContainment) {
         if (corona()) {
-            act = corona()->action("add sibling containment");
+            //FIXME this is just here because of the darn keyboard shortcut :/
+            act = corona()->action("manage activities");
             if (act) {
-                d->actions()->addAction("add sibling containment", act);
+                d->actions()->addAction("manage activities", act);
             }
             //a stupid hack to make this one's keyboard shortcut work
             act = corona()->action("configure shortcuts");
