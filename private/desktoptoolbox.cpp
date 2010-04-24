@@ -118,6 +118,16 @@ class EmptyGraphicsItem : public QGraphicsWidget
             return false;
         }
 
+        void hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+        {
+            event->accept();
+        }
+
+        void hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+        {
+            m_itemBackground->hide();
+        }
+
     private:
         QRectF m_rect;
         Plasma::FrameSvg *m_background;
