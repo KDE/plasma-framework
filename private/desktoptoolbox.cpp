@@ -41,6 +41,7 @@
 #include <plasma/tooltipcontent.h>
 #include <plasma/tooltipmanager.h>
 #include <plasma/widgets/iconwidget.h>
+#include <plasma/widgets/itembackground.h>
 
 namespace Plasma
 {
@@ -59,6 +60,7 @@ class EmptyGraphicsItem : public QGraphicsWidget
             m_background->setImagePath("widgets/background");
             m_background->setEnabledBorders(FrameSvg::AllBorders);
             m_layout->setOrientation(Qt::Vertical);
+            m_itemBackground = new Plasma::ItemBackground(this);
             updateMargins();
         }
 
@@ -81,13 +83,23 @@ class EmptyGraphicsItem : public QGraphicsWidget
         void clearLayout()
         {
             while (m_layout->count()) {
+                //safe? at the moment everything it's thre will always be QGraphicsWidget
+                static_cast<QGraphicsWidget *>(m_layout->itemAt(0))->removeEventFilter(this);
                 m_layout->removeAt(0);
             }
         }
 
         void addToLayout(QGraphicsWidget *widget)
         {
+            qreal left, top, right, bottom;
+            m_itemBackground->getContentsMargins(&left, &top, &right, &bottom);
+            widget->setContentsMargins(left, top, right, bottom);
             m_layout->addItem(widget);
+            widget->installEventFilter(this);
+
+            if (m_layout->count() == 1) {
+                m_itemBackground->setTargetItem(widget);
+            }
         }
 
     protected:
@@ -96,10 +108,20 @@ class EmptyGraphicsItem : public QGraphicsWidget
             m_background->resizeFrame(size());
         }
 
+        bool eventFilter(QObject *watched, QEvent *event)
+        {
+            QGraphicsWidget *widget = qobject_cast<QGraphicsWidget *>(watched);
+            if (event->type() == QEvent::GraphicsSceneHoverEnter) {
+                m_itemBackground->setTargetItem(widget);
+            }
+            return false;
+        }
+
     private:
         QRectF m_rect;
         Plasma::FrameSvg *m_background;
         QGraphicsLinearLayout *m_layout;
+        Plasma::ItemBackground *m_itemBackground;
 };
 
 // used with QGrahphicsItem::setData
@@ -525,6 +547,7 @@ void DesktopToolBox::adjustToolBackerGeometry()
         //kDebug() << "showing off" << it.key() << icon->text();
         if (icon->isEnabled()) {
             icon->show();
+            icon->setDrawBackground(false);
             d->toolBacker->addToLayout(icon);
         } else {
             icon->hide();
