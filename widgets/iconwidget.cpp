@@ -671,7 +671,7 @@ QSizeF IconWidget::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
             if (d->iconSvgElement.isNull()) {
                 iconSize = qMax(d->iconSvg->size().width(), d->iconSvg->size().height());
             } else {
-                iconSize = qMax(d->iconSvg->elementSize(d->iconSvgElement).width(), d->iconSvg->elementSize(d->iconSvgElement).width());
+                iconSize = qMax(d->iconSvg->elementSize(d->iconSvgElement).width(), d->iconSvg->elementSize(d->iconSvgElement).height());
             }
             d->iconSvg->resize(oldSize);
         }
