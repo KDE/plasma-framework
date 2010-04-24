@@ -139,6 +139,8 @@ void InternalToolBox::addTool(QAction *action)
     tool->setDrawBackground(true);
     tool->setOrientation(Qt::Horizontal);
     tool->resize(tool->sizeFromIconSize(KIconLoader::SizeSmallMedium));
+    tool->setPreferredIconSize(QSizeF(KIconLoader::SizeSmallMedium, KIconLoader::SizeSmallMedium));
+    tool->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
     tool->hide();
     const int height = static_cast<int>(tool->boundingRect().height());
