@@ -304,33 +304,34 @@ void InternalToolBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     int distanceToTop = newPos.y() - d->dragStartRelative.y();
     int distanceToBottom = areaHeight - h - distanceToTop;
 
-    int distancetoHorizontalMiddle = qAbs(newPos.x() - areaWidth/2);
-    int distancetoVerticalMiddle = qAbs(newPos.y() - areaHeight/2);
-
-    // decide which border is the nearest
-    if (distanceToLeft < distanceToTop && distanceToLeft < distanceToRight &&
-        distanceToLeft < distanceToBottom ) {
-        x = 0;
-        y = (newPos.y() - d->dragStartRelative.y());
-    } else if (distanceToRight < distanceToTop && distanceToRight < distanceToLeft &&
-               distanceToRight < distanceToBottom) {
-        x = areaWidth - w;
-        y = (newPos.y() - d->dragStartRelative.y());
-    } else if (distanceToTop < distanceToLeft && distanceToTop < distanceToRight &&
-               distanceToTop < distanceToBottom ) {
-        y = 0;
-        x = (newPos.x() - d->dragStartRelative.x());
-    } else if (distanceToBottom < distanceToLeft && distanceToBottom < distanceToRight &&
-               distanceToBottom < distanceToTop) {
-        y = areaHeight - h;
-        x = (newPos.x() - d->dragStartRelative.x());
-    }
+    int distancetoHorizontalMiddle = qAbs((newPos.x() + boundingRect().size().width()/2) - areaWidth/2 - d->dragStartRelative.x());
+    int distancetoVerticalMiddle = qAbs((newPos.y() + boundingRect().size().height()/2) - areaHeight/2 - d->dragStartRelative.y());
 
     if (distancetoHorizontalMiddle < 10) {
-        x = areaWidth/2 - d->dragStartRelative.x();
+        x = areaWidth/2 - boundingRect().size().width()/2;
     } else if (distancetoVerticalMiddle < 10) {
-        y = areaHeight/2 - d->dragStartRelative.y();
+        y = areaHeight/2 - boundingRect().size().height()/2;
+    } else {
+        // decide which border is the nearest
+        if (distanceToLeft < distanceToTop && distanceToLeft < distanceToRight &&
+            distanceToLeft < distanceToBottom ) {
+            x = 0;
+            y = (newPos.y() - d->dragStartRelative.y());
+        } else if (distanceToRight < distanceToTop && distanceToRight < distanceToLeft &&
+                distanceToRight < distanceToBottom) {
+            x = areaWidth - w;
+            y = (newPos.y() - d->dragStartRelative.y());
+        } else if (distanceToTop < distanceToLeft && distanceToTop < distanceToRight &&
+                distanceToTop < distanceToBottom ) {
+            y = 0;
+            x = (newPos.x() - d->dragStartRelative.x());
+        } else if (distanceToBottom < distanceToLeft && distanceToBottom < distanceToRight &&
+                distanceToBottom < distanceToTop) {
+            y = areaHeight - h;
+            x = (newPos.x() - d->dragStartRelative.x());
+        }
     }
+
 
     x = qBound(0, x, areaWidth - w);
     y = qBound(0, y, areaHeight - h);
