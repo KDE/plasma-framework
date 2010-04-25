@@ -206,13 +206,16 @@ QScriptValue ScriptEngine::fileExists(QScriptContext *context, QScriptEngine *en
 
 QScriptValue ScriptEngine::loadTemplate(QScriptContext *context, QScriptEngine *engine)
 {
+    kDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
     Q_UNUSED(engine)
     if (context->argumentCount() == 0) {
+        kDebug() << "no arguments";
         return false;
     }
 
     const QString layout = context->argument(0).toString();
     if (layout.isEmpty() || layout.contains("'")) {
+        kDebug() << "layout is empty";
         return false;
     }
 
@@ -221,6 +224,7 @@ QScriptValue ScriptEngine::loadTemplate(QScriptContext *context, QScriptEngine *
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/LayoutTemplate", constraint);
 
     if (offers.isEmpty()) {
+        kDebug() << "offers fail" << constraint;
         return false;
     }
 
@@ -228,12 +232,14 @@ QScriptValue ScriptEngine::loadTemplate(QScriptContext *context, QScriptEngine *
     KPluginInfo info(offers.first());
     const QString path = KStandardDirs::locate("data", structure->defaultPackageRoot() + '/' + info.pluginName() + '/');
     if (path.isEmpty()) {
+        kDebug() << "script path is empty";
         return false;
     }
 
-    Plasma::Package p(path, structure);
-    const QString scriptFile = p.filePath("mainscript");
+    Plasma::Package package(path, structure);
+    const QString scriptFile = package.filePath("mainscript");
     if (scriptFile.isEmpty()) {
+        kDebug() << "scriptfile is empty";
         return false;
     }
 
@@ -245,6 +251,7 @@ QScriptValue ScriptEngine::loadTemplate(QScriptContext *context, QScriptEngine *
 
     QString script = file.readAll();
     if (script.isEmpty()) {
+        kDebug() << "script is empty";
         return false;
     }
 
@@ -273,6 +280,8 @@ void ScriptEngine::setupEngine()
     m_scriptSelf.setProperty("panelById", newFunction(ScriptEngine::panelById));
     m_scriptSelf.setProperty("fileExists", newFunction(ScriptEngine::fileExists));
     m_scriptSelf.setProperty("loadTemplate", newFunction(ScriptEngine::loadTemplate));
+    m_scriptSelf.setProperty("applicationVersion", KGlobal::mainComponent().aboutData()->version(), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+    m_scriptSelf.setProperty("scriptingVersion", newVariant(2), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
     setGlobalObject(m_scriptSelf);
 }
