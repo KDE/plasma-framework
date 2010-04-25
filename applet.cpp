@@ -26,45 +26,62 @@
 #include <Plasma/Containment>
 #include <Plasma/Corona>
 
+class Applet::Private
+{
+public:
+    Private()
+        : configDirty(false)
+    {
+    }
+
+    KConfigGroup configGroup;
+    QStringList configGroupPath;
+    KConfigGroup globalConfigGroup;
+    QStringList globalConfigGroupPath;
+    bool configDirty;
+};
+
 Applet::Applet(QObject *parent)
     : QObject(parent),
-      m_configDirty(false)
+      d(new Applet::Private)
 {
 }
 
 Applet::~Applet()
 {
-    if (m_configDirty) {
+    if (d->configDirty) {
         reloadConfig();
     }
+
+    delete d;
 }
 
 void Applet::setCurrentConfigGroup(const QStringList &groupNames)
 {
     Plasma::Applet *app = applet();
     if (!app) {
-        m_configGroup = KConfigGroup();
-        m_configGroupPath.clear();
+        d->configGroup = KConfigGroup();
+        d->configGroupPath.clear();
         return;
     }
 
-    m_configGroup = app->config();
-    m_configGroupPath = groupNames;
+    d->configGroup = app->config();
+    d->configGroupPath = groupNames;
 
     foreach (const QString &groupName, groupNames) {
-        m_configGroup = KConfigGroup(&m_configGroup, groupName);
+        d->configGroup = KConfigGroup(&d->configGroup, groupName);
     }
 }
 
 QStringList Applet::currentConfigGroup() const
 {
-    return m_configGroupPath;
+    return d->configGroupPath;
 }
 
 QStringList Applet::configKeys() const
 {
-    if (m_configGroup.isValid()) {
-        return m_configGroup.keyList();
+    if (d->configGroup.isValid()) {
+        return d->configGroup.keyList();
     }
 
     return QStringList();
@@ -72,8 +89,8 @@ QStringList Applet::configKeys() const
 
 QStringList Applet::configGroups() const
 {
-    if (m_configGroup.isValid()) {
-        return m_configGroup.groupList();
+    if (d->configGroup.isValid()) {
+        return d->configGroup.groupList();
     }
 
     return QStringList();
@@ -81,8 +98,8 @@ QStringList Applet::configGroups() const
 
 QVariant Applet::readConfig(const QString &key, const QVariant &def) const
 {
-    if (m_configGroup.isValid()) {
-        return m_configGroup.readEntry(key, def);
+    if (d->configGroup.isValid()) {
+        return d->configGroup.readEntry(key, def);
     } else {
         return QVariant();
     }
@@ -90,9 +107,66 @@ QVariant Applet::readConfig(const QString &key, const QVariant &def) const
 
 void Applet::writeConfig(const QString &key, const QVariant &value)
 {
-    if (m_configGroup.isValid()) {
-        m_configGroup.writeEntry(key, value);
-        m_configDirty = true;
+    if (d->configGroup.isValid()) {
+        d->configGroup.writeEntry(key, value);
+        d->configDirty = true;
+    }
+}
+
+void Applet::setCurrentGlobalConfigGroup(const QStringList &groupNames)
+{
+    Plasma::Applet *app = applet();
+    if (!app) {
+        d->globalConfigGroup = KConfigGroup();
+        d->globalConfigGroupPath.clear();
+        return;
+    }
+
+    d->globalConfigGroup = app->globalConfig();
+    d->globalConfigGroupPath = groupNames;
+
+    foreach (const QString &groupName, groupNames) {
+        d->globalConfigGroup = KConfigGroup(&d->globalConfigGroup, groupName);
+    }
+}
+
+QStringList Applet::currentGlobalConfigGroup() const
+{
+    return d->globalConfigGroupPath;
+}
+
+QStringList Applet::globalConfigKeys() const
+{
+    if (d->globalConfigGroup.isValid()) {
+        return d->globalConfigGroup.keyList();
+    }
+
+    return QStringList();
+}
+
+QStringList Applet::globalConfigGroups() const
+{
+    if (d->globalConfigGroup.isValid()) {
+        return d->globalConfigGroup.groupList();
+    }
+
+    return QStringList();
+}
+
+QVariant Applet::readGlobalConfig(const QString &key, const QVariant &def) const
+{
+    if (d->globalConfigGroup.isValid()) {
+        return d->globalConfigGroup.readEntry(key, def);
+    } else {
+        return QVariant();
+    }
+}
+
+void Applet::writeGlobalConfig(const QString &key, const QVariant &value)
+{
+    if (d->globalConfigGroup.isValid()) {
+        d->globalConfigGroup.writeEntry(key, value);
+        d->configDirty = true;
     }
 }
 
@@ -112,7 +186,7 @@ void Applet::reloadConfig()
             app->containment()->corona()->requestConfigSync();
         }
 
-        m_configDirty = false;
+        d->configDirty = false;
     }
 }
 

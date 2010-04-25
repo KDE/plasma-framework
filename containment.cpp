@@ -44,6 +44,7 @@ Containment::Containment(Plasma::Containment *containment, QObject *parent)
 {
     d->containment = containment;
     setCurrentConfigGroup(QStringList());
+    setCurrentGlobalConfigGroup(QStringList());
     if (containment && containment->wallpaper()) {
         d->oldWallpaperPlugin = d->wallpaperPlugin = containment->wallpaper()->pluginName();
         d->oldWallpaperMode = d->wallpaperMode = containment->wallpaper()->renderingMode().name();

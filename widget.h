@@ -38,6 +38,8 @@ class PLASMAGENERICSHELL_EXPORT Widget : public Applet
     Q_PROPERTY(int id READ id)
     Q_PROPERTY(QStringList configKeys READ configKeys)
     Q_PROPERTY(QStringList configGroups READ configGroups)
+    Q_PROPERTY(QStringList globalConfigKeys READ globalConfigKeys)
+    Q_PROPERTY(QStringList globalConfigGroups READ globalConfigGroups)
     Q_PROPERTY(int index WRITE setIndex READ index)
     Q_PROPERTY(QRectF geometry WRITE setGeometry READ geometry)
     Q_PROPERTY(QStringList currentConfigGroup WRITE setCurrentConfigGroup READ currentConfigGroup)
@@ -69,10 +71,15 @@ public Q_SLOTS:
     // from the applet interface
     QVariant readConfig(const QString &key, const QVariant &def = QString()) const { return Applet::readConfig(key, def); }
     void writeConfig(const QString &key, const QVariant &value) { Applet::writeConfig(key, value); }
+
+    QVariant readGlobalConfig(const QString &key, const QVariant &def = QString()) const { return Applet::readConfig(key, def); }
+    void writeGlobalConfig(const QString &key, const QVariant &value) { Applet::writeConfig(key, value); }
+
     void reloadConfig() { Applet::reloadConfig(); }
 
 private:
-    QWeakPointer<Plasma::Applet> m_applet;
+    class Private;
+    Private * const d;
 };
 
 #endif

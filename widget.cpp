@@ -26,21 +26,34 @@
 #include <Plasma/Containment>
 #include <Plasma/Corona>
 
+class Widget::Private
+{
+public:
+    Private()
+    {
+    }
+
+    QWeakPointer<Plasma::Applet> applet;
+};
+
 Widget::Widget(Plasma::Applet *applet, QObject *parent)
     : Applet(parent),
-      m_applet(applet)
+      d(new Widget::Private)
 {
+    d->applet = applet;
     setCurrentConfigGroup(QStringList());
+    setCurrentGlobalConfigGroup(QStringList());
 }
 
 Widget::~Widget()
 {
+    delete d;
 }
 
 uint Widget::id() const
 {
-    if (m_applet) {
-        return m_applet.data()->id();
+    if (d->applet) {
+        return d->applet.data()->id();
     }
 
     return 0;
@@ -48,8 +61,8 @@ uint Widget::id() const
 
 QString Widget::type() const
 {
-    if (m_applet) {
-        return m_applet.data()->pluginName();
+    if (d->applet) {
+        return d->applet.data()->pluginName();
     }
 
     return QString();
@@ -57,23 +70,23 @@ QString Widget::type() const
 
 void Widget::remove()
 {
-    if (m_applet) {
-        m_applet.data()->destroy();
-        m_applet.clear();
+    if (d->applet) {
+        d->applet.data()->destroy();
+        d->applet.clear();
     }
 }
 
 void Widget::setGlobalShortcut(const QString &shortcut)
 {
-    if (m_applet) {
-        m_applet.data()->setGlobalShortcut(KShortcut(shortcut));
+    if (d->applet) {
+        d->applet.data()->setGlobalShortcut(KShortcut(shortcut));
     }
 }
 
 QString Widget::globalShorcut() const
 {
-    if (m_applet) {
-        return m_applet.data()->globalShortcut().toString();
+    if (d->applet) {
+        return d->applet.data()->globalShortcut().toString();
     }
 
     return QString();
@@ -81,16 +94,16 @@ QString Widget::globalShorcut() const
 
 Plasma::Applet *Widget::applet() const
 {
-    return m_applet.data();
+    return d->applet.data();
 }
 
 int Widget::index() const
 {
-    if (!m_applet) {
+    if (!d->applet) {
         return -1;
     }
 
-    Plasma::Applet *applet = m_applet.data();
+    Plasma::Applet *applet = d->applet.data();
     Plasma::Containment *c = applet->containment();
     if (!c) {
         return -1;
@@ -112,11 +125,11 @@ int Widget::index() const
 
 void Widget::setIndex(int index)
 {
-    if (!m_applet) {
+    if (!d->applet) {
         return;
     }
 
-    Plasma::Applet *applet = m_applet.data();
+    Plasma::Applet *applet = d->applet.data();
     Plasma::Containment *c = applet->containment();
     if (!c) {
         return;
@@ -133,8 +146,8 @@ void Widget::setIndex(int index)
 
 QRectF Widget::geometry() const
 {
-    if (m_applet) {
-        return m_applet.data()->geometry();
+    if (d->applet) {
+        return d->applet.data()->geometry();
     }
 
     return QRectF();
@@ -142,15 +155,15 @@ QRectF Widget::geometry() const
 
 void Widget::setGeometry(const QRectF &geometry)
 {
-    if (m_applet) {
-        m_applet.data()->setGeometry(geometry);
+    if (d->applet) {
+        d->applet.data()->setGeometry(geometry);
     }
 }
 
 void Widget::showConfigurationInterface()
 {
-    if (m_applet) {
-        m_applet.data()->showConfigurationInterface();
+    if (d->applet) {
+        d->applet.data()->showConfigurationInterface();
     }
 }
 

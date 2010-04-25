@@ -41,6 +41,8 @@ class PLASMAGENERICSHELL_EXPORT Containment : public Applet
     Q_OBJECT
     Q_PROPERTY(QStringList configKeys READ configKeys)
     Q_PROPERTY(QStringList configGroups READ configGroups)
+    Q_PROPERTY(QStringList globalConfigKeys READ globalConfigKeys)
+    Q_PROPERTY(QStringList globalConfigGroups READ globalConfigGroups)
     Q_PROPERTY(QStringList currentConfigGroup WRITE setCurrentConfigGroup READ currentConfigGroup)
     Q_PROPERTY(QString name READ name WRITE setName)
     Q_PROPERTY(QString wallpaperPlugin READ wallpaperPlugin WRITE setWallpaperPlugin)
@@ -88,6 +90,10 @@ public Q_SLOTS:
     // from the applet interface
     QVariant readConfig(const QString &key, const QVariant &def = QString()) const { return Applet::readConfig(key, def); }
     void writeConfig(const QString &key, const QVariant &value) { Applet::writeConfig(key, value); }
+
+    QVariant readGlobalConfig(const QString &key, const QVariant &def = QString()) const { return Applet::readConfig(key, def); }
+    void writeGlobalConfig(const QString &key, const QVariant &value) { Applet::writeConfig(key, value); }
+
     void reloadConfig() { Applet::reloadConfig(); }
 
 private:

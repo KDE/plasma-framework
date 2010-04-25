@@ -46,17 +46,24 @@ public:
     void setCurrentConfigGroup(const QStringList &groupNames);
     QStringList currentConfigGroup() const;
 
+    QStringList globalConfigKeys() const;
+    QStringList globalConfigGroups() const;
+
+    void setCurrentGlobalConfigGroup(const QStringList &groupNames);
+    QStringList currentGlobalConfigGroup() const;
+
     virtual Plasma::Applet *applet() const;
 
 public Q_SLOTS:
     virtual QVariant readConfig(const QString &key, const QVariant &def = QString()) const;
     virtual void writeConfig(const QString &key, const QVariant &value);
+    virtual QVariant readGlobalConfig(const QString &key, const QVariant &def = QString()) const;
+    virtual void writeGlobalConfig(const QString &key, const QVariant &value);
     virtual void reloadConfig();
 
 private:
-    KConfigGroup m_configGroup;
-    QStringList m_configGroupPath;
-    bool m_configDirty;
+    class Private;
+    Private * const d;
 };
 
 
