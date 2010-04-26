@@ -512,6 +512,7 @@ void IconWidget::setDrawBackground(bool draw)
         }
 
         update();
+        updateGeometry();
     }
 }
 
@@ -1498,7 +1499,7 @@ QSizeF IconWidget::sizeFromIconSize(const qreal iconWidth) const
     d->setActiveMargins();
     if (d->text.isEmpty() && d->infoText.isEmpty()) {
         //no text, just the icon size
-        return QSizeF(iconWidth, iconWidth);
+        return d->addMargin(QSizeF(iconWidth, iconWidth), IconWidgetPrivate::ItemMargin);
     }
 
     QFontMetricsF fm(d->widgetFont());
