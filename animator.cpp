@@ -31,8 +31,15 @@
 #include "animations/zoom_p.h"
 #include "animations/pixmaptransition_p.h"
 #include "animations/water_p.h"
-
 #include "animations/pendulumcurve_p.h"
+#include "animations/javascriptanimation_p.h"
+#include "animations/animationscriptengine_p.h"
+
+#include <QFile>
+#include <QTextStream>
+#include <QDebug>
+
+static QSet<QString> s_paths;
 
 namespace Plasma
 {
@@ -118,6 +125,51 @@ QEasingCurve Animator::create(Animator::CurveShape type)
         kDebug() << "Unsupported easing curve type.";
         break;
     }
+
+    return result;
+}
+
+static Plasma::Animation *create(QString &path, QObject *parent = 0)
+{
+    Plasma::Animation *result = 0;
+    /* Here this will be executed in the Animator::factory() and
+     * the path is retrieved from the Theme class
+     */
+    //qDebug() << path;
+
+    /**
+     * FIXME: in future, the path and the animation name will not match 1:1
+     * so we need a way to map animations to path names. trivial would be to map
+     * "Zoom" to "zoom.js" (e.g. anim.toLower() + 'js') but that's also a bit lame.
+     * I think we may need a mapping, much as we use KService to do for applet
+     * names to libraries. Maybe we should, in fact, use KSycoca for this?
+     * In any case, the method used below even allows for all anims to be defined in
+     * one file!
+     */
+    if (!s_paths.contains(path)) {
+        QFile file(path);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            kError() << "failed to open js......";
+            return result;
+        }
+
+        QTextStream buffer(&file);
+        QString tmp(buffer.readAll());
+        s_paths.insert(path);
+
+        QScriptEngine *engine = AnimationScriptEngine::globalEngine();
+        QScriptValue def(engine->evaluate(tmp, path));
+        if (engine->hasUncaughtException()) {
+            const QScriptValue error = engine->uncaughtException();
+            QString file = error.property("fileName").toString();
+            const QString failureMsg = QString("Error in %1 on line %2.<br><br>%3").arg(
+                    file).arg(error.property("lineNumber").toString()).arg(error.toString());
+            kError() << "fail!" << failureMsg;
+        }
+    }
+
+    result = new Plasma::JavascriptAnimation(path);
+    result->setParent(parent);
 
     return result;
 }

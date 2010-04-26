@@ -97,6 +97,8 @@ public:
      **/
     static Plasma::Animation *create(Animator::Animation type, QObject *parent = 0);
 
+    static Plasma::Animation *create(QString &path, QObject *parent = 0);
+
     /**
      * Factory to build new custom easing curves.
      */
