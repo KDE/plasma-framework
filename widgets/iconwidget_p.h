@@ -210,6 +210,8 @@ public:
     IconHoverAnimation *hoverAnimation;
     QSizeF iconSize;
     QSizeF preferredIconSize;
+    QSizeF minimumIconSize;
+    QSizeF maximumIconSize;
     QIcon icon;
     QIcon oldIcon;
     IconWidgetStates states;

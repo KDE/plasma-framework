@@ -105,6 +105,8 @@ IconWidgetPrivate::IconWidgetPrivate(IconWidget *i)
       hoverAnimation(new IconHoverAnimation(q)),
       iconSize(48, 48),
       preferredIconSize(-1, -1),
+      minimumIconSize(-1, -1),
+      maximumIconSize(-1, -1),
       states(IconWidgetPrivate::NoState),
       orientation(Qt::Vertical),
       numDisplayLines(2),
@@ -618,6 +620,10 @@ void IconWidgetPrivate::layoutIcons(const QStyleOptionGraphicsItem *option)
     }
     iconSize = QSizeF(iconWidth, iconWidth);
 
+    if (maximumIconSize.isValid()) {
+        iconSize = iconSize.boundedTo(maximumIconSize);
+    }
+
     int count = 0;
     foreach (IconAction *iconAction, cornerActions) {
         iconAction->setRect(actionRect((IconWidgetPrivate::ActionPosition)count));
@@ -677,8 +683,14 @@ QSizeF IconWidget::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
         }
         return sizeFromIconSize(iconSize);
     } else if (which == Qt::MinimumSize) {
+        if (d->minimumIconSize.isValid()) {
+            return sizeFromIconSize(qMax(d->minimumIconSize.height(), d->minimumIconSize.height()));
+        }
         return sizeFromIconSize(KIconLoader::SizeSmall);
     } else {
+        if (d->maximumIconSize.isValid()) {
+            return sizeFromIconSize(qMax(d->maximumIconSize.height(), d->maximumIconSize.height()));
+        }
         return QGraphicsWidget::sizeHint(which, constraint);
     }
 }
@@ -1274,6 +1286,28 @@ void IconWidget::setPreferredIconSize(const QSizeF &size)
 QSizeF IconWidget::preferredIconSize() const
 {
     return d->preferredIconSize;
+}
+
+void IconWidget::setMinimumIconSize(const QSizeF &size)
+{
+    d->minimumIconSize = size;
+    updateGeometry();
+}
+
+QSizeF IconWidget::minimumIconSize() const
+{
+    return d->minimumIconSize;
+}
+
+void IconWidget::setMaximumIconSize(const QSizeF &size)
+{
+    d->maximumIconSize = size;
+    updateGeometry();
+}
+
+QSizeF IconWidget::maximumIconSize() const
+{
+    return d->maximumIconSize;
 }
 
 bool IconWidget::isDown()

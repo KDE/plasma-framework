@@ -92,6 +92,8 @@ class PLASMA_EXPORT IconWidget : public QGraphicsWidget
     Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation)
     Q_PROPERTY(int numDisplayLines READ numDisplayLines WRITE setNumDisplayLines)
     Q_PROPERTY(QSizeF preferredIconSize READ preferredIconSize WRITE setPreferredIconSize)
+    Q_PROPERTY(QSizeF minimumIconSize READ minimumIconSize WRITE setMinimumIconSize)
+    Q_PROPERTY(QSizeF maximumIconSize READ maximumIconSize WRITE setMaximumIconSize)
 
 public:
     /**
@@ -207,6 +209,44 @@ public:
      * @since 4.5
      */
     QSizeF preferredIconSize() const;
+
+    /**
+     * Set the size that should be the minimum beyond the icon shouldn't scale when
+     * the icon will be when positioned in a layout.
+     * @param preferred icon size, pass an invalid size to unset this value
+     *
+     * @since 4.5
+     */
+    void setMinimumIconSize(const QSizeF &size);
+
+    /**
+     * @return The size that should be the minimum beyond the icon shouldn't scale when
+     *         the icon will be when positioned in a layout.
+     *         The default is QSizeF(-1, -1); an invalid size means the icon
+     *         will attempt to be at its default  and "optimal" size
+     *
+     * @since 4.5
+     */
+    QSizeF minimumIconSize() const;
+
+    /**
+     * Set the size that should be the maximum beyond the icon shouldn't scale when
+     * the icon will be when positioned in a layout.
+     * @param preferred icon size, pass an invalid size to unset this value
+     *
+     * @since 4.5
+     */
+    void setMaximumIconSize(const QSizeF &size);
+
+    /**
+     * @return The size that should be the maximum beyond the icon shouldn't scale when
+     *         the icon will be when positioned in a layout.
+     *         The default is QSizeF(-1, -1); an invalid size means the icon
+     *         will attempt to be at its default  and "optimal" size
+     *
+     * @since 4.5
+     */
+    QSizeF maximumIconSize() const;
 
     /**
     * Plasma::IconWidget allows the user to specify a number of actions
