@@ -20,7 +20,7 @@
 #include "javascriptanimation_p.h"
 #include <QDebug>
 
-#include "animationscriptengine.h"
+#include "animationscriptengine_p.h"
 /* TODO:
  * - support passing more parameters to the js animation object
  * - support more properties: angle, direction, etc
@@ -52,9 +52,9 @@ void JavascriptAnimation::updateState(QAbstractAnimation::State newState, QAbstr
             //Define the class and create an instance
             if (!m_instance) {
                 m_instance = new QScriptValue;
-                *m_instance = AnimationEngine::animation(m_name).construct(QScriptValueList()
-                                               << engine->newQObject(targetWidget())
-                                               << duration());
+                QScriptValueList args;
+                args << engine->newQObject(targetWidget()) << duration();
+                *m_instance = AnimationScriptEngine::animation(m_name).construct(args);
                 qDebug( )<< "trying for" << m_name << m_instance->isFunction();
             }
 
@@ -98,4 +98,4 @@ void JavascriptAnimation::updateCurrentTime(int currentTime)
 
 } //namespace Plasma
 
-#include <../jsanim_p.moc>
+#include <javascriptanimation_p.moc>

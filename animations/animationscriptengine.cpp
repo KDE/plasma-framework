@@ -22,7 +22,7 @@
  * - cleanup debug messages
  */
 
-#include "engine.h"
+#include "animationscriptengine_p.h"
 
 namespace Plasma
 {

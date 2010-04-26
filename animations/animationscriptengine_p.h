@@ -33,8 +33,8 @@ namespace Plasma
 namespace AnimationScriptEngine
 {
 
-static QScriptEngine* globalEngine();
-static QScriptValue animation(const QString &anim);
+QScriptEngine* globalEngine();
+QScriptValue animation(const QString &anim);
 
 }
 
