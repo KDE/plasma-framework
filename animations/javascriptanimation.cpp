@@ -17,10 +17,10 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "jsanim_p.h"
-#include "engine.h"
+#include "javascriptanimation_p.h"
 #include <QDebug>
 
+#include "animationscriptengine.h"
 /* TODO:
  * - support passing more parameters to the js animation object
  * - support more properties: angle, direction, etc
@@ -47,7 +47,7 @@ void JavascriptAnimation::updateState(QAbstractAnimation::State newState, QAbstr
     qDebug() << ".................. state: " << newState;
     if (oldState == Stopped && newState == Running) {
         if (!engine) {
-            engine = AnimationEngine::globalEngine();
+            engine = AnimationScriptEngine::globalEngine();
 
             //Define the class and create an instance
             if (!m_instance) {

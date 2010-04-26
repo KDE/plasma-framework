@@ -24,15 +24,21 @@
 
 #include "engine.h"
 
-QScriptEngine* AnimationEngine::inst = 0;
-QHash<QString, QScriptValue> AnimationEngine::s_animFuncs;
+namespace Plasma
+{
 
-QScriptValue AnimationEngine::animation(const QString &anim)
+namespace AnimationScriptEngine
+{
+
+QScriptEngine* inst = 0;
+QHash<QString, QScriptValue> s_animFuncs;
+
+QScriptValue animation(const QString &anim)
 {
     return s_animFuncs.value(anim);
 }
 
-QScriptValue AnimationEngine::registerAnimation(QScriptContext *context, QScriptEngine *engine)
+QScriptValue registerAnimation(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() > 1) {
         const QString name = context->argument(0).toString();
@@ -45,15 +51,18 @@ QScriptValue AnimationEngine::registerAnimation(QScriptContext *context, QScript
     return engine->undefinedValue();
 }
 
-QScriptEngine *AnimationEngine::globalEngine()
+QScriptEngine *globalEngine()
 {
     if (!inst) {
         inst = new QScriptEngine;
         QScriptValue global = inst->globalObject();
-        global.setProperty("registerAnimation", inst->newFunction(AnimationEngine::registerAnimation));
+        global.setProperty("registerAnimation", inst->newFunction(AnimationScriptEngine::registerAnimation));
 	qDebug() << "........... first js animation, creating the engine!";
     }
 
     return inst;
 }
+
+} // namespace AnimationEngine
+} // namespace Plasma
 

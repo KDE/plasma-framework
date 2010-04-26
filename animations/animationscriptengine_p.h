@@ -27,19 +27,17 @@
 #include <QDebug>
 
 /* Plasma-shell will have an engine */
-class AnimationEngine
+namespace Plasma
 {
-public:
-    static QScriptEngine* globalEngine();
-    static QScriptValue animation(const QString &anim);
 
-protected:
-    AnimationEngine() { }
+namespace AnimationScriptEngine
+{
 
-private:
-    static QScriptEngine *inst;
-    static QScriptValue registerAnimation(QScriptContext *context, QScriptEngine *engine);
-    static QHash<QString, QScriptValue> s_animFuncs;
-};
+static QScriptEngine* globalEngine();
+static QScriptValue animation(const QString &anim);
+
+}
+
+} // namespace Plasma
 
 #endif
