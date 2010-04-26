@@ -51,9 +51,11 @@ set(plasma_LIB_SRCS
     animator.cpp
     animations/animation.cpp
     animations/easinganimation.cpp
+    animations/animationscriptengine.cpp
     animations/pendulumcurve.cpp
     animations/fade.cpp
     animations/grow.cpp
+    animations/javascriptanimation.cpp
     animations/slide.cpp
     animations/pixmaptransition.cpp
     animations/pulser.cpp
