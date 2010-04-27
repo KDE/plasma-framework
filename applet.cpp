@@ -2118,7 +2118,9 @@ KPluginInfo::List Applet::listAppletInfo(const QString &category, const QString 
     QString constraint;
 
     if (parentApp.isEmpty()) {
-        constraint.append("(not exist [X-KDE-ParentApp] or [X-KDE-ParentApp] == '')");
+        constraint.append("((not exist [X-KDE-ParentApp] or [X-KDE-ParentApp] == '') or [X-KDE-ParentApp] == '")
+                  .append(KGlobal::mainComponent().aboutData()->appName())
+                  .append("')");
     } else {
         constraint.append("[X-KDE-ParentApp] == '").append(parentApp).append("'");
     }
