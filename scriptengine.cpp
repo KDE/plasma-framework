@@ -189,6 +189,20 @@ QScriptValue ScriptEngine::panelById(QScriptContext *context, QScriptEngine *eng
     return engine->undefinedValue();
 }
 
+QScriptValue ScriptEngine::availableWidgets(QScriptContext *context, QScriptEngine *engine)
+{
+    Q_UNUSED(context)
+
+    QStringList widgets;
+    KPluginInfo::List info = Plasma::Applet::listAppletInfo();
+
+    foreach (const KPluginInfo &info, info) {
+        widgets.append(info.pluginName());
+    }
+
+    return qScriptValueFromValue(engine, widgets);
+}
+
 QScriptValue ScriptEngine::activities(QScriptContext *context, QScriptEngine *engine)
 {
     Q_UNUSED(context)
@@ -314,6 +328,7 @@ void ScriptEngine::setupEngine()
     m_scriptSelf.setProperty("QRectF", constructQRectFClass(this));
     m_scriptSelf.setProperty("Activity", newFunction(ScriptEngine::newActivity));
     m_scriptSelf.setProperty("Panel", newFunction(ScriptEngine::newPanel));
+    m_scriptSelf.setProperty("availableWidgets", newFunction(ScriptEngine::availableWidgets));
     m_scriptSelf.setProperty("activities", newFunction(ScriptEngine::activities));
     m_scriptSelf.setProperty("activityById", newFunction(ScriptEngine::activityById));
     m_scriptSelf.setProperty("activityForScreen", newFunction(ScriptEngine::activityForScreen));
