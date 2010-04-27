@@ -62,9 +62,6 @@ private:
     void setupEngine();
 
     // containment accessors
-    static QScriptValue availableWidgets(QScriptContext *context, QScriptEngine *engine);
-    static QScriptValue availableActivities(QScriptContext *context, QScriptEngine *engine);
-    static QScriptValue availablePanels(QScriptContext *context, QScriptEngine *engine);
     static QStringList availableContainments(const QString &type);
     static QScriptValue newActivity(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue newPanel(QScriptContext *context, QScriptEngine *engine);

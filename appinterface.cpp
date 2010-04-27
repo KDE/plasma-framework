@@ -103,5 +103,39 @@ bool AppInterface::hasBattery() const
   return !batteries.isEmpty();
 }
 
+QStringList AppInterface::knownWidgetTypes() const
+{
+    QStringList widgets;
+    KPluginInfo::List info = Plasma::Applet::listAppletInfo();
+
+    foreach (const KPluginInfo &info, info) {
+        widgets.append(info.pluginName());
+    }
+
+    return widgets;
+}
+
+QStringList AppInterface::knownActivityTypes() const
+{
+    return knownContainmentTypes("desktop");
+}
+
+QStringList AppInterface::knownPanelTypes() const
+{
+    return knownContainmentTypes("panel");
+}
+
+QStringList AppInterface::knownContainmentTypes(const QString &type) const
+{
+    QStringList containments;
+    KPluginInfo::List info = Plasma::Containment::listContainmentsOfType(type);
+
+    foreach (const KPluginInfo &info, info) {
+        containments.append(info.pluginName());
+    }
+
+    return containments;
+}
+
 #include "appinterface.moc"
 

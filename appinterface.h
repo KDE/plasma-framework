@@ -40,6 +40,9 @@ class PLASMAGENERICSHELL_EXPORT AppInterface : public QObject
     Q_PROPERTY(int screenCount READ screenCount)
     Q_PROPERTY(QList<int> activityIds READ activityIds)
     Q_PROPERTY(QList<int> panelIds READ panelIds)
+    Q_PROPERTY(QStringList knownPanelTypes READ knownPanelTypes)
+    Q_PROPERTY(QStringList knownActivityTypes READ knownActivityTypes)
+    Q_PROPERTY(QStringList knownWidgetTypes READ knownWidgetTypes)
 
 public:
     AppInterface(Plasma::Corona *corona, QObject *parent = 0);
@@ -48,6 +51,12 @@ public:
     int screenCount() const;
     QList<int> activityIds() const;
     QList<int> panelIds() const;
+
+    QStringList knownWidgetTypes() const;
+    QStringList knownActivityTypes() const;
+    QStringList knownPanelTypes() const;
+    QStringList knownContainmentTypes(const QString &type) const;
+
     bool coronaLocked() const;
 
 public Q_SLOTS:
