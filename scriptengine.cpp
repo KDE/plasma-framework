@@ -203,6 +203,30 @@ QScriptValue ScriptEngine::availableWidgets(QScriptContext *context, QScriptEngi
     return qScriptValueFromValue(engine, widgets);
 }
 
+QScriptValue ScriptEngine::availableActivities(QScriptContext *context, QScriptEngine *engine)
+{
+    Q_UNUSED(context)
+    return qScriptValueFromValue(engine, availableContainments("desktop"));
+}
+
+QScriptValue ScriptEngine::availablePanels(QScriptContext *context, QScriptEngine *engine)
+{
+    Q_UNUSED(context)
+    return qScriptValueFromValue(engine, availableContainments("panel"));
+}
+
+QStringList ScriptEngine::availableContainments(const QString &type)
+{
+    QStringList containments;
+    KPluginInfo::List info = Plasma::Containment::listContainmentsOfType(type);
+
+    foreach (const KPluginInfo &info, info) {
+        containments.append(info.pluginName());
+    }
+
+    return containments;
+}
+
 QScriptValue ScriptEngine::activities(QScriptContext *context, QScriptEngine *engine)
 {
     Q_UNUSED(context)
@@ -329,6 +353,8 @@ void ScriptEngine::setupEngine()
     m_scriptSelf.setProperty("Activity", newFunction(ScriptEngine::newActivity));
     m_scriptSelf.setProperty("Panel", newFunction(ScriptEngine::newPanel));
     m_scriptSelf.setProperty("availableWidgets", newFunction(ScriptEngine::availableWidgets));
+    m_scriptSelf.setProperty("availableActivities", newFunction(ScriptEngine::availableActivities));
+    m_scriptSelf.setProperty("availablePanels", newFunction(ScriptEngine::availablePanels));
     m_scriptSelf.setProperty("activities", newFunction(ScriptEngine::activities));
     m_scriptSelf.setProperty("activityById", newFunction(ScriptEngine::activityById));
     m_scriptSelf.setProperty("activityForScreen", newFunction(ScriptEngine::activityForScreen));
