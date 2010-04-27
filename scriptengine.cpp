@@ -23,6 +23,7 @@
 #include <QFileInfo>
 #include <QScriptValueIterator>
 
+#include <kdeversion.h>
 #include <KServiceTypeTrader>
 #include <KShell>
 #include <KStandardDirs>
@@ -364,6 +365,7 @@ void ScriptEngine::setupEngine()
     m_scriptSelf.setProperty("loadTemplate", newFunction(ScriptEngine::loadTemplate));
     m_scriptSelf.setProperty("applicationVersion", KGlobal::mainComponent().aboutData()->version(), QScriptValue::ReadOnly | QScriptValue::Undeletable);
     m_scriptSelf.setProperty("scriptingVersion", newVariant(2), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+    m_scriptSelf.setProperty("platformVersion", KDE::versionString(), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
     setGlobalObject(m_scriptSelf);
 }
