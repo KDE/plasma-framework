@@ -64,6 +64,7 @@ private:
     // containment accessors
     static QScriptValue newActivity(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue newPanel(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue activities(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue activityById(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue activityForScreen(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue panelById(QScriptContext *context, QScriptEngine *engine);

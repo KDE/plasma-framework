@@ -188,6 +188,25 @@ QScriptValue ScriptEngine::panelById(QScriptContext *context, QScriptEngine *eng
     return engine->undefinedValue();
 }
 
+QScriptValue ScriptEngine::activities(QScriptContext *context, QScriptEngine *engine)
+{
+    Q_UNUSED(context)
+
+    QScriptValue panels = engine->newArray();
+    ScriptEngine *env = envFor(engine);
+    int count = 0;
+
+    foreach (Plasma::Containment *c, env->m_corona->containments()) {
+        if (!isPanel(c)) {
+            panels.setProperty(count, env->wrap(c));
+            ++count;
+        }
+    }
+
+    panels.setProperty("length", count);
+    return panels;
+}
+
 QScriptValue ScriptEngine::panels(QScriptContext *context, QScriptEngine *engine)
 {
     Q_UNUSED(context)
@@ -294,6 +313,7 @@ void ScriptEngine::setupEngine()
     m_scriptSelf.setProperty("QRectF", constructQRectFClass(this));
     m_scriptSelf.setProperty("Activity", newFunction(ScriptEngine::newActivity));
     m_scriptSelf.setProperty("Panel", newFunction(ScriptEngine::newPanel));
+    m_scriptSelf.setProperty("activities", newFunction(ScriptEngine::activities));
     m_scriptSelf.setProperty("activityById", newFunction(ScriptEngine::activityById));
     m_scriptSelf.setProperty("activityForScreen", newFunction(ScriptEngine::activityForScreen));
     m_scriptSelf.setProperty("panelById", newFunction(ScriptEngine::panelById));
