@@ -52,6 +52,8 @@ public:
     void setCurrentGlobalConfigGroup(const QStringList &groupNames);
     QStringList currentGlobalConfigGroup() const;
 
+    QString version() const;
+
     virtual Plasma::Applet *applet() const;
 
 public Q_SLOTS:

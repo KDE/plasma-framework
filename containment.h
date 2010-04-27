@@ -39,6 +39,7 @@ class PanelView;
 class PLASMAGENERICSHELL_EXPORT Containment : public Applet
 {
     Q_OBJECT
+    Q_PROPERTY(QString version READ version)
     Q_PROPERTY(QStringList configKeys READ configKeys)
     Q_PROPERTY(QStringList configGroups READ configGroups)
     Q_PROPERTY(QStringList globalConfigKeys READ globalConfigKeys)

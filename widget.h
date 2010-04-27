@@ -35,6 +35,7 @@ class PLASMAGENERICSHELL_EXPORT Widget : public Applet
 {
     Q_OBJECT
     Q_PROPERTY(QString type READ type)
+    Q_PROPERTY(QString version READ version)
     Q_PROPERTY(int id READ id)
     Q_PROPERTY(QStringList configKeys READ configKeys)
     Q_PROPERTY(QStringList configGroups READ configGroups)

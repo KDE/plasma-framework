@@ -22,6 +22,9 @@
 #include <QAction>
 #include <QGraphicsLinearLayout>
 
+#include <KService>
+#include <KServiceTypeTrader>
+
 #include <Plasma/Applet>
 #include <Plasma/Containment>
 #include <Plasma/Corona>
@@ -188,6 +191,23 @@ void Applet::reloadConfig()
 
         d->configDirty = false;
     }
+}
+
+QString Applet::version() const
+{
+    Plasma::Applet *app = applet();
+    if (!app) {
+        return QString();
+    }
+
+    QString type = app->pluginName();
+    KService::List services = KServiceTypeTrader::self()->query("Plasma/Applet", "[X-KDE-PluginInfo-Name] == '" + type + "'");
+    if (services.isEmpty()) {
+        return QString();
+    }
+
+    KPluginInfo info(services.first());
+    return info.version();
 }
 
 Plasma::Applet *Applet::applet() const
