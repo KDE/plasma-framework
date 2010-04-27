@@ -91,7 +91,7 @@ int main(int argc, char **argv)
                 ki18nc("theme, wallpaper, etc. are keywords, but they may be translated, as both versions "
                        "are recognized by the application "
                        "(if translated, should be same as messages with 'package type' context below)",
-                       "The type of package, e.g. theme, wallpaper, plasmoid, dataengine, runner, etc."),
+                       "The type of package, e.g. theme, wallpaper, plasmoid, dataengine, runner, layout-template, etc."),
                 "plasmoid");
     options.add("s");
     options.add("i");
@@ -177,6 +177,10 @@ int main(int argc, char **argv)
         packageRoot = "plasma/wallpapers/";
         servicePrefix = "plasma-wallpaper-";
         pluginTypes << "Wallpaper";
+    } else if (type == i18nc("package type", "layout-template") || type == "layout-template") {
+        packageRoot = "plasma/layout-templates/";
+        servicePrefix = "plasma-layout-";
+        pluginTypes << "LayoutTemplate";
     } else {
         QString constraint = QString("'%1' == [X-KDE-PluginInfo-Name]").arg(packageRoot);
         KService::List offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure", constraint);
