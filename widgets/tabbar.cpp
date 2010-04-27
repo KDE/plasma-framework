@@ -168,7 +168,9 @@ void TabBarPrivate::slidingOldPageCompleted()
     QGraphicsWidget *item = oldPageAnim->targetWidget();
 
     oldPageAnimId = -1;
-    item->hide();
+    if (item) {
+        item->hide();
+    }
     q->setFlags(0);
 }
 
