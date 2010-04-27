@@ -82,6 +82,7 @@ public:
 
     static QScriptValue widgetById(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue addWidget(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue widgets(QScriptContext *context, QScriptEngine *engine);
 
 public Q_SLOTS:
     void remove();

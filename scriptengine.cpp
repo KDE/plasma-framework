@@ -153,6 +153,7 @@ QScriptValue ScriptEngine::wrap(Containment *c)
                                 QScriptEngine::ExcludeSuperClassMethods);
     v.setProperty("widgetById", newFunction(Containment::widgetById));
     v.setProperty("addWidget", newFunction(Containment::addWidget));
+    v.setProperty("widgets", newFunction(Containment::widgets));
 
     return v;
 }
