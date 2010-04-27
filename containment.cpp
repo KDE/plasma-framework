@@ -210,20 +210,22 @@ QScriptValue Containment::addWidget(QScriptContext *context, QScriptEngine *engi
 
 QScriptValue Containment::widgets(QScriptContext *context, QScriptEngine *engine)
 {
-    Q_UNUSED(context)
     Containment *c = qobject_cast<Containment*>(context->thisObject().toQObject());
 
     if (!c || !c->d->containment) {
         return engine->undefinedValue();
     }
 
+    const QString widgetType = context->argumentCount() > 0 ? context->argument(0).toString() : QString();
     QScriptValue widgets = engine->newArray();
     ScriptEngine *env = ScriptEngine::envFor(engine);
     int count = 0;
 
     foreach (Plasma::Applet *widget, c->d->containment.data()->applets()) {
-        widgets.setProperty(count, env->wrap(widget));
-        ++count;
+        if (widgetType.isEmpty() || widget->pluginName() == widgetType) {
+            widgets.setProperty(count, env->wrap(widget));
+            ++count;
+        }
     }
 
     widgets.setProperty("length", count);
