@@ -171,7 +171,7 @@ QScriptValue Containment::widgetById(QScriptContext *context, QScriptEngine *eng
         foreach (Plasma::Applet *w, c->d->containment.data()->applets()) {
             if (w->id() == id) {
                 ScriptEngine *env = ScriptEngine::envFor(engine);
-                return env->wrap(w, engine);
+                return env->wrap(w);
             }
         }
     }
@@ -197,7 +197,7 @@ QScriptValue Containment::addWidget(QScriptContext *context, QScriptEngine *engi
         applet = c->d->containment.data()->addApplet(v.toString());
         if (applet) {
             ScriptEngine *env = ScriptEngine::envFor(engine);
-            return env->wrap(applet, engine);
+            return env->wrap(applet);
         }
     } else if (Widget *widget = qobject_cast<Widget*>(v.toQObject())) {
         applet = widget->applet();

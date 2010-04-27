@@ -66,7 +66,7 @@ QScriptValue ScriptEngine::activityById(QScriptContext *context, QScriptEngine *
     ScriptEngine *env = envFor(engine);
     foreach (Plasma::Containment *c, env->m_corona->containments()) {
         if (c->id() == id && !isPanel(c)) {
-            return env->wrap(c, engine);
+            return env->wrap(c);
         }
     }
 
@@ -82,7 +82,7 @@ QScriptValue ScriptEngine::activityForScreen(QScriptContext *context, QScriptEng
     const uint screen = context->argument(0).toInt32();
     const uint desktop = context->argumentCount() > 1 ? context->argument(1).toInt32() : -1;
     ScriptEngine *env = envFor(engine);
-    return env->wrap(env->m_corona->containmentForScreen(screen, desktop), engine);
+    return env->wrap(env->m_corona->containmentForScreen(screen, desktop));
 }
 
 QScriptValue ScriptEngine::newActivity(QScriptContext *context, QScriptEngine *engine)
@@ -128,31 +128,31 @@ QScriptValue ScriptEngine::createContainment(const QString &type, const QString 
         emit env->createPendingPanelViews();
     }
 
-    return env->wrap(c, engine);
+    return env->wrap(c);
 }
 
-QScriptValue ScriptEngine::wrap(Plasma::Applet *w, QScriptEngine *engine)
+QScriptValue ScriptEngine::wrap(Plasma::Applet *w)
 {
     Widget *wrapper = new Widget(w);
-    QScriptValue v = engine->newQObject(wrapper, QScriptEngine::ScriptOwnership,
-                                        QScriptEngine::ExcludeSuperClassProperties |
-                                        QScriptEngine::ExcludeSuperClassMethods);
+    QScriptValue v = newQObject(wrapper, QScriptEngine::ScriptOwnership,
+                                QScriptEngine::ExcludeSuperClassProperties |
+                                QScriptEngine::ExcludeSuperClassMethods);
     return v;
 }
 
-QScriptValue ScriptEngine::wrap(Plasma::Containment *c, QScriptEngine *engine)
+QScriptValue ScriptEngine::wrap(Plasma::Containment *c)
 {
     Containment *wrapper = new Containment(c);
-    return wrap(wrapper, engine);
+    return wrap(wrapper);
 }
 
-QScriptValue ScriptEngine::wrap(Containment *c, QScriptEngine *engine)
+QScriptValue ScriptEngine::wrap(Containment *c)
 {
-    QScriptValue v = engine->newQObject(c, QScriptEngine::ScriptOwnership,
-                                        QScriptEngine::ExcludeSuperClassProperties |
-                                        QScriptEngine::ExcludeSuperClassMethods);
-    v.setProperty("widgetById", engine->newFunction(Containment::widgetById));
-    v.setProperty("addWidget", engine->newFunction(Containment::addWidget));
+    QScriptValue v = newQObject(c, QScriptEngine::ScriptOwnership,
+                                QScriptEngine::ExcludeSuperClassProperties |
+                                QScriptEngine::ExcludeSuperClassMethods);
+    v.setProperty("widgetById", newFunction(Containment::widgetById));
+    v.setProperty("addWidget", newFunction(Containment::addWidget));
 
     return v;
 }
@@ -181,7 +181,7 @@ QScriptValue ScriptEngine::panelById(QScriptContext *context, QScriptEngine *eng
     ScriptEngine *env = envFor(engine);
     foreach (Plasma::Containment *c, env->m_corona->containments()) {
         if (c->id() == id && isPanel(c)) {
-            return env->wrap(c, engine);
+            return env->wrap(c);
         }
     }
 

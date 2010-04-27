@@ -47,9 +47,9 @@ public:
 
     bool evaluateScript(const QString &script, const QString &path = QString());
     static bool isPanel(const Plasma::Containment *c);
-    QScriptValue wrap(Plasma::Applet *w, QScriptEngine *engine);
-    virtual QScriptValue wrap(Plasma::Containment *c, QScriptEngine *engine);
-    QScriptValue wrap(Containment *c, QScriptEngine *engine);
+    QScriptValue wrap(Plasma::Applet *w);
+    virtual QScriptValue wrap(Plasma::Containment *c);
+    QScriptValue wrap(Containment *c);
 
     static ScriptEngine *envFor(QScriptEngine *engine);
 
