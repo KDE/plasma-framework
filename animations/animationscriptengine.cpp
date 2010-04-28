@@ -38,13 +38,28 @@ QScriptValue animation(const QString &anim)
     return s_animFuncs.value(anim);
 }
 
+bool isAnimationRegistered(const QString &anim)
+{
+    return s_animFuncs.contains(anim);
+}
+
+void clearAnimations()
+{
+    s_animFuncs.clear();
+    delete inst;
+    inst = 0;
+}
+
 QScriptValue registerAnimation(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() > 1) {
         const QString name = context->argument(0).toString();
-        const QScriptValue func = context->argument(1);
-        if (func.isFunction()) {
-            s_animFuncs.insert(name, func);
+
+        if (!s_animFuncs.contains(name)) {
+            const QScriptValue func = context->argument(1);
+            if (func.isFunction()) {
+                s_animFuncs.insert(name, func);
+            }
         }
     }
 

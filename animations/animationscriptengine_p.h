@@ -33,6 +33,8 @@ namespace Plasma
 namespace AnimationScriptEngine
 {
 
+void clearAnimations();
+bool isAnimationRegistered(const QString &anim);
 QScriptEngine* globalEngine();
 QScriptValue animation(const QString &anim);
 
