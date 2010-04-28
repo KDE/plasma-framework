@@ -18,9 +18,13 @@
 #include "animator.h"
 #include "private/animator_p.h"
 
-#include <kdebug.h>
+#include <QFile>
+#include <QTextStream>
+
+#include <KDebug>
 
 #include "animations/animation.h"
+#include "animations/animationscriptengine_p.h"
 #include "animations/fade_p.h"
 #include "animations/grow_p.h"
 #include "animations/pulser_p.h"
@@ -33,20 +37,44 @@
 #include "animations/water_p.h"
 #include "animations/pendulumcurve_p.h"
 #include "animations/javascriptanimation_p.h"
-#include "animations/animationscriptengine_p.h"
-
-#include <QFile>
-#include <QTextStream>
-#include <QDebug>
-
-static QSet<QString> s_paths;
+#include "theme.h"
 
 namespace Plasma
 {
 
+QHash<Animator::Animation, Animator::Animation> AnimatorPrivate::s_stockAnimMappings;
+QHash<Animator::Animation, QString> AnimatorPrivate::s_loadableAnimMappings;
+
+void AnimatorPrivate::mapAnimation(Animator::Animation from, Animator::Animation to)
+{
+    if (from == to) {
+        return;
+    }
+
+    s_loadableAnimMappings.remove(from);
+    s_stockAnimMappings.insert(from, to);
+}
+
+void AnimatorPrivate::mapAnimation(Animator::Animation from, const QString &to)
+{
+    s_stockAnimMappings.remove(from);
+    s_loadableAnimMappings.insert(from, to);
+}
+
 Plasma::Animation* Animator::create(Animator::Animation type, QObject *parent)
 {
     Plasma::Animation *result = 0;
+
+    if (AnimatorPrivate::s_stockAnimMappings.contains(type)) {
+        return create(AnimatorPrivate::s_stockAnimMappings.value(type));
+    } else if (AnimatorPrivate::s_loadableAnimMappings.contains(type)) {
+        const QString anim = AnimatorPrivate::s_loadableAnimMappings.value(type);
+        if (AnimationScriptEngine::isAnimationRegistered(anim)) {
+            result = new JavascriptAnimation(anim, parent);
+        }
+
+        return result;
+    }
 
     switch (type) {
     case FadeAnimation:
@@ -129,49 +157,42 @@ QEasingCurve Animator::create(Animator::CurveShape type)
     return result;
 }
 
-static Plasma::Animation *create(QString &path, QObject *parent = 0)
+Plasma::Animation *Animator::create(QString &anim, QObject *parent)
 {
-    Plasma::Animation *result = 0;
-    /* Here this will be executed in the Animator::factory() and
-     * the path is retrieved from the Theme class
-     */
-    //qDebug() << path;
-
-    /**
-     * FIXME: in future, the path and the animation name will not match 1:1
-     * so we need a way to map animations to path names. trivial would be to map
-     * "Zoom" to "zoom.js" (e.g. anim.toLower() + 'js') but that's also a bit lame.
-     * I think we may need a mapping, much as we use KService to do for applet
-     * names to libraries. Maybe we should, in fact, use KSycoca for this?
-     * In any case, the method used below even allows for all anims to be defined in
-     * one file!
-     */
-    if (!s_paths.contains(path)) {
+    if (!AnimationScriptEngine::isAnimationRegistered(anim)) {
+        const QString path = Theme::defaultTheme()->animationPath(anim);
+        if (path.isEmpty()) {
+            kError() << "failed to find script file for animation" << anim;
+            return 0;
+        }
         QFile file(path);
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            kError() << "failed to open js......";
-            return result;
+            kError() << "failed to open script file" << path;
+            return 0;
         }
 
         QTextStream buffer(&file);
         QString tmp(buffer.readAll());
-        s_paths.insert(path);
 
         QScriptEngine *engine = AnimationScriptEngine::globalEngine();
         QScriptValue def(engine->evaluate(tmp, path));
         if (engine->hasUncaughtException()) {
             const QScriptValue error = engine->uncaughtException();
             QString file = error.property("fileName").toString();
-            const QString failureMsg = QString("Error in %1 on line %2.<br><br>%3").arg(
-                    file).arg(error.property("lineNumber").toString()).arg(error.toString());
-            kError() << "fail!" << failureMsg;
+            const QString failureMsg = QString("Error in %1 on line %2.\n%3")
+                                              .arg(file)
+                                              .arg(error.property("lineNumber").toString())
+                                              .arg(error.toString());
+            kError() << failureMsg;
+            return 0;
+        }
+
+        if (!AnimationScriptEngine::isAnimationRegistered(anim)) {
+            kError() << "successfully loaded script file" << path << ", but did not get animation object for" << anim;
         }
     }
 
-    result = new Plasma::JavascriptAnimation(path);
-    result->setParent(parent);
-
-    return result;
+    return new Plasma::JavascriptAnimation(anim, parent);
 }
 
 } // namespace Plasma

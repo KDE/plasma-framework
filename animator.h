@@ -53,12 +53,10 @@ class PLASMA_EXPORT Animator : public QObject
 public:
 
     enum Animation {
-        /* TODO: should we map older animations to new ones? */
         AppearAnimation = 0, /*<< Animate the appearance of an element */
         DisappearAnimation,  /*<< Animate the disappearance of an element */
         ActivateAnimation,    /*<< When something is activated or launched,
                                 such as an app icon being clicked */
-        /* TODO: change the names of animation classes */
         FadeAnimation, /*<< Can be used for both fade in and out */
         GrowAnimation, /*<< Grow animated object geometry */
         PulseAnimation, /*<< Pulse animated object (opacity/geometry/scale) */
@@ -94,13 +92,20 @@ public:
     /**
      * Factory to build new animation objects. To control their behavior,
      * check \ref AbstractAnimation properties.
+     * @since 4.4
      **/
     static Plasma::Animation *create(Animator::Animation type, QObject *parent = 0);
 
-    static Plasma::Animation *create(QString &path, QObject *parent = 0);
+    /**
+     * Factory to build new animation objects from Javascript files. To control their behavior,
+     * check \ref AbstractAnimation properties.
+     * @since 4.5
+     **/
+    static Plasma::Animation *create(QString &animationName, QObject *parent = 0);
 
     /**
      * Factory to build new custom easing curves.
+     * @since 4.5
      */
     static QEasingCurve create(Animator::CurveShape type);
 
