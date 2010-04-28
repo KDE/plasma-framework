@@ -40,10 +40,12 @@
 #include <kaction.h>
 #include <kshortcutsdialog.h>
 
+#include "animator.h"
 #include "abstracttoolbox.h"
 #include "containment.h"
 #include "containmentactionspluginsconfig.h"
 #include "view.h"
+#include "private/animator_p.h"
 #include "private/applet_p.h"
 #include "private/containment_p.h"
 #include "tooltipmanager.h"
@@ -552,6 +554,16 @@ Containment *Corona::addContainment(const QString &name, const QVariantList &arg
 Containment *Corona::addContainmentDelayed(const QString &name, const QVariantList &args)
 {
     return d->addContainment(name, args, 0, true);
+}
+
+void Corona::mapAnimation(Animator::Animation from, Animator::Animation to)
+{
+    AnimatorPrivate::mapAnimation(from, to);
+}
+
+void Corona::mapAnimation(Animator::Animation from, const QString &to)
+{
+    AnimatorPrivate::mapAnimation(from, to);
 }
 
 void Corona::addOffscreenWidget(QGraphicsWidget *widget)

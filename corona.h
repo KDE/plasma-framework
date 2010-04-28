@@ -388,6 +388,24 @@ protected:
     Containment *addContainmentDelayed(const QString &name,
                                        const QVariantList &args = QVariantList());
 
+    /**
+     * Maps a stock animation to one of the semantic animations. Used to control things such
+     * as what animation is used to make a Plasma::Appear appear in a containment.
+     * @arg from the animation to map a new value to
+     * @arg to the animation value to map to from
+     * @since 4.5
+     */
+    void mapAnimation(Animator::Animation from, Animator::Animation to);
+
+    /**
+     * Maps a loadable animation to one of the semantic animations. Used to control things such
+     * as what animation is used to make a Plasma::Appear appear in a containment.
+     * @arg from the animation to map a new value to
+     * @arg to the animation value to map to from; this must map to a Javascript animation
+     * @since 4.5
+     */
+    void mapAnimation(Animator::Animation from, const QString &to);
+
     //Reimplemented from QGraphicsScene
     void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
     void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
