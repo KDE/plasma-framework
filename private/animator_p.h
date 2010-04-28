@@ -132,6 +132,12 @@ class AnimatorPrivate
         QSet<CustomAnimationState *> customAnimsToDelete;
 
         QHash<QGraphicsWidget *, KineticScrolling *> scrollingManagers;
+
+        static void mapAnimation(Animator::Animation from, Animator::Animation to);
+        static void mapAnimation(Animator::Animation from, const QString &to);
+
+        static QHash<Animator::Animation, Animator::Animation> s_stockAnimMappings;
+        static QHash<Animator::Animation, QString> s_loadableAnimMappings;
 };
 
 }
