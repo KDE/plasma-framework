@@ -1,5 +1,6 @@
 /*
- * Copyright (C)  2010  Adenilson Cavalcanti <cavalcantii@gmail.com>
+ *   Copyright 2010 Aaron Seigo <aseigo@kde.org>
+ *   Copyright 2010 Adenilson Cavalcanti <cavalcantii@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -23,6 +24,11 @@
  */
 
 #include "animationscriptengine_p.h"
+
+#include <QFile>
+#include <QTextStream>
+
+#include <kdebug.h>
 
 namespace Plasma
 {
@@ -76,6 +82,33 @@ QScriptEngine *globalEngine()
     }
 
     return inst;
+}
+
+bool loadScript(const QString &path)
+{
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        kError() << "failed to open script file" << path;
+        return false;
+    }
+
+    QTextStream buffer(&file);
+    QString tmp(buffer.readAll());
+
+    QScriptEngine *engine = AnimationScriptEngine::globalEngine();
+    QScriptValue def(engine->evaluate(tmp, path));
+    if (engine->hasUncaughtException()) {
+        const QScriptValue error = engine->uncaughtException();
+        QString file = error.property("fileName").toString();
+        const QString failureMsg = QString("Error in %1 on line %2.\n%3")
+                                          .arg(file)
+                                          .arg(error.property("lineNumber").toString())
+                                          .arg(error.toString());
+        kError() << failureMsg;
+        return false;
+    }
+
+    return true;
 }
 
 } // namespace AnimationEngine

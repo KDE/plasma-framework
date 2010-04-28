@@ -18,10 +18,7 @@
 #include "animator.h"
 #include "private/animator_p.h"
 
-#include <QFile>
-#include <QTextStream>
-
-#include <KDebug>
+#include <kdebug.h>
 
 #include "animations/animation.h"
 #include "animations/animationscriptengine_p.h"
@@ -162,30 +159,13 @@ Plasma::Animation *Animator::create(const QString &anim, QObject *parent)
             return 0;
         }
 
-        QFile file(path);
-        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            kError() << "failed to open script file" << path;
-            return 0;
-        }
-
-        QTextStream buffer(&file);
-        QString tmp(buffer.readAll());
-
-        QScriptEngine *engine = AnimationScriptEngine::globalEngine();
-        QScriptValue def(engine->evaluate(tmp, path));
-        if (engine->hasUncaughtException()) {
-            const QScriptValue error = engine->uncaughtException();
-            QString file = error.property("fileName").toString();
-            const QString failureMsg = QString("Error in %1 on line %2.\n%3")
-                                              .arg(file)
-                                              .arg(error.property("lineNumber").toString())
-                                              .arg(error.toString());
-            kError() << failureMsg;
+        if (!AnimationScriptEngine::loadScript(path)) {
             return 0;
         }
 
         if (!AnimationScriptEngine::isAnimationRegistered(anim)) {
             kError() << "successfully loaded script file" << path << ", but did not get animation object for" << anim;
+            return false;
         }
     }
 

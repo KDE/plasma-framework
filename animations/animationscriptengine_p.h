@@ -1,5 +1,6 @@
 /*
- * Copyright (C)  2010  Adenilson Cavalcanti <cavalcantii@gmail.com>
+ *   Copyright 2010 Aaron Seigo <aseigo@kde.org>
+ *   Copyright 2010 Adenilson Cavalcanti <cavalcantii@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -37,6 +38,7 @@ void clearAnimations();
 bool isAnimationRegistered(const QString &anim);
 QScriptEngine* globalEngine();
 QScriptValue animation(const QString &anim);
+bool loadScript(const QString &path);
 
 }
 
