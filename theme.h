@@ -129,6 +129,15 @@ class PLASMA_EXPORT Theme : public QObject
         Q_INVOKABLE QString imagePath(const QString &name) const;
 
         /**
+         * Retrieves the path for the script file that contains a given
+         * Javascript animation.
+         * @arg the name of the animation
+         * @return the full path to the script file, or an emptry string on failure
+         * @since 4.5
+         */
+        Q_INVOKABLE QString animationPath(const QString &name) const;
+
+        /**
          * Retrieves the default wallpaper associated with this theme.
          *
          * @arg size the target height and width of the wallpaper; if an invalid size

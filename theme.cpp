@@ -42,9 +42,10 @@
 #include <kwindowsystem.h>
 
 
-#include "windoweffects.h"
-#include "private/packages_p.h"
+#include "animations/animationscriptengine_p.h"
 #include "libplasma-theme-global.h"
+#include "private/packages_p.h"
+#include "windoweffects.h"
 
 namespace Plasma
 {
@@ -131,6 +132,8 @@ public:
     void settingsFileChanged(const QString &);
     void setThemeName(const QString &themeName, bool writeSettings);
     void onAppExitCleanup();
+    void processWallpaperSettings(KConfigBase *metadata);
+    void processAnimationSettings(const QString &theme, KConfigBase *metadata);
 
     static const char *defaultTheme;
     static const char *themeRcFile;
@@ -155,6 +158,7 @@ public:
     QHash<QString, QPixmap> pixmapsToCache;
     QHash<QString, QString> keysToCache;
     QHash<QString, QString> idsToCache;
+    QHash<QString, QString> animationMapping;
     QTimer *saveTimer;
 
 #ifdef Q_WS_X11
@@ -365,6 +369,43 @@ void Theme::setThemeName(const QString &themeName)
     d->setThemeName(themeName, true);
 }
 
+void ThemePrivate::processWallpaperSettings(KConfigBase *metadata)
+{
+    if (!defaultWallpaperTheme.isEmpty()) {
+        return;
+    }
+
+    KConfigGroup cg;
+    if (metadata->hasGroup("Wallpaper")) {
+        // we have a theme color config, so let's also check to see if
+        // there is a wallpaper defined in there.
+        cg = KConfigGroup(metadata, "Wallpaper");
+    } else {
+        // since we didn't find an entry in the theme, let's look in the main
+        // theme config
+        cg = config();
+    }
+
+    defaultWallpaperTheme = cg.readEntry("defaultWallpaperTheme", DEFAULT_WALLPAPER_THEME);
+    defaultWallpaperSuffix = cg.readEntry("defaultFileSuffix", DEFAULT_WALLPAPER_SUFFIX);
+    defaultWallpaperWidth = cg.readEntry("defaultWidth", DEFAULT_WALLPAPER_WIDTH);
+    defaultWallpaperHeight = cg.readEntry("defaultHeight", DEFAULT_WALLPAPER_HEIGHT);
+}
+
+void ThemePrivate::processAnimationSettings(const QString &theme, KConfigBase *metadata)
+{
+    KConfigGroup cg(metadata, "Animations");
+    const QString animDir = "desktoptheme/" + theme + "/animations/";
+    foreach (const QString &path, cg.keyList()) {
+        QStringList anims = cg.readEntry(path, QStringList());
+        foreach (const QString &anim, anims) {
+            if (!animationMapping.contains(anim)) {
+                animationMapping.insert(animDir + anim, path);
+            }
+        }
+    }
+}
+
 void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings)
 {
     //kDebug() << tempThemeName;
@@ -408,23 +449,14 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     // load the wallpaper settings, if any
     const QString metadataPath(KStandardDirs::locate("data", "desktoptheme/" + theme + "/metadata.desktop"));
     KConfig metadata(metadataPath);
-    KConfigGroup cg;
-    if (metadata.hasGroup("Wallpaper")) {
-        // we have a theme color config, so let's also check to see if
-        // there is a wallpaper defined in there.
-        cg = KConfigGroup(&metadata, "Wallpaper");
-    } else {
-        // since we didn't find an entry in the theme, let's look in the main
-        // theme config
-        cg = config();
-    }
 
-    defaultWallpaperTheme = cg.readEntry("defaultWallpaperTheme", DEFAULT_WALLPAPER_THEME);
-    defaultWallpaperSuffix = cg.readEntry("defaultFileSuffix", DEFAULT_WALLPAPER_SUFFIX);
-    defaultWallpaperWidth = cg.readEntry("defaultWidth", DEFAULT_WALLPAPER_WIDTH);
-    defaultWallpaperHeight = cg.readEntry("defaultHeight", DEFAULT_WALLPAPER_HEIGHT);
+    processWallpaperSettings(&metadata);
 
-    cg = KConfigGroup(&metadata, "Settings");
+    AnimationScriptEngine::clearAnimations();
+    animationMapping.clear();
+    processAnimationSettings(themeName, &metadata);
+
+    KConfigGroup cg(&metadata, "Settings");
     useNativeWidgetStyle = cg.readEntry("UseNativeWidgetStyle", false);
     QString fallback = cg.readEntry("FallbackTheme", QString());
 
@@ -434,10 +466,8 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
 
         QString metadataPath(KStandardDirs::locate("data", "desktoptheme/" + theme + "/metadata.desktop"));
         KConfig metadata(metadataPath);
-        cg = KConfigGroup(&metadata, "Settings");
+        KConfigGroup cg(&metadata, "Settings");
         fallback = cg.readEntry("FallbackTheme", QString());
-
-        //TODO: grab the fallback's wallpaper defaults?
     }
 
     if (!fallbackThemes.contains("oxygen")) {
@@ -446,6 +476,13 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
 
     if (!fallbackThemes.contains(ThemePrivate::defaultTheme)) {
         fallbackThemes.append(ThemePrivate::defaultTheme);
+    }
+
+    foreach (const QString &theme, fallbackThemes) {
+        QString metadataPath(KStandardDirs::locate("data", "desktoptheme/" + theme + "/metadata.desktop"));
+        KConfig metadata(metadataPath);
+        processAnimationSettings(theme, &metadata);
+        processWallpaperSettings(&metadata);
     }
 
     QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
@@ -478,7 +515,6 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     //check for expired cache
     QFile f(metadataPath);
     QFileInfo info(f);
-
 
     if (useCache() && info.lastModified().toTime_t() > pixmapCache->timestamp()) {
         discardCache();
@@ -527,11 +563,23 @@ QString Theme::imagePath(const QString &name) const
         }
     }
 
+    /*
     if (path.isEmpty()) {
-        //kDebug() << "Theme says: bad image path " << name;
+        kDebug() << "Theme says: bad image path " << name;
     }
+    */
 
     return path;
+}
+
+QString Theme::animationPath(const QString &name) const
+{
+    const QString path = d->animationMapping.value(name);
+    if (path.isEmpty()) {
+        return path;
+    }
+
+    return KStandardDirs::locate("data", path);
 }
 
 QString Theme::wallpaperPath(const QSize &size) const
