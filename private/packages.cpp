@@ -106,6 +106,7 @@ ThemePackage::ThemePackage(QObject *parent)
                       i18n("Theme for the logout dialog"));
 
     addDirectoryDefinition("wallpapers", "wallpapers/", i18n("Wallpaper packages"));
+    addDirectoryDefinition("animations", "animations/", i18n("Animation scripts"));
 
     addDirectoryDefinition("widgets", "widgets/", i18n("Images for widgets"));
     addFileDefinition("widgets/background", "widgets/background.svg",
