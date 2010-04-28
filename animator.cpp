@@ -71,47 +71,88 @@ Plasma::Animation* Animator::create(Animator::Animation type, QObject *parent)
 
     switch (type) {
     case FadeAnimation:
-        result = new Plasma::FadeAnimation(parent);
+        if (AnimationScriptEngine::isAnimationRegistered("FadeAnimation")) {
+            result = create("FadeAnimation", parent);
+        } else {
+            result = new Plasma::FadeAnimation(parent);
+        }
         break;
 
     case GrowAnimation:
-        result = new Plasma::GrowAnimation(parent);
+        if (AnimationScriptEngine::isAnimationRegistered("GrowAnimation")) {
+            result = create("GrowAnimation", parent);
+        } else {
+            result = new Plasma::GrowAnimation(parent);
+        }
         break;
 
     case PulseAnimation:
-        result = new Plasma::PulseAnimation(parent);
+        if (AnimationScriptEngine::isAnimationRegistered("PulseAnimation")) {
+            result = create("PulseAnimation", parent);
+        } else {
+            result = new Plasma::PulseAnimation(parent);
+        }
         break;
 
     case RotationAnimation:
-        result = new Plasma::RotationAnimation(parent);
+        if (AnimationScriptEngine::isAnimationRegistered("RotationAnimation")) {
+            result = create("RotationAnimation", parent);
+        } else {
+            result = new Plasma::RotationAnimation(parent);
+        }
         break;
 
     case RotationStackedAnimation:
-        result = new Plasma::RotationStackedAnimation(parent);
+        if (AnimationScriptEngine::isAnimationRegistered("RotationStackedAnimation")) {
+            result = create("RotationStackedAnimation", parent);
+        } else {
+            result = new Plasma::RotationStackedAnimation(parent);
+        }
         break;
 
     case SlideAnimation:
-        result = new Plasma::SlideAnimation(parent);
+        if (AnimationScriptEngine::isAnimationRegistered("SlideAnimation")) {
+            result = create("SlideAnimation", parent);
+        } else {
+            result = new Plasma::SlideAnimation(parent);
+        }
         break;
 
     case GeometryAnimation:
-        result = new Plasma::GeometryAnimation(parent);
+        if (AnimationScriptEngine::isAnimationRegistered("GeometryAnimation")) {
+            result = create("GeometryAnimation", parent);
+        } else {
+            result = new Plasma::GeometryAnimation(parent);
+        }
         break;
 
     case ZoomAnimation:
-        result = new Plasma::ZoomAnimation(parent);
+        if (AnimationScriptEngine::isAnimationRegistered("ZoomAnimation")) {
+            result = create("ZoomAnimation", parent);
+        } else {
+            result = new Plasma::ZoomAnimation(parent);
+        }
         break;
 
     case PixmapTransitionAnimation:
-        result = new Plasma::PixmapTransition(parent);
+        if (AnimationScriptEngine::isAnimationRegistered("PixmapTransitionAnimation")) {
+            result = create("PixmapTransitionAnimation", parent);
+        } else {
+            result = new Plasma::PixmapTransition(parent);
+        }
         break;
 
     case WaterAnimation:
-        result = new Plasma::WaterAnimation(parent);
+        if (AnimationScriptEngine::isAnimationRegistered("WaterAnimation")) {
+            result = create("WaterAnimation", parent);
+        } else {
+            result = new Plasma::WaterAnimation(parent);
+        }
         break;
 
     default:
-        kDebug() << "Unsupported animation type.";
+        //kDebug() << "Unsupported animation type.";
+        break;
     }
 
     return result;
