@@ -63,18 +63,14 @@ void AnimatorPrivate::mapAnimation(Animator::Animation from, const QString &to)
 
 Plasma::Animation* Animator::create(Animator::Animation type, QObject *parent)
 {
-    Plasma::Animation *result = 0;
-
     if (AnimatorPrivate::s_stockAnimMappings.contains(type)) {
         return create(AnimatorPrivate::s_stockAnimMappings.value(type));
     } else if (AnimatorPrivate::s_loadableAnimMappings.contains(type)) {
         const QString anim = AnimatorPrivate::s_loadableAnimMappings.value(type);
-        if (AnimationScriptEngine::isAnimationRegistered(anim)) {
-            result = new JavascriptAnimation(anim, parent);
-        }
-
-        return result;
+        return create(anim, parent);
     }
+
+    Plasma::Animation *result = 0;
 
     switch (type) {
     case FadeAnimation:
@@ -157,7 +153,7 @@ QEasingCurve Animator::create(Animator::CurveShape type)
     return result;
 }
 
-Plasma::Animation *Animator::create(QString &anim, QObject *parent)
+Plasma::Animation *Animator::create(const QString &anim, QObject *parent)
 {
     if (!AnimationScriptEngine::isAnimationRegistered(anim)) {
         const QString path = Theme::defaultTheme()->animationPath(anim);
@@ -165,6 +161,7 @@ Plasma::Animation *Animator::create(QString &anim, QObject *parent)
             kError() << "failed to find script file for animation" << anim;
             return 0;
         }
+
         QFile file(path);
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
             kError() << "failed to open script file" << path;

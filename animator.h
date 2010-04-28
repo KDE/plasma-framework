@@ -101,7 +101,7 @@ public:
      * check \ref AbstractAnimation properties.
      * @since 4.5
      **/
-    static Plasma::Animation *create(QString &animationName, QObject *parent = 0);
+    static Plasma::Animation *create(const QString &animationName, QObject *parent = 0);
 
     /**
      * Factory to build new custom easing curves.
