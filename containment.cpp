@@ -936,15 +936,15 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
             applet->installSceneEventFilter(this);
             //applet->setWindowFlags(Qt::Window);
         }
-
     } else {
         applet->init();
-        applet->setScale(0);
-        Plasma::Animation *zoomAnim = Plasma::Animator::create(Plasma::Animator::ZoomAnimation);
-        connect(zoomAnim, SIGNAL(finished()), this, SLOT(appletAppearAnimationComplete()));
-        zoomAnim->setTargetWidget(applet);
-        zoomAnim->setProperty("zoom", 1.0);
-        zoomAnim->start(QAbstractAnimation::DeleteWhenStopped);
+        Plasma::Animation *anim = Plasma::Animator::create(Plasma::Animator::AppearAnimation);
+        if (anim) {
+            connect(anim, SIGNAL(finished()), this, SLOT(appletAppearAnimationComplete()));
+            anim->start(QAbstractAnimation::DeleteWhenStopped);
+        } else {
+            d->appletAppeared(applet);
+        }
     }
 
     applet->updateConstraints(Plasma::AllConstraints);
@@ -2276,30 +2276,24 @@ void ContainmentPrivate::appletDestroyed(Plasma::Applet *applet)
 void ContainmentPrivate::appletAppearAnimationComplete()
 {
     Animation *anim = qobject_cast<Animation *>(q->sender());
-    if (!anim) {
-        return;
-    }
-
-    Applet *applet = qobject_cast<Applet*>(anim->targetWidget());
-    if (!applet) {
-        return;
-    }
-
-    Animation *pulse = Plasma::Animator::create(Plasma::Animator::PulseAnimation);
-    pulse->setTargetWidget(applet);
-    pulse->setProperty("duration", 300);
-    pulse->setProperty("targetScale", 1.3);
-    pulse->start(QAbstractAnimation::DeleteWhenStopped);
-
-    if (applet->parentItem() == q) {
-        if (type == Containment::DesktopContainment) {
-            applet->installSceneEventFilter(q);
+    if (anim) {
+        Applet *applet = qobject_cast<Applet*>(anim->targetWidget());
+        if (applet) {
+            appletAppeared(applet);
         }
-
-        KConfigGroup *cg = applet->d->mainConfigGroup();
-        applet->save(*cg);
-        emit q->configNeedsSaving();
     }
+}
+
+void ContainmentPrivate::appletAppeared(Applet *applet)
+{
+    kDebug() << type << Containment::DesktopContainment;
+    if (type == Containment::DesktopContainment) {
+        applet->installSceneEventFilter(q);
+    }
+
+    KConfigGroup *cg = applet->d->mainConfigGroup();
+    applet->save(*cg);
+    emit q->configNeedsSaving();
 }
 
 void ContainmentPrivate::positionPanel(bool force)

@@ -86,8 +86,9 @@ public:
     QPointF preferredPanelPos(Corona *corona) const;
     void setLockToolText();
     void handleDisappeared(AppletHandle *handle);
-    void appletDestroyed(Plasma::Applet*);
+    void appletDestroyed(Applet*);
     void appletAppearAnimationComplete();
+    void appletAppeared(Applet*);
     void clearDataForMimeJob(KIO::Job *job);
     void remoteAppletReady(Plasma::AccessAppletJob *job);
     void mimeTypeRetrieved(KIO::Job *job, const QString &mimetype);

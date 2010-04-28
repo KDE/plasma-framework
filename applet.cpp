@@ -2920,10 +2920,14 @@ AppletOverlayWidget::AppletOverlayWidget(QGraphicsWidget *parent)
 
 void AppletOverlayWidget::destroy()
 {
-    Animation *zoomAnim = Plasma::Animator::create(Plasma::Animator::ZoomAnimation);
-    connect(zoomAnim, SIGNAL(finished()), this, SLOT(overlayAnimationComplete()));
-    zoomAnim->setTargetWidget(this);
-    zoomAnim->start();
+    Animation *anim = Plasma::Animator::create(Plasma::Animator::DisappearAnimation);
+    if (anim) {
+        connect(anim, SIGNAL(finished()), this, SLOT(overlayAnimationComplete()));
+        anim->setTargetWidget(this);
+        anim->start();
+    } else {
+        overlayAnimationComplete();
+    }
 }
 
 void AppletOverlayWidget::overlayAnimationComplete()
