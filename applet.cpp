@@ -2113,19 +2113,21 @@ void AppletPrivate::filterOffers(QList<KService::Ptr> &offers)
     }
 }
 
+QString AppletPrivate::parentAppConstraint(const QString &parentApp)
+{
+    if (parentApp.isEmpty()) {
+        return QString("((not exist [X-KDE-ParentApp] or [X-KDE-ParentApp] == '') or [X-KDE-ParentApp] == '%1')")
+                      .arg(KGlobal::mainComponent().aboutData()->appName());
+    }
+
+    return QString("[X-KDE-ParentApp] == '%1'").arg(parentApp);
+}
+
 KPluginInfo::List Applet::listAppletInfo(const QString &category, const QString &parentApp)
 {
-    QString constraint;
+    QString constraint = AppletPrivate::parentAppConstraint(parentApp);
 
-    if (parentApp.isEmpty()) {
-        constraint.append("((not exist [X-KDE-ParentApp] or [X-KDE-ParentApp] == '') or [X-KDE-ParentApp] == '")
-                  .append(KGlobal::mainComponent().aboutData()->appName())
-                  .append("')");
-    } else {
-        constraint.append("[X-KDE-ParentApp] == '").append(parentApp).append("'");
-    }
     //note: constraint guaranteed non-empty from here down
-
     if (category.isEmpty()) { //use all but the excluded categories
         KConfigGroup group(KGlobal::config(), "General");
         QStringList excluded = group.readEntry("ExcludeCategories", QStringList());
@@ -2133,9 +2135,7 @@ KPluginInfo::List Applet::listAppletInfo(const QString &category, const QString 
             constraint.append(" and [X-KDE-PluginInfo-Category] != '").append(category).append("'");
         }
     } else { //specific category (this could be an excluded one - is that bad?)
-        constraint.append(" and ");
-
-        constraint.append("[X-KDE-PluginInfo-Category] == '").append(category).append("'");
+        constraint.append(" and ").append("[X-KDE-PluginInfo-Category] == '").append(category).append("'");
         if (category == "Miscellaneous") {
             constraint.append(" or (not exist [X-KDE-PluginInfo-Category] or [X-KDE-PluginInfo-Category] == '')");
         }
@@ -2153,7 +2153,8 @@ KPluginInfo::List Applet::listAppletInfo(const QString &category, const QString 
 
 KPluginInfo::List Applet::listAppletInfoForMimetype(const QString &mimetype)
 {
-    QString constraint = QString("'%1' in [X-Plasma-DropMimeTypes]").arg(mimetype);
+    QString constraint = AppletPrivate::parentAppConstraint();
+    constraint.append(QString(" and '%1' in [X-Plasma-DropMimeTypes]").arg(mimetype));
     //kDebug() << "listAppletInfoForMimetype with" << mimetype << constraint;
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
     AppletPrivate::filterOffers(offers);
@@ -2162,7 +2163,8 @@ KPluginInfo::List Applet::listAppletInfoForMimetype(const QString &mimetype)
 
 KPluginInfo::List Applet::listAppletInfoForUrl(const QUrl &url)
 {
-    QString constraint = "exist [X-Plasma-DropUrlPatterns]";
+    QString constraint = AppletPrivate::parentAppConstraint();
+    constraint.append(" and exist [X-Plasma-DropUrlPatterns]");
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
     AppletPrivate::filterOffers(offers);
 
@@ -2185,13 +2187,8 @@ KPluginInfo::List Applet::listAppletInfoForUrl(const QUrl &url)
 
 QStringList Applet::listCategories(const QString &parentApp, bool visibleOnly)
 {
-    QString constraint = "exist [X-KDE-PluginInfo-Category]";
-
-    if (parentApp.isEmpty()) {
-        constraint.append("and (not exist [X-KDE-ParentApp] or [X-KDE-ParentApp] == '')");
-    } else {
-        constraint.append(" and [X-KDE-ParentApp] == '").append(parentApp).append("'");
-    }
+    QString constraint = AppletPrivate::parentAppConstraint(parentApp);
+    constraint.append(" and exist [X-KDE-PluginInfo-Category]");
 
     KConfigGroup group(KGlobal::config(), "General");
     const QStringList excluded = group.readEntry("ExcludeCategories", QStringList());
