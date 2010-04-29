@@ -21,6 +21,11 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${KDE4_INCLUDES}
                     )
 
+if(NOT PLASMA_NO_KIO)
+   include_directories(${KDE4_KIO_INCLUDES})
+   set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} ${KDE4_KIO_LIBS})
+endif(NOT PLASMA_NO_KIO)
+
 if(NOT PLASMA_NO_KDEWEBKIT)
     include_directories(${CMAKE_SOURCE_DIR}/kdewebkit/)
     set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} kdewebkit)
@@ -235,7 +240,7 @@ endif(PHONON_FOUND)
 
 kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
 
-target_link_libraries(plasma ${KDE4_KIO_LIBS} ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
+target_link_libraries(plasma ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
                              ${QT_QTSCRIPT_LIBRARY} kdnssd threadweaver ${PLASMA_EXTRA_LIBS})
 
 if(QCA2_FOUND)
