@@ -37,7 +37,9 @@
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>
 
+#ifndef PLASMA_NO_KIO
 #include <kio/job.h>
+#endif
 
 #ifndef PLASMA_NO_SOLID
 #include <solid/device.h>
