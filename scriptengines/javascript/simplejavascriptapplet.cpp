@@ -666,29 +666,32 @@ QScriptValue SimpleJavaScriptApplet::animation(QScriptContext *context, QScriptE
     QString animName = context->argument(0).toString().toLower();
     const bool isPause = animName == "pause";
     const bool isProperty = animName == "property";
-    if (!isPause && !isProperty && !s_animationDefs.contains(animName)) {
-        return context->throwError(i18n("%1 is not a known animation type", animName));
-    }
 
     bool parentIsApplet = false;
     QGraphicsWidget *parent = extractParent(context, engine, 0, &parentIsApplet);
+    QAbstractAnimation *anim = 0;
+    Plasma::Animation *plasmaAnim = 0;
     if (isPause) {
-        QPauseAnimation *pause = new QPauseAnimation(parent);
-        return engine->newQObject(pause);
+        anim = new QPauseAnimation(parent);
     } else if (isProperty) {
-        QPropertyAnimation *propertyAnim = new QPropertyAnimation(parent);
-        return engine->newQObject(propertyAnim);
+        anim = new QPropertyAnimation(parent);
+    } else if (s_animationDefs.contains(animName)) {
+        plasmaAnim = Plasma::Animator::create(s_animationDefs.value(animName), parent);
     } else {
-        Plasma::Animation *anim = Plasma::Animator::create(s_animationDefs.value(animName), parent);
-        if (anim) {
-            if (!parentIsApplet) {
-                anim->setTargetWidget(parent);
-            }
+        plasmaAnim = Plasma::Animator::create(animName, parent);
+    }
 
-            QScriptValue value = engine->newQObject(anim);
-	    ScriptEnv::registerEnums(value, *anim->metaObject());
-            return value;
+    if (plasmaAnim) {
+        if (!parentIsApplet) {
+            plasmaAnim->setTargetWidget(parent);
         }
+        anim = plasmaAnim;
+    }
+
+    if (anim) {
+        QScriptValue value = engine->newQObject(anim);
+        ScriptEnv::registerEnums(value, *anim->metaObject());
+        return value;
     }
 
     return context->throwError(i18n("%1 is not a known animation type", animName));
