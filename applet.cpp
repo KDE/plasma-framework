@@ -894,7 +894,7 @@ ImmutabilityType Applet::immutability() const
 
 void Applet::setImmutability(const ImmutabilityType immutable)
 {
-    if (d->immutability == immutable) {
+    if (d->immutability == immutable || d->immutability == Plasma::SystemImmutable) {
         return;
     }
 
