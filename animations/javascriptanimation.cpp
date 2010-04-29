@@ -51,10 +51,13 @@ void JavascriptAnimation::updateState(QAbstractAnimation::State newState, QAbstr
     if (oldState == Stopped && newState == Running) {
         if (!m_method.isFunction()) {
             //Define the class and create an instance
+            QScriptEngine *engine = AnimationScriptEngine::globalEngine();
             QScriptValueList args;
-            args << AnimationScriptEngine::globalEngine()->newQObject(targetWidget()) << duration();
+            args << engine->newQObject(targetWidget()) << duration();
             m_instance = AnimationScriptEngine::animation(m_name).construct(args);
             kDebug() << "trying for" << m_name << m_instance.isFunction();
+            m_instance.setProperty("__plasma_javascriptanimation", engine->newQObject(this),
+                                   QScriptValue::ReadOnly | QScriptValue::Undeletable | QScriptValue::SkipInEnumeration);
 
             //Get the method of the object
             m_method = m_instance.property(QString("updateCurrentTime"));

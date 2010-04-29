@@ -26,9 +26,13 @@
 #include "animationscriptengine_p.h"
 
 #include <QFile>
+#include <QParallelAnimationGroup>
+#include <QSequentialAnimationGroup>
 #include <QTextStream>
 
 #include <kdebug.h>
+
+#include "bindings/animationgroup_p.h"
 
 namespace Plasma
 {
@@ -72,12 +76,42 @@ QScriptValue registerAnimation(QScriptContext *context, QScriptEngine *engine)
     return engine->undefinedValue();
 }
 
+QObject *extractParent(QScriptContext *context, QScriptEngine *engine)
+{
+    Q_UNUSED(engine)
+    return context->thisObject().property("__plasma_javascriptanimation").toQObject();
+}
+
+QScriptValue animationGroup(QScriptContext *context, QScriptEngine *engine)
+{
+    QObject *parent = extractParent(context, engine);
+    if (!parent) {
+        return engine->undefinedValue();
+    }
+
+    QSequentialAnimationGroup *group = new SequentialAnimationGroup(parent);
+    return engine->newQObject(group);
+}
+
+QScriptValue parallelAnimationGroup(QScriptContext *context, QScriptEngine *engine)
+{
+    QObject *parent = extractParent(context, engine);
+    if (!parent) {
+        return engine->undefinedValue();
+    }
+
+    ParallelAnimationGroup *group = new ParallelAnimationGroup(parent);
+    return engine->newQObject(group);
+}
+
 QScriptEngine *globalEngine()
 {
     if (!inst) {
         inst = new QScriptEngine;
         QScriptValue global = inst->globalObject();
         global.setProperty("registerAnimation", inst->newFunction(AnimationScriptEngine::registerAnimation));
+        global.setProperty("AnimationGroup", inst->newFunction(AnimationScriptEngine::animationGroup));
+        global.setProperty("ParallelAnimationGroup", inst->newFunction(AnimationScriptEngine::parallelAnimationGroup));
 	qDebug() << "........... first js animation, creating the engine!";
     }
 

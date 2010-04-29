@@ -72,22 +72,23 @@ set(plasma_LIB_SRCS
     abstracttoolbox.cpp
     animator.cpp
     animations/animation.cpp
-    animations/easinganimation.cpp
     animations/animationscriptengine.cpp
-    animations/pendulumcurve.cpp
+    animations/bindings/animationgroup.cpp
+    animations/easinganimation.cpp
     animations/fade.cpp
     animations/grow.cpp
     animations/javascriptanimation.cpp
-    animations/slide.cpp
+    animations/pendulumcurve.cpp
     animations/pixmaptransition.cpp
     animations/pulser.cpp
-    animations/widgetsnapshot.cpp
     animations/rotation.cpp
     animations/rotationstacked.cpp
+    animations/slide.cpp
     animations/stackedlayout.cpp
     animations/geometry.cpp
-    animations/zoom.cpp
     animations/water.cpp
+    animations/widgetsnapshot.cpp
+    animations/zoom.cpp
     applet.cpp
     configloader.cpp
     containment.cpp
