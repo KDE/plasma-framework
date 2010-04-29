@@ -210,6 +210,26 @@ QString Applet::version() const
     return info.version();
 }
 
+void Applet::setLocked(bool locked)
+{
+    Plasma::Applet *app = applet();
+    if (!app) {
+        return;
+    }
+
+    app->setImmutability(locked ? Plasma::UserImmutable : Plasma::Mutable);
+}
+
+bool Applet::locked() const
+{
+    Plasma::Applet *app = applet();
+    if (!app) {
+        return Plasma::Mutable;
+    }
+
+    return app->immutability() != Plasma::Mutable;
+}
+
 Plasma::Applet *Applet::applet() const
 {
     return 0;

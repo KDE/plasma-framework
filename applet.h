@@ -35,6 +35,7 @@ namespace Plasma
 class PLASMAGENERICSHELL_EXPORT Applet : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(bool locked READ locked WRITE setLocked)
 
 public:
     Applet(QObject *parent = 0);
@@ -53,6 +54,9 @@ public:
     QStringList currentGlobalConfigGroup() const;
 
     QString version() const;
+
+    void setLocked(bool locked);
+    bool locked() const;
 
     virtual Plasma::Applet *applet() const;
 
