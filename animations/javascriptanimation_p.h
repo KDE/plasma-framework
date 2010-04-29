@@ -20,12 +20,15 @@
 #ifndef PLASMA_ANIMATIONS_JS_P_H
 #define PLASMA_ANIMATIONS_JS_P_H
 
+#include <QScriptValue>
+
 #include <plasma/animations/animation.h>
 #include <plasma/plasma_export.h>
 
 class QString;
 class QScriptEngine;
-class QScriptValue;
+
+//#define PLASMA_JSANIM_FPS
 
 namespace Plasma
 {
@@ -45,11 +48,12 @@ protected:
     void updateCurrentTime(int currentTime);
 
 private:
+#ifdef PLASMA_JSANIM_FPS
     int m_fps;
+#endif
     QString m_name;
-    QScriptEngine *engine;
-    QScriptValue *m_instance;
-    QScriptValue *m_method;
+    QScriptValue m_instance;
+    QScriptValue m_method;
 };
 
 }

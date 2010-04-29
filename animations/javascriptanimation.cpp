@@ -18,7 +18,8 @@
  */
 
 #include "javascriptanimation_p.h"
-#include <QDebug>
+
+#include <kdebug.h>
 
 #include "animationscriptengine_p.h"
 /* TODO:
@@ -31,68 +32,62 @@ namespace Plasma
 {
 
 JavascriptAnimation::JavascriptAnimation(const QString &name, QObject *parent)
-    : Animation(parent), m_fps(0), m_name(name), engine(0), m_instance(0), m_method(0)
+    : Animation(parent),
+#ifdef PLASMA_JSANIM_FPS
+      m_fps(0),
+#endif
+      m_name(name)
 {
 
 }
 
 JavascriptAnimation::~JavascriptAnimation()
 {
-    delete m_instance;
-    delete m_method;
 }
 
 void JavascriptAnimation::updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
 {
-    qDebug() << ".................. state: " << newState;
+    //kDebug() << ".................. state: " << newState;
     if (oldState == Stopped && newState == Running) {
-        if (!engine) {
-            engine = AnimationScriptEngine::globalEngine();
-
+        if (!m_method.isFunction()) {
             //Define the class and create an instance
-            if (!m_instance) {
-                m_instance = new QScriptValue;
-                QScriptValueList args;
-                args << engine->newQObject(targetWidget()) << duration();
-                *m_instance = AnimationScriptEngine::animation(m_name).construct(args);
-                qDebug( )<< "trying for" << m_name << m_instance->isFunction();
-            }
+            QScriptValueList args;
+            args << AnimationScriptEngine::globalEngine()->newQObject(targetWidget()) << duration();
+            m_instance = AnimationScriptEngine::animation(m_name).construct(args);
+            kDebug() << "trying for" << m_name << m_instance.isFunction();
 
             //Get the method of the object
-            if (!m_method) {
-                m_method = new QScriptValue;
-                *m_method = m_instance->property(QString("updateCurrentTime"));
-                if (!m_method->isFunction()) {
-                    qDebug() << "**************** ERROR! ************";
-                } else {
-                    qDebug() << ".................. success js instance creation!";
-                }
-
+            m_method = m_instance.property(QString("updateCurrentTime"));
+            if (!m_method.isFunction()) {
+                qDebug() << "**************** ERROR! ************";
+                m_instance = m_method = QScriptValue();
             }
 
+            //TODO: this really should be done in the bindings provided
             //Center the widget for transformation
             qreal x = targetWidget()->geometry().height()/2;
             qreal y = targetWidget()->geometry().width()/2;
             targetWidget()->setTransformOriginPoint(x, y);
-
         }
 
+#ifdef PLASMA_JSANIM_FPS
         m_fps = 0;
-
     } else if (oldState == Running && newState == Stopped) {
-
-        qDebug() << ".........." << m_name << " fps: " << m_fps * 1000/duration();
+        kDebug() << ".........." << m_name << " fps: " << m_fps * 1000/duration();
+#endif
     }
 }
 
 void JavascriptAnimation::updateCurrentTime(int currentTime)
 {
-    if (m_method->isFunction()) {
+    if (m_method.isFunction()) {
+#ifdef PLASMA_JSANIM_FPS
         ++m_fps;
+#endif
         QScriptValueList args;
         args << currentTime;
 
-        m_method->call(*m_instance, args);
+        m_method.call(m_instance, args);
     }
 }
 
