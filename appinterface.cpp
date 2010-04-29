@@ -106,9 +106,9 @@ bool AppInterface::hasBattery() const
 QStringList AppInterface::knownWidgetTypes() const
 {
     QStringList widgets;
-    KPluginInfo::List info = Plasma::Applet::listAppletInfo();
+    KPluginInfo::List infoLs = Plasma::Applet::listAppletInfo();
 
-    foreach (const KPluginInfo &info, info) {
+    foreach (const KPluginInfo &info, infoLs) {
         widgets.append(info.pluginName());
     }
 
@@ -128,9 +128,9 @@ QStringList AppInterface::knownPanelTypes() const
 QStringList AppInterface::knownContainmentTypes(const QString &type) const
 {
     QStringList containments;
-    KPluginInfo::List info = Plasma::Containment::listContainmentsOfType(type);
+    KPluginInfo::List infoLs = Plasma::Containment::listContainmentsOfType(type);
 
-    foreach (const KPluginInfo &info, info) {
+    foreach (const KPluginInfo &info, infoLs) {
         containments.append(info.pluginName());
     }
 
