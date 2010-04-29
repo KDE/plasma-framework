@@ -52,6 +52,8 @@ protected:
     void updateEffectiveTime(int currentTime);
 
 private:
+    void prepInstance();
+
 #ifdef PLASMA_JSANIM_FPS
     int m_fps;
 #endif

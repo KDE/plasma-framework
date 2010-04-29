@@ -47,49 +47,57 @@ JavascriptAnimation::~JavascriptAnimation()
 {
 }
 
+void JavascriptAnimation::prepInstance()
+{
+    QScriptEngine *engine = AnimationScriptEngine::globalEngine();
+    m_instance.setProperty("__plasma_javascriptanimation", engine->newQObject(this),
+                          QScriptValue::ReadOnly | QScriptValue::Undeletable | QScriptValue::SkipInEnumeration);
+    ADD_ENUM_VALUE(m_instance, Plasma::Animator, FadeAnimation);
+    ADD_ENUM_VALUE(m_instance, Plasma::Animator, AppearAnimation);
+    ADD_ENUM_VALUE(m_instance, Plasma::Animator, DisappearAnimation);
+    ADD_ENUM_VALUE(m_instance, Plasma::Animator, ActivateAnimation);
+    ADD_ENUM_VALUE(m_instance, Plasma::Animator, FadeAnimation);
+    ADD_ENUM_VALUE(m_instance, Plasma::Animator, GrowAnimation);
+    ADD_ENUM_VALUE(m_instance, Plasma::Animator, PulseAnimation);
+    ADD_ENUM_VALUE(m_instance, Plasma::Animator, RotationAnimation);
+    ADD_ENUM_VALUE(m_instance, Plasma::Animator, RotationStackedAnimation);
+    ADD_ENUM_VALUE(m_instance, Plasma::Animator, SlideAnimation);
+    ADD_ENUM_VALUE(m_instance, Plasma::Animator, GeometryAnimation);
+    ADD_ENUM_VALUE(m_instance, Plasma::Animator, ZoomAnimation);
+    ADD_ENUM_VALUE(m_instance, Plasma::Animator, PixmapTransitionAnimation);
+    ADD_ENUM_VALUE(m_instance, JavascriptAnimation, PauseAnimation);
+    ADD_ENUM_VALUE(m_instance, JavascriptAnimation, PropertyAnimation);
+}
+
 void JavascriptAnimation::updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
 {
     //kDebug() << ".................. state: " << newState;
     if (oldState == Stopped && newState == Running) {
         if (!m_method.isFunction()) {
             //Define the class and create an instance
-            QScriptEngine *engine = AnimationScriptEngine::globalEngine();
-            QScriptValueList args;
-            args << engine->newQObject(targetWidget()) << duration();
-            m_instance = AnimationScriptEngine::animation(m_name).construct(args);
+            m_instance = AnimationScriptEngine::animation(m_name).construct();
             kDebug() << "trying for" << m_name << m_instance.isFunction();
-            m_instance.setProperty("__plasma_javascriptanimation", engine->newQObject(this),
-                                   QScriptValue::ReadOnly | QScriptValue::Undeletable | QScriptValue::SkipInEnumeration);
-            ADD_ENUM_VALUE(m_instance, Plasma::Animator, FadeAnimation);
-            ADD_ENUM_VALUE(m_instance, Plasma::Animator, AppearAnimation);
-            ADD_ENUM_VALUE(m_instance, Plasma::Animator, DisappearAnimation);
-            ADD_ENUM_VALUE(m_instance, Plasma::Animator, ActivateAnimation);
-            ADD_ENUM_VALUE(m_instance, Plasma::Animator, FadeAnimation);
-            ADD_ENUM_VALUE(m_instance, Plasma::Animator, GrowAnimation);
-            ADD_ENUM_VALUE(m_instance, Plasma::Animator, PulseAnimation);
-            ADD_ENUM_VALUE(m_instance, Plasma::Animator, RotationAnimation);
-            ADD_ENUM_VALUE(m_instance, Plasma::Animator, RotationStackedAnimation);
-            ADD_ENUM_VALUE(m_instance, Plasma::Animator, SlideAnimation);
-            ADD_ENUM_VALUE(m_instance, Plasma::Animator, GeometryAnimation);
-            ADD_ENUM_VALUE(m_instance, Plasma::Animator, ZoomAnimation);
-            ADD_ENUM_VALUE(m_instance, Plasma::Animator, PixmapTransitionAnimation);
-            ADD_ENUM_VALUE(m_instance, JavascriptAnimation, PauseAnimation);
-            ADD_ENUM_VALUE(m_instance, JavascriptAnimation, PropertyAnimation);
 
             //Get the method of the object
             m_method = m_instance.property(QString("updateCurrentTime"));
             if (!m_method.isFunction()) {
                 qDebug() << "**************** ERROR! ************";
                 m_instance = m_method = QScriptValue();
-            }
+            } else {
+                prepInstance();
 
-            //TODO: this really should be done in the bindings provided
-            //Center the widget for transformation
-            qreal x = targetWidget()->geometry().height()/2;
-            qreal y = targetWidget()->geometry().width()/2;
-            targetWidget()->setTransformOriginPoint(x, y);
+                //TODO: this really should be done in the bindings provided
+                //Center the widget for transformation
+                qreal x = targetWidget()->geometry().height()/2;
+                qreal y = targetWidget()->geometry().width()/2;
+                targetWidget()->setTransformOriginPoint(x, y);
+            }
         }
 
+        if (m_method.isFunction()) {
+            m_instance.setProperty("duration", duration());
+            m_instance.setProperty("target", m_instance.engine()->newQObject(targetWidget()));
+        }
 #ifdef PLASMA_JSANIM_FPS
         m_fps = 0;
     } else if (oldState == Running && newState == Stopped) {
