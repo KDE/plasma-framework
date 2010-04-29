@@ -18,8 +18,6 @@
 
 #include "animationgroup.h"
 
-#include "filedialogproxy.h"
-
 ParallelAnimationGroup::ParallelAnimationGroup(QObject *parent)
     : QParallelAnimationGroup(parent)
 {

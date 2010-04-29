@@ -53,7 +53,7 @@ ScriptEnv::ScriptEnv(QObject *parent, QScriptEngine *engine)
     // Add an accessor so we can find the scriptenv given only the engine. The
     // property is hidden from scripts.
     global.setProperty("__plasma_scriptenv", m_engine->newQObject(this),
-		       QScriptValue::ReadOnly|QScriptValue::Undeletable|QScriptValue::SkipInEnumeration);
+                       QScriptValue::ReadOnly|QScriptValue::Undeletable|QScriptValue::SkipInEnumeration);
 }
 
 ScriptEnv::~ScriptEnv()
