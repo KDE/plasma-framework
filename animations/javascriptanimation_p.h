@@ -22,8 +22,9 @@
 
 #include <QScriptValue>
 
-#include <plasma/animations/animation.h>
-#include <plasma/plasma_export.h>
+#include "animation.h"
+#include "plasma_export.h"
+#include "animator.h"
 
 class QString;
 class QScriptEngine;
@@ -38,6 +39,9 @@ class JavascriptAnimation: public Animation
     Q_OBJECT
 
 public:
+    enum { PauseAnimation = Animator::LastAnimation + 1,
+           PropertyAnimation = Animator::LastAnimation + 2
+    };
 
     explicit JavascriptAnimation(const QString &name, QObject *parent = 0);
 

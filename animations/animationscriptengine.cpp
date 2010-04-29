@@ -26,12 +26,17 @@
 #include "animationscriptengine_p.h"
 
 #include <QFile>
+#include <QMetaEnum>
 #include <QParallelAnimationGroup>
+#include <QPauseAnimation>
 #include <QSequentialAnimationGroup>
 #include <QTextStream>
 
 #include <kdebug.h>
+#include <klocale.h>
 
+#include "animator.h"
+#include "javascriptanimation_p.h"
 #include "bindings/animationgroup_p.h"
 
 namespace Plasma
@@ -102,6 +107,51 @@ QScriptValue parallelAnimationGroup(QScriptContext *context, QScriptEngine *engi
 
     ParallelAnimationGroup *group = new ParallelAnimationGroup(parent);
     return engine->newQObject(group);
+}
+
+void registerEnums(QScriptValue &scriptValue, const QMetaObject &meta)
+{
+    //manually create enum values. ugh
+    QScriptEngine *engine = scriptValue.engine();
+    for (int i = 0; i < meta.enumeratorCount(); ++i) {
+        QMetaEnum e = meta.enumerator(i);
+        //kDebug() << e.name();
+        for (int i=0; i < e.keyCount(); ++i) {
+            //kDebug() << e.key(i) << e.value(i);
+            scriptValue.setProperty(e.key(i), QScriptValue(engine, e.value(i)));
+        }
+    }
+}
+
+QScriptValue animation(QScriptContext *context, QScriptEngine *engine)
+{
+    if (context->argumentCount() != 1) {
+        return context->throwError(i18n("animation() takes one argument"));
+    }
+
+    QObject *parent = extractParent(context, engine);
+    QAbstractAnimation *anim = 0;
+    if (context->argument(0).isString()) {
+        const QString animName = context->argument(0).toString();
+        anim = Plasma::Animator::create(animName, parent);
+    } else {
+        int animId = context->argument(0).toInt32();
+        if (animId == JavascriptAnimation::PauseAnimation) {
+            anim = new QPauseAnimation(parent);
+        } else if (animId == JavascriptAnimation::PropertyAnimation) {
+            anim = new QPropertyAnimation(parent);
+        } else {
+            anim = Plasma::Animator::create(static_cast<Animator::Animation>(animId), parent);
+        }
+    }
+
+    if (anim) {
+        QScriptValue value = engine->newQObject(anim);
+        registerEnums(value, *anim->metaObject());
+        return value;
+    }
+
+    return context->throwError(i18n("%1 is not a known animation type", context->argument(0).isString()));
 }
 
 QScriptEngine *globalEngine()

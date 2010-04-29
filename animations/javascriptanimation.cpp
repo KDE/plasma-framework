@@ -27,6 +27,8 @@
  * - support more properties: angle, direction, etc
  * - support calling a 'resetAnimation' in js class when animation is stopped
  */
+#define ADD_ENUM_VALUE(__c__, __ns__, __v__) \
+    __c__.setProperty(#__v__, QScriptValue(__c__.engine(), __ns__::__v__))
 
 namespace Plasma
 {
@@ -58,6 +60,21 @@ void JavascriptAnimation::updateState(QAbstractAnimation::State newState, QAbstr
             kDebug() << "trying for" << m_name << m_instance.isFunction();
             m_instance.setProperty("__plasma_javascriptanimation", engine->newQObject(this),
                                    QScriptValue::ReadOnly | QScriptValue::Undeletable | QScriptValue::SkipInEnumeration);
+            ADD_ENUM_VALUE(m_instance, Plasma::Animator, FadeAnimation);
+            ADD_ENUM_VALUE(m_instance, Plasma::Animator, AppearAnimation);
+            ADD_ENUM_VALUE(m_instance, Plasma::Animator, DisappearAnimation);
+            ADD_ENUM_VALUE(m_instance, Plasma::Animator, ActivateAnimation);
+            ADD_ENUM_VALUE(m_instance, Plasma::Animator, FadeAnimation);
+            ADD_ENUM_VALUE(m_instance, Plasma::Animator, GrowAnimation);
+            ADD_ENUM_VALUE(m_instance, Plasma::Animator, PulseAnimation);
+            ADD_ENUM_VALUE(m_instance, Plasma::Animator, RotationAnimation);
+            ADD_ENUM_VALUE(m_instance, Plasma::Animator, RotationStackedAnimation);
+            ADD_ENUM_VALUE(m_instance, Plasma::Animator, SlideAnimation);
+            ADD_ENUM_VALUE(m_instance, Plasma::Animator, GeometryAnimation);
+            ADD_ENUM_VALUE(m_instance, Plasma::Animator, ZoomAnimation);
+            ADD_ENUM_VALUE(m_instance, Plasma::Animator, PixmapTransitionAnimation);
+            ADD_ENUM_VALUE(m_instance, JavascriptAnimation, PauseAnimation);
+            ADD_ENUM_VALUE(m_instance, JavascriptAnimation, PropertyAnimation);
 
             //Get the method of the object
             m_method = m_instance.property(QString("updateCurrentTime"));
