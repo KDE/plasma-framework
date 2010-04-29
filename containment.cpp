@@ -1318,10 +1318,12 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
 
                 KMenu *choices = new KMenu("Content dropped");
                 choices->addAction(KIcon("process-working"), i18n("Fetching file type..."));
-                if (dropEvent)
+                if (dropEvent) {
                     choices->popup(dropEvent->screenPos());
-                else
+                } else {
                     choices->popup(screenPos);
+                }
+
                 dropMenus[job] = choices;
             }
         }
