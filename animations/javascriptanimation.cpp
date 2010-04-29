@@ -34,7 +34,7 @@ namespace Plasma
 {
 
 JavascriptAnimation::JavascriptAnimation(const QString &name, QObject *parent)
-    : Animation(parent),
+    : EasingAnimation(parent),
 #ifdef PLASMA_JSANIM_FPS
       m_fps(0),
 #endif
@@ -98,7 +98,7 @@ void JavascriptAnimation::updateState(QAbstractAnimation::State newState, QAbstr
     }
 }
 
-void JavascriptAnimation::updateCurrentTime(int currentTime)
+void JavascriptAnimation::updateEffectiveTime(int currentTime)
 {
     if (m_method.isFunction()) {
 #ifdef PLASMA_JSANIM_FPS

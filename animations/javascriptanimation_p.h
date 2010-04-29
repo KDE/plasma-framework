@@ -22,9 +22,9 @@
 
 #include <QScriptValue>
 
-#include "animation.h"
-#include "plasma_export.h"
 #include "animator.h"
+#include "easinganimation_p.h"
+#include "plasma_export.h"
 
 class QString;
 class QScriptEngine;
@@ -34,7 +34,7 @@ class QScriptEngine;
 namespace Plasma
 {
 
-class JavascriptAnimation: public Animation
+class JavascriptAnimation: public EasingAnimation
 {
     Q_OBJECT
 
@@ -49,7 +49,7 @@ public:
 
 protected:
     void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
-    void updateCurrentTime(int currentTime);
+    void updateEffectiveTime(int currentTime);
 
 private:
 #ifdef PLASMA_JSANIM_FPS
