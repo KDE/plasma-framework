@@ -66,8 +66,6 @@
 #include <kwindowsystem.h>
 #include <kpushbutton.h>
 #include <krun.h>
-#include "kio/jobclasses.h" // for KIO::JobFlags
-#include "kio/job.h"
 
 #ifndef PLASMA_NO_SOLID
 #include <solid/powermanagement.h>
