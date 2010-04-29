@@ -29,7 +29,9 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
+#ifndef PLASMA_NO_KNEWSTUFF
 #include <knewstuff3/downloaddialog.h>
+#endif
 
 #include "plasma/private/wallpaper_p.h"
 
@@ -70,7 +72,9 @@ PlasmoidPackage::PlasmoidPackage(QObject *parent)
 
 PlasmoidPackage::~PlasmoidPackage()
 {
+#ifndef PLASMA_NO_KNEWSTUFF
     delete m_knsDialog.data();
+#endif
 }
 
 void PlasmoidPackage::pathChanged()
@@ -86,6 +90,7 @@ void PlasmoidPackage::pathChanged()
 
 void PlasmoidPackage::createNewWidgetBrowser(QWidget *parent)
 {
+#ifndef PLASMA_NO_KNEWSTUFF
     KNS3::DownloadDialog *knsDialog = m_knsDialog.data();
     if (!knsDialog) {
         m_knsDialog = knsDialog = new KNS3::DownloadDialog("plasmoids.knsrc", parent);
@@ -94,6 +99,7 @@ void PlasmoidPackage::createNewWidgetBrowser(QWidget *parent)
 
     knsDialog->show();
     knsDialog->raise();
+#endif
 }
 
 ThemePackage::ThemePackage(QObject *parent)

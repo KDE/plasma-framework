@@ -30,7 +30,7 @@
 using namespace Plasma;
 
 AnimableGraphicsWebView::AnimableGraphicsWebView(QGraphicsItem * parent)
-    : KGraphicsWebView(parent)
+    : GraphicsWebViewBase(parent)
 {
     setAcceptTouchEvents(true);
     m_dragToScroll = false;
@@ -75,12 +75,12 @@ QPointF AnimableGraphicsWebView::scrollPosition() const
 
 qreal AnimableGraphicsWebView::zoom() const
 {
-    return KGraphicsWebView::zoomFactor();
+    return GraphicsWebViewBase::zoomFactor();
 }
 
 void AnimableGraphicsWebView::setZoom(const qreal zoom)
 {
-    KGraphicsWebView::setZoomFactor(zoom);
+    GraphicsWebViewBase::setZoomFactor(zoom);
 }
 
 QRectF AnimableGraphicsWebView::viewportGeometry() const
@@ -96,7 +96,7 @@ QRectF AnimableGraphicsWebView::viewportGeometry() const
 void AnimableGraphicsWebView::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (!page()) {
-        KGraphicsWebView::mouseMoveEvent(event);
+        GraphicsWebViewBase::mouseMoveEvent(event);
         return;
     }
 
@@ -116,7 +116,7 @@ void AnimableGraphicsWebView::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 void AnimableGraphicsWebView::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (!page()) {
-        KGraphicsWebView::mousePressEvent(event);
+        GraphicsWebViewBase::mousePressEvent(event);
         return;
     }
 
@@ -135,7 +135,7 @@ void AnimableGraphicsWebView::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void AnimableGraphicsWebView::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if (!page()) {
-        KGraphicsWebView::mouseReleaseEvent(event);
+        GraphicsWebViewBase::mouseReleaseEvent(event);
         return;
     }
 
@@ -154,7 +154,7 @@ void AnimableGraphicsWebView::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 void AnimableGraphicsWebView::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
     if (!page()) {
-        KGraphicsWebView::wheelEvent(event);
+        GraphicsWebViewBase::wheelEvent(event);
         return;
     }
 

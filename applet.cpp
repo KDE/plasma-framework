@@ -22,6 +22,9 @@
 
 #include "applet.h"
 #include "private/applet_p.h"
+
+#include "config-plasma.h"
+
 #include <plasma/animations/animation.h>
 
 #include <cmath>
@@ -66,8 +69,9 @@
 #include "kio/jobclasses.h" // for KIO::JobFlags
 #include "kio/job.h"
 
-
+#ifndef PLASMA_NO_SOLID
 #include <solid/powermanagement.h>
+#endif
 
 #include "abstracttoolbox.h"
 #include "authorizationmanager.h"
@@ -111,7 +115,6 @@
 #include "private/service_p.h"
 #include "ui_publish.h"
 
-#include "config-plasma.h"
 
 namespace Plasma
 {
@@ -834,7 +837,11 @@ QString Applet::pluginName() const
 
 bool Applet::shouldConserveResources() const
 {
+#ifndef PLASMA_NO_SOLID
     return Solid::PowerManagement::appShouldConserveResources();
+#else
+    return true;
+#endif
 }
 
 QString Applet::category() const

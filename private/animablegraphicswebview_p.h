@@ -27,12 +27,20 @@
 #include <QtGui/QGraphicsSceneWheelEvent>
 #include <QtGui/QGraphicsView>
 
+#include <config-plasma.h>
+
+#ifndef PLASMA_NO_KDEWEBKIT
 #include <kgraphicswebview.h>
+#define GraphicsWebViewBase KGraphicsWebView
+#else
+#include <qgraphicswebview.h>
+#define GraphicsWebViewBase QGraphicsWebView
+#endif
 
 namespace Plasma
 {
 
-class AnimableGraphicsWebView : public KGraphicsWebView
+class AnimableGraphicsWebView : public GraphicsWebViewBase
 {
     Q_OBJECT
 

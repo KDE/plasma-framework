@@ -20,6 +20,8 @@
 
 #include "wallpaper.h"
 
+#include "config-plasma.h"
+
 #include <QColor>
 #include <QFile>
 #include <QFileInfo>
@@ -37,8 +39,10 @@
 
 #include <kio/job.h>
 
+#ifndef PLASMA_NO_SOLID
 #include <solid/device.h>
 #include <solid/deviceinterface.h>
+#endif
 
 #include <version.h>
 
@@ -424,7 +428,12 @@ void Wallpaper::render(const QString &sourceImagePath, const QSize &size,
         }
     }
 
-    if (WallpaperPrivate::s_renderers.size() < qMax(Solid::Device::listFromType(Solid::DeviceInterface::Processor).count(), 1)) {
+#ifndef PLASMA_NO_SOLID
+    const int numProcs = Solid::Device::listFromType(Solid::DeviceInterface::Processor).count();
+#else
+    const int numProcs = 1;
+#endif
+    if (WallpaperPrivate::s_renderers.size() < qMax(numProcs, 1)) {
         WallpaperRenderThread *renderThread = new WallpaperRenderThread();
         WallpaperPrivate::s_renderers.append(renderThread);
         d->renderToken = renderThread->render(sourceImagePath, size, resizeMethod, color);

@@ -28,9 +28,6 @@
 #include <QtCore/QTimer>
 
 #include <kdebug.h>
-#include <kgraphicswebview.h>
-#include <kio/accessmanager.h>
-#include <accessmanager.h>
 
 #include "animator.h"
 #include "plasma.h"

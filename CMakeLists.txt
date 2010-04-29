@@ -1,15 +1,15 @@
 # strange conversion error in pushbutton.cpp
 kde4_no_enable_final(plasma)
 
+if(KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
+    set(PLASMA_NO_KDEWEBKIT TRUE)
+    set(PLASMA_NO_KNEWSTUFF TRUE)
+    set(PLASMA_NO_SOLID TRUE)
+endif(KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${KDE4_KDECORE_INCLUDES}
                     ${KDE4_KDEUI_INCLUDES}
-                    ${KDE4_KIO_INCLUDES}
-                    ${CMAKE_SOURCE_DIR}/kdewebkit/
-                    ${CMAKE_SOURCE_DIR}/knewstuff/
-                    ${CMAKE_BINARY_DIR}/solid/
-                    ${CMAKE_SOURCE_DIR}/solid/
                     ${CMAKE_SOURCE_DIR}/threadweaver/
                     ${CMAKE_SOURCE_DIR}/plasma/extenders
                     ${CMAKE_SOURCE_DIR}/plasma/remote
@@ -19,6 +19,22 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch/includes
                     ${KDE4_INCLUDES}
                     )
+
+if(NOT PLASMA_NO_KDEWEBKIT)
+    include_directories(${CMAKE_SOURCE_DIR}/kdewebkit/)
+    set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} kdewebkit)
+endif(NOT PLASMA_NO_KDEWEBKIT)
+
+if(NOT PLASMA_NO_KNEWSTUFF)
+    include_directories(${CMAKE_SOURCE_DIR}/knewstuff/)
+    set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} knewstuff3)
+endif(NOT PLASMA_NO_KNEWSTUFF)
+
+if(NOT PLASMA_NO_SOLID)
+    include_directories(${CMAKE_BINARY_DIR}/solid/)
+    include_directories(${CMAKE_SOURCE_DIR}/solid/)
+    set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} ${KDE4_SOLID_LIBS})
+endif(NOT PLASMA_NO_SOLID)
 
 if(QCA2_FOUND)
     include_directories(${QCA2_INCLUDE_DIR})
@@ -218,9 +234,8 @@ endif(PHONON_FOUND)
 
 kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
 
-target_link_libraries(plasma ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS} knewstuff3
-                             ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY} ${QT_QTSCRIPT_LIBRARY} kdewebkit
-                             kdnssd threadweaver ${KDE4_SOLID_LIBS} )
+target_link_libraries(plasma ${KDE4_KIO_LIBS} ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
+                             ${QT_QTSCRIPT_LIBRARY} kdnssd threadweaver ${PLASMA_EXTRA_LIBS})
 
 if(QCA2_FOUND)
    target_link_libraries(plasma ${QCA2_LIBRARIES})

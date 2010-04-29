@@ -24,10 +24,14 @@
 #include "plasma/wallpaper.h"
 #include "plasma/plasma.h"
 
+#include "config-plasma.h"
+
+#ifndef PLASMA_NO_KNEWSTUFF
 namespace KNS3
 {
     class DownloadDialog;
 } // namespace KNS
+#endif
 
 namespace Plasma
 {
@@ -44,7 +48,9 @@ protected:
     void pathChanged();
 
 private:
+#ifndef PLASMA_NO_KNEWSTUFF
     QWeakPointer<KNS3::DownloadDialog> m_knsDialog;
+#endif
 };
 
 class ThemePackage : public PackageStructure
