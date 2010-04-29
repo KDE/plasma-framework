@@ -48,6 +48,7 @@ class PLASMAGENERICSHELL_EXPORT Containment : public Applet
     Q_PROPERTY(QString name READ name WRITE setName)
     Q_PROPERTY(QString wallpaperPlugin READ wallpaperPlugin WRITE setWallpaperPlugin)
     Q_PROPERTY(QString wallpaperMode READ wallpaperMode WRITE setWallpaperMode)
+    Q_PROPERTY(bool locked READ locked WRITE setLocked)
     Q_PROPERTY(QString type READ type)
     Q_PROPERTY(QString formFactor READ formFactor)
     Q_PROPERTY(QList<int> widgetIds READ widgetIds)
