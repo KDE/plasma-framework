@@ -74,6 +74,7 @@ set(plasma_LIB_SRCS
     animations/animation.cpp
     animations/animationscriptengine.cpp
     animations/bindings/animationgroup.cpp
+    animations/bindings/easingcurve.cpp
     animations/easinganimation.cpp
     animations/fade.cpp
     animations/grow.cpp

@@ -42,6 +42,8 @@
 namespace Plasma
 {
 
+QScriptValue constructEasingCurveClass(QScriptEngine *engine);
+
 namespace AnimationScriptEngine
 {
 
@@ -162,7 +164,8 @@ QScriptEngine *globalEngine()
         global.setProperty("registerAnimation", inst->newFunction(AnimationScriptEngine::registerAnimation));
         global.setProperty("AnimationGroup", inst->newFunction(AnimationScriptEngine::animationGroup));
         global.setProperty("ParallelAnimationGroup", inst->newFunction(AnimationScriptEngine::parallelAnimationGroup));
-	qDebug() << "........... first js animation, creating the engine!";
+        global.setProperty("QEasingCurve", constructEasingCurveClass(inst));
+        kDebug() << "........... first js animation, creating the engine!";
     }
 
     return inst;
