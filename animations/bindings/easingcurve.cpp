@@ -28,6 +28,14 @@ Q_DECLARE_METATYPE(QEasingCurve*)
 #define ADD_ENUM_VALUE(__c__, __ns__, __v__) \
     __c__.setProperty(#__v__, QScriptValue(__c__.engine(), __ns__::__v__))
 
+#define DECLARE_SELF(Class, __fn__) \
+    Class* self = qscriptvalue_cast<Class*>(ctx->thisObject()); \
+    if (!self) { \
+        return ctx->throwError(QScriptContext::TypeError, \
+            QString::fromLatin1("%0.prototype.%1: this object is not a %0") \
+            .arg(#Class).arg(#__fn__)); \
+    }
+
 namespace Plasma
 {
 
