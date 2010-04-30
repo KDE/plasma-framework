@@ -2347,11 +2347,10 @@ QPointF ContainmentPrivate::preferredPos(Corona *corona) const
         return preferredPanelPos(corona);
     }
 
-    int width = q->size().width();
     QPointF pos(0, 0);
     QTransform t;
-    while (corona->itemAt(pos, t)) {
-        pos.setX(pos.x() + width);
+    while (QGraphicsItem *i = corona->itemAt(pos, t)) {
+        pos.setX(i->scenePos().x() + i->boundingRect().width() + 10);
     }
 
     //kDebug() << "not a panel, put it at" << pos;
