@@ -1682,7 +1682,7 @@ bool Applet::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
     {
         // don't move when the containment is not mutable,
         // in the rare case the containment doesn't exists consider it as mutable
-        if (d->registeredAsDragHandle.contains(watched)) {
+        if ((flags() & ItemIsMovable) && d->registeredAsDragHandle.contains(watched)) {
             Containment *c = containment();
             if (!c || c->immutability() == Mutable) {
                 mouseMoveEvent(static_cast<QGraphicsSceneMouseEvent*>(event));
@@ -1701,7 +1701,7 @@ bool Applet::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 
 void Applet::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (immutability() == Mutable && formFactor() == Plasma::Planar) {
+    if (immutability() == Mutable && formFactor() == Plasma::Planar && flags() & ItemIsMovable) {
         QGraphicsItem *parent = parentItem();
         Plasma::Applet *applet = qgraphicsitem_cast<Plasma::Applet*>(parent);
 
