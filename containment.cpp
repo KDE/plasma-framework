@@ -947,6 +947,7 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
         }
     }
 
+    applet->setFlag(QGraphicsItem::ItemIsMovable, true);
     applet->updateConstraints(Plasma::AllConstraints);
     if (!delayInit) {
         applet->flushPendingConstraintsEvents();

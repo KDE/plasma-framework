@@ -226,6 +226,7 @@ PackageStructure::Ptr Applet::packageStructure()
 
 void Applet::init()
 {
+    setFlag(ItemIsMovable, true);
     if (d->script) {
         d->setupScriptSupport();
 
@@ -1701,7 +1702,7 @@ bool Applet::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 
 void Applet::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (immutability() == Mutable && formFactor() == Plasma::Planar && flags() & ItemIsMovable) {
+    if (immutability() == Mutable && formFactor() == Plasma::Planar && (flags() & ItemIsMovable)) {
         QGraphicsItem *parent = parentItem();
         Plasma::Applet *applet = qgraphicsitem_cast<Plasma::Applet*>(parent);
 
