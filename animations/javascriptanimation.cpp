@@ -95,8 +95,8 @@ void JavascriptAnimation::updateState(QAbstractAnimation::State newState, QAbstr
         }
 
         if (m_method.isFunction()) {
-            m_instance.setProperty("duration", duration());
-            m_instance.setProperty("target", m_instance.engine()->newQObject(targetWidget()));
+            m_instance.setProperty("duration", duration(), QScriptValue::ReadOnly);
+            m_instance.setProperty("target", m_instance.engine()->newQObject(targetWidget()), QScriptValue::ReadOnly);
         }
 #ifdef PLASMA_JSANIM_FPS
         m_fps = 0;
