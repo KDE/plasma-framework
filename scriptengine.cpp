@@ -296,6 +296,8 @@ QScriptValue ScriptEngine::loadTemplate(QScriptContext *context, QScriptEngine *
     }
 
     ScriptEngine *env = envFor(engine);
+    env->globalObject().setProperty("templateName", env->newVariant(info.name()), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+    env->globalObject().setProperty("templateComment", env->newVariant(info.comment()), QScriptValue::ReadOnly | QScriptValue::Undeletable);
     env->evaluateScript(script, path);
     return true;
 }
