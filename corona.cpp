@@ -195,13 +195,16 @@ public:
             pluginName = "desktop";
         }
 
-        if (pluginName != "null") {
+        bool loadingNull = pluginName == "null";
+        if (!loadingNull) {
             applet = Applet::load(pluginName, id, args);
             containment = dynamic_cast<Containment*>(applet);
         }
 
         if (!containment) {
-            kDebug() << "loading of containment" << name << "failed.";
+            if (!loadingNull) {
+                kDebug() << "loading of containment" << name << "failed.";
+            }
 
             // in case we got a non-Containment from Applet::loadApplet or
             // a null containment was requested
@@ -215,12 +218,13 @@ public:
             }
             applet = containment = new Containment(0, 0, id);
 
-            if (pluginName == "null") {
+            if (loadingNull) {
                 containment->setDrawWallpaper(false);
+            } else {
+                containment->setFailedToLaunch(false);
             }
 
             // we want to provide something and don't care about the failure to launch
-            containment->setFailedToLaunch(false);
             containment->setFormFactor(Plasma::Planar);
         }
 
