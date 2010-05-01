@@ -199,9 +199,9 @@ ToolTip::ToolTip(QWidget *parent)
     previewHBoxLayout->addWidget(d->preview);
 
     QHBoxLayout *iconTextHBoxLayout = new QHBoxLayout;
-    iconTextHBoxLayout->addWidget(d->imageLabel);    
+    iconTextHBoxLayout->addWidget(d->imageLabel);
     iconTextHBoxLayout->setAlignment(d->imageLabel, Qt::AlignCenter);
-    iconTextHBoxLayout->addWidget(d->text);  
+    iconTextHBoxLayout->addWidget(d->text);
     iconTextHBoxLayout->setAlignment(d->text, Qt::AlignLeft | Qt::AlignVCenter);
     iconTextHBoxLayout->setStretchFactor(d->text, 1);
 
@@ -301,8 +301,9 @@ void ToolTip::setContent(QObject *tipper, const ToolTipContent &data)
     d->imageLabel->setPixmap(data.image());
 
     if (data.highlightWindows() && (data.windowsToPreview().size() > 1 || data.windowToPreview() != 0)) {
-        WindowEffects::highlightWindows(winId(), QList<WId>()<<winId()<<data.windowsToPreview());
+        WindowEffects::highlightWindows(winId(), QList<WId>() << winId() << data.windowsToPreview());
     }
+
     if (data.windowsToPreview().size() > 1) {
         d->preview->setWindowIds(data.windowsToPreview());
     } else {
@@ -310,6 +311,7 @@ void ToolTip::setContent(QObject *tipper, const ToolTipContent &data)
         ids.append(data.windowToPreview());
         d->preview->setWindowIds(ids);
     }
+
     d->preview->setHighlightWindows(data.highlightWindows());
 
     d->autohide = data.autohide();
