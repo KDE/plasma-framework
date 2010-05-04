@@ -102,6 +102,7 @@ public:
     int resizeStartCorner;
     QTimer *moveTimer;
     QTimer *adjustViewTimer;
+    QTimer *adjustSizeTimer;
     QSize oldGraphicsWidgetMinimumSize;
     QSize oldGraphicsWidgetMaximumSize;
     Plasma::AspectRatioMode aspectRatioMode;
@@ -410,6 +411,10 @@ Dialog::Dialog(QWidget *parent, Qt::WindowFlags f)
     d->adjustViewTimer->setSingleShot(true);
     connect(d->adjustViewTimer, SIGNAL(timeout()), this, SLOT(syncToGraphicsWidget()));
 
+    d->adjustSizeTimer = new QTimer(this);
+    d->adjustSizeTimer->setSingleShot(true);
+    connect(d->adjustSizeTimer, SIGNAL(timeout()), this, SLOT(adjustSize()));
+
     connect(d->background, SIGNAL(repaintNeeded()), this, SLOT(update()));
 
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(themeChanged()));
@@ -654,7 +659,7 @@ void Dialog::setGraphicsWidget(QGraphicsWidget *widget)
         d->view->setScene(widget->scene());
         syncToGraphicsWidget();
 
-        adjustSize();
+        d->adjustSizeTimer->start(150);
 
         widget->installEventFilter(this);
         d->view->installEventFilter(this);
