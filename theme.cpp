@@ -36,7 +36,7 @@
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kmanagerselection.h>
-#include <kpixmapcache.h>
+#include <kimagecache.h>
 #include <ksharedconfig.h>
 #include <kstandarddirs.h>
 #include <kwindowsystem.h>
@@ -152,7 +152,7 @@ public:
     QString defaultWallpaperSuffix;
     int defaultWallpaperWidth;
     int defaultWallpaperHeight;
-    KPixmapCache *pixmapCache;
+    KImageCache *pixmapCache;
     KSharedConfigPtr svgElementsCache;
     QHash<QString, QSet<QString> > invalidElements;
     QHash<QString, QPixmap> pixmapsToCache;
@@ -180,9 +180,8 @@ const char *ThemePrivate::themeRcFile = "plasmarc";
 bool ThemePrivate::useCache()
 {
     if (cacheTheme && !pixmapCache) {
-        pixmapCache = new KPixmapCache("plasma_theme_" + themeName);
         ThemeConfig config;
-        pixmapCache->setCacheLimit(config.themeCacheKb());
+        pixmapCache = new KImageCache("plasma_theme_" + themeName, config.themeCacheKb() * 1024);
     }
 
     return cacheTheme;
@@ -236,7 +235,7 @@ void ThemePrivate::compositingChanged()
 
 void ThemePrivate::discardCache()
 {
-    KPixmapCache::deleteCache("plasma_theme_" + themeName);
+    KSharedDataCache::deleteCache("plasma_theme_" + themeName);
     delete pixmapCache;
     pixmapCache = 0;
     invalidElements.clear();
@@ -257,7 +256,7 @@ void ThemePrivate::scheduledCacheUpdate()
     QHashIterator<QString, QPixmap> it(pixmapsToCache);
     while (it.hasNext()) {
         it.next();
-        pixmapCache->insert(idsToCache[it.key()], it.value());
+        pixmapCache->insertPixmap(idsToCache[it.key()], it.value());
     }
 
     pixmapsToCache.clear();
@@ -516,7 +515,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     QFile f(metadataPath);
     QFileInfo info(f);
 
-    if (useCache() && info.lastModified().toTime_t() > pixmapCache->timestamp()) {
+    if (useCache() && info.lastModified().toTime_t() > pixmapCache->lastModifiedTime()) {
         discardCache();
     } else {
         QString svgElementsFile = KStandardDirs::locateLocal("cache", "plasma-svgelements-" + themeName);
@@ -748,7 +747,12 @@ bool Theme::findInCache(const QString &key, QPixmap &pix)
             return true;
         }
 
-        return d->pixmapCache->find(key, pix);
+        QPixmap temp;
+        if(d->pixmapCache->findPixmap(key, &temp) && !temp.isNull()) {
+            pix = temp;
+            return true;
+        }
+        return false;
     }
 
     return false;
@@ -757,7 +761,7 @@ bool Theme::findInCache(const QString &key, QPixmap &pix)
 // BIC FIXME: Should be merged with the other findInCache method above when we break BC
 bool Theme::findInCache(const QString &key, QPixmap &pix, unsigned int lastModified)
 {
-    if (d->useCache() && lastModified > d->pixmapCache->timestamp()) {
+    if (d->useCache() && lastModified > d->pixmapCache->lastModifiedTime()) {
         return false;
     }
 
@@ -767,7 +771,7 @@ bool Theme::findInCache(const QString &key, QPixmap &pix, unsigned int lastModif
 void Theme::insertIntoCache(const QString& key, const QPixmap& pix)
 {
     if (d->useCache()) {
-        d->pixmapCache->insert(key, pix);
+        d->pixmapCache->insertPixmap(key, pix);
     }
 }
 
@@ -863,7 +867,9 @@ void Theme::releaseRectsCache(const QString &image)
 void Theme::setCacheLimit(int kbytes)
 {
     if (d->useCache()) {
-        d->pixmapCache->setCacheLimit(kbytes);
+        ;
+        // Too late for you bub.
+        // d->pixmapCache->setCacheLimit(kbytes);
     }
 }
 
