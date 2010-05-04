@@ -615,9 +615,7 @@ DataContainer *DataEnginePrivate::source(const QString &sourceName, bool createW
         return 0;
     }
 
-    /*kDebug() << "DataEngine " << q->objectName()
-                << ": could not find DataContainer " << sourceName
-                << ", creating" << endl;*/
+    //kDebug() << "DataEngine " << q->objectName() << ": could not find DataContainer " << sourceName << ", creating";
     DataContainer *s = new DataContainer(q);
     s->setObjectName(sourceName);
     sources.insert(sourceName, s);
