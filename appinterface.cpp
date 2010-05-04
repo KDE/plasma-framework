@@ -98,7 +98,7 @@ bool AppInterface::hasBattery() const
   Plasma::DataEngineManager *engines = Plasma::DataEngineManager::self();
   Plasma::DataEngine *power = engines->loadEngine("powermanagement");
 
-  const QStringList batteries = power->query("Battery")["sources"].toStringList();
+  const QStringList batteries = power->query("Battery")["Sources"].toStringList();
   engines->unloadEngine("powermanagement");
   return !batteries.isEmpty();
 }
