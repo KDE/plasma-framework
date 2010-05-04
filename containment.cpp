@@ -53,10 +53,15 @@ Containment::Containment(Plasma::Containment *containment, QObject *parent)
 
 Containment::~Containment()
 {
-    if (d->containment && (d->oldWallpaperPlugin != d->wallpaperPlugin ||
-                          d->oldWallpaperMode != d->wallpaperMode)) {
+    if (d->containment) {
         Plasma::Containment *containment = d->containment.data();
-        containment->setWallpaper(d->wallpaperPlugin, d->wallpaperMode);
+        if (d->oldWallpaperPlugin != d->wallpaperPlugin ||
+            d->oldWallpaperMode != d->wallpaperMode) {
+            containment->setWallpaper(d->wallpaperPlugin, d->wallpaperMode);
+        } else if (wallpaperConfigDirty() && containment->wallpaper()) {
+            KConfigGroup cg(&containment->config(), "Wallpaper");
+            containment->wallpaper()->restore(cg);
+        }
     }
 
     delete d;

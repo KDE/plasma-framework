@@ -33,7 +33,9 @@ class Applet::Private
 {
 public:
     Private()
-        : configDirty(false)
+        : configDirty(false),
+          inWallpaperConfig(false),
+          wallpaperConfigDirty(false)
     {
     }
 
@@ -41,7 +43,9 @@ public:
     QStringList configGroupPath;
     KConfigGroup globalConfigGroup;
     QStringList globalConfigGroupPath;
-    bool configDirty;
+    bool configDirty : 1;
+    bool inWallpaperConfig : 1;
+    bool wallpaperConfigDirty : 1;
 };
 
 Applet::Applet(QObject *parent)
@@ -74,6 +78,8 @@ void Applet::setCurrentConfigGroup(const QStringList &groupNames)
     foreach (const QString &groupName, groupNames) {
         d->configGroup = KConfigGroup(&d->configGroup, groupName);
     }
+
+    d->inWallpaperConfig = !groupNames.isEmpty() && groupNames.first() == "Wallpaper";
 }
 
 QStringList Applet::currentConfigGroup() const
@@ -111,6 +117,10 @@ QVariant Applet::readConfig(const QString &key, const QVariant &def) const
 void Applet::writeConfig(const QString &key, const QVariant &value)
 {
     if (d->configGroup.isValid()) {
+        if (d->inWallpaperConfig) {
+            d->wallpaperConfigDirty = true;
+        }
+
         d->configGroup.writeEntry(key, value);
         d->configDirty = true;
     }
@@ -228,6 +238,11 @@ bool Applet::locked() const
     }
 
     return app->immutability() != Plasma::Mutable;
+}
+
+bool Applet::wallpaperConfigDirty() const
+{
+    return d->wallpaperConfigDirty;
 }
 
 Plasma::Applet *Applet::applet() const
