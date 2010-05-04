@@ -149,8 +149,8 @@ Containment::~Containment()
 
 void Containment::init()
 {
+    Applet::init();
     if (!isContainment()) {
-        Applet::init();
         return;
     }
 
