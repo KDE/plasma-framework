@@ -2642,9 +2642,13 @@ void AppletPrivate::init(const QString &packagePath)
         // find where the Package is
         QString path = packagePath;
         if (path.isEmpty()) {
-            path = q->packageStructure()->defaultPackageRoot() + '/' + appletDescription.pluginName() + "/metadata.desktop";
-            path = KStandardDirs::locate("data", path);
-            path.replace(QString("/metadata.desktop"),QString("/"));
+            QString subPath = q->packageStructure()->defaultPackageRoot() + '/' + appletDescription.pluginName() + '/';
+            path = KStandardDirs::locate("data", subPath + "metadata.desktop");
+            if (path.isEmpty()) {
+                path = KStandardDirs::locate("data", subPath);
+            } else {
+                path.remove(QString("metadata.desktop"));
+            }
         } else if (!path.endsWith('/')) {
             path.append('/');
         }
