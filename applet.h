@@ -694,7 +694,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         /**
          * This signal indicates that an application launch, window
          * creation or window focus event was triggered. This is used, for instance,
-         * to ensure that the Dashboard view in Plasma hides when such an event is
+         * to ensure that the Dashboard view in Plasma Desktop hides when such an event is
          * triggered by an item it is displaying.
          */
         void releaseVisualFocus();
