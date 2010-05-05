@@ -740,6 +740,7 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::Alig
         }
         break;
     }
+
     switch (loc) {
     case BottomEdge:
         pos.setY(v->geometry().y() - s.height());
@@ -770,7 +771,6 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::Alig
     QRect screenRect = screenGeometry(screen);
     //kDebug() << "==> rect for" << screen << "is" << screenRect;
 
-    
     if (loc != LeftEdge && pos.x() + s.width() > screenRect.right()) {
         pos.rx() -= ((pos.x() + s.width()) - screenRect.right());
     }
@@ -780,7 +780,6 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::Alig
     }
 
     pos.rx() = qMax(0, pos.x());
-
     return pos;
 }
 
