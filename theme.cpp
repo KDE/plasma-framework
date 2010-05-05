@@ -397,12 +397,21 @@ void ThemePrivate::processAnimationSettings(const QString &theme, KConfigBase *m
     const QString animDir = "desktoptheme/" + theme + "/animations/";
     foreach (const QString &path, cg.keyList()) {
         QStringList anims = cg.readEntry(path, QStringList());
+
         foreach (const QString &anim, anims) {
             if (!animationMapping.contains(anim)) {
-                animationMapping.insert(animDir + anim, path);
+                kDebug() << "Registering animation. animDir: " << animDir
+                         << "\tanim: " << anim
+                         << "\tpath: " << path << "\t*******\n\n\n";
+                //key: desktoptheme/default/animations/+ all.js
+                //value: ZoomAnimation
+                animationMapping.insert(anim, animDir + path);
+            } else {
+                kDebug() << "************Animation already registered!\n\n\n";
             }
         }
     }
+
 }
 
 void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings)
@@ -575,6 +584,8 @@ QString Theme::animationPath(const QString &name) const
 {
     const QString path = d->animationMapping.value(name);
     if (path.isEmpty()) {
+
+        kError() << "****** FAILED TO FIND IN MAPPING!";
         return path;
     }
 
