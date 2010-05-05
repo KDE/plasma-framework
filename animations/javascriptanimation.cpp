@@ -81,7 +81,7 @@ void JavascriptAnimation::updateState(QAbstractAnimation::State newState, QAbstr
             //Get the method of the object
             m_method = m_instance.property(QString("updateCurrentTime"));
             if (!m_method.isFunction()) {
-                qDebug() << "**************** ERROR! ************";
+                qDebug() << "**************** ERROR! Name: " << m_name << " ************";
                 m_instance = m_method = QScriptValue();
             } else {
                 prepInstance();
