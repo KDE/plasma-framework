@@ -930,6 +930,7 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
     connect(applet, SIGNAL(configNeedsSaving()), this, SIGNAL(configNeedsSaving()));
     connect(applet, SIGNAL(releaseVisualFocus()), this, SIGNAL(releaseVisualFocus()));
     connect(applet, SIGNAL(appletDestroyed(Plasma::Applet*)), this, SLOT(appletDestroyed(Plasma::Applet*)));
+    connect(applet, SIGNAL(newStatus(Plasma::ItemStatus)), this, SLOT(checkStatus(Plasma::ItemStatus)));
     connect(applet, SIGNAL(activate()), this, SIGNAL(activate()));
 
     if (pos != QPointF(-1, -1)) {
@@ -2060,6 +2061,27 @@ void Containment::showConfigurationInterface()
 void ContainmentPrivate::requestConfiguration()
 {
     emit q->configureRequested(q);
+}
+
+void ContainmentPrivate::checkStatus(Plasma::ItemStatus appletStatus)
+{
+    //kDebug() << "================== "<< appletStatus << q->status();
+    if (appletStatus == q->status()) {
+        emit q->newStatus(appletStatus);
+        return;
+    }
+
+    if (appletStatus < q->status()) {
+        // check to see if any other applet has a higher status, and stick with that
+        // if we do
+        foreach (Applet *applet, applets) {
+            if (applet->status() > appletStatus) {
+                appletStatus = applet->status();
+            }
+        }
+    }
+
+    q->setStatus(appletStatus);
 }
 
 void Containment::destroy(bool confirm)

@@ -612,6 +612,7 @@ class PLASMA_EXPORT Containment : public Applet
         Q_PRIVATE_SLOT(d, void requestConfiguration())
         Q_PRIVATE_SLOT(d, void updateToolBoxVisibility())
         Q_PRIVATE_SLOT(d, void showDropZoneDelayed())
+        Q_PRIVATE_SLOT(d, void checkStatus(Plasma::ItemStatus))
         Q_PRIVATE_SLOT(d, void remoteAppletReady(Plasma::AccessAppletJob *))
         /**
         * This slot is called when the 'stat' after a job event has finished.

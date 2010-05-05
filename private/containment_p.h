@@ -70,6 +70,7 @@ public:
     void updateToolBoxVisibility();
     void triggerShowAddWidgets();
     void requestConfiguration();
+    void checkStatus(Plasma::ItemStatus status);
 
     /**
      * Called when constraints have been updated on this containment to provide
