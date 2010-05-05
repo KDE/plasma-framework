@@ -432,14 +432,7 @@ bool ToolTipManager::eventFilter(QObject *watched, QEvent *event)
                 break;
             }
 
-            // If the mouse is in the widget's area at the time that it is being
-            // created the widget can receive a hover event before it is fully
-            // initialized, in which case view() will return 0.
-            QGraphicsView *parentView = viewFor(widget);
-            if (parentView) {
-                show(widget);
-            }
-
+            show(widget);
             break;
         }
 
