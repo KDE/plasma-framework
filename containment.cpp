@@ -613,7 +613,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     }
 
     if (d->showContextMenu(event->scenePos(), event->screenPos(), true,
-                event->reason() == QGraphicsSceneContextMenuEvent::Mouse)) {
+                           event->reason() == QGraphicsSceneContextMenuEvent::Mouse)) {
         event->accept();
     } else {
         Applet::contextMenuEvent(event);
@@ -761,7 +761,12 @@ bool ContainmentPrivate::showContextMenu(const QPointF &point, const QPoint &scr
 
     if (!desktopMenu.isEmpty()) {
         //kDebug() << "executing at" << screenPos;
-        desktopMenu.exec(screenPos);
+        QPoint pos = screenPos;
+        if (applet && isPanelContainment()) {
+            desktopMenu.adjustSize();
+            pos = applet->popupPosition(desktopMenu.size());
+        }
+        desktopMenu.exec(pos);
         return true;
     }
 
