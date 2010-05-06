@@ -82,7 +82,10 @@ LineEdit::LineEdit(QGraphicsWidget *parent)
 
     FocusIndicator *focusIndicator = new FocusIndicator(this, "widgets/lineedit");
 
-    setNativeWidget(new KLineEdit);
+    KLineEdit *native = new KLineEdit;
+    native->setWindowFlags(native->windowFlags()|Qt::BypassGraphicsProxyWidget);
+
+    setNativeWidget(native);
 
     connect(Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(setPalette()));
 }
