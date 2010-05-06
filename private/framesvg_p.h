@@ -58,7 +58,8 @@ public:
         bottomMargin(0),
         noBorderPadding(false),
         stretchBorders(false),
-        tileCenter(false)
+        tileCenter(false),
+        composeOverBorder(false)
     {
     }
 
@@ -88,6 +89,7 @@ public:
     bool noBorderPadding : 1;
     bool stretchBorders : 1;
     bool tileCenter : 1;
+    bool composeOverBorder : 1;
 };
 
 class FrameSvgPrivate

@@ -526,15 +526,30 @@ void FrameSvgPrivate::generateFrameBackground(FrameData *frame)
                 q->paint(&centerPainter, QRect(QPoint(0, 0), q->elementSize(prefix + "center")), prefix + "center");
             }
 
-            p.drawTiledPixmap(QRect(frame->leftWidth, frame->topHeight,
-                                    contentWidth, contentHeight), center);
+            if (frame->composeOverBorder) {
+                p.drawTiledPixmap(QRect(QPoint(0, 0), size.toSize()), center);
+            } else {
+                p.drawTiledPixmap(QRect(frame->leftWidth, frame->topHeight,
+                                        contentWidth, contentHeight), center);
+            }
         }
     } else {
         if (contentHeight > 0 && contentWidth > 0) {
-            q->paint(&p, QRect(frame->leftWidth, frame->topHeight,
-                               contentWidth, contentHeight),
+            if (frame->composeOverBorder) {
+                q->paint(&p, QRect(QPoint(0, 0), size.toSize()),
                                prefix + "center");
+            } else {
+                q->paint(&p, QRect(frame->leftWidth, frame->topHeight,
+                                contentWidth, contentHeight),
+                                prefix + "center");
+            }
         }
+    }
+
+    if (frame->composeOverBorder) {
+        p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+        p.drawPixmap(QRect(QPoint(0, 0), size.toSize()), alphaMask());
+        p.setCompositionMode(QPainter::CompositionMode_SourceOver);
     }
 
     if (frame->enabledBorders & FrameSvg::LeftBorder && q->hasElement(prefix + "left")) {
@@ -738,7 +753,11 @@ void FrameSvgPrivate::updateSizes() const
         frame->bottomMargin = frame->bottomHeight = 0;
     }
 
+    frame->composeOverBorder = (q->hasElement(prefix + "hint-compose-over-border") &&
+                                q->hasElement(prefix + "mask-center"));
+
     //since it's rectangular, topWidth and bottomWidth must be the same
+    //the ones that don't have a prefix is for retrocompatibility
     frame->tileCenter = q->hasElement("hint-tile-center");
     frame->noBorderPadding = q->hasElement("hint-no-border-padding");
     frame->stretchBorders = q->hasElement("hint-stretch-borders");
