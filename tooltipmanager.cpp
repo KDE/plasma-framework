@@ -145,6 +145,13 @@ void ToolTipManager::show(QGraphicsWidget *widget)
         return;
     }
 
+    KConfig config("plasmarc");
+    KConfigGroup cg(&config, "PlasmaToolTips");
+    qreal delay = cg.readEntry("Delay", qreal(0.7));
+    if (delay < 0) {
+        return;
+    }
+
     if (d->currentWidget) {
         disconnect(this, 0, d->currentWidget, 0);
     }
@@ -159,7 +166,7 @@ void ToolTipManager::show(QGraphicsWidget *widget)
         // which can be too much for less powerful CPUs to keep up with
         d->showTimer->start(200);
     } else {
-        d->showTimer->start(700);
+        d->showTimer->start(delay * 1000);
     }
 }
 
