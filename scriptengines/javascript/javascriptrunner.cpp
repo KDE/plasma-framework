@@ -99,6 +99,7 @@ void JavaScriptRunner::match(Plasma::RunnerContext &search)
 
     if (m_engine->hasUncaughtException()) {
         reportError(m_env, false);
+        m_engine->clearExceptions();
     }
 }
 
@@ -121,6 +122,7 @@ void JavaScriptRunner::exec(const Plasma::RunnerContext *search, const Plasma::Q
 
     if (m_engine->hasUncaughtException()) {
         reportError(m_env, false);
+        m_engine->clearExceptions();
     }
 }
 

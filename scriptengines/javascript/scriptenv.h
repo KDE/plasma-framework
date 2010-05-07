@@ -68,6 +68,11 @@ private:
     static QScriptValue openUrl(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue getUrl(QScriptContext *context, QScriptEngine *engine);
 
+
+private Q_SLOTS:
+    void signalException();
+
+private:
     QSet<QString> m_extensions;
     AllowedUrls m_allowedUrls;
     QScriptEngine *m_engine;

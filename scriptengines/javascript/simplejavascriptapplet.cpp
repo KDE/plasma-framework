@@ -244,6 +244,7 @@ void SimpleJavaScriptApplet::callFunction(QScriptValue &func, const QScriptValue
 
     if (m_engine->hasUncaughtException()) {
         reportError(m_env);
+        m_engine->clearExceptions();
     }
 }
 

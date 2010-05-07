@@ -198,6 +198,7 @@ QScriptValue JavaScriptDataEngine::callFunction(const QString &functionName, con
 
         if (m_qscriptEngine->hasUncaughtException()) {
             reportError(m_env, false);
+            m_qscriptEngine->clearExceptions();
         } else {
             return rv;
         }

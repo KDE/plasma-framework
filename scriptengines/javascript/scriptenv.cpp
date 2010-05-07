@@ -54,6 +54,7 @@ ScriptEnv::ScriptEnv(QObject *parent, QScriptEngine *engine)
     // property is hidden from scripts.
     global.setProperty("__plasma_scriptenv", m_engine->newQObject(this),
                        QScriptValue::ReadOnly|QScriptValue::Undeletable|QScriptValue::SkipInEnumeration);
+    connect(m_engine, SIGNAL(signalHandlerException(QScriptValue)), this, SLOT(signalException()));
 }
 
 ScriptEnv::~ScriptEnv()
@@ -69,6 +70,11 @@ ScriptEnv *ScriptEnv::findScriptEnv(QScriptEngine *engine)
 {
     QScriptValue global = engine->globalObject();
     return qscriptvalue_cast<ScriptEnv*>(global.property("__plasma_scriptenv"));
+}
+
+void ScriptEnv::signalException()
+{
+    checkForErrors(false);
 }
 
 void ScriptEnv::registerEnums(QScriptValue &scriptValue, const QMetaObject &meta)
@@ -114,6 +120,9 @@ bool ScriptEnv::checkForErrors(bool fatal)
 {
     if (m_engine->hasUncaughtException()) {
         emit reportError(this, fatal);
+        if (!fatal) {
+            m_engine->clearExceptions();
+        }
         return true;
     }
 
