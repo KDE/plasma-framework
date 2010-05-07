@@ -108,6 +108,7 @@ public:
     QString configWindowTitle() const;
     void updateShortcuts();
     void publishCheckboxStateChanged(int state);
+    void globalShortcutChanged();
 
     static KActionCollection* defaultActions(QObject *parent);
     static QSet<QString> knownCategories();

@@ -1095,6 +1095,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         Q_PRIVATE_SLOT(d, void configDialogFinished())
         Q_PRIVATE_SLOT(d, void updateShortcuts())
         Q_PRIVATE_SLOT(d, void publishCheckboxStateChanged(int state))
+        Q_PRIVATE_SLOT(d, void globalShortcutChanged())
 
         /**
          * Reimplemented from QGraphicsItem

@@ -1480,6 +1480,8 @@ void Applet::setGlobalShortcut(const KShortcut &shortcut)
         d->activationAction->setText(i18n("Activate %1 Widget", name()));
         d->activationAction->setObjectName(QString("activate widget %1").arg(id())); // NO I18N
         connect(d->activationAction, SIGNAL(triggered()), this, SIGNAL(activate()));
+        connect(d->activationAction, SIGNAL(globalShortcutChanged(QKeySequence)),
+                this, SLOT(globalShortcutChanged()));
 
         QList<QWidget *> widgets = d->actions->associatedWidgets();
         foreach (QWidget *w, widgets) {
@@ -1492,10 +1494,18 @@ void Applet::setGlobalShortcut(const KShortcut &shortcut)
         shortcut,
         KAction::ShortcutTypes(KAction::ActiveShortcut | KAction::DefaultShortcut),
         KAction::NoAutoloading);
+    d->globalShortcutChanged();
+}
 
-    KConfigGroup shortcutConfig(d->mainConfigGroup(), "Shortcuts");
-    shortcutConfig.writeEntry("global", d->activationAction->globalShortcut().toString());
-    d->scheduleModificationNotification();
+void AppletPrivate::globalShortcutChanged()
+{
+    if (!activationAction) {
+        return;
+    }
+
+    KConfigGroup shortcutConfig(mainConfigGroup(), "Shortcuts");
+    shortcutConfig.writeEntry("global", activationAction->globalShortcut().toString());
+    scheduleModificationNotification();
     //kDebug() << "after" << shortcut.primary() << d->activationAction->globalShortcut().primary();
 }
 
