@@ -197,37 +197,29 @@ public:
 
     /**
      * Register a widget as a scrolling widget.
-     * The widget will get animate scrolling with mouse dragging and mouse wheel.
-     * It must provide
-     * scrollValue, viewportGeometry and pageSize properties
+     * This function is deprecated:
+     * use a ScrollWidget, with setWidget() as your widget instead.
      *
      * @param widget the widget that offers a scrolling behaviour
      * @since 4.4
      */
-    void registerScrollingManager(QGraphicsWidget *widget);
+    KDE_DEPRECATED void registerScrollingManager(QGraphicsWidget *widget);
 
     /**
      * unregister the scrolling manager of a certain widget
+     * This function is deprecated: use ScrollWidget instead.
      *
      * @param widget the widget we don't want no longer animated
      * @since 4.4
      */
-    void unregisterScrollingManager(QGraphicsWidget *widget);
-
-    /**
-     * Stop any scrolling that could be happening on widget
-     *
-     * @param the widget that must stop animating
-     * @since 4.5
-     */
-    void stopScrollingWidget(QGraphicsWidget *widget);
+    KDE_DEPRECATED void unregisterScrollingManager(QGraphicsWidget *widget);
 
 Q_SIGNALS:
     void animationFinished(QGraphicsItem *item, Plasma::Animator::Animation anim);
     void movementFinished(QGraphicsItem *item);
     void elementAnimationFinished(int id);
     void customAnimationFinished(int id);
-    void scrollStateChanged(QGraphicsWidget *widget, QAbstractAnimation::State newState,
+    KDE_DEPRECATED void scrollStateChanged(QGraphicsWidget *widget, QAbstractAnimation::State newState,
             QAbstractAnimation::State oldState);
 
 protected:
