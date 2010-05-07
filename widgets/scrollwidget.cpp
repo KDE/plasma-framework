@@ -83,13 +83,21 @@ namespace Plasma
 class ScrollWidgetPrivate
 {
 public:
+    enum Gesture {
+        GestureNone = 0,
+        GestureUndefined,
+        GestureScroll,
+        GestureZoom
+    };
+
     ScrollWidgetPrivate(ScrollWidget *parent)
         : q(parent),
           topBorder(0),
           bottomBorder(0),
           leftBorder(0),
           rightBorder(0),
-          dragging(false)
+          dragging(false),
+          multitouchGesture(GestureNone)
     {
     }
 
@@ -1011,6 +1019,8 @@ public:
 
     Qt::Alignment alignment;
 
+    Gesture multitouchGesture;
+
     bool hasContentsProperty;
     bool hasOffsetProperty;
     bool hasXProperty;
@@ -1360,6 +1370,57 @@ bool ScrollWidget::sceneEventFilter(QGraphicsItem *i, QEvent *e)
         break;
     case QEvent::GraphicsSceneWheel:
         d->handleWheelEvent(static_cast<QGraphicsSceneWheelEvent*>(e));
+    //Multitouch related events
+    case QEvent::TouchBegin:
+        d->handleMousePressEvent(static_cast<QGraphicsSceneMouseEvent*>(e));
+        break;
+    case QEvent::TouchUpdate: {
+        QList<QTouchEvent::TouchPoint> touchPoints = static_cast<QTouchEvent *>(e)->touchPoints();
+        if (touchPoints.count() == 2) {
+            const QTouchEvent::TouchPoint &touchPoint0 = touchPoints.first();
+            const QTouchEvent::TouchPoint &touchPoint1 = touchPoints.last();
+            const QLineF line0(touchPoint0.lastPos(), touchPoint1.lastPos());
+            const QLineF line1(touchPoint0.pos(), touchPoint1.pos());
+            const QLineF startLine(touchPoint0.startPos(), touchPoint1.startPos());
+            const QPointF point = line1.pointAt(0.5);
+            const QPointF lastPoint = line0.pointAt(0.5);
+
+            if (d->multitouchGesture == ScrollWidgetPrivate::GestureNone) {
+                d->multitouchGesture = ScrollWidgetPrivate::GestureUndefined;
+            }
+            if (d->multitouchGesture == ScrollWidgetPrivate::GestureUndefined) {
+                const int zoomDistance = qAbs(line1.length() - startLine.length());
+                const int dragDistance = (startLine.pointAt(0.5) - point).manhattanLength();
+
+                if (zoomDistance - dragDistance > 30) {
+                    d->multitouchGesture = ScrollWidgetPrivate::GestureZoom;
+                } else if (dragDistance - zoomDistance > 30) {
+                    d->multitouchGesture = ScrollWidgetPrivate::GestureScroll;
+                }
+            }
+
+            if (d->multitouchGesture ==  ScrollWidgetPrivate::GestureScroll) {
+                QGraphicsSceneMouseEvent fakeEvent;
+                fakeEvent.setPos(point);
+                fakeEvent.setLastPos(lastPoint);
+                d->handleMouseMoveEvent(&fakeEvent);
+            } else if (d->multitouchGesture == ScrollWidgetPrivate::GestureZoom) {
+                if (d->widget && d->widget.data()->property("zoomFactor").isValid()) {
+                    qreal scaleFactor = 1;
+                    if (line0.length() > 0) {
+                        scaleFactor = line1.length() / line0.length();
+                    }
+
+                    qreal zoom = d->widget.data()->property("zoomFactor").toReal();
+                    d->widget.data()->setProperty("zoomFactor", zoom * scaleFactor);
+                }
+            }
+        }
+        break;
+    }
+    case QEvent::TouchEnd:
+        d->handleMouseReleaseEvent(static_cast<QGraphicsSceneMouseEvent*>(e));
+        break;
     default:
         break;
     }
