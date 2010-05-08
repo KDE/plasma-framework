@@ -475,7 +475,21 @@ bool PopupApplet::eventFilter(QObject *watched, QEvent *event)
         //because all the code for showing an applet's contextmenu is actually in Containment.
         Containment *c = containment();
         if (c) {
-            return c->d->showAppletContextMenu(this, static_cast<QContextMenuEvent*>(event)->globalPos());
+            Applet *applet = this;
+            Dialog *dialog = d->dialogPtr.data();
+            if (dialog && dialog->graphicsWidget()) {
+                const QPoint eventPos = static_cast<QContextMenuEvent*>(event)->pos();
+                QPointF pos = dialog->graphicsWidget()->mapToScene(eventPos);
+                int left, top, right, bottom;
+                dialog->getContentsMargins(&left, &top, &right, &bottom);
+                pos += QPointF(-left, -top);
+
+                if (Applet *actual = c->d->appletAt(pos)) {
+                    applet = actual;
+                }
+            }
+
+            return c->d->showAppletContextMenu(applet, static_cast<QContextMenuEvent*>(event)->globalPos());
         }
     }
 
