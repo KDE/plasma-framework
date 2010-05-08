@@ -370,7 +370,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                     q->setAspectRatioMode(Plasma::ConstrainedSquare);
                 }
 
-                Dialog *dialog = new Plasma::Dialog();
+                Dialog *dialog = new Dialog();
                 dialogPtr = dialog;
 
                 dialog->setAspectRatioMode(savedAspectRatio);
@@ -457,18 +457,6 @@ bool PopupApplet::eventFilter(QObject *watched, QEvent *event)
         QTimer::singleShot(100, this, SLOT(clearPopupLostFocus()));
     }
 
-    /**
-    if (layout() && watched == graphicsWidget() && (event->type() == QEvent::GraphicsSceneResize)) {
-        //sizes are recalculated in the constraintsevent so let's just call that.
-        d->popupConstraintsEvent(Plasma::FormFactorConstraint);
-
-        //resize vertically if necesarry.
-        if (formFactor() == Plasma::MediaCenter || formFactor() == Plasma::Planar) {
-            resize(QSizeF(size().width(), minimumHeight()));
-        }
-    }
-    */
-
     if (watched == d->dialogPtr.data() && event->type() == QEvent::ContextMenu) {
         //pass it up to the applet
         //well, actually we have to pass it to the *containment*
@@ -478,11 +466,10 @@ bool PopupApplet::eventFilter(QObject *watched, QEvent *event)
             Applet *applet = this;
             Dialog *dialog = d->dialogPtr.data();
             if (dialog && dialog->graphicsWidget()) {
-                const QPoint eventPos = static_cast<QContextMenuEvent*>(event)->pos();
-                QPointF pos = dialog->graphicsWidget()->mapToScene(eventPos);
                 int left, top, right, bottom;
                 dialog->getContentsMargins(&left, &top, &right, &bottom);
-                pos += QPointF(-left, -top);
+                const QPoint eventPos = static_cast<QContextMenuEvent*>(event)->pos() - QPoint(left, top);
+                QPointF pos = dialog->graphicsWidget()->mapToScene(eventPos);
 
                 if (Applet *actual = c->d->appletAt(pos)) {
                     applet = actual;
