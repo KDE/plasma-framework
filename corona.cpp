@@ -93,6 +93,7 @@ public:
         KAction *lockAction = actions.addAction("lock widgets");
         QObject::connect(lockAction, SIGNAL(triggered(bool)), q, SLOT(toggleImmutability()));
         lockAction->setText(i18n("Lock Widgets"));
+        lockAction->setAutoRepeat(true);
         lockAction->setIcon(KIcon("object-locked"));
         lockAction->setData(AbstractToolBox::ControlTool);
         lockAction->setShortcut(KShortcut("alt+d, l"));
