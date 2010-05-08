@@ -2092,6 +2092,7 @@ void Containment::destroy(bool confirm)
 
     if (isContainment()) {
         //FIXME maybe that %1 should be the containment type not the name
+        //FIXME: should not be blocking
         if (!confirm ||
             KMessageBox::warningContinueCancel(
                 view(),
