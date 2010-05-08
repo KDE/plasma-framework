@@ -765,6 +765,15 @@ bool ContainmentPrivate::showContextMenu(const QPointF &point, const QPoint &scr
         if (applet && isPanelContainment()) {
             desktopMenu.adjustSize();
             pos = applet->popupPosition(desktopMenu.size());
+            if (formFactor == Vertical) {
+                if (pos.y() + desktopMenu.height() < screenPos.y()) {
+                    pos.setY(screenPos.y());
+                }
+            } else if (formFactor == Horizontal) {
+                if (pos.x() + desktopMenu.width() < screenPos.x()) {
+                    pos.setX(screenPos.x());
+                }
+            }
         }
         desktopMenu.exec(pos);
         return true;
