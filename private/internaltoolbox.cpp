@@ -187,7 +187,6 @@ void InternalToolBox::updateToolBox()
     }
 
     if (d->showing) {
-        d->showing = false;
         showToolBox();
     } else if (tool && !tool->isEnabled()) {
         tool->hide();
