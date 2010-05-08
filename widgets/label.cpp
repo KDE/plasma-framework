@@ -286,6 +286,11 @@ void Label::paint(QPainter *painter,
                   const QStyleOptionGraphicsItem *option,
                   QWidget *widget)
 {
+    QGraphicsProxyWidget::paint(painter, option, widget);
+    /*
+        NOTE: if we don't get any coplaints about "unitialized random gibberish" as in the FIXME
+        below, then we can just get rid of this entire block of code.it really depends on whether
+        or not Qt has been fixed since this was written
     QLabel *native = nativeWidget();
     QFontMetrics fm = native->font();
 
@@ -327,6 +332,7 @@ void Label::paint(QPainter *painter,
         buffPainter.end();
         painter->drawPixmap(contentsRect(), buffer, buffer.rect());
     }
+    */
 }
 
 void Label::changeEvent(QEvent *event)
