@@ -669,7 +669,7 @@ void Dialog::setGraphicsWidget(QGraphicsWidget *widget)
     }
 }
 
-//BIC FIXME: should be const
+//KDE5 FIXME: should be const
 QGraphicsWidget *Dialog::graphicsWidget()
 {
     return d->graphicsWidgetPtr.data();
@@ -690,7 +690,7 @@ bool Dialog::eventFilter(QObject *watched, QEvent *event)
     if (event->type() == QEvent::Enter && watched == d->view) {
         unsetCursor();
     }
-        
+
     return QWidget::eventFilter(watched, event);
 }
 
