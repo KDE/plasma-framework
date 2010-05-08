@@ -294,7 +294,7 @@ void Label::paint(QPainter *painter,
         QGraphicsProxyWidget::paint(painter, option, widget);
     } else {
         const int gradientLength = 25;
-        QPixmap buffer(size().toSize());
+        QPixmap buffer(contentsRect().size().toSize());
         buffer.fill(Qt::transparent);
 
         QPainter buffPainter(&buffer);
@@ -325,7 +325,7 @@ void Label::paint(QPainter *painter,
         }
 
         buffPainter.end();
-        painter->drawPixmap(buffer.rect(), buffer, buffer.rect());
+        painter->drawPixmap(contentsRect(), buffer, buffer.rect());
     }
 }
 
