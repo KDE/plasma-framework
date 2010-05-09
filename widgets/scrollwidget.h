@@ -255,6 +255,7 @@ protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+    void keyPressEvent(QKeyEvent *event);
     void wheelEvent(QGraphicsSceneWheelEvent *event);
     bool eventFilter(QObject *watched, QEvent *event);
     void focusInEvent(QFocusEvent *event);

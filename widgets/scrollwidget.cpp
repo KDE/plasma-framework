@@ -26,6 +26,7 @@
 #include <QGraphicsGridLayout>
 #include <QGraphicsScene>
 #include <QApplication>
+#include <QKeyEvent>
 #include <QWidget>
 #include <QTimer>
 #include <QTime>
@@ -577,6 +578,51 @@ public:
             return -widget.data()->property("scrollPositionY").toReal();
         } else
             return widget.data()->y();
+    }
+
+    void handleKeyPressEvent(QKeyEvent *event)
+    {
+        if (!widget.data())
+            return;
+
+        QPointF start = q->scrollPosition();
+        QPointF end = start;
+
+        qreal step = 100;
+
+        switch (event->key()) {
+        case Qt::Key_Left:
+            if (canXFlick()) {
+                end += QPointF(-step, 0);
+            }
+            break;
+        case Qt::Key_Right:
+            if (canXFlick()) {
+                end += QPointF(step, 0);
+            }
+            break;
+        case Qt::Key_Up:
+            if (canYFlick()) {
+                end += QPointF(0, -step);
+            }
+            break;
+        case Qt::Key_Down:
+            if (canYFlick()) {
+                end += QPointF(0, step);
+            }
+            break;
+        default:
+            break;
+        }
+
+        fixupAnimation.groupX->stop();
+        fixupAnimation.groupY->stop();
+        fixupAnimation.snapX->stop();
+        fixupAnimation.snapY->stop();
+        directMoveAnimation->setStartValue(start);
+        directMoveAnimation->setEndValue(end);
+        directMoveAnimation->setDuration(200);
+        directMoveAnimation->start();
     }
 
     void handleMousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -1255,6 +1301,11 @@ void ScrollWidget::resizeEvent(QGraphicsSceneResizeEvent *event)
     }
 
     QGraphicsWidget::resizeEvent(event);
+}
+
+void ScrollWidget::keyPressEvent(QKeyEvent *event)
+{
+    d->handleKeyPressEvent(event);
 }
 
 void ScrollWidget::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
