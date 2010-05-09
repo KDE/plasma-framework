@@ -273,9 +273,9 @@ void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containme
     KAction *appAction = qobject_cast<KAction*>(actions->action("remove"));
     appAction->setShortcut(KShortcut("alt+d, alt+r"));
     if (c && c->d->isPanelContainment()) {
-        appAction->setText(i18n("Remove this panel"));
+        appAction->setText(i18n("Remove this Panel"));
     } else {
-        appAction->setText(i18n("Remove this activity"));
+        appAction->setText(i18n("Remove this Activity"));
     }
 
     appAction = qobject_cast<KAction*>(actions->action("configure"));

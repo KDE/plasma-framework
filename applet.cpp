@@ -1671,7 +1671,7 @@ KActionCollection* AppletPrivate::defaultActions(QObject *parent)
 
     KAction *runAssociatedApplication = actions->addAction("run associated application");
     runAssociatedApplication->setAutoRepeat(false);
-    runAssociatedApplication->setText(i18n("Run the associated application"));
+    runAssociatedApplication->setText(i18n("Run the Associated Application"));
     runAssociatedApplication->setIcon(KIcon("system-run"));
     runAssociatedApplication->setShortcut(KShortcut("alt+d, t"));
     runAssociatedApplication->setVisible(false);
