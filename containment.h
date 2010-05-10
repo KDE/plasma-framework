@@ -342,15 +342,26 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * Sets the current activity by name
          *
-         * @param activity the name of the activity; if it doesn't exist in the
-         *        semantic store, it will be created.
+         * @param activity the name of the activity
          */
         void setActivity(const QString &activity);
 
         /**
-         * @return the current activity associated with this activity
+         * @return the current activity name associated with this containment
          */
         QString activity() const;
+
+        /**
+         * Sets the current activity by id
+         *
+         * @param activity the id of the activity
+         */
+        void setActivityId(const QString &activity);
+
+        /**
+         * @return the current activity id associated with this containment
+         */
+        QString activityId() const;
 
         /**
          * Shows the context menu for the containment directly, bypassing Applets
@@ -448,9 +459,14 @@ class PLASMA_EXPORT Containment : public Applet
         void configureRequested(Plasma::Containment *containment);
 
         /**
-         * The activity associated to this containemnt has changed
+         * The context associated to this containment has changed
          */
         void contextChanged(Plasma::Context *context);
+        /**
+         * The activity name for the context associated to this containment has changed
+         * @since 4.5
+         */
+        void activityNameChanged(Plasma::Context *context);
 
     public Q_SLOTS:
         /**

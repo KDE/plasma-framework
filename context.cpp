@@ -25,7 +25,8 @@ namespace Plasma
 class ContextPrivate
 {
 public:
-    QString activity;
+    QString activityId;
+    QString activityName;
 };
 
 Context::Context(QObject *parent)
@@ -33,6 +34,7 @@ Context::Context(QObject *parent)
       d(new ContextPrivate)
 {
     //TODO: look up activity in Nepomuk
+    //except we can't, because that code is in kdebase.
 }
 
 Context::~Context()
@@ -52,23 +54,33 @@ QStringList Context::listActivities() const
 
 void Context::setCurrentActivity(const QString &name)
 {
-    if (d->activity == name || name.isEmpty()) {
+    if (d->activityName == name || name.isEmpty()) {
         return;
     }
 
-    d->activity = name;
+    d->activityName = name;
     emit activityChanged(this);
     emit changed(this);
-
-    const QStringList activities = listActivities();
-    if (!activities.contains(name)) {
-        createActivity(name);
-    }
 }
 
 QString Context::currentActivity() const
 {
-    return d->activity;
+    return d->activityName;
+}
+
+void Context::setCurrentActivityId(const QString &id)
+{
+    if (d->activityId == id || id.isEmpty()) {
+        return;
+    }
+
+    d->activityId = id;
+    emit changed(this);
+}
+
+QString Context::currentActivityId() const
+{
+    return d->activityId;
 }
 
 } // namespace Plasma

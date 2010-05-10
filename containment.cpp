@@ -357,6 +357,10 @@ void Containment::restore(KConfigGroup &group)
     setFormFactor((Plasma::FormFactor)group.readEntry("formfactor", (int)d->formFactor));
     //kDebug() << "setScreen from restore";
     setScreen(group.readEntry("screen", d->screen), group.readEntry("desktop", d->desktop));
+    QString activityId = group.readEntry("activityId", QString());
+    if (! activityId.isEmpty()) {
+        setActivityId(activityId);
+    }
     setActivity(group.readEntry("activity", QString()));
 
     flushPendingConstraintsEvents();
@@ -1982,9 +1986,34 @@ void Containment::setActivity(const QString &activity)
     }
 }
 
+void Containment::setActivityId(const QString &activity)
+{
+    Context *context = d->context();
+    if (context->currentActivityId() != activity) {
+        context->setCurrentActivityId(activity);
+
+        foreach (Applet *a, d->applets) {
+            a->updateConstraints(ContextConstraint);
+        }
+
+        KConfigGroup c = config();
+        c.writeEntry("activityId", activity);
+
+        if (d->toolBox) {
+            d->toolBox.data()->update();
+        }
+        emit configNeedsSaving();
+    }
+}
+
 QString Containment::activity() const
 {
     return d->context()->currentActivity();
+}
+
+QString Containment::activityId() const
+{
+    return d->context()->currentActivityId();
 }
 
 Context *ContainmentPrivate::context()
@@ -1993,6 +2022,8 @@ Context *ContainmentPrivate::context()
         con = new Context(q);
         q->connect(con, SIGNAL(changed(Plasma::Context*)),
                    q, SIGNAL(contextChanged(Plasma::Context*)));
+        q->connect(con, SIGNAL(activityChanged(Plasma::Context*)),
+                   q, SIGNAL(activityNameChanged(Plasma::Context*)));
     }
 
     return con;

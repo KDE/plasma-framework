@@ -38,11 +38,17 @@ public:
     explicit Context(QObject *parent = 0);
     ~Context();
 
+    //don't use these two
     void createActivity(const QString &name);
     QStringList listActivities() const;
 
+    //activity name
     void setCurrentActivity(const QString &name);
     QString currentActivity() const;
+
+    //activity id
+    void setCurrentActivityId(const QString &id);
+    QString currentActivityId() const;
 
     //TODO: location
 
