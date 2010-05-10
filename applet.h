@@ -638,6 +638,21 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * parented to the supplied widget. Ownership of the widgets is passed
          * to the parent widget.
          *
+         * Typically one would add custom pages to the config dialog @p parent
+         * and then connect to the applyClicked() and okClicked() signals
+         * or @p parent to react on config changes:
+         *
+         * @code
+         * connect(parent, SIGNAL(applyClicked()), this, SLOT(myConfigAccepted()));
+         * connect(parent, SIGNAL(okClicked()), this, SLOT(myConfigAccepted()));
+         * @endcode
+         *
+         * With this approach it makes sense to store the custom pages in member
+         * variables to make their fields accessible from the myConfigAccepted()
+         * slot.
+         *
+         * Use config() to store your configuration.
+         *
          * @param parent the dialog which is the parent of the configuration
          *               widgets
          */
