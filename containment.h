@@ -355,11 +355,13 @@ class PLASMA_EXPORT Containment : public Applet
          * Sets the current activity by id
          *
          * @param activity the id of the activity
+         * @since 4.5
          */
         void setActivityId(const QString &activity);
 
         /**
          * @return the current activity id associated with this containment
+         * @since 4.5
          */
         QString activityId() const;
 
