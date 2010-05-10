@@ -30,7 +30,6 @@
 #include <ktemporaryfile.h>
 #include <ktempdir.h>
 #include <kzip.h>
-#include <kio/netaccess.h>
 #include <kio/job.h>
 
 #include "package.h"
@@ -179,7 +178,7 @@ PackageStructure::Ptr PackageStructure::load(const QString &packageFormat)
     // try to load from absolute file path
     KUrl url(packageFormat);
     if (url.isLocalFile()) {
-        KConfig config(KIO::NetAccess::mostLocalUrl(url, NULL).toLocalFile(), KConfig::SimpleConfig);
+        KConfig config(url.toLocalFile(), KConfig::SimpleConfig);
         structure->read(&config);
         PackageStructurePrivate::structures[structure->type()] = structure;
     } else {
