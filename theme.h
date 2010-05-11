@@ -216,6 +216,46 @@ class PLASMA_EXPORT Theme : public QObject
         bool useNativeWidgetStyle() const;
 
         /**
+         * Provides a Plasma::Theme-themed stylesheet for hybrid (web / native Plasma) widgets.
+         *
+         * You can use this method to retrieve a basic default stylesheet, or to theme your
+         * custom stylesheet you use for example in Plasma::WebView. The QString you can pass
+         * into this method does not have to be a valid stylesheet, in fact you can use this
+         * method to replace color placeholders with the theme's color in any QString.
+         *
+         * In order to use this method with a custom stylesheet, just put for example %textcolor
+         * in your QString and it will be replaced with the theme's text (or foreground) color.
+         *
+         * Just like in many other methods for retrieving theme information, do not forget to
+         * update your stylesheet upon the themeChanged() signal.
+         *
+         * The following tags will be replaced by corresponding colors from Plasma::Theme:
+         *
+         * %textcolor
+         * %backgroundcolor
+         * %buttonbackgroundcolor
+         *
+         * %link
+         * %activatedlink
+         * %hoveredlink
+         * %visitedlink
+         *
+         * %fontfamily
+         * %fontsize
+         * %smallfontsize
+         *
+         * @param css a stylesheet to theme, leave empty for a default stylesheet containing
+         * theming for some commonly used elements, body text and links, for example.
+         *
+         * @return a piece of CSS that sets the most commonly used style elements to a theme
+         * matching Plasma::Theme.
+         *
+         * @since 4.5
+         */
+        Q_INVOKABLE QString styleSheet(const QString &css = QString()) const;
+
+
+        /**
          * Tries to load pixmap with the specified key from cache.
          *
          * @param key the name to use in the cache for this image

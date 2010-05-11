@@ -135,6 +135,8 @@ public:
     void processWallpaperSettings(KConfigBase *metadata);
     void processAnimationSettings(const QString &theme, KConfigBase *metadata);
 
+    const QString processStyleSheet(const QString &css);
+
     static const char *defaultTheme;
     static const char *themeRcFile;
     static PackageStructure::Ptr packageStructure;
@@ -271,6 +273,54 @@ void ThemePrivate::colorsChanged()
     buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, colors);
     viewColorScheme = KColorScheme(QPalette::Active, KColorScheme::View, colors);
     emit q->themeChanged();
+}
+
+const QString ThemePrivate::processStyleSheet(const QString &css)
+{
+    QString stylesheet;
+    if (css.isEmpty()) {
+        stylesheet = QString("\n\
+                    body {\n\
+                        color: %textcolor;\n\
+                        font-size: %fontsize;\n\
+                        font-family: %fontfamily;\n\
+                    }\n\
+                    a:active  { color: %activatedlink; }\n\
+                    a:link    { color: %link; }\n\
+                    a:visited { color: %visitedlink; }\n\
+                    a:hover   { color: %hoveredlink; text-decoration: none; }\n\
+                    ");
+    } else {
+        stylesheet = css;
+    }
+
+    QHash<QString, QString> elements;
+    // If you add elements here, make sure their names are sufficiently unique to not cause
+    // clashes between element keys
+    elements["%textcolor"] = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor).name();
+    elements["%backgroundcolor"] =
+                Plasma::Theme::defaultTheme()->color(Plasma::Theme::BackgroundColor).name();
+    elements["%visitedlink"] =
+                Plasma::Theme::defaultTheme()->color(Plasma::Theme::VisitedLinkColor).name();
+    elements["%activatedlink"] =
+                Plasma::Theme::defaultTheme()->color(Plasma::Theme::HighlightColor).name();
+    elements["%hoveredlink"] =
+                Plasma::Theme::defaultTheme()->color(Plasma::Theme::HighlightColor).name();
+    elements["%link"] = Plasma::Theme::defaultTheme()->color(Plasma::Theme::LinkColor).name();
+    elements["%buttonbackgroundcolor"] =
+                Plasma::Theme::defaultTheme()->color(Plasma::Theme::ButtonBackgroundColor).name();
+    elements["%smallfontsize"] =
+                QString("%1pt").arg(KGlobalSettings::smallestReadableFont().pointSize());
+
+    QFont font = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
+    elements["%fontsize"] =
+                QString("%1pt").arg(font.pointSize());
+    elements["%fontfamily"] = font.family();
+
+    foreach (const QString &k, elements.keys()) {
+        stylesheet.replace(k, elements[k]);
+    }
+    return stylesheet;
 }
 
 class ThemeSingleton
@@ -578,6 +628,11 @@ QString Theme::imagePath(const QString &name) const
     */
 
     return path;
+}
+
+QString Theme::styleSheet(const QString &css) const
+{
+    return d->processStyleSheet(css);
 }
 
 QString Theme::animationPath(const QString &name) const
