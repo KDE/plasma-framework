@@ -1412,6 +1412,7 @@ void IconWidget::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
         action->event(event->type(), event->pos());
     }
 
+    d->oldIcon = QIcon();
     d->animateMainIcon(true, d->states|IconWidgetPrivate::HoverState);
     update();
 
