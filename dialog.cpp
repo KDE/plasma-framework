@@ -87,6 +87,7 @@ public:
     void updateResizeCorners();
     int calculateWidthForHeightAndRatio(int height, qreal ratio);
     Plasma::Applet *applet();
+    void delayedAdjustSize();
 
     Plasma::Dialog *q;
 
@@ -182,6 +183,11 @@ Plasma::Applet *DialogPrivate::applet()
         }
     }
     return applet;
+}
+
+void DialogPrivate::delayedAdjustSize()
+{
+    q->adjustSize();
 }
 
 void DialogPrivate::checkBorders(bool updateMaskIfNeeded)
@@ -413,7 +419,7 @@ Dialog::Dialog(QWidget *parent, Qt::WindowFlags f)
 
     d->adjustSizeTimer = new QTimer(this);
     d->adjustSizeTimer->setSingleShot(true);
-    connect(d->adjustSizeTimer, SIGNAL(timeout()), this, SLOT(adjustSize()));
+    connect(d->adjustSizeTimer, SIGNAL(timeout()), this, SLOT(delayedAdjustSize()));
 
     connect(d->background, SIGNAL(repaintNeeded()), this, SLOT(update()));
 
