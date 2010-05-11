@@ -534,12 +534,8 @@ void Meter::paint(QPainter *p,
 }
 
 QSizeF Meter::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
-{return QGraphicsWidget::sizeHint(which, constraint);
-    if (which == Qt::PreferredSize) {
-        return QSizeF(200, 32);
-    } else {
-        return QGraphicsWidget::sizeHint(which, constraint);
-    }
+{
+    return QGraphicsWidget::sizeHint(which, constraint);
 }
 
 } // End of namepace
