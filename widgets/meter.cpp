@@ -210,7 +210,7 @@ void MeterPrivate::setSizePolicyAndPreferredSize()
     {
         switch (meterType) {
             case Meter::BarMeterHorizontal:
-                meter->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+                meter->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
                 break;
             case Meter::BarMeterVertical:
                 meter->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
