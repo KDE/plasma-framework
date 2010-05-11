@@ -358,7 +358,7 @@ void Containment::restore(KConfigGroup &group)
     //kDebug() << "setScreen from restore";
     setScreen(group.readEntry("screen", d->screen), group.readEntry("desktop", d->desktop));
     QString activityId = group.readEntry("activityId", QString());
-    if (! activityId.isEmpty()) {
+    if (!activityId.isEmpty()) {
         setActivityId(activityId);
     }
     setActivity(group.readEntry("activity", QString()));

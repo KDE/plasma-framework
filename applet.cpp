@@ -364,7 +364,6 @@ void Applet::setFailedToLaunch(bool failed, const QString &reason)
     d->failed = failed;
     prepareGeometryChange();
 
-
     foreach (QGraphicsItem *item, childItems()) {
         if (!dynamic_cast<AppletHandle *>(item)) {
             delete item;
