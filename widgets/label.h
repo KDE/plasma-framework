@@ -171,6 +171,7 @@ protected:
     bool event(QEvent *event);
     QVariant itemChange(GraphicsItemChange change, const QVariant & value);
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+    QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint) const;
 
 private:
     Q_PRIVATE_SLOT(d, void setPalette())

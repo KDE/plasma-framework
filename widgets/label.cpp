@@ -363,6 +363,15 @@ QVariant Label::itemChange(GraphicsItemChange change, const QVariant & value)
     return QGraphicsWidget::itemChange(change, value);
 }
 
+QSizeF Label::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
+{
+    if (sizePolicy().verticalPolicy() == QSizePolicy::Fixed) {
+        return QGraphicsProxyWidget::sizeHint(Qt::PreferredSize, constraint);
+    } else {
+        return QGraphicsProxyWidget::sizeHint(which, constraint);
+    }
+}
+
 } // namespace Plasma
 
 #include <label.moc>
