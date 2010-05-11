@@ -359,7 +359,7 @@ void Containment::restore(KConfigGroup &group)
     setScreen(group.readEntry("screen", d->screen), group.readEntry("desktop", d->desktop));
     QString activityId = group.readEntry("activityId", QString());
     if (!activityId.isEmpty()) {
-        setActivityId(activityId);
+        d->context()->setCurrentActivityId(activityId);
     }
     setActivity(group.readEntry("activity", QString()));
 
@@ -1971,39 +1971,34 @@ void Containment::setActivity(const QString &activity)
     Context *context = d->context();
     if (context->currentActivity() != activity) {
         context->setCurrentActivity(activity);
-
-        foreach (Applet *a, d->applets) {
-            a->updateConstraints(ContextConstraint);
-        }
-
-        KConfigGroup c = config();
-        c.writeEntry("activity", activity);
-
-        if (d->toolBox) {
-            d->toolBox.data()->update();
-        }
-        emit configNeedsSaving();
     }
 }
 
-void Containment::setActivityId(const QString &activity)
+void ContainmentPrivate::onContextChanged(Plasma::Context *con)
 {
-    Context *context = d->context();
-    if (context->currentActivityId() != activity) {
-        context->setCurrentActivityId(activity);
-
-        foreach (Applet *a, d->applets) {
-            a->updateConstraints(ContextConstraint);
-        }
-
-        KConfigGroup c = config();
-        c.writeEntry("activityId", activity);
-
-        if (d->toolBox) {
-            d->toolBox.data()->update();
-        }
-        emit configNeedsSaving();
+    foreach (Applet *a, applets) {
+        a->updateConstraints(ContextConstraint);
     }
+
+    KConfigGroup c = q->config();
+    QString act = con->currentActivityId();
+
+    //save anything that's been set (boy I hope this avoids overwriting things)
+    //FIXME of course if the user sets the name to an empty string we have a bug
+    //but once we get context retrieving the name as soon as the id is set, this issue should go away
+    if (!act.isEmpty()) {
+        c.writeEntry("activityId", act);
+    }
+    act = con->currentActivity();
+    if (!act.isEmpty()) {
+        c.writeEntry("activity", act);
+    }
+
+    if (toolBox) {
+        toolBox.data()->update();
+    }
+    emit q->configNeedsSaving();
+    emit q->contextChanged(con);
 }
 
 QString Containment::activity() const
@@ -2011,9 +2006,9 @@ QString Containment::activity() const
     return d->context()->currentActivity();
 }
 
-QString Containment::activityId() const
+Context *Containment::context() const
 {
-    return d->context()->currentActivityId();
+    return d->context();
 }
 
 Context *ContainmentPrivate::context()
@@ -2021,9 +2016,7 @@ Context *ContainmentPrivate::context()
     if (!con) {
         con = new Context(q);
         q->connect(con, SIGNAL(changed(Plasma::Context*)),
-                   q, SIGNAL(contextChanged(Plasma::Context*)));
-        q->connect(con, SIGNAL(activityChanged(Plasma::Context*)),
-                   q, SIGNAL(activityNameChanged(Plasma::Context*)));
+                   q, SLOT(onContextChanged(Plasma::Context*)));
     }
 
     return con;

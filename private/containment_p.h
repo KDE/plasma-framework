@@ -121,6 +121,11 @@ public:
     Context *context();
 
     /**
+     * propogates context changes
+     */
+    void onContextChanged(Plasma::Context *con);
+
+    /**
      * Handles dropped/pasted mimetype data
      * @param scenePos scene-relative position
      * @param screenPos screen-relative position
