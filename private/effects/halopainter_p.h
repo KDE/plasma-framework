@@ -26,6 +26,7 @@
 class QRect;
 class QPainter;
 
+namespace Plasma {
 
 class TileSet
 {
@@ -72,6 +73,8 @@ private:
     mutable QCache<int, TileSet> m_tileCache;
     mutable QCache<int, QPixmap> m_haloCache;
 };
+
+} // namespace Plasma
 
 #endif
 

@@ -22,6 +22,8 @@
 
 #include <cmath>
 
+namespace Plasma
+{
 
 static inline qreal gaussian(qreal x, qreal sigma)
 {
@@ -243,4 +245,6 @@ void HaloPainter::paint(QPainter *painter, const QRect &textRect) const
 
     painter->drawPixmap(hr.topLeft(), *pixmap);
 }
+
+} // namespace Plasma
 
