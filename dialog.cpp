@@ -398,11 +398,10 @@ int DialogPrivate::calculateWidthForHeightAndRatio(int height, qreal ratio)
 }
 
 Dialog::Dialog(QWidget *parent, Qt::WindowFlags f)
-    : QWidget(parent, f),
+    : QWidget(parent, f | Qt::FramelessWindowHint),
       d(new DialogPrivate(this))
 {
     setAttribute(Qt::WA_TranslucentBackground);
-    setWindowFlags(Qt::FramelessWindowHint);
     d->background = new FrameSvg(this);
     d->background->setImagePath("dialogs/background");
     d->background->setEnabledBorders(FrameSvg::AllBorders);
