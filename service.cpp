@@ -66,6 +66,12 @@ Service::~Service()
 
 Service *Service::load(const QString &name, QObject *parent)
 {
+    QVariantList args;
+    return load(name, args, parent);
+}
+
+Service *Service::load(const QString &name, const QVariantList &args, QObject *parent)
+{
     //TODO: scripting API support
     if (name.isEmpty()) {
         return new NullService(QString(), parent);
@@ -81,7 +87,6 @@ Service *Service::load(const QString &name, QObject *parent)
 
     KService::Ptr offer = offers.first();
     QString error;
-    QVariantList args;
     //args << name;
     Service *service = 0;
 
