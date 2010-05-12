@@ -83,8 +83,7 @@ QPropertyAnimation *IconHoverAnimation::animation() const
 void IconHoverAnimation::setValue(qreal value)
 {
     m_value = value;
-
-    QGraphicsItem *item = qobject_cast<QGraphicsItem*>(parent());
+    QGraphicsWidget *item = static_cast<QGraphicsWidget*>(parent());
     item->update();
 }
 
