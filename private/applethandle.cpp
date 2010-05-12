@@ -796,7 +796,7 @@ void AppletHandle::switchContainment(Containment *containment, const QPointF &po
     applet->disconnect(this); //make sure the applet doesn't tell us to do anything
     //applet->setZValue(m_zValue);
     containment->addApplet(applet, containment->mapFromScene(pos), false);
-    update();
+    deleteLater();
 }
 
 void AppletHandle::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
