@@ -412,7 +412,7 @@ void Containment::save(KConfigGroup &g) const
     // locking is saved in Applet::save
     Applet::save(group);
 
-    if (! isContainment()) {
+    if (!isContainment()) {
         return;
     }
 
