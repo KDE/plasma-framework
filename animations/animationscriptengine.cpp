@@ -49,6 +49,7 @@ namespace AnimationScriptEngine
 
 QScriptEngine* inst = 0;
 QHash<QString, QScriptValue> s_animFuncs;
+QString s_prefix;
 
 QScriptValue animation(const QString &anim)
 {
@@ -70,7 +71,7 @@ void clearAnimations()
 QScriptValue registerAnimation(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() > 1) {
-        const QString name = context->argument(0).toString();
+        const QString name = s_prefix + context->argument(0).toString();
 
         if (!s_animFuncs.contains(name)) {
             const QScriptValue func = context->argument(1);
@@ -171,7 +172,7 @@ QScriptEngine *globalEngine()
     return inst;
 }
 
-bool loadScript(const QString &path)
+bool loadScript(const QString &path, const QString &prefix)
 {
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -183,7 +184,9 @@ bool loadScript(const QString &path)
     QString tmp(buffer.readAll());
 
     QScriptEngine *engine = AnimationScriptEngine::globalEngine();
+    s_prefix = prefix;
     QScriptValue def(engine->evaluate(tmp, path));
+    s_prefix.clear();
     if (engine->hasUncaughtException()) {
         const QScriptValue error = engine->uncaughtException();
         QString file = error.property("fileName").toString();
