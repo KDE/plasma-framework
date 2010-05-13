@@ -411,6 +411,11 @@ void Containment::save(KConfigGroup &g) const
 
     // locking is saved in Applet::save
     Applet::save(group);
+
+    if (! isContainment()) {
+        return;
+    }
+
     group.writeEntry("screen", d->screen);
     group.writeEntry("desktop", d->desktop);
     group.writeEntry("formfactor", (int)d->formFactor);
