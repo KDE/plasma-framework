@@ -664,7 +664,8 @@ QScriptValue SimpleJavaScriptApplet::animation(QScriptContext *context, QScriptE
     }
 
     populateAnimationsHash();
-    QString animName = context->argument(0).toString().toLower();
+    QString name = context->argument(0).toString();
+    QString animName = name.toLower();
     const bool isPause = animName == "pause";
     const bool isProperty = animName == "property";
 
@@ -679,7 +680,15 @@ QScriptValue SimpleJavaScriptApplet::animation(QScriptContext *context, QScriptE
     } else if (s_animationDefs.contains(animName)) {
         plasmaAnim = Plasma::Animator::create(s_animationDefs.value(animName), parent);
     } else {
-        plasmaAnim = Plasma::Animator::create(animName, parent);
+        SimpleJavaScriptApplet *jsApplet = qobject_cast<SimpleJavaScriptApplet *>(engine->parent());
+        if (jsApplet) {
+            //kDebug() << "trying to load it from the package";
+            plasmaAnim = jsApplet->loadAnimationFromPackage(name, parent);
+        }
+
+        if (!plasmaAnim) {
+            plasmaAnim = Plasma::Animator::create(animName, parent);
+        }
     }
 
     if (plasmaAnim) {
@@ -695,7 +704,13 @@ QScriptValue SimpleJavaScriptApplet::animation(QScriptContext *context, QScriptE
         return value;
     }
 
-    return context->throwError(i18n("%1 is not a known animation type", animName));
+    context->throwError(i18n("%1 is not a known animation type", animName));
+
+    ScriptEnv *env = ScriptEnv::findScriptEnv(engine);
+    if (env) {
+        env->checkForErrors(false);
+    }
+    return engine->undefinedValue();
 }
 
 QScriptValue SimpleJavaScriptApplet::animationGroup(QScriptContext *context, QScriptEngine *engine)
