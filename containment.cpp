@@ -416,6 +416,7 @@ void Containment::save(KConfigGroup &g) const
     group.writeEntry("formfactor", (int)d->formFactor);
     group.writeEntry("location", (int)d->location);
     group.writeEntry("activity", d->context()->currentActivity());
+    group.writeEntry("activityId", d->context()->currentActivityId());
 
     InternalToolBox *toolBox = qobject_cast<InternalToolBox *>(d->toolBox.data());
     if (toolBox) {
