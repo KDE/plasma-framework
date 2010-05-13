@@ -446,8 +446,7 @@ void ThemePrivate::processAnimationSettings(const QString &theme, KConfigBase *m
     KConfigGroup cg(metadata, "Animations");
     const QString animDir = "desktoptheme/" + theme + "/animations/";
     foreach (const QString &path, cg.keyList()) {
-        QStringList anims = cg.readEntry(path, QStringList());
-
+        const QStringList anims = cg.readEntry(path, QStringList());
         foreach (const QString &anim, anims) {
             if (!animationMapping.contains(anim)) {
                 kDebug() << "Registering animation. animDir: " << animDir
