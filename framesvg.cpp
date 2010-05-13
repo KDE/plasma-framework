@@ -78,6 +78,10 @@ void FrameSvg::setEnabledBorders(const EnabledBorders borders)
 
 FrameSvg::EnabledBorders FrameSvg::enabledBorders() const
 {
+    if (d->frames.isEmpty()) {
+        return NoBorder;
+    }
+
     QHash<QString, FrameData*>::const_iterator it = d->frames.constFind(d->prefix);
 
     if (it != d->frames.constEnd()) {
