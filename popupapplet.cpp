@@ -277,7 +277,9 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             //kDebug() << "we are expanding the popupapplet";
 
 
-            q->setStatus(Plasma::AcceptingInputStatus);
+            if (q->status() == UnknownStatus) {
+                q->setStatus(AcceptingInputStatus);
+            }
 
             // we only switch to expanded if we aren't horiz/vert constrained and
             // this applet has an icon.
@@ -364,7 +366,9 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 delete proxy.data();
             }
 
-            q->setStatus(Plasma::UnknownStatus);
+            if (q->status() == AcceptingInputStatus) {
+                q->setStatus(UnknownStatus);
+            }
 
             if (!dialogPtr) {
                 //save the aspect ratio mode in case we drag'n drop in the Desktop later
