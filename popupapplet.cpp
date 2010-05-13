@@ -276,6 +276,9 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
              (f == Plasma::Horizontal && parentSize.height() >= minimum.height())))) {
             //kDebug() << "we are expanding the popupapplet";
 
+
+            q->setStatus(Plasma::AcceptingInputStatus);
+
             // we only switch to expanded if we aren't horiz/vert constrained and
             // this applet has an icon.
             // otherwise, we leave it up to the applet itself to figure it out
@@ -360,6 +363,8 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 proxy.data()->setWidget(0); // prevent it from deleting our widget!
                 delete proxy.data();
             }
+
+            q->setStatus(Plasma::UnknownStatus);
 
             if (!dialogPtr) {
                 //save the aspect ratio mode in case we drag'n drop in the Desktop later
