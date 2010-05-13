@@ -38,6 +38,7 @@ class KConfigDialog;
 namespace Plasma
 {
 
+class Animation;
 class AppletScriptPrivate;
 class Extender;
 
@@ -224,6 +225,14 @@ protected:
      * @see Applet
      */
     bool isRegisteredAsDragHandle(QGraphicsItem *item);
+
+    /**
+     * Loads an animation from the applet package
+     * @arg animation the animation to load
+     * @return an Animation object on success, a NULL pointer on failure
+     * @since 4.5
+     */
+    Animation *loadAnimationFromPackage(const QString &name, QObject *parent);
 
 private:
     friend class Applet;
