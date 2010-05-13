@@ -67,6 +67,7 @@ PlasmoidPackage::PlasmoidPackage(QObject *parent)
     addFileDefinition("mainconfigxml", "config/main.xml", i18n("Configuration XML file"));
     addFileDefinition("mainscript", "code/main", i18n("Main Script File"));
     addFileDefinition("defaultconfig", "config/default-configrc", i18n("Default configuration"));
+    addDirectoryDefinition("animations", "animations/", i18n("Animation scripts"));
     setRequired("mainscript", true);
 }
 
