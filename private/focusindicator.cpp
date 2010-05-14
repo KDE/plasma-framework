@@ -34,8 +34,7 @@ namespace Plasma
 FocusIndicator::FocusIndicator(QGraphicsWidget *parent, QString widget)
     : QGraphicsWidget(parent),
       m_parent(parent),
-      m_background(0),
-      m_prefix("hover")
+      m_background(0)
 {
     setFlag(QGraphicsItem::ItemStacksBehindParent);
     setAcceptsHoverEvents(true);
