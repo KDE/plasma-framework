@@ -261,6 +261,7 @@ public:
     }
 
     void offscreenWidgetDestroyed(QObject *);
+    QList<Plasma::Containment *> importLayout(const KConfigBase &conf, bool mergeConfig);
 
     static bool s_positioningContainments;
 
@@ -437,83 +438,87 @@ void Corona::layoutContainments()
 
 void Corona::loadLayout(const QString &configName)
 {
-    KSharedConfigPtr c;
-    bool mergeConfig = false;
+    KSharedConfigPtr conf;
 
     if (configName.isEmpty() || configName == d->configName) {
-        c = config();
+        conf = config();
     } else {
-        c = KSharedConfig::openConfig(configName);
-        mergeConfig = true;
+        conf = KSharedConfig::openConfig(configName);
     }
 
-    QList<uint> containmentsIds;
+    d->importLayout(*conf, conf != config());
+}
 
-    if (mergeConfig) {
-        foreach (Plasma::Containment *cont, d->containments) {
-            containmentsIds.append(cont->id());
+QList<Plasma::Containment *> Corona::importLayout(const KConfigBase &conf)
+{
+    if (const KConfigGroup *group = dynamic_cast<const KConfigGroup *>(&conf)) {
+        if (!group->isValid()) {
+            return QList<Containment *>();
         }
     }
 
-    KConfigGroup containments(c, "Containments");
+    return d->importLayout(conf, true);
+}
 
-    foreach (const QString &group, containments.groupList()) {
-        KConfigGroup containmentConfig(&containments, group);
+QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigBase &conf, bool mergeConfig)
+{
+    QList<Plasma::Containment *> newContainments;
+    QSet<uint> containmentsIds;
+
+    foreach (Containment *containment, containments) {
+        containmentsIds.insert(containment->id());
+    }
+
+    KConfigGroup containmentsGroup(&conf, "Containments");
+
+    foreach (const QString &group, containmentsGroup.groupList()) {
+        KConfigGroup containmentConfig(&containmentsGroup, group);
 
         if (containmentConfig.entryMap().isEmpty()) {
             continue;
         }
 
         uint cid = group.toUInt();
+        if (containmentsIds.contains(cid)) {
+            cid = ++AppletPrivate::s_maxAppletId;
+        } else if (cid > AppletPrivate::s_maxAppletId) {
+            AppletPrivate::s_maxAppletId = cid;
+        }
+
         if (mergeConfig) {
-            if (containmentsIds.contains(cid)) {
-                cid = 0;
-            } else if (cid > AppletPrivate::s_maxAppletId) {
-                AppletPrivate::s_maxAppletId = cid;
-            }
+            KConfigGroup realConf(q->config(), "Containments");
+            realConf = KConfigGroup(&realConf, QString::number(cid));
+            containmentConfig.copyTo(&realConf);
         }
 
         //kDebug() << "got a containment in the config, trying to make a" << containmentConfig.readEntry("plugin", QString()) << "from" << group;
-        Containment *c = d->addContainment(containmentConfig.readEntry("plugin", QString()), QVariantList(),
-                                           cid, true);
+        Containment *c = addContainment(containmentConfig.readEntry("plugin", QString()), QVariantList(), cid, true);
         if (!c) {
             continue;
         }
 
-        if (mergeConfig) {
-            containmentsIds.append(c->id());
-        }
+        newContainments.append(c);
+        containmentsIds.insert(c->id());
 
         c->init();
         c->restore(containmentConfig);
     }
 
-    foreach (Containment *containment, d->containments) {
-        QString cid = QString::number(containment->id());
-        KConfigGroup *appletsConfigGroup = 0;
-        if (mergeConfig) {
-            KConfigGroup containmentConfig(&containments, cid);
-            appletsConfigGroup = new KConfigGroup(&containmentConfig, "Applets");
-        }
-
+    foreach (Containment *containment, newContainments) {
         foreach (Applet *applet, containment->applets()) {
-            if (mergeConfig) {
-                KConfigGroup externalAppletConfig(appletsConfigGroup, QString::number(applet->id()));
-                externalAppletConfig.copyTo(applet->d->mainConfigGroup());
-            }
-
             applet->init();
             // We have to flush the applet constraints manually
             applet->flushPendingConstraintsEvents();
             kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Applet" << applet->name();
         }
 
-        delete appletsConfigGroup;
         containment->updateConstraints(Plasma::StartupCompletedConstraint);
         containment->flushPendingConstraintsEvents();
-        emit containmentAdded(containment);
+        emit q->containmentAdded(containment);
         kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Containment" << containment->name();
     }
+
+    return newContainments;
 }
 
 Containment *Corona::containmentForScreen(int screen, int desktop) const
