@@ -122,11 +122,12 @@ public:
     Svg *svg;
     QString svgElement;
     bool customFont;
+    QString optionalPrefix;
 };
 
 void PushButtonPrivate::syncActiveRect()
 {
-    background->setElementPrefix("normal");
+    background->setElementPrefix(optionalPrefix+"normal");
 
     qreal left, top, right, bottom;
     background->getMargins(left, top, right, bottom);
@@ -139,7 +140,7 @@ void PushButtonPrivate::syncActiveRect()
     activeRect.adjust(left - activeLeft, top - activeTop,
                       -(right - activeRight), -(bottom - activeBottom));
 
-    background->setElementPrefix("normal");
+    background->setElementPrefix(optionalPrefix+"normal");
 }
 
 void PushButtonPrivate::syncBorders()
@@ -147,7 +148,13 @@ void PushButtonPrivate::syncBorders()
     //set margins from the normal element
     qreal left, top, right, bottom;
 
-    background->setElementPrefix("normal");
+    if (background->hasElementPrefix("pushbutton-normal")) {
+        optionalPrefix = "pushbutton-";
+    } else {
+        optionalPrefix = QString();
+    }
+
+    background->setElementPrefix(optionalPrefix+"normal");
     background->getMargins(left, top, right, bottom);
     q->setContentsMargins(left, top, right, bottom);
 
@@ -163,7 +170,12 @@ PushButton::PushButton(QGraphicsWidget *parent)
     d->background = new FrameSvg(this);
     d->background->setImagePath("widgets/button");
     d->background->setCacheAllRenderedFrames(true);
-    d->background->setElementPrefix("normal");
+    if (d->background->hasElementPrefix("pushbutton-normal")) {
+        d->optionalPrefix = "pushbutton-";
+    } else {
+        d->optionalPrefix = QString();
+    }
+    d->background->setElementPrefix(d->optionalPrefix+"normal");
 
     d->hoverAnimation = Animator::create(Animator::PixmapTransitionAnimation);
     d->hoverAnimation->setTargetWidget(this);
@@ -312,7 +324,7 @@ void PushButton::resizeEvent(QGraphicsSceneResizeEvent *event)
 
    if (d->background) {
         //resize all four panels
-        d->background->setElementPrefix("pressed");
+        d->background->setElementPrefix(d->optionalPrefix+"pressed");
         d->background->resizeFrame(size());
 
         d->syncActiveRect();
@@ -323,7 +335,7 @@ void PushButton::resizeEvent(QGraphicsSceneResizeEvent *event)
         d->background->setElementPrefix("focus");
         d->background->resizeFrame(d->activeRect.size());
 
-        d->background->setElementPrefix("normal");
+        d->background->setElementPrefix(d->optionalPrefix+"normal");
         d->background->resizeFrame(size());
         d->hoverAnimation->setProperty("startPixmap", d->background->framePixmap());
    }
@@ -345,9 +357,9 @@ void PushButton::paint(QPainter *painter,
     //Normal button, pressed or not
     if (isEnabled()) {
         if (nativeWidget()->isDown() || nativeWidget()->isChecked()) {
-            d->background->setElementPrefix("pressed");
+            d->background->setElementPrefix(d->optionalPrefix+"pressed");
         } else {
-            d->background->setElementPrefix("normal");
+            d->background->setElementPrefix(d->optionalPrefix+"normal");
         }
 
     //flat or disabled
@@ -363,7 +375,6 @@ void PushButton::paint(QPainter *painter,
         painter->drawPixmap(0, 0, bufferPixmap);
     }
 
-
     //if is under mouse draw the animated glow overlay
     if (!nativeWidget()->isDown() && !nativeWidget()->isChecked() && isEnabled() && acceptHoverEvents() && d->background->hasElementPrefix("active")) {
         if (d->hoverAnimation->state() == QAbstractAnimation::Running && !isUnderMouse() && !nativeWidget()->isDefault()) {
@@ -374,7 +385,7 @@ void PushButton::paint(QPainter *painter,
                 d->activeRect.topLeft(),
                 d->hoverAnimation->property("currentPixmap").value<QPixmap>());
         }
-    } else if (nativeWidget()->isDown()) {
+    } else if (isEnabled()) {
         d->background->paintFrame(painter);
     }
 
@@ -462,7 +473,7 @@ void PushButton::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
     d->hoverAnimation->setProperty("duration", 75);
 
-    d->background->setElementPrefix("normal");
+    d->background->setElementPrefix(d->optionalPrefix+"normal");
     d->hoverAnimation->setProperty("startPixmap", d->background->framePixmap());
 
     d->background->setElementPrefix("active");
@@ -493,7 +504,7 @@ void PushButton::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     d->background->setElementPrefix("active");
     d->hoverAnimation->setProperty("startPixmap", d->background->framePixmap());
 
-    d->background->setElementPrefix("normal");
+    d->background->setElementPrefix(d->optionalPrefix+"normal");
     d->hoverAnimation->setProperty("targetPixmap", d->background->framePixmap());
 
     d->hoverAnimation->start();
