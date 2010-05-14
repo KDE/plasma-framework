@@ -38,6 +38,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QVarLengthArray>
+#include <QGraphicsLayout>
 
 #include <kdebug.h>
 #include <kwindowsystem.h>
@@ -318,7 +319,7 @@ void Dialog::syncToGraphicsWidget()
 {
     d->adjustViewTimer->stop();
     QGraphicsWidget *graphicsWidget = d->graphicsWidgetPtr.data();
-    if (d->view && graphicsWidget) {
+    if (d->view && graphicsWidget && d->resizeStartCorner != -1) {
         const int prevStartCorner = d->resizeStartCorner;
         d->resizeStartCorner = -1;
         QSize prevSize = size();
@@ -337,12 +338,18 @@ void Dialog::syncToGraphicsWidget()
         QSize maxSize = desktop->availableGeometry(desktop->screenNumber(this)).size();
 
 
-        setMinimumSize(qMin(int(graphicsWidget->minimumSize().width()) + left + right, maxSize.width()),
-                       qMin(int(graphicsWidget->minimumSize().height()) + top + bottom, maxSize.height()));
-        setMaximumSize(qMin(int(graphicsWidget->maximumSize().width()) + left + right, maxSize.width()),
-                       qMin(int(graphicsWidget->maximumSize().height()) + top + bottom, maxSize.height()));
+        setMinimumSize(-1, -1);
+        setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
         resize(qMin(int(graphicsWidget->size().width()) + left + right, maxSize.width()),
                qMin(int(graphicsWidget->size().height()) + top + bottom, maxSize.height()));
+
+        setMinimumSize(qMin(int(graphicsWidget->minimumSize().width()) + left + right, maxSize.width()),
+                       qMin(int(graphicsWidget->minimumSize().height()) + top + bottom, maxSize.height()));
+
+
+        setMaximumSize(qMin(int(graphicsWidget->maximumSize().width()) + left + right, maxSize.width()),
+                       qMin(int(graphicsWidget->maximumSize().height()) + top + bottom, maxSize.height()));
+
         updateGeometry();
 
         //reposition and resize the view.
@@ -662,9 +669,18 @@ void Dialog::setGraphicsWidget(QGraphicsWidget *widget)
         }
 
         d->view->setScene(widget->scene());
+
+        //try to have the proper size -before- showing the dialog
+        d->view->centerOn(widget);
+        if (widget->layout()) {
+            widget->layout()->activate();
+        }
+        static_cast<QGraphicsLayoutItem *>(widget)->updateGeometry();
+        widget->resize(widget->size().expandedTo(widget->effectiveSizeHint(Qt::MinimumSize)));
+
         syncToGraphicsWidget();
 
-        d->adjustSizeTimer->start(150);
+        //d->adjustSizeTimer->start(150);
 
         widget->installEventFilter(this);
         d->view->installEventFilter(this);
@@ -718,6 +734,7 @@ void Dialog::showEvent(QShowEvent * event)
         ((d->view && graphicsWidget->size().toSize() != d->view->size()) ||
          d->oldGraphicsWidgetMinimumSize != graphicsWidget->minimumSize() ||
          d->oldGraphicsWidgetMaximumSize != graphicsWidget->maximumSize())) {
+        //here have to be done immediately, ideally should have to be done -before- shwing, but is not possible to catch show() so early
         syncToGraphicsWidget();
         d->oldGraphicsWidgetMinimumSize = graphicsWidget->minimumSize().toSize();
         d->oldGraphicsWidgetMaximumSize = graphicsWidget->maximumSize().toSize();
