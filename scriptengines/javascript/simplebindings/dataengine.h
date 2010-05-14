@@ -32,7 +32,6 @@
 
 using namespace Plasma;
 
-Q_DECLARE_METATYPE(DataEngine*)
 Q_DECLARE_METATYPE(Service*)
 Q_DECLARE_METATYPE(ServiceJob*)
 Q_DECLARE_METATYPE(QVariant)
