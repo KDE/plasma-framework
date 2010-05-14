@@ -52,6 +52,7 @@ private:
     QGraphicsWidget *m_parent;
     Plasma::FrameSvg *m_background;
     Animation *m_fade;
+    Animation *m_hoverAnimation;
     QRectF m_customGeometry;
     QString m_prefix;
     QString m_customPrefix;

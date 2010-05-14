@@ -20,6 +20,8 @@
 #include "focusindicator_p.h"
 
 #include <QGraphicsSceneResizeEvent>
+#include <QPainter>
+#include <QStyleOptionGraphicsItem>
 
 #include <plasma/theme.h>
 #include <plasma/framesvg.h>
@@ -47,7 +49,16 @@ FocusIndicator::FocusIndicator(QGraphicsWidget *parent, QString widget)
     m_fade->setTargetWidget(this);
     m_fade->setProperty("startOpacity", 0.0);
     m_fade->setProperty("targetOpacity", 1.0);
-    setOpacity(0);
+
+    m_hoverAnimation = Animator::create(Animator::PixmapTransitionAnimation);
+    m_hoverAnimation->setProperty("duration", 250);
+    m_hoverAnimation->setTargetWidget(this);
+    if (m_background->hasElementPrefix("shadow")) {
+        m_background->setElementPrefix("shadow");
+        m_prefix = "shadow";
+        syncGeometry();
+        m_hoverAnimation->setProperty("startPixmap", m_background->framePixmap());
+    }
 
     parent->installEventFilter(this);
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(syncGeometry()));
@@ -77,29 +88,42 @@ bool FocusIndicator::eventFilter(QObject *watched, QEvent *event)
     }
 
     if (!m_parent->hasFocus() && event->type() == QEvent::GraphicsSceneHoverEnter) {
-        m_background->setElementPrefix("hover");
         m_prefix = m_customPrefix + "hover";
-        m_fade->setProperty("startOpacity", 0.0);
-        m_fade->setProperty("targetOpacity", 1.0);
         syncGeometry();
-        m_fade->start();
+        m_hoverAnimation->stop();
+        m_background->setElementPrefix("shadow");
+        m_hoverAnimation->setProperty("startPixmap", m_background->framePixmap());
+        m_background->setElementPrefix("hover");
+        m_hoverAnimation->setProperty("targetPixmap", m_background->framePixmap());
+        m_hoverAnimation->start();
     } else if (!m_parent->hasFocus() && event->type() == QEvent::GraphicsSceneHoverLeave) {
-        m_fade->setProperty("startOpacity", 1.0);
-        m_fade->setProperty("targetOpacity", 0.0);
-        m_fade->start();
+        m_prefix = m_customPrefix + "shadow";
+        syncGeometry();
+        m_hoverAnimation->stop();
+        m_background->setElementPrefix("hover");
+        m_hoverAnimation->setProperty("startPixmap", m_background->framePixmap());
+        m_background->setElementPrefix("shadow");
+        m_hoverAnimation->setProperty("targetPixmap", m_background->framePixmap());
+        m_hoverAnimation->start();
     } else if (event->type() == QEvent::GraphicsSceneResize) {
         syncGeometry();
     } else if (event->type() == QEvent::FocusIn) {
-        m_background->setElementPrefix("focus");
         m_prefix = m_customPrefix + "focus";
-        m_fade->setProperty("startOpacity", 0.0);
-        m_fade->setProperty("targetOpacity", 1.0);
         syncGeometry();
-        m_fade->start();
+        m_hoverAnimation->stop();
+        m_hoverAnimation->setProperty("startPixmap", m_background->framePixmap());
+        m_background->setElementPrefix("focus");
+        m_hoverAnimation->setProperty("targetPixmap", m_background->framePixmap());
+        m_hoverAnimation->start();
     } else if (!m_parent->isUnderMouse() && event->type() == QEvent::FocusOut) {
-        m_fade->setProperty("startOpacity", 1.0);
-        m_fade->setProperty("targetOpacity", 0.0);
-        m_fade->start();
+        m_prefix = m_customPrefix + "shadow";
+        syncGeometry();
+        m_hoverAnimation->stop();
+        m_background->setElementPrefix("focus");
+        m_hoverAnimation->setProperty("startPixmap", m_background->framePixmap());
+        m_background->setElementPrefix("shadow");
+        m_hoverAnimation->setProperty("targetPixmap", m_background->framePixmap());
+        m_hoverAnimation->start();
     }
 
     return false;
@@ -107,10 +131,20 @@ bool FocusIndicator::eventFilter(QObject *watched, QEvent *event)
 
 void FocusIndicator::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
+    m_background->setElementPrefix("shadow");
+    m_background->resizeFrame(event->newSize());
     m_background->setElementPrefix("hover");
     m_background->resizeFrame(event->newSize());
     m_background->setElementPrefix("focus");
     m_background->resizeFrame(event->newSize());
+
+    if (m_hoverAnimation->state() == QAbstractAnimation::Running) {
+        m_hoverAnimation->stop();
+    }
+
+    m_background->setElementPrefix(m_prefix);
+    m_hoverAnimation->setProperty("startPixmap", m_background->framePixmap());
+    m_hoverAnimation->setProperty("targetPixmap", m_background->framePixmap());
 }
 
 void FocusIndicator::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -118,27 +152,28 @@ void FocusIndicator::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     Q_UNUSED(option)
     Q_UNUSED(widget)
 
-    if (m_background->hasElementPrefix(m_prefix)) {
-        m_background->paintFrame(painter);
-    } else {
-        m_background->paint(painter, QPoint(0,0), m_prefix);
-    }
+    painter->drawPixmap(
+                option->rect,
+                m_hoverAnimation->property("currentPixmap").value<QPixmap>());
 }
 
 void FocusIndicator::syncGeometry()
 {
     QRectF geom;
-    if (!m_customGeometry.isNull()) {
+    if (!m_customGeometry.isEmpty()) {
         geom = m_customGeometry;
     } else {
         geom = m_parent->boundingRect();
     }
 
     if (m_background->hasElementPrefix(m_prefix)) {
+        //always take borders from hover to make it stable
+        m_background->setElementPrefix("hover");
         qreal left, top, right, bottom;
         m_background->getMargins(left, top, right, bottom);
+        m_background->setElementPrefix(m_prefix);
         setGeometry(QRectF(geom.topLeft() + QPointF(-left, -top), geom.size() + QSize(left+right, top+bottom)));
-    } else {
+    } else if (m_background->hasElement(m_prefix)) {
         QRectF elementRect = m_background->elementRect(m_prefix);
         elementRect.moveCenter(geom.center());
         setGeometry(elementRect);

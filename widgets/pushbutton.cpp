@@ -39,6 +39,7 @@
 #include "animator.h"
 #include "paintutils.h"
 #include "private/actionwidgetinterface_p.h"
+#include <plasma/private/focusindicator_p.h>
 #include "animations/animation.h"
 
 namespace Plasma
@@ -113,7 +114,7 @@ public:
     bool fadeIn;
     qreal opacity;
     QRectF activeRect;
-    
+
     Animation *hoverAnimation;
 
     QString imagePath;
@@ -177,6 +178,8 @@ PushButton::PushButton(QGraphicsWidget *parent)
     native->setAttribute(Qt::WA_NoSystemBackground);
 
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+
+    FocusIndicator *focusIndicator = new FocusIndicator(this, "widgets/button");
 
     d->syncBorders();
     setAcceptHoverEvents(true);
@@ -362,7 +365,7 @@ void PushButton::paint(QPainter *painter,
 
 
     //if is under mouse draw the animated glow overlay
-    if (!nativeWidget()->isDown() && !nativeWidget()->isChecked() && isEnabled() && acceptHoverEvents()) {
+    if (!nativeWidget()->isDown() && !nativeWidget()->isChecked() && isEnabled() && acceptHoverEvents() && d->background->hasElementPrefix("active")) {
         if (d->hoverAnimation->state() == QAbstractAnimation::Running && !isUnderMouse() && !nativeWidget()->isDefault()) {
             d->background->setElementPrefix("active");
             d->background->paintFrame(painter, d->activeRect.topLeft());
@@ -375,10 +378,6 @@ void PushButton::paint(QPainter *painter,
         d->background->paintFrame(painter);
     }
 
-    if (nativeWidget()->hasFocus()) {
-        d->background->setElementPrefix("focus");
-        d->background->paintFrame(painter, d->activeRect.topLeft());
-    }
 
     painter->setPen(Plasma::Theme::defaultTheme()->color(Theme::ButtonTextColor));
 
@@ -457,12 +456,12 @@ void PushButton::paint(QPainter *painter,
 
 void PushButton::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-    if (nativeWidget()->isDown()) {
+    if (nativeWidget()->isDown() || d->background->hasElementPrefix("hover")) {
         return;
     }
 
     d->hoverAnimation->setProperty("duration", 75);
-    
+
     d->background->setElementPrefix("normal");
     d->hoverAnimation->setProperty("startPixmap", d->background->framePixmap());
 
@@ -485,20 +484,20 @@ void PushButton::changeEvent(QEvent *event)
 
 void PushButton::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-    if (nativeWidget()->isDown()) {
+    if (nativeWidget()->isDown() || d->background->hasElementPrefix("hover")) {
         return;
     }
 
     d->hoverAnimation->setProperty("duration", 150);
-    
+
     d->background->setElementPrefix("active");
     d->hoverAnimation->setProperty("startPixmap", d->background->framePixmap());
 
     d->background->setElementPrefix("normal");
     d->hoverAnimation->setProperty("targetPixmap", d->background->framePixmap());
-    
+
     d->hoverAnimation->start();
-    
+
 
     QGraphicsProxyWidget::hoverLeaveEvent(event);
 }
