@@ -93,6 +93,7 @@ class DataEnginePrivate
         bool valid;
         DataEngineScript *script;
         QString engineName;
+        QString serviceName;
         Package *package;
         Service *publishedService;
 };

@@ -234,6 +234,17 @@ NoAlignment) const;
          */
         QString pluginName() const;
 
+        /**
+         *  Initializes and returns a new service from the name that was set with setDefaultService.
+         *  (service name is set internally). Sends a DataEngine* to the created service via the QVariantList.
+         *  Note that you have to dispose of the Service* manually if you do not pass a valid parent.
+         *  @see setDefaultService
+         *  @param the parent of the object, if any, for the returned service
+         *  @return the newly created service
+         *  @since 4.5
+         */
+        Q_INVOKABLE Service* createDefaultService(QObject *parent = 0);
+
     Q_SIGNALS:
         /**
          * Emitted when a new data source is created
@@ -426,6 +437,22 @@ NoAlignment) const;
          **/
         void setIcon(const QString &icon);
 
+        /**
+         *  Should be set if there will be 1 main service.
+         *  This saves any users of this DataEngine from having to know the service name to load.
+         *  It is not created until createDefaultService is called.
+         *
+         *  @code
+         *  DataEngine *engine = dataEngine("foo");
+         *  Service *service = engine->createDefaultService(this);
+         *  @endcode
+         *
+         *  @see createDefaultService
+         *  @param serviceName the name of the service to load (plugin name)
+         *  @since 4.5
+         */
+        void setDefaultService(const QString &serviceName);
+
     protected Q_SLOTS:
         /**
          * Call this method when you call setData directly on a DataContainer instead
@@ -479,5 +506,6 @@ K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
 K_EXPORT_PLUGIN(factory("plasma_engine_" #libname)) \
 K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
 
-#endif // multiple inclusion guard
+Q_DECLARE_METATYPE(Plasma::DataEngine*)
 
+#endif // multiple inclusion guard
