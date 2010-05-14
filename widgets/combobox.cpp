@@ -21,7 +21,6 @@
 
 #include <QPainter>
 #include <QApplication>
-#include <QPropertyAnimation>
 
 #include <kcombobox.h>
 #include <kmimetype.h>
@@ -29,6 +28,7 @@
 #include <kiconloader.h>
 
 #include <plasma/private/style_p.h>
+#include <plasma/private/focusindicator_p.h>
 #include "theme.h"
 #include "framesvg.h"
 #include "animator.h"
@@ -54,14 +54,12 @@ public:
 
     void syncActiveRect();
     void syncBorders();
-    void animationUpdate(qreal progress);
 
     ComboBox *q;
 
     FrameSvg *background;
     FrameSvg *lineEditBackground;
     int animId;
-    QPropertyAnimation *animation;
     qreal opacity;
     QRectF activeRect;
     Style::Ptr style;
@@ -107,13 +105,6 @@ void ComboBoxPrivate::syncBorders()
     }
 }
 
-void ComboBoxPrivate::animationUpdate(qreal progress)
-{
-    opacity = progress;
-
-    // explicit update
-    q->update();
-}
 
 ComboBox::ComboBox(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
@@ -134,9 +125,7 @@ ComboBox::ComboBox(QGraphicsWidget *parent)
 
     setNativeWidget(new KComboBox);
 
-    d->animation = new QPropertyAnimation(this, "animationUpdate", this);
-    d->animation->setStartValue(0);
-    d->animation->setEndValue(1);
+    FocusIndicator *focusIndicator = new FocusIndicator(this, "widgets/button");
 
     connect(Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(syncBorders()));
 }
@@ -218,7 +207,6 @@ void ComboBox::paint(QPainter *painter,
                      const QStyleOptionGraphicsItem *option,
                      QWidget *widget)
 {
-    QAbstractAnimation::State animState = d->animation->state();
 
     if (!styleSheet().isNull() ||
         Theme::defaultTheme()->useNativeWidgetStyle()) {
@@ -227,26 +215,6 @@ void ComboBox::paint(QPainter *painter,
     }
 
     if (nativeWidget()->isEditable()) {
-        if (animState != QAbstractAnimation::Stopped || hasFocus() || d->underMouse) {
-            if (hasFocus()) {
-                d->lineEditBackground->setElementPrefix("focus");
-            } else {
-                d->lineEditBackground->setElementPrefix("hover");
-            }
-            qreal left, top, right, bottom;
-            d->lineEditBackground->getMargins(left, top, right, bottom);
-            d->lineEditBackground->resizeFrame(size()+QSizeF(left+right, top+bottom));
-            if (qFuzzyCompare(d->opacity, (qreal)1.0)) {
-                d->lineEditBackground->paintFrame(painter, QPoint(-left, -top));
-            } else {
-                QPixmap bufferPixmap = d->lineEditBackground->framePixmap();
-                QPainter buffPainter(&bufferPixmap);
-                buffPainter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-                buffPainter.fillRect(bufferPixmap.rect(), QColor(0, 0, 0, 256*d->opacity));
-                buffPainter.end();
-                painter->drawPixmap(bufferPixmap.rect().translated(QPoint(-left, -top)), bufferPixmap, bufferPixmap.rect());
-            }
-        }
         QGraphicsProxyWidget::paint(painter, option, widget);
         return;
     }
@@ -257,9 +225,7 @@ void ComboBox::paint(QPainter *painter,
     if (isEnabled()) {
         d->background->setElementPrefix("normal");
 
-        if (animState == QAbstractAnimation::Stopped) {
-            d->background->paintFrame(painter);
-        }
+        d->background->paintFrame(painter);
     //disabled widget
     } else {
         bufferPixmap = QPixmap(rect().size().toSize());
@@ -271,26 +237,6 @@ void ComboBox::paint(QPainter *painter,
         buffPainter.fillRect(bufferPixmap.rect(), QColor(0, 0, 0, 128));
 
         painter->drawPixmap(0, 0, bufferPixmap);
-    }
-
-    //if is under mouse draw the animated glow overlay
-    if (isEnabled() && acceptHoverEvents()) {
-        if (animState!= QAbstractAnimation::Stopped) {
-            d->background->setElementPrefix("normal");
-            QPixmap normalPix = d->background->framePixmap();
-            d->background->setElementPrefix("active");
-            painter->drawPixmap(
-                d->activeRect.topLeft(),
-                PaintUtils::transition(d->background->framePixmap(), normalPix, 1 - d->opacity));
-        } else if (isUnderMouse()) {
-            d->background->setElementPrefix("active");
-            d->background->paintFrame(painter, d->activeRect.topLeft());
-        }
-    }
-
-    if (nativeWidget()->hasFocus()) {
-        d->background->setElementPrefix("focus");
-        d->background->paintFrame(painter);
     }
 
     painter->setPen(Theme::defaultTheme()->color(Theme::ButtonTextColor));
@@ -315,87 +261,25 @@ void ComboBox::paint(QPainter *painter,
         QStyle::PE_IndicatorArrowDown, &comboOpt, painter, nativeWidget());
 }
 
-void ComboBox::setAnimationUpdate(qreal progress)
-{
-    d->animationUpdate(progress);
-}
-
-qreal ComboBox::animationUpdate() const
-{
-    return d->opacity;
-}
-
 void ComboBox::focusInEvent(QFocusEvent *event)
 {
-    if (nativeWidget()->isEditable() && !d->underMouse) {
-        const int FadeInDuration = 75;
-
-        if (d->animation->state() != QAbstractAnimation::Stopped) {
-            d->animation->stop();
-        }
-        d->animation->setDuration(FadeInDuration);
-        d->animation->setDirection(QAbstractAnimation::Forward);
-        d->animation->start();
-    }
-
     QGraphicsProxyWidget::focusInEvent(event);
 }
 
 void ComboBox::focusOutEvent(QFocusEvent *event)
 {
-    if (nativeWidget()->isEditable() && !d->underMouse) {
-        const int FadeOutDuration = 150;
-
-        if (d->animation->state() != QAbstractAnimation::Stopped) {
-            d->animation->stop();
-        }
-        d->animation->setDuration(FadeOutDuration);
-        d->animation->setDirection(QAbstractAnimation::Backward);
-        d->animation->start();
-    }
-
-
     QGraphicsProxyWidget::focusInEvent(event);
 }
 
 void ComboBox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
     d->underMouse = true;
-    if (nativeWidget()->isEditable() && hasFocus()) {
-        return;
-    }
-    const int FadeInDuration = 75;
-
-    if (d->animation->state() != QAbstractAnimation::Stopped) {
-        d->animation->stop();
-    }
-    d->animation->setDuration(FadeInDuration);
-    d->animation->setDirection(QAbstractAnimation::Forward);
-    d->animation->start();
-
-    d->background->setElementPrefix("active");
-
     QGraphicsProxyWidget::hoverEnterEvent(event);
 }
 
 void ComboBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     d->underMouse = false;
-    if (nativeWidget()->isEditable() && hasFocus()) {
-        return;
-    }
-
-    const int FadeOutDuration = 150;
-
-    if (d->animation->state() != QAbstractAnimation::Stopped) {
-        d->animation->stop();
-    }
-    d->animation->setDuration(FadeOutDuration);
-    d->animation->setDirection(QAbstractAnimation::Backward);
-    d->animation->start();
-
-    d->background->setElementPrefix("active");
-
     QGraphicsProxyWidget::hoverLeaveEvent(event);
 }
 
