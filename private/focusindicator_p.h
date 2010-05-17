@@ -56,6 +56,7 @@ private:
     QRectF m_customGeometry;
     QString m_prefix;
     QString m_customPrefix;
+    bool m_isUnderMouse;
 };
 }
 #endif
