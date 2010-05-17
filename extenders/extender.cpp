@@ -284,7 +284,9 @@ QList<ExtenderGroup*> Extender::groups() const
     QList<ExtenderGroup*> result;
     foreach (ExtenderItem *item, d->attachedExtenderItems) {
         if (item->isGroup() && !result.contains(item->group())) {
-            result.append(item->group());
+           if (item->group()) {
+               result.append(item->group());
+           }
         }
     }
     return result;
