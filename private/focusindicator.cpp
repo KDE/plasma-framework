@@ -66,6 +66,7 @@ FocusIndicator::FocusIndicator(QGraphicsWidget *parent, QString widget)
 
 FocusIndicator::~FocusIndicator()
 {
+    m_parent->removeEventFilter(this);
     delete m_fade;
 }
 
@@ -82,7 +83,7 @@ void FocusIndicator::setCustomPrefix(const QString &prefix)
 
 bool FocusIndicator::eventFilter(QObject *watched, QEvent *event)
 {
-    if (static_cast<QGraphicsWidget *>(watched) != m_parent) {
+    if (static_cast<QGraphicsWidget *>(watched) != m_parent || !m_parent) {
         return false;
     }
 
