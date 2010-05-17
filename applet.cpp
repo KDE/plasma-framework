@@ -1264,6 +1264,13 @@ void Applet::flushPendingConstraintsEvents()
                 delete item;
             }
         }
+
+        // avoid putting rotated applets in panels
+        if (f == Vertical || f == Horizontal) {
+            QTransform at;
+            at.rotateRadians(0);
+            setTransform(at);
+        }
     }
     if (c & Plasma::SizeConstraint || c & Plasma::FormFactorConstraint) {
         if (aspectRatioMode() == Plasma::Square || aspectRatioMode() == Plasma::ConstrainedSquare) {
