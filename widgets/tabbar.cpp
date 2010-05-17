@@ -75,8 +75,6 @@ public:
           tabProxy(0),
           currentIndex(0),
           tabWidgetMode(true),
-          oldPage(0),
-          newPage(0),
           oldPageAnimId(-1),
           newPageAnimId(-1),
           customFont(false)
@@ -103,8 +101,8 @@ public:
     int currentIndex;
     bool tabWidgetMode;
 
-    QGraphicsWidget *oldPage;
-    QGraphicsWidget *newPage;
+    QWeakPointer<QGraphicsWidget>oldPage;
+    QWeakPointer<QGraphicsWidget>newPage;
     int oldPageAnimId;
     int newPageAnimId;
     Animation *oldPageAnim;
@@ -155,7 +153,9 @@ void TabBarPrivate::updateTabWidgetMode()
 
 void TabBarPrivate::slidingNewPageCompleted()
 {
-    tabWidgetLayout->addItem(newPage);
+    if (newPage) {
+        tabWidgetLayout->addItem(newPage.data());
+    }
     newPageAnimId = -1;
     mainLayout->invalidate();
     emit q->currentChanged(currentIndex);
@@ -366,16 +366,12 @@ void TabBar::setCurrentIndex(int index)
 
     if (d->currentIndex >= 0) {
         d->oldPage = d->pages[d->currentIndex];
-    } else {
-        d->oldPage = 0;
     }
 
-    d->tabWidgetLayout->removeItem(d->oldPage);
+    d->tabWidgetLayout->removeItem(d->oldPage.data());
 
     if (index >= 0) {
         d->newPage = d->pages[index];
-    } else {
-        d->newPage = 0;
     }
 
     setFlags(QGraphicsItem::ItemClipsChildrenToShape);
@@ -390,49 +386,49 @@ void TabBar::setCurrentIndex(int index)
     }
 
     if (d->newPage) {
-        d->newPage->show();
-        d->newPage->setEnabled(true);
+        d->newPage.data()->show();
+        d->newPage.data()->setEnabled(true);
     }
 
     if (d->oldPage) {
-        d->oldPage->show();
-        d->oldPage->setEnabled(false);
+        d->oldPage.data()->show();
+        d->oldPage.data()->setEnabled(false);
     }
 
     if (d->newPage && d->oldPage) {
         //FIXME: it seems necessary to resiz the thing 2 times to have effect
-        d->newPage->resize(1,1);
-        d->newPage->resize(d->oldPage->size());
+        d->newPage.data()->resize(1,1);
+        d->newPage.data()->resize(d->oldPage.data()->size());
 
-        QRect beforeCurrentGeom(d->oldPage->geometry().toRect());
+        QRect beforeCurrentGeom(d->oldPage.data()->geometry().toRect());
         beforeCurrentGeom.moveTopRight(beforeCurrentGeom.topLeft());
 
         if (index > d->currentIndex) {
-            d->newPage->setPos(d->oldPage->geometry().topRight());
+            d->newPage.data()->setPos(d->oldPage.data()->geometry().topRight());
             d->newPageAnim->setProperty("movementDirection", Animation::MoveAny);
-            d->newPageAnim->setProperty("distancePointF", d->oldPage->pos());
-            d->newPageAnim->setTargetWidget(d->newPage);
+            d->newPageAnim->setProperty("distancePointF", d->oldPage.data()->pos());
+            d->newPageAnim->setTargetWidget(d->newPage.data());
 
             d->oldPageAnim->setProperty("movementDirection", Animation::MoveAny);
             d->oldPageAnim->setProperty("distancePointF", beforeCurrentGeom.topLeft());
-            d->oldPageAnim->setTargetWidget(d->oldPage);
+            d->oldPageAnim->setTargetWidget(d->oldPage.data());
 
             d->animGroup->start();
         } else {
-            d->newPage->setPos(beforeCurrentGeom.topLeft());
+            d->newPage.data()->setPos(beforeCurrentGeom.topLeft());
             d->newPageAnim->setProperty("movementDirection", Animation::MoveAny);
-            d->newPageAnim->setProperty("distancePointF", d->oldPage->pos());
-            d->newPageAnim->setTargetWidget(d->newPage);
+            d->newPageAnim->setProperty("distancePointF", d->oldPage.data()->pos());
+            d->newPageAnim->setTargetWidget(d->newPage.data());
 
             d->oldPageAnim->setProperty("movementDirection", Animation::MoveAny);
             d->oldPageAnim->setProperty("distancePointF",
-                                        d->oldPage->geometry().topRight());
-            d->oldPageAnim->setTargetWidget(d->oldPage);
+                                        d->oldPage.data()->geometry().topRight());
+            d->oldPageAnim->setTargetWidget(d->oldPage.data());
 
             d->animGroup->start();
         }
-    } else {
-        d->tabWidgetLayout->addItem(d->newPage);
+    } else if (d->newPage) {
+        d->tabWidgetLayout->addItem(d->newPage.data());
     }
 
     d->currentIndex = index;
@@ -447,9 +443,12 @@ int TabBar::count() const
 
 void TabBar::removeTab(int index)
 {
-    if (index >= d->pages.count()) {
+    if (index >= d->pages.count() || index < 0) {
         return;
     }
+
+    d->newPageAnim->stop();
+    d->oldPageAnim->stop();
 
     int oldCurrentIndex = d->tabProxy->native->currentIndex();
     d->tabProxy->native->removeTab(index);
