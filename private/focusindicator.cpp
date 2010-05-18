@@ -88,6 +88,12 @@ bool FocusIndicator::eventFilter(QObject *watched, QEvent *event)
         return false;
     }
 
+    if (event->type() == QEvent::GraphicsSceneHoverEnter) {
+        m_isUnderMouse = true;
+    } else if (event->type() == QEvent::GraphicsSceneHoverLeave) {
+        m_isUnderMouse = false;
+    }
+
     if (!m_parent->hasFocus() && event->type() == QEvent::GraphicsSceneHoverEnter) {
         m_prefix = m_customPrefix + "hover";
         syncGeometry();
@@ -96,7 +102,6 @@ bool FocusIndicator::eventFilter(QObject *watched, QEvent *event)
         m_hoverAnimation->setProperty("startPixmap", m_background->framePixmap());
         m_background->setElementPrefix("hover");
         m_hoverAnimation->setProperty("targetPixmap", m_background->framePixmap());
-        m_isUnderMouse = true;
         m_hoverAnimation->start();
     } else if (!m_parent->hasFocus() && event->type() == QEvent::GraphicsSceneHoverLeave) {
         m_prefix = m_customPrefix + "shadow";
@@ -106,7 +111,6 @@ bool FocusIndicator::eventFilter(QObject *watched, QEvent *event)
         m_hoverAnimation->setProperty("startPixmap", m_background->framePixmap());
         m_background->setElementPrefix("shadow");
         m_hoverAnimation->setProperty("targetPixmap", m_background->framePixmap());
-        m_isUnderMouse = false;
         m_hoverAnimation->start();
     } else if (event->type() == QEvent::GraphicsSceneResize) {
         syncGeometry();
@@ -122,6 +126,7 @@ bool FocusIndicator::eventFilter(QObject *watched, QEvent *event)
         m_prefix = m_customPrefix + "shadow";
         syncGeometry();
         m_hoverAnimation->stop();
+
         m_background->setElementPrefix("focus");
         m_hoverAnimation->setProperty("startPixmap", m_background->framePixmap());
         m_background->setElementPrefix("shadow");
