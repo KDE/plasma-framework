@@ -375,8 +375,13 @@ void ExtenderItem::setGroup(ExtenderGroup *group)
 void ExtenderItem::setGroup(ExtenderGroup *group, const QPointF &pos)
 {
     if (isGroup()) {
-        //nesting extender groups is just insane. I don't think we'd even want to support that.
-        kWarning() << "Nesting ExtenderGroups is not supported";
+        if (group == this) {
+            //a group of a group is always just itself
+            d->group = group;
+        } else {
+            //nesting extender groups is just insane. I don't think we'd even want to support that.
+            kWarning() << "Nesting ExtenderGroups is not supported";
+        }
         return;
     }
 
@@ -406,7 +411,7 @@ ExtenderGroup *ExtenderItem::group() const
 
 bool ExtenderItem::isGroup() const
 {
-    return (config().readEntry("isGroup", false));
+    return (config().readEntry("isGroup", false) && qobject_cast<const Plasma::ExtenderGroup *>(this));
 }
 
 bool ExtenderItem::isCollapsed() const
