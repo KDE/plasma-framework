@@ -99,7 +99,6 @@ ExtenderGroup::ExtenderGroup(Extender *parent, uint groupId)
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
             this, SLOT(themeChanged()));
 
-    setGroup(this);
 }
 
 ExtenderGroup::~ExtenderGroup()

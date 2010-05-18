@@ -281,11 +281,12 @@ Extender::Appearance Extender::appearance() const
 
 QList<ExtenderGroup*> Extender::groups() const
 {
-    QList<ExtenderGroup*> result;
+    QList<ExtenderGroup *> result;
     foreach (ExtenderItem *item, d->attachedExtenderItems) {
         if (item->isGroup() && !result.contains(item->group())) {
-           if (item->group()) {
-               result.append(item->group());
+           ExtenderGroup *group = qobject_cast<ExtenderGroup *>(item);
+           if (group) {
+               result.append(group);
            }
         }
     }
