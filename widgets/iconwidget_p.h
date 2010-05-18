@@ -49,6 +49,31 @@ namespace Plasma
 class Animation;
 class IconHoverAnimation;
 
+class IconHoverAnimation : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(qreal value READ value WRITE setValue)
+
+public:
+    IconHoverAnimation(QObject *parent = 0);
+
+    qreal value() const;
+
+    bool fadeIn() const;
+    void setFadeIn(bool fadeIn);
+
+    QPropertyAnimation *animation() const;
+    void setAnimation(QPropertyAnimation *animation);
+
+protected slots:
+    void setValue(qreal value);
+
+private:
+    qreal m_value;
+    bool m_fadeIn;
+    QWeakPointer<QPropertyAnimation> m_animation;
+};
+
 class PLASMA_EXPORT IconAction
 {
 public:

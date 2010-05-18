@@ -1564,3 +1564,4 @@ void IconWidget::changeEvent(QEvent *event)
 } // namespace Plasma
 
 #include "iconwidget.moc"
+#include "iconwidget_p.moc"
