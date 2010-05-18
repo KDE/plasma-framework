@@ -47,7 +47,7 @@ const DataEngine::Data DataContainer::data() const
 
 void DataContainer::setData(const QString &key, const QVariant &value)
 {
-    if (value.isNull() || !value.isValid()) {
+    if (!value.isValid()) {
         d->data.remove(key);
     } else {
         d->data[key] = value;
