@@ -96,4 +96,5 @@ Aaron Seigo \<aseigo@kde.org\>
 
 // DOXYGEN_SET_PROJECT_NAME = Plasma
 // DOXYGEN_SET_RECURSIVE = YES
+// DOXYGEN_EXCLUDE_PATTERNS = *_p.h */private/* */tests/*
 // vim:ts=4:sw=4:expandtab:filetype=doxygen
