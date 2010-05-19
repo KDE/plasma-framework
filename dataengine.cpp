@@ -300,17 +300,6 @@ void DataEngine::setPollingInterval(uint frequency)
     }
 }
 
-/*
-NOTE: This is not implemented to prevent having to store the value internally.
-      When there is a good use case for needing access to this value, we can
-      add another member to the Private class and add this method.
-
-void DataEngine::pollingInterval()
-{
-    return d->pollingInterval;
-}
-*/
-
 void DataEngine::removeSource(const QString &source)
 {
     //kDebug() << "removing source " << source;

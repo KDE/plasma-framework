@@ -395,15 +395,6 @@ NoAlignment) const;
         void setPollingInterval(uint frequency);
 
         /**
-         * Returns the current update frequency.
-         * @see setPollingInterval
-         NOTE: This is not implemented to prevent having to store the value internally.
-               When there is a good use case for needing access to this value, we can
-               add another member to the Private class and add this method.
-        uint pollingInterval();
-         **/
-
-        /**
          * Removes all data sources
          **/
         void removeAllSources();
