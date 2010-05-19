@@ -1029,7 +1029,7 @@ void Containment::setScreen(int newScreen, int newDesktop)
     if (d->type == DesktopContainment || d->type >= CustomContainment) {
         // we want to listen to changes in work area if our screen changes
         if (d->screen < 0 && newScreen > -1) {
-            connect(KWindowSystem::self(), SIGNAL(workAreaChanged()), this, SLOT(positionToolBox()));
+            connect(KWindowSystem::self(), SIGNAL(workAreaChanged()), this, SLOT(positionToolBox()), Qt::UniqueConnection);
         } else if (newScreen < 0) {
             disconnect(KWindowSystem::self(), SIGNAL(workAreaChanged()), this, SLOT(positionToolBox()));
         }
