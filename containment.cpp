@@ -356,6 +356,8 @@ void Containment::restore(KConfigGroup &group)
     setLocation((Plasma::Location)group.readEntry("location", (int)d->location));
     setFormFactor((Plasma::FormFactor)group.readEntry("formfactor", (int)d->formFactor));
     //kDebug() << "setScreen from restore";
+    d->lastScreen = group.readEntry("lastScreen", d->lastScreen);
+    d->lastDesktop = group.readEntry("lastDesktop", d->lastDesktop);
     setScreen(group.readEntry("screen", d->screen), group.readEntry("desktop", d->desktop));
     QString activityId = group.readEntry("activityId", QString());
     if (!activityId.isEmpty()) {
@@ -417,7 +419,9 @@ void Containment::save(KConfigGroup &g) const
     }
 
     group.writeEntry("screen", d->screen);
+    group.writeEntry("lastScreen", d->lastScreen);
     group.writeEntry("desktop", d->desktop);
+    group.writeEntry("lastDesktop", d->lastDesktop);
     group.writeEntry("formfactor", (int)d->formFactor);
     group.writeEntry("location", (int)d->location);
     group.writeEntry("activity", d->context()->currentActivity());
@@ -1059,6 +1063,7 @@ void Containment::setScreen(int newScreen, int newDesktop)
     int oldScreen = d->screen;
     d->screen = newScreen;
 
+
     updateConstraints(Plasma::ScreenConstraint);
 
     if (oldScreen != newScreen || oldDesktop != newDesktop) {
@@ -1067,6 +1072,12 @@ void Containment::setScreen(int newScreen, int newDesktop)
         KConfigGroup c = config();
         c.writeEntry("screen", d->screen);
         c.writeEntry("desktop", d->desktop);
+        if (newScreen != -1) {
+            d->lastScreen = newScreen;
+            d->lastDesktop = newDesktop;
+            c.writeEntry("lastScreen", d->lastScreen);
+            c.writeEntry("lastDesktop", d->lastDesktop);
+        }
         emit configNeedsSaving();
     }
 
@@ -1087,9 +1098,19 @@ int Containment::screen() const
     return d->screen;
 }
 
+int Containment::lastScreen() const
+{
+    return d->lastScreen;
+}
+
 int Containment::desktop() const
 {
     return d->desktop;
+}
+
+int Containment::lastDesktop() const
+{
+    return d->lastDesktop;
 }
 
 KPluginInfo::List Containment::listContainments(const QString &category,

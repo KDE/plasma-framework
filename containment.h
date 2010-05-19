@@ -256,9 +256,23 @@ class PLASMA_EXPORT Containment : public Applet
         int screen() const;
 
         /**
+         * @return the last screen number this containment had
+         *         only returns -1 if it's never ever been on a screen
+         * @since 4.5
+         */
+        int lastScreen() const;
+
+        /**
          * @return the viewport (e.g. virtual desktop) this Containment is associated with.
          */
         int desktop() const;
+
+        /**
+         * @return the viewport (e.g. virtual desktop) this Containment was associated with
+         * last time it had a screen
+         * @since 4.5
+         */
+        int lastDesktop() const;
 
         /**
          * @reimp
