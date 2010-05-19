@@ -19,6 +19,8 @@
 
 #include "runnercontext.h"
 
+#include <cmath>
+
 #include <QReadWriteLock>
 
 #include <QDir>
@@ -375,8 +377,9 @@ bool RunnerContext::addMatches(const QString &term, const QList<QueryMatch> &mat
     LOCK_FOR_WRITE(d)
     foreach (QueryMatch match, matches) {
         // Give previously launched matches a slight boost in relevance
+        // The boost smoothly saturates to 0.5;
         if (int count = d->launchCounts.value(match.id())) {
-            match.setRelevance(match.relevance() + 0.05 * count);
+            match.setRelevance(match.relevance() + 0.5 * (1-exp(-count*0.3)));
         }
 
         d->matches.append(match);
