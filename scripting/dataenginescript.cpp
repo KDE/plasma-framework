@@ -109,6 +109,13 @@ void DataEngineScript::setData(const QString &source, const QVariant &value)
     }
 }
 
+void DataEngineScript::setData(const QString &source, const DataEngine::Data &values)
+{
+    if (d->dataEngine) {
+        d->dataEngine->setData(source, values);
+    }
+}
+
 void DataEngineScript::removeAllData(const QString &source)
 {
     if (d->dataEngine) {

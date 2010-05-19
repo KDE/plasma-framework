@@ -119,6 +119,15 @@ protected:
     void setData(const QString &source, const QString &key,
                  const QVariant &value);
     void setData(const QString &source, const QVariant &value);
+
+    /**
+     * Adds a set of values to a source
+     * @param source the name of the source to set the data on
+     * @values a key/value collection to add to the source
+     * @since 4.5
+     */
+    void setData(const QString &source, const DataEngine::Data &values);
+
     void removeAllData(const QString &source);
     void removeData(const QString &source, const QString &key);
     void setMaxSourceCount(uint limit);
