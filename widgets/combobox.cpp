@@ -29,6 +29,7 @@
 
 #include <plasma/private/style_p.h>
 #include <plasma/private/focusindicator_p.h>
+#include "applet.h"
 #include "theme.h"
 #include "framesvg.h"
 #include "animator.h"
@@ -268,7 +269,18 @@ void ComboBox::focusInEvent(QFocusEvent *event)
 
 void ComboBox::focusOutEvent(QFocusEvent *event)
 {
-    QGraphicsProxyWidget::focusInEvent(event);
+    QGraphicsWidget *widget = parentWidget();
+    Plasma::Applet *applet = qobject_cast<Plasma::Applet *>(widget);
+
+    while (!applet && widget) {
+        widget = widget->parentWidget();
+        applet = qobject_cast<Plasma::Applet *>(widget);
+    }
+
+    if (applet) {
+        applet->setStatus(Plasma::UnknownStatus);
+    }
+    QGraphicsProxyWidget::focusOutEvent(event);
 }
 
 void ComboBox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
@@ -291,6 +303,22 @@ void ComboBox::changeEvent(QEvent *event)
     }
 
     QGraphicsProxyWidget::changeEvent(event);
+}
+
+void ComboBox::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    QGraphicsWidget *widget = parentWidget();
+    Plasma::Applet *applet = qobject_cast<Plasma::Applet *>(widget);
+
+    while (!applet && widget) {
+        widget = widget->parentWidget();
+        applet = qobject_cast<Plasma::Applet *>(widget);
+    }
+
+    if (applet) {
+        applet->setStatus(Plasma::AcceptingInputStatus);
+    }
+    QGraphicsProxyWidget::mousePressEvent(event);
 }
 
 } // namespace Plasma

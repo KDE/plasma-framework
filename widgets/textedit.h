@@ -116,6 +116,8 @@ protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
     void changeEvent(QEvent *event);
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void focusOutEvent(QFocusEvent *event);
 
 private:
     TextEditPrivate * const d;

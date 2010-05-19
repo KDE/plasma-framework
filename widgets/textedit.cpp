@@ -27,6 +27,7 @@
 #include <kmimetype.h>
 #include <ktextedit.h>
 
+#include "applet.h"
 #include "theme.h"
 #include "svg.h"
 #include "private/style_p.h"
@@ -182,6 +183,38 @@ void TextEdit::changeEvent(QEvent *event)
     }
 
     QGraphicsProxyWidget::changeEvent(event);
+}
+
+void TextEdit::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    QGraphicsWidget *widget = parentWidget();
+    Plasma::Applet *applet = qobject_cast<Plasma::Applet *>(widget);
+
+    while (!applet && widget) {
+        widget = widget->parentWidget();
+        applet = qobject_cast<Plasma::Applet *>(widget);
+    }
+
+    if (applet) {
+        applet->setStatus(Plasma::AcceptingInputStatus);
+    }
+    QGraphicsProxyWidget::mousePressEvent(event);
+}
+
+void TextEdit::focusOutEvent(QFocusEvent *event)
+{
+    QGraphicsWidget *widget = parentWidget();
+    Plasma::Applet *applet = qobject_cast<Plasma::Applet *>(widget);
+
+    while (!applet && widget) {
+        widget = widget->parentWidget();
+        applet = qobject_cast<Plasma::Applet *>(widget);
+    }
+
+    if (applet) {
+        applet->setStatus(Plasma::UnknownStatus);
+    }
+    QGraphicsProxyWidget::focusOutEvent(event);
 }
 
 } // namespace Plasma

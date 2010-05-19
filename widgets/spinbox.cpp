@@ -27,6 +27,7 @@
 #include <knuminput.h>
 #include <kmimetype.h>
 
+#include <plasma/applet.h>
 #include <plasma/theme.h>
 #include <plasma/framesvg.h>
 #include <plasma/private/style_p.h>
@@ -198,7 +199,37 @@ void SpinBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, Q
     QGraphicsProxyWidget::paint(painter, option, widget);
 }
 
+void SpinBox::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    QGraphicsWidget *widget = parentWidget();
+    Plasma::Applet *applet = qobject_cast<Plasma::Applet *>(widget);
 
+    while (!applet && widget) {
+        widget = widget->parentWidget();
+        applet = qobject_cast<Plasma::Applet *>(widget);
+    }
+
+    if (applet) {
+        applet->setStatus(Plasma::AcceptingInputStatus);
+    }
+    QGraphicsProxyWidget::mousePressEvent(event);
+}
+
+void SpinBox::focusOutEvent(QFocusEvent *event)
+{
+    QGraphicsWidget *widget = parentWidget();
+    Plasma::Applet *applet = qobject_cast<Plasma::Applet *>(widget);
+
+    while (!applet && widget) {
+        widget = widget->parentWidget();
+        applet = qobject_cast<Plasma::Applet *>(widget);
+    }
+
+    if (applet) {
+        applet->setStatus(Plasma::UnknownStatus);
+    }
+    QGraphicsProxyWidget::focusOutEvent(event);
+}
 
 } // namespace Plasma
 
