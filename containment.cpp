@@ -1046,7 +1046,6 @@ void Containment::setScreen(int newScreen, int newDesktop)
                 //make the view completely forget about us
                 emit screenChanged(d->screen, -1, this);
                 currently->setScreen(-1, newDesktop);
-                emit screenChanged(-1, newDesktop, currently);
                 swapScreensWith = currently;
             }
         }
