@@ -28,6 +28,9 @@
 #include "scriptengine.h"
 #include "widget.h"
 
+namespace WorkspaceScripting
+{
+
 class Containment::Private
 {
 public:
@@ -297,6 +300,8 @@ Plasma::Applet *Containment::applet() const
 Plasma::Containment *Containment::containment() const
 {
     return d->containment.data();
+}
+
 }
 
 #include "containment.moc"

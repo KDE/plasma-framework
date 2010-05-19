@@ -19,6 +19,9 @@
 
 #include "layouttemplatepackagestructure.h"
 
+namespace WorkspaceScripting
+{
+
 LayoutTemplatePackageStructure::LayoutTemplatePackageStructure(QObject *parent)
     : Plasma::PackageStructure(parent)
 {
@@ -30,6 +33,8 @@ LayoutTemplatePackageStructure::LayoutTemplatePackageStructure(QObject *parent)
 
 LayoutTemplatePackageStructure::~LayoutTemplatePackageStructure()
 {
+
+}
 
 }
 

@@ -32,6 +32,9 @@ namespace Plasma
     class Corona;
 } // namespace Plasma
 
+namespace WorkspaceScripting
+{
+
 class Containment;
 
 class PLASMAGENERICSHELL_EXPORT ScriptEngine : public QScriptEngine
@@ -84,6 +87,8 @@ private:
     Plasma::Corona *m_corona;
     QScriptValue m_scriptSelf;
 };
+
+}
 
 #endif
 

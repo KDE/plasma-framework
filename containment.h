@@ -36,6 +36,9 @@ namespace Plasma
 class Widget;
 class PanelView;
 
+namespace WorkspaceScripting
+{
+
 class PLASMAGENERICSHELL_EXPORT Containment : public Applet
 {
     Q_OBJECT
@@ -103,6 +106,8 @@ private:
     class Private;
     Private * const d;
 };
+
+}
 
 #endif
 

@@ -29,6 +29,9 @@
 #include <Plasma/Containment>
 #include <Plasma/Corona>
 
+namespace WorkspaceScripting
+{
+
 class Applet::Private
 {
 public:
@@ -248,6 +251,8 @@ bool Applet::wallpaperConfigDirty() const
 Plasma::Applet *Applet::applet() const
 {
     return 0;
+}
+
 }
 
 #include "applet.moc"

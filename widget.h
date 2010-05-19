@@ -31,6 +31,9 @@ namespace Plasma
     class Applet;
 } // namespace Plasma
 
+namespace WorkspaceScripting
+{
+
 class PLASMAGENERICSHELL_EXPORT Widget : public Applet
 {
     Q_OBJECT
@@ -82,6 +85,8 @@ private:
     class Private;
     Private * const d;
 };
+
+}
 
 #endif
 

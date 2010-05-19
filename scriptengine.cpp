@@ -40,6 +40,9 @@
 
 QScriptValue constructQRectFClass(QScriptEngine *engine);
 
+namespace WorkspaceScripting
+{
+
 ScriptEngine::ScriptEngine(Plasma::Corona *corona, QObject *parent)
     : QScriptEngine(parent),
       m_corona(corona)
@@ -425,6 +428,8 @@ QStringList ScriptEngine::defaultLayoutScripts()
     }
 
     return scriptPaths;
+}
+
 }
 
 #include "scriptengine.moc"

@@ -32,6 +32,9 @@ namespace Plasma
     class Corona;
 } // namespace Plasma
 
+namespace WorkspaceScripting
+{
+
 class PLASMAGENERICSHELL_EXPORT AppInterface : public QObject
 {
     Q_OBJECT
@@ -70,6 +73,8 @@ Q_SIGNALS:
 private:
     Plasma::Corona *m_corona;
 };
+
+}
 
 #endif
 

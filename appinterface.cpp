@@ -28,6 +28,9 @@
 
 #include "scriptengine.h"
 
+namespace WorkspaceScripting
+{
+
 AppInterface::AppInterface(Plasma::Corona *corona, QObject *parent)
     : QObject(parent),
       m_corona(corona)
@@ -135,6 +138,8 @@ QStringList AppInterface::knownContainmentTypes(const QString &type) const
     }
 
     return containments;
+}
+
 }
 
 #include "appinterface.moc"

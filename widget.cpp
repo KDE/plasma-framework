@@ -26,6 +26,9 @@
 #include <Plasma/Containment>
 #include <Plasma/Corona>
 
+namespace WorkspaceScripting
+{
+
 class Widget::Private
 {
 public:
@@ -167,6 +170,7 @@ void Widget::showConfigurationInterface()
     }
 }
 
+}
 
 #include "widget.moc"
 

@@ -23,6 +23,9 @@
 #include <Plasma/PackageStructure>
 #include "../plasmagenericshell_export.h"
 
+namespace WorkspaceScripting
+{
+
 class PLASMAGENERICSHELL_EXPORT LayoutTemplatePackageStructure : public Plasma::PackageStructure
 {
     Q_OBJECT
@@ -32,6 +35,7 @@ public:
     ~LayoutTemplatePackageStructure();
 };
 
+}
 
 #endif
 
