@@ -32,7 +32,7 @@ class JavaScriptDataEngine : public Plasma::DataEngineScript
 {
     Q_OBJECT
     Q_PROPERTY(int sourceCount WRITE jsSetMaxSourceCount READ maxSourceCount)
-    Q_PROPERTY(int minimumPollingInterval WRITE jsSetMinimumPollingInterval READ minimumPollingInterval)
+    Q_PROPERTY(int minimumPollingInterval WRITE jsSetMinimumPollingInterval READ jsMinimumPollingInterval)
     Q_PROPERTY(int pollingInterval WRITE jsSetPollingInterval READ pollingInterval)
 
 public:
@@ -47,7 +47,7 @@ public:
     int maxSourceCount() const;
     void jsSetMaxSourceCount(int count);
     void jsSetMinimumPollingInterval(int interval);
-    int minimumPollingInterval() const;
+    int jsMinimumPollingInterval() const;
     void jsSetPollingInterval(int interval);
     int pollingInterval() const;
 
@@ -66,6 +66,7 @@ private:
     QScriptEngine *m_qscriptEngine;
     ScriptEnv *m_env;
     QScriptValue iface;
+    int m_pollingInterval;
 };
 
 #endif

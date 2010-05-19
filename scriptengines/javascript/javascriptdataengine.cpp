@@ -30,7 +30,7 @@ JavaScriptDataEngine::JavaScriptDataEngine(QObject *parent, const QVariantList &
     : DataEngineScript(parent)
 {
     Q_UNUSED(args);
-    
+
     m_qscriptEngine = new QScriptEngine(this);
     m_env = new ScriptEnv(this, m_qscriptEngine);
 
@@ -77,19 +77,20 @@ void JavaScriptDataEngine::jsSetMinimumPollingInterval(int interval)
     setMinimumPollingInterval(interval);
 }
 
-int JavaScriptDataEngine::minimumPollingInterval() const
+int JavaScriptDataEngine::jsMinimumPollingInterval() const
 {
     return minimumPollingInterval();
 }
 
 void JavaScriptDataEngine::jsSetPollingInterval(int interval)
 {
+    m_pollingInterval = interval;
     setPollingInterval(interval);
 }
 
 int JavaScriptDataEngine::pollingInterval() const
 {
-    return pollingInterval();
+    return m_pollingInterval;
 }
 
 QScriptValue JavaScriptDataEngine::jsSetData(QScriptContext *context, QScriptEngine *engine)
@@ -105,12 +106,12 @@ QScriptValue JavaScriptDataEngine::jsSetData(QScriptContext *context, QScriptEng
         return context->throwError(error);
     }
 
-    QString source = context->argument(0).toString();
+    const QString source = context->argument(0).toString();
     QString value = context->argument(1).toString();
 
     if (context->argumentCount() > 2) {
-        QString key = value;
-        QString value = context->argument(2).toString();
+        const QString key = value;
+        value = context->argument(2).toString();
         iFace->setData(source, key, value);
     } else {
         iFace->setData(source, value);
