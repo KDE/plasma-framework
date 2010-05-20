@@ -25,6 +25,7 @@
 #include <QPinchGesture>
 #include <QtWebKit/QWebFrame>
 
+#include <kglobalsettings.h>
 #include <kwebpage.h>
 
 using namespace Plasma;
@@ -142,7 +143,7 @@ void AnimableGraphicsWebView::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     QMouseEvent me(QEvent::MouseButtonRelease, event->pos().toPoint(),
             event->button(),event->buttons(), event->modifiers());
 
-    if (!m_dragToScroll || (scrollPosition() - m_lastScrollPosition).manhattanLength() < QApplication::startDragDistance()) {
+    if (!m_dragToScroll || (scrollPosition() - m_lastScrollPosition).manhattanLength() < KGlobalSettings::dndEventDelay()) {
         page()->event(&me);
     }
 
