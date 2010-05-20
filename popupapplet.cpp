@@ -277,10 +277,6 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             //kDebug() << "we are expanding the popupapplet";
 
 
-            if (q->status() == UnknownStatus) {
-                q->setStatus(AcceptingInputStatus);
-            }
-
             // we only switch to expanded if we aren't horiz/vert constrained and
             // this applet has an icon.
             // otherwise, we leave it up to the applet itself to figure it out
@@ -364,10 +360,6 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             if (proxy) {
                 proxy.data()->setWidget(0); // prevent it from deleting our widget!
                 delete proxy.data();
-            }
-
-            if (q->status() == AcceptingInputStatus) {
-                q->setStatus(UnknownStatus);
             }
 
             if (!dialogPtr) {
