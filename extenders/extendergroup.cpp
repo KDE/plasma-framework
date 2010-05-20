@@ -183,6 +183,8 @@ void ExtenderGroup::expandGroup()
     }
     d->scrollWidget->show();
     static_cast<QGraphicsLinearLayout *>(layout())->addItem(d->scrollWidget);
+    updateGeometry();
+    extender()->resize(extender()->effectiveSizeHint(Qt::PreferredSize));
 }
 
 void ExtenderGroup::collapseGroup()
