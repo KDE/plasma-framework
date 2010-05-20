@@ -645,7 +645,7 @@ public:
 
         if (canYFlick()) {
             int dy = int(event->scenePos().y() - pressPos.y());
-            if (qAbs(dy) > QApplication::startDragDistance() || elapsed(pressTime) > 200) {
+            if (qAbs(dy) > KGlobalSettings::dndEventDelay() || elapsed(pressTime) > 200) {
                 qreal newY = dy + pressScrollPos.y();
                 const qreal minY = minYExtent();
                 const qreal maxY = maxYExtent();
@@ -665,14 +665,14 @@ public:
                     setWidgetY(qRound(newY));
                     moved = true;
                 }
-                if (qAbs(dy) > QApplication::startDragDistance())
+                if (qAbs(dy) > KGlobalSettings::dndEventDelay())
                     stealEvent = true;
             }
         }
 
         if (canXFlick()) {
             int dx = int(event->scenePos().x() - pressPos.x());
-            if (qAbs(dx) > QApplication::startDragDistance() || elapsed(pressTime) > 200) {
+            if (qAbs(dx) > KGlobalSettings::dndEventDelay() || elapsed(pressTime) > 200) {
                 qreal newX = dx + pressScrollPos.x();
                 const qreal minX = minXExtent();
                 const qreal maxX = maxXExtent();
@@ -693,7 +693,7 @@ public:
                     moved = true;
                 }
 
-                if (qAbs(dx) > QApplication::startDragDistance())
+                if (qAbs(dx) > KGlobalSettings::dndEventDelay())
                     stealEvent = true;
             }
         }
