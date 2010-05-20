@@ -528,9 +528,9 @@ void ExtenderItem::setCollapsed(bool collapsed)
         } else {
             d->layout->insertItem(1, d->widget);
         }
-        QGraphicsWidget *pw = qgraphicsitem_cast<QGraphicsWidget *>(parentItem());
-        if (pw) {
-            pw->resize(pw->effectiveSizeHint(Qt::PreferredSize));
+        updateGeometry();
+        if (extender()) {
+            extender()->resize(extender()->effectiveSizeHint(Qt::PreferredSize));
         }
     }
 }
