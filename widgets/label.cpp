@@ -287,15 +287,12 @@ void Label::paint(QPainter *painter,
                   QWidget *widget)
 {
     QGraphicsProxyWidget::paint(painter, option, widget);
-    /*
-        NOTE: if we don't get any coplaints about "unitialized random gibberish" as in the FIXME
-        below, then we can just get rid of this entire block of code.it really depends on whether
-        or not Qt has been fixed since this was written
+
     QLabel *native = nativeWidget();
     QFontMetrics fm = native->font();
 
-    //FIXME: using QGraphicsProxyWidget::paint directly with opacity<1 produces uninitialized random gibberish
-    if (qFuzzyCompare((qreal)1.0, opacity()) && (native->wordWrap() || native->text().isEmpty() || size().width() >= fm.width(native->text()))) {
+    //indirect painting still used for fade out
+    if (native->wordWrap() || native->text().isEmpty() || size().width() >= fm.width(native->text())) {
         QGraphicsProxyWidget::paint(painter, option, widget);
     } else {
         const int gradientLength = 25;
@@ -332,7 +329,6 @@ void Label::paint(QPainter *painter,
         buffPainter.end();
         painter->drawPixmap(contentsRect(), buffer, buffer.rect());
     }
-    */
 }
 
 void Label::changeEvent(QEvent *event)
