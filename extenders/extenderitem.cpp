@@ -210,7 +210,7 @@ ExtenderItem::~ExtenderItem()
 
 KConfigGroup ExtenderItem::config() const
 {
-    if (d->extender->d->applet) {
+    if (!d->extender->d->applet) {
         return KConfigGroup();
     }
     KConfigGroup cg = d->extender->d->applet->config("ExtenderItems");
