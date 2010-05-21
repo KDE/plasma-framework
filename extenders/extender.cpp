@@ -422,6 +422,8 @@ void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
 {
     if (!item->group()) {
         if (pos == QPointF(-1, -1)) {
+            //if it was already there, reposition
+            d->layout->removeItem(item);
             //if just plain adding an item, add it at a sane position:
             if (appearance() == BottomUpStacked) {
                 //at the top
