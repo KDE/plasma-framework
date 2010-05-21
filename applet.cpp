@@ -790,17 +790,12 @@ QString Applet::name() const
 {
     if (d->isContainment) {
         const Containment *c = qobject_cast<const Containment*>(this);
-        if (c && !c->activity().isNull()) {
-            return i18n("%1 Activity", c->activity());
-        }
-
-        if (!d->appletDescription.isValid()) {
-            return i18n("Unknown Activity");
-        } else if (c && (c->d->type == Containment::PanelContainment ||
-                   c->d->type == Containment::CustomPanelContainment)) {
-            return d->appletDescription.name();
+        if (c && c->d->isPanelContainment()) {
+            return i18n("Panel");
+        } else if (!d->appletDescription.isValid()) {
+            return i18n("Unknown");
         } else {
-            return i18n("%1 Activity", d->appletDescription.name());
+            return d->appletDescription.name();
         }
     } else if (!d->appletDescription.isValid()) {
         return i18n("Unknown Widget");
