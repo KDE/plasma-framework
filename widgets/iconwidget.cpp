@@ -1227,7 +1227,8 @@ void IconWidget::setInfoText(const QString &text)
     d->currentSize = QSizeF(-1, -1);
     //try to relayout, needed if an icon was never shown before
     if (!isVisible()) {
-        d->layoutIcons(new QStyleOptionGraphicsItem);
+        QStyleOptionGraphicsItem styleoption;
+        d->layoutIcons(&styleoption);
     }
     resize(sizeFromIconSize(d->iconSize.width()));
     updateGeometry();
