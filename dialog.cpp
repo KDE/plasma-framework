@@ -337,6 +337,7 @@ void Dialog::syncToGraphicsWidget()
         QDesktopWidget *desktop = QApplication::desktop();
         QSize maxSize = desktop->availableGeometry(desktop->screenNumber(this)).size();
 
+        graphicsWidget->setMaximumSize(maxSize - QSize(left + right, top + bottom));
 
         setMinimumSize(-1, -1);
         setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
