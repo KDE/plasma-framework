@@ -396,13 +396,6 @@ void Dialog::syncToGraphicsWidget()
 
         d->background->getMargins(leftWidth, topHeight, rightWidth, bottomHeight);
 
-        /*if (rightWidth == 0) {
-            move(pos().x() + (prevSize.width() - size().width()), pos().y());
-        }
-        if (bottomHeight == 0) {
-            move(pos().x(), pos().y() + (prevSize.height() - size().height()));
-        }*/
-
         if (size() != prevSize) {
             //the size of the dialog has changed, emit the signal:
             emit dialogResized();
