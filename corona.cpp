@@ -492,6 +492,7 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigBase &conf
         }
 
         //kDebug() << "got a containment in the config, trying to make a" << containmentConfig.readEntry("plugin", QString()) << "from" << group;
+        kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Adding Containment" << containmentConfig.readEntry("plugin", QString());
         Containment *c = addContainment(containmentConfig.readEntry("plugin", QString()), QVariantList(), cid, true);
         if (!c) {
             continue;
@@ -501,7 +502,9 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigBase &conf
         containmentsIds.insert(c->id());
 
         c->init();
+        kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Init Containment" << c->pluginName();
         c->restore(containmentConfig);
+        kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Restored Containment" << c->pluginName();
     }
 
     foreach (Containment *containment, newContainments) {
