@@ -199,7 +199,7 @@ void extenderFromQScriptValue(const QScriptValue &scriptValue, ExtenderPtr &exte
     extender = static_cast<Plasma::Extender *>(obj);
 }
 
-QScriptValue qScriptValueFromMouseButton(QScriptEngine *engine, const Qt::MouseButton &button)
+QScriptValue qScriptValueFromMouseButton(QScriptEngine *, const Qt::MouseButton &button)
 {
     return int(button);
 }
