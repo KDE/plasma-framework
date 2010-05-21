@@ -26,6 +26,7 @@
 #include <QGraphicsProxyWidget>
 
 #include <kactioncollection.h>
+#include <kconfigdialog.h>
 
 #include "plasma/animator.h"
 #include "plasma/private/dataengineconsumer_p.h"
@@ -46,6 +47,34 @@ class FrameSvg;
 class AppletScript;
 class Wallpaper;
 class BusyWidget;
+
+class AppletConfigDialog : public KConfigDialog
+{
+    Q_OBJECT
+
+public:
+    AppletConfigDialog(QWidget* parent, const QString &id, KConfigSkeleton *s)
+        : KConfigDialog(parent, id, s),
+          m_changed(false)
+    {
+    }
+
+public Q_SLOTS:
+    void settingsModified(bool modified = true)
+    {
+        m_changed = modified;
+        updateButtons();
+    }
+
+protected:
+    bool hasChanged()
+    {
+        return m_changed || KConfigDialog::hasChanged();
+    }
+
+private:
+    bool m_changed;
+};
 
 class AppletOverlayWidget : public QGraphicsWidget
 {

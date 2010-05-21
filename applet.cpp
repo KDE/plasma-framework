@@ -53,7 +53,6 @@
 #include <kactioncollection.h>
 #include <kauthorized.h>
 #include <kcolorscheme.h>
-#include <kconfigdialog.h>
 #include <kdialog.h>
 #include <kicon.h>
 #include <kiconloader.h>
@@ -1805,7 +1804,7 @@ void Applet::showConfigurationInterface()
             QUiLoader loader;
             QWidget *w = loader.load(&f);
             if (w) {
-                dialog = new KConfigDialog(0, d->configDialogId(), d->configLoader);
+                dialog = new AppletConfigDialog(0, d->configDialogId(), d->configLoader);
                 dialog->setWindowTitle(d->configWindowTitle());
                 dialog->setAttribute(Qt::WA_DeleteOnClose, true);
                 dialog->addPage(w, i18n("Settings"), icon(), i18n("%1 Settings", name()));
@@ -1881,7 +1880,7 @@ QSet<QString> AppletPrivate::knownCategories()
 KConfigDialog *AppletPrivate::generateGenericConfigDialog()
 {
     KConfigSkeleton *nullManager = new KConfigSkeleton(0);
-    KConfigDialog *dialog = new KConfigDialog(0, configDialogId(), nullManager);
+    KConfigDialog *dialog = new AppletConfigDialog(0, configDialogId(), nullManager);
     dialog->setFaceType(KPageDialog::Auto);
     dialog->setWindowTitle(configWindowTitle());
     dialog->setAttribute(Qt::WA_DeleteOnClose, true);
