@@ -43,6 +43,7 @@ Q_DECLARE_METATYPE(Plasma::Applet*)
 Q_DECLARE_METATYPE(Plasma::Extender*)
 Q_DECLARE_METATYPE(Plasma::VideoWidget::Controls)
 Q_DECLARE_METATYPE(Plasma::Svg*)
+Q_DECLARE_METATYPE(Qt::MouseButton)
 
 Q_DECLARE_METATYPE(AppletInterface*)
 
@@ -198,6 +199,16 @@ void extenderFromQScriptValue(const QScriptValue &scriptValue, ExtenderPtr &exte
     extender = static_cast<Plasma::Extender *>(obj);
 }
 
+QScriptValue qScriptValueFromMouseButton(QScriptEngine *engine, const Qt::MouseButton &button)
+{
+    return int(button);
+}
+
+void mouseButtonFromScriptValue(const QScriptValue &scriptValue, Qt::MouseButton &button)
+{
+    button = static_cast<Qt::MouseButton>(scriptValue.toInt32());
+}
+
 using namespace Plasma;
 
 void registerSimpleAppletMetaTypes(QScriptEngine *engine)
@@ -212,7 +223,7 @@ void registerSimpleAppletMetaTypes(QScriptEngine *engine)
     qScriptRegisterMetaType<Plasma::Animation *>(engine, qScriptValueFromAnimation, abstractAnimationFromQScriptValue);
     qScriptRegisterMetaType<Plasma::Extender *>(engine, qScriptValueFromExtender, extenderFromQScriptValue);
     qScriptRegisterMetaType<Plasma::VideoWidget::Controls>(engine, qScriptValueFromControls, controlsFromScriptValue, QScriptValue());
-
+    qScriptRegisterMetaType<Qt::MouseButton>(engine, qScriptValueFromMouseButton, mouseButtonFromScriptValue);
     registerDataEngineMetaTypes(engine);
 }
 
