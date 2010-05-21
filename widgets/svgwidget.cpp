@@ -22,6 +22,7 @@
 #include <QtGui/QPainter>
 #include <QtGui/QGraphicsSceneMouseEvent>
 
+#include "kdebug.h"
 #include "svg.h"
 
 namespace Plasma
@@ -55,12 +56,19 @@ SvgWidget::~SvgWidget()
     delete d;
 }
 
-void SvgWidget::mouseReleaseEvent ( QGraphicsSceneMouseEvent * event  )
+void SvgWidget::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    // we check for receivers so that SvgWidgets that aren't being used for events remain "click
+    // transparent"
     if (receivers(SIGNAL(clicked(Qt::MouseButton)))) {
-        emit clicked(event->button());
-    } else {
         event->accept();
+    }
+}
+
+void SvgWidget::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (boundingRect().contains(event->pos())) {
+        emit clicked(event->button());
     }
 }
 

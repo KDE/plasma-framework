@@ -49,8 +49,6 @@ class PLASMA_EXPORT SvgWidget : public QGraphicsWidget
                            QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);
         virtual ~SvgWidget();
 
-        virtual void mouseReleaseEvent ( QGraphicsSceneMouseEvent * event );
-
         void setSvg(Svg *svg);
         Svg *svg() const;
 
@@ -63,6 +61,8 @@ class PLASMA_EXPORT SvgWidget : public QGraphicsWidget
     protected:
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
         QSizeF sizeHint(Qt::SizeHint which, const QSizeF & constraint) const;
+        void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
+        void mousePressEvent(QGraphicsSceneMouseEvent * event);
 
     private:
         SvgWidgetPrivate * const d;
