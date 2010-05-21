@@ -188,7 +188,7 @@ Plasma::Applet *DialogPrivate::applet()
 
 void DialogPrivate::delayedAdjustSize()
 {
-    q->adjustSize();
+    q->syncToGraphicsWidget();
 }
 
 void DialogPrivate::checkBorders(bool updateMaskIfNeeded)
@@ -341,15 +341,39 @@ void Dialog::syncToGraphicsWidget()
 
         setMinimumSize(-1, -1);
         setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
-        resize(qMin(int(graphicsWidget->size().width()) + left + right, maxSize.width()),
+
+        QSize newSize(qMin(int(graphicsWidget->size().width()) + left + right, maxSize.width()),
                qMin(int(graphicsWidget->size().height()) + top + bottom, maxSize.height()));
 
-        setMinimumSize(qMin(int(graphicsWidget->minimumSize().width()) + left + right, maxSize.width()),
+        QSize newMinimumSize(qMin(int(graphicsWidget->minimumSize().width()) + left + right, maxSize.width()),
                        qMin(int(graphicsWidget->minimumSize().height()) + top + bottom, maxSize.height()));
 
 
-        setMaximumSize(qMin(int(graphicsWidget->maximumSize().width()) + left + right, maxSize.width()),
+        QSize newMaximumSize(qMin(int(graphicsWidget->maximumSize().width()) + left + right, maxSize.width()),
                        qMin(int(graphicsWidget->maximumSize().height()) + top + bottom, maxSize.height()));
+
+
+        Plasma::Applet *applet = d->applet();
+        if (applet) {
+            QRect currentGeometry(geometry());
+            currentGeometry.setSize(newSize);
+            if (applet->location() == Plasma::TopEdge ||
+                applet->location() == Plasma::LeftEdge) {
+                currentGeometry.setSize(newSize);
+            } else if (applet->location() == Plasma::RightEdge) {
+                currentGeometry.moveTopRight(geometry().topRight());
+            //BottomEdge and floating
+            } else {
+                currentGeometry.moveBottomLeft(geometry().bottomLeft());
+            }
+            setGeometry(currentGeometry);
+        } else {
+            resize(newSize);
+        }
+
+        setMinimumSize(newMinimumSize);
+        setMaximumSize(newMaximumSize);
+
 
         updateGeometry();
 
@@ -361,7 +385,7 @@ void Dialog::syncToGraphicsWidget()
         sceneRect.setHeight(qMax(qreal(1), sceneRect.height()));
         d->view->setSceneRect(sceneRect);
 
-        d->view->resize(graphicsWidget->size().toSize());
+        //d->view->resize(graphicsWidget->size().toSize());
         d->view->centerOn(graphicsWidget);
 
         //if the view resized and a border is disabled move the dialog to make sure it will still look attached to panel/screen edge
@@ -372,12 +396,12 @@ void Dialog::syncToGraphicsWidget()
 
         d->background->getMargins(leftWidth, topHeight, rightWidth, bottomHeight);
 
-        if (rightWidth == 0) {
+        /*if (rightWidth == 0) {
             move(pos().x() + (prevSize.width() - size().width()), pos().y());
         }
         if (bottomHeight == 0) {
             move(pos().x(), pos().y() + (prevSize.height() - size().height()));
-        }
+        }*/
 
         if (size() != prevSize) {
             //the size of the dialog has changed, emit the signal:
@@ -584,22 +608,6 @@ void Dialog::resizeEvent(QResizeEvent *event)
         sceneRect.setHeight(qMax(qreal(1), sceneRect.height()));
         d->view->setSceneRect(sceneRect);
         d->view->centerOn(graphicsWidget);
-    }
-
-    if (d->resizeStartCorner == -1) {
-        Plasma::Applet *applet = d->applet();
-        if (applet && !event->oldSize().isEmpty()) {
-            Plasma::Corona *corona = qobject_cast<Plasma::Corona *>(applet->scene());
-            if (corona) {
-                QSize deltaSize(event->size() - event->oldSize());
-
-                if (applet->location() == Plasma::BottomEdge) {
-                    move(pos() - QPoint(0, deltaSize.height()));
-                } else if (applet->location() == Plasma::RightEdge) {
-                    move(pos() - QPoint(deltaSize.width(), 0));
-                }
-            }
-        }
     }
 }
 
