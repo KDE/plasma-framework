@@ -455,6 +455,9 @@ void Extender::itemRemovedEvent(ExtenderItem *item)
     //add the empty extender message if needed.
     d->updateEmptyExtenderLabel();
     d->updateBorders();
+
+    updateGeometry();
+    resize(effectiveSizeHint(Qt::PreferredSize));
 }
 
 void Extender::itemHoverEnterEvent(ExtenderItem *item)
