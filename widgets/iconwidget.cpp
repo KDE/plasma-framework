@@ -1211,8 +1211,10 @@ void IconWidget::setText(const QString &text)
         QStyleOptionGraphicsItem styleoption;
         d->layoutIcons(&styleoption);
     }
-    resize(sizeFromIconSize(d->iconSize.width()));
     updateGeometry();
+    if (!parentWidget() || !parentWidget()->layout()) {
+        resize(preferredSize());
+    }
 }
 
 QString IconWidget::text() const
@@ -1230,8 +1232,10 @@ void IconWidget::setInfoText(const QString &text)
         QStyleOptionGraphicsItem styleoption;
         d->layoutIcons(&styleoption);
     }
-    resize(sizeFromIconSize(d->iconSize.width()));
     updateGeometry();
+    if (!parentWidget() || !parentWidget()->layout()) {
+        resize(preferredSize());
+    }
 }
 
 QString IconWidget::infoText() const
