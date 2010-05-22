@@ -126,6 +126,9 @@ void PopupApplet::setPopupIcon(const QString &iconName)
         if (!d->icon) {
             d->icon = new Plasma::IconWidget(this);
             d->icon->setSvg(name, iconName);
+            if (d->icon->svg().isEmpty()) {
+                setPopupIcon(KIcon(iconName));
+            }
             connect(d->icon, SIGNAL(clicked()), this, SLOT(internalTogglePopup()));
 
             QGraphicsLinearLayout *layout = new QGraphicsLinearLayout();
@@ -136,6 +139,9 @@ void PopupApplet::setPopupIcon(const QString &iconName)
             setLayout(layout);
         } else {
             d->icon->setSvg(name, iconName);
+            if (d->icon->svg().isEmpty()) {
+                setPopupIcon(KIcon(iconName));
+            }
         }
     // Final Attempt: use KIcon
     } else {
