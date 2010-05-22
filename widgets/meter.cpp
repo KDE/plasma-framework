@@ -74,6 +74,8 @@ void MeterPrivate::text(QPainter *p, int index)
 
             if (colors.count() > index) {
                 p->setPen(QPen(colors[index]));
+            } else {
+                p->setPen(Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor));
             }
             if (fonts.count() > index) {
                 p->setFont(fonts[index]);
