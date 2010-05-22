@@ -658,7 +658,11 @@ void IconWidget::setSvg(const QString &svgFilePath, const QString &elementId)
 QString IconWidget::svg() const
 {
     if (d->iconSvg) {
-        return d->iconSvg->imagePath();
+        if (d->iconSvg->isValid() && (d->iconSvgElement.isEmpty() || d->iconSvg->hasElement(d->iconSvgElement))) {
+            return d->iconSvg->imagePath();
+        } else {
+            return QString();
+        }
     }
 
     return QString();
