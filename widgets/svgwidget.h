@@ -55,13 +55,14 @@ class PLASMA_EXPORT SvgWidget : public QGraphicsWidget
         void setElementID(const QString &elementID);
         QString elementID() const;
 
+        void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
+
     Q_SIGNALS:
         void clicked(Qt::MouseButton);
 
     protected:
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
         QSizeF sizeHint(Qt::SizeHint which, const QSizeF & constraint) const;
-        void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
         void mousePressEvent(QGraphicsSceneMouseEvent * event);
 
     private:
