@@ -114,6 +114,16 @@ bool LineEdit::isClearButtonShown() const
     return nativeWidget()->isClearButtonShown();
 }
 
+void LineEdit::setClickMessage(const QString &message)
+{
+    nativeWidget()->setClickMessage(message);
+}
+
+QString LineEdit::clickMessage() const
+{
+    return nativeWidget()->clickMessage();
+}
+
 void LineEdit::setStyleSheet(const QString &stylesheet)
 {
     widget()->setStyleSheet(stylesheet);

@@ -43,6 +43,7 @@ class PLASMA_EXPORT LineEdit : public QGraphicsProxyWidget
     Q_PROPERTY(QGraphicsWidget *parentWidget READ parentWidget)
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textEdited)
     Q_PROPERTY(bool clearButtonShown READ isClearButtonShown WRITE setClearButtonShown)
+    Q_PROPERTY(QString clickMessage READ clickMessage WRITE setClickMessage)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(KLineEdit *nativeWidget READ nativeWidget WRITE setNativeWidget)
 
@@ -73,6 +74,20 @@ public:
      * @since 4.3
      */
     bool isClearButtonShown() const;
+
+    /**
+     * Sets a greyed out message that will go away after the user clicked the line edit
+     *
+     * @param message the message
+     * @since 4.5
+     */
+    void setClickMessage(const QString &message);
+
+    /**
+     * @return the text of a greyed out message that will go away when clicked
+     * @since 4.5
+     */
+    QString clickMessage() const;
 
     /**
      * Sets the stylesheet used to control the visual display of this LineEdit
