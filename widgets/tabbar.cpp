@@ -287,7 +287,7 @@ int TabBar::insertTab(int index, const QIcon &icon, const QString &label,
 {
     QGraphicsWidget *page = new QGraphicsWidget(this);
     page->setContentsMargins(0,0,0,0);
-    page->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    page->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     if (content) {
         if (content->isLayout()) {
             page->setLayout(static_cast<QGraphicsLayout *>(content));
