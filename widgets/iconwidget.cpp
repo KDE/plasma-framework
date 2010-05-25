@@ -672,7 +672,7 @@ QSizeF IconWidget::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
 {
     if (which == Qt::PreferredSize) {
         if (d->preferredIconSize.isValid()) {
-            return sizeFromIconSize(qMax(d->preferredIconSize.height(), d->preferredIconSize.height()));
+            return sizeFromIconSize(qMax(d->preferredIconSize.height(), d->preferredIconSize.width()));
         }
         int iconSize = KIconLoader::SizeMedium;
         if (d->iconSvg) {
@@ -688,12 +688,12 @@ QSizeF IconWidget::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
         return sizeFromIconSize(iconSize);
     } else if (which == Qt::MinimumSize) {
         if (d->minimumIconSize.isValid()) {
-            return sizeFromIconSize(qMax(d->minimumIconSize.height(), d->minimumIconSize.height()));
+            return sizeFromIconSize(qMax(d->minimumIconSize.height(), d->minimumIconSize.width()));
         }
         return sizeFromIconSize(KIconLoader::SizeSmall);
     } else {
         if (d->maximumIconSize.isValid()) {
-            return sizeFromIconSize(qMax(d->maximumIconSize.height(), d->maximumIconSize.height()));
+            return sizeFromIconSize(qMax(d->maximumIconSize.height(), d->maximumIconSize.width()));
         }
         return QGraphicsWidget::sizeHint(which, constraint);
     }
