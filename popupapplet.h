@@ -144,11 +144,39 @@ protected:
      */
     virtual void popupEvent(bool show);
 
+    /**
+     * Reimplemented from QGraphicsLayoutItem
+     */
+    QSizeF sizeHint(Qt::SizeHint which, const QSizeF & constraint = QSizeF()) const;
+
+    /**
+     * Reimplemented from QGraphicsLayoutItem
+     */
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
+
+    /**
+     * Reimplemented from QGraphicsLayoutItem
+     */
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+
+    /**
+     * Reimplemented from QGraphicsLayoutItem
+     */
     bool eventFilter(QObject *watched, QEvent *event);
+
+    /**
+     * Reimplemented from QGraphicsLayoutItem
+     */
     void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
+
+    /**
+     * Reimplemented from QGraphicsLayoutItem
+     */
     void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
+
+    /**
+     * Reimplemented from QGraphicsLayoutItem
+     */
     void dropEvent(QGraphicsSceneDragDropEvent *event);
 
 private:
@@ -169,6 +197,7 @@ private:
     Q_PRIVATE_SLOT(d, void dialogStatusChanged(bool))
     Q_PRIVATE_SLOT(d, void updateDialogPosition())
     Q_PRIVATE_SLOT(d, void appletActivated())
+    Q_PRIVATE_SLOT(d, void iconSizeChanged(int))
 
     friend class Applet;
     friend class AppletPrivate;

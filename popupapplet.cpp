@@ -58,22 +58,12 @@ PopupApplet::PopupApplet(QObject *parent, const QVariantList &args)
     : Plasma::Applet(parent, args),
       d(new PopupAppletPrivate(this))
 {
-    int iconSize = IconSize(KIconLoader::Desktop);
-    resize(iconSize, iconSize);
-    disconnect(this, SIGNAL(activate()), (Applet*)this, SLOT(setFocus()));
-    connect(this, SIGNAL(activate()), this, SLOT(appletActivated()));
-    setAcceptDrops(true);
 }
 
 PopupApplet::PopupApplet(const QString &packagePath, uint appletId, const QVariantList &args)
     : Plasma::Applet(packagePath, appletId, args),
       d(new PopupAppletPrivate(this))
 {
-    int iconSize = IconSize(KIconLoader::Desktop);
-    resize(iconSize, iconSize);
-    disconnect(this, SIGNAL(activate()), (Applet*)this, SLOT(setFocus()));
-    connect(this, SIGNAL(activate()), this, SLOT(togglePopup()));
-    setAcceptDrops(true);
 }
 
 PopupApplet::~PopupApplet()
@@ -435,6 +425,27 @@ void PopupAppletPrivate::appletActivated()
     q->showPopup();
 }
 
+QSizeF PopupApplet::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
+{
+    if (!d->icon) {
+        return Applet::sizeHint(which, constraint);
+    }
+
+    switch (formFactor()) {
+        case Vertical:
+        case Horizontal: {
+            const int size = IconSize(KIconLoader::Panel);
+            return QSizeF(size, size);
+            break;
+        }
+        default:
+            break;
+    }
+
+    const int size = IconSize(KIconLoader::Desktop);
+    return QSizeF(size, size);
+}
+
 void PopupApplet::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (!d->icon && !d->popupLostFocus && event->buttons() == Qt::LeftButton) {
@@ -610,6 +621,12 @@ PopupAppletPrivate::PopupAppletPrivate(PopupApplet *applet)
           popupLostFocus(false),
           passive(false)
 {
+    int iconSize = IconSize(KIconLoader::Desktop);
+    q->resize(iconSize, iconSize);
+    q->setAcceptDrops(true);
+    QObject::disconnect(q, SIGNAL(activate()), static_cast<Applet*>(q), SLOT(setFocus()));
+    QObject::connect(q, SIGNAL(activate()), q, SLOT(appletActivated()));
+    QObject::connect(KGlobalSettings::self(), SIGNAL(iconChanged(int)), q, SLOT(iconSizeChanged(int)));
 }
 
 PopupAppletPrivate::~PopupAppletPrivate()
@@ -620,6 +637,13 @@ PopupAppletPrivate::~PopupAppletPrivate()
 
     delete dialogPtr.data();
     delete icon;
+}
+
+void PopupAppletPrivate::iconSizeChanged(int group)
+{
+    if (icon && (group == KIconLoader::Desktop || group == KIconLoader::Panel)) {
+        q->updateGeometry();
+    }
 }
 
 void PopupAppletPrivate::internalTogglePopup()

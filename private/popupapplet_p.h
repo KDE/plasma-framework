@@ -33,6 +33,7 @@ public:
     PopupAppletPrivate(PopupApplet *applet);
     ~PopupAppletPrivate();
 
+    void iconSizeChanged(int group);
     void internalTogglePopup();
     void hideTimedPopup();
     void clearPopupLostFocus();
