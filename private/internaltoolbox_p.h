@@ -87,19 +87,17 @@ public:
     virtual QSize fullWidth() const;
     virtual QSize fullHeight() const;
     virtual QSize cornerSize() const;
+    virtual void updateToolBox() {}
+
+    void setIconic(bool iconic);
+    bool iconic() const;
 
     virtual void showToolBox() = 0;
     virtual void hideToolBox() = 0;
-public Q_SLOTS:
-    /**
-     * re-show the toolbox, in case any tools have changed
-     */
-    virtual void updateToolBox();
 
 protected:
     Containment *containment();
     QPoint toolPosition(int toolHeight);
-    QMap<AbstractToolBox::ToolType, IconWidget *> tools() const;
 
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
@@ -107,6 +105,7 @@ protected:
 
 protected Q_SLOTS:
     virtual void toolTriggered(bool);
+    void actionDestroyed(QObject *object);
 
 private:
     InternalToolBoxPrivate *d;

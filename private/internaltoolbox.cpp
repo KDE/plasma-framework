@@ -51,7 +51,8 @@ public:
         showing(false),
         movable(false),
         dragging(false),
-        userMoved(false)
+        userMoved(false),
+        iconic(true)
     {}
 
     Containment *containment;
@@ -60,12 +61,13 @@ public:
     QSize iconSize;
     QPoint dragStartRelative;
     QTransform viewTransform;
-    QMultiMap<AbstractToolBox::ToolType, IconWidget *> tools;
+    QList<QAction *> actions;
     bool hidden : 1;
     bool showing : 1;
     bool movable : 1;
     bool dragging : 1;
     bool userMoved : 1;
+    bool iconic : 1;
 };
 
 InternalToolBox::InternalToolBox(Containment *parent)
@@ -109,11 +111,6 @@ QPoint InternalToolBox::toolPosition(int toolHeight)
     }
 }
 
-QMap<AbstractToolBox::ToolType, IconWidget *> InternalToolBox::tools() const
-{
-    return d->tools;
-}
-
 QGraphicsWidget *InternalToolBox::toolParent()
 {
     return this;
@@ -125,92 +122,33 @@ void InternalToolBox::addTool(QAction *action)
         return;
     }
 
-    foreach (IconWidget *tool, d->tools) {
-        //kDebug() << "checking tool" << child << child->data(ToolName);
-        if (tool->action() == action) {
-            return;
-        }
+    if (d->actions.contains(action)) {
+        return;
     }
 
-    Plasma::IconWidget *tool = new Plasma::IconWidget(toolParent());
-
-    tool->setTextBackgroundColor(QColor());
-    tool->setAction(action);
-    tool->setDrawBackground(true);
-    tool->setOrientation(Qt::Horizontal);
-    tool->resize(tool->sizeFromIconSize(KIconLoader::SizeSmallMedium));
-    tool->setPreferredIconSize(QSizeF(KIconLoader::SizeSmallMedium, KIconLoader::SizeSmallMedium));
-    tool->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-
-    tool->hide();
-    const int height = static_cast<int>(tool->boundingRect().height());
-    tool->setPos(toolPosition(height));
-    tool->setZValue(zValue() + 10);
-    tool->setToolTip(action->text());
-
-    //make enabled/disabled tools appear/disappear instantly
-    connect(tool, SIGNAL(changed()), this, SLOT(updateToolBox()));
+    connect(action, SIGNAL(destroyed(QObject*)), this, SLOT(actionDestroyed(QObject*)));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(toolTriggered(bool)));
-
-    ToolType type = AbstractToolBox::MiscTool;
-    if (!action->data().isNull() && action->data().type() == QVariant::Int) {
-        int t = action->data().toInt();
-        if (t >= 0 && t < AbstractToolBox::UserToolType) {
-            type = static_cast<AbstractToolBox::ToolType>(t);
-        }
-    }
-
-    d->tools.insert(type, tool);
-    //kDebug() << "added tool" << type << action->text();
-}
-
-bool InternalToolBox::isEmpty() const
-{
-    return d->tools.isEmpty();
-}
-
-void InternalToolBox::updateToolBox()
-{
-    Plasma::IconWidget *tool = qobject_cast<Plasma::IconWidget *>(sender());
-    if (tool && !tool->action()) {
-        QMutableMapIterator<ToolType, IconWidget *> it(d->tools);
-        while (it.hasNext()) {
-            it.next();
-            if (it.value() == tool) {
-                it.remove();
-                break;
-            }
-        }
-
-        tool->deleteLater();
-        tool = 0;
-    }
-
-    if (d->showing) {
-        showToolBox();
-    } else if (tool && !tool->isEnabled()) {
-        tool->hide();
-    }
-}
-
-void InternalToolBox::toolTriggered(bool)
-{
+    d->actions.append(action);
 }
 
 void InternalToolBox::removeTool(QAction *action)
 {
-    QMutableMapIterator<ToolType, IconWidget *> it(d->tools);
-    while (it.hasNext()) {
-        it.next();
-        IconWidget *tool = it.value();
-        //kDebug() << "checking tool" << tool
-        if (tool && tool->action() == action) {
-            //kDebug() << "tool found!";
-            tool->deleteLater();
-            it.remove();
-            break;
-        }
-    }
+    disconnect(action, 0, this, 0);
+    d->actions.removeAll(action);
+}
+
+void InternalToolBox::actionDestroyed(QObject *object)
+{
+    d->actions.removeAll(static_cast<QAction*>(object));
+}
+
+bool InternalToolBox::isEmpty() const
+{
+    return d->actions.isEmpty();
+}
+
+void InternalToolBox::toolTriggered(bool)
+{
 }
 
 int InternalToolBox::size() const

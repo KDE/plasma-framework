@@ -49,6 +49,8 @@ public:
     QRectF boundingRect() const;
     QPainterPath shape() const;
 
+    void addTool(QAction *action);
+    void removeTool(QAction *action);
     void showToolBox();
     void hideToolBox();
 

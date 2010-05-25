@@ -123,7 +123,7 @@ class EmptyGraphicsItem : public QGraphicsWidget
             event->accept();
         }
 
-        void hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+        void hoverLeaveEvent(QGraphicsSceneHoverEvent *)
         {
             m_itemBackground->hide();
         }
@@ -195,6 +195,7 @@ public:
     QColor fgColor;
     QColor bgColor;
     bool hovering : 1;
+    QMultiMap<AbstractToolBox::ToolType, IconWidget *> tools;
 };
 
 DesktopToolBox::DesktopToolBox(Containment *parent)
@@ -537,10 +538,80 @@ void DesktopToolBox::showToolBox()
     fadeAnim->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
+void DesktopToolBox::addTool(QAction *action)
+{
+    InternalToolBox::addTool(action);
+    Plasma::IconWidget *tool = new Plasma::IconWidget(toolParent());
+
+    tool->setTextBackgroundColor(QColor());
+    tool->setAction(action);
+    tool->setDrawBackground(true);
+    tool->setOrientation(Qt::Horizontal);
+    tool->resize(tool->sizeFromIconSize(KIconLoader::SizeSmallMedium));
+    tool->setPreferredIconSize(QSizeF(KIconLoader::SizeSmallMedium, KIconLoader::SizeSmallMedium));
+    tool->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+
+    tool->hide();
+    const int height = static_cast<int>(tool->boundingRect().height());
+    tool->setPos(toolPosition(height));
+    tool->setZValue(zValue() + 10);
+    tool->setToolTip(action->text());
+
+    //make enabled/disabled tools appear/disappear instantly
+    connect(tool, SIGNAL(changed()), this, SLOT(updateToolBox()));
+
+    ToolType type = AbstractToolBox::MiscTool;
+    if (!action->data().isNull() && action->data().type() == QVariant::Int) {
+        int t = action->data().toInt();
+        if (t >= 0 && t < AbstractToolBox::UserToolType) {
+            type = static_cast<AbstractToolBox::ToolType>(t);
+        }
+    }
+
+    d->tools.insert(type, tool);
+    //kDebug() << "added tool" << type << action->text();
+}
+
 void DesktopToolBox::updateToolBox()
 {
-    InternalToolBox::updateToolBox();
+    Plasma::IconWidget *tool = qobject_cast<Plasma::IconWidget *>(sender());
+    if (tool && !tool->action()) {
+        QMutableMapIterator<ToolType, IconWidget *> it(d->tools);
+        while (it.hasNext()) {
+            it.next();
+            if (it.value() == tool) {
+                it.remove();
+                break;
+            }
+        }
+
+        tool->deleteLater();
+        tool = 0;
+    }
+
+    if (isShowing()) {
+        showToolBox();
+    } else if (tool && !tool->isEnabled()) {
+        tool->hide();
+    }
+
     adjustToolBackerGeometry();
+}
+
+void DesktopToolBox::removeTool(QAction *action)
+{
+    QMutableMapIterator<ToolType, IconWidget *> it(d->tools);
+    while (it.hasNext()) {
+        it.next();
+        IconWidget *tool = it.value();
+        //kDebug() << "checking tool" << tool
+        if (tool && tool->action() == action) {
+            //kDebug() << "tool found!";
+            tool->deleteLater();
+            it.remove();
+            break;
+        }
+    }
 }
 
 void DesktopToolBox::adjustToolBackerGeometry()
@@ -550,8 +621,7 @@ void DesktopToolBox::adjustToolBackerGeometry()
     }
 
     d->toolBacker->clearLayout();
-    QMap<ToolType, IconWidget *> t = tools();
-    QMapIterator<ToolType, IconWidget *> it(t);
+    QMapIterator<ToolType, IconWidget *> it(d->tools);
     while (it.hasNext()) {
         it.next();
         IconWidget *icon = it.value();
