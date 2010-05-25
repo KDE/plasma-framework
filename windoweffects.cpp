@@ -309,9 +309,8 @@ void enableBlurBehind(WId window, bool enable, const QRegion &region)
 
     if (enable) {
         QVector<QRect> rects = region.rects();
-        QVector<quint32> data;
-        for (int i = 0; i < rects.count(); i++) {
-            const QRect r = rects[i];
+        QVector<unsigned long> data;
+        foreach (const QRect &r, rects) {
             data << r.x() << r.y() << r.width() << r.height();
         }
 
