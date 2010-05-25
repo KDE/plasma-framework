@@ -124,10 +124,8 @@ ComboBox::ComboBox(QGraphicsWidget *parent)
 
     d->style = Style::sharedStyle();
 
+    new FocusIndicator(this, "widgets/button");
     setNativeWidget(new KComboBox);
-
-    FocusIndicator *focusIndicator = new FocusIndicator(this, "widgets/button");
-
     connect(Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(syncBorders()));
 }
 
