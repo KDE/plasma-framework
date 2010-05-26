@@ -112,88 +112,88 @@ Service *Service::access(const KUrl &url, QObject *parent)
 }
 
 void ServicePrivate::jobFinished(KJob *job)
-    {
-        emit q->finished(static_cast<ServiceJob*>(job));
-    }
+{
+    emit q->finished(static_cast<ServiceJob*>(job));
+}
 
-    void ServicePrivate::associatedWidgetDestroyed(QObject *obj)
-    {
-        associatedWidgets.remove(static_cast<QWidget*>(obj));
-    }
+void ServicePrivate::associatedWidgetDestroyed(QObject *obj)
+{
+    associatedWidgets.remove(static_cast<QWidget*>(obj));
+}
 
-    void ServicePrivate::associatedGraphicsWidgetDestroyed(QObject *obj)
-    {
-        associatedGraphicsWidgets.remove(static_cast<QGraphicsWidget*>(obj));
-    }
+void ServicePrivate::associatedGraphicsWidgetDestroyed(QObject *obj)
+{
+    associatedGraphicsWidgets.remove(static_cast<QGraphicsWidget*>(obj));
+}
 
-    void ServicePrivate::publish(AnnouncementMethods methods, const QString &name, PackageMetadata metadata)
-    {
-    #ifdef ENABLE_REMOTE_WIDGETS
-        if (!serviceProvider) {
-            AuthorizationManager::self()->d->prepareForServicePublication();
+void ServicePrivate::publish(AnnouncementMethods methods, const QString &name, PackageMetadata metadata)
+{
+#ifdef ENABLE_REMOTE_WIDGETS
+    if (!serviceProvider) {
+        AuthorizationManager::self()->d->prepareForServicePublication();
 
-            serviceProvider = new ServiceProvider(name, q);
+        serviceProvider = new ServiceProvider(name, q);
 
-            if (methods.testFlag(ZeroconfAnnouncement) &&
+        if (methods.testFlag(ZeroconfAnnouncement) &&
                 (DNSSD::ServiceBrowser::isAvailable() == DNSSD::ServiceBrowser::Working)) {
-                //TODO: dynamically pick a free port number.
-                publicService = new DNSSD::PublicService(name, "_plasma._tcp", 4000);
+            //TODO: dynamically pick a free port number.
+            publicService = new DNSSD::PublicService(name, "_plasma._tcp", 4000);
 
-                QMap<QString, QByteArray> textData;
-                textData["name"] = name.toUtf8();
-                textData["plasmoidname"] = metadata.name().toUtf8();
-                textData["description"] = metadata.description().toUtf8();
-                publicService->setTextData(textData);
-                kDebug() << "about to publish";
+            QMap<QString, QByteArray> textData;
+            textData["name"] = name.toUtf8();
+            textData["plasmoidname"] = metadata.name().toUtf8();
+            textData["description"] = metadata.description().toUtf8();
+            publicService->setTextData(textData);
+            kDebug() << "about to publish";
 
-                publicService->publishAsync();
-            } else if (methods.testFlag(ZeroconfAnnouncement) &&
-                       (DNSSD::ServiceBrowser::isAvailable() != DNSSD::ServiceBrowser::Working)) {
-                kDebug() << "sorry, but your zeroconf daemon doesn't seem to be running.";
-            }
-        } else {
-            kDebug() << "already published!";
+            publicService->publishAsync();
+        } else if (methods.testFlag(ZeroconfAnnouncement) &&
+                (DNSSD::ServiceBrowser::isAvailable() != DNSSD::ServiceBrowser::Working)) {
+            kDebug() << "sorry, but your zeroconf daemon doesn't seem to be running.";
         }
-    #else
-	kWarning() << "libplasma is compiled without support for remote widgets. not publishing.";
-    #endif
+    } else {
+        kDebug() << "already published!";
+    }
+#else
+    kWarning() << "libplasma is compiled without support for remote widgets. not publishing.";
+#endif
+}
+
+void ServicePrivate::unpublish()
+{
+    if (serviceProvider) {
+        delete serviceProvider;
+        serviceProvider = 0;
     }
 
-    void ServicePrivate::unpublish()
-    {
-        if (serviceProvider) {
-            delete serviceProvider;
-            serviceProvider = 0;
+    if (publicService) {
+        delete publicService;
+        publicService = 0;
+    }
+}
+
+bool ServicePrivate::isPublished() const
+{
+    if (serviceProvider) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+KConfigGroup ServicePrivate::dummyGroup()
+{
+    if (!dummyConfig) {
+        if (!tempFile) {
+            tempFile = new KTemporaryFile;
+            tempFile->open();
         }
 
-        if (publicService) {
-            delete publicService;
-            publicService = 0;
-        }
+        dummyConfig = new KConfig(tempFile->fileName());
     }
 
-    bool ServicePrivate::isPublished() const
-    {
-        if (serviceProvider) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    KConfigGroup ServicePrivate::dummyGroup()
-    {
-        if (!dummyConfig) {
-            if (!tempFile) {
-                tempFile = new KTemporaryFile;
-                tempFile->open();
-            }
-
-            dummyConfig = new KConfig(tempFile->fileName());
-        }
-
-        return KConfigGroup(dummyConfig, "DummyGroup");
-    }
+    return KConfigGroup(dummyConfig, "DummyGroup");
+}
 
 void Service::setDestination(const QString &destination)
 {
