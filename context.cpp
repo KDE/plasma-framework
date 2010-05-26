@@ -70,7 +70,7 @@ QString Context::currentActivity() const
 
 void Context::setCurrentActivityId(const QString &id)
 {
-    if (d->activityId == id || id.isEmpty()) {
+    if (d->activityId == id) {
         return;
     }
 
