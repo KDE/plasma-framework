@@ -1882,6 +1882,7 @@ KConfigDialog *AppletPrivate::generateGenericConfigDialog()
     q->createConfigurationInterface(dialog);
     //TODO: Apply button does not correctly work for now, so do not show it
     dialog->showButton(KDialog::Apply, false);
+    dialog->showButton(KDialog::Default, false);
     QObject::connect(dialog, SIGNAL(applyClicked()), q, SLOT(configDialogFinished()));
     QObject::connect(dialog, SIGNAL(okClicked()), q, SLOT(configDialogFinished()));
     QObject::connect(dialog, SIGNAL(finished()), nullManager, SLOT(deleteLater()));
