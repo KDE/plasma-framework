@@ -64,8 +64,7 @@ public:
           backgroundSvg(0),
           buttonSvg(0),
           closeIcon("window-close"),
-          animationId(-1),
-          mousePressOffset(0)
+          animationId(-1)
     {
     }
 
@@ -91,7 +90,7 @@ public:
 
     QRect currentAnimRect;
     QRect startAnimRect;
-    int mousePressOffset;
+    QPoint mousePressOffset;
     int lastIndex[2];
     qreal animProgress;
 };
@@ -509,7 +508,7 @@ void NativeTabBar::mousePressEvent(QMouseEvent *event)
         QRect rect = tabRect(currentIndex());
 
         if (rect.contains(event->pos())) {
-            d->mousePressOffset = event->pos().x();
+            d->mousePressOffset = event->pos();
             event->accept();
             return;
         }
@@ -520,12 +519,18 @@ void NativeTabBar::mousePressEvent(QMouseEvent *event)
 
 void NativeTabBar::mouseMoveEvent(QMouseEvent *event)
 {
-    if (d->mousePressOffset) {
+    if (d->mousePressOffset != QPoint()) {
         d->currentAnimRect = tabRect(currentIndex());
 
-        int pos = qBound(0, d->currentAnimRect.left() + (event->pos().x() - d->mousePressOffset),
-                         width() - d->currentAnimRect.width());
-        d->currentAnimRect.moveLeft(pos);
+        if (isVertical()) {
+            int pos = qBound(0, d->currentAnimRect.top() + (event->pos().y() - d->mousePressOffset.y()),
+                            height() - d->currentAnimRect.height());
+            d->currentAnimRect.moveTop(pos);
+        } else {
+            int pos = qBound(0, d->currentAnimRect.left() + (event->pos().x() - d->mousePressOffset.x()),
+                            width() - d->currentAnimRect.width());
+            d->currentAnimRect.moveLeft(pos);
+        }
         update();
     } else {
         KTabBar::mouseMoveEvent(event);
@@ -534,10 +539,18 @@ void NativeTabBar::mouseMoveEvent(QMouseEvent *event)
 
 void NativeTabBar::mouseReleaseEvent(QMouseEvent *event)
 {
-    if (d->mousePressOffset) {
-        bool left = event->pos().x() - d->mousePressOffset < 0;
-        int index = tabAt(QPoint(left ? d->currentAnimRect.left() : d->currentAnimRect.right(), 1));
-        d->mousePressOffset = 0;
+    if (d->mousePressOffset != QPoint()) {
+        int index = -1;
+
+        if (isVertical()) {
+            bool top = event->pos().y() - d->mousePressOffset.y() < 0;
+            index = tabAt(QPoint(1, top ? d->currentAnimRect.top() : d->currentAnimRect.bottom()));
+        } else {
+            bool left = event->pos().x() - d->mousePressOffset.x() < 0;
+            index = tabAt(QPoint(left ? d->currentAnimRect.left() : d->currentAnimRect.right(), 1));
+        }
+
+        d->mousePressOffset = QPoint();
 
         if (index != currentIndex() && isTabEnabled(index)) {
             d->startAnimRect = d->currentAnimRect;
