@@ -172,7 +172,10 @@ Plasma::Applet *DialogPrivate::applet()
     Extender *extender = qobject_cast<Extender*>(graphicsWidgetPtr.data());
     Plasma::Applet *applet = 0;
     if (extender) {
-        applet = extender->d->applet;
+        if (!extender->d->applet) {
+            return 0;
+        }
+        applet = extender->d->applet.data();
     } else if (graphicsWidgetPtr) {
         QObject *pw = graphicsWidgetPtr.data();
 

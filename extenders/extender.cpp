@@ -137,7 +137,11 @@ QList<ExtenderItem*> Extender::items() const
 
     //FIXME: a triple nested loop ... ew. there should be a more efficient way to do this
     //iterate through all extenders we can find and check each extenders source applet.
-    Containment *containment = d->applet->containment();
+    if (!d->applet) {
+        return QList<ExtenderItem*>();
+    }
+
+    Containment *containment = d->applet.data()->containment();
     if (!containment) {
         return result;
     }
@@ -146,7 +150,7 @@ QList<ExtenderItem*> Extender::items() const
         foreach (Applet *applet, c->applets()) {
             if (applet->d->extender) {
                 foreach (ExtenderItem *item, applet->d->extender.data()->attachedItems()) {
-                    if (item->d->sourceApplet == d->applet) {
+                    if (item->d->sourceApplet == d->applet.data()) {
                         result.append(item);
                     }
                 }
@@ -168,7 +172,10 @@ QList<ExtenderItem*> Extender::detachedItems() const
 
     //FIXME: a triple nested loop ... ew. there should be a more efficient way to do this
     //iterate through all extenders we can find and check each extenders source applet.
-    Containment *containment = d->applet->containment();
+    if (!d->applet) {
+        return QList<ExtenderItem*>();
+    }
+    Containment *containment = d->applet.data()->containment();
     if (!containment) {
         return result;
     }
@@ -177,7 +184,7 @@ QList<ExtenderItem*> Extender::detachedItems() const
         foreach (Applet *applet, c->applets()) {
             if (applet->d->extender) {
                 foreach (ExtenderItem *item, applet->d->extender.data()->attachedItems()) {
-                    if (item->d->sourceApplet == d->applet && item->isDetached()) {
+                    if (item->d->sourceApplet == d->applet.data() && item->isDetached()) {
                         result.append(item);
                     }
                 }
@@ -192,7 +199,7 @@ ExtenderItem *Extender::item(const QString &name) const
 {
     // chances are the item is in our own extender, so check there first
     foreach (ExtenderItem *item, d->attachedExtenderItems) {
-        if (item->d->sourceApplet == d->applet && item->name() == name) {
+        if (item->d->sourceApplet == d->applet.data() && item->name() == name) {
             return item;
         }
     }
@@ -200,7 +207,10 @@ ExtenderItem *Extender::item(const QString &name) const
     // maybe it's been moved elsewhere, so lets search through the entire tree of elements
     //FIXME: a triple nested loop ... ew. there should be a more efficient way to do this
     //iterate through all extenders we can find and check each extenders source applet.
-    Containment *containment = d->applet->containment();
+    if (!d->applet) {
+        return 0;
+    }
+    Containment *containment = d->applet.data()->containment();
     if (!containment) {
         return 0;
     }
@@ -221,7 +231,7 @@ ExtenderItem *Extender::item(const QString &name) const
                 }
 
                 foreach (ExtenderItem *item, applet->d->extender.data()->attachedItems()) {
-                    if (item->d->sourceApplet == d->applet && item->name() == name) {
+                    if (item->d->sourceApplet == d->applet.data() && item->name() == name) {
                         return item;
                     }
                 }
@@ -243,6 +253,10 @@ bool Extender::hasItem(const QString &name) const
         return true;
     }
 
+    if (!d->applet) {
+        return false;
+    }
+
     //if item(name) returns false, that doesn't mean that the item doesn't exist, just that it has
     //not been instantiated yet. check to see if there's mention of this item existing in the
     //plasma config's section DetachedExtenderItems
@@ -254,9 +268,9 @@ bool Extender::hasItem(const QString &name) const
     KConfigGroup extenderItemGroup(corona->config(), "DetachedExtenderItems");
     foreach (const QString &extenderItemId, extenderItemGroup.groupList()) {
         KConfigGroup cg = extenderItemGroup.group(extenderItemId);
-        if (uint(cg.readEntry("sourceAppletId", 0)) == d->applet->id() &&
+        if (uint(cg.readEntry("sourceAppletId", 0)) == d->applet.data()->id() &&
             cg.readEntry("extenderItemName", "") == name &&
-            cg.readEntry("sourceAppletPluginName", "") == d->applet->pluginName()) {
+            cg.readEntry("sourceAppletPluginName", "") == d->applet.data()->pluginName()) {
             return true;
         }
     }
@@ -295,7 +309,7 @@ QList<ExtenderGroup*> Extender::groups() const
 
 Applet *Extender::applet() const
 {
-    return d->applet;
+    return d->applet.data();
 }
 
 void Extender::saveState()
@@ -323,7 +337,12 @@ void Extender::resizeEvent(QGraphicsSceneResizeEvent *event)
 void Extender::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event)
-    PopupApplet *popupApplet = qobject_cast<PopupApplet*>(d->applet);
+
+    if (!d->applet) {
+        return;
+    }
+
+    PopupApplet *popupApplet = qobject_cast<PopupApplet*>(d->applet.data());
     if (isEmpty() && popupApplet) {
         popupApplet->hidePopup();
     }
@@ -340,7 +359,7 @@ void Extender::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
         if (mimeData) {
             itemHoverEnterEvent(mimeData->extenderItem());
 
-            PopupApplet *popupApplet = qobject_cast<PopupApplet*>(d->applet);
+            PopupApplet *popupApplet = qobject_cast<PopupApplet*>(d->applet.data());
             if (popupApplet) {
                 popupApplet->showPopup();
             }
@@ -375,7 +394,7 @@ void Extender::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
             //Hide popups when they're not the extender where we started, and we're leaving the
             //extender. Use a small timeout here, to avoid accidental hides of extenders we're
             //targetting.
-            PopupApplet *popupApplet = qobject_cast<PopupApplet*>(d->applet);
+            PopupApplet *popupApplet = qobject_cast<PopupApplet*>(d->applet.data());
             if (popupApplet && sourceExtender != this) {
                 kDebug() << "leaving another extender then the extender we started, so hide the popup.";
                 popupApplet->showPopup(250);
@@ -389,7 +408,7 @@ void Extender::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 
             //Hide empty internal extender containers when we drag the last item away. Avoids having
             //an ugly empty applet on the desktop temporarily.
-            ExtenderApplet *extenderApplet = qobject_cast<ExtenderApplet*>(d->applet);
+            ExtenderApplet *extenderApplet = qobject_cast<ExtenderApplet*>(d->applet.data());
             if (extenderApplet && sourceExtender == this && attachedItems().count() < 2 && 
                 extenderApplet->formFactor() != Plasma::Horizontal &&
                 extenderApplet->formFactor() != Plasma::Vertical) {
@@ -573,7 +592,7 @@ void ExtenderPrivate::removeExtenderItem(ExtenderItem *item)
 
     //collapse the popupapplet if the last item is removed.
     if (!q->attachedItems().count()) {
-        PopupApplet *popupApplet = qobject_cast<PopupApplet*>(applet);
+        PopupApplet *popupApplet = qobject_cast<PopupApplet*>(applet.data());
         if (popupApplet) {
             popupApplet->hidePopup();
         }
@@ -606,7 +625,11 @@ int ExtenderPrivate::insertIndexFromPos(const QPointF &pos) const
 
 void ExtenderPrivate::loadExtenderItems()
 {
-    KConfigGroup cg = applet->config("ExtenderItems");
+    if (!applet) {
+        return;
+    }
+
+    KConfigGroup cg = applet.data()->config("ExtenderItems");
 
     //first create a list of extenderItems, and then sort them on their position, so the items get
     //recreated in the correct order.
@@ -631,17 +654,17 @@ void ExtenderPrivate::loadExtenderItems()
 
         bool temporarySourceApplet = false;
 
-        kDebug() << "applet id = " << applet->id();
+        kDebug() << "applet id = " << applet.data()->id();
         kDebug() << "sourceappletid = " << sourceAppletId;
 
         //find the source applet.
         Applet *sourceApplet = 0;
-        if (applet->id() == sourceAppletId) {
+        if (applet.data()->id() == sourceAppletId) {
             // it's ours!
-            sourceApplet = applet;
+            sourceApplet = applet.data();
         } else {
             // maybe it's foreign?
-            Containment *containment = applet->containment();
+            Containment *containment = applet.data()->containment();
 
             if (containment) {
                 Corona *corona = containment->corona();

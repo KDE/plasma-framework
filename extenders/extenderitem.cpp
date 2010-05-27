@@ -130,7 +130,7 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
     d->toolboxLayout = new QGraphicsLinearLayout(d->toolbox);
 
     //create items's configgroup
-    KConfigGroup cg = hostExtender->d->applet->config("ExtenderItems");
+    KConfigGroup cg = hostExtender->d->applet.data()->config("ExtenderItems");
     KConfigGroup dg = KConfigGroup(&cg, QString::number(d->extenderItemId));
 
     //create own layout
@@ -149,11 +149,11 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
 
     if (!sourceAppletId) {
         //The item is new
-        dg.writeEntry("sourceAppletPluginName", hostExtender->d->applet->pluginName());
-        dg.writeEntry("sourceAppletId", hostExtender->d->applet->id());
-        dg.writeEntry("extenderIconName", hostExtender->d->applet->icon());
-        d->sourceApplet = hostExtender->d->applet;
-        d->collapseIcon->setIcon(KIcon(hostExtender->d->applet->icon()));
+        dg.writeEntry("sourceAppletPluginName", hostExtender->d->applet.data()->pluginName());
+        dg.writeEntry("sourceAppletId", hostExtender->d->applet.data()->id());
+        dg.writeEntry("extenderIconName", hostExtender->d->applet.data()->icon());
+        d->sourceApplet = hostExtender->d->applet.data();
+        d->collapseIcon->setIcon(KIcon(hostExtender->d->applet.data()->icon()));
     } else {
         //The item already exists.
         d->name = dg.readEntry("extenderItemName", "");
@@ -171,7 +171,7 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
         d->group = hostExtender->d->findGroup(groupName);
 
         //Find the sourceapplet.
-        Corona *corona = hostExtender->d->applet->containment()->corona();
+        Corona *corona = hostExtender->d->applet.data()->containment()->corona();
         foreach (Containment *containment, corona->containments()) {
             foreach (Applet *applet, containment->applets()) {
                 if (applet->id() == sourceAppletId &&
@@ -199,7 +199,7 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
     setAcceptsHoverEvents(true);
 
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(themeChanged()));
-    d->setMovable(d->extender->d->applet->immutability() == Plasma::Mutable);
+    d->setMovable(d->extender->d->applet.data()->immutability() == Plasma::Mutable);
 }
 
 ExtenderItem::~ExtenderItem()
@@ -213,7 +213,7 @@ KConfigGroup ExtenderItem::config() const
     if (!d->extender->d->applet) {
         return KConfigGroup();
     }
-    KConfigGroup cg = d->extender->d->applet->config("ExtenderItems");
+    KConfigGroup cg = d->extender->d->applet.data()->config("ExtenderItems");
     return KConfigGroup(&cg, QString::number(d->extenderItemId));
 }
 
@@ -314,7 +314,7 @@ void ExtenderItem::setExtender(Extender *extender, const QPointF &pos)
 
     //move the configuration.
     if (d->hostApplet() && (extender != d->extender)) {
-        KConfigGroup c = extender->d->applet->config("ExtenderItems");
+        KConfigGroup c = extender->d->applet.data()->config("ExtenderItems");
         config().reparent(&c);
     }
 
@@ -576,7 +576,7 @@ void ExtenderItem::resizeEvent(QGraphicsSceneResizeEvent *event)
 void ExtenderItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (!(d->dragHandleRect().contains(event->pos())) ||
-        d->extender->d->applet->immutability() != Plasma::Mutable) {
+        d->extender->d->applet.data()->immutability() != Plasma::Mutable) {
         event->ignore();
         return;
     }
@@ -587,6 +587,10 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     QPoint mousePressPos = event->buttonDownPos(event->button()).toPoint();
     if ((event->pos().toPoint() - mousePressPos).manhattanLength()
         < QApplication::startDragDistance()) {
+        return;
+    }
+
+    if (!d->extender->d->applet) {
         return;
     }
 
@@ -629,7 +633,7 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     //Hide empty internal extender containers when we drag the last item away. Avoids having
     //an ugly empty applet on the desktop temporarily.
-    ExtenderApplet *extenderApplet = qobject_cast<ExtenderApplet*>(d->extender->d->applet);
+    ExtenderApplet *extenderApplet = qobject_cast<ExtenderApplet*>(d->extender->d->applet.data());
     if (extenderApplet && d->extender->attachedItems().count() < 2 &&
         extenderApplet->formFactor() != Plasma::Horizontal &&
         extenderApplet->formFactor() != Plasma::Vertical) {
@@ -649,7 +653,7 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     }
 
     //and execute the drag.
-    QWidget *dragParent = extender()->d->applet->view();
+    QWidget *dragParent = extender()->d->applet.data()->view();
     QDrag *drag = new QDrag(dragParent);
     drag->setPixmap(pixmap);
     drag->setMimeData(mimeData);
@@ -845,7 +849,7 @@ void ExtenderItemPrivate::updateToolBox()
 Applet *ExtenderItemPrivate::hostApplet() const
 {
     if (extender) {
-        return extender->d->applet;
+        return extender->d->applet.data();
     } else {
         return 0;
     }

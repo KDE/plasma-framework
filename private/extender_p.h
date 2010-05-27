@@ -75,7 +75,7 @@ class ExtenderPrivate
 
         Extender *q;
 
-        Applet *applet;
+        QWeakPointer<Applet> applet;
         QGraphicsLinearLayout *layout;
         FrameSvg *background;
 
