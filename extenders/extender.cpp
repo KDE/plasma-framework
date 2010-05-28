@@ -109,6 +109,7 @@ Extender::Extender(Applet *applet)
 
 Extender::~Extender()
 {
+    d->destroying = true;
     foreach (ExtenderItem *item, d->attachedExtenderItems) {
         disconnect(item, 0, this, 0);
         delete item;
@@ -465,6 +466,10 @@ void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
 
 void Extender::itemRemovedEvent(ExtenderItem *item)
 {
+    if (d->destroying) {
+        return;
+    }
+
     d->layout->removeItem(item);
 
     if (d->spacerWidget) {
@@ -563,7 +568,8 @@ ExtenderPrivate::ExtenderPrivate(Applet *applet, Extender *extender) :
     spacerWidget(0),
     emptyExtenderMessage(QString()),
     emptyExtenderLabel(0),
-    appearance(Extender::NoBorders)
+    appearance(Extender::NoBorders),
+    destroying(false)
 {
     background->setImagePath("widgets/extender-background");
 }
