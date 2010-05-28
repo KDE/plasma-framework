@@ -90,6 +90,8 @@ class ExtenderPrivate
         Extender::Appearance appearance;
 
         static QGraphicsGridLayout *s_popupLayout;
+
+        bool destroying;
 };
 
 } // namespace Plasma
