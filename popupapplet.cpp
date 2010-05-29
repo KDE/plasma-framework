@@ -427,7 +427,7 @@ void PopupAppletPrivate::appletActivated()
 
 QSizeF PopupApplet::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
 {
-    if (!d->icon || which != Qt::PreferredSize) {
+    if (!d->dialogPtr || which != Qt::PreferredSize) {
         return Applet::sizeHint(which, constraint);
     }
 
