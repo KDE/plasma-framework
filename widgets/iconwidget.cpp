@@ -30,6 +30,7 @@
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsView>
+#include <QMenu>
 #include <QStyleOptionGraphicsItem>
 #include <QTextLayout>
 
@@ -1394,6 +1395,10 @@ void IconWidget::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             emit clicked();
             if (KGlobalSettings::singleClick()) {
                emit activated();
+            }
+
+            if (d->action && d->action->menu()) {
+                d->action->menu()->popup(event->screenPos());
             }
         }
         emit pressed(false);
