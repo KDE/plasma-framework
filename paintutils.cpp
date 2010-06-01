@@ -154,7 +154,7 @@ void centerPixmaps(QPixmap &from, QPixmap &to)
     fromRect.moveCenter(actualRect.center());
     toRect.moveCenter(actualRect.center());
 
-    if (from.size() != actualRect.size()) {
+    if (from.size() != actualRect.size() || !from.hasAlphaChannel()) {
         QPixmap result(actualRect.size());
         result.fill(Qt::transparent);
         QPainter p(&result);
@@ -164,7 +164,7 @@ void centerPixmaps(QPixmap &from, QPixmap &to)
         from = result;
     }
 
-    if (to.size() != actualRect.size()) {
+    if (to.size() != actualRect.size() || !to.hasAlphaChannel()) {
         QPixmap result(actualRect.size());
         result.fill(Qt::transparent);
         QPainter p(&result);
