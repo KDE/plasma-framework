@@ -144,7 +144,7 @@ QPainterPath roundedRectangle(const QRectF &rect, qreal radius)
 
 void centerPixmaps(QPixmap &from, QPixmap &to)
 {
-    if (from.size() == to.size()) {
+    if (from.size() == to.size() && from.hasAlphaChannel() && to.hasAlphaChannel()) {
         return;
     }
     QRect fromRect(from.rect());
