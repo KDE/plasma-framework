@@ -184,7 +184,7 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
     QPixmap startPixmap(from);
     QPixmap targetPixmap(to);
 
-    if (from.size() != to.size()) {
+    if (from.size() != to.size() || !from.hasAlphaChannel() || !to.hasAlphaChannel()) {
         centerPixmaps(startPixmap, targetPixmap);
     }
 
