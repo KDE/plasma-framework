@@ -635,6 +635,7 @@ public:
         velocity = QPointF();
         stopAnimations();
     }
+
     void handleMouseMoveEvent(QGraphicsSceneMouseEvent *event)
     {
         if (lastPosTime.isNull())
@@ -1327,7 +1328,12 @@ void ScrollWidget::mousePressEvent(QGraphicsSceneMouseEvent *event)
     }
 
     d->handleMousePressEvent(event);
-    event->accept();
+
+    if (event->button() == Qt::LeftButton) {
+        event->accept();
+    } else {
+        QGraphicsWidget::mousePressEvent(event);
+    }
 }
 
 void ScrollWidget::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
