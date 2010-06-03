@@ -223,10 +223,6 @@ void RemoteDataEngine::createSource(const QString &source)
 
 void RemoteDataEngine::updateSources()
 {
-    if (!m_service) {
-        return;
-    }
-
     if (m_service) {
         KConfigGroup op = m_service->operationDescription("GetSourceNames");
         m_service->startOperationCall(op);
