@@ -740,6 +740,10 @@ void IconWidgetPrivate::drawBackground(QPainter *painter, IconWidgetState state)
         return;
     }
 
+    if (!(states & IconWidgetPrivate::HoverState) && !(states & IconWidgetPrivate::PressedState)) {
+        return;
+    }
+
     if (state == IconWidgetPrivate::PressedState) {
         background->setElementPrefix("selected");
     } else {
