@@ -465,7 +465,7 @@ public:
             }
         } else if (end == fixupAnimation.endX && snapSize.width() > 1 &&
                    q->contentsSize().width() > q->viewportGeometry().width()) {
-            int target = snapSize.width() * round(val/snapSize.width());return;
+            int target = snapSize.width() * round(val/snapSize.width());
             fixupAnimation.snapX->setStartValue(val);
             fixupAnimation.snapX->setEndValue(target);
             fixupAnimation.snapX->setDuration(FixupDuration);
