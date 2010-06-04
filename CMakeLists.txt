@@ -419,13 +419,3 @@ install(PROGRAMS data/kconfig_updates/plasma_popupapplet_fix_groups.pl DESTINATI
 install(FILES data/operations/dataengineservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
 install(FILES data/operations/plasmoidservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
 
-########### next target ###############
-
-kde4_add_executable(kcmremotewidgetshelper private/remotewidgetshelper.cpp)
-target_link_libraries(kcmremotewidgetshelper kdecore)
-install(TARGETS kcmremotewidgetshelper DESTINATION ${LIBEXEC_INSTALL_DIR})
-
-kde4_install_auth_helper_files(kcmremotewidgetshelper org.kde.kcontrol.kcmremotewidgets root)
-
-kde4_install_auth_actions(org.kde.kcontrol.kcmremotewidgets kcm_remotewidgets.actions)
-
