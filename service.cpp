@@ -32,7 +32,6 @@
 #include <kservicetypetrader.h>
 #include <ksharedconfig.h>
 #include <kstandarddirs.h>
-#include <ktemporaryfile.h>
 #include <dnssd/publicservice.h>
 #include <dnssd/servicebrowser.h>
 
@@ -184,12 +183,7 @@ bool ServicePrivate::isPublished() const
 KConfigGroup ServicePrivate::dummyGroup()
 {
     if (!dummyConfig) {
-        if (!tempFile) {
-            tempFile = new KTemporaryFile;
-            tempFile->open();
-        }
-
-        dummyConfig = new KConfig(tempFile->fileName());
+        dummyConfig = new KConfig(QString(), KConfig::SimpleConfig);
     }
 
     return KConfigGroup(dummyConfig, "DummyGroup");
@@ -334,9 +328,6 @@ void Service::setName(const QString &name)
     delete d->config;
     d->config = 0;
 
-    delete d->tempFile;
-    d->tempFile = 0;
-
     delete d->dummyConfig;
     d->dummyConfig = 0;
 
@@ -386,17 +377,11 @@ bool Service::isOperationEnabled(const QString &operation) const
 void Service::setOperationsScheme(QIODevice *xml)
 {
     delete d->config;
-    delete d->tempFile;
 
     delete d->dummyConfig;
     d->dummyConfig = 0;
 
-    //FIXME: make KSharedConfig and KConfigSkeleton not braindamaged in 4.2 and then get rid of the
-    //       temp file object here
-    d->tempFile = new KTemporaryFile;
-    d->tempFile->open();
-
-    KSharedConfigPtr c = KSharedConfig::openConfig(d->tempFile->fileName(), KConfig::NoGlobals);
+    KSharedConfigPtr c = KSharedConfig::openConfig(QString(), KConfig::SimpleConfig);
     d->config = new ConfigLoader(c, xml, this);
     d->config->d->setWriteDefaults(true);
 

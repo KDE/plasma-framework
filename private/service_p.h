@@ -29,8 +29,6 @@
 #include <QWidget>
 #include <QSet>
 
-#include <ktemporaryfile.h>
-
 #include <dnssd/publicservice.h>
 #include <dnssd/servicebrowser.h>
 
@@ -81,7 +79,6 @@ public:
         : q(service),
           config(0),
           dummyConfig(0),
-          tempFile(0),
           publicService(0),
           serviceProvider(0)
     {
@@ -91,7 +88,6 @@ public:
     {
         delete config;
         delete dummyConfig;
-        delete tempFile;
     }
 
     void jobFinished(KJob *job);
@@ -115,7 +111,6 @@ public:
     QString resourcename;
     ConfigLoader *config;
     KConfig *dummyConfig;
-    KTemporaryFile *tempFile;
     DNSSD::PublicService *publicService;
     ServiceProvider *serviceProvider;
     QMultiHash<QWidget *, QString> associatedWidgets;
