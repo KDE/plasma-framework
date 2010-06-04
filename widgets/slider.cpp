@@ -145,8 +145,7 @@ void Slider::paint(QPainter *painter,
         style->drawComplexControl(QStyle::CC_Slider, &sliderOpt, painter, slider);
     }
 
-    QRect handleRect =
-        style->subControlRect(QStyle::CC_Slider, &sliderOpt, QStyle::SC_SliderHandle, slider);
+    QRect handleRect = style->subControlRect(QStyle::CC_Slider, &sliderOpt, QStyle::SC_SliderHandle, slider);
 
     QString handle;
     if (sliderOpt.orientation == Qt::Horizontal) {
@@ -157,6 +156,22 @@ void Slider::paint(QPainter *painter,
 
     QRect elementRect = d->background->elementRect(handle).toRect();
     elementRect.moveCenter(handleRect.center());
+    if (elementRect.right() > rect().right()) {
+        elementRect.moveRight(rect().right());
+    }
+
+    if (elementRect.left() < rect().left()) {
+        elementRect.moveLeft(rect().left());
+    }
+
+    if (elementRect.top() < rect().top()) {
+        elementRect.moveTop(rect().top());
+    }
+
+    if (elementRect.bottom() > rect().bottom()) {
+        elementRect.moveBottom(rect().bottom());
+    }
+
     if (orientation() == Qt::Vertical) {
         d->focusIndicator->setCustomPrefix("vertical-slider");
     } else {
@@ -164,7 +179,6 @@ void Slider::paint(QPainter *painter,
     }
     d->focusIndicator->setCustomGeometry(elementRect);
     d->background->paint(painter, elementRect, handle);
-
 }
 
 void Slider::wheelEvent(QGraphicsSceneWheelEvent *event)
