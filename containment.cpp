@@ -455,6 +455,17 @@ void Containment::saveContents(KConfigGroup &group) const
     }
 }
 
+void ContainmentPrivate::initApplets()
+{
+    foreach (Applet *applet, applets) {
+        applet->restore(*applet->d->mainConfigGroup());
+        applet->init();
+        // We have to flush the applet constraints manually
+        applet->flushPendingConstraintsEvents();
+        kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Applet" << applet->name();
+    }
+}
+
 void Containment::restoreContents(KConfigGroup &group)
 {
     KConfigGroup applets(&group, "Applets");
@@ -479,10 +490,7 @@ void Containment::restoreContents(KConfigGroup &group)
             continue;
         }
 
-        Applet *applet = d->addApplet(plugin, QVariantList(),
-                                      appletConfig.readEntry("geometry", QRectF()),
-                                      appId, true);
-        applet->restore(appletConfig);
+        d->addApplet(plugin, QVariantList(), appletConfig.readEntry("geometry", QRectF()), appId, true);
     }
 }
 

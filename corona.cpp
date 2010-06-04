@@ -508,15 +508,9 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigBase &conf
     }
 
     foreach (Containment *containment, newContainments) {
-        foreach (Applet *applet, containment->applets()) {
-            applet->init();
-            // We have to flush the applet constraints manually
-            applet->flushPendingConstraintsEvents();
-            kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Applet" << applet->name();
-        }
-
         containment->updateConstraints(Plasma::StartupCompletedConstraint);
         containment->flushPendingConstraintsEvents();
+        containment->d->initApplets();
         emit q->containmentAdded(containment);
         kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Containment" << containment->name();
     }

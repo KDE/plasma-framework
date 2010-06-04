@@ -81,6 +81,7 @@ public:
      */
     void containmentConstraintsEvent(Plasma::Constraints constraints);
 
+    void initApplets();
     void checkContainmentFurniture();
     bool regionIsEmpty(const QRectF &region, Applet *ignoredApplet=0) const;
     void positionPanel(bool force = false);
