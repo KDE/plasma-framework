@@ -409,7 +409,7 @@ install(FILES
    DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
 install(FILES
-   data/servicetypes/plasma-applet-extenderapplet.desktop
+   data/services/plasma-applet-extenderapplet.desktop
    DESTINATION ${SERVICES_INSTALL_DIR})
 
 install(FILES data/knewstuff/plasmoids.knsrc DESTINATION  ${CONFIG_INSTALL_DIR})
