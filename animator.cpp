@@ -186,7 +186,7 @@ Plasma::Animation *Animator::create(const QString &anim, QObject *parent)
     if (!AnimationScriptEngine::isAnimationRegistered(anim)) {
         const QString path = Theme::defaultTheme()->animationPath(anim);
         if (path.isEmpty()) {
-            kError() << "************ failed to find script file for animation" << anim;
+            //kError() << "************ failed to find script file for animation" << anim;
             return 0;
         }
 
@@ -195,7 +195,7 @@ Plasma::Animation *Animator::create(const QString &anim, QObject *parent)
         }
 
         if (!AnimationScriptEngine::isAnimationRegistered(anim)) {
-            kError() << "successfully loaded script file" << path << ", but did not get animation object for" << anim;
+            //kError() << "successfully loaded script file" << path << ", but did not get animation object for" << anim;
             return 0;
         }
     }

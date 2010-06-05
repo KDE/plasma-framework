@@ -638,8 +638,7 @@ QString Theme::animationPath(const QString &name) const
 {
     const QString path = d->animationMapping.value(name);
     if (path.isEmpty()) {
-
-        kError() << "****** FAILED TO FIND IN MAPPING!";
+        //kError() << "****** FAILED TO FIND IN MAPPING!";
         return path;
     }
 
