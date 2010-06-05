@@ -50,7 +50,7 @@ void DataContainer::setData(const QString &key, const QVariant &value)
     if (!value.isValid()) {
         d->data.remove(key);
     } else {
-        d->data[key] = value;
+        d->data.insertMulti(key, value);
     }
 
     d->dirty = true;
