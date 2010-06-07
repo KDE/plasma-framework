@@ -235,9 +235,11 @@ NoAlignment) const;
         QString pluginName() const;
 
         /**
-         *  Initializes and returns a new service from the name that was set with setDefaultService.
-         *  (service name is set internally). Sends a DataEngine* to the created service via the QVariantList.
-         *  Note that you have to dispose of the Service* manually if you do not pass a valid parent.
+         * Initializes and returns a new service from the name that was set
+         * with setDefaultService. (service name is set internally). Remember to dispose
+         * of the Service* when you are finished with it (even if a parent is passed)
+         * A DataEngine* is sent to the created service via the QVariantList arguments.
+         * 
          *  @see setDefaultService
          *  @param the parent of the object, if any, for the returned service
          *  @return the newly created service

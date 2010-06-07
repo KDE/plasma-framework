@@ -73,6 +73,20 @@ class ServicePrivate;
  * Plasma::ServiceJob *job = service->startOperationCall(op);
  * connect(job, SIGNAL(finished(KJob*)), this, SLOT(jobCompeted()));
  * @endcode
+ *
+ * Please remember, the service needs to be deleted when it will no longer be
+ * used. This can be done manually or by these (perhaps easier) alternatives:
+ *
+ * If it is needed throughout the lifetime of the object:
+ * @code
+ * service->setParent(this);
+ * @endcode
+ *
+ * If the service will not be used after just one operation call, use:
+ * @code
+ * connect(job, SIGNAL(finished(KJob*)), service, SLOT(deleteLater()));
+ * @endcode
+ *
  */
 class PLASMA_EXPORT Service : public QObject
 {
