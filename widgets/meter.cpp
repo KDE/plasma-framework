@@ -311,7 +311,7 @@ void Meter::setValue(int value)
         d->value = value;
         update();
     } else  {
-        d->animation->setStartValue(0);
+        d->animation->setStartValue(d->value);
         d->animation->setEndValue(value);
         d->animation->start();
     }
