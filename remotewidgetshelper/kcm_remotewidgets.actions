@@ -1,6 +1,26 @@
 [org.kde.kcontrol.kcmremotewidgets.save]
 Name=Save remote widgets' policies
+Name[da]=Gem politikker for eksterne widgets
+Name[en_GB]=Save remote widgets' policies
+Name[ia]=Il Salva le politicas de le widgets remote
+Name[id]=Simpan kebijakan widget jarak jauh
+Name[km]=រក្សាទុក​គោលនយោបាយ​របស់​ធាតុក្រាហ្វិក​ពី​ចម្ងាយ
+Name[pt]=Gravar as políticas dos elementos remotos
+Name[pt_BR]=Salvar políticas de widgets remotos
+Name[sv]=Spara policy för grafiska fjärrkomponenter
+Name[uk]=Зберегти правила для віддалених віджетів
 Name[x-test]=xxSave remote widgets' policiesxx
+Name[zh_TW]=儲存遠端元件政策
 Description=Prevents the system from saving remote plasma widgets' policies
+Description[da]=Forhindrer systemet i et gemme politikker for eksterne plasma-widgets
+Description[en_GB]=Prevents the system from saving remote plasma widgets' policies
+Description[ia]=Il preveni le systema ab salvar le politicas de le remote widgets de plasma
+Description[id]=Mencegah sistem dari menyimpan kebijakan widget jarak jauh plasma
+Description[km]=ការពារ​ប្រព័ន្ធ​មិន​ឲ្យ​រក្សាទុក​គោលនយោបាយ​របស់​ធាតុក្រាហ្វិក​ប្លាស្មា​ពី​ចម្ងាយ
+Description[pt]=Impede o sistema de gravar as políticas dos elementos remotos do Plasma
+Description[pt_BR]=Previne o sistema de salvar as políticas de widgets Plasma remotos
+Description[sv]=Förhindrar systemet från att spara policy för Plasma grafiska fjärrkomponenter
+Description[uk]=Заборонити системі зберігати правила для віддалених віджетів Плазми
 Description[x-test]=xxPrevents the system from saving remote plasma widgets' policiesxx
+Description[zh_TW]=避免系統儲存遠端 plasma 元件政策
 Policy=auth_admin
