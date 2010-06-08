@@ -86,14 +86,16 @@ public:
             }
 
             //QPainter p(&pm);
-            if (!svgElement.isNull() && svg->hasElement(svgElement)) {
-                QSizeF elementSize = svg->elementSize(svgElement);
-                float scale = pm.width() / qMax(elementSize.width(), elementSize.height());
 
-                svg->resize(svg->size() * scale);
+            if (!svgElement.isEmpty() && svg->hasElement(svgElement)) {
+                svg->resize();
+                QSizeF elementSize = svg->elementSize(svgElement);
+                float scale = q->nativeWidget()->iconSize().width() / qMax(elementSize.width(), elementSize.height());
+
+                svg->resize(elementSize * scale);
                 pm = svg->pixmap(svgElement);
             } else {
-                svg->resize(pm.size());
+                svg->resize(q->nativeWidget()->iconSize());
                 pm = svg->pixmap();
             }
         } else {
