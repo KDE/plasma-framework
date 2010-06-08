@@ -88,7 +88,7 @@ class PLASMA_EXPORT DataContainer : public QObject
          * DataContainer.
          *
          * @param key a string used as the key for the data
-         * @param value a QVariant holding the actual data. If a null or invalid
+         * @param value a QVariant holding the actual data. If a invalid
          *              QVariant is passed in and the key currently exists in the
          *              data, then the data entry is removed
          **/
