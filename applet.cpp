@@ -1008,7 +1008,13 @@ void Applet::setConfigurationRequired(bool needsConfig, const QString &reason)
     }
 
     PushButton *configWidget = new PushButton(d->messageOverlay);
-    configWidget->setText(i18n("Configure..."));
+    if (!qobject_cast<Plasma::PopupApplet *>(this) && (formFactor() == Plasma::Horizontal || formFactor() == Plasma::Vertical)) {
+        configWidget->setImage("widgets/configuration-icons", "configure");
+        configWidget->setMaximumSize(24,24);
+        configWidget->setMinimumSize(24,24);
+    } else {
+        configWidget->setText(i18n("Configure..."));
+    }
     connect(configWidget, SIGNAL(clicked()), this, SLOT(showConfigurationInterface()));
     configLayout->addItem(configWidget, row, 1);
 
