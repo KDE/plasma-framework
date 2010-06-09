@@ -251,6 +251,7 @@ void DataEngine::addSource(DataContainer *source)
 
     QObject::connect(source, SIGNAL(updateRequested(DataContainer*)),
                      this, SLOT(internalUpdateSource(DataContainer*)));
+    QObject::connect(source, SIGNAL(destroyed()), this, SLOT(sourceDestroyed()));
     d->sources.insert(source->objectName(), source);
     emit sourceAdded(source->objectName());
     scheduleSourcesUpdated();
@@ -620,6 +621,7 @@ DataContainer *DataEnginePrivate::source(const QString &sourceName, bool createW
     DataContainer *s = new DataContainer(q);
     s->setObjectName(sourceName);
     sources.insert(sourceName, s);
+    QObject::connect(s, SIGNAL(destroyed(QObject *)), q, SLOT(sourceDestroyed(QObject *)));
     QObject::connect(s, SIGNAL(updateRequested(DataContainer*)),
                      q, SLOT(internalUpdateSource(DataContainer*)));
 
@@ -664,6 +666,20 @@ void DataEnginePrivate::connectSource(DataContainer *s, QObject *visualization,
         QMetaObject::invokeMethod(visualization, "dataUpdated",
                                   Q_ARG(QString, s->objectName()),
                                   Q_ARG(Plasma::DataEngine::Data, s->data()));
+    }
+}
+
+void DataEnginePrivate::sourceDestroyed(QObject *object)
+{
+    DataContainer *container = qobject_cast<DataContainer *>(object);
+
+    DataEngine::SourceDict::const_iterator it = sources.begin();
+    while (it != sources.constEnd()) {
+        if (it.value() == object) {
+            sources.remove(it.key());
+            break;
+        }
+        ++it;
     }
 }
 

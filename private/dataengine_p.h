@@ -79,6 +79,11 @@ class DataEnginePrivate
          */
         bool isPublished() const;
 
+        /**
+         * a datacontainer has been destroyed, clean up stuff
+         */
+        void sourceDestroyed(QObject *object);
+
         DataEngine *q;
         KPluginInfo dataEngineDescription;
         int refCount;
