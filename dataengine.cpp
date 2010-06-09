@@ -320,6 +320,7 @@ void DataEngine::removeSource(const QString &source)
             }
         }
 
+        s->disconnect(this);
         s->deleteLater();
         d->sources.erase(it);
         emit sourceRemoved(source);
@@ -673,10 +674,10 @@ void DataEnginePrivate::sourceDestroyed(QObject *object)
 {
     DataContainer *container = qobject_cast<DataContainer *>(object);
 
-    DataEngine::SourceDict::const_iterator it = sources.constBegin();
-    while (it != sources.constEnd()) {
+    DataEngine::SourceDict::iterator it = sources.begin();
+    while (it != sources.end()) {
         if (it.value() == object) {
-            sources.remove(it.key());
+            sources.erase(it);
             break;
         }
         ++it;
