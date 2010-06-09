@@ -2618,9 +2618,7 @@ AppletPrivate::~AppletPrivate()
         activationAction->forgetGlobalShortcut();
     }
 
-    if (extender) {
-        delete extender.data();
-    }
+    delete extender.data();
 
     delete script;
     script = 0;
