@@ -673,7 +673,7 @@ void DataEnginePrivate::sourceDestroyed(QObject *object)
 {
     DataContainer *container = qobject_cast<DataContainer *>(object);
 
-    DataEngine::SourceDict::const_iterator it = sources.begin();
+    DataEngine::SourceDict::const_iterator it = sources.constBegin();
     while (it != sources.constEnd()) {
         if (it.value() == object) {
             sources.remove(it.key());
