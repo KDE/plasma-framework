@@ -312,6 +312,12 @@ class PLASMA_EXPORT Containment : public Applet
         void setToolBoxOpen(bool open);
 
         /**
+         * @return true if the toolbox is open
+         * @since 4.5
+         */
+        bool isToolBoxOpen() const;
+
+        /**
          * Open the Containment's toolbox
          */
         void openToolBox();

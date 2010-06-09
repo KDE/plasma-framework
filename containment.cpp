@@ -1812,6 +1812,11 @@ void Containment::setToolBoxOpen(bool open)
     }
 }
 
+bool Containment::isToolBoxOpen() const
+{
+    return (d->toolBox && d->toolBox.data()->isShowing());
+}
+
 void Containment::openToolBox()
 {
     if (d->toolBox && !d->toolBox.data()->isShowing()) {
