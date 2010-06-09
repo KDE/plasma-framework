@@ -37,7 +37,7 @@ ExtenderApplet::~ExtenderApplet()
 {
     if (destroyed()) {
         disconnect(extender(), SIGNAL(itemDetached(Plasma::ExtenderItem*)),
-                this, SLOT(itemDetached(Plasma::ExtenderItem*)));
+                   this, SLOT(itemDetached(Plasma::ExtenderItem*)));
         foreach (ExtenderItem *item, extender()->attachedItems()) {
             item->returnToSource();
         }
