@@ -72,6 +72,7 @@ void MeterPrivate::text(QPainter *p, int index)
             QRectF elementRect = image->elementRect(elementID);
             Qt::Alignment align = Qt::AlignCenter;
 
+
             if (colors.count() > index) {
                 p->setPen(QPen(colors[index]));
             } else {
@@ -80,6 +81,15 @@ void MeterPrivate::text(QPainter *p, int index)
             if (fonts.count() > index) {
                 p->setFont(fonts[index]);
             }
+
+            QFontMetricsF fm(p->font());
+            // If the height is too small increase the Height of the button to shall the whole text #192988
+            if (elementRect.height() < fm.height()) {
+                QPointF oldCenter = elementRect.center();
+                elementRect.setHeight(fm.height());
+                elementRect.moveCenter(oldCenter);
+            }
+
             if (alignments.count() > index) {
                 align = alignments[index];
             }
