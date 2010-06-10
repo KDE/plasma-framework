@@ -2293,9 +2293,19 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
         }
     }
 
-    if (constraints & Plasma::FormFactorConstraint) {
+    // pass on the constraints that are relevant here
+    Constraints appletConstraints = NoConstraint;
+    if (constraints & FormFactorConstraint) {
+        appletConstraints |= FormFactorConstraint;
+    }
+
+    if (constraints & ScreenConstraint) {
+        appletConstraints |= ScreenConstraint;
+    }
+
+    if (appletConstraints != NoConstraint) {
         foreach (Applet *applet, applets) {
-            applet->updateConstraints(Plasma::FormFactorConstraint);
+            applet->updateConstraints(appletConstraints);
         }
     }
 
