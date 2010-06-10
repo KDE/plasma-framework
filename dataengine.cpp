@@ -251,7 +251,7 @@ void DataEngine::addSource(DataContainer *source)
 
     QObject::connect(source, SIGNAL(updateRequested(DataContainer*)),
                      this, SLOT(internalUpdateSource(DataContainer*)));
-    QObject::connect(source, SIGNAL(destroyed()), this, SLOT(sourceDestroyed()));
+    QObject::connect(source, SIGNAL(destroyed(QObject*)), this, SLOT(sourceDestroyed(QObject*)));
     d->sources.insert(source->objectName(), source);
     emit sourceAdded(source->objectName());
     scheduleSourcesUpdated();
