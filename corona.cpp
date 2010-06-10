@@ -438,14 +438,13 @@ void Corona::layoutContainments()
 
 void Corona::loadLayout(const QString &configName)
 {
-    KSharedConfigPtr conf;
-
-    if (configName.isEmpty() || configName == d->configName) {
-        conf = config();
-    } else {
-        conf = KSharedConfig::openConfig(configName);
+    if (!configName.isEmpty() && configName != d->configName) {
+        // if we have a new config name passed in, then use that as the config file for this Corona
+        d->config = 0;
+        d->configName = configName;
     }
 
+    KSharedConfigPtr conf = config();
     d->importLayout(*conf, conf != config());
 }
 
