@@ -423,7 +423,7 @@ void PushButton::paint(QPainter *painter,
     // If the height is too small increase the Height of the button to shall the whole text #192988
     if (rect.height() < fm.height()) {
         rect.setHeight(fm.height());
-        rect.moveTop(boundingRect().center().y()-rect.height()/2)
+        rect.moveTop(boundingRect().center().y() - rect.height() / 2);
     }
 
     // If there is not enough room for the text make it to fade out
