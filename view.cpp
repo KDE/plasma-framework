@@ -175,14 +175,6 @@ void View::setScreen(int screen, int desktop)
         return;
     }
 
-    // handle views that are working with panel containment types
-    if (d->containment &&
-        (d->containment->type() == Containment::PanelContainment ||
-         d->containment->type() == Containment::CustomPanelContainment)) {
-        d->containment->setScreen(screen, desktop);
-        return;
-    }
-
     // handle desktop views
     // -1 == All desktops
     if (desktop < -1 || desktop > KWindowSystem::numberOfDesktops() - 1) {
@@ -191,6 +183,14 @@ void View::setScreen(int screen, int desktop)
 
     d->lastScreen = screen;
     d->lastDesktop = desktop;
+
+    // handle views that are working with panel containment types
+    if (d->containment &&
+        (d->containment->type() == Containment::PanelContainment ||
+         d->containment->type() == Containment::CustomPanelContainment)) {
+        d->containment->setScreen(screen, desktop);
+        return;
+    }
 
     Plasma::Corona *corona = qobject_cast<Plasma::Corona*>(scene());
     if (corona) {
