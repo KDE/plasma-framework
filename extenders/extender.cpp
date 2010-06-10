@@ -110,10 +110,13 @@ Extender::Extender(Applet *applet)
 Extender::~Extender()
 {
     d->destroying = true;
-    foreach (ExtenderItem *item, d->attachedExtenderItems) {
-        disconnect(item, 0, this, 0);
+    QMutableListIterator<ExtenderItem *> it(d->attachedExtenderItems);
+    while (it.hasNext()) {
+        ExtenderItem *item = it.next();
+        item->disconnect(this);
         delete item;
     }
+    d->attachedExtenderItems.clear();
 
     delete d;
 }
@@ -211,6 +214,7 @@ ExtenderItem *Extender::item(const QString &name) const
     if (!d->applet) {
         return 0;
     }
+
     Containment *containment = d->applet.data()->containment();
     if (!containment) {
         return 0;
@@ -228,6 +232,10 @@ ExtenderItem *Extender::item(const QString &name) const
             if (applet->d->extender) {
                 if (applet->d->extender.data() == this) {
                     // skip it, we checked it already
+                    continue;
+                }
+
+                if (!applet->d->extender) {
                     continue;
                 }
 
@@ -597,7 +605,7 @@ void ExtenderPrivate::removeExtenderItem(ExtenderItem *item)
     attachedExtenderItems.removeAll(item);
 
     //collapse the popupapplet if the last item is removed.
-    if (!q->attachedItems().count()) {
+    if (attachedExtenderItems.isEmpty()) {
         PopupApplet *popupApplet = qobject_cast<PopupApplet*>(applet.data());
         if (popupApplet) {
             popupApplet->hidePopup();
