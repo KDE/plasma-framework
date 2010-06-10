@@ -485,7 +485,7 @@ NoAlignment) const;
         friend class NullEngine;
 
         Q_PRIVATE_SLOT(d, void internalUpdateSource(DataContainer *source))
-        Q_PRIVATE_SLOT(d, void sourceDestroyed(QObject *object));
+        Q_PRIVATE_SLOT(d, void sourceDestroyed(QObject *object))
 
         DataEnginePrivate *const d;
 };
