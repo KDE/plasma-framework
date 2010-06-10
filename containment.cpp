@@ -460,10 +460,16 @@ void ContainmentPrivate::initApplets()
     foreach (Applet *applet, applets) {
         applet->restore(*applet->d->mainConfigGroup());
         applet->init();
-        // We have to flush the applet constraints manually
-        applet->flushPendingConstraintsEvents();
         kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Applet" << applet->name();
     }
+
+    q->flushPendingConstraintsEvents();
+
+    foreach (Applet *applet, applets) {
+        applet->flushPendingConstraintsEvents();
+    }
+
+    kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Containment's applets initialized" << q->name();
 }
 
 void Containment::restoreContents(KConfigGroup &group)
