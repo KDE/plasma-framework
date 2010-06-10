@@ -141,6 +141,7 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
 
     //check if we're creating a new item or reinstantiating an existing one.
     d->collapseIcon = new IconWidget(d->toolbox);
+    d->collapseIcon->setCursor(Qt::ArrowCursor);
     d->titleLabel = new Label(d->toolbox);
 
     d->toolboxLayout->addItem(d->collapseIcon);
@@ -801,6 +802,7 @@ void ExtenderItemPrivate::updateToolBox()
 
             icon->setMinimumSize(widgetSize);
             icon->setMaximumSize(widgetSize);
+            icon->setCursor(Qt::ArrowCursor);
             toolboxLayout->insertItem(startingIndex, icon);
         }
     }
@@ -819,6 +821,7 @@ void ExtenderItemPrivate::updateToolBox()
         returnToSourceIcon->setSvg("widgets/configuration-icons", "return-to-source");
         returnToSourceIcon->setMinimumSize(widgetSize);
         returnToSourceIcon->setMaximumSize(widgetSize);
+        returnToSourceIcon->setCursor(Qt::ArrowCursor);
 
         if (closeIndex == -1) {
             toolboxLayout->addItem(returnToSourceIcon);
@@ -843,6 +846,7 @@ void ExtenderItemPrivate::updateToolBox()
         destroyButton->setSvg("widgets/configuration-icons", "close");
         destroyButton->setMinimumSize(widgetSize);
         destroyButton->setMaximumSize(widgetSize);
+        destroyButton->setCursor(Qt::ArrowCursor);
         toolboxLayout->addItem(destroyButton);
     }
 }
