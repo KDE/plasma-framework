@@ -153,7 +153,7 @@ QList<ExtenderItem*> Extender::items() const
     foreach (Containment *c, containment->corona()->containments()) {
         foreach (Applet *applet, c->applets()) {
             if (applet->d->extender) {
-                foreach (ExtenderItem *item, applet->d->extender.data()->attachedItems()) {
+                foreach (ExtenderItem *item, applet->d->extender.data()->d->attachedExtenderItems) {
                     if (item->d->sourceApplet == d->applet.data()) {
                         result.append(item);
                     }
@@ -725,7 +725,7 @@ void ExtenderPrivate::loadExtenderItems()
 
 void ExtenderPrivate::updateBorders()
 {
-    foreach (ExtenderItem *item, q->attachedItems()) {
+    foreach (ExtenderItem *item, attachedExtenderItems) {
         if (item && (item->d->background->enabledBorders() != q->enabledBordersForItem(item))) {
             //call themeChanged to change the backgrounds enabled borders, and move all contained
             //widgets according to it's changed margins.
@@ -759,7 +759,7 @@ void ExtenderPrivate::updateEmptyExtenderLabel()
 
 ExtenderGroup *ExtenderPrivate::findGroup(const QString &name) const
 {
-    foreach (ExtenderItem *item, q->attachedItems()) {
+    foreach (ExtenderItem *item, attachedExtenderItems) {
         if (item->isGroup() && item->name() == name) {
             return qobject_cast<ExtenderGroup*>(item);
         }
