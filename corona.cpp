@@ -23,6 +23,7 @@
 #include "corona.h"
 
 #include <QApplication>
+#include <QDesktopWidget>
 #include <QGraphicsView>
 #include <QGraphicsSceneDragDropEvent>
 #include <QGraphicsGridLayout>
@@ -765,8 +766,14 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::Alig
 
     //are we out of screen?
     int screen = ((pv && pv->containment()) ? pv->containment()->screen() : -1);
-    if (pv && screen == -1) {
-        screen = pv->screen();
+    if (screen == -1) {
+        if (pv) {
+            screen = pv->screen();
+        } else {
+            // fall back to asking the actual system what screen the view is on
+            // in the case we are dealing with a non-PlasmaView QGraphicsView
+            screen = QApplication::desktop()->screenNumber(v);
+        }
     }
 
     QRect screenRect = screenGeometry(screen);
