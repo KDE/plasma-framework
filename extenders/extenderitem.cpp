@@ -186,7 +186,7 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
     //make sure we keep monitoring if the source applet still exists, so the return to source icon
     //can be hidden if it is removed.
     connect(d->sourceApplet, SIGNAL(destroyed()), this, SLOT(sourceAppletRemoved()));
-    connect(d->sourceApplet, SIGNAL(immutabilityChanged(Plasma::ImmutabilityType)), this, SLOT(updateToolBox()));
+
     connect(d->collapseIcon, SIGNAL(clicked()), this, SLOT(toggleCollapse()));
 
     //set the extender we want to move to.
@@ -325,7 +325,11 @@ void ExtenderItem::setExtender(Extender *extender, const QPointF &pos)
 
     setParentItem(extender);
     setParent(extender);
+    if (d->extender) {
+        disconnect(d->extender->applet(), SIGNAL(immutabilityChanged(Plasma::ImmutabilityType)), this, SLOT(updateToolBox()));
+    }
     d->extender = extender;
+    connect(d->extender->applet(), SIGNAL(immutabilityChanged(Plasma::ImmutabilityType)), this, SLOT(updateToolBox()));
 
     //change parent.
     extender->d->addExtenderItem(this, pos);
@@ -751,7 +755,7 @@ void ExtenderItemPrivate::updateToolBox()
 
     QAction *closeAction = actions.value("close");
     QAction *returnToSourceAction = actions.value("extenderItemReturnToSource");
-    bool returnToSourceVisibility = q->isDetached() && sourceApplet && (sourceApplet->immutability() == Plasma::Mutable);
+    bool returnToSourceVisibility = q->isDetached() && sourceApplet && (hostApplet()->immutability() == Plasma::Mutable);
     int closeIndex = -1;
     int returnToSourceIndex = -1;
     const int startingIndex = 2; // collapse item is index 0, title label is 1
