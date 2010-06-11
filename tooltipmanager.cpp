@@ -58,19 +58,14 @@ public :
     ToolTipManagerPrivate(ToolTipManager *manager)
         : q(manager),
           currentWidget(0),
-          showTimer(0),
-          hideTimer(0),
+          showTimer(new QTimer(manager)),
+          hideTimer(new QTimer(manager)),
           tipWidget(new ToolTip(0)),
           state(ToolTipManager::Activated),
           isShown(false),
           delayedHide(false),
           clickable(false)
     {
-        QObject::connect(tipWidget, SIGNAL(activateWindowByWId(WId,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)),
-                         q, SIGNAL(windowPreviewActivated(WId,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)));
-        QObject::connect(tipWidget, SIGNAL(linkActivated(QString,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)),
-                         q, SIGNAL(linkActivated(QString,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)));
-        QObject::connect(tipWidget, SIGNAL(hovered(bool)), q, SLOT(toolTipHovered(bool)));
     }
 
     ~ToolTipManagerPrivate()
@@ -125,13 +120,17 @@ ToolTipManager::ToolTipManager(QObject *parent)
     d(new ToolTipManagerPrivate(this)),
     m_corona(0)
 {
-    d->showTimer = new QTimer(this);
     d->showTimer->setSingleShot(true);
-    d->hideTimer = new QTimer(this);
-    d->hideTimer->setSingleShot(true);
-
     connect(d->showTimer, SIGNAL(timeout()), SLOT(showToolTip()));
+
+    d->hideTimer->setSingleShot(true);
     connect(d->hideTimer, SIGNAL(timeout()), SLOT(resetShownState()));
+
+    connect(d->tipWidget, SIGNAL(activateWindowByWId(WId,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)),
+            this, SIGNAL(windowPreviewActivated(WId,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)));
+    connect(d->tipWidget, SIGNAL(linkActivated(QString,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)),
+            this, SIGNAL(linkActivated(QString,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)));
+    connect(d->tipWidget, SIGNAL(hovered(bool)), this, SLOT(toolTipHovered(bool)));
 }
 
 ToolTipManager::~ToolTipManager()
