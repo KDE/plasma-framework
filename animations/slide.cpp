@@ -111,8 +111,8 @@ void SlideAnimation::updateState(QAbstractAnimation::State newState, QAbstractAn
         }
 
         if (moveAnyOnly && m_animDirection.testFlag(MoveAny)) {
-            newX = actualDistance.x();
-            newY = actualDistance.y();
+            newX += actualDistance.x();
+            newY += actualDistance.y();
         }
 
         if (direction() == QAbstractAnimation::Forward) {
