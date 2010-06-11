@@ -672,8 +672,6 @@ void DataEnginePrivate::connectSource(DataContainer *s, QObject *visualization,
 
 void DataEnginePrivate::sourceDestroyed(QObject *object)
 {
-    DataContainer *container = qobject_cast<DataContainer *>(object);
-
     DataEngine::SourceDict::iterator it = sources.begin();
     while (it != sources.end()) {
         if (it.value() == object) {
