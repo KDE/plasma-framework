@@ -590,8 +590,9 @@ void ExtenderItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    QPoint mousePressPos = event->buttonDownPos(event->button()).toPoint();
-    if ((event->pos().toPoint() - mousePressPos).manhattanLength()
+    QPoint mousePressPos = event->buttonDownPos(Qt::LeftButton).toPoint();
+    if (!(event->buttons() & Qt::LeftButton) ||
+        (event->pos().toPoint() - mousePressPos).manhattanLength()
         < QApplication::startDragDistance()) {
         return;
     }
@@ -664,6 +665,7 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     drag->setPixmap(pixmap);
     drag->setMimeData(mimeData);
     drag->setHotSpot(mousePressPos);
+
     Qt::DropAction action = drag->exec();
 
     corona->removeOffscreenWidget(this);
