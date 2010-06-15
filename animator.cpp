@@ -183,19 +183,26 @@ QEasingCurve Animator::create(Animator::CurveShape type)
 
 Plasma::Animation *Animator::create(const QString &anim, QObject *parent)
 {
+    if (AnimationScriptEngine::animationFailedToLoad(anim)) {
+        return 0;
+    }
+
     if (!AnimationScriptEngine::isAnimationRegistered(anim)) {
         const QString path = Theme::defaultTheme()->animationPath(anim);
         if (path.isEmpty()) {
+            AnimationScriptEngine::addToLoadFailures(anim);
             //kError() << "************ failed to find script file for animation" << anim;
             return 0;
         }
 
         if (!AnimationScriptEngine::loadScript(path)) {
+            AnimationScriptEngine::addToLoadFailures(anim);
             return 0;
         }
 
         if (!AnimationScriptEngine::isAnimationRegistered(anim)) {
             //kError() << "successfully loaded script file" << path << ", but did not get animation object for" << anim;
+            AnimationScriptEngine::addToLoadFailures(anim);
             return 0;
         }
     }

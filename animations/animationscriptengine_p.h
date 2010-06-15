@@ -39,6 +39,8 @@ bool isAnimationRegistered(const QString &anim);
 QScriptEngine* globalEngine();
 QScriptValue animation(const QString &anim);
 bool loadScript(const QString &path, const QString &prefix = QString());
+void addToLoadFailures(const QString &anim);
+bool animationFailedToLoad(const QString &anim);
 
 }
 

@@ -49,6 +49,7 @@ namespace AnimationScriptEngine
 
 QScriptEngine* inst = 0;
 QHash<QString, QScriptValue> s_animFuncs;
+QSet<QString> s_animFailures;
 QString s_prefix;
 
 QScriptValue animation(const QString &anim)
@@ -61,9 +62,20 @@ bool isAnimationRegistered(const QString &anim)
     return s_animFuncs.contains(anim);
 }
 
+void addToLoadFailures(const QString &anim)
+{
+    s_animFailures.insert(anim);
+}
+
+bool animationFailedToLoad(const QString &anim)
+{
+    return s_animFailures.contains(anim);
+}
+
 void clearAnimations()
 {
     s_animFuncs.clear();
+    s_animFailures.clear();
     delete inst;
     inst = 0;
 }
