@@ -405,24 +405,24 @@ void TabBar::setCurrentIndex(int index)
 
         if (index > d->currentIndex) {
             d->newPage.data()->setPos(d->oldPage.data()->geometry().topRight());
-            d->newPageAnim->setProperty("movementDirection", Animation::MoveAny);
-            d->newPageAnim->setProperty("distancePointF", d->oldPage.data()->pos());
+            d->newPageAnim->setProperty("movementDirection", Animation::MoveLeft);
+            d->newPageAnim->setProperty("distancePointF", QPointF(d->oldPage.data()->size().width(), 0));
             d->newPageAnim->setTargetWidget(d->newPage.data());
 
-            d->oldPageAnim->setProperty("movementDirection", Animation::MoveAny);
-            d->oldPageAnim->setProperty("distancePointF", beforeCurrentGeom.topLeft());
+            d->oldPageAnim->setProperty("movementDirection", Animation::MoveLeft);
+            d->oldPageAnim->setProperty("distancePointF", QPointF(beforeCurrentGeom.width(), 0));
             d->oldPageAnim->setTargetWidget(d->oldPage.data());
 
             d->animGroup->start();
         } else {
             d->newPage.data()->setPos(beforeCurrentGeom.topLeft());
-            d->newPageAnim->setProperty("movementDirection", Animation::MoveAny);
-            d->newPageAnim->setProperty("distancePointF", d->oldPage.data()->pos());
+            d->newPageAnim->setProperty("movementDirection", Animation::MoveRight);
+            d->newPageAnim->setProperty("distancePointF", QPointF(d->oldPage.data()->size().width(), 0));
             d->newPageAnim->setTargetWidget(d->newPage.data());
 
-            d->oldPageAnim->setProperty("movementDirection", Animation::MoveAny);
+            d->oldPageAnim->setProperty("movementDirection", Animation::MoveRight);
             d->oldPageAnim->setProperty("distancePointF",
-                                        d->oldPage.data()->geometry().topRight());
+                                        QPointF(d->oldPage.data()->size().width(), 0));
             d->oldPageAnim->setTargetWidget(d->oldPage.data());
 
             d->animGroup->start();
