@@ -198,6 +198,9 @@ public:
     // the applet can change size policy by itself, so save the old one for eventual restore
     QSizePolicy preferredSizePolicy;
 
+    //keep last sizes for formfactors, useful when the containment changes
+    QHash<FormFactor, QSizeF> sizeForFormFactor;
+
     // timerEvent bookkeeping
     QBasicTimer constraintsTimer;
     QBasicTimer busyWidgetTimer;

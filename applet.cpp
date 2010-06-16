@@ -1271,7 +1271,17 @@ void Applet::flushPendingConstraintsEvents()
             at.rotateRadians(0);
             setTransform(at);
         }
+
+        //was a size saved for a particular form factor?
+        if (d->sizeForFormFactor.contains(f)) {
+            resize(d->sizeForFormFactor.value(f));
+        }
     }
+
+    if ((c & Plasma::StartupCompletedConstraint) || (c & Plasma::SizeConstraint && !(c & Plasma::FormFactorConstraint))) {
+        d->sizeForFormFactor[formFactor()] = size();
+    }
+
     if (c & Plasma::SizeConstraint || c & Plasma::FormFactorConstraint) {
         if (aspectRatioMode() == Plasma::Square || aspectRatioMode() == Plasma::ConstrainedSquare) {
             // enforce square size in panels
