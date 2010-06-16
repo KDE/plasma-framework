@@ -1404,8 +1404,10 @@ bool ScrollWidget::sceneEventFilter(QGraphicsItem *i, QEvent *e)
 {
     //only the scrolling widget and its children
     if (!d->widget.data() ||
-        (!d->scrollingWidget->isAncestorOf(i) && i != d->scrollingWidget))
+        (!d->scrollingWidget->isAncestorOf(i) && i != d->scrollingWidget) ||
+        i == d->horizontalScrollBar || i == d->verticalScrollBar) {
         return false;
+    }
 
     bool stealThisEvent = d->stealEvent;
     //still pass around mouse moves: try to make still possible to make items start a drag event. thi could be either necessary or annoying, let's see how it goes. (add QEvent::GraphicsSceneMouseMove to block them)
