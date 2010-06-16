@@ -89,6 +89,8 @@ public:
      * Implement either this function or widget().
      * @return the widget that will get shown in either a layout, in the applet or in a Dialog,
      * depending on the form factor of the applet.
+     * If you set a popup icon you must set a minimum size to the widget. When the applet will 
+     * be littlier than that it will show the icon
      */
     virtual QGraphicsWidget *graphicsWidget();
     void setGraphicsWidget(QGraphicsWidget * widget);
