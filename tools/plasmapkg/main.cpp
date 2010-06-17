@@ -131,7 +131,7 @@ int main(int argc, char **argv)
     }
 
     if (!packageFile.isEmpty() && (!args->isSet("type") ||
-        type == i18nc("package type", "wallpaper") || type == "wallpaper")) {
+        type == i18nc("package type", "wallpaper").toLower() || type == "wallpaper")) {
         // Check type for common plasma packages
         Plasma::PackageStructure package;
         package.setPath(packageFile);
@@ -155,29 +155,29 @@ int main(int argc, char **argv)
         }
     }
 
-    if (type == i18nc("package type", "plasmoid") || type == "plasmoid") {
+    if (type == i18nc("package type", "plasmoid").toLower() || type == "plasmoid") {
         packageRoot = "plasma/plasmoids/";
         servicePrefix = "plasma-applet-";
         pluginTypes << "Applet";
         pluginTypes << "PopupApplet";
         pluginTypes << "Containment";
-    } else if (type == i18nc("package type", "theme") || type == "theme") {
+    } else if (type == i18nc("package type", "theme").toLower() || type == "theme") {
         packageRoot = "desktoptheme/";
-    } else if (type == i18nc("package type", "wallpaper") || type == "wallpaper") {
+    } else if (type == i18nc("package type", "wallpaper").toLower() || type == "wallpaper") {
         packageRoot = "wallpapers/";
-    } else if (type == i18nc("package type", "dataengine") || type == "dataengine") {
+    } else if (type == i18nc("package type", "dataengine").toLower() || type == "dataengine") {
         packageRoot = "plasma/dataengines/";
         servicePrefix = "plasma-dataengine-";
         pluginTypes << "DataEngine";
-    } else if (type == i18nc("package type", "runner") || type == "runner") {
+    } else if (type == i18nc("package type", "runner").toLower() || type == "runner") {
         packageRoot = "plasma/runners/";
         servicePrefix = "plasma-runner-";
         pluginTypes << "Runner";
-    } else if (type == i18nc("package type", "wallpaperplugin") || type == "wallpaperplugin") {
+    } else if (type == i18nc("package type", "wallpaperplugin").toLower() || type == "wallpaperplugin") {
         packageRoot = "plasma/wallpapers/";
         servicePrefix = "plasma-wallpaper-";
         pluginTypes << "Wallpaper";
-    } else if (type == i18nc("package type", "layout-template") || type == "layout-template") {
+    } else if (type == i18nc("package type", "layout-template").toLower() || type == "layout-template") {
         packageRoot = "plasma/layout-templates/";
         servicePrefix = "plasma-layout-";
         pluginTypes << "LayoutTemplate";
