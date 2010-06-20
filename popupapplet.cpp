@@ -422,7 +422,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
 void PopupAppletPrivate::appletActivated()
 {
     q->setStatus(Plasma::NeedsAttentionStatus);
-    q->showPopup();
+    QTimer::singleShot(0, q, SLOT(showPopup()));
 }
 
 QSizeF PopupApplet::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
