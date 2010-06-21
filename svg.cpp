@@ -25,6 +25,7 @@
 #include <QMatrix>
 #include <QPainter>
 #include <QSharedData>
+#include <QSvgRenderer>
 
 #include <kcolorscheme.h>
 #include <kconfiggroup.h>
@@ -32,7 +33,6 @@
 #include <kiconeffect.h>
 #include <kglobalsettings.h>
 #include <ksharedptr.h>
-#include <ksvgrenderer.h>
 
 #include "applet.h"
 #include "package.h"
@@ -41,21 +41,21 @@
 namespace Plasma
 {
 
-class SharedSvgRenderer : public KSvgRenderer, public QSharedData
+class SharedSvgRenderer : public QSvgRenderer, public QSharedData
 {
     public:
         typedef KSharedPtr<SharedSvgRenderer> Ptr;
 
         SharedSvgRenderer(QObject *parent = 0)
-            : KSvgRenderer(parent)
+            : QSvgRenderer(parent)
         {}
 
         SharedSvgRenderer(const QString &filename, QObject *parent = 0)
-            : KSvgRenderer(filename, parent)
+            : QSvgRenderer(filename, parent)
         {}
 
         SharedSvgRenderer(const QByteArray &contents, QObject *parent = 0)
-            : KSvgRenderer(contents, parent)
+            : QSvgRenderer(contents, parent)
         {}
 
         ~SharedSvgRenderer()
