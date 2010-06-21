@@ -1365,6 +1365,7 @@ bool ScrollWidget::eventFilter(QObject *watched, QEvent *event)
          event->type() == QEvent::Move)) {
         emit viewportGeometryChanged(viewportGeometry());
     } else if (watched == d->widget.data() && event->type() == QEvent::GraphicsSceneResize) {
+        d->stopAnimations();
         d->adjustScrollbarsTimer->start(200);
         updateGeometry();
     } else if (watched == d->widget.data() && event->type() == QEvent::GraphicsSceneMove) {
