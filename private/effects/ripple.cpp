@@ -134,7 +134,7 @@ void RippleEffect::draw(QPainter *painter)
     }
 
     int x, y;
-    if (qFuzzyCompare(m_opacity, 0.0)) {
+    if (qFuzzyCompare(m_opacity, qreal(0.0))) {
         for (x = 0; x < currentImage.width(); ++x) {
             memset(m_currentMap[x], 0, sizeof(int) * currentImage.height());
             memset(m_previousMap[x], 0, sizeof(int) * currentImage.height());
