@@ -78,7 +78,7 @@ bool JavaScriptRunner::init()
         return false;
     }
 
-    return true;
+    return m_env->include(mainScript());
 }
 
 void JavaScriptRunner::match(Plasma::RunnerContext &search)
