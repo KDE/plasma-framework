@@ -65,7 +65,7 @@ private:
 
     QScriptEngine *m_qscriptEngine;
     ScriptEnv *m_env;
-    QScriptValue iface;
+    QScriptValue m_iface;
     int m_pollingInterval;
 };
 

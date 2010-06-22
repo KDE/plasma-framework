@@ -43,9 +43,9 @@ bool JavaScriptDataEngine::init()
 
     bindI18N(m_qscriptEngine);
 
-    QScriptValue iface = m_qscriptEngine->newQObject(this);
-    iface.setScope(global);
-    global.setProperty("engine", iface);
+    m_iface = m_qscriptEngine->newQObject(this);
+    m_iface.setScope(global);
+    global.setProperty("engine", m_iface);
 
     global.setProperty("setData", m_qscriptEngine->newFunction(JavaScriptDataEngine::jsSetData));
     global.setProperty("removeAllData", m_qscriptEngine->newFunction(JavaScriptDataEngine::jsRemoveAllData));
@@ -55,11 +55,11 @@ bool JavaScriptDataEngine::init()
     registerDataEngineMetaTypes(m_qscriptEngine);
 
     Authorization auth;
-    if (!m_env->importExtensions(description(), iface, auth)) {
+    if (!m_env->importExtensions(description(), m_iface, auth)) {
         return false;
     }
 
-    return true;
+    return m_env->include(mainScript());
 }
 
 void JavaScriptDataEngine::jsSetMaxSourceCount(int count)
@@ -200,11 +200,12 @@ QScriptValue JavaScriptDataEngine::jsRemoveAllSources(QScriptContext *context, Q
 
 QScriptValue JavaScriptDataEngine::callFunction(const QString &functionName, const QScriptValueList &args) const
 {
-    QScriptValue fun = iface.property(functionName);
+    //kDebug() << "calling" << functionName;
+    QScriptValue fun = m_iface.property(functionName);
     if (fun.isFunction()) {
         QScriptContext *ctx = m_qscriptEngine->pushContext();
-        ctx->setActivationObject(iface);
-        QScriptValue rv = fun.call(iface, args);
+        ctx->setActivationObject(m_iface);
+        QScriptValue rv = fun.call(m_iface, args);
         m_qscriptEngine->popContext();
 
         if (m_qscriptEngine->hasUncaughtException()) {
