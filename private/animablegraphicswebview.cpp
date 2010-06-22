@@ -25,13 +25,8 @@
 #include <QPinchGesture>
 #include <QtWebKit/QWebFrame>
 
-#include <kglobalsettings.h>
-#ifndef PLASMA_NO_KDEWEBKIT
-#include <kgraphicswebpage.h>
-#else
 #include <qwebpage.h>
-#endif
-
+#include <kglobalsettings.h>
 
 using namespace Plasma;
 
