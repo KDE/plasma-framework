@@ -26,7 +26,12 @@
 #include <QtWebKit/QWebFrame>
 
 #include <kglobalsettings.h>
-#include <kwebpage.h>
+#ifndef PLASMA_NO_KDEWEBKIT
+#include <kgraphicswebpage.h>
+#else
+#include <qwebpage.h>
+#endif
+
 
 using namespace Plasma;
 
