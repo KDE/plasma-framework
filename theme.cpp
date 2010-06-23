@@ -111,7 +111,7 @@ public:
             if (!useGlobal) {
                 QString app = KGlobal::mainComponent().componentName();
 
-                if (!app.isEmpty() && !app.startsWith("plasma-")) {
+                if (!app.isEmpty()) {
                     kDebug() << "using theme for app" << app;
                     groupName.append("-").append(app);
                 }
