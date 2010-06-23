@@ -420,7 +420,7 @@ void Theme::setThemeName(const QString &themeName)
 
 void ThemePrivate::processWallpaperSettings(KConfigBase *metadata)
 {
-    if (!defaultWallpaperTheme.isEmpty()) {
+    if (!defaultWallpaperTheme.isEmpty() && defaultWallpaperTheme != DEFAULT_WALLPAPER_THEME) {
         return;
     }
 
