@@ -110,13 +110,29 @@ Extender::Extender(Applet *applet)
 Extender::~Extender()
 {
     d->destroying = true;
-    QMutableListIterator<ExtenderItem *> it(d->attachedExtenderItems);
-    while (it.hasNext()) {
-        ExtenderItem *item = it.next();
-        item->disconnect(this);
-        delete item;
+
+    // when deleting items that are connected to us, it can happen that
+    // other items which are in groups may get deleted as well. so we first
+    // build a new list of guarded pointers, and then use that list. that
+    // way when items are deleted behind our back, we are still safe.
+    // FIXME: having groups and items in the same collection is probably a mistake,
+    // so would be a good candidate for a refactoring exercise
+    QList<QWeakPointer<ExtenderItem> > guardedItems;
+
+    foreach (ExtenderItem *item, d->attachedExtenderItems) {
+        guardedItems << QWeakPointer<ExtenderItem>(item);
     }
+
     d->attachedExtenderItems.clear();
+
+    foreach (const QWeakPointer<ExtenderItem> &guardedItem, guardedItems) {
+        ExtenderItem *item = guardedItem.data();
+        if (item) {
+            item->disconnect(this);
+            delete item;
+        }
+    }
+
 
     delete d;
 }
