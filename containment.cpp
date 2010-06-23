@@ -980,6 +980,7 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
             //applet->setWindowFlags(Qt::Window);
         }
     } else {
+        applet->restore(*applet->d->mainConfigGroup());
         applet->init();
         Plasma::Animation *anim = Plasma::Animator::create(Plasma::Animator::AppearAnimation);
         if (anim) {
