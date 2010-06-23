@@ -166,7 +166,7 @@ class PLASMA_EXPORT DataEngine : public QObject
 NoAlignment) const;
 
         /**
-         * Disconnects a source to an object that was receiving data updates.
+         * Disconnects a source from an object that was receiving data updates.
          *
          * @param source the name of the data source
          * @param visualization the object to connect the data source to
@@ -174,7 +174,7 @@ NoAlignment) const;
         Q_INVOKABLE void disconnectSource(const QString &source, QObject *visualization) const;
 
         /**
-         * Retrevies a pointer to the DataContainer for a given source. This method
+         * Retrieves a pointer to the DataContainer for a given source. This method
          * should not be used if possible. An exception is for script engines that
          * can not provide a QMetaObject as required by connectSource for the initial
          * call to dataUpdated. Using this method, such engines can provide their own
@@ -199,12 +199,16 @@ NoAlignment) const;
 
         /**
          * Returns true if this engine is valid, otherwise returns false
+         *
+         * @return true if the engine is valid
          **/
         bool isValid() const;
 
         /**
          * Returns true if the data engine is empty, which is to say that it has no
          * data sources currently.
+         * 
+         * @return true if the engine has no sources currently
          */
         bool isEmpty() const;
 
@@ -230,7 +234,7 @@ NoAlignment) const;
         const Package *package() const;
 
         /**
-         * Returns the plugin name for the applet
+         * @return the plugin name for the applet
          */
         QString pluginName() const;
 
