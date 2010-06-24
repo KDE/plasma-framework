@@ -185,7 +185,9 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
 
     //make sure we keep monitoring if the source applet still exists, so the return to source icon
     //can be hidden if it is removed.
-    connect(d->sourceApplet, SIGNAL(destroyed()), this, SLOT(sourceAppletRemoved()));
+    if (d->sourceApplet) {
+        connect(d->sourceApplet, SIGNAL(destroyed()), this, SLOT(sourceAppletRemoved()));
+    }
 
     connect(d->collapseIcon, SIGNAL(clicked()), this, SLOT(toggleCollapse()));
 
