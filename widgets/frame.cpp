@@ -101,8 +101,7 @@ Frame::Frame(QGraphicsWidget *parent)
     d->svg->setElementPrefix("plain");
     d->syncBorders();
 
-    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(syncBorders()));
-
+    connect(d->svg, SIGNAL(repaintNeeded()), SLOT(syncBorders()));
 }
 
 Frame::~Frame()

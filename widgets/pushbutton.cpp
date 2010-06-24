@@ -186,7 +186,8 @@ PushButton::PushButton(QGraphicsWidget *parent)
 
     d->syncBorders();
     setAcceptHoverEvents(true);
-    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(syncBorders()));
+
+    connect(d->background, SIGNAL(repaintNeeded()), SLOT(syncBorders()));
 }
 
 PushButton::~PushButton()

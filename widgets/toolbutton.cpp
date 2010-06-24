@@ -178,7 +178,7 @@ ToolButton::ToolButton(QGraphicsWidget *parent)
 
     d->syncBorders();
     setAcceptHoverEvents(true);
-    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(syncBorders()));
+    connect(d->background, SIGNAL(repaintNeeded()), SLOT(syncBorders()));
 
     d->animation = new QPropertyAnimation(this, "animationUpdate");
     d->animation->setStartValue(0);
