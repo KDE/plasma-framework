@@ -912,6 +912,7 @@ void Applet::setBackgroundHints(const BackgroundHints hints)
     if ((hints & StandardBackground) || (hints & TranslucentBackground)) {
         if (!d->background) {
             d->background = new Plasma::FrameSvg(this);
+            QObject::connect(d->background, SIGNAL(repaintNeeded()), this, SLOT(themeChanged()));
         }
 
         if ((hints & TranslucentBackground) &&
@@ -2736,7 +2737,6 @@ void AppletPrivate::init(const QString &packagePath)
         configAction->setText(i18nc("%1 is the name of the applet", "%1 Settings", q->name()));
     }
 
-    QObject::connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
     QObject::connect(q, SIGNAL(activate()), q, SLOT(setFocus()));
 }
 
