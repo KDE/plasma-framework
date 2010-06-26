@@ -752,7 +752,6 @@ void Theme::setFont(const QFont &font, FontRole role)
 
 QFont Theme::font(FontRole role) const
 {
-    Q_UNUSED(role)
     switch (role) {
     case DesktopFont:
     {
