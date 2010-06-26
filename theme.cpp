@@ -756,7 +756,7 @@ QFont Theme::font(FontRole role) const
     case DesktopFont:
     {
         KConfigGroup cg(KGlobal::config(), "General");
-        return cg.readEntry("desktopFont", QFont("Sans Serif", 10));
+        return cg.readEntry("desktopFont", d->generalFont);
     }
     break;
     case DefaultFont:
