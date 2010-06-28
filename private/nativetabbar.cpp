@@ -63,8 +63,7 @@ public:
           shape(NativeTabBar::RoundedNorth),
           backgroundSvg(0),
           buttonSvg(0),
-          closeIcon("window-close"),
-          animationId(-1)
+          closeIcon("window-close")
     {
     }
 
@@ -85,7 +84,6 @@ public:
     qreal buttonLeft, buttonTop, buttonRight, buttonBottom;
     KIcon closeIcon;
 
-    int animationId;
     QWeakPointer<QPropertyAnimation> anim;
 
     QRect currentAnimRect;
