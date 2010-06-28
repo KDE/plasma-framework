@@ -367,12 +367,24 @@ void NativeTabBar::tabInserted(int index)
 {
     KTabBar::tabInserted(index);
     emit sizeHintChanged();
+
+    d->currentAnimRect = tabRect(currentIndex());
+    d->backgroundSvg->resizeFrame(size());
+    d->syncBorders();
+
+    update();
 }
 
 void NativeTabBar::tabRemoved(int index)
 {
     KTabBar::tabRemoved(index);
     emit sizeHintChanged();
+
+    d->currentAnimRect = tabRect(currentIndex());
+    d->backgroundSvg->resizeFrame(size());
+    d->syncBorders();
+
+    update();
 }
 
 void NativeTabBar::tabLayoutChange()
