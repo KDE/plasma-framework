@@ -232,7 +232,7 @@ void NativeTabBar::paintEvent(QPaintEvent *event)
     // Drawing Tabborders
     QRect movingRect;
 
-    if (d->currentAnimRect.isNull()) {
+    if (d->currentAnimRect.isNull() || !d->anim || d->anim.data()->state() != QAbstractAnimation::Running) {
         movingRect = tabRect(currentIndex());
     } else {
         movingRect = d->currentAnimRect;
