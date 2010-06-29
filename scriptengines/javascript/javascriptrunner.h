@@ -48,6 +48,9 @@ public:
     /** Reimplemented to forward to script. */
     void exec(const Plasma::RunnerContext *search, const Plasma::QueryMatch *action);
 
+public Q_SLOTS:
+    bool include(const QString &script);
+
 protected:
     void setupObjects();
     void importExtensions();

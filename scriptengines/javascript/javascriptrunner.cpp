@@ -21,6 +21,7 @@
 #include <QFile>
 
 #include <Plasma/AbstractRunner>
+#include <Plasma/Package>
 #include <Plasma/QueryMatch>
 
 #include "authorization.h"
@@ -143,6 +144,16 @@ void JavaScriptRunner::reportError(ScriptEnv *env, bool fatal)
     kDebug() << "Error: " << env->engine()->uncaughtException().toString()
              << " at line " << env->engine()->uncaughtExceptionLineNumber() << endl;
     kDebug() << env->engine()->uncaughtExceptionBacktrace();
+}
+
+bool JavaScriptRunner::include(const QString &script)
+{
+    const QString path = package()->filePath("scripts", script);
+    if (path.isEmpty()) {
+        return false;
+    }
+
+    return m_env->include(path);
 }
 
 #include "javascriptrunner.moc"
