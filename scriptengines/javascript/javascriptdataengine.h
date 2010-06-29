@@ -51,6 +51,9 @@ public:
     void jsSetPollingInterval(int interval);
     int pollingInterval() const;
 
+public Q_SLOTS:
+    bool include(const QString &file);
+
 private Q_SLOTS:
     void reportError(ScriptEnv *engine, bool fatal) const;
 

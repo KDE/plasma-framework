@@ -21,6 +21,8 @@
 
 #include <QScriptEngine>
 
+#include <Plasma/Package>
+
 #include "authorization.h"
 #include "scriptenv.h"
 #include "simplebindings/dataengine.h"
@@ -273,6 +275,16 @@ Plasma::Service *JavaScriptDataEngine::serviceForSource(const QString &source)
     }
 
     return 0;
+}
+
+bool JavaScriptDataEngine::include(const QString &script)
+{
+    const QString path = package()->filePath("scripts", script);
+    if (path.isEmpty()) {
+        return false;
+    }
+
+    return m_env->include(path);
 }
 
 K_EXPORT_PLASMA_DATAENGINESCRIPTENGINE(javascriptdataengine, JavaScriptDataEngine)
