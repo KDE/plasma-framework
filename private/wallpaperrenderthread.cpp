@@ -35,8 +35,6 @@ WallpaperRenderThread::WallpaperRenderThread(QObject *parent)
 {
     m_abort = false;
     m_restart = false;
-    
-    setPriority(QThread::LowPriority);
 }
 
 WallpaperRenderThread::~WallpaperRenderThread()
@@ -74,7 +72,7 @@ int WallpaperRenderThread::render(const QString &file,
     }
 
     if (!isRunning()) {
-        start();
+        start(QThread::LowPriority);
     } else {
         m_condition.wakeOne();
     }
