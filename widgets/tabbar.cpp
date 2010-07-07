@@ -452,22 +452,24 @@ void TabBar::removeTab(int index)
 
     int oldCurrentIndex = d->tabProxy->native->currentIndex();
     d->tabProxy->native->removeTab(index);
-    QGraphicsWidget *page = d->pages.takeAt(index);
 
+    d->currentIndex = oldCurrentIndex;
     int currentIndex = d->tabProxy->native->currentIndex();
 
     if (oldCurrentIndex == index) {
         d->tabWidgetLayout->removeAt(1);
+        if (d->tabProxy->native->count() > 0) {
+            setCurrentIndex(currentIndex >= oldCurrentIndex ? currentIndex + 1 : currentIndex);
+        }
     }
 
+    QGraphicsWidget *page = d->pages.takeAt(index);
     scene()->removeItem(page);
     page->deleteLater();
 
-    if (oldCurrentIndex != currentIndex) {
-        setCurrentIndex(currentIndex);
+    if (d->pages.count() > 0) {
+        d->updateTabWidgetMode();
     }
-
-    d->updateTabWidgetMode();
     d->tabProxy->setPreferredSize(d->tabProxy->native->sizeHint());
 }
 
