@@ -183,6 +183,7 @@ protected:
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
     void changeEvent(QEvent *event);
+    QVariant itemChange(GraphicsItemChange change, const QVariant &value); 
     QSizeF sizeHint(Qt::SizeHint which, const QSizeF & constraint) const;
 
 private slots:

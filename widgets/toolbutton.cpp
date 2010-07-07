@@ -445,6 +445,17 @@ void ToolButton::changeEvent(QEvent *event)
     QGraphicsProxyWidget::changeEvent(event);
 }
 
+QVariant ToolButton::itemChange(GraphicsItemChange change, const QVariant &value)
+{
+    //If the widget is hidden while it's hovered and then we show it again
+    //we have to disable the hover otherwise it will remain hovered.
+    if (change == ItemVisibleHasChanged){
+         d->underMouse = false;
+    }
+
+    return QGraphicsProxyWidget::itemChange(change, value);
+}
+
 QSizeF ToolButton::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
 {
     QSizeF hint = QGraphicsProxyWidget::sizeHint(which, constraint);
