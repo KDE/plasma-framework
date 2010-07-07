@@ -95,6 +95,8 @@ public:
     virtual void showToolBox() = 0;
     virtual void hideToolBox() = 0;
 
+    QList<QAction *> actions() const;
+
 protected:
     Containment *containment();
     QPoint toolPosition(int toolHeight);

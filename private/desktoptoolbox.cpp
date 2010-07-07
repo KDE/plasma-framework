@@ -544,6 +544,10 @@ void DesktopToolBox::addTool(QAction *action)
         return;
     }
 
+    if (actions().contains(action)) {
+        return;
+    }
+
     InternalToolBox::addTool(action);
     Plasma::IconWidget *tool = new Plasma::IconWidget(toolParent());
 

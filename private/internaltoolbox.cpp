@@ -116,6 +116,11 @@ QGraphicsWidget *InternalToolBox::toolParent()
     return this;
 }
 
+QList<QAction *> InternalToolBox::actions() const
+{
+    return d->actions;
+}
+
 void InternalToolBox::addTool(QAction *action)
 {
     if (!action) {
