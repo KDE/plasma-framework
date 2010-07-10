@@ -25,15 +25,14 @@ namespace Plasma
 {
 
 ZoomAnimation::ZoomAnimation(QObject *parent)
-             : EasingAnimation(parent),
-             m_zoom(0)
+    : EasingAnimation(parent),
+      m_zoom(0)
 {
 }
 
 ZoomAnimation::~ZoomAnimation()
 {
 }
-
 
 void ZoomAnimation::setZoom(qreal zoom)
 {
