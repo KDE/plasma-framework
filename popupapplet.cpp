@@ -260,14 +260,27 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
         }
 
         //99% of the times q->parentWidget() is the containment, but using it  we can also manage the applet-in-applet case (i.e. systray)
+        //there are also cases where the parentlayoutitem is bigger than the containment (e.g. newspaper)
         if (q->parentLayoutItem()) {
             parentSize = q->parentLayoutItem()->geometry().size();
         } else if (q->parentWidget()) {
             parentSize = q->parentWidget()->size();
         }
 
+        //check if someone did the nasty trick of applets in applets, in this case we always want to be collapsed
+        QGraphicsWidget *candidateParentApplet = q;
+        Plasma::Applet *parentApplet = 0;
+        //this loop should be executed normally a single time, at most 2-3 times for quite complex containments
+        while (candidateParentApplet) {
+            candidateParentApplet = candidateParentApplet->parentWidget();
+            parentApplet = qobject_cast<Plasma::Applet *>(candidateParentApplet);
+            if (parentApplet) {
+                break;
+            }
+        }
+
         //Applet on desktop
-        if (icon && (!icon->svg().isEmpty() || !icon->icon().isNull()) && ((f != Plasma::Vertical && f != Plasma::Horizontal) ||
+        if ((!parentApplet || parentApplet->isContainment() ) && icon && (!icon->svg().isEmpty() || !icon->icon().isNull()) && ((f != Plasma::Vertical && f != Plasma::Horizontal) ||
             ((f == Plasma::Vertical && parentSize.width() >= minimum.width()) ||
              (f == Plasma::Horizontal && parentSize.height() >= minimum.height())))) {
             //kDebug() << "we are expanding the popupapplet";
