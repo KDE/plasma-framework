@@ -109,6 +109,8 @@ public:
     Animation *newPageAnim;
     QParallelAnimationGroup *animGroup;
     bool customFont;
+    QWeakPointer<QGraphicsWidget> firstPositionWidget;
+    QWeakPointer<QGraphicsWidget> lastPositionWidget;
 };
 
 void TabBarPrivate::updateTabWidgetMode()
@@ -608,6 +610,65 @@ void TabBar::changeEvent(QEvent *event)
     }
 
     QGraphicsWidget::changeEvent(event);
+}
+
+void TabBar::setFirstPositionWidget(QGraphicsWidget *widget)
+{
+    if (d->lastPositionWidget.data() == widget) {
+        return;
+    }
+
+    if (d->firstPositionWidget) {
+        QGraphicsWidget *widget = d->firstPositionWidget.data();
+        d->tabBarLayout->removeItem(widget);
+        scene()->removeItem(widget);
+        widget->deleteLater();
+    }
+
+    d->firstPositionWidget = widget;
+    if (widget) {
+        widget->setParentItem(this);
+        if (layoutDirection() == Qt::LeftToRight) {
+            d->tabBarLayout->insertItem(0, widget);
+        } else {
+            d->tabBarLayout->addItem(widget);
+        }
+    }
+}
+
+
+QGraphicsWidget *TabBar::firstPositionWidget() const
+{
+    return d->firstPositionWidget.data();
+}
+
+void TabBar::setLastPositionWidget(QGraphicsWidget *widget)
+{
+    if (d->lastPositionWidget.data() == widget) {
+        return;
+    }
+
+    if (d->lastPositionWidget) {
+        QGraphicsWidget *widget = d->lastPositionWidget.data();
+        d->tabBarLayout->removeItem(widget);
+        scene()->removeItem(widget);
+        widget->deleteLater();
+    }
+
+    d->lastPositionWidget = widget;
+    if (widget) {
+        widget->setParentItem(this);
+        if (layoutDirection() == Qt::LeftToRight) {
+            d->tabBarLayout->addItem(widget);
+        } else {
+            d->tabBarLayout->insertItem(0, widget);
+        }
+    }
+}
+
+QGraphicsWidget *TabBar::lastPositionWidget() const
+{
+    return d->lastPositionWidget.data();
 }
 
 } // namespace Plasma

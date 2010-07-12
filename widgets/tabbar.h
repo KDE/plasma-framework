@@ -52,6 +52,8 @@ class PLASMA_EXPORT TabBar : public QGraphicsWidget
     Q_PROPERTY(int count READ count)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(bool tabBarShown READ isTabBarShown WRITE setTabBarShown)
+    Q_PROPERTY(QGraphicsWidget *firstPositionWidget READ firstPositionWidget WRITE setFirstPositionWidget)
+    Q_PROPERTY(QGraphicsWidget *lastPositionWidget READ lastPositionWidget WRITE setLastPositionWidget)
 
 public:
     /**
@@ -206,6 +208,36 @@ public:
      * @return the native widget wrapped by this TabBar
      */
     KTabBar *nativeWidget() const;
+
+    /**
+     * Set a widget to be displayed on one side of the TabBar, depending on the
+     * LayoutDirection and the Shape.
+     * @param widget the widget to be displayed. Passing 0 will show nothing.
+     * Any previous widget will be deleted.
+     * @since 4.6
+     */
+    void setFirstPositionWidget(QGraphicsWidget *widget);
+
+    /**
+     * @return the widget in the first position
+     * @since 4.6
+     */
+    QGraphicsWidget *firstPositionWidget() const;
+
+    /**
+     * Set a widget to be displayed on one side of the TabBar, depending on the
+     * LayoutDirection and the Shape.
+     * @param widget the widget to be displayed. Passing 0 will show nothing.
+     * Any previous widget will be deleted.
+     * @since 4.6
+     */
+    void setLastPositionWidget(QGraphicsWidget *widget);
+
+    /**
+     * @return the widget in the last position
+     * @since 4.6
+     */
+    QGraphicsWidget *lastPositionWidget() const;
 
 public Q_SLOTS:
     /**
