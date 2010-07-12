@@ -450,6 +450,16 @@ NoAlignment) const;
          */
         void setDefaultService(const QString &serviceName);
 
+        /**
+         * Sets a source to be stored for easy retrieval
+         * when the real source of the data (usually a network connection)
+         * is unavailable.
+         * @param source the name of the source
+         * @param store if source should be stored
+         */
+        void setStorageEnable(const QString &source, bool store);
+
+
     protected Q_SLOTS:
         /**
          * Call this method when you call setData directly on a DataContainer instead
@@ -490,6 +500,8 @@ NoAlignment) const;
 
         Q_PRIVATE_SLOT(d, void internalUpdateSource(DataContainer *source))
         Q_PRIVATE_SLOT(d, void sourceDestroyed(QObject *object))
+        Q_PRIVATE_SLOT(d, void storeAllSources())
+        Q_PRIVATE_SLOT(d, void storeSource(const QString &sourceName) const)
 
         DataEnginePrivate *const d;
 };

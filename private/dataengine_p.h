@@ -84,6 +84,23 @@ class DataEnginePrivate
          */
         void sourceDestroyed(QObject *object);
 
+        /**
+         * stores the source
+         * @param sourceName the name of the source to store
+         */
+        void storeSource(const QString &sourceName) const;
+
+        /**
+         * stores all sources marked for storage
+         */
+        void storeAllSources();
+
+        /**
+         * retrieves source data
+         * @param the data container to populate
+         */
+        void retrieveStoredData(DataContainer *s);
+
         DataEngine *q;
         KPluginInfo dataEngineDescription;
         int refCount;

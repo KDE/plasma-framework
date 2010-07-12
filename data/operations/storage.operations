@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM
+    "http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+<kcfg>
+    <group name="save">
+        <entry name="source" type="String">
+            <label>Name of the source</label>
+        </entry>
+        <entry name="key" type="String">
+            <label>Fill</label>
+        </entry>
+        <entry name="data" type="Int">
+            <label>The actual data to be stored.</label>
+        </entry>
+        <entry name="data" type="String">
+            <label>The actual data to be stored.</label>
+        </entry>
+        <entry name="data" type="StringList">
+            <label>The actual data to be stored.</label>
+        </entry>
+  </group>
+  <group name="retrieve">
+      <entry name="source" type="String">
+          <label>Name of the source</label>
+      </entry>
+  </group>
+</kcfg>

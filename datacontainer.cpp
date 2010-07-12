@@ -19,6 +19,7 @@
 
 #include "datacontainer.h"
 #include "private/datacontainer_p.h"
+#include "private/storage_p.h"
 
 #include <QVariant>
 
@@ -33,6 +34,8 @@ DataContainer::DataContainer(QObject *parent)
     : QObject(parent),
       d(new DataContainerPrivate)
 {
+    d->enableStorage = false;
+    d->isStored = true;
 }
 
 DataContainer::~DataContainer()
@@ -55,6 +58,8 @@ void DataContainer::setData(const QString &key, const QVariant &value)
 
     d->dirty = true;
     d->updateTs.start();
+
+    d->isStored = false;
 }
 
 void DataContainer::removeAllData()
@@ -134,6 +139,26 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
         connect(relay, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                 visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
     }
+}
+
+void DataContainer::setStorageEnable(bool store)
+{
+    d->enableStorage = store;
+}
+
+bool DataContainer::isStorageEnabled() const
+{
+    return d->enableStorage;
+}
+
+bool DataContainer::needsToBeStored() const
+{
+    return (d->enableStorage && !d->isStored);
+}
+
+void DataContainer::setNeedsToBeStored(bool store)
+{
+    d->isStored = !store;
 }
 
 void DataContainer::disconnectVisualization(QObject *visualization)

@@ -47,6 +47,8 @@ public:
     QTime updateTs;
     bool dirty : 1;
     bool cached : 1;
+    bool enableStorage;
+    bool isStored;
 };
 
 class SignalRelay : public QObject

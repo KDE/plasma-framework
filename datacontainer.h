@@ -122,6 +122,28 @@ class PLASMA_EXPORT DataContainer : public QObject
         void connectVisualization(QObject *visualization, uint pollingInterval,
                                   Plasma::IntervalAlignment alignment);
 
+        /**
+         * sets this data container to be automatically stored.
+         * @param whether this data container should be stored
+         */
+        void setStorageEnable(bool store);
+
+        /**
+         * @return true if the data container has been marked for storage
+         */
+        bool isStorageEnabled() const;
+
+        /**
+         * @return true if the data container has been updated, but not stored
+         */
+        bool needsToBeStored() const;
+
+        /**
+         * sets that the data container needs to be stored or not.
+         * @param whether the data container needs to be stored
+         */
+        void setNeedsToBeStored(bool store);
+
     public Q_SLOTS:
         /**
          * Disconnects an object from this DataContainer.
