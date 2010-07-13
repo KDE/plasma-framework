@@ -22,8 +22,8 @@
 #ifndef PLASMA_STORAGE_H
 #define PLASMA_STORAGE_H
 
-#include <Plasma/Service>
-#include <Plasma/ServiceJob>
+#include <plasma/service.h>
+#include <plasma/servicejob.h>
 
 //Begin StorageJob
 class StorageJob : public Plasma::ServiceJob
