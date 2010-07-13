@@ -246,6 +246,7 @@ VideoWidget::VideoWidget(QGraphicsWidget *parent)
 
 
     setWidget(d->videoWidget);
+    d->videoWidget->setWindowIcon(QIcon());
     setAcceptHoverEvents(true);
 
     connect(d->media, SIGNAL(tick(qint64)), this, SIGNAL(tick(qint64)));

@@ -179,6 +179,7 @@ PushButton::PushButton(QGraphicsWidget *parent)
     connect(native, SIGNAL(toggled(bool)), this, SIGNAL(toggled(bool)));
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
+    native->setWindowIcon(QIcon());
 
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 

@@ -20,7 +20,7 @@
 #include "lineedit.h"
 
 #include <QPainter>
-
+#include <QIcon>
 #include <QGraphicsSceneResizeEvent>
 
 #include <klineedit.h>
@@ -146,6 +146,7 @@ void LineEdit::setNativeWidget(KLineEdit *nativeWidget)
 
     nativeWidget->setWindowFlags(nativeWidget->windowFlags()|Qt::BypassGraphicsProxyWidget);
     setWidget(nativeWidget);
+    nativeWidget->setWindowIcon(QIcon());
 
     nativeWidget->setAttribute(Qt::WA_NoSystemBackground);
     nativeWidget->setStyle(d->style.data());

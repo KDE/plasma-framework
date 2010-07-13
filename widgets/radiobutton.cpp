@@ -96,6 +96,7 @@ RadioButton::RadioButton(QGraphicsWidget *parent)
     QRadioButton *native = new QRadioButton;
     connect(native, SIGNAL(toggled(bool)), this, SIGNAL(toggled(bool)));
     setWidget(native);
+    native->setWindowIcon(QIcon());
     native->setAttribute(Qt::WA_NoSystemBackground);
     connect(Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(setPalette()));
 }

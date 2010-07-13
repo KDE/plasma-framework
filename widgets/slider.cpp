@@ -63,6 +63,7 @@ Slider::Slider(QGraphicsWidget *parent)
     d->focusIndicator = new FocusIndicator(this, "widgets/slider");
 
     setWidget(native);
+    native->setWindowIcon(QIcon());
     native->setAttribute(Qt::WA_NoSystemBackground);
 
     d->background = new Plasma::FrameSvg(this);

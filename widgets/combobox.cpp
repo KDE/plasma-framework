@@ -161,6 +161,7 @@ void ComboBox::setNativeWidget(KComboBox *nativeWidget)
             this, SIGNAL(textChanged(const QString &)));
 
     setWidget(nativeWidget);
+    nativeWidget->setWindowIcon(QIcon());
 
     nativeWidget->setAttribute(Qt::WA_NoSystemBackground);
     nativeWidget->setStyle(d->style.data());

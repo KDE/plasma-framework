@@ -125,6 +125,7 @@ Label::Label(QGraphicsWidget *parent)
     native->setAttribute(Qt::WA_NoSystemBackground);
     native->setWordWrap(true);
     setWidget(native);
+    native->setWindowIcon(QIcon());
     d->setPalette();
 }
 

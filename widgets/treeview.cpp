@@ -42,6 +42,7 @@ TreeView::TreeView(QGraphicsWidget *parent)
 {
     QTreeView *native = new QTreeView;
     setWidget(native);
+    native->setWindowIcon(QIcon());
     native->setAttribute(Qt::WA_NoSystemBackground);
     native->setFrameStyle(QFrame::NoFrame);
 

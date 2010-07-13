@@ -21,6 +21,7 @@
 
 #include <QGroupBox>
 #include <QPainter>
+#include <QIcon>
 
 #include <kmimetype.h>
 
@@ -67,6 +68,7 @@ GroupBox::GroupBox(QGraphicsWidget *parent)
 {
     QGroupBox *native = new QGroupBox;
     setWidget(native);
+    native->setWindowIcon(QIcon());
     native->setAttribute(Qt::WA_NoSystemBackground);
     connect(Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(setPalette()));
 }

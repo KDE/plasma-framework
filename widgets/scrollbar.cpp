@@ -43,6 +43,7 @@ ScrollBar::ScrollBar(QGraphicsWidget *parent)
    scrollbar->setWindowFlags(scrollbar->windowFlags()|Qt::BypassGraphicsProxyWidget);
    scrollbar->setAttribute(Qt::WA_NoSystemBackground);
    setWidget(scrollbar);
+   scrollbar->setWindowIcon(QIcon());
    d->style = Plasma::Style::sharedStyle();
    scrollbar->setStyle(d->style.data());
 

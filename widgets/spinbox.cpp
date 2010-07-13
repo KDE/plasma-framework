@@ -88,6 +88,7 @@ SpinBox::SpinBox(QGraphicsWidget *parent)
     d->focusIndicator = new FocusIndicator(this, "widgets/lineedit");
 
     setWidget(native);
+    native->setWindowIcon(QIcon());
     native->setAttribute(Qt::WA_NoSystemBackground);
     native->setAutoFillBackground(false);
 
