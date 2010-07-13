@@ -40,6 +40,7 @@ PulseAnimation::PulseAnimation(QObject *parent)
 
 PulseAnimation::~PulseAnimation()
 {
+    delete m_under.data();
 }
 
 void PulseAnimation::setTargetScale(qreal scale)
