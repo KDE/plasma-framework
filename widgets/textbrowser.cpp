@@ -105,6 +105,7 @@ TextBrowser::TextBrowser(QGraphicsWidget *parent)
     native->setWindowFlags(native->windowFlags()|Qt::BypassGraphicsProxyWidget);
     connect(native, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
     connect(native, SIGNAL(textChanged()), this, SLOT(setFixedHeight()));
+    native->setWindowIcon(QIcon());
     setWidget(native);
     d->native = native;
     native->setAttribute(Qt::WA_NoSystemBackground);
