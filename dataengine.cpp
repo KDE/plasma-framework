@@ -387,7 +387,6 @@ void DataEngine::timerEvent(QTimerEvent *event)
         }
 
         d->updateTimestamp.restart();
-        d->updateTimerId = 0;
         updateAllSources();
     } else if (event->timerId() == d->checkSourcesTimerId) {
         killTimer(d->checkSourcesTimerId);
