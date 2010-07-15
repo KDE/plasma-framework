@@ -32,7 +32,10 @@ class DataContainerPrivate
 {
 public:
     DataContainerPrivate()
-        : dirty(false), cached(false)
+        : dirty(false),
+          cached(false),
+          enableStorage(false),
+          isStored(false)
     {}
 
     SignalRelay *signalRelay(const DataContainer *dc, QObject *visualization,
@@ -47,8 +50,8 @@ public:
     QTime updateTs;
     bool dirty : 1;
     bool cached : 1;
-    bool enableStorage;
-    bool isStored;
+    bool enableStorage : 1;
+    bool isStored : 1;
 };
 
 class SignalRelay : public QObject
