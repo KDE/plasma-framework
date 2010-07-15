@@ -47,7 +47,7 @@ public:
     virtual ~PluginLoader();
 
     /**
-     * Load an external applet and supply it to Plasma.
+     * Load an Applet plugin.
      *
      * @param name the plugin name, as returned by KPluginInfo::pluginName()
      * @param appletId unique ID to assign the applet, or zero to have one
@@ -55,19 +55,19 @@ public:
      * @param args to send the applet extra arguments
      * @return a pointer to the loaded applet, or 0 on load failure
      **/
-    virtual Applet *loadApplet(const QString &name, uint appletId = 0,
-                               const QVariantList &args = QVariantList());
+    Applet *loadApplet(const QString &name, uint appletId = 0,
+                       const QVariantList &args = QVariantList());
 
     /**
-     * Load an external DataEngine and supply it to Plasma.
+     * Load a DataEngine plugin.
      *
      * @param name the name of the engine
      * @return the data engine that was loaded, or the NullEngine on failure.
      **/
-    virtual DataEngine *loadDataEngine(const QString &name);
+    DataEngine *loadDataEngine(const QString &name);
 
     /**
-     * Load an external Service and supply it to Plasma.
+     * Load a Service plugin.
      *
      * @param name the plugin name of the service to load
      * @param args a list of arguments to supply to the service plugin when loading it
@@ -75,7 +75,7 @@ public:
      *
      * @return a Service object, unlike Plasma::Service::loadService, this can return null.
      **/
-    virtual Service *loadService(const QString &name, const QVariantList &args, QObject *parent = 0);
+    Service *loadService(const QString &name, const QVariantList &args, QObject *parent = 0);
 
     /**
      * Set the plugin loader which will be queried for all loads.
