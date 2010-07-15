@@ -24,6 +24,7 @@
 
 #include "private/dataengine_p.h"
 #include "scripting/scriptengine.h"
+#include "pluginloader.h"
 
 namespace Plasma
 {
@@ -113,7 +114,15 @@ Plasma::DataEngine *DataEngineManager::loadEngine(const QString &name)
 {
     Plasma::DataEngine *engine = 0;
     Plasma::DataEngine::Dict::const_iterator it = d->engines.constFind(name);
-
+ 
+    // Ask the application's plugin loader, if present
+    if (PluginLoader::pluginLoader()) {
+        engine = PluginLoader::pluginLoader()->loadEngine(name);
+        if (engine) {
+            return engine;
+        }
+    } 
+    
     if (it != d->engines.constEnd()) {
         engine = *it;
         engine->d->ref();

@@ -108,6 +108,7 @@ set(plasma_LIB_SRCS
     extenders/extender.cpp
     extenders/extendergroup.cpp
     extenders/extenderitem.cpp
+    pluginloader.cpp
     paintutils.cpp
     framesvg.cpp
     plasma.cpp
@@ -310,6 +311,7 @@ set(plasma_LIB_INCLUDES
     extenders/extender.h
     extenders/extendergroup.h
     extenders/extenderitem.h
+    pluginloader.h
     paintutils.h
     windoweffects.h
     framesvg.h

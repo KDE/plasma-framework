@@ -99,6 +99,7 @@
 #include "wallpaper.h"
 #include "paintutils.h"
 #include "abstractdialogmanager.h"
+#include "pluginloader.h"
 
 #include "private/associatedapplicationmanager_p.h"
 #include "private/authorizationmanager_p.h"
@@ -2292,6 +2293,18 @@ Applet *Applet::loadPlasmoid(const QString &path, uint appletId, const QVariantL
 
 Applet *Applet::load(const QString &appletName, uint appletId, const QVariantList &args)
 {
+    Applet* applet = 0;
+    
+    // Get the plugin loader
+    if (PluginLoader::pluginLoader()) {
+        applet = PluginLoader::pluginLoader()->loadApplet(appletName, appletId, args);
+        if (applet) {
+            return applet;
+        }
+    }
+ 
+    // the application-specific appletLoader failed to create an applet, here we try with our own logic.
+    
     if (appletName.isEmpty()) {
         return 0;
     }
@@ -2320,7 +2333,7 @@ Applet *Applet::load(const QString &appletName, uint appletId, const QVariantLis
     }
 
     KService::Ptr offer = offers.first();
-
+ 
     if (appletId == 0) {
         appletId = ++AppletPrivate::s_maxAppletId;
     }
@@ -2351,7 +2364,6 @@ Applet *Applet::load(const QString &appletName, uint appletId, const QVariantLis
 
 
     QString error;
-    Applet *applet;
 
     if (appletName == "internal:extender") {
         applet = new ExtenderApplet(0, allArgs);

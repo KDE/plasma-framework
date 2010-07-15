@@ -40,6 +40,7 @@
 #include "private/configloader_p.h"
 #include "private/remoteservice_p.h"
 #include "private/remoteservicejob_p.h"
+#include "pluginloader.h"
 
 namespace Plasma
 {
@@ -89,6 +90,14 @@ Service *Service::load(const QString &name, const QVariantList &args, QObject *p
     //args << name;
     Service *service = 0;
 
+    // Ask the application's plugin loader, if present
+    if (PluginLoader::pluginLoader()) {
+        service = PluginLoader::pluginLoader()->loadService(name, args, parent);
+        if (service) {
+            return service;
+        }
+    }
+    
     if (Plasma::isPluginVersionCompatible(KPluginLoader(*offer).pluginVersion())) {
         service = offer->createInstance<Plasma::Service>(parent, args, &error);
     }
