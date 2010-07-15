@@ -117,7 +117,7 @@ Plasma::DataEngine *DataEngineManager::loadEngine(const QString &name)
  
     // Ask the application's plugin loader, if present
     if (PluginLoader::pluginLoader()) {
-        engine = PluginLoader::pluginLoader()->loadEngine(name);
+        engine = PluginLoader::pluginLoader()->loadDataEngine(name);
         if (engine) {
             return engine;
         }

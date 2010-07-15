@@ -32,7 +32,9 @@ class PluginLoaderPrivate;
 
 /**
  * This is an abstract base class which defines an interface to which Plasma's 
- * Applet Loading logic can communicate with a parent application.
+ * Applet Loading logic can communicate with a parent application. The plugin loader
+ * must be set before any plugins are loaded, otherwise (for safety reasons), the
+ * default PluginLoader implementation will be used.
  * 
  * @author Ryan Rix <ry@n.rix.si>
  * @since 4.6
@@ -40,8 +42,10 @@ class PluginLoaderPrivate;
 class PLASMA_EXPORT PluginLoader
 {
 public: 
+    PluginLoader();
+
     virtual ~PluginLoader();
-    
+
     /**
      * Load an external applet and supply it to Plasma.
      *
@@ -53,15 +57,15 @@ public:
      **/
     virtual Applet* loadApplet(const QString &name, uint appletId = 0,
                                const QVariantList &args = QVariantList());
-    
+
     /**
      * Load an external DataEngine and supply it to Plasma.
      *
      * @param name the name of the engine
      * @return the data engine that was loaded, or the NullEngine on failure.
      **/
-    virtual DataEngine* loadEngine(const QString &name);
-    
+    virtual DataEngine* loadDataEngine(const QString &name);
+
     /**
      * Load an external Service and supply it to Plasma.
      *
@@ -72,7 +76,7 @@ public:
      * @return a Service object, unlike Plasma::Service::loadService, this can return null.
      **/
     virtual Service* loadService(const QString &name, const QVariantList &args, QObject *parent = 0);
-    
+
     /**
      * Set the plugin loader which will be queried for all loads.
      * 
@@ -80,14 +84,14 @@ public:
      * by the application
      **/
     static void setPluginLoader(PluginLoader* loader);
-    
+
     /**
      * Return the active plugin loader
      **/
     static PluginLoader* pluginLoader();
 
 private:
-    PluginLoaderPrivate* d;
+    PluginLoaderPrivate * const d;
 };
 
 }

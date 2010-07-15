@@ -23,15 +23,16 @@
 
 namespace Plasma {
 
-class PluginLoaderPrivate
-{
-    // Placeholder for BC
-};
-
 static PluginLoader* s_pluginLoader = 0;
+
+PluginLoader::PluginLoader()
+    : d(0)
+{
+}
 
 PluginLoader::~PluginLoader()
 {
+    //delete d;
 }
 
 void PluginLoader::setPluginLoader(PluginLoader* loader)
@@ -52,7 +53,7 @@ Applet* PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
 { Q_UNUSED(name) Q_UNUSED(appletId) Q_UNUSED(args) return 0;
 }
 
-DataEngine* PluginLoader::loadEngine(const QString &name)
+DataEngine* PluginLoader::loadDataEngine(const QString &name)
 { Q_UNUSED(name) return 0;
 }
 
