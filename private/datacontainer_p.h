@@ -35,7 +35,7 @@ public:
         : dirty(false),
           cached(false),
           enableStorage(false),
-          isStored(false)
+          isStored(true)
     {}
 
     SignalRelay *signalRelay(const DataContainer *dc, QObject *visualization,

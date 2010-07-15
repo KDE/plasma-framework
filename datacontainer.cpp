@@ -34,8 +34,6 @@ DataContainer::DataContainer(QObject *parent)
     : QObject(parent),
       d(new DataContainerPrivate)
 {
-    d->enableStorage = false;
-    d->isStored = true;
 }
 
 DataContainer::~DataContainer()

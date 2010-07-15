@@ -88,7 +88,7 @@ class DataEnginePrivate
          * stores the source
          * @param sourceName the name of the source to store
          */
-        void storeSource(const QString &sourceName) const;
+        void storeSource(DataContainer *source) const;
 
         /**
          * stores all sources marked for storage

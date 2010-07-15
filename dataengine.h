@@ -501,7 +501,7 @@ NoAlignment) const;
         Q_PRIVATE_SLOT(d, void internalUpdateSource(DataContainer *source))
         Q_PRIVATE_SLOT(d, void sourceDestroyed(QObject *object))
         Q_PRIVATE_SLOT(d, void storeAllSources())
-        Q_PRIVATE_SLOT(d, void storeSource(const QString &sourceName) const)
+        Q_PRIVATE_SLOT(d, void storeSource(DataContainer *source) const)
 
         DataEnginePrivate *const d;
 };
