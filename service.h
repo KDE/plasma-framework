@@ -309,6 +309,7 @@ private:
     friend class PackagePrivate;
     friend class ServiceProvider;
     friend class RemoveService;
+    friend class PluginLoader;
 };
 
 } // namespace Plasma

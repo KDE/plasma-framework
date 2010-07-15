@@ -112,49 +112,16 @@ Plasma::DataEngine *DataEngineManager::engine(const QString &name) const
 
 Plasma::DataEngine *DataEngineManager::loadEngine(const QString &name)
 {
-    Plasma::DataEngine *engine = 0;
     Plasma::DataEngine::Dict::const_iterator it = d->engines.constFind(name);
- 
-    // Ask the application's plugin loader, if present
-    if (PluginLoader::pluginLoader()) {
-        engine = PluginLoader::pluginLoader()->loadDataEngine(name);
-        if (engine) {
-            return engine;
-        }
-    } 
-    
+
     if (it != d->engines.constEnd()) {
-        engine = *it;
+        DataEngine *engine = *it;
         engine->d->ref();
         return engine;
     }
 
-    // load the engine, add it to the engines
-    QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(name);
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/DataEngine",
-                                                              constraint);
-    QString error;
-
-    if (offers.isEmpty()) {
-        kDebug() << "offers are empty for " << name << " with constraint " << constraint;
-    } else {
-        QVariantList allArgs;
-        allArgs << offers.first()->storageId();
-        QString api = offers.first()->property("X-Plasma-API").toString();
-        if (api.isEmpty()) {
-            if (offers.first()) {
-                KPluginLoader plugin(*offers.first());
-                if (Plasma::isPluginVersionCompatible(plugin.pluginVersion())) {
-                    engine = offers.first()->createInstance<Plasma::DataEngine>(0, allArgs, &error);
-                }
-            }
-        } else {
-            engine = new DataEngine(0, offers.first());
-        }
-    }
-
+    DataEngine *engine = PluginLoader::pluginLoader()->loadDataEngine(name);
     if (!engine) {
-        kDebug() << "Couldn't load engine \"" << name << "\". Error given: " << error;
         return d->nullEngine();
     }
 

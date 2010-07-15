@@ -72,46 +72,7 @@ Service *Service::load(const QString &name, QObject *parent)
 
 Service *Service::load(const QString &name, const QVariantList &args, QObject *parent)
 {
-    //TODO: scripting API support
-    if (name.isEmpty()) {
-        return new NullService(QString(), parent);
-    }
-
-    QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(name);
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Service", constraint);
-
-    if (offers.isEmpty()) {
-        kDebug() << "offers is empty for " << name;
-        return new NullService(name, parent);
-    }
-
-    KService::Ptr offer = offers.first();
-    QString error;
-    //args << name;
-    Service *service = 0;
-
-    // Ask the application's plugin loader, if present
-    if (PluginLoader::pluginLoader()) {
-        service = PluginLoader::pluginLoader()->loadService(name, args, parent);
-        if (service) {
-            return service;
-        }
-    }
-    
-    if (Plasma::isPluginVersionCompatible(KPluginLoader(*offer).pluginVersion())) {
-        service = offer->createInstance<Plasma::Service>(parent, args, &error);
-    }
-
-    if (!service) {
-        kDebug() << "Couldn't load Service \"" << name << "\"! reason given: " << error;
-        return new NullService(name, parent);
-    }
-
-    if (service->name().isEmpty()) {
-        service->setName(name);
-    }
-
-    return service;
+    return PluginLoader::pluginLoader()->loadService(name, args, parent);
 }
 
 Service *Service::access(const KUrl &url, QObject *parent)
