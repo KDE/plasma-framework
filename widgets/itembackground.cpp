@@ -67,6 +67,8 @@ ItemBackground::ItemBackground(QGraphicsWidget *parent)
     setFlag(ItemIsSelectable, false);
     setFlag(ItemIsFocusable, false);
 
+    setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
+
     d->frameSvg = new Plasma::FrameSvg(this);
     d->anim = new QPropertyAnimation(this, "animationUpdate", this);
     d->anim->setStartValue(0);
