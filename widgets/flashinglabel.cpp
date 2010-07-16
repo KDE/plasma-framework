@@ -243,11 +243,8 @@ void FlashingLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
     if (d->anim.data() && d->anim.data()->state() == QAbstractAnimation::Running) {
         Plasma::Animation *animation = d->anim.data();
         painter->drawPixmap(0, 0, qvariant_cast<QPixmap>(animation->property("currentPixmap")));
-    } else {
-
-        if (d->state == FlashingLabelPrivate::Visible) {
-            painter->drawPixmap(0, 0, d->renderedPixmap);
-        }
+    } else if (d->state == FlashingLabelPrivate::Visible) {
+        painter->drawPixmap(0, 0, d->renderedPixmap);
     }
 }
 
