@@ -287,8 +287,6 @@ void Label::paint(QPainter *painter,
                   const QStyleOptionGraphicsItem *option,
                   QWidget *widget)
 {
-    QGraphicsProxyWidget::paint(painter, option, widget);
-
     QLabel *native = nativeWidget();
     QFontMetrics fm = native->font();
 
