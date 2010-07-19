@@ -169,6 +169,7 @@ public:
         }
 
         verticalScrollBar->nativeWidget()->setMaximum(qMax(0, int((widget.data()->size().height() - scrollingWidget->size().height())/10)));
+        verticalScrollBar->nativeWidget()->setPageStep(int(scrollingWidget->size().height())/10);
 
         if (verticalScrollBarPolicy == Qt::ScrollBarAlwaysOff ||
             verticalScrollBar->nativeWidget()->maximum() == 0) {
@@ -184,6 +185,7 @@ public:
         }
 
         horizontalScrollBar->nativeWidget()->setMaximum(qMax(0, int((widget.data()->size().width() - scrollingWidget->size().width())/10)));
+        horizontalScrollBar->nativeWidget()->setPageStep(int(scrollingWidget->size().width())/10);
 
         if (horizontalScrollBarPolicy == Qt::ScrollBarAlwaysOff ||
             horizontalScrollBar->nativeWidget()->maximum() == 0) {
