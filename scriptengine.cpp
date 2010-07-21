@@ -197,19 +197,19 @@ QScriptValue ScriptEngine::activities(QScriptContext *context, QScriptEngine *en
 {
     Q_UNUSED(context)
 
-    QScriptValue panels = engine->newArray();
+    QScriptValue containments = engine->newArray();
     ScriptEngine *env = envFor(engine);
     int count = 0;
 
     foreach (Plasma::Containment *c, env->m_corona->containments()) {
         if (!isPanel(c)) {
-            panels.setProperty(count, env->wrap(c));
+            containments.setProperty(count, env->wrap(c));
             ++count;
         }
     }
 
-    panels.setProperty("length", count);
-    return panels;
+    containments.setProperty("length", count);
+    return containments;
 }
 
 QScriptValue ScriptEngine::panels(QScriptContext *context, QScriptEngine *engine)
