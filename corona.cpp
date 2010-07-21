@@ -238,8 +238,9 @@ public:
 
         if (!delayedInit) {
             containment->init();
-            containment->updateConstraints(Plasma::StartupCompletedConstraint);
             KConfigGroup cg = containment->config();
+            containment->restore(cg);
+            containment->updateConstraints(Plasma::StartupCompletedConstraint);
             containment->save(cg);
             q->requestConfigSync();
             containment->flushPendingConstraintsEvents();
