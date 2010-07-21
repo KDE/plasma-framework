@@ -38,7 +38,6 @@ namespace WorkspaceScripting
 class PLASMAGENERICSHELL_EXPORT Applet : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(bool locked READ locked WRITE setLocked)
 
 public:
     Applet(QObject *parent = 0);
