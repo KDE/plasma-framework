@@ -48,7 +48,7 @@ class PLASMAGENERICSHELL_EXPORT Widget : public Applet
     Q_PROPERTY(QRectF geometry WRITE setGeometry READ geometry)
     Q_PROPERTY(QStringList currentConfigGroup WRITE setCurrentConfigGroup READ currentConfigGroup)
     Q_PROPERTY(QString globalShortcut WRITE setGlobalShortcut READ globalShorcut)
-
+    Q_PROPERTY(bool locked READ locked WRITE setLocked)
 
 public:
     Widget(Plasma::Applet *applet, QObject *parent = 0);
