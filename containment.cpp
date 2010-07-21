@@ -230,12 +230,6 @@ void Containment::init()
                 d->toolBox.data()->addTool(configureContainment);
             }
         }
-
-        //Set a default wallpaper the first time the containment is created,
-        //for instance from the toolbox by the user
-        if (d->drawWallpaper) {
-            setDrawWallpaper(true);
-        }
     }
 
     //containmentactionss, from config or defaults
@@ -262,7 +256,6 @@ void Containment::init()
             }
         }
     }
-
 }
 
 void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containment *c)
