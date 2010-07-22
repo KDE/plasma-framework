@@ -312,8 +312,10 @@ Containment *View::swapContainment(Plasma::Containment *existing, const QString 
 
     Containment *old = existing;
     Plasma::Corona *corona = old->corona();
-    Plasma::Containment *c = corona->addContainment(name, args);
+    Plasma::Containment *c = corona->addContainmentDelayed(name, args);
     if (c) {
+        c->init();
+
         KConfigGroup oldConfig = old->config();
         KConfigGroup newConfig = c->config();
 
@@ -330,6 +332,9 @@ Containment *View::swapContainment(Plasma::Containment *existing, const QString 
 
         // load the configuration of the old containment into the new one
         c->restore(newConfig);
+        c->updateConstraints(Plasma::StartupCompletedConstraint);
+        c->flushPendingConstraintsEvents();
+        emit corona->containmentAdded(c);
         foreach (Applet *applet, c->applets()) {
             applet->init();
             // We have to flush the applet constraints manually

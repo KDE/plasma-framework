@@ -432,6 +432,7 @@ private:
     Q_PRIVATE_SLOT(d, void showShortcutConfig())
 
     friend class CoronaPrivate;
+    friend class View;
 };
 
 } // namespace Plasma
