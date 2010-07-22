@@ -71,7 +71,7 @@ class FrameSvgPrivate;
  * @c topright will be ignored if @c top does not exist, and similarly for
  * @c bottomleft and @c bottomright.
  *
- * @see Plamsa::Svg
+ * @see Plasma::Svg
  **/
 class PLASMA_EXPORT FrameSvg : public Svg
 {
