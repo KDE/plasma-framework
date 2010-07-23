@@ -217,8 +217,36 @@ KConfigGroup ExtenderItem::config() const
     if (!d->extender->d->applet) {
         return KConfigGroup();
     }
+
     KConfigGroup cg = d->extender->d->applet.data()->config("ExtenderItems");
-    return KConfigGroup(&cg, QString::number(d->extenderItemId));
+    KConfigGroup itemCg = KConfigGroup(&cg, QString::number(d->extenderItemId));
+
+    //we try to figure out if we are a transient ExtenderItem
+    //if we are, return an in memory config group (nothing will be saved on disk)
+    //if we aren't, return the ExtenderItems subgroup of our applet, as usual
+    if (d->transient) {
+        //create the dummy config group pointer if doesn't exists
+        if (!d->transientConfig) {
+            d->transientConfig = KSharedConfig::openConfig(QString(), KConfig::SimpleConfig);
+            KConfigGroup dummyGroup = KConfigGroup(d->transientConfig, "ExtenderItems");
+            itemCg.reparent(&dummyGroup);
+            return itemCg;
+        }
+        KConfigGroup dummyGroup = KConfigGroup(d->transientConfig, "ExtenderItems");
+        dummyGroup = KConfigGroup(&dummyGroup, QString::number(d->extenderItemId));
+        return dummyGroup;
+    } else {
+        //if the dummy config pointer still exists, get rid of it
+        if (d->transientConfig) {
+            KConfigGroup dummyGroup = KConfigGroup(d->transientConfig, "ExtenderItems");
+            dummyGroup = KConfigGroup(&dummyGroup, QString::number(d->extenderItemId));
+            dummyGroup.reparent(&cg);
+            delete d->transientConfig.data();
+            d->transientConfig.clear();
+            return dummyGroup;
+        }
+        return itemCg;
+    }
 }
 
 void ExtenderItem::setTitle(const QString &title)
@@ -317,7 +345,7 @@ void ExtenderItem::setExtender(Extender *extender, const QPointF &pos)
     d->extender->d->removeExtenderItem(this);
 
     //move the configuration.
-    if (d->hostApplet() && (extender != d->extender)) {
+    if (!d->transient && d->hostApplet() && (extender != d->extender)) {
         KConfigGroup c = extender->d->applet.data()->config("ExtenderItems");
         config().reparent(&c);
     }
@@ -719,6 +747,16 @@ QSizeF ExtenderItem::sizeHint(Qt::SizeHint which, const QSizeF &constraint) cons
     return QGraphicsWidget::sizeHint(which, constraint);
 }
 
+void ExtenderItem::setTransient(const bool transient)
+{
+    d->transient = transient;
+}
+
+bool ExtenderItem::isTransient() const
+{
+    return d->transient;
+}
+
 ExtenderItemPrivate::ExtenderItemPrivate(ExtenderItem *extenderItem, Extender *hostExtender)
     : q(extenderItem),
       widget(0),
@@ -731,7 +769,8 @@ ExtenderItemPrivate::ExtenderItemPrivate(ExtenderItem *extenderItem, Extender *h
       dragStarted(false),
       destroyActionVisibility(false),
       collapsed(false),
-      expirationTimer(0)
+      expirationTimer(0),
+      transient(false)
 {
 }
 

@@ -236,6 +236,23 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
          */
         QAction *action(const QString &name) const;
 
+        /**
+         * Set the ExtenderItem as transient: won't be saved in the Plasma config
+         * and won't be restored. This is intended for items that have contents
+         * valid only for this session.
+         * 
+         * @param transient true if the ExtenderItem will be transient
+         *
+         * @since 4.6
+         */
+        void setTransient(const bool transient);
+
+        /**
+         * @return true if the ExtenderItem is transient.
+         * @since 4.6
+         */
+        bool isTransient() const;
+
     public Q_SLOTS:
         /**
          * Destroys the extender item. As opposed to calling delete on this class, destroy also
