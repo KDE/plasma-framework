@@ -42,7 +42,8 @@ namespace WindowEffects
         PresentWindowsGroup = 4,
         HighlightWindows = 5,
         OverrideShadow = 6,
-        BlurBehind = 7
+        BlurBehind = 7,
+        Dashboard = 8
     };
 
     /**
@@ -145,11 +146,21 @@ namespace WindowEffects
      * excluding any shadow or halo.
      *
      * @param window The window for which to enable the blur effect
-     * @param enable Enable the effect if @a true, disable it if @false 
+     * @param enable Enable the effect if @a true, disable it if @false
      * @param region The region within the window where the background will be blurred
      * @since 4.5
      */
     PLASMA_EXPORT void enableBlurBehind(WId window, bool enable = true, const QRegion &region = QRegion());
+
+    /**
+     * Instructs the window manager to handle the given window as dashboard window as
+     * Dashboard windows should be handled diffrently and may have special effects
+     * applied to them.
+     *
+     * @param window The window for which to enable the blur effect
+     * @since 4.6
+     */
+    PLASMA_EXPORT void markAsDashboard(WId window);
 }
 
 } // namespace Plasma

@@ -18,15 +18,18 @@
  */
 
 #include "windoweffects.h"
-
 #include <QVarLengthArray>
 
 #include <kwindowsystem.h>
 
 #ifdef Q_WS_X11
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
-#include <QX11Info>
+    #include <X11/Xlib.h>
+    #include <X11/Xatom.h>
+    #include <X11/Xutil.h>
+    #include <QX11Info>
+
+    #define DASHBOARD_WIN_NAME "dashboard"
+    #define DASHBOARD_WIN_CLASS "dashboard"
 #endif
 
 namespace Plasma
@@ -65,6 +68,10 @@ bool isEffectAvailable(Effect effect)
         break;
     case BlurBehind:
         effectName = "_KDE_NET_WM_BLUR_BEHIND_REGION";
+        break;
+    case Dashboard:
+        // TODO: Better namespacing for atoms
+        effectName = "_WM_EFFECT_KDE_DASHBOARD";
         break;
     default:
         return false;
@@ -319,6 +326,16 @@ void enableBlurBehind(WId window, bool enable, const QRegion &region)
     } else {
         XDeleteProperty(dpy, window, atom);
     }
+#endif
+}
+
+void markAsDashboard(WId window)
+{
+#ifdef Q_WS_X11
+    XClassHint classHint;
+    classHint.res_name = DASHBOARD_WIN_NAME;
+    classHint.res_class = DASHBOARD_WIN_CLASS;
+    XSetClassHint(QX11Info::display(), window, &classHint);
 #endif
 }
 
