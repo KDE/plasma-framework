@@ -34,6 +34,7 @@
 #include <kdebug.h>
 #include <kicon.h>
 #include <kiconloader.h>
+#include <ksharedconfig.h>
 
 #include "applet.h"
 #include "containment.h"
@@ -766,10 +767,10 @@ ExtenderItemPrivate::ExtenderItemPrivate(ExtenderItem *extenderItem, Extender *h
       group(0),
       background(new FrameSvg(extenderItem)),
       collapseIcon(0),
+      expirationTimer(0),
       dragStarted(false),
       destroyActionVisibility(false),
       collapsed(false),
-      expirationTimer(0),
       transient(false)
 {
 }

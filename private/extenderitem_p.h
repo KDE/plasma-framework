@@ -72,6 +72,7 @@ class ExtenderItemPrivate
         ExtenderGroup *group;
 
         KConfigGroup config;
+        KSharedConfig::Ptr transientConfig;
 
         FrameSvg *background;
 
@@ -85,12 +86,12 @@ class ExtenderItemPrivate
         QString iconName;
 
         uint extenderItemId;
-
-        bool dragStarted;
-        bool destroyActionVisibility;
-        bool collapsed;
-
         QTimer *expirationTimer;
+
+        bool dragStarted : 1;
+        bool destroyActionVisibility : 1;
+        bool collapsed : 1;
+        bool transient : 1;
 
         static uint s_maxExtenderItemId;
 };
