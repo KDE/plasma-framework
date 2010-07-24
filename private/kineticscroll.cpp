@@ -224,6 +224,8 @@ void KineticScrolling::resetAnimation(QPointF finalPosition, int duration)
 
 void KineticScrolling::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    Q_UNUSED(event);
+
     if (d->scrollAnimation->state() != QAbstractAnimation::Stopped) {
         d->scrollAnimation->stop();
     }
@@ -282,8 +284,8 @@ void KineticScrolling::wheelReleaseEvent(QGraphicsSceneWheelEvent *event)
     d->kinMovement = QPointF(0,0);
 
     if((event->orientation() == Qt::Vertical) &&
-       ((event->delta() < 0) && d->canScroll(KineticScrollingPrivate::Down) ||
-       (event->delta() > 0) && d->canScroll(KineticScrollingPrivate::Up))) {
+       (((event->delta() < 0) && d->canScroll(KineticScrollingPrivate::Down)) ||
+        ((event->delta() > 0) && d->canScroll(KineticScrollingPrivate::Up)))) {
         d->kinMovement.setY(d->kinMovement.y() - event->delta());
     } else if ((event->orientation() == Qt::Vertical) ||
                (!d->canScroll(KineticScrollingPrivate::Down) &&
