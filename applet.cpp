@@ -2160,30 +2160,7 @@ QString AppletPrivate::parentAppConstraint(const QString &parentApp)
 
 KPluginInfo::List Applet::listAppletInfo(const QString &category, const QString &parentApp)
 {
-    QString constraint = AppletPrivate::parentAppConstraint(parentApp);
-
-    //note: constraint guaranteed non-empty from here down
-    if (category.isEmpty()) { //use all but the excluded categories
-        KConfigGroup group(KGlobal::config(), "General");
-        QStringList excluded = group.readEntry("ExcludeCategories", QStringList());
-        foreach (const QString &category, excluded) {
-            constraint.append(" and [X-KDE-PluginInfo-Category] != '").append(category).append("'");
-        }
-    } else { //specific category (this could be an excluded one - is that bad?)
-        constraint.append(" and ").append("[X-KDE-PluginInfo-Category] == '").append(category).append("'");
-        if (category == "Miscellaneous") {
-            constraint.append(" or (not exist [X-KDE-PluginInfo-Category] or [X-KDE-PluginInfo-Category] == '')");
-        }
-    }
-
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
-
-    //now we have to do some manual filtering because the constraint can't handle everything
-    AppletPrivate::filterOffers(offers);
-
-    //kDebug() << "Applet::listAppletInfo constraint was '" << constraint
-    //         << "' which got us " << offers.count() << " matches";
-    return KPluginInfo::fromServices(offers);
+   return PluginLoader::pluginLoader()->listAppletInfo(category, parentApp); 
 }
 
 KPluginInfo::List Applet::listAppletInfoForMimetype(const QString &mimetype)

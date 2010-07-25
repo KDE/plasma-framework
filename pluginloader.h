@@ -21,6 +21,7 @@
 #define PLUGIN_LOADER_H
 
 #include <plasma/plasma.h>
+#include <kplugininfo.h>
 
 namespace Plasma {
 
@@ -76,6 +77,8 @@ public:
      * @return a Service object, unlike Plasma::Service::loadService, this can return null.
      **/
     Service *loadService(const QString &name, const QVariantList &args, QObject *parent = 0);
+
+    KPluginInfo::List listAppletInfo( const QString &category, const QString &parentApp );
 
     /**
      * Set the plugin loader which will be queried for all loads.
@@ -134,11 +137,34 @@ protected:
      **/
     virtual Service *internalLoadService(const QString &name, const QVariantList &args, QObject *parent = 0);
 
+    /**
+     * A re-implementable method that allows subclasses to provide additional applets
+     * for listAppletInfo. If the application has no applets to give to the application, 
+     * then the implementation should return QStringList().
+     * This method is called by listAppletInfo prior to generating the list of applets installed
+     * on the system using the standard Plasma plugin mechanisms, and will try to find .desktop
+     * files for your applets.
+     * 
+     * @param category Only applets matchin this category will be returned.
+     *                 Useful in conjunction with knownCategories.
+     *                 If "Misc" is passed in, then applets without a
+     *                 Categories= entry are also returned.
+     *                 If an empty string is passed in, all applets are
+     *                 returned.
+     * @param parentApp the application to filter applets on. Uses the
+     *                  X-KDE-ParentApp entry (if any) in the plugin info.
+     *                  The default value of QString() will result in a
+     *                  list containing only applets not specifically
+     *                  registered to an application.
+     * @return list of applets
+     **/
+    QStringList internalAppletNames(const QString &category);
+
+
 private:
     PluginLoaderPrivate * const d;
 };
 
 }
-Q_DECLARE_METATYPE( Plasma::PluginLoader* ) // so that it can be wrapped in QVariants, etc
 
 #endif 
