@@ -78,7 +78,48 @@ public:
      **/
     Service *loadService(const QString &name, const QVariantList &args, QObject *parent = 0);
 
-    KPluginInfo::List listAppletInfo( const QString &category, const QString &parentApp );
+    /**
+     * Returns a list of all known applets.
+     * This may skip applets based on security settings and ExcludeCategories in the application's config.
+     *
+     * @param category Only applets matchin this category will be returned.
+     *                 Useful in conjunction with knownCategories.
+     *                 If "Misc" is passed in, then applets without a
+     *                 Categories= entry are also returned.
+     *                 If an empty string is passed in, all applets are
+     *                 returned.
+     * @param parentApp the application to filter applets on. Uses the
+     *                  X-KDE-ParentApp entry (if any) in the plugin info.
+     *                  The default value of QString() will result in a
+     *                  list containing only applets not specifically
+     *                  registered to an application.
+     * @return list of applets
+     **/
+    KPluginInfo::List listAppletInfo(const QString &category, const QString &parentApp = QString());
+
+    /**
+     * Returns a list of all known DataEngines.
+     *
+     * @param parentApp the application to filter applets on. Uses the
+     *                  X-KDE-ParentApp entry (if any) in the plugin info.
+     *                  The default value of QString() will result in a
+     *                  list containing only applets not specifically
+     *                  registered to an application.
+     * @return list of DataEngines
+     **/
+    KPluginInfo::List listDataEngineInfo(const QString &parentApp = QString());
+
+    /**
+     * Returns a list of all known Runner implementations
+     *
+     * @param parentApp the application to filter applets on. Uses the
+     *                  X-KDE-ParentApp entry (if any) in the plugin info.
+     *                  The default value of QString() will result in a
+     *                  list containing only applets not specifically
+     *                  registered to an application.
+     * @return list of AbstractRunners
+     **/
+    KPluginInfo::List listRunnerInfo(const QString &parentApp = QString());
 
     /**
      * Set the plugin loader which will be queried for all loads.
@@ -140,26 +181,75 @@ protected:
     /**
      * A re-implementable method that allows subclasses to provide additional applets
      * for listAppletInfo. If the application has no applets to give to the application, 
-     * then the implementation should return QStringList().
+     * then the implementation should return an empty list.
+     *
      * This method is called by listAppletInfo prior to generating the list of applets installed
      * on the system using the standard Plasma plugin mechanisms, and will try to find .desktop
      * files for your applets.
      * 
-     * @param category Only applets matchin this category will be returned.
+     * @param category Only applets matching this category will be returned.
      *                 Useful in conjunction with knownCategories.
      *                 If "Misc" is passed in, then applets without a
      *                 Categories= entry are also returned.
      *                 If an empty string is passed in, all applets are
      *                 returned.
-     * @param parentApp the application to filter applets on. Uses the
-     *                  X-KDE-ParentApp entry (if any) in the plugin info.
-     *                  The default value of QString() will result in a
-     *                  list containing only applets not specifically
-     *                  registered to an application.
      * @return list of applets
      **/
-    QStringList internalAppletNames(const QString &category);
+    virtual KPluginInfo::List internalAppletInfo(const QString &category) const;
 
+    /**
+     * A re-implementable method that allows subclasses to provide additional DataEngines
+     * for DataEngineManager::listDataEngines.
+     *
+     * @return list of DataEngines, or an empty list if none
+     **/
+    virtual KPluginInfo::List internalDataEngineInfo() const;
+
+    /**
+     * Returns a list of all known Runner implementations
+     *
+     * @return list of AbstractRunners, or an empty list if none
+     */
+    virtual KPluginInfo::List internalRunnerInfo() const;
+
+    /**
+     * Standardized mechanism for providing internal Applets by install .desktop files
+     * in $APPPDATA/plasma/internal/applets/
+     * 
+     * For applications that do this, internalAppletInfo can be implemented as a one-liner
+     * call to this method.
+     * 
+     * @param category Only applets matching this category will be returned.
+     *                 Useful in conjunction with knownCategories.
+     *                 If "Misc" is passed in, then applets without a
+     *                 Categories= entry are also returned.
+     *                 If an empty string is passed in, all applets are
+     *                 returned.
+     * @return list of Applets, or an empty list if none
+     */
+    KPluginInfo::List standardInternalAppletInfo(const QString &category) const;
+
+    /**
+     * Standardized mechanism for providing internal Applets by install .desktop files
+     * in $APPPDATA/plasma/internal/dataengines/
+     * 
+     * For applications that do this, internalDataEngineInfo can be implemented as a one-liner
+     * call to this method.
+     * 
+     * @return list of applets
+     */
+    KPluginInfo::List standardInternalDataEngineInfo() const;
+
+    /**
+     * Standardized mechanism for providing internal Applets by install .desktop files
+     * in $APPPDATA/plasma/internal/dataengines/
+     * 
+     * For applications that do this, internalRunnerInfo can be implemented as a one-liner
+     * call to this method.
+     * 
+     * @return list of applets
+     */
+    KPluginInfo::List standardInternalRunnerInfo() const;
 
 private:
     PluginLoaderPrivate * const d;
