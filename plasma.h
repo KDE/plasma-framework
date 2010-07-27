@@ -185,9 +185,9 @@ enum ZoomLevel {
  * Possible timing alignments
  **/
 enum IntervalAlignment {
-    NoAlignment = 0,
-    AlignToMinute,
-    AlignToHour
+    NoAlignment = 0, /**< No alignment **/
+    AlignToMinute, /**< Align to the minute **/
+    AlignToHour /**< Align to the hour **/
 };
 
 enum ItemTypes {
@@ -239,18 +239,18 @@ enum ComponentType {
 Q_DECLARE_FLAGS(ComponentTypes, ComponentType)
 
 enum MarginEdge {
-    TopMargin = 0,
-    BottomMargin,
-    LeftMargin,
-    RightMargin
+    TopMargin = 0, /**< The top margin **/
+    BottomMargin, /**< The bottom margin **/
+    LeftMargin, /**< The left margin **/
+    RightMargin /**< The right margin **/
 };
 
 enum MessageButton {
-    ButtonNone = 0,
-    ButtonOk = 1,
-    ButtonYes = 2,
-    ButtonNo = 4,
-    ButtonCancel = 8
+    ButtonNone = 0, /**< None **/
+    ButtonOk = 1, /**< OK Button **/
+    ButtonYes = 2, /**< Yes Button **/
+    ButtonNo = 4, /**< No Button **/
+    ButtonCancel = 8 /**< Cancel Button **/
 };
 Q_DECLARE_FLAGS(MessageButtons, MessageButton)
 
@@ -259,26 +259,26 @@ Q_DECLARE_FLAGS(MessageButtons, MessageButton)
  * @since 4.3
  */
 enum ItemStatus {
-    UnknownStatus = 0,
-    PassiveStatus = 1,
-    ActiveStatus = 2,
-    NeedsAttentionStatus = 3,
-    AcceptingInputStatus = 4
+    UnknownStatus = 0, /**< The status is unknown **/
+    PassiveStatus = 1, /**< The Item is passive **/
+    ActiveStatus = 2, /**< The Item is active **/
+    NeedsAttentionStatus = 3, /**< The Item needs attention **/
+    AcceptingInputStatus = 4 /**< The Item is accepting input **/
 };
 Q_ENUMS(ItemStatus)
 
 enum AnnouncementMethod {
-    NoAnnouncement = 0,
-    ZeroconfAnnouncement = 1
+    NoAnnouncement = 0, /**< No announcements **/
+    ZeroconfAnnouncement = 1 /**< Announcements via ZeroConf **/
 };
 Q_DECLARE_FLAGS(AnnouncementMethods, AnnouncementMethod)
 
 enum TrustLevel {
-    InvalidCredentials = 0,
-    UnknownCredentials = 1,
-    ValidCredentials = 2,
-    TrustedCredentials = 3,
-    UltimateCredentials = 4
+    InvalidCredentials = 0, /**< The credentials are invalid **/
+    UnknownCredentials = 1, /**< The credentials are unknown **/
+    ValidCredentials = 2, /**< The credentials are valid **/
+    TrustedCredentials = 3, /**< The credentials are trusted **/
+    UltimateCredentials = 4 /**< The ultimate trust level applies to the credentials **/
 };
 Q_ENUMS(TrustLevel)
 
