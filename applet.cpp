@@ -1731,15 +1731,7 @@ bool Applet::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 void Applet::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (immutability() == Mutable && formFactor() == Plasma::Planar && (flags() & ItemIsMovable)) {
-        QPointF curPos = event->pos();
-        QPointF lastPos = event->lastPos();
-
-        QTransform appletTransform = transform();
-        //we need to discard translation from the transform
-        QTransform t(appletTransform.m11(), appletTransform.m12(), appletTransform.m21(), appletTransform.m22(), 0, 0);
-        QPointF delta = t.map(curPos - lastPos);
-
-        moveBy(delta.x(), delta.y());
+        QGraphicsWidget::mouseMoveEvent(event);
     }
 }
 
