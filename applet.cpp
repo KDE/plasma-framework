@@ -1731,30 +1731,15 @@ bool Applet::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 void Applet::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (immutability() == Mutable && formFactor() == Plasma::Planar && (flags() & ItemIsMovable)) {
-        QGraphicsItem *parent = parentItem();
-        Plasma::Applet *applet = qgraphicsitem_cast<Plasma::Applet*>(parent);
+        QPointF curPos = event->pos();
+        QPointF lastPos = event->lastPos();
 
-        if (applet && applet->isContainment()) {
-            // our direct parent is a containment. just move ourselves.
-            QPointF curPos = event->pos();
-            QPointF lastPos = event->lastPos();
+        QTransform appletTransform = transform();
+        //we need to discard translation from the transform
+        QTransform t(appletTransform.m11(), appletTransform.m12(), appletTransform.m21(), appletTransform.m22(), 0, 0);
+        QPointF delta = t.map(curPos - lastPos);
 
-            QTransform appletTransform = transform();
-            //we need to discard translation from the transform
-            QTransform t(appletTransform.m11(), appletTransform.m12(), appletTransform.m21(), appletTransform.m22(), 0, 0);
-            QPointF delta = t.map(curPos - lastPos);
-
-            moveBy(delta.x(), delta.y());
-        } else if (parent) {
-            //don't move the icon as well because our parent
-            //(usually an appletHandle) will do it for us
-            //parent->moveBy(delta.x(),delta.y());
-            QPointF curPos = parent->transform().map(event->pos());
-            QPointF lastPos = parent->transform().map(event->lastPos());
-            QPointF delta = curPos - lastPos;
-
-            parent->setPos(parent->pos() + delta);
-        }
+        moveBy(delta.x(), delta.y());
     }
 }
 
