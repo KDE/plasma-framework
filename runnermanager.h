@@ -25,6 +25,8 @@
 #include <QtCore/QList>
 #include <QtCore/QObject>
 
+#include <kplugininfo.h>
+
 #include <plasma/plasma_export.h>
 #include "abstractrunner.h"
 
@@ -202,6 +204,19 @@ class PLASMA_EXPORT RunnerManager : public QObject
          * @since 4.5
          */
         QMimeData * mimeDataForMatch(const QString &id) const;
+
+        /**
+         * Returns a list of all known Runner implementations
+         *
+         * @param parentApp the application to filter applets on. Uses the
+         *                  X-KDE-ParentApp entry (if any) in the plugin info.
+         *                  The default value of QString() will result in a
+         *                  list containing only applets not specifically
+         *                  registered to an application.
+         * @return list of AbstractRunners
+         * @since 4.6
+         **/
+        static KPluginInfo::List listRunnerInfo(const QString &parentApp = QString());
 
     public Q_SLOTS:
         /**

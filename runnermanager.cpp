@@ -43,6 +43,7 @@
 #include <Weaver/ThreadWeaver.h>
 
 #include "private/runnerjobs_p.h"
+#include "pluginloader.h"
 #include "querymatch.h"
 
 using ThreadWeaver::Weaver;
@@ -173,7 +174,7 @@ public:
     void loadRunners()
     {
         KConfigGroup config = configGroup();
-        KService::List offers = KServiceTypeTrader::self()->query("Plasma/Runner");
+        KPluginInfo::List offers = RunnerManager::listRunnerInfo();
 
         const bool loadAll = config.readEntry("loadAll", false);
         QStringList whiteList = config.readEntry("pluginWhiteList", QStringList());
@@ -187,16 +188,17 @@ public:
 
         advertiseSingleRunnerIds.clear();
 
-        foreach (const KService::Ptr &service, offers) {
+        QMutableListIterator<KPluginInfo> it(offers);
+        while (it.hasNext()) {
+            KPluginInfo &description = it.next();
             //kDebug() << "Loading runner: " << service->name() << service->storageId();
-            QString tryExec = service->property("TryExec", QVariant::String).toString();
+            QString tryExec = description.property("TryExec").toString();
             //kDebug() << "TryExec is" << tryExec;
             if (!tryExec.isEmpty() && KStandardDirs::findExe(tryExec).isEmpty()) {
                 // we don't actually have this application!
                 continue;
             }
 
-            KPluginInfo description(service);
             const QString runnerName = description.pluginName();
             description.load(pluginConf);
 
@@ -204,7 +206,7 @@ public:
             const bool selected = loadAll ||
                             (description.isPluginEnabled() && (noWhiteList || whiteList.contains(runnerName)));
 
-            const bool singleQueryModeEnabled = service->property("X-Plasma-AdvertiseSingleRunnerQueryMode", QVariant::Bool).toBool();
+            const bool singleQueryModeEnabled = description.property("X-Plasma-AdvertiseSingleRunnerQueryMode").toBool();
 
             if (singleQueryModeEnabled) {
                 advertiseSingleRunnerIds.insert(runnerName, description.name());
@@ -213,7 +215,7 @@ public:
             //kDebug() << loadAll << description.isPluginEnabled() << noWhiteList << whiteList.contains(runnerName);
             if (selected) {
                 if (!loaded) {
-                    AbstractRunner *runner = loadInstalledRunner(service);
+                    AbstractRunner *runner = loadInstalledRunner(description.service());
 
                     if (runner) {
                         runners.insert(runnerName, runner);
@@ -232,22 +234,31 @@ public:
 
     AbstractRunner *loadInstalledRunner(const KService::Ptr service)
     {
-        AbstractRunner *runner = 0;
-        const QString api = service->property("X-Plasma-API").toString();
+        if (!service) {
+            return 0;
+        }
 
-        if (api.isEmpty()) {
-            QVariantList args;
-            args << service->storageId();
-            if (Plasma::isPluginVersionCompatible(KPluginLoader(*service).pluginVersion())) {
-                QString error;
-                runner = service->createInstance<AbstractRunner>(q, args, &error);
-                if (!runner) {
-                    kDebug() << "Failed to load runner:" << service->name() << ". error reported:" << error;
-                }
-            }
+        AbstractRunner *runner = PluginLoader::pluginLoader()->loadRunner(service->property("X-KDE-PluginInfo-Name", QVariant::String).toString());
+
+        if (runner) {
+            runner->setParent(q);
         } else {
-            //kDebug() << "got a script runner known as" << api;
-            runner = new AbstractRunner(service, q);
+            const QString api = service->property("X-Plasma-API").toString();
+
+            if (api.isEmpty()) {
+                QVariantList args;
+                args << service->storageId();
+                if (Plasma::isPluginVersionCompatible(KPluginLoader(*service).pluginVersion())) {
+                    QString error;
+                    runner = service->createInstance<AbstractRunner>(q, args, &error);
+                    if (!runner) {
+                        kDebug() << "Failed to load runner:" << service->name() << ". error reported:" << error;
+                    }
+                }
+            } else {
+                //kDebug() << "got a script runner known as" << api;
+                runner = new AbstractRunner(service, q);
+            }
         }
 
         if (runner) {
@@ -434,9 +445,7 @@ void RunnerManager::loadRunner(const QString &path)
 {
     if (!d->runners.contains(path)) {
         AbstractRunner *runner = new AbstractRunner(this, path);
-        if (runner) {
-            d->runners.insert(path, runner);
-        }
+        d->runners.insert(path, runner);
     }
 }
 
@@ -582,6 +591,11 @@ QMimeData * RunnerManager::mimeDataForMatch(const QueryMatch &match) const
     }
 
     return 0;
+}
+
+KPluginInfo::List RunnerManager::listRunnerInfo(const QString &parentApp)
+{
+    return PluginLoader::pluginLoader()->listRunnerInfo(parentApp);
 }
 
 void RunnerManager::setupMatchSession()
