@@ -22,7 +22,9 @@
 
 #include <QtCore/QHash>
 #include <QtCore/QObject>
+#include <QtCore/QTimer>
 
+#include <kjob.h>
 #include <plasma/plasma_export.h>
 #include <plasma/dataengine.h>
 
@@ -144,6 +146,12 @@ class PLASMA_EXPORT DataContainer : public QObject
          */
         void setNeedsToBeStored(bool store);
 
+        /**
+         * @return the DataEngine that the DataContainer is
+         * a child of.
+         */
+        DataEngine* getDataEngine();
+
     public Q_SLOTS:
         /**
          * Disconnects an object from this DataContainer.
@@ -158,6 +166,16 @@ class PLASMA_EXPORT DataContainer : public QObject
          * @since 4.4
          */
         void forceImmediateUpdate();
+
+        /**
+         * Stores the DataContainer to disk.
+         */
+        void store();
+
+        /**
+         * Retrieves the DataContainer from disk.
+         */
+        void retrieve();
 
     Q_SIGNALS:
         /**
@@ -234,6 +252,12 @@ class PLASMA_EXPORT DataContainer : public QObject
          * to becameUnused() may have deleted it.
          **/
         void checkUsage();
+
+        /**
+         * Does the work of putting the data from disk into the DataContainer
+         * after retrieve() sets it up.
+         */
+        void populateFromStoredData(KJob *job);
 
     private:
         friend class SignalRelay;

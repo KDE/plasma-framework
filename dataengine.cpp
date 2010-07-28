@@ -200,12 +200,6 @@ void DataEngine::setData(const QString &source, const QString &key, const QVaria
         emit sourceAdded(source);
     }
 
-    if (s->isStorageEnabled()) {
-        //FIXME: broken. one can't pass in parameters to a slot like this.
-        // this probably belongs in DataContainer in any case
-        QTimer::singleShot(180000, this, SLOT(storeSource(objectName())));
-    }
-
     scheduleSourcesUpdated();
 }
 
@@ -222,12 +216,6 @@ void DataEngine::setData(const QString &source, const Data &data)
     while (it != data.constEnd()) {
         s->setData(it.key(), it.value());
         ++it;
-    }
-
-    if (s->isStorageEnabled()) {
-        //FIXME: broken. one can't pass in parameters to a slot like this.
-        // this probably belongs in DataContainer in any case
-        QTimer::singleShot(180000, this, SLOT(storeSource(objectName())));
     }
 
     if (isNew) {
@@ -333,7 +321,7 @@ void DataEngine::removeSource(const QString &source)
             }
         }
 
-        d->storeSource(s);
+        s->store();
         s->disconnect(this);
         s->deleteLater();
         d->sources.erase(it);
@@ -680,7 +668,6 @@ void DataEnginePrivate::connectSource(DataContainer *s, QObject *visualization,
                         !s->visualizationIsConnected(visualization);
     }
 
-    retrieveStoredData(s);
     s->connectVisualization(visualization, pollingInterval, align);
 
     if (immediateCall) {
@@ -761,84 +748,6 @@ void DataEnginePrivate::setupScriptSupport()
         KGlobal::dirs()->addResourceDir("locale", translationsPath);
         KGlobal::locale()->insertCatalog(package->metadata().pluginName());
     }
-}
-
-void DataEnginePrivate::storeAllSources()
-{
-    //kDebug() << "cache all sources";
-    foreach (QString sourceName, q->sources()) {
-        DataContainer *s = q->d->source(sourceName, false);
-        storeSource(s);
-    }
-}
-
-void DataEnginePrivate::storeSource(DataContainer *s) const
-{
-    return;
-    if (!s || !s->needsToBeStored()) {
-        return;
-    }
-
-    // FIXME: this should probably be moved into DataContainer, e.g. DataContainer::store()
-    s->setNeedsToBeStored(false);
-    Storage* store = new Storage(q->name(), 0);
-    KConfigGroup op = store->operationDescription("save");
-    op.writeEntry("source", s->objectName());
-    DataEngine::Data dataToStore = s->data();
-    DataEngine::Data::const_iterator it = dataToStore.constBegin();
-    //FIXME: this shouldn't be one job per key/value pair, but one job for the entire container
-    while (it != dataToStore.constEnd() && dataToStore.constEnd() == s->data().constEnd()) {
-        QVariant v = it.value();
-        if ((it.value().type() == QVariant::String) || (it.value().type() == QVariant::Int)) {
-            op.writeEntry("key", it.key());
-            op.writeEntry("data", it.value());
-        } else {
-            QByteArray b;
-            QDataStream ds(&b, QIODevice::WriteOnly);
-            ds << it.value();
-            op.writeEntry("key", "base64-" + it.key());
-            op.writeEntry("data", b.toBase64());
-        }
-        ++it;
-        ServiceJob* job = store->startOperationCall(op);
-        job->start();
-    }
-
-    //FIXME: this may result in the service being deleted before the jobs ... resulting in the
-    //jobs potentially being terminated prematurely
-    store->deleteLater();
-}
-
-void DataEnginePrivate::retrieveStoredData(DataContainer *s)
-{
-    if (!s || !s->isStorageEnabled()) {
-        return;
-    }
-
-    //FIXME: this should probably move into DataContainer, and be triggered in setStorageEnabled
-    // when it is set to true
-    Storage* store = new Storage(q->name(), 0);
-    KConfigGroup ret = store->operationDescription("retrieve");
-    ret.writeEntry("source", s->objectName());
-    ServiceJob* retrieve = store->startOperationCall(ret);
-    QVariant retrievedData;
-    retrieve->start();
-    while (!retrieve->error()) {
-        QHash<QString, QVariant> h = retrieve->result().toHash();
-        QString key = h["key"].value<QString>();
-        if (key.startsWith("base64-")) {
-            QByteArray b = QByteArray::fromBase64(h["data"].toString().toAscii());
-            QDataStream ds(&b, QIODevice::ReadOnly);
-            QVariant v(ds);
-            key.remove(0, 7);
-            retrievedData = v;
-        } else {
-            retrievedData = h["data"];
-        }
-        s->setData(key, retrievedData);
-        retrieve->start();
-    }
-    s->checkForUpdate();
 }
 
 }

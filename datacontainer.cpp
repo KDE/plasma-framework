@@ -16,12 +16,9 @@
  *   Free Software Foundation, Inc.,
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 #include "datacontainer.h"
 #include "private/datacontainer_p.h"
 #include "private/storage_p.h"
-
-#include <QVariant>
 
 #include <kdebug.h>
 
@@ -57,7 +54,15 @@ void DataContainer::setData(const QString &key, const QVariant &value)
     d->dirty = true;
     d->updateTs.start();
 
-    d->isStored = false;
+    //check if storage is enabled and if storage is needed.
+    //If it is not set to be stored,then this is the first
+    //setData() since the last time it was stored. This
+    //gives us only one singleShot timer.
+    if (isStorageEnabled() && !needsToBeStored()) {
+      QTimer::singleShot(180000, this, SLOT(store()));
+    }
+
+    setNeedsToBeStored(true);
 }
 
 void DataContainer::removeAllData()
@@ -141,7 +146,12 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
 
 void DataContainer::setStorageEnable(bool store)
 {
+    QTime time = QTime::currentTime();
+    qsrand((uint)time.msec());
     d->enableStorage = store;
+    if (store) {
+        QTimer::singleShot(qrand() % (2000 + 1) , this, SLOT(retrieve()));
+    }
 }
 
 bool DataContainer::isStorageEnabled() const
@@ -151,12 +161,109 @@ bool DataContainer::isStorageEnabled() const
 
 bool DataContainer::needsToBeStored() const
 {
-    return (d->enableStorage && !d->isStored);
+    return !d->isStored;
 }
 
 void DataContainer::setNeedsToBeStored(bool store)
 {
     d->isStored = !store;
+}
+
+DataEngine* DataContainer::getDataEngine()
+{
+    QObject *o = NULL;
+    DataEngine *de = NULL;
+    o = this;
+    while (de == NULL)
+    {
+        o = dynamic_cast<QObject *> (o->parent());
+        if (o == NULL) {
+            return NULL;
+        }
+        de = dynamic_cast<DataEngine *> (o);
+    }
+    return de;
+}
+
+void DataContainer::store()
+{
+    if (!needsToBeStored()){
+        return;
+    }
+    DataEngine* de = getDataEngine();
+    if (de == NULL) {
+        return;
+    }
+    setNeedsToBeStored(false);
+    Storage* store = new Storage(de->name(), 0);
+    KConfigGroup op = store->operationDescription("save");
+    op.writeEntry("source", objectName());
+    DataEngine::Data dataToStore = data();
+    DataEngine::Data::const_iterator it = dataToStore.constBegin();
+    while (it != dataToStore.constEnd() && dataToStore.constEnd() == data().constEnd()) {
+        QVariant v = it.value();
+        if ((it.value().type() == QVariant::String) || (it.value().type() == QVariant::Int)) {
+            op.writeEntry("key", it.key());
+            op.writeEntry("data", it.value());
+        } else {
+            QByteArray b;
+            QDataStream ds(&b, QIODevice::WriteOnly);
+            ds << it.value();
+            op.writeEntry("key", "base64-" + it.key());
+            op.writeEntry("data", b.toBase64());
+        }
+        ++it;
+        ServiceJob* job = store->startOperationCall(op);
+        job->start();
+    }
+
+    //FIXME: this may result in the service being deleted before the jobs ... resulting in the
+    //jobs potentially being terminated prematurely
+    store->deleteLater();
+}
+
+void DataContainer::retrieve()
+{
+    DataEngine* de = getDataEngine();
+    if (de == NULL) {
+        return;
+    }
+    Storage* store = new Storage(de->name(), 0);
+    KConfigGroup retrieveGroup = store->operationDescription("retrieve");
+    retrieveGroup.writeEntry("source", objectName());
+    ServiceJob* retrieveJob = store->startOperationCall(retrieveGroup);
+    connect(retrieveJob, SIGNAL(result(KJob*)), this,
+            SLOT(populateFromStoredData(KJob*)));
+}
+
+void DataContainer::populateFromStoredData(KJob *job)
+{
+    if (job->error()) {
+        return;
+    }
+    DataEngine::Data dataToInsert;
+    ServiceJob* ret = dynamic_cast<ServiceJob*>(job);
+    QHash<QString, QVariant> h = ret->result().toHash();
+    foreach (QString key, h.keys()) {
+        if (key.startsWith("base64-")) {
+            QByteArray b = QByteArray::fromBase64(h[key].toString().toAscii());
+            QDataStream ds(&b, QIODevice::ReadOnly);
+            QVariant v(ds);
+            key.remove(0, 7);
+            dataToInsert.insert(key, v);
+        } else {
+            dataToInsert.insert(key, h[key]);
+        }
+    }
+    if (!(d->data.isEmpty()))
+    {
+        //Do not fill the source with old stored
+        //data if it is already populated with new data.
+        return;
+    }
+    d->data = dataToInsert;
+    d->dirty = true;
+    checkForUpdate();
 }
 
 void DataContainer::disconnectVisualization(QObject *visualization)

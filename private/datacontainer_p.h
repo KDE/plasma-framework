@@ -22,10 +22,11 @@
 
 #include <QtCore/QTimerEvent>
 #include <QtCore/QTime>
+#include "servicejob.h"
 
 namespace Plasma
 {
-
+class ServiceJob;
 class SignalRelay;
 
 class DataContainerPrivate
@@ -43,6 +44,7 @@ public:
                              bool immediateUpdate);
 
     bool hasUpdates();
+    void populateFromStoredData(KJob *job);
 
     DataEngine::Data data;
     QMap<QObject *, SignalRelay *> relayObjects;

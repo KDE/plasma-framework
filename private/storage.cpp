@@ -18,7 +18,6 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA       //
 // 02110-1301  USA                                                     //
 /////////////////////////////////////////////////////////////////////////
-
 #include "private/storage_p.h"
 #include <kdebug.h>
 
@@ -33,38 +32,25 @@ StorageJob::StorageJob(const QString& destination,
 
 void StorageJob::start()
 {
-    static QStringList* keyList = NULL;
     QMap<QString, QVariant> params = parameters();
     QString source = params["source"].toString();
     KConfig config("plasma-storagerc");
     KConfigGroup destinationGroup(&config, destination());
     KConfigGroup sourceGroup(&destinationGroup, source);
-    KConfigGroup data(&sourceGroup, "Data");
-
+    KConfigGroup dataGroup(&sourceGroup, "Data");
     if (operationName() == "save") {
-    //    KConfigGroup metaData(&sourceGroup, "MetaData");
-    //    metaData.writeEntry("TimeStamp", QDateTime::currentDateTime());
-        data.writeEntry(params["key"].toString(), params["data"]);
-        setResult(true);
+      dataGroup.writeEntry(params["key"].toString(), params["data"]);
+      setResult(true);
+      return;
     } else if (operationName() == "retrieve") {
-        if (keyList == NULL) {
-            kDebug() << "NULL";
-            keyList = new QStringList;
-            *keyList = data.keyList();
+        QHash<QString, QVariant> h;
+        foreach(QString key, dataGroup.keyList())
+        {
+            QVariant v(dataGroup.readEntry(key));
+            h[key] = v;
         }
-        if (keyList->isEmpty()) {
-           setError(1);
-           delete keyList;
-           keyList = NULL;
-        } else {
-           QString key = keyList->first();
-           QHash<QString, QVariant> h;
-           QVariant v(data.readEntry(key));
-           h["key"] = key;
-           h["data"] = v;
-           keyList->pop_front();
-           setResult(h);
-       }
+        setResult(h);
+        return;
     }
     setError(1);
 }
