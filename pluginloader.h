@@ -28,6 +28,7 @@ namespace Plasma {
 class Applet;
 class DataEngine;
 class Service;
+class AbstractRunner;
 
 class PluginLoaderPrivate;
 
@@ -63,9 +64,16 @@ public:
      * Load a DataEngine plugin.
      *
      * @param name the name of the engine
-     * @return the data engine that was loaded, or the NullEngine on failure.
+     * @return the DataEngine that was loaded, or the NullEngine on failure.
      **/
     DataEngine *loadDataEngine(const QString &name);
+
+    /**
+     * Load a Runner plugin
+     *
+     * @return the Runner that was loaded, or 0 on failure.
+     */
+    AbstractRunner *loadRunner(const QString &name);
 
     /**
      * Load a Service plugin.
@@ -153,6 +161,18 @@ protected:
 
     /**
      * A re-implementable method that allows subclasses to override
+     * the default behaviour of loadRunner. If the runner requested is not recognized,
+     * then the implementation should return a NULL pointer. This method is called
+     * by loadRunner prior to attempting to load a DataEgine using the standard Plasma
+     * plugin mechanisms.
+     *
+     * @param name the name of the engine
+     * @return the data engine that was loaded, or the NullEngine on failure.
+     **/
+    virtual AbstractRunner *internalLoadRunner(const QString &name);
+
+    /**
+     * A re-implementable method that allows subclasses to override
      * the default behaviour of loadDataEngine. If the engine requested is not recognized,
      * then the implementation should return a NULL pointer. This method is called
      * by loadDataEngine prior to attempting to load a DataEgine using the standard Plasma
@@ -213,6 +233,13 @@ protected:
     virtual KPluginInfo::List internalRunnerInfo() const;
 
     /**
+     * Returns a list of all known Runner implementations
+     *
+     * @return list of AbstractRunners, or an empty list if none
+     */
+    virtual KPluginInfo::List internalServiceInfo() const;
+
+    /**
      * Standardized mechanism for providing internal Applets by install .desktop files
      * in $APPPDATA/plasma/internal/applets/
      * 
@@ -242,7 +269,7 @@ protected:
 
     /**
      * Standardized mechanism for providing internal Applets by install .desktop files
-     * in $APPPDATA/plasma/internal/dataengines/
+     * in $APPPDATA/plasma/internal/runners/
      * 
      * For applications that do this, internalRunnerInfo can be implemented as a one-liner
      * call to this method.
@@ -250,6 +277,17 @@ protected:
      * @return list of applets
      */
     KPluginInfo::List standardInternalRunnerInfo() const;
+
+    /**
+     * Standardized mechanism for providing internal Applets by install .desktop files
+     * in $APPPDATA/plasma/internal/services/
+     * 
+     * For applications that do this, internalRunnerInfo can be implemented as a one-liner
+     * call to this method.
+     * 
+     * @return list of applets
+     */
+    KPluginInfo::List standardInternalServiceInfo() const;
 
 private:
     PluginLoaderPrivate * const d;
