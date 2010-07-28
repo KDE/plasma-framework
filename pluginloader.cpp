@@ -27,6 +27,7 @@
 #include <kplugininfo.h>
 
 #include "applet.h"
+#include "abstractrunner.h"
 #include "containment.h"
 #include "packagestructure.h"
 #include "popupapplet.h"
@@ -187,6 +188,13 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
     return engine;
 }
 
+AbstractRunner *PluginLoader::loadRunner(const QString &name)
+{
+    // FIXME: RunnerManager is all wrapped around runner loading; that should be sorted out
+    // and the actual plugin loading added here
+    return internalLoadRunner(name);
+}
+
 Service *PluginLoader::loadService(const QString &name, const QVariantList &args, QObject *parent)
 { 
     Service *service = internalLoadService(name, args, parent);
@@ -312,6 +320,12 @@ DataEngine* PluginLoader::internalLoadDataEngine(const QString &name)
     return 0;
 }
 
+AbstractRunner* PluginLoader::internalLoadRunner(const QString &name)
+{
+    Q_UNUSED(name)
+    return 0;
+}
+
 Service* PluginLoader::internalLoadService(const QString &name, const QVariantList &args, QObject *parent)
 { 
     Q_UNUSED(name)
@@ -332,6 +346,11 @@ KPluginInfo::List PluginLoader::internalDataEngineInfo() const
 }
 
 KPluginInfo::List PluginLoader::internalRunnerInfo() const
+{
+    return KPluginInfo::List();
+}
+
+KPluginInfo::List PluginLoader::internalServiceInfo() const
 {
     return KPluginInfo::List();
 }
@@ -371,6 +390,11 @@ KPluginInfo::List PluginLoader::standardInternalDataEngineInfo() const
 KPluginInfo::List PluginLoader::standardInternalRunnerInfo() const
 {
     return standardInternalInfo("runners");
+}
+
+KPluginInfo::List PluginLoader::standardInternalServiceInfo() const
+{
+    return standardInternalInfo("services");
 }
 
 } // Plasma Namespace
