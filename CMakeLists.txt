@@ -236,6 +236,7 @@ endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
 if (PHONON_FOUND)
     message(STATUS "Adding support for Phonon to libplasma")
+    include_directories(${KDE4_PHONON_INCLUDES})
     set(plasma_LIB_SRCS
         ${plasma_LIB_SRCS}
         widgets/videowidget.cpp)
