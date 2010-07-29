@@ -182,8 +182,10 @@ void TextBrowser::dataUpdated(const QString &sourceName, const Plasma::DataEngin
 void TextBrowser::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
     QMenu *popup = nativeWidget()->createStandardContextMenu(event->screenPos());
-    popup->exec(event->screenPos());
-    delete popup;
+    if (popup) {
+        popup->exec(event->screenPos());
+        delete popup;
+    }
 }
 
 void TextBrowser::resizeEvent(QGraphicsSceneResizeEvent *event)
