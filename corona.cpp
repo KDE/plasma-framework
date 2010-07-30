@@ -279,6 +279,7 @@ public:
     KShortcutsDialog shortcutsDlg;
     QMap<Containment::Type, ContainmentActionsPluginsConfig> containmentActionsDefaults;
     QWeakPointer<AbstractDialogManager>dialogManager;
+    QHash<Containment::Type, QString> toolBoxPlugins;
 };
 
 bool CoronaPrivate::s_positioningContainments = false;
@@ -794,6 +795,17 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::Alig
 
 void Corona::loadDefaultLayout()
 {
+}
+
+void Corona::setPreferredToolBoxPlugin(const Containment::Type type, const QString &plugin)
+{
+    d->toolBoxPlugins[type] = plugin;
+    //TODO: react to plugin changes on the fly? still don't see the use case (maybe for laptops that become tablets?)
+}
+
+QString Corona::preferredToolBoxPlugin(const Containment::Type type) const
+{
+    return d->toolBoxPlugins.value(type);
 }
 
 void Corona::dragEnterEvent(QGraphicsSceneDragDropEvent *event)

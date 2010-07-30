@@ -262,6 +262,15 @@ public:
      */
     QList<Plasma::Containment *> importLayout(const KConfigBase &config);
 
+    /**
+     * Returns the name of the preferred plugin to be used as containment toolboxes.
+     * CustomContainments and CustomPanelContainments can still override it as their liking. It's also not guaranteed that the plugin will actually exist.
+     *
+     * @param type the containment type of which we want to know the associated toolbox plugin
+     * @since 4.6
+     */
+    QString preferredToolBoxPlugin(const Containment::Type type) const;
+
 public Q_SLOTS:
     /**
      * Initializes the layout from a config file. This will first clear any existing
@@ -416,6 +425,14 @@ protected:
      * @since 4.5
      */
     void mapAnimation(Animator::Animation from, const QString &to);
+
+    /**
+     * @return The preferred toolbox plugin name for a given containment type.
+     * @param type the containment type of which we want to know the preferred toolbox plugin.
+     * @param plugin the toolbox plugin name
+     * @since 4.6
+     */
+    void setPreferredToolBoxPlugin(const Containment::Type type, const QString &plugin);
 
     //Reimplemented from QGraphicsScene
     void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
