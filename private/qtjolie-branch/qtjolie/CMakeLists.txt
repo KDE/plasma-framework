@@ -20,7 +20,7 @@ set(qtjolie_LIB_SRCS
   serverthread.cpp
 )
 
-kde4_add_library(QtJolie SHARED ${qtjolie_LIB_SRCS})
+kde4_add_library(QtJolie ${LIBRARY_TYPE} ${qtjolie_LIB_SRCS})
 
 target_link_libraries(QtJolie ${QT_QTCORE_LIBRARY} ${QT_QTNETWORK_LIBRARY})
 

@@ -24,7 +24,10 @@
 #include <kdemacros.h>
 
 #ifndef PLASMA_EXPORT
-# if defined(MAKE_PLASMA_LIB)
+# if defined(KDELIBS_STATIC_LIBS)
+   /* No export/import for static libraries */
+#  define PLASMA_EXPORT
+# elif defined(MAKE_PLASMA_LIB)
    /* We are building this library */
 #  define PLASMA_EXPORT KDE_EXPORT
 # else
