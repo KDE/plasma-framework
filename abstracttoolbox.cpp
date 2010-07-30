@@ -21,6 +21,8 @@
 
 #include "containment.h"
 
+#include <kservicetypetrader.h>
+
 namespace Plasma
 {
 
@@ -40,9 +42,40 @@ AbstractToolBox::AbstractToolBox(Containment *parent)
 {
 }
 
+AbstractToolBox::AbstractToolBox(QObject *parent, const QVariantList &args)
+   : QGraphicsWidget(0),
+     d(new AbstractToolBoxPrivate(qobject_cast<Containment *>(parent)))
+{
+    Containment *cont = qobject_cast<Containment *>(parent);
+
+    if (cont) {
+        setParentItem(cont);
+    }
+}
+
 AbstractToolBox::~AbstractToolBox()
 {
     delete d;
+}
+
+AbstractToolBox *AbstractToolBox::load(const QString &name, const QVariantList &args, Plasma::Containment *containment)
+{
+    const QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(name);
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/ToolBox", constraint);
+
+    if (!offers.isEmpty()) {
+        KService::Ptr offer = offers.first();
+
+        KPluginLoader plugin(*offer);
+
+        if (!Plasma::isPluginVersionCompatible(plugin.pluginVersion())) {
+            return 0;
+        }
+
+        return offer->createInstance<AbstractToolBox>(containment, args);
+    } else {
+        return 0;
+    }
 }
 
 Containment *AbstractToolBox::containment() const

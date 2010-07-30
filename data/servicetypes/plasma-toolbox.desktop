@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Plasma/ToolBox
+
+Comment=Plasma toolbox

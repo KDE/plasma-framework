@@ -408,6 +408,7 @@ install(FILES
    data/servicetypes/plasma-packagestructure.desktop
    data/servicetypes/plasma-runner.desktop
    data/servicetypes/plasma-scriptengine.desktop
+   data/servicetypes/plasma-toolbox.desktop
    data/servicetypes/plasma-wallpaper.desktop
    DESTINATION ${SERVICETYPES_INSTALL_DIR})
 

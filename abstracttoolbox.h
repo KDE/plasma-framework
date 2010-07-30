@@ -51,7 +51,18 @@ public:
     Q_ENUMS(ToolType)
 
     explicit AbstractToolBox(Containment *parent);
+    explicit AbstractToolBox(QObject *parent = 0,
+                    const QVariantList &args = QVariantList());
     ~AbstractToolBox();
+
+    /**
+     * Create a new AbstractToolBox, loading the proper plugin
+     * @param name the plugin name
+     * @param args the plugin arguments
+     * @param containment the containment parent of the toolbox
+     * @since 4.6
+     */
+    static AbstractToolBox *load(const QString &name, const QVariantList &args=QVariantList(), Plasma::Containment *containment=0);
 
     /**
      * create a toolbox tool from the given action
@@ -79,5 +90,14 @@ private:
 };
 
 } // Plasma namespace
+
+/**
+ * Register an applet when it is contained in a loadable module
+ */
+#define K_EXPORT_PLASMA_TOOLBOX(libname, classname) \
+K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
+K_EXPORT_PLUGIN(factory("plasma_toolbox_" #libname)) \
+K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
+
 #endif // multiple inclusion guard
 
