@@ -3,3 +3,4 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/ToolBox
 
 Comment=Plasma toolbox
+Comment[x-test]=xxPlasma toolboxxx
