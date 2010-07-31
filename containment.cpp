@@ -48,6 +48,7 @@
 #include "kio/job.h"
 #include "kio/scheduler.h"
 
+#include "abstracttoolbox.h"
 #include "animator.h"
 #include "context.h"
 #include "containmentactions.h"
@@ -64,10 +65,8 @@
 #include "private/applet_p.h"
 #include "private/applethandle_p.h"
 #include "private/containmentactionspluginsconfig_p.h"
-#include "private/desktoptoolbox_p.h"
 #include "private/extenderitemmimedata_p.h"
 #include "private/extenderapplet_p.h"
-#include "private/paneltoolbox_p.h"
 
 #include "plasma/plasma.h"
 #include "animations/animation.h"
@@ -204,7 +203,6 @@ void Containment::init()
             d->actions()->addAction("lock widgets", lockDesktopAction);
         }
     }
-
     if (d->type != PanelContainment && d->type != CustomPanelContainment) {
         if (corona()) {
             //FIXME this is just here because of the darn keyboard shortcut :/
@@ -219,15 +217,15 @@ void Containment::init()
             }
         }
 
-        if (d->type == DesktopContainment && d->toolBox) {
-            d->toolBox.data()->addTool(action("add widgets"));
+        if (d->type == DesktopContainment) {
+            addToolBoxAction(action("add widgets"));
 
             //TODO: do we need some way to allow this be overridden?
             //      it's always available because shells rely on this
             //      to offer their own custom configuration as well
             QAction *configureContainment = action("configure");
             if (configureContainment) {
-                d->toolBox.data()->addTool(configureContainment);
+                addToolBoxAction(configureContainment);
             }
         }
     }
@@ -365,10 +363,9 @@ void Containment::restore(KConfigGroup &group)
     setWallpaper(group.readEntry("wallpaperplugin", defaultWallpaper),
                  group.readEntry("wallpaperpluginmode", defaultWallpaperMode));
 
-    InternalToolBox *internalToolBox = qobject_cast<InternalToolBox *>(d->toolBox.data());
-    if (internalToolBox) {
-        internalToolBox->restore(group);
-    }
+
+    QMetaObject::invokeMethod(d->toolBox.data(), "restore", Q_ARG(KConfigGroup, group));
+
 
     KConfigGroup cfg(&group, "ActionPlugins");
     kDebug() << cfg.keyList();
@@ -420,10 +417,9 @@ void Containment::save(KConfigGroup &g) const
     group.writeEntry("activity", d->context()->currentActivity());
     group.writeEntry("activityId", d->context()->currentActivityId());
 
-    InternalToolBox *toolBox = qobject_cast<InternalToolBox *>(d->toolBox.data());
-    if (toolBox) {
-        toolBox->save(group);
-    }
+
+    QMetaObject::invokeMethod(d->toolBox.data(), "save", Q_ARG(KConfigGroup, group));
+
 
     if (d->wallpaper) {
         group.writeEntry("wallpaperplugin", d->wallpaper->pluginName());
@@ -831,17 +827,7 @@ void Containment::setFormFactor(FormFactor formFactor)
         d->positionPanel(true);
     }
 
-    InternalToolBox *toolBox = qobject_cast<InternalToolBox *>(d->toolBox.data());
-    if (toolBox) {
-        if (d->formFactor == Vertical) {
-            toolBox->setCorner(InternalToolBox::Bottom);
-            //defaults to horizontal
-        } else if (QApplication::layoutDirection() == Qt::RightToLeft) {
-            toolBox->setCorner(InternalToolBox::Left);
-        } else {
-            toolBox->setCorner(InternalToolBox::Right);
-        }
-    }
+    QMetaObject::invokeMethod(d->toolBox.data(), "reposition");
 
     updateConstraints(Plasma::FormFactorConstraint);
 
@@ -1040,10 +1026,10 @@ void Containment::setScreen(int newScreen, int newDesktop)
     Containment *swapScreensWith(0);
     if (d->type == DesktopContainment || d->type >= CustomContainment) {
         // we want to listen to changes in work area if our screen changes
-        if (d->screen < 0 && newScreen > -1) {
-            connect(KWindowSystem::self(), SIGNAL(workAreaChanged()), this, SLOT(positionToolBox()), Qt::UniqueConnection);
-        } else if (newScreen < 0) {
-            disconnect(KWindowSystem::self(), SIGNAL(workAreaChanged()), this, SLOT(positionToolBox()));
+        if (d->toolBox && d->screen < 0 && newScreen > -1) {
+            connect(KWindowSystem::self(), SIGNAL(workAreaChanged()), d->toolBox.data(), SLOT(positionToolBox()), Qt::UniqueConnection);
+        } else if (d->toolBox && newScreen < 0) {
+            disconnect(KWindowSystem::self(), SIGNAL(workAreaChanged()), d->toolBox.data(), SLOT(positionToolBox()));
         }
 
         if (newScreen > -1 && corona()) {
@@ -1797,7 +1783,9 @@ void Containment::enableAction(const QString &name, bool enable)
 void Containment::addToolBoxAction(QAction *action)
 {
     d->createToolBox();
-    d->toolBox.data()->addTool(action);
+    if (d->toolBox) {
+        d->toolBox.data()->addTool(action);
+    }
 }
 
 void Containment::removeToolBoxAction(QAction *action)
@@ -2185,40 +2173,20 @@ void Containment::destroy(bool confirm)
 void ContainmentPrivate::createToolBox()
 {
     if (!toolBox) {
-        if (isPanelContainment()) {
-            PanelToolBox *pt = new PanelToolBox(q);
-            toolBox = pt;
-            pt->setSize(KIconLoader::SizeSmallMedium);
-            pt->setIconSize(QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall));
-            if (q->immutability() != Mutable) {
-                pt->hide();
-            }
-        } else  {
-            DesktopToolBox *dt = new DesktopToolBox(q);
-            toolBox = dt;
-            dt->setSize(KIconLoader::SizeSmallMedium);
-            dt->setIconSize(QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall));
-        }
+        toolBox = Plasma::AbstractToolBox::load(q->corona()->preferredToolBoxPlugin(type), QVariantList(), q);
 
         if (toolBox) {
             QObject::connect(toolBox.data(), SIGNAL(toggled()), q, SIGNAL(toolBoxToggled()));
             QObject::connect(toolBox.data(), SIGNAL(toggled()), q, SLOT(updateToolBoxVisibility()));
-            InternalToolBox *internalToolBox = qobject_cast<InternalToolBox *>(toolBox.data());
-            if (internalToolBox) {
-                internalToolBox->restore();
-                positionToolBox();
-            }
+
+            positionToolBox();
         }
     }
 }
 
 void ContainmentPrivate::positionToolBox()
 {
-    InternalToolBox *internalToolBox = qobject_cast<InternalToolBox *>(toolBox.data());
-    if (internalToolBox) {
-        internalToolBox->updateToolBox();
-        internalToolBox->reposition();
-    }
+    QMetaObject::invokeMethod(toolBox.data(), "reposition");
 }
 
 void ContainmentPrivate::updateToolBoxVisibility()
@@ -2259,7 +2227,7 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
     if (constraints & Plasma::ImmutableConstraint) {
         //update actions
         checkRemoveAction();
-        bool unlocked = q->immutability() == Mutable;
+        const bool unlocked = q->immutability() == Mutable;
         q->setAcceptDrops(unlocked);
         q->enableAction("add widgets", unlocked);
 
@@ -2267,17 +2235,6 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
         foreach (Applet *a, applets) {
             a->setImmutability(q->immutability());
             a->updateConstraints(ImmutableConstraint);
-        }
-
-        if (toolBox) {
-            if (isPanelContainment()) {
-                toolBox.data()->setVisible(unlocked);
-            } else {
-                InternalToolBox *internalToolBox = qobject_cast<InternalToolBox *>(toolBox.data());
-                if (internalToolBox) {
-                    internalToolBox->setIsMovable(unlocked);
-                }
-            }
         }
 
         //clear handles on lock
@@ -2321,8 +2278,8 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
         positionToolBox();
     }
 
-    if (toolBox && constraints & Plasma::StartupCompletedConstraint && type < Containment::CustomContainment) {
-        toolBox.data()->addTool(q->action("remove"));
+    if (constraints & Plasma::StartupCompletedConstraint && type < Containment::CustomContainment) {
+        q->addToolBoxAction(q->action("remove"));
         checkRemoveAction();
     }
 }

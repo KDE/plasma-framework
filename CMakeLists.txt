@@ -119,14 +119,12 @@ set(plasma_LIB_SRCS
     private/dataengineconsumer.cpp
     private/dataengineservice.cpp
     private/denyallauthorization.cpp
-    private/desktoptoolbox.cpp
     private/extenderapplet.cpp
     private/extenderitemmimedata.cpp
     private/focusindicator.cpp
     private/getsource.cpp
     private/nativetabbar.cpp
     private/packages.cpp
-    private/paneltoolbox.cpp
     private/pinpairingauthorization.cpp
     private/pinpairingdialog.cpp
     private/plasmoidservice.cpp
@@ -138,7 +136,6 @@ set(plasma_LIB_SRCS
     private/storage.cpp
     private/style.cpp
     private/trustedonlyauthorization.cpp
-    private/internaltoolbox.cpp
     private/tooltip.cpp
     private/wallpaperrenderthread.cpp
     private/windowpreview.cpp

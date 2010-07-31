@@ -27,6 +27,8 @@
 
 class QAction;
 
+class KConfigGroup;
+
 namespace Plasma
 {
 
@@ -77,9 +79,40 @@ public:
     virtual bool isShowing() const = 0;
     virtual void setShowing(const bool show) = 0;
 
+public Q_SLOTS:
+    //FIXME for KDE5: those should become virtuals
+    /**
+     * Restore the ToolBox settings
+     * It has to be reimplemented in toolboxes that need it
+     * @since 4.6
+     */
+    void restore(const KConfigGroup &group);
+
+    /**
+     * Save the ToolBox settings
+     * It has to be reimplemented in toolboxes that need it
+     * @since 4.6
+     */
+    void save(const KConfigGroup &group);
+
+    /**
+     * Inform the ToolBox it has to reposition itlself
+     * It has to be reimplemented in toolboxes that need it
+     * @since 4.6
+     */
+    void reposition();
+
 Q_SIGNALS:
+    /**
+     * Toolbox opened or closed
+     */
     void toggled();
-    void visibilityChanged(bool);
+
+    /**
+     * Toolbox opened or closed
+     * @param open tells if the toolbox opened or closed
+     */
+    void visibilityChanged(bool open);
 
 protected:
     Containment *containment() const;

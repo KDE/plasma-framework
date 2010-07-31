@@ -81,6 +81,19 @@ Containment *AbstractToolBox::containment() const
     return d->containment;
 }
 
+void AbstractToolBox::restore(const KConfigGroup &group)
+{
+    Q_UNUSED(group)
+}
+
+void AbstractToolBox::save(const KConfigGroup &group)
+{
+    Q_UNUSED(group)
+}
+
+void AbstractToolBox::reposition()
+{}
+
 } // plasma namespace
 
 #include "abstracttoolbox.moc"
