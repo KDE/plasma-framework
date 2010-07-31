@@ -23,6 +23,8 @@
 #include <QGraphicsWidget>
 #include <QGraphicsItem>
 
+#include <kplugininfo.h>
+
 #include "plasma/plasma_export.h"
 
 class QAction;
@@ -65,6 +67,20 @@ public:
      * @since 4.6
      */
     static AbstractToolBox *load(const QString &name, const QVariantList &args=QVariantList(), Plasma::Containment *containment=0);
+
+    /**
+     * Returns a list of all installed ToolBox plugins
+     *
+     * @param parentApp the application to filter applets on. Uses the
+     *                  X-KDE-ParentApp entry (if any) in the plugin info.
+     *                  The default value of QString() will result in a
+     *                  list containing only applets not specifically
+     *                  registered to an application.
+     *
+     * @since 4.6
+     */
+    static KPluginInfo::List listToolBoxInfo(const QString
+ &parentApp = QString());
 
     /**
      * create a toolbox tool from the given action

@@ -76,6 +76,26 @@ AbstractToolBox *AbstractToolBox::load(const QString &name, const QVariantList &
     }
 }
 
+KPluginInfo::List AbstractToolBox::listToolBoxInfo(const QString
+ &parentApp)
+{
+    KPluginInfo::List list;
+
+    if (parentApp.isEmpty() || parentApp == KGlobal::mainComponent().componentName()) {
+        list = KPluginInfo::List();
+    }
+
+    QString constraint;
+    if (parentApp.isEmpty()) {
+        constraint.append("not exist [X-KDE-ParentApp]");
+    } else {
+        constraint.append("[X-KDE-ParentApp] == '").append(parentApp).append("'");
+    }
+
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/ToolBox", constraint);
+    return list + KPluginInfo::fromServices(offers);
+}
+
 Containment *AbstractToolBox::containment() const
 {
     return d->containment;
