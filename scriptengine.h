@@ -87,6 +87,8 @@ private Q_SLOTS:
 private:
     Plasma::Corona *m_corona;
     QScriptValue m_scriptSelf;
+
+    static const int PLASMA_DESKTOP_SCRIPTING_VERSION = 3;
 };
 
 }

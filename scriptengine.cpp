@@ -342,7 +342,7 @@ void ScriptEngine::setupEngine()
     m_scriptSelf.setProperty("loadTemplate", newFunction(ScriptEngine::loadTemplate));
     m_scriptSelf.setProperty("applicationVersion", KGlobal::mainComponent().aboutData()->version(),
                              QScriptValue::PropertyGetter | QScriptValue::ReadOnly | QScriptValue::Undeletable);
-    m_scriptSelf.setProperty("scriptingVersion", newVariant(2),
+    m_scriptSelf.setProperty("scriptingVersion", newVariant(PLASMA_DESKTOP_SCRIPTING_VERSION),
                              QScriptValue::PropertyGetter | QScriptValue::ReadOnly | QScriptValue::Undeletable);
     m_scriptSelf.setProperty("platformVersion", KDE::versionString(),
                              QScriptValue::PropertyGetter | QScriptValue::ReadOnly | QScriptValue::Undeletable);
