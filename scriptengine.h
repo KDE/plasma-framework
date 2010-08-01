@@ -75,6 +75,7 @@ private:
     static QScriptValue panels(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue fileExists(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue loadTemplate(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue theme(QScriptContext *context, QScriptEngine *engine);
 
     // helpers
     static QScriptValue createContainment(const QString &type, const QString &defautPlugin,

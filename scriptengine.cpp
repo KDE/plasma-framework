@@ -32,6 +32,7 @@
 #include <Plasma/Containment>
 #include <Plasma/Corona>
 #include <Plasma/Package>
+#include <Plasma/Theme>
 
 #include "appinterface.h"
 #include "containment.h"
@@ -58,6 +59,18 @@ ScriptEngine::ScriptEngine(Plasma::Corona *corona, QObject *parent)
 
 ScriptEngine::~ScriptEngine()
 {
+}
+
+QScriptValue ScriptEngine::theme(QScriptContext *context, QScriptEngine *engine)
+{
+    Q_UNUSED(engine)
+
+    if (context->argumentCount() > 0) {
+        const QString newTheme = context->argument(0).toString();
+        Plasma::Theme::defaultTheme()->setThemeName(newTheme);
+    }
+
+    return Plasma::Theme::defaultTheme()->themeName();
 }
 
 QScriptValue ScriptEngine::activityById(QScriptContext *context, QScriptEngine *engine)
@@ -327,9 +340,14 @@ void ScriptEngine::setupEngine()
     m_scriptSelf.setProperty("panels", newFunction(ScriptEngine::panels));
     m_scriptSelf.setProperty("fileExists", newFunction(ScriptEngine::fileExists));
     m_scriptSelf.setProperty("loadTemplate", newFunction(ScriptEngine::loadTemplate));
-    m_scriptSelf.setProperty("applicationVersion", KGlobal::mainComponent().aboutData()->version(), QScriptValue::ReadOnly | QScriptValue::Undeletable);
-    m_scriptSelf.setProperty("scriptingVersion", newVariant(2), QScriptValue::ReadOnly | QScriptValue::Undeletable);
-    m_scriptSelf.setProperty("platformVersion", KDE::versionString(), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+    m_scriptSelf.setProperty("applicationVersion", KGlobal::mainComponent().aboutData()->version(),
+                             QScriptValue::PropertyGetter | QScriptValue::ReadOnly | QScriptValue::Undeletable);
+    m_scriptSelf.setProperty("scriptingVersion", newVariant(2),
+                             QScriptValue::PropertyGetter | QScriptValue::ReadOnly | QScriptValue::Undeletable);
+    m_scriptSelf.setProperty("platformVersion", KDE::versionString(),
+                             QScriptValue::PropertyGetter | QScriptValue::ReadOnly | QScriptValue::Undeletable);
+    m_scriptSelf.setProperty("theme", newFunction(ScriptEngine::theme),
+                             QScriptValue::PropertyGetter | QScriptValue::PropertySetter | QScriptValue::Undeletable);
 
     setGlobalObject(m_scriptSelf);
 }
