@@ -234,7 +234,7 @@ QStringList JavaScriptDataEngine::sources() const
 {
     QScriptValueList args;
     QScriptValue rv = callFunction("sources", args);
-    if (rv.isValid() && rv.isVariant()) {
+    if (rv.isValid() && (rv.isVariant() || rv.isArray())) {
         return rv.toVariant().toStringList();
     }
 
