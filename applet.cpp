@@ -117,9 +117,18 @@
 namespace Plasma
 {
 
+Applet::Applet(const KPluginInfo &info, QGraphicsItem *parent, uint appletId)
+    :  QGraphicsWidget(parent),
+       d(new AppletPrivate(KService::Ptr(), &info, appletId, this))
+{
+    // WARNING: do not access config() OR globalConfig() in this method!
+    //          that requires a scene, which is not available at this point
+    d->init();
+}
+
 Applet::Applet(QGraphicsItem *parent, const QString &serviceID, uint appletId)
     :  QGraphicsWidget(parent),
-       d(new AppletPrivate(KService::serviceByStorageId(serviceID), appletId, this))
+       d(new AppletPrivate(KService::serviceByStorageId(serviceID), 0, appletId, this))
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
@@ -131,7 +140,7 @@ Applet::Applet(QGraphicsItem *parent,
                uint appletId,
                const QVariantList &args)
     :  QGraphicsWidget(parent),
-       d(new AppletPrivate(KService::serviceByStorageId(serviceID), appletId, this))
+       d(new AppletPrivate(KService::serviceByStorageId(serviceID), 0, appletId, this))
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
@@ -153,7 +162,7 @@ Applet::Applet(QGraphicsItem *parent,
 Applet::Applet(QObject *parentObject, const QVariantList &args)
     :  QGraphicsWidget(0),
        d(new AppletPrivate(
-             KService::serviceByStorageId(args.count() > 0 ? args[0].toString() : QString()),
+             KService::serviceByStorageId(args.count() > 0 ? args[0].toString() : QString()), 0,
              args.count() > 1 ? args[1].toInt() : 0, this))
 {
     // now remove those first two items since those are managed by Applet and subclasses shouldn't
@@ -182,7 +191,7 @@ Applet::Applet(QObject *parentObject, const QVariantList &args)
 
 Applet::Applet(const QString &packagePath, uint appletId, const QVariantList &args)
     : QGraphicsWidget(0),
-      d(new AppletPrivate(KService::Ptr(new KService(packagePath + "/metadata.desktop")), appletId, this))
+      d(new AppletPrivate(KService::Ptr(new KService(packagePath + "/metadata.desktop")), 0, appletId, this))
 {
     Q_UNUSED(args) // FIXME?
     d->init(packagePath);
@@ -2468,7 +2477,7 @@ bool Applet::isContainment() const
 
 // PRIVATE CLASS IMPLEMENTATION
 
-AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet)
+AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int uniqueID, Applet *applet)
         : appletId(uniqueID),
           q(applet),
           service(0),
@@ -2476,7 +2485,7 @@ AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet
           backgroundHints(Applet::NoBackground),
           aspectRatioMode(Plasma::KeepAspectRatio),
           immutability(Mutable),
-          appletDescription(service),
+          appletDescription(info ? *info : KPluginInfo(service)),
           background(0),
           mainConfig(0),
           pendingConstraints(NoConstraint),

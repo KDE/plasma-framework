@@ -96,7 +96,7 @@ protected Q_SLOTS:
 class AppletPrivate : public DataEngineConsumer
 {
 public:
-    AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet);
+    AppletPrivate(KService::Ptr service, const KPluginInfo *info, int uniqueID, Applet *applet);
     ~AppletPrivate();
 
     void init(const QString &packagePath = QString());

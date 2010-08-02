@@ -613,6 +613,15 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
 
         /**
          * @param parent the QGraphicsItem this applet is parented to
+         * @param info the plugin information object for this Applet
+         * @param appletId a unique id used to differentiate between multiple
+         *      instances of the same Applet type
+         * @since 4.6
+         */
+        explicit Applet(const KPluginInfo &info, QGraphicsItem *parent = 0, uint appletId = 0);
+
+        /**
+         * @param parent the QGraphicsItem this applet is parented to
          * @param serviceId the name of the .desktop file containing the
          *      information about the widget
          * @param appletId a unique id used to differentiate between multiple
