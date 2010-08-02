@@ -656,6 +656,11 @@ void Dialog::setGraphicsWidget(QGraphicsWidget *widget)
     d->graphicsWidgetPtr = widget;
 
     if (widget) {
+        Plasma::Corona *c = qobject_cast<Plasma::Corona *>(widget->scene());
+        if (c) {
+            c->addOffscreenWidget(widget);
+        }
+
         if (!layout()) {
             QVBoxLayout *lay = new QVBoxLayout(this);
             lay->setMargin(0);
