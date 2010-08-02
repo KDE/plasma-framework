@@ -190,13 +190,19 @@ void DataContainer::store()
     if (!needsToBeStored()){
         return;
     }
+
     DataEngine* de = getDataEngine();
     if (de == NULL) {
         return;
     }
+
     setNeedsToBeStored(false);
-    Storage* store = new Storage(de->name(), 0);
-    KConfigGroup op = store->operationDescription("save");
+
+    if (d->store == NULL) {
+        d->store = new Storage(de->name(), 0);
+    }
+
+    KConfigGroup op = d->store->operationDescription("save");
     op.writeEntry("source", objectName());
     DataEngine::Data dataToStore = data();
     DataEngine::Data::const_iterator it = dataToStore.constBegin();
@@ -213,13 +219,21 @@ void DataContainer::store()
             op.writeEntry("data", b.toBase64());
         }
         ++it;
-        ServiceJob* job = store->startOperationCall(op);
-        job->start();
+        if (d->store == NULL) {
+            d->store = new Storage(de->name(), 0);
+        }
+        ServiceJob* job = d->store->startOperationCall(op);
+        d->storeCount++;
+        connect(job, "finished(KJob*)", this, "storeJobFinished(KJob*)");
     }
+}
 
-    //FIXME: this may result in the service being deleted before the jobs ... resulting in the
-    //jobs potentially being terminated prematurely
-    store->deleteLater();
+void DataContainer::storeJobFinished(KJob* job)
+{
+    d->storeCount--;
+    if (d->storeCount == 0) {
+        d->store->deleteLater();
+    }
 }
 
 void DataContainer::retrieve()

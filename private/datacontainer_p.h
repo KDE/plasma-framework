@@ -23,6 +23,7 @@
 #include <QtCore/QTimerEvent>
 #include <QtCore/QTime>
 #include "servicejob.h"
+#include "storage_p.h"
 
 namespace Plasma
 {
@@ -36,7 +37,9 @@ public:
         : dirty(false),
           cached(false),
           enableStorage(false),
-          isStored(true)
+          isStored(true),
+          store(NULL),
+          storeCount(0)
     {}
 
     SignalRelay *signalRelay(const DataContainer *dc, QObject *visualization,
@@ -50,10 +53,12 @@ public:
     QMap<QObject *, SignalRelay *> relayObjects;
     QMap<uint, SignalRelay *> relays;
     QTime updateTs;
+    Storage* store;
     bool dirty : 1;
     bool cached : 1;
     bool enableStorage : 1;
     bool isStored : 1;
+    int  storeCount;
 };
 
 class SignalRelay : public QObject
