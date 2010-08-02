@@ -2538,12 +2538,33 @@ void AppletPrivate::init(const QString &packagePath)
     // but it doesn't actually work anyways =/
     q->setLayoutDirection(qApp->layoutDirection());
 
+    //set a default size before any saved settings are read
+    QSize size(200, 200);
+    q->setBackgroundHints(Applet::DefaultBackground);
+    q->setHasConfigurationInterface(true); //FIXME why not default it to true in the constructor?
+
+    QAction *closeApplet = actions->action("remove");
+    if (closeApplet) {
+        closeApplet->setText(i18nc("%1 is the name of the applet", "Remove this %1", q->name()));
+    }
+
+    QAction *configAction = actions->action("configure");
+    if (configAction) {
+        configAction->setText(i18nc("%1 is the name of the applet", "%1 Settings", q->name()));
+    }
+
+    QObject::connect(q, SIGNAL(activate()), q, SLOT(setFocus()));
     if (!appletDescription.isValid()) {
         kDebug() << "Check your constructor! "
                  << "You probably want to be passing in a Service::Ptr "
                  << "or a QVariantList with a valid storageid as arg[0].";
+        q->resize(size);
         return;
     }
+
+    size = appletDescription.property("X-Plasma-DefaultSize").toSize();
+    //kDebug() << "size" << size;
+    q->resize(size);
 
     QString api = appletDescription.property("X-Plasma-API").toString();
 
@@ -2599,29 +2620,6 @@ void AppletPrivate::init(const QString &packagePath)
             }
         }
     }
-
-    //set a default size before any saved settings are read
-    QSize size = appletDescription.property("X-Plasma-DefaultSize").toSize();
-    if (size.isEmpty()) {
-        size = QSize(200, 200);
-    }
-    //kDebug() << "size" << size;
-    q->resize(size);
-
-    q->setBackgroundHints(Applet::DefaultBackground);
-    q->setHasConfigurationInterface(true); //FIXME why not default it to true in the constructor?
-
-    QAction *closeApplet = actions->action("remove");
-    if (closeApplet) {
-        closeApplet->setText(i18nc("%1 is the name of the applet", "Remove this %1", q->name()));
-    }
-
-    QAction *configAction = actions->action("configure");
-    if (configAction) {
-        configAction->setText(i18nc("%1 is the name of the applet", "%1 Settings", q->name()));
-    }
-
-    QObject::connect(q, SIGNAL(activate()), q, SLOT(setFocus()));
 }
 
 // put all setup routines for script here. at this point we can assume that
