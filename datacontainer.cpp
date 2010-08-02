@@ -224,7 +224,7 @@ void DataContainer::store()
         }
         ServiceJob* job = d->store->startOperationCall(op);
         d->storeCount++;
-        connect(job, "finished(KJob*)", this, "storeJobFinished(KJob*)");
+        connect(job, SIGNAL(finished(KJob*)), this, SLOT(storeJobFinished(KJob*)));
     }
 }
 
