@@ -77,6 +77,10 @@ class PLASMA_EXPORT Dialog : public QWidget
          * Sets a QGraphicsWidget to be shown as the content in this dialog.
          * The dialog will then set up a QGraphicsView and coordinate geometry with
          * the widget automatically.
+         * The widget must be in the scene and not child of a movable
+         * widget such as an Applet. It is advised to call
+         * Corona::addOffScreenWidget(widget) prior to call this function that
+         * will take care of this issue.
          *
          * @arg widget the QGraphicsWidget to display in this dialog
          */
