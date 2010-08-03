@@ -90,6 +90,7 @@ Name[x-test]=xxTestxx
 Name[zh_CN]=测试
 Name[zh_TW]=測試
 Comment=A dummy plugin for testing
+Comment[ar]=محلق فارغ للاختبار
 Comment[ca]=Un connector fals per a provar
 Comment[ca@valencia]=Un connector fals per a provar
 Comment[cs]=Prázdný modul pro testování
