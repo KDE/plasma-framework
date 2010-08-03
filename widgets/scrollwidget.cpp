@@ -108,12 +108,14 @@ public:
 
     void commonConstructor()
     {
+        q->setFlag(QGraphicsItem::ItemHasNoContents);
         q->setFocusPolicy(Qt::StrongFocus);
         q->setFiltersChildEvents(true);
         layout = new QGraphicsGridLayout(q);
         q->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         layout->setContentsMargins(1, 1, 1, 1);
         scrollingWidget = new QGraphicsWidget(q);
+        scrollingWidget->setFlag(QGraphicsItem::ItemHasNoContents);
         scrollingWidget->installEventFilter(q);
         layout->addItem(scrollingWidget, 0, 0);
         borderSvg = new Plasma::Svg(q);
