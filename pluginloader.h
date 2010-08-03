@@ -32,6 +32,10 @@ class AbstractRunner;
 
 class PluginLoaderPrivate;
 
+//TODO:
+// * add support for ContainmentActions plugins
+// * add KPluginInfo listing support for Containments (already loaded via the applet loading code)
+
 /**
  * This is an abstract base class which defines an interface to which Plasma's 
  * Applet Loading logic can communicate with a parent application. The plugin loader
@@ -294,5 +298,7 @@ private:
 };
 
 }
+
+Q_DECLARE_METATYPE(Plasma::PluginLoader*)
 
 #endif 
