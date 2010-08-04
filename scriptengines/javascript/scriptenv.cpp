@@ -25,17 +25,24 @@
 #include <QMetaEnum>
 
 #include <KDebug>
+#include <KDesktopFile>
 #include <KIO/Job>
 #include <KLocale>
 #include <KMimeType>
+#include <KPluginInfo>
 #include <KService>
+#include <KServiceTypeTrader>
 #include <KShell>
 #include <KStandardDirs>
 #include <KRun>
 
+#include <Plasma/Package>
+
 #ifdef USEGUI
 #include "simplebindings/filedialogproxy.h"
 #endif
+
+#include "javascriptaddonpackagestructure.h"
 
 Q_DECLARE_METATYPE(ScriptEnv*)
 
@@ -49,6 +56,8 @@ ScriptEnv::ScriptEnv(QObject *parent, QScriptEngine *engine)
     // Add utility functions
     global.setProperty("print", m_engine->newFunction(ScriptEnv::print));
     global.setProperty("debug", m_engine->newFunction(ScriptEnv::debug));
+    global.setProperty("listAddons", m_engine->newFunction(ScriptEnv::listAddons));
+    global.setProperty("loadAddon", m_engine->newFunction(ScriptEnv::loadAddon));
 
     // Add an accessor so we can find the scriptenv given only the engine. The
     // property is hidden from scripts.
@@ -346,6 +355,155 @@ QScriptValue ScriptEnv::print(QScriptContext *context, QScriptEngine *engine)
     return engine->undefinedValue();
 }
 
-#ifndef USEGUI
+QScriptValue ScriptEnv::listAddons(QScriptContext *context, QScriptEngine *engine)
+{
+    if (context->argumentCount() < 1) {
+        return context->throwError(i18n("listAddons takes one argument: addon type"));
+    }
+
+    QStringList addons;
+    const QString type = context->argument(0).toString();
+
+    if (type.isEmpty()) {
+        return qScriptValueFromValue(engine, addons);
+    }
+
+    const QString constraint = QString("[X-KDE-PluginInfo-Category] == '%1'").arg(type);
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/JavascriptAddon", constraint);
+
+    foreach (KService::Ptr offer, offers) {
+        KPluginInfo info(offer);
+        addons << info.pluginName();
+    }
+
+    return qScriptValueFromValue(engine, addons);
+}
+
+QScriptValue ScriptEnv::loadAddon(QScriptContext *context, QScriptEngine *engine)
+{
+    if (context->argumentCount() < 2)  {
+        return context->throwError(i18n("listAddons takes two arguments: addon type and addon name to load"));
+    }
+
+    const QString type = context->argument(0).toString();
+    const QString plugin = context->argument(1).toString();
+
+    if (type.isEmpty() || plugin.isEmpty()) { 
+        return false;
+    }
+
+    const QString constraint = QString("[X-KDE-PluginInfo-Category] == '%1' and [X-KDE-PluginInfo-Name] == '%2'")
+                                      .arg(type, plugin);
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/JavascriptAddon", constraint);
+
+    if (offers.isEmpty()) {
+        return false;
+    }
+
+    Plasma::PackageStructure::Ptr structure(new JavascriptAddonPackageStructure);
+    const QString subPath = structure->defaultPackageRoot() + '/' + plugin + '/';
+    const QString path = KStandardDirs::locate("data", subPath);
+    Plasma::Package package(path, structure);
+    //FIXME include() will not work from within addons; needs a solution
+
+    QFile file(package.filePath("mainscript"));
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        kError() << "failed to open script file" << path;
+        return false;
+    }
+
+    QTextStream buffer(&file);
+    QString code(buffer.readAll());
+
+    QScriptContext *innerContext = engine->pushContext();
+    innerContext->activationObject().setProperty("registerAddon", engine->newFunction(ScriptEnv::registerAddon));
+    engine->evaluate(code, file.fileName());
+
+    engine->popContext();
+    return engine->undefinedValue();
+}
+
+QScriptValue ScriptEnv::registerAddon(QScriptContext *context, QScriptEngine *engine)
+{
+    if (context->argumentCount() > 0) {
+        QScriptValue func = context->argument(0);
+        if (func.isFunction()) {
+            QScriptValue obj = func.construct();
+            QScriptValueList args;
+            args << obj;
+            ScriptEnv *env = ScriptEnv::findScriptEnv(engine);
+            if (env) {
+                env->callEventListeners("addonCreated", args);
+            }
+        }
+    }
+
+    return engine->undefinedValue();
+}
+
+void ScriptEnv::callFunction(QScriptValue &func, const QScriptValueList &args, const QScriptValue &activator)
+{
+    if (!func.isFunction()) {
+        return;
+    }
+
+    QScriptContext *ctx = m_engine->pushContext();
+    ctx->setActivationObject(activator);
+    func.call(activator, args);
+    m_engine->popContext();
+
+    if (m_engine->hasUncaughtException()) {
+        emit reportError(this, false);
+        m_engine->clearExceptions();
+    }
+}
+
+bool ScriptEnv::hasEventListeners(const QString &event) const
+{
+    return m_eventListeners.contains(event);
+}
+
+bool ScriptEnv::callEventListeners(const QString &event, const QScriptValueList &args)
+{
+    if (!m_eventListeners.contains(event)) {
+        return false;
+    }
+
+    QScriptValueList funcs = m_eventListeners.value(event);
+    QMutableListIterator<QScriptValue> it(funcs);
+    while (it.hasNext()) {
+        callFunction(it.next(), args);
+    }
+
+    return true;
+}
+
+void ScriptEnv::addEventListener(const QString &event, const QScriptValue &func)
+{
+    if (func.isFunction()) {
+        m_eventListeners[event.toLower()].append(func);
+    }
+}
+
+void ScriptEnv::removeEventListener(const QString &event, const QScriptValue &func)
+{
+    if (func.isFunction()) {
+        QScriptValueList funcs = m_eventListeners.value("mousepress");
+        QMutableListIterator<QScriptValue> it(funcs);//m_eventListeners.value("mousepress"));
+        while (it.hasNext()) {
+            if (it.next().equals(func)) {
+                it.remove();
+            }
+        }
+
+        if (funcs.isEmpty()) {
+            m_eventListeners.remove(event.toLower());
+        } else {
+            m_eventListeners.insert(event.toLower(), funcs);
+        }
+    }
+}
+
 #include "scriptenv.moc"
-#endif
+#include "javascriptaddonpackagestructure.moc"
+

@@ -54,6 +54,13 @@ public:
 
     bool checkForErrors(bool fatal);
 
+    void addEventListener(const QString &event, const QScriptValue &func);
+    void removeEventListener(const QString &event, const QScriptValue &func);
+
+    void callFunction(QScriptValue &func, const QScriptValueList &args = QScriptValueList(), const QScriptValue &activator = QScriptValue());
+    bool callEventListeners(const QString &event, const QScriptValueList &args = QScriptValueList());
+    bool hasEventListeners(const QString &event) const;
+
 Q_SIGNALS:
     void reportError(ScriptEnv *engine, bool fatal);
 
@@ -67,7 +74,9 @@ private:
     static QScriptValue runCommand(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue openUrl(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue getUrl(QScriptContext *context, QScriptEngine *engine);
-
+    static QScriptValue listAddons(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue loadAddon(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue registerAddon(QScriptContext *context, QScriptEngine *engine);
 
 private Q_SLOTS:
     void signalException();
@@ -76,6 +85,7 @@ private:
     QSet<QString> m_extensions;
     AllowedUrls m_allowedUrls;
     QScriptEngine *m_engine;
+    QHash<QString, QScriptValueList> m_eventListeners;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ScriptEnv::AllowedUrls)

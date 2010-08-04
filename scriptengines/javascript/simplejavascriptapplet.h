@@ -55,10 +55,10 @@ public:
     bool include(const QString &path);
     QSet<QString> loadedExtensions() const;
     QScriptValue variantToScriptValue(QVariant var);
-
-    bool eventFilter(QObject *watched, QEvent *event);
     void addEventListener(const QString &event, const QScriptValue &func);
     void removeEventListener(const QString &event, const QScriptValue &func);
+
+    bool eventFilter(QObject *watched, QEvent *event);
 
     static QString findImageFile(QScriptEngine *engine, const QString &file);
 
@@ -79,8 +79,6 @@ private:
     bool importBuiltinExtension(const QString &extension);
     void setupObjects();
     void callPlasmoidFunction(const QString &functionName, const QScriptValueList &args = QScriptValueList());
-    void callFunction(QScriptValue &func, const QScriptValueList &args = QScriptValueList(), const QScriptValue &activator = QScriptValue());
-    void callEventListeners(const QString &event, const QScriptValueList &args = QScriptValueList());
     QScriptValue createKeyEventObject(QKeyEvent *event);
     QScriptValue createHoverEventObject(QGraphicsSceneHoverEvent *event);
     QScriptValue createMouseEventObject(QGraphicsSceneMouseEvent *event);
@@ -120,7 +118,6 @@ private:
     QScriptValue m_self;
     QVariantList m_args;
     AppletInterface *m_interface;
-    QHash<QString, QScriptValueList> m_eventListeners;
     friend class AppletInterface;
 };
 
