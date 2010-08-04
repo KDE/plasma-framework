@@ -233,6 +233,7 @@ void DataContainer::storeJobFinished(KJob* job)
     d->storeCount--;
     if (d->storeCount == 0) {
         d->store->deleteLater();
+        d->store = 0;
     }
 }
 
