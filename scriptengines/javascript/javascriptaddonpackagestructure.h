@@ -30,8 +30,8 @@ public:
         : Plasma::PackageStructure(parent)
     {
         setServicePrefix("plasma-layout-template");
-        setDefaultPackageRoot("plasma/layout-templates");
-        addFileDefinition("mainscript", "layout.js", i18n("Main Script File"));
+        setDefaultPackageRoot("plasma/javascript-addons/");
+        addFileDefinition("mainscript", "main.js", i18n("Main Script File"));
         setRequired("mainscript", true);
     }
 
