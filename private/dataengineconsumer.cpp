@@ -94,7 +94,12 @@ DataEngineConsumer::~DataEngineConsumer()
 DataEngine *DataEngineConsumer::dataEngine(const QString &name)
 {
     if (m_loadedEngines.contains(name)) {
-        return DataEngineManager::self()->engine(name);
+        DataEngine *engine = DataEngineManager::self()->engine(name);
+        if (engine->isValid()) {
+            return engine;
+        } else {
+            m_loadedEngines.remove(name);
+        }
     }
 
     DataEngine *engine = DataEngineManager::self()->loadEngine(name);
