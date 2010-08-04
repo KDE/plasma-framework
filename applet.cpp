@@ -667,9 +667,7 @@ DataEngine *Applet::dataEngine(const QString &name) const
 {
     if (!d->remoteLocation.isEmpty()) {
         return d->remoteDataEngine(KUrl(d->remoteLocation), name);
-    }
-
-    if (!package() || package()->metadata().remoteLocation().isEmpty()) {
+    } else if (!package() || package()->metadata().remoteLocation().isEmpty()) {
         return d->dataEngine(name);
     } else {
         return d->remoteDataEngine(KUrl(package()->metadata().remoteLocation()), name);
