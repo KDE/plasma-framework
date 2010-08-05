@@ -394,7 +394,7 @@ QScriptValue ScriptEnv::listAddons(QScriptContext *context, QScriptEngine *engin
 QScriptValue ScriptEnv::loadAddon(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() < 2)  {
-        return context->throwError(i18n("listAddons takes two arguments: addon type and addon name to load"));
+        return context->throwError(i18n("loadAddon takes two arguments: addon type and addon name to load"));
     }
 
     const QString type = context->argument(0).toString();
