@@ -36,7 +36,7 @@ JavaScriptDataEngine::JavaScriptDataEngine(QObject *parent, const QVariantList &
     m_qscriptEngine = new QScriptEngine(this);
     m_env = new ScriptEnv(this, m_qscriptEngine);
 
-    connect(m_qscriptEngine, SIGNAL(reportError(ScriptEnv*,bool)), this, SLOT(reportError(ScriptEnv*,bool)));
+    connect(m_env, SIGNAL(reportError(ScriptEnv*,bool)), this, SLOT(reportError(ScriptEnv*,bool)));
 }
 
 bool JavaScriptDataEngine::init()
