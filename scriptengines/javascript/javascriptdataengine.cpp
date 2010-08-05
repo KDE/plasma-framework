@@ -202,25 +202,10 @@ QScriptValue JavaScriptDataEngine::jsRemoveAllSources(QScriptContext *context, Q
     return context->throwError(error);
 }
 
-QScriptValue JavaScriptDataEngine::callFunction(const QString &functionName, const QScriptValueList &args) const
+QScriptValue JavaScriptDataEngine::callFunction(const QString &functionName, const QScriptValueList &args)
 {
-    //kDebug() << "calling" << functionName;
-    QScriptValue fun = m_iface.property(functionName);
-    if (fun.isFunction()) {
-        QScriptContext *ctx = m_qscriptEngine->pushContext();
-        ctx->setActivationObject(m_iface);
-        QScriptValue rv = fun.call(m_iface, args);
-        m_qscriptEngine->popContext();
-
-        if (m_qscriptEngine->hasUncaughtException()) {
-            reportError(m_env, false);
-            m_qscriptEngine->clearExceptions();
-        } else {
-            return rv;
-        }
-    }
-
-    return QScriptValue();
+    QScriptValue func = m_iface.property(functionName);
+    return m_env->callFunction(func, args, m_iface);
 }
 
 void JavaScriptDataEngine::reportError(ScriptEnv *env, bool fatal) const
@@ -234,8 +219,9 @@ void JavaScriptDataEngine::reportError(ScriptEnv *env, bool fatal) const
 
 QStringList JavaScriptDataEngine::sources() const
 {
+    JavaScriptDataEngine *unconst = const_cast<JavaScriptDataEngine *>(this);
     QScriptValueList args;
-    QScriptValue rv = callFunction("sources", args);
+    QScriptValue rv = unconst->callFunction("sources", args);
     if (rv.isValid() && (rv.isVariant() || rv.isArray())) {
         return rv.toVariant().toStringList();
     }
@@ -247,6 +233,7 @@ bool JavaScriptDataEngine::sourceRequestEvent(const QString &name)
 {
     QScriptValueList args;
     args << name;
+    m_env->callEventListeners("sourceRequestEvent", args);
     QScriptValue rv = callFunction("sourceRequestEvent", args);
     if (rv.isValid() && rv.isBool()) {
         return rv.toBool();
@@ -259,6 +246,7 @@ bool JavaScriptDataEngine::updateSourceEvent(const QString &source)
 {
     QScriptValueList args;
     args << source;
+    m_env->callEventListeners("updateSourcEvent", args);
     QScriptValue rv = callFunction("updateSourceEvent", args);
     if (rv.isValid() && rv.isBool()) {
         return rv.toBool();
@@ -271,7 +259,7 @@ Plasma::Service *JavaScriptDataEngine::serviceForSource(const QString &source)
 {
     QScriptValueList args;
     args << source;
-    QScriptValue rv = callFunction("updateSourceEvent", args);
+    QScriptValue rv = callFunction("serviceForSource", args);
     if (rv.isValid() && rv.isQObject()) {
         return qobject_cast<Plasma::Service *>(rv.toQObject());
     }

@@ -64,7 +64,7 @@ private:
     static QScriptValue jsRemoveData(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue jsRemoveAllSources(QScriptContext *context, QScriptEngine *engine);
 
-    QScriptValue callFunction(const QString &functionName, const QScriptValueList &args) const;
+    QScriptValue callFunction(const QString &functionName, const QScriptValueList &args);
 
     QScriptEngine *m_qscriptEngine;
     ScriptEnv *m_env;
