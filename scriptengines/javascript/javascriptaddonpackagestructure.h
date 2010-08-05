@@ -31,7 +31,7 @@ public:
     {
         setServicePrefix("plasma-layout-template");
         setDefaultPackageRoot("plasma/javascript-addons/");
-        addFileDefinition("mainscript", "main.js", i18n("Main Script File"));
+        addFileDefinition("mainscript", "code/main.js", i18n("Main Script File"));
         setRequired("mainscript", true);
     }
 
