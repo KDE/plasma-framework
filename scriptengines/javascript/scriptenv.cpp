@@ -502,21 +502,24 @@ QScriptValue ScriptEnv::removeEventListener(QScriptContext *context, QScriptEngi
     return env->removeEventListener(context->argument(0).toString(), context->argument(1));
 }
 
-void ScriptEnv::callFunction(QScriptValue &func, const QScriptValueList &args, const QScriptValue &activator)
+QScriptValue ScriptEnv::callFunction(QScriptValue &func, const QScriptValueList &args, const QScriptValue &activator)
 {
     if (!func.isFunction()) {
-        return;
+        return m_engine->undefinedValue();
     }
 
     QScriptContext *ctx = m_engine->pushContext();
     ctx->setActivationObject(activator);
-    func.call(activator, args);
+    QScriptValue rv = func.call(activator, args);
     m_engine->popContext();
 
     if (m_engine->hasUncaughtException()) {
         emit reportError(this, false);
         m_engine->clearExceptions();
+        return m_engine->undefinedValue();
     }
+
+    return rv;
 }
 
 bool ScriptEnv::hasEventListeners(const QString &event) const

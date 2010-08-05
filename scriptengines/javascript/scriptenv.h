@@ -63,7 +63,7 @@ public:
     bool addEventListener(const QString &event, const QScriptValue &func);
     bool removeEventListener(const QString &event, const QScriptValue &func);
 
-    void callFunction(QScriptValue &func, const QScriptValueList &args = QScriptValueList(), const QScriptValue &activator = QScriptValue());
+    QScriptValue callFunction(QScriptValue &func, const QScriptValueList &args = QScriptValueList(), const QScriptValue &activator = QScriptValue());
     bool callEventListeners(const QString &event, const QScriptValueList &args = QScriptValueList());
     bool hasEventListeners(const QString &event) const;
 
