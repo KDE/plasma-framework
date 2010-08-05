@@ -87,3 +87,5 @@ target_link_libraries(plasma_dataenginescript_javascript
 install(TARGETS plasma_dataenginescript_javascript DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES data/plasma-scriptengine-dataengine-javascript.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
+install(FILES data/plasma-javascriptaddon.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
+

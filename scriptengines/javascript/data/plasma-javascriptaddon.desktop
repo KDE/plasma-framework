@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=Plasa JavaScript Addon
+Type=ServiceType
+X-KDE-ServiceType=Plasma/JavascriptAddon
+Icon=plasma
