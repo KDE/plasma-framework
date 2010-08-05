@@ -47,7 +47,7 @@ target_link_libraries(plasma_appletscript_simple_javascript
                        )
 
 install(TARGETS plasma_appletscript_simple_javascript DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES plasma-scriptengine-applet-simple-javascript.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install(FILES data/plasma-scriptengine-applet-simple-javascript.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 
 # RUNNER
 
@@ -65,7 +65,7 @@ target_link_libraries(plasma_runnerscript_javascript
                       ${QT_QTSCRIPT_LIBRARY})
 
 install(TARGETS plasma_runnerscript_javascript DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES plasma-scriptengine-runner-javascript.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES data/plasma-scriptengine-runner-javascript.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 # DATAENGINE
@@ -85,5 +85,5 @@ target_link_libraries(plasma_dataenginescript_javascript
                       ${QT_QTSCRIPT_LIBRARY})
 
 install(TARGETS plasma_dataenginescript_javascript DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES plasma-scriptengine-dataengine-javascript.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES data/plasma-scriptengine-dataengine-javascript.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
