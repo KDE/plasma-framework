@@ -401,7 +401,7 @@ QScriptValue ScriptEnv::loadAddon(QScriptContext *context, QScriptEngine *engine
     const QString plugin = context->argument(1).toString();
 
     if (type.isEmpty() || plugin.isEmpty()) { 
-        return false;
+        return context->throwError(i18n("loadAddon takes two arguments: addon type and addon name to load"));
     }
 
     const QString constraint = QString("[X-KDE-PluginInfo-Category] == '%1' and [X-KDE-PluginInfo-Name] == '%2'")
@@ -409,7 +409,7 @@ QScriptValue ScriptEnv::loadAddon(QScriptContext *context, QScriptEngine *engine
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/JavascriptAddon", constraint);
 
     if (offers.isEmpty()) {
-        return false;
+        return context->throwError(i18n("Failed to find Addon %1 of type %1", plugin, type));
     }
 
     Plasma::PackageStructure::Ptr structure(new JavascriptAddonPackageStructure);
@@ -420,8 +420,7 @@ QScriptValue ScriptEnv::loadAddon(QScriptContext *context, QScriptEngine *engine
 
     QFile file(package.filePath("mainscript"));
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        kError() << "failed to open script file" << path;
-        return false;
+        return context->throwError(i18n("file to open script file for Addon %1: %1", plugin, path));
     }
 
     QTextStream buffer(&file);
@@ -432,7 +431,7 @@ QScriptValue ScriptEnv::loadAddon(QScriptContext *context, QScriptEngine *engine
     engine->evaluate(code, file.fileName());
 
     engine->popContext();
-    return engine->undefinedValue();
+    return true;
 }
 
 /*
