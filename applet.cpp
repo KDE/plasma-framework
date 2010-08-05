@@ -185,7 +185,7 @@ void Applet::writeGlobalConfig(const QString &key, const QVariant &value)
 void Applet::reloadConfigIfNeeded()
 {
     if (d->configDirty) {
-        reloadConfigIfNeeded();
+        reloadConfig();
     }
 }
 
