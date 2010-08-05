@@ -435,17 +435,38 @@ QScriptValue ScriptEnv::loadAddon(QScriptContext *context, QScriptEngine *engine
     return engine->undefinedValue();
 }
 
+/*
+QScriptValue ScriptEnv::addonFilePath(QScriptContext *context, QScriptEngine *engine)
+{
+    const QString &path = context->thisObject().property("__plasma_addon_filepath").toString();
+    return path + context->argument(0).toString();
+}
+*/
+
 QScriptValue ScriptEnv::registerAddon(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() > 0) {
         QScriptValue func = context->argument(0);
         if (func.isFunction()) {
+            /*
+            QScriptValue v = func.prototype();
+            v.setProperty("addonFilePath", engine->newFunction(ScriptEnv::addonFilePath));
+            func.setPrototype(v);
+            func.setProperty("test", "bar");
+            */
             QScriptValue obj = func.construct();
-            QScriptValueList args;
-            args << obj;
+            /*
+            obj.setProperty("__plasma_addon_filepath", "/fake/path/",
+                            QScriptValue::ReadOnly|QScriptValue::Undeletable|QScriptValue::SkipInEnumeration);
+            obj.setProperty("test", "bar");
+            obj.setProperty("addonFilePath", engine->newFunction(ScriptEnv::addonFilePath));
+            */
+
             ScriptEnv *env = ScriptEnv::findScriptEnv(engine);
             if (env) {
-                env->callEventListeners("addonCreated", args);
+                QScriptValueList args;
+                args << obj;
+                env->callEventListeners("addoncreated", args);
             }
         }
     }

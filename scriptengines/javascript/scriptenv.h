@@ -85,6 +85,7 @@ private:
     static QScriptValue registerAddon(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue addEventListener(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue removeEventListener(QScriptContext *context, QScriptEngine *engine);
+    //static QScriptValue addonFilePath(QScriptContext *context, QScriptEngine *engine);
 
 private Q_SLOTS:
     void signalException();
