@@ -50,6 +50,7 @@ Widget::Widget(Plasma::Applet *applet, QObject *parent)
 
 Widget::~Widget()
 {
+    reloadConfigIfNeeded();
     delete d;
 }
 

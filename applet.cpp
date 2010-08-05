@@ -59,10 +59,6 @@ Applet::Applet(QObject *parent)
 
 Applet::~Applet()
 {
-    if (d->configDirty) {
-        reloadConfig();
-    }
-
     delete d;
 }
 
@@ -183,6 +179,13 @@ void Applet::writeGlobalConfig(const QString &key, const QVariant &value)
     if (d->globalConfigGroup.isValid()) {
         d->globalConfigGroup.writeEntry(key, value);
         d->configDirty = true;
+    }
+}
+
+void Applet::reloadConfigIfNeeded()
+{
+    if (d->configDirty) {
+        reloadConfigIfNeeded();
     }
 }
 

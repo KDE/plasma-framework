@@ -64,6 +64,9 @@ public:
 
     virtual Plasma::Applet *applet() const;
 
+protected:
+    void reloadConfigIfNeeded();
+
 public Q_SLOTS:
     virtual QVariant readConfig(const QString &key, const QVariant &def = QString()) const;
     virtual void writeConfig(const QString &key, const QVariant &value);

@@ -68,6 +68,7 @@ Containment::~Containment()
         }
     }
 
+    reloadConfigIfNeeded();
     delete d;
 }
 
