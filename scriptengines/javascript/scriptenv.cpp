@@ -424,7 +424,7 @@ QScriptValue ScriptEnv::loadAddon(QScriptContext *context, QScriptEngine *engine
 
     QFile file(package.filePath("mainscript"));
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        return context->throwError(i18n("file to open script file for Addon %1: %1", plugin, path));
+        return context->throwError(i18n("Failed to open script file for Addon %1: %2", plugin, package.filePath("mainscript")));
     }
 
     QTextStream buffer(&file);
