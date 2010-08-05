@@ -69,7 +69,9 @@ public:
 
     FrameSvg::EnabledBorders enabledBorders;
     QPixmap cachedBackground;
-    QRegion cachedMask;
+    QHash<QString, QRegion> cachedMasks;
+    static const int MAX_CACHED_MASKS = 10;
+
     QSize frameSize;
 
     //measures

@@ -282,8 +282,15 @@ QPixmap FrameSvg::alphaMask() const
 QRegion FrameSvg::mask() const
 {
     FrameData *frame = d->frames[d->prefix];
-    frame->cachedMask = QRegion(QBitmap(d->alphaMask().alphaChannel().createMaskFromColor(Qt::black)));
-    return frame->cachedMask;
+    QString id = d->cacheId(frame, QString());
+    if (!frame->cachedMasks.contains(id)) {
+        //TODO: Implement a better way to cap the number of cached masks
+        if (frame->cachedMasks.count() > frame->MAX_CACHED_MASKS) {
+            frame->cachedMasks.clear();
+        }
+        frame->cachedMasks.insert(id, QRegion(QBitmap(d->alphaMask().alphaChannel().createMaskFromColor(Qt::black))));
+    }
+    return frame->cachedMasks[id];
 }
 
 void FrameSvg::setCacheAllRenderedFrames(bool cache)
@@ -707,7 +714,6 @@ void FrameSvgPrivate::updateSizes() const
     QSize s = q->size();
     q->resize();
     frame->cachedBackground = QPixmap();
-    frame->cachedMask = QRegion();
 
     if (frame->enabledBorders & FrameSvg::TopBorder) {
         frame->topHeight = q->elementSize(prefix + "top").height();
