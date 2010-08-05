@@ -51,23 +51,35 @@ ScriptEnv::ScriptEnv(QObject *parent, QScriptEngine *engine)
       m_allowedUrls(NoUrls),
       m_engine(engine)
 {
-    QScriptValue global = m_engine->globalObject();
+    connect(m_engine, SIGNAL(signalHandlerException(QScriptValue)), this, SLOT(signalException()));
 
-    // Add utility functions
-    global.setProperty("print", m_engine->newFunction(ScriptEnv::print));
-    global.setProperty("debug", m_engine->newFunction(ScriptEnv::debug));
-    global.setProperty("listAddons", m_engine->newFunction(ScriptEnv::listAddons));
-    global.setProperty("loadAddon", m_engine->newFunction(ScriptEnv::loadAddon));
+    setupGlobalObject();
+}
+
+ScriptEnv::~ScriptEnv()
+{
+}
+
+void ScriptEnv::setupGlobalObject()
+{
+    QScriptValue global = m_engine->globalObject();
 
     // Add an accessor so we can find the scriptenv given only the engine. The
     // property is hidden from scripts.
     global.setProperty("__plasma_scriptenv", m_engine->newQObject(this),
                        QScriptValue::ReadOnly|QScriptValue::Undeletable|QScriptValue::SkipInEnumeration);
-    connect(m_engine, SIGNAL(signalHandlerException(QScriptValue)), this, SLOT(signalException()));
+
+    // Add utility functions
+    global.setProperty("print", m_engine->newFunction(ScriptEnv::print));
+    global.setProperty("debug", m_engine->newFunction(ScriptEnv::debug));
 }
 
-ScriptEnv::~ScriptEnv()
+void ScriptEnv::addMainObjectProperties(QScriptValue &value)
 {
+    value.setProperty("listAddons", m_engine->newFunction(ScriptEnv::listAddons));
+    value.setProperty("loadAddon", m_engine->newFunction(ScriptEnv::loadAddon));
+    value.setProperty("addEventListener", m_engine->newFunction(ScriptEnv::addEventListener));
+    value.setProperty("removeEventListener", m_engine->newFunction(ScriptEnv::removeEventListener));
 }
 
 QScriptEngine *ScriptEnv::engine() const
@@ -441,6 +453,34 @@ QScriptValue ScriptEnv::registerAddon(QScriptContext *context, QScriptEngine *en
     return engine->undefinedValue();
 }
 
+QScriptValue ScriptEnv::addEventListener(QScriptContext *context, QScriptEngine *engine)
+{
+    if (context->argumentCount() < 2) {
+        return false;
+    }
+
+    ScriptEnv *env = ScriptEnv::findScriptEnv(engine);
+    if (!env) {
+        return false;
+    }
+
+    return env->addEventListener(context->argument(0).toString(), context->argument(1));
+}
+
+QScriptValue ScriptEnv::removeEventListener(QScriptContext *context, QScriptEngine *engine)
+{
+    if (context->argumentCount() < 2) {
+        return false;
+    }
+
+    ScriptEnv *env = ScriptEnv::findScriptEnv(engine);
+    if (!env) {
+        return false;
+    }
+
+    return env->removeEventListener(context->argument(0).toString(), context->argument(1));
+}
+
 void ScriptEnv::callFunction(QScriptValue &func, const QScriptValueList &args, const QScriptValue &activator)
 {
     if (!func.isFunction()) {
@@ -478,21 +518,27 @@ bool ScriptEnv::callEventListeners(const QString &event, const QScriptValueList 
     return true;
 }
 
-void ScriptEnv::addEventListener(const QString &event, const QScriptValue &func)
+bool ScriptEnv::addEventListener(const QString &event, const QScriptValue &func)
 {
-    if (func.isFunction()) {
+    if (func.isFunction() && !event.isEmpty()) {
         m_eventListeners[event.toLower()].append(func);
+        return true;
     }
+
+    return false;
 }
 
-void ScriptEnv::removeEventListener(const QString &event, const QScriptValue &func)
+bool ScriptEnv::removeEventListener(const QString &event, const QScriptValue &func)
 {
+    bool found = false;
+
     if (func.isFunction()) {
-        QScriptValueList funcs = m_eventListeners.value("mousepress");
-        QMutableListIterator<QScriptValue> it(funcs);//m_eventListeners.value("mousepress"));
+        QScriptValueList funcs = m_eventListeners.value(event);
+        QMutableListIterator<QScriptValue> it(funcs);
         while (it.hasNext()) {
             if (it.next().equals(func)) {
                 it.remove();
+                found = true;
             }
         }
 
@@ -502,6 +548,8 @@ void ScriptEnv::removeEventListener(const QString &event, const QScriptValue &fu
             m_eventListeners.insert(event.toLower(), funcs);
         }
     }
+
+    return found;
 }
 
 #ifndef USEGUI

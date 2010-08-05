@@ -134,6 +134,7 @@ void JavaScriptRunner::setupObjects()
     // Expose the runner
     m_self = m_engine->newQObject(this);
     m_self.setScope(global);
+    m_env->addMainObjectProperties(m_self);
 
     global.setProperty("runner", m_self);
 }

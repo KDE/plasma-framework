@@ -47,6 +47,8 @@ bool JavaScriptDataEngine::init()
 
     m_iface = m_qscriptEngine->newQObject(this);
     m_iface.setScope(global);
+    m_env->addMainObjectProperties(m_iface);
+
     global.setProperty("engine", m_iface);
 
     global.setProperty("setData", m_qscriptEngine->newFunction(JavaScriptDataEngine::jsSetData));

@@ -40,6 +40,12 @@ public:
     ScriptEnv(QObject *parent, QScriptEngine *engine);
     ~ScriptEnv();
 
+    /**
+     * Adds common properties (e.g. registerEventFilter)
+     * for a 'main' object (e.g. plasmoid, engine, runner)
+     */
+    void addMainObjectProperties(QScriptValue &value);
+
     /** Returns the QScriptEngine in use. */
     QScriptEngine *engine() const;
 
@@ -54,8 +60,8 @@ public:
 
     bool checkForErrors(bool fatal);
 
-    void addEventListener(const QString &event, const QScriptValue &func);
-    void removeEventListener(const QString &event, const QScriptValue &func);
+    bool addEventListener(const QString &event, const QScriptValue &func);
+    bool removeEventListener(const QString &event, const QScriptValue &func);
 
     void callFunction(QScriptValue &func, const QScriptValueList &args = QScriptValueList(), const QScriptValue &activator = QScriptValue());
     bool callEventListeners(const QString &event, const QScriptValueList &args = QScriptValueList());
@@ -77,11 +83,16 @@ private:
     static QScriptValue listAddons(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue loadAddon(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue registerAddon(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue addEventListener(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue removeEventListener(QScriptContext *context, QScriptEngine *engine);
 
 private Q_SLOTS:
     void signalException();
 
 private:
+    /** Call to set common properties on the global object **/
+    void setupGlobalObject();
+
     QSet<QString> m_extensions;
     AllowedUrls m_allowedUrls;
     QScriptEngine *m_engine;
