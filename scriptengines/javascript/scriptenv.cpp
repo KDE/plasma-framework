@@ -373,22 +373,26 @@ QScriptValue ScriptEnv::listAddons(QScriptContext *context, QScriptEngine *engin
         return context->throwError(i18n("listAddons takes one argument: addon type"));
     }
 
-    QStringList addons;
     const QString type = context->argument(0).toString();
 
     if (type.isEmpty()) {
-        return qScriptValueFromValue(engine, addons);
+        return engine->undefinedValue();
     }
 
     const QString constraint = QString("[X-KDE-PluginInfo-Category] == '%1'").arg(type);
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/JavascriptAddon", constraint);
 
+    int i = 0;
+    QScriptValue addons = engine->newArray(offers.count());
     foreach (KService::Ptr offer, offers) {
         KPluginInfo info(offer);
-        addons << info.pluginName();
+        QScriptValue v = engine->newObject();
+        v.setProperty("id", info.pluginName(), QScriptValue::ReadOnly);
+        v.setProperty("name", info.name(), QScriptValue::ReadOnly);
+        addons.setProperty(i++, v);
     }
 
-    return qScriptValueFromValue(engine, addons);
+    return addons;
 }
 
 QScriptValue ScriptEnv::loadAddon(QScriptContext *context, QScriptEngine *engine)
