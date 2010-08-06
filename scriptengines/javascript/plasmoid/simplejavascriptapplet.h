@@ -60,8 +60,6 @@ public:
 
     bool eventFilter(QObject *watched, QEvent *event);
 
-    static QString findImageFile(QScriptEngine *engine, const QString &file);
-
 public Q_SLOTS:
     void dataUpdated( const QString &name, const Plasma::DataEngine::Data &data );
     void configChanged();
@@ -104,7 +102,6 @@ private:
     static QScriptValue createWidget(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue widgetAdjustSize(QScriptContext *context, QScriptEngine *engine);
 
-    static AppletInterface *extractAppletInterface(QScriptEngine *engine);
     static QGraphicsWidget *extractParent(QScriptContext *context,
                                           QScriptEngine *engine,
                                           int parentIndex = 0,

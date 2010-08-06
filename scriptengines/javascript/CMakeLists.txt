@@ -1,11 +1,11 @@
 # APPLET
 
 set(simple_javascript_engine_SRCS
-    appletauthorization.cpp
-    scriptenvui.cpp
-    simplejavascriptapplet.cpp
+    common/scriptenvui.cpp
+    plasmoid/appletauthorization.cpp
+    plasmoid/appletinterface.cpp
+    plasmoid/simplejavascriptapplet.cpp
     simplebindings/animationgroup.cpp
-    simplebindings/appletinterface.cpp
     simplebindings/anchorlayout.cpp
     simplebindings/dataenginereceiver.cpp
     simplebindings/bytearrayclass.cpp
@@ -33,7 +33,7 @@ set(simple_javascript_engine_SRCS
     simplebindings/variant.cpp
 )
 
-include_directories(${PHONON_INCLUDES})
+include_directories(${PHONON_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/common)
 
 kde4_add_plugin(plasma_appletscript_simple_javascript ${simple_javascript_engine_SRCS})
 
@@ -52,8 +52,8 @@ install(FILES data/plasma-scriptengine-applet-simple-javascript.desktop DESTINAT
 # RUNNER
 
 set(javascript_runner_engine_SRCS
-    javascriptrunner.cpp
-    scriptenv.cpp
+    common/scriptenv.cpp
+    runner/javascriptrunner.cpp
 )
 
 kde4_add_plugin(plasma_runnerscript_javascript ${javascript_runner_engine_SRCS})
@@ -71,8 +71,8 @@ install(FILES data/plasma-scriptengine-runner-javascript.desktop DESTINATION ${S
 # DATAENGINE
 
 set(javascript_dataengine_engine_SRCS
-    javascriptdataengine.cpp
-    scriptenv.cpp
+    dataengine/javascriptdataengine.cpp
+    common/scriptenv.cpp
     simplebindings/dataengine.cpp
     simplebindings/variant.cpp
 )

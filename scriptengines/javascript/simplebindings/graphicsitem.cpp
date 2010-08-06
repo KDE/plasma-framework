@@ -22,7 +22,7 @@
 #include <QtGui/QCursor>
 #include <QtGui/QGraphicsItem>
 #include <QtGui/QGraphicsScene>
-#include "../backportglobal.h"
+#include "backportglobal.h"
 
 Q_DECLARE_METATYPE(QScript::Pointer<QGraphicsItem>::wrapped_pointer_type)
 Q_DECLARE_METATYPE(QList<QGraphicsItem*>)

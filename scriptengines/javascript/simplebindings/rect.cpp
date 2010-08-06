@@ -20,7 +20,7 @@
 #include <QtScript/QScriptEngine>
 #include <QtScript/QScriptContext>
 #include <QtCore/QRectF>
-#include "../backportglobal.h"
+#include "backportglobal.h"
 
 Q_DECLARE_METATYPE(QRectF*)
 Q_DECLARE_METATYPE(QRectF)

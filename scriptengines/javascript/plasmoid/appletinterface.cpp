@@ -34,6 +34,8 @@
 #include <Plasma/Context>
 #include <Plasma/Package>
 
+Q_DECLARE_METATYPE(AppletInterface*)
+
 AppletInterface::AppletInterface(SimpleJavaScriptApplet *parent)
     : QObject(parent),
       m_appletScriptEngine(parent),
@@ -45,6 +47,12 @@ AppletInterface::AppletInterface(SimpleJavaScriptApplet *parent)
 
 AppletInterface::~AppletInterface()
 {
+}
+
+AppletInterface *AppletInterface::extract(QScriptEngine *engine)
+{
+    QScriptValue appletValue = engine->globalObject().property("plasmoid");
+    return qobject_cast<AppletInterface*>(appletValue.toQObject());
 }
 
 Plasma::DataEngine* AppletInterface::dataEngine(const QString &name)

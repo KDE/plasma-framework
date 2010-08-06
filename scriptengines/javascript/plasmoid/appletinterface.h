@@ -277,6 +277,7 @@ enum IntervalAlignment {
     bool userConfiguring() const;
     int apiVersion() const;
 
+    static AppletInterface *extract(QScriptEngine *engine);
     inline Plasma::Applet *applet() const { return m_appletScriptEngine->applet(); }
 
 Q_SIGNALS:

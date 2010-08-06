@@ -27,8 +27,8 @@
 
 #include <Plasma/Applet>
 
-#include "../backportglobal.h"
-#include "appletinterface.h"
+#include "backportglobal.h"
+#include "plasmoid/appletinterface.h"
 
 Q_DECLARE_METATYPE(QScript::Pointer<QGraphicsItem>::wrapped_pointer_type)
 Q_DECLARE_METATYPE(QGraphicsWidget*)

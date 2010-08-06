@@ -28,7 +28,6 @@
 #include <Plasma/Extender>
 #include <Plasma/VideoWidget>
 
-#include "appletinterface.h"
 #include "dataengine.h"
 #include "variant.h"
 
@@ -44,11 +43,6 @@ Q_DECLARE_METATYPE(Plasma::Extender*)
 Q_DECLARE_METATYPE(Plasma::VideoWidget::Controls)
 Q_DECLARE_METATYPE(Plasma::Svg*)
 Q_DECLARE_METATYPE(Qt::MouseButton)
-
-Q_DECLARE_METATYPE(AppletInterface*)
-
-//Q_SCRIPT_DECLARE_QMETAOBJECT(AppletInterface, SimpleJavaScriptApplet*)
-
 
 QScriptValue qScriptValueFromControls(QScriptEngine *engine, const Plasma::VideoWidget::Controls &controls)
 {

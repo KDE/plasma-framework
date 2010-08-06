@@ -56,12 +56,12 @@
 #include <Plasma/VideoWidget>
 
 #include "appletauthorization.h"
+#include "appletinterface.h"
 #include "scriptenv.h"
 #include "simplebindings/animationgroup.h"
 #include "simplebindings/dataengine.h"
 #include "simplebindings/dataenginereceiver.h"
 #include "simplebindings/i18n.h"
-#include "simplebindings/appletinterface.h"
 #include "simplebindings/bytearrayclass.h"
 #include "simplebindings/variant.h"
 
@@ -123,7 +123,7 @@ void SimpleJavaScriptApplet::engineReportsError(ScriptEnv *engine, bool fatal)
 void SimpleJavaScriptApplet::reportError(ScriptEnv *env, bool fatal)
 {
     SimpleJavaScriptApplet *jsApplet = qobject_cast<SimpleJavaScriptApplet *>(env->parent());
-    AppletInterface *interface = extractAppletInterface(env->engine());
+    AppletInterface *interface = AppletInterface::extract(env->engine());
     const QScriptValue error = env->engine()->uncaughtException();
     QString file = error.property("fileName").toString();
     if (interface) {
@@ -573,19 +573,13 @@ QSet<QString> SimpleJavaScriptApplet::loadedExtensions() const
     return m_env->loadedExtensions();
 }
 
-AppletInterface *SimpleJavaScriptApplet::extractAppletInterface(QScriptEngine *engine)
-{
-    QScriptValue appletValue = engine->globalObject().property("plasmoid");
-    return qobject_cast<AppletInterface*>(appletValue.toQObject());
-}
-
 QScriptValue SimpleJavaScriptApplet::dataEngine(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() != 1) {
         return context->throwError(i18n("dataEngine() takes one argument"));
     }
 
-    AppletInterface *interface = extractAppletInterface(engine);
+    AppletInterface *interface = AppletInterface::extract(engine);
     if (!interface) {
         return context->throwError(i18n("Could not extract the Applet"));
     }
@@ -606,7 +600,7 @@ QScriptValue SimpleJavaScriptApplet::service(QScriptContext *context, QScriptEng
 
     QString dataEngine = context->argument(0).toString();
 
-    AppletInterface *interface = extractAppletInterface(engine);
+    AppletInterface *interface = AppletInterface::extract(engine);
     if (!interface) {
         return context->throwError(i18n("Could not extract the Applet"));
     }
@@ -707,19 +701,9 @@ QScriptValue SimpleJavaScriptApplet::loadui(QScriptContext *context, QScriptEngi
     return engine->newQObject(w, QScriptEngine::AutoOwnership);
 }
 
-QString SimpleJavaScriptApplet::findImageFile(QScriptEngine *engine, const QString &file)
-{
-    AppletInterface *interface = extractAppletInterface(engine);
-    if (!interface) {
-        return QString();
-    }
-
-    return interface->package()->filePath("images", file);
-}
-
 QString SimpleJavaScriptApplet::findSvg(QScriptEngine *engine, const QString &file)
 {
-    AppletInterface *interface = extractAppletInterface(engine);
+    AppletInterface *interface = AppletInterface::extract(engine);
     if (!interface) {
         return file;
     }
@@ -778,7 +762,7 @@ QScriptValue SimpleJavaScriptApplet::newPlasmaExtenderItem(QScriptContext *conte
     }
 
     if (!extender) {
-        AppletInterface *interface = extractAppletInterface(engine);
+        AppletInterface *interface = AppletInterface::extract(engine);
         if (!interface) {
             engine->undefinedValue();
         }
@@ -831,7 +815,7 @@ QGraphicsWidget *SimpleJavaScriptApplet::extractParent(QScriptContext *context, 
     }
 
     if (!parent) {
-        AppletInterface *interface = extractAppletInterface(engine);
+        AppletInterface *interface = AppletInterface::extract(engine);
         if (!interface) {
             return 0;
         }

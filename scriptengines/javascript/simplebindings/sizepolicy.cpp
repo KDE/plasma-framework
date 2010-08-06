@@ -20,7 +20,7 @@
 #include <QtScript/QScriptEngine>
 #include <QtScript/QScriptContext>
 #include <QtGui/QSizePolicy>
-#include "../backportglobal.h"
+#include "backportglobal.h"
 
 Q_DECLARE_METATYPE(QSizePolicy*)
 

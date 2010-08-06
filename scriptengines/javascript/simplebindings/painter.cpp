@@ -27,7 +27,7 @@
 
 #include <QtCore/qdebug.h>
 
-#include "../backportglobal.h"
+#include "backportglobal.h"
 
 Q_DECLARE_METATYPE(QPolygonF)
 Q_DECLARE_METATYPE(QPainterPath)

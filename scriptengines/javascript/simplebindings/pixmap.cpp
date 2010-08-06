@@ -20,8 +20,8 @@
 #include <QtScript/QScriptEngine>
 #include <QtScript/QScriptContext>
 #include <QtGui/QPixmap>
-#include "../backportglobal.h"
-#include "../simplejavascriptapplet.h"
+#include "backportglobal.h"
+#include "plasmoid/appletinterface.h"
 
 Q_DECLARE_METATYPE(QPixmap*)
 Q_DECLARE_METATYPE(QPixmap)
@@ -30,7 +30,9 @@ static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
 {
     if (ctx->argumentCount() == 1 && ctx->argument(0).isString()) {
         // a path on disk in the package
-        return qScriptValueFromValue(eng, QPixmap(SimpleJavaScriptApplet::findImageFile(eng, ctx->argument(0).toString())));
+        AppletInterface *interface = AppletInterface::extract(eng);
+        const QString path = interface ? interface->file("images", ctx->argument(0).toString()) : QString();
+        return qScriptValueFromValue(eng, QPixmap(path));
     }
 
     if (ctx->argumentCount() == 2) {

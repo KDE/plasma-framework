@@ -23,7 +23,7 @@
 #include <QScriptContext>
 #include <QScriptable>
 
-#include "../backportglobal.h"
+#include "backportglobal.h"
 
 Q_DECLARE_METATYPE(QEasingCurve)
 Q_DECLARE_METATYPE(QEasingCurve*)

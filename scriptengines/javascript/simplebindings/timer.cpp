@@ -21,7 +21,7 @@
 #include <QtScript/QScriptContext>
 #include <QtScript/QScriptable>
 #include <QtCore/QTimer>
-#include "../backportglobal.h"
+#include "backportglobal.h"
 
 Q_DECLARE_METATYPE(QTimer*)
 

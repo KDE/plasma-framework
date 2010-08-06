@@ -25,8 +25,7 @@
 
 #include <Plasma/Applet>
 
-#include "../backportglobal.h"
-#include "appletinterface.h"
+#include "backportglobal.h"
 
 #define DECLARE_INT_NUMBER_GET_METHOD(Class, __get__) \
 BEGIN_DECLARE_METHOD(Class, __get__) { \

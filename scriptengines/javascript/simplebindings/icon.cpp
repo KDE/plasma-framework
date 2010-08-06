@@ -22,7 +22,7 @@
 
 #include <KIcon>
 
-#include "../backportglobal.h"
+#include "backportglobal.h"
 
 Q_DECLARE_METATYPE(QIcon)
 Q_DECLARE_METATYPE(QIcon*)
