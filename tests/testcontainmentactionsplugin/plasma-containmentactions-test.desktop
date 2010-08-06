@@ -1,7 +1,17 @@
 [Desktop Entry]
 Name=Test
+Name[ia]=Prova
+Name[pt]=Teste
+Name[pt_BR]=Teste
+Name[sv]=Test
+Name[uk]=Тест
 Name[x-test]=xxTestxx
 Comment=A dummy plugin for testing
+Comment[ia]=Un plugin vacue pro essayar
+Comment[pt]=Um 'plugin' de exemplo para testes
+Comment[pt_BR]=Um plug-in fictício para testes
+Comment[sv]=Ett exempelinsticksprogram för test
+Comment[uk]=Додаток для тестування
 Comment[x-test]=xxA dummy plugin for testingxx
 Type=Service
 Icon=preferences-desktop-color
