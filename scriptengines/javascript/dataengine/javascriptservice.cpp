@@ -24,6 +24,38 @@
 #include "common/scriptenv.h"
 #include "javascriptdataengine.h"
 
+JavaScriptServiceJob::JavaScriptServiceJob(QScriptEngine *engine, const QString &destination, const QString &operation,
+                     const QMap<QString, QVariant> &parameters, QObject *parent)
+    : Plasma::ServiceJob(destination, operation, parameters, parent),
+      m_thisObject(engine->newQObject(this, QScriptEngine::QtOwnership, QScriptEngine::ExcludeSuperClassContents))
+{
+}
+
+void JavaScriptServiceJob::start()
+{
+    if (!m_startFunction.isFunction()) {
+        setResult(false);
+        return;
+    }
+
+    m_startFunction.call(m_thisObject);
+}
+
+QScriptValue JavaScriptServiceJob::scriptValue() const
+{
+    return m_thisObject;
+}
+
+QScriptValue JavaScriptServiceJob::startFunction() const
+{
+    return m_startFunction;
+}
+
+void JavaScriptServiceJob::setStartFunction(const QScriptValue &v)
+{
+    m_startFunction = v;
+}
+
 JavaScriptService::JavaScriptService(const QString &serviceName, JavaScriptDataEngine *engine)
     : Plasma::Service(engine),
       m_dataEngine(engine)
@@ -36,32 +68,14 @@ JavaScriptService::~JavaScriptService()
 //    kDebug();
 }
 
-void JavaScriptService::setScriptValue(QScriptValue &v)
-{
-    m_scriptValue = v;
-}
-
 Plasma::ServiceJob *JavaScriptService::createJob(const QString &operation, QMap<QString, QVariant> &parameters)
 {
-    QMapIterator<QString, QVariant> it(parameters);
-    if (m_dataEngine) {
-        ScriptEnv *env = ScriptEnv::findScriptEnv(m_dataEngine.data()->engine());
-        if (env) {
-            QScriptValueList args;
-            args << m_scriptValue << operation
-                 << qScriptValueFromValue(m_dataEngine.data()->engine(), parameters);
-            //TODO: Parameters!
-            QScriptValue func = m_scriptValue.property("createJob");
-            /*
-            kDebug() << "same thing?" << v.equals(sv) << func.isFunction() <<
-                sv.property("createJob").isFunction();
-                */
-            QScriptValue rv = env->callFunction(func, args, m_scriptValue);
-            Plasma::ServiceJob *job = dynamic_cast<Plasma::ServiceJob *>(rv.toQObject());
-            if (job) {
-                return job;
-            }
-        }
+    if (m_setupFunc.isFunction() && m_dataEngine && isOperationEnabled(operation)) {
+        JavaScriptServiceJob *job = new JavaScriptServiceJob(m_dataEngine.data()->engine(), destination(), operation, parameters, this);
+        QScriptValueList args;
+        args << job->scriptValue();
+        m_setupFunc.call(QScriptValue(), args);
+        return job;
     }
 
     return 0;
@@ -88,6 +102,16 @@ void JavaScriptService::registerOperationsScheme()
 
     QFile file(path);
     setOperationsScheme(&file);
+}
+
+QScriptValue JavaScriptService::setupJobFunction() const
+{
+    return m_setupFunc;
+}
+
+void JavaScriptService::setSetupJobFunction(const QScriptValue &v)
+{
+    m_setupFunc = v;
 }
 
 #include "javascriptservice.moc"

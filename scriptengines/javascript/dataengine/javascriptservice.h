@@ -24,6 +24,7 @@
 
 #include <Plasma/Package>
 #include <Plasma/Service>
+#include <Plasma/ServiceJob>
 
 namespace Plasma
 {
@@ -32,19 +33,49 @@ namespace Plasma
 
 class JavaScriptDataEngine;
 
+class JavaScriptServiceJob : public Plasma::ServiceJob
+{
+    Q_OBJECT
+    Q_PROPERTY(QString destination READ destination)
+    Q_PROPERTY(QString operationName READ operationName)
+    Q_PROPERTY(QVariantMap parameters READ parameters)
+    Q_PROPERTY(QVariant result READ result WRITE setResult)
+    Q_PROPERTY(int error READ error WRITE setError)
+    Q_PROPERTY(QString errorText READ errorText WRITE setErrorText)
+    Q_PROPERTY(QScriptValue start READ startFunction WRITE setStartFunction)
+
+public:
+    JavaScriptServiceJob(QScriptEngine *engine, const QString &destination, const QString &operation,
+                         const QMap<QString, QVariant> &parameters, QObject *parent = 0);
+
+    void start();
+
+    QScriptValue startFunction() const;
+    void setStartFunction(const QScriptValue &v);
+
+    QScriptValue scriptValue() const;
+
+private:
+    QScriptValue m_startFunction;
+    QScriptValue m_thisObject;
+};
+
 class JavaScriptService : public Plasma::Service
 {
     Q_OBJECT
     Q_PROPERTY(QString destination READ destination WRITE setDestination)
     Q_PROPERTY(QStringList operationNames READ operationNames)
     Q_PROPERTY(QString name READ name)
+    Q_PROPERTY(QScriptValue setupJob READ setupJobFunction WRITE setSetupJobFunction)
 
 public:
     JavaScriptService(const QString &serviceName, JavaScriptDataEngine *engine);
     ~JavaScriptService();
 
     bool wasFound() const;
-    void setScriptValue(QScriptValue &v);
+
+    QScriptValue setupJobFunction() const;
+    void setSetupJobFunction(const QScriptValue &v);
 
 protected:
     Plasma::ServiceJob *createJob(const QString &operation, QMap<QString, QVariant> &parameters);
@@ -52,7 +83,7 @@ protected:
 
 private:
      QWeakPointer<JavaScriptDataEngine> m_dataEngine;
-     QScriptValue m_scriptValue;
+     QScriptValue m_setupFunc;
 };
 
 #endif
