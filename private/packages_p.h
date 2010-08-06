@@ -53,6 +53,17 @@ private:
 #endif
 };
 
+class DataEnginePackage : public PackageStructure
+{
+    Q_OBJECT
+public:
+    explicit DataEnginePackage(QObject *parent = 0);
+    ~DataEnginePackage();
+
+protected:
+    void pathChanged();
+};
+
 class ThemePackage : public PackageStructure
 {
     Q_OBJECT

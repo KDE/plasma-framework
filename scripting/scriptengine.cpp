@@ -251,10 +251,12 @@ PackageStructure::Ptr defaultPackageStructure(ComponentType type)
 {
     switch (type) {
     case AppletComponent:
-    case DataEngineComponent:
     case WallpaperComponent:
     case RunnerComponent:
         return PackageStructure::Ptr(new PlasmoidPackage());
+        break;
+    case DataEngineComponent:
+        return PackageStructure::Ptr(new DataEnginePackage());
         break;
     default:
         // TODO: we don't have any special structures for other components yet
