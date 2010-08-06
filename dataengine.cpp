@@ -48,13 +48,13 @@ namespace Plasma
 
 DataEngine::DataEngine(QObject *parent, KService::Ptr service)
     : QObject(parent),
-      d(new DataEnginePrivate(this, service))
+      d(new DataEnginePrivate(this, KPluginInfo(service)))
 {
 }
 
 DataEngine::DataEngine(QObject *parent, const QVariantList &args)
     : QObject(parent),
-      d(new DataEnginePrivate(this, KService::serviceByStorageId(args.count() > 0 ? args[0].toString() : QString())))
+      d(new DataEnginePrivate(this, KPluginInfo(KService::serviceByStorageId(args.count() > 0 ?  args[0].toString() : QString()))))
 {
 }
 
@@ -508,9 +508,9 @@ void DataEngine::setStorageEnable(const QString &source, bool store)
 }
 
 // Private class implementations
-DataEnginePrivate::DataEnginePrivate(DataEngine *e, KService::Ptr service)
+DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info)
     : q(e),
-      dataEngineDescription(service),
+      dataEngineDescription(info),
       refCount(-1), // first ref
       checkSourcesTimerId(0),
       updateTimerId(0),
@@ -523,17 +523,17 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, KService::Ptr service)
 {
     updateTimestamp.start();
 
-    if (!service) {
+    if (!info.isValid()) {
         engineName = i18n("Unnamed");
         return;
     }
 
-    engineName = service->name();
+    engineName = info.name();
     if (engineName.isEmpty()) {
         engineName = i18n("Unnamed");
     }
     e->setObjectName(engineName);
-    icon = service->icon();
+    icon = info.icon();
 
     if (dataEngineDescription.isValid()) {
         QString api = dataEngineDescription.property("X-Plasma-API").toString();
@@ -542,8 +542,7 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, KService::Ptr service)
             const QString path =
                 KStandardDirs::locate("data",
                                       "plasma/dataengines/" + dataEngineDescription.pluginName() + '/');
-            PackageStructure::Ptr structure =
-                Plasma::packageStructure(api, Plasma::DataEngineComponent);
+            PackageStructure::Ptr structure = Plasma::packageStructure(api, Plasma::DataEngineComponent);
             structure->setPath(path);
             package = new Package(path, structure);
 
@@ -737,9 +736,11 @@ void DataEnginePrivate::setupScriptSupport()
         return;
     }
 
-    kDebug() << "setting up script support, package is in" << package->path()
+    /*
+    kDebug() << "sletting up script support, package is in" << package->path()
              << "which is a" << package->structure()->type() << "package"
              << ", main script is" << package->filePath("mainscript");
+    */
 
     QString translationsPath = package->filePath("translations");
     if (!translationsPath.isEmpty()) {
