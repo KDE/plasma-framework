@@ -228,7 +228,7 @@ QScriptValue JavaScriptDataEngine::serviceCtor(QScriptContext *context, QScriptE
 
     JavaScriptService *service = new JavaScriptService(serviceName, iFace);
     if (service->wasFound()) {
-        QScriptValue v = engine->newQObject(service, QScriptEngine::QtOwnership);
+        QScriptValue v = engine->newQObject(service, QScriptEngine::QtOwnership, QScriptEngine::ExcludeSuperClassContents);
         service->setScriptValue(v);
         return v;
     }

@@ -35,6 +35,9 @@ class JavaScriptDataEngine;
 class JavaScriptService : public Plasma::Service
 {
     Q_OBJECT
+    Q_PROPERTY(QString destination READ destination WRITE setDestination)
+    Q_PROPERTY(QStringList operationNames READ operationNames)
+    Q_PROPERTY(QString name READ name)
 
 public:
     JavaScriptService(const QString &serviceName, JavaScriptDataEngine *engine);
