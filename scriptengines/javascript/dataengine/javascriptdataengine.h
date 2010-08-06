@@ -39,6 +39,9 @@ public:
     JavaScriptDataEngine(QObject *parent, const QVariantList &args);
     bool init();
 
+    QScriptEngine *engine() const;
+    QString filePath(const char *type, const QString &file) const;
+
     QStringList sources() const;
     bool sourceRequestEvent(const QString &name);
     bool updateSourceEvent(const QString &source);
@@ -63,6 +66,7 @@ private:
     static QScriptValue jsRemoveAllData(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue jsRemoveData(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue jsRemoveAllSources(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue serviceCtor(QScriptContext *context, QScriptEngine *engine);
 
     QScriptValue callFunction(const QString &functionName, const QScriptValueList &args);
 

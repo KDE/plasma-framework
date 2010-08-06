@@ -72,6 +72,7 @@ install(FILES data/plasma-scriptengine-runner-javascript.desktop DESTINATION ${S
 
 set(javascript_dataengine_engine_SRCS
     dataengine/javascriptdataengine.cpp
+    dataengine/javascriptservice.cpp
     common/scriptenv.cpp
     simplebindings/dataengine.cpp
     simplebindings/variant.cpp

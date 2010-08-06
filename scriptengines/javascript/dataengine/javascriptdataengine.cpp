@@ -23,8 +23,9 @@
 
 #include <Plasma/Package>
 
-#include "authorization.h"
-#include "scriptenv.h"
+#include "javascriptservice.h"
+#include "common/authorization.h"
+#include "common/scriptenv.h"
 #include "simplebindings/dataengine.h"
 #include "simplebindings/i18n.h"
 
@@ -55,6 +56,7 @@ bool JavaScriptDataEngine::init()
     global.setProperty("removeAllData", m_qscriptEngine->newFunction(JavaScriptDataEngine::jsRemoveAllData));
     global.setProperty("removeData", m_qscriptEngine->newFunction(JavaScriptDataEngine::jsRemoveData));
     global.setProperty("removeAllSources", m_qscriptEngine->newFunction(JavaScriptDataEngine::jsRemoveAllSources));
+    global.setProperty("Service", m_qscriptEngine->newFunction(JavaScriptDataEngine::serviceCtor));
 
     registerDataEngineMetaTypes(m_qscriptEngine);
 
@@ -64,6 +66,11 @@ bool JavaScriptDataEngine::init()
     }
 
     return m_env->include(mainScript());
+}
+
+QScriptEngine *JavaScriptDataEngine::engine() const
+{
+    return m_qscriptEngine;
 }
 
 void JavaScriptDataEngine::jsSetMaxSourceCount(int count)
@@ -202,6 +209,34 @@ QScriptValue JavaScriptDataEngine::jsRemoveAllSources(QScriptContext *context, Q
     return context->throwError(error);
 }
 
+QScriptValue JavaScriptDataEngine::serviceCtor(QScriptContext *context, QScriptEngine *engine)
+{
+    QString error;
+    JavaScriptDataEngine *iFace = extractIFace(engine, error);
+    if (!iFace) {
+        return context->throwError(error);
+    }
+
+    if (context->argumentCount() < 1) {
+        return context->throwError(i18n("Service requires at least one parameter: the name of the service"));
+    }
+
+    const QString &serviceName = context->argument(0).toString();
+    if (serviceName.isEmpty()) {
+        return context->throwError(i18n("Service requires at least one parameter: the name of the service"));
+    }
+
+    JavaScriptService *service = new JavaScriptService(serviceName, iFace);
+    if (service->wasFound()) {
+        QScriptValue v = engine->newQObject(service, QScriptEngine::ScriptOwnership);
+        service->setScriptValue(v);
+        return v;
+    }
+
+    delete service;
+    return context->throwError(i18n("Requested service %1 ws not found in the Package.", serviceName));
+}
+
 QScriptValue JavaScriptDataEngine::callFunction(const QString &functionName, const QScriptValueList &args)
 {
     QScriptValue func = m_iface.property(functionName);
@@ -226,7 +261,7 @@ QStringList JavaScriptDataEngine::sources() const
         return rv.toVariant().toStringList();
     }
 
-    return QStringList();
+    return DataEngineScript::sources();
 }
 
 bool JavaScriptDataEngine::sourceRequestEvent(const QString &name)
@@ -261,10 +296,23 @@ Plasma::Service *JavaScriptDataEngine::serviceForSource(const QString &source)
     args << source;
     QScriptValue rv = callFunction("serviceForSource", args);
     if (rv.isValid() && rv.isQObject()) {
-        return qobject_cast<Plasma::Service *>(rv.toQObject());
+        Plasma::Service *service = qobject_cast<Plasma::Service *>(rv.toQObject());
+        if (service) {
+            if (service->destination().isEmpty()) {
+                service->setDestination(source);
+            }
+            return service;
+        } else {
+            delete rv.toQObject();
+        }
     }
 
     return 0;
+}
+
+QString JavaScriptDataEngine::filePath(const char *type, const QString &file) const
+{
+    return package()->filePath(type, file);
 }
 
 bool JavaScriptDataEngine::include(const QString &script)
