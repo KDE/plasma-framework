@@ -92,6 +92,10 @@ class PLASMA_EXPORT Service : public QObject
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(Service)
+    Q_PROPERTY(QString destination READ destination WRITE setDestination)
+    Q_PROPERTY(QStringList operationNames READ operationNames)
+    Q_PROPERTY(QString name READ name)
+
 public:
     /**
      * Destructor
