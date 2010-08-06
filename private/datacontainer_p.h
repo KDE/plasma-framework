@@ -33,8 +33,9 @@ class SignalRelay;
 class DataContainerPrivate
 {
 public:
-    DataContainerPrivate()
-        : store(NULL),
+    DataContainerPrivate(DataContainer *container)
+        : q(container),
+          store(NULL),
           dirty(false),
           cached(false),
           enableStorage(false),
@@ -47,7 +48,6 @@ public:
                              bool immediateUpdate);
 
     bool hasUpdates();
-    void populateFromStoredData(KJob *job);
 
     /**
      * Deletes the store member of DataContainerPrivate if 
@@ -55,7 +55,13 @@ public:
      */
     void storeJobFinished(KJob *job);
 
+    /**
+     * Does the work of putting the data from disk into the DataContainer
+     * after retrieve() sets it up.
+     */
+    void populateFromStoredData(KJob *job);
 
+    DataContainer *q;
     DataEngine::Data data;
     QMap<QObject *, SignalRelay *> relayObjects;
     QMap<uint, SignalRelay *> relays;

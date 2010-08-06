@@ -253,17 +253,13 @@ class PLASMA_EXPORT DataContainer : public QObject
          **/
         void checkUsage();
 
-        /**
-         * Does the work of putting the data from disk into the DataContainer
-         * after retrieve() sets it up.
-         */
-        void populateFromStoredData(KJob *job);
-
     private:
         friend class SignalRelay;
+        friend class DataContainerPrivate;
         DataContainerPrivate *const d;
 
         Q_PRIVATE_SLOT(d, void storeJobFinished(KJob *job))
+        Q_PRIVATE_SLOT(d, void populateFromStoredData(KJob *job))
 };
 
 } // Plasma namespace

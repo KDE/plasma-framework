@@ -29,7 +29,7 @@ namespace Plasma
 
 DataContainer::DataContainer(QObject *parent)
     : QObject(parent),
-      d(new DataContainerPrivate)
+      d(new DataContainerPrivate(this))
 {
 }
 
@@ -251,11 +251,12 @@ void DataContainer::retrieve()
             SLOT(populateFromStoredData(KJob*)));
 }
 
-void DataContainer::populateFromStoredData(KJob *job)
+void DataContainerPrivate::populateFromStoredData(KJob *job)
 {
     if (job->error()) {
         return;
     }
+
     DataEngine::Data dataToInsert;
     ServiceJob* ret = dynamic_cast<ServiceJob*>(job);
     QHash<QString, QVariant> h = ret->result().toHash();
@@ -270,15 +271,17 @@ void DataContainer::populateFromStoredData(KJob *job)
             dataToInsert.insert(key, h[key]);
         }
     }
-    if (!(d->data.isEmpty()))
+
+    if (!(data.isEmpty()))
     {
         //Do not fill the source with old stored
         //data if it is already populated with new data.
         return;
     }
-    d->data = dataToInsert;
-    d->dirty = true;
-    checkForUpdate();
+
+    data = dataToInsert;
+    dirty = true;
+    q->checkForUpdate();
 }
 
 void DataContainer::disconnectVisualization(QObject *visualization)
