@@ -386,7 +386,7 @@ void Service::registerOperationsScheme()
         return;
     }
 
-    QString path = KStandardDirs::locate("data", "plasma/services/" + d->name + ".operations");
+    const QString path = KStandardDirs::locate("data", "plasma/services/" + d->name + ".operations");
 
     if (path.isEmpty()) {
         kDebug() << "Cannot find operations description:" << d->name << ".operations";
