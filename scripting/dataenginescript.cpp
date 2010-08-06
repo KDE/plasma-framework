@@ -55,7 +55,7 @@ DataEngine *DataEngineScript::dataEngine() const
 
 QStringList DataEngineScript::sources() const
 {
-    return d->dataEngine->sources();
+    return d->dataEngine->containerDict().keys();
 }
 
 bool DataEngineScript::sourceRequestEvent(const QString &name)
