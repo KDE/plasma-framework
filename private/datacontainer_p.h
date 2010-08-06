@@ -34,10 +34,10 @@ class DataContainerPrivate
 {
 public:
     DataContainerPrivate()
-        : dirty(false),
+        : store(NULL),
+          dirty(false),
           cached(false),
           enableStorage(false),
-          store(NULL),
           isStored(true),
           storeCount(0)
     {}
@@ -48,6 +48,13 @@ public:
 
     bool hasUpdates();
     void populateFromStoredData(KJob *job);
+
+    /**
+     * Deletes the store member of DataContainerPrivate if 
+     * there are no more references to it.
+     */
+    void storeJobFinished(KJob *job);
+
 
     DataEngine::Data data;
     QMap<QObject *, SignalRelay *> relayObjects;

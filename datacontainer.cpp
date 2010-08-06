@@ -228,12 +228,12 @@ void DataContainer::store()
     }
 }
 
-void DataContainer::storeJobFinished(KJob* job)
+void DataContainerPrivate::storeJobFinished(KJob* )
 {
-    d->storeCount--;
-    if (d->storeCount == 0) {
-        d->store->deleteLater();
-        d->store = 0;
+    --storeCount;
+    if (storeCount < 1) {
+        store->deleteLater();
+        store = 0;
     }
 }
 

@@ -259,15 +259,11 @@ class PLASMA_EXPORT DataContainer : public QObject
          */
         void populateFromStoredData(KJob *job);
 
-        /**
-         * Deletes the store member of DataContainerPrivate if 
-         * there are no more references to it.
-         */
-        void storeJobFinished(KJob *job);
-
     private:
         friend class SignalRelay;
         DataContainerPrivate *const d;
+
+        Q_PRIVATE_SLOT(d, void storeJobFinished(KJob *job))
 };
 
 } // Plasma namespace
