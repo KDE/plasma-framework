@@ -37,8 +37,8 @@ public:
         : dirty(false),
           cached(false),
           enableStorage(false),
-          isStored(true),
           store(NULL),
+          isStored(true),
           storeCount(0)
     {}
 
