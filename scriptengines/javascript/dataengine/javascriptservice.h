@@ -38,6 +38,7 @@ class JavaScriptService : public Plasma::Service
 
 public:
     JavaScriptService(const QString &serviceName, JavaScriptDataEngine *engine);
+    ~JavaScriptService();
 
     bool wasFound() const;
     void setScriptValue(QScriptValue &v);

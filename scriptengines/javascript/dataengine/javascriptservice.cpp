@@ -31,6 +31,11 @@ JavaScriptService::JavaScriptService(const QString &serviceName, JavaScriptDataE
     setName(serviceName);
 }
 
+JavaScriptService::~JavaScriptService()
+{
+//    kDebug();
+}
+
 void JavaScriptService::setScriptValue(QScriptValue &v)
 {
     m_scriptValue = v;
