@@ -233,7 +233,7 @@ QScriptValue JavaScriptDataEngine::serviceCtor(QScriptContext *context, QScriptE
     }
 
     delete service;
-    return context->throwError(i18n("Requested service %1 ws not found in the Package.", serviceName));
+    return context->throwError(i18n("Requested service %1 was not found in the Package.", serviceName));
 }
 
 QScriptValue JavaScriptDataEngine::callFunction(const QString &functionName, const QScriptValueList &args)
