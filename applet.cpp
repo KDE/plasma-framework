@@ -2851,6 +2851,11 @@ void AppletOverlayWidget::destroy()
     }
 }
 
+void AppletOverlayWidget::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    event->accept();
+}
+
 void AppletOverlayWidget::overlayAnimationComplete()
 {
     if (scene()) {
