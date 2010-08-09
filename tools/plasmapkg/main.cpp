@@ -26,6 +26,7 @@
 #include <KAboutData>
 #include <KCmdLineArgs>
 #include <KLocale>
+#include <KPluginInfo>
 #include <KService>
 #include <KServiceTypeTrader>
 #include <KShell>
@@ -52,12 +53,14 @@ void runKbuildsycoca()
 QStringList packages(const QStringList& types)
 {
     QStringList result;
+
     foreach (const QString& type, types) {
-        KService::List services = KServiceTypeTrader::self()->query("Plasma/" + type);
-        foreach(const KService::Ptr &service, services) {
+        const KService::List services = KServiceTypeTrader::self()->query(type);
+        foreach (const KService::Ptr &service, services) {
             result << service->property("X-KDE-PluginInfo-Name", QVariant::String).toString();
         }
     }
+
     return result;
 }
 
@@ -65,7 +68,7 @@ void listPackages(const QStringList& types)
 {
     QStringList list = packages(types);
     list.sort();
-    foreach(const QString& package, list) {
+    foreach (const QString& package, list) {
         output(package);
     }
 }
@@ -158,9 +161,9 @@ int main(int argc, char **argv)
     if (type == i18nc("package type", "plasmoid").toLower() || type == "plasmoid") {
         packageRoot = "plasma/plasmoids/";
         servicePrefix = "plasma-applet-";
-        pluginTypes << "Applet";
-        pluginTypes << "PopupApplet";
-        pluginTypes << "Containment";
+        pluginTypes << "Plasma/Applet";
+        pluginTypes << "Plasma/PopupApplet";
+        pluginTypes << "Plasma/Containment";
     } else if (type == i18nc("package type", "theme").toLower() || type == "theme") {
         packageRoot = "desktoptheme/";
     } else if (type == i18nc("package type", "wallpaper").toLower() || type == "wallpaper") {
@@ -168,24 +171,24 @@ int main(int argc, char **argv)
     } else if (type == i18nc("package type", "dataengine").toLower() || type == "dataengine") {
         packageRoot = "plasma/dataengines/";
         servicePrefix = "plasma-dataengine-";
-        pluginTypes << "DataEngine";
+        pluginTypes << "Plasma/DataEngine";
     } else if (type == i18nc("package type", "runner").toLower() || type == "runner") {
         packageRoot = "plasma/runners/";
         servicePrefix = "plasma-runner-";
-        pluginTypes << "Runner";
+        pluginTypes << "Plasma/Runner";
     } else if (type == i18nc("package type", "wallpaperplugin").toLower() || type == "wallpaperplugin") {
         packageRoot = "plasma/wallpapers/";
         servicePrefix = "plasma-wallpaper-";
-        pluginTypes << "Wallpaper";
+        pluginTypes << "Plasma/Wallpaper";
     } else if (type == i18nc("package type", "layout-template").toLower() || type == "layout-template") {
         packageRoot = "plasma/layout-templates/";
         servicePrefix = "plasma-layout-";
-        pluginTypes << "LayoutTemplate";
+        pluginTypes << "Plasma/LayoutTemplate";
     } else {
-        QString constraint = QString("'%1' == [X-KDE-PluginInfo-Name]").arg(packageRoot);
+        const QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(args->getOption("type"));
         KService::List offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure", constraint);
         if (offers.isEmpty()) {
-            output(i18n("Could not find a suitable installer for package of type %1", type));
+            output(i18n("Could not find a suitable installer for package of type %1", args->getOption("type")));
             return 1;
         }
 
@@ -195,9 +198,10 @@ int main(int argc, char **argv)
 
         if (!installer) {
             output(i18n("Could not load installer for package of type %1. Error reported was: %2",
-                        type, error));
+                        args->getOption("type"), error));
             return 1;
         }
+
         packageRoot = installer->defaultPackageRoot();
         pluginTypes << installer->type();
     }
