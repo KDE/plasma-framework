@@ -73,6 +73,45 @@ void listPackages(const QStringList& types)
     }
 }
 
+void listTypes()
+{
+    output(i18n("Package types that are installable with this tool:"));
+    output(i18n("Builtins:"));
+    output(i18n("    dataengine: Plasma DataEngine plugin"));
+    output(i18n("    layout-template: Plasma containment and widgets layout script"));
+    output(i18n("    plasmoid: Plasma widget"));
+    output(i18n("    runner: Search plugin (KRunner, etc)"));
+    output(i18n("    theme: Plasma SVG theme"));
+    output(i18n("    wallpaper: Image pack for use with wallpaper backgrounds"));
+    output(i18n("    wallpaperplugin: Wallpaper plugin"));
+
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure");
+    if (!offers.isEmpty()) {
+        std::cout << std::endl;
+        output(i18n("Provided by plugins:"));
+        foreach (const KService::Ptr service, offers) {
+            KPluginInfo info(service);
+            output(i18nc("Plugin name and the kind of Plasma related content it provides, both from the plugin's desktop file",
+                        "    %1: %2", info.pluginName(), info.name()));
+        }
+    }
+
+    QStringList desktopFiles = KGlobal::dirs()->findAllResources("data", "plasma/packageformats/*rc", KStandardDirs::NoDuplicates);
+    if (!desktopFiles.isEmpty()) {
+        output(i18n("Provided by .desktop files:"));
+        Plasma::PackageStructure structure;
+        foreach (const QString &file, desktopFiles) {
+            // extract the type
+            KConfig config(file, KConfig::SimpleConfig);
+            structure.read(&config);
+            // get the name based on the rc file name, just as Plasma::PackageStructure does
+            const QString name = file.left(file.length() - 2);
+            output(i18nc("Plugin name and the kind of Plasma related content it provides, both from the plugin's desktop file",
+                        "    %1: %2", name, structure.type()));
+        }
+    }
+}
+
 int main(int argc, char **argv)
 {
     KAboutData aboutData("plasmapkg", 0, ki18n("Plasma Package Manager"),
@@ -103,6 +142,7 @@ int main(int argc, char **argv)
     options.add("upgrade <path>", ki18nc("Do not translate <path>", "Upgrade the package at <path>"));
     options.add("l");
     options.add("list", ki18n("List installed packages"));
+    options.add("list-types", ki18n("lists all known Package types that can be installed"));
     options.add("r");
     options.add("remove <name>", ki18nc("Do not translate <name>", "Remove the package named <name>"));
     options.add("p");
@@ -119,6 +159,11 @@ int main(int argc, char **argv)
     Plasma::PackageStructure *installer = 0;
     QString package;
     QString packageFile;
+
+    if (args->isSet("list-types")) {
+        listTypes();
+        exit(0);
+    }
 
     if (args->isSet("remove")) {
         package = args->getOption("remove");
