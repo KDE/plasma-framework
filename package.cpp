@@ -486,7 +486,6 @@ bool Package::uninstallPackage(const QString &pluginName,
 
     if (!ok) {
         kWarning() << "Unable to remove " << service;
-        return ok;
     }
 
     KIO::DeleteJob *job = KIO::del(KUrl(targetName));
