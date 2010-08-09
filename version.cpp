@@ -52,6 +52,7 @@ bool isPluginVersionCompatible(unsigned int version)
 {
     if (version == quint32(-1)) {
         // unversioned, just let it through
+        kWarning() << "unversioned plugin detected, may result in instability";
         return true;
     }
 
