@@ -19,5 +19,4 @@
 #define USEGUI
 #include "scriptenv.cpp"
 #include "scriptenv.moc"
-#include "javascriptaddonpackagestructure.moc"
 

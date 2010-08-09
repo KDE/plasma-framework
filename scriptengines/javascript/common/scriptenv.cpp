@@ -581,5 +581,4 @@ bool ScriptEnv::removeEventListener(const QString &event, const QScriptValue &fu
 
 #ifndef USEGUI
 #include "scriptenv.moc"
-#include "javascriptaddonpackagestructure.moc"
 #endif

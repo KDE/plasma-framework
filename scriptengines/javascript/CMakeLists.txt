@@ -1,6 +1,7 @@
 # APPLET
 
 set(simple_javascript_engine_SRCS
+    common/javascriptaddonpackagestructure.cpp
     common/scriptenvui.cpp
     plasmoid/appletauthorization.cpp
     plasmoid/appletinterface.cpp
@@ -52,6 +53,7 @@ install(FILES data/plasma-scriptengine-applet-simple-javascript.desktop DESTINAT
 # RUNNER
 
 set(javascript_runner_engine_SRCS
+    common/javascriptaddonpackagestructure.cpp
     common/scriptenv.cpp
     runner/javascriptrunner.cpp
 )
@@ -71,9 +73,10 @@ install(FILES data/plasma-scriptengine-runner-javascript.desktop DESTINATION ${S
 # DATAENGINE
 
 set(javascript_dataengine_engine_SRCS
+    common/javascriptaddonpackagestructure.cpp
+    common/scriptenv.cpp
     dataengine/javascriptdataengine.cpp
     dataengine/javascriptservice.cpp
-    common/scriptenv.cpp
     simplebindings/dataengine.cpp
     simplebindings/variant.cpp
 )
@@ -88,5 +91,20 @@ target_link_libraries(plasma_dataenginescript_javascript
 install(TARGETS plasma_dataenginescript_javascript DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES data/plasma-scriptengine-dataengine-javascript.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
+# ADDONS
+
+set(javascript_addon_packagestructure_SRCS
+    common/addonpackageplugin.cpp
+    common/javascriptaddonpackagestructure.cpp
+)
+
+kde4_add_plugin(plasma_packagestructure_javascriptaddon ${javascript_addon_packagestructure_SRCS})
+target_link_libraries(plasma_packagestructure_javascriptaddon ${KDE4_PLASMA_LIBS})
+
+install(TARGETS plasma_packagestructure_javascriptaddon DESTINATION ${PLUGIN_INSTALL_DIR})
+install(FILES data/plasma-packagestructure-javascript-addon.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+
 install(FILES data/plasma-javascriptaddon.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
+
+
 

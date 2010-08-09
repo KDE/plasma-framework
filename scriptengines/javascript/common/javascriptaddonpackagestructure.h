@@ -26,24 +26,9 @@ class JavascriptAddonPackageStructure : public Plasma::PackageStructure
     Q_OBJECT
 
 public:
-    JavascriptAddonPackageStructure(QObject *parent = 0)
-        : Plasma::PackageStructure(parent)
-    {
-        setServicePrefix("plasma-layout-template");
-        setDefaultPackageRoot("plasma/javascript-addons/");
-        addFileDefinition("mainscript", "code/main.js", i18n("Main Script File"));
-        setRequired("mainscript", true);
-    }
+    JavascriptAddonPackageStructure(QObject *parent = 0, const QVariantList &args = QVariantList());
 
-    void pathChanged()
-    {
-        KDesktopFile config(path() + "/metadata.desktop");
-        KConfigGroup cg = config.desktopGroup();
-        QString mainScript = cg.readEntry("X-Plasma-MainScript", QString());
-        if (!mainScript.isEmpty()) {
-            addFileDefinition("mainscript", mainScript, i18n("Main Script File"));
-        }
-    }
+    void pathChanged();
 };
 
 #endif
