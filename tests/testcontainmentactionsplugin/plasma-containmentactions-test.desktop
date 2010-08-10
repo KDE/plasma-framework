@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Test
 Name[en_GB]=Test
+Name[es]=Prueba
 Name[ia]=Prova
 Name[pt]=Teste
 Name[pt_BR]=Teste
@@ -9,6 +10,7 @@ Name[uk]=Тест
 Name[x-test]=xxTestxx
 Comment=A dummy plugin for testing
 Comment[en_GB]=A dummy plugin for testing
+Comment[es]=Un complemento de pruebas
 Comment[ia]=Un plugin vacue pro essayar
 Comment[pt]=Um 'plugin' de exemplo para testes
 Comment[pt_BR]=Um plug-in fictício para testes
