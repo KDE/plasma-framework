@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=Javascript Addon
+Name[x-test]=xxJavascript Addonxx
 Comment=Addons for Javascript Plasma plugins
+Comment[x-test]=xxAddons for Javascript Plasma pluginsxx
 Type=Service
 X-KDE-ServiceTypes=Plasma/PackageStructure
 
