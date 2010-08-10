@@ -99,6 +99,12 @@ public:
      */
     int currentIndex() const;
 
+    /**
+     * Sets the current index of the combobox
+     * @since 4.6
+     */
+    void setCurrentIndex(int index);
+
 public Q_SLOTS:
     void clear();
 

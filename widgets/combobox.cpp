@@ -332,6 +332,11 @@ int ComboBox::currentIndex() const
     return nativeWidget()->currentIndex();
 }
 
+void ComboBox::setCurrentIndex(int index)
+{
+    nativeWidget()->setCurrentIndex(index);
+}
+
 } // namespace Plasma
 
 #include <combobox.moc>
