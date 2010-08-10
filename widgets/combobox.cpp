@@ -157,6 +157,8 @@ void ComboBox::setNativeWidget(KComboBox *nativeWidget)
     }
 
     connect(nativeWidget, SIGNAL(activated(const QString &)), this, SIGNAL(activated(const QString &)));
+    connect(nativeWidget, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(currentIndexChanged(int)));
     connect(nativeWidget, SIGNAL(currentIndexChanged(const QString &)),
             this, SIGNAL(textChanged(const QString &)));
 
@@ -318,6 +320,16 @@ void ComboBox::mousePressEvent(QGraphicsSceneMouseEvent *event)
         applet->setStatus(Plasma::AcceptingInputStatus);
     }
     QGraphicsProxyWidget::mousePressEvent(event);
+}
+
+int ComboBox::count() const
+{
+    return nativeWidget()->count();
+}
+
+int ComboBox::currentIndex() const
+{
+    return nativeWidget()->currentIndex();
 }
 
 } // namespace Plasma

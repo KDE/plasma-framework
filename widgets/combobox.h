@@ -44,6 +44,8 @@ class PLASMA_EXPORT ComboBox : public QGraphicsProxyWidget
     Q_PROPERTY(QString text READ text NOTIFY textChanged)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(KComboBox *nativeWidget READ nativeWidget WRITE setNativeWidget)
+    Q_PROPERTY(int count READ count)
+    Q_PROPERTY(int currentIndex READ currentIndex WRITE setCurrentIndex NOTIFY currentIndexChanged)
 
 public:
     explicit ComboBox(QGraphicsWidget *parent = 0);
@@ -85,6 +87,18 @@ public:
      */
     Q_INVOKABLE void addItem(const QString &text);
 
+    /**
+     * Returns the number of items in the combo box
+     * @since 4.6
+     */
+    int count() const;
+
+    /**
+     * Returns the current index of the combobox
+     * @since 4.6
+     */
+    int currentIndex() const;
+
 public Q_SLOTS:
     void clear();
 
@@ -101,6 +115,12 @@ Q_SIGNALS:
      * The item's text is passed.
      */
     void textChanged(const QString &text);
+
+    /**
+     * This signal is sent whenever the currentIndex in the combobox changes 
+     * either through user interaction or programmatically. 
+     */
+    void currentIndexChanged(int index);
 
 protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
