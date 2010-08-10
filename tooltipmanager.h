@@ -61,7 +61,7 @@ class Corona;
  * memory used by the tooltip, but you can manually unregister it at any time by
  * calling unregisterWidget().
  *
- * When a tooltip for a widget is about to be shown, the widget's toolTipAboutToShow slot will be
+ * When a tooltip for a widget is about to be shown, the widget's toolTipAboutToShow() slot will be
  * invoked if it exists. Similarly, when a tooltip is hidden, the widget's toolTipHidden() slot
  * will be invoked if it exists. This allows widgets to provide on-demand tooltip data.
  */
