@@ -62,6 +62,8 @@ void SvgWidget::mousePressEvent(QGraphicsSceneMouseEvent *event)
     // transparent"
     if (receivers(SIGNAL(clicked(Qt::MouseButton)))) {
         event->accept();
+    } else {
+        QGraphicsWidget::mousePressEvent(event);
     }
 }
 
