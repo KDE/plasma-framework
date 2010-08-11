@@ -161,7 +161,7 @@ protected:
      * @return a pointer to the loaded applet, or 0 on load failure
      **/
     virtual Applet *internalLoadApplet(const QString &name, uint appletId = 0,
-                               const QVariantList &args = QVariantList());
+                                       const QVariantList &args = QVariantList());
 
     /**
      * A re-implementable method that allows subclasses to override
