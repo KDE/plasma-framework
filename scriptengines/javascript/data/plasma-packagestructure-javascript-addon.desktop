@@ -1,7 +1,13 @@
 [Desktop Entry]
 Name=Javascript Addon
+Name[pt]=Extensão de JavaScript
+Name[sv]=Javaskript-tillägg
+Name[uk]=Додаток JavaScript
 Name[x-test]=xxJavascript Addonxx
 Comment=Addons for Javascript Plasma plugins
+Comment[pt]=Extras para os 'plugins' do Plasma em JavaScript
+Comment[sv]=Tillägg för Javascript Plasma-insticksprogram
+Comment[uk]=Додатки для використання Javascript у Плазмі
 Comment[x-test]=xxAddons for Javascript Plasma pluginsxx
 Type=Service
 X-KDE-ServiceTypes=Plasma/PackageStructure
