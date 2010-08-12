@@ -471,7 +471,8 @@ WallpaperPrivate::WallpaperPrivate(KService::Ptr service, Wallpaper *wallpaper) 
     initialized(false),
     needsConfig(false),
     scriptInitialized(false),
-    previewing(false)
+    previewing(false),
+    needsPreviewDuringConfiguration(false)
 {
     if (wallpaperDescription.isValid()) {
         QString api = wallpaperDescription.property("X-Plasma-API").toString();
@@ -663,6 +664,16 @@ bool Wallpaper::isPreviewing() const
 void Wallpaper::setPreviewing(bool previewing)
 {
     d->previewing = previewing;
+}
+
+bool Wallpaper::needsPreviewDuringConfiguration() const
+{
+    return d->needsPreviewDuringConfiguration;
+}
+
+void Wallpaper::setPreviewDuringConfiguration(const bool preview)
+{
+    d->needsPreviewDuringConfiguration = preview;
 }
 
 const Package *Wallpaper::package() const

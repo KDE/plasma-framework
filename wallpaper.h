@@ -343,6 +343,13 @@ class PLASMA_EXPORT Wallpaper : public QObject
          */
         void setPreviewing(bool previewing);
 
+        /**
+         * @return true if the wallpaper needs a live preview in the configuration UI
+         * @since 4.6
+         */
+        bool needsPreviewDuringConfiguration() const;
+
+
     Q_SIGNALS:
         /**
          * This signal indicates that wallpaper needs to be repainted.
@@ -489,6 +496,16 @@ class PLASMA_EXPORT Wallpaper : public QObject
 
         //FIXME: KDE5, this must be moved to the dptr
         QList<QAction*> contextActions;
+
+        /**
+         * Sets whether the configuration user interface of the wallpaper should have
+         * a live preview rendered by a Wallpaper instance. note: this is just an
+         * hint, the configuration user interface can choose to ignore it
+         *
+         * @param preview true if a preview should be shown
+         * @since 4.6
+         */
+        void setPreviewDuringConfiguration(const bool preview);
 
     private:
         Q_PRIVATE_SLOT(d, void renderCompleted(WallpaperRenderThread *renderer, int token, const QImage &image,
