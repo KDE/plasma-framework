@@ -25,7 +25,7 @@ JavascriptAddonPackageStructure::JavascriptAddonPackageStructure(QObject *parent
     : Plasma::PackageStructure(parent, "Plasma/JavascriptAddon")
 {
     Q_UNUSED(args)
-    setServicePrefix("plasma-javascriptaddon");
+    setServicePrefix("plasma-javascriptaddon-");
     setDefaultPackageRoot("plasma/javascript-addons/");
     addFileDefinition("mainscript", "code/main.js", i18n("Main Script File"));
     setRequired("mainscript", true);
