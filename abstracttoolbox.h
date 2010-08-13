@@ -92,7 +92,15 @@ public:
      * remove the tool associated with this action
      */
     virtual void removeTool(QAction *action) = 0;
+
+    /**
+     * @return true if the ToolBox is open and shown the actions list
+     */
     virtual bool isShowing() const = 0;
+
+    /**
+     * Opens or closes the ToolBox
+     */
     virtual void setShowing(const bool show) = 0;
 
 public Q_SLOTS:
