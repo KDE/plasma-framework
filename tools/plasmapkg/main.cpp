@@ -76,9 +76,9 @@ void listPackages(const QStringList& types)
 void listTypes()
 {
     output(i18n("Package types that are installable with this tool:"));
-    output(i18n("Builtins:"));
+    output(i18n("Built in:"));
     output(i18n("    dataengine: Plasma DataEngine plugin"));
-    output(i18n("    layout-template: Plasma containment and widgets layout script"));
+    output(i18n("    layout-template: Plasma containment and widget layout script"));
     output(i18n("    plasmoid: Plasma widget"));
     output(i18n("    runner: Search plugin (KRunner, etc)"));
     output(i18n("    theme: Plasma SVG theme"));
