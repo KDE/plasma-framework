@@ -155,6 +155,18 @@ void FocusIndicator::resizeEvent(QGraphicsSceneResizeEvent *event)
     m_hoverAnimation->setProperty("targetPixmap", m_background->framePixmap());
 }
 
+void FocusIndicator::animateVisibility(const bool visible)
+{
+    m_fade->setProperty("startOpacity", opacity());
+
+    if (visible) {
+        m_fade->setProperty("targetOpacity", 1.0);
+    } else {
+        m_fade->setProperty("targetOpacity", 0);
+    }
+    m_fade->start();
+}
+
 void FocusIndicator::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option)

@@ -107,6 +107,15 @@ public:
         static_cast<KPushButton*>(q->widget())->setIcon(KIcon(pm));
     }
 
+    void pressedChanged()
+    {
+        if (q->nativeWidget()->isDown() || q->nativeWidget()->isChecked()) {
+            focusIndicator->animateVisibility(false);
+        } else {
+            focusIndicator->animateVisibility(true);
+        }
+    }
+
     void syncActiveRect();
     void syncBorders();
 
@@ -119,6 +128,7 @@ public:
 
     Animation *hoverAnimation;
 
+    FocusIndicator *focusIndicator;
     QString imagePath;
     QString absImagePath;
     Svg *svg;
@@ -174,7 +184,9 @@ PushButton::PushButton(QGraphicsWidget *parent)
 
     KPushButton *native = new KPushButton;
     connect(native, SIGNAL(pressed()), this, SIGNAL(pressed()));
+    connect(native, SIGNAL(pressed()), this, SLOT(pressedChanged()));
     connect(native, SIGNAL(released()), this, SIGNAL(released()));
+    connect(native, SIGNAL(released()), this, SLOT(pressedChanged()));
     connect(native, SIGNAL(clicked()), this, SIGNAL(clicked()));
     connect(native, SIGNAL(toggled(bool)), this, SIGNAL(toggled(bool)));
     setWidget(native);
@@ -183,7 +195,7 @@ PushButton::PushButton(QGraphicsWidget *parent)
 
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    FocusIndicator *focusIndicator = new FocusIndicator(this, "widgets/button");
+    d->focusIndicator = new FocusIndicator(this, "widgets/button");
 
     d->syncBorders();
     setAcceptHoverEvents(true);

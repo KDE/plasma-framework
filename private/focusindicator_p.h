@@ -39,6 +39,7 @@ public:
     void setCustomGeometry(const QRectF &geometry);
     void setCustomPrefix(const QString &prefix);
 
+    void animateVisibility(const bool visible);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 protected:

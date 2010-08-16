@@ -222,6 +222,7 @@ protected:
 private:
     Q_PRIVATE_SLOT(d, void syncBorders())
     Q_PRIVATE_SLOT(d, void setPixmap())
+    Q_PRIVATE_SLOT(d, void pressedChanged())
 
     friend class PushButtonPrivate;
     PushButtonPrivate *const d;
