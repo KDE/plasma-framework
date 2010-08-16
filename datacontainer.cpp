@@ -19,6 +19,7 @@
 #include "datacontainer.h"
 #include "private/datacontainer_p.h"
 #include "private/storage_p.h"
+#include "pluginloader.h"
 
 #include <kdebug.h>
 
@@ -198,35 +199,42 @@ void DataContainer::store()
 
     setNeedsToBeStored(false);
 
-    if (d->store == NULL) {
-        d->store = new Storage(de->name(), 0);
+    if (!d->store) {
+        QVariantList args;
+        args.insert(0, de->name());
+        d->store = PluginLoader::pluginLoader()->loadService("akonadi_storage_plugin", args, 0);
+        if (!d->store) {
+            d->store = new Storage(de->name(), 0);
+        }
     }
 
     KConfigGroup op = d->store->operationDescription("save");
     op.writeEntry("source", objectName());
     DataEngine::Data dataToStore = data();
     DataEngine::Data::const_iterator it = dataToStore.constBegin();
+
     while (it != dataToStore.constEnd() && dataToStore.constEnd() == data().constEnd()) {
         QVariant v = it.value();
-        if ((it.value().type() == QVariant::String) || (it.value().type() == QVariant::Int)) {
-            op.writeEntry("key", it.key());
-            op.writeEntry("data", it.value());
-        } else {
-            QByteArray b;
-            QDataStream ds(&b, QIODevice::WriteOnly);
-            ds << it.value();
-            op.writeEntry("key", "base64-" + it.key());
-            op.writeEntry("data", b.toBase64());
-        }
-        ++it;
-        if (d->store == NULL) {
+        QByteArray b;
+        QDataStream ds(&b, QIODevice::WriteOnly);
+        ds << it.value();
+        op.writeEntry("key", it.key());
+        op.writeEntry("data", b.toBase64());
+    }
+    ++it;
+    if (!d->store) {
+        QVariantList args;
+        args.insert(0, de->name());
+        d->store = PluginLoader::pluginLoader()->loadService("plasma_storage_akonadi", args, 0);
+        if (!d->store) {
             d->store = new Storage(de->name(), 0);
         }
-        ServiceJob* job = d->store->startOperationCall(op);
-        d->storeCount++;
-        connect(job, SIGNAL(finished(KJob*)), this, SLOT(storeJobFinished(KJob*)));
     }
+    ServiceJob* job = d->store->startOperationCall(op);
+    d->storeCount++;
+    connect(job, SIGNAL(finished(KJob*)), this, SLOT(storeJobFinished(KJob*)));
 }
+
 
 void DataContainerPrivate::storeJobFinished(KJob* )
 {
@@ -243,10 +251,17 @@ void DataContainer::retrieve()
     if (de == NULL) {
         return;
     }
-    Storage* store = new Storage(de->name(), 0);
-    KConfigGroup retrieveGroup = store->operationDescription("retrieve");
+    if (!d->store) {
+        QVariantList args;
+        args.insert(0, de->name());
+        d->store = PluginLoader::pluginLoader()->loadService("plasma_storage_akonadi", args, 0);
+        if (!d->store) {
+            d->store = new Storage(de->name(), 0);
+        }
+    }
+    KConfigGroup retrieveGroup = d->store->operationDescription("retrieve");
     retrieveGroup.writeEntry("source", objectName());
-    ServiceJob* retrieveJob = store->startOperationCall(retrieveGroup);
+    ServiceJob* retrieveJob = d->store->startOperationCall(retrieveGroup);
     connect(retrieveJob, SIGNAL(result(KJob*)), this,
             SLOT(populateFromStoredData(KJob*)));
 }
@@ -261,27 +276,22 @@ void DataContainerPrivate::populateFromStoredData(KJob *job)
     ServiceJob* ret = dynamic_cast<ServiceJob*>(job);
     QHash<QString, QVariant> h = ret->result().toHash();
     foreach (QString key, h.keys()) {
-        if (key.startsWith("base64-")) {
-            QByteArray b = QByteArray::fromBase64(h[key].toString().toAscii());
-            QDataStream ds(&b, QIODevice::ReadOnly);
-            QVariant v(ds);
-            key.remove(0, 7);
-            dataToInsert.insert(key, v);
-        } else {
-            dataToInsert.insert(key, h[key]);
-        }
+        QByteArray b = QByteArray::fromBase64(h[key].toString().toAscii());
+        QDataStream ds(&b, QIODevice::ReadOnly);
+        QVariant v(ds);
+        key.remove(0, 7);
+        dataToInsert.insert(key, v);
     }
 
-    if (!(data.isEmpty()))
+    //Do not fill the source with old stored
+    //data if it is already populated with new data.
+    if (data.isEmpty())
     {
-        //Do not fill the source with old stored
-        //data if it is already populated with new data.
-        return;
+        data = dataToInsert;
+    //    dirty = true;
+    //    q->checkForUpdate();
     }
 
-    data = dataToInsert;
-    dirty = true;
-    q->checkForUpdate();
 }
 
 void DataContainer::disconnectVisualization(QObject *visualization)

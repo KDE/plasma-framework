@@ -35,7 +35,7 @@ class DataContainerPrivate
 public:
     DataContainerPrivate(DataContainer *container)
         : q(container),
-          store(NULL),
+          store(0),
           dirty(false),
           cached(false),
           enableStorage(false),
@@ -66,7 +66,7 @@ public:
     QMap<QObject *, SignalRelay *> relayObjects;
     QMap<uint, SignalRelay *> relays;
     QTime updateTs;
-    Storage* store;
+    Service* store;
     bool dirty : 1;
     bool cached : 1;
     bool enableStorage : 1;
