@@ -1073,7 +1073,7 @@ void Applet::showMessage(const QIcon &icon, const QString &message, const Messag
 
     if (buttons & ButtonOk) {
         PushButton *ok = new PushButton(mainWidget);
-        ok->setText(i18n("OK"));
+        ok->setText(i18n("&OK"));
         ok->setIcon(KIcon("dialog-ok"));
         buttonLayout->addItem(ok);
         connect(ok, SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
@@ -1081,25 +1081,30 @@ void Applet::showMessage(const QIcon &icon, const QString &message, const Messag
 
     if (buttons & ButtonYes) {
         PushButton *yes = new PushButton(mainWidget);
-        yes->setText(i18n("Yes"));
+        yes->setText(i18n("&Yes"));
         buttonLayout->addItem(yes);
         connect(yes, SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
     }
 
     if (buttons & ButtonNo) {
         PushButton *no = new PushButton(mainWidget);
-        no->setText(i18n("No"));
+        no->setText(i18n("&No"));
         buttonLayout->addItem(no);
         connect(no, SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
     }
 
     if (buttons & ButtonCancel) {
         PushButton *cancel = new PushButton(mainWidget);
-        cancel->setText(i18n("Cancel"));
+        cancel->setText(i18n("&Cancel"));
         cancel->setIcon(KIcon("dialog-cancel"));
         buttonLayout->addItem(cancel);
         connect(cancel, SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
     }
+
+    QAction *action = new QAction(this);
+    action->setShortcut(Qt::Key_Escape);
+    mainWidget->addAction(action);
+    connect(action, SIGNAL(triggered()), this, SLOT(destroyMessageOverlay()));
 
     buttonLayout->addStretch();
 
