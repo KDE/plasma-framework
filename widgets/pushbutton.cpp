@@ -457,12 +457,12 @@ void PushButton::paint(QPainter *painter,
         if (option->direction == Qt::LeftToRight) {
             alphaGradient.setColorAt(0, QColor(0, 0, 0, 255));
             alphaGradient.setColorAt(1, QColor(0, 0, 0, 0));
-            p.drawText(bufferPixmap.rect(), Qt::AlignLeft|Qt::AlignVCenter,
+            p.drawText(bufferPixmap.rect(), Qt::AlignLeft|Qt::AlignVCenter|Qt::TextShowMnemonic,
                        nativeWidget()->text());
         } else {
             alphaGradient.setColorAt(0, QColor(0, 0, 0, 0));
             alphaGradient.setColorAt(1, QColor(0, 0, 0, 255));
-            p.drawText(bufferPixmap.rect(), Qt::AlignRight|Qt::AlignVCenter,
+            p.drawText(bufferPixmap.rect(), Qt::AlignRight|Qt::AlignVCenter|Qt::TextShowMnemonic,
                        nativeWidget()->text());
         }
 
@@ -472,7 +472,7 @@ void PushButton::paint(QPainter *painter,
         painter->drawPixmap(rect.topLeft(), bufferPixmap);
     } else {
         painter->setFont(widgetFont);
-        painter->drawText(rect, Qt::AlignCenter, nativeWidget()->text());
+        painter->drawText(rect, Qt::AlignCenter|Qt::TextShowMnemonic, nativeWidget()->text());
     }
 }
 
