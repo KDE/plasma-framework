@@ -242,8 +242,12 @@ void ToolTipManager::setContent(QGraphicsWidget *widget, const ToolTipContent &d
 
         d->tipWidget->setContent(widget, data);
         d->tipWidget->prepareShowing();
+
+        //look if the data prefers aother graphicswidget, otherwise use the one used as event catcher
+        QGraphicsWidget *referenceWidget = data.graphicsWidget()?data.graphicsWidget():widget;
+
         if (m_corona) {
-            d->tipWidget->moveTo(m_corona->popupPosition(widget, d->tipWidget->size(), Qt::AlignCenter));
+            d->tipWidget->moveTo(m_corona->popupPosition(referenceWidget, d->tipWidget->size(), Qt::AlignCenter));
         }
     }
 }
@@ -369,7 +373,8 @@ void ToolTipManagerPrivate::showToolTip()
     tipWidget->setContent(currentWidget, tooltip.value());
     tipWidget->prepareShowing();
     if (q->m_corona) {
-        tipWidget->moveTo(q->m_corona->popupPosition(currentWidget, tipWidget->size(), Qt::AlignCenter));
+        QGraphicsWidget *referenceWidget = tooltip.value().graphicsWidget()?tooltip.value().graphicsWidget():currentWidget;
+        tipWidget->moveTo(q->m_corona->popupPosition(referenceWidget, tipWidget->size(), Qt::AlignCenter));
     }
     tipWidget->show();
     isShown = true;  //ToolTip is visible

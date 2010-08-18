@@ -19,6 +19,7 @@
 
 #include "tooltipcontent.h"
 
+#include <QGraphicsWidget>
 #include <QHash>
 #include <QTextDocument>
 
@@ -58,6 +59,7 @@ public:
     QPixmap image;
     QList<WId> windowsToPreview;
     QHash<QString, ToolTipResource> resources;
+    QWeakPointer<QGraphicsWidget> graphicsWidget;
     bool autohide : 1;
     bool clickable : 1;
     bool highlightWindows : 1;
@@ -233,6 +235,16 @@ void ToolTipContent::setClickable(bool clickable)
 bool ToolTipContent::isClickable() const
 {
     return d->clickable;
+}
+
+void ToolTipContent::setGraphicsWidget(QGraphicsWidget *widget)
+{
+    d->graphicsWidget = widget;
+}
+
+QGraphicsWidget *ToolTipContent::graphicsWidget() const
+{
+    return d->graphicsWidget.data();
 }
 
 } // namespace Plasma

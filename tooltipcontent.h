@@ -30,6 +30,7 @@
 #include <plasma/plasma_export.h>
 
 class QTextDocument;
+class QGraphicsWidget;
 
 /**
  * This provides the content for a tooltip.
@@ -190,6 +191,18 @@ public:
      * @since 4.3
      */
     bool isClickable() const;
+
+    /**
+     * Sets an optional graphicsWidget that will be used for positioning the tooltip
+     * @since 4.6
+     */
+    void setGraphicsWidget(QGraphicsWidget *widget);
+
+    /**
+     * the graphicsWidget used for positioning the tooltip, if any
+     * @since 4.6
+     */
+    QGraphicsWidget *graphicsWidget() const;
 
 private:
     ToolTipContentPrivate * const d;
