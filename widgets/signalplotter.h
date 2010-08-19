@@ -89,12 +89,12 @@ public:
     /**
      * Reorder the plots into the order given.  For example:
      * \code
-     *  KSignalPlotter *s = KSignalPlotter(parent);
+     *  Plasma::SignalPlotter *s = new Plasma::SignalPlotter(parent);
      *  s->addPlot(Qt::Blue);
      *  s->addPlot(Qt::Green);
      *  QList neworder;
      *  neworder << 1 << 0;
-     *  reorderPlots(newOrder);
+     *  s->reorderPlots(newOrder);
      *  //Now the order is Green then Blue
      * \endcode
      * @param newOrder a list with the new position of each plot
