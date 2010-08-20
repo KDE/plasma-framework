@@ -174,6 +174,31 @@ class PLASMA_EXPORT WebView : public QGraphicsWidget
          */
         void setGeometry(const QRectF &geometry);
 
+    public Q_SLOTS:
+        /**
+         * Loads the previous document in the list of documents built by navigating links.
+         * @since 4.6
+         */
+        void back();
+
+        /**
+         * Loads the next document in the list of documents built by navigating links.
+         * @since 4.6
+         */
+        void forward();
+
+        /**
+         * Reloads the current document.
+         * @since 4.6
+         */
+        void reload();
+
+        /**
+         * Stops loading the document.
+         * @since 4.6
+         */
+        void stop();
+
     Q_SIGNALS:
         /**
          * During loading progress, this signal is emitted. The values
@@ -190,6 +215,12 @@ class PLASMA_EXPORT WebView : public QGraphicsWidget
          *                otherwise false
          */
         void loadFinished(bool success);
+
+        /**
+         * url displayed by the web page changed
+         * @since 4.6
+         */
+        void urlChanged(const QUrl &url);
 
     protected:
         /**

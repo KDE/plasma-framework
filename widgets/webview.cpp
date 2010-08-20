@@ -79,6 +79,8 @@ WebView::WebView(QGraphicsItem *parent)
             this, SIGNAL(loadProgress(int)));
     connect(d->webView, SIGNAL(loadFinished(bool)),
             this, SLOT(loadingFinished(bool)));
+    connect(d->webView, SIGNAL(urlChanged(const QUrl &)),
+            this, SLOT(urlChanged(const QUrl &)));
 }
 
 WebView::~WebView()
@@ -177,6 +179,26 @@ void WebView::setDragToScroll(bool drag)
 bool WebView::dragToScroll()
 {
     return d->webView->dragToScroll();
+}
+
+void WebView::back()
+{
+    d->webView->back();
+}
+
+void WebView::forward()
+{
+    d->webView->forward();
+}
+
+void WebView::reload()
+{
+    d->webView->reload();
+}
+
+void WebView::stop()
+{
+    d->webView->stop();
 }
 
 void WebView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
