@@ -342,7 +342,7 @@ void Dialog::syncToGraphicsWidget()
 
         graphicsWidget->setMaximumSize(maxSize - QSize(left + right, top + bottom).boundedTo(graphicsWidget->effectiveSizeHint(Qt::MaximumSize).toSize()));
 
-        setMinimumSize(-1, -1);
+        setMinimumSize(0, 0);
         setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
 
         QSize newSize(qMin(int(graphicsWidget->size().width()) + left + right, maxSize.width()),
