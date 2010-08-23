@@ -9,6 +9,7 @@ Name[pt_BR]=Complementos de JavaScript
 Name[sv]=Javaskript-tillägg
 Name[uk]=Додаток JavaScript
 Name[x-test]=xxJavascript Addonxx
+Name[zh_TW]=Javascript Addon
 Comment=Addons for Javascript Plasma plugins
 Comment[en_GB]=Addons for Javascript Plasma plugins
 Comment[es]=Añadidos para complementos de JavaScript para Plasma
@@ -19,6 +20,7 @@ Comment[pt_BR]=Complementos para os plug-ins do Plasma em JavaScript
 Comment[sv]=Tillägg för Javascript Plasma-insticksprogram
 Comment[uk]=Додатки для використання Javascript у Плазмі
 Comment[x-test]=xxAddons for Javascript Plasma pluginsxx
+Comment[zh_TW]=Javascript Plasma 外掛程式的 Addon
 Type=Service
 X-KDE-ServiceTypes=Plasma/PackageStructure
 

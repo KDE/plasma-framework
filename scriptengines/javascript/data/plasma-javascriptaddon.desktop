@@ -10,6 +10,7 @@ Name[pt_BR]=Complementos de JavaScript do Plasma
 Name[sv]=Plasma Javaskript-tillägg
 Name[uk]=Додаток JavaScript до Плазми
 Name[x-test]=xxPlasma JavaScript Addonxx
+Name[zh_TW]=Plasma JavaScript Addon
 Type=ServiceType
 X-KDE-ServiceType=Plasma/JavascriptAddon
 Icon=plasma
