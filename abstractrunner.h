@@ -439,6 +439,11 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         Q_INVOKABLE DataEngine *dataEngine(const QString &name) const;
 
     protected Q_SLOTS:
+        /**
+         * Reimplement this slot to run any initialization routines on first load.
+         * By default, it calls reloadConfiguration(); for scripted Runners this
+         * method also sets up the ScriptEngine.
+         */
         void init();
 
         /**

@@ -351,6 +351,8 @@ void AbstractRunner::init()
         d->setupScriptSupport();
         d->script->init();
     }
+
+    reloadConfiguration();
 }
 
 DataEngine *AbstractRunner::dataEngine(const QString &name) const
