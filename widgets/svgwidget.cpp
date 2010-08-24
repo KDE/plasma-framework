@@ -27,27 +27,34 @@
 
 namespace Plasma
 {
+
 class SvgWidgetPrivate
 {
-    public:
-        SvgWidgetPrivate(Svg *s, const QString &element)
-            : svg(s), elementID(element)
-        {
-        }
+public:
+    SvgWidgetPrivate(SvgWidget *widget, Svg *s, const QString &element)
+        : q(widget), svg(s), elementID(element)
+    {
+    }
 
-        Svg *svg;
-        QString elementID;
+    void svgChanged()
+    {
+        q->update();
+    }
+
+    SvgWidget *q;
+    Svg *svg;
+    QString elementID;
 };
 
 SvgWidget::SvgWidget(QGraphicsItem *parent, Qt::WindowFlags wFlags)
     : QGraphicsWidget(parent, wFlags),
-      d(new SvgWidgetPrivate(0, QString()))
+      d(new SvgWidgetPrivate(this, 0, QString()))
 {
 }
 
 SvgWidget::SvgWidget(Svg *svg, const QString &elementID, QGraphicsItem *parent, Qt::WindowFlags wFlags)
     : QGraphicsWidget(parent, wFlags),
-      d(new SvgWidgetPrivate(svg, elementID))
+      d(new SvgWidgetPrivate(this, svg, elementID))
 {
 }
 
@@ -76,7 +83,15 @@ void SvgWidget::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 void SvgWidget::setSvg(Svg *svg)
 {
+    if (d->svg) {
+        disconnect(d->svg);
+    }
+
     d->svg = svg;
+
+    if (svg) {
+        connect(svg, SIGNAL(repaintNeeded()), this, SLOT(svgChanged()));
+    }
     update();
 }
 

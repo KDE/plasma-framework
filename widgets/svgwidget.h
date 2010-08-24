@@ -66,6 +66,8 @@ class PLASMA_EXPORT SvgWidget : public QGraphicsWidget
         void mousePressEvent(QGraphicsSceneMouseEvent * event);
 
     private:
+        Q_PRIVATE_SLOT(d, void svgChanged())
+
         SvgWidgetPrivate * const d;
 };
 
