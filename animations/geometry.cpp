@@ -80,12 +80,16 @@ void GeometryAnimation::updateEffectiveTime(int currentTime)
     if (w) {
         const qreal delta = currentTime / qreal(duration());
 
-        QRectF newGeo = m_startGeometry;
-        newGeo.adjust((-m_startGeometry.x() + m_targetGeometry.x()) * delta,
-                (-m_startGeometry.y() + m_targetGeometry.y()) * delta,
-                (-m_startGeometry.width() + m_targetGeometry.width()) * delta,
-                (-m_startGeometry.height() + m_targetGeometry.height()) * delta);
+        QRectF newGeo;
 
+        newGeo.moveTopLeft(QPointF(m_startGeometry.left()*(1-delta) + m_targetGeometry.left()*(delta),
+                        m_startGeometry.top()*(1-delta) + m_targetGeometry.top()*(delta)));
+        if (m_startGeometry.size() != m_targetGeometry.size()) {
+            newGeo.setSize(QSizeF(m_startGeometry.width()*(1-delta) + m_targetGeometry.width()*(delta),
+                    m_startGeometry.width()*(1-delta) + m_targetGeometry.width()*(delta)));
+        } else {
+            newGeo.setSize(m_targetGeometry.size());
+        }
         w->setGeometry(newGeo);
     }
 }
