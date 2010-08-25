@@ -407,9 +407,7 @@ void AbstractRunnerPrivate::prepScripting(const QString &path, QString api)
         return;
     }
 
-    if (package) {
-        delete package;
-    }
+    delete package;
 
     PackageStructure::Ptr structure = Plasma::packageStructure(api, Plasma::RunnerComponent);
     structure->setPath(path);

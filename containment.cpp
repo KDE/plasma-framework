@@ -1458,9 +1458,7 @@ void ContainmentPrivate::clearDataForMimeJob(KIO::Job *job)
     QObject::disconnect(job, 0, q, 0);
     dropPoints.remove(job);
     KMenu *choices = dropMenus.take(job);
-    if (choices) {
-        delete choices;
-    }
+    delete choices;
     job->kill();
 }
 

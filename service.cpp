@@ -130,15 +130,11 @@ void ServicePrivate::publish(AnnouncementMethods methods, const QString &name, P
 
 void ServicePrivate::unpublish()
 {
-    if (serviceProvider) {
         delete serviceProvider;
         serviceProvider = 0;
-    }
 
-    if (publicService) {
         delete publicService;
         publicService = 0;
-    }
 }
 
 bool ServicePrivate::isPublished() const

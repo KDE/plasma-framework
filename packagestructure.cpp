@@ -528,10 +528,8 @@ void PackageStructure::setServicePrefix(const QString &servicePrefix)
 
 void PackageStructurePrivate::createPackageMetadata(const QString &path)
 {
-    if (metadata) {
-        delete metadata;
-        metadata = 0;
-    }
+    delete metadata;
+    metadata = 0;
 
     QString metadataPath(path + "/metadata.desktop");
     if (!QFile::exists(metadataPath)) {
