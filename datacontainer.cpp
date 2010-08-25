@@ -58,11 +58,12 @@ void DataContainer::setData(const QString &key, const QVariant &value)
     //If it is not set to be stored,then this is the first
     //setData() since the last time it was stored. This
     //gives us only one singleShot timer.
-    if (isStorageEnabled() && !needsToBeStored()) {
-      QTimer::singleShot(180000, this, SLOT(store()));
+    if (isStorageEnabled()) {
+        if (!needsToBeStored()) {
+            QTimer::singleShot(180000, this, SLOT(store()));
+        }
+        setNeedsToBeStored(true);
     }
-
-    setNeedsToBeStored(true);
 }
 
 void DataContainer::removeAllData()
@@ -187,7 +188,7 @@ DataEngine* DataContainer::getDataEngine()
 
 void DataContainer::store()
 {
-    if (!needsToBeStored()){
+    if (!needsToBeStored() || !isStorageEnabled()){
         return;
     }
 
@@ -353,6 +354,7 @@ void DataContainer::checkUsage()
     if (d->relays.count() < 1 &&
         receivers(SIGNAL(dataUpdated(QString, Plasma::DataEngine::Data))) < 1) {
         // DO NOT CALL ANYTHING AFTER THIS LINE AS IT MAY GET DELETED!
+        kDebug() << objectName() << "is unused";
         emit becameUnused(objectName());
     }
 }

@@ -304,7 +304,6 @@ void DataEngine::setPollingInterval(uint frequency)
 
 void DataEngine::removeSource(const QString &source)
 {
-    //kDebug() << "removing source " << source;
     SourceDict::iterator it = d->sources.find(source);
     if (it != d->sources.end()) {
         DataContainer *s = it.value();
@@ -617,7 +616,7 @@ DataContainer *DataEnginePrivate::source(const QString &sourceName, bool createW
             }
             sourceQueue.enqueue(s);
         }
-        return it.value();
+        return s;
     }
 
     if (!createWhenMissing) {
