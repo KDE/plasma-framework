@@ -456,9 +456,9 @@ NoAlignment) const;
          * is unavailable.
          * @param source the name of the source
          * @param store if source should be stored
+         * @since 4.6
          */
-        void setStorageEnable(const QString &source, bool store);
-
+        void setStorageEnabled(const QString &source, bool store);
 
     protected Q_SLOTS:
         /**

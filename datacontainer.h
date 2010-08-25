@@ -127,11 +127,13 @@ class PLASMA_EXPORT DataContainer : public QObject
         /**
          * sets this data container to be automatically stored.
          * @param whether this data container should be stored
+         * @since 4.6
          */
-        void setStorageEnable(bool store);
+        void setStorageEnabled(bool store);
 
         /**
          * @return true if the data container has been marked for storage
+         * @since 4.6
          */
         bool isStorageEnabled() const;
 

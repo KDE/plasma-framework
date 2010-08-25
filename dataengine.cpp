@@ -500,10 +500,10 @@ void DataEngine::setName(const QString &name)
     setObjectName(name);
 }
 
-void DataEngine::setStorageEnable(const QString &source, bool store)
+void DataEngine::setStorageEnabled(const QString &source, bool store)
 {
     DataContainer *s = d->source(source, false);
-    s->setStorageEnable(store);
+    s->setStorageEnabled(store);
 }
 
 // Private class implementations
