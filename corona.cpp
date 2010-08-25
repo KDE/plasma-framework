@@ -230,6 +230,14 @@ public:
             containment->setFormFactor(Plasma::Planar);
         }
 
+        // if this is a new containment, we need to ensure that there are no stale
+        // configuration data around
+        if (id == 0) {
+            KConfigGroup conf(q->config(), "Containments");
+            conf = KConfigGroup(&conf, QString::number(containment->id()));
+            conf.deleteGroup();
+        }
+
         applet->d->isContainment = true;
         containment->setPos(containment->d->preferredPos(q));
         q->addItem(containment);
@@ -448,7 +456,7 @@ void Corona::loadLayout(const QString &configName)
     }
 
     KSharedConfigPtr conf = config();
-    d->importLayout(*conf, conf != config());
+    d->importLayout(*conf, false);
 }
 
 QList<Plasma::Containment *> Corona::importLayout(const KConfigBase &conf)
@@ -490,6 +498,8 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigBase &conf
         if (mergeConfig) {
             KConfigGroup realConf(q->config(), "Containments");
             realConf = KConfigGroup(&realConf, QString::number(cid));
+            // in case something was there before us
+            realConf.deleteGroup();
             containmentConfig.copyTo(&realConf);
         }
 
