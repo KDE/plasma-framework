@@ -58,12 +58,11 @@ void DataContainer::setData(const QString &key, const QVariant &value)
     //If it is not set to be stored,then this is the first
     //setData() since the last time it was stored. This
     //gives us only one singleShot timer.
-    if (isStorageEnabled()) {
-        if (!needsToBeStored()) {
-            QTimer::singleShot(180000, this, SLOT(store()));
-        }
-        setNeedsToBeStored(true);
+    if (isStorageEnabled() || !needsToBeStored()) {
+        QTimer::singleShot(180000, this, SLOT(store()));
     }
+
+    setNeedsToBeStored(true);
 }
 
 void DataContainer::removeAllData()
