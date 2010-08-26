@@ -101,8 +101,8 @@ public:
     int currentIndex;
     bool tabWidgetMode;
 
-    QWeakPointer<QGraphicsWidget>oldPage;
-    QWeakPointer<QGraphicsWidget>newPage;
+    QWeakPointer<QGraphicsWidget> oldPage;
+    QWeakPointer<QGraphicsWidget> newPage;
     int oldPageAnimId;
     int newPageAnimId;
     Animation *oldPageAnim;
@@ -360,20 +360,20 @@ void TabBar::resizeEvent(QGraphicsSceneResizeEvent * event)
 
 void TabBar::setCurrentIndex(int index)
 {
-    if (index >= d->tabProxy->native->count() ||
-        d->tabProxy->native->count() <= 1 ||
+    if (index >= d->pages.count() ||
+        d->pages.count() < 2 ||
         d->currentIndex == index) {
         return;
     }
 
-    if (d->currentIndex >= 0) {
-        d->oldPage = d->pages[d->currentIndex];
+    d->oldPage = d->pages.value(d->currentIndex);
+
+    if (d->oldPage) {
+        d->tabWidgetLayout->removeItem(d->oldPage.data());
     }
 
-    d->tabWidgetLayout->removeItem(d->oldPage.data());
-
     if (index >= 0) {
-        d->newPage = d->pages[index];
+        d->newPage = d->pages.value(index);
     }
 
     setFlags(QGraphicsItem::ItemClipsChildrenToShape);
@@ -434,7 +434,6 @@ void TabBar::setCurrentIndex(int index)
     }
 
     d->currentIndex = index;
-
     d->tabProxy->native->setCurrentIndex(index);
 }
 
