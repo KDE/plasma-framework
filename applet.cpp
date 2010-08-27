@@ -1292,7 +1292,8 @@ void Applet::flushPendingConstraintsEvents()
         }
     }
 
-    if ((c & Plasma::StartupCompletedConstraint) || (c & Plasma::SizeConstraint && !(c & Plasma::FormFactorConstraint))) {
+    if (!size().isEmpty() &&
+        ((c & Plasma::StartupCompletedConstraint) || (c & Plasma::SizeConstraint && !(c & Plasma::FormFactorConstraint)))) {
         d->sizeForFormFactor[formFactor()] = size();
     }
 
