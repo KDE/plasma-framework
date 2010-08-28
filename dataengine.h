@@ -147,7 +147,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * without side-effects. This can be useful to change the pollingInterval.
          *
          * Note that this method does not automatically connect sources that
-         * may appear later on. Connecting and responding to the sourceAdded sigal
+         * may appear later on. Connecting and responding to the sourceAdded signal
          * is still required to achieve that.
          *
          * @param visualization the object to connect the data source to
