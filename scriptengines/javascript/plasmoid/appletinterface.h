@@ -29,6 +29,7 @@
 #include <Plasma/Applet>
 #include <Plasma/PopupApplet>
 #include <Plasma/DataEngine>
+#include <Plasma/Theme>
 
 #include "simplejavascriptapplet.h"
 
@@ -60,6 +61,7 @@ class AppletInterface : public QObject
     Q_ENUMS(QtMouseButton)
     Q_ENUMS(AnimationDirection)
     Q_ENUMS(IntervalAlignment)
+    Q_ENUMS(ThemeColors)
     Q_PROPERTY(AspectRatioMode aspectRatioMode READ aspectRatioMode WRITE setAspectRatioMode)
     Q_PROPERTY(FormFactor formFactor READ formFactor)
     Q_PROPERTY(Location location READ location)
@@ -170,6 +172,16 @@ enum BackgroundHints {
     StandardBackground = Plasma::Applet::StandardBackground,
     TranslucentBackground = Plasma::Applet::TranslucentBackground,
     DefaultBackground = Plasma::Applet::DefaultBackground
+};
+
+enum ThemeColors {
+    TextColor = Plasma::Theme::TextColor,
+    HighlightColor = Plasma::Theme::HighlightColor,
+    BackgroundColor = Plasma::Theme::BackgroundColor,
+    ButtonTextColor = Plasma::Theme::ButtonTextColor,
+    ButtonBackgroundColor = Plasma::Theme::ButtonBackgroundColor,
+    LinkColor = Plasma::Theme::LinkColor,
+    VisitedLinkColor = Plasma::Theme::VisitedLinkColor
 };
 
 enum QtAlignment {

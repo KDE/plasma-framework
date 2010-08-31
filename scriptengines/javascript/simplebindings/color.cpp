@@ -20,6 +20,9 @@
 #include <QtScript/QScriptEngine>
 #include <QtScript/QScriptContext>
 #include <QtGui/QColor>
+
+#include <Plasma/Theme>
+
 #include "backportglobal.h"
 
 Q_DECLARE_METATYPE(QColor*)
@@ -106,6 +109,22 @@ static QScriptValue valid(QScriptContext *ctx, QScriptEngine *eng)
     return QScriptValue(eng, self->isValid());
 }
 
+static QScriptValue setThemeColor(QScriptContext *ctx, QScriptEngine *)
+{
+    DECLARE_SELF(QColor, themeColor);
+
+    if (ctx->argumentCount() > 0) {
+        const qint32 arg = ctx->argument(0).toInt32();
+        if (arg >= 0 && arg <= Plasma::Theme::VisitedLinkColor) {
+            kDebug() << "setting to: " << static_cast<Plasma::Theme::ColorRole>(arg);
+            kDebug() << "color is: " << Plasma::Theme::defaultTheme()->color(static_cast<Plasma::Theme::ColorRole>(arg));
+            self->setRgba(Plasma::Theme::defaultTheme()->color(static_cast<Plasma::Theme::ColorRole>(arg)).rgba());
+        }
+    }
+
+    return ctx->thisObject();//.property("themeColor");
+}
+
 QScriptValue constructColorClass(QScriptEngine *eng)
 {
     QScriptValue proto = qScriptValueFromValue(eng, QColor());
@@ -116,6 +135,7 @@ QScriptValue constructColorClass(QScriptEngine *eng)
     proto.setProperty("blue", eng->newFunction(blue), getter | setter);
     proto.setProperty("alpha", eng->newFunction(alpha), getter | setter);
     proto.setProperty("valid", eng->newFunction(valid), getter);
+    ADD_METHOD(proto, setThemeColor);
 
     eng->setDefaultPrototype(qMetaTypeId<QColor>(), proto);
     eng->setDefaultPrototype(qMetaTypeId<QColor*>(), proto);
