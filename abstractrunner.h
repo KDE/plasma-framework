@@ -63,6 +63,7 @@ class AbstractRunnerPrivate;
 class PLASMA_EXPORT AbstractRunner : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(bool matchingSuspended READ isMatchingSuspended WRITE suspendMatching NOTIFY matchingSuspended)
 
     public:
         /** Specifies a nominal speed for the runner */
@@ -257,6 +258,13 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          */
         RunnerSyntax *defaultSyntax() const;
 
+        /**
+         * @return true if the runner is currently busy with non-interuptable work, signaling that
+         * new threads should not be created for it at this time
+         * @since 4.6
+         */
+        bool isMatchingSuspended() const;
+
     Q_SIGNALS:
         /**
          * This signal is emitted when matching is about to commence, giving runners
@@ -277,6 +285,13 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          */
         void teardown();
 
+        /**
+         * Emitted when the runner enters or exits match suspension
+         * @see matchingSuspended
+         * @since 4.6
+         */
+        void matchingSuspended(bool suspended);
+
     protected:
         friend class RunnerManager;
         friend class RunnerManagerPrivate;
@@ -285,6 +300,12 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         explicit AbstractRunner(const KService::Ptr service, QObject *parent = 0);
 
         AbstractRunner(QObject *parent, const QVariantList &args);
+
+        /**
+         * Sets whether or not the runner is available for match requests. Useful to
+         * prevent more thread spawning when the thread is in a busy state.
+         */
+        void suspendMatching(bool suspend);
 
         /**
          * Provides access to the runner's configuration object.

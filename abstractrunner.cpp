@@ -125,6 +125,10 @@ void AbstractRunner::performMatch(Plasma::RunnerContext &localContext)
     static const int reasonableRunTime = 1500;
     static const int fastEnoughTime = 250;
 
+    if (d->suspendMatching) {
+        return;
+    }
+
     QTime time;
     time.restart();
 
@@ -360,6 +364,21 @@ DataEngine *AbstractRunner::dataEngine(const QString &name) const
     return d->dataEngine(name);
 }
 
+bool AbstractRunner::isMatchingSuspended() const
+{
+    return d->suspendMatching;
+}
+
+void AbstractRunner::suspendMatching(bool suspend)
+{
+    if (d->suspendMatching == suspend) {
+        return;
+    }
+
+    d->suspendMatching = suspend;
+    emit matchingSuspended(suspend);
+}
+
 AbstractRunnerPrivate::AbstractRunnerPrivate(AbstractRunner *r)
     : priority(AbstractRunner::NormalPriority),
       speed(AbstractRunner::NormalSpeed),
@@ -368,8 +387,9 @@ AbstractRunnerPrivate::AbstractRunnerPrivate(AbstractRunner *r)
       runner(r),
       fastRuns(0),
       package(0),
+      defaultSyntax(0),
       hasRunOptions(false),
-      defaultSyntax(0)
+      suspendMatching(false)
 {
 }
 

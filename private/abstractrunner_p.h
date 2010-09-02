@@ -46,12 +46,13 @@ public:
     KPluginInfo runnerDescription;
     AbstractRunner *runner;
     int fastRuns;
+    QReadWriteLock speedLock;
     Package *package;
     QHash<QString, QAction*> actions;
     QList<RunnerSyntax> syntaxes;
-    bool hasRunOptions;
-    QReadWriteLock speedLock;
     RunnerSyntax *defaultSyntax;
+    bool hasRunOptions : 1;
+    bool suspendMatching : 1;
 };
 
 } // namespace Plasma

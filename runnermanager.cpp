@@ -263,6 +263,7 @@ public:
 
         if (runner) {
             kDebug() << "================= loading runner:" << service->name() << "=================";
+            QObject::connect(runner, SIGNAL(matchingSuspended(bool)), q, SLOT(runnerMatchingSuspended(bool)));
             QMetaObject::invokeMethod(runner, "init");
         }
 
@@ -350,6 +351,32 @@ public:
         DummyJob *dummy = new DummyJob(q);
         Weaver::instance()->enqueue(dummy);
         QObject::connect(dummy, SIGNAL(done(ThreadWeaver::Job*)), dummy, SLOT(deleteLater()));
+    }
+
+    void runnerMatchingSuspended(bool suspended)
+    {
+        if (suspended || !prepped || teardownRequested) {
+            return;
+        }
+
+        AbstractRunner *runner = qobject_cast<AbstractRunner *>(q->sender());
+
+        if (runner) {
+            startJob(runner);
+        }
+    }
+
+    void startJob(AbstractRunner *runner)
+    {
+        if ((runner->ignoredTypes() & context.type()) == 0) {
+            FindMatchesJob *job = new FindMatchesJob(runner, &context, Weaver::instance());
+            QObject::connect(job, SIGNAL(done(ThreadWeaver::Job*)), q, SLOT(jobDone(ThreadWeaver::Job*)));
+            if (runner->speed() == AbstractRunner::SlowSpeed) {
+                job->setDelayTimer(&delayTimer);
+            }
+            Weaver::instance()->enqueue(job);
+            searchJobs.insert(job);
+        }
     }
 
     // Delay in ms before slow runners are allowed to run
@@ -445,6 +472,7 @@ void RunnerManager::loadRunner(const QString &path)
 {
     if (!d->runners.contains(path)) {
         AbstractRunner *runner = new AbstractRunner(this, path);
+        connect(runner, SIGNAL(matchingSuspended(bool)), this, SLOT(runnerMatchingSuspended(bool)));
         d->runners.insert(path, runner);
     }
 }
@@ -580,12 +608,12 @@ QMimeData * RunnerManager::mimeDataForMatch(const QString &id) const
 QMimeData * RunnerManager::mimeDataForMatch(const QueryMatch &match) const
 {
     AbstractRunner *runner = match.runner();
-    QMimeData * mimeData;
+    QMimeData *mimeData;
     if (runner && QMetaObject::invokeMethod(
             runner,
             "mimeDataForMatch", Qt::DirectConnection,
             Q_RETURN_ARG(QMimeData*, mimeData),
-            Q_ARG(const Plasma::QueryMatch *, & match)
+            Q_ARG(const Plasma::QueryMatch *, &match)
     )) {
         return mimeData;
     }
@@ -689,16 +717,11 @@ void RunnerManager::launchQuery(const QString &untrimmedTerm, const QString &run
     }
 
     foreach (Plasma::AbstractRunner *r, runable) {
-        if ((r->ignoredTypes() & d->context.type()) == 0) {
-//            kDebug() << "launching" << r->name();
-            FindMatchesJob *job = new FindMatchesJob(r, &d->context, Weaver::instance());
-            connect(job, SIGNAL(done(ThreadWeaver::Job*)), this, SLOT(jobDone(ThreadWeaver::Job*)));
-            if (r->speed() == AbstractRunner::SlowSpeed) {
-                job->setDelayTimer(&d->delayTimer);
-            }
-            Weaver::instance()->enqueue(job);
-            d->searchJobs.insert(job);
+        if (r->isMatchingSuspended()) {
+            continue;
         }
+
+        d->startJob(r);
     }
 
     // Start timer to unblock slow runners
