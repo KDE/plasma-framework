@@ -296,9 +296,6 @@ Q_SIGNALS:
     void releaseVisualFocus();
     void configNeedsSaving();
 
-public Q_SLOTS:
-    void dataUpdated(QString source, Plasma::DataEngine::Data data);
-
 protected:
     SimpleJavaScriptApplet *m_appletScriptEngine;
 

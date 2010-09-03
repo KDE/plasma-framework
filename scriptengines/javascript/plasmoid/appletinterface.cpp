@@ -300,11 +300,6 @@ void AppletInterface::setPreferredSize(qreal w, qreal h)
     applet()->setPreferredSize(w,h);
 }
 
-void AppletInterface::dataUpdated(QString source, Plasma::DataEngine::Data data)
-{
-    m_appletScriptEngine->dataUpdated(source, data);
-}
-
 QGraphicsLayout *AppletInterface::layout() const
 {
     return applet()->layout();
