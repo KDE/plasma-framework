@@ -86,6 +86,7 @@ private:
     static QScriptValue addEventListener(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue removeEventListener(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue hasExtension(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue throwNonFatalError(const QString &msg, QScriptContext *context, QScriptEngine *engine);
     //static QScriptValue addonFilePath(QScriptContext *context, QScriptEngine *engine);
 
 private Q_SLOTS:
