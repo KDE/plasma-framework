@@ -235,7 +235,7 @@ QScriptValue ScriptEnv::getUrl(QScriptContext *context, QScriptEngine *engine)
 
     ScriptEnv *env = ScriptEnv::findScriptEnv(engine);
     if (!env) {
-	//kDebug() << "findScriptEnv failed";
+        //kDebug() << "findScriptEnv failed";
         return engine->undefinedValue();
     }
 
@@ -406,14 +406,24 @@ QScriptValue ScriptEnv::listAddons(QScriptContext *context, QScriptEngine *engin
 QScriptValue ScriptEnv::loadAddon(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() < 2)  {
-        return context->throwError(i18n("loadAddon takes two arguments: addon type and addon name to load"));
+        QScriptValue rv = context->throwError(i18n("loadAddon takes two arguments: addon type and addon name to load"));
+        ScriptEnv *env = ScriptEnv::findScriptEnv(engine);
+        if (env) {
+             env->checkForErrors(false);
+        }
+        return rv;
     }
 
     const QString type = context->argument(0).toString();
     const QString plugin = context->argument(1).toString();
 
     if (type.isEmpty() || plugin.isEmpty()) { 
-        return context->throwError(i18n("loadAddon takes two arguments: addon type and addon name to load"));
+        QScriptValue rv = context->throwError(i18n("loadAddon takes two arguments: addon type and addon name to load"));
+        ScriptEnv *env = ScriptEnv::findScriptEnv(engine);
+        if (env) {
+            env->checkForErrors(false);
+        }
+        return rv;
     }
 
     const QString constraint = QString("[X-KDE-PluginInfo-Category] == '%1' and [X-KDE-PluginInfo-Name] == '%2'")
@@ -421,7 +431,12 @@ QScriptValue ScriptEnv::loadAddon(QScriptContext *context, QScriptEngine *engine
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/JavascriptAddon", constraint);
 
     if (offers.isEmpty()) {
-        return context->throwError(i18n("Failed to find Addon %1 of type %1", plugin, type));
+        QScriptValue rv =  context->throwError(i18n("Failed to find Addon %1 of type %2", plugin, type));
+        ScriptEnv *env = ScriptEnv::findScriptEnv(engine);
+        if (env) {
+            env->checkForErrors(false);
+        }
+        return rv;
     }
 
     Plasma::PackageStructure::Ptr structure(new JavascriptAddonPackageStructure);
@@ -432,7 +447,12 @@ QScriptValue ScriptEnv::loadAddon(QScriptContext *context, QScriptEngine *engine
 
     QFile file(package.filePath("mainscript"));
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        return context->throwError(i18n("Failed to open script file for Addon %1: %2", plugin, package.filePath("mainscript")));
+        QScriptValue rv = context->throwError(i18n("Failed to open script file for Addon %1: %2", plugin, package.filePath("mainscript")));
+        ScriptEnv *env = ScriptEnv::findScriptEnv(engine);
+        if (env) {
+            env->checkForErrors(false);
+        }
+        return rv;
     }
 
     QTextStream buffer(&file);
@@ -446,8 +466,13 @@ QScriptValue ScriptEnv::loadAddon(QScriptContext *context, QScriptEngine *engine
                                                  QScriptValue::Undeletable |
                                                  QScriptValue::SkipInEnumeration);
     engine->evaluate(code, file.fileName());
-
     engine->popContext();
+
+    ScriptEnv *env = ScriptEnv::findScriptEnv(engine);
+    if (env) {
+        return env->checkForErrors(false);
+    }
+
     return true;
 }
 
