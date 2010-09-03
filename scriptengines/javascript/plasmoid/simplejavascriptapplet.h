@@ -47,7 +47,6 @@ public:
     ~SimpleJavaScriptApplet();
     bool init();
 
-    static void reportError(ScriptEnv *error, bool fatal = false);
 
     void paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, const QRect &contentsRect);
     QList<QAction*> contextualActions();
@@ -68,7 +67,7 @@ public Q_SLOTS:
     void activate();
 
 private Q_SLOTS:
-    void engineReportsError(ScriptEnv *engine, bool fatal);
+    void reportError(ScriptEnv *error, bool fatal);
 
 private:
     bool importExtensions();

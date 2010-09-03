@@ -105,7 +105,7 @@ SimpleJavaScriptApplet::SimpleJavaScriptApplet(QObject *parent, const QVariantLi
     // TODO this will be set to the engine we get from QML
     m_engine = new QScriptEngine(this);
     m_env = new ScriptEnv(this, m_engine);
-    connect(m_env, SIGNAL(reportError(ScriptEnv*,bool)), this, SLOT(engineReportsError(ScriptEnv*,bool)));
+    connect(m_env, SIGNAL(reportError(ScriptEnv*,bool)), this, SLOT(reportError(ScriptEnv*,bool)));
 }
 
 SimpleJavaScriptApplet::~SimpleJavaScriptApplet()
@@ -113,11 +113,6 @@ SimpleJavaScriptApplet::~SimpleJavaScriptApplet()
     if (s_widgetLoader.count() == 1) {
         s_widgetLoader.clear();
     }
-}
-
-void SimpleJavaScriptApplet::engineReportsError(ScriptEnv *engine, bool fatal)
-{
-    reportError(engine, fatal);
 }
 
 void SimpleJavaScriptApplet::reportError(ScriptEnv *env, bool fatal)
@@ -137,7 +132,7 @@ void SimpleJavaScriptApplet::reportError(ScriptEnv *env, bool fatal)
         if (fatal) {
             jsApplet->setFailedToLaunch(true, failureMsg);
         } else {
-            jsApplet->showMessage(KIcon("dialog-error"), failureMsg, Plasma::ButtonNone);
+            jsApplet->showMessage(KIcon("dialog-error"), failureMsg, Plasma::ButtonOk);
         }
     } else {
         kDebug() << failureMsg;
