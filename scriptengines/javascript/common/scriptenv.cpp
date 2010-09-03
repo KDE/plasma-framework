@@ -45,6 +45,7 @@
 #include "javascriptaddonpackagestructure.h"
 
 Q_DECLARE_METATYPE(ScriptEnv*)
+Q_DECLARE_METATYPE(Plasma::Package)
 
 ScriptEnv::ScriptEnv(QObject *parent, QScriptEngine *engine)
     : QObject(parent),
@@ -233,7 +234,7 @@ QScriptValue ScriptEnv::getUrl(QScriptContext *context, QScriptEngine *engine)
 
     ScriptEnv *env = ScriptEnv::findScriptEnv(engine);
     if (!env) {
-	kDebug() << "findScriptEnv failed";
+	//kDebug() << "findScriptEnv failed";
         return engine->undefinedValue();
     }
 
@@ -291,7 +292,10 @@ bool ScriptEnv::importBuiltinExtension(const QString &extension, QScriptValue &o
 bool ScriptEnv::importExtensions(const KPluginInfo &info, QScriptValue &obj, Authorization &auth)
 {
     QStringList requiredExtensions = info.service()->property("X-Plasma-RequiredExtensions", QVariant::StringList).toStringList();
-    kDebug() << "required extensions are" << requiredExtensions;
+    if (!requiredExtensions.isEmpty()) {
+        kDebug() << "required extensions are" << requiredExtensions;
+    }
+
     foreach (const QString &ext, requiredExtensions) {
         QString extension = ext.toLower();
         if (m_extensions.contains(extension)) {
@@ -316,7 +320,10 @@ bool ScriptEnv::importExtensions(const KPluginInfo &info, QScriptValue &obj, Aut
     }
 
     QStringList optionalExtensions = info.service()->property("X-Plasma-OptionalExtensions", QVariant::StringList).toStringList();
-    kDebug() << "optional extensions are" << optionalExtensions;
+    if (!optionalExtensions.isEmpty()) {
+        kDebug() << "optional extensions are" << optionalExtensions;
+    }
+
     foreach (const QString &ext, optionalExtensions) {
         QString extension = ext.toLower();
 
@@ -432,6 +439,11 @@ QScriptValue ScriptEnv::loadAddon(QScriptContext *context, QScriptEngine *engine
 
     QScriptContext *innerContext = engine->pushContext();
     innerContext->activationObject().setProperty("registerAddon", engine->newFunction(ScriptEnv::registerAddon));
+    QScriptValue v = engine->newVariant(QVariant::fromValue(package));
+    innerContext->activationObject().setProperty("__plasma_addon_package", v,
+                                                 QScriptValue::ReadOnly | 
+                                                 QScriptValue::Undeletable |
+                                                 QScriptValue::SkipInEnumeration);
     engine->evaluate(code, file.fileName());
 
     engine->popContext();
@@ -458,9 +470,11 @@ QScriptValue ScriptEnv::registerAddon(QScriptContext *context, QScriptEngine *en
             func.setProperty("test", "bar");
             */
             QScriptValue obj = func.construct();
+            obj.setProperty("__plasma_addon_package",
+                            context->activationObject().property("__plasma_addon_package"),
+                            QScriptValue::ReadOnly|QScriptValue::Undeletable|
+                            QScriptValue::SkipInEnumeration);
             /*
-            obj.setProperty("__plasma_addon_filepath", "/fake/path/",
-                            QScriptValue::ReadOnly|QScriptValue::Undeletable|QScriptValue::SkipInEnumeration);
             obj.setProperty("test", "bar");
             obj.setProperty("addonFilePath", engine->newFunction(ScriptEnv::addonFilePath));
             */

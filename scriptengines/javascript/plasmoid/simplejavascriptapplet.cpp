@@ -149,28 +149,37 @@ void SimpleJavaScriptApplet::reportError(ScriptEnv *env, bool fatal)
 void SimpleJavaScriptApplet::configChanged()
 {
     ScriptEnv *env = ScriptEnv::findScriptEnv(m_engine);
-    if (!env || !env->callEventListeners("configchanged")) {
-        callPlasmoidFunction("configChanged");
+    if (!env || !env->callEventListeners("configchangd")) {
+        callPlasmoidFunction("configChanged", QScriptValueList(), env);
     }
 }
 
 void SimpleJavaScriptApplet::dataUpdated(const QString &name, const DataEngine::Data &data)
 {
-    QScriptValueList args;
-    args << m_engine->toScriptValue(name) << m_engine->toScriptValue(data);
     ScriptEnv *env = ScriptEnv::findScriptEnv(m_engine);
-    if (!env || !env->callEventListeners("dataUpdated")) {
-        callPlasmoidFunction("dataUpdated", args);
+    if (!env) {
+        return;
+    }
+
+    if (!env->callEventListeners("dataUpdated")) {
+        QScriptValueList args;
+        args << m_engine->toScriptValue(name) << m_engine->toScriptValue(data);
+        callPlasmoidFunction("dataUpdated", args, env);
     }
 }
 
 void SimpleJavaScriptApplet::extenderItemRestored(Plasma::ExtenderItem* item)
 {
+    ScriptEnv *env = ScriptEnv::findScriptEnv(m_engine);
+    if (!env) {
+        return;
+    }
+
     QScriptValueList args;
     args << m_engine->newQObject(item, QScriptEngine::AutoOwnership, QScriptEngine::PreferExistingWrapperObject);
-    ScriptEnv *env = ScriptEnv::findScriptEnv(m_engine);
-    if (!env || !env->callEventListeners("initExtenderItem")) {
-        callPlasmoidFunction("initExtenderItem", args);
+
+    if (!env->callEventListeners("initExtenderItem")) {
+        callPlasmoidFunction("initExtenderItem", args, env);
     }
 }
 
@@ -178,39 +187,52 @@ void SimpleJavaScriptApplet::activate()
 {
     ScriptEnv *env = ScriptEnv::findScriptEnv(m_engine);
     if (!env || !env->callEventListeners("activate")) {
-        callPlasmoidFunction("activate");
+        callPlasmoidFunction("activate", QScriptValueList(), env);
     }
 }
 
 void SimpleJavaScriptApplet::popupEvent(bool popped)
 {
+    ScriptEnv *env = ScriptEnv::findScriptEnv(m_engine);
+    if (!env) {
+        return;
+    }
+
     QScriptValueList args;
     args << popped;
-    ScriptEnv *env = ScriptEnv::findScriptEnv(m_engine);
-    if (!env || !env->callEventListeners("popupEvent", args)) {
-        callPlasmoidFunction("popupEvent", args);
+
+    if (!env->callEventListeners("popupEvent", args)) {
+        callPlasmoidFunction("popupEvent", args, env);
     }
 }
 
 void SimpleJavaScriptApplet::executeAction(const QString &name)
 {
-    const QString func("action_" + name);
     ScriptEnv *env = ScriptEnv::findScriptEnv(m_engine);
-    if (!env || !env->callEventListeners(func)) {
-        callPlasmoidFunction(func);
+    if (!env) {
+        return;
+    }
+
+    const QString func("action_" + name);
+    if (!env->callEventListeners(func)) {
+        callPlasmoidFunction(func, QScriptValueList(), env);
     }
 }
 
 void SimpleJavaScriptApplet::paintInterface(QPainter *p, const QStyleOptionGraphicsItem *option, const QRect &contentsRect)
 {
+    ScriptEnv *env = ScriptEnv::findScriptEnv(m_engine);
+    if (!env) {
+        return;
+    }
+
     QScriptValueList args;
     args << m_engine->toScriptValue(p);
     args << m_engine->toScriptValue(const_cast<QStyleOptionGraphicsItem*>(option));
     args << m_engine->toScriptValue(QRectF(contentsRect));
 
-    ScriptEnv *env = ScriptEnv::findScriptEnv(m_engine);
-    if (!env || !env->callEventListeners("paintInterface")) {
-        callPlasmoidFunction("paintInterface", args);
+    if (!env->callEventListeners("paintInterface")) {
+        callPlasmoidFunction("paintInterface", args, env);
     }
 }
 
@@ -219,11 +241,14 @@ QList<QAction*> SimpleJavaScriptApplet::contextualActions()
     return m_interface->contextualActions();
 }
 
-void SimpleJavaScriptApplet::callPlasmoidFunction(const QString &functionName, const QScriptValueList &args)
+void SimpleJavaScriptApplet::callPlasmoidFunction(const QString &functionName, const QScriptValueList &args, ScriptEnv *env)
 {
-    QScriptValue func = m_self.property(functionName);
-    ScriptEnv *env = ScriptEnv::findScriptEnv(m_engine);
+    if (!env) {
+        env = ScriptEnv::findScriptEnv(m_engine);
+    }
+
     if (env) {
+        QScriptValue func = m_self.property(functionName);
         env->callFunction(func, args, m_self);
     }
 }
@@ -247,34 +272,37 @@ void SimpleJavaScriptApplet::removeEventListener(const QString &event, const QSc
 void SimpleJavaScriptApplet::constraintsEvent(Plasma::Constraints constraints)
 {
     ScriptEnv *env = ScriptEnv::findScriptEnv(m_engine);
+    if (!env) {
+        return;
+    }
 
     if (constraints & Plasma::FormFactorConstraint) {
-        if (!env || !env->callEventListeners("formFactorChanged")) {
-            callPlasmoidFunction("formFactorChanged");
+        if (!env->callEventListeners("formFactorChanged")) {
+            callPlasmoidFunction("formFactorChanged", QScriptValueList(), env);
         }
     }
 
     if (constraints & Plasma::LocationConstraint) {
-        if (!env || !env->callEventListeners("locationChanged")) {
-            callPlasmoidFunction("locationChanged");
+        if (!env->callEventListeners("locationChanged")) {
+            callPlasmoidFunction("locationChanged", QScriptValueList(), env);
         }
     }
 
     if (constraints & Plasma::ContextConstraint) {
-        if (!env || !env->callEventListeners("currentActivityChanged")) {
-            callPlasmoidFunction("currentActivityChanged");
+        if (!env->callEventListeners("currentActivityChanged")) {
+            callPlasmoidFunction("currentActivityChanged", QScriptValueList(), env);
         }
     }
 
     if (constraints & Plasma::SizeConstraint) {
         if (!env || !env->callEventListeners("sizeChanged")) {
-            callPlasmoidFunction("sizeChanged");
+            callPlasmoidFunction("sizeChanged", QScriptValueList(), env);
         }
     }
 
     if (constraints & Plasma::ImmutableConstraint) {
-        if (!env || !env->callEventListeners("immutabilityChanged")) {
-            callPlasmoidFunction("immutabilityChanged");
+        if (!env->callEventListeners("immutabilityChanged")) {
+            callPlasmoidFunction("immutabilityChanged", QScriptValueList(), env);
         }
     }
 }

@@ -61,7 +61,7 @@ public:
     bool eventFilter(QObject *watched, QEvent *event);
 
 public Q_SLOTS:
-    void dataUpdated( const QString &name, const Plasma::DataEngine::Data &data );
+    void dataUpdated(const QString &name, const Plasma::DataEngine::Data &data);
     void configChanged();
     void executeAction(const QString &name);
     void collectGarbage();
@@ -76,7 +76,7 @@ private:
     bool importExtensions();
     bool importBuiltinExtension(const QString &extension);
     void setupObjects();
-    void callPlasmoidFunction(const QString &functionName, const QScriptValueList &args = QScriptValueList());
+    void callPlasmoidFunction(const QString &functionName, const QScriptValueList &args = QScriptValueList(), ScriptEnv *env = 0);
     QScriptValue createKeyEventObject(QKeyEvent *event);
     QScriptValue createHoverEventObject(QGraphicsSceneHoverEvent *event);
     QScriptValue createMouseEventObject(QGraphicsSceneMouseEvent *event);
