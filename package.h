@@ -43,7 +43,13 @@ class PLASMA_EXPORT Package
 {
     public:
         /**
-         * Default constructor
+         * Default constructor that creates an invalid Package
+         * @since 4.6
+         */
+        explicit Package();
+
+        /**
+         * Construct a Package object
          *
          * @arg packageRoot path to the package installation root
          * @arg package the name of the package
@@ -60,7 +66,19 @@ class PLASMA_EXPORT Package
           */
         Package(const QString &packagePath, PackageStructure::Ptr structure);
 
+        /**
+         * Copy constructore
+         * @since 4.6
+         */
+        Package(const Package &other);
+
         ~Package();
+
+        /**
+         * Assignment operator
+         * @since 4.6
+         */
+        Package &operator=(const Package &rhs);
 
         /**
          * @return true if all the required components as defined in
@@ -213,7 +231,6 @@ class PLASMA_EXPORT Package
                                   const QString &icon = QString());
 
     private:
-        Q_DISABLE_COPY(Package)
         PackagePrivate * const d;
 
         friend class Applet;

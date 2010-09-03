@@ -32,7 +32,10 @@ class PackagePrivate
 {
 public:
     PackagePrivate(const PackageStructure::Ptr st, const QString &p);
+    PackagePrivate(const PackagePrivate &other);
     ~PackagePrivate();
+
+    PackagePrivate &operator=(const PackagePrivate &rhs);
 
     void publish(AnnouncementMethods methods);
     void unpublish();

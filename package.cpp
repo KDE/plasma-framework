@@ -56,6 +56,11 @@
 namespace Plasma
 {
 
+Package::Package()
+    : d(new PackagePrivate(PackageStructure::Ptr(0), QString()))
+{
+}
+
 Package::Package(const QString &packageRoot, const QString &package,
                  PackageStructure::Ptr structure)
     : d(new PackagePrivate(structure, packageRoot + '/' + package))
@@ -67,9 +72,23 @@ Package::Package(const QString &packagePath, PackageStructure::Ptr structure)
 {
 }
 
+Package::Package(const Package &other)
+    : d(new PackagePrivate(*other.d))
+{
+}
+
 Package::~Package()
 {
     delete d;
+}
+
+Package &Package::operator=(const Package &rhs)
+{
+    if (&rhs != this) {
+        *d = *rhs.d;
+    }
+
+    return *this;
 }
 
 bool Package::isValid() const
@@ -156,18 +175,24 @@ QStringList Package::entryList(const char *fileType) const
 
 PackageMetadata Package::metadata() const
 {
-    return d->structure->metadata();
+    if (d->structure) {
+        return d->structure->metadata();
+    }
+
+    return PackageMetadata();
 }
 
 void Package::setPath(const QString &path)
 {
-    d->structure->setPath(path);
-    d->valid = !d->structure->path().isEmpty();
+    if (d->structure) {
+        d->structure->setPath(path);
+        d->valid = !d->structure->path().isEmpty();
+    }
 }
 
 const QString Package::path() const
 {
-    return d->structure->path();
+    return d->structure ? d->structure->path() : QString();
 }
 
 const PackageStructure::Ptr Package::structure() const
@@ -232,6 +257,11 @@ void PackagePrivate::updateHash(const QString &basePath, const QString &subPath,
 QString Package::contentsHash() const
 {
 #ifdef QCA2_FOUND
+    if (!d->valid) {
+        kWarning() << "can not create hash due to Package being invalid";
+        return QString();
+    }
+
     if (!QCA::isSupported("sha1")) {
         kWarning() << "can not create hash for" << path() << "due to no SHA1 support in QCA2";
         return QString();
@@ -565,16 +595,38 @@ PackagePrivate::PackagePrivate(const PackageStructure::Ptr st, const QString &p)
         : structure(st),
           service(0)
 {
-    structure->setPath(p);
-    valid = !structure->path().isEmpty();
+    if (structure) {
+        structure->setPath(p);
+    }
+
+    valid = structure && !structure->path().isEmpty();
+}
+
+PackagePrivate::PackagePrivate(const PackagePrivate &other)
+        : structure(other.structure),
+          service(other.service),
+          valid(other.valid)
+{
 }
 
 PackagePrivate::~PackagePrivate()
 {
 }
 
+PackagePrivate &PackagePrivate::operator=(const PackagePrivate &rhs)
+{
+    structure = rhs.structure;
+    service = rhs.service;
+    valid = rhs.valid;
+    return *this;
+}
+
 void PackagePrivate::publish(AnnouncementMethods methods)
 {
+    if (!structure) {
+        return;
+    }
+
     if (!service) {
         service = new PlasmoidService(structure->path());
     }
