@@ -39,7 +39,7 @@
 #include "widgets/label.h"
 
 #include "private/applet_p.h"
-#include "private/abstracthandle.h"
+#include "private/applethandle_p.h"
 #include "private/extender_p.h"
 #include "private/extenderapplet_p.h"
 #include "private/extenderitem_p.h"
