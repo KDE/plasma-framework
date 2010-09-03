@@ -20,90 +20,16 @@
 #ifndef JAVASCRIPTBINDI18N_H
 #define JAVASCRIPTBINDI18N_H
 
-QScriptValue jsi18n(QScriptContext *context, QScriptEngine *engine)
-{
-    Q_UNUSED(engine)
+#include <QScriptValue>
 
-    if (context->argumentCount() < 1) {
-        return context->throwError(i18n("i18n() takes at least one argument"));
-    }
+class QScriptContext;
+class QScriptEngine;
 
-    KLocalizedString message = ki18n(context->argument(0).toString().toUtf8());
-
-    const int numArgs = context->argumentCount();
-    for (int i = 1; i < numArgs; ++i) {
-        message = message.subs(context->argument(i).toString());
-    }
-
-    return message.toString();
-}
-
-QScriptValue jsi18nc(QScriptContext *context, QScriptEngine *engine)
-{
-    Q_UNUSED(engine)
-
-    if (context->argumentCount() < 2) {
-        return context->throwError(i18n("i18nc() takes at least two arguments"));
-    }
-
-    KLocalizedString message = ki18nc(context->argument(0).toString().toUtf8(),
-                                      context->argument(1).toString().toUtf8());
-
-    const int numArgs = context->argumentCount();
-    for (int i = 2; i < numArgs; ++i) {
-        message = message.subs(context->argument(i).toString());
-    }
-
-    return message.toString();
-}
-
-QScriptValue jsi18np(QScriptContext *context, QScriptEngine *engine)
-{
-    Q_UNUSED(engine)
-
-    if (context->argumentCount() < 2) {
-        return context->throwError(i18n("i18np() takes at least two arguments"));
-    }
-
-    KLocalizedString message = ki18np(context->argument(0).toString().toUtf8(),
-                                      context->argument(1).toString().toUtf8());
-
-    const int numArgs = context->argumentCount();
-    for (int i = 2; i < numArgs; ++i) {
-        message = message.subs(context->argument(i).toString());
-    }
-
-    return message.toString();
-}
-
-QScriptValue jsi18ncp(QScriptContext *context, QScriptEngine *engine)
-{
-    Q_UNUSED(engine)
-
-    if (context->argumentCount() < 3) {
-        return context->throwError(i18n("i18ncp() takes at least three arguments"));
-    }
-
-    KLocalizedString message = ki18ncp(context->argument(0).toString().toUtf8(),
-                                       context->argument(1).toString().toUtf8(),
-                                       context->argument(2).toString().toUtf8());
-
-    const int numArgs = context->argumentCount();
-    for (int i = 3; i < numArgs; ++i) {
-        message = message.subs(context->argument(i).toString());
-    }
-
-    return message.toString();
-}
-
-void bindI18N(QScriptEngine *engine)
-{
-    QScriptValue global = engine->globalObject();
-    global.setProperty("i18n", engine->newFunction(jsi18n));
-    global.setProperty("i18nc", engine->newFunction(jsi18nc));
-    global.setProperty("i18np", engine->newFunction(jsi18np));
-    global.setProperty("i18ncp", engine->newFunction(jsi18ncp));
-}
+QScriptValue jsi18n(QScriptContext *context, QScriptEngine *engine);
+QScriptValue jsi18nc(QScriptContext *context, QScriptEngine *engine);
+QScriptValue jsi18np(QScriptContext *context, QScriptEngine *engine);
+QScriptValue jsi18ncp(QScriptContext *context, QScriptEngine *engine);
+void bindI18N(QScriptEngine *engine);
 
 #endif
 

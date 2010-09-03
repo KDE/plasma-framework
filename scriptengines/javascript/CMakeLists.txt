@@ -18,6 +18,7 @@ set(simple_javascript_engine_SRCS
     simplebindings/filedialogproxy.cpp
     simplebindings/graphicsitem.cpp
     simplebindings/icon.cpp
+    simplebindings/i18n.cpp
     simplebindings/linearlayout.cpp
     simplebindings/gridlayout.cpp
     simplebindings/painter.cpp
@@ -56,6 +57,7 @@ set(javascript_runner_engine_SRCS
     common/javascriptaddonpackagestructure.cpp
     common/scriptenv.cpp
     runner/javascriptrunner.cpp
+    simplebindings/i18n.cpp
 )
 
 kde4_add_plugin(plasma_runnerscript_javascript ${javascript_runner_engine_SRCS})
@@ -78,6 +80,7 @@ set(javascript_dataengine_engine_SRCS
     dataengine/javascriptdataengine.cpp
     dataengine/javascriptservice.cpp
     simplebindings/dataengine.cpp
+    simplebindings/i18n.cpp
     simplebindings/variant.cpp
 )
 kde4_add_plugin(plasma_dataenginescript_javascript ${javascript_dataengine_engine_SRCS})
