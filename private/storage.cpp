@@ -44,7 +44,7 @@ void StorageJob::start()
       return;
     } else if (operationName() == "retrieve") {
         QHash<QString, QVariant> h;
-        foreach(QString key, dataGroup.keyList())
+        foreach(const QString &key, dataGroup.keyList())
         {
             QVariant v(dataGroup.readEntry(key));
             h[key] = v;
