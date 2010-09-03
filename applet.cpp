@@ -2150,7 +2150,7 @@ QString AppletPrivate::parentAppConstraint(const QString &parentApp)
 
 KPluginInfo::List Applet::listAppletInfo(const QString &category, const QString &parentApp)
 {
-   return PluginLoader::pluginLoader()->listAppletInfo(category, parentApp); 
+   return PluginLoader::pluginLoader()->listAppletInfo(category, parentApp);
 }
 
 KPluginInfo::List Applet::listAppletInfoForMimetype(const QString &mimetype)

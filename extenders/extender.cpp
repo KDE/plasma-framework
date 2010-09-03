@@ -39,7 +39,7 @@
 #include "widgets/label.h"
 
 #include "private/applet_p.h"
-#include "private/applethandle_p.h"
+#include "private/abstracthandle.h"
 #include "private/extender_p.h"
 #include "private/extenderapplet_p.h"
 #include "private/extenderitem_p.h"
@@ -434,7 +434,7 @@ void Extender::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
             //Hide empty internal extender containers when we drag the last item away. Avoids having
             //an ugly empty applet on the desktop temporarily.
             ExtenderApplet *extenderApplet = qobject_cast<ExtenderApplet*>(d->applet.data());
-            if (extenderApplet && sourceExtender == this && attachedItems().count() < 2 && 
+            if (extenderApplet && sourceExtender == this && attachedItems().count() < 2 &&
                 extenderApplet->formFactor() != Plasma::Horizontal &&
                 extenderApplet->formFactor() != Plasma::Vertical) {
                 kDebug() << "leaving the internal extender container, so hide the applet and it's handle.";

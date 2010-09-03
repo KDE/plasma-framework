@@ -1049,7 +1049,7 @@ void Containment::setScreen(int newScreen, int newDesktop)
         }
     }
 
-    if (newScreen < numScreens && newScreen > -1 && 
+    if (newScreen < numScreens && newScreen > -1 &&
         (d->type == DesktopContainment || d->type >= CustomContainment)) {
         resize(corona()->screenGeometry(newScreen).size());
     }
