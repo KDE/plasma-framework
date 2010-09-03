@@ -81,6 +81,7 @@ void ScriptEnv::addMainObjectProperties(QScriptValue &value)
     value.setProperty("loadAddon", m_engine->newFunction(ScriptEnv::loadAddon));
     value.setProperty("addEventListener", m_engine->newFunction(ScriptEnv::addEventListener));
     value.setProperty("removeEventListener", m_engine->newFunction(ScriptEnv::removeEventListener));
+    value.setProperty("hasExtension", m_engine->newFunction(ScriptEnv::hasExtension));
 }
 
 QScriptEngine *ScriptEnv::engine() const
@@ -517,6 +518,20 @@ QScriptValue ScriptEnv::removeEventListener(QScriptContext *context, QScriptEngi
     }
 
     return env->removeEventListener(context->argument(0).toString(), context->argument(1));
+}
+
+QScriptValue ScriptEnv::hasExtension(QScriptContext *context, QScriptEngine *engine)
+{
+    if (context->argumentCount() < 1) {
+        return false;
+    }
+
+    ScriptEnv *env = ScriptEnv::findScriptEnv(engine);
+    if (!env) {
+        return false;
+    }
+
+    return env->m_extensions.contains(context->argument(0).toString().toLower());
 }
 
 QScriptValue ScriptEnv::callFunction(QScriptValue &func, const QScriptValueList &args, const QScriptValue &activator)

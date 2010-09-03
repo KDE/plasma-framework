@@ -55,8 +55,6 @@ public:
     bool include(const QString &path);
     QSet<QString> loadedExtensions() const;
     QScriptValue variantToScriptValue(QVariant var);
-    void addEventListener(const QString &event, const QScriptValue &func);
-    void removeEventListener(const QString &event, const QScriptValue &func);
 
     bool eventFilter(QObject *watched, QEvent *event);
 

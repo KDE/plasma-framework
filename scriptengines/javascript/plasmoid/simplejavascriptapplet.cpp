@@ -253,22 +253,6 @@ void SimpleJavaScriptApplet::callPlasmoidFunction(const QString &functionName, c
     }
 }
 
-void SimpleJavaScriptApplet::addEventListener(const QString &event, const QScriptValue &func)
-{
-    ScriptEnv *env = ScriptEnv::findScriptEnv(m_engine);
-    if (env) {
-        env->addEventListener(event, func);
-    }
-}
-
-void SimpleJavaScriptApplet::removeEventListener(const QString &event, const QScriptValue &func)
-{
-    ScriptEnv *env = ScriptEnv::findScriptEnv(m_engine);
-    if (env) {
-        env->removeEventListener(event, func);
-    }
-}
-
 void SimpleJavaScriptApplet::constraintsEvent(Plasma::Constraints constraints)
 {
     ScriptEnv *env = ScriptEnv::findScriptEnv(m_engine);
@@ -537,6 +521,7 @@ void SimpleJavaScriptApplet::setupObjects()
     const bool isPopupApplet = qobject_cast<Plasma::PopupApplet *>(applet());
     m_interface = isPopupApplet ? new PopupAppletInterface(this) : new AppletInterface(this);
     m_self = m_engine->newQObject(m_interface);
+    m_env->addMainObjectProperties(m_self);
     m_self.setScope(global);
     global.setProperty("plasmoid", m_self);
 
@@ -594,11 +579,6 @@ void SimpleJavaScriptApplet::setupObjects()
 
     registerSimpleAppletMetaTypes(m_engine);
     installWidgets(m_engine);
-}
-
-QSet<QString> SimpleJavaScriptApplet::loadedExtensions() const
-{
-    return m_env->loadedExtensions();
 }
 
 QScriptValue SimpleJavaScriptApplet::dataEngine(QScriptContext *context, QScriptEngine *engine)

@@ -341,11 +341,6 @@ bool AppletInterface::include(const QString &script)
     return m_appletScriptEngine->include(path);
 }
 
-bool AppletInterface::hasExtension(const QString &extension) const
-{
-    return m_appletScriptEngine->loadedExtensions().contains(extension.toLower());
-}
-
 void AppletInterface::debug(const QString &msg)
 {
     kDebug() << msg;
@@ -370,16 +365,6 @@ QObject *AppletInterface::findChild(const QString &name) const
 Plasma::Extender *AppletInterface::extender() const
 {
     return m_appletScriptEngine->extender();
-}
-
-void AppletInterface::addEventListener(const QString &event, const QScriptValue &func)
-{
-    m_appletScriptEngine->addEventListener(event, func);
-}
-
-void AppletInterface::removeEventListener(const QString &event, const QScriptValue &func)
-{
-    m_appletScriptEngine->removeEventListener(event, func);
 }
 
 void AppletInterface::gc()
