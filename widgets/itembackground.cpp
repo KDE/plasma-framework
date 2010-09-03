@@ -62,13 +62,6 @@ ItemBackground::ItemBackground(QGraphicsWidget *parent)
     : QGraphicsWidget(parent),
       d(new ItemBackgroundPrivate(this))
 {
-    setCacheMode(DeviceCoordinateCache);
-    setFlag(ItemIsMovable, false);
-    setFlag(ItemIsSelectable, false);
-    setFlag(ItemIsFocusable, false);
-
-    setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
-
     d->frameSvg = new Plasma::FrameSvg(this);
     d->anim = new QPropertyAnimation(this, "animationUpdate", this);
     d->anim->setStartValue(0);
@@ -82,6 +75,13 @@ ItemBackground::ItemBackground(QGraphicsWidget *parent)
     d->frameSvg->setEnabledBorders(Plasma::FrameSvg::AllBorders);
     d->frameSvg->setCacheAllRenderedFrames(true);
     d->frameSvg->setElementPrefix("hover");
+
+    setCacheMode(DeviceCoordinateCache);
+    setFlag(ItemIsMovable, false);
+    setFlag(ItemIsSelectable, false);
+    setFlag(ItemIsFocusable, false);
+
+    setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
 
     qreal l, t, r, b;
     d->frameSvg->getMargins(l, t, r, b);
