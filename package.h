@@ -239,5 +239,6 @@ class PLASMA_EXPORT Package
 
 } // Namespace
 
+Q_DECLARE_METATYPE(Plasma::Package)
 #endif
 
