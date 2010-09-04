@@ -120,7 +120,7 @@ bool Package::isValid() const
 QString Package::filePath(const char *fileType, const QString &filename) const
 {
     if (!d->valid) {
-        kDebug() << "package is not valid";
+        //kDebug() << "package is not valid";
         return QString();
     }
 
@@ -130,7 +130,7 @@ QString Package::filePath(const char *fileType, const QString &filename) const
         path = d->structure->path(fileType);
 
         if (path.isEmpty()) {
-            kDebug() << "no matching path came of it, while looking for" << fileType << filename;
+            //kDebug() << "no matching path came of it, while looking for" << fileType << filename;
             return QString();
         }
     }
@@ -155,7 +155,7 @@ QString Package::filePath(const char *fileType, const QString &filename) const
         }
     }
 
-    kDebug() << path << "does not exist";
+    //kDebug() << path << "does not exist";
     return QString();
 }
 
