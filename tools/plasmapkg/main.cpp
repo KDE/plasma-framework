@@ -152,7 +152,7 @@ int main(int argc, char **argv)
     KApplication app;
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    QString type = args->getOption("type").toLower();
+    QString type = args->getOption("type");
     QString packageRoot = type;
     QString servicePrefix;
     QStringList pluginTypes;
@@ -179,16 +179,16 @@ int main(int argc, char **argv)
     }
 
     if (!packageFile.isEmpty() && (!args->isSet("type") ||
-        type == i18nc("package type", "wallpaper").toLower() || type == "wallpaper")) {
+        type.compare(i18nc("package type", "wallpaper"), Qt::CaseInsensitive) == 0 ||
+        type.compare("wallpaper", Qt::CaseInsensitive) == 0)) {
         // Check type for common plasma packages
         Plasma::PackageStructure package;
         package.setPath(packageFile);
         QString serviceType = package.metadata().serviceType();
         if (!serviceType.isEmpty()) {
-            if (    serviceType == "Plasma/Applet" 
-                    || serviceType == "Plasma/Containment"
-                    || serviceType == "Plasma/PopupApplet" ) 
-            {
+            if (serviceType == "Plasma/Applet" ||
+                serviceType == "Plasma/Containment" ||
+                serviceType == "Plasma/PopupApplet") {
                 type = "plasmoid";
             } else if (serviceType == "Plasma/DataEngine") {
                 type = "dataengine";
@@ -199,41 +199,51 @@ int main(int argc, char **argv)
                 // was specified and we have wallpaper plugin package (instead of
                 // wallpaper image package)
                 type = "wallpaperplugin";
+            } else {
+                type = serviceType;
+                kDebug() << "fallthrough type is" << serviceType;
             }
         }
     }
 
-    if (type == i18nc("package type", "plasmoid").toLower() || type == "plasmoid") {
+    if (type.compare(i18nc("package type", "plasmoid"), Qt::CaseInsensitive) ||
+        type.compare("plasmoid", Qt::CaseInsensitive) == 0) {
         packageRoot = "plasma/plasmoids/";
         servicePrefix = "plasma-applet-";
         pluginTypes << "Plasma/Applet";
         pluginTypes << "Plasma/PopupApplet";
         pluginTypes << "Plasma/Containment";
-    } else if (type == i18nc("package type", "theme").toLower() || type == "theme") {
+    } else if (type.compare(i18nc("package type", "theme"), Qt::CaseInsensitive) ||
+               type.compare("theme", Qt::CaseInsensitive) == 0) {
         packageRoot = "desktoptheme/";
-    } else if (type == i18nc("package type", "wallpaper").toLower() || type == "wallpaper") {
+    } else if (type.compare(i18nc("package type", "wallpaper"), Qt::CaseInsensitive) ||
+               type.compare("wallpaper", Qt::CaseInsensitive) == 0) {
         packageRoot = "wallpapers/";
-    } else if (type == i18nc("package type", "dataengine").toLower() || type == "dataengine") {
+    } else if (type.compare(i18nc("package type", "dataengine"), Qt::CaseInsensitive) ||
+               type.compare("dataengine", Qt::CaseInsensitive) == 0) {
         packageRoot = "plasma/dataengines/";
         servicePrefix = "plasma-dataengine-";
         pluginTypes << "Plasma/DataEngine";
-    } else if (type == i18nc("package type", "runner").toLower() || type == "runner") {
+    } else if (type.compare(i18nc("package type", "runner"), Qt::CaseInsensitive) ||
+               type.compare("runner", Qt::CaseInsensitive) == 0) {
         packageRoot = "plasma/runners/";
         servicePrefix = "plasma-runner-";
         pluginTypes << "Plasma/Runner";
-    } else if (type == i18nc("package type", "wallpaperplugin").toLower() || type == "wallpaperplugin") {
+    } else if (type.compare(i18nc("package type", "wallpaperplugin"), Qt::CaseInsensitive) ||
+               type.compare("wallpaperplugin", Qt::CaseInsensitive) == 0) {
         packageRoot = "plasma/wallpapers/";
         servicePrefix = "plasma-wallpaper-";
         pluginTypes << "Plasma/Wallpaper";
-    } else if (type == i18nc("package type", "layout-template").toLower() || type == "layout-template") {
+    } else if (type.compare(i18nc("package type", "layout-template"), Qt::CaseInsensitive) ||
+               type.compare("layout-template", Qt::CaseInsensitive) == 0) {
         packageRoot = "plasma/layout-templates/";
         servicePrefix = "plasma-layout-";
         pluginTypes << "Plasma/LayoutTemplate";
     } else {
-        const QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(args->getOption("type"));
+        const QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(type);
         KService::List offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure", constraint);
         if (offers.isEmpty()) {
-            output(i18n("Could not find a suitable installer for package of type %1", args->getOption("type")));
+            output(i18n("Could not find a suitable installer for package of type %1", type));
             return 1;
         }
 
