@@ -45,7 +45,6 @@
 #include "javascriptaddonpackagestructure.h"
 
 Q_DECLARE_METATYPE(ScriptEnv*)
-Q_DECLARE_METATYPE(Plasma::Package)
 
 ScriptEnv::ScriptEnv(QObject *parent, QScriptEngine *engine)
     : QObject(parent),
@@ -450,16 +449,17 @@ QScriptValue ScriptEnv::loadAddon(QScriptContext *context, QScriptEngine *engine
     QScriptContext *innerContext = engine->pushContext();
     innerContext->activationObject().setProperty("registerAddon", engine->newFunction(ScriptEnv::registerAddon));
     QScriptValue v = engine->newVariant(QVariant::fromValue(package));
-    innerContext->activationObject().setProperty("__plasma_addon_package", v,
-                                                 QScriptValue::ReadOnly | 
+    innerContext->activationObject().setProperty("__plasma_package", v,
+                                                 QScriptValue::ReadOnly |
                                                  QScriptValue::Undeletable |
                                                  QScriptValue::SkipInEnumeration);
+    kDebug() << "context is" << innerContext;
     engine->evaluate(code, file.fileName());
     engine->popContext();
 
     ScriptEnv *env = ScriptEnv::findScriptEnv(engine);
-    if (env) {
-        return env->checkForErrors(false);
+    if (env && env->checkForErrors(false)) {
+        return false;
     }
 
     return true;
@@ -485,9 +485,10 @@ QScriptValue ScriptEnv::registerAddon(QScriptContext *context, QScriptEngine *en
             func.setProperty("test", "bar");
             */
             QScriptValue obj = func.construct();
-            obj.setProperty("__plasma_addon_package",
-                            context->activationObject().property("__plasma_addon_package"),
-                            QScriptValue::ReadOnly|QScriptValue::Undeletable|
+            obj.setProperty("__plasma_package",
+                            context->parentContext()->activationObject().property("__plasma_package"),
+                            QScriptValue::ReadOnly|
+                            QScriptValue::Undeletable |
                             QScriptValue::SkipInEnumeration);
             /*
             obj.setProperty("test", "bar");
