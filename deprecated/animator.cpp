@@ -256,7 +256,7 @@ int Animator::animateItem(QGraphicsItem *item, Animation animation)
     state->item = item;
     state->animation = animation;
     state->curve = d->driver->animationCurve(animation);
-    state->frames = qMax(1.0, frames * (duration / 1000.0));
+    state->frames = qMax(qreal(1.0), frames * (duration / 1000.0));
     state->currentFrame = 0;
     state->interval = d->driver->animationDuration(animation) / qreal(state->frames);
     state->interval = qMax(MIN_TICK_RATE_INT, state->interval - (state->interval % MIN_TICK_RATE_INT));
@@ -311,7 +311,7 @@ int Animator::moveItem(QGraphicsItem *item, Movement movement, const QPoint &des
      state->movement = movement;
      state->curve = d->driver->movementAnimationCurve(movement);
      int duration = d->driver->movementAnimationDuration(movement);
-     state->frames = qMax(1.0, frames * (duration / 1000.0));
+     state->frames = qMax(qreal(1.0), frames * (duration / 1000.0));
      state->currentFrame = 0;
      state->interval = duration / qreal(state->frames);
      state->interval = qMax(MIN_TICK_RATE_INT, state->interval - (state->interval % MIN_TICK_RATE_INT));
@@ -437,7 +437,7 @@ int Animator::animateElement(QGraphicsItem *item, Animation animation)
     state->item = item;
     state->curve = d->driver->elementAnimationCurve(animation);
     state->animation = animation;
-    state->frames = qMax(1.0, frames * (duration / 1000.0));
+    state->frames = qMax(qreal(1.0), frames * (duration / 1000.0));
     state->currentFrame = 0;
     state->interval = duration / qreal(state->frames);
     state->interval = qMax(MIN_TICK_RATE_INT, state->interval - (state->interval % MIN_TICK_RATE_INT));
