@@ -51,12 +51,12 @@ public:
 public Q_SLOTS:
     bool include(const QString &script);
 
-protected:
+private:
     void setupObjects();
     void importExtensions();
     void reportError(ScriptEnv *engine, bool fatal);
+    QString filePath(const char *type, const QString &file) const;
 
-private:
     QScriptEngine *m_engine;
     ScriptEnv *m_env;
     QScriptValue m_self;

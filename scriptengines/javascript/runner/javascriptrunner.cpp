@@ -147,9 +147,19 @@ void JavaScriptRunner::reportError(ScriptEnv *env, bool fatal)
     kDebug() << env->engine()->uncaughtExceptionBacktrace();
 }
 
+QString JavaScriptRunner::filePath(const char *type, const QString &file) const
+{
+    const QString path = m_env->filePathFromScriptContext(type, file);
+    if (path.isEmpty()) {
+        return path;
+    }
+
+    return package()->filePath(type, file);
+}
+
 bool JavaScriptRunner::include(const QString &script)
 {
-    const QString path = package()->filePath("scripts", script);
+    const QString path = filePath("scripts", script);
     if (path.isEmpty()) {
         return false;
     }
