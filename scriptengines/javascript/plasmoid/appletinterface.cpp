@@ -200,16 +200,25 @@ QString AppletInterface::file(const QString &fileType)
 
 QString AppletInterface::file(const QString &fileType, const QString &filePath)
 {
-    QScriptContext *c = context();
-    if (c && c->parentContext()) {
-        QScriptValue v = c->parentContext()->activationObject().property("__plasma_package");
-        //kDebug() << "variant in parent context?" << v.isVariant() << t.restart();
+    return file(fileType, filePath, context());
+}
+
+QString AppletInterface::file(const QString &fileType, const QString &filePath, QScriptContext *c)
+{
+    while (c) {
+        QScriptValue v = c->activationObject().property("__plasma_package");
+        //kDebug() << "variant in parent context?" << v.isVariant();
         if (v.isVariant()) {
-            return v.toVariant().value<Plasma::Package>().filePath(fileType.toLocal8Bit().constData(), filePath);
-            //kDebug() << "path to package is" << p.path();
+            const QString path = v.toVariant().value<Plasma::Package>().filePath(fileType.toLocal8Bit().constData(), filePath);
+            if (!path.isEmpty()) {
+                return path;
+            }
         }
+
+        c = c->parentContext();
     }
 
+    //kDebug() << "old school attempt";
     return m_appletScriptEngine->package()->filePath(fileType.toLocal8Bit().constData(), filePath);
 }
 

@@ -80,7 +80,7 @@ private:
     QScriptValue createWheelEventObject(QGraphicsSceneWheelEvent *event);
     static void populateAnimationsHash();
 
-    static QString findSvg(QScriptEngine *engine, const QString &file);
+    static QString findSvg(QScriptContext *context, QScriptEngine *engine, const QString &file);
     static QScriptValue animation(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue animationGroup(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue parallelAnimationGroup(QScriptContext *context, QScriptEngine *engine);

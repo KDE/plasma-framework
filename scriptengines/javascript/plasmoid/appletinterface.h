@@ -268,6 +268,7 @@ enum IntervalAlignment {
 
     Q_INVOKABLE QString file(const QString &fileType);
     Q_INVOKABLE QString file(const QString &fileType, const QString &filePath);
+    QString file(const QString &fileType, const QString &filePath, QScriptContext *context);
 
     Q_INVOKABLE bool include(const QString &script);
 
