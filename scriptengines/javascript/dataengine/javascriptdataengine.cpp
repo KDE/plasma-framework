@@ -312,12 +312,26 @@ Plasma::Service *JavaScriptDataEngine::serviceForSource(const QString &source)
 
 QString JavaScriptDataEngine::filePath(const char *type, const QString &file) const
 {
+    QScriptContext *c = m_qscriptEngine->currentContext();
+    while (c) {
+        QScriptValue v = c->activationObject().property("__plasma_package");
+        //kDebug() << "variant in parent context?" << v.isVariant();
+        if (v.isVariant()) {
+            const QString path = v.toVariant().value<Plasma::Package>().filePath(type, file);
+            if (!path.isEmpty()) {
+                return path;
+            }
+        }
+
+        c = c->parentContext();
+    }
+
     return package()->filePath(type, file);
 }
 
 bool JavaScriptDataEngine::include(const QString &script)
 {
-    const QString path = package()->filePath("scripts", script);
+    const QString path = filePath("scripts", script);
     if (path.isEmpty()) {
         return false;
     }
