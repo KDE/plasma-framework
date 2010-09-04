@@ -35,6 +35,7 @@
 #include <Plasma/Package>
 
 Q_DECLARE_METATYPE(AppletInterface*)
+Q_DECLARE_METATYPE(Plasma::Package)
 
 AppletInterface::AppletInterface(SimpleJavaScriptApplet *parent)
     : QObject(parent),

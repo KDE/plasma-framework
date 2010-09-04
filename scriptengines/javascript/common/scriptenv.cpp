@@ -45,7 +45,7 @@
 #include "javascriptaddonpackagestructure.h"
 
 Q_DECLARE_METATYPE(ScriptEnv*)
-
+Q_DECLARE_METATYPE(Plasma::Package)
 ScriptEnv::ScriptEnv(QObject *parent, QScriptEngine *engine)
     : QObject(parent),
       m_allowedUrls(NoUrls),
