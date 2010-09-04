@@ -67,6 +67,8 @@ public:
     bool callEventListeners(const QString &event, const QScriptValueList &args = QScriptValueList());
     bool hasEventListeners(const QString &event) const;
 
+    QString filePathFromScriptContext(const char *type, const QString &file) const;
+
 Q_SIGNALS:
     void reportError(ScriptEnv *engine, bool fatal);
 
@@ -87,7 +89,6 @@ private:
     static QScriptValue removeEventListener(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue hasExtension(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue throwNonFatalError(const QString &msg, QScriptContext *context, QScriptEngine *engine);
-    //static QScriptValue addonFilePath(QScriptContext *context, QScriptEngine *engine);
 
 private Q_SLOTS:
     void signalException();

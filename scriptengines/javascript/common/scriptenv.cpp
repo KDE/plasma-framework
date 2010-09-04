@@ -45,7 +45,7 @@
 #include "javascriptaddonpackagestructure.h"
 
 Q_DECLARE_METATYPE(ScriptEnv*)
-Q_DECLARE_METATYPE(Plasma::Package)
+
 ScriptEnv::ScriptEnv(QObject *parent, QScriptEngine *engine)
     : QObject(parent),
       m_allowedUrls(NoUrls),
@@ -453,7 +453,7 @@ QScriptValue ScriptEnv::loadAddon(QScriptContext *context, QScriptEngine *engine
                                                  QScriptValue::ReadOnly |
                                                  QScriptValue::Undeletable |
                                                  QScriptValue::SkipInEnumeration);
-    kDebug() << "context is" << innerContext;
+    //kDebug() << "context is" << innerContext;
     engine->evaluate(code, file.fileName());
     engine->popContext();
 
@@ -465,35 +465,17 @@ QScriptValue ScriptEnv::loadAddon(QScriptContext *context, QScriptEngine *engine
     return true;
 }
 
-/*
-QScriptValue ScriptEnv::addonFilePath(QScriptContext *context, QScriptEngine *engine)
-{
-    const QString &path = context->thisObject().property("__plasma_addon_filepath").toString();
-    return path + context->argument(0).toString();
-}
-*/
-
 QScriptValue ScriptEnv::registerAddon(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() > 0) {
         QScriptValue func = context->argument(0);
         if (func.isFunction()) {
-            /*
-            QScriptValue v = func.prototype();
-            v.setProperty("addonFilePath", engine->newFunction(ScriptEnv::addonFilePath));
-            func.setPrototype(v);
-            func.setProperty("test", "bar");
-            */
             QScriptValue obj = func.construct();
             obj.setProperty("__plasma_package",
                             context->parentContext()->activationObject().property("__plasma_package"),
                             QScriptValue::ReadOnly|
                             QScriptValue::Undeletable |
                             QScriptValue::SkipInEnumeration);
-            /*
-            obj.setProperty("test", "bar");
-            obj.setProperty("addonFilePath", engine->newFunction(ScriptEnv::addonFilePath));
-            */
 
             ScriptEnv *env = ScriptEnv::findScriptEnv(engine);
             if (env) {
@@ -505,6 +487,27 @@ QScriptValue ScriptEnv::registerAddon(QScriptContext *context, QScriptEngine *en
     }
 
     return engine->undefinedValue();
+}
+
+QString ScriptEnv::filePathFromScriptContext(const char *type, const QString &file) const
+{
+    //kDebug() << type << file;
+    QScriptContext *c = m_engine->currentContext();
+    while (c) {
+        QScriptValue v = c->activationObject().property("__plasma_package");
+        //kDebug() << "variant in parent context?" << v.isVariant();
+        if (v.isVariant()) {
+            const QString path = v.toVariant().value<Plasma::Package>().filePath(type, file);
+            if (!path.isEmpty()) {
+                return path;
+            }
+        }
+
+        c = c->parentContext();
+    }
+
+    //kDebug() << "fail";
+    return QString();
 }
 
 QScriptValue ScriptEnv::addEventListener(QScriptContext *context, QScriptEngine *engine)
