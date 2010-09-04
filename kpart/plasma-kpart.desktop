@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=plasma-kpart
+Name[da]=plasma-kpart
+Name[es]=plasma-kpart
+Name[pt]=plasma-kpart
+Name[pt_BR]=plasma-kpart
+Name[sv]=Plasma-delprogram
+Name[uk]=Модуль Плазми
+Name[x-test]=xxplasma-kpartxx
+Type=Service
+ServiceTypes=KParts/Part
+X-KDE-Library=plasma-kpart

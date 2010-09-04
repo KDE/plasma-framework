@@ -1,0 +1,7 @@
+=== What ===
+This is a generic shell that can be embedded in any KDE application
+which supports KParts to provide easy capabilities to add a plasma-based
+dashboard to their application.
+
+=== How can I use this code? ===
+See http://techbase.kde.org/Development/Tutorials/Plasma/ApplicationShell
