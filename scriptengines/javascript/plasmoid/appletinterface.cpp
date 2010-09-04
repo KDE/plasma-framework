@@ -140,7 +140,7 @@ void AppletInterface::setActiveConfig(const QString &name)
     Plasma::ConfigLoader *loader = m_configs.value(name, 0);
 
     if (!loader) {
-        QString path = applet()->package()->filePath("config", name + ".xml");
+        QString path = file("config", name + ".xml");
         if (path.isEmpty()) {
             return;
         }
@@ -195,17 +195,22 @@ QScriptValue AppletInterface::readConfig(const QString &entry) const
 
 QString AppletInterface::file(const QString &fileType)
 {
-    return m_appletScriptEngine->package()->filePath(fileType.toLocal8Bit().constData());
+    return file(fileType.toLocal8Bit().constData(), QString());
 }
 
 QString AppletInterface::file(const QString &fileType, const QString &filePath)
 {
-    return m_appletScriptEngine->package()->filePath(fileType.toLocal8Bit().constData(), filePath);
-}
+    QScriptContext *c = context();
+    if (c && c->parentContext()) {
+        QScriptValue v = c->parentContext()->activationObject().property("__plasma_package");
+        //kDebug() << "variant in parent context?" << v.isVariant() << t.restart();
+        if (v.isVariant()) {
+            return v.toVariant().value<Plasma::Package>().filePath(fileType.toLocal8Bit().constData(), filePath);
+            //kDebug() << "path to package is" << p.path();
+        }
+    }
 
-const Plasma::Package *AppletInterface::package() const
-{
-    return m_appletScriptEngine->package();
+    return m_appletScriptEngine->package()->filePath(fileType.toLocal8Bit().constData(), filePath);
 }
 
 QList<QAction*> AppletInterface::contextualActions() const
@@ -333,7 +338,24 @@ int AppletInterface::apiVersion() const
 
 bool AppletInterface::include(const QString &script)
 {
-    const QString path = package()->filePath("scripts", script);
+    QString path;
+    /*
+    QScriptContext *c = context();
+    if (c && c->parentContext()) {
+        QScriptValue v = c->parentContext()->activationObject().property("__plasma_package");
+        //kDebug() << "variant in parent context?" << v.isVariant() << t.restart();
+        if (v.isVariant()) {
+            Plasma::Package p = v.toVariant().value<Plasma::Package>();
+            //kDebug() << "path to package is" << p.path();
+            path = p.filePath("scripts", script);
+        }
+    }
+    */
+    if (path.isEmpty()) {
+        kDebug() << "kicking it old school";
+        path = file("scripts", script);
+    }
+
     if (path.isEmpty()) {
         return false;
     }

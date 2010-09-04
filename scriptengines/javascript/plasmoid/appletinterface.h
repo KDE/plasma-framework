@@ -25,6 +25,7 @@
 #include <QObject>
 #include <QSizePolicy>
 #include <QScriptValue>
+#include <QScriptable>
 
 #include <Plasma/Applet>
 #include <Plasma/PopupApplet>
@@ -45,7 +46,7 @@ namespace Plasma
     class Extender;
 } // namespace Plasa
 
-class AppletInterface : public QObject
+class AppletInterface : public QObject, QScriptable
 {
     Q_OBJECT
     Q_ENUMS(FormFactor)
@@ -277,7 +278,6 @@ enum IntervalAlignment {
 
     Plasma::DataEngine *dataEngine(const QString &name);
 
-    const Plasma::Package *package() const;
     QList<QAction*> contextualActions() const;
     QGraphicsLayout *layout() const;
     void setLayout(QGraphicsLayout *);
