@@ -54,6 +54,7 @@ public:
     bool include(const QString &path);
     QSet<QString> loadedExtensions() const;
     QScriptValue variantToScriptValue(QVariant var);
+    QString filePath(const QString &type, const QString &file) const;
 
     bool eventFilter(QObject *watched, QEvent *event);
 

@@ -705,9 +705,9 @@ QString SimpleJavaScriptApplet::findSvg(QScriptContext *context, QScriptEngine *
         return file;
     }
 
-    QString path = interface->file("images", file + ".svg", context);
+    QString path = interface->file("images", file + ".svg");
     if (path.isEmpty()) {
-        path = interface->file("images", file + ".svgz", context);
+        path = interface->file("images", file + ".svgz");
 
         if (path.isEmpty()) {
             return file;
@@ -854,6 +854,16 @@ QScriptValue SimpleJavaScriptApplet::createWidget(QScriptContext *context, QScri
 void SimpleJavaScriptApplet::collectGarbage()
 {
     m_engine->collectGarbage();
+}
+
+QString SimpleJavaScriptApplet::filePath(const QString &type, const QString &file) const
+{
+    const QString path = m_env->filePathFromScriptContext(type.toLocal8Bit().constData(), file);
+    if (!path.isEmpty()) {
+        return path;
+    }
+
+    return package()->filePath(type.toLocal8Bit().constData(), file);
 }
 
 /*

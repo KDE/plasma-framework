@@ -35,7 +35,6 @@
 #include <Plasma/Package>
 
 Q_DECLARE_METATYPE(AppletInterface*)
-Q_DECLARE_METATYPE(Plasma::Package)
 
 AppletInterface::AppletInterface(SimpleJavaScriptApplet *parent)
     : QObject(parent),
@@ -141,7 +140,7 @@ void AppletInterface::setActiveConfig(const QString &name)
     Plasma::ConfigLoader *loader = m_configs.value(name, 0);
 
     if (!loader) {
-        QString path = file("config", name + ".xml");
+        QString path = m_appletScriptEngine->filePath("config", name + ".xml");
         if (path.isEmpty()) {
             return;
         }
@@ -196,31 +195,12 @@ QScriptValue AppletInterface::readConfig(const QString &entry) const
 
 QString AppletInterface::file(const QString &fileType)
 {
-    return file(fileType.toLocal8Bit().constData(), QString());
+    return m_appletScriptEngine->filePath(fileType, QString());
 }
 
 QString AppletInterface::file(const QString &fileType, const QString &filePath)
 {
-    return file(fileType, filePath, context());
-}
-
-QString AppletInterface::file(const QString &fileType, const QString &filePath, QScriptContext *c)
-{
-    while (c) {
-        QScriptValue v = c->activationObject().property("__plasma_package");
-        //kDebug() << "variant in parent context?" << v.isVariant();
-        if (v.isVariant()) {
-            const QString path = v.toVariant().value<Plasma::Package>().filePath(fileType.toLocal8Bit().constData(), filePath);
-            if (!path.isEmpty()) {
-                return path;
-            }
-        }
-
-        c = c->parentContext();
-    }
-
-    //kDebug() << "old school attempt";
-    return m_appletScriptEngine->package()->filePath(fileType.toLocal8Bit().constData(), filePath);
+    return m_appletScriptEngine->filePath(fileType, filePath);
 }
 
 QList<QAction*> AppletInterface::contextualActions() const
@@ -348,23 +328,7 @@ int AppletInterface::apiVersion() const
 
 bool AppletInterface::include(const QString &script)
 {
-    QString path;
-    /*
-    QScriptContext *c = context();
-    if (c && c->parentContext()) {
-        QScriptValue v = c->parentContext()->activationObject().property("__plasma_package");
-        //kDebug() << "variant in parent context?" << v.isVariant() << t.restart();
-        if (v.isVariant()) {
-            Plasma::Package p = v.toVariant().value<Plasma::Package>();
-            //kDebug() << "path to package is" << p.path();
-            path = p.filePath("scripts", script);
-        }
-    }
-    */
-    if (path.isEmpty()) {
-        kDebug() << "kicking it old school";
-        path = file("scripts", script);
-    }
+    const QString path = m_appletScriptEngine->filePath("scripts", script);
 
     if (path.isEmpty()) {
         return false;
