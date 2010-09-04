@@ -110,6 +110,7 @@ SimpleJavaScriptApplet::SimpleJavaScriptApplet(QObject *parent, const QVariantLi
 
 SimpleJavaScriptApplet::~SimpleJavaScriptApplet()
 {
+    delete m_interface;
     if (s_widgetLoader.count() == 1) {
         s_widgetLoader.clear();
     }
@@ -117,27 +118,20 @@ SimpleJavaScriptApplet::~SimpleJavaScriptApplet()
 
 void SimpleJavaScriptApplet::reportError(ScriptEnv *env, bool fatal)
 {
-    SimpleJavaScriptApplet *jsApplet = qobject_cast<SimpleJavaScriptApplet *>(env->parent());
-    AppletInterface *interface = AppletInterface::extract(env->engine());
     const QScriptValue error = env->engine()->uncaughtException();
     QString file = error.property("fileName").toString();
-    if (interface) {
-        file.remove(interface->package()->path());
-    }
+    file.remove(package()->path());
 
     const QString failureMsg = i18n("Error in %1 on line %2.<br><br>%3",
                                     file, error.property("lineNumber").toString(),
                                     error.toString());
-    if (jsApplet) {
-        if (fatal) {
-            jsApplet->setFailedToLaunch(true, failureMsg);
-        } else {
-            jsApplet->showMessage(KIcon("dialog-error"), failureMsg, Plasma::ButtonOk);
-        }
+    if (fatal) {
+        setFailedToLaunch(true, failureMsg);
     } else {
-        kDebug() << failureMsg;
+        showMessage(KIcon("dialog-error"), failureMsg, Plasma::ButtonOk);
     }
 
+    kDebug() << failureMsg;
     kDebug() << env->engine()->uncaughtExceptionBacktrace();
 }
 
@@ -711,9 +705,9 @@ QString SimpleJavaScriptApplet::findSvg(QScriptEngine *engine, const QString &fi
         return file;
     }
 
-    QString path = interface->package()->filePath("images", file + ".svg");
+    QString path = interface->file("images", file + ".svg");
     if (path.isEmpty()) {
-        path = interface->package()->filePath("images", file + ".svgz");
+        path = interface->file("images", file + ".svgz");
 
         if (path.isEmpty()) {
             return file;
