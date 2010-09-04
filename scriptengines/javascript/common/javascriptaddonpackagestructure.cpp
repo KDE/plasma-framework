@@ -27,6 +27,30 @@ JavascriptAddonPackageStructure::JavascriptAddonPackageStructure(QObject *parent
     Q_UNUSED(args)
     setServicePrefix("plasma-javascriptaddon-");
     setDefaultPackageRoot("plasma/javascript-addons/");
+    addDirectoryDefinition("images", "images/", i18n("Images"));
+    QStringList mimetypes;
+    mimetypes << "image/svg+xml" << "image/png" << "image/jpeg";
+    setMimetypes("images", mimetypes);
+
+    addDirectoryDefinition("config", "config/", i18n("Configuration Definitions"));
+    mimetypes.clear();
+    mimetypes << "text/xml";
+    setMimetypes("config", mimetypes);
+
+    addDirectoryDefinition("ui", "ui", i18n("User Interface"));
+    setMimetypes("ui", mimetypes);
+
+    addDirectoryDefinition("data", "data", i18n("Data Files"));
+
+    addDirectoryDefinition("scripts", "code", i18n("Executable Scripts"));
+    mimetypes.clear();
+    mimetypes << "text/plain";
+    setMimetypes("scripts", mimetypes);
+
+    addDirectoryDefinition("translations", "locale", i18n("Translations"));
+
+    addDirectoryDefinition("animations", "animations/", i18n("Animation scripts"));
+
     addFileDefinition("mainscript", "code/main.js", i18n("Main Script File"));
     setRequired("mainscript", true);
 }
