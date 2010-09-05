@@ -1210,7 +1210,7 @@ void Applet::flushPendingConstraintsEvents()
                 connect(configAction, SIGNAL(triggered(bool)), this, SLOT(showConfigurationInterface()), Qt::UniqueConnection);
             }
 
-            if (configAction->isEnabled()) {
+            if (d->hasConfigurationInterface) {
                 bool canConfig = unlocked || KAuthorized::authorize("plasma/allow_configure_when_locked");
                 configAction->setVisible(canConfig);
                 configAction->setEnabled(canConfig);
@@ -1238,7 +1238,7 @@ void Applet::flushPendingConstraintsEvents()
         }
 
         action = d->actions->action("configure");
-        if (action && action->isEnabled()) {
+        if (action && d->hasConfigurationInterface) {
             bool canConfig = unlocked || KAuthorized::authorize("plasma/allow_configure_when_locked");
             action->setVisible(canConfig);
             action->setEnabled(canConfig);
