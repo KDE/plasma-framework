@@ -206,35 +206,35 @@ int main(int argc, char **argv)
         }
     }
 
-    if (type.compare(i18nc("package type", "plasmoid"), Qt::CaseInsensitive) ||
+    if (type.compare(i18nc("package type", "plasmoid"), Qt::CaseInsensitive) == 0 ||
         type.compare("plasmoid", Qt::CaseInsensitive) == 0) {
         packageRoot = "plasma/plasmoids/";
         servicePrefix = "plasma-applet-";
         pluginTypes << "Plasma/Applet";
         pluginTypes << "Plasma/PopupApplet";
         pluginTypes << "Plasma/Containment";
-    } else if (type.compare(i18nc("package type", "theme"), Qt::CaseInsensitive) ||
+    } else if (type.compare(i18nc("package type", "theme"), Qt::CaseInsensitive) == 0 ||
                type.compare("theme", Qt::CaseInsensitive) == 0) {
         packageRoot = "desktoptheme/";
-    } else if (type.compare(i18nc("package type", "wallpaper"), Qt::CaseInsensitive) ||
+    } else if (type.compare(i18nc("package type", "wallpaper"), Qt::CaseInsensitive) == 0 ||
                type.compare("wallpaper", Qt::CaseInsensitive) == 0) {
         packageRoot = "wallpapers/";
-    } else if (type.compare(i18nc("package type", "dataengine"), Qt::CaseInsensitive) ||
+    } else if (type.compare(i18nc("package type", "dataengine"), Qt::CaseInsensitive) == 0 ||
                type.compare("dataengine", Qt::CaseInsensitive) == 0) {
         packageRoot = "plasma/dataengines/";
         servicePrefix = "plasma-dataengine-";
         pluginTypes << "Plasma/DataEngine";
-    } else if (type.compare(i18nc("package type", "runner"), Qt::CaseInsensitive) ||
+    } else if (type.compare(i18nc("package type", "runner"), Qt::CaseInsensitive) == 0 ||
                type.compare("runner", Qt::CaseInsensitive) == 0) {
         packageRoot = "plasma/runners/";
         servicePrefix = "plasma-runner-";
         pluginTypes << "Plasma/Runner";
-    } else if (type.compare(i18nc("package type", "wallpaperplugin"), Qt::CaseInsensitive) ||
+    } else if (type.compare(i18nc("package type", "wallpaperplugin"), Qt::CaseInsensitive) == 0 ||
                type.compare("wallpaperplugin", Qt::CaseInsensitive) == 0) {
         packageRoot = "plasma/wallpapers/";
         servicePrefix = "plasma-wallpaper-";
         pluginTypes << "Plasma/Wallpaper";
-    } else if (type.compare(i18nc("package type", "layout-template"), Qt::CaseInsensitive) ||
+    } else if (type.compare(i18nc("package type", "layout-template"), Qt::CaseInsensitive) == 0 ||
                type.compare("layout-template", Qt::CaseInsensitive) == 0) {
         packageRoot = "plasma/layout-templates/";
         servicePrefix = "plasma-layout-";
@@ -259,6 +259,7 @@ int main(int argc, char **argv)
 
         packageRoot = installer->defaultPackageRoot();
         pluginTypes << installer->type();
+        kDebug() << "we have: " << packageRoot << pluginTypes;
     }
 
     if (args->isSet("list")) {
