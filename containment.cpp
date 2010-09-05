@@ -2336,9 +2336,6 @@ void ContainmentPrivate::appletDestroyed(Plasma::Applet *applet)
     if (handles.contains(applet)) {
         AppletHandle *handle = handles.value(applet);
         handles.remove(applet);
-        if (q->scene()) {
-            q->scene()->removeItem(handle);
-        }
     }
 
     emit q->appletRemoved(applet);
