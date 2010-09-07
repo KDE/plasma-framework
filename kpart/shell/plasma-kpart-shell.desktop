@@ -1,22 +1,10 @@
 [Desktop Entry]
 Name=plasma-kpart-shell
-Name[da]=plasma-kpart-shell
-Name[es]=plasma-kpart-shell
-Name[pt]=plasma-kpart-shell
-Name[pt_BR]=plasma-kpart-shell
-Name[sv]=Plasma-delprogramskal
-Name[uk]=plasma-kpart-shell
 Name[x-test]=xxplasma-kpart-shellxx
 Exec=plasma-kpart-shell %i -caption "%c"
 Icon=plasma-kpart-shell
 Type=Application
 X-DocPath=plasma-kpart-shell/index.html
 GenericName=A KPart shell for Plasma
-GenericName[da]=En KPart-skal til Plasma
-GenericName[es]=Shell de KPart para Plasma
-GenericName[pt]=Uma consola de KPart para o Plasma
-GenericName[pt_BR]=Uma shell de KPart para o Plasma
-GenericName[sv]=Ett delprogramskal för Plasma
-GenericName[uk]=Оболонка модулів для Плазми
 GenericName[x-test]=xxA KPart shell for Plasmaxx
 Terminal=false
