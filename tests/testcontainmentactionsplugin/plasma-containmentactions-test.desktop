@@ -2,6 +2,7 @@
 Name=Test
 Name[en_GB]=Test
 Name[es]=Prueba
+Name[et]=Test
 Name[eu]=Proba
 Name[hu]=Teszt
 Name[ia]=Prova
@@ -19,6 +20,7 @@ Name[zh_TW]=測試
 Comment=A dummy plugin for testing
 Comment[en_GB]=A dummy plugin for testing
 Comment[es]=Un complemento de pruebas
+Comment[et]=Libaplugin testimiseks
 Comment[eu]=Probatarako gezurretazko plugin bat
 Comment[hu]=Üres bővítmény teszteléshez
 Comment[ia]=Un plugin vacue pro essayar
