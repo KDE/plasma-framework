@@ -541,42 +541,19 @@ void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
         return; //no unexpected click-throughs
     }
 
-    QGraphicsItem *item = scene()->itemAt(event->scenePos());
-    if (event->button() == Qt::RightButton && event->modifiers() == Qt::NoModifier && item != this) {
-        //fake a contextmenuevent in case something in the containment plugin is expecting it
-        //we do this because the click is sent around as a mousepress before a contextmenu event,
-        //folderview only handles it as a contextmenu event, but if folderview isn't handling it
-        //then we need to handle it as a mousepress *not* a contextmenuevent.
-        //unfortunately this makes is possible for badly-behaved containments to eat rightclicks
-        QGraphicsSceneContextMenuEvent contextEvent(QEvent::GraphicsSceneContextMenu);
-        contextEvent.setReason(QGraphicsSceneContextMenuEvent::Mouse);
-        contextEvent.setPos(event->pos());
-        contextEvent.setScenePos(event->scenePos());
-        contextEvent.setScreenPos(event->screenPos());
-        contextEvent.setModifiers(event->modifiers());
-        contextEvent.setWidget(event->widget());
-
-        scene()->sendEvent(item, &contextEvent);
-        if (contextEvent.isAccepted()) {
-            event->accept();
-            return;
-        }
-    }
-
     if (d->wallpaper && d->wallpaper->isInitialized() && !event->isAccepted()) {
         d->wallpaper->mousePressEvent(event);
     }
 
     if (event->isAccepted()) {
         setFocus(Qt::MouseFocusReason);
+    } else if (event->button() == Qt::RightButton && event->modifiers() == Qt::NoModifier) {
+        // we'll catch this in the context menu even
+        Applet::mousePressEvent(event);
     } else {
         QString trigger = ContainmentActions::eventToString(event);
-        if (d->actionPlugins.contains(trigger)) {
-            if (d->prepareContainmentActions(trigger, event->screenPos())) {
-                d->actionPlugins.value(trigger)->contextEvent(event);
-            }
-            event->accept();
-            return;
+        if (d->prepareContainmentActions(trigger, event->screenPos())) {
+            d->actionPlugins.value(trigger)->contextEvent(event);
         }
 
         Applet::mousePressEvent(event);
@@ -597,12 +574,8 @@ void Containment::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
 
     if (!event->isAccepted() && isContainment()) {
-        if (d->actionPlugins.contains(trigger)) {
-            if (d->prepareContainmentActions(trigger, event->screenPos())) {
-                d->actionPlugins.value(trigger)->contextEvent(event);
-            }
-            event->accept();
-            return;
+        if (d->prepareContainmentActions(trigger, event->screenPos())) {
+            d->actionPlugins.value(trigger)->contextEvent(event);
         }
 
         event->accept();
@@ -618,25 +591,69 @@ void Containment::showDropZone(const QPoint pos)
 
 void Containment::showContextMenu(const QPointF &containmentPos, const QPoint &screenPos)
 {
-    //d->showContextMenu(mapToScene(containmentPos), screenPos, false, false);
+    //kDebug() << containmentPos << screenPos;
     QGraphicsSceneContextMenuEvent gvevent;
     gvevent.setScreenPos(screenPos);
     gvevent.setScenePos(mapToScene(containmentPos));
     gvevent.setPos(containmentPos);
-    gvevent.setReason(QGraphicsSceneContextMenuEvent::Other);
+    gvevent.setReason(QGraphicsSceneContextMenuEvent::Mouse);
     gvevent.setWidget(view());
     contextMenuEvent(&gvevent);
 }
 
 void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
-    if (!isContainment() || !scene() || !KAuthorized::authorizeKAction("plasma/containment_context_menu")) {
+    if (!isContainment() || !KAuthorized::authorizeKAction("plasma/containment_context_menu")) {
         Applet::contextMenuEvent(event);
         return;
     }
 
-    if (d->showContextMenu(event->scenePos(), event->screenPos(), true,
-                           event->reason() == QGraphicsSceneContextMenuEvent::Mouse)) {
+    const QString trigger = ContainmentActions::eventToString(event);
+    if (d->prepareContainmentActions(trigger, event->screenPos())) {
+        // create a mouse event for the action plugin
+        QGraphicsSceneMouseEvent mevent(QEvent::GraphicsSceneMousePress);
+        mevent.setScreenPos(event->screenPos());
+        mevent.setScenePos(event->scenePos());
+        mevent.setPos(event->pos());
+        mevent.setWidget(event->widget());
+        mevent.setButtons(Qt::RightButton);
+        mevent.setModifiers(event->modifiers());
+        d->actionPlugins.value(trigger)->contextEvent(&mevent);
+        return;
+    }
+
+    Applet *applet = d->appletAt(event->scenePos());
+
+    KMenu desktopMenu;
+    //kDebug() << "context menu event " << (QObject*)applet;
+    if (applet) {
+        d->appletActions(desktopMenu, applet);
+    } else {
+        d->containmentActions(desktopMenu);
+    }
+
+    if (!desktopMenu.isEmpty()) {
+        //kDebug() << "executing at" << screenPos;
+        QPoint pos = event->screenPos();
+        if (applet && d->isPanelContainment()) {
+            desktopMenu.adjustSize();
+            pos = applet->popupPosition(desktopMenu.size());
+            if (event->reason() == QGraphicsSceneContextMenuEvent::Mouse) {
+                // if the menu pops up way away from the mouse press, then move it
+                // to the mouse press
+                if (d->formFactor == Vertical) {
+                    if (pos.y() + desktopMenu.height() < event->screenPos().y()) {
+                        pos.setY(event->screenPos().y());
+                    }
+                } else if (d->formFactor == Horizontal) {
+                    if (pos.x() + desktopMenu.width() < event->screenPos().x()) {
+                        pos.setX(event->screenPos().x());
+                    }
+                }
+            }
+        }
+
+        desktopMenu.exec(pos);
         event->accept();
     } else {
         Applet::contextMenuEvent(event);
@@ -683,13 +700,11 @@ void ContainmentPrivate::containmentActions(KMenu &desktopMenu)
     }
 }
 
-void ContainmentPrivate::appletActions(KMenu &desktopMenu, Applet *applet, bool includeApplet)
+void ContainmentPrivate::appletActions(KMenu &desktopMenu, Applet *applet)
 {
-    if (includeApplet) {
-        foreach (QAction *action, applet->contextualActions()) {
-            if (action) {
-                desktopMenu.addAction(action);
-            }
+    foreach (QAction *action, applet->contextualActions()) {
+        if (action) {
+            desktopMenu.addAction(action);
         }
     }
 
@@ -768,47 +783,10 @@ Applet* ContainmentPrivate::appletAt(const QPointF &point)
     return applet;
 }
 
-bool ContainmentPrivate::showContextMenu(const QPointF &point, const QPoint &screenPos, bool includeApplet, bool isMouseEvent)
-{
-    Applet *applet = appletAt(point);
-
-    KMenu desktopMenu;
-    //kDebug() << "context menu event " << (QObject*)applet;
-    if (applet) {
-        appletActions(desktopMenu, applet, includeApplet);
-    } else if (isMouseEvent)  {
-        return false; //fall through to plugin/wallpaper stuff
-    } else {
-        containmentActions(desktopMenu);
-    }
-
-    if (!desktopMenu.isEmpty()) {
-        //kDebug() << "executing at" << screenPos;
-        QPoint pos = screenPos;
-        if (applet && isPanelContainment()) {
-            desktopMenu.adjustSize();
-            pos = applet->popupPosition(desktopMenu.size());
-            if (formFactor == Vertical) {
-                if (pos.y() + desktopMenu.height() < screenPos.y()) {
-                    pos.setY(screenPos.y());
-                }
-            } else if (formFactor == Horizontal) {
-                if (pos.x() + desktopMenu.width() < screenPos.x()) {
-                    pos.setX(screenPos.x());
-                }
-            }
-        }
-        desktopMenu.exec(pos);
-        return true;
-    }
-
-    return false;
-}
-
 bool ContainmentPrivate::showAppletContextMenu(Applet *applet, const QPoint &screenPos)
 {
     KMenu desktopMenu;
-    appletActions(desktopMenu, applet, true);
+    appletActions(desktopMenu, applet);
 
     if (!desktopMenu.isEmpty()) {
         desktopMenu.exec(screenPos);
@@ -1690,16 +1668,13 @@ void Containment::wheelEvent(QGraphicsSceneWheelEvent *event)
 
     QString trigger = ContainmentActions::eventToString(event);
 
-    if (d->actionPlugins.contains(trigger)) {
-        if (d->prepareContainmentActions(trigger, event->screenPos())) {
-            d->actionPlugins.value(trigger)->contextEvent(event);
-        }
+    if (d->prepareContainmentActions(trigger, event->screenPos())) {
+        d->actionPlugins.value(trigger)->contextEvent(event);
         event->accept();
-        return;
+    } else {
+        event->ignore();
+        Applet::wheelEvent(event);
     }
-
-    event->ignore();
-    Applet::wheelEvent(event);
 }
 
 bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
@@ -2486,6 +2461,9 @@ QPointF ContainmentPrivate::preferredPanelPos(Corona *corona) const
 bool ContainmentPrivate::prepareContainmentActions(const QString &trigger, const QPoint &screenPos)
 {
     ContainmentActions *plugin = actionPlugins.value(trigger);
+    if (!plugin) {
+        return false;
+    }
 
     if (!plugin->isInitialized()) {
         KConfigGroup cfg = q->config();
@@ -2501,6 +2479,7 @@ bool ContainmentPrivate::prepareContainmentActions(const QString &trigger, const
         menu.exec(screenPos);
         return false;
     }
+
     return true;
 }
 
