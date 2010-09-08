@@ -158,7 +158,7 @@ class PLASMA_EXPORT ContainmentActions : public QObject
          * Implement this to respond to events.
          * The user can configure whatever button and modifier they like, so please don't look at
          * those parameters.
-         * So far the event could be a QGraphicsSceneMouseEvent or a QGraphicsSceneWheelEvent.
+         * The event may be a QGraphicsSceneMouseEvent or a QGraphicsSceneWheelEvent.
          */
         virtual void contextEvent(QEvent *event);
 
