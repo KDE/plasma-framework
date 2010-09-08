@@ -299,6 +299,88 @@ void ContainmentActions::paste(QPointF scenePos, QPoint screenPos)
     }
 }
 
+QPoint screenPosFromEvent(QEvent *event)
+{
+    switch (event->type()) {
+        case QEvent::GraphicsSceneMousePress:
+        case QEvent::GraphicsSceneMouseRelease:
+        case QEvent::GraphicsSceneMouseDoubleClick:
+            return static_cast<QGraphicsSceneMouseEvent*>(event)->screenPos();
+            break;
+        case QEvent::GraphicsSceneWheel:
+            return static_cast<QGraphicsSceneWheelEvent*>(event)->screenPos();
+            break;
+        case QEvent::GraphicsSceneContextMenu:
+            return static_cast<QGraphicsSceneContextMenuEvent*>(event)->screenPos();
+            break;
+        default:
+            break;
+    }
+
+    return QPoint();
+}
+
+QPointF scenePosFromEvent(QEvent *event)
+{
+    switch (event->type()) {
+        case QEvent::GraphicsSceneMousePress:
+        case QEvent::GraphicsSceneMouseRelease:
+        case QEvent::GraphicsSceneMouseDoubleClick:
+            return static_cast<QGraphicsSceneMouseEvent*>(event)->scenePos();
+            break;
+        case QEvent::GraphicsSceneWheel:
+            return static_cast<QGraphicsSceneWheelEvent*>(event)->scenePos();
+            break;
+        case QEvent::GraphicsSceneContextMenu:
+            return static_cast<QGraphicsSceneContextMenuEvent*>(event)->scenePos();
+            break;
+        default:
+            break;
+    }
+
+    return QPoint();
+}
+
+bool isNonSceneEvent(QEvent *event)
+{
+    return dynamic_cast<QGraphicsSceneEvent *>(event) == 0;
+}
+
+QPoint ContainmentActions::popupPosition(const QSize &s, QEvent *event)
+{
+    if (isNonSceneEvent(event)) {
+        return screenPosFromEvent(event);
+    }
+
+    Containment *c = containment();
+    if (!c) {
+        return screenPosFromEvent(event);
+    }
+
+    Applet *applet = c->d->appletAt(scenePosFromEvent(event));
+    QPoint screenPos = screenPosFromEvent(event);
+    QPoint pos = screenPos;
+    if (applet && containment()->d->isPanelContainment()) {
+        pos = applet->popupPosition(s);
+        if (event->type() != QEvent::GraphicsSceneContextMenu ||
+            static_cast<QGraphicsSceneContextMenuEvent *>(event)->reason() == QGraphicsSceneContextMenuEvent::Mouse) {
+            // if the menu pops up way away from the mouse press, then move it
+            // to the mouse press
+            if (c->formFactor() == Vertical) {
+                if (pos.y() + s.height() < screenPos.y()) {
+                    pos.setY(screenPos.y());
+                }
+            } else if (c->formFactor() == Horizontal) {
+                if (pos.x() + s.width() < screenPos.x()) {
+                    pos.setX(screenPos.x());
+                }
+            }
+        }
+    }
+
+    return pos;
+}
+
 bool ContainmentActions::event(QEvent *e)
 {
     if (e->type() == QEvent::ParentChange) {
