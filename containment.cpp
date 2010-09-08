@@ -618,12 +618,18 @@ void Containment::showDropZone(const QPoint pos)
 
 void Containment::showContextMenu(const QPointF &containmentPos, const QPoint &screenPos)
 {
-    d->showContextMenu(mapToScene(containmentPos), screenPos, false, false);
+    //d->showContextMenu(mapToScene(containmentPos), screenPos, false, false);
+    QGraphicsSceneContextMenuEvent gvevent;
+    gvevent.setScreenPos(screenPos);
+    gvevent.setScenePos(mapToScene(containmentPos));
+    gvevent.setPos(containmentPos);
+    gvevent.setReason(QGraphicsSceneContextMenuEvent::Other);
+    gvevent.setWidget(view());
+    contextMenuEvent(&gvevent);
 }
 
 void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
-    //kDebug() << "let's see if we manage to get a context menu here, huh";
     if (!isContainment() || !scene() || !KAuthorized::authorizeKAction("plasma/containment_context_menu")) {
         Applet::contextMenuEvent(event);
         return;
@@ -2334,7 +2340,6 @@ void ContainmentPrivate::appletDestroyed(Plasma::Applet *applet)
     }
 
     if (handles.contains(applet)) {
-        AppletHandle *handle = handles.value(applet);
         handles.remove(applet);
     }
 
