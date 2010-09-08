@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=plasma-kpart
+Name[ia]=plasma-kpart
+Name[pt]=plasma-kpart
+Name[pt_BR]=plasma-kpart
+Name[sv]=Plasma-delprogram
+Name[uk]=plasma-kpart
 Name[x-test]=xxplasma-kpartxx
 Type=Service
 ServiceTypes=KParts/Part
