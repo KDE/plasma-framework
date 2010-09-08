@@ -28,6 +28,7 @@
 #include <QMetaEnum>
 #include <QMouseEvent>
 #include <QWheelEvent>
+#include <QGraphicsSceneContextMenuEvent>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsSceneWheelEvent>
 
@@ -227,12 +228,11 @@ QString ContainmentActions::eventToString(QEvent *event)
     QString trigger;
     Qt::KeyboardModifiers modifiers;
 
-    //strict typing sucks sometimes.
     switch (event->type()) {
         case QEvent::MouseButtonPress:
         case QEvent::MouseButtonRelease:
         {
-            QMouseEvent *e = dynamic_cast<QMouseEvent*>(event);
+            QMouseEvent *e = static_cast<QMouseEvent*>(event);
             int m = QObject::staticQtMetaObject.indexOfEnumerator("MouseButtons");
             QMetaEnum mouse = QObject::staticQtMetaObject.enumerator(m);
             trigger += mouse.valueToKey(e->button());
@@ -241,8 +241,9 @@ QString ContainmentActions::eventToString(QEvent *event)
         }
         case QEvent::GraphicsSceneMousePress:
         case QEvent::GraphicsSceneMouseRelease:
+        case QEvent::GraphicsSceneMouseDoubleClick:
         {
-            QGraphicsSceneMouseEvent *e = dynamic_cast<QGraphicsSceneMouseEvent*>(event);
+            QGraphicsSceneMouseEvent *e = static_cast<QGraphicsSceneMouseEvent*>(event);
             int m = QObject::staticQtMetaObject.indexOfEnumerator("MouseButtons");
             QMetaEnum mouse = QObject::staticQtMetaObject.enumerator(m);
             trigger += mouse.valueToKey(e->button());
@@ -251,7 +252,7 @@ QString ContainmentActions::eventToString(QEvent *event)
         }
         case QEvent::Wheel:
         {
-            QWheelEvent *e = dynamic_cast<QWheelEvent*>(event);
+            QWheelEvent *e = static_cast<QWheelEvent*>(event);
             int o = QObject::staticQtMetaObject.indexOfEnumerator("Orientations");
             QMetaEnum orient = QObject::staticQtMetaObject.enumerator(o);
             trigger = "wheel:";
@@ -261,12 +262,21 @@ QString ContainmentActions::eventToString(QEvent *event)
         }
         case QEvent::GraphicsSceneWheel:
         {
-            QGraphicsSceneWheelEvent *e = dynamic_cast<QGraphicsSceneWheelEvent*>(event);
+            QGraphicsSceneWheelEvent *e = static_cast<QGraphicsSceneWheelEvent*>(event);
             int o = QObject::staticQtMetaObject.indexOfEnumerator("Orientations");
             QMetaEnum orient = QObject::staticQtMetaObject.enumerator(o);
             trigger = "wheel:";
             trigger += orient.valueToKey(e->orientation());
             modifiers = e->modifiers();
+            break;
+        }
+        case QEvent::GraphicsSceneContextMenu:
+        case QEvent::ContextMenu:
+        {
+            int m = QObject::staticQtMetaObject.indexOfEnumerator("MouseButtons");
+            QMetaEnum mouse = QObject::staticQtMetaObject.enumerator(m);
+            trigger = mouse.valueToKey(Qt::RightButton);
+            modifiers = Qt::NoModifier;
             break;
         }
         default:
