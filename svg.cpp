@@ -188,7 +188,7 @@ class SvgPrivate
         QPixmap findInCache(const QString &elementId, const QSizeF &s = QSizeF())
         {
             QSize size;
-            QString actualElementId(QString("%1-%2-%3").arg(qRound(s.width())).arg( qRound(s.height())).arg(elementId));
+            QString actualElementId(QString("%1-%2-%3").arg(qRound(s.width())).arg(qRound(s.height())).arg(elementId));
 
             if (elementId.isEmpty() || !q->hasElement(actualElementId)) {
                 actualElementId = elementId;
