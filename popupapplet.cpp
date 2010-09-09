@@ -507,7 +507,15 @@ bool PopupApplet::eventFilter(QObject *watched, QEvent *event)
                 }
             }
 
-            return c->d->showAppletContextMenu(applet, static_cast<QContextMenuEvent*>(event)->globalPos());
+            KMenu desktopMenu;
+            c->d->addAppletActions(desktopMenu, applet, event);
+
+            if (!desktopMenu.isEmpty()) {
+                desktopMenu.exec(static_cast<QContextMenuEvent*>(event)->globalPos());
+                return true;
+            }
+
+            return false;
         }
     }
 

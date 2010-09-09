@@ -97,8 +97,8 @@ public:
     void remoteAppletReady(Plasma::AccessAppletJob *job);
     void mimeTypeRetrieved(KIO::Job *job, const QString &mimetype);
     void dropJobResult(KJob *);
-    void containmentActions(KMenu &desktopMenu);
-    void appletActions(KMenu &desktopMenu, Applet *applet);
+    void addContainmentActions(KMenu &desktopMenu, QEvent *event);
+    void addAppletActions(KMenu &desktopMenu, Applet *applet, QEvent *event);
     void checkRemoveAction();
 
     Applet *addApplet(const QString &name, const QVariantList &args = QVariantList(),
@@ -138,17 +138,16 @@ public:
     /**
      * inits the containmentactions if necessary
      * if it needs configuring, this warns the user and returns false
+     * if a menu is passed in, then it populates that menu with the actions from the plugin
+     * @param trigger the string to identify the correct plugin with
+     * @param screenPos used to show the configure menu, only used if no menu is passed in
+     * @param menu an optional menu to use to populate with actions, instead of triggering the
+     *             action directly
      * @return true if it's ok to run the action
      */
-    bool prepareContainmentActions(const QString &trigger, const QPoint &screenPos);
+    bool prepareContainmentActions(const QString &trigger, const QPoint &screenPos, KMenu *menu = 0);
 
     Applet *appletAt(const QPointF &point);
-
-    /**
-     * force the contextmenu for @p applet to be shown at @p screenPos
-     * @since 4.4
-     */
-    bool showAppletContextMenu(Applet *applet, const QPoint &screenPos);
 
     /**
      * Delayed drop zone display

@@ -608,28 +608,14 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
         return;
     }
 
-    const QString trigger = ContainmentActions::eventToString(event);
-    if (d->prepareContainmentActions(trigger, event->screenPos())) {
-        // create a mouse event for the action plugin
-        QGraphicsSceneMouseEvent mevent(QEvent::GraphicsSceneMousePress);
-        mevent.setScreenPos(event->screenPos());
-        mevent.setScenePos(event->scenePos());
-        mevent.setPos(event->pos());
-        mevent.setWidget(event->widget());
-        mevent.setButtons(Qt::RightButton);
-        mevent.setModifiers(event->modifiers());
-        d->actionPlugins.value(trigger)->contextEvent(&mevent);
-        return;
-    }
-
-    Applet *applet = d->appletAt(event->scenePos());
-
     KMenu desktopMenu;
+    Applet *applet = d->appletAt(event->scenePos());
     //kDebug() << "context menu event " << (QObject*)applet;
+
     if (applet) {
-        d->appletActions(desktopMenu, applet);
+        d->addAppletActions(desktopMenu, applet, event);
     } else {
-        d->containmentActions(desktopMenu);
+        d->addContainmentActions(desktopMenu, event);
     }
 
     if (!desktopMenu.isEmpty()) {
@@ -660,7 +646,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     }
 }
 
-void ContainmentPrivate::containmentActions(KMenu &desktopMenu)
+void ContainmentPrivate::addContainmentActions(KMenu &desktopMenu, QEvent *event)
 {
     if (static_cast<Corona*>(q->scene())->immutability() != Mutable &&
         !KAuthorized::authorizeKAction("plasma/containment_actions")) {
@@ -668,39 +654,11 @@ void ContainmentPrivate::containmentActions(KMenu &desktopMenu)
         return;
     }
 
-    QString trigger = "RightButton;NoModifier";
-    //get base context actions
-    ContainmentActions *plugin = actionPlugins.value(trigger);
-    if (plugin) {
-        if (!plugin->isInitialized()) {
-            KConfigGroup cfg = q->config();
-            cfg = KConfigGroup(&cfg, "ActionPlugins");
-            KConfigGroup pluginConfig = KConfigGroup(&cfg, trigger);
-            plugin->restore(pluginConfig);
-        }
-
-        if (plugin->configurationRequired()) {
-            desktopMenu.addTitle(i18n("This menu needs to be configured"));
-            desktopMenu.addAction(q->action("configure"));
-        } else {
-            QList<QAction*> actions = plugin->contextualActions();
-            if (actions.isEmpty()) {
-                //it probably didn't bother implementing the function. give the user a chance to set
-                //a better plugin.
-                //note that if the user sets no-plugin this won't happen...
-                //FIXME maybe the behaviour could be better
-                if (type == Containment::DesktopContainment) {
-                    desktopMenu.addAction(q->action("configure"));
-                }
-            } else {
-                //yay!
-                desktopMenu.addActions(actions);
-            }
-        }
-    }
+    const QString trigger = ContainmentActions::eventToString(event);
+    prepareContainmentActions(trigger, QPoint(), &desktopMenu);
 }
 
-void ContainmentPrivate::appletActions(KMenu &desktopMenu, Applet *applet)
+void ContainmentPrivate::addAppletActions(KMenu &desktopMenu, Applet *applet, QEvent *event)
 {
     foreach (QAction *action, applet->contextualActions()) {
         if (action) {
@@ -719,11 +677,13 @@ void ContainmentPrivate::appletActions(KMenu &desktopMenu, Applet *applet)
     }
 
     KMenu *containmentMenu = new KMenu(i18nc("%1 is the name of the containment", "%1 Options", q->name()), &desktopMenu);
-    containmentActions(*containmentMenu);
+    addContainmentActions(*containmentMenu, event);
     if (!containmentMenu->isEmpty()) {
         int enabled = 0;
         //count number of real actions
-        foreach (const QAction *action, containmentMenu->actions()) {
+        QListIterator<QAction *> actionsIt(containmentMenu->actions());
+        while (enabled < 3 && actionsIt.hasNext()) {
+            QAction *action = actionsIt.next();
             if (action->isVisible() && !action->isSeparator()) {
                 ++enabled;
             }
@@ -733,7 +693,9 @@ void ContainmentPrivate::appletActions(KMenu &desktopMenu, Applet *applet)
             //if there is only one, don't create a submenu
             if (enabled < 2) {
                 foreach (QAction *action, containmentMenu->actions()) {
-                    desktopMenu.addAction(action);
+                    if (action->isVisible() && !action->isSeparator()) {
+                        desktopMenu.addAction(action);
+                    }
                 }
             } else {
                 desktopMenu.addMenu(containmentMenu);
@@ -747,7 +709,9 @@ void ContainmentPrivate::appletActions(KMenu &desktopMenu, Applet *applet)
         }
 
         QAction *closeApplet = applet->d->actions->action("remove");
+        kDebug() << "checking for removal" << closeApplet;
         if (closeApplet) {
+            kDebug() << "boo yah, adding it!" << closeApplet->isEnabled() << closeApplet->isVisible();
             desktopMenu.addAction(closeApplet);
         }
     }
@@ -781,19 +745,6 @@ Applet* ContainmentPrivate::appletAt(const QPointF &point)
         item = item->parentItem();
     }
     return applet;
-}
-
-bool ContainmentPrivate::showAppletContextMenu(Applet *applet, const QPoint &screenPos)
-{
-    KMenu desktopMenu;
-    appletActions(desktopMenu, applet);
-
-    if (!desktopMenu.isEmpty()) {
-        desktopMenu.exec(screenPos);
-        return true;
-    }
-
-    return false;
 }
 
 void Containment::setFormFactor(FormFactor formFactor)
@@ -2458,7 +2409,7 @@ QPointF ContainmentPrivate::preferredPanelPos(Corona *corona) const
 }
 
 
-bool ContainmentPrivate::prepareContainmentActions(const QString &trigger, const QPoint &screenPos)
+bool ContainmentPrivate::prepareContainmentActions(const QString &trigger, const QPoint &screenPos, KMenu *menu)
 {
     ContainmentActions *plugin = actionPlugins.value(trigger);
     if (!plugin) {
@@ -2473,11 +2424,28 @@ bool ContainmentPrivate::prepareContainmentActions(const QString &trigger, const
     }
 
     if (plugin->configurationRequired()) {
-        KMenu menu;
-        menu.addTitle(i18n("This plugin needs to be configured"));
-        menu.addAction(q->action("configure"));
-        menu.exec(screenPos);
+        KMenu *localMenu = menu ? menu : new KMenu();
+
+        localMenu->addTitle(i18n("This plugin needs to be configured"));
+        localMenu->addAction(q->action("configure"));
+
+        if (!menu) {
+            localMenu->exec(screenPos);
+            delete localMenu;
+        }
+
         return false;
+    } else if (menu) {
+        QList<QAction*> actions = plugin->contextualActions();
+        if (actions.isEmpty()) {
+            //it probably didn't bother implementing the function. give the user a chance to set
+            //a better plugin.  note that if the user sets no-plugin this won't happen...
+            if (!isPanelContainment() && q->action("configure")) {
+                menu->addAction(q->action("configure"));
+            }
+        } else {
+            menu->addActions(actions);
+        }
     }
 
     return true;
