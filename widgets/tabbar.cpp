@@ -501,6 +501,9 @@ QGraphicsLayoutItem *TabBar::takeTab(int index)
 
     if (returnItem) {
         returnItem->setParentLayoutItem(0);
+        if (QGraphicsItem *item = returnItem->graphicsItem()) {
+            item->setParentItem(0);
+        }
     }
 
     page->setLayout(0);
