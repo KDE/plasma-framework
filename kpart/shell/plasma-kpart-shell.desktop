@@ -2,6 +2,7 @@
 Name=plasma-kpart-shell
 Name[en_GB]=plasma-kpart-shell
 Name[ia]=plasma-kpart-shell
+Name[nl]=plasma-kpart-shell
 Name[pt]=plasma-kpart-shell
 Name[pt_BR]=plasma-kpart-shell
 Name[sv]=Plasma-delprogramskal
@@ -14,6 +15,7 @@ X-DocPath=plasma-kpart-shell/index.html
 GenericName=A KPart shell for Plasma
 GenericName[en_GB]=A KPart shell for Plasma
 GenericName[ia]=Un shell de KPart pro Plasma
+GenericName[nl]=Een KPart-shell voor Plasma
 GenericName[pt]=Uma consola de KParts para o Plasma
 GenericName[pt_BR]=Uma shell de KPart para o Plasma
 GenericName[sv]=Ett delprogramskal för Plasma
