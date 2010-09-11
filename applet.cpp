@@ -1192,9 +1192,6 @@ void Applet::flushPendingConstraintsEvents()
     if (c & Plasma::StartupCompletedConstraint) {
         //common actions
         bool unlocked = immutability() == Mutable;
-        //FIXME desktop containments can't be removed while in use.
-        //it's kinda silly to have a keyboard shortcut for something that can only be used when the
-        //shortcut isn't active.
         QAction *closeApplet = d->actions->action("remove");
         if (closeApplet) {
             closeApplet->setEnabled(unlocked);
