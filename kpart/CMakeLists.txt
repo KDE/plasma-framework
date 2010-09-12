@@ -6,9 +6,6 @@ include (KDE4Defaults)
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 include_directories (${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
 
-#Don't build test shell
-#add_subdirectory(shell) 
-
 set(plasma_kpartscripting_SRCS
    scripting/layouttemplatepackagestructure.cpp
    scripting/rect.cpp
