@@ -288,7 +288,7 @@ void ConfigLoaderHandler::addItem()
     } else if (m_type == "point") {
         QPoint defaultPoint;
         QStringList tmpList = m_default.split(',');
-        while (tmpList.size() >= 2) {
+        if (tmpList.size() >= 2) {
             defaultPoint.setX(tmpList[0].toInt());
             defaultPoint.setY(tmpList[1].toInt());
         }
@@ -296,7 +296,7 @@ void ConfigLoaderHandler::addItem()
     } else if (m_type == "rect") {
         QRect defaultRect;
         QStringList tmpList = m_default.split(',');
-        while (tmpList.size() >= 4) {
+        if (tmpList.size() >= 4) {
             defaultRect.setCoords(tmpList[0].toInt(), tmpList[1].toInt(),
                                   tmpList[2].toInt(), tmpList[3].toInt());
         }
@@ -304,7 +304,7 @@ void ConfigLoaderHandler::addItem()
     } else if (m_type == "size") {
         QSize defaultSize;
         QStringList tmpList = m_default.split(',');
-        while (tmpList.size() >= 2) {
+        if (tmpList.size() >= 2) {
             defaultSize.setWidth(tmpList[0].toInt());
             defaultSize.setHeight(tmpList[1].toInt());
         }
