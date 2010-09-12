@@ -76,8 +76,8 @@ public Q_SLOTS:
     QVariant readConfig(const QString &key, const QVariant &def = QString()) const { return Applet::readConfig(key, def); }
     void writeConfig(const QString &key, const QVariant &value) { Applet::writeConfig(key, value); }
 
-    QVariant readGlobalConfig(const QString &key, const QVariant &def = QString()) const { return Applet::readConfig(key, def); }
-    void writeGlobalConfig(const QString &key, const QVariant &value) { Applet::writeConfig(key, value); }
+    QVariant readGlobalConfig(const QString &key, const QVariant &def = QString()) const { return Applet::readGlobalConfig(key, def); }
+    void writeGlobalConfig(const QString &key, const QVariant &value) { Applet::writeGlobalConfig(key, value); }
 
     void reloadConfig() { Applet::reloadConfig(); }
 
