@@ -53,6 +53,7 @@ public:
     QWidget *widget;
     QGraphicsWidget *graphicsWidget;
     Plasma::PopupPlacement popupPlacement;
+    Qt::AlignmentFlag popupAlignment;
     Plasma::AspectRatioMode savedAspectRatio;
     QTimer *timer;
     QPoint clicked;

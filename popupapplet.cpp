@@ -609,6 +609,16 @@ Plasma::PopupPlacement PopupApplet::popupPlacement() const
     return d->popupPlacement;
 }
 
+void PopupApplet::setPopupAlignment(Qt::AlignmentFlag alignment)
+{
+    d->popupAlignment = alignment;
+}
+
+Qt::AlignmentFlag PopupApplet::popupAlignment() const
+{
+    return d->popupAlignment;
+}
+
 void PopupApplet::popupEvent(bool popped)
 {
     if (Applet::d->script) {
@@ -637,6 +647,7 @@ PopupAppletPrivate::PopupAppletPrivate(PopupApplet *applet)
           widget(0),
           graphicsWidget(0),
           popupPlacement(Plasma::FloatingPopup),
+          popupAlignment(Qt::AlignLeft),
           savedAspectRatio(Plasma::InvalidAspectRatioMode),
           timer(0),
           popupLostFocus(false),
@@ -824,9 +835,9 @@ void PopupAppletPrivate::updateDialogPosition()
     QPoint pos = view->mapFromScene(q->scenePos());
 
     if (!q->containment() || view == q->containment()->view()) {
-        pos = corona->popupPosition(q, s);
+        pos = corona->popupPosition(q, s, popupAlignment);
     } else {
-        pos = corona->popupPosition(q->parentItem(), s);
+        pos = corona->popupPosition(q->parentItem(), s, popupAlignment);
     }
 
     bool reverse = false;

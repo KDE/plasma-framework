@@ -52,6 +52,8 @@ class PopupAppletPrivate;
 class PLASMA_EXPORT PopupApplet : public Plasma::Applet
 {
     Q_OBJECT
+    Q_PROPERTY(Qt::AlignmentFlag popupAlignment READ popupAlignment WRITE setPopupAlignment)
+
 public:
     PopupApplet(QObject *parent, const QVariantList &args);
     ~PopupApplet();
@@ -99,9 +101,22 @@ public:
     void setGraphicsWidget(QGraphicsWidget * widget);
 
     /**
-     * @return the placement of the popup relating to the icon
+     * @return the placement of the popup relating to the applet
      */
     Plasma::PopupPlacement popupPlacement() const;
+
+    /**
+     * Sets the default alignment of the popup relative to the applet
+     * @arg alignment the alignment to use; Qt::AlignLeft or Qt::AlignRight
+     * @since 4.6
+     */
+    void setPopupAlignment(Qt::AlignmentFlag alignment);
+
+    /**
+     * @return the default alignment of the popup relative to the applet
+     * @since 4.6
+     */
+    Qt::AlignmentFlag popupAlignment() const;
 
     /**
      * Sets whether or not the dialog popup that gets created should be a "passive" popup
