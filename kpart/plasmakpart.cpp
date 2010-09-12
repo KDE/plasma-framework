@@ -83,8 +83,8 @@ PlasmaKPart::~PlasmaKPart()
 
 void PlasmaKPart::setThemeDefaults()
 {
-    KConfigGroup cg(KSharedConfig::openConfig("plasmarc"), "Theme-plasma-netbook" );
-    const QString themeName = cg.readEntry("name", "air" );
+    KConfigGroup cg(KSharedConfig::openConfig("plasmarc"), "Theme-plasma-kpart" );
+    const QString themeName = cg.readEntry("name", "default");
     Plasma::Theme::defaultTheme()->setUseGlobalSettings(false);
     Plasma::Theme::defaultTheme()->setThemeName(themeName);
 
