@@ -265,7 +265,7 @@ void ConfigLoaderHandler::addItem()
         item = doubleItem;
     } else if (m_type == "intlist") {
         QStringList tmpList = m_default.split(',');
-        QList<qint32> defaultList;
+        QList<int> defaultList;
         foreach (const QString &tmp, tmpList) {
             defaultList.append(tmp.toInt());
         }
