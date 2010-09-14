@@ -19,7 +19,6 @@
 
 #include "lineedit.h"
 
-#include <QCoreApplication>
 #include <QPainter>
 #include <QIcon>
 #include <QGraphicsSceneResizeEvent>
@@ -211,7 +210,7 @@ void LineEdit::focusInEvent(QFocusEvent *event)
     QGraphicsProxyWidget::focusInEvent(event);
     if (!nativeWidget()->hasFocus()) {
         // as of Qt 4.7, apparently we have a bug here in QGraphicsProxyWidget
-        QCoreApplication::sendEvent(nativeWidget(), event);
+        nativeWidget()->setFocus(event->reason());
     }
 }
 
