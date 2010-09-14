@@ -159,13 +159,6 @@ public:
     bool isCheckable() const;
 
     /**
-     * Sets whether or not this button is checked. Implies setIsCheckable(true).
-     *
-     * @since 4.3
-     */
-    void setChecked(bool checked);
-
-    /**
      * @return true if the button is checked; requires setIsCheckable(true) to
      * be called
      *
@@ -208,6 +201,20 @@ Q_SIGNALS:
      * Emitted when the button changes state from up to down
      */
     void toggled(bool);
+
+public Q_SLOTS:
+    /**
+     * Performs a visual click and emits the associated signals
+     * @since 4.6
+     */
+    void click();
+
+    /**
+     * Sets whether or not this button is checked. Implies setIsCheckable(true).
+     *
+     * @since 4.3
+     */
+    void setChecked(bool checked);
 
 protected:
     void paint(QPainter *painter,

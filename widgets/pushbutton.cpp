@@ -308,6 +308,11 @@ void PushButton::setChecked(bool checked)
     nativeWidget()->setChecked(checked);
 }
 
+void PushButton::click()
+{
+    nativeWidget()->animateClick();
+}
+
 bool PushButton::isChecked() const
 {
     return nativeWidget()->isChecked();
