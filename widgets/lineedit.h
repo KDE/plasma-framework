@@ -120,6 +120,7 @@ protected:
     void changeEvent(QEvent *event);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void focusInEvent(QFocusEvent *event);
     void focusOutEvent(QFocusEvent *event);
 
 Q_SIGNALS:

@@ -19,6 +19,7 @@
 
 #include "lineedit.h"
 
+#include <QCoreApplication>
 #include <QPainter>
 #include <QIcon>
 #include <QGraphicsSceneResizeEvent>
@@ -203,6 +204,15 @@ void LineEdit::mousePressEvent(QGraphicsSceneMouseEvent *event)
         applet->setStatus(Plasma::AcceptingInputStatus);
     }
     QGraphicsProxyWidget::mousePressEvent(event);
+}
+
+void LineEdit::focusInEvent(QFocusEvent *event)
+{
+    QGraphicsProxyWidget::focusInEvent(event);
+    if (!nativeWidget()->hasFocus()) {
+        // as of Qt 4.7, apparently we have a bug here in QGraphicsProxyWidget
+        QCoreApplication::sendEvent(nativeWidget(), event);
+    }
 }
 
 void LineEdit::focusOutEvent(QFocusEvent *event)
