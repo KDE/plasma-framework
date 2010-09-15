@@ -2037,6 +2037,7 @@ void AppletPrivate::updateShortcuts()
 void Applet::configChanged()
 {
     if (d->script) {
+        d->configLoader->readConfig();
         d->script->configChanged();
     }
 }
