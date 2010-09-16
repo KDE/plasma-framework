@@ -86,7 +86,7 @@ void GeometryAnimation::updateEffectiveTime(int currentTime)
                         m_startGeometry.top()*(1-delta) + m_targetGeometry.top()*(delta)));
         if (m_startGeometry.size() != m_targetGeometry.size()) {
             newGeo.setSize(QSizeF(m_startGeometry.width()*(1-delta) + m_targetGeometry.width()*(delta),
-                    m_startGeometry.width()*(1-delta) + m_targetGeometry.width()*(delta)));
+                    m_startGeometry.height()*(1-delta) + m_targetGeometry.height()*(delta)));
         } else {
             newGeo.setSize(m_targetGeometry.size());
         }
