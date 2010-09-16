@@ -25,7 +25,7 @@
 #include "javascriptdataengine.h"
 
 JavaScriptServiceJob::JavaScriptServiceJob(QScriptEngine *engine, const QString &destination, const QString &operation,
-                     const QMap<QString, QVariant> &parameters, QObject *parent)
+                                           const QMap<QString, QVariant> &parameters, QObject *parent)
     : Plasma::ServiceJob(destination, operation, parameters, parent),
       m_thisObject(engine->newQObject(this, QScriptEngine::QtOwnership, QScriptEngine::ExcludeSuperClassContents))
 {
