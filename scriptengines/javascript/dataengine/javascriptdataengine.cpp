@@ -313,7 +313,7 @@ Plasma::Service *JavaScriptDataEngine::serviceForSource(const QString &source)
 QString JavaScriptDataEngine::filePath(const char *type, const QString &file) const
 {
     const QString path = m_env->filePathFromScriptContext(type, file);
-    if (path.isEmpty()) {
+    if (!path.isEmpty()) {
         return path;
     }
 

@@ -473,7 +473,7 @@ QScriptValue ScriptEnv::registerAddon(QScriptContext *context, QScriptEngine *en
             QScriptValue obj = func.construct();
             obj.setProperty("__plasma_package",
                             context->parentContext()->activationObject().property("__plasma_package"),
-                            QScriptValue::ReadOnly|
+                            QScriptValue::ReadOnly |
                             QScriptValue::Undeletable |
                             QScriptValue::SkipInEnumeration);
 

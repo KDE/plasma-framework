@@ -150,7 +150,7 @@ void JavaScriptRunner::reportError(ScriptEnv *env, bool fatal)
 QString JavaScriptRunner::filePath(const char *type, const QString &file) const
 {
     const QString path = m_env->filePathFromScriptContext(type, file);
-    if (path.isEmpty()) {
+    if (!path.isEmpty()) {
         return path;
     }
 
