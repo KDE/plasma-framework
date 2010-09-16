@@ -106,6 +106,9 @@ void PlasmoidPackage::createNewWidgetBrowser(QWidget *parent)
 DataEnginePackage::DataEnginePackage(QObject *parent)
     : Plasma::PackageStructure(parent, QString("DataEngine"))
 {
+    setServicePrefix("plasma-dataengine-");
+    setDefaultPackageRoot("plasma/dataengine/");
+
     addDirectoryDefinition("data", "data", i18n("Data Files"));
 
     addDirectoryDefinition("scripts", "code", i18n("Executable Scripts"));
