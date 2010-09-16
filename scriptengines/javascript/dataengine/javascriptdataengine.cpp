@@ -108,8 +108,8 @@ int JavaScriptDataEngine::pollingInterval() const
 
 QScriptValue JavaScriptDataEngine::jsSetData(QScriptContext *context, QScriptEngine *engine)
 {
-    if (context->argumentCount() < 2) {
-        return context->throwError(i18n("setData() takes at least two arguments"));
+    if (context->argumentCount() < 1) {
+        return context->throwError(i18n("setData() takes at least one argument"));
     }
 
     QString error;
@@ -120,7 +120,10 @@ QScriptValue JavaScriptDataEngine::jsSetData(QScriptContext *context, QScriptEng
     }
 
     const QString source = context->argument(0).toString();
-    if (context->argument(1).isArray()  || context->argument(1).isObject()) {
+    if (context->argumentCount() == 1) {
+        iFace->setData(source, DataEngine::Data());
+    } else if (context->argument(1).isArray()  || context->argument(1).isObject()) {
+        kDebug( )<< "array or object";
         QScriptValueIterator it(context->argument(1));
         DataEngine::Data data;
 
@@ -131,7 +134,7 @@ QScriptValue JavaScriptDataEngine::jsSetData(QScriptContext *context, QScriptEng
 
         iFace->setData(source, data);
     } else {
-        QString value = context->argument(1).toString();
+        const QString value = context->argument(1).toString();
         if (context->argumentCount() > 2) {
             if (context->argument(2).isArray() || context->argument(2).isObject()) {
                 QScriptValueIterator it(context->argument(2));
