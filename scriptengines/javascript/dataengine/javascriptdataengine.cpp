@@ -120,9 +120,10 @@ QScriptValue JavaScriptDataEngine::jsSetData(QScriptContext *context, QScriptEng
     }
 
     const QString source = context->argument(0).toString();
-    if (context->argument(1).isArray()) {
+    if (context->argument(1).isArray()  || context->argument(1).isObject()) {
         QScriptValueIterator it(context->argument(1));
         DataEngine::Data data;
+
         while (it.hasNext()) {
             it.next();
             data.insert(it.name(), it.value().toVariant());
@@ -132,9 +133,19 @@ QScriptValue JavaScriptDataEngine::jsSetData(QScriptContext *context, QScriptEng
     } else {
         QString value = context->argument(1).toString();
         if (context->argumentCount() > 2) {
-            const QString key = value;
-            value = context->argument(2).toString();
-            iFace->setData(source, key, value);
+            if (context->argument(2).isArray() || context->argument(2).isObject()) {
+                QScriptValueIterator it(context->argument(2));
+                DataEngine::Data data;
+
+                while (it.hasNext()) {
+                    it.next();
+                    data.insert(it.name(), it.value().toVariant());
+                }
+
+                iFace->setData(source, value, data);
+            } else {
+                iFace->setData(source, value, context->argument(2).toString());
+            }
         } else {
             iFace->setData(source, value);
         }
