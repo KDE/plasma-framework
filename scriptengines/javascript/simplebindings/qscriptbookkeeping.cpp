@@ -20,22 +20,16 @@
 #include <QGraphicsWidget>
 #include <QScriptEngine>
 
-#include <KConfigGroup>
-#include <KIO/Job>
-
 #include <Plasma/Applet>
 #include <Plasma/Animation>
 #include <Plasma/Extender>
 #include <Plasma/VideoWidget>
 
-#include "dataengine.h"
 #include "variant.h"
 
 //Q_DECLARE_METATYPE(SimpleJavaScriptApplet*)
 Q_DECLARE_METATYPE(QGraphicsWidget*)
 Q_DECLARE_METATYPE(QGraphicsLayout*)
-
-Q_DECLARE_METATYPE(KConfigGroup)
 
 Q_DECLARE_METATYPE(Plasma::Animation*)
 Q_DECLARE_METATYPE(Plasma::Applet*)
@@ -76,85 +70,16 @@ void controlsFromScriptValue(const QScriptValue& obj, Plasma::VideoWidget::Contr
     }
 }
 
-Q_DECLARE_METATYPE(KJob *)
-typedef KJob* KJobPtr;
-QScriptValue qScriptValueFromKJob(QScriptEngine *engine, const KJobPtr &job)
-{
-    return engine->newQObject(const_cast<KJob *>(job), QScriptEngine::AutoOwnership, QScriptEngine::PreferExistingWrapperObject);
-}
-
-void qKJobFromQScriptValue(const QScriptValue &scriptValue, KJobPtr &job)
-{
-    QObject *obj = scriptValue.toQObject();
-    job = static_cast<KJob *>(obj);
-}
-
-Q_DECLARE_METATYPE(KIO::Job *)
-typedef KIO::Job* KioJobPtr;
-QScriptValue qScriptValueFromKIOJob(QScriptEngine *engine, const KioJobPtr &job)
-{
-    return engine->newQObject(const_cast<KIO::Job *>(job), QScriptEngine::AutoOwnership, QScriptEngine::PreferExistingWrapperObject);
-}
-
-void qKIOJobFromQScriptValue(const QScriptValue &scriptValue, KioJobPtr &job)
-{
-    QObject *obj = scriptValue.toQObject();
-    job = static_cast<KIO::Job *>(obj);
-}
-
-QScriptValue qScriptValueFromKConfigGroup(QScriptEngine *engine, const KConfigGroup &config)
-{
-    QScriptValue obj = engine->newObject();
-
-    if (!config.isValid()) {
-        return obj;
-    }
-
-    QMap<QString, QString> entryMap = config.entryMap();
-    QMap<QString, QString>::const_iterator it = entryMap.constBegin();
-    QMap<QString, QString>::const_iterator begin = it;
-    QMap<QString, QString>::const_iterator end = entryMap.constEnd();
-
-    //setting the group name
-    obj.setProperty("__name", QScriptValue(engine, config.name()));
-
-    //setting the key/value pairs
-    for (it = begin; it != end; ++it) {
-        //kDebug() << "setting" << it.key() << "to" << it.value();
-        QString prop = it.key();
-        prop.replace(' ', '_');
-        obj.setProperty(prop, variantToScriptValue(engine, it.value()));
-    }
-
-    return obj;
-}
-
-void kConfigGroupFromScriptValue(const QScriptValue& obj, KConfigGroup &config)
-{
-    KConfigSkeleton *skel = new KConfigSkeleton();
-    config = KConfigGroup(skel->config(), obj.property("__name").toString());
-
-    QScriptValueIterator it(obj);
-
-    while (it.hasNext()) {
-        it.next();
-        //kDebug() << it.name() << "is" << it.value().toString();
-        if (it.name() != "__name") {
-            config.writeEntry(it.name(), it.value().toString());
-        }
-    }
-}
-
 typedef Plasma::Animation* AnimationPtr;
 QScriptValue qScriptValueFromAnimation(QScriptEngine *engine, const AnimationPtr &anim)
 {
-    return engine->newQObject(const_cast<Animation *>(anim), QScriptEngine::AutoOwnership, QScriptEngine::PreferExistingWrapperObject);
+    return engine->newQObject(const_cast<Plasma::Animation *>(anim), QScriptEngine::AutoOwnership, QScriptEngine::PreferExistingWrapperObject);
 }
 
 void abstractAnimationFromQScriptValue(const QScriptValue &scriptValue, AnimationPtr &anim)
 {
     QObject *obj = scriptValue.toQObject();
-    anim = static_cast<Animation *>(obj);
+    anim = static_cast<Plasma::Animation *>(obj);
 }
 
 typedef QGraphicsWidget * QGraphicsWidgetPtr;
@@ -210,14 +135,11 @@ void registerSimpleAppletMetaTypes(QScriptEngine *engine)
     qScriptRegisterMetaType<QGraphicsWidget*>(engine, qScriptValueFromQGraphicsWidget, graphicsWidgetFromQScriptValue);
     qScriptRegisterMetaType<Plasma::Svg*>(engine, qScriptValueFromSvg, svgFromQScriptValue);
 
-    qScriptRegisterMetaType<KConfigGroup>(engine, qScriptValueFromKConfigGroup, kConfigGroupFromScriptValue, QScriptValue());
-    qScriptRegisterMetaType<KJob *>(engine, qScriptValueFromKJob, qKJobFromQScriptValue);
-    qScriptRegisterMetaType<KIO::Job *>(engine, qScriptValueFromKIOJob, qKIOJobFromQScriptValue);
-
     qScriptRegisterMetaType<Plasma::Animation *>(engine, qScriptValueFromAnimation, abstractAnimationFromQScriptValue);
     qScriptRegisterMetaType<Plasma::Extender *>(engine, qScriptValueFromExtender, extenderFromQScriptValue);
     qScriptRegisterMetaType<Plasma::VideoWidget::Controls>(engine, qScriptValueFromControls, controlsFromScriptValue, QScriptValue());
     qScriptRegisterMetaType<Qt::MouseButton>(engine, qScriptValueFromMouseButton, mouseButtonFromScriptValue);
-    registerDataEngineMetaTypes(engine);
 }
+
+#include "simplebindings/qscriptnonguibookkeeping.cpp"
 
