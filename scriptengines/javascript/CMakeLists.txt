@@ -81,6 +81,7 @@ set(javascript_dataengine_engine_SRCS
     dataengine/javascriptservice.cpp
     simplebindings/dataengine.cpp
     simplebindings/i18n.cpp
+    simplebindings/qscriptnonguibookkeeping.cpp
     simplebindings/variant.cpp
 )
 kde4_add_plugin(plasma_dataenginescript_javascript ${javascript_dataengine_engine_SRCS})

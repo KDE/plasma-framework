@@ -26,8 +26,10 @@
 #include "javascriptservice.h"
 #include "common/authorization.h"
 #include "common/scriptenv.h"
-#include "simplebindings/dataengine.h"
 #include "simplebindings/i18n.h"
+#include "simplebindings/dataengine.h"
+
+void registerNonGuiMetaTypes(QScriptEngine *engine);
 
 JavaScriptDataEngine::JavaScriptDataEngine(QObject *parent, const QVariantList &args)
     : DataEngineScript(parent)
@@ -58,7 +60,7 @@ bool JavaScriptDataEngine::init()
     global.setProperty("removeAllSources", m_qscriptEngine->newFunction(JavaScriptDataEngine::jsRemoveAllSources));
     global.setProperty("Service", m_qscriptEngine->newFunction(JavaScriptDataEngine::serviceCtor));
 
-    registerDataEngineMetaTypes(m_qscriptEngine);
+    registerNonGuiMetaTypes(m_qscriptEngine);
 
     Authorization auth;
     if (!m_env->importExtensions(description(), m_iface, auth)) {
