@@ -47,7 +47,13 @@ QScriptValue qScriptValueFromMap(QScriptEngine *eng, const M &map)
     typename M::const_iterator end = map.constEnd();
     typename M::const_iterator it;
     for (it = begin; it != end; ++it) {
-        obj.setProperty(it.key(), qScriptValueFromValue(eng, it.value()));
+        if (it.value().type() == QVariant::Hash) {
+            obj.setProperty(it.key(), qScriptValueFromMap(eng, it.value().toHash()));
+        } else if (it.value().type() == QVariant::Map) {
+            obj.setProperty(it.key(), qScriptValueFromMap(eng, it.value().toMap()));
+        } else {
+            obj.setProperty(it.key(), qScriptValueFromValue(eng, it.value()));
+        }
     }
 
     return obj;
