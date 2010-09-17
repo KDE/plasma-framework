@@ -9,6 +9,7 @@ Name[pt_BR]=plasma-kpart
 Name[sv]=Plasma-delprogram
 Name[uk]=plasma-kpart
 Name[x-test]=xxplasma-kpartxx
+Name[zh_TW]=plasma-kpart
 Type=Service
 ServiceTypes=KParts/Part
 X-KDE-Library=plasma-kpart
