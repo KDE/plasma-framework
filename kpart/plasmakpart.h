@@ -45,7 +45,7 @@ class QVBoxLayout;
 class PlasmaKPart : public KParts::ReadOnlyPart
 {
 Q_OBJECT
-Q_PROPERTY( Plasma::Applet::List activeApplets READ listActiveApplets );
+Q_PROPERTY( Plasma::Applet::List activeApplets READ listActiveApplets )
 public:
     PlasmaKPart(QWidget* parentWidget, QObject* parent, const QVariantList&);
     ~PlasmaKPart();
