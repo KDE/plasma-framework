@@ -71,6 +71,7 @@ class ExtenderPrivate
         void delayItemAddedEvent();
         void loadExtenderItems();
         void updateBorders();
+        void delayItemAddedEvent();
         void updateEmptyExtenderLabel();
         ExtenderGroup *findGroup(const QString &name) const;
 
@@ -94,6 +95,8 @@ class ExtenderPrivate
         static QGraphicsGridLayout *s_popupLayout;
 
         bool destroying;
+
+        QList<QPair<ExtenderItem *, QPointF> > pendingItems;
 };
 
 } // namespace Plasma

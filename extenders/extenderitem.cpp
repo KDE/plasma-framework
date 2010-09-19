@@ -48,6 +48,7 @@
 #include "view.h"
 
 #include "widgets/iconwidget.h"
+#include "widgets/pushbutton.h"
 
 #include "private/applethandle_p.h"
 #include "private/extender_p.h"
@@ -808,34 +809,44 @@ void ExtenderItemPrivate::updateToolBox()
     const QSizeF widgetSize = collapseIcon->sizeFromIconSize(toolbox->iconSize());
 
     QSet<QAction*> shownActions = actionsInOrder.toSet();
-    QHash<QAction *, IconWidget *> actionIcons;
+
+    QHash<QAction *, QGraphicsWidget *> actionWidgets;
     for (int index = startingIndex; index < toolboxLayout->count(); ++index) {
-        IconWidget *widget = dynamic_cast<IconWidget*>(toolboxLayout->itemAt(index));
+        QGraphicsWidget *widget = dynamic_cast<QGraphicsWidget*>(toolboxLayout->itemAt(index));
+        QAction *widgetAction = 0;
 
         if (!widget) {
             continue;
+        } else if (qobject_cast<IconWidget*>(widget)) {
+            widgetAction = static_cast<IconWidget*>(widget)->action();
+        } else if (qobject_cast<PushButton*>(widget)) {
+            widgetAction = static_cast<PushButton*>(widget)->action();
+        } else {
+            continue;
         }
 
+
         if (closeIndex == -1 && destroyActionVisibility &&
-            closeAction && widget->action() == closeAction) {
+            closeAction && widgetAction == closeAction) {
             closeIndex = index;
             continue;
         }
 
         if (returnToSourceIndex == -1 && returnToSourceVisibility &&
-            returnToSourceAction && widget->action() == returnToSourceAction) {
+            returnToSourceAction && widgetAction == returnToSourceAction) {
             returnToSourceIndex = index;
             continue;
         }
 
-        if (shownActions.contains(widget->action())) {
-            actionIcons.insert(widget->action(), widget);
+        if (shownActions.contains(widgetAction)) {
+            actionWidgets.insert(widgetAction, widget);
             continue;
         }
 
         toolboxLayout->removeAt(index);
         widget->deleteLater();
     }
+
 
     // ensure the collapseIcon is the correct size.
     collapseIcon->setMinimumSize(widgetSize);
@@ -844,16 +855,33 @@ void ExtenderItemPrivate::updateToolBox()
     //add the actions that are actually set to visible.
     foreach (QAction *action, actionsInOrder) {
         if (action->isVisible() && action != closeAction) {
-            IconWidget *icon = actionIcons.value(action);
-            if (!icon) {
-                icon = new IconWidget(q);
-                icon->setAction(action);
-            }
+            IconWidget *icon = qobject_cast<IconWidget*>(actionWidgets.value(action));
+            PushButton *button = qobject_cast<PushButton*>(actionWidgets.value(action));
 
-            icon->setMinimumSize(widgetSize);
-            icon->setMaximumSize(widgetSize);
-            icon->setCursor(Qt::ArrowCursor);
-            toolboxLayout->insertItem(startingIndex, icon);
+            if (action->icon().isNull() && !action->text().isNull()) {
+                if (!button) {
+                    button = new PushButton(q);
+                    button->setAction(action);
+                }
+
+                button->setMinimumHeight(widgetSize.height());
+                button->setMaximumHeight(widgetSize.height());
+                button->setCursor(Qt::ArrowCursor);
+                toolboxLayout->insertItem(startingIndex, button);
+            } else {
+                if (!icon) {
+                    icon = new IconWidget(q);
+                    icon->setAction(action);
+                }
+
+                if (action->icon().isNull()) {
+                    icon->setText(action->text());
+                }
+                icon->setMinimumSize(widgetSize);
+                icon->setMaximumSize(widgetSize);
+                icon->setCursor(Qt::ArrowCursor);
+                toolboxLayout->insertItem(startingIndex, icon);
+            }
         }
     }
 
