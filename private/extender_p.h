@@ -68,6 +68,7 @@ class ExtenderPrivate
         void extenderItemDestroyed(ExtenderItem *item);
         void removeExtenderItem(ExtenderItem *item);
         int insertIndexFromPos(const QPointF &pos) const;
+        void delayItemAddedEvent();
         void loadExtenderItems();
         void updateBorders();
         void updateEmptyExtenderLabel();
@@ -86,6 +87,7 @@ class ExtenderPrivate
         Label *emptyExtenderLabel;
 
         QList<ExtenderItem*> attachedExtenderItems;
+        QList<QPair<Plasma::ExtenderItem *, QPointF> > pendingItems;
 
         Extender::Appearance appearance;
 
