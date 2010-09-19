@@ -612,8 +612,7 @@ void ExtenderPrivate::addExtenderItem(ExtenderItem *item, const QPointF &pos)
     QObject::connect(item, SIGNAL(destroyed(ExtenderItem*)), q, SLOT(extenderItemDestroyed(ExtenderItem*)));
     attachedExtenderItems.append(item);
     q->itemHoverLeaveEvent(item);
-    q->itemAddedEvent(item, pos);
-    emit q->itemAttached(item);
+    QTimer::singleShot(0, q, SLOT(delayItemAddedEvent()));
 }
 
 void ExtenderPrivate::removeExtenderItem(ExtenderItem *item)
@@ -747,6 +746,15 @@ void ExtenderPrivate::updateBorders()
             //widgets according to it's changed margins.
             item->d->themeChanged();
         }
+    }
+}
+
+void ExtenderPrivate::delayItemAddedEvent()
+{
+    while (!pendingItems.isEmpty()) {
+        QPair<Plasma::ExtenderItem *, QPointF> item = pendingItems.first();
+        q->itemAddedEvent(item.first, item.second);
+        pendingItems.pop_front();
     }
 }
 
