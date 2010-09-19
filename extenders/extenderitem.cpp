@@ -544,9 +544,11 @@ void ExtenderItem::destroy()
 
     //remove global entry if needed.
     Corona *corona = qobject_cast<Corona*>(scene());
-    KConfigGroup extenderItemGroup(corona->config(), "DetachedExtenderItems");
-    if (extenderItemGroup.hasGroup(QString::number(d->extenderItemId))) {
-        extenderItemGroup.deleteGroup(QString::number(d->extenderItemId));
+    if (corona) {
+        KConfigGroup extenderItemGroup(corona->config(), "DetachedExtenderItems");
+        if (extenderItemGroup.hasGroup(QString::number(d->extenderItemId))) {
+            extenderItemGroup.deleteGroup(QString::number(d->extenderItemId));
+        }
     }
 
     d->hostApplet()->config("ExtenderItems").deleteGroup(QString::number(d->extenderItemId));
