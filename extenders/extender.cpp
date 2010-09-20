@@ -612,6 +612,7 @@ void ExtenderPrivate::addExtenderItem(ExtenderItem *item, const QPointF &pos)
     QObject::connect(item, SIGNAL(destroyed(ExtenderItem*)), q, SLOT(extenderItemDestroyed(ExtenderItem*)));
     attachedExtenderItems.append(item);
     q->itemHoverLeaveEvent(item);
+    pendingItems.append(QPair<ExtenderItem *, QPointF>(item, pos));
     QTimer::singleShot(0, q, SLOT(delayItemAddedEvent()));
 }
 
