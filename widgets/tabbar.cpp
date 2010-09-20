@@ -482,14 +482,17 @@ QGraphicsLayoutItem *TabBar::takeTab(int index)
 
     int oldCurrentIndex = d->tabProxy->native->currentIndex();
     d->tabProxy->native->removeTab(index);
-    QGraphicsWidget *page = d->pages.takeAt(index);
 
     int currentIndex = d->tabProxy->native->currentIndex();
 
     if (oldCurrentIndex == index) {
         d->tabWidgetLayout->removeAt(1);
+        if (d->tabProxy->native->count() > 0) {
+            setCurrentIndex(currentIndex >= oldCurrentIndex ? currentIndex + 1 : currentIndex);
+        }
     }
 
+    QGraphicsWidget *page = d->pages.takeAt(index);
     QGraphicsLayoutItem *returnItem = 0;
     QGraphicsLayout *lay = page->layout();
     if (lay && lay->count() == 1) {
