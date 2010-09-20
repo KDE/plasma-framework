@@ -230,8 +230,8 @@ class SvgPrivate
             QRectF finalRect = makeUniform(renderer->boundsOnElement(actualElementId), QRect(QPoint(0,0), size));
 
 
-            //don't alter the pixmap size or it won't connect animre different parts of framesvg
-            //but makeUniform should never change the size so much to make necessary to gain or remove a whole pixel
+            //don't alter the pixmap size or it won't match up properly to, e.g., FrameSvg elements
+            //makeUniform should never change the size so much that it gains or loses a whole pixel
             p = QPixmap(size);
 
             p.fill(Qt::transparent);
