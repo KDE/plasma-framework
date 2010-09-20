@@ -699,10 +699,14 @@ void ExtenderPrivate::loadExtenderItems()
             if (containment) {
                 Corona *corona = containment->corona();
 
-                foreach (Containment *containment, corona->containments()) {
-                    foreach (Applet *applet, containment->applets()) {
-                        if (applet->id() == sourceAppletId) {
-                            sourceApplet = applet;
+                if (sourceAppletId == q->applet()->id()) {
+                    sourceApplet = q->applet();
+                } else {
+                    foreach (Containment *containment, corona->containments()) {
+                        foreach (Applet *applet, containment->applets()) {
+                            if (applet->id() == sourceAppletId) {
+                                sourceApplet = applet;
+                            }
                         }
                     }
                 }

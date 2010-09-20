@@ -175,11 +175,15 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
 
         //Find the sourceapplet.
         Corona *corona = hostExtender->d->applet.data()->containment()->corona();
-        foreach (Containment *containment, corona->containments()) {
-            foreach (Applet *applet, containment->applets()) {
-                if (applet->id() == sourceAppletId &&
-                        applet->pluginName() == dg.readEntry("sourceAppletPluginName", "")) {
-                    d->sourceApplet = applet;
+        if (sourceAppletId == hostExtender->applet()->id()) {
+            d->sourceApplet = hostExtender->applet();
+        } else {
+            foreach (Containment *containment, corona->containments()) {
+                foreach (Applet *applet, containment->applets()) {
+                    if (applet->id() == sourceAppletId &&
+                            applet->pluginName() == dg.readEntry("sourceAppletPluginName", "")) {
+                        d->sourceApplet = applet;
+                    }
                 }
             }
         }
