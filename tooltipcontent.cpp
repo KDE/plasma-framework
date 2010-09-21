@@ -44,6 +44,8 @@ struct ToolTipResource
     QVariant data;
 };
 
+const int MAXIMUM_TEXT_LENGTH = 5000;
+
 class ToolTipContentPrivate
 {
 public:
@@ -121,7 +123,9 @@ void ToolTipContent::setMainText(const QString &text)
 
 QString ToolTipContent::mainText() const
 {
-    return d->mainText;
+    QString text = d->mainText;
+    text.truncate(MAXIMUM_TEXT_LENGTH);
+    return text;
 }
 
 void ToolTipContent::setSubText(const QString &text)
@@ -131,7 +135,9 @@ void ToolTipContent::setSubText(const QString &text)
 
 QString ToolTipContent::subText() const
 {
-    return d->subText;
+    QString text = d->subText;
+    text.truncate(MAXIMUM_TEXT_LENGTH);
+    return text;
 }
 
 void ToolTipContent::setImage(const QPixmap &image)
