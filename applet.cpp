@@ -2315,12 +2315,6 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
             }
         }
         break;
-    case ItemPositionChange:
-        return (immutability() == Mutable || isContainment() || formFactor() == Horizontal || formFactor() == Vertical || (parentLayoutItem() && parentLayoutItem()->isLayout()) || !d->started) ? value : pos();
-        break;
-    case ItemTransformChange:
-        return immutability() == Mutable ? value : transform();
-        break;
     case ItemPositionHasChanged:
         emit geometryChanged();
         // fall through!
