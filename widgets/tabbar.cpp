@@ -77,7 +77,8 @@ public:
           tabWidgetMode(true),
           oldPageAnimId(-1),
           newPageAnimId(-1),
-          customFont(false)
+          customFont(false),
+          tabBarShown(true)
     {
     }
 
@@ -109,12 +110,17 @@ public:
     Animation *newPageAnim;
     QParallelAnimationGroup *animGroup;
     bool customFont;
+    bool tabBarShown;
     QWeakPointer<QGraphicsWidget> firstPositionWidget;
     QWeakPointer<QGraphicsWidget> lastPositionWidget;
 };
 
 void TabBarPrivate::updateTabWidgetMode()
 {
+    if (!tabBarShown) {
+        return;
+    }
+
     bool tabWidget = false;
 
     foreach (QGraphicsWidget *page, pages) {
@@ -571,6 +577,7 @@ void TabBar::setTabBarShown(bool show)
     if (!show && !d->tabWidgetMode) {
         return;
     }
+    d->tabBarShown = show;
 
     if (!show && d->tabProxy->isVisible()) {
         d->tabProxy->hide();
