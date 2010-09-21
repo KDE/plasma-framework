@@ -572,7 +572,7 @@ FrameSvg::EnabledBorders Extender::enabledBordersForItem(ExtenderItem *item) con
     ExtenderItem *topItem = dynamic_cast<ExtenderItem*>(d->layout->itemAt(0));
     ExtenderItem *bottomItem = dynamic_cast<ExtenderItem*>(d->layout->itemAt(d->layout->count() - 1));
     if (item->group()) {
-        return FrameSvg::LeftBorder | FrameSvg::RightBorder;
+        return FrameSvg::NoBorder;
     } else if (d->appearance == TopDownStacked && bottomItem != item) {
         return FrameSvg::LeftBorder | FrameSvg::BottomBorder | FrameSvg::RightBorder;
     } else if (d->appearance == BottomUpStacked && topItem != item) {
