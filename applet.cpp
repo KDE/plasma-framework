@@ -876,11 +876,18 @@ QString Applet::category(const QString &appletName)
 
 ImmutabilityType Applet::immutability() const
 {
-    //Returning the more strict immutability between the applet immutability and Corona one
+    //Returning the more strict immutability between the applet immutability, Containment and Corona
     ImmutabilityType coronaImmutability = Mutable;
 
-    if (qobject_cast<Corona*>(scene())) {
-        coronaImmutability = static_cast<Corona*>(scene())->immutability();
+    Containment *cont = 0;
+    if (!d->isContainment) {
+        cont = containment();
+    }
+
+    if (cont) {
+        coronaImmutability = cont->immutability();
+    } else if (Corona *corona = qobject_cast<Corona*>(scene())) {
+        coronaImmutability = corona->immutability();
     }
 
     if (coronaImmutability == SystemImmutable) {
