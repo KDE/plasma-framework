@@ -377,7 +377,7 @@ bool SimpleJavaScriptApplet::eventFilter(QObject *watched, QEvent *event)
     switch (event->type()) {
         case QEvent::KeyPress: {
             ScriptEnv *env = ScriptEnv::findScriptEnv(m_engine);
-            if (env && !env->hasEventListeners("keypress")) {
+            if (env && env->hasEventListeners("keypress")) {
                 QScriptValueList args;
                 args << createKeyEventObject(static_cast<QKeyEvent *>(event));
                 env->callEventListeners("keypress", args);
@@ -387,7 +387,7 @@ bool SimpleJavaScriptApplet::eventFilter(QObject *watched, QEvent *event)
 
         case QEvent::KeyRelease: {
             ScriptEnv *env = ScriptEnv::findScriptEnv(m_engine);
-            if (env && !env->hasEventListeners("keyrelease")) {
+            if (env && env->hasEventListeners("keyrelease")) {
                 QScriptValueList args;
                 args << createKeyEventObject(static_cast<QKeyEvent *>(event));
                 env->callEventListeners("keyrelease", args);
@@ -398,7 +398,7 @@ bool SimpleJavaScriptApplet::eventFilter(QObject *watched, QEvent *event)
 
         case QEvent::GraphicsSceneHoverEnter: {
             ScriptEnv *env = ScriptEnv::findScriptEnv(m_engine);
-            if (env && !env->hasEventListeners("hoverenter")) {
+            if (env && env->hasEventListeners("hoverenter")) {
                 QScriptValueList args;
                 args << createHoverEventObject(static_cast<QGraphicsSceneHoverEvent *>(event));
                 env->callEventListeners("hoverenter", args);
@@ -409,7 +409,7 @@ bool SimpleJavaScriptApplet::eventFilter(QObject *watched, QEvent *event)
 
         case QEvent::GraphicsSceneHoverLeave: {
             ScriptEnv *env = ScriptEnv::findScriptEnv(m_engine);
-            if (env && !env->hasEventListeners("hoverleave")) {
+            if (env && env->hasEventListeners("hoverleave")) {
                 QScriptValueList args;
                 args << createHoverEventObject(static_cast<QGraphicsSceneHoverEvent *>(event));
                 env->callEventListeners("hoverleave", args);
@@ -420,7 +420,7 @@ bool SimpleJavaScriptApplet::eventFilter(QObject *watched, QEvent *event)
 
         case QEvent::GraphicsSceneHoverMove: {
             ScriptEnv *env = ScriptEnv::findScriptEnv(m_engine);
-            if (env && !env->hasEventListeners("hovermove")) {
+            if (env && env->hasEventListeners("hovermove")) {
                 QScriptValueList args;
                 args << createHoverEventObject(static_cast<QGraphicsSceneHoverEvent *>(event));
                 env->callEventListeners("hovermove", args);
@@ -431,7 +431,7 @@ bool SimpleJavaScriptApplet::eventFilter(QObject *watched, QEvent *event)
 
         case QEvent::GraphicsSceneMousePress: {
             ScriptEnv *env = ScriptEnv::findScriptEnv(m_engine);
-            if (env && !env->hasEventListeners("mousepress")) {
+            if (env && env->hasEventListeners("mousepress")) {
                 QScriptValueList args;
                 args << createMouseEventObject(static_cast<QGraphicsSceneMouseEvent *>(event));
                 env->callEventListeners("mousepress", args);
@@ -442,7 +442,7 @@ bool SimpleJavaScriptApplet::eventFilter(QObject *watched, QEvent *event)
 
         case QEvent::GraphicsSceneMouseRelease: {
             ScriptEnv *env = ScriptEnv::findScriptEnv(m_engine);
-            if (env && !env->hasEventListeners("mouserelease")) {
+            if (env && env->hasEventListeners("mouserelease")) {
                 QScriptValueList args;
                 args << createMouseEventObject(static_cast<QGraphicsSceneMouseEvent *>(event));
                 env->callEventListeners("mouserelease", args);
@@ -453,7 +453,7 @@ bool SimpleJavaScriptApplet::eventFilter(QObject *watched, QEvent *event)
 
         case QEvent::GraphicsSceneMouseMove: {
             ScriptEnv *env = ScriptEnv::findScriptEnv(m_engine);
-            if (env && !env->hasEventListeners("mousemove")) {
+            if (env && env->hasEventListeners("mousemove")) {
                 QScriptValueList args;
                 args << createMouseEventObject(static_cast<QGraphicsSceneMouseEvent *>(event));
                 env->callEventListeners("mousemove", args);
@@ -464,7 +464,7 @@ bool SimpleJavaScriptApplet::eventFilter(QObject *watched, QEvent *event)
 
         case QEvent::GraphicsSceneMouseDoubleClick: {
             ScriptEnv *env = ScriptEnv::findScriptEnv(m_engine);
-            if (env && !env->hasEventListeners("mousedoubleclick")) {
+            if (env && env->hasEventListeners("mousedoubleclick")) {
                 QScriptValueList args;
                 args << createMouseEventObject(static_cast<QGraphicsSceneMouseEvent *>(event));
                 env->callEventListeners("mousedoubleclick", args);
@@ -475,7 +475,7 @@ bool SimpleJavaScriptApplet::eventFilter(QObject *watched, QEvent *event)
 
         case QEvent::GraphicsSceneWheel: {
             ScriptEnv *env = ScriptEnv::findScriptEnv(m_engine);
-            if (env && !env->hasEventListeners("wheel")) {
+            if (env && env->hasEventListeners("wheel")) {
                 QScriptValueList args;
                 args << createWheelEventObject(static_cast<QGraphicsSceneWheelEvent *>(event));
                 env->callEventListeners("wheel", args);
