@@ -31,7 +31,9 @@ namespace Plasma
 {
 
 PixmapTransition::PixmapTransition(QObject *parent)
-             : EasingAnimation(parent)
+    : EasingAnimation(parent),
+      m_cache(false),
+      m_dirty(false)
 {
 }
 
@@ -67,6 +69,16 @@ void PixmapTransition::setTargetPixmap(const QPixmap &pixmap)
     updateEffectiveTime(0);
 }
 
+void PixmapTransition::setUsesCache(bool cache)
+{
+    m_cache = cache;
+}
+
+bool PixmapTransition::usesCache() const
+{
+    return m_cache;
+}
+
 QPixmap PixmapTransition::targetPixmap() const
 {
     return m_targetPixmap;
@@ -74,92 +86,88 @@ QPixmap PixmapTransition::targetPixmap() const
 
 QPixmap PixmapTransition::currentPixmap() const
 {
-    return m_currentPixmap;
+    if (m_cache && !m_dirty) {
+        return m_currentPixmap;
+    }
+
+    QPixmap currentPixmap;
+    qreal delta = currentTime() / qreal(duration());
+    if (!m_startPixmap.isNull() && !m_targetPixmap.isNull()) {
+        //kDebug() << "transitioning";
+        currentPixmap = Plasma::PaintUtils::transition(m_startPixmap, m_targetPixmap, delta);
+    } else if (m_startPixmap.isNull()) {
+        if (qFuzzyCompare(delta, qreal(1.0))) {
+            currentPixmap = alignedTargetPixmap();
+            return currentPixmap;
+        }
+
+        if (currentPixmap.isNull()) {
+            currentPixmap = QPixmap(m_pixmapSize);
+        }
+
+        currentPixmap.fill(QColor(0, 0, 0, (int)(((qreal)255)*delta)));
+        QPainter p(&currentPixmap);
+        p.setCompositionMode(QPainter::CompositionMode_SourceIn);
+        //kDebug() << "painting" << m_targetPixmap.rect() << "into" << m_targetRect << "in size" << currentPixmap.size();
+        p.drawPixmap(m_targetRect, m_targetPixmap);
+        p.end();
+    } else if (m_targetPixmap.isNull()) {
+        currentPixmap = alignedStartPixmap();
+        if (qFuzzyCompare(delta, qreal(1.0))) {
+            return currentPixmap;
+        }
+        //kDebug() << "painting" << m_startPixmap.rect() << "into" << m_targetRect << "in size" << currentPixmap.size();
+        QPainter p(&currentPixmap);
+        p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+        p.fillRect(m_currentPixmap.rect(), QColor(0, 0, 0, (int)(254 - ((qreal)254)*delta)));
+        p.end();
+    }
+
+    if (m_cache) {
+        const_cast<PixmapTransition *>(this)->m_currentPixmap = currentPixmap;
+    }
+
+    return currentPixmap;
+}
+
+QPixmap PixmapTransition::alignedTargetPixmap() const
+{
+    QPixmap pm(m_pixmapSize);
+    pm.fill(Qt::transparent);
+    QPainter p(&pm);
+    p.drawPixmap(m_targetRect, m_targetPixmap);
+    return pm;
+}
+
+QPixmap PixmapTransition::alignedStartPixmap() const
+{
+    QPixmap pm(m_pixmapSize);
+    pm.fill(Qt::transparent);
+    QPainter p(&pm);
+    p.drawPixmap(m_startRect, m_startPixmap);
+    return pm;
 }
 
 void PixmapTransition::updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
 {
-    QGraphicsWidget *w = targetWidget();
-    if (!w) {
-        return;
+    if (oldState == Stopped && newState == Running) {
+        m_targetRect = m_targetPixmap.rect();
+        m_startRect = m_startPixmap.rect();
+        m_pixmapSize = m_startRect.size().expandedTo(m_targetRect.size());
+        QRect actualRect = QRect(QPoint(0,0), m_pixmapSize);
+        m_targetRect.moveCenter(actualRect.center());
+        m_startRect.moveCenter(actualRect.center());
+    } else if (QGraphicsWidget *w = targetWidget()) {
+        w->update();
     }
 
-    if (!m_startPixmap.isNull() && !m_targetPixmap.isNull()) {
-        if (oldState == Stopped && newState == Running) {
-            Plasma::PaintUtils::centerPixmaps(m_startPixmap, m_targetPixmap);
-            m_currentPixmap = (direction() == Forward ? m_startPixmap : m_targetPixmap);
-        } else if (newState == Stopped) {
-            m_currentPixmap = (direction() == Forward ? m_targetPixmap : m_startPixmap);
-        }
-    } else if (m_startPixmap.isNull()) {
-        if (oldState == Stopped && newState == Running) {
-            if (direction() == Forward) {
-                m_currentPixmap = QPixmap(m_targetPixmap.size());
-                m_currentPixmap.fill(Qt::transparent);
-            } else {
-                m_currentPixmap = m_targetPixmap;
-            }
-        } else if (newState == Stopped) {
-            if (direction() == Forward) {
-                m_currentPixmap = m_targetPixmap;
-            } else {
-                m_currentPixmap = QPixmap(m_targetPixmap.size());
-                m_currentPixmap.fill(Qt::transparent);
-            }
-        }
-    } else if (m_targetPixmap.isNull()) {
-        if (oldState == Stopped && newState == Running) {
-            if (direction() == Forward) {
-                m_currentPixmap = m_targetPixmap;
-            } else {
-                m_currentPixmap = QPixmap(m_targetPixmap.size());
-                m_currentPixmap.fill(Qt::transparent);
-            }
-        } else if (newState == Stopped) {
-            if (direction() == Forward) {
-                m_currentPixmap = QPixmap(m_targetPixmap.size());
-                m_currentPixmap.fill(Qt::transparent);
-            } else {
-                m_currentPixmap = m_targetPixmap;
-            }
-        }
-    }
-
-    w->update();
+    m_dirty = true;
 }
 
 void PixmapTransition::updateEffectiveTime(int currentTime)
 {
+    m_dirty = true;
     QGraphicsWidget *w = targetWidget();
-    if (w) {
-        qreal delta = currentTime / qreal(duration());
-        if (!m_startPixmap.isNull() && !m_targetPixmap.isNull()) {
-            m_currentPixmap = Plasma::PaintUtils::transition(m_startPixmap, m_targetPixmap, delta);
-        } else if (m_startPixmap.isNull()) {
-            if (qFuzzyCompare(delta, qreal(1.0))) {
-                m_currentPixmap = m_targetPixmap;
-                return;
-            }
-            if (m_currentPixmap.isNull()) {
-                m_currentPixmap = QPixmap(m_targetPixmap.size());
-            }
-            m_currentPixmap.fill(QColor(0, 0, 0, (int)(((qreal)255)*delta)));
-            QPainter p(&m_currentPixmap);
-            p.setCompositionMode(QPainter::CompositionMode_SourceIn);
-            p.drawPixmap(m_currentPixmap.rect(), m_targetPixmap, m_targetPixmap.rect());
-            p.end();
-        } else if (m_targetPixmap.isNull()) {
-            m_currentPixmap = m_startPixmap;
-            if (qFuzzyCompare(delta, qreal(1.0))) {
-                return;
-            }
-            QPainter p(&m_currentPixmap);
-            p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-            p.fillRect(m_currentPixmap.rect(), QColor(0, 0, 0, (int)(254 - ((qreal)254)*delta)));
-            p.end();
-        }
-    }
-
     if (w) {
         w->update();
     }

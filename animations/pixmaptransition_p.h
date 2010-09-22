@@ -42,6 +42,7 @@ class PixmapTransition : public EasingAnimation
     Q_OBJECT
     Q_PROPERTY(QPixmap startPixmap READ startPixmap WRITE setStartPixmap)
     Q_PROPERTY(QPixmap targetPixmap READ targetPixmap WRITE setTargetPixmap)
+    Q_PROPERTY(QPixmap usesCache READ usesCache WRITE setUsesCache)
     Q_PROPERTY(QPixmap currentPixmap READ currentPixmap)
 
 public:
@@ -50,7 +51,7 @@ public:
     virtual ~PixmapTransition();
 
     /**
-     * The first pixmap of the animation
+     * @return The first pixmap of the animation
      */
     QPixmap startPixmap() const;
 
@@ -70,18 +71,39 @@ public:
     void setTargetPixmap(const QPixmap &);
 
     /**
-     * Returns the current pixmap
+     * @return the current pixmap
      */
     QPixmap currentPixmap() const;
+
+    /**
+     * Enable caching of the resulting pixmap, otherwise it will be regenerated on
+     * each call to currentPixmap; for elements which already have their own caching
+     * this is not a problem.
+     */
+    void setUsesCache(bool cache);
+
+    /**
+     * @return whether or not caching is on
+     */
+    bool usesCache() const;
 
 protected:
     void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
     void updateEffectiveTime(int currentTime);
 
 private:
+    QPixmap alignedTargetPixmap() const;
+    QPixmap alignedStartPixmap() const;
+
+private:
     QPixmap m_startPixmap;
     QPixmap m_targetPixmap;
     QPixmap m_currentPixmap;
+    QRect m_startRect;
+    QRect m_targetRect;
+    QSize m_pixmapSize;
+    bool m_cache;
+    bool m_dirty;
 };
 
 }

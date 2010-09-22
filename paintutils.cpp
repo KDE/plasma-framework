@@ -82,8 +82,7 @@ QPixmap shadowText(QString text, const QFont &font, QColor textColor, QColor sha
     p.end();
 
     //Draw blurred shadow
-    QImage img(textRect.size() + QSize(radius * 2, radius * 2),
-    QImage::Format_ARGB32_Premultiplied);
+    QImage img(textRect.size() + QSize(radius * 2, radius * 2), QImage::Format_ARGB32_Premultiplied);
     img.fill(0);
     p.begin(&img);
     p.drawImage(QPoint(radius, radius), textPixmap.toImage());
@@ -147,6 +146,7 @@ void centerPixmaps(QPixmap &from, QPixmap &to)
     if (from.size() == to.size() && from.hasAlphaChannel() && to.hasAlphaChannel()) {
         return;
     }
+
     QRect fromRect(from.rect());
     QRect toRect(to.rect());
  
@@ -181,16 +181,16 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
         return from;
     }
 
-    QPixmap startPixmap(from);
-    QPixmap targetPixmap(to);
-
-    if (from.size() != to.size() || !from.hasAlphaChannel() || !to.hasAlphaChannel()) {
-        centerPixmaps(startPixmap, targetPixmap);
-    }
+    QRect startRect(from.rect());
+    QRect targetRect(to.rect());
+    QSize pixmapSize = startRect.size().expandedTo(targetRect.size());
+    QRect toRect = QRect(QPoint(0,0), pixmapSize);
+    targetRect.moveCenter(toRect.center());
+    startRect.moveCenter(toRect.center());
+    QPixmap startPixmap(pixmapSize);
+    QPixmap targetPixmap(pixmapSize);
 
     //paint to in the center of from
-    QRect toRect = to.rect();
-
     QColor color;
     color.setAlphaF(amount);
 
@@ -203,15 +203,17 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
 
         QPainter p;
         p.begin(&targetPixmap);
+        p.drawPixmap(targetRect, from);
         p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-        p.fillRect(targetPixmap.rect(), color);
+        p.fillRect(targetRect, color);
         p.end();
 
         p.begin(&startPixmap);
+        p.drawPixmap(startRect, from);
         p.setCompositionMode(QPainter::CompositionMode_DestinationOut);
-        p.fillRect(startPixmap.rect(), color);
+        p.fillRect(startRect, color);
         p.setCompositionMode(QPainter::CompositionMode_Plus);
-        p.drawPixmap(toRect.topLeft(), targetPixmap);
+        p.drawPixmap(targetRect, to);
         p.end();
 
         return startPixmap;
@@ -266,18 +268,22 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
 #endif
     else {
         // Fall back to using QRasterPaintEngine to do the transition.
-        QImage under = startPixmap.toImage();
-        QImage over  = targetPixmap.toImage();
+        QImage under(pixmapSize, QImage::Format_ARGB32_Premultiplied);// = startPixmap.toImage();
+        under.fill(Qt::transparent);
+        QImage over(pixmapSize, QImage::Format_ARGB32_Premultiplied);//  = targetPixmap.toImage();
+        over.fill(Qt::transparent);
 
         QPainter p;
         p.begin(&over);
+        p.drawPixmap(targetRect, to);
         p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
         p.fillRect(over.rect(), color);
         p.end();
 
         p.begin(&under);
+        p.drawPixmap(startRect, from);
         p.setCompositionMode(QPainter::CompositionMode_DestinationOut);
-        p.fillRect(under.rect(), color);
+        p.fillRect(startRect, color);
         p.setCompositionMode(QPainter::CompositionMode_Plus);
         p.drawImage(toRect.topLeft(), over);
         p.end();
