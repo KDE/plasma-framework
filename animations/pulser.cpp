@@ -141,4 +141,4 @@ void PulseAnimation::updateEffectiveTime(int currentTime)
 
 } //namespace Plasma
 
-#include <../pulser_p.moc>
+#include "pulser_p.moc"

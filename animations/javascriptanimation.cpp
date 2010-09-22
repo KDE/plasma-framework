@@ -121,4 +121,4 @@ void JavascriptAnimation::updateEffectiveTime(int currentTime)
 
 } //namespace Plasma
 
-#include <javascriptanimation_p.moc>
+#include "javascriptanimation_p.moc"

@@ -83,4 +83,4 @@ void FadeAnimation::updateEffectiveTime(int currentTime)
 
 } //namespace Plasma
 
-#include <../fade_p.moc>
+#include "fade_p.moc"

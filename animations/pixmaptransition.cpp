@@ -175,4 +175,4 @@ void PixmapTransition::updateEffectiveTime(int currentTime)
 
 } //namespace Plasma
 
-#include <../pixmaptransition_p.moc>
+#include "pixmaptransition_p.moc"

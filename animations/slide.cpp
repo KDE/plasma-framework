@@ -126,4 +126,4 @@ void SlideAnimation::updateState(QAbstractAnimation::State newState, QAbstractAn
 
 } //namespace Plasma
 
-#include <../slide_p.moc>
+#include "slide_p.moc"
