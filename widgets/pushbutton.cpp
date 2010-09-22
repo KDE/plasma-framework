@@ -180,7 +180,6 @@ PushButton::PushButton(QGraphicsWidget *parent)
 
     d->hoverAnimation = Animator::create(Animator::PixmapTransitionAnimation);
     d->hoverAnimation->setTargetWidget(this);
-    d->hoverAnimation->setProperty("startPixmap", d->background->framePixmap());
 
     KPushButton *native = new KPushButton;
     connect(native, SIGNAL(pressed()), this, SIGNAL(pressed()));
@@ -195,7 +194,7 @@ PushButton::PushButton(QGraphicsWidget *parent)
 
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    d->focusIndicator = new FocusIndicator(this, "widgets/button");
+    d->focusIndicator = new FocusIndicator(this, d->background);
 
     d->syncBorders();
     setAcceptHoverEvents(true);
@@ -333,21 +332,19 @@ void PushButton::resizeEvent(QGraphicsSceneResizeEvent *event)
     d->setPixmap();
 
    if (d->background) {
-        //resize all four panels
-        d->background->setElementPrefix("pressed");
-        d->background->resizeFrame(size());
+        //resize all panels
+       d->background->setElementPrefix("pressed");
+       d->background->resizeFrame(size());
 
-        d->syncActiveRect();
+       d->syncActiveRect();
 
-        d->background->setElementPrefix("active");
-        d->background->resizeFrame(d->activeRect.size());
-        d->hoverAnimation->setProperty("targetPixmap", d->background->framePixmap());
-        d->background->setElementPrefix("focus");
-        d->background->resizeFrame(d->activeRect.size());
+       d->background->setElementPrefix("normal");
+       d->background->resizeFrame(size());
+       d->hoverAnimation->setProperty("startPixmap", d->background->framePixmap());
 
-        d->background->setElementPrefix("normal");
-        d->background->resizeFrame(size());
-        d->hoverAnimation->setProperty("startPixmap", d->background->framePixmap());
+       d->background->setElementPrefix("active");
+       d->background->resizeFrame(d->activeRect.size());
+       d->hoverAnimation->setProperty("targetPixmap", d->background->framePixmap());
    }
 
    QGraphicsProxyWidget::resizeEvent(event);
@@ -524,7 +521,6 @@ void PushButton::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     d->hoverAnimation->setProperty("targetPixmap", d->background->framePixmap());
 
     d->hoverAnimation->start();
-
 
     QGraphicsProxyWidget::hoverLeaveEvent(event);
 }
