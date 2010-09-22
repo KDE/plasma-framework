@@ -60,7 +60,6 @@ Slider::Slider(QGraphicsWidget *parent)
     connect(native, SIGNAL(sliderMoved(int)), this, SIGNAL(sliderMoved(int)));
     connect(native, SIGNAL(valueChanged(int)), this, SIGNAL(valueChanged(int)));
 
-    d->focusIndicator = new FocusIndicator(this, "widgets/slider");
 
     setWidget(native);
     native->setWindowIcon(QIcon());
@@ -68,6 +67,7 @@ Slider::Slider(QGraphicsWidget *parent)
 
     d->background = new Plasma::FrameSvg(this);
     d->background->setImagePath("widgets/slider");
+    d->focusIndicator = new FocusIndicator(this, d->background);
 
     d->style = Plasma::Style::sharedStyle();
     native->setStyle(d->style.data());
@@ -174,9 +174,9 @@ void Slider::paint(QPainter *painter,
     }
 
     if (orientation() == Qt::Vertical) {
-        d->focusIndicator->setCustomPrefix("vertical-slider");
+        d->focusIndicator->setCustomPrefix("vertical-slider-");
     } else {
-        d->focusIndicator->setCustomPrefix("horizontal-slider");
+        d->focusIndicator->setCustomPrefix("horizontal-slider-");
     }
     d->focusIndicator->setCustomGeometry(elementRect);
     d->background->paint(painter, elementRect, handle);
