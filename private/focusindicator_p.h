@@ -33,7 +33,8 @@ class FocusIndicator : public QGraphicsWidget
 {
     Q_OBJECT
 public:
-    FocusIndicator(QGraphicsWidget *parent = 0, QString widget = "widgets/lineedit");
+    FocusIndicator(QGraphicsWidget *parent, const QString &widget);
+    FocusIndicator(QGraphicsWidget *parent, FrameSvg *svg);
     ~FocusIndicator();
 
     void setCustomGeometry(const QRectF &geometry);
@@ -50,6 +51,7 @@ private Q_SLOTS:
     void syncGeometry();
 
 private:
+    void init(QGraphicsWidget *parent); 
     QGraphicsWidget *m_parent;
     Plasma::FrameSvg *m_background;
     Animation *m_fade;
@@ -57,6 +59,7 @@ private:
     QRectF m_customGeometry;
     QString m_prefix;
     QString m_customPrefix;
+    QString m_testPrefix;
     bool m_isUnderMouse;
 };
 }
