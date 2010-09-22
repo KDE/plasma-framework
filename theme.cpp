@@ -22,8 +22,9 @@
 #include <QApplication>
 #include <QFile>
 #include <QFileInfo>
-#include <QTimer>
 #include <QPair>
+#include <QStringBuilder>
+#include <QTimer>
 #ifdef Q_WS_X11
 #include <QX11Info>
 #endif
@@ -203,19 +204,19 @@ QString ThemePrivate::findInTheme(const QString &image, const QString &theme) co
     QString search;
 
     if (locolor) {
-        search = "desktoptheme/" + theme + "/locolor/" + image;
+        search = "desktoptheme/" % theme % "/locolor/" % image;
         search =  KStandardDirs::locate("data", search);
     } else if (!compositingActive) {
-        search = "desktoptheme/" + theme + "/opaque/" + image;
+        search = "desktoptheme/" % theme % "/opaque/" % image;
         search =  KStandardDirs::locate("data", search);
     } else if (WindowEffects::isEffectAvailable(WindowEffects::BlurBehind)) {
-        search = "desktoptheme/" + theme + "/translucent/" + image;
+        search = "desktoptheme/" % theme % "/translucent/" % image;
         search =  KStandardDirs::locate("data", search);
     }
 
     //not found or compositing enabled
     if (search.isEmpty()) {
-        search = "desktoptheme/" + theme + '/' + image;
+        search = "desktoptheme/" % theme % '/' % image;
         search =  KStandardDirs::locate("data", search);
     }
 
@@ -455,7 +456,7 @@ void ThemePrivate::processWallpaperSettings(KConfigBase *metadata)
 void ThemePrivate::processAnimationSettings(const QString &theme, KConfigBase *metadata)
 {
     KConfigGroup cg(metadata, "Animations");
-    const QString animDir = "desktoptheme/" + theme + "/animations/";
+    const QString animDir = "desktoptheme/" % theme % "/animations/";
     foreach (const QString &path, cg.keyList()) {
         const QStringList anims = cg.readEntry(path, QStringList());
         foreach (const QString &anim, anims) {
@@ -465,7 +466,7 @@ void ThemePrivate::processAnimationSettings(const QString &theme, KConfigBase *m
                          << "\tpath: " << path << "\t*******\n\n\n";
                 //key: desktoptheme/default/animations/+ all.js
                 //value: ZoomAnimation
-                animationMapping.insert(anim, animDir + path);
+                animationMapping.insert(anim, animDir % path);
             } else {
                 kDebug() << "************Animation already registered!\n\n\n";
             }
@@ -488,7 +489,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     }
 
     //TODO: should we care about names with relative paths in them?
-    QString themePath = KStandardDirs::locate("data", "desktoptheme/" + theme + '/');
+    QString themePath = KStandardDirs::locate("data", "desktoptheme/" % theme % '/');
     if (themePath.isEmpty() && themeName.isEmpty()) {
         themePath = KStandardDirs::locate("data", "desktoptheme/default/");
 
@@ -509,11 +510,11 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     themeName = theme;
 
     // load the color scheme config
-    const QString colorsFile = KStandardDirs::locate("data", "desktoptheme/" + theme + "/colors");
+    const QString colorsFile = KStandardDirs::locate("data", "desktoptheme/" % theme % "/colors");
     //kDebug() << "we're going for..." << colorsFile << "*******************";
 
     // load the wallpaper settings, if any
-    const QString metadataPath(KStandardDirs::locate("data", "desktoptheme/" + theme + "/metadata.desktop"));
+    const QString metadataPath(KStandardDirs::locate("data", "desktoptheme/" % theme % "/metadata.desktop"));
     KConfig metadata(metadataPath);
 
     processWallpaperSettings(&metadata);
@@ -530,7 +531,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     while (!fallback.isEmpty() && !fallbackThemes.contains(fallback)) {
         fallbackThemes.append(fallback);
 
-        QString metadataPath(KStandardDirs::locate("data", "desktoptheme/" + theme + "/metadata.desktop"));
+        QString metadataPath(KStandardDirs::locate("data", "desktoptheme/" % theme % "/metadata.desktop"));
         KConfig metadata(metadataPath);
         KConfigGroup cg(&metadata, "Settings");
         fallback = cg.readEntry("FallbackTheme", QString());
@@ -545,7 +546,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     }
 
     foreach (const QString &theme, fallbackThemes) {
-        QString metadataPath(KStandardDirs::locate("data", "desktoptheme/" + theme + "/metadata.desktop"));
+        QString metadataPath(KStandardDirs::locate("data", "desktoptheme/" % theme % "/metadata.desktop"));
         KConfig metadata(metadataPath);
         processAnimationSettings(theme, &metadata);
         processWallpaperSettings(&metadata);
@@ -565,7 +566,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     colorScheme = KColorScheme(QPalette::Active, KColorScheme::Window, colors);
     buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, colors);
     viewColorScheme = KColorScheme(QPalette::Active, KColorScheme::View, colors);
-    hasWallpapers = KStandardDirs::exists(KStandardDirs::locateLocal("data", "desktoptheme/" + theme + "/wallpapers/"));
+    hasWallpapers = KStandardDirs::exists(KStandardDirs::locateLocal("data", "desktoptheme/" % theme % "/wallpapers/"));
 
     if (isDefault && writeSettings) {
         // we're the default theme, let's save our state
@@ -585,7 +586,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     if (useCache() && (!oldThemeName.isEmpty() || info.lastModified().toTime_t() > pixmapCache->lastModifiedTime())) {
         discardCache(oldThemeName);
     } else {
-        QString svgElementsFile = KStandardDirs::locateLocal("cache", "plasma-svgelements-" + themeName);
+        QString svgElementsFile = KStandardDirs::locateLocal("cache", "plasma-svgelements-" % themeName);
         svgElementsCache = KSharedConfig::openConfig(svgElementsFile);
     }
 
@@ -607,11 +608,11 @@ QString Theme::imagePath(const QString &name) const
         return QString();
     }
 
-    QString path = d->findInTheme(name + ".svgz", d->themeName);
+    QString path = d->findInTheme(name % ".svgz", d->themeName);
 
     if (path.isEmpty()) {
         // try for an uncompressed svg file
-        path = d->findInTheme(name + ".svg", d->themeName);
+        path = d->findInTheme(name % ".svg", d->themeName);
 
         // search in fallback themes if necessary
         for (int i = 0; path.isEmpty() && i < d->fallbackThemes.count(); ++i) {
@@ -620,11 +621,11 @@ QString Theme::imagePath(const QString &name) const
             }
 
             // try a compressed svg file in the fallback theme
-            path = d->findInTheme(name + ".svgz", d->fallbackThemes[i]);
+            path = d->findInTheme(name % ".svgz", d->fallbackThemes[i]);
 
             if (path.isEmpty()) {
                 // try an uncompressed svg file in the fallback theme
-                path = d->findInTheme(name + ".svg", d->fallbackThemes[i]);
+                path = d->findInTheme(name % ".svg", d->fallbackThemes[i]);
             }
         }
     }
@@ -677,10 +678,10 @@ QString Theme::wallpaperPath(const QSize &size) const
     //      to override the theme?
     if (d->hasWallpapers) {
         // check in the theme first
-        fullPath = d->findInTheme("wallpapers/" + image, d->themeName);
+        fullPath = d->findInTheme("wallpapers/" % image, d->themeName);
 
         if (fullPath.isEmpty()) {
-            fullPath = d->findInTheme("wallpapers/" + defaultImage, d->themeName);
+            fullPath = d->findInTheme("wallpapers/" % defaultImage, d->themeName);
         }
     }
 
@@ -711,8 +712,8 @@ bool Theme::currentThemeHasImage(const QString &name) const
         return false;
     }
 
-    return !(d->findInTheme(name + ".svgz", d->themeName).isEmpty()) ||
-           !(d->findInTheme(name + ".svg", d->themeName).isEmpty());
+    return !(d->findInTheme(name % ".svgz", d->themeName).isEmpty()) ||
+           !(d->findInTheme(name % ".svg", d->themeName).isEmpty());
 }
 
 KSharedConfigPtr Theme::colorScheme() const
@@ -869,7 +870,7 @@ bool Theme::findInRectsCache(const QString &image, const QString &element, QRect
     }
 
     KConfigGroup imageGroup(d->svgElementsCache, image);
-    rect = imageGroup.readEntry(element + "Size", QRectF());
+    rect = imageGroup.readEntry(element % "Size", QRectF());
 
     if (rect.isValid()) {
         return true;
@@ -903,7 +904,7 @@ void Theme::insertIntoRectsCache(const QString& image, const QString &element, c
 
     if (rect.isValid()) {
         KConfigGroup imageGroup(d->svgElementsCache, image);
-        imageGroup.writeEntry(element + "Size", rect);
+        imageGroup.writeEntry(element % "Size", rect);
     } else {
         QHash<QString, QSet<QString> >::iterator it = d->invalidElements.find(image);
         if (it == d->invalidElements.end()) {
