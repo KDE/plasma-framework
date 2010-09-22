@@ -42,7 +42,7 @@ class PixmapTransition : public EasingAnimation
     Q_OBJECT
     Q_PROPERTY(QPixmap startPixmap READ startPixmap WRITE setStartPixmap)
     Q_PROPERTY(QPixmap targetPixmap READ targetPixmap WRITE setTargetPixmap)
-    Q_PROPERTY(QPixmap usesCache READ usesCache WRITE setUsesCache)
+    Q_PROPERTY(bool usesCache READ usesCache WRITE setUsesCache)
     Q_PROPERTY(QPixmap currentPixmap READ currentPixmap)
 
 public:
