@@ -81,7 +81,7 @@ LineEdit::LineEdit(QGraphicsWidget *parent)
     d->background->setImagePath("widgets/lineedit");
     d->background->setCacheAllRenderedFrames(true);
 
-    new FocusIndicator(this, "widgets/lineedit");
+    new FocusIndicator(this, d->background);
     setNativeWidget(new KLineEdit);
     connect(Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(setPalette()));
 }
