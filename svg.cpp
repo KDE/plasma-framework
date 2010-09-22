@@ -25,6 +25,7 @@
 #include <QMatrix>
 #include <QPainter>
 #include <QSharedData>
+#include <QStringBuilder>
 #include <QSvgRenderer>
 
 #include <kcolorscheme.h>
@@ -188,7 +189,8 @@ class SvgPrivate
         QPixmap findInCache(const QString &elementId, const QSizeF &s = QSizeF())
         {
             QSize size;
-            QString actualElementId(QString("%1-%2-%3").arg(qRound(s.width())).arg(qRound(s.height())).arg(elementId));
+            const QChar dash('-');
+            QString actualElementId(QString::number(qRound(s.width())) % dash % QString::number(qRound(s.height())) % dash % elementId);
 
             if (elementId.isEmpty() || !q->hasElement(actualElementId)) {
                 actualElementId = elementId;
@@ -253,7 +255,7 @@ class SvgPrivate
             }
 
             if (cacheRendering) {
-                actualTheme()->insertIntoCache(id, p, QString::number((qint64)q, 16)+actualElementId);
+                actualTheme()->insertIntoCache(id, p, QString::number((qint64)q, 16) % actualElementId);
             }
 
             return p;
