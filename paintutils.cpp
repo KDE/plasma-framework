@@ -194,12 +194,13 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
     QColor color;
     color.setAlphaF(amount);
 
-
     // If the native paint engine supports Porter/Duff compositing and CompositionMode_Plus
     QPaintEngine *paintEngine = from.paintEngine();
     if (paintEngine && 
         paintEngine->hasFeature(QPaintEngine::PorterDuff) &&
         paintEngine->hasFeature(QPaintEngine::BlendModes)) {
+        startPixmap.fill(Qt::transparent);
+        targetPixmap.fill(Qt::transparent);
 
         QPainter p;
         p.begin(&targetPixmap);
