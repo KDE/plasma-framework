@@ -945,7 +945,6 @@ void Applet::setBackgroundHints(const BackgroundHints hints)
         d->background->resizeFrame(boundingRect().size());
 
         //if the background has an "overlay" element decide a random position for it and then save it so it's consistent across plasma starts
-
         if (d->background->hasElement("overlay")) {
             QSize overlaySize = d->background->elementSize("overlay");
 
@@ -954,7 +953,6 @@ void Applet::setBackgroundHints(const BackgroundHints hints)
             d->background->d->overlayPos.rx() = - (overlaySize.width() /2) + (overlaySize.width() /4) * (qrand() % (4 + 1));
             d->background->d->overlayPos.ry() = (- (overlaySize.height() /2) + (overlaySize.height() /4) * (qrand() % (4 + 1)))/2;
         }
-
     } else if (d->background) {
         qreal left, top, right, bottom;
         d->background->getMargins(left, top, right, bottom);
