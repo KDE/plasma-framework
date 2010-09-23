@@ -187,8 +187,6 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
     QRect toRect = QRect(QPoint(0,0), pixmapSize);
     targetRect.moveCenter(toRect.center());
     startRect.moveCenter(toRect.center());
-    QPixmap startPixmap(pixmapSize);
-    QPixmap targetPixmap(pixmapSize);
 
     //paint to in the center of from
     QColor color;
@@ -199,12 +197,15 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
     if (paintEngine && 
         paintEngine->hasFeature(QPaintEngine::PorterDuff) &&
         paintEngine->hasFeature(QPaintEngine::BlendModes)) {
+        QPixmap startPixmap(pixmapSize);
         startPixmap.fill(Qt::transparent);
+
+        QPixmap targetPixmap(pixmapSize);
         targetPixmap.fill(Qt::transparent);
 
         QPainter p;
         p.begin(&targetPixmap);
-        p.drawPixmap(targetRect, from);
+        p.drawPixmap(targetRect, to);
         p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
         p.fillRect(targetRect, color);
         p.end();
@@ -214,7 +215,7 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
         p.setCompositionMode(QPainter::CompositionMode_DestinationOut);
         p.fillRect(startRect, color);
         p.setCompositionMode(QPainter::CompositionMode_Plus);
-        p.drawPixmap(targetRect, to);
+        p.drawPixmap(targetRect, targetPixmap);
         p.end();
 
         return startPixmap;
@@ -269,9 +270,9 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
 #endif
     else {
         // Fall back to using QRasterPaintEngine to do the transition.
-        QImage under(pixmapSize, QImage::Format_ARGB32_Premultiplied);// = startPixmap.toImage();
+        QImage under(pixmapSize, QImage::Format_ARGB32_Premultiplied);
         under.fill(Qt::transparent);
-        QImage over(pixmapSize, QImage::Format_ARGB32_Premultiplied);//  = targetPixmap.toImage();
+        QImage over(pixmapSize, QImage::Format_ARGB32_Premultiplied);
         over.fill(Qt::transparent);
 
         QPainter p;
