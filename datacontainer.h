@@ -258,6 +258,7 @@ class PLASMA_EXPORT DataContainer : public QObject
     private:
         friend class SignalRelay;
         friend class DataContainerPrivate;
+        friend class DataEngineManager;
         DataContainerPrivate *const d;
 
         Q_PRIVATE_SLOT(d, void storeJobFinished(KJob *job))

@@ -19,12 +19,19 @@
 
 #include "dataenginemanager.h"
 
+#include <QFile>
+#include <QTextStream>
+
 #include <kdebug.h>
+#include <kglobal.h>
+#include <kstandarddirs.h>
 #include <kservicetypetrader.h>
 
-#include "private/dataengine_p.h"
-#include "scripting/scriptengine.h"
+#include "datacontainer.h"
 #include "pluginloader.h"
+#include "private/dataengine_p.h"
+#include "private/datacontainer_p.h"
+#include "scripting/scriptengine.h"
 
 namespace Plasma
 {
@@ -87,6 +94,7 @@ DataEngineManager *DataEngineManager::self()
 DataEngineManager::DataEngineManager()
     : d(new DataEngineManagerPrivate)
 {
+    //startTimer(30000);
 }
 
 DataEngineManager::~DataEngineManager()
@@ -185,6 +193,55 @@ KPluginInfo::List DataEngineManager::listEngineInfoByCategory(const QString &cat
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/DataEngine", constraint);
     return KPluginInfo::fromServices(offers);
+}
+
+void DataEngineManager::timerEvent(QTimerEvent *event)
+{
+#ifndef NDEBUG
+    QString path = KGlobal::dirs()->locateLocal("appdata", "plasma_dataenginemanager_log");
+    QFile f(path);
+    if (!f.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) {
+        kDebug() << "faild to open" << path;
+        return;
+    }
+
+    QTextStream out(&f);
+
+    QHashIterator<QString, DataEngine*> it(d->engines);
+    out << "================================== " << KGlobal::locale()->formatDateTime(QDateTime::currentDateTime()) << endl;
+    while (it.hasNext()) {
+        it.next();
+        DataEngine *engine = it.value();
+        out << "DataEngine: " << it.key() << ' ' << engine << endl;
+        out << "            Claimed # of sources: " << engine->sources().count() << endl;
+        out << "            Actual # of sources: " << engine->containerDict().count() << endl;
+        out << endl << "            Source Details" << endl;
+
+        foreach (DataContainer *dc, engine->containerDict()) {
+            out << "                * " << dc->objectName() << endl;
+            out << "                       Data count: " << dc->d->data.count() << endl;
+            out << "                       Stored: " << dc->isStorageEnabled() << ' ' << endl;
+            const int directs = dc->receivers(SIGNAL(dataUpdated(QString, Plasma::DataEngine::Data)));
+            if (directs > 0) {
+                out << "                       Direction Connections: " << directs << ' ' << endl;
+            }
+
+            const int relays = dc->d->relays.count();
+            if (relays > 0) {
+                out << "                       Relays: " << dc->d->relays.count() << endl;
+                QString times;
+                foreach (SignalRelay *relay, dc->d->relays) {
+                    times.append(' ').append(QString::number(relay->m_interval));
+                }
+                out << "                       Relay Timeouts: " << times << ' '  << endl;
+            }
+        }
+
+        out << endl << "-----" << endl;
+    }
+    out << endl << endl;
+#endif
+//    killTimer(event->timerId());
 }
 
 } // namespace Plasma

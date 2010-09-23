@@ -114,6 +114,13 @@ class PLASMA_EXPORT DataEngineManager: public QObject
          * @since 4.3
          **/
         static KPluginInfo::List listEngineInfoByCategory(const QString &category, const QString &parentApp = QString());
+
+    protected:
+        /**
+         * Reimplemented from QObject
+         **/
+        void timerEvent(QTimerEvent *event);
+
     private:
         /**
          * Default constructor. The singleton method self() is the
