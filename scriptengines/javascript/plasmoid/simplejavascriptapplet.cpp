@@ -138,7 +138,7 @@ void SimpleJavaScriptApplet::reportError(ScriptEnv *env, bool fatal)
 void SimpleJavaScriptApplet::configChanged()
 {
     ScriptEnv *env = ScriptEnv::findScriptEnv(m_engine);
-    if (!env || !env->callEventListeners("configchangd")) {
+    if (!env || !env->callEventListeners("configchanged")) {
         callPlasmoidFunction("configChanged", QScriptValueList(), env);
     }
 }
