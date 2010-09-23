@@ -121,82 +121,107 @@ bool FocusIndicator::eventFilter(QObject *watched, QEvent *event)
         m_isUnderMouse = false;
     }
 
-    if (!m_parent->hasFocus() && event->type() == QEvent::GraphicsSceneHoverEnter) {
-        m_prefix = m_customPrefix % "hover";
-        syncGeometry();
-        m_hoverAnimation->stop();
-        if (m_background->hasElementPrefix(m_testPrefix)) {
-            m_background->setElementPrefix(m_customPrefix % "shadow");
-            m_hoverAnimation->setProperty("startPixmap", m_background->framePixmap());
-            m_background->setElementPrefix(m_customPrefix % "hover");
-            m_hoverAnimation->setProperty("targetPixmap", m_background->framePixmap());
-        } else if (m_background->hasElement(m_testPrefix)) {
-            m_hoverAnimation->setProperty("startPixmap", m_background->pixmap(m_customPrefix % "shadow"));
-            m_hoverAnimation->setProperty("targetPixmap", m_background->pixmap(m_customPrefix % "hover"));
-        }
+    switch (event->type()) {
+        case QEvent::GraphicsSceneHoverEnter:
+            if (!m_parent->hasFocus()) {
+                m_prefix = m_customPrefix % "hover";
+                syncGeometry();
+                m_hoverAnimation->stop();
+                if (m_background->hasElementPrefix(m_testPrefix)) {
+                    m_background->setElementPrefix(m_customPrefix % "shadow");
+                    m_hoverAnimation->setProperty("startPixmap", m_background->framePixmap());
+                    m_background->setElementPrefix(m_customPrefix % "hover");
+                    m_hoverAnimation->setProperty("targetPixmap", m_background->framePixmap());
+                } else if (m_background->hasElement(m_testPrefix)) {
+                    m_hoverAnimation->setProperty("startPixmap", m_background->pixmap(m_customPrefix % "shadow"));
+                    m_hoverAnimation->setProperty("targetPixmap", m_background->pixmap(m_customPrefix % "hover"));
+                }
 
-        m_hoverAnimation->start();
-    } else if (!m_parent->hasFocus() && event->type() == QEvent::GraphicsSceneHoverLeave) {
-        m_prefix = m_customPrefix % "shadow";
-        syncGeometry();
-        m_hoverAnimation->stop();
+                m_hoverAnimation->start();
+            }
+            break;
 
-        if (m_background->hasElementPrefix(m_testPrefix)) {
-            m_background->setElementPrefix(m_customPrefix % "hover");
-            m_hoverAnimation->setProperty("startPixmap", m_background->framePixmap());
-            m_background->setElementPrefix(m_customPrefix % "shadow");
-            m_hoverAnimation->setProperty("targetPixmap", m_background->framePixmap());
-        } else if (m_background->hasElement(m_testPrefix)) {
-            m_hoverAnimation->setProperty("startPixmap", m_background->pixmap(m_customPrefix % "hover"));
-            m_hoverAnimation->setProperty("targetPixmap", m_background->pixmap(m_customPrefix % "shadow"));
-        }
-        m_hoverAnimation->start();
-    } else if (event->type() == QEvent::GraphicsSceneResize) {
-        syncGeometry();
-    } else if (event->type() == QEvent::FocusIn) {
-        m_prefix = m_customPrefix % "focus";
-        syncGeometry();
-        m_hoverAnimation->stop();
+        case QEvent::GraphicsSceneHoverLeave:
+            if (!m_parent->hasFocus()) {
+                m_prefix = m_customPrefix % "shadow";
+                syncGeometry();
+                m_hoverAnimation->stop();
 
-        if (m_background->hasElementPrefix(m_customPrefix % "focus")) {
-            //m_background->setElementPrefix(m_customPrefix % "shadow");
-            m_hoverAnimation->setProperty("startPixmap", m_background->framePixmap());
-            m_background->setElementPrefix(m_customPrefix % "focus");
-            m_hoverAnimation->setProperty("targetPixmap", m_background->framePixmap());
-        } else if (m_background->hasElement(m_customPrefix % "focus")) {
-            //m_hoverAnimation->setProperty("startPixmap", m_background->pixmap(m_customPrefix % "shadow"));
-            m_hoverAnimation->setProperty("targetPixmap", m_background->pixmap(m_customPrefix % "focus"));
-        }
+                if (m_background->hasElementPrefix(m_testPrefix)) {
+                    m_background->setElementPrefix(m_customPrefix % "hover");
+                    m_hoverAnimation->setProperty("startPixmap", m_background->framePixmap());
+                    m_background->setElementPrefix(m_customPrefix % "shadow");
+                    m_hoverAnimation->setProperty("targetPixmap", m_background->framePixmap());
+                } else if (m_background->hasElement(m_testPrefix)) {
+                    m_hoverAnimation->setProperty("startPixmap", m_background->pixmap(m_customPrefix % "hover"));
+                    m_hoverAnimation->setProperty("targetPixmap", m_background->pixmap(m_customPrefix % "shadow"));
+                }
+                m_hoverAnimation->start();
+            }
+            break;
 
-        m_hoverAnimation->start();
-    } else if (!m_isUnderMouse && event->type() == QEvent::FocusOut) {
-        m_prefix = m_customPrefix % "shadow";
-        syncGeometry();
-        m_hoverAnimation->stop();
+        case QEvent::GraphicsSceneResize:
+            syncGeometry();
+        break;
 
-        if (m_background->hasElementPrefix(m_customPrefix % "focus")) {
-            m_background->setElementPrefix("focus");
-            m_hoverAnimation->setProperty("startPixmap", m_background->framePixmap());
-            m_background->setElementPrefix("shadow");
-            m_hoverAnimation->setProperty("targetPixmap", m_background->framePixmap());
-        } else if (m_background->hasElement(m_customPrefix % "focus")) {
-            m_hoverAnimation->setProperty("startPixmap", m_background->pixmap(m_customPrefix % "focus"));
-            m_hoverAnimation->setProperty("targetPixmap", m_background->pixmap(m_customPrefix % "shadow"));
-        }
+        case QEvent::FocusIn:
+            m_prefix = m_customPrefix % "focus";
+            syncGeometry();
+            m_hoverAnimation->stop();
 
-        m_hoverAnimation->start();
-    }
+            if (m_background->hasElementPrefix(m_customPrefix % "focus")) {
+                //m_background->setElementPrefix(m_customPrefix % "shadow");
+                m_hoverAnimation->setProperty("startPixmap", m_background->framePixmap());
+                m_background->setElementPrefix(m_customPrefix % "focus");
+                m_hoverAnimation->setProperty("targetPixmap", m_background->framePixmap());
+            } else if (m_background->hasElement(m_customPrefix % "focus")) {
+                //m_hoverAnimation->setProperty("startPixmap", m_background->pixmap(m_customPrefix % "shadow"));
+                m_hoverAnimation->setProperty("targetPixmap", m_background->pixmap(m_customPrefix % "focus"));
+            }
+
+            m_hoverAnimation->start();
+            break;
+
+        case QEvent::FocusOut:
+            if (!m_isUnderMouse) {
+                m_prefix = m_customPrefix % "shadow";
+                syncGeometry();
+                m_hoverAnimation->stop();
+
+                if (m_background->hasElementPrefix(m_customPrefix % "focus")) {
+                    m_background->setElementPrefix("focus");
+                    m_hoverAnimation->setProperty("startPixmap", m_background->framePixmap());
+                    m_background->setElementPrefix("shadow");
+                    m_hoverAnimation->setProperty("targetPixmap", m_background->framePixmap());
+                } else if (m_background->hasElement(m_customPrefix % "focus")) {
+                    m_hoverAnimation->setProperty("startPixmap", m_background->pixmap(m_customPrefix % "focus"));
+                    m_hoverAnimation->setProperty("targetPixmap", m_background->pixmap(m_customPrefix % "shadow"));
+                }
+
+                m_hoverAnimation->start();
+            }
+            break;
+
+        default:
+            break;
+    };
 
     return false;
 }
 
 void FocusIndicator::resizeEvent(QGraphicsSceneResizeEvent *)
 {
-    if (m_background->hasElementPrefix(m_testPrefix)) {
+    if (m_background->hasElementPrefix(m_customPrefix % "shadow")) {
         m_background->setElementPrefix(m_customPrefix % "shadow");
         m_background->resizeFrame(size());
+    }
+
+    if (m_background->hasElementPrefix(m_customPrefix % "hover")) { 
         m_background->setElementPrefix(m_customPrefix % "hover");
         m_background->resizeFrame(size());
+    }
+
+    if (m_background->hasElementPrefix(m_customPrefix % "focus")) { 
         m_background->setElementPrefix(m_customPrefix % "focus");
         m_background->resizeFrame(size());
     }
