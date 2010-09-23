@@ -60,7 +60,7 @@ public :
           currentWidget(0),
           showTimer(new QTimer(manager)),
           hideTimer(new QTimer(manager)),
-          tipWidget(new ToolTip(0)),
+          tipWidget(0),
           state(ToolTipManager::Activated),
           isShown(false),
           delayedHide(false),
@@ -86,6 +86,8 @@ public :
     void clearTips();
     void doDelayedHide();
     void toolTipHovered(bool);
+    void createTipWidget();
+    void hideTipWidget();
 
     ToolTipManager *q;
     QGraphicsWidget *currentWidget;
@@ -125,12 +127,6 @@ ToolTipManager::ToolTipManager(QObject *parent)
 
     d->hideTimer->setSingleShot(true);
     connect(d->hideTimer, SIGNAL(timeout()), SLOT(resetShownState()));
-
-    connect(d->tipWidget, SIGNAL(activateWindowByWId(WId,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)),
-            this, SIGNAL(windowPreviewActivated(WId,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)));
-    connect(d->tipWidget, SIGNAL(linkActivated(QString,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)),
-            this, SIGNAL(linkActivated(QString,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)));
-    connect(d->tipWidget, SIGNAL(hovered(bool)), this, SLOT(toolTipHovered(bool)));
 }
 
 ToolTipManager::~ToolTipManager()
@@ -167,7 +163,7 @@ void ToolTipManager::show(QGraphicsWidget *widget)
 
 bool ToolTipManager::isVisible(QGraphicsWidget *widget) const
 {
-    return d->currentWidget == widget && d->tipWidget->isVisible();
+    return d->currentWidget == widget && d->tipWidget && d->tipWidget->isVisible();
 }
 
 void ToolTipManagerPrivate::doDelayedHide()
@@ -192,7 +188,7 @@ void ToolTipManager::hide(QGraphicsWidget *widget)
     d->currentWidget = 0;
     d->showTimer->stop();  // stop the timer to show the tooltip
     d->delayedHide = false;
-    d->tipWidget->hide();
+    d->hideTipWidget();
 }
 
 void ToolTipManager::registerWidget(QGraphicsWidget *widget)
@@ -226,7 +222,7 @@ void ToolTipManager::setContent(QGraphicsWidget *widget, const ToolTipContent &d
     registerWidget(widget);
     d->tooltips.insert(widget, data);
 
-    if (d->currentWidget == widget) {
+    if (d->currentWidget == widget && d->tipWidget && d->tipWidget->isVisible()) {
         if (data.isEmpty()) {
             hide(widget);
         } else {
@@ -278,6 +274,28 @@ ToolTipManager::State ToolTipManager::state() const
     return d->state;
 }
 
+void ToolTipManagerPrivate::createTipWidget()
+{
+    if (tipWidget) {
+        return;
+    }
+    tipWidget = new ToolTip(0);
+    QObject::connect(tipWidget, SIGNAL(activateWindowByWId(WId,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)),
+                     q, SIGNAL(windowPreviewActivated(WId,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)));
+    QObject::connect(tipWidget, SIGNAL(linkActivated(QString,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)),
+                     q, SIGNAL(linkActivated(QString,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)));
+    QObject::connect(tipWidget, SIGNAL(hovered(bool)), q, SLOT(toolTipHovered(bool)));
+}
+
+void ToolTipManagerPrivate::hideTipWidget()
+{
+    if (tipWidget) {
+        tipWidget->hide();
+        delete tipWidget;
+        tipWidget = 0;
+    }
+}
+
 void ToolTipManagerPrivate::onWidgetDestroyed(QObject *object)
 {
     if (!object) {
@@ -300,8 +318,7 @@ void ToolTipManagerPrivate::removeWidget(QGraphicsWidget *w, bool canSafelyAcces
     if (currentWidget == w && currentWidget) {
         currentWidget = 0;
         showTimer->stop();  // stop the timer to show the tooltip
-        tipWidget->setContent(0, ToolTipContent());
-        tipWidget->hide();
+        hideTipWidget();
         delayedHide = false;
     }
 
@@ -320,12 +337,12 @@ void ToolTipManagerPrivate::clearTips()
 void ToolTipManagerPrivate::resetShownState()
 {
     if (currentWidget) {
-        if (!tipWidget->isVisible() || delayedHide) {
+        if (!tipWidget || !tipWidget->isVisible() || delayedHide) {
             //One might have moused out and back in again
             delayedHide = false;
             isShown = false;
             currentWidget = 0;
-            tipWidget->hide();
+            hideTipWidget();
         }
     }
 }
@@ -362,6 +379,8 @@ void ToolTipManagerPrivate::showToolTip()
 
         return;
     }
+
+    createTipWidget();
 
     Containment *c = dynamic_cast<Containment *>(currentWidget->topLevelItem());
     //kDebug() << "about to show" << (QObject*)c;
