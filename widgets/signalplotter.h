@@ -76,7 +76,7 @@ public:
      * the same data is given in (unless you reorder the plots).
      * @param color the color to use for this plot
      */
-    void addPlot(const QColor &color);
+    Q_INVOKABLE void addPlot(const QColor &color);
 
     /**
      * Add data to the graph, and advance the graph by one time period.
@@ -84,7 +84,7 @@ public:
      * added (or consequently reordered).
      * @param samples a list with the new value for each plot
      */
-    void addSample(const QList<double> &samples);
+    Q_INVOKABLE void addSample(const QList<double> &samples);
 
     /**
      * Reorder the plots into the order given.  For example:
@@ -99,13 +99,13 @@ public:
      * \endcode
      * @param newOrder a list with the new position of each plot
      */
-    void reorderPlots(const QList<uint>& newOrder);
+    Q_INVOKABLE void reorderPlots(const QList<uint>& newOrder);
 
     /**
      * Removes the plot at the specified index.
      * @param pos the index of the plot to be removed
      */
-    void removePlot(uint pos);
+    Q_INVOKABLE void removePlot(uint pos);
 
     /**
      * Return the list of plot colors, in the order that the plots
