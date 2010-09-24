@@ -279,6 +279,7 @@ void ToolTipManagerPrivate::createTipWidget()
     if (tipWidget) {
         return;
     }
+
     tipWidget = new ToolTip(0);
     QObject::connect(tipWidget, SIGNAL(activateWindowByWId(WId,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)),
                      q, SIGNAL(windowPreviewActivated(WId,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)));
@@ -291,7 +292,7 @@ void ToolTipManagerPrivate::hideTipWidget()
 {
     if (tipWidget) {
         tipWidget->hide();
-        delete tipWidget;
+        tipWidget->deleteLater();
         tipWidget = 0;
     }
 }
