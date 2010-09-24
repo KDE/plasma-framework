@@ -27,7 +27,7 @@ class PlasmaKPartView;
 class PlasmaKPartCorona;
 
 #include <Plasma/Containment>
-Q_DECLARE_METATYPE( Plasma::Containment* );
+Q_DECLARE_METATYPE( Plasma::Containment* )
 namespace Plasma
 {
     class Applet;
