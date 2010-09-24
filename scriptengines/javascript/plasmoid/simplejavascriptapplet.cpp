@@ -59,11 +59,12 @@
 #include "appletinterface.h"
 #include "scriptenv.h"
 #include "simplebindings/animationgroup.h"
+#include "simplebindings/bytearrayclass.h"
 #include "simplebindings/dataengine.h"
 #include "simplebindings/dataenginereceiver.h"
 #include "simplebindings/i18n.h"
-#include "simplebindings/bytearrayclass.h"
 #include "simplebindings/variant.h"
+#include "themedsvg.h"
 
 using namespace Plasma;
 
@@ -698,25 +699,6 @@ QScriptValue SimpleJavaScriptApplet::loadui(QScriptContext *context, QScriptEngi
     return engine->newQObject(w, QScriptEngine::AutoOwnership);
 }
 
-QString SimpleJavaScriptApplet::findSvg(QScriptContext *context, QScriptEngine *engine, const QString &file)
-{
-    AppletInterface *interface = AppletInterface::extract(engine);
-    if (!interface) {
-        return file;
-    }
-
-    QString path = interface->file("images", file + ".svg");
-    if (path.isEmpty()) {
-        path = interface->file("images", file + ".svgz");
-
-        if (path.isEmpty()) {
-            return file;
-        }
-    }
-
-    return path;
-}
-
 QScriptValue SimpleJavaScriptApplet::newPlasmaSvg(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() == 0) {
@@ -726,11 +708,13 @@ QScriptValue SimpleJavaScriptApplet::newPlasmaSvg(QScriptContext *context, QScri
     const QString filename = context->argument(0).toString();
     bool parentedToApplet = false;
     QGraphicsWidget *parent = extractParent(context, engine, 1, &parentedToApplet);
-    Svg *svg = new Svg(parent);
-    svg->setImagePath(parentedToApplet ? findSvg(context, engine, filename) : filename);
-    QScriptValue fun = engine->newQObject(svg);
-    ScriptEnv::registerEnums(fun, *svg->metaObject());
-    return fun;
+    Svg *svg = new ThemedSvg(parent);
+    svg->setImagePath(ThemedSvg::findSvg(engine, filename));
+
+    QScriptValue obj = engine->newQObject(svg);
+    ScriptEnv::registerEnums(obj, *svg->metaObject());
+
+    return obj;
 }
 
 QScriptValue SimpleJavaScriptApplet::newPlasmaFrameSvg(QScriptContext *context, QScriptEngine *engine)
@@ -743,12 +727,13 @@ QScriptValue SimpleJavaScriptApplet::newPlasmaFrameSvg(QScriptContext *context, 
 
     bool parentedToApplet = false;
     QGraphicsWidget *parent = extractParent(context, engine, 1, &parentedToApplet);
-    FrameSvg *frameSvg = new FrameSvg(parent);
-    frameSvg->setImagePath(parentedToApplet ? filename : findSvg(context, engine, filename));
+    FrameSvg *frameSvg = new ThemedFrameSvg(parent);
+    frameSvg->setImagePath(ThemedSvg::findSvg(engine, filename));
 
-    QScriptValue fun = engine->newQObject(frameSvg);
-    ScriptEnv::registerEnums(fun, *frameSvg->metaObject());
-    return fun;
+    QScriptValue obj = engine->newQObject(frameSvg);
+    ScriptEnv::registerEnums(obj, *frameSvg->metaObject());
+
+    return obj;
 }
 
 QScriptValue SimpleJavaScriptApplet::newPlasmaExtenderItem(QScriptContext *context, QScriptEngine *engine)

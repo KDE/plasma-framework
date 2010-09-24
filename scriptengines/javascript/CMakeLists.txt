@@ -6,6 +6,7 @@ set(simple_javascript_engine_SRCS
     plasmoid/appletauthorization.cpp
     plasmoid/appletinterface.cpp
     plasmoid/simplejavascriptapplet.cpp
+    plasmoid/themedsvg.cpp
     simplebindings/animationgroup.cpp
     simplebindings/anchorlayout.cpp
     simplebindings/dataenginereceiver.cpp
