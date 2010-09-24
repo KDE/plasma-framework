@@ -1041,7 +1041,7 @@ public:
     QPointF dragHandleClicked;
     bool dragging;
     QTimer *adjustScrollbarsTimer;
-    static const int borderSize = 4;
+    static const int borderSize = 0;
 
     QPointF pressPos;
     QPointF pressScrollPos;
