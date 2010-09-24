@@ -73,6 +73,7 @@ public:
     void triggerShowAddWidgets();
     void requestConfiguration();
     void checkStatus(Plasma::ItemStatus status);
+    void setScreen(int newScreen, int newDesktop, bool preventInvalidDesktops = true);
 
     /**
      * Called when constraints have been updated on this containment to provide

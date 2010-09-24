@@ -349,7 +349,7 @@ void Containment::restore(KConfigGroup &group)
     //kDebug() << "setScreen from restore";
     d->lastScreen = group.readEntry("lastScreen", d->lastScreen);
     d->lastDesktop = group.readEntry("lastDesktop", d->lastDesktop);
-    setScreen(group.readEntry("screen", d->screen), group.readEntry("desktop", d->desktop));
+    d->setScreen(group.readEntry("screen", d->screen), group.readEntry("desktop", d->desktop), false);
     QString activityId = group.readEntry("activityId", QString());
     if (!activityId.isEmpty()) {
         d->context()->setCurrentActivityId(activityId);
@@ -363,19 +363,17 @@ void Containment::restore(KConfigGroup &group)
     setWallpaper(group.readEntry("wallpaperplugin", defaultWallpaper),
                  group.readEntry("wallpaperpluginmode", defaultWallpaperMode));
 
-
     QMetaObject::invokeMethod(d->toolBox.data(), "restore", Q_ARG(KConfigGroup, group));
 
-
     KConfigGroup cfg(&group, "ActionPlugins");
-    kDebug() << cfg.keyList();
+    //kDebug() << cfg.keyList();
     if (cfg.exists()) {
         //clear default containmentactionss
         qDeleteAll(d->actionPlugins);
         d->actionPlugins.clear();
         //load the right configactions
         foreach (const QString &key, cfg.keyList()) {
-            kDebug() << "loading" << key;
+            //kDebug() << "loading" << key;
             setContainmentActions(key, cfg.readEntry(key, QString()));
         }
     }
@@ -935,6 +933,11 @@ Applet::List Containment::applets() const
 
 void Containment::setScreen(int newScreen, int newDesktop)
 {
+    d->setScreen(newScreen, newDesktop);
+}
+
+void ContainmentPrivate::setScreen(int newScreen, int newDesktop, bool preventInvalidDesktops)
+{
     // What we want to do in here is:
     //   * claim the screen as our own
     //   * signal whatever may be watching this containment about the switch
@@ -945,39 +948,42 @@ void Containment::setScreen(int newScreen, int newDesktop)
     //            we kick out
     //
     // a screen of -1 means no associated screen.
-    Q_ASSERT(corona());
-    int numScreens = corona()->numScreens();
+    Corona *corona = q->corona();
+    Q_ASSERT(corona);
+    int numScreens = corona->numScreens();
     if (newScreen < -1) {
         newScreen = -1;
     }
 
     // -1 == All desktops
-    if (newDesktop < -1 || newDesktop > KWindowSystem::numberOfDesktops() - 1) {
+    if (newDesktop < -1 || (preventInvalidDesktops && newDesktop > KWindowSystem::numberOfDesktops() - 1)) {
         newDesktop = -1;
     }
 
-    //kDebug() << activity() << "setting screen to " << newScreen << newDesktop << "and type is" << d->type;
+    //kDebug() << activity() << "setting screen to " << newScreen << newDesktop << "and type is" << type;
 
     Containment *swapScreensWith(0);
-    if (d->type == DesktopContainment || d->type >= CustomContainment) {
+    if (type == Containment::DesktopContainment || type >= Containment::CustomContainment) {
         // we want to listen to changes in work area if our screen changes
-        if (d->toolBox && d->screen < 0 && newScreen > -1) {
-            connect(KWindowSystem::self(), SIGNAL(workAreaChanged()), d->toolBox.data(), SLOT(positionToolBox()), Qt::UniqueConnection);
-        } else if (d->toolBox && newScreen < 0) {
-            disconnect(KWindowSystem::self(), SIGNAL(workAreaChanged()), d->toolBox.data(), SLOT(positionToolBox()));
+        if (toolBox) {
+            if (screen < 0 && newScreen > -1) {
+                QObject::connect(KWindowSystem::self(), SIGNAL(workAreaChanged()), toolBox.data(), SLOT(positionToolBox()), Qt::UniqueConnection);
+            } else if (newScreen < 0) {
+                QObject::disconnect(KWindowSystem::self(), SIGNAL(workAreaChanged()), toolBox.data(), SLOT(positionToolBox()));
+            }
         }
 
-        if (newScreen > -1 && corona()) {
+        if (newScreen > -1) {
             // sanity check to make sure someone else doesn't have this screen already!
-            Containment *currently = corona()->containmentForScreen(newScreen, newDesktop);
-            if (currently && currently != this) {
+            Containment *currently = corona->containmentForScreen(newScreen, newDesktop);
+            if (currently && currently != q) {
                 kDebug() << "currently is on screen" << currently->screen()
                          << "desktop" << currently->desktop()
                          << "and is" << currently->activity()
-                         << (QObject*)currently << "i'm" << (QObject*)this;
+                         << (QObject*)currently << "i'm" << (QObject*)q;
                 //kDebug() << "setScreen due to swap";
                 //make the view completely forget about us
-                emit screenChanged(d->screen, -1, this);
+                emit q->screenChanged(screen, -1, q);
                 currently->setScreen(-1, newDesktop);
                 swapScreensWith = currently;
             }
@@ -985,32 +991,32 @@ void Containment::setScreen(int newScreen, int newDesktop)
     }
 
     if (newScreen < numScreens && newScreen > -1 &&
-        (d->type == DesktopContainment || d->type >= CustomContainment)) {
-        resize(corona()->screenGeometry(newScreen).size());
+        (type == Containment::DesktopContainment || type >= Containment::CustomContainment)) {
+        q->resize(corona->screenGeometry(newScreen).size());
     }
 
-    int oldDesktop = d->desktop;
-    d->desktop = newDesktop;
+    int oldDesktop = desktop;
+    desktop = newDesktop;
 
-    int oldScreen = d->screen;
-    d->screen = newScreen;
+    int oldScreen = screen;
+    screen = newScreen;
 
 
-    updateConstraints(Plasma::ScreenConstraint);
+    q->updateConstraints(Plasma::ScreenConstraint);
 
     if (oldScreen != newScreen || oldDesktop != newDesktop) {
-        emit screenChanged(oldScreen, newScreen, this);
+        emit q->screenChanged(oldScreen, newScreen, q);
 
-        KConfigGroup c = config();
-        c.writeEntry("screen", d->screen);
-        c.writeEntry("desktop", d->desktop);
+        KConfigGroup c = q->config();
+        c.writeEntry("screen", screen);
+        c.writeEntry("desktop", desktop);
         if (newScreen != -1) {
-            d->lastScreen = newScreen;
-            d->lastDesktop = newDesktop;
-            c.writeEntry("lastScreen", d->lastScreen);
-            c.writeEntry("lastDesktop", d->lastDesktop);
+            lastScreen = newScreen;
+            lastDesktop = newDesktop;
+            c.writeEntry("lastScreen", lastScreen);
+            c.writeEntry("lastDesktop", lastDesktop);
         }
-        emit configNeedsSaving();
+        emit q->configNeedsSaving();
     }
 
     if (swapScreensWith) {
@@ -1018,10 +1024,10 @@ void Containment::setScreen(int newScreen, int newDesktop)
         swapScreensWith->setScreen(oldScreen, oldDesktop);
     }
 
-    d->checkRemoveAction();
+    checkRemoveAction();
 
     if (newScreen >= 0) {
-        emit activate();
+        emit q->activate();
     }
 }
 
