@@ -228,9 +228,12 @@ void ToolTip::showEvent(QShowEvent *e)
 void ToolTip::hideEvent(QHideEvent *e)
 {
     QWidget::hideEvent(e);
+    d->animation->stop();
+
     if (d->source) {
         QMetaObject::invokeMethod(d->source.data(), "toolTipHidden");
     }
+
     WindowEffects::highlightWindows(winId(), QList<WId>());
 }
 
@@ -347,9 +350,7 @@ void ToolTip::moveTo(const QPoint &to)
         return;
     }
 
-    if (d->animation->state() == QAbstractAnimation::Running) {
-        d->animation->stop();
-    }
+    d->animation->stop();
     d->animation->setEndValue(to);
     d->animation->start();
 }
