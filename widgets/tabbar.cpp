@@ -96,6 +96,7 @@ public:
     TabBar *q;
     TabBarProxy *tabProxy;
     QList<QGraphicsWidget *> pages;
+    QGraphicsWidget *emptyTabBarSpacer;
     QGraphicsLinearLayout *mainLayout;
     QGraphicsLinearLayout *tabWidgetLayout;
     QGraphicsLinearLayout *tabBarLayout;
@@ -257,7 +258,12 @@ TabBar::TabBar(QGraphicsWidget *parent)
     setLayout(d->mainLayout);
     d->mainLayout->setContentsMargins(0,0,0,0);
 
+    //simulate a page until there isn't one
+    //needed to make the widget resize well when there are no tab added
+    d->emptyTabBarSpacer = new QGraphicsWidget(this);
+
     d->tabWidgetLayout->addItem(d->tabBarLayout);
+    d->tabWidgetLayout->addItem(d->emptyTabBarSpacer);
 
     //tabBar is centered, so a stretch at begin one at the end
     d->tabBarLayout->addStretch();
@@ -313,6 +319,7 @@ int TabBar::insertTab(int index, const QIcon &icon, const QString &label,
     d->pages.insert(qBound(0, index, d->pages.count()), page);
 
     if (d->pages.count() == 1) {
+        d->tabWidgetLayout->removeItem(d->emptyTabBarSpacer);
         d->tabWidgetLayout->addItem(page);
         page->setVisible(true);
         page->setEnabled(true);
@@ -476,6 +483,8 @@ void TabBar::removeTab(int index)
 
     if (d->pages.count() > 0) {
         d->updateTabWidgetMode();
+    } else {
+        d->tabWidgetLayout->addItem(d->emptyTabBarSpacer);
     }
     d->tabProxy->setPreferredSize(d->tabProxy->native->sizeHint());
 }
