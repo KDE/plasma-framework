@@ -108,7 +108,6 @@ public:
 
     void commonConstructor()
     {
-        q->setFlag(QGraphicsItem::ItemHasNoContents);
         q->setFocusPolicy(Qt::StrongFocus);
         q->setFiltersChildEvents(true);
         layout = new QGraphicsGridLayout(q);
