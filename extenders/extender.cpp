@@ -44,6 +44,7 @@
 #include "private/extenderapplet_p.h"
 #include "private/extenderitem_p.h"
 #include "private/extenderitemmimedata_p.h"
+#include "private/popupapplet_p.h"
 
 namespace Plasma
 {
@@ -91,7 +92,13 @@ Extender::Extender(Applet *applet)
         kWarning() << "Applet already has an extender, and can have only one extender."
                    << "The previous extender will be destroyed.";
         delete applet->d->extender.data();
+    } else if (PopupApplet *popup = qobject_cast<PopupApplet *>(applet)) {
+        if (!popup->d->graphicsWidget) {
+            // ensure the popup gets a dialog with us as the graphics widget
+            popup->d->popupConstraintsEvent(SizeConstraint);
+        }
     }
+
     applet->d->extender = this;
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
