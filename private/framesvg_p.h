@@ -22,13 +22,16 @@
 #define PLASMA_FRAMESVG_P_H
 
 #include <QHash>
+#include <QStringBuilder>
+
+#include <KDebug>
 
 namespace Plasma
 {
 class FrameData
 {
 public:
-    FrameData()
+    FrameData(FrameSvg *svg)
       : enabledBorders(FrameSvg::AllBorders),
         frameSize(-1,-1),
         topHeight(0),
@@ -43,9 +46,10 @@ public:
         stretchBorders(false),
         tileCenter(false)
     {
+        ref(svg);
     }
 
-    FrameData(const FrameData &other)
+    FrameData(const FrameData &other, FrameSvg *svg)
       : enabledBorders(other.enabledBorders),
         frameSize(other.frameSize),
         topHeight(0),
@@ -61,11 +65,18 @@ public:
         tileCenter(false),
         composeOverBorder(false)
     {
+        ref(svg);
     }
 
     ~FrameData()
     {
     }
+
+    void ref(FrameSvg *svg);
+    bool deref(FrameSvg *svg);
+    bool removeRefs(FrameSvg *svg);
+    bool isUsed() const;
+    int refcount() const;
 
     FrameSvg::EnabledBorders enabledBorders;
     QPixmap cachedBackground;
@@ -92,6 +103,8 @@ public:
     bool stretchBorders : 1;
     bool tileCenter : 1;
     bool composeOverBorder : 1;
+
+    QHash<FrameSvg *, int> references;
 };
 
 class FrameSvgPrivate
@@ -104,13 +117,10 @@ public:
     {
     }
 
-    ~FrameSvgPrivate()
-    {
-        qDeleteAll(frames);
-        frames.clear();
-    }
+    ~FrameSvgPrivate();
 
     QPixmap alphaMask();
+
     void generateBackground(FrameData *frame);
     void generateFrameBackground(FrameData *frame);
     QString cacheId(FrameData *frame, const QString &prefixToUse) const;
@@ -129,6 +139,8 @@ public:
     QPoint overlayPos;
 
     QHash<QString, FrameData*> frames;
+
+    static QHash<QString, FrameData *> s_sharedFrames;
 };
 
 }
