@@ -24,7 +24,7 @@
 #include <QHash>
 #include <QStringBuilder>
 
-#include <KDebug>
+#include <kdebug.h>
 
 namespace Plasma
 {
