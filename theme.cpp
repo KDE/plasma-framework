@@ -733,7 +733,7 @@ QColor Theme::color(ColorRole role) const
             break;
 
         case BackgroundColor:
-            return d->colorScheme.background().color();
+            return d->colorScheme.background(KColorScheme::NormalBackground).color();
             break;
 
         case ButtonTextColor:
@@ -741,7 +741,7 @@ QColor Theme::color(ColorRole role) const
             break;
 
         case ButtonBackgroundColor:
-            return d->buttonColorScheme.background(KColorScheme::ActiveBackground).color();
+            return d->buttonColorScheme.background(KColorScheme::NormalBackground).color();
             break;
 
         case LinkColor:
