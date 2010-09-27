@@ -254,13 +254,14 @@ public:
     /**
      * Imports an applet layout from a config file. The results will be added to the
      * current set of Containments.
+     * @deprecated Use the 4.6 version that takes a KConfigGroup
      *
      * @param config the name of the config file to load from,
      *               or the default config file if QString()
      * @return the list of containments that were loaded
      * @since 4.5
      */
-    QList<Plasma::Containment *> importLayout(const KConfigBase &config);
+    KDE_DEPRECATED QList<Plasma::Containment *> importLayout(const KConfigBase &config);
 
     /**
      * Returns the name of the preferred plugin to be used as containment toolboxes.
@@ -270,6 +271,26 @@ public:
      * @since 4.6
      */
     QString preferredToolBoxPlugin(const Containment::Type type) const;
+
+    /**
+     * Imports an applet layout from a config file. The results will be added to the
+     * current set of Containments.
+     *
+     * @param config the name of the config file to load from,
+     *               or the default config file if QString()
+     * @return the list of containments that were loaded
+     * @since 4.6
+     */
+    QList<Plasma::Containment *> importLayout(const KConfigGroup &config);
+
+    /**
+     * Exports a set of containments to a config file.
+     *
+     * @param config the config group to save to
+     * @param containments the list of containments to save
+     * @since 4.6
+     */
+    void exportLayout(KConfigGroup &config, QList<Containment*> containments);
 
 public Q_SLOTS:
     /**

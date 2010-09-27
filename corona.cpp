@@ -337,6 +337,39 @@ void Corona::saveLayout(const QString &configName) const
     d->saveLayout(c);
 }
 
+void Corona::exportLayout(KConfigGroup &config, QList<Containment*> containments)
+{
+    foreach (const QString &group, config.groupList()) {
+        KConfigGroup cg(&config, group);
+        cg.deleteGroup();
+    }
+
+    //temporarily unlock so that removal works
+    ImmutabilityType oldImm = immutability();
+    d->immutability = Mutable;
+
+    KConfigGroup dest(&config, "Containments");
+    KConfigGroup dummy;
+    foreach (Plasma::Containment *c, containments) {
+        c->save(dummy);
+        c->config().reparent(&dest);
+
+        //ensure the containment is unlocked
+        //this is done directly because we have to bypass any SystemImmutable checks
+        c->Applet::d->immutability = Mutable;
+        foreach (Applet *a, c->applets()) {
+            a->d->immutability = Mutable;
+        }
+
+        c->destroy(false);
+    }
+
+    //restore immutability
+    d->immutability = oldImm;
+
+    config.sync();
+}
+
 void Corona::requestConfigSync()
 {
     // TODO: should we check into our immutability before doing this?
@@ -459,7 +492,17 @@ void Corona::loadLayout(const QString &configName)
     d->importLayout(*conf, false);
 }
 
+QList<Plasma::Containment *> Corona::importLayout(const KConfigGroup &conf)
+{
+    return d->importLayout(conf, true);
+}
+
 QList<Plasma::Containment *> Corona::importLayout(const KConfigBase &conf)
+{
+    return d->importLayout(conf, true);
+}
+
+QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigBase &conf, bool mergeConfig)
 {
     if (const KConfigGroup *group = dynamic_cast<const KConfigGroup *>(&conf)) {
         if (!group->isValid()) {
@@ -467,11 +510,6 @@ QList<Plasma::Containment *> Corona::importLayout(const KConfigBase &conf)
         }
     }
 
-    return d->importLayout(conf, true);
-}
-
-QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigBase &conf, bool mergeConfig)
-{
     QList<Plasma::Containment *> newContainments;
     QSet<uint> containmentsIds;
 
