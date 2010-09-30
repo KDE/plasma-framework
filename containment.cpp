@@ -1262,7 +1262,14 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
                 applet->setPos(geometry.topLeft() - QPointF(int(left), int(top)));
                 applet->show();
             } else {
-                applet = q->addApplet("internal:extender", QVariantList(), geometry);
+                applet = addApplet("internal:extender", QVariantList(), geometry, 0, true);
+                applet->hide();
+                applet->init();
+                appletAppeared(applet);
+                applet->flushPendingConstraintsEvents();
+                applet->d->scheduleModificationNotification();
+                applet->adjustSize();
+                applet->show();
             }
             item->setExtender(applet->extender());
         }
