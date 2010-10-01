@@ -67,7 +67,11 @@ class PLASMA_EXPORT Theme : public QObject
             ButtonTextColor = 4, /** text color for buttons */
             ButtonBackgroundColor = 8, /** background color for buttons*/
             LinkColor = 16, /** color for clickable links */
-            VisitedLinkColor = 32 /** color visited clickable links */
+            VisitedLinkColor = 32, /** color visited clickable links */
+	    ButtonHoverColor = 64, /** color for hover effect on buttons */
+	    ButtonFocusColor = 128, /** color for focus effect on buttons */
+	    ViewTextColor = 256, /** text color for views */
+	    ViewBackgroundColor = 512 /** background color for views */
         };
 
         enum FontRole {

@@ -56,6 +56,11 @@ namespace Plasma
 static const int DEFAULT_WALLPAPER_WIDTH = 1920;
 static const int DEFAULT_WALLPAPER_HEIGHT = 1200;
 
+enum styles {
+    DEFAULTSTYLE,
+    SVGSTYLE
+};
+
 class ThemePrivate
 {
 public:
@@ -162,6 +167,7 @@ public:
     QHash<QString, QString> keysToCache;
     QHash<QString, QString> idsToCache;
     QHash<QString, QString> animationMapping;
+    QHash<styles, QString> cachedStyleSheets;
     QTimer *saveTimer;
 
 #ifdef Q_WS_X11
@@ -247,6 +253,7 @@ void ThemePrivate::discardCache(const QString &oldThemeName, bool keepSvgElement
         pixmapCache = 0;
         KSharedDataCache::deleteCache("plasma_theme_" + oldThemeName);
     }
+    cachedStyleSheets.clear();
     invalidElements.clear();
     pixmapsToCache.clear();
     saveTimer->stop();
@@ -291,17 +298,43 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
 {
     QString stylesheet;
     if (css.isEmpty()) {
-        stylesheet = QString("\n\
-                    body {\n\
-                        color: %textcolor;\n\
-                        font-size: %fontsize;\n\
-                        font-family: %fontfamily;\n\
-                    }\n\
-                    a:active  { color: %activatedlink; }\n\
-                    a:link    { color: %link; }\n\
-                    a:visited { color: %visitedlink; }\n\
-                    a:hover   { color: %hoveredlink; text-decoration: none; }\n\
-                    ");
+        stylesheet = cachedStyleSheets[DEFAULTSTYLE];
+        if(stylesheet.isEmpty()) {
+            stylesheet = QString("\n\
+                        body {\n\
+                            color: %textcolor;\n\
+                            font-size: %fontsize;\n\
+                            font-family: %fontfamily;\n\
+                        }\n\
+                        a:active  { color: %activatedlink; }\n\
+                        a:link    { color: %link; }\n\
+                        a:visited { color: %visitedlink; }\n\
+                        a:hover   { color: %hoveredlink; text-decoration: none; }\n\
+                        ");
+            stylesheet = processStyleSheet(stylesheet);
+        }
+        cachedStyleSheets[DEFAULTSTYLE] = stylesheet;
+        return stylesheet;
+    } else if(css == "SVG") {
+        stylesheet = cachedStyleSheets[SVGSTYLE];
+        if(stylesheet.isEmpty()) {
+            QString skel = ".ColorScheme-%1{color:%2;}";
+
+            stylesheet += skel.arg("Text","%textcolor");
+            stylesheet += skel.arg("Background","%backgroundcolor");
+
+            stylesheet += skel.arg("ButtonText","%buttontextcolor");
+            stylesheet += skel.arg("ButtonBackground","%buttonbackgroundcolor");
+            stylesheet += skel.arg("ButtonHover","%buttonhovercolor");
+            stylesheet += skel.arg("ButtonFocus","%buttonfocuscolor");
+
+            stylesheet += skel.arg("ViewText","%viewtextcolor");
+            stylesheet += skel.arg("ViewBackground","%viewbackgroundcolor");
+
+            stylesheet = processStyleSheet(stylesheet);
+        }
+        cachedStyleSheets[SVGSTYLE] = stylesheet;
+        return stylesheet;
     } else {
         stylesheet = css;
     }
@@ -319,8 +352,18 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
     elements["%hoveredlink"] =
                 Plasma::Theme::defaultTheme()->color(Plasma::Theme::HighlightColor).name();
     elements["%link"] = Plasma::Theme::defaultTheme()->color(Plasma::Theme::LinkColor).name();
+    elements["%buttontextcolor"] =
+                Plasma::Theme::defaultTheme()->color(Plasma::Theme::ButtonTextColor).name();
     elements["%buttonbackgroundcolor"] =
                 Plasma::Theme::defaultTheme()->color(Plasma::Theme::ButtonBackgroundColor).name();
+    elements["%buttonhovercolor"] =
+                Plasma::Theme::defaultTheme()->color(Plasma::Theme::ButtonHoverColor).name();
+    elements["%buttonfocuscolor"] =
+                Plasma::Theme::defaultTheme()->color(Plasma::Theme::ButtonFocusColor).name();
+    elements["%viewtextcolor"] =
+                Plasma::Theme::defaultTheme()->color(Plasma::Theme::ViewTextColor).name();
+    elements["%viewbackgroundcolor"] =
+                Plasma::Theme::defaultTheme()->color(Plasma::Theme::ViewBackgroundColor).name();
     elements["%smallfontsize"] =
                 QString("%1pt").arg(KGlobalSettings::smallestReadableFont().pointSize());
 
@@ -726,23 +769,30 @@ QColor Theme::color(ColorRole role) const
     switch (role) {
         case TextColor:
             return d->colorScheme.foreground(KColorScheme::NormalText).color();
-            break;
 
         case HighlightColor:
             return d->colorScheme.decoration(KColorScheme::HoverColor).color();
-            break;
 
         case BackgroundColor:
             return d->colorScheme.background(KColorScheme::NormalBackground).color();
-            break;
 
         case ButtonTextColor:
             return d->buttonColorScheme.foreground(KColorScheme::NormalText).color();
-            break;
 
         case ButtonBackgroundColor:
             return d->buttonColorScheme.background(KColorScheme::NormalBackground).color();
-            break;
+
+        case ButtonHoverColor:
+            return d->buttonColorScheme.decoration(KColorScheme::HoverColor).color();
+
+        case ButtonFocusColor:
+            return d->buttonColorScheme.decoration(KColorScheme::FocusColor).color();
+
+        case ViewTextColor:
+            return d->viewColorScheme.foreground(KColorScheme::NormalText).color();
+
+        case ViewBackgroundColor:
+            return d->viewColorScheme.background(KColorScheme::NormalBackground).color();
 
         case LinkColor:
             return d->viewColorScheme.foreground(KColorScheme::LinkText).color();

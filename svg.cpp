@@ -22,6 +22,7 @@
 #include <cmath>
 
 #include <QDir>
+#include <QDomDocument>
 #include <QMatrix>
 #include <QPainter>
 #include <QSharedData>
@@ -31,6 +32,7 @@
 #include <kcolorscheme.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
+#include <kfilterdev.h>
 #include <kiconeffect.h>
 #include <kglobalsettings.h>
 #include <ksharedptr.h>
@@ -51,19 +53,63 @@ class SharedSvgRenderer : public QSvgRenderer, public QSharedData
             : QSvgRenderer(parent)
         {}
 
-        SharedSvgRenderer(const QString &filename, QObject *parent = 0)
-            : QSvgRenderer(filename, parent)
-        {}
+        SharedSvgRenderer(const QString &filename, const QString &styleSheet, QObject *parent = 0);
 
-        SharedSvgRenderer(const QByteArray &contents, QObject *parent = 0)
-            : QSvgRenderer(contents, parent)
-        {}
+        SharedSvgRenderer(const QByteArray &contents, const QString &styleSheet, QObject *parent = 0);
 
         ~SharedSvgRenderer()
         {
             //kDebug() << "leaving this world for a better one.";
         }
+
+    private:
+        bool load(const QByteArray &contents, const QString &styleSheet);
 };
+
+SharedSvgRenderer::SharedSvgRenderer(const QString &filename, const QString &styleSheet, QObject *parent)
+    : QSvgRenderer(parent)
+{
+    QIODevice *file = KFilterDev::deviceForFile(filename, "application/x-gzip");
+    if (!file->open(QIODevice::ReadOnly)) {
+        delete file;
+        return;
+    }
+    load(file->readAll(), styleSheet);
+    delete file;
+}
+
+SharedSvgRenderer::SharedSvgRenderer(const QByteArray &contents, const QString &styleSheet, QObject *parent)
+    : QSvgRenderer(parent)
+{
+    load(contents, styleSheet);
+}
+
+bool SharedSvgRenderer::load(const QByteArray &contents, const QString &styleSheet)
+{
+    if (styleSheet.isEmpty() || ! contents.contains("current-color-scheme")) {
+        return QSvgRenderer::load(contents);
+    }
+    QDomDocument svg;
+    if (!svg.setContent(contents)) {
+        return false;
+    }
+    QDomNode defs = svg.elementsByTagName("defs").item(0);
+
+    for (QDomElement style = defs.firstChildElement("style"); !style.isNull();
+         style = style.nextSiblingElement("style")) {
+        if (style.attribute("id") != "current-color-scheme") {
+            continue;
+        }
+        QDomElement colorScheme = svg.createElement("style");
+        colorScheme.setAttribute("type", "text/css");
+        colorScheme.setAttribute("id", "current-color-scheme");
+        defs.replaceChild(colorScheme, style);
+        colorScheme.appendChild(svg.createCDATASection(styleSheet));
+
+        break;
+    }
+    return QSvgRenderer::load(svg.toByteArray(-1));
+}
 
 class SvgPrivate
 {
@@ -71,10 +117,12 @@ class SvgPrivate
         SvgPrivate(Svg *svg)
             : q(svg),
               renderer(0),
+              styleCrc(0),
               lastModified(0),
               multipleImages(false),
               themed(false),
               applyColors(false),
+              usesColors(false),
               cacheRendering(true),
               themeFailed(false)
         {
@@ -145,8 +193,8 @@ class SvgPrivate
             QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
                                 q, SLOT(colorsChanged()));
 
-            checkApplyColorHint();
-            if (applyColors && !actualTheme()->colorScheme()) {
+            checkColorHints();
+            if (usesColors && !actualTheme()->colorScheme()) {
                 QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
                                  q, SLOT(colorsChanged()));
             }
@@ -291,7 +339,10 @@ class SvgPrivate
             //kDebug() << "FAIL! **************************";
             //kDebug() << path << "**";
 
-            QHash<QString, SharedSvgRenderer::Ptr>::const_iterator it = s_renderers.constFind(path);
+            QByteArray styleSheet = actualTheme()->styleSheet("SVG").toUtf8();
+            styleCrc = qChecksum(styleSheet, styleSheet.size());
+
+            QHash<QString, SharedSvgRenderer::Ptr>::const_iterator it = s_renderers.constFind(styleCrc + path);
 
             if (it != s_renderers.constEnd()) {
                 //kDebug() << "gots us an existing one!";
@@ -300,10 +351,10 @@ class SvgPrivate
                 if (path.isEmpty()) {
                     renderer = new SharedSvgRenderer();
                 } else {
-                    renderer = new SharedSvgRenderer(path);
+                    renderer = new SharedSvgRenderer(path, actualTheme()->styleSheet("SVG"));
                 }
 
-                s_renderers[path] = renderer;
+                s_renderers[styleCrc + path] = renderer;
             }
 
             if (size == QSizeF()) {
@@ -315,7 +366,7 @@ class SvgPrivate
         {
             if (renderer && renderer.count() == 2) {
                 // this and the cache reference it
-                s_renderers.erase(s_renderers.find(path));
+                s_renderers.erase(s_renderers.find(styleCrc + path));
 
                 if (theme) {
                     theme.data()->releaseRectsCache(path);
@@ -323,6 +374,7 @@ class SvgPrivate
             }
 
             renderer = 0;
+	    styleCrc = 0;
             localRectCache.clear();
         }
 
@@ -380,9 +432,18 @@ class SvgPrivate
             return renderer->matrixForElement(elementId);
         }
 
-        void checkApplyColorHint()
+        void checkColorHints()
         {
-            applyColors = elementRect("hint-apply-color-scheme").isValid();
+            if (elementRect("hint-apply-color-scheme").isValid()) {
+                applyColors = true;
+                usesColors = true;
+            } else if (elementRect("current-color-scheme").isValid()) {
+                applyColors = false;
+                usesColors = true;
+            } else {
+                applyColors = false;
+                usesColors = false;
+            }
         }
 
         //Folowing two are utility functions to snap rendered elements to the pixel grid
@@ -439,10 +500,10 @@ class SvgPrivate
         void themeChanged()
         {
             // check if new theme svg wants colorscheme applied
-            bool wasApplyColors = applyColors;
-            checkApplyColorHint();
-            if (applyColors && actualTheme()->colorScheme()) {
-                if (!wasApplyColors) {
+            bool wasUsesColors = usesColors;
+            checkColorHints();
+            if (usesColors && actualTheme()->colorScheme()) {
+                if (!wasUsesColors) {
                     QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
                                      q, SLOT(colorsChanged()));
                 }
@@ -466,7 +527,7 @@ class SvgPrivate
 
         void colorsChanged()
         {
-            if (!applyColors) {
+            if (!usesColors) {
                 return;
             }
 
@@ -485,10 +546,12 @@ class SvgPrivate
         QString path;
         QSizeF size;
         QSizeF naturalSize;
+        QChar styleCrc;
         unsigned int lastModified;
         bool multipleImages : 1;
         bool themed : 1;
         bool applyColors : 1;
+        bool usesColors : 1;
         bool cacheRendering : 1;
         bool themeFailed : 1;
 };
