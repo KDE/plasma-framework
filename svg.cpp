@@ -237,7 +237,7 @@ class SvgPrivate
         QPixmap findInCache(const QString &elementId, const QSizeF &s = QSizeF())
         {
             QSize size;
-            const QChar dash('-');
+            const char dash('-');
             QString actualElementId(QString::number(qRound(s.width())) % dash % QString::number(qRound(s.height())) % dash % elementId);
 
             if (elementId.isEmpty() || !q->hasElement(actualElementId)) {
