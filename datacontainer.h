@@ -169,16 +169,6 @@ class PLASMA_EXPORT DataContainer : public QObject
          */
         void forceImmediateUpdate();
 
-        /**
-         * Stores the DataContainer to disk.
-         */
-        void store();
-
-        /**
-         * Retrieves the DataContainer from disk.
-         */
-        void retrieve();
-
     Q_SIGNALS:
         /**
          * Emitted when the data has been updated, allowing visualizations to
@@ -263,6 +253,8 @@ class PLASMA_EXPORT DataContainer : public QObject
 
         Q_PRIVATE_SLOT(d, void storeJobFinished(KJob *job))
         Q_PRIVATE_SLOT(d, void populateFromStoredData(KJob *job))
+        Q_PRIVATE_SLOT(d, void store())
+        Q_PRIVATE_SLOT(d, void retrieve())
 };
 
 } // Plasma namespace

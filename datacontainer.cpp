@@ -185,28 +185,28 @@ DataEngine* DataContainer::getDataEngine()
     return de;
 }
 
-void DataContainer::store()
+void DataContainerPrivate::store()
 {
-    if (!needsToBeStored() || !isStorageEnabled()){
+    if (!q->needsToBeStored() || !q->isStorageEnabled()){
         return;
     }
 
-    DataEngine* de = getDataEngine();
+    DataEngine* de = q->getDataEngine();
     if (de == NULL) {
         return;
     }
 
-    setNeedsToBeStored(false);
+    q->setNeedsToBeStored(false);
 
-    if (d->store == NULL) {
-        d->store = new Storage(de->name(), 0);
+    if (storage == NULL) {
+        storage = new Storage(de->name(), 0);
     }
 
-    KConfigGroup op = d->store->operationDescription("save");
-    op.writeEntry("source", objectName());
-    DataEngine::Data dataToStore = data();
+    KConfigGroup op = storage->operationDescription("save");
+    op.writeEntry("source", q->objectName());
+    DataEngine::Data dataToStore = q->data();
     DataEngine::Data::const_iterator it = dataToStore.constBegin();
-    while (it != dataToStore.constEnd() && dataToStore.constEnd() == data().constEnd()) {
+    while (it != dataToStore.constEnd() && dataToStore.constEnd() == q->data().constEnd()) {
         QVariant v = it.value();
         if ((it.value().type() == QVariant::String) || (it.value().type() == QVariant::Int)) {
             op.writeEntry("key", it.key());
@@ -219,35 +219,38 @@ void DataContainer::store()
             op.writeEntry("data", b.toBase64());
         }
         ++it;
-        if (d->store == NULL) {
-            d->store = new Storage(de->name(), 0);
+        if (storage == NULL) {
+            storage = new Storage(de->name(), 0);
         }
-        ServiceJob* job = d->store->startOperationCall(op);
-        d->storeCount++;
-        connect(job, SIGNAL(finished(KJob*)), this, SLOT(storeJobFinished(KJob*)));
+        ServiceJob* job = storage->startOperationCall(op);
+        storageCount++;
+        QObject::connect(job, SIGNAL(finished(KJob*)), q, SLOT(storeJobFinished(KJob*)));
     }
 }
 
 void DataContainerPrivate::storeJobFinished(KJob* )
 {
-    --storeCount;
-    if (storeCount < 1) {
-        store->deleteLater();
-        store = 0;
+    --storageCount;
+    if (storageCount < 1) {
+        storage->deleteLater();
+        storage = 0;
     }
 }
 
-void DataContainer::retrieve()
+void DataContainerPrivate::retrieve()
 {
-    DataEngine* de = getDataEngine();
+    DataEngine* de = q->getDataEngine();
     if (de == NULL) {
         return;
     }
-    Storage* store = new Storage(de->name(), 0);
-    KConfigGroup retrieveGroup = store->operationDescription("retrieve");
-    retrieveGroup.writeEntry("source", objectName());
-    ServiceJob* retrieveJob = store->startOperationCall(retrieveGroup);
-    connect(retrieveJob, SIGNAL(result(KJob*)), this,
+    if (!storage) {
+        storage = new Storage(de->name(), 0);
+    }
+
+    KConfigGroup retrieveGroup = storage->operationDescription("retrieve");
+    retrieveGroup.writeEntry("source", q->objectName());
+    ServiceJob* retrieveJob = storage->startOperationCall(retrieveGroup);
+    QObject::connect(retrieveJob, SIGNAL(result(KJob*)), q,
             SLOT(populateFromStoredData(KJob*)));
 }
 

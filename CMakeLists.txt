@@ -242,7 +242,7 @@ endif(PHONON_FOUND)
 kde4_add_library(plasma ${LIBRARY_TYPE} ${plasma_LIB_SRCS})
 
 target_link_libraries(plasma ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
-                             ${QT_QTSCRIPT_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTXML_LIBRARY}
+                             ${QT_QTSCRIPT_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTSQL_LIBRARY}
                              ${KDE4_KDEUI_LIBS} kdnssd threadweaver ${PLASMA_EXTRA_LIBS})
 
 if(QCA2_FOUND)

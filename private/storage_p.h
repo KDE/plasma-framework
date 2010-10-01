@@ -22,6 +22,8 @@
 #ifndef PLASMA_STORAGE_H
 #define PLASMA_STORAGE_H
 
+#include <QSqlDatabase>
+
 #include <plasma/service.h>
 #include <plasma/servicejob.h>
 
@@ -35,6 +37,8 @@ public:
                const QMap<QString, QVariant>& parameters,
                QObject *parent = 0);
     void start();
+private:
+    QSqlDatabase m_db;
 };
 //End StorageJob
 

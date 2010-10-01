@@ -35,12 +35,12 @@ class DataContainerPrivate
 public:
     DataContainerPrivate(DataContainer *container)
         : q(container),
-          store(NULL),
+          storage(NULL),
           dirty(false),
           cached(false),
           enableStorage(false),
           isStored(true),
-          storeCount(0)
+          storageCount(0)
     {}
 
     SignalRelay *signalRelay(const DataContainer *dc, QObject *visualization,
@@ -61,17 +61,20 @@ public:
      */
     void populateFromStoredData(KJob *job);
 
+    void store();
+    void retrieve();
+
     DataContainer *q;
     DataEngine::Data data;
     QMap<QObject *, SignalRelay *> relayObjects;
     QMap<uint, SignalRelay *> relays;
     QTime updateTs;
-    Storage* store;
+    Storage* storage;
     bool dirty : 1;
     bool cached : 1;
     bool enableStorage : 1;
     bool isStored : 1;
-    int  storeCount;
+    int  storageCount;
 };
 
 class SignalRelay : public QObject

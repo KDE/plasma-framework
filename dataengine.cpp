@@ -19,6 +19,7 @@
 
 #include "dataengine.h"
 #include "private/dataengine_p.h"
+#include "private/datacontainer_p.h"
 
 #include <QQueue>
 #include <QTimer>
@@ -316,7 +317,7 @@ void DataEngine::removeSource(const QString &source)
             }
         }
 
-        s->store();
+        s->d->store();
         s->disconnect(this);
         s->deleteLater();
         d->sources.erase(it);
@@ -499,7 +500,9 @@ void DataEngine::setName(const QString &name)
 void DataEngine::setStorageEnabled(const QString &source, bool store)
 {
     DataContainer *s = d->source(source, false);
-    s->setStorageEnabled(store);
+    if (s) {
+        s->setStorageEnabled(store);
+    }
 }
 
 // Private class implementations
