@@ -59,6 +59,10 @@ void StorageJob::start()
 
     if (operationName() == "save") {
       QSqlQuery query(m_db);
+      query.prepare("delete from data where key = :id");
+      query.bindValue(":id", params["key"].toString());
+      query.exec();
+
       query.prepare("insert into data values(:id, :source, :datavalue, 'now')");
       query.bindValue(":id", params["key"].toString());
       query.bindValue(":source", params["source"].toString());
