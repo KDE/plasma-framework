@@ -24,13 +24,15 @@
 #include <QFileInfo>
 
 #include <kconfiggroup.h>
+#include <kio/job.h>
+#include <kmimetype.h>
 #include <kstandarddirs.h>
 #include <kservicetypetrader.h>
-#include <kurl.h>
+#include <ktar.h>
 #include <ktemporaryfile.h>
 #include <ktempdir.h>
+#include <kurl.h>
 #include <kzip.h>
-#include <kio/job.h>
 
 #include "package.h"
 #include "private/packages_p.h"
@@ -549,15 +551,28 @@ PackageMetadata PackageStructure::metadata()
         if (fileInfo.isDir()) {
             d->createPackageMetadata(d->path);
         } else if (fileInfo.exists()) {
-            KZip archive(d->path);
-            if (archive.open(QIODevice::ReadOnly)) {
-                const KArchiveDirectory *source = archive.directory();
+            KArchive *archive = 0;
+            KMimeType::Ptr mimetype = KMimeType::findByPath(d->path);
+
+            if (mimetype->is("application/zip")) {
+                archive = new KZip(d->path);
+            } else if (mimetype->is("application/x-compressed-tar") ||
+                       mimetype->is("application/x-tar")|| mimetype->is("application/x-bzip-compressed-tar")) {
+                archive = new KTar(d->path);
+            } else {
+                kWarning() << "Could not open package file, unsupported archive format:" << d->path << mimetype->name();
+            }
+
+            if (archive->open(QIODevice::ReadOnly)) {
+                const KArchiveDirectory *source = archive->directory();
                 KTempDir tempdir;
                 source->copyTo(tempdir.name());
                 d->createPackageMetadata(tempdir.name());
             } else {
                 kWarning() << "Could not open package file:" << d->path;
             }
+
+            delete archive;
         }
     }
 
