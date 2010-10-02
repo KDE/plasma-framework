@@ -118,8 +118,13 @@ BEGIN_DECLARE_METHOD(QGraphicsGridLayout, addItem) {
     return eng->undefinedValue();
 } END_DECLARE_METHOD
 
-BEGIN_DECLARE_METHOD(QGraphicsItem, toString) {
+BEGIN_DECLARE_METHOD(QGraphicsGridLayout, toString) {
     return QScriptValue(eng, "QGraphicsGridLayout");
+} END_DECLARE_METHOD
+
+BEGIN_DECLARE_METHOD(QGraphicsGridLayout, activate) {
+    self->activate();
+    return eng->undefinedValue();
 } END_DECLARE_METHOD
 
 /////////////////////////////////////////////////////////////
@@ -168,6 +173,7 @@ QScriptValue constructGridLayoutClass(QScriptEngine *eng)
     ADD_METHOD(proto, setContentsMargins);
     ADD_METHOD(proto, addItem);
     ADD_METHOD(proto, toString);
+    ADD_METHOD(proto, activate);
 
     QScript::registerPointerMetaType<QGraphicsGridLayout>(eng, proto);
 

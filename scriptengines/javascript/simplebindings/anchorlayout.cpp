@@ -105,10 +105,16 @@ BEGIN_DECLARE_METHOD(QGraphicsAnchorLayout, addAnchors) {
     return eng->undefinedValue();
 } END_DECLARE_METHOD
 
-BEGIN_DECLARE_METHOD(QGraphicsItem, toString) {
+BEGIN_DECLARE_METHOD(QGraphicsAnchorLayout, toString) {
     return QScriptValue(eng, "QGraphicsAnchorLayout");
 } END_DECLARE_METHOD
 
+BEGIN_DECLARE_METHOD(QGraphicsAnchorLayout, activate) {
+    self->activate();
+    return eng->undefinedValue();
+} END_DECLARE_METHOD
+
+/////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 class PrototypeAnchorLayout : public QGraphicsAnchorLayout
@@ -139,6 +145,7 @@ QScriptValue constructAnchorLayoutClass(QScriptEngine *eng)
     ADD_METHOD(proto, addAnchors);
     ADD_METHOD(proto, addCornerAnchors);
     ADD_METHOD(proto, toString);
+    ADD_METHOD(proto, activate);
 
     QScript::registerPointerMetaType<QGraphicsAnchorLayout>(eng, proto);
 

@@ -200,6 +200,11 @@ BEGIN_DECLARE_METHOD(QGraphicsLinearLayout, spacing) {
     return QScriptValue(eng, self->spacing());
 } END_DECLARE_METHOD
 
+BEGIN_DECLARE_METHOD(QGraphicsLinearLayout, activate) {
+    self->activate();
+    return eng->undefinedValue();
+} END_DECLARE_METHOD
+
 /////////////////////////////////////////////////////////////
 
 QScriptValue constructLinearLayoutClass(QScriptEngine *eng)
@@ -228,6 +233,7 @@ QScriptValue constructLinearLayoutClass(QScriptEngine *eng)
     ADD_METHOD(proto, removeItem);
     ADD_METHOD(proto, insertItem);
     ADD_METHOD(proto, toString);
+    ADD_METHOD(proto, activate);
 
     QScript::registerPointerMetaType<QGraphicsLinearLayout>(eng, proto);
 
