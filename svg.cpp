@@ -111,6 +111,7 @@ bool SharedSvgRenderer::load(const QByteArray &contents, const QString &styleShe
     return QSvgRenderer::load(svg.toByteArray(-1));
 }
 
+#define QLDASH QLatin1Char('-')
 class SvgPrivate
 {
     public:
@@ -137,21 +138,16 @@ class SvgPrivate
         QString cacheId(const QString &elementId)
         {
             if (size.isValid() && size != naturalSize) {
-                return QString("%3_%2_%1").arg(int(size.height()))
-                                        .arg(int(size.width()))
-                                        .arg(elementId);
+                return QString::number(int(size.height())) % QString::number(int(size.width())) % elementId;
             } else {
-                return QString("%2_%1").arg("Natural")
-                                        .arg(elementId);
+                return QLatin1Literal("Natural") % elementId;
             }
         }
 
         //This function is meant for the pixmap cache
         QString cachePath(const QString &path, const QSize &size)
         {
-             return QString("%3_%2_%1_").arg(int(size.height()))
-                                        .arg(int(size.width()))
-                                        .arg(path);
+            return QString::number(int(size.height())) % QString::number(int(size.width())) % path;
         }
 
         bool setImagePath(const QString &imagePath)
@@ -237,8 +233,9 @@ class SvgPrivate
         QPixmap findInCache(const QString &elementId, const QSizeF &s = QSizeF())
         {
             QSize size;
-            const char dash('-');
-            QString actualElementId(QString::number(qRound(s.width())) % dash % QString::number(qRound(s.height())) % dash % elementId);
+            QString actualElementId(QString::number(qRound(s.width())) % QLDASH %
+                                                    QString::number(qRound(s.height())) %
+                                                    QLDASH % elementId);
 
             if (elementId.isEmpty() || !q->hasElement(actualElementId)) {
                 actualElementId = elementId;
