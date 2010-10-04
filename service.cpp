@@ -95,7 +95,7 @@ void ServicePrivate::associatedGraphicsWidgetDestroyed(QObject *obj)
     associatedGraphicsWidgets.remove(static_cast<QGraphicsWidget*>(obj));
 }
 
-void ServicePrivate::publish(AnnouncementMethods methods, const QString &name, PackageMetadata metadata)
+void ServicePrivate::publish(AnnouncementMethods methods, const QString &name, const PackageMetadata &metadata)
 {
 #ifdef ENABLE_REMOTE_WIDGETS
     if (!serviceProvider) {
@@ -104,7 +104,7 @@ void ServicePrivate::publish(AnnouncementMethods methods, const QString &name, P
         serviceProvider = new ServiceProvider(name, q);
 
         if (methods.testFlag(ZeroconfAnnouncement) &&
-                (DNSSD::ServiceBrowser::isAvailable() == DNSSD::ServiceBrowser::Working)) {
+            (DNSSD::ServiceBrowser::isAvailable() == DNSSD::ServiceBrowser::Working)) {
             //TODO: dynamically pick a free port number.
             publicService = new DNSSD::PublicService(name, "_plasma._tcp", 4000);
 

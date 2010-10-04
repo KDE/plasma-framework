@@ -97,7 +97,7 @@ public:
     void associatedGraphicsWidgetDestroyed(QObject *obj);
 
     void publish(AnnouncementMethods methods, const QString &name,
-                 PackageMetadata metadata = PackageMetadata());
+                 const PackageMetadata &metadata = PackageMetadata());
 
     void unpublish();
 
