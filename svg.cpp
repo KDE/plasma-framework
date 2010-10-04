@@ -111,7 +111,8 @@ bool SharedSvgRenderer::load(const QByteArray &contents, const QString &styleShe
     return QSvgRenderer::load(svg.toByteArray(-1));
 }
 
-#define QLDASH QLatin1Char('-')
+#define QLSEP QLatin1Char('_')
+#define CACHE_ID_WITH_SIZE(size, id) QString::number(int(size.width())) % QString::number(int(size.height())) % QLSEP % id
 class SvgPrivate
 {
     public:
@@ -138,16 +139,16 @@ class SvgPrivate
         QString cacheId(const QString &elementId)
         {
             if (size.isValid() && size != naturalSize) {
-                return QString::number(int(size.height())) % QString::number(int(size.width())) % elementId;
+                return CACHE_ID_WITH_SIZE(size, elementId);
             } else {
-                return QLatin1Literal("Natural") % elementId;
+                return QLatin1Literal("Natural") % QLSEP % elementId;
             }
         }
 
         //This function is meant for the pixmap cache
         QString cachePath(const QString &path, const QSize &size)
         {
-            return QString::number(int(size.height())) % QString::number(int(size.width())) % path;
+            return CACHE_ID_WITH_SIZE(size, path);
         }
 
         bool setImagePath(const QString &imagePath)
@@ -233,9 +234,7 @@ class SvgPrivate
         QPixmap findInCache(const QString &elementId, const QSizeF &s = QSizeF())
         {
             QSize size;
-            QString actualElementId(QString::number(qRound(s.width())) % QLDASH %
-                                                    QString::number(qRound(s.height())) %
-                                                    QLDASH % elementId);
+            QString actualElementId(CACHE_ID_WITH_SIZE(s, elementId));
 
             if (elementId.isEmpty() || !q->hasElement(actualElementId)) {
                 actualElementId = elementId;
@@ -300,7 +299,7 @@ class SvgPrivate
             }
 
             if (cacheRendering) {
-                actualTheme()->insertIntoCache(id, p, QString::number((qint64)q, 16) % actualElementId);
+                actualTheme()->insertIntoCache(id, p, QString::number((qint64)q, 16) % QLSEP % actualElementId);
             }
 
             return p;
