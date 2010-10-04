@@ -1630,13 +1630,18 @@ void Applet::publish(AnnouncementMethods methods, const QString &resourceName)
 {
     if (d->package) {
         d->package->d->publish(methods);
-    } else {
+    } else if (d->appletDescription.isValid()) {
         if (!d->service) {
             d->service = new PlasmoidService(this);
         }
 
         kDebug() << "publishing package under name " << resourceName;
-        d->service->d->publish(methods, resourceName);
+        PackageMetadata pm;
+        pm.setName(d->appletDescription.name());
+        pm.setDescription(d->appletDescription.comment());
+        d->service->d->publish(methods, resourceName, pm);
+    } else {
+        kDebug() << "Can not publish invalid applets.";
     }
 }
 
