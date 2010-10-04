@@ -71,8 +71,6 @@ private Q_SLOTS:
     void reportError(ScriptEnv *error, bool fatal);
 
 private:
-    bool importExtensions();
-    bool importBuiltinExtension(const QString &extension);
     void setupObjects();
     void callPlasmoidFunction(const QString &functionName, const QScriptValueList &args = QScriptValueList(), ScriptEnv *env = 0);
     QScriptValue createKeyEventObject(QKeyEvent *event);
