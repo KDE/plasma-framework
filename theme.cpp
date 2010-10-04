@@ -651,11 +651,13 @@ QString Theme::imagePath(const QString &name) const
         return QString();
     }
 
-    QString path = d->findInTheme(name % QLatin1Literal(".svgz"), d->themeName);
+    const QString svgzName = name % QLatin1Literal(".svgz");
+    QString path = d->findInTheme(svgzName, d->themeName);
 
     if (path.isEmpty()) {
         // try for an uncompressed svg file
-        path = d->findInTheme(name % QLatin1Literal(".svg"), d->themeName);
+        const QString svgName = name % QLatin1Literal(".svg");
+        path = d->findInTheme(svgName, d->themeName);
 
         // search in fallback themes if necessary
         for (int i = 0; path.isEmpty() && i < d->fallbackThemes.count(); ++i) {
@@ -664,11 +666,11 @@ QString Theme::imagePath(const QString &name) const
             }
 
             // try a compressed svg file in the fallback theme
-            path = d->findInTheme(name % QLatin1Literal(".svgz"), d->fallbackThemes[i]);
+            path = d->findInTheme(svgzName % QLatin1Char('z'), d->fallbackThemes[i]);
 
             if (path.isEmpty()) {
                 // try an uncompressed svg file in the fallback theme
-                path = d->findInTheme(name % QLatin1Literal(".svg"), d->fallbackThemes[i]);
+                path = d->findInTheme(svgName, d->fallbackThemes[i]);
             }
         }
     }
