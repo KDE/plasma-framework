@@ -90,32 +90,14 @@ QPixmap shadowText(QString text, const QFont &font, QColor textColor, QColor sha
     shadowBlur(img, radius, shadowColor);
 
     //Compose text and shadow
-    int addSizeX;
-    int addSizeY;
-    if (offset.x() > radius) {
-        addSizeX = abs(offset.x()) - radius;
-    } else {
-        addSizeX = 0;
-    }
-    if (offset.y() > radius) {
-        addSizeY = abs(offset.y()) - radius;
-    } else {
-        addSizeY = 0;
-    }
+    int addSizeX = qMax(0, qAbs(offset.x()) - radius);
+    int addSizeY = qMax(0, qAbs(offset.y()) - radius);
 
     QPixmap finalPixmap(img.size() + QSize(addSizeX, addSizeY));
     finalPixmap.fill(Qt::transparent);
     p.begin(&finalPixmap);
-    QPointF offsetF(offset);
-    QPointF textTopLeft(finalPixmap.rect().topLeft() +
-                        QPointF ((finalPixmap.width() - textPixmap.width()) / 2.0, (finalPixmap.height() - textPixmap.height()) / 2.0) -
-                        (offsetF / 2.0));
-    QPointF shadowTopLeft(finalPixmap.rect().topLeft() +
-                          QPointF ((finalPixmap.width() - img.width()) / 2.0, (finalPixmap.height() - img.height()) / 2.0) +
-                          (offsetF / 2.0));
-
-    p.drawImage(shadowTopLeft, img);
-    p.drawPixmap(textTopLeft, textPixmap);
+    p.drawImage(qMax(0, offset.x()), qMax(0, offset.y()), img);
+    p.drawPixmap(radius + qMax(0, -offset.x()), radius + qMax(0, -offset.y()), textPixmap);
     p.end();
 
     return finalPixmap;
