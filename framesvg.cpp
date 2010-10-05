@@ -161,6 +161,7 @@ void FrameSvg::setElementPrefix(const QString &prefix)
                 // frame to be in the frames collection already
                 const QString key = d->cacheId(oldFrameData, d->prefix);
                 //kDebug() << this << "     1. inserting as" << key;
+
                 FrameSvgPrivate::s_sharedFrames.insert(key, newFd);
             }
         } else {
@@ -240,6 +241,7 @@ void FrameSvg::resizeFrame(const QSizeF &size)
         return;
     }
 
+    const QString oldKey = d->cacheId(fd, d->prefix);
     const QSize currentSize = fd->frameSize;
     fd->frameSize = size.toSize();
     const QString newKey = d->cacheId(fd, d->prefix);
@@ -257,7 +259,6 @@ void FrameSvg::resizeFrame(const QSizeF &size)
         if (fd->deref(this)) {
             //const QString oldKey = d->cacheId(fd, d->prefix);
             //kDebug() << "1. Removing it" << oldKey << fd->refcount;
-            const QString oldKey = d->cacheId(fd, d->prefix);
             FrameSvgPrivate::s_sharedFrames.remove(oldKey);
             delete fd;
         }
@@ -268,7 +269,6 @@ void FrameSvg::resizeFrame(const QSizeF &size)
     if (fd->refcount() == 1) {
         // we're the only user of it, let's remove it from the shared keys
         // we don't want to deref it, however, as we'll still be using it
-        const QString oldKey = d->cacheId(fd, d->prefix);
         FrameSvgPrivate::s_sharedFrames.remove(oldKey);
     } else {
         // others are using it, but we wish to change its size. so deref it,
@@ -530,6 +530,7 @@ QPixmap FrameSvgPrivate::alphaMask()
             // if successful, ref and insert, otherwise create a new one
             // and insert that into both the shared frames and our frames.
             FrameData *maskFrame = s_sharedFrames.value(key);
+
             if (maskFrame) {
                 maskFrame->ref(q);
             } else {
@@ -543,7 +544,14 @@ QPixmap FrameSvgPrivate::alphaMask()
 
         FrameData *maskFrame = frames[prefix];
         if (maskFrame->cachedBackground.isNull() || maskFrame->frameSize != frameSize(frame)) {
+            const QString oldKey = cacheId(maskFrame, prefix);
             maskFrame->frameSize = frameSize(frame).toSize();
+            const QString newKey = cacheId(maskFrame, prefix);
+            if (s_sharedFrames.contains(oldKey)) {
+                s_sharedFrames.remove(oldKey);
+                s_sharedFrames.insert(newKey, maskFrame);
+            }
+
             maskFrame->cachedBackground = QPixmap();
 
             generateBackground(maskFrame);
