@@ -168,7 +168,7 @@ void SimpleJavaScriptApplet::extenderItemRestored(Plasma::ExtenderItem* item)
     QScriptValueList args;
     args << m_engine->newQObject(item, QScriptEngine::AutoOwnership, QScriptEngine::PreferExistingWrapperObject);
 
-    if (!env->callEventListeners("initExtenderItem")) {
+    if (!env->callEventListeners("initExtenderItem", args)) {
         callPlasmoidFunction("initExtenderItem", args, env);
     }
 }
