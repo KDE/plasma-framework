@@ -151,9 +151,10 @@ void SimpleJavaScriptApplet::dataUpdated(const QString &name, const DataEngine::
         return;
     }
 
-    if (!env->callEventListeners("dataUpdated")) {
-        QScriptValueList args;
-        args << m_engine->toScriptValue(name) << m_engine->toScriptValue(data);
+    QScriptValueList args;
+    args << m_engine->toScriptValue(name) << m_engine->toScriptValue(data);
+
+    if (!env->callEventListeners("dataUpdated", args)) {
         callPlasmoidFunction("dataUpdated", args, env);
     }
 }
