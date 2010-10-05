@@ -2,7 +2,7 @@ include_directories(${KDE4_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT
 
 MACRO(SODEP_UNIT_TESTS)
   FOREACH(_testname ${ARGN})
-    kde4_add_unit_test(${_testname} NOGUI ${_testname}.cpp)
+    kde4_add_unit_test(${_testname} TESTNAME plasma-sodep-${_testname} NOGUI ${_testname}.cpp)
     target_link_libraries(${_testname} ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY} ${QT_QTNETWORK_LIBRARY} QtJolie)
     add_definitions(-DDATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}\\"")
   ENDFOREACH(_testname)
