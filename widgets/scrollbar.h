@@ -53,7 +53,7 @@ public:
     /**
      * Creates a scrollbar; the default orientation is vertical
      */
-    explicit ScrollBar(QGraphicsWidget *parent);
+    explicit ScrollBar(QGraphicsWidget *parent=0);
 
     ~ScrollBar();
 
