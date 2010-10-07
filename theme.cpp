@@ -666,7 +666,7 @@ QString Theme::imagePath(const QString &name) const
             }
 
             // try a compressed svg file in the fallback theme
-            path = d->findInTheme(svgzName % QLatin1Char('z'), d->fallbackThemes[i]);
+            path = d->findInTheme(svgName % QLatin1Char('z'), d->fallbackThemes[i]);
 
             if (path.isEmpty()) {
                 // try an uncompressed svg file in the fallback theme
