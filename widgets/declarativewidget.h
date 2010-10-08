@@ -22,6 +22,7 @@
 
 #include <QtGui/QGraphicsWidget>
 
+#include <plasma/plasma_export.h>
 
 class QDeclarativeEngine;
 class QDeclarativeComponent;
@@ -44,7 +45,7 @@ class DeclarativeWidgetPrivate;
  * tere will be its own QDeclarativeEngine with a single root object,
  * described in the QML file.
  */
-class DeclarativeWidget : public QGraphicsWidget
+class PLASMA_EXPORT DeclarativeWidget : public QGraphicsWidget
 {
     Q_OBJECT
 
