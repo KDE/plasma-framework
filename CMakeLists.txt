@@ -171,6 +171,7 @@ set(plasma_LIB_SRCS
     windoweffects.cpp
     widgets/checkbox.cpp
     widgets/combobox.cpp
+    widgets/declarativewidget.cpp
     widgets/flashinglabel.cpp
     widgets/frame.cpp
     widgets/groupbox.cpp
@@ -242,7 +243,7 @@ endif(PHONON_FOUND)
 kde4_add_library(plasma ${LIBRARY_TYPE} ${plasma_LIB_SRCS})
 
 target_link_libraries(plasma ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
-                             ${QT_QTSCRIPT_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTSQL_LIBRARY}
+                             ${QT_QTSCRIPT_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTSQL_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY}
                              ${KDE4_KDEUI_LIBS} kdnssd threadweaver ${PLASMA_EXTRA_LIBS})
 
 if(QCA2_FOUND)
@@ -350,6 +351,7 @@ install(FILES
 install(FILES
     widgets/checkbox.h
     widgets/combobox.h
+    widgets/declarativewidget.h
     widgets/flashinglabel.h
     widgets/frame.h
     widgets/groupbox.h
