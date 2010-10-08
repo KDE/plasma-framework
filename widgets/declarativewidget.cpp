@@ -86,13 +86,8 @@ void DeclarativeWidgetPrivate::execute(const QString &fileName)
         return;
     }
 
-    if (engine) {
-        delete engine;
-    }
-
-    if (component) {
-        delete component;
-    }
+    delete engine;
+    delete component;
 
     engine = new QDeclarativeEngine(q);
     component = new QDeclarativeComponent(engine, fileName, q);
