@@ -224,6 +224,7 @@ void ToolTipManager::setContent(QGraphicsWidget *widget, const ToolTipContent &d
 
     if (d->currentWidget == widget && d->tipWidget && d->tipWidget->isVisible()) {
         if (data.isEmpty()) {
+            // after this call, d->tipWidget will be null
             hide(widget);
         } else {
             d->delayedHide = data.autohide();
@@ -236,14 +237,15 @@ void ToolTipManager::setContent(QGraphicsWidget *widget, const ToolTipContent &d
             }
         }
 
-        d->tipWidget->setContent(widget, data);
-        d->tipWidget->prepareShowing();
+        if (d->tipWidget) {
+            d->tipWidget->setContent(widget, data);
+            d->tipWidget->prepareShowing();
 
-        //look if the data prefers aother graphicswidget, otherwise use the one used as event catcher
-        QGraphicsWidget *referenceWidget = data.graphicsWidget()?data.graphicsWidget():widget;
-
-        if (m_corona) {
-            d->tipWidget->moveTo(m_corona->popupPosition(referenceWidget, d->tipWidget->size(), Qt::AlignCenter));
+            if (m_corona) {
+                //look if the data prefers aother graphicswidget, otherwise use the one used as event catcher
+                QGraphicsWidget *referenceWidget = data.graphicsWidget() ? data.graphicsWidget() : widget;
+                d->tipWidget->moveTo(m_corona->popupPosition(referenceWidget, d->tipWidget->size(), Qt::AlignCenter));
+            }
         }
     }
 }
