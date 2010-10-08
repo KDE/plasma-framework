@@ -28,7 +28,7 @@
 #include <QGraphicsScene>
 #include <QTimer>
 
-#include <KDebug>
+#include <kdebug.h>
 
 namespace Plasma
 {
