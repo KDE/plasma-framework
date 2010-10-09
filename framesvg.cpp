@@ -77,7 +77,47 @@ void FrameSvg::setEnabledBorders(const EnabledBorders borders)
         return;
     }
 
-    d->frames[d->prefix]->enabledBorders = borders;
+    FrameData *fd = d->frames[d->prefix];
+
+    const QString oldKey = d->cacheId(fd, d->prefix);
+    const EnabledBorders oldBorders = fd->enabledBorders;
+    fd->enabledBorders = borders;
+    const QString newKey = d->cacheId(fd, d->prefix);
+    fd->enabledBorders = oldBorders;
+
+    //kDebug() << "looking for" << newKey;
+    FrameData *newFd = FrameSvgPrivate::s_sharedFrames.value(newKey);
+    if (newFd) {
+        //kDebug() << "FOUND IT!" << newFd->refcount;
+        // we've found a math, so insert that new one and ref it ..
+        newFd->ref(this);
+        d->frames.insert(d->prefix, newFd);
+
+        //.. then deref the old one and if it's no longer used, get rid of it
+        if (fd->deref(this)) {
+            //const QString oldKey = d->cacheId(fd, d->prefix);
+            //kDebug() << "1. Removing it" << oldKey << fd->refcount;
+            FrameSvgPrivate::s_sharedFrames.remove(oldKey);
+            delete fd;
+        }
+
+        return;
+    }
+
+    if (fd->refcount() == 1) {
+        // we're the only user of it, let's remove it from the shared keys
+        // we don't want to deref it, however, as we'll still be using it
+        FrameSvgPrivate::s_sharedFrames.remove(oldKey);
+    } else {
+        // others are using it, but we wish to change its size. so deref it,
+        // then create a copy of it (we're automatically ref'd via the ctor),
+        // then insert it into our frames.
+        fd->deref(this);
+        fd = new FrameData(*fd, this);
+        d->frames.insert(d->prefix, fd);
+    }
+
+    fd->enabledBorders = borders;
     d->updateAndSignalSizes();
 }
 
@@ -830,7 +870,7 @@ QString FrameSvgPrivate::cacheId(FrameData *frame, const QString &prefixToSave) 
 {
     const QSize size = frameSize(frame).toSize();
     const QChar s('_');
-    return (frame->enabledBorders ? '1' : '0') % s % QString::number(size.width()) % s % QString::number(size.height()) % s % prefixToSave % s % q->imagePath();
+    return QString::number(frame->enabledBorders) % s % QString::number(size.width()) % s % QString::number(size.height()) % s % prefixToSave % s % q->imagePath();
 }
 
 void FrameSvgPrivate::cacheFrame(const QString &prefixToSave, const QPixmap &background, const QPixmap &overlay)
