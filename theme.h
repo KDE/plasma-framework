@@ -71,7 +71,9 @@ class PLASMA_EXPORT Theme : public QObject
 	    ButtonHoverColor = 64, /** color for hover effect on buttons */
 	    ButtonFocusColor = 128, /** color for focus effect on buttons */
 	    ViewTextColor = 256, /** text color for views */
-	    ViewBackgroundColor = 512 /** background color for views */
+	    ViewBackgroundColor = 512, /** background color for views */
+	    ViewHoverColor = 1024, /** color for hover effect on view */
+	    ViewFocusColor = 2048 /** color for focus effect on view */
         };
 
         enum FontRole {

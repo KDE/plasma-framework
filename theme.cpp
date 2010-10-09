@@ -330,6 +330,8 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
 
             stylesheet += skel.arg("ViewText","%viewtextcolor");
             stylesheet += skel.arg("ViewBackground","%viewbackgroundcolor");
+            stylesheet += skel.arg("ViewHover","%viewhovercolor");
+            stylesheet += skel.arg("ViewFocus","%viewfocuscolor");
 
             stylesheet = processStyleSheet(stylesheet);
         }
@@ -364,6 +366,10 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
                 Plasma::Theme::defaultTheme()->color(Plasma::Theme::ViewTextColor).name();
     elements["%viewbackgroundcolor"] =
                 Plasma::Theme::defaultTheme()->color(Plasma::Theme::ViewBackgroundColor).name();
+    elements["%viewhovercolor"] =
+                Plasma::Theme::defaultTheme()->color(Plasma::Theme::ViewHoverColor).name();
+    elements["%viewfocuscolor"] =
+                Plasma::Theme::defaultTheme()->color(Plasma::Theme::ViewFocusColor).name();
     elements["%smallfontsize"] =
                 QString("%1pt").arg(KGlobalSettings::smallestReadableFont().pointSize());
 
@@ -795,6 +801,12 @@ QColor Theme::color(ColorRole role) const
 
         case ViewBackgroundColor:
             return d->viewColorScheme.background(KColorScheme::NormalBackground).color();
+
+        case ViewHoverColor:
+            return d->viewColorScheme.decoration(KColorScheme::HoverColor).color();
+
+        case ViewFocusColor:
+            return d->viewColorScheme.decoration(KColorScheme::FocusColor).color();
 
         case LinkColor:
             return d->viewColorScheme.foreground(KColorScheme::LinkText).color();
