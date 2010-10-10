@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Javascript Addon
+Name[de]=JavaScript-Erweiterung
 Name[en_GB]=Javascript Addon
 Name[es]=Complemento de JavaScript
 Name[et]=JavaScripti lisa
@@ -22,6 +23,7 @@ Name[uk]=Додаток JavaScript
 Name[x-test]=xxJavascript Addonxx
 Name[zh_TW]=Javascript Addon
 Comment=Addons for Javascript Plasma plugins
+Comment[de]=Erweiterungen für JavaScript-Module in Plasma
 Comment[en_GB]=Addons for Javascript Plasma plugins
 Comment[es]=Añadidos para complementos de JavaScript para Plasma
 Comment[et]=JavaScripti Plasma pluginate lisad
