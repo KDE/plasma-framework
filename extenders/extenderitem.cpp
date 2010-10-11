@@ -97,6 +97,19 @@ public:
         m_iconSize = qMax(size.height(), (qreal) fm.height());
     }
 
+    void setBackgroundPrefix(const QString &string)
+    {
+        if (string.isEmpty() || m_background->hasElementPrefix(string)) {
+            m_background->setElementPrefix(string);
+            update();
+        }
+    }
+
+    const QString backgroundPrefix() const
+    {
+        return m_background->prefix();
+    }
+
 protected:
     void resizeEvent(QGraphicsSceneResizeEvent *)
     {
@@ -108,6 +121,7 @@ protected:
 
 private:
     FrameSvg *m_background;
+    QString m_prefix;
     qreal m_iconSize;
 };
 
@@ -329,6 +343,12 @@ void ExtenderItem::setExtender(Extender *extender, const QPointF &pos)
 {
     Q_ASSERT(extender);
 
+    if (extender->appearance() != Extender::NoBorders) {
+        d->toolbox->setBackgroundPrefix("root");
+    } else {
+        d->toolbox->setBackgroundPrefix(QString());
+    }
+
     //themeChanged() has to now that by now, we're no longer dragging, even though the QDrag has not
     //been entirely finished.
     d->dragStarted = false;
@@ -429,6 +449,7 @@ void ExtenderItem::setGroup(ExtenderGroup *group, const QPointF &pos)
     d->group = group;
 
     if (group) {
+        d->toolbox->setBackgroundPrefix("grouped");
         config().writeEntry("group", group->name());
         //TODO: move to another extender if the group we set is actually detached.
         if (group->extender() != extender()) {
@@ -437,6 +458,12 @@ void ExtenderItem::setGroup(ExtenderGroup *group, const QPointF &pos)
         }
         group->d->addItemToGroup(this, pos);
     } else {
+        if (d->extender->appearance() != Extender::NoBorders) {
+            d->toolbox->setBackgroundPrefix("root");
+        } else {
+            d->toolbox->setBackgroundPrefix(QString());
+        }
+        d->toolbox->setBackgroundPrefix(QString());
         if (oldGroup) {
             oldGroup->d->removeItemFromGroup(this);
         }
