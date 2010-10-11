@@ -37,6 +37,7 @@ class Extender;
 class ExtenderGroup;
 class ExtenderItem;
 class Label;
+class ScrollWidget;
 class Svg;
 
 class Spacer : public QGraphicsWidget
@@ -66,6 +67,7 @@ class ExtenderPrivate
 
         void addExtenderItem(ExtenderItem *item, const QPointF &pos = QPointF(-1, -1));
         void extenderItemDestroyed(ExtenderItem *item);
+        void viewportGeometryChanged(const QRectF &rect);
         void removeExtenderItem(ExtenderItem *item);
         int insertIndexFromPos(const QPointF &pos) const;
         void loadExtenderItems();
@@ -77,6 +79,8 @@ class ExtenderPrivate
         Extender *q;
 
         QWeakPointer<Applet> applet;
+        ScrollWidget *scrollWidget;
+        QGraphicsWidget *mainWidget;
         QGraphicsLinearLayout *layout;
         FrameSvg *background;
 
@@ -93,6 +97,7 @@ class ExtenderPrivate
         static QGraphicsGridLayout *s_popupLayout;
 
         bool destroying;
+        bool scrollbarVisible;
 
         QList<QPair<ExtenderItem *, QPointF> > pendingItems;
 };

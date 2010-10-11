@@ -37,6 +37,7 @@
 #include "svg.h"
 #include "theme.h"
 #include "widgets/label.h"
+#include "widgets/scrollwidget.h"
 
 #include "private/applet_p.h"
 #include "private/applethandle_p.h"
@@ -102,12 +103,24 @@ Extender::Extender(Applet *applet)
     applet->d->extender = this;
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    setContentsMargins(0, 0, 0, 0);
-    d->layout = new QGraphicsLinearLayout(this);
+    d->scrollWidget = new ScrollWidget(this);
+    d->scrollWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    d->mainWidget = new QGraphicsWidget(d->scrollWidget);
+    d->scrollWidget->setWidget(d->mainWidget);
+    d->mainWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    connect(d->scrollWidget, SIGNAL(viewportGeometryChanged(const QRectF &)),
+            this, SLOT(viewportGeometryChanged(const QRectF &)));
+
+    d->layout = new QGraphicsLinearLayout(d->mainWidget);
     d->layout->setOrientation(Qt::Vertical);
     d->layout->setContentsMargins(0, 0, 0, 0);
     d->layout->setSpacing(0);
-    setLayout(d->layout);
+
+
+    QGraphicsLinearLayout *lay = new QGraphicsLinearLayout(Qt::Vertical, this);
+    lay->addItem(d->scrollWidget);
+    setContentsMargins(0, 0, 0, 0);
+    lay->setContentsMargins(0, 0, 0, 0);
 
     d->loadExtenderItems();
 
@@ -490,6 +503,11 @@ void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
         }
     }
 
+    //FIXME: hardcoded number for the scrollbar
+    d->scrollWidget->setMinimumWidth(d->mainWidget->effectiveSizeHint(Qt::MinimumSize).width() + 32);
+    //FIXME: hardcoded number
+    d->scrollWidget->setMinimumHeight(qMin((qreal)300, d->mainWidget->effectiveSizeHint(Qt::MinimumSize).height()));
+
     //remove the empty extender message if needed.
     d->updateEmptyExtenderLabel();
     d->updateBorders();
@@ -578,17 +596,30 @@ FrameSvg::EnabledBorders Extender::enabledBordersForItem(ExtenderItem *item) con
 
     ExtenderItem *topItem = dynamic_cast<ExtenderItem*>(d->layout->itemAt(0));
     ExtenderItem *bottomItem = dynamic_cast<ExtenderItem*>(d->layout->itemAt(d->layout->count() - 1));
+
+    FrameSvg::EnabledBorders borders = FrameSvg::NoBorder;
+
     if (item->group()) {
         return FrameSvg::NoBorder;
     } else if (d->appearance == TopDownStacked && bottomItem != item) {
-        return FrameSvg::LeftBorder | FrameSvg::BottomBorder | FrameSvg::RightBorder;
+        borders = FrameSvg::LeftBorder | FrameSvg::BottomBorder | FrameSvg::RightBorder;
     } else if (d->appearance == BottomUpStacked && topItem != item) {
-        return FrameSvg::LeftBorder | FrameSvg::TopBorder | FrameSvg::RightBorder;
+        borders =  FrameSvg::LeftBorder | FrameSvg::TopBorder | FrameSvg::RightBorder;
     } else if (d->appearance != NoBorders) {
-        return FrameSvg::LeftBorder | FrameSvg::RightBorder;
+        borders = FrameSvg::LeftBorder | FrameSvg::RightBorder;
     } else {
-        return 0;
+        return FrameSvg::NoBorder;
     }
+
+    if (d->scrollWidget->viewportGeometry().height() < d->mainWidget->boundingRect().height()) {
+        if (QApplication::layoutDirection() == Qt::RightToLeft) {
+            borders &= ~FrameSvg::LeftBorder;
+        } else {
+            borders &= ~FrameSvg::RightBorder;
+        }
+    }
+
+    return borders;
 }
 
 ExtenderPrivate::ExtenderPrivate(Applet *applet, Extender *extender) :
@@ -808,6 +839,32 @@ void ExtenderPrivate::extenderItemDestroyed(ExtenderItem *item)
 {
     if (item && attachedExtenderItems.contains(item)) {
         removeExtenderItem(item);
+    }
+}
+
+void ExtenderPrivate::viewportGeometryChanged(const QRectF &rect)
+{
+    if (appearance != Extender::TopDownStacked && appearance != Extender::BottomUpStacked) {
+        scrollbarVisible = (rect.height() > mainWidget->boundingRect().height());
+        return;
+    }
+
+    bool scroll;
+    if (rect.height() >= mainWidget->boundingRect().height()) {
+        scroll = false;
+        scrollWidget->setContentsMargins(0, 0, 0, 0);
+    } else {
+        scroll = true;
+        if (QApplication::layoutDirection() == Qt::RightToLeft) {
+            scrollWidget->setContentsMargins(background->marginSize(RightMargin), 0, 0, 0);
+        } else {
+            scrollWidget->setContentsMargins(0, 0, background->marginSize(RightMargin), 0);
+        }
+    }
+
+    if (scroll != scrollbarVisible) {
+        scrollbarVisible = scroll;
+        updateBorders();
     }
 }
 

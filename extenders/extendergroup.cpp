@@ -54,16 +54,11 @@ ExtenderGroup::ExtenderGroup(Extender *parent, uint groupId)
     setAcceptDrops(true);
 
     QGraphicsLinearLayout *lay = static_cast<QGraphicsLinearLayout *>(layout());
-    d->scrollWidget = new ScrollWidget(this);
-    d->scrollWidget->show();
-    lay->addItem(d->scrollWidget);
-    d->scrollWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    d->childsWidget = new QGraphicsWidget(d->scrollWidget);
+    d->childsWidget = new QGraphicsWidget(this);
     d->childsWidget->installEventFilter(this);
-    d->scrollWidget->setWidget(d->childsWidget);
     d->layout = new QGraphicsLinearLayout(Qt::Vertical, d->childsWidget);
     d->childsWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    d->scrollWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    lay->addItem(d->childsWidget);
 
     QAction *expand = new QAction(this);
     expand->setVisible(true);
@@ -181,8 +176,8 @@ void ExtenderGroup::expandGroup()
             extender()->itemAddedEvent(item);
         }
     }
-    d->scrollWidget->show();
-    static_cast<QGraphicsLinearLayout *>(layout())->addItem(d->scrollWidget);
+    d->childsWidget->show();
+    static_cast<QGraphicsLinearLayout *>(layout())->addItem(d->childsWidget);
     updateGeometry();
     extender()->resize(extender()->effectiveSizeHint(Qt::PreferredSize));
 }
@@ -206,8 +201,8 @@ void ExtenderGroup::collapseGroup()
             extender()->itemRemovedEvent(item);
         }
     }
-    d->scrollWidget->hide();
-    static_cast<QGraphicsLinearLayout *>(layout())->removeItem(d->scrollWidget);
+    d->childsWidget->hide();
+    static_cast<QGraphicsLinearLayout *>(layout())->removeItem(d->childsWidget);
 }
 
 void ExtenderGroup::resizeEvent(QGraphicsSceneResizeEvent *event)
@@ -325,7 +320,7 @@ void ExtenderGroupPrivate::addItemToGroup(Plasma::ExtenderItem *item, const QPoi
             q->extender()->itemAddedEvent(q);
             q->show();
         }
-        scrollWidget->setVisible(!q->isCollapsed());
+        childsWidget->setVisible(!q->isCollapsed());
         q->extender()->resize(q->extender()->effectiveSizeHint(Qt::PreferredSize));
     }
 }

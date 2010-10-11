@@ -43,7 +43,6 @@ class ExtenderGroupPrivate
         Plasma::ExtenderGroup *q;
         Spacer *spacerWidget;
         Plasma::Svg *svg;
-        Plasma::ScrollWidget *scrollWidget;
         QGraphicsWidget *childsWidget;
         QGraphicsLinearLayout *layout;
         bool collapsed;
