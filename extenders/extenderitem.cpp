@@ -343,12 +343,6 @@ void ExtenderItem::setExtender(Extender *extender, const QPointF &pos)
 {
     Q_ASSERT(extender);
 
-    if (extender->appearance() != Extender::NoBorders) {
-        d->toolbox->setBackgroundPrefix("root");
-    } else {
-        d->toolbox->setBackgroundPrefix(QString());
-    }
-
     //themeChanged() has to now that by now, we're no longer dragging, even though the QDrag has not
     //been entirely finished.
     d->dragStarted = false;
@@ -830,6 +824,16 @@ void ExtenderItemPrivate::updateToolBox()
 {
     Q_ASSERT(toolbox);
     Q_ASSERT(toolboxLayout);
+
+    if (group) {
+        toolbox->setBackgroundPrefix("grouped");
+    } else {
+        if (extender->appearance() != Extender::NoBorders) {
+            toolbox->setBackgroundPrefix("root");
+        } else {
+            toolbox->setBackgroundPrefix(QString());
+        }
+    }
 
     QAction *closeAction = actions.value("close");
     QAction *returnToSourceAction = actions.value("extenderItemReturnToSource");
