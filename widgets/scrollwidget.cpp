@@ -112,7 +112,7 @@ public:
         q->setFiltersChildEvents(true);
         layout = new QGraphicsGridLayout(q);
         q->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        layout->setContentsMargins(1, 1, 1, 1);
+        layout->setContentsMargins(0, 0, 0, 0);
         scrollingWidget = new QGraphicsWidget(q);
         scrollingWidget->setFlag(QGraphicsItem::ItemHasNoContents);
         scrollingWidget->installEventFilter(q);
@@ -140,6 +140,11 @@ public:
         horizontalScrollBar->nativeWidget()->setMinimum(0);
         horizontalScrollBar->nativeWidget()->setMaximum(100);
         QObject::connect(horizontalScrollBar, SIGNAL(valueChanged(int)), q, SLOT(horizontalScroll(int)));
+
+        layout->setColumnSpacing(0, 0);
+        layout->setColumnSpacing(1, 0);
+        layout->setRowSpacing(0, 0);
+        layout->setRowSpacing(1, 0);
 
         flickAnimationX = 0;
         flickAnimationY = 0;
@@ -263,10 +268,10 @@ public:
         QSizeF widgetSize = widget.data()->size();
         if (widget.data()->sizePolicy().expandingDirections() & Qt::Horizontal) {
             //keep a 1 pixel border
-            widgetSize.setWidth(scrollingWidget->size().width()-borderSize);
+            widgetSize.setWidth(scrollingWidget->size().width());
         }
         if (widget.data()->sizePolicy().expandingDirections() & Qt::Vertical) {
-            widgetSize.setHeight(scrollingWidget->size().height()-borderSize);
+            widgetSize.setHeight(scrollingWidget->size().height());
         }
         widget.data()->resize(widgetSize);
 
@@ -869,12 +874,12 @@ public:
     bool canXFlick() const
     {
         //make the thing feel quite "fixed" don't permit to flick when the contents size is less than the viewport
-        return q->contentsSize().width() + borderSize > q->viewportGeometry().width();
+        return q->contentsSize().width() > q->viewportGeometry().width();
     }
 
     bool canYFlick() const
     {
-        return q->contentsSize().height() + borderSize > q->viewportGeometry().height();
+        return q->contentsSize().height() > q->viewportGeometry().height();
     }
 
     int elapsed(const QTime &t) const
@@ -1040,7 +1045,6 @@ public:
     QPointF dragHandleClicked;
     bool dragging;
     QTimer *adjustScrollbarsTimer;
-    static const int borderSize = 0;
 
     QPointF pressPos;
     QPointF pressScrollPos;
@@ -1393,7 +1397,7 @@ QSizeF ScrollWidget::sizeHint(Qt::SizeHint which, const QSizeF & constraint) con
         return QSizeF(KIconLoader::SizeEnormous, KIconLoader::SizeEnormous);
     }
 
-    QSizeF hint = d->widget.data()->effectiveSizeHint(which, constraint)+QSize(d->borderSize*2, d->borderSize*2);
+    QSizeF hint = d->widget.data()->effectiveSizeHint(which, constraint);
     if (d->horizontalScrollBar && d->horizontalScrollBar->isVisible()) {
         hint += QSize(0, d->horizontalScrollBar->size().height());
     }
