@@ -104,6 +104,7 @@ Extender::Extender(Applet *applet)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     d->scrollWidget = new ScrollWidget(this);
+    d->scrollWidget->setOverflowBordersVisible(false);
     d->scrollWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     d->mainWidget = new QGraphicsWidget(d->scrollWidget);
     d->scrollWidget->setWidget(d->mainWidget);
