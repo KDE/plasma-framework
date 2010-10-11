@@ -98,6 +98,7 @@ public:
           leftBorder(0),
           rightBorder(0),
           dragging(false),
+          overflowBordersVisible(true),
           multitouchGesture(GestureNone)
     {
     }
@@ -212,13 +213,14 @@ public:
             topBorder->setElementID("border-top");
             topBorder->setZValue(900);
             topBorder->resize(topBorder->effectiveSizeHint(Qt::PreferredSize));
-            topBorder->show();
+            topBorder->setVisible(overflowBordersVisible);
+
             bottomBorder = new Plasma::SvgWidget(q);
             bottomBorder->setSvg(borderSvg);
             bottomBorder->setElementID("border-bottom");
             bottomBorder->setZValue(900);
             bottomBorder->resize(bottomBorder->effectiveSizeHint(Qt::PreferredSize));
-            bottomBorder->show();
+            bottomBorder->setVisible(overflowBordersVisible);
         } else if (topBorder && widget && widget.data()->size().height() <= q->size().height()) {
             //FIXME: in some cases topBorder->deleteLater() is deleteNever(), why?
             topBorder->hide();
@@ -236,13 +238,14 @@ public:
             leftBorder->setElementID("border-left");
             leftBorder->setZValue(900);
             leftBorder->resize(leftBorder->effectiveSizeHint(Qt::PreferredSize));
-            leftBorder->show();
+            leftBorder->setVisible(overflowBordersVisible);
+
             rightBorder = new Plasma::SvgWidget(q);
             rightBorder->setSvg(borderSvg);
             rightBorder->setElementID("border-right");
             rightBorder->setZValue(900);
             rightBorder->resize(rightBorder->effectiveSizeHint(Qt::PreferredSize));
-            rightBorder->show();
+            rightBorder->setVisible(overflowBordersVisible);
         } else if (leftBorder && widget && widget.data()->size().width() <= q->size().width()) {
             leftBorder->hide();
             rightBorder->hide();
@@ -1070,6 +1073,7 @@ public:
     QSizeF snapSize;
     bool stealEvent;
     bool hasOvershoot;
+    bool overflowBordersVisible;
 
     Qt::Alignment alignment;
 
@@ -1154,6 +1158,21 @@ void ScrollWidget::setVerticalScrollBarPolicy(const Qt::ScrollBarPolicy policy)
 Qt::ScrollBarPolicy ScrollWidget::verticalScrollBarPolicy() const
 {
     return d->verticalScrollBarPolicy;
+}
+
+bool ScrollWidget::overflowBordersVisible() const
+{
+    return d->overflowBordersVisible;
+}
+
+void ScrollWidget::setOverflowBordersVisible(const bool visible)
+{
+    if (d->overflowBordersVisible == visible) {
+        return;
+    }
+
+    d->overflowBordersVisible = visible;
+    d->adjustScrollbars();
 }
 
 void ScrollWidget::ensureRectVisible(const QRectF &rect)

@@ -46,6 +46,7 @@ class PLASMA_EXPORT ScrollWidget : public QGraphicsWidget
     Q_PROPERTY(QGraphicsWidget *widget READ widget WRITE setWidget)
     Q_PROPERTY(Qt::ScrollBarPolicy horizontalScrollBarPolicy READ horizontalScrollBarPolicy WRITE setHorizontalScrollBarPolicy)
     Q_PROPERTY(Qt::ScrollBarPolicy verticalScrollBarPolicy READ verticalScrollBarPolicy WRITE setVerticalScrollBarPolicy)
+    Q_PROPERTY(bool overflowBordersVisible READ overflowBordersVisible WRITE setOverflowBordersVisible)
     Q_PROPERTY(QPointF scrollPosition READ scrollPosition WRITE setScrollPosition)
     Q_PROPERTY(QSizeF contentsSize READ contentsSize)
     Q_PROPERTY(QRectF viewportGeometry READ viewportGeometry)
@@ -133,6 +134,22 @@ public:
      * @return the vertical scrollbar policy
      */
     Qt::ScrollBarPolicy verticalScrollBarPolicy() const;
+
+    /**
+     * @return true if the widget shows borders when the inner widget
+     *         is bigger than the viewport
+     * @since 4.6
+     */
+    bool overflowBordersVisible() const;
+
+    /**
+     * Sets whether borders should be shown when the inner widget
+     * is bigger than the viewport
+     * @param visible true if the border should be visible when
+     *                the inner widget overflows
+     * @since 4.6
+     */
+    void setOverflowBordersVisible(const bool visible);
 
     /**
      * Scroll the view until the given rectangle is visible
