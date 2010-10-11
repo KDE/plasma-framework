@@ -271,6 +271,10 @@ QString FrameSvg::prefix()
 
 void FrameSvg::resizeFrame(const QSizeF &size)
 {
+    if (imagePath().isEmpty()) {
+        return;
+    }
+
     if (size.isEmpty()) {
         kWarning() << "Invalid size" << size;
         return;
