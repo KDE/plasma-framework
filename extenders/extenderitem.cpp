@@ -301,6 +301,7 @@ void ExtenderItem::setWidget(QGraphicsItem *widget)
     if (d->widget) {
         d->widget->removeSceneEventFilter(this);
         d->layout->removeItem(d->widget);
+        d->widget->deleteLater();
     }
 
     if (!widget || !widget->isWidget()) {

@@ -108,6 +108,7 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
 
         /**
          * @param widget The widget that should be wrapped into the extender item.
+         *               It has to be a QGraphicsWidget.
          */
         void setWidget(QGraphicsItem *widget);
 
