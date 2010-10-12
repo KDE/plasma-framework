@@ -644,6 +644,7 @@ ExtenderPrivate::~ExtenderPrivate()
 void ExtenderPrivate::addExtenderItem(ExtenderItem *item, const QPointF &pos)
 {
     if (attachedExtenderItems.contains(item)) {
+        pendingItems.remove(item);
         q->itemAddedEvent(item, pos);
         return;
     }
@@ -651,7 +652,7 @@ void ExtenderPrivate::addExtenderItem(ExtenderItem *item, const QPointF &pos)
     QObject::connect(item, SIGNAL(destroyed(ExtenderItem*)), q, SLOT(extenderItemDestroyed(ExtenderItem*)));
     attachedExtenderItems.append(item);
     q->itemHoverLeaveEvent(item);
-    pendingItems.append(QPair<ExtenderItem *, QPointF>(item, pos));
+    pendingItems[item] = pos;
     QTimer::singleShot(0, q, SLOT(delayItemAddedEvent()));
 }
 
@@ -795,11 +796,12 @@ void ExtenderPrivate::updateBorders()
 
 void ExtenderPrivate::delayItemAddedEvent()
 {
-    while (!pendingItems.isEmpty()) {
-        QPair<Plasma::ExtenderItem *, QPointF> item = pendingItems.first();
-        q->itemAddedEvent(item.first, item.second);
-        pendingItems.pop_front();
+    QHash<Plasma::ExtenderItem *, QPointF>::const_iterator i = pendingItems.constBegin();
+    while (i != pendingItems.constEnd()) {
+        q->itemAddedEvent(i.key(), i.value());
+        ++i;
     }
+    pendingItems.clear();
 }
 
 void ExtenderPrivate::updateEmptyExtenderLabel()

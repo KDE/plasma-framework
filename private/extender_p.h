@@ -99,7 +99,7 @@ class ExtenderPrivate
         bool destroying;
         bool scrollbarVisible;
 
-        QList<QPair<ExtenderItem *, QPointF> > pendingItems;
+        QHash<ExtenderItem *, QPointF> pendingItems;
 };
 
 } // namespace Plasma
