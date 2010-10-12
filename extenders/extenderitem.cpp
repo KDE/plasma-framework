@@ -298,26 +298,25 @@ QString ExtenderItem::name() const
 
 void ExtenderItem::setWidget(QGraphicsItem *widget)
 {
-    if (d->widget) {
-        d->widget->removeSceneEventFilter(this);
-        d->layout->removeItem(d->widget);
-        d->widget->deleteLater();
+    if (d->widget.data()) {
+        d->widget.data()->removeSceneEventFilter(this);
+        d->layout->removeItem(d->widget.data());
+        d->widget.data()->deleteLater();
     }
 
     if (!widget || !widget->isWidget()) {
-        d->widget = 0;
         return;
     }
 
     widget->setParentItem(this);
     d->widget = static_cast<QGraphicsWidget *>(widget);
-    d->layout->insertItem(1, d->widget);
-    d->widget->setVisible(!d->collapsed);
+    d->layout->insertItem(1, d->widget.data());
+    d->widget.data()->setVisible(!d->collapsed);
 }
 
 QGraphicsItem *ExtenderItem::widget() const
 {
-    return d->widget;
+    return d->widget.data();
 }
 
 void ExtenderItem::setIcon(const QIcon &icon)
@@ -593,12 +592,12 @@ void ExtenderItem::setCollapsed(bool collapsed)
     config().writeEntry("isCollapsed", collapsed);
     d->collapsed = collapsed;
     d->collapseIcon->setToolTip(collapsed ? i18n("Expand this widget") : i18n("Collapse this widget"));
-    if (d->widget) {
-        d->widget->setVisible(!collapsed);
+    if (d->widget.data()) {
+        d->widget.data()->setVisible(!collapsed);
         if (collapsed) {
-            d->layout->removeItem(d->widget);
+            d->layout->removeItem(d->widget.data());
         } else {
-            d->layout->insertItem(1, d->widget);
+            d->layout->insertItem(1, d->widget.data());
         }
         updateGeometry();
         if (extender()) {
@@ -792,7 +791,6 @@ bool ExtenderItem::isTransient() const
 
 ExtenderItemPrivate::ExtenderItemPrivate(ExtenderItem *extenderItem, Extender *hostExtender)
     : q(extenderItem),
-      widget(0),
       toolbox(0),
       extender(hostExtender),
       sourceApplet(0),
@@ -809,8 +807,7 @@ ExtenderItemPrivate::ExtenderItemPrivate(ExtenderItem *extenderItem, Extender *h
 
 ExtenderItemPrivate::~ExtenderItemPrivate()
 {
-    delete widget;
-    widget = 0;
+    delete widget.data();
 }
 
 //returns a Rect containing the area of the detachable where the draghandle will be drawn.

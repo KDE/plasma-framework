@@ -62,7 +62,8 @@ class ExtenderItemPrivate
 
         ExtenderItem *q;
 
-        QGraphicsWidget *widget;
+        QWeakPointer<QGraphicsWidget> widget;
+
         ExtenderItemToolbox *toolbox;
         QGraphicsLinearLayout *toolboxLayout;
         QGraphicsLinearLayout *layout;
