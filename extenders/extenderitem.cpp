@@ -973,6 +973,15 @@ void ExtenderItemPrivate::updateToolBox()
 
     //to keep the text really centered
     toolboxLayout->setItemSpacing(0, KIconLoader::SizeSmall * (lastIndex - 2));
+    if (lastIndex == 2) {
+        if (QApplication::layoutDirection() == Qt::RightToLeft) {
+            toolboxLayout->setContentsMargins(KIconLoader::SizeSmall, 0, 0, 0);
+        } else {
+            toolboxLayout->setContentsMargins(0, 0, KIconLoader::SizeSmall, 0);
+        }
+    } else {
+        toolboxLayout->setContentsMargins(0, 0, 0, 0);
+    }
 }
 
 Applet *ExtenderItemPrivate::hostApplet() const
