@@ -61,13 +61,13 @@ ExtenderGroup::ExtenderGroup(Extender *parent, uint groupId)
     lay->addItem(d->childsWidget);
 
     QAction *expand = new QAction(this);
-    expand->setVisible(true);
+    expand->setVisible(false);
     expand->setToolTip(i18n("Show this group."));
     connect(expand, SIGNAL(triggered()), this, SLOT(expandGroup()));
     addAction("expand", expand);
 
     QAction *collapse = new QAction(this);
-    collapse->setVisible(false);
+    collapse->setVisible(true);
     collapse->setToolTip(i18n("Hide this group."));
     connect(collapse, SIGNAL(triggered()), this, SLOT(collapseGroup()));
     addAction("collapse", collapse);
@@ -292,7 +292,7 @@ ExtenderGroupPrivate::ExtenderGroupPrivate(ExtenderGroup *group)
     : q(group),
       spacerWidget(0),
       svg(new Svg(group)),
-      collapsed(true),
+      collapsed(false),
       autoHide(true),
       autoCollapse(false)
 {
