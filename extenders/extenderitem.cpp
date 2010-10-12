@@ -828,15 +828,6 @@ void ExtenderItemPrivate::updateToolBox()
     Q_ASSERT(toolbox);
     Q_ASSERT(toolboxLayout);
 
-    if (group) {
-        toolbox->setBackgroundPrefix("grouped");
-    } else {
-        if (extender->appearance() != Extender::NoBorders) {
-            toolbox->setBackgroundPrefix("root");
-        } else {
-            toolbox->setBackgroundPrefix(QString());
-        }
-    }
 
     QAction *closeAction = actions.value("close");
     QAction *returnToSourceAction = actions.value("extenderItemReturnToSource");
@@ -1007,6 +998,16 @@ void ExtenderItemPrivate::themeChanged()
     qreal left, top, right, bottom;
     background->getMargins(left, top, right, bottom);
     layout->setContentsMargins(left, top, right, bottom);
+
+    if (group) {
+        toolbox->setBackgroundPrefix("grouped");
+    } else {
+        if (extender->items().count() <= 1 || extender->items().first() == q || extender->appearance() != Extender::NoBorders) {
+            toolbox->setBackgroundPrefix("root");
+        } else {
+            toolbox->setBackgroundPrefix(QString());
+        }
+    }
 
     toolbox->updateTheme();
 }
