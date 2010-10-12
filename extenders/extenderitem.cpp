@@ -159,6 +159,8 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
     d->collapseIcon = new IconWidget(d->toolbox);
     d->collapseIcon->setCursor(Qt::ArrowCursor);
     d->titleLabel = new Label(d->toolbox);
+    d->titleLabel->setWordWrap(false);
+    d->titleLabel->setAlignment(Qt::AlignCenter);
 
     d->toolboxLayout->addItem(d->collapseIcon);
     d->toolboxLayout->addItem(d->titleLabel);
@@ -322,6 +324,7 @@ void ExtenderItem::setIcon(const QIcon &icon)
     if (d->collapseIcon->icon().isNull() || icon.cacheKey() != d->collapseIcon->icon().cacheKey()) {
         d->iconName.clear();
         d->collapseIcon->setIcon(icon);
+        d->collapseIcon->setVisible(!icon.isNull());
     }
 }
 
@@ -841,6 +844,7 @@ void ExtenderItemPrivate::updateToolBox()
     int closeIndex = -1;
     int returnToSourceIndex = -1;
     const int startingIndex = 2; // collapse item is index 0, title label is 1
+    int lastIndex = 2;
     const QSizeF widgetSize = collapseIcon->sizeFromIconSize(toolbox->iconSize());
 
     QSet<QAction*> shownActions = actionsInOrder.toSet();
@@ -903,6 +907,7 @@ void ExtenderItemPrivate::updateToolBox()
                 button->setMaximumHeight(widgetSize.height());
                 button->setCursor(Qt::ArrowCursor);
                 toolboxLayout->insertItem(startingIndex, button);
+                ++lastIndex;
             } else {
                 if (!icon) {
                     icon = new IconWidget(q);
@@ -916,6 +921,7 @@ void ExtenderItemPrivate::updateToolBox()
                 icon->setMaximumSize(widgetSize);
                 icon->setCursor(Qt::ArrowCursor);
                 toolboxLayout->insertItem(startingIndex, icon);
+                ++lastIndex;
             }
         }
     }
@@ -941,6 +947,7 @@ void ExtenderItemPrivate::updateToolBox()
         } else {
             toolboxLayout->insertItem(closeIndex - 1, returnToSourceIcon);
         }
+        ++lastIndex;
     }
 
     //add the close icon if desired.
@@ -961,7 +968,11 @@ void ExtenderItemPrivate::updateToolBox()
         destroyButton->setMaximumSize(widgetSize);
         destroyButton->setCursor(Qt::ArrowCursor);
         toolboxLayout->addItem(destroyButton);
+        ++lastIndex;
     }
+
+    //to keep the text really centered
+    toolboxLayout->setItemSpacing(0, KIconLoader::SizeSmall * (lastIndex - 2));
 }
 
 Applet *ExtenderItemPrivate::hostApplet() const

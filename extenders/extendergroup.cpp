@@ -138,9 +138,6 @@ bool ExtenderGroup::isAutoCollapse() const
 void ExtenderGroup::setAutoCollapse(bool collapse)
 {
     d->autoCollapse = collapse;
-    if (collapse) {
-        setCollapsed(d->collapsed);
-    }
 }
 
 bool ExtenderGroup::isGroupCollapsed() const
