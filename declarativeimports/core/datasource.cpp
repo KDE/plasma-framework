@@ -23,8 +23,6 @@
 #include "qdeclarativeengine.h"
 #include "qdeclarativecontext.h"
 
-#include <QDebug>
-#include <QTimer>
 
 #include <Plasma/Applet>
 
