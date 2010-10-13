@@ -170,7 +170,7 @@ void PackageStructureTest::write()
     QStringList groups;
     groups << "images" << "config" << "data" << "defaultconfig" << "scripts"
            << "mainconfigui" << "mainconfigxml" << "mainscript"
-           << "translations" << "ui";
+           << "translations" << "ui" << "animations";
     groups.sort();
 
     QStringList actualGroups = config.groupList();
