@@ -43,7 +43,9 @@ public:
     LabelPrivate(Label *label)
         : q(label),
           svg(0),
-          customFont(false)
+          textSelectable(false),
+          customFont(false),
+          customPalette(false)
     {
     }
 
@@ -84,9 +86,12 @@ public:
 
     void setPalette()
     {
-        QLabel *native = q->nativeWidget();
+        if (customPalette) {
+            return;
+        }
+
         QColor color = Theme::defaultTheme()->color(Theme::TextColor);
-        QPalette p = native->palette();
+        QPalette p = q->palette();
         p.setColor(QPalette::Normal, QPalette::WindowText, color);
         p.setColor(QPalette::Inactive, QPalette::WindowText, color);
         color.setAlphaF(0.6);
@@ -94,10 +99,10 @@ public:
 
         p.setColor(QPalette::Normal, QPalette::Link, Theme::defaultTheme()->color(Theme::LinkColor));
         p.setColor(QPalette::Normal, QPalette::LinkVisited, Theme::defaultTheme()->color(Theme::VisitedLinkColor));
-        native->setPalette(p);
+        q->setPalette(p);
 
         if (!customFont) {
-            q->nativeWidget()->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+            q->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
         }
     }
 
@@ -105,8 +110,9 @@ public:
     QString imagePath;
     QString absImagePath;
     Svg *svg;
-    bool textSelectable;
-    bool customFont;
+    bool textSelectable : 1;
+    bool customFont : 1;
+    bool customPalette : 1;
 };
 
 Label::Label(QGraphicsWidget *parent)
@@ -115,7 +121,6 @@ Label::Label(QGraphicsWidget *parent)
 {
     QLabel *native = new QLabel;
     native->setWindowFlags(native->windowFlags()|Qt::BypassGraphicsProxyWidget);
-    d->textSelectable = false;
     connect(native, SIGNAL(linkActivated(QString)), this, SIGNAL(linkActivated(QString)));
     connect(native, SIGNAL(linkHovered(QString)), this, SIGNAL(linkHovered(QString)));
 
@@ -332,9 +337,21 @@ void Label::paint(QPainter *painter,
 
 void Label::changeEvent(QEvent *event)
 {
-    if (event->type() == QEvent::FontChange && font() != QApplication::font()) {
-        d->customFont = true;
-        nativeWidget()->setFont(font());
+    switch (event->type()) {
+        case QEvent::FontChange:
+            if (font() != QApplication::font()) {
+                d->customFont = true;
+                nativeWidget()->setFont(font());
+            }
+            break;
+
+        case QEvent::PaletteChange:
+            d->customPalette = true;
+            nativeWidget()->setPalette(palette());
+            break;
+
+        default:
+            break;
     }
 
     QGraphicsProxyWidget::changeEvent(event);

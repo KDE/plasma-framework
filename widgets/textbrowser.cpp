@@ -70,9 +70,8 @@ public:
 
     void setPalette()
     {
-        KTextBrowser *native = q->nativeWidget();
         QColor color = Theme::defaultTheme()->color(Theme::TextColor);
-        QPalette p = native->palette();
+        QPalette p = q->palette();
 
         p.setColor(QPalette::Normal, QPalette::Text, color);
         p.setColor(QPalette::Inactive, QPalette::Text, color);
@@ -80,10 +79,10 @@ public:
         p.setColor(QPalette::Inactive, QPalette::ButtonText, color);
         p.setColor(QPalette::Normal, QPalette::Base, QColor(0,0,0,0));
         p.setColor(QPalette::Inactive, QPalette::Base, QColor(0,0,0,0));
-        native->setPalette(p);
+        q->setPalette(p);
 
         if (!customFont) {
-            q->nativeWidget()->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+            q->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
         }
     }
 

@@ -78,14 +78,13 @@ public:
 
     void setPalette()
     {
-        QCheckBox *native = q->nativeWidget();
         QColor color = Theme::defaultTheme()->color(Theme::TextColor);
-        QPalette p = native->palette();
+        QPalette p = q->palette();
         p.setColor(QPalette::Normal, QPalette::WindowText, color);
         p.setColor(QPalette::Inactive, QPalette::WindowText, color);
-        native->setPalette(p);
+        q->setPalette(p);
         if (!customFont) {
-            q->nativeWidget()->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+            q->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
         }
     }
 
