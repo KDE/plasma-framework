@@ -19,9 +19,10 @@
 #include <KAuthorized>
 
 #include "appletauthorization.h"
-#include "simplejavascriptapplet.h"
+#include <Plasma/AppletScript>
+#include <Plasma/Applet>
 
-AppletAuthorization::AppletAuthorization(SimpleJavaScriptApplet *scriptEngine)
+AppletAuthorization::AppletAuthorization(Plasma::AppletScript *scriptEngine)
     : Authorization(),
       m_scriptEngine(scriptEngine)
 {

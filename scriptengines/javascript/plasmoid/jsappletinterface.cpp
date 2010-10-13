@@ -1,5 +1,5 @@
 /*
- *   Copyright 2010 Aaron J. Seigo <aseigo@kde.org>
+ *   Copyright 2010 Marco Martin <mart@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License version 2 as
@@ -16,29 +16,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef APPLETAUTHORIZATION_H
-#define APPLETAUTHORIZATION_H
-
-#include "authorization.h"
-
-namespace Plasma {
-    class AppletScript;
-}
-
-class SimpleJavaScriptApplet;
-
-class AppletAuthorization : public Authorization
-{
-public:
-    AppletAuthorization(Plasma::AppletScript *scriptEngine);
-
-    bool authorizeRequiredExtension(const QString &extension);
-    bool authorizeOptionalExtension(const QString &extension);
-    bool authorizeExternalExtensions();
-
-private:
-    Plasma::AppletScript *m_scriptEngine;
-};
-
-#endif
+#define USE_JS_SCRIPTENGINE
+#include "appletinterface.cpp"
+#include "appletinterface.moc"
 

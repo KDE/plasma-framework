@@ -22,10 +22,10 @@
 #include <QScriptValue>
 
 #include <Plasma/Animator>
-#include <Plasma/AppletScript>
 #include <Plasma/DataEngine>
 
 #include "simplebindings/uiloader.h"
+#include "abstractjsappletscript.h"
 
 class QScriptContext;
 class QScriptEngine;
@@ -38,7 +38,7 @@ namespace Plasma
     class ExtenderItem;
 } // namespace Plasma
 
-class SimpleJavaScriptApplet : public Plasma::AppletScript
+class SimpleJavaScriptApplet : public AbstractJsAppletScript
 {
     Q_OBJECT
 

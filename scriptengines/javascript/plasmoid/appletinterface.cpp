@@ -1,5 +1,7 @@
 /*
  *   Copyright 2008 Chani Armitage <chani@kde.org>
+ *   Copyright 2008, 2009 Aaron Seigo <aseigo@kde.org>
+ *   Copyright 2010 Marco Martin <mart@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -36,13 +38,14 @@
 
 Q_DECLARE_METATYPE(AppletInterface*)
 
-AppletInterface::AppletInterface(SimpleJavaScriptApplet *parent)
+AppletInterface::AppletInterface(AbstractJsAppletScript *parent)
     : QObject(parent),
       m_appletScriptEngine(parent),
       m_actionSignals(0)
 {
     connect(this, SIGNAL(releaseVisualFocus()), applet(), SIGNAL(releaseVisualFocus()));
     connect(this, SIGNAL(configNeedsSaving()), applet(), SIGNAL(configNeedsSaving()));
+    connect(applet(), SIGNAL(immutabilityChanged(Plasma::ImmutabilityType)), this, SIGNAL(immutableChanged()));
 }
 
 AppletInterface::~AppletInterface()
@@ -120,10 +123,24 @@ void AppletInterface::setConfigurationRequired(bool needsConfiguring, const QStr
     m_appletScriptEngine->setConfigurationRequired(needsConfiguring, reason);
 }
 
+#ifdef USE_JS_SCRIPTENGINE
+
 void AppletInterface::update(const QRectF &rect)
 {
     applet()->update(rect);
 }
+
+QGraphicsLayout *AppletInterface::layout() const
+{
+    return applet()->layout();
+}
+
+void AppletInterface::setLayout(QGraphicsLayout *layout)
+{
+    applet()->setLayout(layout);
+}
+
+#endif
 
 QString AppletInterface::activeConfig() const
 {
@@ -295,16 +312,6 @@ void AppletInterface::setPreferredSize(qreal w, qreal h)
     applet()->setPreferredSize(w,h);
 }
 
-QGraphicsLayout *AppletInterface::layout() const
-{
-    return applet()->layout();
-}
-
-void AppletInterface::setLayout(QGraphicsLayout *layout)
-{
-    applet()->setLayout(layout);
-}
-
 bool AppletInterface::immutable() const
 {
     return applet()->immutability() != Plasma::Mutable;
@@ -363,13 +370,14 @@ Plasma::Extender *AppletInterface::extender() const
     return m_appletScriptEngine->extender();
 }
 
+
 void AppletInterface::gc()
 {
     QTimer::singleShot(0, m_appletScriptEngine, SLOT(collectGarbage()));
 }
 
 
-PopupAppletInterface::PopupAppletInterface(SimpleJavaScriptApplet *parent)
+PopupAppletInterface::PopupAppletInterface(AbstractJsAppletScript *parent)
     : AppletInterface(parent)
 {
 }
@@ -424,4 +432,6 @@ QGraphicsWidget *PopupAppletInterface::popupWidget()
     return popupApplet()->graphicsWidget();
 }
 
+#ifndef USE_JS_SCRIPTENGINE
 #include "appletinterface.moc"
+#endif

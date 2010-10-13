@@ -98,7 +98,7 @@ KSharedPtr<UiLoader> SimpleJavaScriptApplet::s_widgetLoader;
 QHash<QString, Plasma::Animator::Animation> SimpleJavaScriptApplet::s_animationDefs;
 
 SimpleJavaScriptApplet::SimpleJavaScriptApplet(QObject *parent, const QVariantList &args)
-    : Plasma::AppletScript(parent)
+    : AbstractJsAppletScript(parent)
 {
     Q_UNUSED(args);
 //    kDebug() << "Script applet launched, args" << applet()->startupArguments();

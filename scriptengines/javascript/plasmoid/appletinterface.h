@@ -1,6 +1,7 @@
 /*
  *   Copyright 2008 Chani Armitage <chani@kde.org>
  *   Copyright 2008, 2009 Aaron Seigo <aseigo@kde.org>
+ *   Copyright 2010 Marco Martin <mart@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -31,10 +32,10 @@
 #include <Plasma/DataEngine>
 #include <Plasma/Theme>
 
-#include "simplejavascriptapplet.h"
+#include "abstractjsappletscript.h"
 
 class QAction;
-class SimpleJavaScriptApplet;
+class QmlAppletScript;
 class QSignalMapper;
 class QSizeF;
 
@@ -63,23 +64,25 @@ class AppletInterface : public QObject
     Q_ENUMS(IntervalAlignment)
     Q_ENUMS(ThemeColors)
     Q_PROPERTY(AspectRatioMode aspectRatioMode READ aspectRatioMode WRITE setAspectRatioMode)
-    Q_PROPERTY(FormFactor formFactor READ formFactor)
-    Q_PROPERTY(Location location READ location)
-    Q_PROPERTY(QString currentActivity READ currentActivity)
+    Q_PROPERTY(FormFactor formFactor READ formFactor NOTIFY formFactorChanged)
+    Q_PROPERTY(Location location READ location NOTIFY locationChanged)
+    Q_PROPERTY(QString currentActivity READ currentActivity NOTIFY contextChanged)
     Q_PROPERTY(bool shouldConserveResources READ shouldConserveResources)
     Q_PROPERTY(QString activeConfig WRITE setActiveConfig READ activeConfig)
     Q_PROPERTY(bool busy WRITE setBusy READ isBusy)
     Q_PROPERTY(BackgroundHints backgroundHints WRITE setBackgroundHints READ backgroundHints)
-    Q_PROPERTY(QGraphicsLayout *layout WRITE setLayout READ layout)
-    Q_PROPERTY(bool immutable READ immutable)
+    Q_PROPERTY(bool immutable READ immutable NOTIFY immutableChanged)
     Q_PROPERTY(bool userConfiguring READ userConfiguring) // @since 4.5
-    Q_PROPERTY(int apiVersion READ apiVersion)
+    Q_PROPERTY(int apiVersion READ apiVersion CONSTANT)
     Q_PROPERTY(QRectF rect READ rect)
     Q_PROPERTY(QSizeF size READ size)
+#ifdef USE_JS_SCRIPTENGINE
+    Q_PROPERTY(QGraphicsLayout *layout WRITE setLayout READ layout)
     Q_PROPERTY(QObject *sender READ sender)
+#endif
 
 public:
-    AppletInterface(SimpleJavaScriptApplet *parent);
+    AppletInterface(AbstractJsAppletScript *parent);
     ~AppletInterface();
 
 //------------------------------------------------------------------
@@ -255,8 +258,6 @@ enum IntervalAlignment {
 
     Q_INVOKABLE void setPreferredSize(qreal w, qreal h);
 
-    Q_INVOKABLE void update(const QRectF &rect = QRectF());
-
     Q_INVOKABLE QString activeConfig() const;
 
     Q_INVOKABLE void setActiveConfig(const QString &name);
@@ -275,11 +276,15 @@ enum IntervalAlignment {
 
     Q_INVOKABLE Plasma::Extender *extender() const;
 
+#ifdef USE_JS_SCRIPTENGINE
+    Q_INVOKABLE void update(const QRectF &rect = QRectF());
+    QGraphicsLayout *layout() const;
+    void setLayout(QGraphicsLayout *);
+#endif
+
     Plasma::DataEngine *dataEngine(const QString &name);
 
     QList<QAction*> contextualActions() const;
-    QGraphicsLayout *layout() const;
-    void setLayout(QGraphicsLayout *);
     bool immutable() const;
     bool userConfiguring() const;
     int apiVersion() const;
@@ -291,8 +296,13 @@ Q_SIGNALS:
     void releaseVisualFocus();
     void configNeedsSaving();
 
+    void formFactorChanged();
+    void locationChanged();
+    void contextChanged();
+    void immutableChanged();
+
 protected:
-    SimpleJavaScriptApplet *m_appletScriptEngine;
+    AbstractJsAppletScript *m_appletScriptEngine;
 
 private:
     QSet<QString> m_actions;
@@ -309,7 +319,7 @@ class PopupAppletInterface : public AppletInterface
     Q_PROPERTY(QGraphicsWidget *popupWidget READ popupWidget WRITE setPopupWidget)
 
 public:
-    PopupAppletInterface(SimpleJavaScriptApplet *parent);
+    PopupAppletInterface(AbstractJsAppletScript *parent);
 
     void setPopupIcon(const QIcon &icon);
     QIcon popupIcon();
