@@ -36,7 +36,6 @@ namespace Plasma
 
 #include <KDE/KParts/Part>
 #include <KDE/KService>
-class KDialog;
 
 #include <QtCore/QHash>
 class QVariant;
