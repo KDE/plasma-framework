@@ -1,10 +1,3 @@
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
-
-find_package(KDE4 REQUIRED)
-include (KDE4Defaults)
-
-add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
-include_directories (${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
 
 set(plasma_kpartscripting_SRCS
    scripting/layouttemplatepackagestructure.cpp
