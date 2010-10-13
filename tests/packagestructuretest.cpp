@@ -43,12 +43,12 @@ void PackageStructureTest::type()
 void PackageStructureTest::directories()
 {
     QList<const char*> dirs;
-    dirs << "config" << "data" << "images" << "scripts" << "translations" << "ui";
+    dirs << "animations" << "config" << "data" << "images" << "scripts" << "translations" << "ui";
 
     QList<const char*> psDirs = ps->directories();
 
     QCOMPARE(dirs.count(), psDirs.count());
-    
+
     for (int i = 0; i < psDirs.count(); ++i) {
         QVERIFY(qstrcmp(dirs[i], psDirs[i]) == 0);
     }
