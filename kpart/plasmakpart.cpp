@@ -30,9 +30,7 @@
 #include <Plasma/Applet>
 #include <plasma/pluginloader.h>
 
-#include <KAction>
 #include <KDebug>
-#include <KDialog>
 
 #include <QCheckBox>
 #include <QHash>
