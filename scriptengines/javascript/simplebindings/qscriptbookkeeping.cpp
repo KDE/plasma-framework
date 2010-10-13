@@ -25,8 +25,6 @@
 #include <Plasma/Extender>
 #include <Plasma/VideoWidget>
 
-#include "variant.h"
-
 //Q_DECLARE_METATYPE(SimpleJavaScriptApplet*)
 Q_DECLARE_METATYPE(QGraphicsWidget*)
 Q_DECLARE_METATYPE(QGraphicsLayout*)

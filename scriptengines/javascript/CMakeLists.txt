@@ -3,8 +3,9 @@
 set(simple_javascript_engine_SRCS
     common/javascriptaddonpackagestructure.cpp
     common/scriptenvui.cpp
+    plasmoid/abstractjsappletscript.cpp
     plasmoid/appletauthorization.cpp
-    plasmoid/appletinterface.cpp
+    plasmoid/jsappletinterface.cpp
     plasmoid/simplejavascriptapplet.cpp
     plasmoid/themedsvg.cpp
     simplebindings/animationgroup.cpp
@@ -33,7 +34,6 @@ set(simple_javascript_engine_SRCS
     simplebindings/timer.cpp
     simplebindings/uiloader.cpp
     simplebindings/url.cpp
-    simplebindings/variant.cpp
 )
 
 include_directories(${PHONON_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/common)
@@ -83,7 +83,6 @@ set(javascript_dataengine_engine_SRCS
     simplebindings/dataengine.cpp
     simplebindings/i18n.cpp
     simplebindings/qscriptnonguibookkeeping.cpp
-    simplebindings/variant.cpp
 )
 kde4_add_plugin(plasma_dataenginescript_javascript ${javascript_dataengine_engine_SRCS})
 

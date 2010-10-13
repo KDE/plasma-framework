@@ -63,7 +63,6 @@
 #include "simplebindings/dataengine.h"
 #include "simplebindings/dataenginereceiver.h"
 #include "simplebindings/i18n.h"
-#include "simplebindings/variant.h"
 #include "themedsvg.h"
 
 using namespace Plasma;
@@ -523,7 +522,7 @@ void SimpleJavaScriptApplet::setupObjects()
     QScriptValue args = m_engine->newArray();
     int i = 0;
     foreach (const QVariant &arg, applet()->startupArguments()) {
-        args.setProperty(i, ::variantToScriptValue(m_engine, arg));
+        args.setProperty(i, m_engine->newVariant(arg));
         ++i;
     }
     global.setProperty("startupArguments", args);
@@ -852,12 +851,9 @@ QString SimpleJavaScriptApplet::filePath(const QString &type, const QString &fil
     return package()->filePath(type.toLocal8Bit().constData(), file);
 }
 
-/*
- * Workaround the fact that QtScripts handling of variants seems a bit broken.
- */
 QScriptValue SimpleJavaScriptApplet::variantToScriptValue(QVariant var)
 {
-    return ::variantToScriptValue(m_engine, var);
+    return m_engine->newVariant(var);
 }
 
 K_EXPORT_PLASMA_APPLETSCRIPTENGINE(qscriptapplet, SimpleJavaScriptApplet)

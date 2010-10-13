@@ -28,8 +28,6 @@
 #include <Plasma/Service>
 #include <Plasma/ServiceJob>
 
-#include "variant.h"
-
 using namespace Plasma;
 
 Q_DECLARE_METATYPE(Service*)
