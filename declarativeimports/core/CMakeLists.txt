@@ -1,7 +1,5 @@
 project(corebindings)
 
-include(KDE4Defaults)
-
 set(corebindings_SRCS
     corebindingsplugin.cpp
     dataengineconsumer.cpp

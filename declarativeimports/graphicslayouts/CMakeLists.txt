@@ -1,7 +1,5 @@
 project(graphicslayoutsbindings)
 
-include(KDE4Defaults)
-
 set(graphicslayoutsbindings_SRCS
     graphicslayoutsbindingsplugin.cpp
     gridlayout.cpp

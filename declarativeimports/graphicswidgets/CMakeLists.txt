@@ -1,7 +1,5 @@
 project(graphicswidgetsbindings)
 
-include(KDE4Defaults)
-
 set(graphicswidgetsbindings_SRCS
     graphicswidgetsbindingsplugin.cpp
     declarativetabbar.cpp
