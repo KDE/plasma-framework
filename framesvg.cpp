@@ -325,7 +325,7 @@ void FrameSvg::resizeFrame(const QSizeF &size)
 
     d->updateSizes();
     fd->frameSize = size.toSize();
-    // we know it isn't in s_sharedFrames do the check above, so insert it now
+    // we know it isn't in s_sharedFrames due to the check above, so insert it now
     FrameSvgPrivate::s_sharedFrames.insert(newKey, fd);
 }
 
@@ -873,8 +873,9 @@ void FrameSvgPrivate::generateFrameBackground(FrameData *frame)
 QString FrameSvgPrivate::cacheId(FrameData *frame, const QString &prefixToSave) const
 {
     const QSize size = frameSize(frame).toSize();
-    const QChar s('_');
-    return QString::number(frame->enabledBorders) % s % QString::number(size.width()) % s % QString::number(size.height()) % s % prefixToSave % s % q->imagePath();
+    const QLatin1Char s('_');
+    const QLatin1Char b(frame->enabledBorders ? '1' : '0');
+    return b % s % QString::number(size.width()) % s % QString::number(size.height()) % s % prefixToSave % s % q->imagePath();
 }
 
 void FrameSvgPrivate::cacheFrame(const QString &prefixToSave, const QPixmap &background, const QPixmap &overlay)
