@@ -36,7 +36,6 @@ class QDeclarativePropertyMap;
 
 namespace Plasma
 {
-  class Applet;
   class DataEngine;
 
   class DataSource : public QObject, DataEngineConsumer
