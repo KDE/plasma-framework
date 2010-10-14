@@ -264,6 +264,7 @@ class PLASMA_EXPORT Svg : public QObject
 
         friend class SvgPrivate;
         friend class FrameSvgPrivate;
+        friend class FrameSvg;
 };
 
 } // Plasma namespace

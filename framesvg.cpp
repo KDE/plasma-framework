@@ -1,6 +1,6 @@
 /*
- *   Copyright 2008 by Aaron Seigo <aseigo@kde.org>
- *   Copyright 2008 Marco Martin <notmart@gmail.com>
+ *   Copyright 2008-2010 by Aaron Seigo <aseigo@kde.org>
+ *   Copyright 2008-2010 Marco Martin <notmart@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -32,8 +32,9 @@
 
 #include <kdebug.h>
 
-#include <plasma/theme.h>
-#include <plasma/applet.h>
+#include <applet.h>
+#include <theme.h>
+#include <private/svg_p.h>
 
 namespace Plasma
 {
@@ -64,11 +65,54 @@ void FrameSvg::setImagePath(const QString &path)
         return;
     }
 
-    Svg::setImagePath(path);
-    setContainsMultipleImages(true);
-
+    bool updateNeeded = true;
     clearCache();
-    d->updateAndSignalSizes();
+
+    FrameData *fd = d->frames[d->prefix];
+    if (fd->refcount() == 1) {
+        // we're the only user of it, let's remove it from the shared keys
+        // we don't want to deref it, however, as we'll still be using it
+        const QString oldKey = d->cacheId(fd, d->prefix);
+        FrameSvgPrivate::s_sharedFrames.remove(oldKey);
+    } else {
+        // others are using this frame, so deref it for ourselves
+        fd->deref(this);
+        fd = 0;
+    }
+
+    Svg::d->setImagePath(path);
+
+    if (!fd) {
+        // we need to replace our frame, start by looking in the frame cache
+        const QString key = d->cacheId(fd, d->prefix);
+        fd = FrameSvgPrivate::s_sharedFrames.value(key);
+
+        if (fd) {
+            // we found one, so ref it and use it; we also don't need to (or want to!)
+            // trigger a full update of the frame since it is already the one we want
+            // and likely already rendered just fine
+            fd->ref(this);
+            updateNeeded = false;
+        } else {
+            // nothing exists for us in the cache, so create a new FrameData based
+            // on the old one
+            fd = new FrameData(*d->frames[d->prefix], this);
+        }
+
+        d->frames.insert(d->prefix, fd);
+    }
+
+    setContainsMultipleImages(true);
+    if (updateNeeded) {
+        // ensure our frame is in the cache
+        const QString key = d->cacheId(fd, d->prefix);
+        FrameSvgPrivate::s_sharedFrames.insert(key, fd);
+
+        // this will emit repaintNeeded() as well when it is done
+        d->updateAndSignalSizes();
+    } else {
+        emit repaintNeeded();
+    }
 }
 
 void FrameSvg::setEnabledBorders(const EnabledBorders borders)
@@ -874,7 +918,7 @@ QString FrameSvgPrivate::cacheId(FrameData *frame, const QString &prefixToSave) 
 {
     const QSize size = frameSize(frame).toSize();
     const QLatin1Char s('_');
-    return QString::number(frame->enabledBorders) % s % QString::number(size.width()) % s % QString::number(size.height()) % s % prefixToSave % s % q->imagePath();
+    return QString::number(frame->enabledBorders) % s % QString::number(size.width()) % s % QString::number(size.height()) % s % prefixToSave % s % q->imagePath(); 
 }
 
 void FrameSvgPrivate::cacheFrame(const QString &prefixToSave, const QPixmap &background, const QPixmap &overlay)
