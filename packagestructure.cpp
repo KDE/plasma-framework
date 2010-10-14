@@ -434,7 +434,7 @@ void PackageStructure::read(const KConfigBase *config)
 {
     d->contents.clear();
     d->mimetypes.clear();
-    KConfigGroup general(config, "");
+    KConfigGroup general(config, QString());
     d->type = general.readEntry("Type", QString());
     d->contentsPrefix = general.readEntry("ContentsPrefix", d->contentsPrefix);
     d->packageRoot = general.readEntry("DefaultPackageRoot", d->packageRoot);
@@ -442,7 +442,7 @@ void PackageStructure::read(const KConfigBase *config)
 
     QStringList groups = config->groupList();
     foreach (const QString &group, groups) {
-        KConfigGroup entry(config, "");
+        KConfigGroup entry(config, group);
         QByteArray key = group.toAscii();
 
         QString path = entry.readEntry("Path", QString());
