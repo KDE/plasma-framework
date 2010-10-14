@@ -24,7 +24,7 @@
 #include <QSharedData>
 #include <QSvgRenderer>
 
-#include <KSharedPtr>
+#include "ksharedptr.h"
 
 namespace Plasma
 {
