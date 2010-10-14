@@ -444,11 +444,11 @@ bool Package::installPackage(const QString &package,
         // it's in a temp dir, so just move it over.
 #ifndef PLASMA_NO_KIO
         KIO::CopyJob *job = KIO::move(KUrl(path), KUrl(targetName), KIO::HideProgressInfo);
-        bool ok = job->exec();
-        QString errorString = job->errorString();
+        const bool ok = job->exec();
+        const QString errorString = job->errorString();
 #else
-        bool ok = QFile::rename(path, targetName);
-        QString errorString("unknown");
+        const bool ok = QFile::rename(path, targetName);
+        const QString errorString("unknown");
 #endif
         if (!ok) {
             kWarning() << "Could not move package to destination:" << targetName << " : " << errorString;
@@ -459,10 +459,11 @@ bool Package::installPackage(const QString &package,
         // than move them
 #ifndef PLASMA_NO_KIO
         KIO::CopyJob *job = KIO::copy(KUrl(path), KUrl(targetName), KIO::HideProgressInfo);
-        bool ok = job->exec();
+        const bool ok = job->exec();
+        const QString errorString = job->errorString();
 #else
-        bool ok = false; // Qt dunno how to recursively copy directories, so don't bother
-        QString errorString("unknown");
+        const bool ok = false; // Qt dunno how to recursively copy directories, so don't bother
+        const QString errorString("unknown");
 #endif
         if (!ok) {
             kWarning() << "Could not copy package to destination:" << targetName << " : " << errorString;
@@ -493,11 +494,11 @@ bool Package::installPackage(const QString &package,
         QString service = KStandardDirs::locateLocal("services", serviceName + ".desktop");
 #ifndef PLASMA_NO_KIO
         KIO::FileCopyJob *job = KIO::file_copy(metaPath, service, -1, KIO::HideProgressInfo);
-        bool ok = job->exec();
-        QString errorString = job->errorString();
+        const bool ok = job->exec();
+        const QString errorString = job->errorString();
 #else
-        bool ok = QFile::copy(metaPath, service);
-        QString errorString("unknown");
+        const bool ok = QFile::copy(metaPath, service);
+        const QString errorString("unknown");
 #endif
         if (ok) {
             // the icon in the installed file needs to point to the icon in the
@@ -543,10 +544,10 @@ bool Package::uninstallPackage(const QString &pluginName,
 #ifndef PLASMA_NO_KIO
     KIO::DeleteJob *job = KIO::del(KUrl(targetName));
     ok = job->exec();
-    QString errorString = job->errorString();
+    const QString errorString = job->errorString();
 #else
     ok = QFile::remove(targetName);
-    QString errorString("unknown");
+    const QString errorString("unknown");
 #endif
     if (!ok) {
         kWarning() << "Could not delete package from:" << targetName << " : " << errorString;
