@@ -66,7 +66,7 @@ class ExtenderPrivate
         ~ExtenderPrivate();
 
         void addExtenderItem(ExtenderItem *item, const QPointF &pos = QPointF(-1, -1));
-        void extenderItemDestroyed(ExtenderItem *item);
+        void extenderItemDestroyed(Plasma::ExtenderItem *item);
         void viewportGeometryChanged(const QRectF &rect);
         void removeExtenderItem(ExtenderItem *item);
         int insertIndexFromPos(const QPointF &pos) const;
