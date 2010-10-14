@@ -41,12 +41,12 @@ namespace Plasma
 PlasmoidPackage::PlasmoidPackage(QObject *parent)
     : Plasma::PackageStructure(parent, QString("Plasmoid"))
 {
-    addDirectoryDefinition("images", "images/", i18n("Images"));
+    addDirectoryDefinition("images", "images", i18n("Images"));
     QStringList mimetypes;
     mimetypes << "image/svg+xml" << "image/png" << "image/jpeg";
     setMimetypes("images", mimetypes);
 
-    addDirectoryDefinition("config", "config/", i18n("Configuration Definitions"));
+    addDirectoryDefinition("config", "config", i18n("Configuration Definitions"));
     mimetypes.clear();
     mimetypes << "text/xml";
     setMimetypes("config", mimetypes);
@@ -67,7 +67,7 @@ PlasmoidPackage::PlasmoidPackage(QObject *parent)
     addFileDefinition("mainconfigxml", "config/main.xml", i18n("Configuration XML file"));
     addFileDefinition("mainscript", "code/main", i18n("Main Script File"));
     addFileDefinition("defaultconfig", "config/default-configrc", i18n("Default configuration"));
-    addDirectoryDefinition("animations", "animations/", i18n("Animation scripts"));
+    addDirectoryDefinition("animations", "animations", i18n("Animation scripts"));
     setRequired("mainscript", true);
 }
 
