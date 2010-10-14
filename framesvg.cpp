@@ -84,7 +84,8 @@ void FrameSvg::setImagePath(const QString &path)
 
     if (!fd) {
         // we need to replace our frame, start by looking in the frame cache
-        const QString key = d->cacheId(fd, d->prefix);
+        FrameData *oldFd = d->frames[d->prefix];
+        const QString key = d->cacheId(oldFd, d->prefix);
         fd = FrameSvgPrivate::s_sharedFrames.value(key);
 
         if (fd) {
@@ -96,7 +97,7 @@ void FrameSvg::setImagePath(const QString &path)
         } else {
             // nothing exists for us in the cache, so create a new FrameData based
             // on the old one
-            fd = new FrameData(*d->frames[d->prefix], this);
+            fd = new FrameData(*oldFd, this);
         }
 
         d->frames.insert(d->prefix, fd);
