@@ -30,6 +30,11 @@ static const int VERTICAL_STACKING_OFFSET = 10000;
 
 class KJob;
 
+namespace KIO
+{
+    class Job;
+}
+
 namespace Plasma
 {
 

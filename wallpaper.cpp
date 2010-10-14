@@ -73,7 +73,7 @@ class SaveImageThread : public QRunnable
         m_image.save(m_filePath);
     }
 };
-    
+
 LoadImageThread::LoadImageThread(const QString &filePath)
 {
     m_filePath = filePath;
@@ -638,7 +638,7 @@ void Wallpaper::insertIntoCache(const QString& key, const QImage &image)
             KIO::file_delete(d->cachePath(key));
 #else
             QFile f(d->cachePath(key));
-            f.remove():
+            f.remove();
 #endif
         } else {
             QThreadPool::globalInstance()->start(new SaveImageThread(image, d->cachePath(key)));

@@ -19,12 +19,20 @@
 
 #include "associatedapplicationmanager_p.h"
 
+#include "config-plasma.h"
+
 #include <QHash>
 #include <QFile>
 
 #include <kstandarddirs.h>
-#include <krun.h>
 #include <kicon.h>
+
+#ifndef PLASMA_NO_KIO
+#include <krun.h>
+#else
+#include <QProcess>
+#include <QDesktopServices>
+#endif
 
 #include "plasma/applet.h"
 
@@ -110,13 +118,30 @@ KUrl::List AssociatedApplicationManager::urls(const Plasma::Applet *applet) cons
 void AssociatedApplicationManager::run(Plasma::Applet *applet)
 {
     if (d->applicationNames.contains(applet)) {
+#ifndef PLASMA_NO_KIO
         bool success = KRun::run(d->applicationNames.value(applet), d->urlLists.value(applet), 0);
+#else
+        QString execCommand = d->applicationNames.value(applet);
+
+        // Clean-up the %u and friends from the exec command (KRun expect them, not QProcess)
+        execCommand = execCommand.replace(QRegExp("%[a-z]"), QString());
+        execCommand = execCommand.trimmed();
+
+        QStringList parameters = d->urlLists.value(applet).toStringList();
+        bool success = QProcess::startDetached(execCommand, parameters);
+#endif
+
         if (!success) {
             applet->showMessage(KIcon("application-exit"), i18n("There was an error attempting to exec the associated application with this widget."), ButtonOk);
         }
+
     } else if (d->urlLists.contains(applet) && !d->urlLists.value(applet).isEmpty()) {
+#ifndef PLASMA_NO_KIO
         KRun *krun = new KRun(d->urlLists.value(applet).first(), 0);
         krun->setAutoDelete(true);
+#else
+        QDesktopServices::openUrl(d->urlLists.value(applet).first());
+#endif
     }
 }
 

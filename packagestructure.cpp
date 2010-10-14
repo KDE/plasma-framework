@@ -19,12 +19,16 @@
 
 #include "packagestructure.h"
 
+#include "config-plasma.h"
+
 #include <QDir>
 #include <QMap>
 #include <QFileInfo>
 
 #include <kconfiggroup.h>
+#ifndef PLASMA_NO_KIO
 #include <kio/job.h>
+#endif
 #include <kmimetype.h>
 #include <kstandarddirs.h>
 #include <kservicetypetrader.h>
@@ -183,7 +187,9 @@ PackageStructure::Ptr PackageStructure::load(const QString &packageFormat)
         KConfig config(url.toLocalFile(), KConfig::SimpleConfig);
         structure->read(&config);
         PackageStructurePrivate::structures[structure->type()] = structure;
-    } else {
+    }
+#ifndef PLASMA_NO_KIO
+    else {
         KTemporaryFile tmp;
         if (tmp.open()) {
             KIO::Job *job = KIO::file_copy(url, KUrl(tmp.fileName()),
@@ -195,6 +201,7 @@ PackageStructure::Ptr PackageStructure::load(const QString &packageFormat)
             }
         }
     }
+#endif
 
     return structure;
 }

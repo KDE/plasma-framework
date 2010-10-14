@@ -19,13 +19,21 @@
 
 #include "videowidget.h"
 
+#include "config-plasma.h"
+
 #include <QUrl>
 #include <QTimer>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsSceneResizeEvent>
 
 #include <kicon.h>
+#include <kiconloader.h>
+
+#ifndef PLASMA_NO_KIO
 #include <kfiledialog.h>
+#else
+#include <QFileDialog>
+#endif
 
 #include <phonon/videowidget.h>
 #include <phonon/mediaobject.h>
@@ -150,7 +158,11 @@ void VideoWidgetPrivate::volumeChanged(qreal value)
 
 void VideoWidgetPrivate::showOpenFileDialog()
 {
+#ifndef PLASMA_NO_KIO
     openFile(KFileDialog::getOpenFileName());
+#else
+    openFile(QFileDialog::getOpenFileName());
+#endif
 }
 
 void VideoWidgetPrivate::openFile(const QString &path)

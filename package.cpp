@@ -33,10 +33,12 @@
 #include <karchive.h>
 #include <kcomponentdata.h>
 #include <kdesktopfile.h>
+#ifndef PLASMA_NO_KIO
 #include <kio/copyjob.h>
 #include <kio/deletejob.h>
 #include <kio/jobclasses.h>
 #include <kio/job.h>
+#endif
 #include <kmimetype.h>
 #include <kplugininfo.h>
 #include <kstandarddirs.h>
@@ -440,17 +442,30 @@ bool Package::installPackage(const QString &package,
 
     if (archivedPackage) {
         // it's in a temp dir, so just move it over.
+#ifndef PLASMA_NO_KIO
         KIO::CopyJob *job = KIO::move(KUrl(path), KUrl(targetName), KIO::HideProgressInfo);
-        if (!job->exec()) {
-            kWarning() << "Could not move package to destination:" << targetName << " : " << job->errorString();
+        bool ok = job->exec();
+        QString errorString = job->errorString();
+#else
+        bool ok = QFile::rename(path, targetName);
+        QString errorString("unknown");
+#endif
+        if (!ok) {
+            kWarning() << "Could not move package to destination:" << targetName << " : " << errorString;
             return false;
         }
     } else {
         // it's a directory containing the stuff, so copy the contents rather
         // than move them
+#ifndef PLASMA_NO_KIO
         KIO::CopyJob *job = KIO::copy(KUrl(path), KUrl(targetName), KIO::HideProgressInfo);
-        if (!job->exec()) {
-            kWarning() << "Could not copy package to destination:" << targetName << " : " << job->errorString();
+        bool ok = job->exec();
+#else
+        bool ok = false; // Qt dunno how to recursively copy directories, so don't bother
+        QString errorString("unknown");
+#endif
+        if (!ok) {
+            kWarning() << "Could not copy package to destination:" << targetName << " : " << errorString;
             return false;
         }
     }
@@ -476,8 +491,15 @@ bool Package::installPackage(const QString &package,
         QString serviceName = servicePrefix + meta.pluginName();
 
         QString service = KStandardDirs::locateLocal("services", serviceName + ".desktop");
+#ifndef PLASMA_NO_KIO
         KIO::FileCopyJob *job = KIO::file_copy(metaPath, service, -1, KIO::HideProgressInfo);
-        if (job->exec()) {
+        bool ok = job->exec();
+        QString errorString = job->errorString();
+#else
+        bool ok = QFile::copy(metaPath, service);
+        QString errorString("unknown");
+#endif
+        if (ok) {
             // the icon in the installed file needs to point to the icon in the
             // installation dir!
             QString iconPath = targetName + '/' + cg.readEntry("Icon");
@@ -488,7 +510,7 @@ bool Package::installPackage(const QString &package,
                 cg.writeEntry("Icon", iconPath);
             }
         } else {
-            kWarning() << "Could not register package as service (this is not necessarily fatal):" << serviceName << " : " << job->errorString();
+            kWarning() << "Could not register package as service (this is not necessarily fatal):" << serviceName << " : " << errorString;
         }
     }
 
@@ -518,9 +540,16 @@ bool Package::uninstallPackage(const QString &pluginName,
         kWarning() << "Unable to remove " << service;
     }
 
+#ifndef PLASMA_NO_KIO
     KIO::DeleteJob *job = KIO::del(KUrl(targetName));
-    if (!job->exec()) {
-        kWarning() << "Could not delete package from:" << targetName << " : " << job->errorString();
+    ok = job->exec();
+    QString errorString = job->errorString();
+#else
+    ok = QFile::remove(targetName);
+    QString errorString("unknown");
+#endif
+    if (!ok) {
+        kWarning() << "Could not delete package from:" << targetName << " : " << errorString;
         return false;
     }
 
@@ -553,8 +582,12 @@ bool Package::registerPackage(const PackageMetadata &data, const QString &iconPa
                               iconPath.right(iconPath.length() - iconPath.lastIndexOf("/")));
         cg.writeEntry("Icon", installedIcon);
         installedIcon = KStandardDirs::locateLocal("icon", installedIcon);
+#ifndef PLASMA_NO_KIO
         KIO::FileCopyJob *job = KIO::file_copy(iconPath, installedIcon, -1, KIO::HideProgressInfo);
         job->exec();
+#else
+        QFile::copy(iconPath, installedIcon);
+#endif
     }
 
     return true;

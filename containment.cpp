@@ -22,6 +22,8 @@
 #include "containment.h"
 #include "private/containment_p.h"
 
+#include "config-plasma.h"
+
 #include <QApplication>
 #include <QClipboard>
 #include <QFile>
@@ -44,9 +46,12 @@
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
 #include <kwindowsystem.h>
+
+#ifndef PLASMA_NO_KIO
 #include "kio/jobclasses.h" // for KIO::JobFlags
 #include "kio/job.h"
 #include "kio/scheduler.h"
+#endif
 
 #include "abstracttoolbox.h"
 #include "animator.h"
@@ -1287,7 +1292,9 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
                 }
                 QObject::connect(AccessManager::self(), SIGNAL(finished(Plasma::AccessAppletJob*)),
                                  q, SLOT(remoteAppletReady(Plasma::AccessAppletJob*)));
-            } else {
+            }
+#ifndef PLASMA_NO_KIO
+            else {
                 KMimeType::Ptr mime = KMimeType::findByUrl(url);
                 QString mimeName = mime->name();
                 QRectF geom(pos, QSize());
@@ -1318,6 +1325,7 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
 
                 dropMenus[job] = choices;
             }
+#endif
         }
 
         if (dropEvent) {
@@ -1403,11 +1411,13 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
 
 void ContainmentPrivate::clearDataForMimeJob(KIO::Job *job)
 {
+#ifndef PLASMA_NO_KIO
     QObject::disconnect(job, 0, q, 0);
     dropPoints.remove(job);
     KMenu *choices = dropMenus.take(job);
     delete choices;
     job->kill();
+#endif // PLASMA_NO_KIO
 }
 
 void ContainmentPrivate::remoteAppletReady(Plasma::AccessAppletJob *job)
@@ -1429,6 +1439,7 @@ void ContainmentPrivate::remoteAppletReady(Plasma::AccessAppletJob *job)
 
 void ContainmentPrivate::dropJobResult(KJob *job)
 {
+#ifndef PLASMA_NO_KIO
     KIO::TransferJob* tjob = dynamic_cast<KIO::TransferJob*>(job);
     if (!tjob) {
         kDebug() << "job is not a KIO::TransferJob, won't handle the drop...";
@@ -1441,10 +1452,12 @@ void ContainmentPrivate::dropJobResult(KJob *job)
     // We call mimetypeRetrieved since there might be other mechanisms
     // for finding suitable applets. Cleanup happens there as well.
     mimeTypeRetrieved(qobject_cast<KIO::Job *>(job), QString());
+#endif // PLASMA_NO_KIO
 }
 
 void ContainmentPrivate::mimeTypeRetrieved(KIO::Job *job, const QString &mimetype)
 {
+#ifndef PLASMA_NO_KIO
     kDebug() << "Mimetype Job returns." << mimetype;
     KIO::TransferJob* tjob = dynamic_cast<KIO::TransferJob*>(job);
     if (!tjob) {
@@ -1562,6 +1575,7 @@ void ContainmentPrivate::mimeTypeRetrieved(KIO::Job *job, const QString &mimetyp
     }
 
     clearDataForMimeJob(job);
+#endif // PLASMA_NO_KIO
 }
 
 const QGraphicsItem *Containment::toolBoxItem() const

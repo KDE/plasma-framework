@@ -33,10 +33,6 @@
 #include <plasma/applet.h>
 #include <plasma/animator.h>
 
-namespace KIO
-{
-    class Job;
-}
 
 namespace Plasma
 {
