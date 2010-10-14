@@ -304,7 +304,7 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
         ExtenderPrivate *const d;
 
         Q_PRIVATE_SLOT(d, void delayItemAddedEvent())
-        Q_PRIVATE_SLOT(d, void extenderItemDestroyed(ExtenderItem *item))
+        Q_PRIVATE_SLOT(d, void extenderItemDestroyed(Plasma::ExtenderItem *item))
         Q_PRIVATE_SLOT(d, void viewportGeometryChanged(const QRectF &))
 
         friend class ExtenderPrivate;

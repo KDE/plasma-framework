@@ -287,7 +287,7 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
          * Emitted when the extender item is destroyed
          * @since 4.4.1
          */
-        void destroyed(ExtenderItem *item);
+        void destroyed(Plasma::ExtenderItem *item);
 
     protected:
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
