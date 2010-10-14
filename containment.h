@@ -527,6 +527,13 @@ class PLASMA_EXPORT Containment : public Applet
          */
         void showConfigurationInterface();
 
+        /**
+         * Called when applet configuration values have changed.
+         * @reimp
+         * @sa Applet::configChanged()
+         */
+        void configChanged();
+
     protected:
         /**
          * Sets the type of this containment.

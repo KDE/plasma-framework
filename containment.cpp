@@ -2079,6 +2079,17 @@ void Containment::showConfigurationInterface()
     Applet::showConfigurationInterface();
 }
 
+void Containment::configChanged()
+{
+    if (d->drawWallpaper) {
+        KConfigGroup group = config();
+        setWallpaper(group.readEntry("wallpaperplugin", defaultWallpaper),
+                     group.readEntry("wallpaperpluginmode", defaultWallpaperMode));
+    }
+
+    Applet::configChanged();
+}
+
 void ContainmentPrivate::requestConfiguration()
 {
     emit q->configureRequested(q);
