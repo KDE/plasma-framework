@@ -142,8 +142,13 @@ void DeclarativeWidgetPrivate::finishExecute()
         lay->addItem(widget);
     } else {
         q->setLayout(0);
-        const qreal width = object->property("width").toReal();
-        const qreal height = object->property("height").toReal();
+        qreal width = 0;
+        qreal height = 0;
+        if (object) {
+            width = object->property("width").toReal();
+            height = object->property("height").toReal();
+        }
+
         if (width > 0 && height > 0) {
             q->setPreferredSize(width, height);
         } else {
