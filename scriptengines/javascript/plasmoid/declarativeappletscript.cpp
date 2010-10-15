@@ -79,7 +79,12 @@ bool DeclarativeAppletScript::init()
     m_declarativeWidget->setInitializationDelayed(true);
     m_declarativeWidget->setQmlPath(mainScript());
 
-    if (!m_declarativeWidget->engine()) {
+    if (!m_declarativeWidget->engine() || !m_declarativeWidget->engine()->rootContext() || !m_declarativeWidget->engine()->rootContext()->isValid() || m_declarativeWidget->mainComponent()->isError()) {
+        QString reason;
+        foreach (QDeclarativeError error, m_declarativeWidget->mainComponent()->errors()) {
+            reason += error.toString();
+        }
+        setFailedToLaunch(true, reason);
         return false;
     }
 
