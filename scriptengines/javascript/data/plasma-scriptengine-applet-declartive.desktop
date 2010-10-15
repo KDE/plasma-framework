@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=Declarative widget
+Name[x-test]=xxDeclarative widgetxx
 Comment=Native Plasma widget written in QML and JavaScript
+Comment[x-test]=xxNative Plasma widget written in QML and JavaScriptxx
 Type=Service
 Icon=text-x-script
 
