@@ -167,16 +167,19 @@ void ExtenderGroup::expandGroup()
     config().writeEntry("groupCollapsed", d->collapsed);
     action("collapse")->setVisible(true);
     action("expand")->setVisible(false);
+
+    d->childsWidget->show();
+    static_cast<QGraphicsLinearLayout *>(layout())->addItem(d->childsWidget);
+    updateGeometry();
+
     foreach (ExtenderItem *item, extender()->attachedItems()) {
         if (item->group() == this) {
             item->show();
             extender()->itemAddedEvent(item);
         }
     }
-    d->childsWidget->show();
-    static_cast<QGraphicsLinearLayout *>(layout())->addItem(d->childsWidget);
-    updateGeometry();
-    extender()->resize(extender()->effectiveSizeHint(Qt::PreferredSize));
+
+    //extender()->resize(extender()->effectiveSizeHint(Qt::PreferredSize));
 }
 
 void ExtenderGroup::collapseGroup()
@@ -192,14 +195,17 @@ void ExtenderGroup::collapseGroup()
     config().writeEntry("groupCollapsed", d->collapsed);
     action("collapse")->setVisible(false);
     action("expand")->setVisible(true);
+
+    d->childsWidget->hide();
+    static_cast<QGraphicsLinearLayout *>(layout())->removeItem(d->childsWidget);
+    updateGeometry();
+
     foreach (ExtenderItem *item, extender()->attachedItems()) {
         if (item != this && item->group() == this) {
             item->hide();
             extender()->itemRemovedEvent(item);
         }
     }
-    d->childsWidget->hide();
-    static_cast<QGraphicsLinearLayout *>(layout())->removeItem(d->childsWidget);
 }
 
 void ExtenderGroup::resizeEvent(QGraphicsSceneResizeEvent *event)

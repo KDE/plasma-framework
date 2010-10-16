@@ -512,6 +512,8 @@ void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
     //remove the empty extender message if needed.
     d->updateEmptyExtenderLabel();
     d->updateBorders();
+
+    resize(d->mainWidget->effectiveSizeHint(Qt::PreferredSize));
 }
 
 void Extender::itemRemovedEvent(ExtenderItem *item)
@@ -528,12 +530,18 @@ void Extender::itemRemovedEvent(ExtenderItem *item)
         d->spacerWidget = 0;
     }
 
+    //FIXME: hardcoded number for the scrollbar
+    d->scrollWidget->setMinimumWidth(d->mainWidget->effectiveSizeHint(Qt::MinimumSize).width() + 32);
+    //FIXME: hardcoded number
+    d->scrollWidget->setMinimumHeight(qMin((qreal)300, d->mainWidget->effectiveSizeHint(Qt::MinimumSize).height()));
+
     //add the empty extender message if needed.
     d->updateEmptyExtenderLabel();
     d->updateBorders();
 
     updateGeometry();
-    resize(effectiveSizeHint(Qt::PreferredSize));
+
+    resize(d->mainWidget->effectiveSizeHint(Qt::PreferredSize));
 }
 
 void Extender::itemHoverEnterEvent(ExtenderItem *item)
