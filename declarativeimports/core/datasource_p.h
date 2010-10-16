@@ -45,31 +45,31 @@ namespace Plasma
       typedef QHash<QString, QVariant> Data;
       DataSource(QObject* parent=0);
 
-      Q_PROPERTY(bool valid READ valid);
+      Q_PROPERTY(bool valid READ valid)
       bool valid() const {return m_dataEngine != 0;}
 
-      Q_PROPERTY(int interval READ interval WRITE setInterval NOTIFY intervalChanged);
+      Q_PROPERTY(int interval READ interval WRITE setInterval NOTIFY intervalChanged)
       int interval() const {return m_interval;}
       void setInterval(int i) {if(i==m_interval) return; m_interval=i; emit intervalChanged();}
 
-      Q_PROPERTY(QString engine READ engine WRITE setEngine NOTIFY engineChanged);
+      Q_PROPERTY(QString engine READ engine WRITE setEngine NOTIFY engineChanged)
       QString engine() const {return m_engine;}
       void setEngine(const QString &e) {if(e==m_engine) return; m_engine=e; emit engineChanged();}
 
-      Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged);
+      Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
       QString source() const {return m_source;}
       void setSource(const QString &s);
 
-      Q_PROPERTY(QStringList keys READ keys NOTIFY keysChanged);
+      Q_PROPERTY(QStringList keys READ keys NOTIFY keysChanged)
       QStringList keys() const {return m_keys;}
 
-      Q_PROPERTY(QStringList allSources READ allSources NOTIFY sourcesChanged);
+      Q_PROPERTY(QStringList allSources READ allSources NOTIFY sourcesChanged)
       QStringList allSources() const {if (m_dataEngine) return m_dataEngine->sources(); else return QStringList();}
 
       Q_PROPERTY(QObject *data READ data NOTIFY dataChanged);
       QObject *data() const {return m_data;}
 
-      Q_PROPERTY(Plasma::Service *service READ service CONSTANT);
+      Q_PROPERTY(Plasma::Service *service READ service CONSTANT)
       Plasma::Service *service();
 
   public Q_SLOTS:
