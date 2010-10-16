@@ -411,6 +411,8 @@ void ExtenderItem::setExtender(Extender *extender, const QPointF &pos)
         extenderItemGroup.deleteGroup(QString::number(d->extenderItemId));
     }
 
+    d->themeChanged();
+
     //we might have to enable or disable the returnToSource button.
     d->updateToolBox();
 
@@ -466,6 +468,8 @@ void ExtenderItem::setGroup(ExtenderGroup *group, const QPointF &pos)
         }
         config().deleteEntry("group");
     }
+    d->dragStarted = false;
+    d->themeChanged();
 }
 
 ExtenderGroup *ExtenderItem::group() const
