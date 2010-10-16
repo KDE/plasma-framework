@@ -75,6 +75,7 @@ class ExtenderPrivate
         void delayItemAddedEvent();
         void updateEmptyExtenderLabel();
         void adjustMinimumSize();
+        void setPositionFromDragPosition(const QPointF &pos);
         ExtenderGroup *findGroup(const QString &name) const;
 
         Extender *q;

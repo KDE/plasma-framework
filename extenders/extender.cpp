@@ -421,6 +421,8 @@ void Extender::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 
         if (mimeData) {
             itemHoverMoveEvent(mimeData->extenderItem(), event->pos());
+
+            d->setPositionFromDragPosition(event->scenePos());
         }
     }
 }
@@ -835,6 +837,13 @@ void ExtenderPrivate::adjustMinimumSize()
     scrollWidget->setMinimumWidth(mainWidget->effectiveSizeHint(Qt::MinimumSize).width() + 32);
     //FIXME: hardcoded number
     scrollWidget->setMinimumHeight(qMin((qreal)300, mainWidget->effectiveSizeHint(Qt::MinimumSize).height()));
+}
+
+void ExtenderPrivate::setPositionFromDragPosition(const QPointF &pos)
+{
+    const qreal ratio = (q->mapFromScene(pos).y()/scrollWidget->size().height());
+
+    mainWidget->setPos(mainWidget->pos().x(), 30 + (ratio *(scrollWidget->size().height() - mainWidget->size().height() - 30)));
 }
 
 ExtenderGroup *ExtenderPrivate::findGroup(const QString &name) const

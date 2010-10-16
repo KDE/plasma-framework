@@ -266,6 +266,8 @@ void ExtenderGroup::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
                 d->spacerWidget = widget;
             }
             d->layout->insertItem(insertIndex, d->spacerWidget);
+
+            extender()->d->setPositionFromDragPosition(event->scenePos());
         }
     }
 }
