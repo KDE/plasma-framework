@@ -600,8 +600,16 @@ void ExtenderItem::setCollapsed(bool collapsed)
             d->layout->insertItem(1, d->widget.data());
         }
         updateGeometry();
+
         if (extender()) {
-            extender()->resize(extender()->effectiveSizeHint(Qt::PreferredSize));
+            extender()->d->adjustMinimumSize();
+            static_cast<QGraphicsLayoutItem *>(extender()->d->mainWidget)->updateGeometry();
+            if (group()) {
+                group()->layout()->invalidate();
+                static_cast<QGraphicsLayoutItem *>(group())->updateGeometry();
+            }
+
+            extender()->resize(extender()->d->mainWidget->effectiveSizeHint(Qt::PreferredSize));
         }
     }
 }

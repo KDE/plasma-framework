@@ -504,10 +504,7 @@ void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
         }
     }
 
-    //FIXME: hardcoded number for the scrollbar
-    d->scrollWidget->setMinimumWidth(d->mainWidget->effectiveSizeHint(Qt::MinimumSize).width() + 32);
-    //FIXME: hardcoded number
-    d->scrollWidget->setMinimumHeight(qMin((qreal)300, d->mainWidget->effectiveSizeHint(Qt::MinimumSize).height()));
+    d->adjustMinimumSize();
 
     //remove the empty extender message if needed.
     d->updateEmptyExtenderLabel();
@@ -530,10 +527,7 @@ void Extender::itemRemovedEvent(ExtenderItem *item)
         d->spacerWidget = 0;
     }
 
-    //FIXME: hardcoded number for the scrollbar
-    d->scrollWidget->setMinimumWidth(d->mainWidget->effectiveSizeHint(Qt::MinimumSize).width() + 32);
-    //FIXME: hardcoded number
-    d->scrollWidget->setMinimumHeight(qMin((qreal)300, d->mainWidget->effectiveSizeHint(Qt::MinimumSize).height()));
+    d->adjustMinimumSize();
 
     //add the empty extender message if needed.
     d->updateEmptyExtenderLabel();
@@ -833,6 +827,14 @@ void ExtenderPrivate::updateEmptyExtenderLabel()
         delete emptyExtenderLabel;
         emptyExtenderLabel = 0;
     }
+}
+
+void ExtenderPrivate::adjustMinimumSize()
+{
+    //FIXME: hardcoded number for the scrollbar
+    scrollWidget->setMinimumWidth(mainWidget->effectiveSizeHint(Qt::MinimumSize).width() + 32);
+    //FIXME: hardcoded number
+    scrollWidget->setMinimumHeight(qMin((qreal)300, mainWidget->effectiveSizeHint(Qt::MinimumSize).height()));
 }
 
 ExtenderGroup *ExtenderPrivate::findGroup(const QString &name) const

@@ -74,6 +74,7 @@ class ExtenderPrivate
         void updateBorders();
         void delayItemAddedEvent();
         void updateEmptyExtenderLabel();
+        void adjustMinimumSize();
         ExtenderGroup *findGroup(const QString &name) const;
 
         Extender *q;
