@@ -18,5 +18,5 @@ qt4_automoc(${graphicslayoutsbindings_SRCS})
 add_library(graphicslayoutsbindingsplugin SHARED ${graphicslayoutsbindings_SRCS})
 target_link_libraries(graphicslayoutsbindingsplugin ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTSCRIPT_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY})
 
-install(TARGETS graphicslayoutsbindingsplugin DESTINATION ${PLUGIN_INSTALL_DIR}/imports/org/kde/plasma/graphicslayouts)
-install(FILES qmldir DESTINATION ${PLUGIN_INSTALL_DIR}/imports/org/kde/plasma/graphicslayouts)
+install(TARGETS graphicslayoutsbindingsplugin DESTINATION imports/org/kde/plasma/graphicslayouts)
+install(FILES qmldir DESTINATION imports/org/kde/plasma/graphicslayouts)

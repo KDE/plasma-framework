@@ -17,5 +17,5 @@ qt4_automoc(${graphicswidgetsbindings_SRCS})
 add_library(graphicswidgetsbindingsplugin SHARED ${graphicswidgetsbindings_SRCS})
 target_link_libraries(graphicswidgetsbindingsplugin ${KDE4_PLASMA_LIBS} ${QT_QTSCRIPT_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY})
 
-install(TARGETS graphicswidgetsbindingsplugin DESTINATION ${PLUGIN_INSTALL_DIR}/imports/org/kde/plasma/graphicswidgets)
-install(FILES qmldir DESTINATION ${PLUGIN_INSTALL_DIR}/imports/org/kde/plasma/graphicswidgets)
+install(TARGETS graphicswidgetsbindingsplugin DESTINATION imports/org/kde/plasma/graphicswidgets)
+install(FILES qmldir DESTINATION imports/org/kde/plasma/graphicswidgets)
