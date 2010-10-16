@@ -281,6 +281,7 @@ void ExtenderGroup::dropEvent(QGraphicsSceneDragDropEvent *event)
             QApplication::restoreOverrideCursor();
             d->layout->removeItem(d->spacerWidget);
             d->spacerWidget->deleteLater();
+            d->spacerWidget = 0;
         }
     }
 }
