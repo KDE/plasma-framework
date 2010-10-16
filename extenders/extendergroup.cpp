@@ -291,6 +291,8 @@ void ExtenderGroup::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
     if (event->mimeData()->hasFormat(ExtenderItemMimeData::mimeType())) {
         if (d->spacerWidget) {
             d->layout->removeItem(d->spacerWidget);
+            d->spacerWidget->deleteLater();
+            d->spacerWidget = 0;
         }
     }
 }
