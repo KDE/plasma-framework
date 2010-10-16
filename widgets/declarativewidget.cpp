@@ -29,6 +29,8 @@
 #include <QTimer>
 
 #include <kdebug.h>
+#include <kglobal.h>
+#include <kstandarddirs.h>
 
 namespace Plasma
 {
@@ -90,6 +92,10 @@ void DeclarativeWidgetPrivate::execute(const QString &fileName)
     delete component;
 
     engine = new QDeclarativeEngine(q);
+    foreach(const QString &importPath, KGlobal::dirs()->findDirs("module", "imports")) {
+        engine->addImportPath(importPath);
+    }
+
     component = new QDeclarativeComponent(engine, fileName, q);
 
     if (delay) {
