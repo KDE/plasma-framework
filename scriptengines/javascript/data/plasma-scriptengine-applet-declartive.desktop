@@ -1,11 +1,15 @@
 [Desktop Entry]
 Name=Declarative widget
+Name[es]=Elemento gráfico declarativo
 Name[pt]=Item declarativo
+Name[pt_BR]=Widget declarativo
 Name[sv]=Deklarativ grafisk komponent
 Name[uk]=Декларативний віджет
 Name[x-test]=xxDeclarative widgetxx
 Comment=Native Plasma widget written in QML and JavaScript
+Comment[es]=Elemento gráfico nativo de Plasma escrito en QML y JavaScript
 Comment[pt]=Elemento nativo do Plasma feito em QML e JavaScript
+Comment[pt_BR]=Widget do Plasma nativo escrito em QML e JavaScript
 Comment[sv]=Inbyggd grafisk Plasma-komponent skriven i QML och Javascript
 Comment[uk]=Віджет Плазми, написаний на QML та JavaScript
 Comment[x-test]=xxNative Plasma widget written in QML and JavaScriptxx
