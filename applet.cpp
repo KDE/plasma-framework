@@ -2577,7 +2577,10 @@ void AppletPrivate::init(const QString &packagePath)
         return;
     }
 
-    size = appletDescription.property("X-Plasma-DefaultSize").toSize();
+    QVariant s = appletDescription.property("X-Plasma-DefaultSize");
+    if (s.isValid()) {
+        size = s.toSize();
+    }
     //kDebug() << "size" << size;
     q->resize(size);
 
