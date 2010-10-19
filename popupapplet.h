@@ -71,8 +71,8 @@ public:
      *           Passing in an empty QString() means that the popup applet itself
      *           will provide an interface for when the PopupApplet is not showing
      *           the widget() or graphicsWidget() directly.
-     
-     * If you set a popup icon you must also set a minimum size of the applet. When the applet 
+
+     * If you set a popup icon you must also set a minimum size of the applet. When the applet
      * is smaller than this minimum size, it will be displayed as that icon.
      */
     void setPopupIcon(const QString &iconName);
@@ -94,7 +94,7 @@ public:
      * Implement either this function or widget().
      * @return the widget that will get shown in either a layout, in the applet or in a Dialog,
      * depending on the form factor of the applet.
-     * If you set a popup icon you must also set a minimum size of the applet. When the applet 
+     * If you set a popup icon you must also set a minimum size of the applet. When the applet
      * is smaller than this minimum size, it will be displayed as that icon.
      */
     virtual QGraphicsWidget *graphicsWidget();
@@ -135,6 +135,13 @@ public:
      * @return true if the applet is popped up
      */
     bool isPopupShowing() const;
+
+    /**
+     * @return true if the applet is collapsed to an icon
+     * @since 4.6
+     */
+    bool isIconified() const;
+
 
 public Q_SLOTS:
     /**

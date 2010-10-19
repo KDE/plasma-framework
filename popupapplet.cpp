@@ -641,6 +641,11 @@ bool PopupApplet::isPopupShowing() const
     return d->dialogPtr && d->dialogPtr.data()->isVisible();
 }
 
+bool PopupApplet::isIconified() const
+{
+    return d->dialogPtr;
+}
+
 PopupAppletPrivate::PopupAppletPrivate(PopupApplet *applet)
         : q(applet),
           icon(0),
