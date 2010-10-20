@@ -77,6 +77,9 @@ bool DeclarativeAppletScript::init()
 {
     m_declarativeWidget = new Plasma::DeclarativeWidget(applet());
     m_declarativeWidget->setInitializationDelayed(true);
+
+    m_declarativeWidget->engine()->addImportPath(package()->path()+"/contents/script");
+
     m_declarativeWidget->setQmlPath(mainScript());
 
     if (!m_declarativeWidget->engine() || !m_declarativeWidget->engine()->rootContext() || !m_declarativeWidget->engine()->rootContext()->isValid() || m_declarativeWidget->mainComponent()->isError()) {
