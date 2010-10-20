@@ -88,15 +88,7 @@ void DeclarativeWidgetPrivate::execute(const QString &fileName)
         return;
     }
 
-    delete engine;
-    delete component;
-
-    engine = new QDeclarativeEngine(q);
-    foreach(const QString &importPath, KGlobal::dirs()->findDirs("module", "imports")) {
-        engine->addImportPath(importPath);
-    }
-
-    component = new QDeclarativeComponent(engine, fileName, q);
+    component->loadUrl(fileName);
 
     if (delay) {
         QTimer::singleShot(0, q, SLOT(scheduleExecutionEnd()));
@@ -171,6 +163,13 @@ DeclarativeWidget::DeclarativeWidget(QGraphicsWidget *parent)
       d(new DeclarativeWidgetPrivate(this))
 {
     setFlag(QGraphicsItem::ItemHasNoContents);
+
+    d->engine = new QDeclarativeEngine(this);
+    foreach(const QString &importPath, KGlobal::dirs()->findDirs("module", "imports")) {
+        d->engine->addImportPath(importPath);
+    }
+
+    d->component = new QDeclarativeComponent(d->engine, this);
 }
 
 DeclarativeWidget::~DeclarativeWidget()
