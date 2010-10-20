@@ -380,15 +380,9 @@ void ToolButton::paint(QPainter *painter,
         buttonOpt.palette.setColor(QPalette::ButtonText, Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor));
     }
 
-    QFont widgetFont;
-    if (d->customFont) {
-        widgetFont = font();
-    } else {
-        widgetFont = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
-    }
-    buttonOpt.font = widgetFont;
+    buttonOpt.font = d->customFont ? font() : Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
 
-    painter->setFont(widgetFont);
+    painter->setFont(buttonOpt.font);
     button->style()->drawControl(QStyle::CE_ToolButtonLabel, &buttonOpt, painter, button);
 }
 

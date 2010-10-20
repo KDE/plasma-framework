@@ -98,11 +98,11 @@ void ComboBoxPrivate::syncBorders()
     //calc the rect for the over effect
     syncActiveRect();
 
-    KComboBox *native = q->nativeWidget();
     if (customFont) {
-        native->setFont(q->font());
+        q->setFont(q->font());
     } else {
-        native->setFont(Theme::defaultTheme()->font(Theme::DefaultFont));
+        q->setFont(Theme::defaultTheme()->font(Theme::DefaultFont));
+        customFont = false;
     }
 }
 
@@ -300,7 +300,6 @@ void ComboBox::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::FontChange) {
         d->customFont = true;
-        nativeWidget()->setFont(font());
     }
 
     QGraphicsProxyWidget::changeEvent(event);

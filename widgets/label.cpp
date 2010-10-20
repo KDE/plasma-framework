@@ -103,6 +103,7 @@ public:
 
         if (!customFont) {
             q->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+            customFont = false;
         }
     }
 
@@ -341,13 +342,11 @@ void Label::changeEvent(QEvent *event)
         case QEvent::FontChange:
             if (font() != QApplication::font()) {
                 d->customFont = true;
-                nativeWidget()->setFont(font());
             }
             break;
 
         case QEvent::PaletteChange:
             d->customPalette = true;
-            nativeWidget()->setPalette(palette());
             break;
 
         default:
@@ -361,8 +360,8 @@ bool Label::event(QEvent *event)
 {
     if (event->type() == QEvent::Show && font() != QApplication::font()) {
         d->customFont = true;
-        nativeWidget()->setFont(font());
     }
+
     return QGraphicsProxyWidget::event(event);
 }
 

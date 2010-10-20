@@ -63,6 +63,7 @@ public:
 
         if (!customFont) {
             q->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+            customFont = false;
         }
     }
 
@@ -179,7 +180,6 @@ void TextEdit::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::FontChange) {
         d->customFont = true;
-        nativeWidget()->setFont(font());
     }
 
     QGraphicsProxyWidget::changeEvent(event);
