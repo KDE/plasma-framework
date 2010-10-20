@@ -2,7 +2,7 @@
 
 set(simple_javascript_engine_SRCS
     common/javascriptaddonpackagestructure.cpp
-    common/scriptenvui.cpp
+    common/jsscriptenv.cpp
     plasmoid/abstractjsappletscript.cpp
     plasmoid/appletauthorization.cpp
     plasmoid/jsappletinterface.cpp
@@ -113,7 +113,7 @@ install(FILES data/plasma-javascriptaddon.desktop DESTINATION ${SERVICETYPES_INS
 #DECLARATIVE APPLET
 set(declarative_appletscript_SRCS
     common/javascriptaddonpackagestructure.cpp
-    common/scriptenvui.cpp
+    common/declarativescriptenv.cpp
     plasmoid/abstractjsappletscript.cpp
     plasmoid/appletauthorization.cpp
     plasmoid/appletinterface.cpp

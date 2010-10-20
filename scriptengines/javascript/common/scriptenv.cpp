@@ -70,7 +70,9 @@ void ScriptEnv::setupGlobalObject()
                        QScriptValue::ReadOnly|QScriptValue::Undeletable|QScriptValue::SkipInEnumeration);
 
     // Add utility functions
+#ifndef DECLARATIVE
     global.setProperty("print", m_engine->newFunction(ScriptEnv::print));
+#endif
     global.setProperty("debug", m_engine->newFunction(ScriptEnv::debug));
 }
 
