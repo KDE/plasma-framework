@@ -22,22 +22,26 @@
 
 #include <kio/accessmanager.h>
 
+
 namespace Plasma
 {
     class Package;
 }
 
+class AppletAuthorization;
+
 class PackageAccessManager : public KIO::AccessManager
 {
 public:
-    PackageAccessManager(const Plasma::Package *package, QObject *parent = 0);
+    PackageAccessManager(const Plasma::Package *package, AppletAuthorization *auth, QObject *parent = 0);
     ~PackageAccessManager();
 
 protected:
-    QNetworkReply *createRequest(Operation op, const QNetworkRequest &req, QIODevice *outgoingData = 0);
+    QNetworkReply *createRequest(QNetworkAccessManager::Operation op, const QNetworkRequest &req, QIODevice *outgoingData = 0);
 
 private:
     const Plasma::Package *m_package;
+    AppletAuthorization *m_auth;
 };
 
 #endif

@@ -22,20 +22,24 @@
 
 #include <QDeclarativeNetworkAccessManagerFactory>
 
+
 namespace Plasma
 {
     class Package;
 }
 
+class AppletAuthorization;
+
 class PackageAccessManagerFactory : public QDeclarativeNetworkAccessManagerFactory
 {
 public:
-    PackageAccessManagerFactory(const Plasma::Package *package);
+    PackageAccessManagerFactory(const Plasma::Package *package, AppletAuthorization *auth);
     ~PackageAccessManagerFactory();
     QNetworkAccessManager *create(QObject *parent);
 
 private:
     const Plasma::Package *m_package;
+    AppletAuthorization *m_auth;
 };
 
 #endif

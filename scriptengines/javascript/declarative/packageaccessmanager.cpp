@@ -19,11 +19,38 @@
 
 #include "packageaccessmanager.h"
 
+#include <QNetworkReply>
+
 #include <Plasma/Package>
 
-PackageAccessManager::PackageAccessManager(const Plasma::Package *package, QObject *parent)
+#include "plasmoid/appletauthorization.h"
+
+class ErrorReply : public QNetworkReply
+{
+public:
+    ErrorReply(QNetworkAccessManager::Operation op, const QNetworkRequest &req)
+        : QNetworkReply()
+    {
+        setError(QNetworkReply::ContentOperationNotPermittedError, "The plasmoid has not been authorized to load remote content");
+        setOperation(op);
+        setRequest(req);
+        setUrl(req.url());
+    }
+
+    qint64 readData(char *data, qint64 maxSize)
+    {
+        return 0;
+    }
+
+    void abort()
+    {
+    }
+};
+
+PackageAccessManager::PackageAccessManager(const Plasma::Package *package, AppletAuthorization *auth, QObject *parent)
     : KIO::AccessManager(parent),
-      m_package(package)
+      m_package(package),
+      m_auth(auth)
 {
 }
 
@@ -32,7 +59,7 @@ PackageAccessManager::~PackageAccessManager()
 }
 
 
-QNetworkReply *PackageAccessManager::createRequest(Operation op, const QNetworkRequest &req, QIODevice *outgoingData)
+QNetworkReply *PackageAccessManager::createRequest(QNetworkAccessManager::Operation op, const QNetworkRequest &req, QIODevice *outgoingData)
 {
     QUrl reqUrl(req.url());
 
@@ -42,7 +69,11 @@ QNetworkReply *PackageAccessManager::createRequest(Operation op, const QNetworkR
         reqUrl.setPath(m_package->path()+"/contents/"+reqUrl.path());
         request.setUrl(reqUrl);
         return KIO::AccessManager::createRequest(op, request, outgoingData);
-    } else {
+    } else if ((reqUrl.scheme() == "http" && !m_auth->authorizeRequiredExtension("http")) ||
+               ((reqUrl.scheme() == "file" || reqUrl.scheme() == "desktop") && !m_auth->authorizeRequiredExtension("localio")) ||
+               (!m_auth->authorizeRequiredExtension("networkio"))) {
+        return new ErrorReply(op, req);
+    }else {
         return KIO::AccessManager::createRequest(op, req, outgoingData);
     }
 }
