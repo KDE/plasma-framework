@@ -49,6 +49,7 @@
 #include "plasmoid/themedsvg.h"
 
 #include "common/scriptenv.h"
+#include "declarative/packageaccessmanagerfactory.h"
 #include "simplebindings/bytearrayclass.h"
 #include "simplebindings/dataenginereceiver.h"
 #include "simplebindings/i18n.h"
@@ -78,7 +79,12 @@ bool DeclarativeAppletScript::init()
     m_declarativeWidget = new Plasma::DeclarativeWidget(applet());
     m_declarativeWidget->setInitializationDelayed(true);
 
+    //make possible to import extensions from the package
+    //FIXME: probably to be removed, would make possible to use native code from within the package :/
     m_declarativeWidget->engine()->addImportPath(package()->path()+"/contents/script");
+
+    //use our own custom network access manager that will acces Plasma packages and to manage security (i.e. deny access to remote stuff when the proper extension isn't enabled
+    m_declarativeWidget->engine()->setNetworkAccessManagerFactory(new PackageAccessManagerFactory(package()));
 
     m_declarativeWidget->setQmlPath(mainScript());
 
