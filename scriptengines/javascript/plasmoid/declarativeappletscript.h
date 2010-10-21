@@ -25,6 +25,7 @@
 #include <QScriptContext>
 
 #include "abstractjsappletscript.h"
+#include "plasmoid/appletauthorization.h"
 #include <Plasma/DataEngine>
 
 class AppletInterface;
@@ -95,6 +96,7 @@ private:
     QScriptEngine *m_engine;
     QScriptValue m_self;
     ScriptEnv *m_env;
+    AppletAuthorization m_auth;
 };
 
 #endif

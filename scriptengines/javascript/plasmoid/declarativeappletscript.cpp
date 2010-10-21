@@ -44,7 +44,6 @@
 #include "plasmoid/declarativeappletscript.h"
 
 #include "engineaccess.h"
-#include "plasmoid/appletauthorization.h"
 #include "plasmoid/appletinterface.h"
 #include "plasmoid/themedsvg.h"
 
@@ -65,7 +64,8 @@ void registerNonGuiMetaTypes(QScriptEngine *engine);
 DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariantList &args)
     : AbstractJsAppletScript(parent, args),
       m_engine(0),
-      m_env(0)
+      m_env(0),
+      m_auth(this)
 {
     Q_UNUSED(args);
 }
@@ -81,10 +81,10 @@ bool DeclarativeAppletScript::init()
 
     //make possible to import extensions from the package
     //FIXME: probably to be removed, would make possible to use native code from within the package :/
-    m_declarativeWidget->engine()->addImportPath(package()->path()+"/contents/script");
+    m_declarativeWidget->engine()->addImportPath(package()->path()+"/contents/imports");
 
     //use our own custom network access manager that will acces Plasma packages and to manage security (i.e. deny access to remote stuff when the proper extension isn't enabled
-    m_declarativeWidget->engine()->setNetworkAccessManagerFactory(new PackageAccessManagerFactory(package()));
+    m_declarativeWidget->engine()->setNetworkAccessManagerFactory(new PackageAccessManagerFactory(package(), &m_auth));
 
     m_declarativeWidget->setQmlPath(mainScript());
 
@@ -447,8 +447,7 @@ void DeclarativeAppletScript::setEngine(QScriptValue &val)
 
     setupObjects();
 
-    AppletAuthorization auth(this);
-    if (!m_env->importExtensions(description(), m_self, auth)) {
+    if (!m_env->importExtensions(description(), m_self, m_auth)) {
         return;
     }
 
