@@ -32,10 +32,10 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
+#include "private/declarative/declarativenetworkaccessmanagerfactory_p.h"
+
 namespace Plasma
 {
-
-
 
 class DeclarativeWidgetPrivate
 {
@@ -165,6 +165,7 @@ DeclarativeWidget::DeclarativeWidget(QGraphicsWidget *parent)
     setFlag(QGraphicsItem::ItemHasNoContents);
 
     d->engine = new QDeclarativeEngine(this);
+    d->engine->setNetworkAccessManagerFactory(new DeclarativeNetworkAccessManagerFactory);
     foreach(const QString &importPath, KGlobal::dirs()->findDirs("module", "imports")) {
         d->engine->addImportPath(importPath);
     }
