@@ -8,6 +8,7 @@ Name[pt_BR]=Widget declarativo
 Name[sv]=Deklarativ grafisk komponent
 Name[uk]=Декларативний віджет
 Name[x-test]=xxDeclarative widgetxx
+Name[zh_TW]=宣告元件
 Comment=Native Plasma widget written in QML and JavaScript
 Comment[es]=Elemento gráfico nativo de Plasma escrito en QML y JavaScript
 Comment[et]=QML-is ja JavaScriptis kirjutatud Plasma vidin
@@ -17,6 +18,7 @@ Comment[pt_BR]=Widget do Plasma nativo escrito em QML e JavaScript
 Comment[sv]=Inbyggd grafisk Plasma-komponent skriven i QML och Javascript
 Comment[uk]=Віджет Плазми, написаний на QML та JavaScript
 Comment[x-test]=xxNative Plasma widget written in QML and JavaScriptxx
+Comment[zh_TW]=用 QML 與 JavaScript 寫的原始 Plasma 元件
 Type=Service
 Icon=text-x-script
 
