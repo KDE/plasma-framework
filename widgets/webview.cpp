@@ -27,6 +27,7 @@
 
 #include <QtCore/QTimer>
 
+#include <kio/accessmanager.h>
 #include <kdebug.h>
 
 #include "animator.h"
@@ -74,6 +75,7 @@ WebView::WebView(QGraphicsItem *parent)
     QPalette palette = qApp->palette();
     palette.setBrush(QPalette::Base, Qt::transparent);
     d->webView->page()->setPalette(palette);
+    d->webView->page()->setNetworkAccessManager(new KIO::AccessManager(d->webView->page()));
 
     connect(d->webView, SIGNAL(loadProgress(int)),
             this, SIGNAL(loadProgress(int)));
