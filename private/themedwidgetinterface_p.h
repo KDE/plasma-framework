@@ -88,7 +88,7 @@ public:
                 break;
 
             case QEvent::PaletteChange:
-             //   customPalette = true;
+                customPalette = true;
                 break;
 
             default:
