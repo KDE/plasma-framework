@@ -30,14 +30,10 @@
 #include <QtGui/QTextLayout>
 #include <QtGui/QTextOption>
 
-#include <plasma/plasma.h>
-#include <plasma/plasma_export.h>
-#include <plasma/framesvg.h>
-#include <plasma/theme.h>
-#include <plasma/svg.h>
-
 #include "iconwidget.h"
+#include "framesvg.h"
 #include "private/actionwidgetinterface_p.h"
+#include "theme.h"
 
 class QAction;
 class QPainter;
