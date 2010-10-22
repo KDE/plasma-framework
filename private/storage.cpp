@@ -80,8 +80,22 @@ void StorageJob::start()
         query.bindValue(":date", time.toTime_t());
         query.exec();
 
-        query.prepare("select * from data where source=:source");
-        query.bindValue(":source", params["source"].toString());
+        //a bit redundant but should be the faster way with less string concatenation as possible
+        if (params["source"].isNull() && params["key"].isNull()) {
+            setError(true);
+            return;
+        } else if (params["source"].isNull()) {
+            query.prepare("select * from data where key=:key");
+            query.bindValue(":source", params["source"].toString());
+        } else if (params["key"].isNull()) {
+            query.prepare("select * from data where source=:source");
+            query.bindValue(":source", params["source"].toString());
+        } else {
+            query.prepare("select * from data where source=:source and key=:key");
+            query.bindValue(":source", params["source"].toString());
+            query.bindValue(":key", params["key"].toString());
+        }
+
         const bool success = query.exec();
 
         QHash<QString, QVariant> h;
@@ -99,6 +113,14 @@ void StorageJob::start()
         } else {
             return;
         }
+
+    } else if (operationName() == "expire") {
+        QSqlQuery query(m_db);
+        query.prepare("delete from data where date < :date");
+        QDateTime time(QDateTime::currentDateTime());
+        time.addDays(-2);
+        query.bindValue(":date", time.toTime_t());
+        query.exec();
 
     } else {
         setError(true);
