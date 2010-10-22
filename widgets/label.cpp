@@ -20,32 +20,31 @@
 #include "label.h"
 
 #include <QApplication>
-#include <QLabel>
-#include <QPainter>
 #include <QDir>
-#include <QStyleOptionGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
+#include <QLabel>
 #include <QMenu>
+#include <QPainter>
+#include <QStyleOptionGraphicsItem>
 
-#include <kmimetype.h>
-#include <kglobalsettings.h>
 #include <kcolorscheme.h>
+#include <kglobalsettings.h>
+#include <kmimetype.h>
 
-#include "theme.h"
+#include "private/themedwidgetinterface_p.h"
 #include "svg.h"
+#include "theme.h"
 
 namespace Plasma
 {
 
-class LabelPrivate
+class LabelPrivate : public ThemedWidgetInterface<Label>
 {
 public:
     LabelPrivate(Label *label)
-        : q(label),
+        : ThemedWidgetInterface(label),
           svg(0),
-          textSelectable(false),
-          customFont(false),
-          customPalette(false)
+          textSelectable(false)
     {
     }
 
@@ -84,36 +83,10 @@ public:
         static_cast<QLabel*>(q->widget())->setPixmap(pm);
     }
 
-    void setPalette()
-    {
-        if (customPalette) {
-            return;
-        }
-
-        QColor color = Theme::defaultTheme()->color(Theme::TextColor);
-        QPalette p = q->palette();
-        p.setColor(QPalette::Normal, QPalette::WindowText, color);
-        p.setColor(QPalette::Inactive, QPalette::WindowText, color);
-        color.setAlphaF(0.6);
-        p.setColor(QPalette::Disabled, QPalette::WindowText, color);
-
-        p.setColor(QPalette::Normal, QPalette::Link, Theme::defaultTheme()->color(Theme::LinkColor));
-        p.setColor(QPalette::Normal, QPalette::LinkVisited, Theme::defaultTheme()->color(Theme::VisitedLinkColor));
-        q->setPalette(p);
-
-        if (!customFont) {
-            q->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
-            customFont = false;
-        }
-    }
-
-    Label *q;
     QString imagePath;
     QString absImagePath;
     Svg *svg;
     bool textSelectable : 1;
-    bool customFont : 1;
-    bool customPalette : 1;
 };
 
 Label::Label(QGraphicsWidget *parent)
@@ -125,14 +98,11 @@ Label::Label(QGraphicsWidget *parent)
     connect(native, SIGNAL(linkActivated(QString)), this, SIGNAL(linkActivated(QString)));
     connect(native, SIGNAL(linkHovered(QString)), this, SIGNAL(linkHovered(QString)));
 
-    connect(Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(setPalette()));
-    connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), this, SLOT(setPalette()));
-
     native->setAttribute(Qt::WA_NoSystemBackground);
     native->setWordWrap(true);
     setWidget(native);
     native->setWindowIcon(QIcon());
-    d->setPalette();
+    d->initTheming();
 }
 
 Label::~Label()
@@ -338,30 +308,13 @@ void Label::paint(QPainter *painter,
 
 void Label::changeEvent(QEvent *event)
 {
-    switch (event->type()) {
-        case QEvent::FontChange:
-            if (font() != QApplication::font()) {
-                d->customFont = true;
-            }
-            break;
-
-        case QEvent::PaletteChange:
-            d->customPalette = true;
-            break;
-
-        default:
-            break;
-    }
-
+    d->changeEvent(event);
     QGraphicsProxyWidget::changeEvent(event);
 }
 
 bool Label::event(QEvent *event)
 {
-    if (event->type() == QEvent::Show && font() != QApplication::font()) {
-        d->customFont = true;
-    }
-
+    d->event(event);
     return QGraphicsProxyWidget::event(event);
 }
 

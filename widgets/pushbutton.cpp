@@ -20,27 +20,24 @@
 
 #include "pushbutton.h"
 
-#include <QStyleOptionGraphicsItem>
-#include <QPainter>
 #include <QDir>
-#include <QApplication>
-
+#include <QPainter>
+#include <QStyleOptionGraphicsItem>
 #include <QWeakPointer>
-#include <QPropertyAnimation>
 
 #include <kicon.h>
 #include <kiconeffect.h>
 #include <kmimetype.h>
 #include <kpushbutton.h>
 
-#include "theme.h"
-#include "svg.h"
-#include "framesvg.h"
 #include "animator.h"
+#include "animations/animation.h"
+#include "framesvg.h"
 #include "paintutils.h"
 #include "private/actionwidgetinterface_p.h"
-#include <plasma/private/focusindicator_p.h>
-#include "animations/animation.h"
+#include "private/focusindicator_p.h"
+#include "private/themedwidgetinterface_p.h"
+#include "theme.h"
 
 namespace Plasma
 {
@@ -50,11 +47,9 @@ class PushButtonPrivate : public ActionWidgetInterface<PushButton>
 public:
     PushButtonPrivate(PushButton *pushButton)
         : ActionWidgetInterface<PushButton>(pushButton),
-          q(pushButton),
           background(0),
           fadeIn(false),
-          svg(0),
-          customFont(false)
+          svg(0)
     {
     }
 
@@ -133,7 +128,6 @@ public:
     QString absImagePath;
     Svg *svg;
     QString svgElement;
-    bool customFont;
 };
 
 void PushButtonPrivate::syncActiveRect()
@@ -200,6 +194,7 @@ PushButton::PushButton(QGraphicsWidget *parent)
     setAcceptHoverEvents(true);
 
     connect(d->background, SIGNAL(repaintNeeded()), SLOT(syncBorders()));
+    d->initTheming();
 }
 
 PushButton::~PushButton()
@@ -428,14 +423,7 @@ void PushButton::paint(QPainter *painter,
         }
     }
 
-    QFont widgetFont;
-    if (d->customFont) {
-        widgetFont = font();
-    } else {
-        widgetFont = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
-    }
-
-    QFontMetricsF fm(widgetFont);
+    QFontMetricsF fm(font());
     // If the height is too small increase the Height of the button to shall the whole text #192988
     if (rect.height() < fm.height()) {
         rect.setHeight(fm.height());
@@ -451,7 +439,7 @@ void PushButton::paint(QPainter *painter,
 
         QPainter p(&bufferPixmap);
         p.setPen(painter->pen());
-        p.setFont(widgetFont);
+        p.setFont(font());
 
         // Create the alpha gradient for the fade out effect
         QLinearGradient alphaGradient(0, 0, 1, 0);
@@ -473,7 +461,7 @@ void PushButton::paint(QPainter *painter,
 
         painter->drawPixmap(rect.topLeft(), bufferPixmap);
     } else {
-        painter->setFont(widgetFont);
+        painter->setFont(font());
         painter->drawText(rect, Qt::AlignCenter|Qt::TextShowMnemonic, nativeWidget()->text());
     }
 }
@@ -499,10 +487,7 @@ void PushButton::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
 void PushButton::changeEvent(QEvent *event)
 {
-    if (event->type() == QEvent::FontChange) {
-        d->customFont = true;
-    }
-
+    d->changeEvent(event);
     QGraphicsProxyWidget::changeEvent(event);
 }
 

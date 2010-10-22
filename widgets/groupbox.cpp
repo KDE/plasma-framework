@@ -20,46 +20,29 @@
 #include "groupbox.h"
 
 #include <QGroupBox>
-#include <QPainter>
 #include <QIcon>
+#include <QPainter>
 
 #include <kmimetype.h>
 
-#include "theme.h"
 #include "svg.h"
+#include "private/themedwidgetinterface_p.h"
+#include "theme.h"
 
 namespace Plasma
 {
 
-class GroupBoxPrivate
+class GroupBoxPrivate : ThemedWidgetInterface<GroupBox>
 {
 public:
     GroupBoxPrivate(GroupBox *groupBox)
-      :q(groupBox),
-       customFont(false)
+      :ThemedWidgetInterface(groupBox)
     {
     }
 
     ~GroupBoxPrivate()
     {
     }
-
-    void setPalette()
-    {
-        QColor color = Theme::defaultTheme()->color(Theme::TextColor);
-        QPalette p = q->palette();
-        p.setColor(QPalette::Normal, QPalette::WindowText, color);
-        p.setColor(QPalette::Inactive, QPalette::WindowText, color);
-        q->setPalette(p);
-
-        if (!customFont) {
-            q->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
-            customFont = false;
-        }
-    }
-
-    GroupBox *q;
-    bool customFont;
 };
 
 GroupBox::GroupBox(QGraphicsWidget *parent)
@@ -70,7 +53,7 @@ GroupBox::GroupBox(QGraphicsWidget *parent)
     setWidget(native);
     native->setWindowIcon(QIcon());
     native->setAttribute(Qt::WA_NoSystemBackground);
-    connect(Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(setPalette()));
+    d->initTheming();
 }
 
 GroupBox::~GroupBox()
@@ -110,10 +93,7 @@ void GroupBox::resizeEvent(QGraphicsSceneResizeEvent *event)
 
 void GroupBox::changeEvent(QEvent *event)
 {
-    if (event->type() == QEvent::FontChange) {
-        d->customFont = true;
-    }
-
+    d->changeEvent(event);
     QGraphicsProxyWidget::changeEvent(event);
 }
 

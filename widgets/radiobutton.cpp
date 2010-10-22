@@ -19,25 +19,25 @@
 
 #include "radiobutton.h"
 
-#include <QRadioButton>
-#include <QPainter>
 #include <QDir>
+#include <QPainter>
+#include <QRadioButton>
 
 #include <kmimetype.h>
 
-#include "theme.h"
+#include "private/themedwidgetinterface_p.h"
 #include "svg.h"
+#include "theme.h"
 
 namespace Plasma
 {
 
-class RadioButtonPrivate
+class RadioButtonPrivate : public ThemedWidgetInterface<RadioButton>
 {
 public:
     RadioButtonPrivate(RadioButton *radio)
-        : q(radio),
-          svg(0),
-          customFont(false)
+        : ThemedWidgetInterface(radio),
+         svg(0)
     {
     }
 
@@ -66,26 +66,9 @@ public:
         static_cast<QRadioButton*>(q->widget())->setIcon(QIcon(pm));
     }
 
-    void setPalette()
-    {
-        QColor color = Theme::defaultTheme()->color(Theme::TextColor);
-        QPalette p = q->palette();
-
-        p.setColor(QPalette::Normal, QPalette::Text, color);
-        p.setColor(QPalette::Inactive, QPalette::Text, color);
-        q->setPalette(p);
-
-        if (!customFont) {
-            q->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
-            customFont = false;
-        }
-    }
-
-    RadioButton *q;
     QString imagePath;
     QString absImagePath;
     Svg *svg;
-    bool customFont;
 };
 
 RadioButton::RadioButton(QGraphicsWidget *parent)
@@ -97,7 +80,7 @@ RadioButton::RadioButton(QGraphicsWidget *parent)
     setWidget(native);
     native->setWindowIcon(QIcon());
     native->setAttribute(Qt::WA_NoSystemBackground);
-    connect(Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(setPalette()));
+    d->initTheming();
 }
 
 RadioButton::~RadioButton()
@@ -181,10 +164,7 @@ bool RadioButton::isChecked() const
 
 void RadioButton::changeEvent(QEvent *event)
 {
-    if (event->type() == QEvent::FontChange) {
-        d->customFont = true;
-    }
-
+    d->changeEvent(event);
     QGraphicsProxyWidget::changeEvent(event);
 }
 

@@ -22,18 +22,19 @@
 
 #include <QAction>
 
+#include "private/themedwidgetinterface_p.h"
+
 namespace Plasma
 {
 
 template <class T>
-class ActionWidgetInterface
+class ActionWidgetInterface : public ThemedWidgetInterface<T>
 {
 public:
-    T *t;
     QAction *action;
 
-    ActionWidgetInterface(T *publicClass)
-        : t(publicClass),
+    ActionWidgetInterface(T *parent)
+        : ThemedWidgetInterface(parent)
           action(0)
     {
     }
@@ -56,20 +57,20 @@ public:
     void syncToAction()
     {
         if (!action) {
-            t->setIcon(QIcon());
-            t->setText(QString());
-            t->setEnabled(false);
+            q->setIcon(QIcon());
+            q->setText(QString());
+            q->setEnabled(false);
             return;
         }
         //we don't get told *what* changed, just that something changed
         //so we update everything we care about
-        t->setIcon(action->icon());
-        t->setText(action->iconText());
-        t->setEnabled(action->isEnabled());
-        t->setVisible(action->isVisible());
+        q->setIcon(action->icon());
+        q->setText(action->iconText());
+        q->setEnabled(action->isEnabled());
+        q->setVisible(action->isVisible());
 
-        if (!t->toolTip().isEmpty()) {
-            t->setToolTip(action->text());
+        if (!q->toolTip().isEmpty()) {
+            q->setToolTip(action->text());
         }
 
         changed();

@@ -19,28 +19,28 @@
 
 #include "textedit.h"
 
+#include <QGraphicsSceneContextMenuEvent>
+#include <QMenu>
 #include <QPainter>
 #include <QScrollBar>
-#include <QMenu>
-#include <QGraphicsSceneContextMenuEvent>
 
 #include <kmimetype.h>
 #include <ktextedit.h>
 
 #include "applet.h"
-#include "theme.h"
-#include "svg.h"
 #include "private/style_p.h"
+#include "private/themedwidgetinterface_p.h"
+#include "svg.h"
+#include "theme.h"
 
 namespace Plasma
 {
 
-class TextEditPrivate
+class TextEditPrivate : public ThemedWidgetInterface<TextEdit>
 {
 public:
     TextEditPrivate(TextEdit *textEdit)
-        : q(textEdit),
-          customFont(false)
+        : ThemedWidgetInterface(textEdit)
     {
     }
 
@@ -48,39 +48,16 @@ public:
     {
     }
 
-    void setPalette()
-    {
-        QColor color = Theme::defaultTheme()->color(Theme::TextColor);
-        QPalette p = q->palette();
-
-        p.setColor(QPalette::Normal, QPalette::Text, color);
-        p.setColor(QPalette::Inactive, QPalette::Text, color);
-        p.setColor(QPalette::Normal, QPalette::ButtonText, color);
-        p.setColor(QPalette::Inactive, QPalette::ButtonText, color);
-        p.setColor(QPalette::Normal, QPalette::Base, QColor(0,0,0,0));
-        p.setColor(QPalette::Inactive, QPalette::Base, QColor(0,0,0,0));
-        q->setPalette(p);
-
-        if (!customFont) {
-            q->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
-            customFont = false;
-        }
-    }
-
-    TextEdit *q;
     Plasma::Style::Ptr style;
-    bool customFont;
 };
 
 TextEdit::TextEdit(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
       d(new TextEditPrivate(this))
 {
-    d->style = Plasma::Style::sharedStyle();
-
     setNativeWidget(new KTextEdit);
-    connect(Theme::defaultTheme(), SIGNAL(themeChanged()),
-            this, SLOT(setPalette()));
+    d->style = Plasma::Style::sharedStyle();
+    d->initTheming();
 }
 
 TextEdit::~TextEdit()
@@ -178,10 +155,7 @@ void TextEdit::resizeEvent(QGraphicsSceneResizeEvent *event)
 
 void TextEdit::changeEvent(QEvent *event)
 {
-    if (event->type() == QEvent::FontChange) {
-        d->customFont = true;
-    }
-
+    d->changeEvent(event);
     QGraphicsProxyWidget::changeEvent(event);
 }
 

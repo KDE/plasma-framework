@@ -19,24 +19,23 @@
 
 #include "toolbutton.h"
 
-#include <QStyleOptionGraphicsItem>
-#include <QPainter>
 #include <QDir>
-#include <QToolButton>
-#include <QApplication>
+#include <QPainter>
 #include <QPropertyAnimation>
+#include <QStyleOptionGraphicsItem>
+#include <QToolButton>
 
+#include <kcolorutils.h>
 #include <kicon.h>
 #include <kiconeffect.h>
 #include <kmimetype.h>
-#include <kcolorutils.h>
 
-#include "theme.h"
-#include "svg.h"
-#include "framesvg.h"
 #include "animator.h"
+#include "framesvg.h"
 #include "paintutils.h"
 #include "private/actionwidgetinterface_p.h"
+#include "private/themedwidgetinterface_p.h"
+#include "theme.h"
 
 namespace Plasma
 {
@@ -45,11 +44,9 @@ class ToolButtonPrivate : public ActionWidgetInterface<ToolButton>
 {
 public:
     ToolButtonPrivate(ToolButton *toolButton)
-        : ActionWidgetInterface<ToolButton>(toolButton),
-          q(toolButton),
+        : ActionWidgetInterface(toolButton),
           background(0),
           svg(0),
-          customFont(false),
           underMouse(false)
     {
     }
@@ -116,7 +113,6 @@ public:
     QString absImagePath;
     Svg *svg;
     QString svgElement;
-    bool customFont;
     bool underMouse;
 };
 
@@ -184,6 +180,8 @@ ToolButton::ToolButton(QGraphicsWidget *parent)
     d->animation = new QPropertyAnimation(this, "animationUpdate");
     d->animation->setStartValue(0);
     d->animation->setEndValue(1);
+
+    d->initTheming();
 }
 
 ToolButton::~ToolButton()
@@ -380,7 +378,7 @@ void ToolButton::paint(QPainter *painter,
         buttonOpt.palette.setColor(QPalette::ButtonText, Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor));
     }
 
-    buttonOpt.font = d->customFont ? font() : Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
+    buttonOpt.font = font();
 
     painter->setFont(buttonOpt.font);
     button->style()->drawControl(QStyle::CE_ToolButtonLabel, &buttonOpt, painter, button);
@@ -431,9 +429,9 @@ void ToolButton::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 void ToolButton::changeEvent(QEvent *event)
 {
-    if (event->type() == QEvent::FontChange) {
-        d->customFont = true;
-    } else if (event->type() == QEvent::EnabledChange && !isEnabled()) {
+    d->changeEvent(event);
+
+    if (event->type() == QEvent::EnabledChange && !isEnabled()) {
         d->underMouse = false;
     }
 

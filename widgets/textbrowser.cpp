@@ -19,31 +19,31 @@
 
 #include "textbrowser.h"
 
-#include <QPainter>
-#include <QScrollBar>
 #include <QGraphicsSceneWheelEvent>
 #include <QMenu>
+#include <QPainter>
+#include <QScrollBar>
 
 #include <kmimetype.h>
 #include <ktextbrowser.h>
 
-#include "plasma/theme.h"
-#include "plasma/svg.h"
+#include "svg.h"
+#include "theme.h"
 #include "private/style_p.h"
+#include "private/themedwidgetinterface_p.h"
 
 namespace Plasma
 {
 
-class TextBrowserPrivate
+class TextBrowserPrivate : public ThemedWidgetInterface<TextBrowser>
 {
 public:
     TextBrowserPrivate(TextBrowser *browser)
-        : q(browser),
+        : ThemedWidgetInterface(browser),
           native(0),
           savedMinimumHeight(0),
           savedMaximumHeight(QWIDGETSIZE_MAX),
-          wasNotFixed(true),
-          customFont(false)
+          wasNotFixed(true)
     {
     }
 
@@ -68,33 +68,11 @@ public:
         }
     }
 
-    void setPalette()
-    {
-        QColor color = Theme::defaultTheme()->color(Theme::TextColor);
-        QPalette p = q->palette();
-
-        p.setColor(QPalette::Normal, QPalette::Text, color);
-        p.setColor(QPalette::Inactive, QPalette::Text, color);
-        p.setColor(QPalette::Normal, QPalette::ButtonText, color);
-        p.setColor(QPalette::Inactive, QPalette::ButtonText, color);
-        p.setColor(QPalette::Normal, QPalette::Base, QColor(0,0,0,0));
-        p.setColor(QPalette::Inactive, QPalette::Base, QColor(0,0,0,0));
-        q->setPalette(p);
-
-        if (!customFont) {
-            q->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
-            customFont = false;
-        }
-    }
-
-
-    TextBrowser *q;
     KTextBrowser *native;
     Plasma::Style::Ptr style;
     int savedMinimumHeight;
     int savedMaximumHeight;
     bool wasNotFixed;
-    bool customFont;
 };
 
 TextBrowser::TextBrowser(QGraphicsWidget *parent)
@@ -115,8 +93,7 @@ TextBrowser::TextBrowser(QGraphicsWidget *parent)
     d->style = Plasma::Style::sharedStyle();
     native->verticalScrollBar()->setStyle(d->style.data());
     native->horizontalScrollBar()->setStyle(d->style.data());
-    connect(Theme::defaultTheme(), SIGNAL(themeChanged()),
-            this, SLOT(setPalette()));
+    d->initTheming();
 }
 
 TextBrowser::~TextBrowser()
@@ -206,10 +183,7 @@ void TextBrowser::wheelEvent(QGraphicsSceneWheelEvent *event)
 
 void TextBrowser::changeEvent(QEvent *event)
 {
-    if (event->type() == QEvent::FontChange) {
-        d->customFont = true;
-    }
-
+    d->changeEvent(event);
     QGraphicsProxyWidget::changeEvent(event);
 }
 

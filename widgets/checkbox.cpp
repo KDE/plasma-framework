@@ -25,19 +25,19 @@
 
 #include <kmimetype.h>
 
-#include "theme.h"
+#include "private/themedwidgetinterface_p.h"
 #include "svg.h"
+#include "theme.h"
 
 namespace Plasma
 {
 
-class CheckBoxPrivate
+class CheckBoxPrivate : public ThemedWidgetInterface<CheckBox>
 {
 public:
     CheckBoxPrivate(CheckBox *c)
-        : q(c),
-          svg(0),
-          customFont(false)
+        : ThemedWidgetInterface(c),
+          svg(0)
     {
     }
 
@@ -76,24 +76,9 @@ public:
         static_cast<QCheckBox*>(q->widget())->setIcon(QIcon(pm));
     }
 
-    void setPalette()
-    {
-        QColor color = Theme::defaultTheme()->color(Theme::TextColor);
-        QPalette p = q->palette();
-        p.setColor(QPalette::Normal, QPalette::WindowText, color);
-        p.setColor(QPalette::Inactive, QPalette::WindowText, color);
-        q->setPalette(p);
-        if (!customFont) {
-            q->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
-            customFont = false;
-        }
-    }
-
-    CheckBox *q;
     QString imagePath;
     QString absImagePath;
     Svg *svg;
-    bool customFont;
 };
 
 CheckBox::CheckBox(QGraphicsWidget *parent)
@@ -104,9 +89,9 @@ CheckBox::CheckBox(QGraphicsWidget *parent)
     connect(native, SIGNAL(toggled(bool)), this, SIGNAL(toggled(bool)));
     setWidget(native);
     native->setWindowIcon(QIcon());
-    d->setPalette();
     native->setAttribute(Qt::WA_NoSystemBackground);
-    connect(Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(setPalette()));
+
+    d->initTheming();
 }
 
 CheckBox::~CheckBox()
@@ -190,10 +175,7 @@ bool CheckBox::isChecked() const
 
 void CheckBox::changeEvent(QEvent *event)
 {
-    if (event->type() == QEvent::FontChange) {
-        d->customFont = true;
-    }
-
+    d->changeEvent(event);
     QGraphicsProxyWidget::changeEvent(event);
 }
 

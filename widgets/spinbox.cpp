@@ -20,29 +20,28 @@
 
 #include "spinbox.h"
 
-#include <QApplication>
 #include <QPainter>
 #include <QStyleOptionSpinBox>
 
-#include <knuminput.h>
 #include <kmimetype.h>
+#include <knuminput.h>
 
-#include <plasma/applet.h>
-#include <plasma/theme.h>
-#include <plasma/framesvg.h>
-#include <plasma/private/style_p.h>
-#include <plasma/private/focusindicator_p.h>
+#include "applet.h"
+#include "framesvg.h"
+#include "private/focusindicator_p.h"
+#include "private/style_p.h"
+#include "private/themedwidgetinterface_p.h"
+#include "theme.h"
 
 namespace Plasma
 {
 
-class SpinBoxPrivate
+class SpinBoxPrivate : public ThemedWidgetInterface<SpinBox>
 {
 public:
     SpinBoxPrivate(SpinBox *spinBox)
-        : q(spinBox),
-          focusIndicator(0),
-          customFont(false)
+        : ThemedWidgetInterface(spinBox),
+          focusIndicator(0)
     {
     }
 
@@ -50,30 +49,9 @@ public:
     {
     }
 
-    void setPalette()
-    {
-        QColor color = Theme::defaultTheme()->color(Theme::ButtonTextColor);
-        QPalette p = q->palette();
-
-        p.setColor(QPalette::Normal, QPalette::Text, color);
-        p.setColor(QPalette::Inactive, QPalette::Text, color);
-        p.setColor(QPalette::Normal, QPalette::ButtonText, color);
-        p.setColor(QPalette::Inactive, QPalette::ButtonText, color);
-        p.setColor(QPalette::Normal, QPalette::Base, QColor(0,0,0,0));
-        p.setColor(QPalette::Inactive, QPalette::Base, QColor(0,0,0,0));
-        q->setPalette(p);
-
-        if (!customFont) {
-            q->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
-            customFont = false;
-        }
-    }
-
-    SpinBox *q;
     Plasma::Style::Ptr style;
     Plasma::FrameSvg *background;
     FocusIndicator *focusIndicator;
-    bool customFont;
 };
 
 SpinBox::SpinBox(QGraphicsWidget *parent)
@@ -99,8 +77,7 @@ SpinBox::SpinBox(QGraphicsWidget *parent)
 
     d->style = Plasma::Style::sharedStyle();
     native->setStyle(d->style.data());
-    d->setPalette();
-    connect(Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(setPalette()));
+    d->initTheming();
 }
 
 SpinBox::~SpinBox()
@@ -161,10 +138,7 @@ KIntSpinBox *SpinBox::nativeWidget() const
 
 void SpinBox::changeEvent(QEvent *event)
 {
-    if (event->type() == QEvent::FontChange) {
-        d->customFont = true;
-    }
-
+    d->changeEvent(event);
     QGraphicsProxyWidget::changeEvent(event);
 }
 

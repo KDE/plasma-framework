@@ -27,27 +27,28 @@
 
 #include <QAction>
 #include <QApplication>
-#include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsView>
 #include <QMenu>
+#include <QPainter>
 #include <QStyleOptionGraphicsItem>
 #include <QTextLayout>
 
+#include <kcolorscheme.h>
+#include <kdebug.h>
 #include <kglobalsettings.h>
+#include <kicon.h>
 #include <kiconeffect.h>
 #include <kiconloader.h>
-#include <kicon.h>
-#include <kurl.h>
-#include <krun.h>
 #include <kmimetype.h>
-#include <kdebug.h>
-#include <kcolorscheme.h>
+#include <krun.h>
+#include <kurl.h>
 
-#include <plasma/animator.h>
-#include <plasma/animations/animation.h>
-#include <plasma/paintutils.h>
-#include <plasma/theme.h>
+#include "animator.h"
+#include "animations/animation.h"
+#include "paintutils.h"
+#include "private/themedwidgetinterface_p.h"
+#include "theme.h"
 
 #include "svg.h"
 
@@ -99,8 +100,7 @@ void IconHoverAnimation::setAnimation(QPropertyAnimation *animation)
 }
 
 IconWidgetPrivate::IconWidgetPrivate(IconWidget *i)
-    : ActionWidgetInterface<IconWidget>(i),
-      q(i),
+    : ActionWidgetInterface(i),
       iconSvg(0),
       hoverAnimation(new IconHoverAnimation(q)),
       iconSize(48, 48),
@@ -114,9 +114,9 @@ IconWidgetPrivate::IconWidgetPrivate(IconWidget *i)
       iconSvgElementChanged(false),
       invertLayout(false),
       drawBg(false),
-      textBgCustomized(false),
-      customFont(false)
+      textBgCustomized(false)
 {
+    d->initTheming();
 }
 
 IconWidgetPrivate::~IconWidgetPrivate()
@@ -156,15 +156,6 @@ void IconWidgetPrivate::iconConfigChanged()
 {
     if (!icon.isNull()) {
         q->update();
-    }
-}
-
-QFont IconWidgetPrivate::widgetFont() const
-{
-    if (customFont) {
-        return q->font();
-    } else {
-        return Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
     }
 }
 
@@ -548,7 +539,7 @@ QSizeF IconWidgetPrivate::displaySizeHint(const QStyleOptionGraphicsItem *option
 
     //allow only five lines of text
     const qreal maxHeight =
-        numDisplayLines * QFontMetrics(widgetFont()).lineSpacing();
+        numDisplayLines * QFontMetrics(q->font()).lineSpacing();
 
     // To compute the nominal size for the label + info, we'll just append
     // the information string to the label
@@ -558,7 +549,7 @@ QSizeF IconWidgetPrivate::displaySizeHint(const QStyleOptionGraphicsItem *option
 
     QTextLayout layout;
     setLayoutOptions(layout, option, q->orientation());
-    layout.setFont(widgetFont());
+    layout.setFont(q->font());
     QSizeF size = layoutText(layout, option, label, QSizeF(textWidth, maxHeight));
 
     return addMargin(size, TextMargin);
@@ -1520,7 +1511,7 @@ QSizeF IconWidget::sizeFromIconSize(const qreal iconWidth) const
         return d->addMargin(QSizeF(iconWidth, iconWidth), IconWidgetPrivate::ItemMargin);
     }
 
-    QFontMetricsF fm(d->widgetFont());
+    QFontMetricsF fm(font());
     qreal width = 0;
 
     if (d->orientation == Qt::Vertical) {
@@ -1572,10 +1563,7 @@ QSizeF IconWidget::sizeFromIconSize(const qreal iconWidth) const
 
 void IconWidget::changeEvent(QEvent *event)
 {
-    if (event->type() == QEvent::FontChange) {
-        d->customFont = true;
-    }
-
+    d->changeEvent(event);
     QGraphicsWidget::changeEvent(event);
 }
 

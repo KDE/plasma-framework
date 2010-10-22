@@ -21,22 +21,23 @@
 
 #include <QGraphicsLinearLayout>
 #include <QGraphicsLayoutItem>
-#include <QString>
-#include <QGraphicsScene>
 #include <QGraphicsProxyWidget>
+#include <QGraphicsScene>
 #include <QGraphicsSceneWheelEvent>
 #include <QIcon>
-#include <QStyleOption>
+#include <QMenu>
 #include <QPainter>
 #include <QParallelAnimationGroup>
+#include <QString>
+#include <QStyleOption>
 
 #include <kdebug.h>
 
-#include <plasma/animator.h>
-#include <plasma/animations/animation.h>
-#include <plasma/theme.h>
-
+#include "animator.h"
+#include "animations/animation.h"
 #include "private/nativetabbar_p.h"
+#include "private/themedwidgetinterface_p.h"
+#include "theme.h"
 
 namespace Plasma
 {
@@ -67,17 +68,16 @@ public:
     NativeTabBar *native;
 };
 
-class TabBarPrivate
+class TabBarPrivate : public ThemedWidgetInterface<TabBar>
 {
 public:
     TabBarPrivate(TabBar *parent)
-        : q(parent),
+        : ThemedWidgetInterface(parent),
           tabProxy(0),
           currentIndex(0),
           tabWidgetMode(true),
           oldPageAnimId(-1),
           newPageAnimId(-1),
-          customFont(false),
           tabBarShown(true)
     {
     }
@@ -91,9 +91,7 @@ public:
     void slidingNewPageCompleted();
     void slidingOldPageCompleted();
     void shapeChanged(const KTabBar::Shape shape);
-    void setPalette();
 
-    TabBar *q;
     TabBarProxy *tabProxy;
     QList<QGraphicsWidget *> pages;
     QGraphicsWidget *emptyTabBarSpacer;
@@ -110,7 +108,6 @@ public:
     Animation *oldPageAnim;
     Animation *newPageAnim;
     QParallelAnimationGroup *animGroup;
-    bool customFont;
     bool tabBarShown;
     QWeakPointer<QGraphicsWidget> firstPositionWidget;
     QWeakPointer<QGraphicsWidget> lastPositionWidget;
@@ -221,26 +218,6 @@ void TabBarPrivate::shapeChanged(const QTabBar::Shape shape)
     tabProxy->setPreferredSize(tabProxy->native->sizeHint());
 }
 
-void TabBarPrivate::setPalette()
-{
-    QColor color = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
-    QPalette p = q->palette();
-
-    p.setColor(QPalette::Normal, QPalette::Text, color);
-    p.setColor(QPalette::Inactive, QPalette::Text, color);
-    p.setColor(QPalette::Normal, QPalette::ButtonText, color);
-    p.setColor(QPalette::Inactive, QPalette::ButtonText, color);
-    p.setColor(QPalette::Normal, QPalette::Base, QColor(0,0,0,0));
-    p.setColor(QPalette::Inactive, QPalette::Base, QColor(0,0,0,0));
-    q->setPalette(p);
-
-    if (!customFont) {
-        q->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
-        customFont = false;
-    }
-}
-
-
 TabBar::TabBar(QGraphicsWidget *parent)
     : QGraphicsWidget(parent),
       d(new TabBarPrivate(this))
@@ -286,8 +263,7 @@ TabBar::TabBar(QGraphicsWidget *parent)
             this, SLOT(shapeChanged(QTabBar::Shape)));
     connect(d->newPageAnim, SIGNAL(finished()), this, SLOT(slidingNewPageCompleted()));
     connect(d->oldPageAnim, SIGNAL(finished()), this, SLOT(slidingOldPageCompleted()));
-    connect(Theme::defaultTheme(), SIGNAL(themeChanged()),
-            this, SLOT(setPalette()));
+    d->initTheming();
 }
 
 TabBar::~TabBar()
@@ -625,10 +601,7 @@ void TabBar::wheelEvent(QGraphicsSceneWheelEvent * event)
 
 void TabBar::changeEvent(QEvent *event)
 {
-    if (event->type() == QEvent::FontChange) {
-        d->customFont = true;
-    }
-
+    d->changeEvent(event);
     QGraphicsWidget::changeEvent(event);
 }
 

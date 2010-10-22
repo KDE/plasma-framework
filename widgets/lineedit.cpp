@@ -19,20 +19,19 @@
 
 #include "lineedit.h"
 
-#include <QPainter>
-#include <QIcon>
 #include <QGraphicsSceneResizeEvent>
+#include <QIcon>
+#include <QPainter>
 
 #include <klineedit.h>
 #include <kmimetype.h>
 
-#include <plasma/private/style_p.h>
-#include <plasma/private/focusindicator_p.h>
-
 #include "applet.h"
-#include "theme.h"
-#include "svg.h"
 #include "framesvg.h"
+#include "private/style_p.h"
+#include "private/focusindicator_p.h"
+#include "private/themedwidgetinterface_p.h"
+#include "theme.h"
 
 namespace Plasma
 {
@@ -40,9 +39,8 @@ namespace Plasma
 class LineEditPrivate
 {
 public:
-    LineEditPrivate(LineEdit *lineEdit)
-        :q(lineEdit),
-         customFont(false)
+    LineEditPrivate(LineEdit *lineEdit) : ThemedWidgetInterface<Label>
+        : ThemedWidgetInterface(lineEdit)
     {
     }
 
@@ -50,25 +48,9 @@ public:
     {
     }
 
-    void setPalette()
-    {
-        QColor color = Theme::defaultTheme()->color(Theme::ButtonTextColor);
-        QPalette p = q->palette();
-
-        p.setColor(QPalette::Normal, QPalette::Text, color);
-        p.setColor(QPalette::Inactive, QPalette::Text, color);
-        q->setPalette(p);
-
-        if (!customFont) {
-            q->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
-            customFont = false;
-        }
-    }
-
     LineEdit *q;
     Plasma::Style::Ptr style;
     Plasma::FrameSvg *background;
-    bool customFont;
 };
 
 LineEdit::LineEdit(QGraphicsWidget *parent)
@@ -82,7 +64,6 @@ LineEdit::LineEdit(QGraphicsWidget *parent)
 
     new FocusIndicator(this, d->background);
     setNativeWidget(new KLineEdit);
-    connect(Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(setPalette()));
 }
 
 LineEdit::~LineEdit()
@@ -149,8 +130,7 @@ void LineEdit::setNativeWidget(KLineEdit *nativeWidget)
 
     nativeWidget->setAttribute(Qt::WA_NoSystemBackground);
     nativeWidget->setStyle(d->style.data());
-
-    d->setPalette();
+    d->initTheming();
 }
 
 KLineEdit *LineEdit::nativeWidget() const
@@ -180,10 +160,7 @@ void LineEdit::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
 void LineEdit::changeEvent(QEvent *event)
 {
-    if (event->type() == QEvent::FontChange) {
-        d->customFont = true;
-    }
-
+    d->changEvent();
     QGraphicsProxyWidget::changeEvent(event);
 }
 

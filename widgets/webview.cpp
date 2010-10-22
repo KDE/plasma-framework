@@ -57,7 +57,6 @@ public:
 };
 
 WebView::WebView(QGraphicsItem *parent)
-
     : QGraphicsWidget(parent),
       d(new WebViewPrivate(this))
 {

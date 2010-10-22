@@ -20,18 +20,18 @@
 #include "frame.h"
 
 //Qt
-#include <QPainter>
 #include <QGraphicsSceneResizeEvent>
 #include <QWidget>
 #include <QDir>
-#include <QApplication>
+#include <QPainter>
 
 //KDE
 #include <kmimetype.h>
 
 //Plasma
-#include "plasma/theme.h"
-#include "plasma/framesvg.h"
+#include "framesvg.h"
+#include "private/themedwidgetinterface_p.h"
+#include "theme.h"
 
 namespace Plasma
 {
@@ -39,12 +39,11 @@ namespace Plasma
 class FramePrivate
 {
 public:
-    FramePrivate(Frame *parent)
-        : q(parent),
+    FramePrivate(Frame *parent) : ThemedWidgetInterface<Frame>
+        : ThemedWidgetInterface(parent),
           svg(0),
           image(0),
-          pixmap(0),
-          customFont(false)
+          pixmap(0)
     {
     }
 
@@ -54,9 +53,7 @@ public:
     }
 
     void syncBorders();
-    QFont widgetFont() const;
 
-    Frame *q;
     FrameSvg *svg;
     Frame::Shadow shadow;
     QString text;
@@ -65,17 +62,7 @@ public:
     QString absImagePath;
     Svg *image;
     QPixmap *pixmap;
-    bool customFont;
 };
-
-QFont FramePrivate::widgetFont() const
-{
-    if (customFont) {
-        return q->font();
-    } else {
-        return Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
-    }
-}
 
 void FramePrivate::syncBorders()
 {
@@ -85,7 +72,7 @@ void FramePrivate::syncBorders()
     svg->getMargins(left, top, right, bottom);
 
     if (!text.isNull()) {
-        QFontMetricsF fm(widgetFont());
+        QFontMetricsF fm(q->font());
         top += fm.height();
     }
 
@@ -102,6 +89,7 @@ Frame::Frame(QGraphicsWidget *parent)
     d->syncBorders();
 
     connect(d->svg, SIGNAL(repaintNeeded()), SLOT(syncBorders()));
+    d->initTheming();
 }
 
 Frame::~Frame()
@@ -231,10 +219,10 @@ void Frame::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
     d->svg->paintFrame(painter);
 
     if (!d->text.isNull()) {
-        QFontMetricsF fm(d->widgetFont());
+        QFontMetricsF fm(font());
         QRectF textRect = d->svg->contentsRect();
         textRect.setHeight(fm.height());
-        painter->setFont(d->widgetFont());
+        painter->setFont(font());
         painter->setPen(Plasma::Theme::defaultTheme()->color(Theme::TextColor));
         painter->drawText(textRect, Qt::AlignHCenter|Qt::AlignTop, d->text);
     }
@@ -264,7 +252,7 @@ QSizeF Frame::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
     QSizeF hint = QGraphicsWidget::sizeHint(which, constraint);
 
     if (!d->image && !layout()) {
-        QFontMetricsF fm(d->widgetFont());
+        QFontMetricsF fm(font());
 
         qreal left, top, right, bottom;
         d->svg->getMargins(left, top, right, bottom);
@@ -281,10 +269,7 @@ QSizeF Frame::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
 
 void Frame::changeEvent(QEvent *event)
 {
-    if (event->type() == QEvent::FontChange) {
-        d->customFont = true;
-    }
-
+    d->changeEvent(event);
     QGraphicsWidget::changeEvent(event);
 }
 

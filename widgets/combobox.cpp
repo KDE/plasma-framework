@@ -20,31 +20,28 @@
 #include "combobox.h"
 
 #include <QPainter>
-#include <QApplication>
 
 #include <kcombobox.h>
-#include <kmimetype.h>
 #include <kiconeffect.h>
 #include <kiconloader.h>
+#include <kmimetype.h>
 
-#include <plasma/private/style_p.h>
-#include <plasma/private/focusindicator_p.h>
 #include "applet.h"
-#include "theme.h"
 #include "framesvg.h"
-#include "animator.h"
-#include "paintutils.h"
+#include "private/style_p.h"
+#include "private/focusindicator_p.h"
+#include "private/themedwidgetinterface_p.h"
+#include "theme.h"
 
 namespace Plasma
 {
 
-class ComboBoxPrivate
+class ComboBoxPrivate : public ThemedWidgetInterface<ComboBox>
 {
 public:
     ComboBoxPrivate(ComboBox *comboBox)
-         : q(comboBox),
+         : ThemedWidgetInterface(comboBox),
            background(0),
-           customFont(false),
            underMouse(false)
     {
     }
@@ -56,15 +53,12 @@ public:
     void syncActiveRect();
     void syncBorders();
 
-    ComboBox *q;
-
     FrameSvg *background;
     FrameSvg *lineEditBackground;
     int animId;
     qreal opacity;
     QRectF activeRect;
     Style::Ptr style;
-    bool customFont;
     bool underMouse;
 };
 
@@ -127,6 +121,7 @@ ComboBox::ComboBox(QGraphicsWidget *parent)
     new FocusIndicator(this, d->background);
     setNativeWidget(new KComboBox);
     connect(d->background, SIGNAL(repaintNeeded()), SLOT(syncBorders()));
+    d->initTheming();
 }
 
 ComboBox::~ComboBox()
@@ -298,10 +293,7 @@ void ComboBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 void ComboBox::changeEvent(QEvent *event)
 {
-    if (event->type() == QEvent::FontChange) {
-        d->customFont = true;
-    }
-
+    d->changeEvent(event);
     QGraphicsProxyWidget::changeEvent(event);
 }
 
