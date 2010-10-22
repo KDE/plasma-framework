@@ -34,7 +34,7 @@ public:
     QAction *action;
 
     ActionWidgetInterface(T *parent)
-        : ThemedWidgetInterface(parent)
+        : ThemedWidgetInterface<T>(parent),
           action(0)
     {
     }
@@ -57,20 +57,20 @@ public:
     void syncToAction()
     {
         if (!action) {
-            q->setIcon(QIcon());
-            q->setText(QString());
-            q->setEnabled(false);
+            ThemedWidgetInterface<T>::q->setIcon(QIcon());
+            ThemedWidgetInterface<T>::q->setText(QString());
+            ThemedWidgetInterface<T>::q->setEnabled(false);
             return;
         }
         //we don't get told *what* changed, just that something changed
         //so we update everything we care about
-        q->setIcon(action->icon());
-        q->setText(action->iconText());
-        q->setEnabled(action->isEnabled());
-        q->setVisible(action->isVisible());
+        ThemedWidgetInterface<T>::q->setIcon(action->icon());
+        ThemedWidgetInterface<T>::q->setText(action->iconText());
+        ThemedWidgetInterface<T>::q->setEnabled(action->isEnabled());
+        ThemedWidgetInterface<T>::q->setVisible(action->isVisible());
 
-        if (!q->toolTip().isEmpty()) {
-            q->setToolTip(action->text());
+        if (!ThemedWidgetInterface<T>::q->toolTip().isEmpty()) {
+            ThemedWidgetInterface<T>::q->setToolTip(action->text());
         }
 
         changed();
@@ -79,16 +79,16 @@ public:
     void setAction(QAction *a)
     {
         if (action) {
-            QObject::disconnect(action, 0, t, 0);
-            QObject::disconnect(t, 0, action, 0);
+            QObject::disconnect(action, 0, ThemedWidgetInterface<T>::q, 0);
+            QObject::disconnect(ThemedWidgetInterface<T>::q, 0, action, 0);
         }
 
         action = a;
 
         if (action) {
-            QObject::connect(action, SIGNAL(changed()), t, SLOT(syncToAction()));
-            QObject::connect(action, SIGNAL(destroyed(QObject*)), t, SLOT(clearAction()));
-            QObject::connect(t, SIGNAL(clicked()), action, SLOT(trigger()));
+            QObject::connect(action, SIGNAL(changed()), ThemedWidgetInterface<T>::q, SLOT(syncToAction()));
+            QObject::connect(action, SIGNAL(destroyed(QObject*)), ThemedWidgetInterface<T>::q, SLOT(clearAction()));
+            QObject::connect(ThemedWidgetInterface<T>::q, SIGNAL(clicked()), action, SLOT(trigger()));
             syncToAction();
         }
     }

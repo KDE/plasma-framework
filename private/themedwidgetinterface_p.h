@@ -17,8 +17,8 @@
 *   Boston, MA 02110-1301, USA.                                               *
 *******************************************************************************/
 
-#ifndef ACTIONWIDGETINTERFACE_P_H
-#define ACTIONWIDGETINTERFACE_P_H
+#ifndef THEMEDWIDGETINTERFACE_P_H
+#define THEMEDWIDGETINTERFACE_P_H
 
 #include "kglobalsettings.h"
 #include <QApplication>
@@ -88,7 +88,7 @@ public:
                 break;
 
             case QEvent::PaletteChange:
-                customPalette = true;
+             //   customPalette = true;
                 break;
 
             default:

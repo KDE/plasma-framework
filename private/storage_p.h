@@ -2,6 +2,7 @@
 // storage.h                                                           //
 //                                                                     //
 // Copyright (C)  2010  Brian Pritchett <batenkaitos@gmail.com>        //
+// Copyright (C)  2010  Marco Martin <mart@kde.org>                    //
 //                                                                     //
 // This library is free software; you can redistribute it and/or       //
 // modify it under the terms of the GNU Lesser General Public          //

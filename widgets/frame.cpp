@@ -36,10 +36,10 @@
 namespace Plasma
 {
 
-class FramePrivate
+class FramePrivate : public ThemedWidgetInterface<Frame>
 {
 public:
-    FramePrivate(Frame *parent) : ThemedWidgetInterface<Frame>
+    FramePrivate(Frame *parent)
         : ThemedWidgetInterface(parent),
           svg(0),
           image(0),

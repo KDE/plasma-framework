@@ -114,8 +114,6 @@ public:
     void syncActiveRect();
     void syncBorders();
 
-    PushButton *q;
-
     FrameSvg *background;
     bool fadeIn;
     qreal opacity;

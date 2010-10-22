@@ -116,7 +116,7 @@ IconWidgetPrivate::IconWidgetPrivate(IconWidget *i)
       drawBg(false),
       textBgCustomized(false)
 {
-    d->initTheming();
+    initTheming();
 }
 
 IconWidgetPrivate::~IconWidgetPrivate()

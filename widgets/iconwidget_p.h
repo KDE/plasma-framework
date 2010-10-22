@@ -30,6 +30,7 @@
 #include <QtGui/QTextLayout>
 #include <QtGui/QTextOption>
 
+#include <plasma/plasma.h>
 #include <plasma/plasma_export.h>
 #include <plasma/framesvg.h>
 #include <plasma/theme.h>
@@ -216,13 +217,11 @@ public:
     void readColors();
     void colorConfigChanged();
     void iconConfigChanged();
-    QFont widgetFont() const;
     void hoverAnimationFinished();
     void init();
     void layoutIcons(const QStyleOptionGraphicsItem *option);
     void animateMainIcon(bool, const IconWidgetStates state);
 
-    IconWidget *q;
     QString text;
     QString infoText;
     Svg *iconSvg;
@@ -280,7 +279,7 @@ void IconWidgetPrivate::setLayoutOptions(QTextLayout &layout,
 
     textoption.setWrapMode(QTextOption::WordWrap);  // NOTE: assumption as well
 
-    layout.setFont(widgetFont());
+    layout.setFont(q->font());
     layout.setTextOption(textoption);
 }
 

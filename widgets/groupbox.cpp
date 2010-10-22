@@ -32,7 +32,7 @@
 namespace Plasma
 {
 
-class GroupBoxPrivate : ThemedWidgetInterface<GroupBox>
+class GroupBoxPrivate : public ThemedWidgetInterface<GroupBox>
 {
 public:
     GroupBoxPrivate(GroupBox *groupBox)

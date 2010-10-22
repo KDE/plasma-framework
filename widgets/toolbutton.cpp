@@ -102,8 +102,6 @@ public:
     void syncBorders();
     void animationUpdate(qreal progress);
 
-    ToolButton *q;
-
     FrameSvg *background;
     QPropertyAnimation *animation;
     qreal opacity;

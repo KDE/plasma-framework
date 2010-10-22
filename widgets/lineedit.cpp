@@ -36,10 +36,10 @@
 namespace Plasma
 {
 
-class LineEditPrivate
+class LineEditPrivate : public ThemedWidgetInterface<LineEdit>
 {
 public:
-    LineEditPrivate(LineEdit *lineEdit) : ThemedWidgetInterface<Label>
+    LineEditPrivate(LineEdit *lineEdit)
         : ThemedWidgetInterface(lineEdit)
     {
     }
@@ -160,7 +160,7 @@ void LineEdit::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
 void LineEdit::changeEvent(QEvent *event)
 {
-    d->changEvent();
+    d->changeEvent(event);
     QGraphicsProxyWidget::changeEvent(event);
 }
 
