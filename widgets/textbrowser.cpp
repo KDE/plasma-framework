@@ -39,7 +39,7 @@ class TextBrowserPrivate : public ThemedWidgetInterface<TextBrowser>
 {
 public:
     TextBrowserPrivate(TextBrowser *browser)
-        : ThemedWidgetInterface(browser),
+        : ThemedWidgetInterface<TextBrowser>(browser),
           native(0),
           savedMinimumHeight(0),
           savedMaximumHeight(QWIDGETSIZE_MAX),

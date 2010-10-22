@@ -36,7 +36,7 @@ class CheckBoxPrivate : public ThemedWidgetInterface<CheckBox>
 {
 public:
     CheckBoxPrivate(CheckBox *c)
-        : ThemedWidgetInterface(c),
+        : ThemedWidgetInterface<CheckBox>(c),
           svg(0)
     {
     }

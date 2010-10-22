@@ -42,7 +42,7 @@ class LabelPrivate : public ThemedWidgetInterface<Label>
 {
 public:
     LabelPrivate(Label *label)
-        : ThemedWidgetInterface(label),
+        : ThemedWidgetInterface<Label>(label),
           svg(0),
           textSelectable(false)
     {

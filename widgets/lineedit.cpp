@@ -40,7 +40,7 @@ class LineEditPrivate : public ThemedWidgetInterface<LineEdit>
 {
 public:
     LineEditPrivate(LineEdit *lineEdit)
-        : ThemedWidgetInterface(lineEdit)
+        : ThemedWidgetInterface<LineEdit>(lineEdit)
     {
     }
 

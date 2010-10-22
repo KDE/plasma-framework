@@ -72,7 +72,7 @@ class TabBarPrivate : public ThemedWidgetInterface<TabBar>
 {
 public:
     TabBarPrivate(TabBar *parent)
-        : ThemedWidgetInterface(parent),
+        : ThemedWidgetInterface<TabBar>(parent),
           tabProxy(0),
           currentIndex(0),
           tabWidgetMode(true),

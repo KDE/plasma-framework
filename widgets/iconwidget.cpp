@@ -100,7 +100,7 @@ void IconHoverAnimation::setAnimation(QPropertyAnimation *animation)
 }
 
 IconWidgetPrivate::IconWidgetPrivate(IconWidget *i)
-    : ActionWidgetInterface(i),
+    : ActionWidgetInterface<IconWidget>(i),
       iconSvg(0),
       hoverAnimation(new IconHoverAnimation(q)),
       iconSize(48, 48),

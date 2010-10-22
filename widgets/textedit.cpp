@@ -40,7 +40,7 @@ class TextEditPrivate : public ThemedWidgetInterface<TextEdit>
 {
 public:
     TextEditPrivate(TextEdit *textEdit)
-        : ThemedWidgetInterface(textEdit)
+        : ThemedWidgetInterface<TextEdit>(textEdit)
     {
     }
 

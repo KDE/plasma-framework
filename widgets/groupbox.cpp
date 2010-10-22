@@ -36,7 +36,7 @@ class GroupBoxPrivate : public ThemedWidgetInterface<GroupBox>
 {
 public:
     GroupBoxPrivate(GroupBox *groupBox)
-      :ThemedWidgetInterface(groupBox)
+      :ThemedWidgetInterface<GroupBox>(groupBox)
     {
     }
 

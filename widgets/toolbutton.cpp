@@ -44,7 +44,7 @@ class ToolButtonPrivate : public ActionWidgetInterface<ToolButton>
 {
 public:
     ToolButtonPrivate(ToolButton *toolButton)
-        : ActionWidgetInterface(toolButton),
+        : ActionWidgetInterface<ToolButton>(toolButton),
           background(0),
           svg(0),
           underMouse(false)

@@ -36,7 +36,7 @@ class RadioButtonPrivate : public ThemedWidgetInterface<RadioButton>
 {
 public:
     RadioButtonPrivate(RadioButton *radio)
-        : ThemedWidgetInterface(radio),
+        : ThemedWidgetInterface<RadioButton>(radio),
          svg(0)
     {
     }

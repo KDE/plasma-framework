@@ -40,7 +40,7 @@ class FramePrivate : public ThemedWidgetInterface<Frame>
 {
 public:
     FramePrivate(Frame *parent)
-        : ThemedWidgetInterface(parent),
+        : ThemedWidgetInterface<Frame>(parent),
           svg(0),
           image(0),
           pixmap(0)

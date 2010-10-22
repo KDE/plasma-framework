@@ -40,7 +40,7 @@ class ComboBoxPrivate : public ThemedWidgetInterface<ComboBox>
 {
 public:
     ComboBoxPrivate(ComboBox *comboBox)
-         : ThemedWidgetInterface(comboBox),
+         : ThemedWidgetInterface<ComboBox>(comboBox),
            background(0),
            underMouse(false)
     {

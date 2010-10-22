@@ -40,7 +40,7 @@ class SpinBoxPrivate : public ThemedWidgetInterface<SpinBox>
 {
 public:
     SpinBoxPrivate(SpinBox *spinBox)
-        : ThemedWidgetInterface(spinBox),
+        : ThemedWidgetInterface<SpinBox>(spinBox),
           focusIndicator(0)
     {
     }
