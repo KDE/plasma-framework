@@ -21,6 +21,7 @@
 #define ACTIONWIDGETINTERFACE_P_H
 
 #include "kglobalsettings.h"
+#include <QApplication>
 
 #include "theme.h"
 
