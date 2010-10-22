@@ -156,11 +156,9 @@ public:
     QBrush backgroundBrush(const QStyleOptionGraphicsItem *option) const;
 
     QString elidedText(QTextLayout &layout,
-                       const QStyleOptionGraphicsItem *option,
                        const QSizeF &maxSize) const;
 
     QSizeF layoutText(QTextLayout &layout,
-                      const QStyleOptionGraphicsItem *option,
                       const QString &text, const QSizeF &constraints) const;
 
     QSizeF layoutText(QTextLayout &layout, const QString &text,
@@ -216,6 +214,7 @@ public:
     void hoverAnimationFinished();
     void init();
     void layoutIcons(const QStyleOptionGraphicsItem *option);
+    QSizeF iconSizeForWidgetSize(const QStyleOptionGraphicsItem *option, const QSizeF &widgetSize);
     void animateMainIcon(bool, const IconWidgetStates state);
 
     QString text;

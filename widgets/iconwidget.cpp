@@ -550,7 +550,7 @@ QSizeF IconWidgetPrivate::displaySizeHint(const QStyleOptionGraphicsItem *option
     QTextLayout layout;
     setLayoutOptions(layout, option, q->orientation());
     layout.setFont(q->font());
-    QSizeF size = layoutText(layout, option, label, QSizeF(textWidth, maxHeight));
+    QSizeF size = layoutText(layout, label, QSizeF(textWidth, maxHeight));
 
     return addMargin(size, TextMargin);
 }
@@ -562,6 +562,17 @@ void IconWidgetPrivate::layoutIcons(const QStyleOptionGraphicsItem *option)
     }
 
     currentSize = option->rect.size();
+    iconSize = iconSizeForWidgetSize(option, currentSize);
+
+    int count = 0;
+    foreach (IconAction *iconAction, cornerActions) {
+        iconAction->setRect(actionRect((IconWidgetPrivate::ActionPosition)count));
+        ++count;
+    }
+}
+
+QSizeF IconWidgetPrivate::iconSizeForWidgetSize(const QStyleOptionGraphicsItem *option, const QSizeF &rect)
+{
     setActiveMargins();
 
     //calculate icon size based on the available space
@@ -571,20 +582,20 @@ void IconWidgetPrivate::layoutIcons(const QStyleOptionGraphicsItem *option)
         qreal heightAvail;
         //if there is text resize the icon in order to make room for the text
         if (text.isEmpty() && infoText.isEmpty()) {
-            heightAvail = currentSize.height();
+            heightAvail = rect.height();
         } else {
-            heightAvail = currentSize.height() -
-                          displaySizeHint(option, currentSize.width()).height() -
+            heightAvail = rect.height() -
+                          displaySizeHint(option, rect.width()).height() -
                           verticalMargin[IconWidgetPrivate::TextMargin].top -
                           verticalMargin[IconWidgetPrivate::TextMargin].bottom;
             //never make a label higher than half the total height
-            heightAvail = qMax(heightAvail, currentSize.height() / 2);
+            heightAvail = qMax(heightAvail, rect.height() / 2);
         }
 
         //aspect ratio very "tall"
         if (!text.isEmpty() || !infoText.isEmpty()) {
-            if (currentSize.width() < heightAvail) {
-                iconWidth = currentSize.width() -
+            if (rect.width() < heightAvail) {
+                iconWidth = rect.width() -
                             verticalMargin[IconWidgetPrivate::IconMargin].left -
                             verticalMargin[IconWidgetPrivate::IconMargin].right;
             } else {
@@ -593,7 +604,7 @@ void IconWidgetPrivate::layoutIcons(const QStyleOptionGraphicsItem *option)
                             verticalMargin[IconWidgetPrivate::IconMargin].bottom;
             }
         } else {
-            iconWidth = qMin(heightAvail, currentSize.width());
+            iconWidth = qMin(heightAvail, rect.width());
         }
 
         iconWidth -= verticalMargin[IconWidgetPrivate::ItemMargin].left + verticalMargin[IconWidgetPrivate::ItemMargin].right;
@@ -602,25 +613,22 @@ void IconWidgetPrivate::layoutIcons(const QStyleOptionGraphicsItem *option)
         //if there is text resize the icon in order to make room for the text
         if (text.isEmpty() && infoText.isEmpty()) {
             // with no text, we just take up the whole geometry
-            iconWidth = qMin(currentSize.height(), currentSize.width());
+            iconWidth = qMin(rect.height(), rect.width());
         } else {
-            iconWidth = currentSize.height() -
+            iconWidth = rect.height() -
                         horizontalMargin[IconWidgetPrivate::IconMargin].top -
                         horizontalMargin[IconWidgetPrivate::IconMargin].bottom;
         }
         iconWidth -= horizontalMargin[IconWidgetPrivate::ItemMargin].top + horizontalMargin[IconWidgetPrivate::ItemMargin].bottom;
     }
-    iconSize = QSizeF(iconWidth, iconWidth);
+
+    QSizeF iconRect(iconWidth, iconWidth);
 
     if (maximumIconSize.isValid()) {
-        iconSize = iconSize.boundedTo(maximumIconSize);
+        iconRect = iconRect.boundedTo(maximumIconSize);
     }
 
-    int count = 0;
-    foreach (IconAction *iconAction, cornerActions) {
-        iconAction->setRect(actionRect((IconWidgetPrivate::ActionPosition)count));
-        ++count;
-    }
+    return iconRect;
 }
 
 void IconWidget::setSvg(const QString &svgFilePath, const QString &elementId)
@@ -663,11 +671,12 @@ QString IconWidget::svg() const
 QSizeF IconWidget::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
 {
     if (which == Qt::PreferredSize) {
+        int iconSize;
+
         if (d->preferredIconSize.isValid()) {
-            return sizeFromIconSize(qMax(d->preferredIconSize.height(), d->preferredIconSize.width()));
+            iconSize = qMax(d->preferredIconSize.height(), d->preferredIconSize.width());
         }
-        int iconSize = KIconLoader::SizeMedium;
-        if (d->iconSvg) {
+        else if (d->iconSvg) {
             QSizeF oldSize = d->iconSvg->size();
             d->iconSvg->resize();
             if (d->iconSvgElement.isNull()) {
@@ -676,8 +685,39 @@ QSizeF IconWidget::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
                 iconSize = qMax(d->iconSvg->elementSize(d->iconSvgElement).width(), d->iconSvg->elementSize(d->iconSvgElement).height());
             }
             d->iconSvg->resize(oldSize);
+        } else {
+            iconSize = KIconLoader::SizeMedium;
         }
+
+        if (constraint.width() > 0 || constraint.height() > 0) {
+            QSizeF constrainedWidgetSize(constraint);
+            QSizeF maximumWidgetSize;
+
+            if (d->maximumIconSize.isValid()) {
+                maximumWidgetSize =
+                    sizeFromIconSize(qMax(d->maximumIconSize.height(), d->maximumIconSize.width()));
+            } else {
+                maximumWidgetSize =
+                    QGraphicsWidget::sizeHint(Qt::MaximumSize);
+            }
+
+            if (constrainedWidgetSize.width() <= 0) {
+                constrainedWidgetSize.setWidth(maximumWidgetSize.width());
+            }
+            if (constrainedWidgetSize.height() <= 0) {
+                constrainedWidgetSize.setHeight(maximumWidgetSize.height());
+            }
+
+            QStyleOptionGraphicsItem option;
+            QSizeF iconRect =
+                d->iconSizeForWidgetSize(&option, constrainedWidgetSize);
+            iconSize =
+                qMin(iconSize, qMax<int>(iconRect.width(), iconRect.height()));
+        }
+        // REMOVE THIS BEFORE COMMITTING
+        // kDebug() << "Returning " << sizeFromIconSize(iconSize) << "for constraints" << constraint << "(iconsize:)" << iconSize;
         return sizeFromIconSize(iconSize);
+
     } else if (which == Qt::MinimumSize) {
         if (d->minimumIconSize.isValid()) {
             return sizeFromIconSize(qMax(d->minimumIconSize.height(), d->minimumIconSize.width()));
@@ -814,7 +854,6 @@ QPointF IconWidgetPrivate::iconPosition(const QStyleOptionGraphicsItem *option,
     // Compute the nominal decoration rectangle
     const QSizeF size = addMargin(iconSize, IconWidgetPrivate::IconMargin);
 
-
     Qt::LayoutDirection direction = iconDirection(option);
 
     //alignment depends from orientation and option->direction
@@ -868,8 +907,9 @@ QRectF IconWidgetPrivate::labelRectangle(const QStyleOptionGraphicsItem *option,
 }
 
 // Lays the text out in a rectangle no larger than constraints, eliding it as necessary
-QSizeF IconWidgetPrivate::layoutText(QTextLayout &layout, const QStyleOptionGraphicsItem *option,
-                                     const QString &text, const QSizeF &constraints) const
+QSizeF IconWidgetPrivate::layoutText(QTextLayout &layout,
+                                     const QString &text,
+                                     const QSizeF &constraints) const
 {
     const QSizeF size = layoutText(layout, text, constraints.width());
 
@@ -877,7 +917,7 @@ QSizeF IconWidgetPrivate::layoutText(QTextLayout &layout, const QStyleOptionGrap
         if (action) {
             q->setToolTip(action->toolTip());
         }
-        const QString elided = elidedText(layout, option, constraints);
+        const QString elided = elidedText(layout, constraints);
         return layoutText(layout, elided, constraints.width());
     }
     q->setToolTip(QString());
@@ -914,11 +954,8 @@ QSizeF IconWidgetPrivate::layoutText(QTextLayout &layout, const QString &text, q
 // or word breaking the line if it's wider than the max width, and finally adding an
 // ellipses at the end of the last line, if there are more lines than will fit within
 // the vertical size constraints.
-QString IconWidgetPrivate::elidedText(QTextLayout &layout, const QStyleOptionGraphicsItem *option,
-                                      const QSizeF &size) const
+QString IconWidgetPrivate::elidedText(QTextLayout &layout, const QSizeF &size) const
 {
-    Q_UNUSED(option)
-
     QFontMetricsF metrics(layout.font());
     const QString text = layout.text();
     qreal maxWidth       = size.width();
@@ -989,12 +1026,12 @@ void IconWidgetPrivate::layoutTextItems(const QStyleOptionGraphicsItem *option,
     }
 
     // Lay out the label text, and adjust the max info size based on the label size
-    labelSize = layoutText(*labelLayout, option, text, maxLabelSize);
+    labelSize = layoutText(*labelLayout, text, maxLabelSize);
     maxInfoSize.rheight() -= labelSize.height();
 
     // Lay out the info text
     if (showInformation) {
-        infoSize = layoutText(*infoLayout, option, infoText, maxInfoSize);
+        infoSize = layoutText(*infoLayout, infoText, maxInfoSize);
     } else {
         infoSize = QSizeF(0, 0);
     }
