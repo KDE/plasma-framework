@@ -22,10 +22,13 @@
 #include <QDeclarativeContext>
 #include <QDeclarativeEngine>
 #include <QDeclarativeExpression>
+#include <QFile>
 #include <QGraphicsLinearLayout>
 #include <QScriptEngine>
 #include <QScriptValueIterator>
 #include <QTimer>
+#include <QUiLoader>
+#include <QWidget>
 
 #include <KConfigGroup>
 #include <KDebug>
@@ -150,6 +153,25 @@ void DeclarativeAppletScript::configChanged()
     }
 
     m_env->callEventListeners("configchanged");
+}
+
+QScriptValue DeclarativeAppletScript::loadui(QScriptContext *context, QScriptEngine *engine)
+{
+    if (context->argumentCount() != 1) {
+        return context->throwError(i18n("loadui() takes one argument"));
+    }
+
+    QString filename = context->argument(0).toString();
+    QFile f(filename);
+    if (!f.open(QIODevice::ReadOnly)) {
+        return context->throwError(i18n("Unable to open '%1'",filename));
+    }
+
+    QUiLoader loader;
+    QWidget *w = loader.load(&f);
+    f.close();
+
+    return engine->newQObject(w, QScriptEngine::AutoOwnership);
 }
 
 QScriptValue DeclarativeAppletScript::newPlasmaSvg(QScriptContext *context, QScriptEngine *engine)
@@ -338,6 +360,10 @@ void DeclarativeAppletScript::setupObjects()
         ++i;
     }
     global.setProperty("startupArguments", args);
+
+    // Add a global loadui method for ui files
+    QScriptValue fun = m_engine->newFunction(DeclarativeAppletScript::loadui);
+    global.setProperty("loadui", fun);
 
     bindI18N(m_engine);
     global.setProperty("dataEngine", m_engine->newFunction(DeclarativeAppletScript::dataEngine));

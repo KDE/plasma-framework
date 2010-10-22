@@ -61,6 +61,7 @@ public:
 
     QScriptValue variantToScriptValue(QVariant var);
 
+    static QScriptValue loadui(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue newPlasmaSvg(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue newPlasmaFrameSvg(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue newPlasmaExtenderItem(QScriptContext *context, QScriptEngine *engine);
