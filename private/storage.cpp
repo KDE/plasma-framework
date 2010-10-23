@@ -168,6 +168,9 @@ Storage::Storage(QObject* parent) : Plasma::Service(parent)
         }
     }
 
+    m_clientName = m_clientName.replace('.', "_");
+    m_clientName = m_clientName.replace('-', "_");
+
     setName("storage");
 }
 
