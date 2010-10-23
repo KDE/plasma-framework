@@ -40,6 +40,7 @@ public:
     void start();
 private:
     QSqlDatabase m_db;
+    QString m_clientName;
 };
 //End StorageJob
 
@@ -48,14 +49,14 @@ class Storage : public Plasma::Service
     Q_OBJECT
 
 public:
-    Storage(const QString& destination, QObject* parent);
+    Storage(QObject* parent);
     ~Storage();
 
 protected:
     Plasma::ServiceJob* createJob(const QString &operation, QMap<QString, QVariant> &parameters);
 
 private:
-    QString m_serviceName;
+    QString m_clientName;
 };
 
 

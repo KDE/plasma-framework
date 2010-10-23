@@ -30,6 +30,11 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
+//Plasma
+#include "applet.h"
+#include "dataengine.h"
+#include "abstractrunner.h"
+
 static uint connectionId = 0;
 
 //Storage Job implentation
@@ -37,16 +42,19 @@ StorageJob::StorageJob(const QString& destination,
                        const QString& operation,
                        const QMap<QString, QVariant>& parameters,
                        QObject *parent)
-            : ServiceJob(destination, operation, parameters, parent)
+            : ServiceJob(destination, operation, parameters, parent),
+              m_clientName(destination)
 {
     m_db = QSqlDatabase::addDatabase("QSQLITE", QString("plasma-storage-%1").arg(++connectionId));
     m_db.setDatabaseName(KStandardDirs::locateLocal("appdata", "plasma-storage.db"));
 
     if (!m_db.open()) {
         kWarning() << "Unable to open the plasma storage cache database: " << m_db.lastError();
-    } else if (!m_db.tables().contains("data")) {
+    } else if (!m_db.tables().contains(m_clientName)) {
         QSqlQuery query(m_db);
-        query.exec("create table data (id varchar(100) primary key, source varchar(100), data clob, date datetime)");
+        //bindValue doesn't seem to be able to replace stuff in create table
+        query.prepare(QString("create table ")+m_clientName+" (valueGroup varchar(256), id varchar(256), data clob, date datetime, primary key (valueGroup, id))");
+        query.exec();
     }
 }
 
@@ -60,13 +68,13 @@ void StorageJob::start()
 
     if (operationName() == "save") {
       QSqlQuery query(m_db);
-      query.prepare("delete from data where key = :id");
+      query.prepare("delete from "+m_clientName+" where key = :id");
       query.bindValue(":id", params["key"].toString());
       query.exec();
 
-      query.prepare("insert into data values(:id, :source, :datavalue, 'now')");
+      query.prepare("insert into "+m_clientName+" values(:valueGroup, :id, :datavalue, 'now')");
       query.bindValue(":id", params["key"].toString());
-      query.bindValue(":source", params["source"].toString());
+      query.bindValue(":valueGroup", params["valueGroup"].toString());
       query.bindValue(":datavalue", params["data"]);
       const bool success = query.exec();
       setResult(success);
@@ -74,25 +82,22 @@ void StorageJob::start()
 
     } else if (operationName() == "retrieve") {
         QSqlQuery query(m_db);
-        query.prepare("delete from data where date < :date");
+        query.prepare("delete from "+m_clientName+" where date < :date");
         QDateTime time(QDateTime::currentDateTime());
         time.addDays(-2);
         query.bindValue(":date", time.toTime_t());
         query.exec();
 
         //a bit redundant but should be the faster way with less string concatenation as possible
-        if (params["source"].isNull() && params["key"].isNull()) {
+        if (params["valueGroup"].isNull()) {
             setError(true);
             return;
-        } else if (params["source"].isNull()) {
-            query.prepare("select * from data where key=:key");
-            query.bindValue(":source", params["source"].toString());
         } else if (params["key"].isNull()) {
-            query.prepare("select * from data where source=:source");
-            query.bindValue(":source", params["source"].toString());
+            query.prepare("select * from "+m_clientName+" where valueGroup=:valueGroup");
+            query.bindValue(":valueGroup", params["valueGroup"].toString());
         } else {
-            query.prepare("select * from data where source=:source and key=:key");
-            query.bindValue(":source", params["source"].toString());
+            query.prepare("select * from "+m_clientName+" where valueGroup=:valueGroup and key=:key");
+            query.bindValue(":valueGroup", params["valueGroup"].toString());
             query.bindValue(":key", params["key"].toString());
         }
 
@@ -116,7 +121,7 @@ void StorageJob::start()
 
     } else if (operationName() == "expire") {
         QSqlQuery query(m_db);
-        query.prepare("delete from data where date < :date");
+        query.prepare("delete from "+m_clientName+" where date < :date");
         QDateTime time(QDateTime::currentDateTime());
         time.addDays(-2);
         query.bindValue(":date", time.toTime_t());
@@ -129,13 +134,36 @@ void StorageJob::start()
 
 Plasma::ServiceJob* Storage::createJob(const QString &operation, QMap<QString, QVariant> &parameters)
 {
-    return new StorageJob(m_serviceName, operation, parameters);
+    return new StorageJob(m_clientName, operation, parameters, this);
 }
 
 //Storage implementation
-Storage::Storage(const QString& destination, QObject* parent) : Plasma::Service(parent)
+Storage::Storage(QObject* parent) : Plasma::Service(parent)
 {
-    m_serviceName = destination;
+    //search among parents for an applet or dataengine: if found call the table as its plugin name
+    QObject *parentObject = this;
+
+    QString clientName("data");
+    while ((parentObject = parentObject->parent())) {
+        Plasma::Applet *applet = qobject_cast<Plasma::Applet *>(parentObject);
+        if (applet) {
+            m_clientName = applet->pluginName();
+            break;
+        }
+
+        Plasma::DataEngine *engine = qobject_cast<Plasma::DataEngine *>(parentObject);
+        if (engine) {
+            m_clientName = engine->pluginName();
+            break;
+        }
+
+        Plasma::AbstractRunner *runner = qobject_cast<Plasma::AbstractRunner *>(parentObject);
+        if (runner) {
+            m_clientName = runner->id();
+            break;
+        }
+    }
+
     setName("storage");
 }
 

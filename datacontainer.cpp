@@ -199,7 +199,7 @@ void DataContainerPrivate::store()
     q->setNeedsToBeStored(false);
 
     if (storage == NULL) {
-        storage = new Storage(de->name(), 0);
+        storage = new Storage(q);
     }
 
     KConfigGroup op = storage->operationDescription("save");
@@ -220,7 +220,7 @@ void DataContainerPrivate::store()
         }
         ++it;
         if (storage == NULL) {
-            storage = new Storage(de->name(), 0);
+            storage = new Storage(q);
         }
         ServiceJob* job = storage->startOperationCall(op);
         storageCount++;
@@ -244,7 +244,7 @@ void DataContainerPrivate::retrieve()
         return;
     }
     if (!storage) {
-        storage = new Storage(de->name(), 0);
+        storage = new Storage(q);
     }
 
     KConfigGroup retrieveGroup = storage->operationDescription("retrieve");
