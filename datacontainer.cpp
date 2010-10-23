@@ -203,7 +203,7 @@ void DataContainerPrivate::store()
     }
 
     KConfigGroup op = storage->operationDescription("save");
-    op.writeEntry("source", q->objectName());
+    op.writeEntry("group", q->objectName());
     DataEngine::Data dataToStore = q->data();
     DataEngine::Data::const_iterator it = dataToStore.constBegin();
     while (it != dataToStore.constEnd() && dataToStore.constEnd() == q->data().constEnd()) {

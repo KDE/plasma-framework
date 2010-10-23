@@ -66,16 +66,22 @@ void StorageJob::start()
 
     QMap<QString, QVariant> params = parameters();
 
+    QString valueGroup = params["group"].toString();
+    if (valueGroup.isEmpty()) {
+        valueGroup = "default";
+    }
+
+
     if (operationName() == "save") {
       QSqlQuery query(m_db);
       query.prepare("delete from "+m_clientName+" where valueGroup=:valueGroup and id = :id");
-      query.bindValue(":valueGroup", params["valueGroup"].toString());
+      query.bindValue(":valueGroup", valueGroup);
       query.bindValue(":id", params["key"].toString());
       query.exec();
 
       query.prepare("insert into "+m_clientName+" values(:valueGroup, :id, :datavalue, 'now')");
       query.bindValue(":id", params["key"].toString());
-      query.bindValue(":valueGroup", params["valueGroup"].toString());
+      query.bindValue(":valueGroup", valueGroup);
       query.bindValue(":datavalue", params["data"]);
       const bool success = query.exec();
       setResult(success);
@@ -90,15 +96,12 @@ void StorageJob::start()
         query.exec();
 
         //a bit redundant but should be the faster way with less string concatenation as possible
-        if (params["valueGroup"].isNull()) {
-            setError(true);
-            return;
-        } else if (params["key"].isNull()) {
+        if (params["key"].isNull()) {
             query.prepare("select * from "+m_clientName+" where valueGroup=:valueGroup");
-            query.bindValue(":valueGroup", params["valueGroup"].toString());
+            query.bindValue(":valueGroup", valueGroup);
         } else {
             query.prepare("select * from "+m_clientName+" where valueGroup=:valueGroup and key=:key");
-            query.bindValue(":valueGroup", params["valueGroup"].toString());
+            query.bindValue(":valueGroup", valueGroup);
             query.bindValue(":key", params["key"].toString());
         }
 
