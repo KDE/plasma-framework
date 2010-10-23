@@ -116,7 +116,6 @@ IconWidgetPrivate::IconWidgetPrivate(IconWidget *i)
       drawBg(false),
       textBgCustomized(false)
 {
-    initTheming();
 }
 
 IconWidgetPrivate::~IconWidgetPrivate()
@@ -410,6 +409,7 @@ void IconWidgetPrivate::init()
 
     setActiveMargins();
     currentSize = QSizeF(-1, -1);
+    initTheming();
 }
 
 void IconWidget::addIconAction(QAction *action)
