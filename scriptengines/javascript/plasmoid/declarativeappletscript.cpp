@@ -368,6 +368,7 @@ void DeclarativeAppletScript::setupObjects()
     bindI18N(m_engine);
     global.setProperty("dataEngine", m_engine->newFunction(DeclarativeAppletScript::dataEngine));
     global.setProperty("service", m_engine->newFunction(DeclarativeAppletScript::service));
+    global.setProperty("loadService", m_engine->newFunction(DeclarativeAppletScript::loadService));
 
     //Add stuff from Qt
     ByteArrayClass *baClass = new ByteArrayClass(m_engine);
@@ -419,6 +420,25 @@ QScriptValue DeclarativeAppletScript::service(QScriptContext *context, QScriptEn
     Plasma::DataEngine *data = interface->dataEngine(dataEngine);
     QString source = context->argument(1).toString();
     Plasma::Service *service = data->serviceForSource(source);
+    //kDebug( )<< "lets try to get" << source << "from" << dataEngine;
+    return engine->newQObject(service, QScriptEngine::AutoOwnership);
+}
+
+QScriptValue DeclarativeAppletScript::loadService(QScriptContext *context, QScriptEngine *engine)
+{
+    if (context->argumentCount() != 1) {
+        return context->throwError(i18n("service() takes one argument"));
+    }
+
+    QString pluginName = context->argument(0).toString();
+
+    AppletInterface *interface = AppletInterface::extract(engine);
+    if (!interface) {
+        return context->throwError(i18n("Could not extract the Applet"));
+    }
+
+    Plasma::Service *service = Plasma::Service::load(pluginName, interface);
+
     //kDebug( )<< "lets try to get" << source << "from" << dataEngine;
     return engine->newQObject(service, QScriptEngine::AutoOwnership);
 }

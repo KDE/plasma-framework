@@ -67,6 +67,7 @@ public:
     static QScriptValue newPlasmaExtenderItem(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue dataEngine(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue service(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue loadService(QScriptContext *context, QScriptEngine *engine);
 
 public Q_SLOTS:
     void dataUpdated(const QString &name, const Plasma::DataEngine::Data &data);
