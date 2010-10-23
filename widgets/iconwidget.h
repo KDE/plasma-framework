@@ -383,6 +383,7 @@ private:
     Q_PRIVATE_SLOT(d, void hoverAnimationFinished())
     Q_PRIVATE_SLOT(d, void colorConfigChanged())
     Q_PRIVATE_SLOT(d, void iconConfigChanged())
+    Q_PRIVATE_SLOT(d, void setPalette())
 
     IconWidgetPrivate * const d;
     friend class IconWidgetPrivate;

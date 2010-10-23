@@ -231,6 +231,7 @@ private:
     Q_PRIVATE_SLOT(d, void setPixmap())
     Q_PRIVATE_SLOT(d, void pressedChanged())
     Q_PRIVATE_SLOT(d, void syncToAction())
+    Q_PRIVATE_SLOT(d, void setPalette())
 
     friend class PushButtonPrivate;
     PushButtonPrivate *const d;

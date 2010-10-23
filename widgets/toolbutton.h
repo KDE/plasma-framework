@@ -195,6 +195,7 @@ private:
     Q_PRIVATE_SLOT(d, void syncToAction())
     Q_PRIVATE_SLOT(d, void clearAction())
     Q_PRIVATE_SLOT(d, void setPixmap())
+    Q_PRIVATE_SLOT(d, void setPalette())
 
     friend class ToolButtonPrivate;
     ToolButtonPrivate *const d;

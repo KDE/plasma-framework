@@ -144,6 +144,7 @@ private:
     FramePrivate * const d;
 
     Q_PRIVATE_SLOT(d, void syncBorders())
+    Q_PRIVATE_SLOT(d, void setPalette())
 };
 
 } // namespace Plasma
