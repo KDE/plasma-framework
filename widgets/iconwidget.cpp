@@ -714,8 +714,6 @@ QSizeF IconWidget::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
             iconSize =
                 qMin(iconSize, qMax<int>(iconRect.width(), iconRect.height()));
         }
-        // REMOVE THIS BEFORE COMMITTING
-        // kDebug() << "Returning " << sizeFromIconSize(iconSize) << "for constraints" << constraint << "(iconsize:)" << iconSize;
         return sizeFromIconSize(iconSize);
 
     } else if (which == Qt::MinimumSize) {
