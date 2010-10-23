@@ -68,7 +68,8 @@ void StorageJob::start()
 
     if (operationName() == "save") {
       QSqlQuery query(m_db);
-      query.prepare("delete from "+m_clientName+" where key = :id");
+      query.prepare("delete from "+m_clientName+" where valueGroup=:valueGroup and id = :id");
+      query.bindValue(":valueGroup", params["valueGroup"].toString());
       query.bindValue(":id", params["key"].toString());
       query.exec();
 
