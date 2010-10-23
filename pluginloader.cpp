@@ -34,6 +34,7 @@
 #include "private/applet_p.h"
 #include "private/extenderapplet_p.h"
 #include "private/service_p.h" // for NullService
+#include "private/storage_p.h"
 
 namespace Plasma {
 
@@ -205,6 +206,8 @@ Service *PluginLoader::loadService(const QString &name, const QVariantList &args
     //TODO: scripting API support
     if (name.isEmpty()) {
         return new NullService(QString(), parent);
+    } else if (name == "org.kde.servicestorage") {
+        return new Storage(parent);
     }
 
     QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(name);

@@ -3,7 +3,7 @@
     "http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
 <kcfg>
     <group name="save">
-        <entry name="source" type="String">
+        <entry name="group" type="String">
             <label>Name of the source</label>
         </entry>
         <entry name="key" type="String">
@@ -20,8 +20,11 @@
         </entry>
   </group>
   <group name="retrieve">
-      <entry name="source" type="String">
+      <entry name="group" type="String">
           <label>Name of the source</label>
       </entry>
+      <entry name="key" type="String">
+            <label>Fill</label>
+        </entry>
   </group>
 </kcfg>
