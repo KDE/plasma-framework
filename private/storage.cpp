@@ -96,11 +96,11 @@ void StorageJob::start()
         query.exec();
 
         //a bit redundant but should be the faster way with less string concatenation as possible
-        if (params["key"].isNull()) {
+        if (params["key"].toString().isEmpty()) {
             query.prepare("select * from "+m_clientName+" where valueGroup=:valueGroup");
             query.bindValue(":valueGroup", valueGroup);
         } else {
-            query.prepare("select * from "+m_clientName+" where valueGroup=:valueGroup and key=:key");
+            query.prepare("select * from "+m_clientName+" where valueGroup=:valueGroup and id=:key");
             query.bindValue(":valueGroup", valueGroup);
             query.bindValue(":key", params["key"].toString());
         }
