@@ -79,7 +79,7 @@ void StorageJob::start()
       query.bindValue(":id", params["key"].toString());
       query.exec();
 
-      query.prepare("insert into "+m_clientName+" values(:valueGroup, :id, :datavalue, 'now')");
+      query.prepare("insert into "+m_clientName+" values(:valueGroup, :id, :datavalue, date('now'))");
       query.bindValue(":id", params["key"].toString());
       query.bindValue(":valueGroup", valueGroup);
       query.bindValue(":datavalue", params["data"]);
