@@ -216,7 +216,7 @@ Theme *SvgPrivate::actualTheme()
 QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
 {
     QSize size;
-    QString actualElementId(CACHE_ID_WITH_SIZE(s, elementId));
+    QString actualElementId(QString::number(int(s.width())) % "-" % QString::number(int(s.height())) % "-" % elementId);
 
     if (elementId.isEmpty() || !q->hasElement(actualElementId)) {
         actualElementId = elementId;
