@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Declarative widget
+Name[ca]=Estri declaratiu
 Name[es]=Elemento gráfico declarativo
 Name[et]=Deklaratiivne vidin
 Name[ia]=Widget declarative
@@ -11,9 +12,11 @@ Name[uk]=Декларативний віджет
 Name[x-test]=xxDeclarative widgetxx
 Name[zh_TW]=宣告元件
 Comment=Native Plasma widget written in QML and JavaScript
+Comment[ca]=Estri nadiu del Plasma escrit en QML i JavaScript
 Comment[es]=Elemento gráfico nativo de Plasma escrito en QML y JavaScript
 Comment[et]=QML-is ja JavaScriptis kirjutatud Plasma vidin
 Comment[ia]=Widget native de Plasma scribite in QLM e JavaScript
+Comment[nds]=En orginaal Plasmaelement, schreven in QML un JavaScript
 Comment[nl]=Hier thuishorend Plasma-widget geschreven in QML en JavaScript
 Comment[pt]=Elemento nativo do Plasma feito em QML e JavaScript
 Comment[pt_BR]=Widget do Plasma nativo escrito em QML e JavaScript
