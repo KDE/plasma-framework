@@ -48,7 +48,7 @@ class PLASMA_EXPORT TabBar : public QGraphicsWidget
     Q_OBJECT
 
     Q_PROPERTY(KTabBar *nativeWidget READ nativeWidget)
-    Q_PROPERTY(int currentIndex READ currentIndex WRITE setCurrentIndex)
+    Q_PROPERTY(int currentIndex READ currentIndex WRITE setCurrentIndex NOTIFY currentChanged)
     Q_PROPERTY(int count READ count)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(bool tabBarShown READ isTabBarShown WRITE setTabBarShown)
