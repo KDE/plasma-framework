@@ -68,12 +68,12 @@ QNetworkReply *PackageAccessManager::createRequest(QNetworkAccessManager::Operat
         reqUrl.setScheme("file");
         reqUrl.setPath(m_package->path()+"/contents/"+reqUrl.path());
         request.setUrl(reqUrl);
-        return KIO::AccessManager::createRequest(op, request, outgoingData);
+        return QNetworkAccessManager::createRequest(op, request, outgoingData);
     } else if ((reqUrl.scheme() == "http" && !m_auth->authorizeRequiredExtension("http")) ||
                ((reqUrl.scheme() == "file" || reqUrl.scheme() == "desktop") && !m_auth->authorizeRequiredExtension("localio")) ||
                (!m_auth->authorizeRequiredExtension("networkio"))) {
         return new ErrorReply(op, req);
-    }else {
+    } else {
         return KIO::AccessManager::createRequest(op, req, outgoingData);
     }
 }
