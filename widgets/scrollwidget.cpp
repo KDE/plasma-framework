@@ -33,17 +33,25 @@
 #include <QPropertyAnimation>
 #include <QSequentialAnimationGroup>
 
+#include <QLabel>
+
 //KDE
 #include <kmimetype.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
+#include <ktextedit.h>
+#include <ktextbrowser.h>
 
 //Plasma
 #include <plasma/widgets/scrollbar.h>
 #include <plasma/widgets/svgwidget.h>
+#include <plasma/widgets/label.h>
+#include <plasma/widgets/textedit.h>
+#include <plasma/widgets/textbrowser.h>
 #include <plasma/animator.h>
 #include <plasma/svg.h>
+
 
 #define DEBUG 0
 
@@ -1435,6 +1443,23 @@ bool ScrollWidget::sceneEventFilter(QGraphicsItem *i, QEvent *e)
         (!d->scrollingWidget->isAncestorOf(i) && i != d->scrollingWidget) ||
         i == d->horizontalScrollBar || i == d->verticalScrollBar) {
         return false;
+    }
+
+    if (i->isWidget()) {
+        Plasma::Label *label = dynamic_cast<Plasma::Label *>(static_cast<QGraphicsWidget *>(i));
+        if (label && (label->nativeWidget()->textInteractionFlags() & Qt::TextSelectableByMouse)) {
+            return false;
+        }
+
+        Plasma::TextEdit *textEdit = dynamic_cast<Plasma::TextEdit *>(static_cast<QGraphicsWidget *>(i));
+        if (textEdit && (textEdit->nativeWidget()->textInteractionFlags() & Qt::TextSelectableByMouse)) {
+            return false;
+        }
+
+        Plasma::TextBrowser *textBrowser= dynamic_cast<Plasma::TextBrowser *>(static_cast<QGraphicsWidget *>(i));
+        if (textBrowser && (textBrowser->nativeWidget()->textInteractionFlags() & Qt::TextSelectableByMouse)) {
+            return false;
+        }
     }
 
     bool stealThisEvent = d->stealEvent;
