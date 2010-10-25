@@ -19,11 +19,21 @@
 
 #include "declarativenetworkaccessmanagerfactory_p.h"
 
+#include "config-plasma.h"
+
+#ifndef PLASMA_NO_KIO
 #include <kio/accessmanager.h>
+#else
+#include <QtNetwork/QNetworkAccessManager>
+#endif
 
 QNetworkAccessManager *DeclarativeNetworkAccessManagerFactory::create(QObject *parent)
 {
+#ifndef PLASMA_NO_KIO
     return new KIO::AccessManager(parent);
+#else
+    return new QNetworkAccessManager(parent);
+#endif
 }
 
 

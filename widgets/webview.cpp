@@ -74,7 +74,9 @@ WebView::WebView(QGraphicsItem *parent)
     QPalette palette = qApp->palette();
     palette.setBrush(QPalette::Base, Qt::transparent);
     d->webView->page()->setPalette(palette);
+#ifndef PLASMA_NO_KIO
     d->webView->page()->setNetworkAccessManager(new KIO::AccessManager(d->webView->page()));
+#endif
 
     connect(d->webView, SIGNAL(loadProgress(int)),
             this, SIGNAL(loadProgress(int)));
