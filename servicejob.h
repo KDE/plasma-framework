@@ -54,6 +54,10 @@ class ServiceJobPrivate;
 class PLASMA_EXPORT ServiceJob : public KJob
 {
     Q_OBJECT
+    Q_PROPERTY(QString destination READ destination)
+    Q_PROPERTY(QString operationName READ operationName)
+    Q_PROPERTY(QVariant result READ result)
+
 
 public:
     /**
@@ -109,7 +113,7 @@ public:
      * Default implementation of start, which simply sets the results to false.
      * This makes it easy to create a "failure" job.
      */
-    virtual void start();
+    Q_INVOKABLE virtual void start();
 
 protected:
     /**
