@@ -102,13 +102,15 @@ void DataModel::setItems(const QVariantList &list)
     //convert to vector, so data() will be O(1)
     m_items = list.toVector();
 
-    int role = Qt::UserRole;
-    m_roleNames.clear();
-    foreach (QString roleName, list.first().value<QVariantMap>().keys()) {
-        ++role;
-        m_roleNames[role] = roleName.toLatin1();
+    if (!list.isEmpty()) {
+        int role = Qt::UserRole;
+        m_roleNames.clear();
+        foreach (QString roleName, list.first().value<QVariantMap>().keys()) {
+            ++role;
+            m_roleNames[role] = roleName.toLatin1();
+        }
+        setRoleNames(m_roleNames);
     }
-    setRoleNames(m_roleNames);
 
     //make the declarative view reload everything,
     //would be nice an incremental update but is not possible
