@@ -34,9 +34,11 @@
 
 class QDeclarativePropertyMap;
 
+
 namespace Plasma
 {
   class DataEngine;
+  class DataModel;
 
   class DataSource : public QObject, DataEngineConsumer
   {
@@ -84,8 +86,10 @@ namespace Plasma
       void dataChanged();
       void sourcesChanged();
 
-  private:
+  protected:
+      inline DataModel *modelFromKey(const QString &key);
 
+  private:
       QString m_id;
       int m_interval;
       QString m_source;

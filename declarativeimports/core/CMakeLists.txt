@@ -4,6 +4,7 @@ set(corebindings_SRCS
     corebindingsplugin.cpp
     dataengineconsumer.cpp
     theme.cpp
+    datamodel.cpp
     datasource.cpp
     svgitem.cpp
     framesvgitem.cpp

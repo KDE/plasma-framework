@@ -20,6 +20,8 @@
  */
 
 #include "datasource_p.h"
+#include "datamodel.h"
+
 #include "qdeclarativeengine.h"
 #include "qdeclarativecontext.h"
 
@@ -44,6 +46,11 @@ DataSource::DataSource(QObject* parent)
             this, SLOT(setupData()));
     connect(this, SIGNAL(intervalChanged()),
             this, SLOT(setupData()));
+}
+
+Plasma::DataModel *DataSource::modelFromKey(const QString &key)
+{
+    return qobject_cast<DataModel*>(qvariant_cast<QObject*>(m_data->value(key.toLatin1())));
 }
 
 void DataSource::setSource(const QString &s)
@@ -92,7 +99,25 @@ void DataSource::dataUpdated(const QString &sourceName, const Plasma::DataEngine
         // Properties in QML must start lowercase.
         QString ourKey = key.toLower();
 
-        m_data->insert(ourKey.toLatin1(), data.value(key));
+        if (data.value(key).canConvert<QVariantList>() && data.value(key).value<QVariantList>().first().canConvert<QVariantMap>()) {
+            DataModel *model = modelFromKey(ourKey);
+
+            if (model) {
+                model->removeRows(0, model->rowCount());
+            } else {
+                model = new DataModel(m_data);
+                m_data->insert(ourKey.toLatin1(), qVariantFromValue(static_cast<QObject*>(model)));
+            }
+
+            model->setItems(data.value(key).value<QVariantList>());
+
+        } else {
+            DataModel *model = modelFromKey(ourKey);
+            if (model) {
+                model->deleteLater();
+            }
+            m_data->insert(ourKey.toLatin1(), data.value(key));
+        }
 
         newKeys << ourKey;
     }
@@ -101,6 +126,10 @@ void DataSource::dataUpdated(const QString &sourceName, const Plasma::DataEngine
         //FIXME: pretty utterly inefficient
         foreach (const QString &key, m_keys) {
             if (!newKeys.contains(key)) {
+                DataModel *model = modelFromKey(key);
+                if (model) {
+                    model->deleteLater();
+                }
                 m_data->insert(key.toLatin1(), QVariant());
             }
         }
