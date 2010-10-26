@@ -13,6 +13,7 @@ Name[x-test]=xxDeclarative widgetxx
 Name[zh_TW]=宣告元件
 Comment=Native Plasma widget written in QML and JavaScript
 Comment[ca]=Estri nadiu del Plasma escrit en QML i JavaScript
+Comment[de]=Echtes Plasma-Programm, geschrieben in QML und JavaScript
 Comment[es]=Elemento gráfico nativo de Plasma escrito en QML y JavaScript
 Comment[et]=QML-is ja JavaScriptis kirjutatud Plasma vidin
 Comment[ia]=Widget native de Plasma scribite in QLM e JavaScript
