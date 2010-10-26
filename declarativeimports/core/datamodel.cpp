@@ -105,9 +105,17 @@ void DataModel::setItems(const QVariantList &list)
     if (!list.isEmpty()) {
         int role = Qt::UserRole;
         m_roleNames.clear();
-        foreach (QString roleName, list.first().value<QVariantMap>().keys()) {
-            ++role;
-            m_roleNames[role] = roleName.toLatin1();
+
+        if (list.first().canConvert<QVariantHash>()) {
+            foreach (QString roleName, list.first().value<QVariantHash>().keys()) {
+                ++role;
+                m_roleNames[role] = roleName.toLatin1();
+            }
+        } else {
+            foreach (QString roleName, list.first().value<QVariantMap>().keys()) {
+                ++role;
+                m_roleNames[role] = roleName.toLatin1();
+            }
         }
         setRoleNames(m_roleNames);
     }
@@ -124,7 +132,11 @@ QVariant DataModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
-    return m_items.value(index.row()).value<QVariantMap>().value(m_roleNames.value(role));
+    if (m_items.value(index.row()).canConvert<QVariantHash>()) {
+        return m_items.value(index.row()).value<QVariantHash>().value(m_roleNames.value(role));
+    } else {
+        return m_items.value(index.row()).value<QVariantMap>().value(m_roleNames.value(role));
+    }
 }
 
 QVariant DataModel::headerData(int section, Qt::Orientation orientation, int role) const
