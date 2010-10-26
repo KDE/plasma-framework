@@ -27,6 +27,7 @@
 #include <Plasma/Svg>
 
 #include "datasource_p.h"
+#include "datamodel.h"
 #include "framesvgitem_p.h"
 #include "svgitem_p.h"
 #include "theme_p.h"
@@ -43,9 +44,13 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterType<ThemeProxy>(uri, 0, 1, "Theme");
 
     qmlRegisterType<Plasma::DataSource>(uri, 0, 1, "DataSource");
+    qmlRegisterType<Plasma::DataModel>(uri, 0, 1, "DataModel");
 
     qmlRegisterInterface<Plasma::Service>("Service");
     qRegisterMetaType<Plasma::Service*>("Service");
+
+    qmlRegisterInterface<Plasma::DataSource>("DataSource");
+    qRegisterMetaType<Plasma::DataSource*>("DataSource");
 }
 
 

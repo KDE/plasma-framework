@@ -1,6 +1,4 @@
 /*
- *   Copyright 2009 by Alan Alpert <alan.alpert@nokia.com>
- *   Copyright 2010 by Ménard Alexis <menard@kde.org>
  *   Copyright 2010 by Marco Martin <mart@kde.org>
 
  *   This program is free software; you can redistribute it and/or modify
@@ -20,6 +18,7 @@
  */
 
 #include "datamodel.h"
+#include "datasource_p.h"
 
 #include <KDebug>
 
@@ -27,7 +26,8 @@ namespace Plasma
 {
 
 DataModel::DataModel(QObject* parent)
-    : QAbstractItemModel(parent)
+    : QAbstractItemModel(parent),
+      m_dataSource(0)
 {
     setObjectName("DataModel");
 }
@@ -36,6 +36,64 @@ DataModel::~DataModel()
 {
 }
 
+void DataModel::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
+{
+    Q_UNUSED(sourceName);
+
+    if (data.contains(m_key) && data.value(m_key).canConvert<QVariantList>()) {
+        setItems(data.value(m_key).value<QVariantList>());
+    } else {
+        QRegExp regExp(m_key);
+        if (!regExp.isValid()) {
+            return;
+        }
+
+        QHash<QString, QVariant>::const_iterator i;
+        QVariantList list;
+        for (i = data.constBegin(); i != data.constEnd(); ++i) {
+            if (regExp.exactMatch(i.key())) {
+                list.append(i.value());
+            }
+        }
+        setItems(list);
+    }
+}
+
+void DataModel::setDataSource(QObject *object)
+{
+    DataSource *source = qobject_cast<DataSource *>(object);
+    if (!source) {
+        kWarning() << "Error: DataSource type expected";
+        return;
+    }
+    if (m_dataSource == source) {
+        return;
+    }
+
+    disconnect(m_dataSource, 0, this, 0);
+    m_dataSource = source;
+    connect(m_dataSource, SIGNAL(newData(const QString &, const Plasma::DataEngine::Data &)),
+            this, SLOT(dataUpdated(const QString &, const Plasma::DataEngine::Data &)));
+}
+
+QObject *DataModel::dataSource() const
+{
+    return m_dataSource;
+}
+
+void DataModel::setKey(const QString key)
+{
+    if (m_key == key) {
+        return;
+    }
+
+    m_key = key;
+}
+
+QString DataModel::key() const
+{
+    return m_key;
+}
 
 void DataModel::setItems(const QVariantList &list)
 {
