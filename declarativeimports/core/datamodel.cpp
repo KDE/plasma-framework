@@ -26,17 +26,84 @@ namespace Plasma
 {
 
 DataModel::DataModel(QObject* parent)
-    : QAbstractItemModel(parent),
-      m_dataSource(0)
+    : QSortFilterProxyModel(parent)
 {
     setObjectName("DataModel");
+    setDynamicSortFilter(true);
+    m_internalDataModel = new InternalDataModel(this);
+    setSourceModel(m_internalDataModel);
 }
 
 DataModel::~DataModel()
 {
 }
 
-void DataModel::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
+void DataModel::setDataSource(QObject *source)
+{
+    m_internalDataModel->setDataSource(source);
+}
+
+QObject *DataModel::dataSource() const
+{
+    return m_internalDataModel->dataSource();
+}
+
+void DataModel::setKey(const QString key)
+{
+    m_internalDataModel->setKey(key);
+}
+
+QString DataModel::key() const
+{
+    return m_internalDataModel->key();
+}
+
+void DataModel::setFilterRegExp(const QString &exp)
+{
+    QSortFilterProxyModel::setFilterRegExp(QRegExp(exp));
+}
+
+QString DataModel::filterRegExp() const
+{
+    return QSortFilterProxyModel::filterRegExp().pattern();
+}
+
+void DataModel::setFilterRole(const QString &role)
+{
+    QSortFilterProxyModel::setFilterRole(m_internalDataModel->roleNameToId(role));
+    m_filterRole = role;
+}
+
+QString DataModel::filterRole() const
+{
+    return m_filterRole;
+}
+
+void DataModel::setSortRole(const QString &role)
+{
+    QSortFilterProxyModel::setSortRole(m_internalDataModel->roleNameToId(role));
+    m_sortRole = role;
+}
+
+QString DataModel::sortRole() const
+{
+    return m_sortRole;
+}
+
+
+
+InternalDataModel::InternalDataModel(DataModel* parent)
+    : QAbstractItemModel(parent),
+      m_dataModel(parent),
+      m_dataSource(0)
+{
+}
+
+InternalDataModel::~InternalDataModel()
+{
+}
+
+void InternalDataModel::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
 {
     Q_UNUSED(sourceName);
 
@@ -59,7 +126,7 @@ void DataModel::dataUpdated(const QString &sourceName, const Plasma::DataEngine:
     }
 }
 
-void DataModel::setDataSource(QObject *object)
+void InternalDataModel::setDataSource(QObject *object)
 {
     DataSource *source = qobject_cast<DataSource *>(object);
     if (!source) {
@@ -76,12 +143,12 @@ void DataModel::setDataSource(QObject *object)
             this, SLOT(dataUpdated(const QString &, const Plasma::DataEngine::Data &)));
 }
 
-QObject *DataModel::dataSource() const
+QObject *InternalDataModel::dataSource() const
 {
     return m_dataSource;
 }
 
-void DataModel::setKey(const QString key)
+void InternalDataModel::setKey(const QString key)
 {
     if (m_key == key) {
         return;
@@ -90,12 +157,12 @@ void DataModel::setKey(const QString key)
     m_key = key;
 }
 
-QString DataModel::key() const
+QString InternalDataModel::key() const
 {
     return m_key;
 }
 
-void DataModel::setItems(const QVariantList &list)
+void InternalDataModel::setItems(const QVariantList &list)
 {
     emit modelAboutToBeReset();
 
@@ -105,19 +172,31 @@ void DataModel::setItems(const QVariantList &list)
     if (!list.isEmpty()) {
         int role = Qt::UserRole;
         m_roleNames.clear();
+        m_roleIds.clear();
 
         if (list.first().canConvert<QVariantHash>()) {
             foreach (QString roleName, list.first().value<QVariantHash>().keys()) {
                 ++role;
                 m_roleNames[role] = roleName.toLatin1();
+                m_roleIds[roleName] = role;
             }
         } else {
             foreach (QString roleName, list.first().value<QVariantMap>().keys()) {
                 ++role;
                 m_roleNames[role] = roleName.toLatin1();
+                m_roleIds[roleName] = role;
             }
         }
+
         setRoleNames(m_roleNames);
+
+        if (m_dataModel) {
+            m_dataModel->setRoleNames(m_roleNames);
+            //FIXME: ugly, but since the filter role can be set before population it can be re setted afterwards
+            m_dataModel->setFilterRole(m_dataModel->filterRole());
+            m_dataModel->setSortRole(m_dataModel->sortRole());
+        }
+
     }
 
     //make the declarative view reload everything,
@@ -125,7 +204,7 @@ void DataModel::setItems(const QVariantList &list)
     emit modelReset();
 }
 
-QVariant DataModel::data(const QModelIndex &index, int role) const
+QVariant InternalDataModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid() || index.column() > 0 ||
         index.row() < 0 || index.row() >= m_items.count()){
@@ -139,7 +218,7 @@ QVariant DataModel::data(const QModelIndex &index, int role) const
     }
 }
 
-QVariant DataModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant InternalDataModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     Q_UNUSED(section)
     Q_UNUSED(orientation)
@@ -148,7 +227,7 @@ QVariant DataModel::headerData(int section, Qt::Orientation orientation, int rol
     return QVariant();
 }
 
-QModelIndex DataModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex InternalDataModel::index(int row, int column, const QModelIndex &parent) const
 {
     if (parent.isValid() || column > 0 || row < 0 || row >= m_items.count()) {
         return QModelIndex();
@@ -157,14 +236,14 @@ QModelIndex DataModel::index(int row, int column, const QModelIndex &parent) con
     return createIndex(row, column, 0);
 }
 
-QModelIndex DataModel::parent(const QModelIndex &child) const
+QModelIndex InternalDataModel::parent(const QModelIndex &child) const
 {
     Q_UNUSED(child)
 
     return QModelIndex();
 }
 
-int DataModel::rowCount(const QModelIndex &parent) const
+int InternalDataModel::rowCount(const QModelIndex &parent) const
 {
     //this is not a tree
     //TODO: make it possible some day?
@@ -175,13 +254,21 @@ int DataModel::rowCount(const QModelIndex &parent) const
     return m_items.count();
 }
 
-int DataModel::columnCount(const QModelIndex &parent) const
+int InternalDataModel::columnCount(const QModelIndex &parent) const
 {
     if (parent.isValid()) {
         return 0;
     }
 
     return 1;
+}
+
+int InternalDataModel::roleNameToId(const QString &name)
+{
+    if (!m_roleIds.contains(name)) {
+        return -1;
+    }
+    return m_roleIds.value(name);
 }
 
 }

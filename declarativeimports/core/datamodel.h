@@ -21,6 +21,7 @@
 #define DATAMODEL_H
 
 #include <QAbstractItemModel>
+#include <QSortFilterProxyModel>
 #include <QVector>
 
 #include <Plasma/DataEngine>
@@ -29,12 +30,19 @@ namespace Plasma
 {
 
 class DataSource;
+class InternalDataModel;
 
-class DataModel : public QAbstractItemModel
+class DataModel : public QSortFilterProxyModel
 {
     Q_OBJECT
     Q_PROPERTY(QObject *dataSource READ dataSource WRITE setDataSource)
     Q_PROPERTY(QString key READ key WRITE setKey)
+
+    Q_PROPERTY(QString filterRegExp READ filterRegExp WRITE setFilterRegExp)
+    Q_PROPERTY(QString filterRole READ filterRole WRITE setFilterRole)
+    Q_PROPERTY(QString sortRole READ sortRole WRITE setSortRole)
+
+    friend class InternalDataModel;
 
 public:
     DataModel(QObject* parent=0);
@@ -46,14 +54,47 @@ public:
     void setKey(const QString key);
     QString key() const;
 
+    void setFilterRegExp(const QString &exp);
+    QString filterRegExp() const;
+
+    void setFilterRole(const QString &role);
+    QString filterRole() const;
+
+    void setSortRole(const QString &role);
+    QString sortRole() const;
+
+private:
+    InternalDataModel *m_internalDataModel;
+    QString m_filterRole;
+    QString m_sortRole;
+};
+
+class InternalDataModel : public QAbstractItemModel
+{
+    Q_OBJECT
+    Q_PROPERTY(QObject *dataSource READ dataSource WRITE setDataSource)
+    Q_PROPERTY(QString key READ key WRITE setKey)
+
+public:
+    InternalDataModel(DataModel* parent=0);
+    ~InternalDataModel();
+
+    void setDataSource(QObject *source);
+    QObject *dataSource() const;
+
+    void setKey(const QString key);
+    QString key() const;
+
     void setItems(const QVariantList &list);
+
+    int roleNameToId(const QString &name);
 
     //Reimplemented
     QVariant data(const QModelIndex &index, int role) const;
     QVariant headerData(int section, Qt::Orientation orientation,
                         int role = Qt::DisplayRole) const;
     QModelIndex index(int row, int column,
-                    const QModelIndex &parent = QModelIndex()) const;
+                      const QModelIndex &parent = QModelIndex()) const;
     QModelIndex parent(const QModelIndex &child) const;
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -66,10 +107,12 @@ private Q_SLOTS:
     void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
 
 private:
+    DataModel *m_dataModel;
     DataSource *m_dataSource;
     QString m_key;
     QVector<QVariant> m_items;
     QHash<int, QByteArray> m_roleNames;
+    QHash<QString, int> m_roleIds;
 };
 
 }
