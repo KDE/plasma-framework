@@ -15,7 +15,7 @@ set(plasma_kpart_SRCS
 
 kde4_add_plugin(plasma-kpart ${plasma_kpart_SRCS})
 
-target_link_libraries(plasma-kpart ${QT_QTSCRIPT_LIBRARY} ${KDE4_PLASMA_LIBS} ${KDE4_KNEWSTUFF2_LIBS} ${KDE4_KIO_LIBS} ${X11_LIBRARIES} ${KDE4_KFILE_LIBS} ${KDE4_KPARTS_LIBS} )
+target_link_libraries(plasma-kpart ${QT_QTSCRIPT_LIBRARY} ${KDE4_PLASMA_LIBS} ${KDE4_KIO_LIBS} ${X11_LIBRARIES} ${KDE4_KFILE_LIBS} ${KDE4_KPARTS_LIBS} )
 
 install(TARGETS plasma-kpart DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES plasma-kpart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
