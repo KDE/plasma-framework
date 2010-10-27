@@ -83,12 +83,19 @@ void DataModel::setSortRole(const QString &role)
 {
     QSortFilterProxyModel::setSortRole(m_internalDataModel->roleNameToId(role));
     m_sortRole = role;
+    sort(0, sortOrder());
 }
 
 QString DataModel::sortRole() const
 {
     return m_sortRole;
 }
+
+void DataModel::setSortOrder(const Qt::SortOrder order)
+{
+    sort(0, order);
+}
+
 
 
 
