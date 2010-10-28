@@ -34,7 +34,7 @@ class DataSource;
 class DataModel;
 
 
-class SortModel : public QSortFilterProxyModel
+class SortFilterModel : public QSortFilterProxyModel
 {
     Q_OBJECT
     Q_PROPERTY(QObject *sourceModel READ sourceModel WRITE setModel)
@@ -47,8 +47,8 @@ class SortModel : public QSortFilterProxyModel
     friend class DataModel;
 
 public:
-    SortModel(QObject* parent=0);
-    ~SortModel();
+    SortFilterModel(QObject* parent=0);
+    ~SortFilterModel();
 
     //FIXME: find a way to make QML understnd QAbstractItemModel
     void setModel(QObject *source);
@@ -83,7 +83,7 @@ class DataModel : public QAbstractItemModel
     Q_PROPERTY(QString key READ key WRITE setKey)
 
 public:
-    DataModel(SortModel* parent=0);
+    DataModel(QObject* parent=0);
     ~DataModel();
 
     void setDataSource(QObject *source);

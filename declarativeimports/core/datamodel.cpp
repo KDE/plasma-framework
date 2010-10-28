@@ -25,18 +25,18 @@
 namespace Plasma
 {
 
-SortModel::SortModel(QObject* parent)
+SortFilterModel::SortFilterModel(QObject* parent)
     : QSortFilterProxyModel(parent)
 {
-    setObjectName("SortModel");
+    setObjectName("SortFilterModel");
     setDynamicSortFilter(true);
 }
 
-SortModel::~SortModel()
+SortFilterModel::~SortFilterModel()
 {
 }
 
-void SortModel::syncRoleNames()
+void SortFilterModel::syncRoleNames()
 {
     m_roleIds.clear();
 
@@ -49,7 +49,7 @@ void SortModel::syncRoleNames()
     setSortRole(m_sortRole);
 }
 
-int SortModel::roleNameToId(const QString &name)
+int SortFilterModel::roleNameToId(const QString &name)
 {
     if (!m_roleIds.contains(name)) {
         return -1;
@@ -57,7 +57,7 @@ int SortModel::roleNameToId(const QString &name)
     return m_roleIds.value(name);
 }
 
-void SortModel::setModel(QObject *source)
+void SortFilterModel::setModel(QObject *source)
 {
     QAbstractItemModel *model = qobject_cast<QAbstractItemModel *>(source);
     if (!model) {
@@ -72,40 +72,40 @@ void SortModel::setModel(QObject *source)
 
 
 
-void SortModel::setFilterRegExp(const QString &exp)
+void SortFilterModel::setFilterRegExp(const QString &exp)
 {
     QSortFilterProxyModel::setFilterRegExp(QRegExp(exp));
 }
 
-QString SortModel::filterRegExp() const
+QString SortFilterModel::filterRegExp() const
 {
     return QSortFilterProxyModel::filterRegExp().pattern();
 }
 
-void SortModel::setFilterRole(const QString &role)
+void SortFilterModel::setFilterRole(const QString &role)
 {
     QSortFilterProxyModel::setFilterRole(roleNameToId(role));
     m_filterRole = role;
 }
 
-QString SortModel::filterRole() const
+QString SortFilterModel::filterRole() const
 {
     return m_filterRole;
 }
 
-void SortModel::setSortRole(const QString &role)
+void SortFilterModel::setSortRole(const QString &role)
 {
     QSortFilterProxyModel::setSortRole(roleNameToId(role));
     m_sortRole = role;
     sort(0, sortOrder());
 }
 
-QString SortModel::sortRole() const
+QString SortFilterModel::sortRole() const
 {
     return m_sortRole;
 }
 
-void SortModel::setSortOrder(const Qt::SortOrder order)
+void SortFilterModel::setSortOrder(const Qt::SortOrder order)
 {
     sort(0, order);
 }
@@ -113,11 +113,11 @@ void SortModel::setSortOrder(const Qt::SortOrder order)
 
 
 
-DataModel::DataModel(SortModel* parent)
+DataModel::DataModel(QObject* parent)
     : QAbstractItemModel(parent),
-    //  m_sortModel(parent),
       m_dataSource(0)
 {
+    setObjectName("DataModel");
 }
 
 DataModel::~DataModel()
@@ -285,4 +285,5 @@ int DataModel::roleNameToId(const QString &name)
 }
 
 }
+
 #include "datamodel.moc"

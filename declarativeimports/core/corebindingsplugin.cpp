@@ -45,7 +45,7 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
 
     qmlRegisterType<Plasma::DataSource>(uri, 0, 1, "DataSource");
     qmlRegisterType<Plasma::DataModel>(uri, 0, 1, "DataModel");
-    qmlRegisterType<Plasma::SortModel>(uri, 0, 1, "SortModel");
+    qmlRegisterType<Plasma::SortFilterModel>(uri, 0, 1, "SortFilterModel");
 
     qmlRegisterInterface<Plasma::Service>("Service");
     qRegisterMetaType<Plasma::Service*>("Service");
