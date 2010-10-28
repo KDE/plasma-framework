@@ -26,34 +26,32 @@
 
 #include <Plasma/DataEngine>
 
+
 namespace Plasma
 {
 
 class DataSource;
-class InternalDataModel;
+class DataModel;
 
-class DataModel : public QSortFilterProxyModel
+
+class SortModel : public QSortFilterProxyModel
 {
     Q_OBJECT
-    Q_PROPERTY(QObject *dataSource READ dataSource WRITE setDataSource)
-    Q_PROPERTY(QString key READ key WRITE setKey)
+    Q_PROPERTY(QObject *sourceModel READ sourceModel WRITE setModel)
 
     Q_PROPERTY(QString filterRegExp READ filterRegExp WRITE setFilterRegExp)
     Q_PROPERTY(QString filterRole READ filterRole WRITE setFilterRole)
     Q_PROPERTY(QString sortRole READ sortRole WRITE setSortRole)
     Q_PROPERTY(Qt::SortOrder sortOrder READ sortOrder WRITE setSortOrder)
 
-    friend class InternalDataModel;
+    friend class DataModel;
 
 public:
-    DataModel(QObject* parent=0);
-    ~DataModel();
+    SortModel(QObject* parent=0);
+    ~SortModel();
 
-    void setDataSource(QObject *source);
-    QObject *dataSource() const;
-
-    void setKey(const QString key);
-    QString key() const;
+    //FIXME: find a way to make QML understnd QAbstractItemModel
+    void setModel(QObject *source);
 
     void setFilterRegExp(const QString &exp);
     QString filterRegExp() const;
@@ -66,21 +64,27 @@ public:
 
     void setSortOrder(const Qt::SortOrder order);
 
+protected:
+    int roleNameToId(const QString &name);
+
+protected Q_SLOTS:
+    void syncRoleNames();
+
 private:
-    InternalDataModel *m_internalDataModel;
     QString m_filterRole;
     QString m_sortRole;
+    QHash<QString, int> m_roleIds;
 };
 
-class InternalDataModel : public QAbstractItemModel
+class DataModel : public QAbstractItemModel
 {
     Q_OBJECT
     Q_PROPERTY(QObject *dataSource READ dataSource WRITE setDataSource)
     Q_PROPERTY(QString key READ key WRITE setKey)
 
 public:
-    InternalDataModel(DataModel* parent=0);
-    ~InternalDataModel();
+    DataModel(SortModel* parent=0);
+    ~DataModel();
 
     void setDataSource(QObject *source);
     QObject *dataSource() const;
@@ -110,7 +114,6 @@ private Q_SLOTS:
     void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
 
 private:
-    DataModel *m_dataModel;
     DataSource *m_dataSource;
     QString m_key;
     QVector<QVariant> m_items;

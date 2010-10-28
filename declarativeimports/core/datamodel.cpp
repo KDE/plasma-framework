@@ -25,73 +25,87 @@
 namespace Plasma
 {
 
-DataModel::DataModel(QObject* parent)
+SortModel::SortModel(QObject* parent)
     : QSortFilterProxyModel(parent)
 {
-    setObjectName("DataModel");
+    setObjectName("SortModel");
     setDynamicSortFilter(true);
-    m_internalDataModel = new InternalDataModel(this);
-    setSourceModel(m_internalDataModel);
 }
 
-DataModel::~DataModel()
+SortModel::~SortModel()
 {
 }
 
-void DataModel::setDataSource(QObject *source)
+void SortModel::syncRoleNames()
 {
-    m_internalDataModel->setDataSource(source);
+    m_roleIds.clear();
+
+    setRoleNames(sourceModel()->roleNames());
+    QHash<int, QByteArray>::const_iterator i;
+    for (i = roleNames().constBegin(); i != roleNames().constEnd(); ++i) {
+        m_roleIds[i.value()] = i.key();
+    }
+    setFilterRole(m_filterRole);
+    setSortRole(m_sortRole);
 }
 
-QObject *DataModel::dataSource() const
+int SortModel::roleNameToId(const QString &name)
 {
-    return m_internalDataModel->dataSource();
+    if (!m_roleIds.contains(name)) {
+        return -1;
+    }
+    return m_roleIds.value(name);
 }
 
-void DataModel::setKey(const QString key)
+void SortModel::setModel(QObject *source)
 {
-    m_internalDataModel->setKey(key);
+    QAbstractItemModel *model = qobject_cast<QAbstractItemModel *>(source);
+    if (!model) {
+        kWarning() << "Error: QAbstractItemModel type expected";
+        return;
+    }
+
+    connect(model, SIGNAL(modelReset()), this, SLOT(syncRoleNames()));
+    QSortFilterProxyModel::setSourceModel(model);
 }
 
-QString DataModel::key() const
-{
-    return m_internalDataModel->key();
-}
 
-void DataModel::setFilterRegExp(const QString &exp)
+
+
+void SortModel::setFilterRegExp(const QString &exp)
 {
     QSortFilterProxyModel::setFilterRegExp(QRegExp(exp));
 }
 
-QString DataModel::filterRegExp() const
+QString SortModel::filterRegExp() const
 {
     return QSortFilterProxyModel::filterRegExp().pattern();
 }
 
-void DataModel::setFilterRole(const QString &role)
+void SortModel::setFilterRole(const QString &role)
 {
-    QSortFilterProxyModel::setFilterRole(m_internalDataModel->roleNameToId(role));
+    QSortFilterProxyModel::setFilterRole(roleNameToId(role));
     m_filterRole = role;
 }
 
-QString DataModel::filterRole() const
+QString SortModel::filterRole() const
 {
     return m_filterRole;
 }
 
-void DataModel::setSortRole(const QString &role)
+void SortModel::setSortRole(const QString &role)
 {
-    QSortFilterProxyModel::setSortRole(m_internalDataModel->roleNameToId(role));
+    QSortFilterProxyModel::setSortRole(roleNameToId(role));
     m_sortRole = role;
     sort(0, sortOrder());
 }
 
-QString DataModel::sortRole() const
+QString SortModel::sortRole() const
 {
     return m_sortRole;
 }
 
-void DataModel::setSortOrder(const Qt::SortOrder order)
+void SortModel::setSortOrder(const Qt::SortOrder order)
 {
     sort(0, order);
 }
@@ -99,18 +113,18 @@ void DataModel::setSortOrder(const Qt::SortOrder order)
 
 
 
-InternalDataModel::InternalDataModel(DataModel* parent)
+DataModel::DataModel(SortModel* parent)
     : QAbstractItemModel(parent),
-      m_dataModel(parent),
+    //  m_sortModel(parent),
       m_dataSource(0)
 {
 }
 
-InternalDataModel::~InternalDataModel()
+DataModel::~DataModel()
 {
 }
 
-void InternalDataModel::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
+void DataModel::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
 {
     Q_UNUSED(sourceName);
 
@@ -133,7 +147,7 @@ void InternalDataModel::dataUpdated(const QString &sourceName, const Plasma::Dat
     }
 }
 
-void InternalDataModel::setDataSource(QObject *object)
+void DataModel::setDataSource(QObject *object)
 {
     DataSource *source = qobject_cast<DataSource *>(object);
     if (!source) {
@@ -150,12 +164,12 @@ void InternalDataModel::setDataSource(QObject *object)
             this, SLOT(dataUpdated(const QString &, const Plasma::DataEngine::Data &)));
 }
 
-QObject *InternalDataModel::dataSource() const
+QObject *DataModel::dataSource() const
 {
     return m_dataSource;
 }
 
-void InternalDataModel::setKey(const QString key)
+void DataModel::setKey(const QString key)
 {
     if (m_key == key) {
         return;
@@ -164,12 +178,12 @@ void InternalDataModel::setKey(const QString key)
     m_key = key;
 }
 
-QString InternalDataModel::key() const
+QString DataModel::key() const
 {
     return m_key;
 }
 
-void InternalDataModel::setItems(const QVariantList &list)
+void DataModel::setItems(const QVariantList &list)
 {
     emit modelAboutToBeReset();
 
@@ -196,14 +210,6 @@ void InternalDataModel::setItems(const QVariantList &list)
         }
 
         setRoleNames(m_roleNames);
-
-        if (m_dataModel) {
-            m_dataModel->setRoleNames(m_roleNames);
-            //FIXME: ugly, but since the filter role can be set before population it can be re setted afterwards
-            m_dataModel->setFilterRole(m_dataModel->filterRole());
-            m_dataModel->setSortRole(m_dataModel->sortRole());
-        }
-
     }
 
     //make the declarative view reload everything,
@@ -211,7 +217,7 @@ void InternalDataModel::setItems(const QVariantList &list)
     emit modelReset();
 }
 
-QVariant InternalDataModel::data(const QModelIndex &index, int role) const
+QVariant DataModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid() || index.column() > 0 ||
         index.row() < 0 || index.row() >= m_items.count()){
@@ -225,7 +231,7 @@ QVariant InternalDataModel::data(const QModelIndex &index, int role) const
     }
 }
 
-QVariant InternalDataModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant DataModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     Q_UNUSED(section)
     Q_UNUSED(orientation)
@@ -234,7 +240,7 @@ QVariant InternalDataModel::headerData(int section, Qt::Orientation orientation,
     return QVariant();
 }
 
-QModelIndex InternalDataModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex DataModel::index(int row, int column, const QModelIndex &parent) const
 {
     if (parent.isValid() || column > 0 || row < 0 || row >= m_items.count()) {
         return QModelIndex();
@@ -243,14 +249,14 @@ QModelIndex InternalDataModel::index(int row, int column, const QModelIndex &par
     return createIndex(row, column, 0);
 }
 
-QModelIndex InternalDataModel::parent(const QModelIndex &child) const
+QModelIndex DataModel::parent(const QModelIndex &child) const
 {
     Q_UNUSED(child)
 
     return QModelIndex();
 }
 
-int InternalDataModel::rowCount(const QModelIndex &parent) const
+int DataModel::rowCount(const QModelIndex &parent) const
 {
     //this is not a tree
     //TODO: make it possible some day?
@@ -261,7 +267,7 @@ int InternalDataModel::rowCount(const QModelIndex &parent) const
     return m_items.count();
 }
 
-int InternalDataModel::columnCount(const QModelIndex &parent) const
+int DataModel::columnCount(const QModelIndex &parent) const
 {
     if (parent.isValid()) {
         return 0;
@@ -270,7 +276,7 @@ int InternalDataModel::columnCount(const QModelIndex &parent) const
     return 1;
 }
 
-int InternalDataModel::roleNameToId(const QString &name)
+int DataModel::roleNameToId(const QString &name)
 {
     if (!m_roleIds.contains(name)) {
         return -1;
