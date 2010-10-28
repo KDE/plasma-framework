@@ -182,13 +182,13 @@ void InternalDataModel::setItems(const QVariantList &list)
         m_roleIds.clear();
 
         if (list.first().canConvert<QVariantHash>()) {
-            foreach (QString roleName, list.first().value<QVariantHash>().keys()) {
+            foreach (const QString& roleName, list.first().value<QVariantHash>().keys()) {
                 ++role;
                 m_roleNames[role] = roleName.toLatin1();
                 m_roleIds[roleName] = role;
             }
         } else {
-            foreach (QString roleName, list.first().value<QVariantMap>().keys()) {
+            foreach (const QString& roleName, list.first().value<QVariantMap>().keys()) {
                 ++role;
                 m_roleNames[role] = roleName.toLatin1();
                 m_roleIds[roleName] = role;
