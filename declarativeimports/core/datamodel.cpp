@@ -74,7 +74,7 @@ void SortFilterModel::setModel(QObject *source)
 
 void SortFilterModel::setFilterRegExp(const QString &exp)
 {
-    QSortFilterProxyModel::setFilterRegExp(QRegExp(exp));
+    QSortFilterProxyModel::setFilterRegExp(QRegExp(exp, Qt::CaseInsensitive));
 }
 
 QString SortFilterModel::filterRegExp() const
