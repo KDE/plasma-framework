@@ -66,7 +66,7 @@ QNetworkReply *PackageAccessManager::createRequest(QNetworkAccessManager::Operat
     if (reqUrl.scheme() == "plasmapackage") {
         QNetworkRequest request = req;
         reqUrl.setScheme("file");
-        reqUrl.setPath(m_package->path()+"/contents/"+reqUrl.path());
+        reqUrl.setPath(m_package->filePath(0, reqUrl.path()));
         request.setUrl(reqUrl);
         return QNetworkAccessManager::createRequest(op, request, outgoingData);
     } else if ((reqUrl.scheme() == "http" && !m_auth->authorizeRequiredExtension("http")) ||
