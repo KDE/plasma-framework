@@ -968,10 +968,11 @@ QStringList Theme::listCachedRectKeys(const QString &image) const
 
     QMutableListIterator<QString> i(keys);
     while (i.hasNext()) {
-        const QString &key = i.next();
+        QString key = i.next();
         if (key.endsWith("Size")) {
             // The actual cache id used from outside doesn't end on "Size".
-            i.setValue(key.resize(key.size() - 4));
+            key.resize(key.size() - 4);
+            i.setValue(key);
         } else {
             i.remove();
         }
