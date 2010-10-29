@@ -183,11 +183,14 @@ public:
             return;
         }
 
+        const bool verticalVisible = widget.data()->size().height() > q->size().height();
+        const bool horizontalVisible = widget.data()->size().width() > q->size().width();
+
         verticalScrollBar->nativeWidget()->setMaximum(qMax(0, int((widget.data()->size().height() - scrollingWidget->size().height())/10)));
         verticalScrollBar->nativeWidget()->setPageStep(int(scrollingWidget->size().height())/10);
 
         if (verticalScrollBarPolicy == Qt::ScrollBarAlwaysOff ||
-            verticalScrollBar->nativeWidget()->maximum() == 0) {
+            !verticalVisible) {
             if (layout->count() > 2 && layout->itemAt(2) == verticalScrollBar) {
                 layout->removeAt(2);
             } else if (layout->count() > 1 && layout->itemAt(1) == verticalScrollBar) {
@@ -203,7 +206,7 @@ public:
         horizontalScrollBar->nativeWidget()->setPageStep(int(scrollingWidget->size().width())/10);
 
         if (horizontalScrollBarPolicy == Qt::ScrollBarAlwaysOff ||
-            horizontalScrollBar->nativeWidget()->maximum() == 0) {
+            !horizontalVisible) {
             if (layout->count() > 2 && layout->itemAt(2) == horizontalScrollBar) {
                 layout->removeAt(2);
             } else if (layout->count() > 1 && layout->itemAt(1) == horizontalScrollBar) {
@@ -215,7 +218,7 @@ public:
             horizontalScrollBar->show();
         }
 
-         if (widget && !topBorder && widget.data()->size().height() > q->size().height()) {
+         if (widget && !topBorder && verticalVisible) {
             topBorder = new Plasma::SvgWidget(q);
             topBorder->setSvg(borderSvg);
             topBorder->setElementID("border-top");
@@ -229,7 +232,7 @@ public:
             bottomBorder->setZValue(900);
             bottomBorder->resize(bottomBorder->effectiveSizeHint(Qt::PreferredSize));
             bottomBorder->setVisible(overflowBordersVisible);
-        } else if (topBorder && widget && widget.data()->size().height() <= q->size().height()) {
+        } else if (topBorder && widget && !verticalVisible) {
             //FIXME: in some cases topBorder->deleteLater() is deleteNever(), why?
             topBorder->hide();
             bottomBorder->hide();
@@ -240,7 +243,7 @@ public:
         }
 
 
-        if (widget && !leftBorder && widget.data()->size().width() > q->size().width()) {
+        if (widget && !leftBorder && horizontalVisible) {
             leftBorder = new Plasma::SvgWidget(q);
             leftBorder->setSvg(borderSvg);
             leftBorder->setElementID("border-left");
@@ -254,7 +257,7 @@ public:
             rightBorder->setZValue(900);
             rightBorder->resize(rightBorder->effectiveSizeHint(Qt::PreferredSize));
             rightBorder->setVisible(overflowBordersVisible);
-        } else if (leftBorder && widget && widget.data()->size().width() <= q->size().width()) {
+        } else if (leftBorder && widget && !horizontalVisible) {
             leftBorder->hide();
             rightBorder->hide();
             leftBorder->deleteLater();
