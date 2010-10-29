@@ -43,6 +43,7 @@ public:
         : ThemedWidgetInterface<SpinBox>(spinBox),
           focusIndicator(0)
     {
+        buttonColorForText = true;
     }
 
     ~SpinBoxPrivate()

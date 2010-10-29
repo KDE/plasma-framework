@@ -42,6 +42,7 @@ public:
     LineEditPrivate(LineEdit *lineEdit)
         : ThemedWidgetInterface<LineEdit>(lineEdit)
     {
+        buttonColorForText = true;
     }
 
     ~LineEditPrivate()
