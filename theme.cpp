@@ -22,6 +22,7 @@
 #include <QApplication>
 #include <QFile>
 #include <QFileInfo>
+#include <QMutableListIterator>
 #include <QPair>
 #include <QStringBuilder>
 #include <QTimer>
@@ -958,6 +959,24 @@ bool Theme::findInRectsCache(const QString &image, const QString &element, QRect
     }
 
     return invalid;
+}
+
+QStringList Theme::listCachedRectKeys(const QString &image) const
+{
+    KConfigGroup imageGroup(d->svgElementsCache, image);
+    QStringList keys = imageGroup.keyList();
+
+    QMutableListIterator<QString> i(keys);
+    while (i.hasNext()) {
+        const QString &key = i.next();
+        if (key.endsWith("Size")) {
+            // The actual cache id used from outside doesn't end on "Size".
+            i.setValue(key.resize(key.size() - 4));
+        } else {
+            i.remove();
+        }
+    }
+    return keys;
 }
 
 void Theme::insertIntoRectsCache(const QString& image, const QString &element, const QRectF &rect)

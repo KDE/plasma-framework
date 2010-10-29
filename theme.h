@@ -330,11 +330,22 @@ class PLASMA_EXPORT Theme : public QObject
          *
          * @arg image path of the image we want to check
          * @arg element sub element we want to retrieve
-         * @arg rect output parameter of the element rect found in cache 
+         * @arg rect output parameter of the element rect found in cache
          *           if not found or if we are sure it doesn't exist it will be QRect()
          * @return true if the element was found in cache or if we are sure the element doesn't exist
          **/
         bool findInRectsCache(const QString &image, const QString &element, QRectF &rect) const;
+
+        /**
+         * Returns a list of all keys of cached rects for the given image.
+         *
+         * @arg image path of the image for which the keys should be returned
+         *
+         * @return a QStringList whose elements are the entry keys in the rects cache
+         *
+         * @since 4.6
+         */
+        QStringList listCachedRectKeys(const QString &image) const;
 
         /**
          * Inserts a rectangle of a sub element of an image into a disk cache

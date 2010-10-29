@@ -49,7 +49,11 @@ SharedSvgRenderer::SharedSvgRenderer(QObject *parent)
 {
 }
 
-SharedSvgRenderer::SharedSvgRenderer(const QString &filename, const QString &styleSheet, QObject *parent)
+SharedSvgRenderer::SharedSvgRenderer(
+    const QString &filename,
+    const QString &styleSheet,
+    QHash<QString, QSize> &elementsWithSizeHints,
+    QObject *parent)
     : QSvgRenderer(parent)
 {
     QIODevice *file = KFilterDev::deviceForFile(filename, "application/x-gzip");
@@ -57,25 +61,53 @@ SharedSvgRenderer::SharedSvgRenderer(const QString &filename, const QString &sty
         delete file;
         return;
     }
-    load(file->readAll(), styleSheet);
+    load(file->readAll(), styleSheet, elementsWithSizeHints);
     delete file;
 }
 
-SharedSvgRenderer::SharedSvgRenderer(const QByteArray &contents, const QString &styleSheet, QObject *parent)
+SharedSvgRenderer::SharedSvgRenderer(
+    const QByteArray &contents,
+    const QString &styleSheet,
+    QHash<QString, QSize> &elementsWithSizeHints,
+    QObject *parent)
     : QSvgRenderer(parent)
 {
-    load(contents, styleSheet);
+    load(contents, styleSheet, elementsWithSizeHints);
 }
 
-bool SharedSvgRenderer::load(const QByteArray &contents, const QString &styleSheet)
+bool SharedSvgRenderer::load(
+    const QByteArray &contents,
+    const QString &styleSheet,
+    QHash<QString, QSize> &elementsWithSizeHints)
 {
+    {   // Search the SVG to find and store all ids that contain size hints.
+        const QString contentsAsString(QString::fromLatin1(contents));
+        QRegExp idExpr("id\\s*=\\s*(['\"])(\\d+)-(\\d+)-(.+)\\1");
+        idExpr.setMinimal(true);
+
+        int pos = 0;
+        while ((pos = idExpr.indexIn(contentsAsString, pos)) != -1) {
+            QString elementId = idExpr.cap(4);
+            QSize sizeHint(idExpr.cap(2).toInt(), idExpr.cap(3).toInt());
+
+            if (sizeHint.isValid()) {
+                elementsWithSizeHints.insertMulti(elementId, sizeHint);
+            }
+
+            pos += idExpr.matchedLength();
+        }
+    }
+
+    // Apply the style sheet.
     if (styleSheet.isEmpty() || ! contents.contains("current-color-scheme")) {
         return QSvgRenderer::load(contents);
     }
+
     QDomDocument svg;
     if (!svg.setContent(contents)) {
         return false;
     }
+
     QDomNode defs = svg.elementsByTagName("defs").item(0);
 
     for (QDomElement style = defs.firstChildElement("style"); !style.isNull();
@@ -96,6 +128,8 @@ bool SharedSvgRenderer::load(const QByteArray &contents, const QString &styleShe
 
 #define QLSEP QLatin1Char('_')
 #define CACHE_ID_WITH_SIZE(size, id) QString::number(int(size.width())) % QString::number(int(size.height())) % QLSEP % id
+#define CACHE_ID_NATURAL_SIZE(id) QLatin1Literal("Natural") % QLSEP % id
+
 SvgPrivate::SvgPrivate(Svg *svg)
     : q(svg),
       renderer(0),
@@ -121,7 +155,7 @@ QString SvgPrivate::cacheId(const QString &elementId)
     if (size.isValid() && size != naturalSize) {
         return CACHE_ID_WITH_SIZE(size, elementId);
     } else {
-        return QLatin1Literal("Natural") % QLSEP % elementId;
+        return CACHE_ID_NATURAL_SIZE(elementId);
     }
 }
 
@@ -157,6 +191,7 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
     path.clear();
     themePath.clear();
     localRectCache.clear();
+    elementsWithSizeHints.clear();
 
     if (themed) {
         themePath = imagePath;
@@ -216,7 +251,60 @@ Theme *SvgPrivate::actualTheme()
 QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
 {
     QSize size;
-    QString actualElementId(QString::number(int(s.width())) % "-" % QString::number(int(s.height())) % "-" % elementId);
+    QString actualElementId;
+
+    if (elementsWithSizeHints.isEmpty()) {
+        // Fetch all size hinted element ids from the theme's rect cache
+        // and store them locally.
+        QRegExp sizeHintedKeyExpr(CACHE_ID_NATURAL_SIZE("(\\d+)-(\\d+)-(.+)"));
+
+        Q_FOREACH(const QString &key, actualTheme()->listCachedRectKeys(path)) {
+
+            if (sizeHintedKeyExpr.exactMatch(key)) {
+                QString baseElementId = sizeHintedKeyExpr.cap(3);
+                QSize sizeHint(
+                    sizeHintedKeyExpr.cap(1).toInt(),
+                    sizeHintedKeyExpr.cap(2).toInt());
+
+                if (sizeHint.isValid()) {
+                    elementsWithSizeHints.insertMulti(baseElementId, sizeHint);
+                }
+            }
+        }
+
+        if (elementsWithSizeHints.isEmpty()) {
+            // Make sure we won't query the theme unnecessarily.
+            elementsWithSizeHints.insert(QString(), QSize());
+        }
+    }
+
+    // Look at the size hinted elements and try to find the smallest one with an
+    // identical aspect ratio.
+    if (s.isValid() && !elementId.isEmpty()) {
+
+        QList<QSize> elementSizeHints = elementsWithSizeHints.values(elementId);
+
+        if (!elementSizeHints.isEmpty()) {
+            QSize bestFit(-1, -1);
+
+            Q_FOREACH(const QSize &hint, elementSizeHints) {
+
+                if (hint.width() >= s.width() && hint.height() >= s.height() &&
+                    (!bestFit.isValid() ||
+                        bestFit.width() * bestFit.height() >
+                          hint.width() * hint.height())) {
+
+                    bestFit = hint;
+                }
+            }
+
+            if (bestFit.isValid()) {
+                actualElementId =
+                    QString::number(bestFit.width()) % "-" %
+                    QString::number(bestFit.height()) % "-" % elementId;
+            }
+        }
+    }
 
     if (elementId.isEmpty() || !q->hasElement(actualElementId)) {
         actualElementId = elementId;
@@ -329,7 +417,33 @@ void SvgPrivate::createRenderer()
         if (path.isEmpty()) {
             renderer = new SharedSvgRenderer();
         } else {
-            renderer = new SharedSvgRenderer(path, actualTheme()->styleSheet("SVG"));
+            renderer = new SharedSvgRenderer(
+                path, actualTheme()->styleSheet("SVG"), elementsWithSizeHints);
+
+            // Add size hinted elements to the theme's rect cache.
+            QHashIterator<QString, QSize> i(elementsWithSizeHints);
+
+            while (i.hasNext()) {
+                i.next();
+                const QString &baseElementId = i.key();
+                const QSize &hintedSize = i.value();
+                QString fullElementId =
+                    QString::number(hintedSize.width()) % '-' %
+                    QString::number(hintedSize.height()) % '-' %
+                    baseElementId;
+
+                QString cacheId = CACHE_ID_NATURAL_SIZE(fullElementId);
+                QRectF elementRect = renderer->boundsOnElement(fullElementId);
+                if (elementRect.isValid()) {
+                    actualTheme()->insertIntoRectsCache(
+                        path, cacheId, elementRect);
+                }
+            }
+        }
+
+        if (elementsWithSizeHints.isEmpty()) {
+            // Make sure we won't query the theme unnecessarily.
+            elementsWithSizeHints.insert(QString(), QSize());
         }
 
         s_renderers[styleCrc + path] = renderer;
@@ -354,6 +468,7 @@ void SvgPrivate::eraseRenderer()
     renderer = 0;
     styleCrc = 0;
     localRectCache.clear();
+    elementsWithSizeHints.clear();
 }
 
 QRectF SvgPrivate::elementRect(const QString &elementId)

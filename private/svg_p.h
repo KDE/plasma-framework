@@ -37,11 +37,23 @@ class SharedSvgRenderer : public QSvgRenderer, public QSharedData
         typedef KSharedPtr<SharedSvgRenderer> Ptr;
 
         SharedSvgRenderer(QObject *parent = 0);
-        SharedSvgRenderer(const QString &filename, const QString &styleSheet, QObject *parent = 0);
-        SharedSvgRenderer(const QByteArray &contents, const QString &styleSheet, QObject *parent = 0);
+        SharedSvgRenderer(
+            const QString &filename,
+            const QString &styleSheet,
+            QHash<QString, QSize> &elementsWithSizeHints,
+            QObject *parent = 0);
+
+        SharedSvgRenderer(
+            const QByteArray &contents,
+            const QString &styleSheet,
+            QHash<QString, QSize> &elementsWithSizeHints,
+            QObject *parent = 0);
 
     private:
-        bool load(const QByteArray &contents, const QString &styleSheet);
+        bool load(
+            const QByteArray &contents,
+            const QString &styleSheet,
+            QHash<QString, QSize> &elementsWithSizeHints);
 };
 
 class SvgPrivate
@@ -86,6 +98,7 @@ public:
     Svg *q;
     QWeakPointer<Theme> theme;
     QHash<QString, QRectF> localRectCache;
+    QHash<QString, QSize> elementsWithSizeHints;
     SharedSvgRenderer::Ptr renderer;
     QString themePath;
     QString path;
