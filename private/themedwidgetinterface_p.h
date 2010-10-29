@@ -35,7 +35,8 @@ public:
     ThemedWidgetInterface(T *publicClass)
         : q(publicClass),
           customPalette(false),
-          customFont(false)
+          customFont(false),
+          buttonColorForText(false)
     {
         QObject::connect(Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(setPalette()));
         QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), q, SLOT(setPalette()));
@@ -55,16 +56,22 @@ public:
             QPalette p = q->palette();
             p.setColor(QPalette::Normal, QPalette::WindowText, color);
             p.setColor(QPalette::Inactive, QPalette::WindowText, color);
-            p.setColor(QPalette::Normal, QPalette::Text, color);
-            p.setColor(QPalette::Inactive, QPalette::Text, color);
-            color.setAlphaF(0.6);
-            p.setColor(QPalette::Disabled, QPalette::WindowText, color);
 
             p.setColor(QPalette::Normal, QPalette::Link, Theme::defaultTheme()->color(Theme::LinkColor));
             p.setColor(QPalette::Normal, QPalette::LinkVisited, Theme::defaultTheme()->color(Theme::VisitedLinkColor));
 
-            p.setColor(QPalette::Normal, QPalette::ButtonText, color);
-            p.setColor(QPalette::Inactive, QPalette::ButtonText, color);
+
+            qreal alpha = color.alpha();
+            color.setAlphaF(0.6);
+            p.setColor(QPalette::Disabled, QPalette::WindowText, color);
+            color.setAlphaF(alpha);
+
+            const QColor buttonColor = Theme::defaultTheme()->color(Theme::ButtonTextColor);
+            p.setColor(QPalette::Normal, QPalette::Text, buttonColorForText ? buttonColor : color);
+            p.setColor(QPalette::Inactive, QPalette::Text, buttonColorForText ? buttonColor : color);
+
+            p.setColor(QPalette::Normal, QPalette::ButtonText, buttonColor);
+            p.setColor(QPalette::Inactive, QPalette::ButtonText, buttonColor);
 
             //FIXME: hardcoded colors .. looks incorrect
             p.setColor(QPalette::Normal, QPalette::Base, QColor(0,0,0,0));
@@ -106,6 +113,7 @@ public:
     T *q;
     bool customPalette : 1;
     bool customFont : 1;
+    bool buttonColorForText : 1;
 };
 
 } // namespace Plasma
