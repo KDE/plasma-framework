@@ -1010,7 +1010,6 @@ void ContainmentPrivate::setScreen(int newScreen, int newDesktop, bool preventIn
     q->updateConstraints(Plasma::ScreenConstraint);
 
     if (oldScreen != newScreen || oldDesktop != newDesktop) {
-        emit q->screenChanged(oldScreen, newScreen, q);
 
         KConfigGroup c = q->config();
         c.writeEntry("screen", screen);
@@ -1022,6 +1021,7 @@ void ContainmentPrivate::setScreen(int newScreen, int newDesktop, bool preventIn
             c.writeEntry("lastDesktop", lastDesktop);
         }
         emit q->configNeedsSaving();
+        emit q->screenChanged(oldScreen, newScreen, q);
     }
 
     if (swapScreensWith) {
