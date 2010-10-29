@@ -328,7 +328,7 @@ void ExtenderGroupPrivate::addItemToGroup(Plasma::ExtenderItem *item, const QPoi
             q->extender()->itemAddedEvent(q);
             q->show();
         }
-        childsWidget->setVisible(!q->isCollapsed());
+        childsWidget->setVisible(!q->isGroupCollapsed());
         q->extender()->resize(q->extender()->effectiveSizeHint(Qt::PreferredSize));
     }
 }
