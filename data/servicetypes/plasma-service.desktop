@@ -3,7 +3,9 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/Service
 
 Comment=Plasma service
+Comment[ca]=Servei del Plasma
 Comment[de]=Plasma-Dienst
+Comment[es]=Servicio de Plasma
 Comment[et]=Plasma teenus
 Comment[ia]=Servicio de Plasma
 Comment[nds]=Plasma-Deenst
