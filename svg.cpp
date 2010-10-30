@@ -82,7 +82,7 @@ bool SharedSvgRenderer::load(
 {
     {   // Search the SVG to find and store all ids that contain size hints.
         const QString contentsAsString(QString::fromLatin1(contents));
-        QRegExp idExpr("id\\s*=\\s*(['\"])(\\d+)-(\\d+)-(.+)\\1");
+        QRegExp idExpr("id\\s*=\\s*(['\"])(\\d+)-(\\d+)-(.*)\\1");
         idExpr.setMinimal(true);
 
         int pos = 0;
