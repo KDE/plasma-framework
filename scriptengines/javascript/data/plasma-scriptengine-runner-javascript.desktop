@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=JavaScript Runner
 Name[ar]=مشغل جافا سكربت
+Name[ast]=Motor de javascript
 Name[be@latin]=Uklučeńnie „JavaScript”
 Name[bg]=Изпълнение на JavaScript
 Name[bn_IN]=JavaScript Runner
@@ -72,6 +73,7 @@ Name[zh_CN]=JavaScript 运行器
 Name[zh_TW]=JavaScript 執行器
 Comment=JavaScript Runner
 Comment[ar]=مشغل جافا سكربت
+Comment[ast]=Motor de javascript
 Comment[be@latin]=Uklučeńnie „JavaScript”.
 Comment[bg]=Изпълнение на JavaScript
 Comment[bn_IN]=JavaScript Runner

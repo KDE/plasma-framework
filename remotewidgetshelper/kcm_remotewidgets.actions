@@ -1,6 +1,7 @@
 [org.kde.kcontrol.kcmremotewidgets.save]
 Name=Save remote widgets' policies
 Name[ar]=احفظ سياسات الودجات البعيدة
+Name[ast]=Guardáu de polítiques d'elementos gráficos remotos
 Name[ca]=Desa les polítiques d'estris remots
 Name[ca@valencia]=Alça les polítiques d'estris remots
 Name[da]=Gem politikker for eksterne widgets
@@ -44,6 +45,7 @@ Name[zh_CN]=保存远程部件的策略
 Name[zh_TW]=儲存遠端元件政策
 Description=Prevents the system from saving remote plasma widgets' policies
 Description[ar]=يمنع النظام من حفظ سياسات ودجات بلازما البعيدة
+Description[ast]=Impide que'l sistema guarde polítiques d'elementos gráficos Plasma remotos
 Description[ca]=Evita al sistema de desar polítiques d'estris remots del plasma
 Description[ca@valencia]=Evita al sistema d'alçar polítiques d'estris remots del plasma
 Description[da]=Forhindrer systemet i et gemme politikker for eksterne plasma-widgets
