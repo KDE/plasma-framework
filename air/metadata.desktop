@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Air
 Name[ar]=هواء
+Name[ast]=Aire
 Name[bg]=Въздух
 Name[bn]=এয়ার
 Name[bn_IN]=বাতাস
@@ -71,6 +72,7 @@ Name[zh_CN]=大气
 Name[zh_TW]=Air
 Comment=A breath of fresh air
 Comment[ar]=نسمة من الهواء النقي
+Comment[ast]=Un soplu d'aire frescu
 Comment[bg]=Глътка свеж въздух
 Comment[ca]=Una alenada d'aire fresc
 Comment[ca@valencia]=Una alenada d'aire fresc
