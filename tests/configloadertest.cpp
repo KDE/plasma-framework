@@ -26,7 +26,7 @@
 
 #include "plasma/configloader.h"
 
-Q_DECLARE_METATYPE(QList<int>);
+Q_DECLARE_METATYPE(QList<int>)
 
 #define TEST_NAME QString::fromLatin1("configloadertest")
 
