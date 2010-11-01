@@ -1,4 +1,4 @@
 #! /usr/bin/env bash
 $EXTRACTRC private/*.ui >> rc.cpp
-$XGETTEXT *.cpp *.h */*.h */*.cpp -o $podir/libplasma.pot
+$XGETTEXT `ls *.cpp *.h */*.h */*.cpp | grep -v 'tests/'` -o $podir/libplasma.pot
 rm -f *.ui
