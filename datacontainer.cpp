@@ -248,7 +248,7 @@ void DataContainerPrivate::retrieve()
     }
 
     KConfigGroup retrieveGroup = storage->operationDescription("retrieve");
-    retrieveGroup.writeEntry("source", q->objectName());
+    retrieveGroup.writeEntry("group", q->objectName());
     ServiceJob* retrieveJob = storage->startOperationCall(retrieveGroup);
     QObject::connect(retrieveJob, SIGNAL(result(KJob*)), q,
             SLOT(populateFromStoredData(KJob*)));
