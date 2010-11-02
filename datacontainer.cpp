@@ -275,8 +275,12 @@ void DataContainerPrivate::populateFromStoredData(KJob *job)
         }
     }
 
-    if (!(data.isEmpty()))
-    {
+    KConfigGroup expireGroup = storage->operationDescription("expire");
+    //expire things older than 4 days
+    expireGroup.writeEntry("age", 345600);
+    storage->startOperationCall(expireGroup);
+
+    if (!(data.isEmpty())) {
         //Do not fill the source with old stored
         //data if it is already populated with new data.
         return;

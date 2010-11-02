@@ -53,7 +53,7 @@ StorageJob::StorageJob(const QString& destination,
     } else if (!m_db.tables().contains(m_clientName)) {
         QSqlQuery query(m_db);
         //bindValue doesn't seem to be able to replace stuff in create table
-        query.prepare(QString("create table ")+m_clientName+" (valueGroup varchar(256), id varchar(256), data clob, date datetime, primary key (valueGroup, id))");
+        query.prepare(QString("create table ")+m_clientName+" (valueGroup varchar(256), id varchar(256), data clob, creationTime datetime, accessTime datetime, primary key (valueGroup, id))");
         query.exec();
     }
 }
@@ -79,7 +79,7 @@ void StorageJob::start()
       query.bindValue(":id", params["key"].toString());
       query.exec();
 
-      query.prepare("insert into "+m_clientName+" values(:valueGroup, :id, :datavalue, date('now'))");
+      query.prepare("insert into "+m_clientName+" values(:valueGroup, :id, :datavalue, date('now'), date('now'))");
       query.bindValue(":id", params["key"].toString());
       query.bindValue(":valueGroup", valueGroup);
       query.bindValue(":datavalue", params["data"]);
@@ -89,17 +89,23 @@ void StorageJob::start()
 
     } else if (operationName() == "retrieve") {
         QSqlQuery query(m_db);
-        query.prepare("delete from "+m_clientName+" where date < :date");
-        QDateTime time(QDateTime::currentDateTime());
-        time.addDays(-2);
-        query.bindValue(":date", time.toTime_t());
-        query.exec();
 
         //a bit redundant but should be the faster way with less string concatenation as possible
         if (params["key"].toString().isEmpty()) {
+            //update modification time
+            query.prepare("update "+m_clientName+" set accessTime=date('now') where valueGroup=:valueGroup");
+            query.bindValue(":valueGroup", valueGroup);
+            query.exec();
+
             query.prepare("select * from "+m_clientName+" where valueGroup=:valueGroup");
             query.bindValue(":valueGroup", valueGroup);
         } else {
+            //update modification time
+            query.prepare("update "+m_clientName+" set accessTime=date('now') where valueGroup=:valueGroup and id=:key");
+            query.bindValue(":valueGroup", valueGroup);
+            query.bindValue(":key", params["key"].toString());
+            query.exec();
+
             query.prepare("select * from "+m_clientName+" where valueGroup=:valueGroup and id=:key");
             query.bindValue(":valueGroup", valueGroup);
             query.bindValue(":key", params["key"].toString());
@@ -123,13 +129,38 @@ void StorageJob::start()
             return;
         }
 
+    } else if (operationName() == "delete") {
+        QSqlQuery query(m_db);
+
+        if (params["key"].toString().isEmpty()) {
+            query.prepare("delete from "+m_clientName+" where valueGroup=:valueGroup");
+            query.bindValue(":valueGroup", valueGroup);
+        } else {
+            query.prepare("delete from "+m_clientName+" where valueGroup=:valueGroup and id=:key");
+            query.bindValue(":valueGroup", valueGroup);
+            query.bindValue(":key", params["key"].toString());
+        }
+
+        const bool success = query.exec();
+        setResult(success);
+
     } else if (operationName() == "expire") {
         QSqlQuery query(m_db);
-        query.prepare("delete from "+m_clientName+" where date < :date");
-        QDateTime time(QDateTime::currentDateTime());
-        time.addDays(-2);
-        query.bindValue(":date", time.toTime_t());
-        query.exec();
+        if (valueGroup.isEmpty()) {
+            query.prepare("delete from "+m_clientName+" where accessTime < :date");
+            QDateTime time(QDateTime::currentDateTime());
+            time.addSecs(-params["age"].toUInt());
+            query.bindValue(":date", time.toTime_t());
+        } else {
+            query.prepare("delete from "+m_clientName+" where valueGroup=:valueGroup and accessTime < :date");
+            query.bindValue(":valueGroup", valueGroup);
+            QDateTime time(QDateTime::currentDateTime());
+            time.addSecs(-params["age"].toUInt());
+            query.bindValue(":date", time.toTime_t());
+        }
+
+        const bool success = query.exec();
+        setResult(success);
 
     } else {
         setError(true);
