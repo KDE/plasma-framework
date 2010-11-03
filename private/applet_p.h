@@ -115,7 +115,6 @@ public:
     void checkImmutability();
     void themeChanged();
     void resetConfigurationObject();
-    void appletAnimationComplete();
     void selectItemToDestroy();
     void updateRect(const QRectF &rect);
     void setFocus();

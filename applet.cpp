@@ -481,7 +481,7 @@ void Applet::destroy()
         d->cleanUpAndDelete();
     } else {
         Animation *zoomAnim = Plasma::Animator::create(Plasma::Animator::ZoomAnimation);
-        connect(zoomAnim, SIGNAL(finished()), this, SLOT(appletAnimationComplete()));
+        connect(zoomAnim, SIGNAL(finished()), this, SLOT(cleanUpAndDelete()));
         zoomAnim->setTargetWidget(this);
         zoomAnim->start();
     }
@@ -490,11 +490,6 @@ void Applet::destroy()
 bool Applet::destroyed() const
 {
     return d->transient;
-}
-
-void AppletPrivate::appletAnimationComplete()
-{
-    cleanUpAndDelete();
 }
 
 void AppletPrivate::selectItemToDestroy()
@@ -550,7 +545,16 @@ void AppletPrivate::cleanUpAndDelete()
 
     resetConfigurationObject();
 
-    q->scene()->removeItem(q);
+    if (q->scene()) {
+        if (isContainment()) {
+            // prematurely emit our destruction if we are a Containment,
+            // giving Corona a chance to remove this Containment from its collection
+            emit destroyed(this);
+        }
+
+        q->scene()->removeItem(q);
+    }
+
     q->deleteLater();
 }
 
