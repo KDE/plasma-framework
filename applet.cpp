@@ -546,10 +546,10 @@ void AppletPrivate::cleanUpAndDelete()
     resetConfigurationObject();
 
     if (q->scene()) {
-        if (isContainment()) {
+        if (isContainment) {
             // prematurely emit our destruction if we are a Containment,
             // giving Corona a chance to remove this Containment from its collection
-            emit destroyed(this);
+            emit q->QObject::destroyed(q);
         }
 
         q->scene()->removeItem(q);
