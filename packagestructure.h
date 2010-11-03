@@ -133,6 +133,9 @@ public:
      * Adds a directory to the structure of the package. It is added as
      * a not-required element with no associated mimetypes.
      *
+     * Starting in 4.6, if an entry with the given key
+     * already exists, the path is added to it as a search alternative.
+     *
      * @param key  used as an internal label for this directory
      * @param path the path within the package for this directory
      * @param name the user visible (translated) name for the directory
@@ -143,6 +146,9 @@ public:
      * Adds a file to the structure of the package. It is added as
      * a not-required element with no associated mimetypes.
      *
+     * Starting in 4.6, if an entry with the given key
+     * already exists, the path is added to it as a search alternative.
+     *
      * @param key  used as an internal label for this file
      * @param path the path within the package for this file
      * @param name the user visible (translated) name for the file
@@ -150,9 +156,23 @@ public:
     void addFileDefinition(const char *key, const QString &path, const QString &name);
 
     /**
+     * Removes a definition from the structure of the package.
+     * @since 4.6
+     * @param key the internal label of the file or directory to remove
+     */
+    void removeDefinition(const char *key);
+
+    /**
      * @return path relative to the package root for the given entry
+     * @deprecatd use searchPaths instead
      **/
     QString path(const char *key) const;
+
+    /**
+     * @return a list of paths relative to the package root for the given entry
+     * @since 4.6
+     **/
+    QStringList searchPath(const char *key) const;
 
     /**
      * Get the list of files of a given type.

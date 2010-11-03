@@ -56,14 +56,14 @@ class ContentStructure
 
         ContentStructure(const ContentStructure &other)
         {
-            path = other.path;
+            paths = other.paths;
             name = other.name;
             mimetypes = other.mimetypes;
             directory = other.directory;
             required = other.required;
         }
 
-        QString path;
+        QStringList paths;
         QString name;
         QStringList mimetypes;
         bool directory : 1;
@@ -304,8 +304,16 @@ void PackageStructure::addDirectoryDefinition(const char *key,
                                               const QString &path, const QString &name)
 {
     ContentStructure s;
-    s.name = name;
-    s.path = path;
+
+    if (d->contents.contains(key)) {
+        s = d->contents[key];
+    }
+
+    if (!name.isEmpty()) {
+        s.name = name;
+    }
+
+    s.paths.append(path);
     s.directory = true;
 
     d->contents[key] = s;
@@ -314,11 +322,24 @@ void PackageStructure::addDirectoryDefinition(const char *key,
 void PackageStructure::addFileDefinition(const char *key, const QString &path, const QString &name)
 {
     ContentStructure s;
-    s.name = name;
-    s.path = path;
+
+    if (d->contents.contains(key)) {
+        s = d->contents[key];
+    }
+
+    if (!name.isEmpty()) {
+        s.name = name;
+    }
+
+    s.paths.append(path);
     s.directory = false;
 
     d->contents[key] = s;
+}
+
+void PackageStructure::removeDefinition(const char *key)
+{
+    d->contents.remove(key);
 }
 
 QString PackageStructure::path(const char *key) const
@@ -329,8 +350,20 @@ QString PackageStructure::path(const char *key) const
         return QString();
     }
 
-    //kDebug() << "found" << key << "and the value is" << it.value().path;
-    return it.value().path;
+    //kDebug() << "found" << key << "and the value is" << it.value().paths.first();
+    return it.value().paths.first();
+}
+
+QStringList PackageStructure::searchPath(const char *key) const
+{
+    //kDebug() << "looking for" << key;
+    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constFind(key);
+    if (it == d->contents.constEnd()) {
+        return QStringList();
+    }
+
+    //kDebug() << "found" << key << "and the value is" << it.value().paths;
+    return it.value().paths;
 }
 
 QString PackageStructure::name(const char *key) const
@@ -473,7 +506,7 @@ void PackageStructure::write(KConfigBase *config) const
     QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
     while (it != d->contents.constEnd()) {
         KConfigGroup group = config->group(it.key());
-        group.writeEntry("Path", it.value().path);
+        group.writeEntry("Path", it.value().paths);
         group.writeEntry("Name", it.value().name);
         if (!it.value().mimetypes.isEmpty()) {
             group.writeEntry("Mimetypes", it.value().mimetypes);
