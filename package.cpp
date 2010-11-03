@@ -163,7 +163,15 @@ bool Package::isValid() const
     }
 
     foreach (const char *dir, d->structure->requiredDirectories()) {
-        if (!QFile::exists(d->structure->path() + d->structure->contentsPrefix() + d->structure->path(dir))) {
+        bool failed = true;
+        foreach (const QString &path, d->structure->searchPath(dir)) {
+            if (QFile::exists(d->structure->path() + d->structure->contentsPrefix() + path)) {
+                failed = false;
+                break;
+            }
+        }
+
+        if (failed) {
             kWarning() << "Could not find required directory" << dir;
             d->valid = false;
             return false;
@@ -171,9 +179,16 @@ bool Package::isValid() const
     }
 
     foreach (const char *file, d->structure->requiredFiles()) {
-        if (!QFile::exists(d->structure->path() + d->structure->contentsPrefix() + d->structure->path(file))) {
-            kWarning() << "Could not find required file" << file << ", look in"
-                       << d->structure->path() + d->structure->contentsPrefix() + d->structure->path(file) << endl;
+        bool failed = true;
+        foreach (const QString &path, d->structure->searchPath(file)) {
+            if (QFile::exists(d->structure->path() + d->structure->contentsPrefix() + path)) {
+                failed = false;
+                break;
+            }
+        }
+
+        if (failed) {
+            kWarning() << "Could not find required file" << file;
             d->valid = false;
             return false;
         }
@@ -189,34 +204,38 @@ QString Package::filePath(const char *fileType, const QString &filename) const
         return QString();
     }
 
-    QString path;
+    QStringList paths;
 
     if (qstrlen(fileType) != 0) {
-        path = d->structure->path(fileType);
+        paths = d->structure->searchPath(fileType);
 
-        if (path.isEmpty()) {
+        if (paths.isEmpty()) {
             //kDebug() << "no matching path came of it, while looking for" << fileType << filename;
             return QString();
         }
     }
 
-    path.prepend(d->structure->path() + d->structure->contentsPrefix());
+    const QString prefix(d->structure->path() + d->structure->contentsPrefix());
 
-    if (!filename.isEmpty()) {
-        path.append("/").append(filename);
-    }
+    foreach (const QString &path, paths) {
+        QString file = prefix + path;
 
-    if (QFile::exists(path)) {
-        if (d->structure->allowExternalPaths()) {
-            return path;
+        if (!filename.isEmpty()) {
+            file.append("/").append(filename);
         }
 
-        // ensure that we don't return files outside of our base path
-        // due to symlink or ../ games
-        QDir dir(path);
-        QString canonicalized = dir.canonicalPath() + QDir::separator();
-        if (canonicalized.startsWith(d->structure->path())) {
-            return path;
+        if (QFile::exists(file)) {
+            if (d->structure->allowExternalPaths()) {
+                return file;
+            }
+
+            // ensure that we don't return files outside of our base path
+            // due to symlink or ../ games
+            QDir dir(file);
+            QString canonicalized = dir.canonicalPath() + QDir::separator();
+            if (canonicalized.startsWith(d->structure->path())) {
+                return file;
+            }
         }
     }
 
