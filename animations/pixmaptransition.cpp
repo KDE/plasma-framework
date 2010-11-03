@@ -114,12 +114,12 @@ QPixmap PixmapTransition::currentPixmap() const
     } else if (m_targetPixmap.isNull()) {
         currentPixmap = alignedStartPixmap();
         if (qFuzzyCompare(delta, qreal(1.0))) {
-            return currentPixmap;
+            return m_currentPixmap;
         }
         //kDebug() << "painting" << m_startPixmap.rect() << "into" << m_targetRect << "in size" << currentPixmap.size();
         QPainter p(&currentPixmap);
         p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-        p.fillRect(m_currentPixmap.rect(), QColor(0, 0, 0, (int)(254 - ((qreal)254)*delta)));
+        p.fillRect(currentPixmap.rect(), QColor(0, 0, 0, (int)(254 - ((qreal)254)*delta)));
         p.end();
     }
 

@@ -656,7 +656,7 @@ QPixmap FrameSvgPrivate::alphaMask()
 
 void FrameSvgPrivate::generateBackground(FrameData *frame)
 {
-    if (!frame->cachedBackground.isNull()) {
+    if (!frame->cachedBackground.isNull() || !q->hasElementPrefix(q->prefix())) {
         return;
     }
 
