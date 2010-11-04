@@ -88,7 +88,9 @@ public:
     /**
      * Singleton accessor
      **/
+#ifndef KDE_NO_DEPRECATED
     static KDE_DEPRECATED Animator *self();
+#endif
 
     /**
      * Factory to build new animation objects. To control their behavior,
@@ -118,7 +120,9 @@ public:
      * @return the id of the animation
      * @deprecated use new Animator API with Qt Kinetic
      **/
+#ifndef KDE_NO_DEPRECATED
     KDE_DEPRECATED Q_INVOKABLE int animateItem(QGraphicsItem *item,Animation anim);
+#endif
 
     /**
      * Stops an item animation before the animation is complete.
@@ -128,7 +132,9 @@ public:
      * @arg id the id of the animation as returned by animateItem
      * @deprecated use new Animator API with Qt Kinetic
      */
+#ifndef KDE_NO_DEPRECATED
     KDE_DEPRECATED Q_INVOKABLE void stopItemAnimation(int id);
+#endif
 
     /**
      * Starts a standard animation on a QGraphicsItem.
@@ -138,7 +144,9 @@ public:
      * @return the id of the animation
      * @deprecated use new Animator API with Qt Kinetic
      **/
+#ifndef KDE_NO_DEPRECATED
     KDE_DEPRECATED Q_INVOKABLE int moveItem(QGraphicsItem *item, Movement movement, const QPoint &destination);
+#endif
 
     /**
      * Stops an item movement before the animation is complete.
@@ -148,7 +156,9 @@ public:
      * @arg id the id of the animation as returned by moveItem
      * @deprecated use new Animator API with Qt Kinetic
      */
+#ifndef KDE_NO_DEPRECATED
     KDE_DEPRECATED Q_INVOKABLE void stopItemMovement(int id);
+#endif
 
     /**
      * Starts a custom animation, preventing the need to create a timeline
@@ -168,8 +178,10 @@ public:
      * @return an id that can be used to identify this animation.
      * @deprecated use new Animator API with Qt Kinetic
      */
+#ifndef KDE_NO_DEPRECATED
     KDE_DEPRECATED Q_INVOKABLE int customAnimation(int frames, int duration,
         Animator::CurveShape curve, QObject *receiver, const char *method);
+#endif
 
     /**
      * Stops a custom animation. Note that it is not necessary to call
@@ -179,12 +191,22 @@ public:
      * @arg id the id of the animation as returned by customAnimation
      * @deprecated use new Animator API with Qt Kinetic
      */
+#ifndef KDE_NO_DEPRECATED
     KDE_DEPRECATED Q_INVOKABLE void stopCustomAnimation(int id);
+#endif
 
+#ifndef KDE_NO_DEPRECATED
     KDE_DEPRECATED Q_INVOKABLE int animateElement(QGraphicsItem *obj, Animation);
+#endif
+#ifndef KDE_NO_DEPRECATED
     KDE_DEPRECATED Q_INVOKABLE void stopElementAnimation(int id);
+#endif
+#ifndef KDE_NO_DEPRECATED
     KDE_DEPRECATED Q_INVOKABLE void setInitialPixmap(int id, const QPixmap &pixmap);
+#endif
+#ifndef KDE_NO_DEPRECATED
     KDE_DEPRECATED Q_INVOKABLE QPixmap currentPixmap(int id);
+#endif
 
     /**
      * Can be used to query if there are other animations happening. This way
@@ -193,7 +215,9 @@ public:
      * @since 4.1
      * @deprecated use new Animator API with Qt Kinetic
      */
+#ifndef KDE_NO_DEPRECATED
     KDE_DEPRECATED Q_INVOKABLE bool isAnimating() const;
+#endif
 
     /**
      * Register a widget as a scrolling widget.
@@ -203,7 +227,9 @@ public:
      * @param widget the widget that offers a scrolling behaviour
      * @since 4.4
      */
+#ifndef KDE_NO_DEPRECATED
     KDE_DEPRECATED void registerScrollingManager(QGraphicsWidget *widget);
+#endif
 
     /**
      * unregister the scrolling manager of a certain widget
@@ -212,20 +238,27 @@ public:
      * @param widget the widget we don't want no longer animated
      * @since 4.4
      */
+#ifndef KDE_NO_DEPRECATED
     KDE_DEPRECATED void unregisterScrollingManager(QGraphicsWidget *widget);
+#endif
 
 Q_SIGNALS:
     void animationFinished(QGraphicsItem *item, Plasma::Animator::Animation anim);
     void movementFinished(QGraphicsItem *item);
     void elementAnimationFinished(int id);
     void customAnimationFinished(int id);
+#ifndef KDE_NO_DEPRECATED
     KDE_DEPRECATED void scrollStateChanged(QGraphicsWidget *widget, QAbstractAnimation::State newState,
             QAbstractAnimation::State oldState);
+#endif
 
+#ifndef KDE_NO_DEPRECATED
 protected:
     void timerEvent(QTimerEvent *event);
+#endif
 
 private:
+#ifndef KDE_NO_DEPRECATED
     friend class AnimatorSingleton;
     explicit Animator(QObject * parent = 0);
     ~Animator();
@@ -236,6 +269,9 @@ private:
     Q_PRIVATE_SLOT(d, void customAnimReceiverDestroyed(QObject*))
     Q_PRIVATE_SLOT(d, void scrollStateChanged(QAbstractAnimation::State,
                 QAbstractAnimation::State))
+#else
+    Animator();
+#endif
 
     friend class AnimatorPrivate;
     AnimatorPrivate * const d;

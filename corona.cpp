@@ -497,10 +497,12 @@ QList<Plasma::Containment *> Corona::importLayout(const KConfigGroup &conf)
     return d->importLayout(conf, true);
 }
 
+#ifndef KDE_NO_DEPRECATED
 QList<Plasma::Containment *> Corona::importLayout(const KConfigBase &conf)
 {
     return d->importLayout(conf, true);
 }
+#endif
 
 QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigBase &conf, bool mergeConfig)
 {

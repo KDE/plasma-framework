@@ -261,7 +261,9 @@ public:
      * @return the list of containments that were loaded
      * @since 4.5
      */
+#ifndef KDE_NO_DEPRECATED
     KDE_DEPRECATED QList<Plasma::Containment *> importLayout(const KConfigBase &config);
+#endif
 
     /**
      * Returns the name of the preferred plugin to be used as containment toolboxes.

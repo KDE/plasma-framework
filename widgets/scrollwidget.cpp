@@ -392,7 +392,7 @@ public:
             qreal duration = qAbs(v / deceleration);
             qreal diffY = v * duration + (0.5  * deceleration * duration * duration);
             qreal startY = val;
- 
+
             qreal endY = startY + diffY;
 
             if (velocity > 0) {
@@ -1223,17 +1223,21 @@ void ScrollWidget::ensureItemVisible(QGraphicsItem *item)
     }
 }
 
+#ifndef KDE_NO_DEPRECATED
 void ScrollWidget::registerAsDragHandle(QGraphicsWidget *item)
 {
     Q_UNUSED(item);
     return;
 }
+#endif
 
+#ifndef KDE_NO_DEPRECATED
 void ScrollWidget::unregisterAsDragHandle(QGraphicsWidget *item)
 {
     Q_UNUSED(item);
     return;
 }
+#endif
 
 QRectF ScrollWidget::viewportGeometry() const
 {

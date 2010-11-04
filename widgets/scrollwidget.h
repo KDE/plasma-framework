@@ -181,7 +181,9 @@ public:
      *             it's not necessary to call this function.
      * @since 4.4
      */
+#ifndef KDE_NO_DEPRECATED
     KDE_DEPRECATED Q_INVOKABLE void registerAsDragHandle(QGraphicsWidget *item);
+#endif
 
     /**
      * Unregister the given item as drag handle (if it was registered)
@@ -191,7 +193,9 @@ public:
      *
      * @since 4.4
      */
+#ifndef KDE_NO_DEPRECATED
     KDE_DEPRECATED Q_INVOKABLE void unregisterAsDragHandle(QGraphicsWidget *item);
+#endif
 
     /**
      * The geometry of the viewport.

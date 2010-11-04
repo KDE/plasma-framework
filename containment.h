@@ -603,7 +603,9 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * @returns the toolbox associated with this containment, or a null pointer if none
          */
+#ifndef KDE_NO_DEPRECATED
         KDE_DEPRECATED const QGraphicsItem *toolBoxItem() const;
+#endif
 
         /**
          * Sets a custom ToolBox
