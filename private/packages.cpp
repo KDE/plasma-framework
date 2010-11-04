@@ -41,6 +41,14 @@ namespace Plasma
 PlasmoidPackage::PlasmoidPackage(QObject *parent)
     : Plasma::PackageStructure(parent, QString("Plasmoid"))
 {
+    QString pathsString(getenv("PLASMA_CUSTOM_PREFIX_PATHS"));
+    if (!pathsString.isEmpty()) {
+        QStringList prefixPaths(pathsString.split(":"));
+        if (!prefixPaths.isEmpty()) {
+            setContentsPrefixPaths(prefixPaths);
+        }
+    }
+
     addDirectoryDefinition("images", "images", i18n("Images"));
     QStringList mimetypes;
     mimetypes << "image/svg+xml" << "image/png" << "image/jpeg";

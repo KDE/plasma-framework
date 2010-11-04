@@ -169,7 +169,7 @@ bool Package::isValid() const
         bool failed = true;
         foreach (const QString &path, d->structure->searchPath(dir)) {
             foreach (const QString &prefix, d->structure->contentsPrefixPaths()) {
-                if (QFile::exists(d->structure->path() + prefix + path)) {
+                if (QFile::exists(d->structure->path() + prefix + "/" + path)) {
                     failed = false;
                     break;
                 }
@@ -190,7 +190,7 @@ bool Package::isValid() const
         bool failed = true;
         foreach (const QString &path, d->structure->searchPath(file)) {
             foreach (const QString &prefix, d->structure->contentsPrefixPaths()) {
-                if (QFile::exists(d->structure->path() + prefix + path)) {
+                if (QFile::exists(d->structure->path() + prefix + "/" + path)) {
                     failed = false;
                     break;
                 }
@@ -233,7 +233,7 @@ QString Package::filePath(const char *fileType, const QString &filename) const
 
     //Nested loop, but in the medium case resolves to just one iteration
     foreach (const QString &contentsPrefix, d->structure->contentsPrefixPaths()) {
-        const QString prefix(d->structure->path() + contentsPrefix);
+        const QString prefix(d->structure->path() + contentsPrefix + "/");
 
         foreach (const QString &path, paths) {
             QString file = prefix + path;
@@ -387,7 +387,7 @@ QString Package::contentsHash() const
     }
 
     foreach (QString prefix, d->structure->contentsPrefixPaths()) {
-        const QString basePath = d->structure->path() + prefix;
+        const QString basePath = d->structure->path() + prefix + "/";
         QDir dir(basePath);
 
         if (!dir.exists()) {
