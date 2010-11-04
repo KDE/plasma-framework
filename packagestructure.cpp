@@ -75,12 +75,12 @@ class PackageStructurePrivate
 public:
     PackageStructurePrivate(const QString &t)
         : type(t),
-          contentsPrefix("contents/"),
           packageRoot("plasma/plasmoids"),
           servicePrefix("plasma-applet-"),
           metadata(0),
           externalPaths(false)
     {
+        contentsPrefixPaths << "contents/";
     }
 
     ~PackageStructurePrivate()
@@ -94,7 +94,7 @@ public:
 
     QString type;
     QString path;
-    QString contentsPrefix;
+    QStringList contentsPrefixPaths;
     QString packageRoot;
     QString servicePrefix;
     QMap<QByteArray, ContentStructure> contents;
@@ -282,22 +282,25 @@ QStringList PackageStructure::entryList(const char *key)
         return QStringList();
     }
 
-    QDir dir(d->path + d->contentsPrefix + p);
+    QStringList list;
+    foreach (QString prefix, d->contentsPrefixPaths) {
+        QDir dir(d->path + prefix + p);
 
-    if (dir.exists()) {
-        if (d->externalPaths) {
-            return dir.entryList(QDir::Files | QDir::Readable);
-        }
+        if (dir.exists()) {
+            if (d->externalPaths) {
+                return dir.entryList(QDir::Files | QDir::Readable);
+            }
 
-        // ensure that we don't return files outside of our base path
-        // due to symlink or ../ games
-        QString canonicalized = dir.canonicalPath();
-        if (canonicalized.startsWith(d->path)) {
-            return dir.entryList(QDir::Files | QDir::Readable);
+            // ensure that we don't return files outside of our base path
+            // due to symlink or ../ games
+            QString canonicalized = dir.canonicalPath();
+            if (canonicalized.startsWith(d->path)) {
+                list << dir.entryList(QDir::Files | QDir::Readable);
+            }
         }
     }
 
-    return QStringList();
+    return list;
 }
 
 void PackageStructure::addDirectoryDefinition(const char *key,
@@ -469,7 +472,7 @@ void PackageStructure::read(const KConfigBase *config)
     d->mimetypes.clear();
     KConfigGroup general(config, QString());
     d->type = general.readEntry("Type", QString());
-    d->contentsPrefix = general.readEntry("ContentsPrefix", d->contentsPrefix);
+    d->contentsPrefixPaths = general.readEntry("ContentsPrefixPaths", d->contentsPrefixPaths);
     d->packageRoot = general.readEntry("DefaultPackageRoot", d->packageRoot);
     d->externalPaths = general.readEntry("AllowExternalPaths", d->externalPaths);
 
@@ -499,7 +502,7 @@ void PackageStructure::write(KConfigBase *config) const
 {
     KConfigGroup general = KConfigGroup(config, "");
     general.writeEntry("Type", type());
-    general.writeEntry("ContentsPrefix", d->contentsPrefix);
+    general.writeEntry("ContentsPrefixPaths", d->contentsPrefixPaths);
     general.writeEntry("DefaultPackageRoot", d->packageRoot);
     general.writeEntry("AllowExternalPaths", d->externalPaths);
 
@@ -524,12 +527,23 @@ void PackageStructure::write(KConfigBase *config) const
 
 QString PackageStructure::contentsPrefix() const
 {
-    return d->contentsPrefix;
+    return d->contentsPrefixPaths.first();
 }
 
 void PackageStructure::setContentsPrefix(const QString &prefix)
 {
-    d->contentsPrefix = prefix;
+    d->contentsPrefixPaths.clear();
+    d->contentsPrefixPaths << prefix;
+}
+
+QStringList PackageStructure::contentsPrefixPaths() const
+{
+    return d->contentsPrefixPaths;
+}
+
+void PackageStructure::setContentsPrefixPaths(const QStringList &prefixPaths)
+{
+    d->contentsPrefixPaths = prefixPaths;
 }
 
 bool PackageStructure::installPackage(const QString &package, const QString &packageRoot)

@@ -169,7 +169,9 @@ public:
     QString path(const char *key) const;
 
     /**
-     * @return a list of paths relative to the package root for the given entry
+     * @return a list of paths relative to the package root for the given entry.
+     *         They are orted by importance: when searching for a file the paths
+     *         will be searched in order
      * @since 4.6
      **/
     QStringList searchPath(const char *key) const;
@@ -284,8 +286,16 @@ public:
 
     /**
      * @return the prefix inserted between the base path and content entries
+     * @deprecated use contentsPrefixPaths() instead.
      */
-    QString contentsPrefix() const;
+    KDE_DEPRECATED QString contentsPrefix() const;
+
+    /**
+     * @return the prefix paths inserted between the base path and content entries, in order of priority.
+     *         When searching for a file, all paths will be tried in order.
+     * @since 4.6
+     */
+    QStringList contentsPrefixPaths() const;
 
     /**
      * @return preferred package root. This defaults to plasma/plasmoids/
@@ -334,8 +344,22 @@ protected:
      * structure
      *
      * @arg prefix the directory prefix to use
+     * @deprecated use setContentsPrefixPaths() instead.
      */
-    void setContentsPrefix(const QString &prefix);
+    KDE_DEPRECATED void setContentsPrefix(const QString &prefix);
+
+    /**
+     * Sets the prefixes that all the contents in this package should
+     * appear under. This defaults to "contents/" and is added automatically
+     * between the base path and the entries as defined by the package
+     * structure. Multiple entries can be added.
+     * In this case each file request will be searched in all prefixes in order,
+     * and the first found will be returned.
+     *
+     * @arg prefix paths the directory prefix to use
+     * @since 4.6
+     */
+    void setContentsPrefixPaths(const QStringList &prefixPaths);
 
     /**
      * Sets preferred package root.

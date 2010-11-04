@@ -158,15 +158,23 @@ Package &Package::operator=(const Package &rhs)
 
 bool Package::isValid() const
 {
-    if (!d->valid) {
+    if (!d->valid || d->structure->contentsPrefixPaths().isEmpty()) {
         return false;
     }
 
+    //search for the file in all prefixes and in all possible paths for each prefix
+    //even if it's a big nested loop, usually there is one prefix and one location
+    //so shouldn't cause too much disk access
     foreach (const char *dir, d->structure->requiredDirectories()) {
         bool failed = true;
         foreach (const QString &path, d->structure->searchPath(dir)) {
-            if (QFile::exists(d->structure->path() + d->structure->contentsPrefix() + path)) {
-                failed = false;
+            foreach (const QString &prefix, d->structure->contentsPrefixPaths()) {
+                if (QFile::exists(d->structure->path() + prefix + path)) {
+                    failed = false;
+                    break;
+                }
+            }
+            if (!failed) {
                 break;
             }
         }
@@ -181,8 +189,13 @@ bool Package::isValid() const
     foreach (const char *file, d->structure->requiredFiles()) {
         bool failed = true;
         foreach (const QString &path, d->structure->searchPath(file)) {
-            if (QFile::exists(d->structure->path() + d->structure->contentsPrefix() + path)) {
-                failed = false;
+            foreach (const QString &prefix, d->structure->contentsPrefixPaths()) {
+                if (QFile::exists(d->structure->path() + prefix + path)) {
+                    failed = false;
+                    break;
+                }
+            }
+            if (!failed) {
                 break;
             }
         }
@@ -213,28 +226,35 @@ QString Package::filePath(const char *fileType, const QString &filename) const
             //kDebug() << "no matching path came of it, while looking for" << fileType << filename;
             return QString();
         }
+    //when filetype is empty paths is always empty, so try with an empty string
+    } else {
+        paths << QString();
     }
 
-    const QString prefix(d->structure->path() + d->structure->contentsPrefix());
+    //Nested loop, but in the medium case resolves to just one iteration
+    foreach (const QString &contentsPrefix, d->structure->contentsPrefixPaths()) {
+        const QString prefix(d->structure->path() + contentsPrefix);
 
-    foreach (const QString &path, paths) {
-        QString file = prefix + path;
+        foreach (const QString &path, paths) {
+            QString file = prefix + path;
 
-        if (!filename.isEmpty()) {
-            file.append("/").append(filename);
-        }
-
-        if (QFile::exists(file)) {
-            if (d->structure->allowExternalPaths()) {
-                return file;
+            if (!filename.isEmpty()) {
+                file.append("/").append(filename);
             }
 
-            // ensure that we don't return files outside of our base path
-            // due to symlink or ../ games
-            QDir dir(file);
-            QString canonicalized = dir.canonicalPath() + QDir::separator();
-            if (canonicalized.startsWith(d->structure->path())) {
-                return file;
+            if (QFile::exists(file)) {
+                if (d->structure->allowExternalPaths()) {
+                    return file;
+                }
+
+                // ensure that we don't return files outside of our base path
+                // due to symlink or ../ games
+                QDir dir(file);
+                QString canonicalized = dir.canonicalPath() + QDir::separator();
+
+                if (canonicalized.startsWith(d->structure->path())) {
+                    return file;
+                }
             }
         }
     }
@@ -351,13 +371,6 @@ QString Package::contentsHash() const
         return QString();
     }
 
-    const QString basePath = d->structure->path() + d->structure->contentsPrefix();
-    QDir dir(basePath);
-
-    if (!dir.exists()) {
-        return QString();
-    }
-
     QCA::Hash hash("sha1");
     QString metadataPath = d->structure->path() + "metadata.desktop";
     if (QFile::exists(metadataPath)) {
@@ -373,7 +386,16 @@ QString Package::contentsHash() const
         kWarning() << "no metadata at" << metadataPath;
     }
 
-    d->updateHash(basePath, QString(), dir, hash);
+    foreach (QString prefix, d->structure->contentsPrefixPaths()) {
+        const QString basePath = d->structure->path() + prefix;
+        QDir dir(basePath);
+
+        if (!dir.exists()) {
+            return QString();
+        }
+
+        d->updateHash(basePath, QString(), dir, hash);
+    }
     return QCA::arrayToHex(hash.final().toByteArray());
 #else
     // no QCA2!
