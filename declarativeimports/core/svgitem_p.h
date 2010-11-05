@@ -29,23 +29,23 @@ class SvgItem : public QDeclarativeItem
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString imagePath READ imagePath WRITE setImagePath)
     Q_PROPERTY(QString elementId READ elementId WRITE setElementId)
+    Q_PROPERTY(Plasma::Svg * svg READ svg WRITE setSvg)
 
 public:
     SvgItem(QDeclarativeItem *parent=0);
     ~SvgItem();
 
-    void setImagePath(const QString &path);
-    QString imagePath() const;
-
     void setElementId(const QString &elementID);
     QString elementId() const;
+
+    void setSvg(Plasma::Svg *svg);
+    Plasma::Svg *svg() const;
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 private:
-    Plasma::Svg *m_svg;
+    QWeakPointer<Plasma::Svg> m_svg;
     QString m_elementID;
 };
 }

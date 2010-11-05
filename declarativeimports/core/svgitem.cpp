@@ -30,9 +30,8 @@ namespace Plasma
 SvgItem::SvgItem(QDeclarativeItem *parent)
     : QDeclarativeItem(parent)
 {
-    m_svg = new Plasma::Svg(this);
     setFlag(QGraphicsItem::ItemHasNoContents, false);
-    connect(m_svg, SIGNAL(repaintNeeded()), this, SLOT(update()));
+    
 }
 
 
@@ -40,22 +39,8 @@ SvgItem::~SvgItem()
 {
 }
 
-void SvgItem::setImagePath(const QString &path)
-{
-    m_svg->setImagePath(path);
-    update();
-}
-
-QString SvgItem::imagePath() const
-{
-    return m_svg->imagePath();
-}
-
-
 void SvgItem::setElementId(const QString &elementID)
 {
-    m_svg->setContainsMultipleImages(!elementID.isNull());
-
     m_elementID = elementID;
     update();
 }
@@ -65,12 +50,31 @@ QString SvgItem::elementId() const
     return m_elementID;
 }
 
+void SvgItem::setSvg(Plasma::Svg *svg)
+{
+    if (m_svg) {
+        disconnect(m_svg.data(), 0, this, 0);
+    }
+    m_svg = svg;
+    connect(svg, SIGNAL(repaintNeeded()), this, SLOT(update()));
+}
+
+Plasma::Svg *SvgItem::svg() const
+{
+    return m_svg.data();
+}
+
 void SvgItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    m_svg->paint(painter, boundingRect(), m_elementID);
+    if (!m_svg) {
+        return;
+    }
+    //setContainsMultipleImages has to be done there since m_frameSvg can be shared with somebody else
+    m_svg.data()->setContainsMultipleImages(!m_elementID.isEmpty());
+    m_svg.data()->paint(painter, boundingRect(), m_elementID);
 }
 
 } // Plasma namespace
