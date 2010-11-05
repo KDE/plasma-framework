@@ -22,7 +22,7 @@
 #include <QtGui/QPainter>
 
 #include "kdebug.h"
-#include "plasma/framesvg.h"
+
 
 namespace Plasma
 {
@@ -94,6 +94,16 @@ QString FrameSvgItem::prefix() const
 FrameSvgItemMargins *FrameSvgItem::margins() const
 {
     return m_margins;
+}
+
+void FrameSvgItem::setEnabledBorders(const Plasma::FrameSvg::EnabledBorders borders)
+{
+    m_frameSvg->setEnabledBorders(borders);
+}
+
+Plasma::FrameSvg::EnabledBorders FrameSvgItem::enabledBorders() const
+{
+    return m_frameSvg->enabledBorders();
 }
 
 void FrameSvgItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

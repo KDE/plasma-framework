@@ -21,6 +21,8 @@
 
 #include <QDeclarativeItem>
 
+#include <Plasma/FrameSvg>
+
 namespace Plasma {
 
     class FrameSvg;
@@ -57,6 +59,9 @@ class FrameSvgItem : public QDeclarativeItem
     Q_PROPERTY(QString prefix READ prefix WRITE setPrefix)
     Q_PROPERTY(QObject *margins READ margins CONSTANT)
 
+    Q_FLAGS(Plasma::FrameSvg::EnabledBorders)
+    Q_PROPERTY(Plasma::FrameSvg::EnabledBorders enabledBorders READ enabledBorders WRITE setEnabledBorders)
+
 public:
     FrameSvgItem(QDeclarativeItem *parent=0);
     ~FrameSvgItem();
@@ -66,6 +71,9 @@ public:
 
     void setPrefix(const QString &prefix);
     QString prefix() const;
+
+    void setEnabledBorders(const Plasma::FrameSvg::EnabledBorders borders);
+    Plasma::FrameSvg::EnabledBorders enabledBorders() const;
 
     FrameSvgItemMargins *margins() const;
 
