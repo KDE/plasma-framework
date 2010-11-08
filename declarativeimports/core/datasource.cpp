@@ -37,91 +37,150 @@ DataSource::DataSource(QObject* parent)
 {
     setObjectName("DataSource");
 
-    m_data = new QDeclarativePropertyMap(this);
+//    m_data = new QDeclarativePropertyMap(this);
 
     connect(this, SIGNAL(engineChanged()),
             this, SLOT(setupData()));
-    connect(this, SIGNAL(sourceChanged()),
+    connect(this, SIGNAL(connectedSourcesChanged()),
             this, SLOT(setupData()));
     connect(this, SIGNAL(intervalChanged()),
             this, SLOT(setupData()));
 }
 
-void DataSource::setSource(const QString &s)
+void DataSource::setConnectedSources(const QStringList &sources)
 {
-    if (s == m_source) {
-        return;
+    foreach (const QString &source, sources) {
+        if (!m_connectedSources.contains(source)) {
+            m_newSources.append(source);
+        }
+    }
+    foreach (const QString &source, m_connectedSources) {
+        if (!m_connectedSources.contains(source)) {
+            m_oldSources.append(source);
+        }
     }
 
-    m_source = s;
-    emit sourceChanged();
+    if (!m_newSources.isEmpty() || !m_oldSources.isEmpty()) {
+        m_connectedSources = sources;
+        m_changes |= SourcesChanged;
+        emit connectedSourcesChanged();
+    }
+}
+
+void DataSource::setEngine(const QString &e)
+{
+    if (e == m_engine) {
+        return;
+    }
+    m_engine = e;
+
+    m_changes |= DataEngineChanged;
+    emit engineChanged();
 }
 
 void DataSource::setupData()
 {
-    if (/*m_source.isEmpty() ||*/ m_engine.isEmpty()) {
-        return;
+
+    if (m_changes & DataEngineChanged) {
+        if (m_dataEngine) {
+            foreach (const QString &source, m_connectedSources) {
+                m_dataEngine->disconnectSource(source, this);
+            }
+        }
+        //FIXME: delete all?
+        m_services.clear();
+
+        m_dataEngine = dataEngine(m_engine);
+        if (!m_dataEngine) {
+            kWarning() << "DataEngine" << m_engine << "not found";
+            return;
+        }
+        connect(m_dataEngine, SIGNAL(sourceAdded(const QString&)), this, SIGNAL(allSourcesChanged()));
+        connect(m_dataEngine, SIGNAL(sourceRemoved(const QString&)), this, SIGNAL(allSourcesChanged()));
+
+        connect(m_dataEngine, SIGNAL(sourceAdded(const QString&)), this, SIGNAL(sourceAdded(const QString&)));
+        connect(m_dataEngine, SIGNAL(sourceRemoved(const QString&)), this, SLOT(removeSource(const QString&)));
+
+        if (!(m_changes & SourcesChanged)) {
+            foreach (const QString &source, m_connectedSources) {
+                m_dataEngine->connectSource(source, this);
+            }
+        }
     }
 
-    if (m_dataEngine) {
-        m_dataEngine->disconnectSource(m_connectedSource, this);
-        m_dataEngine = 0;
-        m_keys.clear();
-        emit keysChanged();
+    if (m_changes & SourcesChanged) {
+        if (m_dataEngine) {
+            foreach (const QString &source, m_oldSources) {
+                m_dataEngine->disconnectSource(source, this);
+            }
+            foreach (const QString &source, m_newSources) {
+                m_dataEngine->connectSource(source, this);
+            }
+            m_oldSources.clear();
+            m_newSources.clear();
+        }
     }
-
-    Plasma::DataEngine* de = dataEngine(m_engine);
-    if (!de) {
-        kWarning() << "DataEngine not found";
-        return;
-    }
-
-    de->connectSource(m_source, this, m_interval);
-    m_dataEngine = de;
-    m_connectedSource = m_source;
-
-    connect(de, SIGNAL(sourceAdded(constQString&)), this, SIGNAL(sourcesChanged()));
-    connect(de, SIGNAL(sourceRemoved(constQString&)), this, SIGNAL(sourcesChanged()));
+    m_changes = NoChange;
 }
 
 void DataSource::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
 {
-    Q_UNUSED(sourceName);//Only one source
     QStringList newKeys;
 
-    foreach (const QString &key, data.keys()) {
-        // Properties in QML must start lowercase.
-        QString ourKey = key.toLower();
-
-        m_data->insert(ourKey.toLatin1(), data.value(key));
-
-
-        newKeys << ourKey;
-    }
-
-    if (newKeys != m_keys) {
-        //FIXME: pretty utterly inefficient
-        foreach (const QString &key, m_keys) {
-            if (!newKeys.contains(key)) {
-                m_data->insert(key.toLatin1(), QVariant());
-            }
-        }
-
-        emit keysChanged();
-        m_keys = newKeys;
-    }
+    m_data.insert(sourceName.toLatin1(), data);
 
     emit dataChanged();
     emit newData(sourceName, data);
 }
 
-Plasma::Service *DataSource::service()
+void DataSource::removeSource(const QString &source)
 {
-    if (!m_service) {
-        m_service = m_dataEngine->serviceForSource(m_source);
+    m_data.remove(source);
+
+    if (m_connectedSources.contains(source)) {
+        emit connectedSourcesChanged();
+    }
+    if (m_dataEngine) {
+        m_connectedSources.removeAll(source);
+        m_newSources.removeAll(source);
+        m_oldSources.removeAll(source);
+        //TODO: delete it?
+        m_services.remove(source);
+        emit connectedSourcesChanged();
+    }
+}
+
+QStringList DataSource::keysForSource(const QString &source) const
+{
+    if (!m_data.contains(source)) {
+        return QStringList();
+    }
+    return m_data.value(source).keys();
+}
+
+Plasma::Service *DataSource::serviceForSource(const QString &source)
+{
+    if (!m_services.contains(source)) {
+        m_services[source] = m_dataEngine->serviceForSource(source);
     }
 
-    return m_service;
+    return m_services.value(source);
+}
+
+void DataSource::connectSource(const QString &source)
+{
+    m_newSources.append(source);
+    m_connectedSources.append(source);
+    m_changes |= SourcesChanged;
+    emit connectedSourcesChanged();
+}
+
+void DataSource::disconnectSource(const QString &source)
+{
+    m_oldSources.append(source);
+    m_connectedSources.removeAll(source);
+    m_changes |= SourcesChanged;
+    emit connectedSourcesChanged();
 }
 
 }

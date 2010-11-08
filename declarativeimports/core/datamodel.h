@@ -80,7 +80,7 @@ class DataModel : public QAbstractItemModel
 {
     Q_OBJECT
     Q_PROPERTY(QObject *dataSource READ dataSource WRITE setDataSource)
-    Q_PROPERTY(QString key READ key WRITE setKey)
+    Q_PROPERTY(QString keyRoleFilter READ keyRoleFilter WRITE setKeyRoleFilter)
 
 public:
     DataModel(QObject* parent=0);
@@ -89,10 +89,8 @@ public:
     void setDataSource(QObject *source);
     QObject *dataSource() const;
 
-    void setKey(const QString key);
-    QString key() const;
-
-    void setItems(const QVariantList &list);
+    void setKeyRoleFilter(const QString key);
+    QString keyRoleFilter() const;
 
     int roleNameToId(const QString &name);
 
@@ -106,6 +104,10 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
+protected:
+    void setItems(const QString &sourceName, const QVariantList &list);
+    inline int countItems() const;
+
 Q_SIGNALS:
     void modelAboutToBeReset();
     void modelReset();
@@ -115,8 +117,8 @@ private Q_SLOTS:
 
 private:
     DataSource *m_dataSource;
-    QString m_key;
-    QVector<QVariant> m_items;
+    QString m_keyRoleFilter;
+    QMap<QString, QVector<QVariant> > m_items;
     QHash<int, QByteArray> m_roleNames;
     QHash<QString, int> m_roleIds;
 };

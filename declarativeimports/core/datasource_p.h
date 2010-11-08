@@ -37,65 +37,78 @@ class QDeclarativePropertyMap;
 
 namespace Plasma
 {
-  class DataEngine;
+class DataEngine;
 
-  class DataSource : public QObject, DataEngineConsumer
-  {
-      Q_OBJECT
-  public:
-      typedef QHash<QString, QVariant> Data;
-      DataSource(QObject* parent=0);
+class DataSource : public QObject, DataEngineConsumer
+{
+    Q_OBJECT
+public:
+    enum Change {
+        NoChange = 0,
+        DataEngineChanged = 1,
+        SourcesChanged = 2
+    };
+    Q_DECLARE_FLAGS(Changes, Change)
+    typedef QHash<QString, QVariant> Data;
+    typedef QMap<QString, Data> DataMap;
+    DataSource(QObject* parent=0);
 
-      Q_PROPERTY(bool valid READ valid)
-      bool valid() const {return m_dataEngine != 0;}
+    Q_PROPERTY(bool valid READ valid)
+    bool valid() const {return m_dataEngine != 0;}
 
-      Q_PROPERTY(int interval READ interval WRITE setInterval NOTIFY intervalChanged)
-      int interval() const {return m_interval;}
-      void setInterval(int i) {if(i==m_interval) return; m_interval=i; emit intervalChanged();}
+    Q_PROPERTY(int interval READ interval WRITE setInterval NOTIFY intervalChanged)
+    int interval() const {return m_interval;}
+    void setInterval(int i) {if(i==m_interval) return; m_interval=i; emit intervalChanged();}
 
-      Q_PROPERTY(QString engine READ engine WRITE setEngine NOTIFY engineChanged)
-      QString engine() const {return m_engine;}
-      void setEngine(const QString &e) {if(e==m_engine) return; m_engine=e; emit engineChanged();}
+    Q_PROPERTY(QString engine READ engine WRITE setEngine NOTIFY engineChanged)
+    QString engine() const {return m_engine;}
+    void setEngine(const QString &e);
 
-      Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
-      QString source() const {return m_source;}
-      void setSource(const QString &s);
+    Q_PROPERTY(QStringList connectedSources READ connectedSources WRITE setConnectedSources NOTIFY connectedSourcesChanged)
+    QStringList connectedSources() const {return m_connectedSources;}
+    void setConnectedSources(const QStringList &s);
 
-      Q_PROPERTY(QStringList keys READ keys NOTIFY keysChanged)
-      QStringList keys() const {return m_keys;}
+    Q_PROPERTY(QStringList sources READ sources NOTIFY sourcesChanged)
+    QStringList sources() const {if (m_dataEngine) return m_dataEngine->sources(); else return QStringList();}
 
-      Q_PROPERTY(QStringList allSources READ allSources NOTIFY sourcesChanged)
-      QStringList allSources() const {if (m_dataEngine) return m_dataEngine->sources(); else return QStringList();}
+    Q_PROPERTY(DataMap data READ data NOTIFY dataChanged);
+    DataMap data() const {return m_data;}
 
-      Q_PROPERTY(QObject *data READ data NOTIFY dataChanged);
-      QObject *data() const {return m_data;}
+    Q_INVOKABLE QStringList keysForSource(const QString &source) const;
+    Q_INVOKABLE Plasma::Service *serviceForSource(const QString &source);
 
-      Q_PROPERTY(Plasma::Service *service READ service CONSTANT)
-      Plasma::Service *service();
+    Q_INVOKABLE void connectSource(const QString &source);
+    Q_INVOKABLE void disconnectSource(const QString &source);
 
-  public Q_SLOTS:
-      void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
-      void setupData();
+public Q_SLOTS:
+    void removeSource(const QString &source);
 
-  Q_SIGNALS:
-      void newData(const QString &sourceName, const Plasma::DataEngine::Data &data);
-      void intervalChanged();
-      void engineChanged();
-      void sourceChanged();
-      void keysChanged();
-      void dataChanged();
-      void sourcesChanged();
+protected Q_SLOTS:
+    void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
+    void setupData();
 
-  private:
-      QString m_id;
-      int m_interval;
-      QString m_source;
-      QString m_engine;
-      QStringList m_keys;
-      QDeclarativePropertyMap *m_data;
-      Plasma::DataEngine* m_dataEngine;
-      Plasma::Service *m_service;
-      QString m_connectedSource;
-  };
+Q_SIGNALS:
+    void newData(const QString &sourceName, const Plasma::DataEngine::Data &data);
+    void sourceAdded(const QString &source);
+    void intervalChanged();
+    void engineChanged();
+    void sourceChanged();
+    void dataChanged();
+    void connectedSourcesChanged();
+    void sourcesChanged();
+
+private:
+    QString m_id;
+    int m_interval;
+    QString m_engine;
+    DataMap m_data;
+    Plasma::DataEngine* m_dataEngine;
+    QStringList m_connectedSources;
+    QStringList m_oldSources;
+    QStringList m_newSources;
+    Changes m_changes;
+    QHash <QString, Plasma::Service *> m_services;
+};
+Q_DECLARE_OPERATORS_FOR_FLAGS(DataSource::Changes)
 }
 #endif

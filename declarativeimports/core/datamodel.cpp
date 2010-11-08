@@ -124,26 +124,43 @@ DataModel::~DataModel()
 {
 }
 
+int DataModel::countItems() const
+{
+    int count = 0;
+    foreach (const QVector<QVariant> &v, m_items) {
+        count += v.count();
+    }
+    return count;
+}
+
 void DataModel::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
 {
-    Q_UNUSED(sourceName);
-
-    if (data.contains(m_key) && data.value(m_key).canConvert<QVariantList>()) {
-        setItems(data.value(m_key).value<QVariantList>());
-    } else {
-        QRegExp regExp(m_key);
-        if (!regExp.isValid()) {
-            return;
-        }
-
-        QHash<QString, QVariant>::const_iterator i;
-        QVariantList list;
-        for (i = data.constBegin(); i != data.constEnd(); ++i) {
-            if (regExp.exactMatch(i.key())) {
-                list.append(i.value());
+    if (!m_keyRoleFilter.isEmpty()) {
+        //a key that matches the one we want exists and is a list of DataEngine::Data
+        if (data.contains(m_keyRoleFilter) && data.value(m_keyRoleFilter).canConvert<QVariantList>()) {
+            setItems(sourceName, data.value(m_keyRoleFilter).value<QVariantList>());
+        //try to match the key we want with a regular expression if set
+        } else {
+            QRegExp regExp(m_keyRoleFilter);
+            if (regExp.isValid()) {
+                QHash<QString, QVariant>::const_iterator i;
+                QVariantList list;
+                for (i = data.constBegin(); i != data.constEnd(); ++i) {
+                    if (regExp.exactMatch(i.key())) {
+                        list.append(i.value());
+                    }
+                }
+                setItems(sourceName, list);
             }
         }
-        setItems(list);
+    //an item is represented by a source: keys are roles m_roleLevel == FirstLevel
+    } else {
+        QVariantList list;
+
+        foreach (Plasma::DataEngine::Data data, m_dataSource->data()) {
+            list.append(data);
+        }
+        setItems(QString(), list);
     }
 }
 
@@ -169,26 +186,26 @@ QObject *DataModel::dataSource() const
     return m_dataSource;
 }
 
-void DataModel::setKey(const QString key)
+void DataModel::setKeyRoleFilter(const QString key)
 {
-    if (m_key == key) {
+    if (m_keyRoleFilter == key) {
         return;
     }
 
-    m_key = key;
+    m_keyRoleFilter = key;
 }
 
-QString DataModel::key() const
+QString DataModel::keyRoleFilter() const
 {
-    return m_key;
+    return m_keyRoleFilter;
 }
 
-void DataModel::setItems(const QVariantList &list)
+void DataModel::setItems(const QString &sourceName, const QVariantList &list)
 {
     emit modelAboutToBeReset();
 
     //convert to vector, so data() will be O(1)
-    m_items = list.toVector();
+    m_items[sourceName] = list.toVector();
 
     if (!list.isEmpty()) {
         int role = Qt::UserRole;
@@ -220,14 +237,29 @@ void DataModel::setItems(const QVariantList &list)
 QVariant DataModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid() || index.column() > 0 ||
-        index.row() < 0 || index.row() >= m_items.count()){
+        index.row() < 0 || index.row() >= countItems()){
         return QVariant();
     }
 
-    if (m_items.value(index.row()).canConvert<QVariantHash>()) {
-        return m_items.value(index.row()).value<QVariantHash>().value(m_roleNames.value(role));
+    int count = 0;
+    int actualRow = 0;
+    QString source;
+    QMap<QString, QVector<QVariant> >::const_iterator i;
+    for (i = m_items.constBegin(); i != m_items.constEnd(); ++i) {
+        const int oldCount = count;
+        count += i.value().count();
+
+        if (index.row() < count) {
+            source = i.key();
+            actualRow = index.row() - oldCount;
+            break;
+        }
+    }
+
+    if (m_items.value(source).value(actualRow).canConvert<QVariantHash>()) {
+        return m_items.value(source).value(actualRow).value<QVariantHash>().value(m_roleNames.value(role));
     } else {
-        return m_items.value(index.row()).value<QVariantMap>().value(m_roleNames.value(role));
+        return m_items.value(source).value(actualRow).value<QVariantMap>().value(m_roleNames.value(role));
     }
 }
 
@@ -242,7 +274,7 @@ QVariant DataModel::headerData(int section, Qt::Orientation orientation, int rol
 
 QModelIndex DataModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if (parent.isValid() || column > 0 || row < 0 || row >= m_items.count()) {
+    if (parent.isValid() || column > 0 || row < 0 || row >= countItems()) {
         return QModelIndex();
     }
 
@@ -264,7 +296,7 @@ int DataModel::rowCount(const QModelIndex &parent) const
         return 0;
     }
 
-    return m_items.count();
+    return countItems();
 }
 
 int DataModel::columnCount(const QModelIndex &parent) const
