@@ -61,7 +61,7 @@ public:
             p.setColor(QPalette::Normal, QPalette::LinkVisited, Theme::defaultTheme()->color(Theme::VisitedLinkColor));
 
 
-            qreal alpha = color.alpha();
+            qreal alpha = color.alphaF();
             color.setAlphaF(0.6);
             p.setColor(QPalette::Disabled, QPalette::WindowText, color);
             color.setAlphaF(alpha);
