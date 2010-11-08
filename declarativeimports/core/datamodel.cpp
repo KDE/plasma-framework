@@ -239,6 +239,7 @@ void DataModel::setItems(const QString &sourceName, const QVariantList &list)
 void DataModel::removeSource(const QString &sourceName)
 {
     //FIXME: this could be way more efficient by not resetting the whole model
+    //FIXME: find a way to remove only the proper things also in the case where sources are items
     emit modelAboutToBeReset();
     m_items.remove(sourceName);
     emit modelReset();
