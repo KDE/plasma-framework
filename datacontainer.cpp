@@ -215,7 +215,7 @@ void DataContainerPrivate::store()
             QByteArray b;
             QDataStream ds(&b, QIODevice::WriteOnly);
             ds << it.value();
-            op.writeEntry("key", "base64-" + it.key());
+            op.writeEntry("key", QString(QLatin1String("base64-") + it.key()));
             op.writeEntry("data", b.toBase64());
         }
         ++it;

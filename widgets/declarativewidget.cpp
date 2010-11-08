@@ -74,7 +74,7 @@ void DeclarativeWidgetPrivate::errorPrint()
     if(component->isError()){
         QList<QDeclarativeError> errors = component->errors();
         foreach (const QDeclarativeError &error, errors) {
-            errorStr += (error.line()>0?QString::number(error.line()) + ": ":"")
+            errorStr += (error.line()>0?QString(QString::number(error.line()) + QLatin1String(": ")):QLatin1String(""))
                 + error.description() + '\n';
         }
     }
