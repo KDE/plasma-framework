@@ -179,6 +179,8 @@ void DataModel::setDataSource(QObject *object)
     m_dataSource = source;
     connect(m_dataSource, SIGNAL(newData(const QString &, const Plasma::DataEngine::Data &)),
             this, SLOT(dataUpdated(const QString &, const Plasma::DataEngine::Data &)));
+    connect(m_dataSource, SIGNAL(sourceRemoved(const QString &)), this, SLOT(removeSource(const QString &)));
+    connect(m_dataSource, SIGNAL(sourceDisconnected(const QString &)), this, SLOT(removeSource(const QString &)));
 }
 
 QObject *DataModel::dataSource() const
@@ -231,6 +233,14 @@ void DataModel::setItems(const QString &sourceName, const QVariantList &list)
 
     //make the declarative view reload everything,
     //would be nice an incremental update but is not possible
+    emit modelReset();
+}
+
+void DataModel::removeSource(const QString &sourceName)
+{
+    //FIXME: this could be way more efficient by not resetting the whole model
+    emit modelAboutToBeReset();
+    m_items.remove(sourceName);
     emit modelReset();
 }
 

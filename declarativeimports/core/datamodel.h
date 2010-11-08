@@ -114,6 +114,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
+    void removeSource(const QString &sourceName);
 
 private:
     DataSource *m_dataSource;

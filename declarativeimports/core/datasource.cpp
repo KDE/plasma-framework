@@ -53,7 +53,7 @@ void DataSource::setConnectedSources(const QStringList &sources)
         }
     }
     foreach (const QString &source, m_connectedSources) {
-        if (!m_connectedSources.contains(source)) {
+        if (!sources.contains(source)) {
             m_oldSources.append(source);
         }
     }
@@ -86,6 +86,7 @@ void DataSource::setInterval(const int interval)
     emit intervalChanged();
 }
 
+//TODO: event compression for this
 void DataSource::setupData()
 {
 
@@ -108,10 +109,13 @@ void DataSource::setupData()
 
         connect(m_dataEngine, SIGNAL(sourceAdded(const QString&)), this, SIGNAL(sourceAdded(const QString&)));
         connect(m_dataEngine, SIGNAL(sourceRemoved(const QString&)), this, SLOT(removeSource(const QString&)));
+        connect(m_dataEngine, SIGNAL(sourceRemoved(const QString&)), this, SIGNAL(sourceRemoved(const QString&)));
 
+        //TODO: remove after event compression done
         if (!(m_changes & SourcesChanged)) {
             foreach (const QString &source, m_connectedSources) {
                 m_dataEngine->connectSource(source, this, m_interval);
+                emit sourceConnected(source);
             }
         }
     }
@@ -120,9 +124,11 @@ void DataSource::setupData()
         if (m_dataEngine) {
             foreach (const QString &source, m_oldSources) {
                 m_dataEngine->disconnectSource(source, this);
+                emit sourceDisconnected(source);
             }
             foreach (const QString &source, m_newSources) {
                 m_dataEngine->connectSource(source, this, m_interval);
+                emit sourceConnected(source);
             }
             m_oldSources.clear();
             m_newSources.clear();
@@ -143,7 +149,9 @@ void DataSource::removeSource(const QString &source)
 {
     m_data.remove(source);
 
+    //TODO: emit those signals as last thing
     if (m_connectedSources.contains(source)) {
+        emit sourceDisconnected(source);
         emit connectedSourcesChanged();
     }
     if (m_dataEngine) {
@@ -152,7 +160,6 @@ void DataSource::removeSource(const QString &source)
         m_oldSources.removeAll(source);
         //TODO: delete it?
         m_services.remove(source);
-        emit connectedSourcesChanged();
     }
 }
 
@@ -178,6 +185,7 @@ void DataSource::connectSource(const QString &source)
     m_newSources.append(source);
     m_connectedSources.append(source);
     m_changes |= SourcesChanged;
+    emit sourceConnected(source);
     emit connectedSourcesChanged();
 }
 
@@ -186,6 +194,7 @@ void DataSource::disconnectSource(const QString &source)
     m_oldSources.append(source);
     m_connectedSources.removeAll(source);
     m_changes |= SourcesChanged;
+    emit sourceDisconnected(source);
     emit connectedSourcesChanged();
 }
 

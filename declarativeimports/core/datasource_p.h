@@ -81,19 +81,19 @@ public:
     Q_INVOKABLE void connectSource(const QString &source);
     Q_INVOKABLE void disconnectSource(const QString &source);
 
-public Q_SLOTS:
-    void removeSource(const QString &source);
-
 protected Q_SLOTS:
     void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
+    void removeSource(const QString &source);
     void setupData();
 
 Q_SIGNALS:
     void newData(const QString &sourceName, const Plasma::DataEngine::Data &data);
     void sourceAdded(const QString &source);
+    void sourceRemoved(const QString &source);
+    void sourceConnected(const QString &source);
+    void sourceDisconnected(const QString &source);
     void intervalChanged();
     void engineChanged();
-    void sourceChanged();
     void dataChanged();
     void connectedSourcesChanged();
     void sourcesChanged();
