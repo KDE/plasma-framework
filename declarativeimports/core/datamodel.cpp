@@ -157,8 +157,8 @@ void DataModel::dataUpdated(const QString &sourceName, const Plasma::DataEngine:
     } else {
         QVariantList list;
 
-        foreach (Plasma::DataEngine::Data data, m_dataSource->data()) {
-            list.append(data);
+        foreach (QVariant data, m_dataSource->data()) {
+            list.append(data.value<Plasma::DataEngine::Data>());
         }
         setItems(QString(), list);
     }
