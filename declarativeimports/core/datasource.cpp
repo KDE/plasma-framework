@@ -37,8 +37,6 @@ DataSource::DataSource(QObject* parent)
 {
     setObjectName("DataSource");
 
-//    m_data = new QDeclarativePropertyMap(this);
-
     connect(this, SIGNAL(engineChanged()),
             this, SLOT(setupData()));
     connect(this, SIGNAL(connectedSourcesChanged()),
@@ -78,6 +76,16 @@ void DataSource::setEngine(const QString &e)
     emit engineChanged();
 }
 
+void DataSource::setInterval(const int interval)
+{
+    if (interval == m_interval) {
+        return;
+    }
+    m_interval = interval;
+    m_changes |= DataEngineChanged;
+    emit intervalChanged();
+}
+
 void DataSource::setupData()
 {
 
@@ -103,7 +111,7 @@ void DataSource::setupData()
 
         if (!(m_changes & SourcesChanged)) {
             foreach (const QString &source, m_connectedSources) {
-                m_dataEngine->connectSource(source, this);
+                m_dataEngine->connectSource(source, this, m_interval);
             }
         }
     }
@@ -114,7 +122,7 @@ void DataSource::setupData()
                 m_dataEngine->disconnectSource(source, this);
             }
             foreach (const QString &source, m_newSources) {
-                m_dataEngine->connectSource(source, this);
+                m_dataEngine->connectSource(source, this, m_interval);
             }
             m_oldSources.clear();
             m_newSources.clear();
@@ -125,8 +133,6 @@ void DataSource::setupData()
 
 void DataSource::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
 {
-    QStringList newKeys;
-
     m_data.insert(sourceName.toLatin1(), data);
 
     emit dataChanged();
@@ -155,7 +161,7 @@ QStringList DataSource::keysForSource(const QString &source) const
     if (!m_data.contains(source)) {
         return QStringList();
     }
-    return m_data.value(source).keys();
+    return m_data.value(source).value<Data>().keys();
 }
 
 Plasma::Service *DataSource::serviceForSource(const QString &source)
