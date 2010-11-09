@@ -27,7 +27,9 @@
 
 #include <QtCore/QTimer>
 
+#ifndef PLASMA_NO_KIO
 #include <kio/accessmanager.h>
+#endif
 #include <kdebug.h>
 
 #include "animator.h"
