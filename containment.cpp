@@ -41,7 +41,6 @@
 #include <kmenu.h>
 #include <kmessagebox.h>
 #include <kmimetype.h>
-#include <krun.h>
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>

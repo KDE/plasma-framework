@@ -64,7 +64,6 @@
 #include <kshortcut.h>
 #include <kwindowsystem.h>
 #include <kpushbutton.h>
-#include <krun.h>
 
 #ifndef PLASMA_NO_SOLID
 #include <solid/powermanagement.h>

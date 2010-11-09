@@ -33,6 +33,7 @@
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 #include <QTextLayout>
+#include <QTimer>
 
 #include <kcolorscheme.h>
 #include <kdebug.h>
@@ -41,7 +42,6 @@
 #include <kiconeffect.h>
 #include <kiconloader.h>
 #include <kmimetype.h>
-#include <krun.h>
 #include <kurl.h>
 
 #include "animator.h"
