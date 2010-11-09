@@ -43,8 +43,8 @@ class PLASMA_EXPORT ScrollBar : public QGraphicsProxyWidget
     Q_PROPERTY(int singleStep READ singleStep WRITE setSingleStep)
     Q_PROPERTY(int pageStep READ pageStep WRITE setPageStep)
     Q_PROPERTY(int value READ value WRITE setValue NOTIFY valueChanged)
-    Q_PROPERTY(int minimum READ minimum)
-    Q_PROPERTY(int maximum READ maximum)
+    Q_PROPERTY(int minimum READ minimum WRITE setMinimum)
+    Q_PROPERTY(int maximum READ maximum WRITE setMaximum)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(QScrollBar *nativeWidget READ nativeWidget)
     Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation)
@@ -101,6 +101,18 @@ public:
      * @return the maximum value bound of this ScrollBar
      */
     int maximum() const;
+
+    /**
+     * @arg the minimum value bound of this ScrollBar
+     * @since 4.6
+     */
+    void setMinimum(const int min) const;
+
+    /**
+     * @arg the maximum value bound of this ScrollBar
+     * @since 4.6
+     */
+    void setMaximum(const int max) const;
 
     /**
      * Sets the stylesheet used to control the visual display of this ScrollBar
