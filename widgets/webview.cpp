@@ -27,6 +27,8 @@
 
 #include <QtCore/QTimer>
 
+#include <config-plasma.h>
+
 #ifndef PLASMA_NO_KIO
 #include <kio/accessmanager.h>
 #endif
