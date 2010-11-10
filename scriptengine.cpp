@@ -23,6 +23,7 @@
 #include <QFileInfo>
 #include <QScriptValueIterator>
 
+#include <KDebug>
 #include <kdeversion.h>
 #include <KServiceTypeTrader>
 #include <KShell>
