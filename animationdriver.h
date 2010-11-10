@@ -25,7 +25,7 @@
 #include <QtGui/QRegion>
 #include <QtGui/QPixmap>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <plasma/version.h>
 #include <plasma/animator.h>

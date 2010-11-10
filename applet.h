@@ -27,7 +27,7 @@
 #include <QtGui/QIcon>
 
 #include <kconfiggroup.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kplugininfo.h>
 #include <kshortcut.h>
 

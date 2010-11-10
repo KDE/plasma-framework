@@ -28,7 +28,7 @@
 
 #include <kplugininfo.h>
 #include <ksharedconfig.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <plasma/applet.h>
 #include <plasma/animator.h>

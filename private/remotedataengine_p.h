@@ -22,6 +22,8 @@
 #include "../dataengine.h"
 #include "remoteservice_p.h"
 
+#include <QtCore/QSet>
+
 class JobView;
 
 namespace Plasma

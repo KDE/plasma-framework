@@ -21,6 +21,7 @@
 
 #include <QTimer>
 
+#include <kdebug.h>
 #include <kglobal.h>
 #include <kwindowsystem.h>
 #include <kactioncollection.h>

@@ -26,6 +26,7 @@
 #include <QFileInfo>
 
 #include <kconfiggroup.h>
+#include <kdebug.h>
 #ifndef PLASMA_NO_KIO
 #include <kio/job.h>
 #endif
