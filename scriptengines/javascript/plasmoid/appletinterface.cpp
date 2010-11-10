@@ -27,6 +27,7 @@
 #include <QSignalMapper>
 #include <QTimer>
 
+#include <KDebug>
 #include <KIcon>
 #include <KService>
 #include <KServiceTypeTrader>

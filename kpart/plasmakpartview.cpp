@@ -21,6 +21,8 @@
 #include "plasmakpartview.h"
 #include "plasmakpartcorona.h"
 
+#include <KDebug>
+
 #include <Plasma/Applet>
 #include <Plasma/Containment>
 

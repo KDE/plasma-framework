@@ -25,6 +25,7 @@
 #include <KApplication>
 #include <KAboutData>
 #include <KCmdLineArgs>
+#include <KDebug>
 #include <KLocale>
 #include <KPluginInfo>
 #include <KService>

@@ -21,6 +21,8 @@
 #include <QtScript/QScriptContext>
 #include <QtGui/QColor>
 
+#include <KDebug>
+
 #include <Plasma/Theme>
 
 #include "backportglobal.h"

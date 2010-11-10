@@ -20,6 +20,8 @@
 
 #include <QFile>
 
+#include <KDebug>
+
 #include <Plasma/AbstractRunner>
 #include <Plasma/Package>
 #include <Plasma/QueryMatch>

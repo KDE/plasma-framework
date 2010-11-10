@@ -22,6 +22,7 @@
 #include <QFile>
 #include <QFileInfo>
 
+#include <KDebug>
 #include <kdeversion.h>
 #include <KServiceTypeTrader>
 #include <KShell>

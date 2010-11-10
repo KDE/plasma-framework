@@ -19,6 +19,7 @@
 #include "javascriptservice.h"
 
 #include <QFile>
+#include <KDebug>
 #include <Plasma/ServiceJob>
 
 #include "common/scriptenv.h"
