@@ -27,6 +27,7 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <kdebug.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kglobalsettings.h>
