@@ -21,7 +21,7 @@
 #ifndef PLASMA_WALLPAPERSCRIPT_H
 #define PLASMA_WALLPAPERSCRIPT_H
 
-#include <kpluginfactory.h>
+#include <kgenericfactory.h>
 #include <kplugininfo.h>
 
 #include <plasma/plasma_export.h>

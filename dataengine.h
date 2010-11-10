@@ -24,7 +24,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
 
-#include <kpluginfactory.h>
+#include <kgenericfactory.h>
 #include <kservice.h>
 
 #include <plasma/version.h>
