@@ -79,6 +79,7 @@ namespace Plasma
 {
 
 bool ContainmentPrivate::s_positioningPanels = false;
+QHash<QString, ContainmentActions*> ContainmentPrivate::globalActionPlugins;
 static const char defaultWallpaper[] = "image";
 static const char defaultWallpaperMode[] = "SingleImage";
 
@@ -233,31 +234,6 @@ void Containment::init()
             }
         }
     }
-
-    //containmentactionss, from config or defaults
-    KConfigGroup cfg = config();
-    cfg = KConfigGroup(&cfg, "ActionPlugins");
-    if (cfg.exists()) {
-        foreach (const QString &key, cfg.keyList()) {
-            setContainmentActions(key, cfg.readEntry(key, QString()));
-        }
-    } else if (corona()){
-        //we need to be very careful here to not write anything
-        //because we have a group, and so the defaults will get merged instead of overwritten
-        //when copyTo is used (which happens right before restore() is called)
-
-        ContainmentActionsPluginsConfig conf = corona()->containmentActionsDefaults(d->type);
-        //steal the data directly, for efficiency
-        QHash<QString,QString> defaults = conf.d->plugins;
-
-        for (QHash<QString,QString>::const_iterator it = defaults.constBegin(),
-                end = defaults.constEnd(); it != end; ++it) {
-            ContainmentActions *plugin = ContainmentActions::load(this, it.value());
-            if (plugin) {
-                d->actionPlugins.insert(it.key(), plugin);
-            }
-        }
-    }
 }
 
 void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containment *c)
@@ -369,16 +345,50 @@ void Containment::restore(KConfigGroup &group)
 
     QMetaObject::invokeMethod(d->toolBox.data(), "restore", Q_ARG(KConfigGroup, group));
 
-    KConfigGroup cfg(&group, "ActionPlugins");
+    KConfigGroup cfg;
+    if (containmentType() == PanelContainment || containmentType() == CustomPanelContainment) {
+        //don't let global desktop actions conflict with panels
+        //this also prevents panels from sharing config with each other
+        //but the panels aren't configurable anyways, and I doubt that'll change.
+        d->containmentActionsSource = ContainmentPrivate::Local;
+        cfg = KConfigGroup(&group, "ActionPlugins");
+    } else {
+        QString source = group.readEntry("ActionPluginsSource", QString());
+        if (source == "Global") {
+            cfg = KConfigGroup(corona()->config(), "ActionPlugins");
+            d->containmentActionsSource = ContainmentPrivate::Global;
+        } else if (source == "Activity") {
+            cfg = KConfigGroup(corona()->config(), "Activities");
+            cfg = KConfigGroup(&cfg, activityId);
+            cfg = KConfigGroup(&cfg, "ActionPlugins");
+            d->containmentActionsSource = ContainmentPrivate::Activity;
+        } else if (source == "Local") {
+            cfg = group;
+            d->containmentActionsSource = ContainmentPrivate::Local;
+        } else {
+            //default to global
+            //but, if there is no global config, try copying it from local.
+            cfg = KConfigGroup(corona()->config(), "ActionPlugins");
+            if (!cfg.exists()) {
+                cfg = KConfigGroup(&group, "ActionPlugins");
+            }
+            d->containmentActionsSource = ContainmentPrivate::Global;
+            group.writeEntry("ActionPluginsSource", "Global");
+        }
+    }
     //kDebug() << cfg.keyList();
     if (cfg.exists()) {
-        //clear default containmentactionss
-        qDeleteAll(d->actionPlugins);
-        d->actionPlugins.clear();
-        //load the right configactions
         foreach (const QString &key, cfg.keyList()) {
             //kDebug() << "loading" << key;
             setContainmentActions(key, cfg.readEntry(key, QString()));
+        }
+    } else { //shell defaults
+        ContainmentActionsPluginsConfig conf = corona()->containmentActionsDefaults(d->type);
+        //steal the data directly, for efficiency
+        QHash<QString,QString> defaults = conf.d->plugins;
+        for (QHash<QString,QString>::const_iterator it = defaults.constBegin(),
+                end = defaults.constEnd(); it != end; ++it) {
+            setContainmentActions(it.key(), it.value());
         }
     }
 
@@ -555,7 +565,7 @@ void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
     } else {
         QString trigger = ContainmentActions::eventToString(event);
         if (d->prepareContainmentActions(trigger, event->screenPos())) {
-            d->actionPlugins.value(trigger)->contextEvent(event);
+            d->actionPlugins()->value(trigger)->contextEvent(event);
         }
 
         Applet::mousePressEvent(event);
@@ -577,7 +587,7 @@ void Containment::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
     if (!event->isAccepted() && isContainment()) {
         if (d->prepareContainmentActions(trigger, event->screenPos())) {
-            d->actionPlugins.value(trigger)->contextEvent(event);
+            d->actionPlugins()->value(trigger)->contextEvent(event);
         }
 
         event->accept();
@@ -1648,7 +1658,7 @@ void Containment::wheelEvent(QGraphicsSceneWheelEvent *event)
     QString trigger = ContainmentActions::eventToString(event);
 
     if (d->prepareContainmentActions(trigger, event->screenPos())) {
-        d->actionPlugins.value(trigger)->contextEvent(event);
+        d->actionPlugins()->value(trigger)->contextEvent(event);
         event->accept();
     } else {
         event->ignore();
@@ -1899,15 +1909,13 @@ Plasma::Wallpaper *Containment::wallpaper() const
 
 void Containment::setContainmentActions(const QString &trigger, const QString &pluginName)
 {
-    KConfigGroup cfg = config();
-    cfg = KConfigGroup(&cfg, "ActionPlugins");
-    bool everSaved = cfg.exists();
+    KConfigGroup cfg = containmentActionsConfig();
     ContainmentActions *plugin = 0;
 
-    if (d->actionPlugins.contains(trigger)) {
-        plugin = d->actionPlugins.value(trigger);
+    if (d->actionPlugins()->contains(trigger)) {
+        plugin = d->actionPlugins()->value(trigger);
         if (plugin->pluginName() != pluginName) {
-            d->actionPlugins.remove(trigger);
+            d->actionPlugins()->remove(trigger);
             delete plugin;
             plugin=0;
         }
@@ -1917,27 +1925,27 @@ void Containment::setContainmentActions(const QString &trigger, const QString &p
     } else if (plugin) {
         //it already existed, just reload config
         if (plugin->isInitialized()) {
+            plugin->setContainment(this); //to be safe
             //FIXME make a truly unique config group
             KConfigGroup pluginConfig = KConfigGroup(&cfg, trigger);
             plugin->restore(pluginConfig);
         }
     } else {
-        plugin = ContainmentActions::load(this, pluginName);
+        switch (d->containmentActionsSource) {
+        case ContainmentPrivate::Activity:
+            //FIXME
+        case ContainmentPrivate::Local:
+            plugin = ContainmentActions::load(this, pluginName);
+            break;
+        default:
+            plugin = ContainmentActions::load(0, pluginName);
+        }
         if (plugin) {
             cfg.writeEntry(trigger, pluginName);
-            d->actionPlugins.insert(trigger, plugin);
+            d->actionPlugins()->insert(trigger, plugin);
         } else {
             //bad plugin... gets removed. is this a feature or a bug?
             cfg.deleteEntry(trigger);
-        }
-    }
-
-    if (!everSaved) {
-        //ensure all our defaults are written out
-        //the disadvantage of using a group...
-        for (QHash<QString,ContainmentActions*>::const_iterator it = d->actionPlugins.constBegin(),
-                end = d->actionPlugins.constEnd(); it != end; ++it) {
-            cfg.writeEntry(it.key(), it.value()->pluginName());
         }
     }
 
@@ -1946,12 +1954,12 @@ void Containment::setContainmentActions(const QString &trigger, const QString &p
 
 QStringList Containment::containmentActionsTriggers()
 {
-    return d->actionPlugins.keys();
+    return d->actionPlugins()->keys();
 }
 
 QString Containment::containmentActions(const QString &trigger)
 {
-    ContainmentActions *c = d->actionPlugins.value(trigger);
+    ContainmentActions *c = d->actionPlugins()->value(trigger);
     return c ? c->pluginName() : QString();
 }
 
@@ -2450,14 +2458,14 @@ QPointF ContainmentPrivate::preferredPanelPos(Corona *corona) const
 
 bool ContainmentPrivate::prepareContainmentActions(const QString &trigger, const QPoint &screenPos, KMenu *menu)
 {
-    ContainmentActions *plugin = actionPlugins.value(trigger);
+    ContainmentActions *plugin = actionPlugins()->value(trigger);
     if (!plugin) {
         return false;
     }
+    plugin->setContainment(q);
 
     if (!plugin->isInitialized()) {
-        KConfigGroup cfg = q->config();
-        cfg = KConfigGroup(&cfg, "ActionPlugins");
+        KConfigGroup cfg = q->containmentActionsConfig();
         KConfigGroup pluginConfig = KConfigGroup(&cfg, trigger);
         plugin->restore(pluginConfig);
     }
@@ -2490,6 +2498,35 @@ bool ContainmentPrivate::prepareContainmentActions(const QString &trigger, const
     return true;
 }
 
+KConfigGroup Containment::containmentActionsConfig()
+{
+    KConfigGroup cfg;
+    switch (d->containmentActionsSource) {
+    case ContainmentPrivate::Local:
+        cfg = KConfigGroup(&config(), "ActionPlugins");
+        break;
+    case ContainmentPrivate::Activity:
+        cfg = KConfigGroup(corona()->config(), "Activities");
+        cfg = KConfigGroup(&cfg, d->context()->currentActivityId());
+        cfg = KConfigGroup(&cfg, "ActionPlugins");
+        break;
+    default:
+        cfg = KConfigGroup(corona()->config(), "ActionPlugins");
+    }
+    return cfg;
+}
+
+QHash<QString, ContainmentActions*> * ContainmentPrivate::actionPlugins()
+{
+    switch (containmentActionsSource) {
+        case Activity:
+            //FIXME
+        case Local:
+            return &localActionPlugins;
+        default:
+            return &globalActionPlugins;
+    }
+}
 
 } // Plasma namespace
 

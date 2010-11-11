@@ -160,6 +160,8 @@ public:
      */
     void showDropZoneDelayed();
 
+    QHash<QString, ContainmentActions*> *actionPlugins();
+
     static bool s_positioningPanels;
 
     Containment *q;
@@ -169,7 +171,7 @@ public:
     Applet *focusedApplet;
     Plasma::Wallpaper *wallpaper;
     QMap<Applet*, AppletHandle*> handles;
-    QHash<QString, ContainmentActions*> actionPlugins;
+    QHash<QString, ContainmentActions*> localActionPlugins;
     int screen;
     int lastScreen;
     int desktop;
@@ -182,6 +184,14 @@ public:
     QTimer *showDropZoneDelayTimer;
     bool drawWallpaper : 1;
     bool dropZoneStarted : 1;
+
+    enum ContainmentActionsSource {
+        Global = 0,
+        Activity,
+        Local
+    };
+    ContainmentActionsSource containmentActionsSource;
+    static QHash<QString, ContainmentActions*> globalActionPlugins;
 };
 
 } // Plasma namespace

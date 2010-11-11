@@ -80,10 +80,6 @@ KPluginInfo::List ContainmentActions::listContainmentActionsInfo()
 
 ContainmentActions *ContainmentActions::load(Containment *parent, const QString &containmentActionsName, const QVariantList &args)
 {
-    if (!parent) {
-        return 0;
-    }
-
     if (containmentActionsName.isEmpty()) {
         return 0;
     }
@@ -134,6 +130,9 @@ PackageStructure::Ptr ContainmentActions::packageStructure()
 
 Containment *ContainmentActions::containment()
 {
+    if (d->containment) {
+        return d->containment;
+    }
     return qobject_cast<Containment*>(parent());
 }
 
@@ -381,15 +380,14 @@ QPoint ContainmentActions::popupPosition(const QSize &s, QEvent *event)
     return pos;
 }
 
-bool ContainmentActions::event(QEvent *e)
+bool ContainmentActions::event(QEvent *)
 {
-    if (e->type() == QEvent::ParentChange) {
-        if (!containment()) {
-            //some fool took away our containment. run away, run away!
-            deleteLater();
-        }
-    }
+    //no longer needed
     return false;
+}
+
+void ContainmentActions::setContainment(Containment *newContainment) {
+    d->containment = newContainment;
 }
 
 } // Plasma namespace

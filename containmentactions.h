@@ -81,7 +81,7 @@ class PLASMA_EXPORT ContainmentActions : public QObject
          * The caller takes responsibility for the containmentactions, including
          * deleting it when no longer needed.
          *
-         * @param parent the parent containment. Required; if you send null you'll get back null.
+         * @param parent the parent containment. @since 4.6 null is allowed.
          * @param name the plugin name, as returned by KPluginInfo::pluginName()
          * @param args to send the containmentactions extra arguments
          * @return a pointer to the loaded containmentactions, or 0 on load failure
@@ -95,7 +95,7 @@ class PLASMA_EXPORT ContainmentActions : public QObject
          * The caller takes responsibility for the containmentactions, including
          * deleting it when no longer needed.
          *
-         * @param parent the parent containment. Required; if you send null you'll get back null.
+         * @param parent the parent containment. @since 4.6 null is allowed.
          * @param info KPluginInfo object for the desired containmentactions
          * @param args to send the containmentactions extra arguments
          * @return a pointer to the loaded containmentactions, or 0 on load failure
@@ -215,6 +215,12 @@ class PLASMA_EXPORT ContainmentActions : public QObject
          * @reimplemented
          */
         bool event(QEvent *e);
+
+        /**
+         * @p newContainment the containment the plugin should be associated with.
+         * @since 4.6
+         */
+        void setContainment(Containment *newContainment);
 
     protected:
         /**

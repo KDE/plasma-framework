@@ -32,7 +32,8 @@ public:
         q(containmentActions),
         containmentActionsDescription(service),
         initialized(false),
-        needsConfig(false)
+        needsConfig(false),
+        containment(0)
     {
     };
 
@@ -44,6 +45,7 @@ public:
     KServiceAction mode;
     bool initialized : 1;
     bool needsConfig : 1;
+    Containment *containment;
 };
 
 } // namespace Plasma

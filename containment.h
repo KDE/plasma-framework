@@ -410,7 +410,13 @@ class PLASMA_EXPORT Containment : public Applet
          */
         QString containmentActions(const QString &trigger);
 
-    Q_SIGNALS:
+        /**
+         * @return the config group that containmentactions plugins go in
+         * @since 4.6
+         */
+        KConfigGroup containmentActionsConfig();
+
+Q_SIGNALS:
         /**
          * This signal is emitted when a new applet is created by the containment
          */
