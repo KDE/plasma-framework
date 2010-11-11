@@ -1884,6 +1884,7 @@ QSet<QString> AppletPrivate::knownCategories()
                << QString(I18N_NOOP("Miscellaneous")).toLower()
                << QString(I18N_NOOP("Multimedia")).toLower()
                << QString(I18N_NOOP("Online Services")).toLower()
+               << QString(I18N_NOOP("Productivity")).toLower()
                << QString(I18N_NOOP("System Information")).toLower()
                << QString(I18N_NOOP("Utilities")).toLower()
                << QString(I18N_NOOP("Windows and Tasks")).toLower();
