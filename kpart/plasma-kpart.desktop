@@ -23,6 +23,7 @@ Name[sv]=Plasma-delprogram
 Name[tr]=plasma-kpart
 Name[uk]=plasma-kpart
 Name[x-test]=xxplasma-kpartxx
+Name[zh_CN]=plasma-kpart
 Name[zh_TW]=plasma-kpart
 Type=Service
 ServiceTypes=KParts/Part
