@@ -879,24 +879,27 @@ QString Applet::category(const QString &appletName)
 
 ImmutabilityType Applet::immutability() const
 {
-    //Returning the more strict immutability between the applet immutability, Containment and Corona
-    ImmutabilityType coronaImmutability = Mutable;
-
-    Containment *cont = 0;
-    if (!d->isContainment) {
-        cont = containment();
+    // if this object is itself system immutable, then just return that; it's the most
+    // restrictive setting possible and will override anything that might be happening above it
+    // in the Corona->Containment->Applet hierarchy
+    if (d->transient || d->mainConfigGroup()->isImmutable()) {
+        return SystemImmutable;
     }
+
+    //Returning the more strict immutability between the applet immutability, Containment and Corona
+    ImmutabilityType upperImmutability = Mutable;
+    Containment *cont = d->isContainment ? 0 : containment();
 
     if (cont) {
-        coronaImmutability = cont->immutability();
+        upperImmutability = cont->immutability();
     } else if (Corona *corona = qobject_cast<Corona*>(scene())) {
-        coronaImmutability = corona->immutability();
+        upperImmutability = corona->immutability();
     }
 
-    if (coronaImmutability == SystemImmutable) {
-        return SystemImmutable;
-    } else if (coronaImmutability == UserImmutable && d->immutability != SystemImmutable) {
-        return UserImmutable;
+    if (upperImmutability != Mutable) {
+        // it's either system or user immutable, and we already check for local system immutability,
+        // so upperImmutability is guaranteed to be as or more severe as this object's immutability
+        return upperImmutability;
     } else {
         return d->immutability;
     }
@@ -904,7 +907,11 @@ ImmutabilityType Applet::immutability() const
 
 void Applet::setImmutability(const ImmutabilityType immutable)
 {
-    if (d->immutability == immutable || d->immutability == Plasma::SystemImmutable) {
+    if (d->immutability == immutable || immutable == Plasma::SystemImmutable) {
+        // we do not store system immutability in d->immutability since that gets saved
+        // out to the config file; instead, we check with
+        // the config group itself for this information at all times. this differs from
+        // corona, where SystemImmutability is stored in d->immutability.
         return;
     }
 
@@ -2290,11 +2297,10 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
 
     //kDebug() << change;
     switch (change) {
-    case ItemSceneHasChanged:
-    {
-        QGraphicsScene *newScene = qvariant_cast<QGraphicsScene*>(value);
-        if (newScene) {
-            d->checkImmutability();
+    case ItemSceneHasChanged: {
+        Corona *newCorona = qobject_cast<Corona *>(qvariant_cast<QGraphicsScene*>(value));
+        if (newCorona && newCorona->immutability() != Mutable) {
+            updateConstraints(ImmutableConstraint);
         }
     }
         break;
@@ -2796,18 +2802,6 @@ QString AppletPrivate::visibleFailureText(const QString &reason)
     }
 
     return text;
-}
-
-void AppletPrivate::checkImmutability()
-{
-    const bool systemImmutable = q->globalConfig().isImmutable() || q->config().isImmutable() ||
-                                ((!isContainment && q->containment()) &&
-                                    q->containment()->immutability() == SystemImmutable) ||
-                                (qobject_cast<Corona*>(q->scene()) && static_cast<Corona*>(q->scene())->immutability() == SystemImmutable);
-
-    if (systemImmutable) {
-        q->updateConstraints(ImmutableConstraint);
-    }
 }
 
 void AppletPrivate::themeChanged()

@@ -112,7 +112,6 @@ public:
     void scheduleModificationNotification();
     KConfigGroup *mainConfigGroup();
     QString visibleFailureText(const QString &reason);
-    void checkImmutability();
     void themeChanged();
     void resetConfigurationObject();
     void selectItemToDestroy();

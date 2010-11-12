@@ -1115,7 +1115,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         Applet(const QString &packagePath, uint appletId, const QVariantList &args);
 
         Q_PRIVATE_SLOT(d, void setFocus())
-        Q_PRIVATE_SLOT(d, void checkImmutability())
         Q_PRIVATE_SLOT(d, void themeChanged())
         Q_PRIVATE_SLOT(d, void cleanUpAndDelete())
         Q_PRIVATE_SLOT(d, void selectItemToDestroy())
