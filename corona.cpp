@@ -402,11 +402,11 @@ void Corona::initializeLayout(const QString &configName)
     }
 
     if (config()->isImmutable()) {
-        d->updateContainmentImmutability();
+        setImmutability(SystemImmutable);
+    } else {
+        KConfigGroup coronaConfig(config(), "General");
+        setImmutability((ImmutabilityType)coronaConfig.readEntry("immutability", (int)Mutable));
     }
-
-    KConfigGroup coronaConfig(config(), "General");
-    setImmutability((ImmutabilityType)coronaConfig.readEntry("immutability", (int)Mutable));
 }
 
 bool containmentSortByPosition(const Containment *c1, const Containment *c2)
@@ -606,12 +606,20 @@ KSharedConfigPtr Corona::config() const
 
 Containment *Corona::addContainment(const QString &name, const QVariantList &args)
 {
-    return d->addContainment(name, args, 0, false);
+    if (d->immutability == Mutable) {
+        return d->addContainment(name, args, 0, false);
+    }
+
+    return 0;
 }
 
 Containment *Corona::addContainmentDelayed(const QString &name, const QVariantList &args)
 {
-    return d->addContainment(name, args, 0, true);
+    if (d->immutability == Mutable) {
+        return d->addContainment(name, args, 0, true);
+    }
+
+    return 0;
 }
 
 void Corona::mapAnimation(Animator::Animation from, Animator::Animation to)
@@ -880,8 +888,7 @@ ImmutabilityType Corona::immutability() const
 
 void Corona::setImmutability(const ImmutabilityType immutable)
 {
-    if (d->immutability == immutable ||
-        d->immutability == SystemImmutable) {
+    if (d->immutability == immutable || d->immutability == SystemImmutable) {
         return;
     }
 
@@ -906,12 +913,14 @@ void Corona::setImmutability(const ImmutabilityType immutable)
         }
     }
 
-    KConfigGroup cg(config(), "General");
+    if (d->immutability != SystemImmutable) {
+        KConfigGroup cg(config(), "General");
 
-    // we call the dptr member directly for locked since isImmutable()
-    // also checks kiosk and parent containers
-    cg.writeEntry("immutability", (int)d->immutability);
-    requestConfigSync();
+        // we call the dptr member directly for locked since isImmutable()
+        // also checks kiosk and parent containers
+        cg.writeEntry("immutability", (int)d->immutability);
+        requestConfigSync();
+    }
 }
 
 QList<Plasma::Location> Corona::freeEdges(int screen) const
