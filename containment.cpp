@@ -2503,7 +2503,8 @@ KConfigGroup Containment::containmentActionsConfig()
     KConfigGroup cfg;
     switch (d->containmentActionsSource) {
     case ContainmentPrivate::Local:
-        cfg = KConfigGroup(&config(), "ActionPlugins");
+        cfg = config();
+        cfg = KConfigGroup(&cfg, "ActionPlugins");
         break;
     case ContainmentPrivate::Activity:
         cfg = KConfigGroup(corona()->config(), "Activities");
