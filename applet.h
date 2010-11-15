@@ -769,11 +769,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         /**
          * Emitted when the user clicked on a button of the message overlay
          *
-         * Since the signal passes the type MessageButton without specifying
-         * the Plasma namespace and since automoc is pedantic if you want to
-         * use this signal outside the Plasma namespace you have to declare
-         * "typedef Plasma::MessageButton MessageButton" and use the typedef
-         * in your slot and in the connect.
          * @see showMessage
          * @see Plasma::MessageButton
          * @since 4.3
