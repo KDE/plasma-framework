@@ -778,7 +778,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @see Plasma::MessageButton
          * @since 4.3
          */
-        void messageButtonPressed(const MessageButton button);
+        void messageButtonPressed(const Plasma::MessageButton button);
 
         /**
          * Emitted when the applet is deleted
@@ -1002,7 +1002,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @see messageButtonPressed
          * @since 4.3
          */
-        void showMessage(const QIcon &icon, const QString &message, const MessageButtons buttons);
+        void showMessage(const QIcon &icon, const QString &message, const Plasma::MessageButtons buttons);
 
         /**
          * Called when any of the geometry constraints have been updated.
