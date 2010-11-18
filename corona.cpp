@@ -33,13 +33,14 @@
 
 #include <cmath>
 
+#include <kaction.h>
+#include <kactioncollection.h>
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kmimetype.h>
-#include <kactioncollection.h>
-#include <kaction.h>
 #include <kshortcutsdialog.h>
+#include <kwindowsystem.h>
 
 #include "animator.h"
 #include "abstracttoolbox.h"
@@ -192,7 +193,7 @@ public:
 
         //kDebug() << "Loading" << name << args << id;
 
-        if (pluginName.isEmpty()) {
+        if (pluginName.isEmpty() || pluginName == "default") {
             // default to the desktop containment
             pluginName = "desktop";
         }
@@ -583,6 +584,23 @@ Containment *Corona::containmentForScreen(int screen, int desktop) const
     return 0;
 }
 
+Containment *Corona::containmentForScreen(int screen, int desktop,
+                                          const QString &defaultPluginIfNonExistent, const QVariantList &defaultArgs)
+{
+    Containment *containment = containmentForScreen(screen, desktop);
+    if (!containment && !defaultPluginIfNonExistent.isEmpty()) {
+        // screen requests are allowed to bypass immutability
+        if (screen >= 0 && screen < numScreens() &&
+            desktop >= -1 && desktop < KWindowSystem::numberOfDesktops()) {
+            containment = d->addContainment(defaultPluginIfNonExistent, defaultArgs, 0, false);
+            if (containment) {
+                containment->setScreen(screen, desktop);
+            }
+        }
+    }
+
+    return containment;
+}
 QList<Containment*> Corona::containments() const
 {
     return d->containments;

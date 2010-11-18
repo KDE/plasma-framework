@@ -96,7 +96,7 @@ public:
     Containment *addContainment(const QString &name, const QVariantList &args = QVariantList());
 
     /**
-     * Returns the Containment, if any, for a given physical screen
+     * Returns the Containment, if any, for a given physical screen and desktop
      *
      * @param screen number of the physical screen to locate
      * @param desktop the virtual desktop) to locate; if < 0 then it will
@@ -104,6 +104,21 @@ public:
      */
     Containment *containmentForScreen(int screen, int desktop = -1) const;
 
+    /**
+     * Returns the Containment for a given physical screen and desktop, creating one
+     * if none exists
+     *
+     * @param screen number of the physical screen to locate
+     * @param desktop the virtual desktop) to locate; if < 0 then it will
+     *        simply return the first Containment associated with screen
+     * @param defaultPluginIfNonExistent the plugin to load by default; "null" is an empty
+     * Containment and "default" creates the default plugin
+     * @param defaultArgs optional arguments to pass in when creating a Containment if needed
+     * @since 4.6
+     */
+    Containment *containmentForScreen(int screen, int desktop,
+                                      const QString &defaultPluginIfNonExistent,
+                                      const QVariantList &defaultArgs = QVariantList());
     /**
      * Adds a widget in the topleft quadrant in the scene. Widgets in the topleft quadrant are
      * normally never shown unless you specifically aim a view at it, which makes it ideal for
