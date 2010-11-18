@@ -48,12 +48,13 @@ public:
     static QStringList pendingUpdateScripts();
     static QStringList defaultLayoutScripts();
 
+    Plasma::Corona *corona() const;
     bool evaluateScript(const QString &script, const QString &path = QString());
-    static bool isPanel(const Plasma::Containment *c);
     QScriptValue wrap(Plasma::Applet *w);
     virtual QScriptValue wrap(Plasma::Containment *c);
     QScriptValue wrap(Containment *c);
 
+    static bool isPanel(const Plasma::Containment *c);
     static ScriptEngine *envFor(QScriptEngine *engine);
 
 Q_SIGNALS:
@@ -75,7 +76,6 @@ private:
     static QScriptValue panels(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue fileExists(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue loadTemplate(QScriptContext *context, QScriptEngine *engine);
-    static QScriptValue theme(QScriptContext *context, QScriptEngine *engine);
 
     // helpers
     static QScriptValue createContainment(const QString &type, const QString &defautPlugin,
@@ -87,10 +87,9 @@ private Q_SLOTS:
 private:
     Plasma::Corona *m_corona;
     QScriptValue m_scriptSelf;
-
-    static const int PLASMA_DESKTOP_SCRIPTING_VERSION = 3;
 };
 
+static const int PLASMA_DESKTOP_SCRIPTING_VERSION = 3;
 }
 
 #endif

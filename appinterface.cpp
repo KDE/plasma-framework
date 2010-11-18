@@ -22,30 +22,33 @@
 #include <QEventLoop>
 #include <QTimer>
 
+#include <KGlobalSettings>
+
 #include <Plasma/Containment>
 #include <Plasma/Corona>
 #include <Plasma/DataEngineManager>
+#include <Plasma/Theme>
 
 #include "scriptengine.h"
 
 namespace WorkspaceScripting
 {
 
-AppInterface::AppInterface(Plasma::Corona *corona, QObject *parent)
-    : QObject(parent),
-      m_corona(corona)
+AppInterface::AppInterface(ScriptEngine *env)
+    : QObject(env),
+      m_env(env)
 {
 
 }
 
 int AppInterface::screenCount() const
 {
-    return m_corona->numScreens();
+    return m_env->corona()->numScreens();
 }
 
 QRectF AppInterface::screenGeometry(int screen) const
 {
-    return m_corona->screenGeometry(screen);
+    return m_env->corona()->screenGeometry(screen);
 }
 
 QList<int> AppInterface::activityIds() const
@@ -54,7 +57,7 @@ QList<int> AppInterface::activityIds() const
     //       however QScript deals with QList<uint> very, very poory
     QList<int> containments;
 
-    foreach (Plasma::Containment *c, m_corona->containments()) {
+    foreach (Plasma::Containment *c, m_env->corona()->containments()) {
         if (!ScriptEngine::isPanel(c)) {
             containments.append(c->id());
         }
@@ -69,7 +72,7 @@ QList<int> AppInterface::panelIds() const
     //       however QScript deals with QList<uint> very, very poory
     QList<int> panels;
 
-    foreach (Plasma::Containment *c, m_corona->containments()) {
+    foreach (Plasma::Containment *c, m_env->corona()->containments()) {
         //kDebug() << "checking" << (QObject*)c << isPanel(c);
         if (ScriptEngine::isPanel(c)) {
             panels.append(c->id());
@@ -79,14 +82,44 @@ QList<int> AppInterface::panelIds() const
     return panels;
 }
 
+QString AppInterface::applicationVersion() const
+{
+    return KGlobal::mainComponent().aboutData()->version();
+}
+
+QString AppInterface::platformVersion() const
+{
+    return KDE::versionString();
+}
+
+int AppInterface::scriptingVersion() const
+{
+    return PLASMA_DESKTOP_SCRIPTING_VERSION;
+}
+
+QString AppInterface::theme() const
+{
+    return Plasma::Theme::defaultTheme()->themeName();
+}
+
+void AppInterface::setTheme(const QString &name)
+{
+    Plasma::Theme::defaultTheme()->setThemeName(name);
+}
+
+bool AppInterface::multihead() const
+{
+    return KGlobalSettings::isMultiHead();
+}
+
 void AppInterface::lockCorona(bool locked)
 {
-    m_corona->setImmutability(locked ? Plasma::UserImmutable : Plasma::Mutable);
+    m_env->corona()->setImmutability(locked ? Plasma::UserImmutable : Plasma::Mutable);
 }
 
 bool AppInterface::coronaLocked() const
 {
-    return m_corona->immutability() != Plasma::Mutable;
+    return m_env->corona()->immutability() != Plasma::Mutable;
 }
 
 void AppInterface::sleep(int ms)

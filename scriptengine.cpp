@@ -33,7 +33,6 @@
 #include <Plasma/Containment>
 #include <Plasma/Corona>
 #include <Plasma/Package>
-#include <Plasma/Theme>
 
 #include "appinterface.h"
 #include "containment.h"
@@ -50,7 +49,7 @@ ScriptEngine::ScriptEngine(Plasma::Corona *corona, QObject *parent)
       m_corona(corona)
 {
     Q_ASSERT(m_corona);
-    AppInterface *interface = new AppInterface(corona, this);
+    AppInterface *interface = new AppInterface(this);
     connect(interface, SIGNAL(print(QString)), this, SIGNAL(print(QString)));
     m_scriptSelf = newQObject(interface, QScriptEngine::QtOwnership,
                               QScriptEngine::ExcludeSuperClassProperties | QScriptEngine::ExcludeSuperClassMethods);
@@ -60,18 +59,6 @@ ScriptEngine::ScriptEngine(Plasma::Corona *corona, QObject *parent)
 
 ScriptEngine::~ScriptEngine()
 {
-}
-
-QScriptValue ScriptEngine::theme(QScriptContext *context, QScriptEngine *engine)
-{
-    Q_UNUSED(engine)
-
-    if (context->argumentCount() > 0) {
-        const QString newTheme = context->argument(0).toString();
-        Plasma::Theme::defaultTheme()->setThemeName(newTheme);
-    }
-
-    return Plasma::Theme::defaultTheme()->themeName();
 }
 
 QScriptValue ScriptEngine::activityById(QScriptContext *context, QScriptEngine *engine)
@@ -207,25 +194,6 @@ QScriptValue ScriptEngine::panelById(QScriptContext *context, QScriptEngine *eng
     return engine->undefinedValue();
 }
 
-QScriptValue ScriptEngine::activities(QScriptContext *context, QScriptEngine *engine)
-{
-    Q_UNUSED(context)
-
-    QScriptValue containments = engine->newArray();
-    ScriptEngine *env = envFor(engine);
-    int count = 0;
-
-    foreach (Plasma::Containment *c, env->m_corona->containments()) {
-        if (!isPanel(c)) {
-            containments.setProperty(count, env->wrap(c));
-            ++count;
-        }
-    }
-
-    containments.setProperty("length", count);
-    return containments;
-}
-
 QScriptValue ScriptEngine::panels(QScriptContext *context, QScriptEngine *engine)
 {
     Q_UNUSED(context)
@@ -348,14 +316,6 @@ void ScriptEngine::setupEngine()
     m_scriptSelf.setProperty("panels", newFunction(ScriptEngine::panels));
     m_scriptSelf.setProperty("fileExists", newFunction(ScriptEngine::fileExists));
     m_scriptSelf.setProperty("loadTemplate", newFunction(ScriptEngine::loadTemplate));
-    m_scriptSelf.setProperty("applicationVersion", KGlobal::mainComponent().aboutData()->version(),
-                             QScriptValue::PropertyGetter | QScriptValue::ReadOnly | QScriptValue::Undeletable);
-    m_scriptSelf.setProperty("scriptingVersion", newVariant(PLASMA_DESKTOP_SCRIPTING_VERSION),
-                             QScriptValue::PropertyGetter | QScriptValue::ReadOnly | QScriptValue::Undeletable);
-    m_scriptSelf.setProperty("platformVersion", KDE::versionString(),
-                             QScriptValue::PropertyGetter | QScriptValue::ReadOnly | QScriptValue::Undeletable);
-    m_scriptSelf.setProperty("theme", newFunction(ScriptEngine::theme),
-                             QScriptValue::PropertyGetter | QScriptValue::PropertySetter | QScriptValue::Undeletable);
 
     setGlobalObject(m_scriptSelf);
 }
@@ -368,6 +328,30 @@ bool ScriptEngine::isPanel(const Plasma::Containment *c)
 
     return c->containmentType() == Plasma::Containment::PanelContainment ||
            c->containmentType() == Plasma::Containment::CustomPanelContainment;
+}
+
+QScriptValue ScriptEngine::activities(QScriptContext *context, QScriptEngine *engine)
+{
+    Q_UNUSED(context)
+
+    QScriptValue containments = engine->newArray();
+    ScriptEngine *env = envFor(engine);
+    int count = 0;
+
+    foreach (Plasma::Containment *c, env->corona()->containments()) {
+        if (!isPanel(c)) {
+            containments.setProperty(count, env->wrap(c));
+            ++count;
+        }
+    }
+
+    containments.setProperty("length", count);
+    return containments;
+}
+
+Plasma::Corona *ScriptEngine::corona() const
+{
+    return m_corona;
 }
 
 bool ScriptEngine::evaluateScript(const QString &script, const QString &path)

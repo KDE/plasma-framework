@@ -35,6 +35,8 @@ namespace Plasma
 namespace WorkspaceScripting
 {
 
+class ScriptEngine;
+
 class PLASMAGENERICSHELL_EXPORT AppInterface : public QObject
 {
     Q_OBJECT
@@ -46,9 +48,14 @@ class PLASMAGENERICSHELL_EXPORT AppInterface : public QObject
     Q_PROPERTY(QStringList knownPanelTypes READ knownPanelTypes)
     Q_PROPERTY(QStringList knownActivityTypes READ knownActivityTypes)
     Q_PROPERTY(QStringList knownWidgetTypes READ knownWidgetTypes)
+    Q_PROPERTY(QString theme READ theme WRITE setTheme)
+    Q_PROPERTY(QString applicationVersion READ applicationVersion)
+    Q_PROPERTY(QString platformVersion READ platformVersion)
+    Q_PROPERTY(int scriptingVersion READ scriptingVersion)
+    Q_PROPERTY(bool multihead READ multihead)
 
 public:
-    AppInterface(Plasma::Corona *corona, QObject *parent = 0);
+    AppInterface(ScriptEngine *env);
 
     bool hasBattery() const;
     int screenCount() const;
@@ -60,6 +67,14 @@ public:
     QStringList knownPanelTypes() const;
     QStringList knownContainmentTypes(const QString &type) const;
 
+    QString applicationVersion() const;
+    QString platformVersion() const;
+    int scriptingVersion() const;
+
+    QString theme() const;
+    void setTheme(const QString &name);
+
+    bool multihead() const;
     bool coronaLocked() const;
 
 public Q_SLOTS:
@@ -71,7 +86,7 @@ Q_SIGNALS:
     void print(const QString &string);
 
 private:
-    Plasma::Corona *m_corona;
+    ScriptEngine *m_env;
 };
 
 }
