@@ -53,6 +53,7 @@ class PLASMAGENERICSHELL_EXPORT AppInterface : public QObject
     Q_PROPERTY(QString platformVersion READ platformVersion)
     Q_PROPERTY(int scriptingVersion READ scriptingVersion)
     Q_PROPERTY(bool multihead READ multihead)
+    Q_PROPERTY(bool multiheadScreen READ multihead)
 
 public:
     AppInterface(ScriptEngine *env);
@@ -75,6 +76,8 @@ public:
     void setTheme(const QString &name);
 
     bool multihead() const;
+    int multiheadScreen() const;
+
     bool coronaLocked() const;
 
 public Q_SLOTS:
