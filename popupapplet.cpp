@@ -583,6 +583,10 @@ void PopupApplet::showPopup(uint popupDuration)
             }
 
             d->timer->start(popupDuration);
+        } else {
+            if (d->timer) {
+                d->timer->stop();
+            }
         }
     }
 }
