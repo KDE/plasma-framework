@@ -981,9 +981,9 @@ void ContainmentPrivate::setScreen(int newScreen, int newDesktop, bool preventIn
         // we want to listen to changes in work area if our screen changes
         if (toolBox) {
             if (screen < 0 && newScreen > -1) {
-                QObject::connect(KWindowSystem::self(), SIGNAL(workAreaChanged()), toolBox.data(), SLOT(positionToolBox()), Qt::UniqueConnection);
+                QObject::connect(KWindowSystem::self(), SIGNAL(workAreaChanged()), toolBox.data(), SLOT(reposition()), Qt::UniqueConnection);
             } else if (newScreen < 0) {
-                QObject::disconnect(KWindowSystem::self(), SIGNAL(workAreaChanged()), toolBox.data(), SLOT(positionToolBox()));
+                QObject::disconnect(KWindowSystem::self(), SIGNAL(workAreaChanged()), toolBox.data(), SLOT(reposition()));
             }
         }
 
