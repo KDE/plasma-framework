@@ -244,14 +244,14 @@ void View::setContainment(Plasma::Containment *containment)
 
     Containment *oldContainment = d->containment;
 
-    int screen = -1;
-    int desktop = -1;
-    if (oldContainment) {
-        if (oldContainment != containment) {
-            screen = d->containment->screen();
-            desktop = d->containment->desktop();
-        }
-    } else {
+    int screen = d->lastScreen;
+    int desktop = d->lastDesktop;
+    if (oldContainment && oldContainment != containment) {
+        screen = oldContainment->screen();
+        desktop = oldContainment->desktop();
+    } 
+
+    if (scene() != containment->scene()) {
         setScene(containment->scene());
     }
 
@@ -267,15 +267,20 @@ void View::setContainment(Plasma::Containment *containment)
         d->lastScreen = screen;
         d->lastDesktop = desktop;
         //kDebug() << "set screen from setContainment due to old containment";
-        oldContainment->setScreen(-1, -1);
-        containment->setScreen(-1, -1);
-        containment->setScreen(screen, desktop);
+        if (oldContainment && oldContainment != containment) {
+            oldContainment->setScreen(-1, -1);
+        }
+
+        if (screen != containment->screen() || desktop != containment->desktop()) {
+            containment->setScreen(screen, desktop);
+        }
     } else {
         d->lastScreen = otherScreen;
         d->lastDesktop = otherDesktop;
     }
 
-    if (oldContainment && oldContainment != d->containment && otherScreen > -1) {
+    if (oldContainment && oldContainment != containment && otherScreen > -1 &&
+        (!containment || otherScreen != containment->screen() || otherDesktop != containment->desktop())) {
         // assign the old containment the old screen/desktop
         //kDebug() << "set screen from setContainment" << screen << otherScreen << desktop << otherDesktop;
         oldContainment->setScreen(otherScreen, otherDesktop);
