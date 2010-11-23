@@ -995,10 +995,7 @@ void ContainmentPrivate::setScreen(int newScreen, int newDesktop, bool preventIn
                          << "desktop" << currently->desktop()
                          << "and is" << currently->activity()
                          << (QObject*)currently << "i'm" << (QObject*)q;
-                //kDebug() << "setScreen due to swap";
-                //make the view completely forget about us
-                emit q->screenChanged(screen, -1, q);
-                currently->setScreen(-1, newDesktop);
+                currently->setScreen(-1, currently->desktop());
                 swapScreensWith = currently;
             }
         }
@@ -1015,11 +1012,14 @@ void ContainmentPrivate::setScreen(int newScreen, int newDesktop, bool preventIn
     int oldScreen = screen;
     screen = newScreen;
 
-
     q->updateConstraints(Plasma::ScreenConstraint);
 
     if (oldScreen != newScreen || oldDesktop != newDesktop) {
-
+        /*
+        kDebug() << "going to signal change for" << q
+                 << ", old screen & desktop:" << oldScreen << oldDesktop
+                 << ", new:" << screen << desktop;
+                 */
         KConfigGroup c = q->config();
         c.writeEntry("screen", screen);
         c.writeEntry("desktop", desktop);
