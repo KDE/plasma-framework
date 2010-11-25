@@ -23,6 +23,7 @@
 #include <QDir>
 #include <QFile>
 #include <kzip.h>
+#include <kstandarddirs.h>
 
 #include "plasma/applet.h"
 #include "plasma/packagemetadata.h"
@@ -35,6 +36,7 @@ void PlasmoidPackageTest::init()
 {
 #ifdef QCA2_FOUND
     QCA::Initializer *cryptoInit = new QCA::Initializer;
+    Q_UNUSED(cryptoInit);
 #endif
     mPackage = QString("Package");
     mPackageRoot = QDir::homePath() + "/.kde-unit-test/packageRoot";
@@ -209,7 +211,7 @@ void PlasmoidPackageTest::filePath()
     delete p;
     p = new Plasma::Package(mPackageRoot, mPackage, ps);
 
-    QString path = mPackageRoot + "/" + mPackage + "/contents/code/main";
+    const QString path = KStandardDirs::realFilePath(mPackageRoot + "/" + mPackage + "/contents/code/main");
 
     // Two ways to get the same info.
     // 1. Give the file type which refers to a class of files (a directory) in
