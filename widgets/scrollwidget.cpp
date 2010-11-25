@@ -1489,10 +1489,7 @@ bool ScrollWidget::sceneEventFilter(QGraphicsItem *i, QEvent *e)
         break;
     case QEvent::GraphicsSceneWheel:
         d->handleWheelEvent(static_cast<QGraphicsSceneWheelEvent*>(e));
-    //Multitouch related events
-    case QEvent::TouchBegin:
-        d->handleMousePressEvent(static_cast<QGraphicsSceneMouseEvent*>(e));
-        break;
+    //Multitouch related events, we actually need only TouchUpdate
     case QEvent::TouchUpdate: {
         QList<QTouchEvent::TouchPoint> touchPoints = static_cast<QTouchEvent *>(e)->touchPoints();
         if (touchPoints.count() == 2) {
@@ -1537,9 +1534,6 @@ bool ScrollWidget::sceneEventFilter(QGraphicsItem *i, QEvent *e)
         }
         break;
     }
-    case QEvent::TouchEnd:
-        d->handleMouseReleaseEvent(static_cast<QGraphicsSceneMouseEvent*>(e));
-        break;
     default:
         break;
     }
