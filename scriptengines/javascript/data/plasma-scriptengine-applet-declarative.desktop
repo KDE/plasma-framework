@@ -2,6 +2,7 @@
 Name=Declarative widget
 Name[ast]=Elementu gráficu declarativu
 Name[ca]=Estri declaratiu
+Name[da]=Erklærende widget
 Name[el]=Δηλωτικό συστατικό
 Name[en_GB]=Declarative widget
 Name[es]=Elemento gráfico declarativo
@@ -23,6 +24,7 @@ Name[zh_TW]=宣告元件
 Comment=Native Plasma widget written in QML and JavaScript
 Comment[ast]=Elementu gráficu nativu de Plasma escritu en QML y JavaScript
 Comment[ca]=Estri nadiu del Plasma escrit en QML i JavaScript
+Comment[da]=Hjemmehørende Plasma-widget skrevet i QML og JavaScript
 Comment[de]=Echtes Plasma-Programm, geschrieben in QML und JavaScript
 Comment[el]=Εγγενές συστατικό Plasma γραμμένο σε QML και JavaScript
 Comment[en_GB]=Native Plasma widget written in QML and JavaScript
