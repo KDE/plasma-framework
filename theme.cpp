@@ -299,8 +299,8 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
 {
     QString stylesheet;
     if (css.isEmpty()) {
-        stylesheet = cachedStyleSheets[DEFAULTSTYLE];
-        if(stylesheet.isEmpty()) {
+        stylesheet = cachedStyleSheets.value(DEFAULTSTYLE);
+        if (stylesheet.isEmpty()) {
             stylesheet = QString("\n\
                         body {\n\
                             color: %textcolor;\n\
@@ -313,12 +313,13 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
                         a:hover   { color: %hoveredlink; text-decoration: none; }\n\
                         ");
             stylesheet = processStyleSheet(stylesheet);
+            cachedStyleSheets.insert(DEFAULTSTYLE, stylesheet);
         }
-        cachedStyleSheets[DEFAULTSTYLE] = stylesheet;
+
         return stylesheet;
-    } else if(css == "SVG") {
-        stylesheet = cachedStyleSheets[SVGSTYLE];
-        if(stylesheet.isEmpty()) {
+    } else if (css == "SVG") {
+        stylesheet = cachedStyleSheets.value(SVGSTYLE);
+        if (stylesheet.isEmpty()) {
             QString skel = ".ColorScheme-%1{color:%2;}";
 
             stylesheet += skel.arg("Text","%textcolor");
@@ -335,8 +336,9 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
             stylesheet += skel.arg("ViewFocus","%viewfocuscolor");
 
             stylesheet = processStyleSheet(stylesheet);
+            cachedStyleSheets.insert(SVGSTYLE, stylesheet);
         }
-        cachedStyleSheets[SVGSTYLE] = stylesheet;
+
         return stylesheet;
     } else {
         stylesheet = css;
@@ -345,38 +347,24 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
     QHash<QString, QString> elements;
     // If you add elements here, make sure their names are sufficiently unique to not cause
     // clashes between element keys
-    elements["%textcolor"] = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor).name();
-    elements["%backgroundcolor"] =
-                Plasma::Theme::defaultTheme()->color(Plasma::Theme::BackgroundColor).name();
-    elements["%visitedlink"] =
-                Plasma::Theme::defaultTheme()->color(Plasma::Theme::VisitedLinkColor).name();
-    elements["%activatedlink"] =
-                Plasma::Theme::defaultTheme()->color(Plasma::Theme::HighlightColor).name();
-    elements["%hoveredlink"] =
-                Plasma::Theme::defaultTheme()->color(Plasma::Theme::HighlightColor).name();
-    elements["%link"] = Plasma::Theme::defaultTheme()->color(Plasma::Theme::LinkColor).name();
-    elements["%buttontextcolor"] =
-                Plasma::Theme::defaultTheme()->color(Plasma::Theme::ButtonTextColor).name();
-    elements["%buttonbackgroundcolor"] =
-                Plasma::Theme::defaultTheme()->color(Plasma::Theme::ButtonBackgroundColor).name();
-    elements["%buttonhovercolor"] =
-                Plasma::Theme::defaultTheme()->color(Plasma::Theme::ButtonHoverColor).name();
-    elements["%buttonfocuscolor"] =
-                Plasma::Theme::defaultTheme()->color(Plasma::Theme::ButtonFocusColor).name();
-    elements["%viewtextcolor"] =
-                Plasma::Theme::defaultTheme()->color(Plasma::Theme::ViewTextColor).name();
-    elements["%viewbackgroundcolor"] =
-                Plasma::Theme::defaultTheme()->color(Plasma::Theme::ViewBackgroundColor).name();
-    elements["%viewhovercolor"] =
-                Plasma::Theme::defaultTheme()->color(Plasma::Theme::ViewHoverColor).name();
-    elements["%viewfocuscolor"] =
-                Plasma::Theme::defaultTheme()->color(Plasma::Theme::ViewFocusColor).name();
-    elements["%smallfontsize"] =
-                QString("%1pt").arg(KGlobalSettings::smallestReadableFont().pointSize());
+    elements["%textcolor"] = q->color(Plasma::Theme::TextColor).name();
+    elements["%backgroundcolor"] = q->color(Plasma::Theme::BackgroundColor).name();
+    elements["%visitedlink"] = q->color(Plasma::Theme::VisitedLinkColor).name();
+    elements["%activatedlink"] = q->color(Plasma::Theme::HighlightColor).name();
+    elements["%hoveredlink"] = q->color(Plasma::Theme::HighlightColor).name();
+    elements["%link"] = q->color(Plasma::Theme::LinkColor).name();
+    elements["%buttontextcolor"] = q->color(Plasma::Theme::ButtonTextColor).name();
+    elements["%buttonbackgroundcolor"] = q->color(Plasma::Theme::ButtonBackgroundColor).name();
+    elements["%buttonhovercolor"] = q->color(Plasma::Theme::ButtonHoverColor).name();
+    elements["%buttonfocuscolor"] = q->color(Plasma::Theme::ButtonFocusColor).name();
+    elements["%viewtextcolor"] = q->color(Plasma::Theme::ViewTextColor).name();
+    elements["%viewbackgroundcolor"] = q->color(Plasma::Theme::ViewBackgroundColor).name();
+    elements["%viewhovercolor"] = q->color(Plasma::Theme::ViewHoverColor).name();
+    elements["%viewfocuscolor"] = q->color(Plasma::Theme::ViewFocusColor).name();
+    elements["%smallfontsize"] = QString("%1pt").arg(KGlobalSettings::smallestReadableFont().pointSize());
 
-    QFont font = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
-    elements["%fontsize"] =
-                QString("%1pt").arg(font.pointSize());
+    QFont font = q->font(Plasma::Theme::DefaultFont);
+    elements["%fontsize"] = QString("%1pt").arg(font.pointSize());
     elements["%fontfamily"] = font.family();
 
     foreach (const QString &k, elements.keys()) {
