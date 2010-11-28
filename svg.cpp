@@ -99,7 +99,7 @@ bool SharedSvgRenderer::load(
     }
 
     // Apply the style sheet.
-    if (styleSheet.isEmpty() || ! contents.contains("current-color-scheme")) {
+    if (styleSheet.isEmpty() || !contents.contains("current-color-scheme")) {
         return QSvgRenderer::load(contents);
     }
 
@@ -281,7 +281,6 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
     // Look at the size hinted elements and try to find the smallest one with an
     // identical aspect ratio.
     if (s.isValid() && !elementId.isEmpty()) {
-
         QList<QSize> elementSizeHints = elementsWithSizeHints.values(elementId);
 
         if (!elementSizeHints.isEmpty()) {
@@ -417,8 +416,7 @@ void SvgPrivate::createRenderer()
         if (path.isEmpty()) {
             renderer = new SharedSvgRenderer();
         } else {
-            renderer = new SharedSvgRenderer(
-                path, actualTheme()->styleSheet("SVG"), elementsWithSizeHints);
+            renderer = new SharedSvgRenderer(path, actualTheme()->styleSheet("SVG"), elementsWithSizeHints);
 
             // Add size hinted elements to the theme's rect cache.
             QHashIterator<QString, QSize> i(elementsWithSizeHints);
