@@ -564,7 +564,7 @@ void TabBar::setTabBarShown(bool show)
     }
     d->tabBarShown = show;
 
-    if (!show && d->tabProxy->isVisible()) {
+    if (!show) {
         d->tabProxy->hide();
         d->tabWidgetLayout->removeItem(d->tabBarLayout);
     } else if (show && !d->tabProxy->isVisible()) {
@@ -575,7 +575,7 @@ void TabBar::setTabBarShown(bool show)
 
 bool TabBar::isTabBarShown() const
 {
-    return d->tabProxy->isVisible();
+    return d->tabBarShown;
 }
 
 void TabBar::setStyleSheet(const QString &stylesheet)
