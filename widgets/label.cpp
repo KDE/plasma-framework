@@ -231,9 +231,13 @@ void Label::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Dat
 
 void Label::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
-    QContextMenuEvent contextMenuEvent(QContextMenuEvent::Reason(event->reason()),
-                                       event->pos().toPoint(), event->screenPos(), event->modifiers());
-    QApplication::sendEvent(nativeWidget(), &contextMenuEvent);
+    if (d->textSelectable || nativeWidget()->text().contains("<a ", Qt::CaseInsensitive)){
+        QContextMenuEvent contextMenuEvent(QContextMenuEvent::Reason(event->reason()),
+                                        event->pos().toPoint(), event->screenPos(), event->modifiers());
+        QApplication::sendEvent(nativeWidget(), &contextMenuEvent);
+    }else{
+        event->ignore();
+    }
 }
 
 void Label::resizeEvent(QGraphicsSceneResizeEvent *event)
