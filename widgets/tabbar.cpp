@@ -462,7 +462,6 @@ void TabBar::removeTab(int index)
     } else {
         d->tabWidgetLayout->addItem(d->emptyTabBarSpacer);
     }
-    d->tabProxy->setPreferredSize(d->tabProxy->native->sizeHint());
 }
 
 QGraphicsLayoutItem *TabBar::takeTab(int index)
