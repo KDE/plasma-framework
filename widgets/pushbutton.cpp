@@ -252,6 +252,7 @@ QString PushButton::image() const
 
 void PushButton::setStyleSheet(const QString &stylesheet)
 {
+    d->focusIndicator->setVisible(stylesheet.isEmpty());
     widget()->setStyleSheet(stylesheet);
 }
 
