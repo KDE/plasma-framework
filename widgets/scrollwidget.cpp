@@ -1489,6 +1489,7 @@ bool ScrollWidget::sceneEventFilter(QGraphicsItem *i, QEvent *e)
         break;
     case QEvent::GraphicsSceneWheel:
         d->handleWheelEvent(static_cast<QGraphicsSceneWheelEvent*>(e));
+        break;
     //Multitouch related events, we actually need only TouchUpdate
     case QEvent::TouchUpdate: {
         QList<QTouchEvent::TouchPoint> touchPoints = static_cast<QTouchEvent *>(e)->touchPoints();
