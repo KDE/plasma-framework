@@ -66,5 +66,36 @@ QColor ThemeProxy::visitedLinkColor() const
     return Plasma::Theme::defaultTheme()->color(Plasma::Theme::VisitedLinkColor);
 }
 
+QColor ThemeProxy::buttonHoverColor() const
+{
+    return Plasma::Theme::defaultTheme()->color(Plasma::Theme::ButtonHoverColor);
+}
+
+QColor ThemeProxy::buttonFocusColor() const
+{
+    return Plasma::Theme::defaultTheme()->color(Plasma::Theme::ButtonFocusColor);
+}
+
+QColor ThemeProxy::viewTextColor() const
+{
+    return Plasma::Theme::defaultTheme()->color(Plasma::Theme::ViewTextColor);
+}
+
+QColor ThemeProxy::viewBackgroundColor() const
+{
+    return Plasma::Theme::defaultTheme()->color(Plasma::Theme::ViewBackgroundColor);
+}
+
+QColor ThemeProxy::viewHoverColor() const
+{
+    return Plasma::Theme::defaultTheme()->color(Plasma::Theme::ViewHoverColor);
+}
+
+QColor ThemeProxy::viewFocusColor() const
+{
+    return Plasma::Theme::defaultTheme()->color(Plasma::Theme::ViewFocusColor);
+}
+
+
 #include "theme_p.moc"
 

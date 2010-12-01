@@ -34,6 +34,13 @@ class ThemeProxy : public QObject
     Q_PROPERTY(QColor buttonBackgroundColor READ buttonBackgroundColor NOTIFY themeChanged)
     Q_PROPERTY(QColor linkColor READ linkColor NOTIFY themeChanged)
     Q_PROPERTY(QColor visitedLinkColor READ visitedLinkColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor visitedLinkColor READ visitedLinkColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor buttonHoverColor READ buttonHoverColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor buttonFocusColor READ buttonFocusColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor viewTextColor READ viewTextColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor viewBackgroundColor READ viewBackgroundColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor viewHoverColor READ viewHoverColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor viewFocusColor READ viewFocusColor NOTIFY themeChanged)
 
 public:
     ThemeProxy(QObject *parent = 0);
@@ -46,6 +53,12 @@ public:
     QColor buttonBackgroundColor() const;
     QColor linkColor() const;
     QColor visitedLinkColor() const;
+    QColor buttonHoverColor() const;
+    QColor buttonFocusColor() const;
+    QColor viewTextColor() const;
+    QColor viewBackgroundColor() const;
+    QColor viewHoverColor() const;
+    QColor viewFocusColor() const;
 
 Q_SIGNALS:
     void themeChanged();
