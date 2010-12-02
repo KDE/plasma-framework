@@ -378,6 +378,8 @@ NoAlignment) const;
          * due to multiple update requests coming in, which can be useful for
          * expensive (time- or resource-wise) update mechanisms.
          *
+         * The default minimumPollingInterval is -1, or "never perform automatic updates"
+         *
          * @param minimumMs the minimum time lapse, in milliseconds, between updates.
          *                A value less than 0 means to never perform automatic updates,
          *                a value of 0 means update immediately on every update request,
