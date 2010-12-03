@@ -127,7 +127,7 @@ bool SharedSvgRenderer::load(
 }
 
 #define QLSEP QLatin1Char('_')
-#define CACHE_ID_WITH_SIZE(size, id) QString::number(int(size.width())) % QString::number(int(size.height())) % QLSEP % id
+#define CACHE_ID_WITH_SIZE(size, id) QString::number(int(size.width())) % QLSEP % QString::number(int(size.height())) % QLSEP % id
 #define CACHE_ID_NATURAL_SIZE(id) QLatin1Literal("Natural") % QLSEP % id
 
 SvgPrivate::SvgPrivate(Svg *svg)
@@ -171,8 +171,8 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
 
     // lets check to see if we're already set to this file
     if (isThemed == themed &&
-            ((themed && themePath == imagePath) ||
-             (!themed && path == imagePath))) {
+        ((themed && themePath == imagePath) ||
+        (!themed && path == imagePath))) {
         return false;
     }
 
@@ -182,10 +182,7 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
     // then lets not schedule a repaint because we are just initializing!
     bool updateNeeded = true; //!path.isEmpty() || !themePath.isEmpty();
 
-    if (themed) {
-        QObject::disconnect(actualTheme(), SIGNAL(themeChanged()),
-                q, SLOT(themeChanged()));
-    }
+    QObject::disconnect(actualTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
 
     themed = isThemed;
     path.clear();
@@ -204,28 +201,19 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
     }
 
     // check if svg wants colorscheme applied
-    QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-            q, SLOT(colorsChanged()));
-
     checkColorHints();
-    if (usesColors && !actualTheme()->colorScheme()) {
-        QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-                q, SLOT(colorsChanged()));
-    }
 
     // also images with absolute path needs to have a natural size initialized,
     // even if looks a bit weird using Theme to store non-themed stuff
     if (themed || QFile::exists(imagePath)) {
         QRectF rect;
-        bool found = actualTheme()->findInRectsCache(path, "_Natural", rect);
-
-        if (!found) {
+        if (cacheAndColorsTheme()->findInRectsCache(path, "_Natural", rect)) {
+            naturalSize = rect.size();
+        } else {
             createRenderer();
             naturalSize = renderer->defaultSize();
             //kDebug() << "natural size for" << path << "from renderer is" << naturalSize;
-            actualTheme()->insertIntoRectsCache(path, "_Natural", QRectF(QPointF(0,0), naturalSize));
-        } else {
-            naturalSize = rect.size();
+            cacheAndColorsTheme()->insertIntoRectsCache(path, "_Natural", QRectF(QPointF(0,0), naturalSize));
             //kDebug() << "natural size for" << path << "from cache is" << naturalSize;
         }
     }
@@ -248,6 +236,20 @@ Theme *SvgPrivate::actualTheme()
     return theme.data();
 }
 
+Theme *SvgPrivate::cacheAndColorsTheme()
+{
+    if (!themed && usesColors) {
+        if (!s_systemColorsCache) {
+            //FIXME: reference count this, so that it is deleted when no longer in use
+            s_systemColorsCache = new Plasma::Theme("internal-system-colors");
+        }
+
+        return s_systemColorsCache.data();
+    }
+
+    return actualTheme();
+}
+
 QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
 {
     QSize size;
@@ -258,13 +260,11 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
         // and store them locally.
         QRegExp sizeHintedKeyExpr(CACHE_ID_NATURAL_SIZE("(\\d+)-(\\d+)-(.+)"));
 
-        Q_FOREACH(const QString &key, actualTheme()->listCachedRectKeys(path)) {
-
+        foreach (const QString &key, cacheAndColorsTheme()->listCachedRectKeys(path)) {
             if (sizeHintedKeyExpr.exactMatch(key)) {
                 QString baseElementId = sizeHintedKeyExpr.cap(3);
-                QSize sizeHint(
-                    sizeHintedKeyExpr.cap(1).toInt(),
-                    sizeHintedKeyExpr.cap(2).toInt());
+                QSize sizeHint(sizeHintedKeyExpr.cap(1).toInt(),
+                               sizeHintedKeyExpr.cap(2).toInt());
 
                 if (sizeHint.isValid()) {
                     elementsWithSizeHints.insertMulti(baseElementId, sizeHint);
@@ -290,17 +290,14 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
 
                 if (hint.width() >= s.width() && hint.height() >= s.height() &&
                     (!bestFit.isValid() ||
-                        bestFit.width() * bestFit.height() >
-                          hint.width() * hint.height())) {
-
+                     (bestFit.width() * bestFit.height()) > (hint.width() * hint.height()))) {
                     bestFit = hint;
                 }
             }
 
             if (bestFit.isValid()) {
-                actualElementId =
-                    QString::number(bestFit.width()) % "-" %
-                    QString::number(bestFit.height()) % "-" % elementId;
+                actualElementId = QString::number(bestFit.width()) % "-" %
+                                  QString::number(bestFit.height()) % "-" % elementId;
             }
         }
     }
@@ -328,11 +325,9 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
     //kDebug() << "id is " << id;
 
     QPixmap p;
-    if (cacheRendering) {
-        if (actualTheme()->findInCache(id, p, lastModified)) {
-            //kDebug() << "found cached version of " << id << p.size();
-            return p;
-        }
+    if (cacheRendering && cacheAndColorsTheme()->findInCache(id, p, lastModified)) {
+        //kDebug() << "found cached version of " << id << p.size();
+        return p;
     }
 
     //kDebug() << "didn't find cached version of " << id << ", so re-rendering";
@@ -343,7 +338,6 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
     createRenderer();
 
     QRectF finalRect = makeUniform(renderer->boundsOnElement(actualElementId), QRect(QPoint(0,0), size));
-
 
     //don't alter the pixmap size or it won't match up properly to, e.g., FrameSvg elements
     //makeUniform should never change the size so much that it gains or loses a whole pixel
@@ -363,12 +357,12 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
     // Apply current color scheme if the svg asks for it
     if (applyColors) {
         QImage itmp = p.toImage();
-        KIconEffect::colorize(itmp, actualTheme()->color(Theme::BackgroundColor), 1.0);
+        KIconEffect::colorize(itmp, cacheAndColorsTheme()->color(Theme::BackgroundColor), 1.0);
         p = p.fromImage(itmp);
     }
 
     if (cacheRendering) {
-        actualTheme()->insertIntoCache(id, p, QString::number((qint64)q, 16) % QLSEP % actualElementId);
+        cacheAndColorsTheme()->insertIntoCache(id, p, QString::number((qint64)q, 16) % QLSEP % actualElementId);
     }
 
     return p;
@@ -404,7 +398,7 @@ void SvgPrivate::createRenderer()
     //kDebug() << "FAIL! **************************";
     //kDebug() << path << "**";
 
-    QByteArray styleSheet = actualTheme()->styleSheet("SVG").toUtf8();
+    QByteArray styleSheet = cacheAndColorsTheme()->styleSheet("SVG").toUtf8();
     styleCrc = qChecksum(styleSheet, styleSheet.size());
 
     QHash<QString, SharedSvgRenderer::Ptr>::const_iterator it = s_renderers.constFind(styleCrc + path);
@@ -416,7 +410,7 @@ void SvgPrivate::createRenderer()
         if (path.isEmpty()) {
             renderer = new SharedSvgRenderer();
         } else {
-            renderer = new SharedSvgRenderer(path, actualTheme()->styleSheet("SVG"), elementsWithSizeHints);
+            renderer = new SharedSvgRenderer(path, cacheAndColorsTheme()->styleSheet("SVG"), elementsWithSizeHints);
 
             // Add size hinted elements to the theme's rect cache.
             QHashIterator<QString, QSize> i(elementsWithSizeHints);
@@ -433,7 +427,7 @@ void SvgPrivate::createRenderer()
                 QString cacheId = CACHE_ID_NATURAL_SIZE(fullElementId);
                 QRectF elementRect = renderer->boundsOnElement(fullElementId);
                 if (elementRect.isValid()) {
-                    actualTheme()->insertIntoRectsCache(
+                    cacheAndColorsTheme()->insertIntoRectsCache(
                         path, cacheId, elementRect);
                 }
             }
@@ -490,9 +484,7 @@ QRectF SvgPrivate::elementRect(const QString &elementId)
     }
 
     QRectF rect;
-    bool found = actualTheme()->findInRectsCache(path, id, rect);
-
-    if (found) {
+    if (cacheAndColorsTheme()->findInRectsCache(path, id, rect)) {
         localRectCache.insert(id, rect);
         return rect;
     }
@@ -513,7 +505,7 @@ QRectF SvgPrivate::findAndCacheElementRect(const QString &elementId)
     elementRect = QRectF(elementRect.x() * dx, elementRect.y() * dy,
             elementRect.width() * dx, elementRect.height() * dy);
 
-    actualTheme()->insertIntoRectsCache(path, cacheId(elementId), elementRect);
+    cacheAndColorsTheme()->insertIntoRectsCache(path, cacheId(elementId), elementRect);
     return elementRect;
 }
 
@@ -534,6 +526,16 @@ void SvgPrivate::checkColorHints()
     } else {
         applyColors = false;
         usesColors = false;
+    }
+
+    // check to see if we are using colors, but the theme isn't being used or isn't providing
+    // a colorscheme
+    if (usesColors && (!themed || !actualTheme()->colorScheme())) {
+        QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
+                         q, SLOT(colorsChanged()));
+    } else {
+        QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
+                            q, SLOT(colorsChanged()));
     }
 }
 
@@ -591,17 +593,7 @@ QRectF SvgPrivate::makeUniform(const QRectF &orig, const QRectF &dst)
 void SvgPrivate::themeChanged()
 {
     // check if new theme svg wants colorscheme applied
-    bool wasUsesColors = usesColors;
     checkColorHints();
-    if (usesColors && actualTheme()->colorScheme()) {
-        if (!wasUsesColors) {
-            QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-                    q, SLOT(colorsChanged()));
-        }
-    } else {
-        QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-                q, SLOT(colorsChanged()));
-    }
 
     if (!themed) {
         return;
@@ -628,6 +620,7 @@ void SvgPrivate::colorsChanged()
 }
 
 QHash<QString, SharedSvgRenderer::Ptr> SvgPrivate::s_renderers;
+QWeakPointer<Theme> SvgPrivate::s_systemColorsCache;
 
 Svg::Svg(QObject *parent)
     : QObject(parent),

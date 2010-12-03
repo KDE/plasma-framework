@@ -71,6 +71,7 @@ public:
     bool setImagePath(const QString &imagePath);
 
     Theme *actualTheme();
+    Theme *cacheAndColorsTheme();
 
     QPixmap findInCache(const QString &elementId, const QSizeF &s = QSizeF());
 
@@ -94,6 +95,7 @@ public:
     void colorsChanged();
 
     static QHash<QString, SharedSvgRenderer::Ptr> s_renderers;
+    static QWeakPointer<Theme> s_systemColorsCache;
 
     Svg *q;
     QWeakPointer<Theme> theme;
