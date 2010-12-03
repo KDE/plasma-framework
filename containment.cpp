@@ -630,7 +630,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
         d->addContainmentActions(desktopMenu, event);
     }
 
-        //kDebug() << "executing at" << screenPos;
+    //kDebug() << "executing at" << screenPos;
     QMenu *menu = &desktopMenu;
     //kDebug() << "showing menu, actions" << desktopMenu.actions().size() << desktopMenu.actions().first()->menu();
     if (desktopMenu.actions().size() == 1 && desktopMenu.actions().first()->menu()) {
