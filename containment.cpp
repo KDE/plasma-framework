@@ -630,28 +630,35 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
         d->addContainmentActions(desktopMenu, event);
     }
 
-    if (!desktopMenu.isEmpty()) {
         //kDebug() << "executing at" << screenPos;
+    QMenu *menu = &desktopMenu;
+    //kDebug() << "showing menu, actions" << desktopMenu.actions().size() << desktopMenu.actions().first()->menu();
+    if (desktopMenu.actions().size() == 1 && desktopMenu.actions().first()->menu()) {
+        // we have a menu with a single top level menu; just show that top level menu instad.
+        menu = desktopMenu.actions().first()->menu();
+    }
+
+    if (!menu->isEmpty()) {
         QPoint pos = event->screenPos();
         if (applet && d->isPanelContainment()) {
-            desktopMenu.adjustSize();
-            pos = applet->popupPosition(desktopMenu.size());
+            menu->adjustSize();
+            pos = applet->popupPosition(menu->size());
             if (event->reason() == QGraphicsSceneContextMenuEvent::Mouse) {
                 // if the menu pops up way away from the mouse press, then move it
                 // to the mouse press
                 if (d->formFactor == Vertical) {
-                    if (pos.y() + desktopMenu.height() < event->screenPos().y()) {
+                    if (pos.y() + menu->height() < event->screenPos().y()) {
                         pos.setY(event->screenPos().y());
                     }
                 } else if (d->formFactor == Horizontal) {
-                    if (pos.x() + desktopMenu.width() < event->screenPos().x()) {
+                    if (pos.x() + menu->width() < event->screenPos().x()) {
                         pos.setX(event->screenPos().x());
                     }
                 }
             }
         }
 
-        desktopMenu.exec(pos);
+        menu->exec(pos);
         event->accept();
     } else {
         Applet::contextMenuEvent(event);
