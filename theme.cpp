@@ -69,7 +69,7 @@ public:
         : q(theme),
           colorScheme(QPalette::Active, KColorScheme::Window, KSharedConfigPtr(0)),
           buttonColorScheme(QPalette::Active, KColorScheme::Button, KSharedConfigPtr(0)),
-          viewColorScheme(KColorScheme(QPalette::Active, KColorScheme::View, KSharedConfigPtr(0))),
+          viewColorScheme(QPalette::Active, KColorScheme::View, KSharedConfigPtr(0)),
           defaultWallpaperTheme(DEFAULT_WALLPAPER_THEME),
           defaultWallpaperSuffix(DEFAULT_WALLPAPER_SUFFIX),
           defaultWallpaperWidth(DEFAULT_WALLPAPER_WIDTH),
@@ -145,6 +145,7 @@ public:
     const QString processStyleSheet(const QString &css);
 
     static const char *defaultTheme;
+    static const char *systemColorsTheme;
     static const char *themeRcFile;
     static PackageStructure::Ptr packageStructure;
 
@@ -186,6 +187,9 @@ public:
 PackageStructure::Ptr ThemePrivate::packageStructure(0);
 const char *ThemePrivate::defaultTheme = "default";
 const char *ThemePrivate::themeRcFile = "plasmarc";
+// the system colors theme is used to cache unthemed svgs with colorization needs
+// these svgs do not follow the theme's colors, but rather the system colors
+const char *ThemePrivate::systemColorsTheme = "internal-system-colors";
 
 bool ThemePrivate::useCache()
 {
@@ -347,25 +351,25 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
     QHash<QString, QString> elements;
     // If you add elements here, make sure their names are sufficiently unique to not cause
     // clashes between element keys
-    elements["%textcolor"] = q->color(Plasma::Theme::TextColor).name();
-    elements["%backgroundcolor"] = q->color(Plasma::Theme::BackgroundColor).name();
-    elements["%visitedlink"] = q->color(Plasma::Theme::VisitedLinkColor).name();
-    elements["%activatedlink"] = q->color(Plasma::Theme::HighlightColor).name();
-    elements["%hoveredlink"] = q->color(Plasma::Theme::HighlightColor).name();
-    elements["%link"] = q->color(Plasma::Theme::LinkColor).name();
-    elements["%buttontextcolor"] = q->color(Plasma::Theme::ButtonTextColor).name();
-    elements["%buttonbackgroundcolor"] = q->color(Plasma::Theme::ButtonBackgroundColor).name();
-    elements["%buttonhovercolor"] = q->color(Plasma::Theme::ButtonHoverColor).name();
-    elements["%buttonfocuscolor"] = q->color(Plasma::Theme::ButtonFocusColor).name();
-    elements["%viewtextcolor"] = q->color(Plasma::Theme::ViewTextColor).name();
-    elements["%viewbackgroundcolor"] = q->color(Plasma::Theme::ViewBackgroundColor).name();
-    elements["%viewhovercolor"] = q->color(Plasma::Theme::ViewHoverColor).name();
-    elements["%viewfocuscolor"] = q->color(Plasma::Theme::ViewFocusColor).name();
-    elements["%smallfontsize"] = QString("%1pt").arg(KGlobalSettings::smallestReadableFont().pointSize());
+    elements["%textcolor"] = q->color(Theme::TextColor).name();
+    elements["%backgroundcolor"] = q->color(Theme::BackgroundColor).name();
+    elements["%visitedlink"] = q->color(Theme::VisitedLinkColor).name();
+    elements["%activatedlink"] = q->color(Theme::HighlightColor).name();
+    elements["%hoveredlink"] = q->color(Theme::HighlightColor).name();
+    elements["%link"] = q->color(Theme::LinkColor).name();
+    elements["%buttontextcolor"] = q->color(Theme::ButtonTextColor).name();
+    elements["%buttonbackgroundcolor"] = q->color(Theme::ButtonBackgroundColor).name();
+    elements["%buttonhovercolor"] = q->color(Theme::ButtonHoverColor).name();
+    elements["%buttonfocuscolor"] = q->color(Theme::ButtonFocusColor).name();
+    elements["%viewtextcolor"] = q->color(Theme::ViewTextColor).name();
+    elements["%viewbackgroundcolor"] = q->color(Theme::ViewBackgroundColor).name();
+    elements["%viewhovercolor"] = q->color(Theme::ViewHoverColor).name();
+    elements["%viewfocuscolor"] = q->color(Theme::ViewFocusColor).name();
 
-    QFont font = q->font(Plasma::Theme::DefaultFont);
+    QFont font = q->font(Theme::DefaultFont);
     elements["%fontsize"] = QString("%1pt").arg(font.pointSize());
     elements["%fontfamily"] = font.family();
+    elements["%smallfontsize"] = QString("%1pt").arg(KGlobalSettings::smallestReadableFont().pointSize());
 
     foreach (const QString &k, elements.keys()) {
         stylesheet.replace(k, elements[k]);
@@ -526,16 +530,20 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
         }
     }
 
-    //TODO: should we care about names with relative paths in them?
-    QString themePath = KStandardDirs::locate("data", QLatin1Literal("desktoptheme/") % theme % QLatin1Char('/'));
-    if (themePath.isEmpty() && themeName.isEmpty()) {
-        themePath = KStandardDirs::locate("data", "desktoptheme/default/");
+    // we have one special theme: essentially a dummy theme used to cache things with
+    // the system colors.
+    bool realTheme = theme != systemColorsTheme;
+    if (realTheme) {
+        QString themePath = KStandardDirs::locate("data", QLatin1Literal("desktoptheme/") % theme % QLatin1Char('/'));
+        if (themePath.isEmpty() && themeName.isEmpty()) {
+            themePath = KStandardDirs::locate("data", "desktoptheme/default/");
 
-        if (themePath.isEmpty()) {
-            return;
+            if (themePath.isEmpty()) {
+                return;
+            }
+
+            theme = ThemePrivate::defaultTheme;
         }
-
-        theme = ThemePrivate::defaultTheme;
     }
 
     // check again as ThemePrivate::defaultTheme might be empty
@@ -548,56 +556,71 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     themeName = theme;
 
     // load the color scheme config
-    const QString colorsFile = KStandardDirs::locate("data", QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/colors"));
+    const QString colorsFile = realTheme ? KStandardDirs::locate("data", QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/colors"))
+                                         : QString();
+
     //kDebug() << "we're going for..." << colorsFile << "*******************";
+    bool expireCache = false;
 
     // load the wallpaper settings, if any
-    const QString metadataPath(KStandardDirs::locate("data", QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/metadata.desktop")));
-    KConfig metadata(metadataPath);
-
-    processWallpaperSettings(&metadata);
-
-    AnimationScriptEngine::clearAnimations();
-    animationMapping.clear();
-    processAnimationSettings(themeName, &metadata);
-
-    KConfigGroup cg(&metadata, "Settings");
-    useNativeWidgetStyle = cg.readEntry("UseNativeWidgetStyle", false);
-    QString fallback = cg.readEntry("FallbackTheme", QString());
-
-    fallbackThemes.clear();
-    while (!fallback.isEmpty() && !fallbackThemes.contains(fallback)) {
-        fallbackThemes.append(fallback);
-
-        QString metadataPath(KStandardDirs::locate("data", QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/metadata.desktop")));
+    if (realTheme) {
+        const QString metadataPath(KStandardDirs::locate("data", QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/metadata.desktop")));
         KConfig metadata(metadataPath);
-        KConfigGroup cg(&metadata, "Settings");
-        fallback = cg.readEntry("FallbackTheme", QString());
-    }
 
-    if (!fallbackThemes.contains("oxygen")) {
-        fallbackThemes.append("oxygen");
-    }
-
-    if (!fallbackThemes.contains(ThemePrivate::defaultTheme)) {
-        fallbackThemes.append(ThemePrivate::defaultTheme);
-    }
-
-    foreach (const QString &theme, fallbackThemes) {
-        QString metadataPath(KStandardDirs::locate("data", QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/metadata.desktop")));
-        KConfig metadata(metadataPath);
-        processAnimationSettings(theme, &metadata);
         processWallpaperSettings(&metadata);
-    }
 
-    QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-                        q, SLOT(colorsChanged()));
+        AnimationScriptEngine::clearAnimations();
+        animationMapping.clear();
+        processAnimationSettings(themeName, &metadata);
+
+        KConfigGroup cg(&metadata, "Settings");
+        useNativeWidgetStyle = cg.readEntry("UseNativeWidgetStyle", false);
+        QString fallback = cg.readEntry("FallbackTheme", QString());
+
+        fallbackThemes.clear();
+        while (!fallback.isEmpty() && !fallbackThemes.contains(fallback)) {
+            fallbackThemes.append(fallback);
+
+            QString metadataPath(KStandardDirs::locate("data", QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/metadata.desktop")));
+            KConfig metadata(metadataPath);
+            KConfigGroup cg(&metadata, "Settings");
+            fallback = cg.readEntry("FallbackTheme", QString());
+        }
+
+        if (!fallbackThemes.contains("oxygen")) {
+            fallbackThemes.append("oxygen");
+        }
+
+        if (!fallbackThemes.contains(ThemePrivate::defaultTheme)) {
+            fallbackThemes.append(ThemePrivate::defaultTheme);
+        }
+
+        foreach (const QString &theme, fallbackThemes) {
+            QString metadataPath(KStandardDirs::locate("data", QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/metadata.desktop")));
+            KConfig metadata(metadataPath);
+            processAnimationSettings(theme, &metadata);
+            processWallpaperSettings(&metadata);
+        }
+
+        //check for expired cache
+        // FIXME: when using the system colors, if they change while the application is not running
+        // the cache should be dropped; we need a way to detect system color change when the
+        // application is not running.
+        QFile f(metadataPath);
+        QFileInfo info(f);
+
+        if (useCache() && info.lastModified().toTime_t() > pixmapCache->lastModifiedTime()) {
+            expireCache = true;
+        }
+    }
 
     if (colorsFile.isEmpty()) {
         colors = 0;
         QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-                         q, SLOT(colorsChanged()));
+                         q, SLOT(colorsChanged()), Qt::UniqueConnection);
     } else {
+        QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
+                            q, SLOT(colorsChanged()));
         colors = KSharedConfig::openConfig(colorsFile);
     }
 
@@ -606,7 +629,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     viewColorScheme = KColorScheme(QPalette::Active, KColorScheme::View, colors);
     hasWallpapers = KStandardDirs::exists(KStandardDirs::locateLocal("data", QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/wallpapers/")));
 
-    if (isDefault && writeSettings) {
+    if (realTheme && isDefault && writeSettings) {
         // we're the default theme, let's save our state
         KConfigGroup &cg = config();
         if (ThemePrivate::defaultTheme == themeName) {
@@ -617,11 +640,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
         cg.sync();
     }
 
-    //check for expired cache
-    QFile f(metadataPath);
-    QFileInfo info(f);
-
-    if (useCache() && (!oldThemeName.isEmpty() || info.lastModified().toTime_t() > pixmapCache->lastModifiedTime())) {
+    if (expireCache) {
         discardCache(oldThemeName);
     } else {
         QString svgElementsFile = KStandardDirs::locateLocal("cache", QLatin1Literal("plasma-svgelements-") % themeName);
@@ -870,15 +889,14 @@ bool Theme::findInCache(const QString &key, QPixmap &pix)
         const QString id = d->keysToCache.value(key);
         if (d->pixmapsToCache.contains(id)) {
             pix = d->pixmapsToCache.value(id);
-            return true;
+            return !pix.isNull();
         }
 
         QPixmap temp;
-        if(d->pixmapCache->findPixmap(key, &temp) && !temp.isNull()) {
+        if (d->pixmapCache->findPixmap(key, &temp) && !temp.isNull()) {
             pix = temp;
             return true;
         }
-        return false;
     }
 
     return false;
@@ -1011,6 +1029,7 @@ void Theme::releaseRectsCache(const QString &image)
 
 void Theme::setCacheLimit(int kbytes)
 {
+    Q_UNUSED(kbytes)
     if (d->useCache()) {
         ;
         // Too late for you bub.
