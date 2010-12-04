@@ -1747,7 +1747,7 @@ bool Applet::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
             Containment *c = containment();
             if (!c || c->immutability() == Mutable) {
                 scene()->sendEvent(this, event);
-                return true;
+                return false;
             }
         }
         break;
