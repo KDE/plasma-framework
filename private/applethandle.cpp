@@ -102,9 +102,11 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &h
     m_configureIcons = new Svg(this);
     m_configureIcons->setImagePath("widgets/configuration-icons");
     m_configureIcons->setContainsMultipleImages(true);
+    connect(m_configureIcons, SIGNAL(repaintNeeded()), this, SLOT(scheduleUpdate()));
 
     m_background = new FrameSvg(this);
     m_background->setImagePath("widgets/background");
+    connect(m_background, SIGNAL(repaintNeeded()), this, SLOT(scheduleUpdate()));
     m_applet->installSceneEventFilter(this);
 }
 
@@ -380,6 +382,11 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 void AppletHandle::emitDisappear()
 {
     emit disappearDone(this);
+}
+
+void AppletHandle::scheduleUpdate()
+{
+    update();
 }
 
 AppletHandle::ButtonType AppletHandle::mapToButton(const QPointF &point) const

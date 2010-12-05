@@ -92,6 +92,7 @@ class AppletHandle : public QGraphicsObject
         void hoverTimeout();
         void leaveTimeout();
         void emitDisappear();
+        void scheduleUpdate();
 
     private:
         static const int HANDLE_MARGIN = 3;
