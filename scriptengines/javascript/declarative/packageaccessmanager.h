@@ -20,8 +20,12 @@
 #ifndef PACKAGEACCESSMANAGER_H
 #define PACKAGEACCESSMANAGER_H
 
-#include <kio/accessmanager.h>
 
+#ifndef PLASMA_NO_KIO
+#include <kio/accessmanager.h>
+#else
+#include <QtNetwork/QNetworkAccessManager>
+#endif
 
 namespace Plasma
 {
@@ -30,7 +34,12 @@ namespace Plasma
 
 class AppletAuthorization;
 
-class PackageAccessManager : public KIO::AccessManager
+class PackageAccessManager :
+#ifdef PLASMA_NO_KIO
+public QNetworkAccessManager
+#else
+public KIO::AccessManager
+#endif
 {
 public:
     PackageAccessManager(const Plasma::Package *package, AppletAuthorization *auth, QObject *parent = 0);

@@ -75,6 +75,11 @@ QNetworkReply *PackageAccessManager::createRequest(QNetworkAccessManager::Operat
         return new ErrorReply(op, req);
     } else {
         return KIO::AccessManager::createRequest(op, req, outgoingData);
+        #ifndef PLASMA_NO_KIO
+            return KIO::AccessManager::createRequest(op, req, outgoingData);
+        #else
+            return QNetworkAccessManager::createRequest(op, req, outgoingData);
+        #endif
     }
 }
 
