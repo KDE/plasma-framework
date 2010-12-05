@@ -43,6 +43,7 @@ class SortFilterModel : public QSortFilterProxyModel
     Q_PROPERTY(QString filterRole READ filterRole WRITE setFilterRole)
     Q_PROPERTY(QString sortRole READ sortRole WRITE setSortRole)
     Q_PROPERTY(Qt::SortOrder sortOrder READ sortOrder WRITE setSortOrder)
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
 
     friend class DataModel;
 
@@ -64,6 +65,11 @@ public:
 
     void setSortOrder(const Qt::SortOrder order);
 
+    int count() const {return QSortFilterProxyModel::rowCount();}
+
+Q_SIGNALS:
+    void countChanged();
+
 protected:
     int roleNameToId(const QString &name);
 
@@ -81,6 +87,7 @@ class DataModel : public QAbstractItemModel
     Q_OBJECT
     Q_PROPERTY(QObject *dataSource READ dataSource WRITE setDataSource)
     Q_PROPERTY(QString keyRoleFilter READ keyRoleFilter WRITE setKeyRoleFilter)
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
 
 public:
     DataModel(QObject* parent=0);
@@ -104,6 +111,8 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
+    int count() const {return countItems();}
+
 protected:
     void setItems(const QString &sourceName, const QVariantList &list);
     inline int countItems() const;
@@ -111,6 +120,7 @@ protected:
 Q_SIGNALS:
     void modelAboutToBeReset();
     void modelReset();
+    void countChanged();
 
 private Q_SLOTS:
     void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
@@ -123,6 +133,15 @@ private:
     QHash<int, QByteArray> m_roleNames;
     QHash<QString, int> m_roleIds;
 };
+
+int DataModel::countItems() const
+{
+    int count = 0;
+    foreach (const QVector<QVariant> &v, m_items) {
+        count += v.count();
+    }
+    return count;
+}
 
 }
 #endif

@@ -30,6 +30,12 @@ SortFilterModel::SortFilterModel(QObject* parent)
 {
     setObjectName("SortFilterModel");
     setDynamicSortFilter(true);
+    connect(this, SIGNAL(rowsInserted(const QModelIndex &, int, int)),
+            this, SIGNAL(countChanged()));
+    connect(this, SIGNAL(rowsRemoved(const QModelIndex &, int, int)),
+            this, SIGNAL(countChanged()));
+    connect(this, SIGNAL(modelReset()),
+            this, SIGNAL(countChanged()));
 }
 
 SortFilterModel::~SortFilterModel()
@@ -118,19 +124,16 @@ DataModel::DataModel(QObject* parent)
       m_dataSource(0)
 {
     setObjectName("DataModel");
+    connect(this, SIGNAL(rowsInserted(const QModelIndex &, int, int)),
+            this, SIGNAL(countChanged()));
+    connect(this, SIGNAL(rowsRemoved(const QModelIndex &, int, int)),
+            this, SIGNAL(countChanged()));
+    connect(this, SIGNAL(modelReset()),
+            this, SIGNAL(countChanged()));
 }
 
 DataModel::~DataModel()
 {
-}
-
-int DataModel::countItems() const
-{
-    int count = 0;
-    foreach (const QVector<QVariant> &v, m_items) {
-        count += v.count();
-    }
-    return count;
 }
 
 void DataModel::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
