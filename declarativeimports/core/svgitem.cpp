@@ -31,7 +31,6 @@ SvgItem::SvgItem(QDeclarativeItem *parent)
     : QDeclarativeItem(parent)
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
-    
 }
 
 
@@ -42,6 +41,7 @@ SvgItem::~SvgItem()
 void SvgItem::setElementId(const QString &elementID)
 {
     m_elementID = elementID;
+    emit naturalSizeChanged();
     update();
 }
 
@@ -50,6 +50,18 @@ QString SvgItem::elementId() const
     return m_elementID;
 }
 
+QSizeF SvgItem::naturalSize() const
+{
+    if (!m_svg) {
+        return QSizeF();
+    } else if (!m_elementID.isEmpty()) {
+        return m_svg.data()->elementSize(m_elementID);
+    }
+
+    return m_svg.data()->size();
+}
+
+
 void SvgItem::setSvg(Plasma::Svg *svg)
 {
     if (m_svg) {
@@ -57,6 +69,9 @@ void SvgItem::setSvg(Plasma::Svg *svg)
     }
     m_svg = svg;
     connect(svg, SIGNAL(repaintNeeded()), this, SLOT(update()));
+    connect(svg, SIGNAL(repaintNeeded()), this, SIGNAL(naturalSizeChanged()));
+    connect(svg, SIGNAL(sizeChanged()), this, SIGNAL(naturalSizeChanged()));
+    emit naturalSizeChanged();
 }
 
 Plasma::Svg *SvgItem::svg() const

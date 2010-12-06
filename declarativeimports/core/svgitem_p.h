@@ -31,6 +31,7 @@ class SvgItem : public QDeclarativeItem
 
     Q_PROPERTY(QString elementId READ elementId WRITE setElementId)
     Q_PROPERTY(Plasma::Svg * svg READ svg WRITE setSvg)
+    Q_PROPERTY(QSizeF naturalSize READ naturalSize NOTIFY naturalSizeChanged)
 
 public:
     SvgItem(QDeclarativeItem *parent=0);
@@ -42,7 +43,12 @@ public:
     void setSvg(Plasma::Svg *svg);
     Plasma::Svg *svg() const;
 
+    QSizeF naturalSize() const;
+
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+Q_SIGNALS:
+    void naturalSizeChanged();
 
 private:
     QWeakPointer<Plasma::Svg> m_svg;
