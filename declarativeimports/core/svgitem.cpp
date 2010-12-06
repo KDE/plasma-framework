@@ -28,7 +28,8 @@ namespace Plasma
 {
 
 SvgItem::SvgItem(QDeclarativeItem *parent)
-    : QDeclarativeItem(parent)
+    : QDeclarativeItem(parent),
+      m_smooth(false)
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
 }
@@ -79,6 +80,20 @@ Plasma::Svg *SvgItem::svg() const
     return m_svg.data();
 }
 
+void SvgItem::setSmooth(const bool smooth)
+{
+    if (smooth == m_smooth) {
+        return;
+    }
+    m_smooth = smooth;
+    update();
+}
+
+bool SvgItem::smooth() const
+{
+    return m_smooth;
+}
+
 void SvgItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option);
@@ -87,9 +102,17 @@ void SvgItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, Q
     if (!m_svg) {
         return;
     }
+    //do without painter save, faster and the support can be compiled out
+    const bool wasAntiAlias = painter->testRenderHint(QPainter::Antialiasing);
+    const bool wasSmoothTransform = painter->testRenderHint(QPainter::SmoothPixmapTransform);
+    painter->setRenderHint(QPainter::Antialiasing, m_smooth);
+    painter->setRenderHint(QPainter::SmoothPixmapTransform, m_smooth);
+
     //setContainsMultipleImages has to be done there since m_frameSvg can be shared with somebody else
     m_svg.data()->setContainsMultipleImages(!m_elementID.isEmpty());
     m_svg.data()->paint(painter, boundingRect(), m_elementID);
+    painter->setRenderHint(QPainter::Antialiasing, wasAntiAlias);
+    painter->setRenderHint(QPainter::SmoothPixmapTransform, wasSmoothTransform);
 }
 
 } // Plasma namespace

@@ -32,6 +32,7 @@ class SvgItem : public QDeclarativeItem
     Q_PROPERTY(QString elementId READ elementId WRITE setElementId)
     Q_PROPERTY(Plasma::Svg * svg READ svg WRITE setSvg)
     Q_PROPERTY(QSizeF naturalSize READ naturalSize NOTIFY naturalSizeChanged)
+    Q_PROPERTY(bool smooth READ smooth WRITE setSmooth)
 
 public:
     SvgItem(QDeclarativeItem *parent=0);
@@ -43,6 +44,9 @@ public:
     void setSvg(Plasma::Svg *svg);
     Plasma::Svg *svg() const;
 
+    void setSmooth(const bool smooth);
+    bool smooth() const;
+
     QSizeF naturalSize() const;
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
@@ -53,6 +57,7 @@ Q_SIGNALS:
 private:
     QWeakPointer<Plasma::Svg> m_svg;
     QString m_elementID;
+    bool m_smooth;
 };
 }
 
