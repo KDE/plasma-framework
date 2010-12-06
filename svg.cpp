@@ -694,6 +694,7 @@ void Svg::resize(const QSizeF &size)
 
     d->size = size;
     d->localRectCache.clear();
+    emit sizeChanged();
 }
 
 void Svg::resize()
@@ -705,6 +706,7 @@ void Svg::resize()
 
     d->size = d->naturalSize;
     d->localRectCache.clear();
+    emit sizeChanged();
 }
 
 QSize Svg::elementSize(const QString &elementId) const

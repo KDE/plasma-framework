@@ -57,7 +57,7 @@ class PLASMA_EXPORT Svg : public QObject
 {
     Q_OBJECT
     Q_ENUMS(ContentType)
-    Q_PROPERTY(QSize size READ size WRITE resize)
+    Q_PROPERTY(QSize size READ size WRITE resize NOTIFY sizeChanged)
     Q_PROPERTY(bool multipleImages READ containsMultipleImages WRITE setContainsMultipleImages)
     Q_PROPERTY(QString imagePath READ imagePath WRITE setImagePath)
     Q_PROPERTY(bool usingRenderingCache READ isUsingRenderingCache WRITE setUsingRenderingCache)
@@ -255,6 +255,7 @@ class PLASMA_EXPORT Svg : public QObject
 
     Q_SIGNALS:
         void repaintNeeded();
+        void sizeChanged();
 
     private:
         SvgPrivate *const d;
