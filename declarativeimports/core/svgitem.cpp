@@ -31,7 +31,6 @@ SvgItem::SvgItem(QDeclarativeItem *parent)
     : QDeclarativeItem(parent)
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
-    
 }
 
 
@@ -42,12 +41,35 @@ SvgItem::~SvgItem()
 void SvgItem::setElementId(const QString &elementID)
 {
     m_elementID = elementID;
+    emit sizeChanged();
     update();
 }
 
 QString SvgItem::elementId() const
 {
     return m_elementID;
+}
+
+qreal SvgItem::naturalWidth() const
+{
+    if (!m_svg) {
+        return 0;
+    } else if (!m_elementID.isEmpty()) {
+        return m_svg.data()->elementSize(m_elementID).height();
+    } else {
+        return m_svg.data()->size().height();
+    }
+}
+
+qreal SvgItem::naturalHeight() const
+{
+    if (!m_svg) {
+        return 0;
+    } else if (!m_elementID.isEmpty()) {
+        return m_svg.data()->elementSize(m_elementID).width();
+    } else {
+        return m_svg.data()->size().width();
+    }
 }
 
 void SvgItem::setSvg(Plasma::Svg *svg)
@@ -57,6 +79,8 @@ void SvgItem::setSvg(Plasma::Svg *svg)
     }
     m_svg = svg;
     connect(svg, SIGNAL(repaintNeeded()), this, SLOT(update()));
+    connect(svg, SIGNAL(repaintNeeded()), this, SLOT(sizeChanged()));
+    emit sizeChanged();
 }
 
 Plasma::Svg *SvgItem::svg() const
