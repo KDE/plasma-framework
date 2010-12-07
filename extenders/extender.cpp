@@ -861,6 +861,10 @@ void ExtenderPrivate::extenderItemDestroyed(Plasma::ExtenderItem *item)
 {
     if (item && attachedExtenderItems.contains(item)) {
         removeExtenderItem(item);
+    } else if (pendingItems.contains(item)) {
+        pendingItems.remove(item);
+    } else {
+        attachedExtenderItems.removeAll(item);
     }
 }
 
