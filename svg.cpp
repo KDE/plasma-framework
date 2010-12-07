@@ -183,6 +183,11 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
     bool updateNeeded = true; //!path.isEmpty() || !themePath.isEmpty();
 
     QObject::disconnect(actualTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
+    if (isThemed && !themed && s_systemColorsCache) {
+        // catch the case where we weren't themed, but now we are, and the colors cache was set up
+        // ensure we are not connected to that theme previously
+        QObject::disconnect(s_systemColorsCache.data(), 0, q, 0);
+    }
 
     themed = isThemed;
     path.clear();
@@ -195,6 +200,7 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
         themeFailed = false;
         QObject::connect(actualTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
     } else if (QFile::exists(imagePath)) {
+        QObject::connect(cacheAndColorsTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()), Qt::UniqueConnection);
         path = imagePath;
     } else {
         kDebug() << "file '" << path << "' does not exist!";
@@ -238,7 +244,10 @@ Theme *SvgPrivate::actualTheme()
 
 Theme *SvgPrivate::cacheAndColorsTheme()
 {
-    if (!themed && usesColors) {
+    if (themed) {
+        return actualTheme();
+    } else {
+        // use a separate cache source for unthemed svg's
         if (!s_systemColorsCache) {
             //FIXME: reference count this, so that it is deleted when no longer in use
             s_systemColorsCache = new Plasma::Theme("internal-system-colors");
@@ -246,8 +255,6 @@ Theme *SvgPrivate::cacheAndColorsTheme()
 
         return s_systemColorsCache.data();
     }
-
-    return actualTheme();
 }
 
 QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
@@ -532,7 +539,7 @@ void SvgPrivate::checkColorHints()
     // a colorscheme
     if (usesColors && (!themed || !actualTheme()->colorScheme())) {
         QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-                         q, SLOT(colorsChanged()));
+                         q, SLOT(colorsChanged()), Qt::UniqueConnection);
     } else {
         QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
                             q, SLOT(colorsChanged()));
@@ -589,14 +596,15 @@ QRectF SvgPrivate::makeUniform(const QRectF &orig, const QRectF &dst)
     return res;
 }
 
-//Slots
 void SvgPrivate::themeChanged()
 {
-    // check if new theme svg wants colorscheme applied
-    checkColorHints();
-
-    if (!themed) {
+    if (q->imagePath().isEmpty()) {
         return;
+    }
+
+    if (themed) {
+        // check if new theme svg wants colorscheme applied
+        checkColorHints();
     }
 
     QString currentPath = themePath;
@@ -796,16 +804,17 @@ bool Svg::isUsingRenderingCache() const
 
 void Svg::setTheme(Plasma::Theme *theme)
 {
+    if (!theme || theme == d->theme.data()) {
+        return;
+    }
+
     if (d->theme) {
         disconnect(d->theme.data(), 0, this, 0);
     }
 
     d->theme = theme;
-    if (!imagePath().isEmpty()) {
-        QString path = imagePath();
-        d->themePath.clear();
-        setImagePath(path);
-    }
+    connect(theme, SIGNAL(themeChanged()), this, SLOT(themeChanged()));
+    d->themeChanged();
 }
 
 Theme *Svg::theme() const
