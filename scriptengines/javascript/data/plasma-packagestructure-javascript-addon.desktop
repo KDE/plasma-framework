@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Javascript Addon
 Name[ast]=Complementu de JavaScript
+Name[bg]=Добавка за JavaScript
 Name[ca]=Complement del Javascript
 Name[da]=JavaScript-tilføjelse
 Name[de]=JavaScript-Erweiterung
@@ -32,6 +33,7 @@ Name[x-test]=xxJavascript Addonxx
 Name[zh_TW]=Javascript Addon
 Comment=Addons for Javascript Plasma plugins
 Comment[ast]=Amestaos pa complementos de JavaScript pa Plasma
+Comment[bg]=Добавки за приставките за Javascript на Plasma
 Comment[ca]=Complements pels connectors Javascript del Plasma
 Comment[da]=Tilføjelse til Plasma-plugins i JavaScript
 Comment[de]=Erweiterungen für JavaScript-Module in Plasma
@@ -54,6 +56,7 @@ Comment[nn]=Tillegg for JavaScript–Plasma-programtillegg
 Comment[pt]=Extras para os 'plugins' do Plasma em JavaScript
 Comment[pt_BR]=Complementos para os plug-ins do Plasma em JavaScript
 Comment[sv]=Tillägg för Javascript Plasma-insticksprogram
+Comment[th]=ส่วนขยายสำหรับส่วนเสริมพลาสมาที่เป็นจาวาสคริปต์
 Comment[uk]=Додатки для використання Javascript у Плазмі
 Comment[x-test]=xxAddons for Javascript Plasma pluginsxx
 Comment[zh_TW]=Javascript Plasma 外掛程式的 Addon
