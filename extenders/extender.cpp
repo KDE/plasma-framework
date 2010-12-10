@@ -535,6 +535,8 @@ void Extender::itemRemovedEvent(ExtenderItem *item)
     d->updateEmptyExtenderLabel();
     d->updateBorders();
 
+    d->layout->updateGeometry();
+    static_cast<QGraphicsLayoutItem *>(d->scrollWidget)->updateGeometry();
     updateGeometry();
 
     resize(d->mainWidget->effectiveSizeHint(Qt::PreferredSize));

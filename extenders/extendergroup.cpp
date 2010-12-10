@@ -216,6 +216,8 @@ void ExtenderGroup::resizeEvent(QGraphicsSceneResizeEvent *event)
 bool ExtenderGroup::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == d->childsWidget && event->type() == QEvent::GraphicsSceneResize) {
+        static_cast<QGraphicsLayoutItem *>(extender()->d->scrollWidget)->updateGeometry();
+        static_cast<QGraphicsLayoutItem *>(extender())->updateGeometry();
         //resize to the max between the extender size hint and ours (that's because the group can still not be in the extender layout)
         extender()->resize(extender()->effectiveSizeHint(Qt::PreferredSize).expandedTo(effectiveSizeHint(Qt::PreferredSize)).width(), extender()->size().height());
     }
@@ -321,14 +323,19 @@ void ExtenderGroupPrivate::addItemToGroup(Plasma::ExtenderItem *item, const QPoi
         layout->insertItem(insertIndexFromPos(pos), item);
         layout->activate();
 
-        childsWidget->resize(childsWidget->size().width(),
-                             childsWidget->effectiveSizeHint(Qt::PreferredSize).height());
-
         if (!q->isVisible() && !q->items().isEmpty()) {
             q->extender()->itemAddedEvent(q);
             q->show();
         }
         childsWidget->setVisible(!q->isGroupCollapsed());
+
+        if (!q->isGroupCollapsed()) {
+            layout->updateGeometry();
+            static_cast<QGraphicsLayoutItem *>(q)->updateGeometry();
+            static_cast<QGraphicsLayoutItem *>(childsWidget)->updateGeometry();
+            static_cast<QGraphicsLayoutItem *>(q->extender()->d->scrollWidget)->updateGeometry();
+        }
+
         q->extender()->resize(q->extender()->effectiveSizeHint(Qt::PreferredSize));
     }
 }
@@ -340,10 +347,14 @@ void ExtenderGroupPrivate::removeItemFromGroup(Plasma::ExtenderItem *item)
             q->extender()->itemRemovedEvent(q);
             q->hide();
         }
-        childsWidget->resize(childsWidget->size().width(),
-                             childsWidget->effectiveSizeHint(Qt::PreferredSize).height());
         layout->removeItem(item);
         item->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+
+        layout->updateGeometry();
+        static_cast<QGraphicsLayoutItem *>(q)->updateGeometry();
+        static_cast<QGraphicsLayoutItem *>(childsWidget)->updateGeometry();
+        static_cast<QGraphicsLayoutItem *>(q->extender()->d->scrollWidget)->updateGeometry();
+
         q->extender()->resize(q->extender()->effectiveSizeHint(Qt::PreferredSize));
     }
 }
