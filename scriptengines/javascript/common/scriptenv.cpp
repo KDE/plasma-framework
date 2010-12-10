@@ -214,7 +214,8 @@ QScriptValue ScriptEnv::openUrl(QScriptContext *context, QScriptEngine *engine)
     QScriptValue v = context->argument(0);
     KUrl url = v.isString() ? KUrl(v.toString()) : qscriptvalue_cast<KUrl>(v);
     if (url.isValid()) {
-        return KRun::runUrl(url, KMimeType::findByUrl(url)->name(), 0);
+        KMimeType::Ptr mimetype = KMimeType::findByUrl(url, 0, false, false);
+        new KRun(url, 0);
     }
 
     return false;
