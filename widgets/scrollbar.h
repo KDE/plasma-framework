@@ -158,6 +158,12 @@ Q_SIGNALS:
      */
     void valueChanged(int value);
 
+    /**
+     * Emitted when the slider has been moved by the user
+     * @since 4.6
+     */
+    void sliderMoved(int value);
+
 private:
     ScrollBarPrivate * const d;
 };

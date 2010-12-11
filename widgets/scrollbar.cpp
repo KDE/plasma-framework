@@ -49,6 +49,7 @@ ScrollBar::ScrollBar(QGraphicsWidget *parent)
 
    scrollbar->resize(scrollbar->sizeHint());
    connect(scrollbar, SIGNAL(valueChanged(int)), this, SIGNAL(valueChanged(int)));
+   connect(scrollbar, SIGNAL(sliderMoved(int)), this, SIGNAL(sliderMoved(int)));
 }
 
 ScrollBar::~ScrollBar()
