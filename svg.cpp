@@ -607,7 +607,7 @@ void SvgPrivate::themeChanged()
         checkColorHints();
     }
 
-    QString currentPath = themePath;
+    QString currentPath = themed ? themePath : path;
     themePath.clear();
     eraseRenderer();
     setImagePath(currentPath);
