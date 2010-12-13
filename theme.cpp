@@ -62,6 +62,14 @@ enum styles {
     SVGSTYLE
 };
 
+enum CacheType {
+    NoCache = 0,
+    PixmapCache = 1,
+    SvgElementsCache = 2
+};
+Q_DECLARE_FLAGS(CacheTypes, CacheType)
+Q_DECLARE_OPERATORS_FOR_FLAGS(CacheTypes)
+
 class ThemePrivate
 {
 public:
@@ -132,7 +140,7 @@ public:
 
     QString findInTheme(const QString &image, const QString &theme) const;
     void compositingChanged();
-    void discardCache(const QString &oldThemeName = QString(), bool keepSvgElementsCache = false);
+    void discardCache(CacheTypes caches);
     void scheduledCacheUpdate();
     void colorsChanged();
     bool useCache();
@@ -196,6 +204,17 @@ bool ThemePrivate::useCache()
     if (cacheTheme && !pixmapCache) {
         ThemeConfig config;
         pixmapCache = new KImageCache("plasma_theme_" + themeName, config.themeCacheKb() * 1024);
+        if (themeName != systemColorsTheme) {
+            //check for expired cache
+            // FIXME: when using the system colors, if they change while the application is not running
+            // the cache should be dropped; we need a way to detect system color change when the
+            // application is not running.
+            QFile f(KStandardDirs::locate("data", "desktoptheme/" + themeName + "/metadata.desktop"));
+            QFileInfo info(f);
+            if (info.lastModified().toTime_t() > pixmapCache->lastModifiedTime()) {
+                pixmapCache->clear();
+            }
+        }
     }
 
     return cacheTheme;
@@ -241,40 +260,38 @@ void ThemePrivate::compositingChanged()
 
     if (compositingActive != nowCompositingActive) {
         compositingActive = nowCompositingActive;
-        discardCache();
+        discardCache(PixmapCache | SvgElementsCache);
         emit q->themeChanged();
     }
 #endif
 }
 
-void ThemePrivate::discardCache(const QString &oldThemeName, bool keepSvgElementsCache)
+void ThemePrivate::discardCache(CacheTypes caches)
 {
-    if (oldThemeName.isEmpty()) {
-        if (pixmapCache) {
-            pixmapCache->clear();
-        }
+    if (caches & PixmapCache) {
+         if (pixmapCache) {
+             pixmapCache->clear();
+         }
     } else {
+        // This deletes the object but keeps the on-disk cache for later use
         delete pixmapCache;
         pixmapCache = 0;
-        KSharedDataCache::deleteCache("plasma_theme_" + oldThemeName);
     }
     cachedStyleSheets.clear();
     invalidElements.clear();
     pixmapsToCache.clear();
     saveTimer->stop();
 
-    if (keepSvgElementsCache) {
-        return;
-    }
+    if (caches & SvgElementsCache) {
+        if (svgElementsCache) {
+            QFile f(svgElementsCache->name());
+            svgElementsCache = 0;
+            f.remove();
+        }
 
-    if (svgElementsCache) {
-        QFile f(svgElementsCache->name());
-        svgElementsCache = 0;
-        f.remove();
+        const QString svgElementsFile = KStandardDirs::locateLocal("cache", "plasma-svgelements-" + themeName);
+        svgElementsCache = KSharedConfig::openConfig(svgElementsFile);
     }
-
-    const QString svgElementsFile = KStandardDirs::locateLocal("cache", "plasma-svgelements-" + themeName);
-    svgElementsCache = KSharedConfig::openConfig(svgElementsFile);
 }
 
 void ThemePrivate::scheduledCacheUpdate()
@@ -292,7 +309,7 @@ void ThemePrivate::scheduledCacheUpdate()
 
 void ThemePrivate::colorsChanged()
 {
-    discardCache(QString(), true);
+    discardCache(PixmapCache);
     colorScheme = KColorScheme(QPalette::Active, KColorScheme::Window, colors);
     buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, colors);
     viewColorScheme = KColorScheme(QPalette::Active, KColorScheme::View, colors);
@@ -553,8 +570,6 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
         return;
     }
 
-    const QString oldThemeName = themeName;
-
     themeName = theme;
 
     // load the color scheme config
@@ -562,7 +577,6 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
                                          : QString();
 
     //kDebug() << "we're going for..." << colorsFile << "*******************";
-    bool expireCache = false;
 
     // load the wallpaper settings, if any
     if (realTheme) {
@@ -603,17 +617,6 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
             processAnimationSettings(theme, &metadata);
             processWallpaperSettings(&metadata);
         }
-
-        //check for expired cache
-        // FIXME: when using the system colors, if they change while the application is not running
-        // the cache should be dropped; we need a way to detect system color change when the
-        // application is not running.
-        QFile f(metadataPath);
-        QFileInfo info(f);
-
-        if (useCache() && info.lastModified().toTime_t() > pixmapCache->lastModifiedTime()) {
-            expireCache = true;
-        }
     }
 
     if (colorsFile.isEmpty()) {
@@ -642,12 +645,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
         cg.sync();
     }
 
-    if (expireCache) {
-        discardCache(oldThemeName);
-    } else {
-        QString svgElementsFile = KStandardDirs::locateLocal("cache", QLatin1Literal("plasma-svgelements-") % themeName);
-        svgElementsCache = KSharedConfig::openConfig(svgElementsFile);
-    }
+    discardCache(SvgElementsCache);
 
     invalidElements.clear();
     emit q->themeChanged();
