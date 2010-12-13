@@ -52,7 +52,7 @@
 namespace Plasma
 {
 
-#define DEFAULT_WALLPAPER_THEME "Ethais"
+#define DEFAULT_WALLPAPER_THEME "Horos"
 #define DEFAULT_WALLPAPER_SUFFIX ".png"
 static const int DEFAULT_WALLPAPER_WIDTH = 1920;
 static const int DEFAULT_WALLPAPER_HEIGHT = 1200;
