@@ -371,8 +371,10 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
     elements["%fontfamily"] = font.family();
     elements["%smallfontsize"] = QString("%1pt").arg(KGlobalSettings::smallestReadableFont().pointSize());
 
-    foreach (const QString &k, elements.keys()) {
-        stylesheet.replace(k, elements[k]);
+    QHash<QString, QString>::const_iterator it = elements.constBegin();
+    QHash<QString, QString>::const_iterator itEnd = elements.constEnd();
+    for ( ; it != itEnd; ++it) {
+        stylesheet.replace(it.key(), it.value());
     }
     return stylesheet;
 }

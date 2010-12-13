@@ -262,16 +262,19 @@ void DataContainerPrivate::populateFromStoredData(KJob *job)
 
     DataEngine::Data dataToInsert;
     ServiceJob* ret = dynamic_cast<ServiceJob*>(job);
-    QHash<QString, QVariant> h = ret->result().toHash();
-    foreach (QString key, h.keys()) {
+    const QHash<QString, QVariant> h = ret->result().toHash();
+    QHash<QString, QVariant>::const_iterator it = h.begin();
+    QHash<QString, QVariant>::const_iterator itEnd = h.end();
+    for ( ; it != itEnd; ++it) {
+        QString key = it.key();
         if (key.startsWith("base64-")) {
-            QByteArray b = QByteArray::fromBase64(h[key].toString().toAscii());
+            QByteArray b = QByteArray::fromBase64(it.value().toString().toAscii());
             QDataStream ds(&b, QIODevice::ReadOnly);
             QVariant v(ds);
             key.remove(0, 7);
             dataToInsert.insert(key, v);
         } else {
-            dataToInsert.insert(key, h[key]);
+            dataToInsert.insert(key, it.value());
         }
     }
 

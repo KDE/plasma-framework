@@ -88,9 +88,13 @@ void ServiceProvider::startOperationCall(Jolie::Message message)
     kDebug() << "====PARAMETERS====";
 
     //write the parameters into the operation description
-    foreach (const QString &key, parameters.keys()) {
-        kDebug() << "key = " << key << ", value = " << parameters.value(key);
-        description.writeEntry(key, parameters.value(key));
+    QMap<QString, QVariant>::const_iterator it = parameters.constBegin();
+    QMap<QString, QVariant>::const_iterator itEnd = parameters.constEnd();
+    for ( ; it != itEnd; ++it) {
+        const QString key = it.key();
+        const QVariant value = it.value();
+        kDebug() << "key = " << key << ", value = " << value;
+        description.writeEntry(key, value);
     }
 
     m_service->setDestination(JolieMessage::field(JolieMessage::Field::DESTINATION, message));
