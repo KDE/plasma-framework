@@ -77,6 +77,7 @@ class ExtenderPrivate
         void adjustMinimumSize();
         void setPositionFromDragPosition(const QPointF &pos);
         ExtenderGroup *findGroup(const QString &name) const;
+        void setDisabledBordersHint(const FrameSvg::EnabledBorders borders);
 
         Extender *q;
 
@@ -85,6 +86,7 @@ class ExtenderPrivate
         QGraphicsWidget *mainWidget;
         QGraphicsLinearLayout *layout;
         FrameSvg *background;
+        FrameSvg::EnabledBorders disabledBordersHint;
 
         int currentSpacerIndex;
         Spacer *spacerWidget;

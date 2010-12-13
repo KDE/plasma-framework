@@ -271,7 +271,7 @@ void DialogPrivate::checkBorders(bool updateMaskIfNeeded)
     }
 
     //decide if to disable the other borders
-    if (!extender && q->isVisible()) {
+    if (q->isVisible()) {
         QRect geom;
         if (applet) {
             geom = screenGeom;
@@ -298,6 +298,15 @@ void DialogPrivate::checkBorders(bool updateMaskIfNeeded)
 
     if (!extender) {
         background->getMargins(leftWidth, topHeight, rightWidth, bottomHeight);
+    } else {
+        FrameSvg::EnabledBorders disabledBorders = FrameSvg::NoBorder;
+        if (!(borders & FrameSvg::LeftBorder)) {
+            disabledBorders |= FrameSvg::LeftBorder;
+        }
+        if (!(borders & FrameSvg::RightBorder)) {
+            disabledBorders |= FrameSvg::RightBorder;
+        }
+        extender->d->setDisabledBordersHint(disabledBorders);
     }
 
     //kDebug() << leftWidth << topHeight << rightWidth << bottomHeight;
@@ -313,7 +322,7 @@ void DialogPrivate::checkBorders(bool updateMaskIfNeeded)
         }
 
         q->update();
-    } 
+    }
 
     resizeChecksWithBorderCheck = false;
 }

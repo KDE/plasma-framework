@@ -20,6 +20,7 @@
 #include "extender.h"
 
 #include <QAction>
+#include <QDesktopWidget>
 #include <QLabel>
 #include <QGraphicsSceneDragDropEvent>
 #include <QGraphicsGridLayout>
@@ -29,6 +30,7 @@
 #include "applet.h"
 #include "containment.h"
 #include "corona.h"
+#include "dialog.h"
 #include "extendergroup.h"
 #include "extenderitem.h"
 #include "framesvg.h"
@@ -626,6 +628,10 @@ FrameSvg::EnabledBorders Extender::enabledBordersForItem(ExtenderItem *item) con
         }
     }
 
+    //someone (i.e. a Dialog) told the extender to disable some border?
+    borders &= ~d->disabledBordersHint;
+
+
     return borders;
 }
 
@@ -633,6 +639,7 @@ ExtenderPrivate::ExtenderPrivate(Applet *applet, Extender *extender) :
     q(extender),
     applet(applet),
     background(new FrameSvg(extender)),
+    disabledBordersHint(FrameSvg::NoBorder),
     currentSpacerIndex(-1),
     spacerWidget(0),
     emptyExtenderMessage(QString()),
@@ -893,6 +900,18 @@ void ExtenderPrivate::viewportGeometryChanged(const QRectF &rect)
     if (scroll != scrollbarVisible) {
         scrollbarVisible = scroll;
         updateBorders();
+    }
+}
+
+void ExtenderPrivate::setDisabledBordersHint(const FrameSvg::EnabledBorders borders)
+{
+    if (disabledBordersHint == borders) {
+        return;
+    }
+
+    disabledBordersHint = borders;
+    foreach (Plasma::ExtenderItem *item, attachedExtenderItems) {
+        item->d->themeChanged();
     }
 }
 
