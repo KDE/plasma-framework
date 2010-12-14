@@ -20,6 +20,7 @@
 #ifndef POPUPAPPLET_P_H
 #define POPUPAPPLET_P_H
 
+#include <QBasicTimer>
 #include <QWeakPointer>
 
 #include <plasma/plasma.h>
@@ -55,7 +56,8 @@ public:
     Plasma::PopupPlacement popupPlacement;
     Qt::AlignmentFlag popupAlignment;
     Plasma::AspectRatioMode savedAspectRatio;
-    QTimer *timer;
+    QTimer *autohideTimer;
+    QBasicTimer delayedShowTimer;
     QPoint clicked;
     bool popupLostFocus : 1;
     bool passive : 1;

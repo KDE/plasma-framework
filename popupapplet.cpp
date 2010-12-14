@@ -435,7 +435,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
 void PopupAppletPrivate::appletActivated()
 {
     q->setStatus(Plasma::NeedsAttentionStatus);
-    QTimer::singleShot(0, q, SLOT(showPopup()));
+    q->showPopup();
 }
 
 QSizeF PopupApplet::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
@@ -568,29 +568,51 @@ void PopupApplet::dropEvent(QGraphicsSceneDragDropEvent *event)
 
 void PopupApplet::showPopup(uint popupDuration)
 {
-    Dialog *dialog = d->dialogPtr.data();
-    if (dialog) {
-        // move the popup before its fist show, even if the show isn't triggered by
-        // a click, this should fix the first random position seen in some widgets
-        if (!dialog->isVisible()) {
-            d->internalTogglePopup();
+    // use autohideTimer to store when the next show should be
+    if (popupDuration > 0 || d->autohideTimer) {
+        if (!d->autohideTimer) {
+            d->autohideTimer = new QTimer(this);
+            d->autohideTimer->setSingleShot(true);
+            connect(d->autohideTimer, SIGNAL(timeout()), this, SLOT(hideTimedPopup()));
         }
 
-        if (popupDuration > 0) {
-            if (!d->timer) {
-                d->timer = new QTimer(this);
-                connect(d->timer, SIGNAL(timeout()), this, SLOT(hideTimedPopup()));
+        d->autohideTimer->stop();
+        d->autohideTimer->setInterval(popupDuration);
+    }
+
+    //kDebug() << "starting delayed show, duration for popup is" << popupDuration;
+    d->delayedShowTimer.start(0, this);
+}
+
+void PopupApplet::timerEvent(QTimerEvent *event)
+{
+    if (event->timerId() == d->delayedShowTimer.timerId()) {
+        d->delayedShowTimer.stop();
+        Dialog *dialog = d->dialogPtr.data();
+        if (dialog) {
+            // move the popup before its fist show, even if the show isn't triggered by
+            // a click, this should fix the first random position seen in some widgets
+            if (!dialog->isVisible()) {
+                d->internalTogglePopup();
             }
 
-            d->timer->start(popupDuration);
-        } else if (d->timer) {
-            d->timer->stop();
+            const int popupDuration = d->autohideTimer ? d->autohideTimer->interval() : 0;
+            kDebug() << d->autohideTimer->interval();
+            if (popupDuration > 0) {
+                d->autohideTimer->start();
+            } else if (d->autohideTimer) {
+                d->autohideTimer->stop();
+            }
         }
+    } else {
+        Applet::timerEvent(event);
     }
 }
 
 void PopupApplet::hidePopup()
 {
+    d->delayedShowTimer.stop();
+
     Dialog *dialog = d->dialogPtr.data();
     if (dialog) {
         if (location() != Floating) {
@@ -656,7 +678,7 @@ PopupAppletPrivate::PopupAppletPrivate(PopupApplet *applet)
           popupPlacement(Plasma::FloatingPopup),
           popupAlignment(Qt::AlignLeft),
           savedAspectRatio(Plasma::InvalidAspectRatioMode),
-          timer(0),
+          autohideTimer(0),
           popupLostFocus(false),
           passive(false)
 {
@@ -687,9 +709,11 @@ void PopupAppletPrivate::iconSizeChanged(int group)
 
 void PopupAppletPrivate::internalTogglePopup()
 {
-    if (timer) {
-        timer->stop();
+    if (autohideTimer) {
+        autohideTimer->stop();
     }
+
+    delayedShowTimer.stop();
 
     Plasma::Dialog *dialog = dialogPtr.data();
     if (!dialog) {
@@ -701,11 +725,8 @@ void PopupAppletPrivate::internalTogglePopup()
         return;
     }
 
-    if (timer) {
-        timer->stop();
-    }
-
     if (dialog->isVisible()) {
+
         if (q->location() != Floating) {
             dialog->animatedHide(locationToInverseDirection(q->location()));
         } else {
@@ -743,7 +764,7 @@ void PopupAppletPrivate::internalTogglePopup()
 
 void PopupAppletPrivate::hideTimedPopup()
 {
-    timer->stop();
+    autohideTimer->stop();
     q->hidePopup();
 }
 
@@ -752,6 +773,7 @@ void PopupAppletPrivate::clearPopupLostFocus()
     if (!icon || !icon->isDown()) {
         q->hidePopup();
     }
+
     popupLostFocus = false;
 }
 

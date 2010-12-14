@@ -206,6 +206,11 @@ protected:
      */
     void dropEvent(QGraphicsSceneDragDropEvent *event);
 
+    /**
+     * Reimplemented from QGraphicsLayoutItem
+     */
+    void timerEvent(QTimerEvent *event);
+
 private:
     /**
      * @internal This constructor is to be used with the Package loading system.
