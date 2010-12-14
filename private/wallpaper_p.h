@@ -54,9 +54,9 @@ public:
 
     bool findInCache(const QString &key, unsigned int lastModified = 0);
 
-    void renderCompleted(WallpaperRenderThread *renderer,int token, const QImage &image,
-                         const QString &sourceImagePath, const QSize &size,
-                         int resizeMethod, const QColor &color);
+    void newRenderCompleted(WallpaperRenderThread *renderer,int token, const QImage &image,
+                            const QString &sourceImagePath, const QSize &size,
+                            int resizeMethod, const QColor &color);
     void setupScriptSupport();
 
     static QList<WallpaperRenderThread *> s_renderers;

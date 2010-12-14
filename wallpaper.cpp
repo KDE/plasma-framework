@@ -440,7 +440,7 @@ void Wallpaper::render(const QString &sourceImagePath, const QSize &size,
         WallpaperPrivate::s_renderers.append(renderThread);
         d->renderToken = renderThread->render(sourceImagePath, size, resizeMethod, color);
         connect(renderThread, SIGNAL(done(WallpaperRenderThread*,int,QImage,QString,QSize,int,QColor)),
-                this, SLOT(renderCompleted(WallpaperRenderThread*,int,QImage,QString,QSize,int,QColor)), Qt::UniqueConnection);
+                this, SLOT(newRenderCompleted(WallpaperRenderThread*,int,QImage,QString,QSize,int,QColor)), Qt::UniqueConnection);
     } else {
          WallpaperPrivate::RenderRequest request;
          request.parent = this;
@@ -510,12 +510,12 @@ QString WallpaperPrivate::cachePath(const QString &key) const
     return KGlobal::dirs()->locateLocal("cache", "plasma-wallpapers/" + key + ".png");
 }
 
-void WallpaperPrivate::renderCompleted(WallpaperRenderThread *currentRenderer, int token, const QImage &image,
-                                       const QString &sourceImagePath, const QSize &size,
-                                       int resizeMethod, const QColor &color)
+void WallpaperPrivate::newRenderCompleted(WallpaperRenderThread *currentRenderer, int token, const QImage &image,
+                                          const QString &sourceImagePath, const QSize &size,
+                                          int resizeMethod, const QColor &color)
 {
     q->disconnect(currentRenderer, SIGNAL(done(WallpaperRenderThread*,int,QImage,QString,QSize,int,QColor)),
-                    q, SLOT(renderCompleted(WallpaperRenderThread*,int,QImage,QString,QSize,int,QColor)));
+                    q, SLOT(newRenderCompleted(WallpaperRenderThread*,int,QImage,QString,QSize,int,QColor)));
 
     if (!s_renderQueue.isEmpty()) {
         while (!s_renderQueue.isEmpty()) {
@@ -528,7 +528,7 @@ void WallpaperPrivate::renderCompleted(WallpaperRenderThread *currentRenderer, i
             currentRenderer->wait();
             request.parent.data()->d->renderToken = currentRenderer->render(request.file, request.size, request.resizeMethod, request.color);
             QObject::connect(currentRenderer, SIGNAL(done(WallpaperRenderThread*,int,QImage,QString,QSize,int,QColor)),
-                    request.parent.data(), SLOT(renderCompleted(WallpaperRenderThread*,int,QImage,QString,QSize,int,QColor)), Qt::UniqueConnection);
+                    request.parent.data(), SLOT(newRenderCompleted(WallpaperRenderThread*,int,QImage,QString,QSize,int,QColor)), Qt::UniqueConnection);
 
             break;
         }

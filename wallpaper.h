@@ -508,9 +508,9 @@ class PLASMA_EXPORT Wallpaper : public QObject
         void setPreviewDuringConfiguration(const bool preview);
 
     private:
-        Q_PRIVATE_SLOT(d, void renderCompleted(WallpaperRenderThread *renderer, int token, const QImage &image,
-                                               const QString &sourceImagePath, const QSize &size,
-                                               int resizeMethod, const QColor &color))
+        Q_PRIVATE_SLOT(d, void newRenderCompleted(WallpaperRenderThread *renderer, int token, const QImage &image,
+                                                  const QString &sourceImagePath, const QSize &size,
+                                                  int resizeMethod, const QColor &color))
         Q_PRIVATE_SLOT(d, void initScript())
 
         friend class WallpaperPackage;
