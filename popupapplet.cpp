@@ -597,7 +597,7 @@ void PopupApplet::timerEvent(QTimerEvent *event)
             }
 
             const int popupDuration = d->autohideTimer ? d->autohideTimer->interval() : 0;
-            kDebug() << d->autohideTimer->interval();
+            //kDebug() << "popupDuration is:" << (d->autohideTimer ? d->autohideTimer->interval() : 0);
             if (popupDuration > 0) {
                 d->autohideTimer->start();
             } else if (d->autohideTimer) {
@@ -726,7 +726,6 @@ void PopupAppletPrivate::internalTogglePopup()
     }
 
     if (dialog->isVisible()) {
-
         if (q->location() != Floating) {
             dialog->animatedHide(locationToInverseDirection(q->location()));
         } else {
