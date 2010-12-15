@@ -231,8 +231,8 @@ QString Package::filePath(const char *fileType, const QString &filename) const
             //kDebug() << "no matching path came of it, while looking for" << fileType << filename;
             return QString();
         }
-    //when filetype is empty paths is always empty, so try with an empty string
     } else {
+        //when filetype is empty paths is always empty, so try with an empty string
         paths << QString();
     }
 
@@ -242,6 +242,7 @@ QString Package::filePath(const char *fileType, const QString &filename) const
         prefixes << QString();
     }
 
+    //kDebug() << "prefixes:" << prefixes.count() << prefixes;
     foreach (const QString &contentsPrefix, prefixes) {
         const QString prefix(d->structure->path() + contentsPrefix);
 
@@ -252,8 +253,10 @@ QString Package::filePath(const char *fileType, const QString &filename) const
                 file.append("/").append(filename);
             }
 
+            //kDebug() << "testing" << file << QFile::exists("/bin/ls") << QFile::exists(file);
             if (QFile::exists(file)) {
                 if (d->structure->allowExternalPaths()) {
+                    //kDebug() << "found" << file;
                     return file;
                 }
 
@@ -262,14 +265,16 @@ QString Package::filePath(const char *fileType, const QString &filename) const
                 QDir dir(file);
                 QString canonicalized = dir.canonicalPath() + QDir::separator();
 
+                //kDebug() << "testing that" << canonicalized << "is in" << d->structure->path();
                 if (canonicalized.startsWith(d->structure->path())) {
+                    //kDebug() << "found" << file;
                     return file;
                 }
             }
         }
     }
 
-    //kDebug() << path << "does not exist";
+    //kDebug() << fileType << filename << "does not exist in" << prefixes << "at root" << d->structure->path();
     return QString();
 }
 
