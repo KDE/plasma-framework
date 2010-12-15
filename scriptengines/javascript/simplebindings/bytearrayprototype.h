@@ -69,6 +69,7 @@ public slots:
     QByteArray trimmed() const;
     void truncate(int pos);
     QString toLatin1String() const;
+    QString toUtf8() const;
     QScriptValue valueOf() const;
 
 private:

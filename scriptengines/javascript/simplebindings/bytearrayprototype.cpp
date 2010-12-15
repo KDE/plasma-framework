@@ -128,6 +128,11 @@ QString ByteArrayPrototype::toLatin1String() const
     return QString::fromLatin1(*thisByteArray());
 }
 
+QString ByteArrayPrototype::toUtf8() const
+{
+    return QString::fromUtf8(*thisByteArray());
+}
+
 //! [2]
 QScriptValue ByteArrayPrototype::valueOf() const
 {
