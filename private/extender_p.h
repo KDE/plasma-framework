@@ -78,6 +78,7 @@ class ExtenderPrivate
         void setPositionFromDragPosition(const QPointF &pos);
         ExtenderGroup *findGroup(const QString &name) const;
         void setDisabledBordersHint(const FrameSvg::EnabledBorders borders);
+        void adjustSize();
 
         Extender *q;
 

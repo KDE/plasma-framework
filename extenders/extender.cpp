@@ -514,7 +514,7 @@ void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
     d->updateEmptyExtenderLabel();
     d->updateBorders();
 
-    resize(d->mainWidget->effectiveSizeHint(Qt::PreferredSize));
+    d->adjustSize();
 }
 
 void Extender::itemRemovedEvent(ExtenderItem *item)
@@ -541,7 +541,7 @@ void Extender::itemRemovedEvent(ExtenderItem *item)
     static_cast<QGraphicsLayoutItem *>(d->scrollWidget)->updateGeometry();
     updateGeometry();
 
-    resize(d->mainWidget->effectiveSizeHint(Qt::PreferredSize));
+    d->adjustSize();
 }
 
 void Extender::itemHoverEnterEvent(ExtenderItem *item)
@@ -913,6 +913,11 @@ void ExtenderPrivate::setDisabledBordersHint(const FrameSvg::EnabledBorders bord
     foreach (Plasma::ExtenderItem *item, attachedExtenderItems) {
         item->d->themeChanged();
     }
+}
+
+void ExtenderPrivate::adjustSize()
+{
+    q->resize(mainWidget->effectiveSizeHint(Qt::PreferredSize));
 }
 
 bool Extender::isEmpty() const

@@ -336,7 +336,7 @@ void ExtenderGroupPrivate::addItemToGroup(Plasma::ExtenderItem *item, const QPoi
             static_cast<QGraphicsLayoutItem *>(q->extender()->d->scrollWidget)->updateGeometry();
         }
 
-        q->extender()->resize(q->extender()->effectiveSizeHint(Qt::PreferredSize));
+        q->extender()->d->adjustSize();
     }
 }
 
@@ -355,7 +355,7 @@ void ExtenderGroupPrivate::removeItemFromGroup(Plasma::ExtenderItem *item)
         static_cast<QGraphicsLayoutItem *>(childsWidget)->updateGeometry();
         static_cast<QGraphicsLayoutItem *>(q->extender()->d->scrollWidget)->updateGeometry();
 
-        q->extender()->resize(q->extender()->effectiveSizeHint(Qt::PreferredSize));
+        q->extender()->d->adjustSize();
     }
 }
 
