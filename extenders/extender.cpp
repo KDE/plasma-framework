@@ -917,7 +917,13 @@ void ExtenderPrivate::setDisabledBordersHint(const FrameSvg::EnabledBorders bord
 
 void ExtenderPrivate::adjustSize()
 {
-    q->resize(mainWidget->effectiveSizeHint(Qt::PreferredSize));
+    QRect screenRect;
+    QSizeF size = mainWidget->effectiveSizeHint(Qt::PreferredSize);
+    if (applet && applet.data()->containment() && applet.data()->containment()->corona()) {
+        screenRect = applet.data()->containment()->corona()->screenGeometry(applet.data()->containment()->screen());
+    }
+    q->resize(qMin(screenRect.width()/3, (int)size.width()),
+              qMin(screenRect.height()/3, (int)size.height()));
 }
 
 bool Extender::isEmpty() const
