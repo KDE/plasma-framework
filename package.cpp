@@ -158,17 +158,22 @@ Package &Package::operator=(const Package &rhs)
 
 bool Package::isValid() const
 {
-    if (!d->valid || d->structure->contentsPrefixPaths().isEmpty()) {
+    if (!d->valid) {
         return false;
     }
 
     //search for the file in all prefixes and in all possible paths for each prefix
     //even if it's a big nested loop, usually there is one prefix and one location
     //so shouldn't cause too much disk access
+    QStringList prefixes = d->structure->contentsPrefixPaths();
+    if (prefixes.isEmpty()) {
+        prefixes << QString();
+    }
+
     foreach (const char *dir, d->structure->requiredDirectories()) {
         bool failed = true;
         foreach (const QString &path, d->structure->searchPath(dir)) {
-            foreach (const QString &prefix, d->structure->contentsPrefixPaths()) {
+            foreach (const QString &prefix, prefixes) {
                 if (QFile::exists(d->structure->path() + prefix + path)) {
                     failed = false;
                     break;
@@ -189,7 +194,7 @@ bool Package::isValid() const
     foreach (const char *file, d->structure->requiredFiles()) {
         bool failed = true;
         foreach (const QString &path, d->structure->searchPath(file)) {
-            foreach (const QString &prefix, d->structure->contentsPrefixPaths()) {
+            foreach (const QString &prefix, prefixes) {
                 if (QFile::exists(d->structure->path() + prefix + path)) {
                     failed = false;
                     break;
@@ -232,7 +237,12 @@ QString Package::filePath(const char *fileType, const QString &filename) const
     }
 
     //Nested loop, but in the medium case resolves to just one iteration
-    foreach (const QString &contentsPrefix, d->structure->contentsPrefixPaths()) {
+    QStringList prefixes = d->structure->contentsPrefixPaths();
+    if (prefixes.isEmpty()) {
+        prefixes << QString();
+    }
+
+    foreach (const QString &contentsPrefix, prefixes) {
         const QString prefix(d->structure->path() + contentsPrefix);
 
         foreach (const QString &path, paths) {
@@ -386,7 +396,12 @@ QString Package::contentsHash() const
         kWarning() << "no metadata at" << metadataPath;
     }
 
-    foreach (QString prefix, d->structure->contentsPrefixPaths()) {
+    QStringList prefixes = d->structure->contentsPrefixPaths();
+    if (prefixes.isEmpty()) {
+        prefixes << QString();
+    }
+
+    foreach (QString prefix, prefixes) {
         const QString basePath = d->structure->path() + prefix;
         QDir dir(basePath);
 
