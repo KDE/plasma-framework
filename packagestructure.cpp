@@ -90,6 +90,7 @@ public:
     }
 
     void createPackageMetadata(const QString &path);
+    QStringList entryList(const QString &prefix, const QString &requestedPath);
 
     static QHash<QString, PackageStructure::Ptr> structures;
 
@@ -284,24 +285,34 @@ QStringList PackageStructure::entryList(const char *key)
     }
 
     QStringList list;
-    foreach (QString prefix, d->contentsPrefixPaths) {
-        QDir dir(d->path + prefix + p);
-
-        if (dir.exists()) {
-            if (d->externalPaths) {
-                return dir.entryList(QDir::Files | QDir::Readable);
-            }
-
-            // ensure that we don't return files outside of our base path
-            // due to symlink or ../ games
-            QString canonicalized = dir.canonicalPath();
-            if (canonicalized.startsWith(d->path)) {
-                list << dir.entryList(QDir::Files | QDir::Readable);
-            }
+    if (d->contentsPrefixPaths.isEmpty()) {
+        // no prefixes is the same as d->contentsPrefixPths with QStringList() << QString()
+        list << d->entryList(QString(), p);
+    } else {
+        foreach (QString prefix, d->contentsPrefixPaths) {
+            list << d->entryList(prefix, p);
         }
     }
 
     return list;
+}
+
+QStringList PackageStructurePrivate::entryList(const QString &prefix, const QString &requestedPath)
+{
+    QDir dir(path + prefix + requestedPath);
+
+    if (externalPaths) {
+        return dir.entryList(QDir::Files | QDir::Readable);
+    }
+
+    // ensure that we don't return files outside of our base path
+    // due to symlink or ../ games
+    QString canonicalized = dir.canonicalPath();
+    if (canonicalized.startsWith(path)) {
+        return dir.entryList(QDir::Files | QDir::Readable);
+    }
+
+    return QStringList();
 }
 
 void PackageStructure::addDirectoryDefinition(const char *key,
@@ -528,7 +539,7 @@ void PackageStructure::write(KConfigBase *config) const
 
 QString PackageStructure::contentsPrefix() const
 {
-    return d->contentsPrefixPaths.first();
+    return d->contentsPrefixPaths.isEmpty() ? QString() : d->contentsPrefixPaths.first();
 }
 
 void PackageStructure::setContentsPrefix(const QString &prefix)
