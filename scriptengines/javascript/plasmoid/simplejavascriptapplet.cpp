@@ -91,6 +91,7 @@ QScriptValue constructQRectFClass(QScriptEngine *engine);
 QScriptValue constructQSizeFClass(QScriptEngine *engine);
 QScriptValue constructQSizePolicyClass(QScriptEngine *engine);
 QScriptValue constructTimerClass(QScriptEngine *engine);
+void registerNonGuiMetaTypes(QScriptEngine *engine);
 void registerSimpleAppletMetaTypes(QScriptEngine *engine);
 
 KSharedPtr<UiLoader> SimpleJavaScriptApplet::s_widgetLoader;
@@ -568,6 +569,7 @@ void SimpleJavaScriptApplet::setupObjects()
     global.setProperty("FrameSvg", m_engine->newFunction(SimpleJavaScriptApplet::newPlasmaFrameSvg));
     global.setProperty("ExtenderItem", m_engine->newFunction(SimpleJavaScriptApplet::newPlasmaExtenderItem));
 
+    registerNonGuiMetaTypes(m_engine);
     registerSimpleAppletMetaTypes(m_engine);
     installWidgets(m_engine);
 }
