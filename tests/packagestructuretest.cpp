@@ -23,8 +23,21 @@
 #include <kconfiggroup.h>
 #include <kdebug.h>
 
+#include "plasma/package.h"
 #include "plasma/packagestructure.h"
 #include "plasma/applet.h"
+
+class NoPrefixes : public Plasma::PackageStructure
+{
+public:
+    explicit NoPrefixes()
+        : Plasma::PackageStructure(0, "StructureLess")
+    {
+        setContentsPrefixPaths(QStringList());
+        addDirectoryDefinition("bin", "bin", "bin");
+    }
+};
+
 
 void PackageStructureTest::init()
 {
@@ -33,6 +46,15 @@ void PackageStructureTest::init()
 
 void PackageStructureTest::cleanup()
 {
+}
+
+void PackageStructureTest::emptyContentsPrefix()
+{
+    Plasma::PackageStructure::Ptr structure(new NoPrefixes);
+    Plasma::Package package("/", structure);
+    QString path(package.filePath("bin", "ls"));
+    qDebug() << path;
+    QCOMPARE(path, QString("/bin/ls"));
 }
 
 void PackageStructureTest::type()

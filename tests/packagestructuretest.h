@@ -32,6 +32,7 @@ public Q_SLOTS:
     void cleanup();
 
 private Q_SLOTS:
+    void emptyContentsPrefix();
     void type();
     void directories();
     void requiredDirectories();
