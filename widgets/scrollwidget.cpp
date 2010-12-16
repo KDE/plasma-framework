@@ -1373,6 +1373,9 @@ void ScrollWidget::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (!d->widget) {
         return;
+    } else if (!d->canYFlick() && !d->canXFlick()) {
+        event->ignore();
+        return;
     }
 
     d->handleMousePressEvent(event);
@@ -1398,8 +1401,7 @@ void ScrollWidget::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
     if (!d->widget) {
         return;
-    }
-    if (!d->canYFlick() && !d->canXFlick()) {
+    } else if (!d->canYFlick() && !d->canXFlick()) {
         event->ignore();
         return;
     }
