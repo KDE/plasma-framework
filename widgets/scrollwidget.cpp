@@ -133,6 +133,9 @@ public:
         adjustScrollbarsTimer->setSingleShot(true);
         QObject::connect(adjustScrollbarsTimer, SIGNAL(timeout()), q, SLOT(adjustScrollbars()));
 
+        wheelTimer =  new QTimer(q);
+        wheelTimer->setSingleShot(true);
+
         verticalScrollBarPolicy = Qt::ScrollBarAsNeeded;
         verticalScrollBar = new Plasma::ScrollBar(q);
         verticalScrollBar->setFocusPolicy(Qt::NoFocus);
@@ -791,8 +794,10 @@ public:
 
     void handleWheelEvent(QGraphicsSceneWheelEvent *event)
     {
-        if (!widget.data())
+        //only scroll when the animation is done, this avoids to receive too many events and getting mad when they arrive from a touchpad
+        if (!widget.data() || wheelTimer->isActive()) {
             return;
+        }
 
         QPointF start = q->scrollPosition();
         QPointF end = start;
@@ -835,6 +840,7 @@ public:
         directMoveAnimation->setEndValue(end);
         directMoveAnimation->setDuration(200);
         directMoveAnimation->start();
+        wheelTimer->start(50);
     }
 
     qreal minXExtent() const
@@ -1059,6 +1065,7 @@ public:
     QPointF dragHandleClicked;
     bool dragging;
     QTimer *adjustScrollbarsTimer;
+    QTimer *wheelTimer;
 
     QPointF pressPos;
     QPointF pressScrollPos;
