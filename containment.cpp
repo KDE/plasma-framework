@@ -883,6 +883,7 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
             currentContainment->d->handles.remove(applet);
         }
         applet->setParentItem(this);
+        applet->setParent(this);
 
         // now move the old config to the new location
         //FIXME: this doesn't seem to get the actual main config group containing plugin=, etc
@@ -893,6 +894,7 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
         disconnect(applet, SIGNAL(activate()), currentContainment, SIGNAL(activate()));
     } else {
         applet->setParentItem(this);
+        applet->setParent(this);
     }
 
     d->applets << applet;

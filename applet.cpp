@@ -1513,6 +1513,20 @@ Containment *Applet::containment() const
         parent = parent->parentItem();
     }
 
+    if (!c) {
+        //if the applet is an offscreen widget its parentItem will be 0, while its parent
+        //will be its parentWidget, so here we check the QObject hierarchy.
+        QObject *objParent = this->parent();
+        while (objParent) {
+            Containment *possibleC = qobject_cast<Containment*>(objParent);
+            if (possibleC && possibleC->Applet::d->isContainment) {
+                c = possibleC;
+                break;
+            }
+            objParent = objParent->parent();
+        }
+    }
+
     return c;
 }
 
