@@ -1392,6 +1392,10 @@ void ScrollWidget::wheelEvent(QGraphicsSceneWheelEvent *event)
     if (!d->widget) {
         return;
     }
+    if (!d->canYFlick() && !d->canXFlick()) {
+        event->ignore();
+        return;
+    }
     d->handleWheelEvent(event);
     event->accept();
 }
