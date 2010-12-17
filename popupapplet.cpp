@@ -20,6 +20,7 @@
 
 #include "popupapplet.h"
 #include "private/popupapplet_p.h"
+#include "private/dialog_p.h"
 
 #include <QApplication>
 #include <QGraphicsProxyWidget>
@@ -381,6 +382,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 }
 
                 Dialog *dialog = new Dialog();
+                dialog->d->appletPtr = q;
                 dialogPtr = dialog;
 
                 dialog->setAspectRatioMode(savedAspectRatio);

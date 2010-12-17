@@ -51,7 +51,6 @@ class DialogPrivate;
 class PLASMA_EXPORT Dialog : public QWidget
 {
     Q_OBJECT
-
     public:
         /**
          * Use these flags to choose the active resize corners.
@@ -180,6 +179,8 @@ class PLASMA_EXPORT Dialog : public QWidget
         Q_PRIVATE_SLOT(d, void themeChanged())
         Q_PRIVATE_SLOT(d, void checkBorders())
         Q_PRIVATE_SLOT(d, void delayedAdjustSize())
+
+        friend class PopupAppletPrivate;
 };
 
 } // Plasma namespace

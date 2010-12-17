@@ -21,6 +21,7 @@
  */
 
 #include "dialog.h"
+#include "private/dialog_p.h"
 
 #include <QPainter>
 #include <QSvgRenderer>
@@ -60,56 +61,6 @@
 
 namespace Plasma
 {
-
-class DialogPrivate
-{
-public:
-    DialogPrivate(Dialog *dialog)
-            : q(dialog),
-              background(0),
-              view(0),
-              resizeCorners(Dialog::NoCorner),
-              resizeStartCorner(Dialog::NoCorner),
-              moveTimer(0),
-              aspectRatioMode(Plasma::IgnoreAspectRatio),
-              resizeChecksWithBorderCheck(false)
-    {
-    }
-
-    ~DialogPrivate()
-    {
-    }
-
-    void scheduleBorderCheck(bool triggeredByResize = false);
-    void themeChanged();
-    void updateMask();
-    void checkBorders();
-    void checkBorders(bool updateMaskIfNeeded);
-    void updateResizeCorners();
-    int calculateWidthForHeightAndRatio(int height, qreal ratio);
-    Plasma::Applet *applet();
-    void delayedAdjustSize();
-
-    Plasma::Dialog *q;
-
-    /**
-     * Holds the background SVG, to be re-rendered when the cache is invalidated,
-     * for example by resizing the dialogue.
-     */
-    Plasma::FrameSvg *background;
-    QGraphicsView *view;
-    QWeakPointer<QGraphicsWidget> graphicsWidgetPtr;
-    Dialog::ResizeCorners resizeCorners;
-    QMap<Dialog::ResizeCorner, QRect> resizeAreas;
-    int resizeStartCorner;
-    QTimer *moveTimer;
-    QTimer *adjustViewTimer;
-    QTimer *adjustSizeTimer;
-    QSize oldGraphicsWidgetMinimumSize;
-    QSize oldGraphicsWidgetMaximumSize;
-    Plasma::AspectRatioMode aspectRatioMode;
-    bool resizeChecksWithBorderCheck;
-};
 
 void DialogPrivate::scheduleBorderCheck(bool triggeredByResize)
 {
@@ -167,28 +118,6 @@ void DialogPrivate::checkBorders()
     checkBorders(true);
 }
 
-Plasma::Applet *DialogPrivate::applet()
-{
-    Extender *extender = qobject_cast<Extender*>(graphicsWidgetPtr.data());
-    Plasma::Applet *applet = 0;
-    if (extender) {
-        if (!extender->d->applet) {
-            return 0;
-        }
-        applet = extender->d->applet.data();
-    } else if (graphicsWidgetPtr) {
-        QObject *pw = graphicsWidgetPtr.data();
-
-        while ((pw = pw->parent())) {
-            applet = dynamic_cast<Plasma::Applet *>(pw);
-            if (applet) {
-                break;
-            }
-        }
-    }
-    return applet;
-}
-
 void DialogPrivate::delayedAdjustSize()
 {
     q->syncToGraphicsWidget();
@@ -205,12 +134,33 @@ void DialogPrivate::checkBorders(bool updateMaskIfNeeded)
     FrameSvg::EnabledBorders borders = FrameSvg::AllBorders;
 
     Extender *extender = qobject_cast<Extender*>(graphicsWidget);
-    Plasma::Applet *applet = this->applet();
+    Plasma::Applet *applet = appletPtr.data();
 
     //used to remove borders at the edge of the desktop
+    QRect avail;
+    QRect screenGeom;
     QDesktopWidget *desktop = QApplication::desktop();
-    QRect avail = desktop->availableGeometry(desktop->screenNumber(q));
-    QRect screenGeom = desktop->screenGeometry(desktop->screenNumber(q));
+    Plasma::Corona *c = 0;
+    if (applet) {
+        c = qobject_cast<Plasma::Corona *>(applet->scene());
+    } else if (graphicsWidget) {
+        c = qobject_cast<Plasma::Corona *>(graphicsWidget->scene());
+    }
+    if (c) {
+        QRegion r = c->availableScreenRegion(desktop->screenNumber(q));
+        QRect maxRect;
+        foreach (QRect rect, r.rects()) {
+            if (rect.width() > maxRect.width() && rect.height() > maxRect.height()) {
+                maxRect = rect;
+            }
+        }
+        avail = maxRect;
+        screenGeom = c->screenGeometry(desktop->screenNumber(q));
+    } else {
+        avail = desktop->availableGeometry(desktop->screenNumber(q));
+        screenGeom = desktop->screenGeometry(desktop->screenNumber(q));
+    }
+
     QRect dialogGeom = q->geometry();
 
     qreal topHeight(0);
@@ -272,24 +222,17 @@ void DialogPrivate::checkBorders(bool updateMaskIfNeeded)
 
     //decide if to disable the other borders
     if (q->isVisible()) {
-        QRect geom;
-        if (applet) {
-            geom = screenGeom;
-        } else {
-            geom = avail;
-        }
-
-        if (dialogGeom.left() <= geom.left()) {
+        if (dialogGeom.left() <= avail.left()) {
             borders &= ~FrameSvg::LeftBorder;
         }
-        if (dialogGeom.top() <= geom.top()) {
+        if (dialogGeom.top() <= avail.top()) {
             borders &= ~FrameSvg::TopBorder;
         }
         //FIXME: that 2 pixels offset has probably something to do with kwin
-        if (dialogGeom.right() + 2 > geom.right()) {
+        if (dialogGeom.right() + 2 > avail.right()) {
             borders &= ~FrameSvg::RightBorder;
         }
-        if (dialogGeom.bottom() + 2 > geom.bottom()) {
+        if (dialogGeom.bottom() + 2 > avail.bottom()) {
             borders &= ~FrameSvg::BottomBorder;
         }
     }
@@ -365,7 +308,7 @@ void Dialog::syncToGraphicsWidget()
                        qMin(int(graphicsWidget->maximumSize().height()) + top + bottom, maxSize.height()));
 
 
-        Plasma::Applet *applet = d->applet();
+        Plasma::Applet *applet = d->appletPtr.data();
         if (applet) {
             QRect currentGeometry(geometry());
             currentGeometry.setSize(newSize);
