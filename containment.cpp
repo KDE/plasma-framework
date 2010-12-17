@@ -973,6 +973,12 @@ void ContainmentPrivate::setScreen(int newScreen, int newDesktop, bool preventIn
     // a screen of -1 means no associated screen.
     Corona *corona = q->corona();
     Q_ASSERT(corona);
+
+    //if it's an offscreen widget, don't allow to claim a screen, after all it's *off*screen
+    if (corona->offscreenWidgets().contains(q)) {
+        return;
+    }
+
     int numScreens = corona->numScreens();
     if (newScreen < -1) {
         newScreen = -1;
