@@ -85,6 +85,7 @@ Description[sr@ijekavian]=Спречава систем да сачува смј
 Description[sr@ijekavianlatin]=Sprečava sistem da sačuva smjernice udaljenih plasma vidžeta
 Description[sr@latin]=Sprečava sistem da sačuva smernice udaljenih plasma vidžeta
 Description[sv]=Förhindrar systemet från att spara policy för Plasma grafiska fjärrkomponenter
+Description[th]=ป้องกันระบบจากการบันทึกกฎของวิดเจ็ตของพลาสมาจากทางไกล
 Description[tr]=Sistemin uzak plasma programcık politikalarını kaydetmesini engelle
 Description[uk]=Заборонити системі зберігати правила для віддалених віджетів Плазми
 Description[x-test]=xxPrevents the system from saving remote plasma widgets' policiesxx
