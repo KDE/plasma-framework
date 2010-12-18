@@ -40,20 +40,20 @@ class SharedSvgRenderer : public QSvgRenderer, public QSharedData
         SharedSvgRenderer(
             const QString &filename,
             const QString &styleSheet,
-            QHash<QString, QSize> &elementsWithSizeHints,
+            QHash<QString, QRectF> &interestingElements,
             QObject *parent = 0);
 
         SharedSvgRenderer(
             const QByteArray &contents,
             const QString &styleSheet,
-            QHash<QString, QSize> &elementsWithSizeHints,
+            QHash<QString, QRectF> &interestingElements,
             QObject *parent = 0);
 
     private:
         bool load(
             const QByteArray &contents,
             const QString &styleSheet,
-            QHash<QString, QSize> &elementsWithSizeHints);
+            QHash<QString, QRectF> &interestingElements);
 };
 
 class SvgPrivate
