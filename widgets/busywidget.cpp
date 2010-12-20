@@ -203,8 +203,15 @@ void BusyWidget::resizeEvent(QGraphicsSceneResizeEvent *event)
 
 void BusyWidget::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    Q_UNUSED(event)
-    emit clicked();
+    event->setAccepted(true);
+}
+
+void BusyWidget::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    if ((event->button() & Qt::LeftButton) ||
+        (event->buttons() & Qt::LeftButton)) {
+        emit clicked();
+    }
 }
 
 } // namespace Plasma

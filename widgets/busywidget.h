@@ -85,6 +85,8 @@ protected:
     void hideEvent(QHideEvent *event);
     void resizeEvent(QGraphicsSceneResizeEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+
 
 protected Q_SLOTS:
     void timerEvent(QTimerEvent *event);
