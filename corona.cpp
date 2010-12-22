@@ -740,7 +740,7 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::Alig
     // TODO: merge both methods (also these in Applet) into one (with optional alignment) when we can break compatibility
     // TODO: add support for more flags in the future?
 
-    QGraphicsView *v = viewFor(item);
+    const QGraphicsView *v = viewFor(item);
 
     if (!v) {
         return QPoint(0, 0);
@@ -774,7 +774,7 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::Alig
 
     pos = v->mapToGlobal(pos);
     //kDebug() << "==> position is" << item->scenePos() << v->mapFromScene(item->scenePos()) << pos;
-    Plasma::View *pv = dynamic_cast<Plasma::View *>(v);
+    const Plasma::View *pv = dynamic_cast<const Plasma::View *>(v);
 
     Plasma::Location loc = Floating;
     if (pv && pv->containment()) {
