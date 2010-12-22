@@ -629,7 +629,7 @@ PackageMetadata PackageStructure::metadata()
                 kWarning() << "Could not open package file, unsupported archive format:" << d->path << mimetype->name();
             }
 
-            if (archive->open(QIODevice::ReadOnly)) {
+            if (archive && archive->open(QIODevice::ReadOnly)) {
                 const KArchiveDirectory *source = archive->directory();
                 KTempDir tempdir;
                 source->copyTo(tempdir.name());
