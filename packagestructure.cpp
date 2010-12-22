@@ -601,8 +601,8 @@ void PackageStructurePrivate::createPackageMetadata(const QString &path)
 
     QString metadataPath(path + "/metadata.desktop");
     if (!QFile::exists(metadataPath)) {
-        metadataPath.clear();
         kWarning() << "No metadata file in the package, expected it at:" << metadataPath;
+        metadataPath.clear();
     }
 
     metadata = new PackageMetadata(metadataPath);
