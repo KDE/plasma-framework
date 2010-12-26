@@ -724,13 +724,13 @@ void ContainmentPrivate::addAppletActions(KMenu &desktopMenu, Applet *applet, QE
 
     if (q->immutability() == Mutable) {
         QAction *closeApplet = applet->d->actions->action("remove");
-        kDebug() << "checking for removal" << closeApplet;
+        //kDebug() << "checking for removal" << closeApplet;
         if (closeApplet) {
             if (!desktopMenu.isEmpty()) {
                 desktopMenu.addSeparator();
             }
 
-            kDebug() << "boo yah, adding it!" << closeApplet->isEnabled() << closeApplet->isVisible();
+            //kDebug() << "adding close action" << closeApplet->isEnabled() << closeApplet->isVisible();
             desktopMenu.addAction(closeApplet);
         }
     }
