@@ -882,7 +882,7 @@ ImmutabilityType Applet::immutability() const
     // if this object is itself system immutable, then just return that; it's the most
     // restrictive setting possible and will override anything that might be happening above it
     // in the Corona->Containment->Applet hierarchy
-    if (d->transient || d->mainConfigGroup()->isImmutable()) {
+    if (d->transient || (d->mainConfig && d->mainConfig->isImmutable())) {
         return SystemImmutable;
     }
 
