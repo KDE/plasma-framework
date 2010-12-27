@@ -231,12 +231,12 @@ kde4_add_ui_files(plasma_LIB_SRCS
 #   TEST_INCLUDES
 #)
 
-if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
+if(QT_QTOPENGL_FOUND AND OPENGL_FOUND AND OPENGL_GLU_FOUND)
     message(STATUS "Adding support for OpenGL applets to libplasma")
     set(plasma_LIB_SRCS
         ${plasma_LIB_SRCS}
         glapplet.cpp)
-endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
+endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND AND OPENGL_GLU_FOUND)
 
 if (PHONON_FOUND)
     message(STATUS "Adding support for Phonon to libplasma")
