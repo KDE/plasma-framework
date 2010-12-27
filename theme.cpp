@@ -1037,6 +1037,14 @@ void Theme::setCacheLimit(int kbytes)
     }
 }
 
+KUrl Theme::homepage() const
+{
+    const QString metadataPath(KStandardDirs::locate("data", QLatin1Literal("desktoptheme/") % d->themeName % QLatin1Literal("/metadata.desktop")));
+    KConfig metadata(metadataPath);
+    KConfigGroup brandConfig(&metadata, "Branding");
+    return brandConfig.readEntry("homepage", KUrl("http://www.kde.org"));
+}
+
 }
 
 #include <theme.moc>

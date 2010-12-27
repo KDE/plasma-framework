@@ -372,6 +372,12 @@ class PLASMA_EXPORT Theme : public QObject
          */
         void releaseRectsCache(const QString &image);
 
+        /**
+         * @return the default homepage to use in conjunction with the branding svg content
+         * @since 4.7
+         */
+        KUrl homepage() const;
+
     Q_SIGNALS:
         /**
          * Emitted when the user changes the theme. SVGs should be reloaded at
