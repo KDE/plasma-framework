@@ -91,7 +91,11 @@ public:
         QTextLine line;
         for (int i = 0; i < layout->lineCount(); ++i) {
             line = layout->lineAt(i);
-            m_haloRects.append(line.naturalTextRect().translated(layout->position().toPoint()).toRect().translated(m_margin, m_margin));
+
+            // Add halo rect only when a non empty line is found
+            if (line.naturalTextWidth()) {
+                m_haloRects.append(line.naturalTextRect().translated(layout->position().toPoint()).toRect().translated(m_margin, m_margin));
+            }
         }
 
         update();
