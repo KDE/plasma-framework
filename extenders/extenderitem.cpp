@@ -190,10 +190,13 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
         d->group = hostExtender->d->findGroup(groupName);
 
         //Find the sourceapplet.
-        Corona *corona = hostExtender->d->applet.data()->containment()->corona();
+        Corona *corona = 0;
+        if (hostExtender && hostExtender->d->applet && hostExtender->d->applet.data()->containment()) {
+            corona = hostExtender->d->applet.data()->containment()->corona();
+        }
         if (sourceAppletId == hostExtender->applet()->id()) {
             d->sourceApplet = hostExtender->applet();
-        } else {
+        } else if (corona) {
             foreach (Containment *containment, corona->containments()) {
                 foreach (Applet *applet, containment->applets()) {
                     if (applet->id() == sourceAppletId &&
