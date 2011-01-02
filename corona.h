@@ -93,7 +93,8 @@ public:
      *
      * @return a pointer to the containment on success, or 0 on failure. Failure can be
      * caused by too restrictive of an Immutability type, as containments cannot be added
-     * when widgets are locked.
+     * when widgets are locked, or if the requested containment plugin can not be located
+     * or successfully loaded.
      */
     Containment *addContainment(const QString &name, const QVariantList &args = QVariantList());
 
@@ -444,8 +445,9 @@ protected:
      * @param args argument list to pass to the containment
      *
      * @return a pointer to the containment on success, or 0 on failure. Failure can
-     * be caused by the Immutability type being too restrictive (can't add containments
-     * when widgets are locked).
+     * be caused by the Immutability type being too restrictive, as containments can't be added
+     * when widgets are locked, or if the requested containment plugin can not be located
+     * or successfully loaded.
      * @see addContainment
      **/
     Containment *addContainmentDelayed(const QString &name,
