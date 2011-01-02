@@ -85,13 +85,15 @@ public:
      * Adds a Containment to the Corona
      *
      * @param name the plugin name for the containment, as given by
-     *        KPluginInfo::pluginName(). If an empty string is passed in, the defalt
+     *        KPluginInfo::pluginName(). If an empty string is passed in, the default
      *        containment plugin will be used (usually DesktopContainment). If the
      *        string literal "null" is passed in, then no plugin will be loaded and
      *        a simple Containment object will be created instead.
      * @param args argument list to pass to the containment
      *
-     * @return a pointer to the containment on success, or 0 on failure
+     * @return a pointer to the containment on success, or 0 on failure. Failure can be
+     * caused by too restrictive of an Immutability type, as containments cannot be added
+     * when widgets are locked.
      */
     Containment *addContainment(const QString &name, const QVariantList &args = QVariantList());
 
@@ -441,7 +443,10 @@ protected:
      *        a simple Containment object will be created instead.
      * @param args argument list to pass to the containment
      *
-     * @return a pointer to the containment on success, or 0 on failure
+     * @return a pointer to the containment on success, or 0 on failure. Failure can
+     * be caused by the Immutability type being too restrictive (can't add containments
+     * when widgets are locked).
+     * @see addContainment
      **/
     Containment *addContainmentDelayed(const QString &name,
                                        const QVariantList &args = QVariantList());
