@@ -884,18 +884,7 @@ void ExtenderPrivate::viewportGeometryChanged(const QRectF &rect)
         return;
     }
 
-    bool scroll;
-    if (rect.height() >= mainWidget->boundingRect().height()) {
-        scroll = false;
-        scrollWidget->setContentsMargins(0, 0, 0, 0);
-    } else {
-        scroll = true;
-        if (QApplication::layoutDirection() == Qt::RightToLeft) {
-            scrollWidget->setContentsMargins(background->marginSize(RightMargin), 0, 0, 0);
-        } else {
-            scrollWidget->setContentsMargins(0, 0, background->marginSize(RightMargin), 0);
-        }
-    }
+    bool scroll = !(rect.height() >= mainWidget->boundingRect().height());
 
     if (scroll != scrollbarVisible) {
         scrollbarVisible = scroll;

@@ -53,6 +53,7 @@
 #include "plasma/private/extender_p.h"
 #include "plasma/framesvg.h"
 #include "plasma/theme.h"
+#include "plasma/widgets/scrollwidget.h"
 #include "plasma/windoweffects.h"
 
 #ifdef Q_WS_X11
@@ -239,9 +240,7 @@ void DialogPrivate::checkBorders(bool updateMaskIfNeeded)
 
     background->setEnabledBorders(borders);
 
-    if (!extender) {
-        background->getMargins(leftWidth, topHeight, rightWidth, bottomHeight);
-    } else {
+    if (extender)  {
         FrameSvg::EnabledBorders disabledBorders = FrameSvg::NoBorder;
         if (!(borders & FrameSvg::LeftBorder)) {
             disabledBorders |= FrameSvg::LeftBorder;
@@ -250,6 +249,19 @@ void DialogPrivate::checkBorders(bool updateMaskIfNeeded)
             disabledBorders |= FrameSvg::RightBorder;
         }
         extender->d->setDisabledBordersHint(disabledBorders);
+
+        //if there is a scrollbar, reserve a margin to not draw it over the shadow
+        qreal left, top, right, bottom;
+        background->getMargins(left, top, right, bottom);
+        if (extender->d->scrollWidget->viewportGeometry().height() < extender->d->scrollWidget->contentsSize().height()) {
+            if (QApplication::layoutDirection() == Qt::RightToLeft) {
+                leftWidth = left;
+            } else {
+                rightWidth = right;
+            }
+        }
+    } else {
+        background->getMargins(leftWidth, topHeight, rightWidth, bottomHeight);
     }
 
     //kDebug() << leftWidth << topHeight << rightWidth << bottomHeight;
