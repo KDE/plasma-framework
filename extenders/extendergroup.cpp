@@ -218,8 +218,6 @@ bool ExtenderGroup::eventFilter(QObject *watched, QEvent *event)
     if (watched == d->childsWidget && event->type() == QEvent::GraphicsSceneResize) {
         static_cast<QGraphicsLayoutItem *>(extender()->d->scrollWidget)->updateGeometry();
         static_cast<QGraphicsLayoutItem *>(extender())->updateGeometry();
-        //resize to the max between the extender size hint and ours (that's because the group can still not be in the extender layout)
-        extender()->resize(extender()->effectiveSizeHint(Qt::PreferredSize).expandedTo(effectiveSizeHint(Qt::PreferredSize)).width(), extender()->size().height());
     }
 
     return ExtenderItem::eventFilter(watched, event);
