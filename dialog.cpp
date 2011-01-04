@@ -312,7 +312,8 @@ void Dialog::syncToGraphicsWidget()
         QSize newSize(qMin(int(graphicsWidget->size().width()) + left + right, maxSize.width()),
                qMin(int(graphicsWidget->size().height()) + top + bottom, maxSize.height()));
 
-        QSize newMinimumSize(qMin(int(graphicsWidget->minimumSize().width()) + left + right, maxSize.width()),
+        //FIXME: hardcoded extra boder for a possible scrollbar in an extender based dialog
+        QSize newMinimumSize(qMin(int(graphicsWidget->minimumSize().width()) + left + right + 32, maxSize.width()),
                        qMin(int(graphicsWidget->minimumSize().height()) + top + bottom, maxSize.height()));
 
 
