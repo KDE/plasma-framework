@@ -356,14 +356,6 @@ void Dialog::syncToGraphicsWidget()
         //d->view->resize(graphicsWidget->size().toSize());
         d->view->centerOn(graphicsWidget);
 
-        //if the view resized and a border is disabled move the dialog to make sure it will still look attached to panel/screen edge
-        qreal topHeight;
-        qreal leftWidth;
-        qreal rightWidth;
-        qreal bottomHeight;
-
-        d->background->getMargins(leftWidth, topHeight, rightWidth, bottomHeight);
-
         if (size() != prevSize) {
             //the size of the dialog has changed, emit the signal:
             emit dialogResized();
