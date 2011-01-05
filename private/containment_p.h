@@ -60,7 +60,8 @@ public:
           type(Containment::NoContainmentType),
           showDropZoneDelayTimer(0),
           drawWallpaper(true),
-          dropZoneStarted(false)
+          dropZoneStarted(false),
+          containmentActionsSource(Global)
     {
     }
 
