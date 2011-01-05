@@ -813,7 +813,7 @@ QPixmap IconWidgetPrivate::decoration(const QStyleOptionGraphicsItem *option, bo
     }
 
     if (usePressedEffect) {
-        result = result.scaled(result.size() * 0.9, Qt::KeepAspectRatio);
+        result = result.scaled(result.size() * 0.9, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 
     if (!result.isNull() && useHoverEffect) {
