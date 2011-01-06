@@ -85,7 +85,6 @@ void StorageJob::start()
       query.bindValue(":datavalue", params["data"]);
       const bool success = query.exec();
       setResult(success);
-      return;
 
     } else if (operationName() == "retrieve") {
         QSqlQuery query(m_db);
@@ -124,9 +123,6 @@ void StorageJob::start()
             }
 
             setResult(h);
-            return;
-        } else {
-            return;
         }
 
     } else if (operationName() == "delete") {
@@ -165,6 +161,9 @@ void StorageJob::start()
     } else {
         setError(true);
     }
+    //TODO: use a single shared db per thread
+    m_db.close();
+    QSqlDatabase::removeDatabase(m_db.connectionName());
 }
 
 Plasma::ServiceJob* Storage::createJob(const QString &operation, QMap<QString, QVariant> &parameters)
