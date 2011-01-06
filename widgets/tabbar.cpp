@@ -561,6 +561,9 @@ void TabBar::setTabBarShown(bool show)
     if (!show && !d->tabWidgetMode) {
         return;
     }
+    if (d->tabBarShown == show) {
+        return;
+    }
     d->tabBarShown = show;
 
     if (!show) {
