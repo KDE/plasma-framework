@@ -569,7 +569,7 @@ void TabBar::setTabBarShown(bool show)
     if (!show) {
         d->tabProxy->hide();
         d->tabWidgetLayout->removeItem(d->tabBarLayout);
-    } else if (show && !d->tabProxy->isVisible()) {
+    } else {
         d->tabProxy->show();
         d->tabWidgetLayout->insertItem(0, d->tabBarLayout);
     }
