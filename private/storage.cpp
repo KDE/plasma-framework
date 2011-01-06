@@ -45,22 +45,27 @@ StorageJob::StorageJob(const QString& destination,
             : ServiceJob(destination, operation, parameters, parent),
               m_clientName(destination)
 {
-    m_db = QSqlDatabase::addDatabase("QSQLITE", QString("plasma-storage-%1").arg(++connectionId));
-    m_db.setDatabaseName(KStandardDirs::locateLocal("appdata", "plasma-storage.db"));
+    m_db = new QSqlDatabase(QSqlDatabase::addDatabase("QSQLITE", QString("plasma-storage-%1").arg(++connectionId)));
+    m_db->setDatabaseName(KStandardDirs::locateLocal("appdata", "plasma-storage.db"));
 
-    if (!m_db.open()) {
-        kWarning() << "Unable to open the plasma storage cache database: " << m_db.lastError();
-    } else if (!m_db.tables().contains(m_clientName)) {
-        QSqlQuery query(m_db);
+    if (!m_db->open()) {
+        kWarning() << "Unable to open the plasma storage cache database: " << m_db->lastError();
+    } else if (!m_db->tables().contains(m_clientName)) {
+        QSqlQuery query(*m_db);
         //bindValue doesn't seem to be able to replace stuff in create table
         query.prepare(QString("create table ")+m_clientName+" (valueGroup varchar(256), id varchar(256), data clob, creationTime datetime, accessTime datetime, primary key (valueGroup, id))");
         query.exec();
     }
 }
 
+StorageJob::~StorageJob()
+{
+    delete m_db;
+}
+
 void StorageJob::start()
 {
-    if (!m_db.isOpen()) {
+    if (!m_db->isOpen()) {
         return;
     }
 
@@ -73,7 +78,7 @@ void StorageJob::start()
 
 
     if (operationName() == "save") {
-      QSqlQuery query(m_db);
+      QSqlQuery query(*m_db);
       query.prepare("delete from "+m_clientName+" where valueGroup=:valueGroup and id = :id");
       query.bindValue(":valueGroup", valueGroup);
       query.bindValue(":id", params["key"].toString());
@@ -87,7 +92,7 @@ void StorageJob::start()
       setResult(success);
 
     } else if (operationName() == "retrieve") {
-        QSqlQuery query(m_db);
+        QSqlQuery query(*m_db);
 
         //a bit redundant but should be the faster way with less string concatenation as possible
         if (params["key"].toString().isEmpty()) {
@@ -126,7 +131,7 @@ void StorageJob::start()
         }
 
     } else if (operationName() == "delete") {
-        QSqlQuery query(m_db);
+        QSqlQuery query(*m_db);
 
         if (params["key"].toString().isEmpty()) {
             query.prepare("delete from "+m_clientName+" where valueGroup=:valueGroup");
@@ -141,7 +146,7 @@ void StorageJob::start()
         setResult(success);
 
     } else if (operationName() == "expire") {
-        QSqlQuery query(m_db);
+        QSqlQuery query(*m_db);
         if (valueGroup.isEmpty()) {
             query.prepare("delete from "+m_clientName+" where accessTime < :date");
             QDateTime time(QDateTime::currentDateTime());
@@ -162,8 +167,12 @@ void StorageJob::start()
         setError(true);
     }
     //TODO: use a single shared db per thread
-    m_db.close();
-    QSqlDatabase::removeDatabase(m_db.connectionName());
+    m_db->commit();
+    m_db->close();
+    QString name = m_db->connectionName();
+    delete m_db;
+    m_db = 0;
+    QSqlDatabase::removeDatabase(name);
 }
 
 Plasma::ServiceJob* Storage::createJob(const QString &operation, QMap<QString, QVariant> &parameters)

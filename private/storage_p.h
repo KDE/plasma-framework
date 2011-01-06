@@ -37,9 +37,10 @@ public:
                const QString& operation,
                const QMap<QString, QVariant>& parameters,
                QObject *parent = 0);
+    ~StorageJob();
     void start();
 private:
-    QSqlDatabase m_db;
+    QSqlDatabase *m_db;
     QString m_clientName;
 };
 //End StorageJob
