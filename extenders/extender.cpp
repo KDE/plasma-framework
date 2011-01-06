@@ -489,6 +489,11 @@ void Extender::dropEvent(QGraphicsSceneDragDropEvent *event)
 
 void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
 {
+    ExtenderGroup *group = item->isGroup()?static_cast<ExtenderGroup*>(item):0;
+    if (group && group->autoHide() && group->items().isEmpty()) {
+        return;
+    }
+
     if (!item->group()) {
         if (pos == QPointF(-1, -1)) {
             //if it was already there, reposition
