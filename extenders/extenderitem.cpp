@@ -616,7 +616,7 @@ void ExtenderItem::setCollapsed(bool collapsed)
                 static_cast<QGraphicsLayoutItem *>(group())->updateGeometry();
             }
 
-            extender()->resize(extender()->d->mainWidget->effectiveSizeHint(Qt::PreferredSize));
+            extender()->d->adjustSize();
         }
     }
 }

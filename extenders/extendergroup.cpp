@@ -218,6 +218,7 @@ bool ExtenderGroup::eventFilter(QObject *watched, QEvent *event)
     if (watched == d->childsWidget && event->type() == QEvent::GraphicsSceneResize) {
         static_cast<QGraphicsLayoutItem *>(extender()->d->scrollWidget)->updateGeometry();
         static_cast<QGraphicsLayoutItem *>(extender())->updateGeometry();
+        extender()->d->adjustSize();
     }
 
     return ExtenderItem::eventFilter(watched, event);
