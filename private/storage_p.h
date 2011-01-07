@@ -28,6 +28,8 @@
 #include <plasma/service.h>
 #include <plasma/servicejob.h>
 
+class RefCountedDatabase;
+
 //Begin StorageJob
 class StorageJob : public Plasma::ServiceJob
 {
@@ -40,7 +42,7 @@ public:
     ~StorageJob();
     void start();
 private:
-    QSqlDatabase *m_db;
+    RefCountedDatabase *m_rdb;
     QString m_clientName;
 };
 //End StorageJob
