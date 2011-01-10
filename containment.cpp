@@ -568,7 +568,9 @@ void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
             d->actionPlugins()->value(trigger)->contextEvent(event);
         }
 
-        Applet::mousePressEvent(event);
+        if (!event->isAccepted()) {
+            Applet::mousePressEvent(event);
+        }
     }
 }
 
