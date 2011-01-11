@@ -39,6 +39,7 @@ public:
 
     virtual ~ActionWidgetInterface()
     {
+        setAction(0);
     }
 
     virtual void changed()
