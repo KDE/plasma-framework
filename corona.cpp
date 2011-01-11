@@ -86,6 +86,7 @@ public:
 
     void init()
     {
+        q->setStickyFocus(true);
         configSyncTimer.setSingleShot(true);
         QObject::connect(&configSyncTimer, SIGNAL(timeout()), q, SLOT(syncConfig()));
 
