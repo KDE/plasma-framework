@@ -1,6 +1,6 @@
 /*
  *   Copyright 2007 Matt Broadstone <mbroadst@gmail.com>
- *   Copyright 2007 Aaron Seigo <aseigo@kde.org>
+ *   Copyright 2007-2011 Aaron Seigo <aseigo@kde.org>
  *   Copyright 2007 Riccardo Iaconelli <riccardo@kde.org>
  *   Copyright (c) 2009 Chani Armitage <chani@kde.org>
  *
@@ -21,6 +21,7 @@
  */
 
 #include "corona.h"
+#include "private/corona_p.h"
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -34,7 +35,6 @@
 #include <cmath>
 
 #include <kaction.h>
-#include <kactioncollection.h>
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -57,240 +57,6 @@ using namespace Plasma;
 
 namespace Plasma
 {
-
-// constant controlling how long between requesting a configuration sync
-// and one happening should occur. currently 10 seconds
-const int CONFIG_SYNC_TIMEOUT = 10000;
-
-class CoronaPrivate
-{
-public:
-    CoronaPrivate(Corona *corona)
-        : q(corona),
-          immutability(Mutable),
-          mimetype("text/x-plasmoidservicename"),
-          config(0),
-          actions(corona)
-    {
-        if (KGlobal::hasMainComponent()) {
-            configName = KGlobal::mainComponent().componentName() + "-appletsrc";
-        } else {
-            configName = "plasma-appletsrc";
-        }
-    }
-
-    ~CoronaPrivate()
-    {
-        qDeleteAll(containments);
-    }
-
-    void init()
-    {
-        q->setStickyFocus(true);
-        configSyncTimer.setSingleShot(true);
-        QObject::connect(&configSyncTimer, SIGNAL(timeout()), q, SLOT(syncConfig()));
-
-        //some common actions
-        actions.setConfigGroup("Shortcuts");
-
-        KAction *lockAction = actions.addAction("lock widgets");
-        QObject::connect(lockAction, SIGNAL(triggered(bool)), q, SLOT(toggleImmutability()));
-        lockAction->setText(i18n("Lock Widgets"));
-        lockAction->setAutoRepeat(true);
-        lockAction->setIcon(KIcon("object-locked"));
-        lockAction->setData(AbstractToolBox::ControlTool);
-        lockAction->setShortcut(KShortcut("alt+d, l"));
-        lockAction->setShortcutContext(Qt::ApplicationShortcut);
-
-        //FIXME this doesn't really belong here. desktop KCM maybe?
-        //but should the shortcuts be per-app or really-global?
-        //I don't know how to make kactioncollections use plasmarc
-        KAction *action = actions.addAction("configure shortcuts");
-        QObject::connect(action, SIGNAL(triggered()), q, SLOT(showShortcutConfig()));
-        action->setText(i18n("Shortcut Settings"));
-        action->setIcon(KIcon("configure-shortcuts"));
-        action->setAutoRepeat(false);
-        action->setData(AbstractToolBox::ConfigureTool);
-        //action->setShortcut(KShortcut("ctrl+h"));
-        action->setShortcutContext(Qt::ApplicationShortcut);
-
-        actions.readSettings();
-
-        //fake containment/applet actions
-        KActionCollection *aActions = AppletPrivate::defaultActions(q);
-        KActionCollection *cActions = AppletPrivate::defaultActions(q); //containment has to start with applet stuff
-        ContainmentPrivate::addDefaultActions(cActions); //now it's really containment
-        //grab the current stuff
-        cActions->readSettings();
-        aActions->readSettings();
-
-        shortcutsDlg.setModal(false);
-        shortcutsDlg.addCollection(aActions);
-        shortcutsDlg.addCollection(cActions);
-
-        QObject::connect(&shortcutsDlg, SIGNAL(saved()), q, SIGNAL(shortcutsChanged()));
-    }
-
-    void showShortcutConfig()
-    {
-        //show a kshortcutsdialog with the actions
-        shortcutsDlg.configure();
-    }
-
-    void toggleImmutability()
-    {
-        if (immutability == Mutable) {
-            q->setImmutability(UserImmutable);
-        } else {
-            q->setImmutability(Mutable);
-        }
-    }
-
-    void saveLayout(KSharedConfigPtr cg) const
-    {
-        KConfigGroup containmentsGroup(cg, "Containments");
-        foreach (const Containment *containment, containments) {
-            QString cid = QString::number(containment->id());
-            KConfigGroup containmentConfig(&containmentsGroup, cid);
-            containment->save(containmentConfig);
-        }
-    }
-
-    void updateContainmentImmutability()
-    {
-        foreach (Containment *c, containments) {
-            // we need to tell each containment that immutability has been altered
-            c->updateConstraints(ImmutableConstraint);
-        }
-    }
-
-    void containmentDestroyed(QObject *obj)
-    {
-        // we do a static_cast here since it really isn't an Containment by this
-        // point anymore since we are in the qobject dtor. we don't actually
-        // try and do anything with it, we just need the value of the pointer
-        // so this unsafe looking code is actually just fine.
-        Containment* containment = static_cast<Plasma::Containment*>(obj);
-        int index = containments.indexOf(containment);
-
-        if (index > -1) {
-            containments.removeAt(index);
-            q->requestConfigSync();
-        }
-    }
-
-    void syncConfig()
-    {
-        q->config()->sync();
-        emit q->configSynced();
-    }
-
-    Containment *addContainment(const QString &name, const QVariantList &args,
-                                uint id, bool delayedInit)
-    {
-        QString pluginName = name;
-        Containment *containment = 0;
-        Applet *applet = 0;
-
-        //kDebug() << "Loading" << name << args << id;
-
-        if (pluginName.isEmpty() || pluginName == "default") {
-            // default to the desktop containment
-            pluginName = "desktop";
-        }
-
-        bool loadingNull = pluginName == "null";
-        if (!loadingNull) {
-            applet = Applet::load(pluginName, id, args);
-            containment = dynamic_cast<Containment*>(applet);
-        }
-
-        if (!containment) {
-            if (!loadingNull) {
-                kDebug() << "loading of containment" << name << "failed.";
-            }
-
-            // in case we got a non-Containment from Applet::loadApplet or
-            // a null containment was requested
-            if (applet) {
-                // the applet probably doesn't know what's hit it, so let's pretend it can be
-                // initialized to make assumptions in the applet's dtor safer
-                q->addItem(applet);
-                applet->init();
-                q->removeItem(applet);
-                delete applet;
-            }
-            applet = containment = new Containment(0, 0, id);
-
-            if (loadingNull) {
-                containment->setDrawWallpaper(false);
-            } else {
-                containment->setFailedToLaunch(false);
-            }
-
-            // we want to provide something and don't care about the failure to launch
-            containment->setFormFactor(Plasma::Planar);
-        }
-
-        // if this is a new containment, we need to ensure that there are no stale
-        // configuration data around
-        if (id == 0) {
-            KConfigGroup conf(q->config(), "Containments");
-            conf = KConfigGroup(&conf, QString::number(containment->id()));
-            conf.deleteGroup();
-        }
-
-        applet->d->isContainment = true;
-        containment->setPos(containment->d->preferredPos(q));
-        q->addItem(containment);
-        applet->d->setIsContainment(true, true);
-        containments.append(containment);
-
-        if (!delayedInit) {
-            containment->init();
-            KConfigGroup cg = containment->config();
-            containment->restore(cg);
-            containment->updateConstraints(Plasma::StartupCompletedConstraint);
-            containment->save(cg);
-            q->requestConfigSync();
-            containment->flushPendingConstraintsEvents();
-        }
-
-        QObject::connect(containment, SIGNAL(destroyed(QObject*)),
-                         q, SLOT(containmentDestroyed(QObject*)));
-        QObject::connect(containment, SIGNAL(configNeedsSaving()),
-                         q, SLOT(requestConfigSync()));
-        QObject::connect(containment, SIGNAL(releaseVisualFocus()),
-                         q, SIGNAL(releaseVisualFocus()));
-        QObject::connect(containment, SIGNAL(screenChanged(int,int,Plasma::Containment*)),
-                         q, SIGNAL(screenOwnerChanged(int,int,Plasma::Containment*)));
-
-        if (!delayedInit) {
-            emit q->containmentAdded(containment);
-        }
-
-        return containment;
-    }
-
-    void offscreenWidgetDestroyed(QObject *);
-    QList<Plasma::Containment *> importLayout(const KConfigBase &conf, bool mergeConfig);
-
-    static bool s_positioningContainments;
-
-    Corona *q;
-    ImmutabilityType immutability;
-    QString mimetype;
-    QString configName;
-    KSharedConfigPtr config;
-    QTimer configSyncTimer;
-    QList<Containment*> containments;
-    QHash<uint, QGraphicsWidget*> offscreenWidgets;
-    KActionCollection actions;
-    KShortcutsDialog shortcutsDlg;
-    QMap<Containment::Type, ContainmentActionsPluginsConfig> containmentActionsDefaults;
-    QWeakPointer<AbstractDialogManager>dialogManager;
-    QHash<Containment::Type, QString> toolBoxPlugins;
-};
 
 bool CoronaPrivate::s_positioningContainments = false;
 
@@ -374,6 +140,10 @@ void Corona::exportLayout(KConfigGroup &config, QList<Containment*> containments
 
 void Corona::requestConfigSync()
 {
+    // constant controlling how long between requesting a configuration sync
+    // and one happening should occur. currently 10 seconds
+    static const int CONFIG_SYNC_TIMEOUT = 10000;
+
     // TODO: should we check into our immutability before doing this?
 
     //NOTE: this is a pretty simplistic model: we simply save no more than CONFIG_SYNC_TIMEOUT
@@ -506,71 +276,6 @@ QList<Plasma::Containment *> Corona::importLayout(const KConfigBase &conf)
 }
 #endif
 
-QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigBase &conf, bool mergeConfig)
-{
-    if (const KConfigGroup *group = dynamic_cast<const KConfigGroup *>(&conf)) {
-        if (!group->isValid()) {
-            return QList<Containment *>();
-        }
-    }
-
-    QList<Plasma::Containment *> newContainments;
-    QSet<uint> containmentsIds;
-
-    foreach (Containment *containment, containments) {
-        containmentsIds.insert(containment->id());
-    }
-
-    KConfigGroup containmentsGroup(&conf, "Containments");
-
-    foreach (const QString &group, containmentsGroup.groupList()) {
-        KConfigGroup containmentConfig(&containmentsGroup, group);
-
-        if (containmentConfig.entryMap().isEmpty()) {
-            continue;
-        }
-
-        uint cid = group.toUInt();
-        if (containmentsIds.contains(cid)) {
-            cid = ++AppletPrivate::s_maxAppletId;
-        } else if (cid > AppletPrivate::s_maxAppletId) {
-            AppletPrivate::s_maxAppletId = cid;
-        }
-
-        if (mergeConfig) {
-            KConfigGroup realConf(q->config(), "Containments");
-            realConf = KConfigGroup(&realConf, QString::number(cid));
-            // in case something was there before us
-            realConf.deleteGroup();
-            containmentConfig.copyTo(&realConf);
-        }
-
-        //kDebug() << "got a containment in the config, trying to make a" << containmentConfig.readEntry("plugin", QString()) << "from" << group;
-        kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Adding Containment" << containmentConfig.readEntry("plugin", QString());
-        Containment *c = addContainment(containmentConfig.readEntry("plugin", QString()), QVariantList(), cid, true);
-        if (!c) {
-            continue;
-        }
-
-        newContainments.append(c);
-        containmentsIds.insert(c->id());
-
-        c->init();
-        kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Init Containment" << c->pluginName();
-        c->restore(containmentConfig);
-        kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Restored Containment" << c->pluginName();
-    }
-
-    foreach (Containment *containment, newContainments) {
-        containment->updateConstraints(Plasma::StartupCompletedConstraint);
-        containment->d->initApplets();
-        emit q->containmentAdded(containment);
-        kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Containment" << containment->name();
-    }
-
-    return newContainments;
-}
-
 Containment *Corona::containmentForScreen(int screen, int desktop) const
 {
     foreach (Containment *containment, d->containments) {
@@ -602,6 +307,7 @@ Containment *Corona::containmentForScreen(int screen, int desktop,
 
     return containment;
 }
+
 QList<Containment*> Corona::containments() const
 {
     return d->containments;
@@ -989,13 +695,29 @@ void Corona::enableAction(const QString &name, bool enable)
 
 void Corona::updateShortcuts()
 {
-    d->actions.readSettings();
-    d->shortcutsDlg.addCollection(&d->actions);
+    QMutableListIterator<QWeakPointer<KActionCollection> > it(d->actionCollections);
+    while (it.hasNext()) {
+        it.next();
+        KActionCollection *collection = it.value().data();
+        if (!collection) {
+            // get rid of KActionCollections that have been deleted behind our backs
+            it.remove();
+            continue;
+        }
+
+        collection->readSettings();
+        if (d->shortcutsDlg) {
+            d->shortcutsDlg.data()->addCollection(collection);
+        }
+    }
 }
 
 void Corona::addShortcuts(KActionCollection *newShortcuts)
 {
-    d->shortcutsDlg.addCollection(newShortcuts);
+    d->actionCollections << newShortcuts;
+    if (d->shortcutsDlg) {
+        d->shortcutsDlg.data()->addCollection(newShortcuts);
+    }
 }
 
 void Corona::setContainmentActionsDefaults(Containment::Type containmentType, const ContainmentActionsPluginsConfig &config)
@@ -1016,6 +738,292 @@ void Corona::setDialogManager(AbstractDialogManager *dialogManager)
 AbstractDialogManager *Corona::dialogManager()
 {
     return d->dialogManager.data();
+}
+
+CoronaPrivate::CoronaPrivate(Corona *corona)
+    : q(corona),
+      immutability(Mutable),
+      mimetype("text/x-plasmoidservicename"),
+      config(0),
+      actions(corona)
+{
+    if (KGlobal::hasMainComponent()) {
+        configName = KGlobal::mainComponent().componentName() + "-appletsrc";
+    } else {
+        configName = "plasma-appletsrc";
+    }
+}
+
+CoronaPrivate::~CoronaPrivate()
+{
+    qDeleteAll(containments);
+}
+
+void CoronaPrivate::init()
+{
+    q->setStickyFocus(true);
+    configSyncTimer.setSingleShot(true);
+    QObject::connect(&configSyncTimer, SIGNAL(timeout()), q, SLOT(syncConfig()));
+
+    //some common actions
+    actions.setConfigGroup("Shortcuts");
+
+    KAction *lockAction = actions.addAction("lock widgets");
+    QObject::connect(lockAction, SIGNAL(triggered(bool)), q, SLOT(toggleImmutability()));
+    lockAction->setText(i18n("Lock Widgets"));
+    lockAction->setAutoRepeat(true);
+    lockAction->setIcon(KIcon("object-locked"));
+    lockAction->setData(AbstractToolBox::ControlTool);
+    lockAction->setShortcut(KShortcut("alt+d, l"));
+    lockAction->setShortcutContext(Qt::ApplicationShortcut);
+
+    //FIXME this doesn't really belong here. desktop KCM maybe?
+    //but should the shortcuts be per-app or really-global?
+    //I don't know how to make kactioncollections use plasmarc
+    KAction *action = actions.addAction("configure shortcuts");
+    QObject::connect(action, SIGNAL(triggered()), q, SLOT(showShortcutConfig()));
+    action->setText(i18n("Shortcut Settings"));
+    action->setIcon(KIcon("configure-shortcuts"));
+    action->setAutoRepeat(false);
+    action->setData(AbstractToolBox::ConfigureTool);
+    //action->setShortcut(KShortcut("ctrl+h"));
+    action->setShortcutContext(Qt::ApplicationShortcut);
+
+    //fake containment/applet actions
+    KActionCollection *containmentActions = AppletPrivate::defaultActions(q); //containment has to start with applet stuff
+    ContainmentPrivate::addDefaultActions(containmentActions); //now it's really containment
+    actionCollections << &actions << AppletPrivate::defaultActions(q) << containmentActions;
+    q->updateShortcuts();
+}
+
+void CoronaPrivate::showShortcutConfig()
+{
+    //show a kshortcutsdialog with the actions
+    KShortcutsDialog *dlg = shortcutsDlg.data();
+    if (!dlg) {
+        dlg = new KShortcutsDialog();
+        dlg->setModal(false);
+        dlg->setAttribute(Qt::WA_DeleteOnClose, true);
+        QObject::connect(dlg, SIGNAL(saved()), q, SIGNAL(shortcutsChanged()));
+
+        dlg->addCollection(&actions);
+        QMutableListIterator<QWeakPointer<KActionCollection> > it(actionCollections);
+        while (it.hasNext()) {
+            it.next();
+            KActionCollection *collection = it.value().data();
+            if (!collection) {
+                // get rid of KActionCollections that have been deleted behind our backs
+                it.remove();
+                continue;
+            }
+
+            dlg->addCollection(collection);
+        }
+    }
+
+    KWindowSystem::setOnDesktop(dlg->winId(), KWindowSystem::currentDesktop());
+    dlg->configure();
+    dlg->raise();
+}
+
+void CoronaPrivate::toggleImmutability()
+{
+    if (immutability == Mutable) {
+        q->setImmutability(UserImmutable);
+    } else {
+        q->setImmutability(Mutable);
+    }
+}
+
+void CoronaPrivate::saveLayout(KSharedConfigPtr cg) const
+{
+    KConfigGroup containmentsGroup(cg, "Containments");
+    foreach (const Containment *containment, containments) {
+        QString cid = QString::number(containment->id());
+        KConfigGroup containmentConfig(&containmentsGroup, cid);
+        containment->save(containmentConfig);
+    }
+}
+
+void CoronaPrivate::updateContainmentImmutability()
+{
+    foreach (Containment *c, containments) {
+        // we need to tell each containment that immutability has been altered
+        c->updateConstraints(ImmutableConstraint);
+    }
+}
+
+void CoronaPrivate::containmentDestroyed(QObject *obj)
+{
+        // we do a static_cast here since it really isn't an Containment by this
+        // point anymore since we are in the qobject dtor. we don't actually
+        // try and do anything with it, we just need the value of the pointer
+        // so this unsafe looking code is actually just fine.
+        Containment* containment = static_cast<Plasma::Containment*>(obj);
+        int index = containments.indexOf(containment);
+
+        if (index > -1) {
+            containments.removeAt(index);
+            q->requestConfigSync();
+        }
+    }
+
+void CoronaPrivate::syncConfig()
+{
+    q->config()->sync();
+    emit q->configSynced();
+}
+
+Containment *CoronaPrivate::addContainment(const QString &name, const QVariantList &args,
+        uint id, bool delayedInit)
+{
+    QString pluginName = name;
+    Containment *containment = 0;
+    Applet *applet = 0;
+
+    //kDebug() << "Loading" << name << args << id;
+
+    if (pluginName.isEmpty() || pluginName == "default") {
+        // default to the desktop containment
+        pluginName = "desktop";
+    }
+
+    bool loadingNull = pluginName == "null";
+    if (!loadingNull) {
+        applet = Applet::load(pluginName, id, args);
+        containment = dynamic_cast<Containment*>(applet);
+    }
+
+    if (!containment) {
+        if (!loadingNull) {
+            kDebug() << "loading of containment" << name << "failed.";
+        }
+
+        // in case we got a non-Containment from Applet::loadApplet or
+        // a null containment was requested
+        if (applet) {
+            // the applet probably doesn't know what's hit it, so let's pretend it can be
+            // initialized to make assumptions in the applet's dtor safer
+            q->addItem(applet);
+            applet->init();
+            q->removeItem(applet);
+            delete applet;
+        }
+        applet = containment = new Containment(0, 0, id);
+
+        if (loadingNull) {
+            containment->setDrawWallpaper(false);
+        } else {
+            containment->setFailedToLaunch(false);
+        }
+
+        // we want to provide something and don't care about the failure to launch
+        containment->setFormFactor(Plasma::Planar);
+    }
+
+    // if this is a new containment, we need to ensure that there are no stale
+    // configuration data around
+    if (id == 0) {
+        KConfigGroup conf(q->config(), "Containments");
+        conf = KConfigGroup(&conf, QString::number(containment->id()));
+        conf.deleteGroup();
+    }
+
+    applet->d->isContainment = true;
+    containment->setPos(containment->d->preferredPos(q));
+    q->addItem(containment);
+    applet->d->setIsContainment(true, true);
+    containments.append(containment);
+
+    if (!delayedInit) {
+        containment->init();
+        KConfigGroup cg = containment->config();
+        containment->restore(cg);
+        containment->updateConstraints(Plasma::StartupCompletedConstraint);
+        containment->save(cg);
+        q->requestConfigSync();
+        containment->flushPendingConstraintsEvents();
+    }
+
+    QObject::connect(containment, SIGNAL(destroyed(QObject*)),
+            q, SLOT(containmentDestroyed(QObject*)));
+    QObject::connect(containment, SIGNAL(configNeedsSaving()),
+            q, SLOT(requestConfigSync()));
+    QObject::connect(containment, SIGNAL(releaseVisualFocus()),
+            q, SIGNAL(releaseVisualFocus()));
+    QObject::connect(containment, SIGNAL(screenChanged(int,int,Plasma::Containment*)),
+            q, SIGNAL(screenOwnerChanged(int,int,Plasma::Containment*)));
+
+    if (!delayedInit) {
+        emit q->containmentAdded(containment);
+    }
+
+    return containment;
+}
+
+QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigBase &conf, bool mergeConfig)
+{
+    if (const KConfigGroup *group = dynamic_cast<const KConfigGroup *>(&conf)) {
+        if (!group->isValid()) {
+            return QList<Containment *>();
+        }
+    }
+
+    QList<Plasma::Containment *> newContainments;
+    QSet<uint> containmentsIds;
+
+    foreach (Containment *containment, containments) {
+        containmentsIds.insert(containment->id());
+    }
+
+    KConfigGroup containmentsGroup(&conf, "Containments");
+
+    foreach (const QString &group, containmentsGroup.groupList()) {
+        KConfigGroup containmentConfig(&containmentsGroup, group);
+
+        if (containmentConfig.entryMap().isEmpty()) {
+            continue;
+        }
+
+        uint cid = group.toUInt();
+        if (containmentsIds.contains(cid)) {
+            cid = ++AppletPrivate::s_maxAppletId;
+        } else if (cid > AppletPrivate::s_maxAppletId) {
+            AppletPrivate::s_maxAppletId = cid;
+        }
+
+        if (mergeConfig) {
+            KConfigGroup realConf(q->config(), "Containments");
+            realConf = KConfigGroup(&realConf, QString::number(cid));
+            // in case something was there before us
+            realConf.deleteGroup();
+            containmentConfig.copyTo(&realConf);
+        }
+
+        //kDebug() << "got a containment in the config, trying to make a" << containmentConfig.readEntry("plugin", QString()) << "from" << group;
+        kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Adding Containment" << containmentConfig.readEntry("plugin", QString());
+        Containment *c = addContainment(containmentConfig.readEntry("plugin", QString()), QVariantList(), cid, true);
+        if (!c) {
+            continue;
+        }
+
+        newContainments.append(c);
+        containmentsIds.insert(c->id());
+
+        c->init();
+        kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Init Containment" << c->pluginName();
+        c->restore(containmentConfig);
+        kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Restored Containment" << c->pluginName();
+    }
+
+    foreach (Containment *containment, newContainments) {
+        containment->updateConstraints(Plasma::StartupCompletedConstraint);
+        containment->d->initApplets();
+        emit q->containmentAdded(containment);
+        kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Containment" << containment->name();
+    }
+
+    return newContainments;
 }
 
 } // namespace Plasma
