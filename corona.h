@@ -67,6 +67,12 @@ public:
     QString appletMimeType();
 
     /**
+     * @return the default containment plugin type
+     * @since 4.7
+     */
+    QString defaultContainmentPlugin() const;
+
+    /**
      * @return all containments on this Corona
      */
     QList<Containment*> containments() const;
@@ -478,6 +484,12 @@ protected:
      * @since 4.6
      */
     void setPreferredToolBoxPlugin(const Containment::Type type, const QString &plugin);
+
+    /**
+     * Sets the default containment plugin to try and load
+     * @since 4.7
+     */
+    void setDefaultContainmentPlugin(const QString &name);
 
     //Reimplemented from QGraphicsScene
     void dragEnterEvent(QGraphicsSceneDragDropEvent *event);

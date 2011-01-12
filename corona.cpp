@@ -92,6 +92,20 @@ QString Corona::appletMimeType()
     return d->mimetype;
 }
 
+void Corona::setDefaultContainmentPlugin(const QString &name)
+{
+    // we could check if it is in:
+    // Containment::listContainments().contains(name) ||
+    // Containment::listContainments(QString(), KGlobal::mainComponent().componentName()).contains(name)
+    // but that seems like overkill
+    d->defaultContainmentPlugin = name;
+}
+
+QString Corona::defaultContainmentPlugin() const
+{
+    return d->defaultContainmentPlugin;
+}
+
 void Corona::saveLayout(const QString &configName) const
 {
     KSharedConfigPtr c;
@@ -744,6 +758,7 @@ CoronaPrivate::CoronaPrivate(Corona *corona)
     : q(corona),
       immutability(Mutable),
       mimetype("text/x-plasmoidservicename"),
+      defaultContainmentPlugin("desktop"),
       config(0),
       actions(corona)
 {
@@ -874,8 +889,7 @@ void CoronaPrivate::syncConfig()
     emit q->configSynced();
 }
 
-Containment *CoronaPrivate::addContainment(const QString &name, const QVariantList &args,
-        uint id, bool delayedInit)
+Containment *CoronaPrivate::addContainment(const QString &name, const QVariantList &args, uint id, bool delayedInit)
 {
     QString pluginName = name;
     Containment *containment = 0;
@@ -885,7 +899,7 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
 
     if (pluginName.isEmpty() || pluginName == "default") {
         // default to the desktop containment
-        pluginName = "desktop";
+        pluginName = defaultContainmentPlugin;
     }
 
     bool loadingNull = pluginName == "null";

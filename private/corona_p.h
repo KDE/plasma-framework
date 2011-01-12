@@ -54,6 +54,7 @@ public:
     ImmutabilityType immutability;
     QString mimetype;
     QString configName;
+    QString defaultContainmentPlugin;
     KSharedConfigPtr config;
     QTimer configSyncTimer;
     QList<Containment*> containments;
