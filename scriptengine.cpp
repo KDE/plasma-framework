@@ -25,9 +25,13 @@
 
 #include <KDebug>
 #include <kdeversion.h>
+#include <KMimeTypeTrader>
 #include <KServiceTypeTrader>
 #include <KShell>
 #include <KStandardDirs>
+
+// KIO
+#include <kemailsettings.h> // no camelcase include
 
 #include <Plasma/Applet>
 #include <Plasma/Containment>
@@ -52,7 +56,8 @@ ScriptEngine::ScriptEngine(Plasma::Corona *corona, QObject *parent)
     AppInterface *interface = new AppInterface(this);
     connect(interface, SIGNAL(print(QString)), this, SIGNAL(print(QString)));
     m_scriptSelf = newQObject(interface, QScriptEngine::QtOwnership,
-                              QScriptEngine::ExcludeSuperClassProperties | QScriptEngine::ExcludeSuperClassMethods);
+                              QScriptEngine::ExcludeSuperClassProperties |
+                              QScriptEngine::ExcludeSuperClassMethods);
     setupEngine();
     connect(this, SIGNAL(signalHandlerException(QScriptValue)), this, SLOT(exception(QScriptValue)));
 }
@@ -294,6 +299,138 @@ QScriptValue ScriptEngine::loadTemplate(QScriptContext *context, QScriptEngine *
     return rv;
 }
 
+QScriptValue ScriptEngine::applicationExists(QScriptContext *context, QScriptEngine *engine)
+{
+    Q_UNUSED(engine)
+    if (context->argumentCount() == 0) {
+        return false;
+    }
+
+    const QString application = context->argument(0).toString();
+    if (application.isEmpty()) {
+        return false;
+    }
+
+    // first, check for it in $PATH
+    if (!KStandardDirs::findExe(application).isEmpty()) {
+        return true;
+    }
+
+    if (KService::serviceByStorageId(application)) {
+        return true;
+    }
+
+    if (application.contains("'")) {
+        // apostrophes just screw up the trader lookups below, so check for it
+        return false;
+    }
+
+    // next, consult ksycoca for an app by that name
+    if (!KServiceTypeTrader::self()->query("Application", QString("Name =~ '%1'").arg(application)).isEmpty()) {
+        return true;
+    }
+
+    // next, consult ksycoca for an app by that generic name
+    if (!KServiceTypeTrader::self()->query("Application", QString("GenericName =~ '%1'").arg(application)).isEmpty()) {
+        return true;
+    }
+
+    return false;
+}
+
+QScriptValue ScriptEngine::defaultApplication(QScriptContext *context, QScriptEngine *engine)
+{
+    Q_UNUSED(engine)
+    if (context->argumentCount() == 0) {
+        return false;
+    }
+
+    const QString application = context->argument(0).toString();
+    if (application.isEmpty()) {
+        return false;
+    }
+
+    const bool storageId = context->argumentCount() < 2 ? false : context->argument(1).toBool();
+
+    // FIXME: there are some pretty horrible hacks below, in the sense that they assume a very
+    // specific implementation system. there is much room for improvement here. see
+    // kdebase-runtime/kcontrol/componentchooser/ for all the gory details ;)
+    if (application.compare("mailer", Qt::CaseInsensitive) == 0) {
+        KEMailSettings settings;
+
+        // in KToolInvocation, the default is kmail; but let's be friendlier :)
+        QString command = settings.getSetting(KEMailSettings::ClientProgram);
+        if (command.isEmpty()) {
+            if (KService::Ptr kontact = KService::serviceByStorageId("kontact")) {
+                return storageId ? kontact->storageId() : kontact->exec();
+            } else if (KService::Ptr kmail = KService::serviceByStorageId("kmail")) {
+                return storageId ? kmail->storageId() : kmail->exec();
+            }
+        }
+
+        if (!command.isEmpty()) {
+            if (settings.getSetting(KEMailSettings::ClientTerminal) == "true") {
+                KConfigGroup confGroup(KGlobal::config(), "General");
+                const QString preferredTerminal = confGroup.readPathEntry("TerminalApplication",
+                        QString::fromLatin1("konsole"));
+                command = preferredTerminal + QString::fromLatin1(" -e ") + command;
+            }
+
+            return command;
+        }
+    } else if (application.compare("browser", Qt::CaseInsensitive) == 0) {
+        KConfigGroup config(KGlobal::config(), "General");
+        QString browserApp = config.readPathEntry("BrowserApplication", QString());
+        if (browserApp.isEmpty()) {
+            const KService::Ptr htmlApp = KMimeTypeTrader::self()->preferredService(QLatin1String("text/html"));
+            if (htmlApp) {
+                browserApp = storageId ? htmlApp->storageId() : htmlApp->exec();
+            }
+        } else if (browserApp.startsWith('!')) {
+            browserApp = browserApp.mid(1);
+        }
+
+        return browserApp;
+    } else if (application.compare("terminal", Qt::CaseInsensitive) == 0) {
+        KConfigGroup confGroup(KGlobal::config(), "General");
+        return confGroup.readPathEntry("TerminalApplication", QString::fromLatin1("konsole"));
+    } else if (application.compare("filemanager", Qt::CaseInsensitive) == 0) {
+        KService::Ptr service = KMimeTypeTrader::self()->preferredService("inode/directory");
+        if (service) {
+            return storageId ? service->storageId() : service->exec();
+        }
+    } else if (application.compare("windowmanager", Qt::CaseInsensitive) == 0) {
+        KConfig cfg("ksmserverrc", KConfig::NoGlobals);
+        KConfigGroup confGroup(&cfg, "General");
+        return confGroup.readEntry("windowManager", QString::fromLatin1("konsole"));
+    } else if (KService::Ptr service = KMimeTypeTrader::self()->preferredService(application)) {
+        return storageId ? service->storageId() : service->exec();
+    } else {
+        // try the files in share/apps/kcm_componentchooser/
+        const QStringList services = KGlobal::dirs()->findAllResources("data","kcm_componentchooser/*.desktop", KStandardDirs::NoDuplicates);
+        kDebug() << "ok, trying in" << services.count();
+        foreach (const QString &service, services) {
+            KConfig config(service, KConfig::SimpleConfig);
+            KConfigGroup cg = config.group(QByteArray());
+            const QString type = cg.readEntry("valueName", QString());
+            kDebug() << "    checking" << service << type << application;
+            if (type.compare(application, Qt::CaseInsensitive) == 0) {
+                KConfig store(cg.readPathEntry("storeInFile", "null"));
+                KConfigGroup storeCg(&store, cg.readEntry("valueSection", QString()));
+                const QString exec = storeCg.readPathEntry(cg.readEntry("valueName", "kcm_componenchooser_null"),
+                                                           cg.readEntry("defaultImplementation", QString()));
+                if (!exec.isEmpty()) {
+                    return exec;
+                }
+
+                break;
+            }
+        }
+    }
+
+    return false;
+}
+
 void ScriptEngine::setupEngine()
 {
     QScriptValue v = globalObject();
@@ -316,6 +453,8 @@ void ScriptEngine::setupEngine()
     m_scriptSelf.setProperty("panels", newFunction(ScriptEngine::panels));
     m_scriptSelf.setProperty("fileExists", newFunction(ScriptEngine::fileExists));
     m_scriptSelf.setProperty("loadTemplate", newFunction(ScriptEngine::loadTemplate));
+    m_scriptSelf.setProperty("applicationExists", newFunction(ScriptEngine::applicationExists));
+    m_scriptSelf.setProperty("defaultApplication", newFunction(ScriptEngine::defaultApplication));
 
     setGlobalObject(m_scriptSelf);
 }
