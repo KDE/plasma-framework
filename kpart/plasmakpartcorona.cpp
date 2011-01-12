@@ -41,13 +41,14 @@ void PlasmaKPartCorona::init()
 {
     enableAction("Lock Widgets", false);
     enableAction("Shortcut Settings", false);
+    setDefaultContainmentPlugin("newspaper");
 }
 
 void PlasmaKPartCorona::loadDefaultLayout()
 {
     // used to force a save into the config file
     KConfigGroup invalidConfig;
-    Plasma::Containment* c = addContainment("newspaper");
+    Plasma::Containment* c = addContainment(QString());
 
     if (!c) {
         // do some error reporting?
