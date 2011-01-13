@@ -79,6 +79,11 @@ SpinBox::SpinBox(QGraphicsWidget *parent)
     d->style = Plasma::Style::sharedStyle();
     native->setStyle(d->style.data());
     d->initTheming();
+
+    QStyleOptionSpinBox spinOpt;
+    spinOpt.initFrom(nativeWidget());
+    QRect controlrect = nativeWidget()->style()->subControlRect(QStyle::CC_SpinBox, &spinOpt, QStyle::SC_SpinBoxFrame, nativeWidget());
+    d->focusIndicator->setCustomGeometry(controlrect);
 }
 
 SpinBox::~SpinBox()
@@ -161,6 +166,7 @@ void SpinBox::resizeEvent(QGraphicsSceneResizeEvent *event)
     QStyleOptionSpinBox spinOpt;
     spinOpt.initFrom(nativeWidget());
     QRect controlrect = nativeWidget()->style()->subControlRect(QStyle::CC_SpinBox, &spinOpt, QStyle::SC_SpinBoxFrame, nativeWidget());
+
     if (d->focusIndicator) {
         d->focusIndicator->setCustomGeometry(controlrect);
     }
