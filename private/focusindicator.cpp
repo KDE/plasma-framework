@@ -91,6 +91,7 @@ void FocusIndicator::setCustomGeometry(const QRectF &geometry)
 
 void FocusIndicator::setCustomPrefix(const QString &prefix)
 {
+    QString was = m_prefix;
     if (!m_prefix.isEmpty() && !m_customPrefix.isEmpty()) {
         m_prefix.remove(m_customPrefix);
     }
@@ -99,6 +100,10 @@ void FocusIndicator::setCustomPrefix(const QString &prefix)
 
     if (!m_prefix.isEmpty()) {
         m_prefix.prepend(m_customPrefix);
+    }
+
+    if (m_prefix == was) {
+        return;
     }
 
     m_testPrefix = m_customPrefix % "hover";
