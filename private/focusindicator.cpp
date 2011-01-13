@@ -85,6 +85,10 @@ FocusIndicator::~FocusIndicator()
 
 void FocusIndicator::setCustomGeometry(const QRectF &geometry)
 {
+    if (m_customGeometry == geometry) {
+        return;
+    }
+
     m_customGeometry = geometry;
     syncGeometry();
 }
@@ -102,14 +106,15 @@ void FocusIndicator::setCustomPrefix(const QString &prefix)
         m_prefix.prepend(m_customPrefix);
     }
 
-    if (m_prefix == was) {
-        return;
-    }
-
     m_testPrefix = m_customPrefix % "hover";
     if (m_prefix.isEmpty()) {
         m_prefix = m_customPrefix % "shadow";
     }
+
+    if (m_prefix == was) {
+        return;
+    }
+
     syncGeometry();
     resizeEvent(0);
 }
