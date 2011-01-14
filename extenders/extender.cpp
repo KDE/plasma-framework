@@ -677,6 +677,7 @@ void ExtenderPrivate::addExtenderItem(ExtenderItem *item, const QPointF &pos)
 void ExtenderPrivate::removeExtenderItem(ExtenderItem *item)
 {
     attachedExtenderItems.removeAll(item);
+    pendingItems.remove(item);
 
     //collapse the popupapplet if the last item is removed.
     if (attachedExtenderItems.isEmpty()) {
