@@ -19,12 +19,14 @@
 
 #include "scriptengine.h"
 
+#include <QDir>
 #include <QFile>
 #include <QFileInfo>
 #include <QScriptValueIterator>
 
 #include <KDebug>
 #include <kdeversion.h>
+#include <KGlobalSettings>
 #include <KMimeTypeTrader>
 #include <KServiceTypeTrader>
 #include <KShell>
@@ -408,12 +410,12 @@ QScriptValue ScriptEngine::defaultApplication(QScriptContext *context, QScriptEn
     } else {
         // try the files in share/apps/kcm_componentchooser/
         const QStringList services = KGlobal::dirs()->findAllResources("data","kcm_componentchooser/*.desktop", KStandardDirs::NoDuplicates);
-        kDebug() << "ok, trying in" << services.count();
+        //kDebug() << "ok, trying in" << services.count();
         foreach (const QString &service, services) {
             KConfig config(service, KConfig::SimpleConfig);
             KConfigGroup cg = config.group(QByteArray());
             const QString type = cg.readEntry("valueName", QString());
-            kDebug() << "    checking" << service << type << application;
+            //kDebug() << "    checking" << service << type << application;
             if (type.compare(application, Qt::CaseInsensitive) == 0) {
                 KConfig store(cg.readPathEntry("storeInFile", "null"));
                 KConfigGroup storeCg(&store, cg.readEntry("valueSection", QString()));
@@ -429,6 +431,86 @@ QScriptValue ScriptEngine::defaultApplication(QScriptContext *context, QScriptEn
     }
 
     return false;
+}
+
+QScriptValue ScriptEngine::applicationPath(QScriptContext *context, QScriptEngine *engine)
+{
+    Q_UNUSED(engine)
+    if (context->argumentCount() == 0) {
+        return false;
+    }
+
+    const QString application = context->argument(0).toString();
+    if (application.isEmpty()) {
+        return false;
+    }
+
+    // first, check for it in $PATH
+    const QString path = KStandardDirs::findExe(application);
+    if (!path.isEmpty()) {
+        return path;
+    }
+
+    if (KService::Ptr service = KService::serviceByStorageId(application)) {
+        return KStandardDirs::locate("apps", service->entryPath());
+    }
+
+    if (application.contains("'")) {
+        // apostrophes just screw up the trader lookups below, so check for it
+        return QString();
+    }
+
+    // next, consult ksycoca for an app by that name
+    KService::List offers = KServiceTypeTrader::self()->query("Application", QString("Name =~ '%1'").arg(application));
+    if (offers.isEmpty()) {
+        // next, consult ksycoca for an app by that generic name
+        offers = KServiceTypeTrader::self()->query("Application", QString("GenericName =~ '%1'").arg(application));
+    }
+
+    if (!offers.isEmpty()) {
+        KService::Ptr offer = offers.first();
+        return KStandardDirs::locate("apps", offer->entryPath());
+    }
+
+    return QString();
+}
+
+QScriptValue ScriptEngine::userDataPath(QScriptContext *context, QScriptEngine *engine)
+{
+    Q_UNUSED(engine)
+    if (context->argumentCount() == 0) {
+        return QString();
+    }
+
+    const QString type = context->argument(0).toString();
+    if (type.isEmpty()) {
+        return QString();
+    }
+
+    if (context->argumentCount() > 1) {
+        const QString filename = context->argument(1).toString();
+        return KStandardDirs::locateLocal(type.toLatin1(), filename);
+    }
+
+    if (type.compare("home", Qt::CaseInsensitive) == 0) {
+        return QDir::homePath();
+    } else if (type.compare("desktop", Qt::CaseInsensitive) == 0) {
+        return KGlobalSettings::desktopPath();
+    } else if (type.compare("autostart", Qt::CaseInsensitive) == 0) {
+        return KGlobalSettings::autostartPath();
+    } else if (type.compare("documents", Qt::CaseInsensitive) == 0) {
+        return KGlobalSettings::documentPath();
+    } else if (type.compare("music", Qt::CaseInsensitive) == 0) {
+        return KGlobalSettings::musicPath();
+    } else if (type.compare("video", Qt::CaseInsensitive) == 0) {
+        return KGlobalSettings::videosPath();
+    } else if (type.compare("downloads", Qt::CaseInsensitive) == 0) {
+        return KGlobalSettings::downloadPath();
+    } else if (type.compare("pictures", Qt::CaseInsensitive) == 0) {
+        return KGlobalSettings::picturesPath();
+    }
+
+    return QString();
 }
 
 void ScriptEngine::setupEngine()
@@ -455,6 +537,8 @@ void ScriptEngine::setupEngine()
     m_scriptSelf.setProperty("loadTemplate", newFunction(ScriptEngine::loadTemplate));
     m_scriptSelf.setProperty("applicationExists", newFunction(ScriptEngine::applicationExists));
     m_scriptSelf.setProperty("defaultApplication", newFunction(ScriptEngine::defaultApplication));
+    m_scriptSelf.setProperty("userDataPath", newFunction(ScriptEngine::userDataPath));
+    m_scriptSelf.setProperty("applicationPath", newFunction(ScriptEngine::applicationPath));
 
     setGlobalObject(m_scriptSelf);
 }

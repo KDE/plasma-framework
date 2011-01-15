@@ -78,6 +78,8 @@ private:
     static QScriptValue loadTemplate(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue applicationExists(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue defaultApplication(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue applicationPath(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue userDataPath(QScriptContext *context, QScriptEngine *engine);
 
     // helpers
     static QScriptValue createContainment(const QString &type, const QString &defautPlugin,
