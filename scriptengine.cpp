@@ -39,6 +39,7 @@
 #include <Plasma/Containment>
 #include <Plasma/Corona>
 #include <Plasma/Package>
+#include <Plasma/Wallpaper>
 
 #include "appinterface.h"
 #include "containment.h"
@@ -479,12 +480,12 @@ QScriptValue ScriptEngine::userDataPath(QScriptContext *context, QScriptEngine *
 {
     Q_UNUSED(engine)
     if (context->argumentCount() == 0) {
-        return QString();
+        return QDir::homePath();
     }
 
     const QString type = context->argument(0).toString();
     if (type.isEmpty()) {
-        return QString();
+        return QDir::homePath();
     }
 
     if (context->argumentCount() > 1) {
@@ -492,9 +493,7 @@ QScriptValue ScriptEngine::userDataPath(QScriptContext *context, QScriptEngine *
         return KStandardDirs::locateLocal(type.toLatin1(), filename);
     }
 
-    if (type.compare("home", Qt::CaseInsensitive) == 0) {
-        return QDir::homePath();
-    } else if (type.compare("desktop", Qt::CaseInsensitive) == 0) {
+    if (type.compare("desktop", Qt::CaseInsensitive) == 0) {
         return KGlobalSettings::desktopPath();
     } else if (type.compare("autostart", Qt::CaseInsensitive) == 0) {
         return KGlobalSettings::autostartPath();
@@ -511,6 +510,36 @@ QScriptValue ScriptEngine::userDataPath(QScriptContext *context, QScriptEngine *
     }
 
     return QString();
+}
+
+QScriptValue ScriptEngine::wallpaperPlugins(QScriptContext *context, QScriptEngine *engine)
+{
+    Q_UNUSED(engine)
+
+    QString formFactor;
+    if (context->argumentCount() > 0) {
+        formFactor = context->argument(0).toString();
+    }
+
+    QString constraint;
+    if (!formFactor.isEmpty()) {
+        constraint.append("[X-Plasma-FormFactors] ~~ '").append(formFactor).append("'");
+    }
+
+    KService::List services = KServiceTypeTrader::self()->query("Plasma/Wallpaper", constraint);
+    QScriptValue rv = engine->newArray(services.size());
+    foreach (const KService::Ptr service, services) {
+        QList<KServiceAction> modeActions = service->actions();
+        QScriptValue modes = engine->newArray(modeActions.size());
+        int i = 0;
+        foreach (const KServiceAction &action, modeActions) {
+            modes.setProperty(i++, action.name());
+        }
+
+        rv.setProperty(service->name(), modes);
+    }
+
+    return rv;
 }
 
 void ScriptEngine::setupEngine()
@@ -539,6 +568,7 @@ void ScriptEngine::setupEngine()
     m_scriptSelf.setProperty("defaultApplication", newFunction(ScriptEngine::defaultApplication));
     m_scriptSelf.setProperty("userDataPath", newFunction(ScriptEngine::userDataPath));
     m_scriptSelf.setProperty("applicationPath", newFunction(ScriptEngine::applicationPath));
+    m_scriptSelf.setProperty("wallpaperPlugins", newFunction(ScriptEngine::wallpaperPlugins));
 
     setGlobalObject(m_scriptSelf);
 }
