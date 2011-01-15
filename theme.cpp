@@ -28,6 +28,7 @@
 #include <QTimer>
 #ifdef Q_WS_X11
 #include <QX11Info>
+#include "private/effectwatcher_p.h"
 #endif
 
 #include <kcolorscheme.h>
@@ -85,6 +86,7 @@ public:
           pixmapCache(0),
           locolor(false),
           compositingActive(KWindowSystem::compositingActive()),
+          blurActive(false),
           isDefault(false),
           useGlobal(true),
           hasWallpapers(false),
@@ -105,6 +107,9 @@ public:
             compositeWatch = new KSelectionWatcher(net_wm_cm_name, -1, q);
             QObject::connect(compositeWatch, SIGNAL(newOwner(Window)), q, SLOT(compositingChanged()));
             QObject::connect(compositeWatch, SIGNAL(lostOwner()), q, SLOT(compositingChanged()));
+            //watch for blur effect property changes as well
+            effectWatcher = new EffectWatcher(WindowEffects::BlurBehind);
+            QObject::connect(effectWatcher, SIGNAL(blurBehindChanged(bool)), q, SLOT(blurBehindChanged(bool)));
         }
 #endif
 
@@ -116,6 +121,9 @@ public:
     ~ThemePrivate()
     {
        delete pixmapCache;
+#ifdef Q_WS_X11
+       delete effectWatcher;
+#endif
     }
 
     KConfigGroup &config()
@@ -143,6 +151,7 @@ public:
     void discardCache(CacheTypes caches);
     void scheduledCacheUpdate();
     void colorsChanged();
+    void blurBehindChanged(bool blur);
     bool useCache();
     void settingsFileChanged(const QString &);
     void setThemeName(const QString &themeName, bool writeSettings);
@@ -181,10 +190,12 @@ public:
     QTimer *saveTimer;
 
 #ifdef Q_WS_X11
+    EffectWatcher *effectWatcher;
     KSelectionWatcher *compositeWatch;
 #endif
     bool locolor : 1;
     bool compositingActive : 1;
+    bool blurActive : 1;
     bool isDefault : 1;
     bool useGlobal : 1;
     bool hasWallpapers : 1;
@@ -257,7 +268,6 @@ void ThemePrivate::compositingChanged()
 {
 #ifdef Q_WS_X11
     bool nowCompositingActive = compositeWatch->owner() != None;
-
     if (compositingActive != nowCompositingActive) {
         compositingActive = nowCompositingActive;
         discardCache(PixmapCache | SvgElementsCache);
@@ -313,6 +323,12 @@ void ThemePrivate::colorsChanged()
     colorScheme = KColorScheme(QPalette::Active, KColorScheme::Window, colors);
     buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, colors);
     viewColorScheme = KColorScheme(QPalette::Active, KColorScheme::View, colors);
+    emit q->themeChanged();
+}
+
+void ThemePrivate::blurBehindChanged(bool blur)
+{
+    blurActive = blur;
     emit q->themeChanged();
 }
 

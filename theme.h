@@ -399,6 +399,7 @@ class PLASMA_EXPORT Theme : public QObject
 
         Q_PRIVATE_SLOT(d, void compositingChanged())
         Q_PRIVATE_SLOT(d, void colorsChanged())
+        Q_PRIVATE_SLOT(d, void blurBehindChanged(bool blur))
         Q_PRIVATE_SLOT(d, void settingsFileChanged(const QString &))
         Q_PRIVATE_SLOT(d, void scheduledCacheUpdate())
         Q_PRIVATE_SLOT(d, void onAppExitCleanup())
