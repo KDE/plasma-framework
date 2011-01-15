@@ -163,7 +163,7 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
         return from;
     }
 
-    if (qFuzzyCompare(amount, 0)) {
+    if (qFuzzyCompare(amount + 1, qreal(1.0))) {
         return from;
     }
 
