@@ -108,8 +108,9 @@ public:
             QObject::connect(compositeWatch, SIGNAL(newOwner(Window)), q, SLOT(compositingChanged()));
             QObject::connect(compositeWatch, SIGNAL(lostOwner()), q, SLOT(compositingChanged()));
             //watch for blur effect property changes as well
-            effectWatcher = new EffectWatcher(WindowEffects::BlurBehind);
-            QObject::connect(effectWatcher, SIGNAL(blurBehindChanged(bool)), q, SLOT(blurBehindChanged(bool)));
+            effectWatcher = 0;
+           /* effectWatcher = new EffectWatcher(WindowEffects::BlurBehind);
+            QObject::connect(effectWatcher, SIGNAL(blurBehindChanged(bool)), q, SLOT(blurBehindChanged(bool)));*/
         }
 #endif
 
