@@ -163,6 +163,10 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
         return from;
     }
 
+    if (qFuzzyCompare(amount, 0)) {
+        return from;
+    }
+
     QRect startRect(from.rect());
     QRect targetRect(to.rect());
     QSize pixmapSize = startRect.size().expandedTo(targetRect.size());
