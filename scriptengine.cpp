@@ -512,7 +512,7 @@ QScriptValue ScriptEngine::userDataPath(QScriptContext *context, QScriptEngine *
     return QString();
 }
 
-QScriptValue ScriptEngine::wallpaperPlugins(QScriptContext *context, QScriptEngine *engine)
+QScriptValue ScriptEngine::knownWallpaperPlugins(QScriptContext *context, QScriptEngine *engine)
 {
     Q_UNUSED(engine)
 
@@ -568,7 +568,7 @@ void ScriptEngine::setupEngine()
     m_scriptSelf.setProperty("defaultApplication", newFunction(ScriptEngine::defaultApplication));
     m_scriptSelf.setProperty("userDataPath", newFunction(ScriptEngine::userDataPath));
     m_scriptSelf.setProperty("applicationPath", newFunction(ScriptEngine::applicationPath));
-    m_scriptSelf.setProperty("wallpaperPlugins", newFunction(ScriptEngine::wallpaperPlugins));
+    m_scriptSelf.setProperty("knownWallpaperPlugins", newFunction(ScriptEngine::knownWallpaperPlugins));
 
     setGlobalObject(m_scriptSelf);
 }

@@ -80,7 +80,7 @@ private:
     static QScriptValue defaultApplication(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue applicationPath(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue userDataPath(QScriptContext *context, QScriptEngine *engine);
-    static QScriptValue wallpaperPlugins(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue knownWallpaperPlugins(QScriptContext *context, QScriptEngine *engine);
 
     // helpers
     static QScriptValue createContainment(const QString &type, const QString &defautPlugin,
