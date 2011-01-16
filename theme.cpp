@@ -109,8 +109,8 @@ public:
             QObject::connect(compositeWatch, SIGNAL(lostOwner()), q, SLOT(compositingChanged()));
             //watch for blur effect property changes as well
             effectWatcher = 0;
-           /* effectWatcher = new EffectWatcher(WindowEffects::BlurBehind);
-            QObject::connect(effectWatcher, SIGNAL(blurBehindChanged(bool)), q, SLOT(blurBehindChanged(bool)));*/
+            effectWatcher = new EffectWatcher("_KDE_NET_WM_BLUR_BEHIND_REGION");
+            QObject::connect(effectWatcher, SIGNAL(blurBehindChanged(bool)), q, SLOT(blurBehindChanged(bool)));
         }
 #endif
 

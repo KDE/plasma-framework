@@ -32,7 +32,7 @@ class EffectWatcher: public QWidget
     Q_OBJECT
 
 public:
-    EffectWatcher(Plasma::WindowEffects::Effect effect, QWidget *parent = 0);
+    EffectWatcher(QString property, QWidget *parent = 0);
 
 protected:
 #ifdef Q_WS_X11
@@ -43,7 +43,7 @@ Q_SIGNALS:
     void blurBehindChanged(bool blur);
 
 private:
-    Plasma::WindowEffects::Effect m_effect;
+    QString m_property;
     bool m_effectActive;
 };
 

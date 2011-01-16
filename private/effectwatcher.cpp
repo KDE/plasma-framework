@@ -30,15 +30,20 @@ namespace Plasma
 {
 
 
-EffectWatcher::EffectWatcher(Plasma::WindowEffects::Effect effect, QWidget *parent)
+EffectWatcher::EffectWatcher(QString property, QWidget *parent)
     : QWidget(parent),
-      m_effect(effect),
+      m_property(property),
       m_effectActive(false)
 {
 #ifdef Q_WS_X11
     kapp->installX11EventFilter( this );
     Display *dpy = QX11Info::display();
-    XSelectInput(dpy, RootWindow(dpy, 0), PropertyChangeMask);
+    Window root = DefaultRootWindow(dpy);
+    XWindowAttributes attrs;
+    //Don't reset eventual other masks already there
+    XGetWindowAttributes(dpy, root, &attrs);
+    attrs.your_event_mask |= PropertyChangeMask;
+    XSelectInput(dpy, root, attrs.your_event_mask);
 #endif
 }
 
@@ -46,10 +51,22 @@ EffectWatcher::EffectWatcher(Plasma::WindowEffects::Effect effect, QWidget *pare
 #ifdef Q_WS_X11
 bool EffectWatcher::x11Event(XEvent *event)
 {
-    bool nowEffectActive = WindowEffects::isEffectAvailable(m_effect);
-    if (m_effectActive != nowEffectActive) {
-        m_effectActive = nowEffectActive;
-        emit blurBehindChanged(m_effectActive);
+    if (event->type == PropertyNotify) {
+        Display *dpy = QX11Info::display();
+        Atom testAtom = XInternAtom(dpy, m_property.toLatin1(), False);
+        if (event->xproperty.atom == testAtom) {
+            bool nowEffectActive = false;
+            int cnt;
+            Atom *list = XListProperties(dpy, DefaultRootWindow(dpy), &cnt);
+            if (list != NULL) {
+                nowEffectActive = (qFind(list, list + cnt, testAtom) != list + cnt);
+                XFree(list);
+            }
+            if (m_effectActive != nowEffectActive) {
+                m_effectActive = nowEffectActive;
+                emit blurBehindChanged(m_effectActive);
+            }
+        }
     }
     return QWidget::x11Event(event);
 }
