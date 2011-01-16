@@ -32,8 +32,7 @@ PlasmaKPartView::PlasmaKPartView(Plasma::Containment* containment, int uid, QWid
 {
     setFocusPolicy(Qt::NoFocus);
     connectContainment(containment);
-
-    setWallpaperEnabled( false );
+    setWallpaperEnabled(false);
 }
 
 PlasmaKPartView::~PlasmaKPartView()
