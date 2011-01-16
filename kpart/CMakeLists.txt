@@ -20,4 +20,3 @@ target_link_libraries(plasma-kpart ${QT_QTSCRIPT_LIBRARY} ${KDE4_PLASMA_LIBS} ${
 install(TARGETS plasma-kpart DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES plasma-kpart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
-install(FILES plasmakpart.h plasmakpartview.h plasmakpartcorona.h DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel )
