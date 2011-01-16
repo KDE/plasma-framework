@@ -35,7 +35,9 @@ public:
     EffectWatcher(Plasma::WindowEffects::Effect effect, QWidget *parent = 0);
 
 protected:
+#ifdef Q_WS_X11
     bool x11Event(XEvent *event);
+#endif
 
 Q_SIGNALS:
     void blurBehindChanged(bool blur);

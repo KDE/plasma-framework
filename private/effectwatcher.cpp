@@ -22,8 +22,9 @@
 #include <kapplication.h>
 #include <kdebug.h>
 
-
+#ifdef Q_WS_X11
 #include <X11/Xlib.h>
+#endif
 
 namespace Plasma
 {
@@ -34,12 +35,15 @@ EffectWatcher::EffectWatcher(Plasma::WindowEffects::Effect effect, QWidget *pare
       m_effect(effect),
       m_effectActive(false)
 {
+#ifdef Q_WS_X11
     kapp->installX11EventFilter( this );
     Display *dpy = QX11Info::display();
     XSelectInput(dpy, RootWindow(dpy, 0), PropertyChangeMask);
+#endif
 }
 
 
+#ifdef Q_WS_X11
 bool EffectWatcher::x11Event(XEvent *event)
 {
     bool nowEffectActive = WindowEffects::isEffectAvailable(m_effect);
@@ -49,6 +53,7 @@ bool EffectWatcher::x11Event(XEvent *event)
     }
     return QWidget::x11Event(event);
 }
+#endif
 
 
 }
