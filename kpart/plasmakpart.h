@@ -27,7 +27,7 @@ class PlasmaKPartView;
 class PlasmaKPartCorona;
 
 #include <Plasma/Containment>
-Q_DECLARE_METATYPE( Plasma::Containment* )
+Q_DECLARE_METATYPE(Plasma::Containment *)
 namespace Plasma
 {
     class Applet;
@@ -43,16 +43,17 @@ class QVBoxLayout;
 
 class PlasmaKPart : public KParts::ReadOnlyPart
 {
-Q_OBJECT
-Q_PROPERTY( Plasma::Applet::List activeApplets READ listActiveApplets )
+    Q_OBJECT
+    Q_PROPERTY(Plasma::Applet::List activeApplets READ listActiveApplets)
+
 public:
-    PlasmaKPart(QWidget* parentWidget, QObject* parent, const QVariantList&);
+    PlasmaKPart(QWidget *parentWidget, QObject *parent, const QVariantList &args);
     ~PlasmaKPart();
 
     void notifyStartup(bool completed);
 
-    PlasmaKPartCorona* corona();
-    Plasma::Containment* containment();
+    PlasmaKPartCorona *corona();
+    Plasma::Containment *containment();
     QString category();
 
 public Q_SLOTS:
@@ -63,7 +64,7 @@ public Q_SLOTS:
      * @author Ryan Rix <ry@n.rix.si>
      * @version 0.01
      **/
-    void addApplet(const QString& pluginName, const QVariantList& args = QVariantList(), const QRectF& dimensions = QRectF());
+    void addApplet(const QString &pluginName, const QVariantList &args = QVariantList(), const QRectF &dimensions = QRectF());
 
     /**
      * Sets the application-specific plugin loader. This allows
@@ -85,14 +86,17 @@ public Q_SLOTS:
      *
      * @short Set application-specific plugin loader
      **/
-    bool setPluginLoader( Plasma::PluginLoader* loader );
+    bool setPluginLoader(Plasma::PluginLoader *loader);
 
     /**
      * Returns a list of active applets in the containment.
      *
      * @return A list of the containment's Applets
      **/
-    Plasma::Applet::List listActiveApplets( );
+    Plasma::Applet::List listActiveApplets();
+
+Q_SIGNALS:
+    void viewCreated();
 
 private Q_SLOTS:
     void cleanup();
@@ -107,9 +111,6 @@ private:
     KService::Ptr m_service;
     QHash<QString,Plasma::Applet*>* m_appletList;
     QVBoxLayout* m_configLayout;
-
-Q_SIGNALS:
-    void viewCreated();
 };
 
 #endif // multiple inclusion guard

@@ -40,13 +40,13 @@
 K_PLUGIN_FACTORY(plasmaKPartFactory, registerPlugin<PlasmaKPart>();)
 K_EXPORT_PLUGIN(plasmaKPartFactory("plasma-kpart","plasma-kpart") )
 
-PlasmaKPart::PlasmaKPart(QWidget *parentWidget, QObject *parent, const QVariantList& args)
-        : KParts::ReadOnlyPart(parent),
-        m_corona(0),
-        m_view(0),
-        m_service(0)
+PlasmaKPart::PlasmaKPart(QWidget *parentWidget, QObject *parent, const QVariantList &args)
+    : KParts::ReadOnlyPart(parent),
+      m_corona(0),
+      m_view(new PlasmaKPartView(0, 1, parentWidget)),
+      m_service(0)
 {
-    setComponentData( plasmaKPartFactory::componentData() );
+    setComponentData(plasmaKPartFactory::componentData());
 
     KGlobal::locale()->insertCatalog("libplasma");
     KGlobal::locale()->insertCatalog("plasmagenericshell");
@@ -54,22 +54,19 @@ PlasmaKPart::PlasmaKPart(QWidget *parentWidget, QObject *parent, const QVariantL
 
     setThemeDefaults();
 
-    m_view = new PlasmaKPartView(0, 1, parentWidget);
-    m_view->installEventFilter(this);
     setWidget(m_view);
 
     // initialize the plugin loader
-    if( args.length() > 0 )
-    {
-        Plasma::PluginLoader* loader = qVariantValue<Plasma::PluginLoader*>( args.first() );
-        if( loader )
-        {
-            Plasma::PluginLoader::setPluginLoader( loader );
+    if (args.length() > 0) {
+        Plasma::PluginLoader *loader = qVariantValue<Plasma::PluginLoader *>(args.first());
+        if (loader) {
+            Plasma::PluginLoader::setPluginLoader(loader);
         }
     }
 
-    if ( args.length() > 1 )
+    if (args.length() > 1) {
         m_category = args.at(1).value<QString>();
+    }
 
     // this line initializes the corona.
     corona();
@@ -164,14 +161,13 @@ Plasma::Containment* PlasmaKPart::containment()
     return corona()->containments().first();
 }
 
-bool PlasmaKPart::setPluginLoader( Plasma::PluginLoader* loader )
+bool PlasmaKPart::setPluginLoader(Plasma::PluginLoader *loader)
 {
-    if ( Plasma::PluginLoader::pluginLoader() ) {
+    if (Plasma::PluginLoader::pluginLoader()) {
         return false;
     }
 
-    Plasma::PluginLoader::setPluginLoader( loader );
-
+    Plasma::PluginLoader::setPluginLoader(loader);
     return true;
 }
 
