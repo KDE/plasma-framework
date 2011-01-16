@@ -38,7 +38,7 @@ Q_OBJECT
 public:
     PlasmaKPartCorona(QObject* parent);
 
-    Plasma::Containment* containment();
+    Plasma::Containment *containment();
 
     void loadDefaultLayout();
 
@@ -51,7 +51,7 @@ private Q_SLOTS:
     void printScriptMessage(const QString &error);
 
 private:
-    Plasma::Applet* loadDefaultApplet(const QString &pluginName, Plasma::Containment *c);
+    Plasma::Applet *loadDefaultApplet(const QString &pluginName, Plasma::Containment *c);
 };
 
 #endif

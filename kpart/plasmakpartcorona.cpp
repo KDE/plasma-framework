@@ -31,7 +31,7 @@
 #include <qfile.h>
 #include "scripting/scriptengine.h"
 
-PlasmaKPartCorona::PlasmaKPartCorona(QObject* parent)
+PlasmaKPartCorona::PlasmaKPartCorona(QObject *parent)
     : Plasma::Corona(parent)
 {
     init();
@@ -48,7 +48,7 @@ void PlasmaKPartCorona::loadDefaultLayout()
 {
     // used to force a save into the config file
     KConfigGroup invalidConfig;
-    Plasma::Containment* c = addContainment(QString());
+    Plasma::Containment *c = addContainment(QString());
 
     if (!c) {
         // do some error reporting?
@@ -87,9 +87,13 @@ void PlasmaKPartCorona::printScriptMessage(const QString &error)
 
 Plasma::Containment* PlasmaKPartCorona::containment()
 {
+    // We only have one containment, so just try and return the first one
     QList<Plasma::Containment*> list = containments();
+    if (!list.isEmpty()) {
+        return list.first();
+    }
 
-    return list.first(); // We only have one containment
+    return 0;
 }
 
 #include "plasmakpartcorona.moc"
