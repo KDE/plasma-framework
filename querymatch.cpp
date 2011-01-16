@@ -21,6 +21,7 @@
 
 #include <QAction>
 #include <QIcon>
+#include <QReadWriteLock>
 #include <QSharedData>
 #include <QStringList>
 #include <QVariant>
@@ -38,6 +39,7 @@ class QueryMatchPrivate : public QSharedData
     public:
         QueryMatchPrivate(AbstractRunner *r)
             : QSharedData(),
+              lock(new QReadWriteLock(QReadWriteLock::Recursive)),
               runner(r),
               type(QueryMatch::ExactMatch),
               relevance(.7),
@@ -47,6 +49,30 @@ class QueryMatchPrivate : public QSharedData
         {
         }
 
+        QueryMatchPrivate(const QueryMatchPrivate &other)
+            : QSharedData(other),
+              lock(new QReadWriteLock(QReadWriteLock::Recursive))
+        {
+            QReadLocker lock(other.lock);
+            runner = other.runner;
+            type = other.type;
+            relevance = other.relevance;
+            selAction = other.selAction;
+            enabled = other.enabled;
+            idSetByData = other.idSetByData;
+            id = other.id;
+            text = other.text;
+            subtext = other.subtext;
+            icon = other.icon;
+            data = other.data;
+        }
+
+        ~QueryMatchPrivate()
+        {
+            delete lock;
+        }
+
+        QReadWriteLock *lock;
         QWeakPointer<AbstractRunner> runner;
         QueryMatch::Type type;
         QString id;
@@ -116,16 +142,19 @@ AbstractRunner* QueryMatch::runner() const
 
 void QueryMatch::setText(const QString &text)
 {
+    QWriteLocker locker(d->lock);
     d->text = text;
 }
 
 void QueryMatch::setSubtext(const QString &subtext)
 {
+    QWriteLocker locker(d->lock);
     d->subtext = subtext;
 }
 
 void QueryMatch::setData(const QVariant & data)
 {
+    QWriteLocker locker(d->lock);
     d->data = data;
 
     if (d->id.isEmpty() || d->idSetByData) {
@@ -139,6 +168,7 @@ void QueryMatch::setData(const QVariant & data)
 
 void QueryMatch::setId(const QString &id)
 {
+    QWriteLocker locker(d->lock);
     if (d->runner) {
         d->id = d->runner.data()->id();
     }
@@ -152,26 +182,31 @@ void QueryMatch::setId(const QString &id)
 
 void QueryMatch::setIcon(const QIcon &icon)
 {
+    QWriteLocker locker(d->lock);
     d->icon = icon;
 }
 
 QVariant QueryMatch::data() const
 {
+    QReadLocker locker(d->lock);
     return d->data;
 }
 
 QString QueryMatch::text() const
 {
+    QReadLocker locker(d->lock);
     return d->text;
 }
 
 QString QueryMatch::subtext() const
 {
+    QReadLocker locker(d->lock);
     return d->subtext;
 }
 
 QIcon QueryMatch::icon() const
 {
+    QReadLocker locker(d->lock);
     return d->icon;
 }
 
@@ -206,6 +241,8 @@ bool QueryMatch::operator<(const QueryMatch &other) const
             return d->relevance < other.d->relevance;
         }
 
+        QReadLocker locker(d->lock);
+        QReadLocker otherLocker(other.d->lock);
         // when resorting to sort by alpha, we want the
         // reverse sort order!
         return d->text > other.d->text;
