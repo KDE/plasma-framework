@@ -100,6 +100,7 @@ void DialogPrivate::themeChanged()
     // when we aren't compositing
     q->setAttribute(Qt::WA_NoSystemBackground, !translucency);
     updateMask();
+    q->update();
 }
 
 void DialogPrivate::updateMask()
@@ -386,11 +387,13 @@ Dialog::Dialog(QWidget *parent, Qt::WindowFlags f)
     : QWidget(parent, f | Qt::FramelessWindowHint),
       d(new DialogPrivate(this))
 {
+    setMouseTracking(true);
     setAttribute(Qt::WA_TranslucentBackground);
     d->background = new FrameSvg(this);
     d->background->setImagePath("dialogs/background");
     d->background->setEnabledBorders(FrameSvg::AllBorders);
     d->background->resizeFrame(size());
+    connect(d->background, SIGNAL(repaintNeeded()), this, SLOT(themeChanged()));
 
     QPalette pal = palette();
     pal.setColor(backgroundRole(), Qt::transparent);
@@ -405,12 +408,7 @@ Dialog::Dialog(QWidget *parent, Qt::WindowFlags f)
     d->adjustSizeTimer->setSingleShot(true);
     connect(d->adjustSizeTimer, SIGNAL(timeout()), this, SLOT(delayedAdjustSize()));
 
-    connect(d->background, SIGNAL(repaintNeeded()), this, SLOT(update()));
-
-    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(themeChanged()));
     d->themeChanged();
-
-    setMouseTracking(true);
 }
 
 Dialog::~Dialog()
