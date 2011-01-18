@@ -20,6 +20,8 @@
 #ifndef PLASMA_EXTENDERGROUPPRIVATE_H
 #define PLASMA_EXTENDERGROUPPRIVATE_H
 
+class QTimer;
+
 namespace Plasma 
 {
 
@@ -45,6 +47,7 @@ class ExtenderGroupPrivate
         Plasma::Svg *svg;
         QGraphicsWidget *childsWidget;
         QGraphicsLinearLayout *layout;
+        QTimer *resizeTimer;
         bool collapsed;
         bool autoHide;
         bool autoCollapse;

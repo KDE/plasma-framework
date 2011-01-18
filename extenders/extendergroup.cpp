@@ -23,6 +23,7 @@
 #include <QApplication>
 #include <QString>
 #include <QList>
+#include <QTimer>
 #include <QtGui/QGraphicsWidget>
 #include <QtGui/QGraphicsLinearLayout>
 #include <QtGui/QGraphicsSceneDragDropEvent>
@@ -48,6 +49,10 @@ ExtenderGroup::ExtenderGroup(Extender *parent, uint groupId)
             this, SLOT(addItemToGroup(Plasma::ExtenderItem*)));
     connect(extender(), SIGNAL(itemDetached(Plasma::ExtenderItem*)),
             this, SLOT(removeItemFromGroup(Plasma::ExtenderItem*)));
+
+    //this isn't actually connected to anything, we will just check if it's running or not
+    d->resizeTimer = new QTimer(this);
+    d->resizeTimer->setSingleShot(true);
 
     config().writeEntry("isGroup", true);
 
@@ -217,8 +222,11 @@ bool ExtenderGroup::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == d->childsWidget && event->type() == QEvent::GraphicsSceneResize) {
         static_cast<QGraphicsLayoutItem *>(extender()->d->scrollWidget)->updateGeometry();
-        static_cast<QGraphicsLayoutItem *>(extender())->updateGeometry();
-        extender()->d->adjustSize();
+        if (!d->resizeTimer->isActive()) {
+            static_cast<QGraphicsLayoutItem *>(extender())->updateGeometry();
+            extender()->d->adjustSize();
+            d->resizeTimer->start(0);
+        }
     }
 
     return ExtenderItem::eventFilter(watched, event);
