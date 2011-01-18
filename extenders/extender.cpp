@@ -489,7 +489,7 @@ void Extender::dropEvent(QGraphicsSceneDragDropEvent *event)
 
 void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
 {
-    ExtenderGroup *group = item->isGroup()?static_cast<ExtenderGroup*>(item):0;
+    ExtenderGroup *group = item->isGroup() ? static_cast<ExtenderGroup*>(item) : 0;
     if (group && group->autoHide() && group->items().isEmpty()) {
         return;
     }
@@ -670,7 +670,7 @@ void ExtenderPrivate::addExtenderItem(ExtenderItem *item, const QPointF &pos)
     QObject::connect(item, SIGNAL(destroyed(Plasma::ExtenderItem*)), q, SLOT(extenderItemDestroyed(Plasma::ExtenderItem*)));
     attachedExtenderItems.append(item);
     q->itemHoverLeaveEvent(item);
-    pendingItems[item] = pos;
+    pendingItems.insert(item, pos);
     QTimer::singleShot(0, q, SLOT(delayItemAddedEvent()));
 }
 
@@ -874,12 +874,11 @@ ExtenderGroup *ExtenderPrivate::findGroup(const QString &name) const
 
 void ExtenderPrivate::extenderItemDestroyed(Plasma::ExtenderItem *item)
 {
-    if (item && attachedExtenderItems.contains(item)) {
+    pendingItems.remove(item);
+
+    if (attachedExtenderItems.contains(item)) {
+        // removeExtenderItem also removes the item from attachedExtenderItems
         removeExtenderItem(item);
-    } else if (pendingItems.contains(item)) {
-        pendingItems.remove(item);
-    } else {
-        attachedExtenderItems.removeAll(item);
     }
 }
 
