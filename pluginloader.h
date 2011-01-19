@@ -40,8 +40,11 @@ class PluginLoaderPrivate;
  * This is an abstract base class which defines an interface to which Plasma's 
  * Applet Loading logic can communicate with a parent application. The plugin loader
  * must be set before any plugins are loaded, otherwise (for safety reasons), the
- * default PluginLoader implementation will be used.
- * 
+ * default PluginLoader implementation will be used. The reimplemented version should
+ * not do more than simply returning a loaded plugin. It should not init() it, and it should not
+ * hang on to it. The associated methods will be called only when a component of Plasma
+ * needs to load a _new_ plugin. (e.g. DataEngine does it's own caching).
+ *
  * @author Ryan Rix <ry@n.rix.si>
  * @since 4.6
  **/
@@ -135,7 +138,7 @@ public:
 
     /**
      * Set the plugin loader which will be queried for all loads.
-     * 
+     *
      * @param loader A subclass of PluginLoader which will be supplied
      * by the application
      **/
@@ -210,7 +213,7 @@ protected:
      * This method is called by listAppletInfo prior to generating the list of applets installed
      * on the system using the standard Plasma plugin mechanisms, and will try to find .desktop
      * files for your applets.
-     * 
+     *
      * @param category Only applets matching this category will be returned.
      *                 Useful in conjunction with knownCategories.
      *                 If "Misc" is passed in, then applets without a
@@ -246,10 +249,10 @@ protected:
     /**
      * Standardized mechanism for providing internal Applets by install .desktop files
      * in $APPPDATA/plasma/internal/applets/
-     * 
+     *
      * For applications that do this, internalAppletInfo can be implemented as a one-liner
      * call to this method.
-     * 
+     *
      * @param category Only applets matching this category will be returned.
      *                 Useful in conjunction with knownCategories.
      *                 If "Misc" is passed in, then applets without a
@@ -263,10 +266,10 @@ protected:
     /**
      * Standardized mechanism for providing internal Applets by install .desktop files
      * in $APPPDATA/plasma/internal/dataengines/
-     * 
+     *
      * For applications that do this, internalDataEngineInfo can be implemented as a one-liner
      * call to this method.
-     * 
+     *
      * @return list of applets
      */
     KPluginInfo::List standardInternalDataEngineInfo() const;
@@ -274,10 +277,10 @@ protected:
     /**
      * Standardized mechanism for providing internal Applets by install .desktop files
      * in $APPPDATA/plasma/internal/runners/
-     * 
+     *
      * For applications that do this, internalRunnerInfo can be implemented as a one-liner
      * call to this method.
-     * 
+     *
      * @return list of applets
      */
     KPluginInfo::List standardInternalRunnerInfo() const;
@@ -285,10 +288,10 @@ protected:
     /**
      * Standardized mechanism for providing internal Applets by install .desktop files
      * in $APPPDATA/plasma/internal/services/
-     * 
+     *
      * For applications that do this, internalRunnerInfo can be implemented as a one-liner
      * call to this method.
-     * 
+     *
      * @return list of applets
      */
     KPluginInfo::List standardInternalServiceInfo() const;
@@ -301,4 +304,4 @@ private:
 
 Q_DECLARE_METATYPE(Plasma::PluginLoader*)
 
-#endif 
+#endif
