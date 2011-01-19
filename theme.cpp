@@ -330,6 +330,7 @@ void ThemePrivate::colorsChanged()
 void ThemePrivate::blurBehindChanged(bool blur)
 {
     blurActive = blur;
+    discardCache(PixmapCache | SvgElementsCache);
     emit q->themeChanged();
 }
 
