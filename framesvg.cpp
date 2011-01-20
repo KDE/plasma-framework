@@ -488,7 +488,7 @@ void FrameSvg::clearCache()
             if (p->deref(this)) {
                 const QString key = d->cacheId(p, it.key());
                 FrameSvgPrivate::s_sharedFrames.remove(key);
-                delete p;
+                p->cachedBackground = QPixmap();
             }
 
             it.remove();
