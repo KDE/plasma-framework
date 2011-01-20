@@ -35,6 +35,7 @@ public:
     EffectWatcher(QString property, QWidget *parent = 0);
 
 protected:
+    bool isEffectActive() const;
 #ifdef Q_WS_X11
     bool x11Event(XEvent *event);
 #endif

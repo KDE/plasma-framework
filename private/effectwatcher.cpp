@@ -32,9 +32,9 @@ namespace Plasma
 
 EffectWatcher::EffectWatcher(QString property, QWidget *parent)
     : QWidget(parent),
-      m_property(property),
-      m_effectActive(false)
+      m_property(property)
 {
+    m_effectActive = isEffectActive();
 #ifdef Q_WS_X11
     kapp->installX11EventFilter( this );
     Display *dpy = QX11Info::display();
@@ -55,13 +55,7 @@ bool EffectWatcher::x11Event(XEvent *event)
         Display *dpy = QX11Info::display();
         Atom testAtom = XInternAtom(dpy, m_property.toLatin1(), False);
         if (event->xproperty.atom == testAtom) {
-            bool nowEffectActive = false;
-            int cnt;
-            Atom *list = XListProperties(dpy, DefaultRootWindow(dpy), &cnt);
-            if (list != NULL) {
-                nowEffectActive = (qFind(list, list + cnt, testAtom) != list + cnt);
-                XFree(list);
-            }
+            bool nowEffectActive = isEffectActive();
             if (m_effectActive != nowEffectActive) {
                 m_effectActive = nowEffectActive;
                 emit blurBehindChanged(m_effectActive);
@@ -72,6 +66,24 @@ bool EffectWatcher::x11Event(XEvent *event)
 }
 #endif
 
+bool EffectWatcher::isEffectActive() const
+{
+#ifdef Q_WS_X11
+    Display *dpy = QX11Info::display();
+    Atom testAtom = XInternAtom(dpy, m_property.toLatin1(), False);
+
+    bool nowEffectActive = false;
+    int cnt;
+    Atom *list = XListProperties(dpy, DefaultRootWindow(dpy), &cnt);
+    if (list != NULL) {
+        nowEffectActive = (qFind(list, list + cnt, testAtom) != list + cnt);
+        XFree(list);
+    }
+    return nowEffectActive;
+#else
+    return false;
+#endif
+}
 
 }
 
