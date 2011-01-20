@@ -125,7 +125,8 @@ void SortFilterModel::setSortOrder(const Qt::SortOrder order)
 
 DataModel::DataModel(QObject* parent)
     : QAbstractItemModel(parent),
-      m_dataSource(0)
+      m_dataSource(0),
+      m_maxRoleId(Qt::UserRole)
 {
     setObjectName("DataModel");
     connect(this, SIGNAL(rowsInserted(const QModelIndex &, int, int)),
@@ -217,21 +218,21 @@ void DataModel::setItems(const QString &sourceName, const QVariantList &list)
     m_items[sourceName] = list.toVector();
 
     if (!list.isEmpty()) {
-        int role = Qt::UserRole;
-        m_roleNames.clear();
-        m_roleIds.clear();
-
         if (list.first().canConvert<QVariantHash>()) {
             foreach (const QString& roleName, list.first().value<QVariantHash>().keys()) {
-                ++role;
-                m_roleNames[role] = roleName.toLatin1();
-                m_roleIds[roleName] = role;
+                if (!m_roleIds.contains(roleName)) {
+                    ++m_maxRoleId;
+                    m_roleNames[m_maxRoleId] = roleName.toLatin1();
+                    m_roleIds[roleName] = m_maxRoleId;
+                }
             }
         } else {
             foreach (const QString& roleName, list.first().value<QVariantMap>().keys()) {
-                ++role;
-                m_roleNames[role] = roleName.toLatin1();
-                m_roleIds[roleName] = role;
+                if (!m_roleIds.contains(roleName)) {
+                    ++m_maxRoleId;
+                    m_roleNames[m_maxRoleId] = roleName.toLatin1();
+                    m_roleIds[roleName] = m_maxRoleId;
+                }
             }
         }
 

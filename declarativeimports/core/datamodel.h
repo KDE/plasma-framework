@@ -132,6 +132,7 @@ private:
     QMap<QString, QVector<QVariant> > m_items;
     QHash<int, QByteArray> m_roleNames;
     QHash<QString, int> m_roleIds;
+    int m_maxRoleId;
 };
 
 int DataModel::countItems() const
