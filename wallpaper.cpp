@@ -132,6 +132,16 @@ Wallpaper::~Wallpaper()
     delete d;
 }
 
+void Wallpaper::addUrls(const KUrl::List &urls)
+{
+    Q_UNUSED(urls);
+}
+
+void Wallpaper::setUrls(const KUrl::List &urls)
+{
+   QMetaObject::invokeMethod(this, "addUrls", Q_ARG(KUrl::List,urls));
+}
+
 KPluginInfo::List Wallpaper::listWallpaperInfo(const QString &formFactor)
 {
     QString constraint;
