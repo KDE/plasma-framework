@@ -139,7 +139,10 @@ void DataSource::setupData()
 
 void DataSource::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
 {
-    m_data.insert(sourceName.toLatin1(), data);
+    //it can arrive also data we don't explicitly connected a source
+    if (m_connectedSources.contains(sourceName)) {
+        m_data.insert(sourceName.toLatin1(), data);
+    }
 
     emit dataChanged();
     emit newData(sourceName, data);
