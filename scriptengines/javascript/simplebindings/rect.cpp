@@ -149,7 +149,7 @@ static QScriptValue moveLeft(QScriptContext *ctx, QScriptEngine *)
 {
     DECLARE_SELF(QRectF, moveLeft);
     qreal left = ctx->argument(0).toNumber();
-    self->moveBottom(left);
+    self->moveLeft(left);
     return QScriptValue();
 }
 
@@ -157,7 +157,7 @@ static QScriptValue moveRight(QScriptContext *ctx, QScriptEngine *)
 {
     DECLARE_SELF(QRectF, moveRight);
     qreal right = ctx->argument(0).toNumber();
-    self->moveBottom(right);
+    self->moveRight(right);
     return QScriptValue();
 }
 

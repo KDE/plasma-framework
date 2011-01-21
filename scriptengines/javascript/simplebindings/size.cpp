@@ -52,7 +52,7 @@ static QScriptValue height(QScriptContext *ctx, QScriptEngine *eng)
     DECLARE_SELF(QSizeF, height);
     if (ctx->argumentCount() > 0) {
         qreal height = ctx->argument(0).toNumber();
-        self->setWidth(height);
+        self->setHeight(height);
     }
 
     return QScriptValue(eng, self->height());
