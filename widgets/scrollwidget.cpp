@@ -1422,7 +1422,13 @@ bool ScrollWidget::eventFilter(QObject *watched, QEvent *event)
         d->stopAnimations();
         d->adjustScrollbarsTimer->start(200);
         updateGeometry();
-        ensureItemVisible(d->widget.data());
+        if (d->widget.data()->size().width() < viewportGeometry().width() ||
+            d->widget.data()->size().height() < viewportGeometry().height()) {
+            d->widget.data()->setPos(d->minXExtent(),
+                                     d->minYExtent());
+        } else {
+            ensureItemVisible(d->widget.data());
+        }
     } else if (watched == d->widget.data() && event->type() == QEvent::GraphicsSceneMove) {
         d->horizontalScrollBar->blockSignals(true);
         d->verticalScrollBar->blockSignals(true);
