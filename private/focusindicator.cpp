@@ -121,7 +121,8 @@ void FocusIndicator::setCustomPrefix(const QString &prefix)
 
 bool FocusIndicator::eventFilter(QObject *watched, QEvent *event)
 {
-    if (static_cast<QGraphicsWidget *>(watched) != m_parent || !m_parent) {
+    if (Theme::defaultTheme()->useNativeWidgetStyle() ||
+        static_cast<QGraphicsWidget *>(watched) != m_parent || !m_parent ) {
         return false;
     }
 
@@ -274,6 +275,13 @@ void FocusIndicator::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 
 void FocusIndicator::syncGeometry()
 {
+    if (Theme::defaultTheme()->useNativeWidgetStyle()) {
+        hide();
+        return;
+    } else if (!isVisible()) {
+        show();
+    }
+
     QRectF geom;
     if (!m_customGeometry.isEmpty()) {
         geom = m_customGeometry;
