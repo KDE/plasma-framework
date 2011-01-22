@@ -519,7 +519,7 @@ void FrameSvg::paintFrame(QPainter *painter, const QRectF &target, const QRectF 
         }
     }
 
-    painter->drawPixmap(target, frame->cachedBackground, source.isValid() ? source : frame->cachedBackground.rect());
+    painter->drawPixmap(target, frame->cachedBackground, source.isValid() ? source : target);
 }
 
 void FrameSvg::paintFrame(QPainter *painter, const QPointF &pos)
