@@ -53,6 +53,7 @@ FocusIndicator::FocusIndicator(QGraphicsWidget *parent, FrameSvg *svg)
 
 void FocusIndicator::init(QGraphicsWidget *parent)
 {
+    setVisible(!Theme::defaultTheme()->useNativeWidgetStyle());
     setFlag(QGraphicsItem::ItemStacksBehindParent);
     setAcceptsHoverEvents(true);
 
