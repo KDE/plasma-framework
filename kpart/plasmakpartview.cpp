@@ -33,6 +33,8 @@ PlasmaKPartView::PlasmaKPartView(Plasma::Containment* containment, int uid, QWid
     setFocusPolicy(Qt::NoFocus);
     connectContainment(containment);
     setWallpaperEnabled(false);
+    viewport()->setAutoFillBackground(false);
+    setAutoFillBackground(false);
 }
 
 PlasmaKPartView::~PlasmaKPartView()
@@ -82,5 +84,6 @@ void PlasmaKPartView::updateGeometry()
         c->resize(size());
     }
 }
+
 
 #include "plasmakpartview.moc"

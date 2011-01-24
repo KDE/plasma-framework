@@ -28,9 +28,11 @@
 #include <Plasma/Containment>
 #include <Plasma/Theme>
 #include <Plasma/Applet>
+#include <Plasma/Wallpaper>
 #include <plasma/pluginloader.h>
 
 #include <KDebug>
+#include <KStandardDirs>
 
 #include <QCheckBox>
 #include <QHash>
@@ -79,7 +81,7 @@ PlasmaKPart::~PlasmaKPart()
 void PlasmaKPart::setThemeDefaults()
 {
     KConfigGroup cg(KSharedConfig::openConfig("plasmarc"), "Theme-plasma-kpart" );
-    const QString themeName = cg.readEntry("name", "default");
+    const QString themeName = cg.readEntry("name", "appdashboard");
     Plasma::Theme::defaultTheme()->setUseGlobalSettings(false);
     Plasma::Theme::defaultTheme()->setThemeName(themeName);
 
