@@ -1585,7 +1585,7 @@ void ContainmentPrivate::mimeTypeRetrieved(KIO::Job *job, const QString &mimetyp
 
                     if (wallpaper) {
                         kDebug() << "Wallpaper dropped:" << tjob->url();
-                        emit wallpaper->urlDropped(tjob->url());
+                        wallpaper->setUrls(KUrl::List() << tjob->url());
                     }
                 } else {
                     addApplet(actionsToApplets[choice], args, QRectF(posi, QSize()));
