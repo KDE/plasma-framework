@@ -134,7 +134,9 @@ Wallpaper::~Wallpaper()
 
 void Wallpaper::addUrls(const KUrl::List &urls)
 {
-    Q_UNUSED(urls);
+    if (d->script) {
+        d->script->addUrls(urls);
+    }
 }
 
 void Wallpaper::setUrls(const KUrl::List &urls)

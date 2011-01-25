@@ -137,6 +137,12 @@ public:
      */
     virtual void wheelEvent(QGraphicsSceneWheelEvent *event);
 
+    /**
+     * Adds urls (e.g. from a drop)
+     * @since 4.7
+     */
+    void addUrls(const KUrl::List urls);
+
 protected:
     /**
      * @return absolute path to the main script file for this wallpaper

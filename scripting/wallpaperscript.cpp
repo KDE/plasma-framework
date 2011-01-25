@@ -116,6 +116,14 @@ void WallpaperScript::wheelEvent(QGraphicsSceneWheelEvent *event)
     Q_UNUSED(event)
 }
 
+void WallpaperScript::addUrls(const KUrl::List urls)
+{
+    //TODO KDE5 replace urlDropped with addUrls
+    foreach (const KUrl &url, urls) {
+        urlDropped(url);
+    }
+}
+
 bool WallpaperScript::isInitialized() const
 {
     if (d->wallpaper) {
