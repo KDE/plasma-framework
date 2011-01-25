@@ -135,13 +135,22 @@ Wallpaper::~Wallpaper()
 void Wallpaper::addUrls(const KUrl::List &urls)
 {
     if (d->script) {
-        d->script->addUrls(urls);
+        d->script->setUrls(urls);
+    } else {
+        // provide compatibility with urlDropped
+        foreach (const KUrl &url, urls) {
+            emit urlDropped(url);
+        }
     }
 }
 
 void Wallpaper::setUrls(const KUrl::List &urls)
 {
-   QMetaObject::invokeMethod(this, "addUrls", Q_ARG(KUrl::List,urls));
+    if (d->script) {
+        d->script->setUrls(urls);
+    } else {
+       QMetaObject::invokeMethod(this, "addUrls", Q_ARG(KUrl::List, urls));
+    }
 }
 
 KPluginInfo::List Wallpaper::listWallpaperInfo(const QString &formFactor)

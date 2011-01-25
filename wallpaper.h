@@ -396,7 +396,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * @arg url the URL of the dropped file
          * @since 4.4
          */
-        void urlDropped(const KUrl &url);
+        PLASMA_EXPORT_DEPRECATED void urlDropped(const KUrl &url);
 
         /**
          * @internal
