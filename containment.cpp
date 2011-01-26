@@ -71,6 +71,7 @@
 #include "private/containmentactionspluginsconfig_p.h"
 #include "private/extenderitemmimedata_p.h"
 #include "private/extenderapplet_p.h"
+#include "private/wallpaper_p.h"
 
 #include "plasma/plasma.h"
 #include "animations/animation.h"
@@ -1523,7 +1524,11 @@ void ContainmentPrivate::mimeTypeRetrieved(KIO::Job *job, const QString &mimetyp
         appletList << Applet::listAppletInfoForMimetype(mimetype);
         KPluginInfo::List wallpaperList;
         if (q->drawWallpaper()) {
-            wallpaperList = Wallpaper::listWallpaperInfoForMimetype(mimetype);
+            if (wallpaper && wallpaper->supportsMimetype(mimetype)) {
+                wallpaperList << wallpaper->d->wallpaperDescription;
+            } else {
+                wallpaperList = Wallpaper::listWallpaperInfoForMimetype(mimetype);
+            }
         }
 
         if (!appletList.isEmpty() || !wallpaperList.isEmpty()) {
