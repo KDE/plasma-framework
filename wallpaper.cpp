@@ -176,6 +176,12 @@ KPluginInfo::List Wallpaper::listWallpaperInfoForMimetype(const QString &mimetyp
     return KPluginInfo::fromServices(offers);
 }
 
+bool Wallpaper::supportsMimetype(const QString &mimetype) const
+{
+    return d->wallpaperDescription.isValid() &&
+           d->wallpaperDescription.service()->hasMimeType(mimetype);
+}
+
 Wallpaper *Wallpaper::load(const QString &wallpaperName, const QVariantList &args)
 {
     if (wallpaperName.isEmpty()) {

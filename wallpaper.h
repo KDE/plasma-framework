@@ -21,6 +21,7 @@
 #ifndef PLASMA_WALLPAPER_H
 #define PLASMA_WALLPAPER_H
 
+#include <kmimetype.h>
 #include <kplugininfo.h>
 
 #include <plasma/plasma.h>
@@ -177,6 +178,14 @@ class PLASMA_EXPORT Wallpaper : public QObject
          */
         KServiceAction renderingMode() const;
 
+        /**
+         * @return true if the mimetype is supported by this wallpaper and
+         *         can be used in renderering. Uses the MimeType= entry from
+         *         the .desktop file, and can include mimetypes that may not be
+         *         suitable for drag-and-drop purposes.
+         * @since 4.7
+         */
+        bool supportsMimetype(const QString &mimetype) const;
 
         /**
          * Sets the rendering mode for this wallpaper.
