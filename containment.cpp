@@ -1523,7 +1523,7 @@ void ContainmentPrivate::mimeTypeRetrieved(KIO::Job *job, const QString &mimetyp
 
         appletList << Applet::listAppletInfoForMimetype(mimetype);
         KPluginInfo::List wallpaperList;
-        if (q->drawWallpaper()) {
+        if (drawWallpaper) {
             if (wallpaper && wallpaper->supportsMimetype(mimetype)) {
                 wallpaperList << wallpaper->d->wallpaperDescription;
             } else {
