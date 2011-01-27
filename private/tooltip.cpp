@@ -234,8 +234,9 @@ void ToolTip::hideEvent(QHideEvent *e)
     QWidget::hideEvent(e);
     d->animation->stop();
 
-    if (d->source) {
-        QMetaObject::invokeMethod(d->source.data(), "toolTipHidden");
+    QObject *source = d->source.data();
+    if (source && source->metaObject()->indexOfMethod("toolTipHidden()") != -1) {
+        QMetaObject::invokeMethod(source, "toolTipHidden");
     }
 
     WindowEffects::highlightWindows(winId(), QList<WId>());

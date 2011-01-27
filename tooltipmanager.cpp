@@ -364,13 +364,15 @@ void ToolTipManagerPrivate::showToolTip()
         return;
     }
 
-    // toolTipAboutToShow may call into methods such as setContent which play
-    // with the current widget; so let's just pretend for a moment that we don't have
-    // a current widget
-    QGraphicsWidget *temp = currentWidget;
-    currentWidget = 0;
-    QMetaObject::invokeMethod(temp, "toolTipAboutToShow");
-    currentWidget = temp;
+    if (currentWidget->metaObject()->indexOfMethod("toolTipAboutToShow()") != -1) {
+        // toolTipAboutToShow may call into methods such as setContent which play
+        // with the current widget; so let's just pretend for a moment that we don't have
+        // a current widget
+        QGraphicsWidget *temp = currentWidget;
+        currentWidget = 0;
+        QMetaObject::invokeMethod(temp, "toolTipAboutToShow");
+        currentWidget = temp;
+    }
 
     QHash<QGraphicsWidget *, ToolTipContent>::const_iterator tooltip = tooltips.constFind(currentWidget);
 
