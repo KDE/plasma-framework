@@ -528,7 +528,7 @@ void ContainmentPrivate::checkContainmentFurniture()
 
 Corona *Containment::corona() const
 {
-    return dynamic_cast<Corona*>(scene());
+    return qobject_cast<Corona*>(scene());
 }
 
 void Containment::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
