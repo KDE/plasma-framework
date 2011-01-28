@@ -124,24 +124,20 @@ void AppletInterface::setConfigurationRequired(bool needsConfiguring, const QStr
     m_appletScriptEngine->setConfigurationRequired(needsConfiguring, reason);
 }
 
-#ifdef USE_JS_SCRIPTENGINE
-
-void AppletInterface::update(const QRectF &rect)
+void JsAppletInterface::update(const QRectF &rect)
 {
     applet()->update(rect);
 }
 
-QGraphicsLayout *AppletInterface::layout() const
+QGraphicsLayout *JsAppletInterface::layout() const
 {
     return applet()->layout();
 }
 
-void AppletInterface::setLayout(QGraphicsLayout *layout)
+void JsAppletInterface::setLayout(QGraphicsLayout *layout)
 {
     applet()->setLayout(layout);
 }
-
-#endif
 
 QString AppletInterface::activeConfig() const
 {
@@ -379,7 +375,7 @@ void AppletInterface::gc()
 
 
 PopupAppletInterface::PopupAppletInterface(AbstractJsAppletScript *parent)
-    : AppletInterface(parent)
+    : POPUPAPPLETSUPERCLASS(parent)
 {
 }
 

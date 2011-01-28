@@ -76,10 +76,6 @@ class AppletInterface : public QObject
     Q_PROPERTY(int apiVersion READ apiVersion CONSTANT)
     Q_PROPERTY(QRectF rect READ rect)
     Q_PROPERTY(QSizeF size READ size)
-#ifdef USE_JS_SCRIPTENGINE
-    Q_PROPERTY(QGraphicsLayout *layout WRITE setLayout READ layout)
-    Q_PROPERTY(QObject *sender READ sender)
-#endif
 
 public:
     AppletInterface(AbstractJsAppletScript *parent);
@@ -276,12 +272,6 @@ enum IntervalAlignment {
 
     Q_INVOKABLE Plasma::Extender *extender() const;
 
-#ifdef USE_JS_SCRIPTENGINE
-    Q_INVOKABLE void update(const QRectF &rect = QRectF());
-    QGraphicsLayout *layout() const;
-    void setLayout(QGraphicsLayout *);
-#endif
-
     Plasma::DataEngine *dataEngine(const QString &name);
 
     QList<QAction*> contextualActions() const;
@@ -311,7 +301,29 @@ private:
     QMap<QString, Plasma::ConfigLoader*> m_configs;
 };
 
-class PopupAppletInterface : public AppletInterface
+class JsAppletInterface : public AppletInterface
+{
+    Q_OBJECT
+    Q_PROPERTY(QGraphicsLayout *layout WRITE setLayout READ layout)
+    Q_PROPERTY(QObject *sender READ sender)
+
+public:
+    JsAppletInterface(AbstractJsAppletScript *parent)
+        : AppletInterface(parent)
+    {
+    }
+
+    Q_INVOKABLE void update(const QRectF &rect = QRectF());
+    QGraphicsLayout *layout() const;
+    void setLayout(QGraphicsLayout *);
+};
+
+#ifdef USE_JS_SCRIPTENGINE
+#define POPUPAPPLETSUPERCLASS JsAppletInterface
+#else
+#define POPUPAPPLETSUPERCLASS AppletInterface
+#endif
+class PopupAppletInterface : public POPUPAPPLETSUPERCLASS
 {
     Q_OBJECT
     Q_PROPERTY(QIcon popupIcon READ popupIcon WRITE setPopupIcon)

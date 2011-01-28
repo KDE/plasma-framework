@@ -55,6 +55,8 @@
 #include <Plasma/Svg>
 #include <Plasma/VideoWidget>
 
+#define USE_JS_SCRIPTENGINE
+
 #include "appletauthorization.h"
 #include "appletinterface.h"
 #include "scriptenv.h"
@@ -511,8 +513,8 @@ void SimpleJavaScriptApplet::setupObjects()
 
     // Expose applet interface
     const bool isPopupApplet = qobject_cast<Plasma::PopupApplet *>(applet());
-    m_interface = isPopupApplet ? new PopupAppletInterface(this) : new AppletInterface(this);
-    m_self = m_engine->newQObject(m_interface);
+    m_interface = isPopupApplet ? new PopupAppletInterface(this) : new JsAppletInterface(this);
+    m_self = m_engine->newQObject(m_interface, QScriptEngine::QtOwnership, QScriptEngine::ExcludeDeleteLater);
     m_env->addMainObjectProperties(m_self);
     m_self.setScope(global);
     global.setProperty("plasmoid", m_self);
