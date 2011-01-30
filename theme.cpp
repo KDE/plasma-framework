@@ -223,7 +223,7 @@ bool ThemePrivate::useCache()
             // application is not running.
             QFile f(KStandardDirs::locate("data", "desktoptheme/" + themeName + "/metadata.desktop"));
             QFileInfo info(f);
-            if (info.lastModified().toTime_t() > pixmapCache->lastModifiedTime()) {
+            if (info.lastModified().toTime_t() > uint(pixmapCache->lastModifiedTime())) {
                 pixmapCache->clear();
             }
         }
@@ -280,20 +280,22 @@ void ThemePrivate::compositingChanged()
 void ThemePrivate::discardCache(CacheTypes caches)
 {
     if (caches & PixmapCache) {
-         if (pixmapCache) {
-             pixmapCache->clear();
-         }
+        pixmapsToCache.clear();
+        saveTimer->stop();
+        if (pixmapCache) {
+            pixmapCache->clear();
+        }
     } else {
         // This deletes the object but keeps the on-disk cache for later use
         delete pixmapCache;
         pixmapCache = 0;
     }
+
     cachedStyleSheets.clear();
-    invalidElements.clear();
-    pixmapsToCache.clear();
-    saveTimer->stop();
 
     if (caches & SvgElementsCache) {
+        invalidElements.clear();
+
         if (svgElementsCache) {
             QFile f(svgElementsCache->name());
             svgElementsCache = 0;
@@ -465,13 +467,16 @@ Theme::Theme(const QString &themeName, QObject *parent)
 
 Theme::~Theme()
 {
-    QHashIterator<QString, QSet<QString> > it(d->invalidElements);
-    while (it.hasNext()) {
-        it.next();
-        KConfigGroup imageGroup(d->svgElementsCache, it.key());
-        imageGroup.writeEntry("invalidElements", it.value().toList()); //FIXME: add QSet support to KConfig
+    if (d->svgElementsCache) {
+        QHashIterator<QString, QSet<QString> > it(d->invalidElements);
+        while (it.hasNext()) {
+            it.next();
+            KConfigGroup imageGroup(d->svgElementsCache, it.key());
+            imageGroup.writeEntry("invalidElements", it.value().toList()); //FIXME: add QSet support to KConfig
+        }
     }
 
+    d->onAppExitCleanup();
     delete d;
 }
 
@@ -665,7 +670,6 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
 
     discardCache(SvgElementsCache);
 
-    invalidElements.clear();
     emit q->themeChanged();
 }
 
@@ -923,7 +927,7 @@ bool Theme::findInCache(const QString &key, QPixmap &pix)
 // BIC FIXME: Should be merged with the other findInCache method above when we break BC
 bool Theme::findInCache(const QString &key, QPixmap &pix, unsigned int lastModified)
 {
-    if (d->useCache() && lastModified > d->pixmapCache->lastModifiedTime()) {
+    if (d->useCache() && lastModified > uint(d->pixmapCache->lastModifiedTime())) {
         return false;
     }
 
@@ -954,7 +958,7 @@ void Theme::insertIntoCache(const QString& key, const QPixmap& pix, const QStrin
 
 bool Theme::findInRectsCache(const QString &image, const QString &element, QRectF &rect) const
 {
-    if (!d->pixmapCache) {
+    if (!d->svgElementsCache) {
         return false;
     }
 
@@ -987,6 +991,10 @@ bool Theme::findInRectsCache(const QString &image, const QString &element, QRect
 
 QStringList Theme::listCachedRectKeys(const QString &image) const
 {
+    if (!d->svgElementsCache) {
+        return QStringList();
+    }
+
     KConfigGroup imageGroup(d->svgElementsCache, image);
     QStringList keys = imageGroup.keyList();
 
@@ -1006,7 +1014,7 @@ QStringList Theme::listCachedRectKeys(const QString &image) const
 
 void Theme::insertIntoRectsCache(const QString& image, const QString &element, const QRectF &rect)
 {
-    if (!d->pixmapCache) {
+    if (!d->svgElementsCache) {
         return;
     }
 
@@ -1029,18 +1037,23 @@ void Theme::insertIntoRectsCache(const QString& image, const QString &element, c
 
 void Theme::invalidateRectsCache(const QString& image)
 {
-    KConfigGroup imageGroup(d->svgElementsCache, image);
-    imageGroup.deleteGroup();
+    if (d->svgElementsCache) {
+        KConfigGroup imageGroup(d->svgElementsCache, image);
+        imageGroup.deleteGroup();
+    }
 
-    releaseRectsCache(image);
+    d->invalidElements.remove(image);
 }
 
 void Theme::releaseRectsCache(const QString &image)
 {
     QHash<QString, QSet<QString> >::iterator it = d->invalidElements.find(image);
     if (it != d->invalidElements.end()) {
-        KConfigGroup imageGroup(d->svgElementsCache, it.key());
-        imageGroup.writeEntry("invalidElements", it.value().toList());
+        if (!d->svgElementsCache) {
+            KConfigGroup imageGroup(d->svgElementsCache, it.key());
+            imageGroup.writeEntry("invalidElements", it.value().toList());
+        }
+
         d->invalidElements.erase(it);
     }
 }
