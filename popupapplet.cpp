@@ -802,6 +802,10 @@ void PopupAppletPrivate::dialogSizeChanged()
 
 void PopupAppletPrivate::dialogStatusChanged(bool status)
 {
+    if (!status) {
+        q->setStatus(PassiveStatus);
+    }
+
     q->popupEvent(status);
 }
 
