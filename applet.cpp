@@ -1922,8 +1922,6 @@ KConfigDialog *AppletPrivate::generateGenericConfigDialog()
     dialog->setWindowTitle(configWindowTitle());
     dialog->setAttribute(Qt::WA_DeleteOnClose, true);
     q->createConfigurationInterface(dialog);
-    //TODO: Apply button does not correctly work for now, so do not show it
-    dialog->showButton(KDialog::Apply, false);
     dialog->showButton(KDialog::Default, false);
     QObject::connect(dialog, SIGNAL(applyClicked()), q, SLOT(configDialogFinished()));
     QObject::connect(dialog, SIGNAL(okClicked()), q, SLOT(configDialogFinished()));
@@ -1956,8 +1954,6 @@ void AppletPrivate::addGlobalShortcutsPage(KConfigDialog *dialog)
     layout->addStretch();
     dialog->addPage(page, i18n("Keyboard Shortcut"), "preferences-desktop-keyboard");
 
-    //TODO: Apply button does not correctly work for now, so do not show it
-    dialog->showButton(KDialog::Apply, false);
     QObject::connect(dialog, SIGNAL(applyClicked()), q, SLOT(configDialogFinished()), Qt::UniqueConnection);
     QObject::connect(dialog, SIGNAL(okClicked()), q, SLOT(configDialogFinished()), Qt::UniqueConnection);
 }
@@ -2041,6 +2037,9 @@ void AppletPrivate::configDialogFinished()
     if (!configLoader) {
         // the config loader will trigger this for us, so we don't need to.
         q->configChanged();
+        if (KConfigDialog *dialog = qobject_cast<KConfigDialog *>(q->sender())) {
+            dialog->enableButton(KDialog::Apply, false);
+        }
     }
 }
 
