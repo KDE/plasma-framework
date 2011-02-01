@@ -1001,7 +1001,7 @@ void ExtenderItemPrivate::themeChanged()
 {
     kDebug();
     if (dragStarted) {
-        background->setImagePath("opaque/widgets/extender-background");
+        background->setImagePath("opaque/dialogs/background");
         background->setEnabledBorders(FrameSvg::AllBorders);
     } else {
         background->setImagePath("widgets/extender-background");
