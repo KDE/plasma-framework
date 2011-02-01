@@ -596,6 +596,10 @@ void ExtenderItem::destroy()
 
 void ExtenderItem::setCollapsed(bool collapsed)
 {
+    if (extender()->d->destroying) {
+        return;
+    }
+
     config().writeEntry("isCollapsed", collapsed);
     d->collapsed = collapsed;
     d->collapseIcon->setToolTip(collapsed ? i18n("Expand this widget") : i18n("Collapse this widget"));
