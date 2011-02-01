@@ -1857,7 +1857,6 @@ void Applet::showConfigurationInterface()
         d->script->showConfigurationInterface();
     } else {
         KConfigDialog *dialog = d->generateGenericConfigDialog();
-        //createConfigurationInterface(dialog);
         d->addStandardConfigurationPages(dialog);
         showConfigurationInterface(dialog);
     }
