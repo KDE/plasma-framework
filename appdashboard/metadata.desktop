@@ -13,6 +13,7 @@ Comment[sv]=Avsett som förvald instrumentpanel för program
 Comment[uk]=Призначено бути типовою панеллю приладів програм
 Comment[x-test]=xxIntended as Application dashboard defaultxx
 
+NoDisplay=true
 
 X-KDE-PluginInfo-Author=The Oxygen Project
 X-KDE-PluginInfo-Email=kde-artists@kde.org
