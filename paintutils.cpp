@@ -119,7 +119,7 @@ QPixmap texturedText(const QString &text, const QFont &font, Plasma::Svg *textur
     buffPainter.setFont(font);
     buffPainter.drawText(contentsRect, Qt::AlignCenter, text);
     buffPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
-    texture->paint(&buffPainter, contentsRect);
+    texture->paint(&buffPainter, contentsRect, "foreground");
     buffPainter.end();
 
     //do the shadow
@@ -128,9 +128,11 @@ QPixmap texturedText(const QString &text, const QFont &font, Plasma::Svg *textur
     buffPainter.begin(&image);
     buffPainter.setFont(font);
     buffPainter.drawText(contentsRect, Qt::AlignCenter, text);
+    buffPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
+    texture->paint(&buffPainter, contentsRect, "shadow");
     buffPainter.end();
 
-    Plasma::PaintUtils::shadowBlur(image, 1, Qt::black);
+    expblur<16, 7>(image, 1);
     //hole in the shadow
     buffPainter.begin(&image);
     buffPainter.setCompositionMode(QPainter::CompositionMode_DestinationOut);
