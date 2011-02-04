@@ -111,7 +111,6 @@ public:
         q->setAttribute(Qt::WA_TranslucentBackground);
         q->setAutoFillBackground(true);
         q->setDragMode(QGraphicsView::NoDrag);
-        //setCacheMode(QGraphicsView::CacheBackground);
         q->setInteractive(true);
         q->setAcceptDrops(true);
         q->setAlignment(Qt::AlignLeft | Qt::AlignTop);
