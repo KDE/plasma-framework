@@ -108,6 +108,7 @@ QPixmap texturedText(const QString &text, const QFont &font, Plasma::Svg *textur
 {
     QFontMetrics fm(font);
     QRect contentsRect = fm.boundingRect(text);
+    contentsRect.moveTo(0,0);
 
     QPixmap pixmap(contentsRect.size());
     pixmap.fill(Qt::transparent);
@@ -137,9 +138,10 @@ QPixmap texturedText(const QString &text, const QFont &font, Plasma::Svg *textur
     buffPainter.drawText(contentsRect, Qt::AlignCenter, text);
     buffPainter.end();
 
-    QPixmap ret(contentsRect.size());
+    QPixmap ret(image.size());
     ret.fill(Qt::transparent);
     buffPainter.begin(&ret);
+    buffPainter.setCompositionMode(QPainter::CompositionMode_SourceOver);
     buffPainter.drawImage(contentsRect, image);
     buffPainter.drawPixmap(contentsRect, pixmap);
     return ret;
