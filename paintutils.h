@@ -33,6 +33,8 @@
 namespace Plasma
 {
 
+class Svg;
+
 /**
  *  Namespace for all Image Effects specific to Plasma
  **/
@@ -60,6 +62,8 @@ PLASMA_EXPORT QPixmap shadowText(QString text,
     QColor shadowColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::BackgroundColor),
     QPoint offset = QPoint(1,1),
     int radius = 2);
+
+PLASMA_EXPORT QPixmap texturedText(const QString &text, const QFont &font, Plasma::Svg *texture);
 
 PLASMA_EXPORT void drawHalo(QPainter *painter, const QRectF &rect);
 

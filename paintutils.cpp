@@ -27,6 +27,7 @@
 
 #include "private/effects/blur.cpp"
 #include "private/effects/halopainter_p.h"
+#include "svg.h"
 
 namespace Plasma
 {
@@ -101,6 +102,47 @@ QPixmap shadowText(QString text, const QFont &font, QColor textColor, QColor sha
     p.end();
 
     return finalPixmap;
+}
+
+QPixmap texturedText(const QString &text, const QFont &font, Plasma::Svg *texture)
+{
+    QFontMetrics fm(font);
+    QRect contentsRect = fm.boundingRect(text);
+
+    QPixmap pixmap(contentsRect.size());
+    pixmap.fill(Qt::transparent);
+
+    QPainter buffPainter(&pixmap);
+    buffPainter.setPen(Qt::black);
+
+    buffPainter.setFont(font);
+    buffPainter.drawText(contentsRect, Qt::AlignCenter, text);
+    buffPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
+    texture->paint(&buffPainter, contentsRect);
+    buffPainter.end();
+
+    //do the shadow
+    QImage image(pixmap.size(), QImage::Format_ARGB32_Premultiplied);
+    image.fill(Qt::transparent);
+    buffPainter.begin(&image);
+    buffPainter.setFont(font);
+    buffPainter.drawText(contentsRect, Qt::AlignCenter, text);
+    buffPainter.end();
+
+    Plasma::PaintUtils::shadowBlur(image, 1, Qt::black);
+    //hole in the shadow
+    buffPainter.begin(&image);
+    buffPainter.setCompositionMode(QPainter::CompositionMode_DestinationOut);
+    buffPainter.setFont(font);
+    buffPainter.drawText(contentsRect, Qt::AlignCenter, text);
+    buffPainter.end();
+
+    QPixmap ret(contentsRect.size());
+    ret.fill(Qt::transparent);
+    buffPainter.begin(&ret);
+    buffPainter.drawImage(contentsRect, image);
+    buffPainter.drawPixmap(contentsRect, pixmap);
+    return ret;
 }
 
 void drawHalo(QPainter *painter, const QRectF &rect)
