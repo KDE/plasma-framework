@@ -431,7 +431,11 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
         updateDialogPosition();
     }
 
-    emit q->sizeHintChanged(Qt::PreferredSize);
+    if (icon) {
+        // emit the size hint changing stuff for our applet as we are handling
+        // the size changings
+        emit q->sizeHintChanged(Qt::PreferredSize);
+    }
 }
 
 void PopupAppletPrivate::appletActivated()
