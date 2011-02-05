@@ -803,10 +803,26 @@ void PopupAppletPrivate::dialogSizeChanged()
     }
 }
 
-void PopupAppletPrivate::dialogStatusChanged(bool status)
+void PopupAppletPrivate::dialogStatusChanged(bool shown)
 {
-    q->setStatus(status ? NeedsAttentionStatus : PassiveStatus);
-    q->popupEvent(status);
+    if (shown) {
+        preShowStatus = q->status();
+        q->setStatus(NeedsAttentionStatus);
+        QObject::connect(q, SIGNAL(newStatus(Plasma::ItemStatus)),
+                         q, SLOT(statusChangeWhileShown(Plasma::ItemStatus)),
+                Qt::UniqueConnection);
+    } else {
+        QObject::disconnect(q, SIGNAL(newStatus(Plasma::ItemStatus)),
+                            q, SLOT(statusChangeWhileShown(Plasma::ItemStatus)));
+        q->setStatus(preShowStatus);
+    }
+
+    q->popupEvent(shown);
+}
+
+void PopupAppletPrivate::statusChangeWhileShown(Plasma::ItemStatus status)
+{
+    preShowStatus = status;
 }
 
 void PopupAppletPrivate::restoreDialogSize()

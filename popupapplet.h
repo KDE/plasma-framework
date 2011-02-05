@@ -230,6 +230,7 @@ private:
     Q_PRIVATE_SLOT(d, void updateDialogPosition())
     Q_PRIVATE_SLOT(d, void appletActivated())
     Q_PRIVATE_SLOT(d, void iconSizeChanged(int))
+    Q_PRIVATE_SLOT(d, void statusChangeWhileShown(Plasma::ItemStatus status))
 
     friend class Applet;
     friend class AppletPrivate;

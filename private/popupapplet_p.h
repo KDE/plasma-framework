@@ -46,6 +46,8 @@ public:
     void checkExtenderAppearance(Plasma::FormFactor f);
     KConfigGroup popupConfigGroup();
     void appletActivated();
+    void statusChangeWhileShown(Plasma::ItemStatus status);
+
 
     PopupApplet *q;
     Plasma::IconWidget *icon;
@@ -59,6 +61,7 @@ public:
     QTimer *autohideTimer;
     QBasicTimer delayedShowTimer;
     QPoint clicked;
+    ItemStatus preShowStatus;
     bool popupLostFocus : 1;
     bool passive : 1;
 };
