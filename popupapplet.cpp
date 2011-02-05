@@ -440,8 +440,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
 
 void PopupAppletPrivate::appletActivated()
 {
-    q->setStatus(Plasma::NeedsAttentionStatus);
-    q->showPopup();
+    internalTogglePopup();
 }
 
 QSizeF PopupApplet::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
@@ -806,10 +805,7 @@ void PopupAppletPrivate::dialogSizeChanged()
 
 void PopupAppletPrivate::dialogStatusChanged(bool status)
 {
-    if (!status) {
-        q->setStatus(PassiveStatus);
-    }
-
+    q->setStatus(status ? NeedsAttentionStatus : PassiveStatus);
     q->popupEvent(status);
 }
 
