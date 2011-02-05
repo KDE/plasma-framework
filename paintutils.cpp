@@ -123,13 +123,13 @@ QPixmap texturedText(const QString &text, const QFont &font, Plasma::Svg *textur
     buffPainter.end();
 
     //do the shadow
-    QImage image(pixmap.size(), QImage::Format_ARGB32_Premultiplied);
+    QImage image(pixmap.size() + QSize(2, 2), QImage::Format_ARGB32_Premultiplied);
     image.fill(Qt::transparent);
     buffPainter.begin(&image);
     buffPainter.setFont(font);
-    buffPainter.drawText(contentsRect, Qt::AlignCenter, text);
+    buffPainter.drawText(contentsRect.translated(1, 1), Qt::AlignCenter, text);
     buffPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
-    texture->paint(&buffPainter, contentsRect, "shadow");
+    texture->paint(&buffPainter, contentsRect.adjusted(-1, -1, 1, 1), "shadow");
     buffPainter.end();
 
     expblur<16, 7>(image, 1);
@@ -137,15 +137,15 @@ QPixmap texturedText(const QString &text, const QFont &font, Plasma::Svg *textur
     buffPainter.begin(&image);
     buffPainter.setCompositionMode(QPainter::CompositionMode_DestinationOut);
     buffPainter.setFont(font);
-    buffPainter.drawText(contentsRect, Qt::AlignCenter, text);
+    buffPainter.drawText(contentsRect.translated(1, 1), Qt::AlignCenter, text);
     buffPainter.end();
 
     QPixmap ret(image.size());
     ret.fill(Qt::transparent);
     buffPainter.begin(&ret);
     buffPainter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    buffPainter.drawImage(contentsRect, image);
-    buffPainter.drawPixmap(contentsRect, pixmap);
+    buffPainter.drawImage(QPoint(0,0), image);
+    buffPainter.drawPixmap(QPoint(1,1), pixmap);
     return ret;
 }
 
