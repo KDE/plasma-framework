@@ -810,7 +810,7 @@ void PopupAppletPrivate::dialogStatusChanged(bool shown)
         q->setStatus(NeedsAttentionStatus);
         QObject::connect(q, SIGNAL(newStatus(Plasma::ItemStatus)),
                          q, SLOT(statusChangeWhileShown(Plasma::ItemStatus)),
-                Qt::UniqueConnection);
+                         Qt::UniqueConnection);
     } else {
         QObject::disconnect(q, SIGNAL(newStatus(Plasma::ItemStatus)),
                             q, SLOT(statusChangeWhileShown(Plasma::ItemStatus)));
