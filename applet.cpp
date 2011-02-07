@@ -2443,6 +2443,7 @@ void Applet::timerEvent(QTimerEvent *event)
             d->busyWidget->setAcceptHoverEvents(false);
             d->busyWidget->setAcceptedMouseButtons(Qt::NoButton);
             d->messageOverlay->setAcceptHoverEvents(false);
+            d->messageOverlay->setAcceptedMouseButtons(Qt::NoButton);
 
             mainLayout->addStretch();
             mainLayout->addItem(d->busyWidget);
