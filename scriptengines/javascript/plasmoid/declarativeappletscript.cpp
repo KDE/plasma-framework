@@ -86,7 +86,7 @@ bool DeclarativeAppletScript::init()
     //FIXME: probably to be removed, would make possible to use native code from within the package :/
     //m_declarativeWidget->engine()->addImportPath(package()->path()+"/contents/imports");
 
-    //use our own custom network access manager that will acces Plasma packages and to manage security (i.e. deny access to remote stuff when the proper extension isn't enabled
+    //use our own custom network access manager that will access Plasma packages and to manage security (i.e. deny access to remote stuff when the proper extension isn't enabled
     m_declarativeWidget->engine()->setNetworkAccessManagerFactory(new PackageAccessManagerFactory(package(), &m_auth));
 
     m_declarativeWidget->setQmlPath(mainScript());

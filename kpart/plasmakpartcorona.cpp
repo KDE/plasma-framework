@@ -77,7 +77,7 @@ void PlasmaKPartCorona::evaluateScripts(const QStringList &scripts)
 
 void PlasmaKPartCorona::printScriptError(const QString &error)
 {
-    kWarning() << "Startup script errror:" << error;
+    kWarning() << "Startup script error:" << error;
 }
 
 void PlasmaKPartCorona::printScriptMessage(const QString &error)
