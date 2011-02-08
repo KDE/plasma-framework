@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Application dashboard
 Name[en_GB]=Application dashboard
+Name[es]=Tablero de aplicaciones
 Name[ia]=Pannello de instrumentos de Application
+Name[nl]=Toepassingendashboard
 Name[pt]=Painel da aplicação
 Name[pt_BR]=Painel de aplicativos
 Name[sv]=Instrumentpanel för program
@@ -9,7 +11,9 @@ Name[uk]=Панель приладів програм
 Name[x-test]=xxApplication dashboardxx
 Comment=Intended as Application dashboard default
 Comment[en_GB]=Intended as Application dashboard default
+Comment[es]=Versión predeterminada del tablero de aplicaciones
 Comment[ia]=Intendite como application predefinite del pannello de instrumentos
+Comment[nl]=Bedoelt als standaard in het toepassingendashboard
 Comment[pt]=Pretendido como predefinição do painel da aplicação
 Comment[pt_BR]=Pretende ser o painel de aplicativos padrão
 Comment[sv]=Avsett som förvald instrumentpanel för program
