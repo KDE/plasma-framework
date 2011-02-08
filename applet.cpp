@@ -655,9 +655,12 @@ void AppletPrivate::destroyMessageOverlay()
             buttonCode = ButtonNo;
         }
         if (button->text() == i18n("Cancel")) {
+            buttonCode = ButtonCancel;
         }
 
         emit q->messageButtonPressed(buttonCode);
+    } else if (q->sender() == messageOverlay) {
+        emit q->messageButtonPressed(ButtonCancel);
     }
 }
 
@@ -1116,10 +1119,10 @@ void Applet::showMessage(const QIcon &icon, const QString &message, const Messag
         connect(cancel, SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
     }
 
-    QAction *action = new QAction(this);
-    action->setShortcut(Qt::Key_Escape);
-    mainWidget->addAction(action);
-    connect(action, SIGNAL(triggered()), this, SLOT(destroyMessageOverlay()));
+    d->messageCloseAction = new QAction(d->messageOverlay);
+    d->messageCloseAction.data()->setShortcut(Qt::Key_Escape);
+    mainWidget->addAction(d->messageCloseAction.data());
+    connect(d->messageCloseAction.data(), SIGNAL(triggered()), this, SLOT(destroyMessageOverlay()));
 
     buttonLayout->addStretch();
 

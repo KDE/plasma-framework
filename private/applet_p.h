@@ -177,6 +177,7 @@ public:
     AppletScript *script;
     Package *package;
     ConfigLoader *configLoader;
+    QWeakPointer<QAction> messageCloseAction;
 
     // actions stuff; put activationAction into actions?
     KActionCollection *actions;
