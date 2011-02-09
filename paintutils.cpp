@@ -107,7 +107,8 @@ QPixmap shadowText(QString text, const QFont &font, QColor textColor, QColor sha
 QPixmap texturedText(const QString &text, const QFont &font, Plasma::Svg *texture)
 {
     QFontMetrics fm(font);
-    QRect contentsRect = fm.boundingRect(text);
+    //the text will be moved a bit from contentsRect
+    QRect contentsRect = fm.boundingRect(text).adjusted(0, 0, 2, 2);
     contentsRect.moveTo(0,0);
 
     QPixmap pixmap(contentsRect.size());
