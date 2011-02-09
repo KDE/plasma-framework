@@ -42,6 +42,7 @@ class FrameSvg;
 class AppletScript;
 class Wallpaper;
 class BusyWidget;
+class PushButton;
 
 class AppletConfigDialog : public KConfigDialog
 {
@@ -177,6 +178,10 @@ public:
     AppletScript *script;
     Package *package;
     ConfigLoader *configLoader;
+    QWeakPointer<Plasma::PushButton> messageOkButton;
+    QWeakPointer<Plasma::PushButton> messageYesButton;
+    QWeakPointer<Plasma::PushButton> messageNoButton;
+    QWeakPointer<Plasma::PushButton> messageCancelButton;
     QWeakPointer<QAction> messageCloseAction;
 
     // actions stuff; put activationAction into actions?

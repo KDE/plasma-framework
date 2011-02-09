@@ -645,16 +645,16 @@ void AppletPrivate::destroyMessageOverlay()
     //find out if we're disappearing because of a button press
     PushButton *button = qobject_cast<PushButton *>(q->sender());
     if (button) {
-        if (button->text() == i18n("&Ok")) {
+        if (button == messageOkButton.data()) {
             buttonCode = ButtonOk;
         }
-        if (button->text() == i18n("&Yes")) {
+        if (button == messageYesButton.data()) {
             buttonCode = ButtonYes;
         }
-        if (button->text() == i18n("&No")) {
+        if (button == messageNoButton.data()) {
             buttonCode = ButtonNo;
         }
-        if (button->text() == i18n("&Cancel")) {
+        if (button == messageCancelButton.data()) {
             buttonCode = ButtonCancel;
         }
 
@@ -1090,33 +1090,33 @@ void Applet::showMessage(const QIcon &icon, const QString &message, const Messag
     buttonLayout->addStretch();
 
     if (buttons & ButtonOk) {
-        PushButton *ok = new PushButton(mainWidget);
-        ok->setText(i18n("&OK"));
-        ok->setIcon(KIcon("dialog-ok"));
-        buttonLayout->addItem(ok);
-        connect(ok, SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
+        d->messageOkButton = new PushButton(mainWidget);
+        d->messageOkButton.data()->setText(i18n("&OK"));
+        d->messageOkButton.data()->setIcon(KIcon("dialog-ok"));
+        buttonLayout->addItem(d->messageOkButton.data());
+        connect(d->messageOkButton.data(), SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
     }
 
     if (buttons & ButtonYes) {
-        PushButton *yes = new PushButton(mainWidget);
-        yes->setText(i18n("&Yes"));
-        buttonLayout->addItem(yes);
-        connect(yes, SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
+        d->messageYesButton = new PushButton(mainWidget);
+        d->messageYesButton.data()->setText(i18n("&Yes"));
+        buttonLayout->addItem(d->messageYesButton.data());
+        connect(d->messageYesButton.data(), SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
     }
 
     if (buttons & ButtonNo) {
-        PushButton *no = new PushButton(mainWidget);
-        no->setText(i18n("&No"));
-        buttonLayout->addItem(no);
-        connect(no, SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
+        d->messageNoButton = new PushButton(mainWidget);
+        d->messageNoButton.data()->setText(i18n("&No"));
+        buttonLayout->addItem(d->messageNoButton.data());
+        connect(d->messageNoButton.data(), SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
     }
 
     if (buttons & ButtonCancel) {
-        PushButton *cancel = new PushButton(mainWidget);
-        cancel->setText(i18n("&Cancel"));
-        cancel->setIcon(KIcon("dialog-cancel"));
-        buttonLayout->addItem(cancel);
-        connect(cancel, SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
+        d->messageCancelButton = new PushButton(mainWidget);
+        d->messageCancelButton.data()->setText(i18n("&Cancel"));
+        d->messageCancelButton.data()->setIcon(KIcon("dialog-cancel"));
+        buttonLayout->addItem(d->messageCancelButton.data());
+        connect(d->messageCancelButton.data(), SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
     }
 
     d->messageCloseAction = new QAction(d->messageOverlay);
