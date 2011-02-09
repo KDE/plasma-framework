@@ -645,16 +645,16 @@ void AppletPrivate::destroyMessageOverlay()
     //find out if we're disappearing because of a button press
     PushButton *button = qobject_cast<PushButton *>(q->sender());
     if (button) {
-        if (button->text() == i18n("Ok")) {
+        if (button->text() == i18n("&Ok")) {
             buttonCode = ButtonOk;
         }
-        if (button->text() == i18n("Yes")) {
+        if (button->text() == i18n("&Yes")) {
             buttonCode = ButtonYes;
         }
-        if (button->text() == i18n("No")) {
+        if (button->text() == i18n("&No")) {
             buttonCode = ButtonNo;
         }
-        if (button->text() == i18n("Cancel")) {
+        if (button->text() == i18n("&Cancel")) {
             buttonCode = ButtonCancel;
         }
 
