@@ -607,8 +607,10 @@ public:
 
     void handleKeyPressEvent(QKeyEvent *event)
     {
-        if (!widget.data())
+        if (!widget.data()) {
+            event->ignore();
             return;
+        }
 
         QPointF start = q->scrollPosition();
         QPointF end = start;
@@ -637,7 +639,8 @@ public:
             }
             break;
         default:
-            break;
+            event->ignore();
+            return;
         }
 
         fixupAnimation.groupX->stop();
