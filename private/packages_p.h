@@ -94,6 +94,8 @@ private Q_SLOTS:
 private:
     Wallpaper *m_paper;
     bool m_fullPackage;
+    QSize m_targetSize;
+    Wallpaper::ResizeMethod m_resizeMethod;
 };
 
 class ContainmentActionsPackage : public PackageStructure

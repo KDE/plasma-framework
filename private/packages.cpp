@@ -213,7 +213,9 @@ ThemePackage::ThemePackage(QObject *parent)
 WallpaperPackage::WallpaperPackage(Wallpaper *paper, QObject *parent)
     : PackageStructure(parent, "Background"),
       m_paper(paper),
-      m_fullPackage(true)
+      m_fullPackage(true),
+      m_targetSize(100000, 100000),
+      m_resizeMethod(Wallpaper::ScaledResize)
 {
     QStringList mimetypes;
     mimetypes << "image/svg" << "image/png" << "image/jpeg" << "image/jpg";
@@ -225,13 +227,21 @@ WallpaperPackage::WallpaperPackage(Wallpaper *paper, QObject *parent)
     setAllowExternalPaths(true);
 
     if (m_paper) {
-        connect(paper, SIGNAL(renderHintsChanged()), this, SLOT(renderHintsChanged()));
+        m_targetSize = m_paper->d->targetSize.toSize();
+        m_resizeMethod = m_paper->d->lastResizeMethod;
+
+        connect(m_paper, SIGNAL(renderHintsChanged()), this, SLOT(renderHintsChanged()));
         connect(m_paper, SIGNAL(destroyed(QObject*)), this, SLOT(paperDestroyed()));
     }
 }
 
 void WallpaperPackage::renderHintsChanged()
 {
+    if (m_paper) {
+        m_targetSize = m_paper->d->targetSize.toSize();
+        m_resizeMethod = m_paper->d->lastResizeMethod;
+    }
+
     if (m_fullPackage) {
         findBestPaper();
     }
@@ -248,14 +258,14 @@ void WallpaperPackage::pathChanged()
     guard = true;
 
     QFileInfo info(path());
-
     m_fullPackage = info.isDir();
+    removeDefinition("preferred");
+
     if (m_fullPackage) {
         setContentsPrefixPaths(QStringList() << "contents/");
         findBestPaper();
     } else {
         // dirty trick to support having a file passed in instead of a directory
-        removeDefinition("preferred");
         addFileDefinition("preferred", info.fileName(), i18n("Recommended wallpaper file"));
         setContentsPrefixPaths(QStringList());
         //kDebug() << "changing" << path() << "to" << info.path();
@@ -287,9 +297,6 @@ void WallpaperPackage::findBestPaper()
 
     // choose the nearest resolution
     float best = FLT_MAX;
-    const QSize size = m_paper ? m_paper->d->targetSize.toSize() : QSize(100000, 100000);
-    const Wallpaper::ResizeMethod method = m_paper ? m_paper->d->lastResizeMethod
-                                                   : Wallpaper::ScaledResize;
 
     QString bestImage;
     foreach (const QString &entry, images) {
@@ -298,7 +305,7 @@ void WallpaperPackage::findBestPaper()
             continue;
         }
 
-        double dist = distance(candidate, size, method);
+        double dist = distance(candidate, m_targetSize, m_resizeMethod);
         //kDebug() << "candidate" << candidate << "distance" << dist;
         if (bestImage.isEmpty() || dist < best) {
             bestImage = entry;
