@@ -234,7 +234,7 @@ class PLASMA_EXPORT FrameSvg : public Svg
        /**
         * Deletes the internal cache freeing memory: use this if you want to switch the rendered
         * element and you don't plan to switch back to the previous one for a long time and you
-        * used setUseCache(true)
+        * used setUsingRenderingCache(true)
         */
         Q_INVOKABLE void clearCache();
 
