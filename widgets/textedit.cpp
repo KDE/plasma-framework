@@ -23,6 +23,7 @@
 #include <QMenu>
 #include <QPainter>
 #include <QScrollBar>
+#include <QGraphicsView>
 
 #include <kmimetype.h>
 #include <ktextedit.h>
@@ -188,6 +189,16 @@ void TextEdit::focusOutEvent(QFocusEvent *event)
     if (applet) {
         applet->setStatus(Plasma::UnknownStatus);
     }
+
+    QEvent closeEvent(QEvent::CloseSoftwareInputPanel);
+    if (qApp) {
+        if (QGraphicsView *view = qobject_cast<QGraphicsView*>(qApp->focusWidget())) {
+            if (view->scene() && view->scene() == scene()) {
+                QApplication::sendEvent(view, &closeEvent);
+            }
+        }
+    }
+
     QGraphicsProxyWidget::focusOutEvent(event);
 }
 

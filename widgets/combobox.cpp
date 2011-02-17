@@ -20,6 +20,7 @@
 #include "combobox.h"
 
 #include <QPainter>
+#include <QGraphicsView>
 
 #include <kcombobox.h>
 #include <kiconeffect.h>
@@ -276,6 +277,18 @@ void ComboBox::focusOutEvent(QFocusEvent *event)
     if (applet) {
         applet->setStatus(Plasma::UnknownStatus);
     }
+
+    if (nativeWidget()->isEditable()) {
+        QEvent closeEvent(QEvent::CloseSoftwareInputPanel);
+        if (qApp) {
+            if (QGraphicsView *view = qobject_cast<QGraphicsView*>(qApp->focusWidget())) {
+                if (view->scene() && view->scene() == scene()) {
+                    QApplication::sendEvent(view, &closeEvent);
+                }
+            }
+        }
+    }
+
     QGraphicsProxyWidget::focusOutEvent(event);
 }
 

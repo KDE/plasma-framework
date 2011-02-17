@@ -22,6 +22,7 @@
 #include <QGraphicsSceneResizeEvent>
 #include <QIcon>
 #include <QPainter>
+#include <QGraphicsView>
 
 #include <klineedit.h>
 #include <kmimetype.h>
@@ -203,6 +204,16 @@ void LineEdit::focusOutEvent(QFocusEvent *event)
     if (applet) {
         applet->setStatus(Plasma::UnknownStatus);
     }
+
+    QEvent closeEvent(QEvent::CloseSoftwareInputPanel);
+    if (qApp) {
+        if (QGraphicsView *view = qobject_cast<QGraphicsView*>(qApp->focusWidget())) {
+            if (view->scene() && view->scene() == scene()) {
+                QApplication::sendEvent(view, &closeEvent);
+            }
+        }
+    }
+
     QGraphicsProxyWidget::focusOutEvent(event);
 }
 

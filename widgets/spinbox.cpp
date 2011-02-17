@@ -22,6 +22,7 @@
 
 #include <QPainter>
 #include <QStyleOptionSpinBox>
+#include <QGraphicsView>
 
 #include <kmimetype.h>
 #include <knuminput.h>
@@ -209,6 +210,16 @@ void SpinBox::focusOutEvent(QFocusEvent *event)
     if (applet) {
         applet->setStatus(Plasma::UnknownStatus);
     }
+
+    QEvent closeEvent(QEvent::CloseSoftwareInputPanel);
+    if (qApp) {
+        if (QGraphicsView *view = qobject_cast<QGraphicsView*>(qApp->focusWidget())) {
+            if (view->scene() && view->scene() == scene()) {
+                QApplication::sendEvent(view, &closeEvent);
+            }
+        }
+    }
+
     QGraphicsProxyWidget::focusOutEvent(event);
 }
 
