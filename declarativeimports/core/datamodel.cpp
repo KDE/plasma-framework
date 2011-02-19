@@ -126,8 +126,13 @@ void SortFilterModel::setSortOrder(const Qt::SortOrder order)
 DataModel::DataModel(QObject* parent)
     : QAbstractItemModel(parent),
       m_dataSource(0),
-      m_maxRoleId(Qt::UserRole)
+      m_maxRoleId(Qt::UserRole+1)
 {
+    //There is one reserved role name: DataEngineSource
+    m_roleNames[m_maxRoleId] = "DataEngineSource";
+    m_roleIds["DataEngineSource"] = m_maxRoleId;
+    ++m_maxRoleId;
+
     setObjectName("DataModel");
     connect(this, SIGNAL(rowsInserted(const QModelIndex &, int, int)),
             this, SIGNAL(countChanged()));
@@ -165,8 +170,17 @@ void DataModel::dataUpdated(const QString &sourceName, const Plasma::DataEngine:
     } else {
         QVariantList list;
 
-        foreach (QVariant data, m_dataSource->data()) {
-            list.append(data.value<Plasma::DataEngine::Data>());
+        if (!m_dataSource->data().isEmpty()) {
+            QVariantMap::const_iterator i = m_dataSource->data().constBegin();
+            while (i != m_dataSource->data().constEnd()) {
+                QVariant value = i.value();
+                if (value.isValid() && value.canConvert<Plasma::DataEngine::Data>()) {
+                    Plasma::DataEngine::Data data = value.value<Plasma::DataEngine::Data>();
+                    data["DataEngineSource"] = i.key();
+                    list.append(data);
+                }
+                ++i;
+            }
         }
         setItems(QString(), list);
     }
@@ -275,7 +289,13 @@ QVariant DataModel::data(const QModelIndex &index, int role) const
         }
     }
 
-    if (m_items.value(source).value(actualRow).canConvert<QVariantHash>()) {
+    //is it the reserved role: DataEngineSource ?
+    //also, if each source is an item DataEngineSource is a role between all the others, otherwise we know it from the role variable
+    if (!m_keyRoleFilter.isEmpty() && m_roleNames.value(role) == "DataEngineSource") {
+        return source;
+
+    //sub items are some times QVariantHash some times QVariantMaps
+    } else if (m_items.value(source).value(actualRow).canConvert<QVariantHash>()) {
         return m_items.value(source).value(actualRow).value<QVariantHash>().value(m_roleNames.value(role));
     } else {
         return m_items.value(source).value(actualRow).value<QVariantMap>().value(m_roleNames.value(role));
