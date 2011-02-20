@@ -121,7 +121,9 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         if (isContainment) {
             return new Containment(0, allArgs);
         } else {
-            if (offer->serviceTypes().contains("Plasma/PopupApplet")) {
+            if (offer->serviceTypes().contains("Plasma/Containment")) {
+                return new Containment(0, allArgs);
+            } else if (offer->serviceTypes().contains("Plasma/PopupApplet")) {
                 return new PopupApplet(0, allArgs);
             } else {
                 return new Applet(0, allArgs);
