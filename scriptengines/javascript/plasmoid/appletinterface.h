@@ -28,6 +28,7 @@
 #include <QScriptValue>
 
 #include <Plasma/Applet>
+#include <Plasma/Containment>
 #include <Plasma/PopupApplet>
 #include <Plasma/DataEngine>
 #include <Plasma/Theme>
@@ -319,11 +320,11 @@ public:
 };
 
 #ifdef USE_JS_SCRIPTENGINE
-#define POPUPAPPLETSUPERCLASS JsAppletInterface
+#define APPLETSUPERCLASS JsAppletInterface
 #else
-#define POPUPAPPLETSUPERCLASS AppletInterface
+#define APPLETSUPERCLASS AppletInterface
 #endif
-class PopupAppletInterface : public POPUPAPPLETSUPERCLASS
+class PopupAppletInterface : public APPLETSUPERCLASS
 {
     Q_OBJECT
     Q_PROPERTY(QIcon popupIcon READ popupIcon WRITE setPopupIcon)
@@ -349,6 +350,28 @@ public Q_SLOTS:
     void togglePopup();
     void hidePopup();
     void showPopup();
+};
+
+
+class ContainmentInterface : public APPLETSUPERCLASS
+{
+    Q_OBJECT
+    Q_PROPERTY(QScriptValue applets READ applets)
+
+public:
+    ContainmentInterface(AbstractJsAppletScript *parent);
+
+    inline Plasma::Containment *containment() const { return static_cast<Plasma::Containment *>(m_appletScriptEngine->applet()); }
+
+    QScriptValue applets() ;
+
+Q_SIGNALS:
+    void appletAdded(QGraphicsWidget *applet, const QPointF &pos);
+    void appletRemoved(QGraphicsWidget *applet);
+
+protected Q_SLOTS:
+    void appletAddedForward(Plasma::Applet *applet, const QPointF &pos);
+    void appletRemovedForward(Plasma::Applet *applet);
 };
 
 #endif

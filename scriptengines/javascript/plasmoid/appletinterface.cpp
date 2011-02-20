@@ -375,7 +375,7 @@ void AppletInterface::gc()
 
 
 PopupAppletInterface::PopupAppletInterface(AbstractJsAppletScript *parent)
-    : POPUPAPPLETSUPERCLASS(parent)
+    : APPLETSUPERCLASS(parent)
 {
 }
 
@@ -427,6 +427,35 @@ void PopupAppletInterface::setPopupWidget(QGraphicsWidget *widget)
 QGraphicsWidget *PopupAppletInterface::popupWidget()
 {
     return popupApplet()->graphicsWidget();
+}
+
+ContainmentInterface::ContainmentInterface(AbstractJsAppletScript *parent)
+    : APPLETSUPERCLASS(parent)
+{
+    connect(containment(), SIGNAL(appletRemoved(Plasma::Applet *)), this, SLOT(appletRemovedForward(Plasma::Applet *)));
+
+    connect(containment(), SIGNAL(appletAdded(Plasma::Applet *, const QPointF &)), this, SLOT(appletAddedForward(Plasma::Applet *, const QPointF &)));
+}
+
+QScriptValue ContainmentInterface::applets() 
+{
+    QScriptValue list = m_appletScriptEngine->engine()->newArray(containment()->applets().size());
+    int i = 0;
+    foreach (Plasma::Applet *applet, containment()->applets()) {
+        list.setProperty(i, m_appletScriptEngine->engine()->newQObject(applet));
+        ++i;
+    }
+    return list;
+}
+
+void ContainmentInterface::appletAddedForward(Plasma::Applet *applet, const QPointF &pos)
+{
+    emit appletAdded(applet, pos);
+}
+
+void ContainmentInterface::appletRemovedForward(Plasma::Applet *applet)
+{
+    emit appletRemoved(applet);
 }
 
 #ifndef USE_JS_SCRIPTENGINE

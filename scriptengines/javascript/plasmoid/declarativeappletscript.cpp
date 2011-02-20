@@ -102,6 +102,7 @@ bool DeclarativeAppletScript::init()
 
     Plasma::Applet *a = applet();
     Plasma::PopupApplet *pa = qobject_cast<Plasma::PopupApplet *>(a);
+    Plasma::Containment *cont = qobject_cast<Plasma::Containment *>(a);
 
     if (pa) {
         pa->setPopupIcon(a->icon());
@@ -112,7 +113,15 @@ bool DeclarativeAppletScript::init()
         lay->addItem(m_declarativeWidget);
     }
 
-    m_interface = pa ? new PopupAppletInterface(this) : new AppletInterface(this);
+    m_interface = 0;
+    if (pa) {
+        m_interface = new PopupAppletInterface(this);
+    } else if (cont) {
+        m_interface = new ContainmentInterface(this);
+    //fail? so it's a normal Applet
+    } else {
+        m_interface = new AppletInterface(this);
+    }
 
     m_engineAccess = new EngineAccess(this);
     m_declarativeWidget->engine()->rootContext()->setContextProperty("__engineAccess", m_engineAccess);
@@ -441,6 +450,11 @@ QScriptValue DeclarativeAppletScript::loadService(QScriptContext *context, QScri
 
     //kDebug( )<< "lets try to get" << source << "from" << dataEngine;
     return engine->newQObject(service, QScriptEngine::AutoOwnership);
+}
+
+QScriptEngine *DeclarativeAppletScript::engine() const
+{
+    return m_engine;
 }
 
 void DeclarativeAppletScript::setEngine(QScriptValue &val)

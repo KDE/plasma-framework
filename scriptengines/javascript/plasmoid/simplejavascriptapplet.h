@@ -58,6 +58,8 @@ public:
 
     bool eventFilter(QObject *watched, QEvent *event);
 
+    QScriptEngine *engine() const;
+
 public Q_SLOTS:
     void dataUpdated(const QString &name, const Plasma::DataEngine::Data &data);
     void configChanged();
