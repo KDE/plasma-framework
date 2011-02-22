@@ -448,6 +448,26 @@ QScriptValue ContainmentInterface::applets()
     return list;
 }
 
+void ContainmentInterface::setDrawWallpaper(bool drawWallpaper)
+{
+   m_appletScriptEngine->setDrawWallpaper(drawWallpaper);
+}
+
+bool ContainmentInterface::drawWallpaper()
+{
+    return m_appletScriptEngine->drawWallpaper();
+}
+
+ContainmentInterface::Type ContainmentInterface::containmentType() const
+{
+    return (ContainmentInterface::Type)m_appletScriptEngine->containmentType();
+}
+
+void ContainmentInterface::setContainmentType(ContainmentInterface::Type type)
+{
+    m_appletScriptEngine->setContainmentType((Plasma::Containment::Type)type);
+}
+
 void ContainmentInterface::appletAddedForward(Plasma::Applet *applet, const QPointF &pos)
 {
     emit appletAdded(applet, pos);

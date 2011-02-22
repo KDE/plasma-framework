@@ -357,13 +357,28 @@ class ContainmentInterface : public APPLETSUPERCLASS
 {
     Q_OBJECT
     Q_PROPERTY(QScriptValue applets READ applets)
+    Q_PROPERTY(bool drawWallpaper READ drawWallpaper WRITE setDrawWallpaper)
+    Q_ENUMS(ContainmentType)
 
 public:
+    enum Type {
+        NoContainmentType = -1,  /**< @internal */
+        DesktopContainment = 0,  /**< A desktop containment */
+        PanelContainment,        /**< A desktop panel */
+        CustomContainment = 127, /**< A containment that is neither a desktop nor a panel
+                                    but something application specific */
+        CustomPanelContainment = 128 /**< A customized desktop panel */
+    };
     ContainmentInterface(AbstractJsAppletScript *parent);
 
     inline Plasma::Containment *containment() const { return static_cast<Plasma::Containment *>(m_appletScriptEngine->applet()); }
 
-    QScriptValue applets() ;
+    QScriptValue applets();
+
+    void setDrawWallpaper(bool drawWallpaper);
+    bool drawWallpaper();
+    Type containmentType() const;
+    void setContainmentType(Type type);
 
 Q_SIGNALS:
     void appletAdded(QGraphicsWidget *applet, const QPointF &pos);
