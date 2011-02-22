@@ -29,6 +29,7 @@
 #include <QTimer>
 
 #include <kdebug.h>
+#include <kdeclarative.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
@@ -89,6 +90,12 @@ void DeclarativeWidgetPrivate::execute(const QString &fileName)
     }
 
     component->loadUrl(fileName);
+
+    KDeclarative kdeclarative;
+    kdeclarative.setDeclarativeEngine(engine);
+    kdeclarative.initialize();
+    //binds things like kconfig and icons
+    kdeclarative.setupBindings();
 
     if (delay) {
         QTimer::singleShot(0, q, SLOT(scheduleExecutionEnd()));

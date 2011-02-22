@@ -11,6 +11,7 @@ endif(KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${KDE4_KDECORE_INCLUDES}
                     ${KDE4_KDEUI_INCLUDES}
+                    ${CMAKE_SOURCE_DIR}/experimental/libkdeclarative
                     ${CMAKE_SOURCE_DIR}/threadweaver/
                     ${CMAKE_SOURCE_DIR}/plasma/extenders
                     ${CMAKE_SOURCE_DIR}/plasma/remote
@@ -244,7 +245,7 @@ kde4_add_library(plasma ${LIBRARY_TYPE} ${plasma_LIB_SRCS})
 
 target_link_libraries(plasma ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
                              ${QT_QTSCRIPT_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTSQL_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY}
-                             ${KDE4_KDEUI_LIBS} kdnssd threadweaver ${PLASMA_EXTRA_LIBS})
+                             ${KDE4_KDEUI_LIBS} kdnssd threadweaver kdeclarative ${PLASMA_EXTRA_LIBS})
 
 if(QCA2_FOUND)
    target_link_libraries(plasma ${QCA2_LIBRARIES})
