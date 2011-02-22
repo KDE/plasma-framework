@@ -27,6 +27,7 @@
 #include <kgenericfactory.h>
 #include <kplugininfo.h>
 
+#include <plasma/containment.h>
 #include <plasma/plasma_export.h>
 #include <plasma/scripting/scriptengine.h>
 
@@ -142,6 +143,32 @@ public:
      * @see Applet
      */
     Extender *extender() const;
+
+    //FIXME plasma2: setWallpaperEnabled and setContainmentType should become public?
+    /**
+     * @return true if the applet is a containment AND if the wallpaper is enabled
+     * @see Containment
+     * @since 4.7
+     */
+     bool drawWallpaper() const;
+     /**
+      * set if the containment draws its own wallpaper: it has no effect if the applet is not a containment
+      * @see Containment
+      * @since 4.7
+      */
+     void setDrawWallpaper(bool drawWallpaper);
+
+     /**
+      * @see Containment
+      * @since 4.7
+      */
+     Containment::Type containmentType() const;
+
+     /**
+      * @see Containment
+      * @since 4.7
+      */
+     void setContainmentType(Containment::Type type);
 
 Q_SIGNALS:
     /**

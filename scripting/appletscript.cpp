@@ -255,6 +255,46 @@ Extender *AppletScript::extender() const
     return d->applet->extender();
 }
 
+bool AppletScript::drawWallpaper() const
+{
+    Q_ASSERT(d->applet);
+    Plasma::Containment *cont = qobject_cast<Plasma::Containment *>(d->applet);
+    if (cont) {
+        return cont->drawWallpaper();
+    } else {
+        return false;
+    }
+}
+
+void AppletScript::setDrawWallpaper(bool drawWallpaper)
+{
+    Q_ASSERT(d->applet);
+    Plasma::Containment *cont = qobject_cast<Plasma::Containment *>(d->applet);
+    if (cont) {
+        cont->setDrawWallpaper(drawWallpaper);
+    }
+}
+
+Containment::Type AppletScript::containmentType() const
+{
+    Q_ASSERT(d->applet);
+    Plasma::Containment *cont = qobject_cast<Plasma::Containment *>(d->applet);
+    if (cont) {
+        return cont->containmentType();
+    } else {
+        return Containment::NoContainmentType;
+    }
+}
+
+void AppletScript::setContainmentType(Containment::Type type)
+{
+    Q_ASSERT(d->applet);
+    Plasma::Containment *cont = qobject_cast<Plasma::Containment *>(d->applet);
+    if (cont) {
+        cont->setContainmentType(type);
+    }
+}
+
 } // Plasma namespace
 
 #include "appletscript.moc"
