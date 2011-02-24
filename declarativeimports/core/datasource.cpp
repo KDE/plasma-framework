@@ -104,8 +104,8 @@ void DataSource::setupData()
             kWarning() << "DataEngine" << m_engine << "not found";
             return;
         }
-        connect(m_dataEngine, SIGNAL(sourceAdded(const QString&)), this, SIGNAL(allSourcesChanged()));
-        connect(m_dataEngine, SIGNAL(sourceRemoved(const QString&)), this, SIGNAL(allSourcesChanged()));
+        connect(m_dataEngine, SIGNAL(sourceAdded(const QString&)), this, SIGNAL(sourcesChanged()));
+        connect(m_dataEngine, SIGNAL(sourceRemoved(const QString&)), this, SIGNAL(sourcesChanged()));
 
         connect(m_dataEngine, SIGNAL(sourceAdded(const QString&)), this, SIGNAL(sourceAdded(const QString&)));
         connect(m_dataEngine, SIGNAL(sourceRemoved(const QString&)), this, SLOT(removeSource(const QString&)));
