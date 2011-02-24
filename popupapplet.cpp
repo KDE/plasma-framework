@@ -400,7 +400,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                     }
 
                     dialog->setGraphicsWidget(gWidget);
-                    gWidget->resize(gWidget->preferredSize());
+                    //gWidget->resize(gWidget->preferredSize());
                     dialog->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | (gWidget->windowFlags() & Qt::X11BypassWindowManagerHint));
                 } else if (qWidget) {
                     QVBoxLayout *l_layout = new QVBoxLayout(dialog);
@@ -841,9 +841,10 @@ void PopupAppletPrivate::restoreDialogSize()
 
     int preferredWidth = 0;
     int preferredHeight = 0;
-    if (dialog->graphicsWidget()) {
-        preferredWidth = dialog->graphicsWidget()->preferredSize().width();
-        preferredHeight = dialog->graphicsWidget()->preferredSize().height();
+    QGraphicsWidget *gWidget = dialog->graphicsWidget();
+    if (gWidget) {
+        preferredWidth = gWidget->preferredSize().width();
+        preferredHeight = gWidget->preferredSize().height();
     }
 
     const int width = qMin(sizeGroup.readEntry("DialogWidth", preferredWidth),
@@ -861,6 +862,9 @@ void PopupAppletPrivate::restoreDialogSize()
 
     if (saved.width() != dialog->width() || saved.height() != dialog->height()) {
         dialog->resize(saved);
+       /*if (gWidget) {
+         gWidget->resize(saved);
+       }*/
     }
 }
 
