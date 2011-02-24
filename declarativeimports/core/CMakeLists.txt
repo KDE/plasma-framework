@@ -8,6 +8,7 @@ set(corebindings_SRCS
     datasource.cpp
     svgitem.cpp
     framesvgitem.cpp
+    dialog.cpp
     )
 
 INCLUDE_DIRECTORIES(
