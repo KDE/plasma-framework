@@ -29,6 +29,8 @@ namespace Plasma
     class Dialog;
 }
 
+class DeclarativeItemContainer;
+
 class DialogProxy : public QObject
 {
     Q_OBJECT
@@ -57,6 +59,7 @@ protected Q_SLOTS:
 
 private:
     Plasma::Dialog *m_dialog;
+    DeclarativeItemContainer *m_declarativeItemContainer;
     QWeakPointer<QGraphicsObject> m_mainItem;
 };
 

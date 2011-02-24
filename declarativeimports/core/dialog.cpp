@@ -19,12 +19,49 @@
 
 #include "dialog.h"
 
+#include <QDeclarativeItem>
 #include <QGraphicsObject>
 #include <QGraphicsWidget>
 #include <QTimer>
 
 #include <Plasma/Corona>
 #include <Plasma/Dialog>
+
+class DeclarativeItemContainer : public QGraphicsWidget
+{
+public:
+    DeclarativeItemContainer(QGraphicsItem *parent = 0)
+       : QGraphicsWidget(parent)
+    {}
+
+    ~DeclarativeItemContainer()
+    {}
+
+    void setDeclarativeItem(QDeclarativeItem *item)
+    {
+        m_declarativeItem = item;
+        static_cast<QGraphicsItem *>(item)->setParentItem(this);
+        setMinimumWidth(item->implicitWidth());
+        setMinimumHeight(item->implicitHeight());
+    }
+
+    QDeclarativeItem *declarativeItem() const
+    {
+        return m_declarativeItem.data();
+    }
+
+protected:
+    void resizeEvent(QGraphicsSceneResizeEvent *event)
+    {
+        if (m_declarativeItem) {
+            m_declarativeItem.data()->setProperty("width", event->newSize().width());
+            m_declarativeItem.data()->setProperty("height", event->newSize().height());
+        }
+    }
+
+private:
+    QWeakPointer<QDeclarativeItem> m_declarativeItem;
+};
 
 DialogProxy::DialogProxy(QObject *parent)
     : QObject(parent)
@@ -35,6 +72,7 @@ DialogProxy::DialogProxy(QObject *parent)
 DialogProxy::~DialogProxy()
 {
     delete m_dialog;
+    delete m_declarativeItemContainer;
 }
 
 QGraphicsObject *DialogProxy::mainItem() const
@@ -60,20 +98,38 @@ void DialogProxy::syncMainItem()
     }
 
     //not have a scene? go up in the hyerarchy until we find something with a scene
-    if (!m_mainItem.data()->scene()) {
+    QGraphicsScene *scene = m_mainItem.data()->scene();
+    if (!scene) {
         QObject *parent = m_mainItem.data();
-        while (parent = parent->parent()) {
+        while ((parent = parent->parent())) {
             QGraphicsObject *qo = qobject_cast<QGraphicsObject *>(parent);
             if (qo) {
-                QGraphicsScene *scene = qo->scene();
+                scene = qo->scene();
                 scene->addItem(m_mainItem.data());
                 break;
             }
         }
     }
 
-    //FIXME: make Dialog accept qgraphicsobjects
-    m_dialog->setGraphicsWidget(qobject_cast<QGraphicsWidget *>(m_mainItem.data()));
+    //the parent of the qobject never changed, only the parentitem, so put it back what it was
+    m_mainItem.data()->setParentItem(qobject_cast<QGraphicsObject *>(m_mainItem.data()->parent()));
+
+    QGraphicsWidget *widget = qobject_cast<QGraphicsWidget *>(m_mainItem.data());
+    if (widget) {
+        m_declarativeItemContainer->deleteLater();
+        m_declarativeItemContainer = 0;
+    } else {
+        QDeclarativeItem *di = qobject_cast<QDeclarativeItem *>(m_mainItem.data());
+        if (di) {
+            if (!m_declarativeItemContainer) {
+                m_declarativeItemContainer = new DeclarativeItemContainer();
+                scene->addItem(m_declarativeItemContainer);
+            }
+            m_declarativeItemContainer->setDeclarativeItem(di);
+            widget = m_declarativeItemContainer;
+        }
+    }
+    m_dialog->setGraphicsWidget(widget);
 }
 
 bool DialogProxy::isVisible() const
