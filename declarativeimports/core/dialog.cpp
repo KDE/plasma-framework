@@ -159,6 +159,35 @@ void DialogProxy::showPopup(QGraphicsObject *item)
     emit visibleChanged();
 }
 
+
+int DialogProxy::x() const
+{
+    return m_dialog->pos().x();
+}
+
+void DialogProxy::setX(int x)
+{
+    m_dialog->move(x, m_dialog->pos().y());
+}
+
+int DialogProxy::y() const
+{
+    return m_dialog->pos().y();
+}
+
+void DialogProxy::setY(int y)
+{
+    m_dialog->move(m_dialog->pos().x(), y);
+}
+
+bool DialogProxy::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == m_dialog && event->type() == QEvent::Move) {
+        emit positionChanged();
+    }
+    return false;
+}
+
 void DialogProxy::setAttribute(int attribute, bool on)
 {
     m_dialog->setAttribute((Qt::WidgetAttribute)attribute, on);

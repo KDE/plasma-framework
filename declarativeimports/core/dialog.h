@@ -37,6 +37,8 @@ class DialogProxy : public QObject
 
     Q_PROPERTY(QGraphicsObject *mainItem READ mainItem WRITE setMainItem NOTIFY mainItemChanged)
     Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY visibleChanged)
+    Q_PROPERTY(int x READ x WRITE setX NOTIFY positionChanged)
+    Q_PROPERTY(int y READ y WRITE setY NOTIFY positionChanged)
 
 public:
     enum WidgetAttribute {
@@ -52,6 +54,12 @@ public:
     bool isVisible() const;
     void setVisible(const bool visible);
 
+    int x() const;
+    void setX(int x);
+
+    int y() const;
+    void setY(int y);
+
     Q_INVOKABLE void showPopup(QGraphicsObject *item);
     //FIXME:: Qt::WidgetAttribute should be already 
     Q_INVOKABLE void setAttribute(int attribute, bool on);
@@ -59,9 +67,13 @@ public:
 Q_SIGNALS:
     void mainItemChanged();
     void visibleChanged();
+    void positionChanged();
 
 protected Q_SLOTS:
     void syncMainItem();
+
+protected:
+    bool eventFilter(QObject *watched, QEvent *event);
 
 private:
     Plasma::Dialog *m_dialog;
