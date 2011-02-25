@@ -46,13 +46,6 @@ if(QCA2_FOUND)
 endif(QCA2_FOUND)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-plasma.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-plasma.h)
 
-if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
-    # libGL needs dlopen() and friends from the dl library
-    find_library(DL_LIBRARY dl)
-    mark_as_advanced(DL_LIBRARY)
-    include_directories(${OPENGL_INCLUDE_DIR})
-endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
-
 add_subdirectory(tests)
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1209)
 
@@ -232,12 +225,12 @@ kde4_add_ui_files(plasma_LIB_SRCS
 #   TEST_INCLUDES
 #)
 
-if(QT_QTOPENGL_FOUND AND OPENGL_FOUND AND OPENGL_GLU_FOUND)
+if (QT_QTOPENGL_FOUND)
     message(STATUS "Adding support for OpenGL applets to libplasma")
     set(plasma_LIB_SRCS
         ${plasma_LIB_SRCS}
         glapplet.cpp)
-endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND AND OPENGL_GLU_FOUND)
+endif(QT_QTOPENGL_FOUND)
 
 if (PHONON_FOUND)
     message(STATUS "Adding support for Phonon to libplasma")
@@ -269,9 +262,9 @@ if(DL_LIBRARY)
     target_link_libraries(plasma ${DL_LIBRARY})
 endif(DL_LIBRARY)
 
-if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
-    target_link_libraries(plasma ${QT_QTOPENGL_LIBRARY} ${OPENGL_gl_LIBRARY})
-endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
+if(QT_QTOPENGL_FOUND)
+    target_link_libraries(plasma ${QT_QTOPENGL_LIBRARY})
+endif(QT_QTOPENGL_FOUND)
 
 target_link_libraries(plasma LINK_INTERFACE_LIBRARIES kdeui kdecore ${QT_QTGUI_LIBRARY})
 
@@ -352,11 +345,11 @@ if(NOT KDE_NO_DEPRECATED)
 endif(NOT KDE_NO_DEPRECATED)
 
 
-if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
+if(QT_QTOPENGL_FOUND)
     set(plasma_LIB_INCLUDES
         ${plasma_LIB_INCLUDES}
         glapplet.h)
-endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
+endif(QT_QTOPENGL_FOUND)
 
 install(FILES
         ${plasma_LIB_INCLUDES}

@@ -188,10 +188,6 @@ void GLApplet::paintInterface(QPainter *painter,
     }
     d->pbuf->makeCurrent();
 
-    // handle background filling
-    glClearColor(0, 0, 0, 0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     QMatrix m = painter->worldMatrix();
     QRect deviceRect = m.mapRect(QRect(QPoint(23, 25), boundingRect().size().toSize()));
     d->updateGlSize(deviceRect.size());
