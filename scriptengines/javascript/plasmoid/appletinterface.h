@@ -358,7 +358,8 @@ class ContainmentInterface : public APPLETSUPERCLASS
     Q_OBJECT
     Q_PROPERTY(QScriptValue applets READ applets)
     Q_PROPERTY(bool drawWallpaper READ drawWallpaper WRITE setDrawWallpaper)
-    Q_ENUMS(ContainmentType)
+    Q_PROPERTY(Type containmentType READ containmentType WRITE setContainmentType)
+    Q_ENUMS(Type)
 
 public:
     enum Type {
