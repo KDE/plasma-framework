@@ -374,6 +374,8 @@ void DeclarativeAppletScript::setupObjects()
     QScriptValue fun = m_engine->newFunction(DeclarativeAppletScript::loadui);
     global.setProperty("loadui", fun);
 
+    ScriptEnv::registerEnums(global, AppletInterface::staticMetaObject);
+
     bindI18N(m_engine);
     global.setProperty("dataEngine", m_engine->newFunction(DeclarativeAppletScript::dataEngine));
     global.setProperty("service", m_engine->newFunction(DeclarativeAppletScript::service));
