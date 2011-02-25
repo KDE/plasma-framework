@@ -139,7 +139,7 @@ bool DialogProxy::isVisible() const
 
 void DialogProxy::setVisible(const bool visible)
 {
-    if (m_dialog->isVisible() == visible) {
+    if (m_dialog->isVisible() != visible) {
         m_dialog->setVisible(visible);
         emit visibleChanged();
     }
