@@ -39,6 +39,10 @@ class DialogProxy : public QObject
     Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY visibleChanged)
 
 public:
+    enum WidgetAttribute {
+        WA_X11NetWmWindowTypeDock = Qt::WA_X11NetWmWindowTypeDock
+    };
+
     DialogProxy(QObject *parent = 0);
     ~DialogProxy();
 
@@ -49,6 +53,8 @@ public:
     void setVisible(const bool visible);
 
     Q_INVOKABLE void showPopup(QGraphicsObject *item);
+    //FIXME:: Qt::WidgetAttribute should be already 
+    Q_INVOKABLE void setAttribute(int attribute, bool on);
 
 Q_SIGNALS:
     void mainItemChanged();

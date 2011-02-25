@@ -159,5 +159,10 @@ void DialogProxy::showPopup(QGraphicsObject *item)
     emit visibleChanged();
 }
 
+void DialogProxy::setAttribute(int attribute, bool on)
+{
+    m_dialog->setAttribute((Qt::WidgetAttribute)attribute, on);
+}
+
 #include "dialog.moc"
 
