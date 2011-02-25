@@ -79,6 +79,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
     Q_OBJECT
     Q_PROPERTY(bool hasConfigurationInterface READ hasConfigurationInterface)
     Q_PROPERTY(QString name READ name)
+    Q_PROPERTY(QString pluginName READ pluginName)
     Q_PROPERTY(QString category READ category)
     Q_PROPERTY(ImmutabilityType immutability READ immutability WRITE setImmutability)
     Q_PROPERTY(bool hasFailedToLaunch READ hasFailedToLaunch WRITE setFailedToLaunch)
