@@ -513,6 +513,12 @@ void Containment::setContainmentType(Containment::Type type)
         return;
     }
 
+    if (type != DesktopContainment) {
+        foreach (Plasma::Applet *applet, applets()) {
+            applet->removeSceneEventFilter(this);
+        }
+    }
+
     delete d->toolBox.data();
     d->type = type;
     d->checkContainmentFurniture();
