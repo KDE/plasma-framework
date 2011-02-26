@@ -367,6 +367,12 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
         //Applet on popup
         } else {
             //kDebug() << "about to switch to a popup";
+
+            //there was already a dialog? don't make the switch again
+            if (dialogPtr) {
+                return;
+            }
+
             if (proxy) {
                 proxy.data()->setWidget(0); // prevent it from deleting our widget!
                 delete proxy.data();
