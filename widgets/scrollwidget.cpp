@@ -1425,13 +1425,23 @@ bool ScrollWidget::eventFilter(QObject *watched, QEvent *event)
         d->stopAnimations();
         d->adjustScrollbarsTimer->start(200);
         updateGeometry();
-        if (d->widget.data()->size().width() < viewportGeometry().width() ||
-            d->widget.data()->size().height() < viewportGeometry().height()) {
-            d->widget.data()->setPos(d->minXExtent(),
-                                     d->minYExtent());
-        } else {
-            ensureItemVisible(d->widget.data());
+
+        QPointF newPos = d->widget.data()->pos();
+        if (d->widget.data()->size().width() <= viewportGeometry().width()) {
+            newPos.setX(d->minXExtent());
         }
+        if (d->widget.data()->size().height() <= viewportGeometry().height()) {
+            newPos.setY(d->minYExtent());
+        }
+        //check if the content is visible
+        if (d->widget.data()->geometry().right() < 0) {
+            newPos.setX(-d->widget.data()->geometry().width()+viewportGeometry().width());
+        }
+        if (d->widget.data()->geometry().bottom() < 0) {
+            newPos.setY(-d->widget.data()->geometry().height()+viewportGeometry().height());
+        }
+        d->widget.data()->setPos(newPos);
+
     } else if (watched == d->widget.data() && event->type() == QEvent::GraphicsSceneMove) {
         d->horizontalScrollBar->blockSignals(true);
         d->verticalScrollBar->blockSignals(true);
