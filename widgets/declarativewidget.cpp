@@ -145,6 +145,8 @@ void DeclarativeWidgetPrivate::finishExecute()
         if (object) {
             width = object->property("width").toReal();
             height = object->property("height").toReal();
+            object->setProperty("width", q->size().width());
+            object->setProperty("height", q->size().height());
         }
 
         if (width > 0 && height > 0) {
