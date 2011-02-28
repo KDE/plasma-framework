@@ -249,6 +249,8 @@ enum IntervalAlignment {
 
     Q_INVOKABLE void removeAction(const QString &name);
 
+    Q_INVOKABLE QAction *action(QString name) const;
+
     Q_INVOKABLE void resize(qreal w, qreal h);
 
     Q_INVOKABLE void setMinimumSize(qreal w, qreal h);

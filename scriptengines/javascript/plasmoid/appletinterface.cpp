@@ -294,6 +294,11 @@ void AppletInterface::removeAction(const QString &name)
     m_actions.remove(name);
 }
 
+QAction *AppletInterface::action(QString name) const
+{
+    return applet()->action(name);
+}
+
 void AppletInterface::resize(qreal w, qreal h)
 {
     applet()->resize(w,h);
