@@ -503,7 +503,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         /**
          * Returns the QAction with the given name from our collection
          */
-        QAction *action(QString name) const;
+        Q_INVOKABLE QAction *action(QString name) const;
 
         /**
          * Adds the action to our collection under the given name
