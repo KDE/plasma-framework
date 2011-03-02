@@ -361,7 +361,7 @@ class ContainmentInterface : public APPLETSUPERCLASS
     Q_PROPERTY(QScriptValue applets READ applets)
     Q_PROPERTY(bool drawWallpaper READ drawWallpaper WRITE setDrawWallpaper)
     Q_PROPERTY(Type containmentType READ containmentType WRITE setContainmentType)
-    Q_PROPERTY(int screen READ screen)
+    Q_PROPERTY(int screen READ screen NOTIFY screenChanged)
     Q_ENUMS(Type)
 
 public:
@@ -385,11 +385,12 @@ public:
     void setContainmentType(Type type);
     int screen() const;
 
-    Q_INVOKABLE QRect screenGeometry(int id) const;
+    Q_INVOKABLE QScriptValue screenGeometry(int id) const;
 
 Q_SIGNALS:
     void appletAdded(QGraphicsWidget *applet, const QPointF &pos);
     void appletRemoved(QGraphicsWidget *applet);
+    void screenChanged();
 
 protected Q_SLOTS:
     void appletAddedForward(Plasma::Applet *applet, const QPointF &pos);

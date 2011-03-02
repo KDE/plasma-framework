@@ -441,6 +441,8 @@ ContainmentInterface::ContainmentInterface(AbstractJsAppletScript *parent)
     connect(containment(), SIGNAL(appletRemoved(Plasma::Applet *)), this, SLOT(appletRemovedForward(Plasma::Applet *)));
 
     connect(containment(), SIGNAL(appletAdded(Plasma::Applet *, const QPointF &)), this, SLOT(appletAddedForward(Plasma::Applet *, const QPointF &)));
+
+    connect(containment(), SIGNAL(screenChanged(int, int, Plasma::Containment)), this, SLOT(screenChanged()));
 }
 
 QScriptValue ContainmentInterface::applets() 
@@ -476,16 +478,22 @@ void ContainmentInterface::setContainmentType(ContainmentInterface::Type type)
 
 int ContainmentInterface::screen() const
 {
-    return screen();
+    return containment()->screen();
 }
 
-QRect ContainmentInterface::screenGeometry(int id) const
+QScriptValue ContainmentInterface::screenGeometry(int id) const
 {
+    QRectF rect;
     if (containment()->corona()) {
-        return containment()->corona()->screenGeometry(id);
-    } else {
-        return QRect();
+        rect = QRectF(containment()->corona()->screenGeometry(id));
     }
+
+    QScriptValue val = m_appletScriptEngine->engine()->newObject();
+    val.setProperty("x", rect.x());
+    val.setProperty("y", rect.y());
+    val.setProperty("width", rect.width());
+    val.setProperty("height", rect.height());
+    return val;
 }
 
 void ContainmentInterface::appletAddedForward(Plasma::Applet *applet, const QPointF &pos)
