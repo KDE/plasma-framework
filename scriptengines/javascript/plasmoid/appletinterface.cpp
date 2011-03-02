@@ -34,6 +34,7 @@
 
 #include <Plasma/Plasma>
 #include <Plasma/Applet>
+#include <Plasma/Corona>
 #include <Plasma/Context>
 #include <Plasma/Package>
 
@@ -471,6 +472,20 @@ ContainmentInterface::Type ContainmentInterface::containmentType() const
 void ContainmentInterface::setContainmentType(ContainmentInterface::Type type)
 {
     m_appletScriptEngine->setContainmentType((Plasma::Containment::Type)type);
+}
+
+int ContainmentInterface::screen() const
+{
+    return screen();
+}
+
+QRect ContainmentInterface::screenGeometry(int id) const
+{
+    if (containment()->corona()) {
+        return containment()->corona()->screenGeometry(id);
+    } else {
+        return QRect();
+    }
 }
 
 void ContainmentInterface::appletAddedForward(Plasma::Applet *applet, const QPointF &pos)
