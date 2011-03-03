@@ -146,7 +146,9 @@ void Wallpaper::addUrls(const KUrl::List &urls)
 
 void Wallpaper::setUrls(const KUrl::List &urls)
 {
-    if (d->script) {
+    if (!d->initialized) {
+        d->pendingUrls = urls;
+    } else if (d->script) {
         d->script->setUrls(urls);
     } else {
        QMetaObject::invokeMethod(this, "addUrls", Q_ARG(KUrl::List, urls));
@@ -329,6 +331,10 @@ void Wallpaper::restore(const KConfigGroup &config)
 {
     init(config);
     d->initialized = true;
+    if (!d->pendingUrls.isEmpty()) {
+        setUrls(d->pendingUrls);
+        d->pendingUrls.clear();
+    }
 }
 
 void Wallpaper::init(const KConfigGroup &config)
