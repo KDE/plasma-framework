@@ -34,6 +34,7 @@
 
 #include <Plasma/Plasma>
 #include <Plasma/Applet>
+#include <Plasma/Corona>
 #include <Plasma/Context>
 #include <Plasma/Package>
 
@@ -294,6 +295,11 @@ void AppletInterface::removeAction(const QString &name)
     m_actions.remove(name);
 }
 
+QAction *AppletInterface::action(QString name) const
+{
+    return applet()->action(name);
+}
+
 void AppletInterface::resize(qreal w, qreal h)
 {
     applet()->resize(w,h);
@@ -375,7 +381,7 @@ void AppletInterface::gc()
 
 
 PopupAppletInterface::PopupAppletInterface(AbstractJsAppletScript *parent)
-    : POPUPAPPLETSUPERCLASS(parent)
+    : APPLETSUPERCLASS(parent)
 {
 }
 
@@ -427,6 +433,77 @@ void PopupAppletInterface::setPopupWidget(QGraphicsWidget *widget)
 QGraphicsWidget *PopupAppletInterface::popupWidget()
 {
     return popupApplet()->graphicsWidget();
+}
+
+ContainmentInterface::ContainmentInterface(AbstractJsAppletScript *parent)
+    : APPLETSUPERCLASS(parent)
+{
+    connect(containment(), SIGNAL(appletRemoved(Plasma::Applet *)), this, SLOT(appletRemovedForward(Plasma::Applet *)));
+
+    connect(containment(), SIGNAL(appletAdded(Plasma::Applet *, const QPointF &)), this, SLOT(appletAddedForward(Plasma::Applet *, const QPointF &)));
+
+    connect(containment(), SIGNAL(screenChanged(int, int, Plasma::Containment)), this, SLOT(screenChanged()));
+}
+
+QScriptValue ContainmentInterface::applets() 
+{
+    QScriptValue list = m_appletScriptEngine->engine()->newArray(containment()->applets().size());
+    int i = 0;
+    foreach (Plasma::Applet *applet, containment()->applets()) {
+        list.setProperty(i, m_appletScriptEngine->engine()->newQObject(applet));
+        ++i;
+    }
+    return list;
+}
+
+void ContainmentInterface::setDrawWallpaper(bool drawWallpaper)
+{
+   m_appletScriptEngine->setDrawWallpaper(drawWallpaper);
+}
+
+bool ContainmentInterface::drawWallpaper()
+{
+    return m_appletScriptEngine->drawWallpaper();
+}
+
+ContainmentInterface::Type ContainmentInterface::containmentType() const
+{
+    return (ContainmentInterface::Type)m_appletScriptEngine->containmentType();
+}
+
+void ContainmentInterface::setContainmentType(ContainmentInterface::Type type)
+{
+    m_appletScriptEngine->setContainmentType((Plasma::Containment::Type)type);
+}
+
+int ContainmentInterface::screen() const
+{
+    return containment()->screen();
+}
+
+QScriptValue ContainmentInterface::screenGeometry(int id) const
+{
+    QRectF rect;
+    if (containment()->corona()) {
+        rect = QRectF(containment()->corona()->screenGeometry(id));
+    }
+
+    QScriptValue val = m_appletScriptEngine->engine()->newObject();
+    val.setProperty("x", rect.x());
+    val.setProperty("y", rect.y());
+    val.setProperty("width", rect.width());
+    val.setProperty("height", rect.height());
+    return val;
+}
+
+void ContainmentInterface::appletAddedForward(Plasma::Applet *applet, const QPointF &pos)
+{
+    emit appletAdded(applet, pos);
+}
+
+void ContainmentInterface::appletRemovedForward(Plasma::Applet *applet)
+{
+    emit appletRemoved(applet);
 }
 
 #ifndef USE_JS_SCRIPTENGINE

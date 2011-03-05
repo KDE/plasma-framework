@@ -28,6 +28,7 @@
 #include <QScriptValue>
 
 #include <Plasma/Applet>
+#include <Plasma/Containment>
 #include <Plasma/PopupApplet>
 #include <Plasma/DataEngine>
 #include <Plasma/Theme>
@@ -248,6 +249,8 @@ enum IntervalAlignment {
 
     Q_INVOKABLE void removeAction(const QString &name);
 
+    Q_INVOKABLE QAction *action(QString name) const;
+
     Q_INVOKABLE void resize(qreal w, qreal h);
 
     Q_INVOKABLE void setMinimumSize(qreal w, qreal h);
@@ -319,11 +322,11 @@ public:
 };
 
 #ifdef USE_JS_SCRIPTENGINE
-#define POPUPAPPLETSUPERCLASS JsAppletInterface
+#define APPLETSUPERCLASS JsAppletInterface
 #else
-#define POPUPAPPLETSUPERCLASS AppletInterface
+#define APPLETSUPERCLASS AppletInterface
 #endif
-class PopupAppletInterface : public POPUPAPPLETSUPERCLASS
+class PopupAppletInterface : public APPLETSUPERCLASS
 {
     Q_OBJECT
     Q_PROPERTY(QIcon popupIcon READ popupIcon WRITE setPopupIcon)
@@ -349,6 +352,49 @@ public Q_SLOTS:
     void togglePopup();
     void hidePopup();
     void showPopup();
+};
+
+
+class ContainmentInterface : public APPLETSUPERCLASS
+{
+    Q_OBJECT
+    Q_PROPERTY(QScriptValue applets READ applets)
+    Q_PROPERTY(bool drawWallpaper READ drawWallpaper WRITE setDrawWallpaper)
+    Q_PROPERTY(Type containmentType READ containmentType WRITE setContainmentType)
+    Q_PROPERTY(int screen READ screen NOTIFY screenChanged)
+    Q_ENUMS(Type)
+
+public:
+    enum Type {
+        NoContainmentType = -1,  /**< @internal */
+        DesktopContainment = 0,  /**< A desktop containment */
+        PanelContainment,        /**< A desktop panel */
+        CustomContainment = 127, /**< A containment that is neither a desktop nor a panel
+                                    but something application specific */
+        CustomPanelContainment = 128 /**< A customized desktop panel */
+    };
+    ContainmentInterface(AbstractJsAppletScript *parent);
+
+    inline Plasma::Containment *containment() const { return static_cast<Plasma::Containment *>(m_appletScriptEngine->applet()); }
+
+    QScriptValue applets();
+
+    void setDrawWallpaper(bool drawWallpaper);
+    bool drawWallpaper();
+    Type containmentType() const;
+    void setContainmentType(Type type);
+    int screen() const;
+
+    Q_INVOKABLE QScriptValue screenGeometry(int id) const;
+
+Q_SIGNALS:
+    void appletAdded(QGraphicsWidget *applet, const QPointF &pos);
+    void appletRemoved(QGraphicsWidget *applet);
+    void screenChanged();
+
+protected Q_SLOTS:
+    void appletAddedForward(Plasma::Applet *applet, const QPointF &pos);
+    void appletRemovedForward(Plasma::Applet *applet);
 };
 
 #endif

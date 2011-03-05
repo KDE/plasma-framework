@@ -808,6 +808,11 @@ void SimpleJavaScriptApplet::installWidgets(QScriptEngine *engine)
     }
 }
 
+QScriptEngine *SimpleJavaScriptApplet::engine() const
+{
+    return m_engine;
+}
+
 QGraphicsWidget *SimpleJavaScriptApplet::extractParent(QScriptContext *context, QScriptEngine *engine,
                                                        int argIndex, bool *parentedToApplet)
 {

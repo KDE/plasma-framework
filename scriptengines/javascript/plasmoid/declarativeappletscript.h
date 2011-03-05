@@ -59,6 +59,8 @@ public:
 
     ScriptEnv *scriptEnv();
 
+    QScriptEngine *engine() const;
+
     QScriptValue variantToScriptValue(QVariant var);
 
     static QScriptValue loadui(QScriptContext *context, QScriptEngine *engine);

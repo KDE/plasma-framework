@@ -32,6 +32,7 @@ public:
     AbstractJsAppletScript(QObject *parent, const QVariantList &args = QVariantList());
     ~AbstractJsAppletScript();
 
+    virtual QScriptEngine *engine() const = 0;
     virtual bool include(const QString &path) = 0;
     virtual QString filePath(const QString &type, const QString &file) const = 0;
     virtual QScriptValue variantToScriptValue(QVariant var) = 0;
