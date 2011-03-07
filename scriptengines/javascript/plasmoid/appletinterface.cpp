@@ -436,7 +436,8 @@ QGraphicsWidget *PopupAppletInterface::popupWidget()
 }
 
 ContainmentInterface::ContainmentInterface(AbstractJsAppletScript *parent)
-    : APPLETSUPERCLASS(parent)
+    : APPLETSUPERCLASS(parent),
+      m_movableApplets(true)
 {
     connect(containment(), SIGNAL(appletRemoved(Plasma::Applet *)), this, SLOT(appletRemovedForward(Plasma::Applet *)));
 
@@ -498,12 +499,32 @@ QScriptValue ContainmentInterface::screenGeometry(int id) const
 
 void ContainmentInterface::appletAddedForward(Plasma::Applet *applet, const QPointF &pos)
 {
+    applet->setFlag(QGraphicsItem::ItemIsMovable, m_movableApplets);
     emit appletAdded(applet, pos);
 }
 
 void ContainmentInterface::appletRemovedForward(Plasma::Applet *applet)
 {
+    applet->setFlag(QGraphicsItem::ItemIsMovable, true);
     emit appletRemoved(applet);
+}
+
+void ContainmentInterface::setMovableApplets(bool movable)
+{
+    if (m_movableApplets == movable) {
+        return;
+    }
+
+    m_movableApplets = movable;
+
+    foreach (Plasma::Applet *applet, containment()->applets()) {
+        applet->setFlag(QGraphicsItem::ItemIsMovable, movable);
+    }
+}
+
+bool ContainmentInterface::hasMovableApplets() const
+{
+    return m_movableApplets;
 }
 
 #ifndef USE_JS_SCRIPTENGINE
