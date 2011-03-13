@@ -390,6 +390,7 @@ public:
     bool hasMovableApplets() const;
 
     Q_INVOKABLE QScriptValue screenGeometry(int id) const;
+    Q_INVOKABLE QScriptValue availableScreenRegion(int id) const;
 
 Q_SIGNALS:
     void appletAdded(QGraphicsWidget *applet, const QPointF &pos);
