@@ -1,7 +1,7 @@
 libplasma
 
 This directory contains the classes making up libplasma, which provides the
-core framework used by Plasma applictions, such as the Plasma desktop shell
+core framework used by Plasma applications, such as the Plasma desktop shell
 and its components. This includes applet and extension definitions and loading,
 common GUI elements, data and service interaction, search system, etc.
 
