@@ -91,6 +91,7 @@ void PackageMetadata::write(const QString &filename) const
     config.writeEntry("Encoding", "UTF-8");
 
     config.writeEntry("Name", d->name);
+    config.writeEntry("Icon", d->icon);
     config.writeEntry("Comment", d->description);
     config.writeEntry("Keywords", d->keywords);
     config.writeEntry("X-KDE-ServiceTypes", d->serviceType);
@@ -117,7 +118,7 @@ void PackageMetadata::read(const QString &filename)
     KConfigGroup config = cfg.desktopGroup();
 
     d->name = config.readEntry("Name", d->name);
-    d->icon = config.readEntry("Icon", d->name);
+    d->icon = config.readEntry("Icon", d->icon);
     d->description = config.readEntry("Comment", d->description);
     d->keywords = config.readEntry("Keywords", d->keywords);
     d->serviceType = config.readEntry("X-KDE-ServiceTypes", d->serviceType);
