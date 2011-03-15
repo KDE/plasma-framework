@@ -362,6 +362,7 @@ class ContainmentInterface : public APPLETSUPERCLASS
     Q_PROPERTY(bool drawWallpaper READ drawWallpaper WRITE setDrawWallpaper)
     Q_PROPERTY(Type containmentType READ containmentType WRITE setContainmentType)
     Q_PROPERTY(int screen READ screen NOTIFY screenChanged)
+    Q_PROPERTY(bool movableApplets READ hasMovableApplets WRITE setMovableApplets)
     Q_ENUMS(Type)
 
 public:
@@ -385,6 +386,9 @@ public:
     void setContainmentType(Type type);
     int screen() const;
 
+    void setMovableApplets(bool movable);
+    bool hasMovableApplets() const;
+
     Q_INVOKABLE QScriptValue screenGeometry(int id) const;
 
 Q_SIGNALS:
@@ -395,6 +399,9 @@ Q_SIGNALS:
 protected Q_SLOTS:
     void appletAddedForward(Plasma::Applet *applet, const QPointF &pos);
     void appletRemovedForward(Plasma::Applet *applet);
+
+private:
+    bool m_movableApplets;
 };
 
 #endif
