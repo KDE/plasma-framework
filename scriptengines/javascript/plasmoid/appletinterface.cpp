@@ -497,6 +497,26 @@ QScriptValue ContainmentInterface::screenGeometry(int id) const
     return val;
 }
 
+QScriptValue ContainmentInterface::availableScreenRegion(int id) const
+{
+    QRegion reg;
+    if (containment()->corona()) {
+        reg = containment()->corona()->availableScreenRegion(id);
+    }
+
+    QScriptValue regVal = m_appletScriptEngine->engine()->newArray(reg.rects().size());
+    int i = 0;
+    foreach (QRect rect, reg.rects()) {
+        QScriptValue val = m_appletScriptEngine->engine()->newObject();
+        val.setProperty("x", rect.x());
+        val.setProperty("y", rect.y());
+        val.setProperty("width", rect.width());
+        val.setProperty("height", rect.height());
+        regVal.setProperty(i++, val);
+    }
+    return regVal;
+}
+
 void ContainmentInterface::appletAddedForward(Plasma::Applet *applet, const QPointF &pos)
 {
     applet->setFlag(QGraphicsItem::ItemIsMovable, m_movableApplets);
