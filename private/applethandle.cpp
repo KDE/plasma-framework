@@ -478,8 +478,8 @@ void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
         //set mousePos to the position in the applet, in screencoords, so it becomes easy
         //to reposition the toplevel view to the correct position.
         if (m_currentView && m_applet) {
-            QPoint localpos = m_currentView->mapFromScene(m_applet->scenePos());
-            m_mousePos = event->screenPos() - m_currentView->mapToGlobal(localpos);
+            QPoint localpos = m_currentView.data()->mapFromScene(m_applet->scenePos());
+            m_mousePos = event->screenPos() - m_currentView.data()->mapToGlobal(localpos);
         }
         return;
     }
@@ -494,7 +494,7 @@ bool AppletHandle::leaveCurrentView(const QPoint &pos) const
             //is this widget a plasma view, a different view then our current one,
             //AND not a dashboardview?
             Plasma::View *v = qobject_cast<Plasma::View *>(widget);
-            if (v && v != m_currentView && v->containment() != m_containment) {
+            if (v && v != m_currentView.data() && v->containment() != m_containment) {
                 return true;
             }
         }
@@ -616,7 +616,7 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     if (m_pressedButton == MoveButton) {
         if (leaveCurrentView(event->screenPos())) {
             Plasma::View *v = Plasma::View::topLevelViewAt(event->screenPos());
-            if (v && v != m_currentView) {
+            if (v && v != m_currentView.data()) {
                 Containment *c = v->containment();
                 if (c) {
                     QPoint pos = v->mapFromGlobal(event->screenPos());

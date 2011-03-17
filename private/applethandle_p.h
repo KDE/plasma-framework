@@ -125,7 +125,7 @@ class AppletHandle : public QGraphicsObject
         QTimer *m_hoverTimer;
         QTimer *m_leaveTimer;
         QPixmap *m_backgroundBuffer;
-        QGraphicsView *m_currentView;
+        QWeakPointer<QGraphicsView> m_currentView;
 
         Svg *m_configureIcons;
         FrameSvg *m_background;
