@@ -43,6 +43,7 @@ public:
         static_cast<QGraphicsItem *>(item)->setParentItem(this);
         setMinimumWidth(item->implicitWidth());
         setMinimumHeight(item->implicitHeight());
+        resize(item->width(), item->height());
     }
 
     QDeclarativeItem *declarativeItem() const
