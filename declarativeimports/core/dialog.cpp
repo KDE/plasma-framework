@@ -39,11 +39,15 @@ public:
 
     void setDeclarativeItem(QDeclarativeItem *item)
     {
+        if (m_declarativeItem) {
+            m_declarativeItem.data()->removeSceneEventFilter(this);
+        }
         m_declarativeItem = item;
         static_cast<QGraphicsItem *>(item)->setParentItem(this);
         setMinimumWidth(item->implicitWidth());
         setMinimumHeight(item->implicitHeight());
         resize(item->width(), item->height());
+        item->installSceneEventFilter(this);
     }
 
     QDeclarativeItem *declarativeItem() const
@@ -58,6 +62,15 @@ protected:
             m_declarativeItem.data()->setProperty("width", event->newSize().width());
             m_declarativeItem.data()->setProperty("height", event->newSize().height());
         }
+    }
+
+    bool sceneEventFilter(QGraphicsItem *watched, QEvent *event)
+    {
+        if (event->type() == QEvent::GraphicsSceneResize) {
+            resize(watched->boundingRect().size());
+        }
+
+        return QGraphicsWidget::sceneEventFilter(watched, event);
     }
 
 private:
