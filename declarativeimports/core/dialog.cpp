@@ -164,18 +164,14 @@ void DialogProxy::setVisible(const bool visible)
     }
 }
 
-void DialogProxy::showPopup(QGraphicsObject *item)
+QPoint DialogProxy::popupPosition(QGraphicsObject *item) const
 {
-    if (m_dialog->isVisible()) {
-        m_dialog->hide();
+    Plasma::Corona *corona = qobject_cast<Plasma::Corona *>(item->scene());
+    if (corona) {
+        return corona->popupPosition(item, m_dialog->size());
     } else {
-        Plasma::Corona *corona = qobject_cast<Plasma::Corona *>(item->scene());
-        if (corona) {
-            m_dialog->move(corona->popupPosition(item, m_dialog->size()));
-        }
-        m_dialog->show();
+        return QPoint();
     }
-    emit visibleChanged();
 }
 
 

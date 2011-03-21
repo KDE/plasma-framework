@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include <QWeakPointer>
+#include <QPoint>
 
 class QGraphicsObject;
 
@@ -60,7 +61,7 @@ public:
     int y() const;
     void setY(int y);
 
-    Q_INVOKABLE void showPopup(QGraphicsObject *item);
+    Q_INVOKABLE QPoint popupPosition(QGraphicsObject *item) const;
     //FIXME:: Qt::WidgetAttribute should be already 
     Q_INVOKABLE void setAttribute(int attribute, bool on);
 
