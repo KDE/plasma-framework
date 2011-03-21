@@ -81,6 +81,7 @@ DialogProxy::DialogProxy(QObject *parent)
     : QObject(parent)
 {
     m_dialog = new Plasma::Dialog();
+    m_flags = m_dialog->windowFlags();
 }
 
 DialogProxy::~DialogProxy()
@@ -160,6 +161,10 @@ void DialogProxy::setVisible(const bool visible)
 {
     if (m_dialog->isVisible() != visible) {
         m_dialog->setVisible(visible);
+        if (visible) {kWarning()<<"AAAAAAAAA"<<m_flags;
+            m_dialog->setWindowFlags(m_flags);
+            m_dialog->raise();
+        }
         emit visibleChanged();
     }
 }
@@ -193,6 +198,17 @@ int DialogProxy::y() const
 void DialogProxy::setY(int y)
 {
     m_dialog->move(m_dialog->pos().x(), y);
+}
+
+int DialogProxy::windowFlags() const
+{
+    return (int)m_dialog->windowFlags();
+}
+
+void DialogProxy::setWindowFlags(const int flags)
+{
+    m_flags = (Qt::WindowFlags)flags;
+    m_dialog->setWindowFlags((Qt::WindowFlags)flags);
 }
 
 bool DialogProxy::eventFilter(QObject *watched, QEvent *event)

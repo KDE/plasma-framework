@@ -40,6 +40,7 @@ class DialogProxy : public QObject
     Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY visibleChanged)
     Q_PROPERTY(int x READ x WRITE setX NOTIFY positionChanged)
     Q_PROPERTY(int y READ y WRITE setY NOTIFY positionChanged)
+    Q_PROPERTY(int windowFlags READ windowFlags WRITE setWindowFlags)
 
 public:
     enum WidgetAttribute {
@@ -61,6 +62,10 @@ public:
     int y() const;
     void setY(int y);
 
+    //FIXME: passing an int is ugly
+    int windowFlags() const;
+    void setWindowFlags(const int);
+
     Q_INVOKABLE QPoint popupPosition(QGraphicsObject *item) const;
     //FIXME:: Qt::WidgetAttribute should be already 
     Q_INVOKABLE void setAttribute(int attribute, bool on);
@@ -78,6 +83,7 @@ protected:
 
 private:
     Plasma::Dialog *m_dialog;
+    Qt::WindowFlags m_flags;
     DeclarativeItemContainer *m_declarativeItemContainer;
     QWeakPointer<QGraphicsObject> m_mainItem;
 };
