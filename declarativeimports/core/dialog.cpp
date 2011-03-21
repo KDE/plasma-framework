@@ -161,7 +161,7 @@ void DialogProxy::setVisible(const bool visible)
 {
     if (m_dialog->isVisible() != visible) {
         m_dialog->setVisible(visible);
-        if (visible) {kWarning()<<"AAAAAAAAA"<<m_flags;
+        if (visible) {
             m_dialog->setWindowFlags(m_flags);
             m_dialog->raise();
         }
