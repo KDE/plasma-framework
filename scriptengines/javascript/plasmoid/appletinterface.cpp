@@ -373,6 +373,15 @@ Plasma::Extender *AppletInterface::extender() const
     return m_appletScriptEngine->extender();
 }
 
+void AppletInterface::setAssociatedApplication(const QString &string)
+{
+    applet()->setAssociatedApplication(string);
+}
+
+QString AppletInterface::associatedApplication() const
+{
+    return applet()->associatedApplication();
+}
 
 void AppletInterface::gc()
 {

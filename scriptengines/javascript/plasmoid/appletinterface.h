@@ -77,6 +77,7 @@ class AppletInterface : public QObject
     Q_PROPERTY(int apiVersion READ apiVersion CONSTANT)
     Q_PROPERTY(QRectF rect READ rect)
     Q_PROPERTY(QSizeF size READ size)
+    Q_PROPERTY(QString associatedApplication WRITE setAssociatedApplication READ associatedApplication)
 
 public:
     AppletInterface(AbstractJsAppletScript *parent);
@@ -284,6 +285,9 @@ enum IntervalAlignment {
 
     static AppletInterface *extract(QScriptEngine *engine);
     inline Plasma::Applet *applet() const { return m_appletScriptEngine->applet(); }
+
+    void setAssociatedApplication(const QString &string);
+    QString associatedApplication() const;
 
 Q_SIGNALS:
     void releaseVisualFocus();
