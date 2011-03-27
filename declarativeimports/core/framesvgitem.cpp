@@ -71,6 +71,7 @@ FrameSvgItem::~FrameSvgItem()
 void FrameSvgItem::setImagePath(const QString &path)
 {
     m_frameSvg->setImagePath(path);
+    m_frameSvg->setElementPrefix(m_prefix);
     update();
 }
 
@@ -83,12 +84,13 @@ QString FrameSvgItem::imagePath() const
 void FrameSvgItem::setPrefix(const QString &prefix)
 {
     m_frameSvg->setElementPrefix(prefix);
+    m_prefix = prefix;
     update();
 }
 
 QString FrameSvgItem::prefix() const
 {
-    return m_frameSvg->prefix();
+    return m_prefix;
 }
 
 FrameSvgItemMargins *FrameSvgItem::margins() const
