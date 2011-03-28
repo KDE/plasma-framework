@@ -88,6 +88,7 @@ private Q_SLOTS:
 private:
     Plasma::FrameSvg *m_frameSvg;
     FrameSvgItemMargins *m_margins;
+    QString m_prefix;
 };
 
 }

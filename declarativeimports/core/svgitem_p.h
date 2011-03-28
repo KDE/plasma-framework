@@ -54,6 +54,9 @@ public:
 Q_SIGNALS:
     void naturalSizeChanged();
 
+protected Q_SLOTS:
+    void updateNeeded();
+
 private:
     QWeakPointer<Plasma::Svg> m_svg;
     QString m_elementID;

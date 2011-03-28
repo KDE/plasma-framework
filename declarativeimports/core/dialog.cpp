@@ -39,10 +39,15 @@ public:
 
     void setDeclarativeItem(QDeclarativeItem *item)
     {
+        if (m_declarativeItem) {
+            m_declarativeItem.data()->removeSceneEventFilter(this);
+        }
         m_declarativeItem = item;
         static_cast<QGraphicsItem *>(item)->setParentItem(this);
         setMinimumWidth(item->implicitWidth());
         setMinimumHeight(item->implicitHeight());
+        resize(item->width(), item->height());
+        item->installSceneEventFilter(this);
     }
 
     QDeclarativeItem *declarativeItem() const
@@ -59,6 +64,15 @@ protected:
         }
     }
 
+    bool sceneEventFilter(QGraphicsItem *watched, QEvent *event)
+    {
+        if (event->type() == QEvent::GraphicsSceneResize) {
+            resize(watched->boundingRect().size());
+        }
+
+        return QGraphicsWidget::sceneEventFilter(watched, event);
+    }
+
 private:
     QWeakPointer<QDeclarativeItem> m_declarativeItem;
 };
@@ -67,6 +81,7 @@ DialogProxy::DialogProxy(QObject *parent)
     : QObject(parent)
 {
     m_dialog = new Plasma::Dialog();
+    m_flags = m_dialog->windowFlags();
 }
 
 DialogProxy::~DialogProxy()
@@ -146,22 +161,22 @@ void DialogProxy::setVisible(const bool visible)
 {
     if (m_dialog->isVisible() != visible) {
         m_dialog->setVisible(visible);
+        if (visible) {
+            m_dialog->setWindowFlags(m_flags);
+            m_dialog->raise();
+        }
         emit visibleChanged();
     }
 }
 
-void DialogProxy::showPopup(QGraphicsObject *item)
+QPoint DialogProxy::popupPosition(QGraphicsObject *item) const
 {
-    if (m_dialog->isVisible()) {
-        m_dialog->hide();
+    Plasma::Corona *corona = qobject_cast<Plasma::Corona *>(item->scene());
+    if (corona) {
+        return corona->popupPosition(item, m_dialog->size());
     } else {
-        Plasma::Corona *corona = qobject_cast<Plasma::Corona *>(item->scene());
-        if (corona) {
-            m_dialog->move(corona->popupPosition(item, m_dialog->size()));
-        }
-        m_dialog->show();
+        return QPoint();
     }
-    emit visibleChanged();
 }
 
 
@@ -183,6 +198,17 @@ int DialogProxy::y() const
 void DialogProxy::setY(int y)
 {
     m_dialog->move(m_dialog->pos().x(), y);
+}
+
+int DialogProxy::windowFlags() const
+{
+    return (int)m_dialog->windowFlags();
+}
+
+void DialogProxy::setWindowFlags(const int flags)
+{
+    m_flags = (Qt::WindowFlags)flags;
+    m_dialog->setWindowFlags((Qt::WindowFlags)flags);
 }
 
 bool DialogProxy::eventFilter(QObject *watched, QEvent *event)
