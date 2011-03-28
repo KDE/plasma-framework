@@ -165,14 +165,18 @@ bool AppInterface::hasBattery() const
 
 QStringList AppInterface::knownWidgetTypes() const
 {
-    QStringList widgets;
-    KPluginInfo::List infoLs = Plasma::Applet::listAppletInfo();
+    if (m_knownWidgets.isEmpty()) {
+        QStringList widgets;
+        KPluginInfo::List infoLs = Plasma::Applet::listAppletInfo();
 
-    foreach (const KPluginInfo &info, infoLs) {
-        widgets.append(info.pluginName());
+        foreach (const KPluginInfo &info, infoLs) {
+            widgets.append(info.pluginName());
+        }
+
+        const_cast<AppInterface *>(this)->m_knownWidgets = widgets;
     }
 
-    return widgets;
+    return m_knownWidgets;
 }
 
 QStringList AppInterface::knownActivityTypes() const

@@ -22,6 +22,7 @@
 
 #include <QObject>
 #include <QRectF>
+#include <QStringList>
 
 #include "../plasmagenericshell_export.h"
 
@@ -90,6 +91,7 @@ Q_SIGNALS:
 
 private:
     ScriptEngine *m_env;
+    QStringList m_knownWidgets;
 };
 
 }
