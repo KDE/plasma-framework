@@ -2370,29 +2370,30 @@ QPainterPath Applet::shape() const
 QSizeF Applet::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
     QSizeF hint = QGraphicsWidget::sizeHint(which, constraint);
+    const FormFactor ff = formFactor();
 
-    //in panels make sure that the contents won't exit from the panel
-    if (formFactor() == Horizontal && which == Qt::MinimumSize) {
-        hint.setHeight(0);
-    } else if (formFactor() == Vertical && which == Qt::MinimumSize) {
-        hint.setWidth(0);
+    // in panels make sure that the contents won't exit from the panel
+    if (which == Qt::MinimumSize) {
+        if (ff == Horizontal) {
+            hint.setHeight(0);
+        } else if (ff == Vertical) {
+            hint.setWidth(0);
+        }
     }
 
     // enforce a square size in panels
     if (d->aspectRatioMode == Plasma::Square) {
-        if (formFactor() == Horizontal) {
+        if (ff == Horizontal) {
             hint.setWidth(size().height());
-        } else if (formFactor() == Vertical) {
+        } else if (ff == Vertical) {
             hint.setHeight(size().width());
         }
     } else if (d->aspectRatioMode == Plasma::ConstrainedSquare) {
         //enforce a size not wider than tall
-        if (formFactor() == Horizontal &&
-            (which == Qt::MaximumSize || size().height() <= KIconLoader::SizeLarge)) {
+        if (ff == Horizontal && (which == Qt::MaximumSize || size().height() <= KIconLoader::SizeLarge)) {
             hint.setWidth(size().height());
         //enforce a size not taller than wide
-        } else if (formFactor() == Vertical &&
-                   (which == Qt::MaximumSize || size().width() <= KIconLoader::SizeLarge)) {
+        } else if (ff == Vertical && (which == Qt::MaximumSize || size().width() <= KIconLoader::SizeLarge)) {
             hint.setHeight(size().width());
         }
     }
