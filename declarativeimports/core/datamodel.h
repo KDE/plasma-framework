@@ -96,7 +96,7 @@ public:
     void setDataSource(QObject *source);
     QObject *dataSource() const;
 
-    void setKeyRoleFilter(const QString key);
+    void setKeyRoleFilter(const QString& key);
     QString keyRoleFilter() const;
 
     int roleNameToId(const QString &name);
