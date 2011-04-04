@@ -36,6 +36,7 @@ public:
     bool isValid() const;
 
     static QScriptValue connectSource(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue connectAllSources(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue disconnectSource(QScriptContext *context, QScriptEngine *engine);
     static QSet<DataEngineReceiver*> s_receivers;
 
@@ -46,6 +47,7 @@ public Q_SLOTS:
 
 private:
     static DataEngineReceiver *getReceiver(Plasma::DataEngine *dataEngine, const QString &source, const QScriptValue &v);
+    static QObject *extractTargetQObject(QScriptEngine *engine, const QString &source, const QScriptValue &v, Plasma::DataEngine *dataEngine);
 
     const Plasma::DataEngine *m_engine;
     const QString m_source;

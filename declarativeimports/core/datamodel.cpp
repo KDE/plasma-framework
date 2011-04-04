@@ -210,7 +210,7 @@ QObject *DataModel::dataSource() const
     return m_dataSource;
 }
 
-void DataModel::setKeyRoleFilter(const QString key)
+void DataModel::setKeyRoleFilter(const QString& key)
 {
     if (m_keyRoleFilter == key) {
         return;

@@ -86,24 +86,10 @@ DataEngineReceiver *DataEngineReceiver::getReceiver(Plasma::DataEngine *dataEngi
     return 0;
 }
 
-QScriptValue DataEngineReceiver::connectSource(QScriptContext *context, QScriptEngine *engine)
+QObject *DataEngineReceiver::extractTargetQObject(QScriptEngine *engine, const QString &source, const QScriptValue &v, Plasma::DataEngine *dataEngine)
 {
-    if (context->argumentCount() < 2) {
-        return engine->undefinedValue();
-    }
-
-    DataEngine *dataEngine = qobject_cast<DataEngine *>(context->thisObject().toQObject());
-    if (!dataEngine) {
-        return engine->undefinedValue();
-    }
-
-    const QString source = context->argument(0).toString();
-    if (source.isEmpty()) {
-        return engine->undefinedValue();
-    }
-
     QObject *obj = 0;
-    QScriptValue v = context->argument(1);
+
     // if it's a function we get, then use that directly
     // next see if it is a qobject with a good slot; if it is then use that directly
     // otherwise, try to use the object with a dataUpdated method call
@@ -127,6 +113,56 @@ QScriptValue DataEngineReceiver::connectSource(QScriptContext *context, QScriptE
         }
     }
 
+    return obj;
+}
+
+QScriptValue DataEngineReceiver::connectAllSources(QScriptContext *context, QScriptEngine *engine)
+{
+    if (context->argumentCount() < 1) {
+        return engine->undefinedValue();
+    }
+
+    DataEngine *dataEngine = qobject_cast<DataEngine *>(context->thisObject().toQObject());
+    if (!dataEngine) {
+        return engine->undefinedValue();
+    }
+
+    int pollingInterval = 0;
+    Plasma::IntervalAlignment intervalAlignment = Plasma::NoAlignment;
+    if (context->argumentCount() > 1) {
+        pollingInterval = context->argument(2).toInt32();
+
+        if (context->argumentCount() > 2) {
+            intervalAlignment = static_cast<Plasma::IntervalAlignment>(context->argument(4).toInt32());
+        }
+    }
+
+    QObject *obj = extractTargetQObject(engine, QString(), context->argument(0), dataEngine);
+    if (!obj) {
+        return engine->undefinedValue();
+    }
+
+    dataEngine->connectAllSources(obj, pollingInterval, intervalAlignment);
+    return true;
+}
+
+QScriptValue DataEngineReceiver::connectSource(QScriptContext *context, QScriptEngine *engine)
+{
+    if (context->argumentCount() < 2) {
+        return engine->undefinedValue();
+    }
+
+    DataEngine *dataEngine = qobject_cast<DataEngine *>(context->thisObject().toQObject());
+    if (!dataEngine) {
+        return engine->undefinedValue();
+    }
+
+    const QString source = context->argument(0).toString();
+    if (source.isEmpty()) {
+        return engine->undefinedValue();
+    }
+
+    QObject *obj = extractTargetQObject(engine, source, context->argument(1), dataEngine);
     if (!obj) {
         return engine->undefinedValue();
     }
