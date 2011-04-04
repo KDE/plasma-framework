@@ -411,6 +411,7 @@ QScriptValue DeclarativeAppletScript::dataEngine(QScriptContext *context, QScrip
     Plasma::DataEngine *dataEngine = interface->dataEngine(dataEngineName);
     QScriptValue v = engine->newQObject(dataEngine, QScriptEngine::QtOwnership, QScriptEngine::PreferExistingWrapperObject);
     v.setProperty("connectSource", engine->newFunction(DataEngineReceiver::connectSource));
+    v.setProperty("connectAllSources", engine->newFunction(DataEngineReceiver::connectAllSources));
     v.setProperty("disconnectSource", engine->newFunction(DataEngineReceiver::disconnectSource));
     return v;
 }
