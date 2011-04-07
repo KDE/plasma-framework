@@ -26,6 +26,7 @@
 
 class QDeclarativeEngine;
 class QDeclarativeComponent;
+class QScriptEngine;
 
 namespace Plasma
 {
@@ -96,6 +97,12 @@ public:
      * @return the declarative engine that runs the qml file assigned to this widget.
      */
     QDeclarativeEngine* engine();
+
+    /**
+     * @return the script engine used by the declarative engine
+     * @since 4.7
+     */
+    QScriptEngine *scriptEngine() const;
 
     /**
      * @return the root object of the declarative object tree

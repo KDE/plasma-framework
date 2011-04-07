@@ -24,6 +24,7 @@
 #include <QtDeclarative/QDeclarativeItem>
 #include <QtDeclarative/QDeclarativeEngine>
 #include <QtDeclarative/QDeclarativeContext>
+#include <QScriptEngine>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsScene>
 #include <QTimer>
@@ -64,6 +65,7 @@ public:
 
     QString qmlPath;
     QDeclarativeEngine* engine;
+    QScriptEngine *scriptEngine;
     QDeclarativeComponent* component;
     QObject *root;
     bool delay : 1;
@@ -96,6 +98,7 @@ void DeclarativeWidgetPrivate::execute(const QString &fileName)
     kdeclarative.initialize();
     //binds things like kconfig and icons
     kdeclarative.setupBindings();
+    scriptEngine = kdeclarative.scriptEngine();
 
     if (delay) {
         QTimer::singleShot(0, q, SLOT(scheduleExecutionEnd()));
@@ -211,6 +214,11 @@ bool DeclarativeWidget::isInitializationDelayed() const
 QDeclarativeEngine* DeclarativeWidget::engine()
 {
     return d->engine;
+}
+
+QScriptEngine *DeclarativeWidget::scriptEngine() const
+{
+    return d->scriptEngine;
 }
 
 QObject *DeclarativeWidget::rootObject() const
