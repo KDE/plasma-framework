@@ -52,8 +52,11 @@
 #include "common/scriptenv.h"
 #include "declarative/packageaccessmanagerfactory.h"
 #include "simplebindings/bytearrayclass.h"
+//not pretty but only way to avoid a double Q_DECLARE_METATYPE(QVariant) in dataengine.h
+#define DECLARATIVE_BINDING
+#include "simplebindings/dataengine.h"
 #include "simplebindings/dataenginereceiver.h"
-#include "simplebindings/i18n.h"
+
 
 K_EXPORT_PLASMA_APPLETSCRIPTENGINE(declarativeappletscript, DeclarativeAppletScript)
 
@@ -61,8 +64,6 @@ K_EXPORT_PLASMA_APPLETSCRIPTENGINE(declarativeappletscript, DeclarativeAppletScr
 QScriptValue constructIconClass(QScriptEngine *engine);
 QScriptValue constructKUrlClass(QScriptEngine *engine);
 void registerSimpleAppletMetaTypes(QScriptEngine *engine);
-void registerNonGuiMetaTypes(QScriptEngine *engine);
-
 DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariantList &args)
     : AbstractJsAppletScript(parent, args),
       m_engine(0),
@@ -348,11 +349,6 @@ void DeclarativeAppletScript::setupObjects()
     m_engine = m_declarativeWidget->scriptEngine();
     connect(m_engine, SIGNAL(signalHandlerException(const QScriptValue &)),
             this, SLOT(signalHandlerException(const QScriptValue &)));
-    QScriptValue originalGlobalObject = m_engine->globalObject();
-
-    QScriptValue newGlobalObject = m_engine->newObject();
-
-    m_engine->setGlobalObject(newGlobalObject);
 
     delete m_env;
     m_env = new ScriptEnv(this, m_engine);
@@ -378,19 +374,14 @@ void DeclarativeAppletScript::setupObjects()
 
     ScriptEnv::registerEnums(global, AppletInterface::staticMetaObject);
 
-    bindI18N(m_engine);
     global.setProperty("dataEngine", m_engine->newFunction(DeclarativeAppletScript::dataEngine));
     global.setProperty("service", m_engine->newFunction(DeclarativeAppletScript::service));
     global.setProperty("loadService", m_engine->newFunction(DeclarativeAppletScript::loadService));
 
     //Add stuff from Qt
+    //TODO: move to libkdeclarative?
     ByteArrayClass *baClass = new ByteArrayClass(m_engine);
     global.setProperty("ByteArray", baClass->constructor());
-    global.setProperty("QIcon", constructIconClass(m_engine));
-
-    // Add stuff from KDE libs
-    qScriptRegisterSequenceMetaType<KUrl::List>(m_engine);
-    global.setProperty("Url", constructKUrlClass(m_engine));
 
     // Add stuff from Plasma
     global.setProperty("Svg", m_engine->newFunction(DeclarativeAppletScript::newPlasmaSvg));
@@ -401,10 +392,8 @@ void DeclarativeAppletScript::setupObjects()
         return;
     }
 
-    qScriptRegisterSequenceMetaType<KUrl::List>(m_engine);
-    registerNonGuiMetaTypes(m_engine);
     registerSimpleAppletMetaTypes(m_engine);
-
+    registerDataEngineMetaTypes(m_engine);
     QTimer::singleShot(0, this, SLOT(configChanged()));
 }
 

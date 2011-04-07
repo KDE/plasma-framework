@@ -133,10 +133,7 @@ set(declarative_appletscript_SRCS
     simplebindings/dataengine.cpp
     simplebindings/dataenginereceiver.cpp
     simplebindings/filedialogproxy.cpp
-    simplebindings/i18n.cpp
-    simplebindings/icon.cpp
     simplebindings/qscriptbookkeeping.cpp
-    simplebindings/url.cpp
     )
 
 include_directories(${PHONON_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/common)
