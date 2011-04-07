@@ -20,6 +20,8 @@
 #include "datamodel.h"
 #include "datasource_p.h"
 
+#include <QTimer>
+
 #include <KDebug>
 
 namespace Plasma
@@ -140,6 +142,11 @@ DataModel::DataModel(QObject* parent)
             this, SIGNAL(countChanged()));
     connect(this, SIGNAL(modelReset()),
             this, SIGNAL(countChanged()));
+
+    m_roleNamesTimer = new QTimer(this);
+    m_roleNamesTimer->setSingleShot(true);
+    connect(m_roleNamesTimer, SIGNAL(timeout()),
+            this, SLOT(syncRoleNames()));
 }
 
 DataModel::~DataModel()
@@ -252,6 +259,13 @@ void DataModel::setItems(const QString &sourceName, const QVariantList &list)
 
         setRoleNames(m_roleNames);
     }
+
+    m_roleNamesTimer->start(0);
+}
+
+void DataModel::syncRoleNames()
+{
+    setRoleNames(m_roleNames);
 
     //make the declarative view reload everything,
     //would be nice an incremental update but is not possible

@@ -47,8 +47,6 @@ public:
     DeclarativeAppletScript(QObject *parent, const QVariantList &args);
     ~DeclarativeAppletScript();
 
-    void setEngine(QScriptValue &val);
-
     QString filePath(const QString &type, const QString &file) const;
 
     void executeAction(const QString &name);

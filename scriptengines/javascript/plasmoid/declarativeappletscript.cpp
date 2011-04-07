@@ -46,7 +46,6 @@
 
 #include "plasmoid/declarativeappletscript.h"
 
-#include "engineaccess.h"
 #include "plasmoid/appletinterface.h"
 #include "plasmoid/themedsvg.h"
 
@@ -123,18 +122,12 @@ bool DeclarativeAppletScript::init()
         m_interface = new AppletInterface(this);
     }
 
-    m_engineAccess = new EngineAccess(this);
-    m_declarativeWidget->engine()->rootContext()->setContextProperty("__engineAccess", m_engineAccess);
-
     connect(applet(), SIGNAL(extenderItemRestored(Plasma::ExtenderItem*)),
             this, SLOT(extenderItemRestored(Plasma::ExtenderItem*)));
     connect(applet(), SIGNAL(activate()),
             this, SLOT(activate()));
 
-    //Glorious hack:steal the engine
-    QDeclarativeExpression *expr = new QDeclarativeExpression(m_declarativeWidget->engine()->rootContext(), m_declarativeWidget->rootObject(), "__engineAccess.setEngine(this)");
-    expr->evaluate();
-    delete expr;
+    setupObjects();
 
     return true;
 }
@@ -352,10 +345,19 @@ ScriptEnv *DeclarativeAppletScript::scriptEnv()
 
 void DeclarativeAppletScript::setupObjects()
 {
-    QScriptValue global = m_engine->globalObject();
+    m_engine = m_declarativeWidget->scriptEngine();
+    connect(m_engine, SIGNAL(signalHandlerException(const QScriptValue &)),
+            this, SLOT(signalHandlerException(const QScriptValue &)));
+    QScriptValue originalGlobalObject = m_engine->globalObject();
 
-    m_declarativeWidget->engine()->rootContext()->setContextProperty("__engineAccess", 0);
-    m_engineAccess->deleteLater();
+    QScriptValue newGlobalObject = m_engine->newObject();
+
+    m_engine->setGlobalObject(newGlobalObject);
+
+    delete m_env;
+    m_env = new ScriptEnv(this, m_engine);
+
+    QScriptValue global = m_engine->globalObject();
 
     m_self = m_engine->newQObject(m_interface);
     m_self.setScope(global);
@@ -394,6 +396,16 @@ void DeclarativeAppletScript::setupObjects()
     global.setProperty("Svg", m_engine->newFunction(DeclarativeAppletScript::newPlasmaSvg));
     global.setProperty("FrameSvg", m_engine->newFunction(DeclarativeAppletScript::newPlasmaFrameSvg));
     global.setProperty("ExtenderItem", m_engine->newFunction(DeclarativeAppletScript::newPlasmaExtenderItem));
+
+    if (!m_env->importExtensions(description(), m_self, m_auth)) {
+        return;
+    }
+
+    qScriptRegisterSequenceMetaType<KUrl::List>(m_engine);
+    registerNonGuiMetaTypes(m_engine);
+    registerSimpleAppletMetaTypes(m_engine);
+
+    QTimer::singleShot(0, this, SLOT(configChanged()));
 }
 
 QScriptValue DeclarativeAppletScript::dataEngine(QScriptContext *context, QScriptEngine *engine)
@@ -458,67 +470,6 @@ QScriptValue DeclarativeAppletScript::loadService(QScriptContext *context, QScri
 QScriptEngine *DeclarativeAppletScript::engine() const
 {
     return m_engine;
-}
-
-void DeclarativeAppletScript::setEngine(QScriptValue &val)
-{
-    if (val.engine() == m_engine) {
-        return;
-    }
-
-    m_engine = val.engine();
-    connect(m_engine, SIGNAL(signalHandlerException(const QScriptValue &)),
-            this, SLOT(signalHandlerException(const QScriptValue &)));
-    QScriptValue originalGlobalObject = m_engine->globalObject();
-
-    QScriptValue newGlobalObject = m_engine->newObject();
-
-    QString eval = QLatin1String("eval");
-    QString version = QLatin1String("version");
-
-    {
-        QScriptValueIterator iter(originalGlobalObject);
-        QVector<QString> names;
-        QVector<QScriptValue> values;
-        QVector<QScriptValue::PropertyFlags> flags;
-        while (iter.hasNext()) {
-            iter.next();
-
-            QString name = iter.name();
-
-            if (name == version) {
-                continue;
-            }
-
-            if (name != eval) {
-                names.append(name);
-                values.append(iter.value());
-                flags.append(iter.flags() | QScriptValue::Undeletable);
-            }
-            newGlobalObject.setProperty(iter.scriptName(), iter.value());
-
-           // m_illegalNames.insert(name);
-        }
-
-    }
-
-    m_engine->setGlobalObject(newGlobalObject);
-
-    delete m_env;
-    m_env = new ScriptEnv(this, m_engine);
-    //m_env->addMainObjectProperties(newGlobalObject);
-
-    setupObjects();
-
-    if (!m_env->importExtensions(description(), m_self, m_auth)) {
-        return;
-    }
-
-    qScriptRegisterSequenceMetaType<KUrl::List>(m_engine);
-    registerNonGuiMetaTypes(m_engine);
-    registerSimpleAppletMetaTypes(m_engine);
-
-    QTimer::singleShot(0, this, SLOT(configChanged()));
 }
 
 void DeclarativeAppletScript::signalHandlerException(const QScriptValue &exception)
