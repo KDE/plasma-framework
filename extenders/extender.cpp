@@ -650,7 +650,8 @@ ExtenderPrivate::ExtenderPrivate(Applet *applet, Extender *extender) :
     emptyExtenderMessage(QString()),
     emptyExtenderLabel(0),
     appearance(Extender::NoBorders),
-    destroying(false)
+    destroying(false),
+    scrollbarVisible(false)
 {
     background->setImagePath("widgets/extender-background");
 }
