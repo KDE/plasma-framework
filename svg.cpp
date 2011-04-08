@@ -479,6 +479,7 @@ QRectF SvgPrivate::elementRect(const QString &elementId)
     }
 
     QString id = cacheId(elementId);
+
     if (localRectCache.contains(id)) {
         return localRectCache.value(id);
     }
@@ -486,10 +487,11 @@ QRectF SvgPrivate::elementRect(const QString &elementId)
     QRectF rect;
     if (cacheAndColorsTheme()->findInRectsCache(path, id, rect)) {
         localRectCache.insert(id, rect);
-        return rect;
+    } else {
+        rect = findAndCacheElementRect(elementId);
     }
 
-    return findAndCacheElementRect(elementId);
+    return rect;
 }
 
 QRectF SvgPrivate::findAndCacheElementRect(const QString &elementId)
@@ -501,15 +503,16 @@ QRectF SvgPrivate::findAndCacheElementRect(const QString &elementId)
     if (localRectCache.contains(id)) {
         return localRectCache.value(id);
     }
+
     QRectF elementRect = renderer->elementExists(elementId) ?
-        renderer->boundsOnElement(elementId) : QRectF();
+                         renderer->matrixForElement(elementId).map(renderer->boundsOnElement(elementId)).boundingRect() :
+                         QRectF();
     naturalSize = renderer->defaultSize();
-    //kDebug() << "natural size for" << path << "is" << naturalSize;
     qreal dx = size.width() / naturalSize.width();
     qreal dy = size.height() / naturalSize.height();
 
     elementRect = QRectF(elementRect.x() * dx, elementRect.y() * dy,
-            elementRect.width() * dx, elementRect.height() * dy);
+                         elementRect.width() * dx, elementRect.height() * dy);
 
     cacheAndColorsTheme()->insertIntoRectsCache(path, id, elementRect);
     return elementRect;
