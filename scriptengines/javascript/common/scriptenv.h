@@ -34,7 +34,8 @@ public:
     enum AllowedUrl { NoUrls = 0,
                       HttpUrls = 1,
                       NetworkUrls = 2,
-                      LocalUrls = 4 };
+                      LocalUrls = 4,
+                      AppLaunching = 8};
     Q_DECLARE_FLAGS(AllowedUrls, AllowedUrl)
 
     ScriptEnv(QObject *parent, QScriptEngine *engine);
@@ -74,6 +75,7 @@ Q_SIGNALS:
 
 private:
     void registerGetUrl(QScriptValue &obj);
+    void registerOpenUrl(QScriptValue &obj);
     bool importBuiltinExtension(const QString &extension, QScriptValue &obj);
 
     static QScriptValue debug(QScriptContext *context, QScriptEngine *engine);
