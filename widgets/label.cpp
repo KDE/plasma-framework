@@ -44,7 +44,8 @@ public:
     LabelPrivate(Label *label)
         : ThemedWidgetInterface<Label>(label),
           svg(0),
-          textSelectable(false)
+          textSelectable(false),
+          hasLinks(false)
     {
     }
 
@@ -87,6 +88,7 @@ public:
     QString absImagePath;
     Svg *svg;
     bool textSelectable : 1;
+    bool hasLinks : 1;
 };
 
 Label::Label(QGraphicsWidget *parent)
@@ -94,14 +96,16 @@ Label::Label(QGraphicsWidget *parent)
       d(new LabelPrivate(this))
 {
     QLabel *native = new QLabel;
+
     native->setWindowFlags(native->windowFlags()|Qt::BypassGraphicsProxyWidget);
+    native->setAttribute(Qt::WA_NoSystemBackground);
+    native->setWordWrap(true);
+    native->setWindowIcon(QIcon());
+
     connect(native, SIGNAL(linkActivated(QString)), this, SIGNAL(linkActivated(QString)));
     connect(native, SIGNAL(linkHovered(QString)), this, SIGNAL(linkHovered(QString)));
 
-    native->setAttribute(Qt::WA_NoSystemBackground);
-    native->setWordWrap(true);
     setWidget(native);
-    native->setWindowIcon(QIcon());
     d->initTheming();
 }
 
@@ -112,6 +116,7 @@ Label::~Label()
 
 void Label::setText(const QString &text)
 {
+    d->hasLinks = text.contains("<a ", Qt::CaseInsensitive);
     static_cast<QLabel*>(widget())->setText(text);
     updateGeometry();
 }
@@ -169,7 +174,7 @@ void Label::setTextSelectable(bool enable)
     if (enable) {
         nativeWidget()->setTextInteractionFlags(Qt::TextBrowserInteraction);
     } else {
-        nativeWidget()->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
+        nativeWidget()->setTextInteractionFlags(Qt::LinksAccessibleByMouse | Qt::LinksAccessibleByKeyboard);
     }
 
     d->textSelectable = enable;
@@ -231,9 +236,9 @@ void Label::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Dat
 
 void Label::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
-    if (d->textSelectable || nativeWidget()->text().contains("<a ", Qt::CaseInsensitive)){
+    if (d->textSelectable || d->hasLinks){
         QContextMenuEvent contextMenuEvent(QContextMenuEvent::Reason(event->reason()),
-                                        event->pos().toPoint(), event->screenPos(), event->modifiers());
+                                           event->pos().toPoint(), event->screenPos(), event->modifiers());
         QApplication::sendEvent(nativeWidget(), &contextMenuEvent);
     }else{
         event->ignore();
@@ -251,7 +256,7 @@ void Label::mousePressEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsProxyWidget::mousePressEvent(event);
     //FIXME: when QTextControl accept()s mouse press events (as of Qt 4.6.2, it processes them
     //but never marks them as accepted) the following event->accept() can be removed
-    if (d->textSelectable) {
+    if (d->textSelectable || d->hasLinks) {
         event->accept();
     }
 }
