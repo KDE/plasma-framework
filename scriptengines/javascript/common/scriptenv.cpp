@@ -213,11 +213,23 @@ QScriptValue ScriptEnv::openUrl(QScriptContext *context, QScriptEngine *engine)
 
     QScriptValue v = context->argument(0);
     KUrl url = v.isString() ? KUrl(v.toString()) : qscriptvalue_cast<KUrl>(v);
-    if (url.isValid()) {
-        new KRun(url, 0);
+
+    if (!url.isValid()) {
+        return false;
     }
 
-    return false;
+    ScriptEnv *env = ScriptEnv::findScriptEnv(engine);
+    if (!env) {
+        return false;
+    }
+
+    if (!(env->m_allowedUrls & AppLaunching) &&
+        !((env->m_allowedUrls & HttpUrls) && (url.protocol() == "http" || url.protocol() == "https"))) {
+        return false;
+    }
+
+    new KRun(url, 0);
+    return true;
 }
 
 // TODO these should throw an exception
@@ -261,6 +273,14 @@ void ScriptEnv::registerGetUrl(QScriptValue &obj)
     }
 }
 
+void ScriptEnv::registerOpenUrl(QScriptValue &obj)
+{
+    QScriptValue value = obj.property("openUrl");
+    if (!value.isValid()) {
+        obj.setProperty("openUrl", m_engine->newFunction(ScriptEnv::openUrl));
+    }
+}
+
 bool ScriptEnv::importBuiltinExtension(const QString &extension, QScriptValue &obj)
 {
     kDebug() << extension;
@@ -270,13 +290,15 @@ bool ScriptEnv::importBuiltinExtension(const QString &extension, QScriptValue &o
         return true;
 #endif
     } else if ("launchapp" == extension) {
+        m_allowedUrls |= AppLaunching;
         obj.setProperty("runApplication", m_engine->newFunction(ScriptEnv::runApplication));
         obj.setProperty("runCommand", m_engine->newFunction(ScriptEnv::runCommand));
-        obj.setProperty("openUrl", m_engine->newFunction(ScriptEnv::openUrl));
+        registerOpenUrl(obj);
         return true;
     } else if ("http" == extension) {
         m_allowedUrls |= HttpUrls;
         registerGetUrl(obj);
+        registerOpenUrl(obj);
         return true;
     } else if ("networkio" == extension) {
         m_allowedUrls |= HttpUrls | NetworkUrls;

@@ -26,6 +26,7 @@
 
 #include <Plasma/DataEngine>
 
+class QTimer;
 
 namespace Plasma
 {
@@ -87,6 +88,7 @@ class DataModel : public QAbstractItemModel
     Q_OBJECT
     Q_PROPERTY(QObject *dataSource READ dataSource WRITE setDataSource)
     Q_PROPERTY(QString keyRoleFilter READ keyRoleFilter WRITE setKeyRoleFilter)
+    Q_PROPERTY(QString sourceFilter READ sourceFilter WRITE setSourceFilter)
     Q_PROPERTY(int count READ count NOTIFY countChanged)
 
 public:
@@ -96,8 +98,18 @@ public:
     void setDataSource(QObject *source);
     QObject *dataSource() const;
 
+    /**
+     * Include only items with a key that matches this regexp in the model
+     */
     void setKeyRoleFilter(const QString& key);
     QString keyRoleFilter() const;
+
+    /**
+     * Include only items with a source name that matches this regexp in the model
+     * @since 4.7
+     */
+    void setSourceFilter(const QString& key);
+    QString sourceFilter() const;
 
     int roleNameToId(const QString &name);
 
@@ -125,10 +137,13 @@ Q_SIGNALS:
 private Q_SLOTS:
     void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
     void removeSource(const QString &sourceName);
+    void syncRoleNames();
 
 private:
     DataSource *m_dataSource;
     QString m_keyRoleFilter;
+    QString m_sourceFilter;
+    QTimer *m_roleNamesTimer;
     QMap<QString, QVector<QVariant> > m_items;
     QHash<int, QByteArray> m_roleNames;
     QHash<QString, int> m_roleIds;

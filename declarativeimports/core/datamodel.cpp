@@ -20,6 +20,8 @@
 #include "datamodel.h"
 #include "datasource_p.h"
 
+#include <QTimer>
+
 #include <KDebug>
 
 namespace Plasma
@@ -140,6 +142,11 @@ DataModel::DataModel(QObject* parent)
             this, SIGNAL(countChanged()));
     connect(this, SIGNAL(modelReset()),
             this, SIGNAL(countChanged()));
+
+    m_roleNamesTimer = new QTimer(this);
+    m_roleNamesTimer->setSingleShot(true);
+    connect(m_roleNamesTimer, SIGNAL(timeout()),
+            this, SLOT(syncRoleNames()));
 }
 
 DataModel::~DataModel()
@@ -149,13 +156,19 @@ DataModel::~DataModel()
 void DataModel::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
 {
     if (!m_keyRoleFilter.isEmpty()) {
+        QRegExp sourceRegExp(m_sourceFilter);
         //a key that matches the one we want exists and is a list of DataEngine::Data
-        if (data.contains(m_keyRoleFilter) && data.value(m_keyRoleFilter).canConvert<QVariantList>()) {
+        if (data.contains(m_keyRoleFilter) &&
+            data.value(m_keyRoleFilter).canConvert<QVariantList>() &&
+            //matches the source filter regexp?
+            (m_sourceFilter.isEmpty() || (sourceRegExp.isValid() &&  sourceRegExp.exactMatch(sourceName)))) {
             setItems(sourceName, data.value(m_keyRoleFilter).value<QVariantList>());
         //try to match the key we want with a regular expression if set
         } else {
             QRegExp regExp(m_keyRoleFilter);
-            if (regExp.isValid()) {
+            if (regExp.isValid() &&
+                //matches the source filter regexp?
+                (m_sourceFilter.isEmpty() || (sourceRegExp.isValid() && sourceRegExp.exactMatch(sourceName)))) {
                 QHash<QString, QVariant>::const_iterator i;
                 QVariantList list;
                 for (i = data.constBegin(); i != data.constEnd(); ++i) {
@@ -172,9 +185,14 @@ void DataModel::dataUpdated(const QString &sourceName, const Plasma::DataEngine:
 
         if (!m_dataSource->data().isEmpty()) {
             QVariantMap::const_iterator i = m_dataSource->data().constBegin();
+            QRegExp sourceRegExp(m_sourceFilter);
+
             while (i != m_dataSource->data().constEnd()) {
                 QVariant value = i.value();
-                if (value.isValid() && value.canConvert<Plasma::DataEngine::Data>()) {
+                if (value.isValid() &&
+                    value.canConvert<Plasma::DataEngine::Data>() &&
+                    //matches the source filter regexp?
+                    (m_sourceFilter.isEmpty() || (sourceRegExp.isValid() && sourceRegExp.exactMatch(i.key())))) {
                     Plasma::DataEngine::Data data = value.value<Plasma::DataEngine::Data>();
                     data["DataEngineSource"] = i.key();
                     list.append(data);
@@ -219,6 +237,20 @@ void DataModel::setKeyRoleFilter(const QString& key)
     m_keyRoleFilter = key;
 }
 
+void DataModel::setSourceFilter(const QString& key)
+{
+    if (m_sourceFilter == key) {
+        return;
+    }
+
+    m_sourceFilter = key;
+}
+
+QString DataModel::sourceFilter() const
+{
+    return m_sourceFilter;
+}
+
 QString DataModel::keyRoleFilter() const
 {
     return m_keyRoleFilter;
@@ -252,6 +284,13 @@ void DataModel::setItems(const QString &sourceName, const QVariantList &list)
 
         setRoleNames(m_roleNames);
     }
+
+    m_roleNamesTimer->start(0);
+}
+
+void DataModel::syncRoleNames()
+{
+    setRoleNames(m_roleNames);
 
     //make the declarative view reload everything,
     //would be nice an incremental update but is not possible

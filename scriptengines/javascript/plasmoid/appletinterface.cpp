@@ -453,9 +453,12 @@ ContainmentInterface::ContainmentInterface(AbstractJsAppletScript *parent)
     connect(containment(), SIGNAL(appletAdded(Plasma::Applet *, const QPointF &)), this, SLOT(appletAddedForward(Plasma::Applet *, const QPointF &)));
 
     connect(containment(), SIGNAL(screenChanged(int, int, Plasma::Containment)), this, SLOT(screenChanged()));
+
+    connect(containment()->context(), SIGNAL(activityChanged(Plasma::Context *)), this, SIGNAL(activityNameChanged()));
+    connect(containment()->context(), SIGNAL(changed(Plasma::Context *)), this, SIGNAL(activityIdChanged()));
 }
 
-QScriptValue ContainmentInterface::applets() 
+QScriptValue ContainmentInterface::applets()
 {
     QScriptValue list = m_appletScriptEngine->engine()->newArray(containment()->applets().size());
     int i = 0;
@@ -554,6 +557,16 @@ void ContainmentInterface::setMovableApplets(bool movable)
 bool ContainmentInterface::hasMovableApplets() const
 {
     return m_movableApplets;
+}
+
+QString ContainmentInterface::activityName() const
+{
+    return containment()->context()->currentActivity();
+}
+
+QString ContainmentInterface::activityId() const
+{
+    return containment()->context()->currentActivityId();
 }
 
 #ifndef USE_JS_SCRIPTENGINE
