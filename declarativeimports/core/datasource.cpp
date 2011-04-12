@@ -96,7 +96,8 @@ void DataSource::setupData()
                 m_dataEngine->disconnectSource(source, this);
             }
         }
-        //FIXME: delete all?
+
+        qDeleteAll(m_services);
         m_services.clear();
 
         m_dataEngine = dataEngine(m_engine);
@@ -157,12 +158,17 @@ void DataSource::removeSource(const QString &source)
         emit sourceDisconnected(source);
         emit connectedSourcesChanged();
     }
+
     if (m_dataEngine) {
         m_connectedSources.removeAll(source);
         m_newSources.removeAll(source);
         m_oldSources.removeAll(source);
-        //TODO: delete it?
-        m_services.remove(source);
+
+        QHash<QString, Plasma::Service *>::iterator it = m_services.find(source);
+        if (it != m_services.end()) {
+            delete it.value();
+            m_services.erase(it);
+        }
     }
 }
 
