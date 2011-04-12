@@ -146,6 +146,8 @@ void DataSource::dataUpdated(const QString &sourceName, const Plasma::DataEngine
 
         emit dataChanged();
         emit newData(sourceName, data);
+    } else if (m_dataEngine) {
+        m_dataEngine->disconnectSource(sourceName, this);
     }
 }
 
