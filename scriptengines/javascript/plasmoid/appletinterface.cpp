@@ -383,6 +383,16 @@ QString AppletInterface::associatedApplication() const
     return applet()->associatedApplication();
 }
 
+void AppletInterface::setStatus(const AppletInterface::ItemStatus &status)
+{
+    applet()->setStatus((Plasma::ItemStatus)status);
+}
+
+AppletInterface::ItemStatus AppletInterface::status() const
+{
+    return (AppletInterface::ItemStatus)((int)(applet()->status()));
+}
+
 void AppletInterface::gc()
 {
     QTimer::singleShot(0, m_appletScriptEngine, SLOT(collectGarbage()));
