@@ -311,7 +311,7 @@ Q_SIGNALS:
     void locationChanged();
     void contextChanged();
     void immutableChanged();
-    void statusChanged(ItemStatus status);
+    void statusChanged();
 
 protected:
     AbstractJsAppletScript *m_appletScriptEngine;

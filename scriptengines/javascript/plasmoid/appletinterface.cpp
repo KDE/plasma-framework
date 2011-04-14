@@ -48,7 +48,7 @@ AppletInterface::AppletInterface(AbstractJsAppletScript *parent)
     connect(this, SIGNAL(releaseVisualFocus()), applet(), SIGNAL(releaseVisualFocus()));
     connect(this, SIGNAL(configNeedsSaving()), applet(), SIGNAL(configNeedsSaving()));
     connect(applet(), SIGNAL(immutabilityChanged(Plasma::ImmutabilityType)), this, SIGNAL(immutableChanged()));
-    connect(applet(), SIGNAL(newStatus(Plasma::ItemStatus)), this, SIGNAL(statusChanged(ItemStatus)));
+    connect(applet(), SIGNAL(newStatus(Plasma::ItemStatus)), this, SIGNAL(statusChanged()));
 }
 
 AppletInterface::~AppletInterface()
