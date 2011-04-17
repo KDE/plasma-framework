@@ -366,6 +366,10 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             }
         //Applet on popup
         } else {
+            if (icon && lay) {
+                lay->addItem(icon);
+            }
+
             //kDebug() << "about to switch to a popup";
 
             //there was already a dialog? don't make the switch again
@@ -425,10 +429,6 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
 
                 QObject::connect(dialog, SIGNAL(dialogResized()), q, SLOT(dialogSizeChanged()));
                 QObject::connect(dialog, SIGNAL(dialogVisible(bool)), q, SLOT(dialogStatusChanged(bool)));
-            }
-
-            if (icon && lay) {
-                lay->addItem(icon);
             }
         }
     }
