@@ -486,6 +486,10 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::Alig
             v = viewFor(actualItem);
         }
     }
+    
+    if (!actualItem) {
+        actualItem = item;
+    }
 
     QPoint pos;
     QTransform sceneTransform = actualItem->sceneTransform();
