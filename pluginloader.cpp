@@ -47,7 +47,7 @@ PluginLoader::PluginLoader()
 
 PluginLoader::~PluginLoader()
 {
-    //delete d;
+    delete d;
 }
 
 void PluginLoader::setPluginLoader(PluginLoader* loader)
