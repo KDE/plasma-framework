@@ -461,14 +461,34 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::Alig
     // TODO: merge both methods (also these in Applet) into one (with optional alignment) when we can break compatibility
     // TODO: add support for more flags in the future?
 
+    const QGraphicsItem *actualItem = item;
+
     const QGraphicsView *v = viewFor(item);
 
     if (!v) {
         return QPoint(0, 0);
     }
 
+    //its own view could be hidden, for instance if item is in an hidden Dialog
+    //try to position it using the parent applet as the item
+    if (!v->isVisible()) {
+        actualItem = item->parentItem();
+        if (!actualItem) {
+            const QGraphicsWidget *widget = qgraphicsitem_cast<const QGraphicsWidget*>(item);
+            if (widget) {
+                actualItem = qobject_cast<QGraphicsItem*>(widget->parent());
+            }
+        }
+
+        kDebug() << actualItem;
+
+        if (!v->isVisible() && actualItem) {
+            v = viewFor(actualItem);
+        }
+    }
+
     QPoint pos;
-    QTransform sceneTransform = item->sceneTransform();
+    QTransform sceneTransform = actualItem->sceneTransform();
 
     //swap direction if necessary
     if (QApplication::isRightToLeft() && alignment != Qt::AlignCenter) {
@@ -483,18 +503,18 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::Alig
     if (sceneTransform.isRotating()) {
         qreal angle = acos(sceneTransform.m11());
         QTransform newTransform;
-        QPointF center = item->sceneBoundingRect().center();
+        QPointF center = actualItem->sceneBoundingRect().center();
 
         newTransform.translate(center.x(), center.y());
         newTransform.rotateRadians(-angle);
         newTransform.translate(-center.x(), -center.y());
-        pos = v->mapFromScene(newTransform.inverted().map(item->scenePos()));
+        pos = v->mapFromScene(newTransform.inverted().map(actualItem->scenePos()));
     } else {
-        pos = v->mapFromScene(item->scenePos());
+        pos = v->mapFromScene(actualItem->scenePos());
     }
 
     pos = v->mapToGlobal(pos);
-    //kDebug() << "==> position is" << item->scenePos() << v->mapFromScene(item->scenePos()) << pos;
+    //kDebug() << "==> position is" << actualItem->scenePos() << v->mapFromScene(actualItem->scenePos()) << pos;
     const Plasma::View *pv = dynamic_cast<const Plasma::View *>(v);
 
     Plasma::Location loc = Floating;
@@ -506,9 +526,9 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::Alig
     case BottomEdge:
     case TopEdge: {
         if (alignment == Qt::AlignCenter) {
-            pos.setX(pos.x() + item->boundingRect().width()/2 - s.width()/2);
+            pos.setX(pos.x() + actualItem->boundingRect().width()/2 - s.width()/2);
         } else if (alignment == Qt::AlignRight) {
-            pos.setX(pos.x() + item->boundingRect().width() - s.width());
+            pos.setX(pos.x() + actualItem->boundingRect().width() - s.width());
         }
 
         if (pos.x() + s.width() > v->geometry().right()) {
@@ -521,9 +541,9 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::Alig
     case LeftEdge:
     case RightEdge: {
         if (alignment == Qt::AlignCenter) {
-            pos.setY(pos.y() + item->boundingRect().height()/2 - s.height()/2);
+            pos.setY(pos.y() + actualItem->boundingRect().height()/2 - s.height()/2);
         } else if (alignment == Qt::AlignRight) {
-            pos.setY(pos.y() + item->boundingRect().height() - s.height());
+            pos.setY(pos.y() + actualItem->boundingRect().height() - s.height());
         }
 
         if (pos.y() + s.height() > v->geometry().bottom()) {
@@ -535,9 +555,9 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::Alig
     }
     default:
         if (alignment == Qt::AlignCenter) {
-            pos.setX(pos.x() + item->boundingRect().width()/2 - s.width()/2);
+            pos.setX(pos.x() + actualItem->boundingRect().width()/2 - s.width()/2);
         } else if (alignment == Qt::AlignRight) {
-            pos.setX(pos.x() + item->boundingRect().width() - s.width());
+            pos.setX(pos.x() + actualItem->boundingRect().width() - s.width());
         }
         break;
     }
@@ -559,7 +579,7 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::Alig
         if (pos.y() - s.height() > 0) {
              pos.ry() = pos.y() - s.height();
         } else {
-             pos.ry() = pos.y() + (int)item->boundingRect().size().height() + 1;
+             pos.ry() = pos.y() + (int)actualItem->boundingRect().size().height() + 1;
         }
     }
 
