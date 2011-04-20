@@ -159,10 +159,11 @@ void DeclarativeWidgetPrivate::finishExecute()
             object->setProperty("height", q->size().height());
         }
 
+        //FIXME: find a better way to have a minimum size
         if (width > 0 && height > 0) {
-            q->setPreferredSize(width, height);
+            q->setMinimumSize(width, height);
         } else {
-            q->setPreferredSize(-1, -1);
+            q->setMinimumSize(-1, -1);
         }
     }
     emit q->finished();
