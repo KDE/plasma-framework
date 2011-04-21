@@ -108,7 +108,7 @@ private:
     QStringList m_oldSources;
     QStringList m_newSources;
     Changes m_changes;
-    QHash <QString, Plasma::Service *> m_services;
+    QHash<QString, Plasma::Service *> m_services;
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(DataSource::Changes)
 }

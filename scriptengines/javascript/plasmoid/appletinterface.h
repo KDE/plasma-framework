@@ -64,6 +64,7 @@ class AppletInterface : public QObject
     Q_ENUMS(AnimationDirection)
     Q_ENUMS(IntervalAlignment)
     Q_ENUMS(ThemeColors)
+    Q_ENUMS(ItemStatus)
     Q_PROPERTY(AspectRatioMode aspectRatioMode READ aspectRatioMode WRITE setAspectRatioMode)
     Q_PROPERTY(FormFactor formFactor READ formFactor NOTIFY formFactorChanged)
     Q_PROPERTY(Location location READ location NOTIFY locationChanged)
@@ -75,6 +76,7 @@ class AppletInterface : public QObject
     Q_PROPERTY(bool immutable READ immutable NOTIFY immutableChanged)
     Q_PROPERTY(bool userConfiguring READ userConfiguring) // @since 4.5
     Q_PROPERTY(int apiVersion READ apiVersion CONSTANT)
+    Q_PROPERTY(ItemStatus status READ status WRITE setStatus NOTIFY statusChanged)
     Q_PROPERTY(QRectF rect READ rect)
     Q_PROPERTY(QSizeF size READ size)
     Q_PROPERTY(QString associatedApplication WRITE setAssociatedApplication READ associatedApplication)
@@ -126,6 +128,14 @@ enum AspectRatioMode {
                                     formfactors) or no higher (in vertical
                                     ones) than a square */
     FixedSize = 4                /** The applet cannot be resized */
+};
+
+enum ItemStatus {
+    UnknownStatus = 0, /**< The status is unknown **/
+    PassiveStatus = 1, /**< The Item is passive **/
+    ActiveStatus = 2, /**< The Item is active **/
+    NeedsAttentionStatus = 3, /**< The Item needs attention **/
+    AcceptingInputStatus = 4 /**< The Item is accepting input **/
 };
 
 //From Qt namespace
@@ -220,6 +230,7 @@ enum IntervalAlignment {
     AlignToMinute,
     AlignToHour
 };
+
 //-------------------------------------------------------------------
 
     Q_INVOKABLE void gc();
@@ -289,6 +300,9 @@ enum IntervalAlignment {
     void setAssociatedApplication(const QString &string);
     QString associatedApplication() const;
 
+    void setStatus(const ItemStatus &status);
+    ItemStatus status() const;
+
 Q_SIGNALS:
     void releaseVisualFocus();
     void configNeedsSaving();
@@ -297,6 +311,7 @@ Q_SIGNALS:
     void locationChanged();
     void contextChanged();
     void immutableChanged();
+    void statusChanged();
 
 protected:
     AbstractJsAppletScript *m_appletScriptEngine;

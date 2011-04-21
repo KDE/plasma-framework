@@ -48,6 +48,7 @@ AppletInterface::AppletInterface(AbstractJsAppletScript *parent)
     connect(this, SIGNAL(releaseVisualFocus()), applet(), SIGNAL(releaseVisualFocus()));
     connect(this, SIGNAL(configNeedsSaving()), applet(), SIGNAL(configNeedsSaving()));
     connect(applet(), SIGNAL(immutabilityChanged(Plasma::ImmutabilityType)), this, SIGNAL(immutableChanged()));
+    connect(applet(), SIGNAL(newStatus(Plasma::ItemStatus)), this, SIGNAL(statusChanged()));
 }
 
 AppletInterface::~AppletInterface()
@@ -381,6 +382,16 @@ void AppletInterface::setAssociatedApplication(const QString &string)
 QString AppletInterface::associatedApplication() const
 {
     return applet()->associatedApplication();
+}
+
+void AppletInterface::setStatus(const AppletInterface::ItemStatus &status)
+{
+    applet()->setStatus((Plasma::ItemStatus)status);
+}
+
+AppletInterface::ItemStatus AppletInterface::status() const
+{
+    return (AppletInterface::ItemStatus)((int)(applet()->status()));
 }
 
 void AppletInterface::gc()

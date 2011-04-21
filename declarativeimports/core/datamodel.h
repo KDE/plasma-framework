@@ -137,13 +137,11 @@ Q_SIGNALS:
 private Q_SLOTS:
     void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
     void removeSource(const QString &sourceName);
-    void syncRoleNames();
 
 private:
     DataSource *m_dataSource;
     QString m_keyRoleFilter;
     QString m_sourceFilter;
-    QTimer *m_roleNamesTimer;
     QMap<QString, QVector<QVariant> > m_items;
     QHash<int, QByteArray> m_roleNames;
     QHash<QString, int> m_roleIds;
