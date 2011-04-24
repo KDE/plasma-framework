@@ -405,7 +405,7 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
 
     QFont font = q->font(Theme::DefaultFont);
     elements["%fontsize"] = QString("%1pt").arg(font.pointSize());
-    elements["%fontfamily"] = font.family();
+    elements["%fontfamily"] = font.family().split('[').first();
     elements["%smallfontsize"] = QString("%1pt").arg(KGlobalSettings::smallestReadableFont().pointSize());
 
     QHash<QString, QString>::const_iterator it = elements.constBegin();
