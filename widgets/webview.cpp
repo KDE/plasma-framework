@@ -179,6 +179,14 @@ QWebFrame *WebView::mainFrame() const
 
 void WebView::setDragToScroll(bool drag)
 {
+    // enable / disable scrollbars
+    if (drag) {
+        mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
+        mainFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
+    } else {
+        mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAsNeeded);
+        mainFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAsNeeded);
+    }
     d->webView->setDragToScroll(drag);
     d->scrollWidget->setFiltersChildEvents(drag);
 }
