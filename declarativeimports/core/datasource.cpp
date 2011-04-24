@@ -193,6 +193,10 @@ Plasma::Service *DataSource::serviceForSource(const QString &source)
 
 void DataSource::connectSource(const QString &source)
 {
+    if (m_connectedSources.contains(source)) {
+        return;
+    }
+
     m_newSources.append(source);
     m_connectedSources.append(source);
     m_changes |= SourcesChanged;
