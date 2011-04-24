@@ -49,6 +49,7 @@ class ThemeProxy : public QObject
     Q_PROPERTY(QColor viewBackgroundColor READ viewBackgroundColor NOTIFY themeChanged)
     Q_PROPERTY(QColor viewHoverColor READ viewHoverColor NOTIFY themeChanged)
     Q_PROPERTY(QColor viewFocusColor READ viewFocusColor NOTIFY themeChanged)
+    Q_PROPERTY(QString styleSheet READ styleSheet NOTIFY themeChanged)
 
 public:
     ThemeProxy(QObject *parent = 0);
@@ -72,6 +73,7 @@ public:
     QColor viewBackgroundColor() const;
     QColor viewHoverColor() const;
     QColor viewFocusColor() const;
+    QString styleSheet() const;
 
 Q_SIGNALS:
     void themeChanged();

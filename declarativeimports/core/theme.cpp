@@ -116,6 +116,11 @@ QColor ThemeProxy::viewFocusColor() const
     return Plasma::Theme::defaultTheme()->color(Plasma::Theme::ViewFocusColor);
 }
 
+QString ThemeProxy::styleSheet() const
+{
+    return Plasma::Theme::defaultTheme()->styleSheet(QString());
+}
+
 
 #include "theme_p.moc"
 
