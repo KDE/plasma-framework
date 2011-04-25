@@ -133,6 +133,7 @@ public:
     void updateShortcuts();
     void publishCheckboxStateChanged(int state);
     void globalShortcutChanged();
+    void propagateConfigChanged();
 
     static KActionCollection* defaultActions(QObject *parent);
     static QSet<QString> knownCategories();

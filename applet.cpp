@@ -293,9 +293,9 @@ void Applet::save(KConfigGroup &g) const
     if (d->configLoader) {
         // we're saving so we know its changed, we don't need or want the configChanged
         // signal bubbling up at this point due to that
-        disconnect(d->configLoader, SIGNAL(configChanged()), this, SLOT(configChanged()));
+        disconnect(d->configLoader, SIGNAL(configChanged()), this, SLOT(propagateConfigChanged()));
         d->configLoader->writeConfig();
-        connect(d->configLoader, SIGNAL(configChanged()), this, SLOT(configChanged()));
+        connect(d->configLoader, SIGNAL(configChanged()), this, SLOT(propagateConfigChanged()));
     }
 }
 
@@ -2038,7 +2038,7 @@ void AppletPrivate::configDialogFinished()
 
     if (!configLoader) {
         // the config loader will trigger this for us, so we don't need to.
-        q->configChanged();
+        propagateConfigChanged();
         if (KConfigDialog *dialog = qobject_cast<KConfigDialog *>(q->sender())) {
             dialog->enableButton(KDialog::Apply, false);
         }
@@ -2072,12 +2072,25 @@ void AppletPrivate::updateShortcuts()
     }
 }
 
+void AppletPrivate::propagateConfigChanged()
+{
+    if (script && configLoader) {
+        configLoader->readConfig();
+        script->configChanged();
+    }
+
+    if (isContainment) {
+        Containment *c = qobject_cast<Containment *>(q);
+        if (c) {
+            c->d->configChanged();
+        }
+    }
+
+    q->configChanged();
+}
+
 void Applet::configChanged()
 {
-    if (d->script && d->configLoader) {
-        d->configLoader->readConfig();
-        d->script->configChanged();
-    }
 }
 
 void Applet::createConfigurationInterface(KConfigDialog *parent)
@@ -2694,7 +2707,7 @@ void AppletPrivate::setupScriptSupport()
         QFile file(xmlPath);
         KConfigGroup config = q->config();
         configLoader = new ConfigLoader(&config, &file);
-        QObject::connect(configLoader, SIGNAL(configChanged()), q, SLOT(configChanged()));
+        QObject::connect(configLoader, SIGNAL(configChanged()), q, SLOT(propagateConfigChanged()));
     }
 
     if (!package->filePath("mainconfigui").isEmpty()) {

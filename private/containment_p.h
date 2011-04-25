@@ -107,6 +107,7 @@ public:
     void addContainmentActions(KMenu &desktopMenu, QEvent *event);
     void addAppletActions(KMenu &desktopMenu, Applet *applet, QEvent *event);
     void checkRemoveAction();
+    void configChanged();
 
     Applet *addApplet(const QString &name, const QVariantList &args = QVariantList(),
                       const QRectF &geometry = QRectF(-1, -1, -1, -1), uint id = 0,

@@ -2118,13 +2118,15 @@ void Containment::showConfigurationInterface()
 
 void Containment::configChanged()
 {
-    if (d->drawWallpaper) {
-        KConfigGroup group = config();
-        setWallpaper(group.readEntry("wallpaperplugin", defaultWallpaper),
-                     group.readEntry("wallpaperpluginmode", defaultWallpaperMode));
-    }
+}
 
-    Applet::configChanged();
+void ContainmentPrivate::configChanged()
+{
+    if (drawWallpaper) {
+        KConfigGroup group = q->config();
+        q->setWallpaper(group.readEntry("wallpaperplugin", defaultWallpaper),
+                        group.readEntry("wallpaperpluginmode", defaultWallpaperMode));
+    }
 }
 
 void ContainmentPrivate::requestConfiguration()
