@@ -43,8 +43,9 @@
 
 #include "appinterface.h"
 #include "containment.h"
-#include "widget.h"
+#include "i18n.h"
 #include "layouttemplatepackagestructure.h"
+#include "widget.h"
 
 QScriptValue constructQRectFClass(QScriptEngine *engine);
 
@@ -63,6 +64,7 @@ ScriptEngine::ScriptEngine(Plasma::Corona *corona, QObject *parent)
                               QScriptEngine::ExcludeSuperClassMethods);
     setupEngine();
     connect(this, SIGNAL(signalHandlerException(QScriptValue)), this, SLOT(exception(QScriptValue)));
+    bindI18N(this);
 }
 
 ScriptEngine::~ScriptEngine()
