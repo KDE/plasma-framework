@@ -2161,20 +2161,19 @@ void Containment::destroy(bool confirm)
         return;
     }
 
-    if (isContainment()) {
-        //FIXME maybe that %1 should be the containment type not the name
+    if (isContainment() && confirm) {
         //FIXME: should not be blocking
-        if (!confirm ||
-            KMessageBox::warningContinueCancel(
-                view(),
-                i18nc("%1 is the name of the containment", "Do you really want to remove this %1?", name()),
-                i18nc("@title:window %1 is the name of the containment", "Remove %1", name()), KStandardGuiItem::remove()) == KMessageBox::Continue) {
-            //clearApplets();
-            Applet::destroy();
+        const QString title = i18nc("@title:window %1 is the name of the containment", "Remove %1", name());
+        KGuiItem remove = KStandardGuiItem::remove();
+        remove.setText(title);
+        if (KMessageBox::warningContinueCancel(view(),
+            i18nc("%1 is the name of the containment", "Do you really want to remove this %1?", name()),
+            title, remove) != KMessageBox::Continue) {
+            return;
         }
-    } else {
-        Applet::destroy();
     }
+
+    Applet::destroy();
 }
 
 void ContainmentPrivate::createToolBox()
