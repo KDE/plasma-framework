@@ -51,6 +51,7 @@ class ToolTipContentPrivate
 public:
     ToolTipContentPrivate()
       : autohide(true),
+        instantPopup(false),
         clickable(false),
         highlightWindows(false)
     {
@@ -63,6 +64,7 @@ public:
     QHash<QString, ToolTipResource> resources;
     QWeakPointer<QGraphicsWidget> graphicsWidget;
     bool autohide : 1;
+    bool instantPopup : 1;
     bool clickable : 1;
     bool highlightWindows : 1;
 };
@@ -198,6 +200,16 @@ void ToolTipContent::setAutohide(bool autohide)
 bool ToolTipContent::autohide() const
 {
     return d->autohide;
+}
+
+void ToolTipContent::setInstantPopup(bool enabled)
+{
+    d->instantPopup = enabled;
+}
+
+bool ToolTipContent::isInstantPopup() const
+{
+    return d->instantPopup;
 }
 
 void ToolTipContent::addResource(ResourceType type, const QUrl &path, const QVariant &resource)
