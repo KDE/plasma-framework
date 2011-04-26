@@ -64,6 +64,7 @@ Containment::~Containment()
         } else if (wallpaperConfigDirty() && containment->wallpaper()) {
             KConfigGroup cg(containment->config());
             cg = KConfigGroup(&cg, "Wallpaper");
+            cg = KConfigGroup(&cg, containment->wallpaper()->pluginName());
             containment->wallpaper()->restore(cg);
         }
     }
