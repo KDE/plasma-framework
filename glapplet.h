@@ -34,7 +34,7 @@ class GLAppletPrivate;
  *
  * @short Plasma Applet that is fully rendered using OpengGL
  */
-class PLASMA_EXPORT GLApplet : public Applet
+class PLASMA_EXPORT_DEPRECATED GLApplet : public Applet
 {
     Q_OBJECT
 
