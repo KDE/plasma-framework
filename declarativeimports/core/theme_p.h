@@ -21,12 +21,20 @@
 
 #include <QObject>
 
+#include <QUrl>
+#include <QFont>
 #include <QColor>
 
 class ThemeProxy : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(QString name READ name NOTIFY themeChanged)
+    Q_PROPERTY(QFont font READ font NOTIFY themeChanged)
+    Q_PROPERTY(bool translucent READ windowTranslucencyEnabled NOTIFY themeChanged)
+    Q_PROPERTY(QUrl homepage READ homepage NOTIFY themeChanged)
+
+    // colors
     Q_PROPERTY(QColor textColor READ textColor NOTIFY themeChanged)
     Q_PROPERTY(QColor highlightColor READ highlightColor NOTIFY themeChanged)
     Q_PROPERTY(QColor backgroundColor READ backgroundColor NOTIFY themeChanged)
@@ -45,6 +53,11 @@ class ThemeProxy : public QObject
 public:
     ThemeProxy(QObject *parent = 0);
     ~ThemeProxy();
+
+    QString name() const;
+    QFont font() const;
+    bool windowTranslucencyEnabled() const;
+    QUrl homepage() const;
 
     QColor textColor() const;
     QColor highlightColor() const;

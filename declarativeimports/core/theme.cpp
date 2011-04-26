@@ -31,6 +31,26 @@ ThemeProxy::~ThemeProxy()
 {
 }
 
+QString ThemeProxy::name() const
+{
+    return Plasma::Theme::defaultTheme()->themeName();
+}
+
+QFont ThemeProxy::font() const
+{
+    return Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
+}
+
+bool ThemeProxy::windowTranslucencyEnabled() const
+{
+    return Plasma::Theme::defaultTheme()->windowTranslucencyEnabled();
+}
+
+QUrl ThemeProxy::homepage() const
+{
+    return Plasma::Theme::defaultTheme()->homepage();
+}
+
 QColor ThemeProxy::textColor() const
 {
     return Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
