@@ -45,10 +45,8 @@ void PlasmoidPackageTest::init()
 
 void PlasmoidPackageTest::cleanup()
 {
-    if (p) {
-        delete p;
-        p = 0;
-    }
+    delete p;
+    p = 0;
 
     // Clean things up.
     QDir local = QDir::homePath() + QLatin1String("/.kde-unit-test/packageRoot");
