@@ -1,0 +1,72 @@
+=== QGraphicsView dependencies ===
+
+= HIGH IMPORTANCE =
+
+Applet -> simple QObject, loads a qml component as child of containment from paths of its package.
+
+Containment -> still subclass of applet, pure qobject (probably containment and applet change name)
+
+PopupApplet -> is an applet/QGWidget, could die, icons could be properties
+
+Corona ->  Simple QObject keeps track of: Containments, scenes in case of SceneGraph and their association probably containment->setScreen() must be significantly different
+
+View: QGraphicsView -> one library with QGraphicsView one with QSGCanvas
+
+GlApplet -> BURN
+
+Widgets DIE (or moved in the support lib)
+
+Animations: DIE
+
+Extenders: current api doesn't work well, -> components, out of main libplasma2
+
+ToolTipManager/Content: QGW api, should go in components together with ToolTipData
+
+AbstractToolx -> a component loaded from the containment
+
+Dialog -> probably a component as well
+
+
+= Medium importance =
+
+Wallpaper: no qgw dep but needs to change to make sense in qml
+
+Theme: no qgw, but if we change api we could use it directly in QML (notifying properties)
+
+Svg/FrameSvg: no deps, to be used in QML pixmaprovider vs item? painter functions should still be maintained
+
+AbstractDialogManager: DIE (other topic: qml conf dialogs)
+
+= Completely independent =
+
+service, servicejob runnersyntax runnermanager runnercontext querymatch : ok
+
+PluginLoader: ok
+
+plasma.h: global enums, will there be an upstream way to register them?
+
+PaintUtils -> probably useless
+
+PackageStructure, PackageMetadata, Package, ok
+
+Delegate -> BURN
+
+DataengineManager, DataEngine, dataContainer : ok
+
+Context -> ok
+
+ContainmentActionsConfig, ContainmentActions: ok
+
+ConfigLoader: ok
+
+Animator  -> BURN
+
+AnimationDriver -> BURN
+
+AbstractRunner: ok
+
+
+
+
+
+
