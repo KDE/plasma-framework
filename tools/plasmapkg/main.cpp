@@ -75,28 +75,67 @@ void listPackages(const QStringList& types)
     }
 }
 
+void renderTypeTable(const QMap<QString, QStringList> &plugins)
+{
+    const QString nameHeader = i18n("Addon Name");
+    const QString pluginHeader = i18n("Service Type");
+    const QString pathHeader = i18n("Path");
+    int nameWidth = nameHeader.length();
+    int pluginWidth = pluginHeader.length();
+    int pathWidth = pathHeader.length();
+
+    QMapIterator<QString, QStringList> pluginIt(plugins);
+    while (pluginIt.hasNext()) {
+        pluginIt.next();
+        if (pluginIt.key().length() > nameWidth) {
+            nameWidth = pluginIt.key().length();
+        }
+
+        if (pluginIt.value()[0].length() > pluginWidth) {
+            pluginWidth = pluginIt.value()[0].length();
+        }
+
+        if (pluginIt.value()[1].length() > pathWidth) {
+            pathWidth = pluginIt.value()[1].length();
+        }
+    }
+
+    std::cout << nameHeader.toLocal8Bit().constData() << std::setw(nameWidth - nameHeader.length() + 2) << ' '
+              << pluginHeader.toLocal8Bit().constData() << std::setw(pluginWidth - pluginHeader.length() + 2) << ' '
+              << pathHeader.toLocal8Bit().constData() << std::endl;
+    std::cout << std::setfill('-') << std::setw(nameWidth) << '-' << "  "
+              << std::setw(pluginWidth) << '-' << "  "
+              << std::setw(pathWidth) << '-' << std::endl;
+    std::cout << std::setfill(' ');
+
+    pluginIt.toFront();
+    while (pluginIt.hasNext()) {
+        pluginIt.next();
+        std::cout << pluginIt.key().toLocal8Bit().constData() << std::setw(nameWidth - pluginIt.key().length() + 2) << ' '
+                  << pluginIt.value()[0].toLocal8Bit().constData() << std::setw(pluginWidth - pluginIt.value()[0].length() + 2) << ' '
+                  << pluginIt.value()[1].toLocal8Bit().constData() << std::endl;
+    }
+}
+
 void listTypes()
 {
     output(i18n("Package types that are installable with this tool:"));
     output(i18n("Built in:"));
-    output(i18n("    dataengine: Plasma DataEngine plugin"));
-    output(i18n("    layout-template: Plasma containment and widget layout script"));
-    output(i18n("    plasmoid: Plasma widget"));
-    output(i18n("    runner: Search plugin (KRunner, etc)"));
-    output(i18n("    theme: Plasma SVG theme"));
-    output(i18n("    wallpaper: Image pack for use with wallpaper backgrounds"));
-    output(i18n("    wallpaperplugin: Wallpaper plugin"));
+
+    QMap<QString, QStringList> builtIns;
+    builtIns.insert(i18n("DataEngine"), QStringList() << "Plasma/DataEngine" << "plasma/dataengines/");
+    builtIns.insert(i18n("Layout Template"), QStringList() << "Plasma/LayoutTemplate" << "plasma/layout-templates/");
+    builtIns.insert(i18n("Plasmoid"), QStringList() << "Plasma/Applet" << "plasma/plasmoids/");
+    builtIns.insert(i18n("Runner"), QStringList() << "Plasma/Runner" << "plasma/runners/");
+    builtIns.insert(i18n("Theme"), QStringList() << "" << "desktoptheme/");
+    builtIns.insert(i18n("Wallpaper Images"), QStringList() << "" << "wallpapers/");
+    builtIns.insert(i18n("Wallpaper Plugin"), QStringList() << "Plasma/Wallpaper" << "plasma/wallpapers/");
+    renderTypeTable(builtIns);
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure");
     if (!offers.isEmpty()) {
         std::cout << std::endl;
         output(i18n("Provided by plugins:"));
-        const QString pluginHeader = i18n("Plugin Name");
-        const QString nameHeader = i18n("Type");
-        const QString pathHeader = i18n("Install Root");
-        int pluginWidth = pluginHeader.length();
-        int nameWidth = nameHeader.length();
-        int pathWidth = pathHeader.length();
 
         QMap<QString, QStringList> plugins;
         foreach (const KService::Ptr service, offers) {
@@ -105,51 +144,24 @@ void listTypes()
             QString name = info.name();
             QString plugin = info.pluginName();
             QString path = structure->defaultPackageRoot();
-
-            if (name.length() > nameWidth) {
-                nameWidth = name.length();
-            }
-
-            if (plugin.length() > pluginWidth) {
-                pluginWidth = plugin.length();
-            }
-
-            if (path.length() > pathWidth) {
-                pathWidth = path.length();
-            }
-
             plugins.insert(name, QStringList() << plugin << path);
         }
 
-
-        std::cout << nameHeader.toLocal8Bit().constData() << std::setw(nameWidth - nameHeader.length() + 2) << ' '
-                  << pluginHeader.toLocal8Bit().constData() << std::setw(pluginWidth - pluginHeader.length() + 2) << ' '
-                  << pathHeader.toLocal8Bit().constData() << std::endl;
-        std::cout << std::setfill('-') << std::setw(nameWidth) << '-' << "  "
-                  << std::setw(pluginWidth) << '-' << "  "
-                  << std::setw(pathWidth) << '-' << std::endl;
-        QMapIterator<QString, QStringList> pluginIt(plugins);
-        std::cout << std::setfill(' ');
-        while (pluginIt.hasNext()) {
-            pluginIt.next();
-            std::cout << pluginIt.key().toLocal8Bit().constData() << std::setw(nameWidth - pluginIt.key().length() + 2) << ' '
-                      << pluginIt.value()[0].toLocal8Bit().constData() << std::setw(pluginWidth - pluginIt.value()[0].length() + 2) << ' '
-                      << pluginIt.value()[1].toLocal8Bit().constData() << std::endl;
-        }
+        renderTypeTable(plugins);
     }
 
     QStringList desktopFiles = KGlobal::dirs()->findAllResources("data", "plasma/packageformats/*rc", KStandardDirs::NoDuplicates);
     if (!desktopFiles.isEmpty()) {
         output(i18n("Provided by .desktop files:"));
         Plasma::PackageStructure structure;
+        QMap<QString, QStringList> plugins;
         foreach (const QString &file, desktopFiles) {
             // extract the type
             KConfig config(file, KConfig::SimpleConfig);
             structure.read(&config);
             // get the name based on the rc file name, just as Plasma::PackageStructure does
             const QString name = file.left(file.length() - 2);
-            output(i18nc("Plugin name and the kind of Plasma related content it provides, both from the plugin's desktop file",
-                        "    %1: %2", name, structure.type()));
+            plugins.insert(name, QStringList() << structure.type() << structure.defaultPackageRoot());
         }
     }
 }
