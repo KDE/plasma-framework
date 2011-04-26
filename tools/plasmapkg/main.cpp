@@ -18,6 +18,7 @@
  */
 
 #include <iostream>
+#include <iomanip>
 
 #include <QDir>
 #include <QDBusInterface>
@@ -90,10 +91,50 @@ void listTypes()
     if (!offers.isEmpty()) {
         std::cout << std::endl;
         output(i18n("Provided by plugins:"));
+        const QString pluginHeader = i18n("Plugin Name");
+        const QString nameHeader = i18n("Type");
+        const QString pathHeader = i18n("Install Root");
+        int pluginWidth = pluginHeader.length();
+        int nameWidth = nameHeader.length();
+        int pathWidth = pathHeader.length();
+
+        QMap<QString, QStringList> plugins;
         foreach (const KService::Ptr service, offers) {
             KPluginInfo info(service);
-            output(i18nc("Plugin name and the kind of Plasma related content it provides, both from the plugin's desktop file",
-                        "    %1: %2", info.pluginName(), info.name()));
+            Plasma::PackageStructure::Ptr structure = Plasma::PackageStructure::load(info.pluginName());
+            QString name = info.name();
+            QString plugin = info.pluginName();
+            QString path = structure->defaultPackageRoot();
+
+            if (name.length() > nameWidth) {
+                nameWidth = name.length();
+            }
+
+            if (plugin.length() > pluginWidth) {
+                pluginWidth = plugin.length();
+            }
+
+            if (path.length() > pathWidth) {
+                pathWidth = path.length();
+            }
+
+            plugins.insert(name, QStringList() << plugin << path);
+        }
+
+
+        std::cout << nameHeader.toLocal8Bit().constData() << std::setw(nameWidth - nameHeader.length() + 2) << ' '
+                  << pluginHeader.toLocal8Bit().constData() << std::setw(pluginWidth - pluginHeader.length() + 2) << ' '
+                  << pathHeader.toLocal8Bit().constData() << std::endl;
+        std::cout << std::setfill('-') << std::setw(nameWidth) << '-' << "  "
+                  << std::setw(pluginWidth) << '-' << "  "
+                  << std::setw(pathWidth) << '-' << std::endl;
+        QMapIterator<QString, QStringList> pluginIt(plugins);
+        std::cout << std::setfill(' ');
+        while (pluginIt.hasNext()) {
+            pluginIt.next();
+            std::cout << pluginIt.key().toLocal8Bit().constData() << std::setw(nameWidth - pluginIt.key().length() + 2) << ' '
+                      << pluginIt.value()[0].toLocal8Bit().constData() << std::setw(pluginWidth - pluginIt.value()[0].length() + 2) << ' '
+                      << pluginIt.value()[1].toLocal8Bit().constData() << std::endl;
         }
     }
 
