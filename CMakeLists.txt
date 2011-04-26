@@ -271,8 +271,8 @@ target_link_libraries(plasma LINK_INTERFACE_LIBRARIES kdeui kdecore ${QT_QTGUI_L
 
 #do NOT use GENERIC versioning -- the plasma team will take care of versioning
 set_target_properties(plasma PROPERTIES
-                             VERSION 3.0.0
-                             SOVERSION 3
+                             VERSION 4.0.0
+                             SOVERSION 4
                       )
 
 install(TARGETS plasma EXPORT kdelibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
