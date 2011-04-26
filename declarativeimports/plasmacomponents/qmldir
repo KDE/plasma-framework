@@ -1,5 +1,6 @@
 BusyWidget 0.1 BusyWidget.qml
 Button 0.1 Button.qml
+CheckBox 0.1 CheckBox.qml
 FlashingLabel 0.1 FlashingLabel.qml
 Frame 0.1 Frame.qml
 IconWidget 0.1 IconWidget.qml
