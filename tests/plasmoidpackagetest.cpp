@@ -49,7 +49,7 @@ void PlasmoidPackageTest::cleanup()
     p = 0;
 
     // Clean things up.
-    QDir local = QDir::homePath() + QLatin1String("/.kde-unit-test/packageRoot");
+    QDir local(QDir::homePath() + QLatin1String("/.kde-unit-test/packageRoot"));
     foreach (const QString &dir, local.entryList(QDir::Dirs)) {
         removeDir(QLatin1String("packageRoot/" + dir.toLatin1() + "/contents/code"));
         removeDir(QLatin1String("packageRoot/" + dir.toLatin1() + "/contents/images"));
@@ -63,7 +63,7 @@ void PlasmoidPackageTest::cleanup()
 // Copied from ktimezonetest.h
 void PlasmoidPackageTest::removeDir(const QString &subdir)
 {
-    QDir local = QDir::homePath() + QLatin1String("/.kde-unit-test/") + subdir;
+    QDir local(QDir::homePath() + QLatin1String("/.kde-unit-test/") + subdir);
     foreach(const QString &file, local.entryList(QDir::Files))
         if(!local.remove(file))
             qWarning("%s: removing failed", qPrintable( file ));
