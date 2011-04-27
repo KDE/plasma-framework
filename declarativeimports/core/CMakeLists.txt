@@ -9,6 +9,7 @@ set(corebindings_SRCS
     svgitem.cpp
     framesvgitem.cpp
     dialog.cpp
+    qrangemodel.cpp
     )
 
 INCLUDE_DIRECTORIES(
