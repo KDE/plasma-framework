@@ -7,4 +7,5 @@ IconWidget 0.1 IconWidget.qml
 PushButton 0.1 PushButton.qml
 RadioButton 0.1 RadioButton.qml
 ScrollBar 0.1 ScrollBar.qml
+Slider 0.1 Slider.qml
 ToolButton 0.1 ToolButton.qml

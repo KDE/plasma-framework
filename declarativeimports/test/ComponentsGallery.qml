@@ -17,11 +17,11 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-import QtQuick 1.1
+import QtQuick 1.0
 import org.kde.plasma.components 0.1 as PlasmaComponents
 
 Rectangle {
-    width: 600
+    width: 800
     height: 400
     color: "lightgrey"
 
@@ -29,7 +29,7 @@ Rectangle {
         id: buttonPage
 
         anchors.fill: parent
-        contentWidth: 1000
+        contentWidth: 1200
 
         Row {
             x: 30
@@ -38,9 +38,9 @@ Rectangle {
                 bottom: parent.bottom
                 margins: 20
             }
+            spacing: 30
 
             Column {
-                width: 200
                 spacing: 20
 
                 Text {
@@ -160,10 +160,56 @@ Rectangle {
                     text: "BusyIndicator"
                 }
 
-
                 PlasmaComponents.BusyIndicator { }
 
                 PlasmaComponents.BusyIndicator { running: true }
+
+                PlasmaComponents.BusyIndicator {
+                    id: busy
+                    running: mouse.pressed
+                    MouseArea {
+                        id: mouse
+                        anchors.fill: parent
+                    }
+                }
+            }
+            Column {
+                spacing: 20
+
+                Text {
+                    font.pixelSize: 20
+                    text: "Slider"
+                }
+
+                PlasmaComponents.Slider {
+                    id: slider1
+                    width: 140
+                    height: 20
+                    animated: true
+                    Component.onCompleted: {
+                        forceActiveFocus();
+                    }
+                }
+
+                Text {
+                    text: slider1.value
+                }
+
+                PlasmaComponents.Slider {
+                    id: slider2
+                    width: 20
+                    height: 140
+                    orientation: Qt.Vertical
+                    minimumValue: 10
+                    maximumValue: 1000
+                    stepSize: 50
+                    inverted: true
+                    animated: true
+                }
+
+                Text {
+                    text: slider2.value
+                }
             }
         }
     }
