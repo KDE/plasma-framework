@@ -17,25 +17,27 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-import Qt 4.7
+import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 
 Item {
     id: root
-    width: 100; height: 100
 
-    property bool running: true
-    property string label: ""
+    // Common API
+    property bool running: false
 
-    PlasmaCore.Theme {
-        id: theme
-    }
+    // Plasma API
+    property alias text: label.text
+    property QtObject theme: PlasmaCore.Theme { }
+
+    width: 52; height: 52
 
     PlasmaCore.SvgItem {
         id: widget
+
+        anchors.centerIn: parent
         width: root.width
         height: root.height
-        anchors.horizontalCenter: root.horizontalCenter
         smooth: true
         svg: PlasmaCore.Svg { imagePath: ("widgets/busywidget") }
 
@@ -47,19 +49,15 @@ Item {
             running: root.running
             loops: Animation.Infinite
         }
-
-        // if you need to do anything while repainting
-        // do it inside this slot
-        function update() {
-        }
     }
 
     Text {
         id: label
-        text: root.label
-        color: theme.textColor
-        anchors.verticalCenter: root.verticalCenter
-        anchors.horizontalCenter: root.horizontalCenter
-    }
 
+        anchors {
+            verticalCenter: root.verticalCenter
+            horizontalCenter: root.horizontalCenter
+        }
+        color: theme.textColor
+    }
 }

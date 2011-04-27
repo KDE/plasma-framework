@@ -152,6 +152,19 @@ Rectangle {
                     }
                 }
             }
+            Column {
+                spacing: 20
+
+                Text {
+                    font.pixelSize: 20
+                    text: "BusyIndicator"
+                }
+
+
+                PlasmaComponents.BusyIndicator { }
+
+                PlasmaComponents.BusyIndicator { running: true }
+            }
         }
     }
 }

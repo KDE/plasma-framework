@@ -1,4 +1,4 @@
-BusyWidget 0.1 BusyWidget.qml
+BusyIndicator 0.1 BusyIndicator.qml
 Button 0.1 Button.qml
 CheckBox 0.1 CheckBox.qml
 FlashingLabel 0.1 FlashingLabel.qml
