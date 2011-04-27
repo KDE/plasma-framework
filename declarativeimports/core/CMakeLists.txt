@@ -10,6 +10,7 @@ set(corebindings_SRCS
     svgitem.cpp
     framesvgitem.cpp
     dialog.cpp
+    tooltip.cpp
     )
 
 INCLUDE_DIRECTORIES(
