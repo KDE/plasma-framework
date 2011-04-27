@@ -18,6 +18,7 @@
  ***************************************************************************/
 
 #include "dialog.h"
+#include "declarativeitemcontainer_p.h"
 
 #include <QDeclarativeItem>
 #include <QGraphicsObject>
@@ -27,55 +28,6 @@
 #include <Plasma/Corona>
 #include <Plasma/Dialog>
 
-class DeclarativeItemContainer : public QGraphicsWidget
-{
-public:
-    DeclarativeItemContainer(QGraphicsItem *parent = 0)
-       : QGraphicsWidget(parent)
-    {}
-
-    ~DeclarativeItemContainer()
-    {}
-
-    void setDeclarativeItem(QDeclarativeItem *item)
-    {
-        if (m_declarativeItem) {
-            m_declarativeItem.data()->removeSceneEventFilter(this);
-        }
-        m_declarativeItem = item;
-        static_cast<QGraphicsItem *>(item)->setParentItem(this);
-        setMinimumWidth(item->implicitWidth());
-        setMinimumHeight(item->implicitHeight());
-        resize(item->width(), item->height());
-        item->installSceneEventFilter(this);
-    }
-
-    QDeclarativeItem *declarativeItem() const
-    {
-        return m_declarativeItem.data();
-    }
-
-protected:
-    void resizeEvent(QGraphicsSceneResizeEvent *event)
-    {
-        if (m_declarativeItem) {
-            m_declarativeItem.data()->setProperty("width", event->newSize().width());
-            m_declarativeItem.data()->setProperty("height", event->newSize().height());
-        }
-    }
-
-    bool sceneEventFilter(QGraphicsItem *watched, QEvent *event)
-    {
-        if (event->type() == QEvent::GraphicsSceneResize) {
-            resize(watched->boundingRect().size());
-        }
-
-        return QGraphicsWidget::sceneEventFilter(watched, event);
-    }
-
-private:
-    QWeakPointer<QDeclarativeItem> m_declarativeItem;
-};
 
 DialogProxy::DialogProxy(QObject *parent)
     : QObject(parent)

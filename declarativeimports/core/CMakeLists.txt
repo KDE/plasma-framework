@@ -1,6 +1,7 @@
 project(corebindings)
 
 set(corebindings_SRCS
+    declarativeitemcontainer.cpp
     corebindingsplugin.cpp
     dataengineconsumer.cpp
     theme.cpp
