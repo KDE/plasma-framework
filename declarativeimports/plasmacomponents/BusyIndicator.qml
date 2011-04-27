@@ -21,7 +21,7 @@ import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 
 Item {
-    id: root
+    id: busy
 
     // Common API
     property bool running: false
@@ -36,17 +36,17 @@ Item {
         id: widget
 
         anchors.centerIn: parent
-        width: root.width
-        height: root.height
-        smooth: true
-        svg: PlasmaCore.Svg { imagePath: ("widgets/busywidget") }
+        width: busy.width
+        height: busy.height
+        smooth: !running
+        svg: PlasmaCore.Svg { imagePath: "widgets/busywidget" }
 
         RotationAnimation on rotation {
             from: 0
             to: 360
             target: widget
             duration: 1500
-            running: root.running
+            running: busy.running
             loops: Animation.Infinite
         }
     }
@@ -55,8 +55,8 @@ Item {
         id: label
 
         anchors {
-            verticalCenter: root.verticalCenter
-            horizontalCenter: root.horizontalCenter
+            verticalCenter: busy.verticalCenter
+            horizontalCenter: busy.horizontalCenter
         }
         color: theme.textColor
     }
