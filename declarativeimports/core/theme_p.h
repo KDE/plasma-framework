@@ -34,7 +34,6 @@ class ThemeProxy : public QObject
     Q_PROPERTY(bool windowTranslucentEnabled READ windowTranslucencyEnabled NOTIFY themeChanged)
     Q_PROPERTY(KUrl homepage READ homepage NOTIFY themeChanged)
     Q_PROPERTY(bool useGlobalSettings READ useGlobalSettings NOTIFY themeChanged)
-    Q_PROPERTY(QString styleSheet READ styleSheet NOTIFY themeChanged)
     Q_PROPERTY(QString wallpaperPath READ wallpaperPath NOTIFY themeChanged)
 
     // colors
@@ -63,7 +62,6 @@ public:
     bool windowTranslucencyEnabled() const;
     KUrl homepage() const;
     bool useGlobalSettings() const;
-    QString styleSheet() const;
     QString wallpaperPath() const;
 
     QColor textColor() const;

@@ -56,11 +56,6 @@ bool ThemeProxy::useGlobalSettings() const
     return Plasma::Theme::defaultTheme()->useGlobalSettings();
 }
 
-QString ThemeProxy::styleSheet() const
-{
-    return Plasma::Theme::defaultTheme()->styleSheet();
-}
-
 QString ThemeProxy::wallpaperPath() const
 {
     return Plasma::Theme::defaultTheme()->wallpaperPath();
