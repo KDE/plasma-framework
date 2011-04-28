@@ -146,8 +146,12 @@ void StorageJob::start()
         query.bindValue(":id", params["key"].toString());
         query.exec();
 
-        query.prepare("insert into " + m_clientName + " values(:valueGroup, :id, :datavalue, date('now'), date('now'))");
+        query.prepare("insert into " + m_clientName + " values(:valueGroup, :id, :txt, :int, :float, :binary, date('now'), date('now'))");
         query.bindValue(":valueGroup", valueGroup);
+        query.bindValue(":txt", QVariant());
+        query.bindValue(":int", QVariant());
+        query.bindValue(":float", QVariant());
+        query.bindValue(":binary", QVariant());
 
         const QString key = params.value("key").toString();
         if (!key.isEmpty()) {
@@ -158,11 +162,35 @@ void StorageJob::start()
         while (it.hasNext()) {
             it.next();
             query.bindValue(":id", it.key());
-            query.bindValue(":datavalue", it.value());
+
+            QString field;
+            switch (QMetaType::Type(it.value().type())) {
+                case QVariant::String:
+                    field = ":txt";
+                    break;
+                case QVariant::Int:
+                    field = ":int";
+                    break;
+                case QVariant::Double:
+                case QMetaType::Float:
+                    field = ":float";
+                    break;
+                case QVariant::ByteArray:
+                    field = ":binary";
+                    break;
+                default:
+                    continue;
+                    break;
+            }
+
+            query.bindValue(field, it.value());
+
             if (!query.exec()) {
                 setResult(false);
                 return;
             }
+
+            query.bindValue(field, QVariant());
         }
 
         setResult(query.exec("COMMIT;"));
@@ -172,11 +200,11 @@ void StorageJob::start()
         //a bit redundant but should be the faster way with less string concatenation as possible
         if (params["key"].toString().isEmpty()) {
             //update modification time
-            query.prepare("update "+m_clientName+" set accessTime=date('now') where valueGroup=:valueGroup");
+            query.prepare("update " + m_clientName + " set accessTime=date('now') where valueGroup=:valueGroup");
             query.bindValue(":valueGroup", valueGroup);
             query.exec();
 
-            query.prepare("select * from "+m_clientName+" where valueGroup=:valueGroup");
+            query.prepare("select * from " + m_clientName + " where valueGroup=:valueGroup");
             query.bindValue(":valueGroup", valueGroup);
         } else {
             //update modification time
