@@ -126,6 +126,7 @@ set(plasma_LIB_SRCS
     private/runnerjobs.cpp
     private/serviceprovider.cpp
     private/storage.cpp
+    private/storagethread.cpp
     private/style.cpp
     private/trustedonlyauthorization.cpp
     private/tooltip.cpp
