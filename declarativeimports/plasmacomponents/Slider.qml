@@ -22,7 +22,7 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 
 // TODO: add support mouse wheel and key events
 // TODO: create a value indicator for plasma?
-PlasmaCore.FrameSvgItem {
+Item {
     id: slider
 
     // Common API
@@ -81,7 +81,7 @@ PlasmaCore.FrameSvgItem {
         }
 
         PlasmaCore.SvgItem {
-            id: focusSvg
+            id: focus
 
             transform: Translate { x: - handle.width / 2 }
             anchors {
@@ -208,5 +208,3 @@ PlasmaCore.FrameSvgItem {
         value: range.position
     }
 }
-
-
