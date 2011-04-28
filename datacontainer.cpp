@@ -252,7 +252,7 @@ void DataContainerPrivate::populateFromStoredData(KJob *job)
 
     // Only fill the source with old stored
     // data if it is not already populated with new data.
-    if (data.isEmpty()) {
+    if (data.isEmpty() && !ret->data().isEmpty()) {
         data = ret->data();
         dirty = true;
         q->checkForUpdate();
