@@ -55,7 +55,7 @@ class Storage : public Plasma::Service
     Q_OBJECT
 
 public:
-    Storage(QObject* parent);
+    Storage(QObject *parent = 0);
     ~Storage();
 
 protected:
