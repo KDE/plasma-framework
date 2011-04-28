@@ -267,8 +267,9 @@ void StorageJob::start()
             }
 
             setResult(m_data);
+        } else {
+            setResult(false);
         }
-
     } else if (operationName() == "delete") {
         QSqlQuery query(*m_rdb->database());
 
