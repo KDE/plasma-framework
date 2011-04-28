@@ -55,6 +55,7 @@ StorageJob::StorageJob(const QString& destination,
     Plasma::StorageThread::self()->start();
     connect(Plasma::StorageThread::self(), SIGNAL(newResult(StorageJob *, const QVariant &)), this, SLOT(resultSlot(StorageJob *, const QVariant &)));
     qRegisterMetaType<StorageJob *>();
+    qRegisterMetaType<QWeakPointer<StorageJob> >();
 }
 
 StorageJob::~StorageJob()
@@ -87,14 +88,15 @@ void StorageJob::start()
         valueGroup = "default";
     }
 
+    QWeakPointer<StorageJob> me(this);
     if (operationName() == "save") {
-        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "save", Qt::QueuedConnection, Q_ARG(StorageJob *, this), Q_ARG(const QVariantMap&, params));
+        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "save", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(const QVariantMap&, params));
     } else if (operationName() == "retrieve") {
-        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "retrieve", Qt::QueuedConnection, Q_ARG(StorageJob *, this), Q_ARG(const QVariantMap&, params));
+        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "retrieve", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(const QVariantMap&, params));
     } else if (operationName() == "delete") {
-        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "delete", Qt::QueuedConnection, Q_ARG(StorageJob *, this), Q_ARG(const QVariantMap&, params));
+        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "delete", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(const QVariantMap&, params));
     } else if (operationName() == "expire") {
-        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "expire", Qt::QueuedConnection, Q_ARG(StorageJob *, this), Q_ARG(const QVariantMap&, params));
+        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "expire", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(const QVariantMap&, params));
     } else {
         setError(true);
         setResult(false);

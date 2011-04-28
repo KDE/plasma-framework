@@ -55,6 +55,7 @@ private:
 //End StorageJob
 
 Q_DECLARE_METATYPE(StorageJob *)
+Q_DECLARE_METATYPE(QWeakPointer<StorageJob>)
 
 class Storage : public Plasma::Service
 {

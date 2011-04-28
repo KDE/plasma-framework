@@ -23,6 +23,7 @@
 
 #include <QThread>
 #include <QSqlDatabase>
+#include <QWeakPointer>
 
 #include "storage_p.h"
 
@@ -39,18 +40,18 @@ public:
     void run();
 
     static Plasma::StorageThread *self();
-    void initializeDb(StorageJob* caller);
 
 public Q_SLOTS:
-    void save(StorageJob* caller, const QVariantMap &parameters);
-    void retrieve(StorageJob* caller, const QVariantMap &parameters);
-    void deleteEntry(StorageJob* caller, const QVariantMap &parameters);
-    void expire(StorageJob* caller, const QVariantMap &parameters);
+    void save(QWeakPointer<StorageJob> caller, const QVariantMap &parameters);
+    void retrieve(QWeakPointer<StorageJob> caller, const QVariantMap &parameters);
+    void deleteEntry(QWeakPointer<StorageJob> caller, const QVariantMap &parameters);
+    void expire(QWeakPointer<StorageJob> caller, const QVariantMap &parameters);
 
 Q_SIGNALS:
     void newResult(StorageJob* caller, const QVariant &result);
 
 private:
+    void initializeDb(StorageJob* caller);
     QSqlDatabase m_db;
 };
 

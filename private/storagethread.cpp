@@ -61,7 +61,7 @@ Plasma::StorageThread *StorageThread::self()
     return &privateStorageThreadSelf->self;
 }
 
-void StorageThread::initializeDb(StorageJob* caller)
+void StorageThread::initializeDb(StorageJob *caller)
 {
     if (!m_db.open()) {
         m_db = QSqlDatabase::addDatabase("QSQLITE", QString("plasma-storage-%1").arg((quintptr)this));
@@ -81,8 +81,13 @@ void StorageThread::initializeDb(StorageJob* caller)
     m_db.transaction();
 }
 
-void StorageThread::save(StorageJob* caller, const QVariantMap &params)
+void StorageThread::save(QWeakPointer<StorageJob> wcaller, const QVariantMap &params)
 {
+    StorageJob *caller = wcaller.data();
+    if (!caller) {
+        return;
+    }
+
     initializeDb(caller);
     QString valueGroup = params["group"].toString();
     if (valueGroup.isEmpty()) {
@@ -169,8 +174,13 @@ void StorageThread::save(StorageJob* caller, const QVariantMap &params)
     emit newResult(caller, true);
 }
 
-void StorageThread::retrieve(StorageJob* caller, const QVariantMap &params)
+void StorageThread::retrieve(QWeakPointer<StorageJob> wcaller, const QVariantMap &params)
 {
+    StorageJob *caller = wcaller.data();
+    if (!caller) {
+        return;
+    }
+
     initializeDb(caller);
     QString valueGroup = params["group"].toString();
     if (valueGroup.isEmpty()) {
@@ -234,8 +244,13 @@ void StorageThread::retrieve(StorageJob* caller, const QVariantMap &params)
     emit newResult(caller, result);
 }
 
-void StorageThread::deleteEntry(StorageJob* caller, const QVariantMap &params)
+void StorageThread::deleteEntry(QWeakPointer<StorageJob> wcaller, const QVariantMap &params)
 {
+    StorageJob *caller = wcaller.data();
+    if (!caller) {
+        return;
+    }
+
     initializeDb(caller);
     QString valueGroup = params["group"].toString();
     if (valueGroup.isEmpty()) {
@@ -258,8 +273,13 @@ void StorageThread::deleteEntry(StorageJob* caller, const QVariantMap &params)
     emit newResult(caller, success);
 }
 
-void StorageThread::expire(StorageJob* caller, const QVariantMap &params)
+void StorageThread::expire(QWeakPointer<StorageJob> wcaller, const QVariantMap &params)
 {
+    StorageJob *caller = wcaller.data();
+    if (!caller) {
+        return;
+    }
+
     initializeDb(caller);
     QString valueGroup = params["group"].toString();
     if (valueGroup.isEmpty()) {
