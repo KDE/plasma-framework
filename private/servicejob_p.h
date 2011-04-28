@@ -37,7 +37,7 @@ public:
                       const QString &op,
                       const QMap<QString, QVariant> &params);
 
-    void slotStart();
+    void autoStart();
 
     ServiceJob *q;
     QString destination;

@@ -245,7 +245,7 @@ ServiceJob *Service::startOperationCall(const KConfigGroup &description, QObject
 
     job->setParent(parent ? parent : this);
     connect(job, SIGNAL(finished(KJob*)), this, SLOT(jobFinished(KJob*)));
-    QTimer::singleShot(0, job, SLOT(slotStart()));
+    QTimer::singleShot(0, job, SLOT(autoStart()));
     return job;
 }
 

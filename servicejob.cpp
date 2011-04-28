@@ -32,7 +32,7 @@ ServiceJobPrivate::ServiceJobPrivate(ServiceJob *owner, const QString &dest,
 {
 }
 
-void ServiceJobPrivate::slotStart()
+void ServiceJobPrivate::autoStart()
 {
     q->start();
 }
