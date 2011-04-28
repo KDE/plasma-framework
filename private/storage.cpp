@@ -44,7 +44,7 @@ public:
     {
         if (m_ref == 0) {
             m_db = QSqlDatabase::addDatabase("QSQLITE", QString("plasma-storage-%1").arg((quintptr)this));
-            m_db.setDatabaseName(KStandardDirs::locateLocal("appdata", "plasma-storage.db"));
+            m_db.setDatabaseName(KStandardDirs::locateLocal("appdata", "plasma-storage2.db"));
         }
         //Q_ASSERT(db.isValid());
         m_ref.ref();
@@ -75,15 +75,13 @@ private:
 
 static QThreadStorage<RefCountedDatabase *> s_databasePool;
 
-
-
 //Storage Job implentation
 StorageJob::StorageJob(const QString& destination,
                        const QString& operation,
                        const QMap<QString, QVariant>& parameters,
                        QObject *parent)
-            : ServiceJob(destination, operation, parameters, parent),
-              m_clientName(destination)
+    : ServiceJob(destination, operation, parameters, parent),
+      m_clientName(destination)
 {
     m_rdb = s_databasePool.localData();
     if (m_rdb == 0) {
@@ -97,9 +95,11 @@ StorageJob::StorageJob(const QString& destination,
         kWarning() << "Unable to open the plasma storage cache database: " << m_rdb->database()->lastError();
     } else if (!m_rdb->database()->tables().contains(m_clientName)) {
         QSqlQuery query(*m_rdb->database());
-        //bindValue doesn't seem to be able to replace stuff in create table
-        query.prepare(QString("create table ")+m_clientName+" (valueGroup varchar(256), id varchar(256), data clob, creationTime datetime, accessTime datetime, primary key (valueGroup, id))");
-        query.exec();
+        query.prepare(QString("create table ") + m_clientName + " (valueGroup varchar(256), id varchar(256), txt TEXT, int INTEGER, float REAL, binary BLOB, creationTime datetime, accessTime datetime, primary key (valueGroup, id))");
+        if (!query.exec()) {
+            kWarning() << "Unable to create table for" << m_clientName;
+            m_rdb->database()->close();
+        }
     }
 }
 
@@ -110,9 +110,14 @@ StorageJob::~StorageJob()
     }
 }
 
-void StorageJob::setData(const QHash<QString, QVariant> &data)
+void StorageJob::setData(const QVariantHash &data)
 {
     m_data = data;
+}
+
+QVariantHash StorageJob::data() const
+{
+    return m_data;
 }
 
 void StorageJob::start()

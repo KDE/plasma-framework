@@ -40,7 +40,8 @@ public:
                const QMap<QString, QVariant>& parameters,
                QObject *parent = 0);
     ~StorageJob();
-    void setData(const QHash<QString, QVariant> &data);
+    void setData(const QVariantHash &data);
+    QVariantHash data() const;
     void start();
 
 private:
