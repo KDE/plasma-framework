@@ -162,6 +162,7 @@ void StorageJob::start()
         query.bindValue(":valueGroup", valueGroup);
 
         if (!query.exec()) {
+            m_rdb->database()->commit();
             setResult(false);
             return;
         }
@@ -208,6 +209,7 @@ void StorageJob::start()
 
             if (!query.exec()) {
                 //kDebug() << "query failed:" << query.lastQuery() << query.lastError().text();
+                m_rdb->database()->commit();
                 setResult(false);
                 return;
             }
