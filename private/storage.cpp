@@ -71,7 +71,6 @@ QVariantHash StorageJob::data() const
     return m_data;
 }
 
-
 QString StorageJob::clientName() const
 {
     return m_clientName;
@@ -80,7 +79,6 @@ QString StorageJob::clientName() const
 
 void StorageJob::start()
 {
-
     //FIXME: QHASH
     QMap<QString, QVariant> params = parameters();
 
@@ -89,7 +87,6 @@ void StorageJob::start()
         valueGroup = "default";
     }
 
-    
     if (operationName() == "save") {
         QMetaObject::invokeMethod(Plasma::StorageThread::self(), "save", Qt::QueuedConnection, Q_ARG(StorageJob *, this), Q_ARG(const QVariantMap&, params));
     } else if (operationName() == "retrieve") {
@@ -100,6 +97,7 @@ void StorageJob::start()
         QMetaObject::invokeMethod(Plasma::StorageThread::self(), "expire", Qt::QueuedConnection, Q_ARG(StorageJob *, this), Q_ARG(const QVariantMap&, params));
     } else {
         setError(true);
+        setResult(false);
     }
 }
 
