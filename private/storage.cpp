@@ -41,42 +41,6 @@
 #include "storagethread_p.h"
 
 
-class RefCountedDatabase
-{
-public:
-    void ref()
-    {
-        if (m_ref == 0) {
-            m_db = QSqlDatabase::addDatabase("QSQLITE", QString("plasma-storage-%1").arg((quintptr)this));
-            m_db.setDatabaseName(KStandardDirs::locateLocal("appdata", "plasma-storage2.db"));
-        }
-        //Q_ASSERT(db.isValid());
-        m_ref.ref();
-    }
-
-    bool deref()
-    {
-        //kill the database if the last one in use
-        bool last = !m_ref.deref();
-        if (last) {
-            m_db.close();
-            QString name = m_db.connectionName();
-            m_db = QSqlDatabase();
-            QSqlDatabase::removeDatabase(name);
-        }
-        return !last;
-    }
-
-    inline QSqlDatabase *database()
-    {
-        return &m_db;
-    }
-
-private:
-    QSqlDatabase m_db;
-    QAtomicInt m_ref;
-};
-
 static QThreadStorage<RefCountedDatabase *> s_databasePool;
 
 
@@ -88,14 +52,6 @@ StorageJob::StorageJob(const QString& destination,
     : ServiceJob(destination, operation, parameters, parent),
       m_clientName(destination)
 {
-    m_rdb = s_databasePool.localData();
-    if (m_rdb == 0) {
-        s_databasePool.setLocalData(new RefCountedDatabase);
-        m_rdb = s_databasePool.localData();
-    }
-
-    m_rdb->ref();
-
     Plasma::StorageThread::self()->start();
     connect(Plasma::StorageThread::self(), SIGNAL(newResult(StorageJob *, const QVariant &)), this, SLOT(resultSlot(StorageJob *, const QVariant &)));
     qRegisterMetaType<StorageJob *>();
@@ -103,9 +59,6 @@ StorageJob::StorageJob(const QString& destination,
 
 StorageJob::~StorageJob()
 {
-    if (!m_rdb->deref()) {
-        s_databasePool.setLocalData(0);
-    }
 }
 
 void StorageJob::setData(const QVariantHash &data)
@@ -127,9 +80,6 @@ QString StorageJob::clientName() const
 
 void StorageJob::start()
 {
-    if (!m_rdb->database()->isOpen()) {
-        return;
-    }
 
     //FIXME: QHASH
     QMap<QString, QVariant> params = parameters();
@@ -138,9 +88,6 @@ void StorageJob::start()
     if (valueGroup.isEmpty()) {
         valueGroup = "default";
     }
-
-    //kDebug() << operationName();
-    m_rdb->database()->transaction();
 
     
     if (operationName() == "save") {
@@ -154,7 +101,6 @@ void StorageJob::start()
     } else {
         setError(true);
     }
-    m_rdb->database()->commit();
 }
 
 void StorageJob::resultSlot(StorageJob *job, const QVariant &result)

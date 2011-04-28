@@ -49,7 +49,6 @@ protected Q_SLOTS:
     void resultSlot(StorageJob *job, const QVariant &result);
 
 private:
-    RefCountedDatabase *m_rdb;
     QString m_clientName;
     QVariantHash m_data;
 };

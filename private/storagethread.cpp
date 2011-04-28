@@ -25,7 +25,8 @@
 #include <QSqlDriver>
 #include <QSqlRecord>
 
-#include "kdebug.h"
+#include <kdebug.h>
+#include <kstandarddirs.h>
 
 namespace Plasma
 {
@@ -63,6 +64,11 @@ Plasma::StorageThread *StorageThread::self()
 void StorageThread::initializeDb(StorageJob* caller)
 {
     if (!m_db.open()) {
+        m_db = QSqlDatabase::addDatabase("QSQLITE", QString("plasma-storage-%1").arg((quintptr)this));
+        m_db.setDatabaseName(KStandardDirs::locateLocal("appdata", "plasma-storage2.db"));
+    }
+
+    if (!m_db.open()) {
         kWarning() << "Unable to open the plasma storage cache database: " << m_db.lastError();
     } else if (!m_db.tables().contains(caller->clientName())) {
         QSqlQuery query(m_db);
@@ -72,6 +78,7 @@ void StorageThread::initializeDb(StorageJob* caller)
             m_db.close();
         }
     }
+    m_db.transaction();
 }
 
 void StorageThread::save(StorageJob* caller, const QVariantMap &params)
@@ -157,6 +164,7 @@ void StorageThread::save(StorageJob* caller, const QVariantMap &params)
 
         query.bindValue(field, QVariant());
     }
+    m_db.commit();
 
     emit newResult(caller, true);
 }
