@@ -255,7 +255,7 @@ void DataContainerPrivate::populateFromStoredData(KJob *job)
     if (data.isEmpty() && !ret->data().isEmpty()) {
         data = ret->data();
         dirty = true;
-        q->checkForUpdate();
+        q->forceImmediateUpdate();
     }
 
     KConfigGroup expireGroup = storage->operationDescription("expire");
