@@ -261,10 +261,10 @@ void StorageThread::deleteEntry(QWeakPointer<StorageJob> wcaller, const QVariant
     QSqlQuery query(m_db);
 
     if (params["key"].toString().isEmpty()) {
-        query.prepare("delete from "+caller->clientName()+" where valueGroup=:valueGroup");
+        query.prepare("delete from " + caller->clientName() + " where valueGroup=:valueGroup");
         query.bindValue(":valueGroup", valueGroup);
     } else {
-        query.prepare("delete from "+caller->clientName()+" where valueGroup=:valueGroup and id=:key");
+        query.prepare("delete from " + caller->clientName() + " where valueGroup=:valueGroup and id=:key");
         query.bindValue(":valueGroup", valueGroup);
         query.bindValue(":key", params["key"].toString());
     }
@@ -289,12 +289,12 @@ void StorageThread::expire(QWeakPointer<StorageJob> wcaller, const QVariantMap &
 
     QSqlQuery query(m_db);
     if (valueGroup.isEmpty()) {
-        query.prepare("delete from "+caller->clientName()+" where accessTime < :date");
+        query.prepare("delete from " + caller->clientName() + " where accessTime < :date");
         QDateTime time(QDateTime::currentDateTime());
         time.addSecs(-params["age"].toUInt());
         query.bindValue(":date", time.toTime_t());
     } else {
-        query.prepare("delete from "+caller->clientName()+" where valueGroup=:valueGroup and accessTime < :date");
+        query.prepare("delete from " + caller->clientName() + " where valueGroup=:valueGroup and accessTime < :date");
         query.bindValue(":valueGroup", valueGroup);
         QDateTime time(QDateTime::currentDateTime());
         time.addSecs(-params["age"].toUInt());
@@ -305,7 +305,6 @@ void StorageThread::expire(QWeakPointer<StorageJob> wcaller, const QVariantMap &
 
     emit newResult(caller, success);
 }
-
 
 void StorageThread::run()
 {
