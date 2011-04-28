@@ -20,9 +20,6 @@
 import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 
-import QtQuick 1.0
-import org.kde.plasma.core 0.1 as PlasmaCore
-
 // TODO: add support mouse wheel and key events
 Item {
     id: scrollbar
@@ -37,9 +34,14 @@ Item {
     property bool updateValueWhileDragging: true
     property alias stepSize: range.stepSize
     property alias pressed: mouseArea.pressed
+    property real scrollButtonInterval: 50
 
     // Convinience API
     property bool _isVertical: orientation == Qt.Vertical
+    property bool _showButtons: stepSize != 0
+    property bool _inverted: _isVertical ?
+        !scrollbar.inverted : scrollbar.inverted
+    property alias _value: range.value
 
     width: _isVertical ? 22 : 200
     height: _isVertical ? 200 : 22
@@ -47,149 +49,241 @@ Item {
     visible: flickableItem && handle.width < contents.width
 
     Item {
-        id: contents
 
         width: _isVertical ? scrollbar.height : scrollbar.width
         height: _isVertical ? scrollbar.width : scrollbar.height
         rotation: _isVertical ? -90 : 0
 
         anchors.centerIn: parent
-
-        PlasmaCore.RangeModel {
-            id: range
-
-            minimumValue: 0
-            maximumValue: {
-                var diff;
-                if (_isVertical)
-                    diff = flickableItem.contentHeight - flickableItem.height;
-                else
-                    diff = flickableItem.contentWidth - flickableItem.width;
-
-                return Math.max(0, diff);
-            }
-            stepSize: 0.0
-            inverted: _isVertical ? !scrollbar.inverted : scrollbar.inverted
-            positionAtMinimum: 0 + handle.width / 2
-            positionAtMaximum: contents.width - handle.width / 2
-            value: _isVertical ? flickableItem.contentY : flickableItem.contentX
-            onValueChanged: {
-                if (flickableItem.flicking)
-                    return;
-
-                if (_isVertical)
-                    flickableItem.contentY = value;
-                else
-                    flickableItem.contentX = value;
-            }
-            position: handle.x
-            onPositionChanged: { handle.x = position; }
-
+        PlasmaCore.Svg {
+            id: scrollbarSvg
+            imagePath: "widgets/scrollbar"
         }
 
-        PlasmaCore.FrameSvgItem {
-            id: groove
+        PlasmaCore.SvgItem {
+            id: leftButton
 
-            anchors.fill: parent
-            imagePath: "widgets/scrollbar"
-            prefix: "background-horizontal"
+            anchors {
+                left: parent.left
+                verticalCenter: parent.verticalCenter
+            }
+            height: 18
+            width: _showButtons ? 18 : 0
+            svg: scrollbarSvg
+            elementId: {
+                if (leftMousArea.pressed)
+                    return "sunken-arrow-left";
+
+                if (scrollbar.activeFocus || leftMousArea.containsMouse)
+                    return "mouseover-arrow-left";
+                else
+                    return "arrow-left";
+            }
+
+            MouseArea {
+                id: leftMousArea
+
+                anchors.fill: parent
+                Timer {
+                    id: leftTimer
+                    interval: scrollbar.scrollButtonInterval;
+                    running: parent.pressed
+                    repeat: true
+                    onTriggered: {
+                        if (_inverted)
+                            _value += stepSize;
+                        else
+                            _value -= stepSize;
+                    }
+                }
+            }
         }
 
-        PlasmaCore.FrameSvgItem {
-            id: handle
+        PlasmaCore.SvgItem {
+            id: rightButton
 
-            transform: Translate { x: - handle.width / 2 }
-            x: fakeHandle.x
-            anchors.verticalCenter: groove.verticalCenter
-            width: {
-                var ratio;
-                if (_isVertical)
-                    ratio = flickableItem.visibleArea.heightRatio;
-                else
-                    ratio = flickableItem.visibleArea.widthRatio;
-
-                return ratio * parent.width;
+            anchors {
+                right: parent.right
+                verticalCenter: parent.verticalCenter
             }
-            height: parent.height - margins.top // TODO: check mergin
-            imagePath: "widgets/scrollbar"
-            prefix: {
-                if (scrollbar.pressed)
-                    return "sunken-slider";
+            height: 18
+            width: _showButtons ? 18 : 0
+            svg: scrollbarSvg
+            elementId: {
+                if (rightMousArea.pressed)
+                    return "sunken-arrow-right";
 
-                if (scrollbar.activeFocus || mouseArea.containsMouse)
-                    return "mouseover-slider";
+                if (scrollbar.activeFocus || rightMousArea.containsMouse)
+                    return "mouseover-arrow-right";
                 else
-                    return "slider";
+                    return "arrow-right";
             }
 
-            Behavior on x {
-                id: behavior
-                enabled: !mouseArea.drag.active && scrollbar.animated &&
-                    !flickableItem.flicking
+            MouseArea {
+                id: rightMousArea
 
-                PropertyAnimation {
-                    duration: behavior.enabled ? 150 : 0
-                    easing.type: Easing.OutSine
+                anchors.fill: parent
+                Timer {
+                    id: rightTimer
+                    interval: scrollbar.scrollButtonInterval;
+                    running: parent.pressed;
+                    repeat: true
+                    onTriggered: {
+                        if (_inverted)
+                            _value -= stepSize
+                        else
+                            _value += stepSize;
+                    }
                 }
             }
         }
 
         Item {
-            id: fakeHandle
-            width: handle.width
-            height: handle.height
-            transform: Translate { x: - handle.width / 2 }
+            id: contents
+
+            anchors {
+                left: leftButton.right
+                top: parent.top
+                bottom: parent.bottom
+                right: rightButton.left
+            }
+
+            PlasmaCore.RangeModel {
+                id: range
+
+                minimumValue: 0
+                maximumValue: {
+                    var diff;
+                    if (_isVertical)
+                        diff = flickableItem.contentHeight - flickableItem.height;
+                    else
+                        diff = flickableItem.contentWidth - flickableItem.width;
+
+                    return Math.max(0, diff);
+                }
+                stepSize: 0.0
+                inverted: _inverted
+                positionAtMinimum: 0 + handle.width / 2
+                positionAtMaximum: contents.width - handle.width / 2
+                value: _isVertical ? flickableItem.contentY : flickableItem.contentX
+                onValueChanged: {
+                    if (flickableItem.flicking)
+                        return;
+
+                    if (_isVertical)
+                        flickableItem.contentY = value;
+                    else
+                        flickableItem.contentX = value;
+                }
+                position: handle.x
+                onPositionChanged: { handle.x = position; }
+
+            }
+
+            PlasmaCore.FrameSvgItem {
+                id: groove
+
+                anchors.fill: parent
+                imagePath: "widgets/scrollbar"
+                prefix: "background-horizontal"
+            }
+
+            PlasmaCore.FrameSvgItem {
+                id: handle
+
+                transform: Translate { x: - handle.width / 2 }
+                x: fakeHandle.x
+                anchors.verticalCenter: groove.verticalCenter
+                width: {
+                    var ratio;
+                    if (_isVertical)
+                        ratio = flickableItem.visibleArea.heightRatio;
+                    else
+                        ratio = flickableItem.visibleArea.widthRatio;
+
+                    return ratio * parent.width;
+                }
+                height: parent.height - margins.top // TODO: check mergin
+                imagePath: "widgets/scrollbar"
+                prefix: {
+                    if (scrollbar.pressed)
+                        return "sunken-slider";
+
+                    if (scrollbar.activeFocus || mouseArea.containsMouse)
+                        return "mouseover-slider";
+                    else
+                        return "slider";
+                }
+
+                Behavior on x {
+                    id: behavior
+                    enabled: !mouseArea.drag.active && scrollbar.animated &&
+                        !flickableItem.flicking
+
+                    PropertyAnimation {
+                        duration: behavior.enabled ? 150 : 0
+                        easing.type: Easing.OutSine
+                    }
+                }
+            }
+
+            Item {
+                id: fakeHandle
+                width: handle.width
+                height: handle.height
+                transform: Translate { x: - handle.width / 2 }
+            }
+
+            MouseArea {
+                id: mouseArea
+
+                anchors.fill: parent
+                drag {
+                    target: fakeHandle
+                    axis: Drag.XAxis
+                    minimumX: range.positionAtMinimum
+                    maximumX: range.positionAtMaximum
+                }
+
+                onPressed: {
+                    // Clamp the value
+                    var newX = Math.max(mouse.x, drag.minimumX);
+                    newX = Math.min(newX, drag.maximumX);
+
+                    // Debounce the press: a press event inside the handler will not
+                    // change its position, the user needs to drag it.
+                    if (Math.abs(newX - fakeHandle.x) > handle.width / 2)
+                        range.position = newX;
+
+                    scrollbar.forceActiveFocus();
+                }
+                onReleased: {
+                    // If we don't update while dragging, this is the only
+                    // moment that the range is updated.
+                    if (!scrollbar.updateValueWhileDragging)
+                        range.position = fakeHandle.x;
+                }
+            }
         }
 
-        MouseArea {
-            id: mouseArea
-
-            anchors.fill: parent
-            drag {
-                target: fakeHandle
-                axis: Drag.XAxis
-                minimumX: range.positionAtMinimum
-                maximumX: range.positionAtMaximum
-            }
-
-            onPressed: {
-                // Clamp the value
-                var newX = Math.max(mouse.x, drag.minimumX);
-                newX = Math.min(newX, drag.maximumX);
-
-                // Debounce the press: a press event inside the handler will not
-                // change its position, the user needs to drag it.
-                if (Math.abs(newX - fakeHandle.x) > handle.width / 2)
-                    range.position = newX;
-
-                scrollbar.forceActiveFocus();
-            }
-            onReleased: {
-                // If we don't update while dragging, this is the only
-                // moment that the range is updated.
-                if (!scrollbar.updateValueWhileDragging)
-                    range.position = fakeHandle.x;
-            }
+        // Range position normally follow fakeHandle, except when
+        // 'updateValueWhileDragging' is false. In this case it will only follow
+        // if the user is not pressing the handle.
+        Binding {
+            when: updateValueWhileDragging || !mouseArea.pressed
+            target: range
+            property: "position"
+            value: fakeHandle.x
         }
-    }
 
-    // Range position normally follow fakeHandle, except when
-    // 'updateValueWhileDragging' is false. In this case it will only follow
-    // if the user is not pressing the handle.
-    Binding {
-        when: updateValueWhileDragging || !mouseArea.pressed
-        target: range
-        property: "position"
-        value: fakeHandle.x
-    }
-
-    // During the drag, we simply ignore position set from the range, this
-    // means that setting a value while dragging will not "interrupt" the
-    // dragging activity.
-    Binding {
-        when: !mouseArea.drag.active
-        target: fakeHandle
-        property: "x"
-        value: range.position
+        // During the drag, we simply ignore position set from the range, this
+        // means that setting a value while dragging will not "interrupt" the
+        // dragging activity.
+        Binding {
+            when: !mouseArea.drag.active
+            target: fakeHandle
+            property: "x"
+            value: range.position
+        }
     }
 }

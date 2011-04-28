@@ -233,30 +233,33 @@ Rectangle {
                         text: index
                     }
 
-                    PlasmaComponents.ScrollBar {
-                        orientation: Qt.Vertical
-                        flickableItem: parent
-                        animated: true
-                        anchors {
-                            top: parent.top
-                            right: parent.right
-                            bottom: horizontalScrollBar.top
-                        }
-                    }
-
                     Rectangle {
                         anchors.fill: parent
                         color: "grey"
                         opacity: 0.3
                     }
                 }
-            }
 
+                PlasmaComponents.ScrollBar {
+                    orientation: Qt.Vertical
+                    flickableItem: scrollList
+                    animated: true
+                    stepSize: 40
+                    scrollButtonInterval: 50
+                    anchors {
+                        top: scrollList.top
+                        right: scrollList.right
+                        bottom: scrollList.bottom
+                    }
+                }
+            }
         }
     }
 
     PlasmaComponents.ScrollBar {
         id: horizontalScrollBar
+
+	    stepSize: 30
 
         flickableItem: page
         animated: true
