@@ -19,6 +19,7 @@
 
 #include "storagethread_p.h"
 
+#include <QCoreApplication>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlField>
@@ -47,13 +48,14 @@ K_GLOBAL_STATIC(StorageThreadSingleton, privateStorageThreadSelf)
 StorageThread::StorageThread(QObject *parent)
     : QThread(parent)
 {
-    
 }
 
 StorageThread::~StorageThread()
 {
-    QString name = m_db.connectionName();
-    QSqlDatabase::removeDatabase(name);
+    if (QCoreApplication::closingDown()) {
+        QString name = m_db.connectionName();
+        QSqlDatabase::removeDatabase(name);
+    }
 }
 
 Plasma::StorageThread *StorageThread::self()
@@ -139,6 +141,7 @@ void StorageThread::save(QWeakPointer<StorageJob> wcaller, const QVariantMap &pa
         query.bindValue(":id", it.key());
 
         QString field;
+        bool binary = false;
         switch (QMetaType::Type(it.value().type())) {
             case QVariant::String:
                 field = ":txt";
@@ -151,6 +154,7 @@ void StorageThread::save(QWeakPointer<StorageJob> wcaller, const QVariantMap &pa
                 field = ":float";
                 break;
             case QVariant::ByteArray:
+                binary = true;
                 field = ":binary";
                 break;
             default:
@@ -158,7 +162,14 @@ void StorageThread::save(QWeakPointer<StorageJob> wcaller, const QVariantMap &pa
                 break;
         }
 
-        query.bindValue(field, it.value());
+        if (binary) {
+            QByteArray b;
+            QDataStream ds(&b, QIODevice::WriteOnly);
+            ds << it.value();
+            query.bindValue(field, ds);
+        } else {
+            query.bindValue(field, it.value());
+        }
 
         if (!query.exec()) {
             //kDebug() << "query failed:" << query.lastQuery() << query.lastError().text();
@@ -233,7 +244,10 @@ void StorageThread::retrieve(QWeakPointer<StorageJob> wcaller, const QVariantMap
             } else if (!query.value(floatColumn).isNull()) {
                 data.insert(key, query.value(floatColumn));
             } else if (!query.value(binaryColumn).isNull()) {
-                data.insert(key, query.value(binaryColumn));
+                QByteArray bytes = query.value(binaryColumn).toByteArray();
+                QDataStream in(bytes);
+                QVariant v(in);
+                data.insert(key, v);
             }
         }
 
