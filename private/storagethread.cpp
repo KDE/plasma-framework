@@ -181,6 +181,7 @@ void StorageThread::retrieve(QWeakPointer<StorageJob> wcaller, const QVariantMap
         return;
     }
 
+    const QString clientName = caller->clientName();
     initializeDb(caller);
     QString valueGroup = params["group"].toString();
     if (valueGroup.isEmpty()) {
@@ -189,57 +190,57 @@ void StorageThread::retrieve(QWeakPointer<StorageJob> wcaller, const QVariantMap
 
     QSqlQuery query(m_db);
 
-        //a bit redundant but should be the faster way with less string concatenation as possible
-        if (params["key"].toString().isEmpty()) {
-            //update modification time
-            query.prepare("update " + caller->clientName() + " set accessTime=date('now') where valueGroup=:valueGroup");
-            query.bindValue(":valueGroup", valueGroup);
-            query.exec();
+    //a bit redundant but should be the faster way with less string concatenation as possible
+    if (params["key"].toString().isEmpty()) {
+        //update modification time
+        query.prepare("update " + clientName + " set accessTime=date('now') where valueGroup=:valueGroup");
+        query.bindValue(":valueGroup", valueGroup);
+        query.exec();
 
-            query.prepare("select * from " + caller->clientName() + " where valueGroup=:valueGroup");
-            query.bindValue(":valueGroup", valueGroup);
-        } else {
-            //update modification time
-            query.prepare("update " + caller->clientName() + " set accessTime=date('now') where valueGroup=:valueGroup and id=:key");
-            query.bindValue(":valueGroup", valueGroup);
-            query.bindValue(":key", params["key"].toString());
-            query.exec();
+        query.prepare("select * from " + clientName + " where valueGroup=:valueGroup");
+        query.bindValue(":valueGroup", valueGroup);
+    } else {
+        //update modification time
+        query.prepare("update " + clientName + " set accessTime=date('now') where valueGroup=:valueGroup and id=:key");
+        query.bindValue(":valueGroup", valueGroup);
+        query.bindValue(":key", params["key"].toString());
+        query.exec();
 
-            query.prepare("select * from " + caller->clientName() + " where valueGroup=:valueGroup and id=:key");
-            query.bindValue(":valueGroup", valueGroup);
-            query.bindValue(":key", params["key"].toString());
-        }
+        query.prepare("select * from " + clientName + " where valueGroup=:valueGroup and id=:key");
+        query.bindValue(":valueGroup", valueGroup);
+        query.bindValue(":key", params["key"].toString());
+    }
 
-        const bool success = query.exec();
+    const bool success = query.exec();
 
-        QVariant result;
+    QVariant result;
 
-        caller->data().clear();
-        if (success) {
-            QSqlRecord rec = query.record();
-            const int keyColumn = rec.indexOf("id");
-            const int textColumn = rec.indexOf("txt");
-            const int intColumn = rec.indexOf("int");
-            const int floatColumn = rec.indexOf("float");
-            const int binaryColumn = rec.indexOf("binary");
+    if (success) {
+        QSqlRecord rec = query.record();
+        const int keyColumn = rec.indexOf("id");
+        const int textColumn = rec.indexOf("txt");
+        const int intColumn = rec.indexOf("int");
+        const int floatColumn = rec.indexOf("float");
+        const int binaryColumn = rec.indexOf("binary");
 
-            while (query.next()) {
-                const QString key = query.value(keyColumn).toString();
-                if (!query.value(textColumn).isNull()) {
-                    caller->data().insert(key, query.value(textColumn));
-                } else if (!query.value(intColumn).isNull()) {
-                    caller->data().insert(key, query.value(intColumn));
-                } else if (!query.value(floatColumn).isNull()) {
-                    caller->data().insert(key, query.value(floatColumn));
-                } else if (!query.value(binaryColumn).isNull()) {
-                    caller->data().insert(key, query.value(binaryColumn));
-                }
+        QVariantHash data;
+        while (query.next()) {
+            const QString key = query.value(keyColumn).toString();
+            if (!query.value(textColumn).isNull()) {
+                data.insert(key, query.value(textColumn));
+            } else if (!query.value(intColumn).isNull()) {
+                data.insert(key, query.value(intColumn));
+            } else if (!query.value(floatColumn).isNull()) {
+                data.insert(key, query.value(floatColumn));
+            } else if (!query.value(binaryColumn).isNull()) {
+                data.insert(key, query.value(binaryColumn));
             }
-
-            result = caller->data();
-        } else {
-            result = false;
         }
+
+        caller->setData(data);
+    } else {
+        result = false;
+    }
 
     emit newResult(caller, result);
 }
