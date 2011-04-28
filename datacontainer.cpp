@@ -194,40 +194,22 @@ void DataContainerPrivate::store()
     }
 
     DataEngine* de = q->getDataEngine();
-    if (de == NULL) {
+    if (!de) {
         return;
     }
 
     q->setNeedsToBeStored(false);
 
-    if (storage == NULL) {
+    if (!storage) {
         storage = new Storage(q);
     }
 
     KConfigGroup op = storage->operationDescription("save");
     op.writeEntry("group", q->objectName());
-    DataEngine::Data dataToStore = q->data();
-    DataEngine::Data::const_iterator it = dataToStore.constBegin();
-    while (it != dataToStore.constEnd() && dataToStore.constEnd() == q->data().constEnd()) {
-        QVariant v = it.value();
-        if ((it.value().type() == QVariant::String) || (it.value().type() == QVariant::Int)) {
-            op.writeEntry("key", it.key());
-            op.writeEntry("data", it.value());
-        } else {
-            QByteArray b;
-            QDataStream ds(&b, QIODevice::WriteOnly);
-            ds << it.value();
-            op.writeEntry("key", QString(QLatin1String("base64-") + it.key()));
-            op.writeEntry("data", b.toBase64());
-        }
-        ++it;
-        if (storage == NULL) {
-            storage = new Storage(q);
-        }
-        ServiceJob* job = storage->startOperationCall(op);
-        storageCount++;
-        QObject::connect(job, SIGNAL(finished(KJob*)), q, SLOT(storeJobFinished(KJob*)));
-    }
+    StorageJob *job = static_cast<StorageJob *>(storage->startOperationCall(op));
+    job->setData(data);
+    storageCount++;
+    QObject::connect(job, SIGNAL(finished(KJob*)), q, SLOT(storeJobFinished(KJob*)));
 }
 
 void DataContainerPrivate::storeJobFinished(KJob* )
