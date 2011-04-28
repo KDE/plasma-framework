@@ -94,7 +94,7 @@ void StorageJob::start()
     } else if (operationName() == "retrieve") {
         QMetaObject::invokeMethod(Plasma::StorageThread::self(), "retrieve", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(const QVariantMap&, params));
     } else if (operationName() == "delete") {
-        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "delete", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(const QVariantMap&, params));
+        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "deleteEntry", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(const QVariantMap&, params));
     } else if (operationName() == "expire") {
         QMetaObject::invokeMethod(Plasma::StorageThread::self(), "expire", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(const QVariantMap&, params));
     } else {

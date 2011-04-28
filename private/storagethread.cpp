@@ -270,6 +270,7 @@ void StorageThread::deleteEntry(QWeakPointer<StorageJob> wcaller, const QVariant
     }
 
     const bool success = query.exec();
+    m_db.commit();
 
     emit newResult(caller, success);
 }

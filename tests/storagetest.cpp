@@ -64,5 +64,33 @@ void StorageTest::retrieve()
     }
 }
 
+void StorageTest::deleteEntry()
+{
+    Storage storage;
+    KConfigGroup op = storage.operationDescription("delete");
+    op.writeEntry("group", "Test");
+    Plasma::ServiceJob *job = storage.startOperationCall(op);
+    StorageJob *storageJob = qobject_cast<StorageJob *>(job);
+
+    QVERIFY(storageJob);
+    if (storageJob) {
+        storageJob->setData(m_data);
+        QVERIFY(storageJob->exec());
+        QVERIFY(storageJob->result().toBool());
+    }
+
+    op = storage.operationDescription("retrieve");
+    op.writeEntry("group", "Test");
+    job = storage.startOperationCall(op);
+    storageJob = qobject_cast<StorageJob *>(job);
+
+    QVERIFY(storageJob);
+    if (storageJob) {
+        QVERIFY(storageJob->exec());
+        QVERIFY(storageJob->result().type() != QVariant::Bool);
+        QVERIFY(storageJob->data().isEmpty());
+    }
+}
+
 QTEST_KDEMAIN(StorageTest, NoGUI)
 

@@ -32,6 +32,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void store();
     void retrieve();
+    void deleteEntry();
 
 
 private:
