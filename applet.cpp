@@ -1666,6 +1666,7 @@ void Applet::publish(AnnouncementMethods methods, const QString &resourceName)
         PackageMetadata pm;
         pm.setName(d->appletDescription.name());
         pm.setDescription(d->appletDescription.comment());
+        pm.setIcon(d->appletDescription.icon());
         d->service->d->publish(methods, resourceName, pm);
     } else {
         kDebug() << "Can not publish invalid applets.";
