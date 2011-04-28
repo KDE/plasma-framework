@@ -110,6 +110,11 @@ StorageJob::~StorageJob()
     }
 }
 
+void StorageJob::setData(const QHash<QString, QVariant> &data)
+{
+    m_data = data;
+}
+
 void StorageJob::start()
 {
     if (!m_rdb->database()->isOpen()) {
@@ -123,20 +128,38 @@ void StorageJob::start()
         valueGroup = "default";
     }
 
-
     if (operationName() == "save") {
-      QSqlQuery query(*m_rdb->database());
-      query.prepare("delete from "+m_clientName+" where valueGroup=:valueGroup and id = :id");
-      query.bindValue(":valueGroup", valueGroup);
-      query.bindValue(":id", params["key"].toString());
-      query.exec();
+        QSqlQuery query(*m_rdb->database());
 
-      query.prepare("insert into "+m_clientName+" values(:valueGroup, :id, :datavalue, date('now'), date('now'))");
-      query.bindValue(":id", params["key"].toString());
-      query.bindValue(":valueGroup", valueGroup);
-      query.bindValue(":datavalue", params["data"].toString());
-      const bool success = query.exec();
-      setResult(success);
+        if (!query.exec("BEGIN;")) {
+            setResult(false);
+            return;
+        }
+
+        query.prepare("delete from " + m_clientName + " where valueGroup = :valueGroup and id = :id");
+        query.bindValue(":valueGroup", valueGroup);
+        query.bindValue(":id", params["key"].toString());
+        query.exec();
+
+        query.prepare("insert into " + m_clientName + " values(:valueGroup, :id, :datavalue, date('now'), date('now'))");
+        query.bindValue(":valueGroup", valueGroup);
+
+        const QString key = params.value("key").toString();
+        if (!key.isEmpty()) {
+            m_data.insert(key, params["data"]);
+        }
+
+        QHashIterator<QString, QVariant> it(m_data);
+        while (it.hasNext()) {
+            query.bindValue(":id", it.key());
+            query.bindValue(":datavalue", it.value());
+            if (!query.exec()) {
+                setResult(false);
+                return;
+            }
+        }
+
+        setResult(query.exec("COMMIT;"));
     } else if (operationName() == "retrieve") {
         QSqlQuery query(*m_rdb->database());
 

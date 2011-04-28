@@ -40,10 +40,13 @@ public:
                const QMap<QString, QVariant>& parameters,
                QObject *parent = 0);
     ~StorageJob();
+    void setData(const QHash<QString, QVariant> &data);
     void start();
+
 private:
     RefCountedDatabase *m_rdb;
     QString m_clientName;
+    QVariantHash m_data;
 };
 //End StorageJob
 
