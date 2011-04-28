@@ -52,7 +52,7 @@ StorageThread::StorageThread(QObject *parent)
 
 StorageThread::~StorageThread()
 {
-    if (QCoreApplication::closingDown()) {
+    if (!QCoreApplication::closingDown()) {
         QString name = m_db.connectionName();
         QSqlDatabase::removeDatabase(name);
     }
