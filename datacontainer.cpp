@@ -244,38 +244,25 @@ void DataContainerPrivate::populateFromStoredData(KJob *job)
         return;
     }
 
-    DataEngine::Data dataToInsert;
-    ServiceJob* ret = dynamic_cast<ServiceJob*>(job);
-    const QHash<QString, QVariant> h = ret->result().toHash();
-    QHash<QString, QVariant>::const_iterator it = h.begin();
-    QHash<QString, QVariant>::const_iterator itEnd = h.end();
-    for ( ; it != itEnd; ++it) {
-        QString key = it.key();
-        if (key.startsWith("base64-")) {
-            QByteArray b = QByteArray::fromBase64(it.value().toString().toAscii());
-            QDataStream ds(&b, QIODevice::ReadOnly);
-            QVariant v(ds);
-            key.remove(0, 7);
-            dataToInsert.insert(key, v);
-        } else {
-            dataToInsert.insert(key, it.value());
-        }
+    StorageJob *ret = dynamic_cast<StorageJob*>(job);
+    if (!ret) {
+        return;
     }
+
+    DataEngine::Data dataToInsert = ret->data();
 
     KConfigGroup expireGroup = storage->operationDescription("expire");
     //expire things older than 4 days
     expireGroup.writeEntry("age", 345600);
     storage->startOperationCall(expireGroup);
 
-    if (!(data.isEmpty())) {
-        //Do not fill the source with old stored
-        //data if it is already populated with new data.
-        return;
+    // Only fill the source with old stored
+    // data if it is already populated with new data.
+    if (data.isEmpty()) {
+        data = dataToInsert;
+        dirty = true;
+        q->checkForUpdate();
     }
-
-    data = dataToInsert;
-    dirty = true;
-    q->checkForUpdate();
 }
 
 void DataContainer::disconnectVisualization(QObject *visualization)
