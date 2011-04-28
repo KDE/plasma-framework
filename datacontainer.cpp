@@ -187,7 +187,7 @@ DataEngine* DataContainer::getDataEngine()
 
 void DataContainerPrivate::store()
 {
-    if (!q->needsToBeStored() || !q->isStorageEnabled()){
+    if (!q->needsToBeStored() || !q->isStorageEnabled()) {
         return;
     }
 
