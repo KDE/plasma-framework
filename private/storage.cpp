@@ -240,16 +240,21 @@ void StorageJob::start()
 
 Plasma::ServiceJob* Storage::createJob(const QString &operation, QMap<QString, QVariant> &parameters)
 {
+    if (m_clientName.isEmpty()) {
+        return 0;
+    }
+
     return new StorageJob(m_clientName, operation, parameters, this);
 }
 
 //Storage implementation
-Storage::Storage(QObject* parent) : Plasma::Service(parent)
+Storage::Storage(QObject* parent)
+    : Plasma::Service(parent),
+      m_clientName("data")
 {
     //search among parents for an applet or dataengine: if found call the table as its plugin name
     QObject *parentObject = this;
 
-    QString clientName("data");
     while ((parentObject = parentObject->parent())) {
         Plasma::Applet *applet = qobject_cast<Plasma::Applet *>(parentObject);
         if (applet) {
