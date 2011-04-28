@@ -32,7 +32,7 @@ DataContainer::DataContainer(QObject *parent)
       d(new DataContainerPrivate(this))
 {
     d->storageTimer = new QTimer(this);
-    QObject::connect(d->storageTimer, SIGNAL(timeOut()), this, SLOT(store()));
+    QObject::connect(d->storageTimer, SIGNAL(timeout()), this, SLOT(store()));
 }
 
 DataContainer::~DataContainer()
