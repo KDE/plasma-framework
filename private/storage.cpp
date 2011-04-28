@@ -106,6 +106,9 @@ void StorageJob::start()
 void StorageJob::resultSlot(StorageJob *job, const QVariant &result)
 {
     if (job == this) {
+        if (result.type() == QVariant::Hash) {
+            m_data = result.toHash();
+        }
         setResult(result);
     }
 }

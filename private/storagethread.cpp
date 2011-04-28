@@ -237,7 +237,7 @@ void StorageThread::retrieve(QWeakPointer<StorageJob> wcaller, const QVariantMap
             }
         }
 
-        caller->setData(data);
+        result = data;
     } else {
         result = false;
     }
