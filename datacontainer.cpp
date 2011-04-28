@@ -227,6 +227,7 @@ void DataContainerPrivate::retrieve()
     if (de == NULL) {
         return;
     }
+
     if (!storage) {
         storage = new Storage(q);
     }
@@ -249,20 +250,18 @@ void DataContainerPrivate::populateFromStoredData(KJob *job)
         return;
     }
 
-    DataEngine::Data dataToInsert = ret->data();
+    // Only fill the source with old stored
+    // data if it is not already populated with new data.
+    if (data.isEmpty()) {
+        data = ret->data();
+        dirty = true;
+        q->checkForUpdate();
+    }
 
     KConfigGroup expireGroup = storage->operationDescription("expire");
     //expire things older than 4 days
     expireGroup.writeEntry("age", 345600);
     storage->startOperationCall(expireGroup);
-
-    // Only fill the source with old stored
-    // data if it is already populated with new data.
-    if (data.isEmpty()) {
-        data = dataToInsert;
-        dirty = true;
-        q->checkForUpdate();
-    }
 }
 
 void DataContainer::disconnectVisualization(QObject *visualization)
