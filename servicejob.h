@@ -123,6 +123,7 @@ protected:
 
 private:
     Q_PRIVATE_SLOT(d, void autoStart())
+    Q_PRIVATE_SLOT(d, void preventAutoStart())
 
     ServiceJobPrivate * const d;
 

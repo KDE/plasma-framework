@@ -37,6 +37,7 @@ public:
                       const QString &op,
                       const QMap<QString, QVariant> &params);
 
+    void preventAutoStart();
     void autoStart();
 
     ServiceJob *q;
@@ -45,6 +46,7 @@ public:
     QMap<QString, QVariant> parameters;
     QVariant result;
     Credentials identity;
+    bool m_allowAutoStart;
 };
 
 }

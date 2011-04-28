@@ -18,6 +18,9 @@
  */
 
 #include "servicejob.h"
+
+#include <kdebug.h>
+
 #include <plasma/private/servicejob_p.h>
 
 namespace Plasma
@@ -28,13 +31,21 @@ ServiceJobPrivate::ServiceJobPrivate(ServiceJob *owner, const QString &dest,
         : q(owner),
           destination(dest),
           operation(op),
-          parameters(params)
+          parameters(params),
+          m_allowAutoStart(true)
 {
+}
+
+void ServiceJobPrivate::preventAutoStart()
+{
+    m_allowAutoStart = false;
 }
 
 void ServiceJobPrivate::autoStart()
 {
-    q->start();
+    if (m_allowAutoStart) {
+        q->start();
+    }
 }
 
 ServiceJob::ServiceJob(const QString &destination, const QString &operation,
@@ -42,6 +53,7 @@ ServiceJob::ServiceJob(const QString &destination, const QString &operation,
     : KJob(parent),
       d(new ServiceJobPrivate(this, destination, operation, parameters))
 {
+    connect(this, SIGNAL(finished(KJob*)), this, SLOT(preventAutoStart()));
 }
 
 ServiceJob::~ServiceJob()
