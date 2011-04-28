@@ -26,10 +26,11 @@ Rectangle {
     color: "lightgrey"
 
     Flickable {
-        id: buttonPage
+        id: page
 
         anchors.fill: parent
-        contentWidth: 1200
+        contentWidth: 2200
+        contentHeight: 600
 
         Row {
             x: 30
@@ -211,6 +212,71 @@ Rectangle {
                     text: slider2.value
                 }
             }
+            Column {
+                spacing: 20
+
+                Text {
+                    font.pixelSize: 20
+                    text: "Scroll Bar"
+                }
+
+                ListView {
+                    id: scrollList
+
+                    width: 200
+                    height: 200
+                    clip: true
+                    model: 100
+                    delegate: Text {
+                        width: 200
+                        height: 18
+                        text: index
+                    }
+
+                    PlasmaComponents.ScrollBar {
+                        orientation: Qt.Vertical
+                        flickableItem: parent
+                        animated: true
+                        anchors {
+                            top: parent.top
+                            right: parent.right
+                            bottom: horizontalScrollBar.top
+                        }
+                    }
+
+                    Rectangle {
+                        anchors.fill: parent
+                        color: "grey"
+                        opacity: 0.3
+                    }
+                }
+            }
+
+        }
+    }
+
+    PlasmaComponents.ScrollBar {
+        id: horizontalScrollBar
+
+        flickableItem: page
+        animated: true
+        anchors {
+            left: parent.left
+            right: verticalScrollBar.left
+            bottom: parent.bottom
+        }
+    }
+
+    PlasmaComponents.ScrollBar {
+        id: verticalScrollBar
+
+        orientation: Qt.Vertical
+        flickableItem: page
+        animated: true
+        anchors {
+            top: parent.top
+            right: parent.right
+            bottom: horizontalScrollBar.top
         }
     }
 }
