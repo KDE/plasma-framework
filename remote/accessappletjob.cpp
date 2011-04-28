@@ -41,7 +41,8 @@ class AccessAppletJobPrivate
 public:
     AccessAppletJobPrivate(const KUrl &location, AccessAppletJob *owner)
         : q(owner),
-          location(location)
+          location(location),
+          applet(0)
     {
     }
 
@@ -112,7 +113,12 @@ public:
             */
 
             applet = Applet::loadPlasmoid(path);
-            applet->d->remoteLocation = location.prettyUrl();
+            if (applet) {
+                applet->d->remoteLocation = location.prettyUrl();
+            } else {
+                q->setError(-1);
+            }
+
             q->emitResult();
         }
     }
