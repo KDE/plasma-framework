@@ -136,14 +136,11 @@ void StorageJob::start()
         valueGroup = "default";
     }
 
+    //kDebug() << operationName();
+    m_rdb->database()->transaction();
+
     if (operationName() == "save") {
         QSqlQuery query(*m_rdb->database());
-
-        if (!query.exec("BEGIN;")) {
-            setResult(false);
-            return;
-        }
-
         if (params.value("key").toString().isNull()) {
             m_data.insert(params.value("key").toString(), params.value("data"));
         }
@@ -210,7 +207,7 @@ void StorageJob::start()
             query.bindValue(field, it.value());
 
             if (!query.exec()) {
-                kDebug() << "query failed:" << query.lastQuery() << query.lastError().text();
+                //kDebug() << "query failed:" << query.lastQuery() << query.lastError().text();
                 setResult(false);
                 return;
             }
@@ -218,7 +215,7 @@ void StorageJob::start()
             query.bindValue(field, QVariant());
         }
 
-        setResult(query.exec("COMMIT;"));
+        setResult(true);
     } else if (operationName() == "retrieve") {
         QSqlQuery query(*m_rdb->database());
 
