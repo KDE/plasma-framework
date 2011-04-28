@@ -50,7 +50,18 @@ void StorageTest::store()
 
 void StorageTest::retrieve()
 {
-    QCOMPARE(true, true);
+    Storage storage;
+    KConfigGroup op = storage.operationDescription("retrieve");
+    op.writeEntry("group", "Test");
+    Plasma::ServiceJob *job = storage.startOperationCall(op);
+    StorageJob *storageJob = qobject_cast<StorageJob *>(job);
+
+    QVERIFY(storageJob);
+    if (storageJob) {
+        QVERIFY(storageJob->exec());
+        QVERIFY(storageJob->result().toBool());
+        QCOMPARE(storageJob->data(), m_data);
+    }
 }
 
 QTEST_KDEMAIN(StorageTest, NoGUI)
