@@ -151,6 +151,7 @@ void StorageJob::start()
 
         QHashIterator<QString, QVariant> it(m_data);
         while (it.hasNext()) {
+            it.next();
             query.bindValue(":id", it.key());
             query.bindValue(":datavalue", it.value());
             if (!query.exec()) {
