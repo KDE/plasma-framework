@@ -19,6 +19,8 @@
 
 #include "storagethread_p.h"
 
+#include "kdebug.h"
+
 namespace Plasma
 {
 
@@ -38,7 +40,6 @@ K_GLOBAL_STATIC(StorageThreadSingleton, privateStorageThreadSelf)
 StorageThread::StorageThread(QObject *parent)
     : QThread(parent)
 {
-    
 }
 
 StorageThread::~StorageThread()
@@ -47,33 +48,33 @@ StorageThread::~StorageThread()
     QSqlDatabase::removeDatabase(name);
 }
 
-Plasma::StorageThread *self()
+Plasma::StorageThread *StorageThread::self()
 {
     return &privateStorageThreadSelf->self;
 }
 
-void StorageThread::save(ServiceJob* caller, const QVariantMap &params)
+void StorageThread::save(StorageJob* caller, const QVariantMap &params)
 {
     bool success = true;
 
     emit newResult(caller, success);
 }
 
-void StorageThread::retrieve(ServiceJob* caller, const QVariantMap &params)
+void StorageThread::retrieve(StorageJob* caller, const QVariantMap &params)
 {
-
+kWarning()<<"RETRIEVE";
     bool success = true;
     emit newResult(caller, success);
 }
 
-void StorageThread::deleteEntry(ServiceJob* caller, const QVariantMap &params)
+void StorageThread::deleteEntry(StorageJob* caller, const QVariantMap &params)
 {
 
     const bool success = true;
     emit newResult(caller, success);
 }
 
-void StorageThread::expire(ServiceJob* caller, const QVariantMap &params)
+void StorageThread::expire(StorageJob* caller, const QVariantMap &params)
 {
     
     bool success = true;
@@ -83,7 +84,7 @@ void StorageThread::expire(ServiceJob* caller, const QVariantMap &params)
 
 void StorageThread::run()
 {
-    
+    exec();
 }
 
 }

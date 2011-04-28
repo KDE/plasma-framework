@@ -38,6 +38,7 @@
 #include "applet.h"
 #include "dataengine.h"
 #include "abstractrunner.h"
+#include "storagethread_p.h"
 
 
 class RefCountedDatabase
@@ -78,6 +79,7 @@ private:
 
 static QThreadStorage<RefCountedDatabase *> s_databasePool;
 
+
 //Storage Job implentation
 StorageJob::StorageJob(const QString& destination,
                        const QString& operation,
@@ -104,6 +106,8 @@ StorageJob::StorageJob(const QString& destination,
             m_rdb->database()->close();
         }
     }
+    Plasma::StorageThread::self()->start();
+    qRegisterMetaType<StorageJob *>();
 }
 
 StorageJob::~StorageJob()
@@ -129,6 +133,7 @@ void StorageJob::start()
         return;
     }
 
+    //FIXME: QHASH
     QMap<QString, QVariant> params = parameters();
 
     QString valueGroup = params["group"].toString();
@@ -220,6 +225,8 @@ void StorageJob::start()
         setResult(true);
     } else if (operationName() == "retrieve") {
         QSqlQuery query(*m_rdb->database());
+        
+        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "retrieve", Qt::QueuedConnection, Q_ARG(StorageJob *, this), Q_ARG(const QVariantMap&, params));
 
         //a bit redundant but should be the faster way with less string concatenation as possible
         if (params["key"].toString().isEmpty()) {

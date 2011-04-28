@@ -24,7 +24,7 @@
 #include <QThread>
 #include <QSqlDatabase>
 
-#include "servicejob_p.h"
+#include "storage_p.h"
 
 namespace Plasma
 {
@@ -38,16 +38,16 @@ public:
 
     void run();
 
-    static StorageThread *self();
+    static Plasma::StorageThread *self();
 
 public Q_SLOTS:
-    void save(ServiceJob* caller, const QVariantMap &parameters);
-    void retrieve(ServiceJob* caller, const QVariantMap &parameters);
-    void deleteEntry(ServiceJob* caller, const QVariantMap &parameters);
-    void expire(ServiceJob* caller, const QVariantMap &parameters);
+    void save(StorageJob* caller, const QVariantMap &parameters);
+    void retrieve(StorageJob* caller, const QVariantMap &parameters);
+    void deleteEntry(StorageJob* caller, const QVariantMap &parameters);
+    void expire(StorageJob* caller, const QVariantMap &parameters);
 
 Q_SIGNALS:
-    void newResult(ServiceJob* caller, bool result);
+    void newResult(StorageJob* caller, bool result);
 
 private:
     QSqlDatabase m_db;
