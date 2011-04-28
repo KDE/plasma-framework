@@ -19,10 +19,13 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA       //
 // 02110-1301  USA                                                     //
 /////////////////////////////////////////////////////////////////////////
+
 #include "private/storage_p.h"
 
 //Qt
+#include <QSqlDriver>
 #include <QSqlError>
+#include <QSqlField>
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QThreadStorage>
@@ -141,10 +144,30 @@ void StorageJob::start()
             return;
         }
 
-        query.prepare("delete from " + m_clientName + " where valueGroup = :valueGroup and id = :id");
+        if (params.value("key").toString().isNull()) {
+            m_data.insert(params.value("key").toString(), params.value("data"));
+        }
+
+        QHashIterator<QString, QVariant> it(m_data);
+
+        QString ids;
+        while (it.hasNext()) {
+            it.next();
+            QSqlField field(":id", QVariant::String);
+            field.setValue(it.key());
+            if (!ids.isEmpty()) {
+                ids.append(", ");
+            }
+            ids.append(m_rdb->database()->driver()->formatValue(field));
+        }
+
+        query.prepare("delete from " + m_clientName + " where valueGroup = :valueGroup and id in (" + ids + ");");
         query.bindValue(":valueGroup", valueGroup);
-        query.bindValue(":id", params["key"].toString());
-        query.exec();
+
+        if (!query.exec()) {
+            setResult(false);
+            return;
+        }
 
         query.prepare("insert into " + m_clientName + " values(:valueGroup, :id, :txt, :int, :float, :binary, date('now'), date('now'))");
         query.bindValue(":valueGroup", valueGroup);
@@ -158,9 +181,10 @@ void StorageJob::start()
             m_data.insert(key, params["data"]);
         }
 
-        QHashIterator<QString, QVariant> it(m_data);
+        it.toFront();
         while (it.hasNext()) {
             it.next();
+            //kDebug() << "going to insert" << valueGroup << it.key();
             query.bindValue(":id", it.key());
 
             QString field;
@@ -186,6 +210,7 @@ void StorageJob::start()
             query.bindValue(field, it.value());
 
             if (!query.exec()) {
+                kDebug() << "query failed:" << query.lastQuery() << query.lastError().text();
                 setResult(false);
                 return;
             }
@@ -208,29 +233,41 @@ void StorageJob::start()
             query.bindValue(":valueGroup", valueGroup);
         } else {
             //update modification time
-            query.prepare("update "+m_clientName+" set accessTime=date('now') where valueGroup=:valueGroup and id=:key");
+            query.prepare("update " + m_clientName + " set accessTime=date('now') where valueGroup=:valueGroup and id=:key");
             query.bindValue(":valueGroup", valueGroup);
             query.bindValue(":key", params["key"].toString());
             query.exec();
 
-            query.prepare("select * from "+m_clientName+" where valueGroup=:valueGroup and id=:key");
+            query.prepare("select * from " + m_clientName + " where valueGroup=:valueGroup and id=:key");
             query.bindValue(":valueGroup", valueGroup);
             query.bindValue(":key", params["key"].toString());
         }
 
         const bool success = query.exec();
 
-        QHash<QString, QVariant> h;
+        m_data.clear();
         if (success) {
             QSqlRecord rec = query.record();
             const int keyColumn = rec.indexOf("id");
-            const int dataColumn = rec.indexOf("data");
+            const int textColumn = rec.indexOf("txt");
+            const int intColumn = rec.indexOf("int");
+            const int floatColumn = rec.indexOf("float");
+            const int binaryColumn = rec.indexOf("binary");
 
             while (query.next()) {
-                h[query.value(keyColumn).toString()] = query.value(dataColumn).toString();
+                const QString key = query.value(keyColumn).toString();
+                if (!query.value(textColumn).isNull()) {
+                    m_data.insert(key, query.value(textColumn));
+                } else if (!query.value(intColumn).isNull()) {
+                    m_data.insert(key, query.value(intColumn));
+                } else if (!query.value(floatColumn).isNull()) {
+                    m_data.insert(key, query.value(floatColumn));
+                } else if (!query.value(binaryColumn).isNull()) {
+                    m_data.insert(key, query.value(binaryColumn));
+                }
             }
 
-            setResult(h);
+            setResult(m_data);
         }
 
     } else if (operationName() == "delete") {
