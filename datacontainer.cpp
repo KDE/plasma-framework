@@ -31,6 +31,8 @@ DataContainer::DataContainer(QObject *parent)
     : QObject(parent),
       d(new DataContainerPrivate(this))
 {
+    d->storageTimer = new QTimer(this);
+    QObject::connect(d->storageTimer, SIGNAL(timeOut()), this, SLOT(store()));
 }
 
 DataContainer::~DataContainer()
@@ -59,7 +61,7 @@ void DataContainer::setData(const QString &key, const QVariant &value)
     //setData() since the last time it was stored. This
     //gives us only one singleShot timer.
     if (isStorageEnabled() || !needsToBeStored()) {
-        QTimer::singleShot(180000, this, SLOT(store()));
+        d->storageTimer->start(180000);
     }
 
     setNeedsToBeStored(true);
