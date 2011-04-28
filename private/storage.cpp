@@ -96,17 +96,8 @@ StorageJob::StorageJob(const QString& destination,
 
     m_rdb->ref();
 
-    if (!m_rdb->database()->open()) {
-        kWarning() << "Unable to open the plasma storage cache database: " << m_rdb->database()->lastError();
-    } else if (!m_rdb->database()->tables().contains(m_clientName)) {
-        QSqlQuery query(*m_rdb->database());
-        query.prepare(QString("create table ") + m_clientName + " (valueGroup varchar(256), id varchar(256), txt TEXT, int INTEGER, float REAL, binary BLOB, creationTime datetime, accessTime datetime, primary key (valueGroup, id))");
-        if (!query.exec()) {
-            kWarning() << "Unable to create table for" << m_clientName;
-            m_rdb->database()->close();
-        }
-    }
     Plasma::StorageThread::self()->start();
+    connect(Plasma::StorageThread::self(), SIGNAL(newResult(StorageJob *, const QVariant &)), this, SLOT(resultSlot(StorageJob *, const QVariant &)));
     qRegisterMetaType<StorageJob *>();
 }
 
@@ -127,6 +118,13 @@ QVariantHash StorageJob::data() const
     return m_data;
 }
 
+
+QString StorageJob::clientName() const
+{
+    return m_clientName;
+}
+
+
 void StorageJob::start()
 {
     if (!m_rdb->database()->isOpen()) {
@@ -144,176 +142,26 @@ void StorageJob::start()
     //kDebug() << operationName();
     m_rdb->database()->transaction();
 
+    
     if (operationName() == "save") {
-        QSqlQuery query(*m_rdb->database());
-        if (params.value("key").toString().isNull()) {
-            m_data.insert(params.value("key").toString(), params.value("data"));
-        }
-
-        QHashIterator<QString, QVariant> it(m_data);
-
-        QString ids;
-        while (it.hasNext()) {
-            it.next();
-            QSqlField field(":id", QVariant::String);
-            field.setValue(it.key());
-            if (!ids.isEmpty()) {
-                ids.append(", ");
-            }
-            ids.append(m_rdb->database()->driver()->formatValue(field));
-        }
-
-        query.prepare("delete from " + m_clientName + " where valueGroup = :valueGroup and id in (" + ids + ");");
-        query.bindValue(":valueGroup", valueGroup);
-
-        if (!query.exec()) {
-            m_rdb->database()->commit();
-            setResult(false);
-            return;
-        }
-
-        query.prepare("insert into " + m_clientName + " values(:valueGroup, :id, :txt, :int, :float, :binary, date('now'), date('now'))");
-        query.bindValue(":valueGroup", valueGroup);
-        query.bindValue(":txt", QVariant());
-        query.bindValue(":int", QVariant());
-        query.bindValue(":float", QVariant());
-        query.bindValue(":binary", QVariant());
-
-        const QString key = params.value("key").toString();
-        if (!key.isEmpty()) {
-            m_data.insert(key, params["data"]);
-        }
-
-        it.toFront();
-        while (it.hasNext()) {
-            it.next();
-            //kDebug() << "going to insert" << valueGroup << it.key();
-            query.bindValue(":id", it.key());
-
-            QString field;
-            switch (QMetaType::Type(it.value().type())) {
-                case QVariant::String:
-                    field = ":txt";
-                    break;
-                case QVariant::Int:
-                    field = ":int";
-                    break;
-                case QVariant::Double:
-                case QMetaType::Float:
-                    field = ":float";
-                    break;
-                case QVariant::ByteArray:
-                    field = ":binary";
-                    break;
-                default:
-                    continue;
-                    break;
-            }
-
-            query.bindValue(field, it.value());
-
-            if (!query.exec()) {
-                //kDebug() << "query failed:" << query.lastQuery() << query.lastError().text();
-                m_rdb->database()->commit();
-                setResult(false);
-                return;
-            }
-
-            query.bindValue(field, QVariant());
-        }
-
-        setResult(true);
+        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "save", Qt::QueuedConnection, Q_ARG(StorageJob *, this), Q_ARG(const QVariantMap&, params));
     } else if (operationName() == "retrieve") {
-        QSqlQuery query(*m_rdb->database());
-        
         QMetaObject::invokeMethod(Plasma::StorageThread::self(), "retrieve", Qt::QueuedConnection, Q_ARG(StorageJob *, this), Q_ARG(const QVariantMap&, params));
-
-        //a bit redundant but should be the faster way with less string concatenation as possible
-        if (params["key"].toString().isEmpty()) {
-            //update modification time
-            query.prepare("update " + m_clientName + " set accessTime=date('now') where valueGroup=:valueGroup");
-            query.bindValue(":valueGroup", valueGroup);
-            query.exec();
-
-            query.prepare("select * from " + m_clientName + " where valueGroup=:valueGroup");
-            query.bindValue(":valueGroup", valueGroup);
-        } else {
-            //update modification time
-            query.prepare("update " + m_clientName + " set accessTime=date('now') where valueGroup=:valueGroup and id=:key");
-            query.bindValue(":valueGroup", valueGroup);
-            query.bindValue(":key", params["key"].toString());
-            query.exec();
-
-            query.prepare("select * from " + m_clientName + " where valueGroup=:valueGroup and id=:key");
-            query.bindValue(":valueGroup", valueGroup);
-            query.bindValue(":key", params["key"].toString());
-        }
-
-        const bool success = query.exec();
-
-        m_data.clear();
-        if (success) {
-            QSqlRecord rec = query.record();
-            const int keyColumn = rec.indexOf("id");
-            const int textColumn = rec.indexOf("txt");
-            const int intColumn = rec.indexOf("int");
-            const int floatColumn = rec.indexOf("float");
-            const int binaryColumn = rec.indexOf("binary");
-
-            while (query.next()) {
-                const QString key = query.value(keyColumn).toString();
-                if (!query.value(textColumn).isNull()) {
-                    m_data.insert(key, query.value(textColumn));
-                } else if (!query.value(intColumn).isNull()) {
-                    m_data.insert(key, query.value(intColumn));
-                } else if (!query.value(floatColumn).isNull()) {
-                    m_data.insert(key, query.value(floatColumn));
-                } else if (!query.value(binaryColumn).isNull()) {
-                    m_data.insert(key, query.value(binaryColumn));
-                }
-            }
-
-            setResult(m_data);
-        } else {
-            setResult(false);
-        }
     } else if (operationName() == "delete") {
-        QSqlQuery query(*m_rdb->database());
-
-        if (params["key"].toString().isEmpty()) {
-            query.prepare("delete from "+m_clientName+" where valueGroup=:valueGroup");
-            query.bindValue(":valueGroup", valueGroup);
-        } else {
-            query.prepare("delete from "+m_clientName+" where valueGroup=:valueGroup and id=:key");
-            query.bindValue(":valueGroup", valueGroup);
-            query.bindValue(":key", params["key"].toString());
-        }
-
-        const bool success = query.exec();
-        setResult(success);
-
+        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "delete", Qt::QueuedConnection, Q_ARG(StorageJob *, this), Q_ARG(const QVariantMap&, params));
     } else if (operationName() == "expire") {
-        QSqlQuery query(*m_rdb->database());
-        if (valueGroup.isEmpty()) {
-            query.prepare("delete from "+m_clientName+" where accessTime < :date");
-            QDateTime time(QDateTime::currentDateTime());
-            time.addSecs(-params["age"].toUInt());
-            query.bindValue(":date", time.toTime_t());
-        } else {
-            query.prepare("delete from "+m_clientName+" where valueGroup=:valueGroup and accessTime < :date");
-            query.bindValue(":valueGroup", valueGroup);
-            QDateTime time(QDateTime::currentDateTime());
-            time.addSecs(-params["age"].toUInt());
-            query.bindValue(":date", time.toTime_t());
-        }
-
-        const bool success = query.exec();
-        setResult(success);
-
+        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "expire", Qt::QueuedConnection, Q_ARG(StorageJob *, this), Q_ARG(const QVariantMap&, params));
     } else {
         setError(true);
     }
     m_rdb->database()->commit();
+}
+
+void StorageJob::resultSlot(StorageJob *job, const QVariant &result)
+{
+    if (job == this) {
+        setResult(result);
+    }
 }
 
 Plasma::ServiceJob* Storage::createJob(const QString &operation, QMap<QString, QVariant> &parameters)

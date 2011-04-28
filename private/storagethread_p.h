@@ -39,6 +39,7 @@ public:
     void run();
 
     static Plasma::StorageThread *self();
+    void initializeDb(StorageJob* caller);
 
 public Q_SLOTS:
     void save(StorageJob* caller, const QVariantMap &parameters);
@@ -47,7 +48,7 @@ public Q_SLOTS:
     void expire(StorageJob* caller, const QVariantMap &parameters);
 
 Q_SIGNALS:
-    void newResult(StorageJob* caller, bool result);
+    void newResult(StorageJob* caller, const QVariant &result);
 
 private:
     QSqlDatabase m_db;

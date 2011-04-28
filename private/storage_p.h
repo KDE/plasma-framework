@@ -43,6 +43,10 @@ public:
     void setData(const QVariantHash &data);
     QVariantHash data() const;
     void start();
+    QString clientName() const;
+
+protected Q_SLOTS:
+    void resultSlot(StorageJob *job, const QVariant &result);
 
 private:
     RefCountedDatabase *m_rdb;
