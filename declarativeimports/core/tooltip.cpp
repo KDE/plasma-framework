@@ -35,8 +35,7 @@
 
 
 ToolTipProxy::ToolTipProxy(QObject *parent)
-    : QObject(parent), m_mainText(""), m_subText(""),
-      m_declarativeItemContainer(0), m_widget(0)
+    : QObject(parent), m_mainText(""), m_subText(""), m_widget(0)
 {
     connect(this, SIGNAL(targetChanged()), this, SLOT(updateToolTip()));
     connect(this, SIGNAL(mainTextChanged()), this, SLOT(updateToolTip()));
@@ -46,9 +45,6 @@ ToolTipProxy::ToolTipProxy(QObject *parent)
 
 ToolTipProxy::~ToolTipProxy()
 {
-    if (!m_declarativeItemContainer) {
-        delete m_declarativeItemContainer;
-	}
 }
 
 QGraphicsObject *ToolTipProxy::target() const
@@ -94,17 +90,19 @@ void ToolTipProxy::syncTarget()
     }
 
     if (!m_declarativeItemContainer) {
-        m_declarativeItemContainer = new DeclarativeItemContainer();
-        m_declarativeItemContainer->setObjectName("DIContainer");
-        scene->addItem(m_declarativeItemContainer);
-    }
-
-    m_target.data()->setObjectName("Original Item");
-    m_declarativeItemContainer->setDeclarativeItem(item, false);
-    m_declarativeItemContainer->setAcceptHoverEvents(true);
-    m_declarativeItemContainer->setParentItem(m_target.data());
-    m_widget = m_declarativeItemContainer;
-    emit targetChanged();
+	    m_declarativeItemContainer = QWeakPointer<DeclarativeItemContainer>(new DeclarativeItemContainer());
+        m_declarativeItemContainer.data()->setObjectName("DIContainer");
+        scene->addItem(m_declarativeItemContainer.data());
+    } 
+    
+    if (m_declarativeItemContainer) {
+        m_target.data()->setObjectName("Original Item");
+        m_declarativeItemContainer.data()->setDeclarativeItem(item, false);
+        m_declarativeItemContainer.data()->setAcceptHoverEvents(true);
+        m_declarativeItemContainer.data()->setParentItem(m_target.data());
+        m_widget = m_declarativeItemContainer.data();
+        emit targetChanged();
+	}
 }
 
 QString ToolTipProxy::mainText() const

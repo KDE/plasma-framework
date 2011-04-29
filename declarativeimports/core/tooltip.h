@@ -68,8 +68,8 @@ private:
     QString m_mainText;
     QString m_subText;
     QString m_image;
-    DeclarativeItemContainer *m_declarativeItemContainer;
     QGraphicsWidget *m_widget;
+    QWeakPointer<DeclarativeItemContainer> m_declarativeItemContainer;
     QWeakPointer<QGraphicsObject> m_target;
 };
 
