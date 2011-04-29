@@ -274,13 +274,16 @@ enum AnnouncementMethod {
 Q_DECLARE_FLAGS(AnnouncementMethods, AnnouncementMethod)
 
 enum TrustLevel {
-    InvalidCredentials = 0, /**< The credentials are invalid **/
-    UnknownCredentials = 1, /**< The credentials are unknown **/
-    ValidCredentials = 2, /**< The credentials are valid **/
-    TrustedCredentials = 3, /**< The credentials are trusted **/
-    UltimateCredentials = 4 /**< The ultimate trust level applies to the credentials **/
+    UnverifiableTrust = 0,      /**< The plasmoid is shipped without any signature file*/
+    CompletelyUntrusted,        /**< The plasmoid has been signed with a broken/expired/false signature*/
+    UnknownTrusted,             /**< The plasmoid has been signed with an unknown key*/
+    UserTrusted,                /**< The plasmoid has been signed with a key signed by the user himself*/
+    SelfTrusted,                /**< The plasmoid has been signed with a user key*/
+    FullyTrused,                /**< The plasmoid has been signed with a key signed by a KDE key*/
+    UltimatelyTrusted           /**< The plasmoid has been signed with a KDE key*/
 };
 Q_ENUMS(TrustLevel)
+
 
 /**
  * @return the scaling factor (0..1) for a ZoomLevel

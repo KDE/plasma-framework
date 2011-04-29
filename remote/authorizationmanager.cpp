@@ -18,19 +18,19 @@
  */
 
 #include "authorizationmanager.h"
-#include "private/authorizationmanager_p.h"
+#include "authorizationmanager_p.h"
 
 #include "authorizationinterface.h"
 #include "authorizationrule.h"
+#include "authorizationrule_p.h"
+#include "denyallauthorization_p.h"
 #include "credentials.h"
+#include "pinpairingauthorization_p.h"
 #include "service.h"
 #include "servicejob.h"
+#include "trustedonlyauthorization_p.h"
 
-#include "private/authorizationrule_p.h"
-#include "private/denyallauthorization_p.h"
 #include "private/joliemessagehelper_p.h"
-#include "private/pinpairingauthorization_p.h"
-#include "private/trustedonlyauthorization_p.h"
 
 #include <QtCore/QBuffer>
 #include <QtCore/QMap>

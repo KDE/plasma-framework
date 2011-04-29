@@ -132,7 +132,7 @@ TrustLevel Credentials::trustLevel() const
     }
     */
     //Trust no one ;)
-    return ValidCredentials;
+    return UnknownTrusted;
 }
 
 bool Credentials::isValid() const
