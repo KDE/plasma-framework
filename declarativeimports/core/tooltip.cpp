@@ -46,7 +46,9 @@ ToolTipProxy::ToolTipProxy(QObject *parent)
 
 ToolTipProxy::~ToolTipProxy()
 {
-    delete m_declarativeItemContainer;
+    if (!m_declarativeItemContainer) {
+        delete m_declarativeItemContainer;
+	}
 }
 
 QGraphicsObject *ToolTipProxy::target() const
