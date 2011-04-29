@@ -1,0 +1,12 @@
+[Protocol]
+protocol=plasma
+
+exec=plasma-remote-helper %u
+input=none
+output=none
+
+Icon=plasma
+Description=A protocol for Plasma services
+
+helper=true
+Class=:internet
