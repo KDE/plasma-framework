@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Application dashboard
 Name[ca]=Tauler d'aplicacions
+Name[cs]=Pracovní plocha aplikace
 Name[de]=Anwendungsübersicht
 Name[en_GB]=Application dashboard
 Name[es]=Tablero de aplicaciones
@@ -24,6 +25,7 @@ Name[x-test]=xxApplication dashboardxx
 Name[zh_TW]=應用程式控制面板
 Comment=Intended as Application dashboard default
 Comment[ca]=Proposat com a tauler d'aplicacions per defecte
+Comment[cs]=Zamýšleno jako výchozí pracovní plocha aplikace
 Comment[en_GB]=Intended as Application dashboard default
 Comment[es]=Versión predeterminada del tablero de aplicaciones
 Comment[et]=Vaikimisi rakendustevaade
