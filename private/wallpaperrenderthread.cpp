@@ -20,194 +20,187 @@
 
 #include "plasma/private/wallpaperrenderthread_p.h"
 
+#include <QCoreApplication>
 #include <QPainter>
 #include <QFile>
 #include <QSvgRenderer>
+
+#ifndef PLASMA_NO_SOLID
+#include <solid/device.h>
+#include <solid/deviceinterface.h>
+#endif
 
 #include <kdebug.h>
 
 namespace Plasma
 {
 
-WallpaperRenderThread::WallpaperRenderThread(QObject *parent)
+int WallpaperRenderRequest::s_token = 0;
+int WallpaperRenderThread::s_rendererCount = 0;
+QQueue<WallpaperRenderRequest> WallpaperRenderThread::s_renderQueue;
+
+WallpaperRenderThread::WallpaperRenderThread(const WallpaperRenderRequest &request, QObject *parent)
     : QThread(parent),
-      m_currentToken(-1)
+      m_request(request),
+      m_abort(false)
 {
-    m_abort = false;
-    m_restart = false;
+    qRegisterMetaType<WallpaperRenderRequest>("WallpaperRenderRequest");
+    if (!request.requester) {
+        deleteLater();
+        return;
+    }
+
+    ++s_rendererCount;
+    connect(this, SIGNAL(done(WallpaperRenderRequest,QImage)),
+            request.requester.data(), SLOT(newRenderCompleted(WallpaperRenderRequest,QImage)));
 }
 
 WallpaperRenderThread::~WallpaperRenderThread()
 {
-    {
-        // abort computation
-        QMutexLocker lock(&m_mutex);
-        m_abort = true;
-        m_condition.wakeOne();
-    }
-
+    kDebug() << "rendering done";
+    m_abort = true;
     wait();
+    --s_rendererCount;
+    checkQueue();
 }
 
-void WallpaperRenderThread::setSize(const QSize& size)
+void WallpaperRenderThread::render(const WallpaperRenderRequest &request)
 {
-    QMutexLocker lock(&m_mutex);
-    m_size = size;
+    QObject *requester = request.requester.data();
+    if (!requester) {
+        return;
+    }
+
+    // remove all dead requests and requests previously made for the same parent
+    QMutableListIterator<WallpaperRenderRequest> it(s_renderQueue);
+    while (it.hasNext()) {
+        const WallpaperRenderRequest &request = it.next();
+
+        if (!request.requester || request.requester.data() == requester) {
+            it.remove();
+        }
+    }
+
+    s_renderQueue.append(request);
+    checkQueue();
 }
 
-int WallpaperRenderThread::render(const QString &file,
-                                  const QSize &size,
-                                  Wallpaper::ResizeMethod method,
-                                  const QColor &color)
+void WallpaperRenderThread::checkQueue()
 {
-    int token;
-    {
-        QMutexLocker lock(&m_mutex);
-        m_file = file;
-        m_color = color;
-        m_method = method;
-        m_size = size;
-        m_restart = true;
-        token = ++m_currentToken;
+    if (s_renderQueue.isEmpty()) {
+        return;
     }
 
-    if (!isRunning()) {
-        start(QThread::LowPriority);
-    } else {
-        m_condition.wakeOne();
+    if (QCoreApplication::closingDown()) {
+        s_renderQueue.clear();
+        return;
     }
 
-    return token;
+#ifndef PLASMA_NO_SOLID
+    const int numProcs = qMax(1, Solid::Device::listFromType(Solid::DeviceInterface::Processor).count());
+#else
+    const int numProcs = 1;
+#endif
+    kDebug() << "checking rendering against" << s_rendererCount << numProcs;
+    if (s_rendererCount < numProcs) {
+        WallpaperRenderThread *renderThread = new WallpaperRenderThread(s_renderQueue.dequeue());
+        renderThread->start();
+    }
 }
 
 void WallpaperRenderThread::run()
 {
-    QString file;
-    QColor color;
-    QSize size;
-    qreal ratio;
-    Wallpaper::ResizeMethod method;
-    int token;
+    kDebug() << "rendering wallpaper" << m_request.file;
+    QImage result(m_request.size, QImage::Format_ARGB32_Premultiplied);
+    result.fill(m_request.color.rgba());
 
-    forever {
-        {
-            QMutexLocker lock(&m_mutex);
-
-            while (!m_restart && !m_abort) {
-                m_condition.wait(&m_mutex);
-            }
-
-            if (m_abort) {
-                return;
-            }
-
-            m_restart = false;
-
-            // load all parameters in nonshared variables
-            token = m_currentToken;
-            file = m_file;
-            color = m_color;
-            size = m_size;
-            ratio = m_size.width() / qreal(m_size.height());
-            method = m_method;
+    if (m_request.file.isEmpty() || !QFile::exists(m_request.file)) {
+        if (!m_abort) {
+            emit done(m_request, result);
         }
 
-        QImage result(size, QImage::Format_ARGB32_Premultiplied);
-        result.fill(color.rgba());
+        kDebug() << "oh, fuck it";
+        deleteLater();
+        return;
+    }
 
-        if (file.isEmpty() || !QFile::exists(file)) {
-            emit done(this, token, result, file, size, method, color);
-            break;
-        }
+    QPoint pos(0, 0);
+    //const float ratio = qMax(float(1), m_request.size.width() / float(m_request.size.height()));
+    const bool scalable = m_request.file.endsWith(QLatin1String("svg")) || m_request.file.endsWith(QLatin1String("svgz"));
+    bool tiled = false;
+    QSize scaledSize;
+    QImage img;
 
-        QPoint pos(0, 0);
-        bool tiled = false;
-        bool scalable = file.endsWith(QLatin1String("svg")) || file.endsWith(QLatin1String("svgz"));
-        QSize scaledSize;
-        QImage img;
+    // set image size
+    QSize imgSize(1, 1);
+    if (scalable) {
+        // scalable: image can be of any size
+        imgSize = imgSize.expandedTo(m_request.size);
+    } else {
+        // otherwise, use the natural size of the loaded image
+        img = QImage(m_request.file);
+        imgSize = imgSize.expandedTo(img.size());
+        //kDebug() << "loaded with" << imgSize << ratio;
+    }
 
-        // set image size
-        QSize imgSize;
-        if (scalable) {
-            // scalable: image can be of any size
-            imgSize = size;
-        } else {
-            // otherwise, use the natural size of the loaded image
-            img = QImage(file);
-            imgSize = img.size();
-            //kDebug() << "loaded with" << imgSize << ratio;
-        }
-
-        // if any of them is zero we may run into a div-by-zero below.
-        if (imgSize.width() < 1) {
-            imgSize.setWidth(1);
-        }
-
-        if (imgSize.height() < 1) {
-            imgSize.setHeight(1);
-        }
-
-        if (ratio < 1) {
-            ratio = 1;
-        }
-
-        // set render parameters according to resize mode
-        switch (method)
-        {
+    // set render parameters according to resize mode
+    switch (m_request.resizeMethod)
+    {
         case Wallpaper::ScaledResize:
-            scaledSize = size;
+            scaledSize = m_request.size;
             break;
         case Wallpaper::CenteredResize:
             scaledSize = imgSize;
-            pos = QPoint((size.width() - scaledSize.width()) / 2,
-                        (size.height() - scaledSize.height()) / 2);
+            pos = QPoint((m_request.size.width() - scaledSize.width()) / 2,
+                         (m_request.size.height() - scaledSize.height()) / 2);
 
             //If the picture is bigger than the screen, shrink it
-            if (size.width() < imgSize.width() && imgSize.width() > imgSize.height()) {
-                int width = size.width();
+            if (m_request.size.width() < imgSize.width() && imgSize.width() > imgSize.height()) {
+                int width = m_request.size.width();
                 int height = width * scaledSize.height() / imgSize.width();
                 scaledSize = QSize(width, height);
-                pos = QPoint((size.width() - scaledSize.width()) / 2,
-                             (size.height() - scaledSize.height()) / 2);
-            } else if (size.height() < imgSize.height()) {
-                int height = size.height();
+                pos = QPoint((m_request.size.width() - scaledSize.width()) / 2,
+                        (m_request.size.height() - scaledSize.height()) / 2);
+            } else if (m_request.size.height() < imgSize.height()) {
+                int height = m_request.size.height();
                 int width = height * imgSize.width() / imgSize.height();
                 scaledSize = QSize(width, height);
-                pos = QPoint((size.width() - scaledSize.width()) / 2,
-                             (size.height() - scaledSize.height()) / 2);
+                pos = QPoint((m_request.size.width() - scaledSize.width()) / 2,
+                             (m_request.size.height() - scaledSize.height()) / 2);
             }
 
             break;
         case Wallpaper::MaxpectResize: {
-            float xratio = (float) size.width() / imgSize.width();
-            float yratio = (float) size.height() / imgSize.height();
+            float xratio = (float) m_request.size.width() / imgSize.width();
+            float yratio = (float) m_request.size.height() / imgSize.height();
             if (xratio > yratio) {
-                int height = size.height();
+                int height = m_request.size.height();
                 int width = height * imgSize.width() / imgSize.height();
                 scaledSize = QSize(width, height);
             } else {
-                int width = size.width();
+                int width = m_request.size.width();
                 int height = width * imgSize.height() / imgSize.width();
                 scaledSize = QSize(width, height);
             }
-            pos = QPoint((size.width() - scaledSize.width()) / 2,
-                        (size.height() - scaledSize.height()) / 2);
+
+            pos = QPoint((m_request.size.width() - scaledSize.width()) / 2,
+                         (m_request.size.height() - scaledSize.height()) / 2);
             break;
         }
         case Wallpaper::ScaledAndCroppedResize: {
-            float xratio = (float) size.width() / imgSize.width();
-            float yratio = (float) size.height() / imgSize.height();
+            float xratio = (float) m_request.size.width() / imgSize.width();
+            float yratio = (float) m_request.size.height() / imgSize.height();
             if (xratio > yratio) {
-                int width = size.width();
+                int width = m_request.size.width();
                 int height = width * imgSize.height() / imgSize.width();
                 scaledSize = QSize(width, height);
             } else {
-                int height = size.height();
+                int height = m_request.size.height();
                 int width = height * imgSize.width() / imgSize.height();
                 scaledSize = QSize(width, height);
             }
-            pos = QPoint((size.width() - scaledSize.width()) / 2,
-                        (size.height() - scaledSize.height()) / 2);
+            pos = QPoint((m_request.size.width() - scaledSize.width()) / 2,
+                         (m_request.size.height() - scaledSize.height()) / 2);
             break;
         }
         case Wallpaper::TiledResize:
@@ -216,56 +209,57 @@ void WallpaperRenderThread::run()
             break;
         case Wallpaper::CenterTiledResize:
             scaledSize = imgSize;
-            pos = QPoint(
-                -scaledSize.width() +
-                    ((size.width() - scaledSize.width()) / 2) % scaledSize.width(),
-                -scaledSize.height() +
-                    ((size.height() - scaledSize.height()) / 2) % scaledSize.height());
+            pos = QPoint(-scaledSize.width() + ((m_request.size.width() - scaledSize.width()) / 2) % scaledSize.width(),
+                         -scaledSize.height() + ((m_request.size.height() - scaledSize.height()) / 2) % scaledSize.height());
             tiled = true;
             break;
+    }
+
+    QPainter p(&result);
+    //kDebug() << token << scalable << scaledSize << imgSize;
+    if (scalable) {
+        // tiling is ignored for scalable wallpapers
+        QSvgRenderer svg(m_request.file);
+        if (m_abort) {
+            deleteLater();
+        kDebug() << "oh, fuck it 2";
+            return;
+        }
+        svg.render(&p);
+    } else {
+        if (scaledSize != imgSize) {
+            img = img.scaled(scaledSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         }
 
-        QPainter p(&result);
-        //kDebug() << token << scalable << scaledSize << imgSize;
-        if (scalable) {
-            // tiling is ignored for scalable wallpapers
-            QSvgRenderer svg(file);
-            if (m_restart) {
-                continue;
-            }
-            svg.render(&p);
-        } else {
-            if (scaledSize != imgSize) {
-                img = img.scaled(scaledSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-            }
+        if (m_abort) {
+            deleteLater();
+        kDebug() << "oh, fuck it 3";
+            return;
+        }
 
-            if (m_restart) {
-                continue;
-            }
-
-            if (tiled) {
-                for (int x = pos.x(); x < size.width(); x += scaledSize.width()) {
-                    for (int y = pos.y(); y < size.height(); y += scaledSize.height()) {
-                        p.drawImage(QPoint(x, y), img);
-                        if (m_restart) {
-                            continue;
-                        }
+        if (tiled) {
+            for (int x = pos.x(); x < m_request.size.width(); x += scaledSize.width()) {
+                for (int y = pos.y(); y < m_request.size.height(); y += scaledSize.height()) {
+                    p.drawImage(QPoint(x, y), img);
+                    if (m_abort) {
+        kDebug() << "oh, fuck it 4";
+                        deleteLater();
+                        return;
                     }
                 }
-            } else {
-                p.drawImage(pos, img);
             }
+        } else {
+            p.drawImage(pos, img);
         }
-
-        // signal we're done
-        emit done(this, token, result, file, size, method, color);
-        break;
     }
-}
 
-int WallpaperRenderThread::currentToken()
-{
-    return m_currentToken;
+    // signal we're done
+    if (!m_abort) {
+        kDebug() << "*****************************************************";
+        emit done(m_request, result);
+    }
+
+    deleteLater();
 }
 
 } // namespace Plasma
