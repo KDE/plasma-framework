@@ -456,9 +456,9 @@ void Wallpaper::render(const QString &sourceImagePath, const QSize &size,
         }
     }
 
-    for (int i = 0; i < WallpaperPrivate::s_renderers.size(); i++) {
-        if (d->renderToken == WallpaperPrivate::s_renderers[i]->currentToken()) {
-            d->renderToken = WallpaperPrivate::s_renderers[i]->render(sourceImagePath, size, resizeMethod, color);
+    foreach (WallpaperRenderThread *renderer, WallpaperPrivate::s_renderers) {
+        if (d->renderToken == renderer->currentToken()) {
+            d->renderToken = renderer->render(sourceImagePath, size, resizeMethod, color);
             return;
         }
     }
