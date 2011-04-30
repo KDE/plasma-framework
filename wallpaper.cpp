@@ -483,7 +483,7 @@ void Wallpaper::render(const QString &sourceImagePath, const QSize &size,
          request.color = color;
 
          for (int i = 0; i < WallpaperPrivate::s_renderQueue.size(); i++) {
-            if (WallpaperPrivate::s_renderQueue[i].parent.data() == this){
+            if (WallpaperPrivate::s_renderQueue[i].parent.data() == this) {
                 WallpaperPrivate::s_renderQueue[i] = request;
                 return;
             }
