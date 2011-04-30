@@ -393,7 +393,6 @@ void DeclarativeAppletScript::setupObjects()
     }
 
     registerSimpleAppletMetaTypes(m_engine);
-    registerDataEngineMetaTypes(m_engine);
     QTimer::singleShot(0, this, SLOT(configChanged()));
 }
 
