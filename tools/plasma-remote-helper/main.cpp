@@ -25,7 +25,7 @@
 #include <KDE/KAboutData>
 #include <KDE/KCmdLineArgs>
 
-static const char description[] = I18N_NOOP("Trigger the installation of a remove Plasma Widget");
+static const char description[] = I18N_NOOP("Trigger the installation of a remote Plasma Widget");
 static const char version[] = "0.1";
 
 int addRemotePlasmoidToShell(const QString &shellName, const QString &url)
