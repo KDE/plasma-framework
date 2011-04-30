@@ -548,7 +548,7 @@ void WallpaperPrivate::newRenderCompleted(WallpaperRenderThread *currentRenderer
                                           int resizeMethod, const QColor &color)
 {
     q->disconnect(currentRenderer, SIGNAL(done(WallpaperRenderThread*,int,QImage,QString,QSize,int,QColor)),
-                    q, SLOT(newRenderCompleted(WallpaperRenderThread*,int,QImage,QString,QSize,int,QColor)));
+                  q, SLOT(newRenderCompleted(WallpaperRenderThread*,int,QImage,QString,QSize,int,QColor)));
 
     if (!s_renderQueue.isEmpty()) {
         while (!s_renderQueue.isEmpty()) {
@@ -566,11 +566,7 @@ void WallpaperPrivate::newRenderCompleted(WallpaperRenderThread *currentRenderer
             break;
         }
     } else {
-         for (int i = 0; i < s_renderers.size(); i++) {
-            if (s_renderers[i] == currentRenderer){
-                s_renderers.removeAt(i);
-            }
-         }
+         s_renderers.removeAll(currentRenderer);
          currentRenderer->deleteLater();
          currentRenderer = 0;
     }
