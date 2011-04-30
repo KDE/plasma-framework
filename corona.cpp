@@ -392,7 +392,9 @@ void Corona::addOffscreenWidget(QGraphicsWidget *widget)
 
     QGraphicsWidget *pw = widget->parentWidget();
     widget->setParentItem(0);
-    widget->setParent(pw);
+    if (pw) {
+        widget->setParent(pw);
+    }
 
     //kDebug() << "adding offscreen widget at slot " << i;
     if (!widget->scene()) {
