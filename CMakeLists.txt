@@ -107,6 +107,7 @@ set(plasma_LIB_SRCS
     private/applethandle.cpp
     private/associatedapplicationmanager.cpp
     private/datacontainer_p.cpp
+    private/dataenginebindings.cpp
     private/dataengineconsumer.cpp
     private/dataengineservice.cpp
     private/denyallauthorization.cpp
