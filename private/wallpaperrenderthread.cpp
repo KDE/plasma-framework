@@ -25,6 +25,7 @@
 #include <QFile>
 #include <QSvgRenderer>
 
+#include "config-plasma.h"
 #ifndef PLASMA_NO_SOLID
 #include <solid/device.h>
 #include <solid/deviceinterface.h>
