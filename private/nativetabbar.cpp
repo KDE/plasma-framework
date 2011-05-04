@@ -310,17 +310,19 @@ void NativeTabBar::paintEvent(QPaintEvent *event)
         QRect iconRect = QRect(rect.x(), rect.y(), iconSize().width(), iconSize().height());
         iconRect.moveCenter(QPoint(iconRect.center().x(), rect.center().y()));
 
-        if (isHighlighted) {
-            QRect iconRectAdjusted = iconRect.adjusted(-buttonHMargin, -buttonVMargin, buttonHMargin, buttonVMargin);
-            d->highlightSvg()->resizeFrame(iconRectAdjusted.size());
-            d->highlightSvg()->paintFrame(&painter, iconRectAdjusted.topLeft());
-            QPixmap iconPix = tabIcon(i).pixmap(iconRect.size());
-            KIconEffect *effect = KIconLoader::global()->iconEffect();
-            iconPix = effect->apply(iconPix, KIconLoader::Panel, KIconLoader::ActiveState);
-            painter.drawPixmap(iconRect.topLeft(), iconPix);
-        } else {
-            tabIcon(i).paint(&painter, iconRect);
-            painter.setOpacity(1.0);
+        if (!tabIcon(i).isNull()) {
+            if (isHighlighted) {
+                QRect iconRectAdjusted = iconRect.adjusted(-buttonHMargin, -buttonVMargin, buttonHMargin, buttonVMargin);
+                d->highlightSvg()->resizeFrame(iconRectAdjusted.size());
+                d->highlightSvg()->paintFrame(&painter, iconRectAdjusted.topLeft());
+                QPixmap iconPix = tabIcon(i).pixmap(iconRect.size());
+                KIconEffect *effect = KIconLoader::global()->iconEffect();
+                iconPix = effect->apply(iconPix, KIconLoader::Panel, KIconLoader::ActiveState);
+                painter.drawPixmap(iconRect.topLeft(), iconPix);
+            } else {
+                tabIcon(i).paint(&painter, iconRect);
+                painter.setOpacity(1.0);
+            }
         }
 
         // draw tab text
