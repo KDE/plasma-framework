@@ -205,6 +205,20 @@ public:
     QString styleSheet() const;
 
     /**
+     * Highlight the specified tab
+     * @param index of the tab to highlight
+     * @param highlight true if it should be highlighted, wrong if not
+     * @since 4.7
+     */
+    Q_INVOKABLE void setTabHighlighted(int index, bool highlight);
+
+    /**
+     * @return if the tab at index is highlighted
+     * @since 4.7
+     */
+    Q_INVOKABLE bool isTabHighlighted(int index) const;
+
+    /**
      * @return the native widget wrapped by this TabBar
      */
     KTabBar *nativeWidget() const;

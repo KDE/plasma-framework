@@ -38,6 +38,7 @@
 #include <kdebug.h>
 #include <kcolorutils.h>
 #include <kicon.h>
+#include <kiconeffect.h>
 #include <kiconloader.h>
 
 #include "plasma/plasma.h"
@@ -63,7 +64,8 @@ public:
           shape(NativeTabBar::RoundedNorth),
           backgroundSvg(0),
           buttonSvg(0),
-          closeIcon("window-close")
+          closeIcon("window-close"),
+          m_highlightSvg(0)
     {
     }
 
@@ -71,10 +73,22 @@ public:
     {
         delete backgroundSvg;
         delete buttonSvg;
+        delete m_highlightSvg;
     }
 
     void syncBorders();
     void storeLastIndex();
+
+    FrameSvg *highlightSvg()
+    {
+        if (!m_highlightSvg) {
+            m_highlightSvg = new Plasma::FrameSvg();
+            m_highlightSvg->setImagePath("widgets/button");
+            m_highlightSvg->setElementPrefix("pressed");
+        }
+
+        return m_highlightSvg;
+    }
 
     NativeTabBar *q;
     QTabBar::Shape shape; //used to keep track of shape() changes
@@ -84,6 +98,8 @@ public:
     qreal buttonLeft, buttonTop, buttonRight, buttonBottom;
     KIcon closeIcon;
 
+    QList<bool> highlightedTabs;
+
     QWeakPointer<QPropertyAnimation> anim;
 
     QRect currentAnimRect;
@@ -91,6 +107,8 @@ public:
     QPoint mousePressOffset;
     int lastIndex[2];
     qreal animProgress;
+
+    FrameSvg *m_highlightSvg;
 };
 
 void NativeTabBarPrivate::syncBorders()
@@ -212,6 +230,26 @@ QSize NativeTabBar::sizeHint() const
     return KTabBar::sizeHint();
 }
 
+void NativeTabBar::setTabHighlighted(int index, bool highlight)
+{
+    if (index < 0 || index >= count()) {
+        return;
+    }
+
+    if (highlight != d->highlightedTabs[index]) {
+        d->highlightedTabs[index] = highlight;
+        update();
+    }
+}
+
+bool NativeTabBar::isTabHighlighted(int index) const
+{
+    if (index < 0 || index >= count() ) {
+        return false;
+    }
+
+    return d->highlightedTabs[index];
+}
 void NativeTabBar::paintEvent(QPaintEvent *event)
 {
     if (!styleSheet().isNull()) {
@@ -259,20 +297,37 @@ void NativeTabBar::paintEvent(QPaintEvent *event)
         }
     }
 
+    const QColor buttonText = Plasma::Theme::defaultTheme()->color(Theme::ButtonTextColor);
+    const QColor textColor = Plasma::Theme::defaultTheme()->color(Theme::TextColor);
+    const QColor highlightColor = Plasma::Theme::defaultTheme()->color(Theme::HighlightColor);
+
     for (int i = 0; i < count(); ++i) {
+        const bool isHighlighted = d->highlightedTabs[i];
         QRect rect = tabRect(i).adjusted(d->buttonLeft + buttonHMargin, d->buttonTop + buttonVMargin,
                                          -(d->buttonRight + buttonHMargin), -(d->buttonBottom + buttonVMargin));
+
         // draw tab icon
         QRect iconRect = QRect(rect.x(), rect.y(), iconSize().width(), iconSize().height());
-
         iconRect.moveCenter(QPoint(iconRect.center().x(), rect.center().y()));
-        tabIcon(i).paint(&painter, iconRect);
+
+        if (isHighlighted) {
+            QRect iconRectAdjusted = iconRect.adjusted(-buttonHMargin, -buttonVMargin, buttonHMargin, buttonVMargin);
+            d->highlightSvg()->resizeFrame(iconRectAdjusted.size());
+            d->highlightSvg()->paintFrame(&painter, iconRectAdjusted.topLeft());
+            QPixmap iconPix = tabIcon(i).pixmap(iconRect.size());
+            KIconEffect *effect = KIconLoader::global()->iconEffect();
+            iconPix = effect->apply(iconPix, KIconLoader::Panel, KIconLoader::ActiveState);
+            painter.drawPixmap(iconRect.topLeft(), iconPix);
+        } else {
+            tabIcon(i).paint(&painter, iconRect);
+            painter.setOpacity(1.0);
+        }
 
         // draw tab text
         if (i == currentIndex() && d->animProgress == 1) {
-            painter.setPen(Plasma::Theme::defaultTheme()->color(Theme::ButtonTextColor));
+            painter.setPen(isHighlighted ? highlightColor : buttonText);
         } else {
-            QColor color(Plasma::Theme::defaultTheme()->color(Theme::TextColor));
+            QColor color = (isHighlighted ? highlightColor : textColor);
             if (!isTabEnabled(i)) {
                 color.setAlpha(140);
             }
@@ -363,6 +418,7 @@ void NativeTabBar::resizeEvent(QResizeEvent *event)
 
 void NativeTabBar::tabInserted(int index)
 {
+    d->highlightedTabs.insert(index, false);
     KTabBar::tabInserted(index);
     emit sizeHintChanged();
 
@@ -375,6 +431,7 @@ void NativeTabBar::tabInserted(int index)
 
 void NativeTabBar::tabRemoved(int index)
 {
+    d->highlightedTabs.removeAt(index);
     KTabBar::tabRemoved(index);
     emit sizeHintChanged();
 
