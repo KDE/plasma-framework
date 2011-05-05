@@ -151,6 +151,7 @@ void AccessManagerPrivate::slotAddService(DNSSD::RemoteService::Ptr service)
             QMap<QString, QByteArray> textData = service->textData();
             metadata.setName(textData["name"]);
             metadata.setDescription(textData["description"]);
+            metadata.setIcon(textData["icon"]);
             metadata.setRemoteLocation(url.prettyUrl());
         } else {
             kDebug() << "no textdata?";

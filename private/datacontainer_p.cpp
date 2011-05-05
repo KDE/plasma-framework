@@ -132,7 +132,6 @@ void SignalRelay::checkQueueing()
 void SignalRelay::forceImmediateUpdate()
 {
     emit dataUpdated(dc->objectName(), d->data);
-    m_queued = false;
 }
 
 void SignalRelay::timerEvent(QTimerEvent *event)

@@ -17,50 +17,26 @@
 *   Boston, MA 02110-1301, USA.                                                 *
 *********************************************************************************/
 
-#ifndef CONFIGLOADERTEST_H
-#define CONFIGLOADERTEST_H
+#ifndef STORAGETEST_H
+#define STORAGETEST_H
 
 #include <qtest_kde.h>
 
-namespace Plasma
-{
-    class ConfigLoader;
-}
-
-class QFile;
-
-class ConfigLoaderTest : public QObject
+class StorageTest : public QObject
 {
     Q_OBJECT
 
 public Q_SLOTS:
     void init();
-    void cleanup();
 
 private Q_SLOTS:
-    void boolDefaultValue();
-    void colorDefaultValue();
-    void dateTimeDefaultValue();
-    void enumDefaultValue();
-    void fontDefaultValue();
-    void intDefaultValue();
-    void passwordDefaultValue();
-    void pathDefaultValue();
-    void stringDefaultValue();
-    void stringListDefaultValue();
-    void uintDefaultValue();
-    void urlDefaultValue();
-    void doubleDefaultValue();
-    void intListDefaultValue();
-    void longLongDefaultValue();
-    void pointDefaultValue();
-    void rectDefaultValue();
-    void sizeDefaultValue();
-    void ulongLongDefaultValue();
+    void store();
+    void retrieve();
+    void deleteEntry();
+
 
 private:
-    Plasma::ConfigLoader* cl;
-    QFile* configFile;
+    QVariantHash m_data;
 };
 
 #endif

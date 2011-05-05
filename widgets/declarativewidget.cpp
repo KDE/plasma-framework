@@ -35,6 +35,7 @@
 #include <kstandarddirs.h>
 
 #include "private/declarative/declarativenetworkaccessmanagerfactory_p.h"
+#include "private/dataenginebindings_p.h"
 
 namespace Plasma
 {
@@ -99,6 +100,7 @@ void DeclarativeWidgetPrivate::execute(const QString &fileName)
     //binds things like kconfig and icons
     kdeclarative.setupBindings();
     scriptEngine = kdeclarative.scriptEngine();
+    registerDataEngineMetaTypes(scriptEngine);
 
     if (delay) {
         QTimer::singleShot(0, q, SLOT(scheduleExecutionEnd()));

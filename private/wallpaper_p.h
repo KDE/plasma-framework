@@ -35,16 +35,6 @@ namespace Plasma
 class WallpaperPrivate : public DataEngineConsumer
 {
 public:
-    class RenderRequest
-    {
-        public:
-            QWeakPointer<Wallpaper> parent;
-            QString file;
-            QSize size;
-            Wallpaper::ResizeMethod resizeMethod;
-            QColor color;
-    };
-
     WallpaperPrivate(KService::Ptr service, Wallpaper *wallpaper);
 
     QString cachePath(const QString &key) const;
@@ -54,13 +44,9 @@ public:
 
     bool findInCache(const QString &key, unsigned int lastModified = 0);
 
-    void newRenderCompleted(WallpaperRenderThread *renderer,int token, const QImage &image,
-                            const QString &sourceImagePath, const QSize &size,
-                            int resizeMethod, const QColor &color);
+    void newRenderCompleted(const WallpaperRenderRequest &render, const QImage &image);
     void setupScriptSupport();
 
-    static QList<WallpaperRenderThread *> s_renderers;
-    static QQueue<RenderRequest> s_renderQueue;
     static PackageStructure::Ptr s_packageStructure;
 
     Wallpaper *q;

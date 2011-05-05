@@ -38,6 +38,7 @@
 #include <kdebug.h>
 #include <kcolorutils.h>
 #include <kicon.h>
+#include <kiconeffect.h>
 #include <kiconloader.h>
 
 #include "plasma/plasma.h"
@@ -45,8 +46,6 @@
 #include "plasma/animator.h"
 #include "plasma/framesvg.h"
 #include "plasma/paintutils.h"
-
-//#include "private/style_p.h"
 
 namespace Plasma
 {
@@ -63,8 +62,20 @@ public:
           shape(NativeTabBar::RoundedNorth),
           backgroundSvg(0),
           buttonSvg(0),
-          closeIcon("window-close")
+          m_highlightSvg(0)
     {
+        backgroundSvg = new FrameSvg(q);
+        backgroundSvg->setImagePath("widgets/frame");
+        backgroundSvg->setElementPrefix("sunken");
+
+        buttonSvg = new FrameSvg(q);
+        buttonSvg->setImagePath("widgets/button");
+        buttonSvg->setElementPrefix("normal");
+
+        syncBorders();
+
+        lastIndex[0] = -1;
+        lastIndex[1] = -1;
     }
 
     ~NativeTabBarPrivate()
@@ -76,13 +87,25 @@ public:
     void syncBorders();
     void storeLastIndex();
 
+    FrameSvg *highlightSvg()
+    {
+        if (!m_highlightSvg) {
+            m_highlightSvg = new FrameSvg(q);
+            m_highlightSvg->setImagePath("widgets/button");
+            m_highlightSvg->setElementPrefix("pressed");
+        }
+
+        return m_highlightSvg;
+    }
+
     NativeTabBar *q;
     QTabBar::Shape shape; //used to keep track of shape() changes
     FrameSvg *backgroundSvg;
     qreal left, top, right, bottom;
     FrameSvg *buttonSvg;
     qreal buttonLeft, buttonTop, buttonRight, buttonBottom;
-    KIcon closeIcon;
+
+    QList<bool> highlightedTabs;
 
     QWeakPointer<QPropertyAnimation> anim;
 
@@ -91,6 +114,8 @@ public:
     QPoint mousePressOffset;
     int lastIndex[2];
     qreal animProgress;
+
+    FrameSvg *m_highlightSvg;
 };
 
 void NativeTabBarPrivate::syncBorders()
@@ -101,11 +126,13 @@ void NativeTabBarPrivate::syncBorders()
 
 void NativeTabBarPrivate::storeLastIndex()
 {
-    // if first run
-    if (lastIndex[0] == -1) {
-        lastIndex[1] = q->currentIndex();
+    // if first run, or invalid previous index
+    if (lastIndex[1] < 0 || lastIndex[1] >= q->count()) {
+        lastIndex[0] = q->currentIndex();
+    } else {
+        lastIndex[0] = lastIndex[1];
     }
-    lastIndex[0] = lastIndex[1];
+
     lastIndex[1] = q->currentIndex();
 }
 
@@ -113,19 +140,7 @@ NativeTabBar::NativeTabBar(QWidget *parent)
         : KTabBar(parent),
           d(new NativeTabBarPrivate(this))
 {
-    d->backgroundSvg = new Plasma::FrameSvg();
-    d->backgroundSvg->setImagePath("widgets/frame");
-    d->backgroundSvg->setElementPrefix("sunken");
-
-    d->buttonSvg = new Plasma::FrameSvg();
-    d->buttonSvg->setImagePath("widgets/button");
-    d->buttonSvg->setElementPrefix("normal");
-
-    d->syncBorders();
-
-    d->lastIndex[0] = -1;
     connect(this, SIGNAL(currentChanged(int)), this, SLOT(startAnimation()));
-
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
@@ -212,6 +227,26 @@ QSize NativeTabBar::sizeHint() const
     return KTabBar::sizeHint();
 }
 
+void NativeTabBar::setTabHighlighted(int index, bool highlight)
+{
+    if (index < 0 || index >= count()) {
+        return;
+    }
+
+    if (highlight != d->highlightedTabs[index]) {
+        d->highlightedTabs[index] = highlight;
+        update();
+    }
+}
+
+bool NativeTabBar::isTabHighlighted(int index) const
+{
+    if (index < 0 || index >= count() ) {
+        return false;
+    }
+
+    return d->highlightedTabs[index];
+}
 void NativeTabBar::paintEvent(QPaintEvent *event)
 {
     if (!styleSheet().isNull()) {
@@ -259,20 +294,39 @@ void NativeTabBar::paintEvent(QPaintEvent *event)
         }
     }
 
+    const QColor buttonText = Plasma::Theme::defaultTheme()->color(Theme::ButtonTextColor);
+    const QColor textColor = Plasma::Theme::defaultTheme()->color(Theme::TextColor);
+    const QColor highlightColor = Plasma::Theme::defaultTheme()->color(Theme::HighlightColor);
+
     for (int i = 0; i < count(); ++i) {
+        const bool isHighlighted = d->highlightedTabs[i];
         QRect rect = tabRect(i).adjusted(d->buttonLeft + buttonHMargin, d->buttonTop + buttonVMargin,
                                          -(d->buttonRight + buttonHMargin), -(d->buttonBottom + buttonVMargin));
+
         // draw tab icon
         QRect iconRect = QRect(rect.x(), rect.y(), iconSize().width(), iconSize().height());
-
         iconRect.moveCenter(QPoint(iconRect.center().x(), rect.center().y()));
-        tabIcon(i).paint(&painter, iconRect);
+
+        if (!tabIcon(i).isNull()) {
+            if (isHighlighted) {
+                QRect iconRectAdjusted = iconRect.adjusted(-buttonHMargin, -buttonVMargin, buttonHMargin, buttonVMargin);
+                d->highlightSvg()->resizeFrame(iconRectAdjusted.size());
+                d->highlightSvg()->paintFrame(&painter, iconRectAdjusted.topLeft());
+                QPixmap iconPix = tabIcon(i).pixmap(iconRect.size());
+                KIconEffect *effect = KIconLoader::global()->iconEffect();
+                iconPix = effect->apply(iconPix, KIconLoader::Panel, KIconLoader::ActiveState);
+                painter.drawPixmap(iconRect.topLeft(), iconPix);
+            } else {
+                tabIcon(i).paint(&painter, iconRect);
+                painter.setOpacity(1.0);
+            }
+        }
 
         // draw tab text
         if (i == currentIndex() && d->animProgress == 1) {
-            painter.setPen(Plasma::Theme::defaultTheme()->color(Theme::ButtonTextColor));
+            painter.setPen(isHighlighted ? highlightColor : buttonText);
         } else {
-            QColor color(Plasma::Theme::defaultTheme()->color(Theme::TextColor));
+            QColor color = (isHighlighted ? highlightColor : textColor);
             if (!isTabEnabled(i)) {
                 color.setAlpha(140);
             }
@@ -319,13 +373,7 @@ void NativeTabBar::paintEvent(QPaintEvent *event)
                 painter.drawText(textRect, Qt::AlignCenter | Qt::TextHideMnemonic, tabText(i));
             }
         }
-
-        if (tabsClosable()) {
-            d->closeIcon.paint(&painter, QRect(closeButtonPos(i), QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall)) );
-        }
     }
-
-
 
     if (scrollButtonsRect.isValid()) {
         scrollButtonsRect.adjust(2, 4, -2, -4);
@@ -363,6 +411,7 @@ void NativeTabBar::resizeEvent(QResizeEvent *event)
 
 void NativeTabBar::tabInserted(int index)
 {
+    d->highlightedTabs.insert(index, false);
     KTabBar::tabInserted(index);
     emit sizeHintChanged();
 
@@ -375,6 +424,7 @@ void NativeTabBar::tabInserted(int index)
 
 void NativeTabBar::tabRemoved(int index)
 {
+    d->highlightedTabs.removeAt(index);
     KTabBar::tabRemoved(index);
     emit sizeHintChanged();
 
@@ -448,13 +498,17 @@ void NativeTabBar::animationFinished()
 
 bool NativeTabBar::isVertical() const
 {
-    Shape s = shape();
-    if(s == RoundedWest ||
-       s == RoundedEast ||
-       s == TriangularWest ||
-       s == TriangularEast) {
-        return true;
+    switch (shape()) {
+        case RoundedWest:
+        case RoundedEast:
+        case TriangularWest:
+        case TriangularEast:
+            return true;
+            break;
+        default:
+            break;
     }
+
     return false;
 }
 
@@ -480,36 +534,6 @@ QSize NativeTabBar::tabSize(int index) const
     }
 
     return hint;
-}
-
-//Unfortunately copied from KTabBar
-QPoint NativeTabBar::closeButtonPos( int tabIndex ) const
-{
-  QPoint buttonPos;
-  if ( tabIndex < 0 ) {
-    return buttonPos;
-  }
-
-  int availableHeight = height();
-  if ( tabIndex == currentIndex() ) {
-    QStyleOption option;
-    option.initFrom(this);
-    availableHeight -= style()->pixelMetric( QStyle::PM_TabBarTabShiftVertical, &option, this );
-  }
-
-  const QRect tabBounds = tabRect( tabIndex );
-  const int xInc = (height() - KIconLoader::SizeSmall) / 2;
-
-  if ( layoutDirection() == Qt::RightToLeft ) {
-    buttonPos = tabBounds.topLeft();
-    buttonPos.rx() += xInc;
-  } else {
-    buttonPos = tabBounds.topRight();
-    buttonPos.rx() -= KIconLoader::SizeSmall + xInc;
-  }
-  buttonPos.ry() += (availableHeight - KIconLoader::SizeSmall) / 2;
-
-  return buttonPos;
 }
 
 void NativeTabBar::mousePressEvent(QMouseEvent *event)

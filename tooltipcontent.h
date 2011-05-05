@@ -167,6 +167,22 @@ public:
     bool autohide() const;
 
     /**
+     * Sets whether or not the tooltip should popup instantly when
+     * the widget is hovered, defaults to false.
+     *
+     * @since 4.7
+     */
+    void setInstantPopup(bool enabled);
+
+    /**
+     * Whether or not the tooltip should popup instantly when
+     * the widget is hovered, defaults to false.
+     *
+     * @since 4.7
+     */
+    bool isInstantPopup() const;
+
+    /**
      * Adds a resource that can then be referenced from the text elements
      * using rich text
      */

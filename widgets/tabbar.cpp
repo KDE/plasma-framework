@@ -590,6 +590,16 @@ QString TabBar::styleSheet() const
     return d->tabProxy->native->styleSheet();
 }
 
+void TabBar::setTabHighlighted(int index, bool highlight)
+{
+    d->tabProxy->native->setTabHighlighted(index, highlight);
+}
+
+bool TabBar::isTabHighlighted(int index) const
+{
+    return d->tabProxy->native->isTabHighlighted(index);
+}
+
 KTabBar *TabBar::nativeWidget() const
 {
     return d->tabProxy->native;

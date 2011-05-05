@@ -27,6 +27,7 @@
 
 #include <kzip.h>
 #include <kdebug.h>
+#include <kmessagebox.h>
 #include <ktempdir.h>
 #include <kdesktopfile.h>
 #include "package.h"
@@ -41,7 +42,8 @@ class AccessAppletJobPrivate
 public:
     AccessAppletJobPrivate(const KUrl &location, AccessAppletJob *owner)
         : q(owner),
-          location(location)
+          location(location),
+          applet(0)
     {
     }
 
@@ -103,6 +105,39 @@ public:
             QString path = tempDir.name();
             source->copyTo(path);
 
+            KDesktopFile metadata(path + "/metadata.desktop");
+            KConfigGroup group = metadata.desktopGroup();
+
+            QString iconName = group.readEntry("Icon");
+            QString message = i18n("You are about to open a remote widget on your system.<br>");
+            message+= i18n("<table width=\"100%\">");
+            message+= i18n("<tr><td align=\"right\"><b>Name:</b></td><td>&nbsp; %1</td></tr>", group.readEntry("Name"));
+            message+= i18n("<tr><td align=\"right\"><b>Description:</b></td><td>&nbsp; %1</td></tr>", group.readEntry("Comment"));
+            message+= i18n("<tr><td align=\"right\"><b>Author:</b></td><td>&nbsp; %1 &lt;%2&gt;</td></tr>",
+                           group.readEntry("X-KDE-PluginInfo-Author"),
+                           group.readEntry("X-KDE-PluginInfo-Email"));
+            message+= i18n("<tr><td align=\"right\"><b>Server:</b></td><td>&nbsp; %1</td></tr>", location.host());
+            message+= i18n("</table>");
+            message+= i18n("<br><br>Are you sure you want to open this widget on your system?");
+
+            KDialog *dialog = new KDialog;
+            dialog->setWindowTitle(i18n("Remote Widget"));
+            dialog->setButtons(KDialog::Yes|KDialog::No);
+            dialog->setButtonText(KDialog::Yes, i18n("Open Widget"));
+            dialog->setButtonText(KDialog::No, i18n("Reject Widget"));
+
+            int answer = KMessageBox::createKMessageBox(dialog, KIcon(iconName), message,
+                                                        QStringList(), QString(), 0,
+                                                        KMessageBox::Dangerous);
+            //int answer = KMessageBox::questionYesNo(0, message, i18n("Remote Widget"));
+
+            if (answer!=KDialog::Yes) {
+                q->setError(-1);
+                q->setErrorText(i18n("User rejected"));
+                q->emitResult();
+                return;
+            }
+
             /**
             QString metadataFilename = path + "/metadata.desktop";
             KDesktopFile cfg(metadataFilename);
@@ -112,7 +147,12 @@ public:
             */
 
             applet = Applet::loadPlasmoid(path);
-            applet->d->remoteLocation = location.prettyUrl();
+            if (applet) {
+                applet->d->remoteLocation = location.prettyUrl();
+            } else {
+                q->setError(-1);
+            }
+
             q->emitResult();
         }
     }

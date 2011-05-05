@@ -140,11 +140,16 @@ void ToolTipManager::show(QGraphicsWidget *widget)
         return;
     }
 
-    KConfig config("plasmarc");
-    KConfigGroup cg(&config, "PlasmaToolTips");
-    qreal delay = cg.readEntry("Delay", qreal(0.7));
-    if (delay < 0) {
-        return;
+    qreal delay = 0.0;
+    ToolTipContent content = d->tooltips[widget];
+
+    if (!content.isInstantPopup()) {
+        KConfig config("plasmarc");
+        KConfigGroup cg(&config, "PlasmaToolTips");
+        delay = cg.readEntry("Delay", qreal(0.7));
+        if (delay < 0) {
+            return;
+        }
     }
 
     d->hideTimer->stop();

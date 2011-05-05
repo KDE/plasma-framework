@@ -195,7 +195,7 @@ KPluginInfo::List DataEngineManager::listEngineInfoByCategory(const QString &cat
     return KPluginInfo::fromServices(offers);
 }
 
-void DataEngineManager::timerEvent(QTimerEvent *event)
+void DataEngineManager::timerEvent(QTimerEvent *)
 {
 #ifndef NDEBUG
     QString path = KGlobal::dirs()->locateLocal("appdata", "plasma_dataenginemanager_log");

@@ -112,6 +112,7 @@ void ServicePrivate::publish(AnnouncementMethods methods, const QString &name, c
             textData["name"] = name.toUtf8();
             textData["plasmoidname"] = metadata.name().toUtf8();
             textData["description"] = metadata.description().toUtf8();
+            textData["icon"] = metadata.icon().toUtf8();
             publicService->setTextData(textData);
             kDebug() << "about to publish";
 
@@ -244,7 +245,7 @@ ServiceJob *Service::startOperationCall(const KConfigGroup &description, QObject
 
     job->setParent(parent ? parent : this);
     connect(job, SIGNAL(finished(KJob*)), this, SLOT(jobFinished(KJob*)));
-    QTimer::singleShot(0, job, SLOT(slotStart()));
+    QTimer::singleShot(0, job, SLOT(autoStart()));
     return job;
 }
 

@@ -40,19 +40,29 @@ public:
                const QMap<QString, QVariant>& parameters,
                QObject *parent = 0);
     ~StorageJob();
+    void setData(const QVariantHash &data);
+    QVariantHash data() const;
     void start();
+    QString clientName() const;
+
+protected Q_SLOTS:
+    void resultSlot(StorageJob *job, const QVariant &result);
+
 private:
-    RefCountedDatabase *m_rdb;
     QString m_clientName;
+    QVariantHash m_data;
 };
 //End StorageJob
+
+Q_DECLARE_METATYPE(StorageJob *)
+Q_DECLARE_METATYPE(QWeakPointer<StorageJob>)
 
 class Storage : public Plasma::Service
 {
     Q_OBJECT
 
 public:
-    Storage(QObject* parent);
+    Storage(QObject *parent = 0);
     ~Storage();
 
 protected:

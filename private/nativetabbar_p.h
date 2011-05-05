@@ -41,6 +41,20 @@ public:
     QSize tabSizeHint(int index) const;
     QSize sizeHint() const;
 
+    /**
+     * Highlight the specified tab
+     * @param index of the tab to highlight
+     * @param highlight true if it should be highlighted, wrong if not
+     * @since 4.7
+     */
+    void setTabHighlighted(int index, bool highlight);
+
+    /**
+     * @return if the tab at index is highlighted
+     * @since 4.7
+     */
+    bool isTabHighlighted(int index) const;
+
 protected:
     int lastIndex() const;
 
@@ -71,7 +85,6 @@ Q_SIGNALS:
 
 private:
     QSize tabSize(int index) const;
-    QPoint closeButtonPos( int tabIndex ) const;
 
     NativeTabBarPrivate * const d;
 

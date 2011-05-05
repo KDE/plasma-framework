@@ -51,6 +51,7 @@ class ToolTipContentPrivate
 public:
     ToolTipContentPrivate()
       : autohide(true),
+        instantPopup(false),
         clickable(false),
         highlightWindows(false)
     {
@@ -63,6 +64,7 @@ public:
     QHash<QString, ToolTipResource> resources;
     QWeakPointer<QGraphicsWidget> graphicsWidget;
     bool autohide : 1;
+    bool instantPopup : 1;
     bool clickable : 1;
     bool highlightWindows : 1;
 };
@@ -93,9 +95,9 @@ ToolTipContent::ToolTipContent(const QString &mainText,
                                const QPixmap &image)
     : d(new ToolTipContentPrivate)
 {
-    d->mainText = mainText;
-    d->subText = subText;
-    d->image = image;
+    setMainText(mainText);
+    setSubText(subText);
+    setImage(image);
 }
 
 ToolTipContent::ToolTipContent(const QString &mainText,
@@ -103,9 +105,9 @@ ToolTipContent::ToolTipContent(const QString &mainText,
                                const QIcon &icon)
     : d(new ToolTipContentPrivate)
 {
-    d->mainText = mainText;
-    d->subText = subText;
-    d->image = icon.pixmap(IconSize(KIconLoader::Desktop));
+    setMainText(mainText);
+    setSubText(subText);
+    setImage(icon);
 }
 
 bool ToolTipContent::isEmpty() const
@@ -118,7 +120,7 @@ bool ToolTipContent::isEmpty() const
 
 void ToolTipContent::setMainText(const QString &text)
 {
-    d->mainText = text;
+    d->mainText = text.trimmed();
 }
 
 QString ToolTipContent::mainText() const
@@ -130,7 +132,7 @@ QString ToolTipContent::mainText() const
 
 void ToolTipContent::setSubText(const QString &text)
 {
-    d->subText = text;
+    d->subText = text.trimmed();
 }
 
 QString ToolTipContent::subText() const
@@ -198,6 +200,16 @@ void ToolTipContent::setAutohide(bool autohide)
 bool ToolTipContent::autohide() const
 {
     return d->autohide;
+}
+
+void ToolTipContent::setInstantPopup(bool enabled)
+{
+    d->instantPopup = enabled;
+}
+
+bool ToolTipContent::isInstantPopup() const
+{
+    return d->instantPopup;
 }
 
 void ToolTipContent::addResource(ResourceType type, const QUrl &path, const QVariant &resource)

@@ -53,7 +53,8 @@
 namespace Plasma
 {
 
-#define DEFAULT_WALLPAPER_THEME "Horos"
+//NOTE: Default wallpaper can be set from the theme configuration
+#define DEFAULT_WALLPAPER_THEME "default"
 #define DEFAULT_WALLPAPER_SUFFIX ".png"
 static const int DEFAULT_WALLPAPER_WIDTH = 1920;
 static const int DEFAULT_WALLPAPER_HEIGHT = 1200;

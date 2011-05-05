@@ -107,6 +107,7 @@ set(plasma_LIB_SRCS
     private/applethandle.cpp
     private/associatedapplicationmanager.cpp
     private/datacontainer_p.cpp
+    private/dataenginebindings.cpp
     private/dataengineconsumer.cpp
     private/dataengineservice.cpp
     private/denyallauthorization.cpp
@@ -126,6 +127,7 @@ set(plasma_LIB_SRCS
     private/runnerjobs.cpp
     private/serviceprovider.cpp
     private/storage.cpp
+    private/storagethread.cpp
     private/style.cpp
     private/trustedonlyauthorization.cpp
     private/tooltip.cpp
@@ -422,6 +424,7 @@ install(FILES
 
 install(FILES
    data/services/plasma-applet-extenderapplet.desktop
+   data/services/plasma.protocol
    DESTINATION ${SERVICES_INSTALL_DIR})
 
 install(FILES data/knewstuff/plasmoids.knsrc DESTINATION  ${CONFIG_INSTALL_DIR})

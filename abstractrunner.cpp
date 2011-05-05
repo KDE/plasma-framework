@@ -78,7 +78,7 @@ AbstractRunner::~AbstractRunner()
 
 KConfigGroup AbstractRunner::config() const
 {
-    QString group = objectName();
+    QString group = id();
     if (group.isEmpty()) {
         group = "UnnamedRunner";
     }

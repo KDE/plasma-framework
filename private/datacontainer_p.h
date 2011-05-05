@@ -25,6 +25,8 @@
 #include "servicejob.h"
 #include "storage_p.h"
 
+class QTimer;
+
 namespace Plasma
 {
 class ServiceJob;
@@ -41,7 +43,8 @@ public:
           enableStorage(false),
           isStored(true),
           storageCount(0)
-    {}
+    {
+    }
 
     SignalRelay *signalRelay(const DataContainer *dc, QObject *visualization,
                              uint pollingInterval, Plasma::IntervalAlignment align,
@@ -68,6 +71,7 @@ public:
     DataEngine::Data data;
     QMap<QObject *, SignalRelay *> relayObjects;
     QMap<uint, SignalRelay *> relays;
+    QTimer *storageTimer;
     QTime updateTs;
     Storage* storage;
     bool dirty : 1;

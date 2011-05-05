@@ -24,6 +24,7 @@
 #include <QColor>
 #include <QImage>
 #include <QMutex>
+#include <QQueue>
 #include <QThread>
 #include <QWaitCondition>
 
@@ -32,44 +33,50 @@
 namespace Plasma
 {
 
+class WallpaperRenderRequest
+{
+public:
+    WallpaperRenderRequest()
+        : token(++s_token)
+    {
+
+    }
+    QWeakPointer<QObject> requester;
+    QString file;
+    QSize size;
+    Wallpaper::ResizeMethod resizeMethod;
+    QColor color;
+    int token;
+
+    static int s_token;
+};
+
 class WallpaperRenderThread : public QThread
 {
     Q_OBJECT
 
 public:
-    WallpaperRenderThread(QObject *parent = 0);
+    WallpaperRenderThread(const WallpaperRenderRequest &request, QObject *parent = 0);
     virtual ~WallpaperRenderThread();
 
-    int render(const QString &file, const QSize &size,
-               Wallpaper::ResizeMethod, const QColor &color);
-
-    void setSize(const QSize &size);
-    void setRatio(float ratio);
-    int currentToken();
+    static void render(const WallpaperRenderRequest &request);
 
 Q_SIGNALS:
-    void done(WallpaperRenderThread *renderer,int token, const QImage &pixmap,
-              const QString &sourceImagePath, const QSize &size,
-              int resizeMethod, const QColor &color);
+    void done(const WallpaperRenderRequest &request, const QImage &image);
+
 protected:
     virtual void run();
 
 private:
-    QMutex m_mutex; // to protect parameters
-    QWaitCondition m_condition;
-
-    // protected by mutex
-    int m_currentToken;
-    QString m_file;
-    QColor m_color;
-    QSize m_size;
-    float m_ratio;
-    Wallpaper::ResizeMethod m_method;
+    static void checkQueue();
+    WallpaperRenderRequest m_request;
 
     bool m_abort;
-    bool m_restart;
+    static int s_rendererCount;
+    static QQueue<WallpaperRenderRequest> s_renderQueue;
 };
 
 } // namespace Plasma
 
+Q_DECLARE_METATYPE(Plasma::WallpaperRenderRequest);
 #endif // PLASMA_WALLPAPERRENDERTHREAD_P_H
