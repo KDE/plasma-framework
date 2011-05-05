@@ -44,10 +44,6 @@ void PackageStructureTest::init()
     ps = Plasma::Applet::packageStructure();
 }
 
-void PackageStructureTest::cleanup()
-{
-}
-
 void PackageStructureTest::emptyContentsPrefix()
 {
     Plasma::PackageStructure::Ptr structure(new NoPrefixes);

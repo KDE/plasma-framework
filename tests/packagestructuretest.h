@@ -29,7 +29,6 @@ class PackageStructureTest : public QObject
 
 public Q_SLOTS:
     void init();
-    void cleanup();
 
 private Q_SLOTS:
     void emptyContentsPrefix();
