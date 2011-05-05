@@ -84,10 +84,6 @@ void RemoteDataEngine::initRemoteService(const QString &source, RemoteService *s
     }
 }
 
-void RemoteDataEngine::init()
-{
-}
-
 void RemoteDataEngine::serviceReady(Plasma::Service *service)
 {
     m_service = service;
