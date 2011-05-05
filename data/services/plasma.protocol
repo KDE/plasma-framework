@@ -17,6 +17,7 @@ Description[pt_BR]=Protocolo para os serviços do Plasma
 Description[sv]=Ett protokoll för Plasma-tjänster
 Description[uk]=Протокол для служб Плазми
 Description[x-test]=xxA protocol for Plasma servicesxx
+Description[zh_TW]=Plasma 服務協定
 
 helper=true
 Class=:internet
