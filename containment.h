@@ -533,13 +533,6 @@ Q_SIGNALS:
          */
         void showConfigurationInterface();
 
-        /**
-         * Called when applet configuration values have changed.
-         * @reimp
-         * @sa Applet::configChanged()
-         */
-        void configChanged();
-
     protected:
         //FIXME plasma2: those should be public to allow scripted containments access them
         /**

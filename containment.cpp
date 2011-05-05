@@ -2116,10 +2116,6 @@ void Containment::showConfigurationInterface()
     Applet::showConfigurationInterface();
 }
 
-void Containment::configChanged()
-{
-}
-
 void ContainmentPrivate::configChanged()
 {
     if (drawWallpaper) {
