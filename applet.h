@@ -463,9 +463,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
         ImmutabilityType immutability() const;
 
-        void paintWindowFrame(QPainter *painter,
-                              const QStyleOptionGraphicsItem *option, QWidget *widget);
-
         /**
          * If for some reason, the applet fails to get up on its feet (the
          * library couldn't be loaded, necessary hardware support wasn't found,
