@@ -465,8 +465,6 @@ void AbstractRunnerPrivate::setupScriptSupport()
 
     QString translationsPath = package->filePath("translations");
     if (!translationsPath.isEmpty()) {
-        //FIXME: we should _probably_ use a KComponentData to segregate the applets
-        //       from each other; but I want to get the basics working first :)
         KGlobal::dirs()->addResourceDir("locale", translationsPath);
         KGlobal::locale()->insertCatalog(package->metadata().pluginName());
     }
