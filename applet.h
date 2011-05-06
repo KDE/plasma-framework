@@ -83,7 +83,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
     Q_PROPERTY(QString category READ category)
     Q_PROPERTY(ImmutabilityType immutability READ immutability WRITE setImmutability)
     Q_PROPERTY(bool hasFailedToLaunch READ hasFailedToLaunch WRITE setFailedToLaunch)
-    Q_PROPERTY(bool isBusy READ isBusy WRITE setBusy) //KDE5: remove
     Q_PROPERTY(bool busy READ isBusy WRITE setBusy)
     Q_PROPERTY(bool configurationRequired READ configurationRequired WRITE setConfigurationRequired)
     Q_PROPERTY(QRectF geometry READ geometry WRITE setGeometry)
