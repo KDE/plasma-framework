@@ -193,11 +193,11 @@ class PLASMA_EXPORT Containment : public Applet
         static QStringList listContainmentTypes();
 
         /**
-         * Returns a list of all known applets associated with a certain mimetype
+         * Returns a list of all known applets associated with a certain MimeType
          *
          * @return list of applets
          **/
-        static KPluginInfo::List listContainmentsForMimetype(const QString &mimetype);
+        static KPluginInfo::List listContainmentsForMimeType(const QString &mimeType);
 
         /**
          * Adds an applet to this Containment

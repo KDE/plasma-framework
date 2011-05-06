@@ -1132,10 +1132,10 @@ KPluginInfo::List Containment::listContainmentsOfType(const QString &type,
     return KPluginInfo::fromServices(offers);
 }
 
-KPluginInfo::List Containment::listContainmentsForMimetype(const QString &mimetype)
+KPluginInfo::List Containment::listContainmentsForMimeType(const QString &mimeType)
 {
-    const QString constraint = QString("'%1' in [X-Plasma-DropMimeTypes]").arg(mimetype);
-    //kDebug() << mimetype << constraint;
+    const QString constraint = QString("'%1' in [X-Plasma-DropMimeTypes]").arg(mimeType);
+    //kDebug() << mimeType << constraint;
     const KService::List offers = KServiceTypeTrader::self()->query("Plasma/Containment", constraint);
     return KPluginInfo::fromServices(offers);
 }
@@ -1286,7 +1286,7 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
             dropEvent->acceptProposedAction();
         }
     } else if (mimeData->hasFormat(ExtenderItemMimeData::mimeType())) {
-        kDebug() << "mimetype plasma/extenderitem is dropped, creating internal:extender";
+        kDebug() << "mimeType plasma/extenderitem is dropped, creating internal:extender";
         //Handle dropping extenderitems.
         const ExtenderItemMimeData *extenderData = qobject_cast<const ExtenderItemMimeData*>(mimeData);
         if (extenderData) {
@@ -1312,7 +1312,7 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
             item->setExtender(applet->extender());
         }
     } else if (KUrl::List::canDecode(mimeData)) {
-        //TODO: collect the mimetypes of available script engines and offer
+        //TODO: collect the mimeTypes of available script engines and offer
         //      to create widgets out of the matching URLs, if any
         const KUrl::List urls = KUrl::List::fromMimeData(mimeData);
         foreach (const KUrl &url, urls) {
@@ -1345,7 +1345,7 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
                 }
 
                 QObject::connect(job, SIGNAL(result(KJob*)), q, SLOT(dropJobResult(KJob*)));
-                QObject::connect(job, SIGNAL(mimetype(KIO::Job *, const QString&)),
+                QObject::connect(job, SIGNAL(mimeType(KIO::Job *, const QString&)),
                                  q, SLOT(mimeTypeRetrieved(KIO::Job *, const QString&)));
 
                 KMenu *choices = new KMenu("Content dropped");
@@ -1482,16 +1482,16 @@ void ContainmentPrivate::dropJobResult(KJob *job)
     if (job->error()) {
         kDebug() << "ERROR" << tjob->error() << ' ' << tjob->errorString();
     }
-    // We call mimetypeRetrieved since there might be other mechanisms
+    // We call mimeTypeRetrieved since there might be other mechanisms
     // for finding suitable applets. Cleanup happens there as well.
     mimeTypeRetrieved(qobject_cast<KIO::Job *>(job), QString());
 #endif // PLASMA_NO_KIO
 }
 
-void ContainmentPrivate::mimeTypeRetrieved(KIO::Job *job, const QString &mimetype)
+void ContainmentPrivate::mimeTypeRetrieved(KIO::Job *job, const QString &mimeType)
 {
 #ifndef PLASMA_NO_KIO
-    kDebug() << "Mimetype Job returns." << mimetype;
+    kDebug() << "Mimetype Job returns." << mimeType;
     KIO::TransferJob* tjob = dynamic_cast<KIO::TransferJob*>(job);
     if (!tjob) {
         kDebug() << "job should be a TransferJob, but isn't";
@@ -1499,9 +1499,9 @@ void ContainmentPrivate::mimeTypeRetrieved(KIO::Job *job, const QString &mimetyp
         return;
     }
     KPluginInfo::List appletList = Applet::listAppletInfoForUrl(tjob->url());
-    if (mimetype.isEmpty() && !appletList.count()) {
+    if (mimeType.isEmpty() && !appletList.count()) {
         clearDataForMimeJob(job);
-        kDebug() << "No applets found matching the url (" << tjob->url() << ") or the mimetype (" << mimetype << ")";
+        kDebug() << "No applets found matching the url (" << tjob->url() << ") or the mimeType (" << mimeType << ")";
         return;
     } else {
 
@@ -1523,17 +1523,17 @@ void ContainmentPrivate::mimeTypeRetrieved(KIO::Job *job, const QString &mimetyp
         }
 
         QVariantList args;
-        args << tjob->url().url() << mimetype;
+        args << tjob->url().url() << mimeType;
 
-        kDebug() << "Creating menu for:" << mimetype  << posi << args;
+        kDebug() << "Creating menu for:" << mimeType  << posi << args;
 
-        appletList << Applet::listAppletInfoForMimeType(mimetype);
+        appletList << Applet::listAppletInfoForMimeType(mimeType);
         KPluginInfo::List wallpaperList;
         if (drawWallpaper) {
-            if (wallpaper && wallpaper->supportsMimetype(mimetype)) {
+            if (wallpaper && wallpaper->supportsMimetype(mimeType)) {
                 wallpaperList << wallpaper->d->wallpaperDescription;
             } else {
-                wallpaperList = Wallpaper::listWallpaperInfoForMimetype(mimetype);
+                wallpaperList = Wallpaper::listWallpaperInfoForMimetype(mimeType);
             }
         }
 
@@ -1581,7 +1581,7 @@ void ContainmentPrivate::mimeTypeRetrieved(KIO::Job *job, const QString &mimetyp
                 // Put the job on hold so it can be recycled to fetch the actual content,
                 // which is to be expected when something's dropped onto the desktop and
                 // an applet is to be created with this URL
-                if (!mimetype.isEmpty() && !tjob->error()) {
+                if (!mimeType.isEmpty() && !tjob->error()) {
                     tjob->putOnHold();
                     KIO::Scheduler::publishSlaveOnHold();
                 }
