@@ -260,6 +260,7 @@ void WallpaperPackage::pathChanged()
     QFileInfo info(path());
     m_fullPackage = info.isDir();
     removeDefinition("preferred");
+    setRequired("images", m_fullPackage);
 
     if (m_fullPackage) {
         setContentsPrefixPaths(QStringList() << "contents/");
