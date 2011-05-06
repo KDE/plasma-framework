@@ -40,7 +40,7 @@ private Q_SLOTS:
     void path();
     void name();
     void required();
-    void mimetypes();
+    void mimeTypes();
     void read();
     void write();
 

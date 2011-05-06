@@ -124,11 +124,11 @@ void PackageStructureTest::required()
     QVERIFY(ps->isRequired("mainscript"));
 }
 
-void PackageStructureTest::mimetypes()
+void PackageStructureTest::mimeTypes()
 {
-    QStringList mimetypes;
-    mimetypes << "image/svg+xml" << "image/png" << "image/jpeg";
-    QCOMPARE(ps->mimetypes("images"), mimetypes);
+    QStringList mimeTypes;
+    mimeTypes << "image/svg+xml" << "image/png" << "image/jpeg";
+    QCOMPARE(ps->mimeTypes("images"), mimeTypes);
 }
 
 void PackageStructureTest::read()
