@@ -524,7 +524,7 @@ void PackageStructure::write(KConfigBase *config) const
         group.writeEntry("Path", it.value().paths);
         group.writeEntry("Name", it.value().name);
         if (!it.value().mimeTypes.isEmpty()) {
-            group.writeEntry("MimeTypes", it.value().mimeTypes);
+            group.writeEntry("Mimetypes", it.value().mimeTypes);
         }
         if (it.value().directory) {
             group.writeEntry("Directory", true);
