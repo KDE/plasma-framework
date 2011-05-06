@@ -103,12 +103,12 @@ class PLASMA_EXPORT Wallpaper : public QObject
         static KPluginInfo::List listWallpaperInfo(const QString &formFactor = QString());
 
         /**
-         * Returns a list of all known wallpapers that can accept the given mimetype
-         * @arg mimetype the mimetype to search for
+         * Returns a list of all known wallpapers that can accept the given MimeType
+         * @arg mimeType the mimeType to search for
          * @arg formFactor the format of the wallpaper being search for (e.g. desktop)
          * @return list of wallpapers
          */
-        static KPluginInfo::List listWallpaperInfoForMimetype(const QString &mimetype,
+        static KPluginInfo::List listWallpaperInfoForMimetype(const QString &mimeType,
                                                               const QString &formFactor = QString());
 
         /**

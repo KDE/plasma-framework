@@ -159,9 +159,9 @@ KPluginInfo::List Wallpaper::listWallpaperInfo(const QString &formFactor)
     return KPluginInfo::fromServices(offers);
 }
 
-KPluginInfo::List Wallpaper::listWallpaperInfoForMimetype(const QString &mimetype, const QString &formFactor)
+KPluginInfo::List Wallpaper::listWallpaperInfoForMimetype(const QString &mimeType, const QString &formFactor)
 {
-    QString constraint = QString("'%1' in [X-Plasma-DropMimeTypes]").arg(mimetype);
+    QString constraint = QString("'%1' in [X-Plasma-DropMimeTypes]").arg(mimeType);
     if (!formFactor.isEmpty()) {
         constraint.append("[X-Plasma-FormFactors] ~~ '").append(formFactor).append("'");
     }
