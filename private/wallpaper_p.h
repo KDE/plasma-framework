@@ -59,6 +59,8 @@ public:
     QSizeF targetSize;
     WallpaperScript *script;
     QList<KUrl> pendingUrls;
+    QList<QAction*> contextActions;
+
     bool cacheRendering : 1;
     bool initialized : 1;
     bool needsConfig : 1;
@@ -70,7 +72,7 @@ public:
 class LoadImageThread : public QObject, public QRunnable
 {
     Q_OBJECT
-    
+
     private:
         QString m_filePath;
 

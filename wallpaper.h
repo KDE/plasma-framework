@@ -520,9 +520,6 @@ class PLASMA_EXPORT Wallpaper : public QObject
          **/
         void setContextualActions(const QList<QAction*> &actions);
 
-        //FIXME: KDE5, this must be moved to the dptr
-        QList<QAction*> contextActions;
-
         /**
          * Sets whether the configuration user interface of the wallpaper should have
          * a live preview rendered by a Wallpaper instance. note: this is just an

@@ -619,12 +619,12 @@ void Wallpaper::insertIntoCache(const QString& key, const QImage &image)
 
 QList<QAction*> Wallpaper::contextualActions() const
 {
-    return contextActions;
+    return d->contextActions;
 }
 
 void Wallpaper::setContextualActions(const QList<QAction*> &actions)
 {
-    contextActions = actions;
+    d->contextActions = actions;
 }
 
 bool Wallpaper::isPreviewing() const
