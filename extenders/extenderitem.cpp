@@ -433,12 +433,6 @@ Extender *ExtenderItem::extender() const
     return d->extender;
 }
 
-//TODO KDE5: only one setGroup()
-void ExtenderItem::setGroup(ExtenderGroup *group)
-{
-    setGroup(group, QPointF(-1, -1));
-}
-
 void ExtenderItem::setGroup(ExtenderGroup *group, const QPointF &pos)
 {
     if (isGroup()) {
