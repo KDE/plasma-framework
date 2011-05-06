@@ -52,22 +52,22 @@ PlasmoidPackage::PlasmoidPackage(QObject *parent)
     addDirectoryDefinition("images", "images", i18n("Images"));
     QStringList mimetypes;
     mimetypes << "image/svg+xml" << "image/png" << "image/jpeg";
-    setMimetypes("images", mimetypes);
+    setMimeTypes("images", mimetypes);
 
     addDirectoryDefinition("config", "config", i18n("Configuration Definitions"));
     mimetypes.clear();
     mimetypes << "text/xml";
-    setMimetypes("config", mimetypes);
+    setMimeTypes("config", mimetypes);
 
     addDirectoryDefinition("ui", "ui", i18n("User Interface"));
-    setMimetypes("ui", mimetypes);
+    setMimeTypes("ui", mimetypes);
 
     addDirectoryDefinition("data", "data", i18n("Data Files"));
 
     addDirectoryDefinition("scripts", "code", i18n("Executable Scripts"));
     mimetypes.clear();
     mimetypes << "text/plain";
-    setMimetypes("scripts", mimetypes);
+    setMimeTypes("scripts", mimetypes);
 
     addDirectoryDefinition("translations", "locale", i18n("Translations"));
 
@@ -122,10 +122,10 @@ DataEnginePackage::DataEnginePackage(QObject *parent)
     addDirectoryDefinition("scripts", "code", i18n("Executable Scripts"));
     QStringList mimetypes;
     mimetypes << "text/plain";
-    setMimetypes("scripts", mimetypes);
+    setMimeTypes("scripts", mimetypes);
 
     addDirectoryDefinition("services", "services/", i18n("Service Descriptions"));
-    setMimetypes("services", mimetypes);
+    setMimeTypes("services", mimetypes);
 
     addDirectoryDefinition("translations", "locale", i18n("Translations"));
 
@@ -207,7 +207,7 @@ ThemePackage::ThemePackage(QObject *parent)
 
     QStringList mimetypes;
     mimetypes << "image/svg+xml";
-    setDefaultMimetypes(mimetypes);
+    setDefaultMimeTypes(mimetypes);
 }
 
 WallpaperPackage::WallpaperPackage(Wallpaper *paper, QObject *parent)
@@ -219,7 +219,7 @@ WallpaperPackage::WallpaperPackage(Wallpaper *paper, QObject *parent)
 {
     QStringList mimetypes;
     mimetypes << "image/svg" << "image/png" << "image/jpeg" << "image/jpg";
-    setDefaultMimetypes(mimetypes);
+    setDefaultMimeTypes(mimetypes);
 
     addDirectoryDefinition("images", "images/", i18n("Images"));
     setRequired("images", true);

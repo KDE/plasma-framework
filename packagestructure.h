@@ -53,12 +53,12 @@ class PackageStructurePrivate;
     structure.addDirectoryDefinition("images", "pics/", i18n("Images"));
     QStringList mimeTypes;
     mimeTypes << "image/svg" << "image/png" << "image/jpeg";
-    structure.setMimetypes("images", mimeTypes);
+    structure.setMimeTypes("images", mimeTypes);
 
     structure.addDirectoryDefinition("scripts", "code/", i18n("Executable Scripts"));
     mimeTypes.clear();
     mimeTypes << "text/\*";
-    structure.setMimetypes("scripts", mimeTypes);
+    structure.setMimeTypes("scripts", mimeTypes);
 
     structure.addFileDefinition("mainscript", "code/main.js", i18n("Main Script File"));
     structure.setRequired("mainscript", true);
@@ -212,7 +212,7 @@ public:
      *
      * @param mimeTypes a list of mimeTypes
      **/
-    void setDefaultMimetypes(QStringList mimeTypes);
+    void setDefaultMimeTypes(QStringList mimeTypes);
 
     /**
      * Define mimeTypes for a given part of the structure
@@ -222,7 +222,7 @@ public:
      * @param key the entry within the package
      * @param mimeTypes a list of mimeTypes
      **/
-    void setMimetypes(const char *key, QStringList mimeTypes);
+    void setMimeTypes(const char *key, QStringList mimeTypes);
 
     /**
      * @return the mimeTypes associated with the path, if any

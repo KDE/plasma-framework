@@ -411,12 +411,12 @@ bool PackageStructure::isRequired(const char *key) const
     return it.value().required;
 }
 
-void PackageStructure::setDefaultMimetypes(QStringList mimeTypes)
+void PackageStructure::setDefaultMimeTypes(QStringList mimeTypes)
 {
     d->mimeTypes = mimeTypes;
 }
 
-void PackageStructure::setMimetypes(const char *key, QStringList mimeTypes)
+void PackageStructure::setMimeTypes(const char *key, QStringList mimeTypes)
 {
     QMap<QByteArray, ContentStructure>::iterator it = d->contents.find(key);
     if (it == d->contents.end()) {
@@ -505,7 +505,7 @@ void PackageStructure::read(const KConfigBase *config)
             addFileDefinition(key, path, name);
         }
 
-        setMimetypes(key, mimeTypes);
+        setMimeTypes(key, mimeTypes);
         setRequired(key, required);
     }
 }
@@ -524,7 +524,7 @@ void PackageStructure::write(KConfigBase *config) const
         group.writeEntry("Path", it.value().paths);
         group.writeEntry("Name", it.value().name);
         if (!it.value().mimeTypes.isEmpty()) {
-            group.writeEntry("Mimetypes", it.value().mimeTypes);
+            group.writeEntry("Mimeypes", it.value().mimeTypes);
         }
         if (it.value().directory) {
             group.writeEntry("Directory", true);
