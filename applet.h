@@ -307,7 +307,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *
          * @return list of applets
          **/
-        static KPluginInfo::List listAppletInfoForMimetype(const QString &mimetype);
+        static KPluginInfo::List listAppletInfoForMimeType(const QString &mimetype);
 
         /**
          * Returns a list of all known applets associated with a certain URL.

@@ -1168,7 +1168,7 @@ void Containment::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
         QStringList formats = event->mimeData()->formats();
 
         foreach (const QString &format, formats) {
-            KPluginInfo::List appletList = Applet::listAppletInfoForMimetype(format);
+            KPluginInfo::List appletList = Applet::listAppletInfoForMimeType(format);
             if (!appletList.isEmpty()) {
                 event->setAccepted(true);
                 break;
@@ -1370,7 +1370,7 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
         QHash<QString, QString> pluginFormats;
 
         foreach (const QString &format, formats) {
-            KPluginInfo::List plugins = Applet::listAppletInfoForMimetype(format);
+            KPluginInfo::List plugins = Applet::listAppletInfoForMimeType(format);
 
             foreach (const KPluginInfo &plugin, plugins) {
                 if (seenPlugins.contains(plugin.pluginName())) {
@@ -1527,7 +1527,7 @@ void ContainmentPrivate::mimeTypeRetrieved(KIO::Job *job, const QString &mimetyp
 
         kDebug() << "Creating menu for:" << mimetype  << posi << args;
 
-        appletList << Applet::listAppletInfoForMimetype(mimetype);
+        appletList << Applet::listAppletInfoForMimeType(mimetype);
         KPluginInfo::List wallpaperList;
         if (drawWallpaper) {
             if (wallpaper && wallpaper->supportsMimetype(mimetype)) {

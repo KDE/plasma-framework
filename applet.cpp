@@ -2192,11 +2192,11 @@ KPluginInfo::List Applet::listAppletInfo(const QString &category, const QString 
    return PluginLoader::pluginLoader()->listAppletInfo(category, parentApp);
 }
 
-KPluginInfo::List Applet::listAppletInfoForMimetype(const QString &mimetype)
+KPluginInfo::List Applet::listAppletInfoForMimeType(const QString &mimeType)
 {
     QString constraint = AppletPrivate::parentAppConstraint();
-    constraint.append(QString(" and '%1' in [X-Plasma-DropMimeTypes]").arg(mimetype));
-    //kDebug() << "listAppletInfoForMimetype with" << mimetype << constraint;
+    constraint.append(QString(" and '%1' in [X-Plasma-DropMimeTypes]").arg(mimeType));
+    //kDebug() << "listAppletInfoForMimetype with" << mimeType << constraint;
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
     AppletPrivate::filterOffers(offers);
     return KPluginInfo::fromServices(offers);
