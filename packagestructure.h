@@ -315,7 +315,7 @@ public:
     /**
       * @return the package metadata object.
       */
-    virtual PackageMetadata metadata();
+    virtual PackageMetadata metadata() const;
 
     /**
      * @return true if paths/symlinks outside the package itself should be followed.

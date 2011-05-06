@@ -608,7 +608,7 @@ void PackageStructurePrivate::createPackageMetadata(const QString &path)
     metadata = new PackageMetadata(metadataPath);
 }
 
-PackageMetadata PackageStructure::metadata()
+PackageMetadata PackageStructure::metadata() const
 {
     if (!d->metadata && !d->path.isEmpty()) {
         QFileInfo fileInfo(d->path);
