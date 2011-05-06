@@ -51,14 +51,14 @@ class PackageStructurePrivate;
     PackageStructure structure;
 
     structure.addDirectoryDefinition("images", "pics/", i18n("Images"));
-    QStringList mimetypes;
-    mimetypes << "image/svg" << "image/png" << "image/jpeg";
-    structure.setMimetypes("images", mimetypes);
+    QStringList mimeTypes;
+    mimeTypes << "image/svg" << "image/png" << "image/jpeg";
+    structure.setMimetypes("images", mimeTypes);
 
     structure.addDirectoryDefinition("scripts", "code/", i18n("Executable Scripts"));
-    mimetypes.clear();
-    mimetypes << "text/\*";
-    structure.setMimetypes("scripts", mimetypes);
+    mimeTypes.clear();
+    mimeTypes << "text/\*";
+    structure.setMimetypes("scripts", mimeTypes);
 
     structure.addFileDefinition("mainscript", "code/main.js", i18n("Main Script File"));
     structure.setRequired("mainscript", true);
@@ -131,7 +131,7 @@ public:
 
     /**
      * Adds a directory to the structure of the package. It is added as
-     * a not-required element with no associated mimetypes.
+     * a not-required element with no associated mimeTypes.
      *
      * Starting in 4.6, if an entry with the given key
      * already exists, the path is added to it as a search alternative.
@@ -144,7 +144,7 @@ public:
 
     /**
      * Adds a file to the structure of the package. It is added as
-     * a not-required element with no associated mimetypes.
+     * a not-required element with no associated mimeTypes.
      *
      * Starting in 4.6, if an entry with the given key
      * already exists, the path is added to it as a search alternative.
@@ -206,28 +206,28 @@ public:
     bool isRequired(const char *key) const;
 
     /**
-     * Defines the default mimetypes for any definitions that do not have
-     * associated mimetypes. Handy for packages with only one or predominantly
+     * Defines the default mimeTypes for any definitions that do not have
+     * associated mimeTypes. Handy for packages with only one or predominantly
      * one file type.
      *
-     * @param mimetypes a list of mimetypes
+     * @param mimeTypes a list of mimeTypes
      **/
-    void setDefaultMimetypes(QStringList mimetypes);
+    void setDefaultMimetypes(QStringList mimeTypes);
 
     /**
-     * Define mimetypes for a given part of the structure
+     * Define mimeTypes for a given part of the structure
      * The path must already have been added using addDirectoryDefinition
      * or addFileDefinition.
      *
      * @param key the entry within the package
-     * @param mimetypes a list of mimetypes
+     * @param mimeTypes a list of mimeTypes
      **/
-    void setMimetypes(const char *key, QStringList mimetypes);
+    void setMimetypes(const char *key, QStringList mimeTypes);
 
     /**
-     * @return the mimetypes associated with the path, if any
+     * @return the mimeTypes associated with the path, if any
      **/
-    QStringList mimetypes(const char *key) const;
+    QStringList mimeTypes(const char *key) const;
 
     /**
      * Sets the path to the package. Useful for package formats

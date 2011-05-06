@@ -59,14 +59,14 @@ class ContentStructure
         {
             paths = other.paths;
             name = other.name;
-            mimetypes = other.mimetypes;
+            mimeTypes = other.mimeTypes;
             directory = other.directory;
             required = other.required;
         }
 
         QStringList paths;
         QString name;
-        QStringList mimetypes;
+        QStringList mimeTypes;
         bool directory : 1;
         bool required : 1;
 };
@@ -100,7 +100,7 @@ public:
     QString packageRoot;
     QString servicePrefix;
     QMap<QByteArray, ContentStructure> contents;
-    QStringList mimetypes;
+    QStringList mimeTypes;
     PackageMetadata *metadata;
     bool externalPaths;
  };
@@ -411,33 +411,33 @@ bool PackageStructure::isRequired(const char *key) const
     return it.value().required;
 }
 
-void PackageStructure::setDefaultMimetypes(QStringList mimetypes)
+void PackageStructure::setDefaultMimetypes(QStringList mimeTypes)
 {
-    d->mimetypes = mimetypes;
+    d->mimeTypes = mimeTypes;
 }
 
-void PackageStructure::setMimetypes(const char *key, QStringList mimetypes)
+void PackageStructure::setMimetypes(const char *key, QStringList mimeTypes)
 {
     QMap<QByteArray, ContentStructure>::iterator it = d->contents.find(key);
     if (it == d->contents.end()) {
         return;
     }
 
-    it.value().mimetypes = mimetypes;
+    it.value().mimeTypes = mimeTypes;
 }
 
-QStringList PackageStructure::mimetypes(const char *key) const
+QStringList PackageStructure::mimeTypes(const char *key) const
 {
     QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constFind(key);
     if (it == d->contents.constEnd()) {
         return QStringList();
     }
 
-    if (it.value().mimetypes.isEmpty()) {
-        return d->mimetypes;
+    if (it.value().mimeTypes.isEmpty()) {
+        return d->mimeTypes;
     }
 
-    return it.value().mimetypes;
+    return it.value().mimeTypes;
 }
 
 void PackageStructure::setPath(const QString &path)
@@ -481,7 +481,7 @@ void PackageStructure::pathChanged()
 void PackageStructure::read(const KConfigBase *config)
 {
     d->contents.clear();
-    d->mimetypes.clear();
+    d->mimeTypes.clear();
     KConfigGroup general(config, QString());
     d->type = general.readEntry("Type", QString());
     d->contentsPrefixPaths = general.readEntry("ContentsPrefixPaths", d->contentsPrefixPaths);
@@ -495,7 +495,7 @@ void PackageStructure::read(const KConfigBase *config)
 
         QString path = entry.readEntry("Path", QString());
         QString name = entry.readEntry("Name", QString());
-        QStringList mimetypes = entry.readEntry("Mimetypes", QStringList());
+        QStringList mimeTypes = entry.readEntry("Mimetypes", QStringList());
         bool directory = entry.readEntry("Directory", false);
         bool required = entry.readEntry("Required", false);
 
@@ -505,7 +505,7 @@ void PackageStructure::read(const KConfigBase *config)
             addFileDefinition(key, path, name);
         }
 
-        setMimetypes(key, mimetypes);
+        setMimetypes(key, mimeTypes);
         setRequired(key, required);
     }
 }
@@ -523,8 +523,8 @@ void PackageStructure::write(KConfigBase *config) const
         KConfigGroup group = config->group(it.key());
         group.writeEntry("Path", it.value().paths);
         group.writeEntry("Name", it.value().name);
-        if (!it.value().mimetypes.isEmpty()) {
-            group.writeEntry("Mimetypes", it.value().mimetypes);
+        if (!it.value().mimeTypes.isEmpty()) {
+            group.writeEntry("Mimetypes", it.value().mimeTypes);
         }
         if (it.value().directory) {
             group.writeEntry("Directory", true);
@@ -608,7 +608,6 @@ void PackageStructurePrivate::createPackageMetadata(const QString &path)
     metadata = new PackageMetadata(metadataPath);
 }
 
-//FIXME KDE5: should be const
 PackageMetadata PackageStructure::metadata()
 {
     if (!d->metadata && !d->path.isEmpty()) {
@@ -618,15 +617,15 @@ PackageMetadata PackageStructure::metadata()
             d->createPackageMetadata(d->path);
         } else if (fileInfo.exists()) {
             KArchive *archive = 0;
-            KMimeType::Ptr mimetype = KMimeType::findByPath(d->path);
+            KMimeType::Ptr mimeType = KMimeType::findByPath(d->path);
 
-            if (mimetype->is("application/zip")) {
+            if (mimeType->is("application/zip")) {
                 archive = new KZip(d->path);
-            } else if (mimetype->is("application/x-compressed-tar") ||
-                       mimetype->is("application/x-tar")|| mimetype->is("application/x-bzip-compressed-tar")) {
+            } else if (mimeType->is("application/x-compressed-tar") ||
+                       mimeType->is("application/x-tar")|| mimeType->is("application/x-bzip-compressed-tar")) {
                 archive = new KTar(d->path);
             } else {
-                kWarning() << "Could not open package file, unsupported archive format:" << d->path << mimetype->name();
+                kWarning() << "Could not open package file, unsupported archive format:" << d->path << mimeType->name();
             }
 
             if (archive && archive->open(QIODevice::ReadOnly)) {
