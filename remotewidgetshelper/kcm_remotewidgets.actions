@@ -55,6 +55,7 @@ Name[zh_TW]=儲存遠端元件政策
 Description=Prevents the system from saving remote plasma widgets' policies
 Description[ar]=يمنع النظام من حفظ سياسات ودجات بلازما البعيدة
 Description[ast]=Impide que'l sistema guarde polítiques d'elementos gráficos Plasma remotos
+Description[bs]=Sprečava sistem da sačuva smjernice udaljenih plazma grafičkih kontrola
 Description[ca]=Evita al sistema de desar polítiques d'estris remots del plasma
 Description[ca@valencia]=Evita al sistema d'alçar polítiques d'estris remots del plasma
 Description[cs]=Zabrání systému ukládat zásady vzdálených widgetů plasmy
