@@ -292,10 +292,9 @@ bool Wallpaper::isInitialized() const
 
 void Wallpaper::setBoundingRect(const QRectF &boundingRect)
 {
-    QSizeF oldBoundingRectSize = d->boundingRect.size();
     d->boundingRect = boundingRect;
 
-    if (!d->targetSize.isValid() || d->targetSize == oldBoundingRectSize)  {
+    if (d->targetSize != boundingRect.size()) {
         d->targetSize = boundingRect.size();
         emit renderHintsChanged();
     }

@@ -286,18 +286,29 @@ class PLASMA_EXPORT Svg : public QObject
         bool containsMultipleImages() const;
 
         /**
-         * Convenience method for setting the svg file to use for the SVG.
+         * Set the SVG file to render.
          *
-         * Relative paths are looked for in the current Plasma theme.
+         * Relative paths are looked for in the current Plasma theme,
+         * and should not include the file extension (.svg and .svgz
+         * files will be searched for).  See Theme::imagePath().
          *
-         * @arg svgFilePath  the path to the SVG file
+         * If the parent object of this Svg is a Plasma::Applet,
+         * relative paths will be searched for in the applet's package
+         * first.
+         *
+         * @arg svgFilePath  either an absolute path to an SVG file, or
+         *                   an image name
          */
         void setImagePath(const QString &svgFilePath);
 
         /**
-         * Convenience method to get the svg filepath and name of svg.
+         * The SVG file to render.
          *
-         * @return the svg's filepath including name of the svg.
+         * If this SVG is themed, this will be a relative path, and will not
+         * include a file extension.
+         *
+         * @return  either an absolute path to an SVG file, or an image name
+         * @see Theme::imagePath()
          */
         QString imagePath() const;
 

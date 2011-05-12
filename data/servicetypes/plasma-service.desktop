@@ -4,6 +4,7 @@ X-KDE-ServiceType=Plasma/Service
 
 Comment=Plasma service
 Comment[bg]=Услуга Plasma
+Comment[bs]=Plazma usluga
 Comment[ca]=Servei del Plasma
 Comment[ca@valencia]=Servei del Plasma
 Comment[cs]=Služba Plasma
@@ -44,6 +45,7 @@ Comment[sr@latin]=Plasma servis
 Comment[sv]=Plasma-tjänst
 Comment[th]=บริการของพลาสมา
 Comment[tr]=Plasma servisi
+Comment[ug]=Plasma مۇلازىمىتى
 Comment[uk]=Служба Плазми
 Comment[wa]=Siervice di Plasma
 Comment[x-test]=xxPlasma servicexx

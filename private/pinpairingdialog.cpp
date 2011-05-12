@@ -112,6 +112,7 @@ PinPairingDialog::PinPairingDialog(ClientPinRequest &request, QObject *parent)
 
 PinPairingDialog::~PinPairingDialog()
 {
+      delete d;
 }
 
 }
