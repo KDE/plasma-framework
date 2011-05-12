@@ -51,10 +51,10 @@ void PlasmoidPackageTest::cleanup()
     // Clean things up.
     QDir local(QDir::homePath() + QLatin1String("/.kde-unit-test/packageRoot"));
     foreach (const QString &dir, local.entryList(QDir::Dirs)) {
-        removeDir(QLatin1String("packageRoot/" + dir.toLatin1() + "/contents/code"));
-        removeDir(QLatin1String("packageRoot/" + dir.toLatin1() + "/contents/images"));
-        removeDir(QLatin1String("packageRoot/" + dir.toLatin1() + "/contents"));
-        removeDir(QLatin1String("packageRoot/" + dir.toLatin1()));
+        removeDir(QLatin1String("packageRoot/") + dir.toLatin1() + "/contents/code");
+        removeDir(QLatin1String("packageRoot/") + dir.toLatin1() + "/contents/images");
+        removeDir(QLatin1String("packageRoot/") + dir.toLatin1() + "/contents");
+        removeDir(QLatin1String("packageRoot/") + dir.toLatin1());
     }
 
     QDir().rmpath(QDir::homePath() + "/.kde-unit-test/packageRoot");
@@ -108,7 +108,7 @@ void PlasmoidPackageTest::createTestPackage(const QString &packageName)
     file.flush();
     file.close();
 
-    // Now we have a minimal plasmoid package which is valid. Let's add some 
+    // Now we have a minimal plasmoid package which is valid. Let's add some
     // files to it for test purposes.
 
     // Create the images dir.
@@ -306,7 +306,7 @@ void PlasmoidPackageTest::createAndInstallPackage()
 {
     QString plasmoid("plasmoid_to_package");
     createTestPackage(plasmoid);
-    
+
     QString packagePath = mPackageRoot + '/' + "package.zip";
     Plasma::PackageMetadata metadata(
         QString(KDESRCDIR) + "/packagemetadatatest.desktop");
@@ -323,7 +323,7 @@ void PlasmoidPackageTest::createAndInstallPackage()
     const KArchiveEntry *contentsEntry = dir->entry("contents");
     QVERIFY(contentsEntry);
     QVERIFY(contentsEntry->isDirectory());
-    const KArchiveDirectory *contents = 
+    const KArchiveDirectory *contents =
         static_cast<const KArchiveDirectory *>(contentsEntry);
     QVERIFY(contents->entry("code"));
     QVERIFY(contents->entry("images"));
