@@ -228,13 +228,6 @@ kde4_add_ui_files(plasma_LIB_SRCS
 #   TEST_INCLUDES
 #)
 
-if (QT_QTOPENGL_FOUND)
-    message(STATUS "Adding support for OpenGL applets to libplasma")
-    set(plasma_LIB_SRCS
-        ${plasma_LIB_SRCS}
-        glapplet.cpp)
-endif(QT_QTOPENGL_FOUND)
-
 if (PHONON_FOUND)
     message(STATUS "Adding support for Phonon to libplasma")
     include_directories(${KDE4_PHONON_INCLUDES})
@@ -264,10 +257,6 @@ endif(PHONON_FOUND)
 if(DL_LIBRARY)
     target_link_libraries(plasma ${DL_LIBRARY})
 endif(DL_LIBRARY)
-
-if(QT_QTOPENGL_FOUND)
-    target_link_libraries(plasma ${QT_QTOPENGL_LIBRARY})
-endif(QT_QTOPENGL_FOUND)
 
 target_link_libraries(plasma LINK_INTERFACE_LIBRARIES kdeui kdecore ${QT_QTGUI_LIBRARY})
 
@@ -347,12 +336,6 @@ if(NOT KDE_NO_DEPRECATED)
     )
 endif(NOT KDE_NO_DEPRECATED)
 
-
-if(QT_QTOPENGL_FOUND)
-    set(plasma_LIB_INCLUDES
-        ${plasma_LIB_INCLUDES}
-        glapplet.h)
-endif(QT_QTOPENGL_FOUND)
 
 install(FILES
         ${plasma_LIB_INCLUDES}
