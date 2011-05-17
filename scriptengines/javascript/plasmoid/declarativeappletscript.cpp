@@ -135,6 +135,9 @@ bool DeclarativeAppletScript::init()
 
 void DeclarativeAppletScript::collectGarbage()
 {
+    if (!m_engine) {
+        return;
+    }
     m_engine->collectGarbage();
 }
 
@@ -195,6 +198,9 @@ QScriptValue DeclarativeAppletScript::newPlasmaSvg(QScriptContext *context, QScr
 
 QScriptValue DeclarativeAppletScript::variantToScriptValue(QVariant var)
 {
+    if (!m_engine) {
+        return QScriptValue();
+    }
     return m_engine->newVariant(var);
 }
 
@@ -297,6 +303,9 @@ void DeclarativeAppletScript::popupEvent(bool popped)
 
 void DeclarativeAppletScript::dataUpdated(const QString &name, const Plasma::DataEngine::Data &data)
 {
+    if (!m_engine) {
+        return;
+    }
     QScriptValueList args;
     args << m_engine->toScriptValue(name) << m_engine->toScriptValue(data);
 
@@ -306,6 +315,9 @@ void DeclarativeAppletScript::dataUpdated(const QString &name, const Plasma::Dat
 void DeclarativeAppletScript::extenderItemRestored(Plasma::ExtenderItem* item)
 {
     if (!m_env) {
+        return;
+    }
+    if (!m_engine) {
         return;
     }
 
@@ -347,6 +359,10 @@ ScriptEnv *DeclarativeAppletScript::scriptEnv()
 void DeclarativeAppletScript::setupObjects()
 {
     m_engine = m_declarativeWidget->scriptEngine();
+    if (!m_engine) {
+        return;
+    }
+
     connect(m_engine, SIGNAL(signalHandlerException(const QScriptValue &)),
             this, SLOT(signalHandlerException(const QScriptValue &)));
 
