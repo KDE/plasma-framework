@@ -17,7 +17,7 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-import QtQuick 1.0
+import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 
 Item {
@@ -27,10 +27,29 @@ Item {
     property bool running: false
 
     // Plasma API
-    property alias text: label.text
-    property QtObject theme: PlasmaCore.Theme { }
+    property bool smoothAnimation: false
 
-    width: 52; height: 52
+    implicitWidth: 52
+    implicitHeight: 52
+
+    // Should use animation's pause to keep the
+    // rotation smooth when running changes but
+    // it has lot's of side effects on
+    // initialization.
+    onRunningChanged: {
+        rotationAnimation.from = rotation;
+        rotationAnimation.to = rotation + 360;
+    }
+
+    RotationAnimation on rotation {
+        id: rotationAnimation
+
+        from: 0
+        to: 360
+        duration: 1500
+        running: busy.running
+        loops: Animation.Infinite
+    }
 
     PlasmaCore.SvgItem {
         id: widget
@@ -38,26 +57,7 @@ Item {
         anchors.centerIn: parent
         width: busy.width
         height: busy.height
-        smooth: !running
+        smooth: !running || smoothAnimation
         svg: PlasmaCore.Svg { imagePath: "widgets/busywidget" }
-
-        RotationAnimation on rotation {
-            from: 0
-            to: 360
-            target: widget
-            duration: 1500
-            running: busy.running
-            loops: Animation.Infinite
-        }
-    }
-
-    Text {
-        id: label
-
-        anchors {
-            verticalCenter: busy.verticalCenter
-            horizontalCenter: busy.horizontalCenter
-        }
-        color: theme.textColor
     }
 }
