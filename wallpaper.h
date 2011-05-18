@@ -87,14 +87,6 @@ class PLASMA_EXPORT Wallpaper : public QObject
         ~Wallpaper();
 
         /**
-         * Sets the urls for the wallpaper
-         * @param urls Urls of the selected images
-         * @since 4.7
-         */
-        void setUrls(const KUrl::List &urls);
-
-
-        /**
          * Returns a list of all known wallpapers.
          *
          * @arg formFactor the format of the wallpaper being search for (e.g. desktop)
@@ -215,7 +207,14 @@ class PLASMA_EXPORT Wallpaper : public QObject
          */
         void setBoundingRect(const QRectF &boundingRect);
 
-       /**
+        /**
+         * Can be Overriden by plugins which support setting Image URLs.
+         * This is triggered by events in the user interface such as
+         * drag and drop of files.
+         */
+        virtual void addUrls(const KUrl::List &urls);
+
+        /**
          * This method is called when the wallpaper should be painted.
          *
          * @param painter the QPainter to use to do the painting
@@ -403,15 +402,6 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * @internal
          */
         void renderHintsChanged();
-
-    protected Q_SLOTS:
-        /**
-         * This method is invoked by setUrls(KUrl::List)
-         * Can be Overriden by Plugins which want to support setting Image URLs
-         * Will be changed to virtual method in libplasma2/KDE5 
-         * @since 4.7
-         */
-        void addUrls(const KUrl::List &urls);
 
     protected:
         /**

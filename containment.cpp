@@ -1590,13 +1590,13 @@ void ContainmentPrivate::mimeTypeRetrieved(KIO::Job *job, const QString &mimeTyp
                     //set wallpapery stuff
                     plugin = actionsToWallpapers.value(choice);
                     if (!wallpaper || plugin != wallpaper->pluginName()) {
-                        kDebug() << "Wallpaper dropped:" << tjob->url();
+                        //kDebug() << "Wallpaper dropped:" << tjob->url();
                         q->setWallpaper(plugin);
                     }
 
                     if (wallpaper) {
-                        kDebug() << "Wallpaper dropped:" << tjob->url();
-                        wallpaper->setUrls(KUrl::List() << tjob->url());
+                        //kDebug() << "Wallpaper dropped:" << tjob->url();
+                        wallpaper->addUrls(KUrl::List() << tjob->url());
                     }
                 } else {
                     addApplet(actionsToApplets[choice], args, QRectF(posi, QSize()));
