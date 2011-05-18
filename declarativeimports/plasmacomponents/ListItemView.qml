@@ -1,5 +1,4 @@
 /*
- *   Copyright 2010 Marco Martin <notmart@gmail.com>
  *   Copyright 2011 Daker Fernandes Pinheiro <dakerfp@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -18,30 +17,38 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 import QtQuick 1.1
-import org.kde.plasma.core 0.1 as PlasmaCore
 
-Item {
-    id: listItem
+ListView {
+    id: list
 
     // Plasma API
-    property Item view: null
-    property alias hoverEnabled: mouse.hoverEnabled
-    property alias hover: mouse.containsMouse
-    property alias pressed: mouse.pressed
-    signal selected(int index)
+    property alias scrollVisible: scrollBar.visible
 
-    implicitWidth: view.width
-    implicitHeight: childrenRect.height + 4
+    // Convinience API
+    property bool __isVertical: orientation == Qt.Vertical
 
-    MouseArea {
-        id: mouse
+    orientation: Qt.Vertical
 
-        anchors.fill: parent
-        hoverEnabled: false
-        onEntered: { view.currentIndex = index; }
-        onClicked: {
-            view.currentIndex = index;
-            listItem.selected(index);
+    highlightFollowsCurrentItem: true
+    highlight: ListHighlight {
+        width: ListView.view.width
+        height: ListView.view.currentItem.height
+        pressed: ListView.view.currentItem.pressed
+        hover: ListView.view.currentItem.hover
+    }
+
+    ScrollBar {
+        id: scrollBar
+
+        anchors {
+            top: __isVertical ? parent.top : undefined
+            left: __isVertical ? undefined : parent.left
+            right: parent.right
+            bottom: parent.bottom
         }
+        animated: true
+        stepSize: highlightItem.height
+        orientation: parent.orientation
+        flickableItem: parent
     }
 }

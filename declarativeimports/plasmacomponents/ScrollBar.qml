@@ -17,7 +17,7 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-import QtQuick 1.0
+import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 
 // TODO: add support mouse wheel and key events
@@ -29,7 +29,7 @@ Item {
 
     // Plasma API
     property int orientation: Qt.Horizontal
-    property bool animated: false
+    property bool animated: true
     property bool inverted: false
     property bool updateValueWhileDragging: true
     property alias stepSize: range.stepSize
@@ -43,8 +43,8 @@ Item {
         !scrollbar.inverted : scrollbar.inverted
     property alias _value: range.value
 
-    width: _isVertical ? 22 : 200
-    height: _isVertical ? 200 : 22
+    implicitWidth: _isVertical ? 22 : 200
+    implicitHeight: _isVertical ? 200 : 22
 
     visible: flickableItem && handle.width < contents.width
 

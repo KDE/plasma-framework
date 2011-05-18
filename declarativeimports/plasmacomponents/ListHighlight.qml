@@ -1,5 +1,4 @@
 /*
- *   Copyright 2010 Marco Martin <notmart@gmail.com>
  *   Copyright 2011 Daker Fernandes Pinheiro <dakerfp@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -21,27 +20,28 @@ import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 
 Item {
-    id: listItem
+    id: listHighlight
 
-    // Plasma API
-    property Item view: null
-    property alias hoverEnabled: mouse.hoverEnabled
-    property alias hover: mouse.containsMouse
-    property alias pressed: mouse.pressed
-    signal selected(int index)
+    property bool hover: false
+    property bool pressed: false
 
-    implicitWidth: view.width
-    implicitHeight: childrenRect.height + 4
+    PlasmaCore.FrameSvgItem {
+        id : background
+        imagePath: "widgets/viewitem"
+        prefix: {
+            if (pressed)
+                return hover ? "selected+hover" : "selected";
 
-    MouseArea {
-        id: mouse
+            if (hover)
+                return "hover";
 
-        anchors.fill: parent
-        hoverEnabled: false
-        onEntered: { view.currentIndex = index; }
-        onClicked: {
-            view.currentIndex = index;
-            listItem.selected(index);
+            return "normal";
+        }
+
+        anchors {
+            fill: parent
+            topMargin: 2
+            bottomMargin: 2
         }
     }
 }

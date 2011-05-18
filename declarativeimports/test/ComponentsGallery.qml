@@ -238,19 +238,64 @@ Rectangle {
                         color: "grey"
                         opacity: 0.3
                     }
+
+                    PlasmaComponents.ScrollBar {
+                        orientation: Qt.Vertical
+                        flickableItem: scrollList
+                        animated: true
+                        stepSize: 40
+                        scrollButtonInterval: 50
+                        anchors {
+                            top: scrollList.top
+                            right: scrollList.right
+                            bottom: scrollList.bottom
+                        }
+                    }
+                }
+            }
+
+            Column {
+                id: listColumn
+                spacing: 20
+
+                Text {
+                    font.pixelSize: 20
+                    text: "ListItemView"
                 }
 
-                PlasmaComponents.ScrollBar {
-                    orientation: Qt.Vertical
-                    flickableItem: scrollList
-                    animated: true
-                    stepSize: 40
-                    scrollButtonInterval: 50
-                    anchors {
-                        top: scrollList.top
-                        right: scrollList.right
-                        bottom: scrollList.bottom
+                PlasmaComponents.ListItemView {
+                    id: listItemView
+
+                    property bool hoverEnabled: hoverCheck.checked
+
+                    width: 200
+                    height: 200
+                    clip: true
+                    model: 15
+                    scrollVisible: false
+                    delegate: PlasmaComponents.ListItem {
+                        view: listItemView
+                        height: 30
+                        hoverEnabled: view.hoverEnabled
+                        Text {
+                            id: label
+                            anchors.fill: parent
+                            anchors.margins: 4
+                            text: index
+                            font.pixelSize: 14
+                        }
+                        onSelected: {
+                            listItemView.currentIndex = index;
+                        }
                     }
+
+                    Component.onCompleted: currentIndex = 3;
+                }
+
+                PlasmaComponents.CheckBox {
+                    id: hoverCheck
+                    text: "Hover Enabled"
+                    checked: true
                 }
             }
         }
