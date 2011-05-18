@@ -139,9 +139,8 @@ public:
 
     /**
      * Adds urls (e.g. from a drop)
-     * @since 4.7
      */
-    void setUrls(const KUrl::List urls);
+    virtual void addUrls(const KUrl::List urls);
 
 protected:
     /**
@@ -179,7 +178,6 @@ protected:
 
 protected Q_SLOTS:
     virtual void renderCompleted(const QImage &image);
-    virtual void urlDropped(const KUrl &url);
 
 private:
     WallpaperScriptPrivate *const d;

@@ -47,8 +47,6 @@ void WallpaperScript::setWallpaper(Wallpaper *wallpaper)
     d->wallpaper = wallpaper;
     connect(wallpaper, SIGNAL(renderCompleted(const QImage&)),
             this, SLOT(renderCompleted(const QImage&)));
-    connect(wallpaper, SIGNAL(urlDropped(const KUrl&)),
-            this, SLOT(urlDropped(const KUrl&)));
 }
 
 Wallpaper *WallpaperScript::wallpaper() const
@@ -116,12 +114,8 @@ void WallpaperScript::wheelEvent(QGraphicsSceneWheelEvent *event)
     Q_UNUSED(event)
 }
 
-void WallpaperScript::setUrls(const KUrl::List urls)
+void WallpaperScript::addUrls(const KUrl::List urls)
 {
-    //TODO KDE5 replace urlDropped with addUrls
-    foreach (const KUrl &url, urls) {
-        urlDropped(url);
-    }
 }
 
 bool WallpaperScript::isInitialized() const
@@ -223,10 +217,6 @@ void WallpaperScript::renderCompleted(const QImage &image)
     Q_UNUSED(image)
 }
 
-void WallpaperScript::urlDropped(const KUrl &url)
-{
-    Q_UNUSED(url)
-}
 
 } // Plasma namespace
 

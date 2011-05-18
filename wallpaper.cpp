@@ -128,12 +128,7 @@ Wallpaper::~Wallpaper()
 void Wallpaper::addUrls(const KUrl::List &urls)
 {
     if (d->script) {
-        d->script->setUrls(urls);
-    } else {
-        // provide compatibility with urlDropped
-        foreach (const KUrl &url, urls) {
-            emit urlDropped(url);
-        }
+        d->script->addUrls(urls);
     }
 }
 
@@ -142,7 +137,7 @@ void Wallpaper::setUrls(const KUrl::List &urls)
     if (!d->initialized) {
         d->pendingUrls = urls;
     } else if (d->script) {
-        d->script->setUrls(urls);
+        d->script->addUrls(urls);
     } else {
        QMetaObject::invokeMethod(this, "addUrls", Q_ARG(KUrl::List, urls));
     }
