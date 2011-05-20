@@ -459,20 +459,19 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          */
         Q_INVOKABLE DataEngine *dataEngine(const QString &name) const;
 
-    protected Q_SLOTS:
         /**
          * Reimplement this slot to run any initialization routines on first load.
          * By default, it calls reloadConfiguration(); for scripted Runners this
          * method also sets up the ScriptEngine.
          */
-        void init();
+        virtual void init();
 
         /**
          * Reimplement this slot if you want your runner
          * to support serialization and drag and drop
          * @since 4.5
          */
-        QMimeData * mimeDataForMatch(const Plasma::QueryMatch *match);
+        virtual QMimeData *mimeDataForMatch(const Plasma::QueryMatch *match);
 
     private:
         friend class RunnerScript;
