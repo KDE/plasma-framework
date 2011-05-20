@@ -784,9 +784,10 @@ void Svg::setImagePath(const QString &svgFilePath)
         return;
     }
 
-    d->setImagePath(svgFilePath);
-    //kDebug() << "repaintNeeded";
-    emit repaintNeeded();
+    if (d->setImagePath(svgFilePath)) {
+        //kDebug() << "repaintNeeded";
+        emit repaintNeeded();
+    }
 }
 
 QString Svg::imagePath() const
