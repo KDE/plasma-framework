@@ -54,7 +54,6 @@
 
 #include "abstracttoolbox.h"
 #include "animator.h"
-#include "context.h"
 #include "containmentactions.h"
 #include "containmentactionspluginsconfig.h"
 #include "corona.h"
@@ -331,11 +330,7 @@ void Containment::restore(KConfigGroup &group)
     d->lastScreen = group.readEntry("lastScreen", d->lastScreen);
     d->lastDesktop = group.readEntry("lastDesktop", d->lastDesktop);
     d->setScreen(group.readEntry("screen", d->screen), group.readEntry("desktop", d->desktop), false);
-    QString activityId = group.readEntry("activityId", QString());
-    if (!activityId.isEmpty()) {
-        d->context()->setCurrentActivityId(activityId);
-    }
-    setActivity(group.readEntry("activity", QString()));
+    d->activityId = group.readEntry("activityId", QString());
 
     flushPendingConstraintsEvents();
     restoreContents(group);
@@ -354,13 +349,13 @@ void Containment::restore(KConfigGroup &group)
         d->containmentActionsSource = ContainmentPrivate::Local;
         cfg = KConfigGroup(&group, "ActionPlugins");
     } else {
-        QString source = group.readEntry("ActionPluginsSource", QString());
+        const QString source = group.readEntry("ActionPluginsSource", QString());
         if (source == "Global") {
             cfg = KConfigGroup(corona()->config(), "ActionPlugins");
             d->containmentActionsSource = ContainmentPrivate::Global;
         } else if (source == "Activity") {
             cfg = KConfigGroup(corona()->config(), "Activities");
-            cfg = KConfigGroup(&cfg, activityId);
+            cfg = KConfigGroup(&cfg, d->activityId);
             cfg = KConfigGroup(&cfg, "ActionPlugins");
             d->containmentActionsSource = ContainmentPrivate::Activity;
         } else if (source == "Local") {
@@ -377,6 +372,7 @@ void Containment::restore(KConfigGroup &group)
             group.writeEntry("ActionPluginsSource", "Global");
         }
     }
+
     //kDebug() << cfg.keyList();
     if (cfg.exists()) {
         foreach (const QString &key, cfg.keyList()) {
@@ -427,9 +423,7 @@ void Containment::save(KConfigGroup &g) const
     group.writeEntry("lastDesktop", d->lastDesktop);
     group.writeEntry("formfactor", (int)d->formFactor);
     group.writeEntry("location", (int)d->location);
-    group.writeEntry("activity", d->context()->currentActivity());
-    group.writeEntry("activityId", d->context()->currentActivityId());
-
+    group.writeEntry("activityId", d->activityId);
 
     QMetaObject::invokeMethod(d->toolBox.data(), "save", Q_ARG(KConfigGroup, group));
 
@@ -1991,60 +1985,26 @@ QString Containment::containmentActions(const QString &trigger)
     return c ? c->pluginName() : QString();
 }
 
-void Containment::setActivity(const QString &activity)
+void Containment::setActivity(const QString &activityId)
 {
-    Context *context = d->context();
-    if (context->currentActivity() != activity) {
-        context->setCurrentActivity(activity);
-    }
-}
-
-void ContainmentPrivate::onContextChanged(Plasma::Context *con)
-{
-    foreach (Applet *a, applets) {
-        a->updateConstraints(ContextConstraint);
+    if (activityId.isEmpty()) {
+        return;
     }
 
-    KConfigGroup c = q->config();
-    QString act = con->currentActivityId();
+    d->activityId = activityId;
+    KConfigGroup c = config();
+    c.writeEntry("activityId", activityId);
 
-    //save anything that's been set (boy I hope this avoids overwriting things)
-    //FIXME of course if the user sets the name to an empty string we have a bug
-    //but once we get context retrieving the name as soon as the id is set, this issue should go away
-    if (!act.isEmpty()) {
-        c.writeEntry("activityId", act);
-    }
-    act = con->currentActivity();
-    if (!act.isEmpty()) {
-        c.writeEntry("activity", act);
+    if (d->toolBox) {
+        d->toolBox.data()->update();
     }
 
-    if (toolBox) {
-        toolBox.data()->update();
-    }
-    emit q->configNeedsSaving();
-    emit q->contextChanged(con);
+    emit configNeedsSaving();
 }
 
 QString Containment::activity() const
 {
-    return d->context()->currentActivity();
-}
-
-Context *Containment::context() const
-{
-    return d->context();
-}
-
-Context *ContainmentPrivate::context()
-{
-    if (!con) {
-        con = new Context(q);
-        q->connect(con, SIGNAL(changed(Plasma::Context*)),
-                   q, SLOT(onContextChanged(Plasma::Context*)));
-    }
-
-    return con;
+    return d->activityId;
 }
 
 KActionCollection* ContainmentPrivate::actions()
@@ -2533,7 +2493,7 @@ KConfigGroup Containment::containmentActionsConfig()
         break;
     case ContainmentPrivate::Activity:
         cfg = KConfigGroup(corona()->config(), "Activities");
-        cfg = KConfigGroup(&cfg, d->context()->currentActivityId());
+        cfg = KConfigGroup(&cfg, d->activityId);
         cfg = KConfigGroup(&cfg, "ActionPlugins");
         break;
     default:

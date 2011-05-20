@@ -356,22 +356,16 @@ class PLASMA_EXPORT Containment : public Applet
         Plasma::Wallpaper *wallpaper() const;
 
         /**
-         * Sets the current activity by name
+         * Sets the current activity by id
          *
-         * @param activity the name of the activity
+         * @param activity the id of the activity
          */
-        void setActivity(const QString &activity);
+        void setActivity(const QString &activityId);
 
         /**
-         * @return the current activity name associated with this containment
+         * @return the current activity id associated with this containment
          */
         QString activity() const;
-
-        /**
-         * @return the context for this containment
-         * @since 4.5
-         */
-        Context* context() const;
 
         /**
          * Shows the context menu for the containment directly, bypassing Applets
@@ -473,11 +467,6 @@ Q_SIGNALS:
          * Emitted when the user wants to configure/change containment.
          */
         void configureRequested(Plasma::Containment *containment);
-
-        /**
-         * The context associated to this containment has changed
-         */
-        void contextChanged(Plasma::Context *context);
 
     public Q_SLOTS:
         /**
@@ -644,7 +633,6 @@ Q_SIGNALS:
         Q_PRIVATE_SLOT(d, void showDropZoneDelayed())
         Q_PRIVATE_SLOT(d, void checkStatus(Plasma::ItemStatus))
         Q_PRIVATE_SLOT(d, void remoteAppletReady(Plasma::AccessAppletJob *))
-        Q_PRIVATE_SLOT(d, void onContextChanged(Plasma::Context *con))
         /**
         * This slot is called when the 'stat' after a job event has finished.
         */

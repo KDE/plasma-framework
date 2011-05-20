@@ -56,7 +56,6 @@ public:
           lastScreen(-1),
           desktop(-1), // all desktops
           lastDesktop(-1),
-          con(0),
           type(Containment::NoContainmentType),
           showDropZoneDelayTimer(0),
           drawWallpaper(true),
@@ -126,16 +125,6 @@ public:
     void focusApplet(Plasma::Applet *applet);
 
     /**
-     * returns the Context for this Containment
-     */
-    Context *context();
-
-    /**
-     * propogates context changes
-     */
-    void onContextChanged(Plasma::Context *con);
-
-    /**
      * Handles dropped/pasted mimetype data
      * @param scenePos scene-relative position
      * @param screenPos screen-relative position
@@ -179,7 +168,7 @@ public:
     int desktop;
     int lastDesktop;
     QWeakPointer<AbstractToolBox> toolBox;
-    Context *con;
+    QString activityId;
     Containment::Type type;
     QHash<KJob*, QPointF> dropPoints;
     QHash<KJob*, KMenu*> dropMenus;
