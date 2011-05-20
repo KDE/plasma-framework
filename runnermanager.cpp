@@ -264,7 +264,7 @@ public:
         if (runner) {
             kDebug() << "================= loading runner:" << service->name() << "=================";
             QObject::connect(runner, SIGNAL(matchingSuspended(bool)), q, SLOT(runnerMatchingSuspended(bool)));
-            QMetaObject::invokeMethod(runner, "init");
+            runner->init();
         }
 
         return runner;
@@ -608,14 +608,8 @@ QMimeData * RunnerManager::mimeDataForMatch(const QString &id) const
 QMimeData * RunnerManager::mimeDataForMatch(const QueryMatch &match) const
 {
     AbstractRunner *runner = match.runner();
-    QMimeData *mimeData;
-    if (runner && QMetaObject::invokeMethod(
-            runner,
-            "mimeDataForMatch", Qt::DirectConnection,
-            Q_RETURN_ARG(QMimeData*, mimeData),
-            Q_ARG(const Plasma::QueryMatch *, &match)
-    )) {
-        return mimeData;
+    if (runner) {
+        return runner->mimeDataForMatch(match);
     }
 
     return 0;
