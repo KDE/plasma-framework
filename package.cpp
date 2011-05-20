@@ -467,37 +467,6 @@ QStringList Package::listInstalledPaths(const QString &packageRoot) // static
     return packages;
 }
 
-bool Package::createPackage(const PackageMetadata &metadata,
-                            const QString &source,
-                            const QString &destination,
-                            const QString &icon) // static
-{
-    Q_UNUSED(icon)
-    if (!metadata.isValid()) {
-        kWarning() << "Metadata file is not complete";
-        return false;
-    }
-
-    // write metadata in a temporary file
-    KTemporaryFile metadataFile;
-    if (!metadataFile.open()) {
-        return false;
-    }
-    metadata.write(metadataFile.fileName());
-
-    // put everything into a zip archive
-    KZip creation(destination);
-    creation.setCompression(KZip::NoCompression);
-    if (!creation.open(QIODevice::WriteOnly)) {
-        return false;
-    }
-
-    creation.addLocalFile(metadataFile.fileName(), "metadata.desktop");
-    creation.addLocalDirectory(source, "contents");
-    creation.close();
-    return true;
-}
-
 PackagePrivate::PackagePrivate(const PackageStructure::Ptr st, const QString &p)
         : structure(st),
           service(0)

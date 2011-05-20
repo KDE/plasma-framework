@@ -177,21 +177,6 @@ class PLASMA_EXPORT Package
          **/
         static QStringList listInstalledPaths(const QString &packageRoot);
 
-        /**
-         * Creates a package based on the metadata from the files contained
-         * in the source directory
-         *
-         * @arg metadata description of the package to create
-         * @arg source path to local directory containing the individual
-         *             files to be added to the package
-         * @arg destination path to the package that should be created
-         * @arg icon path to the package icon
-         **/
-        static bool createPackage(const PackageMetadata &metadata,
-                                  const QString &source,
-                                  const QString &destination,
-                                  const QString &icon = QString());
-
     private:
         PackagePrivate * const d;
 
