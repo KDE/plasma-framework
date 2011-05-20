@@ -778,12 +778,6 @@ bool Svg::containsMultipleImages() const
 
 void Svg::setImagePath(const QString &svgFilePath)
 {
-    //BIC FIXME: setImagePath should be virtual, or call an internal virtual protected method
-    if (FrameSvg *frame = qobject_cast<FrameSvg *>(this)) {
-        frame->setImagePath(svgFilePath);
-        return;
-    }
-
     if (d->setImagePath(svgFilePath)) {
         //kDebug() << "repaintNeeded";
         emit repaintNeeded();

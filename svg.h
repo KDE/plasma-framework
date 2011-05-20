@@ -299,7 +299,7 @@ class PLASMA_EXPORT Svg : public QObject
          * @arg svgFilePath  either an absolute path to an SVG file, or
          *                   an image name
          */
-        void setImagePath(const QString &svgFilePath);
+        virtual void setImagePath(const QString &svgFilePath);
 
         /**
          * The SVG file to render.
