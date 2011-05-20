@@ -655,8 +655,7 @@ void Dialog::setGraphicsWidget(QGraphicsWidget *widget)
     }
 }
 
-//KDE5 FIXME: should be const
-QGraphicsWidget *Dialog::graphicsWidget()
+QGraphicsWidget *Dialog::graphicsWidget() const
 {
     return d->graphicsWidgetPtr.data();
 }
