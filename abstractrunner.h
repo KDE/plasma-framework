@@ -471,7 +471,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * to support serialization and drag and drop
          * @since 4.5
          */
-        virtual QMimeData *mimeDataForMatch(const Plasma::QueryMatch *match);
+        virtual QMimeData *mimeDataForMatch(const Plasma::QueryMatch &match);
 
     private:
         friend class RunnerScript;
