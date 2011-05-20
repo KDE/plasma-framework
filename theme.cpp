@@ -906,8 +906,12 @@ bool Theme::useNativeWidgetStyle() const
     return d->useNativeWidgetStyle;
 }
 
-bool Theme::findInCache(const QString &key, QPixmap &pix)
+bool Theme::findInCache(const QString &key, QPixmap &pix, unsigned int lastModified)
 {
+    if (lastModified != 0 && d->useCache() && lastModified > uint(d->pixmapCache->lastModifiedTime())) {
+        return false;
+    }
+
     if (d->useCache()) {
         const QString id = d->keysToCache.value(key);
         if (d->pixmapsToCache.contains(id)) {
@@ -923,16 +927,6 @@ bool Theme::findInCache(const QString &key, QPixmap &pix)
     }
 
     return false;
-}
-
-// BIC FIXME: Should be merged with the other findInCache method above when we break BC
-bool Theme::findInCache(const QString &key, QPixmap &pix, unsigned int lastModified)
-{
-    if (d->useCache() && lastModified > uint(d->pixmapCache->lastModifiedTime())) {
-        return false;
-    }
-
-    return findInCache(key, pix);
 }
 
 void Theme::insertIntoCache(const QString& key, const QPixmap& pix)

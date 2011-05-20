@@ -262,16 +262,6 @@ class PLASMA_EXPORT Theme : public QObject
 
 
         /**
-         * Tries to load pixmap with the specified key from cache.
-         *
-         * @param key the name to use in the cache for this image
-         * @param pix the pixmap object to populate with the resulting data if found
-         *
-         * @return true when pixmap was found and loaded from cache, false otherwise
-         **/
-        bool findInCache(const QString &key, QPixmap &pix);
-
-        /**
          * This is an overloaded member provided to check with file timestamp
          * where cache is still valid.
          *
@@ -283,7 +273,7 @@ class PLASMA_EXPORT Theme : public QObject
          * @return true when pixmap was found and loaded from cache, false otherwise
          * @since 4.3
          **/
-        bool findInCache(const QString &key, QPixmap &pix, unsigned int lastModified);
+        bool findInCache(const QString &key, QPixmap &pix, unsigned int lastModified = 0);
 
         /**
          * Insert specified pixmap into the cache.
