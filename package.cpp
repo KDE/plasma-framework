@@ -467,43 +467,6 @@ QStringList Package::listInstalledPaths(const QString &packageRoot) // static
     return packages;
 }
 
-bool Package::registerPackage(const PackageMetadata &data, const QString &iconPath)
-{
-    QString serviceName("plasma-applet-" + data.pluginName());
-    QString service = KStandardDirs::locateLocal("services", serviceName + ".desktop");
-
-    if (data.pluginName().isEmpty()) {
-        return false;
-    }
-
-    data.write(service);
-
-    KDesktopFile config(service);
-    KConfigGroup cg = config.desktopGroup();
-    const QString type = data.type().isEmpty() ? "Service" : data.type();
-    cg.writeEntry("Type", type);
-    const QString serviceTypes = data.serviceType().isNull() ? "Plasma/Applet,Plasma/Containment" : data.serviceType();
-    cg.writeEntry("X-KDE-ServiceTypes", serviceTypes);
-    cg.writeEntry("X-KDE-PluginInfo-EnabledByDefault", true);
-
-    QFile icon(iconPath);
-    if (icon.exists()) {
-        //FIXME: the '/' search will break on non-UNIX. do we care?
-        QString installedIcon("plasma_applet_" + data.pluginName() +
-                              iconPath.right(iconPath.length() - iconPath.lastIndexOf("/")));
-        cg.writeEntry("Icon", installedIcon);
-        installedIcon = KStandardDirs::locateLocal("icon", installedIcon);
-#ifndef PLASMA_NO_KIO
-        KIO::FileCopyJob *job = KIO::file_copy(iconPath, installedIcon, -1, KIO::HideProgressInfo);
-        job->exec();
-#else
-        QFile::copy(iconPath, installedIcon);
-#endif
-    }
-
-    return true;
-}
-
 bool Package::createPackage(const PackageMetadata &metadata,
                             const QString &source,
                             const QString &destination,

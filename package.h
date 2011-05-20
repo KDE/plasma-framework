@@ -178,14 +178,6 @@ class PLASMA_EXPORT Package
         static QStringList listInstalledPaths(const QString &packageRoot);
 
         /**
-         * Registers a package described by the given desktop file
-         *
-         * @arg the full path to the desktop file (must be KPluginInfo compatible)
-         * @return true on success, false on failure
-         */
-        static bool registerPackage(const PackageMetadata &data, const QString &iconPath);
-
-        /**
          * Creates a package based on the metadata from the files contained
          * in the source directory
          *
