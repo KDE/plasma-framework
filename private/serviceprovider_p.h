@@ -26,7 +26,7 @@
 
 class QSignalMapper;
 
-namespace Plasma 
+namespace Plasma
 {
 
 class AuthorizationRule;
@@ -65,7 +65,7 @@ class ServiceProvider : public Jolie::AbstractAdaptor
         QString                           m_providerName;
 
         QMap<ServiceJob*, Jolie::Message> m_messageMap;
-        QMap<QString, QByteArray>         m_tokens;
+        QMap<QByteArray, QByteArray>         m_tokens;
         QMap<QByteArray, int>             m_descriptorMap;
         QList<Jolie::Message>             m_messagesPendingAuthorization;
 
