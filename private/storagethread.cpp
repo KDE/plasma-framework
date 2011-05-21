@@ -166,7 +166,7 @@ void StorageThread::save(QWeakPointer<StorageJob> wcaller, const QVariantMap &pa
             QByteArray b;
             QDataStream ds(&b, QIODevice::WriteOnly);
             ds << it.value();
-            query.bindValue(field, ds);
+            query.bindValue(field, b);
         } else {
             query.bindValue(field, it.value());
         }
