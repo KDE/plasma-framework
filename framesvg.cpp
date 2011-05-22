@@ -1010,9 +1010,9 @@ void FrameSvgPrivate::updateSizes() const
 
     //since it's rectangular, topWidth and bottomWidth must be the same
     //the ones that don't have a prefix is for retrocompatibility
-    frame->tileCenter = q->hasElement("hint-tile-center");
-    frame->noBorderPadding = q->hasElement("hint-no-border-padding");
-    frame->stretchBorders = q->hasElement("hint-stretch-borders");
+    frame->tileCenter = (q->hasElement("hint-tile-center") || q->hasElement(prefix % "hint-tile-center"));
+    frame->noBorderPadding = (q->hasElement("hint-no-border-padding") || q->hasElement(prefix % "hint-no-border-padding"));
+    frame->stretchBorders = (q->hasElement("hint-stretch-borders") || q->hasElement(prefix % "hint-stretch-borders"));
     q->resize(s);
 }
 
