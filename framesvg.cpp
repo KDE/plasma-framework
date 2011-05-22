@@ -1006,7 +1006,7 @@ void FrameSvgPrivate::updateSizes() const
     }
 
     frame->composeOverBorder = (q->hasElement(prefix % "hint-compose-over-border") &&
-                                q->hasElement(prefix % "mask-center"));
+                                q->hasElement("mask-" % prefix % "center"));
 
     //since it's rectangular, topWidth and bottomWidth must be the same
     //the ones that don't have a prefix is for retrocompatibility
