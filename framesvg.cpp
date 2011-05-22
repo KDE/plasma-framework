@@ -321,7 +321,7 @@ void FrameSvg::resizeFrame(const QSizeF &size)
     }
 
     if (size.isEmpty()) {
-        kWarning() << "Invalid size" << size;
+        kDebug() << "Invalid size" << size;
         return;
     }
 
@@ -746,7 +746,7 @@ void FrameSvgPrivate::generateFrameBackground(FrameData *frame)
 
 
     if (!size.isValid()) {
-        kWarning() << "Invalid frame size" << size;
+        kDebug() << "Invalid frame size" << size;
         return;
     }
     if (size.width() >= MAX_FRAME_SIZE || size.height() >= MAX_FRAME_SIZE) {
