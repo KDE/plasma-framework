@@ -168,7 +168,7 @@ void SigningPrivate::splitKeysByTrustLevel()
     // After Loop 3, the tmp object contains the remaining keys not yet processed.
     //
     // Loop 4: foreach key not yet classified, inspect their signatures and:
-    //    - a: if contains a key from keys[UltimatelyTrusted], save it in keys[FullyTrused];
+    //    - a: if contains a key from keys[UltimatelyTrusted], save it in keys[FullyTrusted];
     //    - b: if contains a key from keys[SelfTrusted], save it in keys[UserTrusted];
     //    - c: if the signature is unknown, let's save it in keys[UnknownTrusted].
     QSet<QByteArray> tmp;
@@ -192,126 +192,62 @@ void SigningPrivate::splitKeysByTrustLevel()
         }
     }
     GpgME::KeyListResult lRes = m_gpgContext->endKeyListing();
+}
 
-    error = m_gpgContext->startKeyListing("");
-    while (!error) { // Loop 3
-
-        GpgME::Key key = m_gpgContext->nextKey(error);
-        if (error) {
-            break;
-        }
-
-        QByteArray data(key.subkey(0).fingerprint());
-
-        if (keys[UltimatelyTrusted].contains(data) ||
-            keys[SelfTrusted].contains(data)) {
-            continue;
-        }
-
-        // If the key is disabled, expired, invalid or revoked, put it in the untrusted list
-        if (key.isDisabled() || key.isExpired() || key.isInvalid() || key.isRevoked()) {
-            keys[CompletelyUntrusted].insert(data);
-            continue;
-        }
-
-        // The keys is new, valid and public: save it !
-        tmp.insert(data);
-    }
-    lRes = m_gpgContext->endKeyListing();
-
-    if (lRes.error()) {
-        kDebug() << "Error while ending the keyListing operation: " << lRes.error().asString();
+Plasma::TrustLevel SigningPrivate::addKeyToCache(const QByteArray &fingerprint)
+{
+    if (!m_gpgContext) {
+        kDebug() << "GPGME context not valid: please re-initialize the library.";
+        return UnknownTrusted;
     }
 
-    //Loop 4 - looking for keys signed by kde or by the user, tmp contains the valid public keys remaining
-    QString kdeKeys;
-    foreach (QByteArray s, keys[UltimatelyTrusted]) {
-        kdeKeys.append(s).append(' ');
+    GpgME::Error error;
+    GpgME::Key key = m_gpgContext->key(fingerprint.data(), error);
+    if (error) {
+        keys[UnknownTrusted].insert(fingerprint);
+        return UnknownTrusted;
     }
 
-    QString selfKeys;
-    foreach (QByteArray s, keys[SelfTrusted]) {
-        selfKeys.append(s).append(' ');
+    if (keys[UltimatelyTrusted].contains(fingerprint)) {
+        return UltimatelyTrusted;
+    } else if (keys[SelfTrusted].contains(fingerprint)) {
+        return SelfTrusted;
     }
 
-    foreach (QByteArray unknowTmpKey, tmp) {
-        QStringList signers = signersOf(QString(unknowTmpKey));
+    // If the key is disabled, expired, invalid or revoked, put it in the untrusted list
+    if (key.isDisabled() || key.isExpired() || key.isInvalid() || key.isRevoked()) {
+        keys[CompletelyUntrusted].insert(fingerprint);
+        return CompletelyUntrusted;
+    }
 
-        bool stored = false;
-
-        foreach (QString signer, signers) {
-            if (kdeKeys.contains(signer)) {
+    for (unsigned int i = 0; i < key.numUserIDs(); ++i) {
+        foreach (const GpgME::UserID::Signature &signature, key.userID(i).signatures()) {
+            if (keys[UltimatelyTrusted].contains(signature.signerKeyID())) {
                 // if the unknown key has a signer that is a kde key, let's trust it
-                keys[FullyTrused].insert(unknowTmpKey);
-                stored = true;
-                break;
-            } else if (selfKeys.contains(unknowTmpKey)) {
+                keys[FullyTrusted].insert(fingerprint);
+                return FullyTrusted;
+            } else if (keys[SelfTrusted].contains(signature.signerKeyID())) {
                 // if the unknown key has a signer that is a user key, let's trust it
-                keys[UserTrusted].insert(unknowTmpKey);
-                stored = true;
-                break;
+                keys[UserTrusted].insert(fingerprint);
+                return UserTrusted;
             }
         }
-
-        if (!stored) {
-            // We didn't stored the unknown key in the previous loop, which means that we
-            // don't know the hey al all.
-            keys[UnknownTrusted].insert(unknowTmpKey);
-        }
     }
 
+    // We didn't stored the unknown key in the previous loop, which means that we
+    // don't know the hey al all.
+    keys[UnknownTrusted].insert(fingerprint);
+    return UnknownTrusted;
+}
 
-#if 0
-    // Lets print out all the keys found till now.
-    temp = keys[UltimatelyTrusted];
-    QStringList list;
-    foreach (QByteArray ba, temp) {
-        list.append(ba);
-    }
-
-    kDebug() << "UltimatelyTrusted = " << list;
-    list.clear();
-
-    temp = keys[FullyTrused];
-    foreach (QByteArray ba, temp) {
-        list.append(ba);
-    }
-
-    kDebug() << "FullyTrused = " << list;
-    list.clear();
-
-    temp = keys[SelfTrusted];
-    foreach (QByteArray ba, temp) {
-        list.append(ba);
-    }
-
-    kDebug() << "SelfTrusted = " << list;
-    list.clear();
-
-    temp = keys[UserTrusted];
-    foreach (QByteArray ba, temp) {
-        list.append(ba);
-    }
-
-    //kDebug() << "UserTrusted = " << list;
-    list.clear();
-
-    temp = keys[UnknownTrusted];
-    foreach (QByteArray ba, temp) {
-        list.append(ba);
-    }
-
-    //kDebug() << "UnknownTrusted = " << list;
-    list.clear();
-
-    temp = keys[CompletelyUntrusted];
-    foreach (QByteArray ba, temp) {
-        list.append(ba);
-    }
-
-    kDebug() << "CompletelyUntrusted = " << list;
-    kDebug() << "ALL = " << keys;
-#endif
+void SigningPrivate::dumpKeysToDebug()
+{
+    kDebug() << "UltimatelyTrusted = " << keys[UltimatelyTrusted];
+    kDebug() << "FullyTrusted = " << keys[FullyTrusted];
+    kDebug() << "SelfTrusted = " << keys[SelfTrusted];
+    kDebug() << "UserTrusted = " << keys[UserTrusted];
+    kDebug() << "UnknownTrusted = " << keys[UnknownTrusted];
+    kDebug() << "CompletelyUntrusted = " << keys[CompletelyUntrusted];
 }
 
 QStringList SigningPrivate::keysID(const bool returnPrivate) const
@@ -360,36 +296,6 @@ QString SigningPrivate::signerOf(const QString &messagePath, const QString &sign
     return QString();
 }
 
-QString SigningPrivate::descriptiveString(const QString &keyID) const
-{
-    QString result;
-
-    if (!m_gpgContext) {
-        kDebug() << "GPGME context not valid: please re-initialize the library.";
-        return result;
-    }
-
-    GpgME::Error error = m_gpgContext->startKeyListing("");
-    while (!error) {
-        GpgME::Key k = m_gpgContext->nextKey(error);
-        if (error) {
-            break;
-        }
-
-        QString fullID(k.subkey(0).fingerprint());
-        if (fullID.contains(keyID)) {
-            result.append(k.userID(0).id());
-            break;
-        }
-    }
-    GpgME::KeyListResult lRes = m_gpgContext->endKeyListing();
-    if (lRes.error()) {
-        kDebug() << "Error while ending the keyListing operation: " << lRes.error().asString();
-    }
-
-    return result;
-}
-
 void SigningPrivate::processKeystore(const QString &path)
 {
     if (path != m_keystorePath) {
@@ -402,7 +308,7 @@ void SigningPrivate::processKeystore(const QString &path)
     oldValues += keys[CompletelyUntrusted];
     oldValues += keys[UnknownTrusted];
     oldValues += keys[SelfTrusted];
-    oldValues += keys[FullyTrused];
+    oldValues += keys[FullyTrusted];
     oldValues += keys[UltimatelyTrusted];
 
     splitKeysByTrustLevel();
@@ -412,7 +318,7 @@ void SigningPrivate::processKeystore(const QString &path)
     newValues += keys[CompletelyUntrusted];
     newValues += keys[UnknownTrusted];
     newValues += keys[SelfTrusted];
-    newValues += keys[FullyTrused];
+    newValues += keys[FullyTrusted];
     newValues += keys[UltimatelyTrusted];
 
     QString result;
@@ -542,25 +448,18 @@ void SigningPrivate::keyRemoved(const QString &path)
 QStringList SigningPrivate::signersOf(const QString id) const
 {
     QStringList result;
-    GpgME::Error error = m_gpgContext->startKeyListing("");
-    while (!error) {
-        GpgME::Key k = m_gpgContext->nextKey(error);
-        if (error) {
-            break;
-        }
+    GpgME::Error error;
+    GpgME::Key key = m_gpgContext->key(id.toAscii().data(), error);
 
-        for (unsigned int i = 0; i < k.numUserIDs(); ++i) {
-            for (unsigned int j = 0; j < k.userID(i).numSignatures(); ++j) {
-                QString sig(k.userID(i).signature(j).signerKeyID());
-                if (!result.contains(sig) && !id.contains(sig)) {
+    if (!error) {
+        for (unsigned int i = 0; i < key.numUserIDs(); ++i) {
+            foreach (const GpgME::UserID::Signature &signature, key.userID(i).signatures()) {
+                QString sig(signature.signerKeyID());
+                if (!result.contains(sig) && id != sig) {
                     result.append(sig);
                 }
             }
         }
-    }
-    GpgME::KeyListResult lRes = m_gpgContext->endKeyListing();
-    if (lRes.error()) {
-        kDebug() << "Error while ending the keyListing operation: " << lRes.error().asString();
     }
 
     //kDebug() << "Hey, the key " << id << " has been signed with " << result;
@@ -611,7 +510,7 @@ TrustLevel Signing::trustLevelOf(const QString &keyID) const
         }
     }
 
-    return Plasma::UnverifiableTrust;
+    return d->addKeyToCache(keyID.toAscii());
 }
 
 QStringList Signing::privateKeys() const
@@ -663,7 +562,18 @@ QString Signing::descriptiveString(const QString &keyID) const
         return QString();
     }
 
-    return d->descriptiveString(keyID);
+    if (!d->m_gpgContext) {
+        kDebug() << "GPGME context not valid: please re-initialize the library.";
+        return QString();
+    }
+
+    GpgME::Error error;
+    GpgME::Key key = d->m_gpgContext->key(keyID.toAscii().data(), error);
+    if (error) {
+        return QString();
+    }
+
+    return key.userID(0).id();
 }
 
 }

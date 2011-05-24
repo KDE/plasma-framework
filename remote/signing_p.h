@@ -51,9 +51,10 @@ public:
     QString ultimateKeyStoragePath() const;
     void registerUltimateTrustKeys();
     void splitKeysByTrustLevel();
+    Plasma::TrustLevel addKeyToCache(const QByteArray &fingerprint);
+    void dumpKeysToDebug();
     QStringList keysID(const bool returnPrivate) const;
     QString signerOf(const QString &messagePath, const QString &signaturePath) const;
-    QString descriptiveString(const QString &keyID) const;
 
     void processKeystore(const QString &path);
     void keyAdded(const QString &path);
