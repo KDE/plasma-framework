@@ -41,7 +41,7 @@ namespace Plasma
 class SigningPrivate;
 
 /**
-  * A class to manage plasmoids authentication
+  * A class to manage authentication based on cryptographic signatures.
   *
   * The Signing class is used to get the trust level of a scripted plasmoid by performing a check
   * between the signature shipped with it, and the PGP keys found in the user keystore. If the keystore
@@ -159,7 +159,7 @@ Q_SIGNALS:
 
     /**
       * Emitted when a new key is added from the trusted keys folder. Applications should connect
-      * to this signal in order to update the trust level of the associated plasmoids.
+      * to this signal in order to update the trust level of the associated signed objects.
       *
       * @param keyId the key added
       */
@@ -167,7 +167,7 @@ Q_SIGNALS:
 
     /*
      * Emitted when a new key is removed from the trusted keys folder. Applications should connect
-     * to this signal in order to update the trust level of the associated plasmoids.
+     * to this signal in order to update the trust level of the associated signed objects.
      *
      * @param keyID the key removed
      */
