@@ -48,6 +48,7 @@ public:
     // Note: keys[CompletelyUntrusted] refers to an empty list
     QMap<TrustLevel, QList<QByteArray> > keys;
 
+    QString ultimateKeyStoragePath() const;
     void registerUltimateTrustKeys();
     void splitKeysByTrustLevel();
     QStringList keysID(const bool returnPrivate) const;

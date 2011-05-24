@@ -81,7 +81,7 @@ SigningPrivate::SigningPrivate(Signing *auth, const QString &path)
     m_keystoreDir->startScan(true);
 
     m_KdeKeysDir = new KDirWatch();
-    m_KdeKeysDir->addDir(KStandardDirs::locate("appdata", "plasmakeys/"));
+    m_KdeKeysDir->addDir(ultimateKeyStoragePath());
     m_KdeKeysDir->startScan(true);
 
     // Start watching the keystore and the dir with the kde keys, and notify for changed
@@ -100,6 +100,11 @@ SigningPrivate::~SigningPrivate()
     delete m_KdeKeysDir;
 }
 
+QString SigningPrivate::ultimateKeyStoragePath() const
+{
+    return KStandardDirs::installPath("data") + "plasmakeys/";
+}
+
 void SigningPrivate::registerUltimateTrustKeys()
 {
     QList< QByteArray > tmp;
@@ -108,7 +113,7 @@ void SigningPrivate::registerUltimateTrustKeys()
         keys.insert(UltimatelyTrusted, tmp);
         return;
     }
-    QString path(KStandardDirs::locate("appdata", "plasmakeys/"));
+    QString path = ultimateKeyStoragePath();
     QDir dir(path);
     if (!dir.exists() || path.isEmpty()) {
         kDebug() << "Directory with KDE keys not found: aborting";
