@@ -267,7 +267,7 @@ void SigningPrivate::splitKeysByTrustLevel()
     }
 
 
-#if 1
+#if 0
     // Lets print out all the keys found till now.
     temp = keys[UltimatelyTrusted];
     QStringList list;
