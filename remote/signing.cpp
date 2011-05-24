@@ -175,7 +175,6 @@ void SigningPrivate::splitKeysByTrustLevel()
 
     GpgME::Error error = m_gpgContext->startKeyListing("", true);
     while (!error) { // Loop 2
-
         GpgME::Key key = m_gpgContext->nextKey(error);
         if (error) {
             break;
@@ -186,16 +185,11 @@ void SigningPrivate::splitKeysByTrustLevel()
         // If the key is disabled, expired, invalid or revoked, put it in the untrusted list
         if (key.isDisabled() || key.isExpired() || key.isInvalid() || key.isRevoked()) {
             keys[CompletelyUntrusted].insert(data);
-            continue;
+        } else if (!keys[UltimatelyTrusted].contains(data)) {
+            // Ensure we are not processing twice the trusted KDE keys
+            // The keys is new, valid and private: save it !
+            keys[SelfTrusted].insert(data);
         }
-
-        // Ensure we are not processing twice the trusted KDE keys
-        if (keys[UltimatelyTrusted].contains(data)) {
-            continue;
-        }
-
-        // The keys is new, valid and private: save it !
-        keys[SelfTrusted].insert(data);
     }
     GpgME::KeyListResult lRes = m_gpgContext->endKeyListing();
 
@@ -604,7 +598,6 @@ QStringList Signing::keysByTrustLevel(TrustLevel trustLevel) const
 
 TrustLevel Signing::trustLevelOf(const QString &keyID) const
 {
-
     if (keyID.isEmpty()) {
         return Plasma::UnverifiableTrust;
     }
@@ -612,10 +605,10 @@ TrustLevel Signing::trustLevelOf(const QString &keyID) const
     for (int i = (int)Plasma::UnverifiableTrust; i <= (int)Plasma::UltimatelyTrusted; ++i) {
         QSet<QByteArray> tmp = d->keys[(Plasma::TrustLevel)i];
         foreach (QByteArray key, tmp) {
-            if (key.contains(keyID.toAscii().data()))
+            if (key.contains(keyID.toAscii().data())) {
                 return (Plasma::TrustLevel)i;
+            }
         }
-
     }
 
     return Plasma::UnverifiableTrust;
