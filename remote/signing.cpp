@@ -177,8 +177,9 @@ void SigningPrivate::splitKeysByTrustLevel()
     while (!error) { // Loop 2
 
         GpgME::Key key = m_gpgContext->nextKey(error);
-        if (error)
+        if (error) {
             break;
+        }
 
         QByteArray data(key.subkey(0).fingerprint());
 
@@ -202,8 +203,9 @@ void SigningPrivate::splitKeysByTrustLevel()
     while (!error) { // Loop 3
 
         GpgME::Key key = m_gpgContext->nextKey(error);
-        if (error)
+        if (error) {
             break;
+        }
 
         QByteArray data(key.subkey(0).fingerprint());
 
@@ -327,8 +329,9 @@ QStringList SigningPrivate::keysID(const bool returnPrivate) const
     GpgME::Error error = m_gpgContext->startKeyListing("", returnPrivate);
     while (!error) {
         GpgME::Key k = m_gpgContext->nextKey(error);
-        if (error)
+        if (error) {
             break;
+        }
 
         result.append(k.subkey(0).fingerprint());
     }
@@ -372,8 +375,9 @@ QString SigningPrivate::descriptiveString(const QString &keyID) const
     GpgME::Error error = m_gpgContext->startKeyListing("");
     while (!error) {
         GpgME::Key k = m_gpgContext->nextKey(error);
-        if (error)
+        if (error) {
             break;
+        }
 
         QString fullID(k.subkey(0).fingerprint());
         if (fullID.contains(keyID)) {
@@ -503,8 +507,9 @@ void SigningPrivate::keyRemoved(const QString &path)
     GpgME::Error error = m_gpgContext->startKeyListing("");
     while (!error) {
         GpgME::Key k = m_gpgContext->nextKey(error);
-        if (error)
+        if (error) {
             break;
+        }
 
         if (result.contains(k.subkey(0).fingerprint())) {
             error = m_gpgContext->startKeyDeletion(k, true); // GG
@@ -537,8 +542,9 @@ QStringList SigningPrivate::signersOf(const QString id) const
     GpgME::Error error = m_gpgContext->startKeyListing("");
     while (!error) {
         GpgME::Key k = m_gpgContext->nextKey(error);
-        if (error)
+        if (error) {
             break;
+        }
 
         for (unsigned int i = 0; i < k.numUserIDs(); ++i) {
             for (unsigned int j = 0; j < k.userID(i).numSignatures(); ++j) {
