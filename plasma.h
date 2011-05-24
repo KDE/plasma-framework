@@ -279,7 +279,7 @@ enum TrustLevel {
     UnknownTrusted,             /**< The plasmoid has been signed with an unknown key*/
     UserTrusted,                /**< The plasmoid has been signed with a key signed by the user himself*/
     SelfTrusted,                /**< The plasmoid has been signed with a user key*/
-    FullyTrused,                /**< The plasmoid has been signed with a key signed by a KDE key*/
+    FullyTrusted,                /**< The plasmoid has been signed with a key signed by a KDE key*/
     UltimatelyTrusted           /**< The plasmoid has been signed with a KDE key*/
 };
 Q_ENUMS(TrustLevel)
