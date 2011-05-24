@@ -43,11 +43,13 @@ class SigningPrivate;
 /**
   * A class to manage authentication based on cryptographic signatures.
   *
-  * The Signing class is used to get the trust level of a scripted plasmoid by performing a check
-  * between the signature shipped with it, and the PGP keys found in the user keystore. If the keystore
-  * is empty, this class will take charge of populating it with the pre-shipped keys. To accomplish
-  * that, it relies upon the Gpgme++ libray; however the developer won't notice this, since the keys
-  * are accessed by their QString ID.
+  * The Signing class is used to get the trust level of a set of files, or package, such
+  * as a scripted plasmoid by performing a check between the signature shipped with it,
+  * and the PGP keys found in the user keystore.
+  *
+  * If the keystore is empty, this class will take charge of populating it with the
+  * pre-shipped keys.
+  *
   * It also performs handy operations, such as populating the local keystore with the keys shipped
   * by default with KDE/linux distro, and notify the application which is using it about changes on the
   * local keystore or in the keys folder.
@@ -128,16 +130,16 @@ public:
     QStringList publicKeys() const;
 
     /**
-      * Tests for a successful match between the plasmoid and signature files, referenced by their
+      * Tests for a successful match between the object and signature files, referenced by their
       * absolute path. The signature path is optional and, if not specified, the function will
-      * automatically try to retrieve it by appending the string ".asc" to the plasmoid path.
+      * automatically try to retrieve it by appending the string ".asc" to the object path.
       *
-      * @arg plasmoidPath the full path of the plasmoid package we want to test
-      * @arg plasmoidSignaturePath optional path for the signature file
+      * @arg path the full path of the package we want to test
+      * @arg signaturePath optional path for the signature file
       *
       * @return a Qstring with the signer's unique key id, or an empty one if a signer was not found.
       */
-    QString signerOf(const KUrl &plasmoidPath, const KUrl &plasmoidSignaturePath = KUrl()) const ;
+    QString signerOf(const KUrl &path, const KUrl &signaturePath = KUrl()) const ;
 
 
     /**
