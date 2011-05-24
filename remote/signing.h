@@ -174,9 +174,9 @@ Q_SIGNALS:
     void keyRemoved(const QString &keyId);
 
 private:
-    Q_PRIVATE_SLOT(d, void slotProcessKeystore());
-    Q_PRIVATE_SLOT(d, void slotKDEKeyAdded(QString path));
-    Q_PRIVATE_SLOT(d, void slotKDEKeyRemoved(QString path));
+    Q_PRIVATE_SLOT(d, void processKeystore(const QString &path));
+    Q_PRIVATE_SLOT(d, void keyAdded(const QString &path));
+    Q_PRIVATE_SLOT(d, void keyRemoved(const QString &path));
     SigningPrivate * const d;
     friend class SigningPrivate;
 };

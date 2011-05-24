@@ -78,26 +78,18 @@ SigningPrivate::SigningPrivate(Signing *auth, const QString &path)
 
     m_keystoreDir = new KDirWatch();
     m_keystoreDir->addDir(m_keystorePath);
+    m_keystoreDir->addDir(ultimateKeyStoragePath());
     m_keystoreDir->startScan(true);
 
-    m_KdeKeysDir = new KDirWatch();
-    m_KdeKeysDir->addDir(ultimateKeyStoragePath());
-    m_KdeKeysDir->startScan(true);
-
     // Start watching the keystore and the dir with the kde keys, and notify for changed
-    q->connect(m_keystoreDir, SIGNAL(created(const QString &)), q, SLOT(slotProcessKeystore()));
-//    q->connect(m_keystoreDir, SIGNAL(dirty(const QString &)), q, SLOT(slotKDEKeyRemoved(const QString &)));
-    q->connect(m_keystoreDir, SIGNAL(deleted(const QString &)), q, SLOT(slotKDEKeyRemoved(const QString &)));
-
-    q->connect(m_KdeKeysDir, SIGNAL(created(const QString &)), q, SLOT(slotKDEKeyAdded(const QString &)));
-    q->connect(m_KdeKeysDir, SIGNAL(dirty(const QString &)), q, SLOT(slotKDEKeyAdded(const QString &)));
-    q->connect(m_KdeKeysDir, SIGNAL(deleted(const QString &)), q, SLOT(slotKDEKeyRemoved(const QString &)));
+    q->connect(m_keystoreDir, SIGNAL(created(const QString &)), q, SLOT(processKeystore()));
+    q->connect(m_keystoreDir, SIGNAL(dirty(const QString &)), q, SLOT(keyAdded(const QString &)));
+    q->connect(m_keystoreDir, SIGNAL(deleted(const QString &)), q, SLOT(keyRemoved(const QString &)));
 }
 
 SigningPrivate::~SigningPrivate()
 {
     delete m_keystoreDir;
-    delete m_KdeKeysDir;
 }
 
 QString SigningPrivate::ultimateKeyStoragePath() const
@@ -108,24 +100,25 @@ QString SigningPrivate::ultimateKeyStoragePath() const
 void SigningPrivate::registerUltimateTrustKeys()
 {
     QList< QByteArray > tmp;
+    keys[UltimatelyTrusted] = tmp;
+
     if (!m_gpgContext) {
         kDebug() << "GPGME context not valid: please re-initialize the library.";
-        keys.insert(UltimatelyTrusted, tmp);
         return;
     }
+
     QString path = ultimateKeyStoragePath();
     QDir dir(path);
     if (!dir.exists() || path.isEmpty()) {
         kDebug() << "Directory with KDE keys not found: aborting";
-        keys[UltimatelyTrusted] = tmp;
         return;
     }
-    QStringList keyFiles = dir.entryList(QDir::Files); // QDir::Files is rendundant in this stage
+
+    const QStringList keyFiles = dir.entryList(QDir::Files); // QDir::Files is rendundant in this stage
 
     // Foreach file found, open it and import the key into the gpg keyring.
     // First avoid firing multiple entryWritten() signals
     m_keystoreDir->stopScan();
-    m_KdeKeysDir->stopScan();
 
     foreach (QString keyFile, keyFiles) {
         FILE *fp;
@@ -145,7 +138,6 @@ void SigningPrivate::registerUltimateTrustKeys()
 
     // Restore scanning folders
     m_keystoreDir->startScan(true, true);
-    m_KdeKeysDir->startScan(true, true);
 }
 
 void SigningPrivate::splitKeysByTrustLevel()
@@ -397,26 +389,30 @@ QString SigningPrivate::descriptiveString(const QString &keyID) const
     return result;
 }
 
-void SigningPrivate::slotProcessKeystore()
+void SigningPrivate::processKeystore(const QString &path)
 {
-    QMap<TrustLevel, QList<QByteArray> > tmpMap = keys;
-    splitKeysByTrustLevel();
+    if (path != m_keystorePath) {
+        registerUltimateTrustKeys();
+        return;
+    }
 
     QList<QByteArray> oldValues;
-    oldValues << tmpMap[UnverifiableTrust]
-    << tmpMap[CompletelyUntrusted]
-    << tmpMap[UnknownTrusted]
-    << tmpMap[SelfTrusted]
-    << tmpMap[FullyTrused]
-    << tmpMap[UltimatelyTrusted];
+    oldValues << keys[UnverifiableTrust]
+              << keys[CompletelyUntrusted]
+              << keys[UnknownTrusted]
+              << keys[SelfTrusted]
+              << keys[FullyTrused]
+              << keys[UltimatelyTrusted];
+
+    splitKeysByTrustLevel();
 
     QList<QByteArray> newValues;
     newValues << keys[UnverifiableTrust]
-    << keys[CompletelyUntrusted]
-    << keys[UnknownTrusted]
-    << keys[SelfTrusted]
-    << keys[FullyTrused]
-    << keys[UltimatelyTrusted];
+              << keys[CompletelyUntrusted]
+              << keys[UnknownTrusted]
+              << keys[SelfTrusted]
+              << keys[FullyTrused]
+              << keys[UltimatelyTrusted];
 
     QString result;
     bool keystoreIncreased = (newValues.size() >= oldValues.size());
@@ -441,10 +437,15 @@ void SigningPrivate::slotProcessKeystore()
     }
 }
 
-void SigningPrivate::slotKDEKeyAdded(const QString path)
+void SigningPrivate::keyAdded(const QString &path)
 {
+    if (path == m_keystorePath) {
+        // we don't worry about keys added to the key store path,
+        // just the ultimate store dir
+        return;
+    }
+
     // Avoid firing multiple signals by kdirwatch instances
-    m_KdeKeysDir->stopScan();
     m_keystoreDir->stopScan();
 
     FILE *fp;
@@ -468,20 +469,22 @@ void SigningPrivate::slotKDEKeyAdded(const QString path)
     }
 
     // Restore scanning folders
-    m_KdeKeysDir->startScan(true, true);
     m_keystoreDir->startScan(true, true);
 
     QString result(iRes.import(0).fingerprint());
     emit(q->keyAdded(result));
 }
 
-void SigningPrivate::slotKDEKeyRemoved(const QString path)
+void SigningPrivate::keyRemoved(const QString &path)
 {
-    Q_UNUSED(path)
-
     // Avoid firing multiple signals by kdirwatch instances
-    m_KdeKeysDir->stopScan();
     m_keystoreDir->stopScan();
+
+    if (path == m_keystorePath) {
+        // Restore scanning folders
+        m_keystoreDir->startScan(true, true);
+        return;
+    }
 
     QList<QByteArray> oldKeys = keys[UltimatelyTrusted];
     registerUltimateTrustKeys();
@@ -523,11 +526,9 @@ void SigningPrivate::slotKDEKeyRemoved(const QString path)
     splitKeysByTrustLevel();
 
     // Restore scanning folders
-    m_KdeKeysDir->startScan(true, true);
     m_keystoreDir->startScan(true, true);
 
     emit(q->keyRemoved(result));
-
 }
 
 QStringList SigningPrivate::signersOf(const QString id) const

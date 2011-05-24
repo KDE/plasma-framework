@@ -55,14 +55,13 @@ public:
     QString signerOf(const QString &messagePath, const QString &signaturePath) const;
     QString descriptiveString(const QString &keyID) const;
 
-    void slotProcessKeystore();
-    void slotKDEKeyAdded(const QString path);
-    void slotKDEKeyRemoved(const QString path);
+    void processKeystore(const QString &path);
+    void keyAdded(const QString &path);
+    void keyRemoved(const QString &path);
 
     QStringList signersOf(const QString id) const;
 
-    KDirWatch *m_KdeKeysDir; // used to be notified for changes in the folder with KDE keys
-    KDirWatch *m_keystoreDir; // used to be notified for changes in the gnupg folder
+    KDirWatch *m_keystoreDir; // used to be notified for changes in the gnupg folders
     GpgME::Context *m_gpgContext;
     QString m_keystorePath;
 };
