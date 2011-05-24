@@ -99,7 +99,7 @@ QString SigningPrivate::ultimateKeyStoragePath() const
 
 void SigningPrivate::registerUltimateTrustKeys()
 {
-    QList< QByteArray > tmp;
+    QSet<QByteArray> tmp;
     keys[UltimatelyTrusted] = tmp;
 
     if (!m_gpgContext) {
@@ -132,7 +132,7 @@ void SigningPrivate::registerUltimateTrustKeys()
         }
 
         // The first fingerprint listed is the one we need to save
-        tmp.append(iRes.import(0).fingerprint());
+        tmp.insert(iRes.import(0).fingerprint());
     }
     keys[UltimatelyTrusted] = tmp;
 
@@ -147,7 +147,7 @@ void SigningPrivate::splitKeysByTrustLevel()
         return;
     }
 
-    QList<QByteArray> temp = keys[UltimatelyTrusted];
+    QSet<QByteArray> temp = keys[UltimatelyTrusted];
     keys.clear();
     keys[UltimatelyTrusted] = temp;
 
@@ -171,7 +171,7 @@ void SigningPrivate::splitKeysByTrustLevel()
     //    - a: if contains a key from keys[UltimatelyTrusted], save it in keys[FullyTrused];
     //    - b: if contains a key from keys[SelfTrusted], save it in keys[UserTrusted];
     //    - c: if the signature is unknown, let's save it in keys[UnknownTrusted].
-    QList< QByteArray > tmp;
+    QSet<QByteArray> tmp;
 
     GpgME::Error error = m_gpgContext->startKeyListing("", true);
     while (!error) { // Loop 2
@@ -185,7 +185,7 @@ void SigningPrivate::splitKeysByTrustLevel()
 
         // If the key is disabled, expired, invalid or revoked, put it in the untrusted list
         if (key.isDisabled() || key.isExpired() || key.isInvalid() || key.isRevoked()) {
-            keys[CompletelyUntrusted].append(data);
+            keys[CompletelyUntrusted].insert(data);
             continue;
         }
 
@@ -195,7 +195,7 @@ void SigningPrivate::splitKeysByTrustLevel()
         }
 
         // The keys is new, valid and private: save it !
-        keys[SelfTrusted].append(data);
+        keys[SelfTrusted].insert(data);
     }
     GpgME::KeyListResult lRes = m_gpgContext->endKeyListing();
 
@@ -210,18 +210,18 @@ void SigningPrivate::splitKeysByTrustLevel()
         QByteArray data(key.subkey(0).fingerprint());
 
         if (keys[UltimatelyTrusted].contains(data) ||
-                keys[SelfTrusted].contains(data)) {
+            keys[SelfTrusted].contains(data)) {
             continue;
         }
 
         // If the key is disabled, expired, invalid or revoked, put it in the untrusted list
         if (key.isDisabled() || key.isExpired() || key.isInvalid() || key.isRevoked()) {
-            keys[CompletelyUntrusted].append(data);
+            keys[CompletelyUntrusted].insert(data);
             continue;
         }
 
         // The keys is new, valid and public: save it !
-        tmp.append(data);
+        tmp.insert(data);
     }
     lRes = m_gpgContext->endKeyListing();
 
@@ -247,12 +247,12 @@ void SigningPrivate::splitKeysByTrustLevel()
         foreach(QString signer, signers) {
             if (kdeKeys.contains(signer)) {
                 // if the unknown key has a signer that is a kde key, let's trust it
-                keys[FullyTrused].append(unknowTmpKey);
+                keys[FullyTrused].insert(unknowTmpKey);
                 stored = true;
                 break;
             } else if (selfKeys.contains(unknowTmpKey)) {
                 // if the unknown key has a signer that is a user key, let's trust it
-                keys[UserTrusted].append(unknowTmpKey);
+                keys[UserTrusted].insert(unknowTmpKey);
                 stored = true;
                 break;
             }
@@ -261,39 +261,40 @@ void SigningPrivate::splitKeysByTrustLevel()
         if (!stored) {
             // We didn't stored the unknown key in the previous loop, which means that we
             // don't know the hey al all.
-            keys[UnknownTrusted].append(unknowTmpKey);
+            keys[UnknownTrusted].insert(unknowTmpKey);
         }
     }
 
 
+#if 1
     // Lets print out all the keys found till now.
     temp = keys[UltimatelyTrusted];
     QStringList list;
-    foreach(QByteArray ba, temp) {
+    foreach (QByteArray ba, temp) {
         list.append(ba);
     }
 
-    //kDebug() << "UltimatelyTrusted = " << list;
+    kDebug() << "UltimatelyTrusted = " << list;
     list.clear();
 
     temp = keys[FullyTrused];
-    foreach(QByteArray ba, temp) {
+    foreach (QByteArray ba, temp) {
         list.append(ba);
     }
 
-    //kDebug() << "FullyTrused = " << list;
+    kDebug() << "FullyTrused = " << list;
     list.clear();
 
     temp = keys[SelfTrusted];
-    foreach(QByteArray ba, temp) {
+    foreach (QByteArray ba, temp) {
         list.append(ba);
     }
 
-    //kDebug() << "SelfTrusted = " << list;
+    kDebug() << "SelfTrusted = " << list;
     list.clear();
 
     temp = keys[UserTrusted];
-    foreach(QByteArray ba, temp) {
+    foreach (QByteArray ba, temp) {
         list.append(ba);
     }
 
@@ -301,7 +302,7 @@ void SigningPrivate::splitKeysByTrustLevel()
     list.clear();
 
     temp = keys[UnknownTrusted];
-    foreach(QByteArray ba, temp) {
+    foreach (QByteArray ba, temp) {
         list.append(ba);
     }
 
@@ -309,12 +310,13 @@ void SigningPrivate::splitKeysByTrustLevel()
     list.clear();
 
     temp = keys[CompletelyUntrusted];
-    foreach(QByteArray ba, temp) {
+    foreach (QByteArray ba, temp) {
         list.append(ba);
     }
 
-    //kDebug() << "CompletelyUntrusted = " << list;
-    //kDebug() << "ALL = " << keys;
+    kDebug() << "CompletelyUntrusted = " << list;
+    kDebug() << "ALL = " << keys;
+#endif
 }
 
 QStringList SigningPrivate::keysID(const bool returnPrivate) const
@@ -400,23 +402,23 @@ void SigningPrivate::processKeystore(const QString &path)
         return;
     }
 
-    QList<QByteArray> oldValues;
-    oldValues << keys[UnverifiableTrust]
-              << keys[CompletelyUntrusted]
-              << keys[UnknownTrusted]
-              << keys[SelfTrusted]
-              << keys[FullyTrused]
-              << keys[UltimatelyTrusted];
+    QSet<QByteArray> oldValues;
+    oldValues += keys[UnverifiableTrust];
+    oldValues += keys[CompletelyUntrusted];
+    oldValues += keys[UnknownTrusted];
+    oldValues += keys[SelfTrusted];
+    oldValues += keys[FullyTrused];
+    oldValues += keys[UltimatelyTrusted];
 
     splitKeysByTrustLevel();
 
-    QList<QByteArray> newValues;
-    newValues << keys[UnverifiableTrust]
-              << keys[CompletelyUntrusted]
-              << keys[UnknownTrusted]
-              << keys[SelfTrusted]
-              << keys[FullyTrused]
-              << keys[UltimatelyTrusted];
+    QSet<QByteArray> newValues;
+    newValues += keys[UnverifiableTrust];
+    newValues += keys[CompletelyUntrusted];
+    newValues += keys[UnknownTrusted];
+    newValues += keys[SelfTrusted];
+    newValues += keys[FullyTrused];
+    newValues += keys[UltimatelyTrusted];
 
     QString result;
     bool keystoreIncreased = (newValues.size() >= oldValues.size());
@@ -428,7 +430,6 @@ void SigningPrivate::processKeystore(const QString &path)
                 break;
             }
         }
-        emit(q->keyAdded(result));
     } else {
         foreach(QByteArray value, oldValues) {
             if (!newValues.contains(value)) {
@@ -437,7 +438,14 @@ void SigningPrivate::processKeystore(const QString &path)
                 break;
             }
         }
-        emit(q->keyRemoved(result));
+    }
+
+    if (!result.isEmpty()) {
+        if (keystoreIncreased) {
+            emit q->keyAdded(result);
+        } else {
+            emit q->keyRemoved(result);
+        }
     }
 }
 
@@ -490,9 +498,9 @@ void SigningPrivate::keyRemoved(const QString &path)
         return;
     }
 
-    QList<QByteArray> oldKeys = keys[UltimatelyTrusted];
+    QSet<QByteArray> oldKeys = keys[UltimatelyTrusted];
     registerUltimateTrustKeys();
-    QList<QByteArray> newkeys = keys[UltimatelyTrusted];
+    QSet<QByteArray> newkeys = keys[UltimatelyTrusted];
 
     QString result;
     foreach(QByteArray key, oldKeys) {
@@ -585,9 +593,9 @@ QStringList Signing::keysByTrustLevel(TrustLevel trustLevel) const
         return QStringList();
     }
 
-    QList< QByteArray > s = d->keys[trustLevel];
+    QSet<QByteArray> s = d->keys[trustLevel];
     QStringList tmp;
-    foreach(QByteArray sa, s) {
+    foreach(const QByteArray &sa, s) {
         tmp.append(sa);
     }
 
@@ -602,7 +610,7 @@ TrustLevel Signing::trustLevelOf(const QString &keyID) const
     }
 
     for (int i = (int)Plasma::UnverifiableTrust; i <= (int)Plasma::UltimatelyTrusted; ++i) {
-        QList< QByteArray > tmp = d->keys[(Plasma::TrustLevel)i];
+        QSet<QByteArray> tmp = d->keys[(Plasma::TrustLevel)i];
         foreach(QByteArray key, tmp) {
             if (key.contains(keyID.toAscii().data()))
                 return (Plasma::TrustLevel)i;

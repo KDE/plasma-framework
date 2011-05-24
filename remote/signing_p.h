@@ -46,7 +46,7 @@ public:
     Signing *q;
     // Save all the keys in a single object, splitted by their SigningLevel
     // Note: keys[CompletelyUntrusted] refers to an empty list
-    QMap<TrustLevel, QList<QByteArray> > keys;
+    QMap<TrustLevel, QSet<QByteArray> > keys;
 
     QString ultimateKeyStoragePath() const;
     void registerUltimateTrustKeys();
