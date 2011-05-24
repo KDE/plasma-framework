@@ -82,7 +82,7 @@ SigningPrivate::SigningPrivate(Signing *auth, const QString &path)
     m_keystoreDir->startScan(true);
 
     // Start watching the keystore and the dir with the kde keys, and notify for changed
-    q->connect(m_keystoreDir, SIGNAL(created(const QString &)), q, SLOT(processKeystore()));
+    q->connect(m_keystoreDir, SIGNAL(created(const QString &)), q, SLOT(processKeystore(const QString &)));
     q->connect(m_keystoreDir, SIGNAL(dirty(const QString &)), q, SLOT(keyAdded(const QString &)));
     q->connect(m_keystoreDir, SIGNAL(deleted(const QString &)), q, SLOT(keyRemoved(const QString &)));
 }
