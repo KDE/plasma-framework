@@ -48,7 +48,7 @@ public:
     // Note: keys[CompletelyUntrusted] refers to an empty list
     QMap<TrustLevel, QList<QByteArray> > keys;
 
-    void importKdeKeysToKeystore();
+    void registerUltimateTrustKeys();
     void splitKeysByTrustLevel();
     QStringList keysID(const bool returnPrivate) const;
     QString signerOf(const QString &messagePath, const QString &signaturePath) const;

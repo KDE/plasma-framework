@@ -100,7 +100,7 @@ SigningPrivate::~SigningPrivate()
     delete m_KdeKeysDir;
 }
 
-void SigningPrivate::importKdeKeysToKeystore()
+void SigningPrivate::registerUltimateTrustKeys()
 {
     QList< QByteArray > tmp;
     if (!m_gpgContext) {
@@ -157,7 +157,7 @@ void SigningPrivate::splitKeysByTrustLevel()
     // Splitting the keys by their trust level is a boring task, since we have to distinguish
     // `which key has been signed with an other given key` :P
     //
-    // Loop 1: import and load the KDE keys, already done in importKdeKeysToKeystore()
+    // Loop 1: import and load the KDE keys, already done in registerUltimateTrustKeys()
     //
     // Loop 2: load the user keyring (private keys only), and loop for:
     //    - a: a key not yet expired;
@@ -479,7 +479,7 @@ void SigningPrivate::slotKDEKeyRemoved(const QString path)
     m_keystoreDir->stopScan();
 
     QList<QByteArray> oldKeys = keys[UltimatelyTrusted];
-    importKdeKeysToKeystore();
+    registerUltimateTrustKeys();
     QList<QByteArray> newkeys = keys[UltimatelyTrusted];
 
     QString result;
@@ -558,7 +558,7 @@ Signing::Signing(const QString &keystorePath)
         : QObject(),
         d(new SigningPrivate(this, keystorePath))
 {
-    d->importKdeKeysToKeystore();
+    d->registerUltimateTrustKeys();
     d->splitKeysByTrustLevel();
 }
 
