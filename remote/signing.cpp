@@ -21,7 +21,6 @@
 #include "signing.h"
 #include "signing_p.h"
 
-#define _FILE_OFFSET_BITS 64
 #include <gpgme.h>
 #include <gpgme++/gpgmefw.h>
 #include <gpgme++/global.h>
@@ -64,7 +63,7 @@ SigningPrivate::SigningPrivate(Signing *auth, const QString &keystorePath = 0)
 
     m_keystorePath = keystorePath;
 
-    if (m_keystorePath.isEmpty() || m_keystorePath.isNull()) {
+    if (m_keystorePath.isEmpty()) {
         // From the gpgme doc: if the homeDirectory() is null, it means we are using the standard dir,
         // that is "/home/$USER/.gnupg/ ; so let's retrieve it.
         KUser user;
@@ -105,7 +104,7 @@ void SigningPrivate::importKdeKeysToKeystore()
     }
     QString path(KStandardDirs::locate("appdata", "plasmakeys/"));
     QDir dir(path);
-    if (!dir.exists() || path.isEmpty() || path.isNull()) {
+    if (!dir.exists() || path.isEmpty()) {
         kDebug() << "Directory with KDE keys not found: aborting";
         keys[UltimatelyTrusted] = tmp;
         return;
@@ -586,8 +585,9 @@ QStringList Signing::keysByTrustLevel(TrustLevel trustLevel) const
 TrustLevel Signing::trustLevelOf(const QString &keyID) const
 {
 
-    if (keyID.isEmpty() || keyID.isNull())
+    if (keyID.isEmpty()) {
         return Plasma::UnverifiableTrust;
+    }
 
     for (int i = (int)Plasma::UnverifiableTrust; i <= (int)Plasma::UltimatelyTrusted; ++i) {
         QList< QByteArray > tmp = d->keys[(Plasma::TrustLevel)i];
@@ -646,8 +646,9 @@ QString Signing::keyStorePath() const
 
 QString Signing::descriptiveString(const QString &keyID) const
 {
-    if (keyID.isNull() || keyID.isEmpty())
+    if (keyID.isEmpty()) {
         return QString();
+    }
 
     return d->descriptiveString(keyID);
 }

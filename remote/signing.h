@@ -77,7 +77,6 @@ class SigningPrivate;
   *
   * @endcode
   *
-  * @since 4.6
   * @author Diego '[Po]lentino' Casella <polentino911@gmail.com>
   */
 class PLASMA_EXPORT Signing : public QObject
