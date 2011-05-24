@@ -41,6 +41,7 @@ class SigningPrivate
 
 public:
     SigningPrivate(Signing *auth, const QString &keystorePath);
+    ~SigningPrivate();
 
     Signing *q;
     // Save all the keys in a single object, splitted by their SigningLevel
@@ -52,7 +53,6 @@ public:
     QStringList keysID(const bool returnPrivate) const;
     QString signerOf(const QString &messagePath, const QString &signaturePath) const;
     QString descriptiveString(const QString &keyID) const;
-    QString keystorePath() const;
 
     void slotProcessKeystore();
     void slotKDEKeyAdded(const QString path);

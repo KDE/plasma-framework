@@ -48,8 +48,9 @@
 namespace Plasma
 {
 
-SigningPrivate::SigningPrivate(Signing *auth, const QString &keystorePath = 0)
-        : q(auth)
+SigningPrivate::SigningPrivate(Signing *auth, const QString &path)
+        : q(auth),
+          m_keystorePath(path)
 {
     GpgME::initializeLibrary();
     GpgME::Error error = GpgME::checkEngine(GpgME::OpenPGP);
@@ -61,7 +62,7 @@ SigningPrivate::SigningPrivate(Signing *auth, const QString &keystorePath = 0)
     m_gpgContext = GpgME::Context::createForProtocol(GpgME::OpenPGP);
     m_gpgContext->setKeyListMode(GPGME_KEYLIST_MODE_LOCAL | GPGME_KEYLIST_MODE_SIGS);
 
-    m_keystorePath = keystorePath;
+    m_keystorePath = path;
 
     if (m_keystorePath.isEmpty()) {
         // From the gpgme doc: if the homeDirectory() is null, it means we are using the standard dir,
@@ -93,6 +94,11 @@ SigningPrivate::SigningPrivate(Signing *auth, const QString &keystorePath = 0)
     q->connect(m_KdeKeysDir, SIGNAL(deleted(const QString &)), q, SLOT(slotKDEKeyRemoved(const QString &)));
 }
 
+SigningPrivate::~SigningPrivate()
+{
+    delete m_keystoreDir;
+    delete m_KdeKeysDir;
+}
 
 void SigningPrivate::importKdeKeysToKeystore()
 {
@@ -116,7 +122,7 @@ void SigningPrivate::importKdeKeysToKeystore()
     m_keystoreDir->stopScan();
     m_KdeKeysDir->stopScan();
 
-    foreach(QString keyFile, keyFiles) {
+    foreach (QString keyFile, keyFiles) {
         FILE *fp;
         fp = fopen(keyFile.toAscii().data(), "r");
         GpgME::Data data(fp);
@@ -135,7 +141,6 @@ void SigningPrivate::importKdeKeysToKeystore()
     // Restore scanning folders
     m_keystoreDir->startScan(true, true);
     m_KdeKeysDir->startScan(true, true);
-
 }
 
 void SigningPrivate::splitKeysByTrustLevel()
@@ -387,11 +392,6 @@ QString SigningPrivate::descriptiveString(const QString &keyID) const
     return result;
 }
 
-QString SigningPrivate::keystorePath() const
-{
-    return m_keystorePath;
-}
-
 void SigningPrivate::slotProcessKeystore()
 {
     QMap<TrustLevel, QList<QByteArray> > tmpMap = keys;
@@ -641,7 +641,7 @@ QString Signing::signerOf(const KUrl &plasmoidPath, const KUrl &plasmoidSignatur
 
 QString Signing::keyStorePath() const
 {
-    return d->keystorePath();
+    return d->m_keystorePath;
 }
 
 QString Signing::descriptiveString(const QString &keyID) const
