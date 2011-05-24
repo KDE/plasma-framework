@@ -231,20 +231,21 @@ void SigningPrivate::splitKeysByTrustLevel()
 
     //Loop 4 - looking for keys signed by kde or by the user, tmp contains the valid public keys remaining
     QString kdeKeys;
-    foreach(QByteArray s, keys[UltimatelyTrusted]) {
+    foreach (QByteArray s, keys[UltimatelyTrusted]) {
         kdeKeys.append(s).append(' ');
     }
+
     QString selfKeys;
-    foreach(QByteArray s, keys[SelfTrusted]) {
+    foreach (QByteArray s, keys[SelfTrusted]) {
         selfKeys.append(s).append(' ');
     }
 
-    foreach(QByteArray unknowTmpKey, tmp) {
+    foreach (QByteArray unknowTmpKey, tmp) {
         QStringList signers = signersOf(QString(unknowTmpKey));
 
         bool stored = false;
 
-        foreach(QString signer, signers) {
+        foreach (QString signer, signers) {
             if (kdeKeys.contains(signer)) {
                 // if the unknown key has a signer that is a kde key, let's trust it
                 keys[FullyTrused].insert(unknowTmpKey);
@@ -423,7 +424,7 @@ void SigningPrivate::processKeystore(const QString &path)
     QString result;
     bool keystoreIncreased = (newValues.size() >= oldValues.size());
     if (keystoreIncreased) {
-        foreach(QByteArray value, newValues) {
+        foreach (QByteArray value, newValues) {
             if (!oldValues.contains(value)) {
                 // Found the key added
                 result.append(value);
@@ -431,7 +432,7 @@ void SigningPrivate::processKeystore(const QString &path)
             }
         }
     } else {
-        foreach(QByteArray value, oldValues) {
+        foreach (QByteArray value, oldValues) {
             if (!newValues.contains(value)) {
                 // Found the removed key
                 result.append(value);
@@ -468,7 +469,7 @@ void SigningPrivate::keyAdded(const QString &path)
     bool alreadyInMap = false;
 
     // Ensure we don't already have the key
-    foreach(QByteArray sec, keys[UltimatelyTrusted]) {
+    foreach (QByteArray sec, keys[UltimatelyTrusted]) {
         if (strcmp(sec.data(), iRes.import(0).fingerprint())) {
             alreadyInMap = true;
             break;
@@ -503,7 +504,7 @@ void SigningPrivate::keyRemoved(const QString &path)
     QSet<QByteArray> newkeys = keys[UltimatelyTrusted];
 
     QString result;
-    foreach(QByteArray key, oldKeys) {
+    foreach (QByteArray key, oldKeys) {
         if (!newkeys.contains(key)) {
             // We found the missing key :)
             result.append(key);
@@ -557,9 +558,8 @@ QStringList SigningPrivate::signersOf(const QString id) const
         for (unsigned int i = 0; i < k.numUserIDs(); ++i) {
             for (unsigned int j = 0; j < k.userID(i).numSignatures(); ++j) {
                 QString sig(k.userID(i).signature(j).signerKeyID());
-                if (!result.contains(sig)) {
-                    if(!id.contains(sig))
-                        result.append(sig);
+                if (!result.contains(sig) && !id.contains(sig)) {
+                    result.append(sig);
                 }
             }
         }
@@ -595,7 +595,7 @@ QStringList Signing::keysByTrustLevel(TrustLevel trustLevel) const
 
     QSet<QByteArray> s = d->keys[trustLevel];
     QStringList tmp;
-    foreach(const QByteArray &sa, s) {
+    foreach (const QByteArray &sa, s) {
         tmp.append(sa);
     }
 
@@ -611,7 +611,7 @@ TrustLevel Signing::trustLevelOf(const QString &keyID) const
 
     for (int i = (int)Plasma::UnverifiableTrust; i <= (int)Plasma::UltimatelyTrusted; ++i) {
         QSet<QByteArray> tmp = d->keys[(Plasma::TrustLevel)i];
-        foreach(QByteArray key, tmp) {
+        foreach (QByteArray key, tmp) {
             if (key.contains(keyID.toAscii().data()))
                 return (Plasma::TrustLevel)i;
         }
