@@ -279,7 +279,7 @@ void SigningPrivate::splitKeysByTrustLevel()
         list.append(ba);
     }
 
-    kDebug() << "UltimatelyTrusted = " << list;
+    //kDebug() << "UltimatelyTrusted = " << list;
     list.clear();
 
     temp = keys[FullyTrused];
@@ -287,7 +287,7 @@ void SigningPrivate::splitKeysByTrustLevel()
         list.append(ba);
     }
 
-    kDebug() << "FullyTrused = " << list;
+    //kDebug() << "FullyTrused = " << list;
     list.clear();
 
     temp = keys[SelfTrusted];
@@ -295,7 +295,7 @@ void SigningPrivate::splitKeysByTrustLevel()
         list.append(ba);
     }
 
-    kDebug() << "SelfTrusted = " << list;
+    //kDebug() << "SelfTrusted = " << list;
     list.clear();
 
     temp = keys[UserTrusted];
@@ -303,7 +303,7 @@ void SigningPrivate::splitKeysByTrustLevel()
         list.append(ba);
     }
 
-    kDebug() << "UserTrusted = " << list;
+    //kDebug() << "UserTrusted = " << list;
     list.clear();
 
     temp = keys[UnknownTrusted];
@@ -311,7 +311,7 @@ void SigningPrivate::splitKeysByTrustLevel()
         list.append(ba);
     }
 
-    kDebug() << "UnknownTrusted = " << list;
+    //kDebug() << "UnknownTrusted = " << list;
     list.clear();
 
     temp = keys[CompletelyUntrusted];
@@ -319,8 +319,8 @@ void SigningPrivate::splitKeysByTrustLevel()
         list.append(ba);
     }
 
-    kDebug() << "CompletelyUntrusted = " << list;
-    kDebug() << "ALL = " << keys;
+    //kDebug() << "CompletelyUntrusted = " << list;
+    //kDebug() << "ALL = " << keys;
 }
 
 QStringList SigningPrivate::keysID(const bool returnPrivate) const
@@ -554,7 +554,7 @@ QStringList SigningPrivate::signersOf(const QString id) const
         kDebug() << "Error while ending the keyListing operation: " << lRes.error().asString();
     }
 
-    kDebug() << "Hey, the key " << id << " has been signed with " << result;
+    //kDebug() << "Hey, the key " << id << " has been signed with " << result;
 
     return result;
 }
