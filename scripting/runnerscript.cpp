@@ -112,15 +112,6 @@ void RunnerScript::setPriority(AbstractRunner::Priority newPriority)
     }
 }
 
-KService::List RunnerScript::serviceQuery(const QString &serviceType,
-                                          const QString &constraint) const
-{
-    if (d->runner) {
-        return d->runner->serviceQuery(serviceType, constraint);
-    }
-    return KService::List();
-}
-
 QAction* RunnerScript::addAction(const QString &id, const QIcon &icon, const QString &text)
 {
     if (d->runner) {
