@@ -42,6 +42,12 @@ namespace Plasma
 QHash<Animator::Animation, Animator::Animation> AnimatorPrivate::s_stockAnimMappings;
 QHash<Animator::Animation, QString> AnimatorPrivate::s_loadableAnimMappings;
 
+Animator::Animator(QObject *parent)
+    : QObject(parent),
+      d(0)
+{
+}
+
 void AnimatorPrivate::mapAnimation(Animator::Animation from, Animator::Animation to)
 {
     if (from == to) {

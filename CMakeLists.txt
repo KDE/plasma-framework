@@ -206,14 +206,6 @@ set(plasma_LIB_SRCS
     private/qtjolie-branch/qtjolie/serverthread.cpp
 )
 
-if(NOT KDE_NO_DEPRECATED)
-    set(plasma_LIB_SRCS
-        ${plasma_LIB_SRCS}
-        deprecated/animationdriver.cpp
-        deprecated/animator.cpp
-    )
-endif(NOT KDE_NO_DEPRECATED)
-
 kde4_add_kcfg_files(plasma_LIB_SRCS data/kconfigxt/libplasma-theme-global.kcfgc)
 
 kde4_add_ui_files(plasma_LIB_SRCS
@@ -326,14 +318,6 @@ set(plasma_LIB_INCLUDES
     version.h
     view.h
     wallpaper.h)
-
-if(NOT KDE_NO_DEPRECATED)
-    set(plasma_LIB_INCLUDES
-        ${plasma_LIB_INCLUDES}
-        animationdriver.h
-    )
-endif(NOT KDE_NO_DEPRECATED)
-
 
 install(FILES
         ${plasma_LIB_INCLUDES}
