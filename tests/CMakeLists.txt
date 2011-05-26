@@ -12,11 +12,12 @@ MACRO(PLASMA_UNIT_TESTS)
 ENDMACRO(PLASMA_UNIT_TESTS)
 
 PLASMA_UNIT_TESTS(
+    configloadertest
     packagestructuretest
     packagemetadatatest
     plasmoidpackagetest
     runnercontexttest
-    configloadertest
+    signingtest
 )
 if(QCA2_FOUND)
   target_link_libraries(plasmoidpackagetest ${QCA2_LIBRARIES})
