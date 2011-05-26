@@ -506,7 +506,7 @@ QString Signing::signerOf(const KUrl &package, const KUrl &signature) const
 
     const QString packagePath = package.path();
     if (!QFile::exists(packagePath)) {
-        kDebug() << "Plasmoid package doesn't exists: signature verification aborted.";
+        kDebug() << "Package doesn't exists: signature verification aborted.";
         return QString();
     }
 
@@ -514,7 +514,7 @@ QString Signing::signerOf(const KUrl &package, const KUrl &signature) const
                                                       : signature.path();
 
     if (!QFile::exists(signaturePath)) {
-        kDebug() << "Plasmoid signature does not exist: signature verification aborted.";
+        kDebug() << "Signature does not exist: signature verification aborted.";
         return QString();
     }
 
