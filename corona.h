@@ -491,11 +491,6 @@ protected:
      */
     void setDefaultContainmentPlugin(const QString &name);
 
-    //Reimplemented from QGraphicsScene
-    void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
-    void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
-    void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
-
 private:
     CoronaPrivate *const d;
 

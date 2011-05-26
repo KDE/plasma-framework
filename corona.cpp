@@ -26,7 +26,6 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QGraphicsView>
-#include <QGraphicsSceneDragDropEvent>
 #include <QGraphicsGridLayout>
 #include <QMimeData>
 #include <QPainter>
@@ -629,21 +628,6 @@ void Corona::setPreferredToolBoxPlugin(const Containment::Type type, const QStri
 QString Corona::preferredToolBoxPlugin(const Containment::Type type) const
 {
     return d->toolBoxPlugins.value(type);
-}
-
-void Corona::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
-{
-    QGraphicsScene::dragEnterEvent(event);
-}
-
-void Corona::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
-{
-    QGraphicsScene::dragLeaveEvent(event);
-}
-
-void Corona::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
-{
-    QGraphicsScene::dragMoveEvent(event);
 }
 
 ImmutabilityType Corona::immutability() const
