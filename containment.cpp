@@ -1643,7 +1643,7 @@ void Containment::resizeEvent(QGraphicsSceneResizeEvent *event)
         if (d->isPanelContainment()) {
             d->positionPanel();
         } else if (corona()) {
-            QMetaObject::invokeMethod(corona(), "layoutContainments");
+            corona()->layoutContainments();
         }
 
         if (d->wallpaper) {
@@ -1758,7 +1758,7 @@ QVariant Containment::itemChange(GraphicsItemChange change, const QVariant &valu
                 break;
             default:
                 if (corona()) {
-                    QMetaObject::invokeMethod(corona(), "layoutContainments");
+                    corona()->layoutContainments();
                 }
                 break;
         }
