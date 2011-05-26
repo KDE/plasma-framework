@@ -339,7 +339,9 @@ void Containment::restore(KConfigGroup &group)
     setWallpaper(group.readEntry("wallpaperplugin", defaultWallpaper),
                  group.readEntry("wallpaperpluginmode", defaultWallpaperMode));
 
-    QMetaObject::invokeMethod(d->toolBox.data(), "restore", Q_ARG(KConfigGroup, group));
+    if (d->toolBox) {
+        d->toolBox.data()->restore(group);
+    }
 
     KConfigGroup cfg;
     if (containmentType() == PanelContainment || containmentType() == CustomPanelContainment) {
@@ -425,7 +427,9 @@ void Containment::save(KConfigGroup &g) const
     group.writeEntry("location", (int)d->location);
     group.writeEntry("activityId", d->activityId);
 
-    QMetaObject::invokeMethod(d->toolBox.data(), "save", Q_ARG(KConfigGroup, group));
+    if (d->toolBox) {
+        d->toolBox.data()->save(group);
+    }
 
 
     if (d->wallpaper) {
@@ -784,7 +788,9 @@ void Containment::setFormFactor(FormFactor formFactor)
         d->positionPanel(true);
     }
 
-    QMetaObject::invokeMethod(d->toolBox.data(), "reposition");
+    if (d->toolBox) {
+        d->toolBox.data()->reposition();
+    }
 
     updateConstraints(Plasma::FormFactorConstraint);
 
@@ -2148,7 +2154,9 @@ void ContainmentPrivate::createToolBox()
 
 void ContainmentPrivate::positionToolBox()
 {
-    QMetaObject::invokeMethod(toolBox.data(), "reposition");
+    if (toolBox) {
+        toolBox.data()->reposition();
+    }
 }
 
 void ContainmentPrivate::updateToolBoxVisibility()
