@@ -274,13 +274,15 @@ enum AnnouncementMethod {
 Q_DECLARE_FLAGS(AnnouncementMethods, AnnouncementMethod)
 
 enum TrustLevel {
-    UnverifiableTrust = 0,      /**< The plasmoid is shipped without any signature file*/
-    CompletelyUntrusted,        /**< The plasmoid has been signed with a broken/expired/false signature*/
-    UnknownTrusted,             /**< The plasmoid has been signed with an unknown key*/
-    UserTrusted,                /**< The plasmoid has been signed with a key signed by the user himself*/
-    SelfTrusted,                /**< The plasmoid has been signed with a user key*/
-    FullyTrusted,                /**< The plasmoid has been signed with a key signed by a KDE key*/
-    UltimatelyTrusted           /**< The plasmoid has been signed with a KDE key*/
+    UnverifiableTrust = 0,      /**< The trust of the object can not be verified, usually because no
+                                     trust information (e.g. a cryptographic signature) was provided */
+    CompletelyUntrusted,        /**< The signature is broken/expired/false */
+    UnknownTrusted,             /**< The signature is valid, but the key is unknown */
+    UserTrusted,                /**< The signature is valid and made with a key signed by one of the
+                                     user's own keys*/
+    SelfTrusted,                /**< The signature is valid and made with one of the user's own keys*/
+    FullyTrusted,               /**< The signature is valid and made with a key signed by the vendor's key*/
+    UltimatelyTrusted           /**< The signature is valid and made with the vendor's key*/
 };
 Q_ENUMS(TrustLevel)
 
