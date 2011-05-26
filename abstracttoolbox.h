@@ -79,8 +79,7 @@ public:
      *
      * @since 4.6
      */
-    static KPluginInfo::List listToolBoxInfo(const QString
- &parentApp = QString());
+    static KPluginInfo::List listToolBoxInfo(const QString &parentApp = QString());
 
     /**
      * create a toolbox tool from the given action
@@ -103,28 +102,26 @@ public:
      */
     virtual void setShowing(const bool show) = 0;
 
-public Q_SLOTS:
-    //FIXME for KDE5: those should become virtuals
     /**
      * Restore the ToolBox settings
      * It has to be reimplemented in toolboxes that need it
      * @since 4.6
      */
-    void restore(const KConfigGroup &group);
+    virtual void restore(const KConfigGroup &group);
 
     /**
      * Save the ToolBox settings
      * It has to be reimplemented in toolboxes that need it
      * @since 4.6
      */
-    void save(const KConfigGroup &group);
+    virtual void save(const KConfigGroup &group);
 
     /**
      * Inform the ToolBox it has to reposition itlself
      * It has to be reimplemented in toolboxes that need it
      * @since 4.6
      */
-    void reposition();
+    virtual void reposition();
 
 Q_SIGNALS:
     /**
