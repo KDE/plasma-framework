@@ -307,12 +307,12 @@ void PlasmoidPackageTest::createAndInstallPackage()
     QString plasmoid("plasmoid_to_package");
     createTestPackage(plasmoid);
 
-    QString packagePath = mPackageRoot + '/' + "package.zip";
-    Plasma::PackageMetadata metadata(
-        QString(KDESRCDIR) + "/packagemetadatatest.desktop");
-    QVERIFY(Plasma::Package::createPackage(metadata,
-                                           mPackageRoot + '/' + plasmoid + "/contents",
-                                           packagePath));
+    const QString packagePath = mPackageRoot + '/' + "testpackage.plasmoid";
+
+    KZip creator(packagePath);
+    creator.addLocalDirectory(packagePath, ".");
+    creator.close();
+
     QVERIFY(QFile::exists(packagePath));
 
     KZip package(packagePath);
@@ -328,7 +328,8 @@ void PlasmoidPackageTest::createAndInstallPackage()
     QVERIFY(contents->entry("code"));
     QVERIFY(contents->entry("images"));
 
-    QVERIFY(Plasma::Package::installPackage(packagePath, mPackageRoot, "plasma-applet-"));
+    Plasma::PackageStructure::Ptr plasmoidStructure(Plasma::Applet::packageStructure());
+    QVERIFY(plasmoidStructure->installPackage(packagePath, mPackageRoot));
     QString installedPackage = mPackageRoot + "/test";
 
     QVERIFY(QFile::exists(installedPackage));
