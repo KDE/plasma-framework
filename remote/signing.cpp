@@ -498,15 +498,14 @@ QString Signing::signerOf(const KUrl &package, const KUrl &signature) const
     kDebug() << "Checking existence of " << package.pathOrUrl();
     kDebug() << "Checking existence of " << signature.pathOrUrl();
 
-
-    if (!package.isLocalFile() || !signature.isLocalFile()) {
+    if (!package.isLocalFile() || (!signature.isEmpty() && !signature.isLocalFile())) {
         kDebug() << "Remote urls not yet supported. FIXME.";
         return QString();
     }
 
     const QString packagePath = package.path();
     if (!QFile::exists(packagePath)) {
-        kDebug() << "Package doesn't exists: signature verification aborted.";
+        kDebug() << "Package" << packagePath << "does not exist: signature verification aborted.";
         return QString();
     }
 
@@ -514,7 +513,7 @@ QString Signing::signerOf(const KUrl &package, const KUrl &signature) const
                                                       : signature.path();
 
     if (!QFile::exists(signaturePath)) {
-        kDebug() << "Signature does not exist: signature verification aborted.";
+        kDebug() << "Signature" << signaturePath << "does not exist: signature verification aborted.";
         return QString();
     }
 
