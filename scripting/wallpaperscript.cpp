@@ -116,6 +116,7 @@ void WallpaperScript::wheelEvent(QGraphicsSceneWheelEvent *event)
 
 void WallpaperScript::addUrls(const KUrl::List urls)
 {
+    Q_UNUSED(urls)
 }
 
 bool WallpaperScript::isInitialized() const
