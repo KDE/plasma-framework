@@ -377,7 +377,7 @@ public Q_SLOTS:
      * organizes them in a grid-like view, but subclasses can reimplement
      * this slot to provide their own layout.
      */
-    void layoutContainments();
+    virtual void layoutContainments();
 
 Q_SIGNALS:
     /**
