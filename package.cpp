@@ -381,6 +381,8 @@ QString Package::contentsHash() const
         return QString();
     }
 
+    //FIXME: the initializer should go somewhere global to be shared between all plasma uses?
+    QCA::Initializer init;
     if (!QCA::isSupported("sha1")) {
         kWarning() << "can not create hash for" << path() << "due to no SHA1 support in QCA2";
         return QString();
