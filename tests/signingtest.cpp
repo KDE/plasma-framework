@@ -33,7 +33,7 @@ SigningTest::SigningTest(QObject *parent)
 {
     const QString prefix = QString::fromLatin1(KDESRCDIR);
     m_path = prefix + "signed.plasmoid";
-    m_sig = prefix + "signed.plasmoid.asc";
+    m_sig = prefix + "signed.plasmoid.sig";
     m_invalidSig = prefix + "signed.plasmoid.invalid.sig";
 }
 
@@ -77,6 +77,7 @@ void SigningTest::validSignatureWithoutDefinedSigFile()
 
 void SigningTest::validPackage()
 {
+    QVERIFY(!m_signing->signerOf(m_package).isEmpty());
 }
 
 void SigningTest::confirmDtorPerformance()

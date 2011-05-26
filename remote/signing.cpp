@@ -42,6 +42,7 @@
 #include <kprocess.h>
 #include <kuser.h>
 
+#include "plasma/package.h"
 
 #include <cstdio> // FILE
 
@@ -493,6 +494,39 @@ TrustLevel Signing::trustLevelOf(const QString &keyID) const
     return d->addKeyToCache(keyID.toAscii());
 }
 
+QString Signing::signerOf(const Package &package) const
+{
+    const QString contents = package.path() + "CONTENTS";
+    kDebug() << "gonna go in for" << package.path();
+    kDebug() << "hash is" << package.contentsHash();
+
+    if (!QFile::exists(contents)) {
+        kDebug() << "not contents hash for package at" << package.path();
+        return QString();
+    }
+
+    QFile file(contents);
+
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        kDebug() << "could not open hash file for reading" << contents;
+        return QString();
+    }
+
+    char hash[10 * 1024];
+    qint64 read = file.read(hash, 10 * 1024 - 1);
+    if (read < 1) {
+        kDebug() << "failed to read the CONTENTS file at" << contents;
+    }
+
+    hash[read + 1] = '\0';
+    const QString actualHash = package.contentsHash();
+    if (actualHash != hash) {
+        kDebug() << "CONTENTS does not match contents of package" << package.path();
+    }
+
+    return "Success!";
+}
+
 QString Signing::signerOf(const KUrl &package, const KUrl &signature) const
 {
     kDebug() << "Checking existence of " << package.pathOrUrl();
@@ -503,25 +537,28 @@ QString Signing::signerOf(const KUrl &package, const KUrl &signature) const
         return QString();
     }
 
-    const QString packagePath = package.path();
-    if (!QFile::exists(packagePath)) {
-        kDebug() << "Package" << packagePath << "does not exist: signature verification aborted.";
+    return d->verifySignature(package.path(), signature.path());
+}
+
+QString SigningPrivate::verifySignature(const QString &filePath, const QString &signature)
+{
+    if (!QFile::exists(filePath)) {
+        kDebug() << "Package" << filePath << "does not exist: signature verification aborted.";
         return QString();
     }
 
-    const QString signaturePath = signature.isEmpty() ? packagePath + (".sig")
-                                                      : signature.path();
+    const QString signaturePath = signature.isEmpty() ? filePath + (".sig") : signature;
 
     if (!QFile::exists(signaturePath)) {
         kDebug() << "Signature" << signaturePath << "does not exist: signature verification aborted.";
         return QString();
     }
 
-    //kDebug() << "Cheking if " << packagePath << " and " << signaturePath << " matches";
+    //kDebug() << "Cheking if " << filePath << " and " << signaturePath << " matches";
 
-    FILE *pFile = fopen(packagePath.toLocal8Bit().data(), "r");
+    FILE *pFile = fopen(filePath.toLocal8Bit().data(), "r");
     if (!pFile) {
-        kDebug() << "failed to open package file" << packagePath;
+        kDebug() << "failed to open file" << filePath;
         return QString();
     }
 
@@ -535,7 +572,7 @@ QString Signing::signerOf(const KUrl &package, const KUrl &signature) const
     GpgME::Data file(pFile);
     GpgME::Data sig(pSig);
 
-    GpgME::VerificationResult vRes = d->m_gpgContext->verifyDetachedSignature(sig, file);
+    GpgME::VerificationResult vRes = m_gpgContext->verifyDetachedSignature(sig, file);
     QString rv;
 
     if (!vRes.error()) {
@@ -547,7 +584,7 @@ QString Signing::signerOf(const KUrl &package, const KUrl &signature) const
             }
         }
 
-        //kDebug() << "message " << packagePath << " and signature " << signaturePath << "matched! The fingerprint of the signer is: " << rv;
+        //kDebug() << "message " << filePath << " and signature " << signaturePath << "matched! The fingerprint of the signer is: " << rv;
     }
 
     fclose(pFile);

@@ -38,6 +38,7 @@ class QString;
 namespace Plasma
 {
 
+class Package;
 class SigningPrivate;
 
 /**
@@ -121,6 +122,20 @@ public:
       * absolute path. The signature path is optional and, if not specified, the function will
       * automatically try to retrieve it by appending the string ".sig" to the package path.
       *
+      * @param package a Plasma::Package object representing the package to be tested
+      *
+      * @return The signer's unique key id, or an empty string if a signer was not found.
+      *         Failure can be due to the signature not matching or the signature file missing.
+      *         On success, this information can then be used with trustLevelOf and/or
+      *         descriptiveString to get more information on the key.
+      */
+    QString signerOf(const Package &package) const;
+
+    /**
+      * Tests for a successful match between the object and signature files, referenced by their
+      * absolute path. The signature path is optional and, if not specified, the function will
+      * automatically try to retrieve it by appending the string ".sig" to the package path.
+      *
       * The signature should be a "detached signature" for correct results.
       *
       * @arg package the full path of the package we want to test
@@ -128,7 +143,7 @@ public:
       *
       * @return The signer's unique key id, or an empty string if a signer was not found.
       *         Failure can be due to the signature not matching or the signature file missing.
-      *         On success, this informatoin can then be used with trustLevelOf and/or
+      *         On success, this information can then be used with trustLevelOf and/or
       *         descriptiveString to get more information on the key.
       */
     QString signerOf(const KUrl &package, const KUrl &signature = KUrl()) const ;
