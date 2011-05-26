@@ -509,7 +509,7 @@ QString Signing::signerOf(const KUrl &package, const KUrl &signature) const
         return QString();
     }
 
-    const QString signaturePath = signature.isEmpty() ? packagePath + (".asc")
+    const QString signaturePath = signature.isEmpty() ? packagePath + (".sig")
                                                       : signature.path();
 
     if (!QFile::exists(signaturePath)) {
@@ -517,7 +517,7 @@ QString Signing::signerOf(const KUrl &package, const KUrl &signature) const
         return QString();
     }
 
-    kDebug() << "Cheking if " << packagePath << " and " << signaturePath << " matches";
+    //kDebug() << "Cheking if " << packagePath << " and " << signaturePath << " matches";
 
     FILE *pFile = fopen(packagePath.toLocal8Bit().data(), "r");
     if (!pFile) {
@@ -539,8 +539,15 @@ QString Signing::signerOf(const KUrl &package, const KUrl &signature) const
     QString rv;
 
     if (!vRes.error()) {
-        kDebug() << "message " << packagePath << " and signature " << signaturePath << "matched! The fingerprint of the signer is: " << vRes.signature(0).fingerprint();
-        rv = vRes.signature(0).fingerprint();
+        //kDebug() << "got" << vRes.signatures().size() << "signatures out" << vRes.error().asString();
+        foreach (GpgME::Signature sig, vRes.signatures()) {
+            if (sig.fingerprint()) {
+                rv = sig.fingerprint();
+                break;
+            }
+        }
+
+        //kDebug() << "message " << packagePath << " and signature " << signaturePath << "matched! The fingerprint of the signer is: " << rv;
     }
 
     fclose(pFile);

@@ -119,7 +119,9 @@ public:
     /**
       * Tests for a successful match between the object and signature files, referenced by their
       * absolute path. The signature path is optional and, if not specified, the function will
-      * automatically try to retrieve it by appending the string ".asc" to the object path.
+      * automatically try to retrieve it by appending the string ".sig" to the package path.
+      *
+      * The signature should be a "detached signature" for correct results.
       *
       * @arg package the full path of the package we want to test
       * @arg signature optional path for the signature file
