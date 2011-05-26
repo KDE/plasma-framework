@@ -82,6 +82,13 @@ void SigningTest::validPackage()
     QCOMPARE(m_signing->signerOf(m_package), fingerprint);
 }
 
+void SigningTest::trustLevel()
+{
+    QCOMPARE(m_signing->trustLevelOf(QString()), Plasma::UnverifiableTrust);
+    QCOMPARE(m_signing->trustLevelOf(fingerprint), Plasma::SelfTrusted);
+    //FIXME: need to test other TrustLevel values
+}
+
 void SigningTest::confirmDtorPerformance()
 {
     QTime t;

@@ -46,6 +46,7 @@ private Q_SLOTS:
     void validSignature();
     void validSignatureWithoutDefinedSigFile();
     void validPackage();
+    void trustLevel();
     void confirmDtorPerformance();
 
 private:
