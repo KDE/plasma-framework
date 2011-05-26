@@ -21,10 +21,13 @@
 
 #include <qtest_kde.h>
 
+#include "plasma/package.h"
+
 namespace Plasma
 {
     class Signing;
 }
+
 
 class SigningTest : public QObject
 {
@@ -39,14 +42,18 @@ public Q_SLOTS:
 private Q_SLOTS:
     void confirmCtorPerformance();
     void missingFiles();
+    void invalidSignature();
     void validSignature();
     void validSignatureWithoutDefinedSigFile();
+    void validPackage();
     void confirmDtorPerformance();
 
 private:
     Plasma::Signing *m_signing;
-    QString m_package;
-    QString m_packageSig;
+    Plasma::Package m_package;
+    QString m_path;
+    QString m_sig;
+    QString m_invalidSig;
 };
 
 #endif
