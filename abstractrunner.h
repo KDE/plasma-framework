@@ -332,21 +332,6 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         void setPriority(Priority newPriority);
 
         /**
-         * @deprecated
-         * A blocking method to do queries of installed Services which can provide
-         * a measure of safety for runners running their own threads. This should
-         * be used instead of calling KServiceTypeTrader::query(..) directly.
-         *
-         * @arg serviceType a service type like "Plasma/Applet" or "KFilePlugin"
-         * @arg constraint a constraint to limit the choices returned.
-         * @see KServiceTypeTrader::query(const QString&, const QString&)
-         *
-         * @return a list of services that satisfy the query.
-         */
-        KService::List serviceQuery(const QString &serviceType,
-                                    const QString &constraint = QString()) const;
-
-        /**
          * A given match can have more than action that can be performed on it.
          * For example, a song match returned by a music player runner can be queued,
          * added to the playlist, or played.
