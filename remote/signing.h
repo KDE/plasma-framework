@@ -121,15 +121,15 @@ public:
       * absolute path. The signature path is optional and, if not specified, the function will
       * automatically try to retrieve it by appending the string ".asc" to the object path.
       *
-      * @arg path the full path of the package we want to test
-      * @arg signaturePath optional path for the signature file
+      * @arg package the full path of the package we want to test
+      * @arg signature optional path for the signature file
       *
       * @return The signer's unique key id, or an empty string if a signer was not found.
       *         Failure can be due to the signature not matching or the signature file missing.
       *         On success, this informatoin can then be used with trustLevelOf and/or
       *         descriptiveString to get more information on the key.
       */
-    QString signerOf(const KUrl &path, const KUrl &signaturePath = KUrl()) const ;
+    QString signerOf(const KUrl &package, const KUrl &signature = KUrl()) const ;
 
     /**
       * @return the QString path of the keystore being used.

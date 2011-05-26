@@ -276,26 +276,6 @@ QStringList SigningPrivate::keysID(const bool returnPrivate) const
     return result;
 }
 
-QString SigningPrivate::signerOf(const QString &messagePath, const QString &signaturePath) const
-{
-    FILE *pFile;
-    FILE *pSig;
-
-    pFile = fopen(messagePath.toAscii().data(), "r");
-    pSig = fopen(signaturePath.toAscii().data(), "r");
-
-    GpgME::Data file(pFile);
-    GpgME::Data sig(pSig);
-
-    GpgME::VerificationResult vRes = m_gpgContext->verifyDetachedSignature(sig, file);
-    if (!vRes.error()) {
-        kDebug() << "message " << messagePath << " and signature " << signaturePath << "matched! The fingerprint of the signer is: " << vRes.signature(0).fingerprint();
-        return QString(vRes.signature(0).fingerprint());
-    }
-
-    return QString();
-}
-
 void SigningPrivate::processKeystore(const QString &path)
 {
     if (path != m_keystorePath) {
@@ -513,32 +493,60 @@ TrustLevel Signing::trustLevelOf(const QString &keyID) const
     return d->addKeyToCache(keyID.toAscii());
 }
 
-QString Signing::signerOf(const KUrl &plasmoidPath, const KUrl &plasmoidSignaturePath) const
+QString Signing::signerOf(const KUrl &package, const KUrl &signature) const
 {
-    kDebug() << "Checking existence of " << plasmoidPath.pathOrUrl();
-    kDebug() << "Checking existence of " << plasmoidSignaturePath.pathOrUrl();
-    // Original file and signature to verify against
-    QFile fileHanlder(plasmoidPath.path());
-    QFile signatureHandler(plasmoidSignaturePath.isEmpty() ?
-                           plasmoidPath.path().append(".asc") :
-                           plasmoidSignaturePath.path());
+    kDebug() << "Checking existence of " << package.pathOrUrl();
+    kDebug() << "Checking existence of " << signature.pathOrUrl();
 
 
-    fileHanlder.open(QIODevice::ReadOnly);
-    signatureHandler.open(QIODevice::ReadOnly);
+    if (!package.isLocalFile() || !signature.isLocalFile()) {
+        kDebug() << "Remote urls not yet supported. FIXME.";
+        return QString();
+    }
 
-    if (!fileHanlder.exists()) {
+    const QString packagePath = package.path();
+    if (!QFile::exists(packagePath)) {
         kDebug() << "Plasmoid package doesn't exists: signature verification aborted.";
         return QString();
     }
-    if (!signatureHandler.exists()) {
-        kDebug() << "Plasmoid signature doesn't exists: signature verification aborted.";
+
+    const QString signaturePath = signature.isEmpty() ? packagePath + (".asc")
+                                                      : signature.path();
+
+    if (!QFile::exists(signaturePath)) {
+        kDebug() << "Plasmoid signature does not exist: signature verification aborted.";
         return QString();
     }
 
-    kDebug() << "Cheking if " << plasmoidPath.pathOrUrl() << " and " << plasmoidSignaturePath.pathOrUrl() << " matches";
+    kDebug() << "Cheking if " << packagePath << " and " << signaturePath << " matches";
 
-    return d->signerOf(plasmoidPath.pathOrUrl(), plasmoidSignaturePath.pathOrUrl());
+    FILE *pFile = fopen(packagePath.toLocal8Bit().data(), "r");
+    if (!pFile) {
+        kDebug() << "failed to open package file" << packagePath;
+        return QString();
+    }
+
+    FILE *pSig = fopen(signaturePath.toLocal8Bit().data(), "r");
+    if (!pSig) {
+        kDebug() << "failed to open package file" << signaturePath;
+        fclose(pFile);
+        return QString();
+    }
+
+    GpgME::Data file(pFile);
+    GpgME::Data sig(pSig);
+
+    GpgME::VerificationResult vRes = d->m_gpgContext->verifyDetachedSignature(sig, file);
+    QString rv;
+
+    if (!vRes.error()) {
+        kDebug() << "message " << packagePath << " and signature " << signaturePath << "matched! The fingerprint of the signer is: " << vRes.signature(0).fingerprint();
+        rv = vRes.signature(0).fingerprint();
+    }
+
+    fclose(pFile);
+    fclose(pSig);
+    return rv;
 }
 
 QString Signing::keyStorePath() const

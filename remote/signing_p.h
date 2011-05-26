@@ -54,7 +54,6 @@ public:
     Plasma::TrustLevel addKeyToCache(const QByteArray &fingerprint);
     void dumpKeysToDebug();
     QStringList keysID(const bool returnPrivate) const;
-    QString signerOf(const QString &messagePath, const QString &signaturePath) const;
 
     void processKeystore(const QString &path);
     void keyAdded(const QString &path);
