@@ -513,16 +513,6 @@ TrustLevel Signing::trustLevelOf(const QString &keyID) const
     return d->addKeyToCache(keyID.toAscii());
 }
 
-QStringList Signing::privateKeys() const
-{
-    return d->keysID(true);
-}
-
-QStringList Signing::publicKeys() const
-{
-    return d->keysID(false);
-}
-
 QString Signing::signerOf(const KUrl &plasmoidPath, const KUrl &plasmoidSignaturePath) const
 {
     kDebug() << "Checking existence of " << plasmoidPath.pathOrUrl();

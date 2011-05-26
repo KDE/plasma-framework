@@ -100,34 +100,21 @@ public:
     ~Signing();
 
     /**
-      * Returns a QStringList object containing all the key ID that matches the TrustLevel passed
-      * as parameter to the function
+      * Returns a list of all the key IDs processed by this Signing object that match the
+      * requested TrustLevel.
       *
       * @param trustLevel the TrustLevel we want to
-      *
       * @return the QStringList with all the ID of the matching keys, or an empty one otherwise
       */
     QStringList keysByTrustLevel(TrustLevel trustLevel) const;
 
     /**
-      * Return the TrustLevel associated with the key passed as parameter to the function
+      * Return the TrustLevel associated with the key passed as parameter to the function.
       *
       * @param keyID the key we want to retrieve its trust level
-      *
       * @return the TrustLevel value
       */
     TrustLevel trustLevelOf(const QString &keyID) const;
-
-    /**
-      * @return a QStringList object containing the ID of all the private keys found in the keyring.
-      */
-    QStringList privateKeys() const;
-
-    /**
-      * @return a QStringList object containing the ID of all the public keys found in the keyring.
-      * @note Private/Public key pairs are not returned: @see privateKeys() for that.
-      */
-    QStringList publicKeys() const;
 
     /**
       * Tests for a successful match between the object and signature files, referenced by their
@@ -137,10 +124,12 @@ public:
       * @arg path the full path of the package we want to test
       * @arg signaturePath optional path for the signature file
       *
-      * @return a Qstring with the signer's unique key id, or an empty one if a signer was not found.
+      * @return The signer's unique key id, or an empty string if a signer was not found.
+      *         Failure can be due to the signature not matching or the signature file missing.
+      *         On success, this informatoin can then be used with trustLevelOf and/or
+      *         descriptiveString to get more information on the key.
       */
     QString signerOf(const KUrl &path, const KUrl &signaturePath = KUrl()) const ;
-
 
     /**
       * @return the QString path of the keystore being used.
