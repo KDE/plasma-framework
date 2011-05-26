@@ -497,8 +497,6 @@ TrustLevel Signing::trustLevelOf(const QString &keyID) const
 QString Signing::signerOf(const Package &package) const
 {
     const QString contents = package.path() + "CONTENTS";
-    kDebug() << "gonna go in for" << package.path();
-    kDebug() << "hash is" << package.contentsHash();
 
     if (!QFile::exists(contents)) {
         kDebug() << "not contents hash for package at" << package.path();
@@ -512,19 +510,14 @@ QString Signing::signerOf(const Package &package) const
         return QString();
     }
 
-    char hash[10 * 1024];
-    qint64 read = file.read(hash, 10 * 1024 - 1);
-    if (read < 1) {
-        kDebug() << "failed to read the CONTENTS file at" << contents;
-    }
-
-    hash[read + 1] = '\0';
+    const QByteArray hash = file.read(10 * 1024);
     const QString actualHash = package.contentsHash();
     if (actualHash != hash) {
         kDebug() << "CONTENTS does not match contents of package" << package.path();
+        return QString();
     }
 
-    return "Success!";
+    return d->verifySignature(contents, QString());
 }
 
 QString Signing::signerOf(const KUrl &package, const KUrl &signature) const

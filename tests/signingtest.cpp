@@ -26,6 +26,8 @@
 #include "plasma/applet.h"
 #include "plasma/remote/signing.h"
 
+static const QString fingerprint("8B8B22090C6F7C47B1EAEE75D6B72EB1A7F1DB43");
+
 SigningTest::SigningTest(QObject *parent)
     : QObject(parent),
       m_signing(0),
@@ -62,22 +64,22 @@ void SigningTest::missingFiles()
 
 void SigningTest::invalidSignature()
 {
-    QVERIFY(m_signing->signerOf(m_path, m_invalidSig).isEmpty());
+    QCOMPARE(m_signing->signerOf(m_path, m_invalidSig), QString());
 }
 
 void SigningTest::validSignature()
 {
-    QVERIFY(!m_signing->signerOf(m_path, m_sig).isEmpty());
+    QCOMPARE(m_signing->signerOf(m_path, m_sig), fingerprint);
 }
 
 void SigningTest::validSignatureWithoutDefinedSigFile()
 {
-    QVERIFY(!m_signing->signerOf(m_path).isEmpty());
+    QCOMPARE(m_signing->signerOf(m_path), fingerprint);
 }
 
 void SigningTest::validPackage()
 {
-    QVERIFY(!m_signing->signerOf(m_package).isEmpty());
+    QCOMPARE(m_signing->signerOf(m_package), fingerprint);
 }
 
 void SigningTest::confirmDtorPerformance()
