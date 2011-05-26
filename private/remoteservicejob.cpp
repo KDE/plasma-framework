@@ -42,7 +42,7 @@ namespace Plasma
 RemoteServiceJob::RemoteServiceJob(KUrl location,
                   const QString& destination,
                   const QString& operation,
-                  QMap<QString,QVariant>& parameters,
+                  QHash<QString,QVariant>& parameters,
                   QByteArray initialToken,
                   RemoteService* parent)
                 : ServiceJob(destination, operation, parameters, parent),
@@ -121,7 +121,7 @@ void RemoteServiceJob::checkValidity()
         d->parameters = m_service->parametersFromDescription(*m_delayedDesc);
     } else {
         KConfigGroup description = m_service->operationDescription(operationName());
-        QMapIterator<QString, QVariant> param(parameters());
+        QHashIterator<QString, QVariant> param(parameters());
         while (param.hasNext()) {
             param.next();
             if (!description.hasKey(param.key())) {

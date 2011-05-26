@@ -24,7 +24,7 @@
 #include "service.h"
 
 #include <QGraphicsWidget>
-#include <QMap>
+#include <QHash>
 #include <QMultiHash>
 #include <QWidget>
 #include <QSet>
@@ -45,7 +45,7 @@ class NullServiceJob : public ServiceJob
 {
 public:
     NullServiceJob(const QString &destination, const QString &operation, QObject *parent)
-        : ServiceJob(destination, operation, QMap<QString, QVariant>(), parent)
+        : ServiceJob(destination, operation, QHash<QString, QVariant>(), parent)
     {
     }
 
@@ -66,7 +66,7 @@ public:
         setName("NullService");
     }
 
-    ServiceJob *createJob(const QString &operation, QMap<QString, QVariant> &)
+    ServiceJob *createJob(const QString &operation, QHash<QString, QVariant> &)
     {
         return new NullServiceJob(destination(), operation, this);
     }

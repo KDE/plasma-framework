@@ -24,7 +24,7 @@
 
 #include <QString>
 #include <QVariant>
-#include <QMap>
+#include <QHash>
 
 namespace Plasma
 {
@@ -35,7 +35,7 @@ public:
     ServiceJobPrivate(ServiceJob *owner,
                       const QString &dest,
                       const QString &op,
-                      const QMap<QString, QVariant> &params);
+                      const QHash<QString, QVariant> &params);
 
     void preventAutoStart();
     void autoStart();
@@ -43,7 +43,7 @@ public:
     ServiceJob *q;
     QString destination;
     QString operation;
-    QMap<QString, QVariant> parameters;
+    QHash<QString, QVariant> parameters;
     QVariant result;
     Credentials identity;
     bool m_allowAutoStart;

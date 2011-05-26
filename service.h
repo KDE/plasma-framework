@@ -20,7 +20,7 @@
 #ifndef PLASMA_SERVICE_H
 #define PLASMA_SERVICE_H
 
-#include <QtCore/QMap>
+#include <QtCore/QHash>
 #include <QtCore/QObject>
 #include <QtCore/QVariant>
 
@@ -227,7 +227,7 @@ public:
      * @arg description the configuration values to turn into the parameter map
      * @since 4.4
      */
-    Q_INVOKABLE QMap<QString, QVariant> parametersFromDescription(const KConfigGroup &description);
+    Q_INVOKABLE QHash<QString, QVariant> parametersFromDescription(const KConfigGroup &description);
 
 Q_SIGNALS:
     /**
@@ -268,7 +268,7 @@ protected:
      * @return a ServiceJob that can be started and monitored by the consumer
      */
     virtual ServiceJob *createJob(const QString &operation,
-                                  QMap<QString, QVariant> &parameters) = 0;
+                                  QHash<QString, QVariant> &parameters) = 0;
 
     /**
      * By default this is based on the file in plasma/services/name.operations, but can be

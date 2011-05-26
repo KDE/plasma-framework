@@ -44,7 +44,7 @@ class PlasmoidServiceJob : public ServiceJob
         PlasmoidServiceJob(const QString &plasmoidLocation,
                            const QString &destination,
                            const QString &operation,
-                           QMap<QString,QVariant>& parameters,
+                           QHash<QString,QVariant>& parameters,
                            PlasmoidService *parent = 0);
 
         void start();
@@ -67,7 +67,7 @@ class PlasmoidService : public Service, DataEngineConsumer
 
     protected:
         Plasma::ServiceJob* createJob(const QString& operation,
-                                      QMap<QString,QVariant>& parameters);
+                                      QHash<QString,QVariant>& parameters);
 
     private:
         QString m_packagePath;

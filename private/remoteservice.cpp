@@ -238,7 +238,7 @@ void RemoteService::slotUpdateEnabledOperations()
 }
 
 ServiceJob* RemoteService::createJob(const QString& operation,
-                                     QMap<QString,QVariant>& parameters)
+                                     QHash<QString,QVariant>& parameters)
 {
     if (!m_ready) {
         kDebug() << "Use of this service hasn't checked for the serviceReady signal, which it should.";

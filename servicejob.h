@@ -69,7 +69,7 @@ public:
      * @arg parent      the parent object for this service
      */
     ServiceJob(const QString &destination, const QString &operation,
-               const QMap<QString, QVariant> &parameters, QObject *parent = 0);
+               const QHash<QString, QVariant> &parameters, QObject *parent = 0);
 
     /**
      * Destructor
@@ -89,7 +89,7 @@ public:
     /**
      * @return the parameters for the operation
      */
-    QMap<QString, QVariant> parameters() const;
+    QHash<QString, QVariant> parameters() const;
 
     /**
      * @return the identity of the caller of this operation

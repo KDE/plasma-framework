@@ -43,7 +43,7 @@ namespace Plasma
 PlasmoidServiceJob::PlasmoidServiceJob(const QString &plasmoidLocation,
                                        const QString &destination,
                                        const QString &operation,
-                                       QMap<QString,QVariant>& parameters,
+                                       QHash<QString,QVariant>& parameters,
                                        PlasmoidService *service)
     : Plasma::ServiceJob(destination, operation, parameters,
                          static_cast<Plasma::Service*>(service)),
@@ -136,8 +136,7 @@ PackageMetadata PlasmoidService::metadata() const
     return m_metadata;
 }
 
-Plasma::ServiceJob* PlasmoidService::createJob(const QString& operation,
-                                          QMap<QString,QVariant>& parameters)
+Plasma::ServiceJob* PlasmoidService::createJob(const QString& operation, QHash<QString,QVariant>& parameters)
 {
     return new PlasmoidServiceJob(m_packagePath, destination(), operation, parameters, this);
 }

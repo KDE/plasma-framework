@@ -191,9 +191,9 @@ KConfigGroup Service::operationDescription(const QString &operationName)
     return params;
 }
 
-QMap<QString, QVariant> Service::parametersFromDescription(const KConfigGroup &description)
+QHash<QString, QVariant> Service::parametersFromDescription(const KConfigGroup &description)
 {
-    QMap<QString, QVariant> params;
+    QHash<QString, QVariant> params;
 
     if (!d->config || !description.isValid()) {
         return params;
@@ -220,7 +220,7 @@ ServiceJob *Service::startOperationCall(const KConfigGroup &description, QObject
     if (!op.isEmpty() && rs && !rs->isReady()) {
         // if we have an operation, but a non-ready remote service, just let it through
         kDebug() << "Remote service is not ready; queueing operation";
-        QMap<QString, QVariant> params;
+        QHash<QString, QVariant> params;
         job = createJob(op, params);
         RemoteServiceJob *rsj = qobject_cast<RemoteServiceJob *>(job);
         if (rsj) {
@@ -232,7 +232,7 @@ ServiceJob *Service::startOperationCall(const KConfigGroup &description, QObject
         if (d->disabledOperations.contains(op)) {
             kDebug() << "Operation" << op << "is disabled";
         } else {
-            QMap<QString, QVariant> params = parametersFromDescription(description);
+            QHash<QString, QVariant> params = parametersFromDescription(description);
             job = createJob(op, params);
         }
     } else {

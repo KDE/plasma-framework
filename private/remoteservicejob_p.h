@@ -44,7 +44,7 @@ class RemoteServiceJob : public Plasma::ServiceJob
         RemoteServiceJob(KUrl location,
                   const QString& destination,
                   const QString& operation,
-                  QMap<QString,QVariant>& parameters,
+                  QHash<QString,QVariant>& parameters,
                   QByteArray initialToken,
                   RemoteService *parent);
         ~RemoteServiceJob();

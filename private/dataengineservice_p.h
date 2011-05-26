@@ -42,15 +42,15 @@ class DataEngineService : public Plasma::Service
 
     protected:
         Plasma::ServiceJob* createJob(const QString& operation,
-                                      QMap<QString,QVariant>& parameters);
+                                      QHash<QString,QVariant>& parameters);
 
     private Q_SLOTS:
         void sourceAdded(QString source);
 
     private:
         DataEngine *m_engine;
-        QMap<QString, QStringList> m_peersAlreadyUpdated;
-        QMap<QString, DataEngine::Data> m_data;
+        QHash<QString, QStringList> m_peersAlreadyUpdated;
+        QHash<QString, DataEngine::Data> m_data;
 
         friend class GetSource;
 };
