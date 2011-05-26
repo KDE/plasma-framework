@@ -28,8 +28,6 @@
 #include <plasma/service.h>
 #include <plasma/servicejob.h>
 
-class RefCountedDatabase;
-
 //Begin StorageJob
 class StorageJob : public Plasma::ServiceJob
 {

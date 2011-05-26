@@ -41,10 +41,6 @@
 #include "storagethread_p.h"
 
 
-static QThreadStorage<RefCountedDatabase *> s_databasePool;
-
-
-//Storage Job implentation
 StorageJob::StorageJob(const QString& destination,
                        const QString& operation,
                        const QHash<QString, QVariant>& parameters,
