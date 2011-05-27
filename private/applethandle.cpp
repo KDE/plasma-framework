@@ -58,10 +58,10 @@ qreal _k_pointAngle(QPointF point);
 QPointF _k_rotatePoint(QPointF point, qreal angle);
 QPointF _k_projectPoint(QPointF point, QPointF v);
 
-AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &hoverPos)
+AppletHandle::AppletHandle(Containment *containment, Applet *applet, const QPointF &hoverPos)
     : QGraphicsObject(applet),
       m_pressedButton(NoButton),
-      m_containment(parent),
+      m_containment(containment),
       m_applet(applet),
       m_iconSize(KIconLoader::SizeSmall),
       m_opacity(0.0),
@@ -114,6 +114,11 @@ AppletHandle::~AppletHandle()
 {
     detachApplet();
     delete m_backgroundBuffer;
+}
+
+bool AppletHandle::shown() const
+{
+    return !m_hoverTimer->isActive();
 }
 
 Applet *AppletHandle::applet() const

@@ -644,7 +644,6 @@ Q_SIGNALS:
         Q_PRIVATE_SLOT(d, void appletDestroyed(Plasma::Applet*))
         Q_PRIVATE_SLOT(d, void appletAppearAnimationComplete())
         Q_PRIVATE_SLOT(d, void triggerShowAddWidgets())
-        Q_PRIVATE_SLOT(d, void handleDisappeared(AppletHandle *handle))
         Q_PRIVATE_SLOT(d, void positionToolBox())
         Q_PRIVATE_SLOT(d, void requestConfiguration())
         Q_PRIVATE_SLOT(d, void updateToolBoxVisibility())

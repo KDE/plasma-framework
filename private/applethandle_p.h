@@ -61,8 +61,9 @@ class AppletHandle : public QGraphicsObject
         AppletHandle(Containment *parent, Applet *applet, const QPointF &hoverPos);
         virtual ~AppletHandle();
 
-        void detachApplet ();
+        bool shown() const;
 
+        void detachApplet();
         Applet *applet() const;
 
         QRectF boundingRect() const;

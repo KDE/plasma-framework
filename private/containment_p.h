@@ -96,7 +96,6 @@ public:
     QPointF preferredPos(Corona *corona) const;
     QPointF preferredPanelPos(Corona *corona) const;
     void setLockToolText();
-    void handleDisappeared(AppletHandle *handle);
     void appletDestroyed(Applet*);
     void appletAppearAnimationComplete();
     void appletAppeared(Applet*);
@@ -172,7 +171,6 @@ public:
     Applet::List applets;
     Applet *focusedApplet;
     Plasma::Wallpaper *wallpaper;
-    QMap<Applet*, AppletHandle*> handles;
     QHash<QString, ContainmentActions*> localActionPlugins;
     int screen;
     int lastScreen;

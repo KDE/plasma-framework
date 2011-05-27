@@ -1265,6 +1265,18 @@ void Applet::flushPendingConstraintsEvents()
             }
         }
 
+        if (!unlocked && d->handle) {
+            AppletHandle *h = d->handle.data();
+            disconnect(this);
+
+            QGraphicsScene *s = scene();
+            if (s && h->scene() == s) {
+                s->removeItem(h);
+            }
+
+            h->deleteLater();
+        }
+
         emit immutabilityChanged(immutability());
     }
 
@@ -1754,6 +1766,40 @@ bool Applet::eventFilter(QObject *o, QEvent *e)
 
 bool Applet::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 {
+    if (watched == this) {
+        switch (event->type()) {
+            case QEvent::GraphicsSceneHoverEnter:
+                //kDebug() << "got hoverenterEvent" << immutability() << " " << immutability();
+                if (immutability() == Mutable) {
+                    QGraphicsSceneHoverEvent *he = static_cast<QGraphicsSceneHoverEvent*>(event);
+                    if (d->handle) {
+                        d->handle.data()->setHoverPos(he->pos());
+                    } else {
+                        //kDebug() << "generated applet handle";
+                        AppletHandle *handle = new AppletHandle(containment(), this, he->pos());
+                        connect(handle, SIGNAL(disappearDone(AppletHandle*)),
+                                this, SLOT(handleDisappeared(AppletHandle*)));
+                        connect(this, SIGNAL(geometryChanged()),
+                                handle, SLOT(appletResized()));
+                        d->handle = handle;
+                    }
+                }
+            break;
+
+            case QEvent::GraphicsSceneHoverMove:
+                if (d->handle && !d->handle.data()->shown() && immutability() == Mutable) {
+                    QGraphicsSceneHoverEvent *he = static_cast<QGraphicsSceneHoverEvent*>(event);
+                    d->handle.data()->setHoverPos(he->pos());
+                }
+            break;
+
+        default:
+            break;
+        }
+
+        return false;
+    }
+
     switch (event->type()) {
     case QEvent::GraphicsSceneMouseMove:
     case QEvent::GraphicsSceneMousePress:
@@ -2359,6 +2405,16 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
             }
         }
         break;
+    case ItemParentHasChanged:
+        {
+            Containment *c = containment();
+            if (c && c->containmentType() == Containment::DesktopContainment) {
+                installSceneEventFilter(this);
+            } else {
+                removeSceneEventFilter(this);
+            }
+        }
+        break;
     case ItemPositionHasChanged:
         emit geometryChanged();
         // fall through!
@@ -2867,6 +2923,24 @@ void AppletPrivate::resetConfigurationObject()
         corona->requireConfigSync();
     }
 }
+
+void AppletPrivate::handleDisappeared(AppletHandle *h)
+{
+    if (h == handle.data()) {
+        h->detachApplet();
+        QGraphicsScene *scene = q->scene();
+        if (scene && h->scene() == scene) {
+            scene->removeItem(h);
+        }
+        h->deleteLater();
+    }
+}
+
+void ContainmentPrivate::checkRemoveAction()
+{
+    q->enableAction("remove", q->immutability() == Mutable);
+}
+
 
 uint AppletPrivate::s_maxAppletId = 0;
 int AppletPrivate::s_maxZValue = 0;

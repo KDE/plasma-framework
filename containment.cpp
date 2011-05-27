@@ -67,7 +67,6 @@
 #include "remote/accessmanager.h"
 
 #include "private/applet_p.h"
-#include "private/applethandle_p.h"
 #include "private/containmentactionspluginsconfig_p.h"
 #include "private/extenderitemmimedata_p.h"
 #include "private/extenderapplet_p.h"
@@ -888,9 +887,6 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
         applet->removeSceneEventFilter(currentContainment);
         KConfigGroup oldConfig = applet->config();
         currentContainment->d->applets.removeAll(applet);
-        if (currentContainment->d->handles.contains(applet)) {
-            currentContainment->d->handles.remove(applet);
-        }
         applet->setParentItem(this);
         applet->setParent(this);
 
@@ -918,12 +914,7 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
         applet->setPos(pos);
     }
 
-    if (delayInit || currentContainment) {
-        if (d->type == DesktopContainment) {
-            applet->installSceneEventFilter(this);
-            //applet->setWindowFlags(Qt::Window);
-        }
-    } else {
+    if (!delayInit && !currentContainment) {
         applet->restore(*applet->d->mainConfigGroup());
         applet->init();
         Plasma::Animation *anim = Plasma::Animator::create(Plasma::Animator::AppearAnimation);
@@ -1696,51 +1687,8 @@ void Containment::wheelEvent(QGraphicsSceneWheelEvent *event)
 
 bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 {
-    Applet *applet = qgraphicsitem_cast<Applet*>(watched);
-
-    // Otherwise we're watching something we shouldn't be...
-    Q_ASSERT(applet != 0);
-    if (!d->applets.contains(applet)) {
-        return false;
-    }
-
-    //kDebug() << "got sceneEvent";
-    switch (event->type()) {
-    case QEvent::GraphicsSceneHoverEnter:
-        //kDebug() << "got hoverenterEvent" << immutability() << " " << applet->immutability();
-        if (immutability() == Mutable && applet->immutability() == Mutable) {
-            QGraphicsSceneHoverEvent *he = static_cast<QGraphicsSceneHoverEvent*>(event);
-            if (d->handles.contains(applet)) {
-                AppletHandle *handle = d->handles.value(applet);
-                if (handle) {
-                    handle->setHoverPos(he->pos());
-                }
-            } else {
-                //kDebug() << "generated applet handle";
-                AppletHandle *handle = new AppletHandle(this, applet, he->pos());
-                d->handles[applet] = handle;
-                connect(handle, SIGNAL(disappearDone(AppletHandle*)),
-                        this, SLOT(handleDisappeared(AppletHandle*)));
-                connect(applet, SIGNAL(geometryChanged()),
-                        handle, SLOT(appletResized()));
-            }
-        }
-        break;
-    case QEvent::GraphicsSceneHoverMove:
-        if (immutability() == Mutable && applet->immutability() == Mutable) {
-            QGraphicsSceneHoverEvent *he = static_cast<QGraphicsSceneHoverEvent*>(event);
-            if (d->handles.contains(applet)) {
-                AppletHandle *handle = d->handles.value(applet);
-                if (handle) {
-                    handle->setHoverPos(he->pos());
-                }
-            }
-        }
-        break;
-    default:
-        break;
-    }
-
+    Q_UNUSED(watched)
+    Q_UNUSED(event)
     return false;
 }
 
@@ -2205,24 +2153,6 @@ void ContainmentPrivate::triggerShowAddWidgets()
     emit q->showAddWidgetsInterface(QPointF());
 }
 
-void ContainmentPrivate::handleDisappeared(AppletHandle *handle)
-{
-    if (handles.contains(handle->applet())) {
-        handles.remove(handle->applet());
-        handle->detachApplet();
-        QGraphicsScene *scene = q->scene();
-        if (scene && handle->scene() == scene) {
-            scene->removeItem(handle);
-        }
-        handle->deleteLater();
-    }
-}
-
-void ContainmentPrivate::checkRemoveAction()
-{
-    q->enableAction("remove", q->immutability() == Mutable);
-}
-
 void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constraints)
 {
     if (!q->isContainment()) {
@@ -2241,22 +2171,6 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
         foreach (Applet *a, applets) {
             a->setImmutability(q->immutability());
             a->updateConstraints(ImmutableConstraint);
-        }
-
-        //clear handles on lock
-        if (!unlocked) {
-            QMap<Applet*, AppletHandle*> h = handles;
-            handles.clear();
-
-            foreach (AppletHandle *handle, h) {
-                handle->disconnect(q);
-
-                if (q->scene()) {
-                    q->scene()->removeItem(handle);
-                }
-
-                handle->deleteLater();
-            }
         }
     }
 
@@ -2341,10 +2255,6 @@ void ContainmentPrivate::appletDestroyed(Plasma::Applet *applet)
         focusedApplet = 0;
     }
 
-    if (handles.contains(applet)) {
-        handles.remove(applet);
-    }
-
     emit q->appletRemoved(applet);
     emit q->configNeedsSaving();
 }
@@ -2362,11 +2272,7 @@ void ContainmentPrivate::appletAppearAnimationComplete()
 
 void ContainmentPrivate::appletAppeared(Applet *applet)
 {
-    kDebug() << type << Containment::DesktopContainment;
-    if (type == Containment::DesktopContainment) {
-        applet->installSceneEventFilter(q);
-    }
-
+    //kDebug() << type << Containment::DesktopContainment;
     KConfigGroup *cg = applet->d->mainConfigGroup();
     applet->save(*cg);
     emit q->configNeedsSaving();
