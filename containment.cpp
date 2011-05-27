@@ -512,12 +512,6 @@ void Containment::setContainmentType(Containment::Type type)
         return;
     }
 
-    if (type != DesktopContainment) {
-        foreach (Plasma::Applet *applet, applets()) {
-            applet->removeSceneEventFilter(this);
-        }
-    }
-
     delete d->toolBox.data();
     d->type = type;
     d->checkContainmentFurniture();
@@ -884,7 +878,6 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
         }
 
         disconnect(applet, 0, currentContainment, 0);
-        applet->removeSceneEventFilter(currentContainment);
         KConfigGroup oldConfig = applet->config();
         currentContainment->d->applets.removeAll(applet);
         applet->setParentItem(this);
