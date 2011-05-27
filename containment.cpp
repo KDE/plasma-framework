@@ -1599,13 +1599,6 @@ void ContainmentPrivate::mimeTypeRetrieved(KIO::Job *job, const QString &mimeTyp
 #endif // PLASMA_NO_KIO
 }
 
-#ifndef KDE_NO_DEPRECATED
-const QGraphicsItem *Containment::toolBoxItem() const
-{
-    return d->toolBox.data();
-}
-#endif
-
 void Containment::setToolBox(AbstractToolBox *toolBox)
 {
     if (d->toolBox.data()) {

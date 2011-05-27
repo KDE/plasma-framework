@@ -583,13 +583,6 @@ Q_SIGNALS:
         void resizeEvent(QGraphicsSceneResizeEvent *event);
 
         /**
-         * @returns the toolbox associated with this containment, or a null pointer if none
-         */
-#ifndef KDE_NO_DEPRECATED
-        KDE_DEPRECATED const QGraphicsItem *toolBoxItem() const;
-#endif
-
-        /**
          * Sets a custom ToolBox
          * if there was an old one it will be deleted
          * and the new one won't have any actions in it
