@@ -28,16 +28,8 @@
 #include "plasma/applet.h"
 #include "plasma/packagemetadata.h"
 
-#ifdef QCA2_FOUND
-#include <QtCrypto>
-#endif
-
 void PlasmoidPackageTest::init()
 {
-#ifdef QCA2_FOUND
-    QCA::Initializer *cryptoInit = new QCA::Initializer;
-    Q_UNUSED(cryptoInit);
-#endif
     mPackage = QString("Package");
     mPackageRoot = QDir::homePath() + "/.kde-unit-test/packageRoot";
     ps = Plasma::Applet::packageStructure();
@@ -182,9 +174,7 @@ void PlasmoidPackageTest::isValid()
     delete p;
     p = new Plasma::Package(mPackageRoot, mPackage, ps);
     QVERIFY(p->isValid());
-#ifdef QCA2_FOUND
     QCOMPARE(p->contentsHash(), QString("db0b38c2b4fe21a9f37923cc25152340de055f6d"));
-#endif
 }
 
 void PlasmoidPackageTest::filePath()
