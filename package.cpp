@@ -26,10 +26,6 @@
 #include <QRegExp>
 #include <QtNetwork/QHostInfo>
 
-#ifdef QCA2_FOUND
-#include <QtCrypto>
-#endif
-
 #include <karchive.h>
 #include <kcomponentdata.h>
 #include <kdesktopfile.h>
@@ -319,8 +315,7 @@ const PackageStructure::Ptr Package::structure() const
     return d->structure;
 }
 
-#ifdef QCA2_FOUND
-void PackagePrivate::updateHash(const QString &basePath, const QString &subPath, const QDir &dir, QCA::Hash &hash)
+void PackagePrivate::updateHash(const QString &basePath, const QString &subPath, const QDir &dir, QCryptographicHash &hash)
 {
     // hash is calculated as a function of:
     // * files ordered alphabetically by name, with each file's:
@@ -336,19 +331,19 @@ void PackagePrivate::updateHash(const QString &basePath, const QString &subPath,
     const QDir::Filters filters = QDir::Hidden | QDir::System | QDir::NoDotAndDotDot;
     foreach (const QString &file, dir.entryList(QDir::Files | filters, sorting)) {
         if (!subPath.isEmpty()) {
-            hash.update(subPath.toUtf8());
+            hash.addData(subPath.toUtf8());
         }
 
-        hash.update(file.toUtf8());
+        hash.addData(file.toUtf8());
 
         QFileInfo info(dir.path() + '/' + file);
         if (info.isSymLink()) {
-            hash.update(info.symLinkTarget().toUtf8());
+            hash.addData(info.symLinkTarget().toUtf8());
         } else {
             QFile f(info.filePath());
             if (f.open(QIODevice::ReadOnly)) {
                 while (!f.atEnd()) {
-                    hash.update(f.read(1024));
+                    hash.addData(f.read(1024));
                 }
             } else {
                 kWarning() << "could not add" << f.fileName() << "to the hash; file could not be opened for reading. "
@@ -359,40 +354,33 @@ void PackagePrivate::updateHash(const QString &basePath, const QString &subPath,
 
     foreach (const QString &subDirPath, dir.entryList(QDir::Dirs | filters, sorting)) {
         const QString relativePath = subPath + subDirPath + '/';
-        hash.update(relativePath.toUtf8());
+        hash.addData(relativePath.toUtf8());
 
         QDir subDir(dir.path());
         subDir.cd(subDirPath);
 
         if (subDir.path() != subDir.canonicalPath()) {
-            hash.update(subDir.canonicalPath().toUtf8());
+            hash.addData(subDir.canonicalPath().toUtf8());
         } else {
             updateHash(basePath, relativePath, subDir, hash);
         }
     }
 }
-#endif
 
 QString Package::contentsHash() const
 {
-#ifdef QCA2_FOUND
     if (!d->valid) {
         kWarning() << "can not create hash due to Package being invalid";
         return QString();
     }
 
-    if (!QCA::isSupported("sha1")) {
-        kWarning() << "can not create hash for" << path() << "due to no SHA1 support in QCA2";
-        return QString();
-    }
-
-    QCA::Hash hash("sha1");
+    QCryptographicHash hash(QCryptographicHash::Sha1);
     QString metadataPath = d->structure->path() + "metadata.desktop";
     if (QFile::exists(metadataPath)) {
         QFile f(metadataPath);
         if (f.open(QIODevice::ReadOnly)) {
             while (!f.atEnd()) {
-                hash.update(f.read(1024));
+                hash.addData(f.read(1024));
             }
         } else {
             kWarning() << "could not add" << f.fileName() << "to the hash; file could not be opened for reading.";
@@ -416,12 +404,8 @@ QString Package::contentsHash() const
 
         d->updateHash(basePath, QString(), dir, hash);
     }
-    return QCA::arrayToHex(hash.final().toByteArray());
-#else
-    // no QCA2!
-    kWarning() << "can not create hash for" << path() << "due to no cryptographic support (QCA2)";
-    return QString();
-#endif
+
+    return hash.result();
 }
 
 //TODO: provide a version of this that allows one to ask for certain types of packages, etc?

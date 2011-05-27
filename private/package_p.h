@@ -23,6 +23,7 @@
 #include "../package.h"
 #include "../service.h"
 
+#include <QCryptographicHash>
 #include <QString>
 
 namespace Plasma
@@ -41,9 +42,7 @@ public:
     void unpublish();
     bool isPublished() const;
 
-#ifdef QCA2_FOUND
-    void updateHash(const QString &basePath, const QString &subPath, const QDir &dir, QCA::Hash &hash);
-#endif
+    void updateHash(const QString &basePath, const QString &subPath, const QDir &dir, QCryptographicHash &hash);
 
     PackageStructure::Ptr structure;
     Service *service;
