@@ -398,6 +398,11 @@ void ExtenderItem::setExtender(Extender *extender, const QPointF &pos)
     }
 
     Corona *corona = qobject_cast<Corona*>(scene());
+
+    if (!corona) {
+      return;
+    }
+
     KConfigGroup extenderItemGroup(corona->config(), "DetachedExtenderItems");
 
     if (isDetached()) {

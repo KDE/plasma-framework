@@ -29,6 +29,7 @@
 #include <kconfigdialog.h>
 
 #include "plasma/animator.h"
+#include "plasma/private/applethandle_p.h"
 #include "plasma/private/dataengineconsumer_p.h"
 #include "plasma/ui_publish.h"
 
@@ -107,6 +108,7 @@ public:
      */
     void setIsContainment(bool isContainment, bool forceUpdate = false);
 
+    void handleDisappeared(AppletHandle *handle);
     QString globalName() const;
     QString instanceName();
     void scheduleConstraintsUpdate(Plasma::Constraints c);
@@ -174,16 +176,17 @@ public:
     AppletOverlayWidget *messageOverlay;
     QGraphicsProxyWidget *messageOverlayProxy;
     Plasma::BusyWidget *busyWidget;
-
-    // sripting and package stuff
-    AppletScript *script;
-    Package *package;
-    ConfigLoader *configLoader;
     QWeakPointer<Plasma::PushButton> messageOkButton;
     QWeakPointer<Plasma::PushButton> messageYesButton;
     QWeakPointer<Plasma::PushButton> messageNoButton;
     QWeakPointer<Plasma::PushButton> messageCancelButton;
     QWeakPointer<QAction> messageCloseAction;
+
+    // sripting and package stuff
+    AppletScript *script;
+    Package *package;
+    ConfigLoader *configLoader;
+    QWeakPointer<AppletHandle> handle;
 
     // actions stuff; put activationAction into actions?
     KActionCollection *actions;

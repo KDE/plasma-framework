@@ -321,7 +321,7 @@ void FrameSvg::resizeFrame(const QSizeF &size)
     }
 
     if (size.isEmpty()) {
-        kWarning() << "Invalid size" << size;
+        kDebug() << "Invalid size" << size;
         return;
     }
 
@@ -746,7 +746,7 @@ void FrameSvgPrivate::generateFrameBackground(FrameData *frame)
 
 
     if (!size.isValid()) {
-        kWarning() << "Invalid frame size" << size;
+        kDebug() << "Invalid frame size" << size;
         return;
     }
     if (size.width() >= MAX_FRAME_SIZE || size.height() >= MAX_FRAME_SIZE) {
@@ -1006,13 +1006,13 @@ void FrameSvgPrivate::updateSizes() const
     }
 
     frame->composeOverBorder = (q->hasElement(prefix % "hint-compose-over-border") &&
-                                q->hasElement(prefix % "mask-center"));
+                                q->hasElement("mask-" % prefix % "center"));
 
     //since it's rectangular, topWidth and bottomWidth must be the same
     //the ones that don't have a prefix is for retrocompatibility
-    frame->tileCenter = q->hasElement("hint-tile-center");
-    frame->noBorderPadding = q->hasElement("hint-no-border-padding");
-    frame->stretchBorders = q->hasElement("hint-stretch-borders");
+    frame->tileCenter = (q->hasElement("hint-tile-center") || q->hasElement(prefix % "hint-tile-center"));
+    frame->noBorderPadding = (q->hasElement("hint-no-border-padding") || q->hasElement(prefix % "hint-no-border-padding"));
+    frame->stretchBorders = (q->hasElement("hint-stretch-borders") || q->hasElement(prefix % "hint-stretch-borders"));
     q->resize(s);
 }
 

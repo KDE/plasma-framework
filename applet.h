@@ -88,6 +88,8 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
     Q_PROPERTY(bool shouldConserveResources READ shouldConserveResources)
     Q_PROPERTY(uint id READ id)
     Q_PROPERTY(bool userConfiguring READ isUserConfiguring)
+    Q_PROPERTY(BackgroundHints backgroundHints READ backgroundHints WRITE setBackgroundHints)
+    Q_ENUMS(BackgroundHints)
 
     public:
         typedef QList<Applet*> List;
@@ -1100,6 +1102,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         Q_PRIVATE_SLOT(d, void publishCheckboxStateChanged(int state))
         Q_PRIVATE_SLOT(d, void globalShortcutChanged())
         Q_PRIVATE_SLOT(d, void propagateConfigChanged())
+        Q_PRIVATE_SLOT(d, void handleDisappeared(AppletHandle *handle))
 
         /**
          * Reimplemented from QGraphicsItem
