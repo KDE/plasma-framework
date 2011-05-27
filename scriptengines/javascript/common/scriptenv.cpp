@@ -153,22 +153,6 @@ bool ScriptEnv::checkForErrors(bool fatal)
     return false;
 }
 
-void ScriptEnv::registerGetUrl(QScriptValue &obj)
-{
-    QScriptValue get = obj.property("getUrl");
-    if (!get.isValid()) {
-        obj.setProperty("getUrl", m_engine->newFunction(ScriptEnv::getUrl));
-    }
-}
-
-void ScriptEnv::registerOpenUrl(QScriptValue &obj)
-{
-    QScriptValue value = obj.property("openUrl");
-    if (!value.isValid()) {
-        obj.setProperty("openUrl", m_engine->newFunction(ScriptEnv::openUrl));
-    }
-}
-
 bool ScriptEnv::importBuiltinExtension(const QString &extension, QScriptValue &obj)
 {
     kDebug() << extension;

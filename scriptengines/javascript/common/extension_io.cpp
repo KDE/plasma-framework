@@ -123,4 +123,20 @@ QScriptValue ScriptEnv::userDataPath(QScriptContext *context, QScriptEngine *eng
     return QString();
 }
 
+void ScriptEnv::registerGetUrl(QScriptValue &obj)
+{
+    QScriptValue get = obj.property("getUrl");
+    if (!get.isValid()) {
+        obj.setProperty("getUrl", m_engine->newFunction(ScriptEnv::getUrl));
+    }
+}
+
+void ScriptEnv::registerOpenUrl(QScriptValue &obj)
+{
+    QScriptValue value = obj.property("openUrl");
+    if (!value.isValid()) {
+        obj.setProperty("openUrl", m_engine->newFunction(ScriptEnv::openUrl));
+    }
+}
+
 
