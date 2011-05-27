@@ -46,7 +46,7 @@ public:
     void syncConfig();
     Containment *addContainment(const QString &name, const QVariantList &args, uint id, bool delayedInit);
     void offscreenWidgetDestroyed(QObject *);
-    QList<Plasma::Containment *> importLayout(const KConfigBase &conf, bool mergeConfig);
+    QList<Plasma::Containment *> importLayout(const KConfigGroup &conf, bool mergeConfig);
 
     static bool s_positioningContainments;
 

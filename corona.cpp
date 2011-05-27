@@ -273,21 +273,14 @@ void Corona::loadLayout(const QString &configName)
         d->configName = configName;
     }
 
-    KSharedConfigPtr conf = config();
-    d->importLayout(*conf, false);
+    KConfigGroup conf(config(), QString());
+    d->importLayout(conf, false);
 }
 
 QList<Plasma::Containment *> Corona::importLayout(const KConfigGroup &conf)
 {
     return d->importLayout(conf, true);
 }
-
-#ifndef KDE_NO_DEPRECATED
-QList<Plasma::Containment *> Corona::importLayout(const KConfigBase &conf)
-{
-    return d->importLayout(conf, true);
-}
-#endif
 
 Containment *Corona::containmentForScreen(int screen, int desktop) const
 {
@@ -985,12 +978,10 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
     return containment;
 }
 
-QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigBase &conf, bool mergeConfig)
+QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &conf, bool mergeConfig)
 {
-    if (const KConfigGroup *group = dynamic_cast<const KConfigGroup *>(&conf)) {
-        if (!group->isValid()) {
-            return QList<Containment *>();
-        }
+    if (!conf.isValid()) {
+        return QList<Containment *>();
     }
 
     QList<Plasma::Containment *> newContainments;

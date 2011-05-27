@@ -276,20 +276,6 @@ public:
     AbstractDialogManager *dialogManager();
 
     /**
-     * Imports an applet layout from a config file. The results will be added to the
-     * current set of Containments.
-     * @deprecated Use the 4.6 version that takes a KConfigGroup
-     *
-     * @param config the name of the config file to load from,
-     *               or the default config file if QString()
-     * @return the list of containments that were loaded
-     * @since 4.5
-     */
-#ifndef KDE_NO_DEPRECATED
-    KDE_DEPRECATED QList<Plasma::Containment *> importLayout(const KConfigBase &config);
-#endif
-
-    /**
      * Returns the name of the preferred plugin to be used as containment toolboxes.
      * CustomContainments and CustomPanelContainments can still override it as their liking. It's also not guaranteed that the plugin will actually exist.
      *
