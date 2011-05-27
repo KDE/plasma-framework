@@ -241,7 +241,6 @@ QScriptValue ScriptEngine::fileExists(QScriptContext *context, QScriptEngine *en
 
 QScriptValue ScriptEngine::loadTemplate(QScriptContext *context, QScriptEngine *engine)
 {
-    kDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
     Q_UNUSED(engine)
     if (context->argumentCount() == 0) {
         kDebug() << "no arguments";
