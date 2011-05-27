@@ -1685,13 +1685,6 @@ void Containment::wheelEvent(QGraphicsSceneWheelEvent *event)
     }
 }
 
-bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
-{
-    Q_UNUSED(watched)
-    Q_UNUSED(event)
-    return false;
-}
-
 QVariant Containment::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     //FIXME if the applet is moved to another containment we need to unfocus it

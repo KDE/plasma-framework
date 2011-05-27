@@ -1741,11 +1741,6 @@ KActionCollection* AppletPrivate::defaultActions(QObject *parent)
     return actions;
 }
 
-bool Applet::eventFilter(QObject *o, QEvent *e)
-{
-    return QObject::eventFilter(o, e);
-}
-
 bool Applet::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 {
     if (watched == this) {

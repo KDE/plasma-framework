@@ -550,7 +550,6 @@ Q_SIGNALS:
         void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
         void keyPressEvent(QKeyEvent *event);
         void wheelEvent(QGraphicsSceneWheelEvent *event);
-        bool sceneEventFilter(QGraphicsItem *watched, QEvent *event);
         QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
         /**
