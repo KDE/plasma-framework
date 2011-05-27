@@ -157,21 +157,6 @@ QPixmap ToolTipContent::image() const
     return d->image;
 }
 
-void ToolTipContent::setWindowToPreview(WId id)
-{
-    d->windowsToPreview.clear();
-    d->windowsToPreview.append(id);
-}
-
-WId ToolTipContent::windowToPreview() const
-{
-    if (d->windowsToPreview.size() == 1) {
-        return d->windowsToPreview.first();
-    } else {
-        return 0;
-    }
-}
-
 void ToolTipContent::setWindowsToPreview(const QList<WId> & ids)
 {
     d->windowsToPreview = ids;
