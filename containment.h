@@ -422,12 +422,6 @@ Q_SIGNALS:
         void appletRemoved(Plasma::Applet *applet);
 
         /**
-         * Emitted when the containment requests zooming in or out one step.
-         * @deprecated
-         */
-        void zoomRequested(Plasma::Containment *containment, Plasma::ZoomDirection direction);
-
-        /**
          * Emitted when the user clicks on the toolbox
          */
         void toolBoxToggled();
