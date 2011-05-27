@@ -484,11 +484,14 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::Alig
 
         kDebug() << actualItem;
 
-        if (!v->isVisible() && actualItem) {
-            v = viewFor(actualItem);
+        if (actualItem) {
+            QGraphicsView *parentView = viewFor(actualItem);
+            if (parentView) {
+                v = parentView;
+            }
         }
     }
-    
+
     if (!actualItem) {
         actualItem = item;
     }
