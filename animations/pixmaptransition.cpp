@@ -166,6 +166,7 @@ void PixmapTransition::updateState(QAbstractAnimation::State newState, QAbstract
 
 void PixmapTransition::updateEffectiveTime(int currentTime)
 {
+    Q_UNUSED(currentTime)
     m_dirty = true;
     QGraphicsWidget *w = targetWidget();
     if (w) {
