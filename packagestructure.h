@@ -285,12 +285,6 @@ public:
     virtual void createNewWidgetBrowser(QWidget *parent = 0);
 
     /**
-     * @return the prefix inserted between the base path and content entries
-     * @deprecated use contentsPrefixPaths() instead.
-     */
-    KDE_DEPRECATED QString contentsPrefix() const;
-
-    /**
      * @return the prefix paths inserted between the base path and content entries, in order of priority.
      *         When searching for a file, all paths will be tried in order.
      * @since 4.6
@@ -336,17 +330,6 @@ protected:
      *             false if they should be rejected.
      */
     void setAllowExternalPaths(bool allow);
-
-    /**
-     * Sets the prefix that all the contents in this package should
-     * appear under. This defaults to "contents/" and is added automatically
-     * between the base path and the entries as defined by the package
-     * structure
-     *
-     * @arg prefix the directory prefix to use
-     * @deprecated use setContentsPrefixPaths() instead.
-     */
-    KDE_DEPRECATED void setContentsPrefix(const QString &prefix);
 
     /**
      * Sets the prefixes that all the contents in this package should
