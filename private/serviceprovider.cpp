@@ -18,6 +18,10 @@
 
 #include "serviceprovider_p.h"
 
+#include <QtCore/QBuffer>
+#include <QtCore/QFile>
+#include <QtCore/QUuid>
+
 #include "authorizationrule_p.h"
 #include "authorizationmanager_p.h"
 #include "joliemessagehelper_p.h"
@@ -31,9 +35,6 @@
 #include <plasma/service.h>
 #include <plasma/servicejob.h>
 #include <plasma/private/servicejob_p.h>
-
-#include <QtCore/QBuffer>
-#include <QtCore/QFile>
 
 #include <QtJolie/Server>
 
@@ -206,14 +207,14 @@ void ServiceProvider::relay(Jolie::Server *server, int descriptor,
 
         return;
     }
-    
+
     if (JolieMessage::field(JolieMessage::Field::TOKEN, message).isEmpty()) {
         Jolie::Message response(message.resourcePath(), message.operationName(), message.id());
         response.setFault(Jolie::Fault(JolieMessage::Error::INVALIDTOKEN));
         AuthorizationManager::self()->d->server->sendReply(descriptor, response);
         return;
     }
-    
+
     //m_descriptor = descriptor;
     QByteArray id = JolieMessage::field(JolieMessage::Field::IDENTITYID, message);
     QByteArray uuid = JolieMessage::field(JolieMessage::Field::UUID, message);
@@ -307,13 +308,10 @@ Jolie::Message ServiceProvider::appendToken(Jolie::Message message,
                                             const QByteArray &caller,
                                             const QByteArray &uuid)
 {
-#ifdef ENABLE_REMOTE_WIDGETS
-    m_tokens[caller + uuid] = QCA::Random::randomArray(256).toByteArray();
-#endif
+    m_tokens[caller + uuid] = QUuid::createUuid().toString().toAscii();
     //kDebug() << "setting token: " << m_tokens[caller + uuid].toBase64()
              //<< " for caller: " << caller.toBase64()
              //<< " with uuid caller: " << uuid.toBase64();
-    
     Jolie::Value data = message.data();
     data.children(JolieMessage::Field::TOKEN) << Jolie::Value(m_tokens[caller + uuid]);
     message.setData(data);
