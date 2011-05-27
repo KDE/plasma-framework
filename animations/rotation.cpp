@@ -72,6 +72,8 @@ void RotationAnimation::setAngle(const qreal &angle)
 
 void RotationAnimation::updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
 {
+    Q_UNUSED(newState)
+    Q_UNUSED(oldState)
     QGraphicsWidget *m_object = targetWidget();
 
     if (!m_object) {
