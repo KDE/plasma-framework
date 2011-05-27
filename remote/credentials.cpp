@@ -17,10 +17,9 @@
  */
 
 #include "credentials.h"
-
-#include "authorizationmanager.h"
 #include "config-plasma.h"
 
+#include <QCryptographicHash>
 #include <QObject>
 
 #ifdef ENABLE_REMOTE_WIDGETS
@@ -29,6 +28,8 @@
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
+
+#include "authorizationmanager.h"
 
 #define REQUIRED_FEATURES "rsa,sha1,pkey"
 
@@ -112,7 +113,7 @@ Credentials Credentials::createCredentials(const QString &name)
     QCA::KeyGenerator generator;
     QCA::PrivateKey key = generator.createRSA(2048);
     QString pemKey(key.toPublicKey().toPEM());
-    QString id = QCA::Hash("sha1").hashToString(pemKey.toAscii());
+    QString id = QCryptographicHash::hash(pemKey.toAscii(), QCryptographicHash::Sha1);
     return Credentials(id, name, key.toPEM(), true);
 #else
     return Credentials();
@@ -146,7 +147,7 @@ bool Credentials::isValid() const
     if (d->publicKey.isNull()) {
         return false;
     } else {
-        QString id = QCA::Hash("sha1").hashToString(d->publicKey.toPEM().toAscii());
+        QString id = QCryptographicHash::hash(d->publicKey.toPEM().toAscii(), QCryptographicHash::Sha1);
         return (id == d->id);
     }
 #else
