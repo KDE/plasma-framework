@@ -95,7 +95,7 @@ void ServicePrivate::associatedGraphicsWidgetDestroyed(QObject *obj)
     associatedGraphicsWidgets.remove(static_cast<QGraphicsWidget*>(obj));
 }
 
-void ServicePrivate::publish(AnnouncementMethods methods, const QString &name, const PackageMetadata &metadata)
+void ServicePrivate::publish(AnnouncementMethods methods, const QString &name, const KPluginInfo &metadata)
 {
 #ifdef ENABLE_REMOTE_WIDGETS
     if (!serviceProvider) {
@@ -111,7 +111,7 @@ void ServicePrivate::publish(AnnouncementMethods methods, const QString &name, c
             QMap<QString, QByteArray> textData;
             textData["name"] = name.toUtf8();
             textData["plasmoidname"] = metadata.name().toUtf8();
-            textData["description"] = metadata.description().toUtf8();
+            textData["description"] = metadata.comment().toUtf8();
             textData["icon"] = metadata.icon().toUtf8();
             publicService->setTextData(textData);
             kDebug() << "about to publish";

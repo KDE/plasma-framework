@@ -29,6 +29,8 @@
 #include <QWidget>
 #include <QSet>
 
+#include <kplugininfo.h>
+
 #include <dnssd/publicservice.h>
 #include <dnssd/servicebrowser.h>
 
@@ -97,7 +99,7 @@ public:
     void associatedGraphicsWidgetDestroyed(QObject *obj);
 
     void publish(AnnouncementMethods methods, const QString &name,
-                 const PackageMetadata &metadata = PackageMetadata());
+                 const KPluginInfo &metadata = KPluginInfo());
 
     void unpublish();
 
