@@ -28,7 +28,6 @@
 
 #include <plasma/plasma_export.h>
 #include <plasma/plasma.h>
-#include "packagemetadata.h"
 
 class QGraphicsWidget;
 class QIODevice;
