@@ -40,15 +40,13 @@
 namespace Plasma
 {
 
-PlasmoidServiceJob::PlasmoidServiceJob(const QString &plasmoidLocation,
-                                       const QString &destination,
+PlasmoidServiceJob::PlasmoidServiceJob(const QString &destination,
                                        const QString &operation,
                                        QHash<QString,QVariant>& parameters,
                                        PlasmoidService *service)
     : Plasma::ServiceJob(destination, operation, parameters,
                          static_cast<Plasma::Service*>(service)),
-      m_service(service),
-      m_packagePath(plasmoidLocation)
+      m_service(service)
 {
 }
 
@@ -65,12 +63,10 @@ void PlasmoidServiceJob::start()
             setResult(file.readAll());
         } else {
             kDebug() << "file doesn't exists, we're sending the plugin name";
-            setResult(m_packagePath);
+            setResult(m_service->m_packagePath);
         }
     } else if (operationName() == "GetMetaData") {
-        KTemporaryFile tempFile;
-        m_service->m_metadata.write(tempFile.fileName());
-        QFile file(tempFile.fileName());
+        QFile file(m_service->m_metadata);
         setResult(file.readAll());
     } else if (operationName() == "DataEngine") {
         DataEngine *engine  = m_service->dataEngine(parameters()["EngineName"].toString());
@@ -97,20 +93,23 @@ PlasmoidService::PlasmoidService(const QString &packageLocation)
         location.append('/');
     }
 
-    m_metadata.read(location + "metadata.desktop");
-    if (!m_metadata.isValid()) {
+    m_metadata = location + "metadata.desktop";
+
+    /*FIXME: either do something useful on error or don't waste time with them
+    if (!QFile::exists(m_metadata)) {
         kDebug() << "not a valid package";
     }
-    if (!m_tempFile.open()) {
-        kDebug() << "could not create tempfile";
-    }
-    QString packagePath = m_tempFile.fileName();
+    */
+
+    m_tempFile.open();
+    m_packagePath = m_tempFile.fileName();
     m_tempFile.close();
 
     // put everything into a zip archive
-    KZip creation(packagePath);
+    KZip creation(m_packagePath);
     creation.setCompression(KZip::NoCompression);
     if (!creation.open(QIODevice::WriteOnly)) {
+        /*FIXME: either do something useful on error or don't waste time with it */
         kDebug() << "could not open archive";
     }
 
@@ -118,8 +117,6 @@ PlasmoidService::PlasmoidService(const QString &packageLocation)
     location.append("contents/");
     creation.addLocalDirectory(location, "contents");
     creation.close();
-
-    m_packagePath = packagePath;
 }
 
 PlasmoidService::PlasmoidService(Applet *applet)
@@ -131,14 +128,9 @@ PlasmoidService::PlasmoidService(Applet *applet)
     }
 }
 
-PackageMetadata PlasmoidService::metadata() const
-{
-    return m_metadata;
-}
-
 Plasma::ServiceJob* PlasmoidService::createJob(const QString& operation, QHash<QString,QVariant>& parameters)
 {
-    return new PlasmoidServiceJob(m_packagePath, destination(), operation, parameters, this);
+    return new PlasmoidServiceJob(destination(), operation, parameters, this);
 }
 
 }

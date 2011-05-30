@@ -41,17 +41,15 @@ class PlasmoidServiceJob : public ServiceJob
    Q_OBJECT
 
     public:
-        PlasmoidServiceJob(const QString &plasmoidLocation,
-                           const QString &destination,
+        PlasmoidServiceJob(const QString &destination,
                            const QString &operation,
                            QHash<QString,QVariant>& parameters,
-                           PlasmoidService *parent = 0);
+                           PlasmoidService *parent);
 
         void start();
 
     private:
         PlasmoidService *m_service;
-        QString m_packagePath;
         QString m_pluginName;
 };
 
@@ -62,16 +60,13 @@ class PlasmoidService : public Service, DataEngineConsumer
     public:
         PlasmoidService(const QString &plasmoidLocation);
         PlasmoidService(Applet *applet);
-        PackageMetadata metadata() const;
-
 
     protected:
-        Plasma::ServiceJob* createJob(const QString& operation,
-                                      QHash<QString,QVariant>& parameters);
+        Plasma::ServiceJob* createJob(const QString& operation, QHash<QString,QVariant>& parameters);
 
     private:
         QString m_packagePath;
-        PackageMetadata m_metadata;
+        QString m_metadata;
         KTemporaryFile m_tempFile;
 
         friend class PlasmoidServiceJob;
