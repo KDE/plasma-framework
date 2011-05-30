@@ -76,7 +76,7 @@ public:
 
             applet = Applet::load(pluginName);
             if (applet) {
-                applet->d->remoteLocation = location.prettyUrl();
+                applet->d->remoteLocation = location;
             } else {
                 q->setError(-1);
                 q->setErrorText(i18n("The \"%1\" widget is not installed.", pluginName));
@@ -129,7 +129,6 @@ public:
             int answer = KMessageBox::createKMessageBox(dialog, KIcon(iconName), message,
                                                         QStringList(), QString(), 0,
                                                         KMessageBox::Dangerous);
-            //int answer = KMessageBox::questionYesNo(0, message, i18n("Remote Widget"));
 
             if (answer!=KDialog::Yes) {
                 q->setError(-1);
@@ -138,17 +137,9 @@ public:
                 return;
             }
 
-            /**
-            QString metadataFilename = path + "/metadata.desktop";
-            KDesktopFile cfg(metadataFilename);
-            KConfigGroup config = cfg.desktopGroup();
-            config.writeEntry("EngineLocation", location.prettyUrl());
-            config.sync();
-            */
-
             applet = Applet::loadPlasmoid(path);
             if (applet) {
-                applet->d->remoteLocation = location.prettyUrl();
+                applet->d->remoteLocation = location;
             } else {
                 q->setError(-1);
             }

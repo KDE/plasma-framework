@@ -196,7 +196,7 @@ public:
     KKeySequenceWidget *shortcutEditor; //TODO: subclass KConfigDialog and encapsulate this in there
 
     ItemStatus itemStatus;
-    QString remoteLocation;
+    KUrl remoteLocation;
     Ui::publishWidget publishUI;
 
     // the applet can change size policy by itself, so save the old one for eventual restore

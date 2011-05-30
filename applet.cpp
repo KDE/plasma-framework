@@ -671,12 +671,10 @@ ConfigLoader *Applet::configScheme() const
 
 DataEngine *Applet::dataEngine(const QString &name) const
 {
-    if (!d->remoteLocation.isEmpty()) {
-        return d->remoteDataEngine(KUrl(d->remoteLocation), name);
-    } else if (!package() || package()->metadata().remoteLocation().isEmpty()) {
+    if (d->remoteLocation.isEmpty()) {
         return d->dataEngine(name);
     } else {
-        return d->remoteDataEngine(KUrl(package()->metadata().remoteLocation()), name);
+        return d->remoteDataEngine(d->remoteLocation, name);
     }
 }
 
@@ -2317,7 +2315,7 @@ Applet *Applet::loadPlasmoid(const QString &path, uint appletId, const QVariantL
 {
     if (QFile::exists(path + "/metadata.desktop")) {
         KService service(path + "/metadata.desktop");
-        const QStringList& types = service.serviceTypes();
+        const QStringList &types = service.serviceTypes();
 
         if (types.contains("Plasma/Containment")) {
             return new Containment(path, appletId, args);
