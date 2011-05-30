@@ -105,7 +105,7 @@ public:
     QString servicePrefix;
     QMap<QByteArray, ContentStructure> contents;
     QStringList mimeTypes;
-    PackageMetadata *metadata;
+    KPluginInfo *metadata;
     bool externalPaths;
  };
 
@@ -615,7 +615,7 @@ bool PackageStructure::installPackage(const QString &package, const QString &pac
                 path.append(entry->name()).append("/");
             }
         }
-        
+
         delete archive;
     }
 
@@ -625,7 +625,7 @@ bool PackageStructure::installPackage(const QString &package, const QString &pac
         return false;
     }
 
-    PackageMetadata meta(metadataPath);
+    KPluginInfo meta(metadataPath);
     QString targetName = meta.pluginName();
 
     if (targetName.isEmpty()) {
@@ -791,7 +791,6 @@ void PackageStructure::setServicePrefix(const QString &servicePrefix)
 void PackageStructurePrivate::createPackageMetadata(const QString &path)
 {
     delete metadata;
-    metadata = 0;
 
     QString metadataPath(path + "/metadata.desktop");
     if (!QFile::exists(metadataPath)) {
@@ -799,10 +798,10 @@ void PackageStructurePrivate::createPackageMetadata(const QString &path)
         metadataPath.clear();
     }
 
-    metadata = new PackageMetadata(metadataPath);
+    metadata = new KPluginInfo(metadataPath);
 }
 
-PackageMetadata PackageStructure::metadata() const
+KPluginInfo PackageStructure::metadata() const
 {
     if (!d->metadata && !d->path.isEmpty()) {
         QFileInfo fileInfo(d->path);
@@ -836,7 +835,7 @@ PackageMetadata PackageStructure::metadata() const
     }
 
     if (!d->metadata) {
-        d->metadata = new PackageMetadata();
+        d->metadata = new KPluginInfo();
     }
 
     return *d->metadata;

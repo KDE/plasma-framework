@@ -25,10 +25,10 @@
 
 #include <kgenericfactory.h>
 #include <klocale.h>
+#include <kplugininfo.h>
 #include <ksharedptr.h>
 
 #include <plasma/version.h>
-#include "packagemetadata.h"
 
 class KConfigBase;
 
@@ -309,7 +309,7 @@ public:
     /**
       * @return the package metadata object.
       */
-    virtual PackageMetadata metadata() const;
+    virtual KPluginInfo metadata() const;
 
     /**
      * @return true if paths/symlinks outside the package itself should be followed.

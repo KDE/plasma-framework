@@ -44,7 +44,6 @@
 #include <kzip.h>
 #include <kdebug.h>
 
-#include "packagemetadata.h"
 #include "private/package_p.h"
 #include "private/plasmoidservice_p.h"
 #include "private/service_p.h"
@@ -288,15 +287,6 @@ QStringList Package::entryList(const char *fileType) const
     return d->structure->entryList(fileType);
 }
 
-PackageMetadata Package::metadata() const
-{
-    if (d->structure) {
-        return d->structure->metadata();
-    }
-
-    return PackageMetadata();
-}
-
 void Package::setPath(const QString &path)
 {
     if (d->structure) {
@@ -423,8 +413,11 @@ QStringList Package::listInstalled(const QString &packageRoot) // static
     foreach (const QString &sdir, dir.entryList(QDir::AllDirs | QDir::Readable)) {
         QString metadata = packageRoot + '/' + sdir + "/metadata.desktop";
         if (QFile::exists(metadata)) {
-            PackageMetadata m(metadata);
-            packages << m.pluginName();
+            const KPluginInfo info(metadata);
+            const QString plugin = info.pluginName();
+            if (!plugin.isEmpty()) {
+                packages << plugin;
+            }
         }
     }
 
