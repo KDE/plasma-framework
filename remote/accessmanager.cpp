@@ -43,6 +43,75 @@
 namespace Plasma
 {
 
+class RemoteObjectDescription::Private
+{
+public:
+    QString name;
+    QString description;
+    QString icon;
+    KUrl url;
+};
+
+RemoteObjectDescription::RemoteObjectDescription()
+    : d(new Private)
+{
+}
+
+RemoteObjectDescription::RemoteObjectDescription(const RemoteObjectDescription &other)
+    : d(new Private(*other.d))
+{
+}
+
+RemoteObjectDescription &RemoteObjectDescription::operator=(const RemoteObjectDescription &other)
+{
+    *d = *other.d;
+    return *this;
+}
+
+
+void RemoteObjectDescription::setName(const QString &name)
+{
+    d->name = name;
+}
+
+QString RemoteObjectDescription::name() const
+{
+    return d->name;
+}
+
+
+void RemoteObjectDescription::setUrl(const KUrl &url)
+{
+    d->url = url;
+}
+
+KUrl RemoteObjectDescription::url() const
+{
+    return d->url;
+}
+
+void RemoteObjectDescription::setDescription(const QString &description)
+{
+    d->description = description;
+}
+
+QString RemoteObjectDescription::description() const
+{
+    return d->description;
+}
+
+void RemoteObjectDescription::setIcon(const QString &icon)
+{
+    d->icon = icon;
+}
+
+QString RemoteObjectDescription::icon() const
+{
+    return d->icon;
+}
+
+
+
 class AccessManagerSingleton
 {
     public:
@@ -75,7 +144,7 @@ AccessAppletJob *AccessManager::accessRemoteApplet(const KUrl &location) const
     KUrl resolvedLocation;
     if (location.protocol() == "plasma+zeroconf") {
         if (d->zeroconfServices.contains(location.host())) {
-            resolvedLocation = d->services[location.host()].remoteLocation();
+            resolvedLocation = d->services[location.host()].url();
         } else {
             kDebug() << "There's no zeroconf service with this name.";
         }
@@ -89,7 +158,7 @@ AccessAppletJob *AccessManager::accessRemoteApplet(const KUrl &location) const
     return job;
 }
 
-QList<PackageMetadata> AccessManager::remoteApplets() const
+QList<RemoteObjectDescription> AccessManager::remoteApplets() const
 {
     return d->services.values();
 }
@@ -135,7 +204,7 @@ void AccessManagerPrivate::slotAddService(DNSSD::RemoteService::Ptr service)
     }
 
     if (!services.contains(service->serviceName())) {
-        PackageMetadata metadata;
+        RemoteObjectDescription metadata;
         kDebug() << "textdata = " << service->textData();
         kDebug() << "hostname: " << service->hostName();
         QHostAddress address = DNSSD::ServiceBrowser::resolveHostName(service->hostName());
@@ -146,20 +215,20 @@ void AccessManagerPrivate::slotAddService(DNSSD::RemoteService::Ptr service)
                                              .arg(service->port())
                                              .arg(service->serviceName()));
 
-        if (!service->textData().isEmpty()) {
+        if (service->textData().isEmpty()) {
+            kDebug() << "no textdata?";
+            metadata.setName(service->serviceName());
+            metadata.setUrl(url);
+        } else {
             kDebug() << "service has got textdata";
             QMap<QString, QByteArray> textData = service->textData();
             metadata.setName(textData["name"]);
             metadata.setDescription(textData["description"]);
             metadata.setIcon(textData["icon"]);
-            metadata.setRemoteLocation(url.prettyUrl());
-        } else {
-            kDebug() << "no textdata?";
-            metadata.setName(service->serviceName());
-            metadata.setRemoteLocation(url.prettyUrl());
+            metadata.setUrl(url);
         }
 
-        kDebug() << "location = " << metadata.remoteLocation();
+        kDebug() << "location = " << metadata.url();
         kDebug() << "name = " << metadata.name();
         kDebug() << "description = " << metadata.name();
 
