@@ -445,7 +445,7 @@ void AbstractRunnerPrivate::setupScriptSupport()
              << "which is a" << package->structure()->type() << "package"
              << ", main script is" << package->filePath("mainscript");
 
-    QString translationsPath = package->filePath("translations");
+    const QString translationsPath = package->filePath("translations");
     if (!translationsPath.isEmpty()) {
         KGlobal::dirs()->addResourceDir("locale", translationsPath);
         KGlobal::locale()->insertCatalog(runnerDescription.pluginName());

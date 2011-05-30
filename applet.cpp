@@ -2726,13 +2726,13 @@ void AppletPrivate::setupScriptSupport()
              << "which is a" << package->structure()->type() << "package"
              << ", main script is" << package->filePath("mainscript");
 
-    QString translationsPath = package->filePath("translations");
+    const QString translationsPath = package->filePath("translations");
     if (!translationsPath.isEmpty()) {
         KGlobal::dirs()->addResourceDir("locale", translationsPath);
         KGlobal::locale()->insertCatalog(appletDescription.pluginName());
     }
 
-    QString xmlPath = package->filePath("mainconfigxml");
+    const QString xmlPath = package->filePath("mainconfigxml");
     if (!xmlPath.isEmpty()) {
         QFile file(xmlPath);
         KConfigGroup config = q->config();
