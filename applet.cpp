@@ -2729,7 +2729,7 @@ void AppletPrivate::setupScriptSupport()
     QString translationsPath = package->filePath("translations");
     if (!translationsPath.isEmpty()) {
         KGlobal::dirs()->addResourceDir("locale", translationsPath);
-        KGlobal::locale()->insertCatalog(package->metadata().pluginName());
+        KGlobal::locale()->insertCatalog(appletDescription.pluginName());
     }
 
     QString xmlPath = package->filePath("mainconfigxml");
