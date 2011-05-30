@@ -57,14 +57,7 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1209)
 
 ########### next target ###############
 
-set(plasmagik_SRCS
-    packagemetadata.cpp
-    packagestructure.cpp
-    package.cpp
-    )
-
 set(plasma_LIB_SRCS
-    ${plasmagik_SRCS}
     abstractrunner.cpp
     abstracttoolbox.cpp
     animator.cpp
@@ -102,8 +95,10 @@ set(plasma_LIB_SRCS
     extenders/extender.cpp
     extenders/extendergroup.cpp
     extenders/extenderitem.cpp
-    pluginloader.cpp
+    packagestructure.cpp
+    package.cpp
     paintutils.cpp
+    pluginloader.cpp
     framesvg.cpp
     plasma.cpp
     popupapplet.cpp
@@ -270,14 +265,6 @@ install(TARGETS plasma EXPORT kdelibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_AR
 
 ########### install files ###############
 
-set(plasmagik_HEADERS
-    packagemetadata.h
-    packagestructure.h
-    package.h
-    )
-
-install(FILES ${plasmagik_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/ COMPONENT Devel)
-
 set(plasma_LIB_INCLUDES
     abstractdialogmanager.h
     abstractrunner.h
@@ -302,6 +289,8 @@ set(plasma_LIB_INCLUDES
     paintutils.h
     windoweffects.h
     framesvg.h
+    packagestructure.h
+    package.h
     plasma.h
     plasma_export.h
     popupapplet.h
