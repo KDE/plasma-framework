@@ -59,7 +59,10 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1209)
 
 set(plasma_LIB_SRCS
     abstractrunner.cpp
+    ${plasmagik_SRCS}
+    abstractdialogmanager.cpp
     abstracttoolbox.cpp
+    dialog.cpp
     animator.cpp
     animations/animation.cpp
     animations/animationscriptengine.cpp
@@ -80,7 +83,6 @@ set(plasma_LIB_SRCS
     animations/water.cpp
     animations/widgetsnapshot.cpp
     animations/zoom.cpp
-    applet.cpp
     configloader.cpp
     containment.cpp
     containmentactions.cpp
@@ -90,8 +92,6 @@ set(plasma_LIB_SRCS
     dataengine.cpp
     dataenginemanager.cpp
     delegate.cpp
-    dialog.cpp
-    abstractdialogmanager.cpp
     extenders/extender.cpp
     extenders/extendergroup.cpp
     extenders/extenderitem.cpp
@@ -101,12 +101,13 @@ set(plasma_LIB_SRCS
     pluginloader.cpp
     framesvg.cpp
     plasma.cpp
+    applet.cpp
     popupapplet.cpp
-    private/animablegraphicswebview.cpp
+    pluginloader.cpp
+
     private/applethandle.cpp
     private/associatedapplicationmanager.cpp
     private/datacontainer_p.cpp
-    private/dataenginebindings.cpp
     private/dataengineconsumer.cpp
     private/dataengineservice.cpp
     private/effectwatcher.cpp
@@ -114,7 +115,6 @@ set(plasma_LIB_SRCS
     private/extenderitemmimedata.cpp
     private/focusindicator.cpp
     private/getsource.cpp
-    private/nativetabbar.cpp
     private/packages.cpp
     private/plasmoidservice.cpp
     private/remotedataengine.cpp
@@ -126,10 +126,10 @@ set(plasma_LIB_SRCS
     private/storagethread.cpp
     private/style.cpp
     private/tooltip.cpp
+    private/trustedonlyauthorization.cpp
     private/wallpaperrenderthread.cpp
     private/windowpreview.cpp
     private/kineticscroll.cpp
-    private/declarative/declarativenetworkaccessmanagerfactory.cpp
     private/effects/halopainter.cpp
     private/effects/ripple.cpp
     querymatch.cpp
@@ -164,33 +164,7 @@ set(plasma_LIB_SRCS
     view.cpp
     wallpaper.cpp
     windoweffects.cpp
-    widgets/checkbox.cpp
-    widgets/combobox.cpp
-    widgets/declarativewidget.cpp
-    widgets/flashinglabel.cpp
-    widgets/frame.cpp
-    widgets/groupbox.cpp
-    widgets/iconwidget.cpp
-    widgets/itembackground.cpp
-    widgets/label.cpp
-    widgets/lineedit.cpp
-    widgets/meter.cpp
-    widgets/pushbutton.cpp
-    widgets/radiobutton.cpp
-    widgets/scrollbar.cpp
-    widgets/signalplotter.cpp
-    widgets/slider.cpp
-    widgets/spinbox.cpp
-    widgets/toolbutton.cpp
-    widgets/busywidget.cpp
-    widgets/scrollwidget.cpp
-    widgets/separator.cpp
-    widgets/svgwidget.cpp
-    widgets/tabbar.cpp
-    widgets/textbrowser.cpp
-    widgets/treeview.cpp
-    widgets/textedit.cpp
-    widgets/webview.cpp
+
 
     #Temporary QtJolie branch
     private/qtjolie-branch/qtjolie/abstractadaptor.cpp
@@ -205,6 +179,45 @@ set(plasma_LIB_SRCS
     private/qtjolie-branch/qtjolie/pendingreply.cpp
     private/qtjolie-branch/qtjolie/server.cpp
     private/qtjolie-branch/qtjolie/serverthread.cpp
+
+    widgets/pushbutton.cpp
+    widgets/busywidget.cpp
+    widgets/iconwidget.cpp
+    widgets/label.cpp
+    widgets/scrollbar.cpp
+    widgets/scrollwidget.cpp
+    widgets/svgwidget.cpp
+    widgets/textbrowser.cpp
+    widgets/textedit.cpp
+)
+
+set (plasmaqgv_LIB_SRCS
+
+    private/animablegraphicswebview.cpp
+    private/dataenginebindings.cpp
+    private/declarative/declarativenetworkaccessmanagerfactory.cpp
+    private/focusindicator.cpp
+    private/nativetabbar.cpp
+    private/style.cpp
+
+    widgets/checkbox.cpp
+    widgets/combobox.cpp
+    widgets/declarativewidget.cpp
+    widgets/flashinglabel.cpp
+    widgets/frame.cpp
+    widgets/groupbox.cpp
+    widgets/itembackground.cpp
+    widgets/lineedit.cpp
+    widgets/meter.cpp
+    widgets/radiobutton.cpp
+    widgets/signalplotter.cpp
+    widgets/slider.cpp
+    widgets/spinbox.cpp
+    widgets/toolbutton.cpp
+    widgets/separator.cpp
+    widgets/tabbar.cpp
+    widgets/treeview.cpp
+    widgets/webview.cpp
 )
 
 kde4_add_kcfg_files(plasma_LIB_SRCS data/kconfigxt/libplasma-theme-global.kcfgc)
@@ -220,21 +233,28 @@ kde4_add_ui_files(plasma_LIB_SRCS
 #   TEST_INCLUDES
 #)
 
+
 if (PHONON_FOUND)
     message(STATUS "Adding support for Phonon to libplasma")
     include_directories(${KDE4_PHONON_INCLUDES})
-    set(plasma_LIB_SRCS
-        ${plasma_LIB_SRCS}
+    set(plasmaqgv_LIB_SRCS
+        ${plasmaqgv_LIB_SRCS}
         widgets/videowidget.cpp)
 endif(PHONON_FOUND)
 
 kde4_add_library(plasma ${LIBRARY_TYPE} ${plasma_LIB_SRCS})
+
+kde4_add_library(plasmaqgv ${LIBRARY_TYPE} ${plasmaqgv_LIB_SRCS})
 
 target_link_libraries(plasma ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
                              ${QT_QTSCRIPT_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTSQL_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY}
                              ${KDE4_KDEUI_LIBS} kdnssd threadweaver kdeclarative ${PLASMA_EXTRA_LIBS})
 #FIXME gpgme++ is in kdepimlibs, neeeds to be elsewhere
 target_link_libraries(plasma ${KDEPIMLIBS_GPGMEPP_LIBS})
+
+target_link_libraries(plasmaqgv plasma ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
+                             ${QT_QTSCRIPT_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY}
+                             ${KDE4_KDEUI_LIBS} kdeclarative ${PLASMA_EXTRA_LIBS})
 
 if(QCA2_FOUND)
    target_link_libraries(plasma ${QCA2_LIBRARIES})
@@ -245,7 +265,7 @@ if(X11_FOUND)
 endif(X11_FOUND)
 
 if(PHONON_FOUND)
-   target_link_libraries(plasma ${KDE4_PHONON_LIBS})
+   target_link_libraries(plasmaqgv ${KDE4_PHONON_LIBS})
 endif(PHONON_FOUND)
 
 if(DL_LIBRARY)
@@ -260,8 +280,13 @@ set_target_properties(plasma PROPERTIES
                              SOVERSION 4
                       )
 
-install(TARGETS plasma EXPORT kdelibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
+set_target_properties(plasmaqgv PROPERTIES
+                             VERSION 1.0.0
+                             SOVERSION 1
+                      )
 
+install(TARGETS plasma EXPORT kdelibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS plasmaqgv EXPORT kdelibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
@@ -315,6 +340,7 @@ set(plasma_LIB_INCLUDES
     version.h
     view.h
     wallpaper.h)
+
 
 install(FILES
         ${plasma_LIB_INCLUDES}
