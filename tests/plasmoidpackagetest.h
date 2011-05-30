@@ -36,7 +36,6 @@ private Q_SLOTS:
     void filePath();
     void entryList();
     void knownPackages();
-    void metadata();
     void createAndInstallPackage();
 
 private:

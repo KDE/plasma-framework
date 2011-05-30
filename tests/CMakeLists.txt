@@ -14,7 +14,6 @@ ENDMACRO(PLASMA_UNIT_TESTS)
 PLASMA_UNIT_TESTS(
     configloadertest
     packagestructuretest
-    packagemetadatatest
     plasmoidpackagetest
     runnercontexttest
     signingtest

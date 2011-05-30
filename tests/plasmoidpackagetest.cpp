@@ -280,18 +280,6 @@ void PlasmoidPackageTest::knownPackages()
     QVERIFY(packages.contains(plamoid2));
 }
 
-void PlasmoidPackageTest::metadata()
-{
-    QString plasmoid("plasmoid_with_metadata");
-    createTestPackage(plasmoid);
-
-    QString path = mPackageRoot + '/' + plasmoid + "/metadata.desktop";
-    p = new Plasma::Package(mPackageRoot, plasmoid, ps);
-    const Plasma::PackageMetadata metadata = p->metadata();
-    QVERIFY(p->isValid());
-    QCOMPARE(metadata.name(), plasmoid);
-}
-
 void PlasmoidPackageTest::createAndInstallPackage()
 {
     QString plasmoid("plasmoid_to_package");
