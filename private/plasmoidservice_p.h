@@ -21,7 +21,6 @@
 
 #include "dataengineconsumer_p.h"
 
-#include "../packagemetadata.h"
 #include "../package.h"
 #include "../service.h"
 #include "../servicejob.h"
