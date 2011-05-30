@@ -292,10 +292,6 @@ QString AbstractRunner::name() const
         return d->runnerDescription.name();
     }
 
-    if (d->package) {
-        return d->package->metadata().name();
-    }
-
     return objectName();
 }
 
@@ -303,10 +299,6 @@ QIcon AbstractRunner::icon() const
 {
     if (d->runnerDescription.isValid()) {
         return KIcon(d->runnerDescription.icon());
-    }
-
-    if (d->package) {
-        return KIcon(d->package->metadata().icon());
     }
 
     return QIcon();
@@ -318,10 +310,6 @@ QString AbstractRunner::id() const
         return d->runnerDescription.pluginName();
     }
 
-    if (d->package) {
-        return d->package->metadata().pluginName();
-    }
-
     return objectName();
 }
 
@@ -329,10 +317,6 @@ QString AbstractRunner::description() const
 {
     if (d->runnerDescription.isValid()) {
         return d->runnerDescription.property("Comment").toString();
-    }
-
-    if (d->package) {
-        return d->package->metadata().description();
     }
 
     return objectName();
@@ -464,7 +448,7 @@ void AbstractRunnerPrivate::setupScriptSupport()
     QString translationsPath = package->filePath("translations");
     if (!translationsPath.isEmpty()) {
         KGlobal::dirs()->addResourceDir("locale", translationsPath);
-        KGlobal::locale()->insertCatalog(package->metadata().pluginName());
+        KGlobal::locale()->insertCatalog(runnerDescription.pluginName());
     }
 }
 
