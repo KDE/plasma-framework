@@ -413,16 +413,23 @@ void AbstractRunnerPrivate::init(const KService::Ptr service)
 
 void AbstractRunnerPrivate::init(const QString &path)
 {
-    prepScripting(path);
+    runnerDescription = KPluginInfo(path + "/metadata.desktop");
+    const QString api = runnerDescription.property("X-Plasma-API").toString();
+    prepScripting(path, api);
 }
 
-void AbstractRunnerPrivate::prepScripting(const QString &path, QString api)
+void AbstractRunnerPrivate::prepScripting(const QString &path, const QString &api)
 {
     if (script) {
         return;
     }
 
     delete package;
+    package = 0;
+
+    if (api.isEmpty()) {
+        return;
+    }
 
     PackageStructure::Ptr structure = Plasma::packageStructure(api, Plasma::RunnerComponent);
     structure->setPath(path);
@@ -433,10 +440,6 @@ void AbstractRunnerPrivate::prepScripting(const QString &path, QString api)
         delete package;
         package = 0;
         return;
-    }
-
-    if (api.isEmpty()) {
-        api = package->metadata().implementationApi();
     }
 
     script = Plasma::loadScriptEngine(api, runner);
