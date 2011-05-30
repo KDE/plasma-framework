@@ -126,7 +126,6 @@ set(plasma_LIB_SRCS
     private/storagethread.cpp
     private/style.cpp
     private/tooltip.cpp
-    private/trustedonlyauthorization.cpp
     private/wallpaperrenderthread.cpp
     private/windowpreview.cpp
     private/kineticscroll.cpp

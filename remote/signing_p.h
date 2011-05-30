@@ -23,7 +23,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
 
-#include <KDE/KDirWatch>
+#include <kdirwatch.h>
 
 namespace GpgME {
     class Context;
