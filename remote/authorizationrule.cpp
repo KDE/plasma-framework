@@ -20,9 +20,9 @@
 #include "authorizationrule.h"
 
 #include "authorizationmanager.h"
+#include "authorizationmanager_p.h"
+#include "authorizationrule_p.h"
 #include "credentials.h"
-#include "private/authorizationmanager_p.h"
-#include "private/authorizationrule_p.h"
 
 #include <QtCore/QObject>
 #include <QtCore/QTimer>

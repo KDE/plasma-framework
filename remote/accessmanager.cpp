@@ -21,9 +21,9 @@
 #include "private/accessmanager_p.h"
 
 #include "authorizationmanager.h"
+#include "authorizationmanager_p.h"
 #include "service.h"
 #include "serviceaccessjob.h"
-#include "private/authorizationmanager_p.h"
 
 #include "config-plasma.h"
 

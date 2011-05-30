@@ -47,6 +47,11 @@ if(QCA2_FOUND)
 endif(QCA2_FOUND)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-plasma.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-plasma.h)
 
+#FIXME: gpgme++ is in kdepimlibs, must move somewhere else!
+macro_optional_find_package(KdepimLibs 4.5.60)
+macro_log_feature(KDEPIMLIBS_FOUND "kdepimlibs" "KDE PIM libraries" "http://www.kde.org" FALSE "" "Needed for building several Plasma DataEngines")
+include_directories(${KDEPIMLIBS_INCLUDE_DIRS})
+
 add_subdirectory(tests)
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1209)
 
@@ -109,7 +114,6 @@ set(plasma_LIB_SRCS
     private/dataenginebindings.cpp
     private/dataengineconsumer.cpp
     private/dataengineservice.cpp
-    private/denyallauthorization.cpp
     private/effectwatcher.cpp
     private/extenderapplet.cpp
     private/extenderitemmimedata.cpp
@@ -117,8 +121,6 @@ set(plasma_LIB_SRCS
     private/getsource.cpp
     private/nativetabbar.cpp
     private/packages.cpp
-    private/pinpairingauthorization.cpp
-    private/pinpairingdialog.cpp
     private/plasmoidservice.cpp
     private/remotedataengine.cpp
     private/remoteservice.cpp
@@ -128,7 +130,6 @@ set(plasma_LIB_SRCS
     private/storage.cpp
     private/storagethread.cpp
     private/style.cpp
-    private/trustedonlyauthorization.cpp
     private/tooltip.cpp
     private/wallpaperrenderthread.cpp
     private/windowpreview.cpp
@@ -144,7 +145,12 @@ set(plasma_LIB_SRCS
     remote/authorizationrule.cpp
     remote/clientpinrequest.cpp
     remote/credentials.cpp
+    remote/denyallauthorization.cpp
+    remote/pinpairingauthorization.cpp
+    remote/pinpairingdialog.cpp
     remote/serviceaccessjob.cpp
+    remote/signing.cpp
+    remote/trustedonlyauthorization.cpp
     runnercontext.cpp
     runnermanager.cpp
     runnersyntax.cpp
@@ -209,7 +215,7 @@ set(plasma_LIB_SRCS
 kde4_add_kcfg_files(plasma_LIB_SRCS data/kconfigxt/libplasma-theme-global.kcfgc)
 
 kde4_add_ui_files(plasma_LIB_SRCS
-                  private/pinpairing.ui
+                  remote/pinpairing.ui
                   private/publish.ui)
 #NEPOMUK_GENERATE_FROM_ONTOLOGY(
 #   nwc.nrl
@@ -232,6 +238,8 @@ kde4_add_library(plasma ${LIBRARY_TYPE} ${plasma_LIB_SRCS})
 target_link_libraries(plasma ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
                              ${QT_QTSCRIPT_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTSQL_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY}
                              ${KDE4_KDEUI_LIBS} kdnssd threadweaver kdeclarative ${PLASMA_EXTRA_LIBS})
+#FIXME gpgme++ is in kdepimlibs, neeeds to be elsewhere
+target_link_libraries(plasma ${KDEPIMLIBS_GPGMEPP_LIBS})
 
 if(QCA2_FOUND)
    target_link_libraries(plasma ${QCA2_LIBRARIES})

@@ -12,11 +12,12 @@ MACRO(PLASMA_UNIT_TESTS)
 ENDMACRO(PLASMA_UNIT_TESTS)
 
 PLASMA_UNIT_TESTS(
+    configloadertest
     packagestructuretest
     packagemetadatatest
     plasmoidpackagetest
     runnercontexttest
-    configloadertest
+    signingtest
 )
 
 kde4_add_unit_test(storagetest TESTNAME plasma-storage storagetest.cpp ../private/storage.cpp ../private/storagethread.cpp)

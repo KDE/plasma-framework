@@ -32,13 +32,13 @@
 #include <kservice.h>
 #include <kstandarddirs.h>
 
-#include "authorizationmanager.h"
 #include "datacontainer.h"
 #include "package.h"
+#include "remote/authorizationmanager.h"
+#include "remote/authorizationmanager_p.h"
 #include "service.h"
 #include "scripting/dataenginescript.h"
 
-#include "private/authorizationmanager_p.h"
 #include "private/dataengineservice_p.h"
 #include "private/remotedataengine_p.h"
 #include "private/service_p.h"

@@ -70,7 +70,6 @@
 #endif
 
 #include "abstracttoolbox.h"
-#include "authorizationmanager.h"
 #include "authorizationrule.h"
 #include "configloader.h"
 #include "containment.h"
@@ -88,6 +87,8 @@
 #include "private/applethandle_p.h"
 #include "private/extenderitem_p.h"
 #include "private/framesvg_p.h"
+#include "remote/authorizationmanager.h"
+#include "remote/authorizationmanager_p.h"
 #include "theme.h"
 #include "view.h"
 #include "widgets/iconwidget.h"
@@ -101,7 +102,6 @@
 #include "pluginloader.h"
 
 #include "private/associatedapplicationmanager_p.h"
-#include "private/authorizationmanager_p.h"
 #include "private/containment_p.h"
 #include "private/extenderapplet_p.h"
 #include "private/package_p.h"

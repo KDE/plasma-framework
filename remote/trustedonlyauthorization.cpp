@@ -17,44 +17,37 @@
  * Boston, MA  02110-1301  USA
  */
 
-#include "pinpairingauthorization_p.h"
+#include "trustedonlyauthorization_p.h"
 
 #include "authorizationrule.h"
-#include "clientpinrequest.h"
 #include "pinpairingdialog_p.h"
 
-#include "../remote/credentials.h"
-
 #include <kdebug.h>
+#include <credentials.h>
 
 
 namespace Plasma
 {
 
-PinPairingAuthorization::PinPairingAuthorization()
+TrustedOnlyAuthorization::TrustedOnlyAuthorization()
 {
 }
 
-PinPairingAuthorization::~PinPairingAuthorization()
+TrustedOnlyAuthorization::~TrustedOnlyAuthorization()
 {
     //TODO: cleanup
 }
 
-void PinPairingAuthorization::clientPinRequest(ClientPinRequest &request)
+void TrustedOnlyAuthorization::clientPinRequest(ClientPinRequest &request)
 {
-    kDebug();
     new PinPairingDialog(request);
 }
 
-void PinPairingAuthorization::authorizationRequest(AuthorizationRule &rule)
+void TrustedOnlyAuthorization::authorizationRequest(AuthorizationRule &rule)
 {
-    kDebug();
-    if (rule.credentials().trustLevel() > TrustedCredentials) {
+    if (rule.credentials().trustLevel() > UnknownTrusted) {
         rule.setPolicy(AuthorizationRule::Allow);
         rule.setTargets(AuthorizationRule::AllServices);
-    } else {
-        rule.setPolicy(AuthorizationRule::PinRequired);
-        new PinPairingDialog(rule);
     }
 }
 

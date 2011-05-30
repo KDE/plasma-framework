@@ -18,7 +18,6 @@
  */
 
 #include "service.h"
-#include "private/authorizationmanager_p.h"
 #include "private/service_p.h"
 #include "private/serviceprovider_p.h"
 
@@ -41,6 +40,7 @@
 #include "private/remoteservice_p.h"
 #include "private/remoteservicejob_p.h"
 #include "pluginloader.h"
+#include "remote/authorizationmanager_p.h"
 
 namespace Plasma
 {

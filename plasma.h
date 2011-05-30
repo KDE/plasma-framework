@@ -272,13 +272,18 @@ enum AnnouncementMethod {
 Q_DECLARE_FLAGS(AnnouncementMethods, AnnouncementMethod)
 
 enum TrustLevel {
-    InvalidCredentials = 0, /**< The credentials are invalid **/
-    UnknownCredentials = 1, /**< The credentials are unknown **/
-    ValidCredentials = 2, /**< The credentials are valid **/
-    TrustedCredentials = 3, /**< The credentials are trusted **/
-    UltimateCredentials = 4 /**< The ultimate trust level applies to the credentials **/
+    UnverifiableTrust = 0,      /**< The trust of the object can not be verified, usually because no
+                                     trust information (e.g. a cryptographic signature) was provided */
+    CompletelyUntrusted,        /**< The signature is broken/expired/false */
+    UnknownTrusted,             /**< The signature is valid, but the key is unknown */
+    UserTrusted,                /**< The signature is valid and made with a key signed by one of the
+                                     user's own keys*/
+    SelfTrusted,                /**< The signature is valid and made with one of the user's own keys*/
+    FullyTrusted,               /**< The signature is valid and made with a key signed by the vendor's key*/
+    UltimatelyTrusted           /**< The signature is valid and made with the vendor's key*/
 };
 Q_ENUMS(TrustLevel)
+
 
 /**
  * @return the scaling factor (0..1) for a ZoomLevel
