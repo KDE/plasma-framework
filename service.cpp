@@ -275,6 +275,10 @@ void Service::disassociateWidget(QWidget *widget)
 
 void Service::associateWidget(QGraphicsWidget *widget, const QString &operation)
 {
+    if (!widget) {
+        return;
+    }
+
     disassociateWidget(widget);
     d->associatedGraphicsWidgets.insert(widget, operation);
     connect(widget, SIGNAL(destroyed(QObject*)),
@@ -285,6 +289,10 @@ void Service::associateWidget(QGraphicsWidget *widget, const QString &operation)
 
 void Service::disassociateWidget(QGraphicsWidget *widget)
 {
+    if (!widget) {
+        return;
+    }
+
     disconnect(widget, SIGNAL(destroyed(QObject*)),
                this, SLOT(associatedGraphicsWidgetDestroyed(QObject*)));
     d->associatedGraphicsWidgets.remove(widget);
