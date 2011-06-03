@@ -251,6 +251,10 @@ ServiceJob *Service::startOperationCall(const KConfigGroup &description, QObject
 
 void Service::associateWidget(QWidget *widget, const QString &operation)
 {
+    if (!widget) {
+        return;
+    }
+
     disassociateWidget(widget);
     d->associatedWidgets.insert(widget, operation);
     connect(widget, SIGNAL(destroyed(QObject*)), this, SLOT(associatedWidgetDestroyed(QObject*)));
@@ -260,6 +264,10 @@ void Service::associateWidget(QWidget *widget, const QString &operation)
 
 void Service::disassociateWidget(QWidget *widget)
 {
+    if (!widget) {
+        return;
+    }
+
     disconnect(widget, SIGNAL(destroyed(QObject*)),
                this, SLOT(associatedWidgetDestroyed(QObject*)));
     d->associatedWidgets.remove(widget);
