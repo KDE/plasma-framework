@@ -287,7 +287,7 @@ void DataContainer::disconnectVisualization(QObject *visualization)
     }
 
     d->relayObjects.erase(objIt);
-    checkUsage();
+    d->checkUsage();
 }
 
 void DataContainer::checkForUpdate()
@@ -328,13 +328,18 @@ void DataContainer::setNeedsUpdate(bool update)
     d->cached = update;
 }
 
-void DataContainer::checkUsage()
+bool DataContainer::isUsed() const
 {
-    if (d->relays.count() < 1 &&
-        receivers(SIGNAL(dataUpdated(QString, Plasma::DataEngine::Data))) < 1) {
+    return !d->relays.isEmpty() &&
+           receivers(SIGNAL(dataUpdated(QString, Plasma::DataEngine::Data))) > 0;
+}
+
+void DataContainerPrivate::checkUsage()
+{
+    if (!q->isUsed()) {
         // DO NOT CALL ANYTHING AFTER THIS LINE AS IT MAY GET DELETED!
-        kDebug() << objectName() << "is unused";
-        emit becameUnused(objectName());
+        //kDebug() << q->objectName() << "is unused";
+        emit q->becameUnused(q->objectName());
     }
 }
 

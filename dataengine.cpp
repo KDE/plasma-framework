@@ -39,6 +39,7 @@
 #include "service.h"
 #include "scripting/dataenginescript.h"
 
+#include "private/datacontainer_p.h"
 #include "private/dataengineservice_p.h"
 #include "private/remotedataengine_p.h"
 #include "private/service_p.h"
@@ -146,7 +147,7 @@ DataEngine::Data DataEngine::query(const QString &source) const
     }
 
     DataEngine::Data data = s->data();
-    s->checkUsage();
+    s->d->checkUsage();
     return data;
 }
 

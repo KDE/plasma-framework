@@ -46,6 +46,16 @@ public:
     {
     }
 
+    /**
+     * Check if the DataContainer is still in use.
+     *
+     * If not the signal "becameUnused" will be emitted.
+     *
+     * Warning: The DataContainer may be invalid after calling this function, because a listener
+     * to becameUnused() may have deleted it.
+     **/
+    void checkUsage();
+
     SignalRelay *signalRelay(const DataContainer *dc, QObject *visualization,
                              uint pollingInterval, Plasma::IntervalAlignment align,
                              bool immediateUpdate);
