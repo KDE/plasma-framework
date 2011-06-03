@@ -318,6 +318,8 @@ private:
 
 } // namespace Plasma
 
+Q_DECLARE_METATYPE(Plasma::Service *)
+
 /**
  * Register a service when it is contained in a loadable module
  */

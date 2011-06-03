@@ -18,6 +18,7 @@
  */
 
 #include "service.h"
+#include "servicejob.h"
 #include "private/authorizationmanager_p.h"
 #include "private/service_p.h"
 #include "private/serviceprovider_p.h"
