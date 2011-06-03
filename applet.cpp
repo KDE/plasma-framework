@@ -273,8 +273,6 @@ void Applet::save(KConfigGroup &g) const
         return;
     }
 
-    //FIXME: for containments, we need to have some special values here w/regards to
-    //       screen affinity (e.g. "bottom of screen 0")
     //kDebug() << pluginName() << "geometry is" << geometry()
     //         << "pos is" << pos() << "bounding rect is" << boundingRect();
     if (transform() == QTransform()) {
