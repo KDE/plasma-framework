@@ -80,11 +80,6 @@ Service *Service::access(const KUrl &url, QObject *parent)
     return new RemoteService(parent, url);
 }
 
-void ServicePrivate::jobFinished(KJob *job)
-{
-    emit q->finished(static_cast<ServiceJob*>(job));
-}
-
 void ServicePrivate::associatedWidgetDestroyed(QObject *obj)
 {
     associatedWidgets.remove(static_cast<QWidget*>(obj));
@@ -244,7 +239,6 @@ ServiceJob *Service::startOperationCall(const KConfigGroup &description, QObject
     }
 
     job->setParent(parent ? parent : this);
-    connect(job, SIGNAL(finished(KJob*)), this, SLOT(jobFinished(KJob*)));
     QTimer::singleShot(0, job, SLOT(autoStart()));
     return job;
 }

@@ -92,8 +92,6 @@ public:
         delete dummyConfig;
     }
 
-    void jobFinished(KJob *job);
-
     void associatedWidgetDestroyed(QObject *obj);
 
     void associatedGraphicsWidgetDestroyed(QObject *obj);

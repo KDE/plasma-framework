@@ -230,11 +230,6 @@ public:
 
 Q_SIGNALS:
     /**
-     * Emitted when a job associated with this Service completes its task
-     */
-    void finished(Plasma::ServiceJob *job);
-
-    /**
      * Emitted when the Service's operations change. For example, a
      * media player service may change what operations are available
      * in response to the state of the player.
@@ -300,7 +295,6 @@ protected:
     void setOperationEnabled(const QString &operation, bool enable);
 
 private:
-    Q_PRIVATE_SLOT(d, void jobFinished(KJob *))
     Q_PRIVATE_SLOT(d, void associatedWidgetDestroyed(QObject *))
     Q_PRIVATE_SLOT(d, void associatedGraphicsWidgetDestroyed(QObject *))
 
