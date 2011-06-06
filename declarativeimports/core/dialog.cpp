@@ -44,7 +44,7 @@ DialogProxy::~DialogProxy()
 
 QGraphicsObject *DialogProxy::mainItem() const
 {
-    return m_dialog->graphicsWidget();
+    return m_mainItem.data();
 }
 
 void DialogProxy::setMainItem(QGraphicsObject *mainItem)
