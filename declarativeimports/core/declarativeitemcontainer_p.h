@@ -28,6 +28,8 @@
 
 class DeclarativeItemContainer : public QGraphicsWidget
 {
+    Q_OBJECT
+
 public:
     DeclarativeItemContainer(QGraphicsItem *parent = 0);
     ~DeclarativeItemContainer();
@@ -37,7 +39,10 @@ public:
 
 protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
-    bool sceneEventFilter(QGraphicsItem *watched, QEvent *event);
+
+protected Q_SLOTS:
+    void widthChanged();
+    void heightChanged();
 
 private:
     QWeakPointer<QDeclarativeItem> m_declarativeItem;

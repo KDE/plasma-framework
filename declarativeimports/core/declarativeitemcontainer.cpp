@@ -19,6 +19,8 @@
 
 #include "declarativeitemcontainer_p.h"
 
+#include <KDebug>
+
 DeclarativeItemContainer::DeclarativeItemContainer(QGraphicsItem *parent)
     : QGraphicsWidget(parent)
 {
@@ -31,7 +33,7 @@ DeclarativeItemContainer::~DeclarativeItemContainer()
 void DeclarativeItemContainer::setDeclarativeItem(QDeclarativeItem *item, bool reparent)
 {
     if (m_declarativeItem) {
-        m_declarativeItem.data()->removeSceneEventFilter(this);
+        disconnect(m_declarativeItem.data(), 0, this, 0);
     }
     m_declarativeItem = item;
     if (reparent) {
@@ -40,7 +42,8 @@ void DeclarativeItemContainer::setDeclarativeItem(QDeclarativeItem *item, bool r
     setMinimumWidth(item->implicitWidth());
     setMinimumHeight(item->implicitHeight());
     resize(item->width(), item->height());
-    item->installSceneEventFilter(this);
+    connect(m_declarativeItem.data(), SIGNAL(widthChanged()), this, SLOT(widthChanged()));
+    connect(m_declarativeItem.data(), SIGNAL(heightChanged()), this, SLOT(heightChanged()));
 }
 
 QDeclarativeItem *DeclarativeItemContainer::declarativeItem() const
@@ -56,11 +59,26 @@ void DeclarativeItemContainer::resizeEvent(QGraphicsSceneResizeEvent *event)
     }
 }
 
-bool DeclarativeItemContainer::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
+void DeclarativeItemContainer::widthChanged()
 {
-    if (event->type() == QEvent::GraphicsSceneResize) {
-        resize(watched->boundingRect().size());
+    if (!m_declarativeItem) {
+        return;
     }
 
-    return QGraphicsWidget::sceneEventFilter(watched, event);
+    QSizeF newSize(size());
+    newSize.setWidth(m_declarativeItem.data()->width());
+    resize(newSize);
 }
+
+void DeclarativeItemContainer::heightChanged()
+{
+    if (!m_declarativeItem) {
+        return;
+    }
+
+    QSizeF newSize(size());
+    newSize.setHeight(m_declarativeItem.data()->height());
+    resize(newSize);
+}
+
+#include "declarativeitemcontainer_p.moc"
