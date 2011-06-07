@@ -38,8 +38,11 @@ class DialogProxy : public QObject
 
     Q_PROPERTY(QGraphicsObject *mainItem READ mainItem WRITE setMainItem NOTIFY mainItemChanged)
     Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY visibleChanged)
-    Q_PROPERTY(int x READ x WRITE setX NOTIFY positionChanged)
-    Q_PROPERTY(int y READ y WRITE setY NOTIFY positionChanged)
+    Q_PROPERTY(int x READ x WRITE setX NOTIFY xChanged)
+    Q_PROPERTY(int y READ y WRITE setY NOTIFY yChanged)
+    //to set the size try to force doing so from the inner item
+    Q_PROPERTY(int width READ width NOTIFY widthChanged)
+    Q_PROPERTY(int height READ width NOTIFY heightChanged)
     Q_PROPERTY(int windowFlags READ windowFlags WRITE setWindowFlags)
 
 public:
@@ -62,6 +65,9 @@ public:
     int y() const;
     void setY(int y);
 
+    int width() const;
+    int height() const;
+
     //FIXME: passing an int is ugly
     int windowFlags() const;
     void setWindowFlags(const int);
@@ -73,7 +79,10 @@ public:
 Q_SIGNALS:
     void mainItemChanged();
     void visibleChanged();
-    void positionChanged();
+    void xChanged();
+    void yChanged();
+    void widthChanged();
+    void heightChanged();
 
 protected Q_SLOTS:
     void syncMainItem();

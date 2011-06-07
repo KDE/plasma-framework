@@ -33,6 +33,7 @@ DialogProxy::DialogProxy(QObject *parent)
     : QObject(parent)
 {
     m_dialog = new Plasma::Dialog();
+    m_dialog->installEventFilter(this);
     m_flags = m_dialog->windowFlags();
 }
 
@@ -152,6 +153,16 @@ void DialogProxy::setY(int y)
     m_dialog->move(m_dialog->pos().x(), y);
 }
 
+int DialogProxy::width() const
+{
+    return m_dialog->size().width();
+}
+
+int DialogProxy::height() const
+{
+    return m_dialog->size().height();
+}
+
 int DialogProxy::windowFlags() const
 {
     return (int)m_dialog->windowFlags();
@@ -166,8 +177,22 @@ void DialogProxy::setWindowFlags(const int flags)
 bool DialogProxy::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_dialog && event->type() == QEvent::Move) {
-        emit positionChanged();
-    }
+        QMoveEvent *me = static_cast<QMoveEvent *>(event);
+        if (me->oldPos().x() != me->pos().x()) {
+            emit xChanged();
+        }
+        if (me->oldPos().y() != me->pos().y()) {
+            emit yChanged();
+        }
+    } else if (watched == m_dialog && event->type() == QEvent::Resize) {
+        QResizeEvent *re = static_cast<QResizeEvent *>(event);
+        if (re->oldSize().width() != re->size().width()) {
+            emit widthChanged();
+        }
+        if (re->oldSize().height() != re->size().height()) {
+            emit heightChanged();
+        }
+    } 
     return false;
 }
 
