@@ -30,7 +30,8 @@
 
 
 DialogProxy::DialogProxy(QObject *parent)
-    : QObject(parent)
+    : QObject(parent),
+      m_isPopupMenu(false)
 {
     m_dialog = new Plasma::Dialog();
     m_dialog->installEventFilter(this);
@@ -117,8 +118,18 @@ void DialogProxy::setVisible(const bool visible)
         if (visible) {
             m_dialog->setWindowFlags(m_flags);
             m_dialog->raise();
+            if (m_isPopupMenu && QWidget::mouseGrabber() != m_dialog) {
+                QTimer::singleShot(200, this, SLOT(syncGrab()));
+            }
         }
         emit visibleChanged();
+    }
+}
+
+void DialogProxy::syncGrab()
+{
+    if (m_isPopupMenu) {
+        m_dialog->grabMouse();
     }
 }
 
@@ -192,13 +203,30 @@ bool DialogProxy::eventFilter(QObject *watched, QEvent *event)
         if (re->oldSize().height() != re->size().height()) {
             emit heightChanged();
         }
-    } 
+    } else if (watched == m_dialog && event->type() == QEvent::Hide) {
+        m_dialog->releaseMouse();
+    } else if (watched == m_dialog && event->type() == QEvent::MouseButtonPress) {
+        if (m_isPopupMenu) {
+            QMouseEvent *me = static_cast<QMouseEvent *>(event);
+            if (!m_dialog->geometry().contains(me->globalPos())) {
+                m_dialog->releaseMouse();
+                setVisible(false);
+            }
+        }
+    }
     return false;
 }
 
 void DialogProxy::setAttribute(int attribute, bool on)
 {
-    m_dialog->setAttribute((Qt::WidgetAttribute)attribute, on);
+    Qt::WidgetAttribute attr = (Qt::WidgetAttribute)attribute;
+    if (attr == Qt::WA_X11NetWmWindowTypePopupMenu) {
+        m_isPopupMenu = on;
+        if (m_isPopupMenu && QWidget::mouseGrabber() != m_dialog) {
+            QTimer::singleShot(200, this, SLOT(syncGrab()));
+        }
+    }
+    m_dialog->setAttribute(attr, on);
 }
 
 #include "dialog.moc"

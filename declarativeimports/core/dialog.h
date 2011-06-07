@@ -86,6 +86,7 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
     void syncMainItem();
+    void syncGrab();
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
@@ -95,6 +96,7 @@ private:
     Qt::WindowFlags m_flags;
     DeclarativeItemContainer *m_declarativeItemContainer;
     QWeakPointer<QGraphicsObject> m_mainItem;
+    bool m_isPopupMenu;
 };
 
 #endif
