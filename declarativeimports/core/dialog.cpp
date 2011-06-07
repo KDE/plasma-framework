@@ -31,7 +31,8 @@
 
 
 DialogProxy::DialogProxy(QObject *parent)
-    : QObject(parent)
+    : QObject(parent),
+      m_declarativeItemContainer(0)
 {
     m_dialog = new Plasma::Dialog();
     m_dialog->installEventFilter(this);
