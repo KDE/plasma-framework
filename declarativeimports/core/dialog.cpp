@@ -30,11 +30,62 @@
 #include <Plasma/Dialog>
 
 
+DialogMargins::DialogMargins(Plasma::Dialog *dialog, QObject *parent)
+    : QObject(parent),
+      m_dialog(dialog)
+{
+    checkMargins();
+}
+
+void DialogMargins::checkMargins()
+{
+    int left, top, right, bottom;
+    m_dialog->getContentsMargins(&left, &top, &right, &bottom);
+
+    if (left != m_left) {
+        m_left = left;
+        emit leftChanged();
+    }
+    if (top != m_top) {
+        m_top = top;
+        emit topChanged();
+    }
+    if (right != m_right) {
+        m_right = right;
+        emit rightChanged();
+    }
+    if (bottom != m_bottom) {
+        m_bottom = bottom;
+        emit bottomChanged();
+    }
+}
+
+int DialogMargins::left() const
+{
+    return m_left;
+}
+
+int DialogMargins::top() const
+{
+    return m_top;
+}
+
+int DialogMargins::right() const
+{
+    return m_right;
+}
+
+int DialogMargins::bottom() const
+{
+    return m_bottom;
+}
+
 DialogProxy::DialogProxy(QObject *parent)
     : QObject(parent),
       m_declarativeItemContainer(0)
 {
     m_dialog = new Plasma::Dialog();
+    m_margins = new DialogMargins(m_dialog, this);
     m_dialog->installEventFilter(this);
     m_flags = m_dialog->windowFlags();
 }
@@ -177,6 +228,11 @@ void DialogProxy::setWindowFlags(const int flags)
     m_dialog->setWindowFlags((Qt::WindowFlags)flags);
 }
 
+QObject *DialogProxy::margins() const
+{
+    return m_margins;
+}
+
 bool DialogProxy::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_dialog && event->type() == QEvent::Move) {
@@ -186,6 +242,9 @@ bool DialogProxy::eventFilter(QObject *watched, QEvent *event)
         }
         if (me->oldPos().y() != me->pos().y()) {
             emit yChanged();
+        }
+        if ((me->oldPos().x() != me->pos().x()) || (me->oldPos().y() != me->pos().y())) {
+            m_margins->checkMargins();
         }
     } else if (watched == m_dialog && event->type() == QEvent::Resize) {
         QResizeEvent *re = static_cast<QResizeEvent *>(event);

@@ -32,6 +32,41 @@ namespace Plasma
 
 class DeclarativeItemContainer;
 
+class DialogMargins : public QObject
+{
+    Q_OBJECT
+
+    Q_PROPERTY(int left READ left NOTIFY leftChanged)
+    Q_PROPERTY(int top READ top NOTIFY topChanged)
+    Q_PROPERTY(int right READ right NOTIFY rightChanged)
+    Q_PROPERTY(int bottom READ bottom NOTIFY bottomChanged)
+
+public:
+    DialogMargins(Plasma::Dialog *dialog, QObject *parent = 0);
+
+    int left() const;
+    int top() const;
+    int right() const;
+    int bottom() const;
+
+Q_SIGNALS:
+    void leftChanged();
+    void rightChanged();
+    void topChanged();
+    void bottomChanged();
+
+protected:
+    void checkMargins();
+
+private:
+    int m_left;
+    int m_top;
+    int m_right;
+    int m_bottom;
+    Plasma::Dialog *m_dialog;
+    friend class DialogProxy;
+};
+
 class DialogProxy : public QObject
 {
     Q_OBJECT
@@ -44,6 +79,7 @@ class DialogProxy : public QObject
     Q_PROPERTY(int width READ width NOTIFY widthChanged)
     Q_PROPERTY(int height READ width NOTIFY heightChanged)
     Q_PROPERTY(int windowFlags READ windowFlags WRITE setWindowFlags)
+    Q_PROPERTY(QObject *margins READ margins CONSTANT)
 
 public:
     enum WidgetAttribute {
@@ -72,6 +108,8 @@ public:
     int windowFlags() const;
     void setWindowFlags(const int);
 
+    QObject *margins() const;
+
     //FIXME: alignment should be Qt::AlignmentFlag
     Q_INVOKABLE QPoint popupPosition(QGraphicsObject *item, int alignment=Qt::AlignLeft) const;
     //FIXME:: Qt::WidgetAttribute should be already 
@@ -96,6 +134,7 @@ private:
     Qt::WindowFlags m_flags;
     DeclarativeItemContainer *m_declarativeItemContainer;
     QWeakPointer<QGraphicsObject> m_mainItem;
+    DialogMargins *m_margins;
 };
 
 #endif
