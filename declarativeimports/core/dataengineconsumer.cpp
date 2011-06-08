@@ -106,6 +106,8 @@ DataEngine *DataEngineConsumer::dataEngine(const QString &name)
 
 DataEngine *DataEngineConsumer::remoteDataEngine(const KUrl &location, const QString &name)
 {
+    Q_UNUSED(location);
+    Q_UNUSED(name);
     return 0;
 }
 
