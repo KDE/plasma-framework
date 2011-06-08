@@ -125,11 +125,11 @@ void DialogProxy::setVisible(const bool visible)
     }
 }
 
-QPoint DialogProxy::popupPosition(QGraphicsObject *item) const
+QPoint DialogProxy::popupPosition(QGraphicsObject *item, int alignment) const
 {
     Plasma::Corona *corona = qobject_cast<Plasma::Corona *>(item->scene());
     if (corona) {
-        return corona->popupPosition(item, m_dialog->size());
+        return corona->popupPosition(item, m_dialog->size(), (Qt::AlignmentFlag)alignment);
     } else {
         return QPoint();
     }

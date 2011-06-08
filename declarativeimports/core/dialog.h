@@ -72,7 +72,8 @@ public:
     int windowFlags() const;
     void setWindowFlags(const int);
 
-    Q_INVOKABLE QPoint popupPosition(QGraphicsObject *item) const;
+    //FIXME: alignment should be Qt::AlignmentFlag
+    Q_INVOKABLE QPoint popupPosition(QGraphicsObject *item, int alignment=Qt::AlignLeft) const;
     //FIXME:: Qt::WidgetAttribute should be already 
     Q_INVOKABLE void setAttribute(int attribute, bool on);
 
