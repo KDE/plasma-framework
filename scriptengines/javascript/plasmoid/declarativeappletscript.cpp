@@ -274,6 +274,18 @@ QGraphicsWidget *DeclarativeAppletScript::extractParent(QScriptContext *context,
     return parent;
 }
 
+void DeclarativeAppletScript::callPlasmoidFunction(const QString &functionName, const QScriptValueList &args, ScriptEnv *env)
+{
+    if (!m_env) {
+        m_env = ScriptEnv::findScriptEnv(m_engine);
+    }
+
+    if (env) {
+        QScriptValue func = m_self.property(functionName);
+        m_env->callFunction(func, args, m_self);
+    }
+}
+
 void DeclarativeAppletScript::constraintsEvent(Plasma::Constraints constraints)
 {
     if (constraints & Plasma::FormFactorConstraint) {
@@ -343,7 +355,9 @@ void DeclarativeAppletScript::executeAction(const QString &name)
     }
 
     const QString func("action_" + name);
-    m_env->callEventListeners(func);
+    if (!m_env->callEventListeners(func)) {
+        callPlasmoidFunction(func, QScriptValueList(), m_env);
+    }
 }
 
 bool DeclarativeAppletScript::include(const QString &path)
@@ -469,6 +483,11 @@ QScriptValue DeclarativeAppletScript::loadService(QScriptContext *context, QScri
 
     //kDebug( )<< "lets try to get" << source << "from" << dataEngine;
     return engine->newQObject(service, QScriptEngine::AutoOwnership);
+}
+
+QList<QAction*> DeclarativeAppletScript::contextualActions()
+{
+    return m_interface->contextualActions();
 }
 
 QScriptEngine *DeclarativeAppletScript::engine() const
