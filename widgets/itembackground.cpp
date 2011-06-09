@@ -251,7 +251,7 @@ QVariant ItemBackground::itemChange(GraphicsItemChange change, const QVariant &v
             d->anim->stop();
         }
 
-        d->anim->setDuration(250);
+        d->anim->setDuration(100);
         d->anim->start();
 
         return retVisible;

@@ -133,6 +133,7 @@ set(plasma_LIB_SRCS
     private/tooltip.cpp
     private/wallpaperrenderthread.cpp
     private/windowpreview.cpp
+    private/windowshadows.cpp
     private/kineticscroll.cpp
     private/declarative/declarativenetworkaccessmanagerfactory.cpp
     private/effects/halopainter.cpp
