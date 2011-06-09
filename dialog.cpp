@@ -55,6 +55,7 @@
 #include "plasma/theme.h"
 #include "plasma/widgets/scrollwidget.h"
 #include "plasma/windoweffects.h"
+#include "plasma/private/windowshadows_p.h"
 
 #ifdef Q_WS_X11
 #include <X11/Xlib.h>
@@ -94,6 +95,11 @@ void DialogPrivate::scheduleBorderCheck(bool triggeredByResize)
 void DialogPrivate::themeChanged()
 {
     checkBorders(false);
+    if (background->hasElement("shadow-top")) {
+        WindowShadows::self()->addWindow(q);
+    } else {
+        WindowShadows::self()->removeWindow(q);
+    }
 
     const bool translucency = Plasma::Theme::defaultTheme()->windowTranslucencyEnabled();
     // WA_NoSystemBackground is going to fail combined with sliding popups, but is needed
