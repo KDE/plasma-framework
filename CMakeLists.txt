@@ -59,7 +59,7 @@ set(plasmagik_SRCS
     )
 
 #to make the Temporary solution to not link to libkdeclarative work, disable the exports of libkdeclarative  
-add_definitions(-DKDECLARATIVE_EXPORT)
+add_definitions(-DKDECLARATIVE_EXPORT=)
 
 set(plasma_LIB_SRCS
     ${plasmagik_SRCS}
