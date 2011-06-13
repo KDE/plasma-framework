@@ -59,7 +59,7 @@ public:
     /**
      * Constructs a new TabBar
      *
-     * @arg parent the parent of this widget
+     * @param parent the parent of this widget
      */
     explicit TabBar(QGraphicsWidget *parent = 0);
     ~TabBar();
@@ -67,12 +67,12 @@ public:
     /**
      * Adds a new tab in the desired position
      *
-     * @arg index the position where to insert the new tab,
+     * @param index the position where to insert the new tab,
      *            if index <=0 will be the first position,
      *            if index >= count() will be the last
-     * @arg icon  the icon for this tab
-     * @arg label the text label of the tab
-     * @arg content the page content that will be shown by this tab
+     * @param icon  the icon for this tab
+     * @param label the text label of the tab
+     * @param content the page content that will be shown by this tab
      * @return the index of the inserted tab
      */
     Q_INVOKABLE int insertTab(int index, const QIcon &icon, const QString &label,
@@ -83,11 +83,11 @@ public:
      * This is an overloaded member provided for convenience
      * equivalent to insertTab(index, QIcon(), label);
      *
-     * @arg index the position where to insert the new tab,
+     * @param index the position where to insert the new tab,
      *            if index <=0 will be the first position,
      *            if index >= count() will be the last
-     * @arg label the text label of the tab
-     * @arg content the page content that will be shown by this tab
+     * @param label the text label of the tab
+     * @param content the page content that will be shown by this tab
      * @return the index of the inserted tab
      */
     Q_INVOKABLE int insertTab(int index, const QString &label, QGraphicsLayoutItem *content = 0);
@@ -95,9 +95,9 @@ public:
     /**
      * Adds a new tab in the last position
      *
-     * @arg icon  the icon for this tab
-     * @arg label the text label of the tab
-     * @arg content the page content that will be shown by this tab
+     * @param icon  the icon for this tab
+     * @param label the text label of the tab
+     * @param content the page content that will be shown by this tab
      * @return the index of the inserted tab
      */
     Q_INVOKABLE int addTab(const QIcon &icon, const QString &label, QGraphicsLayoutItem *content = 0);
@@ -107,8 +107,8 @@ public:
      * This is an overloaded member provided for convenience
      * equivalent to addTab(QIcon(), label, page)
      *
-     * @arg label the text label of the tab
-     * @arg content the page content that will be shown by this tab
+     * @param label the text label of the tab
+     * @param content the page content that will be shown by this tab
      * @return the index of the inserted tab
      */
     Q_INVOKABLE int addTab(const QString &label, QGraphicsLayoutItem *content = 0);
@@ -116,14 +116,14 @@ public:
     /**
      * Removes a tab, contents are deleted
      *
-     * @arg index the index of the tab to remove
+     * @param index the index of the tab to remove
      */
     Q_INVOKABLE void removeTab(int index);
 
     /**
      * Removes a tab, the page is reparented to 0 and is returned
      *
-     * @arg index the index of the tab to remove
+     * @param index the index of the tab to remove
      * @since 4.4
      */
     Q_INVOKABLE QGraphicsLayoutItem *takeTab(int index);
@@ -131,7 +131,7 @@ public:
     /**
      * Returns the contents of a page
      *
-     * @arg index the index of the tab to retrieve
+     * @param index the index of the tab to retrieve
      * @since 4.4
      */
     Q_INVOKABLE QGraphicsLayoutItem *tabAt(int index);
@@ -149,30 +149,30 @@ public:
     /**
      * Sets the text label of the given tab
      *
-     * @arg index the index of the tab to modify
-     * @arg label the new text label of the given tab
+     * @param index the index of the tab to modify
+     * @param label the new text label of the given tab
      */
     Q_INVOKABLE void setTabText(int index, const QString &label);
 
     /**
      * @return the text label of the given tab
      *
-     * @arg index the index of the tab we want to know its label
+     * @param index the index of the tab we want to know its label
      */
     Q_INVOKABLE QString tabText(int index) const;
 
     /**
      * Sets an icon for a given tab
      *
-     * @arg index the index of the tab to modify
-     * @arg icon the new icon for the given tab
+     * @param index the index of the tab to modify
+     * @param icon the new icon for the given tab
      */
     Q_INVOKABLE void setTabIcon(int index, const QIcon &icon);
 
     /**
      * @return the current icon for a given tab
      *
-     * @arg index the index of the tab we want to know its icon
+     * @param index the index of the tab we want to know its icon
      */
     Q_INVOKABLE QIcon tabIcon(int index) const;
 
@@ -181,7 +181,7 @@ public:
      * pages, when the tabbar doesn't have content pages at all this
      * function has no effect
      *
-     * @arg show true if we want to show the tabbar
+     * @param show true if we want to show the tabbar
      * @since 4.3
      */
      void setTabBarShown(bool show);
@@ -195,7 +195,7 @@ public:
     /**
      * Sets the stylesheet used to control the visual display of this TabBar
      *
-     * @arg stylesheet a CSS string
+     * @param stylesheet a CSS string
      */
     void setStyleSheet(const QString &stylesheet);
 
@@ -257,7 +257,7 @@ public Q_SLOTS:
     /**
      * Activate a given tab
      *
-     * @arg index the index of the tab to activate
+     * @param index the index of the tab to activate
      */
     void setCurrentIndex(int index);
 
@@ -265,7 +265,7 @@ Q_SIGNALS:
     /**
      * Emitted when the active tab changes
      *
-     * @arg index the newly activated tab
+     * @param index the newly activated tab
      */
     void currentChanged(int index);
 

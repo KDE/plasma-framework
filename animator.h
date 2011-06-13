@@ -115,8 +115,8 @@ public:
     /**
      * Starts a standard animation on a QGraphicsItem.
      *
-     * @arg item the item to animate in some fashion
-     * @arg anim the type of animation to perform
+     * @param item the item to animate in some fashion
+     * @param anim the type of animation to perform
      * @return the id of the animation
      * @deprecated use new Animator API with Qt Kinetic
      **/
@@ -129,7 +129,7 @@ public:
      * Note that it is not necessary to call
      * this on normal completion of the animation.
      *
-     * @arg id the id of the animation as returned by animateItem
+     * @param id the id of the animation as returned by animateItem
      * @deprecated use new Animator API with Qt Kinetic
      */
 #ifndef KDE_NO_DEPRECATED
@@ -139,8 +139,8 @@ public:
     /**
      * Starts a standard animation on a QGraphicsItem.
      *
-     * @arg item the item to animate in some fashion
-     * @arg anim the type of animation to perform
+     * @param item the item to animate in some fashion
+     * @param anim the type of animation to perform
      * @return the id of the animation
      * @deprecated use new Animator API with Qt Kinetic
      **/
@@ -153,7 +153,7 @@ public:
      * Note that it is not necessary to call
      * this on normal completion of the animation.
      *
-     * @arg id the id of the animation as returned by moveItem
+     * @param id the id of the animation as returned by moveItem
      * @deprecated use new Animator API with Qt Kinetic
      */
 #ifndef KDE_NO_DEPRECATED
@@ -164,11 +164,11 @@ public:
      * Starts a custom animation, preventing the need to create a timeline
      * with its own timer tick.
      *
-     * @arg frames the number of frames this animation should persist for
-     * @arg duration the length, in milliseconds, the animation will take
-     * @arg curve the curve applied to the frame rate
-     * @arg receive the object that will handle the actual animation
-     * @arg method the method name of slot to be invoked on each update.
+     * @param frames the number of frames this animation should persist for
+     * @param duration the length, in milliseconds, the animation will take
+     * @param curve the curve applied to the frame rate
+     * @param receive the object that will handle the actual animation
+     * @param method the method name of slot to be invoked on each update.
      *             It must take a qreal. So if the slot is animate(qreal),
      *             pass in "animate" as the method parameter.
      *             It has an optional integer paramenter that takes an
@@ -188,7 +188,7 @@ public:
      * this on object destruction, as custom animations associated with
      * a given QObject are cleaned up automatically on QObject destruction.
      *
-     * @arg id the id of the animation as returned by customAnimation
+     * @param id the id of the animation as returned by customAnimation
      * @deprecated use new Animator API with Qt Kinetic
      */
 #ifndef KDE_NO_DEPRECATED

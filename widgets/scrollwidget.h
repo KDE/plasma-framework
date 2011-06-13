@@ -60,7 +60,7 @@ public:
     /**
      * Constructs a new ScrollWidget
      *
-     * @arg parent the parent of this widget
+     * @param parent the parent of this widget
      */
     explicit ScrollWidget(QGraphicsWidget *parent = 0);
     explicit ScrollWidget(QGraphicsItem *parent);
@@ -74,7 +74,7 @@ public:
      * it will be resized when possible, otherwise it will be kept to whichever
      * width the widget resizes itself.
      *
-     * @arg widget the new main sub widget
+     * @param widget the new main sub widget
      */
     void setWidget(QGraphicsWidget *widget);
 
@@ -114,7 +114,7 @@ public:
     /**
      * Sets the horizontal scrollbar policy
      *
-     * @arg policy desired policy
+     * @param policy desired policy
      */
     void setHorizontalScrollBarPolicy(const Qt::ScrollBarPolicy policy);
 
@@ -126,7 +126,7 @@ public:
     /**
      * Sets the vertical scrollbar policy
      *
-     * @arg policy desired policy
+     * @param policy desired policy
      */
     void setVerticalScrollBarPolicy(const Qt::ScrollBarPolicy policy);
 
@@ -226,7 +226,7 @@ public:
      * Set the nap size of the kinetic scrolling:
      * the scrolling will always stop at multiples of that size.
      *
-     * @arg the desired snap size
+     * @param the desired snap size
      * @since 4.5
      */
     void setSnapSize(const QSizeF &size);
@@ -240,7 +240,7 @@ public:
     /**
      * Sets the stylesheet used to control the visual display of this ScrollWidget
      *
-     * @arg stylesheet a CSS string
+     * @param stylesheet a CSS string
      */
     void setStyleSheet(const QString &stylesheet);
 

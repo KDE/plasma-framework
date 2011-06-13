@@ -52,7 +52,7 @@ public:
     /**
      * Sets a new target geometry we want at the end of animation
      *
-     * @arg newGeometry the final geometry target
+     * @param newGeometry the final geometry target
      */
     void setTarget(const QRectF &newGeometry);
 

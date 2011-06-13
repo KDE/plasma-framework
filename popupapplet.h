@@ -59,7 +59,7 @@ public:
     ~PopupApplet();
 
     /**
-     * @arg icon the icon that has to be displayed when the applet is in a panel.
+     * @param icon the icon that has to be displayed when the applet is in a panel.
      *           Passing in a null icon means that the popup applet itself
      *           will provide an interface for when the PopupApplet is not showing
      *           the widget() or graphicsWidget() directly.
@@ -67,7 +67,7 @@ public:
     void setPopupIcon(const QIcon &icon);
 
     /**
-     * @arg icon the icon that has to be displayed when the applet is in a panel.
+     * @param icon the icon that has to be displayed when the applet is in a panel.
      *           Passing in an empty QString() means that the popup applet itself
      *           will provide an interface for when the PopupApplet is not showing
      *           the widget() or graphicsWidget() directly.
@@ -107,7 +107,7 @@ public:
 
     /**
      * Sets the default alignment of the popup relative to the applet
-     * @arg alignment the alignment to use; Qt::AlignLeft or Qt::AlignRight
+     * @param alignment the alignment to use; Qt::AlignLeft or Qt::AlignRight
      * @since 4.6
      */
     void setPopupAlignment(Qt::AlignmentFlag alignment);
@@ -122,7 +122,7 @@ public:
      * Sets whether or not the dialog popup that gets created should be a "passive" popup
      * that does not steal focus from other windows or not.
      *
-     * @arg passive true if the dialog should be treated as a passive popup
+     * @param passive true if the dialog should be treated as a passive popup
      */
     void setPassivePopup(bool passive);
 
@@ -151,7 +151,7 @@ public Q_SLOTS:
 
     /**
      * Shows the dialog showing the widget if the applet is in a panel.
-     * @arg displayTime the time in ms that the popup should be displayed, defaults to 0 which means
+     * @param displayTime the time in ms that the popup should be displayed, defaults to 0 which means
      * always (until the user closes it again, that is).
      */
     void showPopup(uint displayTime = 0);
@@ -165,7 +165,7 @@ protected:
     /**
      * This event handler can be reimplemented in a subclass to receive an
      * event before the popup is shown or hidden.
-     * @arg show true if the popup is going to be shown, false if the popup
+     * @param show true if the popup is going to be shown, false if the popup
      * is going to be hidden.
      * Note that showing and hiding the popup on click is already done in PopupApplet.
      */

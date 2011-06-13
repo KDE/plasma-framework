@@ -54,7 +54,7 @@ public:
     /**
      * Sets the display text for this TextEdit
      *
-     * @arg text the text to display; should be translated.
+     * @param text the text to display; should be translated.
      */
     void setText(const QString &text);
 
@@ -65,7 +65,7 @@ public:
 
     /**
      * Sets the text area to be read only or interactive
-     * @arg true to make it read only, false for interactive
+     * @param true to make it read only, false for interactive
      * @since 4.4
      */
     void setReadOnly(bool readOnly);
@@ -78,7 +78,7 @@ public:
     /**
      * Sets the stylesheet used to control the visual display of this TextEdit
      *
-     * @arg stylesheet a CSS string
+     * @param stylesheet a CSS string
      */
     void setStyleSheet(const QString &stylesheet);
 
@@ -90,7 +90,7 @@ public:
     /**
      * Sets the text edit wrapped by this TextEdit (widget must inherit KTextEdit), ownership is transferred to the TextEdit
      *
-     * @arg text edit that will be wrapped by this TextEdit
+     * @param nativeWidget text edit that will be wrapped by this TextEdit
      * @since KDE4.4
      */
     void setNativeWidget(KTextEdit *nativeWidget);

@@ -59,7 +59,7 @@ public:
     /**
      * Sets the stylesheet used to control the visual display of this ComboBox
      *
-     * @arg stylesheet a CSS string
+     * @param stylesheet a CSS string
      */
     void setStyleSheet(const QString &stylesheet);
 
@@ -71,7 +71,7 @@ public:
     /**
      * Sets the combo box wrapped by this ComboBox (widget must inherit KComboBox), ownership is transferred to the ComboBox
      *
-     * @arg combo box that will be wrapped by this ComboBox
+     * @param nativeWidget combo box that will be wrapped by this ComboBox
      * @since KDE4.4
      */
     void setNativeWidget(KComboBox *nativeWidget);

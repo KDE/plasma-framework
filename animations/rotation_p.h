@@ -80,27 +80,27 @@ public:
 
     /**
      * Reimplemented from Plasma::Animation
-     * @arg curve Easing curve
+     * @param curve Easing curve
      */
     void setEasingCurve(const QEasingCurve &curve);
 
 public slots:
     /**
      * set animation rotation axis
-     * @arg axis Rotation (e.g. YAxis, ZAxis, XAxis)
+     * @param axis Rotation (e.g. YAxis, ZAxis, XAxis)
      */
     void setAxis(const Qt::Axis &axis);
 
     /**
      * Set rotation reference (e.g. Center, Up, Down, Left, Right) can
      * be combined (i.e. Center|Up)
-     * @arg reference The reference
+     * @param reference The reference
      */
     void setReference(const qint8 &reference);
 
     /**
      * Set animation rotation angle (e.g. 45, 180, etc)
-     * @arg angle The angle
+     * @param angle The angle
      */
     void setAngle(const qreal &angle);
 

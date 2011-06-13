@@ -57,7 +57,7 @@ class PLASMA_EXPORT RunnerManager : public QObject
 
         /**
          * Finds and returns a loaded runner or NULL
-         * @arg name the name of the runner
+         * @param name the name of the runner
          * @return Pointer to the runner
          */
         AbstractRunner *runner(const QString &name) const;
@@ -73,7 +73,7 @@ class PLASMA_EXPORT RunnerManager : public QObject
          * runner; if the runner does not exist or can not be loaded then
          * the single runner mode will not be started and singleModeRunner()
          * will return NULL
-         * @arg id the id of the runner to use
+         * @param id the id of the runner to use
          * @since 4.4
          */
         void setSingleModeRunnerId(const QString &id);
@@ -93,14 +93,14 @@ class PLASMA_EXPORT RunnerManager : public QObject
         /**
          * Sets whether or not the manager is in single mode.
          *
-         * @arg singleMode true if the manager should be in single mode, false otherwise
+         * @param singleMode true if the manager should be in single mode, false otherwise
          * @since 4.4
          */
         void setSingleMode(bool singleMode);
 
         /**
          * Returns the translated name of a runner
-         * @arg id the id of the runner
+         * @param id the id of the runner
          *
          * @since 4.4
          */
@@ -131,13 +131,13 @@ class PLASMA_EXPORT RunnerManager : public QObject
 
         /**
          * Runs a given match
-         * @arg match the match to be executed
+         * @param match the match to be executed
          */
         void run(const QueryMatch &match);
 
         /**
          * Runs a given match
-         * @arg id the id of the match to run
+         * @param id the id of the match to run
          */
         void run(const QString &id);
 
@@ -159,7 +159,7 @@ class PLASMA_EXPORT RunnerManager : public QObject
         /**
          * Sets a whitelist for the plugins that can be loaded
          *
-         * @arg plugins the plugin names of allowed runners
+         * @param plugins the plugin names of allowed runners
          * @since 4.4
          */
         void setAllowedRunners(const QStringList &runners);
@@ -171,7 +171,7 @@ class PLASMA_EXPORT RunnerManager : public QObject
          * but in cases where specific runners should be loaded this
          * allows for that to take place
          *
-         * @arg service the service to use to load the plugin
+         * @param service the service to use to load the plugin
          * @since 4.5
          */
         void loadRunner(const KService::Ptr service);
@@ -182,7 +182,7 @@ class PLASMA_EXPORT RunnerManager : public QObject
          * handle loading Runner plugins, but in cases where specific
          * runners should be loaded this allows for that to take place
          *
-         * @arg path the path to a Runner package to load
+         * @param path the path to a Runner package to load
          * @since 4.5
          */
         void loadRunner(const QString &path);
@@ -241,8 +241,8 @@ class PLASMA_EXPORT RunnerManager : public QObject
          * When the information will be available can be known using the
          * matchesChanged signal.
          *
-         * @arg term the term we want to find matches for
-         * @arg runnerId optional, if only one specific runner is to be used;
+         * @param term the term we want to find matches for
+         * @param runnerId optional, if only one specific runner is to be used;
          *               providing an id will put the manager into single runner mode
          */
         void launchQuery(const QString &term, const QString &runnerId);
@@ -257,8 +257,8 @@ class PLASMA_EXPORT RunnerManager : public QObject
          * This means that the method may be dangerous as it wait a variable amount
          * of time for the runner to finish.
          * The runner parameter is mandatory, to avoid launching unwanted runners.
-         * @arg term the term we want to find matches for
-         * @arg runner the runner we will use, it is mandatory
+         * @param term the term we want to find matches for
+         * @param runner the runner we will use, it is mandatory
          * @return 0 if nothing was launched, 1 if launched.
          */
         bool execQuery(const QString &term, const QString &runnerName);

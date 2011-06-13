@@ -156,7 +156,7 @@ public:
     /**
      * Sets the current state of the manager.
      * @see State
-     * @arg state the state to put the manager in
+     * @param state the state to put the manager in
      */
     void setState(ToolTipManager::State state);
 
@@ -168,9 +168,9 @@ public:
 Q_SIGNALS:
     /**
      * This signal is emitted when a window preview in the tooltip is clicked.
-     * @arg window the id of the window that was clicked
-     * @arg buttons the mouse buttons involved in the activation
-     * @arg modifiers the keyboard modifiers involved in the activation, if any
+     * @param window the id of the window that was clicked
+     * @param buttons the mouse buttons involved in the activation
+     * @param modifiers the keyboard modifiers involved in the activation, if any
      * @since 4.4
      */
     void windowPreviewActivated(WId window, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers,
@@ -178,9 +178,9 @@ Q_SIGNALS:
 
     /**
      * This signal is emitted when a link in the tooltip is clicked.
-     * @arg anchor the achor text (e.g. url) that was clicked on
-     * @arg buttons the mouse buttons involved in the activation
-     * @arg modifiers the keyboard modifiers involved in the activation, if any
+     * @param anchor the achor text (e.g. url) that was clicked on
+     * @param buttons the mouse buttons involved in the activation
+     * @param modifiers the keyboard modifiers involved in the activation, if any
      * @since 4.4
      */
     void linkActivated(const QString &anchor, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers,

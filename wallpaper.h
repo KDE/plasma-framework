@@ -97,15 +97,15 @@ class PLASMA_EXPORT Wallpaper : public QObject
         /**
          * Returns a list of all known wallpapers.
          *
-         * @arg formFactor the format of the wallpaper being search for (e.g. desktop)
+         * @param formFactor the format of the wallpaper being search for (e.g. desktop)
          * @return list of wallpapers
          **/
         static KPluginInfo::List listWallpaperInfo(const QString &formFactor = QString());
 
         /**
          * Returns a list of all known wallpapers that can accept the given mimetype
-         * @arg mimetype the mimetype to search for
-         * @arg formFactor the format of the wallpaper being search for (e.g. desktop)
+         * @param mimetype the mimetype to search for
+         * @param formFactor the format of the wallpaper being search for (e.g. desktop)
          * @return list of wallpapers
          */
         static KPluginInfo::List listWallpaperInfoForMimetype(const QString &mimetype,
@@ -325,7 +325,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * Wallpaper's current state, allowing for better selection of papers from packages,
          * for instance.
          *
-         * @arg resizeMethod The resize method to assume will be used for future wallpaper
+         * @param resizeMethod The resize method to assume will be used for future wallpaper
          *                   scaling; may later be changed by calls to render()
          *
          * @since 4.3
@@ -337,7 +337,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * Wallpaper's current state, allowing for better selection of papers from packages,
          * for instance.
          *
-         * @arg targetSize The size to assume will be used for future wallpaper scaling
+         * @param targetSize The size to assume will be used for future wallpaper scaling
          *
          * @since 4.3
          */
@@ -402,7 +402,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
         /**
          * Emitted when a URL matching X-Plasma-DropMimeTypes is dropped on the wallpaper
          *
-         * @arg url the URL of the dropped file
+         * @param url the URL of the dropped file
          * @since 4.4
          */
         KDE_DEPRECATED void urlDropped(const KUrl &url);

@@ -66,8 +66,8 @@ class PLASMA_EXPORT Dialog : public QWidget
         Q_DECLARE_FLAGS(ResizeCorners, ResizeCorner)
 
         /**
-         * @arg parent the parent widget, for plasmoids, this is usually 0.
-         * @arg f the Qt::WindowFlags, default is to not show a windowborder.
+         * @param parent the parent widget, for plasmoids, this is usually 0.
+         * @param f the Qt::WindowFlags, default is to not show a windowborder.
          */
         explicit Dialog(QWidget * parent = 0, Qt::WindowFlags f =  Qt::Window);
         virtual ~Dialog();
@@ -77,7 +77,7 @@ class PLASMA_EXPORT Dialog : public QWidget
          * The dialog will then set up a QGraphicsView and coordinate geometry with
          * the widget automatically.
          *
-         * @arg widget the QGraphicsWidget to display in this dialog
+         * @param widget the QGraphicsWidget to display in this dialog
          */
         void setGraphicsWidget(QGraphicsWidget *widget);
 
@@ -87,7 +87,7 @@ class PLASMA_EXPORT Dialog : public QWidget
         QGraphicsWidget *graphicsWidget();
 
         /**
-         * @arg corners the corners the resize handlers should be placed in.
+         * @param corners the corners the resize handlers should be placed in.
          */
         void setResizeHandleCorners(ResizeCorners corners);
 

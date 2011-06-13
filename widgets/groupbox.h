@@ -52,7 +52,7 @@ public:
     /**
      * Sets the display text for this GroupBox
      *
-     * @arg text the text to display; should be translated.
+     * @param text the text to display; should be translated.
      */
     void setText(const QString &text);
 
@@ -64,7 +64,7 @@ public:
     /**
      * Sets the stylesheet used to control the visual display of this GroupBox
      *
-     * @arg stylesheet a CSS string
+     * @param stylesheet a CSS string
      */
     void setStyleSheet(const QString &stylesheet);
 

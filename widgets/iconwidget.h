@@ -297,7 +297,7 @@ public:
     /**
      * Sets whether or not to draw a background area for the icon
      *
-     * @arg draw true if a background should be drawn or not
+     * @param draw true if a background should be drawn or not
      */
     void setDrawBackground(bool draw);
 

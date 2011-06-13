@@ -79,7 +79,7 @@ public:
 
     /**
      * Load a certain url that can be a local file or a remote one
-     * @arg path resource to play
+     * @param path resource to play
      */
     void setUrl(const QString &url);
 
@@ -118,7 +118,7 @@ public:
     /**
      * Set what control widgets to use
      *
-     * @arg controls bitwise OR combination of Controls flags
+     * @param controls bitwise OR combination of Controls flags
      * @see Controls
      */
     void setUsedControls(const Controls controls);
@@ -132,7 +132,7 @@ public:
     /**
      * Show/hide the main controls widget, if any of them is used
      *
-     * @arg visible if we want to show or hide the main controls
+     * @param visible if we want to show or hide the main controls
      * @see setUsedControls()
      */
     void setControlsVisible(bool visible);
@@ -145,7 +145,7 @@ public:
     /**
      * Sets the stylesheet used to control the visual display of this VideoWidget
      *
-     * @arg stylesheet a CSS string
+     * @param stylesheet a CSS string
      */
     void setStyleSheet(const QString &stylesheet);
 
@@ -178,14 +178,14 @@ public Q_SLOTS:
 
     /**
      * Jump at a given millisecond in the current file
-     * @arg time where we want to jump
+     * @param time where we want to jump
      */
     void seek(qint64 time);
 
 Q_SIGNALS:
     /**
      * Emitted regularly when the playing is progressing
-     * @arg time where we are
+     * @param time where we are
      */
     void tick(qint64 time);
 

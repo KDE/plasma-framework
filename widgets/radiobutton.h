@@ -54,7 +54,7 @@ public:
     /**
      * Sets the display text for this RadioButton
      *
-     * @arg text the text to display; should be translated.
+     * @param text the text to display; should be translated.
      */
     void setText(const QString &text);
 
@@ -66,7 +66,7 @@ public:
     /**
      * Sets the path to an image to display.
      *
-     * @arg path the path to the image; if a relative path, then a themed image will be loaded.
+     * @param path the path to the image; if a relative path, then a themed image will be loaded.
      */
     void setImage(const QString &path);
 
@@ -78,7 +78,7 @@ public:
     /**
      * Sets the stylesheet used to control the visual display of this RadioButton
      *
-     * @arg stylesheet a CSS string
+     * @param stylesheet a CSS string
      */
     void setStyleSheet(const QString &stylesheet);
 
@@ -95,7 +95,7 @@ public:
     /**
      * Sets the checked state.
      *
-     * @arg checked true if checked, false if not
+     * @param checked true if checked, false if not
      */
     void setChecked(bool checked);
 

@@ -59,15 +59,15 @@ public:
 
     /**
      * Sets the scrollbar minimum and maximum values
-     * @arg min minimum value
-     * @arg max maximum value
+     * @param min minimum value
+     * @param max maximum value
      */
     void setRange(int min, int max);
 
     /**
      * Sets the amount of the single step
      * i.e how much the slider will move when the user press an arrow button
-     * @arg val
+     * @param val
      */
     void setSingleStep(int val);
 
@@ -78,7 +78,7 @@ public:
 
     /**
      * Sets the amount the slider will scroll when the user press page up or page down
-     * @arg val
+     * @param val
      */
     void setPageStep(int val);
 
@@ -103,13 +103,13 @@ public:
     int maximum() const;
 
     /**
-     * @arg the minimum value bound of this ScrollBar
+     * @param the minimum value bound of this ScrollBar
      * @since 4.6
      */
     void setMinimum(const int min) const;
 
     /**
-     * @arg the maximum value bound of this ScrollBar
+     * @param the maximum value bound of this ScrollBar
      * @since 4.6
      */
     void setMaximum(const int max) const;
@@ -117,7 +117,7 @@ public:
     /**
      * Sets the stylesheet used to control the visual display of this ScrollBar
      *
-     * @arg stylesheet a CSS string
+     * @param stylesheet a CSS string
      */
     void setStyleSheet(const QString &stylesheet);
 
@@ -143,7 +143,7 @@ protected:
 public Q_SLOTS:
     /**
      * Sets the current value for the ScrollBar
-     * @arg value must be minimum() <= value <= maximum()
+     * @param value must be minimum() <= value <= maximum()
      */
     void setValue(int val);
 

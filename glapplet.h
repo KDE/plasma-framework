@@ -40,10 +40,10 @@ class PLASMA_EXPORT_DEPRECATED GLApplet : public Applet
 
     public:
         /**
-         * @arg parent the QGraphicsItem this applet is parented to
-         * @arg serviceId the name of the .desktop file containing the
+         * @param parent the QGraphicsItem this applet is parented to
+         * @param serviceId the name of the .desktop file containing the
          *      information about the widget
-         * @arg appletId a unique id used to differentiate between multiple
+         * @param appletId a unique id used to differentiate between multiple
          *      instances of the same Applet type
          */
         GLApplet(QGraphicsItem *parent,
@@ -56,8 +56,8 @@ class PLASMA_EXPORT_DEPRECATED GLApplet : public Applet
          * to have two elements: the KService service ID for the desktop entry
          * and an applet ID which must be a base 10 number.
          *
-         * @arg parent a QObject parent; you probably want to pass in 0
-         * @arg args a list of strings containing two entries: the service id
+         * @param parent a QObject parent; you probably want to pass in 0
+         * @param args a list of strings containing two entries: the service id
          *      and the applet id
          */
         GLApplet(QObject *parent, const QVariantList &args);

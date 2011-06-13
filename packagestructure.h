@@ -79,7 +79,7 @@ public:
     /**
      * Default constructor for a package structure definition
      *
-     * @arg type the type of package. This is often application specific.
+     * @param type the type of package. This is often application specific.
      **/
     explicit PackageStructure(QObject *parent = 0,
                               const QString &type = i18nc("A non-functional package", "Invalid"));
@@ -97,7 +97,7 @@ public:
     /**
      * Loads a package format by name.
      *
-     * @arg format If not empty, attempts to locate the given format, either
+     * @param format If not empty, attempts to locate the given format, either
      *             from built-ins or via plugins.
      * @return a package that matches the format, if available. The caller
      *         is responsible for deleting the object.
@@ -179,7 +179,7 @@ public:
     /**
      * Get the list of files of a given type.
      *
-     * @arg key the type of file to look for
+     * @param key the type of file to look for
      * @return list of files by name
      * @since 4.3
      */
@@ -264,8 +264,8 @@ public:
     /**
      * Uninstalls a package matching this package structure.
      *
-     * @arg packageName the name of the package to remove
-     * @arg packageRoot path to the directory where the package should be installed to
+     * @param packageName the name of the package to remove
+     * @param packageRoot path to the directory where the package should be installed to
      * @return true on successful removal of the package, false otherwise
      */
     virtual bool uninstallPackage(const QString &packageName, const QString &packageRoot);
@@ -332,7 +332,7 @@ Q_SIGNALS:
 protected:
     /**
      * Sets whether or not external paths/symlinks can be followed by a package
-     * @arg allow true if paths/symlinks outside of the package should be followed,
+     * @param allow true if paths/symlinks outside of the package should be followed,
      *             false if they should be rejected.
      */
     void setAllowExternalPaths(bool allow);
@@ -343,7 +343,7 @@ protected:
      * between the base path and the entries as defined by the package
      * structure
      *
-     * @arg prefix the directory prefix to use
+     * @param prefix the directory prefix to use
      * @deprecated use setContentsPrefixPaths() instead.
      */
     KDE_DEPRECATED void setContentsPrefix(const QString &prefix);
@@ -356,7 +356,7 @@ protected:
      * In this case each file request will be searched in all prefixes in order,
      * and the first found will be returned.
      *
-     * @arg prefix paths the directory prefix to use
+     * @param prefix paths the directory prefix to use
      * @since 4.6
      */
     void setContentsPrefixPaths(const QStringList &prefixPaths);

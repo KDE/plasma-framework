@@ -94,7 +94,7 @@ private:
 };
 
 /**
- * @arg types a set of ComponentTypes flags for which to look up the
+ * @param types a set of ComponentTypes flags for which to look up the
  *            language support for
  * @return a list of all supported languages for the given type(s).
  **/

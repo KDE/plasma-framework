@@ -63,7 +63,7 @@ public:
      * with KPluginInfo
      * @see KPluginInfo
      *
-     * @arg filename path to the file to write to
+     * @param filename path to the file to write to
      **/
     void write(const QString &filename) const;
 
@@ -73,7 +73,7 @@ public:
      * with KPluginInfo
      * @see KPluginInfo
      *
-     * @arg filename path to the file to write to
+     * @param filename path to the file to write to
      **/
     void read(const QString &filename);
 

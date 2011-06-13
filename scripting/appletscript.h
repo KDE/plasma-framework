@@ -120,7 +120,7 @@ public:
     /**
      * Sets whether or not this script has a configuration interface or not
      *
-     * @arg hasInterface true if the applet is user configurable
+     * @param hasInterface true if the applet is user configurable
      */
     void setHasConfigurationInterface(bool hasInterface);
 
@@ -195,7 +195,7 @@ public Q_SLOTS:
 
 protected:
     /**
-     * @arg engine name of the engine
+     * @param engine name of the engine
      * @return a data engine associated with this plasmoid
      */
     Q_INVOKABLE DataEngine *dataEngine(const QString &engine) const;
@@ -255,7 +255,7 @@ protected:
 
     /**
      * Loads an animation from the applet package
-     * @arg animation the animation to load
+     * @param animation the animation to load
      * @return an Animation object on success, a NULL pointer on failure
      * @since 4.5
      */

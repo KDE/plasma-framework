@@ -204,8 +204,8 @@ class PLASMA_EXPORT ContainmentActions : public QObject
         /**
          * Returns a popup position appropriate to the event and the size.
          * 
-         * @arg s size of the popup
-         * @arg event a pointer to the event that triggered the popup
+         * @param s size of the popup
+         * @param event a pointer to the event that triggered the popup
          * @return the preferred top-left position for the popup
          * @since 4.6
          */

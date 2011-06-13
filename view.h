@@ -53,17 +53,17 @@ public:
      * Constructs a view for a given contanment. An Id is automatically
      * assigned to the View.
      *
-     * @arg containment the containment to center the view on
-     * @arg parent the parent object for this view
+     * @param containment the containment to center the view on
+     * @param parent the parent object for this view
      */
     explicit View(Containment *containment, QWidget *parent = 0);
 
     /**
      * Constructs a view for a given contanment.
      *
-     * @arg containment the containment to center the view on
-     * @arg viewId the id to assign to this view
-     * @arg parent the parent object for this view
+     * @param containment the containment to center the view on
+     * @param viewId the id to assign to this view
+     * @param parent the parent object for this view
      */
     View(Containment *containment, int viewId, QWidget *parent = 0);
 
@@ -84,8 +84,8 @@ public:
      * Sets which screen this view is associated with, if any.
      * This will also set the containment if a valid screen is specified
      *
-     * @arg screen the physical screen number; -1 for no screen
-     * @arg desktop the virtual desktop number, or -1 for all virtual desktops
+     * @param screen the physical screen number; -1 for no screen
+     * @param desktop the virtual desktop number, or -1 for all virtual desktops
      */
     void setScreen(int screen, int desktop = -1);
 
@@ -140,7 +140,7 @@ public:
     /**
      * Set whether or not the view should adjust its size when the associated
      * containment does.
-     * @arg trackChanges true to synchronize the view's size with the containment's
+     * @param trackChanges true to synchronize the view's size with the containment's
      * (this is the default behaviour), false to ignore containment size changes
      */
     void setTrackContainmentChanges(bool trackChanges);
@@ -189,7 +189,7 @@ public Q_SLOTS:
      * Sets the containment for this view, which will also cause the view
      * to track the geometry of the containment.
      *
-     * @arg containment the containment to center the view on
+     * @param containment the containment to center the view on
      */
     virtual void setContainment(Plasma::Containment *containment);
 

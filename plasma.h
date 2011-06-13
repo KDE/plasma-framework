@@ -308,7 +308,7 @@ PLASMA_EXPORT Direction locationToInverseDirection(Location location);
 /**
  * Returns the most appropriate QGraphicsView for the item.
  *
- * @arg item the QGraphicsItem to locate a view for
+ * @param item the QGraphicsItem to locate a view for
  * @return pointer to a view, or 0 if none was found
  */
 PLASMA_EXPORT QGraphicsView *viewFor(const QGraphicsItem *item);

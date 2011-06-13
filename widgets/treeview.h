@@ -53,7 +53,7 @@ public:
     /**
      * Sets a model for this weather view
      *
-     * @arg model the model to display
+     * @param model the model to display
      */
     void setModel(QAbstractItemModel *model);
 
@@ -65,7 +65,7 @@ public:
     /**
      * Sets the stylesheet used to control the visual display of this TreeView
      *
-     * @arg stylesheet a CSS string
+     * @param stylesheet a CSS string
      */
     void setStyleSheet(const QString &stylesheet);
 

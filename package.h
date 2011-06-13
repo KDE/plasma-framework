@@ -51,9 +51,9 @@ class PLASMA_EXPORT Package
         /**
          * Construct a Package object
          *
-         * @arg packageRoot path to the package installation root
-         * @arg package the name of the package
-         * @arg structure the package structure describing this package
+         * @param packageRoot path to the package installation root
+         * @param package the name of the package
+         * @param structure the package structure describing this package
          **/
         Package(const QString &packageRoot, const QString &package,
                 PackageStructure::Ptr structure);
@@ -61,8 +61,8 @@ class PLASMA_EXPORT Package
         /**
           * Construct a Package object.
           *
-          * @arg packagePath full path to the package directory
-          * @arg structure the package structure describing this package
+          * @param packagePath full path to the package directory
+          * @param structure the package structure describing this package
           */
         Package(const QString &packagePath, PackageStructure::Ptr structure);
 
@@ -89,9 +89,9 @@ class PLASMA_EXPORT Package
         /**
          * Get the path to a given file.
          *
-         * @arg fileType the type of file to look for, as defined in the
+         * @param fileType the type of file to look for, as defined in the
          *               package structure
-         * @arg filename the name of the file
+         * @param filename the name of the file
          * @return path to the file on disk. QString() if not found.
          **/
         QString filePath(const char *fileType, const QString &filename) const;
@@ -99,7 +99,7 @@ class PLASMA_EXPORT Package
         /**
          * Get the path to a given file.
          *
-         * @arg fileType the type of file to look for, as defined in the
+         * @param fileType the type of file to look for, as defined in the
          *               package structure. The type must refer to a file
          *               in the package structure and not a directory.
          * @return path to the file on disk. QString() if not found
@@ -109,7 +109,7 @@ class PLASMA_EXPORT Package
         /**
          * Get the list of files of a given type.
          *
-         * @arg fileType the type of file to look for, as defined in the
+         * @param fileType the type of file to look for, as defined in the
          *               package structure.
          * @return list of files by name, suitable for passing to filePath
          **/
@@ -122,7 +122,7 @@ class PLASMA_EXPORT Package
 
         /**
          * Sets the path to the root of this package
-         * @arg path and absolute path
+         * @param path and absolute path
          * @since 4.3
          */
         void setPath(const QString &path);
@@ -210,7 +210,7 @@ class PLASMA_EXPORT Package
         /**
          * Registers a package described by the given desktop file
          *
-         * @arg the full path to the desktop file (must be KPluginInfo compatible)
+         * @param the full path to the desktop file (must be KPluginInfo compatible)
          * @return true on success, false on failure
          */
         static bool registerPackage(const PackageMetadata &data, const QString &iconPath);
@@ -219,11 +219,11 @@ class PLASMA_EXPORT Package
          * Creates a package based on the metadata from the files contained
          * in the source directory
          *
-         * @arg metadata description of the package to create
-         * @arg source path to local directory containing the individual
+         * @param metadata description of the package to create
+         * @param source path to local directory containing the individual
          *             files to be added to the package
-         * @arg destination path to the package that should be created
-         * @arg icon path to the package icon
+         * @param destination path to the package that should be created
+         * @param icon path to the package icon
          **/
         static bool createPackage(const PackageMetadata &metadata,
                                   const QString &source,
