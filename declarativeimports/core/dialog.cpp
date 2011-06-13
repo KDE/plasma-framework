@@ -108,8 +108,10 @@ void DialogProxy::setMainItem(QGraphicsObject *mainItem)
             m_mainItem.data()->setParent(mainItem->parent());
         }
         m_mainItem = mainItem;
-        mainItem->setParentItem(0);
-        mainItem->setParent(this);
+        if (mainItem) {
+            mainItem->setParentItem(0);
+            mainItem->setParent(this);
+        }
 
         //if this is called in Compenent.onCompleted we have to wait a loop the item is added to a scene
         QTimer::singleShot(0, this, SLOT(syncMainItem()));
