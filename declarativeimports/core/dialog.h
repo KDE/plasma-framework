@@ -77,7 +77,7 @@ class DialogProxy : public QObject
     Q_PROPERTY(int y READ y WRITE setY NOTIFY yChanged)
     //to set the size try to force doing so from the inner item
     Q_PROPERTY(int width READ width NOTIFY widthChanged)
-    Q_PROPERTY(int height READ width NOTIFY heightChanged)
+    Q_PROPERTY(int height READ height NOTIFY heightChanged)
     Q_PROPERTY(int windowFlags READ windowFlags WRITE setWindowFlags)
     Q_PROPERTY(QObject *margins READ margins CONSTANT)
 
