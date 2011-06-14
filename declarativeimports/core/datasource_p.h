@@ -61,6 +61,7 @@ public:
     int interval() const {return m_interval;}
     void setInterval(const int interval);
 
+    Q_PROPERTY(QString dataEngine READ engine WRITE setEngine NOTIFY engineChanged)
     Q_PROPERTY(QString engine READ engine WRITE setEngine NOTIFY engineChanged)
     QString engine() const {return m_engine;}
     void setEngine(const QString &e);
