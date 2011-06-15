@@ -87,7 +87,11 @@ bool DeclarativeAppletScript::init()
     //m_declarativeWidget->engine()->addImportPath(package()->path()+"/contents/imports");
 
     //use our own custom network access manager that will access Plasma packages and to manage security (i.e. deny access to remote stuff when the proper extension isn't enabled
-    m_declarativeWidget->engine()->setNetworkAccessManagerFactory(new PackageAccessManagerFactory(package(), &m_auth));
+    QDeclarativeEngine *engine = m_declarativeWidget->engine();
+    QDeclarativeNetworkAccessManagerFactory *factory = engine->networkAccessManagerFactory();
+    engine->setNetworkAccessManagerFactory(0);
+    delete factory;
+    engine->setNetworkAccessManagerFactory(new PackageAccessManagerFactory(package(), &m_auth));
 
     m_declarativeWidget->setQmlPath(mainScript());
 
