@@ -12,6 +12,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${KDE4_KDECORE_INCLUDES}
                     ${KDE4_KDEUI_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/experimental/libkdeclarative
+                    ${CMAKE_BINARY_DIR}/experimental/libkdeclarative
                     ${CMAKE_SOURCE_DIR}/threadweaver/
                     ${CMAKE_SOURCE_DIR}/plasma/extenders
                     ${CMAKE_SOURCE_DIR}/plasma/remote
