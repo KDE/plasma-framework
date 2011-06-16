@@ -190,6 +190,7 @@ void DataModel::dataUpdated(const QString &sourceName, const Plasma::DataEngine:
                     (m_sourceFilter.isEmpty() || (sourceRegExp.isValid() && sourceRegExp.exactMatch(i.key())))) {
                     Plasma::DataEngine::Data data = value.value<Plasma::DataEngine::Data>();
                     data["DataEngineSource"] = i.key();
+
                     list.append(data);
                 }
                 ++i;
@@ -292,7 +293,18 @@ void DataModel::removeSource(const QString &sourceName)
     //FIXME: this could be way more efficient by not resetting the whole model
     //FIXME: find a way to remove only the proper things also in the case where sources are items
     emit modelAboutToBeReset();
-    m_items.remove(sourceName);
+    //source name as key of the map
+    if (!m_keyRoleFilter.isEmpty()) {
+        m_items.remove(sourceName);
+    //source name in the map, linear scan
+    } else {
+        for (int i = 0; i < m_items.value(QString()).count(); ++i) {
+            if (m_items.value(QString())[i].value<QVariantHash>().value("DataEngineSource") == sourceName) {
+                m_items[QString()].remove(i);
+                break;
+            }
+        }
+    }
     emit modelReset();
 }
 
