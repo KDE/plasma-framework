@@ -133,10 +133,16 @@ void DialogProxy::syncMainItem()
             QGraphicsObject *qo = qobject_cast<QGraphicsObject *>(parent);
             if (qo) {
                 scene = qo->scene();
-                scene->addItem(m_mainItem.data());
-                break;
+                if (scene) {
+                    scene->addItem(m_mainItem.data());
+                    break;
+                }
             }
         }
+    }
+
+    if (!scene) {
+        return;
     }
 
     //the parent of the qobject never changed, only the parentitem, so put it back what it was
