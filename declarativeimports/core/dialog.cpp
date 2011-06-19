@@ -82,7 +82,8 @@ int DialogMargins::bottom() const
 
 DialogProxy::DialogProxy(QObject *parent)
     : QObject(parent),
-      m_declarativeItemContainer(0)
+      m_declarativeItemContainer(0),
+      m_activeWindow(false)
 {
     m_dialog = new Plasma::Dialog();
     m_margins = new DialogMargins(m_dialog, this);
@@ -225,6 +226,11 @@ int DialogProxy::height() const
     return m_dialog->size().height();
 }
 
+bool DialogProxy::isActiveWindow() const
+{
+    return m_activeWindow;
+}
+
 int DialogProxy::windowFlags() const
 {
     return (int)m_dialog->windowFlags();
@@ -262,6 +268,12 @@ bool DialogProxy::eventFilter(QObject *watched, QEvent *event)
         if (re->oldSize().height() != re->size().height()) {
             emit heightChanged();
         }
+    } else if (watched == m_dialog && event->type() == QEvent::WindowActivate) {
+        m_activeWindow = true;
+        emit activeWindowChanged();
+    } else if (watched == m_dialog && event->type() == QEvent::WindowDeactivate) {
+        m_activeWindow = false;
+        emit activeWindowChanged();
     }
     return false;
 }

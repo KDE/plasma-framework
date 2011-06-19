@@ -80,6 +80,7 @@ class DialogProxy : public QObject
     Q_PROPERTY(int height READ height NOTIFY heightChanged)
     Q_PROPERTY(int windowFlags READ windowFlags WRITE setWindowFlags)
     Q_PROPERTY(QObject *margins READ margins CONSTANT)
+    Q_PROPERTY(bool activeWindow READ isActiveWindow NOTIFY activeWindowChanged)
 
 public:
     enum WidgetAttribute {
@@ -104,6 +105,8 @@ public:
     int width() const;
     int height() const;
 
+    bool isActiveWindow() const;
+
     //FIXME: passing an int is ugly
     int windowFlags() const;
     void setWindowFlags(const int);
@@ -122,6 +125,7 @@ Q_SIGNALS:
     void yChanged();
     void widthChanged();
     void heightChanged();
+    void activeWindowChanged();
 
 protected Q_SLOTS:
     void syncMainItem();
@@ -135,6 +139,7 @@ private:
     DeclarativeItemContainer *m_declarativeItemContainer;
     QWeakPointer<QGraphicsObject> m_mainItem;
     DialogMargins *m_margins;
+    bool m_activeWindow;
 };
 
 #endif
