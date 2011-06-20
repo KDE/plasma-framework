@@ -57,7 +57,7 @@ class PLASMA_EXPORT Meter : public QGraphicsWidget
     Q_ENUMS(MeterType)
     Q_PROPERTY(int minimum READ minimum WRITE setMinimum)
     Q_PROPERTY(int maximum READ maximum WRITE setMaximum)
-    Q_PROPERTY(int value READ value WRITE setValue)
+    Q_PROPERTY(int value READ value WRITE setValue NOTIFY valueChanged)
     Q_PROPERTY(QString svg READ svg WRITE setSvg)
     Q_PROPERTY(MeterType meterType READ meterType WRITE setMeterType)
 
@@ -200,6 +200,13 @@ public Q_SLOTS:
      * Set value for the meter
      */
     void setValue(int value);
+
+Q_SIGNALS:
+    /**
+     * This signal is sent when the value of the meter changes programmatically.
+     * The meter's value is passed.
+     */
+    void valueChanged(const int &value);
 
 protected:
     /**
