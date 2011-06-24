@@ -130,8 +130,6 @@ protected:
     inline int countItems() const;
 
 Q_SIGNALS:
-    void modelAboutToBeReset();
-    void modelReset();
     void countChanged();
 
 private Q_SLOTS:

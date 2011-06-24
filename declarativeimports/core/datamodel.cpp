@@ -83,10 +83,11 @@ void SortFilterModel::setModel(QObject *source)
 void SortFilterModel::setFilterRegExp(const QString &exp)
 {
     //FIXME: this delaying of the reset signal seems to make the views behave a bit better, i.e. less holes and avoids some crashes, in theory shouldn't be necessary
+    beginResetModel();
     blockSignals(true);
     QSortFilterProxyModel::setFilterRegExp(QRegExp(exp, Qt::CaseInsensitive));
     blockSignals(false);
-    reset();
+    endResetModel();
 }
 
 QString SortFilterModel::filterRegExp() const
@@ -254,7 +255,7 @@ QString DataModel::keyRoleFilter() const
 
 void DataModel::setItems(const QString &sourceName, const QVariantList &list)
 {
-    emit modelAboutToBeReset();
+    beginResetModel();
 
     //convert to vector, so data() will be O(1)
     m_items[sourceName] = list.toVector();
@@ -285,14 +286,14 @@ void DataModel::setItems(const QString &sourceName, const QVariantList &list)
 
     //make the declarative view reload everything,
     //would be nice an incremental update but is not possible
-    emit modelReset();
+    endResetModel();
 }
 
 void DataModel::removeSource(const QString &sourceName)
 {
     //FIXME: this could be way more efficient by not resetting the whole model
     //FIXME: find a way to remove only the proper things also in the case where sources are items
-    emit modelAboutToBeReset();
+    beginResetModel();
     //source name as key of the map
     if (!m_keyRoleFilter.isEmpty()) {
         m_items.remove(sourceName);
@@ -305,7 +306,7 @@ void DataModel::removeSource(const QString &sourceName)
             }
         }
     }
-    emit modelReset();
+    endResetModel();
 }
 
 QVariant DataModel::data(const QModelIndex &index, int role) const
