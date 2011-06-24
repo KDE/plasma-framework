@@ -98,14 +98,6 @@ enum Direction {
 };
 
 /**
- * The direction of a zoom action.
- */
-enum ZoomDirection {
-    ZoomIn = 0, /**< Zoom in one step */
-    ZoomOut = 1 /**< Zoom out one step */
-};
-
-/**
  * The Location enumeration describes where on screen an element, such as an
  * Applet or its managing container, is positioned on the screen.
  **/
@@ -169,17 +161,6 @@ enum FlipDirection {
 Q_DECLARE_FLAGS(Flip, FlipDirection)
 
 /**
- * Zoom levels that Plasma is aware of...
- **/
-enum ZoomLevel {
-    DesktopZoom = 0, /**< Normal desktop usage, plasmoids are painted normally
-                        and have full interaction */
-    GroupZoom,       /**< Plasmoids are shown as icons in visual groups; drag
-                        and drop and limited context menu interaction only */
-    OverviewZoom     /**< Groups become icons themselves */
-};
-
-/**
  * Possible timing alignments
  **/
 enum IntervalAlignment {
@@ -207,7 +188,7 @@ enum ImmutabilityType {
 };
 
 /**
- * Defines the aspect ratio used when scaling an applet
+ * Defines the aspect ratio used when resizing an applet
  */
 enum AspectRatioMode {
     InvalidAspectRatioMode = -1, /**< Unset mode used for dev convenience
@@ -294,11 +275,6 @@ enum BackgroundHints {
     DefaultBackground = StandardBackground /**< Default settings: both standard background */
 };
 Q_ENUMS(BackgroundHints)
-
-/**
- * @return the scaling factor (0..1) for a ZoomLevel
- **/
-PLASMA_EXPORT qreal scalingFactor(ZoomLevel level);
 
 /**
  * Converts a location to a direction. Handy for figuring out which way to send a popup based on

@@ -30,24 +30,6 @@
 namespace Plasma
 {
 
-qreal scalingFactor(ZoomLevel level)
-{
-    switch (level) {
-    case DesktopZoom:
-        return 1;
-        break;
-    case GroupZoom:
-        return 0.5;
-        break;
-    case OverviewZoom:
-        return 0.2;
-        break;
-    }
-
-    // to make odd compilers not warn like silly beasts
-    return 1;
-}
-
 Direction locationToDirection(Location location)
 {
     switch (location) {
