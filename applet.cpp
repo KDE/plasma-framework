@@ -385,7 +385,7 @@ void Applet::setFailedToLaunch(bool failed, const QString &reason)
     setLayout(0);
 
     if (failed) {
-        setBackgroundHints(d->backgroundHints|StandardBackground);
+        setBackgroundHints(StandardBackground);
 
         QGraphicsLinearLayout *failureLayout = new QGraphicsLinearLayout(this);
         failureLayout->setContentsMargins(0, 0, 0, 0);
@@ -918,12 +918,12 @@ void Applet::setImmutability(const ImmutabilityType immutable)
     updateConstraints(ImmutableConstraint);
 }
 
-Applet::BackgroundHints Applet::backgroundHints() const
+BackgroundHints Applet::backgroundHints() const
 {
     return d->backgroundHints;
 }
 
-void Applet::setBackgroundHints(const BackgroundHints hints)
+void Applet::setBackgroundHints(const Plasma::BackgroundHints hints)
 {
     if (d->backgroundHints == hints) {
         return;
@@ -2555,8 +2555,8 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
         : appletId(uniqueID),
           q(applet),
           service(0),
-          preferredBackgroundHints(Applet::StandardBackground),
-          backgroundHints(Applet::NoBackground),
+          preferredBackgroundHints(StandardBackground),
+          backgroundHints(NoBackground),
           aspectRatioMode(Plasma::KeepAspectRatio),
           immutability(Mutable),
           appletDescription(info ? *info : KPluginInfo(service)),
@@ -2623,7 +2623,7 @@ void AppletPrivate::init(const QString &packagePath)
 
     //set a default size before any saved settings are read
     QSize size(200, 200);
-    q->setBackgroundHints(Applet::DefaultBackground);
+    q->setBackgroundHints(DefaultBackground);
     q->setHasConfigurationInterface(true); //FIXME why not default it to true in the constructor?
 
     QAction *closeApplet = actions->action("remove");
@@ -2965,7 +2965,7 @@ void AppletOverlayWidget::paint(QPainter *painter,
 
 
     QPainterPath backgroundShape;
-    if (!applet || applet->backgroundHints() & Applet::StandardBackground) {
+    if (!applet || applet->backgroundHints() == StandardBackground) {
         //FIXME: a resize here is nasty, but perhaps still better than an eventfilter just for that..
         if (parentWidget()->contentsRect().size() != size()) {
             resize(parentWidget()->contentsRect().size());

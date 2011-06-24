@@ -284,6 +284,16 @@ enum TrustLevel {
 };
 Q_ENUMS(TrustLevel)
 
+/**
+ * Description on how draw a background for the applet
+ */
+enum BackgroundHints {
+    NoBackground = 0,         /**< Not drawing a background under the applet, the applet has its own implementation */
+    StandardBackground = 1,   /**< The standard background from the theme is drawn */
+    TranslucentBackground = 2, /**< An alternate version of the background is drawn, usually more translucent */
+    DefaultBackground = StandardBackground /**< Default settings: both standard background */
+};
+Q_ENUMS(BackgroundHints)
 
 /**
  * @return the scaling factor (0..1) for a ZoomLevel
@@ -337,6 +347,5 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Constraints)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Flip)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::ComponentTypes)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::MessageButtons)
-
 
 #endif // multiple inclusion guard

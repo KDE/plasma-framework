@@ -87,27 +87,12 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
     Q_PROPERTY(QRectF geometry READ geometry WRITE setGeometry)
     Q_PROPERTY(bool shouldConserveResources READ shouldConserveResources)
     Q_PROPERTY(uint id READ id)
-    Q_PROPERTY(bool userConfiguring READ isUserConfiguring)
     Q_PROPERTY(BackgroundHints backgroundHints READ backgroundHints WRITE setBackgroundHints)
-    Q_ENUMS(BackgroundHints)
+    Q_PROPERTY(bool userConfiguring READ isUserConfiguring)
 
     public:
         typedef QList<Applet*> List;
         typedef QHash<QString, Applet*> Dict;
-
-        /**
-         * Description on how draw a background for the applet
-         */
-        enum BackgroundHint {
-            NoBackground = 0,         /**< Not drawing a background under the
-                                          applet, the applet has its own implementation */
-            StandardBackground = 1,   /**< The standard background from the theme is drawn */
-            TranslucentBackground = 2, /**< An alternate version of the background is drawn,
-                                          usually more translucent */
-            DefaultBackground = StandardBackground /**< Default settings:
-                                          both standard background */
-        };
-        Q_DECLARE_FLAGS(BackgroundHints, BackgroundHint)
 
         ~Applet();
 
@@ -507,13 +492,13 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *
          * @param hints the BackgroundHint combination for this applet
          */
-        void setBackgroundHints(const BackgroundHints hints);
+        void setBackgroundHints(const Plasma::BackgroundHints hint);
 
         /**
          * @return BackgroundHints flags combination telling if the standard background is shown
          *         and if it has a drop shadow
          */
-        BackgroundHints backgroundHints() const;
+        Plasma::BackgroundHints backgroundHints() const;
 
         /**
          * @return true if this Applet is currently being used as a Containment, false otherwise
@@ -1128,8 +1113,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
 };
 
 } // Plasma namespace
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Applet::BackgroundHints)
 
 /**
  * Register an applet when it is contained in a loadable module

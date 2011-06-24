@@ -156,9 +156,9 @@ public:
     // applet attributes
     QWeakPointer<Extender> extender;
     Service *service;
-    Applet::BackgroundHints preferredBackgroundHints;
-    Applet::BackgroundHints backgroundHints;
-    Plasma::AspectRatioMode aspectRatioMode;
+    BackgroundHints preferredBackgroundHints;
+    BackgroundHints backgroundHints;
+    AspectRatioMode aspectRatioMode;
     ImmutabilityType immutability;
 
     // applet info we keep around in case its needed
