@@ -101,7 +101,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          *
          * Each runner is executed in its own thread. Whenever the user input changes this
          * method is called again. Thus, it needs to be thread-safe. Also, all matches need
-         * to be reported once this method returns. Asyncroneous runners therefore need
+         * to be reported once this method returns. Asynchronous runners therefore need
          * to make use of a local event loop to wait for all matches.
          *
          * It is recommended to use local status data in async runners. The simplest way is
