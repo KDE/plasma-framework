@@ -31,7 +31,7 @@ namespace Jolie
 using namespace Jolie;
 
 AbstractAdaptor::AbstractAdaptor(QObject *parent)
-    : d(new AbstractAdaptorPrivate)
+    : QObject(parent), d(new AbstractAdaptorPrivate)
 {
 }
 
