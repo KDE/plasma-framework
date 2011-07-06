@@ -51,6 +51,7 @@ Name[tr]=Plasma JavaScript Eklentisi
 Name[ug]=Plasma JavaScript قوشۇلما
 Name[uk]=Додаток JavaScript до Плазми
 Name[x-test]=xxPlasma JavaScript Addonxx
+Name[zh_CN]=Plasma JavaScript 附加插件
 Name[zh_TW]=Plasma JavaScript Addon
 Type=ServiceType
 X-KDE-ServiceType=Plasma/JavascriptAddon
