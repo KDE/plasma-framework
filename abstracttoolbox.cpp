@@ -42,7 +42,7 @@ AbstractToolBox::AbstractToolBox(Containment *parent)
 {
 }
 
-AbstractToolBox::AbstractToolBox(QObject *parent, const QVariantList &args)
+AbstractToolBox::AbstractToolBox(QObject *parent, const QVariantList & /*args*/)
    : QGraphicsWidget(dynamic_cast<QGraphicsItem *>(parent)),
      d(new AbstractToolBoxPrivate(qobject_cast<Containment *>(parent)))
 {
