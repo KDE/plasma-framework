@@ -179,7 +179,8 @@ bool ScriptEnv::importBuiltinExtension(const QString &extension, QScriptValue &o
     } else if ("localio" == extension) {
         m_allowedUrls |= LocalUrls;
         registerGetUrl(obj);
-        obj.setProperty("", m_engine->newFunction(ScriptEnv::runCommand));
+        obj.setProperty("userDataPath", m_engine->newFunction(ScriptEnv::userDataPath));
+        obj.setProperty("runCommand", m_engine->newFunction(ScriptEnv::runCommand));
         return true;
     }
 
