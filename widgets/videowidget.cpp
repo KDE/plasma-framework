@@ -542,6 +542,16 @@ bool VideoWidget::controlsVisible() const
     return d->controlsWidget != 0 && d->controlsWidget->isVisible();
 }
 
+void VideoWidget::setTickInterval(qint64 interval)
+{
+    d->media->setTickInterval(interval);
+}
+
+qint64 VideoWidget::tickInterval() const
+{
+    return d->media->tickInterval();
+}
+
 void VideoWidget::setStyleSheet(const QString &stylesheet)
 {
     d->videoWidget->setStyleSheet(stylesheet);
