@@ -31,6 +31,7 @@ Rectangle {
         anchors.fill: parent
         contentWidth: 2200
         contentHeight: 600
+        contentX: 500
 
         Row {
             x: 30
@@ -168,6 +169,7 @@ Rectangle {
                 PlasmaComponents.BusyIndicator {
                     id: busy
                     running: mouse.pressed
+                    smoothAnimation: true
                     MouseArea {
                         id: mouse
                         anchors.fill: parent
@@ -317,6 +319,8 @@ Rectangle {
 
     PlasmaComponents.ScrollBar {
         id: verticalScrollBar
+
+	    stepSize: 30
 
         orientation: Qt.Vertical
         flickableItem: page

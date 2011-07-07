@@ -48,6 +48,47 @@ Item {
 
     visible: flickableItem && handle.width < contents.width
 
+    Keys.onUpPressed: {
+        if (!_isVertical)
+            return;
+
+        if (_inverted)
+            range.value -= stepSize;
+        else
+            range.value += stepSize;
+    }
+
+    Keys.onDownPressed: {
+        if (!_isVertical)
+            return;
+
+        if (_inverted)
+            range.value += stepSize;
+        else
+            range.value -= stepSize;
+    }
+
+    Keys.onLeftPressed: {
+        if (_isVertical)
+            return;
+
+        if (_inverted)
+            range.value += stepSize;
+        else
+            range.value -= stepSize;
+    }
+
+    Keys.onRightPressed: {
+        if (_isVertical)
+            return;
+
+        if (_inverted)
+            range.value -= stepSize;
+        else
+            range.value += stepSize;
+    }
+
+
     Item {
 
         width: _isVertical ? scrollbar.height : scrollbar.width
@@ -90,6 +131,7 @@ Item {
                     running: parent.pressed
                     repeat: true
                     onTriggered: {
+                        scrollbar.forceActiveFocus();
                         if (_inverted)
                             _value += stepSize;
                         else
@@ -129,6 +171,7 @@ Item {
                     running: parent.pressed;
                     repeat: true
                     onTriggered: {
+                        scrollbar.forceActiveFocus();
                         if (_inverted)
                             _value -= stepSize
                         else
