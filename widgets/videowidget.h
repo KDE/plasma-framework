@@ -55,6 +55,7 @@ class PLASMA_EXPORT VideoWidget : public QGraphicsProxyWidget
     Q_PROPERTY(qint64 remainingTime READ remainingTime)
     Q_PROPERTY(Controls usedControls READ usedControls WRITE setUsedControls)
     Q_PROPERTY(bool controlsVisible READ controlsVisible WRITE setControlsVisible)
+    Q_PROPERTY(qint32 tickInterval READ tickInterval WRITE setTickInterval)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
     Q_ENUMS(Control)
 
@@ -141,6 +142,19 @@ public:
      * @return true if the controls widget is being shown right now
      */
     bool controlsVisible() const;
+
+    /**
+     * @param interval milliseconds the tick signal will be emitted
+     * @since 4.8
+     */
+    void setTickInterval(qint64 interval);
+
+    /**
+     * @return milliseconds the tick signal will be emitted
+     * @see tickInterval()
+     * @since 4.8
+     */
+    qint64 tickInterval() const;
 
     /**
      * Sets the stylesheet used to control the visual display of this VideoWidget
