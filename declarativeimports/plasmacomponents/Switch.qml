@@ -20,83 +20,9 @@
 import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 
-Item {
+DualStateButton {
     id: switchItem
-
-    // Common API
-    property bool checked
-    property alias pressed: mouseArea.pressed
-
-    signal clicked()
-
-    width: surface.width
-    height: surface.height
-
-    function entered() {
-        shadow.opacity = 0;
-        hover.opacity = 1;
-    }
-
-    function released() {
-        switchItem.checked = !switchItem.checked;
-        switchItem.clicked();
-    }
-
-    Keys.onSpacePressed: entered();
-    Keys.onReturnPressed: entered();
-    Keys.onReleased: {
-        if(event.key == Qt.Key_Space ||
-           event.key == Qt.Key_Return)
-            released();
-    }
-
-    PlasmaCore.FrameSvgItem {
-        id: hover
-
-        anchors {
-            fill: surface
-            leftMargin: -margins.left
-            topMargin: -margins.top
-            rightMargin: -margins.right
-            bottomMargin: -margins.bottom
-        }
-        opacity: 0
-        imagePath: "widgets/button"
-        prefix: "hover"
-
-        Behavior on opacity {
-            PropertyAnimation { duration: 250 }
-        }
-    }
-
-    PlasmaCore.FrameSvgItem {
-        id: shadow
-
-        anchors {
-            fill: surface
-            leftMargin: -margins.left
-            topMargin: -margins.top
-            rightMargin: -margins.right
-            bottomMargin: -margins.bottom
-        }
-        imagePath: "widgets/button"
-        prefix: "shadow"
-
-        Behavior on opacity {
-            PropertyAnimation { duration: 250 }
-        }
-    }
-
-    Image {
-        id: surface
-
-        anchors {
-            verticalCenter: parent.verticalCenter
-            horizontalCenter: parent.horizontalCenter
-        }
-
-        // XXX: debug solution until we have the resources
-        // source: checked ? "checked" : "unchecked"
+    view: Rectangle {
         width: 32
         height: 16
         Rectangle {
@@ -111,21 +37,7 @@ Item {
             }
             color: "green"
         }
-    }
-
-    MouseArea {
-        id: mouseArea
-
-        anchors.fill: parent
-        hoverEnabled: true
-
-        onReleased: switchItem.released();
-        onEntered: switchItem.entered();
-        onPressed: switchItem.forceActiveFocus();
-        onExited: {
-            shadow.opacity = 1;
-            hover.opacity = 0;
-        }
+        color: "grey"
     }
 }
 
