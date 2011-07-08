@@ -167,16 +167,6 @@ Rectangle {
                 PlasmaComponents.BusyIndicator { }
 
                 PlasmaComponents.BusyIndicator { running: true }
-
-                PlasmaComponents.BusyIndicator {
-                    id: busy
-                    running: mouse.pressed
-                    smoothAnimation: true
-                    MouseArea {
-                        id: mouse
-                        anchors.fill: parent
-                    }
-                }
             }
             Column {
                 spacing: 20

@@ -27,7 +27,7 @@ Item {
     property bool running: false
 
     // Plasma API
-    property bool smoothAnimation: false
+    property bool smoothAnimation: true
 
     implicitWidth: 52
     implicitHeight: 52
