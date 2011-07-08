@@ -153,6 +153,8 @@ Rectangle {
                             console.log("RadioButton Unchecked");
                     }
                 }
+
+                PlasmaComponents.Switch { }
             }
             Column {
                 spacing: 20
