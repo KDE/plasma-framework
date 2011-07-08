@@ -249,6 +249,34 @@ Rectangle {
                     }
                 }
             }
+
+            Column {
+                spacing: 20
+
+                Text {
+                    font.pixelSize: 20
+                    text: "Button Row"
+                }
+
+                PlasmaComponents.ButtonRow {
+                    spacing: 20
+                    PlasmaComponents.RadioButton { text: "A" }
+                    PlasmaComponents.RadioButton { text: "B" }
+                    PlasmaComponents.RadioButton { text: "C" }
+                }
+
+                Text {
+                    font.pixelSize: 20
+                    text: "Button Column"
+                }
+
+                PlasmaComponents.ButtonColumn {
+                    spacing: 20
+                    PlasmaComponents.RadioButton { text: "Alice" }
+                    PlasmaComponents.RadioButton { text: "Bob" }
+                    PlasmaComponents.RadioButton { text: "Charles" }
+                }
+            }
         }
     }
 
