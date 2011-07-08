@@ -20,7 +20,6 @@
 import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 
-// TODO: add support mouse wheel and key events
 // TODO: create a value indicator for plasma?
 Item {
     id: slider
@@ -45,6 +44,46 @@ Item {
 
     width: _isVertical ? 22 : 200
     height: _isVertical ? 200 : 22
+
+    Keys.onUpPressed: {
+        if (!_isVertical)
+            return;
+
+        if (inverted)
+            value -= stepSize;
+        else
+            value += stepSize;
+    }
+
+    Keys.onDownPressed: {
+        if (!_isVertical)
+            return;
+
+        if (inverted)
+            value += stepSize;
+        else
+            value -= stepSize;
+    }
+
+    Keys.onLeftPressed: {
+        if (_isVertical)
+            return;
+
+        if (inverted)
+            value += stepSize;
+        else
+            value -= stepSize;
+    }
+
+    Keys.onRightPressed: {
+        if (_isVertical)
+            return;
+
+        if (inverted)
+            value -= stepSize;
+        else
+            value += stepSize;
+    }
 
     Item {
         id: contents
