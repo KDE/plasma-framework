@@ -86,10 +86,10 @@ private:
 	QDeclarativeComponent* m_delegate;
 	QDeclarativeItem* m_source;
 	QDeclarativeItem* m_target;
-	DeclarativeMimeData* const m_data;
 	bool m_enabled;
 	Qt::DropActions m_supportedActions;
 	Qt::DropAction m_defaultAction;
+	DeclarativeMimeData* const m_data;
 };
 
 #endif // DECLARATIVEDRAGAREA_H
