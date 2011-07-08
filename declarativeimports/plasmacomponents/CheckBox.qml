@@ -21,11 +21,11 @@ import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 
 Item {
-    id: checkbox
+    id: radiobutton
 
     // Common API
     property bool checked
-    property alias pressed: mouse.pressed
+    property alias pressed: mouseArea.pressed
 
     signal clicked()
 
@@ -35,6 +35,24 @@ Item {
 
     width: surface.width + label.paintedWidth
     height: surface.height
+
+    function entered() {
+        shadow.opacity = 0;
+        hover.opacity = 1;
+    }
+
+    function released() {
+        radiobutton.checked = !radiobutton.checked;
+        radiobutton.clicked();
+    }
+
+    Keys.onSpacePressed: entered();
+    Keys.onReturnPressed: entered();
+    Keys.onReleased: {
+        if(event.key == Qt.Key_Space ||
+           event.key == Qt.Key_Return)
+            released();
+    }
 
     PlasmaCore.FrameSvgItem {
         id: hover
@@ -91,7 +109,7 @@ Item {
     Text {
         id: label
 
-        text: checkbox.text
+        text: radiobutton.text
         anchors {
             top: parent.top
             bottom: parent.bottom
@@ -105,19 +123,14 @@ Item {
     }
 
     MouseArea {
-        id: mouse
+        id: mouseArea
 
         anchors.fill: parent
         hoverEnabled: true
 
-        onReleased: {
-            checkbox.checked = !checkbox.checked;
-            checkbox.clicked();
-        }
-        onEntered: {
-            shadow.opacity = 0;
-            hover.opacity = 1;
-        }
+        onReleased: radiobutton.released();
+        onEntered: radiobutton.entered();
+        onPressed: radiobutton.forceActiveFocus();
         onExited: {
             shadow.opacity = 1;
             hover.opacity = 0;
