@@ -125,7 +125,7 @@ void PlasmoidPackageTest::createTestPackage(const QString &packageName)
 
 void PlasmoidPackageTest::isValid()
 {
-    p = new Plasma::Package(mPackageRoot, mPackage, ps);
+    p = new Plasma::Package(mPackageRoot + '/' + mPackage, ps);
 
     // A PlasmoidPackage is valid when:
     // - The package root exists.
@@ -138,7 +138,7 @@ void PlasmoidPackageTest::isValid()
 
     // Should still be invalid.
     delete p;
-    p = new Plasma::Package(mPackageRoot, mPackage, ps);
+    p = new Plasma::Package(mPackageRoot + '/' + mPackage, ps);
     QVERIFY(!p->isValid());
 
     // Create the metadata.desktop file.
@@ -157,7 +157,7 @@ void PlasmoidPackageTest::isValid()
 
     // No main file yet so should still be invalid.
     delete p;
-    p = new Plasma::Package(mPackageRoot, mPackage, ps);
+    p = new Plasma::Package(mPackageRoot + '/' + mPackage, ps);
     QVERIFY(!p->isValid());
 
     // Create the main file.
@@ -172,7 +172,7 @@ void PlasmoidPackageTest::isValid()
     file.setPermissions(QFile::ReadUser | QFile::WriteUser);
     // Main file exists so should be valid now.
     delete p;
-    p = new Plasma::Package(mPackageRoot, mPackage, ps);
+    p = new Plasma::Package(mPackageRoot + '/' + mPackage, ps);
     QVERIFY(p->isValid());
     QCOMPARE(p->contentsHash(), QString("db0b38c2b4fe21a9f37923cc25152340de055f6d"));
 }
@@ -182,7 +182,7 @@ void PlasmoidPackageTest::filePath()
     // Package::filePath() returns
     // - {package_root}/{package_name}/path/to/file if the file exists
     // - QString() otherwise.
-    p = new Plasma::Package(mPackageRoot, mPackage, ps);
+    p = new Plasma::Package(mPackageRoot + '/' +  mPackage, ps);
 
     QCOMPARE(p->filePath("scripts", "main"), QString());
 
@@ -197,7 +197,7 @@ void PlasmoidPackageTest::filePath()
 
     // The package is valid by now so a path for code/main should get returned.
     delete p;
-    p = new Plasma::Package(mPackageRoot, mPackage, ps);
+    p = new Plasma::Package(mPackageRoot + '/' +  mPackage, ps);
 
     const QString path = KStandardDirs::realFilePath(mPackageRoot + "/" + mPackage + "/contents/code/main");
 
@@ -220,7 +220,7 @@ void PlasmoidPackageTest::entryList()
     createTestPackage(packageName);
 
     // Create a package object and verify that it is valid.
-    p = new Plasma::Package(mPackageRoot, packageName, ps);
+    p = new Plasma::Package(mPackageRoot + '/' +  packageName, ps);
     QVERIFY(p->isValid());
 
     // Now we have a valid package that should contain the following files in
@@ -243,27 +243,27 @@ void PlasmoidPackageTest::knownPackages()
     // Don't do strange things when package root doesn't exists.
     QDir pRoot = QDir(mPackageRoot + "blah");
     QVERIFY(!pRoot.exists());
-    p = new Plasma::Package(mPackageRoot + "blah", mPackage, ps);
+    p = new Plasma::Package(mPackageRoot + "blah/" + mPackage, ps);
     QCOMPARE(Plasma::Package::listInstalled(mPackageRoot), QStringList());
     delete p;
 
     // Don't do strange things when an empty package root exists
     QVERIFY(QDir().mkpath(mPackageRoot));
     //QVERIFY(pRoot.exists());
-    p = new Plasma::Package(mPackageRoot, mPackage, ps);
+    p = new Plasma::Package(mPackageRoot + '/' +  mPackage, ps);
     QCOMPARE(Plasma::Package::listInstalled(mPackageRoot), QStringList());
     delete p;
 
     // Do not return a directory as package if it has no metadata.desktop file
     QVERIFY(QDir().mkpath(mPackageRoot + "/invalid_plasmoid"));
-    p = new Plasma::Package(mPackageRoot, mPackage, ps);
+    p = new Plasma::Package(mPackageRoot + '/' +  mPackage, ps);
     QCOMPARE(Plasma::Package::listInstalled(mPackageRoot), QStringList());
     delete p;
 
     // Let's add a valid package and see what happens.
     QString plamoid1("a_valid_plasmoid");
     createTestPackage(plamoid1);
-    p = new Plasma::Package(mPackageRoot, mPackage, ps);
+    p = new Plasma::Package(mPackageRoot + '/' +  mPackage, ps);
 
     QStringList packages = Plasma::Package::listInstalled(mPackageRoot);
     QCOMPARE(packages.size(), 1);
@@ -272,7 +272,7 @@ void PlasmoidPackageTest::knownPackages()
     // Ok.... one more valid package.
     QString plamoid2("another_valid_plasmoid");
     createTestPackage(plamoid2);
-    p = new Plasma::Package(mPackageRoot, mPackage, ps);
+    p = new Plasma::Package(mPackageRoot + '/' +  mPackage, ps);
 
     packages = Plasma::Package::listInstalled(mPackageRoot);
     QCOMPARE(packages.size(), 2);
