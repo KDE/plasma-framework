@@ -1,6 +1,8 @@
 /******************************************************************************
 *   Copyright 2007 by Aaron Seigo <aseigo@kde.org>                            *
-*   Copyright 2007 by Riccardo Iaconelli <riccardo@kde.org>                   *
+*   Copyright 2010 by Marco Martin <notmart@gmail.com>                        *
+*   Copyright 2010 by Kevin Ottens <ervin@kde.org>                            *
+*   Copyright 2009 by Rob Scheepmaker                                         *
 *                                                                             *
 *   This library is free software; you can redistribute it and/or             *
 *   modify it under the terms of the GNU Library General Public               *
