@@ -48,16 +48,6 @@ class PLASMA_EXPORT Package
         explicit Package();
 
         /**
-         * Construct a Package object
-         *
-         * @arg packageRoot path to the package installation root
-         * @arg package the name of the package
-         * @arg structure the package structure describing this package
-         **/
-        Package(const QString &packageRoot, const QString &package,
-                PackageStructure::Ptr structure);
-
-        /**
           * Construct a Package object.
           *
           * @arg packagePath full path to the package directory

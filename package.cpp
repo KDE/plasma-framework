@@ -123,12 +123,6 @@ Package::Package()
 {
 }
 
-Package::Package(const QString &packageRoot, const QString &package,
-                 PackageStructure::Ptr structure)
-    : d(new PackagePrivate(structure, packageRoot + '/' + package))
-{
-}
-
 Package::Package(const QString &packagePath, PackageStructure::Ptr structure)
     : d(new PackagePrivate(structure, packagePath))
 {
