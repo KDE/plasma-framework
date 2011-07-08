@@ -20,13 +20,13 @@ import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 
 Item {
-    id: listHighlight
+    id: highlight
 
     property bool hover: false
     property bool pressed: false
 
     PlasmaCore.FrameSvgItem {
-        id : background
+        id: background
         imagePath: "widgets/viewitem"
         prefix: {
             if (pressed)

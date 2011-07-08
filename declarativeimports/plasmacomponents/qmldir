@@ -5,9 +5,7 @@ DualStateButton 0.1 DualStateButton.qml
 FlashingLabel 0.1 FlashingLabel.qml
 Frame 0.1 Frame.qml
 IconWidget 0.1 IconWidget.qml
-ListHighlight 0.1 ListHighlight.qml
-ListItem 0.1 ListItem.qml
-ListItemView 0.1 ListItemView.qml
+Highlight 0.1 Highlight.qml
 PushButton 0.1 PushButton.qml
 RadioButton 0.1 RadioButton.qml
 ScrollBar 0.1 ScrollBar.qml
