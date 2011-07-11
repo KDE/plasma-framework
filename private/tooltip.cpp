@@ -302,18 +302,11 @@ void ToolTip::setContent(QObject *tipper, const ToolTipContent &data)
     d->text->setContent(data);
     d->imageLabel->setPixmap(data.image());
 
-    if (data.highlightWindows() && (data.windowsToPreview().size() > 1 || data.windowToPreview() != 0)) {
+    if (data.highlightWindows() && !data.windowsToPreview().isEmpty()) {
         WindowEffects::highlightWindows(winId(), QList<WId>() << winId() << data.windowsToPreview());
     }
 
-    if (data.windowsToPreview().size() > 1) {
-        d->preview->setWindowIds(data.windowsToPreview());
-    } else {
-        QList<WId>ids;
-        ids.append(data.windowToPreview());
-        d->preview->setWindowIds(ids);
-    }
-
+    d->preview->setWindowIds(data.windowsToPreview());
     d->preview->setHighlightWindows(data.highlightWindows());
 
     d->autohide = data.autohide();
