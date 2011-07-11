@@ -327,12 +327,8 @@ void ToolTip::setContent(QObject *tipper, const ToolTipContent &data)
 
 void ToolTip::prepareShowing()
 {
-    if (!d->preview->isEmpty()) {
-        // show/hide the preview area
-        d->preview->show();
-    } else {
-        d->preview->hide();
-    }
+    // show/hide the preview area
+    d->preview->setVisible(!d->preview->isEmpty());
 
     layout()->activate();
     d->preview->setInfo();
