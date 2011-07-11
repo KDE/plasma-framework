@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Application dashboard
+Name[bg]=Табло за програми
 Name[bs]=Programska instrument tabla
 Name[ca]=Tauler d'aplicacions
 Name[ca@valencia]=Tauler d'aplicacions
@@ -37,6 +38,7 @@ Name[sv]=Instrumentpanel för program
 Name[tr]=Uygulama panosu
 Name[ug]=پروگرامما تىزگىن تاختىسى
 Name[uk]=Панель приладів програм
+Name[wa]=Tåvlea d' boird des programes
 Name[x-test]=xxApplication dashboardxx
 Name[zh_CN]=程序面板
 Name[zh_TW]=應用程式控制面板
@@ -76,6 +78,7 @@ Comment[sv]=Avsett som förvald instrumentpanel för program
 Comment[tr]=Uygulama kontrol paneli öntanımlısı olarak tasarlandı
 Comment[ug]=پروگرامما تىزگىن تاختىنى كۆڭۈلدىكىگە تەڭشەيدۇ
 Comment[uk]=Призначено бути типовою панеллю приладів програм
+Comment[wa]=Fwait po esse li prémetou tåvlea d' boird des programes
 Comment[x-test]=xxIntended as Application dashboard defaultxx
 Comment[zh_CN]=设为应用程序面板的默认
 Comment[zh_TW]=應用程式預設控制面板
