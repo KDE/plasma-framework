@@ -60,7 +60,7 @@ public:
     /**
      * Sets the display text for this PushButton
      *
-     * @arg text the text to display; should be translated.
+     * @param text the text to display; should be translated.
      */
     void setText(const QString &text);
 
@@ -72,15 +72,15 @@ public:
     /**
      * Sets the path to an image to display.
      *
-     * @arg path the path to the image; if a relative path, then a themed image will be loaded.
+     * @param path the path to the image; if a relative path, then a themed image will be loaded.
      */
     void setImage(const QString &path);
 
     /**
      * Sets the path to an svg image to display and the id of the used svg element, if necessary.
      *
-     * @arg path the path to the image; if a relative path, then a themed image will be loaded.
-     * @arg elementid the id of a svg element.
+     * @param path the path to the image; if a relative path, then a themed image will be loaded.
+     * @param elementid the id of a svg element.
      *
      * @since 4.4
      */
@@ -94,7 +94,7 @@ public:
     /**
      * Sets the stylesheet used to control the visual display of this PushButton
      *
-     * @arg stylesheet a CSS string
+     * @param stylesheet a CSS string
      */
     void setStyleSheet(const QString &stylesheet);
 
@@ -122,7 +122,7 @@ public:
     /**
      * sets the icon for this push button
      * 
-     * @arg icon the icon to use
+     * @param icon the icon to use
      *
      * @since 4.3
      */
@@ -131,7 +131,7 @@ public:
     /**
      * sets the icon for this push button using a KIcon
      * 
-     * @arg icon the icon to use
+     * @param icon the icon to use
      *
      * @since 4.4
      */

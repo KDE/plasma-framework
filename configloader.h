@@ -109,8 +109,8 @@ public:
     /**
      * Finds the item for the given group and key.
      *
-     * @arg group the group in the config file to look in
-     * @arg key the configuration key to find
+     * @param group the group in the config file to look in
+     * @param key the configuration key to find
      * @return the associated KConfigSkeletonItem, or 0 if none
      */
     KConfigSkeletonItem *findItem(const QString &group, const QString &key);

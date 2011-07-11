@@ -59,7 +59,7 @@ public:
     /**
      * Constructs a new Frame
      *
-     * @arg parent the parent of this widget
+     * @param parent the parent of this widget
      */
     explicit Frame(QGraphicsWidget *parent = 0);
     ~Frame();
@@ -67,7 +67,7 @@ public:
    /**
     * Sets the Frame's shadow style
     *
-    * @arg shadow plain, raised or sunken
+    * @param shadow plain, raised or sunken
     */
     void setFrameShadow(Shadow shadow);
 
@@ -78,7 +78,7 @@ public:
 
     /**
      * Sets what borders should be painted
-     * @arg flags borders we want to paint
+     * @param flags borders we want to paint
      */
     void setEnabledBorders(const FrameSvg::EnabledBorders borders);
 
@@ -92,7 +92,7 @@ public:
    /**
     * Set the text to display by this Frame
     *
-    * @arg text the text
+    * @param text the text
     * @since 4.4
     */
     void setText(QString text);
@@ -105,7 +105,7 @@ public:
     /**
      * Sets the path to an image to display.
      *
-     * @arg path the path to the image; if a relative path, then a themed image will be loaded.
+     * @param path the path to the image; if a relative path, then a themed image will be loaded.
      */
     void setImage(const QString &path);
 
@@ -117,7 +117,7 @@ public:
     /**
      * Sets the stylesheet used to control the visual display of this Frame
      *
-     * @arg stylesheet a CSS string
+     * @param stylesheet a CSS string
      */
     void setStyleSheet(const QString &stylesheet);
 

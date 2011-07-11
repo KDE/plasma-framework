@@ -52,8 +52,8 @@ protected:
     /**
      * Default constructor
      *
-     * @arg location the location of the service
-     * @arg parent the parent object for this service
+     * @param location the location of the service
+     * @param parent the parent object for this service
      */
     ServiceAccessJob(KUrl location, QObject *parent = 0);
 

@@ -282,7 +282,18 @@ Phonon::AudioOutput *VideoWidget::audioOutput() const
 
 void VideoWidget::setUrl(const QString &url)
 {
-    d->media->setCurrentSource(Phonon::MediaSource(url));
+    QString fileUrl;
+    if (url.startsWith('/')) {
+        fileUrl = "file://" % url;
+    } else {
+        fileUrl = url;
+    }
+
+    if (fileUrl == d->media->currentSource().url().toString()) {
+        return;
+    }
+
+    d->media->setCurrentSource(Phonon::MediaSource(fileUrl));
 }
 
 QString VideoWidget::url() const
@@ -292,6 +303,10 @@ QString VideoWidget::url() const
 
 void VideoWidget::setUsedControls(const Controls controls)
 {
+    if (controls == d->shownControls) {
+        return;
+    }
+
     d->shownControls = controls;
 
     //kDebug()<<"Setting used controls"<<controls;
@@ -465,21 +480,37 @@ VideoWidget::Controls VideoWidget::usedControls() const
 
 void VideoWidget::play()
 {
+    if (d->media->state() == Phonon::PlayingState) {
+        return;
+    }
+
     d->media->play();
 }
 
 void VideoWidget::pause()
 {
+    if (d->media->state() == Phonon::PausedState) {
+        return;
+    }
+
     d->media->pause();
 }
 
 void VideoWidget::stop()
 {
+    if (d->media->state() == Phonon::StoppedState) {
+        return;
+    }
+
     d->media->stop();
 }
 
 void VideoWidget::seek(qint64 time)
 {
+    if (d->media->currentTime() == time) {
+        return;
+    }
+
     d->media->seek(time);
 }
 
@@ -509,6 +540,16 @@ void VideoWidget::setControlsVisible(bool visible)
 bool VideoWidget::controlsVisible() const
 {
     return d->controlsWidget != 0 && d->controlsWidget->isVisible();
+}
+
+void VideoWidget::setTickInterval(qint64 interval)
+{
+    d->media->setTickInterval(interval);
+}
+
+qint64 VideoWidget::tickInterval() const
+{
+    return d->media->tickInterval();
 }
 
 void VideoWidget::setStyleSheet(const QString &stylesheet)

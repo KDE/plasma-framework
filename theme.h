@@ -89,15 +89,15 @@ class PLASMA_EXPORT Theme : public QObject
         /**
          * Default constructor. Usually you want to use the singleton instead.
          * @see defaultTheme
-         * @arg parent the parent object
+         * @param parent the parent object
          */
         explicit Theme(QObject *parent = 0);
 
         /**
          * Construct a theme. Usually you want to use the singleton instead.
          * @see defaultTheme
-         * @arg themeName the name of the theme to create
-         * @arg parent the parent object
+         * @param themeName the name of the theme to create
+         * @param parent the parent object
          * @since 4.3
          */
         explicit Theme(const QString &themeName, QObject *parent = 0);
@@ -128,7 +128,7 @@ class PLASMA_EXPORT Theme : public QObject
         /**
          * Retrieve the path for an SVG image in the current theme.
          *
-         * @arg name the name of the file in the theme directory (without the
+         * @param name the name of the file in the theme directory (without the
          *           ".svg" part or a leading slash)
          * @return the full path to the requested file for the current theme
          */
@@ -137,7 +137,7 @@ class PLASMA_EXPORT Theme : public QObject
         /**
          * Retrieves the path for the script file that contains a given
          * Javascript animation.
-         * @arg the name of the animation
+         * @param the name of the animation
          * @return the full path to the script file, or an emptry string on failure
          * @since 4.5
          */
@@ -146,7 +146,7 @@ class PLASMA_EXPORT Theme : public QObject
         /**
          * Retrieves the default wallpaper associated with this theme.
          *
-         * @arg size the target height and width of the wallpaper; if an invalid size
+         * @param size the target height and width of the wallpaper; if an invalid size
          *           is passed in, then a default size will be provided instead.
          * @return the full path to the wallpaper image
          */
@@ -155,7 +155,7 @@ class PLASMA_EXPORT Theme : public QObject
         /**
          * Checks if this theme has an image named in a certain way
          *
-         * @arg name the name of the file in the theme directory (without the
+         * @param name the name of the file in the theme directory (without the
          *           ".svg" part or a leading slash)
          * @return true if the image exists for this theme
          */
@@ -171,7 +171,7 @@ class PLASMA_EXPORT Theme : public QObject
         /**
          * Returns the text color to be used by items resting on the background
          *
-         * @arg role which role (usage pattern) to get the color for
+         * @param role which role (usage pattern) to get the color for
          */
         Q_INVOKABLE QColor color(ColorRole role) const;
 
@@ -179,15 +179,15 @@ class PLASMA_EXPORT Theme : public QObject
          * Sets the default font to be used with themed items. Defaults to
          * the application wide default font.
          *
-         * @arg font the new font
-         * @arg role which role (usage pattern) to set the font for
+         * @param font the new font
+         * @param role which role (usage pattern) to set the font for
          */
         Q_INVOKABLE void setFont(const QFont &font, FontRole role = DefaultFont);
 
         /**
          * Returns the font to be used by themed items
          *
-         * @arg role which role (usage pattern) to get the font for
+         * @param role which role (usage pattern) to get the font for
          */
         Q_INVOKABLE QFont font(FontRole role) const;
 
@@ -205,7 +205,7 @@ class PLASMA_EXPORT Theme : public QObject
          * Tells the theme whether to follow the global settings or use application
          * specific settings
          *
-         * @arg useGlobal pass in true to follow the global settings
+         * @param useGlobal pass in true to follow the global settings
          */
         void setUseGlobalSettings(bool useGlobal);
 
@@ -318,9 +318,9 @@ class PLASMA_EXPORT Theme : public QObject
         /**
          * Tries to load the rect of a sub element from a disk cache
          *
-         * @arg image path of the image we want to check
-         * @arg element sub element we want to retrieve
-         * @arg rect output parameter of the element rect found in cache
+         * @param image path of the image we want to check
+         * @param element sub element we want to retrieve
+         * @param rect output parameter of the element rect found in cache
          *           if not found or if we are sure it doesn't exist it will be QRect()
          * @return true if the element was found in cache or if we are sure the element doesn't exist
          **/
@@ -329,7 +329,7 @@ class PLASMA_EXPORT Theme : public QObject
         /**
          * Returns a list of all keys of cached rects for the given image.
          *
-         * @arg image path of the image for which the keys should be returned
+         * @param image path of the image for which the keys should be returned
          *
          * @return a QStringList whose elements are the entry keys in the rects cache
          *
@@ -340,16 +340,16 @@ class PLASMA_EXPORT Theme : public QObject
         /**
          * Inserts a rectangle of a sub element of an image into a disk cache
          *
-         * @arg image path of the image we want to insert information
-         * @arg element sub element we want insert the rect
-         * @arg rect element rectangle
+         * @param image path of the image we want to insert information
+         * @param element sub element we want insert the rect
+         * @param rect element rectangle
          **/
         void insertIntoRectsCache(const QString& image, const QString &element, const QRectF &rect);
 
         /**
          * Discards all the information about a given image from the rectangle disk cache
          *
-         * @arg image the path to the image the cache is assoiated with
+         * @param image the path to the image the cache is assoiated with
          **/
         void invalidateRectsCache(const QString &image);
 
@@ -358,7 +358,7 @@ class PLASMA_EXPORT Theme : public QObject
          * the permenant record of it on disk.
          * @see invalidateRectsCache
          *
-         * @arg image the path to the image the cache is assoiated with
+         * @param image the path to the image the cache is assoiated with
          */
         void releaseRectsCache(const QString &image);
 

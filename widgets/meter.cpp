@@ -325,6 +325,7 @@ void Meter::setValue(int value)
         d->animation->setEndValue(value);
         d->animation->start();
     }
+    emit valueChanged(value);
 }
 
 int MeterPrivate::meterValue() const

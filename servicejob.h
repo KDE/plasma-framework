@@ -63,10 +63,10 @@ public:
     /**
      * Default constructor
      *
-     * @arg destination the subject that the job is acting on
-     * @arg operation   the action that the job is performing on the @p destination
-     * @arg parameters  the parameters of the @p action
-     * @arg parent      the parent object for this service
+     * @param destination the subject that the job is acting on
+     * @param operation   the action that the job is performing on the @p destination
+     * @param parameters  the parameters of the @p action
+     * @param parent      the parent object for this service
      */
     ServiceJob(const QString &destination, const QString &operation,
                const QHash<QString, QVariant> &parameters, QObject *parent = 0);

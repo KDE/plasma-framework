@@ -141,7 +141,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         /**
          * Triggers a call to match. This will call match() internally.
          *
-         * @arg context the search context used in executing this match.
+         * @param context the search context used in executing this match.
          */
         void performMatch(Plasma::RunnerContext &context);
 

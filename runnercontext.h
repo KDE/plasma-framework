@@ -146,8 +146,8 @@ class PLASMA_EXPORT RunnerContext : public QObject
          *
          * If you are going to be adding multiple matches, use addMatches instead.
          *
-         * @arg term the search term that this match was generated for.
-         * @arg match the match to add
+         * @param term the search term that this match was generated for.
+         * @param match the match to add
          *
          * @return true if the match was added, false otherwise.
          */
@@ -160,7 +160,7 @@ class PLASMA_EXPORT RunnerContext : public QObject
          *
          * If you are going to be removing multiple matches, use removeMatches instead.
          *
-         * @arg matchId the id of match to remove
+         * @param matchId the id of match to remove
          *
          * @return true if the match was removed, false otherwise.
 	 * @since 4.4
@@ -172,7 +172,7 @@ class PLASMA_EXPORT RunnerContext : public QObject
          *
          * This method is thread safe and causes the matchesChanged() signal to be emitted.
          *
-         * @arg matchIdList the list of matches id to remove
+         * @param matchIdList the list of matches id to remove
          *
          * @return true if at least one match was removed, false otherwise.
          * @since 4.4

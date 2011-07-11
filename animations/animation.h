@@ -102,7 +102,7 @@ public:
 
     /**
      * Set the widget on which the animation is to be performed.
-     * @arg widget The QGraphicsWidget to be animated.
+     * @param widget The QGraphicsWidget to be animated.
      */
     void setTargetWidget(QGraphicsWidget* widget);
 
@@ -124,7 +124,7 @@ public:
 protected:
     /**
      * Change the animation duration. Default is 250ms.
-     * @arg duration The new duration of the animation.
+     * @param duration The new duration of the animation.
      */
     virtual void setDuration(int duration = 250);
 

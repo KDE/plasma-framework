@@ -190,6 +190,9 @@ DeclarativeWidget::DeclarativeWidget(QGraphicsWidget *parent)
 
 DeclarativeWidget::~DeclarativeWidget()
 {
+    QDeclarativeNetworkAccessManagerFactory *factory = d->engine->networkAccessManagerFactory();
+    d->engine->setNetworkAccessManagerFactory(0);
+    delete factory;
     delete d;
 }
 

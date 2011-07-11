@@ -315,7 +315,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         /**
          * Sets the list of custom categories that are used in addition to the default
          * set of categories known to libplasma for Applets.
-         * @arg categories a list of categories
+         * @param categories a list of categories
          * @since 4.3
          */
         void setCustomCategories(const QStringList &categories);
@@ -767,7 +767,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         /**
          * Sets the immutability type for this applet (not immutable,
          * user immutable or system immutable)
-         * @arg immutable the new immutability type of this applet
+         * @param immutable the new immutability type of this applet
          */
         void setImmutability(const ImmutabilityType immutable);
 
@@ -796,7 +796,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * Actually show your custom configuration interface
          * Use this only if you reimplemented showConfigurationInterface()
          *
-         * @arg widget the widget representing your configuration interface
+         * @param widget the widget representing your configuration interface
          *
          * @since 4.5
          */

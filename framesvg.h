@@ -99,7 +99,7 @@ class PLASMA_EXPORT FrameSvg : public Svg
          * as borders. It may also be used as a regular Plasma::Svg object
          * for direct access to elements in the Svg.
          *
-         * @arg parent options QObject to parent this to
+         * @param parent options QObject to parent this to
          *
          * @related Plasma::Theme
          */
@@ -108,13 +108,13 @@ class PLASMA_EXPORT FrameSvg : public Svg
 
         /**
          * Loads a new Svg
-         * @arg imagePath the new file
+         * @param imagePath the new file
          */
         Q_INVOKABLE void setImagePath(const QString &path);
 
         /**
          * Sets what borders should be painted
-         * @arg flags borders we want to paint
+         * @param flags borders we want to paint
          */
         void setEnabledBorders(const EnabledBorders borders);
 
@@ -126,7 +126,7 @@ class PLASMA_EXPORT FrameSvg : public Svg
 
         /**
          * Resize the frame maintaining the same border size
-         * @arg size the new size of the frame
+         * @param size the new size of the frame
          */
         Q_INVOKABLE void resizeFrame(const QSizeF &size);
 
@@ -137,7 +137,7 @@ class PLASMA_EXPORT FrameSvg : public Svg
 
         /**
          * Returns the margin size given the margin edge we want
-         * @arg edge the margin edge we want, top, bottom, left or right
+         * @param edge the margin edge we want, top, bottom, left or right
          * @return the margin size
          */
         Q_INVOKABLE qreal marginSize(const Plasma::MarginEdge edge) const;
@@ -145,10 +145,10 @@ class PLASMA_EXPORT FrameSvg : public Svg
         /**
          * Convenience method that extracts the size of the four margins
          * in the four output parameters
-         * @arg left left margin size
-         * @arg top top margin size
-         * @arg right right margin size
-         * @arg bottom bottom margin size
+         * @param left left margin size
+         * @param top top margin size
+         * @param right right margin size
+         * @param bottom bottom margin size
          */
         Q_INVOKABLE void getMargins(qreal &left, qreal &top, qreal &right, qreal &bottom) const;
 
@@ -164,7 +164,7 @@ class PLASMA_EXPORT FrameSvg : public Svg
          *
          * The prefix must exist in the SVG document, which means that this can only be
          * called successfully after setImagePath is called.
-         * @arg location location in the UI this frame will be drawn
+         * @param location location in the UI this frame will be drawn
          */
         Q_INVOKABLE void setElementPrefix(Plasma::Location location);
 
@@ -182,14 +182,14 @@ class PLASMA_EXPORT FrameSvg : public Svg
          * The prefix must exist in the SVG document, which means that this can only be
          * called successfully after setImagePath is called.
          *
-         * @arg prefix prefix for the SVG elements that make up the frame
+         * @param prefix prefix for the SVG elements that make up the frame
          */
         Q_INVOKABLE void setElementPrefix(const QString & prefix);
 
         /**
          * @return true if the svg has the necessary elements with the given prefix
          * to draw a frame
-         * @arg prefix the given prefix we want to check if drawable
+         * @param prefix the given prefix we want to check if drawable
          */
         Q_INVOKABLE bool hasElementPrefix(const QString & prefix) const;
 
@@ -199,7 +199,7 @@ class PLASMA_EXPORT FrameSvg : public Svg
          * hasElementPrefix("west") and hasElementPrefix("east")
          * @return true if the svg has the necessary elements with the given prefix
          * to draw a frame.
-         * @arg location the given prefix we want to check if drawable
+         * @param location the given prefix we want to check if drawable
          */
         Q_INVOKABLE bool hasElementPrefix(Plasma::Location location) const;
 
@@ -222,7 +222,7 @@ class PLASMA_EXPORT FrameSvg : public Svg
 
        /**
         * Sets whether saving all the rendered prefixes in a cache or not
-        * @arg cache if use the cache or not
+        * @param cache if use the cache or not
         */
         Q_INVOKABLE void setCacheAllRenderedFrames(bool cache);
 
@@ -241,7 +241,7 @@ class PLASMA_EXPORT FrameSvg : public Svg
        /**
          * Returns a pixmap of the SVG represented by this object.
          *
-         * @arg elelementId the ID string of the element to render, or an empty
+         * @param elelementId the ID string of the element to render, or an empty
          *                  string for the whole SVG (the default)
          * @return a QPixmap of the rendered SVG
          */
@@ -249,9 +249,9 @@ class PLASMA_EXPORT FrameSvg : public Svg
 
         /**
          * Paints the loaded SVG with the elements that represents the border
-         * @arg painter the QPainter to use
-         * @arg target the target rectangle on the paint device
-         * @arg source the portion rectangle of the source image
+         * @param painter the QPainter to use
+         * @param target the target rectangle on the paint device
+         * @param source the portion rectangle of the source image
          */
         Q_INVOKABLE void paintFrame(QPainter *painter, const QRectF &target,
                                     const QRectF &source = QRectF());
@@ -259,8 +259,8 @@ class PLASMA_EXPORT FrameSvg : public Svg
         /**
          * Paints the loaded SVG with the elements that represents the border
          * This is an overloaded member provided for convenience
-         * @arg painter the QPainter to use
-         * @arg pos where to paint the svg
+         * @param painter the QPainter to use
+         * @param pos where to paint the svg
          */
         Q_INVOKABLE void paintFrame(QPainter *painter, const QPointF &pos = QPointF(0, 0));
 

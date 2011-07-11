@@ -326,7 +326,7 @@ public Q_SLOTS:
 
     /**
      * Save applets layout to file
-     * @arg config the file to save to, or the default config file if QString()
+     * @param config the file to save to, or the default config file if QString()
      */
     void saveLayout(const QString &config = QString()) const;
 
@@ -338,7 +338,7 @@ public Q_SLOTS:
     /**
      * Sets the immutability type for this Corona (not immutable,
      * user immutable or system immutable)
-     * @arg immutable the new immutability type of this applet
+     * @param immutable the new immutability type of this applet
      */
     void setImmutability(const ImmutabilityType immutable);
 
@@ -448,8 +448,8 @@ protected:
     /**
      * Maps a stock animation to one of the semantic animations. Used to control things such
      * as what animation is used to make a Plasma::Appear appear in a containment.
-     * @arg from the animation to map a new value to
-     * @arg to the animation value to map to from
+     * @param from the animation to map a new value to
+     * @param to the animation value to map to from
      * @since 4.5
      */
     void mapAnimation(Animator::Animation from, Animator::Animation to);
@@ -457,8 +457,8 @@ protected:
     /**
      * Maps a loadable animation to one of the semantic animations. Used to control things such
      * as what animation is used to make a Plasma::Appear appear in a containment.
-     * @arg from the animation to map a new value to
-     * @arg to the animation value to map to from; this must map to a Javascript animation
+     * @param from the animation to map a new value to
+     * @param to the animation value to map to from; this must map to a Javascript animation
      * @since 4.5
      */
     void mapAnimation(Animator::Animation from, const QString &to);

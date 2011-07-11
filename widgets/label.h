@@ -55,7 +55,7 @@ public:
     /**
      * Constructs a label with word wrap on by default
      *
-     * @arg parent the parent of this widget
+     * @param parent the parent of this widget
      */
     explicit Label(QGraphicsWidget *parent = 0);
     ~Label();
@@ -63,7 +63,7 @@ public:
     /**
      * Sets the display text for this Label
      *
-     * @arg text the text to display; should be translated.
+     * @param text the text to display; should be translated.
      */
     void setText(const QString &text);
 
@@ -75,7 +75,7 @@ public:
     /**
      * Sets the path to an image to display.
      *
-     * @arg path the path to the image; if a relative path, then a themed image will be loaded.
+     * @param path the path to the image; if a relative path, then a themed image will be loaded.
      */
     void setImage(const QString &path);
 
@@ -87,7 +87,7 @@ public:
     /**
      * Sets the alignment for the text
      *
-     * @arg the desired alignment
+     * @param the desired alignment
      */
     void setAlignment(Qt::Alignment alignment);
 
@@ -99,7 +99,7 @@ public:
     /**
      * Scale or not the contents of the label to the label size
      *
-     * @arg scale
+     * @param scale
      */
     void setScaledContents(bool scaled);
 
@@ -111,7 +111,7 @@ public:
     /**
      * Set if the text on the label can be selected with the mouse
      *
-     * @arg enable true if we want to manage text selection with the mouse
+     * @param enable true if we want to manage text selection with the mouse
      * @since 4.4 
      */
     void setTextSelectable(bool enable);
@@ -125,7 +125,7 @@ public:
     /**
      * Sets if the text of the label can wrap in multiple lines
      *
-     * @arg wrap multiple lines or not
+     * @param wrap multiple lines or not
      * @since 4.5
      */
     void setWordWrap(bool wrap);
@@ -139,7 +139,7 @@ public:
     /**
      * Sets the stylesheet used to control the visual display of this Label
      *
-     * @arg stylesheet a CSS string
+     * @param stylesheet a CSS string
      */
     void setStyleSheet(const QString &stylesheet);
 

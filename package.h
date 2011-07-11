@@ -48,10 +48,23 @@ class PLASMA_EXPORT Package
         explicit Package();
 
         /**
+<<<<<<< HEAD
+=======
+         * Construct a Package object
+         *
+         * @param packageRoot path to the package installation root
+         * @param package the name of the package
+         * @param structure the package structure describing this package
+         **/
+        Package(const QString &packageRoot, const QString &package,
+                PackageStructure::Ptr structure);
+
+        /**
+>>>>>>> origin/master
           * Construct a Package object.
           *
-          * @arg packagePath full path to the package directory
-          * @arg structure the package structure describing this package
+          * @param packagePath full path to the package directory
+          * @param structure the package structure describing this package
           */
         Package(const QString &packagePath, PackageStructure::Ptr structure);
 
@@ -78,9 +91,9 @@ class PLASMA_EXPORT Package
         /**
          * Get the path to a given file.
          *
-         * @arg fileType the type of file to look for, as defined in the
+         * @param fileType the type of file to look for, as defined in the
          *               package structure
-         * @arg filename the name of the file
+         * @param filename the name of the file
          * @return path to the file on disk. QString() if not found.
          **/
         QString filePath(const char *fileType, const QString &filename) const;
@@ -88,7 +101,7 @@ class PLASMA_EXPORT Package
         /**
          * Get the path to a given file.
          *
-         * @arg fileType the type of file to look for, as defined in the
+         * @param fileType the type of file to look for, as defined in the
          *               package structure. The type must refer to a file
          *               in the package structure and not a directory.
          * @return path to the file on disk. QString() if not found
@@ -98,7 +111,7 @@ class PLASMA_EXPORT Package
         /**
          * Get the list of files of a given type.
          *
-         * @arg fileType the type of file to look for, as defined in the
+         * @param fileType the type of file to look for, as defined in the
          *               package structure.
          * @return list of files by name, suitable for passing to filePath
          **/
@@ -106,7 +119,7 @@ class PLASMA_EXPORT Package
 
         /**
          * Sets the path to the root of this package
-         * @arg path and absolute path
+         * @param path and absolute path
          * @since 4.3
          */
         void setPath(const QString &path);

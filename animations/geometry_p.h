@@ -62,7 +62,7 @@ public:
      *
      * If no geometry is set, it will use the widget current geometry
      * when the animation is first run).
-     * @arg geometry The initial geometry.
+     * @param geometry The initial geometry.
      */
     void setStartGeometry(const QRectF &geometry);
 

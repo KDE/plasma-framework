@@ -70,7 +70,7 @@ public:
     /**
      * Sets the stylesheet used to control the visual display of this SpinBox
      *
-     * @arg stylesheet a CSS string
+     * @param stylesheet a CSS string
      */
     void setStyleSheet(const QString &stylesheet);
 

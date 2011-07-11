@@ -48,7 +48,7 @@ public:
     /**
      * Constructs a new BusyWidget
      *
-     * @arg parent the parent of this widget
+     * @param parent the parent of this widget
      */
     explicit BusyWidget(QGraphicsWidget *parent = 0);
     ~BusyWidget();

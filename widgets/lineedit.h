@@ -41,7 +41,7 @@ class PLASMA_EXPORT LineEdit : public QGraphicsProxyWidget
     Q_OBJECT
 
     Q_PROPERTY(QGraphicsWidget *parentWidget READ parentWidget)
-    Q_PROPERTY(QString text READ text WRITE setText NOTIFY textEdited)
+    Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
     Q_PROPERTY(bool clearButtonShown READ isClearButtonShown WRITE setClearButtonShown)
     Q_PROPERTY(QString clickMessage READ clickMessage WRITE setClickMessage)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
@@ -54,7 +54,7 @@ public:
     /**
      * Sets the display text for this LineEdit
      *
-     * @arg text the text to display; should be translated.
+     * @param text the text to display; should be translated.
      */
     void setText(const QString &text);
 
@@ -92,7 +92,7 @@ public:
     /**
      * Sets the stylesheet used to control the visual display of this LineEdit
      *
-     * @arg stylesheet a CSS string
+     * @param stylesheet a CSS string
      */
     void setStyleSheet(const QString &stylesheet);
 
@@ -104,7 +104,7 @@ public:
     /**
      * Sets the line edit wrapped by this LineEdit (widget must inherit KLineEdit), ownership is transferred to the LineEdit
      *
-     * @arg text edit that will be wrapped by this LineEdit
+     * @param nativeWidget line edit that will be wrapped by this LineEdit
      * @since KDE4.4
      */
     void setNativeWidget(KLineEdit *nativeWidget);

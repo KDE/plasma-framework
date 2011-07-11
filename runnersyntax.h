@@ -43,11 +43,11 @@ class PLASMA_EXPORT RunnerSyntax
         /**
          * Constructs a simple syntax object
          *
-         * @arg exampleQuery an example of the query, with :q: placed wherever
+         * @param exampleQuery an example of the query, with :q: placed wherever
          *                   search term text might appear. e.g. if the runner
          *                   accepts "keyword some random text" then the value
          *                   of this parameter should be "keyword :q:"
-         * @arg descrition A description of what the described syntax does from
+         * @param descrition A description of what the described syntax does from
          *                 the user's point of view.
          */
         RunnerSyntax(const QString &exampleQuery, const QString &description);
@@ -70,7 +70,7 @@ class PLASMA_EXPORT RunnerSyntax
          * This allows the runner to show these relationships by grouping the
          * example queries into one Syntax object
          *
-         * @arg exampleQuery an example of the query, with :q: placed wherever
+         * @param exampleQuery an example of the query, with :q: placed wherever
          *                   search term text might appear. e.g. if the runner
          *                   accepts "keyword some random text" then the value
          *                   of this parameter should be "keyword :q:"

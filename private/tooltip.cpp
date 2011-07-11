@@ -56,10 +56,6 @@ public:
           m_toolTip(parent),
           m_document(new QTextDocument(this))
     {
-        //d->text->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-//        QTextOption op;
-//        op.setWrapMode(QTextOption::WordWrap);
-//        m_document->setDefaultTextOption(op);
     }
 
     void setStyleSheet(const QString &css)
@@ -71,18 +67,16 @@ public:
     {
         QString html;
         if (!data.mainText().isEmpty()) {
-            html.append("<b>" + data.mainText() + "</b>");
-
-            if (!data.subText().isEmpty()) {
-                html.append("<br>");
-            }
+            html.append("<div><b>" + data.mainText() + "</b></div>");
         }
         html.append(data.subText());
 
         m_anchor.clear();
         m_document->clear();
         data.registerResources(m_document);
-        m_document->setHtml("<p>" + html + "</p>");
+        if (!html.isEmpty()) {
+            m_document->setHtml("<p>" + html + "</p>");
+        }
         m_document->adjustSize();
 
         m_haloRects.clear();
@@ -327,12 +321,8 @@ void ToolTip::setContent(QObject *tipper, const ToolTipContent &data)
 
 void ToolTip::prepareShowing()
 {
-    if (!d->preview->isEmpty()) {
-        // show/hide the preview area
-        d->preview->show();
-    } else {
-        d->preview->hide();
-    }
+    // show/hide the preview area
+    d->preview->setVisible(!d->preview->isEmpty());
 
     layout()->activate();
     d->preview->setInfo();

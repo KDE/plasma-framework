@@ -73,7 +73,7 @@ class PLASMA_EXPORT Svg : public QObject
          *
          * The size is initialized to be the SVG's native size.
          *
-         * @arg parent options QObject to parent this to
+         * @param parent options QObject to parent this to
          *
          * @related Plasma::Theme
          */
@@ -88,7 +88,7 @@ class PLASMA_EXPORT Svg : public QObject
          * size of the requested element after the whole SVG has been scaled
          * to size().
          *
-         * @arg elementId  the ID string of the element to render, or an empty
+         * @param elementId  the ID string of the element to render, or an empty
          *                 string for the whole SVG (the default)
          * @return a QPixmap of the rendered SVG
          */
@@ -102,10 +102,10 @@ class PLASMA_EXPORT Svg : public QObject
          * be the size of the requested element after the whole SVG has been
          * scaled to size().
          *
-         * @arg painter    the QPainter to use
-         * @arg point      the position to start drawing; the entire svg will be
+         * @param painter    the QPainter to use
+         * @param point      the position to start drawing; the entire svg will be
          *                 drawn starting at this point.
-         * @arg elementId  the ID string of the element to render, or an empty
+         * @param elementId  the ID string of the element to render, or an empty
          *                 string for the whole SVG (the default)
          */
         Q_INVOKABLE void paint(QPainter *painter, const QPointF &point,
@@ -119,10 +119,10 @@ class PLASMA_EXPORT Svg : public QObject
          * be the size of the requested element after the whole SVG has been
          * scaled to size().
          *
-         * @arg painter    the QPainter to use
-         * @arg x          the horizontal coordinate to start painting from
-         * @arg y          the vertical coordinate to start painting from
-         * @arg elementId  the ID string of the element to render, or an empty
+         * @param painter    the QPainter to use
+         * @param x          the horizontal coordinate to start painting from
+         * @param y          the vertical coordinate to start painting from
+         * @param elementId  the ID string of the element to render, or an empty
          *                 string for the whole SVG (the default)
          */
         Q_INVOKABLE void paint(QPainter *painter, int x, int y,
@@ -131,10 +131,10 @@ class PLASMA_EXPORT Svg : public QObject
         /**
          * Paints all or part of the SVG represented by this object
          *
-         * @arg painter    the QPainter to use
-         * @arg rect       the rect to draw into; if smaller than the current size
+         * @param painter    the QPainter to use
+         * @param rect       the rect to draw into; if smaller than the current size
          *                 the drawing is starting at this point.
-         * @arg elementId  the ID string of the element to render, or an empty
+         * @param elementId  the ID string of the element to render, or an empty
          *                 string for the whole SVG (the default)
          */
         Q_INVOKABLE void paint(QPainter *painter, const QRectF &rect,
@@ -143,12 +143,12 @@ class PLASMA_EXPORT Svg : public QObject
         /**
          * Paints all or part of the SVG represented by this object
          *
-         * @arg painter    the QPainter to use
-         * @arg x          the horizontal coordinate to start painting from
-         * @arg y          the vertical coordinate to start painting from
-         * @arg width      the width of the element to draw
-         * @arg height     the height of the element do draw
-         * @arg elementId  the ID string of the element to render, or an empty
+         * @param painter    the QPainter to use
+         * @param x          the horizontal coordinate to start painting from
+         * @param y          the vertical coordinate to start painting from
+         * @param width      the width of the element to draw
+         * @param height     the height of the element do draw
+         * @param elementId  the ID string of the element to render, or an empty
          *                 string for the whole SVG (the default)
          */
         Q_INVOKABLE void paint(QPainter *painter, int x, int y, int width,
@@ -177,8 +177,8 @@ class PLASMA_EXPORT Svg : public QObject
          * image will be scaled to this size and each element will be
          * scaled appropriately.
          *
-         * @arg width   the new width
-         * @arg height  the new height
+         * @param width   the new width
+         * @param height  the new height
          **/
         Q_INVOKABLE void resize(qreal width, qreal height);
 
@@ -192,7 +192,7 @@ class PLASMA_EXPORT Svg : public QObject
          * image will be scaled to this size and each element will be
          * scaled appropriately.
          *
-         * @arg size  the new size of the image
+         * @param size  the new size of the image
          **/
         Q_INVOKABLE void resize(const QSizeF &size);
 
@@ -210,7 +210,7 @@ class PLASMA_EXPORT Svg : public QObject
          * has been scaled (see resize()).  Note that this is unaffected by
          * the containsMultipleImages property.
          *
-         * @arg elementId  the id of the element to check
+         * @param elementId  the id of the element to check
          * @return the size of a given element, given the current size of the SVG
          **/
         Q_INVOKABLE QSize elementSize(const QString &elementId) const;
@@ -222,7 +222,7 @@ class PLASMA_EXPORT Svg : public QObject
          * the SVG has been scaled (see resize()).  Note that this is
          * unaffected by the containsMultipleImages property.
          *
-         * @arg elementId  the id of the element to check
+         * @param elementId  the id of the element to check
          * @return  the current rect of a given element, given the current size of the SVG
          **/
         Q_INVOKABLE QRectF elementRect(const QString &elementId) const;
@@ -230,7 +230,7 @@ class PLASMA_EXPORT Svg : public QObject
         /**
          * Check whether an element exists in the loaded SVG.
          *
-         * @arg elementId  the id of the element to check for
+         * @param elementId  the id of the element to check for
          * @return @c true if the element is defined in the SVG, otherwise @c false
          **/
         Q_INVOKABLE bool hasElement(const QString &elementId) const;
@@ -242,7 +242,7 @@ class PLASMA_EXPORT Svg : public QObject
          *
          * NOTE: not implemented!  This will currently return an empty string!
          *
-         * @arg point  a point in SVG co-ordinates
+         * @param point  a point in SVG co-ordinates
          * @return     an empty string
          */
         Q_INVOKABLE QString elementAtPoint(const QPoint &point) const;
@@ -268,7 +268,7 @@ class PLASMA_EXPORT Svg : public QObject
         * affects whether the elements are resized to size() by default.
         * See paint() and pixmap().
         *
-        * @arg multiple true if the svg contains multiple images
+        * @param multiple true if the svg contains multiple images
         */
         void setContainsMultipleImages(bool multiple);
 
@@ -296,7 +296,7 @@ class PLASMA_EXPORT Svg : public QObject
          * relative paths will be searched for in the applet's package
          * first.
          *
-         * @arg svgFilePath  either an absolute path to an SVG file, or
+         * @param svgFilePath  either an absolute path to an SVG file, or
          *                   an image name
          */
         virtual void setImagePath(const QString &svgFilePath);
@@ -345,7 +345,7 @@ class PLASMA_EXPORT Svg : public QObject
          *
          * This determines how relative image paths are interpreted.
          *
-         * @arg theme  the theme object to use
+         * @param theme  the theme object to use
          * @since 4.3
          */
         void setTheme(Plasma::Theme *theme);

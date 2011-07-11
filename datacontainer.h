@@ -57,7 +57,7 @@ class DataContainerPrivate;
  * See DataEngine::addSource() for more information.
  *
  * Note that there is normally no need to subclass DataContainer, except as
- * a way of encapsulating the data retreival for a source, since all notifications
+ * a way of encapsulating the data retrieval for a source, since all notifications
  * are done via signals rather than virtual methods.
  **/
 class PLASMA_EXPORT DataContainer : public QObject

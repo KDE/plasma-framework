@@ -57,7 +57,7 @@ public:
     /**
      * Set the animation movement direction (e.g. MoveAny, MoveUp, MoveDown,
      * MoveLeft, MoveRight) which can be combined (i.e. MoveUp|MoveLeft).
-     * @arg direction animation direction
+     * @param direction animation direction
      */
     void setMovementDirection(const Animation::MovementDirection &direction);
 
@@ -69,7 +69,7 @@ public:
     /**
      * Set the animation rotation reference (e.g. Center, Up, Down, Left,
      * Right) which can be combined (i.e. Center|Up).
-     * @arg reference animation reference
+     * @param reference animation reference
      */
     void setReference(const Animation::Reference &reference);
 
@@ -91,7 +91,7 @@ public:
 
     /**
      * Set the back widget that is used after the animation to be finished
-     * @arg backWidget The back widget
+     * @param backWidget The back widget
      */
     void setBackWidget(QGraphicsWidget *backWidget);
 

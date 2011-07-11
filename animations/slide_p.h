@@ -66,7 +66,7 @@ public:
 
     /**
      * Set the animation direction
-     * @arg direction animation direction
+     * @param direction animation direction
      */
     void setMovementDirection(const Animation::MovementDirection&direction);
 

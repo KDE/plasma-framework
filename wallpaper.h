@@ -89,7 +89,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
         /**
          * Returns a list of all known wallpapers.
          *
-         * @arg formFactor the format of the wallpaper being search for (e.g. desktop)
+         * @param formFactor the format of the wallpaper being search for (e.g. desktop)
          * @return list of wallpapers
          **/
         static KPluginInfo::List listWallpaperInfo(const QString &formFactor = QString());
@@ -324,7 +324,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * Wallpaper's current state, allowing for better selection of papers from packages,
          * for instance.
          *
-         * @arg resizeMethod The resize method to assume will be used for future wallpaper
+         * @param resizeMethod The resize method to assume will be used for future wallpaper
          *                   scaling; may later be changed by calls to render()
          *
          * @since 4.3
@@ -336,7 +336,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * Wallpaper's current state, allowing for better selection of papers from packages,
          * for instance.
          *
-         * @arg targetSize The size to assume will be used for future wallpaper scaling
+         * @param targetSize The size to assume will be used for future wallpaper scaling
          *
          * @since 4.3
          */

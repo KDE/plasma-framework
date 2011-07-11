@@ -132,7 +132,7 @@ public:
     /**
      * Sets the destination for this Service to operate on
      *
-     * @arg destination specific to each Service, this sets which
+     * @param destination specific to each Service, this sets which
      *                  target or address for ServiceJobs to operate on
      */
     Q_INVOKABLE void setDestination(const QString &destination);
@@ -223,7 +223,7 @@ public:
 
     /**
      * @return a parameter map for the given description
-     * @arg description the configuration values to turn into the parameter map
+     * @param description the configuration values to turn into the parameter map
      * @since 4.4
      */
     Q_INVOKABLE QHash<QString, QVariant> parametersFromDescription(const KConfigGroup &description);
@@ -245,7 +245,7 @@ protected:
     /**
      * Default constructor
      *
-     * @arg parent the parent object for this service
+     * @param parent the parent object for this service
      */
     explicit Service(QObject *parent = 0);
 
@@ -282,7 +282,7 @@ protected:
      * Sets the name of the Service; useful for Services not loaded from plugins,
      * which use the plugin name for this.
      *
-     * @arg name the name to use for this service
+     * @param name the name to use for this service
      */
     void setName(const QString &name);
 

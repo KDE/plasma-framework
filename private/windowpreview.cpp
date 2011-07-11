@@ -133,8 +133,9 @@ bool WindowPreview::highlightWindows() const
 
 void WindowPreview::setInfo()
 {
+    QWidget *w = parentWidget();
     if (isEmpty()) {
-        WindowEffects::showWindowThumbnails(parentWidget()->winId());
+        WindowEffects::showWindowThumbnails(w->winId());
         return;
     }
 
@@ -143,11 +144,11 @@ void WindowPreview::setInfo()
     }
 
     if (windowSizes.size() == 0) {
-        WindowEffects::showWindowThumbnails(parentWidget()->winId());
+        WindowEffects::showWindowThumbnails(w->winId());
         return;
     }
 
-    Q_ASSERT(parentWidget()->isWindow()); // parent must be toplevel
+    Q_ASSERT(w->isWindow()); // parent must be toplevel
 
     QSize thumbnailSize = sizeHint();
     thumbnailSize.scale(size(), Qt::KeepAspectRatio);
@@ -155,21 +156,24 @@ void WindowPreview::setInfo()
 
     qreal left, top, right, bottom;
     m_background->getMargins(left, top, right, bottom);
-    QRect thumbnailRect = geometry().adjusted(left, top, -right, -bottom);
-
+    const QRect thumbnailRect(QPoint(left, top), size() - QSize(left + right, top + bottom));
     const int numWindows = ids.size();
+    const qreal thumbWidth = (thumbnailRect.width() - WINDOW_MARGIN*(numWindows - 1)) / numWindows;
 
+    // we paint in parent coords, but accept events in local coords
+    QList<QRect> inParentCoords;
     m_thumbnailRects.clear();
-    int x = thumbnailRect.x();
 
+    int x = thumbnailRect.x();
     foreach (QSize s, windowSizes) {
-        s.scale((qreal)(thumbnailRect.width()-WINDOW_MARGIN*(numWindows-1))/numWindows, thumbnailRect.height(), Qt::KeepAspectRatio);
+        s.scale(thumbWidth, thumbnailRect.height(), Qt::KeepAspectRatio);
         int y = thumbnailRect.y() + (thumbnailRect.height() - s.height())/2;
-        m_thumbnailRects.append(QRect(QPoint(x,y), s));
+        m_thumbnailRects.append(QRect(QPoint(x, y), s));
+        inParentCoords.append(QRect(mapToParent(QPoint(x, y)), s));
         x += s.width() + WINDOW_MARGIN;
     }
 
-    WindowEffects::showWindowThumbnails(parentWidget()->winId(), ids, m_thumbnailRects);
+    WindowEffects::showWindowThumbnails(w->winId(), ids, inParentCoords);
 }
 
 void WindowPreview::paintEvent(QPaintEvent *e)
@@ -180,29 +184,23 @@ void WindowPreview::paintEvent(QPaintEvent *e)
 
     qreal left, top, right, bottom;
     m_background->getMargins(left, top, right, bottom);
+    const QSize delta(left + right, top + bottom);
+    const QPoint topLeft(left, top);
 
     foreach (const QRect &r, m_thumbnailRects) {
         //kWarning()<<r;
-        m_background->resizeFrame(r.size()+QSize(left+right, top+bottom));
-        m_background->paintFrame(&painter, r.topLeft()-pos()-QPoint(left,top));
+        m_background->resizeFrame(r.size() + delta);
+        m_background->paintFrame(&painter, r.topLeft() - topLeft);
     }
-
 }
 
 void WindowPreview::mousePressEvent(QMouseEvent *event)
 {
-    QPoint p = event->pos();
-    WId wid = 0;
-
     for (int i = 0; i < m_thumbnailRects.size(); ++i) {
-        if (m_thumbnailRects[i].contains(p)) {
-            wid = ids[i];
-            break;
+        if (m_thumbnailRects[i].contains(event->pos())) {
+            emit windowPreviewClicked(ids[i], event->buttons(), event->modifiers(), event->globalPos());
+            return;
         }
-    }
-
-    if (wid) {
-        emit windowPreviewClicked(wid, event->buttons(), event->modifiers(), event->globalPos());
     }
 }
 
@@ -212,14 +210,13 @@ void WindowPreview::mouseMoveEvent(QMouseEvent *event)
         return;
     }
 
-    int i = 0;
-    foreach (const QRect &rect, m_thumbnailRects) {
-        if (rect.contains(event->pos())) {
-            WindowEffects::highlightWindows(effectiveWinId(), QList<WId>()<<effectiveWinId()<<ids[i]);
+    for (int i = 0; i < m_thumbnailRects.size(); ++i) {
+        if (m_thumbnailRects[i].contains(event->pos())) {
+            WindowEffects::highlightWindows(effectiveWinId(), QList<WId>() << effectiveWinId() << ids[i]);
             return;
         }
-        ++i;
     }
+
     WindowEffects::highlightWindows(effectiveWinId(), QList<WId>());
 }
 
