@@ -122,14 +122,14 @@ public:
      * @deprecated
      * @see setWindowsToPreview
      */
-    void setWindowToPreview(WId id);
+    KDE_DEPRECATED void setWindowToPreview(WId id);
 
     /**
      * Id of a window if you want to show a preview
      * @deprecated
      * @see windowsToPreview
      */
-    WId windowToPreview() const;
+    KDE_DEPRECATED WId windowToPreview() const;
 
     /**
      * Sets the IDS of the windows to show a preview for
