@@ -227,11 +227,10 @@ void ToolTipContent::registerResources(QTextDocument *document) const
     while (it.hasNext()) {
         it.next();
         const ToolTipResource &r = it.value();
-        QTextDocument::ResourceType t;
+        QTextDocument::ResourceType t = QTextDocument::ImageResource;
 
         switch (r.type) {
             case ImageResource:
-                t = QTextDocument::ImageResource;
                 break;
             case HtmlResource:
                 t = QTextDocument::HtmlResource;
