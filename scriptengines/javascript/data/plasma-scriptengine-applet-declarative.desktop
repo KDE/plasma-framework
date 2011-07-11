@@ -48,6 +48,7 @@ Name[zh_CN]=描述部件
 Name[zh_TW]=宣告元件
 Comment=Native Plasma widget written in QML and JavaScript
 Comment[ast]=Elementu gráficu nativu de Plasma escritu en QML y JavaScript
+Comment[bg]=Оригинална джаджа за Plasma, написана наQML и JavaScript
 Comment[bs]=Samosvojni plazma grafičkih kontrola napisana u QML‑u i javaskriptu
 Comment[ca]=Estri nadiu del Plasma escrit en QML i JavaScript
 Comment[ca@valencia]=Estri nadiu del Plasma escrit en QML i JavaScript
