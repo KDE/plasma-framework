@@ -105,8 +105,6 @@ SimpleJavaScriptApplet::SimpleJavaScriptApplet(QObject *parent, const QVariantLi
     Q_UNUSED(args);
 //    kDebug() << "Script applet launched, args" << applet()->startupArguments();
 
-    KGlobal::locale()->insertCatalog(description().pluginName());
-
     // TODO this will be set to the engine we get from QML
     m_engine = new QScriptEngine(this);
     m_env = new ScriptEnv(this, m_engine);
@@ -311,6 +309,7 @@ bool SimpleJavaScriptApplet::init()
             this, SLOT(extenderItemRestored(Plasma::ExtenderItem*)));
     connect(applet(), SIGNAL(activate()),
             this, SLOT(activate()));
+    KGlobal::locale()->insertCatalog(description().pluginName());
     setupObjects();
 
     AppletAuthorization auth(this);

@@ -70,7 +70,6 @@ DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariant
       m_env(0),
       m_auth(this)
 {
-    KGlobal::locale()->insertCatalog(description().pluginName());
     Q_UNUSED(args);
 }
 
@@ -82,6 +81,7 @@ bool DeclarativeAppletScript::init()
 {
     m_declarativeWidget = new Plasma::DeclarativeWidget(applet());
     m_declarativeWidget->setInitializationDelayed(true);
+    KGlobal::locale()->insertCatalog(description().pluginName());
 
     //make possible to import extensions from the package
     //FIXME: probably to be removed, would make possible to use native code from within the package :/
