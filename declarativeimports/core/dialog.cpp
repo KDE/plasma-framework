@@ -181,7 +181,6 @@ void DialogProxy::setVisible(const bool visible)
             m_dialog->setVisible(visible);
             m_dialog->raise();
         }
-        emit visibleChanged();
     }
 }
 
@@ -271,6 +270,10 @@ bool DialogProxy::eventFilter(QObject *watched, QEvent *event)
         if (re->oldSize().height() != re->size().height()) {
             emit heightChanged();
         }
+    } else if (watched == m_dialog && event->type() == QEvent::Show) {
+        emit visibleChanged();
+    } else if (watched == m_dialog && event->type() == QEvent::Hide) {
+        emit visibleChanged();
     } else if (watched == m_dialog && event->type() == QEvent::WindowActivate) {
         m_activeWindow = true;
         emit activeWindowChanged();
