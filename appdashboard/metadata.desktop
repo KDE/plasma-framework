@@ -43,6 +43,7 @@ Name[x-test]=xxApplication dashboardxx
 Name[zh_CN]=程序面板
 Name[zh_TW]=應用程式控制面板
 Comment=Intended as Application dashboard default
+Comment[bg]=Табло със стандартни програми
 Comment[bs]=Namijenjeno kao podrazumijevana programska instrument tabla
 Comment[ca]=Proposat com a tauler d'aplicacions per defecte
 Comment[ca@valencia]=Proposat com a tauler d'aplicacions per defecte
