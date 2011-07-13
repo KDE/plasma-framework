@@ -54,7 +54,6 @@ public:
 
     PlasmaKPartCorona *corona();
     Plasma::Containment *containment();
-    QString category();
 
 public Q_SLOTS:
     /**
@@ -107,7 +106,6 @@ private Q_SLOTS:
 private:
     PlasmaKPartCorona* m_corona;
     PlasmaKPartView* m_view;
-    QString m_category;
     KService::Ptr m_service;
     QHash<QString,Plasma::Applet*>* m_appletList;
     QVBoxLayout* m_configLayout;

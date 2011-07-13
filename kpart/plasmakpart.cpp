@@ -66,10 +66,6 @@ PlasmaKPart::PlasmaKPart(QWidget *parentWidget, QObject *parent, const QVariantL
         }
     }
 
-    if (args.length() > 1) {
-        m_category = args.at(1).value<QString>();
-    }
-
     // this line initializes the corona.
     corona();
 }
@@ -171,11 +167,6 @@ bool PlasmaKPart::setPluginLoader(Plasma::PluginLoader *loader)
 
     Plasma::PluginLoader::setPluginLoader(loader);
     return true;
-}
-
-QString PlasmaKPart::category()
-{
-    return m_category;
 }
 
 #include "plasmakpart.moc"
