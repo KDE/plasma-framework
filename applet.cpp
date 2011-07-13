@@ -1673,15 +1673,7 @@ void Applet::unpublish()
 
 bool Applet::isPublished() const
 {
-    if (d->package) {
-        return d->package->d->isPublished();
-    } else {
-        if (d->service) {
-            return d->service->d->isPublished();
-        } else {
-            return false;
-        }
-    }
+    return d->service && d->service->d->isPublished();
 }
 
 void Applet::setHasConfigurationInterface(bool hasInterface)
