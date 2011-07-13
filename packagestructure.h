@@ -332,20 +332,6 @@ protected:
     void setAllowExternalPaths(bool allow);
 
     /**
-<<<<<<< HEAD
-=======
-     * Sets the prefix that all the contents in this package should
-     * appear under. This defaults to "contents/" and is added automatically
-     * between the base path and the entries as defined by the package
-     * structure
-     *
-     * @param prefix the directory prefix to use
-     * @deprecated use setContentsPrefixPaths() instead.
-     */
-    KDE_DEPRECATED void setContentsPrefix(const QString &prefix);
-
-    /**
->>>>>>> origin/master
      * Sets the prefixes that all the contents in this package should
      * appear under. This defaults to "contents/" and is added automatically
      * between the base path and the entries as defined by the package
