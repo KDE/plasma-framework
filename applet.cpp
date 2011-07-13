@@ -1645,16 +1645,21 @@ bool Applet::hasConfigurationInterface() const
 
 void Applet::publish(AnnouncementMethods methods, const QString &resourceName)
 {
-    if (d->package) {
-        d->package->d->publish(methods);
-    } else if (d->appletDescription.isValid()) {
-        if (!d->service) {
-            d->service = new PlasmoidService(this);
-        }
+    if (!d->service) {
+        d->service = new PlasmoidService(this);
+    }
 
-        kDebug() << "publishing package under name " << resourceName;
-        d->service->d->publish(methods, resourceName, d->appletDescription);
+    const QString resName = resourceName.isEmpty() ?  i18nc("%1 is the name of a plasmoid, %2 the name of the machine that plasmoid is published on",
+                                                         "%1 on %2", name(), QHostInfo::localHostName())
+                                                   : resourceName;
+    kDebug() << "publishing package under name " << resName;
+    if (d->package && d->package->isValid()) {
+        d->service->d->publish(methods, resName, d->package->structure()->metadata());
+    } else if (!d->package && d->appletDescription.isValid()) {
+        d->service->d->publish(methods, resName, d->appletDescription);
     } else {
+        delete d->service;
+        d->service  = 0;
         kDebug() << "Can not publish invalid applets.";
     }
 }
