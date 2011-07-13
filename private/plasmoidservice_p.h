@@ -57,7 +57,6 @@ class PlasmoidService : public Service, DataEngineConsumer
     Q_OBJECT
 
     public:
-        PlasmoidService(const QString &plasmoidLocation);
         PlasmoidService(Applet *applet);
 
     protected:
@@ -66,6 +65,7 @@ class PlasmoidService : public Service, DataEngineConsumer
     private:
         QString m_packagePath;
         QString m_metadata;
+        QString m_pluginName;
         KTemporaryFile m_tempFile;
 
         friend class PlasmoidServiceJob;

@@ -31,7 +31,9 @@
 #include <kdebug.h>
 #include <ktemporaryfile.h>
 #include <kzip.h>
+#include <kservicetypetrader.h>
 
+#include <QDir>
 #include <QFile>
 #include <QFileInfo>
 #include <QHostInfo>
@@ -53,16 +55,20 @@ void PlasmoidServiceJob::start()
 {
     if (operationName() == "GetPackage") {
         kDebug() << "sending " << m_service->m_packagePath;
-        QFileInfo fileInfo(m_service->m_packagePath);
-
-        if (fileInfo.exists() && fileInfo.isAbsolute()) {
-            kDebug() << "file exists, let's try and read it";
-            QFile file(m_service->m_packagePath);
-            file.open(QIODevice::ReadOnly);
-            setResult(file.readAll());
+        if (m_service->m_packagePath.isEmpty()) {
+            // just return the plugin name in this case
+            setResult(m_service->m_pluginName);
         } else {
-            kDebug() << "file doesn't exists, we're sending the plugin name";
-            setResult(m_service->m_packagePath);
+            QFileInfo fileInfo(m_service->m_packagePath);
+
+            if (fileInfo.exists() && fileInfo.isAbsolute()) {
+                kDebug() << "file exists, let's try and read it";
+                QFile file(m_service->m_packagePath);
+                file.open(QIODevice::ReadOnly);
+                setResult(file.readAll());
+            } else {
+                setResult(QString());
+            }
         }
     } else if (operationName() == "GetMetaData") {
         QFile file(m_service->m_metadata);
@@ -78,52 +84,48 @@ void PlasmoidServiceJob::start()
         }
         setResult(serviceName);
     }
-}
 
-
-PlasmoidService::PlasmoidService(const QString &packageLocation)
-    : Plasma::Service(0)
-{
-    setName("plasmoidservice");
-
-    QString location;
-    location = packageLocation;
-    if (!location.endsWith('/')) {
-        location.append('/');
-    }
-
-    m_metadata = location + "metadata.desktop";
-
-    /*FIXME: either do something useful on error or don't waste time with them
-    if (!QFile::exists(m_metadata)) {
-        kDebug() << "not a valid package";
-    }
-    */
-
-    m_tempFile.open();
-    m_packagePath = m_tempFile.fileName();
-    m_tempFile.close();
-
-    // put everything into a zip archive
-    KZip creation(m_packagePath);
-    creation.setCompression(KZip::NoCompression);
-    if (!creation.open(QIODevice::WriteOnly)) {
-        /*FIXME: either do something useful on error or don't waste time with it */
-        kDebug() << "could not open archive";
-    }
-
-    creation.addLocalFile(location + "metadata.desktop", "metadata.desktop");
-    location.append("contents/");
-    creation.addLocalDirectory(location, "contents");
-    creation.close();
+    setResult(false);
 }
 
 PlasmoidService::PlasmoidService(Applet *applet)
+    : Plasma::Service(applet),
+      m_pluginName(applet->pluginName())
 {
     setName("plasmoidservice");
-    if (!applet->package() || !applet->package()->isValid()) {
-        kDebug() << "not a valid package";
-        m_packagePath = applet->pluginName();
+
+    if (applet->package() && !applet->package()->isValid()) {
+        const QString root = applet->package()->path();
+        m_metadata = root + "metadata.desktop";
+
+        m_tempFile.open();
+        m_packagePath = m_tempFile.fileName();
+        m_tempFile.close();
+
+        // put everything into a zip archive
+        KZip creation(m_packagePath);
+        creation.setCompression(KZip::NoCompression);
+        if (creation.open(QIODevice::WriteOnly)) {
+            QDir dir(root);
+            foreach (const QString &entry, dir.entryList(QDir::Files)) {
+                creation.addLocalFile(root + entry, entry);
+            }
+
+            foreach (const QString &entry, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+                creation.addLocalDirectory(root + entry, entry);
+            }
+
+            creation.close();
+        } else {
+            kDebug() << "could not open archive";
+        }
+    } else {
+        kDebug() << "applet lacks a valid package";
+        const QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(applet->pluginName());
+        KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
+        if (!offers.isEmpty()) {
+            m_metadata = offers.first()->entryPath();
+        }
     }
 }
 
