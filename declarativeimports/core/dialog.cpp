@@ -153,8 +153,10 @@ void DialogProxy::syncMainItem()
 
     QGraphicsWidget *widget = qobject_cast<QGraphicsWidget *>(m_mainItem.data());
     if (widget) {
-        m_declarativeItemContainer->deleteLater();
-        m_declarativeItemContainer = 0;
+        if (m_declarativeItemContainer) {
+            m_declarativeItemContainer->deleteLater();
+            m_declarativeItemContainer = 0;
+        }
     } else {
         QDeclarativeItem *di = qobject_cast<QDeclarativeItem *>(m_mainItem.data());
         if (di) {
