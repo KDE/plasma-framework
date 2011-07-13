@@ -145,6 +145,10 @@ PackageStructure::Ptr PackageStructure::load(const QString &packageFormat)
     } else if (packageFormat == "Plasma/Theme") {
         structure = Theme::packageStructure();
         structure->d->type = "Plasma/Theme";
+    } else if (packageFormat == "Plasma/Generic") {
+        structure = defaultPackageStructure(GenericComponent);
+        structure->d->type = "Plasma/Generic";
+        structure->setDefaultPackageRoot(KStandardDirs::locate("data", "plasmapackages"));
     }
 
     if (structure) {
