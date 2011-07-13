@@ -38,7 +38,8 @@
 
 namespace Plasma {
 
-static PluginLoader* s_pluginLoader = 0;
+static PluginLoader *s_pluginLoader = 0;
+static bool s_isDefaultLoader = false;
 
 class PluginLoaderPrivate
 {
@@ -71,6 +72,7 @@ PluginLoader *PluginLoader::pluginLoader()
         // implementation. this prevents plugins from nefariously injecting their own
         // plugin loader if the app doesn't
         s_pluginLoader = new PluginLoader;
+        s_isDefaultLoader = true;
     }
 
     return s_pluginLoader;
@@ -83,7 +85,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         return 0;
     }
 
-    Applet *applet = internalLoadApplet(name, appletId, args);
+    Applet *applet = s_isDefaultLoader ? 0 : internalLoadApplet(name, appletId, args);
     if (applet) {
         return applet;
     }
@@ -160,7 +162,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
 
 DataEngine *PluginLoader::loadDataEngine(const QString &name)
 { 
-    DataEngine *engine = internalLoadDataEngine(name);
+    DataEngine *engine = s_isDefaultLoader ? 0 : internalLoadDataEngine(name);
     if (engine) {
         return engine;
     }
@@ -200,12 +202,12 @@ AbstractRunner *PluginLoader::loadRunner(const QString &name)
 {
     // FIXME: RunnerManager is all wrapped around runner loading; that should be sorted out
     // and the actual plugin loading added here
-    return internalLoadRunner(name);
+    return s_isDefaultLoader ? 0 : internalLoadRunner(name);
 }
 
 Service *PluginLoader::loadService(const QString &name, const QVariantList &args, QObject *parent)
 {
-    Service *service = internalLoadService(name, args, parent);
+    Service *service = s_isDefaultLoader ? 0 : internalLoadService(name, args, parent);
     if (service) {
         return service;
     }
@@ -246,20 +248,22 @@ Service *PluginLoader::loadService(const QString &name, const QVariantList &args
 
 Package PluginLoader::loadPackage(const QString &name, const QVariantList &args)
 {
-    Package p = internalLoadPackage(name, args);
-    if (p.isValid()) {
-        return p;
+    if (!s_isDefaultLoader) {
+        Package p = internalLoadPackage(name, args);
+        if (p.isValid()) {
+            return p;
+        }
     }
 
     //TODO: pull code from PackageStructure over here
-    return p;
+    return Package();
 }
 
 KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QString &parentApp)
 {
     KPluginInfo::List list;
 
-    if (parentApp.isEmpty() || parentApp == KGlobal::mainComponent().componentName()) {
+    if (!s_isDefaultLoader && (parentApp.isEmpty() || parentApp == KGlobal::mainComponent().componentName())) {
         list = internalAppletInfo(category);
     }
 
@@ -293,7 +297,7 @@ KPluginInfo::List PluginLoader::listDataEngineInfo(const QString &parentApp)
 {
     KPluginInfo::List list;
 
-    if (parentApp.isEmpty() || parentApp == KGlobal::mainComponent().componentName()) {
+    if (!s_isDefaultLoader && (parentApp.isEmpty() || parentApp == KGlobal::mainComponent().componentName())) {
         list = internalDataEngineInfo();
     }
 
@@ -312,7 +316,7 @@ KPluginInfo::List PluginLoader::listRunnerInfo(const QString &parentApp)
 {
     KPluginInfo::List list;
 
-    if (parentApp.isEmpty() || parentApp == KGlobal::mainComponent().componentName()) {
+    if (!s_isDefaultLoader && (parentApp.isEmpty() || parentApp == KGlobal::mainComponent().componentName())) {
         list = internalRunnerInfo();
     }
 
