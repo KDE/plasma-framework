@@ -394,52 +394,6 @@ QString Package::contentsHash() const
     return hash.result();
 }
 
-//TODO: provide a version of this that allows one to ask for certain types of packages, etc?
-//      should we be using KService here instead/as well?
-QStringList Package::listInstalled(const QString &packageRoot) // static
-{
-    QDir dir(packageRoot);
-
-    if (!dir.exists()) {
-        return QStringList();
-    }
-
-    QStringList packages;
-
-    foreach (const QString &sdir, dir.entryList(QDir::AllDirs | QDir::Readable)) {
-        QString metadata = packageRoot + '/' + sdir + "/metadata.desktop";
-        if (QFile::exists(metadata)) {
-            const KPluginInfo info(metadata);
-            const QString plugin = info.pluginName();
-            if (!plugin.isEmpty()) {
-                packages << plugin;
-            }
-        }
-    }
-
-    return packages;
-}
-
-QStringList Package::listInstalledPaths(const QString &packageRoot) // static
-{
-    QDir dir(packageRoot);
-
-    if (!dir.exists()) {
-        return QStringList();
-    }
-
-    QStringList packages;
-
-    foreach (const QString &sdir, dir.entryList(QDir::AllDirs | QDir::Readable)) {
-        QString metadata = packageRoot + '/' + sdir + "/metadata.desktop";
-        if (QFile::exists(metadata)) {
-            packages << sdir;
-        }
-    }
-
-    return packages;
-}
-
 PackagePrivate::PackagePrivate(const PackageStructure::Ptr st, const QString &p)
         : structure(st),
           service(0)
