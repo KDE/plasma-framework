@@ -424,23 +424,6 @@ PackagePrivate &PackagePrivate::operator=(const PackagePrivate &rhs)
     return *this;
 }
 
-void PackagePrivate::publish(AnnouncementMethods methods)
-{
-    if (!structure) {
-        return;
-    }
-
-    if (!service) {
-        service = new PlasmoidService(structure->path());
-    }
-
-    QString resourceName =
-    i18nc("%1 is the name of a plasmoid, %2 the name of the machine that plasmoid is published on",
-          "%1 on %2", structure->metadata().name(), QHostInfo::localHostName());
-    kDebug() << "publishing package under name " << resourceName;
-    service->d->publish(methods, resourceName, structure->metadata());
-}
-
 void PackagePrivate::unpublish()
 {
     if (service) {

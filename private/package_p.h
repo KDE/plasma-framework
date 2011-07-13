@@ -38,7 +38,6 @@ public:
 
     PackagePrivate &operator=(const PackagePrivate &rhs);
 
-    void publish(AnnouncementMethods methods);
     void unpublish();
     bool isPublished() const;
 
