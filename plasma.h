@@ -213,7 +213,8 @@ enum ComponentType {
     RunnerComponent = 4,      /**< Plasma::AbstractRunner based plugsin **/
     AnimatorComponent = 8,    /**< Plasma::Animator based plugins **/
     ContainmentComponent = 16,/**< Plasma::Containment based plugins **/
-    WallpaperComponent = 32   /**< Plasma::Wallpaper based plugins **/
+    WallpaperComponent = 32,   /**< Plasma::Wallpaper based plugins **/
+    GenericComponent = 64      /** Generic repositories of files, usually they keep QML files and their assets **/
 };
 Q_DECLARE_FLAGS(ComponentTypes, ComponentType)
 
