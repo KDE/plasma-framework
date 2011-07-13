@@ -424,13 +424,4 @@ PackagePrivate &PackagePrivate::operator=(const PackagePrivate &rhs)
     return *this;
 }
 
-bool PackagePrivate::isPublished() const
-{
-    if (service) {
-        return service->d->isPublished();
-    } else {
-        return false;
-    }
-}
-
 } // Namespace
