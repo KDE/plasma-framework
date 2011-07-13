@@ -424,13 +424,6 @@ PackagePrivate &PackagePrivate::operator=(const PackagePrivate &rhs)
     return *this;
 }
 
-void PackagePrivate::unpublish()
-{
-    if (service) {
-        service->d->unpublish();
-    }
-}
-
 bool PackagePrivate::isPublished() const
 {
     if (service) {

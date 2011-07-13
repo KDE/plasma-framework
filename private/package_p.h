@@ -38,7 +38,6 @@ public:
 
     PackagePrivate &operator=(const PackagePrivate &rhs);
 
-    void unpublish();
     bool isPublished() const;
 
     void updateHash(const QString &basePath, const QString &subPath, const QDir &dir, QCryptographicHash &hash);
