@@ -81,9 +81,6 @@ PlasmoidPackage::PlasmoidPackage(QObject *parent)
 
 PlasmoidPackage::~PlasmoidPackage()
 {
-#ifndef PLASMA_NO_KNEWSTUFF
-    delete m_knsDialog.data();
-#endif
 }
 
 void PlasmoidPackage::pathChanged()
@@ -95,20 +92,6 @@ void PlasmoidPackage::pathChanged()
         addFileDefinition("mainscript", mainScript, i18n("Main Script File"));
         setRequired("mainscript", true);
     }
-}
-
-void PlasmoidPackage::createNewWidgetBrowser(QWidget *parent)
-{
-#ifndef PLASMA_NO_KNEWSTUFF
-    KNS3::DownloadDialog *knsDialog = m_knsDialog.data();
-    if (!knsDialog) {
-        m_knsDialog = knsDialog = new KNS3::DownloadDialog("plasmoids.knsrc", parent);
-        connect(knsDialog, SIGNAL(accepted()), this, SIGNAL(newWidgetBrowserFinished()));
-    }
-
-    knsDialog->show();
-    knsDialog->raise();
-#endif
 }
 
 DataEnginePackage::DataEnginePackage(QObject *parent)

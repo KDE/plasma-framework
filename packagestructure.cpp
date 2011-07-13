@@ -762,12 +762,6 @@ bool PackageStructure::uninstallPackage(const QString &packageName, const QStrin
     return true;
 }
 
-void PackageStructure::createNewWidgetBrowser(QWidget *parent)
-{
-    Q_UNUSED(parent)
-    emit newWidgetBrowserFinished();
-}
-
 QString PackageStructure::defaultPackageRoot() const
 {
     return d->packageRoot;
