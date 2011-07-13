@@ -106,9 +106,11 @@ void DialogProxy::setMainItem(QGraphicsObject *mainItem)
 {
     if (m_mainItem.data() != mainItem) {
         if (m_mainItem) {
-            m_mainItem.data()->setParent(mainItem->parent());
+            m_mainItem.data()->setParent(mainItem ? mainItem->parent() : 0);
         }
+
         m_mainItem = mainItem;
+
         if (mainItem) {
             mainItem->setParentItem(0);
             mainItem->setParent(this);
