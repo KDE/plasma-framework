@@ -47,13 +47,27 @@ class PlasmaKPart : public KParts::ReadOnlyPart
     Q_PROPERTY(Plasma::Applet::List activeApplets READ listActiveApplets)
 
 public:
+    /**
+     * The default constructor.
+     * The args may contain a pointer to a Plasma::PluginLoader as the first parameter.
+     * Note that only one Plasma::PluginLoader can be active at a time, and that the
+     * prefered mechanism for registering the plugin loader is via
+     * Plasma::PluginLoader::setPluginLoader
+     */
     PlasmaKPart(QWidget *parentWidget, QObject *parent, const QVariantList &args);
     ~PlasmaKPart();
 
     void notifyStartup(bool completed);
 
-    PlasmaKPartCorona *corona();
-    Plasma::Containment *containment();
+    PlasmaKPartCorona *corona() const;
+    Plasma::Containment *containment() const;
+
+    /**
+     * Returns a list of active applets in the containment.
+     *
+     * @return A list of the containment's Applets
+     **/
+    Plasma::Applet::List listActiveApplets() const;
 
 public Q_SLOTS:
     /**
@@ -65,37 +79,11 @@ public Q_SLOTS:
      **/
     void addApplet(const QString &pluginName, const QVariantList &args = QVariantList(), const QRectF &dimensions = QRectF());
 
-    /**
-     * Sets the application-specific plugin loader. This allows
-     * applications which need to add internal applets (such
-     * as existing QWidget-based dashboard plugins), services or
-     * data engines to the Plasma dashboard. The preferred way to
-     * set this loader is by passing it to the KPart wrapped in a
-     * QVariant in the @p args parameter of the KPart constructor.
-     * This method is provided for applications which cannot set
-     * the loader in this method.
-     * The method will return false if Plasma already has a
-     * PluginLoader in memory, and will return true if the PluginLoader
-     * is successfully set.
-     *
-     * @param loader The loader which you want Plasma to query for
-     *               new Applets, Data Engines and Services.
-     * @return True if the loader was successfully set, false otherwise
-     *         (If Plasma already has a PluginLoader in memory)
-     *
-     * @short Set application-specific plugin loader
-     **/
-    bool setPluginLoader(Plasma::PluginLoader *loader);
-
-    /**
-     * Returns a list of active applets in the containment.
-     *
-     * @return A list of the containment's Applets
-     **/
-    Plasma::Applet::List listActiveApplets();
-
 Q_SIGNALS:
     void viewCreated();
+
+private:
+    void initCorona();
 
 private Q_SLOTS:
     void cleanup();
