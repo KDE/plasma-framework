@@ -1666,12 +1666,8 @@ void Applet::publish(AnnouncementMethods methods, const QString &resourceName)
 
 void Applet::unpublish()
 {
-    if (d->package) {
-        d->package->d->unpublish();
-    } else {
-        if (d->service) {
-            d->service->d->unpublish();
-        }
+    if (d->service) {
+        d->service->d->unpublish();
     }
 }
 
