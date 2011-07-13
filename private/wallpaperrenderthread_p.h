@@ -78,5 +78,5 @@ private:
 
 } // namespace Plasma
 
-Q_DECLARE_METATYPE(Plasma::WallpaperRenderRequest);
+Q_DECLARE_METATYPE(Plasma::WallpaperRenderRequest)
 #endif // PLASMA_WALLPAPERRENDERTHREAD_P_H
