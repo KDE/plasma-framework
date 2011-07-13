@@ -20,6 +20,7 @@
 #ifndef PLUGIN_LOADER_H
 #define PLUGIN_LOADER_H
 
+#include <plasma/package.h>
 #include <plasma/plasma.h>
 #include <kplugininfo.h>
 
@@ -92,6 +93,16 @@ public:
      * @return a Service object, unlike Plasma::Service::loadService, this can return null.
      **/
     Service *loadService(const QString &name, const QVariantList &args, QObject *parent = 0);
+
+    /**
+     * Load a Package plugin.
+     *
+     * @param name the plugin name of the package to load
+     * @param args a list of arguments to supply to the service plugin when loading it
+     *
+     * @return a Package object matching name, or an invalid package on failure
+     **/
+    Package loadPackage(const QString &name, const QVariantList &args);
 
     /**
      * Returns a list of all known applets.
@@ -204,6 +215,21 @@ protected:
      * @return a Service object, unlike Plasma::Service::loadService, this can return null.
      **/
     virtual Service *internalLoadService(const QString &name, const QVariantList &args, QObject *parent = 0);
+
+    /**
+     * A re-implementable method that allows subclasses to override
+     * the default behaviour of loadPackage. If the service requested is not recognized,
+     * then the implementation should return a NULL pointer. This method is called
+     * by loadService prior to attempting to load a Service using the standard Plasma
+     * plugin mechanisms.
+     *
+     * @param name the plugin name of the service to load
+     * @param args a list of arguments to supply to the service plugin when loading it
+     * @param parent the parent object, if any, for the service
+     *
+     * @return a Service object, unlike Plasma::Service::loadService, this can return null.
+     **/
+    virtual Package internalLoadPackage(const QString &name, const QVariantList &args);
 
     /**
      * A re-implementable method that allows subclasses to provide additional applets

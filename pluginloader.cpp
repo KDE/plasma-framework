@@ -204,7 +204,7 @@ AbstractRunner *PluginLoader::loadRunner(const QString &name)
 }
 
 Service *PluginLoader::loadService(const QString &name, const QVariantList &args, QObject *parent)
-{ 
+{
     Service *service = internalLoadService(name, args, parent);
     if (service) {
         return service;
@@ -242,6 +242,17 @@ Service *PluginLoader::loadService(const QString &name, const QVariantList &args
     }
 
     return service;
+}
+
+Package PluginLoader::loadPackage(const QString &name, const QVariantList &args)
+{
+    Package p = internalLoadPackage(name, args);
+    if (p.isValid()) {
+        return p;
+    }
+
+    //TODO: pull code from PackageStructure over here
+    return p;
 }
 
 KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QString &parentApp)
@@ -337,11 +348,18 @@ AbstractRunner* PluginLoader::internalLoadRunner(const QString &name)
 }
 
 Service* PluginLoader::internalLoadService(const QString &name, const QVariantList &args, QObject *parent)
-{ 
+{
     Q_UNUSED(name)
     Q_UNUSED(args)
     Q_UNUSED(parent)
     return 0;
+}
+
+Package PluginLoader::internalLoadPackage(const QString &name, const QVariantList &args)
+{
+    Q_UNUSED(name);
+    Q_UNUSED(args);
+    return Package();
 }
 
 KPluginInfo::List PluginLoader::internalAppletInfo(const QString &category) const
