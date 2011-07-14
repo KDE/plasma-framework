@@ -112,22 +112,6 @@ class PLASMA_EXPORT Package
         void setPath(const QString &path);
 
         /**
-         * Publish this package on the network.
-         * @param methods the ways to announce this package on the network.
-         */
-        void publish(AnnouncementMethods methods, const QString &name);
-
-        /**
-         * Remove this package from the network.
-         */
-        void unpublish(const QString &name = QString());
-
-        /**
-         * @returns whether or not this service is currently published on the network.
-         */
-        bool isPublished() const;
-
-        /**
          * @return the path to the root of this particular package
          */
         const QString path() const;
