@@ -32,6 +32,7 @@ class PackagePrivate
 {
 public:
     PackagePrivate(const PackageStructure::Ptr st, const QString &p);
+    PackagePrivate(const PackageStructure::Ptr st, const QString &packageRoot, const QString &path);
     PackagePrivate(const PackagePrivate &other);
     ~PackagePrivate();
 
