@@ -21,8 +21,8 @@ import QtQuick 1.0
 import org.kde.plasma.components 0.1 as PlasmaComponents
 
 Rectangle {
-    width: 800
-    height: 400
+    width: 1000
+    height: 800
     color: "lightgrey"
 
     Flickable {
@@ -245,6 +245,75 @@ Rectangle {
                             top: scrollList.top
                             right: scrollList.right
                             bottom: scrollList.bottom
+                        }
+                    }
+                }
+
+                Text {
+                    font.pixelSize: 20
+                    text: "Scroll Decorator"
+                }
+
+                Item {
+                    width: 200
+                    height: 200
+                    PlasmaComponents.Highlight {
+                        anchors.fill: parent
+                        anchors.margins: -10
+                    }
+                    Flickable {
+                        id: scrollArea
+                        anchors.fill: parent
+                        clip: true
+                        contentWidth: 400
+                        contentHeight: 400
+
+                        // Flickable Contents
+                        Rectangle {
+                            color: "green"
+                            width: 100
+                            height: 100
+                        }
+                        Rectangle {
+                            x: 80
+                            y: 80
+                            color: "blue"
+                            width: 200
+                            height: 200
+                        }
+                        Rectangle {
+                            x: 200
+                            y: 200
+                            color: "red"
+                            width: 150
+                            height: 150
+                        }
+                    }
+
+                    // Scroll Decorators
+                    PlasmaComponents.ScrollDecorator {
+                        orientation: Qt.Vertical
+                        flickableItem: scrollArea
+                        inverted: true
+                        anchors {
+                            top: scrollArea.top
+                            right: scrollArea.right
+                            bottom: scrollArea.bottom
+                        }
+                        Text {
+                            y: parent.height / 2
+                            x: 13
+                            rotation: -90
+                            text: "inverted"
+                        }
+                    }
+                    PlasmaComponents.ScrollDecorator {
+                        orientation: Qt.Horizontal
+                        flickableItem: scrollArea
+                        anchors {
+                            left: scrollArea.left
+                            right: scrollArea.right
+                            bottom: scrollArea.bottom
                         }
                     }
                 }

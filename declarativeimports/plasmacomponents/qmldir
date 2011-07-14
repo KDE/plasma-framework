@@ -12,6 +12,7 @@ Highlight 0.1 Highlight.qml
 PushButton 0.1 PushButton.qml
 RadioButton 0.1 RadioButton.qml
 ScrollBar 0.1 ScrollBar.qml
+ScrollDecorator 0.1 ScrollDecorator.qml
 Slider 0.1 Slider.qml
 Switch 0.1 Switch.qml
 ToolButton 0.1 ToolButton.qml
