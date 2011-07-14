@@ -253,6 +253,7 @@ PackageStructure::Ptr defaultPackageStructure(ComponentType type)
     case AppletComponent:
     case WallpaperComponent:
     case RunnerComponent:
+    case GenericComponent:
         return PackageStructure::Ptr(new PlasmoidPackage());
         break;
     case DataEngineComponent:
