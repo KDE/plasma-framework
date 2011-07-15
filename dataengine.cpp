@@ -473,9 +473,9 @@ bool DataEnginePrivate::isPublished() const
     }
 }
 
-const Package *DataEngine::package() const
+Package DataEngine::package() const
 {
-    return d->package;
+    return d->package ? *d->package : Package();
 }
 
 void DataEngine::scheduleSourcesUpdated()
@@ -541,11 +541,13 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info)
             const QString path =
                 KStandardDirs::locate("data",
                                       "plasma/dataengines/" + dataEngineDescription.pluginName() + '/');
-            PackageStructure::Ptr structure = Plasma::packageStructure(api, Plasma::DataEngineComponent);
-            structure->setPath(path);
-            package = new Package(path, structure);
+            package = new Package(Package::load("Plasma/DataEngine", api));
+            package->setPath(path);
 
-            script = Plasma::loadScriptEngine(api, q);
+            if (package->isValid()) {
+                script = Plasma::loadScriptEngine(api, q);
+            }
+
             if (!script) {
                 kDebug() << "Could not create a" << api << "ScriptEngine for the"
                         << dataEngineDescription.name() << "DataEngine.";

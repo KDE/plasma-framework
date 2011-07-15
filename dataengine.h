@@ -231,7 +231,7 @@ NoAlignment) const;
          *
          * @return the Package object, or 0 if none
          **/
-        const Package *package() const;
+        Package package() const;
 
         /**
          * @return the plugin name for the applet
