@@ -24,8 +24,9 @@
 #include <QGraphicsView>
 #include <QMenu>
 
-#include <plasma/containment.h>
-#include <plasma/view.h>
+#include "plasma/containment.h"
+#include "plasma/view.h"
+#include "plasma/private/packages_p.h"
 
 namespace Plasma
 {
@@ -123,5 +124,6 @@ QList<QAction*> actionsFromMenu(QMenu *menu, const QString &prefix, QObject *par
     }
     return ret;
 }
+
 
 } // Plasma namespace
