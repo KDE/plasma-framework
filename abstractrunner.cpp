@@ -322,9 +322,9 @@ QString AbstractRunner::description() const
     return objectName();
 }
 
-const Package* AbstractRunner::package() const
+Package AbstractRunner::package() const
 {
-    return d->package;
+    return d->package ? *d->package : Package();
 }
 
 
@@ -415,14 +415,11 @@ void AbstractRunnerPrivate::prepScripting(const QString &path, const QString &ap
         return;
     }
 
-    PackageStructure::Ptr structure = Plasma::packageStructure(api, Plasma::RunnerComponent);
-    structure->setPath(path);
-    package = new Package(path, structure);
+    package = new Package(Plasma::Package::load("Plasma/Runner", api));
+    package->setPath(path);
 
     if (!package->isValid()) {
         kDebug() << "Invalid Runner package at" << path;
-        delete package;
-        package = 0;
         return;
     }
 
@@ -442,7 +439,6 @@ void AbstractRunnerPrivate::setupScriptSupport()
     }
 
     kDebug() << "setting up script support, package is in" << package->path()
-             << "which is a" << package->structure()->type() << "package"
              << ", main script is" << package->filePath("mainscript");
 
     const QString translationsPath = package->filePath("translations");

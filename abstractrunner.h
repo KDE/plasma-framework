@@ -222,9 +222,9 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * Note that the returned pointer is only valid for the lifetime of
          * the runner.
          *
-         * @return the Package object, or 0 if none
+         * @return the Package object, which may be invalid
          **/
-        const Package *package() const;
+        Package package() const;
 
         /**
          * Signal runner to reload its configuration.
