@@ -103,15 +103,16 @@ void PopupApplet::setPopupIcon(const QIcon &icon)
 
 void PopupApplet::setPopupIcon(const QString &iconName)
 {
-    if (package()) {
+    if (Applet::d->package) {
         //Attempt1: is it in the plasmoid package?
-        const QString file = package()->filePath("images", iconName);
+        const QString file = Applet::d->package->filePath("images", iconName);
         if (!file.isEmpty()) {
             setPopupIcon(KIcon(file));
             return;
         }
-    //Attempt2: is it a svg in the icons directory?
     }
+
+    //Attempt2: is it a svg in the icons directory?
     QString name = QString("icons/") + iconName.split("-").first();
     if (!Plasma::Theme::defaultTheme()->imagePath(name).isEmpty()) {
         if (!d->icon) {
