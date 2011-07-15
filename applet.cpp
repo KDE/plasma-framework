@@ -223,15 +223,6 @@ Applet::~Applet()
     delete d;
 }
 
-PackageStructure::Ptr Applet::packageStructure()
-{
-    if (!AppletPrivate::packageStructure) {
-        AppletPrivate::packageStructure = new PlasmoidPackage();
-    }
-
-    return AppletPrivate::packageStructure;
-}
-
 void Applet::init()
 {
     setFlag(ItemIsMovable, true);
@@ -676,9 +667,9 @@ DataEngine *Applet::dataEngine(const QString &name) const
     }
 }
 
-const Package *Applet::package() const
+Package Applet::package() const
 {
-    return d->package;
+    return d->package ? *d->package : Package();
 }
 
 QGraphicsView *Applet::view() const
@@ -1654,7 +1645,7 @@ void Applet::publish(AnnouncementMethods methods, const QString &resourceName)
                                                    : resourceName;
     kDebug() << "publishing package under name " << resName;
     if (d->package && d->package->isValid()) {
-        d->service->d->publish(methods, resName, d->package->structure()->metadata());
+        d->service->d->publish(methods, resName, d->package->metadata());
     } else if (!d->package && d->appletDescription.isValid()) {
         d->service->d->publish(methods, resName, d->appletDescription);
     } else {
@@ -2648,56 +2639,63 @@ void AppletPrivate::init(const QString &packagePath)
     QString api = appletDescription.property("X-Plasma-API").toString();
 
     // we have a scripted plasmoid
-    if (!api.isEmpty()) {
-        // find where the Package is
-        QString path = packagePath;
-        if (path.isEmpty()) {
-            QString subPath = q->packageStructure()->defaultPackageRoot() + '/' + appletDescription.pluginName() + '/';
-            path = KStandardDirs::locate("data", subPath + "metadata.desktop");
-            if (path.isEmpty()) {
-                path = KStandardDirs::locate("data", subPath);
-            } else {
-                path.remove(QString("metadata.desktop"));
-            }
-        } else if (!path.endsWith('/')) {
-            path.append('/');
-        }
+    if (api.isEmpty()) {
+        q->setFailedToLaunch(true, i18n("The %2 widget did not define which ScriptEngine to use.", appletDescription.name()));
+        return;
+    }
 
+
+    package = new Package(Package::load("Plasma/Applet", api));
+
+    // find where the Package is
+    QString path = packagePath;
+    if (path.isEmpty()) {
+        QString subPath = package->defaultPackageRoot() + appletDescription.pluginName() + '/';
+        path = KStandardDirs::locate("data", subPath + "metadata.desktop");
         if (path.isEmpty()) {
-            q->setFailedToLaunch(
-                true,
-                i18nc("Package file, name of the widget",
-                      "Could not locate the %1 package required for the %2 widget.",
-                      appletDescription.pluginName(), appletDescription.name()));
+            path = KStandardDirs::locate("data", subPath);
         } else {
-            // create the package and see if we have something real
-            //kDebug() << "trying for" << path;
-            PackageStructure::Ptr structure = Plasma::packageStructure(api, Plasma::AppletComponent);
-            structure->setPath(path);
-            package = new Package(path, structure);
-
-            if (package->isValid()) {
-                // now we try and set up the script engine.
-                // it will be parented to this applet and so will get
-                // deleted when the applet does
-
-                script = Plasma::loadScriptEngine(api, q);
-                if (!script) {
-                    delete package;
-                    package = 0;
-                    q->setFailedToLaunch(true,
-                                         i18nc("API or programming language the widget was written in, name of the widget",
-                                               "Could not create a %1 ScriptEngine for the %2 widget.",
-                                               api, appletDescription.name()));
-                }
-            } else {
-                q->setFailedToLaunch(true, i18nc("Package file, name of the widget",
-                                                 "Could not open the %1 package required for the %2 widget.",
-                                                 appletDescription.pluginName(), appletDescription.name()));
-                delete package;
-                package = 0;
-            }
+            path.remove(QString("metadata.desktop"));
         }
+    } else if (!path.endsWith('/')) {
+        path.append('/');
+    }
+
+    if (path.isEmpty()) {
+        delete package;
+        package = 0;
+        q->setFailedToLaunch(true,
+                             i18nc("Package file, name of the widget",
+                                   "Could not locate the %1 package required for the %2 widget.",
+                                   appletDescription.pluginName(), appletDescription.name()));
+        return;
+    }
+
+    package->setPath(path);
+    if (!package->isValid()) {
+        delete package;
+        package = 0;
+        q->setFailedToLaunch(true, i18nc("Package file, name of the widget",
+                                         "Could not open the %1 package required for the %2 widget.",
+                                         appletDescription.pluginName(), appletDescription.name()));
+        return;
+    }
+
+    // create the package and see if we have something real
+    //kDebug() << "trying for" << path;
+
+        // now we try and set up the script engine.
+        // it will be parented to this applet and so will get
+        // deleted when the applet does
+
+    script = Plasma::loadScriptEngine(api, q);
+    if (!script) {
+        delete package;
+        package = 0;
+        q->setFailedToLaunch(true,
+                             i18nc("API or programming language the widget was written in, name of the widget",
+                                   "Could not create a %1 ScriptEngine for the %2 widget.",
+                                   api, appletDescription.name()));
     }
 }
 
@@ -2710,7 +2708,6 @@ void AppletPrivate::setupScriptSupport()
     }
 
     kDebug() << "setting up script support, package is in" << package->path()
-             << "which is a" << package->structure()->type() << "package"
              << ", main script is" << package->filePath("mainscript");
 
     const QString translationsPath = package->filePath("translations");
@@ -2829,9 +2826,9 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
 
     if (newGroup) {
         //see if we have a default configuration in our package
-        const QString defaultConfigFile = q->package()->filePath("defaultconfig");
+        const QString defaultConfigFile = package->filePath("defaultconfig");
         if (!defaultConfigFile.isEmpty()) {
-            kDebug() << "copying default config: " << q->package()->filePath("defaultconfig");
+            kDebug() << "copying default config: " << package->filePath("defaultconfig");
             KConfigGroup defaultConfig(KSharedConfig::openConfig(defaultConfigFile)->group("Configuration"));
             defaultConfig.copyTo(mainConfig);
         }
@@ -2905,7 +2902,6 @@ void ContainmentPrivate::checkRemoveAction()
 uint AppletPrivate::s_maxAppletId = 0;
 int AppletPrivate::s_maxZValue = 0;
 int AppletPrivate::s_minZValue = 0;
-PackageStructure::Ptr AppletPrivate::packageStructure(0);
 QSet<QString> AppletPrivate::s_customCategories;
 
 AppletOverlayWidget::AppletOverlayWidget(QGraphicsWidget *parent)

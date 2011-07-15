@@ -32,7 +32,6 @@
 #include <kshortcut.h>
 
 #include <plasma/configloader.h>
-#include <plasma/packagestructure.h>
 #include <plasma/plasma.h>
 #include <plasma/animator.h>
 #include <plasma/version.h>
@@ -95,11 +94,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         typedef QHash<QString, Applet*> Dict;
 
         ~Applet();
-
-        /**
-         * @return a package structure representing an Applet
-         */
-        static PackageStructure::Ptr packageStructure();
 
         /**
          * @return the id of this applet
@@ -188,7 +182,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *
          * @return the Package object, or 0 if none
          **/
-        const Package *package() const;
+        Package package() const;
 
         /**
          * Returns the view this widget is visible on, or 0 if none can be found.
