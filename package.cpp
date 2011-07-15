@@ -361,13 +361,18 @@ QStringList Package::entryList(const char *key) const
 
     QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constFind(key);
     if (it == d->contents.constEnd()) {
+        //kDebug() << "couldn't find" << key;
         return QStringList();
     }
 
+    //kDebug() << "going to list" << key;
     QStringList list;
     foreach (const QString &prefix, d->contentsPrefixPaths) {
+        //kDebug() << "     looking in" << prefix;
         foreach (const QString &path, it.value().paths) {
+            //kDebug() << "         looking in" << path;
             if (it.value().directory) {
+                //kDebug() << "it's a directory, so trying out" << d->path + prefix + path;
                 QDir dir(d->path + prefix + path);
 
                 if (d->externalPaths) {
@@ -376,12 +381,13 @@ QStringList Package::entryList(const char *key) const
                     // ensure that we don't return files outside of our base path
                     // due to symlink or ../ games
                     QString canonicalized = dir.canonicalPath();
-                    if (canonicalized.startsWith(path)) {
+                    if (canonicalized.startsWith(d->path)) {
                         list += dir.entryList(QDir::Files | QDir::Readable);
                     }
                 }
             } else {
                 const QString fullPath = d->path + prefix + path;
+                //kDebug() << "it's a file at" << fullPath << QFile::exists(fullPath);
                 if (!QFile::exists(fullPath)) {
                     continue;
                 }
