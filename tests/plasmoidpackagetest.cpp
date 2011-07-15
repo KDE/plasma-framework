@@ -38,7 +38,6 @@ void PlasmoidPackageTest::init()
 
 void PlasmoidPackageTest::cleanup()
 {
-    qDebug() << "CLEANEAING UP!";
     // Clean things up.
     KIO::NetAccess::del(KUrl(QDir::homePath() + QLatin1String("/.kde-unit-test/packageRoot")), 0);
 }
@@ -98,7 +97,6 @@ void PlasmoidPackageTest::createTestPackage(const QString &packageName)
     out << "<svg>This is another test image</svg>";
     file.flush();
     file.close();
-    qDebug() << "SUUUUUUUUCCCCCCCCESSSSSSSSS";
 }
 
 void PlasmoidPackageTest::isValid()
@@ -202,7 +200,7 @@ void PlasmoidPackageTest::filePath()
 void PlasmoidPackageTest::entryList()
 {
     // Create a package named @p packageName which is valid and has some images.
-    createTestPackage("SomePlasmoid");
+    createTestPackage(m_package);
 
     // Create a package object and verify that it is valid.
     Plasma::Package *p = new Plasma::Package(m_defaultPackage);
