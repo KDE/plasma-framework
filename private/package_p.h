@@ -29,20 +29,53 @@
 namespace Plasma
 {
 
+class ContentStructure
+{
+    public:
+        ContentStructure()
+            : directory(false),
+              required(false)
+        {
+        }
+
+        ContentStructure(const ContentStructure &other)
+        {
+            paths = other.paths;
+            name = other.name;
+            mimeTypes = other.mimeTypes;
+            directory = other.directory;
+            required = other.required;
+        }
+
+        QStringList paths;
+        QString name;
+        QStringList mimeTypes;
+        bool directory : 1;
+        bool required : 1;
+};
+
 class PackagePrivate
 {
 public:
-    PackagePrivate(const PackageStructure::Ptr st, const QString &p);
+    PackagePrivate();
     PackagePrivate(const PackagePrivate &other);
     ~PackagePrivate();
 
     PackagePrivate &operator=(const PackagePrivate &rhs);
 
+    void createPackageMetadata(const QString &path);
     void updateHash(const QString &basePath, const QString &subPath, const QDir &dir, QCryptographicHash &hash);
 
-    PackageStructure::Ptr structure;
-    Service *service;
-    bool valid;
+    QString type;
+    QString path;
+    QStringList contentsPrefixPaths;
+    QString defaultPackageRoot;
+    QString servicePrefix;
+    QMap<QByteArray, ContentStructure> contents;
+    QStringList mimeTypes;
+    KPluginInfo *metadata;
+    bool externalPaths : 1;
+    bool valid : 1;
 };
 
 }
