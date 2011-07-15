@@ -24,8 +24,8 @@
 #include <kmimetype.h>
 #include <kplugininfo.h>
 
+#include <plasma/package.h>
 #include <plasma/plasma.h>
-#include <plasma/packagestructure.h>
 #include <plasma/version.h>
 
 namespace Plasma
@@ -33,7 +33,6 @@ namespace Plasma
 
 class DataEngine;
 class WallpaperPrivate;
-class Package;
 
 /**
  * @class Wallpaper plasma/wallpaper.h <Plasma/Wallpaper>
@@ -130,17 +129,6 @@ class PLASMA_EXPORT Wallpaper : public QObject
         static Wallpaper *load(const KPluginInfo &info, const QVariantList &args = QVariantList());
 
         /**
-         * Returns the Package specialization for wallpapers. May be queried for 'preferred'
-         * which will return the preferred wallpaper image path given the associated Wallpaper
-         * object, if any.
-         *
-         * @param paper the Wallpaper object to associated the PackageStructure with,
-         *              which will then use the Wallpaper object to define things such as
-         *              default size and resize methods.
-         */
-        static PackageStructure::Ptr packageStructure(Wallpaper *paper = 0);
-
-        /**
          * Returns the user-visible name for the wallpaper, as specified in the
          * .desktop file.
          *
@@ -153,7 +141,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
          *
          * @return the Package object, or 0 if none
          **/
-        const Package *package() const;
+        Package package() const;
 
         /**
          * Returns the plugin name for the wallpaper

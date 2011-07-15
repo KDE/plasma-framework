@@ -97,8 +97,6 @@ public:
     }
 };
 
-PackageStructure::Ptr WallpaperPrivate::s_packageStructure(0);
-
 Wallpaper::Wallpaper(QObject * parentObject)
     : d(new WallpaperPrivate(KService::serviceByStorageId(QString()), this))
 {
@@ -207,20 +205,6 @@ Wallpaper *Wallpaper::load(const KPluginInfo &info, const QVariantList &args)
         return 0;
     }
     return load(info.pluginName(), args);
-}
-
-PackageStructure::Ptr Wallpaper::packageStructure(Wallpaper *paper)
-{
-    if (paper) {
-        PackageStructure::Ptr package(new WallpaperPackage(paper));
-        return package;
-    }
-
-    if (!WallpaperPrivate::s_packageStructure) {
-        WallpaperPrivate::s_packageStructure = new WallpaperPackage();
-    }
-
-    return WallpaperPrivate::s_packageStructure;
 }
 
 QString Wallpaper::name() const
@@ -459,19 +443,20 @@ WallpaperPrivate::WallpaperPrivate(KService::Ptr service, Wallpaper *wallpaper) 
         if (!api.isEmpty()) {
             const QString path = KStandardDirs::locate("data",
                     "plasma/wallpapers/" + wallpaperDescription.pluginName() + '/');
-            PackageStructure::Ptr structure =
-                Plasma::packageStructure(api, Plasma::WallpaperComponent);
-            structure->setPath(path);
-            package = new Package(path, structure);
+            package = new Package(Package::load("Plasma/Wallpaper", api));
+            package->setPath(path);
 
-            script = Plasma::loadScriptEngine(api, q);
+            if (package->isValid()) {
+                script = Plasma::loadScriptEngine(api, q);
+            }
+
             if (!script) {
                 kDebug() << "Could not create a" << api << "ScriptEngine for the"
-                        << wallpaperDescription.name() << "Wallpaper.";
+                    << wallpaperDescription.name() << "Wallpaper.";
                 delete package;
                 package = 0;
             }
-       }
+        }
     }
 }
 
@@ -511,7 +496,6 @@ void WallpaperPrivate::setupScriptSupport()
 {
     Q_ASSERT(package);
     kDebug() << "setting up script support, package is in" << package->path()
-             << "which is a" << package->structure()->type() << "package"
              << ", main script is" << package->filePath("mainscript");
 
     const QString translationsPath = package->filePath("translations");
@@ -624,9 +608,9 @@ void Wallpaper::setPreviewDuringConfiguration(const bool preview)
     d->needsPreviewDuringConfiguration = preview;
 }
 
-const Package *Wallpaper::package() const
+Package Wallpaper::package() const
 {
-    return d->package;
+    return d->package ? *d->package : Package();
 }
 
 } // Plasma namespace
