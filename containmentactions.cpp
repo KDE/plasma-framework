@@ -42,8 +42,6 @@
 namespace Plasma
 {
 
-PackageStructure::Ptr ContainmentActionsPrivate::s_packageStructure(0);
-
 ContainmentActions::ContainmentActions(QObject * parentObject)
     : d(new ContainmentActionsPrivate(KService::serviceByStorageId(QString()), this))
 {
@@ -117,15 +115,6 @@ ContainmentActions *ContainmentActions::load(Containment *parent, const KPluginI
         return 0;
     }
     return load(parent, info.pluginName(), args);
-}
-
-PackageStructure::Ptr ContainmentActions::packageStructure()
-{
-    if (!ContainmentActionsPrivate::s_packageStructure) {
-        ContainmentActionsPrivate::s_packageStructure = new ContainmentActionsPackage();
-    }
-
-    return ContainmentActionsPrivate::s_packageStructure;
 }
 
 Containment *ContainmentActions::containment()
