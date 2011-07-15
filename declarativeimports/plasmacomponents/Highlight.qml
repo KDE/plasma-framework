@@ -40,8 +40,10 @@ Item {
 
         anchors {
             fill: parent
-            topMargin: 2
-            bottomMargin: 2
+            topMargin: -background.margins.top
+            leftMargin: -background.margins.left
+            bottomMargin: -background.margins.bottom
+            rightMargin: -background.margins.right
         }
     }
 }

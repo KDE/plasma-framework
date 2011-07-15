@@ -71,10 +71,7 @@ Column {
     Item {
         width: 200
         height: 200
-        PlasmaComponents.Highlight {
-            anchors.fill: parent
-            anchors.margins: -10
-        }
+        PlasmaComponents.Highlight { anchors.fill: parent }
         Flickable {
             id: scrollArea
             anchors.fill: parent

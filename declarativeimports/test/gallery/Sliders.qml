@@ -34,7 +34,6 @@ Column {
         Column {
             anchors {
                 fill: parent
-                margins: 10
             }
             spacing: 10
 
