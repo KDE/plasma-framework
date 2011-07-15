@@ -388,11 +388,15 @@ void SvgPrivate::createRenderer()
     //kDebug() << kBacktrace();
     if (themed && path.isEmpty() && !themeFailed) {
         Applet *applet = qobject_cast<Applet*>(q->parent());
-        if (applet && applet->package()) {
-            path = applet->package()->filePath("images", themePath + ".svg");
+        //FIXME: this maybe could be more efficient if we knew if the package was empty, e.g. for
+        //C++; however, I'm not sure this has any real world runtime impact. something to measure
+        //for.
+        if (applet && applet->package().isValid()) {
+            const Package package = applet->package();
+            path = package.filePath("images", themePath + ".svg");
 
             if (path.isEmpty()) {
-                path = applet->package()->filePath("images", themePath + ".svgz");
+                path = package.filePath("images", themePath + ".svgz");
             }
         }
 
