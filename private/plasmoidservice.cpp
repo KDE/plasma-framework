@@ -94,8 +94,8 @@ PlasmoidService::PlasmoidService(Applet *applet)
 {
     setName("plasmoidservice");
 
-    if (applet->package() && !applet->package()->isValid()) {
-        const QString root = applet->package()->path();
+    if (applet->package().isValid()) {
+        const QString root = applet->package().path();
         m_metadata = root + "metadata.desktop";
 
         m_tempFile.open();
