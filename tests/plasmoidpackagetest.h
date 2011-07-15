@@ -35,17 +35,15 @@ private Q_SLOTS:
     void isValid();
     void filePath();
     void entryList();
-    void knownPackages();
     void createAndInstallPackage();
 
 private:
     void removeDir(const QString &subdir);
     void createTestPackage(const QString &packageName);
 
-    QString mPackageRoot;
-    QString mPackage;
-    Plasma::PackageStructure::Ptr ps;
-    Plasma::Package *p;
+    QString m_packageRoot;
+    QString m_package;
+    Plasma::Package m_defaultPackage;
 };
 
 #endif

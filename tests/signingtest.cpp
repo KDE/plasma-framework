@@ -31,8 +31,9 @@ static const QString fingerprint("8B8B22090C6F7C47B1EAEE75D6B72EB1A7F1DB43");
 SigningTest::SigningTest(QObject *parent)
     : QObject(parent),
       m_signing(0),
-      m_package(QString::fromLatin1(KDESRCDIR) + "signedPackage", Plasma::Applet::packageStructure())
+      m_package(Plasma::Package::load("Plasma/Applet"))
 {
+    m_package.setPath(QString::fromLatin1(KDESRCDIR) + "signedPackage");
     const QString prefix = QString::fromLatin1(KDESRCDIR);
     m_path = prefix + "signed.plasmoid";
     m_sig = prefix + "signed.plasmoid.sig";

@@ -21,7 +21,7 @@
 
 #include <qtest_kde.h>
 
-#include "plasma/packagestructure.h"
+#include "plasma/package.h"
 
 class PackageStructureTest : public QObject
 {
@@ -32,7 +32,6 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void emptyContentsPrefix();
-    void type();
     void directories();
     void requiredDirectories();
     void files();
@@ -47,7 +46,7 @@ private Q_SLOTS:
     //TODO: add tests for copy construction
 
 private:
-    Plasma::PackageStructure::Ptr ps;
+    Plasma::Package ps;
 };
 
 #endif

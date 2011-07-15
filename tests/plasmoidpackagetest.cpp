@@ -26,20 +26,16 @@
 #include <kstandarddirs.h>
 
 #include "plasma/applet.h"
-#include "plasma/packagemetadata.h"
 
 void PlasmoidPackageTest::init()
 {
-    mPackage = QString("Package");
-    mPackageRoot = QDir::homePath() + "/.kde-unit-test/packageRoot";
-    ps = Plasma::Applet::packageStructure();
+    m_package = QString("Package");
+    m_packageRoot = QDir::homePath() + "/.kde-unit-test/packageRoot";
+    m_defaultPackage = Plasma::Package::load("Plasma/Applet");
 }
 
 void PlasmoidPackageTest::cleanup()
 {
-    delete p;
-    p = 0;
-
     // Clean things up.
     QDir local(QDir::homePath() + QLatin1String("/.kde-unit-test/packageRoot"));
     foreach (const QString &dir, local.entryList(QDir::Dirs)) {
@@ -68,17 +64,17 @@ void PlasmoidPackageTest::removeDir(const QString &subdir)
 
 void PlasmoidPackageTest::createTestPackage(const QString &packageName)
 {
-    QDir pRoot(mPackageRoot);
+    QDir pRoot(m_packageRoot);
     // Create the root and package dir.
     if (!pRoot.exists()) {
-        QVERIFY(QDir().mkpath(mPackageRoot));
+        QVERIFY(QDir().mkpath(m_packageRoot));
     }
 
     // Create the package dir
-    QVERIFY(QDir().mkpath(mPackageRoot + "/" + packageName));
+    QVERIFY(QDir().mkpath(m_packageRoot + "/" + packageName));
 
     // Create the metadata.desktop file
-    QFile file(mPackageRoot + "/" + packageName + "/metadata.desktop");
+    QFile file(m_packageRoot + "/" + packageName + "/metadata.desktop");
 
     QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
 
@@ -90,10 +86,10 @@ void PlasmoidPackageTest::createTestPackage(const QString &packageName)
     file.close();
 
     // Create the code dir.
-    QVERIFY(QDir().mkpath(mPackageRoot + "/" + packageName + "/contents/code"));
+    QVERIFY(QDir().mkpath(m_packageRoot + "/" + packageName + "/contents/code"));
 
     // Create the main file.
-    file.setFileName(mPackageRoot + "/" + packageName + "/contents/code/main");
+    file.setFileName(m_packageRoot + "/" + packageName + "/contents/code/main");
     QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
 
     out << "THIS IS A PLASMOID SCRIPT.....";
@@ -104,8 +100,8 @@ void PlasmoidPackageTest::createTestPackage(const QString &packageName)
     // files to it for test purposes.
 
     // Create the images dir.
-    QVERIFY(QDir().mkpath(mPackageRoot + "/" + packageName + "/contents/images"));
-    file.setFileName(mPackageRoot + "/" + packageName + "/contents/images/image-1.svg");
+    QVERIFY(QDir().mkpath(m_packageRoot + "/" + packageName + "/contents/images"));
+    file.setFileName(m_packageRoot + "/" + packageName + "/contents/images/image-1.svg");
 
     QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
 
@@ -113,7 +109,7 @@ void PlasmoidPackageTest::createTestPackage(const QString &packageName)
     file.flush();
     file.close();
 
-    file.setFileName(mPackageRoot + "/" + packageName + "/contents/images/image-2.svg");
+    file.setFileName(m_packageRoot + "/" + packageName + "/contents/images/image-2.svg");
 
     QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
 
@@ -125,7 +121,8 @@ void PlasmoidPackageTest::createTestPackage(const QString &packageName)
 
 void PlasmoidPackageTest::isValid()
 {
-    p = new Plasma::Package(mPackageRoot + '/' + mPackage, ps);
+    Plasma::Package *p = new Plasma::Package(m_defaultPackage);
+    p->setPath(m_packageRoot + '/' + m_package);
 
     // A PlasmoidPackage is valid when:
     // - The package root exists.
@@ -133,16 +130,17 @@ void PlasmoidPackageTest::isValid()
     QVERIFY(!p->isValid());
 
     // Create the root and package dir.
-    QVERIFY(QDir().mkpath(mPackageRoot));
-    QVERIFY(QDir().mkpath(mPackageRoot + "/" + mPackage));
+    QVERIFY(QDir().mkpath(m_packageRoot));
+    QVERIFY(QDir().mkpath(m_packageRoot + "/" + m_package));
 
     // Should still be invalid.
     delete p;
-    p = new Plasma::Package(mPackageRoot + '/' + mPackage, ps);
+    p = new Plasma::Package(m_defaultPackage);
+    p->setPath(m_packageRoot + '/' + m_package);
     QVERIFY(!p->isValid());
 
     // Create the metadata.desktop file.
-    QFile file(mPackageRoot + "/" + mPackage + "/metadata.desktop");
+    QFile file(m_packageRoot + "/" + m_package + "/metadata.desktop");
     QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
 
     QTextStream out(&file);
@@ -153,15 +151,16 @@ void PlasmoidPackageTest::isValid()
     file.close();
 
     // Create the code dir.
-    QVERIFY(QDir().mkpath(mPackageRoot + "/" + mPackage + "/contents/code"));
+    QVERIFY(QDir().mkpath(m_packageRoot + "/" + m_package + "/contents/code"));
 
     // No main file yet so should still be invalid.
     delete p;
-    p = new Plasma::Package(mPackageRoot + '/' + mPackage, ps);
+    p = new Plasma::Package(m_defaultPackage);
+    p->setPath(m_packageRoot + '/' + m_package);
     QVERIFY(!p->isValid());
 
     // Create the main file.
-    file.setFileName(mPackageRoot + "/" + mPackage + "/contents/code/main");
+    file.setFileName(m_packageRoot + "/" + m_package + "/contents/code/main");
     QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
 
     out.setDevice(&file);
@@ -172,9 +171,11 @@ void PlasmoidPackageTest::isValid()
     file.setPermissions(QFile::ReadUser | QFile::WriteUser);
     // Main file exists so should be valid now.
     delete p;
-    p = new Plasma::Package(mPackageRoot + '/' + mPackage, ps);
+    p = new Plasma::Package(m_defaultPackage);
+    p->setPath(m_packageRoot + '/' + m_package);
     QVERIFY(p->isValid());
     QCOMPARE(p->contentsHash(), QString("db0b38c2b4fe21a9f37923cc25152340de055f6d"));
+    delete p;
 }
 
 void PlasmoidPackageTest::filePath()
@@ -182,12 +183,13 @@ void PlasmoidPackageTest::filePath()
     // Package::filePath() returns
     // - {package_root}/{package_name}/path/to/file if the file exists
     // - QString() otherwise.
-    p = new Plasma::Package(mPackageRoot + '/' +  mPackage, ps);
+    Plasma::Package *p = new Plasma::Package(m_defaultPackage);
+    p->setPath(m_packageRoot + '/' + m_package);
 
     QCOMPARE(p->filePath("scripts", "main"), QString());
 
-    QVERIFY(QDir().mkpath(mPackageRoot + "/" + mPackage + "/contents/code"));
-    QFile file(mPackageRoot + "/" + mPackage + "/contents/code/main");
+    QVERIFY(QDir().mkpath(m_packageRoot + "/" + m_package + "/contents/code"));
+    QFile file(m_packageRoot + "/" + m_package + "/contents/code/main");
     QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
 
     QTextStream out(&file);
@@ -197,9 +199,10 @@ void PlasmoidPackageTest::filePath()
 
     // The package is valid by now so a path for code/main should get returned.
     delete p;
-    p = new Plasma::Package(mPackageRoot + '/' +  mPackage, ps);
+    p = new Plasma::Package(m_defaultPackage);
+    p->setPath(m_packageRoot + '/' + m_package);
 
-    const QString path = KStandardDirs::realFilePath(mPackageRoot + "/" + mPackage + "/contents/code/main");
+    const QString path = KStandardDirs::realFilePath(m_packageRoot + "/" + m_package + "/contents/code/main");
 
     // Two ways to get the same info.
     // 1. Give the file type which refers to a class of files (a directory) in
@@ -210,17 +213,17 @@ void PlasmoidPackageTest::filePath()
     //       specific for a PlasmoidPackage.
     QCOMPARE(p->filePath("scripts", "main"), path);
     QCOMPARE(p->filePath("mainscript"), path);
+    delete p;
 }
 
 void PlasmoidPackageTest::entryList()
 {
-    QString packageName("SomePlasmoid");
-
     // Create a package named @p packageName which is valid and has some images.
-    createTestPackage(packageName);
+    createTestPackage("SomePlasmoid");
 
     // Create a package object and verify that it is valid.
-    p = new Plasma::Package(mPackageRoot + '/' +  packageName, ps);
+    Plasma::Package *p = new Plasma::Package(m_defaultPackage);
+    p->setPath(m_packageRoot + '/' + m_package);
     QVERIFY(p->isValid());
 
     // Now we have a valid package that should contain the following files in
@@ -236,56 +239,14 @@ void PlasmoidPackageTest::entryList()
     QCOMPARE(files.size(), 2);
     QVERIFY(files.contains("image-1.svg"));
     QVERIFY(files.contains("image-2.svg"));
-}
-
-void PlasmoidPackageTest::knownPackages()
-{
-    // Don't do strange things when package root doesn't exists.
-    QDir pRoot = QDir(mPackageRoot + "blah");
-    QVERIFY(!pRoot.exists());
-    p = new Plasma::Package(mPackageRoot + "blah/" + mPackage, ps);
-    QCOMPARE(Plasma::Package::listInstalled(mPackageRoot), QStringList());
     delete p;
-
-    // Don't do strange things when an empty package root exists
-    QVERIFY(QDir().mkpath(mPackageRoot));
-    //QVERIFY(pRoot.exists());
-    p = new Plasma::Package(mPackageRoot + '/' +  mPackage, ps);
-    QCOMPARE(Plasma::Package::listInstalled(mPackageRoot), QStringList());
-    delete p;
-
-    // Do not return a directory as package if it has no metadata.desktop file
-    QVERIFY(QDir().mkpath(mPackageRoot + "/invalid_plasmoid"));
-    p = new Plasma::Package(mPackageRoot + '/' +  mPackage, ps);
-    QCOMPARE(Plasma::Package::listInstalled(mPackageRoot), QStringList());
-    delete p;
-
-    // Let's add a valid package and see what happens.
-    QString plamoid1("a_valid_plasmoid");
-    createTestPackage(plamoid1);
-    p = new Plasma::Package(mPackageRoot + '/' +  mPackage, ps);
-
-    QStringList packages = Plasma::Package::listInstalled(mPackageRoot);
-    QCOMPARE(packages.size(), 1);
-    QVERIFY(packages.contains(plamoid1));
-
-    // Ok.... one more valid package.
-    QString plamoid2("another_valid_plasmoid");
-    createTestPackage(plamoid2);
-    p = new Plasma::Package(mPackageRoot + '/' +  mPackage, ps);
-
-    packages = Plasma::Package::listInstalled(mPackageRoot);
-    QCOMPARE(packages.size(), 2);
-    QVERIFY(packages.contains(plamoid1));
-    QVERIFY(packages.contains(plamoid2));
 }
 
 void PlasmoidPackageTest::createAndInstallPackage()
 {
-    QString plasmoid("plasmoid_to_package");
-    createTestPackage(plasmoid);
+    createTestPackage("plasmoid_to_package");
 
-    const QString packagePath = mPackageRoot + '/' + "testpackage.plasmoid";
+    const QString packagePath = m_packageRoot + '/' + "testpackage.plasmoid";
 
     KZip creator(packagePath);
     creator.addLocalDirectory(packagePath, ".");
@@ -301,19 +262,19 @@ void PlasmoidPackageTest::createAndInstallPackage()
     const KArchiveEntry *contentsEntry = dir->entry("contents");
     QVERIFY(contentsEntry);
     QVERIFY(contentsEntry->isDirectory());
-    const KArchiveDirectory *contents =
-        static_cast<const KArchiveDirectory *>(contentsEntry);
+    const KArchiveDirectory *contents = static_cast<const KArchiveDirectory *>(contentsEntry);
     QVERIFY(contents->entry("code"));
     QVERIFY(contents->entry("images"));
 
-    Plasma::PackageStructure::Ptr plasmoidStructure(Plasma::Applet::packageStructure());
-    QVERIFY(plasmoidStructure->installPackage(packagePath, mPackageRoot));
-    QString installedPackage = mPackageRoot + "/test";
+    Plasma::Package *p = new Plasma::Package(m_defaultPackage);
+    QVERIFY(p->installPackage(packagePath, m_packageRoot));
+    QString installedPackage = m_packageRoot + "/test";
 
     QVERIFY(QFile::exists(installedPackage));
 
-    p = new Plasma::Package(installedPackage, ps);
+    p->setPath(installedPackage);
     QVERIFY(p->isValid());
+    delete p;
 }
 
 QTEST_KDEMAIN(PlasmoidPackageTest, NoGUI)
