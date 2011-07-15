@@ -55,7 +55,7 @@ public:
     DataSource(QObject* parent=0);
 
     Q_PROPERTY(bool valid READ valid)
-    bool valid() const {return m_dataEngine != 0;}
+    bool valid() const {return m_dataEngine && m_dataEngine->isValid();}
 
     Q_PROPERTY(int interval READ interval WRITE setInterval NOTIFY intervalChanged)
     int interval() const {return m_interval;}
