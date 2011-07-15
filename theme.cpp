@@ -166,7 +166,6 @@ public:
     static const char *defaultTheme;
     static const char *systemColorsTheme;
     static const char *themeRcFile;
-    static PackageStructure::Ptr packageStructure;
 
     Theme *q;
     QString themeName;
@@ -205,7 +204,6 @@ public:
     bool useNativeWidgetStyle :1;
 };
 
-PackageStructure::Ptr ThemePrivate::packageStructure(0);
 const char *ThemePrivate::defaultTheme = "default";
 const char *ThemePrivate::themeRcFile = "plasmarc";
 // the system colors theme is used to cache unthemed svgs with colorization needs
@@ -479,15 +477,6 @@ Theme::~Theme()
 
     d->onAppExitCleanup();
     delete d;
-}
-
-PackageStructure::Ptr Theme::packageStructure()
-{
-    if (!ThemePrivate::packageStructure) {
-        ThemePrivate::packageStructure = new ThemePackage();
-    }
-
-    return ThemePrivate::packageStructure;
 }
 
 KPluginInfo::List Theme::listThemeInfo()

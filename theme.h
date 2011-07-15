@@ -28,7 +28,6 @@
 #include <ksharedconfig.h>
 
 #include <plasma/plasma_export.h>
-#include <plasma/packagestructure.h>
 
 namespace Plasma
 {
@@ -103,11 +102,6 @@ class PLASMA_EXPORT Theme : public QObject
         explicit Theme(const QString &themeName, QObject *parent = 0);
 
         ~Theme();
-
-        /**
-         * @return a package structure representing a Theme
-         */
-        static PackageStructure::Ptr packageStructure();
 
         /**
          * @return a list of all known themes
