@@ -28,9 +28,6 @@
 #include <kplugininfo.h>
 
 #ifndef PLASMA_NO_KIO
-#include <kio/copyjob.h>
-#include <kio/deletejob.h>
-#include <kio/jobclasses.h>
 #include <kio/job.h>
 #endif
 
