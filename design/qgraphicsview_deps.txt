@@ -47,7 +47,7 @@ plasma.h: global enums, will there be an upstream way to register them?
 
 PaintUtils -> probably useless
 
-PackageStructure, PackageMetadata, Package, ok
+Package, ok
 
 Delegate -> BURN
 
