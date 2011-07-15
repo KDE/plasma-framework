@@ -24,15 +24,24 @@
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>
+#include <ktemporaryfile.h>
 #include <kplugininfo.h>
+
+#ifndef PLASMA_NO_KIO
+#include <kio/copyjob.h>
+#include <kio/deletejob.h>
+#include <kio/jobclasses.h>
+#include <kio/job.h>
+#endif
 
 #include "applet.h"
 #include "abstractrunner.h"
 #include "containment.h"
-#include "packagestructure.h"
+#include "package.h"
 #include "popupapplet.h"
 #include "private/applet_p.h"
 #include "private/extenderapplet_p.h"
+#include "private/packages_p.h"
 #include "private/service_p.h" // for NullService
 #include "private/storage_p.h"
 
@@ -114,7 +123,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     }
 
     KService::Ptr offer = offers.first();
- 
+
     if (appletId == 0) {
         appletId = ++AppletPrivate::s_maxAppletId;
     }
@@ -246,17 +255,107 @@ Service *PluginLoader::loadService(const QString &name, const QVariantList &args
     return service;
 }
 
-Package PluginLoader::loadPackage(const QString &name, const QVariantList &args)
+Package PluginLoader::loadPackage(const QString &packageFormat, const QString &specialization)
 {
     if (!s_isDefaultLoader) {
-        Package p = internalLoadPackage(name, args);
+        Package p = internalLoadPackage(packageFormat, specialization);
         if (p.isValid()) {
             return p;
         }
     }
 
-    //TODO: pull code from PackageStructure over here
-    return Package();
+    if (packageFormat.isEmpty()) {
+        return Package();
+    }
+
+    if (!specialization.isEmpty()) {
+        QRegExp re("[^a-zA-Z0-9\\-_]");
+        // check that the provided strings are safe to use in a ServiceType query
+        if (re.indexIn(specialization) == -1 && re.indexIn(packageFormat) == -1) {
+            // FIXME: The query below is rather spepcific to script engines. generify if possible
+            const QString component = packageFormat.right(packageFormat.size() - packageFormat.lastIndexOf('/') - 1);
+            const QString constraint = QString("[X-Plasma-API] == '%1' and " "'%2' in [X-Plasma-ComponentTypes]").arg(specialization, component);
+            KService::List offers = KServiceTypeTrader::self()->query("Plasma/ScriptEngine", constraint);
+
+            if (!offers.isEmpty()) {
+                KService::Ptr offer = offers.first();
+                QString packageFormat = offer->property("X-Plasma-PackageFormat").toString();
+                if (!packageFormat.isEmpty()) {
+                    return loadPackage(packageFormat);
+                }
+            }
+        }
+    }
+
+    if (packageFormat.startsWith("Plasma")) {
+        if (packageFormat.endsWith("/Applet")) {
+            return PlasmoidPackage();
+        } else if (packageFormat.endsWith("/DataEngine")) {
+            return DataEnginePackage();
+        } else if (packageFormat.endsWith("/Runner")) {
+            return RunnerPackage();
+        } else if (packageFormat.endsWith("/Wallpaper")) {
+            return WallpaperPackage();
+        } else if (packageFormat.endsWith("/Theme")) {
+            return ThemePackage();
+        } else if (packageFormat.endsWith("/ContainmentActions")) {
+            return ContainmentActionsPackage();
+        } else if (packageFormat.endsWith("/Generic")) {
+            return GenericPackage();
+        }
+    }
+
+    // first we check for plugins in sycoca
+    QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(packageFormat);
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Package", constraint);
+
+    QVariantList args;
+    QString error;
+    foreach (const KService::Ptr &offer, offers) {
+        PackageFactory *factory = (offer->createInstance<Plasma::PackageFactory>(0, args, &error));
+
+        if (factory) {
+            Package package = factory->package();
+            delete factory;
+            return package;
+        }
+
+        kDebug() << "Couldn't load Package for" << packageFormat
+                 << "! reason given: " << error;
+    }
+
+    // if that didn't give us any love, then we try to load from a config file
+    Package package;
+    QString configPath("plasma/packageformats/%1rc");
+    configPath = KStandardDirs::locate("data", configPath.arg(packageFormat));
+
+    if (!configPath.isEmpty()) {
+        KConfig config(configPath);
+        package.read(&config);
+        return package;
+    }
+
+    // try to load from absolute file path
+    KUrl url(packageFormat);
+    if (url.isLocalFile()) {
+        KConfig config(url.toLocalFile(), KConfig::SimpleConfig);
+        package.read(&config);
+    }
+#ifndef PLASMA_NO_KIO
+    else {
+        KTemporaryFile tmp;
+        if (tmp.open()) {
+            KIO::Job *job = KIO::file_copy(url, KUrl(tmp.fileName()),
+                                           -1, KIO::Overwrite | KIO::HideProgressInfo);
+            if (job->exec()) {
+                KConfig config(tmp.fileName(), KConfig::SimpleConfig);
+                package.read(&config);
+            }
+        }
+    }
+#endif
+
+    return package;
 }
 
 KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QString &parentApp)
@@ -359,10 +458,10 @@ Service* PluginLoader::internalLoadService(const QString &name, const QVariantLi
     return 0;
 }
 
-Package PluginLoader::internalLoadPackage(const QString &name, const QVariantList &args)
+Package PluginLoader::internalLoadPackage(const QString &name, const QString &specialization)
 {
     Q_UNUSED(name);
-    Q_UNUSED(args);
+    Q_UNUSED(specialization);
     return Package();
 }
 

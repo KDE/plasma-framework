@@ -98,11 +98,11 @@ public:
      * Load a Package plugin.
      *
      * @param name the plugin name of the package to load
-     * @param args a list of arguments to supply to the service plugin when loading it
+     * @param specialization used to find script extensions for the given format, e.g. "QML" for "Plasma/Applet"
      *
      * @return a Package object matching name, or an invalid package on failure
      **/
-    Package loadPackage(const QString &name, const QVariantList &args);
+    Package loadPackage(const QString &packageFormat, const QString &specialization = QString());
 
     /**
      * Returns a list of all known applets.
@@ -229,7 +229,7 @@ protected:
      *
      * @return a Service object, unlike Plasma::Service::loadService, this can return null.
      **/
-    virtual Package internalLoadPackage(const QString &name, const QVariantList &args);
+    virtual Package internalLoadPackage(const QString &name, const QString &specialization);
 
     /**
      * A re-implementable method that allows subclasses to provide additional applets
