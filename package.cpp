@@ -21,7 +21,6 @@
 *******************************************************************************/
 
 #include "package.h"
-#include "config-plasma.h"
 
 #include <QDir>
 #include <QFile>
@@ -29,26 +28,26 @@
 #include <QtNetwork/QHostInfo>
 
 #include <karchive.h>
-#include <kcomponentdata.h>
+#include <kdebug.h>
 #include <kdesktopfile.h>
+#include <kmimetype.h>
+#include <kservicetypetrader.h>
+#include <kstandarddirs.h>
+#include <ktar.h>
+#include <ktempdir.h>
+#include <ktemporaryfile.h>
+#include <kzip.h>
+
 #ifndef PLASMA_NO_KIO
 #include <kio/copyjob.h>
 #include <kio/deletejob.h>
 #include <kio/jobclasses.h>
 #include <kio/job.h>
 #endif
-#include <kmimetype.h>
-#include <kplugininfo.h>
-#include <kstandarddirs.h>
-#include <ktar.h>
-#include <ktempdir.h>
-#include <ktemporaryfile.h>
-#include <kzip.h>
-#include <kdebug.h>
 
+#include "config-plasma.h"
 #include "private/package_p.h"
-#include "private/plasmoidservice_p.h"
-#include "private/service_p.h"
+#include "private/packages_p.h"
 #include "remote/authorizationmanager.h"
 #include "remote/authorizationmanager_p.h"
 
@@ -117,14 +116,105 @@ bool removeFolder(QString folderPath)
 
 #endif // PLASMA_NO_KIO
 
-
-Package::Package()
-    : d(new PackagePrivate(PackageStructure::Ptr(0), QString()))
+Package Package::load(const QString &packageFormat, const QString &specialization)
 {
+    if (packageFormat.isEmpty()) {
+        return Package();
+    }
+
+    if (!specialization.isEmpty()) {
+        QRegExp re("[^a-zA-Z0-9\\-_]");
+        // check that the provided strings are safe to use in a ServiceType query
+        if (re.indexIn(specialization) == -1 && re.indexIn(packageFormat) == -1) {
+            // FIXME: The query below is rather spepcific to script engines. generify if possible
+            const QString component = packageFormat.right(packageFormat.size() - packageFormat.lastIndexOf('/') - 1);
+            const QString constraint = QString("[X-Plasma-API] == '%1' and " "'%2' in [X-Plasma-ComponentTypes]").arg(specialization, component);
+            KService::List offers = KServiceTypeTrader::self()->query("Plasma/ScriptEngine", constraint);
+
+            if (!offers.isEmpty()) {
+                KService::Ptr offer = offers.first();
+                QString packageFormat = offer->property("X-Plasma-PackageFormat").toString();
+                if (!packageFormat.isEmpty()) {
+                    return load(packageFormat);
+                }
+            }
+        }
+    }
+
+    if (packageFormat.startsWith("Plasma")) {
+        if (packageFormat.endsWith("/Applet")) {
+            return PlasmoidPackage();
+        } else if (packageFormat.endsWith("/DataEngine")) {
+            return DataEnginePackage();
+        } else if (packageFormat.endsWith("/Runner")) {
+            return RunnerPackage();
+        } else if (packageFormat.endsWith("/Wallpaper")) {
+            return WallpaperPackage();
+        } else if (packageFormat.endsWith("/Theme")) {
+            return ThemePackage();
+        } else if (packageFormat.endsWith("/ContainmentActions")) {
+            return ContainmentActionsPackage();
+        } else if (packageFormat.endsWith("/Generic")) {
+            return GenericPackage();
+        }
+    }
+
+    // first we check for plugins in sycoca
+    QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(packageFormat);
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Package", constraint);
+
+    QVariantList args;
+    QString error;
+    foreach (const KService::Ptr &offer, offers) {
+        PackageFactory *factory = (offer->createInstance<Plasma::PackageFactory>(0, args, &error));
+
+        if (factory) {
+            Package package = factory->package();
+            delete factory;
+            return package;
+        }
+
+        kDebug() << "Couldn't load Package for" << packageFormat
+                 << "! reason given: " << error;
+    }
+
+    // if that didn't give us any love, then we try to load from a config file
+    Package package;
+    QString configPath("plasma/packageformats/%1rc");
+    configPath = KStandardDirs::locate("data", configPath.arg(packageFormat));
+
+    if (!configPath.isEmpty()) {
+        KConfig config(configPath);
+        package.read(&config);
+        return package;
+    }
+
+    // try to load from absolute file path
+    KUrl url(packageFormat);
+    if (url.isLocalFile()) {
+        KConfig config(url.toLocalFile(), KConfig::SimpleConfig);
+        package.read(&config);
+    }
+#ifndef PLASMA_NO_KIO
+    else {
+        KTemporaryFile tmp;
+        if (tmp.open()) {
+            KIO::Job *job = KIO::file_copy(url, KUrl(tmp.fileName()),
+                                           -1, KIO::Overwrite | KIO::HideProgressInfo);
+            if (job->exec()) {
+                KConfig config(tmp.fileName(), KConfig::SimpleConfig);
+                package.read(&config);
+            }
+        }
+    }
+#endif
+
+    return package;
 }
 
-Package::Package(const QString &packagePath, PackageStructure::Ptr structure)
-    : d(new PackagePrivate(structure, packagePath))
+
+Package::Package()
+    : d(new PackagePrivate())
 {
 }
 
@@ -156,16 +246,17 @@ bool Package::isValid() const
     //search for the file in all prefixes and in all possible paths for each prefix
     //even if it's a big nested loop, usually there is one prefix and one location
     //so shouldn't cause too much disk access
-    QStringList prefixes = d->structure->contentsPrefixPaths();
-    if (prefixes.isEmpty()) {
-        prefixes << QString();
-    }
+    QMapIterator<QByteArray, ContentStructure> it(d->contents);
+    while (it.hasNext()) {
+        it.next();
+        if (!it.value().required) {
+            continue;
+        }
 
-    foreach (const char *dir, d->structure->requiredDirectories()) {
         bool failed = true;
-        foreach (const QString &path, d->structure->searchPath(dir)) {
-            foreach (const QString &prefix, prefixes) {
-                if (QFile::exists(d->structure->path() + prefix + path)) {
+        foreach (const QString &path, it.value().paths) {
+            foreach (const QString &prefix, d->contentsPrefixPaths) {
+                if (QFile::exists(d->path + prefix + path)) {
                     failed = false;
                     break;
                 }
@@ -176,34 +267,120 @@ bool Package::isValid() const
         }
 
         if (failed) {
-            kWarning() << "Could not find required directory" << dir;
-            d->valid = false;
-            return false;
-        }
-    }
-
-    foreach (const char *file, d->structure->requiredFiles()) {
-        bool failed = true;
-        foreach (const QString &path, d->structure->searchPath(file)) {
-            foreach (const QString &prefix, prefixes) {
-                if (QFile::exists(d->structure->path() + prefix + path)) {
-                    failed = false;
-                    break;
-                }
-            }
-            if (!failed) {
-                break;
-            }
-        }
-
-        if (failed) {
-            kWarning() << "Could not find required file" << file;
+            kWarning() << "Could not find required" << (it.value().directory ? "directory" : "file") << it.key();
             d->valid = false;
             return false;
         }
     }
 
     return true;
+}
+
+QString Package::name(const char *key) const
+{
+    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constFind(key);
+    if (it == d->contents.constEnd()) {
+        return QString();
+    }
+
+    return it.value().name;
+}
+
+bool Package::isRequired(const char *key) const
+{
+    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constFind(key);
+    if (it == d->contents.constEnd()) {
+        return false;
+    }
+
+    return it.value().required;
+}
+
+QStringList Package::mimeTypes(const char *key) const
+{
+    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constFind(key);
+    if (it == d->contents.constEnd()) {
+        return QStringList();
+    }
+
+    if (it.value().mimeTypes.isEmpty()) {
+        return d->mimeTypes;
+    }
+
+    return it.value().mimeTypes;
+}
+
+QString Package::defaultPackageRoot() const
+{
+    return d->defaultPackageRoot;
+}
+
+void Package::setDefaultPackageRoot(const QString &packageRoot)
+{
+    d->defaultPackageRoot = packageRoot;
+    if (!d->defaultPackageRoot.isEmpty() && !d->defaultPackageRoot.endsWith('/')) {
+        d->defaultPackageRoot.append('/');
+    }
+}
+
+QString Package::servicePrefix() const
+{
+    return d->servicePrefix;
+}
+
+void Package::setServicePrefix(const QString &servicePrefix)
+{
+    d->servicePrefix = servicePrefix;
+}
+
+bool Package::allowExternalPaths() const
+{
+    return d->externalPaths;
+}
+
+void Package::setAllowExternalPaths(bool allow)
+{
+    d->externalPaths = allow;
+}
+
+KPluginInfo Package::metadata() const
+{
+    if (!d->metadata && !d->path.isEmpty()) {
+        QFileInfo fileInfo(d->path);
+
+        if (fileInfo.isDir()) {
+            d->createPackageMetadata(d->path);
+        } else if (fileInfo.exists()) {
+            KArchive *archive = 0;
+            KMimeType::Ptr mimeType = KMimeType::findByPath(d->path);
+
+            if (mimeType->is("application/zip")) {
+                archive = new KZip(d->path);
+            } else if (mimeType->is("application/x-compressed-tar") ||
+                       mimeType->is("application/x-tar")|| mimeType->is("application/x-bzip-compressed-tar")) {
+                archive = new KTar(d->path);
+            } else {
+                kWarning() << "Could not open package file, unsupported archive format:" << d->path << mimeType->name();
+            }
+
+            if (archive && archive->open(QIODevice::ReadOnly)) {
+                const KArchiveDirectory *source = archive->directory();
+                KTempDir tempdir;
+                source->copyTo(tempdir.name());
+                d->createPackageMetadata(tempdir.name());
+            } else {
+                kWarning() << "Could not open package file:" << d->path;
+            }
+
+            delete archive;
+        }
+    }
+
+    if (!d->metadata) {
+        d->metadata = new KPluginInfo();
+    }
+
+    return *d->metadata;
 }
 
 QString Package::filePath(const char *fileType, const QString &filename) const
@@ -216,7 +393,12 @@ QString Package::filePath(const char *fileType, const QString &filename) const
     QStringList paths;
 
     if (qstrlen(fileType) != 0) {
-        paths = d->structure->searchPath(fileType);
+        if (!d->contents.contains(fileType)) {
+            //kDebug() << "package does not contain" << fileType << filename;
+            return QString();
+        }
+
+        paths = d->contents[fileType].paths;
 
         if (paths.isEmpty()) {
             //kDebug() << "no matching path came of it, while looking for" << fileType << filename;
@@ -228,14 +410,9 @@ QString Package::filePath(const char *fileType, const QString &filename) const
     }
 
     //Nested loop, but in the medium case resolves to just one iteration
-    QStringList prefixes = d->structure->contentsPrefixPaths();
-    if (prefixes.isEmpty()) {
-        prefixes << QString();
-    }
-
     //kDebug() << "prefixes:" << prefixes.count() << prefixes;
-    foreach (const QString &contentsPrefix, prefixes) {
-        const QString prefix(d->structure->path() + contentsPrefix);
+    foreach (const QString &contentsPrefix, d->contentsPrefixPaths) {
+        const QString prefix(d->path + contentsPrefix);
 
         foreach (const QString &path, paths) {
             QString file = prefix + path;
@@ -246,7 +423,7 @@ QString Package::filePath(const char *fileType, const QString &filename) const
 
             //kDebug() << "testing" << file << QFile::exists("/bin/ls") << QFile::exists(file);
             if (QFile::exists(file)) {
-                if (d->structure->allowExternalPaths()) {
+                if (d->externalPaths) {
                     //kDebug() << "found" << file;
                     return file;
                 }
@@ -256,8 +433,8 @@ QString Package::filePath(const char *fileType, const QString &filename) const
                 QDir dir(file);
                 QString canonicalized = dir.canonicalPath() + QDir::separator();
 
-                //kDebug() << "testing that" << canonicalized << "is in" << d->structure->path();
-                if (canonicalized.startsWith(d->structure->path())) {
+                //kDebug() << "testing that" << canonicalized << "is in" << d->path;
+                if (canonicalized.startsWith(d->path)) {
                     //kDebug() << "found" << file;
                     return file;
                 }
@@ -265,40 +442,599 @@ QString Package::filePath(const char *fileType, const QString &filename) const
         }
     }
 
-    //kDebug() << fileType << filename << "does not exist in" << prefixes << "at root" << d->structure->path();
+    //kDebug() << fileType << filename << "does not exist in" << prefixes << "at root" << d->path;
     return QString();
 }
 
-QString Package::filePath(const char *fileType) const
-{
-    return filePath(fileType, QString());
-}
-
-QStringList Package::entryList(const char *fileType) const
+QStringList Package::entryList(const char *key) const
 {
     if (!d->valid) {
         return QStringList();
     }
 
-    return d->structure->entryList(fileType);
+    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constFind(key);
+    if (it == d->contents.constEnd()) {
+        return QStringList();
+    }
+
+    QStringList list;
+    foreach (const QString &prefix, d->contentsPrefixPaths) {
+        foreach (const QString &path, it.value().paths) {
+            if (it.value().directory) {
+                QDir dir(d->path + prefix + path);
+
+                if (d->externalPaths) {
+                    list += dir.entryList(QDir::Files | QDir::Readable);
+                } else {
+                    // ensure that we don't return files outside of our base path
+                    // due to symlink or ../ games
+                    QString canonicalized = dir.canonicalPath();
+                    if (canonicalized.startsWith(path)) {
+                        list += dir.entryList(QDir::Files | QDir::Readable);
+                    }
+                }
+            } else {
+                const QString fullPath = d->path + prefix + path;
+                if (!QFile::exists(fullPath)) {
+                    continue;
+                }
+
+                if (d->externalPaths) {
+                    list += fullPath;
+                } else {
+                    QDir dir(fullPath);
+                    QString canonicalized = dir.canonicalPath() + QDir::separator();
+
+                    //kDebug() << "testing that" << canonicalized << "is in" << d->path;
+                    if (canonicalized.startsWith(d->path)) {
+                        list += fullPath;
+                    }
+                }
+            }
+        }
+    }
+
+    return list;
 }
 
 void Package::setPath(const QString &path)
 {
-    if (d->structure) {
-        d->structure->setPath(path);
-        d->valid = !d->structure->path().isEmpty();
+    if (path.isEmpty()) {
+        d->path.clear();
+        d->valid = false;
+        return;
     }
+
+    QDir dir(path);
+    if (dir.isRelative()) {
+        QString location;
+        if (!d->defaultPackageRoot.isEmpty()) {
+            dir.setPath(d->defaultPackageRoot);
+            if (dir.isRelative()) {
+                location = KStandardDirs::locate("data", d->defaultPackageRoot + path);
+            } else {
+                location = d->defaultPackageRoot + path;
+            }
+        }
+
+        if (location.isEmpty()) {
+            location = KStandardDirs::locate("data", path);
+
+            if (location.isEmpty()) {
+                d->path.clear();
+                d->valid = false;
+                return;
+            }
+        }
+
+        dir.setPath(location);
+    }
+
+    QString basePath = dir.canonicalPath();
+    bool valid = QFile::exists(basePath);
+
+    if (valid) {
+        QFileInfo info(basePath);
+        if (info.isDir() && !basePath.endsWith('/')) {
+            basePath.append('/');
+        }
+        //kDebug() << "basePath is" << basePath;
+    } else {
+        kDebug() << path << "invalid, basePath is" << basePath;
+        return;
+    }
+
+    if (d->path == basePath) {
+        return;
+    }
+
+    d->path = basePath;
+    delete d->metadata;
+    d->metadata = 0;
+    pathChanged();
+    d->valid = !d->path.isEmpty();
 }
 
 const QString Package::path() const
 {
-    return d->structure ? d->structure->path() : QString();
+    return d->path;
 }
 
-const PackageStructure::Ptr Package::structure() const
+void Package::pathChanged()
 {
-    return d->structure;
+    // default impl does nothing, this is a hook for subclasses.
+}
+
+QStringList Package::contentsPrefixPaths() const
+{
+    return d->contentsPrefixPaths;
+}
+
+void Package::setContentsPrefixPaths(const QStringList &prefixPaths)
+{
+    d->contentsPrefixPaths = prefixPaths;
+    if (d->contentsPrefixPaths.isEmpty()) {
+        d->contentsPrefixPaths << QString();
+    }
+}
+
+QString Package::contentsHash() const
+{
+    if (!d->valid) {
+        kWarning() << "can not create hash due to Package being invalid";
+        return QString();
+    }
+
+    QCryptographicHash hash(QCryptographicHash::Sha1);
+    QString metadataPath = d->path + "metadata.desktop";
+    if (QFile::exists(metadataPath)) {
+        QFile f(metadataPath);
+        if (f.open(QIODevice::ReadOnly)) {
+            while (!f.atEnd()) {
+                hash.addData(f.read(1024));
+            }
+        } else {
+            kWarning() << "could not add" << f.fileName() << "to the hash; file could not be opened for reading.";
+        }
+    } else {
+        kWarning() << "no metadata at" << metadataPath;
+    }
+
+    foreach (QString prefix, d->contentsPrefixPaths) {
+        const QString basePath = d->path + prefix;
+        QDir dir(basePath);
+
+        if (!dir.exists()) {
+            return QString();
+        }
+
+        d->updateHash(basePath, QString(), dir, hash);
+    }
+
+    return hash.result();
+}
+
+void Package::addDirectoryDefinition(const char *key, const QString &path, const QString &name)
+{
+    ContentStructure s;
+
+    if (d->contents.contains(key)) {
+        s = d->contents[key];
+    }
+
+    if (!name.isEmpty()) {
+        s.name = name;
+    }
+
+    s.paths.append(path);
+    s.directory = true;
+
+    d->contents[key] = s;
+}
+
+void Package::addFileDefinition(const char *key, const QString &path, const QString &name)
+{
+    ContentStructure s;
+
+    if (d->contents.contains(key)) {
+        s = d->contents[key];
+    }
+
+    if (!name.isEmpty()) {
+        s.name = name;
+    }
+
+    s.paths.append(path);
+    s.directory = false;
+
+    d->contents[key] = s;
+}
+
+void Package::removeDefinition(const char *key)
+{
+    d->contents.remove(key);
+}
+
+void Package::setRequired(const char *key, bool required)
+{
+    QMap<QByteArray, ContentStructure>::iterator it = d->contents.find(key);
+    if (it == d->contents.end()) {
+        return;
+    }
+
+    it.value().required = required;
+}
+
+void Package::setDefaultMimeTypes(QStringList mimeTypes)
+{
+    d->mimeTypes = mimeTypes;
+}
+
+void Package::setMimeTypes(const char *key, QStringList mimeTypes)
+{
+    QMap<QByteArray, ContentStructure>::iterator it = d->contents.find(key);
+    if (it == d->contents.end()) {
+        return;
+    }
+
+    it.value().mimeTypes = mimeTypes;
+}
+
+QList<const char*> Package::directories() const
+{
+    QList<const char*> dirs;
+    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
+    while (it != d->contents.constEnd()) {
+        if (it.value().directory) {
+            dirs << it.key();
+        }
+        ++it;
+    }
+    return dirs;
+}
+
+QList<const char*> Package::requiredDirectories() const
+{
+    QList<const char*> dirs;
+    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
+    while (it != d->contents.constEnd()) {
+        if (it.value().directory &&
+            it.value().required) {
+            dirs << it.key();
+        }
+        ++it;
+    }
+    return dirs;
+}
+
+QList<const char*> Package::files() const
+{
+    QList<const char*> files;
+    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
+    while (it != d->contents.constEnd()) {
+        if (!it.value().directory) {
+            files << it.key();
+        }
+        ++it;
+    }
+    return files;
+}
+
+QList<const char*> Package::requiredFiles() const
+{
+    QList<const char*> files;
+    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
+    while (it != d->contents.constEnd()) {
+        if (!it.value().directory && it.value().required) {
+            files << it.key();
+        }
+        ++it;
+    }
+
+    return files;
+}
+
+void Package::read(const KConfigBase *config)
+{
+    d->contents.clear();
+    d->mimeTypes.clear();
+    KConfigGroup general(config, QString());
+    d->type = general.readEntry("Type", QString());
+    d->contentsPrefixPaths = general.readEntry("ContentsPrefixPaths", d->contentsPrefixPaths);
+    d->defaultPackageRoot = general.readEntry("DefaultPackageRoot", d->defaultPackageRoot);
+    d->externalPaths = general.readEntry("AllowExternalPaths", d->externalPaths);
+
+    QStringList groups = config->groupList();
+    foreach (const QString &group, groups) {
+        KConfigGroup entry(config, group);
+        QByteArray key = group.toAscii();
+
+        QString path = entry.readEntry("Path", QString());
+        QString name = entry.readEntry("Name", QString());
+        QStringList mimeTypes = entry.readEntry("Mimetypes", QStringList());
+        bool directory = entry.readEntry("Directory", false);
+        bool required = entry.readEntry("Required", false);
+
+        if (directory) {
+            addDirectoryDefinition(key, path, name);
+        } else {
+            addFileDefinition(key, path, name);
+        }
+
+        setMimeTypes(key, mimeTypes);
+        setRequired(key, required);
+    }
+}
+
+void Package::write(KConfigBase *config) const
+{
+    KConfigGroup general = KConfigGroup(config, "");
+    general.writeEntry("ContentsPrefixPaths", d->contentsPrefixPaths);
+    general.writeEntry("DefaultPackageRoot", d->defaultPackageRoot);
+    general.writeEntry("AllowExternalPaths", d->externalPaths);
+
+    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
+    while (it != d->contents.constEnd()) {
+        KConfigGroup group = config->group(it.key());
+        group.writeEntry("Path", it.value().paths);
+        group.writeEntry("Name", it.value().name);
+        if (!it.value().mimeTypes.isEmpty()) {
+            group.writeEntry("Mimetypes", it.value().mimeTypes);
+        }
+        if (it.value().directory) {
+            group.writeEntry("Directory", true);
+        }
+        if (it.value().required) {
+            group.writeEntry("Required", true);
+        }
+
+        ++it;
+    }
+}
+
+bool Package::installPackage(const QString &package, const QString &packageRoot)
+{
+    //TODO: report *what* failed if something does fail
+    QDir root(packageRoot);
+
+    if (!root.exists()) {
+        KStandardDirs::makeDir(packageRoot);
+        if (!root.exists()) {
+            kWarning() << "Could not create package root directory:" << packageRoot;
+            return false;
+        }
+    }
+
+    QFileInfo fileInfo(package);
+    if (!fileInfo.exists()) {
+        kWarning() << "No such file:" << package;
+        return false;
+    }
+
+    QString path;
+    KTempDir tempdir;
+    bool archivedPackage = false;
+
+    if (fileInfo.isDir()) {
+        // we have a directory, so let's just install what is in there
+        path = package;
+
+        // make sure we end in a slash!
+        if (path[path.size() - 1] != '/') {
+            path.append('/');
+        }
+    } else {
+        KArchive *archive = 0;
+        KMimeType::Ptr mimetype = KMimeType::findByPath(package);
+
+        if (mimetype->is("application/zip")) {
+            archive = new KZip(package);
+        } else if (mimetype->is("application/x-compressed-tar") ||
+                   mimetype->is("application/x-tar")|| mimetype->is("application/x-bzip-compressed-tar")) {
+            archive = new KTar(package);
+        } else {
+            kWarning() << "Could not open package file, unsupported archive format:" << package << mimetype->name();
+            return false;
+        }
+
+        if (!archive->open(QIODevice::ReadOnly)) {
+            kWarning() << "Could not open package file:" << package;
+        delete archive;
+            return false;
+        }
+
+        archivedPackage = true;
+        path = tempdir.name();
+
+        const KArchiveDirectory *source = archive->directory();
+        source->copyTo(path);
+
+        QStringList entries = source->entries();
+        if (entries.count() == 1) {
+            const KArchiveEntry *entry = source->entry(entries[0]);
+            if (entry->isDirectory()) {
+                path.append(entry->name()).append("/");
+            }
+        }
+
+        delete archive;
+    }
+
+    QString metadataPath = path + "metadata.desktop";
+    if (!QFile::exists(metadataPath)) {
+        kWarning() << "No metadata file in package" << package << metadataPath;
+        return false;
+    }
+
+    KPluginInfo meta(metadataPath);
+    QString targetName = meta.pluginName();
+
+    if (targetName.isEmpty()) {
+        kWarning() << "Package plugin name not specified";
+        return false;
+    }
+
+    // Ensure that package names are safe so package uninstall can't inject
+    // bad characters into the paths used for removal.
+    QRegExp validatePluginName("^[\\w-\\.]+$"); // Only allow letters, numbers, underscore and period.
+    if (!validatePluginName.exactMatch(targetName)) {
+        kWarning() << "Package plugin name " << targetName << "contains invalid characters";
+        return false;
+    }
+
+    targetName = packageRoot + '/' + targetName;
+    if (QFile::exists(targetName)) {
+        kWarning() << targetName << "already exists";
+        return false;
+    }
+
+    if (archivedPackage) {
+        // it's in a temp dir, so just move it over.
+#ifndef PLASMA_NO_KIO
+        KIO::CopyJob *job = KIO::move(KUrl(path), KUrl(targetName), KIO::HideProgressInfo);
+        const bool ok = job->exec();
+        const QString errorString = job->errorString();
+#else
+        const bool ok = copyFolder(path, targetName);
+        removeFolder(path);
+        const QString errorString("unknown");
+#endif
+        if (!ok) {
+            kWarning() << "Could not move package to destination:" << targetName << " : " << errorString;
+            return false;
+        }
+    } else {
+        // it's a directory containing the stuff, so copy the contents rather
+        // than move them
+#ifndef PLASMA_NO_KIO
+        KIO::CopyJob *job = KIO::copy(KUrl(path), KUrl(targetName), KIO::HideProgressInfo);
+        const bool ok = job->exec();
+        const QString errorString = job->errorString();
+#else
+        const bool ok = copyFolder(path, targetName);
+        const QString errorString("unknown");
+#endif
+        if (!ok) {
+            kWarning() << "Could not copy package to destination:" << targetName << " : " << errorString;
+            return false;
+        }
+    }
+
+    if (archivedPackage) {
+        // no need to remove the temp dir (which has been successfully moved if it's an archive)
+        tempdir.setAutoRemove(false);
+    }
+
+    if (!d->servicePrefix.isEmpty()) {
+        // and now we register it as a service =)
+        QString metaPath = targetName + "/metadata.desktop";
+        KDesktopFile df(metaPath);
+        KConfigGroup cg = df.desktopGroup();
+
+        // Q: should not installing it as a service disqualify it?
+        // Q: i don't think so since KServiceTypeTrader may not be
+        // used by the installing app in any case, and the
+        // package is properly installed - aseigo
+
+        //TODO: reduce code duplication with registerPackage below
+
+        QString serviceName = d->servicePrefix + meta.pluginName();
+
+        QString service = KStandardDirs::locateLocal("services", serviceName + ".desktop");
+#ifndef PLASMA_NO_KIO
+        KIO::FileCopyJob *job = KIO::file_copy(metaPath, service, -1, KIO::HideProgressInfo);
+        const bool ok = job->exec();
+        const QString errorString = job->errorString();
+#else
+        const bool ok = QFile::copy(metaPath, service);
+        const QString errorString("unknown");
+#endif
+        if (ok) {
+            // the icon in the installed file needs to point to the icon in the
+            // installation dir!
+            QString iconPath = targetName + '/' + cg.readEntry("Icon");
+            QFile icon(iconPath);
+            if (icon.exists()) {
+                KDesktopFile df(service);
+                KConfigGroup cg = df.desktopGroup();
+                cg.writeEntry("Icon", iconPath);
+            }
+        } else {
+            kWarning() << "Could not register package as service (this is not necessarily fatal):" << serviceName << " : " << errorString;
+        }
+    }
+
+    return true;
+}
+
+bool Package::uninstallPackage(const QString &packageName, const QString &packageRoot)
+{
+    // We need to remove the package directory and its metadata file.
+    const QString targetName = packageRoot + '/' + packageName;
+
+    if (!QFile::exists(targetName)) {
+        kWarning() << targetName << "does not exist";
+        return false;
+    }
+
+    QString serviceName = d->servicePrefix + packageName;
+
+    QString service = KStandardDirs::locateLocal("services", serviceName + ".desktop");
+    kDebug() << "Removing service file " << service;
+    bool ok = QFile::remove(service);
+
+    if (!ok) {
+        kWarning() << "Unable to remove " << service;
+    }
+
+#ifndef PLASMA_NO_KIO
+    KIO::DeleteJob *job = KIO::del(KUrl(targetName));
+    ok = job->exec();
+    const QString errorString = job->errorString();
+#else
+    ok = removeFolder(targetName);
+    const QString errorString("unknown");
+#endif
+    if (!ok) {
+        kWarning() << "Could not delete package from:" << targetName << " : " << errorString;
+        return false;
+    }
+
+    return true;
+}
+
+PackagePrivate::PackagePrivate()
+        : servicePrefix("plasma-applet-"),
+          metadata(0),
+          externalPaths(false),
+          valid(false)
+{
+    contentsPrefixPaths << "contents/";
+}
+
+PackagePrivate::PackagePrivate(const PackagePrivate &other)
+{
+    *this = other;
+}
+
+PackagePrivate::~PackagePrivate()
+{
+    delete metadata;
+}
+
+PackagePrivate &PackagePrivate::operator=(const PackagePrivate &rhs)
+{
+    path = rhs.path;
+    contentsPrefixPaths = rhs.contentsPrefixPaths;
+    servicePrefix = rhs.servicePrefix;
+    contents = rhs.contents;
+    mimeTypes = rhs.mimeTypes;
+    defaultPackageRoot = rhs.defaultPackageRoot;
+    servicePrefix = rhs.servicePrefix;
+    metadata = 0;
+    externalPaths = rhs.externalPaths;
+    valid = rhs.valid;
+    return *this;
 }
 
 void PackagePrivate::updateHash(const QString &basePath, const QString &subPath, const QDir &dir, QCryptographicHash &hash)
@@ -353,79 +1089,28 @@ void PackagePrivate::updateHash(const QString &basePath, const QString &subPath,
     }
 }
 
-QString Package::contentsHash() const
+void PackagePrivate::createPackageMetadata(const QString &path)
 {
-    if (!d->valid) {
-        kWarning() << "can not create hash due to Package being invalid";
-        return QString();
+    delete metadata;
+
+    QString metadataPath(path + "/metadata.desktop");
+    if (!QFile::exists(metadataPath)) {
+        kWarning() << "No metadata file in the package, expected it at:" << metadataPath;
+        metadataPath.clear();
     }
 
-    QCryptographicHash hash(QCryptographicHash::Sha1);
-    QString metadataPath = d->structure->path() + "metadata.desktop";
-    if (QFile::exists(metadataPath)) {
-        QFile f(metadataPath);
-        if (f.open(QIODevice::ReadOnly)) {
-            while (!f.atEnd()) {
-                hash.addData(f.read(1024));
-            }
-        } else {
-            kWarning() << "could not add" << f.fileName() << "to the hash; file could not be opened for reading.";
-        }
-    } else {
-        kWarning() << "no metadata at" << metadataPath;
-    }
-
-    QStringList prefixes = d->structure->contentsPrefixPaths();
-    if (prefixes.isEmpty()) {
-        prefixes << QString();
-    }
-
-    foreach (QString prefix, prefixes) {
-        const QString basePath = d->structure->path() + prefix;
-        QDir dir(basePath);
-
-        if (!dir.exists()) {
-            return QString();
-        }
-
-        d->updateHash(basePath, QString(), dir, hash);
-    }
-
-    return hash.result();
+    metadata = new KPluginInfo(metadataPath);
 }
 
-PackagePrivate::PackagePrivate(const PackageStructure::Ptr st, const QString &p)
-        : structure(st),
-          service(0)
+PackageFactory::PackageFactory(QObject *parent, const QVariantList &args)
+    : QObject(parent)
 {
-    if (structure) {
-        if (p.isEmpty()) {
-            structure->setPath(structure->defaultPackageRoot());
-        } else {
-            structure->setPath(p);
-        }
-    }
-
-    valid = structure && !structure->path().isEmpty();
+    Q_UNUSED(args)
 }
 
-PackagePrivate::PackagePrivate(const PackagePrivate &other)
-        : structure(other.structure),
-          service(other.service),
-          valid(other.valid)
+Package PackageFactory::package() const
 {
-}
-
-PackagePrivate::~PackagePrivate()
-{
-}
-
-PackagePrivate &PackagePrivate::operator=(const PackagePrivate &rhs)
-{
-    structure = rhs.structure;
-    service = rhs.service;
-    valid = rhs.valid;
-    return *this;
+    return Package();
 }
 
 } // Namespace

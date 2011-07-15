@@ -96,7 +96,6 @@ set(plasma_LIB_SRCS
     extenders/extender.cpp
     extenders/extendergroup.cpp
     extenders/extenderitem.cpp
-    packagestructure.cpp
     package.cpp
     paintutils.cpp
     pluginloader.cpp
@@ -315,7 +314,6 @@ set(plasma_LIB_INCLUDES
     paintutils.h
     windoweffects.h
     framesvg.h
-    packagestructure.h
     package.h
     plasma.h
     plasma_export.h
@@ -403,7 +401,7 @@ install(FILES
    data/servicetypes/plasma-containment.desktop
    data/servicetypes/plasma-containmentactions.desktop
    data/servicetypes/plasma-dataengine.desktop
-   data/servicetypes/plasma-packagestructure.desktop
+   data/servicetypes/plasma-package.desktop
    data/servicetypes/plasma-runner.desktop
    data/servicetypes/plasma-scriptengine.desktop
    data/servicetypes/plasma-service.desktop
