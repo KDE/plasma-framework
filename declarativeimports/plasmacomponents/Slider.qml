@@ -38,6 +38,7 @@ Item {
     property bool animated: false
     property alias inverted: range.inverted
     property bool updateValueWhileDragging: true
+    property real handleSize: 22
 
     // Convinience API
     property bool _isVertical: orientation == Qt.Vertical
@@ -161,8 +162,8 @@ Item {
             anchors {
                 verticalCenter: groove.verticalCenter
             }
-            width: height
-            height: parent.height
+            width: handleSize
+            height: handleSize
             svg: PlasmaCore.Svg { imagePath: "widgets/slider" }
             elementId: "horizontal-slider-handle"
 
