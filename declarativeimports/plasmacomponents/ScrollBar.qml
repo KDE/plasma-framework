@@ -41,21 +41,30 @@ Item {
     property bool _showButtons: stepSize != 0
     property bool _inverted: _isVertical ?
         !scrollbar.inverted : scrollbar.inverted
-    property alias _value: range.value
 
     implicitWidth: _isVertical ? 22 : 200
     implicitHeight: _isVertical ? 200 : 22
 
     visible: flickableItem && handle.width < contents.width
 
+    function incrementValue(increment) {
+        if (!flickableItem)
+            return;
+
+        if (_isVertical)
+            flickableItem.contentY += increment;
+        else
+            flickableItem.contentX += increment;
+    }
+
     Keys.onUpPressed: {
         if (!_isVertical)
             return;
 
         if (_inverted)
-            range.value -= stepSize;
+            incrementValue(-stepSize);
         else
-            range.value += stepSize;
+            incrementValue(stepSize);
     }
 
     Keys.onDownPressed: {
@@ -63,9 +72,9 @@ Item {
             return;
 
         if (_inverted)
-            range.value += stepSize;
+            incrementValue(stepSize);
         else
-            range.value -= stepSize;
+            incrementValue(-stepSize);
     }
 
     Keys.onLeftPressed: {
@@ -73,9 +82,9 @@ Item {
             return;
 
         if (_inverted)
-            range.value += stepSize;
+            incrementValue(stepSize);
         else
-            range.value -= stepSize;
+            incrementValue(-stepSize);
     }
 
     Keys.onRightPressed: {
@@ -83,9 +92,9 @@ Item {
             return;
 
         if (_inverted)
-            range.value -= stepSize;
+            incrementValue(-stepSize);
         else
-            range.value += stepSize;
+            incrementValue(stepSize);
     }
 
 
@@ -133,9 +142,9 @@ Item {
                     onTriggered: {
                         scrollbar.forceActiveFocus();
                         if (_inverted)
-                            _value += stepSize;
+                            incrementValue(stepSize);
                         else
-                            _value -= stepSize;
+                            incrementValue(-stepSize);
                     }
                 }
             }
@@ -173,9 +182,9 @@ Item {
                     onTriggered: {
                         scrollbar.forceActiveFocus();
                         if (_inverted)
-                            _value -= stepSize
+                            incrementValue(-stepSize);
                         else
-                            _value += stepSize;
+                            incrementValue(stepSize);
                     }
                 }
             }
@@ -220,7 +229,6 @@ Item {
                 }
                 position: handle.x
                 onPositionChanged: { handle.x = position; }
-
             }
 
             PlasmaCore.FrameSvgItem {
