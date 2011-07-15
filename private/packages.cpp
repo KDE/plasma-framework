@@ -29,17 +29,24 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#ifndef PLASMA_NO_KNEWSTUFF
-#include <knewstuff3/downloaddialog.h>
-#endif
-
 #include "plasma/private/wallpaper_p.h"
 
 namespace Plasma
 {
 
-PlasmoidPackage::PlasmoidPackage(QObject *parent)
-    : Plasma::PackageStructure(parent, QString("Plasmoid"))
+void ChangeableMainScriptPackage::pathChanged()
+{
+    KDesktopFile config(path() + "/metadata.desktop");
+    KConfigGroup cg = config.desktopGroup();
+    QString mainScript = cg.readEntry("X-Plasma-MainScript", QString());
+    if (!mainScript.isEmpty()) {
+        addFileDefinition("mainscript", mainScript, i18n("Main Script File"));
+        setRequired("mainscript", true);
+    }
+}
+
+PlasmoidPackage::PlasmoidPackage()
+    : ChangeableMainScriptPackage()
 {
     QString pathsString(getenv("PLASMA_CUSTOM_PREFIX_PATHS"));
     if (!pathsString.isEmpty()) {
@@ -48,6 +55,9 @@ PlasmoidPackage::PlasmoidPackage(QObject *parent)
             setContentsPrefixPaths(prefixPaths);
         }
     }
+
+    setServicePrefix("plasma-applet-");
+    setDefaultPackageRoot("plasma/plasmoids");
 
     addDirectoryDefinition("images", "images", i18n("Images"));
     QStringList mimetypes;
@@ -79,26 +89,11 @@ PlasmoidPackage::PlasmoidPackage(QObject *parent)
     setRequired("mainscript", true);
 }
 
-PlasmoidPackage::~PlasmoidPackage()
-{
-}
-
-void PlasmoidPackage::pathChanged()
-{
-    KDesktopFile config(path() + "/metadata.desktop");
-    KConfigGroup cg = config.desktopGroup();
-    QString mainScript = cg.readEntry("X-Plasma-MainScript", QString());
-    if (!mainScript.isEmpty()) {
-        addFileDefinition("mainscript", mainScript, i18n("Main Script File"));
-        setRequired("mainscript", true);
-    }
-}
-
-DataEnginePackage::DataEnginePackage(QObject *parent)
-    : Plasma::PackageStructure(parent, QString("DataEngine"))
+DataEnginePackage::DataEnginePackage()
+    : ChangeableMainScriptPackage()
 {
     setServicePrefix("plasma-dataengine-");
-    setDefaultPackageRoot("plasma/dataengine/");
+    setDefaultPackageRoot("plasma/dataengines/");
 
     addDirectoryDefinition("data", "data", i18n("Data Files"));
 
@@ -116,23 +111,27 @@ DataEnginePackage::DataEnginePackage(QObject *parent)
     setRequired("mainscript", true);
 }
 
-DataEnginePackage::~DataEnginePackage()
+RunnerPackage::RunnerPackage()
+    : ChangeableMainScriptPackage()
 {
+    setServicePrefix("plasma-runner-");
+    setDefaultPackageRoot("plasma/runners/");
+
+    addDirectoryDefinition("data", "data", i18n("Data Files"));
+
+    addDirectoryDefinition("scripts", "code", i18n("Executable Scripts"));
+    QStringList mimetypes;
+    mimetypes << "text/plain";
+    setMimeTypes("scripts", mimetypes);
+
+    addDirectoryDefinition("translations", "locale", i18n("Translations"));
+
+    addFileDefinition("mainscript", "code/main", i18n("Main Script File"));
+    setRequired("mainscript", true);
 }
 
-void DataEnginePackage::pathChanged()
-{
-    KDesktopFile config(path() + "/metadata.desktop");
-    KConfigGroup cg = config.desktopGroup();
-    QString mainScript = cg.readEntry("X-Plasma-MainScript", QString());
-    if (!mainScript.isEmpty()) {
-        addFileDefinition("mainscript", mainScript, i18n("Main Script File"));
-        setRequired("mainscript", true);
-    }
-}
-
-ThemePackage::ThemePackage(QObject *parent)
-    : Plasma::PackageStructure(parent, QString("Plasma Theme"))
+ThemePackage::ThemePackage()
+    : Package()
 {
     addDirectoryDefinition("dialogs", "dialogs/", i18n("Images for dialogs"));
     addFileDefinition("dialogs/background", "dialogs/background.svg",
@@ -193,8 +192,8 @@ ThemePackage::ThemePackage(QObject *parent)
     setDefaultMimeTypes(mimetypes);
 }
 
-WallpaperPackage::WallpaperPackage(Wallpaper *paper, QObject *parent)
-    : PackageStructure(parent, "Background"),
+WallpaperPackage::WallpaperPackage(Wallpaper *paper)
+    : Package(),
       m_paper(paper),
       m_fullPackage(true),
       m_targetSize(100000, 100000),
@@ -302,7 +301,7 @@ void WallpaperPackage::findBestPaper()
     }
 
     //kDebug() << "best image" << bestImage;
-    addFileDefinition("preferred", path("images") + bestImage, i18n("Recommended wallpaper file"));
+    addFileDefinition("preferred", filePath("images") + bestImage, i18n("Recommended wallpaper file"));
 }
 
 float WallpaperPackage::distance(const QSize& size, const QSize& desired,
@@ -340,10 +339,14 @@ void WallpaperPackage::paperDestroyed()
     m_paper = 0;
 }
 
-ContainmentActionsPackage::ContainmentActionsPackage(QObject *parent)
-    : Plasma::PackageStructure(parent, QString("ContainmentActions"))
+ContainmentActionsPackage::ContainmentActionsPackage()
 {
     //FIXME how do I do the mimetypes stuff?
+}
+
+GenericPackage::GenericPackage()
+{
+    setDefaultPackageRoot("plasma/packages");
 }
 
 } // namespace Plasma

@@ -20,63 +20,51 @@
 #ifndef LIBS_PLASMA_PACKAGES_P_H
 #define LIBS_PLASMA_PACKAGES_P_H
 
-#include "plasma/packagestructure.h"
-#include "plasma/wallpaper.h"
+#include "plasma/package.h"
 #include "plasma/plasma.h"
+#include "plasma/wallpaper.h"
 
 #include "config-plasma.h"
-
-#ifndef PLASMA_NO_KNEWSTUFF
-namespace KNS3
-{
-    class DownloadDialog;
-} // namespace KNS
-#endif
 
 namespace Plasma
 {
 
-class PlasmoidPackage : public PackageStructure
+class ChangeableMainScriptPackage : public Package
 {
-    Q_OBJECT
-public:
-    explicit PlasmoidPackage(QObject *parent = 0);
-    ~PlasmoidPackage();
-    void createNewWidgetBrowser(QWidget *parent = 0);
-
-protected:
-    void pathChanged();
-
-private:
-#ifndef PLASMA_NO_KNEWSTUFF
-    QWeakPointer<KNS3::DownloadDialog> m_knsDialog;
-#endif
-};
-
-class DataEnginePackage : public PackageStructure
-{
-    Q_OBJECT
-public:
-    explicit DataEnginePackage(QObject *parent = 0);
-    ~DataEnginePackage();
-
 protected:
     void pathChanged();
 };
 
-class ThemePackage : public PackageStructure
+class PlasmoidPackage : public ChangeableMainScriptPackage
 {
-    Q_OBJECT
 public:
-    explicit ThemePackage(QObject *parent = 0);
+    explicit PlasmoidPackage();
 };
 
-class WallpaperPackage : public PackageStructure
+class DataEnginePackage : public ChangeableMainScriptPackage
+{
+public:
+    explicit DataEnginePackage();
+} ;
+
+class RunnerPackage : public ChangeableMainScriptPackage
+{
+public:
+    explicit RunnerPackage();
+};
+
+class ThemePackage : public Package
+{
+public:
+    explicit ThemePackage();
+};
+
+class WallpaperPackage : public QObject, public Package
 {
     Q_OBJECT
 
 public:
-    explicit WallpaperPackage(Wallpaper *paper = 0, QObject *parent = 0);
+    explicit WallpaperPackage(Wallpaper *paper = 0);
 
 protected:
     void pathChanged();
@@ -98,15 +86,17 @@ private:
     Wallpaper::ResizeMethod m_resizeMethod;
 };
 
-class ContainmentActionsPackage : public PackageStructure
+class ContainmentActionsPackage : public Package
 {
-    Q_OBJECT
-
 public:
-    explicit ContainmentActionsPackage(QObject *parent = 0);
+    explicit ContainmentActionsPackage();
 };
 
-PackageStructure::Ptr defaultPackageStructure(ComponentType type);
+class GenericPackage : public Package
+{
+public:
+    explicit GenericPackage();
+};
 
 } // namespace Plasma
 
