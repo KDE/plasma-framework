@@ -24,6 +24,7 @@
 #include <QFile>
 #include <kzip.h>
 #include <kstandarddirs.h>
+#include <kio/netaccess.h>
 
 #include "plasma/applet.h"
 
@@ -32,34 +33,14 @@ void PlasmoidPackageTest::init()
     m_package = QString("Package");
     m_packageRoot = QDir::homePath() + "/.kde-unit-test/packageRoot";
     m_defaultPackage = Plasma::Package::load("Plasma/Applet");
+    cleanup(); // to prevent previous runs from interfering with this one
 }
 
 void PlasmoidPackageTest::cleanup()
 {
+    qDebug() << "CLEANEAING UP!";
     // Clean things up.
-    QDir local(QDir::homePath() + QLatin1String("/.kde-unit-test/packageRoot"));
-    foreach (const QString &dir, local.entryList(QDir::Dirs)) {
-        removeDir(QLatin1String("packageRoot/") + dir.toLatin1() + "/contents/code");
-        removeDir(QLatin1String("packageRoot/") + dir.toLatin1() + "/contents/images");
-        removeDir(QLatin1String("packageRoot/") + dir.toLatin1() + "/contents");
-        removeDir(QLatin1String("packageRoot/") + dir.toLatin1());
-    }
-
-    QDir().rmpath(QDir::homePath() + "/.kde-unit-test/packageRoot");
-}
-
-// Copied from ktimezonetest.h
-void PlasmoidPackageTest::removeDir(const QString &subdir)
-{
-    QDir local(QDir::homePath() + QLatin1String("/.kde-unit-test/") + subdir);
-    foreach(const QString &file, local.entryList(QDir::Files))
-        if(!local.remove(file))
-            qWarning("%s: removing failed", qPrintable( file ));
-    QCOMPARE((int)local.entryList(QDir::Files).count(), 0);
-    local.cdUp();
-    QString subd = subdir;
-    subd.remove(QRegExp("^.*/"));
-    local.rmpath(subd);
+    KIO::NetAccess::del(KUrl(QDir::homePath() + QLatin1String("/.kde-unit-test/packageRoot")), 0);
 }
 
 void PlasmoidPackageTest::createTestPackage(const QString &packageName)
@@ -117,12 +98,14 @@ void PlasmoidPackageTest::createTestPackage(const QString &packageName)
     out << "<svg>This is another test image</svg>";
     file.flush();
     file.close();
+    qDebug() << "SUUUUUUUUCCCCCCCCESSSSSSSSS";
 }
 
 void PlasmoidPackageTest::isValid()
 {
     Plasma::Package *p = new Plasma::Package(m_defaultPackage);
     p->setPath(m_packageRoot + '/' + m_package);
+    kDebug() << "package path is" << p->path();
 
     // A PlasmoidPackage is valid when:
     // - The package root exists.
@@ -245,12 +228,13 @@ void PlasmoidPackageTest::entryList()
 void PlasmoidPackageTest::createAndInstallPackage()
 {
     createTestPackage("plasmoid_to_package");
-
     const QString packagePath = m_packageRoot + '/' + "testpackage.plasmoid";
 
     KZip creator(packagePath);
-    creator.addLocalDirectory(packagePath, ".");
+    QVERIFY(creator.open(QIODevice::WriteOnly));
+    creator.addLocalDirectory(m_packageRoot + '/' + "plasmoid_to_package", ".");
     creator.close();
+    KIO::NetAccess::del(KUrl(m_packageRoot + "/plasmoid_to_package"), 0);
 
     QVERIFY(QFile::exists(packagePath));
 
@@ -268,7 +252,7 @@ void PlasmoidPackageTest::createAndInstallPackage()
 
     Plasma::Package *p = new Plasma::Package(m_defaultPackage);
     QVERIFY(p->installPackage(packagePath, m_packageRoot));
-    QString installedPackage = m_packageRoot + "/test";
+    const QString installedPackage = m_packageRoot + "/plasmoid_to_package";
 
     QVERIFY(QFile::exists(installedPackage));
 

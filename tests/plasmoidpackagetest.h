@@ -32,13 +32,12 @@ public Q_SLOTS:
     void cleanup();
 
 private Q_SLOTS:
+    void createAndInstallPackage();
     void isValid();
     void filePath();
     void entryList();
-    void createAndInstallPackage();
 
 private:
-    void removeDir(const QString &subdir);
     void createTestPackage(const QString &packageName);
 
     QString m_packageRoot;
