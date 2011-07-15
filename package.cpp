@@ -524,7 +524,7 @@ QString Package::contentsHash() const
         d->updateHash(basePath, QString(), dir, hash);
     }
 
-    return hash.result();
+    return hash.result().toHex();
 }
 
 void Package::addDirectoryDefinition(const char *key, const QString &path, const QString &name)
