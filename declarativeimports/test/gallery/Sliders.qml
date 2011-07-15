@@ -28,6 +28,69 @@ Column {
         text: "Slider"
     }
 
+    PlasmaComponents.Highlight {
+        width: 300
+        height: 400
+        Column {
+            anchors {
+                fill: parent
+                margins: 10
+            }
+            spacing: 10
+
+            Text { text: "Color Selector"; font.pixelSize: 20 }
+
+            Text { text: "Red" }
+
+            PlasmaComponents.Slider {
+                id: redSlider
+                height: 20
+                width: 255
+                orientation: Qt.Horizontal
+                minimumValue: 0
+                maximumValue: 255
+                stepSize: 10
+                animated: true
+                Keys.onTabPressed: greenSlider.forceActiveFocus()
+            }
+
+            Text { text: "Green" }
+
+            PlasmaComponents.Slider {
+                id: greenSlider
+                height: 20
+                width: 255
+                orientation: Qt.Horizontal
+                minimumValue: 0
+                maximumValue: 255
+                stepSize: 10
+                animated: true
+                Keys.onTabPressed: blueSlider.forceActiveFocus()
+            }
+
+            Text { text: "Blue" }
+
+            PlasmaComponents.Slider {
+                id: blueSlider
+                height: 20
+                width: 255
+                orientation: Qt.Horizontal
+                minimumValue: 0
+                maximumValue: 255
+                stepSize: 10
+                animated: true
+                Keys.onTabPressed: redSlider.forceActiveFocus()
+            }
+
+            Rectangle {
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: parent.width / 2
+                height: width
+                color: Qt.rgba(redSlider.value / 255, greenSlider.value / 255, blueSlider.value / 255, 1)
+            }
+        }
+    }
+
     PlasmaComponents.Slider {
         id: slider1
         width: 140
