@@ -47,8 +47,6 @@ public:
     void newRenderCompleted(const WallpaperRenderRequest &render, const QImage &image);
     void setupScriptSupport();
 
-    static PackageStructure::Ptr s_packageStructure;
-
     Wallpaper *q;
     KPluginInfo wallpaperDescription;
     Package *package;
