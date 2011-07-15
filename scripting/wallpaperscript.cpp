@@ -57,10 +57,10 @@ Wallpaper *WallpaperScript::wallpaper() const
 QString WallpaperScript::mainScript() const
 {
     Q_ASSERT(d->wallpaper);
-    return d->wallpaper->package()->filePath("mainscript");
+    return d->wallpaper->package().filePath("mainscript");
 }
 
-const Package *WallpaperScript::package() const
+Package WallpaperScript::package() const
 {
     Q_ASSERT(d->wallpaper);
     return d->wallpaper->package();

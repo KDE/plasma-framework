@@ -20,8 +20,8 @@
 #ifndef PLASMA_SCRIPTENGINE_H
 #define PLASMA_SCRIPTENGINE_H
 
+#include <plasma/package.h>
 #include <plasma/plasma_export.h>
-#include <plasma/packagestructure.h>
 #include <plasma/plasma.h>
 
 #include <QtCore/QObject>
@@ -42,7 +42,6 @@ class DataEngineScript;
 class RunnerScript;
 class Wallpaper;
 class WallpaperScript;
-class Package;
 class ScriptEnginePrivate;
 
 /**
@@ -50,16 +49,6 @@ class ScriptEnginePrivate;
  *
  * @short The base class for scripting interfaces to be used in loading
  *        plasmoids of a given language.
- *
- * All ScriptEngines should export as consistent an interface as possible
- * so that the learning curve is limited. In particular, the following
- * API should be made available in the script environment:
- *
- * TODO: define the actual scripting APIas ...
- * PlasmaApplet - the applet of this plasmoid
- * LoadUserInterface(String uiFile) - loads and returns a given UI file
- * LoadImage - loads an image resource out of the plasmoid's package
- * PlasmaSvg - creates and returns an Svg file
  **/
 
 class PLASMA_EXPORT ScriptEngine : public QObject
@@ -87,7 +76,7 @@ protected:
      *         be used to request resources, such as images and
      *         interface files.
      */
-    virtual const Package *package() const;
+    virtual Package package() const;
 
 private:
     ScriptEnginePrivate *const d;
@@ -140,14 +129,6 @@ PLASMA_EXPORT RunnerScript *loadScriptEngine(const QString &language, AbstractRu
  **/
 PLASMA_EXPORT WallpaperScript *loadScriptEngine(const QString &language, Wallpaper *wallpaper);
 
-/**
- * Loads an appropriate PackageStructure for the given language and type
- *
- * @param language the language to load the PackageStructure for
- * @param type the component type
- * @return a guarded PackageStructure pointer
- */
-PLASMA_EXPORT PackageStructure::Ptr packageStructure(const QString &language, ComponentType type);
 
 } // namespace Plasma
 

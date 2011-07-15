@@ -171,9 +171,9 @@ void RunnerScript::setSyntaxes(const QList<RunnerSyntax> &syns)
     }
 }
 
-const Package *RunnerScript::package() const
+Package RunnerScript::package() const
 {
-    return d->runner ? d->runner->package() : 0;
+    return d->runner ? d->runner->package() : Package();
 }
 
 KPluginInfo RunnerScript::description() const
@@ -183,11 +183,7 @@ KPluginInfo RunnerScript::description() const
 
 QString RunnerScript::mainScript() const
 {
-    if (!package()) {
-        return QString();
-    } else {
-        return package()->filePath("mainscript");
-    }
+    return package().filePath("mainscript");
 }
 
 } // Plasma namespace

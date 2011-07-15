@@ -79,10 +79,10 @@ Service *DataEngineScript::serviceForSource(const QString &source)
 QString DataEngineScript::mainScript() const
 {
     Q_ASSERT(d->dataEngine);
-    return d->dataEngine->package()->filePath("mainscript");
+    return d->dataEngine->package().filePath("mainscript");
 }
 
-const Package *DataEngineScript::package() const
+Package DataEngineScript::package() const
 {
     Q_ASSERT(d->dataEngine);
     return d->dataEngine->package();
