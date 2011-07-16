@@ -29,6 +29,7 @@ Column {
     }
 
     PlasmaComponents.Button {
+        id: bt1
         width: 140
         height: 30
         text: "Button"
@@ -36,9 +37,12 @@ Column {
         onClicked: {
             console.log("Clicked");
         }
+
+        Keys.onTabPressed: bt2.forceActiveFocus();
     }
 
     PlasmaComponents.Button {
+        id: bt2
         width: 140
         height: 30
         text: "Checkable Button"
@@ -50,9 +54,12 @@ Column {
             else
                 console.log("Button Unchecked");
         }
+
+        Keys.onTabPressed: bt3.forceActiveFocus();
     }
 
     PlasmaComponents.Button {
+        id: bt3
         width: 140
         height: 30
         text: "Different Font"
@@ -60,18 +67,26 @@ Column {
             pixelSize: 20
             family: "Helvetica"
         }
+
+        Keys.onTabPressed: bt4.forceActiveFocus();
     }
 
     PlasmaComponents.Button {
+        id: bt4
         width: 140
         height: 30
         text: "Icon Button"
         iconSource: "/home/dakerfp/work/comics-reader/ui/images/random.png"
+
+        Keys.onTabPressed: bt5.forceActiveFocus();
     }
 
     PlasmaComponents.Button {
+        id: bt5
         width: 140
         height: 30
         iconSource: "/home/dakerfp/work/comics-reader/ui/images/random.png"
+
+        Keys.onTabPressed: bt1.forceActiveFocus();
     }
 }

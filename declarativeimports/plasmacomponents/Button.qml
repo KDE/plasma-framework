@@ -36,8 +36,44 @@ Item {
     // Plasma API
     property QtObject theme: PlasmaCore.Theme { }
 
+    function pressButton() {
+        surface.prefix = "pressed";
+    }
+
+    function releaseButton() {
+        if (button.checkable)
+            button.checked = !button.checked;
+
+        // TODO: "checked" state must have special graphics?
+        if (button.checked)
+            surface.prefix = "pressed";
+        else
+            surface.prefix = "normal";
+
+        button.clicked();
+        button.forceActiveFocus();
+    }
+
     width: 50
     height: 20
+
+    Keys.onSpacePressed: pressButton();
+    Keys.onReturnPressed: pressButton();
+    Keys.onReleased: {
+        if (event.key == Qt.Key_Space ||
+            event.key == Qt.Key_Return)
+            releaseButton();
+    }
+
+    onActiveFocusChanged: {
+        if (activeFocus) {
+            shadow.opacity = 0;
+            hover.opacity = 1;
+        }else {
+            shadow.opacity = 1;
+            hover.opacity = 0;
+        }
+    }
 
     PlasmaCore.FrameSvgItem {
         id: hover
@@ -125,27 +161,23 @@ Item {
         hoverEnabled: true
 
         onPressed: {
-            surface.prefix = "pressed";
+            pressButton();
         }
         onReleased: {
-            if (button.checkable)
-                button.checked = !button.checked;
-
-            // TODO: "checked" state must have special graphics?
-            if (button.checked)
-                surface.prefix = "pressed";
-            else
-                surface.prefix = "normal";
-
-            button.clicked();
+            releaseButton();
         }
         onEntered: {
             shadow.opacity = 0;
             hover.opacity = 1;
         }
         onExited: {
-            shadow.opacity = 1;
-            hover.opacity = 0;
+            if (button.activeFocus) {
+                shadow.opacity = 0;
+                hover.opacity = 1;
+            } else {
+                shadow.opacity = 1;
+                hover.opacity = 0;
+            }
         }
     }
 }
