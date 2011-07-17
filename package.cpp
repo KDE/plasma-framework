@@ -775,7 +775,7 @@ PackagePrivate::PackagePrivate(const PackageStructure::Ptr st, const QString &pa
         if (packageRoot.isEmpty()) {
             structure->setPath(structure->defaultPackageRoot()%"/"%path);
         } else {
-            structure->setPath(packageRoot%path);
+            structure->setPath(packageRoot%"/"%path);
         }
     }
 
