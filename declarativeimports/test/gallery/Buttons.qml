@@ -89,4 +89,11 @@ Column {
 
         Keys.onTabPressed: bt1.forceActiveFocus();
     }
+
+    PlasmaComponents.Button {
+        width: 140
+        height: 30
+        text: "Disabled Button"
+        enabled: false
+    }
 }

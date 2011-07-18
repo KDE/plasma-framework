@@ -37,10 +37,14 @@ Item {
     property QtObject theme: PlasmaCore.Theme { }
 
     function pressButton() {
-        surface.prefix = "pressed";
+        if (button.enabled)
+            surface.prefix = "pressed";
     }
 
     function releaseButton() {
+        if (!button.enabled)
+            return;
+
         if (button.checkable)
             button.checked = !button.checked;
 
@@ -56,6 +60,7 @@ Item {
 
     width: 50
     height: 20
+    opacity: enabled ? 1.0 : 0.5 // XXX: temporary solution
 
     Keys.onSpacePressed: pressButton();
     Keys.onReturnPressed: pressButton();
