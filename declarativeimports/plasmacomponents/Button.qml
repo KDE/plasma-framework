@@ -60,7 +60,9 @@ Item {
 
     width: 50
     height: 20
-    opacity: enabled ? 1.0 : 0.5 // XXX: temporary solution
+    // TODO: needs to define if there will be specific graphics for
+    //     disabled buttons
+    opacity: enabled ? 1.0 : 0.5
 
     Keys.onSpacePressed: pressButton();
     Keys.onReturnPressed: pressButton();

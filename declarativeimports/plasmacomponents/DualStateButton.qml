@@ -36,7 +36,9 @@ Item {
 
     width: surface.width + label.paintedWidth
     height: surface.height
-    opacity: dualButton.enabled ? 1.0 : 0.5 // XXX: temporary solution
+    // TODO: needs to define if there will be specific graphics for
+    //     disabled buttons
+    opacity: dualButton.enabled ? 1.0 : 0.5
 
     function entered() {
         if (dualButton.enabled) {
