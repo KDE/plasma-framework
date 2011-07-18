@@ -44,6 +44,9 @@ Item {
 
     implicitWidth: _isVertical ? 22 : 200
     implicitHeight: _isVertical ? 200 : 22
+    // TODO: needs to define if there will be specific graphics for
+    //     disabled scroll bars
+    opacity: enabled ? 1.0 : 0.5
 
     visible: flickableItem && handle.width < contents.width
 
@@ -58,7 +61,7 @@ Item {
     }
 
     Keys.onUpPressed: {
-        if (!_isVertical)
+        if (!enabled || !_isVertical)
             return;
 
         if (_inverted)
@@ -68,7 +71,7 @@ Item {
     }
 
     Keys.onDownPressed: {
-        if (!_isVertical)
+        if (!enabled || !_isVertical)
             return;
 
         if (_inverted)
@@ -78,7 +81,7 @@ Item {
     }
 
     Keys.onLeftPressed: {
-        if (_isVertical)
+        if (!enabled || _isVertical)
             return;
 
         if (_inverted)
@@ -88,7 +91,7 @@ Item {
     }
 
     Keys.onRightPressed: {
-        if (_isVertical)
+        if (!enabled || _isVertical)
             return;
 
         if (_inverted)
@@ -134,6 +137,7 @@ Item {
                 id: leftMousArea
 
                 anchors.fill: parent
+                enabled: scrollbar.enabled
                 Timer {
                     id: leftTimer
                     interval: scrollbar.scrollButtonInterval;
@@ -174,6 +178,7 @@ Item {
                 id: rightMousArea
 
                 anchors.fill: parent
+                enabled: scrollbar.enabled
                 Timer {
                     id: rightTimer
                     interval: scrollbar.scrollButtonInterval;
@@ -289,6 +294,7 @@ Item {
                 id: mouseArea
 
                 anchors.fill: parent
+                enabled: scrollbar.enabled
                 drag {
                     target: fakeHandle
                     axis: Drag.XAxis
