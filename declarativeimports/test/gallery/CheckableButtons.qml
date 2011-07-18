@@ -46,7 +46,8 @@ Column {
 
     PlasmaComponents.CheckBox {
         height: 30
-        text: "Check Box 2"
+        text: "Disabled"
+        enabled: false
     }
 
     PlasmaComponents.CheckBox {

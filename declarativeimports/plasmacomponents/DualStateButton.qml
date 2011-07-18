@@ -36,15 +36,20 @@ Item {
 
     width: surface.width + label.paintedWidth
     height: surface.height
+    opacity: dualButton.enabled ? 1.0 : 0.5 // XXX: temporary solution
 
     function entered() {
-        shadow.opacity = 0;
-        hover.opacity = 1;
+        if (dualButton.enabled) {
+            shadow.opacity = 0;
+            hover.opacity = 1;
+        }
     }
 
     function released() {
-        dualButton.checked = !dualButton.checked;
-        dualButton.clicked();
+        if (dualButton.enabled) {
+            dualButton.checked = !dualButton.checked;
+            dualButton.clicked();
+        }
     }
 
     Keys.onSpacePressed: entered();
