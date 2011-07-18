@@ -45,9 +45,12 @@ Item {
 
     width: _isVertical ? 22 : 200
     height: _isVertical ? 200 : 22
+    // TODO: needs to define if there will be specific graphics for
+    //     disabled sliders
+    opacity: enabled ? 1.0 : 0.5
 
     Keys.onUpPressed: {
-        if (!_isVertical)
+        if (!enabled || !_isVertical)
             return;
 
         if (inverted)
@@ -57,6 +60,9 @@ Item {
     }
 
     Keys.onDownPressed: {
+        if (!enabled || !enabled)
+            return;
+
         if (!_isVertical)
             return;
 
@@ -67,7 +73,7 @@ Item {
     }
 
     Keys.onLeftPressed: {
-        if (_isVertical)
+        if (!enabled || _isVertical)
             return;
 
         if (inverted)
@@ -77,7 +83,7 @@ Item {
     }
 
     Keys.onRightPressed: {
-        if (_isVertical)
+        if (!enabled || _isVertical)
             return;
 
         if (inverted)
@@ -189,6 +195,7 @@ Item {
             id: mouseArea
 
             anchors.fill: parent
+            enabled: slider.enabled
             drag {
                 target: fakeHandle
                 axis: Drag.XAxis

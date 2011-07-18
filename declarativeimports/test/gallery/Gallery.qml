@@ -30,8 +30,7 @@ Rectangle {
 
         anchors.fill: parent
         contentWidth: 2200
-        contentHeight: 600
-//        contentX: 500
+        contentHeight: 1000
 
         Row {
             x: 30

@@ -90,33 +90,32 @@ Column {
         }
     }
 
+    Text { text: "Disabled Horizontal Slider" }
+
     PlasmaComponents.Slider {
-        id: slider1
+        id: horizontalSlider
         width: 140
         height: 20
         animated: true
-        Component.onCompleted: {
-            forceActiveFocus();
+        enabled: false
+    }
+
+    Text { text: "Vertical Slider" }
+
+    Row {
+        spacing: 30
+        PlasmaComponents.Slider {
+            id: verticalSlider
+            width: 20
+            height: 140
+            orientation: Qt.Vertical
+            minimumValue: 10
+            maximumValue: 1000
+            stepSize: 50
+            inverted: true
+            animated: true
         }
+        Text { text: verticalSlider.value }
     }
 
-    Text {
-        text: slider1.value
-    }
-
-    PlasmaComponents.Slider {
-        id: slider2
-        width: 20
-        height: 140
-        orientation: Qt.Vertical
-        minimumValue: 10
-        maximumValue: 1000
-        stepSize: 50
-        inverted: true
-        animated: true
-    }
-
-    Text {
-        text: slider2.value
-    }
 }
