@@ -235,7 +235,7 @@ ServiceJob *Service::startOperationCall(const KConfigGroup &description, QObject
     }
 
     if (!job) {
-        job = new NullServiceJob(destination(), op, this);
+        job = new NullServiceJob(d->destination, op, this);
     }
 
     job->setParent(parent ? parent : this);
