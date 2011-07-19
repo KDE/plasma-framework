@@ -1799,7 +1799,6 @@ bool Applet::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
             break;
         }
 
-        return false;
     }
 
     switch (event->type()) {
@@ -2409,11 +2408,15 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
         break;
     case ItemParentHasChanged:
         {
-            Containment *c = containment();
-            if (c && c->containmentType() == Containment::DesktopContainment) {
-                installSceneEventFilter(this);
-            } else {
+            if (isContainment()) {
                 removeSceneEventFilter(this);
+            } else {
+                Containment *c = containment();
+                if (c && c->containmentType() == Containment::DesktopContainment) {
+                    installSceneEventFilter(this);
+                } else {
+                    removeSceneEventFilter(this);
+                }
             }
         }
         break;
