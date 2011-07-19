@@ -97,6 +97,7 @@ set(plasma_LIB_SRCS
     extenders/extendergroup.cpp
     extenders/extenderitem.cpp
     package.cpp
+    packagestructure.cpp
     paintutils.cpp
     pluginloader.cpp
     framesvg.cpp
@@ -315,6 +316,7 @@ set(plasma_LIB_INCLUDES
     windoweffects.h
     framesvg.h
     package.h
+    packagestructure.h
     plasma.h
     plasma_export.h
     popupapplet.h
