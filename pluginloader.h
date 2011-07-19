@@ -53,10 +53,6 @@ class PluginLoaderPrivate;
 class PLASMA_EXPORT PluginLoader
 {
 public: 
-    PluginLoader();
-
-    virtual ~PluginLoader();
-
     /**
      * Load an Applet plugin.
      *
@@ -186,7 +182,7 @@ public:
     /**
      * Return the active plugin loader
      **/
-    static PluginLoader* pluginLoader();
+    static PluginLoader *self();
 
 protected:
     /**
@@ -374,6 +370,9 @@ protected:
      * @return list of applets
      */
     KPluginInfo::List standardInternalServiceInfo() const;
+
+    PluginLoader();
+    virtual ~PluginLoader();
 
 private:
     PluginLoaderPrivate * const d;

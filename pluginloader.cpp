@@ -46,20 +46,26 @@
 namespace Plasma {
 
 static PluginLoader *s_pluginLoader = 0;
-static bool s_isDefaultLoader = false;
 
 class PluginLoaderPrivate
 {
-
+public:
+    QHash<QString, QWeakPointer<PackageStructure> > structures;
+    bool isDefaultLoader;
 };
 
 PluginLoader::PluginLoader()
-    : d(0)
+    : d(new PluginLoaderPrivate)
 {
+    d->isDefaultLoader = false;
 }
 
 PluginLoader::~PluginLoader()
 {
+    typedef QWeakPointer<PackageStructure> pswp;
+    foreach (pswp wp, d->structures) {
+        delete wp.data();
+    }
     delete d;
 }
 
@@ -72,27 +78,27 @@ void PluginLoader::setPluginLoader(PluginLoader* loader)
     }
 }
 
-PluginLoader *PluginLoader::pluginLoader()
+PluginLoader *PluginLoader::self()
 {
     if (!s_pluginLoader) {
         // we have been called before any PluginLoader was set, so just use the default
         // implementation. this prevents plugins from nefariously injecting their own
         // plugin loader if the app doesn't
         s_pluginLoader = new PluginLoader;
-        s_isDefaultLoader = true;
+        s_pluginLoader->d->isDefaultLoader = true;
     }
 
     return s_pluginLoader;
 }
 
 Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVariantList &args)
-{ 
+{
     // the application-specific appletLoader failed to create an applet, here we try with our own logic.
     if (name.isEmpty()) {
         return 0;
     }
 
-    Applet *applet = s_isDefaultLoader ? 0 : internalLoadApplet(name, appletId, args);
+    Applet *applet = d->isDefaultLoader ? 0 : internalLoadApplet(name, appletId, args);
     if (applet) {
         return applet;
     }
@@ -169,7 +175,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
 
 DataEngine *PluginLoader::loadDataEngine(const QString &name)
 { 
-    DataEngine *engine = s_isDefaultLoader ? 0 : internalLoadDataEngine(name);
+    DataEngine *engine = d->isDefaultLoader ? 0 : internalLoadDataEngine(name);
     if (engine) {
         return engine;
     }
@@ -209,12 +215,12 @@ AbstractRunner *PluginLoader::loadRunner(const QString &name)
 {
     // FIXME: RunnerManager is all wrapped around runner loading; that should be sorted out
     // and the actual plugin loading added here
-    return s_isDefaultLoader ? 0 : internalLoadRunner(name);
+    return d->isDefaultLoader ? 0 : internalLoadRunner(name);
 }
 
 Service *PluginLoader::loadService(const QString &name, const QVariantList &args, QObject *parent)
 {
-    Service *service = s_isDefaultLoader ? 0 : internalLoadService(name, args, parent);
+    Service *service = d->isDefaultLoader ? 0 : internalLoadService(name, args, parent);
     if (service) {
         return service;
     }
@@ -304,6 +310,12 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
         return Package();
     }
 
+    const QString hashkey = packageFormat + '%' + specialization;
+    PackageStructure *structure = d->structures.value(hashkey).data();
+    if (structure) {
+        return Package(structure);
+    }
+
     if (!specialization.isEmpty()) {
         QRegExp re("[^a-zA-Z0-9\\-_]");
         // check that the provided strings are safe to use in a ServiceType query
@@ -325,80 +337,52 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
 
     if (packageFormat.startsWith("Plasma")) {
         if (packageFormat.endsWith("/Applet")) {
-            return PlasmoidPackage();
+            structure = new PlasmoidPackage();
         } else if (packageFormat.endsWith("/DataEngine")) {
-            return DataEnginePackage();
+            structure = new DataEnginePackage();
         } else if (packageFormat.endsWith("/Runner")) {
-            return RunnerPackage();
+            structure = new RunnerPackage();
         } else if (packageFormat.endsWith("/Wallpaper")) {
-            return WallpaperPackage();
+            structure = new WallpaperPackage();
         } else if (packageFormat.endsWith("/Theme")) {
-            return ThemePackage();
+            structure = new ThemePackage();
         } else if (packageFormat.endsWith("/ContainmentActions")) {
-            return ContainmentActionsPackage();
+            structure = new ContainmentActionsPackage();
         } else if (packageFormat.endsWith("/Generic")) {
-            return GenericPackage();
+            structure = new GenericPackage();
+        }
+
+        if (structure) {
+            d->structures.insert(hashkey, structure);
+            return Package(structure);
         }
     }
 
     // first we check for plugins in sycoca
     QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(packageFormat);
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Package", constraint);
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure", constraint);
 
     QVariantList args;
     QString error;
     foreach (const KService::Ptr &offer, offers) {
-        PackageFactory *factory = (offer->createInstance<Plasma::PackageFactory>(0, args, &error));
+        structure = qobject_cast<PackageStructure *>(offer->createInstance<PackageStructure>(0, args, &error));
 
-        if (factory) {
-            Package package = factory->package();
-            delete factory;
-            return package;
+        if (structure) {
+            d->structures.insert(hashkey, structure);
+            return Package(structure);
         }
 
-        kDebug() << "Couldn't load Package for" << packageFormat
-                 << "! reason given: " << error;
+        kDebug() << "Couldn't load Package for" << packageFormat << "! reason given: " << error;
     }
 
-    // if that didn't give us any love, then we try to load from a config file
-    Package package;
-    QString configPath("plasma/packageformats/%1rc");
-    configPath = KStandardDirs::locate("data", configPath.arg(packageFormat));
-
-    if (!configPath.isEmpty()) {
-        KConfig config(configPath);
-        package.read(&config);
-        return package;
-    }
-
-    // try to load from absolute file path
-    KUrl url(packageFormat);
-    if (url.isLocalFile()) {
-        KConfig config(url.toLocalFile(), KConfig::SimpleConfig);
-        package.read(&config);
-    }
-#ifndef PLASMA_NO_KIO
-    else {
-        KTemporaryFile tmp;
-        if (tmp.open()) {
-            KIO::Job *job = KIO::file_copy(url, KUrl(tmp.fileName()),
-                                           -1, KIO::Overwrite | KIO::HideProgressInfo);
-            if (job->exec()) {
-                KConfig config(tmp.fileName(), KConfig::SimpleConfig);
-                package.read(&config);
-            }
-        }
-    }
-#endif
-
-    return package;
+    return Package();
 }
 
 KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QString &parentApp)
 {
     KPluginInfo::List list;
 
-    if (!s_isDefaultLoader && (parentApp.isEmpty() || parentApp == KGlobal::mainComponent().componentName())) {
+    if (!d->isDefaultLoader && (parentApp.isEmpty() || parentApp == KGlobal::mainComponent().componentName())) {
         list = internalAppletInfo(category);
     }
 
@@ -432,7 +416,7 @@ KPluginInfo::List PluginLoader::listDataEngineInfo(const QString &parentApp)
 {
     KPluginInfo::List list;
 
-    if (!s_isDefaultLoader && (parentApp.isEmpty() || parentApp == KGlobal::mainComponent().componentName())) {
+    if (!d->isDefaultLoader && (parentApp.isEmpty() || parentApp == KGlobal::mainComponent().componentName())) {
         list = internalDataEngineInfo();
     }
 
@@ -451,7 +435,7 @@ KPluginInfo::List PluginLoader::listRunnerInfo(const QString &parentApp)
 {
     KPluginInfo::List list;
 
-    if (!s_isDefaultLoader && (parentApp.isEmpty() || parentApp == KGlobal::mainComponent().componentName())) {
+    if (!d->isDefaultLoader && (parentApp.isEmpty() || parentApp == KGlobal::mainComponent().componentName())) {
         list = internalRunnerInfo();
     }
 
