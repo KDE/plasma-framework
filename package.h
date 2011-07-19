@@ -55,14 +55,14 @@ namespace Plasma
     package.addFileDefinition("mainscript", "code/main.js", i18n("Main Script File"));
     package.setRequired("mainscript", true);
  @endcode
- * One may also choose to create a subclass of Package and include the setup
+ * One may also choose to create a subclass of PackageStructure and include the setup
  * in the constructor.
  *
  * Either way, Package creates a self-documenting contract between the packager and
  * the application without exposing package internals such as actual on-disk structure
  * of the package or requiring that all contents be explicitly known ahead of time.
  *
- * Subclassing Package does have provide a number of potential const benefits:
+ * Subclassing PackageStructure does have provide a number of potential const benefits:
  *    * the package can be notified of path changes via the virtual pathChanged() method
  *    * the subclass may implement mechanisms to install and remove packages using the
  *      virtual installPackage and uninstallPackage methods
@@ -71,6 +71,7 @@ namespace Plasma
 //TODO: write documentation on USING a package
 
 class PackagePrivate;
+class PackageStructure;
 
 class PLASMA_EXPORT Package
 {
@@ -86,10 +87,13 @@ public:
     static Package load(const QString &format, const QString &specialization = QString());
 
     /**
-     * Default constructor that creates an invalid Package
+     * Default constructor
+     *
+     * @arg structure if a NULL pointer is passed in, this will creates an empty (invalid) Package;
+     * otherwise the structure is allowed to set up the Package's initial layout
      * @since 4.6
      */
-    explicit Package();
+    explicit Package(PackageStructure *structure = 0);
 
     /**
      * Copy constructore
@@ -97,7 +101,7 @@ public:
      */
     Package(const Package &other);
 
-    virtual ~Package();
+    ~Package();
 
     /**
      * Assignment operator
@@ -186,7 +190,7 @@ public:
     /**
       * @return the package metadata object.
       */
-    virtual KPluginInfo metadata() const;
+    KPluginInfo metadata() const;
 
     /**
      * @return a SHA1 hash digest of the contents of the package in hexadecimal form
@@ -290,7 +294,7 @@ public:
      * Called whenever the path changes so that subclasses may take
      * package specific actions.
      */
-    virtual void pathChanged();
+    void pathChanged();
 
     // Content structure description methods
     /**
@@ -314,16 +318,6 @@ public:
     QList<const char*> requiredFiles() const;
 
     /**
-     * Read a package structure from a config file.
-     */
-    void read(const KConfigBase *config);
-
-    /**
-     * Write this package structure to a config file.
-     */
-    void write(KConfigBase *config) const;
-
-    /**
      * Installs a package matching this package structure. By default installs a
      * native Plasma::Package.
      *
@@ -332,7 +326,7 @@ public:
      *                    installed to
      * @return true on successful installation, false otherwise
      **/
-    virtual bool installPackage(const QString &archivePath, const QString &packageRoot);
+    bool installPackage(const QString &archivePath, const QString &packageRoot);
 
     /**
      * Uninstalls a package matching this package structure.
@@ -341,37 +335,13 @@ public:
      * @param packageRoot path to the directory where the package should be installed to
      * @return true on successful removal of the package, false otherwise
      */
-    virtual bool uninstallPackage(const QString &packageName, const QString &packageRoot);
+    bool uninstallPackage(const QString &packageName, const QString &packageRoot);
 
 private:
     PackagePrivate * const d;
 };
 
-class PackageFactory : public QObject
-{
-    Q_OBJECT
-
-public:
-    PackageFactory(QObject *parent, const QVariantList &args);
-    virtual Package package() const;
-};
-
-} // Namespace
-
-/**
- * Register a Package class when it is contained in a loadable module
- */
-#define K_EXPORT_PLASMA_PACKAGE(libname, classname) \
-class classname "_Factory" : public Plasma::PackageFactory { \
-    Q_OBJECT \
-public: \
-    classname "_PackageFactory"(QObject *parent, const QVariantList &args) \
-        : Plasma::PackageFactory(parent, args) {} \
-    Package package() const { return classname(); } \
-}; \
-K_PLUGIN_FACTORY(factory, registerPlugin<classname "_PackageFactory">();) \
-K_EXPORT_PLUGIN(factory("plasma_package_" #libname)) \
-K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
+}
 
 Q_DECLARE_METATYPE(Plasma::Package)
 #endif
