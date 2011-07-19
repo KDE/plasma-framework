@@ -34,6 +34,7 @@
 #include "applet.h"
 #include "abstractrunner.h"
 #include "containment.h"
+#include "containmentactions.h"
 #include "package.h"
 #include "popupapplet.h"
 #include "private/applet_p.h"
@@ -252,9 +253,47 @@ Service *PluginLoader::loadService(const QString &name, const QVariantList &args
     return service;
 }
 
+ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, const QString &name, const QVariantList &args)
+{
+    if (name.isEmpty()) {
+        return 0;
+    }
+
+    ContainmentActions *actions = d->isDefaultLoader ? 0 : internalLoadContainmentActions(parent, name, args);
+    if (actions) {
+        return actions;
+    }
+
+    QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(name);
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/ContainmentActions", constraint);
+
+    if (offers.isEmpty()) {
+        kDebug() << "offers is empty for " << name;
+        return 0;
+    }
+
+    KService::Ptr offer = offers.first();
+    KPluginLoader plugin(*offer);
+
+    if (!Plasma::isPluginVersionCompatible(plugin.pluginVersion())) {
+        return 0;
+    }
+
+    QVariantList allArgs;
+    allArgs << offer->storageId() << args;
+    QString error;
+    actions = offer->createInstance<Plasma::ContainmentActions>(parent, allArgs, &error);
+
+    if (!actions) {
+        kDebug() << "Couldn't load containmentActions \"" << name << "\"! reason given: " << error;
+    }
+
+    return actions;
+}
+
 Package PluginLoader::loadPackage(const QString &packageFormat, const QString &specialization)
 {
-    if (!s_isDefaultLoader) {
+    if (!d->isDefaultLoader) {
         Package p = internalLoadPackage(packageFormat, specialization);
         if (p.isValid()) {
             return p;
@@ -427,6 +466,25 @@ KPluginInfo::List PluginLoader::listRunnerInfo(const QString &parentApp)
     return list + KPluginInfo::fromServices(offers);
 }
 
+KPluginInfo::List PluginLoader::listContainmentActionsInfo(const QString &parentApp)
+{
+    KPluginInfo::List list;
+
+    if (!d->isDefaultLoader && (parentApp.isEmpty() || parentApp == KGlobal::mainComponent().componentName())) {
+        list = internalContainmentActionsInfo();
+    }
+
+    QString constraint;
+    if (parentApp.isEmpty()) {
+        constraint.append("not exist [X-KDE-ParentApp]");
+    } else {
+        constraint.append("[X-KDE-ParentApp] == '").append(parentApp).append("'");
+    }
+
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/ContainmentActions", constraint);
+    return KPluginInfo::fromServices(offers);
+}
+
 Applet* PluginLoader::internalLoadApplet(const QString &name, uint appletId, const QVariantList &args)
 { 
     Q_UNUSED(name)
@@ -479,6 +537,11 @@ KPluginInfo::List PluginLoader::internalRunnerInfo() const
 }
 
 KPluginInfo::List PluginLoader::internalServiceInfo() const
+{
+    return KPluginInfo::List();
+}
+
+KPluginInfo::List PluginLoader::internalContainmentActionsInfo() const
 {
     return KPluginInfo::List();
 }
