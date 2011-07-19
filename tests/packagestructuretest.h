@@ -47,6 +47,7 @@ private Q_SLOTS:
 
 private:
     Plasma::Package ps;
+    QString m_packagePath;
 };
 
 #endif

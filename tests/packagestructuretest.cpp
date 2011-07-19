@@ -33,21 +33,23 @@ public:
     {
         setContentsPrefixPaths(QStringList());
         addDirectoryDefinition("bin", "bin", "bin");
+        setPath("/");
     }
 };
 
 
 void PackageStructureTest::init()
 {
+    m_packagePath = QString::fromLatin1(KDESRCDIR) + "signedPackage/";
     ps = Plasma::Package::load("Plasma/Applet");
+    ps.setPath(m_packagePath);
 }
 
 void PackageStructureTest::emptyContentsPrefix()
 {
     NoPrefixes package;
-    package.setPath("/");
     QString path(package.filePath("bin", "ls"));
-    qDebug() << path;
+    //qDebug() << path;
     QCOMPARE(path, QString("/bin/ls"));
 }
 
@@ -102,8 +104,10 @@ void PackageStructureTest::requiredFiles()
 
 void PackageStructureTest::path()
 {
-    QCOMPARE(ps.filePath("images"), QString("images"));
-    QCOMPARE(ps.filePath("mainscript"), QString("code/main"));
+    qDebug() << "real paths are" << ps.filePath("images") << ps.filePath("mainscript");
+    qDebug() << "we wants" << QString(m_packagePath + QString("contents/images")) << QString(m_packagePath + QString("contents/code/main.js"));
+    QCOMPARE(ps.filePath("images"), QString(m_packagePath + QString("contents/images")));
+    QCOMPARE(ps.filePath("mainscript"), QString(m_packagePath + QString("contents/code/main.js")));
 }
 
 void PackageStructureTest::name()
