@@ -2199,7 +2199,7 @@ QString AppletPrivate::parentAppConstraint(const QString &parentApp)
 
 KPluginInfo::List Applet::listAppletInfo(const QString &category, const QString &parentApp)
 {
-   return PluginLoader::pluginLoader()->listAppletInfo(category, parentApp);
+   return PluginLoader::self()->listAppletInfo(category, parentApp);
 }
 
 KPluginInfo::List Applet::listAppletInfoForMimeType(const QString &mimeType)
@@ -2309,7 +2309,7 @@ Applet *Applet::loadPlasmoid(const QString &path, uint appletId, const QVariantL
 
 Applet *Applet::load(const QString &appletName, uint appletId, const QVariantList &args)
 {
-    return PluginLoader::pluginLoader()->loadApplet(appletName, appletId, args);
+    return PluginLoader::self()->loadApplet(appletName, appletId, args);
 }
 
 Applet *Applet::load(const KPluginInfo &info, uint appletId, const QVariantList &args)

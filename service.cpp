@@ -72,7 +72,7 @@ Service *Service::load(const QString &name, QObject *parent)
 
 Service *Service::load(const QString &name, const QVariantList &args, QObject *parent)
 {
-    return PluginLoader::pluginLoader()->loadService(name, args, parent);
+    return PluginLoader::self()->loadService(name, args, parent);
 }
 
 Service *Service::access(const KUrl &url, QObject *parent)
