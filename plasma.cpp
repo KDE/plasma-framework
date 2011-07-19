@@ -24,9 +24,9 @@
 #include <QGraphicsView>
 #include <QMenu>
 
-#include "plasma/containment.h"
-#include "plasma/view.h"
-#include "plasma/private/packages_p.h"
+#include "containment.h"
+#include "view.h"
+#include "private/packages_p.h"
 
 namespace Plasma
 {
