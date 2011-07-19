@@ -43,10 +43,11 @@
 
 #include <version.h>
 
-#include "plasma/package.h"
-#include "plasma/private/dataengineconsumer_p.h"
-#include "plasma/private/packages_p.h"
-#include "plasma/private/wallpaper_p.h"
+#include "package.h"
+#include "pluginloader.h"
+#include "private/dataengineconsumer_p.h"
+#include "private/packages_p.h"
+#include "private/wallpaper_p.h"
 
 namespace Plasma
 {
@@ -443,7 +444,7 @@ WallpaperPrivate::WallpaperPrivate(KService::Ptr service, Wallpaper *wallpaper) 
         if (!api.isEmpty()) {
             const QString path = KStandardDirs::locate("data",
                     "plasma/wallpapers/" + wallpaperDescription.pluginName() + '/');
-            package = new Package(Package::load("Plasma/Wallpaper", api));
+            package = new Package(PluginLoader::self()->loadPackage("Plasma/Wallpaper", api));
             package->setPath(path);
 
             if (package->isValid()) {
