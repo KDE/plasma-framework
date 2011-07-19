@@ -68,55 +68,6 @@ ContainmentActions::~ContainmentActions()
     delete d;
 }
 
-KPluginInfo::List ContainmentActions::listContainmentActionsInfo()
-{
-    QString constraint;
-
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/ContainmentActions", constraint);
-    return KPluginInfo::fromServices(offers);
-}
-
-ContainmentActions *ContainmentActions::load(Containment *parent, const QString &containmentActionsName, const QVariantList &args)
-{
-    if (containmentActionsName.isEmpty()) {
-        return 0;
-    }
-
-    QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(containmentActionsName);
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/ContainmentActions", constraint);
-
-    if (offers.isEmpty()) {
-        kDebug() << "offers is empty for " << containmentActionsName;
-        return 0;
-    }
-
-    KService::Ptr offer = offers.first();
-    KPluginLoader plugin(*offer);
-
-    if (!Plasma::isPluginVersionCompatible(plugin.pluginVersion())) {
-        return 0;
-    }
-
-    QVariantList allArgs;
-    allArgs << offer->storageId() << args;
-    QString error;
-    ContainmentActions *containmentActions = offer->createInstance<Plasma::ContainmentActions>(parent, allArgs, &error);
-
-    if (!containmentActions) {
-        kDebug() << "Couldn't load containmentActions \"" << containmentActionsName << "\"! reason given: " << error;
-    }
-
-    return containmentActions;
-}
-
-ContainmentActions *ContainmentActions::load(Containment *parent, const KPluginInfo &info, const QVariantList &args)
-{
-    if (!info.isValid()) {
-        return 0;
-    }
-    return load(parent, info.pluginName(), args);
-}
-
 Containment *ContainmentActions::containment()
 {
     if (d->containment) {

@@ -67,41 +67,6 @@ class PLASMA_EXPORT ContainmentActions : public QObject
         ~ContainmentActions();
 
         /**
-         * Returns a list of all known containmentactions plugins.
-         *
-         * @return list of containmentactions plugins
-         **/
-        static KPluginInfo::List listContainmentActionsInfo();
-
-        /**
-         * Attempts to load a containmentactions
-         *
-         * Returns a pointer to the containmentactions if successful.
-         * The caller takes responsibility for the containmentactions, including
-         * deleting it when no longer needed.
-         *
-         * @param parent the parent containment. @since 4.6 null is allowed.
-         * @param name the plugin name, as returned by KPluginInfo::pluginName()
-         * @param args to send the containmentactions extra arguments
-         * @return a pointer to the loaded containmentactions, or 0 on load failure
-         **/
-        static ContainmentActions *load(Containment *parent, const QString &name, const QVariantList &args = QVariantList());
-
-        /**
-         * Attempts to load a containmentactions
-         *
-         * Returns a pointer to the containmentactions if successful.
-         * The caller takes responsibility for the containmentactions, including
-         * deleting it when no longer needed.
-         *
-         * @param parent the parent containment. @since 4.6 null is allowed.
-         * @param info KPluginInfo object for the desired containmentactions
-         * @param args to send the containmentactions extra arguments
-         * @return a pointer to the loaded containmentactions, or 0 on load failure
-         **/
-        static ContainmentActions *load(Containment *parent, const KPluginInfo &info, const QVariantList &args = QVariantList());
-
-        /**
          * Returns the user-visible name for the containmentactions, as specified in the
          * .desktop file.
          *
