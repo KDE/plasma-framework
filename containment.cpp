@@ -59,6 +59,7 @@
 #include "corona.h"
 #include "extender.h"
 #include "extenderitem.h"
+#include "pluginloader.h"
 #include "svg.h"
 #include "wallpaper.h"
 
@@ -1890,10 +1891,10 @@ void Containment::setContainmentActions(const QString &trigger, const QString &p
         case ContainmentPrivate::Activity:
             //FIXME
         case ContainmentPrivate::Local:
-            plugin = ContainmentActions::load(this, pluginName);
+            plugin = PluginLoader::self()->loadContainmentActions(this, pluginName);
             break;
         default:
-            plugin = ContainmentActions::load(0, pluginName);
+            plugin = PluginLoader::self()->loadContainmentActions(0, pluginName);
         }
         if (plugin) {
             cfg.writeEntry(trigger, pluginName);
