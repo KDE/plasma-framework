@@ -35,6 +35,7 @@
 #include "extenderitem.h"
 #include "framesvg.h"
 #include "paintutils.h"
+#include "pluginloader.h"
 #include "popupapplet.h"
 #include "svg.h"
 #include "theme.h"
@@ -777,7 +778,7 @@ void ExtenderPrivate::loadExtenderItems()
         //detachables.
         if (!sourceApplet) {
             kDebug() << "creating a temporary applet as factory";
-            sourceApplet = Applet::load(appletName);
+            sourceApplet = PluginLoader::self()->loadApplet(appletName);
             temporarySourceApplet = true;
             //TODO: maybe add an option to applet to indicate that it shouldn't be deleted after
             //having used it as factory.

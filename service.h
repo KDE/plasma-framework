@@ -102,28 +102,6 @@ public:
     ~Service();
 
     /**
-     * Used to load a given service from a plugin.
-     *
-     * @param name the plugin name of the service to load
-     * @param args a list of arguments to supply to the service plugin when loading it
-     * @param parent the parent object, if any, for the service
-     *
-     * @return a Service object, guaranteed to be not null.
-     * @since 4.5
-     */
-    static Service *load(const QString &name, const QVariantList &args, QObject *parent = 0);
-
-    /**
-     * Used to load a given service from a plugin.
-     *
-     * @param name the plugin name of the service to load
-     * @param parent the parent object, if any, for the service
-     *
-     * @return a Service object, guaranteed to be not null.
-     */
-    static Service *load(const QString &name, QObject *parent = 0);
-
-    /**
      * Used to access a service from an url. Always check for the signal serviceReady() that fires
      * when this service is actually ready for use.
      */

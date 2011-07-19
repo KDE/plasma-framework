@@ -34,6 +34,7 @@
 
 #include "datacontainer.h"
 #include "package.h"
+#include "pluginloader.h"
 #include "remote/authorizationmanager.h"
 #include "remote/authorizationmanager_p.h"
 #include "service.h"
@@ -438,7 +439,7 @@ Service* DataEngine::createDefaultService(QObject *parent)
 {
     QVariantList args;
     args << QVariant::fromValue<DataEngine*>(this);
-    return Service::load(d->serviceName, args, parent);
+    return PluginLoader::self()->loadService(d->serviceName, args, parent);
 }
 
 void DataEnginePrivate::publish(AnnouncementMethods methods, const QString &name)
@@ -541,7 +542,7 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info)
             const QString path =
                 KStandardDirs::locate("data",
                                       "plasma/dataengines/" + dataEngineDescription.pluginName() + '/');
-            package = new Package(Package::load("Plasma/DataEngine", api));
+            package = new Package(PluginLoader::self()->loadPackage("Plasma/DataEngine", api));
             package->setPath(path);
 
             if (package->isValid()) {

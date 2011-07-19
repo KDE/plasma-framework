@@ -41,16 +41,17 @@
 #include <kshortcutsdialog.h>
 #include <kwindowsystem.h>
 
-#include "animator.h"
+#include "abstractdialogmanager.h"
 #include "abstracttoolbox.h"
+#include "animator.h"
 #include "containment.h"
 #include "containmentactionspluginsconfig.h"
-#include "view.h"
+#include "pluginloader.h"
 #include "private/animator_p.h"
 #include "private/applet_p.h"
 #include "private/containment_p.h"
 #include "tooltipmanager.h"
-#include "abstractdialogmanager.h"
+#include "view.h"
 
 using namespace Plasma;
 
@@ -910,7 +911,7 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
 
     bool loadingNull = pluginName == "null";
     if (!loadingNull) {
-        applet = Applet::load(pluginName, id, args);
+        applet = PluginLoader::self()->loadApplet(pluginName, id, args);
         containment = dynamic_cast<Containment*>(applet);
     }
 

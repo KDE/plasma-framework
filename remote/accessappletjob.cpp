@@ -19,20 +19,22 @@
 
 #include "accessappletjob.h"
 
-#include "service.h"
-#include "servicejob.h"
-#include "applet.h"
+#include <qtimer.h>
+
+#include <kdebug.h>
+#include <kdesktopfile.h>
+#include <kmessagebox.h>
+#include <ktempdir.h>
+#include <kzip.h>
 
 #include "config-plasma.h"
 
-#include <kzip.h>
-#include <kdebug.h>
-#include <kmessagebox.h>
-#include <ktempdir.h>
-#include <kdesktopfile.h>
+#include "applet.h"
 #include "package.h"
-#include <qtimer.h>
+#include "pluginloader.h"
 #include "private/applet_p.h"
+#include "service.h"
+#include "servicejob.h"
 
 namespace Plasma
 {
@@ -74,7 +76,7 @@ public:
             QString pluginName = job->result().toString();
             kDebug() << "Server responded with a pluginname, trying to load: " << pluginName;
 
-            applet = Applet::load(pluginName);
+            applet = PluginLoader::self()->loadApplet(pluginName);
             if (applet) {
                 applet->d->remoteLocation = location;
             } else {

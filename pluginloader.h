@@ -36,6 +36,7 @@ class Service;
 class PluginLoaderPrivate;
 
 //TODO:
+// * add loadWallpaper
 // * add KPluginInfo listing support for Containments (already loaded via the applet loading code)
 
 /**

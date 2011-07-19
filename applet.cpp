@@ -2307,20 +2307,6 @@ Applet *Applet::loadPlasmoid(const QString &path, uint appletId, const QVariantL
     return 0;
 }
 
-Applet *Applet::load(const QString &appletName, uint appletId, const QVariantList &args)
-{
-    return PluginLoader::self()->loadApplet(appletName, appletId, args);
-}
-
-Applet *Applet::load(const KPluginInfo &info, uint appletId, const QVariantList &args)
-{
-    if (!info.isValid()) {
-        return 0;
-    }
-
-    return load(info.pluginName(), appletId, args);
-}
-
 QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     QVariant ret = QGraphicsWidget::itemChange(change, value);
@@ -2645,7 +2631,7 @@ void AppletPrivate::init(const QString &packagePath)
     }
 
 
-    package = new Package(Package::load("Plasma/Applet", api));
+    package = new Package(PluginLoader::self()->loadPackage("Plasma/Applet", api));
 
     // find where the Package is
     QString path = packagePath;

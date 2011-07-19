@@ -338,38 +338,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
                                     const QVariantList &args = QVariantList());
 
         /**
-         * Attempts to load an applet
-         *
-         * Returns a pointer to the applet if successful.
-         * The caller takes responsibility for the applet, including
-         * deleting it when no longer needed.
-         *
-         * @param name the plugin name, as returned by KPluginInfo::pluginName()
-         * @param appletId unique ID to assign the applet, or zero to have one
-         *        assigned automatically.
-         * @param args to send the applet extra arguments
-         * @return a pointer to the loaded applet, or 0 on load failure
-         **/
-        static Applet *load(const QString &name, uint appletId = 0,
-                            const QVariantList &args = QVariantList());
-
-        /**
-         * Attempts to load an applet
-         *
-         * Returns a pointer to the applet if successful.
-         * The caller takes responsibility for the applet, including
-         * deleting it when no longer needed.
-         *
-         * @param info KPluginInfo object for the desired applet
-         * @param appletId unique ID to assign the applet, or zero to have one
-         *        assigned automatically.
-         * @param args to send the applet extra arguments
-         * @return a pointer to the loaded applet, or 0 on load failure
-         **/
-        static Applet *load(const KPluginInfo &info, uint appletId = 0,
-                            const QVariantList &args = QVariantList());
-
-        /**
          * Get the category of the given applet
          *
          * @param applet a KPluginInfo object for the applet

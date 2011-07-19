@@ -2165,7 +2165,7 @@ Applet *ContainmentPrivate::addApplet(const QString &name, const QVariantList &a
         v->setCursor(Qt::BusyCursor);
     }
 
-    Applet *applet = Applet::load(name, id, args);
+    Applet *applet = PluginLoader::self()->loadApplet(name, id, args);
     if (v) {
         v->unsetCursor();
     }

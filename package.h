@@ -77,16 +77,6 @@ class PLASMA_EXPORT Package
 {
 public:
     /**
-     * Loads a package format by name.
-     *
-     * @param format If not empty, attempts to locate the given format, either
-     *             from built-ins or via plugins.
-     * @param specialization used to find script extensions for the given format, e.g. "QML" for "Plasma/Applet"
-     * @return a package that matches the format, if available, or an invalid package if not
-     */
-    static Package load(const QString &format, const QString &specialization = QString());
-
-    /**
      * Default constructor
      *
      * @arg structure if a NULL pointer is passed in, this will creates an empty (invalid) Package;

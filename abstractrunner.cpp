@@ -33,10 +33,10 @@
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>
 
-#include <plasma/package.h>
-#include <plasma/querymatch.h>
-
+#include "package.h"
+#include "pluginloader.h"
 #include "private/abstractrunner_p.h"
+#include "querymatch.h"
 #include "runnercontext.h"
 #include "scripting/runnerscript.h"
 
@@ -415,7 +415,7 @@ void AbstractRunnerPrivate::prepScripting(const QString &path, const QString &ap
         return;
     }
 
-    package = new Package(Plasma::Package::load("Plasma/Runner", api));
+    package = new Package(PluginLoader::self()->loadPackage("Plasma/Runner", api));
     package->setPath(path);
 
     if (!package->isValid()) {

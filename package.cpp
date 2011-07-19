@@ -116,11 +116,6 @@ bool removeFolder(QString folderPath)
 
 #endif // PLASMA_NO_KIO
 
-Package Package::load(const QString &packageFormat, const QString &specialization)
-{
-    return PluginLoader::self()->loadPackage(packageFormat, specialization);
-}
-
 Package::Package(PackageStructure *structure)
     : d(new PackagePrivate())
 {

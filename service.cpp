@@ -64,17 +64,6 @@ Service::~Service()
     delete d;
 }
 
-Service *Service::load(const QString &name, QObject *parent)
-{
-    QVariantList args;
-    return load(name, args, parent);
-}
-
-Service *Service::load(const QString &name, const QVariantList &args, QObject *parent)
-{
-    return PluginLoader::self()->loadService(name, args, parent);
-}
-
 Service *Service::access(const KUrl &url, QObject *parent)
 {
     return new RemoteService(parent, url);
