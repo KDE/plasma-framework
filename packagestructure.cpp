@@ -92,8 +92,6 @@ public:
     void createPackageMetadata(const QString &path);
     QStringList entryList(const QString &prefix, const QString &requestedPath);
 
-    static QHash<QString, PackageStructure::Ptr> structures;
-
     QString type;
     QString path;
     QStringList contentsPrefixPaths;
@@ -104,8 +102,6 @@ public:
     PackageMetadata *metadata;
     bool externalPaths;
  };
-
-QHash<QString, PackageStructure::Ptr> PackageStructurePrivate::structures;
 
 PackageStructure::PackageStructure(QObject *parent, const QString &type)
     : QObject(parent),
@@ -124,11 +120,7 @@ PackageStructure::Ptr PackageStructure::load(const QString &packageFormat)
         return Ptr(new PackageStructure());
     }
 
-    PackageStructure::Ptr structure = PackageStructurePrivate::structures[packageFormat];
-
-    if (structure) {
-        return structure;
-    }
+    PackageStructure::Ptr structure;
 
     if (packageFormat == "Plasma/Applet") {
         structure = defaultPackageStructure(AppletComponent);
@@ -152,7 +144,6 @@ PackageStructure::Ptr PackageStructure::load(const QString &packageFormat)
     }
 
     if (structure) {
-        PackageStructurePrivate::structures[packageFormat] = structure;
         return structure;
     }
 
@@ -183,7 +174,6 @@ PackageStructure::Ptr PackageStructure::load(const QString &packageFormat)
     if (!configPath.isEmpty()) {
         KConfig config(configPath);
         structure->read(&config);
-        PackageStructurePrivate::structures[packageFormat] = structure;
         return structure;
     }
 
@@ -192,7 +182,6 @@ PackageStructure::Ptr PackageStructure::load(const QString &packageFormat)
     if (url.isLocalFile()) {
         KConfig config(url.toLocalFile(), KConfig::SimpleConfig);
         structure->read(&config);
-        PackageStructurePrivate::structures[structure->type()] = structure;
     }
 #ifndef PLASMA_NO_KIO
     else {
@@ -203,7 +192,6 @@ PackageStructure::Ptr PackageStructure::load(const QString &packageFormat)
             if (job->exec()) {
                 KConfig config(tmp.fileName(), KConfig::SimpleConfig);
                 structure->read(&config);
-                PackageStructurePrivate::structures[structure->type()] = structure;
             }
         }
     }
