@@ -1680,9 +1680,7 @@ void Containment::wheelEvent(QGraphicsSceneWheelEvent *event)
 
 bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 {
-    Q_UNUSED(watched)
-    Q_UNUSED(event)
-    return false;
+    return Applet::sceneEventFilter(watched, event);
 }
 
 QVariant Containment::itemChange(GraphicsItemChange change, const QVariant &value)
