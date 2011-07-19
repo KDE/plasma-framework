@@ -1651,7 +1651,9 @@ void Applet::unregisterAsDragHandle(QGraphicsItem *item)
     }
 
     if (d->registeredAsDragHandle.remove(item)) {
-        item->removeSceneEventFilter(this);
+        if (item != this) {
+            item->removeSceneEventFilter(this);
+        }
     }
 }
 
