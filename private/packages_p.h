@@ -20,54 +20,51 @@
 #ifndef LIBS_PLASMA_PACKAGES_P_H
 #define LIBS_PLASMA_PACKAGES_P_H
 
-#include "plasma/package.h"
-#include "plasma/plasma.h"
-#include "plasma/wallpaper.h"
-
-#include "config-plasma.h"
+#include "packagestructure.h"
+#include "plasma.h"
+#include "wallpaper.h"
 
 namespace Plasma
 {
 
-class ChangeableMainScriptPackage : public Package
+class ChangeableMainScriptPackage : public PackageStructure
 {
 protected:
-    void pathChanged();
+    void pathChanged(Package *package);
 };
 
 class PlasmoidPackage : public ChangeableMainScriptPackage
 {
 public:
-    explicit PlasmoidPackage();
+    void initPackage(Package *package);
 };
 
 class DataEnginePackage : public ChangeableMainScriptPackage
 {
 public:
-    explicit DataEnginePackage();
-} ;
+    void initPackage(Package *package);
+};
 
 class RunnerPackage : public ChangeableMainScriptPackage
 {
 public:
-    explicit RunnerPackage();
+    void initPackage(Package *package);
 };
 
-class ThemePackage : public Package
+class ThemePackage : public PackageStructure
 {
 public:
-    explicit ThemePackage();
+    void initPackage(Package *package);
 };
 
-class WallpaperPackage : public QObject, public Package
+class WallpaperPackage : public PackageStructure
 {
     Q_OBJECT
 
 public:
     explicit WallpaperPackage(Wallpaper *paper = 0);
-
-protected:
-    void pathChanged();
+    void initPackage(Package *package);
+    void pathChanged(Package *package);
 
 private:
     QSize resSize(const QString &str) const;
@@ -86,16 +83,16 @@ private:
     Wallpaper::ResizeMethod m_resizeMethod;
 };
 
-class ContainmentActionsPackage : public Package
+class ContainmentActionsPackage : public PackageStructure
 {
 public:
-    explicit ContainmentActionsPackage();
+    void initPackage(Package *package);
 };
 
-class GenericPackage : public Package
+class GenericPackage : public PackageStructure
 {
 public:
-    explicit GenericPackage();
+    void initPackage(Package *package);
 };
 
 } // namespace Plasma

@@ -29,207 +29,204 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include "plasma/private/wallpaper_p.h"
+#include "private/wallpaper_p.h"
+#include "package.h"
+#include "config-plasma.h"
 
 namespace Plasma
 {
 
-void ChangeableMainScriptPackage::pathChanged()
+void ChangeableMainScriptPackage::pathChanged(Package *package)
 {
-    KDesktopFile config(path() + "/metadata.desktop");
+    KDesktopFile config(package->path() + "/metadata.desktop");
     KConfigGroup cg = config.desktopGroup();
     QString mainScript = cg.readEntry("X-Plasma-MainScript", QString());
     if (!mainScript.isEmpty()) {
-        addFileDefinition("mainscript", mainScript, i18n("Main Script File"));
-        setRequired("mainscript", true);
+        package->addFileDefinition("mainscript", mainScript, i18n("Main Script File"));
+        package->setRequired("mainscript", true);
     }
 }
 
-PlasmoidPackage::PlasmoidPackage()
-    : ChangeableMainScriptPackage()
+void PlasmoidPackage::initPackage(Package *package)
 {
     QString pathsString(getenv("PLASMA_CUSTOM_PREFIX_PATHS"));
     if (!pathsString.isEmpty()) {
         QStringList prefixPaths(pathsString.split(":"));
         if (!prefixPaths.isEmpty()) {
-            setContentsPrefixPaths(prefixPaths);
+            package->setContentsPrefixPaths(prefixPaths);
         }
     }
 
-    setServicePrefix("plasma-applet-");
-    setDefaultPackageRoot("plasma/plasmoids");
+    package->setServicePrefix("plasma-applet-");
+    package->setDefaultPackageRoot("plasma/plasmoids");
 
-    addDirectoryDefinition("images", "images", i18n("Images"));
+    package->addDirectoryDefinition("images", "images", i18n("Images"));
     QStringList mimetypes;
     mimetypes << "image/svg+xml" << "image/png" << "image/jpeg";
-    setMimeTypes("images", mimetypes);
+    package->setMimeTypes("images", mimetypes);
 
-    addDirectoryDefinition("config", "config", i18n("Configuration Definitions"));
+    package->addDirectoryDefinition("config", "config", i18n("Configuration Definitions"));
     mimetypes.clear();
     mimetypes << "text/xml";
-    setMimeTypes("config", mimetypes);
+    package->setMimeTypes("config", mimetypes);
 
-    addDirectoryDefinition("ui", "ui", i18n("User Interface"));
-    setMimeTypes("ui", mimetypes);
+    package->addDirectoryDefinition("ui", "ui", i18n("User Interface"));
+    package->setMimeTypes("ui", mimetypes);
 
-    addDirectoryDefinition("data", "data", i18n("Data Files"));
+    package->addDirectoryDefinition("data", "data", i18n("Data Files"));
 
-    addDirectoryDefinition("scripts", "code", i18n("Executable Scripts"));
+    package->addDirectoryDefinition("scripts", "code", i18n("Executable Scripts"));
     mimetypes.clear();
     mimetypes << "text/plain";
-    setMimeTypes("scripts", mimetypes);
+    package->setMimeTypes("scripts", mimetypes);
 
-    addDirectoryDefinition("translations", "locale", i18n("Translations"));
+    package->addDirectoryDefinition("translations", "locale", i18n("Translations"));
 
-    addFileDefinition("mainconfigui", "ui/config.ui", i18n("Main Config UI File"));
-    addFileDefinition("mainconfigxml", "config/main.xml", i18n("Configuration XML file"));
-    addFileDefinition("mainscript", "code/main", i18n("Main Script File"));
-    addFileDefinition("defaultconfig", "config/default-configrc", i18n("Default configuration"));
-    addDirectoryDefinition("animations", "animations", i18n("Animation scripts"));
-    setRequired("mainscript", true);
+    package->addFileDefinition("mainconfigui", "ui/config.ui", i18n("Main Config UI File"));
+    package->addFileDefinition("mainconfigxml", "config/main.xml", i18n("Configuration XML file"));
+    package->addFileDefinition("mainscript", "code/main", i18n("Main Script File"));
+    package->addFileDefinition("defaultconfig", "config/default-configrc", i18n("Default configuration"));
+    package->addDirectoryDefinition("animations", "animations", i18n("Animation scripts"));
+    package->setRequired("mainscript", true);
 }
 
-DataEnginePackage::DataEnginePackage()
-    : ChangeableMainScriptPackage()
+void DataEnginePackage::initPackage(Package *package)
 {
-    setServicePrefix("plasma-dataengine-");
-    setDefaultPackageRoot("plasma/dataengines/");
+    package->setServicePrefix("plasma-dataengine-");
+    package->setDefaultPackageRoot("plasma/dataengines/");
 
-    addDirectoryDefinition("data", "data", i18n("Data Files"));
+    package->addDirectoryDefinition("data", "data", i18n("Data Files"));
 
-    addDirectoryDefinition("scripts", "code", i18n("Executable Scripts"));
+    package->addDirectoryDefinition("scripts", "code", i18n("Executable Scripts"));
     QStringList mimetypes;
     mimetypes << "text/plain";
-    setMimeTypes("scripts", mimetypes);
+    package->setMimeTypes("scripts", mimetypes);
 
-    addDirectoryDefinition("services", "services/", i18n("Service Descriptions"));
-    setMimeTypes("services", mimetypes);
+    package->addDirectoryDefinition("services", "services/", i18n("Service Descriptions"));
+    package->setMimeTypes("services", mimetypes);
 
-    addDirectoryDefinition("translations", "locale", i18n("Translations"));
+    package->addDirectoryDefinition("translations", "locale", i18n("Translations"));
 
-    addFileDefinition("mainscript", "code/main", i18n("Main Script File"));
-    setRequired("mainscript", true);
+    package->addFileDefinition("mainscript", "code/main", i18n("Main Script File"));
+    package->setRequired("mainscript", true);
 }
 
-RunnerPackage::RunnerPackage()
-    : ChangeableMainScriptPackage()
+void RunnerPackage::initPackage(Package *package)
 {
-    setServicePrefix("plasma-runner-");
-    setDefaultPackageRoot("plasma/runners/");
+    package->setServicePrefix("plasma-runner-");
+    package->setDefaultPackageRoot("plasma/runners/");
 
-    addDirectoryDefinition("data", "data", i18n("Data Files"));
+    package->addDirectoryDefinition("data", "data", i18n("Data Files"));
 
-    addDirectoryDefinition("scripts", "code", i18n("Executable Scripts"));
+    package->addDirectoryDefinition("scripts", "code", i18n("Executable Scripts"));
     QStringList mimetypes;
     mimetypes << "text/plain";
-    setMimeTypes("scripts", mimetypes);
+    package->setMimeTypes("scripts", mimetypes);
 
-    addDirectoryDefinition("translations", "locale", i18n("Translations"));
+    package->addDirectoryDefinition("translations", "locale", i18n("Translations"));
 
-    addFileDefinition("mainscript", "code/main", i18n("Main Script File"));
-    setRequired("mainscript", true);
+    package->addFileDefinition("mainscript", "code/main", i18n("Main Script File"));
+    package->setRequired("mainscript", true);
 }
 
-ThemePackage::ThemePackage()
-    : Package()
+void ThemePackage::initPackage(Package *package)
 {
-    addDirectoryDefinition("dialogs", "dialogs/", i18n("Images for dialogs"));
-    addFileDefinition("dialogs/background", "dialogs/background.svg",
+    package->addDirectoryDefinition("dialogs", "dialogs/", i18n("Images for dialogs"));
+    package->addFileDefinition("dialogs/background", "dialogs/background.svg",
                       i18n("Generic dialog background"));
-    addFileDefinition("dialogs/shutdowndialog", "dialogs/shutdowndialog.svg",
+    package->addFileDefinition("dialogs/shutdowndialog", "dialogs/shutdowndialog.svg",
                       i18n("Theme for the logout dialog"));
 
-    addDirectoryDefinition("wallpapers", "wallpapers/", i18n("Wallpaper packages"));
-    addDirectoryDefinition("animations", "animations/", i18n("Animation scripts"));
+    package->addDirectoryDefinition("wallpapers", "wallpapers/", i18n("Wallpaper packages"));
+    package->addDirectoryDefinition("animations", "animations/", i18n("Animation scripts"));
 
-    addDirectoryDefinition("widgets", "widgets/", i18n("Images for widgets"));
-    addFileDefinition("widgets/background", "widgets/background.svg",
+    package->addDirectoryDefinition("widgets", "widgets/", i18n("Images for widgets"));
+    package->addFileDefinition("widgets/background", "widgets/background.svg",
                       i18n("Background image for widgets"));
-    addFileDefinition("widgets/clock", "widgets/clock.svg",
+    package->addFileDefinition("widgets/clock", "widgets/clock.svg",
                       i18n("Analog clock face"));
-    addFileDefinition("widgets/panel-background", "widgets/panel-background.svg",
+    package->addFileDefinition("widgets/panel-background", "widgets/panel-background.svg",
                       i18n("Background image for panels"));
-    addFileDefinition("widgets/plot-background", "widgets/plot-background.svg",
+    package->addFileDefinition("widgets/plot-background", "widgets/plot-background.svg",
                       i18n("Background for graphing widgets"));
-    addFileDefinition("widgets/tooltip", "widgets/tooltip.svg",
+    package->addFileDefinition("widgets/tooltip", "widgets/tooltip.svg",
                       i18n("Background image for tooltips"));
 
-    addDirectoryDefinition("opaque/dialogs", "opaque/dialogs/", i18n("Opaque images for dialogs"));
-    addFileDefinition("opaque/dialogs/background", "opaque/dialogs/background.svg",
+    package->addDirectoryDefinition("opaque/dialogs", "opaque/dialogs/", i18n("Opaque images for dialogs"));
+    package->addFileDefinition("opaque/dialogs/background", "opaque/dialogs/background.svg",
                       i18n("Opaque generic dialog background"));
-    addFileDefinition("opaque/dialogs/shutdowndialog", "opaque/dialogs/shutdowndialog.svg",
+    package->addFileDefinition("opaque/dialogs/shutdowndialog", "opaque/dialogs/shutdowndialog.svg",
                       i18n("Opaque theme for the logout dialog"));
 
-    addDirectoryDefinition("opaque/widgets", "opaque/widgets/", i18n("Opaque images for widgets"));
-    addFileDefinition("opaque/widgets/panel-background", "opaque/widgets/panel-background.svg",
+    package->addDirectoryDefinition("opaque/widgets", "opaque/widgets/", i18n("Opaque images for widgets"));
+    package->addFileDefinition("opaque/widgets/panel-background", "opaque/widgets/panel-background.svg",
                       i18n("Opaque background image for panels"));
-    addFileDefinition("opaque/widgets/tooltip", "opaque/widgets/tooltip.svg",
+    package->addFileDefinition("opaque/widgets/tooltip", "opaque/widgets/tooltip.svg",
                       i18n("Opaque background image for tooltips"));
 
-    addDirectoryDefinition("locolor/dialogs", "locolor/dialogs/",
+    package->addDirectoryDefinition("locolor/dialogs", "locolor/dialogs/",
                            i18n("Low color images for dialogs"));
-    addFileDefinition("locolor/dialogs/background", "locolor/dialogs/background.svg",
+    package->addFileDefinition("locolor/dialogs/background", "locolor/dialogs/background.svg",
                       i18n("Low color generic dialog background"));
-    addFileDefinition("locolor/dialogs/shutdowndialog", "locolor/dialogs/shutdowndialog.svg",
+    package->addFileDefinition("locolor/dialogs/shutdowndialog", "locolor/dialogs/shutdowndialog.svg",
                       i18n("Low color theme for the logout dialog"));
 
-    addDirectoryDefinition("locolor/widgets", "locolor/widgets/", i18n("Images for widgets"));
-    addFileDefinition("locolor/widgets/background", "locolor/widgets/background.svg",
+    package->addDirectoryDefinition("locolor/widgets", "locolor/widgets/", i18n("Images for widgets"));
+    package->addFileDefinition("locolor/widgets/background", "locolor/widgets/background.svg",
                       i18n("Low color background image for widgets"));
-    addFileDefinition("locolor/widgets/clock", "locolor/widgets/clock.svg",
+    package->addFileDefinition("locolor/widgets/clock", "locolor/widgets/clock.svg",
                       i18n("Low color analog clock face"));
-    addFileDefinition("locolor/widgets/panel-background", "locolor/widgets/panel-background.svg",
+    package->addFileDefinition("locolor/widgets/panel-background", "locolor/widgets/panel-background.svg",
                       i18n("Low color background image for panels"));
-    addFileDefinition("locolor/widgets/plot-background", "locolor/widgets/plot-background.svg",
+    package->addFileDefinition("locolor/widgets/plot-background", "locolor/widgets/plot-background.svg",
                       i18n("Low color background for graphing widgets"));
-    addFileDefinition("locolor/widgets/tooltip", "locolor/widgets/tooltip.svg",
+    package->addFileDefinition("locolor/widgets/tooltip", "locolor/widgets/tooltip.svg",
                       i18n("Low color background image for tooltips"));
 
-    addFileDefinition("colors", "colors", i18n("KColorScheme configuration file"));
+    package->addFileDefinition("colors", "colors", i18n("KColorScheme configuration file"));
 
     QStringList mimetypes;
     mimetypes << "image/svg+xml";
-    setDefaultMimeTypes(mimetypes);
+    package->setDefaultMimeTypes(mimetypes);
 }
 
 WallpaperPackage::WallpaperPackage(Wallpaper *paper)
-    : Package(),
-      m_paper(paper),
+    : PackageStructure(),
       m_fullPackage(true),
       m_targetSize(100000, 100000),
       m_resizeMethod(Wallpaper::ScaledResize)
 {
+    if (paper) {
+        connect(paper, SIGNAL(renderHintsChanged()), this, SLOT(renderHintsChanged()));
+        connect(paper, SIGNAL(destroyed(QObject*)), this, SLOT(paperDestroyed()));
+    }
+}
+
+void WallpaperPackage::initPackage(Package *package)
+{
     QStringList mimetypes;
     mimetypes << "image/svg" << "image/png" << "image/jpeg" << "image/jpg";
-    setDefaultMimeTypes(mimetypes);
+    package->setDefaultMimeTypes(mimetypes);
 
-    addDirectoryDefinition("images", "images/", i18n("Images"));
-    setRequired("images", true);
-    addFileDefinition("screenshot", "screenshot.png", i18n("Screenshot"));
-    setAllowExternalPaths(true);
-
-    if (m_paper) {
-        m_targetSize = m_paper->d->targetSize.toSize();
-        m_resizeMethod = m_paper->d->lastResizeMethod;
-
-        connect(m_paper, SIGNAL(renderHintsChanged()), this, SLOT(renderHintsChanged()));
-        connect(m_paper, SIGNAL(destroyed(QObject*)), this, SLOT(paperDestroyed()));
-    }
+    package->addDirectoryDefinition("images", "images/", i18n("Images"));
+    package->setRequired("images", true);
+    package->addFileDefinition("screenshot", "screenshot.png", i18n("Screenshot"));
+    package->setAllowExternalPaths(true);
 }
 
 void WallpaperPackage::renderHintsChanged()
 {
-    if (m_paper) {
-        m_targetSize = m_paper->d->targetSize.toSize();
-        m_resizeMethod = m_paper->d->lastResizeMethod;
+    Wallpaper *paper = qobject_cast<Wallpaper *>(sender());
+    if (!paper) {
+        return;
     }
 
     if (m_fullPackage) {
-        findBestPaper();
+        findBestPaper(paper, packages.value(paper));
     }
 }
 
-void WallpaperPackage::pathChanged()
+void WallpaperPackage::pathChanged(Package *package)
 {
     static bool guard = false;
 
@@ -239,20 +236,20 @@ void WallpaperPackage::pathChanged()
 
     guard = true;
 
-    QFileInfo info(path());
+    QFileInfo info(package->path());
     m_fullPackage = info.isDir();
-    removeDefinition("preferred");
-    setRequired("images", m_fullPackage);
+    package->removeDefinition("preferred");
+    package->setRequired("images", m_fullPackage);
 
     if (m_fullPackage) {
-        setContentsPrefixPaths(QStringList() << "contents/");
-        findBestPaper();
+        package->setContentsPrefixPaths(QStringList() << "contents/");
+        findBestPaper(package, papers.value(package));
     } else {
         // dirty trick to support having a file passed in instead of a directory
-        addFileDefinition("preferred", info.fileName(), i18n("Recommended wallpaper file"));
-        setContentsPrefixPaths(QStringList());
+        package->addFileDefinition("preferred", info.fileName(), i18n("Recommended wallpaper file"));
+        package->setContentsPrefixPaths(QStringList());
         //kDebug() << "changing" << path() << "to" << info.path();
-        setPath(info.path());
+        package->setPath(info.path());
     }
 
     guard = false;
@@ -262,16 +259,15 @@ QSize WallpaperPackage::resSize(const QString &str) const
 {
     int index = str.indexOf('x');
     if (index != -1) {
-        return QSize(str.left(index).toInt(),
-                     str.mid(index + 1).toInt());
+        return QSize(str.left(index).toInt(), str.mid(index + 1).toInt());
     } else {
         return QSize();
     }
 }
 
-void WallpaperPackage::findBestPaper()
+void WallpaperPackage::findBestPaper(Package *package)
 {
-    QStringList images = entryList("images");
+    QStringList images = package->entryList("images");
     if (images.empty()) {
         return;
     }
@@ -301,7 +297,7 @@ void WallpaperPackage::findBestPaper()
     }
 
     //kDebug() << "best image" << bestImage;
-    addFileDefinition("preferred", filePath("images") + bestImage, i18n("Recommended wallpaper file"));
+    package->addFileDefinition("preferred", filePath("images") + bestImage, i18n("Recommended wallpaper file"));
 }
 
 float WallpaperPackage::distance(const QSize& size, const QSize& desired,
@@ -334,19 +330,15 @@ float WallpaperPackage::distance(const QSize& size, const QSize& desired,
     }
 }
 
-void WallpaperPackage::paperDestroyed()
+void ContainmentActionsPackage::initPackage(Package *package)
 {
-    m_paper = 0;
+    package->setDefaultPackageRoot("plasma/containmentactions/");
+    package->addFileDefinition("mainscript", "code/main", i18n("Main Script File"));
 }
 
-ContainmentActionsPackage::ContainmentActionsPackage()
+void GenericPackage::initPackage(Package *package)
 {
-    //FIXME how do I do the mimetypes stuff?
-}
-
-GenericPackage::GenericPackage()
-{
-    setDefaultPackageRoot("plasma/packages");
+    package->setDefaultPackageRoot("plasma/packages/");
 }
 
 } // namespace Plasma
