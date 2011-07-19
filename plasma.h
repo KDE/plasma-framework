@@ -302,21 +302,6 @@ PLASMA_EXPORT Direction locationToInverseDirection(Location location);
  */
 PLASMA_EXPORT QGraphicsView *viewFor(const QGraphicsItem *item);
 
-/**
- * Returns a list of all actions in the given QMenu
- * This method flattens the hierarchy of the menu by prefixing the
- * text of all actions in a submenu with the submenu title.
- *
- * @param menu the QMenu storing the actions
- * @param prefix text to display before the text of all actions in the menu
- * @param parent QObject to be passed as parent of all the actions in the list
- *
- * @since 4.4
- */
-PLASMA_EXPORT QList<QAction*> actionsFromMenu(QMenu *menu,
-                                              const QString &prefix = QString(),
-                                              QObject *parent = 0);
-
 } // Plasma namespace
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Constraints)
