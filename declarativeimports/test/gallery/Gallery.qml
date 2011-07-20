@@ -61,6 +61,8 @@ Rectangle {
             Sliders { }
 
             Scrollers { }
+
+            Texts { }
         }
     }
 
