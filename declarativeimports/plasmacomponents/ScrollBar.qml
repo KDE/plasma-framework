@@ -54,10 +54,13 @@ Item {
         if (!flickableItem)
             return;
 
-        if (_isVertical)
-            flickableItem.contentY += increment;
-        else
-            flickableItem.contentX += increment;
+        if (_isVertical) {
+            flickableItem.contentY = Math.min(flickableItem.contentHeight,
+                flickableItem.contentY + increment);
+        } else {
+            flickableItem.contentX = Math.min(flickableItem.contentWidth,
+                flickableItem.contentX + increment);
+        }
     }
 
     Keys.onUpPressed: {
