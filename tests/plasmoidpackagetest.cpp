@@ -26,13 +26,14 @@
 #include <kstandarddirs.h>
 #include <kio/netaccess.h>
 
-#include "plasma/applet.h"
+#include "applet.h"
+#include "pluginloader.h"
 
 void PlasmoidPackageTest::init()
 {
     m_package = QString("Package");
     m_packageRoot = QDir::homePath() + "/.kde-unit-test/packageRoot";
-    m_defaultPackage = Plasma::Package::load("Plasma/Applet");
+    m_defaultPackage = Plasma::PluginLoader::self()->loadPackage("Plasma/Applet");
     cleanup(); // to prevent previous runs from interfering with this one
 }
 

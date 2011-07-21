@@ -40,8 +40,6 @@ private Q_SLOTS:
     void name();
     void required();
     void mimeTypes();
-    void read();
-    void write();
 
     //TODO: add tests for copy construction
 
