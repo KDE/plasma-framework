@@ -182,12 +182,17 @@ bool Package::isValid() const
 
 QString Package::name(const char *key) const
 {
+#ifndef PLASMA_NO_PACKAGE_EXTRADATA
     QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constFind(key);
     if (it == d->contents.constEnd()) {
         return QString();
     }
 
     return it.value().name;
+#else
+    Q_UNUSED(key);
+    return QString();
+#endif
 }
 
 bool Package::isRequired(const char *key) const
@@ -202,6 +207,7 @@ bool Package::isRequired(const char *key) const
 
 QStringList Package::mimeTypes(const char *key) const
 {
+#ifndef PLASMA_NO_PACKAGE_EXTRADATA
     QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constFind(key);
     if (it == d->contents.constEnd()) {
         return QStringList();
@@ -212,6 +218,9 @@ QStringList Package::mimeTypes(const char *key) const
     }
 
     return it.value().mimeTypes;
+#else
+    return QStringList();
+#endif
 }
 
 QString Package::defaultPackageRoot() const
@@ -539,9 +548,13 @@ void Package::addDirectoryDefinition(const char *key, const QString &path, const
         s = d->contents[key];
     }
 
+#ifndef PLASMA_NO_PACKAGE_EXTRADATA
     if (!name.isEmpty()) {
         s.name = name;
     }
+#else
+    Q_UNUSED(name)
+#endif
 
     s.paths.append(path);
     s.directory = true;
@@ -557,9 +570,13 @@ void Package::addFileDefinition(const char *key, const QString &path, const QStr
         s = d->contents[key];
     }
 
+#ifndef PLASMA_NO_PACKAGE_EXTRADATA
     if (!name.isEmpty()) {
         s.name = name;
     }
+#else
+    Q_UNUSED(name)
+#endif
 
     s.paths.append(path);
     s.directory = false;
@@ -584,17 +601,21 @@ void Package::setRequired(const char *key, bool required)
 
 void Package::setDefaultMimeTypes(QStringList mimeTypes)
 {
+#ifndef PLASMA_NO_PACKAGE_EXTRADATA
     d->mimeTypes = mimeTypes;
+#endif
 }
 
 void Package::setMimeTypes(const char *key, QStringList mimeTypes)
 {
+#ifndef PLASMA_NO_PACKAGE_EXTRADATA
     QMap<QByteArray, ContentStructure>::iterator it = d->contents.find(key);
     if (it == d->contents.end()) {
         return;
     }
 
     it.value().mimeTypes = mimeTypes;
+#endif
 }
 
 QList<const char*> Package::directories() const
@@ -905,7 +926,9 @@ PackagePrivate &PackagePrivate::operator=(const PackagePrivate &rhs)
     contentsPrefixPaths = rhs.contentsPrefixPaths;
     servicePrefix = rhs.servicePrefix;
     contents = rhs.contents;
+#ifndef PLASMA_NO_PACKAGE_EXTRADATA
     mimeTypes = rhs.mimeTypes;
+#endif
     defaultPackageRoot = rhs.defaultPackageRoot;
     servicePrefix = rhs.servicePrefix;
     metadata = 0;

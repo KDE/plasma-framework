@@ -42,15 +42,19 @@ class ContentStructure
         ContentStructure(const ContentStructure &other)
         {
             paths = other.paths;
+#ifndef PLASMA_NO_PACKAGE_EXTRADATA
             name = other.name;
             mimeTypes = other.mimeTypes;
+#endif
             directory = other.directory;
             required = other.required;
         }
 
         QStringList paths;
+#ifndef PLASMA_NO_PACKAGE_EXTRADATA
         QString name;
         QStringList mimeTypes;
+#endif
         bool directory : 1;
         bool required : 1;
 };
@@ -70,13 +74,14 @@ public:
     static bool uninstallPackage(const QString &packageName, const QString &packageRoot, const QString &servicePrefix);
 
     QWeakPointer<PackageStructure> structure;
-    QString type;
     QString path;
     QStringList contentsPrefixPaths;
     QString defaultPackageRoot;
     QString servicePrefix;
     QMap<QByteArray, ContentStructure> contents;
+#ifndef PLASMA_NO_PACKAGE_EXTRADATA
     QStringList mimeTypes;
+#endif
     KPluginInfo *metadata;
     bool externalPaths : 1;
     bool valid : 1;
