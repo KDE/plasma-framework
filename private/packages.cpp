@@ -198,7 +198,6 @@ WallpaperPackage::WallpaperPackage(Wallpaper *paper)
 {
     if (paper) {
         connect(paper, SIGNAL(renderHintsChanged()), this, SLOT(renderHintsChanged()));
-        connect(paper, SIGNAL(destroyed(QObject*)), this, SLOT(paperDestroyed()));
     }
 }
 
@@ -222,7 +221,7 @@ void WallpaperPackage::renderHintsChanged()
     }
 
     if (m_fullPackage) {
-        findBestPaper(paper, packages.value(paper));
+        //FIXME: findBestPaper(packages.value(paper));
     }
 }
 
@@ -243,7 +242,7 @@ void WallpaperPackage::pathChanged(Package *package)
 
     if (m_fullPackage) {
         package->setContentsPrefixPaths(QStringList() << "contents/");
-        findBestPaper(package, papers.value(package));
+        findBestPaper(package);
     } else {
         // dirty trick to support having a file passed in instead of a directory
         package->addFileDefinition("preferred", info.fileName(), i18n("Recommended wallpaper file"));
@@ -257,12 +256,12 @@ void WallpaperPackage::pathChanged(Package *package)
 
 QSize WallpaperPackage::resSize(const QString &str) const
 {
-    int index = str.indexOf('x');
+    const int index = str.indexOf('x');
     if (index != -1) {
         return QSize(str.left(index).toInt(), str.mid(index + 1).toInt());
-    } else {
-        return QSize();
     }
+
+    return QSize();
 }
 
 void WallpaperPackage::findBestPaper(Package *package)
@@ -279,7 +278,7 @@ void WallpaperPackage::findBestPaper(Package *package)
 
     QString bestImage;
     foreach (const QString &entry, images) {
-        QSize candidate = resSize(QFileInfo(entry).baseName());
+        const QSize candidate = resSize(QFileInfo(entry).baseName());
         if (candidate == QSize()) {
             continue;
         }
@@ -297,7 +296,7 @@ void WallpaperPackage::findBestPaper(Package *package)
     }
 
     //kDebug() << "best image" << bestImage;
-    package->addFileDefinition("preferred", filePath("images") + bestImage, i18n("Recommended wallpaper file"));
+    package->addFileDefinition("preferred", package->filePath("images") + bestImage, i18n("Recommended wallpaper file"));
 }
 
 float WallpaperPackage::distance(const QSize& size, const QSize& desired,

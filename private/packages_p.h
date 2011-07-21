@@ -68,12 +68,11 @@ public:
 
 private:
     QSize resSize(const QString &str) const;
-    void findBestPaper();
+    void findBestPaper(Package *package);
     float distance(const QSize& size, const QSize& desired,
                    Plasma::Wallpaper::ResizeMethod method) const;
 
 private Q_SLOTS:
-    void paperDestroyed();
     void renderHintsChanged();
 
 private:
