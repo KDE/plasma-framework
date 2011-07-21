@@ -477,19 +477,27 @@ Applet* PluginLoader::internalLoadApplet(const QString &name, uint appletId, con
     return 0;
 }
 
-DataEngine* PluginLoader::internalLoadDataEngine(const QString &name)
+DataEngine *PluginLoader::internalLoadDataEngine(const QString &name)
 {
     Q_UNUSED(name)
     return 0;
 }
 
-AbstractRunner* PluginLoader::internalLoadRunner(const QString &name)
+AbstractRunner *PluginLoader::internalLoadRunner(const QString &name)
 {
     Q_UNUSED(name)
     return 0;
 }
 
-Service* PluginLoader::internalLoadService(const QString &name, const QVariantList &args, QObject *parent)
+ContainmentActions *PluginLoader::internalLoadContainmentActions(Containment *containment, const QString &name, const QVariantList &args)
+{
+    Q_UNUSED(containment)
+    Q_UNUSED(name)
+    Q_UNUSED(args)
+    return 0;
+}
+
+Service *PluginLoader::internalLoadService(const QString &name, const QVariantList &args, QObject *parent)
 {
     Q_UNUSED(name)
     Q_UNUSED(args)
