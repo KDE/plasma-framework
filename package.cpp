@@ -913,6 +913,7 @@ PackagePrivate::PackagePrivate()
 PackagePrivate::PackagePrivate(const PackagePrivate &other)
 {
     *this = other;
+    metadata = 0;
 }
 
 PackagePrivate::~PackagePrivate()
@@ -922,6 +923,7 @@ PackagePrivate::~PackagePrivate()
 
 PackagePrivate &PackagePrivate::operator=(const PackagePrivate &rhs)
 {
+    structure = rhs.structure;
     path = rhs.path;
     contentsPrefixPaths = rhs.contentsPrefixPaths;
     servicePrefix = rhs.servicePrefix;
