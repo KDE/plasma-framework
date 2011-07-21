@@ -120,6 +120,9 @@ Package::Package(PackageStructure *structure)
     : d(new PackagePrivate())
 {
     d->structure = structure;
+    if (d->structure) {
+        d->structure.data()->initPackage(this);
+    }
 }
 
 Package::Package(const Package &other)
