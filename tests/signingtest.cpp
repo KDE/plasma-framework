@@ -28,6 +28,7 @@
 #include "pluginloader.h"
 
 static const QString fingerprint("8B8B22090C6F7C47B1EAEE75D6B72EB1A7F1DB43");
+static const QString shortFingerprint("D6B72EB1A7F1DB43");
 
 SigningTest::SigningTest(QObject *parent)
     : QObject(parent),
@@ -81,7 +82,8 @@ void SigningTest::validSignatureWithoutDefinedSigFile()
 
 void SigningTest::validPackage()
 {
-    QCOMPARE(m_signing->signerOf(m_package), fingerprint);
+    const QString sig = m_signing->signerOf(m_package);
+    QVERIFY(sig == fingerprint || sig == shortFingerprint);
 }
 
 void SigningTest::trustLevel()
