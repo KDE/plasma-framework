@@ -148,7 +148,7 @@ public:
         return cfg;
     }
 
-    QString findInTheme(const QString &image, const QString &theme) const;
+    QString findInTheme(const QString &image, const QString &theme, bool cache = true);
     void compositingChanged();
     void discardCache(CacheTypes caches);
     void scheduledCacheUpdate();
@@ -189,6 +189,7 @@ public:
     QHash<QString, QString> idsToCache;
     QHash<QString, QString> animationMapping;
     QHash<styles, QString> cachedStyleSheets;
+    QHash<QString, QString> discoveries;
     QTimer *saveTimer;
 
 #ifdef Q_WS_X11
@@ -241,9 +242,12 @@ void ThemePrivate::onAppExitCleanup()
     cacheTheme = false;
 }
 
-QString ThemePrivate::findInTheme(const QString &image, const QString &theme) const
+QString ThemePrivate::findInTheme(const QString &image, const QString &theme, bool cache)
 {
-    //TODO: this should be using Package
+    if (cache && discoveries.contains(image)) {
+        return discoveries[image];
+    }
+
     QString search;
 
     if (locolor) {
@@ -263,6 +267,10 @@ QString ThemePrivate::findInTheme(const QString &image, const QString &theme) co
         search =  KStandardDirs::locate("data", search);
     }
 
+    if (cache && !search.isEmpty()) {
+        discoveries.insert(image, search);
+    }
+
     return search;
 }
 
@@ -280,6 +288,8 @@ void ThemePrivate::compositingChanged()
 
 void ThemePrivate::discardCache(CacheTypes caches)
 {
+    discoveries.clear();
+
     if (caches & PixmapCache) {
         pixmapsToCache.clear();
         saveTimer->stop();
@@ -794,8 +804,8 @@ bool Theme::currentThemeHasImage(const QString &name) const
         return false;
     }
 
-    return !(d->findInTheme(name % QLatin1Literal(".svgz"), d->themeName).isEmpty()) ||
-           !(d->findInTheme(name % QLatin1Literal(".svg"), d->themeName).isEmpty());
+    return !(d->findInTheme(name % QLatin1Literal(".svgz"), d->themeName, false).isEmpty()) ||
+           !(d->findInTheme(name % QLatin1Literal(".svg"), d->themeName, false).isEmpty());
 }
 
 KSharedConfigPtr Theme::colorScheme() const
