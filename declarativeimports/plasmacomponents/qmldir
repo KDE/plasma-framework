@@ -16,4 +16,5 @@ ScrollDecorator 0.1 ScrollDecorator.qml
 Slider 0.1 Slider.qml
 Switch 0.1 Switch.qml
 TextField 0.1 TextField.qml
+TextArea 0.1 TextArea.qml
 ToolButton 0.1 ToolButton.qml
