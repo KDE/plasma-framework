@@ -286,8 +286,6 @@ void ThemePrivate::compositingChanged()
 
 void ThemePrivate::discardCache(CacheTypes caches)
 {
-    discoveries.clear();
-
     if (caches & PixmapCache) {
         pixmapsToCache.clear();
         saveTimer->stop();
@@ -303,6 +301,7 @@ void ThemePrivate::discardCache(CacheTypes caches)
     cachedStyleSheets.clear();
 
     if (caches & SvgElementsCache) {
+        discoveries.clear();
         invalidElements.clear();
 
         if (svgElementsCache) {
