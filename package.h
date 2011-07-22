@@ -280,12 +280,6 @@ public:
      */
     void setDefaultPackageRoot(const QString &packageRoot);
 
-    /**
-     * Called whenever the path changes so that subclasses may take
-     * package specific actions.
-     */
-    void pathChanged();
-
     // Content structure description methods
     /**
      * @return all directories registered as part of this Package's structure
@@ -328,7 +322,7 @@ public:
     bool uninstallPackage(const QString &packageName, const QString &packageRoot);
 
 private:
-    PackagePrivate * const d;
+    QExplicitlySharedDataPointer<PackagePrivate> d;
 };
 
 }

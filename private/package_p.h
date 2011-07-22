@@ -26,6 +26,7 @@
 #include <QCryptographicHash>
 #include <QDir>
 #include <QString>
+#include <QSharedData>
 
 namespace Plasma
 {
@@ -50,6 +51,7 @@ class ContentStructure
             required = other.required;
         }
 
+        QString found;
         QStringList paths;
 #ifndef PLASMA_NO_PACKAGE_EXTRADATA
         QString name;
@@ -59,7 +61,7 @@ class ContentStructure
         bool required : 1;
 };
 
-class PackagePrivate
+class PackagePrivate : public QSharedData
 {
 public:
     PackagePrivate();
@@ -78,7 +80,8 @@ public:
     QStringList contentsPrefixPaths;
     QString defaultPackageRoot;
     QString servicePrefix;
-    QMap<QByteArray, ContentStructure> contents;
+    QHash<QString, QString> discoveries;
+    QHash<QByteArray, ContentStructure> contents;
 #ifndef PLASMA_NO_PACKAGE_EXTRADATA
     QStringList mimeTypes;
 #endif

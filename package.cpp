@@ -126,19 +126,18 @@ Package::Package(PackageStructure *structure)
 }
 
 Package::Package(const Package &other)
-    : d(new PackagePrivate(*other.d))
+    : d(other.d)
 {
 }
 
 Package::~Package()
 {
-    delete d;
 }
 
 Package &Package::operator=(const Package &rhs)
 {
     if (&rhs != this) {
-        *d = *rhs.d;
+        d = rhs.d;
     }
 
     return *this;
@@ -153,7 +152,7 @@ bool Package::isValid() const
     //search for the file in all prefixes and in all possible paths for each prefix
     //even if it's a big nested loop, usually there is one prefix and one location
     //so shouldn't cause too much disk access
-    QMapIterator<QByteArray, ContentStructure> it(d->contents);
+    QHashIterator<QByteArray, ContentStructure> it(d->contents);
     while (it.hasNext()) {
         it.next();
         if (!it.value().required) {
@@ -186,7 +185,7 @@ bool Package::isValid() const
 QString Package::name(const char *key) const
 {
 #ifndef PLASMA_NO_PACKAGE_EXTRADATA
-    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constFind(key);
+    QHash<QByteArray, ContentStructure>::const_iterator it = d->contents.constFind(key);
     if (it == d->contents.constEnd()) {
         return QString();
     }
@@ -200,7 +199,7 @@ QString Package::name(const char *key) const
 
 bool Package::isRequired(const char *key) const
 {
-    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constFind(key);
+    QHash<QByteArray, ContentStructure>::const_iterator it = d->contents.constFind(key);
     if (it == d->contents.constEnd()) {
         return false;
     }
@@ -211,7 +210,7 @@ bool Package::isRequired(const char *key) const
 QStringList Package::mimeTypes(const char *key) const
 {
 #ifndef PLASMA_NO_PACKAGE_EXTRADATA
-    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constFind(key);
+    QHash<QByteArray, ContentStructure>::const_iterator it = d->contents.constFind(key);
     if (it == d->contents.constEnd()) {
         return QStringList();
     }
@@ -233,6 +232,7 @@ QString Package::defaultPackageRoot() const
 
 void Package::setDefaultPackageRoot(const QString &packageRoot)
 {
+    d.detach();
     d->defaultPackageRoot = packageRoot;
     if (!d->defaultPackageRoot.isEmpty() && !d->defaultPackageRoot.endsWith('/')) {
         d->defaultPackageRoot.append('/');
@@ -246,6 +246,7 @@ QString Package::servicePrefix() const
 
 void Package::setServicePrefix(const QString &servicePrefix)
 {
+    d.detach();
     d->servicePrefix = servicePrefix;
 }
 
@@ -256,6 +257,7 @@ bool Package::allowExternalPaths() const
 
 void Package::setAllowExternalPaths(bool allow)
 {
+    d.detach();
     d->externalPaths = allow;
 }
 
@@ -311,6 +313,12 @@ QString Package::filePath(const char *fileType, const QString &filename) const
         return QString();
     }
 
+    const QString discoveryKey(fileType + filename);
+    if (d->discoveries.contains(discoveryKey)) {
+    //qDebug() << "looking for" << discoveryKey << d->discoveries.value(discoveryKey);
+        return d->discoveries[discoveryKey];
+    }
+
     QStringList paths;
 
     if (qstrlen(fileType) != 0) {
@@ -323,6 +331,7 @@ QString Package::filePath(const char *fileType, const QString &filename) const
 
         if (paths.isEmpty()) {
             //kDebug() << "no matching path came of it, while looking for" << fileType << filename;
+            d->discoveries.insert(discoveryKey, QString());
             return QString();
         }
     } else {
@@ -346,6 +355,7 @@ QString Package::filePath(const char *fileType, const QString &filename) const
             if (QFile::exists(file)) {
                 if (d->externalPaths) {
                     //kDebug() << "found" << file;
+                    d->discoveries.insert(discoveryKey, file);
                     return file;
                 }
 
@@ -357,6 +367,7 @@ QString Package::filePath(const char *fileType, const QString &filename) const
                 //kDebug() << "testing that" << canonicalized << "is in" << d->path;
                 if (canonicalized.startsWith(d->path)) {
                     //kDebug() << "found" << file;
+                    d->discoveries.insert(discoveryKey, file);
                     return file;
                 }
             }
@@ -373,7 +384,7 @@ QStringList Package::entryList(const char *key) const
         return QStringList();
     }
 
-    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constFind(key);
+    QHash<QByteArray, ContentStructure>::const_iterator it = d->contents.constFind(key);
     if (it == d->contents.constEnd()) {
         //kDebug() << "couldn't find" << key;
         return QStringList();
@@ -426,9 +437,20 @@ QStringList Package::entryList(const char *key) const
 
 void Package::setPath(const QString &path)
 {
+    if (path == d->path) {
+        return;
+    }
+
+    d.detach();
+    d->discoveries.clear();
     if (path.isEmpty()) {
         d->path.clear();
         d->valid = false;
+
+        if (d->structure) {
+            d->structure.data()->pathChanged(this);
+        }
+
         return;
     }
 
@@ -478,20 +500,16 @@ void Package::setPath(const QString &path)
     d->path = basePath;
     delete d->metadata;
     d->metadata = 0;
-    pathChanged();
     d->valid = !d->path.isEmpty();
+
+    if (d->structure) {
+        d->structure.data()->pathChanged(this);
+    }
 }
 
 const QString Package::path() const
 {
     return d->path;
-}
-
-void Package::pathChanged()
-{
-    if (d->structure) {
-        d->structure.data()->pathChanged(this);
-    }
 }
 
 QStringList Package::contentsPrefixPaths() const
@@ -501,6 +519,7 @@ QStringList Package::contentsPrefixPaths() const
 
 void Package::setContentsPrefixPaths(const QStringList &prefixPaths)
 {
+    d.detach();
     d->contentsPrefixPaths = prefixPaths;
     if (d->contentsPrefixPaths.isEmpty()) {
         d->contentsPrefixPaths << QString();
@@ -594,17 +613,19 @@ void Package::removeDefinition(const char *key)
 
 void Package::setRequired(const char *key, bool required)
 {
-    QMap<QByteArray, ContentStructure>::iterator it = d->contents.find(key);
+    QHash<QByteArray, ContentStructure>::iterator it = d->contents.find(key);
     if (it == d->contents.end()) {
         return;
     }
 
+    d.detach();
     it.value().required = required;
 }
 
 void Package::setDefaultMimeTypes(QStringList mimeTypes)
 {
 #ifndef PLASMA_NO_PACKAGE_EXTRADATA
+    d.detach();
     d->mimeTypes = mimeTypes;
 #endif
 }
@@ -612,11 +633,12 @@ void Package::setDefaultMimeTypes(QStringList mimeTypes)
 void Package::setMimeTypes(const char *key, QStringList mimeTypes)
 {
 #ifndef PLASMA_NO_PACKAGE_EXTRADATA
-    QMap<QByteArray, ContentStructure>::iterator it = d->contents.find(key);
+    QHash<QByteArray, ContentStructure>::iterator it = d->contents.find(key);
     if (it == d->contents.end()) {
         return;
     }
 
+    d.detach();
     it.value().mimeTypes = mimeTypes;
 #endif
 }
@@ -624,7 +646,7 @@ void Package::setMimeTypes(const char *key, QStringList mimeTypes)
 QList<const char*> Package::directories() const
 {
     QList<const char*> dirs;
-    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
+    QHash<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
     while (it != d->contents.constEnd()) {
         if (it.value().directory) {
             dirs << it.key();
@@ -637,7 +659,7 @@ QList<const char*> Package::directories() const
 QList<const char*> Package::requiredDirectories() const
 {
     QList<const char*> dirs;
-    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
+    QHash<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
     while (it != d->contents.constEnd()) {
         if (it.value().directory &&
             it.value().required) {
@@ -651,7 +673,7 @@ QList<const char*> Package::requiredDirectories() const
 QList<const char*> Package::files() const
 {
     QList<const char*> files;
-    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
+    QHash<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
     while (it != d->contents.constEnd()) {
         if (!it.value().directory) {
             files << it.key();
@@ -664,7 +686,7 @@ QList<const char*> Package::files() const
 QList<const char*> Package::requiredFiles() const
 {
     QList<const char*> files;
-    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
+    QHash<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
     while (it != d->contents.constEnd()) {
         if (!it.value().directory && it.value().required) {
             files << it.key();
@@ -905,7 +927,8 @@ bool PackagePrivate::uninstallPackage(const QString &packageName, const QString 
 }
 
 PackagePrivate::PackagePrivate()
-        : servicePrefix("plasma-applet-"),
+        : QSharedData(),
+          servicePrefix("plasma-applet-"),
           metadata(0),
           externalPaths(false),
           valid(false)
@@ -914,6 +937,7 @@ PackagePrivate::PackagePrivate()
 }
 
 PackagePrivate::PackagePrivate(const PackagePrivate &other)
+    : QSharedData()
 {
     *this = other;
     metadata = 0;
@@ -926,6 +950,10 @@ PackagePrivate::~PackagePrivate()
 
 PackagePrivate &PackagePrivate::operator=(const PackagePrivate &rhs)
 {
+    if (&rhs == this) {
+        return *this;
+    }
+
     structure = rhs.structure;
     path = rhs.path;
     contentsPrefixPaths = rhs.contentsPrefixPaths;
