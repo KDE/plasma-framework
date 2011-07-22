@@ -75,4 +75,25 @@ Column {
         Keys.onTabPressed: loginButton.forceActiveFocus();
         enabled: false
     }
+
+    Text {
+        text: "Text Area"
+        font.pixelSize: 20
+    }
+
+    PlasmaComponents.TextArea {
+        width: 200
+        height: 200
+        placeholderText: "Lorem ipsum et dolor"
+        wrapMode: TextEdit.WordWrap
+        contentMaxWidth: 400
+        contentMaxHeight: 400
+    }
+
+    PlasmaComponents.TextArea {
+        width: 200
+        height: 100
+        enabled: false
+        text: "Disabled Text Area"
+    }
 }
