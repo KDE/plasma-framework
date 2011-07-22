@@ -27,10 +27,11 @@ class PackageStructureTest : public QObject
 {
     Q_OBJECT
 
-public Q_SLOTS:
-    void init();
+public:
+    PackageStructureTest();
 
 private Q_SLOTS:
+    void copyPerformance();
     void emptyContentsPrefix();
     void directories();
     void requiredDirectories();

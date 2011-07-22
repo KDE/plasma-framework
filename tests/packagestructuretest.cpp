@@ -39,11 +39,27 @@ public:
 };
 
 
-void PackageStructureTest::init()
+PackageStructureTest::PackageStructureTest()
 {
     m_packagePath = QString::fromLatin1(KDESRCDIR) + "signedPackage/";
     ps = Plasma::PluginLoader::self()->loadPackage("Plasma/Applet");
     ps.setPath(m_packagePath);
+}
+
+void PackageStructureTest::copyPerformance()
+{
+    // seed the cache first
+    ps.filePath("mainscript");
+
+    QTime t;
+    t.start();
+
+    for (int i = 0; i < 100000; ++i) {
+        Plasma::Package foo(ps);
+        const QString bar = foo.filePath("mainscript");
+    }
+
+    QVERIFY(t.elapsed() < 50);
 }
 
 void PackageStructureTest::emptyContentsPrefix()
@@ -63,8 +79,26 @@ void PackageStructureTest::directories()
 
     QCOMPARE(dirs.count(), psDirs.count());
 
-    for (int i = 0; i < psDirs.count(); ++i) {
-        QVERIFY(qstrcmp(dirs[i], psDirs[i]) == 0);
+    foreach (const char *dir, psDirs) {
+        bool found = false;
+        foreach (const char *check, dirs) {
+            if (qstrcmp(dir, check)) {
+                found = true;
+                break;
+            }
+        }
+        QVERIFY(found);
+    }
+
+    foreach (const char *dir, dirs) {
+        bool found = false;
+        foreach (const char *check, psDirs) {
+            if (qstrcmp(dir, check)) {
+                found = true;
+                break;
+            }
+        }
+        QVERIFY(found);
     }
 }
 
@@ -84,9 +118,15 @@ void PackageStructureTest::files()
     //for (int i = 0; i < psFiles.count(); ++i) {
     //    qDebug() << psFiles[i];
     //}
-    QCOMPARE(files.count(), psFiles.count());
-    for (int i = 0; i < files.count(); ++i) {
-        QCOMPARE(files[i], psFiles[i]);
+    foreach (const char *file, psFiles) {
+        bool found = false;
+        foreach (const char *check, files) {
+            if (qstrcmp(file, check)) {
+                found = true;
+                break;
+            }
+        }
+        QVERIFY(found);
     }
 }
 
