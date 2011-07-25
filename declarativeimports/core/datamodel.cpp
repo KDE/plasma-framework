@@ -293,20 +293,25 @@ void DataModel::removeSource(const QString &sourceName)
 {
     //FIXME: this could be way more efficient by not resetting the whole model
     //FIXME: find a way to remove only the proper things also in the case where sources are items
-    beginResetModel();
+
     //source name as key of the map
     if (!m_keyRoleFilter.isEmpty()) {
-        m_items.remove(sourceName);
+        if (m_items.contains(sourceName)) {
+            beginResetModel();
+            m_items.remove(sourceName);
+            endResetModel();
+        }
     //source name in the map, linear scan
     } else {
         for (int i = 0; i < m_items.value(QString()).count(); ++i) {
             if (m_items.value(QString())[i].value<QVariantHash>().value("DataEngineSource") == sourceName) {
+                beginResetModel();
                 m_items[QString()].remove(i);
+                endResetModel();
                 break;
             }
         }
     }
-    endResetModel();
 }
 
 QVariant DataModel::data(const QModelIndex &index, int role) const
