@@ -10,6 +10,7 @@ Frame 0.1 Frame.qml
 IconWidget 0.1 IconWidget.qml
 Highlight 0.1 Highlight.qml
 PushButton 0.1 PushButton.qml
+ProgressBar 0.1 ProgressBar.qml
 RadioButton 0.1 RadioButton.qml
 ScrollBar 0.1 ScrollBar.qml
 ScrollDecorator 0.1 ScrollDecorator.qml
