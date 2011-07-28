@@ -97,23 +97,13 @@ public:
         ThemeConfig config;
         cacheTheme = config.cacheTheme();
 
-#ifdef Q_WS_X11
-        Display *dpy = QX11Info::display();
-        int screen = DefaultScreen(dpy);
-        locolor = DefaultDepth(dpy, screen) < 16;
-
-        if (!locolor) {
-            char net_wm_cm_name[100];
-            sprintf(net_wm_cm_name, "_NET_WM_CM_S%d", screen);
-            compositeWatch = new KSelectionWatcher(net_wm_cm_name, -1, q);
-            QObject::connect(compositeWatch, SIGNAL(newOwner(Window)), q, SLOT(compositingChanged()));
-            QObject::connect(compositeWatch, SIGNAL(lostOwner()), q, SLOT(compositingChanged()));
+        if (QPixmap::defaultDepth() > 8) {
+            QObject::connect(KWindowSystem::self(), SIGNAL(compositingChanged(bool)), q, SLOT(compositingChanged(bool)));
             //watch for blur effect property changes as well
             effectWatcher = 0;
             effectWatcher = new EffectWatcher("_KDE_NET_WM_BLUR_BEHIND_REGION");
             QObject::connect(effectWatcher, SIGNAL(blurBehindChanged(bool)), q, SLOT(blurBehindChanged(bool)));
         }
-#endif
 
         saveTimer = new QTimer(q);
         saveTimer->setSingleShot(true);
@@ -149,7 +139,7 @@ public:
     }
 
     QString findInTheme(const QString &image, const QString &theme, bool cache = true);
-    void compositingChanged();
+    void compositingChanged(bool active);
     void discardCache(CacheTypes caches);
     void scheduledCacheUpdate();
     void colorsChanged();
@@ -274,12 +264,11 @@ QString ThemePrivate::findInTheme(const QString &image, const QString &theme, bo
     return search;
 }
 
-void ThemePrivate::compositingChanged()
+void ThemePrivate::compositingChanged(bool active)
 {
 #ifdef Q_WS_X11
-    bool nowCompositingActive = compositeWatch->owner() != None;
-    if (compositingActive != nowCompositingActive) {
-        compositingActive = nowCompositingActive;
+    if (compositingActive != active) {
+        compositingActive = active;
         discardCache(PixmapCache | SvgElementsCache);
         emit q->themeChanged();
     }

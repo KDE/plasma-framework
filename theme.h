@@ -397,7 +397,7 @@ class PLASMA_EXPORT Theme : public QObject
         friend class ThemePrivate;
         ThemePrivate *const d;
 
-        Q_PRIVATE_SLOT(d, void compositingChanged())
+        Q_PRIVATE_SLOT(d, void compositingChanged(bool))
         Q_PRIVATE_SLOT(d, void colorsChanged())
         Q_PRIVATE_SLOT(d, void blurBehindChanged(bool blur))
         Q_PRIVATE_SLOT(d, void settingsFileChanged(const QString &))
