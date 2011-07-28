@@ -524,7 +524,7 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::Alig
 
     pos = v->mapToGlobal(pos);
     //kDebug() << "==> position is" << actualItem->scenePos() << v->mapFromScene(actualItem->scenePos()) << pos;
-    const Plasma::View *pv = dynamic_cast<const Plasma::View *>(v);
+    const Plasma::View *pv = qobject_cast<const Plasma::View *>(v);
 
     Plasma::Location loc = Floating;
     if (pv && pv->containment()) {
