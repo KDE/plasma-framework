@@ -151,7 +151,9 @@ bool Credentials::isValid() const
         return (id == d->id);
     }
 #else
+#ifndef NDEBUG
     kDebug() << "libplasma is compiled without support for remote widgets. Key invalid.";
+#endif
     return false;
 #endif
 }
@@ -176,14 +178,18 @@ bool Credentials::isValidSignature(const QByteArray &signature, const QByteArray
 
     if (d->publicKey.canVerify()) {
         if (!isValid()) {
+#ifndef NDEBUG
             kDebug() << "Key is null?";
+#endif
         }
         QCA::PublicKey publicKey = QCA::PublicKey::fromPEM(d->publicKey.toPEM());
         publicKey.startVerify( QCA::EMSA3_MD5 );
         publicKey.update(payload);
         return ( publicKey.validSignature( signature ) );
     } else {
+#ifndef NDEBUG
         kDebug() << "Can't verify?";
+#endif
         return false;
     }
 #else
@@ -209,7 +215,9 @@ QByteArray Credentials::signMessage(const QByteArray &message)
 {
 #ifdef ENABLE_REMOTE_WIDGETS
     if(!QCA::isSupported(REQUIRED_FEATURES)) {
+#ifndef NDEBUG
         kDebug() << "RSA not supported";
+#endif
         return QByteArray();
     } else if (canSign()) {
         //QCA::PrivateKey privateKey = QCA::PrivateKey::fromPEM(d->privateKey.toPEM());
@@ -285,7 +293,9 @@ QDataStream &operator>>(QDataStream &in, Credentials &myObj)
     }
 
     if (conversionResult != QCA::ConvertGood) {
+#ifndef NDEBUG
         kDebug() << "Unsuccessfull conversion of key?";
+#endif
     }
 #endif
 

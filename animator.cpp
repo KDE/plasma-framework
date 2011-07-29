@@ -180,7 +180,9 @@ QEasingCurve Animator::create(Animator::CurveShape type)
         break;
 
     default:
+#ifndef NDEBUG
         kDebug() << "Unsupported easing curve type.";
+#endif
         break;
     }
 

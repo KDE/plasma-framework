@@ -489,7 +489,9 @@ void Package::setPath(const QString &path)
         }
         //kDebug() << "basePath is" << basePath;
     } else {
+#ifndef NDEBUG
         kDebug() << path << "invalid, basePath is" << basePath;
+#endif
         return;
     }
 
@@ -903,7 +905,9 @@ bool PackagePrivate::uninstallPackage(const QString &packageName, const QString 
     const QString serviceName = servicePrefix + packageName + ".desktop";
 
     QString service = KStandardDirs::locateLocal("services", serviceName);
+#ifndef NDEBUG
     kDebug() << "Removing service file " << service;
+#endif
     bool ok = QFile::remove(service);
 
     if (!ok) {

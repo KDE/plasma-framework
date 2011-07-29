@@ -406,7 +406,9 @@ void ExtenderItem::setExtender(Extender *extender, const QPointF &pos)
     KConfigGroup extenderItemGroup(corona->config(), "DetachedExtenderItems");
 
     if (isDetached()) {
+#ifndef NDEBUG
         kDebug() << "detached, adding entry to the global group";
+#endif
         KConfigGroup itemConfig = extenderItemGroup.group(QString::number(d->extenderItemId));
         itemConfig.writeEntry("sourceAppletPluginName",
                 config().readEntry("sourceAppletPluginName", ""));
@@ -415,7 +417,9 @@ void ExtenderItem::setExtender(Extender *extender, const QPointF &pos)
         itemConfig.writeEntry("extenderItemName",
                 config().readEntry("extenderItemName", ""));
     } else if (extenderItemGroup.hasGroup(QString::number(d->extenderItemId))) {
+#ifndef NDEBUG
         kDebug() << "no longer detached, removing entry from the global group";
+#endif
         extenderItemGroup.deleteGroup(QString::number(d->extenderItemId));
     }
 
@@ -454,7 +458,9 @@ void ExtenderItem::setGroup(ExtenderGroup *group, const QPointF &pos)
         config().writeEntry("group", group->name());
         //TODO: move to another extender if the group we set is actually detached.
         if (group->extender() != extender()) {
+#ifndef NDEBUG
             kDebug() << "moving to another extender because we're joining a detached group.";
+#endif
             setExtender(group->extender());
         }
         group->d->addItemToGroup(this, pos);
@@ -724,7 +730,9 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     if (extenderApplet && d->extender->attachedItems().count() < 2 &&
         extenderApplet->formFactor() != Plasma::Horizontal &&
         extenderApplet->formFactor() != Plasma::Vertical) {
+#ifndef NDEBUG
         kDebug() << "leaving the internal extender container, so hide the applet and it's handle.";
+#endif
         extenderApplet->hide();
     }
 
@@ -1002,7 +1010,9 @@ Applet *ExtenderItemPrivate::hostApplet() const
 
 void ExtenderItemPrivate::themeChanged()
 {
+#ifndef NDEBUG
     kDebug();
+#endif
     if (dragStarted) {
         background->setImagePath("opaque/dialogs/background");
         background->setEnabledBorders(FrameSvg::AllBorders);

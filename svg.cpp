@@ -207,7 +207,9 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
         QObject::connect(cacheAndColorsTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()), Qt::UniqueConnection);
         path = imagePath;
     } else {
+#ifndef NDEBUG
         kDebug() << "file '" << path << "' does not exist!";
+#endif
     }
 
     // check if svg wants colorscheme applied

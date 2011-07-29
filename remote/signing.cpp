@@ -56,7 +56,9 @@ SigningPrivate::SigningPrivate(Signing *auth, const QString &path)
     GpgME::initializeLibrary();
     GpgME::Error error = GpgME::checkEngine(GpgME::OpenPGP);
     if (error) {
+#ifndef NDEBUG
         kDebug() << "OpenPGP engine not found: authentication will not work.";
+#endif
         return;
     }
 
@@ -73,7 +75,9 @@ SigningPrivate::SigningPrivate(Signing *auth, const QString &path)
     } else {
         error = m_gpgContext->setEngineHomeDirectory(m_keystorePath.toAscii().data());
         if (error) {
+#ifndef NDEBUG
             kDebug() << "Failed setting custom gpg keystore directory: using default.";
+#endif
         }
     }
 
@@ -104,14 +108,18 @@ void SigningPrivate::registerUltimateTrustKeys()
     keys[UltimatelyTrusted] = tmp;
 
     if (!m_gpgContext) {
+#ifndef NDEBUG
         kDebug() << "GPGME context not valid: please re-initialize the library.";
+#endif
         return;
     }
 
     QString path = ultimateKeyStoragePath();
     QDir dir(path);
     if (!dir.exists() || path.isEmpty()) {
+#ifndef NDEBUG
         kDebug() << "Directory with KDE keys not found: aborting";
+#endif
         return;
     }
 
@@ -127,8 +135,12 @@ void SigningPrivate::registerUltimateTrustKeys()
         GpgME::Data data(fp);
         GpgME::ImportResult iRes = m_gpgContext->importKeys(data);
         if (iRes.error()) {
+#ifndef NDEBUG
             kDebug() << "Error while importing the key located at: " << keyFile;
+#endif
+#ifndef NDEBUG
             kDebug() << " The error is:" << iRes.error().asString() << "; Skipping.";
+#endif
             continue;
         }
 
@@ -144,7 +156,9 @@ void SigningPrivate::registerUltimateTrustKeys()
 void SigningPrivate::splitKeysByTrustLevel()
 {
     if (!m_gpgContext) {
+#ifndef NDEBUG
         kDebug() << "GPGME context not valid: please re-initialize the library.";
+#endif
         return;
     }
 
@@ -198,7 +212,9 @@ void SigningPrivate::splitKeysByTrustLevel()
 Plasma::TrustLevel SigningPrivate::addKeyToCache(const QByteArray &fingerprint)
 {
     if (!m_gpgContext) {
+#ifndef NDEBUG
         kDebug() << "GPGME context not valid: please re-initialize the library.";
+#endif
         return UnknownTrusted;
     }
 
@@ -243,12 +259,24 @@ Plasma::TrustLevel SigningPrivate::addKeyToCache(const QByteArray &fingerprint)
 
 void SigningPrivate::dumpKeysToDebug()
 {
+#ifndef NDEBUG
     kDebug() << "UltimatelyTrusted = " << keys[UltimatelyTrusted];
+#endif
+#ifndef NDEBUG
     kDebug() << "FullyTrusted = " << keys[FullyTrusted];
+#endif
+#ifndef NDEBUG
     kDebug() << "SelfTrusted = " << keys[SelfTrusted];
+#endif
+#ifndef NDEBUG
     kDebug() << "UserTrusted = " << keys[UserTrusted];
+#endif
+#ifndef NDEBUG
     kDebug() << "UnknownTrusted = " << keys[UnknownTrusted];
+#endif
+#ifndef NDEBUG
     kDebug() << "CompletelyUntrusted = " << keys[CompletelyUntrusted];
+#endif
 }
 
 QStringList SigningPrivate::keysID(const bool returnPrivate) const
@@ -256,7 +284,9 @@ QStringList SigningPrivate::keysID(const bool returnPrivate) const
     QStringList result;
 
     if (!m_gpgContext) {
+#ifndef NDEBUG
         kDebug() << "GPGME context not valid: please re-initialize the library.";
+#endif
         return result;
     }
 
@@ -271,7 +301,9 @@ QStringList SigningPrivate::keysID(const bool returnPrivate) const
     }
     GpgME::KeyListResult lRes = m_gpgContext->endKeyListing();
     if (lRes.error()) {
+#ifndef NDEBUG
         kDebug() << "Error while ending the keyListing operation: " << lRes.error().asString();
+#endif
     }
 
     return result;
@@ -405,7 +437,9 @@ void SigningPrivate::keyRemoved(const QString &path)
             error = m_gpgContext->startKeyDeletion(k, true); // GG
 
             if (error) {
+#ifndef NDEBUG
                 kDebug() << "Can't delete key with fingerprint: " << result;
+#endif
                 m_gpgContext->endKeyListing();
                 return;
             }
@@ -415,7 +449,9 @@ void SigningPrivate::keyRemoved(const QString &path)
     }
     GpgME::KeyListResult lRes = m_gpgContext->endKeyListing();
     if (lRes.error()) {
+#ifndef NDEBUG
         kDebug() << "Error while ending the keyListing operation: " << lRes.error().asString();
+#endif
     }
 
     splitKeysByTrustLevel();
@@ -499,21 +535,27 @@ QString Signing::signerOf(const Package &package) const
     const QString contents = package.path() + "CONTENTS";
 
     if (!QFile::exists(contents)) {
+#ifndef NDEBUG
         kDebug() << "not contents hash for package at" << package.path();
+#endif
         return QString();
     }
 
     QFile file(contents);
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+#ifndef NDEBUG
         kDebug() << "could not open hash file for reading" << contents;
+#endif
         return QString();
     }
 
     const QByteArray hash = file.read(10 * 1024);
     const QString actualHash = package.contentsHash();
     if (actualHash != hash) {
+#ifndef NDEBUG
         kDebug() << "CONTENTS does not match contents of package" << package.path();
+#endif
         return QString();
     }
 
@@ -522,11 +564,17 @@ QString Signing::signerOf(const Package &package) const
 
 QString Signing::signerOf(const KUrl &package, const KUrl &signature) const
 {
+#ifndef NDEBUG
     kDebug() << "Checking existence of " << package.pathOrUrl();
+#endif
+#ifndef NDEBUG
     kDebug() << "Checking existence of " << signature.pathOrUrl();
+#endif
 
     if (!package.isLocalFile() || (!signature.isEmpty() && !signature.isLocalFile())) {
+#ifndef NDEBUG
         kDebug() << "Remote urls not yet supported. FIXME.";
+#endif
         return QString();
     }
 
@@ -536,14 +584,18 @@ QString Signing::signerOf(const KUrl &package, const KUrl &signature) const
 QString SigningPrivate::verifySignature(const QString &filePath, const QString &signature)
 {
     if (!QFile::exists(filePath)) {
+#ifndef NDEBUG
         kDebug() << "Package" << filePath << "does not exist: signature verification aborted.";
+#endif
         return QString();
     }
 
     const QString signaturePath = signature.isEmpty() ? filePath + (".sig") : signature;
 
     if (!QFile::exists(signaturePath)) {
+#ifndef NDEBUG
         kDebug() << "Signature" << signaturePath << "does not exist: signature verification aborted.";
+#endif
         return QString();
     }
 
@@ -551,13 +603,17 @@ QString SigningPrivate::verifySignature(const QString &filePath, const QString &
 
     FILE *pFile = fopen(filePath.toLocal8Bit().data(), "r");
     if (!pFile) {
+#ifndef NDEBUG
         kDebug() << "failed to open file" << filePath;
+#endif
         return QString();
     }
 
     FILE *pSig = fopen(signaturePath.toLocal8Bit().data(), "r");
     if (!pSig) {
+#ifndef NDEBUG
         kDebug() << "failed to open package file" << signaturePath;
+#endif
         fclose(pFile);
         return QString();
     }
@@ -597,7 +653,9 @@ QString Signing::descriptiveString(const QString &keyID) const
     }
 
     if (!d->m_gpgContext) {
+#ifndef NDEBUG
         kDebug() << "GPGME context not valid: please re-initialize the library.";
+#endif
         return QString();
     }
 

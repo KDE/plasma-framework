@@ -318,8 +318,12 @@ void Applet::restore(KConfigGroup &group)
     if (!shortcutText.isEmpty()) {
         setGlobalShortcut(KShortcut(shortcutText));
         /*
+#ifndef NDEBUG
         kDebug() << "got global shortcut for" << name() << "of" << QKeySequence(shortcutText);
+#endif
+#ifndef NDEBUG
         kDebug() << "set to" << d->activationAction->objectName()
+#endif
                  << d->activationAction->globalShortcut().primary();
                  */
     }
@@ -1645,7 +1649,9 @@ void Applet::publish(AnnouncementMethods methods, const QString &resourceName)
     const QString resName = resourceName.isEmpty() ?  i18nc("%1 is the name of a plasmoid, %2 the name of the machine that plasmoid is published on",
                                                          "%1 on %2", name(), QHostInfo::localHostName())
                                                    : resourceName;
+#ifndef NDEBUG
     kDebug() << "publishing package under name " << resName;
+#endif
     if (d->package && d->package->isValid()) {
         d->service->d->publish(methods, resName, d->package->metadata());
     } else if (!d->package && d->appletDescription.isValid()) {
@@ -1653,7 +1659,9 @@ void Applet::publish(AnnouncementMethods methods, const QString &resourceName)
     } else {
         delete d->service;
         d->service  = 0;
+#ifndef NDEBUG
         kDebug() << "Can not publish invalid applets.";
+#endif
     }
 }
 
@@ -2228,7 +2236,9 @@ KPluginInfo::List Applet::listAppletInfoForUrl(const QUrl &url)
             QRegExp rx(glob);
             rx.setPatternSyntax(QRegExp::Wildcard);
             if (rx.exactMatch(url.toString())) {
+#ifndef NDEBUG
                 kDebug() << info.name() << "matches" << glob << url;
+#endif
                 filtered << info;
             }
         }
@@ -2262,8 +2272,10 @@ QStringList Applet::listCategories(const QString &parentApp, bool visibleOnly)
 
         //kDebug() << "   and we have " << appletCategory;
         if (!appletCategory.isEmpty() && !known.contains(appletCategory.toLower())) {
+#ifndef NDEBUG
             kDebug() << "Unknown category: " << applet->name() << "says it is in the"
                      << appletCategory << "category which is unknown to us";
+#endif
             appletCategory.clear();
         }
 
@@ -2613,9 +2625,11 @@ void AppletPrivate::init(const QString &packagePath)
 
     QObject::connect(q, SIGNAL(activate()), q, SLOT(setFocus()));
     if (!appletDescription.isValid()) {
+#ifndef NDEBUG
         kDebug() << "Check your constructor! "
                  << "You probably want to be passing in a Service::Ptr "
                  << "or a QVariantList with a valid storageid as arg[0].";
+#endif
         q->resize(size);
         return;
     }
@@ -2698,8 +2712,10 @@ void AppletPrivate::setupScriptSupport()
         return;
     }
 
+#ifndef NDEBUG
     kDebug() << "setting up script support, package is in" << package->path()
              << ", main script is" << package->filePath("mainscript");
+#endif
 
     const QString translationsPath = package->filePath("translations");
     if (!translationsPath.isEmpty()) {
@@ -2819,7 +2835,9 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
         //see if we have a default configuration in our package
         const QString defaultConfigFile = package->filePath("defaultconfig");
         if (!defaultConfigFile.isEmpty()) {
+#ifndef NDEBUG
             kDebug() << "copying default config: " << package->filePath("defaultconfig");
+#endif
             KConfigGroup defaultConfig(KSharedConfig::openConfig(defaultConfigFile)->group("Configuration"));
             defaultConfig.copyTo(mainConfig);
         }

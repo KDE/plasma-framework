@@ -38,13 +38,17 @@ DenyAllAuthorization::~DenyAllAuthorization()
 
 void DenyAllAuthorization::clientPinRequest(ClientPinRequest &request)
 {
+#ifndef NDEBUG
     kDebug();
+#endif
     request.setPin("");
 }
 
 void DenyAllAuthorization::authorizationRequest(AuthorizationRule &rule)
 {
+#ifndef NDEBUG
     kDebug();
+#endif
     rule.setPolicy(AuthorizationRule::Deny);
     rule.setTargets(AuthorizationRule::AllServices | AuthorizationRule::AllUsers);
 }

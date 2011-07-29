@@ -178,7 +178,9 @@ QScriptEngine *globalEngine()
         global.setProperty("AnimationGroup", inst->newFunction(AnimationScriptEngine::animationGroup));
         global.setProperty("ParallelAnimationGroup", inst->newFunction(AnimationScriptEngine::parallelAnimationGroup));
         global.setProperty("QEasingCurve", constructEasingCurveClass(inst));
+#ifndef NDEBUG
         kDebug() << "........... first js animation, creating the engine!";
+#endif
     }
 
     return inst;

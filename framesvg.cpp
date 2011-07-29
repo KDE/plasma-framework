@@ -321,7 +321,9 @@ void FrameSvg::resizeFrame(const QSizeF &size)
     }
 
     if (size.isEmpty()) {
+#ifndef NDEBUG
         kDebug() << "Invalid size" << size;
+#endif
         return;
     }
 
@@ -539,7 +541,9 @@ void FrameSvg::paintFrame(QPainter *painter, const QPointF &pos)
 FrameSvgPrivate::~FrameSvgPrivate()
 {
 #ifdef DEBUG_FRAMESVG_CACHE
+#ifndef NDEBUG
     kDebug() << "*************" << q << q->imagePath() << "****************";
+#endif
 #endif
 
     QHashIterator<QString, FrameData *> it(frames);
@@ -551,17 +555,23 @@ FrameSvgPrivate::~FrameSvgPrivate()
             if (it.value()->removeRefs(q)) {
                 const QString key = cacheId(it.value(), it.key());
 #ifdef DEBUG_FRAMESVG_CACHE
+#ifndef NDEBUG
                 kDebug() << "2. Removing it" << key << it.value() << it.value()->refcount() << s_sharedFrames.contains(key);
+#endif
 #endif
                 s_sharedFrames.remove(key);
                 delete it.value();
             }
 #ifdef DEBUG_FRAMESVG_CACHE
             else {
+#ifndef NDEBUG
                 kDebug() << "still shared:" << cacheId(it.value(), it.key()) << it.value() << it.value()->refcount() << it.value()->isUsed();
+#endif
             }
         } else {
+#ifndef NDEBUG
             kDebug() << "lost our value for" << it.key();
+#endif
 #endif
         }
     }
@@ -573,16 +583,24 @@ FrameSvgPrivate::~FrameSvgPrivate()
         it2.next();
         const int rc = it2.value()->refcount();
         if (rc == 0) {
+#ifndef NDEBUG
             kDebug() << "     LOST!" << it2.key() << rc << it2.value();// << it2.value()->references;
+#endif
         } else {
+#ifndef NDEBUG
             kDebug() << "          " << it2.key() << rc << it2.value();
+#endif
             foreach (FrameSvg *data, it2.value()->references.keys()) {
+#ifndef NDEBUG
                 kDebug( )<< "            " << (void*)data << it2.value()->references[data];
+#endif
             }
             shares += rc - 1;
         }
     }
+#ifndef NDEBUG
     kDebug() << "#####################################" << s_sharedFrames.count() << ", pixmaps saved:" << shares;
+#endif
 #endif
 
     frames.clear();
@@ -746,7 +764,9 @@ void FrameSvgPrivate::generateFrameBackground(FrameData *frame)
 
 
     if (!size.isValid()) {
+#ifndef NDEBUG
         kDebug() << "Invalid frame size" << size;
+#endif
         return;
     }
     if (size.width() >= MAX_FRAME_SIZE || size.height() >= MAX_FRAME_SIZE) {

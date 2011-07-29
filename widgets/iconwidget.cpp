@@ -416,7 +416,9 @@ void IconWidget::addIconAction(QAction *action)
 {
     int count = d->cornerActions.count();
     if (count >= IconWidgetPrivate::LastIconPosition) {
+#ifndef NDEBUG
         kDebug() << "no more room for more actions!";
+#endif
         // just overlap it with the last item for now. ugly, but there you go.
     }
 

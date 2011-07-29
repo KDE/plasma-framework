@@ -295,11 +295,15 @@ bool appletConfigLessThan(const KConfigGroup &c1, const KConfigGroup &c2)
 
 void Containment::restore(KConfigGroup &group)
 {
-    /*kDebug() << "!!!!!!!!!!!!initConstraints" << group.name() << d->type;
+    /*
+#ifndef NDEBUG
+    kDebug() << "!!!!!!!!!!!!initConstraints" << group.name() << d->type;
     kDebug() << "    location:" << group.readEntry("location", (int)d->location);
     kDebug() << "    geom:" << group.readEntry("geometry", geometry());
     kDebug() << "    formfactor:" << group.readEntry("formfactor", (int)d->formFactor);
-    kDebug() << "    screen:" << group.readEntry("screen", d->screen);*/
+    kDebug() << "    screen:" << group.readEntry("screen", d->screen);
+#endif
+*/
     if (!isContainment()) {
         Applet::restore(group);
         return;
@@ -392,7 +396,9 @@ void Containment::restore(KConfigGroup &group)
     }
 
     /*
+#ifndef NDEBUG
     kDebug() << "Containment" << id() <<
+#endif
                 "screen" << screen() <<
                 "geometry is" << geometry() <<
                 "wallpaper" << ((d->wallpaper) ? d->wallpaper->pluginName() : QString()) <<
@@ -460,7 +466,9 @@ void ContainmentPrivate::initApplets()
     foreach (Applet *applet, applets) {
         applet->restore(*applet->d->mainConfigGroup());
         applet->init();
+#ifndef NDEBUG
         kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Applet" << applet->name();
+#endif
     }
 
     q->flushPendingConstraintsEvents();
@@ -469,7 +477,9 @@ void ContainmentPrivate::initApplets()
         applet->flushPendingConstraintsEvents();
     }
 
+#ifndef NDEBUG
     kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Containment's applets initialized" << q->name();
+#endif
 }
 
 void Containment::restoreContents(KConfigGroup &group)
@@ -857,12 +867,16 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
     }
 
     if (!applet) {
+#ifndef NDEBUG
         kDebug() << "adding null applet!?!";
+#endif
         return;
     }
 
     if (d->applets.contains(applet)) {
+#ifndef NDEBUG
         kDebug() << "already have this applet!";
+#endif
     }
 
     Containment *currentContainment = applet->containment();
@@ -1000,10 +1014,12 @@ void ContainmentPrivate::setScreen(int newScreen, int newDesktop, bool preventIn
             // sanity check to make sure someone else doesn't have this screen already!
             Containment *currently = corona->containmentForScreen(newScreen, newDesktop);
             if (currently && currently != q) {
+#ifndef NDEBUG
                 kDebug() << "currently is on screen" << currently->screen()
                          << "desktop" << currently->desktop()
                          << "and is" << currently->activity()
                          << (QObject*)currently << "i'm" << (QObject*)q;
+#endif
                 currently->setScreen(-1, currently->desktop());
                 swapScreensWith = currently;
             }
@@ -1025,7 +1041,9 @@ void ContainmentPrivate::setScreen(int newScreen, int newDesktop, bool preventIn
 
     if (oldScreen != newScreen || oldDesktop != newDesktop) {
         /*
+#ifndef NDEBUG
         kDebug() << "going to signal change for" << q
+#endif
                  << ", old screen & desktop:" << oldScreen << oldDesktop
                  << ", new:" << screen << desktop;
                  */
@@ -1251,7 +1269,9 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
 
     if (!mimeData) {
         //Selection is either empty or not supported on this OS
+#ifndef NDEBUG
         kDebug() << "no mime data";
+#endif
         return;
     }
 
@@ -1271,13 +1291,17 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
             dropEvent->acceptProposedAction();
         }
     } else if (mimeData->hasFormat(ExtenderItemMimeData::mimeType())) {
+#ifndef NDEBUG
         kDebug() << "mimeType plasma/extenderitem is dropped, creating internal:extender";
+#endif
         //Handle dropping extenderitems.
         const ExtenderItemMimeData *extenderData = qobject_cast<const ExtenderItemMimeData*>(mimeData);
         if (extenderData) {
             ExtenderItem *item = extenderData->extenderItem();
             QRectF geometry(pos - extenderData->pointerOffset(), item->size());
+#ifndef NDEBUG
             kDebug() << "desired geometry: " << geometry;
+#endif
             Applet *applet = qobject_cast<ExtenderApplet *>(item->extender() ?  item->extender()->applet() : 0);
             if (applet) {
                 qreal left, top, right, bottom;
@@ -1318,7 +1342,9 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
                 QRectF geom(pos, QSize());
                 QVariantList args;
                 args << url.url();
+#ifndef NDEBUG
                 kDebug() << "can decode" << mimeName << args;
+#endif
 
                 // It may be a directory or a file, let's stat
                 KIO::JobFlags flags = KIO::HideProgressInfo;
@@ -1418,7 +1444,9 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
                 QRectF geom(pos, QSize());
                 QVariantList args;
                 args << tempFile.fileName();
+#ifndef NDEBUG
                 kDebug() << args;
+#endif
                 tempFile.close();
 
                 q->addApplet(selectedPlugin, args, geom);
@@ -1443,12 +1471,16 @@ void ContainmentPrivate::remoteAppletReady(Plasma::AccessAppletJob *job)
     QPointF pos = dropPoints.take(job);
     if (job->error()) {
         //TODO: nice user visible error handling (knotification probably?)
+#ifndef NDEBUG
         kDebug() << "remote applet access failed: " << job->errorText();
+#endif
         return;
     }
 
     if (!job->applet()) {
+#ifndef NDEBUG
         kDebug() << "how did we end up here? if applet is null, the job->error should be nonzero";
+#endif
         return;
     }
 
@@ -1460,12 +1492,16 @@ void ContainmentPrivate::dropJobResult(KJob *job)
 #ifndef PLASMA_NO_KIO
     KIO::TransferJob* tjob = dynamic_cast<KIO::TransferJob*>(job);
     if (!tjob) {
+#ifndef NDEBUG
         kDebug() << "job is not a KIO::TransferJob, won't handle the drop...";
+#endif
         clearDataForMimeJob(tjob);
         return;
     }
     if (job->error()) {
+#ifndef NDEBUG
         kDebug() << "ERROR" << tjob->error() << ' ' << tjob->errorString();
+#endif
     }
     // We call mimeTypeRetrieved since there might be other mechanisms
     // for finding suitable applets. Cleanup happens there as well.
@@ -1476,33 +1512,45 @@ void ContainmentPrivate::dropJobResult(KJob *job)
 void ContainmentPrivate::mimeTypeRetrieved(KIO::Job *job, const QString &mimeType)
 {
 #ifndef PLASMA_NO_KIO
+#ifndef NDEBUG
     kDebug() << "Mimetype Job returns." << mimeType;
+#endif
     KIO::TransferJob* tjob = dynamic_cast<KIO::TransferJob*>(job);
     if (!tjob) {
+#ifndef NDEBUG
         kDebug() << "job should be a TransferJob, but isn't";
+#endif
         clearDataForMimeJob(job);
         return;
     }
     KPluginInfo::List appletList = Applet::listAppletInfoForUrl(tjob->url());
     if (mimeType.isEmpty() && !appletList.count()) {
         clearDataForMimeJob(job);
+#ifndef NDEBUG
         kDebug() << "No applets found matching the url (" << tjob->url() << ") or the mimeType (" << mimeType << ")";
+#endif
         return;
     } else {
 
         QPointF posi; // will be overwritten with the event's position
         if (dropPoints.keys().contains(tjob)) {
             posi = dropPoints[tjob];
+#ifndef NDEBUG
             kDebug() << "Received a suitable dropEvent at" << posi;
+#endif
         } else {
+#ifndef NDEBUG
             kDebug() << "Bailing out. Cannot find associated dropEvent related to the TransferJob";
+#endif
             clearDataForMimeJob(job);
             return;
         }
 
         KMenu *choices = dropMenus.value(tjob);
         if (!choices) {
+#ifndef NDEBUG
             kDebug() << "Bailing out. No QMenu found for this job.";
+#endif
             clearDataForMimeJob(job);
             return;
         }
@@ -1510,7 +1558,9 @@ void ContainmentPrivate::mimeTypeRetrieved(KIO::Job *job, const QString &mimeTyp
         QVariantList args;
         args << tjob->url().url() << mimeType;
 
+#ifndef NDEBUG
         kDebug() << "Creating menu for:" << mimeType  << posi << args;
+#endif
 
         appletList << Applet::listAppletInfoForMimeType(mimeType);
         KPluginInfo::List wallpaperList;
@@ -1527,7 +1577,9 @@ void ContainmentPrivate::mimeTypeRetrieved(KIO::Job *job, const QString &mimeTyp
             QHash<QAction *, QString> actionsToApplets;
             choices->addTitle(i18n("Widgets"));
             foreach (const KPluginInfo &info, appletList) {
+#ifndef NDEBUG
                 kDebug() << info.name();
+#endif
                 QAction *action;
                 if (!info.icon().isEmpty()) {
                     action = choices->addAction(KIcon(info.icon()), info.name());
@@ -1536,7 +1588,9 @@ void ContainmentPrivate::mimeTypeRetrieved(KIO::Job *job, const QString &mimeTyp
                 }
 
                 actionsToApplets.insert(action, info.pluginName());
+#ifndef NDEBUG
                 kDebug() << info.pluginName();
+#endif
             }
             actionsToApplets.insert(choices->addAction(i18n("Icon")), "icon");
 
@@ -1636,7 +1690,9 @@ void Containment::keyPressEvent(QKeyEvent *event)
     //         << "and hoping and wishing for a" << Qt::Key_Tab;
     if (event->key() == Qt::Key_Tab) { // && event->modifiers() == 0) {
         if (!d->applets.isEmpty()) {
+#ifndef NDEBUG
             kDebug() << "let's give focus to...." << (QObject*)d->applets.first();
+#endif
             d->applets.first()->setFocus(Qt::TabFocusReason);
         }
     }
@@ -1983,7 +2039,9 @@ void Containment::focusNextApplet()
     if (index >= d->applets.size()) {
         index = 0;
     }
+#ifndef NDEBUG
     kDebug() << "index" << index;
+#endif
     d->focusApplet(d->applets.at(index));
 }
 
@@ -1996,7 +2054,9 @@ void Containment::focusPreviousApplet()
     if (index < 0) {
         index = d->applets.size() - 1;
     }
+#ifndef NDEBUG
     kDebug() << "index" << index;
+#endif
     d->focusApplet(d->applets.at(index));
 }
 
@@ -2156,7 +2216,9 @@ Applet *ContainmentPrivate::addApplet(const QString &name, const QVariantList &a
     }
 
     if (!delayInit && q->immutability() != Mutable) {
+#ifndef NDEBUG
         kDebug() << "addApplet for" << name << "requested, but we're currently immutable!";
+#endif
         return 0;
     }
 
@@ -2171,7 +2233,9 @@ Applet *ContainmentPrivate::addApplet(const QString &name, const QVariantList &a
     }
 
     if (!applet) {
+#ifndef NDEBUG
         kDebug() << "Applet" << name << "could not be loaded.";
+#endif
         applet = new Applet(0, QString(), id);
         applet->setFailedToLaunch(true, i18n("Could not find requested component: %1", name));
     }
@@ -2225,7 +2289,9 @@ void ContainmentPrivate::appletAppeared(Applet *applet)
 void ContainmentPrivate::positionPanel(bool force)
 {
     if (!q->scene()) {
+#ifndef NDEBUG
         kDebug() << "no scene yet";
+#endif
         return;
     }
 
@@ -2322,12 +2388,16 @@ QPointF ContainmentPrivate::preferredPanelPos(Corona *corona) const
     if (horiz) {
         bottom -= lastHeight + INTER_CONTAINMENT_MARGIN;
         //TODO: fix x position for non-flush-left panels
+#ifndef NDEBUG
         kDebug() << "moved to" << QPointF(0, bottom - q->size().height());
+#endif
         newPos = QPointF(0, bottom - q->size().height());
     } else {
         bottom += lastHeight + INTER_CONTAINMENT_MARGIN;
         //TODO: fix y position for non-flush-top panels
+#ifndef NDEBUG
         kDebug() << "moved to" << QPointF(bottom + q->size().width(), -INTER_CONTAINMENT_MARGIN - q->size().height());
+#endif
         newPos = QPointF(bottom + q->size().width(), -INTER_CONTAINMENT_MARGIN - q->size().height());
     }
 

@@ -54,7 +54,9 @@ PlasmoidServiceJob::PlasmoidServiceJob(const QString &destination,
 void PlasmoidServiceJob::start()
 {
     if (operationName() == "GetPackage") {
+#ifndef NDEBUG
         kDebug() << "sending " << m_service->m_packagePath;
+#endif
         if (m_service->m_packagePath.isEmpty()) {
             // just return the plugin name in this case
             setResult(m_service->m_pluginName);
@@ -62,7 +64,9 @@ void PlasmoidServiceJob::start()
             QFileInfo fileInfo(m_service->m_packagePath);
 
             if (fileInfo.exists() && fileInfo.isAbsolute()) {
+#ifndef NDEBUG
                 kDebug() << "file exists, let's try and read it";
+#endif
                 QFile file(m_service->m_packagePath);
                 file.open(QIODevice::ReadOnly);
                 setResult(file.readAll());
@@ -117,10 +121,14 @@ PlasmoidService::PlasmoidService(Applet *applet)
 
             creation.close();
         } else {
+#ifndef NDEBUG
             kDebug() << "could not open archive";
+#endif
         }
     } else {
+#ifndef NDEBUG
         kDebug() << "applet lacks a valid package";
+#endif
         const QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(applet->pluginName());
         KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
         if (!offers.isEmpty()) {

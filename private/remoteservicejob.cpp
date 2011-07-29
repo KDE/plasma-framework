@@ -66,7 +66,9 @@ void RemoteServiceJob::start()
     if (m_service->m_busy || !m_service->m_ready) {
         //enqueue and wait
         m_service->m_queue.enqueue(this);
+#ifndef NDEBUG
         kDebug() << "already busy... enqueue, queue contains " << m_service->m_queue.count();
+#endif
         return;
     }
 
@@ -145,7 +147,9 @@ void RemoteServiceJob::callCompleted(Jolie::PendingCallWatcher *watcher)
 
     //TODO:async
     if (response.fault().isValid()) {
+#ifndef NDEBUG
         kDebug() << "fault: " << response.fault().name();
+#endif
         setError(-1);
         setErrorText(JolieMessage::errorMessage(response.fault().name()));
         emitResult();
@@ -167,7 +171,9 @@ void RemoteServiceJob::callCompleted(Jolie::PendingCallWatcher *watcher)
 void RemoteServiceJob::timeout()
 {
     m_service->m_busy = false;
+#ifndef NDEBUG
     kDebug() << "Service job timed out.";
+#endif
     setError(-1);
     setErrorText(i18n("Timeout."));
     m_service->m_queue.removeAll(this);

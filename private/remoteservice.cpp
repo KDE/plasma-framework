@@ -77,18 +77,24 @@ RemoteService::~RemoteService()
 
 void RemoteService::slotReadyForRemoteAccess()
 {
+#ifndef NDEBUG
     kDebug() << "AuthorizationManager is now ready for remote access!";
+#endif
     setLocation(m_location);
 }
 
 void RemoteService::setLocation(const KUrl &location)
 {
+#ifndef NDEBUG
     kDebug() << "Setting RemoteService location to " << location.prettyUrl();
+#endif
 
     m_uuid = QUuid::createUuid().toString();
     Credentials identity = AuthorizationManager::self()->d->myCredentials;
     if (!identity.canSign()) {
+#ifndef NDEBUG
         kDebug() << "we can't sign? how did we get here?";
+#endif
         return;
     }
 
@@ -141,7 +147,9 @@ void RemoteService::callCompleted(Jolie::PendingCallWatcher *watcher)
     Jolie::Message response = reply.reply();
 
     if (response.operationName() == "startConnection") {
+#ifndef NDEBUG
         kDebug() << "Started connection: fetching .operations";
+#endif
         m_token = JolieMessage::field(JolieMessage::Field::TOKEN, response);
         Jolie::Message getOpDesc(m_location.path(KUrl::RemoveTrailingSlash).remove(0, 1).toUtf8(),
                                  "getOperations");
@@ -152,13 +160,17 @@ void RemoteService::callCompleted(Jolie::PendingCallWatcher *watcher)
                 this, SLOT(callCompleted(Jolie::PendingCallWatcher*)));
     } else if (response.operationName() == "getOperations") {
         if (response.fault().name() == JolieMessage::Error::REQUIREPIN) {
+#ifndef NDEBUG
             kDebug() << "pin required, request auth interface";
+#endif
             ClientPinRequest *request = new ClientPinRequest(this);
             connect(request, SIGNAL(changed(Plasma::ClientPinRequest*)),
                     this, SLOT(slotGotPin(Plasma::ClientPinRequest*)));
             AuthorizationManager::self()->d->authorizationInterface->clientPinRequest(*request);
         } else {
+#ifndef NDEBUG
             kDebug() << "RemoteService is now ready for use!";
+#endif
             m_operationsScheme = JolieMessage::field(JolieMessage::Field::OPERATIONSDESCRIPTION, response);
             m_token = JolieMessage::field(JolieMessage::Field::TOKEN, response);
             m_ready = true;
@@ -176,10 +188,14 @@ void RemoteService::callCompleted(Jolie::PendingCallWatcher *watcher)
 
         foreach (const QString &operation, operationNames()) {
             if (enabledOperationsList.contains(operation) && !isOperationEnabled(operation)) {
+#ifndef NDEBUG
                 kDebug() << "yeah, we're enabling the operation with the name " << operation;
+#endif
                 setOperationEnabled(operation, true);
             } else if (!enabledOperationsList.contains(operation) && isOperationEnabled(operation)) {
+#ifndef NDEBUG
                 kDebug() << "we're disabling the operation with the name " << operation;
+#endif
                 setOperationEnabled(operation, false);
             }
         }
@@ -188,7 +204,9 @@ void RemoteService::callCompleted(Jolie::PendingCallWatcher *watcher)
         m_busy = false;
         slotFinished();
     } else {
+#ifndef NDEBUG
         kDebug() << "How did we end up here?";
+#endif
     }
 }
 
@@ -233,7 +251,9 @@ void RemoteService::slotUpdateEnabledOperations()
         connect(watcher, SIGNAL(finished(Jolie::PendingCallWatcher*)),
                 this, SLOT(callCompleted(Jolie::PendingCallWatcher*)));
     } else {
+#ifndef NDEBUG
         kDebug() << "We would like to update enabled operations, but are still busy so let's wait for now.";
+#endif
     }
 }
 
@@ -241,7 +261,9 @@ ServiceJob* RemoteService::createJob(const QString& operation,
                                      QHash<QString,QVariant>& parameters)
 {
     if (!m_ready) {
+#ifndef NDEBUG
         kDebug() << "Use of this service hasn't checked for the serviceReady signal, which it should.";
+#endif
     }
 
     ServiceJob *job = new RemoteServiceJob(m_location, destination(), operation, parameters, m_token, this);
@@ -252,7 +274,9 @@ ServiceJob* RemoteService::createJob(const QString& operation,
 void RemoteService::slotFinished()
 {
     if (!m_queue.isEmpty()) {
+#ifndef NDEBUG
         kDebug() << "Job finished, there are still service jobs in queue, starting next in queue.";
+#endif
         ServiceJob *job = m_queue.dequeue();
         QTimer::singleShot(0, job, SLOT(slotStart()));
     }
@@ -264,7 +288,9 @@ Jolie::Message RemoteService::signMessage(const Jolie::Message &message) const
 
     Credentials identity = AuthorizationManager::self()->d->myCredentials;
     if (!identity.isValid()) {
+#ifndef NDEBUG
         kDebug() << "We don't have our identity yet, just drop this message";
+#endif
         return response;
     }
 

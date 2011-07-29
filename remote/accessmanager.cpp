@@ -146,7 +146,9 @@ AccessAppletJob *AccessManager::accessRemoteApplet(const KUrl &location) const
         if (d->zeroconfServices.contains(location.host())) {
             resolvedLocation = d->services[location.host()].url();
         } else {
+#ifndef NDEBUG
             kDebug() << "There's no zeroconf service with this name.";
+#endif
         }
     } else {
         resolvedLocation = location;
@@ -197,30 +199,44 @@ void AccessManagerPrivate::slotJobFinished(KJob *job)
 
 void AccessManagerPrivate::slotAddService(DNSSD::RemoteService::Ptr service)
 {
+#ifndef NDEBUG
     kDebug();
+#endif
     if (!service->resolve()) {
+#ifndef NDEBUG
         kDebug() << "Zeroconf service can't be resolved";
+#endif
         return;
     }
 
     if (!services.contains(service->serviceName())) {
         RemoteObjectDescription metadata;
+#ifndef NDEBUG
         kDebug() << "textdata = " << service->textData();
+#endif
+#ifndef NDEBUG
         kDebug() << "hostname: " << service->hostName();
+#endif
         QHostAddress address = DNSSD::ServiceBrowser::resolveHostName(service->hostName());
         QString ip = address.toString();
+#ifndef NDEBUG
         kDebug() << "result for resolve = " << ip;
+#endif
 
         KUrl url(QString("plasma://%1:%2/%3").arg(ip)
                                              .arg(service->port())
                                              .arg(service->serviceName()));
 
         if (service->textData().isEmpty()) {
+#ifndef NDEBUG
             kDebug() << "no textdata?";
+#endif
             metadata.setName(service->serviceName());
             metadata.setUrl(url);
         } else {
+#ifndef NDEBUG
             kDebug() << "service has got textdata";
+#endif
             QMap<QString, QByteArray> textData = service->textData();
             metadata.setName(textData["name"]);
             metadata.setDescription(textData["description"]);
@@ -228,9 +244,15 @@ void AccessManagerPrivate::slotAddService(DNSSD::RemoteService::Ptr service)
             metadata.setUrl(url);
         }
 
+#ifndef NDEBUG
         kDebug() << "location = " << metadata.url();
+#endif
+#ifndef NDEBUG
         kDebug() << "name = " << metadata.name();
+#endif
+#ifndef NDEBUG
         kDebug() << "description = " << metadata.name();
+#endif
 
         services[service->serviceName()] = metadata;
         zeroconfServices[service->serviceName()] = service;
@@ -240,7 +262,9 @@ void AccessManagerPrivate::slotAddService(DNSSD::RemoteService::Ptr service)
 
 void AccessManagerPrivate::slotRemoveService(DNSSD::RemoteService::Ptr service)
 {
+#ifndef NDEBUG
     kDebug();
+#endif
     emit q->remoteAppletUnannounced(services[service->serviceName()]);
     services.remove(service->serviceName());
     zeroconfServices.remove(service->serviceName());

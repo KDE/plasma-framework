@@ -224,12 +224,16 @@ public:
             } else if (loaded) {
                 //Remove runner
                 AbstractRunner *runner = runners.take(runnerName);
+#ifndef NDEBUG
                 kDebug() << "Removing runner: " << runnerName;
+#endif
                 delete runner;
             }
         }
 
+#ifndef NDEBUG
         kDebug() << "All runners loaded, total:" << runners.count();
+#endif
     }
 
     AbstractRunner *loadInstalledRunner(const KService::Ptr service)
@@ -252,7 +256,9 @@ public:
                     QString error;
                     runner = service->createInstance<AbstractRunner>(q, args, &error);
                     if (!runner) {
+#ifndef NDEBUG
                         kDebug() << "Failed to load runner:" << service->name() << ". error reported:" << error;
+#endif
                     }
                 }
             } else {
@@ -262,7 +268,9 @@ public:
         }
 
         if (runner) {
+#ifndef NDEBUG
             kDebug() << "================= loading runner:" << service->name() << "=================";
+#endif
             QObject::connect(runner, SIGNAL(matchingSuspended(bool)), q, SLOT(runnerMatchingSuspended(bool)));
             runner->init();
         }
@@ -576,7 +584,9 @@ void RunnerManager::run(const QueryMatch &match)
 
     foreach (FindMatchesJob *job, d->searchJobs) {
         if (job->runner() == runner && !job->isFinished()) {
+#ifndef NDEBUG
             kDebug() << "deferred run";
+#endif
             d->deferredRun = match;
             return;
         }
@@ -642,7 +652,9 @@ void RunnerManager::setupMatchSession()
 #endif
             emit runner->prepare();
 #ifdef MEASURE_PREPTIME
+#ifndef NDEBUG
             kDebug() << t.elapsed() << runner->name();
+#endif
 #endif
         }
 

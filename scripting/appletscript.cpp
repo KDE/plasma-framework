@@ -203,13 +203,17 @@ Animation *AppletScript::loadAnimationFromPackage(const QString &name, QObject *
 
             const QString path = applet()->package().filePath("animations", file);
             if (path.isEmpty()) {
+#ifndef NDEBUG
                 kDebug() << "file path was empty for" << file;
+#endif
                 return 0;
             }
 
             if (!AnimationScriptEngine::loadScript(path, applet()->pluginName() + ':') ||
                 !AnimationScriptEngine::isAnimationRegistered(scopedName)) {
+#ifndef NDEBUG
                 kDebug() << "script engine loading failed for" << path;
+#endif
                 return 0;
             }
         }

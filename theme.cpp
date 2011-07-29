@@ -137,7 +137,9 @@ public:
                 QString app = KGlobal::mainComponent().componentName();
 
                 if (!app.isEmpty()) {
+#ifndef NDEBUG
                     kDebug() << "using theme for app" << app;
+#endif
                     groupName.append("-").append(app);
                 }
             }
@@ -544,14 +546,18 @@ void ThemePrivate::processAnimationSettings(const QString &theme, KConfigBase *m
         const QStringList anims = cg.readEntry(path, QStringList());
         foreach (const QString &anim, anims) {
             if (!animationMapping.contains(anim)) {
+#ifndef NDEBUG
                 kDebug() << "Registering animation. animDir: " << animDir
                          << "\tanim: " << anim
                          << "\tpath: " << path << "\t*******\n\n\n";
+#endif
                 //key: desktoptheme/default/animations/+ all.js
                 //value: ZoomAnimation
                 animationMapping.insert(anim, animDir % path);
             } else {
+#ifndef NDEBUG
                 kDebug() << "************Animation already registered!\n\n\n";
+#endif
             }
         }
     }
@@ -682,7 +688,9 @@ QString Theme::imagePath(const QString &name) const
     // look for a compressed svg file in the theme
     if (name.contains("../") || name.isEmpty()) {
         // we don't support relative paths
+#ifndef NDEBUG
         kDebug() << "Theme says: bad image path " << name;
+#endif
         return QString();
     }
 
@@ -712,7 +720,9 @@ QString Theme::imagePath(const QString &name) const
 
     /*
     if (path.isEmpty()) {
+#ifndef NDEBUG
         kDebug() << "Theme says: bad image path " << name;
+#endif
     }
     */
 
@@ -778,7 +788,9 @@ QString Theme::wallpaperPath(const QSize &size) const
         fullPath = KStandardDirs::locate("wallpaper", defaultImage);
 
         if (fullPath.isEmpty()) {
+#ifndef NDEBUG
             kDebug() << "exhausted every effort to find a wallpaper.";
+#endif
         }
     }
 

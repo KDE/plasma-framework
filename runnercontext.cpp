@@ -87,7 +87,9 @@ bool correctLastComponentCase(const QString &path, QString &correctCasePath, con
         return false;
     } else {
         /*if (matchingFilenames.size() > 1) {
+#ifndef NDEBUG
             kDebug() << "Found multiple matches!!\n";
+#endif
         }*/
 
         if (fileDir.path().endsWith(QDir::separator())) {

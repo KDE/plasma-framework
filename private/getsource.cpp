@@ -43,7 +43,9 @@ GetSource::GetSource(DataEngine *engine, const QString& operation,
 
 void GetSource::start()
 {
+#ifndef NDEBUG
     kDebug() << "Trying to perform the action" << operationName();
+#endif
 
     //TODO: check with capabilities before performing actions.
     if (operationName() == "GetSource") {
@@ -62,7 +64,9 @@ void GetSource::start()
         Service *service    = m_engine->serviceForSource(source);
         QString serviceName = "plasma-service-" + service->name();
 
+#ifndef NDEBUG
         kDebug() << "serviceForSource: getting source " << serviceName;
+#endif
         service->d->publish(Plasma::NoAnnouncement, serviceName);
         if (!AuthorizationManager::self()->d->matchingRule(serviceName, identity())) {
             AuthorizationRule *rule = new AuthorizationRule(serviceName, identity().id());

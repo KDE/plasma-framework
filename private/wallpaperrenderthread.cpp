@@ -58,7 +58,9 @@ WallpaperRenderThread::WallpaperRenderThread(const WallpaperRenderRequest &reque
 
 WallpaperRenderThread::~WallpaperRenderThread()
 {
+#ifndef NDEBUG
     kDebug() << "rendering done";
+#endif
     m_abort = true;
     wait();
     --s_rendererCount;
@@ -102,7 +104,9 @@ void WallpaperRenderThread::checkQueue()
 #else
     const int numProcs = 1;
 #endif
+#ifndef NDEBUG
     kDebug() << "checking rendering against" << s_rendererCount << numProcs;
+#endif
     if (s_rendererCount < numProcs) {
         WallpaperRenderThread *renderThread = new WallpaperRenderThread(s_renderQueue.dequeue());
         renderThread->start();
@@ -111,7 +115,9 @@ void WallpaperRenderThread::checkQueue()
 
 void WallpaperRenderThread::run()
 {
+#ifndef NDEBUG
     kDebug() << "rendering wallpaper" << m_request.file;
+#endif
     QImage result(m_request.size, QImage::Format_ARGB32_Premultiplied);
     result.fill(m_request.color.rgba());
 
@@ -120,7 +126,9 @@ void WallpaperRenderThread::run()
             emit done(m_request, result);
         }
 
+#ifndef NDEBUG
         kDebug() << "oh, fuck it";
+#endif
         deleteLater();
         return;
     }
@@ -223,7 +231,9 @@ void WallpaperRenderThread::run()
         QSvgRenderer svg(m_request.file);
         if (m_abort) {
             deleteLater();
+#ifndef NDEBUG
         kDebug() << "oh, fuck it 2";
+#endif
             return;
         }
         svg.render(&p);
@@ -234,7 +244,9 @@ void WallpaperRenderThread::run()
 
         if (m_abort) {
             deleteLater();
+#ifndef NDEBUG
         kDebug() << "oh, fuck it 3";
+#endif
             return;
         }
 
@@ -243,7 +255,9 @@ void WallpaperRenderThread::run()
                 for (int y = pos.y(); y < m_request.size.height(); y += scaledSize.height()) {
                     p.drawImage(QPoint(x, y), img);
                     if (m_abort) {
+#ifndef NDEBUG
         kDebug() << "oh, fuck it 4";
+#endif
                         deleteLater();
                         return;
                     }
@@ -256,7 +270,9 @@ void WallpaperRenderThread::run()
 
     // signal we're done
     if (!m_abort) {
+#ifndef NDEBUG
         kDebug() << "*****************************************************";
+#endif
         emit done(m_request, result);
     }
 

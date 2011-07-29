@@ -65,7 +65,9 @@ public:
     void slotPackageDownloaded(Plasma::ServiceJob *job)
     {
         if (job->error()) {
+#ifndef NDEBUG
             kDebug() << "Plasmoid Access Job triggers an error.";
+#endif
             q->setError(job->error());
             q->setErrorText(job->errorText());
         }
@@ -74,7 +76,9 @@ public:
         //the fetched package. Just extract the archive somewhere in a temp directory.
         if (job->result().type() == QVariant::String) {
             QString pluginName = job->result().toString();
+#ifndef NDEBUG
             kDebug() << "Server responded with a pluginname, trying to load: " << pluginName;
+#endif
 
             applet = PluginLoader::self()->loadApplet(pluginName);
             if (applet) {
@@ -86,7 +90,9 @@ public:
 
             q->emitResult();
         } else {
+#ifndef NDEBUG
             kDebug() << "Server responded with a plasmoid package";
+#endif
             //read, and extract the plasmoid package to a temporary directory
             QByteArray package = job->result().toByteArray();
             QDataStream stream(&package, QIODevice::ReadOnly);
@@ -183,7 +189,9 @@ Applet *AccessAppletJob::applet() const
 void AccessAppletJob::start()
 {
 #ifdef ENABLE_REMOTE_WIDGETS
+#ifndef NDEBUG
     kDebug() << "fetching a plasmoid from location = " << d->location.prettyUrl();
+#endif
     Service *service = Service::access(d->location);
     connect(service, SIGNAL(serviceReady(Plasma::Service*)),
             this, SLOT(slotServiceReady(Plasma::Service*)));

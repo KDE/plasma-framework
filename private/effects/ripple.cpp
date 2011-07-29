@@ -31,14 +31,18 @@ int **allocateWaveMap(const QSize &size)
 {
     int **waveMap = new int *[size.width()];
     if (!waveMap) {
+#ifndef NDEBUG
         kDebug() << "could not allocate wave map";
+#endif
         return 0;
     }
 
     for (int x = 0; x < size.width(); ++x) {
         waveMap[x] = new int[size.height()];
         if (!waveMap[x]) {
+#ifndef NDEBUG
             kDebug() << "could not allocate wave map";
+#endif
             return 0;
         }
     }

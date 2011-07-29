@@ -298,7 +298,9 @@ void Dialog::syncToGraphicsWidget()
         d->resizeStartCorner = -1;
         QSize prevSize = size();
         /*
+#ifndef NDEBUG
         kDebug() << "Widget size:" << graphicsWidget->size()
+#endif
                  << "| Widget size hint:" << graphicsWidget->effectiveSizeHint(Qt::PreferredSize)
                  << "| Widget minsize hint:" << graphicsWidget->minimumSize()
                  << "| Widget maxsize hint:" << graphicsWidget->maximumSize()

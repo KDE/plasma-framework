@@ -447,13 +447,17 @@ void Extender::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
             //targetting.
             PopupApplet *popupApplet = qobject_cast<PopupApplet*>(d->applet.data());
             if (popupApplet && sourceExtender != this) {
+#ifndef NDEBUG
                 kDebug() << "leaving another extender then the extender we started, so hide the popup.";
+#endif
                 popupApplet->showPopup(250);
             }
 
             //Hide popups when we drag the last item away.
             if (popupApplet && sourceExtender == this && (attachedItems().count() < 2)) {
+#ifndef NDEBUG
                 kDebug() << "leaving the extender, and there are no more attached items so hide the popup.";
+#endif
                 popupApplet->hidePopup();
             }
 
@@ -463,7 +467,9 @@ void Extender::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
             if (extenderApplet && sourceExtender == this && attachedItems().count() < 2 &&
                 extenderApplet->formFactor() != Plasma::Horizontal &&
                 extenderApplet->formFactor() != Plasma::Vertical) {
+#ifndef NDEBUG
                 kDebug() << "leaving the internal extender container, so hide the applet and it's handle.";
+#endif
                 extenderApplet->hide();
                 AppletHandle *handle = dynamic_cast<AppletHandle*>(extenderApplet->parentItem());
                 if (handle) {
@@ -508,9 +514,13 @@ void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
                 d->layout->addItem(item);
             }
         } else {
+#ifndef NDEBUG
             kDebug() << "inserting at" << pos << d->insertIndexFromPos(pos) << item->size();
+#endif
             d->layout->insertItem(d->insertIndexFromPos(pos), item);
+#ifndef NDEBUG
             kDebug() << item->size();
+#endif
         }
     }
 
@@ -745,8 +755,12 @@ void ExtenderPrivate::loadExtenderItems()
 
         bool temporarySourceApplet = false;
 
+#ifndef NDEBUG
         kDebug() << "applet id = " << applet.data()->id();
+#endif
+#ifndef NDEBUG
         kDebug() << "sourceappletid = " << sourceAppletId;
+#endif
 
         //find the source applet.
         Applet *sourceApplet = 0;
@@ -777,7 +791,9 @@ void ExtenderPrivate::loadExtenderItems()
         //There is no source applet. We just instantiate one just for the sake of creating
         //detachables.
         if (!sourceApplet) {
+#ifndef NDEBUG
             kDebug() << "creating a temporary applet as factory";
+#endif
             sourceApplet = PluginLoader::self()->loadApplet(appletName);
             temporarySourceApplet = true;
             //TODO: maybe add an option to applet to indicate that it shouldn't be deleted after
@@ -785,8 +801,12 @@ void ExtenderPrivate::loadExtenderItems()
         }
 
         if (!sourceApplet) {
+#ifndef NDEBUG
             kDebug() << "sourceApplet is null? appletName = " << appletName;
+#endif
+#ifndef NDEBUG
             kDebug() << "                      extenderItemId = " << extenderItemId;
+#endif
         } else {
             ExtenderItem *item;
             if (dg.readEntry("isGroup", false)) {

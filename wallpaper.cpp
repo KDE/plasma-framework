@@ -150,7 +150,9 @@ KPluginInfo::List Wallpaper::listWallpaperInfoForMimetype(const QString &mimeTyp
     }
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Wallpaper", constraint);
+#ifndef NDEBUG
     kDebug() << offers.count() << constraint;
+#endif
     return KPluginInfo::fromServices(offers);
 }
 
@@ -170,7 +172,9 @@ Wallpaper *Wallpaper::load(const QString &wallpaperName, const QVariantList &arg
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Wallpaper", constraint);
 
     if (offers.isEmpty()) {
+#ifndef NDEBUG
         kDebug() << "offers is empty for " << wallpaperName;
+#endif
         return 0;
     }
 
@@ -179,8 +183,10 @@ Wallpaper *Wallpaper::load(const QString &wallpaperName, const QVariantList &arg
     allArgs << offer->storageId() << args;
 
     if (!offer->property("X-Plasma-API").toString().isEmpty()) {
+#ifndef NDEBUG
         kDebug() << "we have a script using the"
                  << offer->property("X-Plasma-API").toString() << "API";
+#endif
         return new WallpaperWithPaint(0, allArgs);
     }
 
@@ -194,7 +200,9 @@ Wallpaper *Wallpaper::load(const QString &wallpaperName, const QVariantList &arg
     Wallpaper *wallpaper = offer->createInstance<Plasma::Wallpaper>(0, allArgs, &error);
 
     if (!wallpaper) {
+#ifndef NDEBUG
         kDebug() << "Couldn't load wallpaper \"" << wallpaperName << "\"! reason given: " << error;
+#endif
     }
 
     return wallpaper;
@@ -452,8 +460,10 @@ WallpaperPrivate::WallpaperPrivate(KService::Ptr service, Wallpaper *wallpaper) 
             }
 
             if (!script) {
+#ifndef NDEBUG
                 kDebug() << "Could not create a" << api << "ScriptEngine for the"
-                    << wallpaperDescription.name() << "Wallpaper.";
+                         << wallpaperDescription.name() << "Wallpaper.";
+#endif
                 delete package;
                 package = 0;
             }
@@ -477,7 +487,9 @@ QString WallpaperPrivate::cachePath(const QString &key) const
 
 void WallpaperPrivate::newRenderCompleted(const WallpaperRenderRequest &request, const QImage &image)
 {
+#ifndef NDEBUG
     kDebug() << request.token << renderToken;
+#endif
     if (request.token != renderToken) {
         //kDebug() << "render token mismatch" << token << renderToken;
         return;
@@ -496,8 +508,10 @@ void WallpaperPrivate::newRenderCompleted(const WallpaperRenderRequest &request,
 void WallpaperPrivate::setupScriptSupport()
 {
     Q_ASSERT(package);
+#ifndef NDEBUG
     kDebug() << "setting up script support, package is in" << package->path()
              << ", main script is" << package->filePath("mainscript");
+#endif
 
     const QString translationsPath = package->filePath("translations");
     if (!translationsPath.isEmpty()) {

@@ -98,15 +98,21 @@ void ServicePrivate::publish(AnnouncementMethods methods, const QString &name, c
             textData["description"] = metadata.comment().toUtf8();
             textData["icon"] = metadata.icon().toUtf8();
             publicService->setTextData(textData);
+#ifndef NDEBUG
             kDebug() << "about to publish";
+#endif
 
             publicService->publishAsync();
         } else if (methods.testFlag(ZeroconfAnnouncement) &&
                 (DNSSD::ServiceBrowser::isAvailable() != DNSSD::ServiceBrowser::Working)) {
+#ifndef NDEBUG
             kDebug() << "sorry, but your zeroconf daemon doesn't seem to be running.";
+#endif
         }
     } else {
+#ifndef NDEBUG
         kDebug() << "already published!";
+#endif
     }
 #else
     kWarning() << "libplasma is compiled without support for remote widgets. not publishing.";
@@ -153,7 +159,9 @@ QString Service::destination() const
 QStringList Service::operationNames() const
 {
     if (!d->config) {
+#ifndef NDEBUG
         kDebug() << "No valid operations scheme has been registered";
+#endif
         return QStringList();
     }
 
@@ -163,7 +171,9 @@ QStringList Service::operationNames() const
 KConfigGroup Service::operationDescription(const QString &operationName)
 {
     if (!d->config) {
+#ifndef NDEBUG
         kDebug() << "No valid operations scheme has been registered";
+#endif
         return d->dummyGroup();
     }
 
@@ -203,7 +213,9 @@ ServiceJob *Service::startOperationCall(const KConfigGroup &description, QObject
     RemoteService *rs = qobject_cast<RemoteService *>(this);
     if (!op.isEmpty() && rs && !rs->isReady()) {
         // if we have an operation, but a non-ready remote service, just let it through
+#ifndef NDEBUG
         kDebug() << "Remote service is not ready; queueing operation";
+#endif
         QHash<QString, QVariant> params;
         job = createJob(op, params);
         RemoteServiceJob *rsj = qobject_cast<RemoteServiceJob *>(job);
@@ -211,16 +223,22 @@ ServiceJob *Service::startOperationCall(const KConfigGroup &description, QObject
             rsj->setDelayedDescription(description);
         }
     } else if (!d->config) {
+#ifndef NDEBUG
         kDebug() << "No valid operations scheme has been registered";
+#endif
     } else if (!op.isEmpty() && d->config->hasGroup(op)) {
         if (d->disabledOperations.contains(op)) {
+#ifndef NDEBUG
             kDebug() << "Operation" << op << "is disabled";
+#endif
         } else {
             QHash<QString, QVariant> params = parametersFromDescription(description);
             job = createJob(op, params);
         }
     } else {
+#ifndef NDEBUG
         kDebug() << "Not a valid group!"<<d->config->groupList();
+#endif
     }
 
     if (!job) {
@@ -378,14 +396,18 @@ void Service::registerOperationsScheme()
     }
 
     if (d->name.isEmpty()) {
+#ifndef NDEBUG
         kDebug() << "No name found";
+#endif
         return;
     }
 
     const QString path = KStandardDirs::locate("data", "plasma/services/" + d->name + ".operations");
 
     if (path.isEmpty()) {
+#ifndef NDEBUG
         kDebug() << "Cannot find operations description:" << d->name << ".operations";
+#endif
         return;
     }
 

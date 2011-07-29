@@ -124,7 +124,9 @@ KService::List engineOffers(const QString &language, ComponentType type)
 
     QRegExp re("[^a-zA-Z0-9\\-_]");
     if (re.indexIn(language) != -1) {
+#ifndef NDEBUG
         kDebug() << "invalid language attempted:" << language;
+#endif
         return KService::List();
     }
 
@@ -153,7 +155,9 @@ KService::List engineOffers(const QString &language, ComponentType type)
     /* kDebug() << "********************* loadingApplet with Plasma/ScriptEngine" << constraint
              << "resulting in" << offers.count() << "results";*/
     if (offers.isEmpty()) {
+#ifndef NDEBUG
         kDebug() << "No offers for \"" << language << "\"";
+#endif
     }
 
     return offers;
@@ -190,8 +194,10 @@ ScriptEngine *loadEngine(const QString &language, ComponentType type, QObject *p
             return engine;
         }
 
+#ifndef NDEBUG
         kDebug() << "Couldn't load script engine for language " << language
                  << "! error reported: " << error;
+#endif
     }
 
     return 0;

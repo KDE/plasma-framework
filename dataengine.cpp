@@ -249,7 +249,9 @@ void DataEngine::removeData(const QString &source, const QString &key)
 void DataEngine::addSource(DataContainer *source)
 {
     if (d->sources.contains(source->objectName())) {
+#ifndef NDEBUG
         kDebug() << "source named \"" << source->objectName() << "\" already exists.";
+#endif
         return;
     }
 
@@ -452,7 +454,9 @@ void DataEnginePrivate::publish(AnnouncementMethods methods, const QString &name
     //i18nc("%1 is the name of a dataengine, %2 the name of the machine that engine is published
 //on",
           //"%1 dataengine on %2", name(), AuthorizationManager::self()->d->myCredentials.name());
+#ifndef NDEBUG
     kDebug() << "name: " << name;
+#endif
     publishedService->d->publish(methods, name);
 }
 
@@ -550,8 +554,10 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info)
             }
 
             if (!script) {
+#ifndef NDEBUG
                 kDebug() << "Could not create a" << api << "ScriptEngine for the"
                         << dataEngineDescription.name() << "DataEngine.";
+#endif
                 delete package;
                 package = 0;
             }
@@ -584,7 +590,9 @@ void DataEnginePrivate::internalUpdateSource(DataContainer *source)
         //kDebug() << "queuing an update";
         q->scheduleSourcesUpdated();
     }/* else {
+#ifndef NDEBUG
         kDebug() << "no update";
+#endif
     }*/
 }
 
@@ -740,7 +748,9 @@ void DataEnginePrivate::setupScriptSupport()
     }
 
     /*
+#ifndef NDEBUG
     kDebug() << "sletting up script support, package is in" << package->path()
+#endif
              << "which is a" << package->structure()->type() << "package"
              << ", main script is" << package->filePath("mainscript");
     */

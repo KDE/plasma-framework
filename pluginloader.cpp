@@ -74,7 +74,9 @@ void PluginLoader::setPluginLoader(PluginLoader* loader)
     if (!s_pluginLoader) {
         s_pluginLoader = loader;
     } else {
+#ifndef NDEBUG
         kDebug() << "Cannot set pluginLoader, already set!" << s_pluginLoader;
+#endif
     }
 }
 
@@ -117,12 +119,16 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     }
 
     /* if (offers.count() > 1) {
+#ifndef NDEBUG
         kDebug() << "hey! we got more than one! let's blindly take the first one";
+#endif
     } */
 
     AppletPrivate::filterOffers(offers);
     if (offers.isEmpty()) {
+#ifndef NDEBUG
         kDebug() << "offers is empty for " << name;
+#endif
         return 0;
     }
 
@@ -136,8 +142,10 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     allArgs << offer->storageId() << appletId << args;
 
     if (!offer->property("X-Plasma-API").toString().isEmpty()) {
+#ifndef NDEBUG
         kDebug() << "we have a script using the"
                  << offer->property("X-Plasma-API").toString() << "API";
+#endif
         if (isContainment) {
             return new Containment(0, allArgs);
         } else {
@@ -167,7 +175,9 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     }
 
     if (!applet) {
+#ifndef NDEBUG
         kDebug() << "Couldn't load applet \"" << name << "\"! reason given: " << error;
+#endif
     }
 
     return applet;
@@ -187,7 +197,9 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
     QString error;
 
     if (offers.isEmpty()) {
+#ifndef NDEBUG
         kDebug() << "offers are empty for " << name << " with constraint " << constraint;
+#endif
     } else {
         QVariantList allArgs;
         allArgs << offers.first()->storageId();
@@ -205,7 +217,9 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
     }
 
     if (!engine) {
+#ifndef NDEBUG
         kDebug() << "Couldn't load engine \"" << name << "\". Error given: " << error;
+#endif
     }
 
     return engine;
@@ -236,7 +250,9 @@ Service *PluginLoader::loadService(const QString &name, const QVariantList &args
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Service", constraint);
 
     if (offers.isEmpty()) {
+#ifndef NDEBUG
         kDebug() << "offers is empty for " << name;
+#endif
         return new NullService(name, parent);
     }
 
@@ -248,7 +264,9 @@ Service *PluginLoader::loadService(const QString &name, const QVariantList &args
     }
 
     if (!service) {
+#ifndef NDEBUG
         kDebug() << "Couldn't load Service \"" << name << "\"! reason given: " << error;
+#endif
         return new NullService(name, parent);
     }
 
@@ -274,7 +292,9 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/ContainmentActions", constraint);
 
     if (offers.isEmpty()) {
+#ifndef NDEBUG
         kDebug() << "offers is empty for " << name;
+#endif
         return 0;
     }
 
@@ -291,7 +311,9 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
     actions = offer->createInstance<Plasma::ContainmentActions>(parent, allArgs, &error);
 
     if (!actions) {
+#ifndef NDEBUG
         kDebug() << "Couldn't load containmentActions \"" << name << "\"! reason given: " << error;
+#endif
     }
 
     return actions;
@@ -372,7 +394,9 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
             return Package(structure);
         }
 
+#ifndef NDEBUG
         kDebug() << "Couldn't load Package for" << packageFormat << "! reason given: " << error;
+#endif
     }
 
     return Package();

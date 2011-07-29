@@ -142,7 +142,9 @@ void AbstractRunner::performMatch(Plasma::RunnerContext &localContext)
     if (!slowed && runtime > reasonableRunTime) {
         // we punish runners that return too slowly, even if they don't bring
         // back matches
+#ifndef NDEBUG
         kDebug() << id() << "runner is too slow, putting it on the back burner.";
+#endif
         d->fastRuns = 0;
         setSpeed(SlowSpeed);
     }
@@ -153,7 +155,9 @@ void AbstractRunner::performMatch(Plasma::RunnerContext &localContext)
         if (d->fastRuns > 2) {
             // we reward slowed runners who bring back matches fast enough
             // 3 times in a row
+#ifndef NDEBUG
             kDebug() << id() << "runner is faster than we thought, kicking it up a notch";
+#endif
             setSpeed(NormalSpeed);
         }
     }
@@ -389,7 +393,9 @@ void AbstractRunnerPrivate::init(const KService::Ptr service)
             const QString path = KStandardDirs::locate("data", "plasma/runners/" + runnerDescription.pluginName() + '/');
             prepScripting(path, api);
             if (!script) {
+#ifndef NDEBUG
                 kDebug() << "Could not create a(n)" << api << "ScriptEngine for the" << runnerDescription.name() << "Runner.";
+#endif
             }
         }
     }
@@ -419,7 +425,9 @@ void AbstractRunnerPrivate::prepScripting(const QString &path, const QString &ap
     package->setPath(path);
 
     if (!package->isValid()) {
+#ifndef NDEBUG
         kDebug() << "Invalid Runner package at" << path;
+#endif
         return;
     }
 
@@ -438,8 +446,10 @@ void AbstractRunnerPrivate::setupScriptSupport()
         return;
     }
 
+#ifndef NDEBUG
     kDebug() << "setting up script support, package is in" << package->path()
              << ", main script is" << package->filePath("mainscript");
+#endif
 
     const QString translationsPath = package->filePath("translations");
     if (!translationsPath.isEmpty()) {
