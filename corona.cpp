@@ -50,7 +50,6 @@
 #include "private/animator_p.h"
 #include "private/applet_p.h"
 #include "private/containment_p.h"
-#include "private/tooltipmanager_p.h"
 #include "tooltipmanager.h"
 #include "view.h"
 
@@ -69,7 +68,7 @@ Corona::Corona(QObject *parent)
     kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Corona ctor start";
 #endif
     d->init();
-    ToolTipManager::self()->d->corona = this;
+    ToolTipManager::self()->m_corona = this;
     //setViewport(new QGLWidget(QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)));
 }
 
