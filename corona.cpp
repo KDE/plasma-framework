@@ -50,6 +50,7 @@
 #include "private/animator_p.h"
 #include "private/applet_p.h"
 #include "private/containment_p.h"
+#include "private/tooltipmanager_p.h"
 #include "tooltipmanager.h"
 #include "view.h"
 
@@ -68,7 +69,7 @@ Corona::Corona(QObject *parent)
     kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Corona ctor start";
 #endif
     d->init();
-    ToolTipManager::self()->m_corona = this;
+    ToolTipManager::self()->d->corona = this;
     //setViewport(new QGLWidget(QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)));
 }
 
@@ -448,11 +449,6 @@ QRect Corona::screenGeometry(int id) const
 QRegion Corona::availableScreenRegion(int id) const
 {
     return QRegion(screenGeometry(id));
-}
-
-QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s)
-{
-    return popupPosition(item, s, Qt::AlignLeft);
 }
 
 QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::AlignmentFlag alignment)
