@@ -22,6 +22,8 @@
 
 #include "package.h"
 
+#include <QDBusInterface>
+#include <QDBusPendingCall>
 #include <QFile>
 #include <QIODevice>
 #include <QRegExp>
@@ -880,6 +882,8 @@ bool PackagePrivate::installPackage(const QString &package, const QString &packa
         }
     }
 
+    QDBusInterface sycoca("org.kde.kded", "/kbuildsycoca");
+    sycoca.asyncCall("recreate");
     return true;
 }
 
@@ -927,6 +931,8 @@ bool PackagePrivate::uninstallPackage(const QString &packageName, const QString 
         return false;
     }
 
+    QDBusInterface sycoca("org.kde.kded", "/kbuildsycoca");
+    sycoca.asyncCall("recreate");
     return true;
 }
 
