@@ -205,7 +205,6 @@ private:
     bool eventFilter(QObject *watched, QEvent *event);
 
     ToolTipManagerPrivate *const d;
-    Corona* m_corona;
 
     Q_PRIVATE_SLOT(d, void showToolTip())
     Q_PRIVATE_SLOT(d, void toolTipHovered(bool))

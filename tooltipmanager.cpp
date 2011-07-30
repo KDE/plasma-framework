@@ -119,8 +119,7 @@ ToolTipManager *ToolTipManager::self()
 
 ToolTipManager::ToolTipManager(QObject *parent)
   : QObject(parent),
-    d(new ToolTipManagerPrivate(this)),
-    m_corona(0)
+    d(new ToolTipManagerPrivate(this))
 {
     d->showTimer->setSingleShot(true);
     connect(d->showTimer, SIGNAL(timeout()), SLOT(showToolTip()));

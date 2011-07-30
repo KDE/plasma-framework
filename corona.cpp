@@ -68,7 +68,6 @@ Corona::Corona(QObject *parent)
     kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Corona ctor start";
 #endif
     d->init();
-    ToolTipManager::self()->m_corona = this;
     //setViewport(new QGLWidget(QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)));
 }
 
@@ -452,11 +451,7 @@ QRegion Corona::availableScreenRegion(int id) const
 
 QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::AlignmentFlag alignment)
 {
-    // TODO: merge both methods (also these in Applet) into one (with optional alignment) when we can break compatibility
-    // TODO: add support for more flags in the future?
-
     const QGraphicsItem *actualItem = item;
-
     const QGraphicsView *v = viewFor(item);
 
     if (!v) {
