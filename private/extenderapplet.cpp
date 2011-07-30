@@ -47,6 +47,7 @@ ExtenderApplet::~ExtenderApplet()
 void ExtenderApplet::init()
 {
     setPopupIcon("utilities-desktop-extra");
+    setAspectRatioMode(Plasma::IgnoreAspectRatio);
 
     extender()->setAppearance(Extender::NoBorders);
 
