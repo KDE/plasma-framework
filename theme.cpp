@@ -186,7 +186,6 @@ public:
 
 #ifdef Q_WS_X11
     EffectWatcher *effectWatcher;
-    KSelectionWatcher *compositeWatch;
 #endif
     bool locolor : 1;
     bool compositingActive : 1;
