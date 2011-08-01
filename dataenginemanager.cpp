@@ -29,6 +29,7 @@
 
 #include "datacontainer.h"
 #include "pluginloader.h"
+#include "private/componentinstaller_p.h"
 #include "private/dataengine_p.h"
 #include "private/datacontainer_p.h"
 #include "scripting/scriptengine.h"
@@ -130,6 +131,9 @@ Plasma::DataEngine *DataEngineManager::loadEngine(const QString &name)
 
     DataEngine *engine = PluginLoader::pluginLoader()->loadDataEngine(name);
     if (!engine) {
+        // Try installing the engine. However, it's too late for this request.
+        ComponentInstaller::self()->installMissingComponent("dataengine", name);
+
         return d->nullEngine();
     }
 

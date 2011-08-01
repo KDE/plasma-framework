@@ -6,7 +6,12 @@ if(KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
     set(PLASMA_NO_KNEWSTUFF TRUE)
     set(PLASMA_NO_SOLID TRUE)
     set(PLASMA_NO_KIO TRUE)
+    set(PLASMA_NO_PACKAGEKIT TRUE)
 endif(KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
+
+if(NOT Q_WS_X11)
+    set(PLASMA_NO_PACKAGEKIT TRUE)
+endif(NOT Q_WS_X11)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${KDE4_KDECORE_INCLUDES}
@@ -41,6 +46,11 @@ if(NOT PLASMA_NO_SOLID)
     include_directories(${CMAKE_SOURCE_DIR}/solid/)
     set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} ${KDE4_SOLID_LIBS})
 endif(NOT PLASMA_NO_SOLID)
+
+if(NOT PLASMA_NO_PACKAGEKIT)
+    add_definitions(-DPLASMA_ENABLE_PACKAGEKIT_SUPPORT=1)
+    set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} ${QT_QTDBUS_LIBRARY})
+endif(NOT PLASMA_NO_PACKAGEKIT)
 
 if(QCA2_FOUND)
     include_directories(${QCA2_INCLUDE_DIR})
@@ -110,6 +120,7 @@ set(plasma_LIB_SRCS
     private/animablegraphicswebview.cpp
     private/applethandle.cpp
     private/associatedapplicationmanager.cpp
+    private/componentinstaller.cpp
     private/datacontainer_p.cpp
     private/dataenginebindings.cpp
     private/dataengineconsumer.cpp

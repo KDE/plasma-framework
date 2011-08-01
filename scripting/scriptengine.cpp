@@ -27,6 +27,7 @@
 #include "applet.h"
 #include "dataengine.h"
 #include "package.h"
+#include "private/componentinstaller_p.h"
 #include "scripting/appletscript.h"
 #include "scripting/dataenginescript.h"
 #include "scripting/runnerscript.h"
@@ -195,6 +196,9 @@ ScriptEngine *loadEngine(const QString &language, ComponentType type, QObject *p
         kDebug() << "Couldn't load script engine for language " << language
                  << "! error reported: " << error;
     }
+
+    // Try installing the engine. However, it's too late for this request.
+    ComponentInstaller::self()->installMissingComponent("scriptengine", language);
 
     return 0;
 }
