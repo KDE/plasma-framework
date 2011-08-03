@@ -86,58 +86,35 @@ void PopupApplet::setPopupIcon(const QIcon &icon)
         return;
     }
 
-    if (!d->icon) {
-        d->icon = new Plasma::IconWidget(icon, QString(), this);
-        connect(d->icon, SIGNAL(clicked()), this, SLOT(internalTogglePopup()));
-
-        QGraphicsLinearLayout *layout = new QGraphicsLinearLayout();
-        layout->setContentsMargins(0, 0, 0, 0);
-        layout->setSpacing(0);
-        layout->setOrientation(Qt::Horizontal);
-
-        setLayout(layout);
-    } else {
-        d->icon->setIcon(icon);
-    }
+    d->createIconWidget();
+    d->icon->setIcon(icon);
 }
 
 void PopupApplet::setPopupIcon(const QString &iconName)
 {
+    // Attempt 1: is it in the plasmoid package?
     if (package()) {
-        //Attempt1: is it in the plasmoid package?
         const QString file = package()->filePath("images", iconName);
         if (!file.isEmpty()) {
             setPopupIcon(KIcon(file));
             return;
         }
-    //Attempt2: is it a svg in the icons directory?
     }
+
+    // Attempt 2: is it a svg in the icons directory?
     QString name = QString("icons/") + iconName.split("-").first();
     if (!Plasma::Theme::defaultTheme()->imagePath(name).isEmpty()) {
-        if (!d->icon) {
-            d->icon = new Plasma::IconWidget(this);
-            d->icon->setSvg(name, iconName);
-            if (d->icon->svg().isEmpty()) {
-                setPopupIcon(KIcon(iconName));
-            }
-            connect(d->icon, SIGNAL(clicked()), this, SLOT(internalTogglePopup()));
-
-            QGraphicsLinearLayout *layout = new QGraphicsLinearLayout();
-            layout->setContentsMargins(0, 0, 0, 0);
-            layout->setSpacing(0);
-            layout->setOrientation(Qt::Horizontal);
-
-            setLayout(layout);
-        } else {
-            d->icon->setSvg(name, iconName);
-            if (d->icon->svg().isEmpty()) {
-                setPopupIcon(KIcon(iconName));
-            }
+        d->createIconWidget();
+        d->icon->setSvg(name, iconName);
+        if (d->icon->svg().isEmpty()) {
+            setPopupIcon(KIcon(iconName));
         }
-    // Final Attempt: use KIcon
-    } else {
-        setPopupIcon(KIcon(iconName));
+
+        return;
     }
+
+    // Final Attempt: use KIcon
+    setPopupIcon(KIcon(iconName));
 }
 
 QIcon PopupApplet::popupIcon() const
@@ -625,7 +602,7 @@ void PopupApplet::hidePopup()
     d->delayedShowTimer.stop();
 
     Dialog *dialog = d->dialogPtr.data();
-    if (dialog) {
+    if (dialog && dialog->isVisible()) {
         if (location() != Floating) {
             dialog->animatedHide(locationToInverseDirection(location()));
         } else {
@@ -830,6 +807,24 @@ void PopupAppletPrivate::dialogStatusChanged(bool shown)
 void PopupAppletPrivate::statusChangeWhileShown(Plasma::ItemStatus status)
 {
     preShowStatus = status;
+}
+
+void PopupAppletPrivate::createIconWidget()
+{
+    if (icon) {
+        return;
+    }
+
+    icon = new Plasma::IconWidget(q);
+    QObject::connect(icon, SIGNAL(clicked()), q, SLOT(internalTogglePopup()));
+
+    QGraphicsLinearLayout *layout = new QGraphicsLinearLayout();
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+    layout->setOrientation(Qt::Horizontal);
+    layout->addItem(icon);
+    layout->setAlignment(icon, Qt::AlignCenter);
+    q->setLayout(layout);
 }
 
 void PopupAppletPrivate::restoreDialogSize()
