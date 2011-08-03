@@ -753,6 +753,10 @@ Dialog::ResizeCorners Dialog::resizeCorners() const
 
 void Dialog::animatedHide(Plasma::Direction direction)
 {
+    if (!isVisible()) {
+        return;
+    }
+
     if (!KWindowSystem::compositingActive()) {
         hide();
         return;
