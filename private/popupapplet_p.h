@@ -47,6 +47,7 @@ public:
     KConfigGroup popupConfigGroup();
     void appletActivated();
     void statusChangeWhileShown(Plasma::ItemStatus status);
+    void createIconWidget();
 
 
     PopupApplet *q;
