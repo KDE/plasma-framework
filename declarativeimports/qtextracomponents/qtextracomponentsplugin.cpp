@@ -35,6 +35,7 @@ void QtExtraComponentsPlugin::registerTypes(const char *uri)
     qmlRegisterType<QPixmapItem>(uri, 0, 1, "QPixmapItem");
     qmlRegisterType<QImageItem>(uri, 0, 1, "QImageItem");
     qmlRegisterType<QIconItem>(uri, 0, 1, "QIconItem");
+    qmlRegisterType<QMenuItem>(uri, 0, 1, "QMenuItem");
     qmlRegisterType<QMenuProxy>(uri, 0, 1, "QMenu");
 }
 

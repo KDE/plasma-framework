@@ -18,25 +18,44 @@
  ***************************************************************************/
 
 #include "qmenu.h"
+#include <QMenu>
+#include <QDebug>
 
 QMenuProxy::QMenuProxy (QObject *parent)
     : QObject (parent)
 {
-    m_menu = new QMenu();
-
-    /* Test entries, should be removed later */
-    m_menu->addAction ("hello");
-    m_menu->addAction ("world");
 }
 
 QMenuProxy::~QMenuProxy()
 {
-    delete m_menu;
+}
+
+QDeclarativeListProperty<QMenuItem> QMenuProxy::actions()
+{
+    return QDeclarativeListProperty<QMenuItem>(this, m_actions);
+}
+
+int QMenuProxy::actionCount() const
+{
+    return m_actions.count();
+}
+
+QMenuItem *QMenuProxy::action(int index) const
+{
+    return m_actions.at(index);
 }
 
 void QMenuProxy::showMenu(int x, int y)
 {
-    m_menu->popup(QPoint(x,y));
+    QList<QAction*> actions;
+    foreach(QMenuItem* item, m_actions) {
+        actions.append(item->nativeAction());
+    }
+
+    QAction *action = QMenu::exec(actions, QPoint(x,y));
+    if (action) {
+        emit actionTriggered(action->text());
+    }
 }
 
 #include "qmenu.moc"
