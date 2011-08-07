@@ -38,10 +38,8 @@ Q_OBJECT
 public:
     PlasmaKPartCorona(QObject* parent);
 
-    Plasma::Containment *containment();
+protected:
     void loadDefaultLayout();
-
-private:
     void evaluateScripts(const QStringList &scripts);
 
 private Q_SLOTS:

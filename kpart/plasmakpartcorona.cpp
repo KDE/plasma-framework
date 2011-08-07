@@ -79,15 +79,4 @@ void PlasmaKPartCorona::printScriptMessage(const QString &error)
     kDebug() << "Startup script: " << error;
 }
 
-Plasma::Containment* PlasmaKPartCorona::containment()
-{
-    // We only have one containment, so just try and return the first one
-    QList<Plasma::Containment*> list = containments();
-    if (!list.isEmpty()) {
-        return list.first();
-    }
-
-    return 0;
-}
-
 #include "plasmakpartcorona.moc"
