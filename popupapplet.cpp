@@ -372,7 +372,9 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 dialog->d->appletPtr = q;
                 dialogPtr = dialog;
 
-                dialog->setAspectRatioMode(savedAspectRatio);
+                if (icon) {
+                    dialog->setAspectRatioMode(savedAspectRatio);
+                }
 
                 //no longer use Qt::Popup since that seems to cause a lot of problem when you drag
                 //stuff out of your Dialog (extenders). Monitor WindowDeactivate events so we can
@@ -736,7 +738,9 @@ void PopupAppletPrivate::internalTogglePopup()
         KWindowSystem::setOnAllDesktops(dialog->winId(), true);
         KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
 
-        dialog->setAspectRatioMode(savedAspectRatio);
+        if (icon) {
+            dialog->setAspectRatioMode(savedAspectRatio);
+        }
 
         if (q->location() != Floating) {
             dialog->animatedShow(locationToDirection(q->location()));
