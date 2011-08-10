@@ -22,8 +22,15 @@
 
 #include "plasmakpart.h"
 
-#include "plasmakpartcorona.h"
-#include "plasmakpartview.h"
+#include <QCheckBox>
+#include <QFile>
+#include <QHash>
+#include <QGraphicsProxyWidget>
+#include <QGraphicsLinearLayout>
+#include <QTimer>
+
+#include <KDebug>
+#include <KStandardDirs>
 
 #include <Plasma/Containment>
 #include <Plasma/Theme>
@@ -31,13 +38,8 @@
 #include <Plasma/Wallpaper>
 #include <plasma/pluginloader.h>
 
-#include <KDebug>
-#include <KStandardDirs>
-
-#include <QCheckBox>
-#include <QHash>
-#include <QGraphicsProxyWidget>
-#include <QGraphicsLinearLayout>
+#include "plasmakpartcorona.h"
+#include "plasmakpartview.h"
 
 K_PLUGIN_FACTORY(plasmaKPartFactory, registerPlugin<PlasmaKPart>();)
 K_EXPORT_PLUGIN(plasmaKPartFactory("plasma-kpart","plasma-kpart") )
@@ -65,11 +67,23 @@ PlasmaKPart::PlasmaKPart(QWidget *parentWidget, QObject *parent, const QVariantL
         }
     }
 
-    initCorona();
+    QTimer::singleShot(0, this, SLOT(initCorona()));
 }
 
 PlasmaKPart::~PlasmaKPart()
 {
+    delete m_view;
+    m_view = 0;
+
+    if (!m_configFile.isEmpty()) {
+        m_corona->saveLayout();
+    }
+
+    delete m_corona;
+    m_corona = 0;
+
+    //TODO: This manual sync() should not be necessary?
+    syncConfig();
 }
 
 void PlasmaKPart::setThemeDefaults()
@@ -82,32 +96,6 @@ void PlasmaKPart::setThemeDefaults()
     cg = KConfigGroup(KGlobal::config(), "General");
 
     Plasma::Theme::defaultTheme()->setFont(cg.readEntry("desktopFont", QFont("Sans") ));
-}
-
-void PlasmaKPart::cleanup()
-{
-    if (m_corona) {
-        m_corona->saveLayout();
-    }
-
-    if (!m_view->containment()) {
-        return;
-    }
-
-    // save the mapping of Views to Containments at the moment
-    // of application exit so we can restore that when we start again.
-    KConfigGroup viewIds(KGlobal::config(), "ViewIds");
-    viewIds.deleteGroup();
-    viewIds.writeEntry(QString::number(m_view->containment()->id()), 1);
-
-    delete m_view;
-    m_view = 0;
-
-    delete m_corona;
-    m_corona = 0;
-
-    //TODO: This manual sync() should not be necessary?
-    syncConfig();
 }
 
 void PlasmaKPart::syncConfig()
@@ -126,7 +114,7 @@ void PlasmaKPart::initCorona()
     connect(m_corona, SIGNAL(configSynced()), this, SLOT(syncConfig()));
 
     m_corona->setItemIndexMethod(QGraphicsScene::NoIndex);
-    m_corona->initializeLayout();
+    m_corona->initializeLayout(m_configFile);
 
     m_view->show();
 }
@@ -138,13 +126,7 @@ PlasmaKPartCorona* PlasmaKPart::corona() const
 
 void PlasmaKPart::createView(Plasma::Containment *containment)
 {
-    KConfigGroup viewIds(KGlobal::config(), "ViewIds");
-    int id = viewIds.readEntry(QString::number(containment->id()), 1);
-
-    kDebug() << "new containment" << (QObject*)containment << containment->id()<<"view id"<<id;
-
     m_view->setContainment(containment);
-    emit viewCreated();
 }
 
 void PlasmaKPart::addApplet(const QString& name, const QVariantList& args, const QRectF& geometry )
@@ -155,6 +137,19 @@ void PlasmaKPart::addApplet(const QString& name, const QVariantList& args, const
 Plasma::Applet::List PlasmaKPart::listActiveApplets() const
 {
     return containment()->applets();
+}
+
+QString PlasmaKPart::configFile() const
+{
+    return m_configFile;
+}
+
+void PlasmaKPart::setConfigFile(const QString &file)
+{
+    m_configFile = file;
+    if (m_corona && QFile::exists(m_configFile)) {
+        m_corona->initializeLayout(m_configFile);
+    }
 }
 
 Plasma::Containment* PlasmaKPart::containment() const

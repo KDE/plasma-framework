@@ -44,6 +44,7 @@ class PlasmaKPart : public KParts::ReadOnlyPart
 {
     Q_OBJECT
     Q_PROPERTY(Plasma::Applet::List activeApplets READ listActiveApplets)
+    Q_PROPERTY(QString configFile READ configFile WRITE setConfigFile)
 
 public:
     /**
@@ -68,6 +69,9 @@ public:
      **/
     Plasma::Applet::List listActiveApplets() const;
 
+    QString configFile() const;
+    void setConfigFile(const QString &file);
+
 public Q_SLOTS:
     /**
      * Add an applet to the currently running containment.
@@ -78,14 +82,8 @@ public Q_SLOTS:
      **/
     void addApplet(const QString &pluginName, const QVariantList &args = QVariantList(), const QRectF &dimensions = QRectF());
 
-Q_SIGNALS:
-    void viewCreated();
-
-private:
-    void initCorona();
-
 private Q_SLOTS:
-    void cleanup();
+    void initCorona();
     void syncConfig();
     void createView(Plasma::Containment* containment);
     void setThemeDefaults();
@@ -95,6 +93,7 @@ private:
     PlasmaKPartView* m_view;
     QHash<QString,Plasma::Applet*>* m_appletList;
     QVBoxLayout* m_configLayout;
+    QString m_configFile;
 };
 
 #endif // multiple inclusion guard
