@@ -35,7 +35,6 @@ namespace Plasma
 }
 
 #include <KDE/KParts/Part>
-#include <KDE/KService>
 
 #include <QtCore/QHash>
 class QVariant;
@@ -94,7 +93,6 @@ private Q_SLOTS:
 private:
     PlasmaKPartCorona* m_corona;
     PlasmaKPartView* m_view;
-    KService::Ptr m_service;
     QHash<QString,Plasma::Applet*>* m_appletList;
     QVBoxLayout* m_configLayout;
 };
