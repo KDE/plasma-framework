@@ -1,5 +1,9 @@
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
+include_directories ( ${CMAKE_SOURCE_DIR}/tier1/libkarchive/src
+                      ${CMAKE_BINARY_DIR}/tier1/libkarchive
+)
+
 MACRO(PLASMA_UNIT_TESTS)
        FOREACH(_testname ${ARGN})
                kde4_add_unit_test(${_testname} TESTNAME plasma-${_testname} ${_testname}.cpp)
