@@ -47,7 +47,7 @@ K_EXPORT_PLUGIN(plasmaKPartFactory("plasma-kpart","plasma-kpart") )
 PlasmaKPart::PlasmaKPart(QWidget *parentWidget, QObject *parent, const QVariantList &args)
     : KParts::ReadOnlyPart(parent),
       m_corona(0),
-      m_view(new PlasmaKPartView(0, 1, parentWidget))
+      m_view(new PlasmaKPartView(0, 1))
 {
     setComponentData(plasmaKPartFactory::componentData());
 
@@ -67,6 +67,7 @@ PlasmaKPart::PlasmaKPart(QWidget *parentWidget, QObject *parent, const QVariantL
         }
     }
 
+    setAutoDeletePart(false);
     QTimer::singleShot(0, this, SLOT(initCorona()));
 }
 
