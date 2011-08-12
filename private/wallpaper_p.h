@@ -47,8 +47,6 @@ public:
     void newRenderCompleted(const WallpaperRenderRequest &render, const QImage &image);
     void setupScriptSupport();
 
-    static PackageStructure::Ptr s_packageStructure;
-
     Wallpaper *q;
     KPluginInfo wallpaperDescription;
     Package *package;
@@ -58,7 +56,8 @@ public:
     Wallpaper::ResizeMethod lastResizeMethod;
     QSizeF targetSize;
     WallpaperScript *script;
-    QList<KUrl> pendingUrls;
+    QList<QAction*> contextActions;
+
     bool cacheRendering : 1;
     bool initialized : 1;
     bool needsConfig : 1;
@@ -70,7 +69,7 @@ public:
 class LoadImageThread : public QObject, public QRunnable
 {
     Q_OBJECT
-    
+
     private:
         QString m_filePath;
 

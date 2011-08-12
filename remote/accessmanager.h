@@ -21,7 +21,6 @@
 #define PLASMA_ACCESSMANAGER_H
 
 #include "accessappletjob.h"
-#include "packagemetadata.h"
 #include "plasma_export.h"
 
 #include <QtCore/QList>
@@ -50,6 +49,29 @@ class ServiceAccessJob;
  *
  * @since 4.4
  */
+class PLASMA_EXPORT RemoteObjectDescription
+{
+public:
+    RemoteObjectDescription();
+    RemoteObjectDescription(const RemoteObjectDescription &other);
+    RemoteObjectDescription &operator=(const RemoteObjectDescription &other);
+
+    void setName(const QString &name);
+    QString name() const;
+
+    void setUrl(const KUrl &url);
+    KUrl url() const;
+
+    void setDescription(const QString &description);
+    QString description() const;
+
+    void setIcon(const QString &icon);
+    QString icon() const;
+
+private:
+    class Private;
+    Private *d;
+};
 
 class PLASMA_EXPORT AccessManager : public QObject
 {
@@ -73,10 +95,10 @@ class PLASMA_EXPORT AccessManager : public QObject
 
         /**
          * @returns a list of applets that are announced on the network through zeroconf. Use the
-         * remoteLocation() function in PackageMetadata to obtain an url to pass to
+         * url() function in RemoteObjectDescription to obtain an url to pass to
          * accessRemoteApplet in AccessManager if you want to access one of these applets.
          */
-        QList<PackageMetadata> remoteApplets() const;
+        QList<RemoteObjectDescription> remoteApplets() const;
 
         /**
          * @returns a list of supported protocols of urls that can be passed to accessRemoteApplet.
@@ -92,12 +114,12 @@ class PLASMA_EXPORT AccessManager : public QObject
         /**
          * fires when a new applet is announced on the network.
          */
-        void remoteAppletAnnounced(Plasma::PackageMetadata metadata);
+        void remoteAppletAnnounced(const Plasma::RemoteObjectDescription &metadata);
 
         /**
          * fires when an announced applet disappears from the network.
          */
-        void remoteAppletUnannounced(Plasma::PackageMetadata metadata);
+        void remoteAppletUnannounced(const Plasma::RemoteObjectDescription &metadata);
 
     private:
         AccessManager();

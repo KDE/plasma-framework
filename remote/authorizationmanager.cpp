@@ -18,19 +18,19 @@
  */
 
 #include "authorizationmanager.h"
-#include "private/authorizationmanager_p.h"
+#include "authorizationmanager_p.h"
 
 #include "authorizationinterface.h"
 #include "authorizationrule.h"
+#include "authorizationrule_p.h"
+#include "denyallauthorization_p.h"
 #include "credentials.h"
+#include "pinpairingauthorization_p.h"
 #include "service.h"
 #include "servicejob.h"
+#include "trustedonlyauthorization_p.h"
 
-#include "private/authorizationrule_p.h"
-#include "private/denyallauthorization_p.h"
 #include "private/joliemessagehelper_p.h"
-#include "private/pinpairingauthorization_p.h"
-#include "private/trustedonlyauthorization_p.h"
 
 #include <QtCore/QBuffer>
 #include <QtCore/QMap>
@@ -81,7 +81,9 @@ AuthorizationManager::~AuthorizationManager()
 void AuthorizationManager::setAuthorizationPolicy(AuthorizationPolicy policy)
 {
     if (d->locked) {
+#ifndef NDEBUG
         kDebug() << "Can't change AuthorizationPolicy: interface locked.";
+#endif
         return;
     }
 
@@ -116,7 +118,9 @@ void AuthorizationManager::setAuthorizationPolicy(AuthorizationPolicy policy)
 void AuthorizationManager::setAuthorizationInterface(AuthorizationInterface *interface)
 {
     if (d->authorizationInterface) {
+#ifndef NDEBUG
         kDebug() << "Can't change AuthorizationInterface: interface locked.";
+#endif
         return;
     }
 
@@ -166,7 +170,9 @@ void AuthorizationManagerPrivate::prepareForServicePublication()
 
 void AuthorizationManagerPrivate::saveRules()
 {
+#ifndef NDEBUG
     kDebug() << "SAVE RULES";
+#endif
 
     KTemporaryFile tempFile;
     tempFile.open();
@@ -176,7 +182,9 @@ void AuthorizationManagerPrivate::saveRules()
     int i = 0;
     foreach (AuthorizationRule *rule, rules) {
         if (rule->persistence() == AuthorizationRule::Persistent) {
+#ifndef NDEBUG
             kDebug() << "adding rule " << i;
+#endif
             rulesGroup.group(QString::number(i)).writeEntry("CredentialsID", rule->credentials().id());
             rulesGroup.group(QString::number(i)).writeEntry("serviceName", rule->serviceName());
             rulesGroup.group(QString::number(i)).writeEntry("Policy", (uint)rule->policy());
@@ -188,7 +196,9 @@ void AuthorizationManagerPrivate::saveRules()
     rulesGroup.sync();
     tempFile.close();
 
+#ifndef NDEBUG
     kDebug() << "tempfile = " << tempFile.fileName();
+#endif
 
     KAuth::Action action("org.kde.kcontrol.kcmremotewidgets.save");
     action.addArgument("source", tempFile.fileName());
@@ -196,7 +206,9 @@ void AuthorizationManagerPrivate::saveRules()
     KAuth::ActionReply reply = action.execute();
 
     if (reply.failed()) {
+#ifndef NDEBUG
         kDebug() << "KAuth failed.... YOU SUCK!";
+#endif
     }
 }
 
@@ -205,13 +217,17 @@ void AuthorizationManagerPrivate::slotWalletOpened()
     QByteArray identity;
 
     if (!wallet->readEntry("Credentials", identity)) {
+#ifndef NDEBUG
         kDebug() << "Existing identity found";
+#endif
         QDataStream stream(&identity, QIODevice::ReadOnly);
         stream >> myCredentials;
     }
 
     if (!myCredentials.isValid()) {
+#ifndef NDEBUG
         kDebug() << "Creating a new identity";
+#endif
         myCredentials = Credentials::createCredentials(QHostInfo::localHostName());
         QDataStream stream(&identity, QIODevice::WriteOnly);
         stream << myCredentials;
@@ -231,7 +247,9 @@ void AuthorizationManagerPrivate::slotLoadRules()
         uint persistence = rulesConfig.group(groupName).readEntry("Persistence", 0);
         //Credentials storedCredentials = identities[identityID];
         if (serviceName.isEmpty()) {
+#ifndef NDEBUG
             kDebug() << "Invalid rule";
+#endif
         } else {
             AuthorizationRule *rule = new AuthorizationRule(serviceName, identityID);
             rule->setPolicy(static_cast<AuthorizationRule::Policy>(policy));
@@ -262,9 +280,13 @@ AuthorizationRule *AuthorizationManagerPrivate::matchingRule(const QString &serv
     }
 
     if (!matchingRule) {
+#ifndef NDEBUG
         kDebug() << "no matching rule";
+#endif
     } else {
+#ifndef NDEBUG
         kDebug() << "matching rule found: " << matchingRule->description();
+#endif
     }
     return matchingRule;
 }
@@ -283,7 +305,9 @@ void AuthorizationManagerPrivate::addCredentials(const Credentials &identity)
     if (identities.contains(identity.id())) {
         return;
     } else if (identity.isValid()) {
+#ifndef NDEBUG
         kDebug() << "Adding a new identity for " << identity.id();
+#endif
         identities[identity.id()] = identity;
     }
 }

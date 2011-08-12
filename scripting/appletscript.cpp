@@ -186,7 +186,7 @@ Animation *AppletScript::loadAnimationFromPackage(const QString &name, QObject *
     if (applet()) {
         const QString scopedName = applet()->pluginName() + ":" + name;
         if (!AnimationScriptEngine::isAnimationRegistered(scopedName)) {
-            KConfig conf(applet()->package()->path() + "/metadata.desktop", KConfig::SimpleConfig);
+            KConfig conf(applet()->package().path() + "/metadata.desktop", KConfig::SimpleConfig);
             KConfigGroup animConf(&conf, "Animations");
             QString file;
             foreach (const QString &possibleFile, animConf.keyList()) {
@@ -201,15 +201,19 @@ Animation *AppletScript::loadAnimationFromPackage(const QString &name, QObject *
                 return 0;
             }
 
-            const QString path = applet()->package()->filePath("animations", file);
+            const QString path = applet()->package().filePath("animations", file);
             if (path.isEmpty()) {
+#ifndef NDEBUG
                 kDebug() << "file path was empty for" << file;
+#endif
                 return 0;
             }
 
             if (!AnimationScriptEngine::loadScript(path, applet()->pluginName() + ':') ||
                 !AnimationScriptEngine::isAnimationRegistered(scopedName)) {
+#ifndef NDEBUG
                 kDebug() << "script engine loading failed for" << path;
+#endif
                 return 0;
             }
         }
@@ -234,10 +238,10 @@ DataEngine *AppletScript::dataEngine(const QString &engine) const
 QString AppletScript::mainScript() const
 {
     Q_ASSERT(d->applet);
-    return d->applet->package()->filePath("mainscript");
+    return d->applet->package().filePath("mainscript");
 }
 
-const Package *AppletScript::package() const
+Package AppletScript::package() const
 {
     Q_ASSERT(d->applet);
     return d->applet->package();

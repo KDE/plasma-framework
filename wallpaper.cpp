@@ -43,10 +43,11 @@
 
 #include <version.h>
 
-#include "plasma/package.h"
-#include "plasma/private/dataengineconsumer_p.h"
-#include "plasma/private/packages_p.h"
-#include "plasma/private/wallpaper_p.h"
+#include "package.h"
+#include "pluginloader.h"
+#include "private/dataengineconsumer_p.h"
+#include "private/packages_p.h"
+#include "private/wallpaper_p.h"
 
 namespace Plasma
 {
@@ -97,8 +98,6 @@ public:
     }
 };
 
-PackageStructure::Ptr WallpaperPrivate::s_packageStructure(0);
-
 Wallpaper::Wallpaper(QObject * parentObject)
     : d(new WallpaperPrivate(KService::serviceByStorageId(QString()), this))
 {
@@ -128,23 +127,7 @@ Wallpaper::~Wallpaper()
 void Wallpaper::addUrls(const KUrl::List &urls)
 {
     if (d->script) {
-        d->script->setUrls(urls);
-    } else {
-        // provide compatibility with urlDropped
-        foreach (const KUrl &url, urls) {
-            emit urlDropped(url);
-        }
-    }
-}
-
-void Wallpaper::setUrls(const KUrl::List &urls)
-{
-    if (!d->initialized) {
-        d->pendingUrls = urls;
-    } else if (d->script) {
-        d->script->setUrls(urls);
-    } else {
-       QMetaObject::invokeMethod(this, "addUrls", Q_ARG(KUrl::List, urls));
+        d->script->addUrls(urls);
     }
 }
 
@@ -159,15 +142,17 @@ KPluginInfo::List Wallpaper::listWallpaperInfo(const QString &formFactor)
     return KPluginInfo::fromServices(offers);
 }
 
-KPluginInfo::List Wallpaper::listWallpaperInfoForMimetype(const QString &mimetype, const QString &formFactor)
+KPluginInfo::List Wallpaper::listWallpaperInfoForMimetype(const QString &mimeType, const QString &formFactor)
 {
-    QString constraint = QString("'%1' in [X-Plasma-DropMimeTypes]").arg(mimetype);
+    QString constraint = QString("'%1' in [X-Plasma-DropMimeTypes]").arg(mimeType);
     if (!formFactor.isEmpty()) {
         constraint.append("[X-Plasma-FormFactors] ~~ '").append(formFactor).append("'");
     }
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Wallpaper", constraint);
+#ifndef NDEBUG
     kDebug() << offers.count() << constraint;
+#endif
     return KPluginInfo::fromServices(offers);
 }
 
@@ -187,7 +172,9 @@ Wallpaper *Wallpaper::load(const QString &wallpaperName, const QVariantList &arg
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Wallpaper", constraint);
 
     if (offers.isEmpty()) {
+#ifndef NDEBUG
         kDebug() << "offers is empty for " << wallpaperName;
+#endif
         return 0;
     }
 
@@ -196,8 +183,10 @@ Wallpaper *Wallpaper::load(const QString &wallpaperName, const QVariantList &arg
     allArgs << offer->storageId() << args;
 
     if (!offer->property("X-Plasma-API").toString().isEmpty()) {
+#ifndef NDEBUG
         kDebug() << "we have a script using the"
                  << offer->property("X-Plasma-API").toString() << "API";
+#endif
         return new WallpaperWithPaint(0, allArgs);
     }
 
@@ -211,7 +200,9 @@ Wallpaper *Wallpaper::load(const QString &wallpaperName, const QVariantList &arg
     Wallpaper *wallpaper = offer->createInstance<Plasma::Wallpaper>(0, allArgs, &error);
 
     if (!wallpaper) {
+#ifndef NDEBUG
         kDebug() << "Couldn't load wallpaper \"" << wallpaperName << "\"! reason given: " << error;
+#endif
     }
 
     return wallpaper;
@@ -223,20 +214,6 @@ Wallpaper *Wallpaper::load(const KPluginInfo &info, const QVariantList &args)
         return 0;
     }
     return load(info.pluginName(), args);
-}
-
-PackageStructure::Ptr Wallpaper::packageStructure(Wallpaper *paper)
-{
-    if (paper) {
-        PackageStructure::Ptr package(new WallpaperPackage(paper));
-        return package;
-    }
-
-    if (!WallpaperPrivate::s_packageStructure) {
-        WallpaperPrivate::s_packageStructure = new WallpaperPackage();
-    }
-
-    return WallpaperPrivate::s_packageStructure;
 }
 
 QString Wallpaper::name() const
@@ -323,10 +300,6 @@ void Wallpaper::restore(const KConfigGroup &config)
 {
     init(config);
     d->initialized = true;
-    if (!d->pendingUrls.isEmpty()) {
-        setUrls(d->pendingUrls);
-        d->pendingUrls.clear();
-    }
 }
 
 void Wallpaper::init(const KConfigGroup &config)
@@ -479,19 +452,22 @@ WallpaperPrivate::WallpaperPrivate(KService::Ptr service, Wallpaper *wallpaper) 
         if (!api.isEmpty()) {
             const QString path = KStandardDirs::locate("data",
                     "plasma/wallpapers/" + wallpaperDescription.pluginName() + '/');
-            PackageStructure::Ptr structure =
-                Plasma::packageStructure(api, Plasma::WallpaperComponent);
-            structure->setPath(path);
-            package = new Package(path, structure);
+            package = new Package(PluginLoader::self()->loadPackage("Plasma/Wallpaper", api));
+            package->setPath(path);
 
-            script = Plasma::loadScriptEngine(api, q);
+            if (package->isValid()) {
+                script = Plasma::loadScriptEngine(api, q);
+            }
+
             if (!script) {
+#ifndef NDEBUG
                 kDebug() << "Could not create a" << api << "ScriptEngine for the"
-                        << wallpaperDescription.name() << "Wallpaper.";
+                         << wallpaperDescription.name() << "Wallpaper.";
+#endif
                 delete package;
                 package = 0;
             }
-       }
+        }
     }
 }
 
@@ -511,7 +487,9 @@ QString WallpaperPrivate::cachePath(const QString &key) const
 
 void WallpaperPrivate::newRenderCompleted(const WallpaperRenderRequest &request, const QImage &image)
 {
+#ifndef NDEBUG
     kDebug() << request.token << renderToken;
+#endif
     if (request.token != renderToken) {
         //kDebug() << "render token mismatch" << token << renderToken;
         return;
@@ -530,16 +508,15 @@ void WallpaperPrivate::newRenderCompleted(const WallpaperRenderRequest &request,
 void WallpaperPrivate::setupScriptSupport()
 {
     Q_ASSERT(package);
+#ifndef NDEBUG
     kDebug() << "setting up script support, package is in" << package->path()
-             << "which is a" << package->structure()->type() << "package"
              << ", main script is" << package->filePath("mainscript");
+#endif
 
-    QString translationsPath = package->filePath("translations");
+    const QString translationsPath = package->filePath("translations");
     if (!translationsPath.isEmpty()) {
-        //FIXME: we should _probably_ use a KComponentData to segregate the applets
-        //       from each other; but I want to get the basics working first :)
         KGlobal::dirs()->addResourceDir("locale", translationsPath);
-        KGlobal::locale()->insertCatalog(package->metadata().pluginName());
+        KGlobal::locale()->insertCatalog(wallpaperDescription.pluginName());
     }
 }
 
@@ -618,12 +595,12 @@ void Wallpaper::insertIntoCache(const QString& key, const QImage &image)
 
 QList<QAction*> Wallpaper::contextualActions() const
 {
-    return contextActions;
+    return d->contextActions;
 }
 
 void Wallpaper::setContextualActions(const QList<QAction*> &actions)
 {
-    contextActions = actions;
+    d->contextActions = actions;
 }
 
 bool Wallpaper::isPreviewing() const
@@ -646,9 +623,9 @@ void Wallpaper::setPreviewDuringConfiguration(const bool preview)
     d->needsPreviewDuringConfiguration = preview;
 }
 
-const Package *Wallpaper::package() const
+Package Wallpaper::package() const
 {
-    return d->package;
+    return d->package ? *d->package : Package();
 }
 
 } // Plasma namespace

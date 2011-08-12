@@ -1,6 +1,8 @@
 /******************************************************************************
 *   Copyright 2007 by Aaron Seigo <aseigo@kde.org>                            *
-*   Copyright 2007 by Riccardo Iaconelli <riccardo@kde.org>                   *
+*   Copyright 2010 by Marco Martin <notmart@gmail.com>                        *
+*   Copyright 2010 by Kevin Ottens <ervin@kde.org>                            *
+*   Copyright 2009 by Rob Scheepmaker                                         *
 *                                                                             *
 *   This library is free software; you can redistribute it and/or             *
 *   modify it under the terms of the GNU Library General Public               *
@@ -19,41 +21,37 @@
 *******************************************************************************/
 
 #include "package.h"
-#include "config-plasma.h"
 
-#include <QDir>
+#include <QDBusInterface>
+#include <QDBusPendingCall>
 #include <QFile>
+#include <QIODevice>
 #include <QRegExp>
 #include <QtNetwork/QHostInfo>
 
-#ifdef QCA2_FOUND
-#include <QtCrypto>
-#endif
-
 #include <karchive.h>
-#include <kcomponentdata.h>
+#include <kdebug.h>
 #include <kdesktopfile.h>
+#include <kmimetype.h>
+#include <kservicetypetrader.h>
+#include <kstandarddirs.h>
+#include <ktar.h>
+#include <ktempdir.h>
+#include <ktemporaryfile.h>
+#include <kzip.h>
+
 #ifndef PLASMA_NO_KIO
 #include <kio/copyjob.h>
 #include <kio/deletejob.h>
 #include <kio/jobclasses.h>
 #include <kio/job.h>
 #endif
-#include <kmimetype.h>
-#include <kplugininfo.h>
-#include <kstandarddirs.h>
-#include <ktar.h>
-#include <ktempdir.h>
-#include <ktemporaryfile.h>
-#include <kzip.h>
-#include <kdebug.h>
 
-#include "authorizationmanager.h"
-#include "packagemetadata.h"
-#include "private/authorizationmanager_p.h"
+#include "config-plasma.h"
+#include "packagestructure.h"
+#include "pluginloader.h"
 #include "private/package_p.h"
-#include "private/plasmoidservice_p.h"
-#include "private/service_p.h"
+#include "private/packages_p.h"
 
 namespace Plasma
 {
@@ -120,37 +118,28 @@ bool removeFolder(QString folderPath)
 
 #endif // PLASMA_NO_KIO
 
-
-Package::Package()
-    : d(new PackagePrivate(PackageStructure::Ptr(0), QString()))
+Package::Package(PackageStructure *structure)
+    : d(new PackagePrivate())
 {
-}
-
-Package::Package(const QString &packageRoot, const QString &package,
-                 PackageStructure::Ptr structure)
-    : d(new PackagePrivate(structure, packageRoot, package))
-{
-}
-
-Package::Package(const QString &packagePath, PackageStructure::Ptr structure)
-    : d(new PackagePrivate(structure, packagePath))
-{
+    d->structure = structure;
+    if (d->structure) {
+        d->structure.data()->initPackage(this);
+    }
 }
 
 Package::Package(const Package &other)
-    : d(new PackagePrivate(*other.d))
+    : d(other.d)
 {
 }
 
 Package::~Package()
 {
-    delete d;
 }
 
 Package &Package::operator=(const Package &rhs)
 {
     if (&rhs != this) {
-        *d = *rhs.d;
+        d = rhs.d;
     }
 
     return *this;
@@ -165,16 +154,17 @@ bool Package::isValid() const
     //search for the file in all prefixes and in all possible paths for each prefix
     //even if it's a big nested loop, usually there is one prefix and one location
     //so shouldn't cause too much disk access
-    QStringList prefixes = d->structure->contentsPrefixPaths();
-    if (prefixes.isEmpty()) {
-        prefixes << QString();
-    }
+    QHashIterator<QByteArray, ContentStructure> it(d->contents);
+    while (it.hasNext()) {
+        it.next();
+        if (!it.value().required) {
+            continue;
+        }
 
-    foreach (const char *dir, d->structure->requiredDirectories()) {
         bool failed = true;
-        foreach (const QString &path, d->structure->searchPath(dir)) {
-            foreach (const QString &prefix, prefixes) {
-                if (QFile::exists(d->structure->path() + prefix + path)) {
+        foreach (const QString &path, it.value().paths) {
+            foreach (const QString &prefix, d->contentsPrefixPaths) {
+                if (QFile::exists(d->path + prefix + path)) {
                     failed = false;
                     break;
                 }
@@ -185,34 +175,137 @@ bool Package::isValid() const
         }
 
         if (failed) {
-            kWarning() << "Could not find required directory" << dir;
-            d->valid = false;
-            return false;
-        }
-    }
-
-    foreach (const char *file, d->structure->requiredFiles()) {
-        bool failed = true;
-        foreach (const QString &path, d->structure->searchPath(file)) {
-            foreach (const QString &prefix, prefixes) {
-                if (QFile::exists(d->structure->path() + prefix + path)) {
-                    failed = false;
-                    break;
-                }
-            }
-            if (!failed) {
-                break;
-            }
-        }
-
-        if (failed) {
-            kWarning() << "Could not find required file" << file;
+            kWarning() << "Could not find required" << (it.value().directory ? "directory" : "file") << it.key();
             d->valid = false;
             return false;
         }
     }
 
     return true;
+}
+
+QString Package::name(const char *key) const
+{
+#ifndef PLASMA_NO_PACKAGE_EXTRADATA
+    QHash<QByteArray, ContentStructure>::const_iterator it = d->contents.constFind(key);
+    if (it == d->contents.constEnd()) {
+        return QString();
+    }
+
+    return it.value().name;
+#else
+    Q_UNUSED(key);
+    return QString();
+#endif
+}
+
+bool Package::isRequired(const char *key) const
+{
+    QHash<QByteArray, ContentStructure>::const_iterator it = d->contents.constFind(key);
+    if (it == d->contents.constEnd()) {
+        return false;
+    }
+
+    return it.value().required;
+}
+
+QStringList Package::mimeTypes(const char *key) const
+{
+#ifndef PLASMA_NO_PACKAGE_EXTRADATA
+    QHash<QByteArray, ContentStructure>::const_iterator it = d->contents.constFind(key);
+    if (it == d->contents.constEnd()) {
+        return QStringList();
+    }
+
+    if (it.value().mimeTypes.isEmpty()) {
+        return d->mimeTypes;
+    }
+
+    return it.value().mimeTypes;
+#else
+    return QStringList();
+#endif
+}
+
+QString Package::defaultPackageRoot() const
+{
+    return d->defaultPackageRoot;
+}
+
+void Package::setDefaultPackageRoot(const QString &packageRoot)
+{
+    d.detach();
+    d->defaultPackageRoot = packageRoot;
+    if (!d->defaultPackageRoot.isEmpty() && !d->defaultPackageRoot.endsWith('/')) {
+        d->defaultPackageRoot.append('/');
+    }
+}
+
+QString Package::servicePrefix() const
+{
+    return d->servicePrefix;
+}
+
+void Package::setServicePrefix(const QString &servicePrefix)
+{
+    d.detach();
+    d->servicePrefix = servicePrefix;
+}
+
+bool Package::allowExternalPaths() const
+{
+    return d->externalPaths;
+}
+
+void Package::setAllowExternalPaths(bool allow)
+{
+    d.detach();
+    d->externalPaths = allow;
+}
+
+KPluginInfo Package::metadata() const
+{
+    if (!d->metadata && !d->path.isEmpty()) {
+        const QString metadataPath = filePath("metadata");
+        if (!metadataPath.isEmpty()) {
+            d->createPackageMetadata(metadataPath);
+        } else {
+            QFileInfo fileInfo(d->path);
+
+            if (fileInfo.isDir()) {
+                d->createPackageMetadata(d->path);
+            } else if (fileInfo.exists()) {
+                KArchive *archive = 0;
+                KMimeType::Ptr mimeType = KMimeType::findByPath(d->path);
+
+                if (mimeType->is("application/zip")) {
+                    archive = new KZip(d->path);
+                } else if (mimeType->is("application/x-compressed-tar") ||
+                        mimeType->is("application/x-tar")|| mimeType->is("application/x-bzip-compressed-tar")) {
+                    archive = new KTar(d->path);
+                } else {
+                    kWarning() << "Could not open package file, unsupported archive format:" << d->path << mimeType->name();
+                }
+
+                if (archive && archive->open(QIODevice::ReadOnly)) {
+                    const KArchiveDirectory *source = archive->directory();
+                    KTempDir tempdir;
+                    source->copyTo(tempdir.name());
+                    d->createPackageMetadata(tempdir.name());
+                } else {
+                    kWarning() << "Could not open package file:" << d->path;
+                }
+
+                delete archive;
+            }
+        }
+    }
+
+    if (!d->metadata) {
+        d->metadata = new KPluginInfo();
+    }
+
+    return *d->metadata;
 }
 
 QString Package::filePath(const char *fileType, const QString &filename) const
@@ -222,13 +315,25 @@ QString Package::filePath(const char *fileType, const QString &filename) const
         return QString();
     }
 
+    const QString discoveryKey(fileType + filename);
+    if (d->discoveries.contains(discoveryKey)) {
+    //qDebug() << "looking for" << discoveryKey << d->discoveries.value(discoveryKey);
+        return d->discoveries[discoveryKey];
+    }
+
     QStringList paths;
 
     if (qstrlen(fileType) != 0) {
-        paths = d->structure->searchPath(fileType);
+        if (!d->contents.contains(fileType)) {
+            //kDebug() << "package does not contain" << fileType << filename;
+            return QString();
+        }
+
+        paths = d->contents[fileType].paths;
 
         if (paths.isEmpty()) {
             //kDebug() << "no matching path came of it, while looking for" << fileType << filename;
+            d->discoveries.insert(discoveryKey, QString());
             return QString();
         }
     } else {
@@ -237,14 +342,9 @@ QString Package::filePath(const char *fileType, const QString &filename) const
     }
 
     //Nested loop, but in the medium case resolves to just one iteration
-    QStringList prefixes = d->structure->contentsPrefixPaths();
-    if (prefixes.isEmpty()) {
-        prefixes << QString();
-    }
-
     //kDebug() << "prefixes:" << prefixes.count() << prefixes;
-    foreach (const QString &contentsPrefix, prefixes) {
-        const QString prefix(d->structure->path() + contentsPrefix);
+    foreach (const QString &contentsPrefix, d->contentsPrefixPaths) {
+        const QString prefix(d->path + contentsPrefix);
 
         foreach (const QString &path, paths) {
             QString file = prefix + path;
@@ -255,8 +355,9 @@ QString Package::filePath(const char *fileType, const QString &filename) const
 
             //kDebug() << "testing" << file << QFile::exists("/bin/ls") << QFile::exists(file);
             if (QFile::exists(file)) {
-                if (d->structure->allowExternalPaths()) {
+                if (d->externalPaths) {
                     //kDebug() << "found" << file;
+                    d->discoveries.insert(discoveryKey, file);
                     return file;
                 }
 
@@ -265,136 +366,184 @@ QString Package::filePath(const char *fileType, const QString &filename) const
                 QDir dir(file);
                 QString canonicalized = dir.canonicalPath() + QDir::separator();
 
-                //kDebug() << "testing that" << canonicalized << "is in" << d->structure->path();
-                if (canonicalized.startsWith(d->structure->path())) {
+                //kDebug() << "testing that" << canonicalized << "is in" << d->path;
+                if (canonicalized.startsWith(d->path)) {
                     //kDebug() << "found" << file;
+                    d->discoveries.insert(discoveryKey, file);
                     return file;
                 }
             }
         }
     }
 
-    //kDebug() << fileType << filename << "does not exist in" << prefixes << "at root" << d->structure->path();
+    //kDebug() << fileType << filename << "does not exist in" << prefixes << "at root" << d->path;
     return QString();
 }
 
-QString Package::filePath(const char *fileType) const
-{
-    return filePath(fileType, QString());
-}
-
-QStringList Package::entryList(const char *fileType) const
+QStringList Package::entryList(const char *key) const
 {
     if (!d->valid) {
         return QStringList();
     }
 
-    return d->structure->entryList(fileType);
-}
-
-PackageMetadata Package::metadata() const
-{
-    if (d->structure) {
-        return d->structure->metadata();
+    QHash<QByteArray, ContentStructure>::const_iterator it = d->contents.constFind(key);
+    if (it == d->contents.constEnd()) {
+        //kDebug() << "couldn't find" << key;
+        return QStringList();
     }
 
-    return PackageMetadata();
+    //kDebug() << "going to list" << key;
+    QStringList list;
+    foreach (const QString &prefix, d->contentsPrefixPaths) {
+        //kDebug() << "     looking in" << prefix;
+        foreach (const QString &path, it.value().paths) {
+            //kDebug() << "         looking in" << path;
+            if (it.value().directory) {
+                //kDebug() << "it's a directory, so trying out" << d->path + prefix + path;
+                QDir dir(d->path + prefix + path);
+
+                if (d->externalPaths) {
+                    list += dir.entryList(QDir::Files | QDir::Readable);
+                } else {
+                    // ensure that we don't return files outside of our base path
+                    // due to symlink or ../ games
+                    QString canonicalized = dir.canonicalPath();
+                    if (canonicalized.startsWith(d->path)) {
+                        list += dir.entryList(QDir::Files | QDir::Readable);
+                    }
+                }
+            } else {
+                const QString fullPath = d->path + prefix + path;
+                //kDebug() << "it's a file at" << fullPath << QFile::exists(fullPath);
+                if (!QFile::exists(fullPath)) {
+                    continue;
+                }
+
+                if (d->externalPaths) {
+                    list += fullPath;
+                } else {
+                    QDir dir(fullPath);
+                    QString canonicalized = dir.canonicalPath() + QDir::separator();
+
+                    //kDebug() << "testing that" << canonicalized << "is in" << d->path;
+                    if (canonicalized.startsWith(d->path)) {
+                        list += fullPath;
+                    }
+                }
+            }
+        }
+    }
+
+    return list;
 }
 
 void Package::setPath(const QString &path)
 {
+    if (path == d->path) {
+        return;
+    }
+
+    d.detach();
+    d->discoveries.clear();
+    if (path.isEmpty()) {
+        d->path.clear();
+        d->valid = false;
+
+        if (d->structure) {
+            d->structure.data()->pathChanged(this);
+        }
+
+        return;
+    }
+
+    QDir dir(path);
+    if (dir.isRelative()) {
+        QString location;
+        if (!d->defaultPackageRoot.isEmpty()) {
+            dir.setPath(d->defaultPackageRoot);
+            if (dir.isRelative()) {
+                location = KStandardDirs::locate("data", d->defaultPackageRoot + path);
+            } else {
+                location = d->defaultPackageRoot + path;
+            }
+        }
+
+        if (location.isEmpty()) {
+            location = KStandardDirs::locate("data", path);
+
+            if (location.isEmpty()) {
+                d->path.clear();
+                d->valid = false;
+                return;
+            }
+        }
+
+        dir.setPath(location);
+    }
+
+    QString basePath = dir.canonicalPath();
+    bool valid = QFile::exists(basePath);
+
+    if (valid) {
+        QFileInfo info(basePath);
+        if (info.isDir() && !basePath.endsWith('/')) {
+            basePath.append('/');
+        }
+        //kDebug() << "basePath is" << basePath;
+    } else {
+#ifndef NDEBUG
+        kDebug() << path << "invalid, basePath is" << basePath;
+#endif
+        return;
+    }
+
+    if (d->path == basePath) {
+        return;
+    }
+
+    d->path = basePath;
+    delete d->metadata;
+    d->metadata = 0;
+    d->valid = !d->path.isEmpty();
+
     if (d->structure) {
-        d->structure->setPath(path);
-        d->valid = !d->structure->path().isEmpty();
+        d->structure.data()->pathChanged(this);
     }
 }
 
 const QString Package::path() const
 {
-    return d->structure ? d->structure->path() : QString();
+    return d->path;
 }
 
-const PackageStructure::Ptr Package::structure() const
+QStringList Package::contentsPrefixPaths() const
 {
-    return d->structure;
+    return d->contentsPrefixPaths;
 }
 
-#ifdef QCA2_FOUND
-void PackagePrivate::updateHash(const QString &basePath, const QString &subPath, const QDir &dir, QCA::Hash &hash)
+void Package::setContentsPrefixPaths(const QStringList &prefixPaths)
 {
-    // hash is calculated as a function of:
-    // * files ordered alphabetically by name, with each file's:
-    //      * path relative to the content root
-    //      * file data
-    // * directories ordered alphabetically by name, with each dir's:
-    //      * path relative to the content root
-    //      * file listing (recursing)
-    // symlinks (in both the file and dir case) are handled by adding
-    // the name of the symlink itself and the abs path of what it points to
-
-    const QDir::SortFlags sorting = QDir::Name | QDir::IgnoreCase;
-    const QDir::Filters filters = QDir::Hidden | QDir::System | QDir::NoDotAndDotDot;
-    foreach (const QString &file, dir.entryList(QDir::Files | filters, sorting)) {
-        if (!subPath.isEmpty()) {
-            hash.update(subPath.toUtf8());
-        }
-
-        hash.update(file.toUtf8());
-
-        QFileInfo info(dir.path() + '/' + file);
-        if (info.isSymLink()) {
-            hash.update(info.symLinkTarget().toUtf8());
-        } else {
-            QFile f(info.filePath());
-            if (f.open(QIODevice::ReadOnly)) {
-                while (!f.atEnd()) {
-                    hash.update(f.read(1024));
-                }
-            } else {
-                kWarning() << "could not add" << f.fileName() << "to the hash; file could not be opened for reading. "
-                           << "permissions fail?" << info.permissions() << info.isFile();
-            }
-        }
-    }
-
-    foreach (const QString &subDirPath, dir.entryList(QDir::Dirs | filters, sorting)) {
-        const QString relativePath = subPath + subDirPath + '/';
-        hash.update(relativePath.toUtf8());
-
-        QDir subDir(dir.path());
-        subDir.cd(subDirPath);
-
-        if (subDir.path() != subDir.canonicalPath()) {
-            hash.update(subDir.canonicalPath().toUtf8());
-        } else {
-            updateHash(basePath, relativePath, subDir, hash);
-        }
+    d.detach();
+    d->contentsPrefixPaths = prefixPaths;
+    if (d->contentsPrefixPaths.isEmpty()) {
+        d->contentsPrefixPaths << QString();
     }
 }
-#endif
 
 QString Package::contentsHash() const
 {
-#ifdef QCA2_FOUND
     if (!d->valid) {
         kWarning() << "can not create hash due to Package being invalid";
         return QString();
     }
 
-    //FIXME: the initializer should go somewhere global to be shared between all plasma uses?
-    QCA::Initializer init;
-    if (!QCA::isSupported("sha1")) {
-        kWarning() << "can not create hash for" << path() << "due to no SHA1 support in QCA2";
-        return QString();
-    }
-
-    QCA::Hash hash("sha1");
-    QString metadataPath = d->structure->path() + "metadata.desktop";
+    QCryptographicHash hash(QCryptographicHash::Sha1);
+    QString metadataPath = d->path + "metadata.desktop";
     if (QFile::exists(metadataPath)) {
         QFile f(metadataPath);
         if (f.open(QIODevice::ReadOnly)) {
             while (!f.atEnd()) {
-                hash.update(f.read(1024));
+                hash.addData(f.read(1024));
             }
         } else {
             kWarning() << "could not add" << f.fileName() << "to the hash; file could not be opened for reading.";
@@ -403,13 +552,8 @@ QString Package::contentsHash() const
         kWarning() << "no metadata at" << metadataPath;
     }
 
-    QStringList prefixes = d->structure->contentsPrefixPaths();
-    if (prefixes.isEmpty()) {
-        prefixes << QString();
-    }
-
-    foreach (QString prefix, prefixes) {
-        const QString basePath = d->structure->path() + prefix;
+    foreach (QString prefix, d->contentsPrefixPaths) {
+        const QString basePath = d->path + prefix;
         QDir dir(basePath);
 
         if (!dir.exists()) {
@@ -418,60 +562,155 @@ QString Package::contentsHash() const
 
         d->updateHash(basePath, QString(), dir, hash);
     }
-    return QCA::arrayToHex(hash.final().toByteArray());
+
+    return hash.result().toHex();
+}
+
+void Package::addDirectoryDefinition(const char *key, const QString &path, const QString &name)
+{
+    ContentStructure s;
+
+    if (d->contents.contains(key)) {
+        s = d->contents[key];
+    }
+
+#ifndef PLASMA_NO_PACKAGE_EXTRADATA
+    if (!name.isEmpty()) {
+        s.name = name;
+    }
 #else
-    // no QCA2!
-    kWarning() << "can not create hash for" << path() << "due to no cryptographic support (QCA2)";
-    return QString();
+    Q_UNUSED(name)
+#endif
+
+    s.paths.append(path);
+    s.directory = true;
+
+    d->contents[key] = s;
+}
+
+void Package::addFileDefinition(const char *key, const QString &path, const QString &name)
+{
+    ContentStructure s;
+
+    if (d->contents.contains(key)) {
+        s = d->contents[key];
+    }
+
+#ifndef PLASMA_NO_PACKAGE_EXTRADATA
+    if (!name.isEmpty()) {
+        s.name = name;
+    }
+#else
+    Q_UNUSED(name)
+#endif
+
+    s.paths.append(path);
+    s.directory = false;
+
+    d->contents[key] = s;
+}
+
+void Package::removeDefinition(const char *key)
+{
+    d->contents.remove(key);
+}
+
+void Package::setRequired(const char *key, bool required)
+{
+    QHash<QByteArray, ContentStructure>::iterator it = d->contents.find(key);
+    if (it == d->contents.end()) {
+        return;
+    }
+
+    d.detach();
+    it.value().required = required;
+}
+
+void Package::setDefaultMimeTypes(QStringList mimeTypes)
+{
+#ifndef PLASMA_NO_PACKAGE_EXTRADATA
+    d.detach();
+    d->mimeTypes = mimeTypes;
 #endif
 }
 
-//TODO: provide a version of this that allows one to ask for certain types of packages, etc?
-//      should we be using KService here instead/as well?
-QStringList Package::listInstalled(const QString &packageRoot) // static
+void Package::setMimeTypes(const char *key, QStringList mimeTypes)
 {
-    QDir dir(packageRoot);
-
-    if (!dir.exists()) {
-        return QStringList();
+#ifndef PLASMA_NO_PACKAGE_EXTRADATA
+    QHash<QByteArray, ContentStructure>::iterator it = d->contents.find(key);
+    if (it == d->contents.end()) {
+        return;
     }
 
-    QStringList packages;
-
-    foreach (const QString &sdir, dir.entryList(QDir::AllDirs | QDir::Readable)) {
-        QString metadata = packageRoot + '/' + sdir + "/metadata.desktop";
-        if (QFile::exists(metadata)) {
-            PackageMetadata m(metadata);
-            packages << m.pluginName();
-        }
-    }
-
-    return packages;
+    d.detach();
+    it.value().mimeTypes = mimeTypes;
+#endif
 }
 
-QStringList Package::listInstalledPaths(const QString &packageRoot) // static
+QList<const char*> Package::directories() const
 {
-    QDir dir(packageRoot);
-
-    if (!dir.exists()) {
-        return QStringList();
-    }
-
-    QStringList packages;
-
-    foreach (const QString &sdir, dir.entryList(QDir::AllDirs | QDir::Readable)) {
-        QString metadata = packageRoot + '/' + sdir + "/metadata.desktop";
-        if (QFile::exists(metadata)) {
-            packages << sdir;
+    QList<const char*> dirs;
+    QHash<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
+    while (it != d->contents.constEnd()) {
+        if (it.value().directory) {
+            dirs << it.key();
         }
+        ++it;
     }
-
-    return packages;
+    return dirs;
 }
 
-bool Package::installPackage(const QString &package,
-                             const QString &packageRoot,
-                             const QString &servicePrefix) // static
+QList<const char*> Package::requiredDirectories() const
+{
+    QList<const char*> dirs;
+    QHash<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
+    while (it != d->contents.constEnd()) {
+        if (it.value().directory &&
+            it.value().required) {
+            dirs << it.key();
+        }
+        ++it;
+    }
+    return dirs;
+}
+
+QList<const char*> Package::files() const
+{
+    QList<const char*> files;
+    QHash<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
+    while (it != d->contents.constEnd()) {
+        if (!it.value().directory) {
+            files << it.key();
+        }
+        ++it;
+    }
+    return files;
+}
+
+QList<const char*> Package::requiredFiles() const
+{
+    QList<const char*> files;
+    QHash<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
+    while (it != d->contents.constEnd()) {
+        if (!it.value().directory && it.value().required) {
+            files << it.key();
+        }
+        ++it;
+    }
+
+    return files;
+}
+
+bool Package::installPackage(const QString &package, const QString &packageRoot)
+{
+    if (d->structure) {
+        return d->structure.data()->installPackage(this, package, packageRoot);
+    }
+
+    return PackagePrivate::installPackage(package, packageRoot, d->servicePrefix);
+}
+
+bool PackagePrivate::installPackage(const QString &package, const QString &packageRoot, const QString &servicePrefix)
 {
     //TODO: report *what* failed if something does fail
     QDir root(packageRoot);
@@ -518,7 +757,7 @@ bool Package::installPackage(const QString &package,
 
         if (!archive->open(QIODevice::ReadOnly)) {
             kWarning() << "Could not open package file:" << package;
-	    delete archive;
+        delete archive;
             return false;
         }
 
@@ -535,7 +774,8 @@ bool Package::installPackage(const QString &package,
                 path.append(entry->name()).append("/");
             }
         }
-	delete archive;
+
+        delete archive;
     }
 
     QString metadataPath = path + "metadata.desktop";
@@ -544,7 +784,7 @@ bool Package::installPackage(const QString &package,
         return false;
     }
 
-    PackageMetadata meta(metadataPath);
+    KPluginInfo meta(metadataPath);
     QString targetName = meta.pluginName();
 
     if (targetName.isEmpty()) {
@@ -616,9 +856,9 @@ bool Package::installPackage(const QString &package,
 
         //TODO: reduce code duplication with registerPackage below
 
-        QString serviceName = servicePrefix + meta.pluginName();
+        const QString serviceName = servicePrefix + meta.pluginName() + ".desktop";
 
-        QString service = KStandardDirs::locateLocal("services", serviceName + ".desktop");
+        QString service = KStandardDirs::locateLocal("services", serviceName);
 #ifndef PLASMA_NO_KIO
         KIO::FileCopyJob *job = KIO::file_copy(metaPath, service, -1, KIO::HideProgressInfo);
         const bool ok = job->exec();
@@ -642,26 +882,36 @@ bool Package::installPackage(const QString &package,
         }
     }
 
+    QDBusInterface sycoca("org.kde.kded", "/kbuildsycoca");
+    sycoca.asyncCall("recreate");
     return true;
 }
 
-bool Package::uninstallPackage(const QString &pluginName,
-                               const QString &packageRoot,
-                               const QString &servicePrefix) // static
+bool Package::uninstallPackage(const QString &packageName, const QString &packageRoot)
+{
+    if (d->structure) {
+        return d->structure.data()->uninstallPackage(this, packageName, packageRoot);
+    }
+
+    return PackagePrivate::uninstallPackage(packageName, packageRoot, d->servicePrefix);
+}
+
+bool PackagePrivate::uninstallPackage(const QString &packageName, const QString &packageRoot, const QString &servicePrefix)
 {
     // We need to remove the package directory and its metadata file.
-    QString targetName = pluginName;
-    targetName = packageRoot + '/' + targetName;
+    const QString targetName = packageRoot + '/' + packageName;
 
     if (!QFile::exists(targetName)) {
         kWarning() << targetName << "does not exist";
         return false;
     }
 
-    QString serviceName = servicePrefix + pluginName;
+    const QString serviceName = servicePrefix + packageName + ".desktop";
 
-    QString service = KStandardDirs::locateLocal("services", serviceName + ".desktop");
+    QString service = KStandardDirs::locateLocal("services", serviceName);
+#ifndef NDEBUG
     kDebug() << "Removing service file " << service;
+#endif
     bool ok = QFile::remove(service);
 
     if (!ok) {
@@ -681,157 +931,118 @@ bool Package::uninstallPackage(const QString &pluginName,
         return false;
     }
 
+    QDBusInterface sycoca("org.kde.kded", "/kbuildsycoca");
+    sycoca.asyncCall("recreate");
     return true;
 }
 
-bool Package::registerPackage(const PackageMetadata &data, const QString &iconPath)
+PackagePrivate::PackagePrivate()
+        : QSharedData(),
+          servicePrefix("plasma-applet-"),
+          metadata(0),
+          externalPaths(false),
+          valid(false)
 {
-    QString serviceName("plasma-applet-" + data.pluginName());
-    QString service = KStandardDirs::locateLocal("services", serviceName + ".desktop");
-
-    if (data.pluginName().isEmpty()) {
-        return false;
-    }
-
-    data.write(service);
-
-    KDesktopFile config(service);
-    KConfigGroup cg = config.desktopGroup();
-    const QString type = data.type().isEmpty() ? "Service" : data.type();
-    cg.writeEntry("Type", type);
-    const QString serviceTypes = data.serviceType().isNull() ? "Plasma/Applet,Plasma/Containment" : data.serviceType();
-    cg.writeEntry("X-KDE-ServiceTypes", serviceTypes);
-    cg.writeEntry("X-KDE-PluginInfo-EnabledByDefault", true);
-
-    QFile icon(iconPath);
-    if (icon.exists()) {
-        //FIXME: the '/' search will break on non-UNIX. do we care?
-        QString installedIcon("plasma_applet_" + data.pluginName() +
-                              iconPath.right(iconPath.length() - iconPath.lastIndexOf("/")));
-        cg.writeEntry("Icon", installedIcon);
-        installedIcon = KStandardDirs::locateLocal("icon", installedIcon);
-#ifndef PLASMA_NO_KIO
-        KIO::FileCopyJob *job = KIO::file_copy(iconPath, installedIcon, -1, KIO::HideProgressInfo);
-        job->exec();
-#else
-        QFile::copy(iconPath, installedIcon);
-#endif
-    }
-
-    return true;
-}
-
-bool Package::createPackage(const PackageMetadata &metadata,
-                            const QString &source,
-                            const QString &destination,
-                            const QString &icon) // static
-{
-    Q_UNUSED(icon)
-    if (!metadata.isValid()) {
-        kWarning() << "Metadata file is not complete";
-        return false;
-    }
-
-    // write metadata in a temporary file
-    KTemporaryFile metadataFile;
-    if (!metadataFile.open()) {
-        return false;
-    }
-    metadata.write(metadataFile.fileName());
-
-    // put everything into a zip archive
-    KZip creation(destination);
-    creation.setCompression(KZip::NoCompression);
-    if (!creation.open(QIODevice::WriteOnly)) {
-        return false;
-    }
-
-    creation.addLocalFile(metadataFile.fileName(), "metadata.desktop");
-    creation.addLocalDirectory(source, "contents");
-    creation.close();
-    return true;
-}
-
-PackagePrivate::PackagePrivate(const PackageStructure::Ptr st, const QString &p)
-        : structure(st),
-          service(0)
-{
-    if (structure) {
-        if (p.isEmpty()) {
-            structure->setPath(structure->defaultPackageRoot());
-        } else {
-            structure->setPath(p);
-        }
-    }
-
-    valid = structure && !structure->path().isEmpty();
-}
-
-PackagePrivate::PackagePrivate(const PackageStructure::Ptr st, const QString &packageRoot, const QString &path)
-        : structure(st),
-          service(0)
-{
-    if (structure) {
-        if (packageRoot.isEmpty()) {
-            structure->setPath(structure->defaultPackageRoot()%"/"%path);
-        } else {
-            structure->setPath(packageRoot%"/"%path);
-        }
-    }
-
-    valid = structure && !structure->path().isEmpty();
+    contentsPrefixPaths << "contents/";
 }
 
 PackagePrivate::PackagePrivate(const PackagePrivate &other)
-        : structure(other.structure),
-          service(other.service),
-          valid(other.valid)
+    : QSharedData()
 {
+    *this = other;
+    metadata = 0;
 }
 
 PackagePrivate::~PackagePrivate()
 {
+    delete metadata;
 }
 
 PackagePrivate &PackagePrivate::operator=(const PackagePrivate &rhs)
 {
+    if (&rhs == this) {
+        return *this;
+    }
+
     structure = rhs.structure;
-    service = rhs.service;
+    path = rhs.path;
+    contentsPrefixPaths = rhs.contentsPrefixPaths;
+    servicePrefix = rhs.servicePrefix;
+    contents = rhs.contents;
+#ifndef PLASMA_NO_PACKAGE_EXTRADATA
+    mimeTypes = rhs.mimeTypes;
+#endif
+    defaultPackageRoot = rhs.defaultPackageRoot;
+    servicePrefix = rhs.servicePrefix;
+    metadata = 0;
+    externalPaths = rhs.externalPaths;
     valid = rhs.valid;
     return *this;
 }
 
-void PackagePrivate::publish(AnnouncementMethods methods)
+void PackagePrivate::updateHash(const QString &basePath, const QString &subPath, const QDir &dir, QCryptographicHash &hash)
 {
-    if (!structure) {
-        return;
+    // hash is calculated as a function of:
+    // * files ordered alphabetically by name, with each file's:
+    //      * path relative to the content root
+    //      * file data
+    // * directories ordered alphabetically by name, with each dir's:
+    //      * path relative to the content root
+    //      * file listing (recursing)
+    // symlinks (in both the file and dir case) are handled by adding
+    // the name of the symlink itself and the abs path of what it points to
+
+    const QDir::SortFlags sorting = QDir::Name | QDir::IgnoreCase;
+    const QDir::Filters filters = QDir::Hidden | QDir::System | QDir::NoDotAndDotDot;
+    foreach (const QString &file, dir.entryList(QDir::Files | filters, sorting)) {
+        if (!subPath.isEmpty()) {
+            hash.addData(subPath.toUtf8());
+        }
+
+        hash.addData(file.toUtf8());
+
+        QFileInfo info(dir.path() + '/' + file);
+        if (info.isSymLink()) {
+            hash.addData(info.symLinkTarget().toUtf8());
+        } else {
+            QFile f(info.filePath());
+            if (f.open(QIODevice::ReadOnly)) {
+                while (!f.atEnd()) {
+                    hash.addData(f.read(1024));
+                }
+            } else {
+                kWarning() << "could not add" << f.fileName() << "to the hash; file could not be opened for reading. "
+                           << "permissions fail?" << info.permissions() << info.isFile();
+            }
+        }
     }
 
-    if (!service) {
-        service = new PlasmoidService(structure->path());
-    }
+    foreach (const QString &subDirPath, dir.entryList(QDir::Dirs | filters, sorting)) {
+        const QString relativePath = subPath + subDirPath + '/';
+        hash.addData(relativePath.toUtf8());
 
-    QString resourceName =
-    i18nc("%1 is the name of a plasmoid, %2 the name of the machine that plasmoid is published on",
-          "%1 on %2", structure->metadata().name(), QHostInfo::localHostName());
-    kDebug() << "publishing package under name " << resourceName;
-    service->d->publish(methods, resourceName, structure->metadata());
+        QDir subDir(dir.path());
+        subDir.cd(subDirPath);
+
+        if (subDir.path() != subDir.canonicalPath()) {
+            hash.addData(subDir.canonicalPath().toUtf8());
+        } else {
+            updateHash(basePath, relativePath, subDir, hash);
+        }
+    }
 }
 
-void PackagePrivate::unpublish()
+void PackagePrivate::createPackageMetadata(const QString &path)
 {
-    if (service) {
-        service->d->unpublish();
-    }
-}
+    delete metadata;
 
-bool PackagePrivate::isPublished() const
-{
-    if (service) {
-        return service->d->isPublished();
-    } else {
-        return false;
+    QString metadataPath(path + "/metadata.desktop");
+    if (!QFile::exists(metadataPath)) {
+        kWarning() << "No metadata file in the package, expected it at:" << metadataPath;
+        metadataPath.clear();
     }
+
+    metadata = new KPluginInfo(metadataPath);
 }
 
 } // Namespace

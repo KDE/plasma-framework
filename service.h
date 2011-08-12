@@ -20,7 +20,7 @@
 #ifndef PLASMA_SERVICE_H
 #define PLASMA_SERVICE_H
 
-#include <QtCore/QMap>
+#include <QtCore/QHash>
 #include <QtCore/QObject>
 #include <QtCore/QVariant>
 
@@ -28,7 +28,6 @@
 
 #include <plasma/plasma_export.h>
 #include <plasma/plasma.h>
-#include "packagemetadata.h"
 
 class QGraphicsWidget;
 class QIODevice;
@@ -101,28 +100,6 @@ public:
      * Destructor
      */
     ~Service();
-
-    /**
-     * Used to load a given service from a plugin.
-     *
-     * @param name the plugin name of the service to load
-     * @param args a list of arguments to supply to the service plugin when loading it
-     * @param parent the parent object, if any, for the service
-     *
-     * @return a Service object, guaranteed to be not null.
-     * @since 4.5
-     */
-    static Service *load(const QString &name, const QVariantList &args, QObject *parent = 0);
-
-    /**
-     * Used to load a given service from a plugin.
-     *
-     * @param name the plugin name of the service to load
-     * @param parent the parent object, if any, for the service
-     *
-     * @return a Service object, guaranteed to be not null.
-     */
-    static Service *load(const QString &name, QObject *parent = 0);
 
     /**
      * Used to access a service from an url. Always check for the signal serviceReady() that fires
@@ -227,14 +204,9 @@ public:
      * @param description the configuration values to turn into the parameter map
      * @since 4.4
      */
-    Q_INVOKABLE QMap<QString, QVariant> parametersFromDescription(const KConfigGroup &description);
+    Q_INVOKABLE QHash<QString, QVariant> parametersFromDescription(const KConfigGroup &description);
 
 Q_SIGNALS:
-    /**
-     * Emitted when a job associated with this Service completes its task
-     */
-    void finished(Plasma::ServiceJob *job);
-
     /**
      * Emitted when the Service's operations change. For example, a
      * media player service may change what operations are available
@@ -268,7 +240,7 @@ protected:
      * @return a ServiceJob that can be started and monitored by the consumer
      */
     virtual ServiceJob *createJob(const QString &operation,
-                                  QMap<QString, QVariant> &parameters) = 0;
+                                  QHash<QString, QVariant> &parameters) = 0;
 
     /**
      * By default this is based on the file in plasma/services/name.operations, but can be
@@ -301,7 +273,6 @@ protected:
     void setOperationEnabled(const QString &operation, bool enable);
 
 private:
-    Q_PRIVATE_SLOT(d, void jobFinished(KJob *))
     Q_PRIVATE_SLOT(d, void associatedWidgetDestroyed(QObject *))
     Q_PRIVATE_SLOT(d, void associatedGraphicsWidgetDestroyed(QObject *))
 

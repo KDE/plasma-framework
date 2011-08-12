@@ -168,36 +168,6 @@ public:
     Q_INVOKABLE void ensureItemVisible(QGraphicsItem *item);
 
     /**
-     * Register an item as a drag handle, it means mouse events will pass trough it
-     * and will be possible to drag the view by dragging the item itself.
-     * The item will still receive mouse clicks if the mouse didn't move
-     * between press and release.
-     *
-     * This function is no more necessary, since it's the authomatic behaviour
-     * for all children items, the implementation has now no effect
-     *
-     * @param item the drag handle item. widget() must be an ancestor if it in
-     *             the parent hierarchy. if item doesn't accept mose press events
-     *             it's not necessary to call this function.
-     * @since 4.4
-     */
-#ifndef KDE_NO_DEPRECATED
-    KDE_DEPRECATED Q_INVOKABLE void registerAsDragHandle(QGraphicsWidget *item);
-#endif
-
-    /**
-     * Unregister the given item as drag handle (if it was registered)
-     *
-     * This function is no more necessary, since it's the authomatic behaviour
-     * for all children items, the implementation has now no effect
-     *
-     * @since 4.4
-     */
-#ifndef KDE_NO_DEPRECATED
-    KDE_DEPRECATED Q_INVOKABLE void unregisterAsDragHandle(QGraphicsWidget *item);
-#endif
-
-    /**
      * The geometry of the viewport.
      * @since 4.4
      */

@@ -23,43 +23,51 @@
 #include <kconfiggroup.h>
 #include <kdebug.h>
 
-#include "plasma/package.h"
-#include "plasma/packagestructure.h"
-#include "plasma/applet.h"
+#include "applet.h"
+#include "pluginloader.h"
 
-class NoPrefixes : public Plasma::PackageStructure
+class NoPrefixes : public Plasma::Package
 {
 public:
     explicit NoPrefixes()
-        : Plasma::PackageStructure(0, "StructureLess")
+        : Plasma::Package()
     {
         setContentsPrefixPaths(QStringList());
         addDirectoryDefinition("bin", "bin", "bin");
+        setPath("/");
     }
 };
 
 
-void PackageStructureTest::init()
+PackageStructureTest::PackageStructureTest()
 {
-    ps = Plasma::Applet::packageStructure();
+    m_packagePath = QString::fromLatin1(KDESRCDIR) + "signedPackage/";
+    ps = Plasma::PluginLoader::self()->loadPackage("Plasma/Applet");
+    ps.setPath(m_packagePath);
 }
 
-void PackageStructureTest::cleanup()
+void PackageStructureTest::copyPerformance()
 {
+    // seed the cache first
+    ps.filePath("mainscript");
+
+    QTime t;
+    t.start();
+
+    for (int i = 0; i < 100000; ++i) {
+        Plasma::Package foo(ps);
+        const QString bar = foo.filePath("mainscript");
+    }
+
+    QVERIFY(t.elapsed() < 50);
 }
 
 void PackageStructureTest::emptyContentsPrefix()
 {
-    Plasma::PackageStructure::Ptr structure(new NoPrefixes);
-    Plasma::Package package("/", structure);
+    NoPrefixes package;
     QString path(package.filePath("bin", "ls"));
-    qDebug() << path;
+    //qDebug() << path;
     QCOMPARE(path, QString("/bin/ls"));
-}
-
-void PackageStructureTest::type()
-{
-    QCOMPARE(ps->type(), QString("Plasmoid"));
 }
 
 void PackageStructureTest::directories()
@@ -67,19 +75,37 @@ void PackageStructureTest::directories()
     QList<const char*> dirs;
     dirs << "animations" << "config" << "data" << "images" << "scripts" << "translations" << "ui";
 
-    QList<const char*> psDirs = ps->directories();
+    QList<const char*> psDirs = ps.directories();
 
     QCOMPARE(dirs.count(), psDirs.count());
 
-    for (int i = 0; i < psDirs.count(); ++i) {
-        QVERIFY(qstrcmp(dirs[i], psDirs[i]) == 0);
+    foreach (const char *dir, psDirs) {
+        bool found = false;
+        foreach (const char *check, dirs) {
+            if (qstrcmp(dir, check)) {
+                found = true;
+                break;
+            }
+        }
+        QVERIFY(found);
+    }
+
+    foreach (const char *dir, dirs) {
+        bool found = false;
+        foreach (const char *check, psDirs) {
+            if (qstrcmp(dir, check)) {
+                found = true;
+                break;
+            }
+        }
+        QVERIFY(found);
     }
 }
 
 void PackageStructureTest::requiredDirectories()
 {
     QList<const char*> dirs;
-    QCOMPARE(ps->requiredDirectories(), dirs);
+    QCOMPARE(ps.requiredDirectories(), dirs);
 }
 
 void PackageStructureTest::files()
@@ -87,14 +113,20 @@ void PackageStructureTest::files()
     QList<const char*> files;
     files << "defaultconfig" << "mainconfigui" << "mainconfigxml" << "mainscript";
 
-    QList<const char*> psFiles = ps->files();
+    QList<const char*> psFiles = ps.files();
 
     //for (int i = 0; i < psFiles.count(); ++i) {
     //    qDebug() << psFiles[i];
     //}
-    QCOMPARE(files.count(), psFiles.count());
-    for (int i = 0; i < files.count(); ++i) {
-        QCOMPARE(files[i], psFiles[i]);
+    foreach (const char *file, psFiles) {
+        bool found = false;
+        foreach (const char *check, files) {
+            if (qstrcmp(file, check)) {
+                found = true;
+                break;
+            }
+        }
+        QVERIFY(found);
     }
 }
 
@@ -103,7 +135,7 @@ void PackageStructureTest::requiredFiles()
     QList<const char*> files;
     files << "mainscript";
 
-    QList<const char*> psFiles = ps->requiredFiles();
+    QList<const char*> psFiles = ps.requiredFiles();
 
     QCOMPARE(files.count(), psFiles.count());
     for (int i = 0; i < files.count(); ++i) {
@@ -113,100 +145,28 @@ void PackageStructureTest::requiredFiles()
 
 void PackageStructureTest::path()
 {
-    QCOMPARE(ps->path("images"), QString("images"));
-    QCOMPARE(ps->path("mainscript"), QString("code/main"));
+    qDebug() << "real paths are" << ps.filePath("images") << ps.filePath("mainscript");
+    qDebug() << "we wants" << QString(m_packagePath + QString("contents/images")) << QString(m_packagePath + QString("contents/code/main.js"));
+    QCOMPARE(ps.filePath("images"), QString(m_packagePath + QString("contents/images")));
+    QCOMPARE(ps.filePath("mainscript"), QString(m_packagePath + QString("contents/code/main.js")));
 }
 
 void PackageStructureTest::name()
 {
-    QCOMPARE(ps->name("config"), i18n("Configuration Definitions"));
-    QCOMPARE(ps->name("mainscript"), i18n("Main Script File"));
+    QCOMPARE(ps.name("config"), i18n("Configuration Definitions"));
+    QCOMPARE(ps.name("mainscript"), i18n("Main Script File"));
 }
 
 void PackageStructureTest::required()
 {
-    QVERIFY(ps->isRequired("mainscript"));
+    QVERIFY(ps.isRequired("mainscript"));
 }
 
-void PackageStructureTest::mimetypes()
+void PackageStructureTest::mimeTypes()
 {
-    QStringList mimetypes;
-    mimetypes << "image/svg+xml" << "image/png" << "image/jpeg";
-    QCOMPARE(ps->mimetypes("images"), mimetypes);
-}
-
-void PackageStructureTest::read()
-{
-    QString structurePath = QString(KDESRCDIR) + "/plasmoidpackagerc";
-    KConfig config(structurePath, KConfig::SimpleConfig);
-    Plasma::PackageStructure structure;
-    structure.read(&config);
-
-    // check some names
-    QCOMPARE(structure.name("config"), i18n("Configuration Definitions"));
-    QCOMPARE(structure.name("mainscript"), i18n("Main Script File"));
-
-    // check some paths
-    QCOMPARE(structure.path("images"), QString("images"));
-    QCOMPARE(structure.path("mainscript"), QString("code/main"));
-
-    // compare files
-    QList<const char *> files;
-    files << "mainconfiggui" << "mainconfigxml" << "mainscript";
-
-    QList<const char *> psFiles = structure.files();
-
-    QCOMPARE(psFiles.count(), files.count());
-    for (int i = 0; i < files.count(); ++i) {
-        QCOMPARE(psFiles[i], files[i]);
-    }
-
-    // compare required files
-    QList<const char *> reqFiles = structure.requiredFiles();
-    QCOMPARE(reqFiles.count(), 1);
-    QCOMPARE(reqFiles[0], "mainscript");
-
-    // compare directories
-    QList <const char *> dirs;
-    dirs << "config" << "configui" << "images" << "scripts";
-    QList <const char *> psDirs = structure.directories();
-    QCOMPARE(psDirs.count(), dirs.count());
-    for (int i = 0; i < dirs.count(); i++) {
-        QCOMPARE(psDirs[i], dirs[i]);
-    }
-    QCOMPARE(structure.requiredDirectories().size(), 0);
-}
-
-void PackageStructureTest::write()
-{
-    QString file1 = QDir::homePath() + "/.kde-unit-test/packagerc";
-    QString file2 = QString(KDESRCDIR) + "/plasmoidpackagerc";
-
-    KConfig config(file1, KConfig::SimpleConfig);
-    ps->write(&config);
-
-    // check type
-    QCOMPARE(config.group("").readEntry("Type", QString()), QString("Plasmoid"));
-
-    // check groups
-    QStringList groups;
-    groups << "images" << "config" << "data" << "defaultconfig" << "scripts"
-           << "mainconfigui" << "mainconfigxml" << "mainscript"
-           << "translations" << "ui" << "animations";
-    groups.sort();
-
-    QStringList actualGroups = config.groupList();
-    actualGroups.sort();
-    //kDebug() << actualGroups;
-    QCOMPARE(actualGroups, groups);
-
-    // check scripts
-    KConfigGroup scripts = config.group("scripts");
-    QCOMPARE(scripts.readEntry("Path", QString()), QString("code"));
-    QCOMPARE(scripts.readEntry("Name", QString()), QString("Executable Scripts"));
-    QCOMPARE(scripts.readEntry("Mimetypes", QStringList()), QStringList() << "text/plain");
-    QCOMPARE(scripts.readEntry("Directory", false), true);
-    QCOMPARE(scripts.readEntry("Required", false), false);
+    QStringList mimeTypes;
+    mimeTypes << "image/svg+xml" << "image/png" << "image/jpeg";
+    QCOMPARE(ps.mimeTypes("images"), mimeTypes);
 }
 
 QTEST_KDEMAIN(PackageStructureTest, NoGUI)

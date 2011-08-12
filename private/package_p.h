@@ -23,32 +23,71 @@
 #include "../package.h"
 #include "../service.h"
 
+#include <QCryptographicHash>
+#include <QDir>
 #include <QString>
+#include <QSharedData>
 
 namespace Plasma
 {
 
-class PackagePrivate
+class ContentStructure
+{
+    public:
+        ContentStructure()
+            : directory(false),
+              required(false)
+        {
+        }
+
+        ContentStructure(const ContentStructure &other)
+        {
+            paths = other.paths;
+#ifndef PLASMA_NO_PACKAGE_EXTRADATA
+            name = other.name;
+            mimeTypes = other.mimeTypes;
+#endif
+            directory = other.directory;
+            required = other.required;
+        }
+
+        QString found;
+        QStringList paths;
+#ifndef PLASMA_NO_PACKAGE_EXTRADATA
+        QString name;
+        QStringList mimeTypes;
+#endif
+        bool directory : 1;
+        bool required : 1;
+};
+
+class PackagePrivate : public QSharedData
 {
 public:
-    PackagePrivate(const PackageStructure::Ptr st, const QString &p);
-    PackagePrivate(const PackageStructure::Ptr st, const QString &packageRoot, const QString &path);
+    PackagePrivate();
     PackagePrivate(const PackagePrivate &other);
     ~PackagePrivate();
 
     PackagePrivate &operator=(const PackagePrivate &rhs);
 
-    void publish(AnnouncementMethods methods);
-    void unpublish();
-    bool isPublished() const;
+    void createPackageMetadata(const QString &path);
+    void updateHash(const QString &basePath, const QString &subPath, const QDir &dir, QCryptographicHash &hash);
+    static bool installPackage(const QString &archivePath, const QString &packageRoot, const QString &servicePrefix);
+    static bool uninstallPackage(const QString &packageName, const QString &packageRoot, const QString &servicePrefix);
 
-#ifdef QCA2_FOUND
-    void updateHash(const QString &basePath, const QString &subPath, const QDir &dir, QCA::Hash &hash);
+    QWeakPointer<PackageStructure> structure;
+    QString path;
+    QStringList contentsPrefixPaths;
+    QString defaultPackageRoot;
+    QString servicePrefix;
+    QHash<QString, QString> discoveries;
+    QHash<QByteArray, ContentStructure> contents;
+#ifndef PLASMA_NO_PACKAGE_EXTRADATA
+    QStringList mimeTypes;
 #endif
-
-    PackageStructure::Ptr structure;
-    Service *service;
-    bool valid;
+    KPluginInfo *metadata;
+    bool externalPaths : 1;
+    bool valid : 1;
 };
 
 }

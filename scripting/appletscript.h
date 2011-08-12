@@ -210,7 +210,7 @@ protected:
      *         be used to request resources, such as images and
      *         interface files.
      */
-    const Package *package() const;
+    Package package() const;
 
     /**
      * @return the KPluginInfo associated with this plasmoid

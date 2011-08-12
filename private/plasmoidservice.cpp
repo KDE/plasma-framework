@@ -25,14 +25,15 @@
 #include <plasma/applet.h>
 #include <plasma/remote/authorizationmanager.h>
 #include <plasma/remote/authorizationrule.h>
-#include <plasma/packagemetadata.h>
 #include <plasma/service.h>
 #include <plasma/servicejob.h>
 
 #include <kdebug.h>
 #include <ktemporaryfile.h>
 #include <kzip.h>
+#include <kservicetypetrader.h>
 
+#include <QDir>
 #include <QFile>
 #include <QFileInfo>
 #include <QHostInfo>
@@ -40,37 +41,41 @@
 namespace Plasma
 {
 
-PlasmoidServiceJob::PlasmoidServiceJob(const QString &plasmoidLocation,
-                                       const QString &destination,
+PlasmoidServiceJob::PlasmoidServiceJob(const QString &destination,
                                        const QString &operation,
-                                       QMap<QString,QVariant>& parameters,
+                                       QHash<QString,QVariant>& parameters,
                                        PlasmoidService *service)
     : Plasma::ServiceJob(destination, operation, parameters,
                          static_cast<Plasma::Service*>(service)),
-      m_service(service),
-      m_packagePath(plasmoidLocation)
+      m_service(service)
 {
 }
 
 void PlasmoidServiceJob::start()
 {
     if (operationName() == "GetPackage") {
+#ifndef NDEBUG
         kDebug() << "sending " << m_service->m_packagePath;
-        QFileInfo fileInfo(m_service->m_packagePath);
-
-        if (fileInfo.exists() && fileInfo.isAbsolute()) {
-            kDebug() << "file exists, let's try and read it";
-            QFile file(m_service->m_packagePath);
-            file.open(QIODevice::ReadOnly);
-            setResult(file.readAll());
+#endif
+        if (m_service->m_packagePath.isEmpty()) {
+            // just return the plugin name in this case
+            setResult(m_service->m_pluginName);
         } else {
-            kDebug() << "file doesn't exists, we're sending the plugin name";
-            setResult(m_packagePath);
+            QFileInfo fileInfo(m_service->m_packagePath);
+
+            if (fileInfo.exists() && fileInfo.isAbsolute()) {
+#ifndef NDEBUG
+                kDebug() << "file exists, let's try and read it";
+#endif
+                QFile file(m_service->m_packagePath);
+                file.open(QIODevice::ReadOnly);
+                setResult(file.readAll());
+            } else {
+                setResult(QString());
+            }
         }
     } else if (operationName() == "GetMetaData") {
-        KTemporaryFile tempFile;
-        m_service->m_metadata.write(tempFile.fileName());
-        QFile file(tempFile.fileName());
+        QFile file(m_service->m_metadata);
         setResult(file.readAll());
     } else if (operationName() == "DataEngine") {
         DataEngine *engine  = m_service->dataEngine(parameters()["EngineName"].toString());
@@ -83,63 +88,58 @@ void PlasmoidServiceJob::start()
         }
         setResult(serviceName);
     }
-}
 
-
-PlasmoidService::PlasmoidService(const QString &packageLocation)
-    : Plasma::Service(0)
-{
-    setName("plasmoidservice");
-
-    QString location;
-    location = packageLocation;
-    if (!location.endsWith('/')) {
-        location.append('/');
-    }
-
-    m_metadata.read(location + "metadata.desktop");
-    if (!m_metadata.isValid()) {
-        kDebug() << "not a valid package";
-    }
-    if (!m_tempFile.open()) {
-        kDebug() << "could not create tempfile";
-    }
-    QString packagePath = m_tempFile.fileName();
-    m_tempFile.close();
-
-    // put everything into a zip archive
-    KZip creation(packagePath);
-    creation.setCompression(KZip::NoCompression);
-    if (!creation.open(QIODevice::WriteOnly)) {
-        kDebug() << "could not open archive";
-    }
-
-    creation.addLocalFile(location + "metadata.desktop", "metadata.desktop");
-    location.append("contents/");
-    creation.addLocalDirectory(location, "contents");
-    creation.close();
-
-    m_packagePath = packagePath;
+    setResult(false);
 }
 
 PlasmoidService::PlasmoidService(Applet *applet)
+    : Plasma::Service(applet),
+      m_pluginName(applet->pluginName())
 {
     setName("plasmoidservice");
-    if (!applet->package() || !applet->package()->isValid()) {
-        kDebug() << "not a valid package";
-        m_packagePath = applet->pluginName();
+
+    if (applet->package().isValid()) {
+        const QString root = applet->package().path();
+        m_metadata = root + "metadata.desktop";
+
+        m_tempFile.open();
+        m_packagePath = m_tempFile.fileName();
+        m_tempFile.close();
+
+        // put everything into a zip archive
+        KZip creation(m_packagePath);
+        creation.setCompression(KZip::NoCompression);
+        if (creation.open(QIODevice::WriteOnly)) {
+            QDir dir(root);
+            foreach (const QString &entry, dir.entryList(QDir::Files)) {
+                creation.addLocalFile(root + entry, entry);
+            }
+
+            foreach (const QString &entry, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+                creation.addLocalDirectory(root + entry, entry);
+            }
+
+            creation.close();
+        } else {
+#ifndef NDEBUG
+            kDebug() << "could not open archive";
+#endif
+        }
+    } else {
+#ifndef NDEBUG
+        kDebug() << "applet lacks a valid package";
+#endif
+        const QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(applet->pluginName());
+        KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
+        if (!offers.isEmpty()) {
+            m_metadata = offers.first()->entryPath();
+        }
     }
 }
 
-PackageMetadata PlasmoidService::metadata() const
+Plasma::ServiceJob* PlasmoidService::createJob(const QString& operation, QHash<QString,QVariant>& parameters)
 {
-    return m_metadata;
-}
-
-Plasma::ServiceJob* PlasmoidService::createJob(const QString& operation,
-                                          QMap<QString,QVariant>& parameters)
-{
-    return new PlasmoidServiceJob(m_packagePath, destination(), operation, parameters, this);
+    return new PlasmoidServiceJob(destination(), operation, parameters, this);
 }
 
 }

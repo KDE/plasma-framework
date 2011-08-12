@@ -224,12 +224,16 @@ public:
             } else if (loaded) {
                 //Remove runner
                 AbstractRunner *runner = runners.take(runnerName);
+#ifndef NDEBUG
                 kDebug() << "Removing runner: " << runnerName;
+#endif
                 delete runner;
             }
         }
 
+#ifndef NDEBUG
         kDebug() << "All runners loaded, total:" << runners.count();
+#endif
     }
 
     AbstractRunner *loadInstalledRunner(const KService::Ptr service)
@@ -238,7 +242,7 @@ public:
             return 0;
         }
 
-        AbstractRunner *runner = PluginLoader::pluginLoader()->loadRunner(service->property("X-KDE-PluginInfo-Name", QVariant::String).toString());
+        AbstractRunner *runner = PluginLoader::self()->loadRunner(service->property("X-KDE-PluginInfo-Name", QVariant::String).toString());
 
         if (runner) {
             runner->setParent(q);
@@ -252,7 +256,9 @@ public:
                     QString error;
                     runner = service->createInstance<AbstractRunner>(q, args, &error);
                     if (!runner) {
+#ifndef NDEBUG
                         kDebug() << "Failed to load runner:" << service->name() << ". error reported:" << error;
+#endif
                     }
                 }
             } else {
@@ -262,9 +268,11 @@ public:
         }
 
         if (runner) {
+#ifndef NDEBUG
             kDebug() << "================= loading runner:" << service->name() << "=================";
+#endif
             QObject::connect(runner, SIGNAL(matchingSuspended(bool)), q, SLOT(runnerMatchingSuspended(bool)));
-            QMetaObject::invokeMethod(runner, "init");
+            runner->init();
         }
 
         return runner;
@@ -576,7 +584,9 @@ void RunnerManager::run(const QueryMatch &match)
 
     foreach (FindMatchesJob *job, d->searchJobs) {
         if (job->runner() == runner && !job->isFinished()) {
+#ifndef NDEBUG
             kDebug() << "deferred run";
+#endif
             d->deferredRun = match;
             return;
         }
@@ -608,14 +618,8 @@ QMimeData * RunnerManager::mimeDataForMatch(const QString &id) const
 QMimeData * RunnerManager::mimeDataForMatch(const QueryMatch &match) const
 {
     AbstractRunner *runner = match.runner();
-    QMimeData *mimeData;
-    if (runner && QMetaObject::invokeMethod(
-            runner,
-            "mimeDataForMatch", Qt::DirectConnection,
-            Q_RETURN_ARG(QMimeData*, mimeData),
-            Q_ARG(const Plasma::QueryMatch *, &match)
-    )) {
-        return mimeData;
+    if (runner) {
+        return runner->mimeDataForMatch(match);
     }
 
     return 0;
@@ -623,7 +627,7 @@ QMimeData * RunnerManager::mimeDataForMatch(const QueryMatch &match) const
 
 KPluginInfo::List RunnerManager::listRunnerInfo(const QString &parentApp)
 {
-    return PluginLoader::pluginLoader()->listRunnerInfo(parentApp);
+    return PluginLoader::self()->listRunnerInfo(parentApp);
 }
 
 void RunnerManager::setupMatchSession()
@@ -648,7 +652,9 @@ void RunnerManager::setupMatchSession()
 #endif
             emit runner->prepare();
 #ifdef MEASURE_PREPTIME
+#ifndef NDEBUG
             kDebug() << t.elapsed() << runner->name();
+#endif
 #endif
         }
 

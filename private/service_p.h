@@ -24,10 +24,12 @@
 #include "service.h"
 
 #include <QGraphicsWidget>
-#include <QMap>
+#include <QHash>
 #include <QMultiHash>
 #include <QWidget>
 #include <QSet>
+
+#include <kplugininfo.h>
 
 #include <dnssd/publicservice.h>
 #include <dnssd/servicebrowser.h>
@@ -45,7 +47,7 @@ class NullServiceJob : public ServiceJob
 {
 public:
     NullServiceJob(const QString &destination, const QString &operation, QObject *parent)
-        : ServiceJob(destination, operation, QMap<QString, QVariant>(), parent)
+        : ServiceJob(destination, operation, QHash<QString, QVariant>(), parent)
     {
     }
 
@@ -66,7 +68,7 @@ public:
         setName("NullService");
     }
 
-    ServiceJob *createJob(const QString &operation, QMap<QString, QVariant> &)
+    ServiceJob *createJob(const QString &operation, QHash<QString, QVariant> &)
     {
         return new NullServiceJob(destination(), operation, this);
     }
@@ -90,14 +92,12 @@ public:
         delete dummyConfig;
     }
 
-    void jobFinished(KJob *job);
-
     void associatedWidgetDestroyed(QObject *obj);
 
     void associatedGraphicsWidgetDestroyed(QObject *obj);
 
     void publish(AnnouncementMethods methods, const QString &name,
-                 const PackageMetadata &metadata = PackageMetadata());
+                 const KPluginInfo &metadata = KPluginInfo());
 
     void unpublish();
 

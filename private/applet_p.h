@@ -145,7 +145,6 @@ public:
     static uint s_maxAppletId;
     static int s_maxZValue;
     static int s_minZValue;
-    static PackageStructure::Ptr packageStructure;
     static QSet<QString> s_customCategories;
 
     //TODO: examine the usage of memory here; there's a pretty large
@@ -156,9 +155,9 @@ public:
     // applet attributes
     QWeakPointer<Extender> extender;
     Service *service;
-    Applet::BackgroundHints preferredBackgroundHints;
-    Applet::BackgroundHints backgroundHints;
-    Plasma::AspectRatioMode aspectRatioMode;
+    BackgroundHints preferredBackgroundHints;
+    BackgroundHints backgroundHints;
+    AspectRatioMode aspectRatioMode;
     ImmutabilityType immutability;
 
     // applet info we keep around in case its needed
@@ -196,7 +195,7 @@ public:
     KKeySequenceWidget *shortcutEditor; //TODO: subclass KConfigDialog and encapsulate this in there
 
     ItemStatus itemStatus;
-    QString remoteLocation;
+    KUrl remoteLocation;
     Ui::publishWidget publishUI;
 
     // the applet can change size policy by itself, so save the old one for eventual restore

@@ -379,7 +379,6 @@ int ExtenderGroupPrivate::insertIndexFromPos(const QPointF &pos) const
 {
     int insertIndex = -1;
 
-    //XXX: duplicated from panel
     if (pos != QPointF(-1, -1)) {
         for (int i = 0; i < layout->count(); ++i) {
             QRectF siblingGeometry = layout->itemAt(i)->geometry();

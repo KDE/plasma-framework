@@ -19,20 +19,22 @@
 
 #include "accessappletjob.h"
 
-#include "service.h"
-#include "servicejob.h"
-#include "applet.h"
+#include <qtimer.h>
+
+#include <kdebug.h>
+#include <kdesktopfile.h>
+#include <kmessagebox.h>
+#include <ktempdir.h>
+#include <kzip.h>
 
 #include "config-plasma.h"
 
-#include <kzip.h>
-#include <kdebug.h>
-#include <kmessagebox.h>
-#include <ktempdir.h>
-#include <kdesktopfile.h>
+#include "applet.h"
 #include "package.h"
-#include <qtimer.h>
+#include "pluginloader.h"
 #include "private/applet_p.h"
+#include "service.h"
+#include "servicejob.h"
 
 namespace Plasma
 {
@@ -63,7 +65,9 @@ public:
     void slotPackageDownloaded(Plasma::ServiceJob *job)
     {
         if (job->error()) {
+#ifndef NDEBUG
             kDebug() << "Plasmoid Access Job triggers an error.";
+#endif
             q->setError(job->error());
             q->setErrorText(job->errorText());
         }
@@ -72,11 +76,13 @@ public:
         //the fetched package. Just extract the archive somewhere in a temp directory.
         if (job->result().type() == QVariant::String) {
             QString pluginName = job->result().toString();
+#ifndef NDEBUG
             kDebug() << "Server responded with a pluginname, trying to load: " << pluginName;
+#endif
 
-            applet = Applet::load(pluginName);
+            applet = PluginLoader::self()->loadApplet(pluginName);
             if (applet) {
-                applet->d->remoteLocation = location.prettyUrl();
+                applet->d->remoteLocation = location;
             } else {
                 q->setError(-1);
                 q->setErrorText(i18n("The \"%1\" widget is not installed.", pluginName));
@@ -84,7 +90,9 @@ public:
 
             q->emitResult();
         } else {
+#ifndef NDEBUG
             kDebug() << "Server responded with a plasmoid package";
+#endif
             //read, and extract the plasmoid package to a temporary directory
             QByteArray package = job->result().toByteArray();
             QDataStream stream(&package, QIODevice::ReadOnly);
@@ -129,7 +137,6 @@ public:
             int answer = KMessageBox::createKMessageBox(dialog, KIcon(iconName), message,
                                                         QStringList(), QString(), 0,
                                                         KMessageBox::Dangerous);
-            //int answer = KMessageBox::questionYesNo(0, message, i18n("Remote Widget"));
 
             if (answer!=KDialog::Yes) {
                 q->setError(-1);
@@ -138,17 +145,9 @@ public:
                 return;
             }
 
-            /**
-            QString metadataFilename = path + "/metadata.desktop";
-            KDesktopFile cfg(metadataFilename);
-            KConfigGroup config = cfg.desktopGroup();
-            config.writeEntry("EngineLocation", location.prettyUrl());
-            config.sync();
-            */
-
             applet = Applet::loadPlasmoid(path);
             if (applet) {
-                applet->d->remoteLocation = location.prettyUrl();
+                applet->d->remoteLocation = location;
             } else {
                 q->setError(-1);
             }
@@ -190,7 +189,9 @@ Applet *AccessAppletJob::applet() const
 void AccessAppletJob::start()
 {
 #ifdef ENABLE_REMOTE_WIDGETS
+#ifndef NDEBUG
     kDebug() << "fetching a plasmoid from location = " << d->location.prettyUrl();
+#endif
     Service *service = Service::access(d->location);
     connect(service, SIGNAL(serviceReady(Plasma::Service*)),
             this, SLOT(slotServiceReady(Plasma::Service*)));

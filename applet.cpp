@@ -70,7 +70,6 @@
 #endif
 
 #include "abstracttoolbox.h"
-#include "authorizationmanager.h"
 #include "authorizationrule.h"
 #include "configloader.h"
 #include "containment.h"
@@ -88,6 +87,8 @@
 #include "private/applethandle_p.h"
 #include "private/extenderitem_p.h"
 #include "private/framesvg_p.h"
+#include "remote/authorizationmanager.h"
+#include "remote/authorizationmanager_p.h"
 #include "theme.h"
 #include "view.h"
 #include "widgets/iconwidget.h"
@@ -101,7 +102,6 @@
 #include "pluginloader.h"
 
 #include "private/associatedapplicationmanager_p.h"
-#include "private/authorizationmanager_p.h"
 #include "private/containment_p.h"
 #include "private/extenderapplet_p.h"
 #include "private/package_p.h"
@@ -223,15 +223,6 @@ Applet::~Applet()
     delete d;
 }
 
-PackageStructure::Ptr Applet::packageStructure()
-{
-    if (!AppletPrivate::packageStructure) {
-        AppletPrivate::packageStructure = new PlasmoidPackage();
-    }
-
-    return AppletPrivate::packageStructure;
-}
-
 void Applet::init()
 {
     setFlag(ItemIsMovable, true);
@@ -273,8 +264,6 @@ void Applet::save(KConfigGroup &g) const
         return;
     }
 
-    //FIXME: for containments, we need to have some special values here w/regards to
-    //       screen affinity (e.g. "bottom of screen 0")
     //kDebug() << pluginName() << "geometry is" << geometry()
     //         << "pos is" << pos() << "bounding rect is" << boundingRect();
     if (transform() == QTransform()) {
@@ -329,8 +318,12 @@ void Applet::restore(KConfigGroup &group)
     if (!shortcutText.isEmpty()) {
         setGlobalShortcut(KShortcut(shortcutText));
         /*
+#ifndef NDEBUG
         kDebug() << "got global shortcut for" << name() << "of" << QKeySequence(shortcutText);
+#endif
+#ifndef NDEBUG
         kDebug() << "set to" << d->activationAction->objectName()
+#endif
                  << d->activationAction->globalShortcut().primary();
                  */
     }
@@ -387,7 +380,7 @@ void Applet::setFailedToLaunch(bool failed, const QString &reason)
     setLayout(0);
 
     if (failed) {
-        setBackgroundHints(d->backgroundHints|StandardBackground);
+        setBackgroundHints(StandardBackground);
 
         QGraphicsLinearLayout *failureLayout = new QGraphicsLinearLayout(this);
         failureLayout->setContentsMargins(0, 0, 0, 0);
@@ -671,18 +664,16 @@ ConfigLoader *Applet::configScheme() const
 
 DataEngine *Applet::dataEngine(const QString &name) const
 {
-    if (!d->remoteLocation.isEmpty()) {
-        return d->remoteDataEngine(KUrl(d->remoteLocation), name);
-    } else if (!package() || package()->metadata().remoteLocation().isEmpty()) {
+    if (d->remoteLocation.isEmpty()) {
         return d->dataEngine(name);
     } else {
-        return d->remoteDataEngine(KUrl(package()->metadata().remoteLocation()), name);
+        return d->remoteDataEngine(d->remoteLocation, name);
     }
 }
 
-const Package *Applet::package() const
+Package Applet::package() const
 {
-    return d->package;
+    return d->package ? *d->package : Package();
 }
 
 QGraphicsView *Applet::view() const
@@ -922,12 +913,12 @@ void Applet::setImmutability(const ImmutabilityType immutable)
     updateConstraints(ImmutableConstraint);
 }
 
-Applet::BackgroundHints Applet::backgroundHints() const
+BackgroundHints Applet::backgroundHints() const
 {
     return d->backgroundHints;
 }
 
-void Applet::setBackgroundHints(const BackgroundHints hints)
+void Applet::setBackgroundHints(const Plasma::BackgroundHints hints)
 {
     if (d->backgroundHints == hints) {
         return;
@@ -981,17 +972,6 @@ void Applet::setBackgroundHints(const BackgroundHints hints)
 bool Applet::hasFailedToLaunch() const
 {
     return d->failed;
-}
-
-void Applet::paintWindowFrame(QPainter *painter,
-                              const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-    Q_UNUSED(painter)
-    Q_UNUSED(option)
-    Q_UNUSED(widget)
-    //Here come the code for the window frame
-    //kDebug() << windowFrameGeometry();
-    //painter->drawRoundedRect(windowFrameGeometry(), 5, 5);
 }
 
 bool Applet::configurationRequired() const
@@ -1611,13 +1591,6 @@ Location Applet::location() const
     return c ? c->d->location : Plasma::Desktop;
 }
 
-Context *Applet::context() const
-{
-    Containment *c = containment();
-    Q_ASSERT(c);
-    return c->d->context();
-}
-
 Plasma::AspectRatioMode Applet::aspectRatioMode() const
 {
     return d->aspectRatioMode;
@@ -1669,46 +1642,39 @@ bool Applet::hasConfigurationInterface() const
 
 void Applet::publish(AnnouncementMethods methods, const QString &resourceName)
 {
-    if (d->package) {
-        d->package->d->publish(methods);
-    } else if (d->appletDescription.isValid()) {
-        if (!d->service) {
-            d->service = new PlasmoidService(this);
-        }
+    if (!d->service) {
+        d->service = new PlasmoidService(this);
+    }
 
-        kDebug() << "publishing package under name " << resourceName;
-        PackageMetadata pm;
-        pm.setName(d->appletDescription.name());
-        pm.setDescription(d->appletDescription.comment());
-        pm.setIcon(d->appletDescription.icon());
-        d->service->d->publish(methods, resourceName, pm);
+    const QString resName = resourceName.isEmpty() ?  i18nc("%1 is the name of a plasmoid, %2 the name of the machine that plasmoid is published on",
+                                                         "%1 on %2", name(), QHostInfo::localHostName())
+                                                   : resourceName;
+#ifndef NDEBUG
+    kDebug() << "publishing package under name " << resName;
+#endif
+    if (d->package && d->package->isValid()) {
+        d->service->d->publish(methods, resName, d->package->metadata());
+    } else if (!d->package && d->appletDescription.isValid()) {
+        d->service->d->publish(methods, resName, d->appletDescription);
     } else {
+        delete d->service;
+        d->service  = 0;
+#ifndef NDEBUG
         kDebug() << "Can not publish invalid applets.";
+#endif
     }
 }
 
 void Applet::unpublish()
 {
-    if (d->package) {
-        d->package->d->unpublish();
-    } else {
-        if (d->service) {
-            d->service->d->unpublish();
-        }
+    if (d->service) {
+        d->service->d->unpublish();
     }
 }
 
 bool Applet::isPublished() const
 {
-    if (d->package) {
-        return d->package->d->isPublished();
-    } else {
-        if (d->service) {
-            return d->service->d->isPublished();
-        } else {
-            return false;
-        }
-    }
+    return d->service && d->service->d->isPublished();
 }
 
 void Applet::setHasConfigurationInterface(bool hasInterface)
@@ -1759,11 +1725,6 @@ KActionCollection* AppletPrivate::defaultActions(QObject *parent)
     runAssociatedApplication->setData(AbstractToolBox::ControlTool);
 
     return actions;
-}
-
-bool Applet::eventFilter(QObject *o, QEvent *e)
-{
-    return QObject::eventFilter(o, e);
 }
 
 bool Applet::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
@@ -2247,14 +2208,14 @@ QString AppletPrivate::parentAppConstraint(const QString &parentApp)
 
 KPluginInfo::List Applet::listAppletInfo(const QString &category, const QString &parentApp)
 {
-   return PluginLoader::pluginLoader()->listAppletInfo(category, parentApp);
+   return PluginLoader::self()->listAppletInfo(category, parentApp);
 }
 
-KPluginInfo::List Applet::listAppletInfoForMimetype(const QString &mimetype)
+KPluginInfo::List Applet::listAppletInfoForMimeType(const QString &mimeType)
 {
     QString constraint = AppletPrivate::parentAppConstraint();
-    constraint.append(QString(" and '%1' in [X-Plasma-DropMimeTypes]").arg(mimetype));
-    //kDebug() << "listAppletInfoForMimetype with" << mimetype << constraint;
+    constraint.append(QString(" and '%1' in [X-Plasma-DropMimeTypes]").arg(mimeType));
+    //kDebug() << "listAppletInfoForMimetype with" << mimeType << constraint;
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
     AppletPrivate::filterOffers(offers);
     return KPluginInfo::fromServices(offers);
@@ -2275,7 +2236,9 @@ KPluginInfo::List Applet::listAppletInfoForUrl(const QUrl &url)
             QRegExp rx(glob);
             rx.setPatternSyntax(QRegExp::Wildcard);
             if (rx.exactMatch(url.toString())) {
+#ifndef NDEBUG
                 kDebug() << info.name() << "matches" << glob << url;
+#endif
                 filtered << info;
             }
         }
@@ -2309,8 +2272,10 @@ QStringList Applet::listCategories(const QString &parentApp, bool visibleOnly)
 
         //kDebug() << "   and we have " << appletCategory;
         if (!appletCategory.isEmpty() && !known.contains(appletCategory.toLower())) {
+#ifndef NDEBUG
             kDebug() << "Unknown category: " << applet->name() << "says it is in the"
                      << appletCategory << "category which is unknown to us";
+#endif
             appletCategory.clear();
         }
 
@@ -2341,7 +2306,7 @@ Applet *Applet::loadPlasmoid(const QString &path, uint appletId, const QVariantL
 {
     if (QFile::exists(path + "/metadata.desktop")) {
         KService service(path + "/metadata.desktop");
-        const QStringList& types = service.serviceTypes();
+        const QStringList &types = service.serviceTypes();
 
         if (types.contains("Plasma/Containment")) {
             return new Containment(path, appletId, args);
@@ -2353,20 +2318,6 @@ Applet *Applet::loadPlasmoid(const QString &path, uint appletId, const QVariantL
     }
 
     return 0;
-}
-
-Applet *Applet::load(const QString &appletName, uint appletId, const QVariantList &args)
-{
-    return PluginLoader::pluginLoader()->loadApplet(appletName, appletId, args);
-}
-
-Applet *Applet::load(const KPluginInfo &info, uint appletId, const QVariantList &args)
-{
-    if (!info.isValid()) {
-        return 0;
-    }
-
-    return load(info.pluginName(), appletId, args);
 }
 
 QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
@@ -2591,8 +2542,8 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
         : appletId(uniqueID),
           q(applet),
           service(0),
-          preferredBackgroundHints(Applet::StandardBackground),
-          backgroundHints(Applet::NoBackground),
+          preferredBackgroundHints(StandardBackground),
+          backgroundHints(NoBackground),
           aspectRatioMode(Plasma::KeepAspectRatio),
           immutability(Mutable),
           appletDescription(info ? *info : KPluginInfo(service)),
@@ -2659,7 +2610,7 @@ void AppletPrivate::init(const QString &packagePath)
 
     //set a default size before any saved settings are read
     QSize size(200, 200);
-    q->setBackgroundHints(Applet::DefaultBackground);
+    q->setBackgroundHints(DefaultBackground);
     q->setHasConfigurationInterface(true); //FIXME why not default it to true in the constructor?
 
     QAction *closeApplet = actions->action("remove");
@@ -2674,9 +2625,11 @@ void AppletPrivate::init(const QString &packagePath)
 
     QObject::connect(q, SIGNAL(activate()), q, SLOT(setFocus()));
     if (!appletDescription.isValid()) {
+#ifndef NDEBUG
         kDebug() << "Check your constructor! "
                  << "You probably want to be passing in a Service::Ptr "
                  << "or a QVariantList with a valid storageid as arg[0].";
+#endif
         q->resize(size);
         return;
     }
@@ -2691,56 +2644,63 @@ void AppletPrivate::init(const QString &packagePath)
     QString api = appletDescription.property("X-Plasma-API").toString();
 
     // we have a scripted plasmoid
-    if (!api.isEmpty()) {
-        // find where the Package is
-        QString path = packagePath;
-        if (path.isEmpty()) {
-            QString subPath = q->packageStructure()->defaultPackageRoot() + '/' + appletDescription.pluginName() + '/';
-            path = KStandardDirs::locate("data", subPath + "metadata.desktop");
-            if (path.isEmpty()) {
-                path = KStandardDirs::locate("data", subPath);
-            } else {
-                path.remove(QString("metadata.desktop"));
-            }
-        } else if (!path.endsWith('/')) {
-            path.append('/');
-        }
+    if (api.isEmpty()) {
+        q->setFailedToLaunch(true, i18n("The %2 widget did not define which ScriptEngine to use.", appletDescription.name()));
+        return;
+    }
 
+
+    package = new Package(PluginLoader::self()->loadPackage("Plasma/Applet", api));
+
+    // find where the Package is
+    QString path = packagePath;
+    if (path.isEmpty()) {
+        QString subPath = package->defaultPackageRoot() + appletDescription.pluginName() + '/';
+        path = KStandardDirs::locate("data", subPath + "metadata.desktop");
         if (path.isEmpty()) {
-            q->setFailedToLaunch(
-                true,
-                i18nc("Package file, name of the widget",
-                      "Could not locate the %1 package required for the %2 widget.",
-                      appletDescription.pluginName(), appletDescription.name()));
+            path = KStandardDirs::locate("data", subPath);
         } else {
-            // create the package and see if we have something real
-            //kDebug() << "trying for" << path;
-            PackageStructure::Ptr structure = Plasma::packageStructure(api, Plasma::AppletComponent);
-            structure->setPath(path);
-            package = new Package(path, structure);
-
-            if (package->isValid()) {
-                // now we try and set up the script engine.
-                // it will be parented to this applet and so will get
-                // deleted when the applet does
-
-                script = Plasma::loadScriptEngine(api, q);
-                if (!script) {
-                    delete package;
-                    package = 0;
-                    q->setFailedToLaunch(true,
-                                         i18nc("API or programming language the widget was written in, name of the widget",
-                                               "Could not create a %1 ScriptEngine for the %2 widget.",
-                                               api, appletDescription.name()));
-                }
-            } else {
-                q->setFailedToLaunch(true, i18nc("Package file, name of the widget",
-                                                 "Could not open the %1 package required for the %2 widget.",
-                                                 appletDescription.pluginName(), appletDescription.name()));
-                delete package;
-                package = 0;
-            }
+            path.remove(QString("metadata.desktop"));
         }
+    } else if (!path.endsWith('/')) {
+        path.append('/');
+    }
+
+    if (path.isEmpty()) {
+        delete package;
+        package = 0;
+        q->setFailedToLaunch(true,
+                             i18nc("Package file, name of the widget",
+                                   "Could not locate the %1 package required for the %2 widget.",
+                                   appletDescription.pluginName(), appletDescription.name()));
+        return;
+    }
+
+    package->setPath(path);
+    if (!package->isValid()) {
+        delete package;
+        package = 0;
+        q->setFailedToLaunch(true, i18nc("Package file, name of the widget",
+                                         "Could not open the %1 package required for the %2 widget.",
+                                         appletDescription.pluginName(), appletDescription.name()));
+        return;
+    }
+
+    // create the package and see if we have something real
+    //kDebug() << "trying for" << path;
+
+        // now we try and set up the script engine.
+        // it will be parented to this applet and so will get
+        // deleted when the applet does
+
+    script = Plasma::loadScriptEngine(api, q);
+    if (!script) {
+        delete package;
+        package = 0;
+        q->setFailedToLaunch(true,
+                             i18nc("API or programming language the widget was written in, name of the widget",
+                                   "Could not create a %1 ScriptEngine for the %2 widget.",
+                                   api, appletDescription.name()));
     }
 }
 
@@ -2752,19 +2712,18 @@ void AppletPrivate::setupScriptSupport()
         return;
     }
 
+#ifndef NDEBUG
     kDebug() << "setting up script support, package is in" << package->path()
-             << "which is a" << package->structure()->type() << "package"
              << ", main script is" << package->filePath("mainscript");
+#endif
 
-    QString translationsPath = package->filePath("translations");
+    const QString translationsPath = package->filePath("translations");
     if (!translationsPath.isEmpty()) {
-        //FIXME: we should _probably_ use a KComponentData to segregate the applets
-        //       from each other; but I want to get the basics working first :)
         KGlobal::dirs()->addResourceDir("locale", translationsPath);
-        KGlobal::locale()->insertCatalog(package->metadata().pluginName());
+        KGlobal::locale()->insertCatalog(appletDescription.pluginName());
     }
 
-    QString xmlPath = package->filePath("mainconfigxml");
+    const QString xmlPath = package->filePath("mainconfigxml");
     if (!xmlPath.isEmpty()) {
         QFile file(xmlPath);
         KConfigGroup config = q->config();
@@ -2874,9 +2833,11 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
 
     if (newGroup) {
         //see if we have a default configuration in our package
-        const QString defaultConfigFile = q->package()->filePath("defaultconfig");
+        const QString defaultConfigFile = package->filePath("defaultconfig");
         if (!defaultConfigFile.isEmpty()) {
-            kDebug() << "copying default config: " << q->package()->filePath("defaultconfig");
+#ifndef NDEBUG
+            kDebug() << "copying default config: " << package->filePath("defaultconfig");
+#endif
             KConfigGroup defaultConfig(KSharedConfig::openConfig(defaultConfigFile)->group("Configuration"));
             defaultConfig.copyTo(mainConfig);
         }
@@ -2950,7 +2911,6 @@ void ContainmentPrivate::checkRemoveAction()
 uint AppletPrivate::s_maxAppletId = 0;
 int AppletPrivate::s_maxZValue = 0;
 int AppletPrivate::s_minZValue = 0;
-PackageStructure::Ptr AppletPrivate::packageStructure(0);
 QSet<QString> AppletPrivate::s_customCategories;
 
 AppletOverlayWidget::AppletOverlayWidget(QGraphicsWidget *parent)
@@ -3003,7 +2963,7 @@ void AppletOverlayWidget::paint(QPainter *painter,
 
 
     QPainterPath backgroundShape;
-    if (!applet || applet->backgroundHints() & Applet::StandardBackground) {
+    if (!applet || applet->backgroundHints() == StandardBackground) {
         //FIXME: a resize here is nasty, but perhaps still better than an eventfilter just for that..
         if (parentWidget()->contentsRect().size() != size()) {
             resize(parentWidget()->contentsRect().size());
@@ -3016,14 +2976,6 @@ void AppletOverlayWidget::paint(QPainter *painter,
     painter->setRenderHints(QPainter::Antialiasing);
     painter->fillPath(backgroundShape, wash);
 }
-
-#if QT_VERSION >= 0x040700
-// in QGraphicsWidget now; preserve BC by implementing it as a protected method
-void Applet::geometryChanged()
-{
-    emit QGraphicsWidget::geometryChanged();
-}
-#endif
 
 } // Plasma namespace
 

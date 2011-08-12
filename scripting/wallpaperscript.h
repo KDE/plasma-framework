@@ -139,9 +139,8 @@ public:
 
     /**
      * Adds urls (e.g. from a drop)
-     * @since 4.7
      */
-    void setUrls(const KUrl::List urls);
+    virtual void addUrls(const KUrl::List urls);
 
 protected:
     /**
@@ -154,7 +153,7 @@ protected:
      *         be used to request resources, such as images and
      *         interface files.
      */
-    const Package *package() const;
+    Package package() const;
 
     /**
      * @return the KPluginInfo associated with this wallpaper
@@ -179,7 +178,6 @@ protected:
 
 protected Q_SLOTS:
     virtual void renderCompleted(const QImage &image);
-    virtual void urlDropped(const KUrl &url);
 
 private:
     WallpaperScriptPrivate *const d;

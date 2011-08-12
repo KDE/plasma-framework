@@ -47,8 +47,6 @@ void WallpaperScript::setWallpaper(Wallpaper *wallpaper)
     d->wallpaper = wallpaper;
     connect(wallpaper, SIGNAL(renderCompleted(const QImage&)),
             this, SLOT(renderCompleted(const QImage&)));
-    connect(wallpaper, SIGNAL(urlDropped(const KUrl&)),
-            this, SLOT(urlDropped(const KUrl&)));
 }
 
 Wallpaper *WallpaperScript::wallpaper() const
@@ -59,10 +57,10 @@ Wallpaper *WallpaperScript::wallpaper() const
 QString WallpaperScript::mainScript() const
 {
     Q_ASSERT(d->wallpaper);
-    return d->wallpaper->package()->filePath("mainscript");
+    return d->wallpaper->package().filePath("mainscript");
 }
 
-const Package *WallpaperScript::package() const
+Package WallpaperScript::package() const
 {
     Q_ASSERT(d->wallpaper);
     return d->wallpaper->package();
@@ -116,12 +114,9 @@ void WallpaperScript::wheelEvent(QGraphicsSceneWheelEvent *event)
     Q_UNUSED(event)
 }
 
-void WallpaperScript::setUrls(const KUrl::List urls)
+void WallpaperScript::addUrls(const KUrl::List urls)
 {
-    //TODO KDE5 replace urlDropped with addUrls
-    foreach (const KUrl &url, urls) {
-        urlDropped(url);
-    }
+    Q_UNUSED(urls)
 }
 
 bool WallpaperScript::isInitialized() const
@@ -223,10 +218,6 @@ void WallpaperScript::renderCompleted(const QImage &image)
     Q_UNUSED(image)
 }
 
-void WallpaperScript::urlDropped(const KUrl &url)
-{
-    Q_UNUSED(url)
-}
 
 } // Plasma namespace
 

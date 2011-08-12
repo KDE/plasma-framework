@@ -207,7 +207,9 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
         QObject::connect(cacheAndColorsTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()), Qt::UniqueConnection);
         path = imagePath;
     } else {
+#ifndef NDEBUG
         kDebug() << "file '" << path << "' does not exist!";
+#endif
     }
 
     // check if svg wants colorscheme applied
@@ -388,11 +390,15 @@ void SvgPrivate::createRenderer()
     //kDebug() << kBacktrace();
     if (themed && path.isEmpty() && !themeFailed) {
         Applet *applet = qobject_cast<Applet*>(q->parent());
-        if (applet && applet->package()) {
-            path = applet->package()->filePath("images", themePath + ".svg");
+        //FIXME: this maybe could be more efficient if we knew if the package was empty, e.g. for
+        //C++; however, I'm not sure this has any real world runtime impact. something to measure
+        //for.
+        if (applet && applet->package().isValid()) {
+            const Package package = applet->package();
+            path = package.filePath("images", themePath + ".svg");
 
             if (path.isEmpty()) {
-                path = applet->package()->filePath("images", themePath + ".svgz");
+                path = package.filePath("images", themePath + ".svgz");
             }
         }
 
@@ -778,15 +784,10 @@ bool Svg::containsMultipleImages() const
 
 void Svg::setImagePath(const QString &svgFilePath)
 {
-    //BIC FIXME: setImagePath should be virtual, or call an internal virtual protected method
-    if (FrameSvg *frame = qobject_cast<FrameSvg *>(this)) {
-        frame->setImagePath(svgFilePath);
-        return;
+    if (d->setImagePath(svgFilePath)) {
+        //kDebug() << "repaintNeeded";
+        emit repaintNeeded();
     }
-
-    d->setImagePath(svgFilePath);
-    //kDebug() << "repaintNeeded";
-    emit repaintNeeded();
 }
 
 QString Svg::imagePath() const

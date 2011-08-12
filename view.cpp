@@ -77,9 +77,11 @@ public:
             return;
         }
 
+#ifndef NDEBUG
         kDebug() << "!!!!!!!!!!!!!!!!! setting the scene rect to"
                  << containment->sceneBoundingRect()
                  << "associated screen is" << containment->screen();
+#endif
 
         emit q->sceneRectAboutToChange();
         if (q->transform().isIdentity()) { //we're not zoomed out
@@ -288,7 +290,9 @@ void View::setContainment(Plasma::Containment *containment)
 
     /*
     if (oldContainment) {
+#ifndef NDEBUG
         kDebug() << "old" << (QObject*)oldContainment << screen << oldContainment->screen()
+#endif
                  << "new" << (QObject*)containment << otherScreen << containment->screen();
     }
     */

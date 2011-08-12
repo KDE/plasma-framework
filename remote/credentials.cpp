@@ -17,10 +17,9 @@
  */
 
 #include "credentials.h"
-
-#include "authorizationmanager.h"
 #include "config-plasma.h"
 
+#include <QCryptographicHash>
 #include <QObject>
 
 #ifdef ENABLE_REMOTE_WIDGETS
@@ -29,6 +28,8 @@
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
+
+#include "authorizationmanager.h"
 
 #define REQUIRED_FEATURES "rsa,sha1,pkey"
 
@@ -112,7 +113,7 @@ Credentials Credentials::createCredentials(const QString &name)
     QCA::KeyGenerator generator;
     QCA::PrivateKey key = generator.createRSA(2048);
     QString pemKey(key.toPublicKey().toPEM());
-    QString id = QCA::Hash("sha1").hashToString(pemKey.toAscii());
+    QString id = QCryptographicHash::hash(pemKey.toAscii(), QCryptographicHash::Sha1);
     return Credentials(id, name, key.toPEM(), true);
 #else
     return Credentials();
@@ -132,7 +133,7 @@ TrustLevel Credentials::trustLevel() const
     }
     */
     //Trust no one ;)
-    return ValidCredentials;
+    return UnknownTrusted;
 }
 
 bool Credentials::isValid() const
@@ -146,11 +147,13 @@ bool Credentials::isValid() const
     if (d->publicKey.isNull()) {
         return false;
     } else {
-        QString id = QCA::Hash("sha1").hashToString(d->publicKey.toPEM().toAscii());
+        QString id = QCryptographicHash::hash(d->publicKey.toPEM().toAscii(), QCryptographicHash::Sha1);
         return (id == d->id);
     }
 #else
+#ifndef NDEBUG
     kDebug() << "libplasma is compiled without support for remote widgets. Key invalid.";
+#endif
     return false;
 #endif
 }
@@ -175,14 +178,18 @@ bool Credentials::isValidSignature(const QByteArray &signature, const QByteArray
 
     if (d->publicKey.canVerify()) {
         if (!isValid()) {
+#ifndef NDEBUG
             kDebug() << "Key is null?";
+#endif
         }
         QCA::PublicKey publicKey = QCA::PublicKey::fromPEM(d->publicKey.toPEM());
         publicKey.startVerify( QCA::EMSA3_MD5 );
         publicKey.update(payload);
         return ( publicKey.validSignature( signature ) );
     } else {
+#ifndef NDEBUG
         kDebug() << "Can't verify?";
+#endif
         return false;
     }
 #else
@@ -208,7 +215,9 @@ QByteArray Credentials::signMessage(const QByteArray &message)
 {
 #ifdef ENABLE_REMOTE_WIDGETS
     if(!QCA::isSupported(REQUIRED_FEATURES)) {
+#ifndef NDEBUG
         kDebug() << "RSA not supported";
+#endif
         return QByteArray();
     } else if (canSign()) {
         //QCA::PrivateKey privateKey = QCA::PrivateKey::fromPEM(d->privateKey.toPEM());
@@ -284,7 +293,9 @@ QDataStream &operator>>(QDataStream &in, Credentials &myObj)
     }
 
     if (conversionResult != QCA::ConvertGood) {
+#ifndef NDEBUG
         kDebug() << "Unsuccessfull conversion of key?";
+#endif
     }
 #endif
 

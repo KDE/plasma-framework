@@ -65,7 +65,9 @@ public:
 
     void slotAccept()
     {
+#ifndef NDEBUG
         kDebug();
+#endif
         if (rule) {
             rule->setPin(pairingUI.password->text());
             if (pairingUI.allServicesCheckbox->isChecked()) {

@@ -129,7 +129,9 @@ public:
                 QString app = KGlobal::mainComponent().componentName();
 
                 if (!app.isEmpty()) {
+#ifndef NDEBUG
                     kDebug() << "using theme for app" << app;
+#endif
                     groupName.append("-").append(app);
                 }
             }
@@ -158,7 +160,6 @@ public:
     static const char *defaultTheme;
     static const char *systemColorsTheme;
     static const char *themeRcFile;
-    static PackageStructure::Ptr packageStructure;
 
     Theme *q;
     QString themeName;
@@ -197,7 +198,6 @@ public:
     bool useNativeWidgetStyle :1;
 };
 
-PackageStructure::Ptr ThemePrivate::packageStructure(0);
 const char *ThemePrivate::defaultTheme = "default";
 const char *ThemePrivate::themeRcFile = "plasmarc";
 // the system colors theme is used to cache unthemed svgs with colorization needs
@@ -482,15 +482,6 @@ Theme::~Theme()
     delete d;
 }
 
-PackageStructure::Ptr Theme::packageStructure()
-{
-    if (!ThemePrivate::packageStructure) {
-        ThemePrivate::packageStructure = new ThemePackage();
-    }
-
-    return ThemePrivate::packageStructure;
-}
-
 KPluginInfo::List Theme::listThemeInfo()
 {
     const QStringList themes = KGlobal::dirs()->findAllResources("data", "desktoptheme/*/metadata.desktop",
@@ -547,14 +538,18 @@ void ThemePrivate::processAnimationSettings(const QString &theme, KConfigBase *m
         const QStringList anims = cg.readEntry(path, QStringList());
         foreach (const QString &anim, anims) {
             if (!animationMapping.contains(anim)) {
+#ifndef NDEBUG
                 kDebug() << "Registering animation. animDir: " << animDir
                          << "\tanim: " << anim
                          << "\tpath: " << path << "\t*******\n\n\n";
+#endif
                 //key: desktoptheme/default/animations/+ all.js
                 //value: ZoomAnimation
                 animationMapping.insert(anim, animDir % path);
             } else {
+#ifndef NDEBUG
                 kDebug() << "************Animation already registered!\n\n\n";
+#endif
             }
         }
     }
@@ -685,7 +680,9 @@ QString Theme::imagePath(const QString &name) const
     // look for a compressed svg file in the theme
     if (name.contains("../") || name.isEmpty()) {
         // we don't support relative paths
+#ifndef NDEBUG
         kDebug() << "Theme says: bad image path " << name;
+#endif
         return QString();
     }
 
@@ -715,7 +712,9 @@ QString Theme::imagePath(const QString &name) const
 
     /*
     if (path.isEmpty()) {
+#ifndef NDEBUG
         kDebug() << "Theme says: bad image path " << name;
+#endif
     }
     */
 
@@ -781,7 +780,9 @@ QString Theme::wallpaperPath(const QSize &size) const
         fullPath = KStandardDirs::locate("wallpaper", defaultImage);
 
         if (fullPath.isEmpty()) {
+#ifndef NDEBUG
             kDebug() << "exhausted every effort to find a wallpaper.";
+#endif
         }
     }
 
@@ -907,8 +908,12 @@ bool Theme::useNativeWidgetStyle() const
     return d->useNativeWidgetStyle;
 }
 
-bool Theme::findInCache(const QString &key, QPixmap &pix)
+bool Theme::findInCache(const QString &key, QPixmap &pix, unsigned int lastModified)
 {
+    if (lastModified != 0 && d->useCache() && lastModified > uint(d->pixmapCache->lastModifiedTime())) {
+        return false;
+    }
+
     if (d->useCache()) {
         const QString id = d->keysToCache.value(key);
         if (d->pixmapsToCache.contains(id)) {
@@ -924,16 +929,6 @@ bool Theme::findInCache(const QString &key, QPixmap &pix)
     }
 
     return false;
-}
-
-// BIC FIXME: Should be merged with the other findInCache method above when we break BC
-bool Theme::findInCache(const QString &key, QPixmap &pix, unsigned int lastModified)
-{
-    if (d->useCache() && lastModified > uint(d->pixmapCache->lastModifiedTime())) {
-        return false;
-    }
-
-    return findInCache(key, pix);
 }
 
 void Theme::insertIntoCache(const QString& key, const QPixmap& pix)

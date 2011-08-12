@@ -35,8 +35,7 @@ DataEngineService::DataEngineService(DataEngine *engine)
     connect(engine, SIGNAL(sourceAdded(QString)), this, SLOT(sourceAdded(QString)));
 }
 
-Plasma::ServiceJob* DataEngineService::createJob(const QString& operation,
-                                          QMap<QString,QVariant>& parameters)
+Plasma::ServiceJob* DataEngineService::createJob(const QString& operation, QHash<QString,QVariant>& parameters)
 {
     return new GetSource(m_engine, operation, parameters, this);
 }

@@ -24,8 +24,8 @@
 #include <kmimetype.h>
 #include <kplugininfo.h>
 
+#include <plasma/package.h>
 #include <plasma/plasma.h>
-#include <plasma/packagestructure.h>
 #include <plasma/version.h>
 
 namespace Plasma
@@ -33,7 +33,6 @@ namespace Plasma
 
 class DataEngine;
 class WallpaperPrivate;
-class Package;
 
 /**
  * @class Wallpaper plasma/wallpaper.h <Plasma/Wallpaper>
@@ -87,14 +86,6 @@ class PLASMA_EXPORT Wallpaper : public QObject
         ~Wallpaper();
 
         /**
-         * Sets the urls for the wallpaper
-         * @param urls Urls of the selected images
-         * @since 4.7
-         */
-        void setUrls(const KUrl::List &urls);
-
-
-        /**
          * Returns a list of all known wallpapers.
          *
          * @param formFactor the format of the wallpaper being search for (e.g. desktop)
@@ -103,12 +94,12 @@ class PLASMA_EXPORT Wallpaper : public QObject
         static KPluginInfo::List listWallpaperInfo(const QString &formFactor = QString());
 
         /**
-         * Returns a list of all known wallpapers that can accept the given mimetype
-         * @param mimetype the mimetype to search for
-         * @param formFactor the format of the wallpaper being search for (e.g. desktop)
+         * Returns a list of all known wallpapers that can accept the given MimeType
+         * @arg mimeType the mimeType to search for
+         * @arg formFactor the format of the wallpaper being search for (e.g. desktop)
          * @return list of wallpapers
          */
-        static KPluginInfo::List listWallpaperInfoForMimetype(const QString &mimetype,
+        static KPluginInfo::List listWallpaperInfoForMimetype(const QString &mimeType,
                                                               const QString &formFactor = QString());
 
         /**
@@ -138,17 +129,6 @@ class PLASMA_EXPORT Wallpaper : public QObject
         static Wallpaper *load(const KPluginInfo &info, const QVariantList &args = QVariantList());
 
         /**
-         * Returns the Package specialization for wallpapers. May be queried for 'preferred'
-         * which will return the preferred wallpaper image path given the associated Wallpaper
-         * object, if any.
-         *
-         * @param paper the Wallpaper object to associated the PackageStructure with,
-         *              which will then use the Wallpaper object to define things such as
-         *              default size and resize methods.
-         */
-        static PackageStructure::Ptr packageStructure(Wallpaper *paper = 0);
-
-        /**
          * Returns the user-visible name for the wallpaper, as specified in the
          * .desktop file.
          *
@@ -161,7 +141,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
          *
          * @return the Package object, or 0 if none
          **/
-        const Package *package() const;
+        Package package() const;
 
         /**
          * Returns the plugin name for the wallpaper
@@ -215,7 +195,14 @@ class PLASMA_EXPORT Wallpaper : public QObject
          */
         void setBoundingRect(const QRectF &boundingRect);
 
-       /**
+        /**
+         * Can be Overriden by plugins which support setting Image URLs.
+         * This is triggered by events in the user interface such as
+         * drag and drop of files.
+         */
+        virtual void addUrls(const KUrl::List &urls);
+
+        /**
          * This method is called when the wallpaper should be painted.
          *
          * @param painter the QPainter to use to do the painting
@@ -400,26 +387,9 @@ class PLASMA_EXPORT Wallpaper : public QObject
         void renderCompleted(const QImage &image);
 
         /**
-         * Emitted when a URL matching X-Plasma-DropMimeTypes is dropped on the wallpaper
-         *
-         * @param url the URL of the dropped file
-         * @since 4.4
-         */
-        KDE_DEPRECATED void urlDropped(const KUrl &url);
-
-        /**
          * @internal
          */
         void renderHintsChanged();
-
-    protected Q_SLOTS:
-        /**
-         * This method is invoked by setUrls(KUrl::List)
-         * Can be Overriden by Plugins which want to support setting Image URLs
-         * Will be changed to virtual method in libplasma2/KDE5 
-         * @since 4.7
-         */
-        void addUrls(const KUrl::List &urls);
 
     protected:
         /**
@@ -519,9 +489,6 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * @since 4.4
          **/
         void setContextualActions(const QList<QAction*> &actions);
-
-        //FIXME: KDE5, this must be moved to the dptr
-        QList<QAction*> contextActions;
 
         /**
          * Sets whether the configuration user interface of the wallpaper should have

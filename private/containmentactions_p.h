@@ -37,8 +37,6 @@ public:
     {
     };
 
-    static PackageStructure::Ptr s_packageStructure;
-
     ContainmentActions *q;
     KPluginInfo containmentActionsDescription;
     Package *package;

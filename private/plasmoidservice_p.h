@@ -21,7 +21,6 @@
 
 #include "dataengineconsumer_p.h"
 
-#include "../packagemetadata.h"
 #include "../package.h"
 #include "../service.h"
 #include "../servicejob.h"
@@ -41,17 +40,15 @@ class PlasmoidServiceJob : public ServiceJob
    Q_OBJECT
 
     public:
-        PlasmoidServiceJob(const QString &plasmoidLocation,
-                           const QString &destination,
+        PlasmoidServiceJob(const QString &destination,
                            const QString &operation,
-                           QMap<QString,QVariant>& parameters,
-                           PlasmoidService *parent = 0);
+                           QHash<QString,QVariant>& parameters,
+                           PlasmoidService *parent);
 
         void start();
 
     private:
         PlasmoidService *m_service;
-        QString m_packagePath;
         QString m_pluginName;
 };
 
@@ -60,18 +57,15 @@ class PlasmoidService : public Service, DataEngineConsumer
     Q_OBJECT
 
     public:
-        PlasmoidService(const QString &plasmoidLocation);
         PlasmoidService(Applet *applet);
-        PackageMetadata metadata() const;
-
 
     protected:
-        Plasma::ServiceJob* createJob(const QString& operation,
-                                      QMap<QString,QVariant>& parameters);
+        Plasma::ServiceJob* createJob(const QString& operation, QHash<QString,QVariant>& parameters);
 
     private:
         QString m_packagePath;
-        PackageMetadata m_metadata;
+        QString m_metadata;
+        QString m_pluginName;
         KTemporaryFile m_tempFile;
 
         friend class PlasmoidServiceJob;

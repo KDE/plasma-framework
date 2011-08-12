@@ -53,7 +53,7 @@ class RemoteService : public Plasma::Service
 
     protected:
         ServiceJob* createJob(const QString& operation,
-                              QMap<QString,QVariant>& parameters);
+                              QHash<QString,QVariant>& parameters);
         void registerOperationsScheme();
 
     private Q_SLOTS:

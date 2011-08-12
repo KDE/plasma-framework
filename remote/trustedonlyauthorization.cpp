@@ -45,7 +45,7 @@ void TrustedOnlyAuthorization::clientPinRequest(ClientPinRequest &request)
 
 void TrustedOnlyAuthorization::authorizationRequest(AuthorizationRule &rule)
 {
-    if (rule.credentials().trustLevel() > TrustedCredentials) {
+    if (rule.credentials().trustLevel() > UnknownTrusted) {
         rule.setPolicy(AuthorizationRule::Allow);
         rule.setTargets(AuthorizationRule::AllServices);
     }

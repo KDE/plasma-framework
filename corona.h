@@ -174,24 +174,15 @@ public:
     virtual QRegion availableScreenRegion(int id) const;
 
     /**
-    * Recommended position for a popup window like a menu or a tooltip
-    * given its size
-    * @param item the item that the popup should appear adjacent to (an applet, say)
-    * @param size size of the popup
-    * @returns reccomended position
-    */
-    QPoint popupPosition(const QGraphicsItem *item, const QSize &size);
-
-    /**
      * @since 4.4
-    * Recommended position for a popup window like a menu or a tooltip
-    * given its size
-    * @param item the item that the popup should appear adjacent to (an applet, say)
-    * @param size size of the popup
-    * @param alignment alignment of the popup, valid flags are Qt::AlignLeft, Qt::AlignRight and Qt::AlignCenter
-    * @returns reccomended position
-    */
-    QPoint popupPosition(const QGraphicsItem *item, const QSize &size, Qt::AlignmentFlag alignment);
+     * Recommended position for a popup window like a menu or a tooltip
+     * given its size
+     * @param item the item that the popup should appear adjacent to (an applet, say)
+     * @param size size of the popup
+     * @param alignment alignment of the popup, valid flags are Qt::AlignLeft, Qt::AlignRight and Qt::AlignCenter
+     * @returns reccomended position
+     */
+    QPoint popupPosition(const QGraphicsItem *item, const QSize &size, Qt::AlignmentFlag alignment = Qt::AlignCenter);
 
     /**
      * This method is useful in order to retrieve the list of available
@@ -274,20 +265,6 @@ public:
      * @since 4.5
      */
     AbstractDialogManager *dialogManager();
-
-    /**
-     * Imports an applet layout from a config file. The results will be added to the
-     * current set of Containments.
-     * @deprecated Use the 4.6 version that takes a KConfigGroup
-     *
-     * @param config the name of the config file to load from,
-     *               or the default config file if QString()
-     * @return the list of containments that were loaded
-     * @since 4.5
-     */
-#ifndef KDE_NO_DEPRECATED
-    KDE_DEPRECATED QList<Plasma::Containment *> importLayout(const KConfigBase &config);
-#endif
 
     /**
      * Returns the name of the preferred plugin to be used as containment toolboxes.
@@ -377,7 +354,7 @@ public Q_SLOTS:
      * organizes them in a grid-like view, but subclasses can reimplement
      * this slot to provide their own layout.
      */
-    void layoutContainments();
+    virtual void layoutContainments();
 
 Q_SIGNALS:
     /**
@@ -490,11 +467,6 @@ protected:
      * @since 4.7
      */
     void setDefaultContainmentPlugin(const QString &name);
-
-    //Reimplemented from QGraphicsScene
-    void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
-    void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
-    void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
 
 private:
     CoronaPrivate *const d;

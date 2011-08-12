@@ -88,7 +88,9 @@ void DeclarativeWidgetPrivate::errorPrint()
 void DeclarativeWidgetPrivate::execute(const QString &fileName)
 {
     if (fileName.isEmpty()) {
+#ifndef NDEBUG
         kDebug() << "File name empty!";
+#endif
         return;
     }
 
@@ -130,7 +132,9 @@ void DeclarativeWidgetPrivate::finishExecute()
         errorPrint();
     }
 
+#ifndef NDEBUG
     kDebug() << "Execution of QML done!";
+#endif
     QGraphicsWidget *widget = dynamic_cast<QGraphicsWidget*>(root);
     QGraphicsObject *object = dynamic_cast<QGraphicsObject *>(root);
 

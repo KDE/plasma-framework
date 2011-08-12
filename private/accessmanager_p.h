@@ -45,7 +45,7 @@ class AccessManagerPrivate
 
         AccessManager *q;
         DNSSD::ServiceBrowser *browser;
-        QMap<QString, PackageMetadata> services;
+        QMap<QString, RemoteObjectDescription> services;
         QMap<QString, DNSSD::RemoteService::Ptr> zeroconfServices;
 };
 

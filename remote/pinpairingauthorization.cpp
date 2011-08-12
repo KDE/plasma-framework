@@ -42,14 +42,18 @@ PinPairingAuthorization::~PinPairingAuthorization()
 
 void PinPairingAuthorization::clientPinRequest(ClientPinRequest &request)
 {
+#ifndef NDEBUG
     kDebug();
+#endif
     new PinPairingDialog(request);
 }
 
 void PinPairingAuthorization::authorizationRequest(AuthorizationRule &rule)
 {
+#ifndef NDEBUG
     kDebug();
-    if (rule.credentials().trustLevel() > TrustedCredentials) {
+#endif
+    if (rule.credentials().trustLevel() > UnknownTrusted) {
         rule.setPolicy(AuthorizationRule::Allow);
         rule.setTargets(AuthorizationRule::AllServices);
     } else {

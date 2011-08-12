@@ -1233,22 +1233,6 @@ void ScrollWidget::ensureItemVisible(QGraphicsItem *item)
     }
 }
 
-#ifndef KDE_NO_DEPRECATED
-void ScrollWidget::registerAsDragHandle(QGraphicsWidget *item)
-{
-    Q_UNUSED(item);
-    return;
-}
-#endif
-
-#ifndef KDE_NO_DEPRECATED
-void ScrollWidget::unregisterAsDragHandle(QGraphicsWidget *item)
-{
-    Q_UNUSED(item);
-    return;
-}
-#endif
-
 QRectF ScrollWidget::viewportGeometry() const
 {
     QRectF result;

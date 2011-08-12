@@ -193,11 +193,11 @@ class PLASMA_EXPORT Containment : public Applet
         static QStringList listContainmentTypes();
 
         /**
-         * Returns a list of all known applets associated with a certain mimetype
+         * Returns a list of all known applets associated with a certain MimeType
          *
          * @return list of applets
          **/
-        static KPluginInfo::List listContainmentsForMimetype(const QString &mimetype);
+        static KPluginInfo::List listContainmentsForMimeType(const QString &mimeType);
 
         /**
          * Adds an applet to this Containment
@@ -356,22 +356,16 @@ class PLASMA_EXPORT Containment : public Applet
         Plasma::Wallpaper *wallpaper() const;
 
         /**
-         * Sets the current activity by name
+         * Sets the current activity by id
          *
-         * @param activity the name of the activity
+         * @param activity the id of the activity
          */
-        void setActivity(const QString &activity);
+        void setActivity(const QString &activityId);
 
         /**
-         * @return the current activity name associated with this containment
+         * @return the current activity id associated with this containment
          */
         QString activity() const;
-
-        /**
-         * @return the context for this containment
-         * @since 4.5
-         */
-        Context* context() const;
 
         /**
          * Shows the context menu for the containment directly, bypassing Applets
@@ -428,12 +422,6 @@ Q_SIGNALS:
         void appletRemoved(Plasma::Applet *applet);
 
         /**
-         * Emitted when the containment requests zooming in or out one step.
-         * @deprecated
-         */
-        void zoomRequested(Plasma::Containment *containment, Plasma::ZoomDirection direction);
-
-        /**
          * Emitted when the user clicks on the toolbox
          */
         void toolBoxToggled();
@@ -473,11 +461,6 @@ Q_SIGNALS:
          * Emitted when the user wants to configure/change containment.
          */
         void configureRequested(Plasma::Containment *containment);
-
-        /**
-         * The context associated to this containment has changed
-         */
-        void contextChanged(Plasma::Context *context);
 
     public Q_SLOTS:
         /**
@@ -533,13 +516,6 @@ Q_SIGNALS:
          */
         void showConfigurationInterface();
 
-        /**
-         * Called when applet configuration values have changed.
-         * @reimp
-         * @sa Applet::configChanged()
-         */
-        void configChanged();
-
     protected:
         //FIXME plasma2: those should be public to allow scripted containments access them
         /**
@@ -574,7 +550,6 @@ Q_SIGNALS:
         void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
         void keyPressEvent(QKeyEvent *event);
         void wheelEvent(QGraphicsSceneWheelEvent *event);
-        bool sceneEventFilter(QGraphicsItem *watched, QEvent *event);
         QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
         /**
@@ -606,13 +581,6 @@ Q_SIGNALS:
          * @sa QGraphicsItem::resizeEvent()
          */
         void resizeEvent(QGraphicsSceneResizeEvent *event);
-
-        /**
-         * @returns the toolbox associated with this containment, or a null pointer if none
-         */
-#ifndef KDE_NO_DEPRECATED
-        KDE_DEPRECATED const QGraphicsItem *toolBoxItem() const;
-#endif
 
         /**
          * Sets a custom ToolBox
@@ -650,7 +618,6 @@ Q_SIGNALS:
         Q_PRIVATE_SLOT(d, void showDropZoneDelayed())
         Q_PRIVATE_SLOT(d, void checkStatus(Plasma::ItemStatus))
         Q_PRIVATE_SLOT(d, void remoteAppletReady(Plasma::AccessAppletJob *))
-        Q_PRIVATE_SLOT(d, void onContextChanged(Plasma::Context *con))
         /**
         * This slot is called when the 'stat' after a job event has finished.
         */

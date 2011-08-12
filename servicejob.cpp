@@ -27,7 +27,7 @@ namespace Plasma
 {
 
 ServiceJobPrivate::ServiceJobPrivate(ServiceJob *owner, const QString &dest,
-                                     const QString &op, const QMap<QString, QVariant> &params)
+                                     const QString &op, const QHash<QString, QVariant> &params)
         : q(owner),
           destination(dest),
           operation(op),
@@ -49,7 +49,7 @@ void ServiceJobPrivate::autoStart()
 }
 
 ServiceJob::ServiceJob(const QString &destination, const QString &operation,
-                       const QMap<QString, QVariant> &parameters, QObject *parent)
+                       const QHash<QString, QVariant> &parameters, QObject *parent)
     : KJob(parent),
       d(new ServiceJobPrivate(this, destination, operation, parameters))
 {
@@ -71,7 +71,7 @@ QString ServiceJob::operationName() const
     return d->operation;
 }
 
-QMap<QString, QVariant> ServiceJob::parameters() const
+QHash<QString, QVariant> ServiceJob::parameters() const
 {
     return d->parameters;
 }

@@ -273,7 +273,9 @@ void ToolTip::adjustPosition(const QSize &previous, const QSize &current)
         int deltaY = 0;
         if (d->direction == Plasma::Up) {
         /*
+#ifndef NDEBUG
         kDebug() << "resizing from" << current << "to" << hint
+#endif
                  << "and moving from" << pos() << "to"
                  << x() << y() + (current.height() - hint.height())
                  << current.height() - hint.height();
@@ -281,7 +283,9 @@ void ToolTip::adjustPosition(const QSize &previous, const QSize &current)
             deltaY = previous.height() - current.height();
         } else if (d->direction == Plasma::Left) {
         /*
+#ifndef NDEBUG
         kDebug() << "vertical resizing from" << current << "to" << hint
+#endif
                  << "and moving from" << pos() << "to"
                  << x() + (current.width() - hint.width()) << y()
                  << current.width() - hint.width(); */

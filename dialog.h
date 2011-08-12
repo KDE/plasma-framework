@@ -84,7 +84,7 @@ class PLASMA_EXPORT Dialog : public QWidget
         /**
          * @return the graphics widget shown in this dialog
          */
-        QGraphicsWidget *graphicsWidget();
+        QGraphicsWidget *graphicsWidget() const;
 
         /**
          * @param corners the corners the resize handlers should be placed in.

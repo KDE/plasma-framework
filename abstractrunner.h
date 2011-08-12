@@ -222,9 +222,9 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * Note that the returned pointer is only valid for the lifetime of
          * the runner.
          *
-         * @return the Package object, or 0 if none
+         * @return the Package object, which may be invalid
          **/
-        const Package *package() const;
+        Package package() const;
 
         /**
          * Signal runner to reload its configuration.
@@ -330,21 +330,6 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * only after higher priority runners.
          */
         void setPriority(Priority newPriority);
-
-        /**
-         * @deprecated
-         * A blocking method to do queries of installed Services which can provide
-         * a measure of safety for runners running their own threads. This should
-         * be used instead of calling KServiceTypeTrader::query(..) directly.
-         *
-         * @param serviceType a service type like "Plasma/Applet" or "KFilePlugin"
-         * @param constraint a constraint to limit the choices returned.
-         * @see KServiceTypeTrader::query(const QString&, const QString&)
-         *
-         * @return a list of services that satisfy the query.
-         */
-        KService::List serviceQuery(const QString &serviceType,
-                                    const QString &constraint = QString()) const;
 
         /**
          * A given match can have more than action that can be performed on it.
@@ -459,20 +444,19 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          */
         Q_INVOKABLE DataEngine *dataEngine(const QString &name) const;
 
-    protected Q_SLOTS:
         /**
          * Reimplement this slot to run any initialization routines on first load.
          * By default, it calls reloadConfiguration(); for scripted Runners this
          * method also sets up the ScriptEngine.
          */
-        void init();
+        virtual void init();
 
         /**
          * Reimplement this slot if you want your runner
          * to support serialization and drag and drop
          * @since 4.5
          */
-        QMimeData * mimeDataForMatch(const Plasma::QueryMatch *match);
+        virtual QMimeData *mimeDataForMatch(const Plasma::QueryMatch &match);
 
     private:
         friend class RunnerScript;

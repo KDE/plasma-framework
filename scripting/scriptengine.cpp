@@ -33,8 +33,6 @@
 #include "scripting/runnerscript.h"
 #include "scripting/wallpaperscript.h"
 
-#include "private/packages_p.h"
-
 namespace Plasma
 {
 
@@ -54,9 +52,9 @@ bool ScriptEngine::init()
     return true;
 }
 
-const Package *ScriptEngine::package() const
+Package ScriptEngine::package() const
 {
-    return 0;
+    return Package();
 }
 
 QString ScriptEngine::mainScript() const
@@ -127,7 +125,9 @@ KService::List engineOffers(const QString &language, ComponentType type)
 
     QRegExp re("[^a-zA-Z0-9\\-_]");
     if (re.indexIn(language) != -1) {
+#ifndef NDEBUG
         kDebug() << "invalid language attempted:" << language;
+#endif
         return KService::List();
     }
 
@@ -156,7 +156,9 @@ KService::List engineOffers(const QString &language, ComponentType type)
     /* kDebug() << "********************* loadingApplet with Plasma/ScriptEngine" << constraint
              << "resulting in" << offers.count() << "results";*/
     if (offers.isEmpty()) {
+#ifndef NDEBUG
         kDebug() << "No offers for \"" << language << "\"";
+#endif
     }
 
     return offers;
@@ -193,8 +195,10 @@ ScriptEngine *loadEngine(const QString &language, ComponentType type, QObject *p
             return engine;
         }
 
+#ifndef NDEBUG
         kDebug() << "Couldn't load script engine for language " << language
                  << "! error reported: " << error;
+#endif
     }
 
     // Try installing the engine. However, it's too late for this request.
@@ -229,8 +233,7 @@ DataEngineScript *loadScriptEngine(const QString &language, DataEngine *dataEngi
 
 RunnerScript *loadScriptEngine(const QString &language, AbstractRunner *runner)
 {
-    RunnerScript *engine =
-        static_cast<RunnerScript*>(loadEngine(language, RunnerComponent, runner));
+    RunnerScript *engine = static_cast<RunnerScript*>(loadEngine(language, RunnerComponent, runner));
 
     if (engine) {
         engine->setRunner(runner);
@@ -249,45 +252,6 @@ WallpaperScript *loadScriptEngine(const QString &language, Wallpaper *wallpaper)
     }
 
     return engine;
-}
-
-PackageStructure::Ptr defaultPackageStructure(ComponentType type)
-{
-    switch (type) {
-    case AppletComponent:
-    case WallpaperComponent:
-    case RunnerComponent:
-    case GenericComponent:
-        return PackageStructure::Ptr(new PlasmoidPackage());
-        break;
-    case DataEngineComponent:
-        return PackageStructure::Ptr(new DataEnginePackage());
-        break;
-    default:
-        // TODO: we don't have any special structures for other components yet
-        break;
-    }
-
-    return PackageStructure::Ptr(new PackageStructure());
-}
-
-PackageStructure::Ptr packageStructure(const QString &language, ComponentType type)
-{
-    KService::List offers = engineOffers(language, type);
-
-    if (offers.isEmpty()) {
-        return defaultPackageStructure(type);
-    }
-
-    KService::Ptr offer = offers.first();
-    QString packageFormat = offer->property("X-Plasma-PackageFormat").toString();
-
-    if (packageFormat.isEmpty()) {
-        return defaultPackageStructure(type);
-    } else {
-        PackageStructure::Ptr structure = PackageStructure::load(packageFormat);
-        return structure;
-    }
 }
 
 } // namespace Plasma

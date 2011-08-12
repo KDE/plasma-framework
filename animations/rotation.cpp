@@ -74,7 +74,6 @@ void RotationAnimation::updateState(QAbstractAnimation::State newState, QAbstrac
 {
     Q_UNUSED(newState)
     Q_UNUSED(oldState)
-
     QGraphicsWidget *m_object = targetWidget();
 
     if (!m_object) {

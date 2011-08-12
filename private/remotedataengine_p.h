@@ -42,7 +42,6 @@ public:
     void setLocation(KUrl location);
 
 protected:
-    void init();
     QStringList sources() const;
     bool updateSourceEvent(const QString &source);
     bool sourceRequestEvent(const QString &source);

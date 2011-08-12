@@ -55,12 +55,10 @@ enum Constraint {
     ImmutableConstraint = 16,
     /** application startup has completed */
     StartupCompletedConstraint = 32,
-    /** the desktop context has changed */
-    ContextConstraint = 64,
     /** the position of the popup needs to be recalculated*/
     PopupConstraint = 128,
     AllConstraints = FormFactorConstraint | LocationConstraint | ScreenConstraint |
-    SizeConstraint | ImmutableConstraint | ContextConstraint | PopupConstraint
+    SizeConstraint | ImmutableConstraint | PopupConstraint
 };
 Q_DECLARE_FLAGS(Constraints, Constraint)
 
@@ -97,14 +95,6 @@ enum Direction {
     Up,       /**< Display upwards */
     Left,     /**< Display to the left */
     Right     /**< Display to the right */
-};
-
-/**
- * The direction of a zoom action.
- */
-enum ZoomDirection {
-    ZoomIn = 0, /**< Zoom in one step */
-    ZoomOut = 1 /**< Zoom out one step */
 };
 
 /**
@@ -171,17 +161,6 @@ enum FlipDirection {
 Q_DECLARE_FLAGS(Flip, FlipDirection)
 
 /**
- * Zoom levels that Plasma is aware of...
- **/
-enum ZoomLevel {
-    DesktopZoom = 0, /**< Normal desktop usage, plasmoids are painted normally
-                        and have full interaction */
-    GroupZoom,       /**< Plasmoids are shown as icons in visual groups; drag
-                        and drop and limited context menu interaction only */
-    OverviewZoom     /**< Groups become icons themselves */
-};
-
-/**
  * Possible timing alignments
  **/
 enum IntervalAlignment {
@@ -209,7 +188,7 @@ enum ImmutabilityType {
 };
 
 /**
- * Defines the aspect ratio used when scaling an applet
+ * Defines the aspect ratio used when resizing an applet
  */
 enum AspectRatioMode {
     InvalidAspectRatioMode = -1, /**< Unset mode used for dev convenience
@@ -234,8 +213,7 @@ enum ComponentType {
     RunnerComponent = 4,      /**< Plasma::AbstractRunner based plugsin **/
     AnimatorComponent = 8,    /**< Plasma::Animator based plugins **/
     ContainmentComponent = 16,/**< Plasma::Containment based plugins **/
-    WallpaperComponent = 32,   /**< Plasma::Wallpaper based plugins **/
-    GenericComponent = 64      /** Generic repositories of files, usually they keep QML files and their assets **/
+    WallpaperComponent = 32   /**< Plasma::Wallpaper based plugins **/
 };
 Q_DECLARE_FLAGS(ComponentTypes, ComponentType)
 
@@ -275,18 +253,28 @@ enum AnnouncementMethod {
 Q_DECLARE_FLAGS(AnnouncementMethods, AnnouncementMethod)
 
 enum TrustLevel {
-    InvalidCredentials = 0, /**< The credentials are invalid **/
-    UnknownCredentials = 1, /**< The credentials are unknown **/
-    ValidCredentials = 2, /**< The credentials are valid **/
-    TrustedCredentials = 3, /**< The credentials are trusted **/
-    UltimateCredentials = 4 /**< The ultimate trust level applies to the credentials **/
+    UnverifiableTrust = 0,      /**< The trust of the object can not be verified, usually because no
+                                     trust information (e.g. a cryptographic signature) was provided */
+    CompletelyUntrusted,        /**< The signature is broken/expired/false */
+    UnknownTrusted,             /**< The signature is valid, but the key is unknown */
+    UserTrusted,                /**< The signature is valid and made with a key signed by one of the
+                                     user's own keys*/
+    SelfTrusted,                /**< The signature is valid and made with one of the user's own keys*/
+    FullyTrusted,               /**< The signature is valid and made with a key signed by the vendor's key*/
+    UltimatelyTrusted           /**< The signature is valid and made with the vendor's key*/
 };
 Q_ENUMS(TrustLevel)
 
 /**
- * @return the scaling factor (0..1) for a ZoomLevel
- **/
-PLASMA_EXPORT qreal scalingFactor(ZoomLevel level);
+ * Description on how draw a background for the applet
+ */
+enum BackgroundHints {
+    NoBackground = 0,         /**< Not drawing a background under the applet, the applet has its own implementation */
+    StandardBackground = 1,   /**< The standard background from the theme is drawn */
+    TranslucentBackground = 2, /**< An alternate version of the background is drawn, usually more translucent */
+    DefaultBackground = StandardBackground /**< Default settings: both standard background */
+};
+Q_ENUMS(BackgroundHints)
 
 /**
  * Converts a location to a direction. Handy for figuring out which way to send a popup based on
@@ -314,27 +302,11 @@ PLASMA_EXPORT Direction locationToInverseDirection(Location location);
  */
 PLASMA_EXPORT QGraphicsView *viewFor(const QGraphicsItem *item);
 
-/**
- * Returns a list of all actions in the given QMenu
- * This method flattens the hierarchy of the menu by prefixing the
- * text of all actions in a submenu with the submenu title.
- *
- * @param menu the QMenu storing the actions
- * @param prefix text to display before the text of all actions in the menu
- * @param parent QObject to be passed as parent of all the actions in the list
- *
- * @since 4.4
- */
-PLASMA_EXPORT QList<QAction*> actionsFromMenu(QMenu *menu,
-                                              const QString &prefix = QString(),
-                                              QObject *parent = 0);
-
 } // Plasma namespace
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Constraints)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Flip)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::ComponentTypes)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::MessageButtons)
-
 
 #endif // multiple inclusion guard

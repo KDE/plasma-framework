@@ -21,19 +21,18 @@
 
 #include <qtest_kde.h>
 
-#include "plasma/packagestructure.h"
+#include "plasma/package.h"
 
 class PackageStructureTest : public QObject
 {
     Q_OBJECT
 
-public Q_SLOTS:
-    void init();
-    void cleanup();
+public:
+    PackageStructureTest();
 
 private Q_SLOTS:
+    void copyPerformance();
     void emptyContentsPrefix();
-    void type();
     void directories();
     void requiredDirectories();
     void files();
@@ -41,14 +40,13 @@ private Q_SLOTS:
     void path();
     void name();
     void required();
-    void mimetypes();
-    void read();
-    void write();
+    void mimeTypes();
 
     //TODO: add tests for copy construction
 
 private:
-    Plasma::PackageStructure::Ptr ps;
+    Plasma::Package ps;
+    QString m_packagePath;
 };
 
 #endif

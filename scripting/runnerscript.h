@@ -94,7 +94,7 @@ protected:
      *         be used to request resources, such as images and
      *         interface files.
      */
-    const Package *package() const;
+    Package package() const;
 
     /**
      * @return the KPluginInfo associated with this plasmoid
@@ -112,8 +112,6 @@ protected:
     void setHasRunOptions(bool hasRunOptions);
     void setSpeed(AbstractRunner::Speed newSpeed);
     void setPriority(AbstractRunner::Priority newPriority);
-    KService::List serviceQuery(const QString &serviceType,
-                                const QString &constraint = QString()) const;
     QAction* addAction(const QString &id, const QIcon &icon, const QString &text);
     void addAction(const QString &id, QAction *action);
     void removeAction(const QString &id);

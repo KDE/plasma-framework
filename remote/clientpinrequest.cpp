@@ -60,7 +60,9 @@ QString ClientPinRequest::description() const
 
 void ClientPinRequest::setPin(const QString &pin)
 {
+#ifndef NDEBUG
     kDebug() << "pin = " << pin;
+#endif
     d->pin = pin;
     emit changed(this);
 }

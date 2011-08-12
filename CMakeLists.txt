@@ -7,6 +7,8 @@ if(KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
     set(PLASMA_NO_SOLID TRUE)
     set(PLASMA_NO_KIO TRUE)
     set(PLASMA_NO_PACKAGEKIT TRUE)
+    set(PLASMA_NO_PACKAGE_EXTRADATA TRUE)
+
 endif(KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
 
 if(NOT Q_WS_X11)
@@ -60,24 +62,22 @@ if(QCA2_FOUND)
 endif(QCA2_FOUND)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-plasma.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-plasma.h)
 
+#FIXME: gpgme++ is in kdepimlibs, must move somewhere else!
+macro_optional_find_package(KdepimLibs 4.5.60)
+macro_log_feature(KDEPIMLIBS_FOUND "kdepimlibs" "KDE PIM libraries" "http://www.kde.org" FALSE "" "Needed for building several Plasma DataEngines")
+include_directories(${KDEPIMLIBS_INCLUDE_DIRS})
+
 add_subdirectory(tests)
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1209)
 
 ########### next target ###############
 
-set(plasmagik_SRCS
-    packagemetadata.cpp
-    packagestructure.cpp
-    package.cpp
-    )
-
-#to make the Temporary solution to not link to libkdeclarative work, disable the exports of libkdeclarative  
-add_definitions(-DKDECLARATIVE_EXPORT=)
-
 set(plasma_LIB_SRCS
-    ${plasmagik_SRCS}
     abstractrunner.cpp
+    ${plasmagik_SRCS}
+    abstractdialogmanager.cpp
     abstracttoolbox.cpp
+    dialog.cpp
     animator.cpp
     animations/animation.cpp
     animations/animationscriptengine.cpp
@@ -98,45 +98,40 @@ set(plasma_LIB_SRCS
     animations/water.cpp
     animations/widgetsnapshot.cpp
     animations/zoom.cpp
-    applet.cpp
     configloader.cpp
     containment.cpp
     containmentactions.cpp
     containmentactionspluginsconfig.cpp
-    context.cpp
     corona.cpp
     datacontainer.cpp
     dataengine.cpp
     dataenginemanager.cpp
     delegate.cpp
-    dialog.cpp
-    abstractdialogmanager.cpp
     extenders/extender.cpp
     extenders/extendergroup.cpp
     extenders/extenderitem.cpp
-    pluginloader.cpp
+    package.cpp
+    packagestructure.cpp
     paintutils.cpp
+    pluginloader.cpp
     framesvg.cpp
     plasma.cpp
+    applet.cpp
     popupapplet.cpp
-    private/animablegraphicswebview.cpp
+    pluginloader.cpp
+
     private/applethandle.cpp
     private/associatedapplicationmanager.cpp
     private/componentinstaller.cpp
     private/datacontainer_p.cpp
-    private/dataenginebindings.cpp
     private/dataengineconsumer.cpp
     private/dataengineservice.cpp
-    private/denyallauthorization.cpp
     private/effectwatcher.cpp
     private/extenderapplet.cpp
     private/extenderitemmimedata.cpp
     private/focusindicator.cpp
     private/getsource.cpp
-    private/nativetabbar.cpp
     private/packages.cpp
-    private/pinpairingauthorization.cpp
-    private/pinpairingdialog.cpp
     private/plasmoidservice.cpp
     private/remotedataengine.cpp
     private/remoteservice.cpp
@@ -146,12 +141,11 @@ set(plasma_LIB_SRCS
     private/storage.cpp
     private/storagethread.cpp
     private/style.cpp
-    private/trustedonlyauthorization.cpp
     private/tooltip.cpp
     private/wallpaperrenderthread.cpp
     private/windowpreview.cpp
+    private/windowshadows.cpp
     private/kineticscroll.cpp
-    private/declarative/declarativenetworkaccessmanagerfactory.cpp
     private/effects/halopainter.cpp
     private/effects/ripple.cpp
     querymatch.cpp
@@ -162,7 +156,12 @@ set(plasma_LIB_SRCS
     remote/authorizationrule.cpp
     remote/clientpinrequest.cpp
     remote/credentials.cpp
+    remote/denyallauthorization.cpp
+    remote/pinpairingauthorization.cpp
+    remote/pinpairingdialog.cpp
     remote/serviceaccessjob.cpp
+    remote/signing.cpp
+    remote/trustedonlyauthorization.cpp
     runnercontext.cpp
     runnermanager.cpp
     runnersyntax.cpp
@@ -181,33 +180,7 @@ set(plasma_LIB_SRCS
     view.cpp
     wallpaper.cpp
     windoweffects.cpp
-    widgets/checkbox.cpp
-    widgets/combobox.cpp
-    widgets/declarativewidget.cpp
-    widgets/flashinglabel.cpp
-    widgets/frame.cpp
-    widgets/groupbox.cpp
-    widgets/iconwidget.cpp
-    widgets/itembackground.cpp
-    widgets/label.cpp
-    widgets/lineedit.cpp
-    widgets/meter.cpp
-    widgets/pushbutton.cpp
-    widgets/radiobutton.cpp
-    widgets/scrollbar.cpp
-    widgets/signalplotter.cpp
-    widgets/slider.cpp
-    widgets/spinbox.cpp
-    widgets/toolbutton.cpp
-    widgets/busywidget.cpp
-    widgets/scrollwidget.cpp
-    widgets/separator.cpp
-    widgets/svgwidget.cpp
-    widgets/tabbar.cpp
-    widgets/textbrowser.cpp
-    widgets/treeview.cpp
-    widgets/textedit.cpp
-    widgets/webview.cpp
+
 
     #Temporary QtJolie branch
     private/qtjolie-branch/qtjolie/abstractadaptor.cpp
@@ -223,28 +196,50 @@ set(plasma_LIB_SRCS
     private/qtjolie-branch/qtjolie/server.cpp
     private/qtjolie-branch/qtjolie/serverthread.cpp
 
-    #Temporary solution to not link to libkdeclarative
-    ${CMAKE_SOURCE_DIR}/experimental/libkdeclarative/kdeclarative.cpp
-    ${CMAKE_SOURCE_DIR}/experimental/libkdeclarative/private/engineaccess.cpp
-    ${CMAKE_SOURCE_DIR}/experimental/libkdeclarative/private/kiconprovider.cpp
-    ${CMAKE_SOURCE_DIR}/experimental/libkdeclarative/bindings/qscriptnonguibookkeeping.cpp
-    ${CMAKE_SOURCE_DIR}/experimental/libkdeclarative/bindings/i18n.cpp
-    ${CMAKE_SOURCE_DIR}/experimental/libkdeclarative/bindings/icon.cpp
-    ${CMAKE_SOURCE_DIR}/experimental/libkdeclarative/bindings/url.cpp
+    widgets/pushbutton.cpp
+    widgets/busywidget.cpp
+    widgets/iconwidget.cpp
+    widgets/label.cpp
+    widgets/scrollbar.cpp
+    widgets/scrollwidget.cpp
+    widgets/svgwidget.cpp
+    widgets/textbrowser.cpp
+    widgets/textedit.cpp
 )
 
-if(NOT KDE_NO_DEPRECATED)
-    set(plasma_LIB_SRCS
-        ${plasma_LIB_SRCS}
-        deprecated/animationdriver.cpp
-        deprecated/animator.cpp
-    )
-endif(NOT KDE_NO_DEPRECATED)
+set (plasmaqgv_LIB_SRCS
+
+    private/animablegraphicswebview.cpp
+    private/dataenginebindings.cpp
+    private/declarative/declarativenetworkaccessmanagerfactory.cpp
+    private/focusindicator.cpp
+    private/nativetabbar.cpp
+    private/style.cpp
+
+    widgets/checkbox.cpp
+    widgets/combobox.cpp
+    widgets/declarativewidget.cpp
+    widgets/flashinglabel.cpp
+    widgets/frame.cpp
+    widgets/groupbox.cpp
+    widgets/itembackground.cpp
+    widgets/lineedit.cpp
+    widgets/meter.cpp
+    widgets/radiobutton.cpp
+    widgets/signalplotter.cpp
+    widgets/slider.cpp
+    widgets/spinbox.cpp
+    widgets/toolbutton.cpp
+    widgets/separator.cpp
+    widgets/tabbar.cpp
+    widgets/treeview.cpp
+    widgets/webview.cpp
+)
 
 kde4_add_kcfg_files(plasma_LIB_SRCS data/kconfigxt/libplasma-theme-global.kcfgc)
 
 kde4_add_ui_files(plasma_LIB_SRCS
-                  private/pinpairing.ui
+                  remote/pinpairing.ui
                   private/publish.ui)
 #NEPOMUK_GENERATE_FROM_ONTOLOGY(
 #   nwc.nrl
@@ -254,27 +249,29 @@ kde4_add_ui_files(plasma_LIB_SRCS
 #   TEST_INCLUDES
 #)
 
-if (QT_QTOPENGL_FOUND)
-    message(STATUS "Adding support for OpenGL applets to libplasma")
-    set(plasma_LIB_SRCS
-        ${plasma_LIB_SRCS}
-        glapplet.cpp)
-endif(QT_QTOPENGL_FOUND)
 
 if (PHONON_FOUND)
     message(STATUS "Adding support for Phonon to libplasma")
     include_directories(${KDE4_PHONON_INCLUDES})
-    set(plasma_LIB_SRCS
-        ${plasma_LIB_SRCS}
+    set(plasmaqgv_LIB_SRCS
+        ${plasmaqgv_LIB_SRCS}
         widgets/videowidget.cpp)
 endif(PHONON_FOUND)
 
 kde4_add_library(plasma ${LIBRARY_TYPE} ${plasma_LIB_SRCS})
 
-#add kdeclarative after the 4.7 release
+kde4_add_library(plasmaqgv ${LIBRARY_TYPE} ${plasmaqgv_LIB_SRCS})
+
 target_link_libraries(plasma ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
                              ${QT_QTSCRIPT_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTSQL_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY}
-                             ${KDE4_KDEUI_LIBS} kdnssd threadweaver ${PLASMA_EXTRA_LIBS} karchive)
+                             ${KDE4_KDEUI_LIBS} kdnssd threadweaver kdeclarative ${PLASMA_EXTRA_LIBS})
+#FIXME gpgme++ is in kdepimlibs, neeeds to be elsewhere
+target_link_libraries(plasma ${KDEPIMLIBS_GPGMEPP_LIBS})
+
+target_link_libraries(plasmaqgv plasma ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
+                             ${QT_QTSCRIPT_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY}
+                             ${KDE4_KDEUI_LIBS} kdeclarative ${PLASMA_EXTRA_LIBS})
+
 
 if(QCA2_FOUND)
    target_link_libraries(plasma ${QCA2_LIBRARIES})
@@ -285,37 +282,30 @@ if(X11_FOUND)
 endif(X11_FOUND)
 
 if(PHONON_FOUND)
-   target_link_libraries(plasma ${KDE4_PHONON_LIBS})
+   target_link_libraries(plasmaqgv ${KDE4_PHONON_LIBS})
 endif(PHONON_FOUND)
 
 if(DL_LIBRARY)
     target_link_libraries(plasma ${DL_LIBRARY})
 endif(DL_LIBRARY)
 
-if(QT_QTOPENGL_FOUND)
-    target_link_libraries(plasma ${QT_QTOPENGL_LIBRARY})
-endif(QT_QTOPENGL_FOUND)
-
 target_link_libraries(plasma LINK_INTERFACE_LIBRARIES kdeui kdecore ${QT_QTGUI_LIBRARY})
 
 #do NOT use GENERIC versioning -- the plasma team will take care of versioning
 set_target_properties(plasma PROPERTIES
-                             VERSION 3.0.0
-                             SOVERSION 3
+                             VERSION 4.0.0
+                             SOVERSION 4
+                      )
+
+set_target_properties(plasmaqgv PROPERTIES
+                             VERSION 1.0.0
+                             SOVERSION 1
                       )
 
 install(TARGETS plasma EXPORT kdelibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
-
+install(TARGETS plasmaqgv EXPORT kdelibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
-
-set(plasmagik_HEADERS
-    packagemetadata.h
-    packagestructure.h
-    package.h
-    )
-
-install(FILES ${plasmagik_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/ COMPONENT Devel)
 
 set(plasma_LIB_INCLUDES
     abstractdialogmanager.h
@@ -328,7 +318,6 @@ set(plasma_LIB_INCLUDES
     containment.h
     containmentactions.h
     containmentactionspluginsconfig.h
-    context.h
     corona.h
     datacontainer.h
     dataengine.h
@@ -342,6 +331,8 @@ set(plasma_LIB_INCLUDES
     paintutils.h
     windoweffects.h
     framesvg.h
+    package.h
+    packagestructure.h
     plasma.h
     plasma_export.h
     popupapplet.h
@@ -367,19 +358,6 @@ set(plasma_LIB_INCLUDES
     view.h
     wallpaper.h)
 
-if(NOT KDE_NO_DEPRECATED)
-    set(plasma_LIB_INCLUDES
-        ${plasma_LIB_INCLUDES}
-        animationdriver.h
-    )
-endif(NOT KDE_NO_DEPRECATED)
-
-
-if(QT_QTOPENGL_FOUND)
-    set(plasma_LIB_INCLUDES
-        ${plasma_LIB_INCLUDES}
-        glapplet.h)
-endif(QT_QTOPENGL_FOUND)
 
 install(FILES
         ${plasma_LIB_INCLUDES}

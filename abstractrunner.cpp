@@ -33,10 +33,10 @@
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>
 
-#include <plasma/package.h>
-#include <plasma/querymatch.h>
-
+#include "package.h"
+#include "pluginloader.h"
 #include "private/abstractrunner_p.h"
+#include "querymatch.h"
 #include "runnercontext.h"
 #include "scripting/runnerscript.h"
 
@@ -142,7 +142,9 @@ void AbstractRunner::performMatch(Plasma::RunnerContext &localContext)
     if (!slowed && runtime > reasonableRunTime) {
         // we punish runners that return too slowly, even if they don't bring
         // back matches
+#ifndef NDEBUG
         kDebug() << id() << "runner is too slow, putting it on the back burner.";
+#endif
         d->fastRuns = 0;
         setSpeed(SlowSpeed);
     }
@@ -153,7 +155,9 @@ void AbstractRunner::performMatch(Plasma::RunnerContext &localContext)
         if (d->fastRuns > 2) {
             // we reward slowed runners who bring back matches fast enough
             // 3 times in a row
+#ifndef NDEBUG
             kDebug() << id() << "runner is faster than we thought, kicking it up a notch";
+#endif
             setSpeed(NormalSpeed);
         }
     }
@@ -203,7 +207,7 @@ void AbstractRunner::clearActions()
     d->actions.clear();
 }
 
-QMimeData * AbstractRunner::mimeDataForMatch(const QueryMatch *match)
+QMimeData *AbstractRunner::mimeDataForMatch(const QueryMatch &match)
 {
     Q_UNUSED(match)
     return 0;
@@ -267,11 +271,6 @@ void AbstractRunner::setIgnoredTypes(RunnerContext::Types types)
     d->blackListed = types;
 }
 
-KService::List AbstractRunner::serviceQuery(const QString &serviceType, const QString &constraint) const
-{
-    return KServiceTypeTrader::self()->query(serviceType, constraint);
-}
-
 QMutex* AbstractRunner::bigLock()
 {
     return s_bigLock;
@@ -297,10 +296,6 @@ QString AbstractRunner::name() const
         return d->runnerDescription.name();
     }
 
-    if (d->package) {
-        return d->package->metadata().name();
-    }
-
     return objectName();
 }
 
@@ -308,10 +303,6 @@ QIcon AbstractRunner::icon() const
 {
     if (d->runnerDescription.isValid()) {
         return KIcon(d->runnerDescription.icon());
-    }
-
-    if (d->package) {
-        return KIcon(d->package->metadata().icon());
     }
 
     return QIcon();
@@ -323,10 +314,6 @@ QString AbstractRunner::id() const
         return d->runnerDescription.pluginName();
     }
 
-    if (d->package) {
-        return d->package->metadata().pluginName();
-    }
-
     return objectName();
 }
 
@@ -336,16 +323,12 @@ QString AbstractRunner::description() const
         return d->runnerDescription.property("Comment").toString();
     }
 
-    if (d->package) {
-        return d->package->metadata().description();
-    }
-
     return objectName();
 }
 
-const Package* AbstractRunner::package() const
+Package AbstractRunner::package() const
 {
-    return d->package;
+    return d->package ? *d->package : Package();
 }
 
 
@@ -410,7 +393,9 @@ void AbstractRunnerPrivate::init(const KService::Ptr service)
             const QString path = KStandardDirs::locate("data", "plasma/runners/" + runnerDescription.pluginName() + '/');
             prepScripting(path, api);
             if (!script) {
+#ifndef NDEBUG
                 kDebug() << "Could not create a(n)" << api << "ScriptEngine for the" << runnerDescription.name() << "Runner.";
+#endif
             }
         }
     }
@@ -418,30 +403,32 @@ void AbstractRunnerPrivate::init(const KService::Ptr service)
 
 void AbstractRunnerPrivate::init(const QString &path)
 {
-    prepScripting(path);
+    runnerDescription = KPluginInfo(path + "/metadata.desktop");
+    const QString api = runnerDescription.property("X-Plasma-API").toString();
+    prepScripting(path, api);
 }
 
-void AbstractRunnerPrivate::prepScripting(const QString &path, QString api)
+void AbstractRunnerPrivate::prepScripting(const QString &path, const QString &api)
 {
     if (script) {
         return;
     }
 
     delete package;
+    package = 0;
 
-    PackageStructure::Ptr structure = Plasma::packageStructure(api, Plasma::RunnerComponent);
-    structure->setPath(path);
-    package = new Package(path, structure);
-
-    if (!package->isValid()) {
-        kDebug() << "Invalid Runner package at" << path;
-        delete package;
-        package = 0;
+    if (api.isEmpty()) {
         return;
     }
 
-    if (api.isEmpty()) {
-        api = package->metadata().implementationApi();
+    package = new Package(PluginLoader::self()->loadPackage("Plasma/Runner", api));
+    package->setPath(path);
+
+    if (!package->isValid()) {
+#ifndef NDEBUG
+        kDebug() << "Invalid Runner package at" << path;
+#endif
+        return;
     }
 
     script = Plasma::loadScriptEngine(api, runner);
@@ -459,16 +446,15 @@ void AbstractRunnerPrivate::setupScriptSupport()
         return;
     }
 
+#ifndef NDEBUG
     kDebug() << "setting up script support, package is in" << package->path()
-             << "which is a" << package->structure()->type() << "package"
              << ", main script is" << package->filePath("mainscript");
+#endif
 
-    QString translationsPath = package->filePath("translations");
+    const QString translationsPath = package->filePath("translations");
     if (!translationsPath.isEmpty()) {
-        //FIXME: we should _probably_ use a KComponentData to segregate the applets
-        //       from each other; but I want to get the basics working first :)
         KGlobal::dirs()->addResourceDir("locale", translationsPath);
-        KGlobal::locale()->insertCatalog(package->metadata().pluginName());
+        KGlobal::locale()->insertCatalog(runnerDescription.pluginName());
     }
 }
 

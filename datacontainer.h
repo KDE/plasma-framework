@@ -154,6 +154,11 @@ class PLASMA_EXPORT DataContainer : public QObject
          */
         DataEngine* getDataEngine();
 
+        /**
+         * @return true if one or more visualizations is connected to this DataContainer
+         */
+        bool isUsed() const;
+
     public Q_SLOTS:
         /**
          * Disconnects an object from this DataContainer.
@@ -233,17 +238,6 @@ class PLASMA_EXPORT DataContainer : public QObject
          * checkForUpdate().  So we claim it needs an update anyway.
          **/
         void setNeedsUpdate(bool update = true);
-
-    protected Q_SLOTS:
-        /**
-         * Check if the DataContainer is still in use.
-         *
-         * If not the signal "becameUnused" will be emitted.
-         *
-         * Warning: The DataContainer may be invalid after calling this function, because a listener
-         * to becameUnused() may have deleted it.
-         **/
-        void checkUsage();
 
     private:
         friend class SignalRelay;

@@ -32,7 +32,6 @@
 #include <kshortcut.h>
 
 #include <plasma/configloader.h>
-#include <plasma/packagestructure.h>
 #include <plasma/plasma.h>
 #include <plasma/animator.h>
 #include <plasma/version.h>
@@ -49,7 +48,6 @@ namespace Plasma
 
 class AppletPrivate;
 class Containment;
-class Context;
 class DataEngine;
 class Extender;
 class ExtenderItem;
@@ -83,40 +81,19 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
     Q_PROPERTY(QString category READ category)
     Q_PROPERTY(ImmutabilityType immutability READ immutability WRITE setImmutability)
     Q_PROPERTY(bool hasFailedToLaunch READ hasFailedToLaunch WRITE setFailedToLaunch)
-    Q_PROPERTY(bool isBusy READ isBusy WRITE setBusy) //KDE5: remove
     Q_PROPERTY(bool busy READ isBusy WRITE setBusy)
     Q_PROPERTY(bool configurationRequired READ configurationRequired WRITE setConfigurationRequired)
     Q_PROPERTY(QRectF geometry READ geometry WRITE setGeometry)
     Q_PROPERTY(bool shouldConserveResources READ shouldConserveResources)
     Q_PROPERTY(uint id READ id)
-    Q_PROPERTY(bool userConfiguring READ isUserConfiguring)
     Q_PROPERTY(BackgroundHints backgroundHints READ backgroundHints WRITE setBackgroundHints)
-    Q_ENUMS(BackgroundHints)
+    Q_PROPERTY(bool userConfiguring READ isUserConfiguring)
 
     public:
         typedef QList<Applet*> List;
         typedef QHash<QString, Applet*> Dict;
 
-        /**
-         * Description on how draw a background for the applet
-         */
-        enum BackgroundHint {
-            NoBackground = 0,         /**< Not drawing a background under the
-                                          applet, the applet has its own implementation */
-            StandardBackground = 1,   /**< The standard background from the theme is drawn */
-            TranslucentBackground = 2, /**< An alternate version of the background is drawn,
-                                          usually more translucent */
-            DefaultBackground = StandardBackground /**< Default settings:
-                                          both standard background */
-        };
-        Q_DECLARE_FLAGS(BackgroundHints, BackgroundHint)
-
         ~Applet();
-
-        /**
-         * @return a package structure representing an Applet
-         */
-        static PackageStructure::Ptr packageStructure();
 
         /**
          * @return the id of this applet
@@ -205,7 +182,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *
          * @return the Package object, or 0 if none
          **/
-        const Package *package() const;
+        Package package() const;
 
         /**
          * Returns the view this widget is visible on, or 0 if none can be found.
@@ -271,11 +248,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         virtual Location location() const;
 
         /**
-         * Returns the workspace context which the applet is operating in
-         */
-        Context *context() const;
-
-        /**
          * @return the preferred aspect ratio mode for placement and resizing
          */
         Plasma::AspectRatioMode aspectRatioMode() const;
@@ -310,7 +282,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *
          * @return list of applets
          **/
-        static KPluginInfo::List listAppletInfoForMimetype(const QString &mimetype);
+        static KPluginInfo::List listAppletInfoForMimeType(const QString &mimetype);
 
         /**
          * Returns a list of all known applets associated with a certain URL.
@@ -364,38 +336,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          **/
         static Applet *loadPlasmoid(const QString &path, uint appletId = 0,
                                     const QVariantList &args = QVariantList());
-
-        /**
-         * Attempts to load an applet
-         *
-         * Returns a pointer to the applet if successful.
-         * The caller takes responsibility for the applet, including
-         * deleting it when no longer needed.
-         *
-         * @param name the plugin name, as returned by KPluginInfo::pluginName()
-         * @param appletId unique ID to assign the applet, or zero to have one
-         *        assigned automatically.
-         * @param args to send the applet extra arguments
-         * @return a pointer to the loaded applet, or 0 on load failure
-         **/
-        static Applet *load(const QString &name, uint appletId = 0,
-                            const QVariantList &args = QVariantList());
-
-        /**
-         * Attempts to load an applet
-         *
-         * Returns a pointer to the applet if successful.
-         * The caller takes responsibility for the applet, including
-         * deleting it when no longer needed.
-         *
-         * @param info KPluginInfo object for the desired applet
-         * @param appletId unique ID to assign the applet, or zero to have one
-         *        assigned automatically.
-         * @param args to send the applet extra arguments
-         * @return a pointer to the loaded applet, or 0 on load failure
-         **/
-        static Applet *load(const KPluginInfo &info, uint appletId = 0,
-                            const QVariantList &args = QVariantList());
 
         /**
          * Get the category of the given applet
@@ -465,9 +405,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
         ImmutabilityType immutability() const;
 
-        void paintWindowFrame(QPainter *painter,
-                              const QStyleOptionGraphicsItem *option, QWidget *widget);
-
         /**
          * If for some reason, the applet fails to get up on its feet (the
          * library couldn't be loaded, necessary hardware support wasn't found,
@@ -517,13 +454,13 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *
          * @param hints the BackgroundHint combination for this applet
          */
-        void setBackgroundHints(const BackgroundHints hints);
+        void setBackgroundHints(const Plasma::BackgroundHints hint);
 
         /**
          * @return BackgroundHints flags combination telling if the standard background is shown
          *         and if it has a drop shadow
          */
-        BackgroundHints backgroundHints() const;
+        Plasma::BackgroundHints backgroundHints() const;
 
         /**
          * @return true if this Applet is currently being used as a Containment, false otherwise
@@ -726,18 +663,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
         void releaseVisualFocus();
 
-#if QT_VERSION >= 0x040700
-    protected:
-        void geometryChanged(); // in QGraphicsWidget now; preserve BC
-#else
-        /**
-         * Emitted whenever the applet makes a geometry change, so that views
-         * can coordinate themselves with these changes if they desire.
-         */
-        void geometryChanged();
-#endif
-
-    Q_SIGNALS:
         /**
          * Emitted when the user completes a transformation of the applet.
          */
@@ -1046,14 +971,9 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         Extender *extender() const;
 
         /**
-         * @internal event filter; used for focus watching
-         **/
-        bool eventFilter(QObject *o, QEvent *e);
-
-        /**
          * @internal scene event filter; used to manage applet dragging
          */
-        bool sceneEventFilter (QGraphicsItem *watched, QEvent *event);
+        bool sceneEventFilter(QGraphicsItem *watched, QEvent *event);
 
         /**
          * @internal manage the mouse movement to drag the applet around
@@ -1155,8 +1075,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
 };
 
 } // Plasma namespace
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Applet::BackgroundHints)
 
 /**
  * Register an applet when it is contained in a loadable module

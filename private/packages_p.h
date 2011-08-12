@@ -20,55 +20,41 @@
 #ifndef LIBS_PLASMA_PACKAGES_P_H
 #define LIBS_PLASMA_PACKAGES_P_H
 
-#include "plasma/packagestructure.h"
-#include "plasma/wallpaper.h"
-#include "plasma/plasma.h"
-
-#include "config-plasma.h"
-
-#ifndef PLASMA_NO_KNEWSTUFF
-namespace KNS3
-{
-    class DownloadDialog;
-} // namespace KNS
-#endif
+#include "packagestructure.h"
+#include "plasma.h"
+#include "wallpaper.h"
 
 namespace Plasma
 {
 
-class PlasmoidPackage : public PackageStructure
+class ChangeableMainScriptPackage : public PackageStructure
 {
-    Q_OBJECT
-public:
-    explicit PlasmoidPackage(QObject *parent = 0);
-    ~PlasmoidPackage();
-    void createNewWidgetBrowser(QWidget *parent = 0);
-
 protected:
-    void pathChanged();
-
-private:
-#ifndef PLASMA_NO_KNEWSTUFF
-    QWeakPointer<KNS3::DownloadDialog> m_knsDialog;
-#endif
+    void pathChanged(Package *package);
 };
 
-class DataEnginePackage : public PackageStructure
+class PlasmoidPackage : public ChangeableMainScriptPackage
 {
-    Q_OBJECT
 public:
-    explicit DataEnginePackage(QObject *parent = 0);
-    ~DataEnginePackage();
+    void initPackage(Package *package);
+};
 
-protected:
-    void pathChanged();
+class DataEnginePackage : public ChangeableMainScriptPackage
+{
+public:
+    void initPackage(Package *package);
+};
+
+class RunnerPackage : public ChangeableMainScriptPackage
+{
+public:
+    void initPackage(Package *package);
 };
 
 class ThemePackage : public PackageStructure
 {
-    Q_OBJECT
 public:
-    explicit ThemePackage(QObject *parent = 0);
+    void initPackage(Package *package);
 };
 
 class WallpaperPackage : public PackageStructure
@@ -76,19 +62,17 @@ class WallpaperPackage : public PackageStructure
     Q_OBJECT
 
 public:
-    explicit WallpaperPackage(Wallpaper *paper = 0, QObject *parent = 0);
-
-protected:
-    void pathChanged();
+    explicit WallpaperPackage(Wallpaper *paper = 0);
+    void initPackage(Package *package);
+    void pathChanged(Package *package);
 
 private:
     QSize resSize(const QString &str) const;
-    void findBestPaper();
+    void findBestPaper(Package *package);
     float distance(const QSize& size, const QSize& desired,
                    Plasma::Wallpaper::ResizeMethod method) const;
 
 private Q_SLOTS:
-    void paperDestroyed();
     void renderHintsChanged();
 
 private:
@@ -100,13 +84,15 @@ private:
 
 class ContainmentActionsPackage : public PackageStructure
 {
-    Q_OBJECT
-
 public:
-    explicit ContainmentActionsPackage(QObject *parent = 0);
+    void initPackage(Package *package);
 };
 
-PackageStructure::Ptr defaultPackageStructure(ComponentType type);
+class GenericPackage : public PackageStructure
+{
+public:
+    void initPackage(Package *package);
+};
 
 } // namespace Plasma
 

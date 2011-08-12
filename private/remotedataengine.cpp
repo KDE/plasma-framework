@@ -42,7 +42,9 @@ RemoteDataEngine::RemoteDataEngine(KUrl location, QObject* parent, const QVarian
     if (!location.isEmpty()) {
         setLocation(location);
     } else {
+#ifndef NDEBUG
         kDebug() << "LOCATION IS EMPTY";
+#endif
     }
 }
 
@@ -84,10 +86,6 @@ void RemoteDataEngine::initRemoteService(const QString &source, RemoteService *s
     }
 }
 
-void RemoteDataEngine::init()
-{
-}
-
 void RemoteDataEngine::serviceReady(Plasma::Service *service)
 {
     m_service = service;
@@ -111,14 +109,18 @@ QStringList RemoteDataEngine::sources() const
 void RemoteDataEngine::remoteCallFinished(Plasma::ServiceJob *job)
 {
     if (job->operationName() == "GetSourceNames") {
+#ifndef NDEBUG
         kDebug() << "get source names";
+#endif
         const QSet<QString> oldsources = m_sources;
         m_sources = QSet<QString>::fromList(job->result().toStringList());
 
         //first check if there are sources that have to be removed:
         foreach (const QString &source, oldsources) {
             if (!m_sources.contains(source)) {
+#ifndef NDEBUG
                 kDebug() << "source no longer exists... remove that data.";
+#endif
                 removeSource(source);
                 emit sourceRemoved(source);
             }
@@ -135,7 +137,9 @@ void RemoteDataEngine::remoteCallFinished(Plasma::ServiceJob *job)
             const SourceDict s = containerDict();
             foreach (const QString &source, m_sources) {
                 if (!oldsources.contains(source) && !s.contains(source)) {
+#ifndef NDEBUG
                     kDebug() << "new source = " << source;
+#endif
                     emit sourceAdded(source);
                 }
             }
@@ -148,10 +152,14 @@ void RemoteDataEngine::remoteCallFinished(Plasma::ServiceJob *job)
         m_pendingSources.clear();
     } else if (job->operationName() == "GetSource") {
         QString source = job->parameters().value("SourceName").toString();
+#ifndef NDEBUG
         kDebug() << "setting data for " << source;
+#endif
         bool newSource = !m_sources.contains(source);
         if (job->result().type() == QVariant::Bool && job->result().toBool() == false) {
+#ifndef NDEBUG
             kDebug() << "there is no update";
+#endif
             if (newSource) {
                 // the source doesn't exist on the remote side!
                 removeSource(source);
@@ -174,7 +182,9 @@ void RemoteDataEngine::remoteCallFinished(Plasma::ServiceJob *job)
         }
     } else {
         QString source = job->parameters().value("SourceName").toString();
+#ifndef NDEBUG
         kDebug() << "setting serviceForSource for " << source;
+#endif
         QString resource = job->result().toString();
         KUrl loc = m_location;
         loc.setFileName(resource);
@@ -182,7 +192,9 @@ void RemoteDataEngine::remoteCallFinished(Plasma::ServiceJob *job)
         if (rs) {
             rs->setLocation(loc);
         } else {
+#ifndef NDEBUG
             kDebug() << "no such service?" << source;
+#endif
         }
     }
 }

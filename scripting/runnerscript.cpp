@@ -112,15 +112,6 @@ void RunnerScript::setPriority(AbstractRunner::Priority newPriority)
     }
 }
 
-KService::List RunnerScript::serviceQuery(const QString &serviceType,
-                                          const QString &constraint) const
-{
-    if (d->runner) {
-        return d->runner->serviceQuery(serviceType, constraint);
-    }
-    return KService::List();
-}
-
 QAction* RunnerScript::addAction(const QString &id, const QIcon &icon, const QString &text)
 {
     if (d->runner) {
@@ -180,9 +171,9 @@ void RunnerScript::setSyntaxes(const QList<RunnerSyntax> &syns)
     }
 }
 
-const Package *RunnerScript::package() const
+Package RunnerScript::package() const
 {
-    return d->runner ? d->runner->package() : 0;
+    return d->runner ? d->runner->package() : Package();
 }
 
 KPluginInfo RunnerScript::description() const
@@ -192,11 +183,7 @@ KPluginInfo RunnerScript::description() const
 
 QString RunnerScript::mainScript() const
 {
-    if (!package()) {
-        return QString();
-    } else {
-        return package()->filePath("mainscript");
-    }
+    return package().filePath("mainscript");
 }
 
 } // Plasma namespace

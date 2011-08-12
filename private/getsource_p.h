@@ -33,7 +33,7 @@ class GetSource : public Plasma::ServiceJob
 
     public:
         GetSource(DataEngine *engine, const QString& operation,
-                  QMap<QString,QVariant>& parameters,
+                  QHash<QString,QVariant>& parameters,
                   DataEngineService *service = 0);
 
         void start();

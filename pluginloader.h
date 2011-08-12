@@ -20,20 +20,23 @@
 #ifndef PLUGIN_LOADER_H
 #define PLUGIN_LOADER_H
 
+#include <plasma/package.h>
 #include <plasma/plasma.h>
 #include <kplugininfo.h>
 
 namespace Plasma {
 
+class AbstractRunner;
 class Applet;
+class Containment;
+class ContainmentActions;
 class DataEngine;
 class Service;
-class AbstractRunner;
 
 class PluginLoaderPrivate;
 
 //TODO:
-// * add support for ContainmentActions plugins
+// * add loadWallpaper
 // * add KPluginInfo listing support for Containments (already loaded via the applet loading code)
 
 /**
@@ -51,10 +54,6 @@ class PluginLoaderPrivate;
 class PLASMA_EXPORT PluginLoader
 {
 public: 
-    PluginLoader();
-
-    virtual ~PluginLoader();
-
     /**
      * Load an Applet plugin.
      *
@@ -92,6 +91,31 @@ public:
      * @return a Service object, unlike Plasma::Service::loadService, this can return null.
      **/
     Service *loadService(const QString &name, const QVariantList &args, QObject *parent = 0);
+
+    /**
+     * Load a ContainmentActions plugin.
+     *
+     * Returns a pointer to the containmentactions if successful.
+     * The caller takes responsibility for the containmentactions, including
+     * deleting it when no longer needed.
+     *
+     * @param parent the parent containment. @since 4.6 null is allowed.
+     * @param name the plugin name, as returned by KPluginInfo::pluginName()
+     * @param args to send the containmentactions extra arguments
+     * @return a ContaimentActions object
+     **/
+    ContainmentActions *loadContainmentActions(Containment *parent, const QString &containmentActionsName,
+                                              const QVariantList &args = QVariantList());
+
+    /**
+     * Load a Package plugin.
+     *
+     * @param name the plugin name of the package to load
+     * @param specialization used to find script extensions for the given format, e.g. "QML" for "Plasma/Applet"
+     *
+     * @return a Package object matching name, or an invalid package on failure
+     **/
+    Package loadPackage(const QString &packageFormat, const QString &specialization = QString());
 
     /**
      * Returns a list of all known applets.
@@ -137,6 +161,18 @@ public:
     KPluginInfo::List listRunnerInfo(const QString &parentApp = QString());
 
     /**
+     * Returns a list of all known ContainmentActions.
+     *
+     * @param parentApp the application to filter applets on. Uses the
+     *                  X-KDE-ParentApp entry (if any) in the plugin info.
+     *                  The default value of QString() will result in a
+     *                  list containing only applets not specifically
+     *                  registered to an application.
+     * @return list of applets
+     **/
+    KPluginInfo::List listContainmentActionsInfo(const QString &parentApp);
+
+    /**
      * Set the plugin loader which will be queried for all loads.
      *
      * @param loader A subclass of PluginLoader which will be supplied
@@ -147,7 +183,7 @@ public:
     /**
      * Return the active plugin loader
      **/
-    static PluginLoader* pluginLoader();
+    static PluginLoader *self();
 
 protected:
     /**
@@ -206,6 +242,39 @@ protected:
     virtual Service *internalLoadService(const QString &name, const QVariantList &args, QObject *parent = 0);
 
     /**
+     * A re-implementable method that allows subclasses to override
+     * the default behaviour of loadContainmentActions. If the Containments Action requested is not recognized,
+     * then the implementation should return a NULL pointer. This method is called
+     * by loadService prior to attempting to load a Service using the standard Plasma
+     * plugin mechanisms.
+     *
+     * Returns a pointer to the containmentactions if successful.
+     * The caller takes responsibility for the containmentactions, including
+     * deleting it when no longer needed.
+     *
+     * @param parent the parent containment. @since 4.6 null is allowed.
+     * @param name the plugin name, as returned by KPluginInfo::pluginName()
+     * @param args to send the containmentactions extra arguments
+     * @return a ContaimentActions object
+     **/
+    virtual ContainmentActions *internalLoadContainmentActions(Containment *parent, const QString &containmentActionsName, const QVariantList &args);
+
+    /**
+     * A re-implementable method that allows subclasses to override
+     * the default behaviour of loadPackage. If the service requested is not recognized,
+     * then the implementation should return a NULL pointer. This method is called
+     * by loadService prior to attempting to load a Service using the standard Plasma
+     * plugin mechanisms.
+     *
+     * @param name the plugin name of the service to load
+     * @param args a list of arguments to supply to the service plugin when loading it
+     * @param parent the parent object, if any, for the service
+     *
+     * @return a Service object, unlike Plasma::Service::loadService, this can return null.
+     **/
+    virtual Package internalLoadPackage(const QString &name, const QString &specialization);
+
+    /**
      * A re-implementable method that allows subclasses to provide additional applets
      * for listAppletInfo. If the application has no applets to give to the application, 
      * then the implementation should return an empty list.
@@ -228,23 +297,30 @@ protected:
      * A re-implementable method that allows subclasses to provide additional DataEngines
      * for DataEngineManager::listDataEngines.
      *
-     * @return list of DataEngines, or an empty list if none
+     * @return list of DataEngines info, or an empty list if none
      **/
     virtual KPluginInfo::List internalDataEngineInfo() const;
 
     /**
      * Returns a list of all known Runner implementations
      *
-     * @return list of AbstractRunners, or an empty list if none
+     * @return list of AbstractRunners info, or an empty list if none
      */
     virtual KPluginInfo::List internalRunnerInfo() const;
 
     /**
      * Returns a list of all known Runner implementations
      *
-     * @return list of AbstractRunners, or an empty list if none
+     * @return list of AbstractRunners info, or an empty list if none
      */
     virtual KPluginInfo::List internalServiceInfo() const;
+
+    /**
+     * Returns a list of all known Runner implementations
+     *
+     * @return list of ContainmentActions info, or an empty list if none
+     */
+    virtual KPluginInfo::List internalContainmentActionsInfo() const;
 
     /**
      * Standardized mechanism for providing internal Applets by install .desktop files
@@ -295,6 +371,9 @@ protected:
      * @return list of applets
      */
     KPluginInfo::List standardInternalServiceInfo() const;
+
+    PluginLoader();
+    virtual ~PluginLoader();
 
 private:
     PluginLoaderPrivate * const d;

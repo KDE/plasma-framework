@@ -118,20 +118,6 @@ public:
     QPixmap image() const;
 
     /**
-     * Sets the ID of the window to show a preview for.
-     * @deprecated
-     * @see setWindowsToPreview
-     */
-    KDE_DEPRECATED void setWindowToPreview(WId id);
-
-    /**
-     * Id of a window if you want to show a preview
-     * @deprecated
-     * @see windowsToPreview
-     */
-    KDE_DEPRECATED WId windowToPreview() const;
-
-    /**
      * Sets the IDS of the windows to show a preview for
      * @since 4.3
      */

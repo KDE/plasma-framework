@@ -76,7 +76,9 @@ void JavascriptAnimation::updateState(QAbstractAnimation::State newState, QAbstr
         if (!m_method.isFunction()) {
             //Define the class and create an instance
             m_instance = AnimationScriptEngine::animation(m_name).construct();
+#ifndef NDEBUG
             kDebug() << "trying for" << m_name << m_instance.isFunction();
+#endif
 
             //Get the method of the object
             m_method = m_instance.property(QString("updateCurrentTime"));
@@ -101,7 +103,9 @@ void JavascriptAnimation::updateState(QAbstractAnimation::State newState, QAbstr
 #ifdef PLASMA_JSANIM_FPS
         m_fps = 0;
     } else if (oldState == Running && newState == Stopped) {
+#ifndef NDEBUG
         kDebug() << ".........." << m_name << " fps: " << m_fps * 1000/duration();
+#endif
 #endif
     }
 }

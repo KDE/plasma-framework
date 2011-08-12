@@ -32,13 +32,15 @@
 #include <kservice.h>
 #include <kstandarddirs.h>
 
-#include "authorizationmanager.h"
 #include "datacontainer.h"
 #include "package.h"
+#include "pluginloader.h"
+#include "remote/authorizationmanager.h"
+#include "remote/authorizationmanager_p.h"
 #include "service.h"
 #include "scripting/dataenginescript.h"
 
-#include "private/authorizationmanager_p.h"
+#include "private/datacontainer_p.h"
 #include "private/dataengineservice_p.h"
 #include "private/remotedataengine_p.h"
 #include "private/service_p.h"
@@ -146,7 +148,7 @@ DataEngine::Data DataEngine::query(const QString &source) const
     }
 
     DataEngine::Data data = s->data();
-    s->checkUsage();
+    s->d->checkUsage();
     return data;
 }
 
@@ -247,7 +249,9 @@ void DataEngine::removeData(const QString &source, const QString &key)
 void DataEngine::addSource(DataContainer *source)
 {
     if (d->sources.contains(source->objectName())) {
+#ifndef NDEBUG
         kDebug() << "source named \"" << source->objectName() << "\" already exists.";
+#endif
         return;
     }
 
@@ -437,7 +441,7 @@ Service* DataEngine::createDefaultService(QObject *parent)
 {
     QVariantList args;
     args << QVariant::fromValue<DataEngine*>(this);
-    return Service::load(d->serviceName, args, parent);
+    return PluginLoader::self()->loadService(d->serviceName, args, parent);
 }
 
 void DataEnginePrivate::publish(AnnouncementMethods methods, const QString &name)
@@ -450,7 +454,9 @@ void DataEnginePrivate::publish(AnnouncementMethods methods, const QString &name
     //i18nc("%1 is the name of a dataengine, %2 the name of the machine that engine is published
 //on",
           //"%1 dataengine on %2", name(), AuthorizationManager::self()->d->myCredentials.name());
+#ifndef NDEBUG
     kDebug() << "name: " << name;
+#endif
     publishedService->d->publish(methods, name);
 }
 
@@ -472,9 +478,9 @@ bool DataEnginePrivate::isPublished() const
     }
 }
 
-const Package *DataEngine::package() const
+Package DataEngine::package() const
 {
-    return d->package;
+    return d->package ? *d->package : Package();
 }
 
 void DataEngine::scheduleSourcesUpdated()
@@ -540,14 +546,18 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info)
             const QString path =
                 KStandardDirs::locate("data",
                                       "plasma/dataengines/" + dataEngineDescription.pluginName() + '/');
-            PackageStructure::Ptr structure = Plasma::packageStructure(api, Plasma::DataEngineComponent);
-            structure->setPath(path);
-            package = new Package(path, structure);
+            package = new Package(PluginLoader::self()->loadPackage("Plasma/DataEngine", api));
+            package->setPath(path);
 
-            script = Plasma::loadScriptEngine(api, q);
+            if (package->isValid()) {
+                script = Plasma::loadScriptEngine(api, q);
+            }
+
             if (!script) {
+#ifndef NDEBUG
                 kDebug() << "Could not create a" << api << "ScriptEngine for the"
                         << dataEngineDescription.name() << "DataEngine.";
+#endif
                 delete package;
                 package = 0;
             }
@@ -580,7 +590,9 @@ void DataEnginePrivate::internalUpdateSource(DataContainer *source)
         //kDebug() << "queuing an update";
         q->scheduleSourcesUpdated();
     }/* else {
+#ifndef NDEBUG
         kDebug() << "no update";
+#endif
     }*/
 }
 
@@ -736,17 +748,17 @@ void DataEnginePrivate::setupScriptSupport()
     }
 
     /*
+#ifndef NDEBUG
     kDebug() << "sletting up script support, package is in" << package->path()
+#endif
              << "which is a" << package->structure()->type() << "package"
              << ", main script is" << package->filePath("mainscript");
     */
 
-    QString translationsPath = package->filePath("translations");
+    const QString translationsPath = package->filePath("translations");
     if (!translationsPath.isEmpty()) {
-        //FIXME: we should _probably_ use a KComponentData to segregate the applets
-        //       from each other; but I want to get the basics working first :)
         KGlobal::dirs()->addResourceDir("locale", translationsPath);
-        KGlobal::locale()->insertCatalog(package->metadata().pluginName());
+        KGlobal::locale()->insertCatalog(dataEngineDescription.pluginName());
     }
 }
 
