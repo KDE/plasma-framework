@@ -23,6 +23,8 @@
 #include <QWeakPointer>
 #include <QPoint>
 
+#include <Plasma/Plasma>
+
 class QGraphicsObject;
 
 namespace Plasma
@@ -81,6 +83,7 @@ class DialogProxy : public QObject
     Q_PROPERTY(int windowFlags READ windowFlags WRITE setWindowFlags)
     Q_PROPERTY(QObject *margins READ margins CONSTANT)
     Q_PROPERTY(bool activeWindow READ isActiveWindow NOTIFY activeWindowChanged)
+    Q_PROPERTY(int location READ location WRITE setLocation NOTIFY locationChanged)
 
 public:
     enum WidgetAttribute {
@@ -111,6 +114,9 @@ public:
     int windowFlags() const;
     void setWindowFlags(const int);
 
+    int location() const;
+    void setLocation(int location);
+
     QObject *margins() const;
 
     //FIXME: alignment should be Qt::AlignmentFlag
@@ -126,6 +132,7 @@ Q_SIGNALS:
     void widthChanged();
     void heightChanged();
     void activeWindowChanged();
+    void locationChanged();
 
 protected Q_SLOTS:
     void syncMainItem();
@@ -140,6 +147,7 @@ private:
     QWeakPointer<QGraphicsObject> m_mainItem;
     DialogMargins *m_margins;
     bool m_activeWindow;
+    Plasma::Location m_location;
 };
 
 #endif

@@ -28,6 +28,7 @@
 
 #include <Plasma/Corona>
 #include <Plasma/Dialog>
+#include <Plasma/WindowEffects>
 
 
 DialogMargins::DialogMargins(Plasma::Dialog *dialog, QObject *parent)
@@ -83,7 +84,8 @@ int DialogMargins::bottom() const
 DialogProxy::DialogProxy(QObject *parent)
     : QObject(parent),
       m_declarativeItemContainer(0),
-      m_activeWindow(false)
+      m_activeWindow(false),
+      m_location(Plasma::Floating)
 {
     m_dialog = new Plasma::Dialog();
     m_margins = new DialogMargins(m_dialog, this);
@@ -248,6 +250,21 @@ void DialogProxy::setWindowFlags(const int flags)
     m_dialog->setWindowFlags((Qt::WindowFlags)flags);
 }
 
+int DialogProxy::location() const
+{
+    return (int)m_location;
+}
+
+void DialogProxy::setLocation(int location)
+{
+    if (m_location == location) {
+        return;
+    }
+    m_location = (Plasma::Location)location;
+    emit locationChanged();
+}
+
+
 QObject *DialogProxy::margins() const
 {
     return m_margins;
@@ -275,8 +292,10 @@ bool DialogProxy::eventFilter(QObject *watched, QEvent *event)
             emit heightChanged();
         }
     } else if (watched == m_dialog && event->type() == QEvent::Show) {
+        Plasma::WindowEffects::slideWindow(m_dialog, m_location);
         emit visibleChanged();
     } else if (watched == m_dialog && event->type() == QEvent::Hide) {
+        Plasma::WindowEffects::slideWindow(m_dialog, m_location);
         emit visibleChanged();
     } else if (watched == m_dialog && event->type() == QEvent::WindowActivate) {
         m_activeWindow = true;
