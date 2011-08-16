@@ -729,9 +729,9 @@ void PopupAppletPrivate::internalTogglePopup()
 
         dialog->clearFocus();
     } else {
-        if (q->graphicsWidget() &&
-            q->graphicsWidget() == static_cast<Applet*>(q)->d->extender.data() &&
-            static_cast<Applet*>(q)->d->extender.data()->isEmpty()) {
+        if (!q->graphicsWidget() ||
+            (q->graphicsWidget() == static_cast<Applet*>(q)->d->extender.data() &&
+             static_cast<Applet*>(q)->d->extender.data()->isEmpty())) {
             // we have nothing to show, so let's not.
             return;
         }
