@@ -348,6 +348,10 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             }
 
             //kDebug() << "about to switch to a popup";
+            if (!qWidget && !gWidget) {
+                delete dialogPtr.data();
+                return;
+            }
 
             //there was already a dialog? don't make the switch again
             if (dialogPtr) {
