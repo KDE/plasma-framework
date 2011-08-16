@@ -89,7 +89,7 @@ void DialogPrivate::scheduleBorderCheck(bool triggeredByResize)
         QObject::connect(moveTimer, SIGNAL(timeout()), q, SLOT(checkBorders()));
     }
 
-    moveTimer->start(triggeredByResize ? 0 : 200);
+    moveTimer->start(0);
 }
 
 void DialogPrivate::themeChanged()
