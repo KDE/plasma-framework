@@ -17,36 +17,25 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
  ***************************************************************************/
 
-#ifndef QMENU_PROXY_H
-#define QMENU_PROXY_H
-
-#include <QDeclarativeListProperty>
 #include "qmenuitem.h"
 
-class QMenuProxy : public QObject
+QMenuItem::QMenuItem(QObject *parent)
+    : QObject(parent)
 {
-    Q_OBJECT
+    m_action = new QAction(0);
+    connect (m_action, SIGNAL(triggered(bool)),
+             this, SLOT(emitTriggered(bool)));
+}
 
-    Q_PROPERTY(QDeclarativeListProperty<QMenuItem> actions READ actions)
-    Q_CLASSINFO("DefaultProperty", "actions")
+QMenuItem::~QMenuItem()
+{
+    delete m_action;
+}
 
-public:
-    QMenuProxy(QObject *parent = 0);
-    ~QMenuProxy();
+void QMenuItem::emitTriggered(bool checked)
+{
+    emit triggered();
+}
 
-    QDeclarativeListProperty<QMenuItem> actions();
-    int actionCount() const;
-    QMenuItem *action(int) const;
-
-    Q_INVOKABLE void showMenu(int x, int y);
-
-Q_SIGNALS:
-    void actionTriggered(QString itemName);
-
-private:
-    QList<QMenuItem*> m_actions;
-    QMenu *m_menu;
-};
-
-#endif //QMENU_PROXY_H
+#include "qmenuitem.moc"
 

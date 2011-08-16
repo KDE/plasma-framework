@@ -19,15 +19,17 @@
 
 #include "qmenu.h"
 #include <QMenu>
-#include <QDebug>
+#include <QApplication>
 
 QMenuProxy::QMenuProxy (QObject *parent)
     : QObject (parent)
 {
+    m_menu = new QMenu(0);
 }
 
 QMenuProxy::~QMenuProxy()
 {
+    delete m_menu;
 }
 
 QDeclarativeListProperty<QMenuItem> QMenuProxy::actions()
@@ -47,15 +49,13 @@ QMenuItem *QMenuProxy::action(int index) const
 
 void QMenuProxy::showMenu(int x, int y)
 {
-    QList<QAction*> actions;
+    m_menu->clear();
     foreach(QMenuItem* item, m_actions) {
-        actions.append(item->nativeAction());
+        m_menu->addAction(item->nativeAction());
     }
 
-    QAction *action = QMenu::exec(actions, QPoint(x,y));
-    if (action) {
-        emit actionTriggered(action->text());
-    }
+    QPoint screenPos = QApplication::activeWindow()->mapToGlobal(QPoint(x, y));
+    m_menu->popup(screenPos);
 }
 
 #include "qmenu.moc"
