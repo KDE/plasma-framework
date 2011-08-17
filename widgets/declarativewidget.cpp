@@ -60,6 +60,8 @@ public:
     void execute(const QString &fileName);
     void finishExecute();
     void scheduleExecutionEnd();
+    void minimumWidthChanged();
+    void minimumHeightChanged();
 
 
     DeclarativeWidget *q;
@@ -152,18 +154,19 @@ void DeclarativeWidgetPrivate::finishExecute()
         lay->addItem(widget);
     } else {
         q->setLayout(0);
-        qreal width = 0;
-        qreal height = 0;
+        qreal minimumWidth = 0;
+        qreal minimumHeight = 0;
         if (object) {
-            width = object->property("width").toReal();
-            height = object->property("height").toReal();
+            minimumWidth = object->property("minimumWidth").toReal();
+            minimumHeight = object->property("minimumHeight").toReal();
             object->setProperty("width", q->size().width());
             object->setProperty("height", q->size().height());
+            QObject::connect(object, SIGNAL(minimumWidthChanged()), q, SLOT(minimumWidthChanged()));
+            QObject::connect(object, SIGNAL(minimumHeightChanged()), q, SLOT(minimumHeightChanged()));
         }
 
-        //FIXME: find a better way to have a minimum size
-        if (width > 0 && height > 0) {
-            q->setMinimumSize(width, height);
+        if (minimumWidth > 0 && minimumHeight > 0) {
+            q->setMinimumSize(minimumWidth, minimumHeight);
         } else {
             q->setMinimumSize(-1, -1);
         }
@@ -171,7 +174,17 @@ void DeclarativeWidgetPrivate::finishExecute()
     emit q->finished();
 }
 
+void DeclarativeWidgetPrivate::minimumWidthChanged()
+{
+    qreal minimumWidth = root->property("minimumWidth").toReal();
+    q->setMinimumWidth(minimumWidth);
+}
 
+void DeclarativeWidgetPrivate::minimumHeightChanged()
+{
+    qreal minimumHeight = root->property("minimumHeight").toReal();
+    q->setMinimumHeight(minimumHeight);
+}
 
 DeclarativeWidget::DeclarativeWidget(QGraphicsWidget *parent)
     : QGraphicsWidget(parent),
