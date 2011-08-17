@@ -20,6 +20,7 @@
 #ifndef QMENU_PROXY_H
 #define QMENU_PROXY_H
 
+#include <QMenu>
 #include <QDeclarativeListProperty>
 #include "qmenuitem.h"
 

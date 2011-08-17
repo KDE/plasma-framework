@@ -18,7 +18,6 @@
  ***************************************************************************/
 
 #include "qmenu.h"
-#include <QMenu>
 #include <QApplication>
 
 QMenuProxy::QMenuProxy (QObject *parent)
@@ -51,7 +50,7 @@ void QMenuProxy::showMenu(int x, int y)
 {
     m_menu->clear();
     foreach(QMenuItem* item, m_actions) {
-        m_menu->addAction(item->nativeAction());
+        m_menu->addAction (item);
     }
 
     QPoint screenPos = QApplication::activeWindow()->mapToGlobal(QPoint(x, y));
