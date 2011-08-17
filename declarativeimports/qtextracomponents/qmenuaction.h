@@ -21,18 +21,16 @@
 #define QMENUITEM_H
 
 #include <QAction>
+#include <QObject>
 
-class QMenuItem : public QAction
+class QMenuAction : public QAction
 {
     Q_OBJECT
 
     Q_PROPERTY(bool separator READ isSeparator WRITE setSeparator)
 
 public:
-    QMenuItem(QObject *parent = 0)
-    : QAction(parent)
-    {
-    }
+    QMenuAction(QObject *parent = 0);
 };
 
 #endif // QMENUITEM_H

@@ -31,9 +31,9 @@ QMenuProxy::~QMenuProxy()
     delete m_menu;
 }
 
-QDeclarativeListProperty<QMenuItem> QMenuProxy::actions()
+QDeclarativeListProperty<QMenuAction> QMenuProxy::actions()
 {
-    return QDeclarativeListProperty<QMenuItem>(this, m_actions);
+    return QDeclarativeListProperty<QMenuAction>(this, m_actions);
 }
 
 int QMenuProxy::actionCount() const
@@ -41,7 +41,7 @@ int QMenuProxy::actionCount() const
     return m_actions.count();
 }
 
-QMenuItem *QMenuProxy::action(int index) const
+QMenuAction *QMenuProxy::action(int index) const
 {
     return m_actions.at(index);
 }
@@ -49,7 +49,7 @@ QMenuItem *QMenuProxy::action(int index) const
 void QMenuProxy::showMenu(int x, int y)
 {
     m_menu->clear();
-    foreach(QMenuItem* item, m_actions) {
+    foreach(QMenuAction* item, m_actions) {
         m_menu->addAction (item);
     }
 
