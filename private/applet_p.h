@@ -154,7 +154,7 @@ public:
 
     // applet attributes
     QWeakPointer<Extender> extender;
-    Service *service;
+    Service *remotingService;
     BackgroundHints preferredBackgroundHints;
     BackgroundHints backgroundHints;
     AspectRatioMode aspectRatioMode;

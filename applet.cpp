@@ -1642,8 +1642,8 @@ bool Applet::hasConfigurationInterface() const
 
 void Applet::publish(AnnouncementMethods methods, const QString &resourceName)
 {
-    if (!d->service) {
-        d->service = new PlasmoidService(this);
+    if (!d->remotingService) {
+        d->remotingService = new PlasmoidService(this);
     }
 
     const QString resName = resourceName.isEmpty() ?  i18nc("%1 is the name of a plasmoid, %2 the name of the machine that plasmoid is published on",
@@ -1653,12 +1653,12 @@ void Applet::publish(AnnouncementMethods methods, const QString &resourceName)
     kDebug() << "publishing package under name " << resName;
 #endif
     if (d->package && d->package->isValid()) {
-        d->service->d->publish(methods, resName, d->package->metadata());
+        d->remotingService->d->publish(methods, resName, d->package->metadata());
     } else if (!d->package && d->appletDescription.isValid()) {
-        d->service->d->publish(methods, resName, d->appletDescription);
+        d->remotingService->d->publish(methods, resName, d->appletDescription);
     } else {
-        delete d->service;
-        d->service  = 0;
+        delete d->remotingService;
+        d->remotingService  = 0;
 #ifndef NDEBUG
         kDebug() << "Can not publish invalid applets.";
 #endif
@@ -1667,14 +1667,14 @@ void Applet::publish(AnnouncementMethods methods, const QString &resourceName)
 
 void Applet::unpublish()
 {
-    if (d->service) {
-        d->service->d->unpublish();
+    if (d->remotingService) {
+        d->remotingService->d->unpublish();
     }
 }
 
 bool Applet::isPublished() const
 {
-    return d->service && d->service->d->isPublished();
+    return d->remotingService && d->remotingService->d->isPublished();
 }
 
 void Applet::setHasConfigurationInterface(bool hasInterface)
@@ -2541,7 +2541,7 @@ bool Applet::isContainment() const
 AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int uniqueID, Applet *applet)
         : appletId(uniqueID),
           q(applet),
-          service(0),
+          remotingService(0),
           preferredBackgroundHints(StandardBackground),
           backgroundHints(NoBackground),
           aspectRatioMode(Plasma::KeepAspectRatio),
@@ -2655,7 +2655,7 @@ void AppletPrivate::init(const QString &packagePath)
     // find where the Package is
     QString path = packagePath;
     if (path.isEmpty()) {
-        QString subPath = package->defaultPackageRoot() + appletDescription.pluginName() + '/';
+        const QString subPath = package->defaultPackageRoot() + appletDescription.pluginName() + '/';
         path = KStandardDirs::locate("data", subPath + "metadata.desktop");
         if (path.isEmpty()) {
             path = KStandardDirs::locate("data", subPath);
