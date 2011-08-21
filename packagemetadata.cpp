@@ -94,7 +94,9 @@ void PackageMetadata::write(const QString &filename) const
     config.writeEntry("Icon", d->icon);
     config.writeEntry("Comment", d->description);
     config.writeEntry("Keywords", d->keywords);
+    config.deleteEntry("X-KDE-Keywords");
     config.writeEntry("X-KDE-ServiceTypes", d->serviceType);
+    config.deleteEntry("ServiceTypes");
     config.writeEntry("X-KDE-PluginInfo-Name", d->pluginName);
     config.writeEntry("X-KDE-PluginInfo-Author", d->author);
     config.writeEntry("X-KDE-PluginInfo-Email", d->email);
@@ -120,8 +122,27 @@ void PackageMetadata::read(const QString &filename)
     d->name = config.readEntry("Name", d->name);
     d->icon = config.readEntry("Icon", d->icon);
     d->description = config.readEntry("Comment", d->description);
-    d->keywords = config.readEntry("Keywords", d->keywords);
-    d->serviceType = config.readEntry("X-KDE-ServiceTypes", d->serviceType);
+    bool hasKeywords = config.hasKey("Keywords");
+    bool hasXKdeKeywords = config.hasKey("X-KDE-Keywords");
+    if (hasKeywords && hasXKdeKeywords) {
+        d->keywords = config.readEntry("Keywords", d->keywords);
+        d->keywords.append(config.readEntry("X-KDE-Keywords", d->keywords));
+    } else if (hasKeywords) {
+        d->keywords = config.readEntry("Keywords", d->keywords);
+    } else if (hasXKdeKeywords) {
+        d->keywords = config.readEntry("X-KDE-Keywords", d->keywords);
+    }
+    bool hasServiceTypes = config.hasKey("ServiceTypes");
+    bool hasXKdeServiceTypes = config.hasKey("X-KDE-ServiceTypes");
+    if (hasServiceTypes && hasXKdeServiceTypes) {
+        d->serviceType = config.readEntry("ServiceTypes", d->serviceType);
+        d->serviceType.append(',');
+        d->serviceType.append(config.readEntry("X-KDE-ServiceTypes", d->serviceType));
+    } else if (hasServiceTypes) {
+        d->serviceType = config.readEntry("ServiceTypes", d->serviceType);
+    } else if (hasXKdeServiceTypes) {
+        d->serviceType = config.readEntry("X-KDE-ServiceTypes", d->serviceType);
+    }
     d->pluginName = config.readEntry("X-KDE-PluginInfo-Name", d->pluginName);
     d->author = config.readEntry("X-KDE-PluginInfo-Author", d->author);
     d->email = config.readEntry("X-KDE-PluginInfo-Email", d->email);
