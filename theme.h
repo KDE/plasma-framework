@@ -77,7 +77,8 @@ class PLASMA_EXPORT Theme : public QObject
 
         enum FontRole {
             DefaultFont = 0, /**< The standard text font */
-            DesktopFont /**< The standard text font */
+            DesktopFont, /**< The standard text font */
+            SmallestFont /**< The smallest readable font */
         };
 
         /**

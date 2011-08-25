@@ -35,7 +35,7 @@ public:
     ~PopupAppletPrivate();
 
     void iconSizeChanged(int group);
-    void internalTogglePopup();
+    void internalTogglePopup(bool fromActivatedSignal = false);
     void hideTimedPopup();
     void clearPopupLostFocus();
     void dialogSizeChanged();

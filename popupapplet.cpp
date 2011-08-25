@@ -92,10 +92,9 @@ void PopupApplet::setPopupIcon(const QIcon &icon)
 
 void PopupApplet::setPopupIcon(const QString &iconName)
 {
-    if (Applet::d->package) {
-        //Attempt1: is it in the plasmoid package?
-        const QString file = Applet::d->package->filePath("images", iconName);
-
+    // Attempt 1: is it in the plasmoid package?
+    if (package()) {
+        const QString file = package()->filePath("images", iconName);
         if (!file.isEmpty()) {
             setPopupIcon(KIcon(file));
             return;
@@ -430,7 +429,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
 
 void PopupAppletPrivate::appletActivated()
 {
-    internalTogglePopup();
+    internalTogglePopup(true);
 }
 
 QSizeF PopupApplet::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
@@ -703,7 +702,7 @@ void PopupAppletPrivate::iconSizeChanged(int group)
     }
 }
 
-void PopupAppletPrivate::internalTogglePopup()
+void PopupAppletPrivate::internalTogglePopup(bool fromActivatedSignal)
 {
     if (autohideTimer) {
         autohideTimer->stop();
@@ -714,6 +713,11 @@ void PopupAppletPrivate::internalTogglePopup()
     Plasma::Dialog *dialog = dialogPtr.data();
     if (!dialog) {
         q->setFocus(Qt::ShortcutFocusReason);
+        if (!fromActivatedSignal) {
+            QObject::disconnect(q, SIGNAL(activate()), q, SLOT(appletActivated()));
+            emit q->activate();
+            QObject::connect(q, SIGNAL(activate()), q, SLOT(appletActivated()));
+        }
         return;
     }
 
@@ -734,6 +738,11 @@ void PopupAppletPrivate::internalTogglePopup()
             (q->graphicsWidget() == static_cast<Applet*>(q)->d->extender.data() &&
              static_cast<Applet*>(q)->d->extender.data()->isEmpty())) {
             // we have nothing to show, so let's not.
+            if (!fromActivatedSignal) {
+                QObject::disconnect(q, SIGNAL(activate()), q, SLOT(appletActivated()));
+                emit q->activate();
+                QObject::connect(q, SIGNAL(activate()), q, SLOT(appletActivated()));
+            }
             return;
         }
 
