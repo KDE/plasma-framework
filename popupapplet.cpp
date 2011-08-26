@@ -93,8 +93,8 @@ void PopupApplet::setPopupIcon(const QIcon &icon)
 void PopupApplet::setPopupIcon(const QString &iconName)
 {
     // Attempt 1: is it in the plasmoid package?
-    if (package()) {
-        const QString file = package()->filePath("images", iconName);
+    if (package().isValid()) {
+        const QString file = package().filePath("images", iconName);
         if (!file.isEmpty()) {
             setPopupIcon(KIcon(file));
             return;
