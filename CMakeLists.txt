@@ -63,7 +63,7 @@ endif(QCA2_FOUND)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-plasma.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-plasma.h)
 
 #FIXME: gpgme++ is in kdepimlibs, must move somewhere else!
-macro_optional_find_package(KdepimLibs 4.5.60)
+find_package(KdepimLibs 4.5.60)
 macro_log_feature(KDEPIMLIBS_FOUND "kdepimlibs" "KDE PIM libraries" "http://www.kde.org" FALSE "" "Needed for building several Plasma DataEngines")
 include_directories(${KDEPIMLIBS_INCLUDE_DIRS})
 
