@@ -140,7 +140,7 @@ public:
 
             if (answer!=KDialog::Yes) {
                 q->setError(-1);
-                q->setErrorText(i18n("User rejected"));
+                q->setErrorText(i18nc("A remote widget was rejected by the user.", "User rejected"));
                 q->emitResult();
                 return;
             }
