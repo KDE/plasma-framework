@@ -22,9 +22,25 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 
 DualStateButton {
     id: checkBox
-    view: Rectangle {
+    view: PlasmaCore.FrameSvgItem {
+        imagePath: "widgets/button"
+        prefix: "normal"
         width: 16
         height: 16
-        color: checked ? "green" : "blue"
+        PlasmaCore.SvgItem {
+            svg: PlasmaCore.Svg {
+                id: checkmarkSvg
+                imagePath: "widgets/checkmarks"
+            }
+            elementId: "checkbox"
+            opacity: checked ? 1 : 0
+            anchors.fill: parent
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 250
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        }
     }
 }

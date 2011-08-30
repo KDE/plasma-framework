@@ -22,10 +22,14 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 
 DualStateButton {
     id: switchItem
-    view: Rectangle {
+    view: PlasmaCore.FrameSvgItem {
+        imagePath: "widgets/frame"
+        prefix: "sunken"
         width: 32
         height: 16
-        Rectangle {
+        PlasmaCore.FrameSvgItem {
+            imagePath: "widgets/button"
+            prefix: "normal"
             anchors {
                 top: parent.top
                 bottom: parent.bottom
@@ -35,9 +39,7 @@ DualStateButton {
             Behavior on x {
                 PropertyAnimation { duration: 100 }
             }
-            color: "green"
         }
-        color: "grey"
     }
 }
 
