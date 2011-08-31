@@ -46,8 +46,8 @@ if(NOT PLASMA_NO_KNEWSTUFF)
 endif(NOT PLASMA_NO_KNEWSTUFF)
 
 if(NOT PLASMA_NO_SOLID)
-    include_directories(${CMAKE_BINARY_DIR}/solid/)
-    include_directories(${CMAKE_SOURCE_DIR}/solid/)
+    include_directories(${CMAKE_BINARY_DIR}/tier1/solid/)
+    include_directories(${CMAKE_SOURCE_DIR}/tier1/solid/)
     set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} ${KDE4_SOLID_LIBS})
 endif(NOT PLASMA_NO_SOLID)
 
