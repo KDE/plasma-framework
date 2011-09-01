@@ -32,7 +32,7 @@ namespace Plasma
 {
 DataSource::DataSource(QObject* parent)
     : QObject(parent),
-      m_interval(1000),
+      m_interval(0),
       m_dataEngine(0)
 {
     setObjectName("DataSource");
