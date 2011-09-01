@@ -197,7 +197,7 @@ void DataEngine::setData(const QString &source, const QString &key, const QVaria
 
     s->setData(key, value);
 
-    if (isNew) {
+    if (isNew && source != d->waitingSourceRequest) {
         emit sourceAdded(source);
     }
 
@@ -219,7 +219,7 @@ void DataEngine::setData(const QString &source, const Data &data)
         ++it;
     }
 
-    if (isNew) {
+    if (isNew && source != d->waitingSourceRequest) {
         emit sourceAdded(source);
     }
 
@@ -701,6 +701,7 @@ DataContainer *DataEnginePrivate::requestSource(const QString &sourceName, bool 
         /*kDebug() << "DataEngine " << q->objectName()
             << ": could not find DataContainer " << sourceName
             << " will create on request" << endl;*/
+        waitingSourceRequest = sourceName;
         if (q->sourceRequestEvent(sourceName)) {
             s = source(sourceName, false);
             if (s) {
@@ -710,8 +711,10 @@ DataContainer *DataEnginePrivate::requestSource(const QString &sourceName, bool 
                     *newSource = true;
                 }
                 QObject::connect(s, SIGNAL(becameUnused(QString)), q, SLOT(removeSource(QString)));
+                emit q->sourceAdded(sourceName);
             }
         }
+        waitingSourceRequest.clear();
     }
 
     return s;
