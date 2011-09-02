@@ -40,6 +40,8 @@
 #include <ktemporaryfile.h>
 #include <kzip.h>
 
+#include "config-plasma.h"
+
 #ifndef PLASMA_NO_KIO
 #include <kio/copyjob.h>
 #include <kio/deletejob.h>
@@ -47,7 +49,6 @@
 #include <kio/job.h>
 #endif
 
-#include "config-plasma.h"
 #include "packagestructure.h"
 #include "pluginloader.h"
 #include "private/package_p.h"

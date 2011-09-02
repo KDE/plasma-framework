@@ -27,6 +27,8 @@
 #include <ktemporaryfile.h>
 #include <kplugininfo.h>
 
+#include "config-plasma.h"
+
 #ifndef PLASMA_NO_KIO
 #include <kio/job.h>
 #endif
