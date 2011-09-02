@@ -118,6 +118,7 @@ class DataEnginePrivate
         QString serviceName;
         Package *package;
         Service *publishedService;
+        QString waitingSourceRequest;
 };
 
 } // Plasma namespace
