@@ -304,8 +304,8 @@ set_target_properties(plasmaqgv PROPERTIES
                              SOVERSION 1
                       )
 
-install(TARGETS plasma EXPORT kdelibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
-install(TARGETS plasmaqgv EXPORT kdelibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS plasma ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS plasmaqgv ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
