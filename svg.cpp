@@ -56,13 +56,11 @@ SharedSvgRenderer::SharedSvgRenderer(
     QObject *parent)
     : QSvgRenderer(parent)
 {
-    QIODevice *file = KFilterDev::deviceForFile(filename, "application/x-gzip");
-    if (!file->open(QIODevice::ReadOnly)) {
-        delete file;
+    KCompressionDevice file(filename, KCompressionDevice::GZip);
+    if (!file.open(QIODevice::ReadOnly)) {
         return;
     }
-    load(file->readAll(), styleSheet, interestingElements);
-    delete file;
+    load(file.readAll(), styleSheet, interestingElements);
 }
 
 SharedSvgRenderer::SharedSvgRenderer(
