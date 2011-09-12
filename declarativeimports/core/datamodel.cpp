@@ -262,19 +262,23 @@ void DataModel::setItems(const QString &sourceName, const QVariantList &list)
 
     if (!list.isEmpty()) {
         if (list.first().canConvert<QVariantHash>()) {
-            foreach (const QString& roleName, list.first().value<QVariantHash>().keys()) {
-                if (!m_roleIds.contains(roleName)) {
-                    ++m_maxRoleId;
-                    m_roleNames[m_maxRoleId] = roleName.toLatin1();
-                    m_roleIds[roleName] = m_maxRoleId;
+            foreach (const QVariant &item, list) {
+                foreach (const QString& roleName, item.value<QVariantHash>().keys()) {
+                    if (!m_roleIds.contains(roleName)) {
+                        ++m_maxRoleId;
+                        m_roleNames[m_maxRoleId] = roleName.toLatin1();
+                        m_roleIds[roleName] = m_maxRoleId;
+                    }
                 }
             }
         } else {
-            foreach (const QString& roleName, list.first().value<QVariantMap>().keys()) {
-                if (!m_roleIds.contains(roleName)) {
-                    ++m_maxRoleId;
-                    m_roleNames[m_maxRoleId] = roleName.toLatin1();
-                    m_roleIds[roleName] = m_maxRoleId;
+            foreach (const QVariant &item, list) {
+                foreach (const QString& roleName, item.value<QVariantMap>().keys()) {
+                    if (!m_roleIds.contains(roleName)) {
+                        ++m_maxRoleId;
+                        m_roleNames[m_maxRoleId] = roleName.toLatin1();
+                        m_roleIds[roleName] = m_maxRoleId;
+                    }
                 }
             }
         }
