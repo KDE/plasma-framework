@@ -309,6 +309,7 @@ bool SimpleJavaScriptApplet::init()
             this, SLOT(extenderItemRestored(Plasma::ExtenderItem*)));
     connect(applet(), SIGNAL(activate()),
             this, SLOT(activate()));
+    KGlobal::locale()->insertCatalog(description().pluginName());
     setupObjects();
 
     AppletAuthorization auth(this);

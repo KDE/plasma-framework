@@ -49,7 +49,7 @@ public:
 
     QString filePath(const QString &type, const QString &file) const;
 
-    void executeAction(const QString &name);
+    QList<QAction*> contextualActions();
 
     void constraintsEvent(Plasma::Constraints constraints);
 
@@ -70,6 +70,7 @@ public:
     static QScriptValue loadService(QScriptContext *context, QScriptEngine *engine);
 
 public Q_SLOTS:
+    void executeAction(const QString &name);
     void dataUpdated(const QString &name, const Plasma::DataEngine::Data &data);
     void signalHandlerException(const QScriptValue &exception);
     void popupEvent(bool popped);
@@ -92,6 +93,7 @@ Q_SIGNALS:
     void contextChanged();
 
 private:
+    void callPlasmoidFunction(const QString &functionName, const QScriptValueList &args, ScriptEnv *env);
     Plasma::DeclarativeWidget *m_declarativeWidget;
     AppletInterface *m_interface;
     EngineAccess *m_engineAccess;

@@ -153,134 +153,6 @@ bool ScriptEnv::checkForErrors(bool fatal)
     return false;
 }
 
-QScriptValue ScriptEnv::runApplication(QScriptContext *context, QScriptEngine *engine)
-{
-    Q_UNUSED(engine)
-    if (context->argumentCount() == 0) {
-        return false;
-    }
-
-    KUrl::List urls;
-    if (context->argumentCount() > 1) {
-        urls = qscriptvalue_cast<KUrl::List>(context->argument(1));
-    }
-
-    const QString app = context->argument(0).toString();
-
-    const QString exec = KGlobal::dirs()->findExe(app);
-    if (!exec.isEmpty()) {
-        return KRun::run(exec, urls, 0);
-    }
-
-    KService::Ptr service = KService::serviceByStorageId(app);
-    if (service) {
-        return KRun::run(*service, urls, 0);
-    }
-
-    return false;
-}
-
-QScriptValue ScriptEnv::runCommand(QScriptContext *context, QScriptEngine *engine)
-{
-    Q_UNUSED(engine);
-
-    if (context->argumentCount() == 0) {
-        return false;
-    }
-
-    const QString exec = KGlobal::dirs()->findExe(context->argument(0).toString());
-    if (!exec.isEmpty()) {
-        QString args;
-        if (context->argumentCount() > 1) {
-            const QStringList argList = qscriptvalue_cast<QStringList>(context->argument(1));
-            if (!argList.isEmpty()) {
-                args = ' ' + KShell::joinArgs(argList);
-            }
-        }
-
-        return KRun::runCommand(exec + args, 0);
-    }
-
-    return false;
-}
-
-QScriptValue ScriptEnv::openUrl(QScriptContext *context, QScriptEngine *engine)
-{
-    Q_UNUSED(engine)
-    if (context->argumentCount() == 0) {
-        return false;
-    }
-
-    QScriptValue v = context->argument(0);
-    KUrl url = v.isString() ? KUrl(v.toString()) : qscriptvalue_cast<KUrl>(v);
-
-    if (!url.isValid()) {
-        return false;
-    }
-
-    ScriptEnv *env = ScriptEnv::findScriptEnv(engine);
-    if (!env) {
-        return false;
-    }
-
-    if (!(env->m_allowedUrls & AppLaunching) &&
-        !((env->m_allowedUrls & HttpUrls) && (url.protocol() == "http" || url.protocol() == "https"))) {
-        return false;
-    }
-
-    new KRun(url, 0);
-    return true;
-}
-
-// TODO these should throw an exception
-QScriptValue ScriptEnv::getUrl(QScriptContext *context, QScriptEngine *engine)
-{
-    if (context->argumentCount() == 0) {
-        return engine->undefinedValue();
-    }
-
-    QScriptValue v = context->argument(0);
-    KUrl url = v.isString() ? KUrl(v.toString()) : qscriptvalue_cast<KUrl>(v);
-
-    if (!url.isValid()) {
-        return engine->undefinedValue();
-    }
-
-    ScriptEnv *env = ScriptEnv::findScriptEnv(engine);
-    if (!env) {
-        //kDebug() << "findScriptEnv failed";
-        return engine->undefinedValue();
-    }
-
-    if (url.isLocalFile()) {
-        if (!(env->m_allowedUrls & LocalUrls)) {
-            return engine->undefinedValue();
-        }
-    } else if (!(env->m_allowedUrls & NetworkUrls) &&
-               !((env->m_allowedUrls & HttpUrls) && (url.protocol() == "http" || url.protocol() == "https"))) {
-        return engine->undefinedValue();
-    }
-
-    KIO::Job *job = KIO::get(url, KIO::NoReload, KIO::HideProgressInfo);
-    return engine->newQObject(job);
-}
-
-void ScriptEnv::registerGetUrl(QScriptValue &obj)
-{
-    QScriptValue get = obj.property("getUrl");
-    if (!get.isValid()) {
-        obj.setProperty("getUrl", m_engine->newFunction(ScriptEnv::getUrl));
-    }
-}
-
-void ScriptEnv::registerOpenUrl(QScriptValue &obj)
-{
-    QScriptValue value = obj.property("openUrl");
-    if (!value.isValid()) {
-        obj.setProperty("openUrl", m_engine->newFunction(ScriptEnv::openUrl));
-    }
-}
-
 bool ScriptEnv::importBuiltinExtension(const QString &extension, QScriptValue &obj)
 {
     kDebug() << extension;
@@ -307,6 +179,8 @@ bool ScriptEnv::importBuiltinExtension(const QString &extension, QScriptValue &o
     } else if ("localio" == extension) {
         m_allowedUrls |= LocalUrls;
         registerGetUrl(obj);
+        obj.setProperty("userDataPath", m_engine->newFunction(ScriptEnv::userDataPath));
+        obj.setProperty("runCommand", m_engine->newFunction(ScriptEnv::runCommand));
         return true;
     }
 

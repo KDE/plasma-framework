@@ -31,6 +31,36 @@ ThemeProxy::~ThemeProxy()
 {
 }
 
+QString ThemeProxy::themeName() const
+{
+    return Plasma::Theme::defaultTheme()->themeName();
+}
+
+QFont ThemeProxy::font() const
+{
+    return Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
+}
+
+bool ThemeProxy::windowTranslucencyEnabled() const
+{
+    return Plasma::Theme::defaultTheme()->windowTranslucencyEnabled();
+}
+
+KUrl ThemeProxy::homepage() const
+{
+    return Plasma::Theme::defaultTheme()->homepage();
+}
+
+bool ThemeProxy::useGlobalSettings() const
+{
+    return Plasma::Theme::defaultTheme()->useGlobalSettings();
+}
+
+QString ThemeProxy::wallpaperPath() const
+{
+    return Plasma::Theme::defaultTheme()->wallpaperPath();
+}
+
 QColor ThemeProxy::textColor() const
 {
     return Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
@@ -94,6 +124,11 @@ QColor ThemeProxy::viewHoverColor() const
 QColor ThemeProxy::viewFocusColor() const
 {
     return Plasma::Theme::defaultTheme()->color(Plasma::Theme::ViewFocusColor);
+}
+
+QString ThemeProxy::styleSheet() const
+{
+    return Plasma::Theme::defaultTheme()->styleSheet(QString());
 }
 
 

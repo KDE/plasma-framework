@@ -18,69 +18,78 @@
  ***************************************************************************/
 
 #include "dialog.h"
+#include "declarativeitemcontainer_p.h"
 
 #include <QDeclarativeItem>
 #include <QGraphicsObject>
 #include <QGraphicsWidget>
 #include <QTimer>
+#include <QLayout>
 
 #include <Plasma/Corona>
 #include <Plasma/Dialog>
+#include <Plasma/WindowEffects>
 
-class DeclarativeItemContainer : public QGraphicsWidget
+
+DialogMargins::DialogMargins(Plasma::Dialog *dialog, QObject *parent)
+    : QObject(parent),
+      m_dialog(dialog)
 {
-public:
-    DeclarativeItemContainer(QGraphicsItem *parent = 0)
-       : QGraphicsWidget(parent)
-    {}
+    checkMargins();
+}
 
-    ~DeclarativeItemContainer()
-    {}
+void DialogMargins::checkMargins()
+{
+    int left, top, right, bottom;
+    m_dialog->getContentsMargins(&left, &top, &right, &bottom);
 
-    void setDeclarativeItem(QDeclarativeItem *item)
-    {
-        if (m_declarativeItem) {
-            m_declarativeItem.data()->removeSceneEventFilter(this);
-        }
-        m_declarativeItem = item;
-        static_cast<QGraphicsItem *>(item)->setParentItem(this);
-        setMinimumWidth(item->implicitWidth());
-        setMinimumHeight(item->implicitHeight());
-        resize(item->width(), item->height());
-        item->installSceneEventFilter(this);
+    if (left != m_left) {
+        m_left = left;
+        emit leftChanged();
     }
-
-    QDeclarativeItem *declarativeItem() const
-    {
-        return m_declarativeItem.data();
+    if (top != m_top) {
+        m_top = top;
+        emit topChanged();
     }
-
-protected:
-    void resizeEvent(QGraphicsSceneResizeEvent *event)
-    {
-        if (m_declarativeItem) {
-            m_declarativeItem.data()->setProperty("width", event->newSize().width());
-            m_declarativeItem.data()->setProperty("height", event->newSize().height());
-        }
+    if (right != m_right) {
+        m_right = right;
+        emit rightChanged();
     }
-
-    bool sceneEventFilter(QGraphicsItem *watched, QEvent *event)
-    {
-        if (event->type() == QEvent::GraphicsSceneResize) {
-            resize(watched->boundingRect().size());
-        }
-
-        return QGraphicsWidget::sceneEventFilter(watched, event);
+    if (bottom != m_bottom) {
+        m_bottom = bottom;
+        emit bottomChanged();
     }
+}
 
-private:
-    QWeakPointer<QDeclarativeItem> m_declarativeItem;
-};
+int DialogMargins::left() const
+{
+    return m_left;
+}
+
+int DialogMargins::top() const
+{
+    return m_top;
+}
+
+int DialogMargins::right() const
+{
+    return m_right;
+}
+
+int DialogMargins::bottom() const
+{
+    return m_bottom;
+}
 
 DialogProxy::DialogProxy(QObject *parent)
-    : QObject(parent)
+    : QObject(parent),
+      m_declarativeItemContainer(0),
+      m_activeWindow(false),
+      m_location(Plasma::Floating)
 {
     m_dialog = new Plasma::Dialog();
+    m_margins = new DialogMargins(m_dialog, this);
+    m_dialog->installEventFilter(this);
     m_flags = m_dialog->windowFlags();
 }
 
@@ -92,18 +101,22 @@ DialogProxy::~DialogProxy()
 
 QGraphicsObject *DialogProxy::mainItem() const
 {
-    return m_dialog->graphicsWidget();
+    return m_mainItem.data();
 }
 
 void DialogProxy::setMainItem(QGraphicsObject *mainItem)
 {
     if (m_mainItem.data() != mainItem) {
         if (m_mainItem) {
-            m_mainItem.data()->setParent(mainItem->parent());
+            m_mainItem.data()->setParent(mainItem ? mainItem->parent() : 0);
         }
+
         m_mainItem = mainItem;
-        mainItem->setParentItem(0);
-        mainItem->setParent(this);
+
+        if (mainItem) {
+            mainItem->setParentItem(0);
+            mainItem->setParent(this);
+        }
 
         //if this is called in Compenent.onCompleted we have to wait a loop the item is added to a scene
         QTimer::singleShot(0, this, SLOT(syncMainItem()));
@@ -125,10 +138,16 @@ void DialogProxy::syncMainItem()
             QGraphicsObject *qo = qobject_cast<QGraphicsObject *>(parent);
             if (qo) {
                 scene = qo->scene();
-                scene->addItem(m_mainItem.data());
-                break;
+                if (scene) {
+                    scene->addItem(m_mainItem.data());
+                    break;
+                }
             }
         }
+    }
+
+    if (!scene) {
+        return;
     }
 
     //the parent of the qobject never changed, only the parentitem, so put it back what it was
@@ -136,8 +155,10 @@ void DialogProxy::syncMainItem()
 
     QGraphicsWidget *widget = qobject_cast<QGraphicsWidget *>(m_mainItem.data());
     if (widget) {
-        m_declarativeItemContainer->deleteLater();
-        m_declarativeItemContainer = 0;
+        if (m_declarativeItemContainer) {
+            m_declarativeItemContainer->deleteLater();
+            m_declarativeItemContainer = 0;
+        }
     } else {
         QDeclarativeItem *di = qobject_cast<QDeclarativeItem *>(m_mainItem.data());
         if (di) {
@@ -163,17 +184,20 @@ void DialogProxy::setVisible(const bool visible)
         m_dialog->setVisible(visible);
         if (visible) {
             m_dialog->setWindowFlags(m_flags);
+            m_dialog->setVisible(visible);
             m_dialog->raise();
         }
-        emit visibleChanged();
     }
 }
 
-QPoint DialogProxy::popupPosition(QGraphicsObject *item) const
+QPoint DialogProxy::popupPosition(QGraphicsObject *item, int alignment) const
 {
+    if (!item) {
+        return QPoint();
+    }
     Plasma::Corona *corona = qobject_cast<Plasma::Corona *>(item->scene());
     if (corona) {
-        return corona->popupPosition(item, m_dialog->size());
+        return corona->popupPosition(item, m_dialog->size(), (Qt::AlignmentFlag)alignment);
     } else {
         return QPoint();
     }
@@ -200,6 +224,21 @@ void DialogProxy::setY(int y)
     m_dialog->move(m_dialog->pos().x(), y);
 }
 
+int DialogProxy::width() const
+{
+    return m_dialog->size().width();
+}
+
+int DialogProxy::height() const
+{
+    return m_dialog->size().height();
+}
+
+bool DialogProxy::isActiveWindow() const
+{
+    return m_activeWindow;
+}
+
 int DialogProxy::windowFlags() const
 {
     return (int)m_dialog->windowFlags();
@@ -211,10 +250,59 @@ void DialogProxy::setWindowFlags(const int flags)
     m_dialog->setWindowFlags((Qt::WindowFlags)flags);
 }
 
+int DialogProxy::location() const
+{
+    return (int)m_location;
+}
+
+void DialogProxy::setLocation(int location)
+{
+    if (m_location == location) {
+        return;
+    }
+    m_location = (Plasma::Location)location;
+    emit locationChanged();
+}
+
+
+QObject *DialogProxy::margins() const
+{
+    return m_margins;
+}
+
 bool DialogProxy::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_dialog && event->type() == QEvent::Move) {
-        emit positionChanged();
+        QMoveEvent *me = static_cast<QMoveEvent *>(event);
+        if (me->oldPos().x() != me->pos().x()) {
+            emit xChanged();
+        }
+        if (me->oldPos().y() != me->pos().y()) {
+            emit yChanged();
+        }
+        if ((me->oldPos().x() != me->pos().x()) || (me->oldPos().y() != me->pos().y())) {
+            m_margins->checkMargins();
+        }
+    } else if (watched == m_dialog && event->type() == QEvent::Resize) {
+        QResizeEvent *re = static_cast<QResizeEvent *>(event);
+        if (re->oldSize().width() != re->size().width()) {
+            emit widthChanged();
+        }
+        if (re->oldSize().height() != re->size().height()) {
+            emit heightChanged();
+        }
+    } else if (watched == m_dialog && event->type() == QEvent::Show) {
+        Plasma::WindowEffects::slideWindow(m_dialog, m_location);
+        emit visibleChanged();
+    } else if (watched == m_dialog && event->type() == QEvent::Hide) {
+        Plasma::WindowEffects::slideWindow(m_dialog, m_location);
+        emit visibleChanged();
+    } else if (watched == m_dialog && event->type() == QEvent::WindowActivate) {
+        m_activeWindow = true;
+        emit activeWindowChanged();
+    } else if (watched == m_dialog && event->type() == QEvent::WindowDeactivate) {
+        m_activeWindow = false;
+        emit activeWindowChanged();
     }
     return false;
 }

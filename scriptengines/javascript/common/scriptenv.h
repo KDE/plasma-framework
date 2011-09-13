@@ -82,8 +82,12 @@ private:
     static QScriptValue print(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue runApplication(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue runCommand(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue defaultApplication(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue applicationPath(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue applicationExists(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue openUrl(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue getUrl(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue userDataPath(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue listAddons(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue loadAddon(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue registerAddon(QScriptContext *context, QScriptEngine *engine);

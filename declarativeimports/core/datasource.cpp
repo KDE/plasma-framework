@@ -32,7 +32,7 @@ namespace Plasma
 {
 DataSource::DataSource(QObject* parent)
     : QObject(parent),
-      m_interval(1000),
+      m_interval(0),
       m_dataEngine(0)
 {
     setObjectName("DataSource");
@@ -193,6 +193,10 @@ Plasma::Service *DataSource::serviceForSource(const QString &source)
 
 void DataSource::connectSource(const QString &source)
 {
+    if (m_connectedSources.contains(source)) {
+        return;
+    }
+
     m_newSources.append(source);
     m_connectedSources.append(source);
     m_changes |= SourcesChanged;

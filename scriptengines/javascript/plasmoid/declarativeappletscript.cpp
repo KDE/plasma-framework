@@ -81,13 +81,18 @@ bool DeclarativeAppletScript::init()
 {
     m_declarativeWidget = new Plasma::DeclarativeWidget(applet());
     m_declarativeWidget->setInitializationDelayed(true);
+    KGlobal::locale()->insertCatalog(description().pluginName());
 
     //make possible to import extensions from the package
     //FIXME: probably to be removed, would make possible to use native code from within the package :/
     //m_declarativeWidget->engine()->addImportPath(package()->path()+"/contents/imports");
 
     //use our own custom network access manager that will access Plasma packages and to manage security (i.e. deny access to remote stuff when the proper extension isn't enabled
-    m_declarativeWidget->engine()->setNetworkAccessManagerFactory(new PackageAccessManagerFactory(package(), &m_auth));
+    QDeclarativeEngine *engine = m_declarativeWidget->engine();
+    QDeclarativeNetworkAccessManagerFactory *factory = engine->networkAccessManagerFactory();
+    engine->setNetworkAccessManagerFactory(0);
+    delete factory;
+    engine->setNetworkAccessManagerFactory(new PackageAccessManagerFactory(package(), &m_auth));
 
     m_declarativeWidget->setQmlPath(mainScript());
 
@@ -135,6 +140,9 @@ bool DeclarativeAppletScript::init()
 
 void DeclarativeAppletScript::collectGarbage()
 {
+    if (!m_engine) {
+        return;
+    }
     m_engine->collectGarbage();
 }
 
@@ -195,6 +203,9 @@ QScriptValue DeclarativeAppletScript::newPlasmaSvg(QScriptContext *context, QScr
 
 QScriptValue DeclarativeAppletScript::variantToScriptValue(QVariant var)
 {
+    if (!m_engine) {
+        return QScriptValue();
+    }
     return m_engine->newVariant(var);
 }
 
@@ -268,6 +279,18 @@ QGraphicsWidget *DeclarativeAppletScript::extractParent(QScriptContext *context,
     return parent;
 }
 
+void DeclarativeAppletScript::callPlasmoidFunction(const QString &functionName, const QScriptValueList &args, ScriptEnv *env)
+{
+    if (!m_env) {
+        m_env = ScriptEnv::findScriptEnv(m_engine);
+    }
+
+    if (env) {
+        QScriptValue func = m_self.property(functionName);
+        m_env->callFunction(func, args, m_self);
+    }
+}
+
 void DeclarativeAppletScript::constraintsEvent(Plasma::Constraints constraints)
 {
     if (constraints & Plasma::FormFactorConstraint) {
@@ -297,6 +320,9 @@ void DeclarativeAppletScript::popupEvent(bool popped)
 
 void DeclarativeAppletScript::dataUpdated(const QString &name, const Plasma::DataEngine::Data &data)
 {
+    if (!m_engine) {
+        return;
+    }
     QScriptValueList args;
     args << m_engine->toScriptValue(name) << m_engine->toScriptValue(data);
 
@@ -306,6 +332,9 @@ void DeclarativeAppletScript::dataUpdated(const QString &name, const Plasma::Dat
 void DeclarativeAppletScript::extenderItemRestored(Plasma::ExtenderItem* item)
 {
     if (!m_env) {
+        return;
+    }
+    if (!m_engine) {
         return;
     }
 
@@ -331,7 +360,9 @@ void DeclarativeAppletScript::executeAction(const QString &name)
     }
 
     const QString func("action_" + name);
-    m_env->callEventListeners(func);
+    if (!m_env->callEventListeners(func)) {
+        callPlasmoidFunction(func, QScriptValueList(), m_env);
+    }
 }
 
 bool DeclarativeAppletScript::include(const QString &path)
@@ -347,6 +378,10 @@ ScriptEnv *DeclarativeAppletScript::scriptEnv()
 void DeclarativeAppletScript::setupObjects()
 {
     m_engine = m_declarativeWidget->scriptEngine();
+    if (!m_engine) {
+        return;
+    }
+
     connect(m_engine, SIGNAL(signalHandlerException(const QScriptValue &)),
             this, SLOT(signalHandlerException(const QScriptValue &)));
 
@@ -393,7 +428,6 @@ void DeclarativeAppletScript::setupObjects()
     }
 
     registerSimpleAppletMetaTypes(m_engine);
-    registerDataEngineMetaTypes(m_engine);
     QTimer::singleShot(0, this, SLOT(configChanged()));
 }
 
@@ -454,6 +488,11 @@ QScriptValue DeclarativeAppletScript::loadService(QScriptContext *context, QScri
 
     //kDebug( )<< "lets try to get" << source << "from" << dataEngine;
     return engine->newQObject(service, QScriptEngine::AutoOwnership);
+}
+
+QList<QAction*> DeclarativeAppletScript::contextualActions()
+{
+    return m_interface->contextualActions();
 }
 
 QScriptEngine *DeclarativeAppletScript::engine() const

@@ -1,6 +1,7 @@
 project(corebindings)
 
 set(corebindings_SRCS
+    declarativeitemcontainer.cpp
     corebindingsplugin.cpp
     dataengineconsumer.cpp
     theme.cpp
@@ -10,6 +11,7 @@ set(corebindings_SRCS
     framesvgitem.cpp
     dialog.cpp
     qrangemodel.cpp
+    tooltip.cpp
     )
 
 INCLUDE_DIRECTORIES(

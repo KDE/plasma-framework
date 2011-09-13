@@ -73,7 +73,7 @@ void QIconItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     painter->setRenderHint(QPainter::Antialiasing, m_smooth);
     painter->setRenderHint(QPainter::SmoothPixmapTransform, m_smooth);
 
-    m_icon.paint(painter, boundingRect().toRect());
+    m_icon.paint(painter, boundingRect().toRect(), Qt::AlignCenter, isEnabled()?QIcon::Normal:QIcon::Disabled);
     painter->setRenderHint(QPainter::Antialiasing, wasAntiAlias);
     painter->setRenderHint(QPainter::SmoothPixmapTransform, wasSmoothTransform);
 }

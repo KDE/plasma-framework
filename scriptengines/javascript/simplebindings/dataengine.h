@@ -30,8 +30,6 @@
 
 using namespace Plasma;
 
-Q_DECLARE_METATYPE(Service*)
-Q_DECLARE_METATYPE(ServiceJob*)
 #ifndef DECLARATIVE_BINDING
 Q_DECLARE_METATYPE(QVariant)
 #endif
@@ -40,6 +38,21 @@ Q_DECLARE_METATYPE(DataEngine::Data)
 
 template <class M>
 QScriptValue qScriptValueFromMap(QScriptEngine *eng, const M &map)
+{
+    //kDebug() << "qScriptValueFromMap called";
+    QScriptValue obj = eng->newObject();
+    typename M::const_iterator begin = map.constBegin();
+    typename M::const_iterator end = map.constEnd();
+    typename M::const_iterator it;
+    for (it = begin; it != end; ++it) {
+        obj.setProperty(it.key(), qScriptValueFromValue(eng, it.value()));
+    }
+
+    return obj;
+}
+
+template <class M>
+QScriptValue qScriptValueFromVariantMap(QScriptEngine *eng, const M &map)
 {
     //kDebug() << "qScriptValueFromMap called";
     QScriptValue obj = eng->newObject();
@@ -68,6 +81,18 @@ void qScriptValueToMap(const QScriptValue &value, M &map)
         it.next();
         map[it.name()] = qscriptvalue_cast<typename M::mapped_type>(it.value());
     }
+}
+
+template<typename T>
+int qScriptRegisterVariantMapMetaType(
+    QScriptEngine *engine,
+    const QScriptValue &prototype = QScriptValue()
+#ifndef qdoc
+    , T * /* dummy */ = 0
+#endif
+)
+{
+    return qScriptRegisterMetaType<T>(engine, qScriptValueFromVariantMap, qScriptValueToMap, prototype);
 }
 
 template<typename T>

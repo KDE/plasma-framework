@@ -26,8 +26,6 @@
 
 #include <Plasma/Service>
 
-Q_DECLARE_METATYPE(Plasma::Service*)
-
 class CoreBindingsPlugin : public QDeclarativeExtensionPlugin
 {
     Q_OBJECT

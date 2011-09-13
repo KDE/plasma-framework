@@ -83,10 +83,11 @@ void SortFilterModel::setModel(QObject *source)
 void SortFilterModel::setFilterRegExp(const QString &exp)
 {
     //FIXME: this delaying of the reset signal seems to make the views behave a bit better, i.e. less holes and avoids some crashes, in theory shouldn't be necessary
+    beginResetModel();
     blockSignals(true);
     QSortFilterProxyModel::setFilterRegExp(QRegExp(exp, Qt::CaseInsensitive));
     blockSignals(false);
-    reset();
+    endResetModel();
 }
 
 QString SortFilterModel::filterRegExp() const
@@ -190,6 +191,7 @@ void DataModel::dataUpdated(const QString &sourceName, const Plasma::DataEngine:
                     (m_sourceFilter.isEmpty() || (sourceRegExp.isValid() && sourceRegExp.exactMatch(i.key())))) {
                     Plasma::DataEngine::Data data = value.value<Plasma::DataEngine::Data>();
                     data["DataEngineSource"] = i.key();
+
                     list.append(data);
                 }
                 ++i;
@@ -253,26 +255,30 @@ QString DataModel::keyRoleFilter() const
 
 void DataModel::setItems(const QString &sourceName, const QVariantList &list)
 {
-    emit modelAboutToBeReset();
+    beginResetModel();
 
     //convert to vector, so data() will be O(1)
     m_items[sourceName] = list.toVector();
 
     if (!list.isEmpty()) {
         if (list.first().canConvert<QVariantHash>()) {
-            foreach (const QString& roleName, list.first().value<QVariantHash>().keys()) {
-                if (!m_roleIds.contains(roleName)) {
-                    ++m_maxRoleId;
-                    m_roleNames[m_maxRoleId] = roleName.toLatin1();
-                    m_roleIds[roleName] = m_maxRoleId;
+            foreach (const QVariant &item, list) {
+                foreach (const QString& roleName, item.value<QVariantHash>().keys()) {
+                    if (!m_roleIds.contains(roleName)) {
+                        ++m_maxRoleId;
+                        m_roleNames[m_maxRoleId] = roleName.toLatin1();
+                        m_roleIds[roleName] = m_maxRoleId;
+                    }
                 }
             }
         } else {
-            foreach (const QString& roleName, list.first().value<QVariantMap>().keys()) {
-                if (!m_roleIds.contains(roleName)) {
-                    ++m_maxRoleId;
-                    m_roleNames[m_maxRoleId] = roleName.toLatin1();
-                    m_roleIds[roleName] = m_maxRoleId;
+            foreach (const QVariant &item, list) {
+                foreach (const QString& roleName, item.value<QVariantMap>().keys()) {
+                    if (!m_roleIds.contains(roleName)) {
+                        ++m_maxRoleId;
+                        m_roleNames[m_maxRoleId] = roleName.toLatin1();
+                        m_roleIds[roleName] = m_maxRoleId;
+                    }
                 }
             }
         }
@@ -284,16 +290,32 @@ void DataModel::setItems(const QString &sourceName, const QVariantList &list)
 
     //make the declarative view reload everything,
     //would be nice an incremental update but is not possible
-    emit modelReset();
+    endResetModel();
 }
 
 void DataModel::removeSource(const QString &sourceName)
 {
     //FIXME: this could be way more efficient by not resetting the whole model
     //FIXME: find a way to remove only the proper things also in the case where sources are items
-    emit modelAboutToBeReset();
-    m_items.remove(sourceName);
-    emit modelReset();
+
+    //source name as key of the map
+    if (!m_keyRoleFilter.isEmpty()) {
+        if (m_items.contains(sourceName)) {
+            beginResetModel();
+            m_items.remove(sourceName);
+            endResetModel();
+        }
+    //source name in the map, linear scan
+    } else {
+        for (int i = 0; i < m_items.value(QString()).count(); ++i) {
+            if (m_items.value(QString())[i].value<QVariantHash>().value("DataEngineSource") == sourceName) {
+                beginResetModel();
+                m_items[QString()].remove(i);
+                endResetModel();
+                break;
+            }
+        }
+    }
 }
 
 QVariant DataModel::data(const QModelIndex &index, int role) const

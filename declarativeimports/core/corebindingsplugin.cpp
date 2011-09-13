@@ -33,6 +33,7 @@
 #include "theme_p.h"
 #include "dialog.h"
 #include "qrangemodel.h"
+#include "tooltip.h"
 
 void CoreBindingsPlugin::registerTypes(const char *uri)
 {
@@ -51,9 +52,12 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
 
     qmlRegisterType<DialogProxy>(uri, 0, 1, "Dialog");
     qmlRegisterType<Plasma::QRangeModel>(uri, 0, 1, "RangeModel");
+    qmlRegisterType<ToolTipProxy>(uri, 0, 1, "ToolTip");
 
     qmlRegisterInterface<Plasma::Service>("Service");
     qRegisterMetaType<Plasma::Service*>("Service");
+    qmlRegisterInterface<Plasma::ServiceJob>("ServiceJob");
+    qRegisterMetaType<Plasma::ServiceJob*>("ServiceJob");
 
     /*qmlRegisterInterface<Plasma::DataSource>("DataSource");
     qRegisterMetaType<Plasma::DataSource*>("DataSource");*/

@@ -21,12 +21,22 @@
 
 #include <QObject>
 
+#include <KUrl>
+#include <QFont>
 #include <QColor>
 
 class ThemeProxy : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(QString themeName READ themeName NOTIFY themeChanged)
+    Q_PROPERTY(QFont font READ font NOTIFY themeChanged)
+    Q_PROPERTY(bool windowTranslucentEnabled READ windowTranslucencyEnabled NOTIFY themeChanged)
+    Q_PROPERTY(KUrl homepage READ homepage NOTIFY themeChanged)
+    Q_PROPERTY(bool useGlobalSettings READ useGlobalSettings NOTIFY themeChanged)
+    Q_PROPERTY(QString wallpaperPath READ wallpaperPath NOTIFY themeChanged)
+
+    // colors
     Q_PROPERTY(QColor textColor READ textColor NOTIFY themeChanged)
     Q_PROPERTY(QColor highlightColor READ highlightColor NOTIFY themeChanged)
     Q_PROPERTY(QColor backgroundColor READ backgroundColor NOTIFY themeChanged)
@@ -41,10 +51,18 @@ class ThemeProxy : public QObject
     Q_PROPERTY(QColor viewBackgroundColor READ viewBackgroundColor NOTIFY themeChanged)
     Q_PROPERTY(QColor viewHoverColor READ viewHoverColor NOTIFY themeChanged)
     Q_PROPERTY(QColor viewFocusColor READ viewFocusColor NOTIFY themeChanged)
+    Q_PROPERTY(QString styleSheet READ styleSheet NOTIFY themeChanged)
 
 public:
     ThemeProxy(QObject *parent = 0);
     ~ThemeProxy();
+
+    QString themeName() const;
+    QFont font() const;
+    bool windowTranslucencyEnabled() const;
+    KUrl homepage() const;
+    bool useGlobalSettings() const;
+    QString wallpaperPath() const;
 
     QColor textColor() const;
     QColor highlightColor() const;
@@ -59,6 +77,7 @@ public:
     QColor viewBackgroundColor() const;
     QColor viewHoverColor() const;
     QColor viewFocusColor() const;
+    QString styleSheet() const;
 
 Q_SIGNALS:
     void themeChanged();

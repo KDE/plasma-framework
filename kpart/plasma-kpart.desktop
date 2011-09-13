@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=plasma-kpart
 Name[ast]=plasma-kpart
+Name[bg]=plasma-kpart
+Name[bs]=plasma-kpart
 Name[ca]=plasma-kpart
 Name[ca@valencia]=plasma-kpart
 Name[cs]=plasma-kpart
@@ -29,6 +31,7 @@ Name[lt]=plasma-kpart
 Name[nb]=plasma-kpart
 Name[nds]=Kpart för Plasma
 Name[nl]=plasma-kpart
+Name[nn]=plasma-kpart
 Name[pa]=plasma-kpart
 Name[pl]=plasma-kpart
 Name[pt]=plasma-kpart
@@ -44,6 +47,7 @@ Name[sr@latin]=plasma-kpart
 Name[sv]=Plasma-delprogram
 Name[th]=plasma-kpart
 Name[tr]=plasma-kpart
+Name[ug]=plasma-kpart
 Name[uk]=plasma-kpart
 Name[wa]=plasma-kpårt
 Name[x-test]=xxplasma-kpartxx

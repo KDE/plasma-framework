@@ -68,7 +68,6 @@ QScriptValue constructQPixmapClass(QScriptEngine *eng)
 {
     QScriptValue proto = qScriptValueFromValue(eng, QPixmap());
     QScriptValue::PropertyFlags getter = QScriptValue::PropertyGetter;
-    QScriptValue::PropertyFlags setter = QScriptValue::PropertySetter;
     proto.setProperty("null", eng->newFunction(null), getter);
     proto.setProperty("rect", eng->newFunction(rect), getter);
     proto.setProperty("scaled", eng->newFunction(scaled));
