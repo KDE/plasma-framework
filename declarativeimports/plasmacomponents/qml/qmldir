@@ -1,3 +1,5 @@
+plugin plasmacomponentsplugin
+
 BusyIndicator 0.1 BusyIndicator.qml
 Button 0.1 Button.qml
 ButtonGroup 0.1 ButtonGroup.js

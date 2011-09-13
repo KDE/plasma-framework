@@ -58,7 +58,7 @@ Item {
 
             anchors.fill: parent
 
-            PlasmaCore.RangeModel {
+            RangeModel {
                 id: range
 
                 minimumValue: 0

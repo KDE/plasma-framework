@@ -208,7 +208,7 @@ Item {
                 right: rightButton.left
             }
 
-            PlasmaCore.RangeModel {
+            RangeModel {
                 id: range
 
                 minimumValue: 0

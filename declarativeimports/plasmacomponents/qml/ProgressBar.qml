@@ -39,7 +39,7 @@ Item {
     height: 20
     opacity: enabled ? 1.0 : 0.5
 
-    PlasmaCore.RangeModel {
+    RangeModel {
         id: range
 
         // default values

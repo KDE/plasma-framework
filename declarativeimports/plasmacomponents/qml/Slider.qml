@@ -101,7 +101,7 @@ Item {
 
         anchors.centerIn: parent
 
-        PlasmaCore.RangeModel {
+        RangeModel {
             id: range
 
             minimumValue: 0.0
