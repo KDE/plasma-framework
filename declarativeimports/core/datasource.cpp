@@ -40,7 +40,7 @@ DataSource::DataSource(QObject* parent)
     connect(this, SIGNAL(engineChanged()),
             this, SLOT(setupData()));
     connect(this, SIGNAL(connectedSourcesChanged()),
-            this, SLOT(setupData()), Qt::QueuedConnection);
+            this, SLOT(setupData()));
     connect(this, SIGNAL(intervalChanged()),
             this, SLOT(setupData()));
 }
