@@ -185,7 +185,11 @@ QStringList DataSource::keysForSource(const QString &source) const
 Plasma::Service *DataSource::serviceForSource(const QString &source)
 {
     if (!m_services.contains(source)) {
-        m_services[source] = m_dataEngine->serviceForSource(source);
+        Plasma::Service *service = m_dataEngine->serviceForSource(source);
+        if (!service) {
+            return 0;
+        }
+        m_services[source] = service;
     }
 
     return m_services.value(source);
