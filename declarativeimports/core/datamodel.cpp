@@ -214,6 +214,13 @@ void DataModel::setDataSource(QObject *object)
 
     disconnect(m_dataSource, 0, this, 0);
     m_dataSource = source;
+
+    QMap<QString, QVariant>::const_iterator i = source->data().constBegin();
+    while (i != source->data().constEnd()) {
+        dataUpdated(i.key(), i.value().value<Plasma::DataEngine::Data>());
+        ++i;
+    }
+
     connect(m_dataSource, SIGNAL(newData(const QString &, const Plasma::DataEngine::Data &)),
             this, SLOT(dataUpdated(const QString &, const Plasma::DataEngine::Data &)));
     connect(m_dataSource, SIGNAL(sourceRemoved(const QString &)), this, SLOT(removeSource(const QString &)));
