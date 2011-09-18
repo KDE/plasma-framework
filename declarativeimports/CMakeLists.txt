@@ -3,4 +3,4 @@ add_subdirectory(draganddrop)
 add_subdirectory(graphicslayouts)
 add_subdirectory(graphicswidgets)
 add_subdirectory(qtextracomponents)
-
+add_subdirectory(plasmacomponents)
