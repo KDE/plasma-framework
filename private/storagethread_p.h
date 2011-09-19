@@ -42,10 +42,10 @@ public:
     static Plasma::StorageThread *self();
 
 public Q_SLOTS:
-    void save(QWeakPointer<StorageJob> caller, const QVariantMap &parameters);
-    void retrieve(QWeakPointer<StorageJob> caller, const QVariantMap &parameters);
-    void deleteEntry(QWeakPointer<StorageJob> caller, const QVariantMap &parameters);
-    void expire(QWeakPointer<StorageJob> caller, const QVariantMap &parameters);
+    void save(QWeakPointer<StorageJob> caller, const QVariantHash &parameters);
+    void retrieve(QWeakPointer<StorageJob> caller, const QVariantHash &parameters);
+    void deleteEntry(QWeakPointer<StorageJob> caller, const QVariantHash &parameters);
+    void expire(QWeakPointer<StorageJob> caller, const QVariantHash &parameters);
 
 Q_SIGNALS:
     void newResult(StorageJob* caller, const QVariant &result);
