@@ -390,14 +390,29 @@ void Wallpaper::setUsingRenderingCache(bool useCache)
 
 void Wallpaper::setResizeMethodHint(Wallpaper::ResizeMethod resizeMethod)
 {
-    d->lastResizeMethod = resizeMethod;
-    emit renderHintsChanged();
+    const ResizeMethod method = qBound(ScaledResize, resizeMethod, LastResizeMethod);
+    if (method != d->lastResizeMethod) {
+        d->lastResizeMethod = method;
+        emit renderHintsChanged();
+    }
+}
+
+Wallpaper::ResizeMethod Wallpaper::resizeMethodHint() const
+{
+    return d->lastResizeMethod;
 }
 
 void Wallpaper::setTargetSizeHint(const QSizeF &targetSize)
 {
-    d->targetSize = targetSize;
-    emit renderHintsChanged();
+    if (targetSize != d->targetSize) {
+        d->targetSize = targetSize;
+        emit renderHintsChanged();
+    }
+}
+
+QSizeF Wallpaper::targetSizeHint() const
+{
+    return d->targetSize;
 }
 
 void Wallpaper::render(const QString &sourceImagePath, const QSize &size,
@@ -408,6 +423,7 @@ void Wallpaper::render(const QString &sourceImagePath, const QSize &size,
         return;
     }
 
+    resizeMethod = qBound(ScaledResize, resizeMethod, LastResizeMethod);
     if (d->lastResizeMethod != resizeMethod) {
         d->lastResizeMethod = resizeMethod;
         emit renderHintsChanged();
