@@ -223,6 +223,9 @@ QList<QAction*> AppletInterface::contextualActions() const
 {
     QList<QAction*> actions;
     Plasma::Applet *a = applet();
+    if (a->hasFailedToLaunch()) {
+        return actions;
+    }
 
     foreach (const QString &name, m_actions) {
         QAction *action = a->action(name);
