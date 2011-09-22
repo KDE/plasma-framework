@@ -36,31 +36,35 @@ DataSource::DataSource(QObject* parent)
       m_dataEngine(0)
 {
     setObjectName("DataSource");
-
-    connect(this, SIGNAL(engineChanged()),
-            this, SLOT(setupData()));
-    connect(this, SIGNAL(connectedSourcesChanged()),
-            this, SLOT(setupData()), Qt::QueuedConnection);
-    connect(this, SIGNAL(intervalChanged()),
-            this, SLOT(setupData()));
 }
 
 void DataSource::setConnectedSources(const QStringList &sources)
 {
+    bool sourcesChanged = false;
     foreach (const QString &source, sources) {
         if (!m_connectedSources.contains(source)) {
-            m_newSources.append(source);
-        }
-    }
-    foreach (const QString &source, m_connectedSources) {
-        if (!sources.contains(source)) {
-            m_oldSources.append(source);
+            sourcesChanged = true;
+            if (m_dataEngine) {
+                m_connectedSources.append(source);
+                m_dataEngine->connectSource(source, this, m_interval);
+                emit sourceConnected(source);
+            }
         }
     }
 
-    if (!m_newSources.isEmpty() || !m_oldSources.isEmpty()) {
+    foreach (const QString &source, m_connectedSources) {
+        if (!sources.contains(source)) {
+            m_data.remove(source);
+            sourcesChanged = true;
+            if (m_dataEngine) {
+                m_dataEngine->disconnectSource(source, this);
+                emit sourceDisconnected(source);
+            }
+        }
+    }
+
+    if (sourcesChanged) {
         m_connectedSources = sources;
-        m_changes |= SourcesChanged;
         emit connectedSourcesChanged();
     }
 }
@@ -70,9 +74,9 @@ void DataSource::setEngine(const QString &e)
     if (e == m_engine) {
         return;
     }
-    m_engine = e;
 
-    m_changes |= DataEngineChanged;
+    m_engine = e;
+    setupData();
     emit engineChanged();
 }
 
@@ -81,61 +85,44 @@ void DataSource::setInterval(const int interval)
     if (interval == m_interval) {
         return;
     }
+
     m_interval = interval;
-    m_changes |= DataEngineChanged;
+    setupData();
     emit intervalChanged();
 }
 
 //TODO: event compression for this
 void DataSource::setupData()
 {
+    //FIXME: should all services be deleted just because we're changing the interval, etc?
+    qDeleteAll(m_services);
+    m_services.clear();
 
-    if (m_changes & DataEngineChanged) {
+    Plasma::DataEngine *engine = dataEngine(m_engine);
+    if (!engine) {
+        kWarning() << "DataEngine" << m_engine << "not found";
+        return;
+    }
+
+    if (engine != m_dataEngine) {
         if (m_dataEngine) {
-            foreach (const QString &source, m_connectedSources) {
-                m_dataEngine->disconnectSource(source, this);
-            }
+            m_dataEngine->disconnect(this);
+            finishedWithEngine(m_dataEngine->pluginName());
         }
 
-        qDeleteAll(m_services);
-        m_services.clear();
-
-        m_dataEngine = dataEngine(m_engine);
-        if (!m_dataEngine) {
-            kWarning() << "DataEngine" << m_engine << "not found";
-            return;
-        }
+        m_dataEngine = engine;
         connect(m_dataEngine, SIGNAL(sourceAdded(const QString&)), this, SIGNAL(sourcesChanged()));
         connect(m_dataEngine, SIGNAL(sourceRemoved(const QString&)), this, SIGNAL(sourcesChanged()));
 
         connect(m_dataEngine, SIGNAL(sourceAdded(const QString&)), this, SIGNAL(sourceAdded(const QString&)));
         connect(m_dataEngine, SIGNAL(sourceRemoved(const QString&)), this, SLOT(removeSource(const QString&)));
         connect(m_dataEngine, SIGNAL(sourceRemoved(const QString&)), this, SIGNAL(sourceRemoved(const QString&)));
-
-        //TODO: remove after event compression done
-        if (!(m_changes & SourcesChanged)) {
-            foreach (const QString &source, m_connectedSources) {
-                m_dataEngine->connectSource(source, this, m_interval);
-                emit sourceConnected(source);
-            }
-        }
     }
 
-    if (m_changes & SourcesChanged) {
-        if (m_dataEngine) {
-            foreach (const QString &source, m_oldSources) {
-                m_dataEngine->disconnectSource(source, this);
-                emit sourceDisconnected(source);
-            }
-            foreach (const QString &source, m_newSources) {
-                m_dataEngine->connectSource(source, this, m_interval);
-                emit sourceConnected(source);
-            }
-            m_oldSources.clear();
-            m_newSources.clear();
-        }
+    foreach (const QString &source, m_connectedSources) {
+        m_dataEngine->connectSource(source, this, m_interval);
+        emit sourceConnected(source);
     }
-    m_changes = NoChange;
 }
 
 void DataSource::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
@@ -157,29 +144,18 @@ void DataSource::removeSource(const QString &source)
 
     //TODO: emit those signals as last thing
     if (m_connectedSources.contains(source)) {
+        m_connectedSources.removeAll(source);
         emit sourceDisconnected(source);
         emit connectedSourcesChanged();
     }
 
     if (m_dataEngine) {
-        m_connectedSources.removeAll(source);
-        m_newSources.removeAll(source);
-        m_oldSources.removeAll(source);
-
         QHash<QString, Plasma::Service *>::iterator it = m_services.find(source);
         if (it != m_services.end()) {
             delete it.value();
             m_services.erase(it);
         }
     }
-}
-
-QStringList DataSource::keysForSource(const QString &source) const
-{
-    if (!m_data.contains(source)) {
-        return QStringList();
-    }
-    return m_data.value(source).value<Data>().keys();
 }
 
 Plasma::Service *DataSource::serviceForSource(const QString &source)
@@ -201,20 +177,22 @@ void DataSource::connectSource(const QString &source)
         return;
     }
 
-    m_newSources.append(source);
     m_connectedSources.append(source);
-    m_changes |= SourcesChanged;
-    emit sourceConnected(source);
-    emit connectedSourcesChanged();
+    if (m_dataEngine) {
+        m_dataEngine->connectSource(source, this, m_interval);
+        emit sourceConnected(source);
+        emit connectedSourcesChanged();
+    }
 }
 
 void DataSource::disconnectSource(const QString &source)
 {
-    m_oldSources.append(source);
-    m_connectedSources.removeAll(source);
-    m_changes |= SourcesChanged;
-    emit sourceDisconnected(source);
-    emit connectedSourcesChanged();
+    if (m_dataEngine && m_connectedSources.contains(source)) {
+        m_connectedSources.removeAll(source);
+        m_dataEngine->disconnectSource(source, this);
+        emit sourceDisconnected(source);
+        emit connectedSourcesChanged();
+    }
 }
 
 }
