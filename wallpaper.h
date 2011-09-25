@@ -21,7 +21,6 @@
 #ifndef PLASMA_WALLPAPER_H
 #define PLASMA_WALLPAPER_H
 
-#include <kmimetype.h>
 #include <kplugininfo.h>
 
 #include <plasma/package.h>
