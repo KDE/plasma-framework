@@ -112,7 +112,6 @@ void TextEdit::setNativeWidget(KTextEdit *nativeWidget)
 
     nativeWidget->setAttribute(Qt::WA_NoSystemBackground);
     nativeWidget->setFrameShape(QFrame::NoFrame);
-    nativeWidget->setTextBackgroundColor(Qt::transparent);
     nativeWidget->viewport()->setAutoFillBackground(false);
     nativeWidget->verticalScrollBar()->setStyle(d->style.data());
     nativeWidget->horizontalScrollBar()->setStyle(d->style.data());
