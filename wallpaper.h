@@ -64,6 +64,8 @@ class PLASMA_EXPORT Wallpaper : public QObject
     Q_PROPERTY(QList<KServiceAction> listRenderingModes READ listRenderingModes)
     Q_PROPERTY(bool usingRenderingCache READ isUsingRenderingCache WRITE setUsingRenderingCache)
     Q_PROPERTY(bool previewing READ isPreviewing WRITE setPreviewing)
+    Q_PROPERTY(ResizeMethod resizeMethod READ resizeMethodHint WRITE setResizeMethodHint)
+    Q_PROPERTY(QSizeF targetSize READ targetSizeHint WRITE setTargetSizeHint)
 
     public:
         /**
@@ -75,7 +77,8 @@ class PLASMA_EXPORT Wallpaper : public QObject
             ScaledAndCroppedResize /**< Scales and crops the image, preserving the aspect ratio */,
             TiledResize /**< Tiles the image to fill the area */,
             CenterTiledResize /**< Tiles the image to fill the area, starting with a centered tile */,
-            MaxpectResize /**< Best fit resize */
+            MaxpectResize /**< Best fit resize */,
+            LastResizeMethod = MaxpectResize
         };
         Q_ENUMS(ResizeMethod)
 
@@ -333,6 +336,12 @@ class PLASMA_EXPORT Wallpaper : public QObject
         void setResizeMethodHint(Wallpaper::ResizeMethod resizeMethod);
 
         /**
+         * @return the current resize method hint
+         * @since 4.7.2
+         */
+        Wallpaper::ResizeMethod resizeMethodHint() const;
+
+        /**
          * Allows one to set rendering hints that may differ from the actualities of the
          * Wallpaper's current state, allowing for better selection of papers from packages,
          * for instance.
@@ -342,6 +351,12 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * @since 4.3
          */
         void setTargetSizeHint(const QSizeF &targetSize);
+
+        /**
+         * @return the current target size method hint
+         * @since 4.7.2
+         */
+        QSizeF targetSizeHint() const;
 
         /**
          * Returns a list of wallpaper contextual actions (nothing by default)
