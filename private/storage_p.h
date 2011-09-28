@@ -32,6 +32,8 @@
 class StorageJob : public Plasma::ServiceJob
 {
     Q_OBJECT
+    Q_PROPERTY(QVariantHash data READ data WRITE setData)
+
 public:
     StorageJob(const QString& destination,
                const QString& operation,

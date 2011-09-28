@@ -696,14 +696,16 @@ void ContainmentPrivate::addAppletActions(KMenu &desktopMenu, Applet *applet, QE
         }
     }
 
-    QAction *configureApplet = applet->d->actions->action("configure");
-    if (configureApplet && configureApplet->isEnabled()) {
-        desktopMenu.addAction(configureApplet);
-    }
+    if (!applet->d->failed) {
+        QAction *configureApplet = applet->d->actions->action("configure");
+        if (configureApplet && configureApplet->isEnabled()) {
+            desktopMenu.addAction(configureApplet);
+        }
 
-    QAction *runAssociatedApplication = applet->d->actions->action("run associated application");
-    if (runAssociatedApplication && runAssociatedApplication->isEnabled()) {
-        desktopMenu.addAction(runAssociatedApplication);
+        QAction *runAssociatedApplication = applet->d->actions->action("run associated application");
+        if (runAssociatedApplication && runAssociatedApplication->isEnabled()) {
+            desktopMenu.addAction(runAssociatedApplication);
+        }
     }
 
     KMenu *containmentMenu = new KMenu(i18nc("%1 is the name of the containment", "%1 Options", q->name()), &desktopMenu);
