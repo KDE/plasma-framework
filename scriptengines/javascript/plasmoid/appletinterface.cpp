@@ -470,6 +470,11 @@ ContainmentInterface::ContainmentInterface(AbstractJsAppletScript *parent)
 
     connect(containment()->context(), SIGNAL(activityChanged(Plasma::Context *)), this, SIGNAL(activityNameChanged()));
     connect(containment()->context(), SIGNAL(changed(Plasma::Context *)), this, SIGNAL(activityIdChanged()));
+
+     if (containment()->corona()) {
+         connect(containment()->corona(), SIGNAL(availableScreenRegionChanged()),
+                 this, SIGNAL(availableScreenRegionChanged()));
+     }
 }
 
 QScriptValue ContainmentInterface::applets()

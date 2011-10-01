@@ -422,6 +422,7 @@ Q_SIGNALS:
     void screenChanged();
     void activityNameChanged();
     void activityIdChanged();
+    void availableScreenRegionChanged();
 
 protected Q_SLOTS:
     void appletAddedForward(Plasma::Applet *applet, const QPointF &pos);
