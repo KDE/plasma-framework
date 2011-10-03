@@ -133,27 +133,20 @@ class PLASMA_EXPORT RunnerContext : public QObject
          /**
          * Appends lists of matches to the list of matches.
          *
-         * This method is thread safe and causes the matchesChanged() signal to be emitted.
-         *
+         * @param matches the matches to add
          * @return true if matches were added, false if matches were e.g. outdated
          */
-        // trueg: what do we need the term for? It is stored in the context anyway! Plus: matches() does not have a term parameter!
-        //        plus: it is Q_UNUSED
-        bool addMatches(const QString &term, const QList<QueryMatch> &matches);
+        bool addMatches(const QList<QueryMatch> &matches);
 
         /**
          * Appends a match to the existing list of matches.
          *
-         * If you are going to be adding multiple matches, use addMatches instead.
+         * If you are going to be adding multiple matches, use @see addMatches instead.
          *
-         * @param term the search term that this match was generated for.
          * @param match the match to add
-         *
          * @return true if the match was added, false otherwise.
          */
-        // trueg: what do we need the term for? It is stored in the context anyway! Plus: matches() does not have a term parameter!
-        //        plus: it is Q_UNUSED
-        bool addMatch(const QString &term, const QueryMatch &match);
+        bool addMatch(const QueryMatch &match);
 
         /**
          * Removes a match from the existing list of matches.
