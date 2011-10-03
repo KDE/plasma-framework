@@ -330,10 +330,10 @@ void DataEngine::removeAllSources()
     QMutableHashIterator<QString, Plasma::DataContainer*> it(d->sources);
     while (it.hasNext()) {
         it.next();
-        const QString source = it.key();
         Plasma::DataContainer *s = it.value();
         it.remove();
-        emit sourceRemoved(source);
+        emit sourceRemoved(it.key());
+        s->disconnect(this);
         delete s;
     }
 }
