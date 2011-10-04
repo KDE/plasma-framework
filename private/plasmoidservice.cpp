@@ -29,7 +29,6 @@
 #include <plasma/servicejob.h>
 
 #include <kdebug.h>
-#include <ktemporaryfile.h>
 #include <kzip.h>
 #include <kservicetypetrader.h>
 

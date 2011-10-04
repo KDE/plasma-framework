@@ -24,7 +24,6 @@
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>
-#include <ktemporaryfile.h>
 #include <kplugininfo.h>
 
 #include "config-plasma.h"
@@ -186,7 +185,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
 }
 
 DataEngine *PluginLoader::loadDataEngine(const QString &name)
-{ 
+{
     DataEngine *engine = d->isDefaultLoader ? 0 : internalLoadDataEngine(name);
     if (engine) {
         return engine;
@@ -496,7 +495,7 @@ KPluginInfo::List PluginLoader::listContainmentActionsInfo(const QString &parent
 }
 
 Applet* PluginLoader::internalLoadApplet(const QString &name, uint appletId, const QVariantList &args)
-{ 
+{
     Q_UNUSED(name)
     Q_UNUSED(appletId)
     Q_UNUSED(args)

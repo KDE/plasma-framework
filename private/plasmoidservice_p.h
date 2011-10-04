@@ -25,7 +25,7 @@
 #include "../service.h"
 #include "../servicejob.h"
 
-#include <ktemporaryfile.h>
+#include <qtemporaryfile.h>
 
 namespace Plasma
 {
@@ -66,11 +66,11 @@ class PlasmoidService : public Service, DataEngineConsumer
         QString m_packagePath;
         QString m_metadata;
         QString m_pluginName;
-        KTemporaryFile m_tempFile;
+        QTemporaryFile m_tempFile;
 
         friend class PlasmoidServiceJob;
 };
 
 }
 
-#endif 
+#endif

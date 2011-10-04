@@ -36,6 +36,7 @@
 #include <QtCore/QMap>
 #include <QtCore/QMetaType>
 #include <QtCore/QTimer>
+#include <qtemporaryfile.h>
 
 #include <QtNetwork/QHostInfo>
 
@@ -46,7 +47,6 @@
 #include <kconfiggroup.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
-#include <ktemporaryfile.h>
 #include <kurl.h>
 #include <kwallet.h>
 
@@ -132,7 +132,7 @@ void AuthorizationManager::setAuthorizationInterface(AuthorizationInterface *int
     }
 }
 
-AuthorizationManagerPrivate::AuthorizationManagerPrivate(AuthorizationManager *manager) 
+AuthorizationManagerPrivate::AuthorizationManagerPrivate(AuthorizationManager *manager)
     : q(manager),
       server(0),
       authorizationPolicy(AuthorizationManager::DenyAll),
@@ -174,7 +174,7 @@ void AuthorizationManagerPrivate::saveRules()
     kDebug() << "SAVE RULES";
 #endif
 
-    KTemporaryFile tempFile;
+    QTemporaryFile tempFile;
     tempFile.open();
     tempFile.setAutoRemove(false);
     KConfigGroup rulesGroup = KSharedConfig::openConfig(tempFile.fileName())->group("Rules");

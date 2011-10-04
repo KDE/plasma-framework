@@ -35,7 +35,6 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <ktemporaryfile.h>
 #include <kurl.h>
 
 #include <QtJolie/Message>

@@ -37,7 +37,6 @@
 #include <kstandarddirs.h>
 #include <ktar.h>
 #include <ktempdir.h>
-#include <ktemporaryfile.h>
 #include <kzip.h>
 
 #include "config-plasma.h"

@@ -34,6 +34,7 @@
 #include <QStyleOptionGraphicsItem>
 #include <QGraphicsLayout>
 #include <QGraphicsLinearLayout>
+#include <qtemporaryfile.h>
 
 #include <kaction.h>
 #include <kauthorized.h>
@@ -43,7 +44,6 @@
 #include <kmimetype.h>
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>
-#include <ktemporaryfile.h>
 #include <kwindowsystem.h>
 
 #ifndef PLASMA_NO_KIO
@@ -1432,7 +1432,7 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
                 mimeData = clipboard->mimeData(QClipboard::Selection);
             }
 
-            KTemporaryFile tempFile;
+            QTemporaryFile tempFile;
             if (mimeData && tempFile.open()) {
                 //TODO: what should we do with files after the applet is done with them??
                 tempFile.setAutoRemove(false);
