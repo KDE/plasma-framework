@@ -314,6 +314,16 @@ QRect Style::subControlRect(ComplexControl control, const QStyleOptionComplex *o
     }
 }
 
+int Style::styleHint(StyleHint hint, const QStyleOption *option, const QWidget *widget, QStyleHintReturn *returnData) const
+{
+    switch (hint) {
+    case SH_RequestSoftwareInputPanel:
+        return RSIP_OnMouseClick;
+    default:
+        return QCommonStyle::styleHint(hint, option, widget, returnData);
+    }
+}
+
 int Style::pixelMetric(PixelMetric metric, const QStyleOption *option, const QWidget *widget) const
 {
     if (Theme::defaultTheme()->useNativeWidgetStyle()) {

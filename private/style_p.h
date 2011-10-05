@@ -45,6 +45,7 @@ public:
     ~Style();
 
     void drawPrimitive(PrimitiveElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = 0) const;
+    int styleHint(StyleHint hint, const QStyleOption *option=0, const QWidget *widget=0, QStyleHintReturn *returnData=0) const;
 
 protected:
     void drawComplexControl(ComplexControl control,
