@@ -61,6 +61,11 @@ QString ThemeProxy::wallpaperPath() const
     return Plasma::Theme::defaultTheme()->wallpaperPath();
 }
 
+QString ThemeProxy::wallpaperPathForSize(int width, int height) const
+{
+    return Plasma::Theme::defaultTheme()->wallpaperPath(QSize(width, height));
+}
+
 QColor ThemeProxy::textColor() const
 {
     return Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
