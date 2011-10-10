@@ -74,47 +74,15 @@ Item {
 
     onActiveFocusChanged: {
         if (activeFocus) {
-            shadow.opacity = 0;
-            hover.opacity = 1;
+            shadow.state = "focus"
         }else {
-            shadow.opacity = 1;
-            hover.opacity = 0;
+            shadow.state = "shadow"
         }
     }
 
-    PlasmaCore.FrameSvgItem {
-        id: hover
-
-        anchors.fill: parent
-        opacity: 0
-        anchors.leftMargin: -margins.left
-        anchors.topMargin: -margins.top
-        anchors.rightMargin: -margins.right
-        anchors.bottomMargin: -margins.bottom
-        imagePath: "widgets/button"
-        prefix: "hover"
-
-        Behavior on opacity {
-            PropertyAnimation { duration: 250 }
-        }
-    }
-
-    PlasmaCore.FrameSvgItem {
+    ButtonShadow {
         id: shadow
-
-        anchors {
-            fill: parent
-            leftMargin: -margins.left
-            topMargin: -margins.top
-            rightMargin: -margins.right
-            bottomMargin: -margins.bottom
-        }
-        imagePath: "widgets/button"
-        prefix: "shadow"
-
-        Behavior on opacity {
-            PropertyAnimation { duration: 250 }
-        }
+        anchors.fill: parent
     }
 
     PlasmaCore.FrameSvgItem {
@@ -174,16 +142,13 @@ Item {
             releaseButton();
         }
         onEntered: {
-            shadow.opacity = 0;
-            hover.opacity = 1;
+            shadow.state = "hover"
         }
         onExited: {
             if (button.activeFocus) {
-                shadow.opacity = 0;
-                hover.opacity = 1;
+                shadow.state = "focus"
             } else {
-                shadow.opacity = 1;
-                hover.opacity = 0;
+                shadow.state = "shadow"
             }
         }
     }
