@@ -90,6 +90,18 @@ Item {
                 opacity: 1
                 prefix: "focus"
             }
+        },
+        State {
+            name: "hidden"
+            PropertyChanges {
+                target: shadow
+                opacity: 0
+            }
+            PropertyChanges {
+                target: hover
+                opacity: 0
+                prefix: "hover"
+            }
         }
     ]
 

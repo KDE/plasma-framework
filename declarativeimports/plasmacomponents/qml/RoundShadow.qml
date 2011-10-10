@@ -85,6 +85,18 @@ Item {
                 opacity: 1
                 elementId: "focus"
             }
+        },
+        State {
+            name: "hover"
+            PropertyChanges {
+                target: shadow
+                opacity: 0
+            }
+            PropertyChanges {
+                target: hover
+                opacity: 0
+                elementId: "hover"
+            }
         }
     ]
 
