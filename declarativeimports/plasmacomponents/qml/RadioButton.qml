@@ -45,4 +45,6 @@ DualStateButton {
             }
         }
     }
+
+    shadow: ButtonShadow {}
 }

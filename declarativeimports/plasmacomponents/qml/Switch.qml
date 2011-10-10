@@ -22,11 +22,15 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 
 DualStateButton {
     id: switchItem
+
     view: PlasmaCore.FrameSvgItem {
         imagePath: "widgets/frame"
         prefix: "sunken"
         width: 32
         height: 16
+        //not used in this control
+        property bool shadowVisible
+
         PlasmaCore.FrameSvgItem {
             imagePath: "widgets/button"
             prefix: "normal"

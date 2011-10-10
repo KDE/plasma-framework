@@ -6,7 +6,6 @@ ButtonGroup 0.1 ButtonGroup.js
 ButtonRow 0.1 ButtonRow.qml
 ButtonColumn 0.1 ButtonColumn.qml
 CheckBox 0.1 CheckBox.qml
-DualStateButton 0.1 DualStateButton.qml
 FlashingLabel 0.1 FlashingLabel.qml
 Frame 0.1 Frame.qml
 IconWidget 0.1 IconWidget.qml

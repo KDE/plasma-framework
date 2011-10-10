@@ -9,7 +9,7 @@
 *   This program is distributed in the hope that it will be useful,
 *   but WITHOUT ANY WARRANTY; without even the implied warranty of
 *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   GNU General Public License for more details
+*   GNU Library General Public License for more details
 *
 *   You should have received a copy of the GNU Library General Public
 *   License along with this program; if not, write to the
@@ -32,18 +32,18 @@ Item {
     // Plasma API
     property alias text: label.text // TODO: Not yet part of the common API
     property QtObject theme: PlasmaCore.Theme { }
-    property alias view: surface.sourceComponent
+    property alias view: surfaceLoader.sourceComponent
+    property alias shadow: shadowLoader.sourceComponent
 
-    width: surface.width + label.paintedWidth
-    height: surface.height
+    width: surfaceLoader.width + label.paintedWidth
+    height: surfaceLoader.height
     // TODO: needs to define if there will be specific graphics for
     //     disabled buttons
     opacity: dualButton.enabled ? 1.0 : 0.5
 
     function entered() {
         if (dualButton.enabled) {
-            shadow.opacity = 0;
-            hover.opacity = 1;
+            shadowLoader.state = "hover"
         }
     }
 
@@ -62,45 +62,13 @@ Item {
             released();
     }
 
-    PlasmaCore.FrameSvgItem {
-        id: hover
-
-        anchors {
-            fill: surface
-            leftMargin: -margins.left
-            topMargin: -margins.top
-            rightMargin: -margins.right
-            bottomMargin: -margins.bottom
-        }
-        opacity: 0
-        imagePath: "widgets/button"
-        prefix: "hover"
-
-        Behavior on opacity {
-            PropertyAnimation { duration: 250 }
-        }
-    }
-
-    PlasmaCore.FrameSvgItem {
-        id: shadow
-
-        anchors {
-            fill: surface
-            leftMargin: -margins.left
-            topMargin: -margins.top
-            rightMargin: -margins.right
-            bottomMargin: -margins.bottom
-        }
-        imagePath: "widgets/button"
-        prefix: "shadow"
-
-        Behavior on opacity {
-            PropertyAnimation { duration: 250 }
-        }
+    Loader {
+        id: shadowLoader
+        anchors.fill: surfaceLoader
     }
 
     Loader {
-        id: surface
+        id: surfaceLoader
 
         anchors {
             verticalCenter: parent.verticalCenter
@@ -116,7 +84,7 @@ Item {
         anchors {
             top: parent.top
             bottom: parent.bottom
-            left: surface.right
+            left: surfaceLoader.right
             right: parent.right
             // XXX: see how this margin will be set
             leftMargin: hover.margins.right
@@ -135,8 +103,7 @@ Item {
         onEntered: dualButton.entered();
         onPressed: dualButton.forceActiveFocus();
         onExited: {
-            shadow.opacity = 1;
-            hover.opacity = 0;
+            shadowLoader.state = "shadow"
         }
     }
 }
