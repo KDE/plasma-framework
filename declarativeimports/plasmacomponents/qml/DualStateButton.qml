@@ -86,8 +86,8 @@ Item {
             bottom: parent.bottom
             left: surfaceLoader.right
             right: parent.right
-            // XXX: see how this margin will be set
-            leftMargin: hover.margins.right
+            //FIXME: see how this margin will be set
+            leftMargin: height/4
         }
         color: theme.textColor
         verticalAlignment: Text.AlignVCenter

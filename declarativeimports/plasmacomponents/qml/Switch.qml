@@ -26,10 +26,14 @@ DualStateButton {
     view: PlasmaCore.FrameSvgItem {
         imagePath: "widgets/frame"
         prefix: "sunken"
-        width: 32
-        height: 16
-        //not used in this control
-        property bool shadowVisible
+        width: height * 2
+        height: fontMetricText.height + margins.top
+        //FIXME: an hack to have font metrics: can we have a proper binding?
+        Text {
+            id: fontMetricText
+            text: "M"
+            visible: false
+        }
 
         PlasmaCore.FrameSvgItem {
             imagePath: "widgets/button"

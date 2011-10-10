@@ -25,8 +25,14 @@ DualStateButton {
     view: PlasmaCore.FrameSvgItem {
         imagePath: "widgets/button"
         prefix: "normal"
-        width: 16
-        height: 16
+        width: fontMetricText.height + margins.left
+        height: fontMetricText.height + margins.top
+        //FIXME: an hack to have font metrics: can we have a proper binding?
+        Text {
+            id: fontMetricText
+            text: "M"
+            visible: false
+        }
         PlasmaCore.SvgItem {
             svg: PlasmaCore.Svg {
                 id: checkmarkSvg
@@ -34,7 +40,10 @@ DualStateButton {
             }
             elementId: "checkbox"
             opacity: checked ? 1 : 0
-            anchors.fill: parent
+            anchors {
+                fill: parent
+                margins: parent.margins.left/2
+            }
             Behavior on opacity {
                 NumberAnimation {
                     duration: 250
