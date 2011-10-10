@@ -37,12 +37,25 @@ DualStateButton {
 
         PlasmaCore.FrameSvgItem {
             imagePath: "widgets/button"
+            prefix: "shadow"
+            anchors {
+                fill: button
+                leftMargin: -margins.left
+                topMargin: -margins.top
+                rightMargin: -margins.right
+                bottomMargin: -margins.bottom
+            }
+        }
+        
+        PlasmaCore.FrameSvgItem {
+            id: button
+            imagePath: "widgets/button"
             prefix: "normal"
             anchors {
                 top: parent.top
                 bottom: parent.bottom
             }
-            width: parent.width / 2
+            width: height
             x: checked ? width : 0
             Behavior on x {
                 PropertyAnimation { duration: 100 }
