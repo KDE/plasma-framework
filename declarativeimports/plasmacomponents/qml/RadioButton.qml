@@ -24,11 +24,14 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 //FIXME: this should be round, DualStateButton shouldn't draw the shadow
 DualStateButton {
     id: radioButton
-    view: PlasmaCore.FrameSvgItem {
-        imagePath: "widgets/button"
-        prefix: "normal"
-        width: fontMetricText.height + margins.left
-        height: fontMetricText.height + margins.top
+    view: PlasmaCore.SvgItem {
+        svg: PlasmaCore.Svg {
+            id: buttonSvg
+            imagePath: "widgets/actionbutton"
+        }
+        elementId: "normal"
+        width: fontMetricText.height + 6
+        height: width
         //FIXME: an hack to have font metrics: can we have a proper binding?
         Text {
             id: fontMetricText
@@ -55,5 +58,5 @@ DualStateButton {
         }
     }
 
-    shadow: ButtonShadow {}
+    shadow: RoundShadow {}
 }
