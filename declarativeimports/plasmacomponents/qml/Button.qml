@@ -75,7 +75,9 @@ Item {
     onActiveFocusChanged: {
         if (activeFocus) {
             shadow.state = "focus"
-        }else {
+        } else if (checked) {
+            shadow.state = "hidden"
+        } else {
             shadow.state = "shadow"
         }
     }
@@ -147,6 +149,8 @@ Item {
         onExited: {
             if (button.activeFocus) {
                 shadow.state = "focus"
+            } else if (checked) {
+                shadow.state = "hidden"
             } else {
                 shadow.state = "shadow"
             }
