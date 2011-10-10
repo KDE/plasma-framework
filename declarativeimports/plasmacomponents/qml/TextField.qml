@@ -113,12 +113,24 @@ Item {
         }
         imagePath: "widgets/lineedit"
         prefix: {
-            // XXX: missing hover state
-            if (textField.activeFocus)
-                return "focus";
-            else
-                return "";
+            if (textField.activeFocus) {
+                return "focus"
+            } else {
+                return "hover"
+            }
         }
+        opacity: (mouseWatcher.containsMouse||textField.activeFocus) ? 1 : 0
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 250
+                easing.type: Easing.InOutQuad
+            }
+        }
+    }
+    MouseArea {
+        id: mouseWatcher
+        anchors.fill: hover
+        hoverEnabled: true
     }
 
     Text {
