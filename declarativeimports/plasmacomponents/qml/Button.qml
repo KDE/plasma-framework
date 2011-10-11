@@ -58,8 +58,8 @@ Item {
         button.forceActiveFocus();
     }
 
-    width: 50
-    height: 20
+    width: Math.max(50, icon.width + label.paintedWidth + surface.margins.left + surface.margins.right)
+    height: Math.max(20, Math.max(icon.height, label.paintedHeight) + surface.margins.top + surface.margins.bottom)
     // TODO: needs to define if there will be specific graphics for
     //     disabled buttons
     opacity: enabled ? 1.0 : 0.5

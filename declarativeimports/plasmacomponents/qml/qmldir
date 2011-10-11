@@ -19,4 +19,5 @@ Slider 0.1 Slider.qml
 Switch 0.1 Switch.qml
 TextField 0.1 TextField.qml
 TextArea 0.1 TextArea.qml
+ToolBar 0.1 ToolBar.qml
 ToolButton 0.1 ToolButton.qml

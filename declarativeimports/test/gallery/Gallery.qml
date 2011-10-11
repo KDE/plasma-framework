@@ -25,10 +25,50 @@ Rectangle {
     height: 800
     color: "lightgrey"
 
+    PlasmaComponents.ToolBar {
+        id: toolBar
+        z: 10
+        anchors {
+            top: parent.top
+            left: parent.left
+            right: parent.right
+        }
+        tools: toolbarA
+    }
+    Row {
+        id: toolbarA
+        visible: false
+        spacing: 5
+        PlasmaComponents.Button {
+            text: "Switch toolbar"
+            onClicked: toolBar.setTools(toolbarB, "push")
+        }
+        PlasmaComponents.Button {
+            text: "button on first toolbar"
+        }
+    }
+    Row {
+        id: toolbarB
+        visible: false
+        spacing: 5
+        PlasmaComponents.Button {
+            text: "Switch toolbar"
+            onClicked: toolBar.setTools(toolbarA, "pop")
+        }
+        PlasmaComponents.Button {
+            text: "button on second toolbar"
+        }
+        PlasmaComponents.TextField {}
+    }
     Flickable {
         id: page
 
-        anchors.fill: parent
+        anchors {
+            top: toolBar.bottom
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+        }
         contentWidth: 2200
         contentHeight: 1000
 
@@ -78,7 +118,7 @@ Rectangle {
         flickableItem: page
         animated: true
         anchors {
-            top: parent.top
+            top: toolBar.bottom
             right: parent.right
             bottom: horizontalScrollBar.top
         }
