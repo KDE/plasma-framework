@@ -36,6 +36,18 @@ DualStateButton {
         }
 
         PlasmaCore.FrameSvgItem {
+            id: highlight
+            imagePath: "widgets/frame"
+            prefix: "sunken-active"
+            anchors.fill: parent
+
+            opacity: checked ? 1 : 0
+            Behavior on opacity {
+                PropertyAnimation { duration: 100 }
+            }
+        }
+
+        PlasmaCore.FrameSvgItem {
             imagePath: "widgets/button"
             prefix: "shadow"
             anchors {

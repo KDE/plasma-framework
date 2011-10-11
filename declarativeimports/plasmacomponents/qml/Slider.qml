@@ -113,17 +113,33 @@ Item {
             positionAtMaximum: contents.width - handle.width / 2
         }
 
-        PlasmaCore.SvgItem {
+        PlasmaCore.Svg {
+            id: grooveSvg
+            imagePath: "widgets/frame"
+        }
+        PlasmaCore.FrameSvgItem {
             id: groove
-
+            imagePath: "widgets/frame"
+            prefix: "sunken"
+            //FIXME: frameSvg should have a minimumSize attribute, could be added to kdelibs 4.7(maybe just the qml binding is enough)?
+            height: grooveSvg.elementSize("sunken-topleft").height + grooveSvg.elementSize("sunken-bottomleft").height
             anchors {
                 left: parent.left
                 right: parent.right
                 verticalCenter: parent.verticalCenter
             }
-            height: 3
-            svg: PlasmaCore.Svg { imagePath: "widgets/slider" }
-            elementId: "horizontal-slider-line"
+        }
+        PlasmaCore.FrameSvgItem {
+            id: highlight
+            imagePath: "widgets/frame"
+            prefix: "sunken-active"
+            height: groove.height
+            width: range.position
+            anchors {
+                left: parent.left
+                verticalCenter: parent.verticalCenter
+            }
+            visible: range.position > 0 && slider.enabled
         }
 
         PlasmaCore.SvgItem {
