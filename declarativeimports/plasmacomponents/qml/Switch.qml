@@ -24,8 +24,8 @@ DualStateButton {
     id: switchItem
 
     view: PlasmaCore.FrameSvgItem {
-        imagePath: "widgets/frame"
-        prefix: "sunken"
+        imagePath: "widgets/slider"
+        prefix: "groove"
         width: height * 2
         height: fontMetricText.height + margins.top
         //FIXME: an hack to have font metrics: can we have a proper binding?
@@ -37,8 +37,8 @@ DualStateButton {
 
         PlasmaCore.FrameSvgItem {
             id: highlight
-            imagePath: "widgets/frame"
-            prefix: "sunken-active"
+            imagePath: "widgets/slider"
+            prefix: "groove-highlight"
             anchors.fill: parent
 
             opacity: checked ? 1 : 0

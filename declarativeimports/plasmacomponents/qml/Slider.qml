@@ -115,14 +115,14 @@ Item {
 
         PlasmaCore.Svg {
             id: grooveSvg
-            imagePath: "widgets/frame"
+            imagePath: "widgets/slider"
         }
         PlasmaCore.FrameSvgItem {
             id: groove
-            imagePath: "widgets/frame"
-            prefix: "sunken"
+            imagePath: "widgets/slider"
+            prefix: "groove"
             //FIXME: frameSvg should have a minimumSize attribute, could be added to kdelibs 4.7(maybe just the qml binding is enough)?
-            height: grooveSvg.elementSize("sunken-topleft").height + grooveSvg.elementSize("sunken-bottomleft").height
+            height: grooveSvg.elementSize("groove-topleft").height + grooveSvg.elementSize("groove-bottomleft").height
             anchors {
                 left: parent.left
                 right: parent.right
@@ -131,8 +131,8 @@ Item {
         }
         PlasmaCore.FrameSvgItem {
             id: highlight
-            imagePath: "widgets/frame"
-            prefix: "sunken-active"
+            imagePath: "widgets/slider"
+            prefix: "groove-highlight"
             height: groove.height
             width: inverted ? groove.width - handle.x : fakeHandle.x
             x: inverted ? handle.x : 0
