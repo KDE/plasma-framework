@@ -24,7 +24,7 @@ Item {
     id: scrollDecorator
 
     // Common API
-    property Flickable flickableItem: null
+    property Flickable flickableItem
 
     // Plasma API
     property int orientation: Qt.Horizontal
@@ -36,8 +36,8 @@ Item {
         !scrollDecorator.inverted : scrollDecorator.inverted
     property alias _value: range.value
 
-    implicitWidth: _isVertical ? 22 : 200
-    implicitHeight: _isVertical ? 200 : 22
+    implicitWidth: _isVertical ? 16 : 200
+    implicitHeight: _isVertical ? 200 : 16
 
     visible: flickableItem && handle.width < contents.width
 
@@ -48,15 +48,19 @@ Item {
 
         anchors.centerIn: parent
 
-        PlasmaCore.Svg {
-            id: scrollDecoratorSvg
-            imagePath: "widgets/scrollDecorator"
-        }
-
-        Item {
+        PlasmaCore.FrameSvgItem {
             id: contents
+            imagePath: "widgets/scrollbar"
+            prefix: "background-horizontal"
 
             anchors.fill: parent
+            opacity: flickableItem && (flickableItem.flicking || flickableItem.moving)  ? 1 : 0
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 250
+                    easing.type: Easing.OutQuad
+                }
+            }
 
             RangeModel {
                 id: range
@@ -96,30 +100,6 @@ Item {
                 height: parent.height - margins.top // TODO: check mergin
                 imagePath: "widgets/scrollbar"
                 prefix: "slider"
-                opacity: flickableItem && flickableItem.flicking ? 1 : 0
-
-                Connections {
-                    target: flickableItem
-                    onMovementStarted: handle.opacity = 1
-                    onMovementEnded: opacityAnimation.start()
-                }
-
-                Behavior on x {
-                    PropertyAnimation {
-                        duration: 150
-                        easing.type: Easing.OutSine
-                    }
-                }
-
-                PropertyAnimation {
-                    id: opacityAnimation
-
-                    target: handle
-                    property: "opacity"
-                    from: 1; to: 0
-                    duration: 500
-                    easing.type: Easing.Linear
-                }
             }
         }
     }
