@@ -134,11 +134,10 @@ Item {
             imagePath: "widgets/frame"
             prefix: "sunken-active"
             height: groove.height
-            width: range.position
-            anchors {
-                left: parent.left
-                verticalCenter: parent.verticalCenter
-            }
+            width: inverted ? groove.width - handle.x : fakeHandle.x
+            x: inverted ? handle.x : 0
+            anchors.verticalCenter: parent.verticalCenter
+
             visible: range.position > 0 && slider.enabled
         }
 

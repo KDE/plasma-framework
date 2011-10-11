@@ -100,6 +100,17 @@ Column {
         enabled: false
     }
 
+    Text { text: "Inverted Horizontal Slider" }
+
+    PlasmaComponents.Slider {
+        id: invHorizontalSlider
+        width: 140
+        height: 20
+        inverted: true
+        animated: true
+        enabled: true
+    }
+
     Text { text: "Vertical Slider" }
 
     Row {
