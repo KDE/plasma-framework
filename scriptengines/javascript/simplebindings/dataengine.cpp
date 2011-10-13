@@ -66,5 +66,7 @@ void registerDataEngineMetaTypes(QScriptEngine *engine)
     qScriptRegisterMetaType<Plasma::Service *>(engine, qScriptValueFromService, serviceFromQScriptValue);
     qScriptRegisterMetaType<Plasma::DataEngine *>(engine, qScriptValueFromDataEngine, dataEngineFromQScriptValue);
     qScriptRegisterMetaType<Plasma::ServiceJob *>(engine, qScriptValueFromServiceJob, serviceJobFromQScriptValue);
+    qRegisterMetaType<Plasma::Service *>("Service*");
+    qRegisterMetaType<Plasma::ServiceJob *>("ServiceJob*");
 }
 

@@ -42,33 +42,32 @@ ServiceMonitor::~ServiceMonitor()
 
 void ServiceMonitor::slotJobFinished(Plasma::ServiceJob *job)
 {
-    kDebug() << "engine ready!";
+    //kDebug() << "engine ready!";
     QString engineName = job->parameters()["EngineName"].toString();
     QString location = job->destination();
     QPair<QString, QString> pair(location, engineName);
-    kDebug() << "pair = " << pair;
+    //kDebug() << "pair = " << pair;
     if (!m_consumer->m_remoteEngines.contains(pair)) {
         kDebug() << "engine does not exist yet!";
     } else {
         KUrl engineLocation(location);
         engineLocation.setFileName(job->result().toString());
-        kDebug() << "setting location : "
-                 << engineLocation.prettyUrl();
+        //kDebug() << "setting location : " << engineLocation.prettyUrl();
       //  m_consumer->m_remoteEngines[pair]->setLocation(engineLocation);
     }
 }
 
 void ServiceMonitor::slotServiceReady(Plasma::Service *plasmoidService)
 {
-    kDebug() << "service ready!";
+    //kDebug() << "service ready!";
     if (!m_consumer->m_engineNameForService.contains(plasmoidService)) {
         kDebug() << "no engine name for service!";
         kDebug() << "amount of services in map: " << m_consumer->m_engineNameForService.count();
     } else {
-        kDebug() << "value = " << m_consumer->m_engineNameForService.value(plasmoidService);
+        //kDebug() << "value = " << m_consumer->m_engineNameForService.value(plasmoidService);
     }
 
-    kDebug() << "requesting dataengine!";
+    //kDebug() << "requesting dataengine!";
     KConfigGroup op = plasmoidService->operationDescription("DataEngine");
     op.writeEntry("EngineName", m_consumer->m_engineNameForService.value(plasmoidService));
     plasmoidService->startOperationCall(op);
@@ -88,6 +87,13 @@ DataEngineConsumer::~DataEngineConsumer()
     }
 
     delete m_monitor;
+}
+
+void DataEngineConsumer::finishedWithEngine(const QString &name)
+{
+    if (m_loadedEngines.contains(name)) {
+        DataEngineManager::self()->unloadEngine(name);
+    }
 }
 
 DataEngine *DataEngineConsumer::dataEngine(const QString &name)

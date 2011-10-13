@@ -63,6 +63,7 @@ public:
     KUrl homepage() const;
     bool useGlobalSettings() const;
     QString wallpaperPath() const;
+    Q_INVOKABLE QString wallpaperPathForSize(int width=-1, int height=-1) const;
 
     QColor textColor() const;
     QColor highlightColor() const;

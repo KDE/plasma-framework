@@ -57,6 +57,7 @@ public:
     ~DataEngineConsumer();
     DataEngine *dataEngine(const QString &name);
     DataEngine *remoteDataEngine(const KUrl &location, const QString &name);
+    void finishedWithEngine(const QString &name);
 
 private:
     QSet<QString> m_loadedEngines;

@@ -317,7 +317,7 @@ protected:
     AbstractJsAppletScript *m_appletScriptEngine;
 
 private:
-    QSet<QString> m_actions;
+    QStringList m_actions;
     QSignalMapper *m_actionSignals;
     QString m_currentConfig;
     QMap<QString, Plasma::ConfigLoader*> m_configs;
@@ -422,6 +422,7 @@ Q_SIGNALS:
     void screenChanged();
     void activityNameChanged();
     void activityIdChanged();
+    void availableScreenRegionChanged();
 
 protected Q_SLOTS:
     void appletAddedForward(Plasma::Applet *applet, const QPointF &pos);

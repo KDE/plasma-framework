@@ -73,10 +73,9 @@ public:
     Q_PROPERTY(QStringList sources READ sources NOTIFY sourcesChanged)
     QStringList sources() const {if (m_dataEngine) return m_dataEngine->sources(); else return QStringList();}
 
-    Q_PROPERTY(QVariantMap data READ data NOTIFY dataChanged);
-    QVariantMap data() const {return m_data;}
+    Q_PROPERTY(QVariantHash data READ data NOTIFY dataChanged);
+    QVariantHash data() const {return m_data;}
 
-    Q_INVOKABLE QStringList keysForSource(const QString &source) const;
     Q_INVOKABLE Plasma::Service *serviceForSource(const QString &source);
 
     Q_INVOKABLE void connectSource(const QString &source);
@@ -103,7 +102,7 @@ private:
     QString m_id;
     int m_interval;
     QString m_engine;
-    QVariantMap m_data;
+    QVariantHash m_data;
     Plasma::DataEngine* m_dataEngine;
     QStringList m_connectedSources;
     QStringList m_oldSources;

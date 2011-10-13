@@ -105,8 +105,7 @@ public:
     QString keyRoleFilter() const;
 
     /**
-     * Include only items with a source name that matches this regexp in the model
-     * @since 4.7
+     * Include only sources that matches this regexp in the model
      */
     void setSourceFilter(const QString& key);
     QString sourceFilter() const;
@@ -139,7 +138,9 @@ private Q_SLOTS:
 private:
     DataSource *m_dataSource;
     QString m_keyRoleFilter;
+    QRegExp m_keyRoleFilterRE;
     QString m_sourceFilter;
+    QRegExp m_sourceFilterRE;
     QMap<QString, QVector<QVariant> > m_items;
     QHash<int, QByteArray> m_roleNames;
     QHash<QString, int> m_roleIds;
