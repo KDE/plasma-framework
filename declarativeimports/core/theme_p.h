@@ -25,6 +25,8 @@
 #include <QFont>
 #include <QColor>
 
+#include <Plasma/Theme>
+
 class FontProxy : public QObject
 {
     Q_OBJECT
@@ -60,9 +62,11 @@ public:
         Black = 87
     };
 
-    FontProxy(QObject *parent = 0);
+    FontProxy(Plasma::Theme::FontRole role, QObject *parent = 0);
     ~FontProxy();
-    static FontProxy *self();
+    static FontProxy *defaultFont();
+    static FontProxy *desktopFont();
+    static FontProxy *smallestFont();
 
     bool bold() const;
     Capitalization capitalization() const;
@@ -88,6 +92,9 @@ Q_SIGNALS:
     void underlineChanged();
     void weightChanged();
     void wordSpacingChanged();
+
+private:
+    Plasma::Theme::FontRole m_fontRole;
 };
 
 class ThemeProxy : public QObject
@@ -101,7 +108,9 @@ class ThemeProxy : public QObject
     Q_PROPERTY(QString wallpaperPath READ wallpaperPath NOTIFY themeChanged)
 
     //fonts
-    Q_PROPERTY(QObject *font READ font CONSTANT)
+    Q_PROPERTY(QObject *defaultFont READ defaultFont CONSTANT)
+    Q_PROPERTY(QObject *desktopFont READ desktopFont CONSTANT)
+    Q_PROPERTY(QObject *smallestFont READ smallestFont CONSTANT)
 
     // colors
     Q_PROPERTY(QColor textColor READ textColor NOTIFY themeChanged)
@@ -125,7 +134,9 @@ public:
     ~ThemeProxy();
 
     QString themeName() const;
-    QObject *font() const;
+    QObject *defaultFont() const;
+    QObject *desktopFont() const;
+    QObject *smallestFont() const;
     bool windowTranslucencyEnabled() const;
     KUrl homepage() const;
     bool useGlobalSettings() const;

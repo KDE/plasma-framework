@@ -23,15 +23,15 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 Text {
     id: root
 
-    font.capitalization: theme.font.capitalization
-    font.family: theme.font.family
-    font.italic: theme.font.italic
-    font.letterSpacing: theme.font.letterSpacing
-    font.pointSize: theme.font.pointSize
-    font.strikeout: theme.font.strikeout
-    font.underline: theme.font.underline
-    font.weight: theme.font.weight
-    font.wordSpacing: theme.font.wordSpacing
+    font.capitalization: theme.defaultFont.capitalization
+    font.family: theme.defaultFont.family
+    font.italic: theme.defaultFont.italic
+    font.letterSpacing: theme.defaultFont.letterSpacing
+    font.pointSize: theme.defaultFont.pointSize
+    font.strikeout: theme.defaultFont.strikeout
+    font.underline: theme.defaultFont.underline
+    font.weight: theme.defaultFont.weight
+    font.wordSpacing: theme.defaultFont.wordSpacing
 
     wrapMode: Text.Wrap
     color: theme.textColor
