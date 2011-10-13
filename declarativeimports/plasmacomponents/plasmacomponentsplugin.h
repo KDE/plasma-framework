@@ -1,6 +1,6 @@
 /*
- *   Copyright 2010 Marco Martin <mart@kde.org>
- *
+ *   Copyright 2011 by Marco Martin <mart@kde.org>
+
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
  *   published by the Free Software Foundation; either version 2, or
@@ -17,24 +17,19 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "engineaccess.h"
-#include "scriptenv.h"
+#ifndef PLASMACOMPONENTSPLUGIN_H
+#define PLASMACOMPONENTSPLUGIN_H
 
-#include "plasmoid/declarativeappletscript.h"
+#include <QDeclarativeExtensionPlugin>
 
-EngineAccess::EngineAccess(DeclarativeAppletScript *parent)
-    : QObject(parent),
-      m_appletScriptEngine(parent)
+class PlasmaComponentsPlugin : public QDeclarativeExtensionPlugin
 {
-}
+    Q_OBJECT
 
-EngineAccess::~EngineAccess()
-{
-}
+public:
+    void registerTypes(const char *uri);
+};
 
-void EngineAccess::setEngine(QScriptValue val)
-{
-    m_appletScriptEngine->setEngine(val);
-}
+Q_EXPORT_PLUGIN2(plasmacomponentsplugin, PlasmaComponentsPlugin)
 
-#include "engineaccess.moc"
+#endif

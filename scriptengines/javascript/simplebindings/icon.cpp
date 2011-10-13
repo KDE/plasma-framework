@@ -92,7 +92,6 @@ QScriptValue constructIconClass(QScriptEngine *eng)
 {
     QScriptValue proto = qScriptValueFromValue(eng, QIcon());
     QScriptValue::PropertyFlags getter = QScriptValue::PropertyGetter;
-    QScriptValue::PropertyFlags setter = QScriptValue::PropertySetter;
     proto.setProperty("addPixmap", eng->newFunction(addPixmap));
     proto.setProperty("addFile", eng->newFunction(addFile));
     proto.setProperty("null", eng->newFunction(isNull), getter);

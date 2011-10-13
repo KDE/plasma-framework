@@ -34,6 +34,7 @@
 
 #include <Plasma/Plasma>
 #include <Plasma/Applet>
+#include <Plasma/Corona>
 #include <Plasma/Context>
 #include <Plasma/Package>
 
@@ -47,6 +48,7 @@ AppletInterface::AppletInterface(AbstractJsAppletScript *parent)
     connect(this, SIGNAL(releaseVisualFocus()), applet(), SIGNAL(releaseVisualFocus()));
     connect(this, SIGNAL(configNeedsSaving()), applet(), SIGNAL(configNeedsSaving()));
     connect(applet(), SIGNAL(immutabilityChanged(Plasma::ImmutabilityType)), this, SIGNAL(immutableChanged()));
+    connect(applet(), SIGNAL(newStatus(Plasma::ItemStatus)), this, SIGNAL(statusChanged()));
 }
 
 AppletInterface::~AppletInterface()
@@ -221,6 +223,9 @@ QList<QAction*> AppletInterface::contextualActions() const
 {
     QList<QAction*> actions;
     Plasma::Applet *a = applet();
+    if (a->hasFailedToLaunch()) {
+        return actions;
+    }
 
     foreach (const QString &name, m_actions) {
         QAction *action = a->action(name);
@@ -255,7 +260,7 @@ void AppletInterface::setAction(const QString &name, const QString &text, const 
         a->addAction(name, action);
 
         Q_ASSERT(!m_actions.contains(name));
-        m_actions.insert(name);
+        m_actions.append(name);
 
         if (!m_actionSignals) {
             m_actionSignals = new QSignalMapper(this);
@@ -291,7 +296,12 @@ void AppletInterface::removeAction(const QString &name)
         delete action;
     }
 
-    m_actions.remove(name);
+    m_actions.removeAll(name);
+}
+
+QAction *AppletInterface::action(QString name) const
+{
+    return applet()->action(name);
 }
 
 void AppletInterface::resize(qreal w, qreal h)
@@ -367,6 +377,25 @@ Plasma::Extender *AppletInterface::extender() const
     return m_appletScriptEngine->extender();
 }
 
+void AppletInterface::setAssociatedApplication(const QString &string)
+{
+    applet()->setAssociatedApplication(string);
+}
+
+QString AppletInterface::associatedApplication() const
+{
+    return applet()->associatedApplication();
+}
+
+void AppletInterface::setStatus(const AppletInterface::ItemStatus &status)
+{
+    applet()->setStatus((Plasma::ItemStatus)status);
+}
+
+AppletInterface::ItemStatus AppletInterface::status() const
+{
+    return (AppletInterface::ItemStatus)((int)(applet()->status()));
+}
 
 void AppletInterface::gc()
 {
@@ -375,7 +404,7 @@ void AppletInterface::gc()
 
 
 PopupAppletInterface::PopupAppletInterface(AbstractJsAppletScript *parent)
-    : POPUPAPPLETSUPERCLASS(parent)
+    : APPLETSUPERCLASS(parent)
 {
 }
 
@@ -427,6 +456,136 @@ void PopupAppletInterface::setPopupWidget(QGraphicsWidget *widget)
 QGraphicsWidget *PopupAppletInterface::popupWidget()
 {
     return popupApplet()->graphicsWidget();
+}
+
+ContainmentInterface::ContainmentInterface(AbstractJsAppletScript *parent)
+    : APPLETSUPERCLASS(parent),
+      m_movableApplets(true)
+{
+    connect(containment(), SIGNAL(appletRemoved(Plasma::Applet *)), this, SLOT(appletRemovedForward(Plasma::Applet *)));
+
+    connect(containment(), SIGNAL(appletAdded(Plasma::Applet *, const QPointF &)), this, SLOT(appletAddedForward(Plasma::Applet *, const QPointF &)));
+
+    connect(containment(), SIGNAL(screenChanged(int, int, Plasma::Containment)), this, SLOT(screenChanged()));
+
+    connect(containment()->context(), SIGNAL(activityChanged(Plasma::Context *)), this, SIGNAL(activityNameChanged()));
+    connect(containment()->context(), SIGNAL(changed(Plasma::Context *)), this, SIGNAL(activityIdChanged()));
+
+     if (containment()->corona()) {
+         connect(containment()->corona(), SIGNAL(availableScreenRegionChanged()),
+                 this, SIGNAL(availableScreenRegionChanged()));
+     }
+}
+
+QScriptValue ContainmentInterface::applets()
+{
+    QScriptValue list = m_appletScriptEngine->engine()->newArray(containment()->applets().size());
+    int i = 0;
+    foreach (Plasma::Applet *applet, containment()->applets()) {
+        list.setProperty(i, m_appletScriptEngine->engine()->newQObject(applet));
+        ++i;
+    }
+    return list;
+}
+
+void ContainmentInterface::setDrawWallpaper(bool drawWallpaper)
+{
+   m_appletScriptEngine->setDrawWallpaper(drawWallpaper);
+}
+
+bool ContainmentInterface::drawWallpaper()
+{
+    return m_appletScriptEngine->drawWallpaper();
+}
+
+ContainmentInterface::Type ContainmentInterface::containmentType() const
+{
+    return (ContainmentInterface::Type)m_appletScriptEngine->containmentType();
+}
+
+void ContainmentInterface::setContainmentType(ContainmentInterface::Type type)
+{
+    m_appletScriptEngine->setContainmentType((Plasma::Containment::Type)type);
+}
+
+int ContainmentInterface::screen() const
+{
+    return containment()->screen();
+}
+
+QScriptValue ContainmentInterface::screenGeometry(int id) const
+{
+    QRectF rect;
+    if (containment()->corona()) {
+        rect = QRectF(containment()->corona()->screenGeometry(id));
+    }
+
+    QScriptValue val = m_appletScriptEngine->engine()->newObject();
+    val.setProperty("x", rect.x());
+    val.setProperty("y", rect.y());
+    val.setProperty("width", rect.width());
+    val.setProperty("height", rect.height());
+    return val;
+}
+
+QScriptValue ContainmentInterface::availableScreenRegion(int id) const
+{
+    QRegion reg;
+    if (containment()->corona()) {
+        reg = containment()->corona()->availableScreenRegion(id);
+    }
+
+    QScriptValue regVal = m_appletScriptEngine->engine()->newArray(reg.rects().size());
+    int i = 0;
+    foreach (QRect rect, reg.rects()) {
+        QScriptValue val = m_appletScriptEngine->engine()->newObject();
+        val.setProperty("x", rect.x());
+        val.setProperty("y", rect.y());
+        val.setProperty("width", rect.width());
+        val.setProperty("height", rect.height());
+        regVal.setProperty(i++, val);
+    }
+    return regVal;
+}
+
+void ContainmentInterface::appletAddedForward(Plasma::Applet *applet, const QPointF &pos)
+{
+    applet->setFlag(QGraphicsItem::ItemIsMovable, m_movableApplets);
+    emit appletAdded(applet, pos);
+}
+
+void ContainmentInterface::appletRemovedForward(Plasma::Applet *applet)
+{
+    applet->setFlag(QGraphicsItem::ItemIsMovable, true);
+    emit appletRemoved(applet);
+}
+
+void ContainmentInterface::setMovableApplets(bool movable)
+{
+    if (m_movableApplets == movable) {
+        return;
+    }
+
+    m_movableApplets = movable;
+
+    foreach (Plasma::Applet *applet, containment()->applets()) {
+        applet->setFlag(QGraphicsItem::ItemIsMovable, movable);
+    }
+}
+
+bool ContainmentInterface::hasMovableApplets() const
+{
+    return m_movableApplets;
+}
+
+QString ContainmentInterface::activityName() const
+{
+    return containment()->context()->currentActivity();
+}
+
+QString ContainmentInterface::activityId() const
+{
+    return containment()->context()->currentActivityId();
 }
 
 #ifndef USE_JS_SCRIPTENGINE

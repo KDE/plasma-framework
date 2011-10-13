@@ -20,6 +20,8 @@
 #include "datamodel.h"
 #include "datasource_p.h"
 
+#include <QTimer>
+
 #include <KDebug>
 
 namespace Plasma
@@ -81,10 +83,11 @@ void SortFilterModel::setModel(QObject *source)
 void SortFilterModel::setFilterRegExp(const QString &exp)
 {
     //FIXME: this delaying of the reset signal seems to make the views behave a bit better, i.e. less holes and avoids some crashes, in theory shouldn't be necessary
+    beginResetModel();
     blockSignals(true);
     QSortFilterProxyModel::setFilterRegExp(QRegExp(exp, Qt::CaseInsensitive));
     blockSignals(false);
-    reset();
+    endResetModel();
 }
 
 QString SortFilterModel::filterRegExp() const
@@ -126,8 +129,13 @@ void SortFilterModel::setSortOrder(const Qt::SortOrder order)
 DataModel::DataModel(QObject* parent)
     : QAbstractItemModel(parent),
       m_dataSource(0),
-      m_maxRoleId(Qt::UserRole)
+      m_maxRoleId(Qt::UserRole+1)
 {
+    //There is one reserved role name: DataEngineSource
+    m_roleNames[m_maxRoleId] = "DataEngineSource";
+    m_roleIds["DataEngineSource"] = m_maxRoleId;
+    ++m_maxRoleId;
+
     setObjectName("DataModel");
     connect(this, SIGNAL(rowsInserted(const QModelIndex &, int, int)),
             this, SIGNAL(countChanged()));
@@ -143,32 +151,44 @@ DataModel::~DataModel()
 
 void DataModel::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
 {
-    if (!m_keyRoleFilter.isEmpty()) {
-        //a key that matches the one we want exists and is a list of DataEngine::Data
-        if (data.contains(m_keyRoleFilter) && data.value(m_keyRoleFilter).canConvert<QVariantList>()) {
-            setItems(sourceName, data.value(m_keyRoleFilter).value<QVariantList>());
-        //try to match the key we want with a regular expression if set
-        } else {
-            QRegExp regExp(m_keyRoleFilter);
-            if (regExp.isValid()) {
-                QHash<QString, QVariant>::const_iterator i;
-                QVariantList list;
-                for (i = data.constBegin(); i != data.constEnd(); ++i) {
-                    if (regExp.exactMatch(i.key())) {
-                        list.append(i.value());
-                    }
-                }
-                setItems(sourceName, list);
-            }
-        }
-    //an item is represented by a source: keys are roles m_roleLevel == FirstLevel
-    } else {
+    if (!m_sourceFilter.isEmpty() && m_sourceFilterRE.isValid() && !m_sourceFilterRE.exactMatch(sourceName)) {
+        return;
+    }
+
+    if (m_keyRoleFilter.isEmpty()) {
+        //an item is represented by a source: keys are roles m_roleLevel == FirstLevel
         QVariantList list;
 
-        foreach (QVariant data, m_dataSource->data()) {
-            list.append(data.value<Plasma::DataEngine::Data>());
+        if (!m_dataSource->data().isEmpty()) {
+            QVariantHash::const_iterator i = m_dataSource->data().constBegin();
+
+            while (i != m_dataSource->data().constEnd()) {
+                QVariant value = i.value();
+                if (value.isValid() && value.canConvert<Plasma::DataEngine::Data>()) {
+                    Plasma::DataEngine::Data data = value.value<Plasma::DataEngine::Data>();
+                    data["DataEngineSource"] = i.key();
+                    list.append(data);
+                }
+                ++i;
+            }
         }
         setItems(QString(), list);
+    } else {
+        //a key that matches the one we want exists and is a list of DataEngine::Data
+        if (data.contains(m_keyRoleFilter) &&
+            data.value(m_keyRoleFilter).canConvert<QVariantList>()) {
+            setItems(sourceName, data.value(m_keyRoleFilter).value<QVariantList>());
+        } else if (m_keyRoleFilterRE.isValid()) {
+            //try to match the key we want with a regular expression if set
+            QVariantList list;
+            QHash<QString, QVariant>::const_iterator i;
+            for (i = data.constBegin(); i != data.constEnd(); ++i) {
+                if (m_keyRoleFilterRE.exactMatch(i.key())) {
+                    list.append(i.value());
+                }
+            }
+            setItems(sourceName, list);
+        }
     }
 }
 
@@ -183,8 +203,19 @@ void DataModel::setDataSource(QObject *object)
         return;
     }
 
-    disconnect(m_dataSource, 0, this, 0);
+    if (m_dataSource) {
+        disconnect(m_dataSource, 0, this, 0);
+    }
+
     m_dataSource = source;
+
+    const QHash<QString, QVariant> data = source->data();
+    QHash<QString, QVariant>::const_iterator i = data.constBegin();
+    while (i != data.constEnd()) {
+        dataUpdated(i.key(), i.value().value<Plasma::DataEngine::Data>());
+        ++i;
+    }
+
     connect(m_dataSource, SIGNAL(newData(const QString &, const Plasma::DataEngine::Data &)),
             this, SLOT(dataUpdated(const QString &, const Plasma::DataEngine::Data &)));
     connect(m_dataSource, SIGNAL(sourceRemoved(const QString &)), this, SLOT(removeSource(const QString &)));
@@ -196,13 +227,21 @@ QObject *DataModel::dataSource() const
     return m_dataSource;
 }
 
-void DataModel::setKeyRoleFilter(const QString key)
+void DataModel::setKeyRoleFilter(const QString& key)
 {
+    // the "key role filter" can be used in one of three ways:
+    //
+    // 1) empty string -> all data is used, each source is one row in the model
+    // 2) matches a key in the data exactly -> only that key/value pair is used, and the value is
+    //    treated as a collection where each item in the collection becomes a row in the model
+    // 3) regular expression -> matches zero or more keys in the data, and each matching key/value
+    //    pair becomes a row in the model
     if (m_keyRoleFilter == key) {
         return;
     }
 
     m_keyRoleFilter = key;
+    m_keyRoleFilterRE = QRegExp(m_keyRoleFilter);
 }
 
 QString DataModel::keyRoleFilter() const
@@ -210,28 +249,62 @@ QString DataModel::keyRoleFilter() const
     return m_keyRoleFilter;
 }
 
+void DataModel::setSourceFilter(const QString& key)
+{
+    if (m_sourceFilter == key) {
+        return;
+    }
+
+    m_sourceFilter = key;
+    m_sourceFilterRE = QRegExp(key);
+    /*
+     FIXME: if the user changes the source filter, it won't immediately be reflected in the
+     available data
+    if (m_sourceFilterRE.isValid()) {
+        .. iterate through all items and weed out the ones that don't match ..
+    }
+    */
+}
+
+QString DataModel::sourceFilter() const
+{
+    return m_sourceFilter;
+}
+
 void DataModel::setItems(const QString &sourceName, const QVariantList &list)
 {
-    emit modelAboutToBeReset();
+    beginResetModel();
 
     //convert to vector, so data() will be O(1)
     m_items[sourceName] = list.toVector();
 
     if (!list.isEmpty()) {
         if (list.first().canConvert<QVariantHash>()) {
-            foreach (const QString& roleName, list.first().value<QVariantHash>().keys()) {
-                if (!m_roleIds.contains(roleName)) {
-                    ++m_maxRoleId;
-                    m_roleNames[m_maxRoleId] = roleName.toLatin1();
-                    m_roleIds[roleName] = m_maxRoleId;
+            foreach (const QVariant &item, list) {
+                const QVariantHash &vh = item.value<QVariantHash>();
+                QHashIterator<QString, QVariant> it(vh);
+                while (it.hasNext()) {
+                    it.next();
+                    const QString &roleName = it.key();
+                    if (!m_roleIds.contains(roleName)) {
+                        ++m_maxRoleId;
+                        m_roleNames[m_maxRoleId] = roleName.toLatin1();
+                        m_roleIds[roleName] = m_maxRoleId;
+                    }
                 }
             }
         } else {
-            foreach (const QString& roleName, list.first().value<QVariantMap>().keys()) {
-                if (!m_roleIds.contains(roleName)) {
-                    ++m_maxRoleId;
-                    m_roleNames[m_maxRoleId] = roleName.toLatin1();
-                    m_roleIds[roleName] = m_maxRoleId;
+            foreach (const QVariant &item, list) {
+                const QVariantMap &vh = item.value<QVariantMap>();
+                QMapIterator<QString, QVariant> it(vh);
+                while (it.hasNext()) {
+                    it.next();
+                    const QString &roleName = it.key();
+                    if (!m_roleIds.contains(roleName)) {
+                        ++m_maxRoleId;
+                        m_roleNames[m_maxRoleId] = roleName.toLatin1();
+                        m_roleIds[roleName] = m_maxRoleId;
+                    }
                 }
             }
         }
@@ -239,18 +312,36 @@ void DataModel::setItems(const QString &sourceName, const QVariantList &list)
         setRoleNames(m_roleNames);
     }
 
+    setRoleNames(m_roleNames);
+
     //make the declarative view reload everything,
     //would be nice an incremental update but is not possible
-    emit modelReset();
+    endResetModel();
 }
 
 void DataModel::removeSource(const QString &sourceName)
 {
     //FIXME: this could be way more efficient by not resetting the whole model
     //FIXME: find a way to remove only the proper things also in the case where sources are items
-    emit modelAboutToBeReset();
-    m_items.remove(sourceName);
-    emit modelReset();
+
+    if (m_keyRoleFilter.isEmpty()) {
+        //source name in the map, linear scan
+        for (int i = 0; i < m_items.value(QString()).count(); ++i) {
+            if (m_items.value(QString())[i].value<QVariantHash>().value("DataEngineSource") == sourceName) {
+                beginResetModel();
+                m_items[QString()].remove(i);
+                endResetModel();
+                break;
+            }
+        }
+    } else {
+        //source name as key of the map
+        if (m_items.contains(sourceName)) {
+            beginResetModel();
+            m_items.remove(sourceName);
+            endResetModel();
+        }
+    }
 }
 
 QVariant DataModel::data(const QModelIndex &index, int role) const
@@ -275,7 +366,12 @@ QVariant DataModel::data(const QModelIndex &index, int role) const
         }
     }
 
-    if (m_items.value(source).value(actualRow).canConvert<QVariantHash>()) {
+    //is it the reserved role: DataEngineSource ?
+    //also, if each source is an item DataEngineSource is a role between all the others, otherwise we know it from the role variable
+    //finally, sub items are some times QVariantHash some times QVariantMaps
+    if (!m_keyRoleFilter.isEmpty() && m_roleNames.value(role) == "DataEngineSource") {
+        return source;
+    } else if (m_items.value(source).value(actualRow).canConvert<QVariantHash>()) {
         return m_items.value(source).value(actualRow).value<QVariantHash>().value(m_roleNames.value(role));
     } else {
         return m_items.value(source).value(actualRow).value<QVariantMap>().value(m_roleNames.value(role));

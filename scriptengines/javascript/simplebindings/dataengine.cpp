@@ -54,13 +54,19 @@ void serviceJobFromQScriptValue(const QScriptValue &scriptValue, ServiceJobPtr &
     serviceJob = static_cast<Plasma::ServiceJob *>(obj);
 }
 
+typedef QMap< QString, QString > StringStringMap;
+Q_DECLARE_METATYPE(StringStringMap)
+
 void registerDataEngineMetaTypes(QScriptEngine *engine)
 {
     qRegisterMetaType<Plasma::DataEngine::Data>("Plasma::DataEngine::Data");
     qRegisterMetaType<Plasma::DataEngine::Data>("DataEngine::Data");
-    qScriptRegisterMapMetaType<Plasma::DataEngine::Data>(engine);
+    qScriptRegisterVariantMapMetaType<Plasma::DataEngine::Data>(engine);
+    qScriptRegisterMapMetaType<StringStringMap>(engine);
     qScriptRegisterMetaType<Plasma::Service *>(engine, qScriptValueFromService, serviceFromQScriptValue);
     qScriptRegisterMetaType<Plasma::DataEngine *>(engine, qScriptValueFromDataEngine, dataEngineFromQScriptValue);
     qScriptRegisterMetaType<Plasma::ServiceJob *>(engine, qScriptValueFromServiceJob, serviceJobFromQScriptValue);
+    qRegisterMetaType<Plasma::Service *>("Service*");
+    qRegisterMetaType<Plasma::ServiceJob *>("ServiceJob*");
 }
 

@@ -31,6 +31,8 @@
 #include "framesvgitem_p.h"
 #include "svgitem_p.h"
 #include "theme_p.h"
+#include "dialog.h"
+#include "tooltip.h"
 
 void CoreBindingsPlugin::registerTypes(const char *uri)
 {
@@ -47,8 +49,13 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterType<Plasma::DataModel>(uri, 0, 1, "DataModel");
     qmlRegisterType<Plasma::SortFilterModel>(uri, 0, 1, "SortFilterModel");
 
+    qmlRegisterType<DialogProxy>(uri, 0, 1, "Dialog");
+    qmlRegisterType<ToolTipProxy>(uri, 0, 1, "ToolTip");
+
     qmlRegisterInterface<Plasma::Service>("Service");
     qRegisterMetaType<Plasma::Service*>("Service");
+    qmlRegisterInterface<Plasma::ServiceJob>("ServiceJob");
+    qRegisterMetaType<Plasma::ServiceJob*>("ServiceJob");
 
     /*qmlRegisterInterface<Plasma::DataSource>("DataSource");
     qRegisterMetaType<Plasma::DataSource*>("DataSource");*/

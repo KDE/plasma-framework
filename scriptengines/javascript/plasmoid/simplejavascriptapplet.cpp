@@ -100,7 +100,8 @@ KSharedPtr<UiLoader> SimpleJavaScriptApplet::s_widgetLoader;
 QHash<QString, Plasma::Animator::Animation> SimpleJavaScriptApplet::s_animationDefs;
 
 SimpleJavaScriptApplet::SimpleJavaScriptApplet(QObject *parent, const QVariantList &args)
-    : AbstractJsAppletScript(parent)
+    : AbstractJsAppletScript(parent),
+      m_interface(0)
 {
     Q_UNUSED(args);
 //    kDebug() << "Script applet launched, args" << applet()->startupArguments();
@@ -231,6 +232,10 @@ void SimpleJavaScriptApplet::paintInterface(QPainter *p, const QStyleOptionGraph
 
 QList<QAction*> SimpleJavaScriptApplet::contextualActions()
 {
+    if (!m_interface) {
+        return QList<QAction *>();
+    }
+
     return m_interface->contextualActions();
 }
 
@@ -309,6 +314,7 @@ bool SimpleJavaScriptApplet::init()
             this, SLOT(extenderItemRestored(Plasma::ExtenderItem*)));
     connect(applet(), SIGNAL(activate()),
             this, SLOT(activate()));
+    KGlobal::locale()->insertCatalog(description().pluginName());
     setupObjects();
 
     AppletAuthorization auth(this);
@@ -591,6 +597,7 @@ QScriptValue SimpleJavaScriptApplet::dataEngine(QScriptContext *context, QScript
     DataEngine *dataEngine = interface->dataEngine(dataEngineName);
     QScriptValue v = engine->newQObject(dataEngine, QScriptEngine::QtOwnership, QScriptEngine::PreferExistingWrapperObject);
     v.setProperty("connectSource", engine->newFunction(DataEngineReceiver::connectSource));
+    v.setProperty("connectAllSources", engine->newFunction(DataEngineReceiver::connectAllSources));
     v.setProperty("disconnectSource", engine->newFunction(DataEngineReceiver::disconnectSource));
     return v;
 }
@@ -806,6 +813,11 @@ void SimpleJavaScriptApplet::installWidgets(QScriptEngine *engine)
         fun.setProperty(QString("prototype"), engine->newObject());
         globalObject.setProperty(widget, fun);
     }
+}
+
+QScriptEngine *SimpleJavaScriptApplet::engine() const
+{
+    return m_engine;
 }
 
 QGraphicsWidget *SimpleJavaScriptApplet::extractParent(QScriptContext *context, QScriptEngine *engine,

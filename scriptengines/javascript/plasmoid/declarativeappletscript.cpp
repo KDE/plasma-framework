@@ -46,15 +46,17 @@
 
 #include "plasmoid/declarativeappletscript.h"
 
-#include "engineaccess.h"
 #include "plasmoid/appletinterface.h"
 #include "plasmoid/themedsvg.h"
 
 #include "common/scriptenv.h"
 #include "declarative/packageaccessmanagerfactory.h"
 #include "simplebindings/bytearrayclass.h"
+//not pretty but only way to avoid a double Q_DECLARE_METATYPE(QVariant) in dataengine.h
+#define DECLARATIVE_BINDING
+#include "simplebindings/dataengine.h"
 #include "simplebindings/dataenginereceiver.h"
-#include "simplebindings/i18n.h"
+
 
 K_EXPORT_PLASMA_APPLETSCRIPTENGINE(declarativeappletscript, DeclarativeAppletScript)
 
@@ -62,10 +64,9 @@ K_EXPORT_PLASMA_APPLETSCRIPTENGINE(declarativeappletscript, DeclarativeAppletScr
 QScriptValue constructIconClass(QScriptEngine *engine);
 QScriptValue constructKUrlClass(QScriptEngine *engine);
 void registerSimpleAppletMetaTypes(QScriptEngine *engine);
-void registerNonGuiMetaTypes(QScriptEngine *engine);
-
 DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariantList &args)
     : AbstractJsAppletScript(parent, args),
+      m_interface(0),
       m_engine(0),
       m_env(0),
       m_auth(this)
@@ -81,13 +82,18 @@ bool DeclarativeAppletScript::init()
 {
     m_declarativeWidget = new Plasma::DeclarativeWidget(applet());
     m_declarativeWidget->setInitializationDelayed(true);
+    KGlobal::locale()->insertCatalog(description().pluginName());
 
     //make possible to import extensions from the package
     //FIXME: probably to be removed, would make possible to use native code from within the package :/
     //m_declarativeWidget->engine()->addImportPath(package()->path()+"/contents/imports");
 
-    //use our own custom network access manager that will acces Plasma packages and to manage security (i.e. deny access to remote stuff when the proper extension isn't enabled
-    m_declarativeWidget->engine()->setNetworkAccessManagerFactory(new PackageAccessManagerFactory(package(), &m_auth));
+    //use our own custom network access manager that will access Plasma packages and to manage security (i.e. deny access to remote stuff when the proper extension isn't enabled
+    QDeclarativeEngine *engine = m_declarativeWidget->engine();
+    QDeclarativeNetworkAccessManagerFactory *factory = engine->networkAccessManagerFactory();
+    engine->setNetworkAccessManagerFactory(0);
+    delete factory;
+    engine->setNetworkAccessManagerFactory(new PackageAccessManagerFactory(package(), &m_auth));
 
     m_declarativeWidget->setQmlPath(mainScript());
 
@@ -102,6 +108,7 @@ bool DeclarativeAppletScript::init()
 
     Plasma::Applet *a = applet();
     Plasma::PopupApplet *pa = qobject_cast<Plasma::PopupApplet *>(a);
+    Plasma::Containment *cont = qobject_cast<Plasma::Containment *>(a);
 
     if (pa) {
         pa->setPopupIcon(a->icon());
@@ -112,26 +119,30 @@ bool DeclarativeAppletScript::init()
         lay->addItem(m_declarativeWidget);
     }
 
-    m_interface = pa ? new PopupAppletInterface(this) : new AppletInterface(this);
-
-    m_engineAccess = new EngineAccess(this);
-    m_declarativeWidget->engine()->rootContext()->setContextProperty("__engineAccess", m_engineAccess);
+    if (pa) {
+        m_interface = new PopupAppletInterface(this);
+    } else if (cont) {
+        m_interface = new ContainmentInterface(this);
+    //fail? so it's a normal Applet
+    } else {
+        m_interface = new AppletInterface(this);
+    }
 
     connect(applet(), SIGNAL(extenderItemRestored(Plasma::ExtenderItem*)),
             this, SLOT(extenderItemRestored(Plasma::ExtenderItem*)));
     connect(applet(), SIGNAL(activate()),
             this, SLOT(activate()));
 
-    //Glorious hack:steal the engine
-    QDeclarativeExpression *expr = new QDeclarativeExpression(m_declarativeWidget->engine()->rootContext(), m_declarativeWidget->rootObject(), "__engineAccess.setEngine(this)");
-    expr->evaluate();
-    delete expr;
+    setupObjects();
 
     return true;
 }
 
 void DeclarativeAppletScript::collectGarbage()
 {
+    if (!m_engine) {
+        return;
+    }
     m_engine->collectGarbage();
 }
 
@@ -192,6 +203,9 @@ QScriptValue DeclarativeAppletScript::newPlasmaSvg(QScriptContext *context, QScr
 
 QScriptValue DeclarativeAppletScript::variantToScriptValue(QVariant var)
 {
+    if (!m_engine) {
+        return QScriptValue();
+    }
     return m_engine->newVariant(var);
 }
 
@@ -265,6 +279,18 @@ QGraphicsWidget *DeclarativeAppletScript::extractParent(QScriptContext *context,
     return parent;
 }
 
+void DeclarativeAppletScript::callPlasmoidFunction(const QString &functionName, const QScriptValueList &args, ScriptEnv *env)
+{
+    if (!m_env) {
+        m_env = ScriptEnv::findScriptEnv(m_engine);
+    }
+
+    if (env) {
+        QScriptValue func = m_self.property(functionName);
+        m_env->callFunction(func, args, m_self);
+    }
+}
+
 void DeclarativeAppletScript::constraintsEvent(Plasma::Constraints constraints)
 {
     if (constraints & Plasma::FormFactorConstraint) {
@@ -294,6 +320,9 @@ void DeclarativeAppletScript::popupEvent(bool popped)
 
 void DeclarativeAppletScript::dataUpdated(const QString &name, const Plasma::DataEngine::Data &data)
 {
+    if (!m_engine) {
+        return;
+    }
     QScriptValueList args;
     args << m_engine->toScriptValue(name) << m_engine->toScriptValue(data);
 
@@ -303,6 +332,9 @@ void DeclarativeAppletScript::dataUpdated(const QString &name, const Plasma::Dat
 void DeclarativeAppletScript::extenderItemRestored(Plasma::ExtenderItem* item)
 {
     if (!m_env) {
+        return;
+    }
+    if (!m_engine) {
         return;
     }
 
@@ -328,7 +360,9 @@ void DeclarativeAppletScript::executeAction(const QString &name)
     }
 
     const QString func("action_" + name);
-    m_env->callEventListeners(func);
+    if (!m_env->callEventListeners(func)) {
+        callPlasmoidFunction(func, QScriptValueList(), m_env);
+    }
 }
 
 bool DeclarativeAppletScript::include(const QString &path)
@@ -343,10 +377,18 @@ ScriptEnv *DeclarativeAppletScript::scriptEnv()
 
 void DeclarativeAppletScript::setupObjects()
 {
-    QScriptValue global = m_engine->globalObject();
+    m_engine = m_declarativeWidget->scriptEngine();
+    if (!m_engine) {
+        return;
+    }
 
-    m_declarativeWidget->engine()->rootContext()->setContextProperty("__engineAccess", 0);
-    m_engineAccess->deleteLater();
+    connect(m_engine, SIGNAL(signalHandlerException(const QScriptValue &)),
+            this, SLOT(signalHandlerException(const QScriptValue &)));
+
+    delete m_env;
+    m_env = new ScriptEnv(this, m_engine);
+
+    QScriptValue global = m_engine->globalObject();
 
     m_self = m_engine->newQObject(m_interface);
     m_self.setScope(global);
@@ -365,24 +407,28 @@ void DeclarativeAppletScript::setupObjects()
     QScriptValue fun = m_engine->newFunction(DeclarativeAppletScript::loadui);
     global.setProperty("loadui", fun);
 
-    bindI18N(m_engine);
+    ScriptEnv::registerEnums(global, AppletInterface::staticMetaObject);
+
     global.setProperty("dataEngine", m_engine->newFunction(DeclarativeAppletScript::dataEngine));
     global.setProperty("service", m_engine->newFunction(DeclarativeAppletScript::service));
     global.setProperty("loadService", m_engine->newFunction(DeclarativeAppletScript::loadService));
 
     //Add stuff from Qt
+    //TODO: move to libkdeclarative?
     ByteArrayClass *baClass = new ByteArrayClass(m_engine);
     global.setProperty("ByteArray", baClass->constructor());
-    global.setProperty("QIcon", constructIconClass(m_engine));
-
-    // Add stuff from KDE libs
-    qScriptRegisterSequenceMetaType<KUrl::List>(m_engine);
-    global.setProperty("Url", constructKUrlClass(m_engine));
 
     // Add stuff from Plasma
     global.setProperty("Svg", m_engine->newFunction(DeclarativeAppletScript::newPlasmaSvg));
     global.setProperty("FrameSvg", m_engine->newFunction(DeclarativeAppletScript::newPlasmaFrameSvg));
     global.setProperty("ExtenderItem", m_engine->newFunction(DeclarativeAppletScript::newPlasmaExtenderItem));
+
+    if (!m_env->importExtensions(description(), m_self, m_auth)) {
+        return;
+    }
+
+    registerSimpleAppletMetaTypes(m_engine);
+    QTimer::singleShot(0, this, SLOT(configChanged()));
 }
 
 QScriptValue DeclarativeAppletScript::dataEngine(QScriptContext *context, QScriptEngine *engine)
@@ -400,6 +446,7 @@ QScriptValue DeclarativeAppletScript::dataEngine(QScriptContext *context, QScrip
     Plasma::DataEngine *dataEngine = interface->dataEngine(dataEngineName);
     QScriptValue v = engine->newQObject(dataEngine, QScriptEngine::QtOwnership, QScriptEngine::PreferExistingWrapperObject);
     v.setProperty("connectSource", engine->newFunction(DataEngineReceiver::connectSource));
+    v.setProperty("connectAllSources", engine->newFunction(DataEngineReceiver::connectAllSources));
     v.setProperty("disconnectSource", engine->newFunction(DataEngineReceiver::disconnectSource));
     return v;
 }
@@ -443,65 +490,18 @@ QScriptValue DeclarativeAppletScript::loadService(QScriptContext *context, QScri
     return engine->newQObject(service, QScriptEngine::AutoOwnership);
 }
 
-void DeclarativeAppletScript::setEngine(QScriptValue &val)
+QList<QAction*> DeclarativeAppletScript::contextualActions()
 {
-    if (val.engine() == m_engine) {
-        return;
+    if (!m_interface) {
+        return QList<QAction *>();
     }
 
-    m_engine = val.engine();
-    connect(m_engine, SIGNAL(signalHandlerException(const QScriptValue &)),
-            this, SLOT(signalHandlerException(const QScriptValue &)));
-    QScriptValue originalGlobalObject = m_engine->globalObject();
+    return m_interface->contextualActions();
+}
 
-    QScriptValue newGlobalObject = m_engine->newObject();
-
-    QString eval = QLatin1String("eval");
-    QString version = QLatin1String("version");
-
-    {
-        QScriptValueIterator iter(originalGlobalObject);
-        QVector<QString> names;
-        QVector<QScriptValue> values;
-        QVector<QScriptValue::PropertyFlags> flags;
-        while (iter.hasNext()) {
-            iter.next();
-
-            QString name = iter.name();
-
-            if (name == version) {
-                continue;
-            }
-
-            if (name != eval) {
-                names.append(name);
-                values.append(iter.value());
-                flags.append(iter.flags() | QScriptValue::Undeletable);
-            }
-            newGlobalObject.setProperty(iter.scriptName(), iter.value());
-
-           // m_illegalNames.insert(name);
-        }
-
-    }
-
-    m_engine->setGlobalObject(newGlobalObject);
-
-    delete m_env;
-    m_env = new ScriptEnv(this, m_engine);
-    //m_env->addMainObjectProperties(newGlobalObject);
-
-    setupObjects();
-
-    if (!m_env->importExtensions(description(), m_self, m_auth)) {
-        return;
-    }
-
-    qScriptRegisterSequenceMetaType<KUrl::List>(m_engine);
-    registerNonGuiMetaTypes(m_engine);
-    registerSimpleAppletMetaTypes(m_engine);
-
-    QTimer::singleShot(0, this, SLOT(configChanged()));
+QScriptEngine *DeclarativeAppletScript::engine() const
+{
+    return m_engine;
 }
 
 void DeclarativeAppletScript::signalHandlerException(const QScriptValue &exception)

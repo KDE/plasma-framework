@@ -1,6 +1,8 @@
 /*
- *   Copyright 2010 Marco Martin <mart@kde.org>
- *
+ *   Copyright 2009 by Alan Alpert <alan.alpert@nokia.com>
+ *   Copyright 2010 by Ménard Alexis <menard@kde.org>
+ *   Copyright 2010 by Marco Martin <mart@kde.org>
+
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
  *   published by the Free Software Foundation; either version 2, or
@@ -17,29 +19,23 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef ENGINEACCESS_H
-#define ENGINEACCESS_H
+#include "qtextracomponentsplugin.h"
 
-#include <QObject>
+#include <QtDeclarative/qdeclarative.h>
 
-#include <QScriptValue>
+#include "qpixmapitem.h"
+#include "qimageitem.h"
+#include "qiconitem.h"
 
-class DeclarativeAppletScript;
-
-class EngineAccess : public QObject
+void QtExtraComponentsPlugin::registerTypes(const char *uri)
 {
-    Q_OBJECT
+    Q_ASSERT(uri == QLatin1String("org.kde.qtextracomponents"));
+
+    qmlRegisterType<QPixmapItem>(uri, 0, 1, "QPixmapItem");
+    qmlRegisterType<QImageItem>(uri, 0, 1, "QImageItem");
+    qmlRegisterType<QIconItem>(uri, 0, 1, "QIconItem");
+}
 
 
-public:
-    EngineAccess(DeclarativeAppletScript *parent);
-    ~EngineAccess();
+#include "qtextracomponentsplugin.moc"
 
-    Q_INVOKABLE void setEngine(QScriptValue val);
-
-private:
-    DeclarativeAppletScript *m_appletScriptEngine;
-
-};
-
-#endif

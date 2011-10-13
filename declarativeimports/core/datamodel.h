@@ -26,6 +26,7 @@
 
 #include <Plasma/DataEngine>
 
+class QTimer;
 
 namespace Plasma
 {
@@ -87,6 +88,7 @@ class DataModel : public QAbstractItemModel
     Q_OBJECT
     Q_PROPERTY(QObject *dataSource READ dataSource WRITE setDataSource)
     Q_PROPERTY(QString keyRoleFilter READ keyRoleFilter WRITE setKeyRoleFilter)
+    Q_PROPERTY(QString sourceFilter READ sourceFilter WRITE setSourceFilter)
     Q_PROPERTY(int count READ count NOTIFY countChanged)
 
 public:
@@ -96,8 +98,17 @@ public:
     void setDataSource(QObject *source);
     QObject *dataSource() const;
 
-    void setKeyRoleFilter(const QString key);
+    /**
+     * Include only items with a key that matches this regexp in the model
+     */
+    void setKeyRoleFilter(const QString& key);
     QString keyRoleFilter() const;
+
+    /**
+     * Include only sources that matches this regexp in the model
+     */
+    void setSourceFilter(const QString& key);
+    QString sourceFilter() const;
 
     int roleNameToId(const QString &name);
 
@@ -118,8 +129,6 @@ protected:
     inline int countItems() const;
 
 Q_SIGNALS:
-    void modelAboutToBeReset();
-    void modelReset();
     void countChanged();
 
 private Q_SLOTS:
@@ -129,6 +138,9 @@ private Q_SLOTS:
 private:
     DataSource *m_dataSource;
     QString m_keyRoleFilter;
+    QRegExp m_keyRoleFilterRE;
+    QString m_sourceFilter;
+    QRegExp m_sourceFilterRE;
     QMap<QString, QVector<QVariant> > m_items;
     QHash<int, QByteArray> m_roleNames;
     QHash<QString, int> m_roleIds;

@@ -34,11 +34,6 @@
 PlasmaKPartCorona::PlasmaKPartCorona(QObject *parent)
     : Plasma::Corona(parent)
 {
-    init();
-}
-
-void PlasmaKPartCorona::init()
-{
     enableAction("Lock Widgets", false);
     enableAction("Shortcut Settings", false);
     setDefaultContainmentPlugin("newspaper");
@@ -47,7 +42,6 @@ void PlasmaKPartCorona::init()
 void PlasmaKPartCorona::loadDefaultLayout()
 {
     // used to force a save into the config file
-    KConfigGroup invalidConfig;
     Plasma::Containment *c = addContainment(QString());
 
     if (!c) {
@@ -77,23 +71,12 @@ void PlasmaKPartCorona::evaluateScripts(const QStringList &scripts)
 
 void PlasmaKPartCorona::printScriptError(const QString &error)
 {
-    kWarning() << "Startup script errror:" << error;
+    kWarning() << "Startup script error:" << error;
 }
 
 void PlasmaKPartCorona::printScriptMessage(const QString &error)
 {
     kDebug() << "Startup script: " << error;
-}
-
-Plasma::Containment* PlasmaKPartCorona::containment()
-{
-    // We only have one containment, so just try and return the first one
-    QList<Plasma::Containment*> list = containments();
-    if (!list.isEmpty()) {
-        return list.first();
-    }
-
-    return 0;
 }
 
 #include "plasmakpartcorona.moc"

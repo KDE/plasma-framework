@@ -34,7 +34,8 @@ public:
     enum AllowedUrl { NoUrls = 0,
                       HttpUrls = 1,
                       NetworkUrls = 2,
-                      LocalUrls = 4 };
+                      LocalUrls = 4,
+                      AppLaunching = 8};
     Q_DECLARE_FLAGS(AllowedUrls, AllowedUrl)
 
     ScriptEnv(QObject *parent, QScriptEngine *engine);
@@ -74,14 +75,19 @@ Q_SIGNALS:
 
 private:
     void registerGetUrl(QScriptValue &obj);
+    void registerOpenUrl(QScriptValue &obj);
     bool importBuiltinExtension(const QString &extension, QScriptValue &obj);
 
     static QScriptValue debug(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue print(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue runApplication(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue runCommand(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue defaultApplication(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue applicationPath(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue applicationExists(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue openUrl(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue getUrl(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue userDataPath(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue listAddons(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue loadAddon(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue registerAddon(QScriptContext *context, QScriptEngine *engine);

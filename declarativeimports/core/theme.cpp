@@ -21,6 +21,109 @@
 
 #include <plasma/theme.h>
 
+class FontProxySingleton
+{
+public:
+   FontProxy self;
+};
+
+K_GLOBAL_STATIC(FontProxySingleton, privateFontProxySingleton)
+
+FontProxy::FontProxy(QObject *parent)
+    : QObject(parent)
+{
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SLOT(boldChanged()));
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SLOT(capitalizationChanged()));
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SLOT(familyChanged()));
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SLOT(italicChanged()));
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SLOT(letterSpacingChanged()));
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SLOT(pixelSizeChanged()));
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SLOT(pointSizeChanged()));
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SLOT(strikeOutChanged()));
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SLOT(underlineChanged()));
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SLOT(weightChanged()));
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SLOT(wordSpacingChanged()));
+}
+
+FontProxy::~FontProxy()
+{
+}
+
+FontProxy *FontProxy::self()
+{
+    return &privateFontProxySingleton->self;
+}
+
+bool FontProxy::bold() const
+{
+    return Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont).bold();
+}
+
+FontProxy::Capitalization FontProxy::capitalization() const
+{
+    return (FontProxy::Capitalization)Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont).capitalization();
+}
+
+QString FontProxy::family() const
+{
+    return Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont).family();
+}
+
+bool FontProxy::italic() const
+{
+    return Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont).italic();
+}
+
+qreal FontProxy::letterSpacing() const
+{
+    return Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont).letterSpacing();
+}
+
+int FontProxy::pixelSize() const
+{
+    return Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont).pixelSize();
+}
+
+qreal FontProxy::pointSize() const
+{
+    return Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont).pointSize();
+}
+
+bool FontProxy::strikeOut() const
+{
+    return Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont).strikeOut();
+}
+
+bool FontProxy::underline() const
+{
+    return Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont).underline();
+}
+
+FontProxy::Weight FontProxy::weight() const
+{
+    return (FontProxy::Weight)Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont).weight();
+}
+
+qreal FontProxy::wordSpacing() const
+{
+    return Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont).wordSpacing();
+}
+
+
+
+//********** Theme *************
+
 ThemeProxy::ThemeProxy(QObject *parent)
     : QObject(parent)
 {
@@ -29,6 +132,41 @@ ThemeProxy::ThemeProxy(QObject *parent)
 
 ThemeProxy::~ThemeProxy()
 {
+}
+
+QString ThemeProxy::themeName() const
+{
+    return Plasma::Theme::defaultTheme()->themeName();
+}
+
+QObject *ThemeProxy::font() const
+{
+    return FontProxy::self();
+}
+
+bool ThemeProxy::windowTranslucencyEnabled() const
+{
+    return Plasma::Theme::defaultTheme()->windowTranslucencyEnabled();
+}
+
+KUrl ThemeProxy::homepage() const
+{
+    return Plasma::Theme::defaultTheme()->homepage();
+}
+
+bool ThemeProxy::useGlobalSettings() const
+{
+    return Plasma::Theme::defaultTheme()->useGlobalSettings();
+}
+
+QString ThemeProxy::wallpaperPath() const
+{
+    return Plasma::Theme::defaultTheme()->wallpaperPath();
+}
+
+QString ThemeProxy::wallpaperPathForSize(int width, int height) const
+{
+    return Plasma::Theme::defaultTheme()->wallpaperPath(QSize(width, height));
 }
 
 QColor ThemeProxy::textColor() const
@@ -94,6 +232,11 @@ QColor ThemeProxy::viewHoverColor() const
 QColor ThemeProxy::viewFocusColor() const
 {
     return Plasma::Theme::defaultTheme()->color(Plasma::Theme::ViewFocusColor);
+}
+
+QString ThemeProxy::styleSheet() const
+{
+    return Plasma::Theme::defaultTheme()->styleSheet(QString());
 }
 
 

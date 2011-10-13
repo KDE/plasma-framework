@@ -69,9 +69,11 @@ void SvgItem::setSvg(Plasma::Svg *svg)
         disconnect(m_svg.data(), 0, this, 0);
     }
     m_svg = svg;
-    connect(svg, SIGNAL(repaintNeeded()), this, SLOT(update()));
-    connect(svg, SIGNAL(repaintNeeded()), this, SIGNAL(naturalSizeChanged()));
-    connect(svg, SIGNAL(sizeChanged()), this, SIGNAL(naturalSizeChanged()));
+    if (svg) {
+        connect(svg, SIGNAL(repaintNeeded()), this, SLOT(updateNeeded()));
+        connect(svg, SIGNAL(repaintNeeded()), this, SIGNAL(naturalSizeChanged()));
+        connect(svg, SIGNAL(sizeChanged()), this, SIGNAL(naturalSizeChanged()));
+    }
     emit naturalSizeChanged();
 }
 
@@ -113,6 +115,11 @@ void SvgItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, Q
     m_svg.data()->paint(painter, boundingRect(), m_elementID);
     painter->setRenderHint(QPainter::Antialiasing, wasAntiAlias);
     painter->setRenderHint(QPainter::SmoothPixmapTransform, wasSmoothTransform);
+}
+
+void SvgItem::updateNeeded()
+{
+    update();
 }
 
 } // Plasma namespace

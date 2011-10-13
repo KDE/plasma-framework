@@ -8,8 +8,10 @@ if(KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
 endif(KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
 
 set(simple_javascript_engine_SRCS
+    common/extension_launchapp.cpp
+    common/extension_io.cpp
+    common/guiscriptenv.cpp
     common/javascriptaddonpackagestructure.cpp
-    common/jsscriptenv.cpp
     plasmoid/abstractjsappletscript.cpp
     plasmoid/appletauthorization.cpp
     plasmoid/jsappletinterface.cpp
@@ -62,6 +64,8 @@ install(FILES data/plasma-scriptengine-applet-simple-javascript.desktop DESTINAT
 # RUNNER
 
 set(javascript_runner_engine_SRCS
+    common/extension_launchapp.cpp
+    common/extension_io.cpp
     common/javascriptaddonpackagestructure.cpp
     common/scriptenv.cpp
     runner/javascriptrunner.cpp
@@ -83,6 +87,8 @@ install(FILES data/plasma-scriptengine-runner-javascript.desktop DESTINATION ${S
 # DATAENGINE
 
 set(javascript_dataengine_engine_SRCS
+    common/extension_launchapp.cpp
+    common/extension_io.cpp
     common/javascriptaddonpackagestructure.cpp
     common/scriptenv.cpp
     dataengine/javascriptdataengine.cpp
@@ -119,6 +125,8 @@ install(FILES data/plasma-javascriptaddon.desktop DESTINATION ${SERVICETYPES_INS
 
 #DECLARATIVE APPLET
 set(declarative_appletscript_SRCS
+    common/extension_launchapp.cpp
+    common/extension_io.cpp
     common/javascriptaddonpackagestructure.cpp
     common/declarativescriptenv.cpp
     declarative/packageaccessmanager.cpp
@@ -127,17 +135,13 @@ set(declarative_appletscript_SRCS
     plasmoid/appletauthorization.cpp
     plasmoid/appletinterface.cpp
     plasmoid/declarativeappletscript.cpp
-    plasmoid/engineaccess.cpp
     plasmoid/themedsvg.cpp
     simplebindings/bytearrayclass.cpp
     simplebindings/bytearrayprototype.cpp
     simplebindings/dataengine.cpp
     simplebindings/dataenginereceiver.cpp
     simplebindings/filedialogproxy.cpp
-    simplebindings/i18n.cpp
-    simplebindings/icon.cpp
     simplebindings/qscriptbookkeeping.cpp
-    simplebindings/url.cpp
     )
 
 include_directories(${PHONON_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/common)
