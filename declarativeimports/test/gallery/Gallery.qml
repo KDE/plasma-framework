@@ -39,11 +39,11 @@ Rectangle {
         id: toolbarA
         visible: false
         spacing: 5
-        PlasmaComponents.Button {
+        PlasmaComponents.ToolButton {
             text: "Switch toolbar"
             onClicked: toolBar.setTools(toolbarB, "push")
         }
-        PlasmaComponents.Button {
+        PlasmaComponents.ToolButton {
             text: "button on first toolbar"
         }
     }
@@ -51,11 +51,12 @@ Rectangle {
         id: toolbarB
         visible: false
         spacing: 5
-        PlasmaComponents.Button {
+        PlasmaComponents.ToolButton {
             text: "Switch toolbar"
             onClicked: toolBar.setTools(toolbarA, "pop")
         }
-        PlasmaComponents.Button {
+        PlasmaComponents.ToolButton {
+            flat: false
             text: "button on second toolbar"
         }
         PlasmaComponents.TextField {}

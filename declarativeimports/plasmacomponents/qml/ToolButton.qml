@@ -24,6 +24,7 @@ Item {
     id: button
 
     // Commmon API
+    property bool flat: true
     property bool checked: false
     property bool checkable: false
     property alias pressed: mouse.pressed
@@ -35,6 +36,10 @@ Item {
 
     PlasmaCore.Theme {
         id: theme
+    }
+
+    onFlatChanged: {
+        surface.opacity = 1
     }
 
     function pressButton() {
@@ -86,6 +91,7 @@ Item {
     ButtonShadow {
         id: shadow
         anchors.fill: parent
+        visible: !flat
     }
 
     PlasmaCore.FrameSvgItem {
@@ -94,6 +100,10 @@ Item {
         anchors.fill: parent
         imagePath: "widgets/button"
         prefix: "normal"
+        opacity: 0
+        Behavior on opacity {
+            PropertyAnimation { duration: 250 }
+        }
     }
 
     Item {
@@ -145,15 +155,23 @@ Item {
             releaseButton();
         }
         onEntered: {
-            shadow.state = "hover"
+            if (flat) {
+                surface.opacity = 1
+            } else {
+                shadow.state = "hover"
+            }
         }
         onExited: {
-            if (button.activeFocus) {
-                shadow.state = "focus"
-            } else if (checked) {
-                shadow.state = "hidden"
+            if (flat) {
+                surface.opacity = 0
             } else {
-                shadow.state = "shadow"
+                if (button.activeFocus) {
+                    shadow.state = "focus"
+                } else if (checked) {
+                    shadow.state = "hidden"
+                } else {
+                    shadow.state = "shadow"
+                }
             }
         }
     }
