@@ -2,22 +2,23 @@ plugin plasmacomponentsplugin
 
 BusyIndicator 0.1 BusyIndicator.qml
 Button 0.1 Button.qml
+ButtonColumn 0.1 ButtonColumn.qml
 ButtonGroup 0.1 ButtonGroup.js
 ButtonRow 0.1 ButtonRow.qml
-ButtonColumn 0.1 ButtonColumn.qml
 CheckBox 0.1 CheckBox.qml
 FlashingLabel 0.1 FlashingLabel.qml
 Frame 0.1 Frame.qml
-IconWidget 0.1 IconWidget.qml
 Highlight 0.1 Highlight.qml
-PushButton 0.1 PushButton.qml
+IconWidget 0.1 IconWidget.qml
+Label 0.1 Label.qml
 ProgressBar 0.1 ProgressBar.qml
+PushButton 0.1 PushButton.qml
 RadioButton 0.1 RadioButton.qml
 ScrollBar 0.1 ScrollBar.qml
 ScrollDecorator 0.1 ScrollDecorator.qml
 Slider 0.1 Slider.qml
 Switch 0.1 Switch.qml
-TextField 0.1 TextField.qml
 TextArea 0.1 TextArea.qml
+TextField 0.1 TextField.qml
 ToolBar 0.1 ToolBar.qml
 ToolButton 0.1 ToolButton.qml
