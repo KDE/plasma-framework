@@ -3,6 +3,7 @@ project(plasmacomponents)
 set(plasmacomponents_SRCS
     plasmacomponentsplugin.cpp
     qrangemodel.cpp
+    enums.cpp
     )
 
 INCLUDE_DIRECTORIES(
