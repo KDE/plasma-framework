@@ -36,6 +36,8 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
     qmlRegisterType<Plasma::QRangeModel>(uri, 0, 1, "RangeModel");
 
     qmlRegisterUncreatableType<DialogStatus>(uri, 0, 1, "DialogStatus", "");
+    qmlRegisterUncreatableType<PageOrientation>(uri, 0, 1, "PageOrientation", "");
+    qmlRegisterUncreatableType<PageStatus>(uri, 0, 1, "PageStatus", "");
 }
 
 

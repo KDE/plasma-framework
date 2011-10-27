@@ -19,11 +19,6 @@
 
 #include "enums.h"
 
-DialogStatus::DialogStatus(QObject *parent)
-    :QObject(parent)
-{}
 
-DialogStatus::~DialogStatus()
-{}
 
 #include "enums.moc"
