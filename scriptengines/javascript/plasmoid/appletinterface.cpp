@@ -248,6 +248,21 @@ QRectF AppletInterface::rect() const
     return applet()->contentsRect();
 }
 
+void AppletInterface::setActionSeparator(const QString &name)
+{
+    Plasma::Applet *a = applet();
+    QAction *action = a->action(name);
+
+    if (!action) {
+        action->setSeparator(true);
+    } else {
+        action = new QAction(this);
+        action->setSeparator(true);
+        a->addAction(name, action);
+        m_actions.append(name);
+    }
+}
+
 void AppletInterface::setAction(const QString &name, const QString &text, const QString &icon, const QString &shortcut)
 {
     Plasma::Applet *a = applet();
