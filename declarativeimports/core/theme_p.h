@@ -37,7 +37,7 @@ class FontProxy : public QObject
     Q_PROPERTY(qreal letterSpacing READ letterSpacing NOTIFY letterSpacingChanged )
     Q_PROPERTY(int pixelSize READ pixelSize NOTIFY pixelSizeChanged )
     Q_PROPERTY(qreal pointSize READ pointSize NOTIFY pointSizeChanged )
-    Q_PROPERTY(bool strikeOut READ strikeOut NOTIFY strikeOutChanged )
+    Q_PROPERTY(bool strikeout READ strikeout NOTIFY strikeoutChanged )
     Q_PROPERTY(bool underline READ underline NOTIFY underlineChanged )
     Q_PROPERTY(Weight weight READ weight NOTIFY weightChanged )
     Q_PROPERTY(qreal wordSpacing READ wordSpacing NOTIFY wordSpacingChanged )
@@ -75,7 +75,7 @@ public:
     qreal letterSpacing() const;
     int pixelSize() const;
     qreal pointSize() const;
-    bool strikeOut() const;
+    bool strikeout() const;
     bool underline() const;
     Weight weight() const;
     qreal wordSpacing() const;
@@ -88,7 +88,7 @@ Q_SIGNALS:
     void letterSpacingChanged();
     void pixelSizeChanged();
     void pointSizeChanged();
-    void strikeOutChanged();
+    void strikeoutChanged();
     void underlineChanged();
     void weightChanged();
     void wordSpacingChanged();

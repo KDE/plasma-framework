@@ -89,6 +89,10 @@ Item {
 
     opacity: enabled ? 1.0 : 0.5
 
+    PlasmaCore.Theme {
+        id: theme
+    }
+
     PlasmaCore.FrameSvgItem {
         id: hover
 

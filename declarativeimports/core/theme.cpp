@@ -41,27 +41,27 @@ FontProxy::FontProxy(Plasma::Theme::FontRole role, QObject *parent)
       m_fontRole(role)
 {
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
-            this, SLOT(boldChanged()));
+            this, SIGNAL(boldChanged()));
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
-            this, SLOT(capitalizationChanged()));
+            this, SIGNAL(capitalizationChanged()));
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
-            this, SLOT(familyChanged()));
+            this, SIGNAL(familyChanged()));
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
-            this, SLOT(italicChanged()));
+            this, SIGNAL(italicChanged()));
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
-            this, SLOT(letterSpacingChanged()));
+            this, SIGNAL(letterSpacingChanged()));
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
-            this, SLOT(pixelSizeChanged()));
+            this, SIGNAL(pixelSizeChanged()));
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
-            this, SLOT(pointSizeChanged()));
+            this, SIGNAL(pointSizeChanged()));
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
-            this, SLOT(strikeOutChanged()));
+            this, SIGNAL(strikeoutChanged()));
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
-            this, SLOT(underlineChanged()));
+            this, SIGNAL(underlineChanged()));
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
-            this, SLOT(weightChanged()));
+            this, SIGNAL(weightChanged()));
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
-            this, SLOT(wordSpacingChanged()));
+            this, SIGNAL(wordSpacingChanged()));
 }
 
 FontProxy::~FontProxy()
@@ -118,7 +118,7 @@ qreal FontProxy::pointSize() const
     return Plasma::Theme::defaultTheme()->font(m_fontRole).pointSize();
 }
 
-bool FontProxy::strikeOut() const
+bool FontProxy::strikeout() const
 {
     return Plasma::Theme::defaultTheme()->font(m_fontRole).strikeOut();
 }
