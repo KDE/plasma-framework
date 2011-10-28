@@ -120,8 +120,8 @@ void QMenuProxy::open()
     const QRect avail = QApplication::desktop()->availableGeometry(view);
     QPoint menuPos = view->mapToGlobal(view->mapFromScene(parentItem->scenePos()+QPoint(0, parentItem->boundingRect().height())));
 
-    if (menuPos.y() + m_menu->height() > avail.bottom()) {
-        menuPos = view->mapToGlobal(view->mapFromScene(parentItem->scenePos() - QPoint(0, m_menu->height())));
+    if (menuPos.y() + m_menu->sizeHint().height() > avail.bottom()) {
+        menuPos = view->mapToGlobal(view->mapFromScene(parentItem->scenePos() - QPoint(0, m_menu->sizeHint().height())));
     }
 
     m_menu->popup(menuPos);
