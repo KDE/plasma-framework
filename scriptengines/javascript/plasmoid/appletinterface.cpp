@@ -253,7 +253,7 @@ void AppletInterface::setActionSeparator(const QString &name)
     Plasma::Applet *a = applet();
     QAction *action = a->action(name);
 
-    if (!action) {
+    if (action) {
         action->setSeparator(true);
     } else {
         action = new QAction(this);
