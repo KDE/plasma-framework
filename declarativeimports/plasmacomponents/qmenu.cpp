@@ -18,7 +18,10 @@
  ***************************************************************************/
 
 #include "qmenu.h"
+
 #include <QApplication>
+#include <QGraphicsObject>
+#include <QGraphicsView>
 
 QMenuProxy::QMenuProxy (QObject *parent)
     : QObject (parent)
@@ -31,9 +34,9 @@ QMenuProxy::~QMenuProxy()
     delete m_menu;
 }
 
-QDeclarativeListProperty<QMenuAction> QMenuProxy::actions()
+QDeclarativeListProperty<QMenuItem> QMenuProxy::actions()
 {
-    return QDeclarativeListProperty<QMenuAction>(this, m_actions);
+    return QDeclarativeListProperty<QMenuItem>(this, m_actions);
 }
 
 int QMenuProxy::actionCount() const
@@ -41,7 +44,7 @@ int QMenuProxy::actionCount() const
     return m_actions.count();
 }
 
-QMenuAction *QMenuProxy::action(int index) const
+QMenuItem *QMenuProxy::action(int index) const
 {
     return m_actions.at(index);
 }
@@ -49,12 +52,61 @@ QMenuAction *QMenuProxy::action(int index) const
 void QMenuProxy::showMenu(int x, int y)
 {
     m_menu->clear();
-    foreach(QMenuAction* item, m_actions) {
+    foreach(QMenuItem* item, m_actions) {
         m_menu->addAction (item);
     }
 
     QPoint screenPos = QApplication::activeWindow()->mapToGlobal(QPoint(x, y));
     m_menu->popup(screenPos);
+}
+
+void QMenuProxy::open()
+{
+    QGraphicsObject *parentItem = qobject_cast<QGraphicsObject *>(parent());
+
+    if (!parentItem || !parentItem->scene()) {
+        showMenu(0, 0);
+        return;
+    }
+
+    QList<QGraphicsView*> views = parentItem->scene()->views();
+
+    if (views.size() < 1) {
+        showMenu(0, 0);
+        return;
+    }
+
+    QGraphicsView *view = 0;
+    if (views.size() == 1) {
+        view = views[0];
+    } else {
+        QGraphicsView *found = 0;
+        QGraphicsView *possibleFind = 0;
+        foreach (QGraphicsView *v, views) {
+            if (v->sceneRect().intersects(parentItem->sceneBoundingRect()) ||
+                v->sceneRect().contains(parentItem->scenePos())) {
+                if (v->isActiveWindow()) {
+                    found = v;
+                } else {
+                    possibleFind = v;
+                }
+            }
+        }
+        view = found ? found : possibleFind;
+    }
+
+    if (!view) {
+        showMenu(0, 0);
+        return;
+    }
+
+    QPoint viewPos = view->mapFromScene(parentItem->scenePos());
+    showMenu(viewPos.x(), viewPos.y());
+}
+
+void QMenuProxy::close()
+{
+    m_menu->hide();
 }
 
 #include "qmenu.moc"

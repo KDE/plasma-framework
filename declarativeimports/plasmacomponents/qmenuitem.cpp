@@ -17,11 +17,13 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
  ***************************************************************************/
 
-#include "qmenuaction.h"
+#include "qmenuitem.h"
 
-QMenuAction::QMenuAction(QObject *parent) : QAction(parent)
+QMenuItem::QMenuItem(QObject *parent)
+    : QAction(parent)
 {
+    connect(this, SIGNAL(triggered(bool)), this, SIGNAL(clicked()));
 }
 
-#include "qmenuaction.moc"
+#include "qmenuitem.moc"
 

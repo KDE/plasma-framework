@@ -7,8 +7,6 @@ set(qtextracomponents_SRCS
     qpixmapitem.cpp
     qimageitem.cpp
     qiconitem.cpp
-    qmenu.cpp
-    qmenuaction.cpp
     )
 
 INCLUDE_DIRECTORIES(

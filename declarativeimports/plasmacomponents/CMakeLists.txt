@@ -4,6 +4,8 @@ set(plasmacomponents_SRCS
     plasmacomponentsplugin.cpp
     qrangemodel.cpp
     enums.cpp
+    qmenu.cpp
+    qmenuitem.cpp
     )
 
 INCLUDE_DIRECTORIES(
@@ -16,7 +18,7 @@ qt4_automoc(${plasmacomponents_SRCS})
 
 
 add_library(plasmacomponentsplugin SHARED ${plasmacomponents_SRCS})
-target_link_libraries(plasmacomponentsplugin ${QT_QTCORE_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY})
+target_link_libraries(plasmacomponentsplugin ${QT_QTCORE_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY} ${QT_QTGUI_LIBRARY})
 
 install(TARGETS plasmacomponentsplugin DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/plasma/components)
 

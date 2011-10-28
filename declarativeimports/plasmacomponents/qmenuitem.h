@@ -17,35 +17,24 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
  ***************************************************************************/
 
-#ifndef QMENU_PROXY_H
-#define QMENU_PROXY_H
+#ifndef QMENUITEM_H
+#define QMENUITEM_H
 
+#include <QAction>
 #include <QObject>
-#include <QMenu>
-#include <QDeclarativeListProperty>
-#include "qmenuaction.h"
 
-class QMenuProxy : public QObject
+class QMenuItem : public QAction
 {
     Q_OBJECT
 
-    Q_PROPERTY(QDeclarativeListProperty<QMenuAction> actions READ actions)
-    Q_CLASSINFO("DefaultProperty", "actions")
+    Q_PROPERTY(bool separator READ isSeparator WRITE setSeparator)
 
 public:
-    QMenuProxy(QObject *parent = 0);
-    ~QMenuProxy();
+    QMenuItem(QObject *parent = 0);
 
-    QDeclarativeListProperty<QMenuAction> actions();
-    int actionCount() const;
-    QMenuAction *action(int) const;
-
-    Q_INVOKABLE void showMenu(int x, int y);
-
-private:
-    QList<QMenuAction*> m_actions;
-    QMenu *m_menu;
+Q_SIGNALS:
+    void clicked();
 };
 
-#endif //QMENU_PROXY_H
+#endif // QMENUITEM_H
 

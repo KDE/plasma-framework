@@ -24,7 +24,8 @@
 #include "qrangemodel.h"
 
 #include "enums.h"
-
+#include "qmenu.h"
+#include "qmenuitem.h"
 
 
 void PlasmaComponentsPlugin::registerTypes(const char *uri)
@@ -32,6 +33,9 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.components"));
 
 
+    qmlRegisterType<QMenuProxy>(uri, 0, 1, "Menu");
+    qmlRegisterType<QMenuProxy>(uri, 0, 1, "ContextMenu");
+    qmlRegisterType<QMenuItem>(uri, 0, 1, "MenuItem");
 
     qmlRegisterType<Plasma::QRangeModel>(uri, 0, 1, "RangeModel");
 
