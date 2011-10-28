@@ -29,7 +29,7 @@ Item {
     property bool interactive
 
     // Plasma API
-    property int orientation: Qt.Horizontal
+    property int orientation: Qt.Vertical
     property bool animated: true
     property bool inverted: false
     property bool updateValueWhileDragging: true
@@ -50,6 +50,13 @@ Item {
     opacity: enabled ? 1.0 : 0.5
 
     visible: flickableItem && handle.width < contents.width
+
+    anchors {
+        right: flickableItem.right
+        left: (orientation == Qt.Vertical) ? undefined : flickableItem.left 
+        top: (orientation == Qt.Vertical) ? flickableItem.top : undefined
+        bottom: flickableItem.bottom
+    }
 
     function incrementValue(increment) {
         if (!flickableItem)

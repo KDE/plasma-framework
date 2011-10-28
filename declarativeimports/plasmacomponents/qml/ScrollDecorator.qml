@@ -27,7 +27,7 @@ Item {
     property Flickable flickableItem
 
     // Plasma API
-    property int orientation: Qt.Horizontal
+    property int orientation: Qt.Vertical
     property bool inverted: false
 
     // Convinience API
@@ -40,6 +40,13 @@ Item {
     implicitHeight: _isVertical ? 200 : 16
 
     visible: flickableItem && handle.width < contents.width
+
+    anchors {
+        right: flickableItem.right
+        left: (orientation == Qt.Vertical) ? undefined : flickableItem.left 
+        top: (orientation == Qt.Vertical) ? flickableItem.top : undefined
+        bottom: flickableItem.bottom
+    }
 
     Item {
         width: _isVertical ? scrollDecorator.height : scrollDecorator.width
