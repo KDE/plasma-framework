@@ -20,6 +20,8 @@
 #include "qmenu.h"
 
 #include <QApplication>
+#include <QDebug>
+#include <QDesktopWidget>
 #include <QGraphicsObject>
 #include <QGraphicsView>
 
@@ -70,6 +72,13 @@ void QMenuProxy::showMenu(int x, int y)
 
 void QMenuProxy::open()
 {
+    m_menu->clear();
+
+    foreach(QMenuItem* item, m_items) {
+        m_menu->addAction (item);
+    }
+    m_menu->updateGeometry();
+
     QGraphicsObject *parentItem = qobject_cast<QGraphicsObject *>(parent());
 
     if (!parentItem || !parentItem->scene()) {
@@ -108,8 +117,16 @@ void QMenuProxy::open()
         return;
     }
 
-    QPoint viewPos = view->mapFromScene(parentItem->scenePos());
-    showMenu(viewPos.x(), viewPos.y());
+    const QRect avail = QApplication::desktop()->availableGeometry(view);
+    QPoint menuPos = view->mapToGlobal(view->mapFromScene(parentItem->scenePos()+QPoint(0, parentItem->boundingRect().height())));
+
+    if (menuPos.y() + m_menu->height() > avail.bottom()) {
+        menuPos = view->mapToGlobal(view->mapFromScene(parentItem->scenePos() - QPoint(0, m_menu->height())));
+    }
+
+    m_menu->popup(menuPos);
+    m_status = DialogStatus::Open;
+    emit statusChanged();
 }
 
 void QMenuProxy::close()
