@@ -24,29 +24,36 @@
 #include <QMenu>
 #include <QDeclarativeListProperty>
 #include "qmenuitem.h"
+#include "enums.h"
 
 class QMenuProxy : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QDeclarativeListProperty<QMenuItem> actions READ actions)
-    Q_CLASSINFO("DefaultProperty", "actions")
+    Q_PROPERTY(QDeclarativeListProperty<QMenuItem> items READ items CONSTANT)
+    Q_CLASSINFO("DefaultProperty", "items")
+    Q_PROPERTY(DialogStatus::Status status READ status NOTIFY statusChanged)
 
 public:
     QMenuProxy(QObject *parent = 0);
     ~QMenuProxy();
 
-    QDeclarativeListProperty<QMenuItem> actions();
+    QDeclarativeListProperty<QMenuItem> items();
     int actionCount() const;
     QMenuItem *action(int) const;
+    DialogStatus::Status status() const;
 
     void showMenu(int x, int y);
     Q_INVOKABLE void open();
     Q_INVOKABLE void close();
 
+Q_SIGNALS:
+    void statusChanged();
+
 private:
-    QList<QMenuItem*> m_actions;
+    QList<QMenuItem*> m_items;
     QMenu *m_menu;
+    DialogStatus::Status m_status;
 };
 
 #endif //QMENU_PROXY_H

@@ -24,7 +24,8 @@
 #include <QGraphicsView>
 
 QMenuProxy::QMenuProxy (QObject *parent)
-    : QObject (parent)
+    : QObject(parent),
+      m_status(DialogStatus::Closed)
 {
     m_menu = new QMenu(0);
 }
@@ -34,30 +35,37 @@ QMenuProxy::~QMenuProxy()
     delete m_menu;
 }
 
-QDeclarativeListProperty<QMenuItem> QMenuProxy::actions()
+QDeclarativeListProperty<QMenuItem> QMenuProxy::items()
 {
-    return QDeclarativeListProperty<QMenuItem>(this, m_actions);
+    return QDeclarativeListProperty<QMenuItem>(this, m_items);
 }
 
 int QMenuProxy::actionCount() const
 {
-    return m_actions.count();
+    return m_items.count();
 }
 
 QMenuItem *QMenuProxy::action(int index) const
 {
-    return m_actions.at(index);
+    return m_items.at(index);
+}
+
+DialogStatus::Status QMenuProxy::status() const
+{
+    return m_status;
 }
 
 void QMenuProxy::showMenu(int x, int y)
 {
     m_menu->clear();
-    foreach(QMenuItem* item, m_actions) {
+    foreach(QMenuItem* item, m_items) {
         m_menu->addAction (item);
     }
 
     QPoint screenPos = QApplication::activeWindow()->mapToGlobal(QPoint(x, y));
     m_menu->popup(screenPos);
+    m_status = DialogStatus::Open;
+    emit statusChanged();
 }
 
 void QMenuProxy::open()
@@ -107,6 +115,8 @@ void QMenuProxy::open()
 void QMenuProxy::close()
 {
     m_menu->hide();
+    m_status = DialogStatus::Closed;
+    emit statusChanged();
 }
 
 #include "qmenu.moc"
