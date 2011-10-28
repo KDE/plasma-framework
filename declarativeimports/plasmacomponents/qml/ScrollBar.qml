@@ -26,6 +26,7 @@ Item {
 
     // Common API
     property Flickable flickableItem: null
+    property bool interactive
 
     // Plasma API
     property int orientation: Qt.Horizontal

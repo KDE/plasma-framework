@@ -25,16 +25,92 @@
 #include <QFont>
 #include <QColor>
 
+#include <Plasma/Theme>
+
+class FontProxy : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(bool bold READ bold NOTIFY boldChanged)
+    Q_PROPERTY(Capitalization capitalization READ capitalization  NOTIFY capitalizationChanged )
+    Q_PROPERTY(QString family READ family NOTIFY familyChanged )
+    Q_PROPERTY(bool italic READ italic NOTIFY italicChanged )
+    Q_PROPERTY(qreal letterSpacing READ letterSpacing NOTIFY letterSpacingChanged )
+    Q_PROPERTY(int pixelSize READ pixelSize NOTIFY pixelSizeChanged )
+    Q_PROPERTY(qreal pointSize READ pointSize NOTIFY pointSizeChanged )
+    Q_PROPERTY(bool strikeout READ strikeout NOTIFY strikeoutChanged )
+    Q_PROPERTY(bool underline READ underline NOTIFY underlineChanged )
+    Q_PROPERTY(Weight weight READ weight NOTIFY weightChanged )
+    Q_PROPERTY(qreal wordSpacing READ wordSpacing NOTIFY wordSpacingChanged )
+
+    Q_ENUMS(Capitalization)
+    Q_ENUMS(Weight)
+
+public:
+    enum Capitalization {
+        MixedCase = 0,
+        AllUppercase = 1,
+        AllLowercase = 2,
+        SmallCaps = 3,
+        Capitalize = 4
+    };
+
+    enum Weight {
+        Light = 25,
+        Normal = 50,
+        DemiBold = 63,
+        Bold = 75,
+        Black = 87
+    };
+
+    FontProxy(Plasma::Theme::FontRole role, QObject *parent = 0);
+    ~FontProxy();
+    static FontProxy *defaultFont();
+    static FontProxy *desktopFont();
+    static FontProxy *smallestFont();
+
+    bool bold() const;
+    Capitalization capitalization() const;
+    QString family() const;
+    bool italic() const;
+    qreal letterSpacing() const;
+    int pixelSize() const;
+    qreal pointSize() const;
+    bool strikeout() const;
+    bool underline() const;
+    Weight weight() const;
+    qreal wordSpacing() const;
+
+Q_SIGNALS:
+    void boldChanged();
+    void capitalizationChanged();
+    void familyChanged();
+    void italicChanged();
+    void letterSpacingChanged();
+    void pixelSizeChanged();
+    void pointSizeChanged();
+    void strikeoutChanged();
+    void underlineChanged();
+    void weightChanged();
+    void wordSpacingChanged();
+
+private:
+    Plasma::Theme::FontRole m_fontRole;
+};
+
 class ThemeProxy : public QObject
 {
     Q_OBJECT
 
     Q_PROPERTY(QString themeName READ themeName NOTIFY themeChanged)
-    Q_PROPERTY(QFont font READ font NOTIFY themeChanged)
     Q_PROPERTY(bool windowTranslucentEnabled READ windowTranslucencyEnabled NOTIFY themeChanged)
     Q_PROPERTY(KUrl homepage READ homepage NOTIFY themeChanged)
     Q_PROPERTY(bool useGlobalSettings READ useGlobalSettings NOTIFY themeChanged)
     Q_PROPERTY(QString wallpaperPath READ wallpaperPath NOTIFY themeChanged)
+
+    //fonts
+    Q_PROPERTY(QObject *defaultFont READ defaultFont CONSTANT)
+    Q_PROPERTY(QObject *desktopFont READ desktopFont CONSTANT)
+    Q_PROPERTY(QObject *smallestFont READ smallestFont CONSTANT)
 
     // colors
     Q_PROPERTY(QColor textColor READ textColor NOTIFY themeChanged)
@@ -58,7 +134,9 @@ public:
     ~ThemeProxy();
 
     QString themeName() const;
-    QFont font() const;
+    QObject *defaultFont() const;
+    QObject *desktopFont() const;
+    QObject *smallestFont() const;
     bool windowTranslucencyEnabled() const;
     KUrl homepage() const;
     bool useGlobalSettings() const;

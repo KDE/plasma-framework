@@ -23,7 +23,7 @@ import org.kde.plasma.components 0.1 as PlasmaComponents
 Column {
     spacing: 20
 
-    Text {
+    PlasmaComponents.Label {
         font.pixelSize: 20
         text: "Slider"
     }
@@ -37,9 +37,9 @@ Column {
             }
             spacing: 10
 
-            Text { text: "Color Selector"; font.pixelSize: 20 }
+            PlasmaComponents.Label { text: "Color Selector"; font.pixelSize: 20 }
 
-            Text { text: "Red" }
+            PlasmaComponents.Label { text: "Red" }
 
             PlasmaComponents.Slider {
                 id: redSlider
@@ -53,7 +53,7 @@ Column {
                 Keys.onTabPressed: greenSlider.forceActiveFocus()
             }
 
-            Text { text: "Green" }
+            PlasmaComponents.Label { text: "Green" }
 
             PlasmaComponents.Slider {
                 id: greenSlider
@@ -67,7 +67,7 @@ Column {
                 Keys.onTabPressed: blueSlider.forceActiveFocus()
             }
 
-            Text { text: "Blue" }
+            PlasmaComponents.Label { text: "Blue" }
 
             PlasmaComponents.Slider {
                 id: blueSlider
@@ -90,7 +90,7 @@ Column {
         }
     }
 
-    Text { text: "Disabled Horizontal Slider" }
+    PlasmaComponents.Label { text: "Disabled Horizontal Slider" }
 
     PlasmaComponents.Slider {
         id: horizontalSlider
@@ -100,7 +100,7 @@ Column {
         enabled: false
     }
 
-    Text { text: "Inverted Horizontal Slider" }
+    PlasmaComponents.Label { text: "Inverted Horizontal Slider" }
 
     PlasmaComponents.Slider {
         id: invHorizontalSlider
@@ -111,7 +111,7 @@ Column {
         enabled: true
     }
 
-    Text { text: "Vertical Slider" }
+    PlasmaComponents.Label { text: "Vertical Slider" }
 
     Row {
         spacing: 30
@@ -126,7 +126,7 @@ Column {
             inverted: true
             animated: true
         }
-        Text { text: verticalSlider.value }
+        PlasmaComponents.Label { text: verticalSlider.value }
     }
 
 }

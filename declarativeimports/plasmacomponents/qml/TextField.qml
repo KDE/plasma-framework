@@ -138,10 +138,19 @@ Item {
         text: placeholderText
         visible: textInput.text == "" && !textField.activeFocus
         // XXX: using textColor and low opacity for theming placeholderText
-        color: theme.textColor
+        color: theme.viewTextColor
         opacity: 0.5
         elide: Text.ElideRight
         clip: true
+        font.capitalization: theme.defaultFont.capitalization
+        font.family: theme.defaultFont.family
+        font.italic: theme.defaultFont.italic
+        font.letterSpacing: theme.defaultFont.letterSpacing
+        font.pointSize: theme.defaultFont.pointSize
+        font.strikeout: theme.defaultFont.strikeout
+        font.underline: theme.defaultFont.underline
+        font.weight: theme.defaultFont.weight
+        font.wordSpacing: theme.defaultFont.wordSpacing
     }
 
     TextInput {

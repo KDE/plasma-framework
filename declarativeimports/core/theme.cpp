@@ -19,7 +19,128 @@
 
 #include "theme_p.h"
 
-#include <plasma/theme.h>
+class FontProxySingleton
+{
+public:
+    FontProxySingleton()
+        : defaultFont(Plasma::Theme::DefaultFont),
+          desktopFont(Plasma::Theme::DesktopFont),
+          smallestFont(Plasma::Theme::SmallestFont)
+    {
+    }
+
+   FontProxy defaultFont;
+   FontProxy desktopFont;
+   FontProxy smallestFont;
+};
+
+K_GLOBAL_STATIC(FontProxySingleton, privateFontProxySingleton)
+
+FontProxy::FontProxy(Plasma::Theme::FontRole role, QObject *parent)
+    : QObject(parent),
+      m_fontRole(role)
+{
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SIGNAL(boldChanged()));
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SIGNAL(capitalizationChanged()));
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SIGNAL(familyChanged()));
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SIGNAL(italicChanged()));
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SIGNAL(letterSpacingChanged()));
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SIGNAL(pixelSizeChanged()));
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SIGNAL(pointSizeChanged()));
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SIGNAL(strikeoutChanged()));
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SIGNAL(underlineChanged()));
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SIGNAL(weightChanged()));
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SIGNAL(wordSpacingChanged()));
+}
+
+FontProxy::~FontProxy()
+{
+}
+
+FontProxy *FontProxy::defaultFont()
+{
+    return &privateFontProxySingleton->defaultFont;
+}
+
+FontProxy *FontProxy::desktopFont()
+{
+    return &privateFontProxySingleton->desktopFont;
+}
+
+FontProxy *FontProxy::smallestFont()
+{
+    return &privateFontProxySingleton->smallestFont;
+}
+
+bool FontProxy::bold() const
+{
+    return Plasma::Theme::defaultTheme()->font(m_fontRole).bold();
+}
+
+FontProxy::Capitalization FontProxy::capitalization() const
+{
+    return (FontProxy::Capitalization)Plasma::Theme::defaultTheme()->font(m_fontRole).capitalization();
+}
+
+QString FontProxy::family() const
+{
+    return Plasma::Theme::defaultTheme()->font(m_fontRole).family();
+}
+
+bool FontProxy::italic() const
+{
+    return Plasma::Theme::defaultTheme()->font(m_fontRole).italic();
+}
+
+qreal FontProxy::letterSpacing() const
+{
+    return Plasma::Theme::defaultTheme()->font(m_fontRole).letterSpacing();
+}
+
+int FontProxy::pixelSize() const
+{
+    return Plasma::Theme::defaultTheme()->font(m_fontRole).pixelSize();
+}
+
+qreal FontProxy::pointSize() const
+{
+    return Plasma::Theme::defaultTheme()->font(m_fontRole).pointSize();
+}
+
+bool FontProxy::strikeout() const
+{
+    return Plasma::Theme::defaultTheme()->font(m_fontRole).strikeOut();
+}
+
+bool FontProxy::underline() const
+{
+    return Plasma::Theme::defaultTheme()->font(m_fontRole).underline();
+}
+
+FontProxy::Weight FontProxy::weight() const
+{
+    return (FontProxy::Weight)Plasma::Theme::defaultTheme()->font(m_fontRole).weight();
+}
+
+qreal FontProxy::wordSpacing() const
+{
+    return Plasma::Theme::defaultTheme()->font(m_fontRole).wordSpacing();
+}
+
+
+
+//********** Theme *************
 
 ThemeProxy::ThemeProxy(QObject *parent)
     : QObject(parent)
@@ -36,9 +157,19 @@ QString ThemeProxy::themeName() const
     return Plasma::Theme::defaultTheme()->themeName();
 }
 
-QFont ThemeProxy::font() const
+QObject *ThemeProxy::defaultFont() const
 {
-    return Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
+    return FontProxy::defaultFont();
+}
+
+QObject *ThemeProxy::desktopFont() const
+{
+    return FontProxy::desktopFont();
+}
+
+QObject *ThemeProxy::smallestFont() const
+{
+    return FontProxy::smallestFont();
 }
 
 bool ThemeProxy::windowTranslucencyEnabled() const

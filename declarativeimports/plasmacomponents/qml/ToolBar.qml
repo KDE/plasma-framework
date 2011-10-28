@@ -17,13 +17,14 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-import QtQuick 1.0
+import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 
 PlasmaCore.FrameSvgItem {
     id: toolBar
     imagePath: "widgets/frame"
     prefix: "raised"
+    width: parent.width
     height: 48 + margins.top + margins.bottom
 
     // The current set of tools; null if none.

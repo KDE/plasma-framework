@@ -23,12 +23,21 @@
 
 #include "qrangemodel.h"
 
+#include "enums.h"
+
+
 
 void PlasmaComponentsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.components"));
 
+
+
     qmlRegisterType<Plasma::QRangeModel>(uri, 0, 1, "RangeModel");
+
+    qmlRegisterUncreatableType<DialogStatus>(uri, 0, 1, "DialogStatus", "");
+    qmlRegisterUncreatableType<PageOrientation>(uri, 0, 1, "PageOrientation", "");
+    qmlRegisterUncreatableType<PageStatus>(uri, 0, 1, "PageStatus", "");
 }
 
 
