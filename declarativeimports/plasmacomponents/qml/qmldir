@@ -24,15 +24,3 @@ ToolBar 0.1 ToolBar.qml
 ToolButton 0.1 ToolButton.qml
 ListItem 0.1 ToolButton.qml
 
-Window 0.1 Window.qml
-Page 0.1 Page.qml
-PageStack 0.1 PageStack.qml
-SelectionDialog 0.1 SelectionDialog.qml
-Dialog 0.1 Dialog.qml
-QueryDialog 0.1 QueryDialog.qml
-TabBar 0.1 TabBar.qml
-TabBarLayout 0.1 TabBarLayout.qml
-TabButton 0.1 TabButton.qml
-TabGroup 0.1 TabGroup.qml
-SectionScroller 0.1 SectionScroller.qml
-CommonDialog 0.1 CommonDialog.qml
