@@ -24,3 +24,7 @@ ToolBar 0.1 ToolBar.qml
 ToolButton 0.1 ToolButton.qml
 ListItem 0.1 ToolButton.qml
 
+TabBar 0.1 TabBar.qml
+TabButton 0.1 TabButton.qml
+TabGroup 0.1 TabGroup.qml
+
