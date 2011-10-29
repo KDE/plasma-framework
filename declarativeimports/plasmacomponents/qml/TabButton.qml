@@ -63,7 +63,7 @@ Item {
         target: root
         onPressedChanged: {
             //TabBar is the granparent
-            parent.parent.currentItem = root
+            root.parent.parent.currentItem = root
         }
     }
 
@@ -127,7 +127,7 @@ Item {
                 internal.tabGroup.currentTab = tab
             }
             //TabBar is the granparent, done here too in case of no tabgroup
-            parent.parent.currentItem = root
+            root.parent.parent.currentItem = root
         }
 
         anchors.fill: parent
