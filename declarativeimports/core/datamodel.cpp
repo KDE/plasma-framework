@@ -60,7 +60,7 @@ void SortFilterModel::syncRoleNames()
 int SortFilterModel::roleNameToId(const QString &name)
 {
     if (!m_roleIds.contains(name)) {
-        return -1;
+        return Qt::DisplayRole;
     }
     return m_roleIds.value(name);
 }
