@@ -24,21 +24,33 @@ import org.kde.qtextracomponents 0.1
 Item {
     id: root
 
-    property string iconSource
+    property bool valid: false
 
-    PlasmaCore.Svg {
-        id: svgIcon
-    }
+    property string source
 
-    onIconSourceChanged: {
-        svgIcon.imagePath = "icons/"+root.iconSource.split("-")[0]
-        if (svgIcon.isValid() && svgIcon.hasElement(root.iconSource)) {
+    onSourceChanged: {
+        if (source == "") {
+            imageLoader.sourceComponent = null
+            valid = false
+        }
+
+        svgIcon.imagePath = "icons/"+root.source.split("-")[0]
+        if (svgIcon.isValid() && svgIcon.hasElement(root.source)) {
             imageLoader.sourceComponent = svgComponent
-        } else if (root.iconSource.indexOf(".") == -1 && root.iconSource.indexOf(":") == -1) {
+        } else if (root.source.indexOf(".") == -1 && root.source.indexOf(":") == -1) {
             imageLoader.sourceComponent = iconComponent
         } else {
             imageLoader.sourceComponent = imageComponent
         }
+        valid = true
+    }
+
+    //FIXME: iconloader sizes coming from plasma
+    implicitWidth: 16
+    implicitHeight: 16
+
+    PlasmaCore.Svg {
+        id: svgIcon
     }
 
     Loader {
@@ -50,7 +62,7 @@ Item {
 
             PlasmaCore.SvgItem {
                 svg: svgIcon
-                elementId: root.iconSource
+                elementId: root.source
                 anchors.fill: parent
             }
         }
@@ -59,7 +71,7 @@ Item {
             id: iconComponent
 
             QIconItem {
-                icon: QIcon(root.iconSource)
+                icon: QIcon(root.source)
                 smooth: true
                 anchors.fill: parent
             }
@@ -69,7 +81,7 @@ Item {
             id: imageComponent
 
             Image {
-                source: root.iconSource
+                source: root.source
                 sourceSize.width: width
                 sourceSize.height: height
                 fillMode: Image.PreserveAspectFit

@@ -51,7 +51,7 @@ Item {
     property bool checked: internal.tabGroup != null && internal.tabGroup.currentTab == tab
     property bool pressed: mouseArea.pressed == true && mouseArea.containsMouse
     property alias text: label.text
-    property alias iconSource: imageLoader.iconSource
+    property alias iconSource: imageLoader.source
 
     signal clicked
 

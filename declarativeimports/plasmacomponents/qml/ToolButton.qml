@@ -116,16 +116,14 @@ Item {
             bottomMargin: surface.margins.bottom
         }
 
-        Image {
+        IconLoader {
             id: icon
 
             anchors {
-                fill: label.text ? undefined : parent
-                top: label.text ? parent.top : undefined
+                verticalCenter: parent.verticalCenter
                 left: label.text ? parent.left : undefined
-                bottom: label.text ? parent.bottom : undefined
+                horizontalCenter: label.text ? undefined : parent.horizontalCenter
             }
-            fillMode: Image.PreserveAspectFit
         }
 
         Text {
@@ -134,7 +132,7 @@ Item {
             anchors {
                 top: parent.top
                 bottom: parent.bottom
-                left: icon.right
+                left: icon.valid ? icon.right : parent.left
                 right: parent.right
             }
             font.capitalization: theme.defaultFont.capitalization
