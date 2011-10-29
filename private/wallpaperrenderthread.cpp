@@ -223,7 +223,6 @@ void WallpaperRenderThread::run()
         QSvgRenderer svg(m_request.file);
         if (m_abort) {
             deleteLater();
-        kDebug() << "oh, fuck it 2";
             return;
         }
         svg.render(&p);
@@ -234,7 +233,6 @@ void WallpaperRenderThread::run()
 
         if (m_abort) {
             deleteLater();
-        kDebug() << "oh, fuck it 3";
             return;
         }
 
@@ -243,7 +241,6 @@ void WallpaperRenderThread::run()
                 for (int y = pos.y(); y < m_request.size.height(); y += scaledSize.height()) {
                     p.drawImage(QPoint(x, y), img);
                     if (m_abort) {
-        kDebug() << "oh, fuck it 4";
                         deleteLater();
                         return;
                     }
@@ -256,7 +253,6 @@ void WallpaperRenderThread::run()
 
     // signal we're done
     if (!m_abort) {
-        kDebug() << "*****************************************************";
         emit done(m_request, result);
     }
 
