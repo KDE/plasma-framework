@@ -1,6 +1,5 @@
 /****************************************************************************
 **
-**
 ** Copyright 2011 Marco Martin <mart@kde.org>
 **
 ** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
@@ -52,7 +51,7 @@ Item {
     property bool checked: internal.tabGroup != null && internal.tabGroup.currentTab == tab
     property bool pressed: mouseArea.pressed == true && mouseArea.containsMouse
     property alias text: label.text
-    property alias iconSource: imageLoader.source
+    property alias iconSource: imageLoader.iconSource
 
     signal clicked
 
@@ -105,57 +104,17 @@ Item {
         verticalAlignment: Text.AlignVCenter
     }
 
-    Loader {
-        // imageLoader acts as wrapper for Image and Icon items. The Image item is
-        // shown when the source points to a image (jpg, png). Icon item is used for
-        // locigal theme icons which are colorised.
+    IconLoader {
         id: imageLoader
-
-        property url source
-        property string iconId:  source.toString() 
 
         //FIXME: icon sizes in Theme
         width : 16
         height : 16
-        sourceComponent: {
-            if (iconId)
-                return iconComponent
-            if (source.toString())
-                return imageComponent
-            return undefined
-        }
+
         anchors {
             left: internal.portrait ? undefined : parent.left
             horizontalCenter: internal.portrait ? parent.horizontalCenter : undefined
             verticalCenter: internal.portrait ? undefined : parent.verticalCenter
-        }
-
-        Component {
-            id: imageComponent
-
-            Image {
-                id: image
-
-                objectName: "image"
-                source: imageLoader.iconId ? "" : imageLoader.source
-                sourceSize.width: width
-                sourceSize.height: height
-                fillMode: Image.PreserveAspectFit
-                smooth: true
-                anchors.fill: parent
-            }
-        }
-
-        Component {
-            id: iconComponent
-
-            Image {
-                id: icon
-
-                objectName: "icon"
-                anchors.fill: parent
-                source: imageLoader.iconId
-            }
         }
     }
 

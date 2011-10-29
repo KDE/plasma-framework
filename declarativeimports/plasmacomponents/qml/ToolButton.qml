@@ -17,7 +17,7 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-import QtQuick 1.0
+import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 
 Item {
@@ -64,8 +64,9 @@ Item {
         button.forceActiveFocus();
     }
 
-    width: Math.max(50, icon.width + label.paintedWidth + surface.margins.left + surface.margins.right)
-    height: Math.max(20, Math.max(icon.height, label.paintedHeight) + surface.margins.top + surface.margins.bottom)
+    implicitWidth: Math.max(50, icon.width + label.paintedWidth + surface.margins.left + surface.margins.right)
+    implicitHeight: Math.max(20, Math.max(icon.height, label.paintedHeight) + surface.margins.top + surface.margins.bottom)
+
     // TODO: needs to define if there will be specific graphics for
     //     disabled buttons
     opacity: enabled ? 1.0 : 0.5
