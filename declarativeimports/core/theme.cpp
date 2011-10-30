@@ -19,6 +19,8 @@
 
 #include "theme_p.h"
 
+#include <KIconLoader>
+
 class FontProxySingleton
 {
 public:
@@ -267,6 +269,35 @@ QString ThemeProxy::styleSheet() const
     return Plasma::Theme::defaultTheme()->styleSheet(QString());
 }
 
+int ThemeProxy::smallIconSize() const
+{
+    return KIconLoader::SizeSmall;
+}
+
+int ThemeProxy::smallMediumIconSize() const
+{
+    return KIconLoader::SizeSmallMedium;
+}
+
+int ThemeProxy::mediumIconSize() const
+{
+    return KIconLoader::SizeMedium;
+}
+
+int ThemeProxy::largeIconSize() const
+{
+    return KIconLoader::SizeLarge;
+}
+
+int ThemeProxy::hugeIconSize() const
+{
+    return KIconLoader::SizeHuge;
+}
+
+int ThemeProxy::enormousIconSize() const
+{
+    return KIconLoader::SizeEnormous;
+}
 
 #include "theme_p.moc"
 

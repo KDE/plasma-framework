@@ -107,9 +107,8 @@ Item {
     IconLoader {
         id: imageLoader
 
-        //FIXME: icon sizes in Theme
-        width : 16
-        height : 16
+        implicitWidth: theme.smallIconSize
+        implicitHeight: theme.smallIconSize
 
         anchors {
             left: internal.portrait ? undefined : parent.left

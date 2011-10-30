@@ -129,6 +129,14 @@ class ThemeProxy : public QObject
     Q_PROPERTY(QColor viewFocusColor READ viewFocusColor NOTIFY themeChanged)
     Q_PROPERTY(QString styleSheet READ styleSheet NOTIFY themeChanged)
 
+    // icon sizes
+    Q_PROPERTY(int smallIconSize READ smallIconSize CONSTANT)
+    Q_PROPERTY(int smallMediumIconSize READ smallMediumIconSize CONSTANT)
+    Q_PROPERTY(int mediumIconSize READ mediumIconSize CONSTANT)
+    Q_PROPERTY(int largeIconSize READ largeIconSize CONSTANT)
+    Q_PROPERTY(int hugeIconSize READ hugeIconSize CONSTANT)
+    Q_PROPERTY(int enormousIconSize READ enormousIconSize CONSTANT)
+
 public:
     ThemeProxy(QObject *parent = 0);
     ~ThemeProxy();
@@ -157,6 +165,13 @@ public:
     QColor viewHoverColor() const;
     QColor viewFocusColor() const;
     QString styleSheet() const;
+
+    int smallIconSize() const;
+    int smallMediumIconSize() const;
+    int mediumIconSize() const;
+    int largeIconSize() const;
+    int hugeIconSize() const;
+    int enormousIconSize() const;
 
 Q_SIGNALS:
     void themeChanged();
