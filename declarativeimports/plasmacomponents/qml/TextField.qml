@@ -73,8 +73,6 @@ Item {
         textInput.positionToRectangle(pos);
     }
 
-    // Plasma API
-    property QtObject theme: PlasmaCore.Theme { }
 
     // Set active focus to it's internal textInput.
     // Overriding QtQuick.Item forceActiveFocus function.

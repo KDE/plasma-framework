@@ -35,8 +35,4 @@ Text {
     color: theme.textColor
 
     wrapMode: Text.Wrap
-
-    PlasmaCore.Theme {
-        id: theme
-    }
 }

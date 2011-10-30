@@ -134,10 +134,6 @@ Item {
         color: Qt.rgba(0,0,0,0.3)
     }
 
-    PlasmaCore.Theme {
-        id: theme
-    }
-
     Rectangle {
         id: handle
         width: 6

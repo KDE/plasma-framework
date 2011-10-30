@@ -31,7 +31,6 @@ Item {
 
     // Plasma API
     property alias text: label.text // TODO: Not yet part of the common API
-    property QtObject theme: PlasmaCore.Theme { }
     property alias view: surfaceLoader.sourceComponent
     property alias shadow: shadowLoader.sourceComponent
 

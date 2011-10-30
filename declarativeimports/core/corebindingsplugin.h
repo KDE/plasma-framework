@@ -22,6 +22,7 @@
 #ifndef COREBINDINGSPLUGIN_H
 #define COREBINDINGSPLUGIN_H
 
+#include <QDeclarativeEngine>
 #include <QDeclarativeExtensionPlugin>
 
 #include <Plasma/Service>
@@ -31,6 +32,7 @@ class CoreBindingsPlugin : public QDeclarativeExtensionPlugin
     Q_OBJECT
 
 public:
+    void initializeEngine(QDeclarativeEngine *engine, const char *uri);
     void registerTypes(const char *uri);
 };
 

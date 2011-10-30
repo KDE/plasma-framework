@@ -34,9 +34,6 @@ Item {
 
     signal clicked()
 
-    PlasmaCore.Theme {
-        id: theme
-    }
 
     onFlatChanged: {
         surface.opacity = 1

@@ -33,9 +33,6 @@ Item {
 
     signal clicked()
 
-    PlasmaCore.Theme {
-        id: theme
-    }
 
     function pressButton() {
         if (button.enabled)

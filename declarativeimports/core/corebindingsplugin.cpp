@@ -22,6 +22,7 @@
 #include "corebindingsplugin.h"
 
 #include <QtDeclarative/qdeclarative.h>
+#include <QDeclarativeContext>
 
 #include <Plasma/FrameSvg>
 #include <Plasma/Svg>
@@ -33,6 +34,16 @@
 #include "theme_p.h"
 #include "dialog.h"
 #include "tooltip.h"
+
+void CoreBindingsPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
+{
+    QDeclarativeExtensionPlugin::initializeEngine(engine, uri);
+
+    QDeclarativeContext *context = engine->rootContext();
+
+    ThemeProxy *theme = new ThemeProxy(context);
+    context->setContextProperty("theme", theme);
+}
 
 void CoreBindingsPlugin::registerTypes(const char *uri)
 {
