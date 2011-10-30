@@ -229,7 +229,7 @@ Item {
 
                     return Math.max(0, diff);
                 }
-                stepSize: 0.0
+                stepSize: 10
                 inverted: _inverted
                 positionAtMinimum: 0 + handle.width / 2
                 positionAtMaximum: contents.width - handle.width / 2
