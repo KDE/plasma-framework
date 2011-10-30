@@ -239,6 +239,12 @@ class PLASMA_EXPORT DataContainer : public QObject
          **/
         void setNeedsUpdate(bool update = true);
 
+    protected Q_SLOTS:
+        /**
+         * @reimp from QObject
+         */
+        void timerEvent(QTimerEvent * event);
+
     private:
         friend class SignalRelay;
         friend class DataContainerPrivate;
@@ -247,7 +253,6 @@ class PLASMA_EXPORT DataContainer : public QObject
 
         Q_PRIVATE_SLOT(d, void storeJobFinished(KJob *job))
         Q_PRIVATE_SLOT(d, void populateFromStoredData(KJob *job))
-        Q_PRIVATE_SLOT(d, void store())
         Q_PRIVATE_SLOT(d, void retrieve())
 };
 

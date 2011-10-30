@@ -46,6 +46,8 @@ public:
 
     void newRenderCompleted(const WallpaperRenderRequest &render, const QImage &image);
     void setupScriptSupport();
+    void renderWallpaper(const QString &sourceImagePath, const QImage &image, const QSize &size,
+                         Wallpaper::ResizeMethod resizeMethod, const QColor &color);
 
     Wallpaper *q;
     KPluginInfo wallpaperDescription;
@@ -69,16 +71,15 @@ public:
 class LoadImageThread : public QObject, public QRunnable
 {
     Q_OBJECT
+public:
+    LoadImageThread(const QString &filePath);
+    void run();
 
-    private:
-        QString m_filePath;
+Q_SIGNALS:
+    void done(const QImage &pixmap);
 
-    Q_SIGNALS:
-        void done(const QImage &pixmap);
-
-    public:        
-        LoadImageThread(const QString &filePath);
-        void run();
+private:
+    QString m_filePath;
 };
 
 } // namespace Plasma

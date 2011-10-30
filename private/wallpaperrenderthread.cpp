@@ -121,13 +121,13 @@ void WallpaperRenderThread::run()
     QImage result(m_request.size, QImage::Format_ARGB32_Premultiplied);
     result.fill(m_request.color.rgba());
 
-    if (m_request.file.isEmpty() || !QFile::exists(m_request.file)) {
+    if (m_request.file.isEmpty() && m_request.providedImage.isNull() && !QFile::exists(m_request.file)) {
         if (!m_abort) {
             emit done(m_request, result);
         }
 
 #ifndef NDEBUG
-        kDebug() << "oh, fuck it";
+        kDebug() << "wrong request or file does not exist";
 #endif
         deleteLater();
         return;
@@ -142,7 +142,11 @@ void WallpaperRenderThread::run()
 
     // set image size
     QSize imgSize(1, 1);
-    if (scalable) {
+    if (!m_request.providedImage.isNull()) {
+        img = m_request.providedImage;
+        kDebug() << "going to resize the img" << img.size();
+        imgSize = imgSize.expandedTo(img.size());
+    } else if (scalable) {
         // scalable: image can be of any size
         imgSize = imgSize.expandedTo(m_request.size);
     } else {
@@ -231,9 +235,6 @@ void WallpaperRenderThread::run()
         QSvgRenderer svg(m_request.file);
         if (m_abort) {
             deleteLater();
-#ifndef NDEBUG
-        kDebug() << "oh, fuck it 2";
-#endif
             return;
         }
         svg.render(&p);
@@ -244,9 +245,6 @@ void WallpaperRenderThread::run()
 
         if (m_abort) {
             deleteLater();
-#ifndef NDEBUG
-        kDebug() << "oh, fuck it 3";
-#endif
             return;
         }
 
@@ -255,9 +253,6 @@ void WallpaperRenderThread::run()
                 for (int y = pos.y(); y < m_request.size.height(); y += scaledSize.height()) {
                     p.drawImage(QPoint(x, y), img);
                     if (m_abort) {
-#ifndef NDEBUG
-        kDebug() << "oh, fuck it 4";
-#endif
                         deleteLater();
                         return;
                     }
@@ -270,9 +265,6 @@ void WallpaperRenderThread::run()
 
     // signal we're done
     if (!m_abort) {
-#ifndef NDEBUG
-        kDebug() << "*****************************************************";
-#endif
         emit done(m_request, result);
     }
 

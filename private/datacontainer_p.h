@@ -20,10 +20,12 @@
 #ifndef PLASMA_DATACONTAINER_P_H
 #define PLASMA_DATACONTAINER_P_H
 
-#include <QtCore/QTimerEvent>
-#include <QtCore/QTime>
 #include "servicejob.h"
 #include "storage_p.h"
+
+#include <QtCore/QTimerEvent>
+#include <QtCore/QTime>
+#include <QtCore/QBasicTimer>
 
 class QTimer;
 
@@ -38,11 +40,11 @@ public:
     DataContainerPrivate(DataContainer *container)
         : q(container),
           storage(NULL),
+          storageCount(0),
           dirty(false),
           cached(false),
           enableStorage(false),
-          isStored(true),
-          storageCount(0)
+          isStored(true)
     {
     }
 
@@ -81,14 +83,15 @@ public:
     DataEngine::Data data;
     QMap<QObject *, SignalRelay *> relayObjects;
     QMap<uint, SignalRelay *> relays;
-    QTimer *storageTimer;
     QTime updateTs;
     Storage* storage;
+    QBasicTimer storageTimer;
+    QBasicTimer checkUsageTimer;
+    int  storageCount;
     bool dirty : 1;
     bool cached : 1;
     bool enableStorage : 1;
     bool isStored : 1;
-    int  storageCount;
 };
 
 class SignalRelay : public QObject
