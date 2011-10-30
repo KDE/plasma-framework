@@ -68,17 +68,40 @@ Item {
     Connections {
         target: listView
         onModelChanged: {
-            if (listView && listView.model)
-                internal.initDirtyObserver();
+            if (listView && listView.model) {
+                internal.initDirtyObserver()
+            }
+        }
+        onMovementStarted: root.opacity = 1
+        onMovementEnded: {
+            if (!dragArea.pressed) {
+                fadeTimer.restart()
+            }
         }
     }
 
     width: 48
+    opacity: 0
+    Behavior on opacity {
+        NumberAnimation {
+            duration: 250
+        }
+    }
 
     anchors {
         right: listView.right
         top: listView.top
         bottom: listView.bottom
+    }
+
+    Timer {
+        id: fadeTimer
+        interval: 4000
+        repeat: false
+        running: false
+        onTriggered: {
+            root.opacity = 0
+        }
     }
 
     RangeModel {
@@ -182,6 +205,7 @@ Item {
             mouse.accepted = true
             handle.y = mouse.y
         }
+        onReleased: fadeTimer.restart()
 
     }
 
