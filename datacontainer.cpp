@@ -31,8 +31,6 @@ DataContainer::DataContainer(QObject *parent)
     : QObject(parent),
       d(new DataContainerPrivate(this))
 {
-    d->storageTimer = new QTimer(this);
-    QObject::connect(d->storageTimer, SIGNAL(timeout()), this, SLOT(store()));
 }
 
 DataContainer::~DataContainer()
@@ -61,7 +59,7 @@ void DataContainer::setData(const QString &key, const QVariant &value)
     //setData() since the last time it was stored. This
     //gives us only one singleShot timer.
     if (isStorageEnabled() || !needsToBeStored()) {
-        d->storageTimer->start(180000);
+        d->storageTimer.start(180000, this);
     }
 
     setNeedsToBeStored(true);
@@ -330,11 +328,24 @@ void DataContainer::setNeedsUpdate(bool update)
 
 void DataContainer::checkUsage()
 {
-    if (d->relays.count() < 1 &&
-        receivers(SIGNAL(dataUpdated(QString, Plasma::DataEngine::Data))) < 1) {
-        // DO NOT CALL ANYTHING AFTER THIS LINE AS IT MAY GET DELETED!
-        kDebug() << objectName() << "is unused";
-        emit becameUnused(objectName());
+    if (!d->checkUsageTimer.isActive()) {
+        d->checkUsageTimer.start(10, this);
+    }
+}
+
+void DataContainer::timerEvent(QTimerEvent * event)
+{
+    if (event->timerId() == d->checkUsageTimer.timerId()) {
+        if (d->relays.count() < 1 &&
+            receivers(SIGNAL(dataUpdated(QString, Plasma::DataEngine::Data))) < 1) {
+            // DO NOT CALL ANYTHING AFTER THIS LINE AS IT MAY GET DELETED!
+            kDebug() << objectName() << "is unused";
+            emit becameUnused(objectName());
+        }
+        d->checkUsageTimer.stop();
+    } else if (event->timerId() == d->storageTimer.timerId()) {
+        d->store();
+        d->storageTimer.stop();
     }
 }
 
