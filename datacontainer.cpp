@@ -342,8 +342,10 @@ void DataContainer::timerEvent(QTimerEvent * event)
             kDebug() << objectName() << "is unused";
             emit becameUnused(objectName());
         }
+        d->checkUsageTimer.stop();
     } else if (event->timerId() == d->storageTimer.timerId()) {
         d->store();
+        d->storageTimer.stop();
     }
 }
 
