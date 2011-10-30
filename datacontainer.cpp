@@ -334,8 +334,8 @@ bool DataContainer::isUsed() const
 
 void DataContainerPrivate::checkUsage()
 {
-    if (!d->checkUsageTimer.isActive()) {
-        d->checkUsageTimer.start(10, this);
+    if (!checkUsageTimer.isActive()) {
+        checkUsageTimer.start(10, q);
     }
 }
 
