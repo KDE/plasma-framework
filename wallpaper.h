@@ -487,6 +487,22 @@ class PLASMA_EXPORT Wallpaper : public QObject
                     const QColor &color = QColor(0, 0, 0));
 
         /**
+         * Renders the wallpaper asyncronously with the given parameters. When the rendering is
+         * complete, the renderCompleted signal is emitted.
+         *
+         * @param image the raw QImage
+         * @param size the size to render the image as
+         * @param resizeMethod the method to use when resizing the image to fit size, @see
+         *                     ResizeMethod
+         * @param color the color to use to pad the rendered image if it doesn't take up the
+         *              entire size with the given ResizeMethod
+         * @since 4.7.4
+         */
+        void render(const QImage &image, const QSize &size,
+                    Wallpaper::ResizeMethod resizeMethod = ScaledResize,
+                    const QColor &color = QColor(0, 0, 0));
+
+        /**
          * Sets whether or not to cache on disk the results of calls to render. If the wallpaper
          * changes often or is innexpensive to render, then it's probably best not to cache them.
          *
