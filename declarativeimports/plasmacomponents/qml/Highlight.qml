@@ -16,7 +16,7 @@
  *   Free Software Foundation, Inc.,
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-import QtQuick 1.1
+import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 
 Item {
