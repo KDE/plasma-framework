@@ -17,6 +17,40 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+/**Documentanted API
+Inherits:
+    Item
+
+Imports:
+    QtQuick 1.0
+    org.kde.plasma.core
+
+ Description:
+ TODO i need more info here
+
+ Properties:
+            bool checked:
+            Returns if the Button is checked or not.
+
+            alias pressed:
+            TODO i need more info here
+
+            alias text:
+            Sets the text for the button
+
+            QtObject theme:
+            TODO needs info
+
+            alias view:
+            TODO needs info
+
+            alias shadow:
+            TODO needs info
+ Signals:
+        clicked:
+        The signal is emited when the button is clicked!
+ **/
+
 import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 
