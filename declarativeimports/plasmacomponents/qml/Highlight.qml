@@ -1,4 +1,4 @@
-/*
+ /*
  *   Copyright 2011 Daker Fernandes Pinheiro <dakerfp@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -16,6 +16,26 @@
  *   Free Software Foundation, Inc.,
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
+/**Documentanted API
+Inherits:
+        Item
+
+Imports:
+        QtQuick 1.1
+        org.kde.plasma.core
+
+ Description:
+ TODO i need more info here
+
+ Properties:
+        bool hover:
+        Returns if the user is hovering over the component
+
+        bool pressed:
+        Returns of the button is pressed or not.
+ **/
+
 import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 
