@@ -321,7 +321,7 @@ void FrameSvg::resizeFrame(const QSizeF &size)
     }
 
     if (size.isEmpty()) {
-        kDebug() << "Invalid size" << size;
+        //kDebug() << "Invalid size" << size;
         return;
     }
 

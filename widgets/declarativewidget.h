@@ -129,6 +129,8 @@ private:
 
     Q_PRIVATE_SLOT(d, void finishExecute())
     Q_PRIVATE_SLOT(d, void scheduleExecutionEnd())
+    Q_PRIVATE_SLOT(d, void minimumWidthChanged())
+    Q_PRIVATE_SLOT(d, void minimumHeightChanged())
 };
 
 } // namespace Plasma

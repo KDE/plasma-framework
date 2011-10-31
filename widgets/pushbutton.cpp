@@ -111,6 +111,25 @@ public:
         }
     }
 
+    void syncFrame()
+    {
+        if (background) {
+            //resize all panels
+            background->setElementPrefix("pressed");
+            background->resizeFrame(q->size());
+
+            syncActiveRect();
+
+            background->setElementPrefix("normal");
+            background->resizeFrame(q->size());
+            hoverAnimation->setProperty("startPixmap", background->framePixmap());
+
+            background->setElementPrefix("active");
+            background->resizeFrame(activeRect.size());
+            hoverAnimation->setProperty("targetPixmap", background->framePixmap());
+        }
+    }
+
     void syncActiveRect();
     void syncBorders();
 
@@ -193,6 +212,7 @@ PushButton::PushButton(QGraphicsWidget *parent)
 
     connect(d->background, SIGNAL(repaintNeeded()), SLOT(syncBorders()));
     d->initTheming();
+    d->syncFrame();
 }
 
 PushButton::~PushButton()
@@ -325,23 +345,9 @@ void PushButton::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
     d->setPixmap();
 
-   if (d->background) {
-        //resize all panels
-       d->background->setElementPrefix("pressed");
-       d->background->resizeFrame(size());
+    d->syncFrame();
 
-       d->syncActiveRect();
-
-       d->background->setElementPrefix("normal");
-       d->background->resizeFrame(size());
-       d->hoverAnimation->setProperty("startPixmap", d->background->framePixmap());
-
-       d->background->setElementPrefix("active");
-       d->background->resizeFrame(d->activeRect.size());
-       d->hoverAnimation->setProperty("targetPixmap", d->background->framePixmap());
-   }
-
-   QGraphicsProxyWidget::resizeEvent(event);
+    QGraphicsProxyWidget::resizeEvent(event);
 }
 
 void PushButton::paint(QPainter *painter,

@@ -145,14 +145,14 @@ public:
 
     /**
      * @param interval milliseconds the tick signal will be emitted
-     * @since 4.8
+     * @since 4.7.1
      */
     void setTickInterval(qint64 interval);
 
     /**
      * @return milliseconds the tick signal will be emitted
      * @see tickInterval()
-     * @since 4.8
+     * @since 4.7.1
      */
     qint64 tickInterval() const;
 

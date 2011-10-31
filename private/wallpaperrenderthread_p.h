@@ -42,6 +42,7 @@ public:
 
     }
     QWeakPointer<QObject> requester;
+    QImage providedImage;
     QString file;
     QSize size;
     Wallpaper::ResizeMethod resizeMethod;
