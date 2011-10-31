@@ -17,6 +17,36 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+/**Documentanted API
+Inherits:
+        Item
+
+Imports:
+        QtQuick 1.1
+        org.kde.plasma.core
+
+Description:
+        It is a simple Radio button which is using the plasma theme.
+        TODO Do we need more info?
+
+Properties:
+        Flickable flickableItem
+        int orientation:
+        Sets the orientation of the ScrollDecorator.
+        For example,orientation: Qt.Vertical
+
+        bool inverted:
+        Returns if the item is inverted or not
+
+        bool _isVertical:
+        Returns if the item is vertical or not.
+
+        bool _inverted:
+
+        alias _value:
+**/
+
+
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 
@@ -43,7 +73,7 @@ Item {
 
     anchors {
         right: flickableItem.right
-        left: (orientation == Qt.Vertical) ? undefined : flickableItem.left 
+        left: (orientation == Qt.Vertical) ? undefined : flickableItem.left
         top: (orientation == Qt.Vertical) ? flickableItem.top : undefined
         bottom: flickableItem.bottom
     }
