@@ -17,6 +17,38 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+/**Documentanted API
+        Inherits:
+        Item
+
+ Imports:
+        QtQuick 1.0
+        org.kde.plasma.core
+
+Description:
+            It is a simple progressBar which is using the plasma theme.
+            TODO Do we need more info?
+
+Properties:
+            alias minimumValue:
+            Sets the minimumValue for the progressBar
+
+            alias maximumValue:
+            Sets the maximumValue for the progressBar
+
+            alias value:
+            Returns the current value of the progressBar
+
+            alias indeterminate:
+            TODO needs info
+
+            int orientation:
+            Sets the orientation of the progressBar
+
+            bool _isVertical:
+            Returns true if the progressBar is vertical.
+**/
+
 import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 
