@@ -22,12 +22,12 @@ TextArea 0.1 TextArea.qml
 TextField 0.1 TextField.qml
 ToolBar 0.1 ToolBar.qml
 ToolButton 0.1 ToolButton.qml
-ListItem 0.1 ToolButton.qml
+ListItem 0.1 ListItem.qml
+
+
 
 Page 0.1 Page.qml
 PageStack 0.1 PageStack.qml
-Window 0.1 Window.qml
-
 
 TabBar 0.1 TabBar.qml
 TabButton 0.1 TabButton.qml
