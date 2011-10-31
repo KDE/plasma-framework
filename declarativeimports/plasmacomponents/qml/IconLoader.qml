@@ -21,6 +21,26 @@ import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.qtextracomponents 0.1
 
+/**Documentanted API
+Inherits:
+        Item
+
+Imports:
+        QtQuick 1.1
+        org.kde.plasma.core
+        org.kde.qtextracomponents
+
+Description:
+ TODO i need more info here
+
+Properties:
+        bool valid:
+        Returns if the icon is valid or not.
+
+        string source:
+        Returns the dir,in which the icon exists.
+**/
+
 Item {
     id: root
 
@@ -65,7 +85,7 @@ Item {
                 anchors.fill: parent
             }
         }
-        
+
         Component {
             id: iconComponent
 
