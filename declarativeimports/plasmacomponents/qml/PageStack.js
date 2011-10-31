@@ -150,7 +150,11 @@ function initPage(page, properties) {
     }
 
     container.page = page;
-    container.owner = page.parent;
+    if (page.parent == null) {
+        container.owner = container;
+    } else {
+        container.owner = page.parent;
+    }
 
     // the page has to be reparented if
     if (page.parent != container) {
