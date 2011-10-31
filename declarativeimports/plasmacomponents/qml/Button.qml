@@ -17,6 +17,44 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+/**Documentanted API
+Inherits:
+        Item
+
+Imports:
+        org.kde.plasma.core
+        QtQuick 1.0
+
+Description:
+        Just a simple button which is using the plasma theme.
+        Plasma theme is the theme which changes via the systemsetting-workspace  appearence
+        -desktop theme.
+
+Properties:
+
+        bool checked:
+        Returns if the Button is checked or not.
+
+        bool checkable:
+        Set if the button will be checkable or not.
+
+        alias pressed:
+        Returns if the button is pressed or not.
+
+        alias text:
+        Sets the text for the button.
+        For example,the ok button has text 'ok'
+
+        alias iconSource:
+        TODO needs to be filled
+
+        alias font:
+        TODO needs to be filled
+
+Signals:
+        onClicked:
+        The signal is emited when button is clicked.
+**/
 import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 
