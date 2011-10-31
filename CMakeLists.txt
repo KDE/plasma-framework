@@ -13,7 +13,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${KDE4_KDEUI_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/experimental/libkdeclarative
                     ${CMAKE_BINARY_DIR}/experimental/libkdeclarative
-                    ${CMAKE_SOURCE_DIR}/threadweaver/
+                    ${CMAKE_SOURCE_DIR}/kutils
+                    ${CMAKE_SOURCE_DIR}/threadweaver
                     ${CMAKE_SOURCE_DIR}/plasma/extenders
                     ${CMAKE_SOURCE_DIR}/plasma/remote
                     ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch/qtjolie
