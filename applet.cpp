@@ -53,7 +53,10 @@
 #include <kactioncollection.h>
 #include <kauthorized.h>
 #include <kcolorscheme.h>
+#include <kcmoduleinfo.h>
+#include <kcmoduleproxy.h>
 #include <kdialog.h>
+#include <kdesktopfile.h>
 #include <kicon.h>
 #include <kiconloader.h>
 #include <kkeysequencewidget.h>
@@ -1885,19 +1888,40 @@ void Applet::showConfigurationInterface()
     if (d->package && d->configLoader) {
         KConfigDialog *dialog = 0;
 
-        QString uiFile = d->package->filePath("mainconfigui");
-        if (!uiFile.isEmpty()) {
+        const QString uiFile = d->package->filePath("mainconfigui");
+        KDesktopFile df(d->package->path() + "/metadata.destkop");
+        const QStringList kcmPlugins = df.desktopGroup().readEntry("X-Plasma-ConfigPlugins", QStringList());
+        if (!uiFile.isEmpty() || !kcmPlugins.isEmpty()) {
+            dialog = new AppletConfigDialog(0, d->configDialogId(), d->configLoader);
+            dialog->setWindowTitle(d->configWindowTitle());
+            dialog->setAttribute(Qt::WA_DeleteOnClose, true);
+            bool hasPages = false;
+
             QFile f(uiFile);
             QUiLoader loader;
             QWidget *w = loader.load(&f);
             if (w) {
-                dialog = new AppletConfigDialog(0, d->configDialogId(), d->configLoader);
-                dialog->setWindowTitle(d->configWindowTitle());
-                dialog->setAttribute(Qt::WA_DeleteOnClose, true);
                 dialog->addPage(w, i18n("Settings"), icon(), i18n("%1 Settings", name()));
+                hasPages = true;
+            }
+
+            foreach (const QString &kcm, kcmPlugins) {
+                KCModuleProxy *module = new KCModuleProxy(kcm);
+                if (module->realModule()) {
+                    dialog->addPage(module, module->moduleInfo().moduleName(), module->moduleInfo().icon());
+                    hasPages = true;
+                } else {
+                    delete module;
+                }
+            }
+
+            if (hasPages) {
                 d->addGlobalShortcutsPage(dialog);
                 d->addPublishPage(dialog);
                 dialog->show();
+            } else {
+                delete dialog;
+                dialog = 0;
             }
         }
 
