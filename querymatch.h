@@ -21,6 +21,7 @@
 #define PLASMA_QUERYMATCH_H
 
 #include <QtCore/QList>
+#include <QtCore/QUrl>
 #include <QtCore/QSharedDataPointer>
 
 #include <plasma/plasma_export.h>
@@ -93,6 +94,15 @@ class PLASMA_EXPORT QueryMatch
         AbstractRunner *runner() const;
 
         /**
+         * Requests this match to activae using the given context
+         *
+         * @param context the context to use in conjunction with this run
+         *
+         * @sa AbstractRunner::run
+         */
+        void run(const RunnerContext &context) const;
+
+        /**
          * @return true if the match is valid and can therefore be run,
          *         an invalid match does not have an associated AbstractRunner
          */
@@ -123,15 +133,6 @@ class PLASMA_EXPORT QueryMatch
          * @return a number between 0 and 1
          */
         qreal relevance() const;
-
-        /**
-         * Requests this match to activae using the given context
-         *
-         * @param context the context to use in conjunction with this run
-         *
-         * @sa AbstractRunner::run
-         */
-        void run(const RunnerContext &context) const;
 
         /**
          * Sets data to be used internally by the associated
@@ -207,6 +208,28 @@ class PLASMA_EXPORT QueryMatch
          * @return the icon for this match
          */
         QIcon icon() const;
+
+        /**
+         * Sets the MimeType, if any, associated with this match.
+         * This overrides the MimeType provided by QueryContext, and should only be
+         * set when it is different from the QueryContext MimeType
+         */
+        void setMimeType(const QString &mimeType);
+
+        /**
+         * @return the mimtype for this match, or QString() is none
+         */
+        QString mimeType() const;
+
+        /**
+         * Sets the urls, if any, associated with this match
+         */
+        void setUrls(const QList<QUrl> &urls);
+
+        /**
+         * @return the mimtype for this match, or QString() is none
+         */
+        QList<QUrl> urls() const;
 
         /**
          * Sets whether or not this match can be activited
