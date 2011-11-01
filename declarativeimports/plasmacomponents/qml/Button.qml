@@ -1,5 +1,6 @@
 /*
 *   Copyright (C) 2011 by Daker Fernandes Pinheiro <dakerfp@gmail.com>
+*   Copyright (C) 2011 by Mark Gaiser <markg85@gmail.com>
 *
 *   This program is free software; you can redistribute it and/or modify
 *   it under the terms of the GNU Library General Public License as
@@ -33,37 +34,36 @@ Item {
 
     signal clicked()
 
+    width: Math.max(50, icon.width + label.paintedWidth + surfaceNormal.margins.left + surfaceNormal.margins.right) + ((icon.valid) ? surfaceNormal.margins.left : 0);
+    height: Math.max(20, Math.max(icon.height, label.paintedHeight) + surfaceNormal.margins.top + surfaceNormal.margins.bottom)
 
-    function pressButton() {
-        if (button.enabled)
-            surface.prefix = "pressed";
-    }
-
-    function releaseButton() {
-        if (!button.enabled)
-            return;
-
-        if (button.checkable)
-            button.checked = !button.checked;
-
-        // TODO: "checked" state must have special graphics?
-        if (button.checked)
-            surface.prefix = "pressed";
-        else
-            surface.prefix = "normal";
-
-        button.clicked();
-        button.forceActiveFocus();
-    }
-
-    width: Math.max(50, icon.width + label.paintedWidth + surface.margins.left + surface.margins.right)
-    height: Math.max(20, Math.max(icon.height, label.paintedHeight) + surface.margins.top + surface.margins.bottom)
     // TODO: needs to define if there will be specific graphics for
     //     disabled buttons
     opacity: enabled ? 1.0 : 0.5
 
-    Keys.onSpacePressed: pressButton();
-    Keys.onReturnPressed: pressButton();
+    function pressButton() {
+        if(button.enabled) {
+            buttonContent.state = "pressed"
+        }
+    }
+
+    function releaseButton() {
+        if(button.enabled) {
+            buttonContent.state = "normal"
+
+            if (button.checkable) {
+                button.checked = !button.checked;
+            }
+
+            // TODO: "checked" state must have special graphics?
+
+            button.clicked();
+            button.forceActiveFocus();
+        }
+    }
+
+    Keys.onSpacePressed: pressButton()
+    Keys.onReturnPressed: pressButton()
     Keys.onReleased: {
         if (event.key == Qt.Key_Space ||
             event.key == Qt.Key_Return)
@@ -85,21 +85,57 @@ Item {
         anchors.fill: parent
     }
 
+    // The normal button state
     PlasmaCore.FrameSvgItem {
-        id: surface
+        id: surfaceNormal
 
         anchors.fill: parent
         imagePath: "widgets/button"
         prefix: "normal"
     }
 
+    // The pressed state
+    PlasmaCore.FrameSvgItem {
+        id: surfacePressed
+
+        anchors.fill: parent
+        imagePath: "widgets/button"
+        prefix: "pressed"
+        opacity: 0
+    }
+
     Item {
+        id: buttonContent
+
+        states: [
+            State { name: "normal" },
+            State { name: "pressed" }
+        ]
+        transitions: [
+            Transition {
+                to: "normal"
+                // Cross fade from pressed to normal
+                ParallelAnimation {
+                    NumberAnimation { target: surfaceNormal; property: "opacity"; to: 1; duration: 100 }
+                    NumberAnimation { target: surfacePressed; property: "opacity"; to: 0; duration: 100 }
+                }
+            },
+            Transition {
+                to: "pressed"
+                // Cross fade from normal to pressed
+                ParallelAnimation {
+                    NumberAnimation { target: surfaceNormal; property: "opacity"; to: 0; duration: 100 }
+                    NumberAnimation { target: surfacePressed; property: "opacity"; to: 1; duration: 100 }
+                }
+            }
+        ]
+
         anchors {
             fill: parent
-            leftMargin: surface.margins.left
-            topMargin: surface.margins.top
-            rightMargin: surface.margins.right
-            bottomMargin: surface.margins.bottom
+            leftMargin: surfaceNormal.margins.left
+            topMargin: surfaceNormal.margins.top
+            rightMargin: surfaceNormal.margins.right
+            bottomMargin: surfaceNormal.margins.bottom
         }
 
         IconLoader {
@@ -118,9 +154,11 @@ Item {
             anchors {
                 top: parent.top
                 bottom: parent.bottom
-                left: icon.valid ? icon.right : parent.left
                 right: parent.right
+                left: icon.valid ? icon.right : parent.left
+                leftMargin: icon.valid ? parent.anchors.leftMargin : 0
             }
+
             font.capitalization: theme.defaultFont.capitalization
             font.family: theme.defaultFont.family
             font.italic: theme.defaultFont.italic
@@ -141,13 +179,8 @@ Item {
 
         anchors.fill: parent
         hoverEnabled: true
-
-        onPressed: {
-            pressButton();
-        }
-        onReleased: {
-            releaseButton();
-        }
+        onPressed: pressButton()
+        onReleased: releaseButton()
         onEntered: {
             shadow.state = "hover"
         }
@@ -162,4 +195,3 @@ Item {
         }
     }
 }
-
