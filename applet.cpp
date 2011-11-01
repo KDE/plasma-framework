@@ -1889,7 +1889,7 @@ void Applet::showConfigurationInterface()
         KConfigDialog *dialog = 0;
 
         const QString uiFile = d->package->filePath("mainconfigui");
-        KDesktopFile df(d->package->path() + "/metadata.destkop");
+        KDesktopFile df(d->package->path() + "/metadata.desktop");
         const QStringList kcmPlugins = df.desktopGroup().readEntry("X-Plasma-ConfigPlugins", QStringList());
         if (!uiFile.isEmpty() || !kcmPlugins.isEmpty()) {
             dialog = new AppletConfigDialog(0, d->configDialogId(), d->configLoader);
