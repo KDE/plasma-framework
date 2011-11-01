@@ -165,6 +165,8 @@ function initPage(page, properties) {
         page.pageStack = root;
     }
 
+    page.anchors.fill = container
+
     return container;
 }
 

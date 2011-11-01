@@ -281,8 +281,9 @@ Item {
             {
                 transitionAnimationRunning = true;
                 internal.ongoingTransitionCount++;
-                if (root.visible)
+                if (root.visible) {
                     internal.setPageStatus(page, (state == "") ? PageStatus.Activating : PageStatus.Deactivating);
+                }
             }
 
             // Called when a transition has ended.
@@ -449,10 +450,11 @@ Item {
                     if (owner != container) {
                         // container is not the owner of the page - re-parent back to original owner
                         page.visible = false;
+                        page.anchors.fill = undefined
                         page.parent = owner;
                     }
                 }
-print("KILLING"+container+" "+page+" "+owner)
+
                 container.destroy();
             }
         }
