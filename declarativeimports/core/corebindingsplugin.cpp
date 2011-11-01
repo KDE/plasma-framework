@@ -37,6 +37,7 @@
 #include "theme_p.h"
 #include "dialog.h"
 #include "tooltip.h"
+#include "dataenginebindings_p.h"
 
 void CoreBindingsPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
 {
@@ -51,12 +52,14 @@ void CoreBindingsPlugin::initializeEngine(QDeclarativeEngine *engine, const char
     kdeclarative.setDeclarativeEngine(engine);
     kdeclarative.initialize();
     QScriptEngine *scriptEngine = kdeclarative.scriptEngine();
-kWarning()<<"AAAAA"<<scriptEngine->globalObject().property("i18n").isValid();
+
     //inject the hack only if wasn't injected already
     if (!scriptEngine->globalObject().property("i18n").isValid()) {
         //binds things like kconfig and icons
         kdeclarative.setupBindings();
     }
+
+    registerDataEngineMetaTypes(scriptEngine);
 }
 
 void CoreBindingsPlugin::registerTypes(const char *uri)
