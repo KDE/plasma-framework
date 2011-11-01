@@ -463,6 +463,11 @@ void PopupAppletInterface::showPopup()
     popupApplet()->showPopup();
 }
 
+void PopupAppletInterface::showPopup(int timeout)
+{
+    popupApplet()->showPopup(timeout);
+}
+
 void PopupAppletInterface::setPopupWidget(QGraphicsWidget *widget)
 {
     popupApplet()->setGraphicsWidget(widget);
