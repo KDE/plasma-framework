@@ -30,11 +30,11 @@
 #include <Plasma/FrameSvg>
 #include <Plasma/Svg>
 
-#include "datasource_p.h"
+#include "datasource.h"
 #include "datamodel.h"
-#include "framesvgitem_p.h"
-#include "svgitem_p.h"
-#include "theme_p.h"
+#include "framesvgitem.h"
+#include "svgitem.h"
+#include "theme.h"
 #include "dialog.h"
 #include "tooltip.h"
 #include "dataenginebindings_p.h"

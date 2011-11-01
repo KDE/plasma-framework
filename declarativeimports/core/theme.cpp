@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
  ***************************************************************************/
 
-#include "theme_p.h"
+#include "theme.h"
 
 #include <KIconLoader>
 
@@ -299,5 +299,5 @@ int ThemeProxy::enormousIconSize() const
     return KIconLoader::SizeEnormous;
 }
 
-#include "theme_p.moc"
+#include "theme.moc"
 
