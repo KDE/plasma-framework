@@ -23,6 +23,9 @@
 
 #include <QtDeclarative/qdeclarative.h>
 #include <QDeclarativeContext>
+#include <QScriptEngine>
+
+#include <kdeclarative.h>
 
 #include <Plasma/FrameSvg>
 #include <Plasma/Svg>
@@ -43,6 +46,17 @@ void CoreBindingsPlugin::initializeEngine(QDeclarativeEngine *engine, const char
 
     ThemeProxy *theme = new ThemeProxy(context);
     context->setContextProperty("theme", theme);
+
+    KDeclarative kdeclarative;
+    kdeclarative.setDeclarativeEngine(engine);
+    kdeclarative.initialize();
+    QScriptEngine *scriptEngine = kdeclarative.scriptEngine();
+kWarning()<<"AAAAA"<<scriptEngine->globalObject().property("i18n").isValid();
+    //inject the hack only if wasn't injected already
+    if (!scriptEngine->globalObject().property("i18n").isValid()) {
+        //binds things like kconfig and icons
+        kdeclarative.setupBindings();
+    }
 }
 
 void CoreBindingsPlugin::registerTypes(const char *uri)
