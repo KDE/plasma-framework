@@ -38,6 +38,31 @@
 **
 ****************************************************************************/
 
+/**Documentanted API
+Inherits:
+        Item
+
+Imports:
+        QtQuick 1.1
+        everything in the same dir which are version 0.1
+
+Description:
+ TODO i need more info here
+
+
+Properties:
+        int status: PageStatus.Inactive
+
+        PageStack pageStack:
+
+        int orientationLock:
+        Sets the orientation for the Page
+
+        Item tools:
+        The default value is true.
+        TODO needs info
+ **/
+
 import QtQuick 1.1
 
 import "." 0.1
