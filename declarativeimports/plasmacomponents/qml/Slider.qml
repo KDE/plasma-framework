@@ -17,6 +17,48 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+/**Documentanted API
+Inherits:
+        Item
+
+Imports:
+        QtQuick 1.0
+        org.kde.plasma.core
+
+Description:
+        A simple slider.
+
+Properties:
+        alias stepSize: range.stepSize
+        Sets the step with which the slider will move.
+
+        alias minimumValue:
+        TODO
+        alias maximumValue:
+        TODO
+        alias value:
+        TODO
+
+        int orientation:
+        Sets the orientation for the slider.
+
+        alias pressed:
+        If it is true then the slider has been pressed.
+
+        bool valueIndicatorVisible:
+
+        string valueIndicatorText:
+
+        bool animated:
+        Sets if the slider will animate or not.
+
+        alias inverted:
+
+        bool updateValueWhileDragging:
+
+        real handleSize:
+**/
+
 import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 
