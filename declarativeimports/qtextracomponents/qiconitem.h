@@ -34,7 +34,7 @@ public:
     QIconItem(QDeclarativeItem *parent=0);
     ~QIconItem();
 
-    void setIcon(QVariant &icon);
+    void setIcon(const QVariant &icon);
     QIcon icon() const;
 
     void setSmooth(const bool smooth);

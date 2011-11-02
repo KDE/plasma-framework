@@ -35,7 +35,7 @@ QIconItem::~QIconItem()
 {
 }
 
-void QIconItem::setIcon(QVariant &icon)
+void QIconItem::setIcon(const QVariant &icon)
 {
     if(icon.canConvert<QIcon>()) {
         m_icon = icon.value<QIcon>();
