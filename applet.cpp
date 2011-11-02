@@ -54,6 +54,7 @@
 #include <kauthorized.h>
 #include <kcolorscheme.h>
 #include <kdialog.h>
+#include <kdesktopfile.h>
 #include <kicon.h>
 #include <kiconloader.h>
 #include <kkeysequencewidget.h>
@@ -64,6 +65,11 @@
 #include <kshortcut.h>
 #include <kwindowsystem.h>
 #include <kpushbutton.h>
+
+#ifndef PLASMA_NO_KUTILS
+#include <kcmoduleinfo.h>
+#include <kcmoduleproxy.h>
+#endif
 
 #ifndef PLASMA_NO_SOLID
 #include <solid/powermanagement.h>
@@ -1882,22 +1888,62 @@ void Applet::showConfigurationInterface()
     }
 
     d->publishUI.publishCheckbox = 0;
-    if (d->package && d->configLoader) {
+    if (d->package) {
         KConfigDialog *dialog = 0;
 
-        QString uiFile = d->package->filePath("mainconfigui");
-        if (!uiFile.isEmpty()) {
+        const QString uiFile = d->package->filePath("mainconfigui");
+        KDesktopFile df(d->package->path() + "/metadata.desktop");
+        const QStringList kcmPlugins = df.desktopGroup().readEntry("X-Plasma-ConfigPlugins", QStringList());
+        if (!uiFile.isEmpty() || !kcmPlugins.isEmpty()) {
+            KConfigSkeleton *configLoader = d->configLoader ? d->configLoader : new KConfigSkeleton(0);
+            dialog = new AppletConfigDialog(0, d->configDialogId(), configLoader);
+
+            dialog->setWindowTitle(d->configWindowTitle());
+            dialog->setAttribute(Qt::WA_DeleteOnClose, true);
+            bool hasPages = false;
+
             QFile f(uiFile);
             QUiLoader loader;
             QWidget *w = loader.load(&f);
             if (w) {
-                dialog = new AppletConfigDialog(0, d->configDialogId(), d->configLoader);
-                dialog->setWindowTitle(d->configWindowTitle());
-                dialog->setAttribute(Qt::WA_DeleteOnClose, true);
                 dialog->addPage(w, i18n("Settings"), icon(), i18n("%1 Settings", name()));
+                hasPages = true;
+            }
+
+            foreach (const QString &kcm, kcmPlugins) {
+#ifndef PLASMA_NO_KUTILS
+                KCModuleProxy *module = new KCModuleProxy(kcm);
+                if (module->realModule()) {
+                    dialog->addPage(module, module->moduleInfo().moduleName(), module->moduleInfo().icon());
+                    hasPages = true;
+                } else {
+                    delete module;
+                }
+#else
+                KService::Ptr service = KService::serviceByStorageId(kcm);
+                if (service) {
+                    QString error;
+                    KCModule *module = service->createInstance<KCModule>(dialog, QVariantList(), &error);
+                    if (module) {
+                        connect(module, SIGNAL(changed(bool)), dialog, SLOT(settingsModified(bool)));
+                        dialog->addPage(module, service->name(), service->icon());
+                        hasPages = true;
+                    } else {
+#ifndef NDEBUG
+                        kDebug() << "failed to load kcm" << kcm << "for" << name();
+#endif
+                    }
+                }
+#endif
+            }
+
+            if (hasPages) {
                 d->addGlobalShortcutsPage(dialog);
                 d->addPublishPage(dialog);
                 dialog->show();
+            } else {
+                delete dialog;
+                dialog = 0;
             }
         }
 
