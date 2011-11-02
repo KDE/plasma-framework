@@ -17,6 +17,19 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+/**Documentanted API
+Inherits:
+        DualStateButton
+
+Imports:
+        QtQuick 1.0
+        org.kde.plasma.core
+
+Description:
+        TODO
+
+Properties:
+**/
 import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 
@@ -58,7 +71,7 @@ DualStateButton {
                 bottomMargin: -margins.bottom
             }
         }
-        
+
         PlasmaCore.FrameSvgItem {
             id: button
             imagePath: "widgets/button"
