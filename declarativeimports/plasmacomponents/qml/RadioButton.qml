@@ -19,7 +19,7 @@
 
 /**Documentanted API
 Inherits:
-        Item
+        DualStateButton
 
 Imports:
         QtQuick 1.0
@@ -29,8 +29,6 @@ Description:
         It is a simple Radio button which is using the plasma theme.
         TODO Do we need more info?
 
-Properties:
-        TODO needs more info?/?
 **/
 
 import QtQuick 1.0
