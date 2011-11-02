@@ -49,7 +49,7 @@ Properties:
         TODO needs to be filled
 
         alias font:
-        TODO needs to be filled
+        Sets the font for the button.
 
 Signals:
         onClicked:
