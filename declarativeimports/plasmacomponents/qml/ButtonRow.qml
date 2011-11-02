@@ -70,7 +70,7 @@ import "ButtonGroup.js" as Behavior
 Properties:
      bool exclusive:
      Specifies the grouping behavior. If enabled, the checked property on buttons contained
-     in the group will be exclusive.
+     in the group will be exclusive.The default value is true.
 
      Note that a button in an exclusive group will allways be checkable
 
