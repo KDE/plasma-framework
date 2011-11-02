@@ -148,6 +148,8 @@ private:
     DialogMargins *m_margins;
     bool m_activeWindow;
     Plasma::Location m_location;
+    static int offscreenX;
+    static int offscreenY;
 };
 
 #endif

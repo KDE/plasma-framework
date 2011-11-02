@@ -20,7 +20,9 @@
 #include "dialog.h"
 #include "declarativeitemcontainer_p.h"
 
+#include <QApplication>
 #include <QDeclarativeItem>
+#include <QDesktopWidget>
 #include <QGraphicsObject>
 #include <QGraphicsWidget>
 #include <QTimer>
@@ -30,6 +32,9 @@
 #include <Plasma/Dialog>
 #include <Plasma/WindowEffects>
 
+
+int DialogProxy::offscreenX = 0;
+int DialogProxy::offscreenY = 0;
 
 DialogMargins::DialogMargins(Plasma::Dialog *dialog, QObject *parent)
     : QObject(parent),
@@ -171,6 +176,12 @@ void DialogProxy::syncMainItem()
         }
     }
     m_dialog->setGraphicsWidget(widget);
+
+    if (!qobject_cast<Plasma::Corona *>(scene)) {
+        offscreenX -= 1024;
+        offscreenY -= 1024;
+        widget->setPos(offscreenX, offscreenY);
+    }
 }
 
 bool DialogProxy::isVisible() const
@@ -199,7 +210,60 @@ QPoint DialogProxy::popupPosition(QGraphicsObject *item, int alignment) const
     if (corona) {
         return corona->popupPosition(item, m_dialog->size(), (Qt::AlignmentFlag)alignment);
     } else {
-        return QPoint();
+
+        QList<QGraphicsView*> views = item->scene()->views();
+
+        if (views.size() < 1) {
+            return QPoint();
+        }
+
+        QGraphicsView *view = 0;
+        if (views.size() == 1) {
+            view = views[0];
+        } else {
+            QGraphicsView *found = 0;
+            QGraphicsView *possibleFind = 0;
+            foreach (QGraphicsView *v, views) {
+                if (v->sceneRect().intersects(item->sceneBoundingRect()) ||
+                    v->sceneRect().contains(item->scenePos())) {
+                    if (v->isActiveWindow()) {
+                        found = v;
+                    } else {
+                        possibleFind = v;
+                    }
+                }
+            }
+            view = found ? found : possibleFind;
+        }
+
+        if (!view) {
+            return QPoint();
+        }
+
+        //swap direction if necessary
+        if (QApplication::isRightToLeft() && alignment != Qt::AlignCenter) {
+            if (alignment == Qt::AlignRight) {
+                alignment = Qt::AlignLeft;
+            } else {
+                alignment = Qt::AlignRight;
+            }
+        }
+
+        int xOffset = 0;
+
+        if (alignment == Qt::AlignCenter) {
+            xOffset = item->boundingRect().width()/2 - m_dialog->width()/2;
+        } else if (alignment == Qt::AlignRight) {
+            xOffset = item->boundingRect().width() - m_dialog->width();
+        }
+
+        const QRect avail = QApplication::desktop()->availableGeometry(view);
+        QPoint menuPos = view->mapToGlobal(view->mapFromScene(item->scenePos()+QPoint(xOffset, item->boundingRect().height())));
+
+        if (menuPos.y() + m_dialog->height() > avail.bottom()) {
+            menuPos = view->mapToGlobal(view->mapFromScene(item->scenePos() - QPoint(-xOffset, m_dialog->height())));
+        }
+        return menuPos;
     }
 }
 
