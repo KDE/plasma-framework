@@ -21,19 +21,20 @@
 
 #include <QDeclarativeItem>
 #include <QPixmap>
+#include <QVariant>
 
 class QIconItem : public QDeclarativeItem
 {
     Q_OBJECT
 
-    Q_PROPERTY(QIcon icon READ icon WRITE setIcon)
+    Q_PROPERTY(QVariant icon READ icon WRITE setIcon)
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth)
 
 public:
     QIconItem(QDeclarativeItem *parent=0);
     ~QIconItem();
 
-    void setIcon(const QIcon &icon);
+    void setIcon(QVariant &icon);
     QIcon icon() const;
 
     void setSmooth(const bool smooth);
