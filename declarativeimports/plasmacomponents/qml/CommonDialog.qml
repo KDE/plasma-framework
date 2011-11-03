@@ -48,7 +48,7 @@ Dialog {
     id: root
 
     property alias titleText: titleAreaText.text
-    property url titleIcon
+    property string titleIcon
     property variant buttonTexts: []
     property bool privateCloseIcon: false
 
@@ -111,8 +111,8 @@ Dialog {
             id: titleLayoutHelper // needed to make the text mirror correctly
 
             anchors {
-                left: parent.left
-                right: titleAreaIcon.source == "" ? parent.right : titleAreaIcon.left
+                right: parent.right
+                left: titleAreaIcon.source == "" ? parent.left : titleAreaIcon.right
                 top: parent.top
                 bottom: parent.bottom
                 leftMargin: parent.margins.left
@@ -134,35 +134,14 @@ Dialog {
             }
         }
 
-        Image {
+        IconLoader {
             id: titleAreaIcon
-
-            anchors.right: parent.right
+            width: theme.iconSizeSmall
+            height: theme.iconSizeSmall
+            source: titleIcon
+            anchors.left: parent.left
             anchors.rightMargin: 4
             anchors.verticalCenter: parent.verticalCenter
-            source: internal.iconSource()
-            sourceSize.height: 16
-            sourceSize.width: 16
-
-            MouseArea {
-                id: iconMouseArea
-
-                property bool pressCancelled
-
-                anchors.centerIn: parent
-                width: parent.width + 4
-                height: parent.height + 4
-                enabled: privateCloseIcon && root.status == DialogStatus.Open
-
-                onPressed: {
-                    pressCancelled = false
-                }
-                onClicked: {
-                    if (!pressCancelled)
-                        root.reject()
-                }
-                onExited: pressCancelled = true
-            }
         }
     }
 

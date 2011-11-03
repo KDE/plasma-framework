@@ -51,7 +51,6 @@ CommonDialog {
     property string message
     property string acceptButtonText
     property string rejectButtonText
-    property alias icon: root.titleIcon // for backwards compatibility
 
     onAcceptButtonTextChanged: internal.updateButtonTexts()
     onRejectButtonTextChanged: internal.updateButtonTexts()
