@@ -34,6 +34,7 @@ KDialogProxy::KDialogProxy (QObject *parent)
     m_dialog->setButtons( KDialog::Ok | KDialog::Cancel);
     connect(m_dialog, SIGNAL(okClicked()), this, SIGNAL(accepted()));
     connect(m_dialog, SIGNAL(cancelClicked()), this, SIGNAL(rejected()));
+    connect(m_dialog, SIGNAL(closeClicked()), this, SIGNAL(rejected()));
 }
 
 KDialogProxy::~KDialogProxy()
