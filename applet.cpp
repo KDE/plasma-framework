@@ -69,6 +69,8 @@
 #ifndef PLASMA_NO_KUTILS
 #include <kcmoduleinfo.h>
 #include <kcmoduleproxy.h>
+#else
+#include <kcmodule.h>
 #endif
 
 #ifndef PLASMA_NO_SOLID
