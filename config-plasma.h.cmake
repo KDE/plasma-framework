@@ -5,4 +5,5 @@
 #cmakedefine PLASMA_NO_KNEWSTUFF
 #cmakedefine PLASMA_NO_SOLID
 #cmakedefine PLASMA_NO_KIO
+#cmakedefine PLASMA_NO_KUTILS
 
