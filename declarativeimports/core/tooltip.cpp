@@ -70,6 +70,9 @@ void ToolTipProxy::setTarget(QGraphicsObject *target)
 
 void ToolTipProxy::syncTarget()
 {
+    if (!m_target) {
+        return;
+    }
     // find the scene
     QGraphicsScene *scene = m_target.data()->scene();
     if (!scene) {
