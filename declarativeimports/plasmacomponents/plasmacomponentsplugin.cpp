@@ -26,6 +26,7 @@
 #include "enums.h"
 #include "qmenu.h"
 #include "qmenuitem.h"
+#include "kdialogproxy.h"
 
 
 void PlasmaComponentsPlugin::registerTypes(const char *uri)
@@ -36,6 +37,8 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
     qmlRegisterType<QMenuProxy>(uri, 0, 1, "Menu");
     qmlRegisterType<QMenuProxy>(uri, 0, 1, "ContextMenu");
     qmlRegisterType<QMenuItem>(uri, 0, 1, "MenuItem");
+
+    qmlRegisterType<KDialogProxy>(uri, 0, 1, "QueryDialog");
 
     qmlRegisterType<Plasma::QRangeModel>(uri, 0, 1, "RangeModel");
 
