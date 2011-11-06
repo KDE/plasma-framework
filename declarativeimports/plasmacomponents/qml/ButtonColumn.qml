@@ -39,9 +39,6 @@
 **
 ****************************************************************************/
 
-import Qt 4.7
-import "ButtonGroup.js" as Behavior
-
 /**Documentanted API
 Inherits:
         Column
@@ -76,6 +73,9 @@ Properties:
         Item checkedButton:
         Returns the last checked button.
 **/
+import Qt 4.7
+import "ButtonGroup.js" as Behavior
+
 Column {
     id: root
 
