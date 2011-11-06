@@ -39,10 +39,6 @@
 **
 ****************************************************************************/
 
-import QtQuick 1.1
-import "ButtonGroup.js" as Behavior
-
-
 /**Documentanted API
  Inherits:
  Row
@@ -77,6 +73,10 @@ Properties:
      Item checkedButton:
      Returns the last checked button.
      **/
+
+import QtQuick 1.1
+import "ButtonGroup.js" as Behavior
+
 Row {
     id: root
 
