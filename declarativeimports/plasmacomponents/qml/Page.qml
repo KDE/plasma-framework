@@ -61,7 +61,7 @@ Properties:
         Item tools:
         The default value is true.
         TODO needs info
- **/
+**/
 
 import QtQuick 1.1
 

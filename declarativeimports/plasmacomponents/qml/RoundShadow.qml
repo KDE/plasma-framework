@@ -19,7 +19,7 @@
  */
 
 /**Documentanted API
-Inh*erits:
+Inherits:
         Item
 
 Imports:

@@ -45,8 +45,8 @@ Inherits:
         DualStateButton
 
 Imports:
- QtQuick 1.0
- org.kde.plasma.core
+        QtQuick 1.1
+        org.kde.plasma.core
 
 Description:
         TODO

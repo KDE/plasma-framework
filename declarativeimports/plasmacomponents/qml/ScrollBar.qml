@@ -18,19 +18,19 @@
 */
 
 /**Documentanted API
- Inherits:
- Item
+Inherits:
+        Item
 
- Imports:
- org.kde.plasma.core
- QtQuick 1.1
+Imports:
+        org.kde.plasma.core
+        QtQuick 1.1
 
- Description:
+Description:
         Just a simple scrollbar which is using the plasma theme.
         Plasma theme is the theme which changes via the systemsetting-workspace  appearence
         -desktop theme.
 
- Properties:
+Properties:
 
         int orientation:
         Sets the orientation.
