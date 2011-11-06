@@ -14,7 +14,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${KDE4_KDEUI_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/experimental/libkdeclarative
                     ${CMAKE_BINARY_DIR}/experimental/libkdeclarative
-                    ${CMAKE_SOURCE_DIR}/kutils
                     ${CMAKE_SOURCE_DIR}/threadweaver
                     ${CMAKE_SOURCE_DIR}/plasma/extenders
                     ${CMAKE_SOURCE_DIR}/plasma/remote
@@ -43,6 +42,11 @@ if(NOT PLASMA_NO_SOLID)
     include_directories(${CMAKE_SOURCE_DIR}/solid/)
     set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} ${KDE4_SOLID_LIBS})
 endif(NOT PLASMA_NO_SOLID)
+
+if (NOT PLASMA_NO_KUTILS)
+    include_directories(${CMAKE_SOURCE_DIR}/kutils)
+    set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} ${KDE4_KUTILS_LIBS})
+endif(NOT PLASMA_NO_KUTILS)
 
 if(QCA2_FOUND)
     include_directories(${QCA2_INCLUDE_DIR})
@@ -263,7 +267,7 @@ kde4_add_library(plasma ${LIBRARY_TYPE} ${plasma_LIB_SRCS})
 #add kdeclarative after the 4.7 release
 target_link_libraries(plasma ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
                              ${QT_QTSCRIPT_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTSQL_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY}
-                             ${KDE4_KDEUI_LIBS} ${KDE4_KUTILS_LIBS} kdnssd threadweaver ${PLASMA_EXTRA_LIBS})
+                             ${KDE4_KDEUI_LIBS} ${KDE4_KDNSSD_LIBS} ${KDE4_THREADWEAVER_LIBS} ${PLASMA_EXTRA_LIBS})
 
 if(QCA2_FOUND)
    target_link_libraries(plasma ${QCA2_LIBRARIES})
