@@ -19,16 +19,16 @@
 
 /**Documentanted API
 Inherits:
-    Item
+        Item
 
 Imports:
-    QtQuick 1.0
-    org.kde.plasma.core
+        QtQuick 1.0
+        org.kde.plasma.core
 
- Description:
+Description:
  TODO i need more info here
 
- Properties:
+Properties:
             bool checked:
             Returns if the Button is checked or not.
 
@@ -46,10 +46,10 @@ Imports:
 
             alias shadow:
             TODO needs info
- Signals:
+Signals:
         clicked:
         The signal is emited when the button is clicked!
- **/
+**/
 
 import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore

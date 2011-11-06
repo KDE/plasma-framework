@@ -19,16 +19,16 @@
 
 /**Documentanted API
 Inherits:
-    DualStateButton
+        DualStateButton
 Imports:
-    QtQuick 1.0
-    org.kde.plasma.core
+        QtQuick 1.0
+        org.kde.plasma.core
 
- Description:
+Description:
  TODO i need more info here
 
- Properties:
- **/
+Properties:
+**/
 
 import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore

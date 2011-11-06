@@ -19,14 +19,14 @@
  */
 
 /**Documentanted API
- Inherits:
- Item
+Inherits:
+        Item
 
- Imports:
- QtQuick 1.0
- org.kde.plasma.core
+Imports:
+        QtQuick 1.0
+        org.kde.plasma.core
 
- Description:
+Description:
 TODO i need more info here
 
 

@@ -40,15 +40,15 @@
 ****************************************************************************/
 
 /**Documentanted API
- Inherits:
- Row
+Inherits:
+        Row
 
- Imports:
- ButtonGroup.js
- QtQuick 1.1
+Imports:
+        ButtonGroup.js
+        QtQuick 1.1
 
 
- Description:
+Description:
         A ButtonRow allows you to group Buttons in a row. It provides a selection-behavior as well.
 
         Note: This component don't support the enabled property.

@@ -25,16 +25,16 @@ Imports:
         QtQuick 1.1
         org.kde.plasma.core
 
- Description:
+Description:
  TODO i need more info here
 
- Properties:
+Properties:
         bool hover:
         Returns if the user is hovering over the component
 
         bool pressed:
         Returns of the button is pressed or not.
- **/
+**/
 
 import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
