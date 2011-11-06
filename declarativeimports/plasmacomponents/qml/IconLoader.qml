@@ -17,10 +17,6 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-import QtQuick 1.1
-import org.kde.plasma.core 0.1 as PlasmaCore
-import org.kde.qtextracomponents 0.1
-
 /**Documentanted API
 Inherits:
         Item
@@ -40,6 +36,10 @@ Properties:
         string source:
         Returns the dir,in which the icon exists.
 **/
+
+import QtQuick 1.1
+import org.kde.plasma.core 0.1 as PlasmaCore
+import org.kde.qtextracomponents 0.1
 
 Item {
     id: root
