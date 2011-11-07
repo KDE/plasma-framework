@@ -24,6 +24,8 @@
 
 #include "qrangemodel.h"
 
+#include <KSharedConfig>
+
 #include "enums.h"
 #include "qmenu.h"
 #include "qmenuitem.h"
@@ -33,14 +35,17 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.components"));
 
+    KConfigGroup cg(KSharedConfig::openConfig("plasmarc"), "Plasma-components-platform");
+    const QString componentsPlatform = cg.readEntry("name", "desktop");
 
     qmlRegisterType<QMenuProxy>(uri, 0, 1, "Menu");
     qmlRegisterType<QMenuProxy>(uri, 0, 1, "ContextMenu");
     qmlRegisterType<QMenuItem>(uri, 0, 1, "MenuItem");
 
-#ifndef TOUCH
-    qmlRegisterType<KDialogProxy>(uri, 0, 1, "QueryDialog");
-#endif
+
+    if (componentsPlatform == "desktop") {
+        qmlRegisterType<KDialogProxy>(uri, 0, 1, "QueryDialog");
+    }
 
     qmlRegisterType<Plasma::QRangeModel>(uri, 0, 1, "RangeModel");
 
