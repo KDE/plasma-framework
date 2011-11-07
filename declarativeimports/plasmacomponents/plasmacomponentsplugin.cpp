@@ -20,6 +20,7 @@
 #include "plasmacomponentsplugin.h"
 
 #include <QtDeclarative/qdeclarative.h>
+#include <QtDeclarative/QDeclarativeEngine>
 
 #include "qrangemodel.h"
 
@@ -27,7 +28,6 @@
 #include "qmenu.h"
 #include "qmenuitem.h"
 #include "kdialogproxy.h"
-
 
 void PlasmaComponentsPlugin::registerTypes(const char *uri)
 {
@@ -38,7 +38,9 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
     qmlRegisterType<QMenuProxy>(uri, 0, 1, "ContextMenu");
     qmlRegisterType<QMenuItem>(uri, 0, 1, "MenuItem");
 
+#ifndef TOUCH
     qmlRegisterType<KDialogProxy>(uri, 0, 1, "QueryDialog");
+#endif
 
     qmlRegisterType<Plasma::QRangeModel>(uri, 0, 1, "RangeModel");
 
