@@ -56,6 +56,7 @@ public:
 
     FrameSvg *background;
     FrameSvg *lineEditBackground;
+    FocusIndicator *focusIndicator;
     int animId;
     qreal opacity;
     QRectF activeRect;
@@ -99,6 +100,13 @@ void ComboBoxPrivate::syncBorders()
         q->setFont(Theme::defaultTheme()->font(Theme::DefaultFont));
         customFont = false;
     }
+
+    if (q->nativeWidget()->isEditable()) {
+        focusIndicator->setFrameSvg(lineEditBackground);
+    } else {
+        focusIndicator->setFrameSvg(background);
+    }
+    focusIndicator->setFlag(QGraphicsItem::ItemStacksBehindParent, !q->nativeWidget()->isEditable() || !lineEditBackground->hasElement("hint-focus-over-base"));
 }
 
 
@@ -119,7 +127,7 @@ ComboBox::ComboBox(QGraphicsWidget *parent)
 
     d->style = Style::sharedStyle();
 
-    new FocusIndicator(this, d->background);
+    d->focusIndicator = new FocusIndicator(this, d->background);
     setNativeWidget(new KComboBox);
     connect(d->background, SIGNAL(repaintNeeded()), SLOT(syncBorders()));
     d->initTheming();

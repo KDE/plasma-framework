@@ -304,6 +304,18 @@ void FocusIndicator::syncGeometry()
     }
 }
 
+void FocusIndicator::setFrameSvg(FrameSvg *frameSvg)
+{
+    if (m_background != frameSvg) {
+        m_background = frameSvg;
+    }
+}
+
+FrameSvg *FocusIndicator::frameSvg() const
+{
+    return m_background;
+}
+
 }
 
 #include <focusindicator_p.moc>
