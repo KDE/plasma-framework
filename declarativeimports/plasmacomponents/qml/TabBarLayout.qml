@@ -40,6 +40,20 @@
 **
 ****************************************************************************/
 
+/**Documentanted API
+Inherits:
+        Item
+
+Imports:
+        QtQuick 1.1
+
+Description:
+ TODO
+
+Properties:
+
+**/
+
 import QtQuick 1.1
 
 Item {
