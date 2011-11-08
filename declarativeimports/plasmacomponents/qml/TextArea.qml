@@ -17,6 +17,95 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+/**Documentanted API
+Inherits:
+        Item
+
+Imports:
+        QtQuick 1.1
+        org.kde.plasma.core 0.1
+
+Description:
+        Creates a simple plasma theme based text area.
+        Like kates..
+
+Properties:
+        alias font:
+        Sets the font for the text area.
+
+        int inputMethodHints:
+
+        bool errorHighlight:
+        If it is true then the problematic lines will be highlighted.
+
+        alias cursorPosition:
+        Returns the cursor's position.
+
+        alias horizontalAlignment:
+        TODO
+        alias verticalAlignment:TODO
+
+        alias readOnly:
+        If this property is set to true the text cannot be edited by user interaction.
+
+        alias selectedText:
+        This read-only property provides the text currently selected in the text edit.
+
+        alias selectionEnd:
+        The cursor position after the last character in the current selection.
+        This property is read-only.
+
+        property alias selectionStart:
+        The cursor position before the first character in the current selection.
+        This property is read-only.
+
+        property alias text:
+        The text to display
+        property alias textFormat:
+        The way the text property should be displayed.
+
+        TextEdit.AutoText
+        TextEdit.PlainText
+        TextEdit.RichText
+        TextEdit.StyledText
+
+        alias wrapMode:
+        Set this property to wrap the text to the TextEdit item's width.
+
+        TextEdit.NoWrap - no wrapping will be performed. If the text contains insufficient
+        newlines, then implicitWidth will exceed a set width.
+
+        TextEdit.WordWrap - wrapping is done on word boundaries only.
+        If a word is too long, implicitWidth will exceed a set width.
+
+        TextEdit.WrapAnywhere - wrapping is done at any point on a line,
+        even if it occurs in the middle of a word.
+
+        TextEdit.Wrap - if possible, wrapping occurs at a word boundary;
+        otherwise it will occur at the appropriate point on the line, even in the middle of a word.
+
+        string placeholderText:TODO
+
+        alias interactive:
+        This property describes whether the user can interact with the Flickable. A user
+        cannot drag or flick a Flickable that is not interactive.
+        This property is useful for temporarily disabling flicking. This allows special interaction
+        with Flickable's children; for example, you might want to freeze a flickable map while scrolling
+        through a pop-up dialog that is a child of the Flickable.
+
+        alias contentMaxWidth:
+        Sets the maximum width that the contents can have.
+
+        alias contentMaxHeight:
+        Sets the maximum height that the contents can have.
+        property real scrollWidth:
+        Sets the step that the scrollwidth will move.
+
+        alias activeFocus:
+        This property indicates whether the item has active focus.
+        An item with active focus will receive keyboard input.
+**/
+
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 
