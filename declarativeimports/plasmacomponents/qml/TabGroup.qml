@@ -38,6 +38,24 @@
 **
 ****************************************************************************/
 
+/**Documentanted API
+Inherits:
+        Item
+
+Imports:
+        QtQuick 1.1
+        .
+        TabGroup.js
+
+Description:
+ TODO
+
+Properties:
+        Item currentTab:
+        Returns the current tab.
+
+**/
+
 import QtQuick 1.1
 import "TabGroup.js" as Engine
 
