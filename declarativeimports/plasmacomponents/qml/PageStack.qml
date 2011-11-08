@@ -43,6 +43,33 @@
 // The PageStack item defines a container for pages and a stack-based
 // navigation model. Pages can be defined as QML items or components.
 
+/**Documentanted API
+Inherits:
+        Item
+
+Imports:
+        QtQuick 1.1
+        .
+        PageStack.js
+
+Description:
+        The PageStack item defines a container for pages and a stack-based
+        snavigation model. Pages can be defined as QML items or components.
+
+Properties:
+        int depth:TODO
+
+        Item currentPage:
+        Returns the current page.
+
+        ToolBar toolBar:
+
+        variant initialPage:
+
+        bool busy:
+        Indicates whether there is an ongoing page transition.
+**/
+
 import QtQuick 1.1
 import "." 0.1
 import "PageStack.js" as Engine
