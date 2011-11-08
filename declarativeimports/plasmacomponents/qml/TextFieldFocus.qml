@@ -25,6 +25,25 @@ Item {
     id: main
     state: parent.state
 
+    PlasmaCore.Svg {
+        id: lineEditSvg
+        imagePath: "widgets/lineedit"
+        onRepaintNeeded: {
+            if (lineEditSvg.hasElement("hint-focus-over-base")) {
+                main.z = 800
+            } else {
+                main.z = 0
+            }
+        }
+        Component.onCompleted: {
+            if (lineEditSvg.hasElement("hint-focus-over-base")) {
+                main.z = 800
+            } else {
+                main.z = 0
+            }
+        }
+    }
+
     PlasmaCore.FrameSvgItem {
         id: hover
 

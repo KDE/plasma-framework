@@ -92,7 +92,6 @@ Item {
 
     TextFieldFocus {
         id: hover
-        z: 800
         state: textInput.activeFocus ? "focus" : (mouseWatcher.containsMouse ? "hover" : "hidden")
         anchors.fill: base
     }
