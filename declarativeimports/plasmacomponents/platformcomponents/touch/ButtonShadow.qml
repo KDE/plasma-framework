@@ -24,7 +24,7 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 Item {
     id: main
     state: parent.state
-
+    property bool hasOverState: false
 
     PlasmaCore.FrameSvgItem {
         id: shadow

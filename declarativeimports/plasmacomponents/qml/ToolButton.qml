@@ -1,5 +1,6 @@
 /*
 *   Copyright (C) 2011 by Daker Fernandes Pinheiro <dakerfp@gmail.com>
+*   Copyright (C) 2011 by Marco Martin <mart@kde.org>
 *
 *   This program is free software; you can redistribute it and/or modify
 *   it under the terms of the GNU Library General Public License as
@@ -102,7 +103,8 @@ Item {
         anchors.fill: parent
         imagePath: "widgets/button"
         prefix: (internal.userPressed || checked) ? "pressed" : "normal"
-        opacity: (internal.userPressed || checked || !flat || mouse.containsMouse) ? 1 : 0
+        //internal: if there is no hover status, don't paint on mouse over in touchscreens
+        opacity: (internal.userPressed || checked || !flat || (shadow.hasOverState && mouse.containsMouse)) ? 1 : 0
         Behavior on opacity {
             PropertyAnimation { duration: 250 }
         }
