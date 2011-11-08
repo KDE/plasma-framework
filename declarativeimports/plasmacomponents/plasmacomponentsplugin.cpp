@@ -38,13 +38,12 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
     KConfigGroup cg(KSharedConfig::openConfig("kdeclarativerc"), "Components-platform");
     const QString componentsPlatform = cg.readEntry("name", "desktop");
 
-    qmlRegisterType<QMenuProxy>(uri, 0, 1, "Menu");
-    qmlRegisterType<QMenuProxy>(uri, 0, 1, "ContextMenu");
-    qmlRegisterType<QMenuItem>(uri, 0, 1, "MenuItem");
-
-
     if (componentsPlatform == "desktop") {
         qmlRegisterType<KDialogProxy>(uri, 0, 1, "QueryDialog");
+
+        qmlRegisterType<QMenuProxy>(uri, 0, 1, "Menu");
+        qmlRegisterType<QMenuProxy>(uri, 0, 1, "ContextMenu");
+        qmlRegisterType<QMenuItem>(uri, 0, 1, "MenuItem");
     }
 
     qmlRegisterType<Plasma::QRangeModel>(uri, 0, 1, "RangeModel");
