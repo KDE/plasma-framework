@@ -17,6 +17,30 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+/**Documentanted API
+Inherits:
+        PlasmaCore.FrameSvgItem
+
+Imports:
+        QtQuick 1.1
+        org.kde.plasma.core
+
+Description:
+        A plasma theme based toolbar.
+
+Properties:
+
+        Item tools:
+        The current set of tools; null if none.
+
+        string transition:
+        The transition type. One of the following:
+              set         an instantaneous change (default)
+              push        follows page stack push animation
+              pop         follows page stack pop animation
+              replace     follows page stack replace animation
+**/
+
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 
