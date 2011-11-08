@@ -45,6 +45,13 @@ Item {
         id: internal
         property bool userPressed: false
 
+        function belongsToButtonGroup()
+        {
+            return button.parent
+                   && button.parent.hasOwnProperty("checkedButton")
+                   && button.parent.exclusive
+        }
+
         function pressButton()
         {
             userPressed = true
@@ -57,7 +64,7 @@ Item {
                 return
             }
 
-            if (button.checkable) {
+            if ((!belongsToButtonGroup() || !button.checked) && button.checkable) {
                 button.checked = !button.checked
             }
 
@@ -74,19 +81,20 @@ Item {
             internal.releaseButton();
     }
 
-    onActiveFocusChanged: {
-        if (activeFocus) {
-            shadow.state = "focus"
-        } else if (checked) {
-            shadow.state = "hidden"
-        } else {
-            shadow.state = "shadow"
-        }
-    }
-
     ButtonShadow {
         id: shadow
         anchors.fill: parent
+        state: {
+            if (internal.userPressed || checked)  {
+                return "hidden"
+            } else if (mouse.containsMouse) {
+                return "hover"
+            } else if (button.activeFocus) {
+                return "focus"
+            } else {
+                return "shadow"
+            }
+        }
     }
 
     // The normal button state
@@ -186,17 +194,5 @@ Item {
         hoverEnabled: true
         onPressed: internal.pressButton()
         onReleased: internal.releaseButton()
-        onEntered: {
-            shadow.state = "hover"
-        }
-        onExited: {
-            if (button.activeFocus) {
-                shadow.state = "focus"
-            } else if (checked) {
-                shadow.state = "hidden"
-            } else {
-                shadow.state = "shadow"
-            }
-        }
     }
 }
