@@ -90,7 +90,7 @@ Item {
             }
         },
         State {
-            name: "hover"
+            name: "hidden"
             PropertyChanges {
                 target: shadow
                 opacity: 0
