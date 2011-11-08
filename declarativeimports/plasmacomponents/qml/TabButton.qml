@@ -40,6 +40,37 @@
 **
 ****************************************************************************/
 
+/**Documentanted API
+Inherits:
+        Item
+
+Imports:
+        QtQuick 1.1
+        AppManager.js
+
+Description:
+        A simple tab button which is using the  plasma theme.
+
+Properties:
+        Item tab:
+        TODO
+        bool checked:
+        Returns true if the button is checked,otherwise false.
+
+        bool pressed:
+        Returns true if the button is being pressed,otherwise false.
+
+        alias text:
+        Sets the text for the button.
+
+        alias iconSource:
+        Sets an icon for the button
+
+Signals:
+        onClicked:
+        The signal is being emmited when the button is being clicked.
+**/
+
 import QtQuick 1.1
 import "AppManager.js" as Utils
 
