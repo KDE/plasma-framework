@@ -39,27 +39,6 @@ Item {
         surface.opacity = 1
     }
 
-    function pressButton() {
-        if (button.enabled)
-            surface.prefix = "pressed";
-    }
-
-    function releaseButton() {
-        if (!button.enabled)
-            return;
-
-        if (button.checkable)
-            button.checked = !button.checked;
-
-        // TODO: "checked" state must have special graphics?
-        if (button.checked)
-            surface.prefix = "pressed";
-        else
-            surface.prefix = "normal";
-
-        button.clicked();
-        button.forceActiveFocus();
-    }
 
     implicitWidth: Math.max(50, icon.width + label.paintedWidth + surface.margins.left + surface.margins.right)
     implicitHeight: Math.max(20, Math.max(icon.height, label.paintedHeight) + surface.margins.top + surface.margins.bottom)
@@ -68,12 +47,12 @@ Item {
     //     disabled buttons
     opacity: enabled ? 1.0 : 0.5
 
-    Keys.onSpacePressed: pressButton();
-    Keys.onReturnPressed: pressButton();
+    Keys.onSpacePressed: internal.pressButton()
+    Keys.onReturnPressed: internal.pressButton()
     Keys.onReleased: {
         if (event.key == Qt.Key_Space ||
             event.key == Qt.Key_Return)
-            releaseButton();
+            internal.releaseButton()
     }
 
     onActiveFocusChanged: {
@@ -83,6 +62,31 @@ Item {
             shadow.state = "hidden"
         } else {
             shadow.state = "shadow"
+        }
+    }
+
+    QtObject {
+        id: internal
+        property bool userPressed: false
+
+        function pressButton()
+        {
+            userPressed = true
+        }
+
+        function releaseButton()
+        {
+            userPressed = false
+            if (!button.enabled) {
+                return
+            }
+
+            if (button.checkable) {
+                button.checked = !button.checked
+            }
+
+            button.clicked()
+            button.forceActiveFocus()
         }
     }
 
@@ -97,8 +101,8 @@ Item {
 
         anchors.fill: parent
         imagePath: "widgets/button"
-        prefix: "normal"
-        opacity: 0
+        prefix: (internal.userPressed || checked) ? "pressed" : "normal"
+        opacity: (internal.userPressed || checked || !flat || mouse.containsMouse) ? 1 : 0
         Behavior on opacity {
             PropertyAnimation { duration: 250 }
         }
@@ -153,23 +157,17 @@ Item {
         anchors.fill: parent
         hoverEnabled: true
 
-        onPressed: {
-            pressButton();
-        }
-        onReleased: {
-            releaseButton();
-        }
+        onPressed: internal.pressButton();
+
+        onReleased: internal.releaseButton();
+
         onEntered: {
-            if (flat) {
-                surface.opacity = 1
-            } else {
+            if (!flat) {
                 shadow.state = "hover"
             }
         }
         onExited: {
-            if (flat) {
-                surface.opacity = 0
-            } else {
+            if (!flat) {
                 if (button.activeFocus) {
                     shadow.state = "focus"
                 } else if (checked) {

@@ -41,39 +41,37 @@ Item {
     //     disabled buttons
     opacity: enabled ? 1.0 : 0.5
 
-    function pressButton()
-    {
-        if (button.enabled) {
-            buttonContent.state = "pressed"
-            shadow.state = "hidden"
-        }
-    }
+    QtObject {
+        id: internal
+        property bool userPressed: false
 
-    function releaseButton()
-    {
-        if (button.enabled) {
-            buttonContent.state = "normal"
-            if (!checked) {
-                shadow.state = "shadow"
+        function pressButton()
+        {
+            userPressed = true
+        }
+
+        function releaseButton()
+        {
+            userPressed = false
+            if (!button.enabled) {
+                return
             }
 
             if (button.checkable) {
-                button.checked = !button.checked;
+                button.checked = !button.checked
             }
 
-            // TODO: "checked" state must have special graphics?
-
-            button.clicked();
-            button.forceActiveFocus();
+            button.clicked()
+            button.forceActiveFocus()
         }
     }
 
-    Keys.onSpacePressed: pressButton()
-    Keys.onReturnPressed: pressButton()
+    Keys.onSpacePressed: internal.pressButton()
+    Keys.onReturnPressed: internal.pressButton()
     Keys.onReleased: {
         if (event.key == Qt.Key_Space ||
             event.key == Qt.Key_Return)
-            releaseButton();
+            internal.releaseButton();
     }
 
     onActiveFocusChanged: {
@@ -112,6 +110,7 @@ Item {
 
     Item {
         id: buttonContent
+        state: (internal.userPressed || checked) ? "pressed" : "normal"
 
         states: [
             State { name: "normal" },
@@ -185,8 +184,8 @@ Item {
 
         anchors.fill: parent
         hoverEnabled: true
-        onPressed: pressButton()
-        onReleased: releaseButton()
+        onPressed: internal.pressButton()
+        onReleased: internal.releaseButton()
         onEntered: {
             shadow.state = "hover"
         }
