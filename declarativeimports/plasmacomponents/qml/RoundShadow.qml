@@ -24,13 +24,19 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 Item {
     id: main
     state: parent.state
+    property alias imagePath: shadowSvg.imagePath
+    property string hoverElement: "hover"
+    property string focusElement: "focus"
+    property alias shadowElement: shadow.elementId
+
+    PlasmaCore.Svg {
+        id: shadowSvg
+        imagePath: "widgets/actionbutton"
+    }
 
     PlasmaCore.SvgItem {
         id: hover
-        svg: PlasmaCore.Svg {
-            id: hoverSvg
-            imagePath: "widgets/actionbutton"
-        }
+        svg: shadowSvg
         elementId: "hover"
 
         anchors.fill: parent
@@ -40,10 +46,7 @@ Item {
 
     PlasmaCore.SvgItem {
         id: shadow
-        svg: PlasmaCore.Svg {
-            id: shadowSvg
-            imagePath: "widgets/actionbutton"
-        }
+        svg: shadowSvg
         elementId: "shadow"
 
         anchors.fill: parent
@@ -59,7 +62,7 @@ Item {
             PropertyChanges {
                 target: hover
                 opacity: 0
-                elementId: "hover"
+                elementId: hoverElement
             }
         },
         State {
@@ -71,7 +74,7 @@ Item {
             PropertyChanges {
                 target: hover
                 opacity: 1
-                elementId: "hover"
+                elementId: hoverElement
             }
         },
         State {
@@ -83,7 +86,7 @@ Item {
             PropertyChanges {
                 target: hover
                 opacity: 1
-                elementId: "focus"
+                elementId: focusElement
             }
         },
         State {
@@ -95,7 +98,7 @@ Item {
             PropertyChanges {
                 target: hover
                 opacity: 0
-                elementId: "hover"
+                elementId: hoverElement
             }
         }
     ]
