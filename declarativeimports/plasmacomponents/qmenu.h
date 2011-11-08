@@ -26,12 +26,15 @@
 #include "qmenuitem.h"
 #include "enums.h"
 
+class QDeclarativeItem;
+
 class QMenuProxy : public QObject
 {
     Q_OBJECT
 
     Q_PROPERTY(QDeclarativeListProperty<QMenuItem> items READ items CONSTANT)
     Q_CLASSINFO("DefaultProperty", "items")
+    Q_PROPERTY(QDeclarativeItem *visualParent READ visualParent WRITE setVisualParent NOTIFY visualParentChanged())
     Q_PROPERTY(DialogStatus::Status status READ status NOTIFY statusChanged)
 
 public:
@@ -43,17 +46,22 @@ public:
     QMenuItem *action(int) const;
     DialogStatus::Status status() const;
 
+    QDeclarativeItem *visualParent() const;
+    void setVisualParent(QDeclarativeItem *parent);
+
     void showMenu(int x, int y);
     Q_INVOKABLE void open();
     Q_INVOKABLE void close();
 
 Q_SIGNALS:
     void statusChanged();
+    void visualParentChanged();
 
 private:
     QList<QMenuItem*> m_items;
     QMenu *m_menu;
     DialogStatus::Status m_status;
+    QWeakPointer<QDeclarativeItem> m_visualParent;
 };
 
 #endif //QMENU_PROXY_H

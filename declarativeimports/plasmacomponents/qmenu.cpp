@@ -24,6 +24,7 @@
 #include <QDesktopWidget>
 #include <QGraphicsObject>
 #include <QGraphicsView>
+#include <QDeclarativeItem>
 
 QMenuProxy::QMenuProxy (QObject *parent)
     : QObject(parent),
@@ -57,6 +58,21 @@ DialogStatus::Status QMenuProxy::status() const
     return m_status;
 }
 
+QDeclarativeItem *QMenuProxy::visualParent() const
+{
+    return m_visualParent.data();
+}
+
+void QMenuProxy::setVisualParent(QDeclarativeItem *parent)
+{
+    if (m_visualParent.data() == parent) {
+        return;
+    }
+
+    m_visualParent = parent;
+    emit visualParentChanged();
+}
+
 void QMenuProxy::showMenu(int x, int y)
 {
     m_menu->clear();
@@ -79,7 +95,12 @@ void QMenuProxy::open()
     }
     m_menu->updateGeometry();
 
-    QGraphicsObject *parentItem = qobject_cast<QGraphicsObject *>(parent());
+    QGraphicsObject *parentItem;
+    if (m_visualParent) {
+        parentItem = qobject_cast<QGraphicsObject *>(parent());
+    } else {
+        parentItem = m_visualParent.data();
+    }
 
     if (!parentItem || !parentItem->scene()) {
         showMenu(0, 0);
