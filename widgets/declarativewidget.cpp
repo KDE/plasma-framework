@@ -94,13 +94,14 @@ void DeclarativeWidgetPrivate::execute(const QString &fileName)
         return;
     }
 
-    component->loadUrl(fileName);
-
     KDeclarative kdeclarative;
     kdeclarative.setDeclarativeEngine(engine);
     kdeclarative.initialize();
     //binds things like kconfig and icons
     kdeclarative.setupBindings();
+
+    component->loadUrl(fileName);
+
     scriptEngine = kdeclarative.scriptEngine();
     registerDataEngineMetaTypes(scriptEngine);
 
@@ -194,9 +195,6 @@ DeclarativeWidget::DeclarativeWidget(QGraphicsWidget *parent)
 
     d->engine = new QDeclarativeEngine(this);
     d->engine->setNetworkAccessManagerFactory(new DeclarativeNetworkAccessManagerFactory);
-    foreach(const QString &importPath, KGlobal::dirs()->findDirs("module", "imports")) {
-        d->engine->addImportPath(importPath);
-    }
 
     d->component = new QDeclarativeComponent(d->engine, this);
 }
