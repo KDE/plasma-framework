@@ -17,6 +17,43 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+/**Documentanted API
+Inherits:
+        Item
+
+Imports:
+        QtQuick 1.1
+        org.kde.plasma.core
+
+Description:
+        A plasma theme based toolbutton.
+
+Properties:
+        bool flat:
+        Returns true if the button is flat.
+
+        bool checked: false
+        Returns true if the button is checked.
+
+        bool checkable:
+        Returns true if the button is checkable.
+
+        alias pressed:
+        Returns true if the button is pressed.
+        alias text:
+        Sets the text for the button.
+
+        alias iconSource:
+        Sets the icon for the button.
+
+        alias font:
+        Sets the font for the button.
+
+Signals:
+        onClicked:
+        The signal is being emmited when the button is being clicked.
+**/
+
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 
