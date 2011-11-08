@@ -35,7 +35,7 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.components"));
 
-    KConfigGroup cg(KSharedConfig::openConfig("plasmarc"), "Plasma-components-platform");
+    KConfigGroup cg(KSharedConfig::openConfig("kdeclarativerc"), "Components-platform");
     const QString componentsPlatform = cg.readEntry("name", "desktop");
 
     qmlRegisterType<QMenuProxy>(uri, 0, 1, "Menu");
