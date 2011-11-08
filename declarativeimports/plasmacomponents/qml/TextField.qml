@@ -17,6 +17,84 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+/**Documentanted API
+Inherits:
+        Item
+
+Imports:
+        QtQuick 1.1
+
+Description:
+        Creates a simple plasma theme based text field.
+        Like kates..
+
+Properties:
+        alias font:
+        Sets the font for the text area.
+
+        int inputMethodHints:
+
+        bool errorHighlight:
+        If it is true then the problematic lines will be highlighted.
+
+        alias cursorPosition:
+        Returns the cursor's position.
+
+        alias readOnly:
+        If this property is set to true the text cannot be edited by user interaction.
+
+        alias selectedText:
+        This read-only property provides the text currently selected in the text edit.
+
+        alias selectionEnd:
+        The cursor position after the last character in the current selection.
+        This property is read-only.
+
+        alias selectionStart:
+        The cursor position before the first character in the current selection.
+        This property is read-only.
+
+        alias text:
+        The text to display
+
+        string placeholderText:TODO
+
+        alias echoMode:
+        Specifies how the text should be displayed in the TextInput.
+
+        TextInput.Normal - Displays the text as it is. (Default)
+        TextInput.Password - Displays asterixes instead of characters.
+        TextInput.NoEcho - Displays nothing.
+        TextInput.PasswordEchoOnEdit - Displays all but the current character as asterixes.
+
+        alias validator:
+        Allows you to set a validator on the TextInput. When a validator is set the TextInput
+        will only accept input which leaves the text property in an acceptable or intermediate state.
+        The accepted signal will only be sent if the text is in an acceptable state when enter is pressed.
+        Currently supported validators are IntValidator, DoubleValidator and RegExpValidator.
+        An example of using validators is shown below, which allows input of integers
+        between 11 and 31 into the text input:
+        <code>
+        import QtQuick 1.0
+        TextInput{
+            validator: IntValidator{bottom: 11; top: 31;}
+            focus: true
+            }
+        </code>
+
+        alias maximumLength:
+        Sets the maximum length that the string can have.
+
+        alias acceptableInput:
+        This property is always true unless a validator has been set. If a validator has been set,
+        this property will only be true if the current text is acceptable to the validator as a final string
+        (not as an intermediate string)
+
+        alias activeFocus:
+        This property indicates whether the item has active focus.
+        An item with active focus will receive keyboard input.
+**/
+
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 
