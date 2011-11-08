@@ -38,19 +38,23 @@
 **
 ****************************************************************************/
 
-import QtQuick 1.1
+import QtQuick 1.0
 
 Item {
     id: root
 
     property bool inPortrait: height > width
+    signal orientationChangeAboutToStart
+    signal orientationChangeStarted
+    signal orientationChangeFinished
 
     width: 800
     height: 480
 
-    //FIXME: something from the plasma theme
-    Rectangle {
-        anchors.fill: parent
+    Connections {
+        target: root
+        onInPortraitChanged: {
+            root.orientationChangeFinished()
+        }
     }
-
 }
