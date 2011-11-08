@@ -151,6 +151,7 @@ Item {
             font.weight: theme.defaultFont.weight
             font.wordSpacing: theme.defaultFont.wordSpacing
             color: theme.viewTextColor
+            selectByMouse: true
 
             onCursorPositionChanged: {
                 if (cursorRectangle.x < flickArea.contentX) {

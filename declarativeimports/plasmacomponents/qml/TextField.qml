@@ -137,10 +137,12 @@ Item {
         anchors {
             left: parent.left
             right: parent.right
+            verticalCenter: parent.verticalCenter
             // TODO: see what is the correct policy for margins
             leftMargin: 2 * base.margins.left
             rightMargin: 2 * base.margins.right
         }
+        selectByMouse: true
         y: (height - font.pixelSize) * 0.4 // XXX: verticalCenter anchor is not centering the text
         height: Math.min(2 * font.pixelSize, parent.height)
         color: theme.textColor
