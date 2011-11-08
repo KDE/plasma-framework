@@ -103,6 +103,7 @@ Rectangle {
 
         flickableItem: page
         animated: true
+        orientation: Qt.Horizontal
         anchors {
             left: parent.left
             right: verticalScrollBar.left

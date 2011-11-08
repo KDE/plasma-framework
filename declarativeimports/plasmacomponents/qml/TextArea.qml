@@ -89,32 +89,13 @@ Item {
 
     opacity: enabled ? 1.0 : 0.5
 
-    PlasmaCore.FrameSvgItem {
+    TextFieldFocus {
         id: hover
-
-        anchors {
-            fill: base
-            leftMargin: -margins.left
-            topMargin: -margins.top
-            rightMargin: -margins.right
-            bottomMargin: -margins.bottom
-        }
-        imagePath: "widgets/lineedit"
-        prefix: {
-            if (textEdit.activeFocus)
-                return "focus";
-            else
-                return "hover";
-        }
-
-        opacity: (mouseWatcher.containsMouse||textArea.activeFocus) ? 1 : 0
-        Behavior on opacity {
-            NumberAnimation {
-                duration: 250
-                easing.type: Easing.InOutQuad
-            }
-        }
+        z: 800
+        state: textArea.activeFocus ? "focus" : (mouseWatcher.containsMouse ? "hover" : "hidden")
+        anchors.fill: base
     }
+
     MouseArea {
         id: mouseWatcher
         anchors.fill: hover

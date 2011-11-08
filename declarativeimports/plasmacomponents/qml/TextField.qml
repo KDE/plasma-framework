@@ -90,6 +90,13 @@ Item {
     //     disabled text fields
     opacity: enabled ? 1.0 : 0.5
 
+    TextFieldFocus {
+        id: hover
+        z: 800
+        state: textInput.activeFocus ? "focus" : (mouseWatcher.containsMouse ? "hover" : "hidden")
+        anchors.fill: base
+    }
+
     PlasmaCore.FrameSvgItem {
         id: base
 
@@ -99,32 +106,6 @@ Item {
         prefix: "base"
     }
 
-    PlasmaCore.FrameSvgItem {
-        id: hover
-
-        anchors {
-            fill: parent
-            leftMargin: -margins.left
-            topMargin: -margins.top
-            rightMargin: -margins.right
-            bottomMargin: -margins.bottom
-        }
-        imagePath: "widgets/lineedit"
-        prefix: {
-            if (textField.activeFocus) {
-                return "focus"
-            } else {
-                return "hover"
-            }
-        }
-        opacity: (mouseWatcher.containsMouse||textField.activeFocus) ? 1 : 0
-        Behavior on opacity {
-            NumberAnimation {
-                duration: 250
-                easing.type: Easing.InOutQuad
-            }
-        }
-    }
     MouseArea {
         id: mouseWatcher
         anchors.fill: hover
