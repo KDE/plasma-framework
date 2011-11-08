@@ -28,6 +28,7 @@ CommonDialog 0.1 CommonDialog.qml
 QueryDialog 0.1 QueryDialog.qml
 SelectionDialog 0.1 SelectionDialog.qml
 Window 0.1 Window.qml
+ToolBarLayout 0.1 ToolBarLayout.qml
 
 Page 0.1 Page.qml
 PageStack 0.1 PageStack.qml
