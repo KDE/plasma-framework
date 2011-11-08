@@ -47,11 +47,6 @@ Item {
                 target: shadow
                 opacity: 1
             }
-            PropertyChanges {
-                target: hover
-                opacity: 0
-                prefix: "hover"
-            }
         },
         State {
             name: "hidden"

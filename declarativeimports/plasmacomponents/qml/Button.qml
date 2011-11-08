@@ -41,15 +41,21 @@ Item {
     //     disabled buttons
     opacity: enabled ? 1.0 : 0.5
 
-    function pressButton() {
-        if(button.enabled) {
+    function pressButton()
+    {
+        if (button.enabled) {
             buttonContent.state = "pressed"
+            shadow.state = "hidden"
         }
     }
 
-    function releaseButton() {
-        if(button.enabled) {
+    function releaseButton()
+    {
+        if (button.enabled) {
             buttonContent.state = "normal"
+            if (!checked) {
+                shadow.state = "shadow"
+            }
 
             if (button.checkable) {
                 button.checked = !button.checked;
