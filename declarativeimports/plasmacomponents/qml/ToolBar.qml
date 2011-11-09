@@ -20,12 +20,10 @@
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 
-PlasmaCore.FrameSvgItem {
+Item{
     id: toolBar
-    imagePath: "widgets/frame"
-    prefix: "raised"
     width: parent.width
-    height: 48 + margins.top + margins.bottom
+    height: 48 + frameSvg.margins.top + frameSvg.margins.bottom
 
     // The current set of tools; null if none.
     property Item tools
@@ -107,6 +105,19 @@ PlasmaCore.FrameSvgItem {
 
         newContainer.opacity = 1
         oldContainer.opacity = 0
+    }
+
+    PlasmaCore.FrameSvgItem {
+        id: frameSvg
+        imagePath: "widgets/frame"
+        prefix: "raised"
+        anchors {
+            fill: parent
+            leftMargin: -margins.left
+            rightMargin: -margins.right
+            topMargin: toolBar.y <= 0 ? -margins.top : 0
+            bottomMargin: toolBar.y >= toolBar.parent.height - toolBar.height ? -margins.bottom : 0
+        }
     }
 
     Item {
