@@ -64,18 +64,8 @@ Item {
     width: visible && parent ? parent.width : internal.previousWidth
     height: visible && parent ? parent.height : internal.previousHeight
 
-    onWidthChanged: internal.previousWidth = visible ? width : internal.previousWidth
-    onHeightChanged: internal.previousHeight = visible ? height : internal.previousHeight
-
-    onStatusChanged: {
-        if (status == PageStatus.Activating)
-            internal.orientationLockCheck();
-    }
-
-    onOrientationLockChanged: {
-        if (status == PageStatus.Activating || status == PageStatus.Active)
-            internal.orientationLockCheck();
-    }
+    onWidthChanged: internal.previousWidth = (visible ? width : internal.previousWidth)
+    onHeightChanged: internal.previousHeight = (visible ? height : internal.previousHeight)
 
     // This is needed to make a parentless Page component visible in the Designer of QtCreator.
     // It's done here instead of binding the visible property because binding it to a script
@@ -88,36 +78,5 @@ Item {
         id: internal
         property int previousWidth: 0
         property int previousHeight: 0
-
-        function isScreenInPortrait() {
-            return screen.currentOrientation == Screen.Portrait || screen.currentOrientation == Screen.PortraitInverted;
-        }
-
-        function isScreenInLandscape() {
-            return screen.currentOrientation == Screen.Landscape || screen.currentOrientation == Screen.LandscapeInverted;
-        }
-
-        function orientationLockCheck() {
-            switch (orientationLock) {
-            case PageOrientation.Automatic:
-                screen.allowedOrientations = Screen.Default
-                break
-            case PageOrientation.LockPortrait:
-                screen.allowedOrientations = Screen.Portrait
-                break
-            case PageOrientation.LockLandscape:
-                screen.allowedOrientations = Screen.Landscape
-                break
-            case PageOrientation.LockPrevious:
-                screen.allowedOrientations = screen.currentOrientation
-                break
-            case PageOrientation.Manual:
-            default:
-                // Do nothing
-                // In manual mode it is expected that orientation is set
-                // explicitly to "screen.allowedOrientations" by the user.
-                break
-            }
-        }
     }
 }
