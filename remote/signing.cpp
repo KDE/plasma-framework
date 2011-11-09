@@ -257,27 +257,17 @@ Plasma::TrustLevel SigningPrivate::addKeyToCache(const QByteArray &fingerprint)
     return UnknownTrusted;
 }
 
+#ifndef NDEBUG
 void SigningPrivate::dumpKeysToDebug()
 {
-#ifndef NDEBUG
     kDebug() << "UltimatelyTrusted = " << keys[UltimatelyTrusted];
-#endif
-#ifndef NDEBUG
     kDebug() << "FullyTrusted = " << keys[FullyTrusted];
-#endif
-#ifndef NDEBUG
     kDebug() << "SelfTrusted = " << keys[SelfTrusted];
-#endif
-#ifndef NDEBUG
     kDebug() << "UserTrusted = " << keys[UserTrusted];
-#endif
-#ifndef NDEBUG
     kDebug() << "UnknownTrusted = " << keys[UnknownTrusted];
-#endif
-#ifndef NDEBUG
     kDebug() << "CompletelyUntrusted = " << keys[CompletelyUntrusted];
-#endif
 }
+#endif
 
 QStringList SigningPrivate::keysID(const bool returnPrivate) const
 {
@@ -532,7 +522,7 @@ TrustLevel Signing::trustLevelOf(const QString &keyID) const
 
 QString Signing::signerOf(const Package &package) const
 {
-    const QString contents = package.path() + "CONTENTS";
+    const QString contents = package.path() + "contents.hash";
 
     if (!QFile::exists(contents)) {
 #ifndef NDEBUG
@@ -545,7 +535,7 @@ QString Signing::signerOf(const Package &package) const
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
 #ifndef NDEBUG
-        kDebug() << "could not open hash file for reading" << contents;
+        kDebug() << "could not open contents.hash file for reading" << contents;
 #endif
         return QString();
     }
@@ -554,7 +544,7 @@ QString Signing::signerOf(const Package &package) const
     const QString actualHash = package.contentsHash();
     if (actualHash != hash) {
 #ifndef NDEBUG
-        kDebug() << "CONTENTS does not match contents of package" << package.path();
+        kDebug() << "contents.hash does not match contents of package" << package.path();
 #endif
         return QString();
     }

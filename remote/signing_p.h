@@ -52,7 +52,9 @@ public:
     void registerUltimateTrustKeys();
     void splitKeysByTrustLevel();
     Plasma::TrustLevel addKeyToCache(const QByteArray &fingerprint);
+#ifndef NDEBUG
     void dumpKeysToDebug();
+#endif
     QStringList keysID(const bool returnPrivate) const;
     QString verifySignature(const QString &packagePath, const QString &signaturePath);
 
