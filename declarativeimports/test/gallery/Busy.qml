@@ -20,59 +20,76 @@
 import QtQuick 1.0
 import org.kde.plasma.components 0.1 as PlasmaComponents
 
-Column {
-    spacing: 20
+PlasmaComponents.Page {
+    height: childrenRect.height
+    property int implicitHeight: childrenRect.height
 
-    Text {
-        font.pixelSize: 20
-        text: "Busy Indicator"
-    }
-
-    PlasmaComponents.BusyIndicator { }
-
-    PlasmaComponents.BusyIndicator { running: true }
-
-    Text {
-        font.pixelSize: 20
-        text: "Progress Bar"
-    }
-
-    Text { text: "Horizontal" }
-
-    PlasmaComponents.ProgressBar {
-        value: 0.3
-    }
-
-    PlasmaComponents.ProgressBar {
-        indeterminate: true
-    }
-
-    PlasmaComponents.ProgressBar {
-        minimumValue: 0
-        maximumValue: 100
-        value: 30
-    }
-
-    Text { text: "Vertical" }
-    Row {
-        spacing: 20
+    tools: PlasmaComponents.ToolBarLayout {
+        spacing: 5
+        PlasmaComponents.ToolButton {
+            text: "ToolButton"
+        }
         PlasmaComponents.ProgressBar {
             value: 0.3
-            orientation: Qt.Vertical
-            width: 20
-            height: 100
         }
-        PlasmaComponents.ProgressBar {
-            value: 0.4
-            orientation: Qt.Vertical
-            width: 20
-            height: 120
+        PlasmaComponents.TextField {
+            text: "Busy widgets"
         }
+    }
+    Column {
+        spacing: 20
+
+        Text {
+            font.pixelSize: 20
+            text: "Busy Indicator"
+        }
+
+        PlasmaComponents.BusyIndicator { }
+
+        PlasmaComponents.BusyIndicator { running: true }
+
+        Text {
+            font.pixelSize: 20
+            text: "Progress Bar"
+        }
+
+        Text { text: "Horizontal" }
+
         PlasmaComponents.ProgressBar {
-            orientation: Qt.Vertical
-            width: 20
-            height: 100
+            value: 0.3
+        }
+
+        PlasmaComponents.ProgressBar {
             indeterminate: true
+        }
+
+        PlasmaComponents.ProgressBar {
+            minimumValue: 0
+            maximumValue: 100
+            value: 30
+        }
+
+        Text { text: "Vertical" }
+        Row {
+            spacing: 20
+            PlasmaComponents.ProgressBar {
+                value: 0.3
+                orientation: Qt.Vertical
+                width: 20
+                height: 100
+            }
+            PlasmaComponents.ProgressBar {
+                value: 0.4
+                orientation: Qt.Vertical
+                width: 20
+                height: 120
+            }
+            PlasmaComponents.ProgressBar {
+                orientation: Qt.Vertical
+                width: 20
+                height: 100
+                indeterminate: true
+            }
         }
     }
 }

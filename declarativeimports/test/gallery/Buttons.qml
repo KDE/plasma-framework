@@ -20,80 +20,94 @@
 import QtQuick 1.0
 import org.kde.plasma.components 0.1 as PlasmaComponents
 
-Column {
-    spacing: 20
-
-    Text {
-        font.pixelSize: 20
-        text: "Buttons"
+PlasmaComponents.Page {
+    height: childrenRect.height
+    tools: PlasmaComponents.ToolBarLayout {
+        spacing: 5
+        PlasmaComponents.Button {
+            text: "Button"
+        }
+        PlasmaComponents.Button {
+            text: "toolbar of the Buttons page"
+        }
+        PlasmaComponents.TextField {}
     }
 
-    PlasmaComponents.Button {
-        id: bt1
-        width: 140
-        height: 30
-        text: "Button"
+    Column {
+        spacing: 20
 
-        onClicked: {
-            console.log("Clicked");
+        Text {
+            font.pixelSize: 20
+            text: "Buttons"
         }
 
-        Keys.onTabPressed: bt2.forceActiveFocus();
-    }
+        PlasmaComponents.Button {
+            id: bt1
+            width: 140
+            height: 30
+            text: "Button"
 
-    PlasmaComponents.Button {
-        id: bt2
-        width: 140
-        height: 30
-        text: "Checkable Button"
-        checkable: true
+            onClicked: {
+                console.log("Clicked");
+            }
 
-        onCheckedChanged: {
-            if (checked)
-                console.log("Button Checked");
-            else
-                console.log("Button Unchecked");
+            Keys.onTabPressed: bt2.forceActiveFocus();
         }
 
-        Keys.onTabPressed: bt3.forceActiveFocus();
-    }
+        PlasmaComponents.Button {
+            id: bt2
+            width: 140
+            height: 30
+            text: "Checkable Button"
+            checkable: true
 
-    PlasmaComponents.Button {
-        id: bt3
-        width: 140
-        height: 30
-        text: "Different Font"
-        font {
-            pixelSize: 20
-            family: "Helvetica"
+            onCheckedChanged: {
+                if (checked)
+                    console.log("Button Checked");
+                else
+                    console.log("Button Unchecked");
+            }
+
+            Keys.onTabPressed: bt3.forceActiveFocus();
         }
 
-        Keys.onTabPressed: bt4.forceActiveFocus();
-    }
+        PlasmaComponents.Button {
+            id: bt3
+            width: 140
+            height: 30
+            text: "Different Font"
+            font {
+                pixelSize: 20
+                family: "Helvetica"
+            }
 
-    PlasmaComponents.Button {
-        id: bt4
-        width: 140
-        height: 30
-        text: "Icon Button"
-        iconSource: "/home/dakerfp/work/comics-reader/ui/images/random.png"
+            Keys.onTabPressed: bt4.forceActiveFocus();
+        }
 
-        Keys.onTabPressed: bt5.forceActiveFocus();
-    }
+        PlasmaComponents.Button {
+            id: bt4
+            width: 140
+            height: 30
+            text: "Icon Button"
+            iconSource: "/home/dakerfp/work/comics-reader/ui/images/random.png"
 
-    PlasmaComponents.Button {
-        id: bt5
-        width: 140
-        height: 30
-        iconSource: "/home/dakerfp/work/comics-reader/ui/images/random.png"
+            Keys.onTabPressed: bt5.forceActiveFocus();
+        }
 
-        Keys.onTabPressed: bt1.forceActiveFocus();
-    }
+        PlasmaComponents.Button {
+            id: bt5
+            width: 140
+            height: 30
+            iconSource: "/home/dakerfp/work/comics-reader/ui/images/random.png"
 
-    PlasmaComponents.Button {
-        width: 140
-        height: 30
-        text: "Disabled Button"
-        enabled: false
+            Keys.onTabPressed: bt1.forceActiveFocus();
+        }
+
+        PlasmaComponents.Button {
+            width: 140
+            height: 30
+            text: "Disabled Button"
+            enabled: false
+        }
     }
 }
