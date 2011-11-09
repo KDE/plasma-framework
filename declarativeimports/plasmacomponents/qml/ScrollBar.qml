@@ -56,46 +56,6 @@ Item {
         bottom: flickableItem.bottom
     }
 
-    Keys.onUpPressed: {
-        if (!interactive || !enabled || !_isVertical)
-            return;
-
-        if (inverted)
-            internalLoader.incrementValue(stepSize);
-        else
-            internalLoader.incrementValue(-stepSize);
-    }
-
-    Keys.onDownPressed: {
-        if (!interactive || !enabled || !_isVertical)
-            return;
-
-        if (inverted)
-            internalLoader.incrementValue(-stepSize);
-        else
-            internalLoader.incrementValue(stepSize);
-    }
-
-    Keys.onLeftPressed: {
-        if (!interactive || !enabled || _isVertical)
-            return;
-
-        if (inverted)
-            internalLoader.incrementValue(stepSize);
-        else
-            internalLoader.incrementValue(-stepSize);
-    }
-
-    Keys.onRightPressed: {
-        if (!interactive || !enabled || _isVertical)
-            return;
-
-        if (inverted)
-            internalLoader.incrementValue(-stepSize);
-        else
-            internalLoader.incrementValue(stepSize);
-    }
-
     Loader {
         id: internalLoader
         anchors.fill: parent

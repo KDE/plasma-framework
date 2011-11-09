@@ -28,6 +28,46 @@ PlasmaCore.FrameSvgItem {
     imagePath:"widgets/scrollbar"
     prefix: _isVertical ? "background-vertical" : "background-horizontal"
 
+     Keys.onUpPressed: {
+        if (!enabled || !_isVertical)
+            return;
+
+        if (inverted)
+            internalLoader.incrementValue(stepSize);
+        else
+            internalLoader.incrementValue(-stepSize);
+    }
+
+    Keys.onDownPressed: {
+        if (!enabled || !_isVertical)
+            return;
+
+        if (inverted)
+            internalLoader.incrementValue(-stepSize);
+        else
+            internalLoader.incrementValue(stepSize);
+    }
+
+    Keys.onLeftPressed: {
+        if (!enabled || _isVertical)
+            return;
+
+        if (inverted)
+            internalLoader.incrementValue(stepSize);
+        else
+            internalLoader.incrementValue(-stepSize);
+    }
+
+    Keys.onRightPressed: {
+        if (!enabled || _isVertical)
+            return;
+
+        if (inverted)
+            internalLoader.incrementValue(-stepSize);
+        else
+            internalLoader.incrementValue(stepSize);
+    }
+
     property Item handle: handle
 
     property Item contents: contents
@@ -104,7 +144,7 @@ PlasmaCore.FrameSvgItem {
                 running: parent.pressed
                 repeat: true
                 onTriggered: {
-                    scrollbar.forceActiveFocus()
+                    background.forceActiveFocus()
                     if (inverted) {
                         internalLoader.incrementValue(stepSize);
                     } else {
@@ -151,7 +191,7 @@ PlasmaCore.FrameSvgItem {
                 running: parent.pressed;
                 repeat: true
                 onTriggered: {
-                    scrollbar.forceActiveFocus();
+                    background.forceActiveFocus();
                     if (inverted)
                         internalLoader.incrementValue(-stepSize);
                     else
@@ -204,7 +244,7 @@ PlasmaCore.FrameSvgItem {
                 }
             }
 
-            scrollbar.forceActiveFocus();
+            background.forceActiveFocus();
         }
     }
 }
