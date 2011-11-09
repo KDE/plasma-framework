@@ -39,7 +39,7 @@
 #include <Plasma/PackageMetadata>
 
 static const char description[] = I18N_NOOP("Install, list, remove Plasma packages");
-static const char version[] = "0.1";
+static const char version[] = "0.2";
 
 void output(const QString &msg)
 {
@@ -180,6 +180,8 @@ int main(int argc, char **argv)
     KCmdLineArgs::init( argc, argv, &aboutData );
 
     KCmdLineOptions options;
+    options.add("h");
+    options.add("hash <path>", ki18nc("Do not translate <path>", "Generate a SHA1 hash for the package at <path>"));
     options.add("g");
     options.add("global", ki18n("For install or remove, operates on packages installed for all users."));
     options.add("t");
@@ -206,6 +208,26 @@ int main(int argc, char **argv)
     KApplication app;
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+
+    if (args->isSet("hash")) {
+        const QString path = args->getOption("hash");
+        Plasma::PackageStructure::Ptr structure(new Plasma::PackageStructure);
+        Plasma::Package package(path, structure);
+        const QString hash = package.contentsHash();
+        if (hash.isEmpty()) {
+            output(i18n("Failed to generate a Package hash for %1", path));
+            exit(1);
+        }
+
+        output(i18n("SHA1 hash for Package at %1: '%2'", path, hash));
+        exit(0);
+    }
+
+    if (args->isSet("list-types")) {
+        listTypes();
+        exit(0);
+    }
+
     QString type = args->getOption("type");
     QString packageRoot = type;
     QString servicePrefix;
@@ -213,11 +235,6 @@ int main(int argc, char **argv)
     Plasma::PackageStructure *installer = 0;
     QString package;
     QString packageFile;
-
-    if (args->isSet("list-types")) {
-        listTypes();
-        exit(0);
-    }
 
     if (args->isSet("remove")) {
         package = args->getOption("remove");
