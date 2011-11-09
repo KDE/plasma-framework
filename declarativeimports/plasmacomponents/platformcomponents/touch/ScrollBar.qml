@@ -38,7 +38,6 @@ Item {
 
     // Plasma API
     property bool inverted: false
-    property bool animated: true
     property alias stepSize: range.stepSize
     property bool pressed: internalLoader.item.mouseArea?internalLoader.item.mouseArea.pressed:false
     property real scrollButtonInterval: 50

@@ -102,7 +102,6 @@ Rectangle {
 	    stepSize: 30
 
         flickableItem: page
-        animated: true
         orientation: Qt.Horizontal
         anchors {
             left: parent.left
@@ -118,7 +117,6 @@ Rectangle {
 
         orientation: Qt.Vertical
         flickableItem: page
-        animated: true
         anchors {
             top: toolBar.bottom
             right: parent.right

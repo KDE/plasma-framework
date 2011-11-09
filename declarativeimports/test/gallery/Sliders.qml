@@ -49,7 +49,6 @@ Column {
                 minimumValue: 0
                 maximumValue: 255
                 stepSize: 10
-                animated: true
                 Keys.onTabPressed: greenSlider.forceActiveFocus()
             }
 
@@ -77,7 +76,6 @@ Column {
                 minimumValue: 0
                 maximumValue: 255
                 stepSize: 10
-                animated: true
                 Keys.onTabPressed: redSlider.forceActiveFocus()
             }
 

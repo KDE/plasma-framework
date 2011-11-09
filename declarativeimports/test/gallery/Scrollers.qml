@@ -52,7 +52,6 @@ Column {
             id: scrollBar
             orientation: Qt.Vertical
             flickableItem: scrollList
-            animated: true
             stepSize: 40
             scrollButtonInterval: 50
             anchors {
