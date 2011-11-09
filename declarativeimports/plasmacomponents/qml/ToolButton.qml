@@ -41,7 +41,13 @@ Item {
     }
 
 
-    implicitWidth: Math.max(theme.defaultFont.mSize.width*12, icon.width + label.paintedWidth + surface.margins.left + surface.margins.right) + ((icon.valid) ? surface.margins.left : 0);
+    implicitWidth: {
+        if (label.paintedWidth == 0) {
+            return implicitHeight
+        } else {
+            return Math.max(theme.defaultFont.mSize.width*12, icon.width + label.paintedWidth + surface.margins.left + surface.margins.right) + ((icon.valid) ? surface.margins.left : 0)
+        }
+    }
     implicitHeight: Math.max(theme.defaultFont.mSize.height*1.8, Math.max(icon.height, label.paintedHeight) + surface.margins.top + surface.margins.bottom)
 
     // TODO: needs to define if there will be specific graphics for
