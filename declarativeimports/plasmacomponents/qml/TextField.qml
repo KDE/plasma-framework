@@ -112,7 +112,13 @@ Item {
     }
 
     Text {
-        anchors.fill: textInput
+        anchors {
+            left: parent.left
+            right: parent.right
+            verticalCenter: parent.verticalCenter
+            leftMargin: 2 * base.margins.left
+            rightMargin: 2 * base.margins.right
+        }
         text: placeholderText
         visible: textInput.text == "" && !textField.activeFocus
         // XXX: using textColor and low opacity for theming placeholderText
@@ -143,8 +149,6 @@ Item {
             rightMargin: 2 * base.margins.right
         }
         selectByMouse: true
-        y: (height - font.pixelSize) * 0.4 // XXX: verticalCenter anchor is not centering the text
-        height: Math.min(2 * font.pixelSize, parent.height)
         color: theme.textColor
         enabled: textField.enabled
         clip: true
