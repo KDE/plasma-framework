@@ -41,8 +41,8 @@ Item {
     property bool _isVertical: orientation == Qt.Vertical
     property bool _showButtons: stepSize != 0
 
-    implicitWidth: _isVertical ? 22 : 200
-    implicitHeight: _isVertical ? 200 : 22
+    implicitWidth: _isVertical ? (interactive ? 22 : 12) : 200
+    implicitHeight: _isVertical ? 200 : (interactive ? 22 : 12)
     // TODO: needs to define if there will be specific graphics for
     //     disabled scroll bars
     opacity: enabled ? 1.0 : 0.5
@@ -157,7 +157,7 @@ Item {
             position: _isVertical ? internalLoader.item.handle.y : internalLoader.item.handle.x
 
             onPositionChanged: {
-                if (internalLoader.item.mouseArea.pressed) {
+                if (internalLoader.item.mouseArea && internalLoader.item.mouseArea.pressed) {
                     return
                 }
 
@@ -169,6 +169,6 @@ Item {
             }
         }
 
-        source: "ScrollBarDelegate.qml"
+        source: interactive ? "ScrollBarDelegate.qml" : "ScrollDecoratorDelegate.qml"
     }
 }
