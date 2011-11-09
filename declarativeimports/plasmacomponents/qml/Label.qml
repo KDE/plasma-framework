@@ -23,6 +23,9 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 Text {
     id: root
 
+    height: theme.defaultFont.mSize.height*1.8
+    verticalAlignment: Text.AlignVCenter
+
     font.capitalization: theme.defaultFont.capitalization
     font.family: theme.defaultFont.family
     font.italic: theme.defaultFont.italic

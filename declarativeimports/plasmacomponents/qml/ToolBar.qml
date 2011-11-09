@@ -23,7 +23,7 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 Item{
     id: toolBar
     width: parent.width
-    height: 48 + frameSvg.margins.top + frameSvg.margins.bottom
+    height: theme.defaultFont.mSize.height*2 + frameSvg.margins.top + frameSvg.margins.bottom
 
     // The current set of tools; null if none.
     property Item tools

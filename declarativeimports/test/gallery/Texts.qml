@@ -26,6 +26,9 @@ PlasmaComponents.Page {
 
     tools: PlasmaComponents.ToolBarLayout {
         spacing: 5
+        PlasmaComponents.Label {
+            text: "Text label:"
+        }
         PlasmaComponents.ToolButton {
             text: "ToolButton"
         }

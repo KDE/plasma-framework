@@ -43,8 +43,8 @@ Item {
     // Convenience API
     property bool _isVertical: orientation == Qt.Vertical
 
-    width: _isVertical ? 22 : 200
-    height: _isVertical ? 200 : 22
+    width: _isVertical ? theme.defaultFont.mSize.height*1.8 : 200
+    height: _isVertical ? 200 : theme.defaultFont.mSize.height*1.8
     // TODO: needs to define if there will be specific graphics for
     //     disabled sliders
     opacity: enabled ? 1.0 : 0.5

@@ -84,8 +84,8 @@ Item {
     property alias activeFocus: textInput.activeFocus
 
     // TODO: fix default size
-    implicitWidth: 100
-    implicitHeight: 26
+    implicitWidth: theme.defaultFont.mSize.width*12
+    implicitHeight: theme.defaultFont.mSize.height*1.8
     // TODO: needs to define if there will be specific graphics for
     //     disabled text fields
     opacity: enabled ? 1.0 : 0.5
