@@ -61,6 +61,7 @@ PlasmaCore.FrameSvgItem {
         target: flickableItem
         onMovingChanged: {
             if (flickableItem.moving) {
+                opacityTimer.running = false
                 background.opacity = 1
             } else {
                 opacityTimer.restart()
