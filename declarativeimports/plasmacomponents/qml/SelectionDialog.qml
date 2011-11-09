@@ -78,7 +78,7 @@ CommonDialog {
     content: Item {
         id: contentItem
 
-        width: theme.defaultFont.mSize.width * 80
+        width: theme.defaultFont.mSize.width * 40
         height: theme.defaultFont.mSize.height * 12
 
         Item {

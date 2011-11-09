@@ -43,12 +43,8 @@ Item {
     property bool pressed: internalLoader.item.mouseArea?internalLoader.item.mouseArea.pressed:false
     property real scrollButtonInterval: 50
 
-    // Convinience API
-    property bool _isVertical: orientation == Qt.Vertical
-    property bool _showButtons: stepSize != 0
-
-    implicitWidth: _isVertical ? (interactive ? 22 : 12) : 200
-    implicitHeight: _isVertical ? 200 : (interactive ? 22 : 12)
+    implicitWidth: internalLoader.isVertical ? (interactive ? 22 : 12) : 200
+    implicitHeight: internalLoader.isVertical ? 200 : (interactive ? 22 : 12)
     // TODO: needs to define if there will be specific graphics for
     //     disabled scroll bars
     opacity: enabled ? 1.0 : 0.5
@@ -65,15 +61,16 @@ Item {
     Loader {
         id: internalLoader
         anchors.fill: parent
-        //property bool handleEnabled: _isVertical ? item.handle.height < item.contents.height : item.handle.width < item.contents.width
-        property bool handleEnabled: _isVertical ? flickableItem.contentHeight > flickableItem.height : flickableItem.contentWidth > flickableItem.width
+        //property bool handleEnabled: internalLoader.isVertical ? item.handle.height < item.contents.height : item.handle.width < item.contents.width
+        property bool handleEnabled: internalLoader.isVertical ? flickableItem.contentHeight > flickableItem.height : flickableItem.contentWidth > flickableItem.width
+        property bool isVertical: orientation == Qt.Vertical
 
         function incrementValue(increment)
         {
             if (!flickableItem)
                 return;
 
-            if (_isVertical) {
+            if (internalLoader.isVertical) {
                 flickableItem.contentY = Math.max(0, Math.min(flickableItem.contentHeight,
                     flickableItem.contentY + increment))
             } else {
@@ -88,7 +85,7 @@ Item {
             minimumValue: 0
             maximumValue: {
                 var diff;
-                if (_isVertical) {
+                if (internalLoader.isVertical) {
                     diff = flickableItem.contentHeight - flickableItem.height
                 } else {
                     diff = flickableItem.contentWidth - flickableItem.width
@@ -101,33 +98,33 @@ Item {
             inverted: scrollbar.inverted
             positionAtMinimum: 0
             positionAtMaximum: {
-                if (_isVertical) {
+                if (internalLoader.isVertical) {
                     internalLoader.item.contents.height - internalLoader.item.handle.height
                 } else {
                     internalLoader.item.contents.width - internalLoader.item.handle.width
                 }
             }
-            value: _isVertical ? flickableItem.contentY : flickableItem.contentX
+            value: internalLoader.isVertical ? flickableItem.contentY : flickableItem.contentX
             onValueChanged: {
                 if (flickableItem.moving) {
                     return
                 }
 
-                if (_isVertical) {
+                if (internalLoader.isVertical) {
                     flickableItem.contentY = value
                 } else {
                     flickableItem.contentX = value
                 }
             }
 
-            position: _isVertical ? internalLoader.item.handle.y : internalLoader.item.handle.x
+            position: internalLoader.isVertical ? internalLoader.item.handle.y : internalLoader.item.handle.x
 
             onPositionChanged: {
                 if (internalLoader.item.mouseArea && internalLoader.item.mouseArea.pressed) {
                     return
                 }
 
-                if (_isVertical) {
+                if (internalLoader.isVertical) {
                     internalLoader.item.handle.y = position
                 } else {
                     internalLoader.item.handle.x = position

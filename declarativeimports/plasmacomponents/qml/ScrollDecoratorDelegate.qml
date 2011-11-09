@@ -26,7 +26,7 @@ PlasmaCore.FrameSvgItem {
     id: background
     anchors.fill: parent
     imagePath:"widgets/scrollbar"
-    prefix: _isVertical ? "background-vertical" : "background-horizontal"
+    prefix: internalLoader.isVertical ? "background-vertical" : "background-horizontal"
 
     opacity: 0
     Behavior on opacity {
@@ -48,10 +48,10 @@ PlasmaCore.FrameSvgItem {
             imagePath:"widgets/scrollbar"
             prefix: "slider"
 
-            property int length: _isVertical? flickableItem.visibleArea.heightRatio * parent.height :  flickableItem.visibleArea.widthRatio * parent.width
+            property int length: internalLoader.isVertical? flickableItem.visibleArea.heightRatio * parent.height :  flickableItem.visibleArea.widthRatio * parent.width
 
-            width: _isVertical ? parent.width : length
-            height: _isVertical ? length : parent.height
+            width: internalLoader.isVertical ? parent.width : length
+            height: internalLoader.isVertical ? length : parent.height
         }
     }
 

@@ -26,10 +26,10 @@ PlasmaCore.FrameSvgItem {
     id: background
     anchors.fill: parent
     imagePath:"widgets/scrollbar"
-    prefix: _isVertical ? "background-vertical" : "background-horizontal"
+    prefix: internalLoader.isVertical ? "background-vertical" : "background-horizontal"
 
      Keys.onUpPressed: {
-        if (!enabled || !_isVertical)
+        if (!enabled || !internalLoader.isVertical)
             return;
 
         if (inverted)
@@ -39,7 +39,7 @@ PlasmaCore.FrameSvgItem {
     }
 
     Keys.onDownPressed: {
-        if (!enabled || !_isVertical)
+        if (!enabled || !internalLoader.isVertical)
             return;
 
         if (inverted)
@@ -49,7 +49,7 @@ PlasmaCore.FrameSvgItem {
     }
 
     Keys.onLeftPressed: {
-        if (!enabled || _isVertical)
+        if (!enabled || internalLoader.isVertical)
             return;
 
         if (inverted)
@@ -59,7 +59,7 @@ PlasmaCore.FrameSvgItem {
     }
 
     Keys.onRightPressed: {
-        if (!enabled || _isVertical)
+        if (!enabled || internalLoader.isVertical)
             return;
 
         if (inverted)
@@ -75,10 +75,10 @@ PlasmaCore.FrameSvgItem {
         id: contents
         anchors {
             fill: parent
-            leftMargin: _isVertical || stepSize <= 0 ? 0 : leftButton.width
-            rightMargin: _isVertical || stepSize <= 0 ? 0 : rightButton.width
-            topMargin: _isVertical && stepSize > 0 ? leftButton.height : 0
-            bottomMargin: _isVertical && stepSize > 0 ? rightButton.height : 0
+            leftMargin: internalLoader.isVertical || stepSize <= 0 ? 0 : leftButton.width
+            rightMargin: internalLoader.isVertical || stepSize <= 0 ? 0 : rightButton.width
+            topMargin: internalLoader.isVertical && stepSize > 0 ? leftButton.height : 0
+            bottomMargin: internalLoader.isVertical && stepSize > 0 ? rightButton.height : 0
         }
 
         PlasmaCore.FrameSvgItem {
@@ -96,10 +96,10 @@ PlasmaCore.FrameSvgItem {
                 }
             }
 
-            property int length: _isVertical? flickableItem.visibleArea.heightRatio * parent.height :  flickableItem.visibleArea.widthRatio * parent.width
+            property int length: internalLoader.isVertical? flickableItem.visibleArea.heightRatio * parent.height :  flickableItem.visibleArea.widthRatio * parent.width
 
-            width: _isVertical ? parent.width : length
-            height: _isVertical ? length : parent.height
+            width: internalLoader.isVertical ? parent.width : length
+            height: internalLoader.isVertical ? length : parent.height
         }
     }
 
@@ -113,23 +113,23 @@ PlasmaCore.FrameSvgItem {
         visible: stepSize > 0
 
         anchors {
-            left: _isVertical ? undefined : parent.left
-            verticalCenter: _isVertical ? undefined : parent.verticalCenter
-            top: _isVertical ? parent.top : undefined
-            horizontalCenter: _isVertical ? parent.horizontalCenter : undefined
+            left: internalLoader.isVertical ? undefined : parent.left
+            verticalCenter: internalLoader.isVertical ? undefined : parent.verticalCenter
+            top: internalLoader.isVertical ? parent.top : undefined
+            horizontalCenter: internalLoader.isVertical ? parent.horizontalCenter : undefined
         }
+        width: 18
         height: 18
-        width: _showButtons ? 18 : 0
         svg: scrollbarSvg
         elementId: {
             if (leftMouseArea.pressed) {
-                return _isVertical ? "sunken-arrow-up" : "sunken-arrow-left"
+                return internalLoader.isVertical ? "sunken-arrow-up" : "sunken-arrow-left"
             }
 
             if (scrollbar.activeFocus || leftMouseArea.containsMouse) {
-                return _isVertical ? "mouseover-arrow-up" : "mouseover-arrow-left"
+                return internalLoader.isVertical ? "mouseover-arrow-up" : "mouseover-arrow-left"
             } else {
-                return _isVertical ? "mouseover-arrow-up" : "arrow-left"
+                return internalLoader.isVertical ? "mouseover-arrow-up" : "arrow-left"
             }
         }
 
@@ -160,23 +160,23 @@ PlasmaCore.FrameSvgItem {
         visible: stepSize > 0
 
         anchors {
-            right: _isVertical ? undefined : parent.right
-            verticalCenter: _isVertical ? undefined : parent.verticalCenter
-            bottom: _isVertical ? parent.bottom : undefined
-            horizontalCenter: _isVertical ? parent.horizontalCenter : undefined
+            right: internalLoader.isVertical ? undefined : parent.right
+            verticalCenter: internalLoader.isVertical ? undefined : parent.verticalCenter
+            bottom: internalLoader.isVertical ? parent.bottom : undefined
+            horizontalCenter: internalLoader.isVertical ? parent.horizontalCenter : undefined
         }
+        width: 18
         height: 18
-        width: _showButtons ? 18 : 0
         svg: scrollbarSvg
         elementId: {
             if (leftMouseArea.pressed) {
-                return _isVertical ? "sunken-arrow-down" : "sunken-arrow-right"
+                return internalLoader.isVertical ? "sunken-arrow-down" : "sunken-arrow-right"
             }
 
             if (scrollbar.activeFocus || leftMouseArea.containsMouse) {
-                return _isVertical ? "mouseover-arrow-down" : "mouseover-arrow-right"
+                return internalLoader.isVertical ? "mouseover-arrow-down" : "mouseover-arrow-right"
             } else {
-                return _isVertical ? "mouseover-arrow-down" : "arrow-right"
+                return internalLoader.isVertical ? "mouseover-arrow-down" : "arrow-right"
             }
         }
 
@@ -210,7 +210,7 @@ PlasmaCore.FrameSvgItem {
         hoverEnabled: true
         drag {
             target: handle
-            axis: _isVertical ? Drag.YAxis : Drag.XAxis
+            axis: internalLoader.isVertical ? Drag.YAxis : Drag.XAxis
             minimumX: range.positionAtMinimum
             maximumX: range.positionAtMaximum
             minimumY: range.positionAtMinimum
@@ -218,7 +218,7 @@ PlasmaCore.FrameSvgItem {
         }
 
         onPressed: {
-            if (_isVertical) {
+            if (internalLoader.isVertical) {
                 // Clamp the value
                 var newY = Math.max(mouse.y, drag.minimumY);
                 newY = Math.min(newY, drag.maximumY);
