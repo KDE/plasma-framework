@@ -66,20 +66,20 @@ Item{
         switch (transition) {
         case "push":
             containerA.animationsEnabled = true
-            oldContainer.x = -oldContainer.width
+            oldContainer.x = -oldContainer.width/2
 
             containerA.animationsEnabled = false
-            newContainer.x = newContainer.width
+            newContainer.x = newContainer.width/2
             newContainer.y = 0
             containerA.animationsEnabled = true
             newContainer.x = 0
             break
         case "pop":
             containerA.animationsEnabled = true
-            oldContainer.x = oldContainer.width
+            oldContainer.x = oldContainer.width/2
 
             containerA.animationsEnabled = false
-            newContainer.x = -newContainer.width
+            newContainer.x = -newContainer.width/2
             newContainer.y = 0
             containerA.animationsEnabled = true
             newContainer.x = 0
@@ -98,7 +98,7 @@ Item{
         default:
             containerA.animationsEnabled = false
             containerA.animationsEnabled = false
-            oldContainer.x = -oldContainer.width
+            oldContainer.x = -oldContainer.width/2
             newContainer.x = 0
             break
         }
