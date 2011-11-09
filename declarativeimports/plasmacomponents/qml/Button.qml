@@ -86,7 +86,7 @@ Item {
         id: shadow
         anchors.fill: parent
         state: {
-            if (internal.userPressed || checked)  {
+            if (internal.userPressed || checked) {
                 return "hidden"
             } else if (mouse.containsMouse) {
                 return "hover"
