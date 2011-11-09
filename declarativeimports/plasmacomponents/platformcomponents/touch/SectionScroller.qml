@@ -72,9 +72,16 @@ Item {
                 internal.initDirtyObserver()
             }
         }
+        onMovementStarted: root.opacity = 1
+        onMovementEnded: {
+            if (!dragArea.pressed) {
+                fadeTimer.restart()
+            }
+        }
     }
 
-    width: 22
+    width: 48
+    opacity: 0
     Behavior on opacity {
         NumberAnimation {
             duration: 250
@@ -87,6 +94,15 @@ Item {
         bottom: listView.bottom
     }
 
+    Timer {
+        id: fadeTimer
+        interval: 4000
+        repeat: false
+        running: false
+        onTriggered: {
+            root.opacity = 0
+        }
+    }
 
     RangeModel {
         id: range
@@ -95,18 +111,51 @@ Item {
         maximumValue: Math.max(0, listView.contentHeight - listView.height)
         stepSize: 0
         //inverted: true
-        positionAtMinimum: root.width*2
-        positionAtMaximum: root.height - root.width*2
+        positionAtMinimum: handle.height / 2
+        positionAtMaximum: root.height - handle.height - handle.height / 2
         value: listView.contentY
-        onPositionChanged: sectionLabel.text = Sections.closestSection(position/listView.height)
-
+        onValueChanged: {
+            if (listView.moving) {
+                return
+            } else {
+                listView.contentY = value
+            }
+        }
+        //position: handle.y
+        onPositionChanged: {
+            if (!dragArea.pressed) {
+                handle.y = position
+            }
+        }
     }
 
-    ScrollBar {
-        id: scrollBar
-        flickableItem: listView
+    Rectangle {
         anchors.fill: parent
-        interactive: true
+        color: Qt.rgba(0,0,0,0.3)
+    }
+
+    Rectangle {
+        id: handle
+        width: 6
+        height: 6
+        color: theme.textColor
+        opacity: 0.7
+        anchors.horizontalCenter: parent.horizontalCenter
+        border {
+            width: 1
+            color: theme.backgroundColor
+        }
+        onYChanged: {
+            if (dragArea.pressed) {
+                range.position = y
+            }
+            sectionLabel.text = Sections.closestSection(y/listView.height)
+        }
+        Behavior on y {
+            NumberAnimation {
+                duration: 150
+            }
+        }
     }
     PlasmaCore.FrameSvgItem {
         imagePath: "widgets/tooltip"
@@ -118,19 +167,43 @@ Item {
             x: parent.margins.left
             y: parent.margins.top
         }
-        y: Math.min(root.height-height-scrollBar.width, Math.max(scrollBar.width, range.position - height/2))
+        y: Math.min(root.height-height, Math.max(0, handle.y - height/2))
         anchors {
             //verticalCenter: handle.verticalCenter
             right: parent.left
         }
-        opacity: sectionLabel.text && scrollBar.pressed?1:0
+        opacity: dragArea.pressed?1:0
         Behavior on opacity {
             NumberAnimation {
                 duration: 250
             }
         }
     }
+    /*Repeater {
+        id: sectionsRepeater
+        delegate: Label {
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: Sections._sections[modelData]
+            y: Sections._sectionData[modelData].index*(listView.height/listView.model.count)
+        }
+    }*/
+    MouseArea {
+        id: dragArea
+        anchors.fill: parent
+        enabled: scrollbar.enabled
+        drag {
+            target: handle
+            axis: Drag.YAxis
+            minimumY: range.positionAtMinimum
+            maximumY: range.positionAtMaximum
+        }
+        onPressed: {
+            mouse.accepted = true
+            handle.y = mouse.y
+        }
+        onReleased: fadeTimer.restart()
 
+    }
 
     QtObject {
         id: internal

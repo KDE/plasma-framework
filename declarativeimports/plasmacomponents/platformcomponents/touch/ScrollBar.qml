@@ -40,7 +40,7 @@ Item {
     property bool inverted: false
     property bool animated: true
     property alias stepSize: range.stepSize
-    //property alias pressed: mouseArea.pressed
+    property bool pressed: internalLoader.item.mouseArea?internalLoader.item.mouseArea.pressed:false
     property real scrollButtonInterval: 50
 
     // Convinience API

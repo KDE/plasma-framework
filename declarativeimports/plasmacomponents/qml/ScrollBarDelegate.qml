@@ -115,7 +115,7 @@ PlasmaCore.FrameSvgItem {
         anchors {
             left: _isVertical ? undefined : parent.left
             verticalCenter: _isVertical ? undefined : parent.verticalCenter
-            top: _isVertical ? 0 : undefined
+            top: _isVertical ? parent.top : undefined
             horizontalCenter: _isVertical ? parent.horizontalCenter : undefined
         }
         height: 18
