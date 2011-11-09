@@ -52,7 +52,7 @@ Item {
     //      PageStatus.Deactivating - the page is transitioning into becoming inactive
     property int status: PageStatus.Inactive
 
-    property PageStack pageStack
+    property Item pageStack
 
     // Defines orientation lock for a page
     property int orientationLock: PageOrientation.Automatic
