@@ -50,7 +50,7 @@ Row {
             layouting = true
             spacer.parent = null
 
-            spacer.width = root.parent.width - root.childrenRect.width
+            spacer.width = root.parent.width - root.childrenRect.width -10
 
             var last = root.children[numChildren-2]
             last.parent = null

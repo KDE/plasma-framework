@@ -47,7 +47,7 @@ Rectangle {
             text: "button on first toolbar"
         }
     }
-    Row {
+    PlasmaComponents.ToolBarLayout {
         id: toolbarB
         visible: false
         spacing: 5
