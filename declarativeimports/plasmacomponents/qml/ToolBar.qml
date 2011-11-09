@@ -121,6 +121,7 @@ Item{
     }
 
     Item {
+        clip: true
         anchors {
             fill: parent
             leftMargin: parent.margins.left
