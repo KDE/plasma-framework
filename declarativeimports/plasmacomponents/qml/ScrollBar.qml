@@ -21,7 +21,13 @@
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 
-// TODO: add support mouse wheel and key events
+
+/**
+ * A generic ScrollBar/ScrollDecorator component:
+ * Qlways prefer this to ScrollDecorator that is not available on desktop.
+ * By default, this component will look and behave like a scroll decorator on touchscreens
+ */
+// TODO: add support mouse wheel events
 Item {
     id: scrollbar
 

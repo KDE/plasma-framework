@@ -102,7 +102,7 @@ Column {
         }
 
         // Scroll Decorators
-        PlasmaComponents.ScrollDecorator {
+        PlasmaComponents.ScrollBar {
             orientation: Qt.Vertical
             flickableItem: scrollArea
             inverted: true
@@ -118,7 +118,7 @@ Column {
                 text: "inverted"
             }
         }
-        PlasmaComponents.ScrollDecorator {
+        PlasmaComponents.ScrollBar {
             orientation: Qt.Horizontal
             flickableItem: scrollArea
             anchors {

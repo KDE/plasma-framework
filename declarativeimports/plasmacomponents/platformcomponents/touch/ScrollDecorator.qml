@@ -19,6 +19,10 @@
 
 import QtQuick 1.0
 
+/**
+ * Just provided for compatibility
+ * Use ScrollBar instead. will behave like a ScrollDecorator on touchscreens
+ */
 ScrollBar {
     interactive: false
 }
