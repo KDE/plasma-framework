@@ -34,7 +34,7 @@ Item {
     // Common API
     property Flickable flickableItem: null
     property int orientation: Qt.Vertical
-    property bool interactive: true
+    property bool interactive: false
 
     // Plasma API
     property bool inverted: false
