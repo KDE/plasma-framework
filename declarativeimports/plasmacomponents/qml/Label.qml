@@ -24,7 +24,7 @@ Text {
     id: root
 
     height: theme.defaultFont.mSize.height*1.8
-    verticalAlignment: Text.AlignVCenter
+    verticalAlignment: lineCount > 1 ? Text.AlignTop : Text.AlignVCenter
 
     font.capitalization: theme.defaultFont.capitalization
     font.family: theme.defaultFont.family
