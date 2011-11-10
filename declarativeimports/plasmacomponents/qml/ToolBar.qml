@@ -23,7 +23,11 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 Item{
     id: toolBar
     width: parent.width
-    height: theme.defaultFont.mSize.height*2 + frameSvg.margins.top + frameSvg.margins.bottom
+    height: (tools && enabled) ? theme.defaultFont.mSize.height*2 + frameSvg.margins.top + frameSvg.margins.bottom : 0
+    visible: height > 0
+    Behavior on height {
+        PropertyAnimation { duration: 250 }
+    }
 
     // The current set of tools; null if none.
     property Item tools
@@ -45,66 +49,69 @@ Item{
         toolBar.transition = transition
         toolBar.tools = tools
     }
-    onToolsChanged: {
-        var newContainer
-        var oldContainer
-        if (containerA.current) {
-            newContainer = containerB
-            oldContainer = containerA
-        } else {
-            newContainer = containerA
-            oldContainer = containerB
+    Connections {
+        target: toolBar
+        onToolsChanged: {
+            var newContainer
+            var oldContainer
+            if (containerA.current) {
+                newContainer = containerB
+                oldContainer = containerA
+            } else {
+                newContainer = containerA
+                oldContainer = containerB
+            }
+            containerA.current = !containerA.current
+
+            tools.parent = newContainer
+            tools.visible = true
+            tools.anchors.left = newContainer.left
+            tools.anchors.right = newContainer.right
+            tools.anchors.verticalCenter = newContainer.verticalCenter
+
+            switch (transition) {
+            case "push":
+                containerA.animationsEnabled = true
+                oldContainer.x = -oldContainer.width/2
+
+                containerA.animationsEnabled = false
+                newContainer.x = newContainer.width/2
+                newContainer.y = 0
+                containerA.animationsEnabled = true
+                newContainer.x = 0
+                break
+            case "pop":
+                containerA.animationsEnabled = true
+                oldContainer.x = oldContainer.width/2
+
+                containerA.animationsEnabled = false
+                newContainer.x = -newContainer.width/2
+                newContainer.y = 0
+                containerA.animationsEnabled = true
+                newContainer.x = 0
+                break
+            case "replace":
+                containerA.animationsEnabled = true
+                oldContainer.y = oldContainer.height
+
+                containerA.animationsEnabled = false
+                newContainer.x = 0
+                newContainer.y = -newContainer.height
+                containerA.animationsEnabled = true
+                newContainer.y = 0
+                break
+            case "set":
+            default:
+                containerA.animationsEnabled = false
+                containerA.animationsEnabled = false
+                oldContainer.x = -oldContainer.width/2
+                newContainer.x = 0
+                break
+            }
+
+            newContainer.opacity = 1
+            oldContainer.opacity = 0
         }
-        containerA.current = !containerA.current
-
-        tools.parent = newContainer
-        tools.visible = true
-        tools.anchors.left = newContainer.left
-        tools.anchors.right = newContainer.right
-        tools.anchors.verticalCenter = newContainer.verticalCenter
-
-        switch (transition) {
-        case "push":
-            containerA.animationsEnabled = true
-            oldContainer.x = -oldContainer.width/2
-
-            containerA.animationsEnabled = false
-            newContainer.x = newContainer.width/2
-            newContainer.y = 0
-            containerA.animationsEnabled = true
-            newContainer.x = 0
-            break
-        case "pop":
-            containerA.animationsEnabled = true
-            oldContainer.x = oldContainer.width/2
-
-            containerA.animationsEnabled = false
-            newContainer.x = -newContainer.width/2
-            newContainer.y = 0
-            containerA.animationsEnabled = true
-            newContainer.x = 0
-            break
-        case "replace":
-            containerA.animationsEnabled = true
-            oldContainer.y = oldContainer.height
-
-            containerA.animationsEnabled = false
-            newContainer.x = 0
-            newContainer.y = -newContainer.height
-            containerA.animationsEnabled = true
-            newContainer.y = 0
-            break
-        case "set":
-        default:
-            containerA.animationsEnabled = false
-            containerA.animationsEnabled = false
-            oldContainer.x = -oldContainer.width/2
-            newContainer.x = 0
-            break
-        }
-
-        newContainer.opacity = 1
-        oldContainer.opacity = 0
     }
 
     PlasmaCore.FrameSvgItem {
