@@ -35,8 +35,11 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.components"));
 
-    KConfigGroup cg(KSharedConfig::openConfig("kdeclarativerc"), "Components-platform");
-    const QString componentsPlatform = cg.readEntry("name", "desktop");
+    QString componentsPlatform = getenv("KDE_PLASMA_COMPONENTS_PLATFORM");
+    if (componentsPlatform.isEmpty()) {
+        KConfigGroup cg(KSharedConfig::openConfig("kdeclarativerc"), "Components-platform");
+        componentsPlatform = cg.readEntry("name", "desktop");
+    }
 
     if (componentsPlatform == "desktop") {
         qmlRegisterType<KDialogProxy>(uri, 0, 1, "QueryDialog");
