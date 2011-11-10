@@ -28,6 +28,7 @@ Item{
     Behavior on height {
         PropertyAnimation { duration: 250 }
     }
+    z: 1000
 
     // The current set of tools; null if none.
     property Item tools
