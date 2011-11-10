@@ -28,6 +28,7 @@ install(DIRECTORY qml/ DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/plasma/compone
 
 
 #The platform specific stuff, overwrites a copy of the desktop one
+#it does install some files on top of the old ones, it's pretty hackyu but it's intended since there are no more elegant ways to produce a fallback during a qml import from the most specific files to the general ones if specific were not found
 
 install(TARGETS plasmacomponentsplugin DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
 install(DIRECTORY qml/ DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
