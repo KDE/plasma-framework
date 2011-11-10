@@ -123,19 +123,20 @@ Item{
             fill: parent
             leftMargin: -margins.left
             rightMargin: -margins.right
-            topMargin: toolBar.y <= 0 ? -margins.top : 0
-            bottomMargin: toolBar.y >= toolBar.parent.height - toolBar.height ? -margins.bottom : 0
+            //FIXME: difference between actial border and shadow
+            topMargin: toolBar.y <= 0 ? -margins.top : -margins.top/2
+            bottomMargin: toolBar.y >= toolBar.parent.height - toolBar.height ? -margins.bottom : -margins.bottom/2
         }
     }
 
     Item {
-        clip: true
+        clip: containerAOpacityAnimation.running
         anchors {
             fill: parent
-            leftMargin: parent.margins.left
-            topMargin: parent.margins.top
-            rightMargin: parent.margins.right
-            bottomMargin: parent.margins.bottom
+            leftMargin: frameSvg.margins.left/2
+            topMargin: frameSvg.margins.top/2
+            rightMargin: frameSvg.margins.right/2
+            bottomMargin: frameSvg.margins.bottom/2
         }
 
         Item {
@@ -147,7 +148,10 @@ Item{
             //this asymmetry just to not export a property
             property bool current: false
             Behavior on opacity {
-                PropertyAnimation { duration: 250 }
+                PropertyAnimation {
+                    id: containerAOpacityAnimation
+                    duration: 250
+                }
             }
             Behavior on x {
                 enabled: containerA.animationsEnabled
