@@ -76,7 +76,6 @@ Item {
     property alias interactive: flickArea.interactive
     property alias contentMaxWidth: textEdit.width
     property alias contentMaxHeight: textEdit.height
-    property real scrollWidth: 22
 
     // Set active focus to it's internal textInput.
     // Overriding QtQuick.Item forceActiveFocus function.
@@ -106,11 +105,7 @@ Item {
 
         // TODO: see what is the best policy for margins
         anchors {
-            fill: flickArea
-            leftMargin: -2 * base.margins.left
-            rightMargin: -2 * base.margins.right
-            topMargin: -2 * base.margins.top
-            bottomMargin: -2 * base.margins.bottom
+            fill: parent
         }
         imagePath: "widgets/lineedit"
         prefix: "base"
@@ -120,10 +115,12 @@ Item {
         id: flickArea
         anchors {
             fill: parent
-            rightMargin: scrollWidth
-            bottomMargin: scrollWidth
+            leftMargin: 2 * base.margins.left
+            rightMargin: 2 * base.margins.right + (verticalScroll.visible ? verticalScroll.width : 0)
+            topMargin: 2 * base.margins.top
+            bottomMargin: 2 * base.margins.bottom + (horizontalScroll.visible ? verticalScroll.width : 0)
         }
-        interactive: false //textArea.activeFocus
+        interactive: !verticalScroll.interactive //textArea.activeFocus
         contentWidth: {
             if (textEdit.wrapMode == TextEdit.NoWrap)
                 return textEdit.paintedWidth;
@@ -151,7 +148,7 @@ Item {
             font.weight: theme.defaultFont.weight
             font.wordSpacing: theme.defaultFont.wordSpacing
             color: theme.viewTextColor
-            selectByMouse: true
+            selectByMouse: verticalScroll.interactive
 
             onCursorPositionChanged: {
                 if (cursorRectangle.x < flickArea.contentX) {
@@ -202,7 +199,6 @@ Item {
         }
         enabled: parent.enabled
         flickableItem: flickArea
-        height: visible ? scrollWidth : 0
         orientation: Qt.Horizontal
         stepSize: textEdit.font.pixelSize
     }
@@ -216,7 +212,6 @@ Item {
         }
         enabled: parent.enabled
         flickableItem: flickArea
-        width: visible ? scrollWidth : 0
         orientation: Qt.Vertical
         stepSize: textEdit.font.pixelSize
     }
