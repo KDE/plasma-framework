@@ -26,7 +26,10 @@ Item{
     height: (tools && enabled) ? theme.defaultFont.mSize.height*2 + frameSvg.margins.top + frameSvg.margins.bottom : 0
     visible: height > 0
     Behavior on height {
-        PropertyAnimation { duration: 250 }
+        PropertyAnimation { 
+            id: heightAnimation
+            duration: 250
+        }
     }
     z: 1000
 
@@ -130,7 +133,7 @@ Item{
     }
 
     Item {
-        clip: containerAOpacityAnimation.running
+        clip: containerAOpacityAnimation.running || heightAnimation.running
         anchors {
             fill: parent
             leftMargin: frameSvg.margins.left/2
