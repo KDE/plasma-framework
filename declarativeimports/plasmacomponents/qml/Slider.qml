@@ -147,7 +147,7 @@ Item {
             focusElement: "horizontal-slider-focus"
             hoverElement: "horizontal-slider-hover"
             shadowElement: "horizontal-slider-shadow"
-            state: slider.activeFocus ? "focus" : (mouseArea.containsMouse ? "hover" : "hidden")
+            state: slider.activeFocus ? "focus" : (mouseArea.containsMouse ? "hover" : "shadow")
             anchors.fill: handle
         }
 
