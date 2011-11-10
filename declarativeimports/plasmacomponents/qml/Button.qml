@@ -35,7 +35,13 @@ Item {
 
     signal clicked()
 
-    width: Math.max(theme.defaultFont.mSize.width*12, icon.width + label.paintedWidth + surfaceNormal.margins.left + surfaceNormal.margins.right) + ((icon.valid) ? surfaceNormal.margins.left : 0);
+    width: {
+        if (label.paintedWidth == 0) {
+            return height
+        } else {
+            return Math.max(theme.defaultFont.mSize.width*12, icon.width + label.paintedWidth + surfaceNormal.margins.left + surfaceNormal.margins.right) + ((icon.valid) ? surfaceNormal.margins.left : 0)
+        }
+    }
     height: Math.max(theme.defaultFont.mSize.height*1.8, Math.max(icon.height, label.paintedHeight) + surfaceNormal.margins.top + surfaceNormal.margins.bottom)
 
     // TODO: needs to define if there will be specific graphics for
