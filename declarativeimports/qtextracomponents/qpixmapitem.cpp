@@ -96,36 +96,36 @@ void QPixmapItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     if (m_pixmap.isNull()) {
         return;
     }
-    //do without painter save, faster and the support can be compiled out
-    const bool wasAntiAlias = painter->testRenderHint(QPainter::Antialiasing);
-    const bool wasSmoothTransform = painter->testRenderHint(QPainter::SmoothPixmapTransform);
+    painter->save();
     painter->setRenderHint(QPainter::Antialiasing, m_smooth);
     painter->setRenderHint(QPainter::SmoothPixmapTransform, m_smooth);
 
     QRect destRect;
     switch (m_fillMode) {
     case PreserveAspectFit: {
-        QRect minimumRect = m_pixmap.rect().intersected(boundingRect().toRect());
-        const qreal scale = qMin(m_pixmap.width()/minimumRect.width(), m_pixmap.height()/minimumRect.height());
-        destRect = QRect(QPoint(0, 0), QSize(m_pixmap.width()*scale, m_pixmap.height()*scale));
+        QSize scaled = m_pixmap.size();
+
+        scaled.scale(boundingRect().size().toSize(), Qt::KeepAspectRatio);
+        destRect = QRect(QPoint(0, 0), scaled);
         break;
     }
     case PreserveAspectCrop: {
-        QRect minimumRect = m_pixmap.rect().intersected(boundingRect().toRect());
-        const qreal scale = qMax(m_pixmap.width()/minimumRect.width(), m_pixmap.height()/minimumRect.height());
-        destRect = QRect(QPoint(0, 0), QSize(m_pixmap.width()*scale, m_pixmap.height()*scale));
+        painter->setClipRect(boundingRect(), Qt::IntersectClip);
+        QSize scaled = m_pixmap.size();
+        scaled.scale(boundingRect().size().toSize(), Qt::KeepAspectRatioByExpanding);
+        destRect = QRect(QPoint(0, 0), scaled);
         break;
     }
     case TileVertically: {
-        QRect minimumRect = m_pixmap.rect().intersected(boundingRect().toRect());
-        const qreal scale = m_pixmap.width()/minimumRect.width();
-        destRect = QRect(QPoint(0, 0), QSize(m_pixmap.width()*scale, m_pixmap.height()));
+        painter->scale(width()/(qreal)m_pixmap.width(), 1);
+        destRect = boundingRect().toRect();
+        destRect.setWidth(destRect.width() / (width()/(qreal)m_pixmap.width()));
         break;
     }
     case TileHorizontally: {
-        QRect minimumRect = m_pixmap.rect().intersected(boundingRect().toRect());
-        const qreal scale = m_pixmap.height()/minimumRect.height();
-        destRect = QRect(QPoint(0, 0), QSize(m_pixmap.width(), m_pixmap.height()*scale));
+        painter->scale(1, height()/(qreal)m_pixmap.height());
+        destRect = boundingRect().toRect();
+        destRect.setHeight(destRect.height() / (height()/(qreal)m_pixmap.height()));
         break;
     }
     case Stretch:
@@ -140,8 +140,7 @@ void QPixmapItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
         painter->drawPixmap(destRect, m_pixmap, m_pixmap.rect());
     }
 
-    painter->setRenderHint(QPainter::Antialiasing, wasAntiAlias);
-    painter->setRenderHint(QPainter::SmoothPixmapTransform, wasSmoothTransform);
+    painter->restore();
 }
 
 
