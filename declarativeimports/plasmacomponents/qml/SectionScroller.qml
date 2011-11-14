@@ -110,8 +110,8 @@ Item {
     }
     PlasmaCore.FrameSvgItem {
         imagePath: "widgets/tooltip"
-        width: childrenRect.width + margins.left + margins.right
-        height: childrenRect.height + margins.top + margins.bottom
+        width: sectionLabel.paintedWidth + margins.left + margins.right
+        height: sectionLabel.paintedHeight + margins.top + margins.bottom
         Label {
             id: sectionLabel
             font.pointSize: theme.defaultFont.pointSize*3
