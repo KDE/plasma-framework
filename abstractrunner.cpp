@@ -43,8 +43,6 @@
 namespace Plasma
 {
 
-K_GLOBAL_STATIC(QMutex, s_bigLock)
-
 AbstractRunner::AbstractRunner(QObject *parent, const QString &path)
     : QObject(parent),
       d(new AbstractRunnerPrivate(this))
@@ -269,11 +267,6 @@ RunnerContext::Types AbstractRunner::ignoredTypes() const
 void AbstractRunner::setIgnoredTypes(RunnerContext::Types types)
 {
     d->blackListed = types;
-}
-
-QMutex* AbstractRunner::bigLock()
-{
-    return s_bigLock;
 }
 
 void AbstractRunner::run(const Plasma::RunnerContext &search, const Plasma::QueryMatch &action)

@@ -238,20 +238,6 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         QList<RunnerSyntax> syntaxes() const;
 
         /**
-         * Access to a shared lock that all runners (and code that manages/interacts with them)
-         * can share to protect access to non-thread-safe shared code or data.
-         * Access of KSycoca records, for instance, is one place this lock should be used.
-         *
-         * Common usage:
-         *
-         * {
-         *     QMutexLocker lock(bigLock());
-         *     .. do something that isn't thread safe ..
-         * }
-         */
-        static QMutex *bigLock();
-
-        /**
          * @return the default syntax for the runner or 0 if no default syntax has been defined
          *
          * @since 4.4
