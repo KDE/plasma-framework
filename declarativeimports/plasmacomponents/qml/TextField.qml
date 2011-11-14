@@ -41,6 +41,9 @@ Item {
     property alias text: textInput.text
     property alias maximumLength: textInput.maximumLength
 
+    //Plasma api
+    property bool clearButtonShown: false
+
     function copy() {
         textInput.copy();
     }
@@ -157,5 +160,31 @@ Item {
         //     common API but is desired in the plasma API.
         Keys.onPressed: textField.Keys.pressed(event);
         Keys.onReleased: textField.Keys.released(event);
+    }
+
+    PlasmaCore.SvgItem {
+        svg: PlasmaCore.Svg {imagePath: "widgets/lineedit"}
+        elementId: "clearbutton"
+        width: textInput.height
+        height: textInput.height
+        opacity: (textInput.text != "" && clearButtonShown) ? 1 : 0
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 250
+                easing.type: Easing.InOutQuad
+            }
+        }
+        anchors {
+            right: parent.right
+            rightMargin: y
+            verticalCenter: textInput.verticalCenter
+        }
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                textInput.text = ""
+                textInput.forceActiveFocus()
+            }
+        }
     }
 }
