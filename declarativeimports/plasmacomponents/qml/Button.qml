@@ -201,5 +201,6 @@ Item {
         hoverEnabled: true
         onPressed: internal.pressButton()
         onReleased: internal.releaseButton()
+        onCanceled: internal.releaseButton()
     }
 }

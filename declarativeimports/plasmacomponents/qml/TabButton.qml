@@ -63,7 +63,7 @@ Item {
         target: root
         onPressedChanged: {
             //TabBar is the granparent
-            root.parent.parent.currentItem = root
+            root.parent.parent.currentTab = root
         }
     }
 
@@ -82,7 +82,7 @@ Item {
 
         Component.onCompleted: {
             if (internal.tabGroup.currentTab == tab) {
-                parent.parent.currentItem = root
+                parent.parent.currentTab = root
             }
         }
     }
@@ -126,7 +126,7 @@ Item {
                 internal.tabGroup.currentTab = tab
             }
             //TabBar is the granparent, done here too in case of no tabgroup
-            root.parent.parent.currentItem = root
+            root.parent.parent.currentTab = root
         }
 
         anchors.fill: parent
