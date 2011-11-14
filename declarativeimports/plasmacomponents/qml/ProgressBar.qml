@@ -19,6 +19,7 @@
 
 import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
+import org.kde.qtextracomponents 0.1
 
 Item {
     id: progressBar
@@ -31,9 +32,6 @@ Item {
 
     // Plasma API
     property int orientation: Qt.Horizontal
-
-    // Convinience API
-    property bool _isVertical: orientation == Qt.Vertical
 
     width: 100
     height: 20
@@ -54,26 +52,57 @@ Item {
     Item {
         id: contents
 
+        property bool _isVertical: orientation == Qt.Vertical
+
         width: _isVertical ? progressBar.height : progressBar.width
         height: _isVertical ? progressBar.width : progressBar.height
         rotation: _isVertical ? 90 : 0
         anchors.centerIn: parent
 
-        PlasmaCore.FrameSvgItem {
-            id: background
-
-            anchors.fill: parent
-            imagePath: "widgets/bar_meter_horizontal"
-            prefix: "bar-inactive"
+        Timer {
+            id: resizeTimer
+            repeat: false
+            interval: 0
+            running: false
+            onTriggered: {
+                barFrameSvg.resizeFrame(Qt.size(Math.floor(contents.height/1.6), contents.height))
+                barPixmapItem.pixmap = barFrameSvg.framePixmap()
+                backgroundFrameSvg.resizeFrame(Qt.size(Math.floor(contents.height/1.6), contents.height))
+                backgroundPixmapItem.pixmap = backgroundFrameSvg.framePixmap()
+            }
+        }
+        PlasmaCore.FrameSvg {
+            id: barFrameSvg
+            Component.onCompleted: {
+                barFrameSvg.setImagePath("widgets/bar_meter_horizontal")
+                barFrameSvg.setElementPrefix("bar-active")
+                resizeTimer.restart()
+            }
+        }
+        PlasmaCore.FrameSvg {
+            id: backgroundFrameSvg
+            Component.onCompleted: {
+                backgroundFrameSvg.setImagePath("widgets/bar_meter_horizontal")
+                backgroundFrameSvg.setElementPrefix("bar-inactive")
+                resizeTimer.restart()
+            }
+        }
+        QPixmapItem {
+            id: backgroundPixmapItem
+            fillMode: QPixmapItem.Tile
+            width: Math.floor(parent.width/(height/1.6))*Math.floor(height/1.6)
+            height: parent.height
+            onWidthChanged: resizeTimer.restart()
+            onHeightChanged: resizeTimer.restart()
         }
 
-        PlasmaCore.FrameSvgItem {
-            id: bar
 
-            width: indeterminate ? contents.width / 4 : range.position
+        QPixmapItem {
+            id: barPixmapItem
+            fillMode: QPixmapItem.Tile
+            width: indeterminate ? Math.floor(height/1.6)*2 : range.position
             height: contents.height
-            imagePath: "widgets/bar_meter_horizontal"
-            prefix: "bar-active"
+
             visible: indeterminate || value > 0
 
             SequentialAnimation {
@@ -82,16 +111,16 @@ Item {
                 loops: Animation.Infinite
 
                 PropertyAnimation {
-                    target: bar;
+                    target: barPixmapItem
                     property: "x"
                     duration: 800
                     to: 0
                 }
                 PropertyAnimation {
-                    target: bar;
+                    target: barPixmapItem
                     property: "x"
                     duration: 800
-                    to: background.width - bar.width
+                    to: backgroundPixmapItem.width - barPixmapItem.width
                 }
             }
         }
