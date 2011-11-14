@@ -54,11 +54,12 @@ Item {
 
     PlasmaCore.SvgItem {
         id: widget
+        svg: PlasmaCore.Svg { imagePath: "widgets/busywidget" }
+        elementId: "busywidget"
 
         anchors.centerIn: parent
         width: busy.width
         height: busy.height
         smooth: !running || smoothAnimation
-        svg: PlasmaCore.Svg { imagePath: "widgets/busywidget" }
     }
 }
