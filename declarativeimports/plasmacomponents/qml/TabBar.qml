@@ -51,7 +51,7 @@ Item {
     //Plasma extension
     property Item currentItem
 
-    implicitWidth: tabBarLayout.implicitWidth + backgroundFrame.margins.left + backgroundFrame.margins.right + buttonFrame.margins.left + buttonFrame.margins.right
+    implicitWidth: tabBarLayout.implicitWidth + backgroundFrame.margins.left + backgroundFrame.margins.right + (buttonFrame.margins.left + buttonFrame.margins.right)*tabBarLayout.children.length
     implicitHeight: tabBarLayout.implicitHeight + backgroundFrame.margins.top + backgroundFrame.margins.bottom + buttonFrame.margins.top + buttonFrame.margins.bottom
 
     PlasmaCore.FrameSvgItem {

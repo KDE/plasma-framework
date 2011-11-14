@@ -92,19 +92,19 @@ Item {
             var contentWidth = 0
             var contentHeight = 0
             if (childCount != 0) {
-                var itemWidth = root.width / childCount
+                var itemWidth = (root.width - (childCount-1)*10) / childCount
                 var itemIndex = mirrored ? childCount - 1 : 0
                 var increment = mirrored ? - 1 : 1
 
                 for (var i = 0; i < childCount; ++i, itemIndex += increment) {
                     var child = root.children[itemIndex]
-                    child.x = i * itemWidth
+                    child.x = i * itemWidth + i*10
                     child.y = 0
                     child.width = itemWidth
                     child.height = root.height
 
                     if (child.implicitWidth != undefined) {
-                        contentWidth = Math.max(contentWidth, (child.implicitWidth + buttonFrame.margins.left*2 + buttonFrame.margins.right*2) * childCount)
+                        contentWidth = Math.max(contentWidth + i*10, (child.implicitWidth + buttonFrame.margins.left*2 + buttonFrame.margins.right*2) * childCount)
                         contentHeight = Math.max(contentHeight, (child.implicitHeight + buttonFrame.margins.top + buttonFrame.margins.bottom))
                     }
                 }
