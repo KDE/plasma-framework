@@ -54,8 +54,10 @@ Item{
         toolBar.tools = tools
     }
     Connections {
+        id: connection
         target: toolBar
-        onToolsChanged: {
+        function internalToolsChanged()
+        {
             var newContainer
             var oldContainer
             if (containerA.current) {
@@ -116,6 +118,8 @@ Item{
             newContainer.opacity = 1
             oldContainer.opacity = 0
         }
+        onToolsChanged: connection.internalToolsChanged()
+        Component.onCompleted: connection.internalToolsChanged()
     }
 
     PlasmaCore.FrameSvgItem {
