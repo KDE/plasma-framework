@@ -100,8 +100,8 @@ DialogProxy::DialogProxy(QObject *parent)
 
 DialogProxy::~DialogProxy()
 {
-    delete m_dialog;
     delete m_declarativeItemContainer;
+    delete m_dialog;
 }
 
 QGraphicsObject *DialogProxy::mainItem() const
