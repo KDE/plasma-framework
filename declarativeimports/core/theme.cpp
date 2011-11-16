@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
  ***************************************************************************/
 
-#include "theme_p.h"
+#include "theme.h"
 
 #include <KIconLoader>
 
@@ -64,6 +64,8 @@ FontProxy::FontProxy(Plasma::Theme::FontRole role, QObject *parent)
             this, SIGNAL(weightChanged()));
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
             this, SIGNAL(wordSpacingChanged()));
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SIGNAL(mSizeChanged()));
 }
 
 FontProxy::~FontProxy()
@@ -140,6 +142,10 @@ qreal FontProxy::wordSpacing() const
     return Plasma::Theme::defaultTheme()->font(m_fontRole).wordSpacing();
 }
 
+QSize FontProxy::mSize() const
+{
+    return QFontMetrics(Plasma::Theme::defaultTheme()->font(m_fontRole)).boundingRect("M").size();
+}
 
 
 //********** Theme *************
@@ -299,5 +305,5 @@ int ThemeProxy::enormousIconSize() const
     return KIconLoader::SizeEnormous;
 }
 
-#include "theme_p.moc"
+#include "theme.moc"
 

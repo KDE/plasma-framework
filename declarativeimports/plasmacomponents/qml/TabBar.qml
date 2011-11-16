@@ -69,9 +69,9 @@ Item {
     property alias layout: tabBarLayout
 
     //Plasma extension
-    property Item currentItem
+    property Item currentTab
 
-    implicitWidth: tabBarLayout.implicitWidth + backgroundFrame.margins.left + backgroundFrame.margins.right + buttonFrame.margins.left + buttonFrame.margins.right
+    implicitWidth: tabBarLayout.implicitWidth + backgroundFrame.margins.left + backgroundFrame.margins.right + (buttonFrame.margins.left + buttonFrame.margins.right)*tabBarLayout.children.length
     implicitHeight: tabBarLayout.implicitHeight + backgroundFrame.margins.top + backgroundFrame.margins.bottom + buttonFrame.margins.top + buttonFrame.margins.bottom
 
     PlasmaCore.FrameSvgItem {
@@ -85,10 +85,10 @@ Item {
     PlasmaCore.FrameSvgItem {
         id: buttonFrame
 
-        x: currentItem.x + backgroundFrame.margins.left
+        x: currentTab.x + backgroundFrame.margins.left
         y: backgroundFrame.margins.top
-        width: currentItem.width + buttonFrame.margins.left + buttonFrame.margins.right
-        height: currentItem.height + buttonFrame.margins.top + buttonFrame.margins.bottom
+        width: currentTab.width + buttonFrame.margins.left + buttonFrame.margins.right
+        height: currentTab.height + buttonFrame.margins.top + buttonFrame.margins.bottom
         imagePath: "widgets/button"
         prefix: "normal"
         Behavior on x {

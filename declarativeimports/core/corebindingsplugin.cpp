@@ -23,17 +23,21 @@
 
 #include <QtDeclarative/qdeclarative.h>
 #include <QDeclarativeContext>
+#include <QScriptEngine>
+
+#include <kdeclarative.h>
 
 #include <Plasma/FrameSvg>
 #include <Plasma/Svg>
 
-#include "datasource_p.h"
+#include "datasource.h"
 #include "datamodel.h"
-#include "framesvgitem_p.h"
-#include "svgitem_p.h"
-#include "theme_p.h"
+#include "framesvgitem.h"
+#include "svgitem.h"
+#include "theme.h"
 #include "dialog.h"
 #include "tooltip.h"
+#include "dataenginebindings_p.h"
 
 void CoreBindingsPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
 {
@@ -43,6 +47,19 @@ void CoreBindingsPlugin::initializeEngine(QDeclarativeEngine *engine, const char
 
     ThemeProxy *theme = new ThemeProxy(context);
     context->setContextProperty("theme", theme);
+
+    KDeclarative kdeclarative;
+    kdeclarative.setDeclarativeEngine(engine);
+    kdeclarative.initialize();
+    QScriptEngine *scriptEngine = kdeclarative.scriptEngine();
+
+    //inject the hack only if wasn't injected already
+    if (!scriptEngine->globalObject().property("i18n").isValid()) {
+        //binds things like kconfig and icons
+        kdeclarative.setupBindings();
+    }
+
+    registerDataEngineMetaTypes(scriptEngine);
 }
 
 void CoreBindingsPlugin::registerTypes(const char *uri)

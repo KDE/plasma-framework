@@ -19,6 +19,7 @@
 
 #include "qiconitem.h"
 
+#include <kicon.h>
 #include <QtGui/QPainter>
 
 
@@ -34,9 +35,14 @@ QIconItem::~QIconItem()
 {
 }
 
-void QIconItem::setIcon(const QIcon &icon)
+void QIconItem::setIcon(const QVariant &icon)
 {
-    m_icon = icon;
+    if(icon.canConvert<QIcon>()) {
+        m_icon = icon.value<QIcon>();
+    }
+    else if(icon.canConvert<QString>()) {
+        m_icon = KIcon(icon.toString());
+    }
     update();
 }
 

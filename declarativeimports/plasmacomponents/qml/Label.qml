@@ -35,6 +35,10 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 Text {
     id: root
 
+    height: theme.defaultFont.mSize.height*1.8
+    //FIXME: wait to rely on 1.1 for lineCount > 1
+    verticalAlignment: paintedHeight > theme.defaultFont.mSize.height*1.5 ? Text.AlignTop : Text.AlignVCenter
+
     font.capitalization: theme.defaultFont.capitalization
     font.family: theme.defaultFont.family
     font.italic: theme.defaultFont.italic

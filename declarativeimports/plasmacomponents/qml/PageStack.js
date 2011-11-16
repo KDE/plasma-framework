@@ -150,7 +150,11 @@ function initPage(page, properties) {
     }
 
     container.page = page;
-    container.owner = page.parent;
+    if (page.parent == null) {
+        container.owner = container;
+    } else {
+        container.owner = page.parent;
+    }
 
     // the page has to be reparented if
     if (page.parent != container) {
@@ -160,6 +164,8 @@ function initPage(page, properties) {
     if (page.pageStack !== undefined) {
         page.pageStack = root;
     }
+
+    page.anchors.fill = container
 
     return container;
 }

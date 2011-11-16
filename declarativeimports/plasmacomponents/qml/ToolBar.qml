@@ -44,12 +44,18 @@ Properties:
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 
-PlasmaCore.FrameSvgItem {
+Item{
     id: toolBar
-    imagePath: "widgets/frame"
-    prefix: "raised"
     width: parent.width
-    height: 48 + margins.top + margins.bottom
+    height: (tools && enabled) ? theme.defaultFont.mSize.height*2 + frameSvg.margins.top + frameSvg.margins.bottom : 0
+    visible: height > 0
+    Behavior on height {
+        PropertyAnimation { 
+            id: heightAnimation
+            duration: 250
+        }
+    }
+    z: 1000
 
     // The current set of tools; null if none.
     property Item tools
@@ -71,75 +77,97 @@ PlasmaCore.FrameSvgItem {
         toolBar.transition = transition
         toolBar.tools = tools
     }
-    onToolsChanged: {
-        var newContainer
-        var oldContainer
-        if (containerA.current) {
-            newContainer = containerB
-            oldContainer = containerA
-        } else {
-            newContainer = containerA
-            oldContainer = containerB
+    Connections {
+        id: connection
+        target: toolBar
+        function internalToolsChanged()
+        {
+            var newContainer
+            var oldContainer
+            if (containerA.current) {
+                newContainer = containerB
+                oldContainer = containerA
+            } else {
+                newContainer = containerA
+                oldContainer = containerB
+            }
+            containerA.current = !containerA.current
+
+            tools.parent = newContainer
+            tools.visible = true
+            tools.anchors.left = newContainer.left
+            tools.anchors.right = newContainer.right
+            tools.anchors.verticalCenter = newContainer.verticalCenter
+
+            switch (transition) {
+            case "push":
+                containerA.animationsEnabled = true
+                oldContainer.x = -oldContainer.width/2
+
+                containerA.animationsEnabled = false
+                newContainer.x = newContainer.width/2
+                newContainer.y = 0
+                containerA.animationsEnabled = true
+                newContainer.x = 0
+                break
+            case "pop":
+                containerA.animationsEnabled = true
+                oldContainer.x = oldContainer.width/2
+
+                containerA.animationsEnabled = false
+                newContainer.x = -newContainer.width/2
+                newContainer.y = 0
+                containerA.animationsEnabled = true
+                newContainer.x = 0
+                break
+            case "replace":
+                containerA.animationsEnabled = true
+                oldContainer.y = oldContainer.height
+
+                containerA.animationsEnabled = false
+                newContainer.x = 0
+                newContainer.y = -newContainer.height
+                containerA.animationsEnabled = true
+                newContainer.y = 0
+                break
+            case "set":
+            default:
+                containerA.animationsEnabled = false
+                containerA.animationsEnabled = false
+                oldContainer.x = -oldContainer.width/2
+                newContainer.x = 0
+                break
+            }
+
+            newContainer.opacity = 1
+            oldContainer.opacity = 0
         }
-        containerA.current = !containerA.current
+        onToolsChanged: connection.internalToolsChanged()
+        Component.onCompleted: connection.internalToolsChanged()
+    }
 
-        tools.parent = newContainer
-        tools.visible = true
-        tools.anchors.left = newContainer.left
-        tools.anchors.right = newContainer.right
-        tools.anchors.verticalCenter = newContainer.verticalCenter
-
-        switch (transition) {
-        case "push":
-            containerA.animationsEnabled = true
-            oldContainer.x = -oldContainer.width
-
-            containerA.animationsEnabled = false
-            newContainer.x = newContainer.width
-            newContainer.y = 0
-            containerA.animationsEnabled = true
-            newContainer.x = 0
-            break
-        case "pop":
-            containerA.animationsEnabled = true
-            oldContainer.x = oldContainer.width
-
-            containerA.animationsEnabled = false
-            newContainer.x = -newContainer.width
-            newContainer.y = 0
-            containerA.animationsEnabled = true
-            newContainer.x = 0
-            break
-        case "replace":
-            containerA.animationsEnabled = true
-            oldContainer.y = oldContainer.height
-
-            containerA.animationsEnabled = false
-            newContainer.x = 0
-            newContainer.y = -newContainer.height
-            containerA.animationsEnabled = true
-            newContainer.y = 0
-            break
-        case "set":
-        default:
-            containerA.animationsEnabled = false
-            containerA.animationsEnabled = false
-            oldContainer.x = -oldContainer.width
-            newContainer.x = 0
-            break
+    PlasmaCore.FrameSvgItem {
+        id: frameSvg
+        imagePath: "widgets/frame"
+        prefix: "raised"
+        anchors {
+            fill: parent
+            leftMargin: -margins.left
+            rightMargin: -margins.right
+            //FIXME: difference between actial border and shadow
+            topMargin: toolBar.y <= 0 ? -margins.top : -margins.top/2
+            bottomMargin: toolBar.y >= toolBar.parent.height - toolBar.height ? -margins.bottom : -margins.bottom/2
         }
-
-        newContainer.opacity = 1
-        oldContainer.opacity = 0
     }
 
     Item {
+        clip: containerAOpacityAnimation.running || heightAnimation.running
         anchors {
             fill: parent
-            leftMargin: parent.margins.left
-            topMargin: parent.margins.top
-            rightMargin: parent.margins.right
-            bottomMargin: parent.margins.bottom
+            leftMargin: frameSvg.margins.left/2
+            topMargin: frameSvg.margins.top/2
+            rightMargin: frameSvg.margins.right/2
+            bottomMargin: frameSvg.margins.bottom/2
         }
 
         Item {
@@ -151,7 +179,10 @@ PlasmaCore.FrameSvgItem {
             //this asymmetry just to not export a property
             property bool current: false
             Behavior on opacity {
-                PropertyAnimation { duration: 250 }
+                PropertyAnimation {
+                    id: containerAOpacityAnimation
+                    duration: 250
+                }
             }
             Behavior on x {
                 enabled: containerA.animationsEnabled

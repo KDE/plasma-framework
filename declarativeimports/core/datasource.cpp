@@ -19,7 +19,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "datasource_p.h"
+#include "datasource.h"
 
 #include "qdeclarativeengine.h"
 #include "qdeclarativecontext.h"
@@ -196,4 +196,4 @@ void DataSource::disconnectSource(const QString &source)
 }
 
 }
-#include "datasource_p.moc"
+#include "datasource.moc"

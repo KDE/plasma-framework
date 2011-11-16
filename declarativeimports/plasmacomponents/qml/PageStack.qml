@@ -204,8 +204,8 @@ Item {
             // The owner of the page.
             property Item owner: null
 
-            // The width of the longer screen dimension
-            property int screenWidth: Math.max(screen.width, screen.height)
+            // The width of the longer stack dimension
+            property int stackWidth: Math.max(root.width, root.height)
 
             // Duration of transition animation (in ms)
             property int transitionDuration: 250
@@ -308,8 +308,9 @@ Item {
             {
                 transitionAnimationRunning = true;
                 internal.ongoingTransitionCount++;
-                if (root.visible)
+                if (root.visible) {
                     internal.setPageStatus(page, (state == "") ? PageStatus.Activating : PageStatus.Deactivating);
+                }
             }
 
             // Called when a transition has ended.
@@ -341,7 +342,7 @@ Item {
                 // when exiting portrait and entering landscape.
                 State {
                     name: "LandscapeLeft"
-                    PropertyChanges { target: container; x: -screenWidth / 2; opacity: 0 }
+                    PropertyChanges { target: container; x: -stackWidth / 2; opacity: 0 }
                 },
                 // Start state for push entry, end state for pop exit.
                 State {
@@ -352,7 +353,7 @@ Item {
                 // when exiting portrait and entering landscape.
                 State {
                     name: "LandscapeRight"
-                    PropertyChanges { target: container; x: screenWidth / 2; opacity: 0 }
+                    PropertyChanges { target: container; x: stackWidth / 2; opacity: 0 }
                 },
                 // Inactive state.
                 State {
@@ -470,14 +471,17 @@ Item {
             function cleanup()
             {
                 if (page != null) {
-                    if (page.status == PageStatus.Active)
-                        internal.setPageStatus(page, PageStatus.Inactive);
+                    if (page.status == PageStatus.Active) {
+                        internal.setPageStatus(page, PageStatus.Inactive)
+                    }
                     if (owner != container) {
                         // container is not the owner of the page - re-parent back to original owner
                         page.visible = false;
+                        page.anchors.fill = undefined
                         page.parent = owner;
                     }
                 }
+
                 container.destroy();
             }
         }

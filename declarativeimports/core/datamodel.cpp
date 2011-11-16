@@ -18,7 +18,7 @@
  */
 
 #include "datamodel.h"
-#include "datasource_p.h"
+#include "datasource.h"
 
 #include <QTimer>
 

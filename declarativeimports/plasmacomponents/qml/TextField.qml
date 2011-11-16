@@ -119,6 +119,9 @@ Item {
     property alias text: textInput.text
     property alias maximumLength: textInput.maximumLength
 
+    //Plasma api
+    property bool clearButtonShown: false
+
     function copy() {
         textInput.copy();
     }
@@ -162,11 +165,17 @@ Item {
     property alias activeFocus: textInput.activeFocus
 
     // TODO: fix default size
-    implicitWidth: 100
-    implicitHeight: 26
+    implicitWidth: theme.defaultFont.mSize.width*12
+    implicitHeight: theme.defaultFont.mSize.height*1.8
     // TODO: needs to define if there will be specific graphics for
     //     disabled text fields
     opacity: enabled ? 1.0 : 0.5
+
+    TextFieldFocus {
+        id: hover
+        state: textInput.activeFocus ? "focus" : (mouseWatcher.containsMouse ? "hover" : "hidden")
+        anchors.fill: base
+    }
 
     PlasmaCore.FrameSvgItem {
         id: base
@@ -177,32 +186,6 @@ Item {
         prefix: "base"
     }
 
-    PlasmaCore.FrameSvgItem {
-        id: hover
-
-        anchors {
-            fill: parent
-            leftMargin: -margins.left
-            topMargin: -margins.top
-            rightMargin: -margins.right
-            bottomMargin: -margins.bottom
-        }
-        imagePath: "widgets/lineedit"
-        prefix: {
-            if (textField.activeFocus) {
-                return "focus"
-            } else {
-                return "hover"
-            }
-        }
-        opacity: (mouseWatcher.containsMouse||textField.activeFocus) ? 1 : 0
-        Behavior on opacity {
-            NumberAnimation {
-                duration: 250
-                easing.type: Easing.InOutQuad
-            }
-        }
-    }
     MouseArea {
         id: mouseWatcher
         anchors.fill: hover
@@ -210,7 +193,13 @@ Item {
     }
 
     Text {
-        anchors.fill: textInput
+        anchors {
+            left: parent.left
+            right: parent.right
+            verticalCenter: parent.verticalCenter
+            leftMargin: 2 * base.margins.left
+            rightMargin: 2 * base.margins.right
+        }
         text: placeholderText
         visible: textInput.text == "" && !textField.activeFocus
         // XXX: using textColor and low opacity for theming placeholderText
@@ -235,12 +224,12 @@ Item {
         anchors {
             left: parent.left
             right: parent.right
+            verticalCenter: parent.verticalCenter
             // TODO: see what is the correct policy for margins
             leftMargin: 2 * base.margins.left
             rightMargin: 2 * base.margins.right
         }
-        y: (height - font.pixelSize) * 0.4 // XXX: verticalCenter anchor is not centering the text
-        height: Math.min(2 * font.pixelSize, parent.height)
+        selectByMouse: true
         color: theme.textColor
         enabled: textField.enabled
         clip: true
@@ -249,5 +238,31 @@ Item {
         //     common API but is desired in the plasma API.
         Keys.onPressed: textField.Keys.pressed(event);
         Keys.onReleased: textField.Keys.released(event);
+    }
+
+    PlasmaCore.SvgItem {
+        svg: PlasmaCore.Svg {imagePath: "widgets/lineedit"}
+        elementId: "clearbutton"
+        width: textInput.height
+        height: textInput.height
+        opacity: (textInput.text != "" && clearButtonShown) ? 1 : 0
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 250
+                easing.type: Easing.InOutQuad
+            }
+        }
+        anchors {
+            right: parent.right
+            rightMargin: y
+            verticalCenter: textInput.verticalCenter
+        }
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                textInput.text = ""
+                textInput.forceActiveFocus()
+            }
+        }
     }
 }

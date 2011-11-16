@@ -119,8 +119,13 @@ public:
 
     QObject *margins() const;
 
+    /**
+     * @returns The suggested screen position for the popup
+     * @arg item the item the popup has to be positioned relatively to. if null, the popup will be positioned in the center of the window
+     * @arg alignment alignment of the popup compared to the item
+     */
     //FIXME: alignment should be Qt::AlignmentFlag
-    Q_INVOKABLE QPoint popupPosition(QGraphicsObject *item, int alignment=Qt::AlignLeft) const;
+    Q_INVOKABLE QPoint popupPosition(QGraphicsObject *item, int alignment=Qt::AlignLeft) ;
     //FIXME:: Qt::WidgetAttribute should be already 
     Q_INVOKABLE void setAttribute(int attribute, bool on);
 
@@ -148,6 +153,8 @@ private:
     DialogMargins *m_margins;
     bool m_activeWindow;
     Plasma::Location m_location;
+    static int offscreenX;
+    static int offscreenY;
 };
 
 #endif

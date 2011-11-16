@@ -20,80 +20,100 @@
 import QtQuick 1.1
 import org.kde.plasma.components 0.1 as PlasmaComponents
 
-Column {
-    spacing: 30
-    Text {
-        text: "Text Fields"
-        font.pixelSize: 20
-    }
+PlasmaComponents.Page {
+    height: childrenRect.height
+    property int implicitHeight: childrenRect.height
 
-    PlasmaComponents.Highlight {
-        width: 200
-        height: 100
-        Column {
-            spacing: 10
-            Row {
-                Text {
-                    text: "Username: "
-                    anchors.verticalCenter: tf1.verticalCenter
-                }
-                PlasmaComponents.TextField {
-                    id: tf1
-                    placeholderText: "login"
-                    Keys.onTabPressed: tf2.forceActiveFocus();
-                }
-            }
-
-            Row {
-                Text {
-                    text: "Password: "
-                    anchors.verticalCenter: tf2.verticalCenter
-                }
-                PlasmaComponents.TextField {
-                    id: tf2
-                    width: 120
-                    echoMode: TextInput.Password
-                    Keys.onTabPressed: loginButton.forceActiveFocus();
-                }
-            }
-
-            PlasmaComponents.Button {
-                id: loginButton
-                text: "Login"
-                anchors {
-                    right: parent.right
-                    rightMargin: 0
-                }
-                width: 100
-            }
+    tools: PlasmaComponents.ToolBarLayout {
+        spacing: 5
+        PlasmaComponents.Label {
+            text: "Text label:"
+        }
+        PlasmaComponents.ToolButton {
+            text: "ToolButton"
+        }
+        PlasmaComponents.TextField {
+            placeholderText: "Place holder text"
+        }
+        PlasmaComponents.TextField {
+            text: "Text fields page"
         }
     }
+    Column {
+        spacing: 30
+        Text {
+            text: "Text Fields"
+            font.pixelSize: 20
+        }
 
-    PlasmaComponents.TextField {
-        width: 120
-        placeholderText: "Disabled Text Field"
-        Keys.onTabPressed: loginButton.forceActiveFocus();
-        enabled: false
-    }
+        PlasmaComponents.Highlight {
+            width: 200
+            height: 100
+            Column {
+                spacing: 10
+                Row {
+                    Text {
+                        text: "Username: "
+                        anchors.verticalCenter: tf1.verticalCenter
+                    }
+                    PlasmaComponents.TextField {
+                        id: tf1
+                        placeholderText: "login"
+                        Keys.onTabPressed: tf2.forceActiveFocus();
+                    }
+                }
 
-    Text {
-        text: "Text Area"
-        font.pixelSize: 20
-    }
+                Row {
+                    Text {
+                        text: "Password: "
+                        anchors.verticalCenter: tf2.verticalCenter
+                    }
+                    PlasmaComponents.TextField {
+                        id: tf2
+                        width: 120
+                        echoMode: TextInput.Password
+                        Keys.onTabPressed: loginButton.forceActiveFocus();
+                    }
+                }
 
-    PlasmaComponents.TextArea {
-        width: 200
-        height: 200
-        placeholderText: "Lorem ipsum et dolor"
-        wrapMode: TextEdit.WordWrap
-        contentMaxWidth: 400
-        contentMaxHeight: 400
-    }
+                PlasmaComponents.Button {
+                    id: loginButton
+                    text: "Login"
+                    anchors {
+                        right: parent.right
+                        rightMargin: 0
+                    }
+                    width: 100
+                }
+            }
+        }
 
-    PlasmaComponents.TextArea {
-        width: 200
-        height: 100
-        enabled: false
-        text: "Disabled Text Area"
+        PlasmaComponents.TextField {
+            width: 120
+            placeholderText: "Disabled Text Field"
+            Keys.onTabPressed: loginButton.forceActiveFocus();
+            enabled: false
+        }
+
+        Text {
+            text: "Text Area"
+            font.pixelSize: 20
+        }
+
+        PlasmaComponents.TextArea {
+            width: 200
+            height: 200
+            placeholderText: "Lorem ipsum et dolor"
+            wrapMode: TextEdit.WordWrap
+            contentMaxWidth: 400
+            contentMaxHeight: 400
+        }
+
+        PlasmaComponents.TextArea {
+            width: 200
+            height: 100
+            enabled: false
+            text: "Disabled Text Area"
+        }
     }
 }

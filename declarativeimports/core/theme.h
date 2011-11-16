@@ -41,6 +41,7 @@ class FontProxy : public QObject
     Q_PROPERTY(bool underline READ underline NOTIFY underlineChanged )
     Q_PROPERTY(Weight weight READ weight NOTIFY weightChanged )
     Q_PROPERTY(qreal wordSpacing READ wordSpacing NOTIFY wordSpacingChanged )
+    Q_PROPERTY(QSize mSize READ mSize NOTIFY mSizeChanged )
 
     Q_ENUMS(Capitalization)
     Q_ENUMS(Weight)
@@ -80,6 +81,11 @@ public:
     Weight weight() const;
     qreal wordSpacing() const;
 
+    /**
+     * @return The size of an uppercase M in this font
+     */
+    QSize mSize() const;
+
 Q_SIGNALS:
     void boldChanged();
     void capitalizationChanged();
@@ -92,6 +98,7 @@ Q_SIGNALS:
     void underlineChanged();
     void weightChanged();
     void wordSpacingChanged();
+    void mSizeChanged();
 
 private:
     Plasma::Theme::FontRole m_fontRole;

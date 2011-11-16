@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "framesvgitem_p.h"
+#include "framesvgitem.h"
 
 #include <QtGui/QPainter>
 
@@ -130,4 +130,4 @@ void FrameSvgItem::doUpdate()
 
 } // Plasma namespace
 
-#include "framesvgitem_p.moc"
+#include "framesvgitem.moc"

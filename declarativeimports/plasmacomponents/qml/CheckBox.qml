@@ -38,24 +38,9 @@ DualStateButton {
     view: PlasmaCore.FrameSvgItem {
         imagePath: "widgets/button"
         prefix: "normal"
-        width: fontMetricText.height + margins.left
-        height: fontMetricText.height + margins.top
-        //FIXME: an hack to have font metrics: can we have a proper binding?
-        Text {
-            id: fontMetricText
-            text: "M"
-            visible: false
-            font.capitalization: theme.defaultFont.capitalization
-            font.family: theme.defaultFont.family
-            font.italic: theme.defaultFont.italic
-            font.letterSpacing: theme.defaultFont.letterSpacing
-            font.pointSize: theme.defaultFont.pointSize
-            font.strikeout: theme.defaultFont.strikeout
-            font.underline: theme.defaultFont.underline
-            font.weight: theme.defaultFont.weight
-            font.wordSpacing: theme.defaultFont.wordSpacing
-            color: theme.textColor
-        }
+        width: theme.defaultFont.mSize.height + margins.left
+        height: theme.defaultFont.mSize.height + margins.top
+
         PlasmaCore.SvgItem {
             svg: PlasmaCore.Svg {
                 id: checkmarkSvg

@@ -18,14 +18,14 @@
 */
 
 import QtQuick 1.0
-import org.kde.plasma.components 0.1 as PlasmaComponents
+import org.kde.plasma.components 0.1
 
 Rectangle {
     width: 1000
     height: 800
     color: "lightgrey"
 
-    PlasmaComponents.ToolBar {
+    ToolBar {
         id: toolBar
         z: 10
         anchors {
@@ -33,76 +33,88 @@ Rectangle {
             left: parent.left
             right: parent.right
         }
-        tools: toolbarA
     }
-    Row {
-        id: toolbarA
-        visible: false
-        spacing: 5
-        PlasmaComponents.ToolButton {
-            text: "Switch toolbar"
-            onClicked: toolBar.setTools(toolbarB, "push")
+
+    
+    ListView {
+        id: pageSelector
+        width: 200
+        anchors {
+            top: toolBar.bottom
+            bottom: parent.bottom
         }
-        PlasmaComponents.ToolButton {
-            text: "button on first toolbar"
+        model:  ListModel {
+            id: pagesModel
+            ListElement {
+                page: "Buttons.qml"
+                title: "Buttons"
+            }
+            ListElement {
+                page: "CheckableButtons.qml"
+                title: "Checkable buttons"
+            }
+            ListElement {
+                page: "Busy.qml"
+                title: "Busy indicators"
+            }
+            ListElement {
+                page: "Sliders.qml"
+                title: "Sliders"
+            }
+            ListElement {
+                page: "Scrollers.qml"
+                title: "Scrollers"
+            }
+            ListElement {
+                page: "Texts.qml"
+                title: "Text elements"
+            }
+            ListElement {
+                page: "Misc.qml"
+                title: "Misc stuff"
+            }
+        }
+        delegate: ListItem {
+            enabled: true
+            Column {
+                Label {
+                    text: title
+                }
+            }
+            onClicked: pageStack.replace(Qt.createComponent(page))
         }
     }
-    Row {
-        id: toolbarB
-        visible: false
-        spacing: 5
-        PlasmaComponents.ToolButton {
-            text: "Switch toolbar"
-            onClicked: toolBar.setTools(toolbarA, "pop")
-        }
-        PlasmaComponents.ToolButton {
-            flat: false
-            text: "button on second toolbar"
-        }
-        PlasmaComponents.TextField {}
-    }
+
+
     Flickable {
         id: page
 
         anchors {
             top: toolBar.bottom
-            left: parent.left
+            left: pageSelector.right
             right: parent.right
             bottom: parent.bottom
         }
-        contentWidth: 2200
-        contentHeight: 1000
+        contentWidth: pageStack.currentPage.implicitWidth
+        contentHeight: pageStack.currentPage.implicitHeight
 
-        Row {
-            x: 30
-            anchors {
-                top: parent.top
-                bottom: parent.bottom
-                margins: 20
-            }
-            spacing: 30
-
-            Buttons{ }
-
-            CheckableButtons { }
-
-            Busy { }
-
-            Sliders { }
-
-            Scrollers { }
-
-            Texts { }
+        PageStack {
+            id: pageStack
+            toolBar: toolBar
+            width: page.width
+            height: currentPage.implicitHeight
+            initialPage: Qt.createComponent("Buttons.qml")
         }
+
     }
 
-    PlasmaComponents.ScrollBar {
+    ScrollBar {
         id: horizontalScrollBar
 
 	    stepSize: 30
 
         flickableItem: page
-        animated: true
+        orientation: Qt.Horizontal
         anchors {
             left: parent.left
             right: verticalScrollBar.left
@@ -110,14 +122,13 @@ Rectangle {
         }
     }
 
-    PlasmaComponents.ScrollBar {
+    ScrollBar {
         id: verticalScrollBar
 
 	    stepSize: 30
 
         orientation: Qt.Vertical
         flickableItem: page
-        animated: true
         anchors {
             top: toolBar.bottom
             right: parent.right

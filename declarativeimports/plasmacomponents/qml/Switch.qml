@@ -40,13 +40,7 @@ DualStateButton {
         imagePath: "widgets/slider"
         prefix: "groove"
         width: height * 2
-        height: fontMetricText.height + margins.top
-        //FIXME: an hack to have font metrics: can we have a proper binding?
-        Text {
-            id: fontMetricText
-            text: "M"
-            visible: false
-        }
+        height: theme.defaultFont.mSize.height + margins.top
 
         PlasmaCore.FrameSvgItem {
             id: highlight

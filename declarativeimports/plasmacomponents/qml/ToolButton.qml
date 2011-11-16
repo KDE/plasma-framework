@@ -1,5 +1,6 @@
 /*
 *   Copyright (C) 2011 by Daker Fernandes Pinheiro <dakerfp@gmail.com>
+*   Copyright (C) 2011 by Marco Martin <mart@kde.org>
 *
 *   This program is free software; you can redistribute it and/or modify
 *   it under the terms of the GNU Library General Public License as
@@ -76,41 +77,26 @@ Item {
         surface.opacity = 1
     }
 
-    function pressButton() {
-        if (button.enabled)
-            surface.prefix = "pressed";
+
+    implicitWidth: {
+        if (label.paintedWidth == 0) {
+            return implicitHeight
+        } else {
+            return Math.max(theme.defaultFont.mSize.width*12, icon.width + label.paintedWidth + surface.margins.left + surface.margins.right) + ((icon.valid) ? surface.margins.left : 0)
+        }
     }
-
-    function releaseButton() {
-        if (!button.enabled)
-            return;
-
-        if (button.checkable)
-            button.checked = !button.checked;
-
-        // TODO: "checked" state must have special graphics?
-        if (button.checked)
-            surface.prefix = "pressed";
-        else
-            surface.prefix = "normal";
-
-        button.clicked();
-        button.forceActiveFocus();
-    }
-
-    implicitWidth: Math.max(50, icon.width + label.paintedWidth + surface.margins.left + surface.margins.right)
-    implicitHeight: Math.max(20, Math.max(icon.height, label.paintedHeight) + surface.margins.top + surface.margins.bottom)
+    implicitHeight: Math.max(theme.defaultFont.mSize.height*1.8, Math.max(icon.height, label.paintedHeight) + surface.margins.top + surface.margins.bottom)
 
     // TODO: needs to define if there will be specific graphics for
     //     disabled buttons
     opacity: enabled ? 1.0 : 0.5
 
-    Keys.onSpacePressed: pressButton();
-    Keys.onReturnPressed: pressButton();
+    Keys.onSpacePressed: internal.pressButton()
+    Keys.onReturnPressed: internal.pressButton()
     Keys.onReleased: {
         if (event.key == Qt.Key_Space ||
             event.key == Qt.Key_Return)
-            releaseButton();
+            internal.releaseButton()
     }
 
     onActiveFocusChanged: {
@@ -120,6 +106,31 @@ Item {
             shadow.state = "hidden"
         } else {
             shadow.state = "shadow"
+        }
+    }
+
+    QtObject {
+        id: internal
+        property bool userPressed: false
+
+        function pressButton()
+        {
+            userPressed = true
+        }
+
+        function releaseButton()
+        {
+            userPressed = false
+            if (!button.enabled) {
+                return
+            }
+
+            if (button.checkable) {
+                button.checked = !button.checked
+            }
+
+            button.clicked()
+            button.forceActiveFocus()
         }
     }
 
@@ -134,8 +145,9 @@ Item {
 
         anchors.fill: parent
         imagePath: "widgets/button"
-        prefix: "normal"
-        opacity: 0
+        prefix: (internal.userPressed || checked) ? "pressed" : "normal"
+        //internal: if there is no hover status, don't paint on mouse over in touchscreens
+        opacity: (internal.userPressed || checked || !flat || (shadow.hasOverState && mouse.containsMouse)) ? 1 : 0
         Behavior on opacity {
             PropertyAnimation { duration: 250 }
         }
@@ -179,7 +191,7 @@ Item {
             font.weight: theme.defaultFont.weight
             font.wordSpacing: theme.defaultFont.wordSpacing
             color: theme.buttonTextColor
-            horizontalAlignment: Text.AlignHCenter
+            horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
     }
@@ -190,23 +202,17 @@ Item {
         anchors.fill: parent
         hoverEnabled: true
 
-        onPressed: {
-            pressButton();
-        }
-        onReleased: {
-            releaseButton();
-        }
+        onPressed: internal.pressButton();
+
+        onReleased: internal.releaseButton();
+
         onEntered: {
-            if (flat) {
-                surface.opacity = 1
-            } else {
+            if (!flat) {
                 shadow.state = "hover"
             }
         }
         onExited: {
-            if (flat) {
-                surface.opacity = 0
-            } else {
+            if (!flat) {
                 if (button.activeFocus) {
                     shadow.state = "focus"
                 } else if (checked) {

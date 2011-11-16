@@ -372,6 +372,7 @@ public Q_SLOTS:
     void togglePopup();
     void hidePopup();
     void showPopup();
+    void showPopup(int timeout);
 };
 
 

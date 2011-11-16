@@ -82,11 +82,11 @@ Item {
     property bool updateValueWhileDragging: true
     property real handleSize: 22
 
-    // Convinience API
+    // Convenience API
     property bool _isVertical: orientation == Qt.Vertical
 
-    width: _isVertical ? 22 : 200
-    height: _isVertical ? 200 : 22
+    width: _isVertical ? theme.defaultFont.mSize.height*1.8 : 200
+    height: _isVertical ? 200 : theme.defaultFont.mSize.height*1.8
     // TODO: needs to define if there will be specific graphics for
     //     disabled sliders
     opacity: enabled ? 1.0 : 0.5
@@ -151,8 +151,8 @@ Item {
             value: 0
             stepSize: 0.0
             inverted: false
-            positionAtMinimum: 0 + handle.width / 2
-            positionAtMaximum: contents.width - handle.width / 2
+            positionAtMinimum: 0
+            positionAtMaximum: contents.width - handle.width
         }
 
         PlasmaCore.Svg {
@@ -176,51 +176,26 @@ Item {
             imagePath: "widgets/slider"
             prefix: "groove-highlight"
             height: groove.height
-            width: inverted ? groove.width - handle.x : fakeHandle.x
+            width: inverted ? groove.width - handle.x : fakeHandle.x + handle.width/2
             x: inverted ? handle.x : 0
             anchors.verticalCenter: parent.verticalCenter
 
             visible: range.position > 0 && slider.enabled
         }
 
-        PlasmaCore.SvgItem {
-            id: focus
-
-            transform: Translate { x: - handle.width / 2 }
-            anchors {
-                fill: handle
-                margins: -1 // Hardcoded
-            }
-            opacity: slider.activeFocus ? 1 : 0
-            svg: PlasmaCore.Svg { imagePath: "widgets/slider" }
-            elementId: "horizontal-slider-hover"
-
-            Behavior on opacity {
-                PropertyAnimation { duration: 250 }
-            }
-        }
-
-        PlasmaCore.SvgItem {
-            id: hover
-
-            transform: Translate { x: - handle.width / 2 }
-            anchors {
-                fill: handle
-                margins: -2 // Hardcoded
-            }
-            opacity: 0
-            svg: PlasmaCore.Svg { imagePath: "widgets/slider" }
-            elementId: "horizontal-slider-hover"
-
-            Behavior on opacity {
-                PropertyAnimation { duration: 250 }
-            }
+        RoundShadow {
+            id: shadow
+            imagePath: "widgets/slider"
+            focusElement: "horizontal-slider-focus"
+            hoverElement: "horizontal-slider-hover"
+            shadowElement: "horizontal-slider-shadow"
+            state: slider.activeFocus ? "focus" : (mouseArea.containsMouse ? "hover" : "shadow")
+            anchors.fill: handle
         }
 
         PlasmaCore.SvgItem {
             id: handle
 
-            transform: Translate { x: - handle.width / 2 }
             x: fakeHandle.x
             anchors {
                 verticalCenter: groove.verticalCenter
@@ -245,7 +220,6 @@ Item {
             id: fakeHandle
             width: handle.width
             height: handle.height
-            transform: Translate { x: - handle.width / 2 }
         }
 
         MouseArea {
@@ -261,33 +235,25 @@ Item {
             }
             hoverEnabled: true
 
-            onEntered: {
-                hover.opacity = 1;
-            }
-            onExited: {
-                if (!pressed)
-                    hover.opacity = 0;
-            }
             onPressed: {
                 // Clamp the value
-                var newX = Math.max(mouse.x, drag.minimumX);
-                newX = Math.min(newX, drag.maximumX);
+                var newX = Math.max(mouse.x, drag.minimumX)
+                newX = Math.min(newX, drag.maximumX)
 
                 // Debounce the press: a press event inside the handler will not
                 // change its position, the user needs to drag it.
-                if (Math.abs(newX - fakeHandle.x) > handle.width / 2)
-                    range.position = newX;
+                if (Math.abs(newX - fakeHandle.x) > handle.width / 2) {
+                    range.position = newX
+                }
 
-                slider.forceActiveFocus();
+                slider.forceActiveFocus()
             }
             onReleased: {
                 // If we don't update while dragging, this is the only
                 // moment that the range is updated.
-                if (!slider.updateValueWhileDragging)
-                    range.position = fakeHandle.x;
-
-                if (!containsMouse)
-                    hover.opacity = 0;
+                if (!slider.updateValueWhileDragging) {
+                    range.position = fakeHandle.x
+                }
             }
         }
     }

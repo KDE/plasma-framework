@@ -20,22 +20,34 @@
 #include "plasmacomponentsplugin.h"
 
 #include <QtDeclarative/qdeclarative.h>
+#include <QtDeclarative/QDeclarativeEngine>
 
 #include "qrangemodel.h"
+
+#include <KSharedConfig>
 
 #include "enums.h"
 #include "qmenu.h"
 #include "qmenuitem.h"
-
+#include "kdialogproxy.h"
 
 void PlasmaComponentsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.components"));
 
+    QString componentsPlatform = getenv("KDE_PLASMA_COMPONENTS_PLATFORM");
+    if (componentsPlatform.isEmpty()) {
+        KConfigGroup cg(KSharedConfig::openConfig("kdeclarativerc"), "Components-platform");
+        componentsPlatform = cg.readEntry("name", "desktop");
+    }
 
-    qmlRegisterType<QMenuProxy>(uri, 0, 1, "Menu");
-    qmlRegisterType<QMenuProxy>(uri, 0, 1, "ContextMenu");
-    qmlRegisterType<QMenuItem>(uri, 0, 1, "MenuItem");
+    if (componentsPlatform == "desktop") {
+        qmlRegisterType<KDialogProxy>(uri, 0, 1, "QueryDialog");
+
+        qmlRegisterType<QMenuProxy>(uri, 0, 1, "Menu");
+        qmlRegisterType<QMenuProxy>(uri, 0, 1, "ContextMenu");
+        qmlRegisterType<QMenuItem>(uri, 0, 1, "MenuItem");
+    }
 
     qmlRegisterType<Plasma::QRangeModel>(uri, 0, 1, "RangeModel");
 

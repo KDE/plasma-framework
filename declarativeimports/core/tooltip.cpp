@@ -70,13 +70,16 @@ void ToolTipProxy::setTarget(QGraphicsObject *target)
 
 void ToolTipProxy::syncTarget()
 {
+    if (!m_target) {
+        return;
+    }
     // find the scene
     QGraphicsScene *scene = m_target.data()->scene();
     if (!scene) {
         QObject *parent = m_target.data();
         while ((parent = parent->parent())) {
             QGraphicsObject *qo = qobject_cast<QGraphicsObject*>(parent);
-            if (qo) {
+            if (qo && qo->scene()) {
                 scene = qo->scene();
                 scene->addItem(m_target.data());
                 break;
