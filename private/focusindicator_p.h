@@ -43,6 +43,9 @@ public:
     void animateVisibility(const bool visible);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
+    void setFrameSvg(FrameSvg *svg);
+    FrameSvg *frameSvg() const;
+
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
     void resizeEvent(QGraphicsSceneResizeEvent *event);

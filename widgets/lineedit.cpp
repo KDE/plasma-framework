@@ -64,7 +64,10 @@ LineEdit::LineEdit(QGraphicsWidget *parent)
     d->background->setImagePath("widgets/lineedit");
     d->background->setCacheAllRenderedFrames(true);
 
-    new FocusIndicator(this, d->background);
+    FocusIndicator *indicator = new FocusIndicator(this, d->background);
+    if (d->background->hasElement("hint-focus-over-base")) {
+        indicator->setFlag(QGraphicsItem::ItemStacksBehindParent, false);
+    }
     setNativeWidget(new KLineEdit);
 }
 
