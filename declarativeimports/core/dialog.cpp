@@ -332,6 +332,11 @@ bool DialogProxy::isActiveWindow() const
     return m_activeWindow;
 }
 
+void DialogProxy::activateWindow()
+{
+    m_dialog->activateWindow();
+}
+
 int DialogProxy::windowFlags() const
 {
     return (int)m_dialog->windowFlags();

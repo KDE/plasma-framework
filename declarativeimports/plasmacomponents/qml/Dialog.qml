@@ -69,7 +69,7 @@ Item {
         dialog.y = pos.y
 
         dialog.visible = true
-        dialog.focus = true
+        dialog.activateWindow()
     }
 
     function accept()
