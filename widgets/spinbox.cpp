@@ -76,6 +76,9 @@ SpinBox::SpinBox(QGraphicsWidget *parent)
     d->background->setImagePath("widgets/lineedit");
     d->background->setCacheAllRenderedFrames(true);
 
+    if (d->background->hasElement("hint-focus-over-base")) {
+        d->focusIndicator->setFlag(QGraphicsItem::ItemStacksBehindParent, false);
+    }
 
     d->style = Plasma::Style::sharedStyle();
     native->setStyle(d->style.data());

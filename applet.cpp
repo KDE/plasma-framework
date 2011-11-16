@@ -1996,6 +1996,7 @@ void AppletPrivate::addStandardConfigurationPages(KConfigDialog *dialog)
 
 void AppletPrivate::addGlobalShortcutsPage(KConfigDialog *dialog)
 {
+#ifndef PLASMA_NO_GLOBAL_SHORTCUTS
     if (isContainment) {
         return;
     }
@@ -2015,6 +2016,7 @@ void AppletPrivate::addGlobalShortcutsPage(KConfigDialog *dialog)
 
     QObject::connect(dialog, SIGNAL(applyClicked()), q, SLOT(configDialogFinished()), Qt::UniqueConnection);
     QObject::connect(dialog, SIGNAL(okClicked()), q, SLOT(configDialogFinished()), Qt::UniqueConnection);
+#endif
 }
 
 void AppletPrivate::addPublishPage(KConfigDialog *dialog)
