@@ -8,6 +8,7 @@ ButtonRow 0.1 ButtonRow.qml
 CheckBox 0.1 CheckBox.qml
 CommonDialog 0.1 CommonDialog.qml
 ContextMenu 0.1 Menu.qml
+Dialog 0.1 Dialog.qml
 Highlight 0.1 Highlight.qml
 Label 0.1 Label.qml
 ListItem 0.1 ListItem.qml
