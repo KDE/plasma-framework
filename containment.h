@@ -516,8 +516,6 @@ Q_SIGNALS:
          */
         void showConfigurationInterface();
 
-    protected:
-        //FIXME plasma2: those should be public to allow scripted containments access them
         /**
          * Sets the type of this containment.
          */
@@ -528,6 +526,7 @@ Q_SIGNALS:
          */
         void setDrawWallpaper(bool drawWallpaper);
 
+    protected:
         /**
          * Called when the contents of the containment should be saved. By default this saves
          * all loaded Applets
@@ -625,7 +624,6 @@ Q_SIGNALS:
 
         friend class Applet;
         friend class AppletPrivate;
-        friend class AppletScript;
         friend class CoronaPrivate;
         friend class ContainmentPrivate;
         friend class ContainmentActions;

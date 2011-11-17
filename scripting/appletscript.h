@@ -138,7 +138,6 @@ public:
      */
     void configNeedsSaving() const;
 
-    //FIXME plasma2: setWallpaperEnabled and setContainmentType should become public?
     /**
      * @return true if the applet is a containment AND if the wallpaper is enabled
      * @see Containment
