@@ -8,7 +8,7 @@ MACRO(PLASMA_UNIT_TESTS)
        FOREACH(_testname ${ARGN})
                kde4_add_unit_test(${_testname} TESTNAME plasma-${_testname} ${_testname}.cpp)
                target_link_libraries(${_testname} ${QT_QTTEST_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY}
-                                     ${KDE4_KIO_LIBS} ${KDE4_KDEUI_LIBS} plasma)
+                                     ${KDE4_KIO_LIBS} ${KDE4_KDEUI_LIBS} plasma kcoreaddons karchive)
                if(QT_QTOPENGL_FOUND)
                    target_link_libraries(${_testname} ${QT_QTOPENGL_LIBRARY})
                endif(QT_QTOPENGL_FOUND)
@@ -24,7 +24,7 @@ PLASMA_UNIT_TESTS(
 )
 
 kde4_add_unit_test(storagetest TESTNAME plasma-storage storagetest.cpp ../private/storage.cpp ../private/storagethread.cpp)
-target_link_libraries(storagetest ${QT_QTTEST_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY} ${QT_QTSQL_LIBRARY} ${KDE4_KIO_LIBS} plasma)
+target_link_libraries(storagetest ${QT_QTTEST_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY} ${QT_QTSQL_LIBRARY} ${KDE4_KIO_LIBS} plasma kcoreaddons)
 if(QT_QTOPENGL_FOUND)
    target_link_libraries(storagetest ${QT_QTOPENGL_LIBRARY})
 endif(QT_QTOPENGL_FOUND)
