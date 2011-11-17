@@ -39,7 +39,6 @@ class KConfigDialog;
 namespace Plasma
 {
 
-class Animation;
 class AppletScriptPrivate;
 class Extender;
 
@@ -138,11 +137,6 @@ public:
      * @see Applet
      */
     void configNeedsSaving() const;
-
-    /**
-     * @see Applet
-     */
-    Extender *extender() const;
 
     //FIXME plasma2: setWallpaperEnabled and setContainmentType should become public?
     /**
@@ -252,14 +246,6 @@ protected:
      * @see Applet
      */
     bool isRegisteredAsDragHandle(QGraphicsItem *item);
-
-    /**
-     * Loads an animation from the applet package
-     * @param animation the animation to load
-     * @return an Animation object on success, a NULL pointer on failure
-     * @since 4.5
-     */
-    Animation *loadAnimationFromPackage(const QString &name, QObject *parent);
 
 private:
     friend class Applet;

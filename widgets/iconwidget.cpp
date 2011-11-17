@@ -170,6 +170,12 @@ IconAction::IconAction(IconWidget *icon, QAction *action)
 
 void IconAction::show()
 {
+    rebuildPixmap();
+    m_visible = true;
+
+        /*
+FIXME: place this animation back when the icon widget is in the qgv library
+
     Animation *animation = m_animation.data();
     if (!animation) {
         animation = Plasma::Animator::create(Plasma::Animator::PixmapTransitionAnimation, m_icon);
@@ -179,12 +185,10 @@ void IconAction::show()
         animation->pause();
     }
 
-    rebuildPixmap();
-    m_visible = true;
-
     animation->setProperty("targetPixmap", m_pixmap);
     animation->setDirection(QAbstractAnimation::Forward);
     animation->start();
+*/
 }
 
 void IconAction::hide()
@@ -342,7 +346,7 @@ void IconAction::paint(QPainter *painter) const
     Animation *animation = m_animation.data();
     if (m_visible && !animation) {
         painter->drawPixmap(m_rect.toRect(), m_pixmap);
-    } else {
+    } else if (animation) {
         painter->drawPixmap(m_rect.toRect(),
                 animation->property("currentPixmap").value<QPixmap>());
     }

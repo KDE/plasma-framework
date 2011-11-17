@@ -39,7 +39,6 @@
 #include "package.h"
 #include "popupapplet.h"
 #include "private/applet_p.h"
-#include "private/extenderapplet_p.h"
 #include "private/packages_p.h"
 #include "private/service_p.h" // for NullService
 #include "private/storage_p.h"
@@ -162,18 +161,13 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
 
     KPluginLoader plugin(*offer);
 
-    if (!Plasma::isPluginVersionCompatible(plugin.pluginVersion()) &&
-        (name != "internal:extender")) {
+    if (!Plasma::isPluginVersionCompatible(plugin.pluginVersion())) {
         return 0;
     }
 
 
     QString error;
-    if (name == "internal:extender") {
-        applet = new ExtenderApplet(0, allArgs);
-    } else {
-        applet = offer->createInstance<Plasma::Applet>(0, allArgs, &error);
-    }
+    applet = offer->createInstance<Plasma::Applet>(0, allArgs, &error);
 
     if (!applet) {
 #ifndef NDEBUG

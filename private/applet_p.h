@@ -73,31 +73,21 @@ private:
     bool m_changed;
 };
 
-class AppletOverlayWidget : public QGraphicsWidget
-{
-    Q_OBJECT
-
-public:
-    AppletOverlayWidget(QGraphicsWidget *parent);
-    void destroy();
-
-    qreal opacity;
-
-protected:
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-    void mousePressEvent(QGraphicsSceneMouseEvent *event);
-
-protected Q_SLOTS:
-    void overlayAnimationComplete();
-};
-
-class AppletPrivate : public DataEngineConsumer
+class PLASMA_EXPORT AppletPrivate : public DataEngineConsumer
 {
 public:
     AppletPrivate(KService::Ptr service, const KPluginInfo *info, int uniqueID, Applet *applet);
-    ~AppletPrivate();
+    virtual ~AppletPrivate();
 
     void init(const QString &packagePath = QString());
+
+    // the interface
+    virtual void showConfigurationRequiredMessage(bool show, const QString &reason);
+    virtual void showMessage(const QIcon &icon, const QString &message, const MessageButtons buttons);
+    virtual void positionMessageOverlay();
+    virtual void setBusy(bool busy);
+    virtual bool isBusy() const;
+    virtual void updateFailedToLaunch(const QString &reason);
 
     // put all setup routines for script here. at this point we can assume that
     // package exists and that we have a script engin
@@ -121,9 +111,6 @@ public:
     void updateRect(const QRectF &rect);
     void setFocus();
     void cleanUpAndDelete();
-    void createMessageOverlay(bool usePopup = true);
-    void positionMessageOverlay();
-    void destroyMessageOverlay();
     void addGlobalShortcutsPage(KConfigDialog *dialog);
     void addPublishPage(KConfigDialog *dialog);
     void clearShortcutEditorPtr();
@@ -147,13 +134,11 @@ public:
     static int s_minZValue;
     static QSet<QString> s_customCategories;
 
-    //TODO: examine the usage of memory here; there's a pretty large
     //      number of members at this point.
     uint appletId;
     Applet *q;
 
     // applet attributes
-    QWeakPointer<Extender> extender;
     Service *remotingService;
     BackgroundHints preferredBackgroundHints;
     BackgroundHints backgroundHints;
@@ -169,17 +154,6 @@ public:
     Plasma::FrameSvg *background;
     KConfigGroup *mainConfig;
     Plasma::Constraints pendingConstraints;
-
-    // overlays and messages
-    QWeakPointer<Plasma::Dialog> messageDialog;
-    AppletOverlayWidget *messageOverlay;
-    QGraphicsProxyWidget *messageOverlayProxy;
-    Plasma::BusyWidget *busyWidget;
-    QWeakPointer<Plasma::PushButton> messageOkButton;
-    QWeakPointer<Plasma::PushButton> messageYesButton;
-    QWeakPointer<Plasma::PushButton> messageNoButton;
-    QWeakPointer<Plasma::PushButton> messageCancelButton;
-    QWeakPointer<QAction> messageCloseAction;
 
     // sripting and package stuff
     AppletScript *script;

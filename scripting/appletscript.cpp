@@ -22,8 +22,6 @@
 #include "kconfig.h"
 #include "kconfigdialog.h"
 
-#include "animations/animationscriptengine_p.h"
-#include "animator.h"
 #include "applet.h"
 #include "package.h"
 #include "private/applet_p.h"
@@ -181,50 +179,6 @@ bool AppletScript::isRegisteredAsDragHandle(QGraphicsItem *item)
     return false;
 }
 
-Animation *AppletScript::loadAnimationFromPackage(const QString &name, QObject *parent)
-{
-    if (applet()) {
-        const QString scopedName = applet()->pluginName() + ":" + name;
-        if (!AnimationScriptEngine::isAnimationRegistered(scopedName)) {
-            KConfig conf(applet()->package().path() + "/metadata.desktop", KConfig::SimpleConfig);
-            KConfigGroup animConf(&conf, "Animations");
-            QString file;
-            foreach (const QString &possibleFile, animConf.keyList()) {
-                const QStringList anims = animConf.readEntry(possibleFile, QStringList());
-                if (anims.contains(name)) {
-                        file = possibleFile;
-                        break;
-                }
-            }
-
-            if (file.isEmpty()) {
-                return 0;
-            }
-
-            const QString path = applet()->package().filePath("animations", file);
-            if (path.isEmpty()) {
-#ifndef NDEBUG
-                kDebug() << "file path was empty for" << file;
-#endif
-                return 0;
-            }
-
-            if (!AnimationScriptEngine::loadScript(path, applet()->pluginName() + ':') ||
-                !AnimationScriptEngine::isAnimationRegistered(scopedName)) {
-#ifndef NDEBUG
-                kDebug() << "script engine loading failed for" << path;
-#endif
-                return 0;
-            }
-        }
-
-        Animation *anim = Animator::create(scopedName, parent ? parent : this);
-        return anim;
-    }
-
-    return 0;
-}
-
 void AppletScript::configChanged()
 {
 }
@@ -251,12 +205,6 @@ KPluginInfo AppletScript::description() const
 {
     Q_ASSERT(d->applet);
     return d->applet->d->appletDescription;
-}
-
-Extender *AppletScript::extender() const
-{
-    Q_ASSERT(d->applet);
-    return d->applet->extender();
 }
 
 bool AppletScript::drawWallpaper() const

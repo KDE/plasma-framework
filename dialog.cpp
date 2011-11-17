@@ -49,8 +49,6 @@
 #include "plasma/animator.h"
 #include "plasma/containment.h"
 #include "plasma/corona.h"
-#include "plasma/extenders/extender.h"
-#include "plasma/private/extender_p.h"
 #include "plasma/framesvg.h"
 #include "plasma/theme.h"
 #include "plasma/widgets/scrollwidget.h"
@@ -141,7 +139,6 @@ void DialogPrivate::checkBorders(bool updateMaskIfNeeded)
     const FrameSvg::EnabledBorders currentBorders = background->enabledBorders();
     FrameSvg::EnabledBorders borders = FrameSvg::AllBorders;
 
-    Extender *extender = qobject_cast<Extender*>(graphicsWidget);
     Plasma::Applet *applet = appletPtr.data();
 
     //used to remove borders at the edge of the desktop
@@ -246,30 +243,7 @@ void DialogPrivate::checkBorders(bool updateMaskIfNeeded)
     }
 
     background->setEnabledBorders(borders);
-
-    if (extender)  {
-        FrameSvg::EnabledBorders disabledBorders = FrameSvg::NoBorder;
-        if (!(borders & FrameSvg::LeftBorder)) {
-            disabledBorders |= FrameSvg::LeftBorder;
-        }
-        if (!(borders & FrameSvg::RightBorder)) {
-            disabledBorders |= FrameSvg::RightBorder;
-        }
-        extender->d->setDisabledBordersHint(disabledBorders);
-
-        //if there is a scrollbar, reserve a margin to not draw it over the shadow
-        qreal left, top, right, bottom;
-        background->getMargins(left, top, right, bottom);
-        if (extender->d->scrollWidget->viewportGeometry().height() < extender->d->scrollWidget->contentsSize().height()) {
-            if (QApplication::layoutDirection() == Qt::RightToLeft) {
-                leftWidth = left;
-            } else {
-                rightWidth = right;
-            }
-        }
-    } else {
-        background->getMargins(leftWidth, topHeight, rightWidth, bottomHeight);
-    }
+    background->getMargins(leftWidth, topHeight, rightWidth, bottomHeight);
 
     //kDebug() << leftWidth << topHeight << rightWidth << bottomHeight;
     q->setContentsMargins(leftWidth, topHeight, rightWidth, bottomHeight);

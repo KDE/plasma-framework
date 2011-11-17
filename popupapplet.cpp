@@ -39,13 +39,10 @@
 #include <netwm.h>
 
 #include "plasma/private/applet_p.h"
-#include "plasma/private/extenderitemmimedata_p.h"
 #include "plasma/corona.h"
 #include "plasma/containment.h"
 #include "plasma/private/containment_p.h"
 #include "plasma/dialog.h"
-#include "plasma/extenders/extender.h"
-#include "plasma/extenders/extenderitem.h"
 #include "plasma/package.h"
 #include "plasma/theme.h"
 #include "plasma/scripting/appletscript.h"
@@ -56,13 +53,13 @@ namespace Plasma
 {
 
 PopupApplet::PopupApplet(QObject *parent, const QVariantList &args)
-    : Plasma::Applet(parent, args),
+    : Applet(parent, args),
       d(new PopupAppletPrivate(this))
 {
 }
 
 PopupApplet::PopupApplet(const QString &packagePath, uint appletId, const QVariantList &args)
-    : Plasma::Applet(packagePath, appletId, args),
+    : Applet(packagePath, appletId, args),
       d(new PopupAppletPrivate(this))
 {
 }
@@ -160,11 +157,7 @@ void PopupApplet::setWidget(QWidget *widget)
 
 QGraphicsWidget *PopupApplet::graphicsWidget()
 {
-    if (d->graphicsWidget != 0) {
-        return d->graphicsWidget;
-    } else {
-        return static_cast<Applet*>(this)->d->extender.data();
-    }
+    return d->graphicsWidget;
 }
 
 void PopupApplet::setGraphicsWidget(QGraphicsWidget *graphicsWidget)
@@ -182,31 +175,9 @@ void PopupApplet::setGraphicsWidget(QGraphicsWidget *graphicsWidget)
     d->graphicsWidget = graphicsWidget;
 }
 
-void PopupAppletPrivate::checkExtenderAppearance(Plasma::FormFactor f)
-{
-    Extender *extender = qobject_cast<Extender*>(q->graphicsWidget());
-    if (extender) {
-        if (f != Plasma::Horizontal && f != Plasma::Vertical) {
-            extender->setAppearance(Extender::NoBorders);
-        } else if (q->location() == TopEdge) {
-            extender->setAppearance(Extender::TopDownStacked);
-        } else {
-            extender->setAppearance(Extender::BottomUpStacked);
-        }
-
-        if (dialogPtr) {
-            dialogPtr.data()->setGraphicsWidget(extender);
-        }
-    }
-}
-
 void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
 {
     Plasma::FormFactor f = q->formFactor();
-
-    if (constraints & Plasma::LocationConstraint) {
-        checkExtenderAppearance(f);
-    }
 
     if (constraints & Plasma::FormFactorConstraint ||
         constraints & Plasma::StartupCompletedConstraint ||
@@ -229,10 +200,6 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             minimum = gWidget->minimumSize();
             // our layout may have been replaced on us in the call to graphicsWidget!
             lay = dynamic_cast<QGraphicsLinearLayout *>(q->layout());
-
-            if (!(constraints & LocationConstraint)) {
-                checkExtenderAppearance(f);
-            }
         } else if (qWidget) {
             minimum = qWidget->minimumSizeHint();
         }
@@ -381,7 +348,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 }
 
                 //no longer use Qt::Popup since that seems to cause a lot of problem when you drag
-                //stuff out of your Dialog (extenders). Monitor WindowDeactivate events so we can
+                //stuff out of your Dialog. Monitor WindowDeactivate events so we can
                 //emulate the same kind of behavior as Qt::Popup (close when you click somewhere
                 //else.
 
@@ -514,50 +481,6 @@ bool PopupApplet::eventFilter(QObject *watched, QEvent *event)
     }
 
     return Applet::eventFilter(watched, event);
-}
-
-//FIXME: some duplication between the drag events... maybe add some simple helper function?
-void PopupApplet::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
-{
-    if (event->mimeData()->hasFormat(ExtenderItemMimeData::mimeType())) {
-        const ExtenderItemMimeData *mimeData =
-            qobject_cast<const ExtenderItemMimeData*>(event->mimeData());
-        if (mimeData && qobject_cast<Extender*>(graphicsWidget())) {
-            event->accept();
-            showPopup();
-        }
-    }
-}
-
-void PopupApplet::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
-{
-    if (event->mimeData()->hasFormat(ExtenderItemMimeData::mimeType())) {
-        const ExtenderItemMimeData *mimeData =
-            qobject_cast<const ExtenderItemMimeData*>(event->mimeData());
-        if (mimeData && qobject_cast<Extender*>(graphicsWidget())) {
-            //We want to hide the popup if we're not moving onto the popup AND it is not the popup
-            //we started.
-            if (d->dialogPtr && !d->dialogPtr.data()->geometry().contains(event->screenPos()) &&
-                mimeData->extenderItem()->extender() != qobject_cast<Extender*>(graphicsWidget())) {
-                //We actually try to hide the popup, with a call to showPopup, with a smal timeout,
-                //so if the user moves into the popup fast enough, it remains open (the extender
-                //will call showPopup which will cancel the timeout.
-                showPopup(250);
-            }
-        }
-    }
-}
-
-void PopupApplet::dropEvent(QGraphicsSceneDragDropEvent *event)
-{
-    if (event->mimeData()->hasFormat(ExtenderItemMimeData::mimeType())) {
-        const ExtenderItemMimeData *mimeData =
-            qobject_cast<const ExtenderItemMimeData*>(event->mimeData());
-        if (mimeData && qobject_cast<Extender*>(graphicsWidget())) {
-            mimeData->extenderItem()->setExtender(extender());
-            QApplication::restoreOverrideCursor();
-        }
-    }
 }
 
 void PopupApplet::showPopup(uint popupDuration)
@@ -734,9 +657,7 @@ void PopupAppletPrivate::internalTogglePopup(bool fromActivatedSignal)
 
         dialog->clearFocus();
     } else {
-        if (!q->graphicsWidget() ||
-            (q->graphicsWidget() == static_cast<Applet*>(q)->d->extender.data() &&
-             static_cast<Applet*>(q)->d->extender.data()->isEmpty())) {
+        if (!graphicsWidget) {
             // we have nothing to show, so let's not.
             if (!fromActivatedSignal) {
                 QObject::disconnect(q, SIGNAL(activate()), q, SLOT(appletActivated()));

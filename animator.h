@@ -64,7 +64,6 @@ public:
         GeometryAnimation, /*<< Geometry animation*/
         ZoomAnimation, /*<<Zoom animation */
         PixmapTransitionAnimation, /*<< Transition between two pixmaps*/
-        WaterAnimation /*<< Water animation using ripple effect */,
         LastAnimation = 1024
     };
 
@@ -84,13 +83,6 @@ public:
      * @since 4.4
      **/
     static Plasma::Animation *create(Animator::Animation type, QObject *parent = 0);
-
-    /**
-     * Factory to build new animation objects from Javascript files. To control their behavior,
-     * check \ref AbstractAnimation properties.
-     * @since 4.5
-     **/
-    static Plasma::Animation *create(const QString &animationName, QObject *parent = 0);
 
     /**
      * Factory to build new custom easing curves.

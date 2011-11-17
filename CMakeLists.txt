@@ -28,7 +28,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_SOURCE_DIR}/tier1/threadweaver/
                     ${CMAKE_BINARY_DIR}/tier1/threadweaver/
                     ${CMAKE_BINARY_DIR}/tier1/threadweaver/Weaver
-                    ${CMAKE_SOURCE_DIR}/plasma/extenders
                     ${CMAKE_SOURCE_DIR}/plasma/remote
                     ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch/qtjolie
                     ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch
@@ -86,26 +85,6 @@ set(plasma_LIB_SRCS
     abstractdialogmanager.cpp
     abstracttoolbox.cpp
     dialog.cpp
-    animator.cpp
-    animations/animation.cpp
-    animations/animationscriptengine.cpp
-    animations/bindings/animationgroup.cpp
-    animations/bindings/easingcurve.cpp
-    animations/easinganimation.cpp
-    animations/fade.cpp
-    animations/grow.cpp
-    animations/javascriptanimation.cpp
-    animations/pendulumcurve.cpp
-    animations/pixmaptransition.cpp
-    animations/pulser.cpp
-    animations/rotation.cpp
-    animations/rotationstacked.cpp
-    animations/slide.cpp
-    animations/stackedlayout.cpp
-    animations/geometry.cpp
-    animations/water.cpp
-    animations/widgetsnapshot.cpp
-    animations/zoom.cpp
     configloader.cpp
     containment.cpp
     containmentactions.cpp
@@ -115,9 +94,6 @@ set(plasma_LIB_SRCS
     dataengine.cpp
     dataenginemanager.cpp
     delegate.cpp
-    extenders/extender.cpp
-    extenders/extendergroup.cpp
-    extenders/extenderitem.cpp
     package.cpp
     packagestructure.cpp
     paintutils.cpp
@@ -134,10 +110,8 @@ set(plasma_LIB_SRCS
     private/datacontainer_p.cpp
     private/dataengineconsumer.cpp
     private/dataengineservice.cpp
+    private/effects/halopainter.cpp
     private/effectwatcher.cpp
-    private/extenderapplet.cpp
-    private/extenderitemmimedata.cpp
-    private/focusindicator.cpp
     private/getsource.cpp
     private/packages.cpp
     private/plasmoidservice.cpp
@@ -154,8 +128,6 @@ set(plasma_LIB_SRCS
     private/windowpreview.cpp
     private/windowshadows.cpp
     private/kineticscroll.cpp
-    private/effects/halopainter.cpp
-    private/effects/ripple.cpp
     querymatch.cpp
     remote/accessmanager.cpp
     remote/accessappletjob.cpp
@@ -204,18 +176,27 @@ set(plasma_LIB_SRCS
     private/qtjolie-branch/qtjolie/server.cpp
     private/qtjolie-branch/qtjolie/serverthread.cpp
 
-    widgets/pushbutton.cpp
-    widgets/busywidget.cpp
+    #FIXME: all these must move into the qgv library
     widgets/iconwidget.cpp
-    widgets/label.cpp
-    widgets/scrollbar.cpp
-    widgets/scrollwidget.cpp
-    widgets/svgwidget.cpp
-    widgets/textbrowser.cpp
-    widgets/textedit.cpp
 )
 
 set (plasmaqgv_LIB_SRCS
+    graphicsview/graphicsviewappletprivate.cpp
+    animator.cpp
+    animations/animation.cpp
+    animations/easinganimation.cpp
+    animations/fade.cpp
+    animations/grow.cpp
+    animations/pendulumcurve.cpp
+    animations/pixmaptransition.cpp
+    animations/pulser.cpp
+    animations/rotation.cpp
+    animations/rotationstacked.cpp
+    animations/slide.cpp
+    animations/stackedlayout.cpp
+    animations/geometry.cpp
+    animations/widgetsnapshot.cpp
+    animations/zoom.cpp
 
     private/animablegraphicswebview.cpp
     private/dataenginebindings.cpp
@@ -224,6 +205,13 @@ set (plasmaqgv_LIB_SRCS
     private/nativetabbar.cpp
     private/style.cpp
 
+    widgets/label.cpp
+    widgets/scrollbar.cpp
+    widgets/svgwidget.cpp
+    widgets/scrollwidget.cpp
+    widgets/textedit.cpp
+    widgets/textbrowser.cpp
+    widgets/busywidget.cpp
     widgets/checkbox.cpp
     widgets/combobox.cpp
     widgets/declarativewidget.cpp
@@ -233,6 +221,7 @@ set (plasmaqgv_LIB_SRCS
     widgets/itembackground.cpp
     widgets/lineedit.cpp
     widgets/meter.cpp
+    widgets/pushbutton.cpp
     widgets/radiobutton.cpp
     widgets/signalplotter.cpp
     widgets/slider.cpp
@@ -331,9 +320,6 @@ set(plasma_LIB_INCLUDES
     dataenginemanager.h
     delegate.h
     dialog.h
-    extenders/extender.h
-    extenders/extendergroup.h
-    extenders/extenderitem.h
     pluginloader.h
     paintutils.h
     windoweffects.h
@@ -435,7 +421,6 @@ install(FILES
    DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
 install(FILES
-   data/services/plasma-applet-extenderapplet.desktop
    data/services/plasma.protocol
    DESTINATION ${SERVICES_INSTALL_DIR})
 

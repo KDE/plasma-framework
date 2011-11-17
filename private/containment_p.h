@@ -41,7 +41,6 @@ namespace Plasma
 class AccessAppletJob;
 class Containment;
 class AbstractToolBox;
-class Animation;
 
 class ContainmentPrivate
 {
@@ -96,7 +95,6 @@ public:
     QPointF preferredPanelPos(Corona *corona) const;
     void setLockToolText();
     void appletDestroyed(Applet*);
-    void appletAppearAnimationComplete();
     void appletAppeared(Applet*);
     void clearDataForMimeJob(KIO::Job *job);
     void remoteAppletReady(Plasma::AccessAppletJob *job);

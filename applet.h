@@ -49,8 +49,6 @@ namespace Plasma
 class AppletPrivate;
 class Containment;
 class DataEngine;
-class Extender;
-class ExtenderItem;
 class Package;
 
 
@@ -522,34 +520,13 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         virtual void removeAssociatedWidget(QWidget *widget);
 
         /**
-         * Gets called when an extender item has to be initialized after a plasma restart. If you
-         * create ExtenderItems in your applet, you should implement this function to again create
-         * the widget that should be shown in this extender item. This function might look something
-         * like this:
-         *
-         * @code
-         * SuperCoolWidget *widget = new SuperCoolWidget();
-         * dataEngine("engine")->connectSource(item->config("dataSourceName"), widget);
-         * item->setWidget(widget);
-         * @endcode
-         *
-         * You can also add one or more custom qactions to this extender item in this function.
-         *
-         * Note that by default, not all ExtenderItems are persistent. Only items that are detached,
-         * will have their configuration stored when plasma exits.
-         */
-        virtual void initExtenderItem(ExtenderItem *item);
-
-        /**
          * @param parent the QGraphicsItem this applet is parented to
          * @param serviceId the name of the .desktop file containing the
          *      information about the widget
          * @param appletId a unique id used to differentiate between multiple
          *      instances of the same Applet type
          */
-        explicit Applet(QGraphicsItem *parent = 0,
-                        const QString &serviceId = QString(),
-                        uint appletId = 0);
+        explicit Applet(QGraphicsItem *parent = 0, const QString &serviceId = QString(), uint appletId = 0);
 
         /**
          * @param parent the QGraphicsItem this applet is parented to
@@ -570,10 +547,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *      and the applet id
          * @since 4.3
          */
-        explicit Applet(QGraphicsItem *parent,
-                        const QString &serviceId,
-                        uint appletId,
-                        const QVariantList &args);
+        explicit Applet(QGraphicsItem *parent, const QString &serviceId, uint appletId, const QVariantList &args);
 
 
         /**
@@ -713,11 +687,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @since 4.4
          */
         void newStatus(Plasma::ItemStatus status);
-
-        /**
-         * Emitted when an ExtenderItem in a scripting applet needs to be initialized
-         */
-        void extenderItemRestored(Plasma::ExtenderItem *item);
 
         /**
          * Emitted when the immutability changes
@@ -966,11 +935,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         bool isRegisteredAsDragHandle(QGraphicsItem *item);
 
         /**
-         * @return the extender of this applet.
-         */
-        Extender *extender() const;
-
-        /**
          * @internal scene event filter; used to manage applet dragging
          */
         bool sceneEventFilter(QGraphicsItem *watched, QEvent *event);
@@ -1037,7 +1001,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         Q_PRIVATE_SLOT(d, void cleanUpAndDelete())
         Q_PRIVATE_SLOT(d, void selectItemToDestroy())
         Q_PRIVATE_SLOT(d, void updateRect(const QRectF& rect))
-        Q_PRIVATE_SLOT(d, void destroyMessageOverlay())
         Q_PRIVATE_SLOT(d, void clearShortcutEditorPtr())
         Q_PRIVATE_SLOT(d, void configDialogFinished())
         Q_PRIVATE_SLOT(d, void updateShortcuts())
@@ -1066,12 +1029,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         friend class PopupApplet;
         friend class PopupAppletPrivate;
         friend class AssociatedApplicationManager;
-
-        friend class Extender;
-        friend class ExtenderGroup;
-        friend class ExtenderGroupPrivate;
-        friend class ExtenderPrivate;
-        friend class ExtenderItem;
 };
 
 } // Plasma namespace

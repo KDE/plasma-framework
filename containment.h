@@ -211,7 +211,7 @@ class PLASMA_EXPORT Containment : public Applet
          * @return a pointer to the applet on success, or 0 on failure
          */
         Applet *addApplet(const QString &name, const QVariantList &args = QVariantList(),
-                          const QRectF &geometry = QRectF(-1, -1, -1, -1));
+                                  const QRectF &geometry = QRectF(-1, -1, -1, -1));
 
         /**
          * Add an existing applet to this Containment
@@ -610,7 +610,6 @@ Q_SIGNALS:
         Containment(const QString &packagePath, uint appletId, const QVariantList &args);
 
         Q_PRIVATE_SLOT(d, void appletDestroyed(Plasma::Applet*))
-        Q_PRIVATE_SLOT(d, void appletAppearAnimationComplete())
         Q_PRIVATE_SLOT(d, void triggerShowAddWidgets())
         Q_PRIVATE_SLOT(d, void positionToolBox())
         Q_PRIVATE_SLOT(d, void requestConfiguration())

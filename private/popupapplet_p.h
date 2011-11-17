@@ -28,6 +28,9 @@
 namespace Plasma
 {
 
+class IconWidget;
+class Dialog;
+
 class PopupAppletPrivate
 {
 public:
@@ -53,7 +56,7 @@ public:
     PopupApplet *q;
     Plasma::IconWidget *icon;
     QWeakPointer<Plasma::Dialog> dialogPtr;
-    QWeakPointer<QGraphicsProxyWidget>proxy;
+    QWeakPointer<QGraphicsProxyWidget> proxy;
     QWidget *widget;
     QGraphicsWidget *graphicsWidget;
     Plasma::PopupPlacement popupPlacement;

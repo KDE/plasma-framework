@@ -27,13 +27,13 @@
 #include <QPropertyAnimation>
 
 #include "animator.h"
+#include "applet.h"
 #include "svg.h"
 
 class QGraphicsView;
 
 namespace Plasma
 {
-class Applet;
 class Containment;
 class FrameSvg;
 class View;

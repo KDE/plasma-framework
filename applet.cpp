@@ -84,8 +84,6 @@
 #include "corona.h"
 #include "dataenginemanager.h"
 #include "dialog.h"
-#include "extenders/extender.h"
-#include "extenders/extenderitem.h"
 #include "package.h"
 #include "plasma.h"
 #include "scripting/appletscript.h"
@@ -93,7 +91,6 @@
 #include "framesvg.h"
 #include "popupapplet.h"
 #include "private/applethandle_p.h"
-#include "private/extenderitem_p.h"
 #include "private/framesvg_p.h"
 #include "remote/authorizationmanager.h"
 #include "remote/authorizationmanager_p.h"
@@ -101,8 +98,6 @@
 #include "view.h"
 #include "widgets/iconwidget.h"
 #include "widgets/label.h"
-#include "widgets/pushbutton.h"
-#include "widgets/busywidget.h"
 #include "tooltipmanager.h"
 #include "wallpaper.h"
 #include "paintutils.h"
@@ -111,7 +106,6 @@
 
 #include "private/associatedapplicationmanager_p.h"
 #include "private/containment_p.h"
-#include "private/extenderapplet_p.h"
 #include "private/package_p.h"
 #include "private/packages_p.h"
 #include "private/plasmoidservice_p.h"
@@ -142,10 +136,7 @@ Applet::Applet(QGraphicsItem *parent, const QString &serviceID, uint appletId)
     d->init();
 }
 
-Applet::Applet(QGraphicsItem *parent,
-               const QString &serviceID,
-               uint appletId,
-               const QVariantList &args)
+Applet::Applet(QGraphicsItem *parent, const QString &serviceID, uint appletId, const QVariantList &args)
     :  QGraphicsWidget(parent),
        d(new AppletPrivate(KService::serviceByStorageId(serviceID), 0, appletId, this))
 {
@@ -208,23 +199,6 @@ Applet::~Applet()
 {
     //let people know that i will die
     emit appletDestroyed(this);
-
-    if (!d->transient && d->extender) {
-        //This would probably be nicer if it was located in extender. But in it's dtor, this won't
-        //work since when that get's called, the applet's config() isn't accessible anymore. (same
-        //problem with calling saveState(). Doing this in saveState() might be a possibility, but
-        //that would require every extender savestate implementation to call it's parent function,
-        //which isn't very nice.
-        d->extender.data()->saveState();
-
-        foreach (ExtenderItem *item, d->extender.data()->attachedItems()) {
-            if (item->autoExpireDelay()) {
-                //destroy temporary extender items, or items that aren't detached, so their
-                //configuration won't linger after a plasma restart.
-                item->destroy();
-            }
-        }
-    }
 
     // clean up our config dialog, if any
     delete KConfigDialog::exists(d->configDialogId());
@@ -358,62 +332,8 @@ void AppletPrivate::setFocus()
 
 void Applet::setFailedToLaunch(bool failed, const QString &reason)
 {
-    if (d->failed == failed) {
-        if (failed && !reason.isEmpty()) {
-            foreach (QGraphicsItem *item, QGraphicsItem::children()) {
-                Label *l = dynamic_cast<Label *>(item);
-                if (l) {
-                    l->setText(d->visibleFailureText(reason));
-                }
-            }
-        }
-        return;
-    }
-
     d->failed = failed;
-    prepareGeometryChange();
-
-    foreach (QGraphicsItem *item, childItems()) {
-        if (!dynamic_cast<AppletHandle *>(item)) {
-            delete item;
-        }
-    }
-
-    d->messageOverlay = 0;
-    if (d->messageDialog) {
-        d->messageDialog.data()->deleteLater();
-        d->messageDialog.clear();
-    }
-
-    setLayout(0);
-
-    if (failed) {
-        setBackgroundHints(StandardBackground);
-
-        QGraphicsLinearLayout *failureLayout = new QGraphicsLinearLayout(this);
-        failureLayout->setContentsMargins(0, 0, 0, 0);
-
-        IconWidget *failureIcon = new IconWidget(this);
-        failureIcon->setIcon(KIcon("dialog-error"));
-        failureLayout->addItem(failureIcon);
-
-        Label *failureWidget = new Plasma::Label(this);
-        failureWidget->setText(d->visibleFailureText(reason));
-        QLabel *label = failureWidget->nativeWidget();
-        label->setWordWrap(true);
-        failureLayout->addItem(failureWidget);
-
-        Plasma::ToolTipManager::self()->registerWidget(failureIcon);
-        Plasma::ToolTipContent data(i18n("Unable to load the widget"), reason,
-                                    KIcon("dialog-error"));
-        Plasma::ToolTipManager::self()->setContent(failureIcon, data);
-
-        setLayout(failureLayout);
-        resize(300, 250);
-        d->background->resizeFrame(geometry().size());
-    }
-
-    update();
+    d->updateFailedToLaunch(reason);
 }
 
 void Applet::saveState(KConfigGroup &group) const
@@ -476,15 +396,8 @@ void Applet::destroy()
     }
 
     d->transient = true;
-
-    if (isContainment()) {
-        d->cleanUpAndDelete();
-    } else {
-        Animation *zoomAnim = Plasma::Animator::create(Plasma::Animator::ZoomAnimation);
-        connect(zoomAnim, SIGNAL(finished()), this, SLOT(cleanUpAndDelete()));
-        zoomAnim->setTargetWidget(this);
-        zoomAnim->start();
-    }
+    //FIXME: an animation on leave if !isContainment() would be good again .. which should be handled by the containment class
+    d->cleanUpAndDelete();
 }
 
 bool Applet::destroyed() const
@@ -556,113 +469,6 @@ void AppletPrivate::cleanUpAndDelete()
     }
 
     q->deleteLater();
-}
-
-void AppletPrivate::createMessageOverlay(bool usePopup)
-{
-    if (messageOverlay) {
-        qDeleteAll(messageOverlay->children());
-        messageOverlay->setLayout(0);
-    }
-
-    PopupApplet *popup = qobject_cast<Plasma::PopupApplet*>(q);
-
-    if (!messageOverlay) {
-        if (usePopup && popup) {
-            if (popup->widget()) {
-                messageOverlayProxy = new QGraphicsProxyWidget(q);
-                messageOverlayProxy->setWidget(popup->widget());
-                messageOverlay = new AppletOverlayWidget(messageOverlayProxy);
-            } else if (popup->graphicsWidget() &&
-                       popup->graphicsWidget() != extender.data()) {
-                messageOverlay = new AppletOverlayWidget(popup->graphicsWidget());
-            }
-        }
-
-        if (!messageOverlay) {
-            messageOverlay = new AppletOverlayWidget(q);
-        }
-    }
-
-    positionMessageOverlay();
-}
-
-void AppletPrivate::positionMessageOverlay()
-{
-    if (!messageOverlay) {
-        return;
-    }
-
-    PopupApplet *popup = qobject_cast<Plasma::PopupApplet*>(q);
-    const bool usePopup = popup && (messageOverlay->parentItem() != q);
-    QGraphicsItem *topItem = q;
-
-    if (usePopup && popup->widget()) {
-        // popupapplet with widget()
-        topItem = popup->d->proxy.data();
-        messageOverlay->setGeometry(popup->widget()->contentsRect());
-    } else if (usePopup && popup->graphicsWidget() && popup->graphicsWidget() != extender.data()) {
-        // popupapplet with graphicsWidget()
-        topItem = popup->graphicsWidget();
-        QGraphicsWidget *w = dynamic_cast<QGraphicsWidget *>(topItem);
-        messageOverlay->setGeometry(w ? w->contentsRect() : topItem->boundingRect());
-    } else {
-        // normal applet
-        messageOverlay->setGeometry(q->contentsRect());
-    }
-
-    // raise the overlay above all the other children!
-    int zValue = 100;
-    foreach (QGraphicsItem *child, topItem->children()) {
-        if (child->zValue() > zValue) {
-            zValue = child->zValue() + 1;
-        }
-    }
-    messageOverlay->setZValue(zValue);
-}
-
-void AppletPrivate::destroyMessageOverlay()
-{
-    if (messageDialog) {
-        messageDialog.data()->animatedHide(Plasma::locationToInverseDirection(q->location()));
-        //messageDialog.data()->deleteLater();
-        messageDialog.clear();
-    }
-
-    if (!messageOverlay) {
-        return;
-    }
-
-    messageOverlay->destroy();
-    messageOverlay = 0;
-
-    if (messageOverlayProxy) {
-        messageOverlayProxy->setWidget(0);
-        delete messageOverlayProxy;
-        messageOverlayProxy = 0;
-    }
-
-    MessageButton buttonCode = ButtonNo;
-    //find out if we're disappearing because of a button press
-    PushButton *button = qobject_cast<PushButton *>(q->sender());
-    if (button) {
-        if (button == messageOkButton.data()) {
-            buttonCode = ButtonOk;
-        }
-        if (button == messageYesButton.data()) {
-            buttonCode = ButtonYes;
-        }
-        if (button == messageNoButton.data()) {
-            buttonCode = ButtonNo;
-        }
-        if (button == messageCancelButton.data()) {
-            buttonCode = ButtonCancel;
-        }
-
-        emit q->messageButtonPressed(buttonCode);
-    } else if (q->sender() == messageOverlay) {
-        emit q->messageButtonPressed(ButtonCancel);
-    }
 }
 
 ConfigLoader *Applet::configScheme() const
@@ -757,46 +563,14 @@ void Applet::constraintsEvent(Plasma::Constraints constraints)
     }
 }
 
-void Applet::initExtenderItem(ExtenderItem *item)
-{
-    if (d->script) {
-        emit extenderItemRestored(item);
-    } else {
-        kWarning() << "Missing implementation of initExtenderItem in the applet "
-                   << item->config().readEntry("SourceAppletPluginName", "")
-                   << "!\n Any applet that uses extenders should implement initExtenderItem to "
-                   << "instantiate a widget. Destroying the item...";
-        item->destroy();
-    }
-}
-
-Extender *Applet::extender() const
-{
-    if (!d->extender) {
-        new Extender(const_cast<Applet*>(this));
-    }
-
-    return d->extender.data();
-}
-
 void Applet::setBusy(bool busy)
 {
-    if (busy) {
-        if (!d->busyWidget && !d->busyWidgetTimer.isActive()) {
-            d->busyWidgetTimer.start(500, this);
-        }
-    } else {
-        d->busyWidgetTimer.stop();
-        if (d->busyWidget) {
-            d->busyWidget = 0;
-            d->destroyMessageOverlay();
-        }
-    }
+    d->setBusy(busy);
 }
 
 bool Applet::isBusy() const
 {
-    return d->busyWidgetTimer.isActive() || (d->busyWidget && d->busyWidget->isVisible());
+    return d->isBusy();
 }
 
 QString Applet::name() const
@@ -994,175 +768,12 @@ void Applet::setConfigurationRequired(bool needsConfig, const QString &reason)
     }
 
     d->needsConfig = needsConfig;
-
-    if (!needsConfig) {
-        d->destroyMessageOverlay();
-        return;
-    }
-
-    d->createMessageOverlay(true);
-    d->messageOverlay->opacity = 0.4;
-
-    QGraphicsGridLayout *configLayout = new QGraphicsGridLayout(d->messageOverlay);
-    configLayout->setContentsMargins(0, 0, 0, 0);
-
-  //  configLayout->addStretch();
-    configLayout->setColumnStretchFactor(0, 5);
-    configLayout->setColumnStretchFactor(2, 5);
-    configLayout->setRowStretchFactor(0, 5);
-    configLayout->setRowStretchFactor(3, 5);
-
-    int row = 1;
-    if (!reason.isEmpty()) {
-        Label *explanation = new Label(d->messageOverlay);
-        explanation->setText(reason);
-        configLayout->addItem(explanation, row, 1);
-        configLayout->setColumnStretchFactor(1, 5);
-        ++row;
-        configLayout->setAlignment(explanation, Qt::AlignBottom | Qt::AlignCenter);
-    }
-
-    PushButton *configWidget = new PushButton(d->messageOverlay);
-    if (!qobject_cast<Plasma::PopupApplet *>(this) && (formFactor() == Plasma::Horizontal || formFactor() == Plasma::Vertical)) {
-        configWidget->setImage("widgets/configuration-icons", "configure");
-        configWidget->setMaximumSize(24,24);
-        configWidget->setMinimumSize(24,24);
-    } else {
-        configWidget->setText(i18n("Configure..."));
-    }
-    connect(configWidget, SIGNAL(clicked()), this, SLOT(showConfigurationInterface()));
-    configLayout->addItem(configWidget, row, 1);
-
-    //configLayout->setAlignment(configWidget, Qt::AlignTop | Qt::AlignCenter);
-    //configLayout->addStretch();
-
-    d->messageOverlay->show();
+    d->showConfigurationRequiredMessage(needsConfig, reason);
 }
 
 void Applet::showMessage(const QIcon &icon, const QString &message, const MessageButtons buttons)
 {
-    if (message.isEmpty()) {
-        d->destroyMessageOverlay();
-        return;
-    }
-
-    Corona *corona = qobject_cast<Corona *>(scene());
-    QGraphicsWidget *mainWidget = new QGraphicsWidget;
-
-    QGraphicsLinearLayout *mainLayout = new QGraphicsLinearLayout(mainWidget);
-    mainLayout->setOrientation(Qt::Vertical);
-    mainLayout->addStretch();
-
-    QGraphicsLinearLayout *messageLayout = new QGraphicsLinearLayout();
-    messageLayout->setOrientation(Qt::Horizontal);
-
-    QGraphicsLinearLayout *buttonLayout = new QGraphicsLinearLayout();
-    buttonLayout->setOrientation(Qt::Horizontal);
-
-    mainLayout->addItem(messageLayout);
-    mainLayout->addItem(buttonLayout);
-    mainLayout->addStretch();
-
-    IconWidget *messageIcon = new IconWidget(mainWidget);
-    Label *messageText = new Label(mainWidget);
-    messageText->nativeWidget()->setWordWrap(true);
-
-    messageLayout->addStretch();
-    messageLayout->addItem(messageIcon);
-    messageLayout->addItem(messageText);
-    messageLayout->addStretch();
-
-    messageIcon->setIcon(icon);
-    messageText->setText(message);
-
-    buttonLayout->addStretch();
-
-    if (buttons & ButtonOk) {
-        d->messageOkButton = new PushButton(mainWidget);
-        d->messageOkButton.data()->setText(i18n("&OK"));
-        d->messageOkButton.data()->setIcon(KIcon("dialog-ok"));
-        buttonLayout->addItem(d->messageOkButton.data());
-        connect(d->messageOkButton.data(), SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
-    }
-
-    if (buttons & ButtonYes) {
-        d->messageYesButton = new PushButton(mainWidget);
-        d->messageYesButton.data()->setText(i18n("&Yes"));
-        buttonLayout->addItem(d->messageYesButton.data());
-        connect(d->messageYesButton.data(), SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
-    }
-
-    if (buttons & ButtonNo) {
-        d->messageNoButton = new PushButton(mainWidget);
-        d->messageNoButton.data()->setText(i18n("&No"));
-        buttonLayout->addItem(d->messageNoButton.data());
-        connect(d->messageNoButton.data(), SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
-    }
-
-    if (buttons & ButtonCancel) {
-        d->messageCancelButton = new PushButton(mainWidget);
-        d->messageCancelButton.data()->setText(i18n("&Cancel"));
-        d->messageCancelButton.data()->setIcon(KIcon("dialog-cancel"));
-        buttonLayout->addItem(d->messageCancelButton.data());
-        connect(d->messageCancelButton.data(), SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
-    }
-
-    d->messageCloseAction = new QAction(d->messageOverlay);
-    d->messageCloseAction.data()->setShortcut(Qt::Key_Escape);
-    mainWidget->addAction(d->messageCloseAction.data());
-    connect(d->messageCloseAction.data(), SIGNAL(triggered()), this, SLOT(destroyMessageOverlay()));
-
-    buttonLayout->addStretch();
-
-    mainWidget->adjustSize();
-    QSizeF hint = mainWidget->preferredSize();
-    if (hint.height() > size().height() || hint.width() > size().width()) {
-        // either a collapsed popup in h/v form factor or just too small,
-        // so show it in a dialog associated with ourselves
-        if (corona) {
-            corona->addOffscreenWidget(mainWidget);
-        }
-
-        if (d->messageDialog) {
-            delete d->messageDialog.data()->graphicsWidget();
-        } else {
-            d->messageDialog = new Plasma::Dialog;
-        }
-
-        ToolTipManager::self()->hide(this);
-        KWindowSystem::setOnAllDesktops(d->messageDialog.data()->winId(), true);
-        KWindowSystem::setState(d->messageDialog.data()->winId(), NET::SkipTaskbar | NET::SkipPager);
-        d->messageDialog.data()->setGraphicsWidget(mainWidget);
-        connect(d->messageDialog.data(), SIGNAL(destroyed(QObject*)), mainWidget, SLOT(deleteLater()));
-
-        // if we are going to show it in a popup, then at least make sure it can be dismissed
-        if (buttonLayout->count() < 1) {
-            PushButton *ok = new PushButton(mainWidget);
-            ok->setText(i18n("OK"));
-            ok->setIcon(KIcon("dialog-ok"));
-            buttonLayout->addItem(ok);
-            connect(ok, SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
-        }
-    } else {
-        delete d->messageDialog.data();
-        d->createMessageOverlay();
-        d->messageOverlay->opacity = 0.8;
-        mainWidget->setParentItem(d->messageOverlay);
-        QGraphicsLinearLayout *l = new QGraphicsLinearLayout(d->messageOverlay);
-        l->addItem(mainWidget);
-    }
-
-    if (d->messageDialog) {
-        QPoint pos = geometry().topLeft().toPoint();
-        if (corona) {
-            pos = corona->popupPosition(this, d->messageDialog.data()->size());
-        }
-
-        d->messageDialog.data()->move(pos);
-        d->messageDialog.data()->animatedShow(locationToDirection(location()));
-    } else {
-        d->messageOverlay->show();
-    }
+    d->showMessage(icon, message, buttons);
 }
 
 QVariantList Applet::startupArguments() const
@@ -1245,12 +856,6 @@ void Applet::flushPendingConstraintsEvents()
             bool canConfig = unlocked || KAuthorized::authorize("plasma/allow_configure_when_locked");
             action->setVisible(canConfig);
             action->setEnabled(canConfig);
-        }
-
-        if (d->extender) {
-            foreach (ExtenderItem *item, d->extender.data()->attachedItems()) {
-                item->d->setMovable(unlocked);
-            }
         }
 
         if (!unlocked && d->handle) {
@@ -1555,6 +1160,44 @@ void Applet::setGlobalShortcut(const KShortcut &shortcut)
         KAction::ShortcutTypes(KAction::ActiveShortcut | KAction::DefaultShortcut),
         KAction::NoAutoloading);
     d->globalShortcutChanged();
+}
+
+void AppletPrivate::showConfigurationRequiredMessage(bool show, const QString &reason)
+{
+    // reimplemented in the UI specific library
+    Q_UNUSED(show)
+    Q_UNUSED(reason)
+}
+
+void AppletPrivate::showMessage(const QIcon &icon, const QString &message, const MessageButtons buttons)
+{
+    // reimplemented in the UI specific library
+    Q_UNUSED(icon)
+    Q_UNUSED(message)
+    Q_UNUSED(buttons)
+}
+
+void AppletPrivate::positionMessageOverlay()
+{
+    // reimplemented in the UI specific library
+}
+
+void AppletPrivate::setBusy(bool busy)
+{
+    // reimplemented in the UI specific library
+    Q_UNUSED(busy)
+}
+
+bool AppletPrivate::isBusy() const
+{
+    // reimplemented in the UI specific library
+    return false;
+}
+
+void AppletPrivate::updateFailedToLaunch(const QString &reason)
+{
+    // reimplemented in the UI specific library
+    Q_UNUSED(reason)
 }
 
 void AppletPrivate::globalShortcutChanged()
@@ -2491,7 +2134,6 @@ void Applet::timerEvent(QTimerEvent *event)
 {
     if (d->transient) {
         d->constraintsTimer.stop();
-        d->busyWidgetTimer.stop();
         if (d->modificationsTimer) {
             d->modificationsTimer->stop();
         }
@@ -2513,22 +2155,6 @@ void Applet::timerEvent(QTimerEvent *event)
 
         save(cg);
         emit configNeedsSaving();
-    } else if (event->timerId() == d->busyWidgetTimer.timerId()) {
-        if (!d->busyWidget) {
-            d->createMessageOverlay(false);
-            d->messageOverlay->opacity = 0;
-
-            QGraphicsLinearLayout *mainLayout = new QGraphicsLinearLayout(d->messageOverlay);
-            d->busyWidget = new Plasma::BusyWidget(d->messageOverlay);
-            d->busyWidget->setAcceptHoverEvents(false);
-            d->busyWidget->setAcceptedMouseButtons(Qt::NoButton);
-            d->messageOverlay->setAcceptHoverEvents(false);
-            d->messageOverlay->setAcceptedMouseButtons(Qt::NoButton);
-
-            mainLayout->addStretch();
-            mainLayout->addItem(d->busyWidget);
-            mainLayout->addStretch();
-        }
     }
 }
 
@@ -2600,9 +2226,6 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
           background(0),
           mainConfig(0),
           pendingConstraints(NoConstraint),
-          messageOverlay(0),
-          messageOverlayProxy(0),
-          busyWidget(0),
           script(0),
           package(0),
           configLoader(0),
@@ -2633,8 +2256,6 @@ AppletPrivate::~AppletPrivate()
         activationAction->forgetGlobalShortcut();
     }
 
-    delete extender.data();
-
     delete script;
     script = 0;
     delete package;
@@ -2650,7 +2271,7 @@ void AppletPrivate::init(const QString &packagePath)
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
-    q->setCacheMode(Applet::DeviceCoordinateCache);
+    q->setCacheMode(QGraphicsItem::DeviceCoordinateCache);
     q->setAcceptsHoverEvents(true);
     q->setFlag(QGraphicsItem::ItemIsFocusable, true);
     q->setFocusPolicy(Qt::ClickFocus);
@@ -2962,70 +2583,6 @@ uint AppletPrivate::s_maxAppletId = 0;
 int AppletPrivate::s_maxZValue = 0;
 int AppletPrivate::s_minZValue = 0;
 QSet<QString> AppletPrivate::s_customCategories;
-
-AppletOverlayWidget::AppletOverlayWidget(QGraphicsWidget *parent)
-    : QGraphicsWidget(parent),
-      opacity(0.4)
-{
-    resize(parent->size());
-}
-
-void AppletOverlayWidget::destroy()
-{
-    Animation *anim = Plasma::Animator::create(Plasma::Animator::DisappearAnimation);
-    if (anim) {
-        connect(anim, SIGNAL(finished()), this, SLOT(overlayAnimationComplete()));
-        anim->setTargetWidget(this);
-        anim->start();
-    } else {
-        overlayAnimationComplete();
-    }
-}
-
-void AppletOverlayWidget::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{
-    event->accept();
-}
-
-void AppletOverlayWidget::overlayAnimationComplete()
-{
-    if (scene()) {
-        scene()->removeItem(this);
-    }
-    deleteLater();
-}
-
-void AppletOverlayWidget::paint(QPainter *painter,
-                                const QStyleOptionGraphicsItem *option,
-                                QWidget *widget)
-{
-    Q_UNUSED(option)
-    Q_UNUSED(widget)
-
-    if (qFuzzyCompare(1, 1+opacity)) {
-        return;
-    }
-
-    QColor wash = Plasma::Theme::defaultTheme()->color(Theme::BackgroundColor);
-    wash.setAlphaF(opacity);
-
-    Applet *applet = qobject_cast<Applet *>(parentWidget());
-
-
-    QPainterPath backgroundShape;
-    if (!applet || applet->backgroundHints() == StandardBackground) {
-        //FIXME: a resize here is nasty, but perhaps still better than an eventfilter just for that..
-        if (parentWidget()->contentsRect().size() != size()) {
-            resize(parentWidget()->contentsRect().size());
-        }
-        backgroundShape = PaintUtils::roundedRectangle(contentsRect(), 5);
-    } else {
-        backgroundShape = shape();
-    }
-
-    painter->setRenderHints(QPainter::Antialiasing);
-    painter->fillPath(backgroundShape, wash);
-}
 
 } // Plasma namespace
 

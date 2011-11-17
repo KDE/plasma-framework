@@ -57,8 +57,6 @@
 #include "containmentactions.h"
 #include "containmentactionspluginsconfig.h"
 #include "corona.h"
-#include "extender.h"
-#include "extenderitem.h"
 #include "pluginloader.h"
 #include "svg.h"
 #include "wallpaper.h"
@@ -68,12 +66,9 @@
 
 #include "private/applet_p.h"
 #include "private/containmentactionspluginsconfig_p.h"
-#include "private/extenderitemmimedata_p.h"
-#include "private/extenderapplet_p.h"
 #include "private/wallpaper_p.h"
 
 #include "plasma/plasma.h"
-#include "animations/animation.h"
 
 namespace Plasma
 {
@@ -133,7 +128,7 @@ Containment::Containment(QObject *parent, const QVariantList &args)
 }
 
 Containment::Containment(const QString &packagePath, uint appletId, const QVariantList &args)
-    : Plasma::Applet(packagePath, appletId, args),
+    : Applet(packagePath, appletId, args),
       d(new ContainmentPrivate(this))
 {
     // WARNING: do not access config() OR globalConfig() in this method!
@@ -927,17 +922,8 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
     if (!delayInit && !currentContainment) {
         applet->restore(*applet->d->mainConfigGroup());
         applet->init();
-        Plasma::Animation *anim = Plasma::Animator::create(Plasma::Animator::AppearAnimation);
-        if (anim) {
-            connect(anim, SIGNAL(finished()), this, SLOT(appletAppearAnimationComplete()));
-            anim->setTargetWidget(applet);
-            //FIXME: small hack until we have proper js anim support; allows 'zoom' to work in the
-            //'right' direction for appearance
-            anim->setDirection(QAbstractAnimation::Backward);
-            anim->start(QAbstractAnimation::DeleteWhenStopped);
-        } else {
-            d->appletAppeared(applet);
-        }
+        //FIXME: an on-appear animation would be nice to have again
+        d->appletAppeared(applet);
     }
 
     applet->setFlag(QGraphicsItem::ItemIsMovable, true);
@@ -1165,8 +1151,7 @@ void Containment::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
     //kDebug() << immutability() << Mutable << (immutability() == Mutable);
     event->setAccepted(immutability() == Mutable &&
                        (event->mimeData()->hasFormat(static_cast<Corona*>(scene())->appletMimeType()) ||
-                        KUrl::List::canDecode(event->mimeData()) ||
-                        event->mimeData()->hasFormat(ExtenderItemMimeData::mimeType())));
+                        KUrl::List::canDecode(event->mimeData())));
 
     if (!event->isAccepted()) {
         // check to see if we have an applet that accepts the format.
@@ -1291,36 +1276,6 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
         }
         if (dropEvent) {
             dropEvent->acceptProposedAction();
-        }
-    } else if (mimeData->hasFormat(ExtenderItemMimeData::mimeType())) {
-#ifndef NDEBUG
-        kDebug() << "mimeType plasma/extenderitem is dropped, creating internal:extender";
-#endif
-        //Handle dropping extenderitems.
-        const ExtenderItemMimeData *extenderData = qobject_cast<const ExtenderItemMimeData*>(mimeData);
-        if (extenderData) {
-            ExtenderItem *item = extenderData->extenderItem();
-            QRectF geometry(pos - extenderData->pointerOffset(), item->size());
-#ifndef NDEBUG
-            kDebug() << "desired geometry: " << geometry;
-#endif
-            Applet *applet = qobject_cast<ExtenderApplet *>(item->extender() ?  item->extender()->applet() : 0);
-            if (applet) {
-                qreal left, top, right, bottom;
-                applet->getContentsMargins(&left, &top, &right, &bottom);
-                applet->setPos(geometry.topLeft() - QPointF(int(left), int(top)));
-                applet->show();
-            } else {
-                applet = addApplet("internal:extender", QVariantList(), geometry, 0, true);
-                applet->hide();
-                applet->init();
-                appletAppeared(applet);
-                applet->flushPendingConstraintsEvents();
-                applet->d->scheduleModificationNotification();
-                applet->adjustSize();
-                applet->show();
-            }
-            item->setExtender(applet->extender());
         }
     } else if (KUrl::List::canDecode(mimeData)) {
         //TODO: collect the mimeTypes of available script engines and offer
@@ -2267,17 +2222,6 @@ void ContainmentPrivate::appletDestroyed(Plasma::Applet *applet)
 
     emit q->appletRemoved(applet);
     emit q->configNeedsSaving();
-}
-
-void ContainmentPrivate::appletAppearAnimationComplete()
-{
-    Animation *anim = qobject_cast<Animation *>(q->sender());
-    if (anim) {
-        Applet *applet = qobject_cast<Applet*>(anim->targetWidget());
-        if (applet) {
-            appletAppeared(applet);
-        }
-    }
 }
 
 void ContainmentPrivate::appletAppeared(Applet *applet)

@@ -45,7 +45,6 @@
 #include <kwindowsystem.h>
 
 
-#include "animations/animationscriptengine_p.h"
 #include "libplasma-theme-global.h"
 #include "private/packages_p.h"
 #include "windoweffects.h"
@@ -153,7 +152,6 @@ public:
     void setThemeName(const QString &themeName, bool writeSettings);
     void onAppExitCleanup();
     void processWallpaperSettings(KConfigBase *metadata);
-    void processAnimationSettings(const QString &theme, KConfigBase *metadata);
 
     const QString processStyleSheet(const QString &css);
 
@@ -180,7 +178,6 @@ public:
     QHash<QString, QPixmap> pixmapsToCache;
     QHash<QString, QString> keysToCache;
     QHash<QString, QString> idsToCache;
-    QHash<QString, QString> animationMapping;
     QHash<styles, QString> cachedStyleSheets;
     QHash<QString, QString> discoveries;
     QTimer *saveTimer;
@@ -530,32 +527,6 @@ void ThemePrivate::processWallpaperSettings(KConfigBase *metadata)
     defaultWallpaperHeight = cg.readEntry("defaultHeight", DEFAULT_WALLPAPER_HEIGHT);
 }
 
-void ThemePrivate::processAnimationSettings(const QString &theme, KConfigBase *metadata)
-{
-    KConfigGroup cg(metadata, "Animations");
-    const QString animDir = QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/animations/");
-    foreach (const QString &path, cg.keyList()) {
-        const QStringList anims = cg.readEntry(path, QStringList());
-        foreach (const QString &anim, anims) {
-            if (!animationMapping.contains(anim)) {
-#ifndef NDEBUG
-                kDebug() << "Registering animation. animDir: " << animDir
-                         << "\tanim: " << anim
-                         << "\tpath: " << path << "\t*******\n\n\n";
-#endif
-                //key: desktoptheme/default/animations/+ all.js
-                //value: ZoomAnimation
-                animationMapping.insert(anim, animDir % path);
-            } else {
-#ifndef NDEBUG
-                kDebug() << "************Animation already registered!\n\n\n";
-#endif
-            }
-        }
-    }
-
-}
-
 void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings)
 {
     //kDebug() << tempThemeName;
@@ -605,10 +576,6 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
 
         processWallpaperSettings(&metadata);
 
-        AnimationScriptEngine::clearAnimations();
-        animationMapping.clear();
-        processAnimationSettings(themeName, &metadata);
-
         KConfigGroup cg(&metadata, "Settings");
         useNativeWidgetStyle = cg.readEntry("UseNativeWidgetStyle", false);
         QString fallback = cg.readEntry("FallbackTheme", QString());
@@ -634,7 +601,6 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
         foreach (const QString &theme, fallbackThemes) {
             QString metadataPath(KStandardDirs::locate("data", QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/metadata.desktop")));
             KConfig metadata(metadataPath);
-            processAnimationSettings(theme, &metadata);
             processWallpaperSettings(&metadata);
         }
     }
@@ -724,17 +690,6 @@ QString Theme::imagePath(const QString &name) const
 QString Theme::styleSheet(const QString &css) const
 {
     return d->processStyleSheet(css);
-}
-
-QString Theme::animationPath(const QString &name) const
-{
-    const QString path = d->animationMapping.value(name);
-    if (path.isEmpty()) {
-        //kError() << "****** FAILED TO FIND IN MAPPING!";
-        return path;
-    }
-
-    return KStandardDirs::locate("data", path);
 }
 
 QString Theme::wallpaperPath(const QSize &size) const
