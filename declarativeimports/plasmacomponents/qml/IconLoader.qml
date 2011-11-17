@@ -34,7 +34,11 @@ Item {
             valid = false
         }
 
-        svgIcon.imagePath = "icons/"+root.source.split("-")[0]
+        svgIcon.imagePath = "toolbar-icons/"+root.source.split("-")[0]
+        if (!svgIcon.isValid() || !svgIcon.hasElement(root.source)) {
+            svgIcon.imagePath = "icons/"+root.source.split("-")[0]
+        }
+
         if (svgIcon.isValid() && svgIcon.hasElement(root.source)) {
             imageLoader.sourceComponent = svgComponent
         } else if (root.source.indexOf(".") == -1 && root.source.indexOf(":") == -1) {
