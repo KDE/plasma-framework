@@ -19,7 +19,7 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-import QtQuick 1.0
+import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 
 Item {
@@ -35,14 +35,15 @@ Item {
 
     signal clicked()
 
-    width: {
+    implicitWidth: {
         if (label.paintedWidth == 0) {
             return height
         } else {
+            //return Math.max(theme.defaultFont.mSize.width*12, label.paintedWidth)
             return Math.max(theme.defaultFont.mSize.width*12, icon.width + label.paintedWidth + surfaceNormal.margins.left + surfaceNormal.margins.right) + ((icon.valid) ? surfaceNormal.margins.left : 0)
         }
     }
-    height: Math.max(theme.defaultFont.mSize.height*1.8, Math.max(icon.height, label.paintedHeight) + surfaceNormal.margins.top + surfaceNormal.margins.bottom)
+    implicitHeight: Math.max(theme.defaultFont.mSize.height*1.8, Math.max(icon.height, label.paintedHeight) + surfaceNormal.margins.top + surfaceNormal.margins.bottom)
 
     // TODO: needs to define if there will be specific graphics for
     //     disabled buttons
@@ -163,13 +164,19 @@ Item {
 
             anchors {
                 verticalCenter: parent.verticalCenter
-                left: label.text ? parent.left : undefined
-                horizontalCenter: label.text ? undefined : parent.horizontalCenter
+                left: label.paintedWidth > 0 ? parent.left : undefined
+                horizontalCenter: label.paintedWidth > 0 ? undefined : parent.horizontalCenter
             }
         }
 
         Text {
             id: label
+
+            //FIXME: why this is needed?
+            onPaintedWidthChanged: {
+                icon.anchors.horizontalCenter = label.paintedWidth > 0 ? undefined : icon.parent.horizontalCenter
+                icon.anchors.left = label.paintedWidth > 0 ? icon.parent.left : undefined
+            }
 
             anchors {
                 top: parent.top

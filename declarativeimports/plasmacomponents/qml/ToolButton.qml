@@ -138,6 +138,12 @@ Item {
         Text {
             id: label
 
+            //FIXME: why this is needed?
+            onPaintedWidthChanged: {
+                icon.anchors.horizontalCenter = label.paintedWidth > 0 ? undefined : icon.parent.horizontalCenter
+                icon.anchors.left = label.paintedWidth > 0 ? icon.parent.left : undefined
+            }
+
             anchors {
                 top: parent.top
                 bottom: parent.bottom
