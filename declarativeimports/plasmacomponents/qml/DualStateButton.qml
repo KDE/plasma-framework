@@ -35,7 +35,7 @@ Item {
     property alias shadow: shadowLoader.sourceComponent
 
     width: surfaceLoader.width + label.paintedWidth
-    height: theme.defaultFont.mSize.height*1.8
+    height: theme.defaultFont.mSize.height*1.6
     // TODO: needs to define if there will be specific graphics for
     //     disabled buttons
     opacity: dualButton.enabled ? 1.0 : 0.5

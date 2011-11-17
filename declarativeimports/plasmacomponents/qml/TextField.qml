@@ -88,7 +88,7 @@ Item {
 
     // TODO: fix default size
     implicitWidth: theme.defaultFont.mSize.width*12
-    implicitHeight: theme.defaultFont.mSize.height*1.8
+    implicitHeight: theme.defaultFont.mSize.height*1.6
     // TODO: needs to define if there will be specific graphics for
     //     disabled text fields
     opacity: enabled ? 1.0 : 0.5
