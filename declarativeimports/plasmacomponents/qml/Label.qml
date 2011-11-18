@@ -23,7 +23,7 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 Text {
     id: root
 
-    height: theme.defaultFont.mSize.height*1.6
+    height: Math.max(paintedHeight, theme.defaultFont.mSize.height*1.6)
     //FIXME: wait to rely on 1.1 for lineCount > 1
     verticalAlignment: paintedHeight > theme.defaultFont.mSize.height*1.5 ? Text.AlignTop : Text.AlignVCenter
 
