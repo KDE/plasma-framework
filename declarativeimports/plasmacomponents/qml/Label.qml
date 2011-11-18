@@ -37,6 +37,4 @@ Text {
     font.weight: theme.defaultFont.weight
     font.wordSpacing: theme.defaultFont.wordSpacing
     color: theme.textColor
-
-    wrapMode: Text.Wrap
 }
