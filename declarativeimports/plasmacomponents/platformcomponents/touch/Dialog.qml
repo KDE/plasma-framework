@@ -97,7 +97,6 @@ Item {
         id: dialog
         windowFlags: Qt.Dialog
 
-
         //onFaderClicked: root.clickedOutside()
         property Item rootItem
 
@@ -110,6 +109,7 @@ Item {
                 status = DialogStatus.Closed
             }
         }
+        onActiveWindowChanged: if (!activeWindow) dialog.visible = false
 
         mainItem: Item {
             width: theme.defaultFont.mSize.width * 40
@@ -154,7 +154,7 @@ Item {
                 }
             }
         }
-        
+
         Component.onCompleted: {
             rootItem = Utils.rootObject()
         }
