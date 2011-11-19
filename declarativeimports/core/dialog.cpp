@@ -178,8 +178,8 @@ void DialogProxy::syncMainItem()
     m_dialog->setGraphicsWidget(widget);
 
     if (!qobject_cast<Plasma::Corona *>(scene)) {
-        offscreenX -= 1024;
-        offscreenY -= 1024;
+        offscreenX -= 10000;
+        offscreenY -= 10000;
         widget->setPos(offscreenX, offscreenY);
     }
 }
