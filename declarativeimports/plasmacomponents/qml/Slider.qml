@@ -38,7 +38,7 @@ Item {
     property bool animated: false
     property alias inverted: range.inverted
     property bool updateValueWhileDragging: true
-    property real handleSize: 22
+    property real handleSize: theme.defaultFont.mSize.height*1.3
 
     // Convenience API
     property bool _isVertical: orientation == Qt.Vertical
