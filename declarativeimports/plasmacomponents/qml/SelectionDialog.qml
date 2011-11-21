@@ -41,6 +41,7 @@
 ****************************************************************************/
 
 import QtQuick 1.1
+import org.kde.plasma.core 0.1 as PlasmaCore
 
 import "." 0.1
 
@@ -58,7 +59,8 @@ CommonDialog {
         id: defaultDelegate
 
         Label {
-            //platformInverted: root.platformInverted
+            visible: modelData.search(RegExp(filterField.filterText, "i")) != -1
+            height: visible? paintedHeight*2 : 0
             text: modelData
             MouseArea {
                 anchors.fill: parent
@@ -78,35 +80,53 @@ CommonDialog {
     content: Item {
         id: contentItem
 
-        width: theme.defaultFont.mSize.width * 40
+        implicitWidth: theme.defaultFont.mSize.width * 40
         height: theme.defaultFont.mSize.height * 12
 
-        Item {
-            // Clipping item with bottom margin added to align content with rounded background graphics
-            id: clipItem
-            anchors.fill: parent
-            anchors.bottomMargin: 4
+        TextField {
+            id: filterField
+            property string filterText
+            onTextChanged: searchTimer.restart()
+            clearButtonShown: true
+            anchors {
+                top: parent.top
+                left: parent.left
+                right: parent.right
+            }
+            Timer {
+                id: searchTimer
+                running: false
+                repeat: false
+                interval: 500
+                onTriggered: filterField.filterText = filterField.text
+            }
+        }
+        ListView {
+            id: listView
+
+            anchors {
+                top: filterField.bottom
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
+            }
+            currentIndex : -1
+            width: contentItem.width
+            height: contentItem.height
+            delegate: root.delegate
             clip: true
-            ListView {
-                id: listView
 
-                currentIndex : -1
-                width: contentItem.width
-                height: contentItem.height
-                delegate: root.delegate
-                clip: true
-
-                Keys.onPressed: {
-                    if (event.key == Qt.Key_Up || event.key == Qt.Key_Down
-                        || event.key == Qt.Key_Left || event.key == Qt.Key_Right
-                        || event.key == Qt.Key_Select || event.key == Qt.Key_Enter
-                        || event.key == Qt.Key_Return) {
-                        listView.currentIndex = 0
-                        event.accepted = true
-                    }
+            Keys.onPressed: {
+                if (event.key == Qt.Key_Up || event.key == Qt.Key_Down
+                    || event.key == Qt.Key_Left || event.key == Qt.Key_Right
+                    || event.key == Qt.Key_Select || event.key == Qt.Key_Enter
+                    || event.key == Qt.Key_Return) {
+                    listView.currentIndex = 0
+                    event.accepted = true
                 }
             }
         }
+
         ScrollBar {
             id: scrollBar
             flickableItem: listView
