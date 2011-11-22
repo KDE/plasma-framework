@@ -53,6 +53,7 @@ public:
     QScriptValue wrap(Plasma::Applet *w);
     virtual QScriptValue wrap(Plasma::Containment *c);
     QScriptValue wrap(Containment *c);
+    virtual int defaultPanelScreen() const;
 
     static bool isPanel(const Plasma::Containment *c);
     static ScriptEngine *envFor(QScriptEngine *engine);

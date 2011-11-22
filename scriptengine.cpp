@@ -19,6 +19,8 @@
 
 #include "scriptengine.h"
 
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -135,7 +137,7 @@ QScriptValue ScriptEngine::createContainment(const QString &type, const QString 
     if (c) {
         if (type == "panel") {
             // some defaults
-            c->setScreen(0);
+            c->setScreen(env->defaultPanelScreen());
             c->setLocation(Plasma::TopEdge);
         }
         c->updateConstraints(Plasma::AllConstraints | Plasma::StartupCompletedConstraint);
@@ -171,6 +173,11 @@ QScriptValue ScriptEngine::wrap(Containment *c)
     v.setProperty("widgets", newFunction(Containment::widgets));
 
     return v;
+}
+
+int ScriptEngine::defaultPanelScreen() const
+{
+    return qApp ? qApp->desktop()->primaryScreen() : 0;
 }
 
 ScriptEngine *ScriptEngine::envFor(QScriptEngine *engine)
