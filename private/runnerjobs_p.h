@@ -126,16 +126,17 @@ private:
 class DelayedJobCleaner : public QObject
 {
 public:
-    DelayedJobCleaner(QSet<FindMatchesJob*> jobs, ThreadWeaver::WeaverInterface *weaver);
+    DelayedJobCleaner(const QSet<FindMatchesJob*> &jobs, const QSet<AbstractRunner *> &runners = QSet<AbstractRunner *>());
+    ~DelayedJobCleaner();
 
 private Q_SLOTS:
     void jobDone(ThreadWeaver::Job*);
     void checkIfFinished();
-    //connect(ThreadWeaver::instance(), SIGNAL(finished()), this, SLOT(checkIfFinished()));
 
 private:
     ThreadWeaver::WeaverInterface *m_weaver;
     QSet<FindMatchesJob*> m_jobs;
+    QSet<AbstractRunner *> m_runners;
 };
 
 }

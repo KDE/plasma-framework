@@ -177,7 +177,7 @@ public:
         KPluginInfo::List offers = RunnerManager::listRunnerInfo();
 
         const bool loadAll = config.readEntry("loadAll", false);
-        QStringList whiteList = config.readEntry("pluginWhiteList", QStringList());
+        const QStringList whiteList = config.readEntry("pluginWhiteList", QStringList());
         const bool noWhiteList = whiteList.isEmpty();
         KConfigGroup pluginConf;
         if (conf.isValid()) {
@@ -188,6 +188,7 @@ public:
 
         advertiseSingleRunnerIds.clear();
 
+        QSet<AbstractRunner *> deadRunners;
         QMutableListIterator<KPluginInfo> it(offers);
         while (it.hasNext()) {
             KPluginInfo &description = it.next();
@@ -203,8 +204,7 @@ public:
             description.load(pluginConf);
 
             const bool loaded = runners.contains(runnerName);
-            const bool selected = loadAll ||
-                            (description.isPluginEnabled() && (noWhiteList || whiteList.contains(runnerName)));
+            const bool selected = loadAll || (description.isPluginEnabled() && (noWhiteList || whiteList.contains(runnerName)));
 
             const bool singleQueryModeEnabled = description.property("X-Plasma-AdvertiseSingleRunnerQueryMode").toBool();
 
@@ -223,9 +223,32 @@ public:
                 }
             } else if (loaded) {
                 //Remove runner
-                AbstractRunner *runner = runners.take(runnerName);
+                deadRunners.insert(runners.take(runnerName));
                 kDebug() << "Removing runner: " << runnerName;
-                delete runner;
+            }
+        }
+
+        if (!deadRunners.isEmpty()) {
+                QSet<FindMatchesJob *> deadJobs;
+                foreach (FindMatchesJob *job, searchJobs) {
+                    if (deadRunners.contains(job->runner())) {
+                        QObject::disconnect(job, SIGNAL(done(ThreadWeaver::Job*)), q, SLOT(jobDone(ThreadWeaver::Job*)));
+                        searchJobs.remove(job);
+                        deadJobs.insert(job);
+                    }
+                }
+
+                foreach (FindMatchesJob *job, oldSearchJobs) {
+                    if (deadRunners.contains(job->runner())) {
+                        oldSearchJobs.remove(job);
+                        deadJobs.insert(job);
+                    }
+                }
+
+            if (deadJobs.isEmpty()) {
+                qDeleteAll(deadRunners);
+            } else {
+                new DelayedJobCleaner(deadJobs, deadRunners);
             }
         }
 
@@ -429,7 +452,7 @@ RunnerManager::RunnerManager(KConfigGroup &c, QObject *parent)
 RunnerManager::~RunnerManager()
 {
     if (!qApp->closingDown() && (!d->searchJobs.isEmpty() || !d->oldSearchJobs.isEmpty())) {
-        new DelayedJobCleaner(d->searchJobs + d->oldSearchJobs, Weaver::instance());
+        new DelayedJobCleaner(d->searchJobs + d->oldSearchJobs);
     }
 
     delete d;
@@ -443,11 +466,13 @@ void RunnerManager::reloadConfiguration()
 
 void RunnerManager::setAllowedRunners(const QStringList &runners)
 {
-    qDeleteAll(d->runners);
-    d->runners.clear();
-
     KConfigGroup config = d->configGroup();
     config.writeEntry("pluginWhiteList", runners);
+
+    if (!d->runners.isEmpty()) {
+        // this has been called with runners already created. so let's do an instant reload
+        d->loadRunners();
+    }
 }
 
 QStringList RunnerManager::allowedRunners() const
