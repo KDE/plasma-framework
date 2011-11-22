@@ -29,14 +29,18 @@ Imports:
 Description:
         It is just a simple BusyIndicator.
         TODO An image has to be added!
+
 Properties:
 
         bool running:
-        Returns true is the BusyIndicator is running and false for not
+        This property holds whether the busy animation is running.
+        The default value is false.
 
         bool smoothAnimation:
+        Set this property if you don't want to apply a filter to smooth
+        the busy icon while animating.
+        Smooth filtering gives better visual quality, but is slower.
         The default value is true.
-        If it is set to true,then the component will have a smooth Animation
 **/
 
 import QtQuick 1.1
