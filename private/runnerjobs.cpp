@@ -170,16 +170,22 @@ Plasma::AbstractRunner* FindMatchesJob::runner() const
     return m_runner;
 }
 
-DelayedJobCleaner::DelayedJobCleaner(QSet<FindMatchesJob*> jobs, ThreadWeaver::WeaverInterface *weaver)
-    : QObject(weaver),
-      m_weaver(weaver),
-      m_jobs(jobs)
+DelayedJobCleaner::DelayedJobCleaner(const QSet<FindMatchesJob *> &jobs, const QSet<AbstractRunner *> &runners)
+    : QObject(Weaver::instance()),
+      m_weaver(Weaver::instance()),
+      m_jobs(jobs),
+      m_runners(runners)
 {
     connect(m_weaver, SIGNAL(finished()), this, SLOT(checkIfFinished()));
 
     foreach (FindMatchesJob *job, m_jobs) {
         connect(job, SIGNAL(done(ThreadWeaver::Job*)), this, SLOT(jobDone(ThreadWeaver::Job*)));
     }
+}
+
+DelayedJobCleaner::~DelayedJobCleaner()
+{
+    qDeleteAll(m_runners);
 }
 
 void DelayedJobCleaner::jobDone(ThreadWeaver::Job *job)
