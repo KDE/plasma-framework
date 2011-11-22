@@ -33,9 +33,6 @@ namespace Plasma
     class Containment;
 } // namespace Plasma
 
-class Widget;
-class PanelView;
-
 namespace WorkspaceScripting
 {
 
