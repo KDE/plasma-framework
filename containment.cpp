@@ -988,7 +988,9 @@ void ContainmentPrivate::setScreen(int newScreen, int newDesktop, bool preventIn
     //kDebug() << activity() << "setting screen to " << newScreen << newDesktop << "and type is" << type;
 
     Containment *swapScreensWith(0);
-    if (type == Containment::DesktopContainment || type >= Containment::CustomContainment) {
+    const bool isDesktopContainment = type == Containment::DesktopContainment ||
+                                      type == Containment::CustomContainment;
+    if (isDesktopContainment) {
         // we want to listen to changes in work area if our screen changes
         if (toolBox) {
             if (screen < 0 && newScreen > -1) {
@@ -1014,8 +1016,7 @@ void ContainmentPrivate::setScreen(int newScreen, int newDesktop, bool preventIn
         }
     }
 
-    if (newScreen < numScreens && newScreen > -1 &&
-        (type == Containment::DesktopContainment || type >= Containment::CustomContainment)) {
+    if (newScreen < numScreens && newScreen > -1 && isDesktopContainment) {
         q->resize(corona->screenGeometry(newScreen).size());
     }
 

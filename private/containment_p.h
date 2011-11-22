@@ -65,10 +65,14 @@ public:
 
     ~ContainmentPrivate()
     {
-        qDeleteAll(applets);
+        // qDeleteAll is broken with Qt4.8, delete it by hand
+        while (!applets.isEmpty()) {
+            delete applets.first();
+        }
         applets.clear();
 
         qDeleteAll(dropMenus);
+        dropMenus.clear();
     }
 
     void createToolBox();
