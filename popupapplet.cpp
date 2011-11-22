@@ -157,7 +157,7 @@ void PopupApplet::setWidget(QWidget *widget)
 
 QGraphicsWidget *PopupApplet::graphicsWidget()
 {
-    return d->graphicsWidget;
+    return d->graphicsWidget.data();
 }
 
 void PopupApplet::setGraphicsWidget(QGraphicsWidget *graphicsWidget)

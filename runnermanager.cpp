@@ -251,7 +251,6 @@ public:
                 qDeleteAll(deadRunners);
             } else {
                 new DelayedJobCleaner(deadJobs, deadRunners);
->>>>>>> origin/KDE/4.7
             }
         }
 
