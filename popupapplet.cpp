@@ -160,8 +160,8 @@ void PopupApplet::setWidget(QWidget *widget)
 
 QGraphicsWidget *PopupApplet::graphicsWidget()
 {
-    if (d->graphicsWidget != 0) {
-        return d->graphicsWidget;
+    if (d->graphicsWidget) {
+        return d->graphicsWidget.data();
     } else {
         return static_cast<Applet*>(this)->d->extender.data();
     }
@@ -668,7 +668,6 @@ PopupAppletPrivate::PopupAppletPrivate(PopupApplet *applet)
         : q(applet),
           icon(0),
           widget(0),
-          graphicsWidget(0),
           popupPlacement(Plasma::FloatingPopup),
           popupAlignment(Qt::AlignLeft),
           savedAspectRatio(Plasma::InvalidAspectRatioMode),
