@@ -177,7 +177,7 @@ public:
         KPluginInfo::List offers = RunnerManager::listRunnerInfo();
 
         const bool loadAll = config.readEntry("loadAll", false);
-        QStringList whiteList = config.readEntry("pluginWhiteList", QStringList());
+        const QStringList whiteList = config.readEntry("pluginWhiteList", QStringList());
         const bool noWhiteList = whiteList.isEmpty();
         KConfigGroup pluginConf;
         if (conf.isValid()) {
@@ -204,8 +204,7 @@ public:
             description.load(pluginConf);
 
             const bool loaded = runners.contains(runnerName);
-            const bool selected = loadAll ||
-                            (description.isPluginEnabled() && (noWhiteList || whiteList.contains(runnerName)));
+            const bool selected = loadAll || (description.isPluginEnabled() && (noWhiteList || whiteList.contains(runnerName)));
 
             const bool singleQueryModeEnabled = description.property("X-Plasma-AdvertiseSingleRunnerQueryMode").toBool();
 
