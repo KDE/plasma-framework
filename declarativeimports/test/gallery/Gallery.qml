@@ -70,6 +70,10 @@ Rectangle {
                 title: "Text elements"
             }
             ListElement {
+                page: "TextEditing.qml"
+                title: "Text Editing"
+            }
+            ListElement {
                 page: "Misc.qml"
                 title: "Misc stuff"
             }
@@ -103,7 +107,7 @@ Rectangle {
             toolBar: toolBar
             width: page.width
             height: currentPage.implicitHeight
-            initialPage: Qt.createComponent("Buttons.qml")
+            initialPage: Qt.createComponent("TextEditing.qml")
         }
 
     }

@@ -59,6 +59,7 @@ PlasmaComponents.Page {
                     PlasmaComponents.TextField {
                         id: tf1
                         placeholderText: "login"
+                        clearButtonShown: true
                         Keys.onTabPressed: tf2.forceActiveFocus();
                     }
                 }
@@ -70,6 +71,7 @@ PlasmaComponents.Page {
                     }
                     PlasmaComponents.TextField {
                         id: tf2
+                        clearButtonShown: true
                         width: 120
                         echoMode: TextInput.Password
                         Keys.onTabPressed: loginButton.forceActiveFocus();
@@ -79,6 +81,7 @@ PlasmaComponents.Page {
                 PlasmaComponents.Button {
                     id: loginButton
                     text: "Login"
+                    z: -1
                     anchors {
                         right: parent.right
                         rightMargin: 0
@@ -90,6 +93,7 @@ PlasmaComponents.Page {
 
         PlasmaComponents.TextField {
             width: 120
+            clearButtonShown: true
             placeholderText: "Disabled Text Field"
             Keys.onTabPressed: loginButton.forceActiveFocus();
             enabled: false
