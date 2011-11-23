@@ -19,6 +19,7 @@
 
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
+import org.kde.qtextracomponents 0.1
 
 Item {
     id: textField
@@ -111,7 +112,7 @@ Item {
     MouseArea {
         id: mouseWatcher
         anchors.fill: hover
-        hoverEnabled: true
+        hoverEnabled: false
     }
 
     Text {
@@ -138,6 +139,45 @@ Item {
         font.underline: theme.defaultFont.underline
         font.weight: theme.defaultFont.weight
         font.wordSpacing: theme.defaultFont.wordSpacing
+    }
+
+    PlasmaCore.FrameSvgItem {
+        id: editBubble
+        objectName: "editBubble"
+        property int iconSize: 32;
+        //anchors.fill: parent
+        imagePath: "dialogs/background"
+        width: (iconSize*2) + 24
+        height: 48
+        z: 1
+        anchors { top: parent.bottom; right: parent.right; topMargin: -8; }
+        visible: textInput.activeFocus && (textInput.selectedText != "" || textInput.canPaste)
+        Row {
+            id: buttonRow
+            spacing: 4
+            anchors {fill: parent; margins: 8; }
+            height: editBubble.iconSize 
+            QIconItem {
+                icon: QIcon("edit-paste")
+                width: editBubble.iconSize
+                height: editBubble.iconSize
+                enabled: textInput.canPaste
+                MouseArea {
+                    anchors.fill: parent;
+                    onClicked: textField.paste();
+                }
+            }
+            QIconItem {
+                icon: QIcon("edit-copy")
+                width: editBubble.iconSize
+                height: editBubble.iconSize
+                enabled: textInput.selectedText != ""
+                MouseArea {
+                    anchors.fill: parent;
+                    onClicked: textField.copy();
+                }
+            }
+        }
     }
 
     TextInput {
