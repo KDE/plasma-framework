@@ -64,7 +64,7 @@ install(FILES qml/TabButton.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimport
 install(FILES qml/TabGroup.js DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
 install(FILES qml/TabGroup.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
 install(FILES qml/TextArea.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
-install(FILES qml/TextField.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
+#install(FILES qml/TextField.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
 install(FILES qml/ToolBarLayout.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
 install(FILES qml/ToolBar.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
 
