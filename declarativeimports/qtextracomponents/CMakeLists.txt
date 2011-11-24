@@ -7,6 +7,7 @@ set(qtextracomponents_SRCS
     qpixmapitem.cpp
     qimageitem.cpp
     qiconitem.cpp
+    mouseeventlistener.cpp
     )
 
 INCLUDE_DIRECTORIES(

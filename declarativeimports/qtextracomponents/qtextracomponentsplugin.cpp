@@ -26,6 +26,7 @@
 #include "qpixmapitem.h"
 #include "qimageitem.h"
 #include "qiconitem.h"
+#include "mouseeventlistener.h"
 
 
 void QtExtraComponentsPlugin::registerTypes(const char *uri)
@@ -35,6 +36,7 @@ void QtExtraComponentsPlugin::registerTypes(const char *uri)
     qmlRegisterType<QPixmapItem>(uri, 0, 1, "QPixmapItem");
     qmlRegisterType<QImageItem>(uri, 0, 1, "QImageItem");
     qmlRegisterType<QIconItem>(uri, 0, 1, "QIconItem");
+    qmlRegisterType<MouseEventListener>(uri, 0, 1, "MouseEventListener");
 }
 
 
