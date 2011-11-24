@@ -45,17 +45,22 @@ PlasmaComponents.Page {
         onClicked: editThing.forceActiveFocus();
     }
 
-    Item {
+    Column {
         id: editThing
         anchors.centerIn: parent
         width: 300
         height: 300
 
+        spacing: 12
+        Item { height: 60; width: parent.width; }
+
         PlasmaComponents.TextField {
-            anchors.centerIn: parent
             placeholderText: "Try copy & paste"
         }
-
-
+        PlasmaComponents.TextArea {
+            width: parent.width
+            height: 200
+            placeholderText: "Touch copy & paste not implemented yet."
+        }
     }
 }
