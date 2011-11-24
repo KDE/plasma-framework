@@ -367,6 +367,9 @@ public:
     void setPopupWidget(QGraphicsWidget *widget);
     QGraphicsWidget *popupWidget();
 
+Q_SIGNALS:
+    void popupEvent(bool);
+
 public Q_SLOTS:
     void setPopupIconByName(const QString &name);
     void togglePopup();

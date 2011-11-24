@@ -421,6 +421,7 @@ void AppletInterface::gc()
 PopupAppletInterface::PopupAppletInterface(AbstractJsAppletScript *parent)
     : APPLETSUPERCLASS(parent)
 {
+    connect(m_appletScriptEngine, SIGNAL(popupEvent(bool)), this, SIGNAL(popupEvent(bool)));
 }
 
 void PopupAppletInterface::setPopupIcon(const QIcon &icon)
