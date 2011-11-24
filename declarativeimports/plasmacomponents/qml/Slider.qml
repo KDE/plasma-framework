@@ -35,22 +35,16 @@ Item {
     property string valueIndicatorText: value
 
     // Plasma API
-    property bool animated: false
     property alias inverted: range.inverted
-    property bool updateValueWhileDragging: true
-    property real handleSize: 22
 
-    // Convenience API
-    property bool _isVertical: orientation == Qt.Vertical
-
-    width: _isVertical ? theme.defaultFont.mSize.height*1.6 : 200
-    height: _isVertical ? 200 : theme.defaultFont.mSize.height*1.6
+    width: contents.isVertical ? theme.defaultFont.mSize.height*1.6 : 200
+    height: contents.isVertical ? 200 : theme.defaultFont.mSize.height*1.6
     // TODO: needs to define if there will be specific graphics for
     //     disabled sliders
     opacity: enabled ? 1.0 : 0.5
 
     Keys.onUpPressed: {
-        if (!enabled || !_isVertical)
+        if (!enabled || !contents.isVertical)
             return;
 
         if (inverted)
@@ -63,7 +57,7 @@ Item {
         if (!enabled || !enabled)
             return;
 
-        if (!_isVertical)
+        if (!contents.isVertical)
             return;
 
         if (inverted)
@@ -73,7 +67,7 @@ Item {
     }
 
     Keys.onLeftPressed: {
-        if (!enabled || _isVertical)
+        if (!enabled || contents.isVertical)
             return;
 
         if (inverted)
@@ -83,7 +77,7 @@ Item {
     }
 
     Keys.onRightPressed: {
-        if (!enabled || _isVertical)
+        if (!enabled || contents.isVertical)
             return;
 
         if (inverted)
@@ -95,9 +89,17 @@ Item {
     Item {
         id: contents
 
-        width: _isVertical ? slider.height : slider.width
-        height: _isVertical ? slider.width : slider.height
-        rotation: _isVertical ? -90 : 0
+        // Plasma API
+        property bool animated: true
+        property bool updateValueWhileDragging: true
+        property real handleSize: theme.defaultFont.mSize.height*1.3
+
+        // Convenience API
+        property bool isVertical: orientation == Qt.Vertical
+
+        width: contents.isVertical ? slider.height : slider.width
+        height: contents.isVertical ? slider.width : slider.height
+        rotation: contents.isVertical ? -90 : 0
 
         anchors.centerIn: parent
 
@@ -158,8 +160,8 @@ Item {
             anchors {
                 verticalCenter: groove.verticalCenter
             }
-            width: handleSize
-            height: handleSize
+            width: contents.handleSize
+            height: contents.handleSize
             svg: PlasmaCore.Svg { imagePath: "widgets/slider" }
             elementId: "horizontal-slider-handle"
 
