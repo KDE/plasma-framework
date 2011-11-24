@@ -141,44 +141,7 @@ Item {
         font.wordSpacing: theme.defaultFont.wordSpacing
     }
 
-    PlasmaCore.FrameSvgItem {
-        id: editBubble
-        objectName: "editBubble"
-        property int iconSize: 32;
-        //anchors.fill: parent
-        imagePath: "dialogs/background"
-        width: (iconSize*2) + 24
-        height: 48
-        z: 1
-        anchors { top: parent.bottom; right: parent.right; topMargin: -8; }
-        visible: textInput.activeFocus && (textInput.selectedText != "" || textInput.canPaste)
-        Row {
-            id: buttonRow
-            spacing: 4
-            anchors {fill: parent; margins: 8; }
-            height: editBubble.iconSize 
-            QIconItem {
-                icon: QIcon("edit-paste")
-                width: editBubble.iconSize
-                height: editBubble.iconSize
-                enabled: textInput.canPaste
-                MouseArea {
-                    anchors.fill: parent;
-                    onClicked: textField.paste();
-                }
-            }
-            QIconItem {
-                icon: QIcon("edit-copy")
-                width: editBubble.iconSize
-                height: editBubble.iconSize
-                enabled: textInput.selectedText != ""
-                MouseArea {
-                    anchors.fill: parent;
-                    onClicked: textField.copy();
-                }
-            }
-        }
-    }
+    EditBubble { iconSize: 32 }
 
     TextInput {
         id: textInput
