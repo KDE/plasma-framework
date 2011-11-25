@@ -190,7 +190,7 @@ Item {
     MouseArea {
         id: dragArea
         anchors.fill: parent
-        enabled: scrollbar.enabled
+        //enabled: scrollbar.enabled
         drag {
             target: handle
             axis: Drag.YAxis

@@ -123,6 +123,18 @@ void SortFilterModel::setSortOrder(const Qt::SortOrder order)
     sort(0, order);
 }
 
+QVariantHash SortFilterModel::get(int row) const
+{
+    QModelIndex idx = index(row, 0);
+    QVariantHash hash;
+
+    QHash<int, QByteArray>::const_iterator i;
+    for (i = roleNames().constBegin(); i != roleNames().constEnd(); ++i) {
+        hash[i.value()] = data(idx, i.key());
+    }
+
+    return hash;
+}
 
 
 
@@ -421,6 +433,19 @@ int DataModel::columnCount(const QModelIndex &parent) const
     }
 
     return 1;
+}
+
+QVariantHash DataModel::get(int row) const
+{
+    QModelIndex idx = index(row, 0);
+    QVariantHash hash;
+
+    QHash<int, QByteArray>::const_iterator i;
+    for (i = roleNames().constBegin(); i != roleNames().constEnd(); ++i) {
+        hash[i.value()] = data(idx, i.key());
+    }
+
+    return hash;
 }
 
 int DataModel::roleNameToId(const QString &name)
