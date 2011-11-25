@@ -142,6 +142,7 @@ Item {
                     left: parent.left
                     right: parent.right
                     bottom: buttonItem.top
+                    bottomMargin: 8
                 }
             }
 
