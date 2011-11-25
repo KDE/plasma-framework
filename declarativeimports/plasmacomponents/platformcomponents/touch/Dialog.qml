@@ -134,13 +134,13 @@ Item {
             Item {
                 id: contentItem
 
+                clip: true
                 onChildrenRectChanged: mainItem.width = Math.max(childrenRect.width, buttonItem.childrenRect.width)
                 anchors {
                     top: titleBar.bottom
                     left: parent.left
                     right: parent.right
                     bottom: buttonItem.top
-                    bottomMargin: 8
                 }
             }
 
@@ -148,7 +148,6 @@ Item {
                 id: buttonItem
 
                 height: childrenRect.height
-                clip: true
                 anchors {
                     left: parent.left
                     right: parent.right
