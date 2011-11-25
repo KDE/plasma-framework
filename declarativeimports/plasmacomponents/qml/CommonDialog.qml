@@ -82,14 +82,14 @@ Dialog {
     QtObject {
         id: internal
 
-        function buttonWidth() {
+        /*function buttonWidth() {
             switch (buttonTexts.length) {
                 case 0: return 0
                 case 1: return Math.round((800 - 3 * 4) / 2)
                 default: return (buttonContainer.width - (buttonTexts.length + 1) *
                     4) / buttonTexts.length
             }
-        }
+        }*/
 
         function iconSource() {
             return root.titleIcon
@@ -145,20 +145,13 @@ Dialog {
         }
     }
 
-    buttons: Item {
-        id: buttonContainer
+    buttons: Row {
+        id: buttonRow
 
         LayoutMirroring.enabled: false
         LayoutMirroring.childrenInherit: true
-
-        width: parent.width
-        height: buttonTexts.length ? 48 + 2 * 2 : 0
-
-        Row {
-            id: buttonRow
-            objectName: "buttonRow"
-            anchors.centerIn: parent
-            spacing: 4
-        }
+        objectName: "buttonRow"
+        anchors.centerIn: parent
+        spacing: 4
     }
 }

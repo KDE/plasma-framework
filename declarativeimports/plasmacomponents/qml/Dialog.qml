@@ -112,6 +112,7 @@ Item {
         }
 
         mainItem: Item {
+            id: mainItem
             width: theme.defaultFont.mSize.width * 40
             height: titleBar.childrenRect.height + contentItem.childrenRect.height + buttonItem.childrenRect.height
 
@@ -133,6 +134,8 @@ Item {
             Item {
                 id: contentItem
 
+                onChildrenRectChanged: mainItem.width = Math.max(childrenRect.width, buttonItem.childrenRect.width)
+
                 clip: true
                 anchors {
                     top: titleBar.bottom
@@ -146,15 +149,15 @@ Item {
                 id: buttonItem
 
                 height: childrenRect.height
-                clip: true
                 anchors {
                     left: parent.left
                     right: parent.right
                     bottom: parent.bottom
+                    bottomMargin: 4
                 }
             }
         }
-        
+
         Component.onCompleted: {
             rootItem = Utils.rootObject()
         }
