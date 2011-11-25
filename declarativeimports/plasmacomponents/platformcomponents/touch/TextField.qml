@@ -139,12 +139,14 @@ Item {
         font.underline: theme.defaultFont.underline
         font.weight: theme.defaultFont.weight
         font.wordSpacing: theme.defaultFont.wordSpacing
+
     }
 
-    EditBubble { iconSize: 32 }
+    EditBubble { id: editBubble; iconSize: 32 }
 
     TextInput {
         id: textInput
+        parent: mouseEventListener
 
         anchors {
             left: parent.left
@@ -166,6 +168,7 @@ Item {
     }
 
     PlasmaCore.SvgItem {
+        parent: mouseEventListener // reparent to the MouseFilter for MouseArea to work
         svg: PlasmaCore.Svg {imagePath: "widgets/lineedit"}
         elementId: "clearbutton"
         width: textInput.height
@@ -180,14 +183,44 @@ Item {
         anchors {
             right: parent.right
             rightMargin: y
-            verticalCenter: textInput.verticalCenter
+            verticalCenter: parent.verticalCenter
         }
         MouseArea {
             anchors.fill: parent
             onClicked: {
-                textInput.text = ""
-                textInput.forceActiveFocus()
+                print("clear button clicked");
+                textInput.text = "";
+                textInput.forceActiveFocus();
+                editBubble.state = "collapsed"
             }
+            //Rectangle { anchors.fill: parent; color: "green"; opacity: 0.3; }
+        }
+    }
+
+    MouseEventListener {
+        id: mouseEventListener
+        anchors.fill: parent
+        //onPressed: print(" MouseEventListener Pressed");
+        onPressAndHold: {
+            print(" *** MouseEventListener PressAndHold");
+            editBubble.cursorPosition = mouse;
+            editBubble.x = mouse.x-(editBubble.width/2)
+            editBubble.y = mouse.y-editBubble.height-8
+            editBubble.state  = (textInput.activeFocus && (textInput.selectedText != "" || textInput.canPaste)) ? "expanded" : "collapsed";
+            //editBubble.state = "expanded"
+        }
+        onPositionChanged: {
+            //print(" positionChanged: " + mouse.x + "," + mouse.y);
+            //if (typeof(mouse) == "undefined") return;
+            editBubble.cursorPosition = mouse;
+            editBubble.x = mouse.x-(editBubble.width/2)
+            editBubble.y = mouse.y-editBubble.height-8
+        }
+    }
+    onActiveFocusChanged: {
+        if (!activeFocus) {
+            editBubble.state = "collapsed";
+            print("Hiding...");
         }
     }
 }

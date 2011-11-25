@@ -23,6 +23,7 @@ import org.kde.plasma.components 0.1 as PlasmaComponents
 PlasmaComponents.Page {
     height: editThing.height
     property int implicitHeight: childrenRect.height
+    //scale: 1.25
 
     tools: PlasmaComponents.ToolBarLayout {
         spacing: 5
@@ -39,7 +40,6 @@ PlasmaComponents.Page {
             text: "Text fields page"
         }
     }
-
     MouseArea {
         anchors.fill: editThing
         onClicked: editThing.forceActiveFocus();
@@ -53,9 +53,11 @@ PlasmaComponents.Page {
 
         spacing: 12
         Item { height: 60; width: parent.width; }
-
         PlasmaComponents.TextField {
             placeholderText: "Try copy & paste"
+            text: "The cat bites into the socks"
+            width: parent.width
+            clearButtonShown: true
         }
         PlasmaComponents.TextArea {
             width: parent.width

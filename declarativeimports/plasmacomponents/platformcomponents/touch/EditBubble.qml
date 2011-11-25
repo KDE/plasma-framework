@@ -25,14 +25,19 @@ PlasmaCore.FrameSvgItem {
     id: editBubble
     objectName: "editBubble"
     property int iconSize: 32;
+    //property alias cursorPosition: textInput.cursorPosition;
+    property variant cursorPosition: "0,0"
 
     imagePath: "dialogs/background"
     width: (iconSize*2) + iconSize
     height: iconSize*2
     z: 1
-    anchors { top: parent.bottom; right: parent.right; topMargin: -(iconSize/4); }
+    //anchors { top: parent.bottom; right: parent.right; topMargin: -(iconSize/4); }
 
-    state: (textInput.activeFocus && (textInput.selectedText != "" || textInput.canPaste)) ? "expanded" : "collapsed";
+    // fully dynamic show / hide
+    //state: (textInput.activeFocus && (textInput.selectedText != "" || textInput.canPaste)) ? "expanded" : "collapsed";
+    // state controlled externally
+    state: "collapsed"
 
     Row {
         id: buttonRow
@@ -73,6 +78,12 @@ PlasmaCore.FrameSvgItem {
                                                 duration: 175; easing.type: Easing.OutExpo; }
             }
         }
+    }
+    onCursorPositionChanged: {
+        //if (typeof(cursorPosition == "undefined")) return;
+        //print("     new cursorPosition: " + cursorPosition.x + "," + cursorPosition.y);
+        x = cursorPosition.x - parent.width/2
+        y = cursorPosition.y - parent.height
     }
     states: [
         State {
