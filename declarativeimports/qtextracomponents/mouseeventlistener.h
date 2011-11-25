@@ -87,6 +87,14 @@ Q_SIGNALS:
     void pressed(QDeclarativeMouseEvent *mouse);
     void positionChanged(QDeclarativeMouseEvent *mouse);
     void released(QDeclarativeMouseEvent *mouse);
+    void pressAndHold(QDeclarativeMouseEvent *mouse);
+
+private Q_SLOTS:
+    void handlePressAndHold();
+private:
+    bool m_pressed;
+    QDeclarativeMouseEvent* m_pressAndHoldEvent;
+    QPointF m_pressAndHoldPosition;
 };
 
 #endif
