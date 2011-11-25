@@ -151,11 +151,6 @@ Item {
             }
             sectionLabel.text = Sections.closestSection(y/listView.height)
         }
-        Behavior on y {
-            NumberAnimation {
-                duration: 150
-            }
-        }
     }
     PlasmaCore.FrameSvgItem {
         imagePath: "widgets/tooltip"
