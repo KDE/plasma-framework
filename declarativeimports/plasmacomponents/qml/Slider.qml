@@ -26,37 +26,61 @@ Imports:
         org.kde.plasma.core
 
 Description:
-        A simple slider.
+        An interactive slider component with Plasma look and feel.
 
 Properties:
-        alias stepSize: range.stepSize
-        Sets the step with which the slider will move.
+        int stepSize: range.stepSize
+        This property holds in how many steps the slider value can be selected within it's
+    range value.
 
-        alias minimumValue:
-        TODO
-        alias maximumValue:
-        TODO
-        alias value:
-        TODO
+        real minimumValue:
+    	This property holds the minimun value that the slider's value can assume.
+	The default value is 0.
 
-        int orientation:
-        Sets the orientation for the slider.
+        real maximumValue:
+	    This property holds the maximum value that the slider's value can assume.
+	The default value is 1.
 
-        alias pressed:
-        If it is true then the slider has been pressed.
+        real value:
+        This property holds the value selected inside the minimun to maximum range of value.
+	The default value is 0.
+
+        enumeration orientation:
+   	    This property holds the orientation for this component.
+	The orientation can assume Qt.Horizontal and Qt.Vertical values.
+	The default is Qt.Horizontal.
+
+        bool pressed:
+   	    This property holds if the Slider is being pressed or not.
+	Read-only.
 
         bool valueIndicatorVisible:
+        This property holds if a value indicator element will be shown while is dragged or not.
+    ! The value indicator is not implemented in the Plasma Slider.
+    The default value is false.
 
         string valueIndicatorText:
+    This property holds the text being displayed in the value indicator.
+    ! The value indicator is not implemented in the Plasma Slider.
+    Read-only.
+
+Plasma Properties:
 
         bool animated:
-        Sets if the slider will animate or not.
+        This property holds if the slider will animate or not when other point is clicked,
+    and the slider handler is not being dragged.
+    The default value is false.
 
         alias inverted:
+        This property holds if the slider visualizations has an inverted direction.
+    The default value is false.
 
         bool updateValueWhileDragging:
+        This property holds if the value is updated while dragging or if it applies only
+    when the slider's handler is released.
 
         real handleSize:
+        This property holds the size of the Slider's handle.
 **/
 
 import QtQuick 1.0
