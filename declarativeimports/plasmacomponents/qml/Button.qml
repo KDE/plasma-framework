@@ -28,34 +28,43 @@ Imports:
         QtQuick 1.0
 
 Description:
-        Just a simple button which is using the plasma theme.
+        A simple button, with optional label and icon which uses the plasma theme.
+	This button component can also be used as a checkable button by using the checkable
+	and checked properties for that.
         Plasma theme is the theme which changes via the systemsetting-workspace  appearence
         -desktop theme.
 
 Properties:
-
         bool checked:
-        Returns if the Button is checked or not.
+        This property holds wheter this button is checked or not.
+	The button must be in the checkable state for enable users check or uncheck it.
+	The default value is false.
+	See also checkable property.
 
         bool checkable:
-        Set if the button will be checkable or not.
+        This property holds if the button is acting like a checkable button or not.
+	The default value is false.
 
-        alias pressed:
-        Returns if the button is pressed or not.
+        bool pressed:
+        This property holds if the button is pressed or not.
+	Read-only.
 
-        alias text:
-        Sets the text for the button.
-        For example,the ok button has text 'ok'
+        string text:
+        This property holds the text label for the button.
+        For example,the ok button has text 'ok'.
+	The default value for this property is an empty string.
 
-        alias iconSource:
-        TODO needs to be filled
+        url iconSource:
+        This property holds the source url for the Button's icon.
+	The default value is an empty url, which displays no icon.
 
-        alias font:
-        Sets the font for the button.
+        font font:
+        This property holds the font used by the button label.
+	See also Qt documentation for font type.
 
 Signals:
         onClicked:
-        The signal is emited when button is clicked.
+        This handler is called when there is a click.
 **/
 import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
