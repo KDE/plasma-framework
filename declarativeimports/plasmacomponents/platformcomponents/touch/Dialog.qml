@@ -114,7 +114,7 @@ Item {
         mainItem: Item {
             id: mainItem
             width: theme.defaultFont.mSize.width * 40
-            height: titleBar.childrenRect.height + contentItem.childrenRect.height + buttonItem.childrenRect.height
+            height: titleBar.childrenRect.height + contentItem.childrenRect.height + buttonItem.childrenRect.height + 8
 
             // Consume all key events that are not processed by children
             Keys.onPressed: event.accepted = true
@@ -152,7 +152,7 @@ Item {
                     left: parent.left
                     right: parent.right
                     bottom: parent.bottom
-                    bottomMargin: 4
+                    bottomMargin: 8
                 }
             }
         }
