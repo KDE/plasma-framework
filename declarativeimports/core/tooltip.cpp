@@ -92,12 +92,12 @@ void ToolTipProxy::syncTarget()
         return;
     }
 
-    if (!m_declarativeItemContainer) {
-	    m_declarativeItemContainer = QWeakPointer<DeclarativeItemContainer>(new DeclarativeItemContainer());
+    if (!m_declarativeItemContainer && scene) {
+        m_declarativeItemContainer = QWeakPointer<DeclarativeItemContainer>(new DeclarativeItemContainer());
         m_declarativeItemContainer.data()->setObjectName("DIContainer");
         scene->addItem(m_declarativeItemContainer.data());
-    } 
-    
+    }
+
     if (m_declarativeItemContainer) {
         m_target.data()->setObjectName("Original Item");
         m_declarativeItemContainer.data()->setDeclarativeItem(item, false);
@@ -105,7 +105,7 @@ void ToolTipProxy::syncTarget()
         m_declarativeItemContainer.data()->setParentItem(m_target.data());
         m_widget = m_declarativeItemContainer.data();
         emit targetChanged();
-	}
+    }
 }
 
 QString ToolTipProxy::mainText() const
