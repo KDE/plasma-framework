@@ -165,10 +165,12 @@ void PopupApplet::setGraphicsWidget(QGraphicsWidget *graphicsWidget)
     if (d->graphicsWidget) {
         if (d->dialogPtr) {
             d->dialogPtr.data()->setGraphicsWidget(graphicsWidget);
-        } else {
+        } else if (layout())  {
             QGraphicsLinearLayout *lay = static_cast<QGraphicsLinearLayout *>(layout());
             lay->removeAt(0);
-            lay->addItem(graphicsWidget);
+            if (graphicsWidget) {
+                lay->addItem(graphicsWidget);
+            }
         }
     }
 
