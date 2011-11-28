@@ -681,6 +681,7 @@ void DataEnginePrivate::sourceDestroyed(QObject *object)
     while (it != sources.end()) {
         if (it.value() == object) {
             sources.erase(it);
+            emit q->sourceRemoved(object->objectName());
             break;
         }
         ++it;
