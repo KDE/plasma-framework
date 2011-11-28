@@ -60,12 +60,7 @@ Item {
                    && button.parent.exclusive
         }
 
-        function pressButton()
-        {
-            userPressed = true
-        }
-
-        function releaseButton()
+        function clickButton()
         {
             userPressed = false
             if (!button.enabled) {
@@ -81,12 +76,13 @@ Item {
         }
     }
 
-    Keys.onSpacePressed: internal.pressButton()
-    Keys.onReturnPressed: internal.pressButton()
+    Keys.onSpacePressed: internal.userPressed = true
+    Keys.onReturnPressed: internal.userPressed = true
     Keys.onReleased: {
+        internal.userPressed = false
         if (event.key == Qt.Key_Space ||
             event.key == Qt.Key_Return)
-            internal.releaseButton();
+            internal.clickButton();
     }
 
     ButtonShadow {
@@ -210,8 +206,9 @@ Item {
 
         anchors.fill: parent
         hoverEnabled: true
-        onPressed: internal.pressButton()
-        onReleased: internal.releaseButton()
-        onCanceled: internal.releaseButton()
+        onPressed: internal.userPressed = true
+        onReleased: internal.userPressed = false
+        onCanceled: internal.userPressed = false
+        onClicked: internal.clickButton()
     }
 }

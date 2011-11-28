@@ -59,12 +59,13 @@ Item {
     //     disabled buttons
     opacity: enabled ? 1.0 : 0.5
 
-    Keys.onSpacePressed: internal.pressButton()
-    Keys.onReturnPressed: internal.pressButton()
+    Keys.onSpacePressed: internal.userPressed = true
+    Keys.onReturnPressed: internal.userPressed = true
     Keys.onReleased: {
+        internal.userPressed = false
         if (event.key == Qt.Key_Space ||
             event.key == Qt.Key_Return)
-            internal.releaseButton()
+            internal.clickButton()
     }
 
     onActiveFocusChanged: {
@@ -81,14 +82,8 @@ Item {
         id: internal
         property bool userPressed: false
 
-        function pressButton()
+        function clickButton()
         {
-            userPressed = true
-        }
-
-        function releaseButton()
-        {
-            userPressed = false
             if (!button.enabled) {
                 return
             }
@@ -186,9 +181,9 @@ Item {
         anchors.fill: parent
         hoverEnabled: true
 
-        onPressed: internal.pressButton();
-
-        onReleased: internal.releaseButton();
+        onPressed: internal.userPressed = true
+        onReleased: internal.userPressed = false
+        onClicked: internal.clickButton()
 
         onEntered: {
             if (!flat) {
