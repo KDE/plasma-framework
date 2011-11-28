@@ -26,8 +26,8 @@ Item {
 
     // Commmon API
     property bool flat: true
-    property bool checked: false
-    property bool checkable: false
+    property bool checked: defaultAction ? defaultAction.checked : false
+    property bool checkable: defaultAction ? defaultAction.checkable : false
     property alias pressed: mouse.pressed
     property alias text: label.text
     property alias iconSource: icon.source
@@ -35,11 +35,16 @@ Item {
 
     signal clicked()
 
+    // Plasma extensiuons
+    property QtObject defaultAction
 
     onFlatChanged: {
-        delegate.opacity = 1
+        if (!flat) {
+            delegate.opacity = 1
+        }
     }
 
+    enabled: defaultAction==undefined||defaultAction.enabled
 
     implicitWidth: {
         if (label.paintedWidth == 0) {
@@ -88,12 +93,18 @@ Item {
                 return
             }
 
-            if (button.checkable) {
+            if (defaultAction && defaultAction.checkable) {
+                defaultAction.checked = !defaultAction.checked
+            } else if (button.checkable) {
                 button.checked = !button.checked
             }
 
             button.clicked()
             button.forceActiveFocus()
+
+            if (defaultAction) {
+                defaultAction.trigger()
+            }
         }
     }
 
@@ -142,10 +153,10 @@ Item {
         Item {
             anchors.fill: parent
             property QtObject margins: QtObject {
-                property int left: 16
-                property int top: 16
-                property int right: 16
-                property int bottom: 16
+                property int left: 8
+                property int top: 8
+                property int right: 8
+                property int bottom: 8
             }
             RoundShadow {
                 anchors.fill: parent
@@ -175,6 +186,10 @@ Item {
             rightMargin: delegate.margins.right
             bottomMargin: delegate.margins.bottom
         }
+        scale: internal.userPressed ? 0.9 : 1
+        Behavior on scale {
+            PropertyAnimation { duration: 100 }
+        }
 
         IconLoader {
             id: icon
@@ -184,6 +199,8 @@ Item {
                 left: label.text ? parent.left : undefined
                 horizontalCenter: label.text ? undefined : parent.horizontalCenter
             }
+            width: label.text ? implicitWidth : roundToStandardSize(parent.width)
+            height: width
         }
 
         Text {

@@ -127,6 +127,10 @@ Item {
     Item {
         id: buttonContent
         state: (internal.userPressed || checked) ? "pressed" : "normal"
+        scale: state == "pressed" ? 0.9 : 1
+        Behavior on scale {
+            PropertyAnimation { duration: 100 }
+        }
 
         states: [
             State { name: "normal" },
