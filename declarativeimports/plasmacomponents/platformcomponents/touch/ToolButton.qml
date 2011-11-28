@@ -26,8 +26,8 @@ Item {
 
     // Commmon API
     property bool flat: true
-    property bool checked: false
-    property bool checkable: false
+    property bool checked: defaultAction ? defaultAction.checked : false
+    property bool checkable: defaultAction ? defaultAction.checkable : false
     property alias pressed: mouse.pressed
     property alias text: label.text
     property alias iconSource: icon.source
@@ -35,11 +35,16 @@ Item {
 
     signal clicked()
 
+    // Plasma extensiuons
+    property QtObject defaultAction
 
     onFlatChanged: {
-        delegate.opacity = 1
+        if (!flat) {
+            delegate.opacity = 1
+        }
     }
 
+    enabled: defaultAction==undefined||defaultAction.enabled
 
     implicitWidth: {
         if (label.paintedWidth == 0) {
@@ -54,46 +59,37 @@ Item {
     //     disabled buttons
     opacity: enabled ? 1.0 : 0.5
 
-    Keys.onSpacePressed: internal.pressButton()
-    Keys.onReturnPressed: internal.pressButton()
+    Keys.onSpacePressed: internal.userPressed = true
+    Keys.onReturnPressed: internal.userPressed = true
     Keys.onReleased: {
+        internal.userPressed = false
         if (event.key == Qt.Key_Space ||
             event.key == Qt.Key_Return)
-            internal.releaseButton()
-    }
-
-    onActiveFocusChanged: {
-        if (activeFocus) {
-            shadow.state = "focus"
-        } else if (checked) {
-            shadow.state = "hidden"
-        } else {
-            shadow.state = "shadow"
-        }
+            internal.clickButton()
     }
 
     QtObject {
         id: internal
         property bool userPressed: false
 
-        function pressButton()
+        function clickButton()
         {
-            userPressed = true
-        }
-
-        function releaseButton()
-        {
-            userPressed = false
             if (!button.enabled) {
                 return
             }
 
-            if (button.checkable) {
+            if (defaultAction && defaultAction.checkable) {
+                defaultAction.checked = !defaultAction.checked
+            } else if (button.checkable) {
                 button.checked = !button.checked
             }
 
             button.clicked()
             button.forceActiveFocus()
+
+            if (defaultAction) {
+                defaultAction.trigger()
+            }
         }
     }
 
@@ -142,10 +138,10 @@ Item {
         Item {
             anchors.fill: parent
             property QtObject margins: QtObject {
-                property int left: 16
-                property int top: 16
-                property int right: 16
-                property int bottom: 16
+                property int left: 8
+                property int top: 8
+                property int right: 8
+                property int bottom: 8
             }
             RoundShadow {
                 anchors.fill: parent
@@ -175,6 +171,10 @@ Item {
             rightMargin: delegate.margins.right
             bottomMargin: delegate.margins.bottom
         }
+        scale: internal.userPressed ? 0.9 : 1
+        Behavior on scale {
+            PropertyAnimation { duration: 100 }
+        }
 
         IconLoader {
             id: icon
@@ -184,6 +184,8 @@ Item {
                 left: label.text ? parent.left : undefined
                 horizontalCenter: label.text ? undefined : parent.horizontalCenter
             }
+            width: label.text ? implicitWidth : roundToStandardSize(parent.width)
+            height: width
         }
 
         Text {
@@ -222,26 +224,9 @@ Item {
         anchors.fill: parent
         hoverEnabled: true
 
-        onPressed: internal.pressButton();
-
-        onReleased: internal.releaseButton();
-
-        onEntered: {
-            if (!flat) {
-                shadow.state = "hover"
-            }
-        }
-        onExited: {
-            if (!flat) {
-                if (button.activeFocus) {
-                    shadow.state = "focus"
-                } else if (checked) {
-                    shadow.state = "hidden"
-                } else {
-                    shadow.state = "shadow"
-                }
-            }
-        }
+        onPressed: internal.userPressed = true
+        onReleased: internal.userPressed = false
+        onClicked: internal.clickButton()
     }
 }
 
