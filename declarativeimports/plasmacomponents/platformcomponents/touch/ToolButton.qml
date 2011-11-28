@@ -67,16 +67,6 @@ Item {
             internal.releaseButton()
     }
 
-    onActiveFocusChanged: {
-        if (activeFocus) {
-            shadow.state = "focus"
-        } else if (checked) {
-            shadow.state = "hidden"
-        } else {
-            shadow.state = "shadow"
-        }
-    }
-
     QtObject {
         id: internal
         property bool userPressed: false
@@ -242,23 +232,6 @@ Item {
         onPressed: internal.pressButton();
 
         onReleased: internal.releaseButton();
-
-        onEntered: {
-            if (!flat) {
-                shadow.state = "hover"
-            }
-        }
-        onExited: {
-            if (!flat) {
-                if (button.activeFocus) {
-                    shadow.state = "focus"
-                } else if (checked) {
-                    shadow.state = "hidden"
-                } else {
-                    shadow.state = "shadow"
-                }
-            }
-        }
     }
 }
 
