@@ -121,17 +121,23 @@ Item {
     }
 
     onInitialPageChanged: {
+        if (!internal.completed) {
+            return
+        }
+
         if (initialPage) {
-            if (depth == 0)
+            if (depth == 0) {
                 push(initialPage, null, true)
-            else if (depth == 1)
+            } else if (depth == 1) {
                 replace(initialPage, null, true)
-            else
+            } else {
                 console.log("Cannot update PageStack.initialPage")
+            }
         }
     }
 
     Component.onCompleted: {
+        internal.completed = true
         if (initialPage && depth == 0)
             push(initialPage, null, true)
     }
@@ -141,6 +147,9 @@ Item {
 
         // The number of ongoing transitions.
         property int ongoingTransitionCount: 0
+
+        //FIXME: there should be a way to access to theh without storing it in an ugly way
+        property bool completed: false
 
         // Sets the page status.
         function setPageStatus(page, status)
