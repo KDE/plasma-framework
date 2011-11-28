@@ -84,9 +84,10 @@ Item {
                 svg: svgIcon
                 elementId: root.source
                 anchors.fill: parent
+                smooth: true
             }
         }
-        
+
         Component {
             id: iconComponent
 
