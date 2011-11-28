@@ -23,7 +23,7 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 Item{
     id: toolBar
     width: parent.width
-    height: (tools && enabled) ? theme.defaultFont.mSize.height*2 + frameSvg.margins.top + frameSvg.margins.bottom : 0
+    height: (tools && enabled) ? tools.height + frameSvg.margins.top + frameSvg.margins.bottom : 0
     visible: height > 0
     Behavior on height {
         PropertyAnimation { 
