@@ -331,10 +331,10 @@ void DataEngine::removeAllSources()
     while (it.hasNext()) {
         it.next();
         Plasma::DataContainer *s = it.value();
-        it.remove();
         s->disconnect(this);
         s->deleteLater();
         emit sourceRemoved(it.key());
+        it.remove();
     }
 }
 
