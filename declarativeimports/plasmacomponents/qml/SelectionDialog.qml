@@ -79,7 +79,7 @@ CommonDialog {
 
     content: Item {
         id: contentItem
-
+        property alias filterText: filterField.filterText
         implicitWidth: theme.defaultFont.mSize.width * 40
         height: theme.defaultFont.mSize.height * 12
 
@@ -132,7 +132,7 @@ CommonDialog {
             flickableItem: listView
             visible: listView.contentHeight > contentItem.height
             //platformInverted: root.platformInverted
-            anchors { top: clipItem.top; right: clipItem.right }
+            anchors { top: contentItem.top; right: contentItem.right }
         }
     }
 
