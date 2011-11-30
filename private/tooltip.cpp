@@ -56,6 +56,9 @@ public:
           m_toolTip(parent),
           m_document(new QTextDocument(this))
     {
+        QTextOption option = m_document->defaultTextOption();
+        option.setWrapMode(QTextOption::WordWrap);
+        m_document->setDefaultTextOption(option);
     }
 
     void setStyleSheet(const QString &css)
@@ -66,8 +69,13 @@ public:
     void setContent(const ToolTipContent &data)
     {
         QString html;
-        if (!data.mainText().isEmpty()) {
-            html.append("<div><b>" + data.mainText() + "</b></div>");
+        QString mainText = data.mainText();
+        if (!mainText.isEmpty()) {
+            if (mainText.size() < 50) {
+                // don't let short texts wrap on us!
+                mainText = mainText.replace(" ", "&nbsp;");
+            }
+            html.append("<div align=\"center\"><b>" + mainText + "</b></div>");
         }
         html.append(data.subText());
 
@@ -76,6 +84,8 @@ public:
         data.registerResources(m_document);
         if (!html.isEmpty()) {
             m_document->setHtml("<p>" + html + "</p>");
+        } else {
+            m_document->clear();
         }
         m_document->adjustSize();
 
@@ -179,8 +189,8 @@ ToolTip::ToolTip(QWidget *parent)
     d->preview = new WindowPreview(this);
     d->text = new TipTextWidget(this);
     d->imageLabel = new QLabel(this);
-    d->imageLabel->setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
+    d->imageLabel->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     d->animation = new QPropertyAnimation(this, "pos", this);
     d->animation->setEasingCurve(QEasingCurve::InOutQuad);
     d->animation->setDuration(250);
@@ -198,7 +208,7 @@ ToolTip::ToolTip(QWidget *parent)
 
     QHBoxLayout *iconTextHBoxLayout = new QHBoxLayout;
     iconTextHBoxLayout->addWidget(d->imageLabel);
-    iconTextHBoxLayout->setAlignment(d->imageLabel, Qt::AlignCenter);
+    iconTextHBoxLayout->setAlignment(d->imageLabel, Qt::AlignTop | Qt::AlignHCenter);
     iconTextHBoxLayout->addWidget(d->text);
     iconTextHBoxLayout->setAlignment(d->text, Qt::AlignLeft | Qt::AlignVCenter);
     iconTextHBoxLayout->setStretchFactor(d->text, 1);
