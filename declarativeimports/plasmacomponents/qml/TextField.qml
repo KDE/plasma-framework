@@ -155,6 +155,11 @@ Item {
         color: theme.textColor
         enabled: textField.enabled
         clip: true
+        onActiveFocusChanged: {
+            if (!textField.activeFocus) {
+                textInput.closeSoftwareInputPanel()
+            }
+        }
 
         // Proxying keys events  is not required by the
         //     common API but is desired in the plasma API.

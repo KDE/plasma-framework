@@ -187,6 +187,11 @@ Item {
                 visible: textEdit.text == "" && !textArea.activeFocus
                 opacity: 0.5
             }
+            onActiveFocusChanged: {
+                if (!textField.activeFocus) {
+                    textInput.closeSoftwareInputPanel()
+                }
+            }
         }
     }
 
