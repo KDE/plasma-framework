@@ -99,7 +99,7 @@ void slideWindow(WId id, Plasma::Location location, int offset)
 #ifdef Q_WS_X11
     Display *dpy = QX11Info::display();
     Atom atom = XInternAtom( dpy, "_KDE_SLIDE", False );
-    QVarLengthArray<long, 1024> data(2);
+    QVarLengthArray<long, 2> data(2);
 
     data[0] = offset;
 
@@ -133,7 +133,7 @@ void slideWindow(QWidget *widget, Plasma::Location location)
 #ifdef Q_WS_X11
     Display *dpy = QX11Info::display();
     Atom atom = XInternAtom( dpy, "_KDE_SLIDE", False );
-    QVarLengthArray<long, 1024> data(2);
+    QVarLengthArray<long, 2> data(2);
 
     switch (location) {
     case LeftEdge:
@@ -197,7 +197,8 @@ void showWindowThumbnails(WId parent, const QList<WId> &windows, const QList<QRe
 
     int numWindows = windows.size();
 
-    QVarLengthArray<long, 1024> data(1 + (6 * numWindows));
+    // 64 is enough for 10 windows and is a nice base 2 number
+    QVarLengthArray<long, 64> data(1 + (6 * numWindows));
     data[0] = numWindows;
 
     QList<WId>::const_iterator windowsIt;
@@ -252,7 +253,7 @@ void presentWindows(WId controller, const QList<WId> &ids)
 void presentWindows(WId controller, int desktop)
 {
 #ifdef Q_WS_X11
-    QVarLengthArray<long, 32> data(1);
+    QVarLengthArray<long, 1> data(1);
     data[0] = desktop;
     Display *dpy = QX11Info::display();
     Atom atom = XInternAtom(dpy, "_KDE_PRESENT_WINDOWS_DESKTOP", False);
@@ -298,12 +299,11 @@ void overrideShadow(WId window, bool override)
 #ifdef Q_WS_X11
     Display *dpy = QX11Info::display();
     Atom atom = XInternAtom( dpy, "_KDE_SHADOW_OVERRIDE", False );
-    QVarLengthArray<long, 1024> data(1);
-    data[0] = 1;
-
     if (!override) {
         XDeleteProperty(dpy, window, atom);
     } else {
+        QVarLengthArray<long, 1> data(1);
+        data[0] = 1;
         XChangeProperty(dpy, window, atom, atom, 32, PropModeReplace,
                         reinterpret_cast<unsigned char *>(data.data()), data.size());
     }
