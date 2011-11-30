@@ -163,7 +163,12 @@ void ToolTipProxy::updateToolTip()
     Plasma::ToolTipContent data;
     data.setMainText(m_mainText);
     data.setSubText(m_subText);
-    data.setImage(KIcon(m_image).pixmap(IconSize(KIconLoader::Desktop)));
+    if (!m_image.isEmpty()) {
+        KIcon icon(m_image);
+        if (!icon.isNull()) {
+            data.setImage(icon.pixmap(IconSize(KIconLoader::Desktop)));
+        }
+    }
     Plasma::ToolTipManager::self()->setContent(m_widget, data);
 }
 
