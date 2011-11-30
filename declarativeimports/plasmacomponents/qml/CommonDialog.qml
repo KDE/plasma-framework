@@ -107,7 +107,7 @@ Dialog {
         LayoutMirroring.enabled: privateCloseIcon ? false : undefined
         LayoutMirroring.childrenInherit: true
 
-        Item {
+        Column {
             id: titleLayoutHelper // needed to make the text mirror correctly
 
             anchors {
@@ -123,11 +123,7 @@ Dialog {
 
             Label {
                 id: titleAreaText
-
                 LayoutMirroring.enabled: root.LayoutMirroring.enabled
-
-                anchors.fill: parent
-
                 elide: Text.ElideRight
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
