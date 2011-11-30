@@ -300,7 +300,12 @@ void ToolTip::setContent(QObject *tipper, const ToolTipContent &data)
 {
     //reset our size
     d->text->setContent(data);
-    d->imageLabel->setPixmap(data.image());
+    if (data.image().isNull()) {
+        d->imageLabel->hide();
+    } else {
+        d->imageLabel->show();
+        d->imageLabel->setPixmap(data.image());
+    }
 
     if (data.highlightWindows() && !data.windowsToPreview().isEmpty()) {
         WindowEffects::highlightWindows(winId(), QList<WId>() << winId() << data.windowsToPreview());
