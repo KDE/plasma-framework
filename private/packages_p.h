@@ -29,7 +29,11 @@ namespace Plasma
 
 class ChangeableMainScriptPackage : public PackageStructure
 {
+public:
+    void initPackage(Package *package);
+
 protected:
+    virtual QString findMainScript(Package *package);
     void pathChanged(Package *package);
 };
 
@@ -37,6 +41,9 @@ class PlasmoidPackage : public ChangeableMainScriptPackage
 {
 public:
     void initPackage(Package *package);
+
+protected:
+    QString findMainScript(Package *package);
 };
 
 class DataEnginePackage : public ChangeableMainScriptPackage
@@ -82,7 +89,7 @@ private:
     Wallpaper::ResizeMethod m_resizeMethod;
 };
 
-class ContainmentActionsPackage : public PackageStructure
+class ContainmentActionsPackage : public ChangeableMainScriptPackage
 {
 public:
     void initPackage(Package *package);

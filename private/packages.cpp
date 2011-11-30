@@ -36,19 +36,52 @@
 namespace Plasma
 {
 
+void ChangeableMainScriptPackage::initPackage(Package *package)
+{
+    package->addFileDefinition("mainscript", "code/main", i18n("Main Script File"));
+    package->setRequired("mainscript", true);
+}
+
+QString ChangeableMainScriptPackage::findMainScript(Package *package)
+{
+    Q_UNUSED(package)
+    return QString();
+}
+
 void ChangeableMainScriptPackage::pathChanged(Package *package)
 {
     KDesktopFile config(package->path() + "/metadata.desktop");
     KConfigGroup cg = config.desktopGroup();
     QString mainScript = cg.readEntry("X-Plasma-MainScript", QString());
+    if (mainScript.isEmpty()) {
+        mainScript = findMainScript(package);
+
+        if (mainScript.isEmpty()) {
+            mainScript = package->path() + "/code/main.js";
+            if (!QFile::exists(mainScript)) {
+                mainScript.clear();
+            }
+        }
+    }
+
     if (!mainScript.isEmpty()) {
         package->addFileDefinition("mainscript", mainScript, i18n("Main Script File"));
-        package->setRequired("mainscript", true);
     }
+}
+
+QString PlasmoidPackage::findMainScript(Package *package)
+{
+    const QString mainScript = package->path() + "/ui/main.qml";
+    if (QFile::exists(mainScript)) {
+        return mainScript;
+    }
+
+    return QString();
 }
 
 void PlasmoidPackage::initPackage(Package *package)
 {
+    ChangeableMainScriptPackage::initPackage(package);
     QString pathsString(getenv("PLASMA_CUSTOM_PREFIX_PATHS"));
     if (!pathsString.isEmpty()) {
         QStringList prefixPaths(pathsString.split(":"));
@@ -84,14 +117,13 @@ void PlasmoidPackage::initPackage(Package *package)
 
     package->addFileDefinition("mainconfigui", "ui/config.ui", i18n("Main Config UI File"));
     package->addFileDefinition("mainconfigxml", "config/main.xml", i18n("Configuration XML file"));
-    package->addFileDefinition("mainscript", "code/main", i18n("Main Script File"));
     package->addFileDefinition("defaultconfig", "config/default-configrc", i18n("Default configuration"));
     package->addDirectoryDefinition("animations", "animations", i18n("Animation scripts"));
-    package->setRequired("mainscript", true);
 }
 
 void DataEnginePackage::initPackage(Package *package)
 {
+    ChangeableMainScriptPackage::initPackage(package);
     package->setServicePrefix("plasma-dataengine-");
     package->setDefaultPackageRoot("plasma/dataengines/");
 
@@ -106,13 +138,11 @@ void DataEnginePackage::initPackage(Package *package)
     package->setMimeTypes("services", mimetypes);
 
     package->addDirectoryDefinition("translations", "locale", i18n("Translations"));
-
-    package->addFileDefinition("mainscript", "code/main", i18n("Main Script File"));
-    package->setRequired("mainscript", true);
 }
 
 void RunnerPackage::initPackage(Package *package)
 {
+    ChangeableMainScriptPackage::initPackage(package);
     package->setServicePrefix("plasma-runner-");
     package->setDefaultPackageRoot("plasma/runners/");
 
@@ -124,9 +154,6 @@ void RunnerPackage::initPackage(Package *package)
     package->setMimeTypes("scripts", mimetypes);
 
     package->addDirectoryDefinition("translations", "locale", i18n("Translations"));
-
-    package->addFileDefinition("mainscript", "code/main", i18n("Main Script File"));
-    package->setRequired("mainscript", true);
 }
 
 void ThemePackage::initPackage(Package *package)
@@ -331,8 +358,8 @@ float WallpaperPackage::distance(const QSize& size, const QSize& desired,
 
 void ContainmentActionsPackage::initPackage(Package *package)
 {
+    ChangeableMainScriptPackage::initPackage(package);
     package->setDefaultPackageRoot("plasma/containmentactions/");
-    package->addFileDefinition("mainscript", "code/main", i18n("Main Script File"));
 }
 
 void GenericPackage::initPackage(Package *package)
