@@ -130,13 +130,6 @@ void DataEngineScript::removeData(const QString &source, const QString &key)
     }
 }
 
-void DataEngineScript::setMaxSourceCount(uint limit)
-{
-    if (d->dataEngine) {
-        d->dataEngine->setMaxSourceCount(limit);
-    }
-}
-
 void DataEngineScript::setMinimumPollingInterval(int minimumMs)
 {
     if (d->dataEngine) {

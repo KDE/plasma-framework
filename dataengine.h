@@ -216,14 +216,6 @@ NoAlignment) const;
         bool isEmpty() const;
 
         /**
-         * Returns the maximum number of sources this DataEngine will have
-         * at any given time.
-         *
-         * @return the maximum number of sources; zero means no limit.
-         */
-        uint maxSourceCount() const;
-
-        /**
          * @return the name of the icon for this data engine; and empty string
          *         is returned if there is no associated icon.
          **/
@@ -365,15 +357,6 @@ NoAlignment) const;
          * @param source the DataContainer to add to the DataEngine
          **/
         void addSource(DataContainer *source);
-
-        /**
-         * Sets an upper limit on the number of data sources to keep in this engine.
-         * If the limit is exceeded, then the oldest data source, as defined by last
-         * update, is dropped.
-         *
-         * @param limit the maximum number of sources to keep active
-         **/
-        void setMaxSourceCount(uint limit);
 
         /**
          * Sets the minimum amount of time, in milliseconds, that must pass between

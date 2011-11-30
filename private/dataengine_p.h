@@ -20,7 +20,6 @@
 #ifndef DATAENGINE_P_H
 #define DATAENGINE_P_H
 
-#include <QQueue>
 #include <QTime>
 
 #include <kplugininfo.h>
@@ -41,7 +40,6 @@ class DataEnginePrivate
         void connectSource(DataContainer *s, QObject *visualization, uint pollingInterval,
                            Plasma::IntervalAlignment align, bool immediateCall = true);
         DataContainer *requestSource(const QString &sourceName, bool *newSource = 0);
-        void trimQueue();
         void internalUpdateSource(DataContainer*);
         void setupScriptSupport();
 
@@ -109,9 +107,7 @@ class DataEnginePrivate
         int minPollingInterval;
         QTime updateTimestamp;
         DataEngine::SourceDict sources;
-        QQueue<DataContainer*> sourceQueue;
         QString icon;
-        uint limit;
         bool valid;
         DataEngineScript *script;
         QString engineName;

@@ -130,7 +130,6 @@ protected:
 
     void removeAllData(const QString &source);
     void removeData(const QString &source, const QString &key);
-    void setMaxSourceCount(uint limit);
     void setMinimumPollingInterval(int minimumMs);
     int  minimumPollingInterval() const;
     void setPollingInterval(uint frequency);

@@ -263,26 +263,6 @@ void DataEngine::addSource(DataContainer *source)
     scheduleSourcesUpdated();
 }
 
-void DataEngine::setMaxSourceCount(uint limit)
-{
-    if (d->limit == limit) {
-        return;
-    }
-
-    d->limit = limit;
-
-    if (d->limit > 0) {
-        d->trimQueue();
-    } else {
-        d->sourceQueue.clear();
-    }
-}
-
-uint DataEngine::maxSourceCount() const
-{
-    return d->limit;
-}
-
 void DataEngine::setMinimumPollingInterval(int minimumMs)
 {
     d->minPollingInterval = minimumMs;
@@ -308,19 +288,6 @@ void DataEngine::removeSource(const QString &source)
     SourceDict::iterator it = d->sources.find(source);
     if (it != d->sources.end()) {
         DataContainer *s = it.value();
-
-        // remove it from the limit queue if we're keeping one
-        if (d->limit > 0) {
-            QQueue<DataContainer*>::iterator it = d->sourceQueue.begin();
-            while (it != d->sourceQueue.end()) {
-                if (*it == s) {
-                    d->sourceQueue.erase(it);
-                    break;
-                }
-                ++it;
-            }
-        }
-
         s->d->store();
         s->disconnect(this);
         s->deleteLater();
@@ -519,7 +486,6 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info)
       checkSourcesTimerId(0),
       updateTimerId(0),
       minPollingInterval(-1),
-      limit(0),
       valid(true),
       script(0),
       package(0),
@@ -616,17 +582,6 @@ DataContainer *DataEnginePrivate::source(const QString &sourceName, bool createW
     DataEngine::SourceDict::const_iterator it = sources.constFind(sourceName);
     if (it != sources.constEnd()) {
         DataContainer *s = it.value();
-        if (limit > 0) {
-            QQueue<DataContainer*>::iterator it = sourceQueue.begin();
-            while (it != sourceQueue.end()) {
-                if (*it == s) {
-                    sourceQueue.erase(it);
-                    break;
-                }
-                ++it;
-            }
-            sourceQueue.enqueue(s);
-        }
         return s;
     }
 
@@ -642,10 +597,6 @@ DataContainer *DataEnginePrivate::source(const QString &sourceName, bool createW
     QObject::connect(s, SIGNAL(updateRequested(DataContainer*)),
                      q, SLOT(internalUpdateSource(DataContainer*)));
 
-    if (limit > 0) {
-        trimQueue();
-        sourceQueue.enqueue(s);
-    }
     return s;
 }
 
@@ -731,16 +682,6 @@ DataContainer *DataEnginePrivate::requestSource(const QString &sourceName, bool 
     }
 
     return s;
-}
-
-void DataEnginePrivate::trimQueue()
-{
-    uint queueCount = sourceQueue.count();
-    while (queueCount >= limit && !sourceQueue.isEmpty()) {
-        DataContainer *punted = sourceQueue.dequeue();
-        q->removeSource(punted->objectName());
-        queueCount = sourceQueue.count();
-    }
 }
 
 // put all setup routines for script here. at this point we can assume that
