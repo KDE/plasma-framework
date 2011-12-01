@@ -20,6 +20,7 @@
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.qtextracomponents 0.1
+import "EditBubble.js" as EditBubbleHelper
 
 Item {
     id: textField
@@ -188,51 +189,28 @@ Item {
         MouseArea {
             anchors.fill: parent
             onClicked: {
-                //print("clear button clicked");
                 textInput.text = "";
                 textInput.forceActiveFocus();
                 editBubble.state = "collapsed"
             }
-            //Rectangle { anchors.fill: parent; color: "green"; opacity: 0.3; }
         }
     }
 
     MouseEventListener {
         id: mouseEventListener
         anchors.fill: parent
-        //onPressed: print(" MouseEventListener Pressed");
         onPressAndHold: {
-            print(" *** MouseEventListener PressAndHold");
-            placeEditBubble(mouse);
+            EditBubbleHelper.placeEditBubble(mouse);
             editBubble.state  = (textInput.activeFocus && (textInput.selectedText != "" || textInput.canPaste)) ? "expanded" : "collapsed";
         }
         onPositionChanged: {
-            placeEditBubble(mouse);
+            EditBubbleHelper.placeEditBubble(mouse);
         }
     }
 
-    function placeEditBubble(mouse) {
-        // Find the root item, then map our cursor position to it
-        // in order to check if the edit bubble could end up off-screen
-        var rootItem = parent;
-        while (rootItem.parent) {
-            rootItem = rootItem.parent;
-        }
-        var distanceToTop = mouseEventListener.mapToItem(rootItem, mouse.x, mouse.y);
-        print( "   distanceToTop: " + distanceToTop.y);
-        if (distanceToTop.y > editBubble.height) {
-            editBubble.x = mouse.x-(editBubble.width/2)
-            editBubble.y = mouse.y-editBubble.height-8
-        } else {
-            editBubble.x = mouse.x-(editBubble.width/2)
-            editBubble.y = mouse.y+8
-        }
-
-    }
     onActiveFocusChanged: {
         if (!activeFocus) {
             editBubble.state = "collapsed";
-            //print("Hiding...");
         }
     }
 }

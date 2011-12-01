@@ -25,6 +25,7 @@ PlasmaCore.FrameSvgItem {
     id: editBubble
     objectName: "editBubble"
     property int iconSize: 32;
+
     imagePath: "dialogs/background"
     width: (iconSize*2) + iconSize
     height: iconSize*2
@@ -49,7 +50,7 @@ PlasmaCore.FrameSvgItem {
             enabled: textInput.canPaste
             MouseArea {
                 anchors.fill: parent;
-                onClicked: textField.paste();
+                onClicked: { textField.paste(); editBubble.state = "collapsed"; }
                 onPressed: PropertyAnimation {  target: pasteIcon; properties: "scale";
                                                 from: 1.0; to: 0.9;
                                                 duration: 175; easing.type: Easing.OutExpo; }
@@ -66,7 +67,7 @@ PlasmaCore.FrameSvgItem {
             enabled: textInput.selectedText != ""
             MouseArea {
                 anchors.fill: parent;
-                onClicked: textField.copy();
+                onClicked: { textField.copy(); editBubble.state = "collapsed"; }
                 onPressed: PropertyAnimation {  target: copyIcon; properties: "scale";
                                                 from: 1.0; to: 0.9;
                                                 duration: 175; easing.type: Easing.OutExpo; }
