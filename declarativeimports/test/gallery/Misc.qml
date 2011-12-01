@@ -181,7 +181,7 @@ Column {
         Timer {
             running: true
             repeat: true
-            interval: 25
+            interval: 100
             onTriggered: parent.value = (parent.value + 1) % 1.1
         }
     }

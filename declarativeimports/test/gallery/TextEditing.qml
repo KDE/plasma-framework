@@ -47,12 +47,13 @@ PlasmaComponents.Page {
 
     Column {
         id: editThing
-        anchors.centerIn: parent
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
         width: 300
         height: 300
 
         spacing: 12
-        Item { height: 60; width: parent.width; }
+        Item { height: 4; width: parent.width; }
         PlasmaComponents.TextField {
             placeholderText: "Try copy & paste"
             text: "The cat bites into the socks"
