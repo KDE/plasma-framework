@@ -135,6 +135,11 @@ void DialogProxy::syncMainItem()
         return;
     }
 
+    if (static_cast<QGraphicsObject *>(m_dialog->graphicsWidget()) == m_mainItem.data() ||
+        (m_declarativeItemContainer && m_declarativeItemContainer->declarativeItem() == m_mainItem.data())) {
+        return;
+    }
+
     //not have a scene? go up in the hyerarchy until we find something with a scene
     QGraphicsScene *scene = m_mainItem.data()->scene();
     if (!scene) {
