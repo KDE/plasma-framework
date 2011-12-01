@@ -160,8 +160,8 @@ void PopupApplet::setWidget(QWidget *widget)
 
 QGraphicsWidget *PopupApplet::graphicsWidget()
 {
-    if (d->graphicsWidget != 0) {
-        return d->graphicsWidget;
+    if (d->graphicsWidget) {
+        return d->graphicsWidget.data();
     } else {
         return static_cast<Applet*>(this)->d->extender.data();
     }
@@ -172,10 +172,12 @@ void PopupApplet::setGraphicsWidget(QGraphicsWidget *graphicsWidget)
     if (d->graphicsWidget) {
         if (d->dialogPtr) {
             d->dialogPtr.data()->setGraphicsWidget(graphicsWidget);
-        } else {
+        } else if (layout())  {
             QGraphicsLinearLayout *lay = static_cast<QGraphicsLinearLayout *>(layout());
             lay->removeAt(0);
-            lay->addItem(graphicsWidget);
+            if (graphicsWidget) {
+                lay->addItem(graphicsWidget);
+            }
         }
     }
 
@@ -341,8 +343,8 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 q->resize(prefSize);
                 emit q->appletTransformedItself();
             }
-        //Applet on popup
         } else {
+            //Applet on popup
             if (icon && lay) {
                 lay->addItem(icon);
             }
@@ -363,56 +365,57 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 delete proxy.data();
             }
 
-            if (!dialogPtr) {
-                //save the aspect ratio mode in case we drag'n drop in the Desktop later
-                savedAspectRatio = q->aspectRatioMode();
+            //save the aspect ratio mode in case we drag'n drop in the Desktop later
+            savedAspectRatio = q->aspectRatioMode();
 
-                if (icon) {
-                    icon->show();
-                    q->setAspectRatioMode(Plasma::ConstrainedSquare);
-                }
-
-                Dialog *dialog = new Dialog();
-                dialog->d->appletPtr = q;
-                dialogPtr = dialog;
-
-                if (icon) {
-                    dialog->setAspectRatioMode(savedAspectRatio);
-                }
-
-                //no longer use Qt::Popup since that seems to cause a lot of problem when you drag
-                //stuff out of your Dialog (extenders). Monitor WindowDeactivate events so we can
-                //emulate the same kind of behavior as Qt::Popup (close when you click somewhere
-                //else.
-
-                if (gWidget) {
-                    Corona *corona = qobject_cast<Corona *>(gWidget->scene());
-
-                    if (corona) {
-                        corona->addOffscreenWidget(gWidget);
-                    }
-
-                    dialog->setGraphicsWidget(gWidget);
-                    //gWidget->resize(gWidget->preferredSize());
-                    dialog->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | (gWidget->windowFlags() & Qt::X11BypassWindowManagerHint));
-                } else if (qWidget) {
-                    QVBoxLayout *l_layout = new QVBoxLayout(dialog);
-                    l_layout->setSpacing(0);
-                    l_layout->setMargin(0);
-                    l_layout->addWidget(qWidget);
-                    dialog->adjustSize();
-                    dialog->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | (qWidget->windowFlags() & Qt::X11BypassWindowManagerHint));
-                } else {
-                    dialog->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
-                }
-
-                restoreDialogSize();
-                KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
-                dialog->installEventFilter(q);
-
-                QObject::connect(dialog, SIGNAL(dialogResized()), q, SLOT(dialogSizeChanged()));
-                QObject::connect(dialog, SIGNAL(dialogVisible(bool)), q, SLOT(dialogStatusChanged(bool)));
+            if (icon) {
+                icon->show();
+                q->setAspectRatioMode(Plasma::ConstrainedSquare);
             }
+
+            Dialog *dialog = new Dialog();
+            dialog->d->appletPtr = q;
+            dialogPtr = dialog;
+
+            if (icon) {
+                dialog->setAspectRatioMode(savedAspectRatio);
+            }
+
+            //no longer use Qt::Popup since that seems to cause a lot of problem when you drag
+            //stuff out of your Dialog (extenders). Monitor WindowDeactivate events so we can
+            //emulate the same kind of behavior as Qt::Popup (close when you click somewhere
+            //else.
+
+            if (gWidget) {
+                Corona *corona = qobject_cast<Corona *>(gWidget->scene());
+                if (!corona) {
+                    corona = qobject_cast<Corona *>(q->scene());
+                }
+
+                if (corona) {
+                    corona->addOffscreenWidget(gWidget);
+                }
+
+                gWidget->show();
+                dialog->setGraphicsWidget(gWidget);
+                dialog->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | (gWidget->windowFlags() & Qt::X11BypassWindowManagerHint));
+            } else if (qWidget) {
+                QVBoxLayout *l_layout = new QVBoxLayout(dialog);
+                l_layout->setSpacing(0);
+                l_layout->setMargin(0);
+                l_layout->addWidget(qWidget);
+                dialog->adjustSize();
+                dialog->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | (qWidget->windowFlags() & Qt::X11BypassWindowManagerHint));
+            } else {
+                dialog->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+            }
+
+            restoreDialogSize();
+            KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
+            dialog->installEventFilter(q);
+
+            QObject::connect(dialog, SIGNAL(dialogResized()), q, SLOT(dialogSizeChanged()));
+            QObject::connect(dialog, SIGNAL(dialogVisible(bool)), q, SLOT(dialogStatusChanged(bool)));
         }
     }
 
@@ -668,7 +671,6 @@ PopupAppletPrivate::PopupAppletPrivate(PopupApplet *applet)
         : q(applet),
           icon(0),
           widget(0),
-          graphicsWidget(0),
           popupPlacement(Plasma::FloatingPopup),
           popupAlignment(Qt::AlignLeft),
           savedAspectRatio(Plasma::InvalidAspectRatioMode),

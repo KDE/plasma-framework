@@ -331,10 +331,11 @@ void DataEngine::removeAllSources()
     while (it.hasNext()) {
         it.next();
         Plasma::DataContainer *s = it.value();
-        emit sourceRemoved(it.key());
+        const QString source = it.key();
         it.remove();
         s->disconnect(this);
-        delete s;
+        s->deleteLater();
+        emit sourceRemoved(source);
     }
 }
 
@@ -681,6 +682,7 @@ void DataEnginePrivate::sourceDestroyed(QObject *object)
     while (it != sources.end()) {
         if (it.value() == object) {
             sources.erase(it);
+            emit q->sourceRemoved(object->objectName());
             break;
         }
         ++it;

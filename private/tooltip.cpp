@@ -56,6 +56,9 @@ public:
           m_toolTip(parent),
           m_document(new QTextDocument(this))
     {
+        QTextOption option = m_document->defaultTextOption();
+        option.setWrapMode(QTextOption::WordWrap);
+        m_document->setDefaultTextOption(option);
     }
 
     void setStyleSheet(const QString &css)
@@ -66,8 +69,13 @@ public:
     void setContent(const ToolTipContent &data)
     {
         QString html;
-        if (!data.mainText().isEmpty()) {
-            html.append("<div><b>" + data.mainText() + "</b></div>");
+        QString mainText = data.mainText();
+        if (!mainText.isEmpty()) {
+            if (mainText.size() < 50) {
+                // don't let short texts wrap on us!
+                mainText = mainText.replace(" ", "&nbsp;");
+            }
+            html.append("<div align=\"center\"><b>" + mainText + "</b></div>");
         }
         html.append(data.subText());
 
@@ -76,28 +84,18 @@ public:
         data.registerResources(m_document);
         if (!html.isEmpty()) {
             m_document->setHtml("<p>" + html + "</p>");
+        } else {
+            m_document->clear();
         }
         m_document->adjustSize();
-
-        m_haloRects.clear();
-        QTextLayout *layout = m_document->begin().layout();
-        //layout->setPosition(QPointF(textRect.x(), textBoundingRect->y()));
-        QTextLine line;
-        for (int i = 0; i < layout->lineCount(); ++i) {
-            line = layout->lineAt(i);
-
-            // Add halo rect only when a non empty line is found
-            if (line.naturalTextWidth()) {
-                m_haloRects.append(line.naturalTextRect().translated(layout->position().toPoint()).toRect().translated(m_margin, m_margin));
-            }
-        }
 
         update();
     }
 
     QSize minimumSizeHint() const
     {
-        return m_document->size().toSize() + QSize(m_margin, m_margin)*2;
+        const int margin = 6;
+        return m_document->size().toSize() + QSize(margin, margin)*2;
     }
 
     QSize maximumSizeHint() const
@@ -108,14 +106,6 @@ public:
     void paintEvent(QPaintEvent *event)
     {
         QPainter p(this);
-
-        if (Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor).value() < 128) {
-            foreach (const QRectF &rect, m_haloRects) {
-                Plasma::PaintUtils::drawHalo(&p, rect);
-            }
-
-            p.translate(m_margin, m_margin);
-        }
         m_document->drawContents(&p, event->rect());
     }
 
@@ -145,8 +135,6 @@ private:
     ToolTip *m_toolTip;
     QTextDocument *m_document;
     QString m_anchor;
-    QList<QRectF> m_haloRects;
-    static const int m_margin = 6;
 };
 
 class ToolTipPrivate
@@ -179,8 +167,8 @@ ToolTip::ToolTip(QWidget *parent)
     d->preview = new WindowPreview(this);
     d->text = new TipTextWidget(this);
     d->imageLabel = new QLabel(this);
-    d->imageLabel->setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
+    d->imageLabel->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     d->animation = new QPropertyAnimation(this, "pos", this);
     d->animation->setEasingCurve(QEasingCurve::InOutQuad);
     d->animation->setDuration(250);
@@ -198,7 +186,7 @@ ToolTip::ToolTip(QWidget *parent)
 
     QHBoxLayout *iconTextHBoxLayout = new QHBoxLayout;
     iconTextHBoxLayout->addWidget(d->imageLabel);
-    iconTextHBoxLayout->setAlignment(d->imageLabel, Qt::AlignCenter);
+    iconTextHBoxLayout->setAlignment(d->imageLabel, Qt::AlignTop | Qt::AlignHCenter);
     iconTextHBoxLayout->addWidget(d->text);
     iconTextHBoxLayout->setAlignment(d->text, Qt::AlignLeft | Qt::AlignVCenter);
     iconTextHBoxLayout->setStretchFactor(d->text, 1);
@@ -300,7 +288,12 @@ void ToolTip::setContent(QObject *tipper, const ToolTipContent &data)
 {
     //reset our size
     d->text->setContent(data);
-    d->imageLabel->setPixmap(data.image());
+    if (data.image().isNull()) {
+        d->imageLabel->hide();
+    } else {
+        d->imageLabel->show();
+        d->imageLabel->setPixmap(data.image());
+    }
 
     if (data.highlightWindows() && !data.windowsToPreview().isEmpty()) {
         WindowEffects::highlightWindows(winId(), QList<WId>() << winId() << data.windowsToPreview());

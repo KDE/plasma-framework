@@ -55,7 +55,7 @@ public:
     QWeakPointer<Plasma::Dialog> dialogPtr;
     QWeakPointer<QGraphicsProxyWidget>proxy;
     QWidget *widget;
-    QGraphicsWidget *graphicsWidget;
+    QWeakPointer<QGraphicsWidget> graphicsWidget;
     Plasma::PopupPlacement popupPlacement;
     Qt::AlignmentFlag popupAlignment;
     Plasma::AspectRatioMode savedAspectRatio;
