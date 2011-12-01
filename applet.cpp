@@ -1900,6 +1900,11 @@ void Applet::showConfigurationInterface()
             KConfigSkeleton *configLoader = d->configLoader ? d->configLoader : new KConfigSkeleton(0);
             dialog = new AppletConfigDialog(0, d->configDialogId(), configLoader);
 
+            if (!d->configLoader) {
+                // delete the temporary when this dialog is done
+                configLoader->setParent(dialog);
+            }
+
             dialog->setWindowTitle(d->configWindowTitle());
             dialog->setAttribute(Qt::WA_DeleteOnClose, true);
             bool hasPages = false;
@@ -2016,6 +2021,7 @@ KConfigDialog *AppletPrivate::generateGenericConfigDialog()
 {
     KConfigSkeleton *nullManager = new KConfigSkeleton(0);
     KConfigDialog *dialog = new AppletConfigDialog(0, configDialogId(), nullManager);
+    nullManager->setParent(dialog);
     dialog->setFaceType(KPageDialog::Auto);
     dialog->setWindowTitle(configWindowTitle());
     dialog->setAttribute(Qt::WA_DeleteOnClose, true);
@@ -2023,7 +2029,6 @@ KConfigDialog *AppletPrivate::generateGenericConfigDialog()
     dialog->showButton(KDialog::Default, false);
     QObject::connect(dialog, SIGNAL(applyClicked()), q, SLOT(configDialogFinished()));
     QObject::connect(dialog, SIGNAL(okClicked()), q, SLOT(configDialogFinished()));
-    QObject::connect(dialog, SIGNAL(finished()), nullManager, SLOT(deleteLater()));
     return dialog;
 }
 
