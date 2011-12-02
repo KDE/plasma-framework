@@ -644,15 +644,25 @@ void IconWidget::setSvg(const QString &svgFilePath, const QString &elementId)
     if (!d->iconSvg) {
         d->iconSvg = new Plasma::Svg(this);
         connect(d->iconSvg, SIGNAL(repaintNeeded()), this, SLOT(svgChanged()));
+        d->oldIcon = d->icon;
+    } else {
+        d->oldIcon = d->iconSvg->pixmap(d->iconSvgElement);
     }
 
     d->iconSvg->setImagePath(svgFilePath);
     d->iconSvg->setContainsMultipleImages(!elementId.isNull());
     d->iconSvgElement = elementId;
     d->iconSvgElementChanged = true;
-    d->icon = QIcon();
     updateGeometry();
-    update();
+
+    if (!(d->states & IconWidgetPrivate::HoverState) && !d->iconChangeTimer->isActive() && !d->oldIcon.isNull()) {
+        d->animateMainIcon(true, d->states);
+    } else {
+        d->oldIcon = QIcon();
+        update();
+    }
+    d->iconChangeTimer->start(300);
+    d->icon = QIcon();
 }
 
 QString IconWidget::svg() const
