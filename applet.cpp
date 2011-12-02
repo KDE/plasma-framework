@@ -2520,7 +2520,7 @@ QSizeF Applet::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
         }
     } else if (d->aspectRatioMode == Plasma::ConstrainedSquare) {
         //enforce a size not wider than tall
-        if (ff == Horizontal && (which == Qt::MaximumSize || size().height() <= KIconLoader::SizeLarge)) {
+        if (ff == Horizontal) {
             hint.setWidth(size().height());
         //enforce a size not taller than wide
         } else if (ff == Vertical && (which == Qt::MaximumSize || size().width() <= KIconLoader::SizeLarge)) {
