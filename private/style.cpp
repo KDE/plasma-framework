@@ -61,7 +61,7 @@ public:
         if (!textBox) {
             textBox = new Plasma::FrameSvg(q);
             textBox->setImagePath("widgets/lineedit");
-            textBox->setElementPrefix("sunken");
+            textBox->setElementPrefix("base");
         }
     }
 
@@ -197,7 +197,6 @@ void Style::drawComplexControl(ComplexControl control,
     case CC_SpinBox: {
         d->createTextBox();
 
-        d->textBox->setElementPrefix("base");
         d->textBox->resizeFrame(option->rect.size());
         d->textBox->paintFrame(painter);
 
@@ -252,7 +251,6 @@ void Style::drawComplexControl(ComplexControl control,
             qApp->style()->drawComplexControl(control, option, painter, widget);
         } else {
             d->createTextBox();
-            d->textBox->setElementPrefix("base");
             d->textBox->resizeFrame(option->rect.size());
             d->textBox->paintFrame(painter);
 
@@ -283,7 +281,6 @@ void Style::drawPrimitive(PrimitiveElement element, const QStyleOption *option, 
         }
         d->createTextBox();
 
-        d->textBox->setElementPrefix("base");
         d->textBox->resizeFrame(option->rect.size());
         d->textBox->paintFrame(painter);
         break;
@@ -350,7 +347,6 @@ QRect Style::subElementRect(SubElement element, const QStyleOption *option, cons
     switch (element) {
     case SE_LineEditContents: {
         d->createTextBox();
-        d->textBox->setElementPrefix("base");
 
         qreal left, top, right, bottom;
         d->textBox->getMargins(left, top, right, bottom);
@@ -365,9 +361,15 @@ QSize Style::sizeFromContents(ContentsType type, const QStyleOption *option,
                               const QSize &contentsSize, const QWidget *widget) const
 {
     switch (type) {
+    case CT_SpinBox: {
+        d->createTextBox();
+
+        qreal left, top, right, bottom;
+        d->textBox->getMargins(left, top, right, bottom);
+        return contentsSize + QSize(left + right - 2, top + bottom - 2);
+    }
     case CT_LineEdit: {
         d->createTextBox();
-        d->textBox->setElementPrefix("base");
 
         qreal left, top, right, bottom;
         d->textBox->getMargins(left, top, right, bottom);
@@ -376,7 +378,6 @@ QSize Style::sizeFromContents(ContentsType type, const QStyleOption *option,
     default:
         return qApp->style()->sizeFromContents(type, option, contentsSize, widget);
     }
-    
 }
 
 }
