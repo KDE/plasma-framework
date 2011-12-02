@@ -751,20 +751,19 @@ void IconWidgetPrivate::animateMainIcon(bool show, const IconWidgetStates state)
     QPropertyAnimation *animation = hoverAnimation->animation();
     if (!animation) {
         animation = new QPropertyAnimation(hoverAnimation, "value");
-        animation->setProperty("duration", 150);
-        animation->setProperty("easingCurve", QEasingCurve::OutQuad);
-        animation->setProperty("startValue", 0.0);
-        animation->setProperty("endValue", 1.0);
+        animation->setDuration(150);
+        animation->setEasingCurve(QEasingCurve::OutQuad);
+        animation->setStartValue(0.0);
+        animation->setEndValue(1.0);
         hoverAnimation->setAnimation(animation);
         q->connect(animation, SIGNAL(finished()), q, SLOT(hoverAnimationFinished()));
     } else if (animation->state() == QAbstractAnimation::Running) {
         animation->pause();
     }
 
-    animation->setProperty("direction", show ?
-            QAbstractAnimation::Forward : QAbstractAnimation::Backward);
-    animation->start(show ?
-            QAbstractAnimation::KeepWhenStopped : QAbstractAnimation::DeleteWhenStopped);
+    animation->setDirection(show ? QAbstractAnimation::Forward : QAbstractAnimation::Backward);
+    animation->start(show ? QAbstractAnimation::KeepWhenStopped : QAbstractAnimation::DeleteWhenStopped);
+    q->update();
 }
 
 void IconWidgetPrivate::hoverAnimationFinished()
@@ -1468,7 +1467,6 @@ void IconWidget::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
     d->oldIcon = QIcon();
     d->animateMainIcon(true, d->states|IconWidgetPrivate::HoverState);
-    update();
 
     QGraphicsWidget::hoverEnterEvent(event);
 }
@@ -1485,7 +1483,6 @@ void IconWidget::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     d->states &= ~IconWidgetPrivate::PressedState;
 
     d->animateMainIcon(false, d->states|IconWidgetPrivate::HoverState);
-    update();
 
     QGraphicsWidget::hoverLeaveEvent(event);
 }
@@ -1496,10 +1493,8 @@ bool IconWidget::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 
     if (event->type() == QEvent::GraphicsSceneDragEnter) {
         d->animateMainIcon(true, d->states|IconWidgetPrivate::HoverState);
-        update();
     } else if (event->type() == QEvent::GraphicsSceneDragLeave) {
         d->animateMainIcon(false, d->states|IconWidgetPrivate::HoverState);
-        update();
     }
 
     return false;
