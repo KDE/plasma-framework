@@ -150,7 +150,7 @@ void AppInterface::sleep(int ms)
 {
     QEventLoop loop;
     QTimer::singleShot(ms, &loop, SLOT(quit()));
-    loop.exec();
+    loop.exec(QEventLoop::ExcludeUserInputEvents);
 }
 
 bool AppInterface::hasBattery() const
