@@ -186,8 +186,8 @@ void View::setScreen(int screen, int desktop)
 
     // handle views that are working with panel containment types
     if (d->containment &&
-        (d->containment->type() == Containment::PanelContainment ||
-         d->containment->type() == Containment::CustomPanelContainment)) {
+        (d->containment->containmentType() == Containment::PanelContainment ||
+         d->containment->containmentType() == Containment::CustomPanelContainment)) {
         d->containment->setScreen(screen, desktop);
         return;
     }
