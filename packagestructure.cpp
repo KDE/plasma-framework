@@ -614,7 +614,7 @@ PackageMetadata PackageStructure::metadata()
 
             if (mimetype->is("application/zip")) {
                 archive = new KZip(d->path);
-            } else if (mimetype->is("application/x-compressed-tar") ||
+            } else if (mimetype->is("application/x-compressed-tar") || mimetype->is("application/x-gzip") ||
                        mimetype->is("application/x-tar")|| mimetype->is("application/x-bzip-compressed-tar")) {
                 archive = new KTar(d->path);
             } else {
