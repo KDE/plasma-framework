@@ -248,10 +248,6 @@ void ToolTipManager::setContent(QGraphicsWidget *widget, const ToolTipContent &d
             //look if the data prefers aother graphicswidget, otherwise use the one used as event catcher
             QGraphicsWidget *referenceWidget = data.graphicsWidget() ? data.graphicsWidget() : widget;
             Corona *corona = qobject_cast<Corona *>(referenceWidget->scene());
-            if (!corona) {
-                // fallback to the corona we were given
-                corona = m_corona;
-            }
 
             if (corona) {
                 d->tipWidget->moveTo(corona->popupPosition(referenceWidget, d->tipWidget->size(), Qt::AlignCenter));
@@ -408,10 +404,6 @@ void ToolTipManagerPrivate::showToolTip()
     tipWidget->prepareShowing();
     QGraphicsWidget *referenceWidget = tooltip.value().graphicsWidget() ? tooltip.value().graphicsWidget() : currentWidget;
     Corona *corona = qobject_cast<Corona *>(referenceWidget->scene());
-    if (!corona) {
-        // fallback to the corona we were given
-        corona = q->m_corona;
-    }
 
     if (corona) {
         tipWidget->moveTo(corona->popupPosition(referenceWidget, tipWidget->size(), Qt::AlignCenter));
