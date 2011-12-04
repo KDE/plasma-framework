@@ -2177,11 +2177,6 @@ void AppletPrivate::updateShortcuts()
 
 void AppletPrivate::propagateConfigChanged()
 {
-    if (script && configLoader) {
-        configLoader->readConfig();
-        script->configChanged();
-    }
-
     if (isContainment) {
         Containment *c = qobject_cast<Containment *>(q);
         if (c) {
@@ -2194,6 +2189,12 @@ void AppletPrivate::propagateConfigChanged()
 
 void Applet::configChanged()
 {
+    if (d->script) {
+        if (d->configLoader) {
+            d->configLoader->readConfig();
+        }
+        d->script->configChanged();
+    }
 }
 
 void Applet::createConfigurationInterface(KConfigDialog *parent)
