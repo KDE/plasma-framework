@@ -22,6 +22,7 @@
 #include <math.h>
 #include <float.h> // FLT_MAX
 
+#include <QCoreApplication>
 #include <QFileInfo>
 
 #include <kconfiggroup.h>

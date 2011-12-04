@@ -105,7 +105,7 @@ Label::Label(QGraphicsWidget *parent)
     connect(native, SIGNAL(linkActivated(QString)), this, SIGNAL(linkActivated(QString)));
     connect(native, SIGNAL(linkHovered(QString)), this, SIGNAL(linkHovered(QString)));
 
-    setWidget(native);
+    d->setWidget(native);
     d->initTheming();
 }
 

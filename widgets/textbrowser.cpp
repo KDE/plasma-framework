@@ -40,7 +40,6 @@ class TextBrowserPrivate : public ThemedWidgetInterface<TextBrowser>
 public:
     TextBrowserPrivate(TextBrowser *browser)
         : ThemedWidgetInterface<TextBrowser>(browser),
-          native(0),
           savedMinimumHeight(0),
           savedMaximumHeight(QWIDGETSIZE_MAX),
           wasNotFixed(true)
@@ -49,7 +48,8 @@ public:
 
     void setFixedHeight()
     {
-        if (native && native->document() &&
+        KTextBrowser *native = q->nativeWidget();
+        if (native->document() &&
             q->sizePolicy().verticalPolicy() == QSizePolicy::Fixed &&
             native->verticalScrollBarPolicy() == Qt::ScrollBarAlwaysOff) {
             native->document()->setTextWidth(q->size().width());
@@ -84,7 +84,7 @@ TextBrowser::TextBrowser(QGraphicsWidget *parent)
     connect(native, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
     connect(native, SIGNAL(textChanged()), this, SLOT(setFixedHeight()));
     native->setWindowIcon(QIcon());
-    setWidget(native);
+    d->setWidget(native);
     d->native = native;
     native->setAttribute(Qt::WA_NoSystemBackground);
     native->setFrameShape(QFrame::NoFrame);
@@ -114,12 +114,12 @@ QString TextBrowser::text() const
 
 void TextBrowser::setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy policy)
 {
-    d->native->setHorizontalScrollBarPolicy(policy);
+    nativeWidget()->setHorizontalScrollBarPolicy(policy);
 }
 
 void TextBrowser::setVerticalScrollBarPolicy(Qt::ScrollBarPolicy policy)
 {
-    d->native->setVerticalScrollBarPolicy(policy);
+    nativeWidget()->setVerticalScrollBarPolicy(policy);
 }
 
 void TextBrowser::setStyleSheet(const QString &stylesheet)
@@ -173,8 +173,8 @@ void TextBrowser::resizeEvent(QGraphicsSceneResizeEvent *event)
 
 void TextBrowser::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
-    if (d->native->verticalScrollBarPolicy() == Qt::ScrollBarAlwaysOff &&
-        d->native->horizontalScrollBarPolicy() == Qt::ScrollBarAlwaysOff) {
+    if (nativeWidget()->verticalScrollBarPolicy() == Qt::ScrollBarAlwaysOff &&
+        nativeWidget()->horizontalScrollBarPolicy() == Qt::ScrollBarAlwaysOff) {
         event->ignore();
     } else {
         QGraphicsProxyWidget::wheelEvent(event);

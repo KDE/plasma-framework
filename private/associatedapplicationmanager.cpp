@@ -100,9 +100,6 @@ void AssociatedApplicationManager::setApplication(Plasma::Applet *applet, const 
 QString AssociatedApplicationManager::application(const Plasma::Applet *applet) const
 {
     return d->applicationNames.value(applet);
-    if (!d->applicationNames.contains(applet)) {
-            connect(applet, SIGNAL(destroyed(QObject *)), this, SLOT(cleanupApplet(QObject *)));
-        }
 }
 
 void AssociatedApplicationManager::setUrls(Plasma::Applet *applet, const KUrl::List &urls)

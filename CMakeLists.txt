@@ -177,6 +177,7 @@ set(plasma_LIB_SRCS
     private/qtjolie-branch/qtjolie/serverthread.cpp
 
     #FIXME: all these must move into the qgv library
+    private/themedwidgetinterface.cpp
     widgets/iconwidget.cpp
 )
 
