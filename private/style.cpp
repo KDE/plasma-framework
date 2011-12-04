@@ -303,12 +303,13 @@ QRect Style::subControlRect(ComplexControl control, const QStyleOptionComplex *o
                 rect.moveCenter(QPoint(option->rect.center().x(), rect.center().y()));
             }
         }
-        return rect;
         break;
     }
     default:
-        return rect;
+        break;
     }
+    return rect;
+
 }
 
 int Style::styleHint(StyleHint hint, const QStyleOption *option, const QWidget *widget, QStyleHintReturn *returnData) const
