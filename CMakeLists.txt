@@ -140,6 +140,7 @@ set(plasma_LIB_SRCS
     private/storage.cpp
     private/storagethread.cpp
     private/style.cpp
+    private/themedwidgetinterface.cpp
     private/trustedonlyauthorization.cpp
     private/tooltip.cpp
     private/wallpaperrenderthread.cpp
