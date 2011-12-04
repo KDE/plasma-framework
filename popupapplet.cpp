@@ -446,7 +446,6 @@ QSizeF PopupApplet::sizeHint(Qt::SizeHint which, const QSizeF & constraint) cons
         case Horizontal: {
             const int size = IconSize(KIconLoader::Panel);
             return QSizeF(size, size);
-            break;
         }
         default:
             break;
