@@ -130,7 +130,7 @@ void LineEdit::setNativeWidget(KLineEdit *nativeWidget)
 
 
     nativeWidget->setWindowFlags(nativeWidget->windowFlags()|Qt::BypassGraphicsProxyWidget);
-    setWidget(nativeWidget);
+    d->setWidget(nativeWidget);
     nativeWidget->setWindowIcon(QIcon());
 
     nativeWidget->setAttribute(Qt::WA_NoSystemBackground);

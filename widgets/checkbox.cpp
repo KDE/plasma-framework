@@ -87,7 +87,7 @@ CheckBox::CheckBox(QGraphicsWidget *parent)
 {
     QCheckBox *native = new QCheckBox;
     connect(native, SIGNAL(toggled(bool)), this, SIGNAL(toggled(bool)));
-    setWidget(native);
+    d->setWidget(native);
     native->setWindowIcon(QIcon());
     native->setAttribute(Qt::WA_NoSystemBackground);
 
