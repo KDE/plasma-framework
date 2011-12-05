@@ -21,10 +21,14 @@
 
 #include <QDir>
 
+#include <KDesktopFile>
 #include <KGlobalSettings>
+#include <KIO/CopyJob>
 #include <KIO/Job>
 #include <KRun>
 #include <KStandardDirs>
+
+#include <Plasma/Package>
 
 QScriptValue ScriptEnv::openUrl(QScriptContext *context, QScriptEngine *engine)
 {
@@ -84,6 +88,67 @@ QScriptValue ScriptEnv::getUrl(QScriptContext *context, QScriptEngine *engine)
     }
 
     KIO::Job *job = KIO::get(url, KIO::NoReload, KIO::HideProgressInfo);
+    return engine->newQObject(job);
+}
+
+QScriptValue ScriptEnv::download(QScriptContext *context, QScriptEngine *engine)
+{
+    if (context->argumentCount() == 0) {
+        return engine->undefinedValue();
+    }
+
+    QScriptValue v = context->argument(0);
+    KUrl url = v.isString() ? KUrl(v.toString()) : qscriptvalue_cast<KUrl>(v);
+
+    if (!url.isValid()) {
+        return engine->undefinedValue();
+    }
+
+    QString requestedFileName;
+    if (context->argumentCount() > 1) {
+        requestedFileName = context->argument(1).toString();
+    }
+
+    ScriptEnv *env = ScriptEnv::findScriptEnv(engine);
+    if (!env) {
+        //kDebug() << "findScriptEnv failed";
+        return engine->undefinedValue();
+    }
+
+    QStringList protocols;
+    protocols << "http" << "https" << "ftp" << "ftps";
+    if (!protocols.contains(url.protocol())) {
+        return engine->undefinedValue();
+    }
+
+    QScriptContext *c = engine->currentContext();
+    QString destination;
+    while (c) {
+        QScriptValue v = c->activationObject().property("__plasma_package");
+        if (v.isVariant()) {
+            KDesktopFile config(v.toVariant().value<Plasma::Package>().path() + "/metadata.desktop");
+            KConfigGroup cg = config.desktopGroup();
+            const QString pluginName = cg.readEntry("X-KDE-PluginInfo-Name", QString());
+            destination = KGlobalSettings::downloadPath() + "Plasma/" + pluginName + '/';
+            break;
+        }
+
+        c = c->parentContext();
+    }
+
+    if (destination.isEmpty()) {
+        return engine->undefinedValue();
+    }
+
+    requestedFileName.prepend(destination);
+    QDir dir(requestedFileName);
+    dir.mkpath(destination);
+    if (!dir.absolutePath().startsWith(destination)) {
+        requestedFileName = destination;
+    }
+
+    //TODO: allow showing desktop progress info?
+    KIO::CopyJob *job = KIO::copy(url, KUrl(requestedFileName), KIO::HideProgressInfo);
     return engine->newQObject(job);
 }
 

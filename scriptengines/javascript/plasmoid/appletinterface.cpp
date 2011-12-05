@@ -22,12 +22,14 @@
 #include "appletinterface.h"
 
 #include <QAction>
+#include <QDir>
 #include <QFile>
 #include <QScriptEngine>
 #include <QSignalMapper>
 #include <QTimer>
 
 #include <KDebug>
+#include <KGlobalSettings>
 #include <KIcon>
 #include <KService>
 #include <KServiceTypeTrader>
@@ -410,6 +412,23 @@ void AppletInterface::setStatus(const AppletInterface::ItemStatus &status)
 AppletInterface::ItemStatus AppletInterface::status() const
 {
     return (AppletInterface::ItemStatus)((int)(applet()->status()));
+}
+
+/*
+QString AppletInterface::downloadPath(const QString &file)
+{
+    KDesktopFile config(v.toVariant().value<Plasma::Package>().path() + "/metadata.desktop");
+    KConfigGroup cg = config.desktopGroup();
+    const QString pluginName = cg.readEntry("X-KDE-PluginInfo-Name", QString());
+    destination = KGlobalSettings::downloadPath() + "/Plasma/" + pluginName + '/';
+}
+*/
+
+QStringList AppletInterface::downloadedFiles() const
+{
+    const QString downloadDir = KGlobalSettings::downloadPath() + "/Plasma/" + applet()->pluginName();
+    QDir dir(downloadDir);
+    return dir.entryList(QDir::Files | QDir::NoSymLinks | QDir::Readable);
 }
 
 void AppletInterface::gc()
