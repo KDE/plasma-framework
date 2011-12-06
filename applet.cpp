@@ -2030,6 +2030,7 @@ KConfigDialog *AppletPrivate::generateGenericConfigDialog()
     dialog->setAttribute(Qt::WA_DeleteOnClose, true);
     q->createConfigurationInterface(dialog);
     dialog->showButton(KDialog::Default, false);
+    dialog->showButton(KDialog::Help, false);
     QObject::connect(dialog, SIGNAL(applyClicked()), q, SLOT(configDialogFinished()));
     QObject::connect(dialog, SIGNAL(okClicked()), q, SLOT(configDialogFinished()));
     return dialog;
