@@ -32,6 +32,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch/qtjolie
                     ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch
                     ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch/includes
+		    ${CMAKE_SOURCE_DIR}/libinqt5/src
+		    ${CMAKE_BINARY_DIR}/libinqt5/src
                     )
 
 if(NOT PLASMA_NO_KIO)

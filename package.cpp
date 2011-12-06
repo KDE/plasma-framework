@@ -28,6 +28,7 @@
 #include <QIODevice>
 #include <QRegExp>
 #include <QtNetwork/QHostInfo>
+#include <qtemporarydir.h>
 
 #include <karchive.h>
 #include <kdebug.h>
@@ -36,7 +37,6 @@
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>
 #include <ktar.h>
-#include <ktempdir.h>
 #include <kzip.h>
 
 #include "config-plasma.h"
@@ -289,9 +289,9 @@ KPluginInfo Package::metadata() const
 
                 if (archive && archive->open(QIODevice::ReadOnly)) {
                     const KArchiveDirectory *source = archive->directory();
-                    KTempDir tempdir;
-                    source->copyTo(tempdir.name());
-                    d->createPackageMetadata(tempdir.name());
+                    QTemporaryDir tempdir;
+                    source->copyTo(tempdir.path() + '/');
+                    d->createPackageMetadata(tempdir.path() + '/');
                 } else {
                     kWarning() << "Could not open package file:" << d->path;
                 }
@@ -730,7 +730,7 @@ bool PackagePrivate::installPackage(const QString &package, const QString &packa
     }
 
     QString path;
-    KTempDir tempdir;
+    QTemporaryDir tempdir;
     bool archivedPackage = false;
 
     if (fileInfo.isDir()) {
@@ -763,7 +763,7 @@ bool PackagePrivate::installPackage(const QString &package, const QString &packa
         }
 
         archivedPackage = true;
-        path = tempdir.name();
+        path = tempdir.path() + '/';
 
         const KArchiveDirectory *source = archive->directory();
         source->copyTo(path);

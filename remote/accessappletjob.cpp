@@ -20,11 +20,11 @@
 #include "accessappletjob.h"
 
 #include <qtimer.h>
+#include <qtemporarydir.h>
 
 #include <kdebug.h>
 #include <kdesktopfile.h>
 #include <kmessagebox.h>
-#include <ktempdir.h>
 #include <kzip.h>
 
 #include "config-plasma.h"
@@ -108,9 +108,9 @@ public:
 
             const KArchiveDirectory *source = archive.directory();
 
-            KTempDir tempDir;
+            QTemporaryDir tempDir;
             tempDir.setAutoRemove(false);
-            QString path = tempDir.name();
+            QString path = tempDir.path() + '/';
             source->copyTo(path);
 
             KDesktopFile metadata(path + "/metadata.desktop");
