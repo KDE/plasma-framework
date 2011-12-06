@@ -50,7 +50,7 @@ GroupBox::GroupBox(QGraphicsWidget *parent)
       d(new GroupBoxPrivate(this))
 {
     QGroupBox *native = new QGroupBox;
-    setWidget(native);
+    d->setWidget(native);
     native->setWindowIcon(QIcon());
     native->setAttribute(Qt::WA_NoSystemBackground);
     d->initTheming();

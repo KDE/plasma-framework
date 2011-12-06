@@ -126,7 +126,6 @@ public:
     void destroyMessageOverlay();
     void addGlobalShortcutsPage(KConfigDialog *dialog);
     void addPublishPage(KConfigDialog *dialog);
-    void clearShortcutEditorPtr();
     void configDialogFinished();
     KConfigDialog *generateGenericConfigDialog();
     void addStandardConfigurationPages(KConfigDialog *dialog);
@@ -193,7 +192,7 @@ public:
     KAction *activationAction;
 
     // configuration
-    KKeySequenceWidget *shortcutEditor; //TODO: subclass KConfigDialog and encapsulate this in there
+    QWeakPointer<KKeySequenceWidget> shortcutEditor; //TODO: subclass KConfigDialog and encapsulate this in there
 
     ItemStatus itemStatus;
     QString remoteLocation;

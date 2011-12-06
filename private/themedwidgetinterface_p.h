@@ -28,6 +28,28 @@
 namespace Plasma
 {
 
+class PaletteHelper : public QObject
+{
+    Q_OBJECT
+public:
+    static PaletteHelper *self();
+
+public Q_SLOTS:
+    void generatePalettes();
+
+Q_SIGNALS:
+    void palettesUpdated();
+
+public:
+    QPalette palette;
+    QPalette buttonPalette;
+
+private:
+    PaletteHelper();
+    static PaletteHelper *s_paletteHelper;
+};
+
+
 template <class T>
 class ThemedWidgetInterface
 {
@@ -36,10 +58,10 @@ public:
         : q(publicClass),
           customPalette(false),
           customFont(false),
-          buttonColorForText(false)
+          buttonColorForText(false),
+          internalPaletteChange(false)
     {
-        QObject::connect(Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(setPalette()));
-        QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), q, SLOT(setPalette()));
+        QObject::connect(PaletteHelper::self(), SIGNAL(palettesUpdated()), q, SLOT(setPalette()));
     }
 
     void initTheming()
@@ -52,33 +74,10 @@ public:
     void setPalette()
     {
         if (!customPalette) {
-            QColor color = Theme::defaultTheme()->color(Theme::TextColor);
-            QPalette p = q->palette();
-            p.setColor(QPalette::Normal, QPalette::WindowText, color);
-            p.setColor(QPalette::Inactive, QPalette::WindowText, color);
-
-            p.setColor(QPalette::Normal, QPalette::Link, Theme::defaultTheme()->color(Theme::LinkColor));
-            p.setColor(QPalette::Normal, QPalette::LinkVisited, Theme::defaultTheme()->color(Theme::VisitedLinkColor));
-
-
-            qreal alpha = color.alphaF();
-            color.setAlphaF(0.6);
-            p.setColor(QPalette::Disabled, QPalette::WindowText, color);
-            color.setAlphaF(alpha);
-
-            const QColor buttonColor = Theme::defaultTheme()->color(Theme::ButtonTextColor);
-            p.setColor(QPalette::Normal, QPalette::Text, buttonColorForText ? buttonColor : color);
-            p.setColor(QPalette::Inactive, QPalette::Text, buttonColorForText ? buttonColor : color);
-
-            p.setColor(QPalette::Normal, QPalette::ButtonText, buttonColor);
-            p.setColor(QPalette::Inactive, QPalette::ButtonText, buttonColor);
-
-            //FIXME: hardcoded colors .. looks incorrect
-            p.setColor(QPalette::Normal, QPalette::Base, QColor(0,0,0,0));
-            p.setColor(QPalette::Inactive, QPalette::Base, QColor(0,0,0,0));
-
-            q->setPalette(p);
-            customPalette = false;
+            internalPaletteChange = true;
+            q->setPalette((buttonColorForText ? PaletteHelper::self()->buttonPalette
+                                              : PaletteHelper::self()->palette));
+            internalPaletteChange = false;
         }
 
         if (!customFont) {
@@ -95,12 +94,22 @@ public:
                 break;
 
             case QEvent::PaletteChange:
-                customPalette = true;
+                if (!internalPaletteChange &&
+                    q->palette() != (buttonColorForText ?  PaletteHelper::self()->buttonPalette : PaletteHelper::self()->palette)) {
+                    customPalette = true;
+                }
                 break;
 
             default:
                 break;
         }
+    }
+
+    void setWidget(QWidget *widget)
+    {
+        internalPaletteChange = true;
+        q->setWidget(widget);
+        internalPaletteChange = false;
     }
 
     void event(QEvent *event)
@@ -114,6 +123,7 @@ public:
     bool customPalette : 1;
     bool customFont : 1;
     bool buttonColorForText : 1;
+    bool internalPaletteChange : 1;
 };
 
 } // namespace Plasma
