@@ -1567,6 +1567,8 @@ void Applet::setGlobalShortcut(const KShortcut &shortcut)
         foreach (QWidget *w, widgets) {
             w->addAction(d->activationAction);
         }
+    } else if (d->activationAction->globalShortcut() == shortcut) {
+        return;
     }
 
     //kDebug() << "before" << shortcut.primary() << d->activationAction->globalShortcut().primary();
