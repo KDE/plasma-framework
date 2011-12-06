@@ -1921,6 +1921,7 @@ void Applet::showConfigurationInterface()
 #ifndef PLASMA_NO_KUTILS
                 KCModuleProxy *module = new KCModuleProxy(kcm);
                 if (module->realModule()) {
+                    connect(module, SIGNAL(changed(bool)), dialog, SLOT(settingsModified(bool)));
                     dialog->addPage(module, module->moduleInfo().moduleName(), module->moduleInfo().icon());
                     hasPages = true;
                 } else {
@@ -2050,11 +2051,11 @@ void AppletPrivate::addGlobalShortcutsPage(KConfigDialog *dialog)
 
     if (!shortcutEditor) {
         shortcutEditor = new KKeySequenceWidget(page);
-        QObject::connect(shortcutEditor, SIGNAL(destroyed(QObject*)), q, SLOT(clearShortcutEditorPtr()));
+        QObject::connect(shortcutEditor.data(), SIGNAL(keySequenceChanged(QKeySequence)), dialog, SLOT(settingsModified()));
     }
 
-    shortcutEditor->setKeySequence(q->globalShortcut().primary());
-    layout->addWidget(shortcutEditor);
+    shortcutEditor.data()->setKeySequence(q->globalShortcut().primary());
+    layout->addWidget(shortcutEditor.data());
     layout->addStretch();
     dialog->addPage(page, i18n("Keyboard Shortcut"), "preferences-desktop-keyboard");
 
@@ -2069,7 +2070,9 @@ void AppletPrivate::addPublishPage(KConfigDialog *dialog)
     QWidget *page = new QWidget;
     publishUI.setupUi(page);
     publishUI.publishCheckbox->setChecked(q->isPublished());
+    QObject::connect(publishUI.publishCheckbox, SIGNAL(clicked(bool)), dialog, SLOT(settingsModified()));
     publishUI.allUsersCheckbox->setEnabled(q->isPublished());
+    QObject::connect(publishUI.allUsersCheckbox, SIGNAL(clicked(bool)), dialog, SLOT(settingsModified()));
 
     QString resourceName =
     i18nc("%1 is the name of a plasmoid, %2 the name of the machine that plasmoid is published on",
@@ -2095,15 +2098,10 @@ void AppletPrivate::publishCheckboxStateChanged(int state)
     }
 }
 
-void AppletPrivate::clearShortcutEditorPtr()
-{
-    shortcutEditor = 0;
-}
-
 void AppletPrivate::configDialogFinished()
 {
     if (shortcutEditor) {
-        QKeySequence sequence = shortcutEditor->keySequence();
+        QKeySequence sequence = shortcutEditor.data()->keySequence();
         if (sequence != q->globalShortcut().primary()) {
             q->setGlobalShortcut(KShortcut(sequence));
             emit q->configNeedsSaving();
@@ -2663,7 +2661,6 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
           configLoader(0),
           actions(AppletPrivate::defaultActions(applet)),
           activationAction(0),
-          shortcutEditor(0),
           itemStatus(UnknownStatus),
           preferredSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored),
           modificationsTimer(0),
