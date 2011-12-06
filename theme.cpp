@@ -183,6 +183,7 @@ public:
     QHash<styles, QString> cachedStyleSheets;
     QHash<QString, QString> discoveries;
     QTimer *saveTimer;
+    int toolTipDelay;
 
 #ifdef Q_WS_X11
     EffectWatcher *effectWatcher;
@@ -508,7 +509,11 @@ void ThemePrivate::settingsFileChanged(const QString &file)
 
 void Theme::settingsChanged()
 {
-    d->setThemeName(d->config().readEntry("name", ThemePrivate::defaultTheme), false);
+    KConfigGroup cg = d->config();
+    d->setThemeName(cg.readEntry("name", ThemePrivate::defaultTheme), false);
+    cg = KConfigGroup(cg.config(), "PlasmaToolTips");
+    d->toolTipDelay = cg.readEntry("Delay", qreal(0.7));
+    kDebug() << "delay for tooltips is ...." << d->toolTipDelay << "**************";
 }
 
 void Theme::setThemeName(const QString &themeName)
@@ -1080,6 +1085,11 @@ KUrl Theme::homepage() const
     KConfig metadata(metadataPath);
     KConfigGroup brandConfig(&metadata, "Branding");
     return brandConfig.readEntry("homepage", KUrl("http://www.kde.org"));
+}
+
+int Theme::toolTipDelay() const
+{
+    return d->toolTipDelay;
 }
 
 }
