@@ -350,16 +350,6 @@ void Applet::saveState(KConfigGroup &group) const
     }
 }
 
-KConfigGroup Applet::config(const QString &group) const
-{
-    if (d->transient) {
-        return KConfigGroup(KGlobal::config(), "PlasmaTransientsConfig");
-    }
-
-    KConfigGroup cg = config();
-    return KConfigGroup(&cg, group);
-}
-
 KConfigGroup Applet::config() const
 {
     if (d->transient) {
