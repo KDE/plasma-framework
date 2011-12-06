@@ -108,15 +108,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         KConfigGroup config() const;
 
         /**
-         * Returns a config group with the name provided. This ensures
-         * that the group name is properly namespaced to avoid collision
-         * with other applets that may be sharing this config file
-         *
-         * @param group the name of the group to access
-         **/
-        KConfigGroup config(const QString &group) const;
-
-        /**
          * Saves state information about this applet that will
          * be accessed when next instantiated in the restore(KConfigGroup&) method.
          *
