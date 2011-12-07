@@ -535,12 +535,6 @@ void Dialog::keyPressEvent(QKeyEvent *event)
 
 bool Dialog::event(QEvent *event)
 {
-    if (event->type() == QEvent::Paint) {
-        QPainter p(this);
-        p.setCompositionMode(QPainter::CompositionMode_Source);
-        p.fillRect(rect(), Qt::transparent);
-    }
-
     return QWidget::event(event);
 }
 
