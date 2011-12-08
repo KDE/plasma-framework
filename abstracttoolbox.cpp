@@ -58,22 +58,19 @@ AbstractToolBox::~AbstractToolBox()
 
 AbstractToolBox *AbstractToolBox::load(const QString &name, const QVariantList &args, Plasma::Containment *containment)
 {
-    const QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(name);
+    const QString constraint = name.isEmpty() ? QString() : QString("[X-KDE-PluginInfo-Name] == '%1'").arg(name);
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/ToolBox", constraint);
 
     if (!offers.isEmpty()) {
         KService::Ptr offer = offers.first();
 
         KPluginLoader plugin(*offer);
-
-        if (!Plasma::isPluginVersionCompatible(plugin.pluginVersion())) {
-            return 0;
+        if (Plasma::isPluginVersionCompatible(plugin.pluginVersion())) {
+            return offer->createInstance<AbstractToolBox>(containment, args);
         }
-
-        return offer->createInstance<AbstractToolBox>(containment, args);
-    } else {
-        return 0;
     }
+
+    return 0;
 }
 
 KPluginInfo::List AbstractToolBox::listToolBoxInfo(const QString

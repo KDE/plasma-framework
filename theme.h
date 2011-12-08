@@ -354,6 +354,11 @@ class PLASMA_EXPORT Theme : public QObject
          */
         KUrl homepage() const;
 
+        /**
+         * @return the default tool tip delay; -1 means "no tooltips"
+         */
+        int toolTipDelay() const;
+
     Q_SIGNALS:
         /**
          * Emitted when the user changes the theme. SVGs should be reloaded at
@@ -379,6 +384,7 @@ class PLASMA_EXPORT Theme : public QObject
         Q_PRIVATE_SLOT(d, void settingsFileChanged(const QString &))
         Q_PRIVATE_SLOT(d, void scheduledCacheUpdate())
         Q_PRIVATE_SLOT(d, void onAppExitCleanup())
+        Q_PRIVATE_SLOT(d, void notifyOfChanged())
 };
 
 } // Plasma namespace

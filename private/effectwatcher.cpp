@@ -58,7 +58,7 @@ bool EffectWatcher::x11Event(XEvent *event)
             bool nowEffectActive = isEffectActive();
             if (m_effectActive != nowEffectActive) {
                 m_effectActive = nowEffectActive;
-                emit blurBehindChanged(m_effectActive);
+                emit effectChanged(m_effectActive);
             }
         }
     }

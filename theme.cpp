@@ -84,8 +84,9 @@ public:
           defaultWallpaperWidth(DEFAULT_WALLPAPER_WIDTH),
           defaultWallpaperHeight(DEFAULT_WALLPAPER_HEIGHT),
           pixmapCache(0),
+          cachesToDiscard(NoCache),
           locolor(false),
-          compositingActive(KWindowSystem::compositingActive()),
+          compositingActive(KWindowSystem::self()->compositingActive()),
           blurActive(false),
           isDefault(false),
           useGlobal(true),
@@ -96,27 +97,32 @@ public:
         ThemeConfig config;
         cacheTheme = config.cacheTheme();
 
+        saveTimer = new QTimer(q);
+        saveTimer->setSingleShot(true);
+        saveTimer->setInterval(600);
+        QObject::connect(saveTimer, SIGNAL(timeout()), q, SLOT(scheduledCacheUpdate()));
+
+        updateNotificationTimer = new QTimer(q);
+        updateNotificationTimer->setSingleShot(true);
+        updateNotificationTimer->setInterval(500);
+        QObject::connect(updateNotificationTimer, SIGNAL(timeout()), q, SLOT(notifyOfChanged()));
+
         if (QPixmap::defaultDepth() > 8) {
             QObject::connect(KWindowSystem::self(), SIGNAL(compositingChanged(bool)), q, SLOT(compositingChanged(bool)));
 #ifdef Q_WS_X11
             //watch for blur effect property changes as well
-            effectWatcher = 0;
-            effectWatcher = new EffectWatcher("_KDE_NET_WM_BLUR_BEHIND_REGION");
-            QObject::connect(effectWatcher, SIGNAL(blurBehindChanged(bool)), q, SLOT(blurBehindChanged(bool)));
+            if (!s_blurEffectWatcher) {
+                s_blurEffectWatcher = new EffectWatcher("_KDE_NET_WM_BLUR_BEHIND_REGION");
+            }
+
+            QObject::connect(s_blurEffectWatcher, SIGNAL(effectChanged(bool)), q, SLOT(blurBehindChanged(bool)));
 #endif
         }
-
-        saveTimer = new QTimer(q);
-        saveTimer->setSingleShot(true);
-        QObject::connect(saveTimer, SIGNAL(timeout()), q, SLOT(scheduledCacheUpdate()));
     }
 
     ~ThemePrivate()
     {
        delete pixmapCache;
-#ifdef Q_WS_X11
-       delete effectWatcher;
-#endif
     }
 
     KConfigGroup &config()
@@ -145,6 +151,8 @@ public:
     void compositingChanged(bool active);
     void discardCache(CacheTypes caches);
     void scheduledCacheUpdate();
+    void scheduleThemeChangeNotification(CacheTypes caches);
+    void notifyOfChanged();
     void colorsChanged();
     void blurBehindChanged(bool blur);
     bool useCache();
@@ -158,6 +166,7 @@ public:
     static const char *defaultTheme;
     static const char *systemColorsTheme;
     static const char *themeRcFile;
+    static EffectWatcher *s_blurEffectWatcher;
 
     Theme *q;
     QString themeName;
@@ -181,10 +190,10 @@ public:
     QHash<styles, QString> cachedStyleSheets;
     QHash<QString, QString> discoveries;
     QTimer *saveTimer;
+    QTimer *updateNotificationTimer;
+    int toolTipDelay;
+    CacheTypes cachesToDiscard;
 
-#ifdef Q_WS_X11
-    EffectWatcher *effectWatcher;
-#endif
     bool locolor : 1;
     bool compositingActive : 1;
     bool blurActive : 1;
@@ -200,6 +209,7 @@ const char *ThemePrivate::themeRcFile = "plasmarc";
 // the system colors theme is used to cache unthemed svgs with colorization needs
 // these svgs do not follow the theme's colors, but rather the system colors
 const char *ThemePrivate::systemColorsTheme = "internal-system-colors";
+EffectWatcher *ThemePrivate::s_blurEffectWatcher = 0;
 
 bool ThemePrivate::useCache()
 {
@@ -267,8 +277,8 @@ void ThemePrivate::compositingChanged(bool active)
 #ifdef Q_WS_X11
     if (compositingActive != active) {
         compositingActive = active;
-        discardCache(PixmapCache | SvgElementsCache);
-        emit q->themeChanged();
+        //kDebug() << QTime::currentTime();
+        scheduleThemeChangeNotification(PixmapCache | SvgElementsCache);
     }
 #endif
 }
@@ -321,17 +331,31 @@ void ThemePrivate::scheduledCacheUpdate()
 
 void ThemePrivate::colorsChanged()
 {
-    discardCache(PixmapCache);
     colorScheme = KColorScheme(QPalette::Active, KColorScheme::Window, colors);
     buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, colors);
     viewColorScheme = KColorScheme(QPalette::Active, KColorScheme::View, colors);
-    emit q->themeChanged();
+    scheduleThemeChangeNotification(PixmapCache);
 }
 
 void ThemePrivate::blurBehindChanged(bool blur)
 {
-    blurActive = blur;
-    discardCache(PixmapCache | SvgElementsCache);
+    if (blurActive != blur) {
+        blurActive = blur;
+        scheduleThemeChangeNotification(PixmapCache | SvgElementsCache);
+    }
+}
+
+void ThemePrivate::scheduleThemeChangeNotification(CacheTypes caches)
+{
+    cachesToDiscard |= caches;
+    updateNotificationTimer->start();
+}
+
+void ThemePrivate::notifyOfChanged()
+{
+    //kDebug() << cachesToDiscard;
+    discardCache(cachesToDiscard);
+    cachesToDiscard = NoCache;
     emit q->themeChanged();
 }
 
@@ -496,7 +520,10 @@ void ThemePrivate::settingsFileChanged(const QString &file)
 
 void Theme::settingsChanged()
 {
-    d->setThemeName(d->config().readEntry("name", ThemePrivate::defaultTheme), false);
+    KConfigGroup cg = d->config();
+    d->setThemeName(cg.readEntry("name", ThemePrivate::defaultTheme), false);
+    cg = KConfigGroup(cg.config(), "PlasmaToolTips");
+    d->toolTipDelay = cg.readEntry("Delay", qreal(0.7));
 }
 
 void Theme::setThemeName(const QString &themeName)
@@ -631,9 +658,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
         cg.sync();
     }
 
-    discardCache(SvgElementsCache);
-
-    emit q->themeChanged();
+    scheduleThemeChangeNotification(SvgElementsCache);
 }
 
 QString Theme::themeName() const
@@ -646,9 +671,7 @@ QString Theme::imagePath(const QString &name) const
     // look for a compressed svg file in the theme
     if (name.contains("../") || name.isEmpty()) {
         // we don't support relative paths
-#ifndef NDEBUG
-        kDebug() << "Theme says: bad image path " << name;
-#endif
+        //kDebug() << "Theme says: bad image path " << name;
         return QString();
     }
 
@@ -908,7 +931,7 @@ void Theme::insertIntoCache(const QString& key, const QPixmap& pix, const QStrin
 
         d->keysToCache.insert(key, id);
         d->idsToCache.insert(id, key);
-        d->saveTimer->start(600);
+        d->saveTimer->start();
     }
 }
 
@@ -1030,6 +1053,11 @@ KUrl Theme::homepage() const
     KConfig metadata(metadataPath);
     KConfigGroup brandConfig(&metadata, "Branding");
     return brandConfig.readEntry("homepage", KUrl("http://www.kde.org"));
+}
+
+int Theme::toolTipDelay() const
+{
+    return d->toolTipDelay;
 }
 
 }
