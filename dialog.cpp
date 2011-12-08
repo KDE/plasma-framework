@@ -751,7 +751,7 @@ void Dialog::animatedHide(Plasma::Direction direction)
         return;
     }
 
-    if (!KWindowSystem::compositingActive()) {
+    if (!Plasma::Theme::defaultTheme()->windowTranslucencyEnabled()) {
         hide();
         return;
     }
@@ -780,7 +780,7 @@ void Dialog::animatedHide(Plasma::Direction direction)
 
 void Dialog::animatedShow(Plasma::Direction direction)
 {
-    if (!KWindowSystem::compositingActive()) {
+    if (!Plasma::Theme::defaultTheme()->windowTranslucencyEnabled()) {
         show();
         return;
     }
@@ -804,7 +804,7 @@ void Dialog::animatedShow(Plasma::Direction direction)
         break;
     }
 
-    if (KWindowSystem::compositingActive()) {
+    if (Plasma::Theme::defaultTheme()->windowTranslucencyEnabled()) {
         Plasma::WindowEffects::slideWindow(this, location);
     }
 
