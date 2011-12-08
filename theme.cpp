@@ -111,12 +111,12 @@ public:
         if (QPixmap::defaultDepth() > 8) {
             QObject::connect(KWindowSystem::self(), SIGNAL(compositingChanged(bool)), q, SLOT(compositingChanged(bool)));
 #ifdef Q_WS_X11
-                //watch for blur effect property changes as well
-                if (!s_blurEffectWatcher) {
-                    s_blurEffectWatcher = new EffectWatcher("_KDE_NET_WM_BLUR_BEHIND_REGION");
-                }
+            //watch for blur effect property changes as well
+            if (!s_blurEffectWatcher) {
+                s_blurEffectWatcher = new EffectWatcher("_KDE_NET_WM_BLUR_BEHIND_REGION");
+            }
 
-                QObject::connect(s_blurEffectWatcher, SIGNAL(effectChanged(bool)), q, SLOT(blurBehindChanged(bool)));
+            QObject::connect(s_blurEffectWatcher, SIGNAL(effectChanged(bool)), q, SLOT(blurBehindChanged(bool)));
 #endif
         }
     }
