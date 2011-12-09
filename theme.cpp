@@ -167,8 +167,10 @@ public:
     static const char *systemColorsTheme;
     static const char *themeRcFile;
     static PackageStructure::Ptr packageStructure;
+#ifdef Q_WS_X11
     static EffectWatcher *s_blurEffectWatcher;
-
+#endif
+    
     Theme *q;
     QString themeName;
     QList<QString> fallbackThemes;
@@ -212,7 +214,9 @@ const char *ThemePrivate::themeRcFile = "plasmarc";
 // the system colors theme is used to cache unthemed svgs with colorization needs
 // these svgs do not follow the theme's colors, but rather the system colors
 const char *ThemePrivate::systemColorsTheme = "internal-system-colors";
+#ifdef Q_WS_X11
 EffectWatcher *ThemePrivate::s_blurEffectWatcher = 0;
+#endif
 
 bool ThemePrivate::useCache()
 {
