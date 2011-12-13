@@ -390,6 +390,10 @@ void DeclarativeAppletScript::setupObjects()
 
     QScriptValue global = m_engine->globalObject();
 
+    QScriptValue v = m_engine->newVariant(QVariant::fromValue(*applet()->package()));
+    global.setProperty("__plasma_package", v,
+                       QScriptValue::ReadOnly | QScriptValue::Undeletable | QScriptValue::SkipInEnumeration);
+
     m_self = m_engine->newQObject(m_interface);
     m_self.setScope(global);
     global.setProperty("plasmoid", m_self);

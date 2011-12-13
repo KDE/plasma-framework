@@ -124,8 +124,7 @@ Item{
 
     PlasmaCore.FrameSvgItem {
         id: frameSvg
-        imagePath: "widgets/frame"
-        prefix: "raised"
+        imagePath: "widgets/toolbar"
         anchors {
             fill: parent
             leftMargin: -margins.left

@@ -21,6 +21,10 @@
 
 #include <QtCore/QSharedData>
 
+#include <QPixmap>
+Q_DECLARE_METATYPE(QPixmap*)
+Q_DECLARE_METATYPE(QPixmap)
+
 #define DECLARE_SELF(Class, __fn__) \
     Class* self = qscriptvalue_cast<Class*>(ctx->thisObject()); \
     if (!self) { \

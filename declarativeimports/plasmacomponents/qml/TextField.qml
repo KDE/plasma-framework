@@ -149,12 +149,17 @@ Item {
             verticalCenter: parent.verticalCenter
             // TODO: see what is the correct policy for margins
             leftMargin: 2 * base.margins.left
-            rightMargin: 2 * base.margins.right
+            rightMargin: 2 * base.margins.right + (clearButton.opacity > 0 ? clearButton.width : 0)
         }
         selectByMouse: true
         color: theme.textColor
         enabled: textField.enabled
         clip: true
+        onActiveFocusChanged: {
+            if (!textField.activeFocus) {
+                textInput.closeSoftwareInputPanel()
+            }
+        }
 
         // Proxying keys events  is not required by the
         //     common API but is desired in the plasma API.
@@ -163,6 +168,7 @@ Item {
     }
 
     PlasmaCore.SvgItem {
+        id: clearButton
         svg: PlasmaCore.Svg {imagePath: "widgets/lineedit"}
         elementId: "clearbutton"
         width: textInput.height
