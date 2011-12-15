@@ -46,6 +46,7 @@ DeclarativeDragArea::DeclarativeDragArea(QDeclarativeItem *parent)
 	m_data(new DeclarativeMimeData())	// m_data is owned by us, and we shouldn't pass it to Qt directly as it will automatically delete it after the drag and drop.
 {
 	setAcceptedMouseButtons(Qt::LeftButton);
+    setFiltersChildEvents(true);
 }
 
 DeclarativeDragArea::~DeclarativeDragArea()
@@ -183,4 +184,19 @@ void DeclarativeDragArea::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 	Qt::DropAction action = drag->exec(m_supportedActions, m_defaultAction);
 	emit drop(action);
+}
+
+
+bool DeclarativeDragArea::sceneEventFilter(QGraphicsItem *item, QEvent *event)
+{
+    if (!isEnabled()) {
+        return false;
+    }
+
+    if (event->type() == QEvent::GraphicsSceneMouseMove) {
+        QGraphicsSceneMouseEvent *me = static_cast<QGraphicsSceneMouseEvent *>(event);
+        mouseMoveEvent(me);
+    }
+
+    return QDeclarativeItem::sceneEventFilter(item, event);
 }

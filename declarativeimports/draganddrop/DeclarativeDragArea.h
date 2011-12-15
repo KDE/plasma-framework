@@ -81,6 +81,7 @@ protected:
 	void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 	void mousePressEvent(QGraphicsSceneMouseEvent *) {}
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent *) {}
+	bool sceneEventFilter(QGraphicsItem *item, QEvent *event);
 
 private:
 	QDeclarativeComponent* m_delegate;
