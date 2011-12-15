@@ -81,8 +81,8 @@ Item {
         }
 
         Component.onCompleted: {
-            if (internal.tabGroup.currentTab == tab) {
-                parent.parent.currentTab = root
+            if (internal.tabGroup && internal.tabGroup.currentTab == tab) {
+                internal.tabGroup.currentTab = tab
             }
         }
     }

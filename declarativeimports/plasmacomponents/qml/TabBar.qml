@@ -88,5 +88,10 @@ Item {
             rightMargin: backgroundFrame.margins.right + buttonFrame.margins.right
             bottomMargin: backgroundFrame.margins.bottom + buttonFrame.margins.bottom
         }
+        Component.onCompleted: {
+            if (!root.currentTab) {
+                root.currentTab = tabBarLayout.children[0]
+            }
+        }
     }
 }
