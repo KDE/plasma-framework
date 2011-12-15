@@ -103,7 +103,7 @@ QDeclarativeItem* DeclarativeDragArea::target() const
 }
 
 // data
-DeclarativeMimeData* DeclarativeDragArea::data() const
+DeclarativeMimeData* DeclarativeDragArea::mimeData() const
 {
 	return m_data;
 }
