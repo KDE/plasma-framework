@@ -304,6 +304,9 @@ enum IntervalAlignment {
     void setStatus(const ItemStatus &status);
     ItemStatus status() const;
 
+//    Q_INVOKABLE QString downloadPath(const QString &file);
+    Q_INVOKABLE QStringList downloadedFiles() const;
+
 Q_SIGNALS:
     void releaseVisualFocus();
     void configNeedsSaving();
@@ -366,6 +369,9 @@ public:
 
     void setPopupWidget(QGraphicsWidget *widget);
     QGraphicsWidget *popupWidget();
+
+Q_SIGNALS:
+    void popupEvent(bool);
 
 public Q_SLOTS:
     void setPopupIconByName(const QString &name);

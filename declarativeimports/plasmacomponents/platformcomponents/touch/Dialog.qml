@@ -97,7 +97,6 @@ Item {
         id: dialog
         windowFlags: Qt.Dialog
 
-
         //onFaderClicked: root.clickedOutside()
         property Item rootItem
 
@@ -110,6 +109,7 @@ Item {
                 status = DialogStatus.Closed
             }
         }
+        onActiveWindowChanged: if (!activeWindow) dialog.visible = false
 
         mainItem: Item {
             id: mainItem
@@ -134,15 +134,13 @@ Item {
             Item {
                 id: contentItem
 
-                onChildrenRectChanged: mainItem.width = Math.max(childrenRect.width, buttonItem.childrenRect.width)
-
                 clip: true
+                onChildrenRectChanged: mainItem.width = Math.max(childrenRect.width, buttonItem.childrenRect.width)
                 anchors {
                     top: titleBar.bottom
                     left: parent.left
                     right: parent.right
                     bottom: buttonItem.top
-                    bottomMargin: 8
                 }
             }
 
@@ -154,7 +152,7 @@ Item {
                     left: parent.left
                     right: parent.right
                     bottom: parent.bottom
-                    bottomMargin: 4
+                    bottomMargin: 8
                 }
             }
         }

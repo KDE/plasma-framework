@@ -110,6 +110,8 @@ public:
 
     bool isActiveWindow() const;
 
+    Q_INVOKABLE void activateWindow();
+
     //FIXME: passing an int is ugly
     int windowFlags() const;
     void setWindowFlags(const int);

@@ -23,9 +23,6 @@
 #include "backportglobal.h"
 #include "plasmoid/appletinterface.h"
 
-Q_DECLARE_METATYPE(QPixmap*)
-Q_DECLARE_METATYPE(QPixmap)
-
 static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
 {
     if (ctx->argumentCount() == 1 && ctx->argument(0).isString()) {

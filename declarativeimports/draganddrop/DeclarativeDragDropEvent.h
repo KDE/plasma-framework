@@ -35,7 +35,7 @@ class DeclarativeDragDropEvent : public QObject
 	Q_PROPERTY(int y READ y)
 	Q_PROPERTY(int buttons READ buttons)
 	Q_PROPERTY(int modifiers READ modifiers)
-	Q_PROPERTY(DeclarativeMimeData* data READ data)
+	Q_PROPERTY(DeclarativeMimeData* mimeData READ mimeData)
 	Q_PROPERTY(Qt::DropActions possibleActions READ possibleActions)
 	Q_PROPERTY(Qt::DropAction proposedAction READ proposedAction)
 
@@ -47,7 +47,7 @@ public:
 	int y() const { return m_y; }
 	int buttons() const { return m_buttons; }
 	int modifiers() const { return m_modifiers; }
-	DeclarativeMimeData* data() { return &m_data; }
+	DeclarativeMimeData* mimeData() { return &m_data; }
 	Qt::DropAction proposedAction() const { return m_event->proposedAction(); }
 	Qt::DropActions possibleActions() const { return m_event->possibleActions(); }
 

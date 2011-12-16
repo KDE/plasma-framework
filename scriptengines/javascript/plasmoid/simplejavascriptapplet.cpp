@@ -510,6 +510,10 @@ void SimpleJavaScriptApplet::setupObjects()
     global.setProperty("AnimationGroup", m_engine->newFunction(SimpleJavaScriptApplet::animationGroup));
     global.setProperty("ParallelAnimationGroup", m_engine->newFunction(SimpleJavaScriptApplet::parallelAnimationGroup));
 
+    QScriptValue v = m_engine->newVariant(QVariant::fromValue(*applet()->package()));
+    global.setProperty("__plasma_package", v,
+                       QScriptValue::ReadOnly | QScriptValue::Undeletable | QScriptValue::SkipInEnumeration);
+
     // Bindings for data engine
 
     bindI18N(m_engine);

@@ -59,6 +59,11 @@ void DeclarativeItemContainer::resizeEvent(QGraphicsSceneResizeEvent *event)
     }
 }
 
+void DeclarativeItemContainer::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    event->ignore();
+}
+
 void DeclarativeItemContainer::widthChanged()
 {
     if (!m_declarativeItem) {

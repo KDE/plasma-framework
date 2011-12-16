@@ -68,6 +68,8 @@ public:
 
     int count() const {return QSortFilterProxyModel::rowCount();}
 
+    Q_INVOKABLE QVariantHash get(int i) const;
+
 Q_SIGNALS:
     void countChanged();
 
@@ -123,6 +125,8 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
     int count() const {return countItems();}
+
+    Q_INVOKABLE QVariantHash get(int i) const;
 
 protected:
     void setItems(const QString &sourceName, const QVariantList &list);

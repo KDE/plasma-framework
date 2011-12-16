@@ -151,11 +151,6 @@ Item {
             }
             sectionLabel.text = Sections.closestSection(y/listView.height)
         }
-        Behavior on y {
-            NumberAnimation {
-                duration: 150
-            }
-        }
     }
     PlasmaCore.FrameSvgItem {
         imagePath: "widgets/tooltip"
@@ -163,7 +158,7 @@ Item {
         height: sectionLabel.paintedHeight + margins.top + margins.bottom
         Label {
             id: sectionLabel
-            font.pointSize: theme.defaultFont.pointSize*3
+            font.pointSize: theme.defaultFont.pointSize * 1.5
             x: parent.margins.left
             y: parent.margins.top
         }
@@ -179,18 +174,11 @@ Item {
             }
         }
     }
-    /*Repeater {
-        id: sectionsRepeater
-        delegate: Label {
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: Sections._sections[modelData]
-            y: Sections._sectionData[modelData].index*(listView.height/listView.model.count)
-        }
-    }*/
+
     MouseArea {
         id: dragArea
         anchors.fill: parent
-        enabled: scrollbar.enabled
+        //enabled: scrollbar.enabled
         drag {
             target: handle
             axis: Drag.YAxis
@@ -200,6 +188,7 @@ Item {
         onPressed: {
             mouse.accepted = true
             handle.y = mouse.y
+            fadeTimer.running = false
         }
         onReleased: fadeTimer.restart()
 
@@ -231,8 +220,6 @@ Item {
 
             if (listView.model.itemsRemoved)
                 listView.model.itemsRemoved.connect(dirtyObserver);
-
-            sectionsRepeater.model = Sections._sections.length
         }
     }
 }

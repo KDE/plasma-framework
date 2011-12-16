@@ -68,7 +68,6 @@ void ScriptEnv::setupGlobalObject()
     // property is hidden from scripts.
     global.setProperty("__plasma_scriptenv", m_engine->newQObject(this),
                        QScriptValue::ReadOnly|QScriptValue::Undeletable|QScriptValue::SkipInEnumeration);
-
     // Add utility functions
 #ifndef DECLARATIVE
     global.setProperty("print", m_engine->newFunction(ScriptEnv::print));
@@ -181,6 +180,9 @@ bool ScriptEnv::importBuiltinExtension(const QString &extension, QScriptValue &o
         registerGetUrl(obj);
         obj.setProperty("userDataPath", m_engine->newFunction(ScriptEnv::userDataPath));
         obj.setProperty("runCommand", m_engine->newFunction(ScriptEnv::runCommand));
+        return true;
+    } else if ("download" == extension) {
+        obj.setProperty("download", m_engine->newFunction(ScriptEnv::download));
         return true;
     }
 

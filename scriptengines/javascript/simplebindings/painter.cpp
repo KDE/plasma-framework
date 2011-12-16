@@ -50,6 +50,14 @@ static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
 {
     if (ctx->argumentCount() > 0) {
         QPaintDevice *device = qscriptvalue_cast<QPaintDevice*>(ctx->argument(0));
+        if (!device) {
+            QPixmap *pixmap = qscriptvalue_cast<QPixmap *>(ctx->argument(0));
+            if (pixmap) {
+                return newPainter(eng, new QPainter(pixmap));
+            } else {
+                return newPainter(eng, new QPainter());
+            }
+        }
         return newPainter(eng, new QPainter(device));
     } else {
         return newPainter(eng, new QPainter());

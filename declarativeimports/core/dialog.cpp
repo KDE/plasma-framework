@@ -135,6 +135,11 @@ void DialogProxy::syncMainItem()
         return;
     }
 
+    if (static_cast<QGraphicsObject *>(m_dialog->graphicsWidget()) == m_mainItem.data() ||
+        (m_declarativeItemContainer && m_declarativeItemContainer->declarativeItem() == m_mainItem.data())) {
+        return;
+    }
+
     //not have a scene? go up in the hyerarchy until we find something with a scene
     QGraphicsScene *scene = m_mainItem.data()->scene();
     if (!scene) {
@@ -178,8 +183,8 @@ void DialogProxy::syncMainItem()
     m_dialog->setGraphicsWidget(widget);
 
     if (!qobject_cast<Plasma::Corona *>(scene)) {
-        offscreenX -= 1024;
-        offscreenY -= 1024;
+        offscreenX -= 10000;
+        offscreenY -= 10000;
         widget->setPos(offscreenX, offscreenY);
     }
 }
@@ -194,7 +199,6 @@ void DialogProxy::setVisible(const bool visible)
     if (m_dialog->isVisible() != visible) {
         m_dialog->setVisible(visible);
         if (visible) {
-            m_dialog->setWindowFlags(m_flags);
             m_dialog->setVisible(visible);
             m_dialog->raise();
         }
@@ -332,15 +336,29 @@ bool DialogProxy::isActiveWindow() const
     return m_activeWindow;
 }
 
+void DialogProxy::activateWindow()
+{
+    m_dialog->activateWindow();
+}
+
 int DialogProxy::windowFlags() const
 {
-    return (int)m_dialog->windowFlags();
+    return (int)m_flags;
 }
 
 void DialogProxy::setWindowFlags(const int flags)
 {
-    m_flags = (Qt::WindowFlags)flags;
-    m_dialog->setWindowFlags((Qt::WindowFlags)flags);
+    /*X misbehaviour: the only way to make a window with the Popup flag working, is to create it with that flag from the beginning*/
+    if (((Qt::WindowFlags)flags & Qt::Popup) != (m_flags & Qt::Popup)) {
+        delete m_dialog;
+        m_flags = (Qt::WindowFlags)flags;
+        m_dialog = new Plasma::Dialog(0, Qt::FramelessWindowHint|m_flags);
+        m_margins = new DialogMargins(m_dialog, this);
+        m_dialog->installEventFilter(this);
+    } else {
+        m_flags = (Qt::WindowFlags)flags;
+        m_dialog->setWindowFlags(Qt::FramelessWindowHint|m_flags);
+    }
 }
 
 int DialogProxy::location() const

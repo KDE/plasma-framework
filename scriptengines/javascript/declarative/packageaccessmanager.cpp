@@ -76,7 +76,6 @@ QNetworkReply *PackageAccessManager::createRequest(QNetworkAccessManager::Operat
                (!m_auth->authorizeRequiredExtension("networkio"))) {
         return new ErrorReply(op, req);
     } else {
-        return KIO::AccessManager::createRequest(op, req, outgoingData);
 #ifndef PLASMA_NO_KIO
             return KIO::AccessManager::createRequest(op, req, outgoingData);
 #else

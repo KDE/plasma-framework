@@ -19,6 +19,7 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+
 /**Documentanted API
 Inherits:
         Item
@@ -66,7 +67,9 @@ Signals:
         onClicked:
         This handler is called when there is a click.
 **/
-import QtQuick 1.0
+
+import QtQuick 1.1
+
 import org.kde.plasma.core 0.1 as PlasmaCore
 
 Item {
@@ -82,14 +85,15 @@ Item {
 
     signal clicked()
 
-    width: {
+    implicitWidth: {
         if (label.paintedWidth == 0) {
             return height
         } else {
+            //return Math.max(theme.defaultFont.mSize.width*12, label.paintedWidth)
             return Math.max(theme.defaultFont.mSize.width*12, icon.width + label.paintedWidth + surfaceNormal.margins.left + surfaceNormal.margins.right) + ((icon.valid) ? surfaceNormal.margins.left : 0)
         }
     }
-    height: Math.max(theme.defaultFont.mSize.height*1.8, Math.max(icon.height, label.paintedHeight) + surfaceNormal.margins.top + surfaceNormal.margins.bottom)
+    implicitHeight: Math.max(theme.defaultFont.mSize.height*1.6, Math.max(icon.height, label.paintedHeight) + surfaceNormal.margins.top/2 + surfaceNormal.margins.bottom/2)
 
     // TODO: needs to define if there will be specific graphics for
     //     disabled buttons
@@ -106,12 +110,7 @@ Item {
                    && button.parent.exclusive
         }
 
-        function pressButton()
-        {
-            userPressed = true
-        }
-
-        function releaseButton()
+        function clickButton()
         {
             userPressed = false
             if (!button.enabled) {
@@ -127,12 +126,13 @@ Item {
         }
     }
 
-    Keys.onSpacePressed: internal.pressButton()
-    Keys.onReturnPressed: internal.pressButton()
+    Keys.onSpacePressed: internal.userPressed = true
+    Keys.onReturnPressed: internal.userPressed = true
     Keys.onReleased: {
+        internal.userPressed = false
         if (event.key == Qt.Key_Space ||
             event.key == Qt.Key_Return)
-            internal.releaseButton();
+            internal.clickButton();
     }
 
     ButtonShadow {
@@ -173,6 +173,10 @@ Item {
     Item {
         id: buttonContent
         state: (internal.userPressed || checked) ? "pressed" : "normal"
+        scale: state == "pressed" ? 0.9 : 1
+        Behavior on scale {
+            PropertyAnimation { duration: 100 }
+        }
 
         states: [
             State { name: "normal" },
@@ -210,13 +214,19 @@ Item {
 
             anchors {
                 verticalCenter: parent.verticalCenter
-                left: label.text ? parent.left : undefined
-                horizontalCenter: label.text ? undefined : parent.horizontalCenter
+                left: label.paintedWidth > 0 ? parent.left : undefined
+                horizontalCenter: label.paintedWidth > 0 ? undefined : parent.horizontalCenter
             }
         }
 
         Text {
             id: label
+
+            //FIXME: why this is needed?
+            onPaintedWidthChanged: {
+                icon.anchors.horizontalCenter = label.paintedWidth > 0 ? undefined : icon.parent.horizontalCenter
+                icon.anchors.left = label.paintedWidth > 0 ? icon.parent.left : undefined
+            }
 
             anchors {
                 top: parent.top
@@ -246,8 +256,9 @@ Item {
 
         anchors.fill: parent
         hoverEnabled: true
-        onPressed: internal.pressButton()
-        onReleased: internal.releaseButton()
-        onCanceled: internal.releaseButton()
+        onPressed: internal.userPressed = true
+        onReleased: internal.userPressed = false
+        onCanceled: internal.userPressed = false
+        onClicked: internal.clickButton()
     }
 }

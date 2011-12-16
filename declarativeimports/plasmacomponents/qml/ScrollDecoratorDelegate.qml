@@ -48,19 +48,38 @@ PlasmaCore.FrameSvgItem {
             imagePath:"widgets/scrollbar"
             prefix: "slider"
 
-            function length() {
+            function length()
+            {
+                var nh, ny;
+
                 if (internalLoader.isVertical) {
-                    var overshoot = 0
-                    if (flickableItem.atYBeginning || flickableItem.atYEnd) {
-                        overshoot = Math.abs(flickableItem.visibleArea.yPosition * parent.height)
-                    }
-                    return (flickableItem.visibleArea.heightRatio * parent.height) - overshoot
+                    nh = flickableItem.visibleArea.heightRatio * internalLoader.height
                 } else {
-                    var overshoot = 0
-                    if (flickableItem.atXBeginning || flickableItem.atXEnd) {
-                        overshoot = Math.abs(flickableItem.visibleArea.xPosition * parent.width)
+                    nh = flickableItem.visibleArea.widthRatio * internalLoader.width
+                }
+
+                if (internalLoader.isVertical) {
+                    ny = flickableItem.visibleArea.yPosition * internalLoader.height
+                } else {
+                    ny = flickableItem.visibleArea.xPosition * internalLoader.width
+                }
+
+                if (ny > 3) {
+                    var t
+
+                    if (internalLoader.isVertical) {
+                        t = Math.ceil(internalLoader.height - 3 - ny)
+                    } else {
+                        t = Math.ceil(internalLoader.width - 3 - ny)
                     }
-                    return (flickableItem.visibleArea.widthRatio * parent.width) - overshoot
+
+                    if (nh > t) {
+                        return t
+                    } else {
+                        return nh
+                    }
+                } else {
+                    return nh + ny
                 }
             }
 

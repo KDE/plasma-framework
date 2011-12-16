@@ -54,7 +54,11 @@ Item {
             valid = false
         }
 
-        svgIcon.imagePath = "icons/"+root.source.split("-")[0]
+        svgIcon.imagePath = "toolbar-icons/"+root.source.split("-")[0]
+        if (!svgIcon.isValid() || !svgIcon.hasElement(root.source)) {
+            svgIcon.imagePath = "icons/"+root.source.split("-")[0]
+        }
+
         if (svgIcon.isValid() && svgIcon.hasElement(root.source)) {
             imageLoader.sourceComponent = svgComponent
         } else if (root.source.indexOf(".") == -1 && root.source.indexOf(":") == -1) {
@@ -72,6 +76,23 @@ Item {
         id: svgIcon
     }
 
+    function roundToStandardSize(size)
+    {
+        if (size >= theme.enormousIconSize) {
+            return theme.enormousIconSize
+        } else if (size >= theme.hugeIconSize) {
+            return theme.hugeIconSize
+        } else if (size >= theme.largeIconSize) {
+            return theme.largeIconSize
+        } else if (size >= theme.mediumIconSize) {
+            return theme.mediumIconSize
+        } else if (size >= theme.smallMediumIconSize) {
+            return theme.smallMediumIconSize
+        } else {
+            return theme.smallIconSize
+        }
+    }
+
     Loader {
         id: imageLoader
         anchors.fill: parent
@@ -83,6 +104,7 @@ Item {
                 svg: svgIcon
                 elementId: root.source
                 anchors.fill: parent
+                smooth: true
             }
         }
 

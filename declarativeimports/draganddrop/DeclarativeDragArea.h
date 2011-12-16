@@ -35,7 +35,7 @@ class DeclarativeDragArea : public QDeclarativeItem
 	Q_PROPERTY(QDeclarativeComponent* delegate READ delegate WRITE setDelegate NOTIFY delegateChanged RESET resetDelegate)
 	Q_PROPERTY(QDeclarativeItem* source READ source WRITE setSource NOTIFY sourceChanged RESET resetSource)
 	Q_PROPERTY(QDeclarativeItem* target READ source NOTIFY targetChanged)
-	Q_PROPERTY(DeclarativeMimeData* data READ data CONSTANT)
+	Q_PROPERTY(DeclarativeMimeData* mimeData READ mimeData CONSTANT)
 	Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled NOTIFY enabledChanged) //TODO: Should call setAcceptDrops()
 	Q_PROPERTY(Qt::DropActions supportedActions READ supportedActions WRITE setSupportedActions NOTIFY supportedActionsChanged)
 	Q_PROPERTY(Qt::DropAction defaultAction READ defaultAction WRITE setDefaultAction NOTIFY defaultActionChanged)
@@ -65,7 +65,7 @@ public:
 	Qt::DropAction defaultAction() const;
 	void setDefaultAction(Qt::DropAction action);
 
-	DeclarativeMimeData* data() const;
+	DeclarativeMimeData* mimeData() const;
 
 signals:
 	void delegateChanged();
@@ -81,6 +81,7 @@ protected:
 	void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 	void mousePressEvent(QGraphicsSceneMouseEvent *) {}
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent *) {}
+	bool sceneEventFilter(QGraphicsItem *item, QEvent *event);
 
 private:
 	QDeclarativeComponent* m_delegate;

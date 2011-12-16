@@ -110,11 +110,22 @@ void DataSource::setupData()
             finishedWithEngine(m_dataEngine->pluginName());
         }
 
+        /*
+         * It is due little explanation why this is a queued connection:
+         * If sourceAdded arrives immediately, in the case we have a datamodel
+         * with items at source level we connect too soon (before setData for
+         * all roles is done), having a dataupdated in the datamodel with only 
+         * the first role, killing off the other roles.
+         * Besides causing a model reset more, unfortunately setRoleNames can be done a single time, so is not possible adding new roles after the
+         * first setRoleNames() is called.
+         * This fixes engines that have 1 item per source like the
+         * recommendations engine.
+         */
         m_dataEngine = engine;
-        connect(m_dataEngine, SIGNAL(sourceAdded(const QString&)), this, SIGNAL(sourcesChanged()));
+        connect(m_dataEngine, SIGNAL(sourceAdded(const QString&)), this, SIGNAL(sourcesChanged()), Qt::QueuedConnection);
         connect(m_dataEngine, SIGNAL(sourceRemoved(const QString&)), this, SIGNAL(sourcesChanged()));
 
-        connect(m_dataEngine, SIGNAL(sourceAdded(const QString&)), this, SIGNAL(sourceAdded(const QString&)));
+        connect(m_dataEngine, SIGNAL(sourceAdded(const QString&)), this, SIGNAL(sourceAdded(const QString&)), Qt::QueuedConnection);
         connect(m_dataEngine, SIGNAL(sourceRemoved(const QString&)), this, SLOT(removeSource(const QString&)));
         connect(m_dataEngine, SIGNAL(sourceRemoved(const QString&)), this, SIGNAL(sourceRemoved(const QString&)));
     }
