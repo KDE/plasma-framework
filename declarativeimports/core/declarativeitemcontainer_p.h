@@ -39,6 +39,7 @@ public:
 
 protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
 protected Q_SLOTS:
     void widthChanged();
