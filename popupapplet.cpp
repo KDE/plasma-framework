@@ -813,7 +813,7 @@ void PopupAppletPrivate::dialogSizeChanged()
         sizeGroup.writeEntry("DialogHeight", dialog->height());
         sizeGroup.writeEntry("DialogWidth", dialog->width());
 
-        updateDialogPosition();
+        updateDialogPosition(!dialog->isUserResizing());
 
         emit q->configNeedsSaving();
         emit q->appletTransformedByUser();
@@ -903,7 +903,7 @@ void PopupAppletPrivate::restoreDialogSize()
     }
 }
 
-void PopupAppletPrivate::updateDialogPosition()
+void PopupAppletPrivate::updateDialogPosition(bool move)
 {
     Plasma::Dialog *dialog = dialogPtr.data();
     if (!dialog) {
@@ -920,85 +920,57 @@ void PopupAppletPrivate::updateDialogPosition()
         return;
     }
 
-    QSize s = dialog->size();
-    QPoint pos = view->mapFromScene(q->scenePos());
+    const QPoint appletPos = view->mapToGlobal(view->mapFromScene(q->scenePos()));
 
+    QPoint dialogPos;
     if (!q->containment() || view == q->containment()->view()) {
-        pos = corona->popupPosition(q, s, popupAlignment);
+        kDebug() << "requesting with" << q->scenePos();
+        dialogPos = corona->popupPosition(q, dialog->size(), popupAlignment);
     } else {
-        pos = corona->popupPosition(q->parentItem(), s, popupAlignment);
+        kDebug() << "requesting with" << q->parentItem();
+        dialogPos = corona->popupPosition(q->parentItem(), dialog->size(), popupAlignment);
     }
+    kDebug() << "dialog position is" << dialogPos <<" with location" << q->location() << "<<<<<<<<<<<<<<<<<<<<<<<<";
 
     bool reverse = false;
     if (q->formFactor() == Plasma::Vertical) {
-        if (view->mapToGlobal(view->mapFromScene(q->scenePos())).y() + q->size().height()/2 < pos.y() + dialog->size().width()/2) {
-            reverse = true;
-        }
+        reverse = (appletPos.y() + (q->size().height() / 2)) < (dialogPos.y() + (dialog->size().height() / 2));
+        dialog->setMinimumResizeLimits(-1, appletPos.y(), -1, appletPos.y() + q->size().height());
     } else {
-        if (view->mapToGlobal(view->mapFromScene(q->scenePos())).x() + q->size().width()/2 < pos.x() + dialog->size().width()/2) {
-            reverse = true;
-        }
+        reverse = (appletPos.x() + (q->size().width() / 2)) < (dialogPos.x() + (dialog->size().width() / 2));
+        dialog->setMinimumResizeLimits(appletPos.x(), -1, appletPos.x() + q->size().width(), -1);
     }
 
+    Dialog::ResizeCorners resizeCorners = Dialog::NoCorner;
     switch (q->location()) {
     case BottomEdge:
-        if (pos.x() >= q->pos().x()) {
-            dialog->setResizeHandleCorners(Dialog::NorthEast);
-        } else {
-            dialog->setResizeHandleCorners(Dialog::NorthWest);
-        }
-
-        if (reverse) {
-            popupPlacement = Plasma::TopPosedLeftAlignedPopup;
-        } else {
-            popupPlacement = Plasma::TopPosedRightAlignedPopup;
-        }
+        resizeCorners = Dialog::NorthEast | Dialog::NorthWest;
+        popupPlacement = reverse ? TopPosedLeftAlignedPopup : TopPosedRightAlignedPopup;
         break;
     case TopEdge:
-        if (pos.x() >= q->pos().x()) {
-            dialog->setResizeHandleCorners(Dialog::SouthEast);
-        } else {
-            dialog->setResizeHandleCorners(Dialog::SouthWest);
-        }
-
-        if (reverse) {
-            popupPlacement = Plasma::BottomPosedLeftAlignedPopup;
-        } else {
-            popupPlacement = Plasma::BottomPosedRightAlignedPopup;
-        }
+        resizeCorners = Dialog::SouthEast | Dialog::SouthWest;
+        popupPlacement = reverse ? Plasma::BottomPosedLeftAlignedPopup : Plasma::BottomPosedRightAlignedPopup;
         break;
     case LeftEdge:
-        if (pos.y() >= q->pos().y()) {
-            dialog->setResizeHandleCorners(Dialog::SouthEast);
-        } else {
-            dialog->setResizeHandleCorners(Dialog::NorthEast);
-        }
-
-        if (reverse) {
-            popupPlacement = Plasma::RightPosedTopAlignedPopup;
-        } else {
-            popupPlacement = Plasma::RightPosedBottomAlignedPopup;
-        }
+        resizeCorners = Dialog::SouthEast | Dialog::NorthEast;
+        popupPlacement = reverse ? RightPosedTopAlignedPopup : RightPosedBottomAlignedPopup;
         break;
 
     case RightEdge:
-        if (pos.y() >= q->pos().y()) {
-            dialog->setResizeHandleCorners(Dialog::SouthWest);
-        } else {
-            dialog->setResizeHandleCorners(Dialog::NorthWest);
-        }
-
-        if (reverse) {
-            popupPlacement = Plasma::LeftPosedTopAlignedPopup;
-        } else {
-            popupPlacement = Plasma::LeftPosedBottomAlignedPopup;
-        }
+        resizeCorners = Dialog::SouthWest | Dialog::NorthWest;
+        popupPlacement = reverse ? LeftPosedTopAlignedPopup : LeftPosedBottomAlignedPopup;
         break;
+
     default:
-        dialog->setResizeHandleCorners(Dialog::NorthEast);
+        popupPlacement = FloatingPopup;
+        resizeCorners = Dialog::All;
+        break;
     }
 
-    dialog->move(pos);
+    dialog->setResizeHandleCorners(resizeCorners);
+    if (move) {
+        dialog->move(dialogPos);
+    }
 }
 
 } // Plasma namespace

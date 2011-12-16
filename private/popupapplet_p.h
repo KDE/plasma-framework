@@ -42,7 +42,7 @@ public:
     void dialogSizeChanged();
     void dialogStatusChanged(bool status);
     void restoreDialogSize();
-    void updateDialogPosition();
+    void updateDialogPosition(bool move = true);
     void popupConstraintsEvent(Plasma::Constraints constraints);
     void checkExtenderAppearance(Plasma::FormFactor f);
     KConfigGroup popupConfigGroup();
