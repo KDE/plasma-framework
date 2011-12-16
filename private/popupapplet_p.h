@@ -36,6 +36,7 @@ public:
 
     void iconSizeChanged(int group);
     void internalTogglePopup(bool fromActivatedSignal = false);
+    void showDialog();
     void hideTimedPopup();
     void clearPopupLostFocus();
     void dialogSizeChanged();
@@ -61,6 +62,7 @@ public:
     Plasma::AspectRatioMode savedAspectRatio;
     QTimer *autohideTimer;
     QBasicTimer delayedShowTimer;
+    QBasicTimer showDialogTimer;
     QPoint clicked;
     ItemStatus preShowStatus;
     bool popupLostFocus : 1;

@@ -600,6 +600,9 @@ void PopupApplet::timerEvent(QTimerEvent *event)
                 d->autohideTimer->stop();
             }
         }
+    } else if (event->timerId() == d->showDialogTimer.timerId()) {
+        d->showDialogTimer.stop();
+        d->showDialog();
     } else {
         Applet::timerEvent(event);
     }
@@ -607,6 +610,7 @@ void PopupApplet::timerEvent(QTimerEvent *event)
 
 void PopupApplet::hidePopup()
 {
+    d->showDialogTimer.stop();
     d->delayedShowTimer.stop();
 
     Dialog *dialog = d->dialogPtr.data();
@@ -748,24 +752,34 @@ void PopupAppletPrivate::internalTogglePopup(bool fromActivatedSignal)
         }
 
         ToolTipManager::self()->hide(q);
-        updateDialogPosition();
+        showDialogTimer.start(0, q);
+    }
+}
 
-        KWindowSystem::setOnAllDesktops(dialog->winId(), true);
-        KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
+void PopupAppletPrivate::showDialog()
+{
+    Plasma::Dialog *dialog = dialogPtr.data();
+    if (!dialog) {
+        return;
+    }
 
-        if (icon) {
-            dialog->setAspectRatioMode(savedAspectRatio);
-        }
+    updateDialogPosition();
 
-        if (q->location() != Floating) {
-            dialog->animatedShow(locationToDirection(q->location()));
-        } else {
-            dialog->show();
-        }
+    KWindowSystem::setOnAllDesktops(dialog->winId(), true);
+    KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
 
-        if (!(dialog->windowFlags() & Qt::X11BypassWindowManagerHint)) {
-            KWindowSystem::activateWindow(dialog->winId());
-        }
+    if (icon) {
+        dialog->setAspectRatioMode(savedAspectRatio);
+    }
+
+    if (q->location() != Floating) {
+        dialog->animatedShow(locationToDirection(q->location()));
+    } else {
+        dialog->show();
+    }
+
+    if (!(dialog->windowFlags() & Qt::X11BypassWindowManagerHint)) {
+        KWindowSystem::activateWindow(dialog->winId());
     }
 }
 
