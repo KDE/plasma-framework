@@ -482,7 +482,7 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::Alig
             }
         }
 
-        kDebug() << actualItem;
+        //kDebug() << actualItem;
 
         if (actualItem) {
             v = viewFor(actualItem);
@@ -618,6 +618,7 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::Alig
     }
 
     pos.rx() = qMax(0, pos.x());
+    pos.ry() = qMax(0, pos.y());
     return pos;
 }
 
