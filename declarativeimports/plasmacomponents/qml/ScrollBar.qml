@@ -27,36 +27,55 @@ Imports:
         QtQuick 1.1
 
 Description:
-        Just a simple scrollbar which is using the plasma theme.
-        Plasma theme is the theme which changes via the systemsetting-workspace  appearence
-        -desktop theme.
+        Just a simple Scroll Bar which is using the plasma theme.
+        This component does not belongs to the QtComponents API specification
+        but it was base on ScrollDecorator component.
+        You should not use it for touch interfaces, use a flickable and a
+        ScrollDecorator instead.
 
-Properties:
+Plasma Properties:
 
-        int orientation:
-        Sets the orientation.
-
-        bool animated:
-        TODO
+        enumeration orientation:
+        This property holds the orientation where the ScrollBar will scroll.
+    The orientation can be either Qt.Horizontal or Qt.Vertical
+    The default value is Qt.Vertical.
 
         bool inverted:
-        Sets if the scrollbar will be inverted or not.
+        This property holds if the ScrollBar will increase the Flickable
+    content in the normal direction (Left to Right or Top to Bottom) or
+    if this will be inverted.
+    The default value is false.
 
-        bool updateValueWhileDragging: true
-        Sets if the Scrollbar will be resized while it is being dragged.
+        bool updateValueWhileDragging:
+        This property holds if the Scrollbar will update the Flickeble
+    position while dragging or only when released.
+    The default value is true.
 
-        alias stepSize:
-        Sets the step with which the scrollbar is moving.
+        real stepSize:
+        This property holds how many steps exists while moving the handler.
+    If you want the ScrollBar buttons to appear you must set this property
+    with a value bigger than 0.
+    The default value is 0.
 
-        alias pressed:
-        If the scrollbar is pressed it returns true,otherwise false.
+        bool pressed:
+        This property holds if the ScrollBar is pressed.
 
-        real scrollButtonInterval: 50
+        real scrollButtonInterval:
+        This property holds the interval time used by the ScrollBar button
+    to increase or decrease steps.
 
-        property Flickable flickableItem: null
+        Flickable flickableItem:
+        This property holds the Flickable component which the ScrollBar will
+    interact with.
 
-        property bool interactive:
-        If true,then the scrollbar is interactive otherwise it isn't.
+        bool interactive:
+        This property holds  if the ScrollBar is interactive.
+    The default value is true.
+
+        bool enabeld:
+        This property holds if the button will be enabled for user
+    interaction.
+    The default value is true.
 **/
 
 import QtQuick 1.1
