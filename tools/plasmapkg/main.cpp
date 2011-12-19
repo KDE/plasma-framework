@@ -258,6 +258,7 @@ int main(int argc, char **argv)
         QString serviceType = package.metadata().serviceType();
         if (!serviceType.isEmpty()) {
             if (serviceType.contains("Plasma/Applet") ||
+                serviceType.contains("Plasma/PopupApplet") ||
                 serviceType.contains("Plasma/Containment")) {
                 type = "plasmoid";
             } else if (serviceType == "Plasma/DataEngine") {
