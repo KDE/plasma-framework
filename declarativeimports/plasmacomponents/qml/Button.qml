@@ -36,35 +36,35 @@ Description:
         -desktop theme.
 
 Properties:
-        bool checked:
+      * bool checked:
         This property holds wheter this button is checked or not.
 	The button must be in the checkable state for enable users check or uncheck it.
 	The default value is false.
 	See also checkable property.
 
-        bool checkable:
+      * bool checkable:
         This property holds if the button is acting like a checkable button or not.
 	The default value is false.
 
-        bool pressed:
+       * bool pressed:
         This property holds if the button is pressed or not.
 	Read-only.
 
-        string text:
+      * string text:
         This property holds the text label for the button.
         For example,the ok button has text 'ok'.
 	The default value for this property is an empty string.
 
-        url iconSource:
+      * url iconSource:
         This property holds the source url for the Button's icon.
 	The default value is an empty url, which displays no icon.
 
-        font font:
+      * font font:
         This property holds the font used by the button label.
 	See also Qt documentation for font type.
 
 Signals:
-        onClicked:
+      * onClicked:
         This handler is called when there is a click.
 **/
 
