@@ -27,26 +27,28 @@ Imports:
 
 Description:
             It is a simple progressBar which is using the plasma theme.
-            TODO Do we need more info?
+            Some operations take a period of time to be performed and the user needs a confirmation that the operation is still ongoing. If the user does not get any confirmation, they might suspect that they did something wrong or that the device has broken. A progress bar is one of available mechanisms for providing this reassurance to the user.
 
 Properties:
-            alias minimumValue:
-            Sets the minimumValue for the progressBar
+          * real minimumValue:
+            Minimum Value for the progressBar
 
-            alias maximumValue:
-            Sets the maximumValue for the progressBar
+          * real maximumValue:
+            Maximum value for the progressBar
 
-            alias value:
-            Returns the current value of the progressBar
+            real value:
+            Current value of the progressBar
 
-            alias indeterminate:
-            TODO needs info
+          * bool indeterminate:
+            Indicates whether the operation's duration is known or not. The property can have the following values:
+            true - the operation's duration is unknown, so the progress bar is animated. The value, minimum, and maximum properties are ignored.
+            false - the operation's duration is known, so the progress bar is drawn to indicate progress between the minimum and maximum values.
+            The default value is false.
 
-            int orientation:
-            Sets the orientation of the progressBar
-
-            bool _isVertical:
-            Returns true if the progressBar is vertical.
+          * int orientation:
+            Orientation of the progressBar:
+            Qt.Horizontal or
+            Qt.Vertical
 **/
 
 import QtQuick 1.0
