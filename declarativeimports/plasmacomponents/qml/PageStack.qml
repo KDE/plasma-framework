@@ -53,21 +53,55 @@ Imports:
         PageStack.js
 
 Description:
-        The PageStack item defines a container for pages and a stack-based
-        snavigation model. Pages can be defined as QML items or components.
+        The PageStack component provides a stack-based navigation model that you can use in your application. A stack-based navigation model means that a page of content for your application is pushed onto a stack when the user navigates deeper into the application page hierarchy. The user can then go back to the previous page (or several pages back) by popping a page (or several pages) off the top of the stack.
 
 Properties:
-        int depth:TODO
+      * int depth:
+        The number of pages on the page stack.
 
-        Item currentPage:
-        Returns the current page.
+      * Item currentPage:
+        The page in the stack that is currently visible.
 
-        ToolBar toolBar:
+      * ToolBar toolBar:
+        The toolbar container for the tools associated with each page. If a toolbar is specified, the tools set for the current page is shown to the user.
+        If toolbar is null, then no tools are shown even if a page does have tools.
 
-        variant initialPage:
+      * variant initialPage:
+        The page to be automatically loaded when this PageStack component gets instantiated.
 
-        bool busy:
+      * bool busy:
         Indicates whether there is an ongoing page transition.
+
+Methods:
+      * clear():
+        Clears the page stack of all pages.
+
+      * find(function):
+        This iterates, top to bottom, through all the pages in the page stack and passes each page to the given function. If the specified function returns true, the iterating stops and this function returns the page that produced the true result. If no matching page is found in the page stack, null is returned.
+
+      * pop(page, immediate):
+        When you use pop() with no arguments, it pops the top page off the stack and returns that page to the caller. The normal pop transition animation is performed. If the page popped off the stack is based on the Item element, the page is re-parented back to its original parent.
+        If you give a page argument, the stack is unwound to the given page. Any Item-based pages popped off the stack are re-parented to their original parent.
+        If the given page is not found in the stack, the stack is unwound to the first page in the stack. However, if you specifically want to unwind the page stack to the first page in the stack, it is best to be explicit about what you are doing and use pop(null) rather than guessing a page that is not on the stack.
+        The immediate argument defaults to false which means the normal transition animation is performed when a page is popped. If you do not want the transition animation to be performed pass a value of true for immediate.
+        Note: A pop() on a stack with that contains 0 or 1 pages is a no-operation.
+        Returns: The page that was top-most on the stack before the pop operation.
+
+      * push(page, properties, immediate):
+        Pushes the given page onto the page stack. You can use a component, item or string for the page. If the page is based on the Item element, the page is re-parented. If a string is used then it is interpreted as a URL that is used to load a page component. The push operation results in the appropriate transition animation being run. If you are pushing an array of pages, the transition animation is only shown for the last page.
+        Returns: The new top page on the stack.
+        The page argument can also be an array of pages. In this case, all the pages in the array are pushed onto the stack. The items in the array can be components, items or strings just like for pushing a single page.
+        The page argument can also be an object that specifies a page with properties or even an array of pages with properties.
+        The properties argument is optional and allows you to specify values for properties in the page being pushed.
+        The immediate argument defaults to false which means the normal transition animation is performed when a page is pushed. If you do not want the transition animation to be performed pass a value of true for immediate.
+        Note: When the stack is empty, a push() or replace() does not perform a transition animation because there is no page to transition from. The only time this normally happens is when an application is starting up so it is not appropriate to have a transition animation anyway.
+        See also Page.
+
+      * replace(page, properties, immediate):
+        Replaces the top-most page on the stack with page. As in the push() operation, you can use a component, item or string for the page, or even an array of pages. If the page is based on the Item element, the page is re- parented. As in the pop() operation, the replaced page on the stack is re- parented back to its original parent.
+        Returns: The new top page on the stack.
+        See also push().
+
 **/
 
 import QtQuick 1.1

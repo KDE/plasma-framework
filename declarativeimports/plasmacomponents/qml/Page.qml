@@ -47,20 +47,26 @@ Imports:
         everything in the same dir which are version 0.1
 
 Description:
- TODO i need more info here
+        Defines the content of a piece of the user interface, it's meant to be loaded by a PageStack or TabGroup element.
+        The typical use can be in small plasmoids or  mobile devices where the whole screen is a series of interchangeable and flickable pages, of which the user navigates across.
 
 
 Properties:
-        int status: PageStatus.Inactive
+        * int status:
+        The current status of the page. It can be one of the following values:
+        PageStatus.Inactive (default) - the page is not visible.
+        PageStatus.Activating - the page is becoming to the active page.
+        PageStatus.Active - the page is the currently active page.
+        PageStatus.Deactivating - the page is becoming to inactive page.
 
-        PageStack pageStack:
+        * PageStack pageStack:
+        The page stack that this page is owned by.
 
-        int orientationLock:
+        * int orientationLock:
         Sets the orientation for the Page
 
-        Item tools:
-        The default value is true.
-        TODO needs info
+        * Item tools:
+        Defines the toolbar contents for the page. If the page stack is set up using a toolbar instance, it automatically shows the currently active page's toolbar contents in the toolbar. The default value is null resulting in the page's toolbar to be invisible when the page is active.
 **/
 
 import QtQuick 1.1
