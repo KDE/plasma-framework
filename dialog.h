@@ -98,6 +98,31 @@ class PLASMA_EXPORT Dialog : public QWidget
         ResizeCorners resizeCorners() const;
 
         /**
+         * @return true if currently being resized by the user
+         */
+        bool isUserResizing() const;
+
+        /**
+         * Sets the minimum values that each of four sides of the rect may expand to or from
+         *
+         * @param left the screen coordinate that the left may not go beyond; -1 for no limit
+         * @param top the screen coordinate that the top may not go beyond; -1 for no limit
+         * @param right the screen coordinate that the right may not go beyond; -1 for no limit
+         * @param bottom the screen coordinate that the bottom may not go beyond; -1 for no limit
+         */
+        void setMinimumResizeLimits(int left, int top, int right, int bottom);
+
+        /**
+         * Retrives the minimum resize limits for the dialog
+         *
+         * @param left the screen coordinate that the left may not go beyond; -1 for no limit
+         * @param top the screen coordinate that the top may not go beyond; -1 for no limit
+         * @param right the screen coordinate that the right may not go beyond; -1 for no limit
+         * @param bottom the screen coordinate that the bottom may not go beyond; -1 for no limit
+         */
+        void getMinimumResizeLimits(int *left, int *top, int *right, int *bottom);
+
+        /**
          * Causes an animated hide; requires compositing to work, otherwise
          * the dialog will simply hide.
          * @since 4.3

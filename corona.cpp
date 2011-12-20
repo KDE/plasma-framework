@@ -112,7 +112,7 @@ void Corona::saveLayout(const QString &configName) const
     if (configName.isEmpty() || configName == d->configName) {
         c = config();
     } else {
-        c = KSharedConfig::openConfig(configName);
+        c = KSharedConfig::openConfig(configName, KConfig::SimpleConfig);
     }
 
     d->saveLayout(c);
@@ -329,7 +329,7 @@ void Corona::clearContainments()
 KSharedConfigPtr Corona::config() const
 {
     if (!d->config) {
-        d->config = KSharedConfig::openConfig(d->configName);
+        d->config = KSharedConfig::openConfig(d->configName, KConfig::SimpleConfig);
     }
 
     return d->config;
@@ -595,6 +595,7 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::Alig
     }
 
     pos.rx() = qMax(0, pos.x());
+    pos.ry() = qMax(0, pos.y());
     return pos;
 }
 

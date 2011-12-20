@@ -134,22 +134,19 @@ void slideWindow(QWidget *widget, Plasma::Location location)
     Display *dpy = QX11Info::display();
     Atom atom = XInternAtom( dpy, "_KDE_SLIDE", False );
     QVarLengthArray<long, 2> data(2);
+    data[0] = -1;
 
     switch (location) {
     case LeftEdge:
-        data[0] = widget->geometry().left();
         data[1] = 0;
         break;
     case TopEdge:
-        data[0] = widget->geometry().top();
         data[1] = 1;
         break;
     case RightEdge:
-        data[0] = widget->geometry().right();
         data[1] = 2;
         break;
     case BottomEdge:
-        data[0] = widget->geometry().bottom();
         data[1] = 3;
     default:
         break;
