@@ -108,7 +108,7 @@ void TextEdit::setNativeWidget(KTextEdit *nativeWidget)
     connect(nativeWidget, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
 
     nativeWidget->setWindowIcon(QIcon());
-    setWidget(nativeWidget);
+    d->setWidget(nativeWidget);
 
     nativeWidget->setAttribute(Qt::WA_NoSystemBackground);
     nativeWidget->setFrameShape(QFrame::NoFrame);

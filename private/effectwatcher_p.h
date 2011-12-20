@@ -41,7 +41,7 @@ protected:
 #endif
 
 Q_SIGNALS:
-    void blurBehindChanged(bool blur);
+    void effectChanged(bool on);
 
 private:
     QString m_property;

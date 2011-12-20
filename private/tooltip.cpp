@@ -356,10 +356,9 @@ void ToolTip::resizeEvent(QResizeEvent *e)
 void ToolTip::paintEvent(QPaintEvent *e)
 {
     QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
     painter.setClipRect(e->rect());
     painter.setCompositionMode(QPainter::CompositionMode_Source);
-    painter.fillRect(rect(), Qt::transparent);
+    painter.fillRect(e->rect(), Qt::transparent);
 
     d->background->paintFrame(&painter);
 }

@@ -933,7 +933,7 @@ void SignalPlotter::drawPlots(QPainter *p, int top, int w, int h, int horizontal
                               qMax(prev_prev_datapoints[j],
                                    prev_prev_prev_datapoints[j])));
                 double current_minvalue =
-                    qMin(datapoints[j],
+                    qMin<double>(datapoints[j],
                          qMin(prev_datapoints[j],
                               qMin(prev_prev_datapoints[j],
                                    prev_prev_prev_datapoints[j])));

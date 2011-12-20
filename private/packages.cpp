@@ -22,6 +22,7 @@
 #include <math.h>
 #include <float.h> // FLT_MAX
 
+#include <QCoreApplication>
 #include <QFileInfo>
 
 #include <kconfiggroup.h>
@@ -82,7 +83,10 @@ PlasmoidPackage::PlasmoidPackage(QObject *parent)
 PlasmoidPackage::~PlasmoidPackage()
 {
 #ifndef PLASMA_NO_KNEWSTUFF
-    delete m_knsDialog.data();
+    if (!QCoreApplication::closingDown()) {
+        // let it "leak" on application close as this causes crashes otherwise, BUG 288153
+        delete m_knsDialog.data();
+    }
 #endif
 }
 
@@ -103,6 +107,7 @@ void PlasmoidPackage::createNewWidgetBrowser(QWidget *parent)
     KNS3::DownloadDialog *knsDialog = m_knsDialog.data();
     if (!knsDialog) {
         m_knsDialog = knsDialog = new KNS3::DownloadDialog("plasmoids.knsrc", parent);
+        knsDialog->setProperty("DoNotCloseController", true);
         connect(knsDialog, SIGNAL(accepted()), this, SIGNAL(newWidgetBrowserFinished()));
     }
 

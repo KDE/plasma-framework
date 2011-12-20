@@ -490,8 +490,27 @@ void Dialog::mouseMoveEvent(QMouseEvent *event)
                 break;
         }
 
-        if ((newWidth >= minimumSize().width()) && (newHeight >= minimumSize().height())) {
-            setGeometry(QRect(position, QSize(newWidth, newHeight)));
+        QRect newGeom(position, QSize(newWidth, newHeight));
+
+        // now sanity check the resize results again min constraints, if any
+        if (d->leftResizeMin > -1 && newGeom.left() > d->leftResizeMin) {
+            newGeom.setLeft(d->leftResizeMin);
+        }
+
+        if (d->topResizeMin > -1 && newGeom.top() > d->topResizeMin) {
+            newGeom.setTop(d->topResizeMin);
+        }
+
+        if (d->rightResizeMin > -1 && newGeom.right() < d->rightResizeMin) {
+            newGeom.setRight(d->rightResizeMin);
+        }
+
+        if (d->bottomResizeMin > -1 && newGeom.bottom() < d->bottomResizeMin) {
+            newGeom.setBottom(d->bottomResizeMin);
+        }
+
+        if ((newGeom.width() >= minimumSize().width()) && (newGeom.height() >= minimumSize().height())) {
+            setGeometry(newGeom);
         }
     }
 
@@ -518,9 +537,9 @@ void Dialog::mousePressEvent(QMouseEvent *event)
 void Dialog::mouseReleaseEvent(QMouseEvent *event)
 {
     if (d->resizeStartCorner != Dialog::NoCorner) {
+        emit dialogResized();
         d->resizeStartCorner = Dialog::NoCorner;
         unsetCursor();
-        emit dialogResized();
     }
 
     QWidget::mouseReleaseEvent(event);
@@ -535,12 +554,6 @@ void Dialog::keyPressEvent(QKeyEvent *event)
 
 bool Dialog::event(QEvent *event)
 {
-    if (event->type() == QEvent::Paint) {
-        QPainter p(this);
-        p.setCompositionMode(QPainter::CompositionMode_Source);
-        p.fillRect(rect(), Qt::transparent);
-    }
-
     return QWidget::event(event);
 }
 
@@ -751,13 +764,45 @@ Dialog::ResizeCorners Dialog::resizeCorners() const
     return d->resizeCorners;
 }
 
+bool Dialog::isUserResizing() const
+{
+    return d->resizeStartCorner > NoCorner;
+}
+
+void Dialog::setMinimumResizeLimits(int left, int top, int right, int bottom)
+{
+    d->leftResizeMin = left;
+    d->topResizeMin = top;
+    d->rightResizeMin = right;
+    d->bottomResizeMin = bottom;
+}
+
+void Dialog::getMinimumResizeLimits(int *left, int *top, int *right, int *bottom)
+{
+    if (left) {
+        *left = d->leftResizeMin;
+    }
+
+    if (top) {
+        *top = d->topResizeMin;
+    }
+
+    if (right) {
+        *right = d->rightResizeMin;
+    }
+
+    if (bottom) {
+        *bottom = d->bottomResizeMin;
+    }
+}
+
 void Dialog::animatedHide(Plasma::Direction direction)
 {
     if (!isVisible()) {
         return;
     }
 
-    if (!KWindowSystem::compositingActive()) {
+    if (!Plasma::Theme::defaultTheme()->windowTranslucencyEnabled()) {
         hide();
         return;
     }
@@ -786,7 +831,7 @@ void Dialog::animatedHide(Plasma::Direction direction)
 
 void Dialog::animatedShow(Plasma::Direction direction)
 {
-    if (!KWindowSystem::compositingActive()) {
+    if (!Plasma::Theme::defaultTheme()->windowTranslucencyEnabled()) {
         show();
         return;
     }
@@ -810,7 +855,7 @@ void Dialog::animatedShow(Plasma::Direction direction)
         break;
     }
 
-    if (KWindowSystem::compositingActive()) {
+    if (Plasma::Theme::defaultTheme()->windowTranslucencyEnabled()) {
         Plasma::WindowEffects::slideWindow(this, location);
     }
 

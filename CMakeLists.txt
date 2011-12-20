@@ -151,6 +151,7 @@ set(plasma_LIB_SRCS
     private/storage.cpp
     private/storagethread.cpp
     private/style.cpp
+    private/themedwidgetinterface.cpp
     private/trustedonlyauthorization.cpp
     private/tooltip.cpp
     private/wallpaperrenderthread.cpp
@@ -461,8 +462,6 @@ install(FILES
 
 install(FILES data/knewstuff/plasmoids.knsrc DESTINATION  ${CONFIG_INSTALL_DIR})
 
-install(FILES data/kconfig_updates/plasma_popupapplet_fix_groups.upd DESTINATION ${KCONF_UPDATE_INSTALL_DIR})
-install(PROGRAMS data/kconfig_updates/plasma_popupapplet_fix_groups.pl DESTINATION ${KCONF_UPDATE_INSTALL_DIR})
 install(FILES data/operations/dataengineservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
 install(FILES data/operations/plasmoidservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
 install(FILES data/operations/storage.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)

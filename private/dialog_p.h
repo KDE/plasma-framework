@@ -40,6 +40,10 @@ public:
               view(0),
               resizeCorners(Dialog::NoCorner),
               resizeStartCorner(Dialog::NoCorner),
+              leftResizeMin(-1),
+              topResizeMin(-1),
+              rightResizeMin(-1),
+              bottomResizeMin(-1),
               moveTimer(0),
               aspectRatioMode(Plasma::IgnoreAspectRatio),
               resizeChecksWithBorderCheck(false)
@@ -72,6 +76,10 @@ public:
     Dialog::ResizeCorners resizeCorners;
     QMap<Dialog::ResizeCorner, QRect> resizeAreas;
     int resizeStartCorner;
+    int leftResizeMin;
+    int topResizeMin;
+    int rightResizeMin;
+    int bottomResizeMin;
     QTimer *moveTimer;
     QTimer *adjustViewTimer;
     QTimer *adjustSizeTimer;

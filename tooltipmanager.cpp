@@ -140,21 +140,18 @@ void ToolTipManager::show(QGraphicsWidget *widget)
         return;
     }
 
-    qreal delay = 0.0;
-    ToolTipContent content = d->tooltips[widget];
+    d->delayedHide = false;
+    d->hideTimer->stop();
+    d->showTimer->stop();
+    const int defaultDelay = Theme::defaultTheme()->toolTipDelay();
 
-    if (!content.isInstantPopup()) {
-        KConfig config("plasmarc");
-        KConfigGroup cg(&config, "PlasmaToolTips");
-        delay = cg.readEntry("Delay", qreal(0.7));
-        if (delay < 0) {
-            return;
-        }
+    if (defaultDelay < 0) {
+        return;
     }
 
-    d->hideTimer->stop();
-    d->delayedHide = false;
-    d->showTimer->stop();
+    ToolTipContent content = d->tooltips[widget];
+    qreal delay = content.isInstantPopup() ? 0.0 : defaultDelay;
+
     d->currentWidget = widget;
 
     if (d->isShown) {
@@ -214,6 +211,13 @@ void ToolTipManager::unregisterWidget(QGraphicsWidget *widget)
         return;
     }
 
+    if (widget == d->currentWidget) {
+        d->currentWidget = 0;
+        d->showTimer->stop();  // stop the timer to show the tooltip
+        d->delayedHide = false;
+        d->hideTipWidget();
+    }
+
     widget->removeEventFilter(this);
     d->removeWidget(widget);
 }
@@ -249,6 +253,11 @@ void ToolTipManager::setContent(QGraphicsWidget *widget, const ToolTipContent &d
             //look if the data prefers aother graphicswidget, otherwise use the one used as event catcher
             QGraphicsWidget *referenceWidget = data.graphicsWidget() ? data.graphicsWidget() : widget;
             Corona *corona = qobject_cast<Corona *>(referenceWidget->scene());
+            if (!corona) {
+                // fallback to the corona we were given
+                corona = m_corona;
+            }
+
             if (corona) {
                 d->tipWidget->moveTo(corona->popupPosition(referenceWidget, d->tipWidget->size(), Qt::AlignCenter));
             }
@@ -345,14 +354,13 @@ void ToolTipManagerPrivate::clearTips()
 
 void ToolTipManagerPrivate::resetShownState()
 {
-    if (currentWidget) {
-        if (!tipWidget || !tipWidget->isVisible() || delayedHide) {
-            //One might have moused out and back in again
-            delayedHide = false;
-            isShown = false;
-            currentWidget = 0;
-            hideTipWidget();
-        }
+    if (!tipWidget || !tipWidget->isVisible() || delayedHide) {
+        //One might have moused out and back in again
+        showTimer->stop();
+        delayedHide = false;
+        isShown = false;
+        currentWidget = 0;
+        hideTipWidget();
     }
 }
 
@@ -404,6 +412,11 @@ void ToolTipManagerPrivate::showToolTip()
     tipWidget->prepareShowing();
     QGraphicsWidget *referenceWidget = tooltip.value().graphicsWidget() ? tooltip.value().graphicsWidget() : currentWidget;
     Corona *corona = qobject_cast<Corona *>(referenceWidget->scene());
+    if (!corona) {
+        // fallback to the corona we were given
+        corona = q->m_corona;
+    }
+
     if (corona) {
         tipWidget->moveTo(corona->popupPosition(referenceWidget, tipWidget->size(), Qt::AlignCenter));
     }

@@ -1118,7 +1118,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         Q_PRIVATE_SLOT(d, void selectItemToDestroy())
         Q_PRIVATE_SLOT(d, void updateRect(const QRectF& rect))
         Q_PRIVATE_SLOT(d, void destroyMessageOverlay())
-        Q_PRIVATE_SLOT(d, void clearShortcutEditorPtr())
         Q_PRIVATE_SLOT(d, void configDialogFinished())
         Q_PRIVATE_SLOT(d, void updateShortcuts())
         Q_PRIVATE_SLOT(d, void publishCheckboxStateChanged(int state))

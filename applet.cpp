@@ -1567,6 +1567,8 @@ void Applet::setGlobalShortcut(const KShortcut &shortcut)
         foreach (QWidget *w, widgets) {
             w->addAction(d->activationAction);
         }
+    } else if (d->activationAction->globalShortcut() == shortcut) {
+        return;
     }
 
     //kDebug() << "before" << shortcut.primary() << d->activationAction->globalShortcut().primary();
@@ -1900,6 +1902,11 @@ void Applet::showConfigurationInterface()
             KConfigSkeleton *configLoader = d->configLoader ? d->configLoader : new KConfigSkeleton(0);
             dialog = new AppletConfigDialog(0, d->configDialogId(), configLoader);
 
+            if (!d->configLoader) {
+                // delete the temporary when this dialog is done
+                configLoader->setParent(dialog);
+            }
+
             dialog->setWindowTitle(d->configWindowTitle());
             dialog->setAttribute(Qt::WA_DeleteOnClose, true);
             bool hasPages = false;
@@ -1916,6 +1923,7 @@ void Applet::showConfigurationInterface()
 #ifndef PLASMA_NO_KUTILS
                 KCModuleProxy *module = new KCModuleProxy(kcm);
                 if (module->realModule()) {
+                    connect(module, SIGNAL(changed(bool)), dialog, SLOT(settingsModified(bool)));
                     dialog->addPage(module, module->moduleInfo().moduleName(), module->moduleInfo().icon());
                     hasPages = true;
                 } else {
@@ -2016,14 +2024,15 @@ KConfigDialog *AppletPrivate::generateGenericConfigDialog()
 {
     KConfigSkeleton *nullManager = new KConfigSkeleton(0);
     KConfigDialog *dialog = new AppletConfigDialog(0, configDialogId(), nullManager);
+    nullManager->setParent(dialog);
     dialog->setFaceType(KPageDialog::Auto);
     dialog->setWindowTitle(configWindowTitle());
     dialog->setAttribute(Qt::WA_DeleteOnClose, true);
     q->createConfigurationInterface(dialog);
     dialog->showButton(KDialog::Default, false);
+    dialog->showButton(KDialog::Help, false);
     QObject::connect(dialog, SIGNAL(applyClicked()), q, SLOT(configDialogFinished()));
     QObject::connect(dialog, SIGNAL(okClicked()), q, SLOT(configDialogFinished()));
-    QObject::connect(dialog, SIGNAL(finished()), nullManager, SLOT(deleteLater()));
     return dialog;
 }
 
@@ -2045,11 +2054,11 @@ void AppletPrivate::addGlobalShortcutsPage(KConfigDialog *dialog)
 
     if (!shortcutEditor) {
         shortcutEditor = new KKeySequenceWidget(page);
-        QObject::connect(shortcutEditor, SIGNAL(destroyed(QObject*)), q, SLOT(clearShortcutEditorPtr()));
+        QObject::connect(shortcutEditor.data(), SIGNAL(keySequenceChanged(QKeySequence)), dialog, SLOT(settingsModified()));
     }
 
-    shortcutEditor->setKeySequence(q->globalShortcut().primary());
-    layout->addWidget(shortcutEditor);
+    shortcutEditor.data()->setKeySequence(q->globalShortcut().primary());
+    layout->addWidget(shortcutEditor.data());
     layout->addStretch();
     dialog->addPage(page, i18n("Keyboard Shortcut"), "preferences-desktop-keyboard");
 
@@ -2064,7 +2073,9 @@ void AppletPrivate::addPublishPage(KConfigDialog *dialog)
     QWidget *page = new QWidget;
     publishUI.setupUi(page);
     publishUI.publishCheckbox->setChecked(q->isPublished());
+    QObject::connect(publishUI.publishCheckbox, SIGNAL(clicked(bool)), dialog, SLOT(settingsModified()));
     publishUI.allUsersCheckbox->setEnabled(q->isPublished());
+    QObject::connect(publishUI.allUsersCheckbox, SIGNAL(clicked(bool)), dialog, SLOT(settingsModified()));
 
     QString resourceName =
     i18nc("%1 is the name of a plasmoid, %2 the name of the machine that plasmoid is published on",
@@ -2090,15 +2101,10 @@ void AppletPrivate::publishCheckboxStateChanged(int state)
     }
 }
 
-void AppletPrivate::clearShortcutEditorPtr()
-{
-    shortcutEditor = 0;
-}
-
 void AppletPrivate::configDialogFinished()
 {
     if (shortcutEditor) {
-        QKeySequence sequence = shortcutEditor->keySequence();
+        QKeySequence sequence = shortcutEditor.data()->keySequence();
         if (sequence != q->globalShortcut().primary()) {
             q->setGlobalShortcut(KShortcut(sequence));
             emit q->configNeedsSaving();
@@ -2172,11 +2178,6 @@ void AppletPrivate::updateShortcuts()
 
 void AppletPrivate::propagateConfigChanged()
 {
-    if (script && configLoader) {
-        configLoader->readConfig();
-        script->configChanged();
-    }
-
     if (isContainment) {
         Containment *c = qobject_cast<Containment *>(q);
         if (c) {
@@ -2189,6 +2190,12 @@ void AppletPrivate::propagateConfigChanged()
 
 void Applet::configChanged()
 {
+    if (d->script) {
+        if (d->configLoader) {
+            d->configLoader->readConfig();
+        }
+        d->script->configChanged();
+    }
 }
 
 void Applet::createConfigurationInterface(KConfigDialog *parent)
@@ -2515,7 +2522,7 @@ QSizeF Applet::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
         }
     } else if (d->aspectRatioMode == Plasma::ConstrainedSquare) {
         //enforce a size not wider than tall
-        if (ff == Horizontal && (which == Qt::MaximumSize || size().height() <= KIconLoader::SizeLarge)) {
+        if (ff == Horizontal) {
             hint.setWidth(size().height());
         //enforce a size not taller than wide
         } else if (ff == Vertical && (which == Qt::MaximumSize || size().width() <= KIconLoader::SizeLarge)) {
@@ -2657,7 +2664,6 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
           configLoader(0),
           actions(AppletPrivate::defaultActions(applet)),
           activationAction(0),
-          shortcutEditor(0),
           itemStatus(UnknownStatus),
           preferredSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored),
           modificationsTimer(0),
