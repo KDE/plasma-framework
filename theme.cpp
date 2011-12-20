@@ -166,7 +166,6 @@ public:
     static const char *defaultTheme;
     static const char *systemColorsTheme;
     static const char *themeRcFile;
-    static PackageStructure::Ptr packageStructure;
 #ifdef Q_WS_X11
     static EffectWatcher *s_blurEffectWatcher;
 #endif
