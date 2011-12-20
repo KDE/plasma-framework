@@ -156,7 +156,7 @@ X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-EnabledByDefault=true
 
 [Wallpaper]
-defaultWallpaperTheme=Horos
+defaultWallpaperTheme=Ariya
 defaultFileSuffix=.png
 defaultWidth=1920
 defaultHeight=1200
