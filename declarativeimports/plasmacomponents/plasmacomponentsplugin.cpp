@@ -45,7 +45,6 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
         qmlRegisterType<KDialogProxy>(uri, 0, 1, "QueryDialog");
 
         qmlRegisterType<QMenuProxy>(uri, 0, 1, "Menu");
-        qmlRegisterType<QMenuProxy>(uri, 0, 1, "ContextMenu");
         qmlRegisterType<QMenuItem>(uri, 0, 1, "MenuItem");
     }
 
