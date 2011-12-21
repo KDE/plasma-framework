@@ -58,7 +58,8 @@ public:
 Q_SIGNALS:
     void statusChanged();
     void visualParentChanged();
-    void triggered(QMenuItem*);
+    void triggered(QMenuItem *item);
+    void triggeredIndex(int index);
 
 private Q_SLOTS:
     void itemTriggered(QAction *item);

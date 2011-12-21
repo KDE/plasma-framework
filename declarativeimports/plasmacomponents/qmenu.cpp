@@ -93,6 +93,10 @@ void QMenuProxy::itemTriggered(QAction *action)
     QMenuItem *item = qobject_cast<QMenuItem *>(action);
     if (item) {
         emit triggered(item);
+        int index = m_items.indexOf(item);
+        if (index > -1) {
+            emit triggeredIndex(index);
+        }
     }
 }
 
