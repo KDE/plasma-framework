@@ -31,6 +31,8 @@ QMenuProxy::QMenuProxy (QObject *parent)
       m_status(DialogStatus::Closed)
 {
     m_menu = new QMenu(0);
+    connect(m_menu, SIGNAL(triggered(QAction *)),
+            this, SLOT(itemTriggered(QAction *)));
 }
 
 QMenuProxy::~QMenuProxy()
@@ -84,6 +86,14 @@ void QMenuProxy::addMenuItem(const QString &text)
     QMenuItem *item = new QMenuItem(this);
     item->setText(text);
     m_items << item;
+}
+
+void QMenuProxy::itemTriggered(QAction *action)
+{
+    QMenuItem *item = qobject_cast<QMenuItem *>(action);
+    if (item) {
+        emit triggered(item);
+    }
 }
 
 void QMenuProxy::showMenu(int x, int y)
