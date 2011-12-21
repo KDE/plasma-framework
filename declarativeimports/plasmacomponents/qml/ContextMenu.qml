@@ -46,7 +46,7 @@ import org.kde.plasma.components 0.1
 Menu {
     id: root
     property QtObject model
-    onModelChanged: if (Component.status === Component.Ready && model != undefined) rebuildMenu()
+    onModelChanged: rebuildMenu()
     Component.onCompleted: if (model != undefined) rebuildMenu()
 
 
@@ -58,7 +58,11 @@ Menu {
         }
         if (model != undefined) {
             for (var j = 0; j < model.count; ++j) {
-                addMenuItem(model.get(j).text)
+                var text = model.get(j).text
+                if (!text) {
+                    text = model.get(j).display
+                }
+                addMenuItem(text)
             }
         }
     }
