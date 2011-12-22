@@ -25,79 +25,132 @@ Imports:
         QtQuick 1.1
 
 Description:
-        Creates a simple plasma theme based text field.
-        Like kates..
+        Creates a simple plasma theme based text field widget.
 
 Properties:
-        alias font:
-        Sets the font for the text area.
+      * font font:
+        This property holds the font used in the text field.
+    The default font value is the font from plasma desktop theme.
 
-        int inputMethodHints:
+      * Qt::InputMethodHints inputMethodHints:
+        This property holds the the currently supported input method hints
+     for the text field.
+     The default values is Qt.ImhNone.
 
-        bool errorHighlight:
-        If it is true then the problematic lines will be highlighted.
+      * bool errorHighlight:
+        This property holds if the text field is highlighted or not
+    If it is true then the problematic lines will be highlighted.
+    This feature is defined in the Common API but is unimplemented in plasma components.
 
-        alias cursorPosition:
-        Returns the cursor's position.
+      * int cursorPosition:
+        This property holds the current cursor position.
 
-        alias readOnly:
-        If this property is set to true the text cannot be edited by user interaction.
+      * bool readOnly:
+        This property holds if the text field can be modified by the user interaction.
+    The default value is false.
 
-        alias selectedText:
-        This read-only property provides the text currently selected in the text edit.
+      * string selectedText:
+        This property holds the text selected by the user.
+    If no text is selected it holds an empty string.
+    This property is read-only.
 
-        alias selectionEnd:
-        The cursor position after the last character in the current selection.
-        This property is read-only.
+      * int selectionEnd:
+        This property holds the cursor position after the last character in the current selection.
+    This property is read-only.
 
-        alias selectionStart:
-        The cursor position before the first character in the current selection.
-        This property is read-only.
+      * int selectionStart:
+        This property holds the cursor position before the first character in the current selection.
+    This property is read-only.
 
-        alias text:
-        The text to display
+      * string text:
+        This property holds the entire text in the text field.
 
-        string placeholderText:TODO
+      * string placeholderText:
+        This property holds the text displayed in when the text is empty.
 
-        alias echoMode:
-        Specifies how the text should be displayed in the TextInput.
+      * enumeration echoMode:
+        This property specifies how the text should be displayed in the TextField.
+    The acceptable values are:
 
-        TextInput.Normal - Displays the text as it is. (Default)
-        TextInput.Password - Displays asterixes instead of characters.
-        TextInput.NoEcho - Displays nothing.
-        TextInput.PasswordEchoOnEdit - Displays all but the current character as asterixes.
+      * TextInput.Normal - Displays the text as it is. (Default)
+      * TextInput.Password - Displays asterixes instead of characters.
+      * TextInput.NoEcho - Displays nothing.
+      * TextInput.PasswordEchoOnEdit - Displays all but the current character as asterixes.
 
-        alias validator:
-        Allows you to set a validator on the TextInput. When a validator is set the TextInput
-        will only accept input which leaves the text property in an acceptable or intermediate state.
-        The accepted signal will only be sent if the text is in an acceptable state when enter is pressed.
-        Currently supported validators are IntValidator, DoubleValidator and RegExpValidator.
-        An example of using validators is shown below, which allows input of integers
-        between 11 and 31 into the text input:
-        <code>
-        import QtQuick 1.0
-        TextInput{
-            validator: IntValidator{bottom: 11; top: 31;}
-            focus: true
-            }
-        </code>
+    The default value is TextInput.Normal
 
-        alias maximumLength:
-        Sets the maximum length that the string can have.
+      *   inputMask: textInput.inputMask
+        Allows you to set an input mask on the TextField, restricting the allowable text inputs.
+    See QLineEdit::inputMask for further details, as the exact same mask strings are used by TextInput.
 
-        alias acceptableInput:
-        This property is always true unless a validator has been set. If a validator has been set,
-        this property will only be true if the current text is acceptable to the validator as a final string
-        (not as an intermediate string)
+      * Validator validator:
+        Allows you to set a validator on the TextField. When a validator is set the TextField
+    will only accept input which leaves the text property in an acceptable or intermediate state.
+    The accepted signal will only be sent if the text is in an acceptable state when enter is pressed.
+    Currently supported validators are IntValidator, DoubleValidator and RegExpValidator.
+    An example of using validators is shown below, which allows input of integers
+    between 11 and 31 into the text input:
+    <code>
+    import QtQuick 1.0
+    TextInput{
+        validator: IntValidator{bottom: 11; top: 31;}
+        focus: true
+    }
+    </code>
 
-        alias activeFocus:
-        This property indicates whether the item has active focus.
-        An item with active focus will receive keyboard input.
+      * int maximumLength:
+        The maximum permitted length of the text in the TextField.
+    If the text is too long, it is truncated at the limit.
+    By default, this property contains a value of 32767.
+
+       * bool acceptableInput:
+         This property is always true unless a validator or input mask has been set.
+    If a validator or input mask has been set, this property will only be true if the current
+    text is acceptable to the validator or input mask as a final string (not as an intermediate string).
+    This property is always true unless a validator has been set.
+    If a validator has been set, this property will only be true if the current text is acceptable to the
+    validator as a final string (not as an intermediate string).
+    This property is read-only.
+
+Plasma properties:
+       * bool clearButtonShown:
+         Holds if the button to clear the text from TextField is visible.
+
+Methods:
+       * void copy():
+         Copies the currently selected text to the system clipboard.
+
+       * void cut():
+         Moves the currently selected text to the system clipboard.
+
+       * void deselect():
+         Removes active text selection.
+
+       * void paste():
+         Replaces the currently selected text by the contents of the system clipboard.
+
+       * void select(int start, int end):
+         Causes the text from start to end to be selected.
+     If either start or end is out of range, the selection is not changed.
+     After calling this, selectionStart will become the lesser and selectionEnd will become the greater
+     (regardless of the order passed to this method).
+
+       * void selectAll():
+         Causes all text to be selected.
+
+       * void selectWord():
+         Causes the word closest to the current cursor position to be selected.
+
+       * void positionAt(int position):
+         This function returns the character position at x pixels from the left of the TextField.
+     Position 0 is before the first character, position 1 is after the first character but before the second,
+     and so on until position text.length, which is after all characters.
+     This means that for all x values before the first character this function returns 0,
+     and for all x values after the last character this function returns text.length.
 **/
 
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
-import "private" as Private
 
 Item {
     id: textField
