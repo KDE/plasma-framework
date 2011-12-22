@@ -58,7 +58,7 @@ Description:
 
 Properties:
         ListView listView:
-        TODO needs info
+         As The ScrollBar, this is the listview the sectionScroller will operate on. This component doesn't work with simple Flickable or GridView.
 **/
 
 import QtQuick 1.1
