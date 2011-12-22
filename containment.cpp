@@ -277,6 +277,48 @@ QString Containment::type() const
     return d->containment.data()->pluginName();
 }
 
+void Containment::setType(const QString &type)
+{
+    if (!d->containment || d->containment.data()->pluginName() == type || type.isEmpty()) {
+        return;
+    }
+
+    Plasma::Containment *old = d->containment.data();
+    Plasma::Corona *corona = old->corona();
+    Plasma::Containment *c = corona->addContainmentDelayed(type);
+    if (c) {
+        c->init();
+
+        KConfigGroup oldConfig = old->config();
+        KConfigGroup newConfig = c->config();
+
+        // ensure that the old containments configuration is up to date
+        old->save(oldConfig);
+
+        // Copy configuration to new containment
+        oldConfig.copyTo(&newConfig);
+
+        // load the configuration of the old containment into the new one
+        c->restore(newConfig);
+        c->updateConstraints(Plasma::StartupCompletedConstraint);
+        c->flushPendingConstraintsEvents();
+        foreach (Plasma::Applet *applet, c->applets()) {
+            applet->init();
+            // We have to flush the applet constraints manually
+            applet->flushPendingConstraintsEvents();
+        }
+
+        // destroy the old one
+        old->destroy(false);
+
+        // and now save the config
+        c->save(newConfig);
+        corona->requestConfigSync();
+
+        d->containment = c;
+    }
+}
+
 void Containment::remove()
 {
     if (d->containment) {
