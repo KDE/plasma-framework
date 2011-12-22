@@ -31,14 +31,25 @@ Description:
 Properties:
 
         Item tools:
-        The current set of tools; null if none.
+        The ToolBarLayout that contains the ToolButton components that
+        are contained in the ToolBar. ToolBarLayout is not mandatory.
+        The default value is NULL.
+
 
         string transition:
-        The transition type. One of the following:
+        The type of transition to be used for the ToolBar when
+        the page changes on the relevant PageStack.
+        The possible values can be one of the following:
               set         an instantaneous change (default)
               push        follows page stack push animation
               pop         follows page stack pop animation
               replace     follows page stack replace animation
+Methods:
+        setTools( tools, transition )
+        This sets the tools for the ToolBar and the transition type that
+        will be used when the page changes on the relevant PageStack.
+        @arg Item tools see tool property
+        @arg string transition see transition property
 **/
 
 import QtQuick 1.1
