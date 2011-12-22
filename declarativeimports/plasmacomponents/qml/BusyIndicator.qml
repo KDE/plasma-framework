@@ -18,7 +18,7 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-/**Documentanted API
+/**Documented API
 Inherits:
         Item
 
@@ -27,7 +27,7 @@ Imports:
         QtQuick 1.1
 
 Description:
-        It is just a simple BusyIndicator.
+        It is just a simple Busy Indicator, it is used to indicate a task which duration is unknown. If the task duration/number of steps is known, a ProgressBar should be used instead.
         TODO An image has to be added!
 
 Properties:
