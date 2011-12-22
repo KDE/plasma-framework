@@ -17,7 +17,7 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-/**Documentanted API
+/**Documented API
 Inherits:
         DualStateButton
 
@@ -26,9 +26,28 @@ Imports:
         org.kde.plasma.core
 
 Description:
-        TODO
+        You can bind the Switch component to a feature that the application
+        has to enable or disable depending on the user's input, for example.
+        Switch has similar usage and API as CheckBox, except that Switch does
+        not provide a built-in label.
 
 Properties:
+            bool checked:
+            Returns true if the Button is checked, otherwise
+            it returns false.
+
+            alias pressed:
+            Returns true if the Button is pressed, otherwise
+            it returns false.
+
+            alias text:
+            Sets the text for the switch.
+            The default value is empty.No text
+            will be displayed.
+
+Signals:
+        onClicked:
+        The signal is emited when the button is clicked!
 **/
 import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
