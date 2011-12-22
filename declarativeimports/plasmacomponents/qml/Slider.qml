@@ -210,7 +210,7 @@ Item {
             visible: range.position > 0 && slider.enabled
         }
 
-        RoundShadow {
+        Private.RoundShadow {
             id: shadow
             imagePath: "widgets/slider"
             focusElement: "horizontal-slider-focus"

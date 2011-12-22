@@ -36,7 +36,7 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 import "private" as Private
 
 //FIXME: this should be round, DualStateButton shouldn't draw the shadow
-DualStateButton {
+Private.DualStateButton {
     id: radioButton
     view: PlasmaCore.SvgItem {
         svg: PlasmaCore.Svg {

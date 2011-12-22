@@ -61,6 +61,7 @@ install(FILES qml/ToolBar.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/
 
 #Now install the private stuff!
 install(FILES qml/private/ButtonShadow.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components/private)
+install(FILES qml/private/RoundShadow.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components/private)
 install(FILES qml/private/DualStateButton.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components/private)
 install(FILES qml/private/IconLoader.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components/private)
 install(FILES qml/private/PageStack.js DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components/private)
@@ -70,6 +71,7 @@ install(FILES qml/private/ScrollDecoratorDelegate.qml DESTINATION ${PLUGIN_INSTA
 install(FILES qml/private/SectionScroller.js DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components/private)
 install(FILES qml/private/AppManager.js DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components/private)
 install(FILES qml/private/TabBarLayout.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components/private)
+install(FILES qml/private/TextFieldFocus.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components/private)
 
 #install platform overrides
 install(DIRECTORY platformcomponents/touch/ DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)

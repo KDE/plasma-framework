@@ -144,7 +144,7 @@ Item {
                 property int right: 8
                 property int bottom: 8
             }
-            RoundShadow {
+            Private.RoundShadow {
                 anchors.fill: parent
                 state: (internal.userPressed || checked) ? "hidden" : "shadow"
             }
@@ -177,7 +177,7 @@ Item {
             PropertyAnimation { duration: 100 }
         }
 
-        IconLoader {
+        Private.IconLoader {
             id: icon
 
             anchors {

@@ -100,7 +100,7 @@ Item {
         }
     }
 
-    TabBarLayout {
+    Private.TabBarLayout {
         id: tabBarLayout
         anchors {
             fill: parent

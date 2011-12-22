@@ -131,7 +131,7 @@ Dialog {
             }
         }
 
-        IconLoader {
+        Private.IconLoader {
             id: titleAreaIcon
             width: theme.iconSizeSmall
             height: theme.iconSizeSmall

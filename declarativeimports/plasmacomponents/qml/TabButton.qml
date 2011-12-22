@@ -136,7 +136,7 @@ Item {
         verticalAlignment: Text.AlignVCenter
     }
 
-    IconLoader {
+    Private.IconLoader {
         id: imageLoader
 
         implicitWidth: theme.smallIconSize
