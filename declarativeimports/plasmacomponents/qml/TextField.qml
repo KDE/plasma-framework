@@ -67,6 +67,7 @@ Properties:
 
       * string placeholderText:
         This property holds the text displayed in when the text is empty.
+    The default value is empty string, meaning no placeholderText shown.
 
       * enumeration echoMode:
         This property specifies how the text should be displayed in the TextField.
