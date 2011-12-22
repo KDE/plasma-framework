@@ -30,80 +30,142 @@ Description:
         Like kates..
 
 Properties:
-        alias font:
-        Sets the font for the text area.
+      * font font:
+        This property holds the font used in the text field.
+    The default font value is the font from plasma desktop theme.
 
-        int inputMethodHints:
+      * Qt::InputMethodHints inputMethodHints:
+        This property holds the the currently supported input method hints
+     for the text field.
+     The default values is Qt.ImhNone.
 
-        bool errorHighlight:
-        If it is true then the problematic lines will be highlighted.
+      * bool errorHighlight:
+        This property holds if the text field is highlighted or not
+    If it is true then the problematic lines will be highlighted.
+    This feature is defined in the Common API but is unimplemented in plasma components.
 
-        alias cursorPosition:
-        Returns the cursor's position.
+      * int cursorPosition:
+        This property holds the current cursor position.
 
-        alias horizontalAlignment:
-        TODO
-        alias verticalAlignment:TODO
+      * enumeration horizontalAlignment:
+      * enumeration verticalAlignment:
+        Sets the horizontal and vertical alignment of the text within the TextArea item's width and height.
+    By default, the text alignment follows the natural alignment of the text,
+    for example text that is read from left to right will be aligned to the left.
 
-        alias readOnly:
-        If this property is set to true the text cannot be edited by user interaction.
+    Valid values for horizontalAlignment are:
 
-        alias selectedText:
-        This read-only property provides the text currently selected in the text edit.
+        * TextEdit.AlignLeft (default)
+        * TextEdit.AlignRight
+        * TextEdit.AlignHCenter
+        * TextEdit.AlignJustify
 
-        alias selectionEnd:
-        The cursor position after the last character in the current selection.
-        This property is read-only.
+    Valid values for verticalAlignment are:
 
-        property alias selectionStart:
-        The cursor position before the first character in the current selection.
-        This property is read-only.
+        * TextEdit.AlignTop (default)
+        * TextEdit.AlignBottom
+        * TextEdit.AlignVCenter
 
-        property alias text:
-        The text to display
-        property alias textFormat:
+      * bool readOnly:
+        This property holds if the TextArea can be modified by the user interaction.
+    The default value is false.
+
+      * string selectedText:
+        This property holds the text selected by the user.
+    If no text is selected it holds an empty string.
+    This property is read-only.
+
+      * int selectionEnd:
+        This property holds the cursor position after the last character in the current selection.
+    This property is read-only.
+
+      * int selectionStart:
+        This property holds the cursor position before the first character in the current selection.
+    This property is read-only.
+
+      * string text:
+        This property holds the entire text in the TextArea.
+
+      * enumeration textFormat:
         The way the text property should be displayed.
 
-        TextEdit.AutoText
-        TextEdit.PlainText
-        TextEdit.RichText
-        TextEdit.StyledText
+        * TextEdit.AutoText
+        * TextEdit.PlainText
+        * TextEdit.RichText
+        * TextEdit.StyledText
 
-        alias wrapMode:
-        Set this property to wrap the text to the TextEdit item's width.
+    The default is TextEdit.AutoText. If the text format is TextEdit.AutoText the text edit will automatically determine whether the text should be treated as rich text. This determination is made using Qt::mightBeRichText().
 
-        TextEdit.NoWrap - no wrapping will be performed. If the text contains insufficient
-        newlines, then implicitWidth will exceed a set width.
+      * enumeration wrapMode:
+        Set this property to wrap the text to the TextArea item's width. The text will only wrap if an explicit width has been set.
 
-        TextEdit.WordWrap - wrapping is done on word boundaries only.
-        If a word is too long, implicitWidth will exceed a set width.
+        * TextEdit.NoWrap - no wrapping will be performed.
+            If the text contains insufficient newlines, then implicitWidth will exceed a set width.
+        * TextEdit.WordWrap - wrapping is done on word boundaries only.
+            If a word is too long, implicitWidth will exceed a set width.
+        * TextEdit.WrapAnywhere - wrapping is done at any point on a line, even if it occurs in the middle of a word.
+        * TextEdit.Wrap - if possible, wrapping occurs at a word boundary; otherwise it will occur at the appropriate point on the line, even in the middle of a word.
 
-        TextEdit.WrapAnywhere - wrapping is done at any point on a line,
-        even if it occurs in the middle of a word.
+    The default is TextEdit.NoWrap. If you set a width, consider using TextEdit.Wrap.
 
-        TextEdit.Wrap - if possible, wrapping occurs at a word boundary;
-        otherwise it will occur at the appropriate point on the line, even in the middle of a word.
+      * string placeholderText:
+        This property holds the text displayed in when the text is empty.
+    The default value is empty string, meaning no placeholderText shown.
 
-        string placeholderText:TODO
 
-        alias interactive:
-        This property describes whether the user can interact with the Flickable. A user
-        cannot drag or flick a Flickable that is not interactive.
-        This property is useful for temporarily disabling flicking. This allows special interaction
-        with Flickable's children; for example, you might want to freeze a flickable map while scrolling
-        through a pop-up dialog that is a child of the Flickable.
+Plasma properties:
 
-        alias contentMaxWidth:
-        Sets the maximum width that the contents can have.
+      * bool interactive:
+        This property describes whether the user can interact with the TextArea flicking content.
+    A user cannot drag or flick a TextArea that is not interactive.
+    This property is useful for temporarily disabling flicking.
 
-        alias contentMaxHeight:
-        Sets the maximum height that the contents can have.
-        property real scrollWidth:
-        Sets the step that the scrollwidth will move.
+      * int contentMaxWidth:
+        This property holds the maximum width that the text content can have.
 
-        alias activeFocus:
-        This property indicates whether the item has active focus.
-        An item with active focus will receive keyboard input.
+      * int contentMaxHeight:
+        This property holds the maximum height that the text content can have.
+
+      * property real scrollWidth:
+        This property holds the stepSize of the ScrollBar present at the TextArea
+    when it's content are bigger than it's size.
+
+Methods:
+       * void copy():
+         Copies the currently selected text to the system clipboard.
+
+       * void cut():
+         Moves the currently selected text to the system clipboard.
+
+       * void deselect():
+         Removes active text selection.
+
+       * void paste():
+         Replaces the currently selected text by the contents of the system clipboard.
+
+       * void select(int start, int end):
+         Causes the text from start to end to be selected.
+     If either start or end is out of range, the selection is not changed.
+     After calling this, selectionStart will become the lesser and selectionEnd will become the greater
+     (regardless of the order passed to this method).
+
+       * void selectAll():
+         Causes all text to be selected.
+
+       * void selectWord():
+         Causes the word closest to the current cursor position to be selected.
+
+       * void positionAt(int position):
+         This function returns the character position at x pixels from the left of the TextArea.
+     Position 0 is before the first character, position 1 is after the first character but before the second,
+     and so on until position text.length, which is after all characters.
+     This means that for all x values before the first character this function returns 0,
+     and for all x values after the last character this function returns text.length.
+
+       * rectangle positionToRectangle(position):
+         Returns the rectangle at the given position in the text.
+     The x, y, and height properties correspond to the cursor that would describe that position.
+
 **/
 
 import QtQuick 1.1
