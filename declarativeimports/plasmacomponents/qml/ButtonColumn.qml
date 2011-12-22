@@ -53,7 +53,6 @@ Description:
 
         Note: This component don't support the enabled property.
         If you need to disable it you should disable all the buttons inside it.
-        TODO we need an example here...
 
         This is an example,
         <code>
