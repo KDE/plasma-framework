@@ -141,7 +141,7 @@ Item {
         }
     }
 
-    ButtonShadow {
+    Private.ButtonShadow {
         id: shadow
         anchors.fill: parent
         visible: !flat
@@ -173,7 +173,7 @@ Item {
             PropertyAnimation { duration: 250 }
         }
 
-        IconLoader {
+        Private.IconLoader {
             id: icon
 
             anchors {

@@ -136,7 +136,7 @@ Item {
             internal.clickButton();
     }
 
-    ButtonShadow {
+    Private.ButtonShadow {
         id: shadow
         anchors.fill: parent
         state: {
@@ -210,7 +210,7 @@ Item {
             bottomMargin: surfaceNormal.margins.bottom
         }
 
-        IconLoader {
+        Private.IconLoader {
             id: icon
 
             anchors {

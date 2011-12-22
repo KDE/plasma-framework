@@ -172,7 +172,7 @@ Item {
     //     disabled text fields
     opacity: enabled ? 1.0 : 0.5
 
-    TextFieldFocus {
+    Private.TextFieldFocus {
         id: hover
         state: textInput.activeFocus ? "focus" : (mouseWatcher.containsMouse ? "hover" : "hidden")
         anchors.fill: base
