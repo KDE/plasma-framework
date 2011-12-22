@@ -53,22 +53,23 @@ Description:
 
 Properties:
         Item tab:
-        TODO
+        The reference to the tab content (one of the children of a TabGroup, usually a Page) that is activated when this TabButton is clicked.
+
         bool checked:
-        Returns true if the button is checked,otherwise false.
+        True if the button is checked,otherwise false.
 
         bool pressed:
-        Returns true if the button is being pressed,otherwise false.
+        True if the button is being pressed,otherwise false.
 
-        alias text:
+        string text:
         Sets the text for the button.
 
-        alias iconSource:
-        Sets an icon for the button
+        string iconSource:
+        Icon for the button. It can be a Freedesktop icon name, a full path to a ong/svg file, or any name for which the application has an image handler registered.
 
 Signals:
         onClicked:
-        The signal is being emmited when the button is being clicked.
+        The signal is emmited when the button is clicked.
 **/
 
 import QtQuick 1.1
