@@ -202,11 +202,11 @@ Item {
     }
 
     function positionAt(pos) {
-        textInput.positionAt(pos);
+        return textInput.positionAt(pos);
     }
 
     function positionToRectangle(pos) {
-        textInput.positionToRectangle(pos);
+        return textInput.positionToRectangle(pos);
     }
 
 
