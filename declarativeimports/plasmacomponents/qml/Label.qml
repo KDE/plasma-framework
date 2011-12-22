@@ -19,14 +19,17 @@
 
 /**Documentanted API
 Inherits:
-        Item
+        Text
 
 Imports:
         QtQuick 1.0
         org.kde.plasma.core
 
 Description:
- TODO i need more info here
+    This is a label which uses the plasma theme.
+    The characteristics of the text will be automatically seted
+    according to the plasma theme.If you need a more customized
+    text,then you can use the Text component from QtQuick.
 **/
 
 import QtQuick 1.0
