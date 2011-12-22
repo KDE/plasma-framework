@@ -62,7 +62,7 @@ Properties:
 **/
 
 import QtQuick 1.1
-import "SectionScroller.js" as Sections
+import "private/SectionScroller.js" as Sections
 import org.kde.plasma.core 0.1 as PlasmaCore
 
 Item {

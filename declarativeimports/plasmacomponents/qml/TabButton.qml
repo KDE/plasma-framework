@@ -72,7 +72,8 @@ Signals:
 **/
 
 import QtQuick 1.1
-import "AppManager.js" as Utils
+import "private/AppManager.js" as Utils
+import "private" as Private
 
 Item {
     id: root

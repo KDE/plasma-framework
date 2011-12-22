@@ -97,6 +97,7 @@ Properties:
 
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
+import "private" as Private
 
 Item {
     id: textField

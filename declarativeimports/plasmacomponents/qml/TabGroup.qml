@@ -57,7 +57,7 @@ Properties:
 **/
 
 import QtQuick 1.1
-import "TabGroup.js" as Engine
+import "private/TabGroup.js" as Engine
 
 import "." 0.1
 

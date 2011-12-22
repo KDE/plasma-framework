@@ -42,7 +42,7 @@
 
 import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
-import "AppManager.js" as Utils
+import "private/AppManager.js" as Utils
 import "." 0.1
 
 Item {
