@@ -843,15 +843,14 @@ void PopupAppletPrivate::updateDialogPosition(bool move)
 
     const QPoint appletPos = view->mapToGlobal(view->mapFromScene(q->scenePos()));
 
-    QPoint dialogPos;
-    if (!q->containment() || view == q->containment()->view()) {
-        kDebug() << "requesting with" << q->scenePos();
-        dialogPos = corona->popupPosition(q, dialog->size(), popupAlignment);
-    } else {
-        kDebug() << "requesting with" << q->parentItem();
-        dialogPos = corona->popupPosition(q->parentItem(), dialog->size(), popupAlignment);
+    QPoint dialogPos = dialog->pos();
+    if (move) {
+        if (!q->containment() || view == q->containment()->view()) {
+            dialogPos = corona->popupPosition(q, dialog->size(), popupAlignment);
+        } else {
+            dialogPos = corona->popupPosition(q->parentItem(), dialog->size(), popupAlignment);
+        }
     }
-    kDebug() << "dialog position is" << dialogPos <<" with location" << q->location() << "<<<<<<<<<<<<<<<<<<<<<<<<";
 
     bool reverse = false;
     if (q->formFactor() == Plasma::Vertical) {
