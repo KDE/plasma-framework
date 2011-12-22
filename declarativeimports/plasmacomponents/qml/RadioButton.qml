@@ -66,5 +66,5 @@ Private.DualStateButton {
         }
     }
 
-    shadow: RoundShadow {}
+    shadow: Private.RoundShadow {}
 }

@@ -62,5 +62,5 @@ Private.DualStateButton {
         }
     }
 
-    shadow: ButtonShadow {}
+    shadow: Private.ButtonShadow {}
 }
