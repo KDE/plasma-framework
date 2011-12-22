@@ -155,11 +155,11 @@ Item {
     }
 
     function positionAt(pos) {
-        textEdit.positionAt(pos);
+        return textEdit.positionAt(pos);
     }
 
     function positionToRectangle(pos) {
-        textEdit.positionToRectangle(pos);
+        return textEdit.positionToRectangle(pos);
     }
 
     // Plasma API
