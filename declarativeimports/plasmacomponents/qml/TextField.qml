@@ -148,6 +148,10 @@ Methods:
      and so on until position text.length, which is after all characters.
      This means that for all x values before the first character this function returns 0,
      and for all x values after the last character this function returns text.length.
+
+       * rectangle positionToRectangle(position):
+         Returns the rectangle at the given position in the text.
+     The x, y, and height properties correspond to the cursor that would describe that position.
 **/
 
 import QtQuick 1.1
