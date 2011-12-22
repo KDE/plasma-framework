@@ -43,7 +43,7 @@
 // The PageStack item defines a container for pages and a stack-based
 // navigation model. Pages can be defined as QML items or components.
 
-/**Documentanted API
+/**Documented API
 Inherits:
         Item
 
