@@ -28,8 +28,17 @@ Imports:
 Description:
     This is a label which uses the plasma theme.
     The characteristics of the text will be automatically seted
-    according to the plasma theme.If you need a more customized
+    according to the plasma theme. If you need a more customized
     text,then you can use the Text component from QtQuick.
+
+Properties:
+    The most important property is "text". For the other ones see the primitive QML Text element
+
+Methods:
+    See the primitive QML Text element
+
+Signals:
+    See the primitive QML Text element
 **/
 
 import QtQuick 1.0
