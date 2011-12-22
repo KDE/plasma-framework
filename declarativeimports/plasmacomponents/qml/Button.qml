@@ -20,7 +20,7 @@
 */
 
 
-/**Documentanted API
+/**Documented API
 Inherits:
         Item
 

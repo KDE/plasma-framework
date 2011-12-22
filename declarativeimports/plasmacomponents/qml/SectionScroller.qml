@@ -37,7 +37,7 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-/**Documentanted API
+/**Documented API
 Inherits:
         Item
 
