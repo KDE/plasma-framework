@@ -32,61 +32,57 @@ Description:
         but it was base on ScrollDecorator component.
         You should not use it for touch interfaces, use a flickable and a
         ScrollDecorator instead.
+        By default, this component will look and behave like a scroll decorator
+        on touchscreens
 
-Plasma Properties:
+Properties:
 
         enumeration orientation:
         This property holds the orientation where the ScrollBar will scroll.
-    The orientation can be either Qt.Horizontal or Qt.Vertical
-    The default value is Qt.Vertical.
+        The orientation can be either Qt.Horizontal or Qt.Vertical
+        The default value is Qt.Vertical.
 
         bool inverted:
         This property holds if the ScrollBar will increase the Flickable
-    content in the normal direction (Left to Right or Top to Bottom) or
-    if this will be inverted.
-    The default value is false.
+        content in the normal direction (Left to Right or Top to Bottom) or
+        if this will be inverted.
+        The default value is false.
 
         bool updateValueWhileDragging:
         This property holds if the Scrollbar will update the Flickeble
-    position while dragging or only when released.
-    The default value is true.
+        position while dragging or only when released.
+        The default value is true.
 
         real stepSize:
         This property holds how many steps exists while moving the handler.
-    If you want the ScrollBar buttons to appear you must set this property
-    with a value bigger than 0.
-    The default value is 0.
+        If you want the ScrollBar buttons to appear you must set this property
+        with a value bigger than 0.
+        The default value is 0.
 
         bool pressed:
         This property holds if the ScrollBar is pressed.
 
         real scrollButtonInterval:
         This property holds the interval time used by the ScrollBar button
-    to increase or decrease steps.
+        to increase or decrease steps.
 
         Flickable flickableItem:
         This property holds the Flickable component which the ScrollBar will
-    interact with.
+        interact with.
 
         bool interactive:
         This property holds  if the ScrollBar is interactive.
-    The default value is true.
+        The default value is true.
 
         bool enabeld:
         This property holds if the button will be enabled for user
-    interaction.
-    The default value is true.
+        interaction.
+        The default value is true.
 **/
 
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 
-
-/**
- * A generic ScrollBar/ScrollDecorator component:
- * Qlways prefer this to ScrollDecorator that is not available on desktop.
- * By default, this component will look and behave like a scroll decorator on touchscreens
- */
 // TODO: add support mouse wheel events
 Item {
     id: scrollbar
