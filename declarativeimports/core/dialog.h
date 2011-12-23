@@ -38,9 +38,24 @@ class DialogMargins : public QObject
 {
     Q_OBJECT
 
+    /**
+     * Width in pixels of the left margin
+     */
     Q_PROPERTY(int left READ left NOTIFY leftChanged)
+
+    /**
+     * Height in pixels of the top margin
+     */
     Q_PROPERTY(int top READ top NOTIFY topChanged)
+
+    /**
+     * Width in pixels of the right margin
+     */
     Q_PROPERTY(int right READ right NOTIFY rightChanged)
+
+    /**
+     * Height in pixels of the bottom margin
+     */
     Q_PROPERTY(int bottom READ bottom NOTIFY bottomChanged)
 
 public:
@@ -73,16 +88,56 @@ class DialogProxy : public QObject
 {
     Q_OBJECT
 
+    /**
+     * The main QML item that will be displayed in the Dialog
+     */
     Q_PROPERTY(QGraphicsObject *mainItem READ mainItem WRITE setMainItem NOTIFY mainItemChanged)
+
+    /**
+     * Visibility of the Dialog window. Doesn't have anything to do with the visibility of the mainItem.
+     */
     Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY visibleChanged)
+
+    /**
+     * X position of the dialog window in screen coordinates.
+     */
     Q_PROPERTY(int x READ x WRITE setX NOTIFY xChanged)
+
+    /**
+     * X position of the dialog window in screen coordinates.
+     */
     Q_PROPERTY(int y READ y WRITE setY NOTIFY yChanged)
     //to set the size try to force doing so from the inner item
+
+    /**
+     * Read only width of the dialog window. It depends from the width of the mainItem
+     */
     Q_PROPERTY(int width READ width NOTIFY widthChanged)
+
+    /**
+     * Read only height of the dialog window. It depends from the height of the mainItem
+     */
     Q_PROPERTY(int height READ height NOTIFY heightChanged)
+
+    /**
+     * Window flags of the Dialog window
+     */
     Q_PROPERTY(int windowFlags READ windowFlags WRITE setWindowFlags)
+
+    /**
+     * Margins of the dialog around the mainItem.
+     * @see DialogMargins
+     */
     Q_PROPERTY(QObject *margins READ margins CONSTANT)
+
+    /**
+     * True if the dialog window is the active one in the window manager.
+     */
     Q_PROPERTY(bool activeWindow READ isActiveWindow NOTIFY activeWindowChanged)
+
+    /**
+     * Plasma Location of the dialog window. Useful if this dialog is apopup for a panel
+     */
     Q_PROPERTY(int location READ location WRITE setLocation NOTIFY locationChanged)
 
 public:
@@ -110,6 +165,10 @@ public:
 
     bool isActiveWindow() const;
 
+    /**
+     * Ask the window manager to activate the window.
+     * The window manager may or may not accept the activiation request
+     */
     Q_INVOKABLE void activateWindow();
 
     //FIXME: passing an int is ugly
@@ -128,6 +187,13 @@ public:
      */
     //FIXME: alignment should be Qt::AlignmentFlag
     Q_INVOKABLE QPoint popupPosition(QGraphicsObject *item, int alignment=Qt::AlignLeft) ;
+
+    /**
+     * Set a Qt.WidgetAttribute to the dialog window
+     *
+     * @arg int attribute see Qt.WidgetAttribute
+     * @arg bool on activate or deactivate the atrtibute
+     */
     //FIXME:: Qt::WidgetAttribute should be already 
     Q_INVOKABLE void setAttribute(int attribute, bool on);
 
