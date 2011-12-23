@@ -49,15 +49,19 @@ Imports:
         org.kde.plasma.core
 
 Description:
-        TODO
+        TabBar is a plasma themed component that you can
+        use as a container for the tab buttons.
 
 Properties:
-        Item currentItem:
-        Returns the current item of the tabbar.
+        Item currentTab:
+        Returns the current tabbar button.
 
-        default alias content: tabBarLayout.data
+        default alias content:
+        This property represends the the content of
+        the TabBarLayout.
 
         property alias layout: tabBarLayout
+        This is an alias for the layout of the tabbar.
 **/
 
 import QtQuick 1.1
