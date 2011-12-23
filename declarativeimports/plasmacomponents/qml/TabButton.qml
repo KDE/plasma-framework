@@ -100,6 +100,7 @@ Item {
             //TabBar is the granparent
             root.parent.parent.currentTab = root
         }
+        onVisibleChanged: root.parent.childrenChanged()
     }
 
     QtObject {
