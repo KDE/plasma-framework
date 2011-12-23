@@ -38,12 +38,34 @@ class DataModel;
 class SortFilterModel : public QSortFilterProxyModel
 {
     Q_OBJECT
+    /**
+     * The source model of this sorting proxy model. It has to inherit QAbstractItemModel (ListModel is not supported)
+     */
     Q_PROPERTY(QObject *sourceModel READ sourceModel WRITE setModel)
 
+    /**
+     * The regular expression for the filter, only items with their filterRole matching filterRegExp will be displayed
+     */
     Q_PROPERTY(QString filterRegExp READ filterRegExp WRITE setFilterRegExp)
+
+    /**
+     * The role of the sourceModel on which filterRegExp must be applied.
+     */
     Q_PROPERTY(QString filterRole READ filterRole WRITE setFilterRole)
+
+    /**
+     * The role of the sourceModel that will be used for sorting. if empty the order will be left unaltered
+     */
     Q_PROPERTY(QString sortRole READ sortRole WRITE setSortRole)
+
+    /**
+     * One of Qt.Ascending or Qt.Descending
+     */
     Q_PROPERTY(Qt::SortOrder sortOrder READ sortOrder WRITE setSortOrder)
+
+    /**
+     * How many items are in this model
+     */
     Q_PROPERTY(int count READ count NOTIFY countChanged)
 
     friend class DataModel;
@@ -68,6 +90,13 @@ public:
 
     int count() const {return QSortFilterProxyModel::rowCount();}
 
+    /**
+     * Returns the item at index in the list model.
+     * This allows the item data to be accessed (but not modified) from JavaScript.
+     * It returns an Object with a property for each role.
+     *
+     * @arg int i the row we want
+     */
     Q_INVOKABLE QVariantHash get(int i) const;
 
 Q_SIGNALS:
@@ -88,9 +117,26 @@ private:
 class DataModel : public QAbstractItemModel
 {
     Q_OBJECT
+
+    /**
+     * The instance of DataSource to construct this model on
+     */
     Q_PROPERTY(QObject *dataSource READ dataSource WRITE setDataSource)
+
+    /**
+     *  It's a regular expression. Only data with keys that match this filter expression will be inserted in the model
+     */
     Q_PROPERTY(QString keyRoleFilter READ keyRoleFilter WRITE setKeyRoleFilter)
+
+    /**
+     * it's a regular expression. If the DataSource is connected to more than one source, only inserts data from sources matching this filter expression in the model.
+     * If we want to have a source watch all sources beginning with say "name:", the required regexp would be sourceFilter: "name:.*"
+     */
     Q_PROPERTY(QString sourceFilter READ sourceFilter WRITE setSourceFilter)
+
+    /**
+     * How many items are in this model
+     */
     Q_PROPERTY(int count READ count NOTIFY countChanged)
 
 public:
@@ -126,6 +172,13 @@ public:
 
     int count() const {return countItems();}
 
+    /**
+     * Returns the item at index in the list model.
+     * This allows the item data to be accessed (but not modified) from JavaScript.
+     * It returns an Object with a property for each role.
+     *
+     * @arg int i the row we want
+     */
     Q_INVOKABLE QVariantHash get(int i) const;
 
 protected:
