@@ -53,7 +53,8 @@ Description:
 
 Properties:
         Item tab:
-        The reference to the tab content (one of the children of a TabGroup, usually a Page) that is activated when this TabButton is clicked.
+        The reference to the tab content (one of the children of a TabGroup,
+        usually a Page) that is activated when this TabButton is clicked.
 
         bool checked:
         True if the button is checked,otherwise false.
@@ -65,7 +66,8 @@ Properties:
         Sets the text for the button.
 
         string iconSource:
-        Icon for the button. It can be a Freedesktop icon name, a full path to a ong/svg file, or any name for which the application has an image handler registered.
+        Icon for the button. It can be a Freedesktop icon name, a full path to a ong/svg file,
+        or any name for which the application has an image handler registered.
 
 Signals:
         onClicked:
