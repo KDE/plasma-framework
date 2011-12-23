@@ -26,14 +26,14 @@ Imports:
         org.kde.plasma.core
 
 Description:
- TODO i need more info here
+        Used to highlight an item of a list. to be used only as the "highlight" property of the ListView and GridView primitive QML components (or their derivates)
 
 Properties:
         bool hover:
-        Returns if the user is hovering over the component
+        true if the user is hovering over the component
 
         bool pressed:
-        Returns of the button is pressed or not.
+        true if the mouse button is pressed over the component.
 **/
 
 import QtQuick 1.0
