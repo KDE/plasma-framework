@@ -118,6 +118,11 @@ void DeclarativeMimeData::setColor(const QColor &color)
 	}
 }
 
+void DeclarativeMimeData::setData(const QString &mimeType, const QString &data)
+{
+    QMimeData::setData(mimeType, data.toLatin1());
+}
+
 /*!
   \qmlproperty item MimeData::source
 

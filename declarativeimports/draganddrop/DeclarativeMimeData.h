@@ -54,6 +54,8 @@ public:
 	QColor color() const;
 	void setColor(const QColor &color);
 
+    Q_INVOKABLE void setData(const QString &mimeType, const QString &data);
+
 	QDeclarativeItem* source() const;
 	void setSource(QDeclarativeItem* source);
 
