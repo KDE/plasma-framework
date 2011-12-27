@@ -80,11 +80,21 @@ Menu {
         }
         if (model != undefined) {
             for (var j = 0; j < model.count; ++j) {
-                var text = model.get(j).text
+                var data = model.get(j)
+                var text = data.text
+
                 if (!text) {
-                    text = model.get(j).display
+                    text = data.display
                 }
                 addMenuItem(text)
+
+                //enabled property must be present -and- be false
+                if (data.enabled === false) {
+                    items[items.length-1].enabled = false
+                }
+                if (data.separator === true) {
+                    items[items.length-1].separator = true
+                }
             }
         }
     }
