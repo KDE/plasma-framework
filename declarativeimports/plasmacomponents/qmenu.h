@@ -52,6 +52,8 @@ public:
     void showMenu(int x, int y);
     Q_INVOKABLE void open();
     Q_INVOKABLE void close();
+    Q_INVOKABLE void clearMenuItems();
+    Q_INVOKABLE void addMenuItem(const QString &text);
 
 Q_SIGNALS:
     void statusChanged();
