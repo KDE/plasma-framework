@@ -97,9 +97,9 @@ void QMenuProxy::open()
 
     QGraphicsObject *parentItem;
     if (m_visualParent) {
-        parentItem = qobject_cast<QGraphicsObject *>(parent());
-    } else {
         parentItem = m_visualParent.data();
+    } else {
+        parentItem = qobject_cast<QGraphicsObject *>(parent());
     }
 
     if (!parentItem || !parentItem->scene()) {
