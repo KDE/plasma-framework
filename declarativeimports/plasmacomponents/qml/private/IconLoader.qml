@@ -46,10 +46,15 @@ Item {
 
     property bool valid: false
 
-    property string source
+    property variant source
 
     onSourceChanged: {
-        if (source == "") {
+        //is it a qicon?
+        if (typeof source != "string") {
+            imageLoader.sourceComponent = iconComponent
+            valid = true
+            return
+        } else if (source == "") {
             imageLoader.sourceComponent = null
             valid = false
         }
@@ -61,7 +66,7 @@ Item {
 
         if (svgIcon.isValid() && svgIcon.hasElement(root.source)) {
             imageLoader.sourceComponent = svgComponent
-        } else if (root.source.indexOf(".") == -1 && root.source.indexOf(":") == -1) {
+        } else if ((root.source.indexOf(".") == -1 && root.source.indexOf(":") == -1)) {
             imageLoader.sourceComponent = iconComponent
         } else {
             imageLoader.sourceComponent = imageComponent
@@ -112,7 +117,7 @@ Item {
             id: iconComponent
 
             QIconItem {
-                icon: QIcon(root.source)
+                icon: (typeof source == "string") ? QIcon(root.source) : root.source
                 smooth: true
                 anchors.fill: parent
             }
