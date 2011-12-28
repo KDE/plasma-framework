@@ -46,6 +46,7 @@ Properties:
 
         alias iconSource:
         Sets the icon for the button.
+        It can be any image from any protocol supported by the Image element, or a freedesktop-compatible icon name
 
         alias font:
         Sets the font for the button.

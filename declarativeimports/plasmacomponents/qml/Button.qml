@@ -57,7 +57,8 @@ Properties:
 
       * url iconSource:
         This property holds the source url for the Button's icon.
-	The default value is an empty url, which displays no icon, it can be any image from any protocol supported by the Image element, or a freedesktop-compatible icon name
+    The default value is an empty url, which displays no icon.
+    It can be any image from any protocol supported by the Image element, or a freedesktop-compatible icon name
 
       * font font:
         This property holds the font used by the button label.
