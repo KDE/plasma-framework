@@ -32,8 +32,8 @@ class QMenuProxy : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QDeclarativeListProperty<QMenuItem> items READ items CONSTANT)
-    Q_CLASSINFO("DefaultProperty", "items")
+    Q_PROPERTY(QDeclarativeListProperty<QMenuItem> content READ content CONSTANT)
+    Q_CLASSINFO("DefaultProperty", "content")
     Q_PROPERTY(QDeclarativeItem *visualParent READ visualParent WRITE setVisualParent NOTIFY visualParentChanged())
     Q_PROPERTY(DialogStatus::Status status READ status NOTIFY statusChanged)
 
@@ -41,7 +41,7 @@ public:
     QMenuProxy(QObject *parent = 0);
     ~QMenuProxy();
 
-    QDeclarativeListProperty<QMenuItem> items();
+    QDeclarativeListProperty<QMenuItem> content();
     int actionCount() const;
     QMenuItem *action(int) const;
     DialogStatus::Status status() const;

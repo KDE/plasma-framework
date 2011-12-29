@@ -38,7 +38,7 @@ QMenuProxy::~QMenuProxy()
     delete m_menu;
 }
 
-QDeclarativeListProperty<QMenuItem> QMenuProxy::items()
+QDeclarativeListProperty<QMenuItem> QMenuProxy::content()
 {
     return QDeclarativeListProperty<QMenuItem>(this, m_items);
 }
