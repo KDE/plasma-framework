@@ -40,7 +40,7 @@ QMenuProxy::~QMenuProxy()
     delete m_menu;
 }
 
-QDeclarativeListProperty<QMenuItem> QMenuProxy::items()
+QDeclarativeListProperty<QMenuItem> QMenuProxy::content()
 {
     return QDeclarativeListProperty<QMenuItem>(this, m_items);
 }
@@ -75,6 +75,37 @@ void QMenuProxy::setVisualParent(QDeclarativeItem *parent)
     emit visualParentChanged();
 }
 
+bool QMenuProxy::event(QEvent *event)
+{
+    switch (event->type()) {
+    case QEvent::ChildAdded: {
+        QChildEvent *ce = static_cast<QChildEvent *>(event);
+        QMenuItem *mi = qobject_cast<QMenuItem *>(ce->child());
+        //FIXME: linear complexity here
+        if (mi && !m_items.contains(mi)) {
+            m_items << mi;
+        }
+        break;
+    }
+
+    case QEvent::ChildRemoved: {
+        QChildEvent *ce = static_cast<QChildEvent *>(event);
+        QMenuItem *mi = qobject_cast<QMenuItem *>(ce->child());
+
+        //FIXME: linear complexity here
+        if (mi) {
+            m_items.removeAll(mi);
+        }
+        break;
+    }
+
+    default:
+        break;
+    }
+
+    return QObject::event(event);
+}
+
 void QMenuProxy::clearMenuItems()
 {
     qDeleteAll(m_items);
@@ -85,6 +116,11 @@ void QMenuProxy::addMenuItem(const QString &text)
 {
     QMenuItem *item = new QMenuItem(this);
     item->setText(text);
+    m_items << item;
+}
+
+void QMenuProxy::addMenuItem(QMenuItem *item)
+{
     m_items << item;
 }
 
