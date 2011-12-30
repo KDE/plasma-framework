@@ -34,6 +34,10 @@ class QMenuProxy : public QObject
 
     Q_PROPERTY(QDeclarativeListProperty<QMenuItem> content READ content CONSTANT)
     Q_CLASSINFO("DefaultProperty", "content")
+
+    /**
+     * the visualParent is used to position the menu. it can be an item on the scene, like a button (that will open the menu on clicked) or another menuitem (in this case this will be a submenu)
+     */
     Q_PROPERTY(QObject *visualParent READ visualParent WRITE setVisualParent NOTIFY visualParentChanged())
     Q_PROPERTY(DialogStatus::Status status READ status NOTIFY statusChanged)
 
