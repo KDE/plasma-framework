@@ -83,7 +83,7 @@ void QMenuProxy::setVisualParent(QObject *parent)
         action->setMenu(m_menu);
         m_menu->clear();
         foreach(QMenuItem* item, m_items) {
-            m_menu->addAction (item);
+            m_menu->addAction(item);
         }
         m_menu->updateGeometry();
     }
@@ -100,6 +100,7 @@ bool QMenuProxy::event(QEvent *event)
         QMenuItem *mi = qobject_cast<QMenuItem *>(ce->child());
         //FIXME: linear complexity here
         if (mi && !m_items.contains(mi)) {
+            m_menu->addAction(mi);
             m_items << mi;
         }
         break;
@@ -111,6 +112,7 @@ bool QMenuProxy::event(QEvent *event)
 
         //FIXME: linear complexity here
         if (mi) {
+            m_menu->removeAction(mi);
             m_items.removeAll(mi);
         }
         break;
@@ -133,11 +135,13 @@ void QMenuProxy::addMenuItem(const QString &text)
 {
     QMenuItem *item = new QMenuItem(this);
     item->setText(text);
+    m_menu->addAction(item);
     m_items << item;
 }
 
 void QMenuProxy::addMenuItem(QMenuItem *item)
 {
+    m_menu->addAction(item);
     m_items << item;
 }
 
