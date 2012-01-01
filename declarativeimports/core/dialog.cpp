@@ -237,6 +237,10 @@ QPoint DialogProxy::popupPosition(QGraphicsObject *item, int alignment)
         return corona->popupPosition(actualItem, m_dialog->size(), (Qt::AlignmentFlag)alignment);
     } else {
 
+        if (!actualItem->scene()) {
+            return QPoint();
+        }
+
         QList<QGraphicsView*> views = actualItem->scene()->views();
 
 
