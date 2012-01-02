@@ -24,7 +24,7 @@ import "." 0.1
 Item {
     id: root
 
-    default property alias content: visualModel.children
+    default property alias content: menuColumn.children
     property Item visualParent
     property int status: DialogStatus.Closed
 
@@ -46,18 +46,15 @@ Item {
 
     function addMenuItem(item)
     {
-        item.parent = visualModel
+        item.parent = menuColumn
     }
 
     onChildrenChanged: {
-        //if is a menuitem move to visualModel
+        //if is a menuitem move to menuColumn
         for (var i = 0; i < children.length; ++i) {
             var item = children[i]
-print("AAAAA"+item+(item.separator !== undefined))
             if (item.separator !== undefined) {
-print("BBBB"+item.parent)
-                item.parent = visualModel
-print("CCCC"+item.parent)
+                item.parent = menuColumn
             }
         }
     }
@@ -79,8 +76,8 @@ print("CCCC"+item.parent)
         mainItem: Item {
             id: contentItem
 
-            width: Math.max(visualModel.width, theme.defaultFont.mSize.width * 12)
-            height: Math.min(visualModel.height, theme.defaultFont.mSize.height * 25)
+            width: Math.max(menuColumn.width, theme.defaultFont.mSize.width * 12)
+            height: Math.min(menuColumn.height, theme.defaultFont.mSize.height * 25)
 
 
 
@@ -91,7 +88,8 @@ print("CCCC"+item.parent)
                 clip: true
 
                 Column {
-                    id: visualModel
+                    id: menuColumn
+                    spacing: 4
                     onChildrenChanged: {
                         for (var i = 0; i < children.length; ++i) {
                             if (children[i].clicked != undefined)
