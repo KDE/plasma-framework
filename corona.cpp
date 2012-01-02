@@ -540,8 +540,8 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::Alig
             pos.setX(pos.x() + actualItem->boundingRect().width() - s.width());
         }
 
-        if (pos.x() + s.width() > v->geometry().right()) {
-            pos.setX(v->geometry().right() - s.width());
+        if (pos.x() + s.width() > v->geometry().x() + v->geometry().width()) {
+            pos.setX((v->geometry().x() + v->geometry().width()) - s.width());
         } else {
             pos.setX(qMax(pos.x(), v->geometry().left()));
         }
@@ -555,8 +555,8 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::Alig
             pos.setY(pos.y() + actualItem->boundingRect().height() - s.height());
         }
 
-        if (pos.y() + s.height() > v->geometry().bottom()) {
-            pos.setY(v->geometry().bottom() - s.height());
+        if (pos.y() + s.height() > v->geometry().y() + v->geometry().height()) {
+            pos.setY((v->geometry().y() + v->geometry().height()) - s.height());
         } else {
             pos.setY(qMax(pos.y(), v->geometry().top()));
         }
@@ -591,10 +591,10 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::Alig
         pos.setY(v->geometry().y() - s.height());
         break;
     case TopEdge:
-        pos.setY(v->geometry().bottom());
+        pos.setY(v->geometry().y() + v->geometry().height());
         break;
     case LeftEdge:
-        pos.setX(v->geometry().right());
+        pos.setX(v->geometry().x() + v->geometry().width());
         break;
     case RightEdge:
         pos.setX(v->geometry().x() - s.width());
@@ -609,12 +609,12 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::Alig
 
     //kDebug() << "==> rect for" << screen << "is" << screenRect;
 
-    if (loc != LeftEdge && pos.x() + s.width() > screenRect.right()) {
-        pos.rx() -= ((pos.x() + s.width()) - screenRect.right());
+    if (loc != LeftEdge && pos.x() + s.width() > screenRect.x() + screenRect.width()) {
+        pos.rx() -= ((pos.x() + s.width()) - (screenRect.x() + screenRect.width()));
     }
 
-    if (loc != TopEdge && pos.y() + s.height() > screenRect.bottom()) {
-        pos.ry() -= ((pos.y() + s.height()) - screenRect.bottom());
+    if (loc != TopEdge && pos.y() + s.height() > screenRect.y() + screenRect.height()) {
+        pos.ry() -= ((pos.y() + s.height()) - (screenRect.y() + screenRect.height()));
     }
 
     pos.rx() = qMax(0, pos.x());
