@@ -38,8 +38,9 @@
 **
 ****************************************************************************/
 
-import QtQuick 1.0
+import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
+import "private" as Private
 
 Item {
     id: root
@@ -48,16 +49,32 @@ Item {
 
     signal clicked
 
-    property int implicitWidth: textArea.paintedWidth + 6
-    width: parent.width
-    height: textArea.paintedHeight + 6
+    implicitWidth: textArea.paintedWidth + iconLoader.width*2 + 6
+    implicitHeight: textArea.paintedHeight + 6
 
+    property bool separator: false
+    property alias icon: iconLoader.source
+
+    Private.IconLoader {
+        id: iconLoader
+        width: parent.height
+        anchors {
+            verticalCenter: parent.verticalCenter
+            left: parent.left
+            top: parent.top
+            bottom: parent.bottom
+        }
+    }
     Label {
         id: textArea
         anchors.centerIn: parent
+
         horizontalAlignment: Text.AlignHCenter
         elide: Text.ElideRight
     }
+    /*Component.onCompleted: {
+        contentItem.width = 300//Math.max(contentItem.width, root.width)
+    }*/
 
 
     MouseArea {

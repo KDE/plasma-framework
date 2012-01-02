@@ -44,6 +44,24 @@ Item {
         dialog.visible = false
     }
 
+    function addMenuItem(item)
+    {
+        item.parent = visualModel
+    }
+
+    onChildrenChanged: {
+        //if is a menuitem move to visualModel
+        for (var i = 0; i < children.length; ++i) {
+            var item = children[i]
+print("AAAAA"+item+(item.separator !== undefined))
+            if (item.separator !== undefined) {
+print("BBBB"+item.parent)
+                item.parent = visualModel
+print("CCCC"+item.parent)
+            }
+        }
+    }
+
     visible: false
 
     PlasmaCore.Dialog {
@@ -61,18 +79,18 @@ Item {
         mainItem: Item {
             id: contentItem
 
-            width: theme.defaultFont.mSize.width * 12
-            height: Math.min(listView.contentHeight, theme.defaultFont.mSize.height * 25)
+            width: Math.max(visualModel.width, theme.defaultFont.mSize.width * 12)
+            height: Math.min(visualModel.height, theme.defaultFont.mSize.height * 25)
 
 
-            ListView {
+
+            Flickable {
                 id: listView
                 anchors.fill: parent
 
-                currentIndex : -1
                 clip: true
 
-                model: VisualItemModel {
+                Column {
                     id: visualModel
                     onChildrenChanged: {
                         for (var i = 0; i < children.length; ++i) {
