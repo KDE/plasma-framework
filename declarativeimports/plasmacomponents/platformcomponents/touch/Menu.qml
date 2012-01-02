@@ -28,6 +28,26 @@ Item {
     property Item visualParent
     property int status: DialogStatus.Closed
 
+    onVisualParentChanged: {
+        //if is a menuitem move to menuColumn
+        if (visualParent.separator !== undefined) {
+            var obj = arrowComponent.createObject(visualParent)
+        }
+    }
+
+    Component {
+        id: arrowComponent
+        PlasmaCore.SvgItem {
+            svg: PlasmaCore.Svg {imagePath: "widgets/arrows"}
+            elementId: "right-arrow"
+            width: naturalSize.width
+            height: naturalSize.height
+            anchors {
+                right: parent.right
+                verticalCenter: parent.verticalCenter
+            }
+        }
+    }
     function open()
     {
         var parent = root.visualParent ? root.visualParent : root.parent
@@ -50,9 +70,9 @@ Item {
     }
 
     onChildrenChanged: {
-        //if is a menuitem move to menuColumn
         for (var i = 0; i < children.length; ++i) {
             var item = children[i]
+            //if is a menuitem move to menuColumn
             if (item.separator !== undefined) {
                 item.parent = menuColumn
             }

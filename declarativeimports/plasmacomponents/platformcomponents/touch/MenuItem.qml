@@ -50,10 +50,20 @@ Item {
     signal clicked
 
     implicitWidth: textArea.paintedWidth + iconLoader.width*2 + 6
-    implicitHeight: textArea.paintedHeight + 6
+    implicitHeight: Math.max(theme.smallIconSize, textArea.paintedHeight + 6)
+    width: Math.max(implicitWidth, parent.width)
 
     property bool separator: false
+    onSeparatorChanged: {
+        if (separator) {
+            internal.separatorItem = separatorComponent.createObject(root)
+        } else {
+            internal.separatorItem.destroy()
+        }
+    }
     property alias icon: iconLoader.source
+
+    enabled: !separator
 
     Private.IconLoader {
         id: iconLoader
@@ -72,10 +82,24 @@ Item {
         horizontalAlignment: Text.AlignHCenter
         elide: Text.ElideRight
     }
-    /*Component.onCompleted: {
-        contentItem.width = 300//Math.max(contentItem.width, root.width)
-    }*/
 
+    QtObject {
+        id: internal
+        property Item separatorItem
+    }
+    Component {
+        id: separatorComponent
+        PlasmaCore.FrameSvgItem {
+            imagePath: "widgets/viewitem"
+            prefix: "normal"
+            height: text ? parent.height : margins.top+margins.bottom
+            anchors {
+                right: parent.right
+                left: parent.left
+                verticalCenter: parent.verticalCenter
+            }
+        }
+    }
 
     MouseArea {
         id: mouseArea
