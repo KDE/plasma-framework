@@ -22,7 +22,7 @@ Inherits:
         Text
 
 Imports:
-        QtQuick 1.0
+        QtQuick 1.1
         org.kde.plasma.core
 
 Description:
@@ -41,15 +41,14 @@ Signals:
     See the primitive QML Text element
 **/
 
-import QtQuick 1.0
+import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 
 Text {
     id: root
 
     height: Math.max(paintedHeight, theme.defaultFont.mSize.height*1.6)
-    //FIXME: wait to rely on 1.1 for lineCount > 1
-    verticalAlignment: paintedHeight > theme.defaultFont.mSize.height*1.5 ? Text.AlignTop : Text.AlignVCenter
+    verticalAlignment: lineCount > 1 ? Text.AlignTop : Text.AlignVCenter
 
     font.capitalization: theme.defaultFont.capitalization
     font.family: theme.defaultFont.family
