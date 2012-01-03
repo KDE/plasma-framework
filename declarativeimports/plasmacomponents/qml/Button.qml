@@ -219,6 +219,8 @@ Item {
                 left: label.paintedWidth > 0 ? parent.left : undefined
                 horizontalCenter: label.paintedWidth > 0 ? undefined : parent.horizontalCenter
             }
+            height: roundToStandardSize(parent.height)
+            width: height
         }
 
         Text {

@@ -182,6 +182,8 @@ Item {
                 left: label.text ? parent.left : undefined
                 horizontalCenter: label.text ? undefined : parent.horizontalCenter
             }
+            height: roundToStandardSize(parent.height)
+            width: height
         }
 
         Text {
