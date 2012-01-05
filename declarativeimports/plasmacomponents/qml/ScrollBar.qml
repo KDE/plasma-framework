@@ -140,6 +140,9 @@ Item {
             }
         }
 
+        // FIXME: there's a binding loop occurrence here somewhere...(RangeModel) : property: value
+        // try flicking a view with a scrollbar in it, and flick it past it's contents
+        // a few times and try using the mousewheel..you'll find the warning then..
         RangeModel {
             id: range
 
