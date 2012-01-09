@@ -91,14 +91,16 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
         componentsPlatform = cg.readEntry("name", "desktop");
     }
 
+    //platform specific c++ components
     if (componentsPlatform == "desktop") {
         qmlRegisterType<KDialogProxy>(uri, 0, 1, "QueryDialog");
 
         qmlRegisterType<QMenuProxy>(uri, 0, 1, "Menu");
         qmlRegisterType<QMenuItem>(uri, 0, 1, "MenuItem");
+    } else {
+        qmlRegisterType<FullScreenDialog>(uri, 0, 1, "Dialog");
     }
 
-    qmlRegisterType<FullScreenDialog>(uri, 0, 1, "FullScreenDialog");
     qmlRegisterType<Plasma::QRangeModel>(uri, 0, 1, "RangeModel");
 
     qmlRegisterUncreatableType<DialogStatus>(uri, 0, 1, "DialogStatus", "");
