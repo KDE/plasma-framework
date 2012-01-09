@@ -21,6 +21,8 @@
 
 #include <QtDeclarative/qdeclarative.h>
 #include <QtDeclarative/QDeclarativeEngine>
+#include <QtDeclarative/QDeclarativeContext>
+#include <QtDeclarative/QDeclarativeItem>
 
 #include "qrangemodel.h"
 
@@ -30,6 +32,8 @@
 #include "qmenu.h"
 #include "qmenuitem.h"
 #include "kdialogproxy.h"
+
+Q_EXPORT_PLUGIN2(plasmacomponentsplugin, PlasmaComponentsPlugin)
 
 class BKSingleton
 {
@@ -47,31 +51,32 @@ EngineBookKeeping *EngineBookKeeping::self()
     return &privateBKSelf->self;
 }
 
-QDeclarativeEngine *EngineBookKeeping::engineFor(QDeclarativeItem *item) const
+QDeclarativeEngine *EngineBookKeeping::engineFor(QObject *item) const
 {
+    foreach (QDeclarativeEngine *engine, m_engines) {
+        QObject *root = engine->rootContext()->contextObject();
+        QObject *candidate = item;
+        while (candidate) {
+            if (candidate == root) {
+                return engine;
+            }
+            candidate = candidate->parent();
+        }
+    }
     return 0;
 }
 
-void EngineBookKeeping::insertPlugin(PlasmaComponentsPlugin *plugin, QDeclarativeEngine *engine)
+void EngineBookKeeping::insertEngine(QDeclarativeEngine *engine)
 {
-    m_engines.insert(plugin, engine);
-}
-
-void EngineBookKeeping::removePlugin(PlasmaComponentsPlugin *plugin)
-{
-    m_engines.remove(plugin);
+    m_engines.insert(engine);
 }
 
 
-PlasmaComponentsPlugin::~PlasmaComponentsPlugin()
-{
-    EngineBookKeeping::self()->removePlugin(this);
-}
 
 void PlasmaComponentsPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
 {
     QDeclarativeExtensionPlugin::initializeEngine(engine, uri);
-    EngineBookKeeping::self()->insertPlugin(this, engine);
+    EngineBookKeeping::self()->insertEngine(engine);
 }
 
 void PlasmaComponentsPlugin::registerTypes(const char *uri)

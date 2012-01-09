@@ -81,8 +81,6 @@ CommonDialog {
     property int selectedIndex: -1
     property Component delegate: defaultDelegate
 
-    privateCloseIcon: true
-
     Component {
         id: defaultDelegate
 

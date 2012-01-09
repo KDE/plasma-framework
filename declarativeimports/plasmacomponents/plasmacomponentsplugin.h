@@ -21,7 +21,7 @@
 #define PLASMACOMPONENTSPLUGIN_H
 
 #include <QDeclarativeExtensionPlugin>
-#include <QHash>
+#include <QSet>
 
 class QDeclarativeEngine;
 class QDeclarativeItem;
@@ -33,12 +33,11 @@ public:
     EngineBookKeeping();
     static EngineBookKeeping *self();
 
-    void insertPlugin(PlasmaComponentsPlugin *plugin, QDeclarativeEngine *engine);
-    void removePlugin(PlasmaComponentsPlugin *plugin);
-    QDeclarativeEngine *engineFor(QDeclarativeItem *item) const;
+    void insertEngine(QDeclarativeEngine *engine);
+    QDeclarativeEngine *engineFor(QObject *item) const;
 
 private:
-    QHash <PlasmaComponentsPlugin*, QDeclarativeEngine*> m_engines;
+    QSet <QDeclarativeEngine*> m_engines;
 };
 
 class PlasmaComponentsPlugin : public QDeclarativeExtensionPlugin
@@ -46,11 +45,8 @@ class PlasmaComponentsPlugin : public QDeclarativeExtensionPlugin
     Q_OBJECT
 
 public:
-    ~PlasmaComponentsPlugin();
     void initializeEngine(QDeclarativeEngine *engine, const char *uri);
     void registerTypes(const char *uri);
 };
-
-Q_EXPORT_PLUGIN2(plasmacomponentsplugin, PlasmaComponentsPlugin)
 
 #endif

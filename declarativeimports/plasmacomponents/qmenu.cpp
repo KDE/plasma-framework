@@ -26,10 +26,11 @@
 #include <QGraphicsView>
 #include <QDeclarativeItem>
 
+#include "plasmacomponentsplugin.h"
 QMenuProxy::QMenuProxy (QObject *parent)
     : QObject(parent),
       m_status(DialogStatus::Closed)
-{
+{qDebug()<<"AAAAAA"<<EngineBookKeeping::self()->engineFor(this);
     m_menu = new QMenu(0);
     connect(m_menu, SIGNAL(triggered(QAction *)),
             this, SLOT(itemTriggered(QAction *)));
