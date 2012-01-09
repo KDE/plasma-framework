@@ -97,6 +97,7 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
 
         qmlRegisterType<QMenuProxy>(uri, 0, 1, "Menu");
         qmlRegisterType<QMenuItem>(uri, 0, 1, "MenuItem");
+    //on touch systems the dialog is fullscreen, c++ needed to do that
     } else {
         qmlRegisterType<FullScreenDialog>(uri, 0, 1, "Dialog");
     }

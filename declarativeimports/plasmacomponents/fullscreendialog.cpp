@@ -203,7 +203,9 @@ void FullScreenDialog::setVisible(const bool visible)
     if (m_view->isVisible() != visible) {
         m_view->setVisible(visible);
         if (visible) {
+            unsigned long state = NET::Sticky | NET::StaysOnTop | NET::KeepAbove | NET::SkipTaskbar | NET::SkipPager | NET::MaxVert | NET::MaxHoriz;
             m_view->setVisible(visible);
+            KWindowSystem::setState(m_view->effectiveWinId(), state);
             m_view->raise();
         }
     }
