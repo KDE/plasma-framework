@@ -56,8 +56,8 @@ public:
 
     //QML properties
     QDeclarativeListProperty<QGraphicsObject> title();
-    QDeclarativeListProperty<QGraphicsObject> content() const;
-    QDeclarativeListProperty<QGraphicsObject> buttons() const;
+    QDeclarativeListProperty<QGraphicsObject> content();
+    QDeclarativeListProperty<QGraphicsObject> buttons();
     DialogStatus::Status status() const;
 
     Q_INVOKABLE void open();
@@ -86,6 +86,11 @@ private:
     QGraphicsScene *m_scene;
     QWeakPointer<QObject> m_rootObject;
     static uint s_numItems;
+
+    //those only used in case of error, to not make plasma crash
+    QList<QGraphicsObject *> m_dummyTitleElements;
+    QList<QGraphicsObject *> m_dummyContentElements;
+    QList<QGraphicsObject *> m_dummyButtonsElements;
 };
 
 #endif

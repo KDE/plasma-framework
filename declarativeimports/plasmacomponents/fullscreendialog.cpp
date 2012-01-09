@@ -216,25 +216,25 @@ QDeclarativeListProperty<QGraphicsObject> FullScreenDialog::title()
     if (m_rootObject) {
         return m_rootObject.data()->property("title").value<QDeclarativeListProperty<QGraphicsObject> >();
     } else {
-        return QDeclarativeListProperty<QGraphicsObject>();
+        return QDeclarativeListProperty<QGraphicsObject>(this, m_dummyTitleElements);
     }
 }
 
-QDeclarativeListProperty<QGraphicsObject> FullScreenDialog::content() const
+QDeclarativeListProperty<QGraphicsObject> FullScreenDialog::content()
 {
     if (m_rootObject) {
         return m_rootObject.data()->property("content").value<QDeclarativeListProperty<QGraphicsObject> >();
     } else {
-        return QDeclarativeListProperty<QGraphicsObject>();
+        return QDeclarativeListProperty<QGraphicsObject>(this, m_dummyContentElements);
     }
 }
 
-QDeclarativeListProperty<QGraphicsObject> FullScreenDialog::buttons() const
+QDeclarativeListProperty<QGraphicsObject> FullScreenDialog::buttons()
 {
     if (m_rootObject) {
         return m_rootObject.data()->property("buttons").value<QDeclarativeListProperty<QGraphicsObject> >();
     } else {
-        return QDeclarativeListProperty<QGraphicsObject>();
+        return QDeclarativeListProperty<QGraphicsObject>(this, m_dummyButtonsElements);
     }
 }
 
