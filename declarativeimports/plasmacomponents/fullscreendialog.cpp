@@ -91,6 +91,9 @@ FullScreenDialog::FullScreenDialog(QDeclarativeItem *parent)
 
     QDeclarativeContext *creationContext = component->creationContext();
     m_rootObject = component->create(creationContext);
+    if (component->status() == QDeclarativeComponent::Error) {
+        kWarning()<<component->errors();
+    }
 
     if (m_rootObject) {
         setMainItem(qobject_cast<QGraphicsObject *>(m_rootObject.data()));
