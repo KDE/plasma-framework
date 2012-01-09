@@ -21,6 +21,23 @@
 #define PLASMACOMPONENTSPLUGIN_H
 
 #include <QDeclarativeExtensionPlugin>
+#include <QHash>
+
+class QDeclarativeEngine;
+class QDeclarativeItem;
+class PlasmaComponentsPlugin;
+
+class EngineBookKeeping
+{
+public:
+    EngineBookKeeping();
+    static EngineBookKeeping *self();
+
+    QDeclarativeEngine *engineFor(QDeclarativeItem *item) const;
+
+private:
+    QHash <PlasmaComponentsPlugin*, QDeclarativeEngine*> m_engines;
+};
 
 class PlasmaComponentsPlugin : public QDeclarativeExtensionPlugin
 {

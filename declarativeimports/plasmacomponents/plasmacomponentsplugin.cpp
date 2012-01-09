@@ -31,6 +31,29 @@
 #include "qmenuitem.h"
 #include "kdialogproxy.h"
 
+class BKSingleton
+{
+public:
+   EngineBookKeeping self;
+};
+K_GLOBAL_STATIC(BKSingleton, privateBKSelf)
+
+EngineBookKeeping::EngineBookKeeping()
+{
+}
+
+EngineBookKeeping *EngineBookKeeping::self()
+{
+    return &privateBKSelf->self;
+}
+
+QDeclarativeEngine *engineFor(QDeclarativeItem *item) const
+{
+    return 0;
+}
+
+
+
 void PlasmaComponentsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.components"));
