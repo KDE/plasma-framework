@@ -64,7 +64,8 @@ Item {
 
     function open()
     {
-        dialog.state = ""
+        status = DialogStatus.Opening
+        delayOpenTimer.restart()
     }
 
     function accept()
@@ -102,6 +103,12 @@ Item {
             clickedOutside()
             close()
         }
+    }
+    Timer {
+        id: delayOpenTimer
+        running: false
+        interval: 100
+        onTriggered: dialog.state = ""
     }
 
     PlasmaCore.FrameSvgItem {
