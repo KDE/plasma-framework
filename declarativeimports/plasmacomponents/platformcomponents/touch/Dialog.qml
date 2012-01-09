@@ -210,7 +210,7 @@ Item {
                     PropertyAnimation {
                         properties: "y, alpha"
                         easing.type: Easing.InOutQuad
-                        duration: 2250
+                        duration: 250
                     }
                     ScriptAction {
                         script: root.status = DialogStatus.Closed
@@ -228,7 +228,7 @@ Item {
                     PropertyAnimation {
                         properties: "y, alpha"
                         easing.type: Easing.InOutQuad
-                        duration: 2250
+                        duration: 250
                     }
                     ScriptAction {
                         script: root.status = DialogStatus.Open

@@ -49,10 +49,9 @@ FullScreenDialog::FullScreenDialog(QDeclarativeItem *parent)
     m_view->setAutoFillBackground(false);
     m_view->viewport()->setAutoFillBackground(false);
     m_view->setAttribute(Qt::WA_TranslucentBackground);
-    m_view->setAttribute(Qt::WA_OpaquePaintEvent);
     m_view->setAttribute(Qt::WA_NoSystemBackground);
-    m_view->viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
     m_view->viewport()->setAttribute(Qt::WA_NoSystemBackground);
+    m_view->setCacheMode(QGraphicsView::CacheNone);
     m_view->setWindowFlags(m_view->windowFlags() | Qt::FramelessWindowHint | Qt::CustomizeWindowHint);
     m_view->setFrameShape(QFrame::NoFrame);
     KWindowSystem::setOnAllDesktops(m_view->winId(), true);
