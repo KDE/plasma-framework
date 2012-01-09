@@ -26,6 +26,7 @@
 #include <QGraphicsView>
 #include <QDeclarativeItem>
 
+#include "plasmacomponentsplugin.h"
 QMenuProxy::QMenuProxy (QObject *parent)
     : QObject(parent),
       m_status(DialogStatus::Closed)

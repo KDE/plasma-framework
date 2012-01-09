@@ -21,15 +21,32 @@
 #define PLASMACOMPONENTSPLUGIN_H
 
 #include <QDeclarativeExtensionPlugin>
+#include <QSet>
+
+class QDeclarativeEngine;
+class QDeclarativeItem;
+class PlasmaComponentsPlugin;
+
+class EngineBookKeeping
+{
+public:
+    EngineBookKeeping();
+    static EngineBookKeeping *self();
+
+    void insertEngine(QDeclarativeEngine *engine);
+    QDeclarativeEngine *engineFor(QObject *item) const;
+
+private:
+    QSet <QDeclarativeEngine*> m_engines;
+};
 
 class PlasmaComponentsPlugin : public QDeclarativeExtensionPlugin
 {
     Q_OBJECT
 
 public:
+    void initializeEngine(QDeclarativeEngine *engine, const char *uri);
     void registerTypes(const char *uri);
 };
-
-Q_EXPORT_PLUGIN2(plasmacomponentsplugin, PlasmaComponentsPlugin)
 
 #endif

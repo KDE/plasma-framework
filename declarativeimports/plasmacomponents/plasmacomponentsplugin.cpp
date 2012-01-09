@@ -21,15 +21,65 @@
 
 #include <QtDeclarative/qdeclarative.h>
 #include <QtDeclarative/QDeclarativeEngine>
+#include <QtDeclarative/QDeclarativeContext>
+#include <QtDeclarative/QDeclarativeItem>
 
 #include "qrangemodel.h"
 
 #include <KSharedConfig>
+#include <KDebug>
 
 #include "enums.h"
 #include "qmenu.h"
 #include "qmenuitem.h"
 #include "kdialogproxy.h"
+#include "fullscreendialog.h"
+
+Q_EXPORT_PLUGIN2(plasmacomponentsplugin, PlasmaComponentsPlugin)
+
+class BKSingleton
+{
+public:
+   EngineBookKeeping self;
+};
+K_GLOBAL_STATIC(BKSingleton, privateBKSelf)
+
+EngineBookKeeping::EngineBookKeeping()
+{
+}
+
+EngineBookKeeping *EngineBookKeeping::self()
+{
+    return &privateBKSelf->self;
+}
+
+QDeclarativeEngine *EngineBookKeeping::engineFor(QObject *item) const
+{return m_engines.values().first();
+    foreach (QDeclarativeEngine *engine, m_engines) {
+        QObject *root = engine->rootContext()->contextObject();
+        QObject *candidate = item;
+        while (candidate) {
+            if (candidate == root) {
+                return engine;
+            }
+            candidate = candidate->parent();
+        }
+    }
+    return 0;
+}
+
+void EngineBookKeeping::insertEngine(QDeclarativeEngine *engine)
+{
+    m_engines.insert(engine);
+}
+
+
+
+void PlasmaComponentsPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
+{
+    QDeclarativeExtensionPlugin::initializeEngine(engine, uri);
+    EngineBookKeeping::self()->insertEngine(engine);
+}
 
 void PlasmaComponentsPlugin::registerTypes(const char *uri)
 {
@@ -41,11 +91,15 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
         componentsPlatform = cg.readEntry("name", "desktop");
     }
 
+    //platform specific c++ components
     if (componentsPlatform == "desktop") {
         qmlRegisterType<KDialogProxy>(uri, 0, 1, "QueryDialog");
 
         qmlRegisterType<QMenuProxy>(uri, 0, 1, "Menu");
         qmlRegisterType<QMenuItem>(uri, 0, 1, "MenuItem");
+    //on touch systems the dialog is fullscreen, c++ needed to do that
+    } else {
+        qmlRegisterType<FullScreenDialog>(uri, 0, 1, "Dialog");
     }
 
     qmlRegisterType<Plasma::QRangeModel>(uri, 0, 1, "RangeModel");
