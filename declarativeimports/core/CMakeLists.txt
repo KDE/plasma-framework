@@ -4,7 +4,6 @@ set(corebindings_SRCS
     declarativeitemcontainer.cpp
     corebindingsplugin.cpp
     dataengineconsumer.cpp
-    fullscreendialog.cpp
     theme.cpp
     datamodel.cpp
     datasource.cpp
