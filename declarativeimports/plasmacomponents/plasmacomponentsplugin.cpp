@@ -47,12 +47,32 @@ EngineBookKeeping *EngineBookKeeping::self()
     return &privateBKSelf->self;
 }
 
-QDeclarativeEngine *engineFor(QDeclarativeItem *item) const
+QDeclarativeEngine *EngineBookKeeping::engineFor(QDeclarativeItem *item) const
 {
     return 0;
 }
 
+void EngineBookKeeping::insertPlugin(PlasmaComponentsPlugin *plugin, QDeclarativeEngine *engine)
+{
+    m_engines.insert(plugin, engine);
+}
 
+void EngineBookKeeping::removePlugin(PlasmaComponentsPlugin *plugin)
+{
+    m_engines.remove(plugin);
+}
+
+
+PlasmaComponentsPlugin::~PlasmaComponentsPlugin()
+{
+    EngineBookKeeping::self()->removePlugin(this);
+}
+
+void PlasmaComponentsPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
+{
+    QDeclarativeExtensionPlugin::initializeEngine(engine, uri);
+    EngineBookKeeping::self()->insertPlugin(this, engine);
+}
 
 void PlasmaComponentsPlugin::registerTypes(const char *uri)
 {

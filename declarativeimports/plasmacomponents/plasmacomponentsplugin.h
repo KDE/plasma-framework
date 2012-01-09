@@ -33,6 +33,8 @@ public:
     EngineBookKeeping();
     static EngineBookKeeping *self();
 
+    void insertPlugin(PlasmaComponentsPlugin *plugin, QDeclarativeEngine *engine);
+    void removePlugin(PlasmaComponentsPlugin *plugin);
     QDeclarativeEngine *engineFor(QDeclarativeItem *item) const;
 
 private:
@@ -44,6 +46,8 @@ class PlasmaComponentsPlugin : public QDeclarativeExtensionPlugin
     Q_OBJECT
 
 public:
+    ~PlasmaComponentsPlugin();
+    void initializeEngine(QDeclarativeEngine *engine, const char *uri);
     void registerTypes(const char *uri);
 };
 
