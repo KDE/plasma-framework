@@ -38,8 +38,9 @@
 
 uint FullScreenDialog::s_numItems = 0;
 
-FullScreenDialog::FullScreenDialog(QObject *parent)
-    : QObject(parent)
+FullScreenDialog::FullScreenDialog(QDeclarativeItem *parent)
+    : QDeclarativeItem(parent),
+      m_declarativeItemContainer(0)
 {
     m_view = new QGraphicsView();
     m_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -90,7 +91,14 @@ FullScreenDialog::FullScreenDialog(QObject *parent)
 
     QDeclarativeContext *creationContext = component->creationContext();
     m_rootObject = component->create(creationContext);
-    setMainItem(qobject_cast<QGraphicsObject *>(m_rootObject.data()));
+
+    if (m_rootObject) {
+        setMainItem(qobject_cast<QGraphicsObject *>(m_rootObject.data()));
+        connect(m_rootObject.data(), SIGNAL(statusChanged()), this, SLOT(statusHasChanged()));
+        connect(m_rootObject.data(), SIGNAL(accepted()), this, SIGNAL(accepted()));
+        connect(m_rootObject.data(), SIGNAL(rejected()), this, SIGNAL(rejected()));
+        connect(m_rootObject.data(), SIGNAL(clickedOutside()), this, SIGNAL(clickedOutside()));
+    }
 }
 
 FullScreenDialog::~FullScreenDialog()
@@ -199,31 +207,30 @@ void FullScreenDialog::setVisible(const bool visible)
     }
 }
 
-
-QDeclarativeListProperty<QDeclarativeItem> FullScreenDialog::title() const
+QDeclarativeListProperty<QGraphicsObject> FullScreenDialog::title()
 {
     if (m_rootObject) {
-        return m_rootObject.data()->property("title").value<QDeclarativeListProperty<QDeclarativeItem> >();
+        return m_rootObject.data()->property("title").value<QDeclarativeListProperty<QGraphicsObject> >();
     } else {
-        return QDeclarativeListProperty<QDeclarativeItem>();
+        return QDeclarativeListProperty<QGraphicsObject>();
     }
 }
 
-QDeclarativeListProperty<QDeclarativeItem> FullScreenDialog::content() const
+QDeclarativeListProperty<QGraphicsObject> FullScreenDialog::content() const
 {
     if (m_rootObject) {
-        return m_rootObject.data()->property("content").value<QDeclarativeListProperty<QDeclarativeItem> >();
+        return m_rootObject.data()->property("content").value<QDeclarativeListProperty<QGraphicsObject> >();
     } else {
-        return QDeclarativeListProperty<QDeclarativeItem>();
+        return QDeclarativeListProperty<QGraphicsObject>();
     }
 }
 
-QDeclarativeListProperty<QDeclarativeItem> FullScreenDialog::buttons() const
+QDeclarativeListProperty<QGraphicsObject> FullScreenDialog::buttons() const
 {
     if (m_rootObject) {
-        return m_rootObject.data()->property("buttons").value<QDeclarativeListProperty<QDeclarativeItem> >();
+        return m_rootObject.data()->property("buttons").value<QDeclarativeListProperty<QGraphicsObject> >();
     } else {
-        return QDeclarativeListProperty<QDeclarativeItem>();
+        return QDeclarativeListProperty<QGraphicsObject>();
     }
 }
 
@@ -235,6 +242,47 @@ DialogStatus::Status FullScreenDialog::status() const
         return DialogStatus::Closed;
     }
 }
+
+
+void FullScreenDialog::statusHasChanged()
+{
+    if (status() == DialogStatus::Closed) {
+        setVisible(false);
+    } else {
+        setVisible(true);
+    }
+    emit statusChanged();
+}
+
+void FullScreenDialog::open()
+{
+    if (m_rootObject) {
+        QMetaObject::invokeMethod(m_rootObject.data(), "open");
+    }
+}
+
+void FullScreenDialog::accept()
+{
+    if (m_rootObject) {
+        QMetaObject::invokeMethod(m_rootObject.data(), "accept");
+    }
+}
+
+void FullScreenDialog::reject()
+{
+    if (m_rootObject) {
+        QMetaObject::invokeMethod(m_rootObject.data(), "reject");
+    }
+}
+
+void FullScreenDialog::close()
+{
+    if (m_rootObject) {
+        QMetaObject::invokeMethod(m_rootObject.data(), "close");
+    }
+}
+
+
 
 
 bool FullScreenDialog::eventFilter(QObject *watched, QEvent *event)

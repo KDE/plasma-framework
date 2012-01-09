@@ -33,21 +33,18 @@ class QGraphicsView;
 class QGraphicsScene;
 class DeclarativeItemContainer;
 
-class FullScreenDialog : public QObject
+class FullScreenDialog : public QDeclarativeItem
 {
     Q_OBJECT
 
-    Q_PROPERTY(QDeclarativeListProperty<QDeclarativeItem> title READ title)
-    Q_PROPERTY(QDeclarativeListProperty<QDeclarativeItem> content READ content)
-    Q_PROPERTY(QDeclarativeListProperty<QDeclarativeItem> buttons READ buttons)
+    Q_PROPERTY(QDeclarativeListProperty<QGraphicsObject> title READ title DESIGNABLE false)
+    Q_PROPERTY(QDeclarativeListProperty<QGraphicsObject> content READ content DESIGNABLE false)
+    Q_PROPERTY(QDeclarativeListProperty<QGraphicsObject> buttons READ buttons DESIGNABLE false)
     Q_PROPERTY(DialogStatus::Status status READ status NOTIFY statusChanged)
-    /*property alias content: contentItem.children
-    property alias buttons: buttonItem.children
-    property int status: DialogStatus.Closed*/
 
 
 public:
-    FullScreenDialog(QObject *parent = 0);
+    FullScreenDialog(QDeclarativeItem *parent = 0);
     ~FullScreenDialog();
 
     QGraphicsObject *mainItem() const;
@@ -56,11 +53,17 @@ public:
     bool isVisible() const;
     void setVisible(const bool visible);
 
+
     //QML properties
-    QDeclarativeListProperty<QDeclarativeItem> title()const ;
-    QDeclarativeListProperty<QDeclarativeItem> content() const;
-    QDeclarativeListProperty<QDeclarativeItem> buttons() const;
+    QDeclarativeListProperty<QGraphicsObject> title();
+    QDeclarativeListProperty<QGraphicsObject> content() const;
+    QDeclarativeListProperty<QGraphicsObject> buttons() const;
     DialogStatus::Status status() const;
+
+    Q_INVOKABLE void open();
+    Q_INVOKABLE void accept();
+    Q_INVOKABLE void reject();
+    Q_INVOKABLE void close();
 
 Q_SIGNALS:
     void accepted();
@@ -69,8 +72,9 @@ Q_SIGNALS:
     void statusChanged();
 
 
-protected Q_SLOTS:
+private Q_SLOTS:
     void syncMainItem();
+    void statusHasChanged();
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
