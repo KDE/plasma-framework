@@ -27,11 +27,13 @@
 #include "qrangemodel.h"
 
 #include <KSharedConfig>
+#include <KDebug>
 
 #include "enums.h"
 #include "qmenu.h"
 #include "qmenuitem.h"
 #include "kdialogproxy.h"
+#include "fullscreendialog.h"
 
 Q_EXPORT_PLUGIN2(plasmacomponentsplugin, PlasmaComponentsPlugin)
 
@@ -52,7 +54,7 @@ EngineBookKeeping *EngineBookKeeping::self()
 }
 
 QDeclarativeEngine *EngineBookKeeping::engineFor(QObject *item) const
-{
+{return m_engines.values().first();
     foreach (QDeclarativeEngine *engine, m_engines) {
         QObject *root = engine->rootContext()->contextObject();
         QObject *candidate = item;
@@ -96,6 +98,7 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
         qmlRegisterType<QMenuItem>(uri, 0, 1, "MenuItem");
     }
 
+    qmlRegisterType<FullScreenDialog>(uri, 0, 1, "FullScreenDialog");
     qmlRegisterType<Plasma::QRangeModel>(uri, 0, 1, "RangeModel");
 
     qmlRegisterUncreatableType<DialogStatus>(uri, 0, 1, "DialogStatus", "");
