@@ -144,7 +144,7 @@ Item {
                 property int right: 8
                 property int bottom: 8
             }
-            Private.RoundShadow {
+            RoundShadow {
                 anchors.fill: parent
                 state: (internal.userPressed || checked) ? "hidden" : "shadow"
             }
