@@ -52,13 +52,13 @@ Description:
         Provides a component with list of options that the user can choose from.
 
 Properties:
-      * QtObject model
+      * QtObject model:
         This property holds the model providing data for the menu.
         The model provides the set of data that is used to create the items in the view.
 	Each model item must have a property called "text" or "display".
 
 Methods:
-      * void rebuildMenu()
+      * void rebuildMenu():
         Rebuild the menu if property model is defined.
 **/
 

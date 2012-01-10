@@ -44,8 +44,9 @@ Properties:
               push        follows page stack push animation
               pop         follows page stack pop animation
               replace     follows page stack replace animation
+
 Methods:
-        setTools( tools, transition )
+        void setTools( tools, transition ):
         This sets the tools for the ToolBar and the transition type that
         will be used when the page changes on the relevant PageStack.
         @arg Item tools see tool property

@@ -60,7 +60,9 @@ Description:
 
 Properties:
         string titleText: the title of the dialog.
+
         string titleIcon: the name or path of the dialog title icon
+
         Array variant buttonTexts: the texts of all the buttons
 
 Signals:

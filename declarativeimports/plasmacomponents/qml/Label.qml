@@ -32,7 +32,9 @@ Description:
     text,then you can use the Text component from QtQuick.
 
 Properties:
-    The most important property is "text". For the other ones see the primitive QML Text element
+    string text:
+    The most important property is "text".
+    For the other ones see the primitive QML Text element
 
 Methods:
     See the primitive QML Text element
