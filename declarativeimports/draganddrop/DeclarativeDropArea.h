@@ -30,27 +30,49 @@ class DeclarativeDragDropEvent;
 
 class DeclarativeDropArea : public QDeclarativeItem
 {
-	Q_OBJECT
-	Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled NOTIFY enabledChanged)
+    Q_OBJECT
+
+    /**
+     * If false the area will receive no drop events
+     */
+    Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled NOTIFY enabledChanged)
 
 public:
-	DeclarativeDropArea(QDeclarativeItem *parent=0);
-	bool isEnabled() const;
-	void setEnabled(bool enabled);
+    DeclarativeDropArea(QDeclarativeItem *parent=0);
+    bool isEnabled() const;
+    void setEnabled(bool enabled);
 
-signals:
-	void dragEnter(DeclarativeDragDropEvent* event);
-	void dragLeave(DeclarativeDragDropEvent* event);
-	void drop(DeclarativeDragDropEvent* event);
-	void enabledChanged();
+Q_SIGNALS:
+    /**
+     * Emitted when the mouse cursor dragging something enters in the drag area
+     * @arg DeclarativeDragDropEvent description of the dragged content
+     * @see DeclarativeDragDropEvent
+     */
+    void dragEnter(DeclarativeDragDropEvent* event);
+
+    /**
+     * Emitted when the mouse cursor dragging something leaves the drag area
+     * @arg DeclarativeDragDropEvent description of the dragged content
+     * @see DeclarativeDragDropEvent
+     */
+    void dragLeave(DeclarativeDragDropEvent* event);
+
+    /**
+     * Emitted when the user drops something in the area
+     * @arg DeclarativeDragDropEvent description of the dragged content
+     * @see DeclarativeDragDropEvent
+     */
+    void drop(DeclarativeDragDropEvent* event);
+
+    void enabledChanged();
 
 protected:
-	void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
-	void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
-	void dropEvent(QGraphicsSceneDragDropEvent *event);
+    void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
+    void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
+    void dropEvent(QGraphicsSceneDragDropEvent *event);
 
 private:
-	bool m_enabled;
+    bool m_enabled;
 };
 
 #endif
