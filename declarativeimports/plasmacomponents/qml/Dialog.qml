@@ -62,7 +62,7 @@ Properties:
             - DialogStatus.Open - the dialog is open and visible to the user
             - DialogStatus.Closing - the dialog is closing
             - DialogStatus.Closed - the dialog is closed and not visible to the user
-            - The dialog's initial status is DialogStatus.Closed.
+        The dialog's initial status is DialogStatus.Closed.
 
         list<Item> title: A list of items in the dialog's title area. You can use a Text component but also any number of components that are based on Item. For example, you can use Text and Image components.
 
