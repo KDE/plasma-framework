@@ -50,10 +50,8 @@ Imports:
 
 Description:
         A ButtonColumn allows you to group Buttons in a column. It provides a selection-behavior as well.
-
         Note: This component don't support the enabled property.
         If you need to disable it you should disable all the buttons inside it.
-
         This is an example,
         <code>
         ButtonColumn {
@@ -66,7 +64,6 @@ Properties:
         bool exclusive:
         Specifies the grouping behavior. If enabled, the checked property on buttons contained
         in the group will be exclusive.The default value is true.
-
         Note that a button in an exclusive group will allways be checkable
 
         Item checkedButton:

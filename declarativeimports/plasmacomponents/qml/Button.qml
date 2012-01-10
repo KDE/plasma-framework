@@ -65,7 +65,7 @@ Properties:
 	See also Qt documentation for font type.
 
 Signals:
-      * onClicked():
+      * clicked():
         This handler is called when there is a click.
 **/
 

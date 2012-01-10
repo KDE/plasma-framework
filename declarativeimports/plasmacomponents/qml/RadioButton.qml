@@ -29,12 +29,16 @@ Description:
         A radio button component consists of a radio button and a line of text. Only one item in a list may be selected at a time. Once an item is selected, it can be deselected only by selecting another item. Initial item selection may be set at the list creation. If not set, the list is shown without a selection.
 
 Properties:
-        bool checked: If the button is checked, its checked property is true; otherwise false. The property is false by default.
+        bool checked:
+        If the button is checked, its checked property is true; otherwise false. The property is false by default.
 
-        bool pressed: If the button is pressed, its pressed property is true.
+        bool pressed:
+        If the button is pressed, its pressed property is true.
             See also clicked.
 
-        string text: The text is shown beside the check box. By default text is an empty string.
+        string text:
+        The text is shown beside the check box. By default text is an empty string.
+
 Signals:
         clicked():
             Emitted when the user clicked a mouse button over the checkbox (or tapped on the touch screen)

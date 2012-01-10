@@ -36,11 +36,11 @@ Properties:
             Returns true if the Button is checked, otherwise
             it returns false.
 
-            alias pressed:
+            bool pressed:
             Returns true if the Button is pressed, otherwise
             it returns false.
 
-            alias text:
+            string text:
             Sets the text for the switch.
             The default value is empty.No text
             will be displayed.

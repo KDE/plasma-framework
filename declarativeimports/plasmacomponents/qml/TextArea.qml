@@ -98,7 +98,6 @@ Properties:
 
       * enumeration wrapMode:
         Set this property to wrap the text to the TextArea item's width. The text will only wrap if an explicit width has been set.
-
         * TextEdit.NoWrap - no wrapping will be performed.
             If the text contains insufficient newlines, then implicitWidth will exceed a set width.
         * TextEdit.WordWrap - wrapping is done on word boundaries only.

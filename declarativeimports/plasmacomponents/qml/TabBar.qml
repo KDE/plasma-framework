@@ -60,7 +60,7 @@ Properties:
         This property represends the the content of
         the TabBarLayout.
 
-        property alias layout: tabBarLayout
+        Item tabBarLayout:
         This is an alias for the layout of the tabbar.
 **/
 

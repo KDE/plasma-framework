@@ -44,14 +44,12 @@ Inherits:
 Imports:
         QtQuick 1.1
         org.kde.plasma.core
-        SectionScroller.js
 
 Description:
         It's similar to a ScrollBar or a ScrollDecorator.
         It's interactive and works on ListViews that have section.property set,
         so its contents are categorized.
         An indicator will say to what category the user scrolled to.
-
         Useful for things like address books or things sorted by date.
         Don't use with models too big (thousands of items) because implies
         loading all the items to memory, as well loses precision.

@@ -59,11 +59,14 @@ Description:
         Note: This component is experimental, so it may be changed or removed in future releases.
 
 Properties:
-        string titleText: the title of the dialog.
+        string titleText:
+        the title of the dialog.
 
-        string titleIcon: the name or path of the dialog title icon
+        string titleIcon:
+        the name or path of the dialog title icon
 
-        Array variant buttonTexts: the texts of all the buttons
+        Array variant buttonTexts:
+        the texts of all the buttons
 
 Signals:
         buttonClicked(int index):

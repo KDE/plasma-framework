@@ -72,15 +72,13 @@ Properties:
       * enumeration echoMode:
         This property specifies how the text should be displayed in the TextField.
     The acceptable values are:
-
-      * TextInput.Normal - Displays the text as it is. (Default)
-      * TextInput.Password - Displays asterixes instead of characters.
-      * TextInput.NoEcho - Displays nothing.
-      * TextInput.PasswordEchoOnEdit - Displays all but the current character as asterixes.
-
+        - TextInput.Normal - Displays the text as it is. (Default)
+        - TextInput.Password - Displays asterixes instead of characters.
+        - TextInput.NoEcho - Displays nothing.
+        - TextInput.PasswordEchoOnEdit - Displays all but the current character as asterixes.
     The default value is TextInput.Normal
 
-      *   inputMask: textInput.inputMask
+      * string inputMask:
         Allows you to set an input mask on the TextField, restricting the allowable text inputs.
     See QLineEdit::inputMask for further details, as the exact same mask strings are used by TextInput.
 
@@ -93,7 +91,7 @@ Properties:
     between 11 and 31 into the text input:
     <code>
     import QtQuick 1.0
-    TextInput{
+    TextInput {
         validator: IntValidator{bottom: 11; top: 31;}
         focus: true
     }
@@ -113,7 +111,6 @@ Properties:
     validator as a final string (not as an intermediate string).
     This property is read-only.
 
-Plasma properties:
        * bool clearButtonShown:
          Holds if the button to clear the text from TextField is visible.
 

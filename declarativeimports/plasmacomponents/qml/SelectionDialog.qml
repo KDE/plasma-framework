@@ -56,13 +56,14 @@ Description:
         The user can choose one item from the list at a time.
 
 Properties:
-        alias model: listView.model:
+        QtObject: listView.model:
         The model of selectionDialog.
-        It is just a simple model.
+        Can be a simple model or a custom QAbstractItemModel
 
         int selectedIndex: -1
         It returns the index that the user has selected.
         The default value is -1.
+
         Component delegate:
         This is a common delegate with which,you will choose
         how your items will be displayed.
