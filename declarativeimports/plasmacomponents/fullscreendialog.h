@@ -32,6 +32,7 @@ class QGraphicsObject;
 class QGraphicsView;
 class QGraphicsScene;
 class DeclarativeItemContainer;
+class Background;
 
 class FullScreenDialog : public QDeclarativeItem
 {
@@ -86,6 +87,7 @@ private:
     QGraphicsScene *m_scene;
     QWeakPointer<QObject> m_rootObject;
     static uint s_numItems;
+    Background *m_background;
 
     //those only used in case of error, to not make plasma crash
     QList<QGraphicsObject *> m_dummyTitleElements;

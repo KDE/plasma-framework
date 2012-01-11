@@ -21,6 +21,7 @@
 #include "../core/declarativeitemcontainer_p.h"
 #include "plasmacomponentsplugin.h"
 
+#include <QApplication>
 #include <QDeclarativeItem>
 #include <QDeclarativeContext>
 #include <QGraphicsObject>
@@ -29,15 +30,56 @@
 #include <QGraphicsWidget>
 #include <QLayout>
 #include <QTimer>
-#include <QFile>
+#include <QDesktopWidget>
 
 #include <KWindowSystem>
 #include <KStandardDirs>
 
 #include <Plasma/Corona>
+#include <Plasma/WindowEffects>
 
 
 uint FullScreenDialog::s_numItems = 0;
+
+class Background : public QWidget
+{
+public:
+    Background(FullScreenDialog *dialog)
+        : QWidget( 0L ),
+          m_dialog(dialog)
+    {
+        setAttribute( Qt::WA_NoSystemBackground );
+        setAttribute( Qt::WA_TranslucentBackground );
+
+        setWindowFlags(Qt::FramelessWindowHint | Qt::CustomizeWindowHint);
+        KWindowSystem::setOnAllDesktops(winId(), true);
+        unsigned long state = NET::Sticky | NET::StaysOnTop | NET::KeepAbove | NET::SkipTaskbar | NET::SkipPager | NET::MaxVert | NET::MaxHoriz;
+        KWindowSystem::setState(effectiveWinId(), state);
+    }
+
+    ~Background()
+    {}
+
+    void paintEvent( QPaintEvent *e )
+    {
+        QPainter painter( this );
+        painter.setCompositionMode(QPainter::CompositionMode_Source);
+        painter.fillRect(e->rect(), QColor(0, 0, 0, 80));
+    }
+
+    void mousePressEvent(QMouseEvent *event)
+    {
+        event->accept();
+    }
+
+    void mouseReleaseEvent(QMouseEvent *event)
+    {
+        m_dialog->close();
+    }
+
+private:
+    FullScreenDialog *m_dialog;
+};
 
 FullScreenDialog::FullScreenDialog(QDeclarativeItem *parent)
     : QDeclarativeItem(parent),
@@ -53,10 +95,10 @@ FullScreenDialog::FullScreenDialog(QDeclarativeItem *parent)
     m_view->setAttribute(Qt::WA_NoSystemBackground);
     m_view->viewport()->setAttribute(Qt::WA_NoSystemBackground);
     m_view->setCacheMode(QGraphicsView::CacheNone);
-    m_view->setWindowFlags(m_view->windowFlags() | Qt::FramelessWindowHint | Qt::CustomizeWindowHint);
+    m_view->setWindowFlags(Qt::FramelessWindowHint | Qt::CustomizeWindowHint);
     m_view->setFrameShape(QFrame::NoFrame);
     KWindowSystem::setOnAllDesktops(m_view->winId(), true);
-    unsigned long state = NET::Sticky | NET::StaysOnTop | NET::KeepAbove | NET::SkipTaskbar | NET::SkipPager | NET::MaxVert | NET::MaxHoriz;
+    unsigned long state = NET::Sticky | NET::StaysOnTop | NET::KeepAbove | NET::SkipTaskbar | NET::SkipPager;
     KWindowSystem::setState(m_view->effectiveWinId(), state);
 
     //Try to figure out the path of the dialog component
@@ -102,6 +144,8 @@ FullScreenDialog::FullScreenDialog(QDeclarativeItem *parent)
         connect(m_rootObject.data(), SIGNAL(rejected()), this, SIGNAL(rejected()));
         connect(m_rootObject.data(), SIGNAL(clickedOutside()), this, SIGNAL(clickedOutside()));
     }
+
+    m_background = new Background(this);
 }
 
 FullScreenDialog::~FullScreenDialog()
@@ -183,15 +227,16 @@ void FullScreenDialog::syncMainItem()
 
 
     if (m_declarativeItemContainer) {
-        m_declarativeItemContainer->resize(m_view->size());
+        m_view->resize(m_declarativeItemContainer->size().toSize());
         m_view->setSceneRect(m_declarativeItemContainer->geometry());
     } else {
-        m_mainItem.data()->setProperty("width", m_view->size().width());
-        m_mainItem.data()->setProperty("height", m_view->size().height());
         QRectF itemGeometry(QPointF(m_mainItem.data()->x(), m_mainItem.data()->y()),
                         QSizeF(m_mainItem.data()->boundingRect().size()));
+        m_view->resize(itemGeometry.size().toSize());
         m_view->setSceneRect(itemGeometry);
     }
+
+    m_view->move(QApplication::desktop()->availableGeometry().center() - QPoint(m_view->width()/2, m_view->height()/2));
 }
 
 bool FullScreenDialog::isVisible() const
@@ -202,11 +247,9 @@ bool FullScreenDialog::isVisible() const
 void FullScreenDialog::setVisible(const bool visible)
 {
     if (m_view->isVisible() != visible) {
+        m_background->setVisible(visible);
         m_view->setVisible(visible);
         if (visible) {
-            unsigned long state = NET::Sticky | NET::StaysOnTop | NET::KeepAbove | NET::SkipTaskbar | NET::SkipPager | NET::MaxVert | NET::MaxHoriz;
-            m_view->setVisible(visible);
-            KWindowSystem::setState(m_view->effectiveWinId(), state);
             m_view->raise();
         }
     }
@@ -292,9 +335,13 @@ void FullScreenDialog::close()
 
 bool FullScreenDialog::eventFilter(QObject *watched, QEvent *event)
 {
-    if (watched == m_view &&
-        (event->type() == QEvent::Resize || event->type() == QEvent::Move)) {
+    if (watched == m_mainItem.data() &&
+        (event->type() == QEvent::GraphicsSceneResize)) {
         syncMainItem();
+    } else if (watched == m_view && event->type() == QEvent::Show) {
+        Plasma::WindowEffects::slideWindow(m_view->winId(), Plasma::BottomEdge, 0);
+    } else if (watched == m_view && event->type() == QEvent::Hide) {
+        Plasma::WindowEffects::slideWindow(m_view->winId(), Plasma::BottomEdge, 0);
     }
     return false;
 }

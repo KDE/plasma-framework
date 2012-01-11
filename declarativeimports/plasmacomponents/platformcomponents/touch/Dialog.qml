@@ -47,6 +47,8 @@ import "." 0.1
 
 Item {
     id: root
+    width: dialog.width
+    height: dialog.height
 
     property alias title: titleBar.children
     property alias content: contentItem.children
@@ -91,12 +93,7 @@ Item {
         dialog.state = "closed"
     }
 
-    Rectangle {
-        id: fader
-        property double alpha: 0
-        color: Qt.rgba(0.0, 0.0, 0.0, alpha)
-        anchors.fill: parent
-    }
+
     MouseArea {
         anchors.fill: parent
         onClicked: {
@@ -120,10 +117,6 @@ Item {
 
         state: "closed"
 
-        transform: Translate {
-            id: dialogTransform
-            y: root.height - dialog.y
-        }
         //state: "Hidden"
 
         Item {
@@ -183,65 +176,18 @@ Item {
             State {
                 name: "closed"
                 PropertyChanges {
-                    target: dialogTransform
-                    y: root.height - dialog.y
-                }
-                PropertyChanges {
-                    target: fader
-                    alpha: 0
+                    target: root
+                    status: DialogStatus.Closed
                 }
             },
             State {
                 name: ""
                 PropertyChanges {
-                    target: dialogTransform
-                    y: 0
-                }
-                PropertyChanges {
-                    target: fader
-                    alpha: 0.6
+                    target: root
+                    status: DialogStatus.Open
                 }
             }
         ]
 
-        transitions: [
-            // Transition between open and closed states.
-            Transition {
-                from: ""
-                to: "closed"
-                reversible: false
-                SequentialAnimation {
-                    ScriptAction {
-                        script: root.status = DialogStatus.Closing
-                    }
-                    PropertyAnimation {
-                        properties: "y, alpha"
-                        easing.type: Easing.InOutQuad
-                        duration: 250
-                    }
-                    ScriptAction {
-                        script: root.status = DialogStatus.Closed
-                    }
-                }
-            },
-            Transition {
-                from: "closed"
-                to: ""
-                reversible: false
-                SequentialAnimation {
-                    ScriptAction {
-                        script: root.status = DialogStatus.Opening
-                    }
-                    PropertyAnimation {
-                        properties: "y, alpha"
-                        easing.type: Easing.InOutQuad
-                        duration: 250
-                    }
-                    ScriptAction {
-                        script: root.status = DialogStatus.Open
-                    }
-                }
-            }
-        ]
     }
 }
