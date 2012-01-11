@@ -40,6 +40,35 @@
 **
 ****************************************************************************/
 
+/**Documentanted API
+Inherits:
+        CommonDialog
+
+Imports:
+        org.kde.plasma.core
+        QtQuick 1.1
+        "." 0.1
+
+Description:
+        This is plasma themed SelectionDialog, with which you can customize the visual representation
+        of the selectable items' list by overriding the ListView delegate.
+        By default SelectionDialog provides a scrollable list of textual menu items.
+        The user can choose one item from the list at a time.
+
+Properties:
+        QtObject: listView.model:
+        The model of selectionDialog.
+        Can be a simple model or a custom QAbstractItemModel
+
+        int selectedIndex: -1
+        It returns the index that the user has selected.
+        The default value is -1.
+
+        Component delegate:
+        This is a common delegate with which,you will choose
+        how your items will be displayed.
+**/
+
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 
@@ -52,8 +81,6 @@ CommonDialog {
     property alias model: listView.model
     property int selectedIndex: -1
     property Component delegate: defaultDelegate
-
-    privateCloseIcon: true
 
     Component {
         id: defaultDelegate

@@ -17,6 +17,32 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+/**Documented API
+Inherits:
+        Item
+
+Imports:
+        org.kde.plasma.core
+        QtQuick 1.0
+
+Description:
+        An item delegate for the primitive ListView component. It's intended to make all listview look coherent
+
+Properties:
+      * bool checked:
+        If true makes the list item look as checked or pressed. It has to be set from the code, it won't change by itself.
+
+      * bool sectionDelegate:
+        If true the item will be a delegate for a section, so will look like a "title" for the otems under it.
+
+Signals:
+      * clicked():
+        This handler is called when there is a click.
+
+      * pressAndHold():
+        The user pressed the item with the mouse and didn't release it for a certain amount of time.
+**/
+
 import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 

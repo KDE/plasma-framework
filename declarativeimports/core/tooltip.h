@@ -32,9 +32,24 @@ class ToolTipProxy : public QObject
 {
     Q_OBJECT
 
+    /**
+     * The item that will display this tooltip on mouse over 
+     */
     Q_PROPERTY(QGraphicsObject *target READ target WRITE setTarget NOTIFY targetChanged)
+
+    /**
+     * The title of the tooltip, not more that 2-3 words
+     */
     Q_PROPERTY(QString mainText READ mainText WRITE setMainText NOTIFY mainTextChanged)
+
+    /**
+     * subtitle of the tooltip. needed if a longer description is needed
+     */
     Q_PROPERTY(QString subText READ subText WRITE setSubText NOTIFY subTextChanged)
+
+    /**
+     * Image to display in the tooltip, can be an image full path or a Freedesktop icon name
+     */
     Q_PROPERTY(QString image READ image WRITE setImage NOTIFY imageChanged)
 
 public:

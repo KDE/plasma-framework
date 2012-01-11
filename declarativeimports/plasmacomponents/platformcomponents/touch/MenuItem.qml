@@ -38,8 +38,9 @@
 **
 ****************************************************************************/
 
-import QtQuick 1.0
+import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
+import "private" as Private
 
 Item {
     id: root
@@ -48,17 +49,57 @@ Item {
 
     signal clicked
 
-    property int implicitWidth: textArea.paintedWidth + 6
-    width: parent.width
-    height: textArea.paintedHeight + 6
+    implicitWidth: textArea.paintedWidth + iconLoader.width*2 + 6
+    implicitHeight: Math.max(theme.smallIconSize, textArea.paintedHeight + 6)
+    width: Math.max(implicitWidth, parent.width)
 
+    property bool separator: false
+    onSeparatorChanged: {
+        if (separator) {
+            internal.separatorItem = separatorComponent.createObject(root)
+        } else {
+            internal.separatorItem.destroy()
+        }
+    }
+    property alias icon: iconLoader.source
+
+    enabled: !separator
+
+    Private.IconLoader {
+        id: iconLoader
+        width: parent.height
+        anchors {
+            verticalCenter: parent.verticalCenter
+            left: parent.left
+            top: parent.top
+            bottom: parent.bottom
+        }
+    }
     Label {
         id: textArea
         anchors.centerIn: parent
+
         horizontalAlignment: Text.AlignHCenter
         elide: Text.ElideRight
     }
 
+    QtObject {
+        id: internal
+        property Item separatorItem
+    }
+    Component {
+        id: separatorComponent
+        PlasmaCore.FrameSvgItem {
+            imagePath: "widgets/viewitem"
+            prefix: "normal"
+            height: text ? parent.height : margins.top+margins.bottom
+            anchors {
+                right: parent.right
+                left: parent.left
+                verticalCenter: parent.verticalCenter
+            }
+        }
+    }
 
     MouseArea {
         id: mouseArea

@@ -18,41 +18,54 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+/**Documented API
+Inherits:
+        Item
+
+Imports:
+        QtQuick 1.0
+        org.kde.plasma.core
+
+Description:
+        It is a simple Radio button which is using the plasma theme.
+        TODO Do we need more info?
+
+Properties:
+        TODO needs more info??
+**/
+
 import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 
 Item {
     id: main
     state: parent.state
-    property bool hasOverState: true
+    property alias imagePath: shadowSvg.imagePath
+    property string hoverElement: "hover"
+    property string focusElement: "focus"
+    property alias shadowElement: shadow.elementId
 
-    PlasmaCore.FrameSvgItem {
-        id: hover
-
-        anchors {
-            fill: parent
-            leftMargin: -margins.left
-            topMargin: -margins.top
-            rightMargin: -margins.right
-            bottomMargin: -margins.bottom
-        }
-        opacity: 0
-        imagePath: "widgets/button"
-        prefix: "hover"
+    PlasmaCore.Svg {
+        id: shadowSvg
+        imagePath: "widgets/actionbutton"
     }
 
-    PlasmaCore.FrameSvgItem {
-        id: shadow
+    PlasmaCore.SvgItem {
+        id: hover
+        svg: shadowSvg
+        elementId: "hover"
 
-        anchors {
-            fill: parent
-            leftMargin: -margins.left
-            topMargin: -margins.top
-            rightMargin: -margins.right
-            bottomMargin: -margins.bottom
-        }
-        imagePath: "widgets/button"
-        prefix: "shadow"
+        anchors.fill: parent
+
+        opacity: 0
+    }
+
+    PlasmaCore.SvgItem {
+        id: shadow
+        svg: shadowSvg
+        elementId: "shadow"
+
+        anchors.fill: parent
     }
 
     states: [
@@ -65,7 +78,7 @@ Item {
             PropertyChanges {
                 target: hover
                 opacity: 0
-                prefix: "hover"
+                elementId: hoverElement
             }
         },
         State {
@@ -77,7 +90,7 @@ Item {
             PropertyChanges {
                 target: hover
                 opacity: 1
-                prefix: "hover"
+                elementId: hoverElement
             }
         },
         State {
@@ -89,7 +102,7 @@ Item {
             PropertyChanges {
                 target: hover
                 opacity: 1
-                prefix: "focus"
+                elementId: focusElement
             }
         },
         State {
@@ -101,7 +114,7 @@ Item {
             PropertyChanges {
                 target: hover
                 opacity: 0
-                prefix: "hover"
+                elementId: hoverElement
             }
         }
     ]

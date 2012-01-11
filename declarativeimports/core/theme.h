@@ -30,17 +30,76 @@
 class FontProxy : public QObject
 {
     Q_OBJECT
+
+    /**
+     * true if the font is bold
+     */
     Q_PROPERTY(bool bold READ bold NOTIFY boldChanged)
+
+    /**
+     * One of
+     * MixedCase: The text is not changed
+     * AllUppercase: the text becomes UPPERCASE
+     * AllLowercase: the text becomes all lowercase
+     * SmallCaps: the lowercase characters becomes smaller uppercase ones
+     * Capitalize: the first letter of all words are uppercase
+     */
     Q_PROPERTY(Capitalization capitalization READ capitalization  NOTIFY capitalizationChanged )
+
+    /**
+     * name of the font family
+     */
     Q_PROPERTY(QString family READ family NOTIFY familyChanged )
+
+    /**
+     * true if the font is italic
+     */
     Q_PROPERTY(bool italic READ italic NOTIFY italicChanged )
+
+    /**
+     * horizontal space between letters
+     */
     Q_PROPERTY(qreal letterSpacing READ letterSpacing NOTIFY letterSpacingChanged )
+
+    /**
+     * Size of the font in pixels: settings this is strongly discouraged.
+     * @see pointSize
+     */
     Q_PROPERTY(int pixelSize READ pixelSize NOTIFY pixelSizeChanged )
+
+    /**
+     * Size of the font in points
+     */
     Q_PROPERTY(qreal pointSize READ pointSize NOTIFY pointSizeChanged )
+
+    /**
+     * True if the text is striked out with an horizontal line
+     */
     Q_PROPERTY(bool strikeout READ strikeout NOTIFY strikeoutChanged )
+
+    /**
+     * True if all the text will be underlined
+     */
     Q_PROPERTY(bool underline READ underline NOTIFY underlineChanged )
+
+    /**
+     * One of:
+     * Light
+     * Normal
+     * DemiBold
+     * Bold
+     * Black
+     */
     Q_PROPERTY(Weight weight READ weight NOTIFY weightChanged )
+
+    /**
+     * Horizontal space between words
+     */
     Q_PROPERTY(qreal wordSpacing READ wordSpacing NOTIFY wordSpacingChanged )
+
+    /**
+     * Size in pixels of an uppercase "M" letter
+     */
     Q_PROPERTY(QSize mSize READ mSize NOTIFY mSizeChanged )
 
     Q_ENUMS(Capitalization)

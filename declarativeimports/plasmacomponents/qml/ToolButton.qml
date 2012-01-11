@@ -18,8 +18,47 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+/**Documented API
+Inherits:
+        Item
+
+Imports:
+        QtQuick 1.1
+        org.kde.plasma.core
+
+Description:
+        A plasma theme based toolbutton.
+
+Properties:
+        bool flat:
+        Returns true if the button is flat.
+
+        bool checked: false
+        Returns true if the button is checked.
+
+        bool checkable:
+        Returns true if the button is checkable.
+
+        alias pressed:
+        Returns true if the button is pressed.
+        alias text:
+        Sets the text for the button.
+
+        alias iconSource:
+        Sets the icon for the button.
+        It can be any image from any protocol supported by the Image element, or a freedesktop-compatible icon name
+
+        alias font:
+        Sets the font for the button.
+
+Signals:
+        onClicked:
+        The signal is being emmited when the button is being clicked.
+**/
+
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
+import "private" as Private
 
 Item {
     id: button
@@ -103,7 +142,7 @@ Item {
         }
     }
 
-    ButtonShadow {
+    Private.ButtonShadow {
         id: shadow
         anchors.fill: parent
         visible: !flat
@@ -135,7 +174,7 @@ Item {
             PropertyAnimation { duration: 250 }
         }
 
-        IconLoader {
+        Private.IconLoader {
             id: icon
 
             anchors {
@@ -143,6 +182,8 @@ Item {
                 left: label.text ? parent.left : undefined
                 horizontalCenter: label.text ? undefined : parent.horizontalCenter
             }
+            height: roundToStandardSize(parent.height)
+            width: height
         }
 
         Text {

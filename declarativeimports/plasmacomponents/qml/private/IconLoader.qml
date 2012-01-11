@@ -17,6 +17,26 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+/**Documented API
+Inherits:
+        Item
+
+Imports:
+        QtQuick 1.1
+        org.kde.plasma.core
+        org.kde.qtextracomponents
+
+Description:
+ TODO i need more info here
+
+Properties:
+        bool valid:
+        Returns if the icon is valid or not.
+
+        string source:
+        Returns the dir,in which the icon exists.
+**/
+
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.qtextracomponents 0.1
@@ -26,10 +46,15 @@ Item {
 
     property bool valid: false
 
-    property string source
+    property variant source
 
     onSourceChanged: {
-        if (source == "") {
+        //is it a qicon?
+        if (typeof source != "string") {
+            imageLoader.sourceComponent = iconComponent
+            valid = true
+            return
+        } else if (source == "") {
             imageLoader.sourceComponent = null
             valid = false
         }
@@ -41,7 +66,7 @@ Item {
 
         if (svgIcon.isValid() && svgIcon.hasElement(root.source)) {
             imageLoader.sourceComponent = svgComponent
-        } else if (root.source.indexOf(".") == -1 && root.source.indexOf(":") == -1) {
+        } else if ((root.source.indexOf(".") == -1 && root.source.indexOf(":") == -1)) {
             imageLoader.sourceComponent = iconComponent
         } else {
             imageLoader.sourceComponent = imageComponent
@@ -92,7 +117,7 @@ Item {
             id: iconComponent
 
             QIconItem {
-                icon: QIcon(root.source)
+                icon: (typeof source == "string") ? QIcon(root.source) : root.source
                 smooth: true
                 anchors.fill: parent
             }

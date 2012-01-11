@@ -7,6 +7,7 @@ ButtonGroup 0.1 ButtonGroup.js
 ButtonRow 0.1 ButtonRow.qml
 CheckBox 0.1 CheckBox.qml
 CommonDialog 0.1 CommonDialog.qml
+ContextMenu 0.1 ContextMenu.qml
 Dialog 0.1 Dialog.qml
 Highlight 0.1 Highlight.qml
 Label 0.1 Label.qml
@@ -14,7 +15,6 @@ ListItem 0.1 ListItem.qml
 Page 0.1 Page.qml
 PageStack 0.1 PageStack.qml
 ProgressBar 0.1 ProgressBar.qml
-PushButton 0.1 PushButton.qml
 RadioButton 0.1 RadioButton.qml
 ScrollBar 0.1 ScrollBar.qml
 SectionScroller 0.1 SectionScroller.qml

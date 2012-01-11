@@ -68,7 +68,7 @@ DeclarativeMimeData::DeclarativeMimeData(const QMimeData* copy)
 QUrl DeclarativeMimeData::url() const
 {
 	if ( this->hasUrls() && !this->urls().isEmpty()) {
-		return urls().first();
+		return QMimeData::urls().first();
 	 }
 	return QUrl();
 }
@@ -79,8 +79,27 @@ void DeclarativeMimeData::setUrl(const QUrl &url)
 
 	QList<QUrl> urlList;
 	urlList.append(url);
-	setUrls(urlList);
+	QMimeData::setUrls(urlList);
 	emit urlChanged();
+}
+
+QVariantList DeclarativeMimeData::urls() const
+{
+    QVariantList varUrls;
+    foreach (const QUrl &url, QMimeData::urls()) {
+        varUrls << url;
+    }
+    return varUrls;
+}
+
+void DeclarativeMimeData::setUrls(const QVariantList &urls)
+{
+    QList<QUrl> urlList;
+    foreach (const QVariant &varUrl, urls) {
+        urlList << varUrl.value<QUrl>();
+    }
+    QMimeData::setUrls(urlList);
+    emit urlsChanged();
 }
 
 // color
@@ -97,6 +116,11 @@ void DeclarativeMimeData::setColor(const QColor &color)
 		this->setColorData(color);
 		emit colorChanged();
 	}
+}
+
+void DeclarativeMimeData::setData(const QString &mimeType, const QString &data)
+{
+    QMimeData::setData(mimeType, data.toLatin1());
 }
 
 /*!

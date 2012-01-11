@@ -42,15 +42,44 @@
 
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
+import "private" as Private
 import "." 0.1
 
+
+/**Documented API
+Inherits:
+        Dialog
+
+Imports:
+        QtQuick 1.0
+        org.kde.plasma.core
+
+Description:
+        CommonDialog is a convenience component that provides a dialog with the platform-style title area. You only have to define titleText. CommonDialog handles its layout automatically.
+        Note: This component is experimental, so it may be changed or removed in future releases.
+
+Properties:
+        string titleText:
+        the title of the dialog.
+
+        string titleIcon:
+        the name or path of the dialog title icon
+
+        Array variant buttonTexts:
+        the texts of all the buttons
+
+Signals:
+        buttonClicked(int index):
+        Emitted when the user clicks on a button
+        @arg int index: the index of the clicked button: buttonTexts[index] will hold the text of the clicked button.
+
+**/
 Dialog {
     id: root
 
     property alias titleText: titleAreaText.text
     property string titleIcon
     property variant buttonTexts: []
-    property bool privateCloseIcon: false
 
     signal buttonClicked(int index)
 
@@ -104,7 +133,6 @@ Dialog {
         //FIXME: +5 because of Plasma::Dialog margins
         height: titleAreaText.paintedHeight + margins.top + margins.bottom
 
-        LayoutMirroring.enabled: privateCloseIcon ? false : undefined
         LayoutMirroring.childrenInherit: true
 
         Column {
@@ -130,7 +158,7 @@ Dialog {
             }
         }
 
-        IconLoader {
+        Private.IconLoader {
             id: titleAreaIcon
             width: theme.iconSizeSmall
             height: theme.iconSizeSmall

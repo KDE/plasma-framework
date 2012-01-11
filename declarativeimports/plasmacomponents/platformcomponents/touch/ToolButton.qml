@@ -20,6 +20,7 @@
 
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
+import "private" as Private
 
 Item {
     id: button
@@ -176,7 +177,7 @@ Item {
             PropertyAnimation { duration: 100 }
         }
 
-        IconLoader {
+        Private.IconLoader {
             id: icon
 
             anchors {

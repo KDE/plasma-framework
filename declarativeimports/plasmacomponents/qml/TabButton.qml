@@ -40,8 +40,43 @@
 **
 ****************************************************************************/
 
+/**Documented API
+Inherits:
+        Item
+
+Imports:
+        QtQuick 1.1
+        AppManager.js
+
+Description:
+        A simple tab button which is using the  plasma theme.
+
+Properties:
+        Item tab:
+        The reference to the tab content (one of the children of a TabGroup,
+        usually a Page) that is activated when this TabButton is clicked.
+
+        bool checked:
+        True if the button is checked,otherwise false.
+
+        bool pressed:
+        True if the button is being pressed,otherwise false.
+
+        string text:
+        Sets the text for the button.
+
+        string iconSource:
+        Icon for the button. It can be a Freedesktop icon name, a full path to a ong/svg file,
+        or any name for which the application has an image handler registered.
+
+Signals:
+        onClicked:
+        The signal is emmited when the button is clicked.
+**/
+
 import QtQuick 1.1
-import "AppManager.js" as Utils
+import "private/AppManager.js" as Utils
+import "private" as Private
 
 Item {
     id: root
@@ -65,6 +100,7 @@ Item {
             //TabBar is the granparent
             root.parent.parent.currentTab = root
         }
+        onVisibleChanged: root.parent.childrenChanged()
     }
 
     QtObject {
@@ -81,8 +117,8 @@ Item {
         }
 
         Component.onCompleted: {
-            if (internal.tabGroup.currentTab == tab) {
-                parent.parent.currentTab = root
+            if (internal.tabGroup && internal.tabGroup.currentTab == tab) {
+                internal.tabGroup.currentTab = tab
             }
         }
     }
@@ -104,7 +140,7 @@ Item {
         verticalAlignment: Text.AlignVCenter
     }
 
-    IconLoader {
+    Private.IconLoader {
         id: imageLoader
 
         implicitWidth: theme.smallIconSize

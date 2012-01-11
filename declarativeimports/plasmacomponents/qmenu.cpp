@@ -26,11 +26,14 @@
 #include <QGraphicsView>
 #include <QDeclarativeItem>
 
+#include "plasmacomponentsplugin.h"
 QMenuProxy::QMenuProxy (QObject *parent)
     : QObject(parent),
       m_status(DialogStatus::Closed)
 {
     m_menu = new QMenu(0);
+    connect(m_menu, SIGNAL(triggered(QAction *)),
+            this, SLOT(itemTriggered(QAction *)));
 }
 
 QMenuProxy::~QMenuProxy()
@@ -38,7 +41,7 @@ QMenuProxy::~QMenuProxy()
     delete m_menu;
 }
 
-QDeclarativeListProperty<QMenuItem> QMenuProxy::items()
+QDeclarativeListProperty<QMenuItem> QMenuProxy::content()
 {
     return QDeclarativeListProperty<QMenuItem>(this, m_items);
 }
@@ -58,19 +61,101 @@ DialogStatus::Status QMenuProxy::status() const
     return m_status;
 }
 
-QDeclarativeItem *QMenuProxy::visualParent() const
+QObject *QMenuProxy::visualParent() const
 {
     return m_visualParent.data();
 }
 
-void QMenuProxy::setVisualParent(QDeclarativeItem *parent)
+void QMenuProxy::setVisualParent(QObject *parent)
 {
     if (m_visualParent.data() == parent) {
         return;
     }
 
+    //if the old parent was a QAction, disconnect the menu from it
+    QAction *action = qobject_cast<QAction *>(m_visualParent.data());
+    if (action) {
+        action->setMenu(0);
+        m_menu->clear();
+    }
+    //if parent is a QAction, become a submenu
+    action = qobject_cast<QAction *>(parent);
+    if (action) {
+        action->setMenu(m_menu);
+        m_menu->clear();
+        foreach(QMenuItem* item, m_items) {
+            m_menu->addAction(item);
+        }
+        m_menu->updateGeometry();
+    }
+
     m_visualParent = parent;
     emit visualParentChanged();
+}
+
+bool QMenuProxy::event(QEvent *event)
+{
+    switch (event->type()) {
+    case QEvent::ChildAdded: {
+        QChildEvent *ce = static_cast<QChildEvent *>(event);
+        QMenuItem *mi = qobject_cast<QMenuItem *>(ce->child());
+        //FIXME: linear complexity here
+        if (mi && !m_items.contains(mi)) {
+            m_menu->addAction(mi);
+            m_items << mi;
+        }
+        break;
+    }
+
+    case QEvent::ChildRemoved: {
+        QChildEvent *ce = static_cast<QChildEvent *>(event);
+        QMenuItem *mi = qobject_cast<QMenuItem *>(ce->child());
+
+        //FIXME: linear complexity here
+        if (mi) {
+            m_menu->removeAction(mi);
+            m_items.removeAll(mi);
+        }
+        break;
+    }
+
+    default:
+        break;
+    }
+
+    return QObject::event(event);
+}
+
+void QMenuProxy::clearMenuItems()
+{
+    qDeleteAll(m_items);
+    m_items.clear();
+}
+
+void QMenuProxy::addMenuItem(const QString &text)
+{
+    QMenuItem *item = new QMenuItem(this);
+    item->setText(text);
+    m_menu->addAction(item);
+    m_items << item;
+}
+
+void QMenuProxy::addMenuItem(QMenuItem *item)
+{
+    m_menu->addAction(item);
+    m_items << item;
+}
+
+void QMenuProxy::itemTriggered(QAction *action)
+{
+    QMenuItem *item = qobject_cast<QMenuItem *>(action);
+    if (item) {
+        emit triggered(item);
+        int index = m_items.indexOf(item);
+        if (index > -1) {
+            emit triggeredIndex(index);
+        }
+    }
 }
 
 void QMenuProxy::showMenu(int x, int y)
@@ -97,9 +182,9 @@ void QMenuProxy::open()
 
     QGraphicsObject *parentItem;
     if (m_visualParent) {
-        parentItem = qobject_cast<QGraphicsObject *>(parent());
+        parentItem = qobject_cast<QGraphicsObject *>(m_visualParent.data());
     } else {
-        parentItem = m_visualParent.data();
+        parentItem = qobject_cast<QGraphicsObject *>(parent());
     }
 
     if (!parentItem || !parentItem->scene()) {

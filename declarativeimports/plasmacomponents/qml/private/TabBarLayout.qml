@@ -40,6 +40,20 @@
 **
 ****************************************************************************/
 
+/**Documented API
+Inherits:
+        Item
+
+Imports:
+        QtQuick 1.1
+
+Description:
+ TODO
+
+Properties:
+
+**/
+
 import QtQuick 1.1
 
 Item {
@@ -92,16 +106,29 @@ Item {
 
         function layoutChildren() {
             var childCount = root.children.length
+            var visibleChildCount = childCount
             var contentWidth = 0
             var contentHeight = 0
             if (childCount != 0) {
-                var itemWidth = (root.width - (childCount-1)*10) / childCount
+                //not too much efficient but the loop over children needs to be done two times to get the proper child width
+                for (var i = 0; i < childCount; ++i) {
+                    if (!root.children[i].visible) {
+                        --visibleChildCount
+                    }
+                }
+                var itemWidth = (root.width - (childCount-1)*10) / visibleChildCount
                 var itemIndex = mirrored ? childCount - 1 : 0
                 var increment = mirrored ? - 1 : 1
+                var visibleIndex = 0
 
                 for (var i = 0; i < childCount; ++i, itemIndex += increment) {
                     var child = root.children[itemIndex]
-                    child.x = i * itemWidth + i*10
+                    if (!child.visible) {
+                        continue
+                    }
+
+                    child.x = visibleIndex * itemWidth + visibleIndex*10
+                    ++visibleIndex
                     child.y = 0
                     child.width = itemWidth
                     child.height = root.height

@@ -31,9 +31,24 @@ class FrameSvgItemMargins : public QObject
 {
     Q_OBJECT
 
+    /**
+     * width in pixels of the left margin
+     */
     Q_PROPERTY(qreal left READ left NOTIFY marginsChanged)
+
+    /**
+     * height in pixels of the top margin
+     */
     Q_PROPERTY(qreal top READ top NOTIFY marginsChanged)
+
+    /**
+     * width in pixels of the right margin
+     */
     Q_PROPERTY(qreal right READ right NOTIFY marginsChanged)
+
+    /**
+     * height in pixels of the bottom margin
+     */
     Q_PROPERTY(qreal bottom READ bottom NOTIFY marginsChanged)
 
 public:
@@ -55,11 +70,33 @@ class FrameSvgItem : public QDeclarativeItem
 {
     Q_OBJECT
 
+    /**
+     * Theme relative path of the svg, like "widgets/background"
+     */
     Q_PROPERTY(QString imagePath READ imagePath WRITE setImagePath)
+
+    /**
+     * prefix for the 9 piece svg, like "pushed" or "normal" for the button
+     * see http://techbase.kde.org/Development/Tutorials/Plasma/ThemeDetails
+     * for a list of paths and prefixes
+     */
     Q_PROPERTY(QString prefix READ prefix WRITE setPrefix)
+
+    /**
+     * The margins of the frame, read only
+     * @see FrameSvgItemMargins
+     */
     Q_PROPERTY(QObject *margins READ margins CONSTANT)
 
     Q_FLAGS(Plasma::FrameSvg::EnabledBorders)
+    /**
+     * The borders that will be rendered, it's a flag combination of:
+     *  NoBorder
+     *  TopBorder
+     *  BottomBorder
+     *  LeftBorder
+     *  RightBorder
+     */
     Q_PROPERTY(Plasma::FrameSvg::EnabledBorders enabledBorders READ enabledBorders WRITE setEnabledBorders)
 
 public:

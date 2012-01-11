@@ -24,10 +24,30 @@ import "." 0.1
 Item {
     id: root
 
-    default property alias content: visualModel.children
+    default property alias content: menuColumn.children
     property Item visualParent
     property int status: DialogStatus.Closed
 
+    onVisualParentChanged: {
+        //if is a menuitem move to menuColumn
+        if (visualParent.separator !== undefined) {
+            var obj = arrowComponent.createObject(visualParent)
+        }
+    }
+
+    Component {
+        id: arrowComponent
+        PlasmaCore.SvgItem {
+            svg: PlasmaCore.Svg {imagePath: "widgets/arrows"}
+            elementId: "right-arrow"
+            width: naturalSize.width
+            height: naturalSize.height
+            anchors {
+                right: parent.right
+                verticalCenter: parent.verticalCenter
+            }
+        }
+    }
     function open()
     {
         var parent = root.visualParent ? root.visualParent : root.parent
@@ -42,6 +62,21 @@ Item {
     function close()
     {
         dialog.visible = false
+    }
+
+    function addMenuItem(item)
+    {
+        item.parent = menuColumn
+    }
+
+    onChildrenChanged: {
+        for (var i = 0; i < children.length; ++i) {
+            var item = children[i]
+            //if is a menuitem move to menuColumn
+            if (item.separator !== undefined) {
+                item.parent = menuColumn
+            }
+        }
     }
 
     visible: false
@@ -61,19 +96,20 @@ Item {
         mainItem: Item {
             id: contentItem
 
-            width: theme.defaultFont.mSize.width * 12
-            height: Math.min(listView.contentHeight, theme.defaultFont.mSize.height * 25)
+            width: Math.max(menuColumn.width, theme.defaultFont.mSize.width * 12)
+            height: Math.min(menuColumn.height, theme.defaultFont.mSize.height * 25)
 
 
-            ListView {
+
+            Flickable {
                 id: listView
                 anchors.fill: parent
 
-                currentIndex : -1
                 clip: true
 
-                model: VisualItemModel {
-                    id: visualModel
+                Column {
+                    id: menuColumn
+                    spacing: 4
                     onChildrenChanged: {
                         for (var i = 0; i < children.length; ++i) {
                             if (children[i].clicked != undefined)

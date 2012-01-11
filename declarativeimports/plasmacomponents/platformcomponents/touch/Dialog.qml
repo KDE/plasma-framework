@@ -64,57 +64,75 @@ Item {
 
     function open()
     {
-        var pos = dialog.popupPosition(null, Qt.alignCenter)
-        dialog.x = pos.x
-        dialog.y = pos.y
-
-        dialog.visible = true
-        dialog.activateWindow()
+        status = DialogStatus.Opening
+        delayOpenTimer.restart()
     }
 
     function accept()
     {
         if (status == DialogStatus.Open) {
-            dialog.visible = false
+            status = DialogStatus.Closing
             accepted()
+            dialog.state = "closed"
         }
     }
 
-    function reject() {
+    function reject()
+    {
         if (status == DialogStatus.Open) {
-            dialog.visible = false
+            status = DialogStatus.Closing
+            dialog.state = "closed"
             rejected()
         }
     }
 
-    function close() {
-        dialog.visible = false
+    function close()
+    {
+        dialog.state = "closed"
     }
 
-    visible: false
-
-    PlasmaCore.Dialog {
-        id: dialog
-        windowFlags: Qt.Dialog
-
-        //onFaderClicked: root.clickedOutside()
-        property Item rootItem
-
-        //state: "Hidden"
-        visible: false
-        onVisibleChanged: {
-            if (visible) {
-                status = DialogStatus.Open
-            } else {
-                status = DialogStatus.Closed
-            }
+    Rectangle {
+        id: fader
+        property double alpha: 0
+        color: Qt.rgba(0.0, 0.0, 0.0, alpha)
+        anchors.fill: parent
+    }
+    MouseArea {
+        anchors.fill: parent
+        onClicked: {
+            clickedOutside()
+            close()
         }
-        onActiveWindowChanged: if (!activeWindow) dialog.visible = false
+    }
+    Timer {
+        id: delayOpenTimer
+        running: false
+        interval: 100
+        onTriggered: dialog.state = ""
+    }
 
-        mainItem: Item {
+    PlasmaCore.FrameSvgItem {
+        id: dialog
+        width: mainItem.width + margins.left + margins.right
+        height: mainItem.height + margins.top + margins.bottom
+        anchors.centerIn: parent
+        imagePath: "dialogs/background"
+
+        state: "closed"
+
+        transform: Translate {
+            id: dialogTransform
+            y: root.height - dialog.y
+        }
+        //state: "Hidden"
+
+        Item {
             id: mainItem
+            x: dialog.margins.left
+            y: dialog.margins.top
             width: theme.defaultFont.mSize.width * 40
             height: titleBar.childrenRect.height + contentItem.childrenRect.height + buttonItem.childrenRect.height + 8
+
 
             // Consume all key events that are not processed by children
             Keys.onPressed: event.accepted = true
@@ -160,5 +178,70 @@ Item {
         Component.onCompleted: {
             rootItem = Utils.rootObject()
         }
+
+        states: [
+            State {
+                name: "closed"
+                PropertyChanges {
+                    target: dialogTransform
+                    y: root.height - dialog.y
+                }
+                PropertyChanges {
+                    target: fader
+                    alpha: 0
+                }
+            },
+            State {
+                name: ""
+                PropertyChanges {
+                    target: dialogTransform
+                    y: 0
+                }
+                PropertyChanges {
+                    target: fader
+                    alpha: 0.6
+                }
+            }
+        ]
+
+        transitions: [
+            // Transition between open and closed states.
+            Transition {
+                from: ""
+                to: "closed"
+                reversible: false
+                SequentialAnimation {
+                    ScriptAction {
+                        script: root.status = DialogStatus.Closing
+                    }
+                    PropertyAnimation {
+                        properties: "y, alpha"
+                        easing.type: Easing.InOutQuad
+                        duration: 250
+                    }
+                    ScriptAction {
+                        script: root.status = DialogStatus.Closed
+                    }
+                }
+            },
+            Transition {
+                from: "closed"
+                to: ""
+                reversible: false
+                SequentialAnimation {
+                    ScriptAction {
+                        script: root.status = DialogStatus.Opening
+                    }
+                    PropertyAnimation {
+                        properties: "y, alpha"
+                        easing.type: Easing.InOutQuad
+                        duration: 250
+                    }
+                    ScriptAction {
+                        script: root.status = DialogStatus.Open
+                    }
+                }
+            }
+        ]
     }
 }

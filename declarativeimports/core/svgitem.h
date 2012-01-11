@@ -29,9 +29,31 @@ class SvgItem : public QDeclarativeItem
 {
     Q_OBJECT
 
+    /**
+     * The sub element of the svg we want to render. If empty the whole svg document will be painted.
+     */
     Q_PROPERTY(QString elementId READ elementId WRITE setElementId)
+
+    /**
+     * Svg class that is the source of the image, use it like that:
+     * <code>
+     * SvgItem {
+     *     svg: Svg {imagePath: "widgets/arrows"}
+     *     elementId: "arrow-left"
+     * }
+     * </code>
+     * Instead of a Svg declaration it can also be the id of a Svg declared elsewhere, useful to share Svg instances.
+     */
     Q_PROPERTY(Plasma::Svg * svg READ svg WRITE setSvg)
+
+    /**
+     * The natural, unscaled size of the svg document or the element. useful if a pixel perfect rendering of outlines is needed.
+     */
     Q_PROPERTY(QSizeF naturalSize READ naturalSize NOTIFY naturalSizeChanged)
+
+    /**
+     * If true enable antialiasing in paint: default off, better quality but less performance.
+     */
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth)
 
 public:

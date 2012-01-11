@@ -20,6 +20,7 @@
 
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
+import "private" as Private
 
 
 /**
@@ -52,7 +53,7 @@ Item {
 
     anchors {
         right: flickableItem.right
-        left: (orientation == Qt.Vertical) ? undefined : flickableItem.left 
+        left: (orientation == Qt.Vertical) ? undefined : flickableItem.left
         top: (orientation == Qt.Vertical) ? flickableItem.top : undefined
         bottom: flickableItem.bottom
     }

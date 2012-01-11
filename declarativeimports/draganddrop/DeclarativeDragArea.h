@@ -31,14 +31,49 @@ class DeclarativeMimeData;
 
 class DeclarativeDragArea : public QDeclarativeItem
 {
-	Q_OBJECT
-	Q_PROPERTY(QDeclarativeComponent* delegate READ delegate WRITE setDelegate NOTIFY delegateChanged RESET resetDelegate)
-	Q_PROPERTY(QDeclarativeItem* source READ source WRITE setSource NOTIFY sourceChanged RESET resetSource)
-	Q_PROPERTY(QDeclarativeItem* target READ source NOTIFY targetChanged)
-	Q_PROPERTY(DeclarativeMimeData* data READ data CONSTANT)
-	Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled NOTIFY enabledChanged) //TODO: Should call setAcceptDrops()
-	Q_PROPERTY(Qt::DropActions supportedActions READ supportedActions WRITE setSupportedActions NOTIFY supportedActionsChanged)
-	Q_PROPERTY(Qt::DropAction defaultAction READ defaultAction WRITE setDefaultAction NOTIFY defaultActionChanged)
+    Q_OBJECT
+
+    /**
+     * The delegate is the item that will be displayed next to the mouse cursor during the drag and drop operation.
+     * It usually consists of a large, semi-transparent icon representing the data being dragged.
+     */
+    Q_PROPERTY(QDeclarativeComponent* delegate READ delegate WRITE setDelegate NOTIFY delegateChanged RESET resetDelegate)
+
+    /**
+     * The QML element that is the source of the resulting drag and drop operation. This can be defined to any item, and will
+     * be available to the DropArea as event.data.source
+     */
+    Q_PROPERTY(QDeclarativeItem* source READ source WRITE setSource NOTIFY sourceChanged RESET resetSource)
+
+    //TODO: to be implemented
+    Q_PROPERTY(QDeclarativeItem* target READ source NOTIFY targetChanged)
+
+    /**
+     * the mime data of the drag operation
+     * @see DeclarativeMimeData
+     */
+    Q_PROPERTY(DeclarativeMimeData* mimeData READ mimeData CONSTANT)
+
+    /**
+     * If false no drag operation will be generate
+     */
+    Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled NOTIFY enabledChanged) //TODO: Should call setAcceptDrops()
+
+    /**
+     * Supported operations, a combination of
+     *  Qt.CopyAction
+     *  Qt.MoveAction
+     *  Qt.LinkAction
+     *  Qt.ActionMask
+     *  Qt.IgnoreAction
+     *  Qt.TargetMoveAction
+     */
+    Q_PROPERTY(Qt::DropActions supportedActions READ supportedActions WRITE setSupportedActions NOTIFY supportedActionsChanged)
+
+    /**
+     * The default action will be performed during a drag when no modificators are pressed.
+     */
+    Q_PROPERTY(Qt::DropAction defaultAction READ defaultAction WRITE setDefaultAction NOTIFY defaultActionChanged)
 
 
 public:
@@ -65,7 +100,7 @@ public:
 	Qt::DropAction defaultAction() const;
 	void setDefaultAction(Qt::DropAction action);
 
-	DeclarativeMimeData* data() const;
+	DeclarativeMimeData* mimeData() const;
 
 signals:
 	void delegateChanged();
@@ -81,6 +116,7 @@ protected:
 	void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 	void mousePressEvent(QGraphicsSceneMouseEvent *) {}
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent *) {}
+	bool sceneEventFilter(QGraphicsItem *item, QEvent *event);
 
 private:
 	QDeclarativeComponent* m_delegate;
