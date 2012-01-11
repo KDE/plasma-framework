@@ -1878,7 +1878,6 @@ void Applet::showConfigurationInterface()
     }
 
     if (immutability() != Mutable && !KAuthorized::authorize("plasma/allow_configure_when_locked")) {
-        //FIXME: in 4.3 add an explanatory dialog
         return;
     }
 
@@ -2112,7 +2111,7 @@ void AppletPrivate::configDialogFinished()
     }
 
 #ifdef ENABLE_REMOTE_WIDGETS
-    if (publishUI.publishCheckbox) {
+    if (KConfigDialog::exists(configDialogId()) && publishUI.publishCheckbox) {
         q->config().writeEntry("Share", publishUI.publishCheckbox->isChecked());
 
         if (publishUI.publishCheckbox->isChecked()) {
