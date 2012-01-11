@@ -29,6 +29,7 @@
 #include <QGraphicsWidget>
 #include <QLayout>
 #include <QTimer>
+#include <QFile>
 
 #include <KWindowSystem>
 #include <KStandardDirs>
