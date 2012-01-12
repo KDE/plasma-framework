@@ -31,6 +31,7 @@
 #include <QLayout>
 #include <QTimer>
 #include <QDesktopWidget>
+#include <QFile>
 
 #include <KWindowSystem>
 #include <KStandardDirs>
