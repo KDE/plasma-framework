@@ -39,16 +39,16 @@ Properties:
         bool checkable:
         Returns true if the button is checkable.
 
-        alias pressed:
+        bool pressed:
         Returns true if the button is pressed.
         alias text:
         Sets the text for the button.
 
-        alias iconSource:
+        variant iconSource:
         Sets the icon for the button.
         It can be any image from any protocol supported by the Image element, or a freedesktop-compatible icon name
 
-        alias font:
+        string font:
         Sets the font for the button.
 
 Signals:
