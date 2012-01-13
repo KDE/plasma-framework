@@ -297,12 +297,11 @@ Item {
         }
     }
 
-    PlasmaCore.SvgItem {
+    Private.IconLoader {
         id: clearButton
-        svg: PlasmaCore.Svg {imagePath: "widgets/lineedit"}
-        elementId: "clearbutton"
-        width: textInput.height
-        height: textInput.height
+        source: "edit-clear-locationbar-rtl"
+        height: Math.max(textInput.height, theme.smallIconSize)
+        width: height
         opacity: (textInput.text != "" && clearButtonShown) ? 1 : 0
         Behavior on opacity {
             NumberAnimation {

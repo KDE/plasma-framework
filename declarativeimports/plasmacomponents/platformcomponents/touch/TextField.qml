@@ -21,6 +21,7 @@ import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.qtextracomponents 0.1
 import "EditBubble.js" as EditBubbleHelper
+import "private" as Private
 
 Item {
     id: textField
@@ -168,12 +169,13 @@ Item {
         Keys.onReleased: textField.Keys.released(event);
     }
 
-    PlasmaCore.SvgItem {
+
+    Private.IconLoader {
         parent: mouseEventListener // reparent to the MouseFilter for MouseArea to work
-        svg: PlasmaCore.Svg {imagePath: "widgets/lineedit"}
-        elementId: "clearbutton"
-        width: textInput.height
-        height: textInput.height
+        id: clearButton
+        source: "edit-clear-locationbar-rtl"
+        height: Math.max(textInput.height, theme.smallIconSize)
+        width: height
         opacity: (textInput.text != "" && clearButtonShown) ? 1 : 0
         Behavior on opacity {
             NumberAnimation {
@@ -184,14 +186,13 @@ Item {
         anchors {
             right: parent.right
             rightMargin: y
-            verticalCenter: parent.verticalCenter
+            verticalCenter: textInput.verticalCenter
         }
         MouseArea {
             anchors.fill: parent
             onClicked: {
-                textInput.text = "";
-                textInput.forceActiveFocus();
-                editBubble.state = "collapsed"
+                textInput.text = ""
+                textInput.forceActiveFocus()
             }
         }
     }
