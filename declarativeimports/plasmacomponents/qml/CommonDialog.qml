@@ -153,6 +153,11 @@ Dialog {
                 id: titleAreaText
                 LayoutMirroring.enabled: root.LayoutMirroring.enabled
                 elide: Text.ElideRight
+                height: paintedHeight
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                }
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
