@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Test
+Name[ar]=اختبار
 Name[bg]=Проба
 Name[bs]=Test
 Name[ca]=Prova
@@ -59,6 +60,7 @@ Name[x-test]=xxTestxx
 Name[zh_CN]=测试
 Name[zh_TW]=測試
 Comment=A dummy plugin for testing
+Comment[ar]=إضافة وهمية من أجل الاختبار
 Comment[bg]=Празна приставка за изпробване
 Comment[bs]=Lažni priključak za probe
 Comment[ca]=Un connector fals per a provar
