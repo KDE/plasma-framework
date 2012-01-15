@@ -104,7 +104,7 @@ Q_PROPERTY(int monetaryDecimalPlaces READ monetaryDecimalPlaces WRITE setMonetar
 Q_PROPERTY(QString monetaryDecimalSymbol READ monetaryDecimalSymbol WRITE setMonetaryDecimalSymbol NOTIFY monetaryDecimalSymbolChanged)
 Q_PROPERTY(DigitSet monetaryDigitSet READ monetaryDigitSet WRITE setMonetaryDigitSet NOTIFY monetaryDigitSetChanged)
 Q_PROPERTY(QString monetaryThousandsSeparator READ monetaryThousandsSeparator WRITE setMonetaryThousandsSeparator NOTIFY monetaryThousandsSeparatorChanged)
-Q_PROPERTY(Signals negativeMonetarySignPosition READ negativeMonetarySignPosition WRITE setNegativeMonetarySignPosition NOTIFY negativeMonetarySignPositionChanged)
+Q_PROPERTY(SignPosition negativeMonetarySignPosition READ negativeMonetarySignPosition WRITE setNegativeMonetarySignPosition NOTIFY negativeMonetarySignPositionChanged)
 Q_PROPERTY(bool negativePrefixCurrencySymbol READ negativePrefixCurrencySymbol WRITE setNegativePrefixCurrencySymbol NOTIFY negativePrefixCurrencySymbolChanged)
 Q_PROPERTY(QString negativeSign READ negativeSign WRITE setNegativeSign NOTIFY negativeSignChanged)
 Q_PROPERTY(int pageSize READ pageSize WRITE setPageSize NOTIFY pageSizeChanged)
@@ -2035,6 +2035,7 @@ Q_SIGNALS:
     void countryChanged();
     void countryDivisionCodeChanged();
     void currencyCodeChanged();
+    void decimalSymbolChanged();
     void currencySymbolChanged();
     void dateFormatChanged();
     void dateFormatShortChanged();
