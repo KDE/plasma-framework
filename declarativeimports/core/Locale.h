@@ -173,7 +173,7 @@ public:
     /**
      * Destructor
      */
-    //virtual ~KLocale();
+    virtual ~Locale();
 
     /**
      * @since 4.5

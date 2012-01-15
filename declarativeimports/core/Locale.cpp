@@ -20,27 +20,7 @@
 
 #include "Locale.h"
 
-/*Locale::Locale(const QString &catalog, KSharedConfig::Ptr config)
-#if defined Q_WS_WIN
-        : d(new LocaleWindowsPrivate(this, catalog, config))
-#elif defined Q_OS_MAC
-        : d(new LocaleMacPrivate(this, catalog, config))
-#else
-        : d(new LocaleUnixPrivate(this, catalog, config))
-#endif
-{
-}
-
-Locale::Locale(const QString& catalog, const QString &language, const QString &country, KConfig *config)
-#if defined Q_WS_WIN
-        : d(new LocaleWindowsPrivate(this, catalog, language, country, config))
-#elif defined Q_OS_MAC
-        : d(new LocaleMacPrivate(this, catalog, language, country, config))
-#else
-        : d(new LocaleUnixPrivate(this, catalog, language, country, config))
-#endif
-{
-}*/
+//TODO we need some ctors
 
 Locale::~Locale()
 {
@@ -413,10 +393,11 @@ bool Locale::use12Clock() const
     return d->use12Clock();
 }
 
-QString Locale::dayPeriodText(const QTime &time, DateTimeComponentFormat format) const
+//TODO fix it!
+/*QString Locale::dayPeriodText(const QTime &time, DateTimeComponentFormat format) const
 {
     return d->dayPeriodForTime(time).periodName(format);
-}
+}*/
 
 QStringList Locale::languageList() const
 {
@@ -445,10 +426,12 @@ QString Locale::formatDateTime(const KDateTime &dateTime, Locale::DateFormat for
     return d->formatDateTime(dateTime, format, options);
 }
 
-QString Locale::langLookup(const QString &fname, const char *rtype)
+//TODO fix it
+/*QString Locale::langLookup(const QString &fname, const char *rtype)
 {
     return Locale::langLookup(fname, rtype);
-}
+}*/
+
 void Locale::setDateFormat(const QString &format)
 {
     d->setDateFormat(format);
@@ -732,11 +715,11 @@ Locale::WeekNumberSystem Locale::weekNumberSystem() const
     return d->weekNumberSystem();
 }
 
-Locale::Locale(const Locale &rhs)
+/*Locale::Locale(const Locale &rhs)
         : d(new Locale(*rhs.d))
 {
     d->q = this;
-}
+}*/
 
 void Locale::copyCatalogsTo(Locale *locale)
 {
@@ -786,7 +769,8 @@ Locale::DigitSet Locale::dateTimeDigitSet() const
     return d->dateTimeDigitSet();
 }
 
-void Locale::reparseConfiguration()
+//TODO fix it!
+/*void Locale::reparseConfiguration()
 {
     d->initFormat();
-}
+}*/
