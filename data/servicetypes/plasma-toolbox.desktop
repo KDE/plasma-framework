@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/ToolBox
 
 Comment=Plasma toolbox
+Comment[ar]=صندوق أدوات بلازما
 Comment[bg]=Инструменти за Plasma
 Comment[bs]=Plazma alatna traka
 Comment[ca]=Caixa d'eines del Plasma
