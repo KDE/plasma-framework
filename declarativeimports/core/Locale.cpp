@@ -393,11 +393,10 @@ bool Locale::use12Clock() const
     return d->use12Clock();
 }
 
-//TODO fix it!
-/*QString Locale::dayPeriodText(const QTime &time, DateTimeComponentFormat format) const
+QString Locale::dayPeriodText(const QTime &time, DateTimeComponentFormat format) const
 {
-    return d->dayPeriodForTime(time).periodName(format);
-}*/
+    return d->dayPeriodText(time, format);
+}
 
 QStringList Locale::languageList() const
 {
@@ -426,11 +425,10 @@ QString Locale::formatDateTime(const KDateTime &dateTime, Locale::DateFormat for
     return d->formatDateTime(dateTime, format, options);
 }
 
-//TODO fix it
-/*QString Locale::langLookup(const QString &fname, const char *rtype)
+QString Locale::langLookup(const QString &fname, const char *rtype)
 {
-    return Locale::langLookup(fname, rtype);
-}*/
+    return KLocale::langLookup(fname, rtype);
+}
 
 void Locale::setDateFormat(const QString &format)
 {
@@ -769,8 +767,7 @@ Locale::DigitSet Locale::dateTimeDigitSet() const
     return d->dateTimeDigitSet();
 }
 
-//TODO fix it!
-/*void Locale::reparseConfiguration()
+void Locale::reparseConfiguration()
 {
-    d->initFormat();
-}*/
+    d->reparseConfiguration();
+}
