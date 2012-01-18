@@ -167,15 +167,27 @@ CommonDialog {
         reject()
     }
 
+    Timer {
+        id: focusTimer
+        interval: 100
+        onTriggered: {
+            filterField.forceActiveFocus()
+        }
+    }
     onStatusChanged: {
+        //FIXME: why needs focus deactivation then activation?
+        if (status == DialogStatus.Open) {
+            filterField.focus = false
+            focusTimer.running = true
+        }
+
         if (status == DialogStatus.Opening) {
             if (listView.currentItem != null) {
                 listView.currentItem.focus = false
             }
             listView.currentIndex = -1
             listView.positionViewAtIndex(0, ListView.Beginning)
-        }
-        else if (status == DialogStatus.Open) {
+        } else if (status == DialogStatus.Open) {
             listView.focus = true
         }
     }
