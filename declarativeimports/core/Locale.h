@@ -176,7 +176,6 @@ public:
     virtual ~Locale();
 
     /**
-     * @since 4.5
      *
      * Raw translation from a message catalog.
      * If catalog name is null or empty,
@@ -199,7 +198,6 @@ public:
     Q_INVOKABLE void translateRawFrom(const char* catname, const char* msg, QString *lang, QString *trans) const;
 
     /**
-     * @since 4.5
      *
      * Raw translation from a message catalog, with given context.
      * Context + message are used as the lookup key in the catalog.
@@ -224,7 +222,6 @@ public:
     Q_INVOKABLE void translateRawFrom(const char *catname, const char *ctxt, const char *msg, QString *lang, QString *trans) const;
 
     /**
-     * @since 4.5
      *
      * Raw translation from a message catalog, with given singular/plural form.
      * Singular form is used as the lookup key in the catalog.
@@ -252,7 +249,6 @@ public:
                             QString *lang, QString *trans) const;
 
     /**
-     * @since 4.5
      *
      * Raw translation from a message catalog, with given context and
      * singular/plural form.
@@ -318,7 +314,6 @@ public:
     };
 
     /**
-     * @since 4.3
      *
      * The set of digit characters used to display and enter numbers.
      */
@@ -365,7 +360,6 @@ public:
     };
 
     /**
-     * @since 4.3
      *
      * Convert a digit set identifier to a human readable, localized name.
      *
@@ -379,7 +373,6 @@ public:
     QString digitSetToName(DigitSet digitSet, bool withDigits = false) const;
 
     /**
-     * @since 4.3
      *
      * Provides list of all known digit set identifiers.
      *
@@ -407,7 +400,6 @@ public:
     QString thousandsSeparator() const;
 
     /**
-     * @since 4.3
      *
      * Returns the identifier of the digit set used to display numbers.
      *
@@ -418,7 +410,6 @@ public:
     DigitSet digitSet() const;
 
     /**
-     * @since 4.4
      *
      * Returns the ISO 4217 Currency Code for the current locale
      *
@@ -427,7 +418,6 @@ public:
     QString currencyCode() const;
 
     /**
-     * @since 4.4
      *
      * Returns the Currency Code object for the current locale
      *
@@ -478,7 +468,6 @@ public:
     QString negativeSign() const;
 
     /**
-     * @since 4.4
      *
      * The number of decimal places to include in numeric values (usually 2).
      *
@@ -487,7 +476,6 @@ public:
     int decimalPlaces() const;
 
     /**
-     * @since 4.4
      *
      * The number of decimal places to include in monetary values (usually 2).
      *
@@ -530,7 +518,6 @@ public:
     SignPosition negativeMonetarySignPosition() const;
 
     /**
-     * @since 4.3
      *
      * Retuns the digit set used to display monetary values.
      *
@@ -622,7 +609,6 @@ public:
      * unit would be pointless.  Use BinaryUnitDialect to control the exact
      * units returned.
      *
-     * @since 4.4
      * @see binaryUnitDialect
      */
     enum BinarySizeUnits {
@@ -656,7 +642,6 @@ public:
      * Normally choosing DefaultBinaryUnits is the best option as that uses
      * the user's selection for units.
      *
-     * @since 4.4
      * @see binaryUnitDialect
      * @see setBinaryUnitDialect
      */
@@ -684,7 +669,6 @@ public:
     Q_INVOKABLE QString formatByteSize(double size) const;
 
     /**
-     * @since 4.4
      *
      * Converts @p size from bytes to the appropriate string representation
      * using the binary unit dialect @p dialect and the specific units @p specificUnit.
@@ -720,7 +704,6 @@ public:
      *
      * Will never return DefaultBinaryDialect.
      *
-     * @since 4.4
      * @return User's configured binary unit dialect
      * @see BinaryUnitDialect
      */
@@ -732,7 +715,6 @@ public:
      * to the user's choice.
      *
      * @param newDialect the new dialect to set as default for this locale object.
-     * @since 4.4
      */
     void setBinaryUnitDialect(BinaryUnitDialect newDialect);
 
@@ -760,13 +742,11 @@ public:
      *         Units not interesting to the user, for example seconds or minutes when the first
      *         unit is day, are not returned because they are irrelevant. The same applies for
      *         seconds when the first unit is hour.
-     * @since 4.2
      */
     Q_INVOKABLE QString prettyFormatDuration(unsigned long mSec) const;
 
     //KDE5 move to KDateTime namespace
     /**
-     * @since 4.6
      *
      * Available Calendar Systems
      *
@@ -801,7 +781,6 @@ public:
 
     //KDE5 move to KDateTime namespace
     /**
-     * @since 4.6
      *
      * System used for Week Numbers
      *
@@ -818,7 +797,6 @@ public:
 
     //KDE5 move to KDateTime namespace
     /**
-     * @since 4.4
      *
      * Standard used for Date Time Format String
      */
@@ -830,7 +808,6 @@ public:
 
     //KDE5 move to KDateTime namespace
     /**
-     * @since 4.6
      *
      * Mode to use when parsing a Date Time input string
      */
@@ -848,7 +825,6 @@ public:
 
     //KDE5 move to KDateTime namespace
     /**
-     * @since 4.6
      *
      * The various Components that make up a Date / Time
      * In the future the Components may be combined as flags for dynamic
@@ -893,7 +869,6 @@ public:
 
     //KDE5 move to KDateTime namespace
     /**
-     * @since 4.6
      *
      * Format used for individual Date/Time Components when converted to/from a string
      * Largely equivalent to the UNICODE CLDR format width definitions 1..5
@@ -987,7 +962,6 @@ public:
     bool dateMonthNamePossessive() const;
 
     /**
-     * @since 4.4
      *
      * Format flags for readLocaleTime() and formatLocaleTime()
      */
@@ -1013,7 +987,6 @@ public:
 
     //KDE5 move to KDateTime namespace
     /**
-     * @since 4.4
      *
      * Returns a string formatted to the current locale's conventions
      * regarding times.
@@ -1026,7 +999,6 @@ public:
                              TimeFormatOptions options = KLocale::TimeDefault) const;
 
     /**
-     * @since 4.3
      *
      * Returns the identifier of the digit set used to display dates and time.
      *
@@ -1044,7 +1016,6 @@ public:
     Q_INVOKABLE bool use12Clock() const;
 
     /**
-     * @since 4.6
      *
      * Returns the Day Period matching the time given
      *
@@ -1064,7 +1035,6 @@ public:
     /**
      * Use this to determine which day is the first working day of the week.
      *
-     * @since 4.2
      * @return an integer (Monday=1..Sunday=7)
      */
     int workingWeekStartDay() const;
@@ -1072,7 +1042,6 @@ public:
     /**
      * Use this to determine which day is the last working day of the week.
      *
-     * @since 4.2
      * @return an integer (Monday=1..Sunday=7)
      */
     int workingWeekEndDay() const;
@@ -1080,7 +1049,6 @@ public:
     /**
      * Use this to determine which day is reserved for religious observance
      *
-     * @since 4.2
      * @return day number (None = 0, Monday = 1, ..., Sunday = 7)
      */
     int weekDayOfPray() const;
@@ -1093,7 +1061,6 @@ public:
     const KCalendarSystem * calendar() const;
 
     /**
-     * @since 4.6
      *
      * Returns the type of Calendar System used in this Locale
      *
@@ -1104,7 +1071,6 @@ public:
     KLocale::CalendarSystem calendarSystem() const;
 
     /**
-     * @since 4.6
      *
      * Sets the type of Calendar System to use in this Locale
      *
@@ -1115,7 +1081,6 @@ public:
     void setCalendarSystem(KLocale::CalendarSystem calendarSystem);
 
     /**
-     * @since 4.6
      *
      * Sets the type of Week Number System to use in this Locale
      *
@@ -1127,7 +1092,6 @@ public:
 
     //KDE5 remove in favour of const version
     /**
-     * @since 4.6
      *
      * Returns the type of Week Number System used in this Locale
      *
@@ -1138,7 +1102,6 @@ public:
     KLocale::WeekNumberSystem weekNumberSystem();
 
     /**
-     * @since 4.7
      *
      * Returns the type of Week Number System used in this Locale
      *
@@ -1257,7 +1220,6 @@ public:
     };
 
     /**
-     * @since 4.4
      *
      * Converts a localized time string to a QTime.
      * This method is stricter than readTime(str, &ok) in that it will either
@@ -1313,7 +1275,6 @@ public:
     QString country() const;
 
     /**
-     * @since 4.6
      *
      * Returns the Country Division Code of the Country where the user lives.
      * When no value is set, then the Country Code will be returned.
@@ -1346,7 +1307,6 @@ public:
     Q_INVOKABLE QStringList languageList() const;
 
     /**
-     * @since 4.4
      *
      * Returns the ISO Currency Codes used in the locale, ordered by decreasing
      * priority.
@@ -1477,7 +1437,6 @@ public:
     void setTimeFormat(const QString & format);
 
     /**
-     * @since 4.3
      *
      * Set digit characters used to display dates and time.
      *
@@ -1496,7 +1455,6 @@ public:
     /**
      * Changes how KLocale defines the first working day in week.
      *
-     * @since 4.2
      * @param day first working day of the week (Monday=1..Sunday=7) as integer
      */
     void setWorkingWeekStartDay(int day);
@@ -1504,7 +1462,6 @@ public:
     /**
      * Changes how KLocale defines the last working day in week.
      *
-     * @since 4.2
      * @param day last working day of the week (Monday=1..Sunday=7) as integer
      */
     void setWorkingWeekEndDay(int day);
@@ -1512,7 +1469,6 @@ public:
     /**
      * Changes how KLocale defines the day reserved for religious observance.
      *
-     * @since 4.2
      * @param day day of the week for religious observance (None=0,Monday=1..Sunday=7) as integer
      */
     void setWeekDayOfPray(int day);
@@ -1571,7 +1527,6 @@ public:
     void setNegativeSign(const QString & sign);
 
     /**
-     * @since 4.3
      *
      * Changes the set of digit characters used to display numbers.
      *
@@ -1613,7 +1568,6 @@ public:
     void setNegativePrefixCurrencySymbol(bool prefix);
 
     /**
-     * @since 4.4
      *
      * Changes the number of decimal places used when formating numbers.
      *
@@ -1622,7 +1576,6 @@ public:
     void setDecimalPlaces(int digits);
 
     /**
-     * @since 4.4
      *
      * Changes the number of decimal places used when formating money.
      *
@@ -1646,7 +1599,6 @@ public:
     void setMonetaryDecimalSymbol(const QString & symbol);
 
     /**
-     * @since 4.4
      *
      * Changes the current ISO Currency Code.
      *
@@ -1665,7 +1617,6 @@ public:
     void setCurrencySymbol(const QString & symbol);
 
     /**
-     * @since 4.3
      *
      * Set digit characters used to display monetary values.
      *
@@ -1757,7 +1708,6 @@ public:
     Q_INVOKABLE QStringList allLanguagesList() const;
 
     /**
-     * @since 4.6
      *
      * Provides list of all installed KDE Language Translations.
      *
@@ -1859,7 +1809,6 @@ public:
     Q_INVOKABLE static QString defaultCountry();
 
     /**
-     * @since 4.4
      *
      * Returns the ISO Code of the default currency.
      *
@@ -1909,7 +1858,6 @@ public:
     bool setCountry(const QString & country, KConfig *config);
 
     /**
-     * @since 4.6
      *
      * Sets the Country Division Code of the Country where the user lives.
      *
@@ -1955,7 +1903,6 @@ public:
     bool setLanguage(const QStringList &languages);
 
     /**
-     * @since 4.1
      *
      * Tries to find a path to the localized file for the given original path.
      * This is intended mainly for non-text resources (images, sounds, etc.),
@@ -1979,7 +1926,6 @@ public:
     Q_INVOKABLE QString localizedFilePath(const QString &filePath) const;
 
     /**
-     * @since 4.2
      *
      * Removes accelerator marker from a UI text label.
      *
@@ -1997,7 +1943,6 @@ public:
     Q_INVOKABLE QString removeAcceleratorMarker(const QString &label) const;
 
     /**
-     * @since 4.3
      *
      * Convert all digits in the string to the given digit set.
      *
@@ -2018,7 +1963,6 @@ public:
                           bool ignoreContext = false) const;
 
     /**
-     * @since 4.8
      *
      * Reparse locale configuration files for the current selected
      * language.
