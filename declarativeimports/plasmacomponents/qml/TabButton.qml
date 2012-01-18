@@ -90,8 +90,8 @@ Item {
 
     signal clicked
 
-    implicitWidth: label.paintedWidth + (internal.portrait ? 0 : (iconSource != "" ? 16 : 0))
-    implicitHeight: label.paintedHeight + (internal.portrait ? (iconSource != "" ? 16 : 0) : 0)
+    implicitWidth: label.paintedWidth + (internal.portrait ? 0 : (iconSource != null ? 16 : 0))
+    implicitHeight: label.paintedHeight + (internal.portrait ? (iconSource != null ? 16 : 0) : 0)
 
     //long notation to not make it overwritten by implementations
     Connections {
@@ -129,14 +129,14 @@ Item {
         objectName: "label"
 
         anchors {
-            top: internal.portrait && iconSource != "" ? imageLoader.bottom : parent.top
-            left: internal.portrait || iconSource == "" ? parent.left : imageLoader.right
+            top: internal.portrait && iconSource != null ? imageLoader.bottom : parent.top
+            left: internal.portrait || iconSource == null ? parent.left : imageLoader.right
             right: parent.right
             bottom: parent.bottom
         }
 
         elide: Text.ElideRight
-        horizontalAlignment: !internal.portrait && iconSource != "" ? Text.AlignLeft : Text.AlignHCenter
+        horizontalAlignment: !internal.portrait && iconSource != null ? Text.AlignLeft : Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
     }
 
