@@ -38,7 +38,6 @@
 #include "dialog.h"
 #include "tooltip.h"
 #include "dataenginebindings_p.h"
-#include "Locale.h"
 
 void CoreBindingsPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
 {
@@ -80,8 +79,6 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
 
     qmlRegisterType<DialogProxy>(uri, 0, 1, "Dialog");
     qmlRegisterType<ToolTipProxy>(uri, 0, 1, "ToolTip");
-
-    qmlRegisterType<Locale>(uri, 0, 1, "Locale");
 
     qmlRegisterInterface<Plasma::Service>("Service");
     qRegisterMetaType<Plasma::Service*>("Service");
