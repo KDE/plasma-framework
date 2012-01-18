@@ -71,11 +71,15 @@ public:
     void mousePressEvent(QMouseEvent *event)
     {
         event->accept();
+        m_dialog->view()->winId();
+        KWindowSystem::forceActiveWindow(m_dialog->view()->winId());
     }
 
     void mouseReleaseEvent(QMouseEvent *event)
     {
-        m_dialog->close();
+        if (!m_dialog->view()->geometry().contains(event->globalPos())) {
+            m_dialog->close();
+        }
     }
 
 private:
@@ -258,6 +262,11 @@ void FullScreenDialog::setVisible(const bool visible)
             KWindowSystem::forceActiveWindow(m_view->effectiveWinId());
         }
     }
+}
+
+QGraphicsView *FullScreenDialog::view() const
+{
+    return m_view;
 }
 
 QDeclarativeListProperty<QGraphicsObject> FullScreenDialog::title()

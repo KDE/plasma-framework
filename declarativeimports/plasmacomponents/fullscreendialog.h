@@ -54,6 +54,7 @@ public:
     bool isVisible() const;
     void setVisible(const bool visible);
 
+    QGraphicsView *view() const;
 
     //QML properties
     QDeclarativeListProperty<QGraphicsObject> title();
