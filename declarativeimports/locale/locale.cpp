@@ -18,48 +18,51 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "Locale.h"
+#include "locale.h"
+#include <KGlobal>
 
 //TODO we need some ctors
 
-Locale::~Locale()
+Locale::Locale(QObject* parent)
+        : QObject(parent)
 {
-    delete d;
+    m_locale = new KLocale(KGlobal::locale());
 }
+
 
 bool Locale::setCountry(const QString &country, KConfig *config)
 {
-    return d->setCountry(country, config);
+    return m_locale->setCountry(country, config);
     emit countryChanged();
 }
 
 bool Locale::setCountryDivisionCode(const QString &countryDivisionCode)
 {
-    return d->setCountryDivisionCode(countryDivisionCode);
+    return m_locale->setCountryDivisionCode(countryDivisionCode);
     emit countryDivisionCodeChanged();
 }
 
 bool Locale::setLanguage(const QString &language, KConfig *config)
 {
-    return d->setLanguage(language, config);
+    return m_locale->setLanguage(language, config);
     emit languageChanged();
 }
 
 bool Locale::setLanguage(const QStringList &languages)
 {
-    return d->setLanguage(languages);
+    return m_locale->setLanguage(languages);
     emit languageChanged();
 }
 
 void Locale::setCurrencyCode(const QString &newCurrencyCode)
 {
-    d->setCurrencyCode(newCurrencyCode);
+    m_locale->setCurrencyCode(newCurrencyCode);
     emit currencyCodeChanged();
 }
 
 bool Locale::isApplicationTranslatedInto(const QString &lang)
 {
-    return d->isApplicationTranslatedInto(lang);
+    return m_locale->isApplicationTranslatedInto(lang);
 }
 
 void Locale::splitLocale(const QString &locale, QString &language, QString &country, QString &modifier,
@@ -70,179 +73,179 @@ void Locale::splitLocale(const QString &locale, QString &language, QString &coun
 
 QString Locale::language() const
 {
-    return d->language();
+    return m_locale->language();
 }
 
 QString Locale::country() const
 {
-    return d->country();
+    return m_locale->country();
 }
 
 QString Locale::countryDivisionCode() const
 {
-    return d->countryDivisionCode();
+    return m_locale->countryDivisionCode();
 }
 
 KCurrencyCode *Locale::currency() const
 {
-    return d->currency();
+    return m_locale->currency();
 }
 
 QString Locale::currencyCode() const
 {
-    return d->currencyCode();
+    return m_locale->currencyCode();
 }
 
 void Locale::insertCatalog(const QString &catalog)
 {
-    d->insertCatalog(catalog);
+    m_locale->insertCatalog(catalog);
 }
 
 void Locale::removeCatalog(const QString &catalog)
 {
-    d->removeCatalog(catalog);
+    m_locale->removeCatalog(catalog);
 }
 
 void Locale::setActiveCatalog(const QString &catalog)
 {
-    d->setActiveCatalog(catalog);
+    m_locale->setActiveCatalog(catalog);
 }
 
 void Locale::translateRawFrom(const char *catname, const char *ctxt, const char *singular, const char *plural,
                                unsigned long n, QString *lang, QString *trans) const
 {
-    d->translateRawFrom(catname, ctxt, singular, plural, n, lang, trans);
+    m_locale->translateRawFrom(catname, ctxt, singular, plural, n, lang, trans);
 }
 
 //Convenience versions
 void Locale::translateRawFrom(const char *catname, const char *msg, QString *lang, QString *trans) const
 {
-    d->translateRawFrom(catname, 0, msg, 0, 0, lang, trans);
+    m_locale->translateRawFrom(catname, 0, msg, 0, 0, lang, trans);
 }
 
 void Locale::translateRaw(const char *msg, QString *lang, QString *trans) const
 {
-    d->translateRawFrom(0, 0, msg, 0, 0, lang, trans);
+    m_locale->translateRawFrom(0, 0, msg, 0, 0, lang, trans);
 }
 
 void Locale::translateRawFrom(const char *catname, const char *ctxt, const char *msg, QString *lang,
                                QString *trans) const
 {
-    d->translateRawFrom(catname, ctxt, msg, 0, 0, lang, trans);
+    m_locale->translateRawFrom(catname, ctxt, msg, 0, 0, lang, trans);
 }
 
 void Locale::translateRaw(const char *ctxt, const char *msg, QString *lang, QString *trans) const
 {
-    d->translateRawFrom(0, ctxt, msg, 0, 0, lang, trans);
+    m_locale->translateRawFrom(0, ctxt, msg, 0, 0, lang, trans);
 }
 
 void Locale::translateRawFrom(const char *catname, const char *singular, const char *plural,
                                unsigned long n, QString *lang, QString *trans) const
 {
-    d->translateRawFrom(catname, 0, singular, plural, n, lang, trans);
+    m_locale->translateRawFrom(catname, 0, singular, plural, n, lang, trans);
 }
 
 void Locale::translateRaw(const char *singular, const char *plural, unsigned long n, QString *lang,
                            QString *trans) const
 {
-    d->translateRawFrom(0, 0, singular, plural, n, lang, trans);
+    m_locale->translateRawFrom(0, 0, singular, plural, n, lang, trans);
 }
 
 void Locale::translateRaw(const char *ctxt, const char *singular, const char *plural,
                            unsigned long n, QString *lang, QString *trans) const
 {
-    d->translateRawFrom(0, ctxt, singular, plural, n, lang, trans);
+    m_locale->translateRawFrom(0, ctxt, singular, plural, n, lang, trans);
 }
 
 QString Locale::translateQt(const char *context, const char *sourceText, const char *comment) const
 {
-    return d->translateQt(context, sourceText, comment);
+    return m_locale->translateQt(context, sourceText, comment);
 }
 
 QList<Locale::DigitSet> Locale::allDigitSetsList() const
 {
-    return d->allDigitSetsList();
+    return m_locale->allDigitSetsList();
 }
 
 QString Locale::digitSetToName(Locale::DigitSet digitSet, bool withDigits) const
 {
-    return d->digitSetToName(digitSet, withDigits);
+    return m_locale->digitSetToName(digitSet, withDigits);
 }
 
 QString Locale::convertDigits(const QString &str, DigitSet digitSet, bool ignoreContext) const
 {
-    return d->convertDigits(str, digitSet, ignoreContext);
+    return m_locale->convertDigits(str, digitSet, ignoreContext);
 }
 
 bool Locale::nounDeclension() const
 {
-    return d->nounDeclension();
+    return m_locale->nounDeclension();
 }
 
 bool Locale::dateMonthNamePossessive() const
 {
-    return d->dateMonthNamePossessive();
+    return m_locale->dateMonthNamePossessive();
 }
 
 int Locale::weekStartDay() const
 {
-    return d->weekStartDay();
+    return m_locale->weekStartDay();
 }
 
 int Locale::workingWeekStartDay() const
 {
-    return d->workingWeekStartDay();
+    return m_locale->workingWeekStartDay();
 }
 
 int Locale::workingWeekEndDay() const
 {
-    return d->workingWeekEndDay();
+    return m_locale->workingWeekEndDay();
 }
 
 int Locale::weekDayOfPray() const
 {
-    return d->weekDayOfPray();
+    return m_locale->weekDayOfPray();
 }
 
 int Locale::decimalPlaces() const
 {
-    return d->decimalPlaces();
+    return m_locale->decimalPlaces();
 }
 
 QString Locale::decimalSymbol() const
 {
-    return d->decimalSymbol();
+    return m_locale->decimalSymbol();
 }
 
 QString Locale::thousandsSeparator() const
 {
-    return d->thousandsSeparator();
+    return m_locale->thousandsSeparator();
 }
 
 QString Locale::currencySymbol() const
 {
-    return d->currencySymbol();
+    return m_locale->currencySymbol();
     emit currencySymbolChanged();
 }
 
 QString Locale::monetaryDecimalSymbol() const
 {
-    return d->monetaryDecimalSymbol();
+    return m_locale->monetaryDecimalSymbol();
 }
 
 QString Locale::monetaryThousandsSeparator() const
 {
-    return d->monetaryThousandsSeparator();
+    return m_locale->monetaryThousandsSeparator();
 }
 
 QString Locale::positiveSign() const
 {
-    return d->positiveSign();
+    return m_locale->positiveSign();
 }
 
 QString Locale::negativeSign() const
 {
-    return d->negativeSign();
+    return m_locale->negativeSign();
 }
 
 int Locale::fracDigits() const
@@ -252,84 +255,84 @@ int Locale::fracDigits() const
 
 int Locale::monetaryDecimalPlaces() const
 {
-    return d->monetaryDecimalPlaces();
+    return m_locale->monetaryDecimalPlaces();
 }
 
 bool Locale::positivePrefixCurrencySymbol() const
 {
-    return d->positivePrefixCurrencySymbol();
+    return m_locale->positivePrefixCurrencySymbol();
 }
 
 bool Locale::negativePrefixCurrencySymbol() const
 {
-    return d->negativePrefixCurrencySymbol();
+    return m_locale->negativePrefixCurrencySymbol();
 }
 
 Locale::SignPosition Locale::positiveMonetarySignPosition() const
 {
-    return d->positiveMonetarySignPosition();
+    return m_locale->positiveMonetarySignPosition();
 }
 
 Locale::SignPosition Locale::negativeMonetarySignPosition() const
 {
-    return d->negativeMonetarySignPosition();
+    return m_locale->negativeMonetarySignPosition();
 }
 
 QString Locale::formatMoney(double num, const QString &symbol, int precision) const
 {
-    return d->formatMoney(num, symbol, precision);
+    return m_locale->formatMoney(num, symbol, precision);
 }
 
 QString Locale::formatNumber(double num, int precision) const
 {
-    return d->formatNumber(num, precision);
+    return m_locale->formatNumber(num, precision);
 }
 
 QString Locale::formatLong(long num) const
 {
-    return d->formatLong(num);
+    return m_locale->formatLong(num);
 }
 
 QString Locale::formatNumber(const QString &numStr, bool round, int precision) const
 {
-    return d->formatNumber(numStr, round, precision);
+    return m_locale->formatNumber(numStr, round, precision);
 }
 
 QString Locale::formatByteSize(double size, int precision, Locale::BinaryUnitDialect dialect,
                                 Locale::BinarySizeUnits specificUnit) const
 {
-    return d->formatByteSize(size, precision, dialect, specificUnit);
+    return m_locale->formatByteSize(size, precision, dialect, specificUnit);
 }
 
 QString Locale::formatByteSize(double size) const
 {
-    return d->formatByteSize(size);
+    return m_locale->formatByteSize(size);
 }
 
 Locale::BinaryUnitDialect Locale::binaryUnitDialect() const
 {
-    return d->binaryUnitDialect();
+    return m_locale->binaryUnitDialect();
 }
 
 void Locale::setBinaryUnitDialect(Locale::BinaryUnitDialect newDialect)
 {
-    d->setBinaryUnitDialect(newDialect);
+    m_locale->setBinaryUnitDialect(newDialect);
     emit binaryUnitDialectChanged();
 }
 
 QString Locale::formatDuration(unsigned long mSec) const
 {
-    return d->formatDuration(mSec);
+    return m_locale->formatDuration(mSec);
 }
 
 QString Locale::prettyFormatDuration(unsigned long mSec) const
 {
-    return d->prettyFormatDuration(mSec);
+    return m_locale->prettyFormatDuration(mSec);
 }
 
 QString Locale::formatDate(const QDate &date, Locale::DateFormat format) const
 {
-    return d->formatDate(date, format);
+    return m_locale->formatDate(date, format);
 }
 
 void Locale::setMainCatalog(const char *catalog)
@@ -339,73 +342,73 @@ void Locale::setMainCatalog(const char *catalog)
 
 double Locale::readNumber(const QString &_str, bool * ok) const
 {
-    return d->readNumber(_str, ok);
+    return m_locale->readNumber(_str, ok);
 }
 
 double Locale::readMoney(const QString &_str, bool *ok) const
 {
-    return d->readMoney(_str, ok);
+    return m_locale->readMoney(_str, ok);
 }
 
 QDate Locale::readDate(const QString &intstr, bool *ok) const
 {
-    return d->readDate(intstr, ok);
+    return m_locale->readDate(intstr, ok);
 }
 
 QDate Locale::readDate(const QString &intstr, ReadDateFlags flags, bool *ok) const
 {
-    return d->readDate(intstr, flags, ok);
+    return m_locale->readDate(intstr, flags, ok);
 }
 
 QDate Locale::readDate(const QString &intstr, const QString &fmt, bool *ok) const
 {
-    return d->readDate(intstr, fmt, ok);
+    return m_locale->readDate(intstr, fmt, ok);
 }
 
 QTime Locale::readTime(const QString &intstr, bool *ok) const
 {
-    return d->readTime(intstr, ok);
+    return m_locale->readTime(intstr, ok);
 }
 
 QTime Locale::readTime(const QString &intstr, Locale::ReadTimeFlags flags, bool *ok) const
 {
-    return d->readTime(intstr, flags, ok);
+    return m_locale->readTime(intstr, flags, ok);
 }
 
 QTime Locale::readLocaleTime(const QString &intstr, bool *ok, TimeFormatOptions options,
                               TimeProcessingOptions processing) const
 {
-    return d->readLocaleTime(intstr, ok, options, processing);
+    return m_locale->readLocaleTime(intstr, ok, options, processing);
 }
 
 QString Locale::formatTime(const QTime &time, bool includeSecs, bool isDuration) const
 {
-    return d->formatTime(time, includeSecs, isDuration);
+    return m_locale->formatTime(time, includeSecs, isDuration);
 }
 
 QString Locale::formatLocaleTime(const QTime &time, TimeFormatOptions options) const
 {
-    return d->formatLocaleTime(time, options);
+    return m_locale->formatLocaleTime(time, options);
 }
 
 bool Locale::use12Clock() const
 {
-    return d->use12Clock();
+    return m_locale->use12Clock();
 }
 
 QString Locale::dayPeriodText(const QTime &time, DateTimeComponentFormat format) const
 {
-    return d->dayPeriodText(time, format);
+    return m_locale->dayPeriodText(time, format);
 }
 
 QStringList Locale::languageList() const
 {
-    return d->languageList();
+    return m_locale->languageList();
 }
 
 QStringList Locale::currencyCodeList() const
 {
-    return d->currencyCodeList();
+    return m_locale->currencyCodeList();
 }
 
 /* Just copy in for now to keep diff clean, remove later
@@ -417,12 +420,12 @@ QString Locale::formatDateTime(const Locale *locale, const QDateTime &dateTime, 
 
 QString Locale::formatDateTime(const QDateTime &dateTime, Locale::DateFormat format, bool includeSeconds) const
 {
-    return d->formatDateTime(dateTime, format, includeSeconds);
+    return m_locale->formatDateTime(dateTime, format, includeSeconds);
 }
 
 QString Locale::formatDateTime(const KDateTime &dateTime, Locale::DateFormat format, DateTimeFormatOptions options) const
 {
-    return d->formatDateTime(dateTime, format, options);
+    return m_locale->formatDateTime(dateTime, format, options);
 }
 
 QString Locale::langLookup(const QString &fname, const char *rtype)
@@ -432,118 +435,118 @@ QString Locale::langLookup(const QString &fname, const char *rtype)
 
 void Locale::setDateFormat(const QString &format)
 {
-    d->setDateFormat(format);
+    m_locale->setDateFormat(format);
     emit dateFormatChanged();
 }
 
 void Locale::setDateFormatShort(const QString &format)
 {
-    d->setDateFormatShort(format);
+    m_locale->setDateFormatShort(format);
     emit dateFormatShortChanged();
 }
 
 void Locale::setDateMonthNamePossessive(bool possessive)
 {
-    d->setDateMonthNamePossessive(possessive);
+    m_locale->setDateMonthNamePossessive(possessive);
     emit dateMonthNamePossessiveChanged();
 }
 
 void Locale::setTimeFormat(const QString &format)
 {
-    d->setTimeFormat(format);
+    m_locale->setTimeFormat(format);
     emit timeFormatChanged();
 }
 
 void Locale::setWeekStartDay(int day)
 {
-    d->setWeekStartDay(day);
+    m_locale->setWeekStartDay(day);
     emit weekStartDayChanged();
 }
 
 void Locale::setWorkingWeekStartDay(int day)
 {
-    d->setWorkingWeekStartDay(day);
+    m_locale->setWorkingWeekStartDay(day);
     emit workingWeekStartDayChanged();
 }
 
 void Locale::setWorkingWeekEndDay(int day)
 {
-    d->setWorkingWeekEndDay(day);
+    m_locale->setWorkingWeekEndDay(day);
     emit workingWeekEndDayChanged();
 }
 
 void Locale::setWeekDayOfPray(int day)
 {
-    d->setWeekDayOfPray(day);
+    m_locale->setWeekDayOfPray(day);
     emit weekDayOfPrayChanged();
 }
 
 QString Locale::dateFormat() const
 {
-    return d->dateFormat();
+    return m_locale->dateFormat();
 }
 
 QString Locale::dateFormatShort() const
 {
-    return d->dateFormatShort();
+    return m_locale->dateFormatShort();
 }
 
 QString Locale::timeFormat() const
 {
-    return d->timeFormat();
+    return m_locale->timeFormat();
 }
 
 void Locale::setDecimalPlaces(int digits)
 {
-    d->setDecimalPlaces(digits);
+    m_locale->setDecimalPlaces(digits);
     emit decimalPlacesChanged();
 }
 
 void Locale::setDecimalSymbol(const QString &symbol)
 {
-    d->setDecimalSymbol(symbol);
+    m_locale->setDecimalSymbol(symbol);
     emit decimalSymbolChanged();
 }
 
 void Locale::setThousandsSeparator(const QString &separator)
 {
-    d->setThousandsSeparator(separator);
+    m_locale->setThousandsSeparator(separator);
     emit thousandsSeparatorChanged();
 }
 
 void Locale::setPositiveSign(const QString &sign)
 {
-    d->setPositiveSign(sign);
+    m_locale->setPositiveSign(sign);
     emit positiveSignChanged();
 }
 
 void Locale::setNegativeSign(const QString &sign)
 {
-    d->setNegativeSign(sign);
+    m_locale->setNegativeSign(sign);
     emit negativeSignChanged();
 }
 
 void Locale::setPositiveMonetarySignPosition(Locale::SignPosition signpos)
 {
-    d->setPositiveMonetarySignPosition(signpos);
+    m_locale->setPositiveMonetarySignPosition(signpos);
     emit positiveMonetarySignPositionChanged();
 }
 
 void Locale::setNegativeMonetarySignPosition(Locale::SignPosition signpos)
 {
-    d->setNegativeMonetarySignPosition(signpos);
+    m_locale->setNegativeMonetarySignPosition(signpos);
     emit negativeMonetarySignPositionChanged();
 }
 
 void Locale::setPositivePrefixCurrencySymbol(bool prefix)
 {
-    d->setPositivePrefixCurrencySymbol(prefix);
+    m_locale->setPositivePrefixCurrencySymbol(prefix);
     emit positivePrefixCurrencySymbolChanged();
 }
 
 void Locale::setNegativePrefixCurrencySymbol(bool prefix)
 {
-    d->setNegativePrefixCurrencySymbol(prefix);
+    m_locale->setNegativePrefixCurrencySymbol(prefix);
     emit negativePrefixCurrencySymbolChanged();
 }
 
@@ -555,47 +558,47 @@ void Locale::setFracDigits(int digits)
 
 void Locale::setMonetaryDecimalPlaces(int digits)
 {
-    d->setMonetaryDecimalPlaces(digits);
+    m_locale->setMonetaryDecimalPlaces(digits);
     emit monetaryDecimalPlacesChanged();
 }
 
 void Locale::setMonetaryThousandsSeparator(const QString &separator)
 {
-    d->setMonetaryThousandsSeparator(separator);
+    m_locale->setMonetaryThousandsSeparator(separator);
     emit monetaryThousandsSeparatorChanged();
 }
 
 void Locale::setMonetaryDecimalSymbol(const QString &symbol)
 {
-    d->setMonetaryDecimalSymbol(symbol);
+    m_locale->setMonetaryDecimalSymbol(symbol);
     emit monetaryDecimalSymbolChanged();
 }
 
 void Locale::setCurrencySymbol(const QString & symbol)
 {
-    d->setCurrencySymbol(symbol);
+    m_locale->setCurrencySymbol(symbol);
     emit currencySymbolChanged();
 }
 
 int Locale::pageSize() const
 {
-    return d->pageSize();
+    return m_locale->pageSize();
 }
 
 void Locale::setPageSize(int size)
 {
-    d->setPageSize(size);
+    m_locale->setPageSize(size);
     emit pageSizeChanged();
 }
 
 Locale::MeasureSystem Locale::measureSystem() const
 {
-    return d->measureSystem();
+    return m_locale->measureSystem();
 }
 
 void Locale::setMeasureSystem(Locale::MeasureSystem value)
 {
-    d->setMeasureSystem(value);
+    m_locale->setMeasureSystem(value);
     emit measureSystemChanged();
 }
 
@@ -616,158 +619,158 @@ QString Locale::defaultCurrencyCode()
 
 bool Locale::useTranscript() const
 {
-    return d->useTranscript();
+    return m_locale->useTranscript();
 }
 
 const QByteArray Locale::encoding() const
 {
-    return d->encoding();
+    return m_locale->encoding();
 }
 
 int Locale::encodingMib() const
 {
-    return d->encodingMib();
+    return m_locale->encodingMib();
 }
 
 int Locale::fileEncodingMib() const
 {
-    return d->fileEncodingMib();
+    return m_locale->fileEncodingMib();
 }
 
 QTextCodec *Locale::codecForEncoding() const
 {
-    return d->codecForEncoding();
+    return m_locale->codecForEncoding();
 }
 
 bool Locale::setEncoding(int mibEnum)
 {
-    return d->setEncoding(mibEnum);
+    return m_locale->setEncoding(mibEnum);
     emit encodingChanged();
 }
 
 QStringList Locale::allLanguagesList() const
 {
-    return d->allLanguagesList();
+    return m_locale->allLanguagesList();
 }
 
 QStringList Locale::installedLanguages() const
 {
-    return d->installedLanguages();
+    return m_locale->installedLanguages();
 }
 
 QString Locale::languageCodeToName(const QString &language) const
 {
-    return d->languageCodeToName(language);
+    return m_locale->languageCodeToName(language);
 }
 
 QStringList Locale::allCountriesList() const
 {
-    return d->allCountriesList();
+    return m_locale->allCountriesList();
 }
 
 QString Locale::countryCodeToName(const QString &country) const
 {
-    return d->countryCodeToName(country);
+    return m_locale->countryCodeToName(country);
 }
 
 void Locale::setCalendar(const QString &calendarType)
 {
-    d->setCalendar(calendarType);
+    m_locale->setCalendar(calendarType);
     emit calendarChanged();
 }
 
 void Locale::setCalendarSystem(Locale::CalendarSystem calendarSystem)
 {
-    d->setCalendarSystem(calendarSystem);
+    m_locale->setCalendarSystem(calendarSystem);
     emit calendarSystemChanged();
 }
 
 QString Locale::calendarType() const
 {
-    return d->calendarType();
+    return m_locale->calendarType();
 }
 
 Locale::CalendarSystem Locale::calendarSystem() const
 {
-    return d->calendarSystem();
+    return m_locale->calendarSystem();
 }
 
 const KCalendarSystem * Locale::calendar() const
 {
-    return d->calendar();
+    return m_locale->calendar();
 }
 
 void Locale::setWeekNumberSystem(Locale::WeekNumberSystem weekNumberSystem)
 {
-    d->setWeekNumberSystem(weekNumberSystem);
+    m_locale->setWeekNumberSystem(weekNumberSystem);
     emit WeekNumberSystemChanged();
 }
 
 Locale::WeekNumberSystem Locale::weekNumberSystem()
 {
-    return d->weekNumberSystem();
+    return m_locale->weekNumberSystem();
 }
 
 Locale::WeekNumberSystem Locale::weekNumberSystem() const
 {
-    return d->weekNumberSystem();
+    return m_locale->weekNumberSystem();
 }
 
 /*Locale::Locale(const Locale &rhs)
         : d(new Locale(*rhs.d))
 {
-    d->q = this;
+    m_locale->q = this;
 }*/
 
 void Locale::copyCatalogsTo(Locale *locale)
 {
-    d->copyCatalogsTo(locale);
+    m_locale->copyCatalogsTo(locale);
 }
 
 QString Locale::localizedFilePath(const QString &filePath) const
 {
-    return d->localizedFilePath(filePath);
+    return m_locale->localizedFilePath(filePath);
 }
 
 QString Locale::removeAcceleratorMarker(const QString &label) const
 {
-    return d->removeAcceleratorMarker(label);
+    return m_locale->removeAcceleratorMarker(label);
 }
 
 void Locale::setDigitSet(Locale::DigitSet digitSet)
 {
-    d->setDigitSet(digitSet);
+    m_locale->setDigitSet(digitSet);
     emit digitSetChanged();
 }
 
 Locale::DigitSet Locale::digitSet() const
 {
-    return d->digitSet();
+    return m_locale->digitSet();
 }
 
 void Locale::setMonetaryDigitSet(Locale::DigitSet digitSet)
 {
-    d->setMonetaryDigitSet(digitSet);
+    m_locale->setMonetaryDigitSet(digitSet);
     emit monetaryDigitSetChanged();
 }
 
 Locale::DigitSet Locale::monetaryDigitSet() const
 {
-    return d->monetaryDigitSet();
+    return m_locale->monetaryDigitSet();
 }
 
 void Locale::setDateTimeDigitSet(Locale::DigitSet digitSet)
 {
-    d->setDateTimeDigitSet(digitSet);
+    m_locale->setDateTimeDigitSet(digitSet);
     emit dateTimeDigitSetChanged();
 }
 
 Locale::DigitSet Locale::dateTimeDigitSet() const
 {
-    return d->dateTimeDigitSet();
+    return m_locale->dateTimeDigitSet();
 }
 
 void Locale::reparseConfiguration()
 {
-    d->reparseConfiguration();
+    m_locale->reparseConfiguration();
 }

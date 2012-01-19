@@ -168,12 +168,7 @@ public:
     /**
      * Copy constructor
      */
-   // KLocale(const KLocale & rhs);
-
-    /**
-     * Destructor
-     */
-    virtual ~Locale();
+    Locale(QObject *parent = 0);
 
     /**
      *
@@ -1970,7 +1965,7 @@ public:
     void reparseConfiguration();
 
 private:
-    KLocale *const d;
+    KLocale *m_locale;
 
 Q_SIGNALS:
     void binaryUnitDialectChanged();
