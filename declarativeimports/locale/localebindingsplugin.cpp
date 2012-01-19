@@ -19,16 +19,14 @@
  */
 
 #include "localebindingsplugin.h"
-
 #include <QtDeclarative/qdeclarative.h>
-
 #include "locale.h"
 
 void LocaleBindingsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.locale"));
 
-    qmlRegisterType<ToolTipProxy>(uri, 0, 1, "Locale");
+    qmlRegisterType<Locale>(uri, 0, 1, "Locale");
 }
 
 #include "localebindingsplugin.moc"
