@@ -249,4 +249,3 @@ void AppletScript::setContainmentType(Containment::Type type)
 
 } // Plasma namespace
 
-#include "appletscript.moc"

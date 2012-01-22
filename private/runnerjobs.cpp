@@ -216,4 +216,3 @@ void DelayedJobCleaner::checkIfFinished()
 
 } // Plasma namespace
 
-// #include "runnerjobs.moc"

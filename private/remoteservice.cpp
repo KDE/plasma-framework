@@ -307,4 +307,4 @@ Jolie::Message RemoteService::signMessage(const Jolie::Message &message) const
 
 } //namespace Plasma
 
-#include "remoteservice_p.moc"
+#include "moc_remoteservice_p.cpp"

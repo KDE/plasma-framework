@@ -453,4 +453,3 @@ void AbstractRunnerPrivate::setupScriptSupport()
 
 } // Plasma namespace
 
-#include "abstractrunner.moc"

@@ -109,4 +109,4 @@ void ServerThread::run()
     delete m_serverSocket;
 }
 
-#include "serverthread_p.moc"
+#include "moc_serverthread_p.cpp"

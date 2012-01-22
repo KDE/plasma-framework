@@ -328,4 +328,4 @@ void StorageThread::run()
 
 }
 
-#include "storagethread_p.moc"
+#include "moc_storagethread_p.cpp"

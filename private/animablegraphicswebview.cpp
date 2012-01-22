@@ -189,5 +189,5 @@ void AnimableGraphicsWebView::setScrollPositionY(qreal position)
 }
 
 
-#include "animablegraphicswebview_p.moc"
+#include "moc_animablegraphicswebview_p.cpp"
 

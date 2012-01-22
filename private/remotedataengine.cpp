@@ -243,5 +243,5 @@ void RemoteDataEngine::updateSources()
 
 }
 
-#include "remotedataengine_p.moc"
+#include "moc_remotedataengine_p.cpp"
 

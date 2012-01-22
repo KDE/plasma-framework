@@ -185,4 +185,4 @@ void RotationStackedAnimation::updateTransformations()
 
 } //namespace Plasma
 
-#include "rotationstacked_p.moc"
+#include "moc_rotationstacked_p.cpp"

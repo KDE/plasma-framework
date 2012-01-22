@@ -143,5 +143,5 @@ Plasma::ServiceJob* PlasmoidService::createJob(const QString& operation, QHash<Q
 
 }
 
-#include "plasmoidservice_p.moc"
+#include "moc_plasmoidservice_p.cpp"
 

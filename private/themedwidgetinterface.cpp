@@ -81,5 +81,5 @@ void PaletteHelper::generatePalettes()
 
 } // namespace Plasma
 
-#include "themedwidgetinterface_p.moc"
+#include "moc_themedwidgetinterface_p.cpp"
 

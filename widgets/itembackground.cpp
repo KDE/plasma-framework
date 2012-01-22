@@ -340,6 +340,5 @@ void ItemBackgroundPrivate::refreshCurrentTarget()
 } // Plasma namespace
 
 
-#include "itembackground.moc"
 
 

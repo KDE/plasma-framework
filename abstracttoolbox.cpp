@@ -113,5 +113,4 @@ void AbstractToolBox::reposition()
 
 } // plasma namespace
 
-#include "abstracttoolbox.moc"
 

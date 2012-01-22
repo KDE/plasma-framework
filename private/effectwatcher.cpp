@@ -87,4 +87,4 @@ bool EffectWatcher::isEffectActive() const
 
 }
 
-#include "effectwatcher_p.moc"
+#include "moc_effectwatcher_p.cpp"

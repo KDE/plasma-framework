@@ -171,5 +171,4 @@ void PackageStructureTest::mimeTypes()
 
 QTEST_KDEMAIN(PackageStructureTest, NoGUI)
 
-//#include "packagestructuretest.moc"
 

@@ -495,5 +495,4 @@ bool ToolTipManager::eventFilter(QObject *watched, QEvent *event)
 
 } // Plasma namespace
 
-#include "tooltipmanager.moc"
 

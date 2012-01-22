@@ -88,4 +88,4 @@ void ClientThread::run()
     delete m_socket;
 }
 
-#include "clientthread_p.moc"
+#include "moc_clientthread_p.cpp"

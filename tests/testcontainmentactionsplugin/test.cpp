@@ -104,4 +104,3 @@ void ContextTest::save(KConfigGroup &config)
 }
 
 
-#include "test.moc"

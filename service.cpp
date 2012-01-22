@@ -417,5 +417,4 @@ void Service::registerOperationsScheme()
 
 } // namespace Plasma
 
-#include "service.moc"
 

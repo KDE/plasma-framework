@@ -209,5 +209,4 @@ void ConfigLoaderTest::ulongLongDefaultValue()
 
 QTEST_KDEMAIN(ConfigLoaderTest, NoGUI)
 
-//#include "configloadertest.moc"
 

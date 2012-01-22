@@ -159,6 +159,6 @@ DataEngine *DataEngineConsumer::remoteDataEngine(const KUrl &location, const QSt
 
 } // namespace Plasma
 
-#include "dataengineconsumer_p.moc"
+#include "moc_dataengineconsumer_p.cpp"
 
 

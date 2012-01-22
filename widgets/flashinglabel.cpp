@@ -328,4 +328,3 @@ void FlashingLabelPrivate::setPalette()
     q->update();
 }
 
-#include "flashinglabel.moc"

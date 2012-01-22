@@ -1112,5 +1112,4 @@ QString SignalPlotter::lastValueAsString(uint i) const
 
 } // Plasma namespace
 
-#include "signalplotter.moc"
 

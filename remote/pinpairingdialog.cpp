@@ -119,4 +119,4 @@ PinPairingDialog::~PinPairingDialog()
 
 }
 
-#include "pinpairingdialog_p.moc"
+#include "moc_pinpairingdialog_p.cpp"

@@ -2581,5 +2581,4 @@ QSet<QString> AppletPrivate::s_customCategories;
 
 } // Plasma namespace
 
-#include "applet.moc"
-#include "private/applet_p.moc"
+#include "moc_applet_p.cpp"

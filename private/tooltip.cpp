@@ -404,4 +404,4 @@ void ToolTip::updateTheme()
 
 } // namespace Plasma
 
-#include "tooltip_p.moc"
+#include "moc_tooltip_p.cpp"

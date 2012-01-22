@@ -231,5 +231,5 @@ void WindowShadows::Private::clearShadow(const QWidget *window)
 
 } // namespace Plasma
 
-#include "windowshadows_p.moc"
+#include "moc_windowshadows_p.cpp"
 

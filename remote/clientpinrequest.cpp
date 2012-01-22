@@ -74,5 +74,4 @@ QString ClientPinRequest::pin() const
 
 } // Plasma namespace
 
-#include "clientpinrequest.moc"
 

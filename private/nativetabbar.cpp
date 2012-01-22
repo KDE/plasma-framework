@@ -632,5 +632,5 @@ void NativeTabBar::wheelEvent(QWheelEvent *event)
 
 } // namespace Plasma
 
-#include "nativetabbar_p.moc"
+#include "moc_nativetabbar_p.cpp"
 

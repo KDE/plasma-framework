@@ -104,4 +104,4 @@ void SequentialAnimationGroup::removeAnimation(QAbstractAnimation *animation)
 
 } // namespace Plasma
 
-#include "animationgroup_p.moc"
+#include "moc_animationgroup_p.cpp"

@@ -35,5 +35,5 @@ void EasingAnimation::updateCurrentTime(int currentTime)
 
 } // namespace Plasma
 
-#include "easinganimation_p.moc"
+#include "moc_easinganimation_p.cpp"
 

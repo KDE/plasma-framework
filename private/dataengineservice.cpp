@@ -55,5 +55,5 @@ void DataEngineService::sourceAdded(QString source)
 
 }
 
-#include "dataengineservice_p.moc"
+#include "moc_dataengineservice_p.cpp"
 

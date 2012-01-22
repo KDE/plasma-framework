@@ -547,4 +547,3 @@ void RunnerContext::run(const QueryMatch &match)
 
 } // Plasma namespace
 
-#include "runnercontext.moc"

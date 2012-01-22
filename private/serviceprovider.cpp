@@ -530,4 +530,4 @@ void ServiceProvider::authorizationFailed(const Jolie::Message &message, const Q
 
 } //namespace Plasma
 
-#include "serviceprovider_p.moc"
+#include "moc_serviceprovider_p.cpp"

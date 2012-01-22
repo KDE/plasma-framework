@@ -156,4 +156,4 @@ Storage::~Storage()
 {
 }
 
-#include "storage_p.moc"
+#include "moc_storage_p.cpp"

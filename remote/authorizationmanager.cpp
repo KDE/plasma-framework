@@ -314,4 +314,3 @@ void AuthorizationManagerPrivate::addCredentials(const Credentials &identity)
 
 } // Plasma namespace
 
-#include "authorizationmanager.moc"
