@@ -39,6 +39,7 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 Item {
     id: main
     state: parent.state
+    //used to tell apart this implementation with the touch components one
     property bool hasOverState: true
 
     PlasmaCore.FrameSvgItem {

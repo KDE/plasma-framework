@@ -71,11 +71,15 @@ public:
     void mousePressEvent(QMouseEvent *event)
     {
         event->accept();
+        m_dialog->view()->winId();
+        KWindowSystem::forceActiveWindow(m_dialog->view()->winId());
     }
 
     void mouseReleaseEvent(QMouseEvent *event)
     {
-        m_dialog->close();
+        if (!m_dialog->view()->geometry().contains(event->globalPos())) {
+            m_dialog->close();
+        }
     }
 
 private:
@@ -249,11 +253,21 @@ void FullScreenDialog::setVisible(const bool visible)
 {
     if (m_view->isVisible() != visible) {
         m_background->setVisible(visible);
+        Plasma::WindowEffects::slideWindow(m_view->winId(), Plasma::BottomEdge, 0);
         m_view->setVisible(visible);
+        unsigned long state = NET::Sticky | NET::StaysOnTop | NET::KeepAbove | NET::SkipTaskbar | NET::SkipPager;
+        KWindowSystem::setState(m_view->effectiveWinId(), state);
+        KWindowSystem::setState(m_background->effectiveWinId(), state);
         if (visible) {
             m_view->raise();
+            KWindowSystem::forceActiveWindow(m_view->effectiveWinId());
         }
     }
+}
+
+QGraphicsView *FullScreenDialog::view() const
+{
+    return m_view;
 }
 
 QDeclarativeListProperty<QGraphicsObject> FullScreenDialog::title()
@@ -339,10 +353,6 @@ bool FullScreenDialog::eventFilter(QObject *watched, QEvent *event)
     if (watched == m_mainItem.data() &&
         (event->type() == QEvent::GraphicsSceneResize)) {
         syncMainItem();
-    } else if (watched == m_view && event->type() == QEvent::Show) {
-        Plasma::WindowEffects::slideWindow(m_view->winId(), Plasma::BottomEdge, 0);
-    } else if (watched == m_view && event->type() == QEvent::Hide) {
-        Plasma::WindowEffects::slideWindow(m_view->winId(), Plasma::BottomEdge, 0);
     }
     return false;
 }

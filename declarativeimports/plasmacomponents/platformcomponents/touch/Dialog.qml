@@ -168,10 +168,6 @@ Item {
             }
         }
 
-        Component.onCompleted: {
-            rootItem = Utils.rootObject()
-        }
-
         states: [
             State {
                 name: "closed"

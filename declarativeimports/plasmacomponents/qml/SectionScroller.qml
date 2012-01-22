@@ -66,7 +66,7 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 Item {
     id: root
 
-    /**
+    /*
      * The listview this scroll indicator will work on
      */
     property ListView listView
