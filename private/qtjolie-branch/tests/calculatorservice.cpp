@@ -88,8 +88,8 @@ private slots:
     {
         m_server = new Server(8000);
         CalculatorAdaptor *adaptor = new CalculatorAdaptor(this);
-        connect(adaptor, SIGNAL(added(int, int, int)),
-                this, SLOT(onAdded(int, int, int)));
+        connect(adaptor, SIGNAL(added(int,int,int)),
+                this, SLOT(onAdded(int,int,int)));
         m_server->registerAdaptor("/", adaptor);
 
         m_meta.addRedirection(QString::fromUtf8("Calculator"),

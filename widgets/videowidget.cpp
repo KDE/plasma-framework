@@ -325,7 +325,7 @@ void VideoWidget::setUsedControls(const Controls controls)
         d->controlsWidget = 0;
 
         //disconnect all the stuff that wasn't automatically disconnected 'cause widget deaths
-        disconnect(d->media, SIGNAL(stateChanged(Phonon::State, Phonon::State)), this, SLOT(stateChanged(Phonon::State, Phonon::State)));
+        disconnect(d->media, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(stateChanged(Phonon::State,Phonon::State)));
         disconnect(d->media, SIGNAL(tick(qint64)), this, SLOT(ticked(qint64)));
         disconnect(d->media, SIGNAL(totalTimeChanged(qint64)), this, SLOT(totalTimeChanged(qint64)));
         disconnect(d->audioOutput, SIGNAL(volumeChanged(qreal)), this, SLOT(volumeChanged(qreal)));
@@ -411,7 +411,7 @@ void VideoWidget::setUsedControls(const Controls controls)
         d->nextButton = 0;
     }
 
-    connect(d->media, SIGNAL(stateChanged(Phonon::State, Phonon::State)), this, SLOT(stateChanged(Phonon::State, Phonon::State)));
+    connect(d->media, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(stateChanged(Phonon::State,Phonon::State)));
 
 
 

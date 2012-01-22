@@ -337,7 +337,7 @@ void DataContainer::timerEvent(QTimerEvent * event)
 {
     if (event->timerId() == d->checkUsageTimer.timerId()) {
         if (d->relays.count() < 1 &&
-            receivers(SIGNAL(dataUpdated(QString, Plasma::DataEngine::Data))) < 1) {
+            receivers(SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data))) < 1) {
             // DO NOT CALL ANYTHING AFTER THIS LINE AS IT MAY GET DELETED!
             kDebug() << objectName() << "is unused";
             emit becameUnused(objectName());

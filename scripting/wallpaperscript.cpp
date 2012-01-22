@@ -45,10 +45,10 @@ WallpaperScript::~WallpaperScript()
 void WallpaperScript::setWallpaper(Wallpaper *wallpaper)
 {
     d->wallpaper = wallpaper;
-    connect(wallpaper, SIGNAL(renderCompleted(const QImage&)),
-            this, SLOT(renderCompleted(const QImage&)));
-    connect(wallpaper, SIGNAL(urlDropped(const KUrl&)),
-            this, SLOT(urlDropped(const KUrl&)));
+    connect(wallpaper, SIGNAL(renderCompleted(QImage)),
+            this, SLOT(renderCompleted(QImage)));
+    connect(wallpaper, SIGNAL(urlDropped(KUrl)),
+            this, SLOT(urlDropped(KUrl)));
 }
 
 Wallpaper *WallpaperScript::wallpaper() const
