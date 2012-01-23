@@ -32,7 +32,7 @@ class QDateTime;
 class KDateTime;
 class KCalendarSystem;
 class KCurrencyCode;
-class KDayPeriod;
+//class KDayPeriod;
 
 /**
  * \file klocale.h

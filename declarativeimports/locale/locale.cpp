@@ -21,8 +21,6 @@
 #include "locale.h"
 #include <KGlobal>
 
-//TODO we need some ctors
-
 Locale::Locale(QObject* parent)
         : QObject(parent)
 {
@@ -32,32 +30,32 @@ Locale::Locale(QObject* parent)
 
 bool Locale::setCountry(const QString &country, KConfig *config)
 {
-    return m_locale->setCountry(country, config);
     emit countryChanged();
+    return m_locale->setCountry(country, config);
 }
 
 bool Locale::setCountryDivisionCode(const QString &countryDivisionCode)
 {
-    return m_locale->setCountryDivisionCode(countryDivisionCode);
     emit countryDivisionCodeChanged();
+    return m_locale->setCountryDivisionCode(countryDivisionCode);
 }
 
 bool Locale::setLanguage(const QString &language, KConfig *config)
 {
-    return m_locale->setLanguage(language, config);
     emit languageChanged();
+    return m_locale->setLanguage(language, config);
 }
 
 bool Locale::setLanguage(const QStringList &languages)
 {
-    return m_locale->setLanguage(languages);
     emit languageChanged();
+    return m_locale->setLanguage(languages);
 }
 
 void Locale::setCurrencyCode(const QString &newCurrencyCode)
 {
-    m_locale->setCurrencyCode(newCurrencyCode);
     emit currencyCodeChanged();
+    m_locale->setCurrencyCode(newCurrencyCode);
 }
 
 bool Locale::isApplicationTranslatedInto(const QString &lang)
@@ -715,12 +713,6 @@ Locale::WeekNumberSystem Locale::weekNumberSystem() const
 {
     return m_locale->weekNumberSystem();
 }
-
-/*Locale::Locale(const Locale &rhs)
-        : d(new Locale(*rhs.d))
-{
-    m_locale->q = this;
-}*/
 
 void Locale::copyCatalogsTo(Locale *locale)
 {
