@@ -7,6 +7,7 @@ output=none
 
 Icon=plasma
 Description=A protocol for Plasma services
+Description[ar]=ميفاق لخدمات بلازما
 Description[bg]=Протокол за услуги Plasma
 Description[bs]=Protokol Plazma usluga
 Description[ca]=Un protocol pels serveis del Plasma
@@ -52,6 +53,7 @@ Description[sr@latin]=Protokol za plasma servise
 Description[sv]=Ett protokoll för Plasma-tjänster
 Description[tg]=Протоколи хидматҳои Plasma
 Description[tr]=Plasma servisleri için bir protokol
+Description[tt]=Plasma хезмәте өчен беркетмә
 Description[ug]=پلازما(Plasma) مۇلازىمىتىنىڭ كېلىشىمى
 Description[uk]=Протокол для служб Плазми
 Description[vi]=Một giao thức cho các dịch vụ Plasma

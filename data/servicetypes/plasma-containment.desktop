@@ -3,7 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/Containment
 
 Comment=Plasma applet container and background painter
-Comment[ar]=حاوية بريمج بلازما و رسام خلفية
+Comment[ar]=حاوية بريمج بلازما ورسام خلفية
 Comment[as]=Plasma এপ্লেটৰ টেমা আৰু পৃষ্ঠভূমিৰ চিত্ৰকাৰ
 Comment[ast]=Contenedor de miniaplicación Plasma y pintor del fondu
 Comment[be@latin]=Schovišča dla apletaŭ „Plasma” j malar fonu
@@ -68,6 +68,7 @@ Comment[ta]=பிளாஸ்மா ஆப்லெட் கொள்ளிய
 Comment[tg]=Системаи захиракунӣ ва тасвирии Plasma
 Comment[th]=ตัววาดพื้นหลังและตัวบรรจุแแอพเพล็ตของพลาสมา
 Comment[tr]=Plasma programcık içerici ve arkaplan oluşturucu
+Comment[tt]=Plasma кушымтаның контейнеры һәм сүрәтләү модуле
 Comment[ug]=Plasma قاچا ھەرىكىتى ۋە تەگلىك سىزغۇچ
 Comment[uk]=Контейнер аплетів плазми і малювання тла
 Comment[wa]=Contneu d' aplikete eyet pondeu do fond di plasma

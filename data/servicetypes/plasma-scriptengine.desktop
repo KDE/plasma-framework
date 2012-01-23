@@ -3,7 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/ScriptEngine
 
 Comment=Scripting language extension for Plasma
-Comment[ar]=إمتداد لغة سكربت للبلازما
+Comment[ar]=امتداد لغة سكربت لبلازما
 Comment[as]=Plasma ৰ কাৰণে স্ক্ৰিপ্টিং ভাষাৰ সম্প্ৰসাৰণ
 Comment[ast]=Estensión de llinguaxe de guiones pa Plasma
 Comment[be@latin]=Pašyreńnie skryptavaj movy dla systemy „Plasma”
@@ -68,6 +68,7 @@ Comment[ta]=பிளாஸ்மாவிற்கான குறுநிர�
 Comment[tg]=Скрипти забонҳои иловагӣ барои Plasma
 Comment[th]=ส่วนเสริมภาษาสคริปต์สำหรับพลาสมา
 Comment[tr]=Plasma için betik dili eklentisi
+Comment[tt]=Plasma өчен скрипт телләр өстәмәсе
 Comment[ug]=Plasma نىڭ قوليازما تىل كېڭەيتىلمىسى
 Comment[uk]=Розширення скриптових мов для Плазми
 Comment[vi]=Phần mở rộng ngôn ngữ lệnh cho Plasma
