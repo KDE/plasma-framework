@@ -24,7 +24,7 @@
 Locale::Locale(QObject* parent)
         : QObject(parent)
 {
-    m_locale = new KLocale(KGlobal::locale());
+    m_locale = new KLocale(*KGlobal::locale());
 }
 
 
@@ -121,38 +121,16 @@ void Locale::translateRawFrom(const char *catname, const char *msg, QString *lan
     m_locale->translateRawFrom(catname, 0, msg, 0, 0, lang, trans);
 }
 
-void Locale::translateRaw(const char *msg, QString *lang, QString *trans) const
-{
-    m_locale->translateRawFrom(0, 0, msg, 0, 0, lang, trans);
-}
-
 void Locale::translateRawFrom(const char *catname, const char *ctxt, const char *msg, QString *lang,
                                QString *trans) const
 {
     m_locale->translateRawFrom(catname, ctxt, msg, 0, 0, lang, trans);
 }
 
-void Locale::translateRaw(const char *ctxt, const char *msg, QString *lang, QString *trans) const
-{
-    m_locale->translateRawFrom(0, ctxt, msg, 0, 0, lang, trans);
-}
-
 void Locale::translateRawFrom(const char *catname, const char *singular, const char *plural,
                                unsigned long n, QString *lang, QString *trans) const
 {
     m_locale->translateRawFrom(catname, 0, singular, plural, n, lang, trans);
-}
-
-void Locale::translateRaw(const char *singular, const char *plural, unsigned long n, QString *lang,
-                           QString *trans) const
-{
-    m_locale->translateRawFrom(0, 0, singular, plural, n, lang, trans);
-}
-
-void Locale::translateRaw(const char *ctxt, const char *singular, const char *plural,
-                           unsigned long n, QString *lang, QString *trans) const
-{
-    m_locale->translateRawFrom(0, ctxt, singular, plural, n, lang, trans);
 }
 
 QString Locale::translateQt(const char *context, const char *sourceText, const char *comment) const

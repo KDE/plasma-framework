@@ -688,8 +688,8 @@ public:
      * @see BinaryUnitDialect
      */
     QString formatByteSize(double size, int precision,
-                           BinaryUnitDialect dialect = KLocale::DefaultBinaryDialect,
-                           BinarySizeUnits specificUnit = KLocale::DefaultBinaryUnits) const;
+                           BinaryUnitDialect dialect = Locale::DefaultBinaryDialect,
+                           BinarySizeUnits specificUnit = Locale::DefaultBinaryUnits) const;
 
     /**
      * Returns the user's configured binary unit dialect.
@@ -880,6 +880,8 @@ public:
         LongName                     /**< Long text format, e.g. Monday for Monday */
     };
 
+    Q_DECLARE_FLAGS(DateTimeComponents, DateTimeComponent)
+
     //KDE5 move to KDateTime namespace
     /**
      * Format for date string.
@@ -934,6 +936,8 @@ public:
         Seconds  = 0x02     /**< Include the seconds value */
     };
 
+    Q_DECLARE_FLAGS(DateTimeFormatOptions, DateTimeFormatOption)
+
     //KDE5 move to KDateTime namespace
     /**
      * Returns a string formatted to the current locale's conventions
@@ -980,6 +984,8 @@ public:
                                     ///< "%I.%M.%S %p".
     };
 
+    Q_DECLARE_FLAGS(TimeFormatOptions, TimeFormatOption)
+
     //KDE5 move to KDateTime namespace
     /**
      *
@@ -991,7 +997,7 @@ public:
      * @return The time as a string
      */
     Q_INVOKABLE QString formatLocaleTime(const QTime &pTime,
-                             TimeFormatOptions options = KLocale::TimeDefault) const;
+                             TimeFormatOptions options = Locale::TimeDefault) const;
 
     /**
      *
@@ -1214,6 +1220,8 @@ public:
                                    ///< left out when entering a time string.
     };
 
+    Q_DECLARE_FLAGS(TimeProcessingOptions, TimeProcessingOption)
+
     /**
      *
      * Converts a localized time string to a QTime.
@@ -1232,7 +1240,7 @@ public:
      * @return The string converted to a QTime
      */
     Q_INVOKABLE QTime readLocaleTime(const QString &str, bool *ok = 0,
-                         TimeFormatOptions options = KLocale::TimeDefault,
+                         TimeFormatOptions options = Locale::TimeDefault,
                          TimeProcessingOptions processing = ProcessNonStrict) const;
 
     /**
