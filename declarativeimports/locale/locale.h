@@ -1069,7 +1069,7 @@ public:
      * @see KCalendarSystem
      * @return the type of Calendar System
      */
-    KLocale::CalendarSystem calendarSystem() const;
+    Locale::CalendarSystem calendarSystem() const;
 
     /**
      *
@@ -1079,7 +1079,7 @@ public:
      * @see KCalendarSystem
      * @param calendarSystem the Calendar System to use
      */
-    void setCalendarSystem(KLocale::CalendarSystem calendarSystem);
+    void setCalendarSystem(Locale::CalendarSystem calendarSystem);
 
     /**
      *
@@ -1089,7 +1089,7 @@ public:
      * @see weekNumberSystem()
      * @param weekNumberSystem the Week Number System to use
      */
-    void setWeekNumberSystem(KLocale::WeekNumberSystem weekNumberSystem);
+    void setWeekNumberSystem(Locale::WeekNumberSystem weekNumberSystem);
 
     //KDE5 remove in favour of const version
     /**
@@ -1100,7 +1100,7 @@ public:
      * @see setWeekNumberSystem()
      * @returns the Week Number System used
      */
-    KLocale::WeekNumberSystem weekNumberSystem();
+    Locale::WeekNumberSystem weekNumberSystem();
 
     /**
      *
@@ -1110,7 +1110,7 @@ public:
      * @see setWeekNumberSystem()
      * @returns the Week Number System used
      */
-    KLocale::WeekNumberSystem weekNumberSystem() const;
+    Locale::WeekNumberSystem weekNumberSystem() const;
 
     /**
      * Converts a localized monetary string to a double.
@@ -1239,6 +1239,12 @@ public:
      *
      * @return The string converted to a QTime
      */
+
+    enum ReadTimeFlags {
+        WithSeconds = 0,    ///< Only accept a time string with seconds. Default (no flag set)
+        WithoutSeconds = 1  ///< Only accept a time string without seconds.
+    }; // (maybe use this enum as a bitfield, if adding independent features?)
+
     Q_INVOKABLE QTime readLocaleTime(const QString &str, bool *ok = 0,
                          TimeFormatOptions options = Locale::TimeDefault,
                          TimeProcessingOptions processing = ProcessNonStrict) const;
@@ -1838,7 +1844,7 @@ public:
      *
      * @param locale the destination KLocale object
      */
-    Q_INVOKABLE void copyCatalogsTo(KLocale *locale);
+    Q_INVOKABLE void copyCatalogsTo(Locale *locale);
 
     /**
      * Changes the current country. The current country will be left
@@ -1977,7 +1983,6 @@ private:
 
 Q_SIGNALS:
     void binaryUnitDialectChanged();
-    void calendarChanged();
     void calendarSystemChanged();
     void countryChanged();
     void countryDivisionCodeChanged();
@@ -1991,7 +1996,6 @@ Q_SIGNALS:
     void decimalPlacesChanged();
     void digitSetChanged();
     void encodingChanged();
-    void fracDigitsChanged();
     void languageChanged();
     void measureSystemChanged();
     void monetaryDecimalPlacesChanged();
