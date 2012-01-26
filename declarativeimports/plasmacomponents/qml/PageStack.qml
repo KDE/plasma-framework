@@ -147,6 +147,9 @@ Item {
     // Returns the page instance that was popped off the stack.
     function pop(page, immediate)
     {
+        if (busy) {
+            return
+        }
         return Engine.pop(page, immediate);
     }
 
