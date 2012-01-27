@@ -132,6 +132,6 @@ Item {
             }
         }
 
-        source: interactive ? "ScrollBarDelegate.qml" : "ScrollDecoratorDelegate.qml"
+        source: interactive ? "private/ScrollBarDelegate.qml" : "private/ScrollDecoratorDelegate.qml"
     }
 }
