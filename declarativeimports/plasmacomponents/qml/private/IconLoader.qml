@@ -57,6 +57,7 @@ Item {
         } else if (source == "") {
             imageLoader.sourceComponent = null
             valid = false
+            return
         }
 
         svgIcon.imagePath = "toolbar-icons/"+root.source.split("-")[0]
