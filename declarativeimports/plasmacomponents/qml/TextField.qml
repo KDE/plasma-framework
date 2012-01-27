@@ -113,6 +113,9 @@ Properties:
 
        * bool clearButtonShown:
          Holds if the button to clear the text from TextField is visible.
+Signals:
+       * accepted():
+        This signal is emitted when the text input is accepted.
 
 Methods:
        * void copy():
@@ -175,6 +178,8 @@ Item {
     property alias selectionStart: textInput.selectionStart // read-only
     property alias text: textInput.text
     property alias maximumLength: textInput.maximumLength
+
+    signal accepted
 
     //Plasma api
     property bool clearButtonShown: false
@@ -295,6 +300,7 @@ Item {
                 textInput.closeSoftwareInputPanel()
             }
         }
+        onAccepted: textField.accepted()
     }
 
     Private.IconLoader {
