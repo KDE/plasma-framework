@@ -112,7 +112,7 @@ Item {
         Item {
             anchors.fill: parent
             property alias margins: surface.margins
-            ButtonShadow {
+            Private.ButtonShadow {
                 id: shadow
                 anchors.fill: parent
                 visible: !flat
