@@ -47,6 +47,7 @@
 #include "corona.h"
 #include "paintutils.h"
 #include "theme.h"
+#include "tooltipmanager.h"
 #include "view.h"
 #include "framesvg.h"
 
@@ -816,12 +817,15 @@ void AppletHandle::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     Q_UNUSED(event);
     //kDebug() << "hover enter";
 
-    //if a disappear was scheduled stop the timer
-    if (m_leaveTimer->isActive()) {
-        m_leaveTimer->stop();
+    if (m_applet) {
+        ToolTipManager::self()->hide(m_applet);
     }
-    // if we're already fading out, fade back in
-    else if (!m_anim.data() && m_animType == FadeOut) {
+
+    if (m_leaveTimer->isActive()) {
+        //if a disappear was scheduled stop the timer
+        m_leaveTimer->stop();
+    } else if (!m_anim.data() && m_animType == FadeOut) {
+        // if we're already fading out, fade back in
         startFading(FadeIn, m_entryPos, true);
     }
 }
