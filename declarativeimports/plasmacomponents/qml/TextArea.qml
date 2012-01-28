@@ -339,7 +339,7 @@ Item {
                 opacity: 0.5
             }
             onActiveFocusChanged: {
-                if (!textField.activeFocus) {
+                if (!textEdit.activeFocus) {
                     textInput.closeSoftwareInputPanel()
                 }
             }
