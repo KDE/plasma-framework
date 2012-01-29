@@ -50,7 +50,6 @@ void MouseEventListener::mousePressEvent(QGraphicsSceneMouseEvent *me)
 
     QDeclarativeMouseEvent dme(me->pos().x(), me->pos().y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
     m_pressAndHoldEvent = new QDeclarativeMouseEvent(me->pos().x(), me->pos().y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
-    kDebug() << "pressed in mousePressEvent";
     emit pressed(&dme);
     m_pressed = true;
     //delete m_pressAndHoldEvent;
