@@ -25,7 +25,7 @@ import "private" as Private
 
 /**
  * A generic ScrollBar/ScrollDecorator component:
- * Qlways prefer this to ScrollDecorator that is not available on desktop.
+ * Always prefer this to ScrollDecorator that is not available on desktop.
  * By default, this component will look and behave like a scroll decorator on touchscreens
  */
 // TODO: add support mouse wheel events
