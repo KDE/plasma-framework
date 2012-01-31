@@ -142,8 +142,13 @@ QString Locale::translateQt(const char *context, const char *sourceText, const c
 
 QList<Locale::DigitSet> Locale::allDigitSetsList() const
 {
-    //TODO
-    return m_locale->allDigitSetsList();
+    QList<Locale::DigitSet> digitList;
+
+    foreach(KLocale::DigitSet digit, m_locale->allDigitSetsList()) {
+     digitList.append((Locale::DigitSet)digit);
+    }
+
+    return digitList;
 }
 
 QString Locale::digitSetToName(Locale::DigitSet digitSet, bool withDigits) const
@@ -198,7 +203,6 @@ QString Locale::thousandsSeparator() const
 
 QString Locale::currencySymbol() const
 {
-    emit currencySymbolChanged();
     return m_locale->currencySymbol();
 }
 
