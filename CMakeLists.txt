@@ -1,5 +1,3 @@
-# strange conversion error in pushbutton.cpp
-kde4_no_enable_final(plasma)
 
 if(KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
     set(PLASMA_NO_KDEWEBKIT TRUE)
