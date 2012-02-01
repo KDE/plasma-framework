@@ -1,8 +1,6 @@
 /*
-    Copyright (c) 2002 Carlos Moro <cfmoro@correo.uniovi.es>
-    Copyright (c) 2002 Hans Petter Bieker <bieker@kde.org>
-    Copyright 2007, 2008, 2009, 2010 John Layt <john@layt.net>
-
+    Copyright (C) 2012 Giorgos Tsiapaliwkas <terietor@gmail.com>
+    Copyright (C) 2012 Antonis Tsiapaliokas <kok3rs@gmail.com>
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
     License as published by the Free Software Foundation; either

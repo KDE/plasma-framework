@@ -1,7 +1,6 @@
 /*
-    Copyright (c) 2002 Carlos Moro <cfmoro@correo.uniovi.es>
-    Copyright (c) 2002-2003 Hans Petter Bieker <bieker@kde.org>
-    Copyright 2007, 2009, 2010 John Layt <john@layt.net>
+     Copyright (C) 2012 Giorgos Tsiapaliwkas <terietor@gmail.com>
+     Copyright (C) 2012 Antonis Tsiapaliokas <kok3rs@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -22,7 +21,7 @@
 #ifndef CALENDARSYSTEM_H
 #define CALENDARSYSTEM_H
 
-#include "klocale.h"  // needed for enums
+#include "locale.h"  // needed for enums
 #include "kglobal.h"
 
 #include <QtCore/QStringList>
@@ -84,7 +83,7 @@ public:
      * @param locale locale to use for translations. The global locale is used if null.
      * @return a KCalendarSystem object
      */
-    Q_INVOKABLE static KCalendarSystem *create(KLocale::CalendarSystem calendarSystem,
+    Q_INVOKABLE static KCalendarSystem *create(Locale::CalendarSystem calendarSystem,
                                    const KLocale *locale = 0);
 
     /**
@@ -98,7 +97,7 @@ public:
      * @param locale locale to use for translations. The global locale is used if null.
      * @return a KCalendarSystem object
      */
-    Q_INVOKABLE static KCalendarSystem *create(KLocale::CalendarSystem calendarSystem, KSharedConfig::Ptr config,
+    Q_INVOKABLE static KCalendarSystem *create(Locale::CalendarSystem calendarSystem, KSharedConfig::Ptr config,
                                    const KLocale *locale = 0);
 
     /**
@@ -112,28 +111,28 @@ public:
      * @param locale the locale to use for the label, defaults to global
      * @return label for calendar
      */
-    Q_INVOKABLE static QString calendarLabel(KLocale::CalendarSystem calendarSystem, const KLocale *locale = KGlobal::locale());
+    Q_INVOKABLE static QString calendarLabel(Locale::CalendarSystem calendarSystem, const KLocale *locale = KGlobal::locale());
 
     /**
      *
      * Returns the Calendar System enum value for a given Calendar Type,
-     * e.g. KLocale::QDateCalendar for "gregorian"
+     * e.g. Locale::QDateCalendar for "gregorian"
      *
      * @param calendarType the calendar type to convert
      * @return calendar system for calendar type
      */
-    Q_INVOKABLE static KLocale::CalendarSystem calendarSystem(const QString &calendarType);
+    Q_INVOKABLE static Locale::CalendarSystem calendarSystem(const QString &calendarType);
 
     //KDE5 remove
     /**
      *
      * Returns the deprecated Calendar Type for a given Calendar System enum value,
-     * e.g. "gregorian" for KLocale::QDateCalendar
+     * e.g. "gregorian" for Locale::QDateCalendar
      *
      * @param calendarSystem the calendar system to convert
      * @return calendar type for calendar system
      */
-    Q_INVOKABLE static QString calendarType(KLocale::CalendarSystem calendarSystem);
+    Q_INVOKABLE static QString calendarType(Locale::CalendarSystem calendarSystem);
 
     /**
      * Constructor of abstract calendar class. This will be called by derived classes.
@@ -163,7 +162,7 @@ public:
      *
      * @return type of calendar system
      */
-    Q_INVOKABLE KLocale::CalendarSystem calendarSystem() const;
+    Q_INVOKABLE Locale::CalendarSystem calendarSystem() const;
 
     //KDE5 make virtual?
     /**
@@ -520,7 +519,7 @@ public:
      * @param weekNumberSystem the week number system to use
      * @return number of weeks in the year, -1 if  date invalid
      */
-    Q_INVOKABLE int weeksInYear(const QDate &date, KLocale::WeekNumberSystem weekNumberSystem) const;
+    Q_INVOKABLE int weeksInYear(const QDate &date, Locale::WeekNumberSystem weekNumberSystem) const;
 
     /**
      * Returns the number of localized weeks in the given year.
@@ -544,7 +543,7 @@ public:
      * @param weekNumberSystem the week number system to use
      * @return number of weeks in the year, -1 if  date invalid
      */
-    Q_INVOKABLE int weeksInYear(int year, KLocale::WeekNumberSystem weekNumberSystem) const;
+    Q_INVOKABLE int weeksInYear(int year, Locale::WeekNumberSystem weekNumberSystem) const;
 
     /**
      * Returns the number of days in the given year.
@@ -619,7 +618,7 @@ public:
      *
      * This may be ISO, US, or any other supported week numbering scheme.  If
      * you specifically require the ISO Week or any other scheme, you should use
-     * the week(KLocale::WeekNumberSystem) form.
+     * the week(Locale::WeekNumberSystem) form.
      *
      * If the date falls in the last week of the previous year or the first
      * week of the following year, then the yearNum returned will be set to the
@@ -654,7 +653,7 @@ public:
      * @param yearNum returns the year the date belongs to
      * @return week number, -1 if input date invalid
      */
-    Q_INVOKABLE int week(const QDate &date, KLocale::WeekNumberSystem weekNumberSystem, int *yearNum = 0) const;
+    Q_INVOKABLE int week(const QDate &date, Locale::WeekNumberSystem weekNumberSystem, int *yearNum = 0) const;
 
     /**
      * Returns whether a given year is a leap year.
@@ -810,14 +809,14 @@ public:
      * settings are respected, which would not occur in some cases if using
      * the global locale.  Defaults to global locale.
      *
-     * @see KLocale::formatDate
+     * @see Locale::formatDate
      *
      * @param fromDate the date to be formatted
      * @param toFormat category of date format to use
      *
      * @return The date as a string
      */
-    Q_INVOKABLE virtual QString formatDate(const QDate &fromDate, KLocale::DateFormat toFormat = KLocale::LongDate) const;
+    Q_INVOKABLE virtual QString formatDate(const QDate &fromDate, Locale::DateFormat toFormat = Locale::LongDate) const;
 
     //KDE5 Make virtual
     /**
@@ -927,7 +926,7 @@ public:
      *
      * %0 is not supported as the returned result is always in the locale's chosen numeric symbol digit set.
      *
-     * @see KLocale::formatDate
+     * @see Locale::formatDate
      *
      * @param fromDate the date to be formatted
      * @param toFormat the date format to use
@@ -936,7 +935,7 @@ public:
      * @return The date as a string
      */
     Q_INVOKABLE QString formatDate(const QDate &fromDate, const QString &toFormat,
-                       KLocale::DateTimeFormatStandard formatStandard = KLocale::KdeFormat) const;
+                       Locale::DateTimeFormatStandard formatStandard = Locale::KdeFormat) const;
 
     //KDE5 Make virtual
     /**
@@ -954,20 +953,20 @@ public:
      *
      * @return The date as a string
      */
-    Q_INVOKABLE QString formatDate(const QDate &fromDate, const QString &toFormat, KLocale::DigitSet digitSet,
-                       KLocale::DateTimeFormatStandard formatStandard = KLocale::KdeFormat) const;
+    Q_INVOKABLE QString formatDate(const QDate &fromDate, const QString &toFormat, Locale::DigitSet digitSet,
+                       Locale::DateTimeFormatStandard formatStandard = Locale::KdeFormat) const;
 
     //KDE5 Make virtual
     /**
      *
      * Returns a Date Component as a localized string in the requested format.
      *
-     * For example for 2010-01-01 the KLocale::Month with en_US Locale and Gregorian calendar may return:
-     *   KLocale::ShortNumber = "1"
-     *   KLocale::LongNumber  = "01"
-     *   KLocale::NarrowName  = "J"
-     *   KLocale::ShortName   = "Jan"
-     *   KLocale::LongName    = "January"
+     * For example for 2010-01-01 the Locale::Month with en_US Locale and Gregorian calendar may return:
+     *   Locale::ShortNumber = "1"
+     *   Locale::LongNumber  = "01"
+     *   Locale::NarrowName  = "J"
+     *   Locale::ShortName   = "Jan"
+     *   Locale::LongName    = "January"
      *
      * @param date The date to format
      * @param component The date component to return
@@ -975,9 +974,9 @@ public:
      * @param weekNumberSystem To override the default Week Number System to use
      * @return The localized string form of the date component
      */
-    Q_INVOKABLE QString formatDate(const QDate &date, KLocale::DateTimeComponent component,
-                       KLocale::DateTimeComponentFormat format = KLocale::DefaultComponentFormat,
-                       KLocale::WeekNumberSystem weekNumberSystem = KLocale::DefaultWeekNumber) const;
+    Q_INVOKABLE QString formatDate(const QDate &date, Locale::DateTimeComponent component,
+                       Locale::DateTimeComponentFormat format = Locale::DefaultComponentFormat,
+                       Locale::WeekNumberSystem weekNumberSystem = Locale::DefaultWeekNumber) const;
 
     /**
      * Converts a localized date string to a QDate.
@@ -988,7 +987,7 @@ public:
      * settings are respected, which would not occur in some cases if using
      * the global locale.  Defaults to global locale.
      *
-     * @see KLocale::readDate
+     * @see Locale::readDate
      *
      * @param str the string to convert
      * @param ok if non-null, will be set to @c true if the date is valid, @c false if invalid
@@ -1007,7 +1006,7 @@ public:
      * settings are respected, which would not occur in some cases if using
      * the global locale.  Defaults to global locale.
      *
-     * @see KLocale::readDate
+     * @see Locale::readDate
      *
      * @param str the string to convert
      * @param flags whether the date string is to be in full format or in short format
@@ -1015,7 +1014,7 @@ public:
      *
      * @return the string converted to a QDate
      */
-    Q_INVOKABLE virtual QDate readDate(const QString &str, KLocale::ReadDateFlags flags, bool *ok = 0) const;
+    Q_INVOKABLE virtual QDate readDate(const QString &str, Locale::ReadDateFlags flags, bool *ok = 0) const;
 
     /**
      * Converts a localized date string to a QDate, using the specified @p format.
@@ -1028,7 +1027,7 @@ public:
      * @return the string converted to a QDate
      *
      * @see formatDate
-     * @see KLocale::readDate
+     * @see Locale::readDate
      */
     Q_INVOKABLE virtual QDate readDate(const QString &dateString, const QString &dateFormat, bool *ok = 0) const;
 
@@ -1090,10 +1089,10 @@ public:
      * @return the string converted to a QDate
      *
      * @see formatDate
-     * @see KLocale::readDate
+     * @see Locale::readDate
      */
     Q_INVOKABLE QDate readDate(const QString &dateString, const QString &dateFormat, bool *ok,
-                   KLocale::DateTimeFormatStandard formatStandard) const;
+                   Locale::DateTimeFormatStandard formatStandard) const;
 
     //KDE5 Make virtual
     /**
@@ -1107,8 +1106,8 @@ public:
      * of 10 is interpreted as 2010.
      *
      * The Short Year Window is only ever applied when reading the Short Year
-     * format and not the Long Year format, i.e. KLocale::ShortFormat or '%y'
-     * only and not KLocale::LongFormat or '%Y'.
+     * format and not the Long Year format, i.e. Locale::ShortFormat or '%y'
+     * only and not Locale::LongFormat or '%Y'.
      *
      * The Start Year 0 effectively means not to use a Short Year Window
      *
@@ -1120,8 +1119,8 @@ public:
      * This value must always be used when evaluating user input Short Year
      * strings.
      *
-     * @see KLocale::shortYearWindowStartYear
-     * @see KLocale::applyShortYearWindow
+     * @see Locale::shortYearWindowStartYear
+     * @see Locale::applyShortYearWindow
      * @return the short year window start year
      */
     Q_INVOKABLE int shortYearWindowStartYear() const;
@@ -1137,8 +1136,8 @@ public:
      * If the @p inputYear is not between 0 and 99, then the original Year Number
      * is returned.
      *
-     * @see KLocale::setYearWindowOffset
-     * @see KLocale::yearWindowOffset
+     * @see Locale::setYearWindowOffset
+     * @see Locale::yearWindowOffset
      * @param inputYear the year number to apply the year window to
      * @return the year number after applying the year window
      */
@@ -1152,7 +1151,7 @@ public:
      * settings are respected, which would not occur in some cases if using
      * the global locale.  Defaults to global locale.
      *
-     * @see KLocale::weekStartDay
+     * @see Locale::weekStartDay
      *
      * @return an integer (Monday = 1, ..., Sunday = 7)
      */
@@ -1241,11 +1240,11 @@ protected:
      * that library widgets require access to internally.
      *
      * @see KCalendarSystem::formatDate
-     * @see KLocale::formatDate
+     * @see Locale::formatDate
      * @see KCalendarSystem::weekStartDay
-     * @see KLocale::weekStartDay
+     * @see Locale::weekStartDay
      * @see KCalendarSystem::readDate
-     * @see KLocale::readDate
+     * @see Locale::readDate
      *
      * @return locale to use
      */
@@ -1265,6 +1264,9 @@ protected:
                     const KLocale *locale = 0);
 
 private:
+    //FIXME When it comes the time to create wrappers for the above
+    //classes will i need the "friend class foo"???
+
     //Required for shared d-pointer as already private, remove in KDE5
     friend class KCalendarSystemCoptic;
     friend class KCalendarSystemEthiopian;
@@ -1284,6 +1286,7 @@ private:
     friend class KDateTimeParser;
     friend class KDateTable;
 
+    //FIXME era issue..
     // Era functions needed by friends, may be made public later if needed in KCM
     QList<KCalendarEra> *eraList() const;
     KCalendarEra era(const QDate &eraDate) const;
