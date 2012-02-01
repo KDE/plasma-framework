@@ -2,7 +2,8 @@ project(localebindings)
 
 set(localebindings_SRCS
     locale.cpp
-    )
+	calendarsystem.cpp
+)
 
 INCLUDE_DIRECTORIES(
         ${CMAKE_SOURCE_DIR}
@@ -15,7 +16,6 @@ qt4_automoc(${localebindings_SRCS})
 
 add_library(localebindingsplugin SHARED ${localebindings_SRCS})
 #FIXME
-#Should i remove KDE4_PLASMA_LIBS?
 #Should i put something?
 target_link_libraries(localebindingsplugin ${QT_QTDECLARATIVE_LIBRARY})
 
