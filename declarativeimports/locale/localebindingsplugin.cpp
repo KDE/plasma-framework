@@ -21,12 +21,14 @@
 #include "localebindingsplugin.h"
 #include <QtDeclarative/qdeclarative.h>
 #include "locale.h"
+#include "calendarsystem.h"
 
 void LocaleBindingsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.locale"));
 
     qmlRegisterType<Locale>(uri, 0, 1, "Locale");
+    qmlRegisterType<CalendarSystem>(uri, 0, 1, "CalendarSystem");
 }
 
 #include "localebindingsplugin.moc"
