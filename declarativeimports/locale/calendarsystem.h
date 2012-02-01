@@ -19,17 +19,16 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KCALENDARSYSTEM_H
-#define KCALENDARSYSTEM_H
+#ifndef CALENDARSYSTEM_H
+#define CALENDARSYSTEM_H
 
-#include <kdecore_export.h>
 #include "klocale.h"  // needed for enums
 #include "kglobal.h"
 
 #include <QtCore/QStringList>
 #include <QtCore/QDate>
 
-class KCalendarSystemPrivate;
+class KCalendarSystem;
 class KCalendarEra;
 
 /**
@@ -37,8 +36,15 @@ class KCalendarEra;
  *
  * Derived classes must be created through the create() static method
  */
-class KDECORE_EXPORT KCalendarSystem
+class CalendarSystem : public QObject
 {
+Q_OBJECT
+
+//enums
+Q_ENUMS(StringFormat)
+Q_ENUMS(MonthNameFormat)
+Q_ENUMS(WeekDayNameFormat)
+
 public:
 
     /**
@@ -1283,9 +1289,10 @@ private:
     KCalendarEra era(const QDate &eraDate) const;
     KCalendarEra era(const QString &eraName, int yearInEra) const;
 
-    Q_DISABLE_COPY(KCalendarSystem)
-    KCalendarSystemPrivate * const d_ptr; // KDE5 make protected
-    Q_DECLARE_PRIVATE(KCalendarSystem)
+    //Q_DISABLE_COPY(KCalendarSystem)
+    KCalendarSystem *m_calendarSystem;
+    //FIXME What is Q_DECLARE_PRIVATE
+    //Q_DECLARE_PRIVATE(KCalendarSystem)
 };
 
 #endif
