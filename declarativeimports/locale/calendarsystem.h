@@ -21,6 +21,7 @@
 #ifndef CALENDARSYSTEM_H
 #define CALENDARSYSTEM_H
 
+#include <kcalendarsystem.h>
 #include "locale.h"  // needed for enums
 #include "kglobal.h"
 
