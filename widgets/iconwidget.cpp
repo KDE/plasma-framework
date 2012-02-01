@@ -1372,7 +1372,9 @@ void IconWidget::mousePressEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
 
-    d->states |= IconWidgetPrivate::PressedState;
+    if (KGlobalSettings::singleClick() || (receivers(SIGNAL(clicked()))) > 0) {
+        d->states |= IconWidgetPrivate::PressedState;
+    }
     d->clickStartPos = scenePos();
 
     bool handled = false;
@@ -1451,10 +1453,14 @@ void IconWidget::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event)
 
+    d->states |= IconWidgetPrivate::PressedState;
+
     emit doubleClicked();
     if (!KGlobalSettings::singleClick()) {
         emit activated();
     }
+
+    update();
 }
 
 void IconWidget::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
