@@ -85,7 +85,7 @@ Q_ENUMS(WeekNumberSystem)
 //properties
 Q_PROPERTY(BinaryUnitDialect binaryUnitDialect READ binaryUnitDialect WRITE setBinaryUnitDialect NOTIFY binaryUnitDialectChanged)
 Q_PROPERTY(KCalendarSystem *calendar READ calendar WRITE setCalendar NOTIFY calendarChanged)
-Q_PROPERTY(KLocale::CalendarSystem *calendarSystem READ calendarSystem WRITE setCalendarSystem NOTIFY calendarSystemChanged)
+Q_PROPERTY(Locale::CalendarSystem *calendarSystem READ calendarSystem WRITE setCalendarSystem NOTIFY calendarSystemChanged)
 Q_PROPERTY(QString country READ country WRITE setCountry NOTIFY countryChanged)
 Q_PROPERTY(QString countryDivisionCode READ countryDivisionCode WRITE setCountryDivisionCode NOTIFY countryDivisionCodeChanged)
 Q_PROPERTY(QString currencyCode READ currencyCode WRITE setCurrencyCode NOTIFY currencyCodeChanged)
@@ -113,7 +113,7 @@ Q_PROPERTY(bool positivePrefixCurrencySymbol READ positivePrefixCurrencySymbol W
 Q_PROPERTY(QString positiveSign READ positiveSign WRITE setPositiveSign NOTIFY positiveSignChanged)
 Q_PROPERTY(QString thousandsSeparator READ thousandsSeparator WRITE setThousandsSeparator NOTIFY thousandsSeparatorChanged)
 Q_PROPERTY(int weekDayOfPray READ weekDayOfPray WRITE setWeekDayOfPray NOTIFY weekDayOfPrayChanged)
-Q_PROPERTY(KLocale::WeekNumberSystem weekNumberSystem READ weekNumberSystem WRITE setWeekNumberSystem NOTIFY WeekNumberSystemChanged)
+Q_PROPERTY(Locale::WeekNumberSystem weekNumberSystem READ weekNumberSystem WRITE setWeekNumberSystem NOTIFY WeekNumberSystemChanged)
 Q_PROPERTY(int weekStartDay READ weekStartDay WRITE setWeekStartDay NOTIFY weekStartDayChanged)
 Q_PROPERTY(int workingWeekEndDay READ workingWeekEndDay WRITE setWorkingWeekEndDay NOTIFY workingWeekEndDayChanged)
 Q_PROPERTY(int workingWeekStartDay READ workingWeekStartDay WRITE setWorkingWeekStartDay NOTIFY workingWeekStartDayChanged)
@@ -182,7 +182,7 @@ public:
      * @param catname the catalog name. Must be UTF-8 encoded.
      * @param msg the message. Must not be null or empty. Must be UTF-8 encoded.
      * @param lang language in which the translation was found. If no translation
-     *             was found, KLocale::defaultLanguage() is reported. If null,
+     *             was found, Locale::defaultLanguage() is reported. If null,
      *             the language is not reported.
      * @param trans raw translation, or original if not found. If no translation
      *              was found, original message is reported. If null, the
@@ -206,7 +206,7 @@ public:
      * @param ctxt the context. Must not be null. Must be UTF-8 encoded.
      * @param msg the message. Must not be null or empty. Must be UTF-8 encoded.
      * @param lang language in which the translation was found. If no translation
-     *             was found, KLocale::defaultLanguage() is reported. If null,
+     *             was found, Locale::defaultLanguage() is reported. If null,
      *             the language is not reported.
      * @param trans raw translation, or original if not found. If no translation
      *              was found, original message is reported. If null, the
@@ -231,7 +231,7 @@ public:
      * @param plural the plural form. Must not be null. Must be UTF-8 encoded.
      * @param n number on which the forms are decided.
      * @param lang language in which the translation was found. If no translation
-     *             was found, KLocale::defaultLanguage() is reported. If null,
+     *             was found, Locale::defaultLanguage() is reported. If null,
      *             the language is not reported.
      * @param trans raw translation, or original if not found. If no translation
      *              was found, original message is reported (either plural or
@@ -260,7 +260,7 @@ public:
      * @param plural the plural form. Must not be null. Must be UTF-8 encoded.
      * @param n number on which the forms are decided.
      * @param lang language in which the translation was found. If no translation
-     *             was found, KLocale::defaultLanguage() is reported. If null,
+     *             was found, Locale::defaultLanguage() is reported. If null,
      *             the language is not reported.
      * @param trans raw translation, or original if not found. If no translation
      *              was found, original message is reported (either plural or
@@ -669,10 +669,10 @@ public:
      * using the binary unit dialect @p dialect and the specific units @p specificUnit.
      *
      * Example:
-     * formatByteSize(1000, unit, KLocale::BinaryUnitKilo) returns:
-     *   for KLocale::MetricBinaryUnits, "1.0 kB",
-     *   for KLocale::IECBinaryUnits,    "0.9 KiB",
-     *   for KLocale::JEDECBinaryUnits,  "0.9 KB".
+     * formatByteSize(1000, unit, Locale::BinaryUnitKilo) returns:
+     *   for Locale::MetricBinaryUnits, "1.0 kB",
+     *   for Locale::IECBinaryUnits,    "0.9 KiB",
+     *   for Locale::JEDECBinaryUnits,  "0.9 KB".
      *
      * @param size size in bytes
      * @param precision number of places after the decimal point to use.  KDE uses
@@ -1065,7 +1065,7 @@ public:
      *
      * Returns the type of Calendar System used in this Locale
      *
-     * @see KLocale::CalendarSystem
+     * @see Locale::CalendarSystem
      * @see KCalendarSystem
      * @return the type of Calendar System
      */
@@ -1075,7 +1075,7 @@ public:
      *
      * Sets the type of Calendar System to use in this Locale
      *
-     * @see KLocale::CalendarSystem
+     * @see Locale::CalendarSystem
      * @see KCalendarSystem
      * @param calendarSystem the Calendar System to use
      */
