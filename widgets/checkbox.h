@@ -20,7 +20,7 @@
 #ifndef PLASMA_CHECKBOX_H
 #define PLASMA_CHECKBOX_H
 
-#include <QtGui/QGraphicsProxyWidget>
+#include <QGraphicsProxyWidget>
 
 #include <plasma/plasma_export.h>
 

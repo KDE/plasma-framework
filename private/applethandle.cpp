@@ -21,11 +21,11 @@
 
 #include <QApplication>
 #include <QBitmap>
-#include <QtGui/QGraphicsSceneMouseEvent>
-#include <QtGui/QLinearGradient>
-#include <QtGui/QPainter>
-#include <QtGui/QApplication>
-#include <QtGui/QMenu>
+#include <QGraphicsSceneMouseEvent>
+#include <QLinearGradient>
+#include <QPainter>
+#include <QApplication>
+#include <QMenu>
 #include <QTouchEvent>
 #include <QMatrix>
 #include <QTransform>

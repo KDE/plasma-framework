@@ -20,7 +20,7 @@
 #ifndef PLASMA_LINEEDIT_H
 #define PLASMA_LINEEDIT_H
 
-#include <QtGui/QGraphicsProxyWidget>
+#include <QGraphicsProxyWidget>
 
 class KLineEdit;
 

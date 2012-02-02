@@ -21,9 +21,9 @@
 #ifndef PLASMA_PAINTUTILS_H
 #define PLASMA_PAINTUTILS_H
 
-#include <QtGui/QApplication>
-#include <QtGui/QGraphicsItem>
-#include <QtGui/QPainterPath>
+#include <QApplication>
+#include <QGraphicsItem>
+#include <QPainterPath>
 
 #include <plasma/plasma_export.h>
 #include "theme.h"

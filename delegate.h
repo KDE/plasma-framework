@@ -22,7 +22,7 @@
 #define PLASMA_DELEGATE_H
 
 // Qt
-#include <QtGui/QAbstractItemDelegate>
+#include <QAbstractItemDelegate>
 
 // Plasma
 #include <plasma/plasma_export.h>

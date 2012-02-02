@@ -24,11 +24,11 @@
 
 #include <QtCore/QEvent>
 #include <QtCore/QWeakPointer>
-#include <QtGui/QApplication>
-#include <QtGui/QIcon>
-#include <QtGui/QStyleOptionGraphicsItem>
-#include <QtGui/QTextLayout>
-#include <QtGui/QTextOption>
+#include <QApplication>
+#include <QIcon>
+#include <QStyleOptionGraphicsItem>
+#include <QTextLayout>
+#include <QTextOption>
 
 #include "iconwidget.h"
 #include "framesvg.h"

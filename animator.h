@@ -21,7 +21,7 @@
 #ifndef PLASMA_ANIMATOR_H
 #define PLASMA_ANIMATOR_H
 
-#include <QtGui/QImage>
+#include <QImage>
 #include <QtCore/QObject>
 #include <QtCore/QAbstractAnimation>
 #include <QtCore/QEasingCurve>

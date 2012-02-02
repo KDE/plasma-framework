@@ -21,11 +21,11 @@
 #ifndef ANIMABLEWEBVIEW_P_H
 #define ANIMABLEWEBVIEW_P_H
 
-#include <QtGui/QGraphicsSceneContextMenuEvent>
-#include <QtGui/QGraphicsSceneDragDropEvent>
-#include <QtGui/QGraphicsSceneMouseEvent>
-#include <QtGui/QGraphicsSceneWheelEvent>
-#include <QtGui/QGraphicsView>
+#include <QGraphicsSceneContextMenuEvent>
+#include <QGraphicsSceneDragDropEvent>
+#include <QGraphicsSceneMouseEvent>
+#include <QGraphicsSceneWheelEvent>
+#include <QGraphicsView>
 
 #include <config-plasma.h>
 

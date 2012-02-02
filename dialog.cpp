@@ -32,10 +32,10 @@
 #endif
 #include <QBitmap>
 #include <QTimer>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QGraphicsSceneEvent>
-#include <QtGui/QGraphicsView>
-#include <QtGui/QGraphicsWidget>
+#include <QVBoxLayout>
+#include <QGraphicsSceneEvent>
+#include <QGraphicsView>
+#include <QGraphicsWidget>
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QVarLengthArray>

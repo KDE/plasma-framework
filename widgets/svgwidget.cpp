@@ -19,8 +19,8 @@
 
 #include "svgwidget.h"
 
-#include <QtGui/QPainter>
-#include <QtGui/QGraphicsSceneMouseEvent>
+#include <QPainter>
+#include <QGraphicsSceneMouseEvent>
 
 #include "kdebug.h"
 #include "svg.h"

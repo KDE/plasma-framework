@@ -20,7 +20,7 @@
 #ifndef PLASMA_RADIOBUTTON_H
 #define PLASMA_RADIOBUTTON_H
 
-#include <QtGui/QGraphicsProxyWidget>
+#include <QGraphicsProxyWidget>
 
 class QRadioButton;
 

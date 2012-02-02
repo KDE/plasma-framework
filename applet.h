@@ -22,9 +22,9 @@
 #ifndef PLASMA_APPLET_H
 #define PLASMA_APPLET_H
 
-#include <QtGui/QGraphicsItem>
-#include <QtGui/QGraphicsWidget>
-#include <QtGui/QIcon>
+#include <QGraphicsItem>
+#include <QGraphicsWidget>
+#include <QIcon>
 
 #include <kconfiggroup.h>
 #include <kgenericfactory.h>

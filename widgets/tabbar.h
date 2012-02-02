@@ -20,7 +20,7 @@
 #ifndef PLASMA_TABBAR_H
 #define PLASMA_TABBAR_H
 
-#include <QtGui/QGraphicsWidget>
+#include <QGraphicsWidget>
 
 #include <ktabbar.h>
 

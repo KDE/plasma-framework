@@ -20,7 +20,7 @@
 #ifndef PLASMA_TREEVIEW_H
 #define PLASMA_TREEVIEW_H
 
-#include <QtGui/QGraphicsProxyWidget>
+#include <QGraphicsProxyWidget>
 
 #include <plasma/plasma_export.h>
 

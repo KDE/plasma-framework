@@ -22,8 +22,8 @@
 #ifndef PLASMA_SIGNALPLOTTER_H
 #define PLASMA_SIGNALPLOTTER_H
 
-#include <QtGui/QFont>
-#include <QtGui/QGraphicsWidget>
+#include <QFont>
+#include <QGraphicsWidget>
 #include <plasma/plasma_export.h>
 
 namespace Plasma

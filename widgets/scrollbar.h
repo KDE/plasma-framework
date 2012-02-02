@@ -21,8 +21,8 @@
 #ifndef PLASMA_SCROLLBAR_H
 #define PLASMA_SCROLLBAR_H
 
-#include <QtGui/QScrollBar>
-#include <QtGui/QGraphicsProxyWidget>
+#include <QScrollBar>
+#include <QGraphicsProxyWidget>
 
 #include <plasma/plasma_export.h>
 

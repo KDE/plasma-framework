@@ -20,7 +20,7 @@
 #ifndef PLASMA_DECLARATIVEWIDGET_H
 #define PLASMA_DECLARATIVEWIDGET_H
 
-#include <QtGui/QGraphicsWidget>
+#include <QGraphicsWidget>
 
 #include <plasma/plasma_export.h>
 

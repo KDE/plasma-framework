@@ -25,9 +25,9 @@
 #include <QtCore/QTimeLine>
 #include <QtCore/QTimer>
 #include <QtCore/QWeakPointer>
-#include <QtGui/QPainter>
-#include <QtGui/QPixmap>
-#include <QtGui/QColor>
+#include <QPainter>
+#include <QPixmap>
+#include <QColor>
 
 #include <kdebug.h>
 

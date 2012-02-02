@@ -22,8 +22,8 @@
 
 /** @header plasma/plasma.h <Plasma/Plasma> */
 
-#include <QtGui/QGraphicsItem>
-#include <QtGui/QPainterPath>
+#include <QGraphicsItem>
+#include <QPainterPath>
 
 #include <plasma/plasma_export.h>
 

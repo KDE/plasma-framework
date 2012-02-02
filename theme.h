@@ -21,8 +21,8 @@
 #define PLASMA_THEME_H
 
 #include <QtCore/QObject>
-#include <QtGui/QFont>
-#include <QtGui/QFontMetrics>
+#include <QFont>
+#include <QFontMetrics>
 
 #include <kplugininfo.h>
 #include <ksharedconfig.h>

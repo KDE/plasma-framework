@@ -20,7 +20,7 @@
 #ifndef PLASMA_WINDOWEFFECTS_H
 #define PLASMA_WINDOWEFFECTS_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 #include <plasma/plasma.h>
 

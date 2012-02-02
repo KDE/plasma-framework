@@ -34,7 +34,7 @@
 
 //X11
 #ifdef Q_WS_X11
-#include <QtGui/QX11Info>
+#include <QX11Info>
 #include <X11/Xlib.h>
 #include <fixx11h.h>
 #endif

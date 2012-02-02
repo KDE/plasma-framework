@@ -22,10 +22,10 @@
 #include <QtCore/QDebug>
 #include <QtCore/QTimer>
 
-#include <QtGui/QApplication>
-#include <QtGui/QBoxLayout>
-#include <QtGui/QLineEdit>
-#include <QtGui/QTextBrowser>
+#include <QApplication>
+#include <QBoxLayout>
+#include <QLineEdit>
+#include <QTextBrowser>
 
 #include <QtJolie/Client>
 #include <QtJolie/Message>

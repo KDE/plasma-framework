@@ -25,7 +25,7 @@
 #ifndef PLASMA_ANIMATION_H
 #define PLASMA_ANIMATION_H
 
-#include <QtGui/QGraphicsWidget>
+#include <QGraphicsWidget>
 #include <QtCore/QObject>
 #include <QtCore/QPropertyAnimation>
 #include <QtCore/QAbstractAnimation>

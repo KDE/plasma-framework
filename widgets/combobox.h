@@ -20,7 +20,7 @@
 #ifndef PLASMA_COMBOBOX_H
 #define PLASMA_COMBOBOX_H
 
-#include <QtGui/QGraphicsProxyWidget>
+#include <QGraphicsProxyWidget>
 
 class KComboBox;
 

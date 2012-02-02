@@ -20,7 +20,7 @@
 #ifndef PLASMA_PUSHBUTTON_H
 #define PLASMA_PUSHBUTTON_H
 
-#include <QtGui/QGraphicsProxyWidget>
+#include <QGraphicsProxyWidget>
 
 #include <kicon.h>
 

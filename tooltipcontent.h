@@ -24,8 +24,8 @@
 #include <QtCore/QUrl>
 #include <QtCore/QVariant>
 #include <QtCore/QList>
-#include <QtGui/QPixmap>
-#include <QtGui/QIcon>
+#include <QPixmap>
+#include <QIcon>
 
 #include <plasma/plasma_export.h>
 

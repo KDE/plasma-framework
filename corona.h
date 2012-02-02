@@ -21,7 +21,7 @@
 #ifndef PLASMA_CORONA_H
 #define PLASMA_CORONA_H
 
-#include <QtGui/QGraphicsScene>
+#include <QGraphicsScene>
 
 #include <plasma/containment.h>
 #include <plasma/plasma.h>

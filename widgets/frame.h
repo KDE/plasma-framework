@@ -20,7 +20,7 @@
 #ifndef PLASMA_FRAME_H
 #define PLASMA_FRAME_H
 
-#include <QtGui/QGraphicsWidget>
+#include <QGraphicsWidget>
 
 #include <plasma/plasma_export.h>
 #include <plasma/framesvg.h>

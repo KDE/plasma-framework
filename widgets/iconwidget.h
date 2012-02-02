@@ -25,9 +25,9 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QWeakPointer>
-#include <QtGui/QGraphicsTextItem>
-#include <QtGui/QIcon>
-#include <QtGui/QGraphicsWidget>
+#include <QGraphicsTextItem>
+#include <QIcon>
+#include <QGraphicsWidget>
 
 #include <plasma/dataengine.h>
 #include <plasma/animator.h>

@@ -20,7 +20,7 @@
 #ifndef PLASMA_TEXTBROWSER_H
 #define PLASMA_TEXTBROWSER_H
 
-#include <QtGui/QGraphicsProxyWidget>
+#include <QGraphicsProxyWidget>
 
 class KTextBrowser;
 

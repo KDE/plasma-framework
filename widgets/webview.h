@@ -21,7 +21,7 @@
 #define PLASMA_WEBVIEW_H
 
 #include <plasma/plasma_export.h>
-#include <QtGui/QGraphicsWidget>
+#include <QGraphicsWidget>
 
 #include <kurl.h>
 

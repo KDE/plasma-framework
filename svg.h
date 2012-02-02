@@ -21,7 +21,7 @@
 #define PLASMA_SVG_H
 
 #include <QtCore/QObject>
-#include <QtGui/QPixmap>
+#include <QPixmap>
 
 #include <plasma/plasma_export.h>
 

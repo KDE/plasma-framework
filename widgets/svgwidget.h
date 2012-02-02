@@ -20,7 +20,7 @@
 #ifndef PLASMA_SVGWIDGET_H
 #define PLASMA_SVGWIDGET_H
 
-#include <QtGui/QGraphicsWidget>
+#include <QGraphicsWidget>
 
 #include <plasma/plasma_export.h>
 

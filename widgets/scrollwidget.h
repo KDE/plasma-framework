@@ -21,7 +21,7 @@
 #define PLASMA_SCROLLWIDGET_H
 
 #include <QtCore/QAbstractAnimation>
-#include <QtGui/QGraphicsWidget>
+#include <QGraphicsWidget>
 
 #include <plasma/plasma_export.h>
 

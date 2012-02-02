@@ -20,7 +20,7 @@
 #ifndef PLASMA_SEPARATOR_H
 #define PLASMA_SEPARATOR_H
 
-#include <QtGui/QGraphicsWidget>
+#include <QGraphicsWidget>
 
 #include <plasma/plasma_export.h>
 

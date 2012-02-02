@@ -24,15 +24,15 @@
 #include <QtCore/QDate>
 #include <QtCore/QLocale>
 #include <QtCore/QUrl>
-#include <QtGui/QBitmap>
-#include <QtGui/QBrush>
-#include <QtGui/QCursor>
-#include <QtGui/QFont>
-#include <QtGui/QIcon>
-#include <QtGui/QPalette>
-#include <QtGui/QPen>
-#include <QtGui/QSizePolicy>
-#include <QtGui/QTextFormat>
+#include <QBitmap>
+#include <QBrush>
+#include <QCursor>
+#include <QFont>
+#include <QIcon>
+#include <QPalette>
+#include <QPen>
+#include <QSizePolicy>
+#include <QTextFormat>
 
 
 Q_DECLARE_METATYPE(TestEngine::MyUserType)

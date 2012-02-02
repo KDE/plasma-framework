@@ -22,7 +22,7 @@
 #define PLASMA_STYLE_P_H
 
 #include <QtCore/QSharedData>
-#include <QtGui/QCommonStyle>
+#include <QCommonStyle>
 
 #include <ksharedptr.h>
 

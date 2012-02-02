@@ -20,7 +20,7 @@
 #ifndef PLASMA_VIDEOWIDGET_H
 #define PLASMA_VIDEOWIDGET_H
 
-#include <QtGui/QGraphicsProxyWidget>
+#include <QGraphicsProxyWidget>
 
 #include <plasma/plasma_export.h>
 

@@ -19,8 +19,8 @@
 
 #include "separator.h"
 
-#include <QtGui/QPainter>
-#include <QtGui/QGraphicsSceneMouseEvent>
+#include <QPainter>
+#include <QGraphicsSceneMouseEvent>
 
 #include "svg.h"
 

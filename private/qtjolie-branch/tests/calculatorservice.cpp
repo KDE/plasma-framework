@@ -19,9 +19,9 @@
  */
 
 #include <QtCore/QTimer>
-#include <QtGui/QApplication>
-#include <QtGui/QBoxLayout>
-#include <QtGui/QTextEdit>
+#include <QApplication>
+#include <QBoxLayout>
+#include <QTextEdit>
 #include <QtNetwork/QTcpSocket>
 
 #include <QtJolie/AbstractAdaptor>

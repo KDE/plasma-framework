@@ -22,9 +22,9 @@
 #ifndef PLASMA_CONTAINMENT_H
 #define PLASMA_CONTAINMENT_H
 
-#include <QtGui/QGraphicsItem>
-#include <QtGui/QWidget>
-#include <QtGui/QStyleOptionGraphicsItem>
+#include <QGraphicsItem>
+#include <QWidget>
+#include <QStyleOptionGraphicsItem>
 
 #include <kplugininfo.h>
 #include <ksharedconfig.h>

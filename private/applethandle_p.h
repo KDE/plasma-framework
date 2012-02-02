@@ -21,7 +21,7 @@
 #define PLASMA_APPLETHANDLE_P_H
 
 #include <QtCore/QObject>
-#include <QtGui/QGraphicsObject>
+#include <QGraphicsObject>
 #include <QTimer>
 #include <QWeakPointer>
 #include <QPropertyAnimation>

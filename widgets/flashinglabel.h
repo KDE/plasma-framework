@@ -21,8 +21,8 @@
 #ifndef PLASMA_FLASHINGLABEL_H
 #define PLASMA_FLASHINGLABEL_H
 
-#include <QtGui/QGraphicsWidget>
-#include <QtGui/QTextOption>
+#include <QGraphicsWidget>
+#include <QTextOption>
 
 #include <plasma/plasma_export.h>
 

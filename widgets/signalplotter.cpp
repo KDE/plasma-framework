@@ -28,10 +28,10 @@
 #include <QApplication>
 #include <QList>
 #include <QPalette>
-#include <QtGui/QPainter>
-#include <QtGui/QPixmap>
-#include <QtGui/QPainterPath>
-#include <QtGui/QPolygon>
+#include <QPainter>
+#include <QPixmap>
+#include <QPainterPath>
+#include <QPolygon>
 
 #include <kdebug.h>
 #include <kglobal.h>

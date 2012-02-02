@@ -20,7 +20,7 @@
 #ifndef PLASMA_SLIDER_H
 #define PLASMA_SLIDER_H
 
-#include <QtGui/QGraphicsProxyWidget>
+#include <QGraphicsProxyWidget>
 
 #include <plasma/plasma_export.h>
 

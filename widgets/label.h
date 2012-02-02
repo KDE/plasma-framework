@@ -20,7 +20,7 @@
 #ifndef PLASMA_LABEL_H
 #define PLASMA_LABEL_H
 
-#include <QtGui/QGraphicsProxyWidget>
+#include <QGraphicsProxyWidget>
 
 #include <plasma/plasma_export.h>
 #include <plasma/dataengine.h>

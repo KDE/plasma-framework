@@ -20,7 +20,7 @@
 #ifndef PLASMA_TOOLBUTTON_H
 #define PLASMA_TOOLBUTTON_H
 
-#include <QtGui/QGraphicsProxyWidget>
+#include <QGraphicsProxyWidget>
 
 class QToolButton;
 

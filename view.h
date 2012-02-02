@@ -20,8 +20,8 @@
 #ifndef PLASMA_VIEW_H
 #define PLASMA_VIEW_H
 
-#include <QtGui/QApplication>
-#include <QtGui/QGraphicsView>
+#include <QApplication>
+#include <QGraphicsView>
 
 #include <kconfiggroup.h>
 
