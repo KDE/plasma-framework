@@ -28,7 +28,7 @@ Imports:
 
 Description:
         Just a simple Scroll Bar which is using the plasma theme.
-        This component does not belongs to the QtComponents API specification
+        This component does not belong to the QtComponents API specification
         but it was base on ScrollDecorator component.
         You should not use it for touch interfaces, use a flickable and a
         ScrollDecorator instead.
@@ -86,7 +86,7 @@ import "private" as Private
 
 /**
  * A generic ScrollBar/ScrollDecorator component:
- * Qlways prefer this to ScrollDecorator that is not available on desktop.
+ * Always prefer this to ScrollDecorator that is not available on desktop.
  * By default, this component will look and behave like a scroll decorator on touchscreens
  */
 // TODO: add support mouse wheel events
