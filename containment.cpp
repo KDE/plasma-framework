@@ -1283,7 +1283,7 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
         //      to create widgets out of the matching URLs, if any
         const KUrl::List urls = KUrl::List::fromMimeData(mimeData);
         foreach (const KUrl &url, urls) {
-            if (AccessManager::supportedProtocols().contains(url.protocol())) {
+            if (AccessManager::supportedProtocols().contains(url.scheme())) {
                 AccessAppletJob *job = AccessManager::self()->accessRemoteApplet(url);
                 if (dropEvent) {
                     dropPoints[job] = dropEvent->pos();

@@ -141,7 +141,7 @@ AccessAppletJob *AccessManager::accessRemoteApplet(const KUrl &location) const
     AuthorizationManager::self()->d->prepareForServiceAccess();
 
     KUrl resolvedLocation;
-    if (location.protocol() == "plasma+zeroconf") {
+    if (location.scheme() == "plasma+zeroconf") {
         if (d->zeroconfServices.contains(location.host())) {
             resolvedLocation = d->services[location.host()].url();
         } else {
