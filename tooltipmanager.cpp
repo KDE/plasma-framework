@@ -158,7 +158,7 @@ void ToolTipManager::show(QGraphicsWidget *widget)
         // which can be too much for less powerful CPUs to keep up with
         d->showTimer->start(200);
     } else {
-        d->showTimer->start(delay * 1000);
+        d->showTimer->start(qMax(qreal(200), delay));
     }
 }
 
