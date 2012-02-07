@@ -539,7 +539,7 @@ void Theme::settingsChanged()
     KConfigGroup cg = d->config();
     d->setThemeName(cg.readEntry("name", ThemePrivate::defaultTheme), false);
     cg = KConfigGroup(cg.config(), "PlasmaToolTips");
-    d->toolTipDelay = cg.readEntry("Delay", qreal(0.7));
+    d->toolTipDelay = cg.readEntry("Delay", 700);
 }
 
 void Theme::setThemeName(const QString &themeName)
