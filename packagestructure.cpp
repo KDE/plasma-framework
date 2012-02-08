@@ -58,3 +58,5 @@ bool PackageStructure::uninstallPackage(Package *package, const QString &package
 }
 
 
+
+#include "moc_packagestructure.cpp"

@@ -46,3 +46,5 @@ void PendingCallWatcher::waitForFinished()
     waiter.waitForFinished(d.data());
 }
 
+
+#include "moc_pendingcallwatcher.cpp"

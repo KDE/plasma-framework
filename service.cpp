@@ -418,3 +418,5 @@ void Service::registerOperationsScheme()
 } // namespace Plasma
 
 
+
+#include "moc_service.cpp"

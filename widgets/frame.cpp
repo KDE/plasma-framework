@@ -275,5 +275,7 @@ void Frame::changeEvent(QEvent *event)
 
 } // namespace Plasma
 
-#include <frame.moc>
 
+
+
+#include "moc_frame.cpp"

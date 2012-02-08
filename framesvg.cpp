@@ -1093,3 +1093,5 @@ int FrameData::refcount() const
 
 } // Plasma namespace
 
+
+#include "moc_framesvg.cpp"

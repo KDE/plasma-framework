@@ -710,3 +710,5 @@ void DataEnginePrivate::setupScriptSupport()
 
 }
 
+
+#include "moc_dataengine.cpp"

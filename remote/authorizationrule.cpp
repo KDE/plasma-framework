@@ -168,3 +168,5 @@ QString AuthorizationRule::serviceName() const
 
 } // Plasma namespace
 
+
+#include "moc_authorizationrule.cpp"

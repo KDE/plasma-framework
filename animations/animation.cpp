@@ -89,3 +89,5 @@ void Animation::updateCurrentTime(int currentTime)
 
 } //namespace Plasma
 
+
+#include "moc_animation.cpp"

@@ -23,6 +23,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QMutex>
 #include <QtCore/QStringList>
+#include <QIcon>
 
 #include <kconfiggroup.h>
 #include <kservice.h>

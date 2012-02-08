@@ -256,5 +256,4 @@ WallpaperScript *loadScriptEngine(const QString &language, Wallpaper *wallpaper)
 
 } // namespace Plasma
 
-#include <scriptengine.moc>
-
+#include "moc_scriptengine.cpp"

@@ -332,3 +332,5 @@ void ContainmentActions::setContainment(Containment *newContainment) {
 
 } // Plasma namespace
 
+
+#include "moc_containmentactions.cpp"

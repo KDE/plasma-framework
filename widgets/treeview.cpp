@@ -84,5 +84,7 @@ QTreeView *TreeView::nativeWidget() const
 
 }
 
-#include <treeview.moc>
 
+
+
+#include "moc_treeview.cpp"

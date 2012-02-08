@@ -226,5 +226,7 @@ void LineEdit::focusOutEvent(QFocusEvent *event)
 
 } // namespace Plasma
 
-#include <lineedit.moc>
 
+
+
+#include "moc_lineedit.cpp"

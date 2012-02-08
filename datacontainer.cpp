@@ -357,3 +357,5 @@ void DataContainer::timerEvent(QTimerEvent * event)
 } // Plasma namespace
 
 
+
+#include "moc_datacontainer.cpp"

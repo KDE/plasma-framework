@@ -221,3 +221,5 @@ void WallpaperScript::renderCompleted(const QImage &image)
 
 } // Plasma namespace
 
+
+#include "moc_wallpaperscript.cpp"

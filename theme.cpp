@@ -1066,4 +1066,4 @@ int Theme::toolTipDelay() const
 
 }
 
-#include <theme.moc>
+#include "moc_theme.cpp"

@@ -678,5 +678,7 @@ QGraphicsWidget *TabBar::lastPositionWidget() const
 
 } // namespace Plasma
 
-#include <tabbar.moc>
 
+
+
+#include "moc_tabbar.cpp"

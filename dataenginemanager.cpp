@@ -250,3 +250,5 @@ void DataEngineManager::timerEvent(QTimerEvent *)
 
 } // namespace Plasma
 
+
+#include "moc_dataenginemanager.cpp"

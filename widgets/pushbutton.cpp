@@ -536,5 +536,7 @@ QSizeF PushButton::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
 
 } // namespace Plasma
 
-#include <pushbutton.moc>
 
+
+
+#include "moc_pushbutton.cpp"

@@ -100,3 +100,5 @@ void ServiceJob::start()
 } // namespace Plasma
 
 
+
+#include "moc_servicejob.cpp"

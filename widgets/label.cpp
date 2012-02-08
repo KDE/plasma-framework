@@ -347,5 +347,7 @@ QSizeF Label::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 
 } // namespace Plasma
 
-#include <label.moc>
 
+
+
+#include "moc_label.cpp"

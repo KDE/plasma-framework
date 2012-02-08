@@ -271,3 +271,5 @@ void AccessManagerPrivate::slotRemoveService(DNSSD::RemoteService::Ptr service)
 
 } // Plasma namespace
 
+
+#include "moc_accessmanager.cpp"

@@ -216,5 +216,7 @@ void BusyWidget::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 } // namespace Plasma
 
-#include <busywidget.moc>
 
+
+
+#include "moc_busywidget.cpp"

@@ -868,3 +868,5 @@ void Dialog::setAspectRatioMode(Plasma::AspectRatioMode mode)
 }
 
 }
+
+#include "moc_dialog.cpp"

@@ -2428,3 +2428,5 @@ QHash<QString, ContainmentActions*> * ContainmentPrivate::actionPlugins()
 } // Plasma namespace
 
 
+
+#include "moc_containment.cpp"

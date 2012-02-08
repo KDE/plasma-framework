@@ -251,5 +251,7 @@ QSlider *Slider::nativeWidget() const
 
 } // namespace Plasma
 
-#include <slider.moc>
 
+
+
+#include "moc_slider.cpp"

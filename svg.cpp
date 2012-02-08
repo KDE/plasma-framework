@@ -826,3 +826,5 @@ Theme *Svg::theme() const
 } // Plasma namespace
 
 
+
+#include "moc_svg.cpp"

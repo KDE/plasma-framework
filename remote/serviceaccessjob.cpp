@@ -73,3 +73,5 @@ void ServiceAccessJob::start()
 } // namespace Plasma
 
 
+
+#include "moc_serviceaccessjob.cpp"

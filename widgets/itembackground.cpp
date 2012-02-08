@@ -342,3 +342,6 @@ void ItemBackgroundPrivate::refreshCurrentTarget()
 
 
 
+
+
+#include "moc_itembackground.cpp"

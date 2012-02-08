@@ -206,3 +206,5 @@ void AccessAppletJob::start()
 } // namespace Plasma
 
 
+
+#include "moc_accessappletjob.cpp"

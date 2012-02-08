@@ -635,5 +635,7 @@ void VideoWidget::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 
 } // namespace Plasma
 
-#include <videowidget.moc>
 
+
+
+#include "moc_videowidget.cpp"

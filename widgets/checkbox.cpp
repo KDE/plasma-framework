@@ -181,5 +181,7 @@ void CheckBox::changeEvent(QEvent *event)
 
 } // namespace Plasma
 
-#include <checkbox.moc>
 
+
+
+#include "moc_checkbox.cpp"

@@ -127,5 +127,4 @@ QEasingCurve Animator::create(Animator::CurveShape type)
 
 } // namespace Plasma
 
-#include <animator.moc>
-
+#include "moc_animator.cpp"

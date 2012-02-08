@@ -228,5 +228,7 @@ void SpinBox::focusOutEvent(QFocusEvent *event)
 
 } // namespace Plasma
 
-#include <spinbox.moc>
 
+
+
+#include "moc_spinbox.cpp"

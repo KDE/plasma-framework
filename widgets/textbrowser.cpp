@@ -189,5 +189,7 @@ void TextBrowser::changeEvent(QEvent *event)
 
 } // namespace Plasma
 
-#include <textbrowser.moc>
 
+
+
+#include "moc_textbrowser.cpp"

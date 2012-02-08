@@ -318,5 +318,5 @@ FrameSvg *FocusIndicator::frameSvg() const
 
 }
 
-#include <focusindicator_p.moc>
+#include "moc_focusindicator_p.cpp"
 

@@ -39,3 +39,5 @@ AbstractAdaptor::~AbstractAdaptor()
 {
     delete d;
 }
+
+#include "moc_abstractadaptor.cpp"

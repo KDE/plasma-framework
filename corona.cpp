@@ -1047,3 +1047,5 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &con
 } // namespace Plasma
 
 
+
+#include "moc_corona.cpp"

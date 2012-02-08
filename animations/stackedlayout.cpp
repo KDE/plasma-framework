@@ -106,3 +106,5 @@ qint32 StackedLayout::currentWidgetIndex() const
 {
     return m_currentWidgetIndex;
 }
+
+#include "moc_stackedlayout.cpp"

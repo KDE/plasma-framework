@@ -419,3 +419,5 @@ View * View::topLevelViewAt(const QPoint & pos)
 } // namespace Plasma
 
 
+
+#include "moc_view.cpp"
