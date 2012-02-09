@@ -68,10 +68,11 @@ Item {
 
         anchors {
             fill: parent
-            topMargin: -background.margins.top
-            leftMargin: -background.margins.left
-            bottomMargin: -background.margins.bottom
-            rightMargin: -background.margins.right
+        //FIXME: breaks listviews and highlight item
+        //    topMargin: -background.margins.top
+        //    leftMargin: -background.margins.left
+        //    bottomMargin: -background.margins.bottom
+        //    rightMargin: -background.margins.right
         }
     }
 }
