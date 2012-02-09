@@ -27,6 +27,7 @@ Imports:
 
 Description:
         Used to highlight an item of a list. to be used only as the "highlight" property of the ListView and GridView primitive QML components (or their derivates)
+        Provides built-in animation of Behavior on opacity Easing.OutQuad for a duration of 250. (TODO, make optional? e.g. animate: false)
 
 Properties:
         bool hover:
