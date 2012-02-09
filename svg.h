@@ -360,7 +360,22 @@ class PLASMA_EXPORT Svg : public QObject
         Theme *theme() const;
 
     Q_SIGNALS:
+        /**
+         * Emitted whenever the SVG data has changed in such a way that a repaint is required.
+         * Any usage of an Svg object that does the painting itself must connect to this signal
+         * and respond by updating the painting. Note that connected to Theme::themeChanged is
+         * incorrect in such a use case as the Svg itself may not be updated yet nor may theme
+         * change be the only case when a repaint is needed. Also note that classes or QML code
+         * which take Svg objects as parameters for their own painting all respond to this signal
+         * so that in those cases manually responding to the signal is unnecessary; ONLY when
+         * direct, manual painting with an Svg object is done in application code is this signal
+         * used.
+         */
         void repaintNeeded();
+
+        /**
+         * Emitted whenever the size of the Svg is changed. @see resize()
+         */
         void sizeChanged();
 
     private:
