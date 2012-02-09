@@ -22,6 +22,7 @@
 
 #include <QObject>
 #include <KLocale>
+#include <QString>
 
 class QStringList;
 class QTextCodec;
@@ -2017,5 +2018,9 @@ Q_SIGNALS:
     void workingWeekEndDayChanged();
     void workingWeekStartDayChanged();
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Locale::DateTimeFormatOptions)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Locale::TimeFormatOptions)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Locale::TimeProcessingOptions)
 
 #endif
