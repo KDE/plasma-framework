@@ -58,6 +58,13 @@ Item {
             return "normal";
         }
 
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 250
+                easing.type: Easing.OutQuad
+            }
+        }
+
         anchors {
             fill: parent
             topMargin: -background.margins.top
