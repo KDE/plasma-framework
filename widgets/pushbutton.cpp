@@ -296,11 +296,6 @@ void PushButton::setIcon(const QIcon &icon)
     nativeWidget()->setIcon(icon);
 }
 
-void PushButton::setIcon(const QIcon &icon)
-{
-    setIcon(KIcon(icon));
-}
-
 QIcon PushButton::icon() const
 {
     return nativeWidget()->icon();

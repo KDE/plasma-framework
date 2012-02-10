@@ -26,6 +26,7 @@
 #include <kdesktopfile.h>
 #include <kmessagebox.h>
 #include <kzip.h>
+#include <kicon.h>
 
 #include "config-plasma.h"
 

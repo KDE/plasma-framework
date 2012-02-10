@@ -40,6 +40,7 @@
 #include <kmimetype.h>
 #include <kshortcutsdialog.h>
 #include <kwindowsystem.h>
+#include <kicon.h>
 
 #include "abstractdialogmanager.h"
 #include "abstracttoolbox.h"

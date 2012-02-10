@@ -120,15 +120,6 @@ public:
     QAction *action() const;
 
     /**
-     * sets the icon for this push button
-     * 
-     * @param icon the icon to use
-     *
-     * @since 4.3
-     */
-    void setIcon(const QIcon &icon);
-
-    /**
      * sets the icon for this push button using a KIcon
      * 
      * @param icon the icon to use
