@@ -80,7 +80,8 @@ Methods:
         This iterates, top to bottom, through all the pages in the page stack and passes each page to the given function. If the specified function returns true, the iterating stops and this function returns the page that produced the true result. If no matching page is found in the page stack, null is returned.
 
       * pop(page, immediate):
-        When you use pop() with no arguments, it pops the top page off the stack and returns that page to the caller. The normal pop transition animation is performed. If the page popped off the stack is based on the Item element, the page is re-parented back to its original parent.
+        When you use pop() with no arguments, it pops the top page off the stack and returns that page to the caller. The normal pop transition animation is performed. If the page popped off the stack is based on the Item element, the page is re-parented back to its original parent. 
+        If the page didn't have an original parent (ie, was created with push(Qt.createComponent("foo.qml")) the page instance will be deleted.
         If you give a page argument, the stack is unwound to the given page. Any Item-based pages popped off the stack are re-parented to their original parent.
         If the given page is not found in the stack, the stack is unwound to the first page in the stack. However, if you specifically want to unwind the page stack to the first page in the stack, it is best to be explicit about what you are doing and use pop(null) rather than guessing a page that is not on the stack.
         The immediate argument defaults to false which means the normal transition animation is performed when a page is popped. If you do not want the transition animation to be performed pass a value of true for immediate.
