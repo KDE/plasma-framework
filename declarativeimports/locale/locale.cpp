@@ -346,17 +346,15 @@ QTime Locale::readTime(const QString &intstr, bool *ok) const
 QTime Locale::readLocaleTime(const QString &intstr, bool *ok, TimeFormatOptions options,
                               TimeProcessingOptions processing) const
 {
-    return m_locale->readLocaleTime(intstr, ok, (KLocale::TimeFormatOptions)options, (KLocale::TimeProcessingOptions)processing);
-}
-
-QString Locale::formatTime(const QTime &time, bool includeSecs, bool isDuration) const
-{
-    return m_locale->formatTime(time, includeSecs, isDuration);
+    Q_UNUSED(options)
+    Q_UNUSED(processing)
+    return m_locale->readLocaleTime(intstr, ok);
 }
 
 QString Locale::formatLocaleTime(const QTime &time, TimeFormatOptions options) const
 {
-    return m_locale->formatLocaleTime(time, (KLocale::TimeFormatOptions)options);
+    Q_UNUSED(options)
+    return m_locale->formatLocaleTime(time);
 }
 
 bool Locale::use12Clock() const
@@ -393,7 +391,9 @@ QString Locale::formatDateTime(const QDateTime &dateTime, Locale::DateFormat for
 
 QString Locale::formatDateTime(const KDateTime &dateTime, Locale::DateFormat format, DateTimeFormatOptions options) const
 {
-    return m_locale->formatDateTime(dateTime, (KLocale::DateFormat)format, (KLocale::DateTimeFormatOptions)options);
+    Q_UNUSED(format)
+    Q_UNUSED(options)
+    return m_locale->formatDateTime(dateTime);
 }
 
 void Locale::setDateFormat(const QString &format)

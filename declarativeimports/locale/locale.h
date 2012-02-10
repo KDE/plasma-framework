@@ -22,18 +22,17 @@
 
 #include <QObject>
 #include <KLocale>
-#include <QString>
 
-class QStringList;
+class QString;
+class QStringList; //TODO will the QStringList invokable methods work in QML?
 class QTextCodec;
 class QDate;
 class QTime;
 class QDateTime;
 
-class KDateTime;
-class KCalendarSystem;
-class KCurrencyCode;
-//class KDayPeriod;
+class KDateTime; //TODO will this work?
+class KCalendarSystem;//TODO make it calendarSystem???
+class KCurrencyCode;//TODO will this work?
 
 /**
  * \file klocale.h
@@ -1358,6 +1357,7 @@ public:
      * @see encoding
      * @see encodingMib
      */
+    //TODO will this work?
     Q_INVOKABLE QTextCodec *codecForEncoding() const;
 
     /**
@@ -2018,9 +2018,9 @@ Q_SIGNALS:
     void workingWeekEndDayChanged();
     void workingWeekStartDayChanged();
 };
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(Locale::DateTimeFormatOptions)
-Q_DECLARE_OPERATORS_FOR_FLAGS(Locale::TimeFormatOptions)
-Q_DECLARE_OPERATORS_FOR_FLAGS(Locale::TimeProcessingOptions)
+//TODO remove the above?
+//Q_DECLARE_OPERATORS_FOR_FLAGS(Locale::DateTimeFormatOptions)
+//Q_DECLARE_OPERATORS_FOR_FLAGS(Locale::TimeFormatOptions)
+//Q_DECLARE_OPERATORS_FOR_FLAGS(Locale::TimeProcessingOptions)
 
 #endif
