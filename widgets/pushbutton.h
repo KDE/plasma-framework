@@ -135,7 +135,7 @@ public:
      *
      * @since 4.4
      */
-    void setIcon(const KIcon &icon);
+    void setIcon(const QIcon &icon);
 
     /**
      * @return the icon of this button
