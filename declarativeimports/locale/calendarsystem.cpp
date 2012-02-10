@@ -24,22 +24,7 @@
 
 #include <QtCore/QDateTime>
 
-#include "kdatetime.h"
-#include "kdatetimeformatter_p.h"
-#include "kdatetimeparser_p.h"
-#include "kcalendarera_p.h"
-#include "kcalendarsystemcoptic_p.h"
-#include "kcalendarsystemethiopian_p.h"
-#include "kcalendarsystemgregorian_p.h"
-#include "kcalendarsystemhebrew_p.h"
-#include "kcalendarsystemindiannational_p.h"
-#include "kcalendarsystemislamiccivil_p.h"
-#include "kcalendarsystemjalali_p.h"
-#include "kcalendarsystemjapanese_p.h"
-#include "kcalendarsystemjulian_p.h"
-#include "kcalendarsystemminguo_p.h"
-#include "kcalendarsystemqdate_p.h"
-#include "kcalendarsystemthai_p.h"
+#include <KDateTime>
 
 //FIXME fix all the create static methods
 KCalendarSystem *CalendarSystem::create(const QString &calendarType, const KLocale *locale)
