@@ -127,11 +127,13 @@ PlasmaKPartCorona* PlasmaKPart::corona() const
 
 void PlasmaKPart::createView(Plasma::Containment *containment)
 {
+    Q_ASSERT(containment);
     m_view->setContainment(containment);
 }
 
 void PlasmaKPart::addApplet(const QString& name, const QVariantList& args, const QRectF& geometry )
 {
+    Q_ASSERT(containment());
     containment()->addApplet(name, args, geometry);
 }
 
@@ -155,6 +157,8 @@ void PlasmaKPart::setConfigFile(const QString &file)
 
 Plasma::Containment* PlasmaKPart::containment() const
 {
+    Q_ASSERT(corona());
+    Q_ASSERT(!corona()->containments().isEmpty());
     return corona()->containments().first();
 }
 
