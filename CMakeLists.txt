@@ -46,11 +46,13 @@ endif(NOT PLASMA_NO_KIO)
 
 if(NOT PLASMA_NO_KDEWEBKIT)
     include_directories(${CMAKE_SOURCE_DIR}/kdewebkit/)
+    include_directories(${CMAKE_BINARY_DIR}/kdewebkit/)
     set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} kdewebkit)
 endif(NOT PLASMA_NO_KDEWEBKIT)
 
 if(NOT PLASMA_NO_KNEWSTUFF)
     include_directories(${CMAKE_SOURCE_DIR}/knewstuff/)
+    include_directories(${CMAKE_BINARY_DIR}/knewstuff/)
     set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} knewstuff3)
 endif(NOT PLASMA_NO_KNEWSTUFF)
 
@@ -67,6 +69,7 @@ endif(NOT PLASMA_NO_PACKAGEKIT)
 
 if (NOT PLASMA_NO_KUTILS)
     include_directories(${CMAKE_SOURCE_DIR}/kutils)
+    include_directories(${CMAKE_BINARY_DIR}/kutils)
     set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} ${KDE4_KUTILS_LIBS})
 endif(NOT PLASMA_NO_KUTILS)
 
