@@ -122,6 +122,7 @@ void PlasmaKPart::initCorona()
 
 PlasmaKPartCorona* PlasmaKPart::corona() const
 {
+    Q_ASSERT(m_corona);
     return m_corona;
 }
 
