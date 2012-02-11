@@ -44,6 +44,7 @@
 #include <kmimetype.h>
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>
+#include <kurlmimedata.h>
 #include <kwindowsystem.h>
 
 #ifndef PLASMA_NO_KIO
@@ -1152,7 +1153,7 @@ void Containment::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
     //kDebug() << immutability() << Mutable << (immutability() == Mutable);
     event->setAccepted(immutability() == Mutable &&
                        (event->mimeData()->hasFormat(static_cast<Corona*>(scene())->appletMimeType()) ||
-                        KUrl::List::canDecode(event->mimeData())));
+                        event->mimeData()->hasUrls()));
 
     if (!event->isAccepted()) {
         // check to see if we have an applet that accepts the format.
@@ -1278,11 +1279,11 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
         if (dropEvent) {
             dropEvent->acceptProposedAction();
         }
-    } else if (KUrl::List::canDecode(mimeData)) {
+    } else if (mimeData->hasUrls()) {
         //TODO: collect the mimeTypes of available script engines and offer
         //      to create widgets out of the matching URLs, if any
-        const KUrl::List urls = KUrl::List::fromMimeData(mimeData);
-        foreach (const KUrl &url, urls) {
+        const QList<QUrl> urls = KUrlMimeData::urlsFromMimeData(mimeData);
+        foreach (const QUrl &url, urls) {
             if (AccessManager::supportedProtocols().contains(url.scheme())) {
                 AccessAppletJob *job = AccessManager::self()->accessRemoteApplet(url);
                 if (dropEvent) {
@@ -1299,7 +1300,7 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
                 QString mimeName = mime->name();
                 QRectF geom(pos, QSize());
                 QVariantList args;
-                args << url.url();
+                args << url.toString();
 #ifndef NDEBUG
                 kDebug() << "can decode" << mimeName << args;
 #endif
