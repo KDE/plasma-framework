@@ -1147,28 +1147,6 @@ public:
     Q_INVOKABLE virtual bool isProleptic() const = 0;
 
 private:
-    //FIXME When it comes the time to create wrappers for the above
-    //classes will i need the "friend class foo"???
-
-    //Required for shared d-pointer as already private, remove in KDE5
-    friend class KCalendarSystemCoptic;
-    friend class KCalendarSystemEthiopian;
-    friend class KCalendarSystemGregorian;
-    friend class KCalendarSystemHebrew;
-    friend class KCalendarSystemIndianNational;
-    friend class KCalendarSystemIslamicCivil;
-    friend class KCalendarSystemJalali;
-    friend class KCalendarSystemJapanese;
-    friend class KCalendarSystemJulian;
-    friend class KCalendarSystemMinguo;
-    friend class KCalendarSystemQDate;
-    friend class KCalendarSystemThai;
-    //Other friends that need access to protected/private functions
-    friend class KLocalizedDate;
-    friend class KLocalizedDatePrivate;
-    friend class KDateTimeParser;
-    friend class KDateTable;
-
     //FIXME era issue..
     // Era functions needed by friends, may be made public later if needed in KCM
     QList<KCalendarEra> *eraList() const;
