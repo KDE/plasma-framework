@@ -473,33 +473,3 @@ int CalendarSystem::weekStartDay() const
 {
     return m_calendarSystem->weekStartDay();
 }
-
-// Dummy version using Gregorian as an example
-// This method MUST be re-implemented in any new Calendar System
-// The implementation MUST NOT do validity checking on date ranges, all calls to this function MUST
-// instead be wrapped in validity checks, as sometimes we want this to work outside the public valid
-// range, i.e. to allow us to internally set dates of 1/1/10000 which are not publically valid but
-// are required for internal maths
-bool CalendarSystem::julianDayToDate(int jd, int &year, int &month, int &day) const
-{
-    return m_calendarSystem->julianDayToDate(jd, year, month, day);
-}
-
-// Dummy version using Gregorian as an example
-// This method MUST be re-implemented in any new Calendar System
-// The implementation MUST NOT do validity checking on date ranges, all calls to this function MUST
-// instead be wrapped in validity checks, as sometimes we want this to work outside the public valid
-// range, i.e. to allow us to internally set dates of 1/1/10000 which are not publically valid but
-// are required for internal maths
-bool CalendarSystem::dateToJulianDay(int year, int month, int day, int &jd) const
-{
-    return m_calendarSystem->dateToJulianDay(year, month, day, jd);
-}
-
-//FIXME what should I do with the above one?
-/*const KLocale * CalendarSystem::locale() const
-{
-    Q_D(const KCalendarSystem);
-
-    return d->locale();
-}*/
