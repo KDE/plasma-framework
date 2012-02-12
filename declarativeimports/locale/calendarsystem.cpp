@@ -22,12 +22,9 @@
 #include "kdebug.h"
 #include "kconfiggroup.h"
 #include <KCalendarSystem>
-
-#include <QtCore/QDateTime>
-
 #include <KDateTime>
 
-//FIXME fix all the create static methods
+#include <QtCore/QDateTime>
 
 QList<Locale::CalendarSystem> CalendarSystem::calendarSystemsList()
 {
@@ -178,32 +175,6 @@ int CalendarSystem::yearInEra(const QDate &date) const
     return m_calendarSystem->yearInEra(date);
 }
 
-// NOT VIRTUAL - If override needed use shared-d
-//FIXME we need a wrapper for KCalendarEra!!
-/*QList<KCalendarEra> *CalendarSystem::eraList() const
-{
-    Q_D(const KCalendarSystem);
-
-    return d->eraList();
-}*/
-
-// NOT VIRTUAL - If override needed use shared-d
-/*FIXME we don't need the above.Correct?
-KCalendarEra CalendarSystem::era(const QDate &eraDate) const
-{
-    Q_D(const KCalendarSystem);
-
-    return d->era(eraDate);
-}
-
-// NOT VIRTUAL - If override needed use shared-d
-KCalendarEra CalendarSystem::era(const QString &eraName, int yearInEra) const
-{
-    Q_D(const KCalendarSystem);
-
-    return d->era(eraName, yearInEra);
-}
-*/
 QDate CalendarSystem::addYears(const QDate &date, int numYears) const
 {
     return m_calendarSystem->addYears(date, numYears);

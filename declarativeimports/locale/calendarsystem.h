@@ -1147,12 +1147,6 @@ public:
     Q_INVOKABLE virtual bool isProleptic() const = 0;
 
 private:
-    //FIXME era issue..
-    // Era functions needed by friends, may be made public later if needed in KCM
-    QList<KCalendarEra> *eraList() const;
-    KCalendarEra era(const QDate &eraDate) const;
-    KCalendarEra era(const QString &eraName, int yearInEra) const;
-
     KCalendarSystem *m_calendarSystem;
 };
 
