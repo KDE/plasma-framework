@@ -21,86 +21,39 @@
 
 #include "kdebug.h"
 #include "kconfiggroup.h"
+#include <KCalendarSystem>
 
 #include <QtCore/QDateTime>
 
 #include <KDateTime>
 
 //FIXME fix all the create static methods
-KCalendarSystem *CalendarSystem::create(const QString &calendarType, const KLocale *locale)
-{
-    return create(calendarSystem(calendarType), locale);
-}
-
-KCalendarSystem *CalendarSystem::create(const QString &calendarType, KSharedConfig::Ptr config,
-                                         const KLocale *locale)
-{
-    return create(calendarSystem(calendarType), config, locale);
-}
-
-QString CalendarSystem::calendarLabel(const QString &calendarType)
-{
-    return m_calendarSystem->calendarLabel(calendarType);
-}
-
-KCalendarSystem *CalendarSystem::create(Locale::CalendarSystem calendarSystem, const KLocale *locale)
-{
-    return create(calendarSystem, KSharedConfig::Ptr(), locale);
-}
-
-KCalendarSystem *CalendarSystem::create(Locale::CalendarSystem calendarSystem,
-                                         KSharedConfig::Ptr config,
-                                         const KLocale *locale)
-{
-    switch (calendarSystem) {
-    case Locale::QDateCalendar:
-        return new KCalendarSystemQDate(config, locale);
-    case Locale::CopticCalendar:
-        return new KCalendarSystemCoptic(config, locale);
-    case Locale::EthiopianCalendar:
-        return new KCalendarSystemEthiopian(config, locale);
-    case Locale::GregorianCalendar:
-        return new KCalendarSystemGregorian(config, locale);
-    case Locale::HebrewCalendar:
-        return new KCalendarSystemHebrew(config, locale);
-    case Locale::IndianNationalCalendar:
-        return new KCalendarSystemIndianNational(config, locale);
-    case Locale::IslamicCivilCalendar:
-        return new KCalendarSystemIslamicCivil(config, locale);
-    case Locale::JalaliCalendar:
-        return new KCalendarSystemJalali(config, locale);
-    case Locale::JapaneseCalendar:
-        return new KCalendarSystemJapanese(config, locale);
-    case Locale::JulianCalendar:
-        return new KCalendarSystemJulian(config, locale);
-    case Locale::MinguoCalendar:
-        return new KCalendarSystemMinguo(config, locale);
-    case Locale::ThaiCalendar:
-        return new KCalendarSystemThai(config, locale);
-    default:
-        return new KCalendarSystemQDate(config, locale);
-    }
-}
 
 QList<Locale::CalendarSystem> CalendarSystem::calendarSystemsList()
 {
      QList<Locale::CalendarSystem> list;
 
-     foreach(KLocale::CalendarSystem calendarSystem, m_calendarSystem->calendarSystemList()) {
+     foreach(KLocale::CalendarSystem calendarSystem, KCalendarSystem::calendarSystemsList()) {
         list.append((Locale::CalendarSystem)calendarSystem);
     }
 
     return list;
 }
 
-QString CalendarSystem::calendarLabel(Locale::CalendarSystem calendarSystem, const Locale *locale)
+QString CalendarSystem::calendarLabel(Locale::CalendarSystem calendarSystem, const KLocale *locale)
 {
-    return m_calendarSystem->calendarLabel((KLocale::CalendarSystem)calendarSystem, (KLocale)locale);
+    return KCalendarSystem::calendarLabel((KLocale::CalendarSystem)calendarSystem, locale);
 }
+
+QString CalendarSystem::calendarType(Locale::CalendarSystem calendarSystem)
+{
+    return KCalendarSystem::calendarType((KLocale::CalendarSystem)calendarSystem);
+}
+
 
 Locale::CalendarSystem CalendarSystem::calendarSystem(const QString &calendarType )
 {
-    return (Locale::CalendarSystem)m_calendarSystem->calendarSystem(calendarType);
+    return (Locale::CalendarSystem)KCalendarSystem::calendarSystem(calendarType);
 }
 
 // NOT VIRTUAL - If override needed use shared-d
@@ -112,7 +65,7 @@ Locale::CalendarSystem CalendarSystem::calendarSystem() const
 // NOT VIRTUAL - If override needed use shared-d
 QString CalendarSystem::calendarLabel() const
 {
-    return CalendarSystem::calendarLabel(calendarSystem());
+    return m_calendarSystem->calendarLabel();
 }
 
 // Dummy version using Gregorian as an example
@@ -183,7 +136,7 @@ bool CalendarSystem::setDate(QDate &date, QString eraName, int yearInEra, int mo
 // NOT VIRTUAL - If override needed use shared-d
 bool CalendarSystem::setDateIsoWeek(QDate &date, int year, int isoWeekNumber, int dayOfIsoWeek) const
 {
-    m_calendarSystem->setDateIsoWeek(date, year, isoWeekNumber, dayOfIsoWeek);
+    return m_calendarSystem->setDateIsoWeek(date, year, isoWeekNumber, dayOfIsoWeek);
 }
 
 // NOT VIRTUAL - If override needed use shared-d

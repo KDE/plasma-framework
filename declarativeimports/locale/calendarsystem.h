@@ -21,7 +21,6 @@
 #ifndef CALENDARSYSTEM_H
 #define CALENDARSYSTEM_H
 
-#include <kcalendarsystem.h>
 #include "locale.h"  // needed for enums
 #include "kglobal.h"
 
@@ -75,31 +74,11 @@ public:
         NarrowDayName                /**< Narrow name format, e.g. "F". @since 4.7 */
     };
 
-    //KDE5 add default value to calendarSystem
     /**
-     *
-     * Creates a KCalendarSystem object for the required Calendar System
-     *
-     * @param calendarSystem the Calendar System to create, defaults to QDate compatible
-     * @param locale locale to use for translations. The global locale is used if null.
-     * @return a KCalendarSystem object
-     */
-    Q_INVOKABLE static KCalendarSystem *create(Locale::CalendarSystem calendarSystem,
-                                   const KLocale *locale = 0);
-
-    /**
-     *
-     * Creates a KCalendarSystem object for the required Calendar System
-     *
-     * @param calendarSystem the Calendar System to create
-     * @param config a configuration file with a 'KCalendarSystem %calendarType' group detailing
-     *               locale-related preferences (such as era options).  The global config is used
-                     if null.
-     * @param locale locale to use for translations. The global locale is used if null.
-     * @return a KCalendarSystem object
-     */
-    Q_INVOKABLE static KCalendarSystem *create(Locale::CalendarSystem calendarSystem, KSharedConfig::Ptr config,
-                                   const KLocale *locale = 0);
+    * Returns the list of currently supported Calendar Systems
+    * @return list of Calendar Systems
+    */
+    static QList<Locale::CalendarSystem> calendarSystemsList();
 
     /**
      *
@@ -134,28 +113,6 @@ public:
      * @return calendar type for calendar system
      */
     Q_INVOKABLE static QString calendarType(Locale::CalendarSystem calendarSystem);
-
-    /**
-     * Constructor of abstract calendar class. This will be called by derived classes.
-     *
-     * @param locale locale to use for translations. The global locale is used if null.
-     */
-    explicit KCalendarSystem(const KLocale *locale = 0);
-
-    /**
-     * Constructor of abstract calendar class. This will be called by derived classes.
-     *
-     * @param config a configuration file with a 'KCalendarSystem %calendarName' group detailing
-     *               locale-related preferences (such as era options).  The global config is used
-                     if null.
-     * @param locale locale to use for translations. The global locale is used if null.
-     */
-    explicit KCalendarSystem(const KSharedConfig::Ptr config, const KLocale *locale = 0);
-
-    /**
-     * Destructor.
-     */
-    virtual ~KCalendarSystem();
 
     /**
      *
@@ -1260,9 +1217,6 @@ protected:
                      if null.
      * @param locale locale to use for translations. The global locale is used if null.
      */
-    KCalendarSystem(KCalendarSystemPrivate &dd,
-                    const KSharedConfig::Ptr config = KSharedConfig::Ptr(),
-                    const KLocale *locale = 0);
 
 private:
     //FIXME When it comes the time to create wrappers for the above
@@ -1293,10 +1247,7 @@ private:
     KCalendarEra era(const QDate &eraDate) const;
     KCalendarEra era(const QString &eraName, int yearInEra) const;
 
-    //Q_DISABLE_COPY(KCalendarSystem)
     KCalendarSystem *m_calendarSystem;
-    //FIXME What is Q_DECLARE_PRIVATE
-    //Q_DECLARE_PRIVATE(KCalendarSystem)
 };
 
 #endif
