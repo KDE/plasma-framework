@@ -386,8 +386,12 @@ class PLASMA_EXPORT Theme : public QObject
 
     Q_SIGNALS:
         /**
-         * Emitted when the user changes the theme. SVGs should be reloaded at
-         * that point
+         * Emitted when the user changes the theme. Stylesheet usage, colors, etc. should
+         * be updated at this point. However, SVGs should *not* be repainted in response
+         * to this signal; connect to Svg::repaintNeeded() instead for that, as Svg objects
+         * need repainting not only when themeChanged() is emitted; moreover Svg objects
+         * connect to and respond appropriately to themeChanged() internally, emitting 
+         * Svg::repaintNeeded() at an appropriate time.
          */
         void themeChanged();
 
