@@ -42,23 +42,15 @@ namespace Plasma
  * for instance in Applet::constraintsUpdated
  */
 enum Constraint {
-    NoConstraint = 0,
-    /** The FormFactor for an object */
-    FormFactorConstraint = 1,
-    /** The Location of an object */
-    LocationConstraint = 2,
-    /** Which screen an object is on */
-    ScreenConstraint = 4,
-    /** the size of the applet was changed */
-    SizeConstraint = 8,
-    /** the immutability (locked) nature of the applet changed  */
-    ImmutableConstraint = 16,
-    /** application startup has completed */
-    StartupCompletedConstraint = 32,
-    /** the desktop context has changed */
-    ContextConstraint = 64,
-    /** the position of the popup needs to be recalculated*/
-    PopupConstraint = 128,
+    NoConstraint = 0, /**< No constraint; never passed in to Applet::constraintsEvent on its own */
+    FormFactorConstraint = 1, /**< The FormFactor for an object */
+    LocationConstraint = 2, /**< The Location of an object */
+    ScreenConstraint = 4, /**< Which screen an object is on */
+    SizeConstraint = 8, /**< the size of the applet was changed */
+    ImmutableConstraint = 16, /**< the immutability (locked) nature of the applet changed  */
+    StartupCompletedConstraint = 32, /**< application startup has completed */
+    ContextConstraint = 64, /**< the context (e.g. activity) has changed */
+    PopupConstraint = 128, /**< the position of the popup needs to be recalculated*/
     AllConstraints = FormFactorConstraint | LocationConstraint | ScreenConstraint |
     SizeConstraint | ImmutableConstraint | ContextConstraint | PopupConstraint
 };

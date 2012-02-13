@@ -1003,9 +1003,15 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         void showMessage(const QIcon &icon, const QString &message, const Plasma::MessageButtons buttons);
 
         /**
-         * Called when any of the geometry constraints have been updated.
+         * Called when any of the constraints for the applet have been updated. These constraints
+         * range from notifying when the applet has officially "started up" to when geometry changes
+         * to when the form factor changes.
          *
-         * This is always called prior to painting and should be used as an
+         * Each constraint that has been changed is passed in the constraints flag.
+         * All of the constraints and how they work is documented in the @see Plasma::Constraints
+         * enumeration.
+         *
+         * On applet creation, this is always called prior to painting and can be used as an
          * opportunity to layout the widget, calculate sizings, etc.
          *
          * Do not call update() from this method; an update() will be triggered
