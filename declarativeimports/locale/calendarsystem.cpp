@@ -26,6 +26,13 @@
 
 #include <QtCore/QDateTime>
 
+CalendarSystem::CalendarSystem(QObject* parent)
+        : QObject(parent)
+{
+    m_calendarSystem = KCalendarSystem::create(KLocale::CalendarSystem, 0);
+}
+
+
 QList<Locale::CalendarSystem> CalendarSystem::calendarSystemsList()
 {
      QList<Locale::CalendarSystem> list;

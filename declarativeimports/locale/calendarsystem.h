@@ -46,6 +46,9 @@ Q_ENUMS(WeekDayNameFormat)
 
 public:
 
+    //ctor
+     CalendarSystem(QObject *parent = 0);
+
     /**
      * Format for returned year number / month number / day number as string.
      */
