@@ -4,6 +4,7 @@ include(KDE4Defaults)
 
 set(localebindings_SRCS
     locale.cpp
+    localebindingsplugin.cpp
 	calendarsystem.cpp
 )
 
