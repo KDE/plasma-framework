@@ -1315,8 +1315,8 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
                 }
 
                 QObject::connect(job, SIGNAL(result(KJob*)), q, SLOT(dropJobResult(KJob*)));
-                QObject::connect(job, SIGNAL(mimeType(KIO::Job *, const QString&)),
-                                 q, SLOT(mimeTypeRetrieved(KIO::Job *, const QString&)));
+                QObject::connect(job, SIGNAL(mimetype(KIO::Job*,QString)),
+                                 q, SLOT(mimeTypeRetrieved(KIO::Job*,QString)));
 
                 KMenu *choices = new KMenu("Content dropped");
                 choices->addAction(KIcon("process-working"), i18n("Fetching file type..."));

@@ -1017,8 +1017,8 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
                     wallpaperConfig = KConfigGroup(&wallpaperConfig, "Wallpaper");
                     wallpaperConfig = KConfigGroup(&wallpaperConfig, w->pluginName());
                     w->restore(wallpaperConfig);
-                    disconnect(w, SIGNAL(update(const QRectF&)), this, SLOT(updateRect(const QRectF&)));
-                    connect(w, SIGNAL(update(const QRectF&)), this, SLOT(updateRect(const QRectF&)));
+                    disconnect(w, SIGNAL(update(QRectF)), this, SLOT(updateRect(QRectF)));
+                    connect(w, SIGNAL(update(QRectF)), this, SLOT(updateRect(QRectF)));
                 }
 
                 painter->save();

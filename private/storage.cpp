@@ -49,7 +49,7 @@ StorageJob::StorageJob(const QString& destination,
       m_clientName(destination)
 {
     Plasma::StorageThread::self()->start();
-    connect(Plasma::StorageThread::self(), SIGNAL(newResult(StorageJob *, const QVariant &)), this, SLOT(resultSlot(StorageJob *, const QVariant &)));
+    connect(Plasma::StorageThread::self(), SIGNAL(newResult(StorageJob*,QVariant)), this, SLOT(resultSlot(StorageJob*,QVariant)));
     qRegisterMetaType<StorageJob *>();
     qRegisterMetaType<QWeakPointer<StorageJob> >();
 }

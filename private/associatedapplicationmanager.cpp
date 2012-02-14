@@ -92,7 +92,7 @@ void AssociatedApplicationManager::setApplication(Plasma::Applet *applet, const 
     if (service || !KStandardDirs::findExe(application).isNull() || QFile::exists(application)) {
         d->applicationNames[applet] = application;
         if (!d->urlLists.contains(applet)) {
-            connect(applet, SIGNAL(destroyed(QObject *)), this, SLOT(cleanupApplet(QObject *)));
+            connect(applet, SIGNAL(destroyed(QObject*)), this, SLOT(cleanupApplet(QObject*)));
         }
     }
 }

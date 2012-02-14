@@ -45,8 +45,8 @@ WallpaperScript::~WallpaperScript()
 void WallpaperScript::setWallpaper(Wallpaper *wallpaper)
 {
     d->wallpaper = wallpaper;
-    connect(wallpaper, SIGNAL(renderCompleted(const QImage&)),
-            this, SLOT(renderCompleted(const QImage&)));
+    connect(wallpaper, SIGNAL(renderCompleted(QImage)),
+            this, SLOT(renderCompleted(QImage)));
 }
 
 Wallpaper *WallpaperScript::wallpaper() const

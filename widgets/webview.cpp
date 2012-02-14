@@ -86,8 +86,8 @@ WebView::WebView(QGraphicsItem *parent)
             this, SIGNAL(loadProgress(int)));
     connect(d->webView, SIGNAL(loadFinished(bool)),
             this, SLOT(loadingFinished(bool)));
-    connect(d->webView, SIGNAL(urlChanged(const QUrl &)),
-            this, SIGNAL(urlChanged(const QUrl &)));
+    connect(d->webView, SIGNAL(urlChanged(QUrl)),
+            this, SIGNAL(urlChanged(QUrl)));
 }
 
 WebView::~WebView()

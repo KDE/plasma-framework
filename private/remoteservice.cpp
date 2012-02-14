@@ -267,7 +267,7 @@ ServiceJob* RemoteService::createJob(const QString& operation,
     }
 
     ServiceJob *job = new RemoteServiceJob(m_location, destination(), operation, parameters, m_token, this);
-    connect(job, SIGNAL(finished(KJob *)), this, SLOT(slotFinished()));
+    connect(job, SIGNAL(finished(KJob*)), this, SLOT(slotFinished()));
     return job;
 }
 

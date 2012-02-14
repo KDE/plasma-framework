@@ -125,8 +125,8 @@ void LineEdit::setNativeWidget(KLineEdit *nativeWidget)
 
     connect(nativeWidget, SIGNAL(editingFinished()), this, SIGNAL(editingFinished()));
     connect(nativeWidget, SIGNAL(returnPressed()), this, SIGNAL(returnPressed()));
-    connect(nativeWidget, SIGNAL(textEdited(const QString&)), this, SIGNAL(textEdited(const QString&)));
-    connect(nativeWidget, SIGNAL(textChanged(const QString&)), this, SIGNAL(textChanged(const QString&)));
+    connect(nativeWidget, SIGNAL(textEdited(QString)), this, SIGNAL(textEdited(QString)));
+    connect(nativeWidget, SIGNAL(textChanged(QString)), this, SIGNAL(textChanged(QString)));
 
 
     nativeWidget->setWindowFlags(nativeWidget->windowFlags()|Qt::BypassGraphicsProxyWidget);

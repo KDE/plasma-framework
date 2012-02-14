@@ -160,11 +160,11 @@ void ComboBox::setNativeWidget(KComboBox *nativeWidget)
         widget()->deleteLater();
     }
 
-    connect(nativeWidget, SIGNAL(activated(const QString &)), this, SIGNAL(activated(const QString &)));
+    connect(nativeWidget, SIGNAL(activated(QString)), this, SIGNAL(activated(QString)));
     connect(nativeWidget, SIGNAL(currentIndexChanged(int)),
             this, SIGNAL(currentIndexChanged(int)));
-    connect(nativeWidget, SIGNAL(currentIndexChanged(const QString &)),
-            this, SIGNAL(textChanged(const QString &)));
+    connect(nativeWidget, SIGNAL(currentIndexChanged(QString)),
+            this, SIGNAL(textChanged(QString)));
 
     d->setWidget(nativeWidget);
     nativeWidget->setWindowIcon(QIcon());
