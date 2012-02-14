@@ -641,10 +641,10 @@ Locale::CalendarSystem Locale::calendarSystem() const
     return (Locale::CalendarSystem)m_locale->calendarSystem();
 }
 
-const KCalendarSystem * Locale::calendar() const
+/*const KCalendarSystem * Locale::calendar() const
 {
     return m_locale->calendar();
-}
+}*/
 
 void Locale::setWeekNumberSystem(Locale::WeekNumberSystem weekNumberSystem)
 {

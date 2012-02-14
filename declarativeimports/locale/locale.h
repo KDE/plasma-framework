@@ -84,8 +84,7 @@ Q_ENUMS(WeekNumberSystem)
 
 //properties
 Q_PROPERTY(BinaryUnitDialect binaryUnitDialect READ binaryUnitDialect WRITE setBinaryUnitDialect NOTIFY binaryUnitDialectChanged)
-Q_PROPERTY(KCalendarSystem *calendar READ calendar WRITE setCalendar NOTIFY calendarChanged)
-Q_PROPERTY(Locale::CalendarSystem *calendarSystem READ calendarSystem WRITE setCalendarSystem NOTIFY calendarSystemChanged)
+Q_PROPERTY(Locale::CalendarSystem calendarSystem READ calendarSystem WRITE setCalendarSystem NOTIFY calendarSystemChanged)
 Q_PROPERTY(QString country READ country WRITE setCountry NOTIFY countryChanged)
 Q_PROPERTY(QString countryDivisionCode READ countryDivisionCode WRITE setCountryDivisionCode NOTIFY countryDivisionCodeChanged)
 Q_PROPERTY(QString currencyCode READ currencyCode WRITE setCurrencyCode NOTIFY currencyCodeChanged)
@@ -1055,11 +1054,16 @@ public:
     int weekDayOfPray() const;
 
     /**
+     * What should I do with the above?
+     * It won't work in QML.
+     **/
+
+    /**
      * Returns a pointer to the calendar system object.
      *
      * @return the current calendar system instance
      */
-    const KCalendarSystem * calendar() const;
+    //const KCalendarSystem * calendar() const;
 
     /**
      *
@@ -2017,7 +2021,6 @@ Q_SIGNALS:
     void weekStartDayChanged();
     void workingWeekEndDayChanged();
     void workingWeekStartDayChanged();
-    void calendarChanged();
 };
 //TODO remove the above?
 //Q_DECLARE_OPERATORS_FOR_FLAGS(Locale::DateTimeFormatOptions)
