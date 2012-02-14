@@ -174,6 +174,10 @@ function initPage(page, properties) {
 function pop(page, immediate) {
     // make sure there are enough pages in the stack to pop
     if (pageStack.length > 1) {
+        //unwind to itself means no pop
+        if (page !== undefined && page == pageStack[pageStack.length - 1].page) {
+            return
+        }
         // pop the current container off the stack and get the next container
         var oldContainer = pageStack.pop();
         var container = pageStack[pageStack.length - 1];
