@@ -2017,6 +2017,7 @@ Q_SIGNALS:
     void weekStartDayChanged();
     void workingWeekEndDayChanged();
     void workingWeekStartDayChanged();
+    void calendarChanged();
 };
 //TODO remove the above?
 //Q_DECLARE_OPERATORS_FOR_FLAGS(Locale::DateTimeFormatOptions)
