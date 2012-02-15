@@ -29,29 +29,10 @@ Locale::Locale(QObject* parent)
     m_locale = new KLocale(*KGlobal::locale());
 }
 
-
-bool Locale::setCountry(const QString &country, KConfig *config)
-{
-    emit countryChanged();
-    return m_locale->setCountry(country, config);
-}
-
 bool Locale::setCountryDivisionCode(const QString &countryDivisionCode)
 {
     emit countryDivisionCodeChanged();
     return m_locale->setCountryDivisionCode(countryDivisionCode);
-}
-
-bool Locale::setLanguage(const QString &language, KConfig *config)
-{
-    emit languageChanged();
-    return m_locale->setLanguage(language, config);
-}
-
-bool Locale::setLanguage(const QStringList &languages)
-{
-    emit languageChanged();
-    return m_locale->setLanguage(languages);
 }
 
 void Locale::setCurrencyCode(const QString &newCurrencyCode)
@@ -84,11 +65,6 @@ QString Locale::country() const
 QString Locale::countryDivisionCode() const
 {
     return m_locale->countryDivisionCode();
-}
-
-KCurrencyCode *Locale::currency() const
-{
-    return m_locale->currency();
 }
 
 QString Locale::currencyCode() const
@@ -592,11 +568,6 @@ int Locale::encodingMib() const
 int Locale::fileEncodingMib() const
 {
     return m_locale->fileEncodingMib();
-}
-
-QTextCodec *Locale::codecForEncoding() const
-{
-    return m_locale->codecForEncoding();
 }
 
 bool Locale::setEncoding(int mibEnum)

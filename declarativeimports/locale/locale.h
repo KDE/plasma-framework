@@ -412,14 +412,6 @@ public:
     QString currencyCode() const;
 
     /**
-     *
-     * Returns the Currency Code object for the current locale
-     *
-     * @return The default Currency Code object used by locale.
-    */
-    Q_INVOKABLE KCurrencyCode *currency() const;
-
-    /**
      * Returns what the symbol denoting currency in the current locale
      * as as defined by user settings should look like.
      *
@@ -1354,17 +1346,6 @@ public:
     Q_INVOKABLE int encodingMib() const;
 
     /**
-     * Returns the user's preferred encoding. Should never be NULL.
-     *
-     * @return The codec for the preferred encoding
-     *
-     * @see encoding
-     * @see encodingMib
-     */
-    //TODO will this work?
-    Q_INVOKABLE QTextCodec *codecForEncoding() const;
-
-    /**
      * Returns the file encoding.
      *
      * @return The Mib of the file encoding
@@ -1852,26 +1833,6 @@ public:
     Q_INVOKABLE void copyCatalogsTo(Locale *locale);
 
     /**
-     * Changes the current country. The current country will be left
-     * unchanged if failed. It will force a reload of the country specific
-     * configuration.
-     *
-     * An empty country value will set the country to the system default.
-     *
-     * If you specify a configuration file, a setLocale() will be performed on
-     * the config using the current locale language, which may cause a sync()
-     * and reparseConfiguration() which will save any changes you have made.
-     *
-     * @param country the ISO 3166 country code
-     * @param config  a configuration file with a Locale group detailing
-     *                locale-related preferences (such as language and
-     *                formatting options).
-     *
-     * @return @c true on success, @c false on failure
-     */
-    bool setCountry(const QString & country, KConfig *config);
-
-    /**
      *
      * Sets the Country Division Code of the Country where the user lives.
      *
@@ -1886,35 +1847,6 @@ public:
      * @see countryDivisionCode
      */
     bool setCountryDivisionCode(const QString & countryDivision);
-
-    /**
-     * Changes the current language. The current language will be left
-     * unchanged if failed. It will force a reload of the country specific
-     * configuration as well.
-     *
-     * If you specify a configuration file, a setLocale() will be performed on
-     * the config using the current locale language, which may cause a sync()
-     * and reparseConfiguration() which will save any changes you have made.
-     *
-     * @param language the language code
-     * @param config   a configuration file with a Locale group detailing
-     *                 locale-related preferences (such as language and
-     *                 formatting options).
-     *
-     * @return true on success
-     */
-    bool setLanguage(const QString &language, KConfig *config);
-
-    /**
-     * Changes the list of preferred languages for the locale. The first valid
-     * language in the list will be used, or the default language (en_US)
-     * if none of the specified languages were available.
-     *
-     * @param languages the list of language codes
-     *
-     * @return true if one of the specified languages were used
-     */
-    bool setLanguage(const QStringList &languages);
 
     /**
      *
