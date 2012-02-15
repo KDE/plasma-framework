@@ -30,6 +30,9 @@ MouseEventListener::MouseEventListener(QDeclarativeItem *parent)
     m_pressed(false),
     m_pressAndHoldEvent(0)
 {
+    qmlRegisterType<KDeclarativeMouseEvent>();
+    qmlRegisterType<KDeclarativeWheelEvent>();
+
     setFiltersChildEvents(true);
     setAcceptedMouseButtons(Qt::LeftButton|Qt::RightButton|Qt::MidButton|Qt::XButton1|Qt::XButton2);
 }
@@ -48,35 +51,41 @@ void MouseEventListener::mousePressEvent(QGraphicsSceneMouseEvent *me)
         return;
     }
 
-    QDeclarativeMouseEvent dme(me->pos().x(), me->pos().y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
-    m_pressAndHoldEvent = new QDeclarativeMouseEvent(me->pos().x(), me->pos().y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
+    KDeclarativeMouseEvent dme(me->pos().x(), me->pos().y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
+    m_pressAndHoldEvent = new KDeclarativeMouseEvent(me->pos().x(), me->pos().y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
     emit pressed(&dme);
     m_pressed = true;
     //delete m_pressAndHoldEvent;
     //m_pressAndHoldEvent = &dme;
-    //new QDeclarativeMouseEvent(me->pos().x(), me->pos().y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());;
+    //new KDeclarativeMouseEvent(me->pos().x(), me->pos().y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());;
     QTimer::singleShot(800, this, SLOT(handlePressAndHold()));
 }
 
 void MouseEventListener::mouseMoveEvent(QGraphicsSceneMouseEvent *me)
 {
-    QDeclarativeMouseEvent dme(me->pos().x(), me->pos().y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
+    KDeclarativeMouseEvent dme(me->pos().x(), me->pos().y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
     emit positionChanged(&dme);
 }
 
 void MouseEventListener::mouseReleaseEvent(QGraphicsSceneMouseEvent *me)
 {
-    QDeclarativeMouseEvent dme(me->pos().x(), me->pos().y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
+    KDeclarativeMouseEvent dme(me->pos().x(), me->pos().y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
     m_pressed = false;
     emit released(&dme);
+}
+
+void MouseEventListener::wheelEvent(QGraphicsSceneWheelEvent *we)
+{
+    KDeclarativeWheelEvent dwe(we->pos(), we->screenPos(), we->delta(), we->buttons(), we->modifiers(), we->orientation());
+    emit wheelMoved(&dwe);
 }
 
 void MouseEventListener::handlePressAndHold()
 {
     if (m_pressed) {
-        //QDeclarativeMouseEvent dme = m_pressAndHoldEvent;
+        //KDeclarativeMouseEvent dme = m_pressAndHoldEvent;
         //const QPointF myPos = m_pressAndHoldEvent->pos();
-        //QDeclarativeMouseEvent dme(myPos.x(), myPos.y(), m_pressAndHoldEvent->screenPos().x(), m_pressAndHoldEvent->screenPos().y(), m_pressAndHoldEvent->button(), m_pressAndHoldEvent->buttons(), m_pressAndHoldEvent->modifiers());
+        //KDeclarativeMouseEvent dme(myPos.x(), myPos.y(), m_pressAndHoldEvent->screenPos().x(), m_pressAndHoldEvent->screenPos().y(), m_pressAndHoldEvent->button(), m_pressAndHoldEvent->buttons(), m_pressAndHoldEvent->modifiers());
         emit pressAndHold(m_pressAndHoldEvent);
         //delete m_pressAndHoldEvent;
     }
@@ -94,13 +103,13 @@ bool MouseEventListener::sceneEventFilter(QGraphicsItem *item, QEvent *event)
         QGraphicsSceneMouseEvent *me = static_cast<QGraphicsSceneMouseEvent *>(event);
         //the parent will receive events in its own coordinates
         const QPointF myPos = item->mapToItem(this, me->pos());
-        QDeclarativeMouseEvent dme(myPos.x(), myPos.y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
-        m_pressAndHoldEvent = new QDeclarativeMouseEvent(myPos.x(), myPos.y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
+        KDeclarativeMouseEvent dme(myPos.x(), myPos.y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
+        m_pressAndHoldEvent = new KDeclarativeMouseEvent(myPos.x(), myPos.y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
         //kDebug() << "pressed in sceneEventFilter";
         emit pressed(&dme);
         m_pressed = true;
         //delete m_pressAndHoldEvent;
-        //m_pressAndHoldEvent = new QDeclarativeMouseEvent(me->pos().x(), me->pos().y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());;
+        //m_pressAndHoldEvent = new KDeclarativeMouseEvent(me->pos().x(), me->pos().y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());;
         //m_pressAndHoldEvent = &dme;
         QTimer::singleShot(800, this, SLOT(handlePressAndHold()));
         break;
@@ -108,18 +117,24 @@ bool MouseEventListener::sceneEventFilter(QGraphicsItem *item, QEvent *event)
     case QEvent::GraphicsSceneMouseMove: {
         QGraphicsSceneMouseEvent *me = static_cast<QGraphicsSceneMouseEvent *>(event);
         const QPointF myPos = item->mapToItem(this, me->pos());
-        QDeclarativeMouseEvent dme(myPos.x(), myPos.y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
+        KDeclarativeMouseEvent dme(myPos.x(), myPos.y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
         //kDebug() << "positionChanged..." << dme.x() << dme.y();
-        m_pressAndHoldEvent = new QDeclarativeMouseEvent(myPos.x(), myPos.y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
+        m_pressAndHoldEvent = new KDeclarativeMouseEvent(myPos.x(), myPos.y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
         emit positionChanged(&dme);
         break;
     }
     case QEvent::GraphicsSceneMouseRelease: {
         QGraphicsSceneMouseEvent *me = static_cast<QGraphicsSceneMouseEvent *>(event);
         const QPointF myPos = item->mapToItem(this, me->pos());
-        QDeclarativeMouseEvent dme(myPos.x(), myPos.y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
+        KDeclarativeMouseEvent dme(myPos.x(), myPos.y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
         emit released(&dme);
         m_pressed = false;
+        break;
+    }
+    case QEvent::GraphicsSceneWheel: {
+        QGraphicsSceneWheelEvent *we = static_cast<QGraphicsSceneWheelEvent *>(event);
+        KDeclarativeWheelEvent dwe(we->pos(), we->screenPos(), we->delta(), we->buttons(), we->modifiers(), we->orientation());
+        emit wheelMoved(&dwe);
         break;
     }
     default:

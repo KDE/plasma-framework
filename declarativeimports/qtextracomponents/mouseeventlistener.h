@@ -22,19 +22,19 @@
 
 #include <QDeclarativeItem>
 
-class QDeclarativeMouseEvent : public QObject
+class KDeclarativeMouseEvent : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(int x READ x)
     Q_PROPERTY(int y READ y)
     Q_PROPERTY(int screenX READ screenX)
     Q_PROPERTY(int screenY READ screenY)
-    Q_PROPERTY(int button READ button)
-    Q_PROPERTY(int buttons READ buttons)
-    Q_PROPERTY(int modifiers READ modifiers)
+    Q_PROPERTY(Qt::MouseButton button READ button)
+    Q_PROPERTY(Qt::MouseButtons buttons READ buttons)
+    Q_PROPERTY(Qt::KeyboardModifiers modifiers READ modifiers)
 
 public:
-    QDeclarativeMouseEvent(int x, int y, int screenX, int screenY,
+    KDeclarativeMouseEvent(int x, int y, int screenX, int screenY,
                            Qt::MouseButton button,
                            Qt::MouseButtons buttons,
                            Qt::KeyboardModifiers modifiers)
@@ -51,9 +51,9 @@ public:
     int y() const { return m_y; }
     int screenX() const { return m_screenX; }
     int screenY() const { return m_screenY; }
-    int button() const { return m_button; }
-    int buttons() const { return m_buttons; }
-    int modifiers() const { return m_modifiers; }
+    Qt::MouseButton button() const { return m_button; }
+    Qt::MouseButtons buttons() const { return m_buttons; }
+    Qt::KeyboardModifiers modifiers() const { return m_modifiers; }
 
     // only for internal usage
     void setX(int x) { m_x = x; }
@@ -69,6 +69,57 @@ private:
     Qt::KeyboardModifiers m_modifiers;
 };
 
+class KDeclarativeWheelEvent : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(int x READ x CONSTANT)
+    Q_PROPERTY(int y READ y CONSTANT)
+    Q_PROPERTY(int screenX READ screenX CONSTANT)
+    Q_PROPERTY(int screenY READ screenY CONSTANT)
+    Q_PROPERTY(int delta READ delta CONSTANT)
+    Q_PROPERTY(Qt::MouseButtons buttons READ buttons CONSTANT)
+    Q_PROPERTY(Qt::KeyboardModifiers modifiers READ modifiers CONSTANT)
+    Q_PROPERTY(Qt::Orientation orientation READ orientation CONSTANT)
+
+public:
+    KDeclarativeWheelEvent(QPointF pos, QPoint screenPos, int delta,
+                           Qt::MouseButtons buttons,
+                           Qt::KeyboardModifiers modifiers,
+                           Qt::Orientation orientation)
+        : m_x(pos.x()),
+          m_y(pos.y()),
+          m_screenX(screenPos.x()),
+          m_screenY(screenPos.y()),
+          m_delta(delta),
+          m_buttons(buttons),
+          m_modifiers(modifiers),
+          m_orientation(orientation)
+    {}
+
+    int x() const { return m_x; }
+    int y() const { return m_y; }
+    int screenX() const { return m_screenX; }
+    int screenY() const { return m_screenY; }
+    int delta() const { return m_delta; }
+    Qt::MouseButtons buttons() const { return m_buttons; }
+    Qt::KeyboardModifiers modifiers() const { return m_modifiers; }
+    Qt::Orientation orientation() { return m_orientation; }
+
+    // only for internal usage
+    void setX(int x) { m_x = x; }
+    void setY(int y) { m_y = y; }
+
+private:
+    int m_x;
+    int m_y;
+    int m_screenX;
+    int m_screenY;
+    int m_delta;
+    Qt::MouseButtons m_buttons;
+    Qt::KeyboardModifiers m_modifiers;
+    Qt::Orientation m_orientation;
+};
+
 class MouseEventListener : public QDeclarativeItem
 {
     Q_OBJECT
@@ -81,19 +132,21 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+    void wheelEvent(QGraphicsSceneWheelEvent *event);
     bool sceneEventFilter(QGraphicsItem *i, QEvent *e);
 
 Q_SIGNALS:
-    void pressed(QDeclarativeMouseEvent *mouse);
-    void positionChanged(QDeclarativeMouseEvent *mouse);
-    void released(QDeclarativeMouseEvent *mouse);
-    void pressAndHold(QDeclarativeMouseEvent *mouse);
+    void pressed(KDeclarativeMouseEvent *mouse);
+    void positionChanged(KDeclarativeMouseEvent *mouse);
+    void released(KDeclarativeMouseEvent *mouse);
+    void pressAndHold(KDeclarativeMouseEvent *mouse);
+    void wheelMoved(KDeclarativeWheelEvent *wheel);
 
 private Q_SLOTS:
     void handlePressAndHold();
 private:
     bool m_pressed;
-    QDeclarativeMouseEvent* m_pressAndHoldEvent;
+    KDeclarativeMouseEvent* m_pressAndHoldEvent;
     QPointF m_pressAndHoldPosition;
 };
 
