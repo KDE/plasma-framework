@@ -116,6 +116,12 @@ Q_PROPERTY(Locale::WeekNumberSystem weekNumberSystem READ weekNumberSystem WRITE
 Q_PROPERTY(int weekStartDay READ weekStartDay WRITE setWeekStartDay NOTIFY weekStartDayChanged)
 Q_PROPERTY(int workingWeekEndDay READ workingWeekEndDay WRITE setWorkingWeekEndDay NOTIFY workingWeekEndDayChanged)
 Q_PROPERTY(int workingWeekStartDay READ workingWeekStartDay WRITE setWorkingWeekStartDay NOTIFY workingWeekStartDayChanged)
+Q_PROPERTY(bool use12Clock READ use12Clock NOTIFY use12ClockChanged)
+Q_PROPERTY(QString defaultLanguage READ defaultLanguage NOTIFY defaultLanguageChanged)
+Q_PROPERTY(QString defaultCountry READ defaultCountry NOTIFY defaultCountryChanged)
+Q_PROPERTY(QString defaultCurrencyCode READ defaultCurrencyCode NOTIFY defaultCurrencyCodeChanged)
+Q_PROPERTY(bool useTranscript READ useTranscript NOTIFY useTranscriptChanged)
+Q_PROPERTY(QVariant encodingMib READ encodingMib NOTIFY encodingMibChanged)
 
 public:
     /**
@@ -328,7 +334,7 @@ public:
      * @see DigitSet
      * @see digitSetToName
      */
-    Q_INVOKABLE QList<DigitSet> allDigitSetsList() const;
+    Q_INVOKABLE QList<DigitSet> allDigitSetsList() const; //TODO
 
     /**
      * Returns what a decimal point should look like ("." or "," etc.)
@@ -959,7 +965,7 @@ public:
      *
      * @return If the user wants 12h clock
      */
-    Q_INVOKABLE bool use12Clock() const;
+    bool use12Clock() const;
 
     /**
      *
@@ -1263,7 +1269,7 @@ public:
      *
      * @see languageCodeToName
      */
-    Q_INVOKABLE QStringList languageList() const;
+    Q_INVOKABLE QStringList languageList() const; //TODO
 
     /**
      *
@@ -1277,7 +1283,7 @@ public:
      *
      * @see currencyCodeToName
      */
-    Q_INVOKABLE QStringList currencyCodeList() const;
+    Q_INVOKABLE QStringList currencyCodeList() const; //TODO
 
     /**
      * Returns the user's preferred encoding.
@@ -1297,7 +1303,7 @@ public:
      * @see encoding
      * @see codecForEncoding
      */
-    Q_INVOKABLE QVariant encodingMib() const;
+    QVariant encodingMib() const;
 
     /**
      * Returns the file encoding.
@@ -1654,7 +1660,7 @@ public:
      * @see languageCodeToName
      * @see installedLanguages
      */
-    Q_INVOKABLE QStringList allLanguagesList() const;
+    Q_INVOKABLE QStringList allLanguagesList() const; //TODO
 
     /**
      *
@@ -1667,7 +1673,7 @@ public:
      *
      * @see languageCodeToName
      */
-    Q_INVOKABLE QStringList installedLanguages() const;
+    Q_INVOKABLE QStringList installedLanguages() const; //TODO
 
     /**
      * Convert a known language code to a human readable, localized form.
@@ -1697,7 +1703,7 @@ public:
      *
      * @see countryCodeToName
      */
-    Q_INVOKABLE QStringList allCountriesList() const;
+    Q_INVOKABLE QStringList allCountriesList() const; //TODO
 
     /**
      * Convert a known country code to a human readable, localized form.
@@ -1743,7 +1749,7 @@ public:
      *
      * @return Name of the default language
      */
-    Q_INVOKABLE static QString defaultLanguage();
+    static QString defaultLanguage();
 
     /**
      * Returns the code of the default country, i.e. "C"
@@ -1755,7 +1761,7 @@ public:
      *
      * @return Name of the default country
      */
-    Q_INVOKABLE static QString defaultCountry();
+    static QString defaultCountry();
 
     /**
      *
@@ -1763,14 +1769,14 @@ public:
      *
      * @return ISO Currency Code of the default currency
      */
-    Q_INVOKABLE static QString defaultCurrencyCode();
+    static QString defaultCurrencyCode();
 
     /**
      * Reports whether evaluation of translation scripts is enabled.
      *
      * @return true if script evaluation is enabled, false otherwise.
      */
-    Q_INVOKABLE bool useTranscript() const;
+    bool useTranscript() const;
 
     /**
      * Checks whether or not the active catalog is found for the given language.
@@ -1778,13 +1784,6 @@ public:
      * @param language language to check
      */
     Q_INVOKABLE bool isApplicationTranslatedInto(const QString & language);
-
-    /**
-     * Copies the catalogs of this object to an other KLocale object.
-     *
-     * @param locale the destination KLocale object
-     */
-    Q_INVOKABLE void copyCatalogsTo(Locale *locale);
 
     /**
      *
@@ -1867,7 +1866,7 @@ public:
      * Reparse locale configuration files for the current selected
      * language.
      */
-    void reparseConfiguration();
+    void reparseConfiguration(); //TODO
 
 private:
     KLocale *m_locale;
@@ -1907,6 +1906,12 @@ Q_SIGNALS:
     void weekStartDayChanged();
     void workingWeekEndDayChanged();
     void workingWeekStartDayChanged();
+    void use12ClockChanged();
+    void defaultCountryChanged();
+    void defaultCurrencyCodeChanged();
+    void defaultLanguageChanged();
+    void useTranscriptChanged();
+    void encodingMibChanged();
 };
 //TODO remove the above?
 //Q_DECLARE_OPERATORS_FOR_FLAGS(Locale::DateTimeFormatOptions)
