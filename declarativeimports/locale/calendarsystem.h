@@ -181,7 +181,7 @@ public:
      * @param day the day portion of the date to check
      * @return @c true if the date is valid, @c false otherwise
      */
-    Q_INVOKABLE virtual bool isValid(int year, int month, int day) const = 0;
+   Q_INVOKABLE bool isValid(int year, int month, int day) const;
 
     //KDE5 make virtual?
     /**
@@ -625,7 +625,7 @@ public:
      * @param year the year to check
      * @return @c true if the year is a leap year, @c false otherwise
      */
-    Q_INVOKABLE virtual bool isLeapYear(int year) const = 0;
+    Q_INVOKABLE bool isLeapYear(int year) const;
 
     /**
      * Returns whether a given date falls in a leap year.
@@ -731,7 +731,7 @@ public:
      * @param format specifies whether the short month name or long month name should be used
      * @return name of the month, empty string if any error
      */
-    Q_INVOKABLE virtual QString monthName(int month, int year, MonthNameFormat format = LongName) const = 0;
+    Q_INVOKABLE QString monthName(int month, int year, MonthNameFormat format = LongName) const;
 
     /**
      * Gets specific calendar type month name for a given date
@@ -750,7 +750,7 @@ public:
      * @param format specifies whether the short month name or long month name should be used
      * @return day name, empty string if any error
      */
-    Q_INVOKABLE virtual QString weekDayName(int weekDay, WeekDayNameFormat format = LongDayName) const = 0;
+    Q_INVOKABLE QString weekDayName(int weekDay, WeekDayNameFormat format = LongDayName) const;
 
     /**
      * Gets specific calendar type week day name.
@@ -1123,21 +1123,21 @@ public:
      *
      * @return @c true if the calendar is lunar based, @c false if not
      */
-    Q_INVOKABLE virtual bool isLunar() const = 0;
+    Q_INVOKABLE bool isLunar() const;
 
     /**
      * Returns whether the calendar is lunisolar based.
      *
      * @return @c true if the calendar is lunisolar based, @c false if not
      */
-    Q_INVOKABLE virtual bool isLunisolar() const = 0;
+    Q_INVOKABLE bool isLunisolar() const;
 
     /**
      * Returns whether the calendar is solar based.
      *
      * @return @c true if the calendar is solar based, @c false if not
      */
-    Q_INVOKABLE virtual bool isSolar() const = 0;
+    Q_INVOKABLE bool isSolar() const;
 
     /**
      * Returns whether the calendar system is proleptic, i.e. whether dates
@@ -1147,7 +1147,7 @@ public:
      *
      * @return @c true if the calendar system is proleptic, @c false if not
      */
-    Q_INVOKABLE virtual bool isProleptic() const = 0;
+    Q_INVOKABLE bool isProleptic() const;
 
 private:
     KCalendarSystem *m_calendarSystem;

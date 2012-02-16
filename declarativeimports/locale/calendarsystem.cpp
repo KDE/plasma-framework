@@ -23,13 +23,13 @@
 #include "kconfiggroup.h"
 #include <KCalendarSystem>
 #include <KDateTime>
-
+#include <KGlobal>
 #include <QtCore/QDateTime>
 
 CalendarSystem::CalendarSystem(QObject* parent)
         : QObject(parent)
 {
-    m_calendarSystem = KCalendarSystem::create(KLocale::CalendarSystem, 0);
+    m_calendarSystem = KCalendarSystem::create(KGlobal::locale()->calendarSystem());
 }
 
 
@@ -450,4 +450,24 @@ int CalendarSystem::applyShortYearWindow(int inputYear) const
 int CalendarSystem::weekStartDay() const
 {
     return m_calendarSystem->weekStartDay();
+}
+
+bool CalendarSystem::isSolar() const
+{
+    return m_calendarSystem->isSolar();
+}
+
+bool CalendarSystem::isLunar() const
+{
+    return m_calendarSystem->isLunar();
+}
+
+bool CalendarSystem::isLunisolar() const
+{
+    return m_calendarSystem->isLunisolar();
+}
+
+bool CalendarSystem::isProleptic() const
+{
+    return m_calendarSystem->isProleptic();
 }
