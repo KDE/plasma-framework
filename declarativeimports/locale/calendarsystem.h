@@ -44,6 +44,20 @@ Q_ENUMS(StringFormat)
 Q_ENUMS(MonthNameFormat)
 Q_ENUMS(WeekDayNameFormat)
 
+//properties
+Q_PROPERTY(Locale::CalendarSystem calendarSystem READ calendarSystem NOTIFY calendarSystemChanged)
+Q_PROPERTY(QString calendarLabel READ calendarLabel NOTIFY calendarLabelChanged)
+Q_PROPERTY(QDate epoch READ epoch NOTIFY epochChanged)
+Q_PROPERTY(QDate earliestValidDate READ earliestValidDate NOTIFY earliestValidDateChanged)
+Q_PROPERTY(QDate latestValidDate READ latestValidDate NOTIFY latestValidDateChanged)
+
+Q_PROPERTY(int shortYearWindowStartYear READ shortYearWindowStartYear NOTIFY shortYearWindowStartYearChanged)
+Q_PROPERTY(int weekStartDay READ weekStartDay NOTIFY weekStartDayChanged)
+Q_PROPERTY(bool isLunar READ isLunar NOTIFY isLunarChanged)
+Q_PROPERTY(bool isLunisolar READ isLunisolar NOTIFY isLunisolarChanged)
+Q_PROPERTY(bool isSolar READ isSolar NOTIFY isSolarChanged)
+Q_PROPERTY(bool isProleptic READ isProleptic NOTIFY isProlepticChanged)
+
 public:
 
     //ctor
@@ -123,7 +137,7 @@ public:
      *
      * @return type of calendar system
      */
-    Q_INVOKABLE Locale::CalendarSystem calendarSystem() const;
+    Locale::CalendarSystem calendarSystem() const;
 
     //KDE5 make virtual?
     /**
@@ -132,7 +146,7 @@ public:
      *
      * @return localized label for this Calendar System
      */
-    Q_INVOKABLE QString calendarLabel() const;
+    QString calendarLabel() const;
 
     /**
      * Returns a QDate holding the epoch of the calendar system.  Usually YMD
@@ -149,7 +163,7 @@ public:
      *
      * @return epoch of calendar system
      */
-    Q_INVOKABLE virtual QDate epoch() const;
+    virtual QDate epoch() const;
 
     /**
      * Returns the earliest date valid in this calendar system implementation.
@@ -161,7 +175,7 @@ public:
      *
      * @return date the earliest valid date
      */
-    Q_INVOKABLE virtual QDate earliestValidDate() const;
+    virtual QDate earliestValidDate() const;
 
     /**
      * Returns the latest date valid in this calendar system implementation.
@@ -171,7 +185,7 @@ public:
      *
      * @return date the latest valid date
      */
-    Q_INVOKABLE virtual QDate latestValidDate() const;
+    virtual QDate latestValidDate() const;
 
     /**
      * Returns whether a given date is valid in this calendar system.
@@ -1084,7 +1098,7 @@ public:
      * @see Locale::applyShortYearWindow
      * @return the short year window start year
      */
-    Q_INVOKABLE int shortYearWindowStartYear() const;
+    int shortYearWindowStartYear() const;
 
     //KDE5 Make virtual
     /**
@@ -1116,28 +1130,28 @@ public:
      *
      * @return an integer (Monday = 1, ..., Sunday = 7)
      */
-    Q_INVOKABLE virtual int weekStartDay() const;
+    virtual int weekStartDay() const;
 
     /**
      * Returns whether the calendar is lunar based.
      *
      * @return @c true if the calendar is lunar based, @c false if not
      */
-    Q_INVOKABLE bool isLunar() const;
+    bool isLunar() const;
 
     /**
      * Returns whether the calendar is lunisolar based.
      *
      * @return @c true if the calendar is lunisolar based, @c false if not
      */
-    Q_INVOKABLE bool isLunisolar() const;
+    bool isLunisolar() const;
 
     /**
      * Returns whether the calendar is solar based.
      *
      * @return @c true if the calendar is solar based, @c false if not
      */
-    Q_INVOKABLE bool isSolar() const;
+    bool isSolar() const;
 
     /**
      * Returns whether the calendar system is proleptic, i.e. whether dates
@@ -1147,7 +1161,20 @@ public:
      *
      * @return @c true if the calendar system is proleptic, @c false if not
      */
-    Q_INVOKABLE bool isProleptic() const;
+    bool isProleptic() const;
+
+Q_SIGNALS:
+    void calendarSystemChanged();
+    void calendarLabelChanged();
+    void epochChanged();
+    void earliestValidDateChanged();
+    void latestValidDateChanged();
+    void shortYearWindowStartYearChanged();
+    void weekStartDayChanged();
+    void isLunarChanged();
+    void isLunisolarChanged();
+    void isSolarChanged();
+    void isProlepticChanged();
 
 private:
     KCalendarSystem *m_calendarSystem;
