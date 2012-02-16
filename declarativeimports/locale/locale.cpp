@@ -633,11 +633,6 @@ Locale::WeekNumberSystem Locale::weekNumberSystem() const
     return (Locale::WeekNumberSystem)m_locale->weekNumberSystem();
 }
 
-void Locale::copyCatalogsTo(Locale *locale)
-{//TODO find a better way to do the cast?
-    m_locale->copyCatalogsTo((KLocale *)locale);
-}
-
 QString Locale::localizedFilePath(const QString &filePath) const
 {
     return m_locale->localizedFilePath(filePath);
