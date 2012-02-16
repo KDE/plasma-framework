@@ -32,7 +32,6 @@ class QDate;
 class QTime;
 class QDateTime;
 
-class KDateTime; //TODO will this work?
 class KCalendarSystem;//TODO make it calendarSystem???
 
 /**
@@ -120,53 +119,7 @@ Q_PROPERTY(int workingWeekStartDay READ workingWeekStartDay WRITE setWorkingWeek
 
 public:
     /**
-     * Constructs a KLocale with the given catalog name
-     *
-     * The constructor looks for an entry Language in the group Locale in the
-     * configuration file.
-     *
-     * If no configuration file is specified, it will also look for languages
-     * using the environment variables (KDE_LANG, LC_MESSAGES, LC_ALL, LANG),
-     * as well as the global configuration file. If KLocale is not able to use
-     * any of the specified languages, the default language (en_US) will be
-     * used.
-     *
-     * If you specify a configuration file, it has to be valid until the KLocale
-     * object is destroyed.  Note that a setLocale() will be performed on the
-     * config using the current locale language, which may cause a sync()
-     * and reparseConfiguration() which will save any changes you have made and
-     * load any changes other shared copies have made.
-     *
-     * @param catalog the name of the main language file
-     * @param config  a configuration file with a Locale group detailing
-     *                locale-related preferences (such as language and
-     *                formatting options).
-     */
-    //explicit KLocale(const QString& catalog, KSharedConfig::Ptr config = KSharedConfig::Ptr());
-
-    /**
-     * Constructs a KLocale with the given catalog name
-     *
-     * Allows you to override the language and, optionally, the
-     * country of this locale.
-     *
-     * If you specify a configuration file, a setLocale() will be performed on
-     * the config using the current locale language, which may cause a sync()
-     * and reparseConfiguration() which will save any changes you have made.
-     *
-     * @param catalog  the name of the main language file
-     * @param language the ISO Language Code for the locale, e.g. "en" for English
-     * @param country  the ISO Country Code for the locale, e.g. "us" for USA
-     * @param config   a configuration file with a Locale group detailing
-     *                 locale-related preferences (such as language and
-     *                 formatting options).
-     */
-   /* KLocale(const QString& catalog, const QString &language, const QString &country = QString(),
-            KConfig *config = 0);
-            */
-
-    /**
-     * Copy constructor
+     * ctor
      */
     Locale(QObject *parent = 0);
 
