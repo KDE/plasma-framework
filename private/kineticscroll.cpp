@@ -349,8 +349,8 @@ void KineticScrolling::setWidget(QGraphicsWidget *parent)
         d->parent->removeEventFilter(this);
         disconnect(d->scrollAnimation, SIGNAL(finished()), this, SLOT(overshoot()));
         disconnect(d->scrollAnimation,
-                SIGNAL(stateChanged(QAbstractAnimation::State, QAbstractAnimation::State)), this,
-                SIGNAL(stateChanged(QAbstractAnimation::State, QAbstractAnimation::State)));
+                SIGNAL(stateChanged(QAbstractAnimation::State,QAbstractAnimation::State)), this,
+                SIGNAL(stateChanged(QAbstractAnimation::State,QAbstractAnimation::State)));
         delete d->scrollAnimation;
     }
 
@@ -361,8 +361,8 @@ void KineticScrolling::setWidget(QGraphicsWidget *parent)
     d->scrollAnimation = new QPropertyAnimation(parent, "scrollPosition", parent);
     connect(d->scrollAnimation, SIGNAL(finished()), this, SLOT(overshoot()));
     connect(d->scrollAnimation,
-            SIGNAL(stateChanged(QAbstractAnimation::State, QAbstractAnimation::State)), this,
-            SIGNAL(stateChanged(QAbstractAnimation::State, QAbstractAnimation::State)));
+            SIGNAL(stateChanged(QAbstractAnimation::State,QAbstractAnimation::State)), this,
+            SIGNAL(stateChanged(QAbstractAnimation::State,QAbstractAnimation::State)));
     d->scrollAnimation->setEasingCurve(QEasingCurve::OutCirc);
 
     if (parent) {

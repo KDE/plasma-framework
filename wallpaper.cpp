@@ -598,7 +598,7 @@ bool WallpaperPrivate::findInCache(const QString &key, unsigned int lastModified
             }
 
             LoadImageThread *loadImageT = new LoadImageThread(cache);
-            q->connect(loadImageT, SIGNAL(done(const QImage&)), q, SIGNAL(renderCompleted(const QImage&)));
+            q->connect(loadImageT, SIGNAL(done(QImage)), q, SIGNAL(renderCompleted(QImage)));
             QThreadPool::globalInstance()->start(loadImageT);
 
             return true;

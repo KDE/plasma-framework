@@ -88,7 +88,7 @@ QWidget* ContextTest::createConfigurationInterface(QWidget* parent)
 
     m_ui.text->setText(m_text);
     //FIXME this way or just get it on close?
-    //connect(m_ui.text, SIGNAL(changed(const QColor&)), this, SLOT(setColor(const QColor&)));
+    //connect(m_ui.text, SIGNAL(changed(QColor)), this, SLOT(setColor(QColor)));
     //connect(this, SIGNAL(settingsChanged(bool)), parent, SLOT(settingsChanged(bool)));
     return widget;
 }

@@ -51,7 +51,7 @@ ServiceProvider::ServiceProvider(const QString &name, Service *service)
     : Jolie::AbstractAdaptor(service),
       m_service(service)
 {
-    connect(service, SIGNAL(finished(Plasma::ServiceJob *)),
+    connect(service, SIGNAL(finished(Plasma::ServiceJob*)),
             this, SLOT(operationCompleted(Plasma::ServiceJob*)));
 
     m_providerName = name;

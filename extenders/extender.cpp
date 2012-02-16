@@ -111,8 +111,8 @@ Extender::Extender(Applet *applet)
     d->mainWidget = new QGraphicsWidget(d->scrollWidget);
     d->scrollWidget->setWidget(d->mainWidget);
     d->mainWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    connect(d->scrollWidget, SIGNAL(viewportGeometryChanged(const QRectF &)),
-            this, SLOT(viewportGeometryChanged(const QRectF &)));
+    connect(d->scrollWidget, SIGNAL(viewportGeometryChanged(QRectF)),
+            this, SLOT(viewportGeometryChanged(QRectF)));
 
     d->layout = new QGraphicsLinearLayout(d->mainWidget);
     d->layout->setOrientation(Qt::Vertical);

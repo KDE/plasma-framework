@@ -767,8 +767,8 @@ void Animator::registerScrollingManager(QGraphicsWidget *widget)
         KineticScrolling *scroll = new KineticScrolling(widget);
         d->scrollingManagers.insert(widget, scroll);
         connect(scroll,
-                SIGNAL(stateChanged(QAbstractAnimation::State, QAbstractAnimation::State)), this,
-                SLOT(scrollStateChanged(QAbstractAnimation::State, QAbstractAnimation::State)));
+                SIGNAL(stateChanged(QAbstractAnimation::State,QAbstractAnimation::State)), this,
+                SLOT(scrollStateChanged(QAbstractAnimation::State,QAbstractAnimation::State)));
     }
 }
 
@@ -776,8 +776,8 @@ void Animator::unregisterScrollingManager(QGraphicsWidget *widget)
 {
     if (d->scrollingManagers.contains(widget)) {
         disconnect(d->scrollingManagers.value(widget),
-                SIGNAL(stateChanged(QAbstractAnimation::State, QAbstractAnimation::State)), this,
-                SLOT(scrollStateChanged(QAbstractAnimation::State, QAbstractAnimation::State)));
+                SIGNAL(stateChanged(QAbstractAnimation::State,QAbstractAnimation::State)), this,
+                SLOT(scrollStateChanged(QAbstractAnimation::State,QAbstractAnimation::State)));
         d->scrollingManagers.value(widget)->deleteLater();
         d->scrollingManagers.remove(widget);
     }
