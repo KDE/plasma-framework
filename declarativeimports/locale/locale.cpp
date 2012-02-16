@@ -555,14 +555,14 @@ bool Locale::useTranscript() const
     return m_locale->useTranscript();
 }
 
-const QByteArray Locale::encoding() const
+const QVariant Locale::encoding() const
 {
-    return m_locale->encoding();
+    return QVariant(m_locale->encoding());
 }
 
-int Locale::encodingMib() const
+QVariant Locale::encodingMib() const
 {
-    return m_locale->encodingMib();
+    return QVariant(m_locale->encodingMib());
 }
 
 int Locale::fileEncodingMib() const
@@ -570,9 +570,9 @@ int Locale::fileEncodingMib() const
     return m_locale->fileEncodingMib();
 }
 
-bool Locale::setEncoding(int mibEnum)
+bool Locale::setEncoding(QVariant mibEnum)
 {
-    return m_locale->setEncoding(mibEnum);
+    return m_locale->setEncoding(mibEnum.toInt());
     emit encodingChanged();
 }
 

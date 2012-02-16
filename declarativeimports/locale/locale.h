@@ -21,6 +21,8 @@
 #define LOCALE_H
 
 #include <QObject>
+#include <QVariant>
+
 #include <KLocale>
 
 class QString;
@@ -32,7 +34,6 @@ class QDateTime;
 
 class KDateTime; //TODO will this work?
 class KCalendarSystem;//TODO make it calendarSystem???
-class KCurrencyCode;//TODO will this work?
 
 /**
  * \file klocale.h
@@ -96,7 +97,7 @@ Q_PROPERTY(DigitSet dateTimeDigitSet READ dateTimeDigitSet WRITE setDateTimeDigi
 Q_PROPERTY(int decimalPlaces READ decimalPlaces WRITE setDecimalPlaces NOTIFY decimalPlacesChanged)
 Q_PROPERTY(QString decimalSymbol READ decimalSymbol WRITE setDecimalSymbol NOTIFY decimalSymbolChanged)
 Q_PROPERTY(DigitSet digitSet READ digitSet WRITE setDigitSet NOTIFY digitSetChanged)
-Q_PROPERTY(QByteArray encoding READ encoding WRITE setEncoding NOTIFY encodingChanged)
+Q_PROPERTY(QVariant encoding READ encoding WRITE setEncoding NOTIFY encodingChanged)
 Q_PROPERTY(QString language READ language NOTIFY languageChanged)
 Q_PROPERTY(MeasureSystem measureSystem READ measureSystem WRITE setMeasureSystem NOTIFY measureSystemChanged)
 Q_PROPERTY(int monetaryDecimalPlaces READ monetaryDecimalPlaces WRITE setMonetaryDecimalPlaces NOTIFY monetaryDecimalPlacesChanged)
@@ -278,7 +279,7 @@ public:
      *
      * @return True on success.
      */
-    bool setEncoding(int mibEnum);
+    bool setEncoding(QVariant mibEnum);
 
     /**
      * Various positions for where to place the positive or negative
@@ -1333,7 +1334,7 @@ public:
      * @see codecForEncoding
      * @see encodingMib
      */
-    const QByteArray encoding() const;
+    const QVariant encoding() const;
 
     /**
      * Returns the user's preferred encoding.
@@ -1343,7 +1344,7 @@ public:
      * @see encoding
      * @see codecForEncoding
      */
-    Q_INVOKABLE int encodingMib() const;
+    Q_INVOKABLE QVariant encodingMib() const;
 
     /**
      * Returns the file encoding.
