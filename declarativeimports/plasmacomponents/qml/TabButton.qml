@@ -143,8 +143,8 @@ Item {
     Private.IconLoader {
         id: imageLoader
 
-        implicitWidth: theme.smallIconSize
-        implicitHeight: theme.smallIconSize
+        implicitWidth: internal.portrait ? Math.max(theme.smallIconSize, root.height - (label.text ? label.height : 0)) : Math.max(theme.smallIconSize, root.height)
+        implicitHeight: implicitWidth
 
         anchors {
             left: internal.portrait ? undefined : parent.left

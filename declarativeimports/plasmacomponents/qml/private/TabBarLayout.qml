@@ -112,11 +112,11 @@ Item {
             if (childCount != 0) {
                 //not too much efficient but the loop over children needs to be done two times to get the proper child width
                 for (var i = 0; i < childCount; ++i) {
-                    if (!root.children[i].visible) {
+                    if (!root.children[i].visible || root.children[i].text == undefined) {
                         --visibleChildCount
                     }
                 }
-                var itemWidth = (root.width - (childCount-1)*10) / visibleChildCount
+                var itemWidth = (root.width - (visibleChildCount-1)*10) / visibleChildCount
                 var itemIndex = mirrored ? childCount - 1 : 0
                 var increment = mirrored ? - 1 : 1
                 var visibleIndex = 0
