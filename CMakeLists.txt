@@ -81,7 +81,7 @@ endif(QCA2_FOUND)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-plasma.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-plasma.h)
 
 #FIXME: gpgme++ is in kdepimlibs, must move somewhere else!
-include_directories(${KDEPIMLIBS_INCLUDE_DIRS})
+include_directories(${KDEPIMLIBS_INCLUDE_DIRS} ${GPGME_INCLUDES})
 
 add_subdirectory(tests)
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1209)
