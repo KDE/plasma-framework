@@ -130,6 +130,9 @@ void listTypes()
     builtIns.insert(i18n("Theme"), QStringList() << "" << "desktoptheme/");
     builtIns.insert(i18n("Wallpaper Images"), QStringList() << "" << "wallpapers/");
     builtIns.insert(i18n("Wallpaper Plugin"), QStringList() << "Plasma/Wallpaper" << "plasma/wallpapers/");
+    builtIns.insert(i18n("KWin Effect"), QStringList() << "KWin/Effect" << "kwin/effects/");
+    builtIns.insert(i18n("KWin Window Switcher"), QStringList() << "KWin/WindowSwitcher" << "kwin/tabbox/");
+    builtIns.insert(i18n("KWin Script"), QStringList() << "KWin/Script" << "kwin/scripts/");
     renderTypeTable(builtIns);
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure");
@@ -310,6 +313,21 @@ int main(int argc, char **argv)
         packageRoot = "plasma/layout-templates/";
         servicePrefix = "plasma-layout-";
         pluginTypes << "Plasma/LayoutTemplate";
+    } else if (type.compare(i18nc("package type", "kwineffect"), Qt::CaseInsensitive) == 0 ||
+               type.compare("kwineffect", Qt::CaseInsensitive) == 0) {
+        packageRoot = "kwin/effects/";
+        servicePrefix = "kwin-effect-";
+        pluginTypes << "KWin/Effect";
+    } else if (type.compare(i18nc("package type", "windowswitcher"), Qt::CaseInsensitive) == 0 ||
+               type.compare("windowswitcher", Qt::CaseInsensitive) == 0) {
+        packageRoot = "kwin/tabbox/";
+        servicePrefix = "kwin-windowswitcher-";
+        pluginTypes << "KWin/WindowSwitcher";
+    } else if (type.compare(i18nc("package type", "kwinscript"), Qt::CaseInsensitive) == 0 ||
+               type.compare("kwinscript", Qt::CaseInsensitive) == 0) {
+        packageRoot = "kwin/scripts/";
+        servicePrefix = "kwin-script-";
+        pluginTypes << "KWin/Script";
     } else {
         const QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(type);
         KService::List offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure", constraint);
