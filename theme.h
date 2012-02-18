@@ -352,7 +352,7 @@ class PLASMA_EXPORT Theme : public QObject
          * @return the default homepage to use in conjunction with the branding svg content
          * @since 4.7
          */
-        KUrl homepage() const;
+        QUrl homepage() const;
 
         /**
          * @return the default tool tip delay; -1 means "no tooltips"
