@@ -24,11 +24,11 @@
 #include <QVarLengthArray>
 #include <QMouseEvent>
 
+#include <kwindoweffects.h>
 #include <kwindowsystem.h>
 #include <kdebug.h>
 
 #include <plasma/framesvg.h>
-#include <plasma/windoweffects.h>
 
 #ifdef Q_WS_X11
 #include <QX11Info>
@@ -51,7 +51,7 @@ WindowPreview::WindowPreview(QWidget *parent)
 
 void WindowPreview::setWindowIds(const QList<WId> wids)
 {
-    if (!WindowEffects::isEffectAvailable(WindowEffects::WindowPreview)) {
+    if (!KWindowEffects::isEffectAvailable(KWindowEffects::WindowPreview)) {
         setMinimumSize(0,0);
         setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
         ids.clear();
@@ -65,7 +65,7 @@ void WindowPreview::setWindowIds(const QList<WId> wids)
         ids = wids.mid(0, 4);
     }
 
-    windowSizes = WindowEffects::windowSizes(ids);
+    windowSizes = KWindowEffects::windowSizes(ids);
     QSize s(sizeHint());
     if (s.isValid()) {
         setFixedSize(sizeHint());
@@ -84,7 +84,7 @@ QSize WindowPreview::sizeHint() const
     }
 
     if (!windowSizes.size() == 0) {
-        windowSizes = WindowEffects::windowSizes(ids);
+        windowSizes = KWindowEffects::windowSizes(ids);
     }
 
     int maxHeight = 0;
@@ -135,16 +135,16 @@ void WindowPreview::setInfo()
 {
     QWidget *w = parentWidget();
     if (isEmpty()) {
-        WindowEffects::showWindowThumbnails(w->winId());
+        KWindowEffects::showWindowThumbnails(w->winId());
         return;
     }
 
     if (windowSizes.size() == 0) {
-        windowSizes = WindowEffects::windowSizes(ids);
+        windowSizes = KWindowEffects::windowSizes(ids);
     }
 
     if (windowSizes.size() == 0) {
-        WindowEffects::showWindowThumbnails(w->winId());
+        KWindowEffects::showWindowThumbnails(w->winId());
         return;
     }
 
@@ -173,7 +173,7 @@ void WindowPreview::setInfo()
         x += s.width() + WINDOW_MARGIN;
     }
 
-    WindowEffects::showWindowThumbnails(w->winId(), ids, inParentCoords);
+    KWindowEffects::showWindowThumbnails(w->winId(), ids, inParentCoords);
 }
 
 void WindowPreview::paintEvent(QPaintEvent *e)
@@ -212,12 +212,12 @@ void WindowPreview::mouseMoveEvent(QMouseEvent *event)
 
     for (int i = 0; i < m_thumbnailRects.size(); ++i) {
         if (m_thumbnailRects[i].contains(event->pos())) {
-            WindowEffects::highlightWindows(effectiveWinId(), QList<WId>() << effectiveWinId() << ids[i]);
+            KWindowEffects::highlightWindows(effectiveWinId(), QList<WId>() << effectiveWinId() << ids[i]);
             return;
         }
     }
 
-    WindowEffects::highlightWindows(effectiveWinId(), QList<WId>());
+    KWindowEffects::highlightWindows(effectiveWinId(), QList<WId>());
 }
 
 void WindowPreview::leaveEvent(QEvent *event)
@@ -226,7 +226,7 @@ void WindowPreview::leaveEvent(QEvent *event)
     if (!m_highlightWindows) {
         return;
     }
-    WindowEffects::highlightWindows(effectiveWinId(), QList<WId>());
+    KWindowEffects::highlightWindows(effectiveWinId(), QList<WId>());
 }
 
 } // namespace Plasma

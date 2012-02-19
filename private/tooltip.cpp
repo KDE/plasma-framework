@@ -39,12 +39,12 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
+#include <kwindoweffects.h>
 
 #include <plasma/plasma.h>
 #include <plasma/paintutils.h>
 #include <plasma/theme.h>
 #include <plasma/framesvg.h>
-#include <plasma/windoweffects.h>
 
 namespace Plasma {
 
@@ -208,7 +208,7 @@ void ToolTip::showEvent(QShowEvent *e)
     checkSize();
     QWidget::showEvent(e);
     d->preview->setInfo();
-    WindowEffects::overrideShadow(winId(), true);
+    KWindowEffects::overrideShadow(winId(), true);
 }
 
 void ToolTip::hideEvent(QHideEvent *e)
@@ -221,7 +221,7 @@ void ToolTip::hideEvent(QHideEvent *e)
         QMetaObject::invokeMethod(source, "toolTipHidden");
     }
 
-    WindowEffects::highlightWindows(winId(), QList<WId>());
+    KWindowEffects::highlightWindows(winId(), QList<WId>());
 }
 
 void ToolTip::mouseReleaseEvent(QMouseEvent *event)
@@ -300,7 +300,7 @@ void ToolTip::setContent(QObject *tipper, const ToolTipContent &data)
     }
 
     if (data.highlightWindows() && !data.windowsToPreview().isEmpty()) {
-        WindowEffects::highlightWindows(winId(), QList<WId>() << winId() << data.windowsToPreview());
+        KWindowEffects::highlightWindows(winId(), QList<WId>() << winId() << data.windowsToPreview());
     }
 
     d->preview->setWindowIds(data.windowsToPreview());
@@ -345,7 +345,7 @@ void ToolTip::resizeEvent(QResizeEvent *e)
     QWidget::resizeEvent(e);
     d->background->resizeFrame(size());
     if (Plasma::Theme::defaultTheme()->windowTranslucencyEnabled()) {
-        WindowEffects::enableBlurBehind(winId(), true, d->background->mask());
+        KWindowEffects::enableBlurBehind(winId(), true, d->background->mask());
         clearMask();
     } else {
         setMask(d->background->mask());

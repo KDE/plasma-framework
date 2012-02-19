@@ -42,12 +42,12 @@
 #include <kimagecache.h>
 #include <ksharedconfig.h>
 #include <kstandarddirs.h>
+#include <kwindoweffects.h>
 #include <kwindowsystem.h>
 
 
 #include "libplasma-theme-global.h"
 #include "private/packages_p.h"
-#include "windoweffects.h"
 
 namespace Plasma
 {
@@ -258,7 +258,7 @@ QString ThemePrivate::findInTheme(const QString &image, const QString &theme, bo
     } else if (!compositingActive) {
         search = QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/opaque/") % image;
         search =  KStandardDirs::locate("data", search);
-    } else if (WindowEffects::isEffectAvailable(WindowEffects::BlurBehind)) {
+    } else if (KWindowEffects::isEffectAvailable(KWindowEffects::BlurBehind)) {
         search = QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/translucent/") % image;
         search =  KStandardDirs::locate("data", search);
     }

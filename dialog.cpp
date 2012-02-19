@@ -42,6 +42,7 @@
 #include <QGraphicsLayout>
 
 #include <kdebug.h>
+#include <kwindoweffects.h>
 #include <kwindowsystem.h>
 #include <netwm.h>
 
@@ -52,7 +53,6 @@
 #include "plasma/framesvg.h"
 #include "plasma/theme.h"
 #include "plasma/widgets/scrollwidget.h"
-#include "plasma/windoweffects.h"
 #include "plasma/private/windowshadows_p.h"
 
 #ifdef Q_WS_X11
@@ -110,7 +110,7 @@ void DialogPrivate::themeChanged()
 void DialogPrivate::updateMask()
 {
     const bool translucency = Plasma::Theme::defaultTheme()->windowTranslucencyEnabled();
-    WindowEffects::enableBlurBehind(q->winId(), translucency,
+    KWindowEffects::enableBlurBehind(q->winId(), translucency,
                                     translucency ? background->mask() : QRegion());
     if (translucency) {
         q->clearMask();
@@ -380,7 +380,7 @@ Dialog::Dialog(QWidget *parent, Qt::WindowFlags f)
     QPalette pal = palette();
     pal.setColor(backgroundRole(), Qt::transparent);
     setPalette(pal);
-    WindowEffects::overrideShadow(winId(), true);
+    KWindowEffects::overrideShadow(winId(), true);
 
     d->adjustViewTimer = new QTimer(this);
     d->adjustViewTimer->setSingleShot(true);
@@ -708,7 +708,7 @@ void Dialog::showEvent(QShowEvent * event)
     }
 
     emit dialogVisible(true);
-    WindowEffects::overrideShadow(winId(), true);
+    KWindowEffects::overrideShadow(winId(), true);
 }
 
 void Dialog::focusInEvent(QFocusEvent *event)
@@ -788,25 +788,25 @@ void Dialog::animatedHide(Plasma::Direction direction)
         return;
     }
 
-    Location location = Desktop;
+    KWindowEffects::SlideFromLocation location = KWindowEffects::NoEdge;
     switch (direction) {
     case Down:
-        location = BottomEdge;
+        location = KWindowEffects::BottomEdge;
         break;
     case Right:
-        location = RightEdge;
+        location = KWindowEffects::RightEdge;
         break;
     case Left:
-        location = LeftEdge;
+        location = KWindowEffects::LeftEdge;
         break;
     case Up:
-        location = TopEdge;
+        location = KWindowEffects::TopEdge;
         break;
     default:
         break;
     }
 
-    Plasma::WindowEffects::slideWindow(this, location);
+    KWindowEffects::slideWindow(this, location);
     hide();
 }
 
@@ -818,26 +818,26 @@ void Dialog::animatedShow(Plasma::Direction direction)
     }
 
     //copied to not add new api
-    Location location = Desktop;
+    KWindowEffects::SlideFromLocation location = KWindowEffects::NoEdge;
     switch (direction) {
     case Up:
-        location = BottomEdge;
+        location = KWindowEffects::BottomEdge;
         break;
     case Left:
-        location = RightEdge;
+        location = KWindowEffects::RightEdge;
         break;
     case Right:
-        location = LeftEdge;
+        location = KWindowEffects::LeftEdge;
         break;
     case Down:
-        location = TopEdge;
+        location = KWindowEffects::TopEdge;
         break;
     default:
         break;
     }
 
     if (Plasma::Theme::defaultTheme()->windowTranslucencyEnabled()) {
-        Plasma::WindowEffects::slideWindow(this, location);
+        KWindowEffects::slideWindow(this, location);
     }
 
     show();
