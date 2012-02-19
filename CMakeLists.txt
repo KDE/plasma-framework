@@ -168,7 +168,6 @@ set(plasma_LIB_SRCS
     version.cpp
     view.cpp
     wallpaper.cpp
-    windoweffects.cpp
 
 
     #Temporary QtJolie branch
@@ -335,7 +334,6 @@ set(plasma_LIB_INCLUDES
     dialog.h
     pluginloader.h
     paintutils.h
-    windoweffects.h
     framesvg.h
     package.h
     packagestructure.h
