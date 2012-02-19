@@ -89,7 +89,7 @@ PlasmaComponents.Page {
             width: 140
             height: 30
             text: "Icon Button"
-            iconSource: "/home/dakerfp/work/comics-reader/ui/images/random.png"
+            iconSource: "system-shutdown"
 
             Keys.onTabPressed: bt5.forceActiveFocus();
         }
@@ -98,7 +98,7 @@ PlasmaComponents.Page {
             id: bt5
             width: 140
             height: 30
-            iconSource: "/home/dakerfp/work/comics-reader/ui/images/random.png"
+            iconSource: "system-switch-user"
 
             Keys.onTabPressed: bt1.forceActiveFocus();
         }
