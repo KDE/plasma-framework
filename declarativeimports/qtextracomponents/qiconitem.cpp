@@ -28,7 +28,6 @@
 QIconItem::QIconItem(QDeclarativeItem *parent)
     : QDeclarativeItem(parent),
       m_smooth(false),
-      m_group(NoGroup),
       m_state(DefaultState)
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
@@ -55,24 +54,6 @@ QIcon QIconItem::icon() const
     return m_icon;
 }
 
-void QIconItem::setGroup(QIconItem::Group group)
-{
-    if (m_group == group) {
-        return;
-    }
-
-    m_group = group;
-    emit groupChanged(group);
-    emit implicitWidthChanged(implicitWidth());
-    emit implicitHeightChanged(implicitHeight());
-    update();
-}
-
-QIconItem::Group QIconItem::group() const
-{
-    return m_group;
-}
-
 QIconItem::State QIconItem::state() const
 {
     return m_state;
@@ -91,12 +72,12 @@ void QIconItem::setState(QIconItem::State state)
 
 int QIconItem::implicitWidth() const
 {
-    return KIconLoader::global()->currentSize((KIconLoader::Group)m_group);
+    return KIconLoader::global()->currentSize(KIconLoader::Desktop);
 }
 
 int QIconItem::implicitHeight() const
 {
-    return KIconLoader::global()->currentSize((KIconLoader::Group)m_group);
+    return KIconLoader::global()->currentSize(KIconLoader::Desktop);
 }
 
 void QIconItem::setSmooth(const bool smooth)

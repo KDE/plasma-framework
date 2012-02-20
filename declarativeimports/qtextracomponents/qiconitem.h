@@ -29,25 +29,13 @@ class QIconItem : public QDeclarativeItem
 
     Q_PROPERTY(QVariant icon READ icon WRITE setIcon)
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth)
-    Q_PROPERTY(int implicitWidth READ implicitWidth NOTIFY implicitWidthChanged)
-    Q_PROPERTY(int implicitHeight READ implicitHeight NOTIFY implicitHeightChanged)
-    Q_PROPERTY(Group group READ group WRITE setGroup NOTIFY groupChanged)
+    Q_PROPERTY(int implicitWidth READ implicitWidth CONSTANT)
+    Q_PROPERTY(int implicitHeight READ implicitHeight CONSTANT)
     Q_PROPERTY(State state READ state WRITE setState NOTIFY stateChanged)
 
-    Q_ENUMS(Group)
     Q_ENUMS(State)
 
 public:
-    enum Group {
-        NoGroup, ///No group.
-        Desktop, ///Desktop icons.
-        FirstGroup, ///First group.
-        Toolbar, ///Toolbar icons.
-        MainToolbar, ///Main toolbar icons.
-        Small, ///Small icons, e.g. for buttons.
-        Panel, ///Panel (Plasma Taskbar) icons.
-        Dialog, ///Icons for use in dialog titles, page lists, etc.
-    };
 
     enum State {
         DefaultState, ///The default state. 
@@ -61,9 +49,6 @@ public:
     void setIcon(const QVariant &icon);
     QIcon icon() const;
 
-    void setGroup(Group group);
-    Group group() const;
-
     QIconItem::State state() const;
     void setState(State state);
 
@@ -76,15 +61,11 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 Q_SIGNALS:
-    void implicitWidthChanged(int implicitWidth);
-    void implicitHeightChanged(int implicitHeight);
-    void groupChanged(Group group);
     void stateChanged(State state);
 
 private:
     QIcon m_icon;
     bool m_smooth;
-    Group m_group;
     State m_state;
 };
 
