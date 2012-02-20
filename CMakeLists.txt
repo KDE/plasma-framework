@@ -104,7 +104,7 @@ set(plasma_LIB_SRCS
     datacontainer.cpp
     dataengine.cpp
     dataenginemanager.cpp
-    delegate.cpp
+    
     package.cpp
     packagestructure.cpp
     paintutils.cpp
@@ -138,7 +138,8 @@ set(plasma_LIB_SRCS
     private/wallpaperrenderthread.cpp
     private/windowpreview.cpp
     private/windowshadows.cpp
-    private/kineticscroll.cpp
+    private/appletprivate.cpp
+    
     querymatch.cpp
     remote/accessmanager.cpp
     remote/accessappletjob.cpp
@@ -168,7 +169,6 @@ set(plasma_LIB_SRCS
     tooltipcontent.cpp
     tooltipmanager.cpp
     version.cpp
-    view.cpp
     wallpaper.cpp
 
 
@@ -189,9 +189,11 @@ set(plasma_LIB_SRCS
     #FIXME: all these must move into the qgv library
     private/themedwidgetinterface.cpp
     widgets/iconwidget.cpp
+    view.cpp
 )
 
 set (plasmaqgv_LIB_SRCS
+    delegate.cpp
     #FIXME: this is duplicated with libplasma because iconwidget requires it!
     private/themedwidgetinterface.cpp
 
@@ -218,6 +220,7 @@ set (plasmaqgv_LIB_SRCS
     private/focusindicator.cpp
     private/nativetabbar.cpp
     private/style.cpp
+    private/kineticscroll.cpp
 
     widgets/label.cpp
     widgets/scrollbar.cpp
