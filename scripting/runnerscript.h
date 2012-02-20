@@ -20,7 +20,6 @@
 #ifndef PLASMA_RUNNERSCRIPT_H
 #define PLASMA_RUNNERSCRIPT_H
 
-#include <kgenericfactory.h>
 #include <kplugininfo.h>
 
 #include <plasma/plasma_export.h>

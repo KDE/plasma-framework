@@ -105,7 +105,7 @@ void PlasmoidPackageTest::isValid()
     Plasma::Package *p = new Plasma::Package(m_defaultPackage);
     p->setPath(m_packageRoot + '/' + m_package);
 #ifndef NDEBUG
-    kDebug() << "package path is" << p->path();
+    qDebug() << "package path is" << p->path();
 #endif
 
     // A PlasmoidPackage is valid when:

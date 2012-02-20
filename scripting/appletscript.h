@@ -24,7 +24,6 @@
 #include <QtCore/QRect>
 #include <QtCore/QSizeF>
 
-#include <kgenericfactory.h>
 #include <kplugininfo.h>
 
 #include <plasma/containment.h>

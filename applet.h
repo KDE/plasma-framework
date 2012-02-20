@@ -27,7 +27,6 @@
 #include <QIcon>
 
 #include <kconfiggroup.h>
-#include <kgenericfactory.h>
 #include <kplugininfo.h>
 #include <kshortcut.h>
 
