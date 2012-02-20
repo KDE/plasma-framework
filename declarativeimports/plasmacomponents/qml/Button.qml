@@ -250,7 +250,7 @@ Item {
             font.weight: theme.defaultFont.weight
             font.wordSpacing: theme.defaultFont.wordSpacing
             color: theme.buttonTextColor
-            horizontalAlignment: icon.valid ? Text.AlignHCenter : Text.AlignLeft
+            horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
     }
