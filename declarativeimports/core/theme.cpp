@@ -153,7 +153,10 @@ QSize FontProxy::mSize() const
 ThemeProxy::ThemeProxy(QObject *parent)
     : QObject(parent)
 {
+    m_defaultIconSize = KIconLoader::global()->currentSize(KIconLoader::Desktop);
+
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), this, SIGNAL(themeChanged()));
+    connect(KIconLoader::global(), SIGNAL(iconLoaderSettingsChanged()), this, SLOT(iconLoaderSettingsChanged()));
 }
 
 ThemeProxy::~ThemeProxy()
@@ -303,6 +306,22 @@ int ThemeProxy::hugeIconSize() const
 int ThemeProxy::enormousIconSize() const
 {
     return KIconLoader::SizeEnormous;
+}
+
+void ThemeProxy::iconLoaderSettingsChanged()
+{
+    if (m_defaultIconSize == KIconLoader::global()->currentSize(KIconLoader::Desktop)) {
+        return;
+    }
+
+    m_defaultIconSize = KIconLoader::global()->currentSize(KIconLoader::Desktop);
+
+    emit defaultIconSizeChanged();
+}
+
+int ThemeProxy::defaultIconSize() const
+{
+    return m_defaultIconSize;
 }
 
 #include "theme.moc"

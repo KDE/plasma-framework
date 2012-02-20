@@ -202,6 +202,7 @@ class ThemeProxy : public QObject
     Q_PROPERTY(int largeIconSize READ largeIconSize CONSTANT)
     Q_PROPERTY(int hugeIconSize READ hugeIconSize CONSTANT)
     Q_PROPERTY(int enormousIconSize READ enormousIconSize CONSTANT)
+    Q_PROPERTY(int defaultIconSize READ defaultIconSize NOTIFY defaultIconSizeChanged)
 
 public:
     ThemeProxy(QObject *parent = 0);
@@ -238,9 +239,17 @@ public:
     int largeIconSize() const;
     int hugeIconSize() const;
     int enormousIconSize() const;
+    int defaultIconSize() const;
+
+private Q_SLOTS:
+    void iconLoaderSettingsChanged();
 
 Q_SIGNALS:
     void themeChanged();
+    void defaultIconSizeChanged();
+
+private:
+    int m_defaultIconSize;
 };
 
 #endif
