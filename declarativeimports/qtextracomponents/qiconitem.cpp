@@ -19,15 +19,17 @@
 
 #include "qiconitem.h"
 
-#include <kicon.h>
-#include <kiconloader.h>
+#include <KIcon>
+#include <KIconLoader>
+#include <KIconEffect>
 #include <QtGui/QPainter>
 
 
 QIconItem::QIconItem(QDeclarativeItem *parent)
     : QDeclarativeItem(parent),
       m_smooth(false),
-      m_group(NoGroup)
+      m_group(NoGroup),
+      m_state(DefaultState)
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
 }
@@ -63,11 +65,28 @@ void QIconItem::setGroup(QIconItem::Group group)
     emit groupChanged(group);
     emit implicitWidthChanged(implicitWidth());
     emit implicitHeightChanged(implicitHeight());
+    update();
 }
 
 QIconItem::Group QIconItem::group() const
 {
     return m_group;
+}
+
+QIconItem::State QIconItem::state() const
+{
+    return m_state;
+}
+
+void QIconItem::setState(QIconItem::State state)
+{
+    if (m_state == state) {
+        return;
+    }
+
+    m_state = state;
+    emit stateChanged(state);
+    update();
 }
 
 int QIconItem::implicitWidth() const
@@ -108,7 +127,14 @@ void QIconItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     painter->setRenderHint(QPainter::Antialiasing, m_smooth);
     painter->setRenderHint(QPainter::SmoothPixmapTransform, m_smooth);
 
-    m_icon.paint(painter, boundingRect().toRect(), Qt::AlignCenter, isEnabled()?QIcon::Normal:QIcon::Disabled);
+    if (m_state == DefaultState) {
+        m_icon.paint(painter, boundingRect().toRect(), Qt::AlignCenter, isEnabled()?QIcon::Normal:QIcon::Disabled);
+    } else {
+        QPixmap result = m_icon.pixmap(boundingRect().size().toSize());
+        KIconLoader::global()->iconEffect()->apply(result, KIconLoader::Desktop, KIconLoader::ActiveState);
+        painter->drawPixmap(0, 0, result);
+    }
+
     painter->setRenderHint(QPainter::Antialiasing, wasAntiAlias);
     painter->setRenderHint(QPainter::SmoothPixmapTransform, wasSmoothTransform);
 }

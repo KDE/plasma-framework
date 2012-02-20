@@ -32,7 +32,10 @@ class QIconItem : public QDeclarativeItem
     Q_PROPERTY(int implicitWidth READ implicitWidth NOTIFY implicitWidthChanged)
     Q_PROPERTY(int implicitHeight READ implicitHeight NOTIFY implicitHeightChanged)
     Q_PROPERTY(Group group READ group WRITE setGroup NOTIFY groupChanged)
+    Q_PROPERTY(State state READ state WRITE setState NOTIFY stateChanged)
+
     Q_ENUMS(Group)
+    Q_ENUMS(State)
 
 public:
     enum Group {
@@ -44,8 +47,12 @@ public:
         Small, ///Small icons, e.g. for buttons.
         Panel, ///Panel (Plasma Taskbar) icons.
         Dialog, ///Icons for use in dialog titles, page lists, etc.
-        LastGroup, ///Last group.
-        User ///User icons.
+    };
+
+    enum State {
+        DefaultState, ///The default state. 
+        ActiveState, ///Icon is active. 
+        DisabledState ///Icon is disabled.
     };
 
     QIconItem(QDeclarativeItem *parent=0);
@@ -56,6 +63,9 @@ public:
 
     void setGroup(Group group);
     Group group() const;
+
+    QIconItem::State state() const;
+    void setState(State state);
 
     int implicitWidth() const;
     int implicitHeight() const;
@@ -69,11 +79,13 @@ Q_SIGNALS:
     void implicitWidthChanged(int implicitWidth);
     void implicitHeightChanged(int implicitHeight);
     void groupChanged(Group group);
+    void stateChanged(State state);
 
 private:
     QIcon m_icon;
     bool m_smooth;
     Group m_group;
+    State m_state;
 };
 
 #endif
