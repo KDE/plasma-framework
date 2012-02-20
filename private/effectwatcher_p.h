@@ -22,8 +22,6 @@
 
 #include <QWidget>
 
-#include <plasma/windoweffects.h>
-
 namespace Plasma
 {
 
