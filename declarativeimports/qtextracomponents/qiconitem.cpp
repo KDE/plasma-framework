@@ -20,12 +20,14 @@
 #include "qiconitem.h"
 
 #include <kicon.h>
+#include <kiconloader.h>
 #include <QtGui/QPainter>
 
 
 QIconItem::QIconItem(QDeclarativeItem *parent)
     : QDeclarativeItem(parent),
-      m_smooth(false)
+      m_smooth(false),
+      m_group(NoGroup)
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
 }
@@ -49,6 +51,33 @@ void QIconItem::setIcon(const QVariant &icon)
 QIcon QIconItem::icon() const
 {
     return m_icon;
+}
+
+void QIconItem::setGroup(QIconItem::Group group)
+{
+    if (m_group == group) {
+        return;
+    }
+
+    m_group = group;
+    emit groupChanged(group);
+    emit implicitWidthChanged(implicitWidth());
+    emit implicitHeightChanged(implicitHeight());
+}
+
+QIconItem::Group QIconItem::group() const
+{
+    return m_group;
+}
+
+int QIconItem::implicitWidth() const
+{
+    return KIconLoader::global()->currentSize((KIconLoader::Group)m_group);
+}
+
+int QIconItem::implicitHeight() const
+{
+    return KIconLoader::global()->currentSize((KIconLoader::Group)m_group);
 }
 
 void QIconItem::setSmooth(const bool smooth)

@@ -29,22 +29,51 @@ class QIconItem : public QDeclarativeItem
 
     Q_PROPERTY(QVariant icon READ icon WRITE setIcon)
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth)
+    Q_PROPERTY(int implicitWidth READ implicitWidth NOTIFY implicitWidthChanged)
+    Q_PROPERTY(int implicitHeight READ implicitHeight NOTIFY implicitHeightChanged)
+    Q_PROPERTY(Group group READ group WRITE setGroup NOTIFY groupChanged)
+    Q_ENUMS(Group)
 
 public:
+    enum Group {
+        NoGroup, ///No group.
+        Desktop, ///Desktop icons.
+        FirstGroup, ///First group.
+        Toolbar, ///Toolbar icons.
+        MainToolbar, ///Main toolbar icons.
+        Small, ///Small icons, e.g. for buttons.
+        Panel, ///Panel (Plasma Taskbar) icons.
+        Dialog, ///Icons for use in dialog titles, page lists, etc.
+        LastGroup, ///Last group.
+        User ///User icons.
+    };
+
     QIconItem(QDeclarativeItem *parent=0);
     ~QIconItem();
 
     void setIcon(const QVariant &icon);
     QIcon icon() const;
 
+    void setGroup(Group group);
+    Group group() const;
+
+    int implicitWidth() const;
+    int implicitHeight() const;
+
     void setSmooth(const bool smooth);
     bool smooth() const;
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
+Q_SIGNALS:
+    void implicitWidthChanged(int implicitWidth);
+    void implicitHeightChanged(int implicitHeight);
+    void groupChanged(Group group);
+
 private:
     QIcon m_icon;
     bool m_smooth;
+    Group m_group;
 };
 
 #endif
