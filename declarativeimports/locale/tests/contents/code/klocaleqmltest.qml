@@ -66,6 +66,8 @@ Item {
                 //locale.currencySymbol = TODO
                 //console.log("currencySymbol" + locale.currencySymbol)
 
+                //locale.dateTimeDigitSet = DigitSet.EasternArabicIndicDigits
+
                 locale.dateFormat = "Y"
                 console.log("dateFormat:" + locale.dateFormat)
 
@@ -74,6 +76,9 @@ Item {
 
                 locale.dateMonthNamePossessive = false
                 console.log("dateMonthNamePossessive:" + locale.dateMonthNamePossessive)
+
+                locale.decimalPlaces = 2
+                console.log("decimalPlaces:" + locale.decimalPlaces)
 
                 console.log("===========end===========")
             }
@@ -131,6 +136,16 @@ Item {
             dateMonthNamePossessive: true
             onDateMonthNamePossessiveChanged: {
                 console.log("the dateMonthNamePossessive property has been changed")
+            }
+
+            dateTimeDigitSet: Digit.ArabicDigits
+            onDateTimeDigitSet: {
+                console.log("the dateTimeDigitSet property has been changed")
+            }
+
+            decimalPlaces: 1
+            onDecimalPlacesChanged: {
+                console.log("the decimalPlaces property has been changed")
             }
 
     }
