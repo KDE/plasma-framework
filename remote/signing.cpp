@@ -39,7 +39,6 @@
 #include <kdirwatch.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
-#include <kprocess.h>
 #include <kuser.h>
 
 #include "plasma/package.h"
