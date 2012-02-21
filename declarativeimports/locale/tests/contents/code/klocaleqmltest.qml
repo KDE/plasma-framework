@@ -19,16 +19,47 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 1.0
-import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
+import QtQuick 1.1
+import org.kde.plasma.components 0.1 as PlasmaComponents
 import org.kde.plasma.core 0.1 as PlasmaCore
-import org.kde.plasma.graphicslayouts 4.7 as GraphicsLayouts
+import org.kde.plasma.locale 0.1
 
 Item {
-    width: 200
-    height: 300
-
+    id: root
+    property int minimumHeight:200
+    property int minimumWidth:500
+Column {
+    id: column
+    anchors.horizontalCenter: root.horizontalCenter
+    spacing: 20
     Text {
-        text: i18n("Hello world")
+        id: text
+        anchors.horizontalCenter: column.horizontalCenter
+        text: "<B>This is a test plasmoid for the locale bindings</B>"
+        color: "red"
     }
+    PlasmaComponents.Button {
+        id: bt1
+        anchors.horizontalCenter: column.horizontalCenter
+        text: "click in order to test the Locale component"
+        onClicked:{
+            print("hello");
+        }
+    }
+    PlasmaComponents.Button {
+        id: bt2
+        anchors.horizontalCenter: column.horizontalCenter
+        text: "click in order to test the CalendarSystem component"
+        onClicked:{
+            print("hello again");
+        }
+    }
+    Locale {
+        id: locale
+    }
+
+    CalendarSystem {
+        id: calendar
+    }
+}
 }

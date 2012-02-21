@@ -1,10 +1,10 @@
 [Desktop Entry]
-Name=klocaleQMLtest
+Name=KLocaleQMLtest
 Type=Service
 X-KDE-PluginInfo-Author=Giorgos Tsiapaliwkas
 X-KDE-PluginInfo-Email=terietor@gmail.com
 X-KDE-PluginInfo-License=GPL
-X-KDE-PluginInfo-Name=klocaleqmltest
+X-KDE-PluginInfo-Name=org.kde.klocaleqmltest
 X-KDE-PluginInfo-Version=1
 X-KDE-ServiceTypes=Plasma/Applet
 X-Plasma-API=declarativeappletscript
