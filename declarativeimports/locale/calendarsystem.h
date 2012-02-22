@@ -45,18 +45,17 @@ Q_ENUMS(MonthNameFormat)
 Q_ENUMS(WeekDayNameFormat)
 
 //properties
-Q_PROPERTY(Locale::CalendarSystem calendarSystem READ calendarSystem NOTIFY calendarSystemChanged)
-Q_PROPERTY(QString calendarLabel READ calendarLabel NOTIFY calendarLabelChanged)
-Q_PROPERTY(QDate epoch READ epoch NOTIFY epochChanged)
-Q_PROPERTY(QDate earliestValidDate READ earliestValidDate NOTIFY earliestValidDateChanged)
-Q_PROPERTY(QDate latestValidDate READ latestValidDate NOTIFY latestValidDateChanged)
-
+Q_PROPERTY(Locale::CalendarSystem calendarSystem READ calendarSystem NOTIFY calendarSystemChanged)//read-only
+Q_PROPERTY(QString calendarLabel READ calendarLabel NOTIFY calendarLabelChanged)//read-only
+Q_PROPERTY(QDate epoch READ epoch NOTIFY epochChanged)//read-only
+Q_PROPERTY(QDate earliestValidDate READ earliestValidDate NOTIFY earliestValidDateChanged)//read-only
+Q_PROPERTY(QDate latestValidDate READ latestValidDate NOTIFY latestValidDateChanged)//read-only
 Q_PROPERTY(int shortYearWindowStartYear READ shortYearWindowStartYear NOTIFY shortYearWindowStartYearChanged)
-Q_PROPERTY(int weekStartDay READ weekStartDay NOTIFY weekStartDayChanged)
-Q_PROPERTY(bool isLunar READ isLunar NOTIFY isLunarChanged)
-Q_PROPERTY(bool isLunisolar READ isLunisolar NOTIFY isLunisolarChanged)
-Q_PROPERTY(bool isSolar READ isSolar NOTIFY isSolarChanged)
-Q_PROPERTY(bool isProleptic READ isProleptic NOTIFY isProlepticChanged)
+Q_PROPERTY(int weekStartDay READ weekStartDay NOTIFY weekStartDayChanged)//read-only
+Q_PROPERTY(bool isLunar READ isLunar NOTIFY isLunarChanged)//read-only
+Q_PROPERTY(bool isLunisolar READ isLunisolar NOTIFY isLunisolarChanged)//read-only
+Q_PROPERTY(bool isSolar READ isSolar NOTIFY isSolarChanged)//read-only
+Q_PROPERTY(bool isProleptic READ isProleptic NOTIFY isProlepticChanged)//read-only
 
 public:
 
