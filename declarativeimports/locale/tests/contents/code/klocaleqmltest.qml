@@ -80,6 +80,29 @@ Item {
                 locale.decimalPlaces = 2
                 console.log("decimalPlaces:" + locale.decimalPlaces)
 
+                locale.decimalSymbol = "."
+                console.log("decimalSymbol:" + locale.decimalSymbol)
+
+                //locale.digitSet = DigitSet.EasternArabicIndicDigits
+
+                //The encoding property takes its value from encodingMib property, and the encodingMib property
+                //is read-only so there is no need for me to change its value.
+                for (var i in locale.encoding) {
+                    console.log("encoding:" + locale.encoding[i])
+                }
+
+                //the language property is read-only
+                console.log("language:" + locale.language)
+
+                //locale.measureSystem = MeasureSystem.Imperial
+
+                locale.monetaryDecimalPlaces = 3
+                console.log("monetaryDecimalPlaces:" + locale.monetaryDecimalPlaces)
+
+                locale.monetaryDecimalSymbol = "."
+                console.log("monetaryDecimalSymbol:" + locale.monetaryDecimalSymbol)
+
+                //locale.monetaryDigitSet = DigitSet.EasternArabicIndicDigits
                 console.log("===========end===========")
             }
         }
@@ -139,13 +162,48 @@ Item {
             }
 
             dateTimeDigitSet: Digit.ArabicDigits
-            onDateTimeDigitSet: {
+            onDateTimeDigitSetChanged: {
                 console.log("the dateTimeDigitSet property has been changed")
             }
 
             decimalPlaces: 1
             onDecimalPlacesChanged: {
                 console.log("the decimalPlaces property has been changed")
+            }
+
+            decimalSymbol: ","
+            onDecimalSymbolChanged: {
+                console.log("the decimalSymbol property has been changed")
+            }
+
+            digitSet: Digit.ArabicDigits
+            onDigitSetChanged: {
+                console.log("the digitSet property has been changed")
+            }
+
+            encoding: encodingMib
+            onEncodingChanged: {
+                console.log("the digitSet property has been changed")
+            }
+
+            measureSystem: MeasureSystem.Metric
+            onMeasureSysteChanged: {
+                console.log("the measureSystem property has been changed")
+            }
+
+            monetaryDecimalPlaces: 2
+            onMonetaryDecimalPlacesChanged: {
+                console.log("the monetaryDecimalPlaces property has been changed")
+            }
+
+            monetaryDecimalSymbol: ","
+            onMonetaryDecimalSymbolChanged: {
+                console.log("the monetaryDecimalSymbol property has been changed")
+            }
+            
+            : DigitSet.ArabicDigits
+            onMonetaryDigitSetChanged: {
+                console.log("the monetaryDigitSet property has been changed")
             }
 
     }
