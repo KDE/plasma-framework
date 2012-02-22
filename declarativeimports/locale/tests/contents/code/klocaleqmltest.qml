@@ -165,6 +165,27 @@ Item {
             text: "click in order to test the CalendarSystem component"
             onClicked:{
                 console.log("=====CalendarSystem Component====")
+
+                console.log("the CalendarLabel:" + locale.CalendarLabel)
+
+                console.log("epoch:" + locale.epoch
+
+                console.log("earliestValidDate:" + locale.earliestValidDate
+
+                console.log("latestValidDate:" + locale.latestValidDate
+
+                console.log("shortYearWindowStartYear:" + locale.shortYearWindowStartYear
+
+                console.log("weekStartDay:" + locale.weekStartDay
+
+                console.log("isLunar:" + locale.isLunar
+
+                console.log("isLunisolar:" + locale.isLunisolar
+
+                console.log("isSolar:" + locale.isSolar
+
+                console.log("isProleptic:" + locale.isProleptic
+
                 console.log("===============end===============")
             }
         }
@@ -363,6 +384,41 @@ Item {
 
         CalendarSystem {
             id: calendar
+
+            onCalendarSystemChanged: {
+                console.log("the language property has been changed")
+            }
+
+            onCalendarLabelChanged: {
+                console.log("the language property has been changed")
+            }
+            onEpochChanged: {
+                console.log("the language property has been changed")
+            }
+            onEarliestValidDateChanged: {
+                console.log("the language property has been changed")
+            }
+            onLatestValidDateChanged: {
+                console.log("the language property has been changed")
+            }
+            onShortYearWindowStartYearChanged: {
+                console.log("the language property has been changed")
+            }
+            onWeekStartDayChanged: {
+                console.log("the language property has been changed")
+            }
+            onIsLunarChanged: {
+                console.log("the language property has been changed")
+            }
+            onIsLunisolarChanged: {
+                console.log("the language property has been changed")
+            }
+            onIsSolarChanged: {
+                console.log("the language property has been changed")
+            }
+            onIsProlepticChanged: {
+                console.log("the language property has been changed")
+            }
         }
     }
 }
