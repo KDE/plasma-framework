@@ -25,8 +25,8 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.locale 0.1
 Item {
     id: root
-    property int minimumHeight:200
-    property int minimumWidth:500
+    property int minimumHeight: 200
+    property int minimumWidth: 500
     Column {
         id: column
         anchors.horizontalCenter: root.horizontalCenter
@@ -144,8 +144,9 @@ Item {
                 console.log("workingWeekStartDay:" + locale.workingWeekEndDay)
 
                 console.log("use12Clock:" + locale.use12Clock)
-                print("prin t static")
-               /* console.log("the defaultLanguage:" + locale.defaultLanguage)
+                print("before static")
+                //TODO the plasmoid seg faults
+                /*console.log("the defaultLanguage:" + locale.defaultLanguage)
 
                 console.log("the defaultCountry:" + locale.defaultCountry)
 
@@ -166,25 +167,25 @@ Item {
             onClicked:{
                 console.log("=====CalendarSystem Component====")
 
-                console.log("calendarLabel:" + locale.CalendarLabel)
+                console.log("calendarLabel:" + calendar.CalendarLabel)
 
-                console.log("epoch:" + locale.epoch)
+                console.log("epoch:" + calendar.epoch)
 
-                console.log("earliestValidDate:" + locale.earliestValidDate)
+                console.log("earliestValidDate:" + calendar.earliestValidDate)
 
-                console.log("latestValidDate:" + locale.latestValidDate)
+                console.log("latestValidDate:" + calendar.latestValidDate)
 
-                console.log("shortYearWindowStartYear:" + locale.shortYearWindowStartYear)
+                console.log("shortYearWindowStartYear:" + calendar.shortYearWindowStartYear)
 
                 console.log("weekStartDay:" + locale.weekStartDay)
 
-                console.log("isLunar:" + locale.isLunar)
+                console.log("isLunar:" + calendar.isLunar)
 
-                console.log("isLunisolar:" + locale.isLunisolar)
+                console.log("isLunisolar:" + calendar.isLunisolar)
 
-                console.log("isSolar:" + locale.isSolar)
+                console.log("isSolar:" + calendar.isSolar)
 
-                console.log("isProleptic:" + locale.isProleptic)
+                console.log("isProleptic:" + calendar.isProleptic)
 
                 console.log("===============end===============")
             }
