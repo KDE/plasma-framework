@@ -144,8 +144,8 @@ Item {
                 console.log("workingWeekStartDay:" + locale.workingWeekEndDay)
 
                 console.log("use12Clock:" + locale.use12Clock)
-
-                console.log("the defaultLanguage:" + locale.defaultLanguage)
+                print("prin t static")
+               /* console.log("the defaultLanguage:" + locale.defaultLanguage)
 
                 console.log("the defaultCountry:" + locale.defaultCountry)
 
@@ -153,7 +153,7 @@ Item {
 
                 console.log("the useTranscript:" + locale.useTranscript)
 
-                console.log("the encodingMib:" + locale.encodingMib)
+                console.log("the encodingMib:" + locale.encodingMib)*/
 
                 console.log("===========end===========")
             }
@@ -166,25 +166,25 @@ Item {
             onClicked:{
                 console.log("=====CalendarSystem Component====")
 
-                console.log("the CalendarLabel:" + locale.CalendarLabel)
+                console.log("calendarLabel:" + locale.CalendarLabel)
 
-                console.log("epoch:" + locale.epoch
+                console.log("epoch:" + locale.epoch)
 
-                console.log("earliestValidDate:" + locale.earliestValidDate
+                console.log("earliestValidDate:" + locale.earliestValidDate)
 
-                console.log("latestValidDate:" + locale.latestValidDate
+                console.log("latestValidDate:" + locale.latestValidDate)
 
-                console.log("shortYearWindowStartYear:" + locale.shortYearWindowStartYear
+                console.log("shortYearWindowStartYear:" + locale.shortYearWindowStartYear)
 
-                console.log("weekStartDay:" + locale.weekStartDay
+                console.log("weekStartDay:" + locale.weekStartDay)
 
-                console.log("isLunar:" + locale.isLunar
+                console.log("isLunar:" + locale.isLunar)
 
-                console.log("isLunisolar:" + locale.isLunisolar
+                console.log("isLunisolar:" + locale.isLunisolar)
 
-                console.log("isSolar:" + locale.isSolar
+                console.log("isSolar:" + locale.isSolar)
 
-                console.log("isProleptic:" + locale.isProleptic
+                console.log("isProleptic:" + locale.isProleptic)
 
                 console.log("===============end===============")
             }
@@ -325,12 +325,12 @@ Item {
             }
 
             weekDayOfPray: 20
-            onweekDayOfPrayChanged: {
+            onWeekDayOfPrayChanged: {
                 console.log("the weekDayOfPray property has been changed")
             }
 
             weekNumberSystem: WeekNumberSystem.DefaultWeekNumber
-            onweekDayOfPrayChanged: {
+            onWeekNumberSystemChanged: {
                 console.log("the weekNumberSystem property has been changed")
             }
 
@@ -386,38 +386,38 @@ Item {
             id: calendar
 
             onCalendarSystemChanged: {
-                console.log("the language property has been changed")
+                console.log("the calendarSystem property has been changed")
             }
 
             onCalendarLabelChanged: {
-                console.log("the language property has been changed")
+                console.log("the calendarLabel property has been changed")
             }
             onEpochChanged: {
-                console.log("the language property has been changed")
+                console.log("the epoch property has been changed")
             }
             onEarliestValidDateChanged: {
-                console.log("the language property has been changed")
+                console.log("the earliestValidDate property has been changed")
             }
             onLatestValidDateChanged: {
-                console.log("the language property has been changed")
+                console.log("the latestValidDate property has been changed")
             }
             onShortYearWindowStartYearChanged: {
-                console.log("the language property has been changed")
+                console.log("the shortYearWindowStartYear property has been changed")
             }
             onWeekStartDayChanged: {
-                console.log("the language property has been changed")
+                console.log("the weekStartDay property has been changed")
             }
             onIsLunarChanged: {
-                console.log("the language property has been changed")
+                console.log("the isLunar property has been changed")
             }
             onIsLunisolarChanged: {
-                console.log("the language property has been changed")
+                console.log("the isLunisolar property has been changed")
             }
             onIsSolarChanged: {
-                console.log("the language property has been changed")
+                console.log("the isSolar property has been changed")
             }
             onIsProlepticChanged: {
-                console.log("the language property has been changed")
+                console.log("the isProleptic property has been changed")
             }
         }
     }
