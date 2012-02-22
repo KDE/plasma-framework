@@ -103,6 +103,58 @@ Item {
                 console.log("monetaryDecimalSymbol:" + locale.monetaryDecimalSymbol)
 
                 //locale.monetaryDigitSet = DigitSet.EasternArabicIndicDigits
+
+                locale.monetaryThousandsSeparator = "."
+                console.log("monetaryThousandsSeparator:" + locale.monetaryThousandsSeparator)
+
+                //locale.negativeMonetarySignPosition = SignPosition.AfterMoney
+
+                locale.negativePrefixCurrencySymbol = false
+                console.log("negativePrefixCurrencySymbol:" + locale.negativePrefixCurrencySymbol)
+
+                locale.negativeSign = "-"
+                console.log("negativeSign:" + locale.negativeSign)
+
+                locale.pageSize = 6
+                console.log("pageSize:" + locale.pageSize)
+
+                //locale.positiveMonetarySignPosition = SignPosition.AfterMoney
+
+                locale.positivePrefixCurrencySymbol = false
+                console.log("positivePrefixCurrencySymbol:" + locale.positivePrefixCurrencySymbol)
+
+                locale.positiveSign = "+"
+                console.log("positiveSign:" + locale.positiveSign)
+
+                locale.thousandsSeparator = "."
+                console.log("thousandsSeparator:" + locale.thousandsSeparator)
+
+                locale.weekDayOfPray = 10
+                console.log("weekDayOfPray:" + locale.weekDayOfPray)
+
+                //locale.weekNumberSystem = WeekNumberSystem.FirstFullWeek
+
+                locale.weekStartDay = 3
+                console.log("weekStartDay:" + locale.weekStartDay)
+
+                locale.workingWeekEndDay = 6
+                console.log("workingWeekEndDay:" + locale.workingWeekEndDay)
+
+                locale.workingWeekStartDay = 2
+                console.log("workingWeekStartDay:" + locale.workingWeekEndDay)
+
+                console.log("use12Clock:" + locale.use12Clock)
+
+                console.log("the defaultLanguage:" + locale.defaultLanguage)
+
+                console.log("the defaultCountry:" + locale.defaultCountry)
+
+                console.log("the defaultCurrencyCode:" + locale.defaultCurrencyCode)
+
+                console.log("the useTranscript:" + locale.useTranscript)
+
+                console.log("the encodingMib:" + locale.encodingMib)
+
                 console.log("===========end===========")
             }
         }
@@ -187,7 +239,7 @@ Item {
             }
 
             measureSystem: MeasureSystem.Metric
-            onMeasureSysteChanged: {
+            onMeasureSystemChanged: {
                 console.log("the measureSystem property has been changed")
             }
 
@@ -200,12 +252,113 @@ Item {
             onMonetaryDecimalSymbolChanged: {
                 console.log("the monetaryDecimalSymbol property has been changed")
             }
-            
-            : DigitSet.ArabicDigits
+
+            monetaryDigitSet: DigitSet.ArabicDigits
             onMonetaryDigitSetChanged: {
                 console.log("the monetaryDigitSet property has been changed")
             }
 
+            monetaryThousandsSeparator: ","
+            onMonetaryThousandsSeparatorChanged: {
+                console.log("the monetaryThousandsSeparator property has been changed")
+            }
+
+            negativeMonetarySignPosition: SignPosition.ParensAround
+            onNegativeMonetarySignPositionChanged: {
+                console.log("the negativeMonetarySignPosition property has been changed")
+            }
+
+            negativePrefixCurrencySymbol: true
+            onNegativePrefixCurrencySymbolChanged: {
+                console.log("the negativePrefixCurrencySymbol property has been changed")
+            }
+
+            negativeSign: "-----"
+            onNegativeSignChanged: {
+                console.log("the negativeSign property has been changed")
+            }
+
+            pageSize: 5
+            onPageSizeChanged: {
+                console.log("the pageSign property has been changed")
+            }
+
+            positiveMonetarySignPosition: SignPosition.ParensAround
+            onPositiveMonetarySignPositionChanged: {
+                console.log("the positiveMonetarySignPosition property has been changed")
+            }
+
+            positivePrefixCurrencySymbol: true
+            onPositivePrefixCurrencySymbolChanged: {
+                console.log("the positivePrefixCurrencySymbol property has been changed")
+            }
+
+            positiveSign: " "
+            onPositiveSignChanged: {
+                console.log("the positiveSign property has been changed")
+            }
+
+            thousandsSeparator: ","
+            onThousandsSeparatorChanged: {
+                console.log("the thousandsSeparator property has been changed")
+            }
+
+            weekDayOfPray: 20
+            onweekDayOfPrayChanged: {
+                console.log("the weekDayOfPray property has been changed")
+            }
+
+            weekNumberSystem: WeekNumberSystem.DefaultWeekNumber
+            onweekDayOfPrayChanged: {
+                console.log("the weekNumberSystem property has been changed")
+            }
+
+            weekStartDay: 2
+            onWeekStartDayChanged: {
+                console.log("the weekStartDay property has been changed")
+            }
+
+            workingWeekEndDay: 5
+            onWorkingWeekEndDayChanged: {
+                console.log("the workingWeekEndDay property has been changed")
+            }
+
+            workingWeekStartDay: 1
+            onWorkingWeekStartDayChanged: {
+                console.log("the workingWeekStartDay property has been changed")
+            }
+
+            onUse12ClockChanged: {
+                console.log("the use12Clock property has been changed")
+            }
+
+            onDefaultLanguageChanged: {
+                console.log("the defaultLanguage property has been changed")
+            }
+
+            onDefaultCountryChanged: {
+                console.log("the defaultCountry property has been changed")
+            }
+
+            onDefaultCurrencyCodeChanged: {
+                console.log("the defaultCurrencyCode property has been changed")
+            }
+
+            onUseTranscriptChanged: {
+                console.log("the useTranscript property has been changed")
+            }
+
+            onEncodingMibChanged: {
+                console.log("the encodingMib property has been changed")
+            }
+
+            onCountryChanged: {
+                console.log("the country property has been changed")
+            }
+
+            onLanguageChanged: {
+                console.log("the language property has been changed")
+            }
     }
 
         CalendarSystem {
