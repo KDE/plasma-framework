@@ -117,9 +117,9 @@ Q_PROPERTY(int weekStartDay READ weekStartDay WRITE setWeekStartDay NOTIFY weekS
 Q_PROPERTY(int workingWeekEndDay READ workingWeekEndDay WRITE setWorkingWeekEndDay NOTIFY workingWeekEndDayChanged)
 Q_PROPERTY(int workingWeekStartDay READ workingWeekStartDay WRITE setWorkingWeekStartDay NOTIFY workingWeekStartDayChanged)
 Q_PROPERTY(bool use12Clock READ use12Clock NOTIFY use12ClockChanged)
-Q_PROPERTY(QString defaultLanguage READ defaultLanguage NOTIFY defaultLanguageChanged)
-Q_PROPERTY(QString defaultCountry READ defaultCountry NOTIFY defaultCountryChanged)
-Q_PROPERTY(QString defaultCurrencyCode READ defaultCurrencyCode NOTIFY defaultCurrencyCodeChanged)
+Q_PROPERTY(QString defaultLanguage READ defaultLanguage NOTIFY defaultLanguageChanged)//read-only
+Q_PROPERTY(QString defaultCountry READ defaultCountry NOTIFY defaultCountryChanged)//read-only
+Q_PROPERTY(QString defaultCurrencyCode READ defaultCurrencyCode NOTIFY defaultCurrencyCodeChanged)//read-only
 Q_PROPERTY(bool useTranscript READ useTranscript NOTIFY useTranscriptChanged) //read-only
 Q_PROPERTY(QVariant encodingMib READ encodingMib NOTIFY encodingMibChanged) //read-only
 
