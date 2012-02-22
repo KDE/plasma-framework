@@ -85,7 +85,7 @@ Q_ENUMS(WeekNumberSystem)
 //properties
 Q_PROPERTY(BinaryUnitDialect binaryUnitDialect READ binaryUnitDialect WRITE setBinaryUnitDialect NOTIFY binaryUnitDialectChanged)
 Q_PROPERTY(Locale::CalendarSystem calendarSystem READ calendarSystem WRITE setCalendarSystem NOTIFY calendarSystemChanged)
-Q_PROPERTY(QString country READ country NOTIFY countryChanged)
+Q_PROPERTY(QString country READ country NOTIFY countryChanged) //read-only
 Q_PROPERTY(QString countryDivisionCode READ countryDivisionCode WRITE setCountryDivisionCode NOTIFY countryDivisionCodeChanged)
 Q_PROPERTY(QString currencyCode READ currencyCode WRITE setCurrencyCode NOTIFY currencyCodeChanged)
 Q_PROPERTY(QString currencySymbol READ currencySymbol WRITE setCurrencySymbol NOTIFY currencySymbolChanged)
@@ -97,7 +97,7 @@ Q_PROPERTY(int decimalPlaces READ decimalPlaces WRITE setDecimalPlaces NOTIFY de
 Q_PROPERTY(QString decimalSymbol READ decimalSymbol WRITE setDecimalSymbol NOTIFY decimalSymbolChanged)
 Q_PROPERTY(DigitSet digitSet READ digitSet WRITE setDigitSet NOTIFY digitSetChanged)
 Q_PROPERTY(QVariant encoding READ encoding WRITE setEncoding NOTIFY encodingChanged)
-Q_PROPERTY(QString language READ language NOTIFY languageChanged)
+Q_PROPERTY(QString language READ language NOTIFY languageChanged) //read-only
 Q_PROPERTY(MeasureSystem measureSystem READ measureSystem WRITE setMeasureSystem NOTIFY measureSystemChanged)
 Q_PROPERTY(int monetaryDecimalPlaces READ monetaryDecimalPlaces WRITE setMonetaryDecimalPlaces NOTIFY monetaryDecimalPlacesChanged)
 Q_PROPERTY(QString monetaryDecimalSymbol READ monetaryDecimalSymbol WRITE setMonetaryDecimalSymbol NOTIFY monetaryDecimalSymbolChanged)
@@ -120,8 +120,8 @@ Q_PROPERTY(bool use12Clock READ use12Clock NOTIFY use12ClockChanged)
 Q_PROPERTY(QString defaultLanguage READ defaultLanguage NOTIFY defaultLanguageChanged)
 Q_PROPERTY(QString defaultCountry READ defaultCountry NOTIFY defaultCountryChanged)
 Q_PROPERTY(QString defaultCurrencyCode READ defaultCurrencyCode NOTIFY defaultCurrencyCodeChanged)
-Q_PROPERTY(bool useTranscript READ useTranscript NOTIFY useTranscriptChanged)
-Q_PROPERTY(QVariant encodingMib READ encodingMib NOTIFY encodingMibChanged)
+Q_PROPERTY(bool useTranscript READ useTranscript NOTIFY useTranscriptChanged) //read-only
+Q_PROPERTY(QVariant encodingMib READ encodingMib NOTIFY encodingMibChanged) //read-only
 
 public:
     /**
