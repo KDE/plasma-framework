@@ -112,7 +112,7 @@ Item {
             if (childCount != 0) {
                 //not too much efficient but the loop over children needs to be done two times to get the proper child width
                 for (var i = 0; i < childCount; ++i) {
-                    if (!root.children[i].visible || root.children[i].text == undefined) {
+                    if (!root.children[i].visible || root.children[i].text === undefined) {
                         --visibleChildCount
                     }
                 }
@@ -123,7 +123,7 @@ Item {
 
                 for (var i = 0; i < childCount; ++i, itemIndex += increment) {
                     var child = root.children[itemIndex]
-                    if (!child.visible) {
+                    if (!child.visible || root.children[i].text === undefined) {
                         continue
                     }
 
