@@ -57,7 +57,7 @@ void RemoteDataEngine::setLocation(KUrl location)
     m_location = location;
     setMinimumPollingInterval(1000);
     setPollingInterval(5000);
-    m_uuid = QUuid::createUuid();
+    m_uuid = QUuid::createUuid().toString();
     Service *service = Service::access(location);
     connect(service, SIGNAL(serviceReady(Plasma::Service*)),
             this, SLOT(serviceReady(Plasma::Service*)));
