@@ -96,7 +96,6 @@ Q_PROPERTY(DigitSet dateTimeDigitSet READ dateTimeDigitSet WRITE setDateTimeDigi
 Q_PROPERTY(int decimalPlaces READ decimalPlaces WRITE setDecimalPlaces NOTIFY decimalPlacesChanged)
 Q_PROPERTY(QString decimalSymbol READ decimalSymbol WRITE setDecimalSymbol NOTIFY decimalSymbolChanged)
 Q_PROPERTY(DigitSet digitSet READ digitSet WRITE setDigitSet NOTIFY digitSetChanged)
-Q_PROPERTY(QVariant encoding READ encoding WRITE setEncoding NOTIFY encodingChanged)
 Q_PROPERTY(QString language READ language NOTIFY languageChanged) //read-only
 Q_PROPERTY(MeasureSystem measureSystem READ measureSystem WRITE setMeasureSystem NOTIFY measureSystemChanged)
 Q_PROPERTY(int monetaryDecimalPlaces READ monetaryDecimalPlaces WRITE setMonetaryDecimalPlaces NOTIFY monetaryDecimalPlacesChanged)
@@ -121,7 +120,6 @@ Q_PROPERTY(QString defaultLanguage READ defaultLanguage NOTIFY defaultLanguageCh
 Q_PROPERTY(QString defaultCountry READ defaultCountry NOTIFY defaultCountryChanged)//read-only
 Q_PROPERTY(QString defaultCurrencyCode READ defaultCurrencyCode NOTIFY defaultCurrencyCodeChanged)//read-only
 Q_PROPERTY(bool useTranscript READ useTranscript NOTIFY useTranscriptChanged) //read-only
-Q_PROPERTY(QVariant encodingMib READ encodingMib NOTIFY encodingMibChanged) //read-only
 
 public:
     /**
@@ -230,15 +228,6 @@ public:
      */
     Q_INVOKABLE void translateRawFrom(const char *catname, const char *ctxt, const char *singular, const char *plural,
                             unsigned long n, QString *lang, QString *trans) const;
-
-    /**
-     * Changes the current encoding.
-     *
-     * @param mibEnum The mib of the preferred codec
-     *
-     * @return True on success.
-     */
-    bool setEncoding(QVariant mibEnum);
 
     /**
      * Various positions for where to place the positive or negative
@@ -1286,26 +1275,6 @@ public:
     Q_INVOKABLE QStringList currencyCodeList() const; //TODO
 
     /**
-     * Returns the user's preferred encoding.
-     *
-     * @return The name of the preferred encoding
-     *
-     * @see codecForEncoding
-     * @see encodingMib
-     */
-    const QVariant encoding() const;
-
-    /**
-     * Returns the user's preferred encoding.
-     *
-     * @return The Mib of the preferred encoding
-     *
-     * @see encoding
-     * @see codecForEncoding
-     */
-    QVariant encodingMib() const;
-
-    /**
      * Returns the file encoding.
      *
      * @return The Mib of the file encoding
@@ -1885,7 +1854,6 @@ Q_SIGNALS:
     void dateTimeDigitSetChanged();
     void decimalPlacesChanged();
     void digitSetChanged();
-    void encodingChanged();
     void languageChanged();
     void measureSystemChanged();
     void monetaryDecimalPlacesChanged();
@@ -1911,7 +1879,6 @@ Q_SIGNALS:
     void defaultCurrencyCodeChanged();
     void defaultLanguageChanged();
     void useTranscriptChanged();
-    void encodingMibChanged();
 };
 //TODO remove the above?
 //Q_DECLARE_OPERATORS_FOR_FLAGS(Locale::DateTimeFormatOptions)

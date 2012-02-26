@@ -555,25 +555,9 @@ bool Locale::useTranscript() const
     return m_locale->useTranscript();
 }
 
-const QVariant Locale::encoding() const
-{
-    return QVariant(m_locale->encoding());
-}
-
-QVariant Locale::encodingMib() const
-{
-    return QVariant(m_locale->encodingMib());
-}
-
 int Locale::fileEncodingMib() const
 {
     return m_locale->fileEncodingMib();
-}
-
-bool Locale::setEncoding(QVariant mibEnum)
-{
-    return m_locale->setEncoding(mibEnum.toInt());
-    emit encodingChanged();
 }
 
 QStringList Locale::allLanguagesList() const
@@ -611,11 +595,6 @@ Locale::CalendarSystem Locale::calendarSystem() const
 {
     return (Locale::CalendarSystem)m_locale->calendarSystem();
 }
-
-/*const KCalendarSystem * Locale::calendar() const
-{
-    return m_locale->calendar();
-}*/
 
 void Locale::setWeekNumberSystem(Locale::WeekNumberSystem weekNumberSystem)
 {
