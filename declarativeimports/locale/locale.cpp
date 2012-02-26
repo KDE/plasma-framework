@@ -87,30 +87,6 @@ void Locale::setActiveCatalog(const QString &catalog)
     m_locale->setActiveCatalog(catalog);
 }
 
-void Locale::translateRawFrom(const char *catname, const char *ctxt, const char *singular, const char *plural,
-                               unsigned long n, QString *lang, QString *trans) const
-{
-    m_locale->translateRawFrom(catname, ctxt, singular, plural, n, lang, trans);
-}
-
-//Convenience versions
-void Locale::translateRawFrom(const char *catname, const char *msg, QString *lang, QString *trans) const
-{
-    m_locale->translateRawFrom(catname, 0, msg, 0, 0, lang, trans);
-}
-
-void Locale::translateRawFrom(const char *catname, const char *ctxt, const char *msg, QString *lang,
-                               QString *trans) const
-{
-    m_locale->translateRawFrom(catname, ctxt, msg, 0, 0, lang, trans);
-}
-
-void Locale::translateRawFrom(const char *catname, const char *singular, const char *plural,
-                               unsigned long n, QString *lang, QString *trans) const
-{
-    m_locale->translateRawFrom(catname, 0, singular, plural, n, lang, trans);
-}
-
 QString Locale::translateQt(const char *context, const char *sourceText, const char *comment) const
 {
     return m_locale->translateQt(context, sourceText, comment);
