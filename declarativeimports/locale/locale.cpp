@@ -537,17 +537,17 @@ void Locale::setMeasureSystem(Locale::MeasureSystem value)
 
 QString Locale::defaultLanguage()
 {
-    return Locale::defaultLanguage();
+    return KLocale::defaultLanguage();
 }
 
 QString Locale::defaultCountry()
 {
-    return Locale::defaultCountry();
+    return KLocale::defaultCountry();
 }
 
 QString Locale::defaultCurrencyCode()
 {
-    return Locale::defaultCurrencyCode();
+    return KLocale::defaultCurrencyCode();
 }
 
 bool Locale::useTranscript() const
