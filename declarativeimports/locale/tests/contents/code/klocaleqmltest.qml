@@ -29,6 +29,8 @@ Item {
     property int minimumWidth: 500
     Column {
         id: column
+        width: parent.width
+        height: parent.height
         anchors.horizontalCenter: root.horizontalCenter
         spacing: 20
         Text {
@@ -41,8 +43,8 @@ Item {
         Text {
             id: text2
             anchors.horizontalCenter: column.horizontalCenter
-            text: "<B>If you see this text,that means that every" +
-            "non printable property/method has been already set. And it works!!</B>"
+            text: "<B>If you see this text,that means that every " +
+            " non printable property/method has been already set. And it works!!</B>"
             color: "black"
         }
 
@@ -84,12 +86,6 @@ Item {
                 console.log("decimalSymbol:" + locale.decimalSymbol)
 
                 //locale.digitSet = DigitSet.EasternArabicIndicDigits
-
-                //The encoding property takes its value from encodingMib property, and the encodingMib property
-                //is read-only so there is no need for me to change its value.
-                for (var i in locale.encoding) {
-                    console.log("encoding:" + locale.encoding[i])
-                }
 
                 //the language property is read-only
                 console.log("language:" + locale.language)
@@ -144,17 +140,32 @@ Item {
                 console.log("workingWeekStartDay:" + locale.workingWeekEndDay)
 
                 console.log("use12Clock:" + locale.use12Clock)
-                print("before static")
-                //TODO the plasmoid seg faults
-                /*console.log("the defaultLanguage:" + locale.defaultLanguage)
 
-                console.log("the defaultCountry:" + locale.defaultCountry)
+                console.log("defaultLanguage:" + locale.defaultLanguage)
 
-                console.log("the defaultCurrencyCode:" + locale.defaultCurrencyCode)
+                console.log("defaultCountry:" + locale.defaultCountry)
 
-                console.log("the useTranscript:" + locale.useTranscript)
+                console.log("defaultCurrencyCode:" + locale.defaultCurrencyCode)
+
+                /*console.log("the useTranscript:" + locale.useTranscript)
 
                 console.log("the encodingMib:" + locale.encodingMib)*/
+
+                for (var i in locale.languageList()) {
+                    console.log("languageList:" + locale.languageList()[i])
+                }
+
+                for (var i in locale.currencyCodeList()) {
+                    console.log("currencyCodeList:" + locale.currencyCodeList()[i])
+                }
+
+                for (var i in locale.installedLanguages()) {
+                    console.log("installedLanguages:" + locale.installedLanguages()[i])
+                }
+
+                for (var i in locale.allCountriesList()) {
+                    console.log("allCountriesList:" + locale.allCountriesList()[i])
+                }
 
                 console.log("===========end===========")
             }
@@ -252,11 +263,6 @@ Item {
 
             digitSet: Digit.ArabicDigits
             onDigitSetChanged: {
-                console.log("the digitSet property has been changed")
-            }
-
-            encoding: encodingMib
-            onEncodingChanged: {
                 console.log("the digitSet property has been changed")
             }
 
@@ -370,10 +376,6 @@ Item {
                 console.log("the useTranscript property has been changed")
             }
 
-            onEncodingMibChanged: {
-                console.log("the encodingMib property has been changed")
-            }
-
             onCountryChanged: {
                 console.log("the country property has been changed")
             }
@@ -381,7 +383,7 @@ Item {
             onLanguageChanged: {
                 console.log("the language property has been changed")
             }
-    }
+        }
 
         CalendarSystem {
             id: calendar
