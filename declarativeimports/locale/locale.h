@@ -21,18 +21,13 @@
 #define LOCALE_H
 
 #include <QObject>
-#include <QVariant>
 
 #include <KLocale>
 
 class QString;
-class QStringList; //TODO will the QStringList invokable methods work in QML?
-class QTextCodec;
 class QDate;
 class QTime;
 class QDateTime;
-
-class KCalendarSystem;//TODO make it calendarSystem???
 
 /**
  * \file klocale.h
@@ -902,7 +897,6 @@ public:
      *
      * @return the current calendar system instance
      */
-    //const KCalendarSystem * calendar() const;
 
     /**
      *

@@ -329,13 +329,6 @@ QStringList Locale::currencyCodeList() const
     return m_locale->currencyCodeList();
 }
 
-/* Just copy in for now to keep diff clean, remove later
-QString Locale::formatDateTime(const Locale *locale, const QDateTime &dateTime, Locale::DateFormat format,
-                                       bool includeSeconds, int daysTo, int secsTo)
-{
-}
-*/
-
 QString Locale::formatDateTime(const QDateTime &dateTime, Locale::DateFormat format, bool includeSeconds) const
 {
     return m_locale->formatDateTime(dateTime, (KLocale::DateFormat)format, (KLocale::DateFormat)includeSeconds);
