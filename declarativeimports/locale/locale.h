@@ -1718,7 +1718,7 @@ public:
      *
      * @return Name of the default language
      */
-    static QString defaultLanguage();
+    QString defaultLanguage();
 
     /**
      * Returns the code of the default country, i.e. "C"
@@ -1730,7 +1730,7 @@ public:
      *
      * @return Name of the default country
      */
-    static QString defaultCountry();
+    QString defaultCountry();
 
     /**
      *
@@ -1738,7 +1738,7 @@ public:
      *
      * @return ISO Currency Code of the default currency
      */
-    static QString defaultCurrencyCode();
+    QString defaultCurrencyCode();
 
     /**
      * Reports whether evaluation of translation scripts is enabled.
