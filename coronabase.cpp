@@ -191,69 +191,6 @@ void CoronaBase::initializeLayout(const QString &configName)
     }
 }
 
-void CoronaBase::layoutContainments()
-{
-    if (CoronaBasePrivate::s_positioningContainments) {
-        return;
-    }
-
-    CoronaBasePrivate::s_positioningContainments = true;
-
-    //TODO: we should avoid running this too often; consider compressing requests
-    //      with a timer.
-    QList<Containment*> c = containments();
-    QMutableListIterator<Containment*> it(c);
-
-    while (it.hasNext()) {
-        Containment *containment = it.next();
-        if (containment->containmentType() == Containment::PanelContainment ||
-            containment->containmentType() == Containment::CustomPanelContainment) {
-            // weed out all containments we don't care about at all
-            // e.g. Panels and ourself
-            it.remove();
-            continue;
-        }
-    }
-
-    if (c.isEmpty()) {
-        CoronaBasePrivate::s_positioningContainments = false;
-        return;
-    }
-
-    int column = 0;
-    int x = 0;
-    int y = 0;
-    int rowHeight = 0;
-
-    it.toFront();
-    while (it.hasNext()) {
-        Containment *containment = it.next();
-        containment->setPos(x, y);
-        //kDebug() << ++count << "setting to" << x << y;
-
-        int height = containment->size().height();
-        if (height > rowHeight) {
-            rowHeight = height;
-        }
-
-        ++column;
-
-        if (column == CONTAINMENT_COLUMNS) {
-            column = 0;
-            x = 0;
-            y += rowHeight + INTER_CONTAINMENT_MARGIN + TOOLBOX_MARGIN;
-            rowHeight = 0;
-        } else {
-            x += containment->size().width() + INTER_CONTAINMENT_MARGIN;
-        }
-        //kDebug() << "column: " << column << "; x " << x << "; y" << y << "; width was"
-        //         << containment->size().width();
-    }
-
-    CoronaBasePrivate::s_positioningContainments = false;
-}
-
-
 void CoronaBase::loadLayout(const QString &configName)
 {
     if (!configName.isEmpty() && configName != d->configName) {
