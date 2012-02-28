@@ -42,6 +42,7 @@
 #include <kwindowsystem.h>
 #include <kicon.h>
 
+#include "coronabase.h"
 #include "abstractdialogmanager.h"
 #include "abstracttoolbox.h"
 #include "containment.h"
@@ -66,6 +67,7 @@ Corona::Corona(QObject *parent)
 #ifndef NDEBUG
     kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Corona ctor start";
 #endif
+    d->coronaBase = new CoronaBase(this);
     d->init();
     //setViewport(new QGLWidget(QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)));
 }
@@ -84,39 +86,27 @@ Corona::~Corona()
 
 void Corona::setAppletMimeType(const QString &type)
 {
-    d->mimetype = type;
+    d->coronaBase->setAppletMimeType(type);
 }
 
 QString Corona::appletMimeType()
 {
-    return d->mimetype;
+    return d->coronaBase->appletMimeType();
 }
 
 void Corona::setDefaultContainmentPlugin(const QString &name)
 {
-    // we could check if it is in:
-    // Containment::listContainments().contains(name) ||
-    // Containment::listContainments(QString(), KGlobal::mainComponent().componentName()).contains(name)
-    // but that seems like overkill
-    d->defaultContainmentPlugin = name;
+    d->coronaBase->setDefaultContainmentPlugin(name);
 }
 
 QString Corona::defaultContainmentPlugin() const
 {
-    return d->defaultContainmentPlugin;
+    return d->coronaBase->defaultContainmentPlugin();
 }
 
 void Corona::saveLayout(const QString &configName) const
 {
-    KSharedConfigPtr c;
-
-    if (configName.isEmpty() || configName == d->configName) {
-        c = config();
-    } else {
-        c = KSharedConfig::openConfig(configName, KConfig::SimpleConfig);
-    }
-
-    d->saveLayout(c);
+    d->coronaBase->saveLayout(configName);
 }
 
 void Corona::exportLayout(KConfigGroup &config, QList<Containment*> containments)
@@ -268,19 +258,12 @@ void Corona::layoutContainments()
 
 void Corona::loadLayout(const QString &configName)
 {
-    if (!configName.isEmpty() && configName != d->configName) {
-        // if we have a new config name passed in, then use that as the config file for this Corona
-        d->config = 0;
-        d->configName = configName;
-    }
-
-    KConfigGroup conf(config(), QString());
-    d->importLayout(conf, false);
+    d->coronaBase->loadLayout();
 }
 
 QList<Plasma::Containment *> Corona::importLayout(const KConfigGroup &conf)
 {
-    return d->importLayout(conf, true);
+    return d->coronaBase->importLayout(conf);
 }
 
 Containment *Corona::containmentForScreen(int screen, int desktop) const
@@ -300,19 +283,7 @@ Containment *Corona::containmentForScreen(int screen, int desktop) const
 Containment *Corona::containmentForScreen(int screen, int desktop,
                                           const QString &defaultPluginIfNonExistent, const QVariantList &defaultArgs)
 {
-    Containment *containment = containmentForScreen(screen, desktop);
-    if (!containment && !defaultPluginIfNonExistent.isEmpty()) {
-        // screen requests are allowed to bypass immutability
-        if (screen >= 0 && screen < numScreens() &&
-            desktop >= -1 && desktop < KWindowSystem::numberOfDesktops()) {
-            containment = d->addContainment(defaultPluginIfNonExistent, defaultArgs, 0, false);
-            if (containment) {
-                containment->setScreen(screen, desktop);
-            }
-        }
-    }
-
-    return containment;
+    return d->coronaBase->containmentForScreen(screen, desktop, defaultPluginIfNonExistent, defaultArgs);
 }
 
 QList<Containment*> Corona::containments() const
@@ -338,20 +309,16 @@ KSharedConfigPtr Corona::config() const
 
 Containment *Corona::addContainment(const QString &name, const QVariantList &args)
 {
-    if (d->immutability == Mutable) {
-        return d->addContainment(name, args, 0, false);
-    }
-
-    return 0;
+    Plasma::Containment *containment = d->coronaBase->addContainment(name, args);
+    addItem(containment);
+    return containment;
 }
 
 Containment *Corona::addContainmentDelayed(const QString &name, const QVariantList &args)
 {
-    if (d->immutability == Mutable) {
-        return d->addContainment(name, args, 0, true);
-    }
-
-    return 0;
+    Plasma::Containment *containment = d->coronaBase->addContainmentDelayed(name, args);
+    addItem(containment);
+    return containment;
 }
 
 void Corona::addOffscreenWidget(QGraphicsWidget *widget)
@@ -754,8 +721,6 @@ AbstractDialogManager *Corona::dialogManager()
 CoronaPrivate::CoronaPrivate(Corona *corona)
     : q(corona),
       immutability(Mutable),
-      mimetype("text/x-plasmoidservicename"),
-      defaultContainmentPlugin("desktop"),
       config(0),
       actions(corona)
 {
@@ -847,16 +812,6 @@ void CoronaPrivate::toggleImmutability()
     }
 }
 
-void CoronaPrivate::saveLayout(KSharedConfigPtr cg) const
-{
-    KConfigGroup containmentsGroup(cg, "Containments");
-    foreach (const Containment *containment, containments) {
-        QString cid = QString::number(containment->id());
-        KConfigGroup containmentConfig(&containmentsGroup, cid);
-        containment->save(containmentConfig);
-    }
-}
-
 void CoronaPrivate::updateContainmentImmutability()
 {
     foreach (Containment *c, containments) {
@@ -886,164 +841,6 @@ void CoronaPrivate::syncConfig()
     emit q->configSynced();
 }
 
-Containment *CoronaPrivate::addContainment(const QString &name, const QVariantList &args, uint id, bool delayedInit)
-{
-    QString pluginName = name;
-    Containment *containment = 0;
-    Applet *applet = 0;
-
-    //kDebug() << "Loading" << name << args << id;
-
-    if (pluginName.isEmpty() || pluginName == "default") {
-        // default to the desktop containment
-        pluginName = defaultContainmentPlugin;
-    }
-
-    bool loadingNull = pluginName == "null";
-    if (!loadingNull) {
-        applet = PluginLoader::self()->loadApplet(pluginName, id, args);
-        containment = dynamic_cast<Containment*>(applet);
-    }
-
-    if (!containment) {
-        if (!loadingNull) {
-#ifndef NDEBUG
-            kDebug() << "loading of containment" << name << "failed.";
-#endif
-        }
-
-        // in case we got a non-Containment from Applet::loadApplet or
-        // a null containment was requested
-        if (applet) {
-            // the applet probably doesn't know what's hit it, so let's pretend it can be
-            // initialized to make assumptions in the applet's dtor safer
-            q->addItem(applet);
-            applet->init();
-            q->removeItem(applet);
-            delete applet;
-        }
-        applet = containment = new Containment(0, 0, id);
-
-        if (loadingNull) {
-            containment->setDrawWallpaper(false);
-        } else {
-            containment->setFailedToLaunch(false);
-        }
-
-        // we want to provide something and don't care about the failure to launch
-        containment->setFormFactor(Plasma::Planar);
-    }
-
-    // if this is a new containment, we need to ensure that there are no stale
-    // configuration data around
-    if (id == 0) {
-        KConfigGroup conf(q->config(), "Containments");
-        conf = KConfigGroup(&conf, QString::number(containment->id()));
-        conf.deleteGroup();
-    }
-
-    applet->d->isContainment = true;
-    containment->setPos(containment->d->preferredPos(q));
-    q->addItem(containment);
-    applet->d->setIsContainment(true, true);
-    containments.append(containment);
-
-    if (!delayedInit) {
-        containment->init();
-        KConfigGroup cg = containment->config();
-        containment->restore(cg);
-        containment->updateConstraints(Plasma::StartupCompletedConstraint);
-        containment->save(cg);
-        q->requestConfigSync();
-        containment->flushPendingConstraintsEvents();
-    }
-
-    QObject::connect(containment, SIGNAL(destroyed(QObject*)),
-            q, SLOT(containmentDestroyed(QObject*)));
-    QObject::connect(containment, SIGNAL(configNeedsSaving()),
-            q, SLOT(requestConfigSync()));
-    QObject::connect(containment, SIGNAL(releaseVisualFocus()),
-            q, SIGNAL(releaseVisualFocus()));
-    QObject::connect(containment, SIGNAL(screenChanged(int,int,Plasma::Containment*)),
-            q, SIGNAL(screenOwnerChanged(int,int,Plasma::Containment*)));
-
-    if (!delayedInit) {
-        emit q->containmentAdded(containment);
-    }
-
-    return containment;
-}
-
-QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &conf, bool mergeConfig)
-{
-    if (!conf.isValid()) {
-        return QList<Containment *>();
-    }
-
-    QList<Plasma::Containment *> newContainments;
-    QSet<uint> containmentsIds;
-
-    foreach (Containment *containment, containments) {
-        containmentsIds.insert(containment->id());
-    }
-
-    KConfigGroup containmentsGroup(&conf, "Containments");
-
-    foreach (const QString &group, containmentsGroup.groupList()) {
-        KConfigGroup containmentConfig(&containmentsGroup, group);
-
-        if (containmentConfig.entryMap().isEmpty()) {
-            continue;
-        }
-
-        uint cid = group.toUInt();
-        if (containmentsIds.contains(cid)) {
-            cid = ++AppletPrivate::s_maxAppletId;
-        } else if (cid > AppletPrivate::s_maxAppletId) {
-            AppletPrivate::s_maxAppletId = cid;
-        }
-
-        if (mergeConfig) {
-            KConfigGroup realConf(q->config(), "Containments");
-            realConf = KConfigGroup(&realConf, QString::number(cid));
-            // in case something was there before us
-            realConf.deleteGroup();
-            containmentConfig.copyTo(&realConf);
-        }
-
-        //kDebug() << "got a containment in the config, trying to make a" << containmentConfig.readEntry("plugin", QString()) << "from" << group;
-#ifndef NDEBUG
-        kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Adding Containment" << containmentConfig.readEntry("plugin", QString());
-#endif
-        Containment *c = addContainment(containmentConfig.readEntry("plugin", QString()), QVariantList(), cid, true);
-        if (!c) {
-            continue;
-        }
-
-        newContainments.append(c);
-        containmentsIds.insert(c->id());
-
-        c->init();
-#ifndef NDEBUG
-        kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Init Containment" << c->pluginName();
-#endif
-        c->restore(containmentConfig);
-#ifndef NDEBUG
-        kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Restored Containment" << c->pluginName();
-#endif
-    }
-
-    foreach (Containment *containment, newContainments) {
-        containment->updateConstraints(Plasma::StartupCompletedConstraint);
-        containment->d->initApplets();
-        emit q->containmentAdded(containment);
-#ifndef NDEBUG
-        kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Containment" << containment->name();
-#endif
-    }
-
-    return newContainments;
-}
 
 } // namespace Plasma
 

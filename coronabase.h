@@ -421,6 +421,7 @@ private:
     Q_PRIVATE_SLOT(d, void showShortcutConfig())
 
     friend class CoronaBasePrivate;
+    friend class Corona;
     friend class View;
 };
 

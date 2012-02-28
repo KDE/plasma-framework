@@ -30,6 +30,7 @@ namespace Plasma
 {
 
 class Containment;
+class CoronaBase;
 
 class CoronaPrivate
 {
@@ -40,21 +41,16 @@ public:
     void init();
     void showShortcutConfig();
     void toggleImmutability();
-    void saveLayout(KSharedConfigPtr cg) const;
     void updateContainmentImmutability();
     void containmentDestroyed(QObject *obj);
     void syncConfig();
-    Containment *addContainment(const QString &name, const QVariantList &args, uint id, bool delayedInit);
     void offscreenWidgetDestroyed(QObject *);
-    QList<Plasma::Containment *> importLayout(const KConfigGroup &conf, bool mergeConfig);
 
     static bool s_positioningContainments;
 
     Corona *q;
     ImmutabilityType immutability;
-    QString mimetype;
     QString configName;
-    QString defaultContainmentPlugin;
     KSharedConfigPtr config;
     QTimer configSyncTimer;
     QList<Containment*> containments;
@@ -65,6 +61,7 @@ public:
     QWeakPointer<AbstractDialogManager> dialogManager;
     QHash<Containment::Type, QString> toolBoxPlugins;
     QList<QWeakPointer<KActionCollection> > actionCollections;
+    CoronaBase *coronaBase;
 };
 
 }
