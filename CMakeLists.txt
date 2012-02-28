@@ -94,28 +94,20 @@ set(plasma_LIB_SRCS
     abstractrunner.cpp
     ${plasmagik_SRCS}
     abstractdialogmanager.cpp
-    abstracttoolbox.cpp
-    dialog.cpp
     configloader.cpp
-    containment.cpp
     containmentactions.cpp
     containmentactionspluginsconfig.cpp
-    corona.cpp
     datacontainer.cpp
     dataengine.cpp
     dataenginemanager.cpp
-    
     package.cpp
     packagestructure.cpp
     paintutils.cpp
     pluginloader.cpp
     framesvg.cpp
     plasma.cpp
-    applet.cpp
-    popupapplet.cpp
     pluginloader.cpp
 
-    private/applethandle.cpp
     private/associatedapplicationmanager.cpp
     private/componentinstaller.cpp
     private/datacontainer_p.cpp
@@ -133,13 +125,12 @@ set(plasma_LIB_SRCS
     private/serviceprovider.cpp
     private/storage.cpp
     private/storagethread.cpp
-    
     private/tooltip.cpp
     private/wallpaperrenderthread.cpp
     private/windowpreview.cpp
     private/windowshadows.cpp
     private/appletprivate.cpp
-    
+
     querymatch.cpp
     remote/accessmanager.cpp
     remote/accessappletjob.cpp
@@ -189,7 +180,14 @@ set(plasma_LIB_SRCS
     #FIXME: all these must move into the qgv library
     private/themedwidgetinterface.cpp
     widgets/iconwidget.cpp
+    abstracttoolbox.cpp
     view.cpp
+    applet.cpp
+    containment.cpp
+    corona.cpp
+    dialog.cpp
+    popupapplet.cpp
+    private/applethandle.cpp
 )
 
 set (plasmaqgv_LIB_SRCS
