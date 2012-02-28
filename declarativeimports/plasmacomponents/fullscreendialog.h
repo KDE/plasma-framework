@@ -80,6 +80,7 @@ private Q_SLOTS:
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
+    virtual QString componentName() const;
 
 private:
     QGraphicsView *m_view;

@@ -116,7 +116,7 @@ FullScreenDialog::FullScreenDialog(QDeclarativeItem *parent)
     QString filePath;
     if (componentsPlatform == "desktop") {
         foreach(const QString &importPath, KGlobal::dirs()->findDirs("module", "imports/")) {
-            filePath = importPath % "org/kde/plasma/components/Dialog.qml";
+            filePath = importPath % "org/kde/plasma/components/" % componentName() % ".qml";
             QFile f(filePath);
             if (f.exists()) {
                 break;
@@ -124,7 +124,7 @@ FullScreenDialog::FullScreenDialog(QDeclarativeItem *parent)
         }
     } else {
         foreach(const QString &importPath, KGlobal::dirs()->findDirs("module", "platformimports/" % componentsPlatform)) {
-            filePath = importPath % "org/kde/plasma/components/Dialog.qml";
+            filePath = importPath % "org/kde/plasma/components/" % componentName() % ".qml";
             QFile f(filePath);
             if (f.exists()) {
                 break;
@@ -156,6 +156,11 @@ FullScreenDialog::FullScreenDialog(QDeclarativeItem *parent)
 FullScreenDialog::~FullScreenDialog()
 {
     delete m_view;
+}
+
+QString FullScreenDialog::componentName() const
+{
+    return "Dialog";
 }
 
 QGraphicsObject *FullScreenDialog::mainItem() const

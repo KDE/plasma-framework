@@ -2,6 +2,7 @@ project(plasmacomponents)
 
 set(plasmacomponents_SRCS
     fullscreendialog.cpp
+    fullscreensheet.cpp
     plasmacomponentsplugin.cpp
     qrangemodel.cpp
     enums.cpp
