@@ -97,6 +97,7 @@ set(plasma_LIB_SRCS
     configloader.cpp
     containmentactions.cpp
     containmentactionspluginsconfig.cpp
+    coronabase.cpp
     datacontainer.cpp
     dataengine.cpp
     dataenginemanager.cpp
