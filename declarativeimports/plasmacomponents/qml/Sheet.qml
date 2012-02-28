@@ -111,13 +111,16 @@ Item {
 
     property alias title: titleBar.children
     property alias content: contentItem.children
-    property alias buttons: buttonItem.children
 //    property alias visualParent: dialog.visualParent
     property int status: DialogStatus.Closed
+    property alias acceptButtonText: acceptButton.text
+    property alias rejectButtonText: rejectButton.text
+    property alias acceptButton: acceptButton
+    property alias rejectButton: rejectButton
 
 
     property alias privateTitleHeight: titleBar.height
-    property alias privateButtonsHeight: buttonItem.height
+    property alias privateButtonsHeight: buttonsRow.height
 
     signal accepted
     signal rejected
@@ -175,7 +178,7 @@ Item {
         mainItem: Item {
             id: mainItem
             width: theme.defaultFont.mSize.width * 40
-            height: titleBar.childrenRect.height + contentItem.childrenRect.height + buttonItem.childrenRect.height + 8
+            height: titleBar.childrenRect.height + contentItem.childrenRect.height + buttonsRow.childrenRect.height + 8
 
             // Consume all key events that are not processed by children
             Keys.onPressed: event.accepted = true
@@ -195,27 +198,36 @@ Item {
             Item {
                 id: contentItem
 
-                onChildrenRectChanged: mainItem.width = Math.max(childrenRect.width, buttonItem.childrenRect.width)
+                onChildrenRectChanged: mainItem.width = Math.max(childrenRect.width, buttonsRow.childrenRect.width)
 
                 clip: true
                 anchors {
                     top: titleBar.bottom
                     left: parent.left
                     right: parent.right
-                    bottom: buttonItem.top
+                    bottom: buttonsRow.top
                     bottomMargin: 8
                 }
             }
 
-            Item {
-                id: buttonItem
-
-                height: childrenRect.height
+            Row {
+                id: buttonsRow
+                spacing: 8
                 anchors {
-                    left: parent.left
-                    right: parent.right
                     bottom: parent.bottom
-                    bottomMargin: 4
+                    horizontalCenter: parent.horizontalCenter
+                    //the bottom margin is disabled but we want it anyways
+                    bottomMargin: theme.defaultFont.mSize.height*0.6
+                }
+
+                Button {
+                    id: acceptButton
+                    onClicked: accept()
+                }
+
+                Button {
+                    id: rejectButton
+                    onClicked: reject()
                 }
             }
         }

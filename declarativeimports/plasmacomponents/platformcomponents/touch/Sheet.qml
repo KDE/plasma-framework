@@ -47,18 +47,22 @@ import "." 0.1
 
 Item {
     id: root
-    width: dialog.width
-    height: dialog.height
+    width: 600
+    height: 200
+    onHeightChanged:print(height)
 
     property alias title: titleBar.children
     property alias content: contentItem.children
-    property alias buttons: buttonItem.children
 //    property alias visualParent: dialog.visualParent
     property int status: DialogStatus.Closed
+    property alias acceptButtonText: acceptButton.text
+    property alias rejectButtonText: rejectButton.text
+    property alias acceptButton: acceptButton
+    property alias rejectButton: rejectButton
 
 
     property alias privateTitleHeight: titleBar.height
-    property alias privateButtonsHeight: buttonItem.height
+    property alias privateButtonsHeight: buttonsRow.height
 
     signal accepted
     signal rejected
@@ -110,9 +114,7 @@ Item {
 
     PlasmaCore.FrameSvgItem {
         id: dialog
-        width: mainItem.width + margins.left + margins.right
-        height: mainItem.height + margins.top + margins.bottom
-        anchors.centerIn: parent
+        anchors.fill: parent
         imagePath: "dialogs/background"
 
         state: "closed"
@@ -123,9 +125,8 @@ Item {
             id: mainItem
             x: dialog.margins.left
             y: dialog.margins.top
-            width: theme.defaultFont.mSize.width * 40
-            height: titleBar.childrenRect.height + contentItem.childrenRect.height + buttonItem.childrenRect.height + 8
-
+            width: parent.width - dialog.margins.left - dialog.margins.right
+            height: parent.height - dialog.margins.top - dialog.margins.bottom
 
             // Consume all key events that are not processed by children
             Keys.onPressed: event.accepted = true
@@ -146,24 +147,33 @@ Item {
                 id: contentItem
 
                 clip: true
-                onChildrenRectChanged: mainItem.width = Math.max(childrenRect.width, buttonItem.childrenRect.width)
+                onChildrenRectChanged: mainItem.width = Math.max(childrenRect.width, buttonsRow.childrenRect.width)
                 anchors {
                     top: titleBar.bottom
                     left: parent.left
                     right: parent.right
-                    bottom: buttonItem.top
+                    bottom: buttonsRow.top
                 }
             }
 
-            Item {
-                id: buttonItem
-
-                height: childrenRect.height
+            Row {
+                id: buttonsRow
+                spacing: 8
                 anchors {
-                    left: parent.left
-                    right: parent.right
                     bottom: parent.bottom
-                    bottomMargin: 8
+                    horizontalCenter: parent.horizontalCenter
+                    //the bottom margin is disabled but we want it anyways
+                    bottomMargin: theme.defaultFont.mSize.height*0.6
+                }
+
+                Button {
+                    id: acceptButton
+                    onClicked: accept()
+                }
+
+                Button {
+                    id: rejectButton
+                    onClicked: reject()
                 }
             }
         }

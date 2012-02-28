@@ -34,6 +34,7 @@
 #include "qmenuitem.h"
 #include "kdialogproxy.h"
 #include "fullscreendialog.h"
+#include "fullscreensheet.h"
 
 Q_EXPORT_PLUGIN2(plasmacomponentsplugin, PlasmaComponentsPlugin)
 
@@ -100,6 +101,7 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
     //on touch systems the dialog is fullscreen, c++ needed to do that
     } else {
         qmlRegisterType<FullScreenDialog>(uri, 0, 1, "Dialog");
+        qmlRegisterType<FullScreenSheet>(uri, 0, 1, "Sheet");
     }
 
     qmlRegisterType<Plasma::QRangeModel>(uri, 0, 1, "RangeModel");

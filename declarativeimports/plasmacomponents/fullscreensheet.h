@@ -19,18 +19,38 @@
 #ifndef FULLSCREENSHEET_P
 #define FULLSCREENSHEET_P
 
-#include "fullscreendialog.h"
+#include "fullscreenwindow.h"
 
-class FullScreenSheet : public FullScreenDialog
+class FullScreenSheet : public FullScreenWindow
 {
     Q_OBJECT
+    Q_PROPERTY(QGraphicsObject *acceptButton READ acceptButton WRITE setAcceptButton NOTIFY acceptButtonChanged)
+    Q_PROPERTY(QGraphicsObject *rejectButton READ rejectButton WRITE setRejectButton NOTIFY rejectButtonChanged)
+
+    Q_PROPERTY(QString acceptButtonText READ acceptButtonText WRITE setAcceptButtonText NOTIFY acceptButtonTextChanged)
+    Q_PROPERTY(QString rejectButtonText READ rejectButtonText WRITE setRejectButtonText NOTIFY rejectButtonTextChanged)
 
 public:
     FullScreenSheet(QDeclarativeItem *parent = 0);
     ~FullScreenSheet();
 
-protected:
-    virtual QString componentName() const;
+    QGraphicsObject *acceptButton() const;
+    void setAcceptButton(QGraphicsObject *button);
+
+    QGraphicsObject *rejectButton() const;
+    void setRejectButton(QGraphicsObject *button);
+
+    QString acceptButtonText() const;
+    void setAcceptButtonText(const QString &text);
+
+    QString rejectButtonText() const;
+    void setRejectButtonText(const QString &text);
+
+Q_SIGNALS:
+    void acceptButtonChanged();
+    void rejectButtonChanged();
+    void acceptButtonTextChanged();
+    void rejectButtonTextChanged();
 };
 
 #endif

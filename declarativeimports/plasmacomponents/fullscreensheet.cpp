@@ -19,19 +19,91 @@
 
 #include "fullscreensheet.h"
 
+#include <KDebug>
 
 FullScreenSheet::FullScreenSheet(QDeclarativeItem *parent)
-    : FullScreenDialog(parent)
+    : FullScreenWindow(parent)
 {
+    init("Sheet");
+
+    if (mainItem()) {
+        connect(mainItem(), SIGNAL(acceptButtonChanged()),
+                this, SIGNAL(acceptButtonChanged()));
+        connect(mainItem(), SIGNAL(rejectButtonChanged()),
+                this, SIGNAL(rejectButtonChanged()));
+        connect(mainItem(), SIGNAL(acceptButtonTextChanged()),
+                this, SIGNAL(acceptButtonTextChanged()));
+        connect(mainItem(), SIGNAL(rejectButtonTextChanged()),
+                this, SIGNAL(rejectButtonTextChanged()));
+    }
 }
 
 FullScreenSheet::~FullScreenSheet()
 {
 }
 
-QString FullScreenSheet::componentName() const
+QGraphicsObject *FullScreenSheet::acceptButton() const
 {
-    return "Sheet";
+    if (mainItem()) {
+        return mainItem()->property("acceptButton").value<QGraphicsObject *>();
+    } else {
+        return 0;
+    }
+}
+
+void FullScreenSheet::setAcceptButton(QGraphicsObject *button)
+{
+    if (mainItem()) {
+        mainItem()->setProperty("acceptButton", QVariant::fromValue(button));
+    }
+}
+
+QGraphicsObject *FullScreenSheet::rejectButton() const
+{
+    if (mainItem()) {
+        return mainItem()->property("rejectButton").value<QGraphicsObject *>();
+    } else {
+        return 0;
+    }
+}
+
+void FullScreenSheet::setRejectButton(QGraphicsObject *button)
+{
+    if (mainItem()) {
+        mainItem()->setProperty("rejectButton", QVariant::fromValue(button));
+    }
+}
+
+QString FullScreenSheet::acceptButtonText() const
+{
+    if (mainItem()) {
+        return mainItem()->property("acceptButtonText").toString();
+    } else {
+        return 0;
+    }
+}
+
+void FullScreenSheet::setAcceptButtonText(const QString &text)
+{
+    if (mainItem()) {
+        mainItem()->setProperty("acceptButtonText", QVariant::fromValue(text));
+    }
+}
+
+QString FullScreenSheet::rejectButtonText() const
+{
+    if (mainItem()) {
+        return mainItem()->property("rejectButtonText").toString();
+    } else {
+        return 0;
+    }
+}
+
+void FullScreenSheet::setRejectButtonText(const QString &text)
+{
+    if (mainItem()) {
+        mainItem()->setProperty("rejectButtonText", QVariant::fromValue(text));
+    }
 }
 
 #include "fullscreensheet.moc"
