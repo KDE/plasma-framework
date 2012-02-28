@@ -32,7 +32,6 @@
 
 #include <kdebug.h>
 
-#include <applet.h>
 #include <theme.h>
 #include <private/svg_p.h>
 
@@ -704,10 +703,7 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
         QPoint pos = QPoint(0, 0);
         overlaySize = q->elementSize(prefix % "overlay");
 
-        //Random pos, stretched and tiled are mutually exclusive
-        if (q->hasElement(prefix % "hint-overlay-random-pos")) {
-            actualOverlayPos = overlayPos;
-        } else if (q->hasElement(prefix % "hint-overlay-pos-right")) {
+        if (q->hasElement(prefix % "hint-overlay-pos-right")) {
             actualOverlayPos.setX(frame->frameSize.width() - overlaySize.width());
         } else if (q->hasElement(prefix % "hint-overlay-pos-bottom")) {
             actualOverlayPos.setY(frame->frameSize.height() - overlaySize.height());
