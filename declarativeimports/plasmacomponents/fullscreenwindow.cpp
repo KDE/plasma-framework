@@ -296,6 +296,7 @@ QGraphicsView *FullScreenWindow::view() const
     return m_view;
 }
 
+
 QDeclarativeListProperty<QGraphicsObject> FullScreenWindow::title()
 {
     if (m_rootObject) {

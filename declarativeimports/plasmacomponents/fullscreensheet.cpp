@@ -19,12 +19,18 @@
 
 #include "fullscreensheet.h"
 
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QGraphicsView>
+
 #include <KDebug>
 
 FullScreenSheet::FullScreenSheet(QDeclarativeItem *parent)
     : FullScreenWindow(parent)
 {
     init("Sheet");
+
+    view()->setGeometry(QApplication::desktop()->availableGeometry().adjusted(50, 50, 0, 50));
 
     if (mainItem()) {
         connect(mainItem(), SIGNAL(acceptButtonChanged()),
