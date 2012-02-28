@@ -133,7 +133,7 @@ set(plasma_LIB_SRCS
     private/serviceprovider.cpp
     private/storage.cpp
     private/storagethread.cpp
-    private/style.cpp
+    
     private/tooltip.cpp
     private/wallpaperrenderthread.cpp
     private/windowpreview.cpp
