@@ -39,28 +39,12 @@ public:
     ~CoronaPrivate();
 
     void init();
-    void showShortcutConfig();
-    void toggleImmutability();
-    void updateContainmentImmutability();
-    void containmentDestroyed(QObject *obj);
-    void syncConfig();
     void offscreenWidgetDestroyed(QObject *);
 
     static bool s_positioningContainments;
 
     Corona *q;
-    ImmutabilityType immutability;
-    QString configName;
-    KSharedConfigPtr config;
-    QTimer configSyncTimer;
-    QList<Containment*> containments;
     QHash<uint, QGraphicsWidget*> offscreenWidgets;
-    KActionCollection actions;
-    QMap<Containment::Type, ContainmentActionsPluginsConfig> containmentActionsDefaults;
-    QWeakPointer<KShortcutsDialog> shortcutsDlg;
-    QWeakPointer<AbstractDialogManager> dialogManager;
-    QHash<Containment::Type, QString> toolBoxPlugins;
-    QList<QWeakPointer<KActionCollection> > actionCollections;
     CoronaBase *coronaBase;
 };
 
