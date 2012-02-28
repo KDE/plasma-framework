@@ -196,7 +196,7 @@ set (plasmaqgv_LIB_SRCS
     #FIXME: this is duplicated with libplasma because iconwidget requires it!
     private/themedwidgetinterface.cpp
 
-    graphicsview/graphicsviewappletprivate.cpp
+    graphicsview/private/graphicsviewappletprivate.cpp
     animator.cpp
     animations/animation.cpp
     animations/easinganimation.cpp

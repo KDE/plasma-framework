@@ -21,7 +21,7 @@
  */
 
 #include "corona.h"
-#include "private/corona_p.h"
+#include "graphicsview/private/corona_p.h"
 
 #include <QApplication>
 #include <QDesktopWidget>
