@@ -114,8 +114,15 @@ Item {
 
     PlasmaCore.FrameSvgItem {
         id: dialog
-        anchors.fill: parent
+        anchors {
+            fill: parent
+            leftMargin: 50
+            topMargin: 50
+            rightMargin: 50
+            bottomMargin: 0
+        }
         imagePath: "dialogs/background"
+        enabledBorders: "LeftBorder|TopBorder|RightBorder"
 
         state: "closed"
 

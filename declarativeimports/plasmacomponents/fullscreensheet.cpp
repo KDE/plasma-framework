@@ -30,7 +30,7 @@ FullScreenSheet::FullScreenSheet(QDeclarativeItem *parent)
 {
     init("Sheet");
 
-    view()->setGeometry(QApplication::desktop()->availableGeometry().adjusted(50, 50, 0, 50));
+    view()->setGeometry(QApplication::desktop()->availableGeometry());
 
     if (mainItem()) {
         connect(mainItem(), SIGNAL(acceptButtonChanged()),
