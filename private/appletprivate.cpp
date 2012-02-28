@@ -231,40 +231,7 @@ void AppletPrivate::updateRect(const QRectF &rect)
 
 void AppletPrivate::cleanUpAndDelete()
 {
-    //kDebug() << "???????????????? DESTROYING APPLET" << q->name() << q->scene() << " ???????????????????????????";
-    QGraphicsWidget *parent = dynamic_cast<QGraphicsWidget *>(q->parentItem());
-    //it probably won't matter, but right now if there are applethandles, *they* are the parent.
-    //not the containment.
-
-    //is the applet in a containment and does the containment have a layout?
-    //if yes, we remove the applet in the layout
-    if (parent && parent->layout()) {
-        QGraphicsLayout *l = parent->layout();
-        for (int i = 0; i < l->count(); ++i) {
-            if (q == l->itemAt(i)) {
-                l->removeAt(i);
-                break;
-            }
-        }
-    }
-
-    if (configLoader) {
-        configLoader->setDefaults();
-    }
-
-    resetConfigurationObject();
-
-    if (q->scene()) {
-        if (isContainment) {
-            // prematurely emit our destruction if we are a Containment,
-            // giving Corona a chance to remove this Containment from its collection
-            emit q->QObject::destroyed(q);
-        }
-
-        q->scene()->removeItem(q);
-    }
-
-    q->deleteLater();
+    // reimplemented in the UI specific library
 }
 
 void AppletPrivate::showConfigurationRequiredMessage(bool show, const QString &reason)

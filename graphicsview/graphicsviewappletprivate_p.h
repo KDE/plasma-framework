@@ -46,6 +46,7 @@ class GraphicsViewAppletPrivate : public QObject, public AppletPrivate
 
 public:
     GraphicsViewAppletPrivate(KService::Ptr service, const KPluginInfo *info, int uniqueID, Applet *applet);
+    void cleanUpAndDelete();
     void showConfigurationRequiredMessage(bool show, const QString &reason);
     void showMessage(const QIcon &icon, const QString &message, const MessageButtons buttons);
     void positionMessageOverlay();
