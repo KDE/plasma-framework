@@ -44,6 +44,13 @@ GraphicsViewAppletPrivate::GraphicsViewAppletPrivate(KService::Ptr service, cons
       messageOverlayProxy(0),
       busyWidget(0)
 {
+    q->setCacheMode(QGraphicsItem::DeviceCoordinateCache);
+    q->setAcceptsHoverEvents(true);
+    q->setFlag(QGraphicsItem::ItemIsFocusable, true);
+    q->setFocusPolicy(Qt::ClickFocus);
+    // FIXME: adding here because nothing seems to be doing it in QGraphicsView,
+    // but it doesn't actually work anyways =/
+    q->setLayoutDirection(qApp->layoutDirection());
 }
 
 void GraphicsViewAppletPrivate::showMessage(const QIcon &icon, const QString &message, const MessageButtons buttons)

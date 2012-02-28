@@ -98,13 +98,6 @@ void AppletPrivate::init(const QString &packagePath)
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
-    q->setCacheMode(QGraphicsItem::DeviceCoordinateCache);
-    q->setAcceptsHoverEvents(true);
-    q->setFlag(QGraphicsItem::ItemIsFocusable, true);
-    q->setFocusPolicy(Qt::ClickFocus);
-    // FIXME: adding here because nothing seems to be doing it in QGraphicsView,
-    // but it doesn't actually work anyways =/
-    q->setLayoutDirection(qApp->layoutDirection());
 
     //set a default size before any saved settings are read
     QSize size(200, 200);
