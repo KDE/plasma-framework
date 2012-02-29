@@ -285,8 +285,29 @@ QString DataModel::sourceFilter() const
 
 void DataModel::setItems(const QString &sourceName, const QVariantList &list)
 {
-    beginResetModel();
+    const int oldLength = m_items.value(sourceName).count();
+    const int delta = list.length() - oldLength;
+    const bool firstRun = m_items.isEmpty();
 
+    //At what row number the first item associated to this source starts
+    int sourceIndex = 0;
+    QMap<QString, QVector<QVariant> >::const_iterator i;
+    for (i = m_items.constBegin(); i != m_items.constEnd(); ++i) {
+        if (i.key() == sourceName) {
+            break;
+        }
+        sourceIndex += i.value().count();
+    }
+    //signal as inserted the rows at the end, all the other rows will signal a dataupdated.
+    //better than a model reset because doesn't cause deletion and re-creation of every list item on a qml ListView, repeaters etc.
+    //the first run it gets reset because otherwise setRoleNames gets broken
+    if (firstRun) {
+        beginResetModel();
+    } else if (delta > 0) {
+        beginInsertRows(QModelIndex(), sourceIndex + oldLength, sourceIndex + list.length() - 1);
+    } else if (delta < 0) {
+        beginRemoveRows(QModelIndex(), sourceIndex + list.length(), sourceIndex + oldLength - 1);
+    }
     //convert to vector, so data() will be O(1)
     m_items[sourceName] = list.toVector();
 
@@ -326,9 +347,15 @@ void DataModel::setItems(const QString &sourceName, const QVariantList &list)
 
     setRoleNames(m_roleNames);
 
-    //make the declarative view reload everything,
-    //would be nice an incremental update but is not possible
-    endResetModel();
+    if (firstRun) {
+        endResetModel();
+    } else if (delta > 0) {
+        endInsertRows();
+    } else if (delta < 0) {
+        endRemoveRows();
+    }
+    emit dataChanged(createIndex(sourceIndex, 0),
+                     createIndex(sourceIndex + qMin(list.length(), oldLength), 0));
 }
 
 void DataModel::removeSource(const QString &sourceName)
