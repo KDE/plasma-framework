@@ -30,9 +30,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${karchive_BINARY_DIR}/src
                     ${CMAKE_SOURCE_DIR}/tier1/kauth/src/
                     ${CMAKE_BINARY_DIR}/tier1/kauth/src/
-                    ${CMAKE_SOURCE_DIR}/tier1/threadweaver/
-                    ${CMAKE_BINARY_DIR}/tier1/threadweaver/
-                    ${CMAKE_BINARY_DIR}/tier1/threadweaver/Weaver
+                    ${CMAKE_SOURCE_DIR}/tier1/threadweaver/src
+                    ${CMAKE_BINARY_DIR}/tier1/threadweaver/src
+                    ${CMAKE_BINARY_DIR}/tier1/threadweaver/src/Weaver
                     ${CMAKE_SOURCE_DIR}/staging/kwindowsystem/
                     ${CMAKE_BINARY_DIR}/staging/kwindowsystem/
                     ${CMAKE_SOURCE_DIR}/plasma/remote
