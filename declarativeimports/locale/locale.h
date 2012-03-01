@@ -115,6 +115,7 @@ Q_PROPERTY(QString defaultLanguage READ defaultLanguage NOTIFY defaultLanguageCh
 Q_PROPERTY(QString defaultCountry READ defaultCountry NOTIFY defaultCountryChanged)//read-only
 Q_PROPERTY(QString defaultCurrencyCode READ defaultCurrencyCode NOTIFY defaultCurrencyCodeChanged)//read-only
 Q_PROPERTY(bool useTranscript READ useTranscript NOTIFY useTranscriptChanged) //read-only
+Q_PROPERTY(int fileEncodingMib READ fileEncodingMib NOTIFY fileEncodingMibChanged) //read-only
 
 public:
     /**
@@ -783,7 +784,7 @@ public:
      * @return The date and time as a string
      */
     Q_INVOKABLE QString formatDateTime(const KDateTime &dateTime, DateFormat format = ShortDate,
-                           DateTimeFormatOptions options = 0) const;
+                           DateTimeFormatOptions options = 0) const;//TODO
 
     /**
      * Use this to determine whether in dates a possessive form of month
@@ -1164,7 +1165,7 @@ public:
      *
      * @see currencyCodeToName
      */
-    Q_INVOKABLE QStringList currencyCodeList() const; //TODO
+    Q_INVOKABLE QStringList currencyCodeList() const;
 
     /**
      * Returns the file encoding.
@@ -1174,7 +1175,7 @@ public:
      * @see QFile::encodeName
      * @see QFile::decodeName
      */
-    Q_INVOKABLE int fileEncodingMib() const;
+    int fileEncodingMib() const;
 
     /**
      * Changes the current date format.
@@ -1521,7 +1522,7 @@ public:
      * @see languageCodeToName
      * @see installedLanguages
      */
-    Q_INVOKABLE QStringList allLanguagesList() const; //TODO
+    Q_INVOKABLE QStringList allLanguagesList() const;
 
     /**
      *
@@ -1534,7 +1535,7 @@ public:
      *
      * @see languageCodeToName
      */
-    Q_INVOKABLE QStringList installedLanguages() const; //TODO
+    Q_INVOKABLE QStringList installedLanguages() const;
 
     /**
      * Convert a known language code to a human readable, localized form.
@@ -1564,7 +1565,7 @@ public:
      *
      * @see countryCodeToName
      */
-    Q_INVOKABLE QStringList allCountriesList() const; //TODO
+    Q_INVOKABLE QStringList allCountriesList() const;
 
     /**
      * Convert a known country code to a human readable, localized form.
@@ -1593,7 +1594,7 @@ public:
      * @param charset set to the charset part of the locale
      */
     Q_INVOKABLE static void splitLocale(const QString &locale, QString &language, QString &country,
-                            QString &modifier, QString &charset);
+                            QString &modifier, QString &charset); //TODO
 
     /**
      * Use this as main catalog for *all* KLocales, if not the appname
@@ -1683,7 +1684,7 @@ public:
      *
      * @return path to the localized file if found, original path otherwise
      */
-    Q_INVOKABLE QString localizedFilePath(const QString &filePath) const;
+    Q_INVOKABLE QString localizedFilePath(const QString &filePath) const;//TODO remove
 
     /**
      *
@@ -1771,6 +1772,7 @@ Q_SIGNALS:
     void defaultCurrencyCodeChanged();
     void defaultLanguageChanged();
     void useTranscriptChanged();
+    void fileEncodingMibChanged();
 };
 //TODO remove the above?
 //Q_DECLARE_OPERATORS_FOR_FLAGS(Locale::DateTimeFormatOptions)
