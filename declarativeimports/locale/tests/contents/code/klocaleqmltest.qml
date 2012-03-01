@@ -56,19 +56,18 @@ Item {
                 console.log("=====Locale Component====")
                 console.log("country:" + locale.country)
 
-               // locale.binaryUnitDialect = Locale.BinaryUnitDialect.IECBinaryDialect
-               // locale.calendarSystem = CalendarSystem.CopticCalendar
+                locale.binaryUnitDialect = Locale.IECBinaryDialect
+                locale.calendarSystem = Locale.CopticCalendar
 
                 locale.countryDivisionCode = "AL"
                 console.log("countryDivisionCode:" + locale.countryDivisionCode)
 
-                //locale.currencyCode = "AFN" //TODO add the right value
-                //console.log("currencyCode:" + locale.currencyCode)
+                console.log("currencyCode:" + locale.currencyCode)
 
-                //locale.currencySymbol = TODO
-                //console.log("currencySymbol" + locale.currencySymbol)
+                locale.currencySymbol = "$"
+                console.log("currencySymbol:" + locale.currencySymbol)
 
-                //locale.dateTimeDigitSet = DigitSet.EasternArabicIndicDigits
+                locale.dateTimeDigitSet = Locale.EasternArabicIndicDigits
 
                 locale.dateFormat = "Y"
                 console.log("dateFormat:" + locale.dateFormat)
@@ -85,12 +84,11 @@ Item {
                 locale.decimalSymbol = "."
                 console.log("decimalSymbol:" + locale.decimalSymbol)
 
-                //locale.digitSet = DigitSet.EasternArabicIndicDigits
+                locale.digitSet = Locale.EasternArabicIndicDigits
 
-                //the language property is read-only
                 console.log("language:" + locale.language)
 
-                //locale.measureSystem = MeasureSystem.Imperial
+                locale.measureSystem = Locale.Imperial
 
                 locale.monetaryDecimalPlaces = 3
                 console.log("monetaryDecimalPlaces:" + locale.monetaryDecimalPlaces)
@@ -98,12 +96,12 @@ Item {
                 locale.monetaryDecimalSymbol = "."
                 console.log("monetaryDecimalSymbol:" + locale.monetaryDecimalSymbol)
 
-                //locale.monetaryDigitSet = DigitSet.EasternArabicIndicDigits
+                locale.monetaryDigitSet = Locale.EasternArabicIndicDigits
 
                 locale.monetaryThousandsSeparator = "."
                 console.log("monetaryThousandsSeparator:" + locale.monetaryThousandsSeparator)
 
-                //locale.negativeMonetarySignPosition = SignPosition.AfterMoney
+                locale.negativeMonetarySignPosition = Locale.AfterMoney
 
                 locale.negativePrefixCurrencySymbol = false
                 console.log("negativePrefixCurrencySymbol:" + locale.negativePrefixCurrencySymbol)
@@ -114,7 +112,7 @@ Item {
                 locale.pageSize = 6
                 console.log("pageSize:" + locale.pageSize)
 
-                //locale.positiveMonetarySignPosition = SignPosition.AfterMoney
+                locale.positiveMonetarySignPosition = Locale.AfterMoney
 
                 locale.positivePrefixCurrencySymbol = false
                 console.log("positivePrefixCurrencySymbol:" + locale.positivePrefixCurrencySymbol)
@@ -128,7 +126,7 @@ Item {
                 locale.weekDayOfPray = 10
                 console.log("weekDayOfPray:" + locale.weekDayOfPray)
 
-                //locale.weekNumberSystem = WeekNumberSystem.FirstFullWeek
+                locale.weekNumberSystem = Locale.FirstFullWeek
 
                 locale.weekStartDay = 3
                 console.log("weekStartDay:" + locale.weekStartDay)
@@ -147,9 +145,9 @@ Item {
 
                 console.log("defaultCurrencyCode:" + locale.defaultCurrencyCode)
 
-                /*console.log("the useTranscript:" + locale.useTranscript)
+                console.log("the useTranscript:" + locale.useTranscript)
 
-                console.log("the encodingMib:" + locale.encodingMib)*/
+                console.log("the encodingMib:" + locale.encodingMib)
 
                 for (var i in locale.languageList) {
                     console.log("languageList:" + locale.languageList[i])
@@ -169,7 +167,7 @@ Item {
 
                 console.log("formatDate:" + locale.formatDate("2010-05-05"))
 
-                console.log("formatDateTime:" + locale.formatDateTime("2010-05-05"))//TODO try if the enums are working.
+                console.log("formatDateTime:" + locale.formatDateTime("2010-05-05"))
 
                 console.log("formatMoney:" + locale.formatMoney(10))
 
@@ -242,7 +240,8 @@ Item {
 
         Locale {
             id: locale
-            binaryUnitDialect: BinaryUnitDialect.DefaultBinaryDialect
+            //TODO enums with negative value(like -1) doesn't work in QML!
+            binaryUnitDialect: Locale.IECBinaryDialect
             onBinaryUnitDialectChanged: {
                 console.log("the binaryUnitDialect property has been changed")
             }
@@ -252,17 +251,14 @@ Item {
                 console.log("the calendarSystem property has been changed")
             }
 
-            //TODO:Add the proper value
-            /*currencyCode: "AED"
             onCurrencyCodeChanged: {
                 console.log("the currencyCode property has been changed")
-            }*/
+            }
 
-            /*TODO
-            currencySymbol: ""
+            currencySymbol: "$"
             onCurrencySymbolChanged: {
                 console.log("the currencySymbol property has been changed")
-            }*/
+            }
 
             countryDivisionCode: "AD"
             onCountryDivisionCodeChanged: {
@@ -284,7 +280,7 @@ Item {
                 console.log("the dateMonthNamePossessive property has been changed")
             }
 
-            dateTimeDigitSet: Digit.ArabicDigits
+            dateTimeDigitSet: Locale.ArabicDigits
             onDateTimeDigitSetChanged: {
                 console.log("the dateTimeDigitSet property has been changed")
             }
@@ -299,12 +295,12 @@ Item {
                 console.log("the decimalSymbol property has been changed")
             }
 
-            digitSet: Digit.ArabicDigits
+            digitSet: Locale.ArabicDigits
             onDigitSetChanged: {
                 console.log("the digitSet property has been changed")
             }
 
-            measureSystem: MeasureSystem.Metric
+            measureSystem: Locale.Metric
             onMeasureSystemChanged: {
                 console.log("the measureSystem property has been changed")
             }
@@ -319,7 +315,7 @@ Item {
                 console.log("the monetaryDecimalSymbol property has been changed")
             }
 
-            monetaryDigitSet: DigitSet.ArabicDigits
+            monetaryDigitSet: Locale.ArabicDigits
             onMonetaryDigitSetChanged: {
                 console.log("the monetaryDigitSet property has been changed")
             }
@@ -329,7 +325,7 @@ Item {
                 console.log("the monetaryThousandsSeparator property has been changed")
             }
 
-            negativeMonetarySignPosition: SignPosition.ParensAround
+            negativeMonetarySignPosition: Locale.ParensAround
             onNegativeMonetarySignPositionChanged: {
                 console.log("the negativeMonetarySignPosition property has been changed")
             }
@@ -349,7 +345,7 @@ Item {
                 console.log("the pageSign property has been changed")
             }
 
-            positiveMonetarySignPosition: SignPosition.ParensAround
+            positiveMonetarySignPosition: Locale.ParensAround
             onPositiveMonetarySignPositionChanged: {
                 console.log("the positiveMonetarySignPosition property has been changed")
             }
@@ -374,7 +370,7 @@ Item {
                 console.log("the weekDayOfPray property has been changed")
             }
 
-            weekNumberSystem: WeekNumberSystem.DefaultWeekNumber
+            weekNumberSystem: Locale.IsoWeekNumber
             onWeekNumberSystemChanged: {
                 console.log("the weekNumberSystem property has been changed")
             }
