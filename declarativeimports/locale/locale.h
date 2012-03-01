@@ -1599,7 +1599,7 @@ public:
      * @param charset set to the charset part of the locale
      */
     Q_INVOKABLE static void splitLocale(const QString &locale, QString &language, QString &country,
-                            QString &modifier, QString &charset); //TODO
+                            QString &modifier, QString &charset); //TODO remove?
 
     /**
      * Use this as main catalog for *all* KLocales, if not the appname
@@ -1733,7 +1733,7 @@ public:
      * Reparse locale configuration files for the current selected
      * language.
      */
-    void reparseConfiguration(); //TODO
+    Q_INVOKABLE void reparseConfiguration();
 
 private:
     KLocale *m_locale;
