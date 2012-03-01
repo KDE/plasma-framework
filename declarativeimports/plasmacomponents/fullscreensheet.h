@@ -24,8 +24,10 @@
 class FullScreenSheet : public FullScreenWindow
 {
     Q_OBJECT
-    Q_PROPERTY(QGraphicsObject *acceptButton READ acceptButton WRITE setAcceptButton NOTIFY acceptButtonChanged)
-    Q_PROPERTY(QGraphicsObject *rejectButton READ rejectButton WRITE setRejectButton NOTIFY rejectButtonChanged)
+    Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
+
+    Q_PROPERTY(QDeclarativeItem *acceptButton READ acceptButton WRITE setAcceptButton NOTIFY acceptButtonChanged)
+    Q_PROPERTY(QDeclarativeItem *rejectButton READ rejectButton WRITE setRejectButton NOTIFY rejectButtonChanged)
 
     Q_PROPERTY(QString acceptButtonText READ acceptButtonText WRITE setAcceptButtonText NOTIFY acceptButtonTextChanged)
     Q_PROPERTY(QString rejectButtonText READ rejectButtonText WRITE setRejectButtonText NOTIFY rejectButtonTextChanged)
@@ -34,11 +36,14 @@ public:
     FullScreenSheet(QDeclarativeItem *parent = 0);
     ~FullScreenSheet();
 
-    QGraphicsObject *acceptButton() const;
-    void setAcceptButton(QGraphicsObject *button);
+    QString title() const;
+    void setTitle(const QString &text);
 
-    QGraphicsObject *rejectButton() const;
-    void setRejectButton(QGraphicsObject *button);
+    QDeclarativeItem *acceptButton() const;
+    void setAcceptButton(QDeclarativeItem *button);
+
+    QDeclarativeItem *rejectButton() const;
+    void setRejectButton(QDeclarativeItem *button);
 
     QString acceptButtonText() const;
     void setAcceptButtonText(const QString &text);
@@ -46,7 +51,10 @@ public:
     QString rejectButtonText() const;
     void setRejectButtonText(const QString &text);
 
+    Q_INVOKABLE void open();
+
 Q_SIGNALS:
+    void titleChanged();
     void acceptButtonChanged();
     void rejectButtonChanged();
     void acceptButtonTextChanged();

@@ -33,6 +33,8 @@ FullScreenSheet::FullScreenSheet(QDeclarativeItem *parent)
     view()->setGeometry(QApplication::desktop()->availableGeometry());
 
     if (mainItem()) {
+        connect(mainItem(), SIGNAL(titleChanged()),
+                this, SIGNAL(titleChanged()));
         connect(mainItem(), SIGNAL(acceptButtonChanged()),
                 this, SIGNAL(acceptButtonChanged()));
         connect(mainItem(), SIGNAL(rejectButtonChanged()),
@@ -48,32 +50,48 @@ FullScreenSheet::~FullScreenSheet()
 {
 }
 
-QGraphicsObject *FullScreenSheet::acceptButton() const
+QString FullScreenSheet::title() const
 {
     if (mainItem()) {
-        return mainItem()->property("acceptButton").value<QGraphicsObject *>();
+        return mainItem()->property("title").toString();
     } else {
         return 0;
     }
 }
 
-void FullScreenSheet::setAcceptButton(QGraphicsObject *button)
+void FullScreenSheet::setTitle(const QString &text)
+{
+    if (mainItem()) {
+        mainItem()->setProperty("title", QVariant::fromValue(text));
+    }
+}
+
+QDeclarativeItem *FullScreenSheet::acceptButton() const
+{
+    if (mainItem()) {
+        return mainItem()->property("acceptButton").value<QDeclarativeItem *>();
+    } else {
+        return 0;
+    }
+}
+
+void FullScreenSheet::setAcceptButton(QDeclarativeItem *button)
 {
     if (mainItem()) {
         mainItem()->setProperty("acceptButton", QVariant::fromValue(button));
     }
 }
 
-QGraphicsObject *FullScreenSheet::rejectButton() const
+QDeclarativeItem *FullScreenSheet::rejectButton() const
 {
     if (mainItem()) {
-        return mainItem()->property("rejectButton").value<QGraphicsObject *>();
+        return mainItem()->property("rejectButton").value<QDeclarativeItem *>();
     } else {
         return 0;
     }
 }
 
-void FullScreenSheet::setRejectButton(QGraphicsObject *button)
+void FullScreenSheet::setRejectButton(QDeclarativeItem *button)
 {
     if (mainItem()) {
         mainItem()->setProperty("rejectButton", QVariant::fromValue(button));
@@ -111,6 +129,15 @@ void FullScreenSheet::setRejectButtonText(const QString &text)
         mainItem()->setProperty("rejectButtonText", QVariant::fromValue(text));
     }
 }
+
+void FullScreenSheet::open()
+{
+    if (mainItem()) {
+        view()->setGeometry(QApplication::desktop()->availableGeometry());
+        QMetaObject::invokeMethod(mainItem(), "open");
+    }
+}
+
 
 #include "fullscreensheet.moc"
 

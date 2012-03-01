@@ -27,14 +27,19 @@ class QDeclarativeEngine;
 class QDeclarativeItem;
 class PlasmaComponentsPlugin;
 
-class EngineBookKeeping
+class EngineBookKeeping : public QObject
 {
+    Q_OBJECT
+
 public:
     EngineBookKeeping();
     static EngineBookKeeping *self();
 
     void insertEngine(QDeclarativeEngine *engine);
     QDeclarativeEngine *engineFor(QObject *item) const;
+
+private Q_SLOTS:
+    void engineDestroyed(QObject *deleted);
 
 private:
     QSet <QDeclarativeEngine*> m_engines;

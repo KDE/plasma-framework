@@ -109,7 +109,7 @@ import "." 0.1
 Item {
     id: root
 
-    property alias title: titleBar.children
+    property alias title: titleLabel.text
     property alias content: contentItem.children
 //    property alias visualParent: dialog.visualParent
     property int status: DialogStatus.Closed
@@ -160,6 +160,7 @@ Item {
     PlasmaCore.Dialog {
         id: dialog
         windowFlags: Qt.Dialog
+        location: 4 //FIXME: replace with BottomEdge when we have an enum reachable from everywhere in core
 
 
         //onFaderClicked: root.clickedOutside()
@@ -178,20 +179,50 @@ Item {
         mainItem: Item {
             id: mainItem
             width: theme.defaultFont.mSize.width * 40
-            height: titleBar.childrenRect.height + contentItem.childrenRect.height + buttonsRow.childrenRect.height + 8
+            height: Math.max(titleBar.childrenRect.height + contentItem.childrenRect.height + buttonsRow.childrenRect.height + 8, theme.defaultFont.mSize.height * 25)
 
             // Consume all key events that are not processed by children
             Keys.onPressed: event.accepted = true
             Keys.onReleased: event.accepted = true
 
-            Item {
+            PlasmaCore.FrameSvgItem {
                 id: titleBar
+                imagePath: "widgets/extender-dragger"
+                prefix: "root"
+                anchors.left: parent.left
+                anchors.right: parent.right
+                //FIXME: +5 because of Plasma::Dialog margins
+                height: titleLabel.paintedHeight + margins.top + margins.bottom
 
-                height: childrenRect.height
-                anchors {
-                    top: parent.top
-                    left: parent.left
-                    right: parent.right
+                Column {
+                    id: titleLayoutHelper // needed to make the text mirror correctly
+
+                    anchors {
+                        right: parent.right
+                        left: parent.left
+                        top: parent.top
+                        bottom: parent.bottom
+                        leftMargin: parent.margins.left
+                        rightMargin: parent.margins.right
+                        topMargin: parent.margins.top
+                        bottomMargin: parent.margins.bottom
+                    }
+
+                    Label {
+                        id: titleLabel
+                        elide: Text.ElideRight
+                        height: paintedHeight
+                        font.pointSize: theme.defaultFont.pointSize * 1.1
+                        font.weight: Font.Bold
+                        style: Text.Raised
+                        styleColor: Qt.rgba(1,1,1,0.8)
+                        anchors {
+                            left: parent.left
+                            right: parent.right
+                        }
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
                 }
             }
 

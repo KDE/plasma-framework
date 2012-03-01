@@ -55,10 +55,14 @@ EngineBookKeeping *EngineBookKeeping::self()
 }
 
 QDeclarativeEngine *EngineBookKeeping::engineFor(QObject *item) const
-{return m_engines.values().first();
+{
+    //for components creation, any engine will do, as long is valid
+    return m_engines.values().first();
+    /*
     foreach (QDeclarativeEngine *engine, m_engines) {
         QObject *root = engine->rootContext()->contextObject();
         QObject *candidate = item;
+
         while (candidate) {
             if (candidate == root) {
                 return engine;
@@ -66,12 +70,18 @@ QDeclarativeEngine *EngineBookKeeping::engineFor(QObject *item) const
             candidate = candidate->parent();
         }
     }
-    return 0;
+    return 0;*/
 }
 
 void EngineBookKeeping::insertEngine(QDeclarativeEngine *engine)
 {
+    connect(engine, SIGNAL(destroyed(QObject *)), this, SLOT(engineDestroyed(QObject *deleted)));
     m_engines.insert(engine);
+}
+
+void EngineBookKeeping::engineDestroyed(QObject *deleted)
+{
+    m_engines.remove(static_cast<QDeclarativeEngine *>(deleted));
 }
 
 
