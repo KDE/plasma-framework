@@ -129,6 +129,7 @@ set(declarative_appletscript_SRCS
     common/extension_io.cpp
     common/javascriptaddonpackagestructure.cpp
     common/declarativescriptenv.cpp
+    declarative/declarativeitemcontainer.cpp
     declarative/packageaccessmanager.cpp
     declarative/packageaccessmanagerfactory.cpp
     plasmoid/abstractjsappletscript.cpp

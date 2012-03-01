@@ -50,6 +50,7 @@
 #include "plasmoid/themedsvg.h"
 
 #include "common/scriptenv.h"
+#include "declarative/declarativeitemcontainer_p.h"
 #include "declarative/packageaccessmanagerfactory.h"
 #include "simplebindings/bytearrayclass.h"
 //not pretty but only way to avoid a double Q_DECLARE_METATYPE(QVariant) in dataengine.h
@@ -82,6 +83,7 @@ bool DeclarativeAppletScript::init()
 {
     m_declarativeWidget = new Plasma::DeclarativeWidget(applet());
     m_declarativeWidget->setInitializationDelayed(true);
+    connect(m_declarativeWidget, SIGNAL(finished()), this, SLOT(qmlCreationFinished()));
     KGlobal::locale()->insertCatalog("plasma_applet_" % description().pluginName());
 
     //make possible to import extensions from the package
@@ -136,6 +138,31 @@ bool DeclarativeAppletScript::init()
     setupObjects();
 
     return true;
+}
+
+void DeclarativeAppletScript::qmlCreationFinished()
+{
+    //If it's a popupapplet and the root object has a "compactRepresentation" component, use that instead of the icon
+    Plasma::Applet *a = applet();
+    Plasma::PopupApplet *pa = qobject_cast<Plasma::PopupApplet *>(a);
+    if (pa) {
+        QDeclarativeComponent *iconComponent = m_declarativeWidget->rootObject()->property("compactRepresentation").value<QDeclarativeComponent *>();
+        if (iconComponent) {
+            QDeclarativeItem *declarativeIcon = qobject_cast<QDeclarativeItem *>(iconComponent->create(m_declarativeWidget->engine()->rootContext()));
+            if (declarativeIcon) {
+                pa->setPopupIcon(QIcon());
+                QGraphicsLinearLayout *lay = new QGraphicsLinearLayout(a);
+                lay->setContentsMargins(0, 0, 0, 0);
+                DeclarativeItemContainer *declarativeItemContainer = new DeclarativeItemContainer(a);
+                lay->addItem(declarativeItemContainer);
+                declarativeItemContainer->setDeclarativeItem(declarativeIcon);
+            } else {
+                pa->setPopupIcon(a->icon());
+            }
+        } else {
+            pa->setPopupIcon(a->icon());
+        }
+    }
 }
 
 void DeclarativeAppletScript::collectGarbage()

@@ -78,6 +78,7 @@ public Q_SLOTS:
     void extenderItemRestored(Plasma::ExtenderItem* item);
     void collectGarbage();
     void configChanged();
+    void qmlCreationFinished();
 
 protected:
     bool init();
