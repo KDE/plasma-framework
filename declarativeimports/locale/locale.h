@@ -116,6 +116,11 @@ Q_PROPERTY(QString defaultCountry READ defaultCountry NOTIFY defaultCountryChang
 Q_PROPERTY(QString defaultCurrencyCode READ defaultCurrencyCode NOTIFY defaultCurrencyCodeChanged)//read-only
 Q_PROPERTY(bool useTranscript READ useTranscript NOTIFY useTranscriptChanged) //read-only
 Q_PROPERTY(int fileEncodingMib READ fileEncodingMib NOTIFY fileEncodingMibChanged) //read-only
+Q_PROPERTY(QStringList languageList READ languageList NOTIFY languageListChanged) //read-only
+Q_PROPERTY(QStringList currencyCodeList READ currencyCodeList NOTIFY currencyCodeListChanged) //read-only
+Q_PROPERTY(QStringList allLanguagesList READ allLanguagesList NOTIFY allLanguagesListChanged) //read-only
+Q_PROPERTY(QStringList installedLanguages READ installedLanguages NOTIFY installedLanguagesChanged) //read-only
+Q_PROPERTY(QStringList allCountriesList READ allCountriesList NOTIFY allCountriesListChanged) //read-only
 
 public:
     /**
@@ -1151,7 +1156,7 @@ public:
      *
      * @see languageCodeToName
      */
-    Q_INVOKABLE QStringList languageList() const; //TODO
+    QStringList languageList() const;
 
     /**
      *
@@ -1165,7 +1170,7 @@ public:
      *
      * @see currencyCodeToName
      */
-    Q_INVOKABLE QStringList currencyCodeList() const;
+    QStringList currencyCodeList() const;
 
     /**
      * Returns the file encoding.
@@ -1522,7 +1527,7 @@ public:
      * @see languageCodeToName
      * @see installedLanguages
      */
-    Q_INVOKABLE QStringList allLanguagesList() const;
+    QStringList allLanguagesList() const;
 
     /**
      *
@@ -1535,7 +1540,7 @@ public:
      *
      * @see languageCodeToName
      */
-    Q_INVOKABLE QStringList installedLanguages() const;
+    QStringList installedLanguages() const;
 
     /**
      * Convert a known language code to a human readable, localized form.
@@ -1565,7 +1570,7 @@ public:
      *
      * @see countryCodeToName
      */
-    Q_INVOKABLE QStringList allCountriesList() const;
+    QStringList allCountriesList() const;
 
     /**
      * Convert a known country code to a human readable, localized form.
@@ -1773,10 +1778,11 @@ Q_SIGNALS:
     void defaultLanguageChanged();
     void useTranscriptChanged();
     void fileEncodingMibChanged();
+    void languageListChanged();
+    void currencyCodeListChanged();
+    void allLanguagesListChanged();
+    void installedLanguagesChanged();
+    void allCountriesListChanged();
 };
-//TODO remove the above?
-//Q_DECLARE_OPERATORS_FOR_FLAGS(Locale::DateTimeFormatOptions)
-//Q_DECLARE_OPERATORS_FOR_FLAGS(Locale::TimeFormatOptions)
-//Q_DECLARE_OPERATORS_FOR_FLAGS(Locale::TimeProcessingOptions)
 
 #endif
