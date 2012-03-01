@@ -16,18 +16,49 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
  ***************************************************************************/
-#ifndef FULLSCREENDIALOG_P
-#define FULLSCREENDIALOG_P
+#ifndef FULLSCREENSHEET_P
+#define FULLSCREENSHEET_P
 
 #include "fullscreenwindow.h"
 
-class FullScreenDialog : public FullScreenWindow
+class FullScreenSheet : public FullScreenWindow
 {
     Q_OBJECT
+    Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
+
+    Q_PROPERTY(QDeclarativeItem *acceptButton READ acceptButton WRITE setAcceptButton NOTIFY acceptButtonChanged)
+    Q_PROPERTY(QDeclarativeItem *rejectButton READ rejectButton WRITE setRejectButton NOTIFY rejectButtonChanged)
+
+    Q_PROPERTY(QString acceptButtonText READ acceptButtonText WRITE setAcceptButtonText NOTIFY acceptButtonTextChanged)
+    Q_PROPERTY(QString rejectButtonText READ rejectButtonText WRITE setRejectButtonText NOTIFY rejectButtonTextChanged)
 
 public:
-    FullScreenDialog(QDeclarativeItem *parent = 0);
-    ~FullScreenDialog();
+    FullScreenSheet(QDeclarativeItem *parent = 0);
+    ~FullScreenSheet();
+
+    QString title() const;
+    void setTitle(const QString &text);
+
+    QDeclarativeItem *acceptButton() const;
+    void setAcceptButton(QDeclarativeItem *button);
+
+    QDeclarativeItem *rejectButton() const;
+    void setRejectButton(QDeclarativeItem *button);
+
+    QString acceptButtonText() const;
+    void setAcceptButtonText(const QString &text);
+
+    QString rejectButtonText() const;
+    void setRejectButtonText(const QString &text);
+
+    Q_INVOKABLE void open();
+
+Q_SIGNALS:
+    void titleChanged();
+    void acceptButtonChanged();
+    void rejectButtonChanged();
+    void acceptButtonTextChanged();
+    void rejectButtonTextChanged();
 };
 
 #endif

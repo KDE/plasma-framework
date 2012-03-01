@@ -34,6 +34,7 @@
 #include "qmenuitem.h"
 #include "kdialogproxy.h"
 #include "fullscreendialog.h"
+#include "fullscreensheet.h"
 
 Q_EXPORT_PLUGIN2(plasmacomponentsplugin, PlasmaComponentsPlugin)
 
@@ -54,10 +55,14 @@ EngineBookKeeping *EngineBookKeeping::self()
 }
 
 QDeclarativeEngine *EngineBookKeeping::engineFor(QObject *item) const
-{return m_engines.values().first();
+{
+    //for components creation, any engine will do, as long is valid
+    return m_engines.values().first();
+    /*
     foreach (QDeclarativeEngine *engine, m_engines) {
         QObject *root = engine->rootContext()->contextObject();
         QObject *candidate = item;
+
         while (candidate) {
             if (candidate == root) {
                 return engine;
@@ -65,12 +70,18 @@ QDeclarativeEngine *EngineBookKeeping::engineFor(QObject *item) const
             candidate = candidate->parent();
         }
     }
-    return 0;
+    return 0;*/
 }
 
 void EngineBookKeeping::insertEngine(QDeclarativeEngine *engine)
 {
+    connect(engine, SIGNAL(destroyed(QObject *)), this, SLOT(engineDestroyed(QObject *deleted)));
     m_engines.insert(engine);
+}
+
+void EngineBookKeeping::engineDestroyed(QObject *deleted)
+{
+    m_engines.remove(static_cast<QDeclarativeEngine *>(deleted));
 }
 
 
@@ -100,6 +111,7 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
     //on touch systems the dialog is fullscreen, c++ needed to do that
     } else {
         qmlRegisterType<FullScreenDialog>(uri, 0, 1, "Dialog");
+        qmlRegisterType<FullScreenSheet>(uri, 0, 1, "Sheet");
     }
 
     qmlRegisterType<Plasma::QRangeModel>(uri, 0, 1, "RangeModel");

@@ -20,6 +20,7 @@ ScrollBar 0.1 ScrollBar.qml
 SectionScroller 0.1 SectionScroller.qml
 SelectionDialog 0.1 SelectionDialog.qml
 Slider 0.1 Slider.qml
+Sheet 0.1 Sheet.qml
 Switch 0.1 Switch.qml
 TabBar 0.1 TabBar.qml
 TabButton 0.1 TabButton.qml
