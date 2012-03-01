@@ -151,21 +151,59 @@ Item {
 
                 console.log("the encodingMib:" + locale.encodingMib)*/
 
-                for (var i in locale.languageList()) {
-                    console.log("languageList:" + locale.languageList()[i])
+                for (var i in locale.languageList) {
+                    console.log("languageList:" + locale.languageList[i])
                 }
 
-                for (var i in locale.currencyCodeList()) {
-                    console.log("currencyCodeList:" + locale.currencyCodeList()[i])
+                for (var i in locale.currencyCodeList) {
+                    console.log("currencyCodeList:" + locale.currencyCodeList[i])
                 }
 
-                for (var i in locale.installedLanguages()) {
-                    console.log("installedLanguages:" + locale.installedLanguages()[i])
+                for (var i in locale.installedLanguages) {
+                    console.log("installedLanguages:" + locale.installedLanguages[i])
                 }
 
-                for (var i in locale.allCountriesList()) {
-                    console.log("allCountriesList:" + locale.allCountriesList()[i])
+                for (var i in locale.allCountriesList) {
+                    console.log("allCountriesList:" + locale.allCountriesList[i])
                 }
+
+                console.log("formatDate:" + locale.formatDate("2010-05-05"))
+
+                console.log("formatDateTime:" + locale.formatDateTime("2010-05-05"))//TODO try if the enums are working.
+
+                console.log("formatMoney:" + locale.formatMoney(10))
+
+                console.log("formatLong:" + locale.formatLong(10))
+
+                console.log("formatByteSize:" + locale.formatByteSize(10))
+
+                console.log("formatDuration:" + locale.formatDuration(10))
+
+                console.log("prettyFormatDuration:" + locale.prettyFormatDuration(10))
+
+                console.log("formatLocaleTime:" + locale.formatLocaleTime("2010-05-05"))
+
+                console.log("dayPeriodText:" + locale.dayPeriodText("2010-05-05"))
+
+                console.log("readMoney:" + locale.readMoney("one"))//TODO
+
+                console.log("readNumber:" + locale.readNumber("one"))//TODO
+
+                console.log("readDate:" + locale.readDate("one"))//TODO
+
+                console.log("readTime:" + locale.readTime("one"))//TODO
+
+                console.log("readLocaleTime:" + locale.readLocaleTime("one"))//TODO
+
+                console.log("fileEncodingMib:" + locale.fileEncodingMib)
+
+                console.log("languageCodeToName:" + locale.languageCodeToName("en_US"))
+
+                console.log("isApplicationTranslatedInto:" + locale.isApplicationTranslatedInto("en_US"))
+
+                console.log("removeAcceleratorMarker:" + locale.removeAcceleratorMarker("&*hello"))//TODO
+
+                //console.log("convertDigits:" + locale.convertDigits) TODO
 
                 console.log("===========end===========")
             }
@@ -382,6 +420,26 @@ Item {
 
             onLanguageChanged: {
                 console.log("the language property has been changed")
+            }
+
+            onFileEncodingMibChanged: {
+                console.log("the fileEncodingMib property has been changed")
+            }
+
+            onLanguageListChanged: {
+                console.log("the languageList property has been changed")
+            }
+
+            onCurrencyCodeListChanged: {
+                console.log("the currencyCodeList property has been changed")
+            }
+
+            onInstalledLanguagesChanged: {
+                console.log("the installedLanguages property has been changed")
+            }
+
+            onAllCountriesListChanged: {
+                console.log("the allCountriesList property has been changed")
             }
         }
 
