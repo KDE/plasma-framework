@@ -50,12 +50,9 @@ Imports:
 
 Description:
         Provides a top-level window for short-term tasks and brief interaction with the user.
-        A dialog floats on the top layer of the application view, usually overlapping the area reserved for the application content. Normally, a dialog provides information and gives warnings to the user, or asks the user to answer a question or select an option.
+        Is intended to be for interaction more complex and bigger in size then Dialog. On the desktop its looks is almost identical to Dialog, on touch interfaces is an almost fullscreen sliding Sheet. It is provided mostly for compatibility with mobile implementations
 
 Properties:
-        list<Item> buttons:
-        A list of items in the dialog's button area. For example, you can use Row or Button components but you can also use any number of components that are based on Item component.
-
         list<Item> content:
         A list of items in the dialog's content area. You can use any component that is based on Item. For example, you can use ListView, so that the user can select from a list of names.
 
@@ -67,8 +64,20 @@ Properties:
             - DialogStatus.Closed - the dialog is closed and not visible to the user
         The dialog's initial status is DialogStatus.Closed.
 
-        list<Item> title:
-        A list of items in the dialog's title area. You can use a Text component but also any number of components that are based on Item. For example, you can use Text and Image components.
+        string title:
+        The title text of this Sheet.
+
+        Item acceptButton:
+        button that when pressed will close the dialog, representing the user accepting it, accepted() will be called
+
+        Item rejectButton:
+        button that when pressed will close the dialog, representing the user rejecting it, rejected() will be called
+
+        string acceptButtonText:
+        Text of the accept button
+
+        string rejectButtonText:
+        Text of the reject button
 
         Item visualParent:
         The item that is dimmed when the dialog opens. By default the root parent object is visualParent.

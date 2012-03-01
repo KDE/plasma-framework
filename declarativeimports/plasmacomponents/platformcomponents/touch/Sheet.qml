@@ -45,6 +45,76 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 import "private/AppManager.js" as Utils
 import "." 0.1
 
+/**Documented API
+Inherits:
+        Item
+
+Imports:
+        QtQuick 1.0
+        org.kde.plasma.core
+
+Description:
+        Provides a top-level window for short-term tasks and brief interaction with the user.
+        Is intended to be for interaction more complex and bigger in size then Dialog. On the desktop its looks is almost identical to Dialog, on touch interfaces is an almost fullscreen sliding Sheet. It is provided mostly for compatibility with mobile implementations
+
+Properties:
+        list<Item> content:
+        A list of items in the dialog's content area. You can use any component that is based on Item. For example, you can use ListView, so that the user can select from a list of names.
+
+        int status:
+        Indicates the dialog's phase in its life cycle. The values are as follows:
+            - DialogStatus.Opening - the dialog is opening
+            - DialogStatus.Open - the dialog is open and visible to the user
+            - DialogStatus.Closing - the dialog is closing
+            - DialogStatus.Closed - the dialog is closed and not visible to the user
+        The dialog's initial status is DialogStatus.Closed.
+
+        string title:
+        The title text of this Sheet.
+
+        Item acceptButton:
+        button that when pressed will close the dialog, representing the user accepting it, accepted() will be called
+
+        Item rejectButton:
+        button that when pressed will close the dialog, representing the user rejecting it, rejected() will be called
+
+        string acceptButtonText:
+        Text of the accept button
+
+        string rejectButtonText:
+        Text of the reject button
+
+        Item visualParent:
+        The item that is dimmed when the dialog opens. By default the root parent object is visualParent.
+
+Signals:
+        accepted():
+        This signal is emitted when the user accepts the dialog's request or the accept() method is called.
+        See also rejected().
+
+        clickedOutside(): This signal is emitted when the user taps in the area that is inside the dialog's visual parent area but outside the dialog's area. Normally the visual parent is the root object. In that case this signal is emitted if the user taps anywhere outside the dialog's area.
+        See also visualParent.
+
+        rejected():
+        This signal is emitted when the user rejects the dialog's request or the reject() method is called.
+        See also accepted().
+
+Methods:
+        void accept():
+        Accepts the dialog's request without any user interaction. The method emits the accepted() signal and closes the dialog.
+        See also reject().
+
+        void close():
+        Closes the dialog without any user interaction.
+
+        void open():
+        Shows the dialog to the user.
+
+        void reject():
+        Rejects the dialog's request without any user interaction. The method emits the rejected() signal and closes the dialog.
+        See also accept().
+**/
+
 Item {
     id: root
     width: 800
