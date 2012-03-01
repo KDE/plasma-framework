@@ -199,9 +199,9 @@ Item {
 
                 console.log("isApplicationTranslatedInto:" + locale.isApplicationTranslatedInto("en_US"))
 
-                console.log("removeAcceleratorMarker:" + locale.removeAcceleratorMarker("&*hello"))//TODO
+                console.log("removeAcceleratorMarker:" + locale.removeAcceleratorMarker("&*hello"))
 
-                //console.log("convertDigits:" + locale.convertDigits) TODO
+                console.log("convertDigits:" + locale.convertDigits(locale.digitSet, Locale.ArabicDigits))
 
                 console.log("===========end===========")
             }
