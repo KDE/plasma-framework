@@ -80,6 +80,11 @@ class DeclarativeDragArea : public QDeclarativeItem
      */
     Q_PROPERTY(int startDragDistance READ startDragDistance WRITE setStartDragDistance NOTIFY startDragDistanceChanged)
 
+    /**
+     * an image to be used as delegate. if present overrides the delegate property. in can be either a QImage or a QIcon
+     */
+    Q_PROPERTY(QVariant delegateImage READ delegateImage WRITE setDelegateImage NOTIFY delegateImageChanged)
+
 public:
 	DeclarativeDragArea(QDeclarativeItem *parent=0);
 	~DeclarativeDragArea();
@@ -88,6 +93,8 @@ public:
 	void setDelegate(QDeclarativeComponent* delegate);
 	void resetDelegate();
 
+    QVariant delegateImage() const;
+    void setDelegateImage(const QVariant &image);
 	QDeclarativeItem* target() const;
 	QDeclarativeItem* source() const;
 	void setSource(QDeclarativeItem* source);
@@ -119,6 +126,7 @@ signals:
 	void supportedActionsChanged();
 	void defaultActionChanged();
     void startDragDistanceChanged();
+    void delegateImageChanged();
 
 protected:
 	void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
@@ -134,6 +142,7 @@ private:
 	Qt::DropActions m_supportedActions;
 	Qt::DropAction m_defaultAction;
 	DeclarativeMimeData* const m_data;
+    QImage m_delegateImage;
     int m_startDragDistance;
 };
 

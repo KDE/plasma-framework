@@ -126,6 +126,27 @@ void DeclarativeDragArea::setStartDragDistance(int distance)
     emit startDragDistanceChanged();
 }
 
+// delegateImage
+QVariant DeclarativeDragArea::delegateImage() const
+{
+    return m_delegateImage;
+}
+
+void DeclarativeDragArea::setDelegateImage(const QVariant &image)
+{
+    if (image.canConvert<QImage>() && image.value<QImage>() == m_delegateImage) {
+        return;
+    }
+
+    if (image.canConvert<QImage>()) {
+        m_delegateImage = image.value<QImage>();
+    } else {
+        m_delegateImage = image.value<QIcon>().pixmap(QSize(48, 48)).toImage();
+    }
+
+    emit delegateImageChanged();
+}
+
 // enabled
 bool DeclarativeDragArea::isEnabled() const
 {
@@ -177,7 +198,9 @@ void DeclarativeDragArea::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 	DeclarativeMimeData* dataCopy = new DeclarativeMimeData(m_data); //Qt will take ownership of this copy and delete it.
 	drag->setMimeData(dataCopy);
 
-	if (m_delegate) {
+    if (!m_delegateImage.isNull()) {
+        drag->setPixmap(QPixmap::fromImage(m_delegateImage));
+    } else if (m_delegate) {
 
 		// Render the delegate to a Pixmap
 
