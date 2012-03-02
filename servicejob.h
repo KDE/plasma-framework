@@ -132,8 +132,8 @@ private:
 };
 
 } // namespace Plasma
-using namespace Plasma;
-Q_DECLARE_METATYPE(ServiceJob *)
+
+Q_DECLARE_METATYPE(Plasma::ServiceJob *)
 
 #endif // multiple inclusion guard
 
