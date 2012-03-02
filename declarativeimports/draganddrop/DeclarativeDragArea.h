@@ -75,6 +75,10 @@ class DeclarativeDragArea : public QDeclarativeItem
      */
     Q_PROPERTY(Qt::DropAction defaultAction READ defaultAction WRITE setDefaultAction NOTIFY defaultActionChanged)
 
+    /**
+     * distance in pixel after which a drag event will get started
+     */
+    Q_PROPERTY(int startDragDistance READ startDragDistance WRITE setStartDragDistance NOTIFY startDragDistanceChanged)
 
 public:
 	DeclarativeDragArea(QDeclarativeItem *parent=0);
@@ -91,6 +95,9 @@ public:
 
 	bool isEnabled() const;
 	void setEnabled(bool enabled);
+
+    int startDragDistance() const;
+    void setStartDragDistance(int distance);
 
 	//supported actions
 	Qt::DropActions supportedActions() const;
@@ -111,6 +118,7 @@ signals:
 	void drop(int action);
 	void supportedActionsChanged();
 	void defaultActionChanged();
+    void startDragDistanceChanged();
 
 protected:
 	void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
@@ -126,6 +134,7 @@ private:
 	Qt::DropActions m_supportedActions;
 	Qt::DropAction m_defaultAction;
 	DeclarativeMimeData* const m_data;
+    int m_startDragDistance;
 };
 
 #endif // DECLARATIVEDRAGAREA_H

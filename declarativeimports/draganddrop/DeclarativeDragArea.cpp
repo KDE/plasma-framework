@@ -45,6 +45,7 @@ DeclarativeDragArea::DeclarativeDragArea(QDeclarativeItem *parent)
 	m_defaultAction(Qt::MoveAction),
 	m_data(new DeclarativeMimeData())	// m_data is owned by us, and we shouldn't pass it to Qt directly as it will automatically delete it after the drag and drop.
 {
+    m_startDragDistance = QApplication::startDragDistance();
 	setAcceptedMouseButtons(Qt::LeftButton);
     setFiltersChildEvents(true);
 }
@@ -109,6 +110,22 @@ DeclarativeMimeData* DeclarativeDragArea::mimeData() const
 	return m_data;
 }
 
+// startDragDistance
+int DeclarativeDragArea::startDragDistance() const
+{
+    return m_startDragDistance;
+}
+
+void DeclarativeDragArea::setStartDragDistance(int distance)
+{
+    if (distance == m_startDragDistance) {
+        return;
+    }
+
+    m_startDragDistance = distance;
+    emit startDragDistanceChanged();
+}
+
 // enabled
 bool DeclarativeDragArea::isEnabled() const
 {
@@ -152,7 +169,7 @@ void DeclarativeDragArea::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
 	if ( !m_enabled
 		 || QLineF(event->screenPos(), event->buttonDownScreenPos(Qt::LeftButton)).length()
-			< QApplication::startDragDistance()) {
+			< m_startDragDistance) {
 		return;
 	}
 
@@ -175,6 +192,8 @@ void DeclarativeDragArea::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 		QPainter painter(&pixmap);
 		painter.setRenderHint(QPainter::Antialiasing);
 		scene.render(&painter);
+        painter.end();
+        delete item;
 
 		drag->setPixmap(pixmap);
 		drag->setHotSpot(QPoint(0, 0)); // TODO: Make a property for that
@@ -185,7 +204,6 @@ void DeclarativeDragArea::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 	Qt::DropAction action = drag->exec(m_supportedActions, m_defaultAction);
 	emit drop(action);
 }
-
 
 bool DeclarativeDragArea::sceneEventFilter(QGraphicsItem *item, QEvent *event)
 {
