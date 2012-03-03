@@ -183,15 +183,15 @@ Item {
 
                 console.log("dayPeriodText:" + locale.dayPeriodText("2010-05-05"))
 
-                console.log("readMoney:" + locale.readMoney("one"))//TODO
+                console.log("readMoney:" + locale.readMoney("$ 21"))
 
-                console.log("readNumber:" + locale.readNumber("one"))//TODO
+                console.log("readNumber:" + locale.readNumber("12,100"))//TODO
 
-                console.log("readDate:" + locale.readDate("one"))//TODO
+                console.log("readDate:" + locale.readDate("2004-02-01"))
 
-                console.log("readTime:" + locale.readTime("one"))//TODO
+                console.log("readTime:" + locale.readTime("11:22:33"))//TODO
 
-                console.log("readLocaleTime:" + locale.readLocaleTime("one"))//TODO
+                console.log("readLocaleTime:" + locale.readLocaleTime("11:12:13 AM"))
 
                 console.log("fileEncodingMib:" + locale.fileEncodingMib)
 
