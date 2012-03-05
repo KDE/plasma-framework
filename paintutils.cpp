@@ -147,6 +147,7 @@ QPixmap texturedText(const QString &text, const QFont &font, Plasma::Svg *textur
     buffPainter.setCompositionMode(QPainter::CompositionMode_SourceOver);
     buffPainter.drawImage(QPoint(0,0), image);
     buffPainter.drawPixmap(QPoint(1,1), pixmap);
+    buffPainter.end();
     return ret;
 }
 

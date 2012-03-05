@@ -81,6 +81,7 @@ void PopupApplet::setPopupIcon(const QIcon &icon)
             d->icon = 0;
             setLayout(0);
             setAspectRatioMode(d->savedAspectRatio);
+            d->popupConstraintsEvent(FormFactorConstraint);
         }
 
         return;
