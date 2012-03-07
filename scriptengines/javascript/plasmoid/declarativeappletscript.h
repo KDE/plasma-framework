@@ -41,7 +41,7 @@ class EngineAccess;
 
 class DeclarativeAppletScript : public AbstractJsAppletScript
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
     DeclarativeAppletScript(QObject *parent, const QVariantList &args);

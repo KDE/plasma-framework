@@ -145,6 +145,8 @@ void DeclarativeAppletScript::qmlCreationFinished()
     //If it's a popupapplet and the root object has a "compactRepresentation" component, use that instead of the icon
     Plasma::Applet *a = applet();
     Plasma::PopupApplet *pa = qobject_cast<Plasma::PopupApplet *>(a);
+    m_self.setProperty("rootItem", m_engine->newQObject(m_declarativeWidget->rootObject()));
+
     if (pa) {
         QDeclarativeComponent *iconComponent = m_declarativeWidget->rootObject()->property("compactRepresentation").value<QDeclarativeComponent *>();
         if (iconComponent) {
