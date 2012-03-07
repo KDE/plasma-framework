@@ -233,6 +233,78 @@ Item {
                 console.log("isSolar:" + calendar.isSolar)
 
                 console.log("isProleptic:" + calendar.isProleptic)
+                //Q_INVOKABLE methods
+                console.log("isValid:" + calendar.isValid(2012, 02, 03))
+
+                console.log("isValid:" + calendar.isValid(2012, 33))
+
+                //console.log("isValid:" + calendar.isValid(QString &eraName, int yearInEra, int month, int day)) TODO
+
+                console.log("isValidIsoWeekDate:" + calendar.isValidIsoWeekDate(2012, 2, 3)
+
+                console.log("isValid:" + calendar.isValid("2012-02-03"))
+
+                console.log("year:" + calendar.year("2012-02-03"))
+
+                console.log("month:" + calendar.month("2012-02-03"))
+
+                console.log("day:" + calendar.day("2012-02-03"))
+
+                console.log("eraName:" + calendar.eraName("2012-02-03"))
+
+                console.log("eraYear:" + calendar.eraYear("2012-02-03"))
+
+                console.log("yearInEra:" + calendar.yearInEra("2012-02-03"))
+
+                console.log("addYears:" + calendar.addYears("2012-02-03", 3))
+
+                console.log("addMonthss:" + calendar.addMonths("2012-02-03", 3))
+
+                console.log("addDays:" + calendar.addDays("2012-02-03", 3))
+
+                console.log("yearsDifference:" + calendar.yearsDifference("2010-02-03", "2012-02-03"))
+
+                console.log("monthsDifference:" + calendar.monthsDifference("2012-02-03", "2012-04-03"))
+
+                console.log("daysDifference:" + calendar.daysDifference("2012-02-03", "2012-02-13"))
+
+                console.log("monthsInYear:" + calendar.monthsInYear("2012-02-03"))
+
+                console.log("monthsInYear:" + calendar.monthsInYear(2012))
+
+                console.log("weeksInYear:" + calendar.weeksInYear("2012-02-03"))
+
+                console.log("weeksInYear:" + calendar.weeksInYear(2012))
+
+                console.log("daysInYear:" + calendar.daysInYear("2012-02-03"))
+
+                console.log("daysInMonth:" + calendar.daysInMonth("2012-02-03"))
+
+                console.log("daysInWeek:" + calendar.daysInWeek("2012-02-03"))
+
+                console.log("dayOfYear:" + calendar.dayOfYear("2012-02-03"))
+
+                console.log("week:" + calendar.week("2012-02-03"))
+
+                console.log("isLeapYear:" + calendar.isLeapYear(2012))
+
+                console.log("firstDayOfYear:" + calendar.firstDayOfYear(2012))
+
+                console.log("lastDayOfYear:" + calendar.lastDayOfYear(2012))
+
+                console.log("firstDayOfMonth:" + calendar.firstDayOfMonth(2012, 02))
+
+                console.log("lastDayOfMonth:" + calendar.lastDayOfMonth(2012, 02))
+
+                console.log("monthName:" + calendar.monthName(02, 2012))
+
+                console.log("weekDayName:" + calendar.weekDayName(3))
+
+                console.log("formatDate:" + calendar.formatDate("2012-02-03"))
+
+                console.log("readDate:" + calendar.readDate("2012-02-03"))//TODO does it work?
+
+                console.log("applyShortYearWindow:" + calendar.applyShortYearWindow(120))//TODO does it work?
 
                 console.log("===============end===============")
             }

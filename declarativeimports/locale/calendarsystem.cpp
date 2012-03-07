@@ -120,29 +120,6 @@ bool CalendarSystem::isValid(const QDate &date) const
     return m_calendarSystem->isValid(date);
 }
 
-bool CalendarSystem::setDate(QDate &date, int year, int month, int day) const
-{
-    return m_calendarSystem->setDate(date, year, month, day);
-}
-
-// NOT VIRTUAL - If override needed use shared-d
-bool CalendarSystem::setDate(QDate &date, int year, int dayOfYear) const
-{
-    return m_calendarSystem->setDate(date, year, dayOfYear);
-}
-
-// NOT VIRTUAL - If override needed use shared-d
-bool CalendarSystem::setDate(QDate &date, QString eraName, int yearInEra, int month, int day) const
-{
-    return m_calendarSystem->setDate(date, eraName, yearInEra, month, day);
-}
-
-// NOT VIRTUAL - If override needed use shared-d
-bool CalendarSystem::setDateIsoWeek(QDate &date, int year, int isoWeekNumber, int dayOfIsoWeek) const
-{
-    return m_calendarSystem->setDateIsoWeek(date, year, isoWeekNumber, dayOfIsoWeek);
-}
-
 // NOT VIRTUAL - If override needed use shared-d
 void CalendarSystem::getDate(const QDate date, int *year, int *month, int *day) const
 {
