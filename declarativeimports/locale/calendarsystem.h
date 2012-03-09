@@ -27,11 +27,11 @@
 #include <QtCore/QStringList>
 #include <QtCore/QDate>
 
-class KCalendarSystem;
+class CalendarSystem;
 class KCalendarEra;
 
 /**
- * KCalendarSystem abstract base class, provides support for local Calendar Systems in KDE
+ * CalendarSystem abstract base class, provides support for local Calendar Systems in KDE
  *
  * Derived classes must be created through the create() static method
  */
@@ -132,7 +132,7 @@ public:
 
     /**
      *
-     * Returns the Calendar System type of the KCalendarSystem object
+     * Returns the Calendar System type of the CalendarSystem object
      *
      * @return type of calendar system
      */
@@ -155,10 +155,10 @@ public:
      * or the calendar system may be proleptic in which case it supports dates
      * before the epoch.
      *
-     * @see KCalendarSystem::earliestValidDate
-     * @see KCalendarSystem::latestValidDate
-     * @see KCalendarSystem::isProleptic
-     * @see KCalendarSystem::isValid
+     * @see CalendarSystem::earliestValidDate
+     * @see CalendarSystem::latestValidDate
+     * @see CalendarSystem::isProleptic
+     * @see CalendarSystem::isValid
      *
      * @return epoch of calendar system
      */
@@ -169,8 +169,8 @@ public:
      *
      * If the calendar system is proleptic then this may be before epoch.
      *
-     * @see KCalendarSystem::epoch
-     * @see KCalendarSystem::latestValidDate
+     * @see CalendarSystem::epoch
+     * @see CalendarSystem::latestValidDate
      *
      * @return date the earliest valid date
      */
@@ -179,8 +179,8 @@ public:
     /**
      * Returns the latest date valid in this calendar system implementation.
      *
-     * @see KCalendarSystem::epoch
-     * @see KCalendarSystem::earliestValidDate
+     * @see CalendarSystem::epoch
+     * @see CalendarSystem::earliestValidDate
      *
      * @return date the latest valid date
      */
@@ -1102,7 +1102,7 @@ public:
      * Returns whether the calendar system is proleptic, i.e. whether dates
      * before the epoch are supported.
      *
-     * @see KCalendarSystem::epoch
+     * @see CalendarSystem::epoch
      *
      * @return @c true if the calendar system is proleptic, @c false if not
      */
