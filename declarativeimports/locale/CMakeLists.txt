@@ -5,7 +5,7 @@ include(KDE4Defaults)
 set(localebindings_SRCS
     locale.cpp
     localebindingsplugin.cpp
-	calendarsystem.cpp
+    calendarsystem.cpp
 )
 
 INCLUDE_DIRECTORIES(
@@ -18,9 +18,8 @@ qt4_automoc(${localebindings_SRCS})
 
 
 kde4_add_library(localebindingsplugin SHARED ${localebindings_SRCS})
-#FIXME
-#Should i put something?
-target_link_libraries(localebindingsplugin ${QT_QTDECLARATIVE_LIBRARY} ${KDE4_KDECORE_LIBRARY} ${KDE4_KDECORE_INCLUDES})
+
+target_link_libraries(localebindingsplugin ${QT_QTDECLARATIVE_LIBRARY} ${KDE4_KDECORE_LIBRARY})
 
 install(TARGETS localebindingsplugin DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/plasma/locale)
 install(FILES qmldir DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/plasma/locale)
