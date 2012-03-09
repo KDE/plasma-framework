@@ -238,9 +238,9 @@ Item {
 
                 console.log("isValid:" + calendar.isValid(2012, 33))
 
-                //console.log("isValid:" + calendar.isValid(QString &eraName, int yearInEra, int month, int day)) TODO
+                console.log("isValid:" + calendar.isValid(calendar.formatDate("2012-02-03"), 2010, 5, 5))//TODO
 
-                console.log("isValidIsoWeekDate:" + calendar.isValidIsoWeekDate(2012, 2, 3)
+                console.log("isValidIsoWeekDate:" + calendar.isValidIsoWeekDate(2012, 2, 3))
 
                 console.log("isValid:" + calendar.isValid("2012-02-03"))
 
@@ -302,9 +302,9 @@ Item {
 
                 console.log("formatDate:" + calendar.formatDate("2012-02-03"))
 
-                console.log("readDate:" + calendar.readDate("2012-02-03"))//TODO does it work?
+                console.log("readDate:" + calendar.readDate("2012-02-03"))
 
-                console.log("applyShortYearWindow:" + calendar.applyShortYearWindow(120))//TODO does it work?
+                console.log("applyShortYearWindow:" + calendar.applyShortYearWindow(50))
 
                 console.log("===============end===============")
             }

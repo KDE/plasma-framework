@@ -32,7 +32,6 @@ CalendarSystem::CalendarSystem(QObject* parent)
     m_calendarSystem = KCalendarSystem::create(KGlobal::locale()->calendarSystem());
 }
 
-
 QList<Locale::CalendarSystem> CalendarSystem::calendarSystemsList()
 {
      QList<Locale::CalendarSystem> list;
@@ -60,20 +59,17 @@ Locale::CalendarSystem CalendarSystem::calendarSystem(const QString &calendarTyp
     return (Locale::CalendarSystem)KCalendarSystem::calendarSystem(calendarType);
 }
 
-// NOT VIRTUAL - If override needed use shared-d
 Locale::CalendarSystem CalendarSystem::calendarSystem() const
 {
     return (Locale::CalendarSystem)m_calendarSystem->calendarSystem();
 }
 
-// NOT VIRTUAL - If override needed use shared-d
+
 QString CalendarSystem::calendarLabel() const
 {
     return m_calendarSystem->calendarLabel();
 }
 
-// Dummy version using Gregorian as an example
-// This method MUST be re-implemented in any new Calendar System
 QDate CalendarSystem::epoch() const
 {
     return m_calendarSystem->epoch();
@@ -84,8 +80,6 @@ QDate CalendarSystem::earliestValidDate() const
     return epoch();
 }
 
-// Dummy version using Gregorian as an example
-// This method MUST be re-implemented in any new Calendar System
 QDate CalendarSystem::latestValidDate() const
 {
     // Default to Gregorian 9999-12-31
@@ -97,19 +91,18 @@ bool CalendarSystem::isValid(int year, int month, int day) const
    return m_calendarSystem->isValid(year, month, day);
 }
 
-// NOT VIRTUAL - If override needed use shared-d
+
 bool CalendarSystem::isValid(int year, int dayOfYear) const
 {
     return m_calendarSystem->isValid(year, dayOfYear);
 }
 
-// NOT VIRTUAL - If override needed use shared-d
+
 bool CalendarSystem::isValid(const QString &eraName, int yearInEra, int month, int day) const
 {
     return m_calendarSystem->isValid(eraName, yearInEra, month, day);
 }
 
-// NOT VIRTUAL - If override needed use shared-d
 bool CalendarSystem::isValidIsoWeekDate(int year, int isoWeekNumber, int dayOfIsoWeek) const
 {
     return m_calendarSystem->isValidIsoWeekDate(year, isoWeekNumber, dayOfIsoWeek);
@@ -120,7 +113,6 @@ bool CalendarSystem::isValid(const QDate &date) const
     return m_calendarSystem->isValid(date);
 }
 
-// NOT VIRTUAL - If override needed use shared-d
 void CalendarSystem::getDate(const QDate date, int *year, int *month, int *day) const
 {
     return m_calendarSystem->getDate(date, year, month, day);
@@ -141,19 +133,17 @@ int CalendarSystem::day(const QDate &date) const
     return m_calendarSystem->day(date);
 }
 
-// NOT VIRTUAL - If override needed use shared-d
 QString CalendarSystem::eraName(const QDate &date, StringFormat format) const
 {
     return m_calendarSystem->eraName(date, (KCalendarSystem::StringFormat)format);
 }
 
-// NOT VIRTUAL - If override needed use shared-d
 QString CalendarSystem::eraYear(const QDate &date, StringFormat format) const
 {
     return m_calendarSystem->eraYear(date, (KCalendarSystem::StringFormat)format);
 }
 
-// NOT VIRTUAL - If override needed use shared-d
+
 int CalendarSystem::yearInEra(const QDate &date) const
 {
     return m_calendarSystem->yearInEra(date);
@@ -174,26 +164,22 @@ QDate CalendarSystem::addDays(const QDate &date, int numDays) const
     return m_calendarSystem->addDays(date, numDays);
 }
 
-// NOT VIRTUAL - Uses shared-d instead
 void CalendarSystem::dateDifference(const QDate &fromDate, const QDate &toDate,
                                      int *yearsDiff, int *monthsDiff, int *daysDiff, int *direction) const
 {
     return m_calendarSystem->dateDifference(fromDate, toDate, yearsDiff, monthsDiff, daysDiff, direction);
 }
 
-// NOT VIRTUAL - Uses shared-d instead
 int CalendarSystem::yearsDifference(const QDate &fromDate, const QDate &toDate) const
 {
     return m_calendarSystem->yearsDifference(fromDate, toDate);
 }
 
-// NOT VIRTUAL - Uses shared-d instead
 int CalendarSystem::monthsDifference(const QDate &fromDate, const QDate &toDate) const
 {
     return m_calendarSystem->monthsDifference(fromDate, toDate);
 }
 
-// NOT VIRTUAL - Uses shared-d instead
 int CalendarSystem::daysDifference(const QDate &fromDate, const QDate &toDate) const
 {
     return m_calendarSystem->daysDifference(fromDate, toDate);
@@ -204,7 +190,6 @@ int CalendarSystem::monthsInYear(const QDate &date) const
     return m_calendarSystem->monthsInYear(date);
 }
 
-// NOT VIRTUAL - Uses shared-d instead
 int CalendarSystem::monthsInYear(int year) const
 {
     return m_calendarSystem->monthsInYear(year);
@@ -220,13 +205,11 @@ int CalendarSystem::weeksInYear(int year) const
     return weeksInYear(year, Locale::DefaultWeekNumber);
 }
 
-// NOT VIRTUAL - Uses shared-d instead
 int CalendarSystem::weeksInYear(const QDate &date, Locale::WeekNumberSystem weekNumberSystem) const
 {
     return m_calendarSystem->weeksInYear(date, (KLocale::WeekNumberSystem)weekNumberSystem);
 }
 
-// NOT VIRTUAL - Uses shared-d instead
 int CalendarSystem::weeksInYear(int year, Locale::WeekNumberSystem weekNumberSystem) const
 {
      return m_calendarSystem->weeksInYear(year, (KLocale::WeekNumberSystem)weekNumberSystem);
@@ -237,7 +220,6 @@ int CalendarSystem::daysInYear(const QDate &date) const
     return m_calendarSystem->daysInYear(date);
 }
 
-// NOT VIRTUAL - Uses shared-d instead
 int CalendarSystem::daysInYear(int year) const
 {
     return m_calendarSystem->daysInYear(year);
@@ -248,7 +230,6 @@ int CalendarSystem::daysInMonth(const QDate &date) const
     return m_calendarSystem->daysInMonth(date);
 }
 
-// NOT VIRTUAL - Uses shared-d instead
 int CalendarSystem::daysInMonth(int year, int month) const
 {
    return m_calendarSystem->daysInMonth(year, month);
@@ -269,13 +250,11 @@ int CalendarSystem::dayOfWeek(const QDate &date) const
     return m_calendarSystem->dayOfWeek(date);
 }
 
-// NOT VIRTUAL - Uses shared-d instead
 int CalendarSystem::week(const QDate &date, int *yearNum) const
 {
     return week(date, Locale::DefaultWeekNumber, yearNum);
 }
 
-// NOT VIRTUAL - Uses shared-d instead
 int CalendarSystem::week(const QDate &date, Locale::WeekNumberSystem weekNumberSystem, int *yearNum) const
 {
     return m_calendarSystem->week(date, (KLocale::WeekNumberSystem)weekNumberSystem, yearNum);
@@ -291,49 +270,42 @@ bool CalendarSystem::isLeapYear(const QDate &date) const
     return m_calendarSystem->isLeapYear(date);
 }
 
-// NOT VIRTUAL - If override needed use shared-d
 QDate CalendarSystem::firstDayOfYear(int year) const
 {
     return m_calendarSystem->firstDayOfYear(year);
 }
 
-// NOT VIRTUAL - If override needed use shared-d
 QDate CalendarSystem::lastDayOfYear(int year) const
 {
     return m_calendarSystem->lastDayOfYear(year);
 }
 
-// NOT VIRTUAL - If override needed use shared-d
 QDate CalendarSystem::firstDayOfYear(const QDate &date) const
 {
     return m_calendarSystem->firstDayOfYear(date);
 }
 
-// NOT VIRTUAL - If override needed use shared-d
+
 QDate CalendarSystem::lastDayOfYear(const QDate &date) const
 {
     return m_calendarSystem->lastDayOfYear(date);
 }
 
-// NOT VIRTUAL - If override needed use shared-d
 QDate CalendarSystem::firstDayOfMonth(int year, int month) const
 {
    return m_calendarSystem->firstDayOfMonth(year, month);
 }
 
-// NOT VIRTUAL - If override needed use shared-d
 QDate CalendarSystem::lastDayOfMonth(int year, int month) const
 {
     return m_calendarSystem->lastDayOfMonth(year, month);
 }
 
-// NOT VIRTUAL - If override needed use shared-d
 QDate CalendarSystem::firstDayOfMonth(const QDate &date) const
 {
    return m_calendarSystem->firstDayOfMonth(date);
 }
 
-// NOT VIRTUAL - If override needed use shared-d
 QDate CalendarSystem::lastDayOfMonth(const QDate &date) const
 {
     return m_calendarSystem->lastDayOfMonth(date);
@@ -364,14 +336,13 @@ QString CalendarSystem::formatDate(const QDate &fromDate, Locale::DateFormat toF
     return m_calendarSystem->formatDate(fromDate, (KLocale::DateFormat)toFormat);
 }
 
-// NOT VIRTUAL - If override needed use shared-d
 QString CalendarSystem::formatDate(const QDate &fromDate, const QString &toFormat,
                                     Locale::DateTimeFormatStandard standard) const
 {
     return m_calendarSystem->formatDate(fromDate, toFormat, (KLocale::DateTimeFormatStandard)standard);
 }
 
-// NOT VIRTUAL - If override needed use shared-d
+
 QString CalendarSystem::formatDate(const QDate &fromDate, const QString &toFormat, Locale::DigitSet digitSet,
                                     Locale::DateTimeFormatStandard formatStandard) const
 {
@@ -379,7 +350,6 @@ QString CalendarSystem::formatDate(const QDate &fromDate, const QString &toForma
                                         (KLocale::DateTimeFormatStandard)formatStandard);
 }
 
-// NOT VIRTUAL - If override needed use shared-d
 QString CalendarSystem::formatDate(const QDate &date, Locale::DateTimeComponent component,
                                     Locale::DateTimeComponentFormat format,
                                     Locale::WeekNumberSystem weekNumberSystem) const
@@ -404,7 +374,6 @@ QDate CalendarSystem::readDate(const QString &inputString, const QString &format
     return readDate(inputString, formatString, ok, Locale::KdeFormat);
 }
 
-// NOT VIRTUAL - If override needed use shared-d
 QDate CalendarSystem::readDate(const QString &inputString, const QString &formatString, bool *ok,
                                 Locale::DateTimeFormatStandard formatStandard) const
 {
@@ -412,13 +381,11 @@ QDate CalendarSystem::readDate(const QString &inputString, const QString &format
                                       (KLocale::DateTimeFormatStandard)formatStandard);
 }
 
-// NOT VIRTUAL - If override needed use shared-d
 int CalendarSystem::shortYearWindowStartYear() const
 {
     return m_calendarSystem->shortYearWindowStartYear();
 }
 
-// NOT VIRTUAL - If override needed use shared-d
 int CalendarSystem::applyShortYearWindow(int inputYear) const
 {
     return m_calendarSystem->applyShortYearWindow(inputYear);

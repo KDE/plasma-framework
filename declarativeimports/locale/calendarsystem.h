@@ -27,7 +27,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QDate>
 
-class CalendarSystem;
+class KCalendarSystem;
 class KCalendarEra;
 
 /**

@@ -579,7 +579,6 @@ public:
      */
     Q_INVOKABLE QString prettyFormatDuration(unsigned long mSec) const;
 
-    //KDE5 move to KDateTime namespace
     /**
      *
      * Available Calendar Systems
@@ -613,7 +612,6 @@ public:
         ThaiCalendar = 23 /**< Thai Calendar, aka Buddhist or Thai Buddhist */
     };
 
-    //KDE5 move to KDateTime namespace
     /**
      *
      * System used for Week Numbers
@@ -629,7 +627,6 @@ public:
         SimpleWeek        =  3  /**< Week 1 starts Jan 1st ends after 7 days */
     };
 
-    //KDE5 move to KDateTime namespace
     /**
      *
      * Standard used for Date Time Format String
@@ -640,7 +637,6 @@ public:
          UnicodeFormat     /**< UNICODE Standard (Qt/Java/OSX/Windows) */
     };
 
-    //KDE5 move to KDateTime namespace
     /**
      *
      * Mode to use when parsing a Date Time input string
@@ -657,14 +653,13 @@ public:
          //StrictParsing    /**< Parse Date/Time strictly to the format. */
     };
 
-    //KDE5 move to KDateTime namespace
     /**
      *
      * The various Components that make up a Date / Time
      * In the future the Components may be combined as flags for dynamic
      * generation of Date Formats.
      *
-     * @see KCalendarSystem
+     * @see CalendarSystem
      * @see KLocalizedDate
      * @see DateTimeComponentFormat
      */
@@ -701,7 +696,6 @@ public:
         UnixTime      = 0x20000000  /**< The UNIX Time portion of a date */
     };
 
-    //KDE5 move to KDateTime namespace
     /**
      *
      * Format used for individual Date/Time Components when converted to/from a string
@@ -721,7 +715,6 @@ public:
 
     Q_DECLARE_FLAGS(DateTimeComponents, DateTimeComponent)
 
-    //KDE5 move to KDateTime namespace
     /**
      * Format for date string.
      */
@@ -739,7 +732,6 @@ public:
         IsoOrdinalDate    /**< ISO-8601 Ordinal Date format YYYY-DDD, e.g. 2009-001 */
     };
 
-    //KDE5 move to KDateTime namespace
     /**
      * Returns a string formatted to the current locale's conventions
      * regarding dates.
@@ -751,7 +743,6 @@ public:
      */
     Q_INVOKABLE QString formatDate(const QDate &date, DateFormat format = LongDate) const;
 
-    //KDE5 move to KDateTime namespace
     /**
      * Returns a string formatted to the current locale's conventions
      * regarding both date and time.
@@ -765,8 +756,6 @@ public:
      */
     Q_INVOKABLE QString formatDateTime(const QDateTime &dateTime, DateFormat format = ShortDate,
                            bool includeSecs = false) const;
-
-    //KDE5 move to KDateTime namespace
     /**
      * Options for formatting date-time values.
      */
@@ -777,7 +766,6 @@ public:
 
     Q_DECLARE_FLAGS(DateTimeFormatOptions, DateTimeFormatOption)
 
-    //KDE5 move to KDateTime namespace
     /**
      * Returns a string formatted to the current locale's conventions
      * regarding both date and time.
@@ -825,7 +813,6 @@ public:
 
     Q_DECLARE_FLAGS(TimeFormatOptions, TimeFormatOption)
 
-    //KDE5 move to KDateTime namespace
     /**
      *
      * Returns a string formatted to the current locale's conventions
@@ -909,7 +896,7 @@ public:
      * Returns the type of Calendar System used in this Locale
      *
      * @see Locale::CalendarSystem
-     * @see KCalendarSystem
+     * @see CalendarSystem
      * @return the type of Calendar System
      */
     Locale::CalendarSystem calendarSystem() const;
@@ -919,7 +906,7 @@ public:
      * Sets the type of Calendar System to use in this Locale
      *
      * @see Locale::CalendarSystem
-     * @see KCalendarSystem
+     * @see CalendarSystem
      * @param calendarSystem the Calendar System to use
      */
     void setCalendarSystem(Locale::CalendarSystem calendarSystem);
@@ -977,7 +964,6 @@ public:
      */
     Q_INVOKABLE double readNumber(const QString &numStr, bool * ok = 0) const;
 
-    //KDE5 move to KDateTime namespace
     /**
      * Converts a localized date string to a QDate.  This method will try all
      * ReadDateFlag formats in preferred order to read a valid date.
@@ -989,19 +975,17 @@ public:
      *           If @p ok is 0, it will be ignored
      *
      * @return The string converted to a QDate
-     * @see KCalendarSystem::readDate()
+     * @see CalendarSystem::readDate()
      */
     Q_INVOKABLE QDate readDate(const QString &str, bool* ok = 0) const;
 
-    //KDE5 move to KDateTime namespace
     /**
      * Converts a localized date string to a QDate, using the specified format.
      * You will usually not want to use this method.
-     * @see KCalendarSystem::readDate()
+     * @see CalendarSystem::readDate()
      */
     Q_INVOKABLE QDate readDate(const QString &intstr, const QString &fmt, bool* ok = 0) const;
 
-    //KDE5 move to KDateTime namespace
     /**
      * Flags for readDate()
      */
@@ -1018,7 +1002,6 @@ public:
                                            ISO Week date format (YYYY-DDD) */
     };
 
-    //KDE5 move to KDateTime namespace
     /**
      * Converts a localized date string to a QDate.
      * This method is stricter than readDate(str,&ok): it will only accept
@@ -1030,7 +1013,7 @@ public:
      *           If @p ok is 0, it will be ignored
      *
      * @return The string converted to a QDate
-     * @see KCalendarSystem::readDate()
+     * @see CalendarSystem::readDate()
      */
     Q_INVOKABLE QDate readDate(const QString &str, ReadDateFlags flags, bool *ok = 0) const;
 
