@@ -139,7 +139,7 @@ public:
     /**
      * Adds urls (e.g. from a drop)
      */
-    virtual void addUrls(const KUrl::List urls);
+    virtual void addUrls(const QList<QUrl>& urls);
 
 protected:
     /**

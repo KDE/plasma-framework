@@ -34,7 +34,7 @@
 #include <kmimetype.h>
 #include <kshell.h>
 #include <kstandarddirs.h>
-#include <kurl.h>
+#include <qurl.h>
 #include <kprotocolinfo.h>
 
 #include "abstractrunner.h"
@@ -198,14 +198,14 @@ class RunnerContextPrivate : public QSharedData
                 type = (space > 0) ? RunnerContext::ShellCommand :
                                      RunnerContext::Executable;
             } else {
-                KUrl url(term);
+                QUrl url = QUrl::fromUserInput(term);
                 // check for a normal URL first
                 //kDebug() << url << KProtocolInfo::protocolClass(url.scheme()) << url.hasHost() <<
                 //    url.host() << url.isLocalFile() << path << path.indexOf('/');
                 const bool hasProtocol = !url.scheme().isEmpty();
                 const bool isLocalProtocol = KProtocolInfo::protocolClass(url.scheme()) == ":local";
-                if (hasProtocol && 
-                    ((!isLocalProtocol && url.hasHost()) ||
+                if (hasProtocol &&
+                    ((!isLocalProtocol && !url.host().isEmpty()) ||
                      (isLocalProtocol && url.scheme() != "file"))) {
                     // we either have a network protocol with a host, so we can show matches for it
                     // or we have a non-file url that may be local so a host isn't required

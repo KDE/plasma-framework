@@ -202,7 +202,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * This is triggered by events in the user interface such as
          * drag and drop of files.
          */
-        virtual void addUrls(const KUrl::List &urls);
+        virtual void addUrls(const QList<QUrl> &urls);
 
         /**
          * This method is called when the wallpaper should be painted.

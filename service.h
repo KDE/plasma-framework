@@ -32,6 +32,7 @@
 class QGraphicsWidget;
 class QIODevice;
 class QWidget;
+class QUrl;
 
 namespace Plasma
 {
@@ -105,7 +106,7 @@ public:
      * Used to access a service from an url. Always check for the signal serviceReady() that fires
      * when this service is actually ready for use.
      */
-    static Service *access(const KUrl &url, QObject *parent = 0);
+    static Service *access(const QUrl &url, QObject *parent = 0);
 
     /**
      * Sets the destination for this Service to operate on

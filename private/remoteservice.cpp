@@ -42,9 +42,10 @@
 #include <QtJolie/Value>
 
 #include <kdebug.h>
-#include <kurl.h>
+#include <qurl.h>
+#include <qurlpathinfo.h>
 
-namespace Plasma 
+namespace Plasma
 {
 
 RemoteService::RemoteService(QObject* parent)
@@ -55,7 +56,7 @@ RemoteService::RemoteService(QObject* parent)
 {
 }
 
-RemoteService::RemoteService(QObject* parent, KUrl location)
+RemoteService::RemoteService(QObject* parent, const QUrl &location)
     : Service(parent),
       m_location(location),
       m_client(0),
@@ -83,10 +84,16 @@ void RemoteService::slotReadyForRemoteAccess()
     setLocation(m_location);
 }
 
-void RemoteService::setLocation(const KUrl &location)
+static QByteArray resourcePathFromUrl(const QUrl& location)
+{
+    QUrlPathInfo pi(location);
+    return pi.path(QUrlPathInfo::StripTrailingSlash).remove(0, 1).toUtf8();
+}
+
+void RemoteService::setLocation(const QUrl &location)
 {
 #ifndef NDEBUG
-    kDebug() << "Setting RemoteService location to " << location.prettyUrl();
+    kDebug() << "Setting RemoteService location to " << location;
 #endif
 
     m_uuid = QUuid::createUuid().toString();
@@ -113,8 +120,7 @@ void RemoteService::setLocation(const KUrl &location)
     QDataStream stream(&identityByteArray, QIODevice::WriteOnly);
     stream << identity.toPublicCredentials();
 
-    Jolie::Message getOpDesc(location.path(KUrl::RemoveTrailingSlash).remove(0, 1).toUtf8(),
-                             "startConnection");
+    Jolie::Message getOpDesc(resourcePathFromUrl(location), "startConnection");
     Jolie::Value data;
     data.children(JolieMessage::Field::IDENTITY) << Jolie::Value(identityByteArray);
     data.children(JolieMessage::Field::UUID) << Jolie::Value(m_uuid.toAscii());
@@ -128,7 +134,11 @@ void RemoteService::setLocation(const KUrl &location)
 
 QString RemoteService::location() const
 {
-    return m_location.prettyUrl();
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+    return m_location.toString();
+#else
+    return m_location.toDisplayString();
+#endif
 }
 
 bool RemoteService::isReady() const
@@ -151,8 +161,7 @@ void RemoteService::callCompleted(Jolie::PendingCallWatcher *watcher)
         kDebug() << "Started connection: fetching .operations";
 #endif
         m_token = JolieMessage::field(JolieMessage::Field::TOKEN, response);
-        Jolie::Message getOpDesc(m_location.path(KUrl::RemoveTrailingSlash).remove(0, 1).toUtf8(),
-                                 "getOperations");
+        Jolie::Message getOpDesc(resourcePathFromUrl(m_location), "getOperations");
         //TODO: async
         Jolie::PendingCall pendingReply = m_client->asyncCall(signMessage(getOpDesc));
         Jolie::PendingCallWatcher *watcher = new Jolie::PendingCallWatcher(pendingReply, this);
@@ -174,7 +183,7 @@ void RemoteService::callCompleted(Jolie::PendingCallWatcher *watcher)
             m_operationsScheme = JolieMessage::field(JolieMessage::Field::OPERATIONSDESCRIPTION, response);
             m_token = JolieMessage::field(JolieMessage::Field::TOKEN, response);
             m_ready = true;
-            setName(m_location.prettyUrl());
+            setName(location());
             //if there's stuff in the queue, let it continue.
             slotFinished();
         }
@@ -212,8 +221,7 @@ void RemoteService::callCompleted(Jolie::PendingCallWatcher *watcher)
 
 void RemoteService::slotGotPin(Plasma::ClientPinRequest *request)
 {
-    Jolie::Message getOpDesc(m_location.path(KUrl::RemoveTrailingSlash).remove(0, 1).toUtf8(),
-                             "getOperations");
+    Jolie::Message getOpDesc(resourcePathFromUrl(m_location), "getOperations");
     Jolie::Value value;
     value.children(JolieMessage::Field::PARAMETERS) << Jolie::Value(QByteArray());
     if (!request->pin().isEmpty()) {
@@ -243,8 +251,7 @@ void RemoteService::slotUpdateEnabledOperations()
     //TODO: maybe push the get enabled operations also on the queue?
     if (!m_busy) {
         m_busy = true;
-        Jolie::Message getOpDesc(m_location.path(KUrl::RemoveTrailingSlash).remove(0, 1).toUtf8(),
-                                 "getEnabledOperations");
+        Jolie::Message getOpDesc(resourcePathFromUrl(m_location), "getEnabledOperations");
 
         Jolie::PendingCall pendingReply = m_client->asyncCall(signMessage(getOpDesc));
         Jolie::PendingCallWatcher *watcher = new Jolie::PendingCallWatcher(pendingReply, this);

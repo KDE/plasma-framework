@@ -35,7 +35,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <kurl.h>
+#include <qurl.h>
 
 #include <QtJolie/Message>
 
@@ -48,7 +48,7 @@ public:
     QString name;
     QString description;
     QString icon;
-    KUrl url;
+    QUrl url;
 };
 
 RemoteObjectDescription::RemoteObjectDescription()
@@ -79,12 +79,12 @@ QString RemoteObjectDescription::name() const
 }
 
 
-void RemoteObjectDescription::setUrl(const KUrl &url)
+void RemoteObjectDescription::setUrl(const QUrl &url)
 {
     d->url = url;
 }
 
-KUrl RemoteObjectDescription::url() const
+QUrl RemoteObjectDescription::url() const
 {
     return d->url;
 }
@@ -136,11 +136,11 @@ AccessManager::~AccessManager()
     delete d;
 }
 
-AccessAppletJob *AccessManager::accessRemoteApplet(const KUrl &location) const
+AccessAppletJob *AccessManager::accessRemoteApplet(const QUrl &location) const
 {
     AuthorizationManager::self()->d->prepareForServiceAccess();
 
-    KUrl resolvedLocation;
+    QUrl resolvedLocation;
     if (location.scheme() == "plasma+zeroconf") {
         if (d->zeroconfServices.contains(location.host())) {
             resolvedLocation = d->services[location.host()].url();
@@ -222,7 +222,7 @@ void AccessManagerPrivate::slotAddService(DNSSD::RemoteService::Ptr service)
         kDebug() << "result for resolve = " << ip;
 #endif
 
-        KUrl url(QString("plasma://%1:%2/%3").arg(ip)
+        QUrl url(QString("plasma://%1:%2/%3").arg(ip)
                                              .arg(service->port())
                                              .arg(service->serviceName()));
 

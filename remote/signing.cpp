@@ -551,13 +551,13 @@ QString Signing::signerOf(const Package &package) const
     return d->verifySignature(contents, QString());
 }
 
-QString Signing::signerOf(const KUrl &package, const KUrl &signature) const
+QString Signing::signerOf(const QUrl &package, const QUrl &signature) const
 {
 #ifndef NDEBUG
-    kDebug() << "Checking existence of " << package.pathOrUrl();
+    kDebug() << "Checking existence of " << package;
 #endif
 #ifndef NDEBUG
-    kDebug() << "Checking existence of " << signature.pathOrUrl();
+    kDebug() << "Checking existence of " << signature;
 #endif
 
     if (!package.isLocalFile() || (!signature.isEmpty() && !signature.isLocalFile())) {

@@ -21,6 +21,7 @@
 
 #include <QtCore/QQueue>
 #include <QtJolie/Message>
+#include <QtCore/QUrl>
 
 #include "../service.h"
 
@@ -30,7 +31,7 @@ namespace Jolie
     class PendingCallWatcher;
 }
 
-namespace Plasma 
+namespace Plasma
 {
 
 class ClientPinRequest;
@@ -42,10 +43,10 @@ class RemoteService : public Plasma::Service
 
     public:
         RemoteService(QObject* parent);
-        RemoteService(QObject* parent, KUrl location);
+        RemoteService(QObject* parent, const QUrl &location);
         ~RemoteService();
 
-        void setLocation(const KUrl &location);
+        void setLocation(const QUrl &location);
         QString location() const;
 
         bool isReady() const;
@@ -67,7 +68,7 @@ class RemoteService : public Plasma::Service
         Jolie::Message signMessage(const Jolie::Message &message) const;
 
     private:
-        KUrl            m_location;
+        QUrl            m_location;
         Jolie::Client   *m_client;
         QByteArray      m_token;
         QByteArray      m_operationsScheme;

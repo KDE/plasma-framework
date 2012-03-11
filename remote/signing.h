@@ -146,7 +146,7 @@ public:
       *         On success, this information can then be used with trustLevelOf and/or
       *         descriptiveString to get more information on the key.
       */
-    QString signerOf(const KUrl &package, const KUrl &signature = KUrl()) const ;
+    QString signerOf(const QUrl &package, const QUrl &signature = QUrl()) const ;
 
     /**
       * @return the QString path of the keystore being used.

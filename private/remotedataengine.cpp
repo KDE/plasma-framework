@@ -28,12 +28,13 @@
 #include <QTimer>
 #include <QUuid>
 
-#include <kurl.h>
+#include <qurl.h>
+#include <qurlpathinfo.h>
 
 namespace Plasma
 {
 
-RemoteDataEngine::RemoteDataEngine(KUrl location, QObject* parent, const QVariantList& args)
+RemoteDataEngine::RemoteDataEngine(const QUrl &location, QObject* parent, const QVariantList& args)
     : Plasma::DataEngine(parent, args),
       m_service(0),
       m_location(location),
@@ -52,7 +53,7 @@ RemoteDataEngine::~RemoteDataEngine()
 {
 }
 
-void RemoteDataEngine::setLocation(KUrl location)
+void RemoteDataEngine::setLocation(const QUrl &location)
 {
     m_location = location;
     setMinimumPollingInterval(1000);
@@ -186,11 +187,11 @@ void RemoteDataEngine::remoteCallFinished(Plasma::ServiceJob *job)
         kDebug() << "setting serviceForSource for " << source;
 #endif
         QString resource = job->result().toString();
-        KUrl loc = m_location;
+        QUrlPathInfo loc(m_location);
         loc.setFileName(resource);
         RemoteService *rs = m_serviceForSource.value(source);
         if (rs) {
-            rs->setLocation(loc);
+            rs->setLocation(loc.url());
         } else {
 #ifndef NDEBUG
             kDebug() << "no such service?" << source;

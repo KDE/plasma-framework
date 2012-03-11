@@ -43,7 +43,7 @@ namespace Plasma
 class AccessAppletJobPrivate
 {
 public:
-    AccessAppletJobPrivate(const KUrl &location, AccessAppletJob *owner)
+    AccessAppletJobPrivate(const QUrl &location, AccessAppletJob *owner)
         : q(owner),
           location(location),
           applet(0)
@@ -166,11 +166,11 @@ public:
     }
 
     AccessAppletJob *q;
-    KUrl location;
+    QUrl location;
     Applet *applet;
 };
 
-AccessAppletJob::AccessAppletJob(const KUrl &location, QObject *parent)
+AccessAppletJob::AccessAppletJob(const QUrl &location, QObject *parent)
     : KJob(parent),
       d(new AccessAppletJobPrivate(location, this))
 {
@@ -191,7 +191,7 @@ void AccessAppletJob::start()
 {
 #ifdef ENABLE_REMOTE_WIDGETS
 #ifndef NDEBUG
-    kDebug() << "fetching a plasmoid from location = " << d->location.prettyUrl();
+    kDebug() << "fetching a plasmoid from location = " << d->location;
 #endif
     Service *service = Service::access(d->location);
     connect(service, SIGNAL(serviceReady(Plasma::Service*)),

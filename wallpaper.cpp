@@ -124,7 +124,7 @@ Wallpaper::~Wallpaper()
     delete d;
 }
 
-void Wallpaper::addUrls(const KUrl::List &urls)
+void Wallpaper::addUrls(const QList<QUrl> &urls)
 {
     if (d->script) {
         d->script->addUrls(urls);

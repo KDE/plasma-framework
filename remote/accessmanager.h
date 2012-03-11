@@ -30,7 +30,7 @@
 #include <kdebug.h>
 
 class QString;
-class KUrl;
+class QUrl;
 
 namespace Plasma
 {
@@ -59,8 +59,8 @@ public:
     void setName(const QString &name);
     QString name() const;
 
-    void setUrl(const KUrl &url);
-    KUrl url() const;
+    void setUrl(const QUrl &url);
+    QUrl url() const;
 
     void setDescription(const QString &description);
     QString description() const;
@@ -91,7 +91,7 @@ class PLASMA_EXPORT AccessManager : public QObject
          * @returns a job that can be used to track when a remote plasmoid is ready for use, and to
          * obtain the applet when the package is sent over.
          */
-        AccessAppletJob *accessRemoteApplet(const KUrl &location) const;
+        AccessAppletJob *accessRemoteApplet(const QUrl &location) const;
 
         /**
          * @returns a list of applets that are announced on the network through zeroconf. Use the

@@ -64,7 +64,7 @@ Service::~Service()
     delete d;
 }
 
-Service *Service::access(const KUrl &url, QObject *parent)
+Service *Service::access(const QUrl &url, QObject *parent)
 {
     return new RemoteService(parent, url);
 }

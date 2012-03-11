@@ -25,7 +25,6 @@
 #include <QtCore/QObject>
 
 class QString;
-class KUrl;
 
 namespace Plasma
 {

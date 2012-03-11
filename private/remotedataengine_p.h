@@ -36,10 +36,10 @@ class RemoteDataEngine : public Plasma::DataEngine
     Q_OBJECT
 
 public:
-    RemoteDataEngine(KUrl location, QObject* parent = 0, const QVariantList &args = QVariantList());
+    RemoteDataEngine(const QUrl &location, QObject* parent = 0, const QVariantList &args = QVariantList());
     ~RemoteDataEngine();
     Plasma::Service* serviceForSource(const QString& source);
-    void setLocation(KUrl location);
+    void setLocation(const QUrl &location);
 
 protected:
     QStringList sources() const;
@@ -59,7 +59,7 @@ private:
     QHash<QString, RemoteService *> m_serviceForSource;
     QHash<QString, RemoteService *> m_pendingServices;
     QStringList     m_pendingSources;
-    KUrl            m_location;
+    QUrl            m_location;
     QString         m_uuid;
 };
 

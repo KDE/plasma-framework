@@ -26,7 +26,7 @@ namespace Plasma
 class ServiceAccessJobPrivate
 {
 public:
-    ServiceAccessJobPrivate(ServiceAccessJob *owner, KUrl location)
+    ServiceAccessJobPrivate(ServiceAccessJob *owner, const QUrl& location)
         : q(owner),
           service(0),
           location(location)
@@ -45,10 +45,10 @@ public:
 
     ServiceAccessJob *q;
     Service *service;
-    KUrl location;
+    QUrl location;
 };
 
-ServiceAccessJob::ServiceAccessJob(KUrl location, QObject *parent)
+ServiceAccessJob::ServiceAccessJob(const QUrl& location, QObject *parent)
     : KJob(parent),
       d(new ServiceAccessJobPrivate(this, location))
 {

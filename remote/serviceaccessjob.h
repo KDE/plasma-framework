@@ -25,8 +25,6 @@
 
 #include <plasma/plasma_export.h>
 
-class KUrl;
-
 namespace Plasma
 {
 
@@ -55,7 +53,7 @@ protected:
      * @param location the location of the service
      * @param parent the parent object for this service
      */
-    ServiceAccessJob(KUrl location, QObject *parent = 0);
+    ServiceAccessJob(const QUrl& location, QObject *parent = 0);
 
     void start();
 
@@ -64,7 +62,7 @@ private:
     Q_PRIVATE_SLOT(d, void slotServiceReady())
 
     ServiceAccessJobPrivate * const d;
-    
+
     friend class AccessManager;
     friend class AccessManagerPrivate;
     friend class ServiceAccessJobPrivate;
