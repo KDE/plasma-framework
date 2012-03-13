@@ -1634,29 +1634,6 @@ public:
 
     /**
      *
-     * Tries to find a path to the localized file for the given original path.
-     * This is intended mainly for non-text resources (images, sounds, etc.),
-     * whereas text resources should be handled in more specific ways.
-     *
-     * The possible localized paths are checked in turn by priority of set
-     * languages, in form of dirname/l10n/ll/basename, where dirname and
-     * basename are those of the original path, and ll is the language code.
-     *
-     * KDE core classes which resolve paths internally (e.g. KStandardDirs)
-     * will usually perform this lookup behind the scene.
-     * In general, you should pipe resource paths through this method only
-     * on explicit translators' request, or when a resource is an obvious
-     * candidate for localization (e.g. a splash screen or a custom icon
-     * with some text drawn on it).
-     *
-     * @param filePath path to the original file
-     *
-     * @return path to the localized file if found, original path otherwise
-     */
-    Q_INVOKABLE QString localizedFilePath(const QString &filePath) const;
-
-    /**
-     *
      * Removes accelerator marker from a UI text label.
      *
      * Accelerator marker is not always a plain ampersand (&),

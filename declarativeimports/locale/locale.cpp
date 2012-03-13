@@ -571,11 +571,6 @@ Locale::WeekNumberSystem Locale::weekNumberSystem() const
     return (Locale::WeekNumberSystem)m_locale->weekNumberSystem();
 }
 
-QString Locale::localizedFilePath(const QString &filePath) const
-{
-    return m_locale->localizedFilePath(filePath);
-}
-
 QString Locale::removeAcceleratorMarker(const QString &label) const
 {
     return m_locale->removeAcceleratorMarker(label);
