@@ -21,8 +21,8 @@
 
 import QtQuick 1.1
 import org.kde.plasma.components 0.1 as PlasmaComponents
-import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.locale 0.1
+
 Item {
     id: root
     property int minimumHeight: 200
@@ -185,7 +185,7 @@ Item {
 
                 console.log("readMoney:" + locale.readMoney("$ 21"))
 
-                console.log("readNumber:" + locale.readNumber("12,100"))//TODO
+                console.log("readNumber:" + locale.readNumber(locale.convertDigits(locale.digitSet, Locale.ArabicDigits)))
 
                 console.log("readDate:" + locale.readDate("2004-02-01"))
 
