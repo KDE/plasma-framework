@@ -72,16 +72,6 @@ QString Locale::currencyCode() const
     return m_locale->currencyCode();
 }
 
-void Locale::insertCatalog(const QString &catalog)
-{
-    m_locale->insertCatalog(catalog);
-}
-
-void Locale::removeCatalog(const QString &catalog)
-{
-    m_locale->removeCatalog(catalog);
-}
-
 void Locale::setActiveCatalog(const QString &catalog)
 {
     m_locale->setActiveCatalog(catalog);

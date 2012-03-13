@@ -1468,25 +1468,6 @@ public:
     void setMeasureSystem(MeasureSystem value);
 
     /**
-     * Adds another catalog to search for translation lookup.
-     * This function is useful for extern libraries and/or code,
-     * that provide their own messages.
-     *
-     * If the catalog does not exist for the chosen language,
-     * it will be ignored and en_US will be used.
-     *
-     * @param catalog The catalog to add.
-     */
-    Q_INVOKABLE void insertCatalog(const QString& catalog);
-
-    /**
-     * Removes a catalog for translation lookup.
-     * @param catalog The catalog to remove.
-     * @see insertCatalog()
-     */
-    Q_INVOKABLE void removeCatalog(const QString &catalog);
-
-    /**
      * Sets the active catalog for translation lookup.
      * @param catalog The catalog to activate.
      */
@@ -1582,7 +1563,7 @@ public:
      * @param charset set to the charset part of the locale
      */
     Q_INVOKABLE static void splitLocale(const QString &locale, QString &language, QString &country,
-                            QString &modifier, QString &charset); //TODO remove?
+                            QString &modifier, QString &charset);
 
     /**
      * Use this as main catalog for *all* KLocales, if not the appname
@@ -1672,7 +1653,7 @@ public:
      *
      * @return path to the localized file if found, original path otherwise
      */
-    Q_INVOKABLE QString localizedFilePath(const QString &filePath) const;//TODO remove
+    Q_INVOKABLE QString localizedFilePath(const QString &filePath) const;
 
     /**
      *
