@@ -92,6 +92,7 @@ Rectangle {
 
     Flickable {
         id: page
+        clip: true
 
         anchors {
             top: toolBar.bottom
