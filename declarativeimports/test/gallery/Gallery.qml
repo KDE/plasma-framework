@@ -99,6 +99,10 @@ Rectangle {
             left: pageSelector.right
             right: verticalScrollBar.left
             bottom: horizontalScrollBar.top
+            leftMargin: 5
+            rightMargin: 5
+            topMargin: 5
+            bottomMargin: 5
         }
         contentWidth: pageStack.currentPage.implicitWidth
         contentHeight: pageStack.currentPage.implicitHeight
