@@ -108,7 +108,7 @@ Rectangle {
             toolBar: toolBar
             width: page.width
             height: currentPage.implicitHeight
-            initialPage: Qt.createComponent("TextEditing.qml")
+            initialPage: Qt.createComponent("Buttons.qml")
         }
 
     }
