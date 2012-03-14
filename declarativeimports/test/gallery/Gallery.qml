@@ -97,8 +97,8 @@ Rectangle {
         anchors {
             top: toolBar.bottom
             left: pageSelector.right
-            right: parent.right
-            bottom: parent.bottom
+            right: verticalScrollBar.left
+            bottom: horizontalScrollBar.top
         }
         contentWidth: pageStack.currentPage.implicitWidth
         contentHeight: pageStack.currentPage.implicitHeight
