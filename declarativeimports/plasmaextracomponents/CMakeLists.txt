@@ -1,0 +1,36 @@
+project(plasmaextracomponents)
+
+set(plasmaextracomponents_SRCS
+    #../core/declarativeitemcontainer.cpp
+    plasmaextracomponentsplugin.cpp
+    )
+
+INCLUDE_DIRECTORIES(
+        ${CMAKE_SOURCE_DIR}
+        ${CMAKE_BINARY_DIR}
+        ${KDE4_INCLUDES}
+)
+
+qt4_automoc(${plasmaextracomponents_SRCS})
+
+
+add_library(plasmaextracomponentsplugin SHARED ${plasmaextracomponents_SRCS})
+target_link_libraries(plasmaextracomponentsplugin ${QT_QTCORE_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY} ${QT_QTGUI_LIBRARY} ${KDE4_KDEUI_LIBRARY} ${KDE4_PLASMA_LIBS})
+
+install(TARGETS plasmaextracomponentsplugin DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/plasma/extras)
+
+install(DIRECTORY qml/ DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/plasma/extras)
+
+
+
+# The platform specific stuff, overwrites a copy of the desktop one
+# it does install some files on top of the old ones, has to be done
+# file by file since if some component from the generic set is more
+# recent than the specifc ones, it wouldn't be overwritten
+
+install(TARGETS plasmaextracomponentsplugin DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/extras)
+
+install(FILES qml/Title.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/extras)
+
+#install platform overrides
+install(DIRECTORY platformcomponents/touch/ DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/extras)
