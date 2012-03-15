@@ -1,6 +1,7 @@
 project(plasmaextracomponents)
 
 set(plasmaextracomponents_SRCS
+    appbackgroundprovider.cpp
     plasmaextracomponentsplugin.cpp
     )
 
