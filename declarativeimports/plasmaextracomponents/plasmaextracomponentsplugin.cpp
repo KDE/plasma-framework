@@ -18,7 +18,9 @@
  */
 
 #include "plasmaextracomponentsplugin.h"
+
 #include "appbackgroundprovider_p.h"
+#include "resourceinstance.h"
 
 #include <QtDeclarative/qdeclarative.h>
 #include <QtDeclarative/QDeclarativeEngine>
@@ -45,6 +47,9 @@ void PlasmaExtraComponentsPlugin::registerTypes(const char *uri)
     }
     */
     // Register additional types here...
+    qmlRegisterType<ResourceInstance>(uri, 0, 1, "ResourceInstance");
+
+    
 }
 
 
