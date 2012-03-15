@@ -1,5 +1,5 @@
 /*
-*   Copyright (C) 2011 by Marco Martin <mart@kde.org>
+*   Copyright 2012 by Sebastian Kügler <sebas@kde.org>
 *
 *   This program is free software; you can redistribute it and/or modify
 *   it under the terms of the GNU Library General Public License as
@@ -19,28 +19,28 @@
 
 /**Documented API
 Inherits:
-        Text
+        Label
 
 Imports:
         QtQuick 1.1
-        org.kde.plasma.core
+        org.kde.plasma.components
 
 Description:
-    This is a label which uses the plasma theme.
-    The characteristics of the text will be automatically seted
-    according to the plasma theme. If you need a more customized
-    text,then you can use the Text component from QtQuick.
+    This is a title label which uses the plasma theme.
+    The characteristics of the text will be automatically set
+    according to the plasma theme. Use this components for titles
+    in your UI, for example page or section titles.
 
 Properties:
     string text:
-    The most important property is "text".
-    For the other ones see the primitive QML Text element
+    The most important property is "text", which applies to the text property of Label
+    For the other ones see Plasma Component's Label or QML primitive Text element
 
 Methods:
-    See the primitive QML Text element
+    See Plasma Component's Label and primitive QML Text element
 
 Signals:
-    See the primitive QML Text element
+    See Plasma Component's Label and primitive QML Text element
 **/
 
 import QtQuick 1.1

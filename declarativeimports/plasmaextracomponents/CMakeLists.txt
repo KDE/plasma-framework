@@ -1,7 +1,6 @@
 project(plasmaextracomponents)
 
 set(plasmaextracomponents_SRCS
-    #../core/declarativeitemcontainer.cpp
     plasmaextracomponentsplugin.cpp
     )
 
@@ -15,12 +14,11 @@ qt4_automoc(${plasmaextracomponents_SRCS})
 
 
 add_library(plasmaextracomponentsplugin SHARED ${plasmaextracomponents_SRCS})
-target_link_libraries(plasmaextracomponentsplugin ${QT_QTCORE_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY} ${QT_QTGUI_LIBRARY} ${KDE4_KDEUI_LIBRARY} ${KDE4_PLASMA_LIBS})
+target_link_libraries(plasmaextracomponentsplugin ${QT_QTCORE_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY} ${QT_QTGUI_LIBRARY} ${KDE4_PLASMA_LIBS})
 
 install(TARGETS plasmaextracomponentsplugin DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/plasma/extras)
 
 install(DIRECTORY qml/ DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/plasma/extras)
-
 
 
 # The platform specific stuff, overwrites a copy of the desktop one

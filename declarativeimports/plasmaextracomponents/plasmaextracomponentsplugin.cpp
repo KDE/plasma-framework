@@ -1,5 +1,4 @@
 /*
- *   Copyright 2011 by Marco Martin <mart@kde.org>
  *   Copyright 2012 by Sebastian Kügler <sebas@kde.org>
  
  *   This program is free software; you can redistribute it and/or modify
@@ -21,26 +20,24 @@
 #include "plasmaextracomponentsplugin.h"
 
 #include <QtDeclarative/qdeclarative.h>
-#include <QtDeclarative/QDeclarativeEngine>
-#include <QtDeclarative/QDeclarativeContext>
-#include <QtDeclarative/QDeclarativeItem>
 
 
-#include <KSharedConfig>
-#include <KConfigGroup>
-#include <KDebug>
+// #include <KSharedConfig>
+// #include <KConfigGroup>
 
 
 void PlasmaExtraComponentsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.extras"));
-
+    /*
+    // Enable when adding touch-specific components
     QString componentsPlatform = getenv("KDE_PLASMA_COMPONENTS_PLATFORM");
     if (componentsPlatform.isEmpty()) {
         KConfigGroup cg(KSharedConfig::openConfig("kdeclarativerc"), "Components-platform");
         componentsPlatform = cg.readEntry("name", "desktop");
     }
-    // Register types...
+    */
+    // Register additional types here...
 }
 
 
