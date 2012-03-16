@@ -23,7 +23,7 @@ Inherits:
 
 Imports:
         QtQuick 1.1
-        org.kde.plasma.components
+        org.kde.plasma.extras
 
 Description:
     This is a title label which uses the plasma theme.
@@ -35,6 +35,9 @@ Properties:
     string text:
     The most important property is "text", which applies to the text property of Label
     For the other ones see Plasma Component's Label or QML primitive Text element
+    int level:
+    The level determines how big the section header is display, values between 1 (big)
+    and 5 (small) are accepted
 
 Methods:
     See Plasma Component's Label and primitive QML Text element
@@ -64,13 +67,6 @@ Label {
         } else {
             s = n + ((5-level)*2)
         }
-        print(" font size for level: " + l + " is " + s + " basePointSize " + n);
         return s;
-    }
-
-    onLevelChanged: {
-        print("level changed: " + level);
-        font.pointSize = headerPointSize(level)
-        anchors.topMargin = level * 2;
     }
 }
