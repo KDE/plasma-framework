@@ -1,6 +1,11 @@
 TODO:
 
-- imageprovider from mobilecomponents
+o imageprovider from mobilecomponents
+o resourceinstance from mobilecomponents
+o remove mobilecomponents' resourceinstance
+o port appbackgrounds
+o porting ResourceInstance
 - subtitle for Title (take from active-settings)
 - Heading { level: 1 } new Component
-- resourceinstance from mobilecomponents
+- App.qml
+
