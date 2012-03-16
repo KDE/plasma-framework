@@ -48,16 +48,18 @@ PlasmaExtras.App {
             width: navigationWidth
             PlasmaExtras.Title {
                 width: navigationColumn.width
+                visible: widthCheck.checked
                 text: "Navigation Pane."
-                elide: Text.ElideMiddle
+                elide: Text.ElideRight
                 //anchors { top: parent.top; left: parent.left; topMargin: 48; }
             }
         }
         PlasmaComponents.CheckBox {
+            id: widthCheck
             text: checked ? "Make big" : " "
             //width: navigationWidth
             checked: navigationWidth > 200
-            anchors { verticalCenter: parent.verticalCenter; bottom: parent.bottom; }
+            anchors { left: parent.left; leftMargin: space; bottomMargin: space; bottom: parent.bottom; }
             onCheckedChanged: {
                 var w = !checked ? 48 : 340;
                 //print(" new: " + w);
@@ -77,6 +79,7 @@ PlasmaExtras.App {
             width: contentItem.width
             id: contentColumn
             anchors.fill: contentItem
+            spacing: 8
             PlasmaExtras.Title {
                 text: "Content Section"
                 elide: Text.ElideMiddle
@@ -124,12 +127,13 @@ PlasmaExtras.App {
     onWidthChanged: {
         //return;
         if (width < 340 + 200) {
-            print("window changed: small " + width);
+            //print("window changed: small " + width);
             navigationWidth = 48;
         } else {
-            print("window changed: tablet " + width);
+            //print("window changed: tablet " + width);
             navigationWidth = 340;
         }
+        widthCheck.checked = navigationWidth > 200;
     }
 
 }
