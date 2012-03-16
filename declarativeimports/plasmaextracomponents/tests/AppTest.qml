@@ -47,47 +47,88 @@ PlasmaExtras.App {
             anchors.fill: navigationItem
             width: navigationWidth
             PlasmaExtras.Title {
+                width: navigationColumn.width
                 text: "Navigation Pane."
                 elide: Text.ElideMiddle
                 //anchors { top: parent.top; left: parent.left; topMargin: 48; }
             }
         }
         PlasmaComponents.CheckBox {
-            text: "Make big"
-            width: navigationWidth
+            text: checked ? "Make big" : " "
+            //width: navigationWidth
             checked: navigationWidth > 200
-            anchors { left: parent.left; right: parent.right; bottom: parent.bottom; }
+            anchors { verticalCenter: parent.verticalCenter; bottom: parent.bottom; }
             onCheckedChanged: {
-                var w = !checked ? 120 : 340;
-                print(" new: " + w);
+                var w = !checked ? 48 : 340;
+                //print(" new: " + w);
                 navigationWidth = w;
             }
             //width: contentItem.width
         }
-        Rectangle { color: "blue"; opacity: 0.3; anchors.fill: parent; }
+        //Rectangle { color: "blue"; opacity: 0.3; anchors.fill: parent; }
     }
 
     Item {
         id: contentItem
+        width: app.width - navigationWidth - space*2
+        //anchors.rightMargin: space*2
+
         Column {
+            width: contentItem.width
             id: contentColumn
             anchors.fill: contentItem
             PlasmaExtras.Title {
-                text: "Content is zooopah cool, too."
+                text: "Content Section"
                 elide: Text.ElideMiddle
                 //anchors { top: parent.top; left: parent.left; topMargin: 48; }
             }
+            PlasmaExtras.Heading {
+                text: "Heading " + level
+                level: 1
+            }
+            PlasmaComponents.Label {
+                width: contentColumn.width
+                wrapMode: Text.WordWrap
+                text: "Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen. Lorem Ipsum is de standaard proeftekst in deze bedrijfstak sinds de 16e eeuw, toen een onbekende drukker een zethaak met letters nam en ze door elkaar husselde om een font-catalogus te maken. Het heeft niet alleen vijf eeuwen overleefd maar is ook, vrijwel onveranderd, overgenomen in elektronische letterzetting. Het is in de jaren '60 populair geworden met de introductie van Letraset vellen met Lorem Ipsum passages en meer recentelijk door desktop publishing software zoals Aldus PageMaker die versies van Lorem Ipsum bevatten."
+            }
+            PlasmaExtras.Heading {
+                text: "Heading " + level
+                level: 2
+            }
+            PlasmaExtras.Heading {
+                text: "Heading " + level
+                level: 3
+            }
+            PlasmaComponents.Label {
+                wrapMode: Text.WordWrap
+                width: contentColumn.width
+                text: "Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen. Lorem Ipsum is de standaard proeftekst in deze bedrijfstak sinds de 16e eeuw, toen een onbekende drukker een zethaak met letters nam en ze door elkaar husselde om een font-catalogus te maken. Het heeft niet alleen vijf eeuwen overleefd maar is ook, vrijwel onveranderd, overgenomen in elektronische letterzetting. Het is in de jaren '60 populair geworden met de introductie van Letraset vellen met Lorem Ipsum passages en meer recentelijk door desktop publishing software zoals Aldus PageMaker die versies van Lorem Ipsum bevatten."
+            }
+            PlasmaExtras.Heading {
+                text: "Heading " + level
+                level: 4
+            }
+            PlasmaExtras.Heading {
+                text: "Heading " + level
+                level: 5
+            }
+            PlasmaComponents.Label {
+                wrapMode: Text.WordWrap
+                width: contentColumn.width
+                text: "Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen. Lorem Ipsum is de standaard proeftekst in deze bedrijfstak sinds de 16e eeuw, toen een onbekende drukker een zethaak met letters nam en ze door elkaar husselde om een font-catalogus te maken. Het heeft niet alleen vijf eeuwen overleefd maar is ook, vrijwel onveranderd, overgenomen in elektronische letterzetting. Het is in de jaren '60 populair geworden met de introductie van Letraset vellen met Lorem Ipsum passages en meer recentelijk door desktop publishing software zoals Aldus PageMaker die versies van Lorem Ipsum bevatten."
+            }
         }
-        Rectangle { color: "green"; opacity: 0.8; anchors.fill: contentColumn; }
+        Rectangle { color: "green"; opacity: 0.8; anchors.fill: contentItem; }
     }
 
     onWidthChanged: {
-        return;
-        print("window changed");
-        if (width < navigationWidth + 200) {
-            setNavigationWidth(48);
+        //return;
+        if (width < 340 + 200) {
+            print("window changed: small " + width);
+            navigationWidth = 48;
         } else {
-            setNavigationWidth(340);
+            print("window changed: tablet " + width);
+            navigationWidth = 340;
         }
     }
 
