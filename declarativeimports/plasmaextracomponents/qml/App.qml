@@ -19,31 +19,29 @@
 
 /**Documented API
 Inherits:
-        Label
+    Item
 
 Imports:
-        QtQuick 1.1
-        org.kde.plasma.components
+    QtQuick 1.1
+    org.kde.plasma.extras
 
 Description:
-    This is a title label which uses the plasma theme.
-    The characteristics of the text will be automatically set
-    according to the plasma theme. Use this components for titles
-    in your UI, for example page or section titles.
+    This is a container for Apps. Navigation and Content area layout can
+    vary depending on the available size.
 
 Properties:
-    string text:
-    The most important property is "text", which applies to the text property of Label
-    For the other ones see Plasma Component's Label or QML primitive Text element
+    Item navigation: Navigation or Context Area.
+    Item content: The "main view"
 
 Methods:
-    See Plasma Component's Label and primitive QML Text element
+    
 
 Signals:
-    See Plasma Component's Label and primitive QML Text element
+    
 **/
 
 import QtQuick 1.1
+import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
 //import org.kde.plasma.extras 0.1 as PlasmaExtras
 
@@ -56,19 +54,21 @@ Item {
     property int contentWidth: app.width - navigationWidth
     anchors.fill: parent
 
+    PlasmaCore.Theme { id: theme }
+
     Image {
         id: contentBackground
         anchors { left: navigationBackground.right; right: parent.right; top: parent.top; bottom: parent.bottom; }
         source: "image://appbackgrounds/standard"
         fillMode: Image.Tile
         asynchronous: true
+        width: childrenRect.width
         Item {
             id: contentItem
-            width: app.width - navigationWidth
+            width: app.width - navigationWidth - space*2
             height: app.height
-            anchors { left: parent.left; leftMargin: space; top: parent.top; bottom: parent.bottom; right: parent.right; }
+            anchors { left: parent.left; leftMargin: space; rightMargin: space; top: parent.top; bottom: parent.bottom; right: parent.right; }
         }
-        //onChildrenRectChanged: root.width = childrenRect.width + contentBackground.childrenRect.width
 
     }
     Image {
@@ -82,12 +82,7 @@ Item {
         Item {
             id: navigationItem
             anchors.fill: parent
-            //anchors { left: parent.left; leftMargin: space; top: parent.top; bottom: parent.bottom; right: parent.right; }
         }
-//         onChildrenRectChanged: {
-//             width = childrenRect.width
-//             print(" set navwidth to: " + width);
-//         }
     }
     Image {
         source: "image://appbackgrounds/shadow-right"
@@ -99,18 +94,9 @@ Item {
             leftMargin: -1
         }
     }
-    Component.onCompleted: {
-        //setWidth(340);
-    }
 
     onNavigationWidthChanged: {
         navigationBackground.width = navigationWidth;
         navigationItem.width = navigationWidth;
     }
-
-//     function setNavigationWidth(w) {
-//         navigationItem.width = w;
-//         navigationWidth = w;
-//     }
-
 }
