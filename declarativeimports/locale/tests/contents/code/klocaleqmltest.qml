@@ -312,10 +312,10 @@ Item {
 
         Locale {
             id: locale
-            //TODO enums with negative value(like -1) doesn't work in QML!
-            binaryUnitDialect: Locale.IECBinaryDialect
+
+            binaryUnitDialect: Locale.DefaultBinaryUnits
             onBinaryUnitDialectChanged: {
-                console.log("the binaryUnitDialect property has been changed")
+            console.log("the binaryUnitDialect property has been changed")
             }
 
             calendarSystem: Locale.QDateCalendar

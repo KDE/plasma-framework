@@ -447,10 +447,10 @@ public:
      */
     enum BinarySizeUnits {
         /// Auto-choose a unit such that the result is in the range [0, 1000 or 1024)
-        DefaultBinaryUnits = -1,
+        DefaultBinaryUnits = 1000,
 
         // The first real unit must be 0 for the current implementation!
-        UnitByte,      ///<  B         1 byte
+        UnitByte = 0,      ///<  B         1 byte
         UnitKiloByte,  ///<  KiB/KB/kB 1024/1000 bytes.
         UnitMegaByte,  ///<  MiB/MB/MB 2^20/10^06 bytes.
         UnitGigaByte,  ///<  GiB/GB/GB 2^30/10^09 bytes.
@@ -480,8 +480,8 @@ public:
      * @see setBinaryUnitDialect
      */
     enum BinaryUnitDialect {
-        DefaultBinaryDialect = -1, ///< Used if no specific preference
-        IECBinaryDialect,          ///< KDE Default, KiB, MiB, etc. 2^(10*n)
+        DefaultBinaryDialect = 1000, ///< Used if no specific preference
+        IECBinaryDialect = 0,          ///< KDE Default, KiB, MiB, etc. 2^(10*n)
         JEDECBinaryDialect,        ///< KDE 3.5 default, KB, MB, etc. 2^(10*n)
         MetricBinaryDialect,       ///< SI Units, kB, MB, etc. 10^(3*n)
         LastBinaryDialect = MetricBinaryDialect
@@ -620,7 +620,7 @@ public:
      * @see weekNumberSystem()
      */
     enum WeekNumberSystem {
-        DefaultWeekNumber = -1, /**< The system locale default */
+        DefaultWeekNumber = 1000, /**< The system locale default */
         IsoWeekNumber     =  0, /**< ISO Week Number */
         FirstFullWeek     =  1, /**< Week 1 starts on the first Week Start Day in year ends after 7 days */
         FirstPartialWeek  =  2, /**< Week 1 starts Jan 1st ends day before first Week Start Day in year */
@@ -704,7 +704,7 @@ public:
      * @see DateTimeComponentFormat
      */
     enum DateTimeComponentFormat {
-        DefaultComponentFormat = -1, /**< The system locale default for the componant */
+        DefaultComponentFormat = 1000, /**< The system locale default for the componant */
         ShortNumber = 0,             /**< Number at its natural width, e.g. 2 for the 2nd*/
         LongNumber,                  /**< Number padded to a required width, e.g. 02 for the 2nd*/
         //OrdinalNumber                /**< Ordinal number format, e.g. "2nd" for the 2nd */
