@@ -199,6 +199,7 @@ Item {
                 top: parent.top
                 bottom: parent.bottom
                 left: icon.valid ? icon.right : parent.left
+                leftMargin: icon.valid ? parent.anchors.leftMargin : 0
                 right: parent.right
             }
             font.capitalization: theme.defaultFont.capitalization
