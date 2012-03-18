@@ -33,7 +33,7 @@
 #include <QTextStream>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "animator.h"
 #include "javascriptanimation_p.h"

@@ -27,7 +27,7 @@
 
 #include <kconfiggroup.h>
 #include <kdesktopfile.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
 
 #include "private/wallpaper_p.h"
