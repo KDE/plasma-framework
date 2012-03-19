@@ -113,9 +113,21 @@ bool CalendarSystem::isValid(const QDate &date) const
     return m_calendarSystem->isValid(date);
 }
 
-void CalendarSystem::getDate(const QDate date, int *year, int *month, int *day) const
+QVariantHash CalendarSystem::getDate(const QDate date) const
 {
-    return m_calendarSystem->getDate(date, year, month, day);
+    QVariantHash hash;
+
+    int year;
+    int month;
+    int day;
+
+    m_calendarSystem->getDate(date, &year, &month, &day);
+
+    hash["year"] = year;
+    hash["month"] = month;
+    hash["day"] = day;
+
+    return hash;
 }
 
 int CalendarSystem::year(const QDate &date) const
@@ -164,10 +176,23 @@ QDate CalendarSystem::addDays(const QDate &date, int numDays) const
     return m_calendarSystem->addDays(date, numDays);
 }
 
-void CalendarSystem::dateDifference(const QDate &fromDate, const QDate &toDate,
-                                     int *yearsDiff, int *monthsDiff, int *daysDiff, int *direction) const
+QVariantHash CalendarSystem::dateDifference(const QDate &fromDate, const QDate &toDate) const
 {
-    return m_calendarSystem->dateDifference(fromDate, toDate, yearsDiff, monthsDiff, daysDiff, direction);
+    QVariantHash hash;
+
+    int yearsDiff;
+    int monthsDiff;
+    int daysDiff;
+    int direction;
+
+    m_calendarSystem->dateDifference(fromDate, toDate, &yearsDiff, &monthsDiff, &daysDiff, &direction);
+
+    hash["years"] = yearsDiff;
+    hash["months"] = monthsDiff;
+    hash["days"] = daysDiff;
+    hash["direction"] = direction;
+
+    return hash;
 }
 
 int CalendarSystem::yearsDifference(const QDate &fromDate, const QDate &toDate) const

@@ -244,13 +244,13 @@ public:
     /**
      *
      * Returns the year, month and day portion of a given date in the current calendar system
-     *
+     * The values are returned in a hash, the available keys are,
+     * ["year"] the year of the date
+     * ["month"] the month of the date
+     * ["day"] the day of the date
      * @param date date to get year, month and day for
-     * @param year year number returned in this variable
-     * @param month month number returned in this variable
-     * @param day day of month returned in this variable
      */
-    Q_INVOKABLE void getDate(const QDate date, int *year, int *month, int *day) const;//TODO should it be part of the QML Wrapper?
+    Q_INVOKABLE QVariantHash getDate(const QDate date) const;//TODO should it be part of the QML Wrapper?
 
     /**
      * Returns the year portion of a given date in the current calendar system
@@ -340,7 +340,11 @@ public:
 
     //KDE5 make virtual?
     /**
-     * Returns the difference between two dates in years, months and days.
+     * Returns the difference between two dates with a hash, the available keys are
+     * ["years"] Returns number of years difference
+     * ["months"] Returns number of months difference
+     * ["days"] Returns number of days difference
+     * ["direction"] Returns direction of difference, 1 if fromDate <= toDate, -1 otherwise
      * The difference is always caculated from the earlier date to the later
      * date in year, month and day order, with the @p direction parameter
      * indicating which direction the difference is applied from the @p toDate.
@@ -352,13 +356,8 @@ public:
      *
      * @param fromDate The date to start from
      * @param toDate The date to end at
-     * @param yearsDiff Returns number of years difference
-     * @param monthsDiff Returns number of months difference
-     * @param daysDiff Returns number of days difference
-     * @param direction Returns direction of difference, 1 if fromDate <= toDate, -1 otherwise
      */
-    Q_INVOKABLE void dateDifference(const QDate &fromDate, const QDate &toDate,
-                        int *yearsDiff, int *monthsDiff, int *daysDiff, int *direction) const;//TODO Does it work?
+    Q_INVOKABLE QVariantHash dateDifference(const QDate &fromDate, const QDate &toDate)const;
 
     //KDE5 make virtual?
     /**

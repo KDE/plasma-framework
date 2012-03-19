@@ -213,6 +213,7 @@ Item {
 
         PlasmaComponents.Button {
             id: bt2
+            property variant hash
             anchors.horizontalCenter: column.horizontalCenter
             text: "click in order to test the CalendarSystem component"
             onClicked:{
@@ -242,7 +243,7 @@ Item {
 
                 console.log("isValid:" + calendar.isValid(2012, 33))
 
-                console.log("isValid:" + calendar.isValid(calendar.formatDate("2012-02-03"), 2010, 5, 5))//TODO
+                console.log("isValid:" + calendar.isValid(calendar.formatDate("2012-02-03"), 2010, 5, 5))
 
                 console.log("isValidIsoWeekDate:" + calendar.isValidIsoWeekDate(2012, 2, 3))
 
@@ -309,6 +310,18 @@ Item {
                 console.log("readDate:" + calendar.readDate("2012-02-03"))
 
                 console.log("applyShortYearWindow:" + calendar.applyShortYearWindow(50))
+
+                console.log("getDate:")
+                hash = calendar.getDate("2012-02-03")
+                for (var i in hash) {
+                    console.log("        " + i, "=", hash[i])
+                }
+
+                console.log("dateDifference:")
+                hash = calendar.dateDifference("2012-01-01", "2014-03-03")
+                for (var i in hash) {
+                    console.log("        " + i, "=", hash[i])
+                }
 
                 console.log("===============end===============")
             }
