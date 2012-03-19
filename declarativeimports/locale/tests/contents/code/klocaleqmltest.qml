@@ -186,6 +186,7 @@ Item {
                 console.log("readMoney:" + locale.readMoney("$ 21"))
 
                 console.log("readNumber:" + locale.readNumber(locale.convertDigits(locale.digitSet, Locale.ArabicDigits)))
+                console.log("readNumber:" + locale.readNumber(10.0,3))
 
                 console.log("readDate:" + locale.readDate("2004-02-01"))
 
