@@ -71,7 +71,6 @@ Q_ENUMS(DateTimeParseMode)
 Q_ENUMS(DigitSet)
 Q_ENUMS(MeasureSystem)
 Q_ENUMS(ReadDateFlags)
-Q_ENUMS(ReadTimeFlags)
 Q_ENUMS(SignPosition)
 Q_ENUMS(TimeFormatOption)
 Q_ENUMS(TimeProcessingOption)
@@ -1066,11 +1065,6 @@ public:
      *
      * @return The string converted to a QTime
      */
-
-    enum ReadTimeFlags {
-        WithSeconds = 0,    ///< Only accept a time string with seconds. Default (no flag set)
-        WithoutSeconds = 1  ///< Only accept a time string without seconds.
-    }; // (maybe use this enum as a bitfield, if adding independent features?)
 
     Q_INVOKABLE QTime readLocaleTime(const QString &str, bool *ok = 0,
                          TimeFormatOptions options = Locale::TimeDefault,

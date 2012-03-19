@@ -250,7 +250,7 @@ public:
      * ["day"] the day of the date
      * @param date date to get year, month and day for
      */
-    Q_INVOKABLE QVariantHash getDate(const QDate date) const;//TODO should it be part of the QML Wrapper?
+    Q_INVOKABLE QVariantHash getDate(const QDate date) const;
 
     /**
      * Returns the year portion of a given date in the current calendar system
