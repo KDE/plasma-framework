@@ -31,7 +31,6 @@ PlasmaComponents.Page {
         }
         PlasmaComponents.Slider {
             width: 140
-            animated: true
             enabled: true
         }
         PlasmaComponents.TextField {
@@ -80,7 +79,6 @@ PlasmaComponents.Page {
                     minimumValue: 0
                     maximumValue: 255
                     stepSize: 10
-                    animated: true
                     Keys.onTabPressed: blueSlider.forceActiveFocus()
                 }
 
@@ -112,7 +110,6 @@ PlasmaComponents.Page {
             id: horizontalSlider
             width: 140
             height: 20
-            animated: true
             enabled: false
         }
 
@@ -123,7 +120,6 @@ PlasmaComponents.Page {
             width: 140
             height: 20
             inverted: true
-            animated: true
             enabled: true
         }
 
@@ -140,7 +136,6 @@ PlasmaComponents.Page {
                 maximumValue: 1000
                 stepSize: 50
                 inverted: true
-                animated: true
             }
             PlasmaComponents.Label { text: verticalSlider.value }
         }
