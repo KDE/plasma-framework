@@ -82,12 +82,12 @@ QString Locale::translateQt(const char *context, const char *sourceText, const c
     return m_locale->translateQt(context, sourceText, comment);
 }
 
-QList<Locale::DigitSet> Locale::allDigitSetsList() const
+QList<int> Locale::allDigitSetsList() const
 {
-    QList<Locale::DigitSet> digitList;
+    QList<int> digitList;
 
     foreach(KLocale::DigitSet digit, m_locale->allDigitSetsList()) {
-     digitList.append((Locale::DigitSet)digit);
+     digitList.append((int)digit);
     }
 
     return digitList;

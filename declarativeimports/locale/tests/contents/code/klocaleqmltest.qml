@@ -203,6 +203,10 @@ Item {
 
                 console.log("convertDigits:" + locale.convertDigits(locale.digitSet, Locale.ArabicDigits))
 
+                for (var i in locale.allDigitSetsList) {
+                    console.log("digia:" + locale.allDigitSetsList[i])
+                }
+
                 console.log("===========end===========")
             }
         }
@@ -508,6 +512,10 @@ Item {
 
             onAllCountriesListChanged: {
                 console.log("the allCountriesList property has been changed")
+            }
+
+            onAllDigitSetsListChanged: {
+                console.log("the allDigitSetsList property has been changed")
             }
         }
 

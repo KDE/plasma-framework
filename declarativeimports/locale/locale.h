@@ -121,6 +121,7 @@ Q_PROPERTY(QStringList currencyCodeList READ currencyCodeList NOTIFY currencyCod
 Q_PROPERTY(QStringList allLanguagesList READ allLanguagesList NOTIFY allLanguagesListChanged) //read-only
 Q_PROPERTY(QStringList installedLanguages READ installedLanguages NOTIFY installedLanguagesChanged) //read-only
 Q_PROPERTY(QStringList allCountriesList READ allCountriesList NOTIFY allCountriesListChanged) //read-only
+Q_PROPERTY(QList<int> allDigitSetsList READ allDigitSetsList NOTIFY allDigitSetsListChanged) //read-only
 
 public:
     /**
@@ -222,7 +223,7 @@ public:
      * @see DigitSet
      * @see digitSetToName
      */
-    Q_INVOKABLE QList<DigitSet> allDigitSetsList() const; //TODO
+    QList<int> allDigitSetsList() const;
 
     /**
      * Returns what a decimal point should look like ("." or "," etc.)
@@ -1724,6 +1725,7 @@ Q_SIGNALS:
     void allLanguagesListChanged();
     void installedLanguagesChanged();
     void allCountriesListChanged();
+    void allDigitSetsListChanged();
 };
 
 #endif
