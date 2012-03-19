@@ -77,6 +77,10 @@ Rectangle {
                 page: "Misc.qml"
                 title: "Misc stuff"
             }
+            ListElement {
+                page: "Extras.qml"
+                title: "Extras"
+            }
         }
         delegate: ListItem {
             enabled: true

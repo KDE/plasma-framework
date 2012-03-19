@@ -54,8 +54,8 @@ Label {
     property int level: 1
     property int step: 2
 
-    anchors.topMargin: 8
     font.pointSize: headerPointSize(level)
+    wrapMode: Text.WordWrap
 
     function headerPointSize(l) {
         var n = theme.defaultFont.pointSize;
