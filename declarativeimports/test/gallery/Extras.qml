@@ -33,7 +33,7 @@ Column {
         Component.onCompleted: app.tools = toolbarlayout
     }
     //anchors.fill: parent
-    anchors.margins: space
+//     anchors.rightMargin: space*2
     width: 600
     spacing: 12
     PlasmaExtras.Title {

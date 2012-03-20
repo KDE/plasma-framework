@@ -54,7 +54,7 @@ Item {
     property alias tools: topBar.tools
 
     property alias contentArea: contentBackground
-    property int space: 12
+    property int space: 20
     property int navigationWidth: 340
     property int contentWidth: app.width - navigationWidth - space*2
     anchors.fill: parent
@@ -69,17 +69,8 @@ Item {
         //tools: PlasmaComponents.ToolBarLayout {}
 
         onToolsChanged: {
-            //print("tools changed:" + typeof(tools) + " " + tools.id);
-            //var shown;
-            // FIXME: Horrible hack, improve heuristics here.
-            if (tools.childrenRect.width > 20) {
-                //shown = true;
-                height = 48;
-            } else {
-                //shown = false;
-                height = 0;
-
-            }
+            // FIXME: questionable heuristics
+            height = (tools.childrenRect.width > 20) ? tools.childrenRect.height + space : 0
         }
     }
 
@@ -92,9 +83,9 @@ Item {
         //width: contentWidth
         Item {
             id: contentItem
-            width: contentWidth - 100
+            //width: contentWidth - 100
             height: app.height
-            anchors { left: parent.left; leftMargin: space; rightMargin: space; top: parent.top; bottom: parent.bottom; right: parent.right; }
+            anchors { left: parent.left; margins: space; top: parent.top; bottom: parent.bottom; right: parent.right; }
         }
 
     }

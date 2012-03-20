@@ -34,7 +34,7 @@ PlasmaExtras.App {
 
     ListView {
         id: pageSelector
-        width: 200
+        width: navigationWidth
         anchors {
             fill: parent
             top: content.top
