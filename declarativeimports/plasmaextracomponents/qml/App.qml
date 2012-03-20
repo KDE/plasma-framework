@@ -70,14 +70,16 @@ Item {
 
         onToolsChanged: {
             //print("tools changed:" + typeof(tools) + " " + tools.id);
-            var shown;
+            //var shown;
             // FIXME: Horrible hack, improve heuristics here.
             if (tools.childrenRect.width > 20) {
-                shown = true;
+                //shown = true;
+                height = 48;
             } else {
-                shown = false;
+                //shown = false;
+                height = 0;
+
             }
-            visible = shown;
         }
     }
 
