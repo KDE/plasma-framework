@@ -24,7 +24,8 @@ PlasmaComponents.Page {
     height: childrenRect.height
     property int implicitHeight: childrenRect.height
 
-    tools: PlasmaComponents.ToolBarLayout {
+    PlasmaComponents.ToolBarLayout {
+        id: toolbarlayout
         spacing: 5
         PlasmaComponents.Label {
             text: "Text label:"
@@ -37,6 +38,9 @@ PlasmaComponents.Page {
         }
         PlasmaComponents.TextField {
             text: "Text fields page"
+        }
+        Component.onCompleted: {
+            app.tools = toolbarlayout
         }
     }
     Column {

@@ -19,29 +19,27 @@
 
 import QtQuick 1.1
 import org.kde.plasma.components 0.1
+import org.kde.plasma.extras 0.1 as PlasmaExtras
 
-Rectangle {
+PlasmaExtras.App {
+    id: app
     width: 1000
     height: 800
-    color: "lightgrey"
 
-    ToolBar {
-        id: toolBar
-        z: 10
-        anchors {
-            top: parent.top
-            left: parent.left
-            right: parent.right
-        }
-    }
+    property string formFactor: "tablet"
 
+    navigation: pageSelector
+    content: page
 
     ListView {
         id: pageSelector
         width: 200
         anchors {
-            top: toolBar.bottom
+            fill: parent
+            top: content.top
             bottom: parent.bottom
+            left: parent.left
+            right: parent.right
         }
         model:  ListModel {
             id: pagesModel
@@ -93,28 +91,30 @@ Rectangle {
         }
     }
 
-
     Flickable {
         id: page
         clip: true
+        width: app.contentWidth
 
-        anchors {
-            top: toolBar.bottom
-            left: pageSelector.right
-            right: verticalScrollBar.left
-            bottom: horizontalScrollBar.top
-            leftMargin: 5
-            rightMargin: 5
-            topMargin: 5
-            bottomMargin: 5
-        }
-        contentWidth: pageStack.currentPage.implicitWidth
+//         anchors {
+//             top: toolBar.bottom
+//             left: pageSelector.right
+//             right: verticalScrollBar.left
+//             bottom: horizontalScrollBar.top
+//             leftMargin: 5
+//             rightMargin: 5
+//             topMargin: 5
+//             bottomMargin: 5
+//         }
+        anchors.fill: parent
+        contentWidth: app.contentWidth
         contentHeight: pageStack.currentPage.implicitHeight
 
         PageStack {
             id: pageStack
-            toolBar: toolBar
-            width: page.width
+            //toolBar: app.toolBar
+            //width: page.width
+            width: contentWidth
             height: currentPage.implicitHeight
             initialPage: Qt.createComponent("Buttons.qml")
         }
@@ -143,7 +143,7 @@ Rectangle {
         orientation: Qt.Vertical
         flickableItem: page
         anchors {
-            top: toolBar.bottom
+            top: content.top
             right: parent.right
             bottom: horizontalScrollBar.top
         }

@@ -70,57 +70,12 @@ PlasmaExtras.App {
         //Rectangle { color: "blue"; opacity: 0.3; anchors.fill: parent; }
     }
 
-    Item {
+    Loader {
         id: contentItem
+        source: "gallery/Extras.qml"
         width: app.width - navigationWidth - space*2
-        //anchors.rightMargin: space*2
-
-        Column {
-            width: contentItem.width
-            id: contentColumn
-            anchors.fill: contentItem
-            spacing: 8
-            PlasmaExtras.Title {
-                text: "Content Section"
-                elide: Text.ElideMiddle
-                //anchors { top: parent.top; left: parent.left; topMargin: 48; }
-            }
-            PlasmaExtras.Heading {
-                text: "Heading " + level
-                level: 1
-            }
-            PlasmaComponents.Label {
-                width: contentColumn.width
-                wrapMode: Text.WordWrap
-                text: "Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen. Lorem Ipsum is de standaard proeftekst in deze bedrijfstak sinds de 16e eeuw, toen een onbekende drukker een zethaak met letters nam en ze door elkaar husselde om een font-catalogus te maken. Het heeft niet alleen vijf eeuwen overleefd maar is ook, vrijwel onveranderd, overgenomen in elektronische letterzetting. Het is in de jaren '60 populair geworden met de introductie van Letraset vellen met Lorem Ipsum passages en meer recentelijk door desktop publishing software zoals Aldus PageMaker die versies van Lorem Ipsum bevatten."
-            }
-            PlasmaExtras.Heading {
-                text: "Heading " + level
-                level: 2
-            }
-            PlasmaExtras.Heading {
-                text: "Heading " + level
-                level: 3
-            }
-            PlasmaComponents.Label {
-                wrapMode: Text.WordWrap
-                width: contentColumn.width
-                text: "Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen. Lorem Ipsum is de standaard proeftekst in deze bedrijfstak sinds de 16e eeuw, toen een onbekende drukker een zethaak met letters nam en ze door elkaar husselde om een font-catalogus te maken. Het heeft niet alleen vijf eeuwen overleefd maar is ook, vrijwel onveranderd, overgenomen in elektronische letterzetting. Het is in de jaren '60 populair geworden met de introductie van Letraset vellen met Lorem Ipsum passages en meer recentelijk door desktop publishing software zoals Aldus PageMaker die versies van Lorem Ipsum bevatten."
-            }
-            PlasmaExtras.Heading {
-                text: "Heading " + level
-                level: 4
-            }
-            PlasmaExtras.Heading {
-                text: "Heading " + level
-                level: 5
-            }
-            PlasmaComponents.Label {
-                wrapMode: Text.WordWrap
-                width: contentColumn.width
-                text: "Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen. Lorem Ipsum is de standaard proeftekst in deze bedrijfstak sinds de 16e eeuw, toen een onbekende drukker een zethaak met letters nam en ze door elkaar husselde om een font-catalogus te maken. Het heeft niet alleen vijf eeuwen overleefd maar is ook, vrijwel onveranderd, overgenomen in elektronische letterzetting. Het is in de jaren '60 populair geworden met de introductie van Letraset vellen met Lorem Ipsum passages en meer recentelijk door desktop publishing software zoals Aldus PageMaker die versies van Lorem Ipsum bevatten."
-            }
-        }
+        parent: contentArea
+        anchors.margins: space*2
         Rectangle { color: "green"; opacity: 0.8; anchors.fill: contentItem; }
     }
 

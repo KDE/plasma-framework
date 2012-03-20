@@ -49,23 +49,33 @@ Item {
     id: app
     property alias navigation: navigationItem.children
     property alias content: contentItem.children
+    property alias tools: topBar.tools
+
+    property alias contentArea: contentBackground
     property int space: 12
     property int navigationWidth: 340
-    property int contentWidth: app.width - navigationWidth
+    property int contentWidth: app.width - navigationWidth - space*2
     anchors.fill: parent
 
     PlasmaCore.Theme { id: theme }
 
+    PlasmaComponents.ToolBar {
+        id: topBar
+        height: 48
+        anchors { top: parent.top; left: parent.left; right: parent.right; }
+        tools: PlasmaComponents.ToolBarLayout {}
+    }
+
     Image {
         id: contentBackground
-        anchors { left: navigationBackground.right; right: parent.right; top: parent.top; bottom: parent.bottom; }
+        anchors { left: navigationBackground.right; right: parent.right; top: topBar.bottom; bottom: parent.bottom; rightMargin: space*2 }
         source: "image://appbackgrounds/standard"
         fillMode: Image.Tile
         asynchronous: true
-        width: childrenRect.width
+        //width: contentWidth
         Item {
             id: contentItem
-            width: app.width - navigationWidth - space*2
+            width: contentWidth - 100
             height: app.height
             anchors { left: parent.left; leftMargin: space; rightMargin: space; top: parent.top; bottom: parent.bottom; right: parent.right; }
         }
@@ -73,7 +83,7 @@ Item {
     }
     Image {
         id: navigationBackground
-        anchors { left: parent.left; top: parent.top; bottom: parent.bottom; }
+        anchors { left: parent.left; top: topBar.bottom; bottom: parent.bottom; }
         source: "image://appbackgrounds/contextarea"
         fillMode: Image.Tile
         asynchronous: true
@@ -89,10 +99,17 @@ Item {
         fillMode: Image.Tile
         anchors {
             left: navigationBackground.right
-            top: parent.top
+            top: topBar.bottom
             bottom: parent.bottom
             leftMargin: -1
         }
+    }
+
+    onContentChanged: {
+        print("content changed to ");
+        //content.parent = contentBackground;
+        //contentItem.width = contentWidth;
+        //contentItem.anchors.rightMargin = 100
     }
 
     onNavigationWidthChanged: {

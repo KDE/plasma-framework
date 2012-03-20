@@ -22,7 +22,9 @@ import org.kde.plasma.components 0.1 as PlasmaComponents
 
 PlasmaComponents.Page {
     height: childrenRect.height
-    tools: PlasmaComponents.ToolBarLayout {
+    
+    PlasmaComponents.ToolBarLayout {
+        id: toolbarlayout
         spacing: 5
         PlasmaComponents.Button {
             text: "Button"
@@ -31,6 +33,9 @@ PlasmaComponents.Page {
             text: "toolbar of the Buttons page"
         }
         PlasmaComponents.TextField {}
+    }
+    Component.onCompleted: {
+        app.tools = toolbarlayout
     }
 
     Column {

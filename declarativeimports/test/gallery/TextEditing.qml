@@ -22,10 +22,12 @@ import org.kde.plasma.components 0.1 as PlasmaComponents
 
 PlasmaComponents.Page {
     height: editThing.height
-    property int implicitHeight: childrenRect.height
+    width: 500
+    //property int implicitHeight: childrenRect.height
     //scale: 1.25
 
-    tools: PlasmaComponents.ToolBarLayout {
+    PlasmaComponents.ToolBarLayout {
+        id: toolbarlayout
         spacing: 5
         PlasmaComponents.Label {
             text: "Text label:"
@@ -38,6 +40,9 @@ PlasmaComponents.Page {
         }
         PlasmaComponents.TextField {
             text: "Text fields page"
+        }
+        Component.onCompleted: {
+            app.tools = toolbarlayout
         }
     }
     MouseArea {
@@ -57,11 +62,11 @@ PlasmaComponents.Page {
         PlasmaComponents.TextField {
             placeholderText: "Try copy & paste"
             text: "The cat bites into the socks"
-            width: parent.width
+            width: editThing.width
             clearButtonShown: true
         }
         PlasmaComponents.TextArea {
-            width: parent.width
+            width: editThing.width
             height: 200
             placeholderText: "Touch copy & paste not implemented yet."
         }
