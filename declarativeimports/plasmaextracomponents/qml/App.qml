@@ -68,7 +68,7 @@ Item {
 
     Image {
         id: contentBackground
-        anchors { left: navigationBackground.right; right: parent.right; top: topBar.bottom; bottom: parent.bottom; rightMargin: space*2 }
+        anchors { left: navigationBackground.right; right: parent.right; top: topBar.bottom; bottom: parent.bottom; }
         source: "image://appbackgrounds/standard"
         fillMode: Image.Tile
         asynchronous: true
