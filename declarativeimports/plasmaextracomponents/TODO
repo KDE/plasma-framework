@@ -6,6 +6,6 @@ o remove mobilecomponents' resourceinstance
 o port appbackgrounds
 o porting ResourceInstance
 - subtitle for Title (take from active-settings)
-- Heading { level: 1 } new Component
-- App.qml
+o Heading { level: 1 } new Component
+o App.qml (WIP)
 
