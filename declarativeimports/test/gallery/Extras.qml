@@ -28,7 +28,10 @@ Column {
         title: "Plasma Components API documentation"
     }
 
-    
+    ToolBarLayout {
+        id: toolbarlayout
+        Component.onCompleted: app.tools = toolbarlayout
+    }
     //anchors.fill: parent
     anchors.margins: space
     width: 600

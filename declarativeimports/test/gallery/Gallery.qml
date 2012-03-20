@@ -24,7 +24,7 @@ import org.kde.plasma.extras 0.1 as PlasmaExtras
 PlasmaExtras.App {
     id: app
     width: 1000
-    height: 800
+    height: 600
     navigationWidth: 200
 
     property string formFactor: "tablet"

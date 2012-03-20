@@ -29,9 +29,12 @@ Description:
     This is a container for Apps. Navigation and Content area layout can
     vary depending on the available size.
 
+    Note that App is experimental, its API might change
+
 Properties:
     Item navigation: Navigation or Context Area.
     Item content: The "main view"
+    ToolBarLayout tools: alias to the topBar's ToolBar.tools
 
 Methods:
     
@@ -43,7 +46,6 @@ Signals:
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
-//import org.kde.plasma.extras 0.1 as PlasmaExtras
 
 Item {
     id: app
@@ -61,9 +63,22 @@ Item {
 
     PlasmaComponents.ToolBar {
         id: topBar
-        height: 48
+        height: visible ? 48 : 0
+        //visible: tools.id != "undefined"
         anchors { top: parent.top; left: parent.left; right: parent.right; }
-        tools: PlasmaComponents.ToolBarLayout {}
+        //tools: PlasmaComponents.ToolBarLayout {}
+
+        onToolsChanged: {
+            //print("tools changed:" + typeof(tools) + " " + tools.id);
+            var shown;
+            // FIXME: Horrible hack, improve heuristics here.
+            if (tools.childrenRect.width > 20) {
+                shown = true;
+            } else {
+                shown = false;
+            }
+            visible = shown;
+        }
     }
 
     Image {
