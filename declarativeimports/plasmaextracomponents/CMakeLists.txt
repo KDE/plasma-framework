@@ -10,10 +10,8 @@ set(plasmaextracomponents_SRCS
     plasmaextracomponentsplugin.cpp
     )
 
-INCLUDE_DIRECTORIES(
-        ${CMAKE_SOURCE_DIR}
-        ${CMAKE_BINARY_DIR}
-        ${KDE4_INCLUDES}
+include_directories(
+        ${KACTIVITIES_INCLUDE_DIRS}
 )
 
 qt4_automoc(${plasmaextracomponents_SRCS})
