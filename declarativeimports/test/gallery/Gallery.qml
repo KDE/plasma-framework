@@ -25,6 +25,7 @@ PlasmaExtras.App {
     id: app
     width: 1000
     height: 800
+    navigationWidth: 200
 
     property string formFactor: "tablet"
 
