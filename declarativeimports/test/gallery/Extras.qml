@@ -22,6 +22,13 @@ import org.kde.plasma.components 0.1
 import org.kde.plasma.extras 0.1 as PlasmaExtras
 
 Column {
+
+    PlasmaExtras.ResourceInstance {
+        uri: "http://api.kde.org/4.x-api/plasma-qml-apidocs/"
+        title: "Plasma Components API documentation"
+    }
+
+    
     //anchors.fill: parent
     anchors.margins: space
     width: 600
