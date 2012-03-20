@@ -31,6 +31,11 @@ PlasmaExtras.App {
     navigation: pageSelector
     content: page
 
+    PlasmaExtras.ResourceInstance {
+        uri: "http://api.kde.org/4.x-api/plasma-qml-apidocs/"
+        title: "Plasma Components API documentation"
+    }
+
     ListView {
         id: pageSelector
         width: 200
