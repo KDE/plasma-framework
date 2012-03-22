@@ -66,11 +66,6 @@ Properties:
 
 Plasma Properties:
 
-        bool animated:
-        This property holds if the slider will animate or not when other point is clicked,
-    and the slider handler is not being dragged.
-    The default value is false.
-
         alias inverted:
         This property holds if the slider visualizations has an inverted direction.
     The default value is false.
