@@ -179,7 +179,7 @@ Item {
     property alias text: textInput.text
     property alias maximumLength: textInput.maximumLength
 
-    signal accepted
+    signal accepted()
 
     //Plasma api
     property bool clearButtonShown: false
