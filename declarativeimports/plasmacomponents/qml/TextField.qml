@@ -92,7 +92,7 @@ Properties:
     <code>
     import QtQuick 1.0
     TextInput {
-        validator: IntValidator{bottom: 11; top: 31;}
+        validator: IntValidator { bottom: 11; top: 31 }
         focus: true
     }
     </code>
