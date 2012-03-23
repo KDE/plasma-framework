@@ -35,12 +35,18 @@ Properties:
       * bool sectionDelegate:
         If true the item will be a delegate for a section, so will look like a "title" for the otems under it.
 
+      * bool enabled:
+        Holds if the item emits signals related to mouse interaction.
+        The default value is false.
+
 Signals:
       * clicked():
         This handler is called when there is a click.
+        This is disabled by default, use enable property to activate it.
 
       * pressAndHold():
         The user pressed the item with the mouse and didn't release it for a certain amount of time.
+        This is disabled by default, use enable property to activate it.
 **/
 
 import QtQuick 1.0
@@ -51,7 +57,7 @@ Item {
     default property alias content: paddingItem.data
 
     //this defines if the item will emit clicked and look pressed on mouse down
-    property bool enabled: false
+    property alias enabled: itemMouse.enabled
     //item has been clicked or pressed+hold
     signal clicked
     signal pressAndHold
@@ -73,6 +79,7 @@ Item {
         onCheckedChanged: background.prefix = (listItem.checked ? "pressed" : "normal")
         onSectionDelegateChanged: background.prefix = (listItem.sectionDelegate ? "section" : "normal")
     }
+
     PlasmaCore.FrameSvgItem {
         id : background
         imagePath: "widgets/listitem"
@@ -99,7 +106,7 @@ Item {
         id: itemMouse
         property bool changeBackgroundOnPress: !listItem.checked && !listItem.sectionDelegate
         anchors.fill: background
-        enabled: listItem.enabled
+        enabled: false
 
         onClicked: listItem.clicked()
         onPressAndHold: listItem.pressAndHold()
