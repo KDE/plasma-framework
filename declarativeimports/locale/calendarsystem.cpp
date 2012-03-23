@@ -86,23 +86,6 @@ QDate CalendarSystem::latestValidDate() const
     return m_calendarSystem->latestValidDate();
 }
 
-bool CalendarSystem::isValid(int year, int month, int day) const
-{
-   return m_calendarSystem->isValid(year, month, day);
-}
-
-
-bool CalendarSystem::isValid(int year, int dayOfYear) const
-{
-    return m_calendarSystem->isValid(year, dayOfYear);
-}
-
-
-bool CalendarSystem::isValid(const QString &eraName, int yearInEra, int month, int day) const
-{
-    return m_calendarSystem->isValid(eraName, yearInEra, month, day);
-}
-
 bool CalendarSystem::isValidIsoWeekDate(int year, int isoWeekNumber, int dayOfIsoWeek) const
 {
     return m_calendarSystem->isValidIsoWeekDate(year, isoWeekNumber, dayOfIsoWeek);
@@ -210,49 +193,19 @@ int CalendarSystem::daysDifference(const QDate &fromDate, const QDate &toDate) c
     return m_calendarSystem->daysDifference(fromDate, toDate);
 }
 
-int CalendarSystem::monthsInYear(const QDate &date) const
-{
-    return m_calendarSystem->monthsInYear(date);
-}
-
 int CalendarSystem::monthsInYear(int year) const
 {
     return m_calendarSystem->monthsInYear(year);
 }
 
-int CalendarSystem::weeksInYear(const QDate &date) const
-{
-    return weeksInYear(date, Locale::DefaultWeekNumber);
-}
-
-int CalendarSystem::weeksInYear(int year) const
-{
-    return weeksInYear(year, Locale::DefaultWeekNumber);
-}
-
-int CalendarSystem::weeksInYear(const QDate &date, Locale::WeekNumberSystem weekNumberSystem) const
-{
-    return m_calendarSystem->weeksInYear(date, (KLocale::WeekNumberSystem)weekNumberSystem);
-}
-
-int CalendarSystem::weeksInYear(int year, Locale::WeekNumberSystem weekNumberSystem) const
+int CalendarSystem::weeksInYear(int year, WeekNumberSystem weekNumberSystem) const
 {
      return m_calendarSystem->weeksInYear(year, (KLocale::WeekNumberSystem)weekNumberSystem);
-}
-
-int CalendarSystem::daysInYear(const QDate &date) const
-{
-    return m_calendarSystem->daysInYear(date);
 }
 
 int CalendarSystem::daysInYear(int year) const
 {
     return m_calendarSystem->daysInYear(year);
-}
-
-int CalendarSystem::daysInMonth(const QDate &date) const
-{
-    return m_calendarSystem->daysInMonth(date);
 }
 
 int CalendarSystem::daysInMonth(int year, int month) const
@@ -275,24 +228,14 @@ int CalendarSystem::dayOfWeek(const QDate &date) const
     return m_calendarSystem->dayOfWeek(date);
 }
 
-int CalendarSystem::week(const QDate &date, int *yearNum) const
+int CalendarSystem::week(const QDate &date, WeekNumberSystem weekNumberSystem) const
 {
-    return week(date, Locale::DefaultWeekNumber, yearNum);
-}
-
-int CalendarSystem::week(const QDate &date, Locale::WeekNumberSystem weekNumberSystem, int *yearNum) const
-{
-    return m_calendarSystem->week(date, (KLocale::WeekNumberSystem)weekNumberSystem, yearNum);
+    return m_calendarSystem->week(date, (KLocale::WeekNumberSystem)weekNumberSystem);
 }
 
 bool CalendarSystem::isLeapYear(int year) const
 {
     return m_calendarSystem->isLeapYear(year);
-}
-
-bool CalendarSystem::isLeapYear(const QDate &date) const
-{
-    return m_calendarSystem->isLeapYear(date);
 }
 
 QDate CalendarSystem::firstDayOfYear(int year) const
@@ -305,17 +248,6 @@ QDate CalendarSystem::lastDayOfYear(int year) const
     return m_calendarSystem->lastDayOfYear(year);
 }
 
-QDate CalendarSystem::firstDayOfYear(const QDate &date) const
-{
-    return m_calendarSystem->firstDayOfYear(date);
-}
-
-
-QDate CalendarSystem::lastDayOfYear(const QDate &date) const
-{
-    return m_calendarSystem->lastDayOfYear(date);
-}
-
 QDate CalendarSystem::firstDayOfMonth(int year, int month) const
 {
    return m_calendarSystem->firstDayOfMonth(year, month);
@@ -326,24 +258,9 @@ QDate CalendarSystem::lastDayOfMonth(int year, int month) const
     return m_calendarSystem->lastDayOfMonth(year, month);
 }
 
-QDate CalendarSystem::firstDayOfMonth(const QDate &date) const
-{
-   return m_calendarSystem->firstDayOfMonth(date);
-}
-
-QDate CalendarSystem::lastDayOfMonth(const QDate &date) const
-{
-    return m_calendarSystem->lastDayOfMonth(date);
-}
-
 QString CalendarSystem::monthName(int month, int year, CalendarSystem::MonthNameFormat format) const
 {
     return m_calendarSystem->monthName(month, year, (KCalendarSystem::MonthNameFormat)format);
-}
-
-QString CalendarSystem::monthName(const QDate &date, MonthNameFormat format) const
-{
-    return m_calendarSystem->monthName(date, (KCalendarSystem::MonthNameFormat)format);
 }
 
 QString CalendarSystem::weekDayName(int weekDay, CalendarSystem::WeekDayNameFormat format) const
@@ -351,59 +268,18 @@ QString CalendarSystem::weekDayName(int weekDay, CalendarSystem::WeekDayNameForm
     return m_calendarSystem->weekDayName(weekDay, (KCalendarSystem::WeekDayNameFormat)format);
 }
 
-QString CalendarSystem::weekDayName(const QDate &date, WeekDayNameFormat format) const
-{
-   return m_calendarSystem->weekDayName(date, (KCalendarSystem::WeekDayNameFormat)format);
-}
-
-QString CalendarSystem::formatDate(const QDate &fromDate, Locale::DateFormat toFormat) const
-{
-    return m_calendarSystem->formatDate(fromDate, (KLocale::DateFormat)toFormat);
-}
-
-QString CalendarSystem::formatDate(const QDate &fromDate, const QString &toFormat,
-                                    Locale::DateTimeFormatStandard standard) const
-{
-    return m_calendarSystem->formatDate(fromDate, toFormat, (KLocale::DateTimeFormatStandard)standard);
-}
-
-
-QString CalendarSystem::formatDate(const QDate &fromDate, const QString &toFormat, Locale::DigitSet digitSet,
-                                    Locale::DateTimeFormatStandard formatStandard) const
-{
-    return m_calendarSystem->formatDate(fromDate, toFormat, (KLocale::DigitSet)digitSet,
-                                        (KLocale::DateTimeFormatStandard)formatStandard);
-}
-
-QString CalendarSystem::formatDate(const QDate &date, Locale::DateTimeComponent component,
-                                    Locale::DateTimeComponentFormat format,
-                                    Locale::WeekNumberSystem weekNumberSystem) const
+QString CalendarSystem::formatDate(const QDate &date, DateTimeComponent component,
+                                    DateTimeComponentFormat format,
+                                    WeekNumberSystem weekNumberSystem) const
 {
     return m_calendarSystem->formatDate(date, (KLocale::DateTimeComponent)component,
                                         (KLocale::DateTimeComponentFormat)format,
                                         (KLocale::WeekNumberSystem)weekNumberSystem);
 }
 
-QDate CalendarSystem::readDate(const QString &str, bool *ok) const
+QDate CalendarSystem::readDate(const QString &str, ReadDateFlags flags) const
 {
-    return m_calendarSystem->readDate(str, ok);
-}
-
-QDate CalendarSystem::readDate(const QString &str, Locale::ReadDateFlags flags, bool *ok) const
-{
-    return m_calendarSystem->readDate(str, (KLocale::ReadDateFlags)flags, ok);
-}
-
-QDate CalendarSystem::readDate(const QString &inputString, const QString &formatString, bool *ok) const
-{
-    return readDate(inputString, formatString, ok, Locale::KdeFormat);
-}
-
-QDate CalendarSystem::readDate(const QString &inputString, const QString &formatString, bool *ok,
-                                Locale::DateTimeFormatStandard formatStandard) const
-{
-    return m_calendarSystem->readDate(inputString, formatString, ok,
-                                      (KLocale::DateTimeFormatStandard)formatStandard);
+    return m_calendarSystem->readDate(str, (KLocale::ReadDateFlags)flags);
 }
 
 int CalendarSystem::shortYearWindowStartYear() const

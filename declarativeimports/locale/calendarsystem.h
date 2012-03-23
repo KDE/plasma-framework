@@ -43,6 +43,10 @@ Q_OBJECT
 Q_ENUMS(StringFormat)
 Q_ENUMS(MonthNameFormat)
 Q_ENUMS(WeekDayNameFormat)
+Q_ENUMS(WeekNumberSystem)
+Q_ENUMS(ReadDateFlags)
+Q_ENUMS(DateTimeComponent)
+Q_ENUMS(DateTimeComponentFormat)
 
 //properties
 Q_PROPERTY(Locale::CalendarSystem calendarSystem READ calendarSystem NOTIFY calendarSystemChanged)//read-only
@@ -61,6 +65,80 @@ public:
 
     //ctor
      CalendarSystem(QObject *parent = 0);
+
+     //the above are enums which I borrow from the Locale class
+     /**
+      *
+      * System used for Week Numbers
+      */
+     enum WeekNumberSystem {
+         DefaultWeekNumber = 1000, /**< The system locale default */
+         IsoWeekNumber     =  0, /**< ISO Week Number */
+         FirstFullWeek     =  1, /**< Week 1 starts on the first Week Start Day in year ends after 7 days */
+         FirstPartialWeek  =  2, /**< Week 1 starts Jan 1st ends day before first Week Start Day in year */
+         SimpleWeek        =  3  /**< Week 1 starts Jan 1st ends after 7 days */
+     };
+
+     enum ReadDateFlags {
+        NormalFormat          =    1, /**< Only accept a date string in
+                                           the locale LongDate format */
+        shortFormat           =    2, /**< Only accept a date string in
+                                           the locale ShortDate format */
+        IsoFormat             =    4, /**< Only accept a date string in
+                                           ISO date format (YYYY-MM-DD) */
+        IsoWeekFormat         =    8, /**< Only accept a date string in
+                                           ISO Week date format (YYYY-Www-D) */
+        IsoOrdinalFormat      =   16  /**< Only accept a date string in
+                                           ISO Week date format (YYYY-DDD) */
+    };
+
+    /**
+     * The various Components that make up a Date / Time
+     * In the future the Components may be combined as flags for dynamic
+     * generation of Date Formats.
+     */
+    enum DateTimeComponent {
+        Year          = 0x1,        /**< The Year portion of a date, may be number or name */
+        YearName      = 0x2,        /**< The Year Name portion of a date */
+        Month         = 0x4,        /**< The Month portion of a date, may be number or name */
+        MonthName     = 0x8,        /**< The Month Name portion of a date */
+        Day           = 0x10,       /**< The Day portion of a date, may be number or name */
+        DayName       = 0x20,       /**< The Day Name portion of a date */
+        JulianDay     = 0x40,       /**< The Julian Day of a date */
+        EraName       = 0x80,       /**< The Era Name portion of a date */
+        EraYear       = 0x100,      /**< The Era and Year portion of a date */
+        YearInEra     = 0x200,      /**< The Year In Era portion of a date */
+        DayOfYear     = 0x400,      /**< The Day Of Year portion of a date, may be number or name */
+        DayOfYearName = 0x800,      /**< The Day Of Year Name portion of a date */
+        DayOfWeek     = 0x1000,     /**< The Day Of Week / Weekday portion of a date, may be number or name */
+        DayOfWeekName = 0x2000,     /**< The Day Of Week Name / Weekday Name portion of a date */
+        Week          = 0x4000,     /**< The Week Number portion of a date */
+        WeekYear      = 0x8000,     /**< The Week Year portion of a date */
+        MonthsInYear  = 0x10000,    /**< The Months In Year portion of a date */
+        WeeksInYear   = 0x20000,    /**< The Weeks In Year portion of a date */
+        DaysInYear    = 0x40000,    /**< The Days In Year portion of a date */
+        DaysInMonth   = 0x80000,    /**< The Days In Month portion of a date */
+        DaysInWeek    = 0x100000,   /**< The Days In Week portion of a date */
+        Hour          = 0x200000,   /**< The Hours portion of a date */
+        Minute        = 0x400000,   /**< The Minutes portion of a date */
+        Second        = 0x800000,   /**< The Seconds portion of a date */
+        Millisecond   = 0x1000000,  /**< The Milliseconds portion of a date */
+        DayPeriod     = 0x2000000,  /**< The Day Period portion of a date, e.g. AM/PM */
+        DayPeriodHour = 0x4000000,  /**< The Day Period Hour portion of a date */
+        Timezone      = 0x8000000,  /**< The Time Zone portion of a date, may be offset or name */
+        TimezoneName  = 0x10000000, /**< The Time Zone Name portion of a date */
+        UnixTime      = 0x20000000  /**< The UNIX Time portion of a date */
+    };
+
+    enum DateTimeComponentFormat {
+        DefaultComponentFormat = 1000, /**< The system locale default for the componant */
+        ShortNumber = 0,             /**< Number at its natural width, e.g. 2 for the 2nd*/
+        LongNumber,                  /**< Number padded to a required width, e.g. 02 for the 2nd*/
+        narrowName = 3,              /**< Narrow text format, may not be unique, e.g. M for Monday */
+        shortName,                   /**< Short text format, e.g. Mon for Monday */
+        longName                     /**< Long text format, e.g. Monday for Monday */
+        };
+    //end of the borrowing enums
 
     /**
      * Format for returned year number / month number / day number as string.
@@ -94,7 +172,7 @@ public:
     * Returns the list of currently supported Calendar Systems
     * @return list of Calendar Systems
     */
-    static QList<Locale::CalendarSystem> calendarSystemsList();
+    static QList<Locale::CalendarSystem> calendarSystemsList();//TODO
 
     /**
      *
@@ -186,41 +264,6 @@ public:
      */
     virtual QDate latestValidDate() const;
 
-    /**
-     * Returns whether a given date is valid in this calendar system.
-     *
-     * @param year the year portion of the date to check
-     * @param month the month portion of the date to check
-     * @param day the day portion of the date to check
-     * @return @c true if the date is valid, @c false otherwise
-     */
-   Q_INVOKABLE bool isValid(int year, int month, int day) const;
-
-    //KDE5 make virtual?
-    /**
-     *
-     * Returns whether a given date is valid in this calendar system.
-     *
-     * @param year the year portion of the date to check
-     * @param dayOfYear the day of year portion of the date to check
-     * @return @c true if the date is valid, @c false otherwise
-     */
-    Q_INVOKABLE bool isValid(int year, int dayOfYear) const;
-
-    //KDE5 make virtual?
-    /**
-     *
-     * Returns whether a given date is valid in this calendar system.
-     *
-     * @param eraName the Era Name portion of the date to check
-     * @param yearInEra the Year In Era portion of the date to check
-     * @param month the Month portion of the date to check
-     * @param day the Day portion of the date to check
-     * @return @c true if the date is valid, @c false otherwise
-     */
-    Q_INVOKABLE bool isValid(const QString &eraName, int yearInEra, int month, int day) const;
-
-    //KDE5 make virtual?
     /**
      *
      * Returns whether a given date is valid in this calendar system.
@@ -399,15 +442,6 @@ public:
     Q_INVOKABLE int daysDifference(const QDate &fromDate, const QDate &toDate) const;
 
     /**
-     * Returns number of months in the given year
-     *
-     * @param date the date to obtain year from
-     * @return number of months in the year, -1 if input date invalid
-     */
-    Q_INVOKABLE int monthsInYear(const QDate &date) const;
-
-    //KDE5 make virtual?
-    /**
      *
      * Returns number of months in the given year
      *
@@ -417,39 +451,6 @@ public:
     Q_INVOKABLE int monthsInYear(int year) const;
 
     /**
-     * Returns the number of localized weeks in the given year.
-     *
-     * @param date the date to obtain year from
-     * @return number of weeks in the year, -1 if input date invalid
-     */
-    Q_INVOKABLE int weeksInYear(const QDate &date) const;
-
-    //KDE5 Merge with virtual weeksInYear with default
-    /**
-     *
-     * Returns the number of Weeks in a year using the required Week Number System.
-     *
-     * Unless you specifically want a particular Week Number System (e.g. ISO Weeks)
-     * you should use the localized number of weeks provided by weeksInYear().
-     *
-     * @see week()
-     * @see formatDate()
-     * @param date the date to obtain year from
-     * @param weekNumberSystem the week number system to use
-     * @return number of weeks in the year, -1 if  date invalid
-     */
-    Q_INVOKABLE int weeksInYear(const QDate &date, Locale::WeekNumberSystem weekNumberSystem) const;
-
-    /**
-     * Returns the number of localized weeks in the given year.
-     *
-     * @param year the year
-     * @return number of weeks in the year, -1 if input date invalid
-     */
-    Q_INVOKABLE  int weeksInYear(int year) const;
-
-    //KDE5 Merge with virtual weeksInYear with default
-    /**
      *
      * Returns the number of Weeks in a year using the required Week Number System.
      *
@@ -462,17 +463,8 @@ public:
      * @param weekNumberSystem the week number system to use
      * @return number of weeks in the year, -1 if  date invalid
      */
-    Q_INVOKABLE int weeksInYear(int year, Locale::WeekNumberSystem weekNumberSystem) const;
+    Q_INVOKABLE int weeksInYear(int year, WeekNumberSystem weekNumberSystem) const;
 
-    /**
-     * Returns the number of days in the given year.
-     *
-     * @param date the date to obtain year from
-     * @return number of days in year, -1 if input date invalid
-     */
-    Q_INVOKABLE  int daysInYear(const QDate &date) const;
-
-    //KDE5 make virtual?
     /**
      *
      * Returns the number of days in the given year.
@@ -482,15 +474,6 @@ public:
      */
     Q_INVOKABLE int daysInYear(int year) const;
 
-    /**
-     * Returns the number of days in the given month.
-     *
-     * @param date the date to obtain month from
-     * @return number of days in month, -1 if input date invalid
-     */
-    Q_INVOKABLE  int daysInMonth(const QDate &date) const;
-
-    //KDE5 make virtual?
     /**
      *
      * Returns the number of days in the given month.
@@ -531,27 +514,6 @@ public:
      */
     Q_INVOKABLE int dayOfWeek(const QDate &date) const;
 
-    //KDE5 Make virtual?
-    /**
-     * Returns the localized Week Number for the date.
-     *
-     * This may be ISO, US, or any other supported week numbering scheme.  If
-     * you specifically require the ISO Week or any other scheme, you should use
-     * the week(Locale::WeekNumberSystem) form.
-     *
-     * If the date falls in the last week of the previous year or the first
-     * week of the following year, then the yearNum returned will be set to the
-     * appropriate year.
-     *
-     * @see weeksInYear()
-     * @see formatDate()
-     * @param date the date to obtain week from
-     * @param yearNum returns the year the date belongs to
-     * @return localized week number, -1 if input date invalid
-     */
-    Q_INVOKABLE int week(const QDate &date, int *yearNum = 0) const;
-
-    //KDE5 Make virtual?
     /**
      * Returns the Week Number for the date in the required Week Number System.
      *
@@ -572,7 +534,7 @@ public:
      * @param yearNum returns the year the date belongs to
      * @return week number, -1 if input date invalid
      */
-    Q_INVOKABLE int week(const QDate &date, Locale::WeekNumberSystem weekNumberSystem, int *yearNum = 0) const;
+    Q_INVOKABLE int week(const QDate &date, WeekNumberSystem weekNumberSystem) const;
 
     /**
      * Returns whether a given year is a leap year.
@@ -585,18 +547,6 @@ public:
      */
     Q_INVOKABLE bool isLeapYear(int year) const;
 
-    /**
-     * Returns whether a given date falls in a leap year.
-     *
-     * Input date must be checked for validity in current Calendar System prior to calling, no
-     * validity checking performed in this routine, behaviour is undefined in invalid case.
-     *
-     * @param date the date to check
-     * @return @c true if the date falls in a leap year, @c false otherwise
-     */
-    Q_INVOKABLE  bool isLeapYear(const QDate &date) const;
-
-    //KDE5 Make virtual?
     /**
      *
      * Returns a QDate containing the first day of the year
@@ -617,28 +567,6 @@ public:
      */
     Q_INVOKABLE QDate lastDayOfYear(int year) const;
 
-    //KDE5 Make virtual?
-    /**
-     *
-     * Returns a QDate containing the first day of the year
-     *
-     * @param date The year to return the date for, defaults to today
-     * @return The first day of the year
-     */
-    Q_INVOKABLE QDate firstDayOfYear(const QDate &date = QDate::currentDate()) const;
-
-    //KDE5 Make virtual?
-    /**
-     * @since 4.6
-     *
-     * Returns a QDate containing the last day of the year
-     *
-     * @param date The year to return the date for, defaults to today
-     * @return The last day of the year
-     */
-    Q_INVOKABLE QDate lastDayOfYear(const QDate &date = QDate::currentDate()) const;
-
-    //KDE5 Make virtual?
     /**
      *
      * Returns a QDate containing the first day of the month
@@ -660,26 +588,6 @@ public:
      */
     Q_INVOKABLE QDate lastDayOfMonth(int year, int month) const;
 
-    //KDE5 Make virtual?
-    /**
-     *
-     * Returns a QDate containing the first day of the month
-     *
-     * @param date The month to return the date for, defaults to today
-     * @return The first day of the month
-     */
-    Q_INVOKABLE QDate firstDayOfMonth(const QDate &date = QDate::currentDate()) const;
-
-    //KDE5 Make virtual?
-    /**
-     *
-     * Returns a QDate containing the last day of the month
-     *
-     * @param date The month to return the date for, defaults to today
-     * @return The last day of the month
-     */
-    Q_INVOKABLE QDate lastDayOfMonth(const QDate &date = QDate::currentDate()) const;
-
     /**
      * Gets specific calendar type month name for a given month number
      * If an invalid month is specified, QString() is returned.
@@ -692,15 +600,6 @@ public:
     Q_INVOKABLE QString monthName(int month, int year, MonthNameFormat format = LongName) const;
 
     /**
-     * Gets specific calendar type month name for a given date
-     *
-     * @param date date to obtain month from
-     * @param format specifies whether the short month name or long month name should be used
-     * @return name of the month, empty string if any error
-     */
-    Q_INVOKABLE QString monthName(const QDate &date, MonthNameFormat format = LongName) const;
-
-    /**
      * Gets specific calendar type week day name.
      * If an invalid week day is specified, QString() is returned.
      *
@@ -711,181 +610,15 @@ public:
     Q_INVOKABLE QString weekDayName(int weekDay, WeekDayNameFormat format = LongDayName) const;
 
     /**
-     * Gets specific calendar type week day name.
-     *
-     * @param date the date
-     * @param format specifies whether the short month name or long month name should be used
-     * @return day name, empty string if any error
-     */
-    Q_INVOKABLE QString weekDayName(const QDate &date, WeekDayNameFormat format = LongDayName) const;
-
-    /**
-     * Returns a string formatted to the current locale's conventions
-     * regarding dates.
-     *
-     * Uses the calendar system's internal locale set when the instance was
-     * created, which ensures that the correct calendar system and locale
-     * settings are respected, which would not occur in some cases if using
-     * the global locale.  Defaults to global locale.
-     *
-     * @see Locale::formatDate
-     *
-     * @param fromDate the date to be formatted
-     * @param toFormat category of date format to use
-     *
-     * @return The date as a string
-     */
-    Q_INVOKABLE QString formatDate(const QDate &fromDate, Locale::DateFormat toFormat = Locale::LongDate) const;
-
-    //KDE5 Make virtual
-    /**
-     *
-     * Returns a string formatted to the given format and localised to the
-     * correct language and digit set using the requested format standard.
-     *
-     *        *** WITH GREAT POWER COMES GREAT RESPONSIBILITY ***
-     * Please use with care and only in situations where the DateFormat enum
-     * or locale formats or individual string methods do not provide what you
-     * need.  You should almost always translate your format string as
-     * documented.  Using the standard DateFormat options instead would take
-     * care of the translation for you.
-     *
-     * Warning: The %n element differs from the GNU/POSIX standard where it is
-     * defined as a newline.  KDE currently uses this for short day number.  It
-     * is recommended for compatibility purposes to use %-m instead.
-     *
-     * The toFormat parameter is a good candidate to be made translatable,
-     * so that translators can adapt it to their language's convention.
-     * There should also be a context using the "kdedt-format" keyword (for
-     * automatic validation of translations) and stating the format's purpose:
-     * \code
-     * QDate reportDate;
-     * KGlobal::locale()->calendar()->setDate(reportDate, reportYear, reportMonth, 1);
-     * dateFormat = i18nc("(kdedt-format) Report month and year in report header", "%B %Y"));
-     * dateString = KGlobal::locale()->calendar()->formatDate(reportDate, dateFormat);
-     * \endcode
-     *
-     * The date format string can be defined using either the KDE or POSIX standards.
-     * The KDE standard closely follows the POSIX standard but with some exceptions.
-     * Always use the KDE standard within KDE, but where interaction is required with
-     * external POSIX compliant systems (e.g. Gnome, glibc, etc) the POSIX standard
-     * should be used.
-     *
-     * Date format strings are made up of date componants and string literals.
-     * Date componants are prefixed by a % escape character and are made up of
-     * optional padding and case modifier flags, an optional width value, and a
-     * compulsary code for the actual date componant:
-     *   %[Flags][Width][Componant]
-     * e.g. %_^5Y
-     * No spaces are allowed.
-     *
-     * The Flags can modify the padding character and/or case of the Date Componant.
-     * The Flags are optional and may be combined and/or repeated in any order,
-     * in which case the last Padding Flag and last Case Flag will be the
-     * ones used.  The Flags must be immediately after the % and before any Width.
-     *
-     * The Width can modify how wide the date Componant is padded to.  The Width
-     * is an optional interger value and must be after any Flags but before the
-     * Componant.  If the Width is less than the minimum defined for a Componant
-     * then the default minimum will be used instead.
-     *
-     * By default most numeric Date Componants are right-aligned with leading 0's.
-     *
-     * By default all string name fields are capital case and unpadded.
-     *
-     * The following Flags may be specified:
-     * @li - (hyphen) no padding (e.g. 1 Jan and "%-j" = "1")
-     * @li _ (underscore) pad with spaces (e.g. 1 Jan and "%-j" = "  1")
-     * @li 0 (zero) pad with 0's  (e.g. 1 Jan and "%0j" = "001")
-     * @li ^ (caret) make uppercase (e.g. 1 Jan and "%^B" = "JANUARY")
-     * @li # (hash) invert case (e.g. 1 Jan and "%#B" = "???")
-     *
-     * The following Date Componants can be specified:
-     * @li %Y the year to 4 digits (e.g. "1984" for 1984, "0584" for 584, "0084" for 84)
-     * @li %C the 'century' portion of the year to 2 digits (e.g. "19" for 1984, "05" for 584, "00" for 84)
-     * @li %y the lower 2 digits of the year to 2 digits (e.g. "84" for 1984, "05" for 2005)
-     * @li %EY the full local era year (e.g. "2000 AD")
-     * @li %EC the era name short form (e.g. "AD")
-     * @li %Ey the year in era to 1 digit (e.g. 1 or 2000)
-     * @li %m the month number to 2 digits (January="01", December="12")
-     * @li %n the month number to 1 digit (January="1", December="12"), see notes!
-     * @li %d the day number of the month to 2 digits (e.g. "01" on the first of March)
-     * @li %e the day number of the month to 1 digit (e.g. "1" on the first of March)
-     * @li %B the month name long form (e.g. "January")
-     * @li %b the month name short form (e.g. "Jan" for January)
-     * @li %h the month name short form (e.g. "Jan" for January)
-     * @li %A the weekday name long form (e.g. "Wednesday" for Wednesday)
-     * @li %a the weekday name short form (e.g. "Wed" for Wednesday)
-     * @li %j the day of the year number to 3 digits (e.g. "001"  for 1 Jan)
-     * @li %V the ISO week of the year number to 2 digits (e.g. "01"  for ISO Week 1)
-     * @li %G the year number in long form of the ISO week of the year to 4 digits (e.g. "2004"  for 1 Jan 2005)
-     * @li %g the year number in short form of the ISO week of the year to 2 digits (e.g. "04"  for 1 Jan 2005)
-     * @li %u the day of the week number to 1 digit (e.g. "1"  for Monday)
-     * @li %D the US short date format (e.g. "%m/%d/%y")
-     * @li %F the ISO short date format (e.g. "%Y-%m-%d")
-     * @li %x the KDE locale short date format
-     * @li %% the literal "%"
-     * @li %t a tab character
-     *
-     * Everything else in the format string will be taken as literal text.
-     *
-     * Examples:
-     * "%Y-%m-%d" = "2009-01-01"
-     * "%Y-%-m-%_4d" = "2009-1-   1"
-     *
-     * The following format codes behave differently in the KDE and POSIX standards
-     * @li %e in GNU/POSIX is space padded to 2 digits, in KDE is not padded
-     * @li %n in GNU/POSIX is newline, in KDE is short month number
-     *
-     * The following POSIX format codes are currently not supported:
-     * @li %U US week number
-     * @li %w US day of week
-     * @li %W US week number
-     * @li %O locale's alternative numeric symbols, in KDE is not supported
-     *
-     * %0 is not supported as the returned result is always in the locale's chosen numeric symbol digit set.
-     *
-     * @see Locale::formatDate
-     *
-     * @param fromDate the date to be formatted
-     * @param toFormat the date format to use
-     * @param formatStandard the standard the date format uses, defaults to KDE Standard
-     *
-     * @return The date as a string
-     */
-    Q_INVOKABLE QString formatDate(const QDate &fromDate, const QString &toFormat,
-                       Locale::DateTimeFormatStandard formatStandard = Locale::KdeFormat) const;
-
-    //KDE5 Make virtual
-    /**
-     *
-     * Returns a string formatted to the given format string and Digit Set.
-     * Only use this version if you need control over the Digit Set and do
-     * not want to use the locale Digit Set.
-     *
-     * @see formatDate
-     *
-     * @param fromDate the date to be formatted
-     * @param toFormat the date format to use
-     * @param digitSet the Digit Set to format the date in
-     * @param formatStandard the standard the date format uses, defaults to KDE Standard
-     *
-     * @return The date as a string
-     */
-    Q_INVOKABLE QString formatDate(const QDate &fromDate, const QString &toFormat, Locale::DigitSet digitSet,
-                       Locale::DateTimeFormatStandard formatStandard = Locale::KdeFormat) const;
-
-    //KDE5 Make virtual
-    /**
      *
      * Returns a Date Component as a localized string in the requested format.
      *
      * For example for 2010-01-01 the Locale::Month with en_US Locale and Gregorian calendar may return:
-     *   Locale::ShortNumber = "1"
-     *   Locale::LongNumber  = "01"
-     *   Locale::NarrowName  = "J"
-     *   Locale::ShortName   = "Jan"
-     *   Locale::LongName    = "January"
+     *   CalendarSystem::ShortNumber = "1"
+     *   CalendarSystem::LongNumber  = "01"
+     *   CalendarSystem::NarrowName  = "J"
+     *   CalendarSystem::ShortName   = "Jan"
+     *   CalendarSystem::LongName    = "January"
      *
      * @param date The date to format
      * @param component The date component to return
@@ -893,27 +626,8 @@ public:
      * @param weekNumberSystem To override the default Week Number System to use
      * @return The localized string form of the date component
      */
-    Q_INVOKABLE QString formatDate(const QDate &date, Locale::DateTimeComponent component,
-                       Locale::DateTimeComponentFormat format = Locale::DefaultComponentFormat,
-                       Locale::WeekNumberSystem weekNumberSystem = Locale::DefaultWeekNumber) const;
-
-    /**
-     * Converts a localized date string to a QDate.
-     * The bool pointed by @p ok will be @c false if the date entered was invalid.
-     *
-     * Uses the calendar system's internal locale set when the instance was
-     * created, which ensures that the correct calendar system and locale
-     * settings are respected, which would not occur in some cases if using
-     * the global locale.  Defaults to global locale.
-     *
-     * @see Locale::readDate
-     *
-     * @param str the string to convert
-     * @param ok if non-null, will be set to @c true if the date is valid, @c false if invalid
-     *
-     * @return the string converted to a QDate
-     */
-    Q_INVOKABLE QDate readDate(const QString &str, bool *ok = 0) const;
+    Q_INVOKABLE QString formatDate(const QDate &date, DateTimeComponent component,
+                       DateTimeComponentFormat format, WeekNumberSystem weekNumberSystem) const;
 
     /**
      * Converts a localized date string to a QDate.
@@ -933,87 +647,8 @@ public:
      *
      * @return the string converted to a QDate
      */
-    Q_INVOKABLE QDate readDate(const QString &str, Locale::ReadDateFlags flags, bool *ok = 0) const;
+    Q_INVOKABLE QDate readDate(const QString &str, ReadDateFlags flags) const;
 
-    /**
-     * Converts a localized date string to a QDate, using the specified @p format.
-     * You will usually not want to use this method.  Uses teh KDE format standard.
-     *
-     * @param dateString the string to convert
-     * @param dateFormat the date format to use, in KDE format standard
-     * @param ok if non-null, will be set to @c true if the date is valid, @c false if invalid
-     *
-     * @return the string converted to a QDate
-     *
-     * @see formatDate
-     * @see Locale::readDate
-     */
-    Q_INVOKABLE  QDate readDate(const QString &dateString, const QString &dateFormat, bool *ok = 0) const;
-
-    //KDE5 Make virtual
-    /**
-     * Converts a localized date string to a QDate, using the specified @p format.
-     * You will usually not want to use this method.
-     *
-     * You must supply a format and string containing at least one of the following combinations to
-     * create a valid date:
-     * @li a month and day of month
-     * @li a day of year
-     * @li a ISO week number and day of week
-     *
-     * If a year number is not supplied then the current year will be assumed.
-     *
-     * All date componants must be separated by a non-numeric character.
-     *
-     * The format is not applied strictly to the input string:
-     * @li extra whitespace is ignored
-     * @li leading 0's on numbers are ignored
-     * @li capitalisation of literals is ignored
-     *
-     * The allowed format componants are almost the same as the formatDate() function.
-     * The following date componants will be read:
-     * @li %Y the whole year (e.g. "1984" for 1984)
-     * @li %y the lower 2 digits of the year (e.g. "84" for 1984)
-     * @li %EY the full local era year (e.g. "2000 AD")
-     * @li %EC the era name short form (e.g. "AD")
-     * @li %Ey the year in era to 1 digit (e.g. 1 or 2000)
-     * @li %m the month number to two digits (January="01", December="12")
-     * @li %n the month number (January="1", December="12")
-     * @li %d the day number of the month to two digits (e.g. "01" on the first of March)
-     * @li %e the day number of the month (e.g. "1" on the first of March)
-     * @li %B the month name long form (e.g. "January")
-     * @li %b the month name short form (e.g. "Jan" for January)
-     * @li %h the month name short form (e.g. "Jan" for January)
-     * @li %A the weekday name long form (e.g. "Wednesday" for Wednesday)
-     * @li %a the weekday name short form (e.g. "Wed" for Wednesday)
-     * @li %j the day of the year number to three digits (e.g. "001"  for 1 Jan)
-     * @li %V the ISO week of the year number to two digits (e.g. "01"  for ISO Week 1)
-     * @li %u the day of the week number (e.g. "1"  for Monday)
-     *
-     * The following date componants are NOT supported:
-     * @li %C the 'century' portion of the year (e.g. "19" for 1984, "5" for 584, "" for 84)
-     * @li %G the year number in long form of the ISO week of the year (e.g. "2004"  for 1 Jan 2005)
-     * @li %g the year number in short form of the ISO week of the year (e.g. "04"  for 1 Jan 2005)
-     * @li %D the US short date format (e.g. "%m/%d/%y")
-     * @li %F the ISO short date format (e.g. "%Y-%m-%d")
-     * @li %x the KDE locale short date format
-     * @li %% the literal "%"
-     * @li %t a tab character
-     *
-     * @param dateString the string to convert
-     * @param dateFormat the date format to use
-     * @param ok if non-null, will be set to @c true if the date is valid, @c false if invalid
-     * @param formatStandard the standard the date format uses
-     *
-     * @return the string converted to a QDate
-     *
-     * @see formatDate
-     * @see Locale::readDate
-     */
-    Q_INVOKABLE QDate readDate(const QString &dateString, const QString &dateFormat, bool *ok,
-                   Locale::DateTimeFormatStandard formatStandard) const;
-
-    //KDE5 Make virtual
     /**
      *
      * Returns the Short Year Window Start Year for the current Calendar System.
@@ -1044,7 +679,6 @@ public:
      */
     int shortYearWindowStartYear() const;
 
-    //KDE5 Make virtual
     /**
      *
      * Returns the Year Number after applying the Year Window.

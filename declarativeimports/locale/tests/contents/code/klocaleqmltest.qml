@@ -205,7 +205,7 @@ Item {
                 console.log("convertDigits:" + locale.convertDigits(locale.digitSet, Locale.ArabicDigits))
 
                 for (var i in locale.allDigitSetsList) {
-                    console.log("digia:" + locale.allDigitSetsList[i])
+                    console.log("digits:" + locale.allDigitSetsList[i])
                 }
 
                 console.log("===========end===========")
@@ -240,11 +240,6 @@ Item {
 
                 console.log("isProleptic:" + calendar.isProleptic)
                 //Q_INVOKABLE methods
-                console.log("isValid:" + calendar.isValid(2012, 02, 03))
-
-                console.log("isValid:" + calendar.isValid(2012, 33))
-
-                console.log("isValid:" + calendar.isValid(calendar.formatDate("2012-02-03"), 2010, 5, 5))
 
                 console.log("isValidIsoWeekDate:" + calendar.isValidIsoWeekDate(2012, 2, 3))
 
@@ -274,23 +269,19 @@ Item {
 
                 console.log("daysDifference:" + calendar.daysDifference("2012-02-03", "2012-02-13"))
 
-                console.log("monthsInYear:" + calendar.monthsInYear("2012-02-03"))
-
                 console.log("monthsInYear:" + calendar.monthsInYear(2012))
 
-                console.log("weeksInYear:" + calendar.weeksInYear("2012-02-03"))
-
-                console.log("weeksInYear:" + calendar.weeksInYear(2012))
+                console.log("weeksInYear:" + calendar.weeksInYear(2012, CalendarSystem.SimpleWeek))
 
                 console.log("daysInYear:" + calendar.daysInYear("2012-02-03"))
 
-                console.log("daysInMonth:" + calendar.daysInMonth("2012-02-03"))
+                console.log("daysInMonth:" + calendar.daysInMonth(2012, 8))
 
                 console.log("daysInWeek:" + calendar.daysInWeek("2012-02-03"))
 
                 console.log("dayOfYear:" + calendar.dayOfYear("2012-02-03"))
 
-                console.log("week:" + calendar.week("2012-02-03"))
+                console.log("week:" + calendar.week("2012-02-03", CalendarSystem.SimpleWeek))
 
                 console.log("isLeapYear:" + calendar.isLeapYear(2012))
 
@@ -306,9 +297,9 @@ Item {
 
                 console.log("weekDayName:" + calendar.weekDayName(3))
 
-                console.log("formatDate:" + calendar.formatDate("2012-02-03"))
+                console.log("formatDate:" + calendar.formatDate("2012-02-03", CalendarSystem.Year, CalendarSystem.ShortNumber, CalendarSystem.SimpleWeek))
 
-                console.log("readDate:" + calendar.readDate("2012-02-03"))
+                console.log("readDate:" + calendar.readDate("2012-02-03", CalendarSystem.NormalFormat))
 
                 console.log("applyShortYearWindow:" + calendar.applyShortYearWindow(50))
 
