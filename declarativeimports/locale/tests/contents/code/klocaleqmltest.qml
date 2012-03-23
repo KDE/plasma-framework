@@ -85,6 +85,7 @@ Item {
                 console.log("decimalSymbol:" + locale.decimalSymbol)
 
                 locale.digitSet = Locale.EasternArabicIndicDigits
+                console.log("digitSet:" + locale.digitSet)
 
                 console.log("language:" + locale.language)
 
@@ -205,7 +206,7 @@ Item {
                 console.log("convertDigits:" + locale.convertDigits(locale.digitSet, Locale.ArabicDigits))
 
                 for (var i in locale.allDigitSetsList) {
-                    console.log("digits:" + locale.allDigitSetsList[i])
+                    console.log("allDigitSetsList:" + locale.allDigitSetsList[i])
                 }
 
                 console.log("===========end===========")
@@ -303,6 +304,7 @@ Item {
 
                 console.log("applyShortYearWindow:" + calendar.applyShortYearWindow(50))
 
+                console.log("calendarSystem:" + calendar.calendarSystem)
                 console.log("getDate:")
                 hash = calendar.getDate("2012-02-03")
                 for (var i in hash) {
@@ -313,6 +315,10 @@ Item {
                 hash = calendar.dateDifference("2012-01-01", "2014-03-03")
                 for (var i in hash) {
                     console.log("        " + i, "=", hash[i])
+                }
+
+                for (var i in calendar.calendarSystemsList) {
+                    console.log("calendarSystemsList:" + calendar.calendarSystemsList[i])
                 }
 
                 console.log("===============end===============")

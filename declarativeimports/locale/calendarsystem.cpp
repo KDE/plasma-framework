@@ -32,12 +32,12 @@ CalendarSystem::CalendarSystem(QObject* parent)
     m_calendarSystem = KCalendarSystem::create(KGlobal::locale()->calendarSystem());
 }
 
-QList<Locale::CalendarSystem> CalendarSystem::calendarSystemsList()
+QList<int> CalendarSystem::calendarSystemsList()
 {
-     QList<Locale::CalendarSystem> list;
+     QList<int> list;
 
      foreach(KLocale::CalendarSystem calendarSystem, KCalendarSystem::calendarSystemsList()) {
-        list.append((Locale::CalendarSystem)calendarSystem);
+        list.append((int)calendarSystem);
     }
 
     return list;

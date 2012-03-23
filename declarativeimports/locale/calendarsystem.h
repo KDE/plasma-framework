@@ -49,6 +49,7 @@ Q_ENUMS(DateTimeComponent)
 Q_ENUMS(DateTimeComponentFormat)
 
 //properties
+Q_PROPERTY(QList<int> calendarSystemsList READ calendarSystemsList)
 Q_PROPERTY(Locale::CalendarSystem calendarSystem READ calendarSystem NOTIFY calendarSystemChanged)//read-only
 Q_PROPERTY(QString calendarLabel READ calendarLabel NOTIFY calendarLabelChanged)//read-only
 Q_PROPERTY(QDate epoch READ epoch NOTIFY epochChanged)//read-only
@@ -172,41 +173,7 @@ public:
     * Returns the list of currently supported Calendar Systems
     * @return list of Calendar Systems
     */
-    static QList<Locale::CalendarSystem> calendarSystemsList();//TODO
-
-    /**
-     *
-     * Returns a localized label to display for the required Calendar System type.
-     *
-     * Use with calendarSystemsList() to populate selection lists of available
-     * calendar systems.
-     *
-     * @param calendarSystem the specific calendar type to return the label for
-     * @param locale the locale to use for the label, defaults to global
-     * @return label for calendar
-     */
-    Q_INVOKABLE static QString calendarLabel(Locale::CalendarSystem calendarSystem, const KLocale *locale = KGlobal::locale());
-
-    /**
-     *
-     * Returns the Calendar System enum value for a given Calendar Type,
-     * e.g. Locale::QDateCalendar for "gregorian"
-     *
-     * @param calendarType the calendar type to convert
-     * @return calendar system for calendar type
-     */
-    Q_INVOKABLE static Locale::CalendarSystem calendarSystem(const QString &calendarType);
-
-    //KDE5 remove
-    /**
-     *
-     * Returns the deprecated Calendar Type for a given Calendar System enum value,
-     * e.g. "gregorian" for Locale::QDateCalendar
-     *
-     * @param calendarSystem the calendar system to convert
-     * @return calendar type for calendar system
-     */
-    Q_INVOKABLE static QString calendarType(Locale::CalendarSystem calendarSystem);
+    static QList<int> calendarSystemsList();
 
     /**
      *
@@ -216,7 +183,6 @@ public:
      */
     Locale::CalendarSystem calendarSystem() const;
 
-    //KDE5 make virtual?
     /**
      *
      * Returns a localized label to display for the current Calendar System type.
