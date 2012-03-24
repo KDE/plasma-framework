@@ -300,7 +300,7 @@ Item {
 
                 console.log("formatDate:" + calendar.formatDate("2012-02-03", CalendarSystem.Year, CalendarSystem.ShortNumber, CalendarSystem.SimpleWeek))
 
-                console.log("readDate:" + calendar.readDate("2012-02-03", CalendarSystem.NormalFormat))
+                console.log("readDate:" + calendar.readDate("2012-02-03", CalendarSystem.IsoFormat))
 
                 console.log("applyShortYearWindow:" + calendar.applyShortYearWindow(50))
 
