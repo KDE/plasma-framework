@@ -43,6 +43,7 @@
 #include <kiconloader.h>
 #include <kmimetype.h>
 #include <kurl.h>
+#include <klocale.h>
 
 #include "animator.h"
 #include "animations/animation.h"

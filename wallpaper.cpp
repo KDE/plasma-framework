@@ -36,6 +36,7 @@
 #include <kglobal.h>
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>
+#include <klocale.h>
 
 #ifndef PLASMA_NO_KIO
 #include <kio/job.h>

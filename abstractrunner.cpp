@@ -32,6 +32,7 @@
 #include <kplugininfo.h>
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>
+#include <klocale.h>
 
 #include "package.h"
 #include "pluginloader.h"

@@ -31,6 +31,7 @@
 #include <kplugininfo.h>
 #include <kservice.h>
 #include <kstandarddirs.h>
+#include <klocale.h>
 
 #include "datacontainer.h"
 #include "package.h"
