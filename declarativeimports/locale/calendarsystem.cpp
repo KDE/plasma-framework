@@ -17,13 +17,14 @@
     Boston, MA 02110-1301, USA.
 */
 
+//own
 #include "calendarsystem.h"
 
-#include "kdebug.h"
-#include "kconfiggroup.h"
+//KDE
 #include <KCalendarSystem>
-#include <KDateTime>
 #include <KGlobal>
+
+//Qt
 #include <QtCore/QDateTime>
 
 CalendarSystem::CalendarSystem(QObject* parent)

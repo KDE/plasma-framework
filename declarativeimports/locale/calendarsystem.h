@@ -21,14 +21,13 @@
 #ifndef CALENDARSYSTEM_H
 #define CALENDARSYSTEM_H
 
+//own
 #include "locale.h"  // needed for enums
-#include "kglobal.h"
 
-#include <QtCore/QStringList>
+//Qt
 #include <QtCore/QDate>
 
 class KCalendarSystem;
-class KCalendarEra;
 
 /**
  * CalendarSystem abstract base class, provides support for local Calendar Systems in KDE
@@ -49,7 +48,7 @@ Q_ENUMS(DateTimeComponent)
 Q_ENUMS(DateTimeComponentFormat)
 
 //properties
-Q_PROPERTY(QList<int> calendarSystemsList READ calendarSystemsList)
+Q_PROPERTY(QList<int> calendarSystemsList READ calendarSystemsList) //read-only
 Q_PROPERTY(Locale::CalendarSystem calendarSystem READ calendarSystem NOTIFY calendarSystemChanged)//read-only
 Q_PROPERTY(QString calendarLabel READ calendarLabel NOTIFY calendarLabelChanged)//read-only
 Q_PROPERTY(QDate epoch READ epoch NOTIFY epochChanged)//read-only
