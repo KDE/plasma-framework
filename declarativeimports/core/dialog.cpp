@@ -350,6 +350,11 @@ int DialogProxy::windowFlags() const
     return (int)m_flags;
 }
 
+qulonglong DialogProxy::windowId() const
+{
+    return m_dialog->winId();
+}
+
 void DialogProxy::setWindowFlags(const int flags)
 {
     /*X misbehaviour: the only way to make a window with the Popup flag working, is to create it with that flag from the beginning*/

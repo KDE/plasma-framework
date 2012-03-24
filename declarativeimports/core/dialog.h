@@ -140,6 +140,11 @@ class DialogProxy : public QObject
      */
     Q_PROPERTY(int location READ location WRITE setLocation NOTIFY locationChanged)
 
+    /**
+     * Window ID of the dialog window.
+     **/
+    Q_PROPERTY(qulonglong windowId READ windowId CONSTANT)
+
 public:
     enum WidgetAttribute {
         WA_X11NetWmWindowTypeDock = Qt::WA_X11NetWmWindowTypeDock
@@ -179,6 +184,8 @@ public:
     void setLocation(int location);
 
     QObject *margins() const;
+
+    qulonglong windowId() const;
 
     /**
      * @returns The suggested screen position for the popup
