@@ -20,6 +20,8 @@
 #ifndef PLASMA_CONFIGLOADER_P_H
 #define PLASMA_CONFIGLOADER_P_H
 
+#include <kurl.h>
+
 namespace Plasma
 {
 
