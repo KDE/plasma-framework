@@ -221,7 +221,7 @@ Item {
             onClicked:{
                 console.log("=====CalendarSystem Component====")
 
-                console.log("calendarLabel:" + calendar.CalendarLabel)
+                console.log("calendarLabel:" + calendar.CalendarLabel) //TODO
 
                 console.log("epoch:" + calendar.epoch)
 

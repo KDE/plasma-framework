@@ -43,22 +43,6 @@ QList<int> CalendarSystem::calendarSystemsList()
     return list;
 }
 
-QString CalendarSystem::calendarLabel(Locale::CalendarSystem calendarSystem, const KLocale *locale)
-{
-    return KCalendarSystem::calendarLabel((KLocale::CalendarSystem)calendarSystem, locale);
-}
-
-QString CalendarSystem::calendarType(Locale::CalendarSystem calendarSystem)
-{
-    return KCalendarSystem::calendarType((KLocale::CalendarSystem)calendarSystem);
-}
-
-
-Locale::CalendarSystem CalendarSystem::calendarSystem(const QString &calendarType )
-{
-    return (Locale::CalendarSystem)KCalendarSystem::calendarSystem(calendarType);
-}
-
 Locale::CalendarSystem CalendarSystem::calendarSystem() const
 {
     return (Locale::CalendarSystem)m_calendarSystem->calendarSystem();
