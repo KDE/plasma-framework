@@ -66,7 +66,6 @@ QDate CalendarSystem::earliestValidDate() const
 
 QDate CalendarSystem::latestValidDate() const
 {
-    // Default to Gregorian 9999-12-31
     return m_calendarSystem->latestValidDate();
 }
 

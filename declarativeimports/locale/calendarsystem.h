@@ -157,7 +157,7 @@ public:
         LongName,                 /**< Long name format, e.g. "December" */
         ShortNamePossessive,      /**< Short name possessive format, e.g. "of Dec" */
         LongNamePossessive,       /**< Long name possessive format, e.g. "of December" */
-        NarrowName                /**< Narrow name format, e.g. "D". @since 4.7 */
+        NarrowName                /**< Narrow name format, e.g. "D" */
     };
 
     /**
@@ -166,7 +166,7 @@ public:
     enum WeekDayNameFormat {
         ShortDayName,                /**< Short name format, e.g. "Fri" */
         LongDayName,                 /**< Long name format, e.g. "Friday" */
-        NarrowDayName                /**< Narrow name format, e.g. "F". @since 4.7 */
+        NarrowDayName                /**< Narrow name format, e.g. "F" */
     };
 
     /**
@@ -515,7 +515,6 @@ public:
     Q_INVOKABLE QDate firstDayOfYear(int year) const;
 
     /**
-     * @since 4.6
      *
      * Returns a QDate containing the last day of the year
      *
