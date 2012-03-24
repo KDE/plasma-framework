@@ -409,7 +409,7 @@ KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QS
 
     //note: constraint guaranteed non-empty from here down
     if (category.isEmpty()) { //use all but the excluded categories
-        KConfigGroup group(KGlobal::config(), "General");
+        KConfigGroup group(KSharedConfig::openConfig(), "General");
         QStringList excluded = group.readEntry("ExcludeCategories", QStringList());
         foreach (const QString &category, excluded) {
             constraint.append(" and [X-KDE-PluginInfo-Category] != '").append(category).append("'");

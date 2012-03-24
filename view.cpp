@@ -365,7 +365,7 @@ Containment *View::swapContainment(Plasma::Containment *existing, const QString 
 
 KConfigGroup View::config() const
 {
-    KConfigGroup views(KGlobal::config(), "PlasmaViews");
+    KConfigGroup views(KSharedConfig::openConfig(), "PlasmaViews");
     return KConfigGroup(&views, QString::number(d->viewId));
 }
 
@@ -375,7 +375,7 @@ void View::configNeedsSaving() const
     if (corona) {
         corona->requestConfigSync();
     } else {
-        KGlobal::config()->sync();
+        KSharedConfig::openConfig()->sync();
     }
 }
 

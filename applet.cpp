@@ -347,7 +347,7 @@ void Applet::saveState(KConfigGroup &group) const
 KConfigGroup Applet::config() const
 {
     if (d->transient) {
-        return KConfigGroup(KGlobal::config(), "PlasmaTransientsConfig");
+        return KConfigGroup(KSharedConfig::openConfig(), "PlasmaTransientsConfig");
     }
 
     if (d->isContainment) {
@@ -367,7 +367,7 @@ KConfigGroup Applet::globalConfig() const
         KSharedConfig::Ptr coronaConfig = corona->config();
         globalAppletConfig = KConfigGroup(coronaConfig, group);
     } else {
-        globalAppletConfig = KConfigGroup(KGlobal::config(), group);
+        globalAppletConfig = KConfigGroup(KSharedConfig::openConfig(), group);
     }
 
     return KConfigGroup(&globalAppletConfig, d->globalName());
@@ -1443,7 +1443,7 @@ void Applet::createConfigurationInterface(KConfigDialog *parent)
 
 bool Applet::hasAuthorization(const QString &constraint) const
 {
-    KConfigGroup constraintGroup(KGlobal::config(), "Constraints");
+    KConfigGroup constraintGroup(KSharedConfig::openConfig(), "Constraints");
     return constraintGroup.readEntry(constraint, true);
 }
 
@@ -1541,7 +1541,7 @@ QStringList Applet::listCategories(const QString &parentApp, bool visibleOnly)
     QString constraint = AppletPrivate::parentAppConstraint(parentApp);
     constraint.append(" and exist [X-KDE-PluginInfo-Category]");
 
-    KConfigGroup group(KGlobal::config(), "General");
+    KConfigGroup group(KSharedConfig::openConfig(), "General");
     const QStringList excluded = group.readEntry("ExcludeCategories", QStringList());
     foreach (const QString &category, excluded) {
         constraint.append(" and [X-KDE-PluginInfo-Category] != '").append(category).append("'");

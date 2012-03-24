@@ -82,7 +82,7 @@ KConfigGroup AbstractRunner::config() const
         group = "UnnamedRunner";
     }
 
-    KConfigGroup runners(KGlobal::config(), "Runners");
+    KConfigGroup runners(KSharedConfig::openConfig(), "Runners");
     return KConfigGroup(&runners, group);
 }
 

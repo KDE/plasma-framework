@@ -72,7 +72,7 @@ CoronaBase::CoronaBase(QObject *parent)
 
 CoronaBase::~CoronaBase()
 {
-    KConfigGroup trans(KGlobal::config(), "PlasmaTransientsConfig");
+    KConfigGroup trans(KSharedConfig::openConfig(), "PlasmaTransientsConfig");
     trans.deleteGroup();
 
     delete d;

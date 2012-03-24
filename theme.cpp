@@ -843,7 +843,7 @@ QFont Theme::font(FontRole role) const
 {
     switch (role) {
     case DesktopFont: {
-        KConfigGroup cg(KGlobal::config(), "General");
+        KConfigGroup cg(KSharedConfig::openConfig(), "General");
         return cg.readEntry("desktopFont", d->generalFont);
         }
         break;

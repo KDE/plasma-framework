@@ -125,7 +125,7 @@ public:
 
     KConfigGroup configGroup()
     {
-        return conf.isValid() ? conf : KConfigGroup(KGlobal::config(), "PlasmaRunnerManager");
+        return conf.isValid() ? conf : KConfigGroup(KSharedConfig::openConfig(), "PlasmaRunnerManager");
     }
 
     void clearSingleRunner()
@@ -183,7 +183,7 @@ public:
         if (conf.isValid()) {
             pluginConf = KConfigGroup(&conf, "Plugins");
         } else {
-            pluginConf = KConfigGroup(KGlobal::config(), "Plugins");
+            pluginConf = KConfigGroup(KSharedConfig::openConfig(), "Plugins");
         }
 
         advertiseSingleRunnerIds.clear();

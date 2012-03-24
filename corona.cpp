@@ -74,7 +74,7 @@ Corona::Corona(QObject *parent)
 
 Corona::~Corona()
 {
-    KConfigGroup trans(KGlobal::config(), "PlasmaTransientsConfig");
+    KConfigGroup trans(KSharedConfig::openConfig(), "PlasmaTransientsConfig");
     trans.deleteGroup();
 
     // FIXME: Same fix as in Plasma::View - make sure that when the focused widget is

@@ -523,7 +523,7 @@ void AppletPrivate::propagateConfigChanged()
 
 void AppletPrivate::filterOffers(QList<KService::Ptr> &offers)
 {
-    KConfigGroup constraintGroup(KGlobal::config(), "Constraints");
+    KConfigGroup constraintGroup(KSharedConfig::openConfig(), "Constraints");
     foreach (const QString &key, constraintGroup.keyList()) {
         //kDebug() << "security constraint" << key;
         if (constraintGroup.readEntry(key, true)) {
@@ -677,7 +677,7 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
         if (corona) {
             containmentConfig = KConfigGroup(corona->config(), "Containments");
         } else {
-            containmentConfig =  KConfigGroup(KGlobal::config(), "Containments");
+            containmentConfig =  KConfigGroup(KSharedConfig::openConfig(), "Containments");
         }
 
         if (package && !containmentConfig.hasGroup(QString::number(appletId))) {
@@ -701,7 +701,7 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
             appletConfig = KConfigGroup(&appletConfig, "Applets");
         } else {
             kWarning() << "requesting config for" << q->name() << "without a containment!";
-            appletConfig = KConfigGroup(KGlobal::config(), "Applets");
+            appletConfig = KConfigGroup(KSharedConfig::openConfig(), "Applets");
         }
 
         if (package && !appletConfig.hasGroup(QString::number(appletId))) {
