@@ -206,7 +206,7 @@ public:
      *
      * @return epoch of calendar system
      */
-    virtual QDate epoch() const;
+    QDate epoch() const;
 
     /**
      * Returns the earliest date valid in this calendar system implementation.
@@ -218,7 +218,7 @@ public:
      *
      * @return date the earliest valid date
      */
-    virtual QDate earliestValidDate() const;
+    QDate earliestValidDate() const;
 
     /**
      * Returns the latest date valid in this calendar system implementation.
@@ -228,7 +228,7 @@ public:
      *
      * @return date the latest valid date
      */
-    virtual QDate latestValidDate() const;
+     QDate latestValidDate() const;
 
     /**
      *
@@ -249,7 +249,6 @@ public:
      */
     Q_INVOKABLE  bool isValid(const QDate &date) const;
 
-    //KDE5 make virtual?
     /**
      *
      * Returns the year, month and day portion of a given date in the current calendar system
@@ -285,7 +284,6 @@ public:
      */
     Q_INVOKABLE int day(const QDate &date) const;
 
-    //KDE5 make virtual?
     /**
      *
      * Returns the Era Name portion of a given date in the current calendar system,
@@ -297,7 +295,6 @@ public:
      */
     Q_INVOKABLE QString eraName(const QDate &date, StringFormat format = ShortFormat) const;
 
-    //KDE5 make virtual?
     /**
      *
      * Returns the Era Year portion of a given date in the current
@@ -309,7 +306,6 @@ public:
      */
     Q_INVOKABLE QString eraYear(const QDate &date, StringFormat format = ShortFormat) const;
 
-    //KDE5 make virtual?
     /**
      *
      * Returns the Year In Era portion of a given date in the current calendar
@@ -347,7 +343,6 @@ public:
      */
     Q_INVOKABLE  QDate addDays(const QDate &date, int ndays) const;
 
-    //KDE5 make virtual?
     /**
      * Returns the difference between two dates with a hash, the available keys are
      * ["years"] Returns number of years difference
@@ -368,7 +363,6 @@ public:
      */
     Q_INVOKABLE QVariantHash dateDifference(const QDate &fromDate, const QDate &toDate)const;
 
-    //KDE5 make virtual?
     /**
     * Returns the difference between two dates in completed calendar years.
     * The returned value will be negative if @p fromDate > @p toDate.
@@ -381,7 +375,6 @@ public:
     */
     Q_INVOKABLE int yearsDifference(const QDate &fromDate, const QDate &toDate) const;
 
-    //KDE5 make virtual?
     /**
      * Returns the difference between two dates in completed calendar months
      * The returned value will be negative if @p fromDate > @p toDate.
@@ -396,7 +389,6 @@ public:
      */
     Q_INVOKABLE int monthsDifference(const QDate &fromDate, const QDate &toDate) const;
 
-    //KDE5 make virtual?
     /**
      * Returns the difference between two dates in days
      * The returned value will be negative if @p fromDate > @p toDate.
@@ -522,7 +514,6 @@ public:
      */
     Q_INVOKABLE QDate firstDayOfYear(int year) const;
 
-    //KDE5 Make virtual?
     /**
      * @since 4.6
      *
@@ -543,7 +534,6 @@ public:
      */
     Q_INVOKABLE QDate firstDayOfMonth(int year, int month) const;
 
-    //KDE5 Make virtual?
     /**
      *
      * Returns a QDate containing the last day of the month
