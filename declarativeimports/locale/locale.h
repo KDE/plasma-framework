@@ -20,8 +20,10 @@
 #ifndef LOCALE_H
 #define LOCALE_H
 
+//Qt
 #include <QObject>
 
+//KDE
 #include <KLocale>
 
 class QString;

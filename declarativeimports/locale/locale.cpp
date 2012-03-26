@@ -18,8 +18,13 @@
    Boston, MA 02110-1301, USA.
 */
 
+//own
 #include "locale.h"
+
+//KDE
 #include <KGlobal>
+
+//Qt
 #include <QTime>
 #include <QDate>
 
