@@ -29,11 +29,6 @@
 
 class KCalendarSystem;
 
-/**
- * CalendarSystem abstract base class, provides support for local Calendar Systems in KDE
- *
- * Derived classes must be created through the create() static method
- */
 class CalendarSystem : public QObject
 {
 Q_OBJECT
@@ -169,10 +164,10 @@ public:
     };
 
     /**
-    * Returns the list of currently supported Calendar Systems
-    * @return list of Calendar Systems
-    */
-    static QList<int> calendarSystemsList();
+     * Returns the list of currently supported Calendar Systems
+     * @return list of Calendar Systems
+     */
+    QList<int> calendarSystemsList();
 
     /**
      *
@@ -188,7 +183,7 @@ public:
      *
      * @return localized label for this Calendar System
      */
-    QString calendarLabel() const;
+    QString calendarLabel() const; //TODO, it returns undefined
 
     /**
      * Returns a QDate holding the epoch of the calendar system.  Usually YMD
