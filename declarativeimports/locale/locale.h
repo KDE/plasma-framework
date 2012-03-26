@@ -910,18 +910,15 @@ public:
      *
      * @return The string converted to a double
      */
-    Q_INVOKABLE double readMoney(const QString &numStr, bool * ok = 0) const;
+    Q_INVOKABLE double readMoney(const QString &numStr) const;
 
     /**
      * Converts a localized numeric string to a double.
      *
      * @param numStr the string we want to convert.
-     * @param ok the boolean that is set to false if it's not a number.
-     *           If @p ok is 0, it will be ignored
-     *
      * @return The string converted to a double
      */
-    Q_INVOKABLE double readNumber(const QString &numStr, bool * ok = 0) const;
+    Q_INVOKABLE double readNumber(const QString &numStr) const;
 
     /**
      * Flags for readDate()

@@ -255,13 +255,15 @@ void Locale::setMainCatalog(const char *catalog)
     KLocale::setMainCatalog(catalog);
 }
 
-double Locale::readNumber(const QString &_str, bool * ok) const
+double Locale::readNumber(const QString &_str) const
 {
+    bool *ok;
     return m_locale->readNumber(_str, ok);
 }
 
-double Locale::readMoney(const QString &_str, bool *ok) const
+double Locale::readMoney(const QString &_str) const
 {
+    bool *ok;
     return m_locale->readMoney(_str, ok);
 }
 
