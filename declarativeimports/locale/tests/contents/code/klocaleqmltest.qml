@@ -182,16 +182,16 @@ Item {
 
                 console.log("formatLocaleTime:" + locale.formatLocaleTime("2010-05-05"))
 
-                console.log("dayPeriodText:" + locale.dayPeriodText("2010-05-05"))
+                console.log("dayPeriodText:" + locale.dayPeriodText("11:22:33"))
 
                 console.log("readMoney:" + locale.readMoney("$ 21"))
 
                 console.log("readNumber:" + locale.readNumber(locale.convertDigits(locale.digitSet, Locale.ArabicDigits)))
                 console.log("readNumber:" + locale.readNumber(10.0,3))
 
-                console.log("readDate:" + locale.readDate("2004-02-01"))
+                console.log("readDate:" + locale.readDate("2004-02-01", Locale.IsoFormat))
 
-                console.log("readTime:" + locale.readTime("11:22:33"))//TODO
+                console.log("readTime:" + locale.readTime("11:22:33"))//TODO its value in nothing(blank)
 
                 console.log("readLocaleTime:" + locale.readLocaleTime("11:12:13 AM"))
 

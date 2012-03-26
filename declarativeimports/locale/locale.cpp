@@ -198,11 +198,6 @@ QString Locale::formatMoney(double num, const QString &symbol, int precision) co
     return m_locale->formatMoney(num, symbol, precision);
 }
 
-QString Locale::formatNumber(double num, int precision) const
-{
-    return m_locale->formatNumber(num, precision);
-}
-
 QString Locale::formatLong(long num) const
 {
     return m_locale->formatLong(num);
@@ -265,23 +260,15 @@ double Locale::readMoney(const QString &_str, bool *ok) const
     return m_locale->readMoney(_str, ok);
 }
 
-QDate Locale::readDate(const QString &intstr, bool *ok) const
+QDate Locale::readDate(const QString &intstr, ReadDateFlags flags) const
 {
-    return m_locale->readDate(intstr, ok);
+    bool *ok;
+    return m_locale->readDate(intstr, (KLocale::ReadDateFlags)flags, ok);
 }
 
-QDate Locale::readDate(const QString &intstr, ReadDateFlags flags, bool *ok) const
+QTime Locale::readTime(const QString &intstr) const
 {
- return m_locale->readDate(intstr, (KLocale::ReadDateFlags)flags, ok);
-}
-
-QDate Locale::readDate(const QString &intstr, const QString &fmt, bool *ok) const
-{
-    return m_locale->readDate(intstr, fmt, ok);
-}
-
-QTime Locale::readTime(const QString &intstr, bool *ok) const
-{
+    bool *ok;
     return m_locale->readTime(intstr, ok);
 }
 
@@ -319,12 +306,7 @@ QStringList Locale::currencyCodeList() const
     return m_locale->currencyCodeList();
 }
 
-QString Locale::formatDateTime(const QDateTime &dateTime, Locale::DateFormat format, bool includeSeconds) const
-{
-    return m_locale->formatDateTime(dateTime, (KLocale::DateFormat)format, (KLocale::DateFormat)includeSeconds);
-}
-
-QString Locale::formatDateTime(const KDateTime &dateTime, Locale::DateFormat format, DateTimeFormatOptions options) const
+QString Locale::formatDateTime(const QDateTime &dateTime, Locale::DateFormat format, DateTimeFormatOptions options) const
 {
     Q_UNUSED(format)
     Q_UNUSED(options)
@@ -559,11 +541,6 @@ void Locale::setWeekNumberSystem(Locale::WeekNumberSystem weekNumberSystem)
 {
     m_locale->setWeekNumberSystem((KLocale::WeekNumberSystem)weekNumberSystem);
     emit WeekNumberSystemChanged();
-}
-
-Locale::WeekNumberSystem Locale::weekNumberSystem()
-{
-    return (Locale::WeekNumberSystem)m_locale->weekNumberSystem();
 }
 
 Locale::WeekNumberSystem Locale::weekNumberSystem() const

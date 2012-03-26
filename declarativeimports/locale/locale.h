@@ -379,25 +379,6 @@ public:
     Q_INVOKABLE QString formatMoney(double num, const QString &currency = QString(), int precision = -1) const;
 
     /**
-     * Given a double, converts that to a numeric string containing
-     * the localized numeric equivalent.
-     *
-     * e.g. given 123456.78F, return "123,456.78" (for some European country).
-     *
-     * If precision isn't specified or is < 0, then the default decimalPlaces() is used.
-     *
-     * This function is a wrapper that is provided for convenience.
-     *
-     * @param num The number to convert
-     * @param precision Number of decimal places used.
-     *
-     * @return The number as a localized string
-     * @see formatNumber(const QString, bool, int)
-     * @see decimalPlaces()
-     */
-    Q_INVOKABLE QString formatNumber(double num, int precision = -1) const;
-
-    /**
      * Given a string representing a number, converts that to a numeric
      * string containing the localized numeric equivalent.
      *
@@ -744,19 +725,6 @@ public:
     Q_INVOKABLE QString formatDate(const QDate &date, DateFormat format = LongDate) const;
 
     /**
-     * Returns a string formatted to the current locale's conventions
-     * regarding both date and time.
-     *
-     * @param dateTime the date and time to be formatted
-     * @param format category of date format to use
-     * @param includeSecs if @c true, the string will include the seconds part
-     *                    of the time; otherwise, the seconds will be omitted
-     *
-     * @return the date and time as a string
-     */
-    Q_INVOKABLE QString formatDateTime(const QDateTime &dateTime, DateFormat format = ShortDate,
-                           bool includeSecs = false) const;
-    /**
      * Options for formatting date-time values.
      */
     enum DateTimeFormatOption {
@@ -776,7 +744,7 @@ public:
      *
      * @return The date and time as a string
      */
-    Q_INVOKABLE QString formatDateTime(const KDateTime &dateTime, DateFormat format = ShortDate,
+    Q_INVOKABLE QString formatDateTime(const QDateTime &dateTime, DateFormat format = ShortDate,
                            DateTimeFormatOptions options = 0) const;//TODO
 
     /**
@@ -921,17 +889,6 @@ public:
      */
     void setWeekNumberSystem(Locale::WeekNumberSystem weekNumberSystem);
 
-    //KDE5 remove in favour of const version
-    /**
-     *
-     * Returns the type of Week Number System used in this Locale
-     *
-     * @see Klocale::WeekNumberSystem
-     * @see setWeekNumberSystem()
-     * @returns the Week Number System used
-     */
-    Locale::WeekNumberSystem weekNumberSystem();
-
     /**
      *
      * Returns the type of Week Number System used in this Locale
@@ -965,28 +922,6 @@ public:
     Q_INVOKABLE double readNumber(const QString &numStr, bool * ok = 0) const;
 
     /**
-     * Converts a localized date string to a QDate.  This method will try all
-     * ReadDateFlag formats in preferred order to read a valid date.
-     *
-     * The bool pointed by ok will be invalid if the date entered was not valid.
-     *
-     * @param str the string we want to convert.
-     * @param ok the boolean that is set to false if it's not a valid date.
-     *           If @p ok is 0, it will be ignored
-     *
-     * @return The string converted to a QDate
-     * @see CalendarSystem::readDate()
-     */
-    Q_INVOKABLE QDate readDate(const QString &str, bool* ok = 0) const;
-
-    /**
-     * Converts a localized date string to a QDate, using the specified format.
-     * You will usually not want to use this method.
-     * @see CalendarSystem::readDate()
-     */
-    Q_INVOKABLE QDate readDate(const QString &intstr, const QString &fmt, bool* ok = 0) const;
-
-    /**
      * Flags for readDate()
      */
     enum ReadDateFlags {
@@ -1009,27 +944,20 @@ public:
      *
      * @param str the string we want to convert.
      * @param flags what format the the date string will be in
-     * @param ok the boolean that is set to false if it's not a valid date.
-     *           If @p ok is 0, it will be ignored
-     *
      * @return The string converted to a QDate
      * @see CalendarSystem::readDate()
      */
-    Q_INVOKABLE QDate readDate(const QString &str, ReadDateFlags flags, bool *ok = 0) const;
+    Q_INVOKABLE QDate readDate(const QString &str, ReadDateFlags flags) const;
 
     /**
      * Converts a localized time string to a QTime.
      * This method will try to parse it with seconds, then without seconds.
-     * The bool pointed to by @p ok will be set to false if the time entered was
-     * not valid.
      *
      * @param str the string we want to convert.
-     * @param ok the boolean that is set to false if it's not a valid time.
-     *           If @p ok is 0, it will be ignored
      *
      * @return The string converted to a QTime
      */
-    Q_INVOKABLE QTime readTime(const QString &str, bool* ok = 0) const;
+    Q_INVOKABLE QTime readTime(const QString &str) const;
 
     /**
      * Additional processing options for readLocaleTime().
@@ -1158,7 +1086,7 @@ public:
      * @see QFile::encodeName
      * @see QFile::decodeName
      */
-    int fileEncodingMib() const;
+    int fileEncodingMib() const; //TODO returns undefined
 
     /**
      * Changes the current date format.
