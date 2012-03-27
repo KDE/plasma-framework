@@ -340,7 +340,7 @@ Item {
             }
             onActiveFocusChanged: {
                 if (!textEdit.activeFocus) {
-                    textInput.closeSoftwareInputPanel()
+                    textEdit.closeSoftwareInputPanel()
                 }
             }
         }
