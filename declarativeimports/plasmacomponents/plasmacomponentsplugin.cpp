@@ -54,28 +54,21 @@ EngineBookKeeping *EngineBookKeeping::self()
     return &privateBKSelf->self;
 }
 
-QDeclarativeEngine *EngineBookKeeping::engineFor(QObject *item) const
+QDeclarativeEngine *EngineBookKeeping::engine() const
 {
     //for components creation, any engine will do, as long is valid
-    return m_engines.values().first();
-    /*
-    foreach (QDeclarativeEngine *engine, m_engines) {
-        QObject *root = engine->rootContext()->contextObject();
-        QObject *candidate = item;
-
-        while (candidate) {
-            if (candidate == root) {
-                return engine;
-            }
-            candidate = candidate->parent();
-        }
+    if (m_engines.isEmpty()) {
+        kWarning() << "No engines found, this should never happen";
+        return 0;
+    } else {
+        return m_engines.values().first();
     }
-    return 0;*/
 }
 
 void EngineBookKeeping::insertEngine(QDeclarativeEngine *engine)
 {
-    connect(engine, SIGNAL(destroyed(QObject *)), this, SLOT(engineDestroyed(QObject *deleted)));
+    connect(engine, SIGNAL(destroyed(QObject *)),
+            this, SLOT(engineDestroyed(QObject *)));
     m_engines.insert(engine);
 }
 

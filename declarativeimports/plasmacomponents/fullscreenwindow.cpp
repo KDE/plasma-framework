@@ -147,7 +147,11 @@ void FullScreenWindow::init(const QString &componentName)
     }
 
 
-    QDeclarativeEngine *engine = EngineBookKeeping::self()->engineFor(this);
+    QDeclarativeEngine *engine = EngineBookKeeping::self()->engine();
+    if (!engine) {
+        kWarning() << "Warning, no QDeclarativeEngines available anymore, should never happen";
+        Q_ASSERT(0);
+    }
     QDeclarativeComponent *component = new QDeclarativeComponent(engine, filePath, this);
 
     QDeclarativeContext *creationContext = component->creationContext();

@@ -36,7 +36,7 @@ public:
     static EngineBookKeeping *self();
 
     void insertEngine(QDeclarativeEngine *engine);
-    QDeclarativeEngine *engineFor(QObject *item) const;
+    QDeclarativeEngine *engine() const;
 
 private Q_SLOTS:
     void engineDestroyed(QObject *deleted);
