@@ -279,18 +279,16 @@ QTime Locale::readTime(const QString &intstr) const
     return m_locale->readTime(intstr, ok);
 }
 
-QTime Locale::readLocaleTime(const QString &intstr, bool *ok, TimeFormatOptions options,
+QTime Locale::readLocaleTime(const QString &intstr, TimeFormatOptions options,
                               TimeProcessingOptions processing) const
 {
-    Q_UNUSED(options)
-    Q_UNUSED(processing)
-    return m_locale->readLocaleTime(intstr, ok);
+    bool *ok;
+    return m_locale->readLocaleTime(intstr, ok, (KLocale::TimeFormatOptions)(int)options, (KLocale::TimeProcessingOptions)(int)processing);
 }
 
 QString Locale::formatLocaleTime(const QTime &time, TimeFormatOptions options) const
 {
-    Q_UNUSED(options)
-    return m_locale->formatLocaleTime(time);
+    return m_locale->formatLocaleTime(time, (KLocale::TimeFormatOptions)(int)options);
 }
 
 bool Locale::use12Clock() const
@@ -315,9 +313,7 @@ QStringList Locale::currencyCodeList() const
 
 QString Locale::formatDateTime(const QDateTime &dateTime, Locale::DateFormat format, DateTimeFormatOptions options) const
 {
-    Q_UNUSED(format)
-    Q_UNUSED(options)
-    return m_locale->formatDateTime(dateTime);
+    return m_locale->formatDateTime(dateTime, (KLocale::DateFormat)format, (KLocale::DateTimeFormatOptions)(int)options);
 }
 
 void Locale::setDateFormat(const QString &format)

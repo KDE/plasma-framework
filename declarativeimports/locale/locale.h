@@ -993,7 +993,7 @@ public:
      * @return The string converted to a QTime
      */
 
-    Q_INVOKABLE QTime readLocaleTime(const QString &str, bool *ok = 0,
+    Q_INVOKABLE QTime readLocaleTime(const QString &str,
                          TimeFormatOptions options = Locale::TimeDefault,
                          TimeProcessingOptions processing = ProcessNonStrict) const;
 

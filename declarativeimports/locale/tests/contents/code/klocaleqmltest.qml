@@ -180,7 +180,7 @@ Item {
 
                 console.log("prettyFormatDuration:" + locale.prettyFormatDuration(10))
 
-                console.log("formatLocaleTime:" + locale.formatLocaleTime("2010-05-05"))
+                console.log("formatLocaleTime:" + locale.formatLocaleTime("11:12:13"))
 
                 console.log("dayPeriodText:" + locale.dayPeriodText("11:22:33"))
 
@@ -192,7 +192,7 @@ Item {
 
                 console.log("readTime:" + locale.readTime("11:22:33"))//TODO its value in nothing(blank)
 
-                console.log("readLocaleTime:" + locale.readLocaleTime("11:12:13 AM"))
+                console.log("readLocaleTime:" + locale.readLocaleTime("11:12:13"))
 
                 console.log("fileEncodingMib:" + locale.fileEncodingMib)
 
