@@ -132,7 +132,6 @@ Item {
 
 
     property alias privateTitleHeight: titleBar.height
-    property alias privateButtonsHeight: buttonsRow.height
 
     signal accepted
     signal rejected
@@ -216,10 +215,10 @@ Item {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 //FIXME: +5 because of Plasma::Dialog margins
-                height: titleLabel.paintedHeight + margins.top + margins.bottom
+                height: Math.max(titleLabel.paintedHeight, acceptButton.height) + margins.top + margins.bottom
 
-                Column {
-                    id: titleLayoutHelper // needed to make the text mirror correctly
+                Item {
+                    id: titleLayoutHelper
 
                     anchors {
                         right: parent.right
@@ -232,6 +231,15 @@ Item {
                         bottomMargin: parent.margins.bottom
                     }
 
+                    Button {
+                        id: acceptButton
+                        onClicked: accept()
+                        visible: text !== ""
+                        anchors {
+                            left: parent.left
+                            verticalCenter: parent.verticalCenter
+                        }
+                    }
                     Label {
                         id: titleLabel
                         elide: Text.ElideRight
@@ -241,11 +249,22 @@ Item {
                         style: Text.Raised
                         styleColor: Qt.rgba(1,1,1,0.8)
                         anchors {
-                            left: parent.left
-                            right: parent.right
+                            left: acceptButton.visible ? acceptButton.right : parent.left
+                            //still depends from acceptButton to make text more centered
+                            right: acceptButton.visible ? rejectButton.right : parent.right
+                            verticalCenter: parent.verticalCenter
                         }
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
+                    }
+                    Button {
+                        id: rejectButton
+                        onClicked: reject()
+                        visible: text !== ""
+                        anchors {
+                            right: parent.right
+                            verticalCenter: parent.verticalCenter
+                        }
                     }
                 }
             }
@@ -254,35 +273,15 @@ Item {
                 id: contentItem
 
                 clip: true
-                onChildrenRectChanged: mainItem.width = Math.max(childrenRect.width, buttonsRow.childrenRect.width)
+                onChildrenRectChanged: mainItem.width = childrenRect.width
                 anchors {
                     top: titleBar.bottom
                     left: parent.left
                     right: parent.right
-                    bottom: buttonsRow.top
-                }
-            }
-
-            Row {
-                id: buttonsRow
-                spacing: 8
-                anchors {
                     bottom: parent.bottom
-                    horizontalCenter: parent.horizontalCenter
-                    //the bottom margin is disabled but we want it anyways
-                    bottomMargin: theme.defaultFont.mSize.height*0.6
-                }
-
-                Button {
-                    id: acceptButton
-                    onClicked: accept()
-                }
-
-                Button {
-                    id: rejectButton
-                    onClicked: reject()
                 }
             }
+
         }
 
         states: [
