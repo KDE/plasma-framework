@@ -4,3 +4,9 @@ App 0.1 App.qml
 Heading 0.1 Heading.qml
 Paragraph 0.1 Paragraph.qml
 Title 0.1 Title.qml
+
+ActivateAnimation 0.1 ActivateAnimation.qml
+AppearAnimation 0.1 AppearAnimation.qml
+DisappearAnimation 0.1 DisappearAnimation.qml
+PressedAnimation 0.1 PressedAnimation.qml
+ReleasedAnimation 0.1 ReleasedAnimation.qml

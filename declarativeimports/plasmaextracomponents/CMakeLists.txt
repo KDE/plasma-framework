@@ -40,5 +40,7 @@ install(FILES qml/Heading.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/
 install(FILES qml/Paragraph.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/extras)
 install(FILES qml/Title.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/extras)
 
+install(DIRECTORY qml/animations/ DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/plasma/extras)
+
 #install platform overrides -- enable as we use this feature for plasmaextras
 #install(DIRECTORY platformcomponents/touch/ DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/extras)
