@@ -76,7 +76,7 @@ PlasmaExtras.App {
         width: app.width - navigationWidth - space*2
         parent: contentArea
         anchors.margins: space*2
-        Rectangle { color: "green"; opacity: 0.8; anchors.fill: contentItem; }
+        //Rectangle { color: "green"; opacity: 0.8; anchors.fill: contentItem; }
     }
 
     onWidthChanged: {
