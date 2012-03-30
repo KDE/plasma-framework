@@ -27,8 +27,8 @@ PlasmaCore.FrameSvgItem {
     property int iconSize: 32;
 
     imagePath: "dialogs/background"
-    width: (iconSize*2) + iconSize
-    height: iconSize*2
+    width:  4*iconSize
+    height: 2*iconSize
     z: 100000
     //anchors { top: parent.bottom; right: parent.right; topMargin: -(iconSize/4); }
 
@@ -39,26 +39,9 @@ PlasmaCore.FrameSvgItem {
 
     Row {
         id: buttonRow
-        spacing: 4
+        spacing: iconSize
         anchors { horizontalCenter: parent.horizontalCenter; verticalCenter: parent.verticalCenter; margins: 8; }
         height: editBubble.iconSize
-        QIconItem {
-            id: pasteIcon
-            icon: QIcon("edit-paste")
-            width: editBubble.iconSize
-            height: editBubble.iconSize
-            enabled: textInput.canPaste
-            MouseArea {
-                anchors.fill: parent;
-                onClicked: { textField.paste(); editBubble.state = "collapsed"; }
-                onPressed: PropertyAnimation {  target: pasteIcon; properties: "scale";
-                                                from: 1.0; to: 0.9;
-                                                duration: 175; easing.type: Easing.OutExpo; }
-                onReleased: PropertyAnimation { target: pasteIcon; properties: "scale";
-                                                from: 0.9; to: 1.0;
-                                                duration: 175; easing.type: Easing.OutExpo; }
-            }
-        }
         QIconItem {
             id: copyIcon
             icon: QIcon("edit-copy")
@@ -66,12 +49,33 @@ PlasmaCore.FrameSvgItem {
             height: editBubble.iconSize
             enabled: textInput.selectedText != ""
             MouseArea {
-                anchors.fill: parent;
+                anchors.centerIn: parent
+                width: 2*parent.width
+                height: 2*parent.height
                 onClicked: { textField.copy(); editBubble.state = "collapsed"; }
                 onPressed: PropertyAnimation {  target: copyIcon; properties: "scale";
                                                 from: 1.0; to: 0.9;
                                                 duration: 175; easing.type: Easing.OutExpo; }
                 onReleased: PropertyAnimation { target: copyIcon; properties: "scale";
+                                                from: 0.9; to: 1.0;
+                                                duration: 175; easing.type: Easing.OutExpo; }
+            }
+        }
+        QIconItem {
+            id: pasteIcon
+            icon: QIcon("edit-paste")
+            width: editBubble.iconSize
+            height: editBubble.iconSize
+            enabled: textInput.canPaste
+            MouseArea {
+                anchors.centerIn: parent;
+                width: 2*parent.width
+                height: 2*parent.height
+                onClicked: { textField.paste(); editBubble.state = "collapsed"; }
+                onPressed: PropertyAnimation {  target: pasteIcon; properties: "scale";
+                                                from: 1.0; to: 0.9;
+                                                duration: 175; easing.type: Easing.OutExpo; }
+                onReleased: PropertyAnimation { target: pasteIcon; properties: "scale";
                                                 from: 0.9; to: 1.0;
                                                 duration: 175; easing.type: Easing.OutExpo; }
             }
