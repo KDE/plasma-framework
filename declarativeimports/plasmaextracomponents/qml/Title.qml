@@ -23,7 +23,7 @@ Inherits:
 
 Imports:
         QtQuick 1.1
-        org.kde.plasma.components
+        org.kde.plasma.components 0.1
 
 Description:
     This is a title label which uses the plasma theme.
@@ -31,16 +31,25 @@ Description:
     according to the plasma theme. Use this components for titles
     in your UI, for example page or section titles.
 
+    Example usage:
+    <code>
+import org.kde.plasma.extras 0.1 as PlasmaExtras
+[...]
+Column{
+    PlasmaExtras.Title { text: "Fruit sweetness on the rise" }
+    PlasmaExtras.Heading { text: "Apples in the sunlight"; level: 2 }
+    PlasmaExtras.Paragraph { text: "Long text about fruit and apples [...]" }
+  [...]
+}
+</code>
+
+    See Plasma Component's Label and primitive QML Text element API for additional properties,
+    methods and signals.
+
 Properties:
     string text:
     The most important property is "text", which applies to the text property of Label
     For the other ones see Plasma Component's Label or QML primitive Text element
-
-Methods:
-    See Plasma Component's Label and primitive QML Text element
-
-Signals:
-    See Plasma Component's Label and primitive QML Text element
 **/
 
 import QtQuick 1.1

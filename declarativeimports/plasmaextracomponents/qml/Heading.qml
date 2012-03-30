@@ -26,24 +26,35 @@ Imports:
         org.kde.plasma.extras
 
 Description:
-    This is a title label which uses the plasma theme.
-    The characteristics of the text will be automatically set
-    according to the plasma theme. Use this components for titles
-    in your UI, for example page or section titles.
+    This is a heading label used for subsections of texts.
+    The characteristics of the text will be automatically set according to the plasma theme. Use
+    this components for section titles or headings in your UI, for example page or section titles.
+
+    Example usage:
+    <code>
+import org.kde.plasma.extras 0.1 as PlasmaExtras
+[...]
+Column{
+    PlasmaExtras.Title { text: "Fruit sweetness on the rise" }
+    PlasmaExtras.Heading { text: "Apples in the sunlight"; level: 2 }
+    PlasmaExtras.Paragraph { text: "Long text about fruit and apples [...]" }
+  [...]
+}
+</code>
+
+    See Plasma Component's Label and primitive QML Text element API for additional properties,
+    methods and signals.
+
 
 Properties:
     string text:
     The most important property is "text", which applies to the text property of Label
     For the other ones see Plasma Component's Label or QML primitive Text element
+
     int level:
     The level determines how big the section header is display, values between 1 (big)
     and 5 (small) are accepted
 
-Methods:
-    See Plasma Component's Label and primitive QML Text element
-
-Signals:
-    See Plasma Component's Label and primitive QML Text element
 **/
 
 import QtQuick 1.1
