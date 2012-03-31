@@ -6,7 +6,7 @@ function placeEditBubble(mouse) {
         rootItem = rootItem.parent;
     }
     var distanceToTop = mouseEventListener.mapToItem(rootItem, mouse.x, mouse.y);
-    print( "   distanceToTop: " + distanceToTop.x);
+    //print( "   distanceToTop: " + distanceToTop.x);
     if (distanceToTop.x < editBubble.width/2) {
         // hitting the left edge
         //editBubble.x = mouse.x
