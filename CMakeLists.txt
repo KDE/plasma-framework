@@ -33,8 +33,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_SOURCE_DIR}/tier1/threadweaver/src
                     ${CMAKE_BINARY_DIR}/tier1/threadweaver/src
                     ${CMAKE_BINARY_DIR}/tier1/threadweaver/src/Weaver
-                    ${CMAKE_SOURCE_DIR}/staging/kwindowsystem/
-                    ${CMAKE_BINARY_DIR}/staging/kwindowsystem/
+                    ${CMAKE_SOURCE_DIR}/tier1/kwindowsystem/
+                    ${CMAKE_BINARY_DIR}/tier1/kwindowsystem/
                     ${CMAKE_SOURCE_DIR}/plasma/remote
                     ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch/qtjolie
                     ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch
