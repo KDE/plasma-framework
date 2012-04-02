@@ -96,7 +96,7 @@ Item {
 
         onToolsChanged: {
             // FIXME: questionable heuristics
-            height = (tools.childrenRect.width > 20) ? tools.childrenRect.height + space : 0
+            height = (tools && tools.childrenRect.width > 20) ? tools.childrenRect.height + space : 0
         }
     }
 
@@ -124,6 +124,7 @@ Item {
         clip: true
         width: navigationWidth + space
         Item {
+            clip: true
             id: navigationItem
             anchors.fill: parent
         }
