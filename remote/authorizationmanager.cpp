@@ -44,6 +44,7 @@
 #include <QtJolie/Server>
 
 #include <kauthaction.h>
+#include <kauthexecutejob.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
@@ -203,9 +204,9 @@ void AuthorizationManagerPrivate::saveRules()
     KAuth::Action action("org.kde.kcontrol.kcmremotewidgets.save");
     action.addArgument("source", tempFile.fileName());
     action.addArgument("filename", "/etc/plasma-remotewidgets.conf");
-    KAuth::ActionReply reply = action.execute();
+    KAuth::ExecuteJob *job  = action.execute();
 
-    if (reply.failed()) {
+    if (!job->exec()) {
 #ifndef NDEBUG
         kDebug() << "KAuth failed.... YOU SUCK!";
 #endif
