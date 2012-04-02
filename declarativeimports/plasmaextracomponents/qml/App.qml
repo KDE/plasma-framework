@@ -84,7 +84,6 @@ Item {
     property int space: 20
     property int navigationWidth: 340
     property int contentWidth: app.width - navigationWidth - space*2
-    anchors.fill: parent
 
     PlasmaCore.Theme { id: theme }
 
