@@ -27,9 +27,9 @@ Imports:
 
 Description:
     This is a label which uses the plasma theme.
-    The characteristics of the text will be automatically seted
+    The characteristics of the text will be automatically set
     according to the plasma theme. If you need a more customized
-    text,then you can use the Text component from QtQuick.
+    text item use the Text component from QtQuick.
 
 Properties:
     string text:
