@@ -6,8 +6,8 @@ Paragraph 0.1 Paragraph.qml
 ScrollArea 0.1 ScrollArea.qml
 Title 0.1 Title.qml
 
-ActivateAnimation 0.1 ActivateAnimation.qml
-AppearAnimation 0.1 AppearAnimation.qml
-DisappearAnimation 0.1 DisappearAnimation.qml
-PressedAnimation 0.1 PressedAnimation.qml
-ReleasedAnimation 0.1 ReleasedAnimation.qml
+ActivateAnimation 0.1 animations/ActivateAnimation.qml
+AppearAnimation 0.1 animations/AppearAnimation.qml
+DisappearAnimation 0.1 animations/DisappearAnimation.qml
+PressedAnimation 0.1 animations/PressedAnimation.qml
+ReleasedAnimation 0.1 animations/ReleasedAnimation.qml
