@@ -36,6 +36,7 @@ Properties:
 
 import QtQuick 1.1
 import org.kde.plasma.components 0.1
+import org.kde.plasma.core 0.1 as PlasmaCore
 
 Item {
     id: root
@@ -150,6 +151,85 @@ Item {
                 right: parent.right
                 bottom: parent.bottom
             }
+        }
+    }
+    //FIXME: create all this stuff only on demand, like scrollbars?
+    PlasmaCore.Svg {
+        id: borderSvg
+        imagePath: "widgets/scrollwidget"
+    }
+    PlasmaCore.SvgItem {
+        svg: borderSvg
+        z: 1000
+        elementId: "border-top"
+        width: 100
+        height: naturalSize.height
+        opacity: flickableItem.atYBeginning ? 0 : 1
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 250
+                easing.type: Easing.InOutQuad
+            }
+        }
+        anchors {
+            left: parent.left
+            top: parent.top
+            right: parent.right
+        }
+    }
+    PlasmaCore.SvgItem {
+        svg: borderSvg
+        z: 1000
+        elementId: "border-bottom"
+        width: 100
+        height: naturalSize.height
+        opacity: flickableItem.atYEnd ? 0 : 1
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 250
+                easing.type: Easing.InOutQuad
+            }
+        }
+        anchors {
+            left: parent.left
+            bottom: parent.bottom
+            right: parent.right
+        }
+    }
+    PlasmaCore.SvgItem {
+        svg: borderSvg
+        z: 1000
+        elementId: "border-left"
+        width: naturalSize.width
+        opacity: flickableItem.atXBeginning ? 0 : 1
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 250
+                easing.type: Easing.InOutQuad
+            }
+        }
+        anchors {
+            left: parent.left
+            top: parent.top
+            bottom: parent.bottom
+        }
+    }
+    PlasmaCore.SvgItem {
+        svg: borderSvg
+        z: 1000
+        elementId: "border-right"
+        width: naturalSize.width
+        opacity: flickableItem.atXEnd ? 0 : 1
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 250
+                easing.type: Easing.InOutQuad
+            }
+        }
+        anchors {
+            top: parent.top
+            bottom: parent.bottom
+            right: parent.right
         }
     }
 }
