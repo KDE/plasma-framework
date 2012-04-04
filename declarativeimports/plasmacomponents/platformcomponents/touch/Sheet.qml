@@ -251,7 +251,7 @@ Item {
                         anchors {
                             left: acceptButton.visible ? acceptButton.right : parent.left
                             //still depends from acceptButton to make text more centered
-                            right: acceptButton.visible ? rejectButton.right : parent.right
+                            right: acceptButton.visible ? rejectButton.left : parent.right
                             verticalCenter: parent.verticalCenter
                         }
                         horizontalAlignment: Text.AlignHCenter
