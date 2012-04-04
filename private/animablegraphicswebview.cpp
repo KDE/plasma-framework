@@ -143,7 +143,7 @@ void AnimableGraphicsWebView::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     QMouseEvent me(QEvent::MouseButtonRelease, event->pos().toPoint(),
             event->button(),event->buttons(), event->modifiers());
 
-    if (!m_dragToScroll || (scrollPosition() - m_lastScrollPosition).manhattanLength() < KGlobalSettings::dndEventDelay()) {
+    if (!m_dragToScroll || (scrollPosition() - m_lastScrollPosition).manhattanLength() < QApplication::startDragDistance()) {
         page()->event(&me);
     }
 

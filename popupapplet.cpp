@@ -438,7 +438,7 @@ void PopupApplet::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void PopupApplet::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if (!d->icon &&
-        (d->clicked - scenePos().toPoint()).manhattanLength() < KGlobalSettings::dndEventDelay()) {
+        (d->clicked - scenePos().toPoint()).manhattanLength() < QApplication::startDragDistance()) {
         d->internalTogglePopup();
     } else {
         Applet::mouseReleaseEvent(event);
