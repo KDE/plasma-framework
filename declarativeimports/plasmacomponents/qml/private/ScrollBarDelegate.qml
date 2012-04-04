@@ -129,7 +129,7 @@ PlasmaCore.FrameSvgItem {
             if (scrollbar.activeFocus || leftMouseArea.containsMouse) {
                 return internalLoader.isVertical ? "mouseover-arrow-up" : "mouseover-arrow-left"
             } else {
-                return internalLoader.isVertical ? "mouseover-arrow-up" : "arrow-left"
+                return internalLoader.isVertical ? "arrow-up" : "arrow-left"
             }
         }
 
@@ -138,6 +138,7 @@ PlasmaCore.FrameSvgItem {
 
             anchors.fill: parent
             enabled: scrollbar.enabled
+            hoverEnabled: true
             Timer {
                 id: leftTimer
                 interval: scrollbar.scrollButtonInterval;
@@ -169,14 +170,14 @@ PlasmaCore.FrameSvgItem {
         height: 18
         svg: scrollbarSvg
         elementId: {
-            if (leftMouseArea.pressed) {
+            if (rightMouseArea.pressed) {
                 return internalLoader.isVertical ? "sunken-arrow-down" : "sunken-arrow-right"
             }
 
-            if (scrollbar.activeFocus || leftMouseArea.containsMouse) {
+            if (scrollbar.activeFocus || rightMouseArea.containsMouse) {
                 return internalLoader.isVertical ? "mouseover-arrow-down" : "mouseover-arrow-right"
             } else {
-                return internalLoader.isVertical ? "mouseover-arrow-down" : "arrow-right"
+                return internalLoader.isVertical ? "arrow-down" : "arrow-right"
             }
         }
 
@@ -185,6 +186,7 @@ PlasmaCore.FrameSvgItem {
 
             anchors.fill: parent
             enabled: scrollbar.enabled
+            hoverEnabled: true
             Timer {
                 id: rightTimer
                 interval: scrollbar.scrollButtonInterval;
