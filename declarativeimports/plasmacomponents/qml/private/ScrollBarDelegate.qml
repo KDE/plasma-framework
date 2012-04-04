@@ -139,11 +139,13 @@ PlasmaCore.FrameSvgItem {
             anchors.fill: parent
             enabled: scrollbar.enabled
             hoverEnabled: true
+
             Timer {
                 id: leftTimer
                 interval: scrollbar.scrollButtonInterval;
                 running: parent.pressed
                 repeat: true
+                triggeredOnStart: true
                 onTriggered: {
                     background.forceActiveFocus()
                     if (inverted) {
@@ -187,11 +189,13 @@ PlasmaCore.FrameSvgItem {
             anchors.fill: parent
             enabled: scrollbar.enabled
             hoverEnabled: true
+
             Timer {
                 id: rightTimer
                 interval: scrollbar.scrollButtonInterval;
                 running: parent.pressed;
                 repeat: true
+                triggeredOnStart: true
                 onTriggered: {
                     background.forceActiveFocus();
                     if (inverted)
