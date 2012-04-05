@@ -70,10 +70,6 @@ Plasma Properties:
         This property holds if the slider visualizations has an inverted direction.
     The default value is false.
 
-        bool updateValueWhileDragging:
-        This property holds if the value is updated while dragging or if it applies only
-    when the slider's handler is released.
-
         real handleSize:
         This property holds the size of the Slider's handle.
 **/
@@ -153,7 +149,6 @@ Item {
 
         // Plasma API
         property bool animated: true
-        property bool updateValueWhileDragging: true
         property real handleSize: theme.defaultFont.mSize.height*1.3
 
         // Convenience API
@@ -270,21 +265,11 @@ Item {
 
                 slider.forceActiveFocus()
             }
-            onReleased: {
-                // If we don't update while dragging, this is the only
-                // moment that the range is updated.
-                if (!slider.updateValueWhileDragging) {
-                    range.position = fakeHandle.x
-                }
-            }
         }
     }
 
-    // Range position normally follow fakeHandle, except when
-    // 'updateValueWhileDragging' is false. In this case it will only follow
-    // if the user is not pressing the handle.
     Binding {
-        when: updateValueWhileDragging || !mouseArea.pressed
+        when: !mouseArea.pressed
         target: range
         property: "position"
         value: fakeHandle.x
