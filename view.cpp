@@ -28,6 +28,7 @@
 
 #include "corona.h"
 #include "containment.h"
+#include "private/containment_p.h"
 #include "wallpaper.h"
 
 using namespace Plasma;
@@ -342,13 +343,8 @@ Containment *View::swapContainment(Plasma::Containment *existing, const QString 
         // load the configuration of the old containment into the new one
         c->restore(newConfig);
         c->updateConstraints(Plasma::StartupCompletedConstraint);
-        c->flushPendingConstraintsEvents();
+        c->d->initApplets();
         emit corona->containmentAdded(c);
-        foreach (Applet *applet, c->applets()) {
-            applet->init();
-            // We have to flush the applet constraints manually
-            applet->flushPendingConstraintsEvents();
-        }
 
         // destroy the old one
         old->destroy(false);
