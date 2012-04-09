@@ -19,7 +19,7 @@
 
 #include "svgitem.h"
 
-#include <QtGui/QPainter>
+#include <QPainter>
 
 #include "kdebug.h"
 #include "plasma/svg.h"

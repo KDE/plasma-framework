@@ -22,7 +22,7 @@
 #include <KIcon>
 #include <KIconLoader>
 #include <KIconEffect>
-#include <QtGui/QPainter>
+#include <QPainter>
 
 
 QIconItem::QIconItem(QDeclarativeItem *parent)

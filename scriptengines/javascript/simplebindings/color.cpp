@@ -19,7 +19,7 @@
 #include <QtScript/QScriptValue>
 #include <QtScript/QScriptEngine>
 #include <QtScript/QScriptContext>
-#include <QtGui/QColor>
+#include <QColor>
 
 #include <KDebug>
 

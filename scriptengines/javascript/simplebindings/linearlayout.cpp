@@ -19,11 +19,11 @@
 #include <QtScript/QScriptValue>
 #include <QtScript/QScriptEngine>
 #include <QtScript/QScriptContext>
-#include <QtGui/QGraphicsAnchorLayout>
-#include <QtGui/QGraphicsLayout>
-#include <QtGui/QGraphicsLinearLayout>
-#include <QtGui/QGraphicsGridLayout>
-#include <QtGui/QGraphicsWidget>
+#include <QGraphicsAnchorLayout>
+#include <QGraphicsLayout>
+#include <QGraphicsLinearLayout>
+#include <QGraphicsGridLayout>
+#include <QGraphicsWidget>
 
 #include <Plasma/Applet>
 

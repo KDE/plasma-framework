@@ -20,10 +20,10 @@
 #include <QtScript/QScriptEngine>
 #include <QtScript/QScriptContext>
 
-#include <QtGui/QPainter>
-#include <QtGui/QPicture>
-#include <QtGui/QPolygonF>
-#include <QtGui/QWidget>
+#include <QPainter>
+#include <QPicture>
+#include <QPolygonF>
+#include <QWidget>
 
 #include <QtCore/qdebug.h>
 

@@ -19,7 +19,7 @@
 #include <QtScript/QScriptValue>
 #include <QtScript/QScriptEngine>
 #include <QtScript/QScriptContext>
-#include <QtGui/QFont>
+#include <QFont>
 #include "backportglobal.h"
 
 Q_DECLARE_METATYPE(QFont*)

@@ -19,7 +19,7 @@
 #include <QtScript/QScriptValue>
 #include <QtScript/QScriptEngine>
 #include <QtScript/QScriptContext>
-#include <QtGui/QPen>
+#include <QPen>
 #include "backportglobal.h"
 
 Q_DECLARE_METATYPE(QPen*)

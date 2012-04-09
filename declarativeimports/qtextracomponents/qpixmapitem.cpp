@@ -19,7 +19,7 @@
 
 #include "qpixmapitem.h"
 
-#include <QtGui/QPainter>
+#include <QPainter>
 
 
 QPixmapItem::QPixmapItem(QDeclarativeItem *parent)

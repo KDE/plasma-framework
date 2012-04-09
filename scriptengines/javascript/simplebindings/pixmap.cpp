@@ -19,7 +19,7 @@
 #include <QtScript/QScriptValue>
 #include <QtScript/QScriptEngine>
 #include <QtScript/QScriptContext>
-#include <QtGui/QPixmap>
+#include <QPixmap>
 #include "backportglobal.h"
 #include "plasmoid/appletinterface.h"
 

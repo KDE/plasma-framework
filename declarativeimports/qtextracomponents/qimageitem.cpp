@@ -19,7 +19,7 @@
 
 #include "qimageitem.h"
 
-#include <QtGui/QPainter>
+#include <QPainter>
 
 
 QImageItem::QImageItem(QDeclarativeItem *parent)

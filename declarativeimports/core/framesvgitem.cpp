@@ -19,7 +19,7 @@
 
 #include "framesvgitem.h"
 
-#include <QtGui/QPainter>
+#include <QPainter>
 
 #include "kdebug.h"
 

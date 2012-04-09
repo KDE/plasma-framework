@@ -19,9 +19,9 @@
 #include <QtScript/QScriptValue>
 #include <QtScript/QScriptEngine>
 #include <QtScript/QScriptContext>
-#include <QtGui/QGraphicsWidget>
-#include <QtGui/QGraphicsGridLayout>
-#include <QtGui/QGraphicsLayout>
+#include <QGraphicsWidget>
+#include <QGraphicsGridLayout>
+#include <QGraphicsLayout>
 
 #include <Plasma/Applet>
 

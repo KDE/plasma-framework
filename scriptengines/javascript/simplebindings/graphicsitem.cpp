@@ -19,9 +19,9 @@
 #include <QtScript/QScriptValue>
 #include <QtScript/QScriptEngine>
 #include <QtScript/QScriptContext>
-#include <QtGui/QCursor>
-#include <QtGui/QGraphicsItem>
-#include <QtGui/QGraphicsScene>
+#include <QCursor>
+#include <QGraphicsItem>
+#include <QGraphicsScene>
 #include "backportglobal.h"
 
 Q_DECLARE_METATYPE(QScript::Pointer<QGraphicsItem>::wrapped_pointer_type)
