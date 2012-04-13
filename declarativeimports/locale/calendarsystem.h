@@ -43,18 +43,18 @@ Q_ENUMS(DateTimeComponent)
 Q_ENUMS(DateTimeComponentFormat)
 
 //properties
-Q_PROPERTY(QList<int> calendarSystemsList READ calendarSystemsList) //read-only
-Q_PROPERTY(Locale::CalendarSystem calendarSystem READ calendarSystem NOTIFY calendarSystemChanged)//read-only
-Q_PROPERTY(QString calendarLabel READ calendarLabel NOTIFY calendarLabelChanged)//read-only
-Q_PROPERTY(QDate epoch READ epoch NOTIFY epochChanged)//read-only
-Q_PROPERTY(QDate earliestValidDate READ earliestValidDate NOTIFY earliestValidDateChanged)//read-only
-Q_PROPERTY(QDate latestValidDate READ latestValidDate NOTIFY latestValidDateChanged)//read-only
-Q_PROPERTY(int shortYearWindowStartYear READ shortYearWindowStartYear NOTIFY shortYearWindowStartYearChanged)
-Q_PROPERTY(int weekStartDay READ weekStartDay NOTIFY weekStartDayChanged)//read-only
-Q_PROPERTY(bool isLunar READ isLunar NOTIFY isLunarChanged)//read-only
-Q_PROPERTY(bool isLunisolar READ isLunisolar NOTIFY isLunisolarChanged)//read-only
-Q_PROPERTY(bool isSolar READ isSolar NOTIFY isSolarChanged)//read-only
-Q_PROPERTY(bool isProleptic READ isProleptic NOTIFY isProlepticChanged)//read-only
+Q_PROPERTY(QList<int> calendarSystemsList READ calendarSystemsList CONSTANT) //read-only
+Q_PROPERTY(Locale::CalendarSystem calendarSystem READ calendarSystem CONSTANT)//read-only
+Q_PROPERTY(QString calendarLabel READ calendarLabel CONSTANT)//read-only
+Q_PROPERTY(QDate epoch READ epoch CONSTANT)//read-only
+Q_PROPERTY(QDate earliestValidDate READ earliestValidDate CONSTANT)//read-only
+Q_PROPERTY(QDate latestValidDate READ latestValidDate CONSTANT)//read-only
+Q_PROPERTY(int shortYearWindowStartYear READ shortYearWindowStartYear CONSTANT)
+Q_PROPERTY(int weekStartDay READ weekStartDay CONSTANT)//read-only
+Q_PROPERTY(bool isLunar READ isLunar CONSTANT)//read-only
+Q_PROPERTY(bool isLunisolar READ isLunisolar CONSTANT)//read-only
+Q_PROPERTY(bool isSolar READ isSolar CONSTANT)//read-only
+Q_PROPERTY(bool isProleptic READ isProleptic CONSTANT)//read-only
 
 public:
 
@@ -689,19 +689,6 @@ public:
      * @return @c true if the calendar system is proleptic, @c false if not
      */
     bool isProleptic() const;
-
-Q_SIGNALS:
-    void calendarSystemChanged();
-    void calendarLabelChanged();
-    void epochChanged();
-    void earliestValidDateChanged();
-    void latestValidDateChanged();
-    void shortYearWindowStartYearChanged();
-    void weekStartDayChanged();
-    void isLunarChanged();
-    void isLunisolarChanged();
-    void isSolarChanged();
-    void isProlepticChanged();
 
 private:
     KCalendarSystem *m_calendarSystem;

@@ -81,7 +81,7 @@ Q_ENUMS(WeekNumberSystem)
 //properties
 Q_PROPERTY(BinaryUnitDialect binaryUnitDialect READ binaryUnitDialect WRITE setBinaryUnitDialect NOTIFY binaryUnitDialectChanged)
 Q_PROPERTY(Locale::CalendarSystem calendarSystem READ calendarSystem WRITE setCalendarSystem NOTIFY calendarSystemChanged)
-Q_PROPERTY(QString country READ country NOTIFY countryChanged) //read-only
+Q_PROPERTY(QString country READ country CONSTANT) //read-only
 Q_PROPERTY(QString countryDivisionCode READ countryDivisionCode WRITE setCountryDivisionCode NOTIFY countryDivisionCodeChanged)
 Q_PROPERTY(QString currencyCode READ currencyCode WRITE setCurrencyCode NOTIFY currencyCodeChanged)
 Q_PROPERTY(QString currencySymbol READ currencySymbol WRITE setCurrencySymbol NOTIFY currencySymbolChanged)
@@ -92,7 +92,7 @@ Q_PROPERTY(DigitSet dateTimeDigitSet READ dateTimeDigitSet WRITE setDateTimeDigi
 Q_PROPERTY(int decimalPlaces READ decimalPlaces WRITE setDecimalPlaces NOTIFY decimalPlacesChanged)
 Q_PROPERTY(QString decimalSymbol READ decimalSymbol WRITE setDecimalSymbol NOTIFY decimalSymbolChanged)
 Q_PROPERTY(DigitSet digitSet READ digitSet WRITE setDigitSet NOTIFY digitSetChanged)
-Q_PROPERTY(QString language READ language NOTIFY languageChanged) //read-only
+Q_PROPERTY(QString language READ language CONSTANT) //read-only
 Q_PROPERTY(MeasureSystem measureSystem READ measureSystem WRITE setMeasureSystem NOTIFY measureSystemChanged)
 Q_PROPERTY(int monetaryDecimalPlaces READ monetaryDecimalPlaces WRITE setMonetaryDecimalPlaces NOTIFY monetaryDecimalPlacesChanged)
 Q_PROPERTY(QString monetaryDecimalSymbol READ monetaryDecimalSymbol WRITE setMonetaryDecimalSymbol NOTIFY monetaryDecimalSymbolChanged)
@@ -111,18 +111,18 @@ Q_PROPERTY(Locale::WeekNumberSystem weekNumberSystem READ weekNumberSystem WRITE
 Q_PROPERTY(int weekStartDay READ weekStartDay WRITE setWeekStartDay NOTIFY weekStartDayChanged)
 Q_PROPERTY(int workingWeekEndDay READ workingWeekEndDay WRITE setWorkingWeekEndDay NOTIFY workingWeekEndDayChanged)
 Q_PROPERTY(int workingWeekStartDay READ workingWeekStartDay WRITE setWorkingWeekStartDay NOTIFY workingWeekStartDayChanged)
-Q_PROPERTY(bool use12Clock READ use12Clock NOTIFY use12ClockChanged)
-Q_PROPERTY(QString defaultLanguage READ defaultLanguage NOTIFY defaultLanguageChanged)//read-only
-Q_PROPERTY(QString defaultCountry READ defaultCountry NOTIFY defaultCountryChanged)//read-only
-Q_PROPERTY(QString defaultCurrencyCode READ defaultCurrencyCode NOTIFY defaultCurrencyCodeChanged)//read-only
-Q_PROPERTY(bool useTranscript READ useTranscript NOTIFY useTranscriptChanged) //read-only
-Q_PROPERTY(int fileEncodingMib READ fileEncodingMib NOTIFY fileEncodingMibChanged) //read-only
-Q_PROPERTY(QStringList languageList READ languageList NOTIFY languageListChanged) //read-only
-Q_PROPERTY(QStringList currencyCodeList READ currencyCodeList NOTIFY currencyCodeListChanged) //read-only
-Q_PROPERTY(QStringList allLanguagesList READ allLanguagesList NOTIFY allLanguagesListChanged) //read-only
-Q_PROPERTY(QStringList installedLanguages READ installedLanguages NOTIFY installedLanguagesChanged) //read-only
-Q_PROPERTY(QStringList allCountriesList READ allCountriesList NOTIFY allCountriesListChanged) //read-only
-Q_PROPERTY(QList<int> allDigitSetsList READ allDigitSetsList NOTIFY allDigitSetsListChanged) //read-only
+Q_PROPERTY(bool use12Clock READ use12Clock CONSTANT)
+Q_PROPERTY(QString defaultLanguage READ defaultLanguage CONSTANT)//read-only
+Q_PROPERTY(QString defaultCountry READ defaultCountry CONSTANT)//read-only
+Q_PROPERTY(QString defaultCurrencyCode READ defaultCurrencyCode CONSTANT)//read-only
+Q_PROPERTY(bool useTranscript READ useTranscript CONSTANT) //read-only
+Q_PROPERTY(int fileEncodingMib READ fileEncodingMib CONSTANT) //read-only
+Q_PROPERTY(QStringList languageList READ languageList CONSTANT) //read-only
+Q_PROPERTY(QStringList currencyCodeList READ currencyCodeList CONSTANT) //read-only
+Q_PROPERTY(QStringList allLanguagesList READ allLanguagesList CONSTANT) //read-only
+Q_PROPERTY(QStringList installedLanguages READ installedLanguages CONSTANT) //read-only
+Q_PROPERTY(QStringList allCountriesList READ allCountriesList CONSTANT) //read-only
+Q_PROPERTY(QList<int> allDigitSetsList READ allDigitSetsList CONSTANT) //read-only
 
 public:
     /**
@@ -1604,7 +1604,6 @@ private:
 Q_SIGNALS:
     void binaryUnitDialectChanged();
     void calendarSystemChanged();
-    void countryChanged();
     void countryDivisionCodeChanged();
     void currencyCodeChanged();
     void decimalSymbolChanged();
@@ -1615,7 +1614,6 @@ Q_SIGNALS:
     void dateTimeDigitSetChanged();
     void decimalPlacesChanged();
     void digitSetChanged();
-    void languageChanged();
     void measureSystemChanged();
     void monetaryDecimalPlacesChanged();
     void monetaryDecimalSymbolChanged();
@@ -1635,18 +1633,6 @@ Q_SIGNALS:
     void weekStartDayChanged();
     void workingWeekEndDayChanged();
     void workingWeekStartDayChanged();
-    void use12ClockChanged();
-    void defaultCountryChanged();
-    void defaultCurrencyCodeChanged();
-    void defaultLanguageChanged();
-    void useTranscriptChanged();
-    void fileEncodingMibChanged();
-    void languageListChanged();
-    void currencyCodeListChanged();
-    void allLanguagesListChanged();
-    void installedLanguagesChanged();
-    void allCountriesListChanged();
-    void allDigitSetsListChanged();
 };
 
 #endif

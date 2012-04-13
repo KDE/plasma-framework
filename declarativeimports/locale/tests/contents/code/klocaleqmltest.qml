@@ -475,97 +475,10 @@ Item {
             onWorkingWeekStartDayChanged: {
                 console.log("the workingWeekStartDay property has been changed")
             }
-
-            onUse12ClockChanged: {
-                console.log("the use12Clock property has been changed")
-            }
-
-            onDefaultLanguageChanged: {
-                console.log("the defaultLanguage property has been changed")
-            }
-
-            onDefaultCountryChanged: {
-                console.log("the defaultCountry property has been changed")
-            }
-
-            onDefaultCurrencyCodeChanged: {
-                console.log("the defaultCurrencyCode property has been changed")
-            }
-
-            onUseTranscriptChanged: {
-                console.log("the useTranscript property has been changed")
-            }
-
-            onCountryChanged: {
-                console.log("the country property has been changed")
-            }
-
-            onLanguageChanged: {
-                console.log("the language property has been changed")
-            }
-
-            onFileEncodingMibChanged: {
-                console.log("the fileEncodingMib property has been changed")
-            }
-
-            onLanguageListChanged: {
-                console.log("the languageList property has been changed")
-            }
-
-            onCurrencyCodeListChanged: {
-                console.log("the currencyCodeList property has been changed")
-            }
-
-            onInstalledLanguagesChanged: {
-                console.log("the installedLanguages property has been changed")
-            }
-
-            onAllCountriesListChanged: {
-                console.log("the allCountriesList property has been changed")
-            }
-
-            onAllDigitSetsListChanged: {
-                console.log("the allDigitSetsList property has been changed")
-            }
         }
 
         CalendarSystem {
             id: calendar
-
-            onCalendarSystemChanged: {
-                console.log("the calendarSystem property has been changed")
-            }
-
-            onCalendarLabelChanged: {
-                console.log("the calendarLabel property has been changed")
-            }
-            onEpochChanged: {
-                console.log("the epoch property has been changed")
-            }
-            onEarliestValidDateChanged: {
-                console.log("the earliestValidDate property has been changed")
-            }
-            onLatestValidDateChanged: {
-                console.log("the latestValidDate property has been changed")
-            }
-            onShortYearWindowStartYearChanged: {
-                console.log("the shortYearWindowStartYear property has been changed")
-            }
-            onWeekStartDayChanged: {
-                console.log("the weekStartDay property has been changed")
-            }
-            onIsLunarChanged: {
-                console.log("the isLunar property has been changed")
-            }
-            onIsLunisolarChanged: {
-                console.log("the isLunisolar property has been changed")
-            }
-            onIsSolarChanged: {
-                console.log("the isSolar property has been changed")
-            }
-            onIsProlepticChanged: {
-                console.log("the isProleptic property has been changed")
-            }
         }
     }
 }
