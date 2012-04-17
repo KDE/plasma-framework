@@ -92,6 +92,10 @@ function build() {
             checkHandlers.push(checkExclusive(item));
             item.checkedChanged.connect(checkHandlers[checkHandlers.length - 1]);
         }
+        if (item.checked) {
+            checkExclusive(item)()
+            if (item.checked) self.checkedButton = item
+        }
     }
 
     var nrButtons = visibleButtons.length;
@@ -100,7 +104,7 @@ function build() {
 
     if (self.checkedButton)
         self.checkedButton.checked = true;
-    else if (self.exclusive && self.checkedButton === undefined) {
+    else if (self.exclusive) {
         self.checkedButton = visibleButtons[0];
         self.checkedButton.checked = true;
     }
