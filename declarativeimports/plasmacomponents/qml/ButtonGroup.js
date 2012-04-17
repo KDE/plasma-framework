@@ -100,7 +100,7 @@ function build() {
 
     if (self.checkedButton)
         self.checkedButton.checked = true;
-    else if (self.exclusive) {
+    else if (self.exclusive && self.checkedButton === undefined) {
         self.checkedButton = visibleButtons[0];
         self.checkedButton.checked = true;
     }
