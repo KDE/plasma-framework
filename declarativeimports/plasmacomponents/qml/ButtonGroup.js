@@ -49,6 +49,7 @@ function create(that, options) {
     self = that;
     direction = options.direction || Qt.Horizontal;
     self.childrenChanged.connect(rebuild);
+    self.exclusiveChanged.connect(rebuild);
 //    self.widthChanged.connect(resizeChildren);
     build();
 }
@@ -88,7 +89,6 @@ function build() {
             item.checkable = true;
 
         if (self.exclusive) {
-            item.checked = false;
             checkHandlers.push(checkExclusive(item));
             item.checkedChanged.connect(checkHandlers[checkHandlers.length - 1]);
         }
