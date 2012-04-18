@@ -664,6 +664,7 @@ Q_SIGNALS:
         friend class ContainmentPrivate;
         friend class ContainmentActions;
         friend class PopupApplet;
+        friend class View;
         ContainmentPrivate *const d;
 };
 
