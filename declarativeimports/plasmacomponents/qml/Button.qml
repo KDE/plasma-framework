@@ -123,8 +123,8 @@ Item {
                 button.checked = !button.checked
             }
 
-            button.clicked()
             button.forceActiveFocus()
+            button.clicked()
         }
     }
 

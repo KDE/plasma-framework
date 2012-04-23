@@ -128,7 +128,6 @@ Item {
                 button.checked = !button.checked
             }
 
-            button.clicked()
             if (button.KeyNavigation.tab || button.KeyNavigation.backtab) {
                 // Only focus the button if it is set up for keyboard
                 // navigation. This avoid getting a strange focus frame around
@@ -136,6 +135,7 @@ Item {
                 // a toolbar.
                 button.forceActiveFocus();
             }
+            button.clicked()
 
             if (defaultAction) {
                 defaultAction.trigger()
