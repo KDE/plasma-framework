@@ -190,9 +190,9 @@ Item {
 
                 console.log("readDate:" + locale.readDate("2004-02-01", Locale.IsoFormat))
 
-                console.log("readTime:" + locale.readTime("11:22:33"))//TODO its value in nothing(blank)
+                console.log("readTime:" + locale.readTime("11:22:33 AM"))
 
-                console.log("readLocaleTime:" + locale.readLocaleTime("11:12:13"))
+                console.log("readLocaleTime:" + locale.readLocaleTime("11:12:13 AM"))
 
                 console.log("fileEncodingMib:" + locale.fileEncodingMib)
 
