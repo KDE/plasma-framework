@@ -851,17 +851,6 @@ public:
     int weekDayOfPray() const;
 
     /**
-     * What should I do with the above?
-     * It won't work in QML.
-     **/
-
-    /**
-     * Returns a pointer to the calendar system object.
-     *
-     * @return the current calendar system instance
-     */
-
-    /**
      *
      * Returns the type of Calendar System used in this Locale
      *

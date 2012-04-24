@@ -36,14 +36,15 @@ Locale::Locale(QObject* parent)
 
 bool Locale::setCountryDivisionCode(const QString &countryDivisionCode)
 {
+    bool ok = m_locale->setCountryDivisionCode(countryDivisionCode);
     emit countryDivisionCodeChanged();
-    return m_locale->setCountryDivisionCode(countryDivisionCode);
+    return ok;
 }
 
 void Locale::setCurrencyCode(const QString &newCurrencyCode)
 {
-    emit currencyCodeChanged();
     m_locale->setCurrencyCode(newCurrencyCode);
+    emit currencyCodeChanged();
 }
 
 bool Locale::isApplicationTranslatedInto(const QString &lang)
