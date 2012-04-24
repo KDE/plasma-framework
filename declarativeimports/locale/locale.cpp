@@ -31,7 +31,7 @@
 Locale::Locale(QObject* parent)
         : QObject(parent)
 {
-    m_locale = new KLocale(*KGlobal::locale());
+    m_locale = KGlobal::locale();
 }
 
 bool Locale::setCountryDivisionCode(const QString &countryDivisionCode)
@@ -257,33 +257,33 @@ void Locale::setMainCatalog(const char *catalog)
 
 double Locale::readNumber(const QString &_str) const
 {
-    bool *ok;
-    return m_locale->readNumber(_str, ok);
+    bool ok;
+    return m_locale->readNumber(_str, &ok);
 }
 
 double Locale::readMoney(const QString &_str) const
 {
-    bool *ok;
-    return m_locale->readMoney(_str, ok);
+    bool ok;
+    return m_locale->readMoney(_str, &ok);
 }
 
 QDate Locale::readDate(const QString &intstr, ReadDateFlags flags) const
 {
-    bool *ok;
-    return m_locale->readDate(intstr, (KLocale::ReadDateFlags)flags, ok);
+    bool ok;
+    return m_locale->readDate(intstr, (KLocale::ReadDateFlags)flags, &ok);
 }
 
 QTime Locale::readTime(const QString &intstr) const
 {
-    bool *ok;
-    return m_locale->readTime(intstr, ok);
+    bool ok;
+    return m_locale->readTime(intstr, &ok);
 }
 
 QTime Locale::readLocaleTime(const QString &intstr, TimeFormatOptions options,
                               TimeProcessingOptions processing) const
 {
-    bool *ok;
-    return m_locale->readLocaleTime(intstr, ok, (KLocale::TimeFormatOptions)(int)options, (KLocale::TimeProcessingOptions)(int)processing);
+    bool ok;
+    return m_locale->readLocaleTime(intstr, &ok, (KLocale::TimeFormatOptions)(int)options, (KLocale::TimeProcessingOptions)(int)processing);
 }
 
 QString Locale::formatLocaleTime(const QTime &time, TimeFormatOptions options) const
