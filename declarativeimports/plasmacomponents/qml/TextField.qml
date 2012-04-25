@@ -158,7 +158,7 @@ import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import "private" as Private
 
-Item {
+FocusScope {
     id: textField
 
     // Common API
@@ -252,6 +252,12 @@ Item {
         id: mouseWatcher
         anchors.fill: hover
         hoverEnabled: true
+        onClicked: {
+            // If we don't set focus on click here then clicking between the
+            // line of text and the bottom or top of the widget will not focus
+            // it.
+            textInput.forceActiveFocus();
+        }
     }
 
     Text {
@@ -295,6 +301,7 @@ Item {
         color: theme.textColor
         enabled: textField.enabled
         clip: true
+        focus: true
         onActiveFocusChanged: {
             if (!textField.activeFocus) {
                 textInput.closeSoftwareInputPanel()
