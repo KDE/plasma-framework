@@ -170,6 +170,7 @@ FocusScope {
     property alias cursorPosition: textInput.cursorPosition
     property alias readOnly: textInput.readOnly
     property alias echoMode: textInput.echoMode // Supports TextInput.Normal,TextInput.Password, TextInput.NoEcho, TextInput.PasswordEchoOnEdit
+    property alias passwordCharacter: textInput.passwordCharacter
     property alias acceptableInput: textInput.acceptableInput // read-only
     property alias inputMask: textInput.inputMask
     property alias validator: textInput.validator
@@ -297,6 +298,7 @@ FocusScope {
             leftMargin: 2 * base.margins.left
             rightMargin: 2 * base.margins.right + (clearButton.opacity > 0 ? clearButton.width : 0)
         }
+        passwordCharacter: "•"
         selectByMouse: true
         color: theme.textColor
         enabled: textField.enabled
