@@ -80,11 +80,6 @@ Item {
 
     enabled: defaultAction==undefined||defaultAction.enabled
 
-    onFlatChanged: {
-        surface.opacity = 1
-    }
-
-
     implicitWidth: {
         if (label.paintedWidth == 0) {
             return implicitHeight
@@ -134,7 +129,13 @@ Item {
             }
 
             button.clicked()
-            button.forceActiveFocus()
+            if (button.KeyNavigation.tab || button.KeyNavigation.backtab) {
+                // Only focus the button if it is set up for keyboard
+                // navigation. This avoid getting a strange focus frame around
+                // buttons which are usually not focusable, such as buttons in
+                // a toolbar.
+                button.forceActiveFocus();
+            }
 
             if (defaultAction) {
                 defaultAction.trigger()
@@ -155,7 +156,7 @@ Item {
         imagePath: "widgets/button"
         prefix: (internal.userPressed || checked) ? "pressed" : "normal"
         //internal: if there is no hover status, don't paint on mouse over in touchscreens
-        opacity: (internal.userPressed || checked || !flat || (shadow.hasOverState && mouse.containsMouse)) ? 1 : 0
+        opacity: (internal.userPressed || checked || !flat || parent.activeFocus || (shadow.hasOverState && mouse.containsMouse)) ? 1 : 0
         Behavior on opacity {
             PropertyAnimation { duration: 100 }
         }
