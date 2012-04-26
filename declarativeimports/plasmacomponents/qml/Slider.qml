@@ -224,7 +224,7 @@ Item {
 
             Behavior on x {
                 id: behavior
-                enabled: !mouseArea.drag.active && slider.animated
+                enabled: !mouseArea.drag.active && contents.animated
 
                 PropertyAnimation {
                     duration: behavior.enabled ? 150 : 0
