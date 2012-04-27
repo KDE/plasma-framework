@@ -203,38 +203,38 @@ public:
     /**
      * This method only exists to maintain binary compatibility.
      *
-     * @see associateWidget(QGraphicsObject*,QString)
+     * @see associateItem
      */
     Q_INVOKABLE void associateWidget(QGraphicsWidget *widget, const QString &operation);
 
     /**
      * This method only exists to maintain binary compatibility.
      *
-     * @see disassociateWidget(QGraphicsObject*)
+     * @see disassociateItem
      */
     Q_INVOKABLE void disassociateWidget(QGraphicsWidget *widget);
 
     /**
-     * Assoicates a widget with an operation, which allows the service to
-     * automatically manage, for example, the enabled state of a widget.
+     * Associates a graphics item with an operation, which allows the service to
+     * automatically manage, for example, the enabled state of the item.
      *
-     * This will remove any previous associations the widget had with
+     * This will remove any previous associations the item had with
      * operations on this engine.
      *
-     * @param widget the QGraphicsItem to associate with the service
-     * @param operation the operation to associate the widget with
+     * @param item the QGraphicsObject to associate with the service
+     * @param operation the operation to associate the item with
      */
-    Q_INVOKABLE void associateWidget(QGraphicsObject *widget, const QString &operation);
+    Q_INVOKABLE void associateItem(QGraphicsObject *item, const QString &operation);
 
     /**
-     * Disassociates a widget if it has been associated with an operation
+     * Disassociates a graphics item if it has been associated with an operation
      * on this service.
      *
-     * This will not change the enabled state of the widget.
+     * This will not change the enabled state of the item.
      *
-     * @param widget the QGraphicsObject to disassociate.
+     * @param widget the QGraphicsItem to disassociate.
      */
-    Q_INVOKABLE void disassociateWidget(QGraphicsObject *widget);
+    Q_INVOKABLE void disassociateItem(QGraphicsObject *widget);
 
     /**
      * @return a parameter map for the given description

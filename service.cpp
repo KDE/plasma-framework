@@ -277,23 +277,21 @@ void Service::disassociateWidget(QWidget *widget)
 
 void Service::associateWidget(QGraphicsWidget *widget, const QString &operation)
 {
-    QGraphicsObject *obj = widget;
-    associateWidget(obj, operation);
+    associateItem(widget, operation);
 }
 
 void Service::disassociateWidget(QGraphicsWidget *widget)
 {
-    QGraphicsObject *obj = widget;
-    disassociateWidget(obj);
+    disassociateItem(widget);
 }
 
-void Service::associateWidget(QGraphicsObject *widget, const QString &operation)
+void Service::associateItem(QGraphicsObject *widget, const QString &operation)
 {
     if (!widget) {
         return;
     }
 
-    disassociateWidget(widget);
+    disassociateItem(widget);
     d->associatedGraphicsWidgets.insert(widget, operation);
     connect(widget, SIGNAL(destroyed(QObject*)),
             this, SLOT(associatedGraphicsWidgetDestroyed(QObject*)));
@@ -301,7 +299,7 @@ void Service::associateWidget(QGraphicsObject *widget, const QString &operation)
     widget->setEnabled(!d->disabledOperations.contains(operation));
 }
 
-void Service::disassociateWidget(QGraphicsObject *widget)
+void Service::disassociateItem(QGraphicsObject *widget)
 {
     if (!widget) {
         return;
