@@ -30,7 +30,7 @@
 #include <plasma/plasma.h>
 #include "packagemetadata.h"
 
-class QGraphicsWidget;
+class QGraphicsObject;
 class QIODevice;
 class QWidget;
 
@@ -201,6 +201,20 @@ public:
     Q_INVOKABLE void disassociateWidget(QWidget *widget);
 
     /**
+     * This method only exists to maintain binary compatibility.
+     *
+     * @see associateWidget(QGraphicsObject*,QString)
+     */
+    Q_INVOKABLE void associateWidget(QGraphicsWidget *widget, const QString &operation);
+
+    /**
+     * This method only exists to maintain binary compatibility.
+     *
+     * @see disassociateWidget(QGraphicsObject*)
+     */
+    Q_INVOKABLE void disassociateWidget(QGraphicsWidget *widget);
+
+    /**
      * Assoicates a widget with an operation, which allows the service to
      * automatically manage, for example, the enabled state of a widget.
      *
@@ -210,7 +224,7 @@ public:
      * @param widget the QGraphicsItem to associate with the service
      * @param operation the operation to associate the widget with
      */
-    Q_INVOKABLE void associateWidget(QGraphicsWidget *widget, const QString &operation);
+    Q_INVOKABLE void associateWidget(QGraphicsObject *widget, const QString &operation);
 
     /**
      * Disassociates a widget if it has been associated with an operation
@@ -218,9 +232,9 @@ public:
      *
      * This will not change the enabled state of the widget.
      *
-     * @param widget the QGraphicsWidget to disassociate.
+     * @param widget the QGraphicsObject to disassociate.
      */
-    Q_INVOKABLE void disassociateWidget(QGraphicsWidget *widget);
+    Q_INVOKABLE void disassociateWidget(QGraphicsObject *widget);
 
     /**
      * @return a parameter map for the given description

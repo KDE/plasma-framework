@@ -23,7 +23,7 @@
 #include "servicejob.h"
 #include "service.h"
 
-#include <QGraphicsWidget>
+#include <QGraphicsObject>
 #include <QMap>
 #include <QMultiHash>
 #include <QWidget>
@@ -114,7 +114,7 @@ public:
     DNSSD::PublicService *publicService;
     ServiceProvider *serviceProvider;
     QMultiHash<QWidget *, QString> associatedWidgets;
-    QMultiHash<QGraphicsWidget *, QString> associatedGraphicsWidgets;
+    QMultiHash<QGraphicsObject *, QString> associatedGraphicsWidgets;
     QSet<QString> disabledOperations;
 };
 
