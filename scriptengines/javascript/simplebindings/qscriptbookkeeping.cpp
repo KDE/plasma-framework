@@ -127,10 +127,13 @@ void mouseButtonFromScriptValue(const QScriptValue &scriptValue, Qt::MouseButton
     button = static_cast<Qt::MouseButton>(scriptValue.toInt32());
 }
 
+#include "simplebindings/qscriptnonguibookkeeping.cpp"
+
 using namespace Plasma;
 
 void registerSimpleAppletMetaTypes(QScriptEngine *engine)
 {
+    registerNonGuiMetaTypes(engine);
     qScriptRegisterMetaType<QGraphicsWidget*>(engine, qScriptValueFromQGraphicsWidget, graphicsWidgetFromQScriptValue);
     qScriptRegisterMetaType<Plasma::Svg*>(engine, qScriptValueFromSvg, svgFromQScriptValue);
 
@@ -141,5 +144,4 @@ void registerSimpleAppletMetaTypes(QScriptEngine *engine)
     qScriptRegisterMetaType<Qt::MouseButton>(engine, qScriptValueFromMouseButton, mouseButtonFromScriptValue);
 }
 
-#include "simplebindings/qscriptnonguibookkeeping.cpp"
 
