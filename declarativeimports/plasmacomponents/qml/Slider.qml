@@ -69,9 +69,6 @@ Plasma Properties:
         alias inverted:
         This property holds if the slider visualizations has an inverted direction.
     The default value is false.
-
-        real handleSize:
-        This property holds the size of the Slider's handle.
 **/
 
 import QtQuick 1.0
@@ -149,7 +146,8 @@ Item {
 
         // Plasma API
         property bool animated: true
-        property real handleSize: theme.defaultFont.mSize.height*1.3
+        property real handleWidth: grooveSvg.elementSize("horizontal-slider-handle").width
+        property real handleHeight: grooveSvg.elementSize("horizontal-slider-handle").height
 
         // Convenience API
         property bool isVertical: orientation == Qt.Vertical
@@ -217,8 +215,8 @@ Item {
             anchors {
                 verticalCenter: groove.verticalCenter
             }
-            width: contents.handleSize
-            height: contents.handleSize
+            width: contents.handleWidth
+            height: contents.handleHeight
             svg: PlasmaCore.Svg { imagePath: "widgets/slider" }
             elementId: "horizontal-slider-handle"
 
@@ -260,7 +258,7 @@ Item {
                 // Debounce the press: a press event inside the handler will not
                 // change its position, the user needs to drag it.
                 if (Math.abs(newX - fakeHandle.x) > handle.width / 2) {
-                    range.position = newX
+                    range.position = newX - handle.width / 2
                 }
 
                 slider.forceActiveFocus()
