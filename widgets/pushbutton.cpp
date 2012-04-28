@@ -98,7 +98,7 @@ public:
             pm = QPixmap(absImagePath);
         }
 
-        static_cast<KPushButton*>(q->widget())->setIcon(KDE::icon(pm));
+        static_cast<KPushButton*>(q->widget())->setIcon(QIcon(pm));
     }
 
     void pressedChanged()

@@ -94,7 +94,7 @@ public:
             pm = QPixmap(absImagePath);
         }
 
-        static_cast<QToolButton*>(q->widget())->setIcon(KDE::icon(pm));
+        static_cast<QToolButton*>(q->widget())->setIcon(QIcon(pm));
     }
 
     void syncActiveRect();

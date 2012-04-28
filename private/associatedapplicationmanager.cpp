@@ -25,6 +25,7 @@
 #include <QFile>
 
 #include <kstandarddirs.h>
+#include <kiconloader.h>
 
 #ifndef PLASMA_NO_KIO
 #include <krun.h>
