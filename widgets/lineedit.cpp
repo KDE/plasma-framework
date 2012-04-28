@@ -99,14 +99,28 @@ bool LineEdit::isClearButtonShown() const
     return nativeWidget()->isClearButtonShown();
 }
 
+#ifndef KDE_NO_DEPRECATED
 void LineEdit::setClickMessage(const QString &message)
 {
-    nativeWidget()->setClickMessage(message);
+    setPlaceholderText(message);
+}
+#endif
+
+void LineEdit::setPlaceholderText(const QString &message)
+{
+    nativeWidget()->setPlaceholderText(message);
 }
 
+#ifndef KDE_NO_DEPRECATED
 QString LineEdit::clickMessage() const
 {
-    return nativeWidget()->clickMessage();
+    return placeholderText();
+}
+#endif
+
+QString LineEdit::placeholderText() const
+{
+    return nativeWidget()->placeholderText();
 }
 
 void LineEdit::setStyleSheet(const QString &stylesheet)

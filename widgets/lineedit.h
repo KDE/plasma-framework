@@ -43,7 +43,10 @@ class PLASMA_EXPORT LineEdit : public QGraphicsProxyWidget
     Q_PROPERTY(QGraphicsWidget *parentWidget READ parentWidget)
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
     Q_PROPERTY(bool clearButtonShown READ isClearButtonShown WRITE setClearButtonShown)
+#ifndef KDE_NO_DEPRECATED
     Q_PROPERTY(QString clickMessage READ clickMessage WRITE setClickMessage)
+#endif
+    Q_PROPERTY(QString placeholderText READ placeholderText WRITE setPlaceholderText)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(KLineEdit *nativeWidget READ nativeWidget WRITE setNativeWidget)
 
@@ -80,14 +83,34 @@ public:
      *
      * @param message the message
      * @since 4.5
+     * @deprecated use LineEdit::setPlaceholderText instead
      */
-    void setClickMessage(const QString &message);
+#ifndef KDE_NO_DEPRECATED
+    void KDE_DEPRECATED setClickMessage(const QString &message);
+#endif
 
     /**
      * @return the text of a greyed out message that will go away when clicked
      * @since 4.5
+     * @deprecated use LineEdit::placeholderText instead
      */
-    QString clickMessage() const;
+#ifndef KDE_NO_DEPRECATED
+    QString KDE_DEPRECATED clickMessage() const;
+#endif
+
+    /**
+     * @return the message set with setPlaceholderText
+     * @since 5.0
+     */
+    QString placeholderText() const;
+
+    /**
+     * This makes the KUrlRequester line edit display a grayed-out hinting text as long as
+     * the user didn't enter any text. It is often used as indication about
+     * the purpose of the line edit.
+     * @since 5.0
+     */
+    void setPlaceholderText(const QString &message);
 
     /**
      * Sets the stylesheet used to control the visual display of this LineEdit
