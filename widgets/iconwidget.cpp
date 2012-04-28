@@ -38,7 +38,6 @@
 #include <kcolorscheme.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
-#include <kicon.h>
 #include <kiconeffect.h>
 #include <kiconloader.h>
 #include <kmimetype.h>
@@ -1307,7 +1306,7 @@ void IconWidget::setIcon(const QString &icon)
         return;
     }
 
-    setIcon(KIcon(icon));
+    setIcon(KDE::icon(icon));
 }
 
 void IconWidget::setIcon(const QIcon &icon)

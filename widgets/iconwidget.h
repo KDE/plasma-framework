@@ -139,7 +139,7 @@ public:
 
     /**
     * Sets the graphical icon for this Plasma::IconWidget.
-    * @param icon the KIcon to associate with this icon.
+    * @param icon the KDE::icon to associate with this icon.
     */
     void setIcon(const QIcon &icon);
 

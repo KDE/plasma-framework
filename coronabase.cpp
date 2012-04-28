@@ -40,7 +40,6 @@
 #include <kmimetype.h>
 #include <kshortcutsdialog.h>
 #include <kwindowsystem.h>
-#include <kicon.h>
 
 #include "abstractdialogmanager.h"
 #include "abstracttoolbox.h"
@@ -338,7 +337,7 @@ void CoronaBase::setImmutability(const ImmutabilityType immutable)
         } else {
             bool unlocked = d->immutability == Mutable;
             action->setText(unlocked ? i18n("Lock Widgets") : i18n("Unlock Widgets"));
-            action->setIcon(KIcon(unlocked ? "object-locked" : "object-unlocked"));
+            action->setIcon(KDE::icon(unlocked ? "object-locked" : "object-unlocked"));
             action->setEnabled(true);
             action->setVisible(true);
         }
@@ -478,7 +477,7 @@ void CoronaBasePrivate::init()
     QObject::connect(lockAction, SIGNAL(triggered(bool)), q, SLOT(toggleImmutability()));
     lockAction->setText(i18n("Lock Widgets"));
     lockAction->setAutoRepeat(true);
-    lockAction->setIcon(KIcon("object-locked"));
+    lockAction->setIcon(KDE::icon("object-locked"));
     lockAction->setData(AbstractToolBox::ControlTool);
     lockAction->setShortcut(KShortcut("alt+d, l"));
     lockAction->setShortcutContext(Qt::ApplicationShortcut);
@@ -489,7 +488,7 @@ void CoronaBasePrivate::init()
     KAction *action = actions.addAction("configure shortcuts");
     QObject::connect(action, SIGNAL(triggered()), q, SLOT(showShortcutConfig()));
     action->setText(i18n("Shortcut Settings"));
-    action->setIcon(KIcon("configure-shortcuts"));
+    action->setIcon(KDE::icon("configure-shortcuts"));
     action->setAutoRepeat(false);
     action->setData(AbstractToolBox::ConfigureTool);
     //action->setShortcut(KShortcut("ctrl+h"));

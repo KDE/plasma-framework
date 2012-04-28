@@ -32,7 +32,6 @@
 #include <QX11Info>
 #endif
 
-#include <kicon.h>
 #include <kiconloader.h>
 #include <kwindowsystem.h>
 #include <kglobalsettings.h>
@@ -94,7 +93,7 @@ void PopupApplet::setPopupIcon(const QString &iconName)
     if (package().isValid()) {
         const QString file = package().filePath("images", iconName);
         if (!file.isEmpty()) {
-            setPopupIcon(KIcon(file));
+            setPopupIcon(KDE::icon(file));
             return;
         }
     }
@@ -105,14 +104,14 @@ void PopupApplet::setPopupIcon(const QString &iconName)
         d->createIconWidget();
         d->icon->setSvg(name, iconName);
         if (d->icon->svg().isEmpty()) {
-            setPopupIcon(KIcon(iconName));
+            setPopupIcon(KDE::icon(iconName));
         }
 
         return;
     }
 
-    // Final Attempt: use KIcon
-    setPopupIcon(KIcon(iconName));
+    // Final Attempt: use KDE::icon
+    setPopupIcon(KDE::icon(iconName));
 }
 
 QIcon PopupApplet::popupIcon() const

@@ -26,7 +26,6 @@
 #include <QGraphicsLinearLayout>
 #include <QGraphicsSceneResizeEvent>
 
-#include <kicon.h>
 #include <kiconloader.h>
 
 #ifndef PLASMA_NO_KIO
@@ -458,7 +457,7 @@ void VideoWidget::setUsedControls(const Controls controls)
     if (controls&OpenFile) {
         if (!d->openFileButton) {
             d->openFileButton = new IconWidget(d->controlsWidget);
-            d->openFileButton->setIcon(KIcon("document-open"));
+            d->openFileButton->setIcon(KDE::icon("document-open"));
             connect(d->openFileButton, SIGNAL(clicked()), this, SLOT(showOpenFileDialog()));
         }
         controlsLayout->addItem(d->openFileButton);

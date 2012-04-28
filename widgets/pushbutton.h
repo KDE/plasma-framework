@@ -22,7 +22,6 @@
 
 #include <QGraphicsProxyWidget>
 
-#include <kicon.h>
 
 class KPushButton;
 
@@ -120,7 +119,7 @@ public:
     QAction *action() const;
 
     /**
-     * sets the icon for this push button using a KIcon
+     * sets the icon for this push button using a KDE::icon
      * 
      * @param icon the icon to use
      *

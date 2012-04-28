@@ -38,7 +38,6 @@
 
 #include <kaction.h>
 #include <kauthorized.h>
-#include <kicon.h>
 #include <kmenu.h>
 #include <kmessagebox.h>
 #include <kmimetype.h>
@@ -255,7 +254,7 @@ void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containme
     KAction *appletBrowserAction = actions->addAction("add widgets");
     appletBrowserAction->setAutoRepeat(false);
     appletBrowserAction->setText(i18n("Add Widgets..."));
-    appletBrowserAction->setIcon(KIcon("list-add"));
+    appletBrowserAction->setIcon(KDE::icon("list-add"));
     appletBrowserAction->setShortcut(KShortcut("alt+d, a"));
     appletBrowserAction->setData(AbstractToolBox::AddTool);
 
@@ -1319,7 +1318,7 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
                                  q, SLOT(mimeTypeRetrieved(KIO::Job*,QString)));
 
                 KMenu *choices = new KMenu("Content dropped");
-                choices->addAction(KIcon("process-working"), i18n("Fetching file type..."));
+                choices->addAction(KDE::icon("process-working"), i18n("Fetching file type..."));
                 if (dropEvent) {
                     choices->popup(dropEvent->screenPos());
                 } else {
@@ -1365,7 +1364,7 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
             foreach (const KPluginInfo &info, seenPlugins) {
                 QAction *action;
                 if (!info.icon().isEmpty()) {
-                    action = choices.addAction(KIcon(info.icon()), info.name());
+                    action = choices.addAction(KDE::icon(info.icon()), info.name());
                 } else {
                     action = choices.addAction(info.name());
                 }
@@ -1541,7 +1540,7 @@ void ContainmentPrivate::mimeTypeRetrieved(KIO::Job *job, const QString &mimeTyp
 #endif
                 QAction *action;
                 if (!info.icon().isEmpty()) {
-                    action = choices->addAction(KIcon(info.icon()), info.name());
+                    action = choices->addAction(KDE::icon(info.icon()), info.name());
                 } else {
                     action = choices->addAction(info.name());
                 }
@@ -1565,7 +1564,7 @@ void ContainmentPrivate::mimeTypeRetrieved(KIO::Job *job, const QString &mimeTyp
                 foreach (const KPluginInfo &info, wallpaperList) {
                     QAction *action;
                     if (!info.icon().isEmpty()) {
-                        action = choices->addAction(KIcon(info.icon()), info.name());
+                        action = choices->addAction(KDE::icon(info.icon()), info.name());
                     } else {
                         action = choices->addAction(info.name());
                     }

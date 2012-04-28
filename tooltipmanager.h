@@ -48,7 +48,7 @@ class Corona;
  * Plasma::ToolTipContent data;
  * data.mainText = i18n("My Title");
  * data.subText = i18n("This is a little tooltip");
- * data.image = KIcon("some-icon").pixmap(IconSize(KIconLoader::Desktop));
+ * data.image = KDE::icon("some-icon").pixmap(IconSize(KIconLoader::Desktop));
  * Plasma::ToolTipManager::self()->setContent(widget, data);
  * @endcode
  *

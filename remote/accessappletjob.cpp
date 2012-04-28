@@ -26,7 +26,6 @@
 #include <kdesktopfile.h>
 #include <kmessagebox.h>
 #include <kzip.h>
-#include <kicon.h>
 
 #include "config-plasma.h"
 
@@ -135,7 +134,7 @@ public:
             dialog->setButtonText(KDialog::Yes, i18n("Open Widget"));
             dialog->setButtonText(KDialog::No, i18n("Reject Widget"));
 
-            int answer = KMessageBox::createKMessageBox(dialog, KIcon(iconName), message,
+            int answer = KMessageBox::createKMessageBox(dialog, KDE::icon(iconName), message,
                                                         QStringList(), QString(), 0,
                                                         KMessageBox::Dangerous);
 

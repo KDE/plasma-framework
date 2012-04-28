@@ -55,7 +55,6 @@
 #include <kcolorscheme.h>
 #include <kdialog.h>
 #include <kdesktopfile.h>
-#include <kicon.h>
 #include <kiconloader.h>
 #include <kkeysequencewidget.h>
 #include <kplugininfo.h>

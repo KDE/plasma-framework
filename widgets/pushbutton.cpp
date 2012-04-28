@@ -25,7 +25,6 @@
 #include <QStyleOptionGraphicsItem>
 #include <QWeakPointer>
 
-#include <kicon.h>
 #include <kiconeffect.h>
 #include <kmimetype.h>
 #include <kpushbutton.h>
@@ -99,7 +98,7 @@ public:
             pm = QPixmap(absImagePath);
         }
 
-        static_cast<KPushButton*>(q->widget())->setIcon(KIcon(pm));
+        static_cast<KPushButton*>(q->widget())->setIcon(KDE::icon(pm));
     }
 
     void pressedChanged()

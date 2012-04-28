@@ -26,7 +26,6 @@
 #include <QToolButton>
 
 #include <kcolorutils.h>
-#include <kicon.h>
 #include <kiconeffect.h>
 #include <kmimetype.h>
 
@@ -95,7 +94,7 @@ public:
             pm = QPixmap(absImagePath);
         }
 
-        static_cast<QToolButton*>(q->widget())->setIcon(KIcon(pm));
+        static_cast<QToolButton*>(q->widget())->setIcon(KDE::icon(pm));
     }
 
     void syncActiveRect();

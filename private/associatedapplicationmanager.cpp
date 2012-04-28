@@ -25,7 +25,6 @@
 #include <QFile>
 
 #include <kstandarddirs.h>
-#include <kicon.h>
 
 #ifndef PLASMA_NO_KIO
 #include <krun.h>
@@ -129,7 +128,7 @@ void AssociatedApplicationManager::run(Plasma::Applet *applet)
 #endif
 
         if (!success) {
-            applet->showMessage(KIcon("application-exit"), i18n("There was an error attempting to exec the associated application with this widget."), ButtonOk);
+            applet->showMessage(KDE::icon("application-exit"), i18n("There was an error attempting to exec the associated application with this widget."), ButtonOk);
         }
 
     } else if (d->urlLists.contains(applet) && !d->urlLists.value(applet).isEmpty()) {

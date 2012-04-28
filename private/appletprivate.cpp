@@ -36,7 +36,6 @@
 
 #include <kaction.h>
 #include <kkeysequencewidget.h>
-#include <kicon.h>
 #include <kstandarddirs.h>
 
 namespace Plasma
@@ -292,21 +291,21 @@ KActionCollection* AppletPrivate::defaultActions(QObject *parent)
     KAction *configAction = actions->addAction("configure");
     configAction->setAutoRepeat(false);
     configAction->setText(i18n("Widget Settings"));
-    configAction->setIcon(KIcon("configure"));
+    configAction->setIcon(KDE::icon("configure"));
     configAction->setShortcut(KShortcut("alt+d, s"));
     configAction->setData(AbstractToolBox::ConfigureTool);
 
     KAction *closeApplet = actions->addAction("remove");
     closeApplet->setAutoRepeat(false);
     closeApplet->setText(i18n("Remove this Widget"));
-    closeApplet->setIcon(KIcon("edit-delete"));
+    closeApplet->setIcon(KDE::icon("edit-delete"));
     closeApplet->setShortcut(KShortcut("alt+d, r"));
     closeApplet->setData(AbstractToolBox::DestructiveTool);
 
     KAction *runAssociatedApplication = actions->addAction("run associated application");
     runAssociatedApplication->setAutoRepeat(false);
     runAssociatedApplication->setText(i18n("Run the Associated Application"));
-    runAssociatedApplication->setIcon(KIcon("system-run"));
+    runAssociatedApplication->setIcon(KDE::icon("system-run"));
     runAssociatedApplication->setShortcut(KShortcut("alt+d, t"));
     runAssociatedApplication->setVisible(false);
     runAssociatedApplication->setEnabled(false);

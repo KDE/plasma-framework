@@ -40,7 +40,6 @@
 #include <kmimetype.h>
 #include <kshortcutsdialog.h>
 #include <kwindowsystem.h>
-#include <kicon.h>
 
 #include "coronabase.h"
 #include "abstractdialogmanager.h"

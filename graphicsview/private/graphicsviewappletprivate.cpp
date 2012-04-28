@@ -94,7 +94,7 @@ void GraphicsViewAppletPrivate::showMessage(const QIcon &icon, const QString &me
     if (buttons & ButtonOk) {
         messageOkButton = new PushButton(mainWidget);
         messageOkButton.data()->setText(i18n("&OK"));
-        messageOkButton.data()->setIcon(KIcon("dialog-ok"));
+        messageOkButton.data()->setIcon(KDE::icon("dialog-ok"));
         buttonLayout->addItem(messageOkButton.data());
         QObject::connect(messageOkButton.data(), SIGNAL(clicked()), q, SLOT(destroyMessageOverlay()));
     }
@@ -116,7 +116,7 @@ void GraphicsViewAppletPrivate::showMessage(const QIcon &icon, const QString &me
     if (buttons & ButtonCancel) {
         messageCancelButton = new PushButton(mainWidget);
         messageCancelButton.data()->setText(i18n("&Cancel"));
-        messageCancelButton.data()->setIcon(KIcon("dialog-cancel"));
+        messageCancelButton.data()->setIcon(KDE::icon("dialog-cancel"));
         buttonLayout->addItem(messageCancelButton.data());
         QObject::connect(messageCancelButton.data(), SIGNAL(clicked()), q, SLOT(destroyMessageOverlay()));
     }
@@ -153,7 +153,7 @@ void GraphicsViewAppletPrivate::showMessage(const QIcon &icon, const QString &me
         if (buttonLayout->count() < 1) {
             PushButton *ok = new PushButton(mainWidget);
             ok->setText(i18n("OK"));
-            ok->setIcon(KIcon("dialog-ok"));
+            ok->setIcon(KDE::icon("dialog-ok"));
             buttonLayout->addItem(ok);
             QObject::connect(ok, SIGNAL(clicked()), q, SLOT(destroyMessageOverlay()));
         }
@@ -216,7 +216,7 @@ void GraphicsViewAppletPrivate::updateFailedToLaunch(const QString &reason)
         failureLayout->setContentsMargins(0, 0, 0, 0);
 
         IconWidget *failureIcon = new IconWidget(q);
-        failureIcon->setIcon(KIcon("dialog-error"));
+        failureIcon->setIcon(KDE::icon("dialog-error"));
         failureLayout->addItem(failureIcon);
 
         Label *failureWidget = new Plasma::Label(q);
@@ -227,7 +227,7 @@ void GraphicsViewAppletPrivate::updateFailedToLaunch(const QString &reason)
 
         Plasma::ToolTipManager::self()->registerWidget(failureIcon);
         Plasma::ToolTipContent data(i18n("Unable to load the widget"), reason,
-                                    KIcon("dialog-error"));
+                                    KDE::icon("dialog-error"));
         Plasma::ToolTipManager::self()->setContent(failureIcon, data);
 
         q->setLayout(failureLayout);

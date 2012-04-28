@@ -28,7 +28,6 @@
 #include <QTimer>
 
 #include <kdebug.h>
-#include <kicon.h>
 #include <kplugininfo.h>
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>
@@ -296,7 +295,7 @@ QString AbstractRunner::name() const
 QIcon AbstractRunner::icon() const
 {
     if (d->runnerDescription.isValid()) {
-        return KIcon(d->runnerDescription.icon());
+        return KDE::icon(d->runnerDescription.icon());
     }
 
     return QIcon();
