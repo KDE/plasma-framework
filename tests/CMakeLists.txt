@@ -20,7 +20,7 @@ PLASMA_UNIT_TESTS(
     packagestructuretest
     plasmoidpackagetest
     runnercontexttest
-    signingtest
+    #signingtest TODO re-enable
 )
 
 kde4_add_unit_test(storagetest TESTNAME plasma-storage storagetest.cpp ../private/storage.cpp ../private/storagethread.cpp)

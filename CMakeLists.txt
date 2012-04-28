@@ -21,6 +21,11 @@ if(NOT Q_WS_X11)
     set(PLASMA_NO_PACKAGEKIT TRUE)
 endif(NOT Q_WS_X11)
 
+#find_package(KdepimLibs 4.5.60)
+#find_package(Gpgme)
+#macro_log_feature(KDEPIMLIBS_FOUND "kdepimlibs" "KDE PIM libraries" "http://www.kde.org" FALSE "" "Needed for building several Plasma DataEngines")
+
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${KDE4_KDECORE_INCLUDES}
                     ${KDE4_KDEUI_INCLUDES}
@@ -144,7 +149,7 @@ set(plasma_LIB_SRCS
     remote/pinpairingauthorization.cpp
     remote/pinpairingdialog.cpp
     remote/serviceaccessjob.cpp
-    remote/signing.cpp
+    #remote/signing.cpp TODO: re-enable, needs gpgmepp though
     remote/trustedonlyauthorization.cpp
     runnercontext.cpp
     runnermanager.cpp
