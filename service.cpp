@@ -237,7 +237,7 @@ ServiceJob *Service::startOperationCall(const KConfigGroup &description, QObject
         }
     } else {
 #ifndef NDEBUG
-        kDebug() << "Not a valid group!"<<d->config->groupList();
+    kDebug() << op << "is not a valid group; valid groups are:" << d->config->groupList();
 #endif
     }
 
