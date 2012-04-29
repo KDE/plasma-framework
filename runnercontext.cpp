@@ -516,7 +516,7 @@ void RunnerContext::restore(const KConfigGroup &config)
 {
     const QStringList cfgList = config.readEntry("LaunchCounts", QStringList());
 
-    const QRegExp r("(\\d*) (.*)");
+    QRegExp r("(\\d*) (.*)");
     foreach (const QString& entry, cfgList) {
         r.indexIn(entry);
         int count = r.cap(1).toInt();
