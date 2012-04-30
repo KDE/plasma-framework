@@ -268,7 +268,7 @@ void Applet::save(KConfigGroup &g) const
         group = *d->mainConfigGroup();
     }
 
-    //kDebug() << "saving to" << group.name();
+    //kDebug() << "saving" << pluginName() << "to" << group.name();
     // we call the dptr member directly for locked since isImmutable()
     // also checks kiosk and parent containers
     group.writeEntry("immutability", (int)d->immutability);
@@ -843,7 +843,7 @@ QString Applet::icon() const
 QString Applet::pluginName() const
 {
     if (!d->appletDescription.isValid()) {
-        return QString();
+        return d->mainConfigGroup()->readEntry("plugin", QString());
     }
 
     return d->appletDescription.pluginName();
