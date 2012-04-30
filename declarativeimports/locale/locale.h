@@ -68,8 +68,6 @@ Q_ENUMS(DateFormat)
 Q_ENUMS(DateTimeComponent)
 Q_ENUMS(DateTimeComponentFormat)
 Q_ENUMS(DateTimeFormatOption )
-Q_ENUMS(DateTimeFormatStandard)
-Q_ENUMS(DateTimeParseMode)
 Q_ENUMS(DigitSet)
 Q_ENUMS(MeasureSystem)
 Q_ENUMS(ReadDateFlags)
@@ -608,32 +606,6 @@ public:
         FirstFullWeek     =  1, /**< Week 1 starts on the first Week Start Day in year ends after 7 days */
         FirstPartialWeek  =  2, /**< Week 1 starts Jan 1st ends day before first Week Start Day in year */
         SimpleWeek        =  3  /**< Week 1 starts Jan 1st ends after 7 days */
-    };
-
-    /**
-     *
-     * Standard used for Date Time Format String
-     */
-    enum DateTimeFormatStandard {
-         KdeFormat,        /**< KDE Standard */
-         PosixFormat,      /**< POSIX Standard */
-         UnicodeFormat     /**< UNICODE Standard (Qt/Java/OSX/Windows) */
-    };
-
-    /**
-     *
-     * Mode to use when parsing a Date Time input string
-     */
-    enum DateTimeParseMode {
-         LiberalParsing   /**< Parse Date/Time liberally.  So long as the
-                               input string contains at least a reconizable
-                               month and day the input will be accepted. */
-         //ModerateParsing, /**< Parse Date/Time with modeate tolerance.
-         //                      The date components in the format must all
-         //                      occur in the input and in the same order,
-         //                      but the spacing and the componants themselves
-         //                      may vary from the strict format. */
-         //StrictParsing    /**< Parse Date/Time strictly to the format. */
     };
 
     /**
