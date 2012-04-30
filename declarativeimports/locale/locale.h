@@ -719,7 +719,7 @@ public:
      * @return The date and time as a string
      */
     Q_INVOKABLE QString formatDateTime(const QDateTime &dateTime, DateFormat format = ShortDate,
-                           DateTimeFormatOptions options = 0) const;//TODO
+                           DateTimeFormatOptions options = 0) const;
 
     /**
      * Use this to determine whether in dates a possessive form of month
@@ -1046,7 +1046,7 @@ public:
      * @see QFile::encodeName
      * @see QFile::decodeName
      */
-    int fileEncodingMib() const; //TODO returns undefined
+    int fileEncodingMib() const;
 
     /**
      * Changes the current date format.
