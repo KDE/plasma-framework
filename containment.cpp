@@ -1514,7 +1514,7 @@ void ContainmentPrivate::mimeTypeRetrieved(KIO::Job *job, const QString &mimeTyp
         }
 
         QVariantList args;
-        args << tjob->url().url() << mimeType;
+        args << tjob->url().toString() << mimeType;
 
 #ifndef NDEBUG
         kDebug() << "Creating menu for:" << mimeType  << posi << args;
