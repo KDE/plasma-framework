@@ -108,12 +108,12 @@ void QIconItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     painter->setRenderHint(QPainter::Antialiasing, m_smooth);
     painter->setRenderHint(QPainter::SmoothPixmapTransform, m_smooth);
 
-    if (m_state == DefaultState) {
-        m_icon.paint(painter, boundingRect().toRect(), Qt::AlignCenter, isEnabled()?QIcon::Normal:QIcon::Disabled);
-    } else {
+    if (m_state == ActiveState) {
         QPixmap result = m_icon.pixmap(boundingRect().size().toSize());
-        KIconLoader::global()->iconEffect()->apply(result, KIconLoader::Desktop, KIconLoader::ActiveState);
+        result = KIconLoader::global()->iconEffect()->apply(result, KIconLoader::Desktop, KIconLoader::ActiveState);
         painter->drawPixmap(0, 0, result);
+    } else {
+        m_icon.paint(painter, boundingRect().toRect(), Qt::AlignCenter, isEnabled() ? QIcon::Normal : QIcon::Disabled);
     }
 
     painter->setRenderHint(QPainter::Antialiasing, wasAntiAlias);
