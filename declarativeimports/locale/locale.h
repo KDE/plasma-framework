@@ -1351,12 +1351,6 @@ public:
     void setMeasureSystem(MeasureSystem value);
 
     /**
-     * Sets the active catalog for translation lookup.
-     * @param catalog The catalog to activate.
-     */
-    Q_INVOKABLE void setActiveCatalog(const QString &catalog);
-
-    /**
      * Translates a message as a QTranslator is supposed to.
      * The parameters are similar to i18n(), but the result
      * value has other semantics (it can be QString())
@@ -1445,18 +1439,8 @@ public:
      * @param modifier set to the modifer part of the locale
      * @param charset set to the charset part of the locale
      */
-    Q_INVOKABLE static void splitLocale(const QString &locale, QString &language, QString &country,
+    Q_INVOKABLE void splitLocale(const QString &locale, QString &language, QString &country,
                             QString &modifier, QString &charset);
-
-    /**
-     * Use this as main catalog for *all* KLocales, if not the appname
-     * will be used. This function is best to be the very first instruction
-     * in your program's main function as it only has an effect before the
-     * first KLocale object is created.
-     *
-     * @param catalog Catalog to override all other main Catalogs.
-     */
-    Q_INVOKABLE static void setMainCatalog(const char *catalog);
 
     /**
      * Returns the name of the internal language.

@@ -78,11 +78,6 @@ QString Locale::currencyCode() const
     return m_locale->currencyCode();
 }
 
-void Locale::setActiveCatalog(const QString &catalog)
-{
-    m_locale->setActiveCatalog(catalog);
-}
-
 QString Locale::translateQt(const char *context, const char *sourceText, const char *comment) const
 {
     return m_locale->translateQt(context, sourceText, comment);
@@ -249,11 +244,6 @@ QString Locale::prettyFormatDuration(unsigned long mSec) const
 QString Locale::formatDate(const QDate &date, Locale::DateFormat format) const
 {
     return m_locale->formatDate(date, (KLocale::DateFormat)format);
-}
-
-void Locale::setMainCatalog(const char *catalog)
-{
-    KLocale::setMainCatalog(catalog);
 }
 
 double Locale::readNumber(const QString &_str) const
