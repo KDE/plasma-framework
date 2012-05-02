@@ -79,6 +79,9 @@ PlasmaExtras.App {
             ListElement {
                 page: "Extras.qml"
                 title: "Extras"
+            ListElement {
+                page: "Locale.qml"
+                title: "Locale stuff"
             }
         }
         delegate: ListItem {
