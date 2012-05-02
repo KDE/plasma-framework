@@ -24,10 +24,6 @@
 //KDE
 #include <KGlobal>
 
-//Qt
-#include <QTime>
-#include <QDate>
-
 Locale::Locale(QObject* parent)
         : QObject(parent)
 {
