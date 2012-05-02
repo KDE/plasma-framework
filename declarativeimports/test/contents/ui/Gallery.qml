@@ -35,7 +35,6 @@ Rectangle {
         }
     }
 
-    
     ListView {
         id: pageSelector
         width: 200
@@ -76,6 +75,11 @@ Rectangle {
             ListElement {
                 page: "Misc.qml"
                 title: "Misc stuff"
+            }
+
+            ListElement {
+                page: "Locale.qml"
+                title: "Locale stuff"
             }
         }
         delegate: ListItem {
