@@ -61,7 +61,7 @@ public:
     QString subText;
     QPixmap image;
     QList<WId> windowsToPreview;
-    QHash<QString, ToolTipResource> resources;
+    QHash<QUrl, ToolTipResource> resources;
     QWeakPointer<QGraphicsWidget> graphicsWidget;
     bool autohide : 1;
     bool instantPopup : 1;
@@ -199,7 +199,7 @@ bool ToolTipContent::isInstantPopup() const
 
 void ToolTipContent::addResource(ResourceType type, const QUrl &path, const QVariant &resource)
 {
-    d->resources.insert(path.toString(), ToolTipResource(type, resource));
+    d->resources.insert(path, ToolTipResource(type, resource));
 }
 
 void ToolTipContent::registerResources(QTextDocument *document) const
@@ -208,7 +208,7 @@ void ToolTipContent::registerResources(QTextDocument *document) const
         return;
     }
 
-    QHashIterator<QString, ToolTipResource> it(d->resources);
+    QHashIterator<QUrl, ToolTipResource> it(d->resources);
     while (it.hasNext()) {
         it.next();
         const ToolTipResource &r = it.value();

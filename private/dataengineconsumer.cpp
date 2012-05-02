@@ -58,7 +58,7 @@ void ServiceMonitor::slotJobFinished(Plasma::ServiceJob *job)
         kDebug() << "engine does not exist yet!";
 #endif
     } else {
-        QUrlPathInfo engineLocation(location);
+        QUrlPathInfo engineLocation = QUrlPathInfo(QUrl(location));
         engineLocation.setFileName(job->result().toString());
 #ifndef NDEBUG
         kDebug() << "setting location : " << engineLocation.url();

@@ -861,7 +861,7 @@ bool PackagePrivate::installPackage(const QString &package, const QString &packa
 
         QString service = KStandardDirs::locateLocal("services", serviceName);
 #ifndef PLASMA_NO_KIO
-        KIO::FileCopyJob *job = KIO::file_copy(metaPath, service, -1, KIO::HideProgressInfo);
+        KIO::FileCopyJob *job = KIO::file_copy(QUrl::fromLocalFile(metaPath), QUrl::fromLocalFile(service), -1, KIO::HideProgressInfo);
         const bool ok = job->exec();
         const QString errorString = job->errorString();
 #else

@@ -102,7 +102,7 @@ void DeclarativeWidgetPrivate::execute(const QString &fileName)
     //binds things like kconfig and icons
     kdeclarative.setupBindings();
 
-    component->loadUrl(fileName);
+    component->loadUrl(QUrl::fromLocalFile(fileName));
 
     scriptEngine = kdeclarative.scriptEngine();
     registerDataEngineMetaTypes(scriptEngine);

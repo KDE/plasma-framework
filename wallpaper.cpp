@@ -615,12 +615,7 @@ void Wallpaper::insertIntoCache(const QString& key, const QImage &image)
 
     if (d->cacheRendering) {
         if (image.isNull()) {
-#ifndef PLASMA_NO_KIO
-            KIO::file_delete(d->cachePath(key));
-#else
-            QFile f(d->cachePath(key));
-            f.remove();
-#endif
+            QFile::remove(d->cachePath(key));
         } else {
             QThreadPool::globalInstance()->start(new SaveImageThread(image, d->cachePath(key)));
         }

@@ -26,9 +26,9 @@
 #include <QXmlContentHandler>
 #include <QXmlInputSource>
 #include <QXmlSimpleReader>
+#include <QUrl>
 
 #include <kdebug.h>
-#include <kurl.h>
 
 namespace Plasma
 {
@@ -250,7 +250,7 @@ void ConfigLoaderHandler::addItem()
         KConfigSkeleton::ItemUrl *urlItem =
             new KConfigSkeleton::ItemUrl(m_config->currentGroup(),
                                          m_key, *d->newUrl(),
-                                         m_default);
+                                         QUrl::fromUserInput(m_default));
         m_config->addItem(urlItem, m_name);
         item = urlItem;
     } else if (m_type == "double") {
