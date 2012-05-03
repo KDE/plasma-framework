@@ -79,6 +79,12 @@ Item{
     //      replace     follows page stack replace animation
     property string transition: "set"
 
+    //This invisible item keeps all the old dismissed tools:
+    //note that the outside application still has to keep references to them (or explicity delete them) or they will just accumulate wasting memory
+    Item {
+        id: oldToolsItem
+        visible: false
+    }
     // Sets the tools with a transition.
     function setTools(tools, transition)
     {
@@ -86,12 +92,18 @@ Item{
             return
         }
 
+        if (connection.oldTools) {
+            connection.oldTools.parent = oldToolsItem
+        }
+        connection.oldTools = toolBar.tools
         toolBar.transition = transition
         toolBar.tools = tools
     }
     Connections {
         id: connection
         target: toolBar
+        property Item oldTools
+
         function internalToolsChanged()
         {
             var newContainer
