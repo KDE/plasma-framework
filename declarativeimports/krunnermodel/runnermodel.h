@@ -55,6 +55,11 @@ class RunnerModel : public QAbstractListModel
      */
     Q_PROPERTY(int count READ count NOTIFY countChanged)
 
+    /**
+     * @property bool running: true when queries are in execution
+     */
+    Q_PROPERTY(bool running READ isRunning NOTIFY runningChanged)
+
 public:
     /**
      * @enum Roles of the model, they will be accessible from delegates
@@ -80,6 +85,8 @@ public:
 
     Q_SCRIPTABLE void run(int row);
 
+    bool isRunning() const;
+
     int rowCount(const QModelIndex&) const;
     int count() const;
     QVariant data(const QModelIndex&, int) const;
@@ -91,6 +98,7 @@ Q_SIGNALS:
     void queryChanged();
     void countChanged();
     void runnersChanged();
+    void runningChanged(bool running);
 
 private Q_SLOTS:
     void startQuery();
@@ -100,6 +108,7 @@ private:
 
 private Q_SLOTS:
     void matchesChanged(const QList<Plasma::QueryMatch> &matches);
+    void queryHasFinished();
 
 private:
     Plasma::RunnerManager *m_manager;
@@ -107,6 +116,7 @@ private:
     QStringList m_pendingRunnersList;
     QString m_pendingQuery;
     QTimer *m_startQueryTimer;
+    bool m_running;
 };
 
 #endif

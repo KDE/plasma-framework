@@ -30,7 +30,8 @@
 RunnerModel::RunnerModel(QObject *parent)
     : QAbstractListModel(parent),
       m_manager(0),
-      m_startQueryTimer(new QTimer(this))
+      m_startQueryTimer(new QTimer(this)),
+      m_running(false)
 {
     QHash<int, QByteArray> roles;
     roles.insert(Qt::DisplayRole, "label");
@@ -84,6 +85,11 @@ void RunnerModel::run(int index)
     if (index >= 0 && index < m_matches.count()) {
         m_manager->run(m_matches.at(index));
     }
+}
+
+bool RunnerModel::isRunning() const
+{
+    return m_running;
 }
 
 QVariant RunnerModel::data(const QModelIndex &index, int role) const
@@ -153,6 +159,8 @@ void RunnerModel::startQuery()
         //kDebug() << "running query" << query;
         m_manager->launchQuery(m_pendingQuery);
         emit queryChanged();
+        m_running = true;
+        emit runningChanged(true);
  //   }
 }
 
@@ -162,6 +170,8 @@ void RunnerModel::createManager()
         m_manager = new Plasma::RunnerManager(this);
         connect(m_manager, SIGNAL(matchesChanged(QList<Plasma::QueryMatch>)),
                 this, SLOT(matchesChanged(QList<Plasma::QueryMatch>)));
+        connect(m_manager, SIGNAL(queryFinished()),
+                this, SLOT(queryHasFinished()));
 
         if (!m_pendingRunnersList.isEmpty()) {
             m_manager->setAllowedRunners(m_pendingRunnersList);
@@ -179,6 +189,12 @@ void RunnerModel::matchesChanged(const QList<Plasma::QueryMatch> &matches)
     m_matches = matches;
     endResetModel();
     emit countChanged();
+}
+
+void RunnerModel::queryHasFinished()
+{
+    m_running = false;
+    emit runningChanged(false);
 }
 
 #include "runnermodel.moc"
