@@ -1,5 +1,11 @@
 [Desktop Entry]
 Name=org.kde.example.widgetgallery
+Name[de]=org.kde.example.widgetgallery
+Name[ia]=org.kde.example.widgetgallery
+Name[nl]=org.kde.example.widgetgallery
+Name[pt]=org.kde.example.widgetgallery
+Name[uk]=org.kde.example.widgetgallery
+Name[x-test]=xxorg.kde.example.widgetgalleryxx
 Type=Service
 X-KDE-PluginInfo-Author=Giorgos Tsiapaliwkas
 X-KDE-PluginInfo-Email=terietor@gmail.com
