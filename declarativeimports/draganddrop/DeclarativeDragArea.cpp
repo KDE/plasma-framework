@@ -65,6 +65,7 @@ QDeclarativeComponent* DeclarativeDragArea::delegate() const
 {
     return m_delegate;
 }
+
 void DeclarativeDragArea::setDelegate(QDeclarativeComponent *delegate)
 {
     if (m_delegate != delegate) {
@@ -85,6 +86,7 @@ QDeclarativeItem* DeclarativeDragArea::source() const
 {
     return m_source;
 }
+
 void DeclarativeDragArea::setSource(QDeclarativeItem* source)
 {
     if (m_source != source) {
@@ -92,6 +94,7 @@ void DeclarativeDragArea::setSource(QDeclarativeItem* source)
         emit sourceChanged();
     }
 }
+
 void DeclarativeDragArea::resetSource()
 {
     setSource(0);
@@ -194,6 +197,8 @@ void DeclarativeDragArea::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
 
+    emit dragStarted();
+
     QDrag *drag = new QDrag(event->widget());
     DeclarativeMimeData* dataCopy = new DeclarativeMimeData(m_data); //Qt will take ownership of this copy and delete it.
     drag->setMimeData(dataCopy);
@@ -201,9 +206,7 @@ void DeclarativeDragArea::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     if (!m_delegateImage.isNull()) {
         drag->setPixmap(QPixmap::fromImage(m_delegateImage));
     } else if (m_delegate) {
-
         // Render the delegate to a Pixmap
-
         QDeclarativeItem* item = qobject_cast<QDeclarativeItem *>(m_delegate->create());
 
         QGraphicsScene scene;
