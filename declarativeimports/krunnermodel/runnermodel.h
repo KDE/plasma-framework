@@ -116,6 +116,7 @@ private:
     QStringList m_pendingRunnersList;
     QString m_pendingQuery;
     QTimer *m_startQueryTimer;
+    QTimer *m_runningChangedTimeout;
     bool m_running;
 };
 

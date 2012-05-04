@@ -31,6 +31,7 @@ RunnerModel::RunnerModel(QObject *parent)
     : QAbstractListModel(parent),
       m_manager(0),
       m_startQueryTimer(new QTimer(this)),
+      m_runningChangedTimeout(new QTimer(this)),
       m_running(false)
 {
     QHash<int, QByteArray> roles;
@@ -50,6 +51,10 @@ RunnerModel::RunnerModel(QObject *parent)
     m_startQueryTimer->setSingleShot(true);
     m_startQueryTimer->setInterval(10);
     connect(m_startQueryTimer, SIGNAL(timeout()), this, SLOT(startQuery()));
+
+    //FIXME: HACK: some runners stay in a running but finished state, not possible to say if it's actually over
+    m_runningChangedTimeout->setSingleShot(true);
+    connect(m_runningChangedTimeout, SIGNAL(timeout()), this, SLOT(queryHasFinished()));
 }
 
 int RunnerModel::rowCount(const QModelIndex& index) const
@@ -189,6 +194,7 @@ void RunnerModel::matchesChanged(const QList<Plasma::QueryMatch> &matches)
     m_matches = matches;
     endResetModel();
     emit countChanged();
+    m_runningChangedTimeout->start(3000);
 }
 
 void RunnerModel::queryHasFinished()
