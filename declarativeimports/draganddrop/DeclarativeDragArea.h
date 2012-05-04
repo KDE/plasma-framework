@@ -1,24 +1,24 @@
 /*
-	Copyright (C) 2010 by BetterInbox <contact@betterinbox.com>
-	Original author: Gregory Schlomoff <greg@betterinbox.com>
+    Copyright (C) 2010 by BetterInbox <contact@betterinbox.com>
+    Original author: Gregory Schlomoff <greg@betterinbox.com>
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
 
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
 
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
 */
 
 #ifndef DECLARATIVEDRAGAREA_H
@@ -86,62 +86,62 @@ class DeclarativeDragArea : public QDeclarativeItem
     Q_PROPERTY(QVariant delegateImage READ delegateImage WRITE setDelegateImage NOTIFY delegateImageChanged)
 
 public:
-	DeclarativeDragArea(QDeclarativeItem *parent=0);
-	~DeclarativeDragArea();
+    DeclarativeDragArea(QDeclarativeItem *parent=0);
+    ~DeclarativeDragArea();
 
-	QDeclarativeComponent *delegate() const;
-	void setDelegate(QDeclarativeComponent* delegate);
-	void resetDelegate();
+    QDeclarativeComponent *delegate() const;
+    void setDelegate(QDeclarativeComponent* delegate);
+    void resetDelegate();
 
     QVariant delegateImage() const;
     void setDelegateImage(const QVariant &image);
-	QDeclarativeItem* target() const;
-	QDeclarativeItem* source() const;
-	void setSource(QDeclarativeItem* source);
-	void resetSource();
+    QDeclarativeItem* target() const;
+    QDeclarativeItem* source() const;
+    void setSource(QDeclarativeItem* source);
+    void resetSource();
 
-	bool isEnabled() const;
-	void setEnabled(bool enabled);
+    bool isEnabled() const;
+    void setEnabled(bool enabled);
 
     int startDragDistance() const;
     void setStartDragDistance(int distance);
 
-	//supported actions
-	Qt::DropActions supportedActions() const;
-	void setSupportedActions(Qt::DropActions actions);
+    //supported actions
+    Qt::DropActions supportedActions() const;
+    void setSupportedActions(Qt::DropActions actions);
 
-	//default action
-	Qt::DropAction defaultAction() const;
-	void setDefaultAction(Qt::DropAction action);
+    //default action
+    Qt::DropAction defaultAction() const;
+    void setDefaultAction(Qt::DropAction action);
 
-	DeclarativeMimeData* mimeData() const;
+    DeclarativeMimeData* mimeData() const;
 
 signals:
-	void delegateChanged();
-	void sourceChanged();
-	void targetChanged();
-	void dataChanged();
-	void enabledChanged();
-	void drop(int action);
-	void supportedActionsChanged();
-	void defaultActionChanged();
+    void delegateChanged();
+    void sourceChanged();
+    void targetChanged();
+    void dataChanged();
+    void enabledChanged();
+    void drop(int action);
+    void supportedActionsChanged();
+    void defaultActionChanged();
     void startDragDistanceChanged();
     void delegateImageChanged();
 
 protected:
-	void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-	void mousePressEvent(QGraphicsSceneMouseEvent *) {}
-	void mouseReleaseEvent(QGraphicsSceneMouseEvent *) {}
-	bool sceneEventFilter(QGraphicsItem *item, QEvent *event);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    void mousePressEvent(QGraphicsSceneMouseEvent *) {}
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *) {}
+    bool sceneEventFilter(QGraphicsItem *item, QEvent *event);
 
 private:
-	QDeclarativeComponent* m_delegate;
-	QDeclarativeItem* m_source;
-	QDeclarativeItem* m_target;
-	bool m_enabled;
-	Qt::DropActions m_supportedActions;
-	Qt::DropAction m_defaultAction;
-	DeclarativeMimeData* const m_data;
+    QDeclarativeComponent* m_delegate;
+    QDeclarativeItem* m_source;
+    QDeclarativeItem* m_target;
+    bool m_enabled;
+    Qt::DropActions m_supportedActions;
+    Qt::DropAction m_defaultAction;
+    DeclarativeMimeData* const m_data;
     QImage m_delegateImage;
     int m_startDragDistance;
 };
