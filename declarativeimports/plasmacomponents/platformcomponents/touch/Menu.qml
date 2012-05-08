@@ -51,7 +51,7 @@ Item {
     function open()
     {
         var parent = root.visualParent ? root.visualParent : root.parent
-        var pos = dialog.popupPosition(parent, Qt.alignCenter)
+        var pos = dialog.popupPosition(parent, Qt.AlignCenter)
         dialog.x = pos.x
         dialog.y = pos.y
 

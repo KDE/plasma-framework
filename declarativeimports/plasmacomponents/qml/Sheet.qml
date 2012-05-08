@@ -137,7 +137,7 @@ Item {
 
     function open()
     {
-        var pos = dialog.popupPosition(null, Qt.alignCenter)
+        var pos = dialog.popupPosition(null, Qt.AlignCenter)
         dialog.x = pos.x
         dialog.y = pos.y
 
