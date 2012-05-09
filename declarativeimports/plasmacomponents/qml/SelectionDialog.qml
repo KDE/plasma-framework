@@ -138,8 +138,6 @@ CommonDialog {
                 bottom: parent.bottom
             }
             currentIndex : -1
-            width: contentItem.width
-            height: contentItem.height
             delegate: root.delegate
             clip: true
 
