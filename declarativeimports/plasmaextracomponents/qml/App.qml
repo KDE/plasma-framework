@@ -123,6 +123,10 @@ Item {
         asynchronous: true
         clip: true
         width: navigationWidth + space
+        Behavior on width {
+            NumberAnimation { duration: 250; easing.type: Easing.InOutExpo; }
+        }
+
         Item {
             clip: true
             id: navigationItem
