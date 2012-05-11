@@ -84,6 +84,7 @@ class PLASMA_EXPORT QueryMatch
         ~QueryMatch();
         QueryMatch &operator=(const QueryMatch &other);
         bool operator==(const QueryMatch &other) const;
+        bool operator!=(const QueryMatch &other) const;
         bool operator<(const QueryMatch &other) const;
 
 
