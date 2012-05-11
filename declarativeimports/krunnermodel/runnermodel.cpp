@@ -190,10 +190,36 @@ void RunnerModel::createManager()
 void RunnerModel::matchesChanged(const QList<Plasma::QueryMatch> &matches)
 {
     //kDebug() << "got matches:" << matches.count();
-    beginResetModel();
-    m_matches = matches;
-    endResetModel();
-    emit countChanged();
+    bool fullReset = false;
+    int oldCount = m_matches.count();
+    int newCount = matches.count();
+    if (newCount > oldCount) {
+        // We received more matches than we had. If all common matches are the
+        // same, we can just append new matches instead of resetting the whole
+        // model
+        for (int row = 0; row < oldCount; ++row) {
+            if (m_matches.at(row) != matches.at(row)) {
+                fullReset = true;
+                break;
+            }
+        }
+        if (!fullReset) {
+            // Not a full reset, inserting rows
+            beginInsertRows(QModelIndex(), oldCount, newCount);
+            m_matches = matches;
+            endInsertRows();
+            emit countChanged();
+        }
+    } else {
+        fullReset = true;
+    }
+
+    if (fullReset) {
+        beginResetModel();
+        m_matches = matches;
+        endResetModel();
+        emit countChanged();
+    }
     m_runningChangedTimeout->start(3000);
 }
 
