@@ -198,7 +198,7 @@ void RunnerModel::matchesChanged(const QList<Plasma::QueryMatch> &matches)
         // same, we can just append new matches instead of resetting the whole
         // model
         for (int row = 0; row < oldCount; ++row) {
-            if (m_matches.at(row) != matches.at(row)) {
+            if (!(m_matches.at(row) == matches.at(row))) {
                 fullReset = true;
                 break;
             }
