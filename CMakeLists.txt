@@ -256,7 +256,7 @@ set (plasmaqgv_LIB_SRCS
     widgets/webview.cpp
 )
 
-kde4_add_kcfg_files(plasma_LIB_SRCS data/kconfigxt/libplasma-theme-global.kcfgc)
+kconfig_add_kcfg_files(plasma_LIB_SRCS data/kconfigxt/libplasma-theme-global.kcfgc)
 
 kde4_add_ui_files(plasma_LIB_SRCS
                   remote/pinpairing.ui
