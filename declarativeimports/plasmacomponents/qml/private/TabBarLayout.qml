@@ -66,19 +66,15 @@ Item {
 
     Keys.onPressed: {
         if (event.key == Qt.Key_Right || event.key == Qt.Key_Left) {
+            var oldIndex = priv.currentButtonIndex();
             if (event.key == Qt.Key_Right || priv.mirrored) {
-                var oldIndex = priv.currentButtonIndex();
-
                 if (oldIndex != root.children.length - 1) {
-                    priv.tabGroup.currentTab = root.children[oldIndex + 1].tab
-                    root.parent.currentTab = root.children[oldIndex + 1]
+                    priv.setCurrentButtonIndex(oldIndex + 1)
                     event.accepted = true
                 }
             } else if (event.key == Qt.Key_Left || priv.mirrored) {
-                var oldIndex = priv.currentButtonIndex()
                 if (oldIndex != 0) {
-                    priv.tabGroup.currentTab = root.children[oldIndex - 1].tab
-                    root.parent.currentTab = root.children[oldIndex - 1]
+                    priv.setCurrentButtonIndex(oldIndex -1)
                     event.accepted = true
                 }
             }
@@ -98,10 +94,17 @@ Item {
 
         function currentButtonIndex() {
             for (var i = 0; i < root.children.length; ++i) {
-                if (root.children[i].tab == tabGroup.currentTab)
+                if (root.children[i] == root.parent.currentTab)
                     return i
             }
             return -1
+        }
+
+        function setCurrentButtonIndex(index) {
+            if (tabGroup) {
+                tabGroup.currentTab = root.children[index].tab
+            }
+            root.parent.currentTab = root.children[index]
         }
 
         function layoutChildren() {

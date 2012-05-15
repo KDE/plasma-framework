@@ -99,6 +99,7 @@ Item {
         onPressedChanged: {
             //TabBar is the granparent
             root.parent.parent.currentTab = root
+            root.parent.parent.forceActiveFocus()
         }
         onVisibleChanged: root.parent.childrenChanged()
     }
