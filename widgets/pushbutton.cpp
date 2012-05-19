@@ -26,6 +26,7 @@
 #include <QWeakPointer>
 
 #include <kiconeffect.h>
+#include <kiconloader.h>
 #include <kmimetype.h>
 #include <kpushbutton.h>
 
