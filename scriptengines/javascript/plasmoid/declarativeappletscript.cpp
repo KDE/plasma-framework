@@ -267,7 +267,7 @@ QScriptValue DeclarativeAppletScript::newPlasmaExtenderItem(QScriptContext *cont
     if (!extender) {
         AppletInterface *interface = AppletInterface::extract(engine);
         if (!interface) {
-            engine->undefinedValue();
+            return engine->undefinedValue();
         }
 
         extender = interface->extender();
