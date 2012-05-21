@@ -127,6 +127,7 @@ Item {
         }
         text: placeholderText
         visible: textInput.text == "" && !textField.activeFocus
+        passwordCharacter: "•"
         // XXX: using textColor and low opacity for theming placeholderText
 //        color: theme.viewTextColor
         color: Qt.color("black")
