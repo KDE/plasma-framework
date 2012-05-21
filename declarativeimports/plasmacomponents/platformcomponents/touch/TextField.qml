@@ -35,6 +35,8 @@ Item {
     property alias cursorPosition: textInput.cursorPosition
     property alias readOnly: textInput.readOnly
     property alias echoMode: textInput.echoMode // Supports TextInput.Normal,TextInput.Password, TextInput.NoEcho, TextInput.PasswordEchoOnEdit
+    property alias passwordCharacter: textInput.passwordCharacter
+
     property alias acceptableInput: textInput.acceptableInput // read-only
     property alias inputMask: textInput.inputMask
     property alias validator: textInput.validator
@@ -127,7 +129,6 @@ Item {
         }
         text: placeholderText
         visible: textInput.text == "" && !textField.activeFocus
-        passwordCharacter: "•"
         // XXX: using textColor and low opacity for theming placeholderText
 //        color: theme.viewTextColor
         color: Qt.color("black")
@@ -161,6 +162,7 @@ Item {
             rightMargin: 2 * base.margins.right
         }
         selectByMouse: true
+        passwordCharacter: "•"
         color: Qt.color("black")
         //color: theme.textColor
         enabled: textField.enabled

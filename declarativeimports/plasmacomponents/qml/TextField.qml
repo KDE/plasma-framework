@@ -301,8 +301,8 @@ FocusScope {
         }
         passwordCharacter: "•"
         selectByMouse: true
-        color: Qt.color("black")
-        //color: theme.textColor
+//         color: Qt.color("black")
+        color: theme.textColor
         enabled: textField.enabled
         clip: true
         focus: true
