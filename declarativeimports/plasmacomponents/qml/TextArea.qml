@@ -298,7 +298,8 @@ Item {
             font.underline: theme.defaultFont.underline
             font.weight: theme.defaultFont.weight
             font.wordSpacing: theme.defaultFont.wordSpacing
-            color: theme.viewTextColor
+            color: Qt.color("black")
+            //color: theme.viewTextColor
             selectByMouse: verticalScroll.interactive
 
             onCursorPositionChanged: {

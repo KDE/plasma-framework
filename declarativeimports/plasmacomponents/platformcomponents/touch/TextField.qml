@@ -128,7 +128,8 @@ Item {
         text: placeholderText
         visible: textInput.text == "" && !textField.activeFocus
         // XXX: using textColor and low opacity for theming placeholderText
-        color: theme.viewTextColor
+//        color: theme.viewTextColor
+        color: Qt.color("black")
         opacity: 0.5
         elide: Text.ElideRight
         clip: true
@@ -159,7 +160,8 @@ Item {
             rightMargin: 2 * base.margins.right
         }
         selectByMouse: true
-        color: theme.textColor
+        color: Qt.color("black")
+        //color: theme.textColor
         enabled: textField.enabled
         clip: true
 
