@@ -82,12 +82,7 @@ void SortFilterModel::setModel(QObject *source)
 
 void SortFilterModel::setFilterRegExp(const QString &exp)
 {
-    //FIXME: this delaying of the reset signal seems to make the views behave a bit better, i.e. less holes and avoids some crashes, in theory shouldn't be necessary
-    beginResetModel();
-    blockSignals(true);
     QSortFilterProxyModel::setFilterRegExp(QRegExp(exp, Qt::CaseInsensitive));
-    blockSignals(false);
-    endResetModel();
 }
 
 QString SortFilterModel::filterRegExp() const
