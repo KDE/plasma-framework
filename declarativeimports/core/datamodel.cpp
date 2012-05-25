@@ -131,7 +131,17 @@ QVariantHash SortFilterModel::get(int row) const
     return hash;
 }
 
+int SortFilterModel::mapRowToSource(int row) const
+{
+    QModelIndex idx = index(row, 0);
+    return mapToSource(idx).row();
+}
 
+int SortFilterModel::mapRowFromSource(int row) const
+{
+    QModelIndex idx = index(row, 0);
+    return mapFromSource(idx).row();
+}
 
 DataModel::DataModel(QObject* parent)
     : QAbstractItemModel(parent),
