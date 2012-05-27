@@ -32,7 +32,7 @@ class SvgItem : public QDeclarativeItem
     /**
      * The sub element of the svg we want to render. If empty the whole svg document will be painted.
      */
-    Q_PROPERTY(QString elementId READ elementId WRITE setElementId)
+    Q_PROPERTY(QString elementId READ elementId WRITE setElementId NOTIFY elementIdChanged)
 
     /**
      * Svg class that is the source of the image, use it like that:
@@ -44,7 +44,7 @@ class SvgItem : public QDeclarativeItem
      * </code>
      * Instead of a Svg declaration it can also be the id of a Svg declared elsewhere, useful to share Svg instances.
      */
-    Q_PROPERTY(Plasma::Svg * svg READ svg WRITE setSvg)
+    Q_PROPERTY(Plasma::Svg * svg READ svg WRITE setSvg NOTIFY svgChanged)
 
     /**
      * The natural, unscaled size of the svg document or the element. useful if a pixel perfect rendering of outlines is needed.
@@ -54,7 +54,7 @@ class SvgItem : public QDeclarativeItem
     /**
      * If true enable antialiasing in paint: default off, better quality but less performance.
      */
-    Q_PROPERTY(bool smooth READ smooth WRITE setSmooth)
+    Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
 
 public:
     SvgItem(QDeclarativeItem *parent=0);
@@ -74,7 +74,10 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 Q_SIGNALS:
+    void elementIdChanged();
+    void svgChanged();
     void naturalSizeChanged();
+    void smoothChanged();
 
 protected Q_SLOTS:
     void updateNeeded();

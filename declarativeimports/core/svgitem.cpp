@@ -42,6 +42,7 @@ SvgItem::~SvgItem()
 void SvgItem::setElementId(const QString &elementID)
 {
     m_elementID = elementID;
+    emit elementIdChanged();
     emit naturalSizeChanged();
     update();
 }
@@ -74,6 +75,7 @@ void SvgItem::setSvg(Plasma::Svg *svg)
         connect(svg, SIGNAL(repaintNeeded()), this, SIGNAL(naturalSizeChanged()));
         connect(svg, SIGNAL(sizeChanged()), this, SIGNAL(naturalSizeChanged()));
     }
+    emit svgChanged();
     emit naturalSizeChanged();
 }
 
@@ -88,6 +90,7 @@ void SvgItem::setSmooth(const bool smooth)
         return;
     }
     m_smooth = smooth;
+    emit smoothChanged();
     update();
 }
 
