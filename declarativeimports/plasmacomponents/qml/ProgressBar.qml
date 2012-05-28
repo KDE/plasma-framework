@@ -144,6 +144,12 @@ Item {
 
                 loops: Animation.Infinite
 
+                onRunningChanged: {
+                    if (!running) {
+                        barPixmapItem.x = 0
+                    }
+                }
+
                 PropertyAnimation {
                     target: barPixmapItem
                     property: "x"
