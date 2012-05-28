@@ -104,7 +104,7 @@ private Q_SLOTS:
     void startQuery();
 
 private:
-    void createManager();
+    bool createManager();
 
 private Q_SLOTS:
     void matchesChanged(const QList<Plasma::QueryMatch> &matches);
@@ -114,6 +114,7 @@ private:
     Plasma::RunnerManager *m_manager;
     QList<Plasma::QueryMatch> m_matches;
     QStringList m_pendingRunnersList;
+    QString m_singleRunnerId;
     QString m_pendingQuery;
     QTimer *m_startQueryTimer;
     QTimer *m_runningChangedTimeout;

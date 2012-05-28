@@ -76,12 +76,18 @@ void RunnerModel::setRunners(const QStringList &allowedRunners)
 {
     if (m_manager) {
         m_manager->setAllowedRunners(allowedRunners);
-
-        //automagically enter single runner mode if there's only 1 allowed runner
-        m_manager->setSingleMode(allowedRunners.count() == 1);
         emit runnersChanged();
     } else {
         m_pendingRunnersList = allowedRunners;
+        kDebug() << "runners set" << m_pendingRunnersList.count();
+    }
+
+    // to trigger single runner fun!
+    if (allowedRunners.count() == 1) {
+        m_singleRunnerId = allowedRunners.first();
+        scheduleQuery(QString());
+    } else {
+        m_singleRunnerId.clear();
     }
 }
 
@@ -152,24 +158,25 @@ void RunnerModel::scheduleQuery(const QString &query)
 
 void RunnerModel::startQuery()
 {
-    if (!m_manager && m_pendingQuery.isEmpty()) {
-        // avoid creating a manager just so we can run nothing
+    // avoid creating a manager just so we can run nothing
+    // however, if we have one pending runner, then we'll be in single query mode
+    // and a null query is a valid query
+    if (!m_manager && m_pendingRunnersList.count() != 1 && m_pendingQuery.isEmpty()) {
         return;
     }
 
-    //kDebug() << "booooooo yah!!!!!!!!!!!!!" << query;
-    createManager();
+    //kDebug() << "!!!!!!!!!!!!!" << m_pendingQuery << m_manager;
 
-//    if (m_pendingQuery != m_manager->query()) {
-        //kDebug() << "running query" << query;
-        m_manager->launchQuery(m_pendingQuery);
+    if (createManager() || m_pendingQuery != m_manager->query()) {
+        //kDebug() << "running query" << m_pendingQuery << m_manager;
+        m_manager->launchQuery(m_pendingQuery, m_singleRunnerId);
         emit queryChanged();
         m_running = true;
         emit runningChanged(true);
- //   }
+    }
 }
 
-void RunnerModel::createManager()
+bool RunnerModel::createManager()
 {
     if (!m_manager) {
         m_manager = new Plasma::RunnerManager(this);
@@ -179,12 +186,14 @@ void RunnerModel::createManager()
                 this, SLOT(queryHasFinished()));
 
         if (!m_pendingRunnersList.isEmpty()) {
-            m_manager->setAllowedRunners(m_pendingRunnersList);
-            m_manager->setSingleMode(m_pendingRunnersList.count() == 1);
+            setRunners(m_pendingRunnersList);
             m_pendingRunnersList.clear();
         }
         //connect(m_manager, SIGNAL(queryFinished()), this, SLOT(queryFinished()));
+        return true;
     }
+
+    return false;
 }
 
 void RunnerModel::matchesChanged(const QList<Plasma::QueryMatch> &matches)
