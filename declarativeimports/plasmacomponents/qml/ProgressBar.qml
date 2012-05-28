@@ -80,7 +80,7 @@ Item {
         value: 0
 
         positionAtMinimum: 0
-        positionAtMaximum: contents.width
+        positionAtMaximum: backgroundPixmapItem.width
     }
 
     Item {
