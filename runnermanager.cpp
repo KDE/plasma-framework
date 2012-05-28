@@ -252,6 +252,11 @@ public:
             }
         }
 
+        if (!singleRunnerWasLoaded) {
+            // in case we deleted it up above
+            clearSingleRunner();
+        }
+
         kDebug() << "All runners loaded, total:" << runners.count();
     }
 
