@@ -402,7 +402,7 @@ void Service::registerOperationsScheme()
         return;
     }
 
-    const QString path = KStandardDirs::locate("data", "plasma/services/" + d->name + ".operations");
+    const QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "plasma/services/" + d->name + ".operations");
 
     if (path.isEmpty()) {
 #ifndef NDEBUG

@@ -462,14 +462,14 @@ void Package::setPath(const QString &path)
         if (!d->defaultPackageRoot.isEmpty()) {
             dir.setPath(d->defaultPackageRoot);
             if (dir.isRelative()) {
-                location = KStandardDirs::locate("data", d->defaultPackageRoot + path);
+                location = QStandardPaths::locate(QStandardPaths::GenericDataLocation, d->defaultPackageRoot + path);
             } else {
                 location = d->defaultPackageRoot + path;
             }
         }
 
         if (location.isEmpty()) {
-            location = KStandardDirs::locate("data", path);
+            location = QStandardPaths::locate(QStandardPaths::GenericDataLocation, path);
 
             if (location.isEmpty()) {
                 d->path.clear();
@@ -859,7 +859,7 @@ bool PackagePrivate::installPackage(const QString &package, const QString &packa
 
         const QString serviceName = servicePrefix + meta.pluginName() + ".desktop";
 
-        QString service = KStandardDirs::locateLocal("services", serviceName);
+        QString service = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/kde5/services/") + serviceName;
 #ifndef PLASMA_NO_KIO
         KIO::FileCopyJob *job = KIO::file_copy(QUrl::fromLocalFile(metaPath), QUrl::fromLocalFile(service), -1, KIO::HideProgressInfo);
         const bool ok = job->exec();
@@ -909,7 +909,7 @@ bool PackagePrivate::uninstallPackage(const QString &packageName, const QString 
 
     const QString serviceName = servicePrefix + packageName + ".desktop";
 
-    QString service = KStandardDirs::locateLocal("services", serviceName);
+    QString service = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/kde5/services/") + serviceName;
 #ifndef NDEBUG
     kDebug() << "Removing service file " << service;
 #endif

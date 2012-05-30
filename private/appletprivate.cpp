@@ -146,9 +146,9 @@ void AppletPrivate::init(const QString &packagePath)
     QString path = packagePath;
     if (path.isEmpty()) {
         const QString subPath = package->defaultPackageRoot() + appletDescription.pluginName() + '/';
-        path = KStandardDirs::locate("data", subPath + "metadata.desktop");
+        path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, subPath + "metadata.desktop");
         if (path.isEmpty()) {
-            path = KStandardDirs::locate("data", subPath);
+            path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, subPath);
         } else {
             path.remove(QString("metadata.desktop"));
         }

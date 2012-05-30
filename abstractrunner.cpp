@@ -384,7 +384,7 @@ void AbstractRunnerPrivate::init(const KService::Ptr service)
     if (runnerDescription.isValid()) {
         const QString api = runnerDescription.property("X-Plasma-API").toString();
         if (!api.isEmpty()) {
-            const QString path = KStandardDirs::locate("data", "plasma/runners/" + runnerDescription.pluginName() + '/');
+            const QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "plasma/runners/" + runnerDescription.pluginName() + '/');
             prepScripting(path, api);
             if (!script) {
 #ifndef NDEBUG

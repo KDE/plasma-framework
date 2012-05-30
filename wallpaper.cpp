@@ -516,7 +516,7 @@ QString WallpaperPrivate::cacheKey(const QString &sourceImagePath, const QSize &
 
 QString WallpaperPrivate::cachePath(const QString &key) const
 {
-    return KGlobal::dirs()->locateLocal("cache", "plasma-wallpapers/" + key + ".png");
+    return QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QLatin1Char('/') + "plasma-wallpapers/" + key + ".png";
 }
 
 void WallpaperPrivate::newRenderCompleted(const WallpaperRenderRequest &request, const QImage &image)

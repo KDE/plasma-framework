@@ -67,7 +67,7 @@ void StorageThread::initializeDb(StorageJob *caller)
 {
     if (!m_db.open()) {
         m_db = QSqlDatabase::addDatabase("QSQLITE", QString("plasma-storage-%1").arg((quintptr)this));
-        m_db.setDatabaseName(KStandardDirs::locateLocal("appdata", "plasma-storage2.db"));
+        m_db.setDatabaseName(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + "plasma-storage2.db");
     }
 
     if (!m_db.open()) {

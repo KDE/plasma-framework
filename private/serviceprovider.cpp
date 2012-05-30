@@ -129,7 +129,7 @@ void ServiceProvider::sendOperations(Jolie::Message message)
     Jolie::Message response(message.resourcePath(), message.operationName(), message.id());
 
     //FIXME: this is duplicated from Plasma::Service
-    QString path = KStandardDirs::locate("data", "plasma/services/" + m_service->name() +
+    QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "plasma/services/" + m_service->name() +
 ".operations");
 
     if (path.isEmpty()) {
