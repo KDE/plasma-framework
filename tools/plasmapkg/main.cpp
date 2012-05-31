@@ -208,7 +208,7 @@ int main(int argc, char **argv)
     options.add("packageroot <path>", ki18n("Absolute path to the package root. If not supplied, then the standard data directories for this KDE session will be searched instead."));
     KCmdLineArgs::addCmdLineOptions( options );
 
-    KApplication app;
+    QCoreApplication app(argc, argv);
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
