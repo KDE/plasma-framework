@@ -33,6 +33,7 @@
 #include <KServiceTypeTrader>
 #include <KShell>
 #include <KStandardDirs>
+#include <KSycoca>
 
 #include <Plasma/PackageStructure>
 #include <Plasma/Package>
@@ -48,18 +49,22 @@ void output(const QString &msg)
 
 void runKbuildsycoca()
 {
-    QDBusInterface dbus("org.kde.kded", "/kbuildsycoca", "org.kde.kbuildsycoca");
-    dbus.call(QDBus::NoBlock, "recreate");
+    if (KSycoca::isAvailable()) {
+        QDBusInterface dbus("org.kde.kded", "/kbuildsycoca", "org.kde.kbuildsycoca");
+        dbus.call(QDBus::NoBlock, "recreate");
+    }
 }
 
 QStringList packages(const QStringList& types)
 {
     QStringList result;
 
-    foreach (const QString& type, types) {
-        const KService::List services = KServiceTypeTrader::self()->query(type);
-        foreach (const KService::Ptr &service, services) {
-            result << service->property("X-KDE-PluginInfo-Name", QVariant::String).toString();
+    if (KSycoca::isAvailable()) {
+        foreach (const QString& type, types) {
+            const KService::List services = KServiceTypeTrader::self()->query(type);
+            foreach (const KService::Ptr &service, services) {
+                result << service->property("X-KDE-PluginInfo-Name", QVariant::String).toString();
+            }
         }
     }
 
@@ -135,7 +140,11 @@ void listTypes()
     builtIns.insert(i18n("KWin Script"), QStringList() << "KWin/Script" << "kwin/scripts/");
     renderTypeTable(builtIns);
 
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure");
+    KService::List offers;
+    if (KSycoca::isAvailable()) {
+        offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure");
+    }
+
     if (!offers.isEmpty()) {
         std::cout << std::endl;
         output(i18n("Provided by plugins:"));
@@ -328,7 +337,7 @@ int main(int argc, char **argv)
         packageRoot = "kwin/scripts/";
         servicePrefix = "kwin-script-";
         pluginTypes << "KWin/Script";
-    } else {
+    } else if (KSycoca::isAvailable()) {
         const QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(type);
         KService::List offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure", constraint);
         if (offers.isEmpty()) {
