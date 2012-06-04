@@ -1,6 +1,7 @@
 project(plasmaextracomponents)
 
-find_package(KActivities REQUIRED)
+find_package(KActivities REQUIRED NO_MODULE)
+macro_log_feature(KACTIVITIES_FOUND "KActivities" "Library and infrasturcture for using Activities from applications" "http://kde.org/" FALSE "" "Provides the ability to access activities from QML.")
 
 #include(KDE4Defaults)
 
