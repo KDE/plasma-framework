@@ -1,7 +1,7 @@
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
 include_directories ( ${karchive_SOURCE_DIR}/src
-                      ${karchive_BINARY_DIR}
+                      ${karchive_BINARY_DIR}/src
 )
 
 MACRO(PLASMA_UNIT_TESTS)
