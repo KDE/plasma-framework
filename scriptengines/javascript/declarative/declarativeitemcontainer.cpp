@@ -44,6 +44,11 @@ void DeclarativeItemContainer::setDeclarativeItem(QDeclarativeItem *item, bool r
     resize(item->width(), item->height());
     connect(m_declarativeItem.data(), SIGNAL(widthChanged()), this, SLOT(widthChanged()));
     connect(m_declarativeItem.data(), SIGNAL(heightChanged()), this, SLOT(heightChanged()));
+
+    QObject::connect(m_declarativeItem.data(), SIGNAL(minimumWidthChanged()), this, SLOT(minimumWidthChanged()));
+    QObject::connect(m_declarativeItem.data(), SIGNAL(minimumHeightChanged()), this, SLOT(minimumHeightChanged()));
+    minimumWidthChanged();
+    minimumHeightChanged();
 }
 
 QDeclarativeItem *DeclarativeItemContainer::declarativeItem() const
@@ -85,5 +90,26 @@ void DeclarativeItemContainer::heightChanged()
     newSize.setHeight(m_declarativeItem.data()->height());
     resize(newSize);
 }
+
+void DeclarativeItemContainer::minimumWidthChanged()
+{
+    if (!m_declarativeItem) {
+        return;
+    }
+
+    qreal minimumWidth = m_declarativeItem.data()->property("minimumWidth").toReal();
+    setMinimumWidth(minimumWidth);
+}
+
+void DeclarativeItemContainer::minimumHeightChanged()
+{
+    if (!m_declarativeItem) {
+        return;
+    }
+
+    qreal minimumHeight = m_declarativeItem.data()->property("minimumHeight").toReal();
+    setMinimumHeight(minimumHeight);
+}
+
 
 #include "declarativeitemcontainer_p.moc"
