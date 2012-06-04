@@ -24,7 +24,7 @@
 #include <QHash>
 #include <QFile>
 
-#include <kstandarddirs.h>
+#include <qstandardpaths.h>
 #include <kiconloader.h>
 
 #ifndef PLASMA_NO_KIO
@@ -89,7 +89,7 @@ AssociatedApplicationManager *AssociatedApplicationManager::self()
 void AssociatedApplicationManager::setApplication(Plasma::Applet *applet, const QString &application)
 {
     KService::Ptr service = KService::serviceByDesktopName(application);
-    if (service || !KStandardDirs::findExe(application).isNull() || QFile::exists(application)) {
+    if (service || !QStandardPaths::findExecutable(application).isNull() || QFile::exists(application)) {
         d->applicationNames[applet] = application;
         if (!d->urlLists.contains(applet)) {
             connect(applet, SIGNAL(destroyed(QObject*)), this, SLOT(cleanupApplet(QObject*)));

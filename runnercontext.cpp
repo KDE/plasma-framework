@@ -33,7 +33,7 @@
 #include <kdebug.h>
 #include <kmimetype.h>
 #include <kshell.h>
-#include <kstandarddirs.h>
+#include <qstandardpaths.h>
 #include <qurl.h>
 #include <kprotocolinfo.h>
 
@@ -192,7 +192,7 @@ class RunnerContextPrivate : public QSharedData
             QString path = QDir::cleanPath(KShell::tildeExpand(term));
 
             int space = path.indexOf(' ');
-            if (!KStandardDirs::findExe(path.left(space)).isEmpty()) {
+            if (!QStandardPaths::findExecutable(path.left(space)).isEmpty()) {
                 // it's a shell command if there's a space because that implies
                 // that it has arguments!
                 type = (space > 0) ? RunnerContext::ShellCommand :

@@ -26,11 +26,11 @@
 #include <QMutex>
 #include <QTimer>
 #include <QCoreApplication>
+#include <qstandardpaths.h>
 
 #include <kdebug.h>
 #include <kplugininfo.h>
 #include <kservicetypetrader.h>
-#include <kstandarddirs.h>
 
 #ifndef PLASMA_NO_SOLID
 #include <solid/device.h>
@@ -195,7 +195,7 @@ public:
             //kDebug() << "Loading runner: " << service->name() << service->storageId();
             QString tryExec = description.property("TryExec").toString();
             //kDebug() << "TryExec is" << tryExec;
-            if (!tryExec.isEmpty() && KStandardDirs::findExe(tryExec).isEmpty()) {
+            if (!tryExec.isEmpty() && QStandardPaths::findExecutable(tryExec).isEmpty()) {
                 // we don't actually have this application!
                 continue;
             }
