@@ -134,10 +134,10 @@ Item {
         }
     }
     Image {
-        source: "image://appbackgrounds/shadow-right"
+        source: "image://appbackgrounds/shadow-left"
         fillMode: Image.Tile
         anchors {
-            left: navigationBackground.right
+            right: navigationBackground.right
             top: topBar.bottom
             bottom: parent.bottom
             leftMargin: -1
