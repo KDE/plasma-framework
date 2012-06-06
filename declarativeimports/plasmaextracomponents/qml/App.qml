@@ -144,6 +144,18 @@ Item {
         }
     }
 
+    Image {
+        source: "image://appbackgrounds/shadow-bottom"
+        fillMode: Image.Tile
+        anchors {
+            right: navigationBackground.right
+            left: navigationBackground.left
+            top: topBar.bottom
+            //bottom: parent.bottom
+            //leftMargin: -1
+        }
+    }
+
     onContentChanged: {
         print("content changed to ");
         //content.parent = contentBackground;
