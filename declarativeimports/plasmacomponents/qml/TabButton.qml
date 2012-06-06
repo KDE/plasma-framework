@@ -140,6 +140,8 @@ Item {
         elide: Text.ElideRight
         horizontalAlignment: !internal.portrait && iconSource != null ? Text.AlignLeft : Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
+
+        color: root.checked ? theme.buttonTextColor : theme.textColor
     }
 
     Private.IconLoader {
