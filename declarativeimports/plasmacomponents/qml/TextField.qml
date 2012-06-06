@@ -272,8 +272,7 @@ FocusScope {
         text: placeholderText
         visible: textInput.text == "" && !textField.activeFocus
         // XXX: using textColor and low opacity for theming placeholderText
-        //color: theme.viewTextColor
-        color: Qt.rgba(0,0,0,1)
+        color: theme.buttonTextColor
         opacity: 0.5
         elide: Text.ElideRight
         clip: true
@@ -301,8 +300,7 @@ FocusScope {
         }
         passwordCharacter: "•"
         selectByMouse: true
-        color: Qt.rgba(0,0,0,1)
-//         color: theme.textColor
+        color: theme.buttonTextColor
         enabled: textField.enabled
         clip: true
         focus: true

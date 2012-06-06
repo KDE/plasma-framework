@@ -167,8 +167,7 @@ Item {
             font.underline: theme.defaultFont.underline
             font.weight: theme.defaultFont.weight
             font.wordSpacing: theme.defaultFont.wordSpacing
-            //color: theme.viewTextColor
-            color: Qt.rgba(0,0,0,1)
+            color: theme.buttonTextColor
             selectByMouse: verticalScroll.interactive
 
             onCursorPositionChanged: {
@@ -207,6 +206,7 @@ Item {
                 text: textArea.placeholderText
                 visible: textEdit.text == "" && !textArea.activeFocus
                 opacity: 0.5
+                color: theme.buttonTextColor
             }
         }
     }
