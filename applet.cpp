@@ -1923,6 +1923,10 @@ void Applet::showConfigurationInterface()
                 KCModuleProxy *module = new KCModuleProxy(kcm);
                 if (module->realModule()) {
                     connect(module, SIGNAL(changed(bool)), dialog, SLOT(settingsModified(bool)));
+                    connect(dialog, SIGNAL(okClicked()),
+                            module->realModule(), SLOT(save()));
+                    connect(dialog, SIGNAL(applyClicked()),
+                            module->realModule(), SLOT(save()));
                     dialog->addPage(module, module->moduleInfo().moduleName(), module->moduleInfo().icon());
                     hasPages = true;
                 } else {
@@ -1935,6 +1939,10 @@ void Applet::showConfigurationInterface()
                     KCModule *module = service->createInstance<KCModule>(dialog, QVariantList(), &error);
                     if (module) {
                         connect(module, SIGNAL(changed(bool)), dialog, SLOT(settingsModified(bool)));
+                        connect(dialog, SIGNAL(okClicked()),
+                                module, SLOT(save()));
+                        connect(dialog, SIGNAL(applyClicked()), 
+                                module, SLOT(save()));
                         dialog->addPage(module, service->name(), service->icon());
                         hasPages = true;
                     } else {
