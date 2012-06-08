@@ -20,10 +20,10 @@
 #include "declarativewidget.h"
 
 
-#include <QtDeclarative/QDeclarativeComponent>
-#include <QtDeclarative/QDeclarativeItem>
-#include <QtDeclarative/QDeclarativeEngine>
-#include <QtDeclarative/QDeclarativeContext>
+#include <QDeclarativeComponent>
+#include <QDeclarativeItem>
+#include <QDeclarativeEngine>
+#include <QDeclarativeContext>
 #include <QScriptEngine>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsScene>
