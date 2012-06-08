@@ -273,7 +273,7 @@ void Label::paint(QPainter *painter,
                   QWidget *widget)
 {
     QLabel *native = nativeWidget();
-    QFontMetrics fm = native->font();
+    QFontMetrics fm(native->font());
 
     //indirect painting still used for fade out
     if (native->wordWrap() || native->text().isEmpty() || size().width() >= fm.width(native->text())) {
