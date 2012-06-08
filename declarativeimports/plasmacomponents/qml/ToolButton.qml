@@ -51,6 +51,9 @@ Properties:
         string font:
         Sets the font for the button.
 
+	bool enabled:
+	Returns wether the button is currently enabled and receives user input.
+
 Signals:
         onClicked:
         The signal is being emmited when the button is being clicked.
