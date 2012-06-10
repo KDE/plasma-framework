@@ -1,7 +1,7 @@
 project(plasmaextracomponents)
 
-find_package(KActivities)
-macro_log_feature(KACTIVITIES_FOUND "KActivities" "Library and infrasturcture for using Activities from applications" "git://anongit.kde.org/kactivities" TRUE "" "Provides the ability to access activities from QML.")
+find_package(KActivities NO_MODULE)
+macro_log_feature(KActivities_FOUND "KActivities" "Library and infrastructure for using Activities from applications" "git://anongit.kde.org/kactivities" TRUE "" "Provides the ability to access activities from QML.")
 
 #include(KDE4Defaults)
 
