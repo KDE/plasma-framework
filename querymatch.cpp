@@ -265,6 +265,11 @@ bool QueryMatch::operator==(const QueryMatch &other) const
     return (d == other.d);
 }
 
+bool QueryMatch::operator!=(const QueryMatch &other) const
+{
+    return (d != other.d);
+}
+
 void QueryMatch::run(const RunnerContext &context) const
 {
     //kDebug() << "we run the term" << context->query() << "whose type is" << context->mimetype();
