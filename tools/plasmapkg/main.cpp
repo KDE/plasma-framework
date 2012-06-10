@@ -282,6 +282,12 @@ int main(int argc, char **argv)
                 // was specified and we have wallpaper plugin package (instead of
                 // wallpaper image package)
                 type = "wallpaperplugin";
+            } else if (serviceType == "KWin/WindowSwitcher") {
+                type = "windowswitcher";
+            } else if (serviceType == "KWin/Effect") {
+                type = "kwineffect";
+            } else if (serviceType == "KWin/Script") {
+                type = "kwinscript";
             } else {
                 type = serviceType;
                 kDebug() << "fallthrough type is" << serviceType;
