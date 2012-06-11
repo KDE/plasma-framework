@@ -288,6 +288,8 @@ int main(int argc, char **argv)
                 type = "kwineffect";
             } else if (serviceType == "KWin/Script") {
                 type = "kwinscript";
+            } else if (serviceType == "Plasma/LayoutTemplate") {
+                type = "layout-template";
             } else {
                 type = serviceType;
                 kDebug() << "fallthrough type is" << serviceType;
