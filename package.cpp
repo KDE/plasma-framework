@@ -35,16 +35,12 @@
 #include <kdesktopfile.h>
 #include <kmimetype.h>
 #include <kservicetypetrader.h>
+#include <ktar.h>
+#include <kzip.h>
 
 #include "config-plasma.h"
 
-#include <kplugininfo.h>
-#include <kstandarddirs.h>
-#include <ktar.h>
-#include <ktempdir.h>
-#include <ktemporaryfile.h>
-#include <kzip.h>
-#include <kdebug.h>
+#include <qstandardpaths.h>
 
 #include "packagestructure.h"
 #include "pluginloader.h"
@@ -89,6 +85,7 @@ bool copyFolder(QString sourcePath, QString targetPath)
     return true;
 }
 
+// Qt5 TODO: use QDir::removeRecursively() instead
 bool removeFolder(QString folderPath)
 {
     QDir folder(folderPath);
@@ -114,26 +111,6 @@ bool removeFolder(QString folderPath)
 
 Package::Package(PackageStructure *structure)
     : d(new PackagePrivate())
-{
-    d->structure = structure;
-    if (d->structure) {
-        d->structure.data()->initPackage(this);
-    }
-}
-
-Package::Package()
-    : d(new PackagePrivate(PackageStructure::Ptr(0), QString()))
-{
-}
-
-Package::Package(const QString &packageRoot, const QString &package,
-                 PackageStructure::Ptr structure)
-    : d(new PackagePrivate(structure, packageRoot + '/' + package))
-{
-}
-
-Package::Package(const QString &packagePath, PackageStructure::Ptr structure)
-    : d(new PackagePrivate(structure, packagePath))
 {
     d->structure = structure;
     if (d->structure) {
@@ -830,11 +807,9 @@ bool PackagePrivate::installPackage(const QString &package, const QString &packa
             return false;
         }
     } else {
-        kDebug() << "************************** 12";
         // it's a directory containing the stuff, so copy the contents rather
         // than move them
         const bool ok = copyFolder(path, targetName);
-        kDebug() << "************************** 13";
         if (!ok) {
             kWarning() << "Could not copy package to destination:" << targetName;
             return false;
@@ -848,12 +823,9 @@ bool PackagePrivate::installPackage(const QString &package, const QString &packa
 
     if (!servicePrefix.isEmpty()) {
         // and now we register it as a service =)
-        kDebug() << "************************** 1";
         QString metaPath = targetName + "/metadata.desktop";
-        kDebug() << "************************** 2";
         KDesktopFile df(metaPath);
         KConfigGroup cg = df.desktopGroup();
-        kDebug() << "************************** 3";
 
         // Q: should not installing it as a service disqualify it?
         // Q: i don't think so since KServiceTypeTrader may not be
@@ -865,9 +837,7 @@ bool PackagePrivate::installPackage(const QString &package, const QString &packa
         const QString serviceName = servicePrefix + meta.pluginName() + ".desktop";
 
         QString service = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/kde5/services/") + serviceName;
-        kDebug() << "************************** 4";
         const bool ok = QFile::copy(metaPath, service);
-        kDebug() << "************************** 5";
         if (ok) {
             // the icon in the installed file needs to point to the icon in the
             // installation dir!
@@ -881,7 +851,6 @@ bool PackagePrivate::installPackage(const QString &package, const QString &packa
         } else {
             kWarning() << "Could not register package as service (this is not necessarily fatal):" << serviceName;
         }
-        kDebug() << "************************** 7";
     }
 
     QDBusInterface sycoca("org.kde.kded5", "/kbuildsycoca");
@@ -921,9 +890,8 @@ bool PackagePrivate::uninstallPackage(const QString &packageName, const QString 
     }
 
     ok = removeFolder(targetName);
-    const QString errorString("unknown");
     if (!ok) {
-        kWarning() << "Could not delete package from:" << targetName << " : " << errorString;
+        kWarning() << "Could not delete package from:" << targetName;
         return false;
     }
 
@@ -940,96 +908,6 @@ PackagePrivate::PackagePrivate()
           valid(false)
 {
     contentsPrefixPaths << "contents/";
-
-    QString serviceName("plasma-applet-" + data.pluginName());
-    QString service = KStandardDirs::locateLocal("services", serviceName + ".desktop");
-
-    if (data.pluginName().isEmpty()) {
-        return false;
-    }
-
-    data.write(service);
-
-    KDesktopFile config(service);
-    KConfigGroup cg = config.desktopGroup();
-    const QString type = data.type().isEmpty() ? "Service" : data.type();
-    cg.writeEntry("Type", type);
-    const QString serviceTypes = data.serviceType().isNull() ? "Plasma/Applet,Plasma/Containment" : data.serviceType();
-    cg.writeEntry("X-KDE-ServiceTypes", serviceTypes);
-    cg.writeEntry("X-KDE-PluginInfo-EnabledByDefault", true);
-
-    QFile icon(iconPath);
-    if (icon.exists()) {
-        //FIXME: the '/' search will break on non-UNIX. do we care?
-        QString installedIcon("plasma_applet_" + data.pluginName() +
-                              iconPath.right(iconPath.length() - iconPath.lastIndexOf("/")));
-        cg.writeEntry("Icon", installedIcon);
-        installedIcon = KStandardDirs::locateLocal("icon", installedIcon);
-        QFile::copy(iconPath, installedIcon);
-    }
-
-    return true;
-}
-
-bool Package::createPackage(const PackageMetadata &metadata,
-                            const QString &source,
-                            const QString &destination,
-                            const QString &icon) // static
-{
-    Q_UNUSED(icon)
-    if (!metadata.isValid()) {
-        kWarning() << "Metadata file is not complete";
-        return false;
-    }
-
-    // write metadata in a temporary file
-    KTemporaryFile metadataFile;
-    if (!metadataFile.open()) {
-        return false;
-    }
-    metadata.write(metadataFile.fileName());
-
-    // put everything into a zip archive
-    KZip creation(destination);
-    creation.setCompression(KZip::NoCompression);
-    if (!creation.open(QIODevice::WriteOnly)) {
-        return false;
-    }
-
-    creation.addLocalFile(metadataFile.fileName(), "metadata.desktop");
-    creation.addLocalDirectory(source, "contents");
-    creation.close();
-    return true;
-}
-
-PackagePrivate::PackagePrivate(const PackageStructure::Ptr st, const QString &p)
-        : structure(st),
-          service(0)
-{
-    if (structure) {
-        if (p.isEmpty()) {
-            structure->setPath(structure->defaultPackageRoot());
-        } else {
-            structure->setPath(p);
-        }
-    }
-
-    valid = structure && !structure->path().isEmpty();
-}
-
-PackagePrivate::PackagePrivate(const PackageStructure::Ptr st, const QString &packageRoot, const QString &path)
-        : structure(st),
-          service(0)
-{
-    if (structure) {
-        if (packageRoot.isEmpty()) {
-            structure->setPath(structure->defaultPackageRoot()%"/"%path);
-        } else {
-            structure->setPath(packageRoot%"/"%path);
-        }
-    }
-
-    valid = structure && !structure->path().isEmpty();
 }
 
 PackagePrivate::PackagePrivate(const PackagePrivate &other)

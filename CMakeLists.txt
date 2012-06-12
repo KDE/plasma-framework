@@ -285,7 +285,7 @@ kde4_add_library(plasmaqgv ${LIBRARY_TYPE} ${plasmaqgv_LIB_SRCS})
 
 target_link_libraries(plasma ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
                              ${QT_QTSCRIPT_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTSQL_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY}
-                             ${KDE4_KDEUI_LIBS} kdnssd threadweaver kauth kwindowsystem ${PLASMA_EXTRA_LIBS} kcoreaddons)
+                             ${KDE4_KDEUI_LIBS} kdnssd threadweaver kauth kwindowsystem ${PLASMA_EXTRA_LIBS} kcoreaddons ${QtMimeTypes_LIBRARY})
 #FIXME gpgme++ is in kdepimlibs, neeeds to be elsewhere
 target_link_libraries(plasma ${KDEPIMLIBS_GPGMEPP_LIBS} karchive)
 
