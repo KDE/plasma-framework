@@ -44,6 +44,7 @@
 #include <kstandarddirs.h>
 #include <kwindoweffects.h>
 #include <kwindowsystem.h>
+#include <qstandardpaths.h>
 
 
 #include "libplasma-theme-global.h"
@@ -509,8 +510,7 @@ Theme::~Theme()
 
 KPluginInfo::List Theme::listThemeInfo()
 {
-    const QStringList themes = KGlobal::dirs()->findAllResources("data", "desktoptheme/*/metadata.desktop",
-                                                           KStandardDirs::NoDuplicates);
+    const QStringList themes = KGlobal::dirs()->findAllResources("data", "desktoptheme/*/metadata.desktop", KStandardDirs::NoDuplicates);
     return KPluginInfo::fromFiles(themes);
 }
 
@@ -752,14 +752,14 @@ QString Theme::wallpaperPath(const QSize &size) const
     if (fullPath.isEmpty()) {
         // we failed to find it in the theme, so look in the standard directories
         //kDebug() << "looking for" << image;
-        fullPath = KStandardDirs::locate("wallpaper", image);
+        fullPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("wallpapers/") + image);
     }
 
     if (fullPath.isEmpty()) {
         // we still failed to find it in the theme, so look for the default in
         // the standard directories
         //kDebug() << "looking for" << defaultImage;
-        fullPath = KStandardDirs::locate("wallpaper", defaultImage);
+        fullPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("wallpapers/") + defaultImage);
 
         if (fullPath.isEmpty()) {
 #ifndef NDEBUG

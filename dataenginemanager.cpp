@@ -25,8 +25,9 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <kstandarddirs.h>
+
 #include <kservicetypetrader.h>
+#include <qstandardpaths.h>
 
 #include "datacontainer.h"
 #include "pluginloader.h"
@@ -203,7 +204,7 @@ KPluginInfo::List DataEngineManager::listEngineInfoByCategory(const QString &cat
 void DataEngineManager::timerEvent(QTimerEvent *)
 {
 #ifndef NDEBUG
-    QString path = KGlobal::dirs()->locateLocal("appdata", "plasma_dataenginemanager_log");
+    QString path = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + "plasma_dataenginemanager_log";
     QFile f(path);
     if (!f.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) {
         kDebug() << "faild to open" << path;

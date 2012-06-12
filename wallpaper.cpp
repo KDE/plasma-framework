@@ -43,6 +43,7 @@
 #endif
 
 #include <version.h>
+#include <qstandardpaths.h>
 
 #include "package.h"
 #include "pluginloader.h"

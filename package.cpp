@@ -35,7 +35,6 @@
 #include <kdesktopfile.h>
 #include <kmimetype.h>
 #include <kservicetypetrader.h>
-#include <kstandarddirs.h>
 #include <ktar.h>
 #include <kzip.h>
 
@@ -46,6 +45,7 @@
 #include <kio/deletejob.h>
 #include <kio/jobclasses.h>
 #include <kio/job.h>
+#include <qstandardpaths.h>
 #endif
 
 #include "packagestructure.h"
@@ -716,7 +716,7 @@ bool PackagePrivate::installPackage(const QString &package, const QString &packa
     QDir root(packageRoot);
 
     if (!root.exists()) {
-        KStandardDirs::makeDir(packageRoot);
+        QDir().mkpath(packageRoot);
         if (!root.exists()) {
             kWarning() << "Could not create package root directory:" << packageRoot;
             return false;

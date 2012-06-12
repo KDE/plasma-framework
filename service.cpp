@@ -30,9 +30,10 @@
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <ksharedconfig.h>
-#include <kstandarddirs.h>
+
 #include <dnssd/publicservice.h>
 #include <dnssd/servicebrowser.h>
+#include <qstandardpaths.h>
 
 #include "configloader.h"
 #include "version.h"

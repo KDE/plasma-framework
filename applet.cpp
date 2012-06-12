@@ -58,7 +58,7 @@
 #include <kiconloader.h>
 #include <kkeysequencewidget.h>
 #include <kplugininfo.h>
-#include <kstandarddirs.h>
+
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kshortcut.h>

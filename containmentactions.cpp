@@ -35,7 +35,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kservicetypetrader.h>
-#include <kstandarddirs.h>
+
 
 #include <version.h>
 

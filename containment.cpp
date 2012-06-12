@@ -42,7 +42,7 @@
 #include <kmessagebox.h>
 #include <kmimetype.h>
 #include <kservicetypetrader.h>
-#include <kstandarddirs.h>
+
 #include <kurlmimedata.h>
 #include <kwindowsystem.h>
 

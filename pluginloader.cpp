@@ -559,9 +559,7 @@ KPluginInfo::List PluginLoader::internalContainmentActionsInfo() const
 
 static KPluginInfo::List standardInternalInfo(const QString &type, const QString &category = QString())
 {
-    QStringList files = KGlobal::dirs()->findAllResources("appdata",
-                                                          "plasma/internal/" + type + "/*.desktop",
-                                                          KStandardDirs::NoDuplicates);
+    QStringList files = KGlobal::dirs()->findAllResources("appdata", "plasma/internal/" + type + "/*.desktop", KStandardDirs::NoDuplicates);
 
     KPluginInfo::List allInfo = KPluginInfo::fromFiles(files);
 

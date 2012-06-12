@@ -33,6 +33,7 @@
 #include <kstandarddirs.h>
 #include <klocale.h>
 #include <kiconloader.h>
+#include <qstandardpaths.h>
 
 #include "package.h"
 #include "pluginloader.h"
