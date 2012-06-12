@@ -27,7 +27,8 @@
 #include <QSqlRecord>
 
 #include <kdebug.h>
-#include <kstandarddirs.h>
+#include <qstandardpaths.h>
+
 
 namespace Plasma
 {

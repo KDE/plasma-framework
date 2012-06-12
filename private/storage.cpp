@@ -32,7 +32,7 @@
 
 //KDE
 #include <kdebug.h>
-#include <kstandarddirs.h>
+
 
 //Plasma
 #include "applet.h"

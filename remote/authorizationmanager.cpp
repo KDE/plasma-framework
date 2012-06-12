@@ -47,7 +47,7 @@
 #include <kauthexecutejob.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
-#include <kstandarddirs.h>
+
 #include <kurl.h>
 #include <kwallet.h>
 

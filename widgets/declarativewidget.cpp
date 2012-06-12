@@ -32,7 +32,7 @@
 #include <kdebug.h>
 #include <kdeclarative.h>
 #include <kglobal.h>
-#include <kstandarddirs.h>
+
 
 #include "private/declarative/declarativenetworkaccessmanagerfactory_p.h"
 #include "private/dataenginebindings_p.h"
