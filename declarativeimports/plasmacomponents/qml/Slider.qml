@@ -195,6 +195,15 @@ Item {
             x: inverted ? handle.x : 0
             anchors.verticalCenter: parent.verticalCenter
 
+            //use the same animation when resizing a slider as moving the slider this keeps it in line when using key shortcuts
+            Behavior on width {
+                enabled: !mouseArea.drag.active && contents.animated
+                PropertyAnimation {
+                    duration: behavior.enabled ? 150 : 0
+                    easing.type: Easing.OutSine
+                }
+            }
+
             visible: range.position > 0 && slider.enabled
         }
 
