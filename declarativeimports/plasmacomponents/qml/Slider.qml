@@ -267,7 +267,6 @@ Item {
     }
 
     Binding {
-        when: !mouseArea.pressed
         target: range
         property: "position"
         value: fakeHandle.x
