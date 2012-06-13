@@ -103,9 +103,16 @@ QString SortFilterModel::filterRole() const
 
 void SortFilterModel::setSortRole(const QString &role)
 {
-    QSortFilterProxyModel::setSortRole(roleNameToId(role));
+    if (m_sortRole == role) {
+        return;
+    }
     m_sortRole = role;
-    sort(0, sortOrder());
+    if (role.isEmpty()) {
+        sort(-1, Qt::AscendingOrder);
+    } else {
+        QSortFilterProxyModel::setSortRole(roleNameToId(role));
+        sort(0, sortOrder());
+    }
 }
 
 QString SortFilterModel::sortRole() const
