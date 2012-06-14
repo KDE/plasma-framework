@@ -34,7 +34,7 @@ Properties:
     range value.
 
         real minimumValue:
-    	This property holds the minimun value that the slider's value can assume.
+        This property holds the minimum value that the slider's value can assume.
 	The default value is 0.
 
         real maximumValue:
@@ -42,7 +42,7 @@ Properties:
 	The default value is 1.
 
         real value:
-        This property holds the value selected inside the minimun to maximum range of value.
+        This property holds the value selected inside the minimum to maximum range of value.
 	The default value is 0.
 
         enumeration orientation:

@@ -32,12 +32,12 @@ Description:
         A simple button, with optional label and icon which uses the plasma theme.
 	This button component can also be used as a checkable button by using the checkable
 	and checked properties for that.
-        Plasma theme is the theme which changes via the systemsetting-workspace appearence
+        Plasma theme is the theme which changes via the systemsetting-workspace appearance
         -desktop theme.
 
 Properties:
       * bool checked:
-        This property holds wheter this button is checked or not.
+        This property holds whether this button is checked or not.
 	The button must be in the checkable state for enable users check or uncheck it.
 	The default value is false.
 	See also checkable property.

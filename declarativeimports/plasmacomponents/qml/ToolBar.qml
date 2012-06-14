@@ -80,7 +80,7 @@ Item{
     property string transition: "set"
 
     //This invisible item keeps all the old dismissed tools:
-    //note that the outside application still has to keep references to them (or explicity delete them) or they will just accumulate wasting memory
+    //note that the outside application still has to keep references to them (or explicitly delete them) or they will just accumulate wasting memory
     Item {
         id: oldToolsItem
         visible: false
