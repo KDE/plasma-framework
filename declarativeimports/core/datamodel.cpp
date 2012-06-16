@@ -187,6 +187,10 @@ void DataModel::dataUpdated(const QString &sourceName, const Plasma::DataEngine:
             QVariantHash::const_iterator i = m_dataSource->data().constBegin();
 
             while (i != m_dataSource->data().constEnd()) {
+                if (!m_sourceFilter.isEmpty() && m_sourceFilterRE.isValid() && !m_sourceFilterRE.exactMatch(i.key())) {
+                    ++i;
+                    continue;
+                }
                 QVariant value = i.value();
                 if (value.isValid() && value.canConvert<Plasma::DataEngine::Data>()) {
                     Plasma::DataEngine::Data data = value.value<Plasma::DataEngine::Data>();
