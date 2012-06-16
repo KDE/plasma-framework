@@ -24,6 +24,7 @@
 #include "config-plasma.h"
 
 #include <QFile>
+#include <QGraphicsWidget>
 #include <QTimer>
 
 #include <kdebug.h>
@@ -77,7 +78,7 @@ void ServicePrivate::associatedWidgetDestroyed(QObject *obj)
 
 void ServicePrivate::associatedGraphicsWidgetDestroyed(QObject *obj)
 {
-    associatedGraphicsWidgets.remove(static_cast<QGraphicsWidget*>(obj));
+    associatedGraphicsWidgets.remove(static_cast<QGraphicsObject*>(obj));
 }
 
 void ServicePrivate::publish(AnnouncementMethods methods, const QString &name, const KPluginInfo &metadata)
@@ -277,11 +278,21 @@ void Service::disassociateWidget(QWidget *widget)
 
 void Service::associateWidget(QGraphicsWidget *widget, const QString &operation)
 {
+    associateItem(widget, operation);
+}
+
+void Service::disassociateWidget(QGraphicsWidget *widget)
+{
+    disassociateItem(widget);
+}
+
+void Service::associateItem(QGraphicsObject *widget, const QString &operation)
+{
     if (!widget) {
         return;
     }
 
-    disassociateWidget(widget);
+    disassociateItem(widget);
     d->associatedGraphicsWidgets.insert(widget, operation);
     connect(widget, SIGNAL(destroyed(QObject*)),
             this, SLOT(associatedGraphicsWidgetDestroyed(QObject*)));
@@ -289,7 +300,7 @@ void Service::associateWidget(QGraphicsWidget *widget, const QString &operation)
     widget->setEnabled(!d->disabledOperations.contains(operation));
 }
 
-void Service::disassociateWidget(QGraphicsWidget *widget)
+void Service::disassociateItem(QGraphicsObject *widget)
 {
     if (!widget) {
         return;
@@ -344,7 +355,7 @@ void Service::setOperationEnabled(const QString &operation, bool enable)
     }
 
     {
-        QHashIterator<QGraphicsWidget *, QString> it(d->associatedGraphicsWidgets);
+        QHashIterator<QGraphicsObject *, QString> it(d->associatedGraphicsWidgets);
         while (it.hasNext()) {
             it.next();
             if (it.value() == operation) {
@@ -381,7 +392,7 @@ void Service::setOperationsScheme(QIODevice *xml)
     }
 
     {
-        QHashIterator<QGraphicsWidget *, QString> it(d->associatedGraphicsWidgets);
+        QHashIterator<QGraphicsObject *, QString> it(d->associatedGraphicsWidgets);
         while (it.hasNext()) {
             it.next();
             it.key()->setEnabled(d->config->hasGroup(it.value()));

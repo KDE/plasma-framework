@@ -254,6 +254,11 @@ public:
             }
         }
 
+        if (!singleRunnerWasLoaded) {
+            // in case we deleted it up above
+            clearSingleRunner();
+        }
+
 #ifndef NDEBUG
         kDebug() << "All runners loaded, total:" << runners.count();
 #endif
@@ -817,7 +822,9 @@ void RunnerManager::reset()
         qDeleteAll(d->oldSearchJobs);
         d->oldSearchJobs.clear();
     } else {
-        Weaver::instance()->dequeue();
+        Q_FOREACH(FindMatchesJob *job, d->searchJobs) {
+            Weaver::instance()->dequeue(job);
+        }
         d->oldSearchJobs += d->searchJobs;
     }
 
