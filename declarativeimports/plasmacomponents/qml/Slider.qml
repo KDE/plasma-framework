@@ -146,8 +146,8 @@ Item {
 
         // Plasma API
         property bool animated: true
-        property real handleWidth: grooveSvg.elementSize("horizontal-slider-handle").width
-        property real handleHeight: grooveSvg.elementSize("horizontal-slider-handle").height
+        property real handleWidth: contents.isVertical ? grooveSvg.elementSize("vertical-slider-handle").width : grooveSvg.elementSize("horizontal-slider-handle").width
+        property real handleHeight: contents.isVertical ? grooveSvg.elementSize("vertical-slider-handle").height : grooveSvg.elementSize("horizontal-slider-handle").height
 
         // Convenience API
         property bool isVertical: orientation == Qt.Vertical
@@ -210,11 +210,13 @@ Item {
         Private.RoundShadow {
             id: shadow
             imagePath: "widgets/slider"
-            focusElement: "horizontal-slider-focus"
-            hoverElement: "horizontal-slider-hover"
-            shadowElement: "horizontal-slider-shadow"
+            focusElement: contents.isVertical ? "vertical-slider-focus" : "horizontal-slider-focus"
+            hoverElement: contents.isVertical ? "vertical-slider-hover" : "horizontal-slider-hover"
+            shadowElement: contents.isVertical ? "vertical-slider-shadow" : "horizontal-slider-shadow"
             state: slider.activeFocus ? "focus" : (mouseArea.containsMouse ? "hover" : "shadow")
             anchors.fill: handle
+            //We rotate the handle below, we need to rotate the shadow back as well
+            rotation: contents.isVertical ? 90 : 0
         }
 
         PlasmaCore.SvgItem {
@@ -226,8 +228,10 @@ Item {
             }
             width: contents.handleWidth
             height: contents.handleHeight
+            //Rotate the handle back for vertical slider so all the handles have the same shadow effect
+            rotation: contents.isVertical ? 90 : 0
             svg: PlasmaCore.Svg { imagePath: "widgets/slider" }
-            elementId: "horizontal-slider-handle"
+            elementId: contents.isVertical ?  "vertical-slider-handle" : "horizontal-slider-handle"
 
             Behavior on x {
                 id: behavior
