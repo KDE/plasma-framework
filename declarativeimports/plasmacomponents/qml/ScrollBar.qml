@@ -132,10 +132,10 @@ Item {
                 return;
 
             if (internalLoader.isVertical) {
-                flickableItem.contentY = Math.max(0, Math.min(flickableItem.contentHeight,
+                flickableItem.contentY = Math.max(0, Math.min(flickableItem.contentHeight - flickableItem.height,
                     flickableItem.contentY + increment))
             } else {
-                flickableItem.contentX = Math.max(0, Math.min(flickableItem.contentWidth,
+                flickableItem.contentX = Math.max(0, Math.min(flickableItem.contentWidth - flickableItem.width,
                     flickableItem.contentX + increment))
             }
         }
