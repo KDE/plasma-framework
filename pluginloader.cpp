@@ -20,7 +20,6 @@
 #include "pluginloader.h"
 
 #include <kdebug.h>
-#include <kglobal.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>
@@ -401,7 +400,7 @@ KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QS
 {
     KPluginInfo::List list;
 
-    if (!d->isDefaultLoader && (parentApp.isEmpty() || parentApp == KGlobal::mainComponent().componentName())) {
+    if (!d->isDefaultLoader && (parentApp.isEmpty() || parentApp == QCoreApplication::instance()->applicationName())) {
         list = internalAppletInfo(category);
     }
 
@@ -435,7 +434,7 @@ KPluginInfo::List PluginLoader::listDataEngineInfo(const QString &parentApp)
 {
     KPluginInfo::List list;
 
-    if (!d->isDefaultLoader && (parentApp.isEmpty() || parentApp == KGlobal::mainComponent().componentName())) {
+    if (!d->isDefaultLoader && (parentApp.isEmpty() || parentApp == QCoreApplication::instance()->applicationName())) {
         list = internalDataEngineInfo();
     }
 
@@ -454,7 +453,7 @@ KPluginInfo::List PluginLoader::listRunnerInfo(const QString &parentApp)
 {
     KPluginInfo::List list;
 
-    if (!d->isDefaultLoader && (parentApp.isEmpty() || parentApp == KGlobal::mainComponent().componentName())) {
+    if (!d->isDefaultLoader && (parentApp.isEmpty() || parentApp == QCoreApplication::instance()->applicationName())) {
         list = internalRunnerInfo();
     }
 
@@ -473,7 +472,7 @@ KPluginInfo::List PluginLoader::listContainmentActionsInfo(const QString &parent
 {
     KPluginInfo::List list;
 
-    if (!d->isDefaultLoader && (parentApp.isEmpty() || parentApp == KGlobal::mainComponent().componentName())) {
+    if (!d->isDefaultLoader && (parentApp.isEmpty() || parentApp == QCoreApplication::instance()->applicationName())) {
         list = internalContainmentActionsInfo();
     }
 
