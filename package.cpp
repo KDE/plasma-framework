@@ -864,17 +864,8 @@ bool PackagePrivate::installPackage(const QString &package, const QString &packa
 
         const QString serviceName = servicePrefix + meta.pluginName() + ".desktop";
 
-<<<<<<< HEAD
         QString service = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/kde5/services/") + serviceName;
-#ifndef PLASMA_NO_KIO
-        KIO::FileCopyJob *job = KIO::file_copy(QUrl::fromLocalFile(metaPath), QUrl::fromLocalFile(service), -1, KIO::HideProgressInfo);
-        const bool ok = job->exec();
-        const QString errorString = job->errorString();
-#else
-=======
-        QString service = KStandardDirs::locateLocal("services", serviceName + ".desktop");
         kDebug() << "************************** 4";
->>>>>>> origin/KDE/4.8
         const bool ok = QFile::copy(metaPath, service);
         kDebug() << "************************** 5";
         if (ok) {
@@ -948,9 +939,8 @@ PackagePrivate::PackagePrivate()
           externalPaths(false),
           valid(false)
 {
-<<<<<<< HEAD
     contentsPrefixPaths << "contents/";
-=======
+
     QString serviceName("plasma-applet-" + data.pluginName());
     QString service = KStandardDirs::locateLocal("services", serviceName + ".desktop");
 
@@ -1040,7 +1030,6 @@ PackagePrivate::PackagePrivate(const PackageStructure::Ptr st, const QString &pa
     }
 
     valid = structure && !structure->path().isEmpty();
->>>>>>> origin/KDE/4.8
 }
 
 PackagePrivate::PackagePrivate(const PackagePrivate &other)
