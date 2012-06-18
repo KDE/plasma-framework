@@ -37,7 +37,7 @@
 #include <qtemporaryfile.h>
 
 #include <kaction.h>
-#include <kauthorized.h>
+#include <kcoreauthorized.h>
 #include <kmenu.h>
 #include <kmessagebox.h>
 #include <kmimetype.h>

@@ -19,6 +19,8 @@
 
 #include "abstracttoolbox.h"
 
+#include <QCoreApplication>
+
 #include "containment.h"
 
 #include <kservicetypetrader.h>
@@ -78,7 +80,7 @@ KPluginInfo::List AbstractToolBox::listToolBoxInfo(const QString
 {
     KPluginInfo::List list;
 
-    if (parentApp.isEmpty() || parentApp == KGlobal::mainComponent().componentName()) {
+    if (parentApp.isEmpty() || parentApp == QCoreApplication::instance()->applicationName()) {
         list = KPluginInfo::List();
     }
 

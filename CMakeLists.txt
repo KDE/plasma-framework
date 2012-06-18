@@ -27,6 +27,7 @@ endif(NOT Q_WS_X11)
 
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
+                    ${CMAKE_CURRENT_BINARY_DIR}
                     ${KDE4_KDECORE_INCLUDES}
                     ${KDE4_KDEUI_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/experimental/libkdeclarative
@@ -325,6 +326,7 @@ install(TARGETS plasma EXPORT kdelibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_AR
 install(TARGETS plasmaqgv EXPORT kdelibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
+generate_export_header(plasma)
 
 set(plasma_LIB_INCLUDES
     abstractdialogmanager.h
@@ -349,7 +351,7 @@ set(plasma_LIB_INCLUDES
     package.h
     packagestructure.h
     plasma.h
-    plasma_export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/plasma_export.h
     popupapplet.h
     querymatch.h
     remote/accessappletjob.h

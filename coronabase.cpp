@@ -35,7 +35,6 @@
 
 #include <kaction.h>
 #include <kdebug.h>
-#include <kglobal.h>
 #include <klocalizedstring.h>
 #include <kmimetype.h>
 #include <kshortcutsdialog.h>
@@ -91,7 +90,7 @@ void CoronaBase::setDefaultContainmentPlugin(const QString &name)
 {
     // we could check if it is in:
     // Containment::listContainments().contains(name) ||
-    // Containment::listContainments(QString(), KGlobal::mainComponent().componentName()).contains(name)
+    // Containment::listContainments(QString(), QCoreApplication::instance()->applicationName()).contains(name)
     // but that seems like overkill
     d->defaultContainmentPlugin = name;
 }
@@ -454,7 +453,7 @@ CoronaBasePrivate::CoronaBasePrivate(CoronaBase *corona)
       actions(corona)
 {
     if (KGlobal::hasMainComponent()) {
-        configName = KGlobal::mainComponent().componentName() + "-appletsrc";
+        configName = QCoreApplication::instance()->applicationName() + "-appletsrc";
     } else {
         configName = "plasma-appletsrc";
     }
