@@ -178,7 +178,16 @@ Item {
 
         states: [
             State { name: "normal" },
-            State { name: "pressed" }
+            State { name: "pressed" 
+                    PropertyChanges {
+                        target: surfaceNormal
+                        opacity: 0
+                    }
+                    PropertyChanges {
+                        target: surfacePressed
+                        opacity: 1
+                    }
+            }
         ]
         transitions: [
             Transition {
@@ -187,14 +196,6 @@ Item {
                 ParallelAnimation {
                     NumberAnimation { target: surfaceNormal; property: "opacity"; to: 1; duration: 100 }
                     NumberAnimation { target: surfacePressed; property: "opacity"; to: 0; duration: 100 }
-                }
-            },
-            Transition {
-                to: "pressed"
-                // Cross fade from normal to pressed
-                ParallelAnimation {
-                    NumberAnimation { target: surfaceNormal; property: "opacity"; to: 0; duration: 100 }
-                    NumberAnimation { target: surfacePressed; property: "opacity"; to: 1; duration: 100 }
                 }
             }
         ]
