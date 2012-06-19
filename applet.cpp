@@ -1922,6 +1922,8 @@ void Applet::showConfigurationInterface()
 #ifndef PLASMA_NO_KUTILS
                 KCModuleProxy *module = new KCModuleProxy(kcm);
                 if (module->realModule()) {
+                    //preemptively load modules to prevent save() crashing on some kcms, like powerdevil ones
+                    module->load();
                     connect(module, SIGNAL(changed(bool)), dialog, SLOT(settingsModified(bool)));
                     connect(dialog, SIGNAL(okClicked()),
                             module->realModule(), SLOT(save()));
@@ -1938,6 +1940,7 @@ void Applet::showConfigurationInterface()
                     QString error;
                     KCModule *module = service->createInstance<KCModule>(dialog, QVariantList(), &error);
                     if (module) {
+                        module->load();
                         connect(module, SIGNAL(changed(bool)), dialog, SLOT(settingsModified(bool)));
                         connect(dialog, SIGNAL(okClicked()),
                                 module, SLOT(save()));
