@@ -23,8 +23,6 @@
 #include <QIcon>
 #include <QPainter>
 
-#include <kmimetype.h>
-
 #include "svg.h"
 #include "private/themedwidgetinterface_p.h"
 #include "theme.h"

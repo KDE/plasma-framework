@@ -29,7 +29,7 @@
 
 #include <kcolorscheme.h>
 #include <kglobalsettings.h>
-#include <kmimetype.h>
+#include <qmimedatabase.h>
 
 #include "private/themedwidgetinterface_p.h"
 #include "svg.h"
@@ -62,10 +62,11 @@ public:
             return;
         }
 
-        KMimeType::Ptr mime = KMimeType::findByPath(absImagePath);
+        QMimeDatabase db;
+        QMimeType mime = db.mimeTypeForFile(absImagePath);
         QPixmap pm(q->size().toSize());
 
-        if (mime->is("image/svg+xml") || mime->is("image/svg+xml-compressed")) {
+        if (mime.inherits("image/svg+xml") || mime.inherits("image/svg+xml-compressed")) {
             if (!svg || svg->imagePath() != absImagePath) {
                 delete svg;
                 svg = new Svg();

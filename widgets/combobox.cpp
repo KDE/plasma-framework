@@ -25,7 +25,6 @@
 #include <kcombobox.h>
 #include <kiconeffect.h>
 #include <kiconloader.h>
-#include <kmimetype.h>
 
 #include "applet.h"
 #include "framesvg.h"

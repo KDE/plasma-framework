@@ -24,7 +24,6 @@
 #include <QStyleOptionSpinBox>
 #include <QGraphicsView>
 
-#include <kmimetype.h>
 #include <knuminput.h>
 
 #include "applet.h"

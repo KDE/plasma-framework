@@ -25,7 +25,6 @@
 #include <QScrollBar>
 #include <QGraphicsView>
 
-#include <kmimetype.h>
 #include <ktextedit.h>
 
 #include "applet.h"

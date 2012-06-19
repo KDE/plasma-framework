@@ -40,7 +40,7 @@
 #include <kcoreauthorized.h>
 #include <kmenu.h>
 #include <kmessagebox.h>
-#include <kmimetype.h>
+#include <qmimedatabase.h>
 #include <kservicetypetrader.h>
 
 #include <kurlmimedata.h>
@@ -1295,8 +1295,9 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
             }
 #ifndef PLASMA_NO_KIO
             else {
-                KMimeType::Ptr mime = KMimeType::findByUrl(url);
-                QString mimeName = mime->name();
+                QMimeDatabase db;
+                QMimeType mime = db.mimeTypeForUrl(url);
+                QString mimeName = mime.name();
                 QRectF geom(pos, QSize());
                 QVariantList args;
                 args << url.toString();

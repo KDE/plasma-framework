@@ -26,7 +26,7 @@
 #include <QPainter>
 
 //KDE
-#include <kmimetype.h>
+#include <qmimedatabase.h>
 
 //Plasma
 #include "framesvg.h"
@@ -180,9 +180,10 @@ void Frame::setImage(const QString &path)
         return;
     }
 
-    KMimeType::Ptr mime = KMimeType::findByPath(d->absImagePath);
+    QMimeDatabase db;
+    QMimeType mime = db.mimeTypeForFile(d->absImagePath);
 
-    if (!mime->is("image/svg+xml") && !mime->is("application/x-gzip")) {
+    if (!mime.inherits("image/svg+xml") && !mime.inherits("application/x-gzip")) {
         d->pixmap = new QPixmap(d->absImagePath);
     } else {
         d->image = new Plasma::Svg(this);

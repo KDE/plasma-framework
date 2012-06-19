@@ -27,7 +27,7 @@
 
 #include <kcolorutils.h>
 #include <kiconeffect.h>
-#include <kmimetype.h>
+#include <qmimedatabase.h>
 
 #include "animator.h"
 #include "framesvg.h"
@@ -63,10 +63,11 @@ public:
             return;
         }
 
-        KMimeType::Ptr mime = KMimeType::findByPath(absImagePath);
+        QMimeDatabase db;
+        QMimeType mime = db.mimeTypeForFile(absImagePath);
         QPixmap pm;
 
-        if (mime->is("image/svg+xml") || mime->is("image/svg+xml-compressed")) {
+        if (mime.inherits("image/svg+xml") || mime.inherits("image/svg+xml-compressed")) {
             if (!svg || svg->imagePath() != absImagePath) {
                 delete svg;
                 svg = new Svg();

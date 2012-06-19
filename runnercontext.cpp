@@ -31,7 +31,7 @@
 #include <kcompletion.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
-#include <kmimetype.h>
+#include <qmimedatabase.h>
 #include <kshell.h>
 #include <qstandardpaths.h>
 #include <qurl.h>
@@ -233,9 +233,10 @@ class RunnerContextPrivate : public QSharedData
                                 mimeType = "inode/folder";
                             } else if (info.isFile()) {
                                 type = RunnerContext::File;
-                                KMimeType::Ptr mimeTypePtr = KMimeType::findByPath(path);
-                                if (mimeTypePtr) {
-                                    mimeType = mimeTypePtr->name();
+                                QMimeDatabase db;
+                                QMimeType mime = db.mimeTypeForFile(path);
+                                if (!mime.isDefault()) {
+                                    mimeType = mime.name();
                                 }
                             }
                         }

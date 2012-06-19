@@ -36,7 +36,6 @@
 #include <QLabel>
 
 //KDE
-#include <kmimetype.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>

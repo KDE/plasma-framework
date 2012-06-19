@@ -23,7 +23,7 @@
 #include <QPainter>
 #include <QRadioButton>
 
-#include <kmimetype.h>
+#include <qmimedatabase.h>
 
 #include "private/themedwidgetinterface_p.h"
 #include "svg.h"
@@ -52,10 +52,11 @@ public:
             return;
         }
 
-        KMimeType::Ptr mime = KMimeType::findByPath(absImagePath);
+        QMimeDatabase db;
+        QMimeType mime = db.mimeTypeForFile(absImagePath);
         QPixmap pm(q->size().toSize());
 
-        if (mime->is("image/svg+xml")) {
+        if (mime.inherits("image/svg+xml")) {
             svg = new Svg();
             QPainter p(&pm);
             svg->paint(&p, pm.rect());

@@ -40,8 +40,6 @@
 #include <kglobalsettings.h>
 #include <kiconeffect.h>
 #include <kiconloader.h>
-#include <kmimetype.h>
-#include <kurl.h>
 #include <klocale.h>
 
 #include "animator.h"

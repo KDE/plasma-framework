@@ -24,7 +24,6 @@
 #include <QSlider>
 #include <QStyleOptionSlider>
 #include <QGraphicsSceneWheelEvent>
-#include <kmimetype.h>
 
 #include "theme.h"
 #include "framesvg.h"

@@ -25,7 +25,6 @@
 #include <QGraphicsView>
 
 #include <klineedit.h>
-#include <kmimetype.h>
 
 #include "applet.h"
 #include "framesvg.h"

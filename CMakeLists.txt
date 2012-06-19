@@ -291,7 +291,7 @@ target_link_libraries(plasma ${KDEPIMLIBS_GPGMEPP_LIBS} karchive)
 
 target_link_libraries(plasmaqgv plasma ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
                              ${QT_QTSCRIPT_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY}
-                             ${KDE4_KDEUI_LIBS} kdeclarative ${PLASMA_EXTRA_LIBS} kcoreaddons)
+                             ${KDE4_KDEUI_LIBS} kdeclarative ${PLASMA_EXTRA_LIBS} kcoreaddons ${QtMimeTypes_LIBRARY})
 
 if(QCA2_FOUND)
    target_link_libraries(plasma ${QCA2_LIBRARIES})

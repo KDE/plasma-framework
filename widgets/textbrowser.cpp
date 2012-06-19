@@ -24,7 +24,6 @@
 #include <QPainter>
 #include <QScrollBar>
 
-#include <kmimetype.h>
 #include <ktextbrowser.h>
 
 #include "svg.h"
