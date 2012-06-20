@@ -173,10 +173,6 @@ Item {
             rightMargin: surface.margins.right
             bottomMargin: surface.margins.bottom
         }
-        scale: internal.userPressed ? 0.9 : 1
-        Behavior on scale {
-            PropertyAnimation { duration: 250 }
-        }
 
         Private.IconLoader {
             id: icon
