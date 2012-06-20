@@ -272,7 +272,8 @@ KPluginInfo Package::metadata() const
                 if (mimeType->is("application/zip")) {
                     archive = new KZip(d->path);
                 } else if (mimeType->is("application/x-compressed-tar") || mimeType->is("application/x-gzip") ||
-                           mimeType->is("application/x-tar") || mimeType->is("application/x-bzip-compressed-tar")) {
+                           mimeType->is("application/x-tar") || mimeType->is("application/x-bzip-compressed-tar") ||
+                           mimeType->is("application/x-xz") || mimeType->is("application/x-lzma")) {
                     archive = new KTar(d->path);
                 } else {
                     kWarning() << "Could not open package file, unsupported archive format:" << d->path << mimeType->name();
