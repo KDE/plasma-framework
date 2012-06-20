@@ -74,12 +74,6 @@ Item {
     //     disabled buttons
     opacity: dualButton.enabled ? 1.0 : 0.5
 
-    function entered() {
-        if (dualButton.enabled) {
-            shadowLoader.state = "hover"
-        }
-    }
-
     function released() {
         if (dualButton.enabled) {
             dualButton.checked = !dualButton.checked;
@@ -87,8 +81,6 @@ Item {
         }
     }
 
-    Keys.onSpacePressed: entered();
-    Keys.onReturnPressed: entered();
     Keys.onReleased: {
         if(event.key == Qt.Key_Space ||
            event.key == Qt.Key_Return)
@@ -98,6 +90,7 @@ Item {
     Loader {
         id: shadowLoader
         anchors.fill: surfaceLoader
+        state: (dualButton.enabled && (dualButton.focus || mouseArea.containsMouse)) ? "hover" : "shadow"
     }
 
     Loader {
@@ -133,11 +126,6 @@ Item {
         hoverEnabled: true
 
         onReleased: dualButton.released();
-        onEntered: dualButton.entered();
         onPressed: dualButton.forceActiveFocus();
-        onExited: {
-            shadowLoader.state = "shadow"
-        }
     }
 }
-
