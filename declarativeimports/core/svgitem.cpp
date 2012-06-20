@@ -41,6 +41,10 @@ SvgItem::~SvgItem()
 
 void SvgItem::setElementId(const QString &elementID)
 {
+    if (elementID == m_elementID) {
+        return;
+    }
+
     m_elementID = elementID;
     emit elementIdChanged();
     emit naturalSizeChanged();
