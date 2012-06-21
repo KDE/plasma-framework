@@ -33,7 +33,6 @@
 #include <karchive.h>
 #include <kdebug.h>
 #include <kdesktopfile.h>
-#include <kmimetype.h>
 #include <kservicetypetrader.h>
 #include <ktar.h>
 #include <kzip.h>
@@ -41,6 +40,7 @@
 #include "config-plasma.h"
 
 #include <qstandardpaths.h>
+#include <qmimedatabase.h>
 
 #include "packagestructure.h"
 #include "pluginloader.h"
@@ -267,16 +267,17 @@ KPluginInfo Package::metadata() const
                 d->createPackageMetadata(d->path);
             } else if (fileInfo.exists()) {
                 KArchive *archive = 0;
-                KMimeType::Ptr mimeType = KMimeType::findByPath(d->path);
+                QMimeDatabase db;
+                QMimeType mimeType = db.mimeTypeForFile(d->path);
 
-                if (mimeType->is("application/zip")) {
+                if (mimeType.inherits("application/zip")) {
                     archive = new KZip(d->path);
-                } else if (mimeType->is("application/x-compressed-tar") || mimeType->is("application/x-gzip") ||
-                           mimeType->is("application/x-tar") || mimeType->is("application/x-bzip-compressed-tar") ||
-                           mimeType->is("application/x-xz") || mimeType->is("application/x-lzma")) {
+                } else if (mimeType.inherits("application/x-compressed-tar") || mimeType.inherits("application/x-gzip") ||
+                           mimeType.inherits("application/x-tar") || mimeType.inherits("application/x-bzip-compressed-tar") ||
+                           mimeType.inherits("application/x-xz") || mimeType.inherits("application/x-lzma")) {
                     archive = new KTar(d->path);
                 } else {
-                    kWarning() << "Could not open package file, unsupported archive format:" << d->path << mimeType->name();
+                    kWarning() << "Could not open package file, unsupported archive format:" << d->path << mimeType.name();
                 }
 
                 if (archive && archive->open(QIODevice::ReadOnly)) {
@@ -735,16 +736,17 @@ bool PackagePrivate::installPackage(const QString &package, const QString &packa
         }
     } else {
         KArchive *archive = 0;
-        KMimeType::Ptr mimetype = KMimeType::findByPath(package);
+        QMimeDatabase db;
+        QMimeType mimetype = db.mimeTypeForFile(package);
 
-        if (mimetype->is("application/zip")) {
+        if (mimetype.inherits("application/zip")) {
             archive = new KZip(package);
-        } else if (mimetype->is("application/x-compressed-tar") ||
-                   mimetype->is("application/x-tar")|| mimetype->is("application/x-bzip-compressed-tar") ||
-                   mimetype->is("application/x-xz") || mimetype->is("application/x-lzma")) {
+        } else if (mimetype.inherits("application/x-compressed-tar") ||
+                   mimetype.inherits("application/x-tar")|| mimetype.inherits("application/x-bzip-compressed-tar") ||
+                   mimetype.inherits("application/x-xz") || mimetype.inherits("application/x-lzma")) {
             archive = new KTar(package);
         } else {
-            kWarning() << "Could not open package file, unsupported archive format:" << package << mimetype->name();
+            kWarning() << "Could not open package file, unsupported archive format:" << package << mimetype.name();
             return false;
         }
 
