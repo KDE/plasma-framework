@@ -1783,6 +1783,17 @@ bool Applet::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
             case QEvent::GraphicsSceneHoverEnter:
                 //kDebug() << "got hoverenterEvent" << immutability() << " " << immutability();
                 if (immutability() == Mutable) {
+                    QGraphicsWidget *pw = this;
+                    //This is for the rare case of applet in applet (systray)
+                    //if the applet is in an applet that is not a containment, don't create the handle BUG:301648
+                    while (pw = pw->parentWidget()) {
+                        if (qobject_cast<Containment *>(pw)) {
+                            break;
+                        } else if (qobject_cast<Applet *>(pw)) {
+                            return false;
+                        }
+                    }
+
                     QGraphicsSceneHoverEvent *he = static_cast<QGraphicsSceneHoverEvent*>(event);
                     if (d->handle) {
                         d->handle.data()->setHoverPos(he->pos());
