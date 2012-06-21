@@ -99,9 +99,18 @@ Item {
             interval: 0
             running: false
             onTriggered: {
-                barFrameSvg.resizeFrame(Qt.size(Math.floor(contents.height/1.6), contents.height))
+                if (barFrameSvg.hasElement("hint-bar-stretch")) {
+                    barFrameSvg.resizeFrame(Qt.size(barPixmapItem.width, barPixmapItem.height))
+                } else {
+                    barFrameSvg.resizeFrame(Qt.size(Math.floor(contents.height/1.6), contents.height))
+                }
                 barPixmapItem.pixmap = barFrameSvg.framePixmap()
-                backgroundFrameSvg.resizeFrame(Qt.size(Math.floor(contents.height/1.6), contents.height))
+
+                if (backgroundFrameSvg.hasElement("hint-bar-stretch")) {
+                    backgroundFrameSvg.resizeFrame(Qt.size(backgroundPixmapItem.width, backgroundPixmapItem.height))
+                } else {
+                    backgroundFrameSvg.resizeFrame(Qt.size(Math.floor(contents.height/1.6), contents.height))
+                }
                 backgroundPixmapItem.pixmap = backgroundFrameSvg.framePixmap()
             }
         }
