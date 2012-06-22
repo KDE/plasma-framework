@@ -179,7 +179,7 @@ void centerPixmaps(QPixmap &from, QPixmap &to)
 
     QRect fromRect(from.rect());
     QRect toRect(to.rect());
- 
+
     QRect actualRect = QRect(QPoint(0,0), fromRect.size().expandedTo(toRect.size()));
     fromRect.moveCenter(actualRect.center());
     toRect.moveCenter(actualRect.center());
@@ -228,7 +228,7 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
 
     // If the native paint engine supports Porter/Duff compositing and CompositionMode_Plus
     QPaintEngine *paintEngine = from.paintEngine();
-    if (paintEngine && 
+    if (paintEngine &&
         paintEngine->hasFeature(QPaintEngine::PorterDuff) &&
         paintEngine->hasFeature(QPaintEngine::BlendModes)) {
         QPixmap startPixmap(pixmapSize);
@@ -254,7 +254,8 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
 
         return startPixmap;
     }
-#if defined(Q_WS_X11) && defined(HAVE_XRENDER)
+#warning Cannot use XRender with QPixmap anymore. Find equivalent with Qt API.
+#if 0 // defined(Q_WS_X11) && defined(HAVE_XRENDER)
     // We have Xrender support
     else if (paintEngine && paintEngine->hasFeature(QPaintEngine::PorterDuff)) {
         // QX11PaintEngine doesn't implement CompositionMode_Plus in Qt 4.3,
