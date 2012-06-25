@@ -677,6 +677,8 @@ QStringList ScriptEngine::defaultLayoutScripts()
 {
     const QString appName = KGlobal::activeComponent().aboutData()->appName();
     QStringList scripts = KGlobal::dirs()->findAllResources("data", appName + "/init/*.js");
+    scripts.sort();
+
     QStringList scriptPaths;
 
     if (scripts.isEmpty()) {
