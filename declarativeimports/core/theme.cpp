@@ -119,7 +119,7 @@ int FontProxy::pixelSize() const
 
 qreal FontProxy::pointSize() const
 {
-    return Plasma::Theme::defaultTheme()->font(m_fontRole).pointSize();
+    return Plasma::Theme::defaultTheme()->font(m_fontRole).pointSizeF();
 }
 
 bool FontProxy::strikeout() const
