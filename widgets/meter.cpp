@@ -184,10 +184,14 @@ void MeterPrivate::paintBar(QPainter *p, const QString &prefix)
 
         image->setUsingRenderingCache(false);
         if (image->hasElement("hint-bar-stretch")) {
+            const QSize imageSize = image->size();
+            image->resize();
+            image->setElementPrefix(prefix);
             image->resizeFrame(elementRect.size());
-            image->paintFrame(p);
+            image->paintFrame(p, elementRect.topLeft());
+            image->resize(imageSize);
         } else {
-            QSize imageSize = image->size();
+            const QSize imageSize = image->size();
             image->resize();
             QSize tileSize = image->elementSize("bar-active-center");
 
