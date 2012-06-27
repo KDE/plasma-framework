@@ -548,6 +548,10 @@ void Containment::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    //close a toolbox if exists, to emulate qmenu behavior
+    if (d->toolBox) {
+        d->toolBox.data()->setShowing(false);
+    }
     event->ignore();
     if (d->appletAt(event->scenePos())) {
         return; //no unexpected click-throughs
@@ -577,6 +581,7 @@ void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void Containment::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     event->ignore();
+
     if (d->appletAt(event->scenePos())) {
         return; //no unexpected click-throughs
     }
