@@ -211,7 +211,10 @@ Item {
             font.underline: theme.defaultFont.underline
             font.weight: theme.defaultFont.weight
             font.wordSpacing: theme.defaultFont.wordSpacing
-            color: surface.opacity == 1 ? theme.buttonTextColor : theme.textColor
+
+            color: mouse.containsMouse ? theme.buttonTextColor : theme.textColor
+            Behavior on color { ColorAnimation { duration: 100 } }
+
             horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
