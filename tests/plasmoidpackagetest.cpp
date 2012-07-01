@@ -186,7 +186,7 @@ void PlasmoidPackageTest::filePath()
     p = new Plasma::Package(m_defaultPackage);
     p->setPath(m_packageRoot + '/' + m_package);
 
-    const QString path = KStandardDirs::realFilePath(m_packageRoot + "/" + m_package + "/contents/code/main");
+    const QString path = QFileInfo(m_packageRoot + "/" + m_package + "/contents/code/main").canonicalFilePath();
 
     // Two ways to get the same info.
     // 1. Give the file type which refers to a class of files (a directory) in
