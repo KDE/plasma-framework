@@ -86,7 +86,7 @@ public:
      * @deprecated use LineEdit::setPlaceholderText instead
      */
 #ifndef KDE_NO_DEPRECATED
-    void PLASMA_DEPRECATED setClickMessage(const QString &message);
+    PLASMA_DEPRECATED void setClickMessage(const QString &message);
 #endif
 
     /**
@@ -95,7 +95,7 @@ public:
      * @deprecated use LineEdit::placeholderText instead
      */
 #ifndef KDE_NO_DEPRECATED
-    QString PLASMA_DEPRECATED clickMessage() const;
+    PLASMA_DEPRECATED QString clickMessage() const;
 #endif
 
     /**
