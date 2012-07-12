@@ -172,8 +172,7 @@ void DialogPrivate::checkBorders(bool updateMaskIfNeeded)
 
     //decide about disabling the border attached to the panel
     //don't cut borders on tooltips
-    //Qt::ToolTip is 0xc & Qt::Window, so Qt::Window has to be considered
-    if (applet && (q->windowFlags() & Qt::ToolTip) != Qt::ToolTip) {
+    if (applet && !q->testAttribute(Qt::WA_X11NetWmWindowTypeToolTip)) {
         background->getMargins(leftWidth, topHeight, rightWidth, bottomHeight);
 
         switch (applet->location()) {
@@ -225,7 +224,7 @@ void DialogPrivate::checkBorders(bool updateMaskIfNeeded)
     }
 
     //decide if to disable the other borders
-    if (q->isVisible() && (q->windowFlags() & Qt::ToolTip) != Qt::ToolTip) {
+    if (q->isVisible() && !q->testAttribute(Qt::WA_X11NetWmWindowTypeToolTip)) {
         if (dialogGeom.left() <= avail.left()) {
             borders &= ~FrameSvg::LeftBorder;
         }
