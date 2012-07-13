@@ -150,29 +150,51 @@ Item {
             function incomingDone() {
                 state = ""
                 if (priv.incomingPage) {
-                    priv.incomingPage.status = PageStatus.Active
+                    if (priv.incomingPage.status != undefined) {
+                        priv.incomingPage.status = PageStatus.Active
+                    }
                     priv.incomingPage = null
                 }
             }
 
             function outgoingDone() {
                 if (priv.outgoingPage) {
-                    priv.outgoingPage.status = PageStatus.Inactive
+                    if (priv.outgoingPage.status != undefined) {
+                        priv.outgoingPage.status = PageStatus.Active
+                    }
                     priv.outgoingPage.visible = false
                     priv.outgoingPage = null
                 }
-                state = "Hidden"
+                state = "HiddenLeft"
             }
 
             width: parent ? parent.width : 0
             height: parent ? parent.height : 0
-            state: "Hidden"
+            state: "HiddenLeft"
 
             states: [
                 State { name: ""; PropertyChanges { target: tabContainerItem; opacity: 1.0; x: 0 } },
                 State { name: "Incoming"; PropertyChanges { target: tabContainerItem; opacity: 1.0; x: 0 } },
-                State { name: "Outgoing"; PropertyChanges { target: tabContainerItem; opacity: 0.0; x: -root.width } },
-                State { name: "Hidden"; PropertyChanges { target: tabContainerItem; opacity: 0.0; x: root.width } }
+
+                State {
+                    name: "OutgoingLeft"
+                    PropertyChanges {
+                        target: tabContainerItem
+                        opacity: 0.0
+                        x: -root.width
+                    }
+                },
+                State {
+                    name: "OutgoingRight"
+                    PropertyChanges {
+                        target: tabContainerItem
+                        opacity: 0.0
+                        x: root.width
+                    }
+                },
+
+                State { name: "HiddenLeft"; PropertyChanges { target: tabContainerItem; opacity: 0.0; x: root.width } },
+                State { name: "HiddenRight"; PropertyChanges { target: tabContainerItem; opacity: 0.0; x: -root.width } }
             ]
 
             transitions:  [
@@ -185,7 +207,7 @@ Item {
                     }
                 },
                 Transition {
-                    to: "Outgoing"
+                    to: "OutgoingLeft,OutgoingRight"
                     SequentialAnimation {
                         PropertyAnimation { properties: "opacity,x"; easing.type: Easing.InQuad; duration: 250 }
                         ScriptAction { script: outgoingDone() }
@@ -200,43 +222,53 @@ Item {
         property bool reparenting: false
         property bool complete: false
         property Item currentTabContainer: root.currentTab ? root.currentTab.parent : null
+        property int currentIndex: 0
         property Item incomingPage
         property Item outgoingPage
         property bool animate: true
 
         onCurrentTabContainerChanged: {
+            var newCurrentIndex = 0
             for (var i = 0; i < containerHost.children.length; i++) {
-                var tabContainer = containerHost.children[i]
-                var isNewTab = (tabContainer == currentTabContainer)
-                if (isNewTab) {
-                    if (tabContainer.state != "") {
-                        if (tabContainer.children[0].status != undefined) {
-                            incomingPage = tabContainer.children[0]
-                            incomingPage.status = PageStatus.Activating // triggers the orientation change
-                            incomingPage.visible = true
-                            if (incomingPage == outgoingPage)
-                                outgoingPage = null
-                        }
-                        if (animate)
-                            tabContainer.state = "Incoming"
-                        else
-                            tabContainer.incomingDone()
-                    }
-                } else {
-                    if (tabContainer.state != "Hidden") {
-                        if (tabContainer.children.length > 0 && tabContainer.children[0].status != undefined) {
-                            outgoingPage = tabContainer.children[0]
-                            outgoingPage.status = PageStatus.Deactivating
-                            if (incomingPage == outgoingPage)
-                                incomingPage = null
-                        }
-                        if (animate)
-                            tabContainer.state = "Outgoing"
-                        else
-                            tabContainer.outgoingDone()
-                    }
+                if (containerHost.children[i] == currentTabContainer) {
+                    newCurrentIndex = i
+                    break
                 }
             }
+
+            currentTabContainer.visible = true
+            incomingPage = currentTabContainer.children[0]
+            incomingPage.visible = true
+            if (incomingPage.status != undefined) {
+                incomingPage.status = PageStatus.Activating
+            }
+            if (currentIndex < newCurrentIndex) {
+                currentTabContainer.state = "HiddenLeft"
+            } else {
+                currentTabContainer.state = "HiddenRight"
+            }
+            if (animate) {
+                currentTabContainer.state = "Incoming"
+            } else {
+                currentTabContainer.incomingDone()
+            }
+
+            if (newCurrentIndex == currentIndex) {
+                return
+            }
+
+            var oldPage = containerHost.children[currentIndex]
+            outgoingPage = oldPage.children[0]
+            if (animate) {
+                if (currentIndex < newCurrentIndex) {
+                    oldPage.state = "OutgoingLeft"
+                } else {
+                    oldPage.state = "OutgoingRight"
+                }
+            } else {
+                oldPage.outgoingDone()
+            }
+            currentIndex = newCurrentIndex
         }
     }
 }
