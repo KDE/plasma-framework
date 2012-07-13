@@ -198,8 +198,9 @@ void DialogProxy::setVisible(const bool visible)
 {
     if (m_dialog->isVisible() != visible) {
         //FIXME: workaround to prevent dialogs of Popup type disappearing on the second show
+        const QSize s = m_dialog->size();
         m_dialog->resize(0,0);
-        m_dialog->syncToGraphicsWidget();
+        m_dialog->resize(s);
         m_dialog->setVisible(visible);
         if (visible) {
             m_dialog->raise();
