@@ -323,7 +323,7 @@ void ConfigLoaderHandler::addItem()
     } else if (m_type == "urllist") {
         //FIXME: the split() is naive and will break on lists with ,'s in them
         QStringList tmpList = m_default.split(",");
-        KUrl::List defaultList;
+        QList<QUrl> defaultList;
         foreach (const QString& tmp, tmpList) {
             defaultList.append(KUrl(tmp));
         }

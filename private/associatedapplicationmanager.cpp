@@ -58,7 +58,7 @@ public:
     }
 
     QHash<const Plasma::Applet *, QString> applicationNames;
-    QHash<const Plasma::Applet *, KUrl::List> urlLists;
+    QHash<const Plasma::Applet *, QList<QUrl> > urlLists;
 };
 
 class AssociatedApplicationManagerSingleton
@@ -102,12 +102,12 @@ QString AssociatedApplicationManager::application(const Plasma::Applet *applet) 
     return d->applicationNames.value(applet);
 }
 
-void AssociatedApplicationManager::setUrls(Plasma::Applet *applet, const KUrl::List &urls)
+void AssociatedApplicationManager::setUrls(Plasma::Applet *applet, const QList<QUrl> &urls)
 {
     d->urlLists[applet] = urls;
 }
 
-KUrl::List AssociatedApplicationManager::urls(const Plasma::Applet *applet) const
+QList<QUrl> AssociatedApplicationManager::urls(const Plasma::Applet *applet) const
 {
     return d->urlLists.value(applet);
 }

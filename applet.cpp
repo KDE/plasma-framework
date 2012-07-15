@@ -1481,7 +1481,7 @@ void Applet::setAssociatedApplication(const QString &string)
     }
 }
 
-void Applet::setAssociatedApplicationUrls(const KUrl::List &urls)
+void Applet::setAssociatedApplicationUrls(const QList<QUrl> &urls)
 {
     AssociatedApplicationManager::self()->setUrls(this, urls);
 
@@ -1499,7 +1499,7 @@ QString Applet::associatedApplication() const
     return AssociatedApplicationManager::self()->application(this);
 }
 
-KUrl::List Applet::associatedApplicationUrls() const
+QList<QUrl> Applet::associatedApplicationUrls() const
 {
     return AssociatedApplicationManager::self()->urls(this);
 }

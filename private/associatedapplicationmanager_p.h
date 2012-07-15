@@ -43,9 +43,9 @@ public:
     QString application(const Plasma::Applet *applet) const;
 
     //sets the urls associated to an applet
-    void setUrls(Plasma::Applet *applet, const KUrl::List &urls);
+    void setUrls(Plasma::Applet *applet, const QList<QUrl> &urls);
     //returns the urls associated to an applet
-    KUrl::List urls(const Plasma::Applet *applet) const;
+    QList<QUrl> urls(const Plasma::Applet *applet) const;
 
     //run the associated application or the urls if no app is associated
     void run(Plasma::Applet *applet);

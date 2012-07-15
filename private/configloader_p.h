@@ -166,9 +166,9 @@ class ConfigLoaderPrivate
             return v;
         }
 
-        KUrl::List *newUrlList()
+        QList<QUrl> *newUrlList()
         {
-            KUrl::List *v = new KUrl::List;
+            QList<QUrl> *v = new QList<QUrl>();
             urllists.append(v);
             return v;
         }
@@ -210,7 +210,7 @@ class ConfigLoaderPrivate
         QList<QRect *> rects;
         QList<QSize *> sizes;
         QList<quint64 *> ulonglongs;
-        QList<KUrl::List *> urllists;
+        QList<QList<QUrl> *> urllists;
         QString baseGroup;
         QStringList groups;
         QHash<QString, QString> keysToNames;

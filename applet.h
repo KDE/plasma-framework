@@ -599,7 +599,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *
          * @param urls
          */
-        void setAssociatedApplicationUrls(const KUrl::List &urls);
+        void setAssociatedApplicationUrls(const QList<QUrl> &urls);
 
         /**
          * @return the application associated to this applet
@@ -611,7 +611,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @return the urls associated to this applet
          * @since 4.4
          */
-        KUrl::List associatedApplicationUrls() const;
+        QList<QUrl> associatedApplicationUrls() const;
 
         /**
          * @return true if the applet has a valid associated application or urls
