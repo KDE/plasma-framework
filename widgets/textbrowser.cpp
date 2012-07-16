@@ -28,7 +28,7 @@
 
 #include "svg.h"
 #include "theme.h"
-#include "private/style_p.h"
+#include "graphicsview/private/style_p.h"
 #include "private/themedwidgetinterface_p.h"
 
 namespace Plasma

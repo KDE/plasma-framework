@@ -28,8 +28,8 @@
 #include "theme.h"
 #include "framesvg.h"
 
-#include "private/style_p.h"
-#include "private/focusindicator_p.h"
+#include "graphicsview/private/style_p.h"
+#include "graphicsview/private/focusindicator_p.h"
 
 namespace Plasma
 {

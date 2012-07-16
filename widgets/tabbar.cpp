@@ -35,7 +35,7 @@
 
 #include "animator.h"
 #include "animations/animation.h"
-#include "private/nativetabbar_p.h"
+#include "graphicsview/private/nativetabbar_p.h"
 #include "private/themedwidgetinterface_p.h"
 #include "theme.h"
 

@@ -35,7 +35,7 @@
 #include "framesvg.h"
 #include "paintutils.h"
 #include "private/actionwidgetinterface_p.h"
-#include "private/focusindicator_p.h"
+#include "graphicsview/private/focusindicator_p.h"
 #include "private/themedwidgetinterface_p.h"
 #include "theme.h"
 

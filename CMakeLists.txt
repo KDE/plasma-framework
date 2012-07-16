@@ -221,13 +221,13 @@ set (plasmaqgv_LIB_SRCS
     animations/widgetsnapshot.cpp
     animations/zoom.cpp
 
-    private/animablegraphicswebview.cpp
-    private/dataenginebindings.cpp
     private/declarative/declarativenetworkaccessmanagerfactory.cpp
-    private/focusindicator.cpp
-    private/nativetabbar.cpp
-    private/style.cpp
-    private/kineticscroll.cpp
+    private/declarative/dataenginebindings.cpp
+    graphicsview/private/animablegraphicswebview.cpp
+    graphicsview/private/focusindicator.cpp
+    graphicsview/private/nativetabbar.cpp
+    graphicsview/private/style.cpp
+    graphicsview/private/kineticscroll.cpp
 
     widgets/label.cpp
     widgets/scrollbar.cpp

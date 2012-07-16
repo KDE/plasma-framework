@@ -38,7 +38,7 @@
 #include "plasma.h"
 #include "widgets/webview.h"
 #include "widgets/scrollwidget.h"
-#include "private/animablegraphicswebview_p.h"
+#include "graphicsview/private/animablegraphicswebview_p.h"
 
 namespace Plasma
 {

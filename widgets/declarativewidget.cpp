@@ -35,7 +35,7 @@
 
 
 #include "private/declarative/declarativenetworkaccessmanagerfactory_p.h"
-#include "private/dataenginebindings_p.h"
+#include "private/declarative/dataenginebindings_p.h"
 
 namespace Plasma
 {

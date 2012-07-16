@@ -28,7 +28,7 @@
 #include <ktextedit.h>
 
 #include "applet.h"
-#include "private/style_p.h"
+#include "graphicsview/private/style_p.h"
 #include "private/themedwidgetinterface_p.h"
 #include "svg.h"
 #include "theme.h"

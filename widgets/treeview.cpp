@@ -25,7 +25,7 @@
 
 #include <kiconloader.h>
 
-#include "private/style_p.h"
+#include "graphicsview/private/style_p.h"
 
 namespace Plasma
 {

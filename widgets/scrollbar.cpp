@@ -24,7 +24,7 @@
 #include <QContextMenuEvent>
 #include <QGraphicsSceneContextMenuEvent>
 
-#include <plasma/private/style_p.h>
+#include <plasma/graphicsview/private/style_p.h>
 
 namespace Plasma
 {
