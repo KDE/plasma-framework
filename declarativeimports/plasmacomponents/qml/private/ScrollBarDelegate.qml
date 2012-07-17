@@ -252,6 +252,10 @@ PlasmaCore.FrameSvgItem {
 
             background.forceActiveFocus();
         }
+
+        Component.onCompleted: {
+            acceptedButtons |= Qt.MiddleButton
+        }
     }
 }
 
