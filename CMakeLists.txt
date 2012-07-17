@@ -139,6 +139,7 @@ set(plasma_LIB_SRCS
     private/windowpreview.cpp
     private/windowshadows.cpp
     private/applet_p.cpp
+    private/containment_p.cpp
 
     querymatch.cpp
     remote/accessmanager.cpp

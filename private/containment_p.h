@@ -23,6 +23,10 @@
 
 #include <kmenu.h>
 
+#include "plasma.h"
+#include "applet.h"
+#include "corona.h"
+
 static const int INTER_CONTAINMENT_MARGIN = 6;
 static const int TOOLBOX_MARGIN = 150;
 static const int CONTAINMENT_COLUMNS = 2;
@@ -183,6 +187,8 @@ public:
     };
     ContainmentActionsSource containmentActionsSource;
     static QHash<QString, ContainmentActions*> globalActionPlugins;
+    static const char defaultWallpaper[];
+    static const char defaultWallpaperMode[];
 };
 
 } // Plasma namespace
