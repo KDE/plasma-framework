@@ -138,7 +138,7 @@ set(plasma_LIB_SRCS
     private/wallpaperrenderthread.cpp
     private/windowpreview.cpp
     private/windowshadows.cpp
-    private/appletprivate.cpp
+    private/applet_p.cpp
 
     querymatch.cpp
     remote/accessmanager.cpp
