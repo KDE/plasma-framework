@@ -60,11 +60,11 @@ class AuthorizationManagerSingleton
         AuthorizationManager self;
 };
 
-K_GLOBAL_STATIC(AuthorizationManagerSingleton, privateAuthorizationManagerSelf)
+Q_GLOBAL_STATIC(AuthorizationManagerSingleton, privateAuthorizationManagerSelf)
 
 AuthorizationManager *AuthorizationManager::self()
 {
-    return &privateAuthorizationManagerSelf->self;
+    return &privateAuthorizationManagerSelf()->self;
 }
 
 AuthorizationManager::AuthorizationManager()

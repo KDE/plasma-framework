@@ -87,11 +87,11 @@ class DataEngineManagerSingleton
         DataEngineManager self;
 };
 
-K_GLOBAL_STATIC(DataEngineManagerSingleton, privateDataEngineManagerSelf)
+Q_GLOBAL_STATIC(DataEngineManagerSingleton, privateDataEngineManagerSelf)
 
 DataEngineManager *DataEngineManager::self()
 {
-    return &privateDataEngineManagerSelf->self;
+    return &privateDataEngineManagerSelf()->self;
 }
 
 DataEngineManager::DataEngineManager()

@@ -43,7 +43,7 @@ public:
    StorageThread self;
 };
 
-K_GLOBAL_STATIC(StorageThreadSingleton, privateStorageThreadSelf)
+Q_GLOBAL_STATIC(StorageThreadSingleton, privateStorageThreadSelf)
 
 
 StorageThread::StorageThread(QObject *parent)
@@ -61,7 +61,7 @@ StorageThread::~StorageThread()
 
 Plasma::StorageThread *StorageThread::self()
 {
-    return &privateStorageThreadSelf->self;
+    return &privateStorageThreadSelf()->self;
 }
 
 void StorageThread::initializeDb(StorageJob *caller)

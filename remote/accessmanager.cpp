@@ -117,11 +117,11 @@ class AccessManagerSingleton
         AccessManager self;
 };
 
-K_GLOBAL_STATIC(AccessManagerSingleton, privateAccessManagerSelf)
+Q_GLOBAL_STATIC(AccessManagerSingleton, privateAccessManagerSelf)
 
 AccessManager *AccessManager::self()
 {
-    return &privateAccessManagerSelf->self;
+    return &privateAccessManagerSelf()->self;
 }
 
 AccessManager::AccessManager()

@@ -460,11 +460,11 @@ public:
    Theme self;
 };
 
-K_GLOBAL_STATIC(ThemeSingleton, privateThemeSelf)
+Q_GLOBAL_STATIC(ThemeSingleton, privateThemeSelf)
 
 Theme *Theme::defaultTheme()
 {
-    return &privateThemeSelf->self;
+    return &privateThemeSelf()->self;
 }
 
 Theme::Theme(QObject *parent)

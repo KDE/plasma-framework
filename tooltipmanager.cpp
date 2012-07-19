@@ -110,11 +110,11 @@ class ToolTipManagerSingleton
     }
     ToolTipManager self;
 };
-K_GLOBAL_STATIC(ToolTipManagerSingleton, privateInstance)
+Q_GLOBAL_STATIC(ToolTipManagerSingleton, privateInstance)
 
 ToolTipManager *ToolTipManager::self()
 {
-    return &privateInstance->self;
+    return &privateInstance()->self;
 }
 
 ToolTipManager::ToolTipManager(QObject *parent)
