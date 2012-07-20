@@ -186,7 +186,7 @@ protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant &value); 
     QSizeF sizeHint(Qt::SizeHint which, const QSizeF & constraint) const;
 
-private slots:
+private Q_SLOTS:
     void setAnimationUpdate(qreal progress);
     qreal animationUpdate() const;
 
