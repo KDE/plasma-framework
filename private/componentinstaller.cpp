@@ -19,8 +19,6 @@
 
 #include "private/componentinstaller_p.h"
 
-#include <kglobal.h>
-
 #ifdef PLASMA_ENABLE_PACKAGEKIT_SUPPORT
 #include <QSet>
 #include <QDBusInterface>
@@ -47,11 +45,11 @@ class ComponentInstallerSingleton
         ComponentInstaller self;
 };
 
-K_GLOBAL_STATIC(ComponentInstallerSingleton, privateComponentInstallerSelf)
+Q_GLOBAL_STATIC(ComponentInstallerSingleton, privateComponentInstallerSelf)
 
 ComponentInstaller *ComponentInstaller::self()
 {
-    return &privateComponentInstallerSelf->self;
+    return &privateComponentInstallerSelf()->self;
 }
 
 ComponentInstaller::ComponentInstaller()

@@ -28,8 +28,6 @@
 #include <fixx11h.h>
 #endif
 
-#include <kglobal.h>
-
 namespace Plasma
 {
 
@@ -67,11 +65,11 @@ class WindowShadowsSingleton
         WindowShadows self;
 };
 
-K_GLOBAL_STATIC(WindowShadowsSingleton, privateWindowShadowsSelf)
+Q_GLOBAL_STATIC(WindowShadowsSingleton, privateWindowShadowsSelf)
 
 WindowShadows *WindowShadows::self()
 {
-    return &privateWindowShadowsSelf->self;
+    return &privateWindowShadowsSelf()->self;
 }
 
 WindowShadows::WindowShadows(QObject *parent)

@@ -67,7 +67,7 @@ class AssociatedApplicationManagerSingleton
         AssociatedApplicationManager self;
 };
 
-K_GLOBAL_STATIC(AssociatedApplicationManagerSingleton, privateAssociatedApplicationManagerSelf)
+Q_GLOBAL_STATIC(AssociatedApplicationManagerSingleton, privateAssociatedApplicationManagerSelf)
 
 
 AssociatedApplicationManager::AssociatedApplicationManager(QObject *parent)
@@ -83,7 +83,7 @@ AssociatedApplicationManager::~AssociatedApplicationManager()
 
 AssociatedApplicationManager *AssociatedApplicationManager::self()
 {
-    return &privateAssociatedApplicationManagerSelf->self;
+    return &privateAssociatedApplicationManagerSelf()->self;
 }
 
 void AssociatedApplicationManager::setApplication(Plasma::Applet *applet, const QString &application)
