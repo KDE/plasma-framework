@@ -548,7 +548,7 @@ void SvgPrivate::checkColorHints()
     }
 }
 
-//Folowing two are utility functions to snap rendered elements to the pixel grid
+//Following two are utility functions to snap rendered elements to the pixel grid
 //to and from are always 0 <= val <= 1
 qreal SvgPrivate::closestDistance(qreal to, qreal from)
 {

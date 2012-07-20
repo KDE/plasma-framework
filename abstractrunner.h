@@ -64,10 +64,10 @@ class PLASMA_EXPORT AbstractRunner : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool matchingSuspended READ isMatchingSuspended WRITE suspendMatching NOTIFY matchingSuspended)
-    Q_PROPERTY(QString id READ id);
-    Q_PROPERTY(QString description READ description);
-    Q_PROPERTY(QString name READ name);
-    Q_PROPERTY(QIcon icon READ icon);
+    Q_PROPERTY(QString id READ id)
+    Q_PROPERTY(QString description READ description)
+    Q_PROPERTY(QString name READ name)
+    Q_PROPERTY(QIcon icon READ icon)
     public:
         /** Specifies a nominal speed for the runner */
         enum Speed {

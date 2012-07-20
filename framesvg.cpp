@@ -665,7 +665,7 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
     Theme *theme = Theme::defaultTheme();
     bool frameCached = !frame->cachedBackground.isNull();
     bool overlayCached = false;
-    const bool overlayAvailable = !prefix.startsWith("mask-") && q->hasElement(prefix % "overlay");
+    const bool overlayAvailable = !prefix.startsWith(QLatin1String("mask-")) && q->hasElement(prefix % "overlay");
     QPixmap overlay;
     if (q->isUsingRenderingCache()) {
         frameCached = theme->findInCache(id, frame->cachedBackground) && !frame->cachedBackground.isNull();
