@@ -22,7 +22,7 @@
 #define CALENDARSYSTEM_H
 
 //own
-#include "locale.h"  // needed for enums
+#include "locale_p.h"  // needed for enums
 
 //Qt
 #include <QtCore/QDate>

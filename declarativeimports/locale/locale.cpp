@@ -19,7 +19,7 @@
 */
 
 //own
-#include "locale.h"
+#include "locale_p.h"
 
 //KDE
 #include <KGlobal>

@@ -20,7 +20,7 @@
 
 #include "localebindingsplugin.h"
 #include <QtDeclarative/qdeclarative.h>
-#include "locale.h"
+#include "locale_p.h"
 #include "calendarsystem.h"
 
 void LocaleBindingsPlugin::registerTypes(const char *uri)
