@@ -117,11 +117,13 @@ Item{
             }
             containerA.current = !containerA.current
 
-            tools.parent = newContainer
-            tools.visible = true
-            tools.anchors.left = newContainer.left
-            tools.anchors.right = newContainer.right
-            tools.anchors.verticalCenter = newContainer.verticalCenter
+            if(tools) {
+                tools.parent = newContainer
+                tools.visible = true
+                tools.anchors.left = newContainer.left
+                tools.anchors.right = newContainer.right
+                tools.anchors.verticalCenter = newContainer.verticalCenter
+            }
 
             switch (transition) {
             case "push":
