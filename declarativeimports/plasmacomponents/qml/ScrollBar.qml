@@ -140,9 +140,33 @@ Item {
             }
         }
 
-        // FIXME: there's a binding loop occurrence here somewhere...(RangeModel) : property: value
-        // try flicking a view with a scrollbar in it, and flick it past it's contents
-        // a few times and try using the mousewheel..you'll find the warning then..
+
+        Connections {
+            target: flickableItem
+            onContentYChanged: {
+                if (internalLoader.isVertical) {
+                    range.value = flickableItem.contentY
+                }
+            }
+            onContentXChanged: {
+                if (!internalLoader.isVertical) {
+                    range.value = flickableItem.contentX
+                }
+            }
+        }
+        Connections {
+            target: internalLoader.item.handle
+            onYChanged: {
+                if (internalLoader.isVertical) {
+                    range.position = internalLoader.item.handle.y
+                }
+            }
+            onXChanged: {
+                if (!internalLoader.isVertical) {
+                    range.position = internalLoader.item.handle.x
+                }
+            }
+        }
         RangeModel {
             id: range
 
@@ -168,7 +192,7 @@ Item {
                     internalLoader.item.contents.width - internalLoader.item.handle.width
                 }
             }
-            value: internalLoader.isVertical ? flickableItem.contentY : flickableItem.contentX
+
             onValueChanged: {
                 if (flickableItem.moving) {
                     return
@@ -181,7 +205,6 @@ Item {
                 }
             }
 
-            position: internalLoader.isVertical ? internalLoader.item.handle.y : internalLoader.item.handle.x
 
             onPositionChanged: {
                 if (internalLoader.item.mouseArea && internalLoader.item.mouseArea.pressed) {

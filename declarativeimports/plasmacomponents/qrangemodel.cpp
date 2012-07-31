@@ -59,6 +59,8 @@
 #include <QAccessible>
 #endif
 
+#include <QDebug>
+
 #include "qrangemodel.h"
 #include "qrangemodel_p.h"
 
