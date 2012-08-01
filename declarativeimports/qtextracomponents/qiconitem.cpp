@@ -42,9 +42,10 @@ void QIconItem::setIcon(const QVariant &icon)
 {
     if(icon.canConvert<QIcon>()) {
         m_icon = icon.value<QIcon>();
-    }
-    else if(icon.canConvert<QString>()) {
+    } else if(icon.canConvert<QString>()) {
         m_icon = KIcon(icon.toString());
+    } else {
+        m_icon = QIcon();
     }
     update();
 }
