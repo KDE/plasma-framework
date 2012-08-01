@@ -414,6 +414,31 @@ AppletInterface::ItemStatus AppletInterface::status() const
     return (AppletInterface::ItemStatus)((int)(applet()->status()));
 }
 
+void AppletInterface::setHorizontalSizePolicy(QtSizePolicy horizPolicy)
+{
+    QSizePolicy policy = applet()->sizePolicy();
+    policy.setHorizontalPolicy((QSizePolicy::Policy)horizPolicy);
+    applet()->setSizePolicy(policy);
+}
+
+AppletInterface::QtSizePolicy AppletInterface::horizontalSizePolicy() const
+{
+    return (AppletInterface::QtSizePolicy)applet()->sizePolicy().horizontalPolicy();
+}
+
+
+void AppletInterface::setVerticalSizePolicy(QtSizePolicy vertPolicy)
+{
+    QSizePolicy policy = applet()->sizePolicy();
+    policy.setVerticalPolicy((QSizePolicy::Policy)vertPolicy);
+    applet()->setSizePolicy(policy);
+}
+
+AppletInterface::QtSizePolicy AppletInterface::verticalSizePolicy() const
+{
+    return (AppletInterface::QtSizePolicy)applet()->sizePolicy().verticalPolicy();
+}
+
 /*
 QString AppletInterface::downloadPath(const QString &file)
 {

@@ -80,6 +80,8 @@ class AppletInterface : public QObject
     Q_PROPERTY(QRectF rect READ rect)
     Q_PROPERTY(QSizeF size READ size)
     Q_PROPERTY(QString associatedApplication WRITE setAssociatedApplication READ associatedApplication)
+    Q_PROPERTY(QtSizePolicy horizontalSizePolicy READ horizontalSizePolicy WRITE setHorizontalSizePolicy)
+    Q_PROPERTY(QtSizePolicy verticalSizePolicy READ verticalSizePolicy WRITE setVerticalSizePolicy)
 
 public:
     AppletInterface(AbstractJsAppletScript *parent);
@@ -303,6 +305,12 @@ enum IntervalAlignment {
 
     void setStatus(const ItemStatus &status);
     ItemStatus status() const;
+
+    void setHorizontalSizePolicy(QtSizePolicy policy);
+    QtSizePolicy horizontalSizePolicy() const;
+
+    void setVerticalSizePolicy(QtSizePolicy policy);
+    QtSizePolicy verticalSizePolicy() const;
 
 //    Q_INVOKABLE QString downloadPath(const QString &file);
     Q_INVOKABLE QStringList downloadedFiles() const;
