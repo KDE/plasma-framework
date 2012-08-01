@@ -156,16 +156,8 @@ Item {
         }
         Connections {
             target: internalLoader.item.handle
-            onYChanged: {
-                if (internalLoader.isVertical) {
-                    range.position = internalLoader.item.handle.y
-                }
-            }
-            onXChanged: {
-                if (!internalLoader.isVertical) {
-                    range.position = internalLoader.item.handle.x
-                }
-            }
+            onYChanged: updateFromHandleTimer.running = true
+            onXChanged: updateFromHandleTimer.running = true
         }
         RangeModel {
             id: range
@@ -215,6 +207,18 @@ Item {
                     internalLoader.item.handle.y = position
                 } else {
                     internalLoader.item.handle.x = position
+                }
+            }
+        }
+
+        Timer {
+            id: updateFromHandleTimer
+            interval: 10
+            onTriggered: {
+                if (internalLoader.isVertical) {
+                    range.position = internalLoader.item.handle.y
+                } else {
+                    range.position = internalLoader.item.handle.x
                 }
             }
         }
