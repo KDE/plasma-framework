@@ -143,6 +143,9 @@ Item {
 
         Connections {
             target: flickableItem
+            onContentHeightChanged: {
+                range.value = flickableItem.contentY
+            }
             onContentYChanged: {
                 if (internalLoader.isVertical) {
                     range.value = flickableItem.contentY
@@ -215,7 +218,7 @@ Item {
             id: updateFromHandleTimer
             interval: 10
             onTriggered: {
-                if (internalLoader.isVertical) {
+                if (internalLoader.isVertical && enabled && interactive) {
                     range.position = internalLoader.item.handle.y
                 } else {
                     range.position = internalLoader.item.handle.x
