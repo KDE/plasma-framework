@@ -1376,7 +1376,9 @@ void IconWidget::mousePressEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
 
-    if (KGlobalSettings::singleClick() || (receivers(SIGNAL(clicked()))) > 0) {
+    if (style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick)
+        || (receivers(SIGNAL(clicked()))) > 0)
+    {
         d->states |= IconWidgetPrivate::PressedState;
     }
     d->clickStartPos = scenePos();
@@ -1439,7 +1441,7 @@ void IconWidget::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     if (!handled) {
         if (boundingRect().contains(event->pos())) {
             emit clicked();
-            if (KGlobalSettings::singleClick()) {
+            if (style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick)) {
                emit activated();
             }
 
@@ -1460,7 +1462,7 @@ void IconWidget::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
     d->states |= IconWidgetPrivate::PressedState;
 
     emit doubleClicked();
-    if (!KGlobalSettings::singleClick()) {
+    if (!style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick)) {
         emit activated();
     }
 
