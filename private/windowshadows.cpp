@@ -21,7 +21,7 @@
 #include <QWidget>
 #include <QPainter>
 
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
 #include <QX11Info>
 #include <X11/Xatom.h>
 #include <X11/Xlib.h>
@@ -125,7 +125,7 @@ void WindowShadows::Private::updateShadows()
 
 void WindowShadows::Private::initPixmap(const QString &element)
 {
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
     QPixmap pix = q->pixmap(element);
     if (pix.handle() == 0) {
         Pixmap xPix = XCreatePixmap(QX11Info::display(), QX11Info::appRootWindow(), pix.width(), pix.height(), 32);
@@ -153,7 +153,7 @@ void WindowShadows::Private::setupPixmaps()
     initPixmap("shadow-left");
     initPixmap("shadow-topleft");
 
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
     foreach (const QPixmap &pixmap, m_shadowPixmaps) {
         m_data << pixmap.handle();
     }
@@ -190,7 +190,7 @@ void WindowShadows::Private::setupPixmaps()
 
 void WindowShadows::Private::clearPixmaps()
 {
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
     if (m_managePixmaps) {
         foreach (const QPixmap &pixmap, m_shadowPixmaps) {
             XFreePixmap(QX11Info::display(), pixmap.handle());
@@ -204,7 +204,7 @@ void WindowShadows::Private::clearPixmaps()
 
 void WindowShadows::Private::updateShadow(const QWidget *window)
 {
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
     if (m_data.isEmpty()) {
         setupPixmaps();
     }
@@ -220,7 +220,7 @@ void WindowShadows::Private::updateShadow(const QWidget *window)
 
 void WindowShadows::Private::clearShadow(const QWidget *window)
 {
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
     Display *dpy = QX11Info::display();
     Atom atom = XInternAtom(dpy, "_KDE_NET_WM_SHADOW", False);
     XDeleteProperty(dpy, window->winId(), atom);

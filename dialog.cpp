@@ -27,9 +27,6 @@
 #include <QSvgRenderer>
 #include <QResizeEvent>
 #include <QMouseEvent>
-#ifdef Q_WS_X11
-#include <QX11Info>
-#endif
 #include <QBitmap>
 #include <QTimer>
 #include <QVBoxLayout>
@@ -54,10 +51,6 @@
 #include "plasma/theme.h"
 #include "plasma/widgets/scrollwidget.h"
 #include "plasma/private/windowshadows_p.h"
-
-#ifdef Q_WS_X11
-#include <X11/Xlib.h>
-#endif
 
 namespace Plasma
 {

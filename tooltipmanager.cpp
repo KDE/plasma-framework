@@ -32,13 +32,6 @@
 //KDE
 #include <kwindowsystem.h>
 
-//X11
-#ifdef Q_WS_X11
-#include <QX11Info>
-#include <X11/Xlib.h>
-#include <fixx11h.h>
-#endif
-
 //Plasma
 #include "plasma/applet.h"
 #include "plasma/containment.h"

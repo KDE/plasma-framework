@@ -31,10 +31,6 @@
 #include <QTextDocument>
 #include <QPropertyAnimation>
 #include <QTextBlock>
-#ifdef Q_WS_X11
-#include <QX11Info>
-#include <netwm.h>
-#endif
 
 #include <kdebug.h>
 #include <kglobal.h>

@@ -22,7 +22,8 @@
 #include <kapplication.h>
 #include <kdebug.h>
 
-#ifdef Q_WS_X11
+#include <config.h>
+#if 0 // Port to Qt5 native filters
 #include <X11/Xlib.h>
 #include <QX11Info>
 #endif
@@ -36,7 +37,8 @@ EffectWatcher::EffectWatcher(QString property, QWidget *parent)
       m_property(property)
 {
     m_effectActive = isEffectActive();
-#ifdef Q_WS_X11
+#pragma message("Port to Qt5 native filter")
+#if 0
     kapp->installX11EventFilter( this );
     Display *dpy = QX11Info::display();
     Window root = DefaultRootWindow(dpy);
@@ -49,7 +51,8 @@ EffectWatcher::EffectWatcher(QString property, QWidget *parent)
 }
 
 
-#ifdef Q_WS_X11
+#pragma message("Port to Qt5 native filter")
+#if 0
 bool EffectWatcher::x11Event(XEvent *event)
 {
     if (event->type == PropertyNotify) {
@@ -69,7 +72,8 @@ bool EffectWatcher::x11Event(XEvent *event)
 
 bool EffectWatcher::isEffectActive() const
 {
-#ifdef Q_WS_X11
+#pragma message("Port to Qt5 native filter")
+#if 0
     Display *dpy = QX11Info::display();
     Atom testAtom = XInternAtom(dpy, m_property.toLatin1(), False);
 

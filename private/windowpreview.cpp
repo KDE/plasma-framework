@@ -30,13 +30,6 @@
 
 #include <plasma/framesvg.h>
 
-#ifdef Q_WS_X11
-#include <QX11Info>
-
-#include <X11/Xlib.h>
-#include <fixx11h.h>
-#endif
-
 namespace Plasma {
 
 WindowPreview::WindowPreview(QWidget *parent)

@@ -34,7 +34,8 @@ public:
 
 protected:
     bool isEffectActive() const;
-#ifdef Q_WS_X11
+#pragma message("Port to Qt5 native filter")
+#if 0
     bool x11Event(XEvent *event);
 #endif
 
