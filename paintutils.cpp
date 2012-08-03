@@ -255,7 +255,7 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
         return startPixmap;
     }
 #warning Cannot use XRender with QPixmap anymore. Find equivalent with Qt API.
-#if 0 // defined(HAVE_X11) && defined(HAVE_XRENDER)
+#if 0 // HAVE_X11 && defined(HAVE_XRENDER)
     // We have Xrender support
     else if (paintEngine && paintEngine->hasFeature(QPaintEngine::PorterDuff)) {
         // QX11PaintEngine doesn't implement CompositionMode_Plus in Qt 4.3,
