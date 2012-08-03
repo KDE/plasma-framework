@@ -26,6 +26,9 @@
 #include <QPair>
 #include <QStringBuilder>
 #include <QTimer>
+
+#include "config.h"
+
 #ifdef HAVE_X11
 #include <QX11Info>
 #include "private/effectwatcher_p.h"
