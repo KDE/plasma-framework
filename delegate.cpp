@@ -34,7 +34,6 @@
 #include <QStyleOptionViewItem>
 
 // KDE
-#include <kcolorutils.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <kcolorscheme.h>

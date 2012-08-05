@@ -36,7 +36,6 @@
 
 // KDE
 #include <kdebug.h>
-#include <kcolorutils.h>
 #include <kiconeffect.h>
 #include <kiconloader.h>
 
