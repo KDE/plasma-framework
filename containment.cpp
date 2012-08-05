@@ -44,7 +44,6 @@
 #include <qmimedatabase.h>
 #include <kservicetypetrader.h>
 
-#include <kurlmimedata.h>
 #include <kwindowsystem.h>
 
 #ifndef PLASMA_NO_KIO
