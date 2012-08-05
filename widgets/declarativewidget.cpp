@@ -31,7 +31,6 @@
 
 #include <kdebug.h>
 #include <kdeclarative.h>
-#include <kglobal.h>
 
 
 #include "private/declarative/declarativenetworkaccessmanagerfactory_p.h"

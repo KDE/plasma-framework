@@ -36,7 +36,6 @@
 // KDE
 #include <kcolorutils.h>
 #include <kdebug.h>
-#include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kcolorscheme.h>
 

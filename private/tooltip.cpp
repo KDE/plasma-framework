@@ -33,7 +33,6 @@
 #include <QTextBlock>
 
 #include <kdebug.h>
-#include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kwindoweffects.h>
 
