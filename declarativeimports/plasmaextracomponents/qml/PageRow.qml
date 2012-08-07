@@ -221,7 +221,7 @@ Item {
     Component {
         id: animationClipComponent
         Item {
-            clip: container.pageDepth == root.depth
+            clip: container.pageDepth == root.depth || container.pageDepth == root.depth + 1
             anchors {
                 top: parent.top
                 bottom: parent.bottom
