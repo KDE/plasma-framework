@@ -87,6 +87,7 @@ Q_PROPERTY(QString currencyCode READ currencyCode WRITE setCurrencyCode NOTIFY c
 Q_PROPERTY(QString currencySymbol READ currencySymbol WRITE setCurrencySymbol NOTIFY currencySymbolChanged)
 Q_PROPERTY(QString dateFormat READ dateFormat WRITE setDateFormat NOTIFY dateFormatChanged)
 Q_PROPERTY(QString dateFormatShort READ dateFormatShort WRITE setDateFormat NOTIFY dateFormatShortChanged)
+Q_PROPERTY(QString timeFormat READ timeFormat WRITE setTimeFormat NOTIFY timeFormatChanged)
 Q_PROPERTY(bool dateMonthNamePossessive READ dateMonthNamePossessive WRITE setDateMonthNamePossessive NOTIFY dateMonthNamePossessiveChanged)
 Q_PROPERTY(DigitSet dateTimeDigitSet READ dateTimeDigitSet WRITE setDateTimeDigitSet NOTIFY dateTimeDigitSetChanged)
 Q_PROPERTY(int decimalPlaces READ decimalPlaces WRITE setDecimalPlaces NOTIFY decimalPlacesChanged)
