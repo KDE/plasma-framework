@@ -267,7 +267,6 @@ Item {
                     transitionEnded();
             }
 
-            clip: true
             Item {
                 id: actualContainer
 
@@ -365,6 +364,7 @@ Item {
             // Called when a transition has started.
             function transitionStarted()
             {
+                container.clip = true
                 transitionAnimationRunning = true;
                 internal.ongoingTransitionCount++;
                 if (actualRoot.visible) {
@@ -375,6 +375,7 @@ Item {
             // Called when a transition has ended.
             function transitionEnded()
             {
+                container.clip = false
                 if (state != "")
                     state = "Hidden";
                 if (actualRoot.visible)
