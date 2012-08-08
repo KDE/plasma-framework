@@ -228,12 +228,17 @@ Item {
 
             width: columnWidth + 100
             height: parent ? parent.height : 0
+
             x: 0
 
             // The actual parent of page: page will anchor to that
             property Item pageParent: actualContainer
 
             property int pageDepth: 0
+            Component.onCompleted: {
+                pageDepth = Engine.getDepth() + 1
+                container.z = -Engine.getDepth()
+            }
 
             // The states correspond to the different possible positions of the container.
             state: "Hidden"
