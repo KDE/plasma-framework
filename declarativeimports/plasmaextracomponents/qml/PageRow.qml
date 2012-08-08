@@ -58,7 +58,7 @@ Item {
     property ToolBar toolBar
     property variant initialPage
     //A column is wide enough for 30 characters
-    property int columnWidth: parent.width/Math.round(parent.width/(theme.defaultFont.mSize.width*30))
+    property int columnWidth: Math.round(parent.width/(theme.defaultFont.mSize.width*30)) > 0 ? parent.width/Math.round(parent.width/(theme.defaultFont.mSize.width*30)) : width
     clip: true
 
     // Indicates whether there is an ongoing page transition.
