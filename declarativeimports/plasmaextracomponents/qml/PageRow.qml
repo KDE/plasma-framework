@@ -198,8 +198,9 @@ Item {
         boundsBehavior: Flickable.StopAtBounds
         contentWidth: mainItem.width
         contentHeight: height
-        Item {
+        Row {
             id: mainItem
+            spacing: -100
             width: columnWidth*depth
             height: parent.height
             Behavior on width {
@@ -218,20 +219,6 @@ Item {
         orientation: Qt.Horizontal
     }
 
-    Component {
-        id: animationClipComponent
-        Item {
-            clip: container.pageDepth == root.depth || container.pageDepth == root.depth + 1
-            anchors {
-                top: parent.top
-                bottom: parent.bottom
-            }
-            width: columnWidth + 100
-            x: (container.pageDepth-1)*container.width
-            property Item container
-        }
-    }
-
     // Component for page containers.
     Component {
         id: containerComponent
@@ -239,19 +226,15 @@ Item {
         Item {
             id: container
 
-            width: columnWidth
+            width: columnWidth + 100
             height: parent ? parent.height : 0
-            x: 0//(pageDepth-1)*width
+            x: 0
 
+            // The actual parent of page: page will anchor to that
+            property Item pageParent: actualContainer
 
             property int pageDepth: 0
-            Component.onCompleted: {
-                pageDepth = Engine.getDepth() + 1
-                container.z = -Engine.getDepth()
-                var clipItem = animationClipComponent.createObject(mainItem)
-                clipItem.container = container
-                container.parent = clipItem
-            }
+
             // The states correspond to the different possible positions of the container.
             state: "Hidden"
 
@@ -284,8 +267,17 @@ Item {
                     transitionEnded();
             }
 
-            transform: Translate {
-                id: translate
+            clip: true
+            Item {
+                id: actualContainer
+
+                anchors {
+                    top: parent.top
+                    bottom: parent.bottom
+                    right: parent.right
+                    rightMargin: 100
+                }
+                width: columnWidth
             }
 
             Image {
@@ -294,9 +286,9 @@ Item {
                 fillMode: Image.TileVertically
                 opacity: container.pageDepth == root.depth ? 1 : 0.7
                 anchors {
-                    left: parent.right
-                    top: parent.top
-                    bottom: parent.bottom
+                    left: actualContainer.right
+                    top: actualContainer.top
+                    bottom: actualContainer.bottom
                 }
                 Behavior on opacity {
                     NumberAnimation {
@@ -401,24 +393,25 @@ Item {
                 State {
                     name: ""
                     PropertyChanges { target: container; visible: true; opacity: 1 }
-                    PropertyChanges { target: translate; x: 0}
+                    PropertyChanges { target: container; width: columnWidth+100}
                 },
                 // Start state for pop entry, end state for push exit.
                 State {
                     name: "Left"
                     PropertyChanges { target: container; opacity: 0 }
-                    PropertyChanges { target: translate; x: -width}
+                    PropertyChanges { target: container; width: 100}
                 },
                 // Start state for push entry, end state for pop exit.
                 State {
                     name: "Right"
                     PropertyChanges { target: container; opacity: 0 }
-                    PropertyChanges { target: translate; x: -width}
+                    PropertyChanges { target: container; width: 100}
                 },
                 // Inactive state.
                 State {
                     name: "Hidden"
                     PropertyChanges { target: container; visible: false }
+                    PropertyChanges { target: container; width: columnWidth+100}
                 }
             ]
 
@@ -429,7 +422,7 @@ Item {
                     SequentialAnimation {
                         ScriptAction { script: transitionStarted() }
                         ParallelAnimation {
-                            PropertyAnimation { properties: "x"; easing.type: Easing.InQuad; duration: transitionDuration }
+                            PropertyAnimation { properties: "width"; easing.type: Easing.InQuad; duration: transitionDuration }
                             PropertyAnimation { properties: "opacity"; easing.type: Easing.InQuad; duration: transitionDuration }
                         }
                         ScriptAction { script: transitionEnded() }
@@ -441,7 +434,7 @@ Item {
                     SequentialAnimation {
                         ScriptAction { script: transitionStarted() }
                         ParallelAnimation {
-                            PropertyAnimation { properties: "x"; easing.type: Easing.OutQuad; duration: transitionDuration }
+                            PropertyAnimation { properties: "width"; easing.type: Easing.OutQuad; duration: transitionDuration }
                             PropertyAnimation { properties: "opacity"; easing.type: Easing.InQuad; duration: transitionDuration }
                         }
                         ScriptAction { script: transitionEnded() }
@@ -453,7 +446,7 @@ Item {
                     SequentialAnimation {
                         ScriptAction { script: transitionStarted() }
                         ParallelAnimation {
-                            PropertyAnimation { properties: "x"; easing.type: Easing.InQuad; duration: transitionDuration }
+                            PropertyAnimation { properties: "width"; easing.type: Easing.InQuad; duration: transitionDuration }
                             PropertyAnimation { properties: "opacity"; easing.type: Easing.InQuad; duration: transitionDuration }
                         }
                         // Workaround for transition animation bug causing ghost view with page pop transition animation
@@ -468,7 +461,7 @@ Item {
                     SequentialAnimation {
                         ScriptAction { script: transitionStarted() }
                         ParallelAnimation {
-                            PropertyAnimation { properties: "x"; easing.type: Easing.OutQuad; duration: transitionDuration }
+                            PropertyAnimation { properties: "width"; easing.type: Easing.OutQuad; duration: transitionDuration }
                             PropertyAnimation { properties: "opacity"; easing.type: Easing.InQuad; duration: transitionDuration }
                         }
                         ScriptAction { script: transitionEnded() }

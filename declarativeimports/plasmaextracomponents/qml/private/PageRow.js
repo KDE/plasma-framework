@@ -139,7 +139,7 @@ function initPage(page, properties) {
             throw new Error("Error while loading page: " + pageComp.errorString());
         } else {
             // instantiate page from component
-            page = pageComp.createObject(container, properties || {});
+            page = pageComp.createObject(container.pageParent, properties || {});
         }
     } else {
         // copy properties to the page
@@ -158,15 +158,15 @@ function initPage(page, properties) {
     }
 
     // the page has to be reparented if
-    if (page.parent != container) {
-        page.parent = container;
+    if (page.parent != container.pageParent) {
+        page.parent = container.pageParent;
     }
 
     if (page.pageStack !== undefined) {
         page.pageStack = root;
     }
 
-    page.anchors.fill = container
+    page.anchors.fill = container.pageParent
 
     return container;
 }

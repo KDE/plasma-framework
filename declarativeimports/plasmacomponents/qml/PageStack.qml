@@ -239,6 +239,10 @@ Item {
             width: parent ? parent.width : 0
             height: parent ? parent.height : 0
 
+            // The actual parent of page: page will anchor to that
+            // in this case is container itself, not the case for PageRow
+            property Item pageParent: container
+
             // The states correspond to the different possible positions of the container.
             state: "Hidden"
 
