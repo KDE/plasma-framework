@@ -44,10 +44,10 @@ import QtQuick 1.1
 import org.kde.plasma.components 0.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 
-import "private/PageRow.js" as Engine
+import "../components/private/PageStack.js" as Engine
 
 Item {
-    id: root
+    id: actualRoot
 
     width: parent ? parent.width : 0
     height: parent ? parent.height : 0
@@ -119,7 +119,7 @@ Item {
     // Scroll the view to have the page of the given level as first item
     function scrollToLevel(level)
     {
-        if (level < 0 || level > depth || mainItem.width < width) {
+        if (level < 0 || level > depth || root.width < width) {
             return
         }
 
@@ -194,12 +194,12 @@ Item {
     Flickable {
         id: mainFlickable
         anchors.fill: parent
-        interactive: mainItem.width > width
+        interactive: root.width > width
         boundsBehavior: Flickable.StopAtBounds
-        contentWidth: mainItem.width
+        contentWidth: root.width
         contentHeight: height
         Row {
-            id: mainItem
+            id: root
             spacing: -100
             width: columnWidth*depth
             height: parent.height
@@ -245,7 +245,7 @@ Item {
             property Item owner: null
 
             // The width of the longer stack dimension
-            property int stackWidth: Math.max(root.width, root.height)
+            property int stackWidth: Math.max(actualRoot.width, actualRoot.height)
 
             // Duration of transition animation (in ms)
             property int transitionDuration: 250
@@ -284,7 +284,7 @@ Item {
                 z: 800
                 source: "image://appbackgrounds/shadow-right"
                 fillMode: Image.TileVertically
-                opacity: container.pageDepth == root.depth ? 1 : 0.7
+                opacity: container.pageDepth == actualRoot.depth ? 1 : 0.7
                 anchors {
                     left: actualContainer.right
                     top: actualContainer.top
@@ -323,14 +323,14 @@ Item {
                 }
                 setState("");
                 page.visible = true;
-                if (root.visible && immediate)
+                if (actualRoot.visible && immediate)
                     internal.setPageStatus(page, PageStatus.Active);
             }
 
             // Performs a push exit transition.
             function pushExit(replace, immediate, orientationChanges)
             {
-                if (root.visible && immediate)
+                if (actualRoot.visible && immediate)
                     internal.setPageStatus(page, PageStatus.Inactive);
                 if (replace) {
                     if (immediate)
@@ -345,7 +345,7 @@ Item {
             {
                 setState("");
                 page.visible = true;
-                if (root.visible && immediate)
+                if (actualRoot.visible && immediate)
                     internal.setPageStatus(page, PageStatus.Active);
             }
 
@@ -354,7 +354,7 @@ Item {
             {
                 setState(immediate ? "Hidden" : "Left");
 
-                if (root.visible && immediate)
+                if (actualRoot.visible && immediate)
                     internal.setPageStatus(page, PageStatus.Inactive);
                 if (immediate)
                     cleanup();
@@ -367,7 +367,7 @@ Item {
             {
                 transitionAnimationRunning = true;
                 internal.ongoingTransitionCount++;
-                if (root.visible) {
+                if (actualRoot.visible) {
                     internal.setPageStatus(page, (state == "") ? PageStatus.Activating : PageStatus.Deactivating);
                 }
             }
@@ -377,7 +377,7 @@ Item {
             {
                 if (state != "")
                     state = "Hidden";
-                if (root.visible)
+                if (actualRoot.visible)
                     internal.setPageStatus(page, (state == "") ? PageStatus.Active : PageStatus.Inactive);
 
                 internal.ongoingTransitionCount--;
