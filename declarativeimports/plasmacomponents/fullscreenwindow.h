@@ -96,6 +96,7 @@ private:
     QList<QGraphicsObject *> m_dummyTitleElements;
     QList<QGraphicsObject *> m_dummyContentElements;
     QList<QGraphicsObject *> m_dummyButtonsElements;
+    friend class Background;
 };
 
 #endif
