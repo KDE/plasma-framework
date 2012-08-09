@@ -131,7 +131,7 @@ Item {
         id: scrollAnimation
         target: mainFlickable
         properties: "contentX"
-        duration: 250
+        duration: internal.transitionDuration
         easing.type: Easing.InOutQuad
     }
 
@@ -175,6 +175,9 @@ Item {
         //FIXME: there should be a way to access to theh without storing it in an ugly way
         property bool completed: false
 
+        // Duration of transition animation (in ms)
+        property int transitionDuration: 250
+
         // Sets the page status.
         function setPageStatus(page, status)
         {
@@ -205,7 +208,7 @@ Item {
             height: parent.height
             Behavior on width {
                 NumberAnimation {
-                    duration: 250
+                    duration: internal.transitionDuration
                     easing.type: Easing.InOutQuad
                 }
             }
@@ -235,7 +238,7 @@ Item {
             }
             Behavior on opacity {
                 NumberAnimation {
-                    duration: transitionDuration
+                    duration: internal.transitionDuration
                     easing.type: Easing.InOutQuad
                 }
             }
@@ -275,8 +278,6 @@ Item {
             // The width of the longer stack dimension
             property int stackWidth: Math.max(actualRoot.width, actualRoot.height)
 
-            // Duration of transition animation (in ms)
-            property int transitionDuration: 250
 
             // Flag that indicates the container should be cleaned up after the transition has ended.
             property bool cleanupAfterTransition: false
@@ -319,7 +320,7 @@ Item {
                 }
                 Behavior on opacity {
                     NumberAnimation {
-                        duration: transitionDuration
+                        duration: internal.transitionDuration
                         easing.type: Easing.InOutQuad
                     }
                 }
@@ -458,8 +459,8 @@ Item {
                     SequentialAnimation {
                         ScriptAction { script: transitionStarted() }
                         ParallelAnimation {
-                            PropertyAnimation { properties: "width"; easing.type: Easing.InQuad; duration: transitionDuration }
-                            PropertyAnimation { properties: "opacity"; easing.type: Easing.InQuad; duration: transitionDuration }
+                            PropertyAnimation { properties: "width"; easing.type: Easing.InQuad; duration: internal.transitionDuration }
+                            PropertyAnimation { properties: "opacity"; easing.type: Easing.InQuad; duration: internal.transitionDuration }
                         }
                         ScriptAction { script: transitionEnded() }
                     }
@@ -470,8 +471,8 @@ Item {
                     SequentialAnimation {
                         ScriptAction { script: transitionStarted() }
                         ParallelAnimation {
-                            PropertyAnimation { properties: "width"; easing.type: Easing.OutQuad; duration: transitionDuration }
-                            PropertyAnimation { properties: "opacity"; easing.type: Easing.InQuad; duration: transitionDuration }
+                            PropertyAnimation { properties: "width"; easing.type: Easing.OutQuad; duration: internal.transitionDuration }
+                            PropertyAnimation { properties: "opacity"; easing.type: Easing.InQuad; duration: internal.transitionDuration }
                         }
                         ScriptAction { script: transitionEnded() }
                     }
@@ -482,8 +483,8 @@ Item {
                     SequentialAnimation {
                         ScriptAction { script: transitionStarted() }
                         ParallelAnimation {
-                            PropertyAnimation { properties: "width"; easing.type: Easing.InQuad; duration: transitionDuration }
-                            PropertyAnimation { properties: "opacity"; easing.type: Easing.InQuad; duration: transitionDuration }
+                            PropertyAnimation { properties: "width"; easing.type: Easing.InQuad; duration: internal.transitionDuration }
+                            PropertyAnimation { properties: "opacity"; easing.type: Easing.InQuad; duration: internal.transitionDuration }
                         }
                         // Workaround for transition animation bug causing ghost view with page pop transition animation
                         // TODO: Root cause still unknown
@@ -497,8 +498,8 @@ Item {
                     SequentialAnimation {
                         ScriptAction { script: transitionStarted() }
                         ParallelAnimation {
-                            PropertyAnimation { properties: "width"; easing.type: Easing.OutQuad; duration: transitionDuration }
-                            PropertyAnimation { properties: "opacity"; easing.type: Easing.InQuad; duration: transitionDuration }
+                            PropertyAnimation { properties: "width"; easing.type: Easing.OutQuad; duration: internal.transitionDuration }
+                            PropertyAnimation { properties: "opacity"; easing.type: Easing.InQuad; duration: internal.transitionDuration }
                         }
                         ScriptAction { script: transitionEnded() }
                     }
