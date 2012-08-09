@@ -59,7 +59,7 @@ Item {
     property variant initialPage
     //A column is wide enough for 30 characters
     property int columnWidth: Math.round(parent.width/(theme.defaultFont.mSize.width*30)) > 0 ? parent.width/Math.round(parent.width/(theme.defaultFont.mSize.width*30)) : width
-    clip: true
+    property alias clip: scrollArea.clip
 
     // Indicates whether there is an ongoing page transition.
     property bool busy: internal.ongoingTransitionCount > 0
@@ -194,32 +194,32 @@ Item {
         }
     }
 
-    Flickable {
-        id: mainFlickable
+    ScrollArea {
+        id: scrollArea
         anchors.fill: parent
-        interactive: root.width > width
-        boundsBehavior: Flickable.StopAtBounds
-        contentWidth: root.width
-        contentHeight: height
-        Row {
-            id: root
-            spacing: -100
-            width: columnWidth*depth
-            height: parent.height
-            Behavior on width {
-                NumberAnimation {
-                    duration: internal.transitionDuration
-                    easing.type: Easing.InOutQuad
+        Flickable {
+            id: mainFlickable
+            anchors.fill: parent
+            interactive: root.width > width
+            boundsBehavior: Flickable.StopAtBounds
+            contentWidth: root.width
+            contentHeight: height
+            Row {
+                id: root
+                spacing: -100
+                width: columnWidth*depth
+                height: parent.height
+                Behavior on width {
+                    NumberAnimation {
+                        duration: internal.transitionDuration
+                        easing.type: Easing.InOutQuad
+                    }
                 }
             }
+            onMovementEnded: {print(Math.round(contentX/columnWidth))
+                scrollToLevel(Math.round(contentX/columnWidth)+1)
+            }
         }
-        onMovementEnded: {print(Math.round(contentX/columnWidth))
-            scrollToLevel(Math.round(contentX/columnWidth)+1)
-        }
-    }
-    ScrollBar {
-        flickableItem: mainFlickable
-        orientation: Qt.Horizontal
     }
 
     Component {
