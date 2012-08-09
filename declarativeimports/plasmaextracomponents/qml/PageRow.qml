@@ -219,6 +219,29 @@ Item {
         orientation: Qt.Horizontal
     }
 
+    Component {
+        id: svgShadowComponent
+        PlasmaCore.SvgItem {
+            property Item container
+            z: 800
+            svg: PlasmaCore.Svg {imagePath: "widgets/scrollwidget"}
+            elementId: "border-left"
+            width: naturalSize.width
+            opacity: container.pageDepth == actualRoot.depth ? 1 : 0.7
+            anchors {
+                left: container.pageParent.right
+                top: container.pageParent.top
+                bottom: container.pageParent.bottom
+            }
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: transitionDuration
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        }
+    }
+
     // Component for page containers.
     Component {
         id: containerComponent
@@ -298,6 +321,13 @@ Item {
                     NumberAnimation {
                         duration: transitionDuration
                         easing.type: Easing.InOutQuad
+                    }
+                }
+                onStatusChanged: {
+                    if (status == Image.Error) {
+                        var shadow = svgShadowComponent.createObject(container)
+                        shadow.container = container
+                        destroy()
                     }
                 }
             }
