@@ -44,6 +44,7 @@ Item {
     property Flickable flickableItem
     //FIXME: this alias seems necessary for it to correctly parse
     default property alias flickableItemDefault: root.flickableItem
+    clip: true
 
     Connections {
         target: root
