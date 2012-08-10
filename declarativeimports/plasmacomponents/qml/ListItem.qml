@@ -86,9 +86,11 @@ Item {
         prefix: "normal"
 
         anchors.fill: parent
+        opacity: itemMouse.containsMouse ? 0.5 : 1
         Component.onCompleted: {
             prefix = (listItem.sectionDelegate ? "section" : (listItem.checked ? "pressed" : "normal"))
         }
+        Behavior on opacity { NumberAnimation { duration: 200 } }
     }
     PlasmaCore.SvgItem {
         svg: PlasmaCore.Svg {imagePath: "widgets/listitem"}
@@ -107,6 +109,7 @@ Item {
         property bool changeBackgroundOnPress: !listItem.checked && !listItem.sectionDelegate
         anchors.fill: background
         enabled: false
+        hoverEnabled: true
 
         onClicked: listItem.clicked()
         onPressAndHold: listItem.pressAndHold()
