@@ -132,9 +132,8 @@ Item {
         }
         QPixmapItem {
             id: backgroundPixmapItem
-            fillMode: QPixmapItem.Tile
-            width: Math.floor(parent.width/(height/1.6))*Math.floor(height/1.6)
-            height: parent.height
+            anchors.fill: parent
+            
             onWidthChanged: resizeTimer.restart()
             onHeightChanged: resizeTimer.restart()
         }
@@ -142,11 +141,12 @@ Item {
 
         QPixmapItem {
             id: barPixmapItem
-            fillMode: QPixmapItem.Tile
+            fillMode: contents._isVertical ? QPixmapItem.TileVertically : QPixmapItem.TileHorizontally
             width: indeterminate ? Math.floor(height/1.6)*2 : range.position
             height: contents.height
 
             visible: indeterminate || value > 0
+            onWidthChanged: resizeTimer.restart()
 
             SequentialAnimation {
                 id: indeterminateAnimation
