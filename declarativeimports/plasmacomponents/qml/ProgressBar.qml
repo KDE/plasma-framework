@@ -87,6 +87,7 @@ Item {
         id: contents
 
         property bool _isVertical: orientation == Qt.Vertical
+        property int _tileWidth: width
 
         width: _isVertical ? progressBar.height : progressBar.width
         height: _isVertical ? progressBar.width : progressBar.height
@@ -99,17 +100,20 @@ Item {
             interval: 0
             running: false
             onTriggered: {
+                contents._tileWidth = Math.floor(contents.width/(Math.floor(contents.width/(contents.height/1.6))))
+
+
                 if (barFrameSvg.hasElement("hint-bar-stretch")) {
                     barFrameSvg.resizeFrame(Qt.size(barPixmapItem.width, barPixmapItem.height))
                 } else {
-                    barFrameSvg.resizeFrame(Qt.size(Math.floor(contents.height/1.6), contents.height))
+                    barFrameSvg.resizeFrame(Qt.size(contents._tileWidth, contents.height))
                 }
                 barPixmapItem.pixmap = barFrameSvg.framePixmap()
 
                 if (backgroundFrameSvg.hasElement("hint-bar-stretch")) {
                     backgroundFrameSvg.resizeFrame(Qt.size(backgroundPixmapItem.width, backgroundPixmapItem.height))
                 } else {
-                    backgroundFrameSvg.resizeFrame(Qt.size(Math.floor(contents.height/1.6), contents.height))
+                    backgroundFrameSvg.resizeFrame(Qt.size(contents._tileWidth, contents.height))
                 }
                 backgroundPixmapItem.pixmap = backgroundFrameSvg.framePixmap()
             }
@@ -133,7 +137,7 @@ Item {
         QPixmapItem {
             id: backgroundPixmapItem
             anchors.fill: parent
-            
+            fillMode: QPixmapItem.TileHorizontally
             onWidthChanged: resizeTimer.restart()
             onHeightChanged: resizeTimer.restart()
         }
@@ -141,8 +145,8 @@ Item {
 
         QPixmapItem {
             id: barPixmapItem
-            fillMode: contents._isVertical ? QPixmapItem.TileVertically : QPixmapItem.TileHorizontally
-            width: indeterminate ? Math.floor(height/1.6)*2 : range.position
+            fillMode: QPixmapItem.TileHorizontally
+            width: indeterminate ? contents._tileWidth*2 : range.position
             height: contents.height
 
             visible: indeterminate || value > 0
