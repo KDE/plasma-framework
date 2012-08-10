@@ -112,6 +112,7 @@ Item {
             var visibleChildCount = childCount
             var contentWidth = 0
             var contentHeight = 0
+            var maxChildWidth = 0
             if (childCount != 0) {
                 //not too much efficient but the loop over children needs to be done two times to get the proper child width
                 for (var i = 0; i < childCount; ++i) {
@@ -137,7 +138,8 @@ Item {
                     child.height = root.height
 
                     if (child.implicitWidth != undefined) {
-                        contentWidth = Math.max(contentWidth + i*10, (child.implicitWidth + buttonFrame.margins.left*2 + buttonFrame.margins.right*2) * childCount)
+                        maxChildWidth = Math.max(maxChildWidth, child.implicitWidth)
+                        contentWidth = Math.max(contentWidth + i*10, (maxChildWidth + buttonFrame.margins.left + buttonFrame.margins.right) * childCount)
                         contentHeight = Math.max(contentHeight, (child.implicitHeight + buttonFrame.margins.top + buttonFrame.margins.bottom))
                     }
                 }
