@@ -51,6 +51,7 @@ Signals:
 
 import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
+import "private/Config.js" as Config
 
 Item {
     id: listItem
@@ -86,9 +87,11 @@ Item {
         prefix: "normal"
 
         anchors.fill: parent
+        opacity: itemMouse.containsMouse && !itemMouse.pressed ? 0.5 : 1
         Component.onCompleted: {
             prefix = (listItem.sectionDelegate ? "section" : (listItem.checked ? "pressed" : "normal"))
         }
+        Behavior on opacity { NumberAnimation { duration: 200 } }
     }
     PlasmaCore.SvgItem {
         svg: PlasmaCore.Svg {imagePath: "widgets/listitem"}
@@ -107,6 +110,7 @@ Item {
         property bool changeBackgroundOnPress: !listItem.checked && !listItem.sectionDelegate
         anchors.fill: background
         enabled: false
+        hoverEnabled: Config.mouseOverEnabled
 
         onClicked: listItem.clicked()
         onPressAndHold: listItem.pressAndHold()

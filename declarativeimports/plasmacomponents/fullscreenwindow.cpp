@@ -78,6 +78,7 @@ public:
     void mouseReleaseEvent(QMouseEvent *event)
     {
         if (!m_dialog->view()->geometry().contains(event->globalPos())) {
+            emit m_dialog->clickedOutside();
             m_dialog->close();
         }
     }

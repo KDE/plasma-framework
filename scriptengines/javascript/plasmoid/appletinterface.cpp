@@ -51,6 +51,12 @@ AppletInterface::AppletInterface(AbstractJsAppletScript *parent)
     connect(this, SIGNAL(configNeedsSaving()), applet(), SIGNAL(configNeedsSaving()));
     connect(applet(), SIGNAL(immutabilityChanged(Plasma::ImmutabilityType)), this, SIGNAL(immutableChanged()));
     connect(applet(), SIGNAL(newStatus(Plasma::ItemStatus)), this, SIGNAL(statusChanged()));
+    connect(m_appletScriptEngine, SIGNAL(formFactorChanged()),
+            this, SIGNAL(formFactorChanged()));
+    connect(m_appletScriptEngine, SIGNAL(locationChanged()),
+            this, SIGNAL(locationChanged()));
+    connect(m_appletScriptEngine, SIGNAL(contextChanged()),
+            this, SIGNAL(contextChanged()));
 }
 
 AppletInterface::~AppletInterface()
