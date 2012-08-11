@@ -73,14 +73,14 @@ class FrameSvgItem : public QDeclarativeItem
     /**
      * Theme relative path of the svg, like "widgets/background"
      */
-    Q_PROPERTY(QString imagePath READ imagePath WRITE setImagePath)
+    Q_PROPERTY(QString imagePath READ imagePath WRITE setImagePath NOTIFY imagePathChanged)
 
     /**
      * prefix for the 9 piece svg, like "pushed" or "normal" for the button
      * see http://techbase.kde.org/Development/Tutorials/Plasma/ThemeDetails
      * for a list of paths and prefixes
      */
-    Q_PROPERTY(QString prefix READ prefix WRITE setPrefix)
+    Q_PROPERTY(QString prefix READ prefix WRITE setPrefix NOTIFY prefixChanged)
 
     /**
      * The margins of the frame, read only
@@ -97,7 +97,7 @@ class FrameSvgItem : public QDeclarativeItem
      *  LeftBorder
      *  RightBorder
      */
-    Q_PROPERTY(Plasma::FrameSvg::EnabledBorders enabledBorders READ enabledBorders WRITE setEnabledBorders)
+    Q_PROPERTY(Plasma::FrameSvg::EnabledBorders enabledBorders READ enabledBorders WRITE setEnabledBorders NOTIFY enabledBordersChanged)
 
 public:
     FrameSvgItem(QDeclarativeItem *parent=0);
@@ -118,6 +118,11 @@ public:
 
     void geometryChanged(const QRectF &newGeometry,
                               const QRectF &oldGeometry);
+
+signals:
+    void imagePathChanged();
+    void prefixChanged();
+    void enabledBordersChanged();
 
 private Q_SLOTS:
     void doUpdate();
