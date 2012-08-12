@@ -82,13 +82,13 @@ public:
      * before the main component gets initialized.
      * So it will be possible to access it immediately from the QML code.
      *
-     * @param delay if true the initilization of the QML file will be delayed 
+     * @param delay if true the initialization of the QML file will be delayed 
      *              at the end of the event loop
      */
     void setInitializationDelayed(const bool delay);
 
     /**
-     * @return true if the initilization of the QML file will be delayed 
+     * @return true if the initialization of the QML file will be delayed 
      *              at the end of the event loop
      */
     bool isInitializationDelayed() const;

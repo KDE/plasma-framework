@@ -44,7 +44,7 @@ public:
     ~SigningPrivate();
 
     Signing *q;
-    // Save all the keys in a single object, splitted by their SigningLevel
+    // Save all the keys in a single object, split by their SigningLevel
     // Note: keys[CompletelyUntrusted] refers to an empty list
     QMap<TrustLevel, QSet<QByteArray> > keys;
 

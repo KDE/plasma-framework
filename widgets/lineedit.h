@@ -79,7 +79,7 @@ public:
     bool isClearButtonShown() const;
 
     /**
-     * Sets a greyed out message that will go away after the user clicked the line edit
+     * Sets a grayed out message that will go away after the user clicked the line edit
      *
      * @param message the message
      * @since 4.5
@@ -90,7 +90,7 @@ public:
 #endif
 
     /**
-     * @return the text of a greyed out message that will go away when clicked
+     * @return the text of a grayed out message that will go away when clicked
      * @since 4.5
      * @deprecated use LineEdit::placeholderText instead
      */

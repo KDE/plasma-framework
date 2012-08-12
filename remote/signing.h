@@ -154,9 +154,9 @@ public:
     QString keyStorePath() const;
 
     /**
-      * Method used to retrieve additional informations about the key passed as parameter to the function.
+      * Method used to retrieve additional information about the key passed as parameter to the function.
       *
-      * @arg keyID the string containing the hash of the key we want to retrive the informations.
+      * @arg keyID the string containing the hash of the key we want to retrive the information.
       *
       * @return a QString object containing the name, the email and the comment (if any) referenced by the
       * id passed as argument to the function.

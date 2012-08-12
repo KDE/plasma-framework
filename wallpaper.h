@@ -198,7 +198,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
         void setBoundingRect(const QRectF &boundingRect);
 
         /**
-         * Can be Overriden by plugins which support setting Image URLs.
+         * Can be Overridden by plugins which support setting Image URLs.
          * This is triggered by events in the user interface such as
          * drag and drop of files.
          */
