@@ -37,10 +37,15 @@ QPixmapItem::~QPixmapItem()
 
 void QPixmapItem::setPixmap(const QPixmap &pixmap)
 {
+    bool oldPixmapNull = m_pixmap.isNull();
     m_pixmap = pixmap;
     update();
     emit nativeWidthChanged();
     emit nativeHeightChanged();
+    emit pixmapChanged();
+    if (oldPixmapNull != m_pixmap.isNull()) {
+        emit nullChanged();
+    }
 }
 
 QPixmap QPixmapItem::pixmap() const
@@ -143,5 +148,9 @@ void QPixmapItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     painter->restore();
 }
 
+bool QPixmapItem::isNull() const
+{
+    return m_pixmap.isNull();
+}
 
 #include "qpixmapitem.moc"

@@ -37,10 +37,15 @@ QImageItem::~QImageItem()
 
 void QImageItem::setImage(const QImage &image)
 {
+    bool oldImageNull = m_image.isNull();
     m_image = image;
     update();
     emit nativeWidthChanged();
     emit nativeHeightChanged();
+    emit imageChanged();
+    if (oldImageNull != m_image.isNull()) {
+        emit nullChanged();
+    }
 }
 
 QImage QImageItem::image() const
@@ -143,5 +148,9 @@ void QImageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     painter->restore();
 }
 
+bool QImageItem::isNull() const
+{
+    return m_image.isNull();
+}
 
 #include "qimageitem.moc"
