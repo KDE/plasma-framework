@@ -266,7 +266,7 @@ void FullScreenWindow::syncMainItemToView()
     m_mainItem.data()->setProperty("height", m_view->height());
 
     if (m_declarativeItemContainer) {
-        m_view->resize(m_declarativeItemContainer->size().toSize());
+        m_declarativeItemContainer->resize(m_view->size());
         m_view->setSceneRect(m_declarativeItemContainer->geometry());
     } else {
         QRectF itemGeometry(QPointF(m_mainItem.data()->x(), m_mainItem.data()->y()),

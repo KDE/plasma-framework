@@ -70,8 +70,13 @@ FrameSvgItem::~FrameSvgItem()
 
 void FrameSvgItem::setImagePath(const QString &path)
 {
+    if (m_frameSvg->imagePath() == path)
+        return;
+
     m_frameSvg->setImagePath(path);
     m_frameSvg->setElementPrefix(m_prefix);
+
+    emit imagePathChanged();
     update();
 }
 
@@ -83,8 +88,13 @@ QString FrameSvgItem::imagePath() const
 
 void FrameSvgItem::setPrefix(const QString &prefix)
 {
+    if (m_prefix == prefix)
+        return;
+
     m_frameSvg->setElementPrefix(prefix);
     m_prefix = prefix;
+
+    emit prefixChanged();
     update();
 }
 
@@ -100,7 +110,11 @@ FrameSvgItemMargins *FrameSvgItem::margins() const
 
 void FrameSvgItem::setEnabledBorders(const Plasma::FrameSvg::EnabledBorders borders)
 {
+    if (m_frameSvg->enabledBorders() == borders)
+        return;
+
     m_frameSvg->setEnabledBorders(borders);
+    emit enabledBordersChanged();
 }
 
 Plasma::FrameSvg::EnabledBorders FrameSvgItem::enabledBorders() const

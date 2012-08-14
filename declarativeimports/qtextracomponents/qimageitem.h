@@ -26,11 +26,12 @@ class QImageItem : public QDeclarativeItem
 {
     Q_OBJECT
 
-    Q_PROPERTY(QImage image READ image WRITE setImage)
+    Q_PROPERTY(QImage image READ image WRITE setImage NOTIFY imageChanged)
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth)
     Q_PROPERTY(int nativeWidth READ nativeWidth NOTIFY nativeWidthChanged)
     Q_PROPERTY(int nativeHeight READ nativeHeight NOTIFY nativeHeightChanged)
     Q_PROPERTY(FillMode fillMode READ fillMode WRITE setFillMode NOTIFY fillModeChanged)
+    Q_PROPERTY(bool null READ isNull NOTIFY nullChanged)
     Q_ENUMS(FillMode)
 
 public:
@@ -60,10 +61,14 @@ public:
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
+    bool isNull() const;
+
 Q_SIGNALS:
     void nativeWidthChanged();
     void nativeHeightChanged();
     void fillModeChanged();
+    void imageChanged();
+    void nullChanged();
 
 private:
     QImage m_image;

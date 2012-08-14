@@ -52,7 +52,7 @@ Properties:
         Sets the font for the button.
 
 	bool enabled:
-	Returns wether the button is currently enabled and receives user input.
+	Returns whether the button is currently enabled and receives user input.
 
 Signals:
         onClicked:
