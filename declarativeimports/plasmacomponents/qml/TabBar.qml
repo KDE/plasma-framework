@@ -76,8 +76,8 @@ FocusScope {
     //Plasma extension
     property Item currentTab
 
-    implicitWidth: tabBarLayout.implicitWidth + backgroundFrame.margins.left + backgroundFrame.margins.right + (buttonFrame.margins.left + buttonFrame.margins.right)*tabBarLayout.children.length
-    implicitHeight: tabBarLayout.implicitHeight + backgroundFrame.margins.top + backgroundFrame.margins.bottom + buttonFrame.margins.top + buttonFrame.margins.bottom
+    implicitWidth: layout.implicitWidth + backgroundFrame.margins.left + backgroundFrame.margins.right
+    implicitHeight: layout.implicitHeight + backgroundFrame.margins.top + backgroundFrame.margins.bottom
 
     PlasmaCore.FrameSvgItem {
         id: backgroundFrame
