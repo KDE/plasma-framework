@@ -47,8 +47,9 @@ import "." 0.1
 
 Item {
     id: root
-    width: dialog.width
-    height: dialog.height
+
+    width: theme.defaultFont.mSize.width * 40
+    height: titleBar.childrenRect.height + contentItem.childrenRect.height + buttonItem.childrenRect.height + 8
 
     property alias title: titleBar.children
     property alias content: contentItem.children
@@ -110,9 +111,7 @@ Item {
 
     PlasmaCore.FrameSvgItem {
         id: dialog
-        width: mainItem.width + margins.left + margins.right
-        height: mainItem.height + margins.top + margins.bottom
-        anchors.centerIn: parent
+        anchors.fill: parent
         imagePath: "dialogs/background"
 
         state: "closed"
@@ -121,10 +120,14 @@ Item {
 
         Item {
             id: mainItem
-            x: dialog.margins.left
-            y: dialog.margins.top
-            width: theme.defaultFont.mSize.width * 40
-            height: titleBar.childrenRect.height + contentItem.childrenRect.height + buttonItem.childrenRect.height + 8
+            anchors {
+                fill: parent
+                leftMargin: dialog.margins.left
+                topMargin: dialog.margins.top
+                rightMargin: dialog.margins.right
+                bottomMargin: dialog.margins.bottom
+            }
+
 
 
             // Consume all key events that are not processed by children
