@@ -151,6 +151,7 @@ Item {
 
             visible: indeterminate || value > 0
             onWidthChanged: resizeTimer.restart()
+            onHeightChanged: resizeTimer.restart()
 
             SequentialAnimation {
                 id: indeterminateAnimation
