@@ -53,7 +53,7 @@ public:
     QObject *visualParent() const;
     void setVisualParent(QObject *parent);
 
-    void showMenu(int x, int y);
+    Q_INVOKABLE void open(int x, int y);
     Q_INVOKABLE void open();
     Q_INVOKABLE void close();
     Q_INVOKABLE void clearMenuItems();

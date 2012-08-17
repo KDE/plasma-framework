@@ -91,8 +91,8 @@ Item {
 
     signal clicked
 
-    implicitWidth: label.paintedWidth + (internal.portrait ? 0 : (iconSource != null ? 16 : 0))
-    implicitHeight: label.paintedHeight + (internal.portrait ? (iconSource != null ? 16 : 0) : 0)
+    implicitWidth: label.implicitWidth + (internal.portrait ? 0 : (iconSource != null ? 16 : 0))
+    implicitHeight: label.implicitHeight + (internal.portrait ? (iconSource != null ? 16 : 0) : 0)
 
     opacity: enabled ? 1 : 0.6
     //long notation to not make it overwritten by implementations
