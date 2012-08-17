@@ -105,6 +105,7 @@ void QImageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     painter->setRenderHint(QPainter::Antialiasing, m_smooth);
     painter->setRenderHint(QPainter::SmoothPixmapTransform, m_smooth);
 
+    QRect sourceRect = m_image.rect();
     QRect destRect;
     switch (m_fillMode) {
     case PreserveAspectFit: {
@@ -112,13 +113,13 @@ void QImageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
         scaled.scale(boundingRect().size().toSize(), Qt::KeepAspectRatio);
         destRect = QRect(QPoint(0, 0), scaled);
+        destRect.moveCenter(boundingRect().center().toPoint());
         break;
     }
     case PreserveAspectCrop: {
-        painter->setClipRect(boundingRect(), Qt::IntersectClip);
-        QSize scaled = m_image.size();
-        scaled.scale(boundingRect().size().toSize(), Qt::KeepAspectRatioByExpanding);
-        destRect = QRect(QPoint(0, 0), scaled);
+        destRect = boundingRect().toRect();
+        sourceRect = destRect;
+        sourceRect.moveCenter(m_image.rect().center());
         break;
     }
     case TileVertically: {
@@ -142,7 +143,7 @@ void QImageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     if (m_fillMode >= Tile) {
         painter->drawTiledPixmap(destRect, QPixmap::fromImage(m_image));
     } else {
-        painter->drawImage(destRect, m_image, m_image.rect());
+        painter->drawImage(destRect, m_image, sourceRect);
     }
 
     painter->restore();
