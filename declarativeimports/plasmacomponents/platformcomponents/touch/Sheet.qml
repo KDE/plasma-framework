@@ -197,12 +197,14 @@ Item {
 
         //state: "Hidden"
 
-        Item {
+        MouseArea {
             id: mainItem
             x: dialog.margins.left
             y: dialog.margins.top
             width: parent.width - dialog.margins.left - dialog.margins.right
             height: parent.height - dialog.margins.top - dialog.margins.bottom
+
+            onClicked: mouse.accepted = true
 
             // Consume all key events that are not processed by children
             Keys.onPressed: event.accepted = true
