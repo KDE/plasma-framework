@@ -141,7 +141,7 @@ void ConfigLoaderTest::urlDefaultValue()
 {
     GET_CONFIG_ITEM_VALUE(KCoreConfigSkeleton::ItemUrl*, "DefaultUrlItem");
 
-    QVERIFY(typeItem->isEqual(KUrl("http://kde.org")));
+    QVERIFY(typeItem->isEqual(QUrl("http://kde.org")));
 }
 
 void ConfigLoaderTest::doubleDefaultValue()
