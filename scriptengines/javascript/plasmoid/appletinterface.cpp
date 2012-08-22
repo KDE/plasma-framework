@@ -39,6 +39,7 @@
 #include <Plasma/Corona>
 #include <Plasma/Context>
 #include <Plasma/Package>
+#include <Plasma/ToolTipManager>
 
 Q_DECLARE_METATYPE(AppletInterface*)
 
@@ -472,6 +473,7 @@ PopupAppletInterface::PopupAppletInterface(AbstractJsAppletScript *parent)
     : APPLETSUPERCLASS(parent)
 {
     connect(m_appletScriptEngine, SIGNAL(popupEvent(bool)), this, SIGNAL(popupEvent(bool)));
+    connect(m_appletScriptEngine, SIGNAL(popupEvent(bool)), this, SLOT(sourceAppletPopupEvent(bool)));
 }
 
 void PopupAppletInterface::setPopupIcon(const QIcon &icon)
@@ -487,6 +489,44 @@ QIcon PopupAppletInterface::popupIcon()
 void PopupAppletInterface::setPopupIconByName(const QString &name)
 {
     return popupApplet()->setPopupIcon(name);
+}
+
+void PopupAppletInterface::setPopupIconToolTip(const QVariantHash &data)
+{
+    if (data == m_rawToolTipData) {
+        return;
+    } else if (!data.contains("image") && !data.contains("mainText") &&
+               !data.contains("subText")) {
+        m_rawToolTipData = QVariantHash();
+        Plasma::ToolTipManager::self()->clearContent(popupApplet());
+        Plasma::ToolTipManager::self()->unregisterWidget(popupApplet());
+        emit popupIconToolTipChanged();
+        return;
+    }
+
+    Plasma::ToolTipContent content(data.value("mainText").toString(), data.value("subText").toString());
+
+    const QVariant image = data.value("image");
+    if (image.canConvert<QIcon>()) {
+        content.setImage(image.value<QIcon>());
+    } else if (image.canConvert<QPixmap>()) {
+        content.setImage(image.value<QPixmap>());
+    } else if (image.canConvert<QImage>()) {
+        content.setImage(QPixmap::fromImage(image.value<QImage>()));
+    } else  if (image.canConvert<QString>()) {
+        content.setImage(KIcon(image.toString()));
+    }
+
+    Plasma::ToolTipManager::self()->registerWidget(popupApplet());
+    Plasma::ToolTipManager::self()->setContent(popupApplet(), content);
+    m_rawToolTipData = data;
+    m_toolTipData = content;
+    emit popupIconToolTipChanged();
+}
+
+QVariantHash PopupAppletInterface::popupIconToolTip() const
+{
+    return m_rawToolTipData;
 }
 
 void PopupAppletInterface::setPassivePopup(bool passive)
@@ -528,6 +568,19 @@ QGraphicsWidget *PopupAppletInterface::popupWidget()
 {
     return popupApplet()->graphicsWidget();
 }
+
+void PopupAppletInterface::sourceAppletPopupEvent(bool show)
+{
+    if (show) {
+        Plasma::ToolTipManager::self()->clearContent(popupApplet());
+    } else {
+        Plasma::ToolTipManager::self()->registerWidget(popupApplet());
+        Plasma::ToolTipManager::self()->setContent(popupApplet(), m_toolTipData);
+    }
+}
+
+
+///////////// ContainmentInterface
 
 ContainmentInterface::ContainmentInterface(AbstractJsAppletScript *parent)
     : APPLETSUPERCLASS(parent),

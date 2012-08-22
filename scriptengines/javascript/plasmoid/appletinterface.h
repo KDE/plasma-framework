@@ -32,6 +32,7 @@
 #include <Plasma/PopupApplet>
 #include <Plasma/DataEngine>
 #include <Plasma/Theme>
+#include <Plasma/ToolTipContent>
 
 #include "abstractjsappletscript.h"
 
@@ -363,12 +364,16 @@ class PopupAppletInterface : public APPLETSUPERCLASS
     Q_PROPERTY(QIcon popupIcon READ popupIcon WRITE setPopupIcon)
     Q_PROPERTY(bool passivePopup READ isPassivePopup WRITE setPassivePopup)
     Q_PROPERTY(QGraphicsWidget *popupWidget READ popupWidget WRITE setPopupWidget)
+    Q_PROPERTY(QVariantHash popupIconToolTip READ popupIconToolTip WRITE setPopupIconToolTip NOTIFY popupIconToolTipChanged)
 
 public:
     PopupAppletInterface(AbstractJsAppletScript *parent);
 
     void setPopupIcon(const QIcon &icon);
     QIcon popupIcon();
+
+    void setPopupIconToolTip(const QVariantHash &data);
+    QVariantHash popupIconToolTip() const;
 
     inline Plasma::PopupApplet *popupApplet() const { return static_cast<Plasma::PopupApplet *>(m_appletScriptEngine->applet()); }
 
@@ -380,6 +385,7 @@ public:
 
 Q_SIGNALS:
     void popupEvent(bool);
+    void popupIconToolTipChanged();
 
 public Q_SLOTS:
     void setPopupIconByName(const QString &name);
@@ -387,6 +393,13 @@ public Q_SLOTS:
     void hidePopup();
     void showPopup();
     void showPopup(int timeout);
+
+private Q_SLOTS:
+    void sourceAppletPopupEvent(bool show);
+
+private:
+    QVariantHash m_rawToolTipData;
+    Plasma::ToolTipContent m_toolTipData;
 };
 
 
