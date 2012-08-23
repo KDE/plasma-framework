@@ -22,7 +22,6 @@
 #include <kapplication.h>
 #include <kdebug.h>
 
-#include <config.h>
 #if 0 // Port to Qt5 native filters
 #include <X11/Xlib.h>
 #include <QX11Info>
