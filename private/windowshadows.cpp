@@ -21,6 +21,8 @@
 #include <QWidget>
 #include <QPainter>
 
+#include <config.h>
+
 #if HAVE_X11
 #include <QX11Info>
 #include <X11/Xatom.h>
