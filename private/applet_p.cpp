@@ -23,17 +23,24 @@
 
 #include "private/applet_p.h"
 
+#include <config-plasma.h>
+
 #include <QGraphicsLayout>
 #include <QGraphicsView>
+#include <QHostInfo>
 
 #include "abstracttoolbox.h"
 #include "containment.h"
 #include "corona.h"
 #include "pluginloader.h"
 #include "scripting/scriptengine.h"
-
 #include "private/containment_p.h"
-#include <config-plasma.h>
+
+#if ENABLE_REMOTE_WIDGETS
+#include "remote/authorizationmanager.h"
+#include "remote/authorizationmanager_p.h"
+#include "remote/authorizationrule.h"
+#endif
 
 #include <kaction.h>
 #include <kkeysequencewidget.h>
