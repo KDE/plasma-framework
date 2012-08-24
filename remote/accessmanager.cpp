@@ -175,7 +175,7 @@ AccessManagerPrivate::AccessManagerPrivate(AccessManager *manager)
     : q(manager),
       browser(new DNSSD::ServiceBrowser("_plasma._tcp"))
 {
-#ifdef ENABLE_REMOTE_WIDGETS
+#if ENABLE_REMOTE_WIDGETS
     q->connect(browser, SIGNAL(serviceAdded(DNSSD::RemoteService::Ptr)),
                q, SLOT(slotAddService(DNSSD::RemoteService::Ptr)));
     q->connect(browser, SIGNAL(serviceRemoved(DNSSD::RemoteService::Ptr)),

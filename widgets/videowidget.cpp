@@ -28,7 +28,7 @@
 
 #include <kiconloader.h>
 
-#ifndef PLASMA_NO_KIO
+#if !PLASMA_NO_KIO
 #include <kfiledialog.h>
 #else
 #include <QFileDialog>
@@ -157,7 +157,7 @@ void VideoWidgetPrivate::volumeChanged(qreal value)
 
 void VideoWidgetPrivate::showOpenFileDialog()
 {
-#ifndef PLASMA_NO_KIO
+#if !PLASMA_NO_KIO
     openFile(KFileDialog::getOpenFileName());
 #else
     openFile(QFileDialog::getOpenFileName());

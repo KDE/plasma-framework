@@ -33,6 +33,7 @@
 #include "scripting/scriptengine.h"
 
 #include "private/containment_p.h"
+#include <config-plasma.h>
 
 #include <kaction.h>
 #include <kkeysequencewidget.h>
@@ -377,7 +378,7 @@ void AppletPrivate::addStandardConfigurationPages(KConfigDialog *dialog)
 
 void AppletPrivate::addGlobalShortcutsPage(KConfigDialog *dialog)
 {
-#ifndef PLASMA_NO_GLOBAL_SHORTCUTS
+#if !PLASMA_NO_GLOBAL_SHORTCUTS
     if (isContainment) {
         return;
     }
@@ -402,7 +403,7 @@ void AppletPrivate::addGlobalShortcutsPage(KConfigDialog *dialog)
 
 void AppletPrivate::addPublishPage(KConfigDialog *dialog)
 {
-#ifdef ENABLE_REMOTE_WIDGETS
+#if ENABLE_REMOTE_WIDGETS
     QWidget *page = new QWidget;
     publishUI.setupUi(page);
     publishUI.publishCheckbox->setChecked(q->isPublished());
@@ -444,7 +445,7 @@ void AppletPrivate::configDialogFinished()
         }
     }
 
-#ifdef ENABLE_REMOTE_WIDGETS
+#if ENABLE_REMOTE_WIDGETS
     if (KConfigDialog::exists(configDialogId()) && publishUI.publishCheckbox) {
         q->config().writeEntry("Share", publishUI.publishCheckbox->isChecked());
 

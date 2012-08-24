@@ -27,7 +27,7 @@
 #include <qstandardpaths.h>
 #include <kiconloader.h>
 
-#ifndef PLASMA_NO_KIO
+#if !PLASMA_NO_KIO
 #include <krun.h>
 #else
 #include <QProcess>
@@ -115,7 +115,7 @@ QList<QUrl> AssociatedApplicationManager::urls(const Plasma::Applet *applet) con
 void AssociatedApplicationManager::run(Plasma::Applet *applet)
 {
     if (d->applicationNames.contains(applet)) {
-#ifndef PLASMA_NO_KIO
+#if !PLASMA_NO_KIO
         bool success = KRun::run(d->applicationNames.value(applet), d->urlLists.value(applet), 0);
 #else
         QString execCommand = d->applicationNames.value(applet);
@@ -133,7 +133,7 @@ void AssociatedApplicationManager::run(Plasma::Applet *applet)
         }
 
     } else if (d->urlLists.contains(applet) && !d->urlLists.value(applet).isEmpty()) {
-#ifndef PLASMA_NO_KIO
+#if !PLASMA_NO_KIO
         KRun *krun = new KRun(d->urlLists.value(applet).first(), 0);
         krun->setAutoDelete(true);
 #else

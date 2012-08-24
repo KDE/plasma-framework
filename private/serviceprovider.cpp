@@ -38,7 +38,7 @@
 
 #include <QtJolie/Server>
 
-#ifdef ENABLE_REMOTE_WIDGETS
+#if ENABLE_REMOTE_WIDGETS
 #include <QtCrypto>
 #endif
 

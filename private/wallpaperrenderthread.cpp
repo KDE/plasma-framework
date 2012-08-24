@@ -26,7 +26,7 @@
 #include <QSvgRenderer>
 
 #include "config-plasma.h"
-#ifndef PLASMA_NO_SOLID
+#if !PLASMA_NO_SOLID
 #include <solid/device.h>
 #include <solid/deviceinterface.h>
 #endif
@@ -99,7 +99,7 @@ void WallpaperRenderThread::checkQueue()
         return;
     }
 
-#ifndef PLASMA_NO_SOLID
+#if !PLASMA_NO_SOLID
     const int numProcs = qMax(1, Solid::Device::listFromType(Solid::DeviceInterface::Processor).count());
 #else
     const int numProcs = 1;

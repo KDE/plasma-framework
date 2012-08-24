@@ -29,7 +29,7 @@
 
 #include <config-plasma.h>
 
-#ifndef PLASMA_NO_KDEWEBKIT
+#if !PLASMA_NO_KDEWEBKIT
 #include <kgraphicswebview.h>
 #define GraphicsWebViewBase KGraphicsWebView
 #else

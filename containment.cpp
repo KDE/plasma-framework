@@ -46,7 +46,7 @@
 
 #include <kwindowsystem.h>
 
-#ifndef PLASMA_NO_KIO
+#if !PLASMA_NO_KIO
 #include "kio/jobclasses.h" // for KIO::JobFlags
 #include "kio/job.h"
 #include "kio/scheduler.h"

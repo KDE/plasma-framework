@@ -188,7 +188,7 @@ Applet *AccessAppletJob::applet() const
 
 void AccessAppletJob::start()
 {
-#ifdef ENABLE_REMOTE_WIDGETS
+#if ENABLE_REMOTE_WIDGETS
 #ifndef NDEBUG
     kDebug() << "fetching a plasmoid from location = " << d->location;
 #endif

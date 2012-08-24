@@ -83,7 +83,7 @@ void ServicePrivate::associatedGraphicsWidgetDestroyed(QObject *obj)
 
 void ServicePrivate::publish(AnnouncementMethods methods, const QString &name, const KPluginInfo &metadata)
 {
-#ifdef ENABLE_REMOTE_WIDGETS
+#if ENABLE_REMOTE_WIDGETS
     if (!serviceProvider) {
         AuthorizationManager::self()->d->prepareForServicePublication();
 

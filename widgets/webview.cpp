@@ -29,7 +29,7 @@
 
 #include <config-plasma.h>
 
-#ifndef PLASMA_NO_KIO
+#if !PLASMA_NO_KIO
 #include <kio/accessmanager.h>
 #endif
 #include <kdebug.h>
@@ -78,7 +78,7 @@ WebView::WebView(QGraphicsItem *parent)
     QPalette palette = qApp->palette();
     palette.setBrush(QPalette::Base, Qt::transparent);
     d->webView->page()->setPalette(palette);
-#ifndef PLASMA_NO_KIO
+#if !PLASMA_NO_KIO
     d->webView->page()->setNetworkAccessManager(new KIO::AccessManager(d->webView->page()));
 #endif
 

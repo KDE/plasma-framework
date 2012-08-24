@@ -36,7 +36,9 @@
 #include <kurlmimedata.h>
 #include <kwindowsystem.h>
 
-#ifndef PLASMA_NO_KIO
+#include "config-plasma.h"
+
+#if !PLASMA_NO_KIO
 #include "kio/jobclasses.h" // for KIO::JobFlags
 #include "kio/job.h"
 #include "kio/scheduler.h"
@@ -407,7 +409,7 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
                 QObject::connect(AccessManager::self(), SIGNAL(finished(Plasma::AccessAppletJob*)),
                                  q, SLOT(remoteAppletReady(Plasma::AccessAppletJob*)));
             }
-#ifndef PLASMA_NO_KIO
+#if !PLASMA_NO_KIO
             else {
                 QMimeDatabase db;
                 QMimeType mime = db.mimeTypeForUrl(url);
@@ -530,7 +532,7 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
 
 void ContainmentPrivate::clearDataForMimeJob(KIO::Job *job)
 {
-#ifndef PLASMA_NO_KIO
+#if !PLASMA_NO_KIO
     QObject::disconnect(job, 0, q, 0);
     dropPoints.remove(job);
     KMenu *choices = dropMenus.take(job);
@@ -562,7 +564,7 @@ void ContainmentPrivate::remoteAppletReady(Plasma::AccessAppletJob *job)
 
 void ContainmentPrivate::dropJobResult(KJob *job)
 {
-#ifndef PLASMA_NO_KIO
+#if !PLASMA_NO_KIO
     KIO::TransferJob* tjob = dynamic_cast<KIO::TransferJob*>(job);
     if (!tjob) {
 #ifndef NDEBUG
@@ -584,7 +586,7 @@ void ContainmentPrivate::dropJobResult(KJob *job)
 
 void ContainmentPrivate::mimeTypeRetrieved(KIO::Job *job, const QString &mimeType)
 {
-#ifndef PLASMA_NO_KIO
+#if !PLASMA_NO_KIO
 #ifndef NDEBUG
     kDebug() << "Mimetype Job returns." << mimeType;
 #endif

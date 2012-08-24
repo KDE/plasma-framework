@@ -65,14 +65,14 @@
 #include <kwindowsystem.h>
 #include <kpushbutton.h>
 
-#ifndef PLASMA_NO_KUTILS
+#if !PLASMA_NO_KUTILS
 #include <kcmoduleinfo.h>
 #include <kcmoduleproxy.h>
 #else
 #include <kcmodule.h>
 #endif
 
-#ifndef PLASMA_NO_SOLID
+#if !PLASMA_NO_SOLID
 #include <solid/powermanagement.h>
 #endif
 
@@ -535,7 +535,7 @@ QString Applet::pluginName() const
 
 bool Applet::shouldConserveResources() const
 {
-#ifndef PLASMA_NO_SOLID
+#if !PLASMA_NO_SOLID
     return Solid::PowerManagement::appShouldConserveResources();
 #else
     return true;
@@ -1372,7 +1372,7 @@ void Applet::showConfigurationInterface()
             }
 
             foreach (const QString &kcm, kcmPlugins) {
-#ifndef PLASMA_NO_KUTILS
+#if !PLASMA_NO_KUTILS
                 KCModuleProxy *module = new KCModuleProxy(kcm);
                 if (module->realModule()) {
                     //preemptively load modules to prevent save() crashing on some kcms, like powerdevil ones
