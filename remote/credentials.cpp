@@ -22,7 +22,7 @@
 #include <QCryptographicHash>
 #include <QObject>
 
-#ifdef ENABLE_REMOTE_WIDGETS
+#if ENABLE_REMOTE_WIDGETS
 #include <QtCrypto>
 #endif
 
@@ -46,7 +46,7 @@ public:
         : id(id),
           name(name)
     {
-    #ifdef ENABLE_REMOTE_WIDGETS
+    #if ENABLE_REMOTE_WIDGETS
         if (!QCA::isSupported(REQUIRED_FEATURES)) {
             kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
             return;
@@ -68,7 +68,7 @@ public:
     QString id;
     QString name;
 
-#ifdef ENABLE_REMOTE_WIDGETS
+#if ENABLE_REMOTE_WIDGETS
     QCA::PublicKey publicKey;
     QCA::PrivateKey privateKey;
 #endif
@@ -104,7 +104,7 @@ Credentials &Credentials::operator=(const Credentials &other)
 
 Credentials Credentials::createCredentials(const QString &name)
 {
-#ifdef ENABLE_REMOTE_WIDGETS
+#if ENABLE_REMOTE_WIDGETS
     if (!QCA::isSupported(REQUIRED_FEATURES)) {
         kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
         return Credentials();
@@ -138,7 +138,7 @@ TrustLevel Credentials::trustLevel() const
 
 bool Credentials::isValid() const
 {
-#ifdef ENABLE_REMOTE_WIDGETS
+#if ENABLE_REMOTE_WIDGETS
     if (!QCA::isSupported(REQUIRED_FEATURES)) {
         kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
         return false;
@@ -170,7 +170,7 @@ QString Credentials::id() const
 
 bool Credentials::isValidSignature(const QByteArray &signature, const QByteArray &payload) 
 {
-#ifdef ENABLE_REMOTE_WIDGETS
+#if ENABLE_REMOTE_WIDGETS
     if (!QCA::isSupported(REQUIRED_FEATURES)) {
         kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
         return false;
@@ -199,7 +199,7 @@ bool Credentials::isValidSignature(const QByteArray &signature, const QByteArray
 
 bool Credentials::canSign() const
 {
-#ifdef ENABLE_REMOTE_WIDGETS
+#if ENABLE_REMOTE_WIDGETS
     if (!QCA::isSupported(REQUIRED_FEATURES)) {
         kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
         return false;
@@ -213,7 +213,7 @@ bool Credentials::canSign() const
 
 QByteArray Credentials::signMessage(const QByteArray &message)
 {
-#ifdef ENABLE_REMOTE_WIDGETS
+#if ENABLE_REMOTE_WIDGETS
     if(!QCA::isSupported(REQUIRED_FEATURES)) {
 #ifndef NDEBUG
         kDebug() << "RSA not supported";
@@ -235,7 +235,7 @@ QByteArray Credentials::signMessage(const QByteArray &message)
 
 Credentials Credentials::toPublicCredentials() const
 {
-#ifdef ENABLE_REMOTE_WIDGETS
+#if ENABLE_REMOTE_WIDGETS
     Credentials result(*this);
     result.d->privateKey = QCA::PrivateKey();
     return result;
@@ -246,7 +246,7 @@ Credentials Credentials::toPublicCredentials() const
 
 QDataStream &operator<<(QDataStream &out, const Credentials &myObj)
 {
-#ifdef ENABLE_REMOTE_WIDGETS
+#if ENABLE_REMOTE_WIDGETS
     if (!QCA::isSupported(REQUIRED_FEATURES)) {
         kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
         return out;
@@ -270,7 +270,7 @@ QDataStream &operator<<(QDataStream &out, const Credentials &myObj)
 
 QDataStream &operator>>(QDataStream &in, Credentials &myObj)
 {
-#ifdef ENABLE_REMOTE_WIDGETS
+#if ENABLE_REMOTE_WIDGETS
     if (!QCA::isSupported(REQUIRED_FEATURES)) {
         kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
         return in;
