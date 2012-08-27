@@ -101,7 +101,8 @@ function push(page, properties, replace, immediate) {
     currentPage = container.page;
 
     // perform page transition
-    immediate = immediate || !oldContainer;
+    //FIXME: this should be in for PageStack, out for PageRow?
+    //immediate = immediate || !oldContainer;
     var orientationChange = false;
     if (oldContainer) {
         orientationChange = orientationChanges(oldContainer.page, container.page);
@@ -138,7 +139,7 @@ function initPage(page, properties) {
             throw new Error("Error while loading page: " + pageComp.errorString());
         } else {
             // instantiate page from component
-            page = pageComp.createObject(container, properties || {});
+            page = pageComp.createObject(container.pageParent, properties || {});
         }
     } else {
         // copy properties to the page
@@ -157,15 +158,15 @@ function initPage(page, properties) {
     }
 
     // the page has to be reparented if
-    if (page.parent != container) {
-        page.parent = container;
+    if (page.parent != container.pageParent) {
+        page.parent = container.pageParent;
     }
 
     if (page.pageStack !== undefined) {
         page.pageStack = root;
     }
 
-    page.anchors.fill = container
+    page.anchors.fill = container.pageParent
 
     return container;
 }
@@ -184,8 +185,8 @@ function pop(page, immediate) {
         if (page !== undefined) {
             // an unwind target has been specified - pop until we find it
             while (page != container.page && pageStack.length > 1) {
-                container.cleanup();
                 pageStack.pop();
+                container.popExit(immediate, false);
                 container = pageStack[pageStack.length - 1];
             }
         }
