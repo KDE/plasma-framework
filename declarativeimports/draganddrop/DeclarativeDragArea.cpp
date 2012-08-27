@@ -224,8 +224,9 @@ void DeclarativeDragArea::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         delete item;
 
         drag->setPixmap(pixmap);
-        drag->setHotSpot(QPoint(0, 0)); // TODO: Make a property for that
     }
+
+    drag->setHotSpot(QPoint(drag->pixmap().width()/2, 0)); // TODO: Make a property for that
 
     //setCursor(Qt::OpenHandCursor);    //TODO? Make a property for the cursor
 
