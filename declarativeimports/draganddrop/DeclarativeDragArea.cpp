@@ -30,6 +30,7 @@
 #include <QApplication>
 #include <QGraphicsScene>
 #include <QGraphicsView>
+#include <QDeclarativeContext>
 
 /*!
     A DragArea is used to make an item draggable.
@@ -207,7 +208,7 @@ void DeclarativeDragArea::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         drag->setPixmap(QPixmap::fromImage(m_delegateImage));
     } else if (m_delegate) {
         // Render the delegate to a Pixmap
-        QDeclarativeItem* item = qobject_cast<QDeclarativeItem *>(m_delegate->create());
+        QDeclarativeItem* item = qobject_cast<QDeclarativeItem *>(m_delegate->create(m_delegate->creationContext()));
 
         QGraphicsScene scene;
         scene.addItem(item);
@@ -217,6 +218,7 @@ void DeclarativeDragArea::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
         QPainter painter(&pixmap);
         painter.setRenderHint(QPainter::Antialiasing);
+        painter.setRenderHint(QPainter::SmoothPixmapTransform);
         scene.render(&painter);
         painter.end();
         delete item;
