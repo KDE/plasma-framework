@@ -75,6 +75,7 @@ void SortFilterModel::setModel(QObject *source)
 
     connect(model, SIGNAL(modelReset()), this, SLOT(syncRoleNames()));
     QSortFilterProxyModel::setSourceModel(model);
+    sourceModelChanged(model);
 }
 
 
@@ -83,6 +84,7 @@ void SortFilterModel::setModel(QObject *source)
 void SortFilterModel::setFilterRegExp(const QString &exp)
 {
     QSortFilterProxyModel::setFilterRegExp(QRegExp(exp, Qt::CaseInsensitive));
+    filterRegExpChanged(exp);
 }
 
 QString SortFilterModel::filterRegExp() const

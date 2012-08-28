@@ -41,12 +41,12 @@ class SortFilterModel : public QSortFilterProxyModel
     /**
      * The source model of this sorting proxy model. It has to inherit QAbstractItemModel (ListModel is not supported)
      */
-    Q_PROPERTY(QObject *sourceModel READ sourceModel WRITE setModel)
+    Q_PROPERTY(QObject *sourceModel READ sourceModel WRITE setModel NOTIFY sourceModelChanged)
 
     /**
      * The regular expression for the filter, only items with their filterRole matching filterRegExp will be displayed
      */
-    Q_PROPERTY(QString filterRegExp READ filterRegExp WRITE setFilterRegExp)
+    Q_PROPERTY(QString filterRegExp READ filterRegExp WRITE setFilterRegExp NOTIFY filterRegExpChanged)
 
     /**
      * The role of the sourceModel on which filterRegExp must be applied.
@@ -105,6 +105,8 @@ public:
 
 Q_SIGNALS:
     void countChanged();
+    void sourceModelChanged(QObject *);
+    void filterRegExpChanged(const QString &);
 
 protected:
     int roleNameToId(const QString &name);
@@ -191,6 +193,8 @@ protected:
 
 Q_SIGNALS:
     void countChanged();
+    void sourceModelChanged(QObject *);
+    void filterRegExpChanged(const QString &);
 
 private Q_SLOTS:
     void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
