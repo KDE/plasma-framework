@@ -67,6 +67,10 @@ int SortFilterModel::roleNameToId(const QString &name)
 
 void SortFilterModel::setModel(QObject *source)
 {
+    if (source == sourceModel()) {
+        return;
+    }
+
     QAbstractItemModel *model = 0;
     if (source) {
         model = qobject_cast<QAbstractItemModel *>(source);
@@ -91,6 +95,9 @@ void SortFilterModel::setModel(QObject *source)
 
 void SortFilterModel::setFilterRegExp(const QString &exp)
 {
+    if (exp == filterRegExp()) {
+        return;
+    }
     QSortFilterProxyModel::setFilterRegExp(QRegExp(exp, Qt::CaseInsensitive));
     filterRegExpChanged(exp);
 }
