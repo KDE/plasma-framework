@@ -48,8 +48,8 @@ import "." 0.1
 Item {
     id: root
 
-    width: theme.defaultFont.mSize.width * 40
-    height: titleBar.childrenRect.height + contentItem.childrenRect.height + buttonItem.childrenRect.height + 8
+    width: Math.max(buttonItem.childrenRect.width + dialog.margins.left + dialog.margins.right, theme.defaultFont.mSize.width * 40)
+    height: titleBar.childrenRect.height + contentItem.childrenRect.height + buttonItem.childrenRect.height + 8 + dialog.margins.top + dialog.margins.bottom
 
     property alias title: titleBar.children
     property alias content: contentItem.children
@@ -136,7 +136,6 @@ Item {
 
             Item {
                 id: titleBar
-
                 height: childrenRect.height
                 anchors {
                     top: parent.top
@@ -149,7 +148,7 @@ Item {
                 id: contentItem
 
                 clip: true
-                onChildrenRectChanged: mainItem.width = Math.max(childrenRect.width, buttonItem.childrenRect.width)
+                onChildrenRectChanged: mainItem.width = Math.max(childrenRect.width, buttonItem.childrenRect.width) + dialog.margins.left + dialog.margins.right
                 anchors {
                     top: titleBar.bottom
                     left: parent.left
