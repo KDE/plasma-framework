@@ -41,7 +41,7 @@ class SortFilterModel : public QSortFilterProxyModel
     /**
      * The source model of this sorting proxy model. It has to inherit QAbstractItemModel (ListModel is not supported)
      */
-    Q_PROPERTY(QObject *sourceModel READ sourceModel WRITE setModel NOTIFY sourceModelChanged)
+    Q_PROPERTY(QAbstractItemModel *sourceModel READ sourceModel WRITE setModel NOTIFY sourceModelChanged)
 
     /**
      * The regular expression for the filter, only items with their filterRole matching filterRegExp will be displayed
@@ -74,8 +74,7 @@ public:
     SortFilterModel(QObject* parent=0);
     ~SortFilterModel();
 
-    //FIXME: find a way to make QML understnd QAbstractItemModel
-    void setModel(QObject *source);
+    void setModel(QAbstractItemModel *source);
 
     void setFilterRegExp(const QString &exp);
     QString filterRegExp() const;

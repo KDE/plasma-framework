@@ -84,6 +84,7 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qRegisterMetaType<Plasma::Service*>("Service");
     qmlRegisterInterface<Plasma::ServiceJob>("ServiceJob");
     qRegisterMetaType<Plasma::ServiceJob*>("ServiceJob");
+    qmlRegisterType<QAbstractItemModel>();
 
     /*qmlRegisterInterface<Plasma::DataSource>("DataSource");
     qRegisterMetaType<Plasma::DataSource*>("DataSource");*/

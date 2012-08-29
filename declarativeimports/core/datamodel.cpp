@@ -65,19 +65,10 @@ int SortFilterModel::roleNameToId(const QString &name)
     return m_roleIds.value(name);
 }
 
-void SortFilterModel::setModel(QObject *source)
+void SortFilterModel::setModel(QAbstractItemModel* model)
 {
-    if (source == sourceModel()) {
+    if (model == sourceModel()) {
         return;
-    }
-
-    QAbstractItemModel *model = 0;
-    if (source) {
-        model = qobject_cast<QAbstractItemModel *>(source);
-        if (!model) {
-            kWarning() << "Error: QAbstractItemModel type expected";
-            return;
-        }
     }
 
     if (sourceModel()) {
