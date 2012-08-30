@@ -1252,7 +1252,7 @@ void IconWidget::drawActionButtonBase(QPainter *painter, const QSize &size, int 
 
 void IconWidget::setText(const QString &text)
 {
-    d->text = KGlobal::locale()->removeAcceleratorMarker(text);
+    d->text = KLocale::global()->removeAcceleratorMarker(text);
     // cause a relayout
     d->currentSize = QSizeF(-1, -1);
     //try to relayout, needed if an icon was never shown before

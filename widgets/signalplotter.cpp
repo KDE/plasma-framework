@@ -1076,7 +1076,7 @@ void SignalPlotter::drawAxisText(QPainter *p, int top, int h)
             value = d->niceVertMax / d->scaledBy - y * stepsize;
         }
 
-        QString number = KGlobal::locale()->formatNumber(value, d->precision);
+        QString number = KLocale::global()->formatNumber(value, d->precision);
         val = QString("%1 %2").arg(number, d->unit);
         p->drawText(6, y_coord - 3, val);
     }
@@ -1106,7 +1106,7 @@ QString SignalPlotter::lastValueAsString(uint i) const
         return QString();
     }
     double value = d->plotData.first()[i] / d->scaledBy; // retrieve the newest value for this plot then scale it correct
-    QString number = KGlobal::locale()->formatNumber(value, (value >= 100)?0:2);
+    QString number = KLocale::global()->formatNumber(value, (value >= 100)?0:2);
     return QString("%1 %2").arg(number, d->unit);
 }
 

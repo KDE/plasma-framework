@@ -551,7 +551,7 @@ void WallpaperPrivate::setupScriptSupport()
     const QString translationsPath = package->filePath("translations");
     if (!translationsPath.isEmpty()) {
         KGlobal::dirs()->addResourceDir("locale", translationsPath);
-        KGlobal::locale()->insertCatalog(wallpaperDescription.pluginName());
+        KLocale::global()->insertCatalog(wallpaperDescription.pluginName());
     }
 }
 
