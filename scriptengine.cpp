@@ -676,8 +676,24 @@ QStringList ScriptEngine::pendingUpdateScripts()
 QStringList ScriptEngine::defaultLayoutScripts()
 {
     const QString appName = KGlobal::activeComponent().aboutData()->appName();
-    QStringList scripts = KGlobal::dirs()->findAllResources("data", appName + "/init/*.js");
-    scripts.sort();
+    QStringList appNameDirs = KGlobal::dirs()->findDirs("data", appName);
+    QStringList scripts;
+    QDir appDir;
+    QFileInfoList scriptList;
+
+    foreach (const QString &appNameDir, appNameDirs) {
+        appDir.setPath(appNameDir + QLatin1String("init/"));
+        if (appDir.exists()) {
+            scriptList = appDir.entryInfoList(QStringList("*.js"),
+                                            QDir::NoFilter,
+                                            QDir::Name);
+            foreach (const QFileInfo &script, scriptList) {
+                if (script.exists()) {
+                    scripts.append(script.absoluteFilePath());
+                }
+            }
+        }
+    }
 
     QStringList scriptPaths;
 
