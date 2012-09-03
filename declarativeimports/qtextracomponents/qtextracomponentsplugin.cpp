@@ -27,7 +27,7 @@
 #include "qimageitem.h"
 #include "qiconitem.h"
 #include "mouseeventlistener.h"
-
+#include "columnproxymodel.h"
 
 void QtExtraComponentsPlugin::registerTypes(const char *uri)
 {
@@ -37,6 +37,10 @@ void QtExtraComponentsPlugin::registerTypes(const char *uri)
     qmlRegisterType<QImageItem>(uri, 0, 1, "QImageItem");
     qmlRegisterType<QIconItem>(uri, 0, 1, "QIconItem");
     qmlRegisterType<MouseEventListener>(uri, 0, 1, "MouseEventListener");
+    qmlRegisterType<ColumnProxyModel>(uri, 0, 1, "ColumnProxyModel");
+    
+    qmlRegisterType<QAbstractItemModel>();
+    qRegisterMetaType<QModelIndex>("QModelIndex");
 }
 
 
