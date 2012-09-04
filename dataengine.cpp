@@ -705,7 +705,7 @@ void DataEnginePrivate::setupScriptSupport()
     const QString translationsPath = package->filePath("translations");
     if (!translationsPath.isEmpty()) {
         KGlobal::dirs()->addResourceDir("locale", translationsPath);
-        KGlobal::locale()->insertCatalog(dataEngineDescription.pluginName());
+        KLocale::global()->insertCatalog(dataEngineDescription.pluginName());
     }
 }
 
