@@ -19,7 +19,6 @@
 
 #include "effectwatcher_p.h"
 
-#include <kapplication.h>
 #include <kdebug.h>
 
 #if 0 // Port to Qt5 native filters
