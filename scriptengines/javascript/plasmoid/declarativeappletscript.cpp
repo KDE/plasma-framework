@@ -451,6 +451,10 @@ void DeclarativeAppletScript::setupObjects()
     ByteArrayClass *baClass = new ByteArrayClass(m_engine);
     global.setProperty("ByteArray", baClass->constructor());
 
+    // Add stuff from KDE libs
+    qScriptRegisterSequenceMetaType<KUrl::List>(m_engine);
+    global.setProperty("Url", constructKUrlClass(m_engine));
+
     // Add stuff from Plasma
     global.setProperty("Svg", m_engine->newFunction(DeclarativeAppletScript::newPlasmaSvg));
     global.setProperty("FrameSvg", m_engine->newFunction(DeclarativeAppletScript::newPlasmaFrameSvg));
