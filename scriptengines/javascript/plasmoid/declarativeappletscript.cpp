@@ -150,7 +150,7 @@ void DeclarativeAppletScript::qmlCreationFinished()
     if (pa) {
         QDeclarativeComponent *iconComponent = m_declarativeWidget->rootObject()->property("compactRepresentation").value<QDeclarativeComponent *>();
         if (iconComponent) {
-            QDeclarativeItem *declarativeIcon = qobject_cast<QDeclarativeItem *>(iconComponent->create(m_declarativeWidget->engine()->rootContext()));
+            QDeclarativeItem *declarativeIcon = qobject_cast<QDeclarativeItem *>(iconComponent->create(iconComponent->creationContext()));
             if (declarativeIcon) {
                 pa->setPopupIcon(QIcon());
                 QGraphicsLinearLayout *lay = new QGraphicsLinearLayout(a);
