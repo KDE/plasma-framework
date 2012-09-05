@@ -153,6 +153,7 @@ Item {
         }
     }
     PlasmaCore.FrameSvgItem {
+        id: tooltip
         imagePath: "widgets/tooltip"
         width: sectionLabel.paintedWidth + margins.left + margins.right
         height: sectionLabel.paintedHeight + margins.top + margins.bottom
@@ -194,11 +195,22 @@ Item {
 
     }
 
+    Timer {
+        id: dirtyTimer
+        interval: 250
+        onTriggered: {
+            Sections.initSectionData(listView);
+            internal.modelDirty = false;
+            tooltip.visible = Sections._sections.length > 1
+        }
+    }
     QtObject {
         id: internal
 
+        property bool modelDirty: false
         function initDirtyObserver() {
             Sections.initSectionData(listView);
+            tooltip.visible = Sections._sections.length > 1
             function dirtyObserver() {
                 if (!internal.modelDirty) {
                     internal.modelDirty = true;

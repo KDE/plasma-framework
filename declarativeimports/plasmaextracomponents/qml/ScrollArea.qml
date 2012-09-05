@@ -64,7 +64,9 @@ Item {
     Connections {
         target: flickableItem
         onContentHeightChanged: internal.checkVerticalScrollBar()
+        onHeightChanged: internal.checkVerticalScrollBar()
         onContentWidthChanged: internal.checkHorizontalScrollBar()
+        onWidthChanged: internal.checkHorizontalScrollBar()
     }
     QtObject {
         id: internal
@@ -80,7 +82,7 @@ Item {
             if (flickableItem.contentHeight > flickableItem.height) {
                 //Do we have to change the type?
                 //from section to normal
-                if ((!flickableItem.section || !flickableItem.section.property) &&
+                if ((!flickableItem.model || flickableItem.model.get === undefined || !flickableItem.section || !flickableItem.section.property) &&
                     (!verticalScrollBar || verticalScrollBar.orientation === undefined)) {
                     if (verticalScrollBar) verticalScrollBar.destroy()
                     verticalScrollBar = verticalScrollBarComponent.createObject(root)
@@ -90,12 +92,16 @@ Item {
                     if (verticalScrollBar) verticalScrollBar.destroy()
                     verticalScrollBar = sectionScrollerComponent.createObject(root)
                 }
+            }
 
-                if (verticalScrollBar.interactive) {
-                    flickableItem.anchors.leftMargin = verticalScrollBar.width
-                } else {
-                    flickableItem.anchors.leftMargin = 0
-                }
+            //undefined in case of SectionScroller
+            if ((flickableItem.contentHeight > flickableItem.height) &&
+                (verticalScrollBar.interactive || (verticalScrollBar.orientation === undefined &&
+                //FIXME: heuristic on width to distinguish the touch sectionscroller
+                verticalScrollBar.width < 30))) {
+                flickableItem.anchors.rightMargin = verticalScrollBar.width
+            } else {
+                flickableItem.anchors.rightMargin = 0
             }
         }
 
@@ -106,13 +112,16 @@ Item {
             }
 
             if (flickableItem.contentWidth > flickableItem.width) {
-                horizontalScrollBar = horizontalScrollBarComponent.createObject(root)
-
-                if (verticalScrollBar.interactive) {
-                    flickableItem.anchors.leftMargin = verticalScrollBar.width
-                } else {
-                    flickableItem.anchors.leftMargin = 0
+                if (!horizontalScrollBar) {
+                    horizontalScrollBar = horizontalScrollBarComponent.createObject(root)
                 }
+            }
+
+            if ((flickableItem.contentWidth > flickableItem.width) &&
+                horizontalScrollBar.interactive) {
+                flickableItem.anchors.bottomMargin = horizontalScrollBar.height
+            } else {
+                flickableItem.anchors.bottomMargin = 0
             }
         }
     }
@@ -121,6 +130,7 @@ Item {
         ScrollBar {
             flickableItem: root.flickableItem
             orientation: Qt.Vertical
+            property bool isScrollBar: true
             anchors {
                 left: undefined
                 top: parent.top
@@ -146,6 +156,7 @@ Item {
         id: sectionScrollerComponent
         SectionScroller {
             listView: root.flickableItem
+            property bool isScrollBar: false
             anchors {
                 left: undefined
                 top: parent.top

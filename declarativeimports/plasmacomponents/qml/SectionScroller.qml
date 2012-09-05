@@ -85,7 +85,7 @@ Item {
         }
     }
 
-    width: 22
+    width: 18
     Behavior on opacity {
         NumberAnimation {
             duration: 250
@@ -120,12 +120,12 @@ Item {
         interactive: true
     }
     PlasmaCore.FrameSvgItem {
+        id: tooltip
         imagePath: "widgets/tooltip"
-        width: sectionLabel.paintedWidth + margins.left + margins.right
-        height: sectionLabel.paintedHeight + margins.top + margins.bottom
+        width: sectionLabel.width + margins.left + margins.right
+        height: sectionLabel.height + margins.top + margins.bottom
         Label {
             id: sectionLabel
-            font.pointSize: theme.defaultFont.pointSize*3
             x: parent.margins.left
             y: parent.margins.top
         }
@@ -134,7 +134,7 @@ Item {
             //verticalCenter: handle.verticalCenter
             right: parent.left
         }
-        opacity: sectionLabel.text && scrollBar.pressed?1:0
+        opacity: sectionLabel.text && scrollBar.pressed ? 1 : 0
         Behavior on opacity {
             NumberAnimation {
                 duration: 250
@@ -143,11 +143,22 @@ Item {
     }
 
 
+    Timer {
+        id: dirtyTimer
+        interval: 250
+        onTriggered: {
+            Sections.initSectionData(listView);
+            internal.modelDirty = false;
+            tooltip.visible = Sections._sections.length > 1
+        }
+    }
     QtObject {
         id: internal
 
+        property bool modelDirty: false
         function initDirtyObserver() {
             Sections.initSectionData(listView);
+            tooltip.visible = Sections._sections.length > 1
             function dirtyObserver() {
                 if (!internal.modelDirty) {
                     internal.modelDirty = true;
