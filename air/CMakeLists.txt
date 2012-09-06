@@ -21,3 +21,6 @@ install( FILES ${translucent_dialogs} DESTINATION ${DATA_INSTALL_DIR}/desktopthe
 
 FILE(GLOB icons icons/*.svgz)
 install( FILES ${icons} DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/default/icons/ )
+
+FILE(GLOB icons toolbar-icons/*.svgz)
+install( FILES ${icons} DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/default/toolbar-icons/ )
