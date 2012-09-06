@@ -139,10 +139,10 @@ Item {
         Item {
             anchors.fill: parent
             property QtObject margins: QtObject {
-                property int left: 8
-                property int top: 8
-                property int right: 8
-                property int bottom: 8
+                property int left: width/15
+                property int top: width/15
+                property int right: width/15
+                property int bottom: width/15
             }
             Private.RoundShadow {
                 anchors.fill: parent
@@ -227,6 +227,7 @@ Item {
 
         onPressed: internal.userPressed = true
         onReleased: internal.userPressed = false
+        onCanceled: internal.userPressed = false
         onClicked: internal.clickButton()
     }
 }
