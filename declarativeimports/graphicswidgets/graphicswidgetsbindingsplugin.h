@@ -24,6 +24,17 @@
 
 #include <QDeclarativeExtensionPlugin>
 
+#include <Plasma/SignalPlotter>
+
+class SignalPlotter : public Plasma::SignalPlotter
+{
+    Q_OBJECT
+
+public:
+    SignalPlotter(QGraphicsItem *parent = 0);
+    ~SignalPlotter();
+    Q_INVOKABLE void addSample(const QVariantList &samples);
+};
 
 class GraphicsWidgetsBindingsPlugin : public QDeclarativeExtensionPlugin
 {

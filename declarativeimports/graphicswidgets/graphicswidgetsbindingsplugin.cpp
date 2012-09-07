@@ -39,7 +39,6 @@
 #include <Plasma/ScrollBar>
 #include <Plasma/ScrollWidget>
 #include <Plasma/Separator>
-#include <Plasma/SignalPlotter>
 #include <Plasma/Slider>
 #include <Plasma/SpinBox>
 #include <Plasma/SvgWidget>
@@ -52,11 +51,29 @@
 
 #include "declarativetabbar.h"
 
+SignalPlotter::SignalPlotter(QGraphicsItem *parent)
+    : Plasma::SignalPlotter(parent)
+{}
+
+SignalPlotter::~SignalPlotter()
+{}
+
+void SignalPlotter::addSample(const QVariantList &samples)
+{
+    QList<double> doubleSamples;
+    foreach (const QVariant &sampleItem, samples) {
+        doubleSamples << sampleItem.toDouble();
+    }
+    if (plotColors().size() == doubleSamples.size()) {
+        Plasma::SignalPlotter::addSample(doubleSamples);
+    }
+}
 
 void GraphicsWidgetsBindingsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.graphicswidgets"));
     qmlRegisterType<DeclarativeTabBar>(uri, 0, 1, "TabBar");
+    qmlRegisterType<SignalPlotter>(uri, 0, 1, "SignalPlotter");
 
     qmlRegisterType<Plasma::BusyWidget>(uri, 0, 1, "BusyWidget");
     qmlRegisterType<Plasma::CheckBox>(uri, 0, 1, "CheckBox");
@@ -74,7 +91,6 @@ void GraphicsWidgetsBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterType<Plasma::ScrollBar>(uri, 0, 1, "ScrollBar");
     qmlRegisterType<Plasma::ScrollWidget>(uri, 0, 1, "ScrollWidget");
     qmlRegisterType<Plasma::Separator>(uri, 0, 1, "Separator");
-    qmlRegisterType<Plasma::SignalPlotter>(uri, 0, 1, "SignalPlotter");
     qmlRegisterType<Plasma::Slider>(uri, 0, 1, "Slider");
     qmlRegisterType<Plasma::SpinBox>(uri, 0, 1, "SpinBox");
     qmlRegisterType<Plasma::SvgWidget>(uri, 0, 1, "SvgWidget");
