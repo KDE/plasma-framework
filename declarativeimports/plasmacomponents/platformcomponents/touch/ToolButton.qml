@@ -139,10 +139,10 @@ Item {
         Item {
             anchors.fill: parent
             property QtObject margins: QtObject {
-                property int left: width/15
-                property int top: width/15
-                property int right: width/15
-                property int bottom: width/15
+                property int left: width/8
+                property int top: width/8
+                property int right: width/8
+                property int bottom: width/8
             }
             Private.RoundShadow {
                 anchors.fill: parent
