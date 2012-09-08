@@ -682,7 +682,7 @@ void SignalPlotter::drawWidget(QPainter *p, uint w, uint height, int horizontalS
         drawTopBarContents(p, separatorX, topBarWidth, top -1);
     }
 
-    p->setClipRect(0, top, w, h);
+    p->setClipRect(0, top, w, h, Qt::IntersectClip);
     // Draw scope-like grid vertical lines
     if (d->verticalLinesScroll && d->showVerticalLines && w > 60) {
         drawVerticalLines(p, top, w, h);
