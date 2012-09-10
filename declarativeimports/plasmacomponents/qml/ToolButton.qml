@@ -87,10 +87,10 @@ Item {
         if (label.paintedWidth == 0) {
             return implicitHeight
         } else {
-            return icon.width + label.paintedWidth + surface.margins.left + surface.margins.right + ((icon.valid) ? surface.margins.left : 0)
+            return icon.width + label.paintedWidth + delegate.margins.left + delegate.margins.right + ((icon.valid) ? delegate.margins.left : 0)
         }
     }
-    implicitHeight: Math.max(theme.defaultFont.mSize.height*1.6, Math.max(icon.height, label.paintedHeight) + surface.margins.top/2 + surface.margins.bottom/2)
+    implicitHeight: Math.max(theme.defaultFont.mSize.height*1.6, Math.max(icon.height, label.paintedHeight) + delegate.margins.top/2 + delegate.margins.bottom/2)
 
     // TODO: needs to define if there will be specific graphics for
     //     disabled buttons
@@ -146,32 +146,84 @@ Item {
         }
     }
 
-    Private.ButtonShadow {
-        id: shadow
-        anchors.fill: parent
-        visible: !flat
+    Loader {
+        id: delegate
+        anchors.fill:parent
+        property QtObject margins: item.margins
+        property string shadowState: "shadow"
+        sourceComponent: {
+            if (label.paintedWidth == 0 && !flat) {
+                return roundButtonComponent
+            } else {
+                return buttonComponent
+            }
+        }
     }
 
-    PlasmaCore.FrameSvgItem {
-        id: surface
+    Component {
+        id: buttonComponent
+        Item {
+            anchors.fill: parent
+            property alias margins: surface.margins
+            Private.ButtonShadow {
+                id: shadow
+                anchors.fill: parent
+                visible: !flat
+                state: delegate.shadowState
+            }
 
-        anchors.fill: parent
-        imagePath: "widgets/button"
-        prefix: (internal.userPressed || checked) ? "pressed" : "normal"
-        //internal: if there is no hover status, don't paint on mouse over in touchscreens
-        opacity: (internal.userPressed || checked || !flat || parent.activeFocus || (shadow.hasOverState && mouse.containsMouse)) ? 1 : 0
-        Behavior on opacity {
-            PropertyAnimation { duration: 100 }
+            PlasmaCore.FrameSvgItem {
+                id: surface
+
+                anchors.fill: parent
+                imagePath: "widgets/button"
+                prefix: (internal.userPressed || checked) ? "pressed" : "normal"
+                //internal: if there is no hover status, don't paint on mouse over in touchscreens
+                opacity: (internal.userPressed || checked || !flat || (shadow.hasOverState && mouse.containsMouse)) ? 1 : 0
+                Behavior on opacity {
+                    PropertyAnimation { duration: 250 }
+                }
+            }
+        }
+    }
+
+    Component {
+        id: roundButtonComponent
+        Item {
+            anchors.fill: parent
+            property QtObject margins: QtObject {
+                property int left: width/8
+                property int top: width/8
+                property int right: width/8
+                property int bottom: width/8
+            }
+            Private.RoundShadow {
+                anchors.fill: parent
+                state: delegate.shadowState
+            }
+
+            PlasmaCore.Svg {
+                id: buttonSvg
+                imagePath: "widgets/actionbutton"
+            }
+
+            PlasmaCore.SvgItem {
+                id: buttonItem
+                svg: buttonSvg
+                elementId: (internal.userPressed || checked) ? "pressed" : "normal"
+                width: parent.height
+                height: width
+            }
         }
     }
 
     Item {
         anchors {
             fill: parent
-            leftMargin: surface.margins.left
-            topMargin: surface.margins.top
-            rightMargin: surface.margins.right
-            bottomMargin: surface.margins.bottom
+            leftMargin: delegate.margins.left
+            topMargin: delegate.margins.top
+            rightMargin: delegate.margins.right
+            bottomMargin: delegate.margins.bottom
         }
 
         Private.IconLoader {
@@ -199,7 +251,7 @@ Item {
                 top: parent.top
                 bottom: parent.bottom
                 left: icon.valid ? icon.right : parent.left
-                leftMargin: icon.valid ? surface.margins.left : 0
+                leftMargin: icon.valid ? delegate.margins.left : 0
                 right: parent.right
             }
             font.capitalization: theme.defaultFont.capitalization
@@ -228,21 +280,25 @@ Item {
 
         onPressed: internal.userPressed = true
         onReleased: internal.userPressed = false
+        onCanceled: {
+            internal.userPressed = false
+            delegate.shadowState = "shadow"
+        }
         onClicked: internal.clickButton()
 
         onEntered: {
             if (!flat) {
-                shadow.state = "hover"
+                delegate.shadowState = "hover"
             }
         }
         onExited: {
             if (!flat) {
                 if (button.activeFocus) {
-                    shadow.state = "focus"
+                    delegate.shadowState = "focus"
                 } else if (checked) {
-                    shadow.state = "hidden"
+                    delegate.shadowState = "hidden"
                 } else {
-                    shadow.state = "shadow"
+                    delegate.shadowState = "shadow"
                 }
             }
         }
