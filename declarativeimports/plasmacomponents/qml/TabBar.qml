@@ -90,6 +90,7 @@ FocusScope {
     PlasmaCore.FrameSvgItem {
         id: buttonFrame
 
+        visible: currentTab !== null
         x: currentTab.x + backgroundFrame.margins.left
         y: backgroundFrame.margins.top
         width: currentTab.width + buttonFrame.margins.left + buttonFrame.margins.right
@@ -112,11 +113,6 @@ FocusScope {
             topMargin: backgroundFrame.margins.top + buttonFrame.margins.top
             rightMargin: backgroundFrame.margins.right + buttonFrame.margins.right
             bottomMargin: backgroundFrame.margins.bottom + buttonFrame.margins.bottom
-        }
-        Component.onCompleted: {
-            if (!root.currentTab) {
-                root.currentTab = tabBarLayout.children[0]
-            }
         }
     }
 }

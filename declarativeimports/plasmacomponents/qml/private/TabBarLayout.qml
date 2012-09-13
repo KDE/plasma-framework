@@ -146,6 +146,16 @@ Item {
             }
             root.implicitWidth = contentWidth
             root.implicitHeight = contentHeight
+            if (root.parent.currentTab === null) {
+                //99% of the cases this loop will be length 1 but a tabbar can also have other children, such as Repeater
+                for (var i = 0; i < tabBarLayout.children.length; ++i) {
+                    //anything with a checked property may act as tabbutton
+                    if (tabBarLayout.children[i].checked !== undefined) {
+                        root.parent.currentTab = tabBarLayout.children[i]
+                        break;
+                    }
+                }
+            }
         }
     }
 }
