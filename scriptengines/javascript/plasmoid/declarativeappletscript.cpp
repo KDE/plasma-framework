@@ -389,7 +389,7 @@ void DeclarativeAppletScript::executeAction(const QString &name)
     }
 
     if (m_declarativeWidget->rootObject()) {
-        m_declarativeWidget->rootObject()->metaObject()->invokeMethod("action_" + name);
+         QMetaObject::invokeMethod(m_declarativeWidget->rootObject(), QString("action_" + name).toLatin1(), Qt::DirectConnection);
     }
 }
 
