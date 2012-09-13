@@ -388,9 +388,8 @@ void DeclarativeAppletScript::executeAction(const QString &name)
         return;
     }
 
-    const QString func("action_" + name);
-    if (!m_env->callEventListeners(func)) {
-        callPlasmoidFunction(func, QScriptValueList(), m_env);
+    if (m_declarativeWidget->rootObject()) {
+        m_declarativeWidget->rootObject()->metaObject()->invokeMethod("action_" + name);
     }
 }
 
