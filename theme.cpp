@@ -135,7 +135,7 @@ public:
             QString groupName = "Theme";
 
             if (!useGlobal) {
-                QString app = KGlobal::mainComponent().componentName();
+                QString app = QCoreApplication::applicationName();
 
                 if (!app.isEmpty()) {
 #ifndef NDEBUG
