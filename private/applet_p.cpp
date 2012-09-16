@@ -566,7 +566,7 @@ QString AppletPrivate::parentAppConstraint(const QString &parentApp)
 {
     if (parentApp.isEmpty()) {
         return QString("((not exist [X-KDE-ParentApp] or [X-KDE-ParentApp] == '') or [X-KDE-ParentApp] == '%1')")
-                      .arg(KGlobal::mainComponent().aboutData()->appName());
+                      .arg(KComponentData::mainComponent().aboutData()->appName());
     }
 
     return QString("[X-KDE-ParentApp] == '%1'").arg(parentApp);
