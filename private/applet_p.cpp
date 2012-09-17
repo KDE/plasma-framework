@@ -45,6 +45,7 @@
 #include <kaction.h>
 #include <kkeysequencewidget.h>
 #include <kstandarddirs.h>
+#include <kaboutdata.h>
 #include <qstandardpaths.h>
 
 namespace Plasma

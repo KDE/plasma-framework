@@ -451,7 +451,7 @@ CoronaBasePrivate::CoronaBasePrivate(CoronaBase *corona)
       config(0),
       actions(corona)
 {
-    if (KGlobal::hasMainComponent()) {
+    if (QCoreApplication::instance()) {
         configName = QCoreApplication::instance()->applicationName() + "-appletsrc";
     } else {
         configName = "plasma-appletsrc";

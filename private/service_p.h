@@ -30,6 +30,7 @@
 #include <QSet>
 
 #include <kplugininfo.h>
+#include <klocalizedstring.h>
 
 #include <dnssd/publicservice.h>
 #include <dnssd/servicebrowser.h>

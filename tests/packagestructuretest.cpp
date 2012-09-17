@@ -22,6 +22,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
+#include <klocalizedstring.h>
 
 #include "applet.h"
 #include "pluginloader.h"

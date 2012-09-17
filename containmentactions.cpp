@@ -33,6 +33,7 @@
 #include <QGraphicsSceneWheelEvent>
 
 #include <kdebug.h>
+#include <klocalizedstring.h>
 #include <kservicetypetrader.h>
 
 
