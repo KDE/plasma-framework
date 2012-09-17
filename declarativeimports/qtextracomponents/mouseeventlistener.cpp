@@ -28,7 +28,8 @@
 MouseEventListener::MouseEventListener(QDeclarativeItem *parent)
     : QDeclarativeItem(parent),
     m_pressed(false),
-    m_pressAndHoldEvent(0)
+    m_pressAndHoldEvent(0),
+    m_lastEvent(0)
 {
     qmlRegisterType<KDeclarativeMouseEvent>();
     qmlRegisterType<KDeclarativeWheelEvent>();
@@ -43,6 +44,10 @@ MouseEventListener::~MouseEventListener()
 
 void MouseEventListener::mousePressEvent(QGraphicsSceneMouseEvent *me)
 {
+    if (m_lastEvent == me) {
+        return;
+    }
+
     //FIXME: when a popup window is visible: a click anywhere hides it: but the old qgraphicswidget will continue to think it's under the mouse
     //doesn't seem to be any good way to properly reset this.
     //this msolution will still caused a missed click after the popup is gone, but gets the situation unblocked.
@@ -63,12 +68,20 @@ void MouseEventListener::mousePressEvent(QGraphicsSceneMouseEvent *me)
 
 void MouseEventListener::mouseMoveEvent(QGraphicsSceneMouseEvent *me)
 {
+    if (m_lastEvent == me) {
+        return;
+    }
+
     KDeclarativeMouseEvent dme(me->pos().x(), me->pos().y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
     emit positionChanged(&dme);
 }
 
 void MouseEventListener::mouseReleaseEvent(QGraphicsSceneMouseEvent *me)
 {
+    if (m_lastEvent == me) {
+        return;
+    }
+
     KDeclarativeMouseEvent dme(me->pos().x(), me->pos().y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
     m_pressed = false;
     emit released(&dme);
@@ -76,6 +89,10 @@ void MouseEventListener::mouseReleaseEvent(QGraphicsSceneMouseEvent *me)
 
 void MouseEventListener::wheelEvent(QGraphicsSceneWheelEvent *we)
 {
+    if (m_lastEvent == we) {
+        return;
+    }
+
     KDeclarativeWheelEvent dwe(we->pos(), we->screenPos(), we->delta(), we->buttons(), we->modifiers(), we->orientation());
     emit wheelMoved(&dwe);
 }
@@ -97,6 +114,8 @@ bool MouseEventListener::sceneEventFilter(QGraphicsItem *item, QEvent *event)
     if (!isEnabled()) {
         return false;
     }
+
+    m_lastEvent = event;
 
     switch (event->type()) {
     case QEvent::GraphicsSceneMousePress: {
