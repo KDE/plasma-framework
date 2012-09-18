@@ -64,6 +64,7 @@ K_EXPORT_PLASMA_APPLETSCRIPTENGINE(declarativeappletscript, DeclarativeAppletScr
 
 QScriptValue constructIconClass(QScriptEngine *engine);
 QScriptValue constructKUrlClass(QScriptEngine *engine);
+QScriptValue constructQPointClass(QScriptEngine *engine);
 void registerSimpleAppletMetaTypes(QScriptEngine *engine);
 DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariantList &args)
     : AbstractJsAppletScript(parent, args),
@@ -449,6 +450,7 @@ void DeclarativeAppletScript::setupObjects()
     //TODO: move to libkdeclarative?
     ByteArrayClass *baClass = new ByteArrayClass(m_engine);
     global.setProperty("ByteArray", baClass->constructor());
+    global.setProperty("QPoint", constructQPointClass(m_engine));
 
     // Add stuff from KDE libs
     qScriptRegisterSequenceMetaType<KUrl::List>(m_engine);
