@@ -189,9 +189,9 @@ void FullScreenWindow::setMainItem(QGraphicsObject *mainItem)
             mainItem->setParentItem(0);
             mainItem->setParent(this);
             m_scene = mainItem->scene();
+            m_view->resize(mainItem->boundingRect().size().toSize());
+            mainItem->installEventFilter(this);
         }
-
-        mainItem->installEventFilter(this);
 
         //if this is called in Compenent.onCompleted we have to wait a loop the item is added to a scene
         QTimer::singleShot(0, this, SLOT(syncViewToMainItem()));
@@ -243,9 +243,12 @@ void FullScreenWindow::syncViewToMainItem()
     m_view->setScene(scene);
 
 
+    QRectF itemGeometry(QPointF(m_mainItem.data()->x(), m_mainItem.data()->y()),
+                        QSizeF(m_mainItem.data()->boundingRect().size()));
     if (m_declarativeItemContainer) {
-        m_view->resize(m_declarativeItemContainer->size().toSize());
+        m_view->resize(itemGeometry.size().toSize());
         m_view->setSceneRect(m_declarativeItemContainer->geometry());
+
     } else {
         QRectF itemGeometry(QPointF(m_mainItem.data()->x(), m_mainItem.data()->y()),
                         QSizeF(m_mainItem.data()->boundingRect().size()));
