@@ -48,7 +48,7 @@ import "." 0.1
 Item {
     id: root
 
-    width: Math.max(buttonItem.childrenRect.width + dialog.margins.left + dialog.margins.right, theme.defaultFont.mSize.width * 40)
+    width: Math.max(buttonItem.childrenRect.width + dialog.margins.left + dialog.margins.right + theme.defaultFont.mSize.width * 4, theme.defaultFont.mSize.width * 45)
     height: titleBar.childrenRect.height + contentItem.childrenRect.height + buttonItem.childrenRect.height + 8 + dialog.margins.top + dialog.margins.bottom
 
     property alias title: titleBar.children
