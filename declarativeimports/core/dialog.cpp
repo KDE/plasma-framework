@@ -203,6 +203,14 @@ void DialogProxy::setVisible(const bool visible)
         const QSize s = m_dialog->size();
         m_dialog->resize(0,0);
         m_dialog->resize(s);
+
+        const QRect workArea(KWindowSystem::workArea());
+        if (!workArea.contains(m_dialog->geometry())) {
+            m_dialog->move(qBound(workArea.left(), m_dialog->x(), workArea.right() - m_dialog->width()),
+                             qBound(workArea.top(), m_dialog->y(), workArea.bottom() - m_dialog->height())
+            );
+        }
+
         m_dialog->setVisible(visible);
         if (visible) {
             m_dialog->raise();
