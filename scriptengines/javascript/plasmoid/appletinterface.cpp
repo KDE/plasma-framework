@@ -539,6 +539,16 @@ bool PopupAppletInterface::isPassivePopup() const
     return popupApplet()->isPassivePopup();
 }
 
+bool PopupAppletInterface::isPopupShowing() const
+{
+    return popupApplet()->isPopupShowing();
+}
+
+void PopupAppletInterface::setPopupShowing(bool show)
+{
+    show ? popupApplet()->showPopup() : popupApplet()->hidePopup();
+}
+
 void PopupAppletInterface::togglePopup()
 {
     popupApplet()->togglePopup();

@@ -365,6 +365,7 @@ class PopupAppletInterface : public APPLETSUPERCLASS
     Q_PROPERTY(bool passivePopup READ isPassivePopup WRITE setPassivePopup)
     Q_PROPERTY(QGraphicsWidget *popupWidget READ popupWidget WRITE setPopupWidget)
     Q_PROPERTY(QVariantHash popupIconToolTip READ popupIconToolTip WRITE setPopupIconToolTip NOTIFY popupIconToolTipChanged)
+    Q_PROPERTY(bool popupShowing READ isPopupShowing WRITE setPopupShowing NOTIFY popupEvent)
 
 public:
     PopupAppletInterface(AbstractJsAppletScript *parent);
@@ -380,11 +381,14 @@ public:
     void setPassivePopup(bool passive);
     bool isPassivePopup() const;
 
+    bool isPopupShowing() const;
+    void setPopupShowing(bool show);
+
     void setPopupWidget(QGraphicsWidget *widget);
     QGraphicsWidget *popupWidget();
 
 Q_SIGNALS:
-    void popupEvent(bool);
+    void popupEvent(bool popupShowing);
     void popupIconToolTipChanged();
 
 public Q_SLOTS:
