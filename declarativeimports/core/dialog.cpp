@@ -28,6 +28,8 @@
 #include <QTimer>
 #include <QLayout>
 
+#include <KWindowSystem>
+
 #include <Plasma/Corona>
 #include <Plasma/Dialog>
 #include <Plasma/WindowEffects>
@@ -409,6 +411,11 @@ bool DialogProxy::eventFilter(QObject *watched, QEvent *event)
         }
     } else if (watched == m_dialog && event->type() == QEvent::Show) {
         Plasma::WindowEffects::slideWindow(m_dialog, m_location);
+        if (m_dialog->testAttribute(Qt::WA_X11NetWmWindowTypeDock)) {
+            KWindowSystem::setOnAllDesktops(m_dialog->winId(), true);
+        } else {
+            KWindowSystem::setOnAllDesktops(m_dialog->winId(), false);
+        }
         emit visibleChanged();
     } else if (watched == m_dialog && event->type() == QEvent::Hide) {
         Plasma::WindowEffects::slideWindow(m_dialog, m_location);
@@ -426,6 +433,12 @@ bool DialogProxy::eventFilter(QObject *watched, QEvent *event)
 void DialogProxy::setAttribute(int attribute, bool on)
 {
     m_dialog->setAttribute((Qt::WidgetAttribute)attribute, on);
+
+    if (attribute == Qt::WA_X11NetWmWindowTypeDock) {
+        KWindowSystem::setOnAllDesktops(m_dialog->winId(), true);
+    } else {
+        KWindowSystem::setOnAllDesktops(m_dialog->winId(), false);
+    }
 }
 
 #include "dialog.moc"
