@@ -48,6 +48,46 @@ void DeclarativeItemContainer::setDeclarativeItem(QDeclarativeItem *item, bool r
 
     connect(m_declarativeItem.data(), SIGNAL(widthChanged()), this, SLOT(widthChanged()));
     connect(m_declarativeItem.data(), SIGNAL(heightChanged()), this, SLOT(heightChanged()));
+
+    qreal minimumWidth = 0;
+    qreal minimumHeight = 0;
+    qreal maximumWidth = 0;
+    qreal maximumHeight = 0;
+    qreal preferredWidth = 0;
+    qreal preferredHeight = 0;
+
+    minimumWidth = item->property("minimumWidth").toReal();
+    minimumHeight = item->property("minimumHeight").toReal();
+    QObject::connect(item, SIGNAL(minimumWidthChanged()), this, SLOT(minimumWidthChanged()));
+    QObject::connect(item, SIGNAL(minimumHeightChanged()), this, SLOT(minimumHeightChanged()));
+
+    maximumWidth = item->property("maximumWidth").toReal();
+    maximumHeight = item->property("maximumHeight").toReal();
+    QObject::connect(item, SIGNAL(maximumWidthChanged()), this, SLOT(maximumWidthChanged()));
+    QObject::connect(item, SIGNAL(maximumHeightChanged()), this, SLOT(maximumHeightChanged()));
+
+    preferredWidth = item->property("preferredWidth").toReal();
+    preferredHeight = item->property("preferredHeight").toReal();
+    QObject::connect(item, SIGNAL(preferredWidthChanged()), this, SLOT(preferredWidthChanged()));
+    QObject::connect(item, SIGNAL(preferredHeightChanged()), this, SLOT(preferredHeightChanged()));
+
+    if (minimumWidth > 0 && minimumHeight > 0) {
+        setMinimumSize(minimumWidth, minimumHeight);
+    } else {
+        setMinimumSize(-1, -1);
+    }
+
+    if (maximumWidth > 0 && maximumHeight > 0) {
+        setMaximumSize(maximumWidth, maximumHeight);
+    } else {
+        setMaximumSize(-1, -1);
+    }
+
+    if (preferredWidth > 0 && preferredHeight > 0) {
+        setPreferredSize(preferredWidth, preferredHeight);
+    } else {
+        setPreferredSize(-1, -1);
+    }
 }
 
 QDeclarativeItem *DeclarativeItemContainer::declarativeItem() const
@@ -88,6 +128,43 @@ void DeclarativeItemContainer::heightChanged()
     QSizeF newSize(size());
     newSize.setHeight(m_declarativeItem.data()->height());
     resize(newSize);
+}
+
+
+void DeclarativeItemContainer::minimumWidthChanged()
+{
+    qreal minimumWidth = m_declarativeItem.data()->property("minimumWidth").toReal();
+    setMinimumWidth(minimumWidth);
+}
+
+void DeclarativeItemContainer::minimumHeightChanged()
+{
+    qreal minimumHeight = m_declarativeItem.data()->property("minimumHeight").toReal();
+    setMinimumHeight(minimumHeight);
+}
+
+void DeclarativeItemContainer::maximumWidthChanged()
+{
+    qreal maximumWidth = m_declarativeItem.data()->property("maximumWidth").toReal();
+    setMaximumWidth(maximumWidth);
+}
+
+void DeclarativeItemContainer::maximumHeightChanged()
+{
+    qreal maximumHeight = m_declarativeItem.data()->property("maximumHeight").toReal();
+    setMaximumHeight(maximumHeight);
+}
+
+void DeclarativeItemContainer::preferredWidthChanged()
+{
+    qreal preferredWidth = m_declarativeItem.data()->property("preferredWidth").toReal();
+    setPreferredWidth(preferredWidth);
+}
+
+void DeclarativeItemContainer::preferredHeightChanged()
+{
+    qreal preferredHeight = m_declarativeItem.data()->property("preferredHeight").toReal();
+    setPreferredHeight(preferredHeight);
 }
 
 #include "declarativeitemcontainer_p.moc"

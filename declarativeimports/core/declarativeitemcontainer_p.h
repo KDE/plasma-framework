@@ -45,6 +45,13 @@ protected Q_SLOTS:
     void widthChanged();
     void heightChanged();
 
+    void minimumWidthChanged();
+    void minimumHeightChanged();
+    void maximumWidthChanged();
+    void maximumHeightChanged();
+    void preferredWidthChanged();
+    void preferredHeightChanged();
+
 private:
     QWeakPointer<QDeclarativeItem> m_declarativeItem;
 };
