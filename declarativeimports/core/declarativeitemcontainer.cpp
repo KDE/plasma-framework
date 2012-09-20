@@ -35,13 +35,17 @@ void DeclarativeItemContainer::setDeclarativeItem(QDeclarativeItem *item, bool r
     if (m_declarativeItem) {
         disconnect(m_declarativeItem.data(), 0, this, 0);
     }
+
+    setMinimumWidth(item->implicitWidth());
+    setMinimumHeight(item->implicitHeight());
+
+    resize(item->width(), item->height());
+
     m_declarativeItem = item;
     if (reparent) {
         static_cast<QGraphicsItem *>(item)->setParentItem(this);
     }
-    setMinimumWidth(item->implicitWidth());
-    setMinimumHeight(item->implicitHeight());
-    resize(item->width(), item->height());
+
     connect(m_declarativeItem.data(), SIGNAL(widthChanged()), this, SLOT(widthChanged()));
     connect(m_declarativeItem.data(), SIGNAL(heightChanged()), this, SLOT(heightChanged()));
 }
