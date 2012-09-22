@@ -144,7 +144,7 @@ KPluginInfo::List Wallpaper::listWallpaperInfo(const QString &formFactor)
     return KPluginInfo::fromServices(offers);
 }
 
-KPluginInfo::List Wallpaper::listWallpaperInfoForMimetype(const QString &mimeType, const QString &formFactor)
+KPluginInfo::List Wallpaper::listWallpaperInfoForMimeType(const QString &mimeType, const QString &formFactor)
 {
     QString constraint = QString("'%1' in [X-Plasma-DropMimeTypes]").arg(mimeType);
     if (!formFactor.isEmpty()) {

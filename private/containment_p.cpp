@@ -643,7 +643,7 @@ void ContainmentPrivate::mimeTypeRetrieved(KIO::Job *job, const QString &mimeTyp
             if (wallpaper && wallpaper->supportsMimetype(mimeType)) {
                 wallpaperList << wallpaper->d->wallpaperDescription;
             } else {
-                wallpaperList = Wallpaper::listWallpaperInfoForMimetype(mimeType);
+                wallpaperList = Wallpaper::listWallpaperInfoForMimeType(mimeType);
             }
         }
 

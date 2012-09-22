@@ -890,7 +890,7 @@ void Containment::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 
         if (!event->isAccepted()) {
             foreach (const QString &format, formats) {
-                KPluginInfo::List wallpaperList = Wallpaper::listWallpaperInfoForMimetype(format);
+                KPluginInfo::List wallpaperList = Wallpaper::listWallpaperInfoForMimeType(format);
                 if (!wallpaperList.isEmpty()) {
                     event->setAccepted(true);
                     break;

@@ -101,7 +101,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * @arg formFactor the format of the wallpaper being search for (e.g. desktop)
          * @return list of wallpapers
          */
-        static KPluginInfo::List listWallpaperInfoForMimetype(const QString &mimeType,
+        static KPluginInfo::List listWallpaperInfoForMimeType(const QString &mimeType,
                                                               const QString &formFactor = QString());
 
         /**
@@ -554,3 +554,4 @@ K_EXPORT_PLUGIN(factory("plasma_wallpaper_" #libname)) \
 K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
 
 #endif // multiple inclusion guard
+
