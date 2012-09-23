@@ -53,11 +53,12 @@ namespace Plasma
 bool copyFolder(QString sourcePath, QString targetPath)
 {
     QDir source(sourcePath);
-    if(!source.exists())
+    if (!source.exists()) {
         return false;
+    }
 
     QDir target(targetPath);
-    if(!target.exists()) {
+    if (!target.exists()) {
         QString targetName = target.dirName();
         target.cdUp();
         target.mkdir(targetName);
