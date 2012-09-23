@@ -44,7 +44,14 @@ void ServiceJobPrivate::preventAutoStart()
 void ServiceJobPrivate::autoStart()
 {
     if (m_allowAutoStart) {
-        q->start();
+        m_allowAutoStart = false;
+
+        if (q->isAutoDelete()) {
+            // by checking for isAutoDelete, we prevent autostarting when
+            // exec() is called or when the job owner has "taken control"
+            // of the job by requesting it not be autodeleted
+            q->start();
+        }
     }
 }
 
