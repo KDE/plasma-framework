@@ -28,12 +28,19 @@
 #include <QGraphicsLayout>
 #include <QGraphicsView>
 #include <QHostInfo>
+#include <qstandardpaths.h>
+
+#include <kaction.h>
+#include <kdebug.h>
+#include <kkeysequencewidget.h>
+#include <kstandarddirs.h>
 
 #include "abstracttoolbox.h"
 #include "containment.h"
 #include "corona.h"
 #include "pluginloader.h"
 #include "scripting/scriptengine.h"
+#include "scripting/appletscript.h"
 #include "private/containment_p.h"
 
 #if ENABLE_REMOTE_WIDGETS
@@ -41,12 +48,6 @@
 #include "remote/authorizationmanager_p.h"
 #include "remote/authorizationrule.h"
 #endif
-
-#include <kaction.h>
-#include <kkeysequencewidget.h>
-#include <kstandarddirs.h>
-#include <kaboutdata.h>
-#include <qstandardpaths.h>
 
 namespace Plasma
 {
@@ -566,8 +567,13 @@ void AppletPrivate::filterOffers(QList<KService::Ptr> &offers)
 QString AppletPrivate::parentAppConstraint(const QString &parentApp)
 {
     if (parentApp.isEmpty()) {
+        QCoreApplication *app = QCoreApplication::instance();
+        if (!app) {
+            return QString();
+        }
+
         return QString("((not exist [X-KDE-ParentApp] or [X-KDE-ParentApp] == '') or [X-KDE-ParentApp] == '%1')")
-                      .arg(KComponentData::mainComponent().aboutData()->appName());
+                      .arg(app->applicationName());
     }
 
     return QString("[X-KDE-ParentApp] == '%1'").arg(parentApp);
