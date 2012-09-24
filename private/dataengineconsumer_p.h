@@ -22,18 +22,18 @@
 #ifndef PLASMA_DATAENGINECONSUMER_P_H
 #define PLASMA_DATAENGINECONSUMER_P_H
 
-#include <QtCore/QSet>
-#include <QtCore/QUrl>
-
-#include "plasma/dataenginemanager.h"
-#include "servicejob.h"
+#include <QMap>
+#include <QSet>
+#include <QUrl>
 
 namespace Plasma
 {
 
 class DataEngineConsumer;
 class RemoteDataEngine;
+class Service;
 class ServiceMonitor;
+class ServiceJob;
 
 class DataEngineConsumerPrivate : public QObject
 {

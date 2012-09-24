@@ -109,7 +109,6 @@ set(plasma_LIB_SRCS
     datacontainer.cpp
     dataengine.cpp
     dataengineconsumer.cpp
-    dataenginemanager.cpp
     package.cpp
     packagestructure.cpp
     paintutils.cpp
@@ -121,6 +120,7 @@ set(plasma_LIB_SRCS
     private/associatedapplicationmanager.cpp
     private/componentinstaller.cpp
     private/datacontainer_p.cpp
+    private/dataenginemanager.cpp
     private/dataengineservice.cpp
     private/effects/halopainter.cpp
     private/effectwatcher.cpp
@@ -343,7 +343,6 @@ set(plasma_LIB_INCLUDES
     corona.h
     datacontainer.h
     dataengine.h
-    dataenginemanager.h
     delegate.h
     dialog.h
     pluginloader.h

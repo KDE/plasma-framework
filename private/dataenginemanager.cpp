@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "dataenginemanager.h"
+#include "dataenginemanager_p.h"
 
 #include <QFile>
 #include <QTextStream>
@@ -210,4 +210,4 @@ void DataEngineManager::timerEvent(QTimerEvent *)
 } // namespace Plasma
 
 
-#include "moc_dataenginemanager.cpp"
+#include "moc_dataenginemanager_p.cpp"

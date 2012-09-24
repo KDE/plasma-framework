@@ -27,7 +27,7 @@
 
 #include <kdebug.h>
 
-#include "dataenginemanager.h"
+#include "private/dataenginemanager_p.h"
 #include "private/remotedataengine_p.h"
 #include "servicejob.h"
 

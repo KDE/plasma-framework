@@ -17,12 +17,12 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "plasma/scripting/runnerscript.h"
+#include "scripting/runnerscript.h"
 
-#include "plasma/abstractrunner.h"
-#include "plasma/dataenginemanager.h"
-#include "plasma/package.h"
-#include "plasma/private/abstractrunner_p.h"
+#include "abstractrunner.h"
+#include "package.h"
+#include "private/dataenginemanager_p.h"
+#include "private/abstractrunner_p.h"
 
 namespace Plasma
 {
