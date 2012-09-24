@@ -47,7 +47,6 @@
 
 #include "package.h"
 #include "pluginloader.h"
-#include "private/dataengineconsumer_p.h"
 #include "private/packages_p.h"
 #include "private/wallpaper_p.h"
 

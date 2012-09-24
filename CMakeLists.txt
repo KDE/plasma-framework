@@ -108,6 +108,7 @@ set(plasma_LIB_SRCS
     coronabase.cpp
     datacontainer.cpp
     dataengine.cpp
+    dataengineconsumer.cpp
     dataenginemanager.cpp
     package.cpp
     packagestructure.cpp
@@ -120,7 +121,6 @@ set(plasma_LIB_SRCS
     private/associatedapplicationmanager.cpp
     private/componentinstaller.cpp
     private/datacontainer_p.cpp
-    private/dataengineconsumer.cpp
     private/dataengineservice.cpp
     private/effects/halopainter.cpp
     private/effectwatcher.cpp

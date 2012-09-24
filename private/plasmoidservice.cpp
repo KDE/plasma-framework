@@ -19,10 +19,11 @@
 #include "plasmoidservice_p.h"
 
 #include "authorizationmanager_p.h"
-#include "dataengineconsumer_p.h"
-#include "dataengine_p.h"
+#include "dataengineconsumer.h"
 
 #include <plasma/applet.h>
+#include <plasma/dataengine.h>
+#include <plasma/private/dataengine_p.h>
 #include <plasma/remote/authorizationmanager.h>
 #include <plasma/remote/authorizationrule.h>
 #include <plasma/service.h>

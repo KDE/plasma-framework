@@ -395,11 +395,7 @@ ConfigLoader *Applet::configScheme() const
 
 DataEngine *Applet::dataEngine(const QString &name) const
 {
-    if (d->remoteLocation.isEmpty()) {
-        return d->dataEngine(name);
-    } else {
-        return d->remoteDataEngine(d->remoteLocation, name);
-    }
+    return d->dataEngine(name, d->remoteLocation);
 }
 
 Package Applet::package() const

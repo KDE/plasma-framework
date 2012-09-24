@@ -35,6 +35,7 @@
 #include "abstractrunner.h"
 #include "containment.h"
 #include "containmentactions.h"
+#include "dataengine.h"
 #include "package.h"
 #include "popupapplet.h"
 #include "private/applet_p.h"

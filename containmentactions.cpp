@@ -20,7 +20,6 @@
 #include "containmentactions.h"
 #include "containment.h"
 
-#include "private/dataengineconsumer_p.h"
 #include "private/packages_p.h"
 #include "private/containmentactions_p.h"
 #include "private/containment_p.h"
@@ -36,8 +35,8 @@
 #include <klocalizedstring.h>
 #include <kservicetypetrader.h>
 
-
-#include <version.h>
+#include "dataengineconsumer.h"
+#include "version.h"
 
 namespace Plasma
 {

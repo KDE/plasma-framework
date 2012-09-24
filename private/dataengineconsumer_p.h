@@ -19,56 +19,38 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_DATAENGINECONSUMER_H
-#define PLASMA_DATAENGINECONSUMER_H
+#ifndef PLASMA_DATAENGINECONSUMER_P_H
+#define PLASMA_DATAENGINECONSUMER_P_H
 
 #include <QtCore/QSet>
-
-#include <kdebug.h>
+#include <QtCore/QUrl>
 
 #include "plasma/dataenginemanager.h"
-#include <servicejob.h>
+#include "servicejob.h"
 
 namespace Plasma
 {
 
 class DataEngineConsumer;
 class RemoteDataEngine;
+class ServiceMonitor;
 
-class ServiceMonitor : public QObject
+class DataEngineConsumerPrivate : public QObject
 {
     Q_OBJECT
+
 public:
-    ServiceMonitor(DataEngineConsumer *consumer);
-    ~ServiceMonitor();
+    QSet<QString> loadedEngines;
+    QMap<QPair<QString, QString>, RemoteDataEngine*> remoteEngines;
+    QMap<Service*, QString> engineNameForService;
+    DataEngine *remoteDataEngine(const QString &name, const QUrl &location);
 
 public Q_SLOTS:
     void slotJobFinished(Plasma::ServiceJob *job);
     void slotServiceReady(Plasma::Service *service);
-
-private:
-    DataEngineConsumer *m_consumer;
-};
-
-class DataEngineConsumer
-{
-public:
-    DataEngineConsumer();
-    ~DataEngineConsumer();
-    DataEngine *dataEngine(const QString &name);
-    DataEngine *remoteDataEngine(const QUrl &location, const QString &name);
-
-private:
-    QSet<QString> m_loadedEngines;
-    QMap<QPair<QString, QString>, RemoteDataEngine*> m_remoteEngines;
-    QMap<Service*, QString> m_engineNameForService;
-    ServiceMonitor *m_monitor;
-
-    friend class ServiceMonitor;
 };
 
 } // namespace Plasma
 
 #endif
-
 

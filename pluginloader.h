@@ -295,7 +295,7 @@ protected:
 
     /**
      * A re-implementable method that allows subclasses to provide additional DataEngines
-     * for DataEngineManager::listDataEngines.
+     * for DataEngine::listDataEngines.
      *
      * @return list of DataEngines info, or an empty list if none
      **/

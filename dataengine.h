@@ -24,6 +24,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
 
+#include <kplugininfo.h>
 #include <kservice.h>
 
 #include <plasma/version.h>
@@ -244,6 +245,47 @@ NoAlignment) const;
          *  @since 4.5
          */
         Q_INVOKABLE Service* createDefaultService(QObject *parent = 0);
+
+        /**
+         * @return a listing of all known DataEngines by name
+         *
+         * @param parentApp the application to filter applets on. Uses the
+         *                  X-KDE-ParentApp entry (if any) in the plugin info.
+         *                  The default value of QString() will result in a
+         *                  list containing only applets not specifically
+         *                  registered to an application.
+         */
+        static QStringList listAllEngines(const QString &parentApp = QString());
+
+        /**
+         * Returns a list of all known DataEngines.
+         *
+         * @param parentApp the application to filter applets on. Uses the
+         *                  X-KDE-ParentApp entry (if any) in the plugin info.
+         *                  The default value of QString() will result in a
+         *                  list containing only applets not specifically
+         *                  registered to an application.
+         * @return list of DataEngines
+         **/
+        static KPluginInfo::List listEngineInfo(const QString &parentApp = QString());
+
+        /**
+         * Returns a list of all known DataEngines filtering by category.
+         *
+         * @param category the category to filter applets on. Uses the
+         *                  X-KDE-PluginInfo-Category entry (if any) in the
+         *                  plugin info. The value of QString() will
+         *                  result in a list of engines with an empty category.
+         *
+         * @param parentApp the application to filter applets on. Uses the
+         *                  X-KDE-ParentApp entry (if any) in the plugin info.
+         *                  The default value of QString() will result in a
+         *                  list containing only applets not specifically
+         *                  registered to an application.
+         * @return list of DataEngines
+         * @since 4.3
+         **/
+        static KPluginInfo::List listEngineInfoByCategory(const QString &category, const QString &parentApp = QString());
 
     Q_SIGNALS:
         /**

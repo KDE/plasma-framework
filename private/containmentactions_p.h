@@ -20,7 +20,7 @@
 #ifndef PLASMA_CONTAINMENTACTIONSPRIVATE_H
 #define PLASMA_CONTAINMENTACTIONSPRIVATE_H
 
-#include "plasma/private/dataengineconsumer_p.h"
+#include "dataengineconsumer.h"
 
 namespace Plasma
 {

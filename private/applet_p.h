@@ -30,7 +30,7 @@
 
 #include "plasma/animator.h"
 #include "plasma/private/applethandle_p.h"
-#include "plasma/private/dataengineconsumer_p.h"
+#include "plasma/dataengineconsumer.h"
 #include "plasma/ui_publish.h"
 
 class KKeySequenceWidget;
@@ -44,6 +44,7 @@ class AppletScript;
 class Wallpaper;
 class BusyWidget;
 class PushButton;
+class Service;
 
 class AppletConfigDialog : public KConfigDialog
 {

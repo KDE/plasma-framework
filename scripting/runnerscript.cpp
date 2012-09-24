@@ -30,6 +30,11 @@ namespace Plasma
 class RunnerScriptPrivate
 {
 public:
+    RunnerScriptPrivate()
+        : runner(0)
+    {
+    }
+
     AbstractRunner *runner;
 };
 

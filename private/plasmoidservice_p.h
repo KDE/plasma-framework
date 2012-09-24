@@ -19,7 +19,7 @@
 #ifndef PLASMOIDSERVICE_H
 #define PLASMOIDSERVICE_H
 
-#include "dataengineconsumer_p.h"
+#include "dataengineconsumer.h"
 
 #include "../package.h"
 #include "../service.h"

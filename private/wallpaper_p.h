@@ -25,8 +25,8 @@
 #include <QtCore/QRunnable>
 #include <QtCore/QWeakPointer>
 
+#include "plasma/dataengineconsumer.h"
 #include "plasma/scripting/wallpaperscript.h"
-#include "plasma/private/dataengineconsumer_p.h"
 #include "plasma/private/wallpaperrenderthread_p.h"
 
 namespace Plasma
