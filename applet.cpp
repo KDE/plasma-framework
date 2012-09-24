@@ -205,7 +205,6 @@ Applet::~Applet()
 
 void Applet::init()
 {
-    setFlag(ItemIsMovable, true);
     if (d->script) {
         d->setupScriptSupport();
 
@@ -360,7 +359,11 @@ KConfigGroup Applet::globalConfig() const
     KConfigGroup globalAppletConfig;
     QString group = isContainment() ? "ContainmentGlobals" : "AppletGlobals";
 
-    Corona *corona = qobject_cast<Corona*>(scene());
+    Containment *cont = containment();
+    Corona *corona = 0;
+    if (cont) {
+        corona = cont->corona();
+    }
     if (corona) {
         KSharedConfig::Ptr coronaConfig = corona->config();
         globalAppletConfig = KConfigGroup(coronaConfig, group);
@@ -402,45 +405,20 @@ Package Applet::package() const
     return d->package ? *d->package : Package();
 }
 
-QGraphicsView *Applet::view() const
-{
-    // It's assumed that we won't be visible on more than one view here.
-    // Anything that actually needs view() should only really care about
-    // one of them anyway though.
-    if (!scene()) {
-        return 0;
-    }
-
-    QGraphicsView *found = 0;
-    QGraphicsView *possibleFind = 0;
-    //kDebug() << "looking through" << scene()->views().count() << "views";
-    foreach (QGraphicsView *view, scene()->views()) {
-        //kDebug() << "     checking" << view << view->sceneRect()
-        //         << "against" << sceneBoundingRect() << scenePos();
-        if (view->sceneRect().intersects(sceneBoundingRect()) ||
-            view->sceneRect().contains(scenePos())) {
-            //kDebug() << "     found something!" << view->isActiveWindow();
-            if (view->isActiveWindow()) {
-                found = view;
-            } else {
-                possibleFind = view;
-            }
-        }
-    }
-
-    return found ? found : possibleFind;
-}
-
 QRectF Applet::mapFromView(const QGraphicsView *view, const QRect &rect) const
 {
+    return QRect();
+    /*TODO: port away qgv
     // Why is this adjustment needed? Qt calculation error?
-    return mapFromScene(view->mapToScene(rect)).boundingRect().adjusted(0, 0, 1, 1);
+    return mapFromScene(view->mapToScene(rect)).boundingRect().adjusted(0, 0, 1, 1);*/
 }
 
 QRect Applet::mapToView(const QGraphicsView *view, const QRectF &rect) const
 {
+    return QRect();
+    /*TODO: port away qgv
     // Why is this adjustment needed? Qt calculation error?
-    return view->mapFromScene(mapToScene(rect)).boundingRect().adjusted(0, 0, -1, -1);
+    return view->mapFromScene(mapToScene(rect)).boundingRect().adjusted(0, 0, -1, -1);*/
 }
 
 QPoint Applet::popupPosition(const QSize &s) const
@@ -450,7 +428,11 @@ QPoint Applet::popupPosition(const QSize &s) const
 
 QPoint Applet::popupPosition(const QSize &s, Qt::AlignmentFlag alignment) const
 {
-    Corona * corona = qobject_cast<Corona*>(scene());
+    Containment *cont = containment();
+    Corona *corona = 0;
+    if (cont) {
+        corona = cont->corona();
+    }
     Q_ASSERT(corona);
 
     return corona->popupPosition(this, s, alignment);
@@ -580,8 +562,6 @@ ImmutabilityType Applet::immutability() const
 
     if (cont) {
         upperImmutability = cont->immutability();
-    } else if (Corona *corona = qobject_cast<Corona*>(scene())) {
-        upperImmutability = corona->immutability();
     }
 
     if (upperImmutability != Mutable) {
@@ -637,7 +617,6 @@ void Applet::setBackgroundHints(const Plasma::BackgroundHints hints)
         d->background->setEnabledBorders(Plasma::FrameSvg::AllBorders);
         qreal left, top, right, bottom;
         d->background->getMargins(left, top, right, bottom);
-        setContentsMargins(left, right, top, bottom);
         QSizeF fitSize(left + right, top + bottom);
         d->background->resizeFrame(boundingRect().size());
 
@@ -656,10 +635,7 @@ void Applet::setBackgroundHints(const Plasma::BackgroundHints hints)
 
         delete d->background;
         d->background = 0;
-        setContentsMargins(0, 0, 0, 0);
     }
-
-    update();
 }
 
 bool Applet::hasFailedToLaunch() const
@@ -748,7 +724,11 @@ void Applet::flushPendingConstraintsEvents()
         }
 
         d->updateShortcuts();
-        Corona * corona = qobject_cast<Corona*>(scene());
+        Containment *cont = containment();
+        Corona *corona = 0;
+        if (cont) {
+            corona = cont->corona();
+        }
         if (corona) {
             connect(corona, SIGNAL(shortcutsChanged()), this, SLOT(updateShortcuts()), Qt::UniqueConnection);
         }
@@ -773,11 +753,6 @@ void Applet::flushPendingConstraintsEvents()
             AppletHandle *h = d->handle.data();
             disconnect(this);
 
-            QGraphicsScene *s = scene();
-            if (s && h->scene() == s) {
-                s->removeItem(h);
-            }
-
             h->deleteLater();
         }
 
@@ -786,10 +761,6 @@ void Applet::flushPendingConstraintsEvents()
 
     if (c & Plasma::SizeConstraint) {
         d->positionMessageOverlay();
-
-        if (d->started && layout()) {
-            layout()->updateGeometry();
-        }
     }
 
     if (c & Plasma::FormFactorConstraint) {
@@ -800,14 +771,6 @@ void Applet::flushPendingConstraintsEvents()
             BackgroundHints hints = d->preferredBackgroundHints;
             setBackgroundHints(NoBackground);
             d->preferredBackgroundHints = hints;
-        }
-
-        if (d->failed) {
-            if (f == Vertical || f == Horizontal) {
-                QGraphicsLayoutItem *item = layout()->itemAt(1);
-                layout()->removeAt(1);
-                delete item;
-            }
         }
 
         // avoid putting rotated applets in panels
@@ -843,7 +806,6 @@ void Applet::flushPendingConstraintsEvents()
                 setSizePolicy(d->preferredSizePolicy);
             }
         }
-        updateGeometry();
     }
 
     // now take care of constraints in special subclasses: Contaiment and PopupApplet
@@ -917,11 +879,6 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         return;
     }
 
-    qreal left, top, right, bottom;
-    getContentsMargins(&left, &top, &right, &bottom);
-    QRect contentsRect = QRectF(QPointF(0, 0),
-                                boundingRect().size()).adjusted(left, top, -right, -bottom).toRect();
-
     if (widget && d->isContainment) {
         // note that the widget we get is actually the viewport of the view, not the view itself
         View* v = qobject_cast<Plasma::View*>(widget->parent());
@@ -938,37 +895,13 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
                     wallpaperConfig = KConfigGroup(&wallpaperConfig, "Wallpaper");
                     wallpaperConfig = KConfigGroup(&wallpaperConfig, w->pluginName());
                     w->restore(wallpaperConfig);
-                    disconnect(w, SIGNAL(update(QRectF)), this, SLOT(updateRect(QRectF)));
-                    connect(w, SIGNAL(update(QRectF)), this, SLOT(updateRect(QRectF)));
                 }
 
                 painter->save();
                 c->wallpaper()->paint(painter, option->exposedRect);
                 painter->restore();
             }
-
-            // .. and now paint the actual containment interface, but with
-            //  a Containment style option based on the one we get
-            //  the view must be assigned only if its containment is actually our own
-            Containment::StyleOption coption(*option);
-            if (v && v->containment() == containment()) {
-                coption.view = v;
-            }
-            paintInterface(painter, &coption, contentsRect);
         }
-    } else {
-        //kDebug() << "paint interface of" << (QObject*) this;
-        // paint the applet's interface
-        paintInterface(painter, option, contentsRect);
-    }
-}
-
-void Applet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, const QRect &contentsRect)
-{
-    if (d->script) {
-        d->script->paintInterface(painter, option, contentsRect);
-    } else {
-        //kDebug() << "Applet::paintInterface() default impl";
     }
 }
 
@@ -976,17 +909,10 @@ FormFactor Applet::formFactor() const
 {
     Containment *c = containment();
     QObject *pw = qobject_cast<QObject *>(parent());
-    if (!pw) {
-        pw = dynamic_cast<QObject *>(parentItem());
-    }
     Plasma::Applet *parentApplet = qobject_cast<Plasma::Applet *>(pw);
     //assumption: this loop is usually is -really- short or doesn't run at all
-    while (!parentApplet && pw && pw->parentWidget()) {
-        QObject *parentWidget = qobject_cast<QObject *>(pw->parent());
-        if (!parentWidget) {
-            parentWidget = dynamic_cast<QObject *>(pw->parentItem());
-        }
-        pw = parentWidget;
+    while (!parentApplet && pw && pw->parent()) {
+        pw = pw->parent();
         parentApplet = qobject_cast<Plasma::Applet *>(pw);
     }
 
@@ -999,10 +925,10 @@ FormFactor Applet::formFactor() const
     // a popupapplet can always be constrained.
     // a normal applet should to but
     //FIXME: not always constrained to not break systemmonitor
-    if (parentApplet && parentApplet != c && c != this && (pa || layout())) {
-        if (pa || (parentApplet->size().height() < layout()->effectiveSizeHint(Qt::MinimumSize).height())) {
+    if (parentApplet && parentApplet != c && c != this) {
+        if (pa || (parentApplet->size().height() < sizeHint(Qt::MinimumSize).height())) {
             return Plasma::Horizontal;
-        } else if (pa || (parentApplet->size().width() < layout()->effectiveSizeHint(Qt::MinimumSize).width())) {
+        } else if (pa || (parentApplet->size().width() < sizeHint(Qt::MinimumSize).width())) {
             return Plasma::Vertical;
         }
         return parentApplet->formFactor();
@@ -1020,7 +946,7 @@ Containment *Applet::containment() const
         }
     }
 
-    QObject *parent = parentItem();
+    QObject *parent = this->parent();
     Containment *c = 0;
 
     while (parent) {
@@ -1029,7 +955,7 @@ Containment *Applet::containment() const
             c = possibleC;
             break;
         }
-        parent = parent->parentItem();
+        parent = parent->parent();
     }
 
     if (!c) {
@@ -1121,34 +1047,6 @@ void Applet::setAspectRatioMode(Plasma::AspectRatioMode mode)
     d->aspectRatioMode = mode;
 }
 
-void Applet::registerAsDragHandle(QObject *item)
-{
-    if (!item || d->registeredAsDragHandle.contains(item)) {
-        return;
-    }
-
-    d->registeredAsDragHandle.insert(item);
-    item->installSceneEventFilter(this);
-}
-
-void Applet::unregisterAsDragHandle(QObject *item)
-{
-    if (!item) {
-        return;
-    }
-
-    if (d->registeredAsDragHandle.remove(item)) {
-        if (item != this) {
-            item->removeSceneEventFilter(this);
-        }
-    }
-}
-
-bool Applet::isRegisteredAsDragHandle(QObject *item)
-{
-    return d->registeredAsDragHandle.contains(item);
-}
-
 bool Applet::hasConfigurationInterface() const
 {
     return d->hasConfigurationInterface;
@@ -1208,106 +1106,6 @@ void Applet::setHasConfigurationInterface(bool hasInterface)
     }
 
     d->hasConfigurationInterface = hasInterface;
-}
-
-bool Applet::sceneEventFilter(QObject *watched, QEvent *event)
-{
-    if (watched == this) {
-        switch (event->type()) {
-            case QEvent::GraphicsSceneHoverEnter:
-                //kDebug() << "got hoverenterEvent" << immutability() << " " << immutability();
-                if (immutability() == Mutable) {
-                    QObject *pw = this;
-                    //This is for the rare case of applet in applet (systray)
-                    //if the applet is in an applet that is not a containment, don't create the handle BUG:301648
-                    while (pw = pw->parentWidget()) {
-                        if (qobject_cast<Containment *>(pw)) {
-                            break;
-                        } else if (qobject_cast<Applet *>(pw)) {
-                            return false;
-                        }
-                    }
-
-                    QGraphicsSceneHoverEvent *he = static_cast<QGraphicsSceneHoverEvent*>(event);
-                    if (d->handle) {
-                        d->handle.data()->setHoverPos(he->pos());
-                    } else {
-                        //kDebug() << "generated applet handle";
-                        AppletHandle *handle = new AppletHandle(containment(), this, he->pos());
-
-                        connect(this, SIGNAL(geometryChanged()),
-                                handle, SLOT(appletResized()));
-                        d->handle = handle;
-                    }
-                }
-            break;
-
-            case QEvent::GraphicsSceneHoverMove:
-                if (d->handle && !d->handle.data()->shown() && immutability() == Mutable) {
-                    QGraphicsSceneHoverEvent *he = static_cast<QGraphicsSceneHoverEvent*>(event);
-                    d->handle.data()->setHoverPos(he->pos());
-                }
-            break;
-
-        default:
-            break;
-        }
-
-    }
-
-    switch (event->type()) {
-    case QEvent::GraphicsSceneMouseMove:
-    case QEvent::GraphicsSceneMousePress:
-    case QEvent::GraphicsSceneMouseRelease:
-    {
-        // don't move when the containment is not mutable,
-        // in the rare case the containment doesn't exists consider it as mutable
-        if ((flags() & ItemIsMovable) && d->registeredAsDragHandle.contains(watched)) {
-            Containment *c = containment();
-            if (!c || c->immutability() == Mutable) {
-                scene()->sendEvent(this, event);
-                return false;
-            }
-        }
-        break;
-    }
-
-    default:
-        break;
-    }
-
-    return QObject::sceneEventFilter(watched, event);
-}
-
-void Applet::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
-{
-    if (immutability() == Mutable && formFactor() == Plasma::Planar && (flags() & ItemIsMovable)) {
-        QObject::mouseMoveEvent(event);
-    }
-}
-
-void Applet::focusInEvent(QFocusEvent *event)
-{
-    if (!isContainment() && containment()) {
-        //focusing an applet may trigger this event again, but we won't be here more than twice
-        containment()->d->focusApplet(this);
-    }
-
-    QObject::focusInEvent(event);
-}
-
-void Applet::resizeEvent(QGraphicsSceneResizeEvent *event)
-{
-    QObject::resizeEvent(event);
-
-    if (d->background) {
-        d->background->resizeFrame(boundingRect().size());
-    }
-
-    updateConstraints(Plasma::SizeConstraint);
-
-    d->scheduleModificationNotification();
-    emit geometryChanged();
 }
 
 bool Applet::isUserConfiguring() const
@@ -1621,18 +1419,9 @@ Applet *Applet::loadPlasmoid(const QString &path, uint appletId, const QVariantL
     return 0;
 }
 
-QPainterPath Applet::shape() const
-{
-    if (d->script) {
-        return d->script->shape();
-    }
-
-    return QObject::shape();
-}
-
 QSizeF Applet::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
-    QSizeF hint = QObject::sizeHint(which, constraint);
+    QSizeF hint(-1, -1);
     const FormFactor ff = formFactor();
 
     // in panels make sure that the contents won't exit from the panel
@@ -1704,6 +1493,8 @@ void Applet::timerEvent(QTimerEvent *event)
 
 QRect Applet::screenRect() const
 {
+    //TODO: port away QGV
+    /*
     QGraphicsView *v = view();
 
     if (v) {
@@ -1714,7 +1505,7 @@ QRect Applet::screenRect() const
         QPoint tL = v->mapToGlobal(v->mapFromScene(pos()));
         QPoint bR = v->mapToGlobal(v->mapFromScene(bottomRight));
         return QRect(QPoint(tL.x(), tL.y()), QSize(bR.x() - tL.x(), bR.y() - tL.y()));
-    }
+    }*/
 
     //The applet doesn't have a view on it.
     //So a screenRect isn't relevant.

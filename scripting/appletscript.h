@@ -225,21 +225,6 @@ protected:
      */
     void showMessage(const QIcon &icon, const QString &message, const MessageButtons buttons);
 
-    /**
-     * @see Applet
-     */
-    void registerAsDragHandle(QGraphicsItem *item);
-
-    /**
-     * @see Applet
-     */
-    void unregisterAsDragHandle(QGraphicsItem *item);
-
-    /**
-     * @see Applet
-     */
-    bool isRegisteredAsDragHandle(QGraphicsItem *item);
-
 private:
     friend class Applet;
     friend class PopupApplet;

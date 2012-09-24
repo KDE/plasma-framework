@@ -329,9 +329,10 @@ QRegion Corona::availableScreenRegion(int id) const
     return QRegion(screenGeometry(id));
 }
 
-QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::AlignmentFlag alignment)
+QPoint Corona::popupPosition(const QObject *item, const QSize &s, Qt::AlignmentFlag alignment)
 {
-    const QGraphicsItem *actualItem = item;
+    //FIXME: this is a stub
+    const QGraphicsItem *actualItem = static_cast<QGraphicsItem>(item);
     const QGraphicsView *v = viewFor(item);
 
     if (!v) {

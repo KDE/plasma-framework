@@ -190,17 +190,17 @@ set(plasma_LIB_SRCS
     #FIXME: all these must move into the qgv library
     private/themedwidgetinterface.cpp
     widgets/iconwidget.cpp
-    abstracttoolbox.cpp
-    view.cpp
+    #view.cpp
     applet.cpp
     containment.cpp
     corona.cpp
-    dialog.cpp
+    #dialog.cpp
     popupapplet.cpp
-    private/applethandle.cpp
 )
 
 set (plasmaqgv_LIB_SRCS
+    private/applethandle.cpp
+    abstracttoolbox.cpp
     delegate.cpp
     #FIXME: this is duplicated with libplasma because iconwidget requires it!
     private/themedwidgetinterface.cpp

@@ -22,7 +22,7 @@
 #ifndef PLASMA_APPLET_H
 #define PLASMA_APPLET_H
 
-#include <QGraphicsItem>
+#include <QObject>
 #include <QGraphicsWidget>
 #include <QIcon>
 
@@ -172,14 +172,6 @@ class PLASMA_EXPORT Applet : public QObject
          * @return the Package object, or 0 if none
          **/
         Package package() const;
-
-        /**
-         * Returns the view this widget is visible on, or 0 if none can be found.
-         * @warning do NOT assume this will always return a view!
-         * a null view probably means that either plasma isn't finished loading, or your applet is
-         * on an activity that's not being shown anywhere.
-         */
-        QGraphicsView *view() const;
 
         /**
          * Maps a QRect from a view's coordinates to local coordinates.
@@ -341,18 +333,6 @@ class PLASMA_EXPORT Applet : public QObject
         static QString category(const QString &appletName);
 
         /**
-         * This method is called when the interface should be painted.
-         *
-         * @param painter the QPainter to use to do the paintiner
-         * @param option the style options object
-         * @param contentsRect the rect to paint within; automatically adjusted for
-         *                     the background, if any
-         **/
-        virtual void paintInterface(QPainter *painter,
-                                    const QStyleOptionGraphicsItem *option,
-                                    const QRect &contentsRect);
-
-        /**
          * Returns the user-visible name for the applet, as specified in the
          * .desktop file.
          *
@@ -468,7 +448,7 @@ class PLASMA_EXPORT Applet : public QObject
         QRect screenRect() const;
 
         /**
-         * Reimplemented from QGraphicsItem
+         * Reimplemented from QObject
          **/
         int type() const;
         enum {
@@ -511,25 +491,25 @@ class PLASMA_EXPORT Applet : public QObject
         virtual void removeAssociatedWidget(QWidget *widget);
 
         /**
-         * @param parent the QGraphicsItem this applet is parented to
+         * @param parent the QObject this applet is parented to
          * @param serviceId the name of the .desktop file containing the
          *      information about the widget
          * @param appletId a unique id used to differentiate between multiple
          *      instances of the same Applet type
          */
-        explicit Applet(QGraphicsItem *parent = 0, const QString &serviceId = QString(), uint appletId = 0);
+        explicit Applet(QObject *parent = 0, const QString &serviceId = QString(), uint appletId = 0);
 
         /**
-         * @param parent the QGraphicsItem this applet is parented to
+         * @param parent the QObject this applet is parented to
          * @param info the plugin information object for this Applet
          * @param appletId a unique id used to differentiate between multiple
          *      instances of the same Applet type
          * @since 4.6
          */
-        explicit Applet(const KPluginInfo &info, QGraphicsItem *parent = 0, uint appletId = 0);
+        explicit Applet(const KPluginInfo &info, QObject *parent = 0, uint appletId = 0);
 
         /**
-         * @param parent the QGraphicsItem this applet is parented to
+         * @param parent the QObject this applet is parented to
          * @param serviceId the name of the .desktop file containing the
          *      information about the widget
          * @param appletId a unique id used to differentiate between multiple
@@ -538,7 +518,7 @@ class PLASMA_EXPORT Applet : public QObject
          *      and the applet id
          * @since 4.3
          */
-        explicit Applet(QGraphicsItem *parent, const QString &serviceId, uint appletId, const QVariantList &args);
+        explicit Applet(QObject *parent, const QString &serviceId, uint appletId, const QVariantList &args);
 
 
         /**
@@ -684,6 +664,8 @@ class PLASMA_EXPORT Applet : public QObject
          * @since 4.4
          */
         void immutabilityChanged(Plasma::ImmutabilityType immutable);
+        
+        void geometryChanged();
 
     public Q_SLOTS:
         /**
@@ -812,10 +794,21 @@ class PLASMA_EXPORT Applet : public QObject
         bool hasFocus() const;
         void setFocus(Qt::FocusReason);
 
-        void resize(const QSizeF &size);
+        //Geometry functions: FIXME: to remove?
         QSizeF size() const;
         QRectF geometry() const;
-        void setGeometry(const QRect &geom);
+        void setGeometry(const QRectF &rect);
+        QRectF boundingRect() const;
+        void resize(const QSizeF &size);
+        int zValue() const;
+        void setZValue(int val);
+        QTransform transform() const;
+        void setTransform(const QTransform &transform);
+        QPointF pos() const;
+        void setPos(const QPointF &pos);
+        void setPos(int x, int y);
+        QSizePolicy sizePolicy() const;
+        void setSizePolicy(const QSizePolicy &policy);
 
     protected:
         /**
@@ -916,55 +909,6 @@ class PLASMA_EXPORT Applet : public QObject
         virtual void constraintsEvent(Plasma::Constraints constraints);
 
         /**
-         * Register the widgets that manage mouse clicks but you still want
-         * to be able to drag the applet around when holding the mouse pointer
-         * on that widget.
-         *
-         * Calling this results in an eventFilter being places on the widget.
-         *
-         * @param item the item to watch for mouse move
-         */
-        void registerAsDragHandle(QGraphicsItem *item);
-
-        /**
-         * Unregister a widget registered with registerAsDragHandle.
-         *
-         * @param item the item to unregister
-         */
-        void unregisterAsDragHandle(QGraphicsItem *item);
-
-        /**
-         * @param item the item to look for if it is registered or not
-         * @return true if it is registered, false otherwise
-         */
-        bool isRegisteredAsDragHandle(QGraphicsItem *item);
-
-        /**
-         * @internal scene event filter; used to manage applet dragging
-         */
-        bool sceneEventFilter(QGraphicsItem *watched, QEvent *event);
-
-        /**
-         * @internal manage the mouse movement to drag the applet around
-         */
-        void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-
-        /**
-         * Reimplemented from QGraphicsItem
-         */
-        void focusInEvent(QFocusEvent *event);
-
-        /**
-         * Reimplemented from QGraphicsItem
-         */
-        void resizeEvent(QGraphicsSceneResizeEvent *event);
-
-        /**
-         * Reimplemented from QGraphicsItem
-         */
-        QPainterPath shape() const;
-
-        /**
          * Reimplemented from QGraphicsLayoutItem
          */
         QSizeF sizeHint(Qt::SizeHint which, const QSizeF & constraint = QSizeF()) const;
@@ -998,7 +942,6 @@ class PLASMA_EXPORT Applet : public QObject
 
         Q_PRIVATE_SLOT(d, void cleanUpAndDelete())
         Q_PRIVATE_SLOT(d, void selectItemToDestroy())
-        Q_PRIVATE_SLOT(d, void updateRect(const QRectF& rect))
         Q_PRIVATE_SLOT(d, void configDialogFinished())
         Q_PRIVATE_SLOT(d, void updateShortcuts())
         Q_PRIVATE_SLOT(d, void publishCheckboxStateChanged(int state))
@@ -1006,7 +949,7 @@ class PLASMA_EXPORT Applet : public QObject
         Q_PRIVATE_SLOT(d, void propagateConfigChanged())
 
         /**
-         * Reimplemented from QGraphicsItem
+         * Reimplemented from QObject
          **/
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 

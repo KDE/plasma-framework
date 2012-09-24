@@ -44,7 +44,6 @@
 #include "kio/scheduler.h"
 #endif
 
-#include "abstracttoolbox.h"
 #include "containmentactions.h"
 #include "containmentactionspluginsconfig.h"
 #include "corona.h"
@@ -94,19 +93,19 @@ void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containme
     appletBrowserAction->setText(i18n("Add Widgets..."));
     appletBrowserAction->setIcon(KDE::icon("list-add"));
     appletBrowserAction->setShortcut(KShortcut("alt+d, a"));
-    appletBrowserAction->setData(AbstractToolBox::AddTool);
+    appletBrowserAction->setData(Containment::AddTool);
 
     KAction *action = actions->addAction("next applet");
     action->setText(i18n("Next Widget"));
     //no icon
     action->setShortcut(KShortcut("alt+d, n"));
-    action->setData(AbstractToolBox::ControlTool);
+    action->setData(Containment::ControlTool);
 
     action = actions->addAction("previous applet");
     action->setText(i18n("Previous Widget"));
     //no icon
     action->setShortcut(KShortcut("alt+d, p"));
-    action->setData(AbstractToolBox::ControlTool);
+    action->setData(Containment::ControlTool);
 }
 
 void ContainmentPrivate::initApplets()
@@ -134,7 +133,6 @@ void ContainmentPrivate::checkContainmentFurniture()
 {
     if (q->isContainment() &&
         (type == Containment::DesktopContainment || type == Containment::PanelContainment)) {
-        createToolBox();
     }
 }
 
@@ -282,15 +280,6 @@ void ContainmentPrivate::setScreen(int newScreen, int newDesktop, bool preventIn
     const bool isDesktopContainment = type == Containment::DesktopContainment ||
                                       type == Containment::CustomContainment;
     if (isDesktopContainment) {
-        // we want to listen to changes in work area if our screen changes
-        if (toolBox) {
-            if (screen < 0 && newScreen > -1) {
-                QObject::connect(KWindowSystem::self(), SIGNAL(workAreaChanged()), toolBox.data(), SLOT(reposition()), Qt::UniqueConnection);
-            } else if (newScreen < 0) {
-                QObject::disconnect(KWindowSystem::self(), SIGNAL(workAreaChanged()), toolBox.data(), SLOT(reposition()));
-            }
-        }
-
         if (newScreen > -1) {
             // sanity check to make sure someone else doesn't have this screen already!
             Containment *currently = corona->containmentForScreen(newScreen, newDesktop);
@@ -801,32 +790,6 @@ void ContainmentPrivate::checkStatus(Plasma::ItemStatus appletStatus)
     q->setStatus(appletStatus);
 }
 
-void ContainmentPrivate::createToolBox()
-{
-    if (!toolBox && KAuthorized::authorizeKAction("plasma/containment_context_menu")) {
-        toolBox = Plasma::AbstractToolBox::load(q->corona()->preferredToolBoxPlugin(type), QVariantList(), q);
-
-        if (toolBox) {
-            QObject::connect(toolBox.data(), SIGNAL(toggled()), q, SIGNAL(toolBoxToggled()));
-            QObject::connect(toolBox.data(), SIGNAL(toggled()), q, SLOT(updateToolBoxVisibility()));
-
-            positionToolBox();
-        }
-    }
-}
-
-void ContainmentPrivate::positionToolBox()
-{
-    if (toolBox) {
-        toolBox.data()->reposition();
-    }
-}
-
-void ContainmentPrivate::updateToolBoxVisibility()
-{
-    emit q->toolBoxVisibilityChanged(toolBox.data()->isShowing());
-}
-
 void ContainmentPrivate::triggerShowAddWidgets()
 {
     emit q->showAddWidgetsInterface(QPointF());
@@ -869,14 +832,6 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
         }
     }
 
-    if (toolBox && (constraints & Plasma::SizeConstraint ||
-                    constraints & Plasma::FormFactorConstraint ||
-                    constraints & Plasma::ScreenConstraint ||
-                    constraints & Plasma::StartupCompletedConstraint)) {
-        //kDebug() << "Positioning toolbox";
-        positionToolBox();
-    }
-
     if (constraints & Plasma::StartupCompletedConstraint && type < Containment::CustomContainment) {
         q->addToolBoxAction(q->action("remove"));
         checkRemoveAction();
@@ -897,15 +852,7 @@ Applet *ContainmentPrivate::addApplet(const QString &name, const QVariantList &a
         return 0;
     }
 
-    QGraphicsView *v = q->view();
-    if (v) {
-        v->setCursor(Qt::BusyCursor);
-    }
-
     Applet *applet = PluginLoader::self()->loadApplet(name, id, args);
-    if (v) {
-        v->unsetCursor();
-    }
 
     if (!applet) {
 #ifndef NDEBUG

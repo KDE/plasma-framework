@@ -146,28 +146,6 @@ void AppletScript::showMessage(const QIcon &icon, const QString &message, const 
     }
 }
 
-void AppletScript::registerAsDragHandle(QGraphicsItem *item)
-{
-    if (applet()) {
-        applet()->registerAsDragHandle(item);
-    }
-}
-
-void AppletScript::unregisterAsDragHandle(QGraphicsItem *item)
-{
-    if (applet()) {
-        applet()->unregisterAsDragHandle(item);
-    }
-}
-
-bool AppletScript::isRegisteredAsDragHandle(QGraphicsItem *item)
-{
-    if (applet()) {
-        return applet()->isRegisteredAsDragHandle(item);
-    }
-    return false;
-}
-
 void AppletScript::configChanged()
 {
 }

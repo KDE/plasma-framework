@@ -202,7 +202,7 @@ public:
      * @param alignment alignment of the popup, valid flags are Qt::AlignLeft, Qt::AlignRight and Qt::AlignCenter
      * @returns reccomended position
      */
-    QPoint popupPosition(const QGraphicsItem *item, const QSize &size, Qt::AlignmentFlag alignment = Qt::AlignCenter);
+    QPoint popupPosition(const QObject *item, const QSize &size, Qt::AlignmentFlag alignment = Qt::AlignCenter);
 
     /**
      * This method is useful in order to retrieve the list of available
