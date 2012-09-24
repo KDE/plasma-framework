@@ -927,7 +927,7 @@ bool ContainmentPrivate::regionIsEmpty(const QRectF &region, Applet *ignoredAppl
     return true;
 }
 
-void ContainmentPrivate::appletDestroyed(Plasma::Applet *applet)
+void ContainmentPrivate::appletDeleted(Plasma::Applet *applet)
 {
     applets.removeAll(applet);
     if (focusedApplet == applet) {

@@ -671,7 +671,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         /**
          * Emitted when the applet is deleted
          */
-        void appletDestroyed(Plasma::Applet *applet);
+        void appletDeleted(Plasma::Applet *applet);
 
         /**
          * Emitted when the applet status changes

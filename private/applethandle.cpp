@@ -93,7 +93,7 @@ AppletHandle::AppletHandle(Containment *containment, Applet *applet, const QPoin
 
     connect(m_hoverTimer, SIGNAL(timeout()), this, SLOT(hoverTimeout()));
     connect(m_leaveTimer, SIGNAL(timeout()), this, SLOT(leaveTimeout()));
-    connect(m_applet, SIGNAL(appletDestroyed(Plasma::Applet*)), this, SLOT(appletDestroyed()));
+    connect(m_applet, SIGNAL(appletDeleted(Plasma::Applet*)), this, SLOT(appletDeleted()));
 
     setAcceptsHoverEvents(true);
     m_hoverTimer->start();

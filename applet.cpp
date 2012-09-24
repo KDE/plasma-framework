@@ -197,7 +197,7 @@ Applet::Applet(const QString &packagePath, uint appletId, const QVariantList &ar
 Applet::~Applet()
 {
     //let people know that i will die
-    emit appletDestroyed(this);
+    emit appletDeleted(this);
 
     // clean up our config dialog, if any
     delete KConfigDialog::exists(d->configDialogId());
@@ -387,8 +387,6 @@ bool Applet::destroyed() const
 {
     return d->transient;
 }
-
-
 
 ConfigLoader *Applet::configScheme() const
 {

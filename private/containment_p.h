@@ -102,7 +102,7 @@ public:
     QPointF preferredPos(Corona *corona) const;
     QPointF preferredPanelPos(Corona *corona) const;
     void setLockToolText();
-    void appletDestroyed(Applet*);
+    void appletDeleted(Applet*);
     void appletAppeared(Applet*);
     void clearDataForMimeJob(KIO::Job *job);
     void remoteAppletReady(Plasma::AccessAppletJob *job);
