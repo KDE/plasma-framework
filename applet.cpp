@@ -81,7 +81,6 @@
 #include "configloader.h"
 #include "containment.h"
 #include "corona.h"
-#include "dataenginemanager.h"
 #include "dialog.h"
 #include "package.h"
 #include "plasma.h"
