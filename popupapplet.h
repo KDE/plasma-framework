@@ -211,7 +211,6 @@ private:
 
     friend class Applet;
     friend class AppletPrivate;
-    friend class Extender;
     friend class PopupAppletPrivate;
     PopupAppletPrivate * const d;
 };
