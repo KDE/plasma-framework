@@ -24,7 +24,6 @@
 
 #include <QObject>
 #include <QWidget>
-#include <QStyleOptionGraphicsItem>
 
 #include <kplugininfo.h>
 #include <ksharedconfig.h>
@@ -73,27 +72,6 @@ class PLASMA_EXPORT Containment : public Applet
     Q_OBJECT
 
     public:
-        class PLASMA_EXPORT StyleOption : public QStyleOptionGraphicsItem
-        {
-            public:
-                explicit StyleOption();
-                explicit StyleOption(const StyleOption &other);
-                explicit StyleOption(const QStyleOptionGraphicsItem &other);
-
-                enum StyleOptionType {
-                    Type = SO_CustomBase + 1
-                };
-                enum StyleOptionVersion {
-                    Version = QStyleOptionGraphicsItem::Version + 1
-                };
-
-                /**
-                 * The View, if any, that this containment is currently
-                 * being rendered into. Note: this may be NULL, so be
-                 * sure to check it before using it!
-                 */
-                Plasma::View *view;
-        };
 
         enum Type {
             NoContainmentType = -1,  /**< @internal */

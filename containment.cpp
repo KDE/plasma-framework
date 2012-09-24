@@ -72,30 +72,6 @@
 namespace Plasma
 {
 
-Containment::StyleOption::StyleOption()
-    : QStyleOptionGraphicsItem(),
-      view(0)
-{
-    version = Version;
-    type = Type;
-}
-
-Containment::StyleOption::StyleOption(const Containment::StyleOption & other)
-    : QStyleOptionGraphicsItem(other),
-      view(other.view)
-{
-    version = Version;
-    type = Type;
-}
-
-Containment::StyleOption::StyleOption(const QStyleOptionGraphicsItem &other)
-    : QStyleOptionGraphicsItem(other),
-      view(0)
-{
-    version = Version;
-    type = Type;
-}
-
 Containment::Containment(QObject *parent,
                          const QString &serviceId,
                          uint containmentId)
