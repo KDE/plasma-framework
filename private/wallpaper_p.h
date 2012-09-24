@@ -59,6 +59,7 @@ public:
     QSizeF targetSize;
     WallpaperScript *script;
     QList<QAction*> contextActions;
+    QString wallpaperPath;
 
     bool cacheRendering : 1;
     bool initialized : 1;

@@ -269,6 +269,21 @@ bool Wallpaper::isInitialized() const
     return d->initialized;
 }
 
+QString Wallpaper::wallpaperPath() const
+{
+    return d->wallpaperPath;
+}
+
+void Wallpaper::setWallpaperPath(const QString& path)
+{
+    if (path.isEmpty() || !QFile::exists(path)) {
+        kWarning() << "failed on:" << path;
+        return;
+    }
+
+    d->wallpaperPath = path;
+}
+
 void Wallpaper::setBoundingRect(const QRectF &boundingRect)
 {
     d->boundingRect = boundingRect;
@@ -427,15 +442,10 @@ void Wallpaper::render(const QImage &image, const QSize &size,
     d->renderWallpaper(QString(), image, size, resizeMethod, color);
 }
 
-void Wallpaper::render(const QString &sourceImagePath, const QSize &size,
-                       Wallpaper::ResizeMethod resizeMethod, const QColor &color)
+void Wallpaper::render(const QSize &size, Wallpaper::ResizeMethod resizeMethod,
+                       const QColor &color)
 {
-    if (sourceImagePath.isEmpty() || !QFile::exists(sourceImagePath)) {
-        //kDebug() << "failed on:" << sourceImagePath;
-        return;
-    }
-
-    d->renderWallpaper(sourceImagePath, QImage(), size, resizeMethod, color);
+    d->renderWallpaper(d->wallpaperPath, QImage(), size, resizeMethod, color);
 }
 
 void WallpaperPrivate::renderWallpaper(const QString &sourceImagePath, const QImage &image, const QSize &size,

@@ -166,7 +166,8 @@ void WallpaperScript::render(const QString &sourceImagePath, const QSize &size,
         Wallpaper::ResizeMethod resizeMethod, const QColor &color)
 {
     if (d->wallpaper) {
-        d->wallpaper->render(sourceImagePath, size, resizeMethod, color);
+        d->wallpaper->setWallpaperPath(sourceImagePath);
+        d->wallpaper->render(size, resizeMethod, color);
     }
 }
 

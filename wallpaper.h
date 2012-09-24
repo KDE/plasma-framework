@@ -309,6 +309,8 @@ class PLASMA_EXPORT Wallpaper : public QObject
          */
         bool isUsingRenderingCache() const;
 
+        virtual void setWallpaperPath(const QString& path);
+
         /**
          * Allows one to set rendering hints that may differ from the actualities of the
          * Wallpaper's current state, allowing for better selection of papers from packages,
@@ -354,6 +356,8 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * @since 4.5
          */
         bool isPreviewing() const;
+
+        QString wallpaperPath() const;
 
         /**
          * Puts the wallpaper into preview mode
@@ -451,8 +455,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
          *              entire size with the given ResizeMethod
          * @since 4.3
          */
-        void render(const QString &sourceImagePath, const QSize &size,
-                    Wallpaper::ResizeMethod resizeMethod = ScaledResize,
+        void render(const QSize &size, Wallpaper::ResizeMethod resizeMethod = ScaledResize,
                     const QColor &color = QColor(0, 0, 0));
 
         /**
