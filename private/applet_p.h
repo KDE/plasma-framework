@@ -27,9 +27,11 @@
 
 #include <kactioncollection.h>
 #include <kconfigdialog.h>
+#include <kconfigskeleton.h>
+#include <kservice.h>
+#include <kplugininfo.h>
 
-#include "plasma/animator.h"
-#include "plasma/private/applethandle_p.h"
+#include "plasma/applet.h"
 #include "plasma/dataengineconsumer.h"
 #include "plasma/ui_publish.h"
 
@@ -146,7 +148,6 @@ public:
     QVariantList args;
 
     // bookkeeping
-    QSet<QGraphicsItem*> registeredAsDragHandle;
     Plasma::FrameSvg *background;
     KConfigGroup *mainConfig;
     Plasma::Constraints pendingConstraints;
@@ -155,7 +156,6 @@ public:
     AppletScript *script;
     Package *package;
     ConfigLoader *configLoader;
-    QWeakPointer<AppletHandle> handle;
 
     // actions stuff; put activationAction into actions?
     KActionCollection *actions;

@@ -87,7 +87,6 @@
 #include "scripting/appletscript.h"
 #include "svg.h"
 #include "framesvg.h"
-#include "private/applethandle_p.h"
 #include "private/framesvg_p.h"
 #include "remote/authorizationmanager.h"
 #include "remote/authorizationmanager_p.h"
@@ -827,13 +826,6 @@ void Applet::flushPendingConstraintsEvents()
             bool canConfig = unlocked || KAuthorized::authorize("plasma/allow_configure_when_locked");
             action->setVisible(canConfig);
             action->setEnabled(canConfig);
-        }
-
-        if (!unlocked && d->handle) {
-            AppletHandle *h = d->handle.data();
-            disconnect(this);
-
-            h->deleteLater();
         }
 
         emit immutabilityChanged(immutability());
