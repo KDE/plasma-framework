@@ -100,18 +100,14 @@ public:
      */
     void setIsContainment(bool isContainment, bool forceUpdate = false);
 
-    void handleDisappeared(AppletHandle *handle);
     QString globalName() const;
     QString instanceName();
     void scheduleConstraintsUpdate(Plasma::Constraints c);
     void scheduleModificationNotification();
     KConfigGroup *mainConfigGroup();
     QString visibleFailureText(const QString &reason);
-    void themeChanged();
     void resetConfigurationObject();
     void selectItemToDestroy();
-    void updateRect(const QRectF &rect);
-    void setFocus();
     void addGlobalShortcutsPage(KConfigDialog *dialog);
     void addPublishPage(KConfigDialog *dialog);
     void configDialogFinished();

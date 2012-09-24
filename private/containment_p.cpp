@@ -140,7 +140,7 @@ void ContainmentPrivate::checkContainmentFurniture()
 
 void ContainmentPrivate::addContainmentActions(KMenu &desktopMenu, QEvent *event)
 {
-    if (static_cast<Corona*>(q->scene())->immutability() != Mutable &&
+    if (q->corona()->immutability() != Mutable &&
         !KAuthorized::authorizeKAction("plasma/containment_actions")) {
         //kDebug() << "immutability";
         return;
@@ -213,6 +213,8 @@ void ContainmentPrivate::addAppletActions(KMenu &desktopMenu, Applet *applet, QE
 
 Applet* ContainmentPrivate::appletAt(const QPointF &point)
 {
+  return 0;
+  /*TODO: port away qgv
     Applet *applet = 0;
 
     QGraphicsItem *item = q->scene()->itemAt(point);
@@ -239,6 +241,7 @@ Applet* ContainmentPrivate::appletAt(const QPointF &point)
         item = item->parentItem();
     }
     return applet;
+    */
 }
 
 void ContainmentPrivate::setScreen(int newScreen, int newDesktop, bool preventInvalidDesktops)
@@ -257,9 +260,11 @@ void ContainmentPrivate::setScreen(int newScreen, int newDesktop, bool preventIn
     Q_ASSERT(corona);
 
     //if it's an offscreen widget, don't allow to claim a screen, after all it's *off*screen
+    //TODO: port away qgv
+    /* should decide in a different way if this is a dashboard containment
     if (corona->offscreenWidgets().contains(q)) {
         return;
-    }
+    }*/
 
     int numScreens = corona->numScreens();
     if (newScreen < -1) {
@@ -360,7 +365,6 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
         return;
     }
 
-    QPointF pos = q->mapFromScene(scenePos);
     const QMimeData *mimeData = 0;
 
     if (dropEvent) {
@@ -388,7 +392,7 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
         const QStringList appletNames = data.split('\n', QString::SkipEmptyParts);
         foreach (const QString &appletName, appletNames) {
             //kDebug() << "doing" << appletName;
-            QRectF geom(pos, QSize(0, 0));
+            QRectF geom(scenePos, QSize(0, 0));
             q->addApplet(appletName, QVariantList(), geom);
         }
         if (dropEvent) {
@@ -414,7 +418,7 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
                 QMimeDatabase db;
                 QMimeType mime = db.mimeTypeForUrl(url);
                 QString mimeName = mime.name();
-                QRectF geom(pos, QSize());
+                QRectF geom(scenePos, QSize());
                 QVariantList args;
                 args << url.toString();
 #ifndef NDEBUG
@@ -516,7 +520,7 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
                     stream.writeRawData(data, data.size());
                 }
 
-                QRectF geom(pos, QSize());
+                QRectF geom(scenePos, QSize());
                 QVariantList args;
                 args << tempFile.fileName();
 #ifndef NDEBUG
@@ -946,124 +950,10 @@ void ContainmentPrivate::appletAppeared(Applet *applet)
     emit q->configNeedsSaving();
 }
 
-void ContainmentPrivate::positionPanel(bool force)
-{
-    if (!q->scene()) {
-#ifndef NDEBUG
-        kDebug() << "no scene yet";
-#endif
-        return;
-    }
-
-    // already positioning the panel - avoid infinite loops
-    if (ContainmentPrivate::s_positioningPanels) {
-        return;
-    }
-
-    // we position panels in negative coordinates, and stack all horizontal
-    // and all vertical panels with each other.
-
-
-    const QPointF p = q->pos();
-
-    if (!force &&
-        p.y() + q->size().height() < -INTER_CONTAINMENT_MARGIN &&
-        q->scene()->collidingItems(q).isEmpty()) {
-        // already positioned and not running into any other panels
-        return;
-    }
-
-
-    QPointF newPos = preferredPanelPos(q->corona());
-    if (p != newPos) {
-        ContainmentPrivate::s_positioningPanels = true;
-        q->setPos(newPos);
-        ContainmentPrivate::s_positioningPanels = false;
-    }
-}
-
 bool ContainmentPrivate::isPanelContainment() const
 {
     return type == Containment::PanelContainment || type == Containment::CustomPanelContainment;
 }
-
-QPointF ContainmentPrivate::preferredPos(Corona *corona) const
-{
-    Q_ASSERT(corona);
-
-    if (isPanelContainment()) {
-        //kDebug() << "is a panel, so put it at" << preferredPanelPos(corona);
-        return preferredPanelPos(corona);
-    }
-
-    QPointF pos(0, 0);
-    QTransform t;
-    while (QGraphicsItem *i = corona->itemAt(pos, t)) {
-        pos.setX(i->scenePos().x() + i->boundingRect().width() + 10);
-    }
-
-    //kDebug() << "not a panel, put it at" << pos;
-    return pos;
-}
-
-QPointF ContainmentPrivate::preferredPanelPos(Corona *corona) const
-{
-    Q_ASSERT(corona);
-
-    //TODO: research how non-Horizontal, non-Vertical (e.g. Planar) panels behave here
-    bool horiz = formFactor == Plasma::Horizontal;
-    qreal bottom = horiz ? 0 : VERTICAL_STACKING_OFFSET;
-    qreal lastHeight = 0;
-
-    // this should be ok for small numbers of panels, but if we ever end
-    // up managing hundreds of them, this simplistic alogrithm will
-    // likely be too slow.
-    foreach (const Containment *other, corona->containments()) {
-        if (other == q ||
-            !other->d->isPanelContainment() ||
-            horiz != (other->formFactor() == Plasma::Horizontal)) {
-            // only line up with panels of the same orientation
-            continue;
-        }
-
-        if (horiz) {
-            qreal y = other->pos().y();
-            if (y < bottom) {
-                lastHeight = other->size().height();
-                bottom = y;
-            }
-        } else {
-            qreal width = other->size().width();
-            qreal x = other->pos().x() + width;
-            if (x > bottom) {
-                lastHeight = width;
-                bottom = x + lastHeight;
-            }
-        }
-    }
-
-    // give a space equal to the height again of the last item so there is
-    // room to grow.
-    QPointF newPos;
-    if (horiz) {
-        bottom -= lastHeight + INTER_CONTAINMENT_MARGIN;
-        //TODO: fix x position for non-flush-left panels
-#ifndef NDEBUG
-        kDebug() << "moved to" << QPointF(0, bottom - q->size().height());
-#endif
-        newPos = QPointF(0, bottom - q->size().height());
-    } else {
-        bottom += lastHeight + INTER_CONTAINMENT_MARGIN;
-        //TODO: fix y position for non-flush-top panels
-#ifndef NDEBUG
-        kDebug() << "moved to" << QPointF(bottom + q->size().width(), -INTER_CONTAINMENT_MARGIN - q->size().height());
-#endif
-        newPos = QPointF(bottom + q->size().width(), -INTER_CONTAINMENT_MARGIN - q->size().height());
-    }
-
-    return newPos;
-}
-
 
 bool ContainmentPrivate::prepareContainmentActions(const QString &trigger, const QPoint &screenPos, KMenu *menu)
 {

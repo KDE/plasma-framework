@@ -70,7 +70,7 @@ class Package;
  *
  * See techbase.kde.org for tutorials on writing Applets using this class.
  */
-class PLASMA_EXPORT Applet : public QGraphicsWidget
+class PLASMA_EXPORT Applet : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool hasConfigurationInterface READ hasConfigurationInterface)
@@ -809,6 +809,14 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
         void runAssociatedApplication();
 
+        bool hasFocus() const;
+        void setFocus(Qt::FocusReason);
+
+        void resize(const QSizeF &size);
+        QSizeF size() const;
+        QRectF geometry() const;
+        void setGeometry(const QRect &geom);
+
     protected:
         /**
          * This constructor is to be used with the plugin loading systems
@@ -954,11 +962,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         /**
          * Reimplemented from QGraphicsItem
          */
-        QVariant itemChange(GraphicsItemChange change, const QVariant &value);
-
-        /**
-         * Reimplemented from QGraphicsItem
-         */
         QPainterPath shape() const;
 
         /**
@@ -993,8 +996,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
         Applet(const QString &packagePath, uint appletId, const QVariantList &args);
 
-        Q_PRIVATE_SLOT(d, void setFocus())
-        Q_PRIVATE_SLOT(d, void themeChanged())
         Q_PRIVATE_SLOT(d, void cleanUpAndDelete())
         Q_PRIVATE_SLOT(d, void selectItemToDestroy())
         Q_PRIVATE_SLOT(d, void updateRect(const QRectF& rect))
@@ -1003,7 +1004,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         Q_PRIVATE_SLOT(d, void publishCheckboxStateChanged(int state))
         Q_PRIVATE_SLOT(d, void globalShortcutChanged())
         Q_PRIVATE_SLOT(d, void propagateConfigChanged())
-        Q_PRIVATE_SLOT(d, void handleDisappeared(AppletHandle *handle))
 
         /**
          * Reimplemented from QGraphicsItem

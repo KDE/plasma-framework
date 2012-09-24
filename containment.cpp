@@ -611,12 +611,6 @@ void Containment::setFormFactor(FormFactor formFactor)
     //kDebug() << "switching FF to " << formFactor;
     d->formFactor = formFactor;
 
-    if (isContainment() &&
-        (d->type == PanelContainment || d->type == CustomPanelContainment)) {
-        // we are a panel and we have chaged our orientation
-        d->positionPanel(true);
-    }
-
     if (d->toolBox) {
         d->toolBox.data()->reposition();
     }
@@ -971,9 +965,7 @@ void Containment::resizeEvent(QGraphicsSceneResizeEvent *event)
     Applet::resizeEvent(event);
 
     if (isContainment()) {
-        if (d->isPanelContainment()) {
-            d->positionPanel();
-        } else if (corona()) {
+        if (corona()) {
             corona()->layoutContainments();
         }
 
@@ -1025,29 +1017,6 @@ void Containment::wheelEvent(QGraphicsSceneWheelEvent *event)
         event->ignore();
         Applet::wheelEvent(event);
     }
-}
-
-QVariant Containment::itemChange(GraphicsItemChange change, const QVariant &value)
-{
-    //FIXME if the applet is moved to another containment we need to unfocus it
-
-    if (isContainment() &&
-        (change == QGraphicsItem::ItemSceneHasChanged ||
-         change == QGraphicsItem::ItemPositionHasChanged)) {
-        switch (d->type) {
-            case PanelContainment:
-            case CustomPanelContainment:
-                d->positionPanel();
-                break;
-            default:
-                if (corona()) {
-                    corona()->layoutContainments();
-                }
-                break;
-        }
-    }
-
-    return Applet::itemChange(change, value);
 }
 
 void Containment::enableAction(const QString &name, bool enable)

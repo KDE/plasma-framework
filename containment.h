@@ -409,6 +409,9 @@ class PLASMA_EXPORT Containment : public Applet
          */
         KConfigGroup containmentActionsConfig();
 
+        void setAcceptDrops(bool accept);
+        bool acceptDrops() const;
+
 Q_SIGNALS:
         /**
          * This signal is emitted when a new applet is created by the containment
@@ -548,7 +551,6 @@ Q_SIGNALS:
         void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
         void keyPressEvent(QKeyEvent *event);
         void wheelEvent(QGraphicsSceneWheelEvent *event);
-        QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
         /**
          * @reimp

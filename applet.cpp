@@ -116,8 +116,8 @@
 namespace Plasma
 {
 
-Applet::Applet(const KPluginInfo &info, QGraphicsItem *parent, uint appletId)
-    :  QGraphicsWidget(parent),
+Applet::Applet(const KPluginInfo &info, QObject *parent, uint appletId)
+    :  QObject(parent),
        d(new AppletPrivate(KService::Ptr(), &info, appletId, this))
 {
     // WARNING: do not access config() OR globalConfig() in this method!
@@ -125,8 +125,8 @@ Applet::Applet(const KPluginInfo &info, QGraphicsItem *parent, uint appletId)
     d->init();
 }
 
-Applet::Applet(QGraphicsItem *parent, const QString &serviceID, uint appletId)
-    :  QGraphicsWidget(parent),
+Applet::Applet(QObject *parent, const QString &serviceID, uint appletId)
+    :  QObject(parent),
        d(new AppletPrivate(KService::serviceByStorageId(serviceID), 0, appletId, this))
 {
     // WARNING: do not access config() OR globalConfig() in this method!
@@ -134,8 +134,8 @@ Applet::Applet(QGraphicsItem *parent, const QString &serviceID, uint appletId)
     d->init();
 }
 
-Applet::Applet(QGraphicsItem *parent, const QString &serviceID, uint appletId, const QVariantList &args)
-    :  QGraphicsWidget(parent),
+Applet::Applet(QObject *parent, const QString &serviceID, uint appletId, const QVariantList &args)
+    :  QObject(parent),
        d(new AppletPrivate(KService::serviceByStorageId(serviceID), 0, appletId, this))
 {
     // WARNING: do not access config() OR globalConfig() in this method!
@@ -156,7 +156,7 @@ Applet::Applet(QGraphicsItem *parent, const QString &serviceID, uint appletId, c
 }
 
 Applet::Applet(QObject *parentObject, const QVariantList &args)
-    :  QGraphicsWidget(0),
+    :  QObject(0),
        d(new AppletPrivate(
              KService::serviceByStorageId(args.count() > 0 ? args[0].toString() : QString()), 0,
              args.count() > 1 ? args[1].toInt() : 0, this))
@@ -186,7 +186,7 @@ Applet::Applet(QObject *parentObject, const QVariantList &args)
 }
 
 Applet::Applet(const QString &packagePath, uint appletId, const QVariantList &args)
-    : QGraphicsWidget(0),
+    : QObject(0),
       d(new AppletPrivate(KService::Ptr(new KService(packagePath + "/metadata.desktop")), 0, appletId, this))
 {
     Q_UNUSED(args) // FIXME?
@@ -625,7 +625,6 @@ void Applet::setBackgroundHints(const Plasma::BackgroundHints hints)
     if ((hints & StandardBackground) || (hints & TranslucentBackground)) {
         if (!d->background) {
             d->background = new Plasma::FrameSvg(this);
-            QObject::connect(d->background, SIGNAL(repaintNeeded()), this, SLOT(themeChanged()));
         }
 
         if ((hints & TranslucentBackground) &&
@@ -976,16 +975,16 @@ void Applet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *o
 FormFactor Applet::formFactor() const
 {
     Containment *c = containment();
-    QGraphicsWidget *pw = qobject_cast<QGraphicsWidget *>(parent());
+    QObject *pw = qobject_cast<QObject *>(parent());
     if (!pw) {
-        pw = dynamic_cast<QGraphicsWidget *>(parentItem());
+        pw = dynamic_cast<QObject *>(parentItem());
     }
     Plasma::Applet *parentApplet = qobject_cast<Plasma::Applet *>(pw);
     //assumption: this loop is usually is -really- short or doesn't run at all
     while (!parentApplet && pw && pw->parentWidget()) {
-        QGraphicsWidget *parentWidget = qobject_cast<QGraphicsWidget *>(pw->parent());
+        QObject *parentWidget = qobject_cast<QObject *>(pw->parent());
         if (!parentWidget) {
-            parentWidget = dynamic_cast<QGraphicsWidget *>(pw->parentItem());
+            parentWidget = dynamic_cast<QObject *>(pw->parentItem());
         }
         pw = parentWidget;
         parentApplet = qobject_cast<Plasma::Applet *>(pw);
@@ -1021,7 +1020,7 @@ Containment *Applet::containment() const
         }
     }
 
-    QGraphicsItem *parent = parentItem();
+    QObject *parent = parentItem();
     Containment *c = 0;
 
     while (parent) {
@@ -1122,7 +1121,7 @@ void Applet::setAspectRatioMode(Plasma::AspectRatioMode mode)
     d->aspectRatioMode = mode;
 }
 
-void Applet::registerAsDragHandle(QGraphicsItem *item)
+void Applet::registerAsDragHandle(QObject *item)
 {
     if (!item || d->registeredAsDragHandle.contains(item)) {
         return;
@@ -1132,7 +1131,7 @@ void Applet::registerAsDragHandle(QGraphicsItem *item)
     item->installSceneEventFilter(this);
 }
 
-void Applet::unregisterAsDragHandle(QGraphicsItem *item)
+void Applet::unregisterAsDragHandle(QObject *item)
 {
     if (!item) {
         return;
@@ -1145,7 +1144,7 @@ void Applet::unregisterAsDragHandle(QGraphicsItem *item)
     }
 }
 
-bool Applet::isRegisteredAsDragHandle(QGraphicsItem *item)
+bool Applet::isRegisteredAsDragHandle(QObject *item)
 {
     return d->registeredAsDragHandle.contains(item);
 }
@@ -1211,14 +1210,14 @@ void Applet::setHasConfigurationInterface(bool hasInterface)
     d->hasConfigurationInterface = hasInterface;
 }
 
-bool Applet::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
+bool Applet::sceneEventFilter(QObject *watched, QEvent *event)
 {
     if (watched == this) {
         switch (event->type()) {
             case QEvent::GraphicsSceneHoverEnter:
                 //kDebug() << "got hoverenterEvent" << immutability() << " " << immutability();
                 if (immutability() == Mutable) {
-                    QGraphicsWidget *pw = this;
+                    QObject *pw = this;
                     //This is for the rare case of applet in applet (systray)
                     //if the applet is in an applet that is not a containment, don't create the handle BUG:301648
                     while (pw = pw->parentWidget()) {
@@ -1235,8 +1234,7 @@ bool Applet::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
                     } else {
                         //kDebug() << "generated applet handle";
                         AppletHandle *handle = new AppletHandle(containment(), this, he->pos());
-                        connect(handle, SIGNAL(disappearDone(AppletHandle*)),
-                                this, SLOT(handleDisappeared(AppletHandle*)));
+
                         connect(this, SIGNAL(geometryChanged()),
                                 handle, SLOT(appletResized()));
                         d->handle = handle;
@@ -1278,13 +1276,13 @@ bool Applet::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
         break;
     }
 
-    return QGraphicsItem::sceneEventFilter(watched, event);
+    return QObject::sceneEventFilter(watched, event);
 }
 
 void Applet::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (immutability() == Mutable && formFactor() == Plasma::Planar && (flags() & ItemIsMovable)) {
-        QGraphicsWidget::mouseMoveEvent(event);
+        QObject::mouseMoveEvent(event);
     }
 }
 
@@ -1295,12 +1293,12 @@ void Applet::focusInEvent(QFocusEvent *event)
         containment()->d->focusApplet(this);
     }
 
-    QGraphicsWidget::focusInEvent(event);
+    QObject::focusInEvent(event);
 }
 
 void Applet::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
-    QGraphicsWidget::resizeEvent(event);
+    QObject::resizeEvent(event);
 
     if (d->background) {
         d->background->resizeFrame(boundingRect().size());
@@ -1623,82 +1621,18 @@ Applet *Applet::loadPlasmoid(const QString &path, uint appletId, const QVariantL
     return 0;
 }
 
-QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
-{
-    QVariant ret = QGraphicsWidget::itemChange(change, value);
-
-    //kDebug() << change;
-    switch (change) {
-    case ItemSceneHasChanged: {
-        Corona *newCorona = qobject_cast<Corona *>(qvariant_cast<QGraphicsScene*>(value));
-        if (newCorona && newCorona->immutability() != Mutable) {
-            updateConstraints(ImmutableConstraint);
-        }
-    }
-        break;
-    case ItemParentChange:
-        if (!d->isContainment) {
-            Containment *c = containment();
-            if (d->mainConfig && !c) {
-                kWarning() << "Configuration object was requested prior to init(), which is too early. "
-                    "Please fix this item:" << parentItem() << value.value<QGraphicsItem *>()
-                    << name();
-
-                Applet *newC = dynamic_cast<Applet*>(value.value<QGraphicsItem *>());
-                if (newC) {
-                    // if this is an applet, and we've just been assigned to our first containment,
-                    // but the applet did something stupid like ask for the config() object prior to
-                    // this happening (e.g. inits ctor) then let's repair that situation for them.
-                    KConfigGroup *old = d->mainConfig;
-                    KConfigGroup appletConfig = newC->config();
-                    appletConfig = KConfigGroup(&appletConfig, "Applets");
-                    d->mainConfig = new KConfigGroup(&appletConfig, QString::number(d->appletId));
-                    old->copyTo(d->mainConfig);
-                    old->deleteGroup();
-                    delete old;
-                }
-            }
-        }
-        break;
-    case ItemParentHasChanged:
-        {
-            if (isContainment()) {
-                removeSceneEventFilter(this);
-            } else {
-                Containment *c = containment();
-                if (c && c->containmentType() == Containment::DesktopContainment) {
-                    installSceneEventFilter(this);
-                } else {
-                    removeSceneEventFilter(this);
-                }
-            }
-        }
-        break;
-    case ItemPositionHasChanged:
-        emit geometryChanged();
-        // fall through!
-    case ItemTransformHasChanged:
-        d->scheduleModificationNotification();
-        break;
-    default:
-        break;
-    };
-
-    return ret;
-}
-
 QPainterPath Applet::shape() const
 {
     if (d->script) {
         return d->script->shape();
     }
 
-    return QGraphicsWidget::shape();
+    return QObject::shape();
 }
 
 QSizeF Applet::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
-    QSizeF hint = QGraphicsWidget::sizeHint(which, constraint);
+    QSizeF hint = QObject::sizeHint(which, constraint);
     const FormFactor ff = formFactor();
 
     // in panels make sure that the contents won't exit from the panel

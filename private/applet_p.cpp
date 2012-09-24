@@ -131,7 +131,6 @@ void AppletPrivate::init(const QString &packagePath)
                  << "You probably want to be passing in a Service::Ptr "
                  << "or a QVariantList with a valid storageid as arg[0].";
 #endif
-        q->resize(size);
         return;
     }
 
@@ -140,7 +139,6 @@ void AppletPrivate::init(const QString &packagePath)
         size = s.toSize();
     }
     //kDebug() << "size" << size;
-    q->resize(size);
 
     QString api = appletDescription.property("X-Plasma-API").toString();
 
@@ -205,15 +203,11 @@ void AppletPrivate::init(const QString &packagePath)
     }
 }
 
-void AppletPrivate::setFocus()
-{
-    //kDebug() << "setting focus";
-    q->setFocus(Qt::ShortcutFocusReason);
-}
-
 void AppletPrivate::selectItemToDestroy()
 {
     //FIXME: this will not work nicely with multiple screens and being zoomed out!
+    //TODO: port away from QGV
+    /*
     if (isContainment) {
         QGraphicsView *view = q->view();
         if (view && view->transform().isScaling() &&
@@ -229,14 +223,9 @@ void AppletPrivate::selectItemToDestroy()
                 }
             }
         }
-    }
+    }*/
 
     q->destroy();
-}
-
-void AppletPrivate::updateRect(const QRectF &rect)
-{
-    q->update(rect);
 }
 
 void AppletPrivate::cleanUpAndDelete()
@@ -684,7 +673,7 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
     }
 
     if (isContainment) {
-        Corona *corona = qobject_cast<Corona*>(q->scene());
+        Corona *corona = static_cast<Containment*>(q)->corona();
         KConfigGroup containmentConfig;
         //kDebug() << "got a corona, baby?" << (QObject*)corona << (QObject*)q;
 
@@ -733,22 +722,6 @@ QString AppletPrivate::visibleFailureText(const QString &reason)
     return text;
 }
 
-void AppletPrivate::themeChanged()
-{
-    if (background) {
-        //do again the translucent background fallback
-        q->setBackgroundHints(backgroundHints);
-
-        qreal left;
-        qreal right;
-        qreal top;
-        qreal bottom;
-        background->getMargins(left, top, right, bottom);
-        q->setContentsMargins(left, right, top, bottom);
-    }
-    q->update();
-}
-
 void AppletPrivate::resetConfigurationObject()
 {
     // make sure mainConfigGroup exists in all cases
@@ -758,21 +731,12 @@ void AppletPrivate::resetConfigurationObject()
     delete mainConfig;
     mainConfig = 0;
 
-    Corona * corona = qobject_cast<Corona*>(q->scene());
+    if (!q->containment()) {
+        return;
+    }
+    Corona * corona = q->containment()->corona();
     if (corona) {
         corona->requireConfigSync();
-    }
-}
-
-void AppletPrivate::handleDisappeared(AppletHandle *h)
-{
-    if (h == handle.data()) {
-        h->detachApplet();
-        QGraphicsScene *scene = q->scene();
-        if (scene && h->scene() == scene) {
-            scene->removeItem(h);
-        }
-        h->deleteLater();
     }
 }
 

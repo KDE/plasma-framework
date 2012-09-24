@@ -97,10 +97,7 @@ public:
     void initApplets();
     void checkContainmentFurniture();
     bool regionIsEmpty(const QRectF &region, Applet *ignoredApplet=0) const;
-    void positionPanel(bool force = false);
     bool isPanelContainment() const;
-    QPointF preferredPos(Corona *corona) const;
-    QPointF preferredPanelPos(Corona *corona) const;
     void setLockToolText();
     void appletDeleted(Applet*);
     void appletAppeared(Applet*);
