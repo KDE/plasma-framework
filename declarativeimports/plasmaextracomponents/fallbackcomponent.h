@@ -23,19 +23,36 @@
 
 #include <QObject>
 #include <QCache>
-
+#include <QStringList>
 
 class FallbackComponent : public QObject
 {
     Q_OBJECT
 
+Q_PROPERTY(QString basePath READ basePath WRITE setBasePath NOTIFY onBasePathChanged)
+Q_PROPERTY(QStringList candidates READ candidates WRITE setCandidates NOTIFY onCandidatesChanged)
+
 public:
     FallbackComponent(QObject *parent = 0);
 
-    Q_INVOKABLE QString resolvePath(const QString &component, const QStringList &paths);
+    Q_INVOKABLE QString filePath(const QString& key);
+
+    QString basePath() const;
+    void setBasePath(const QString &basePath);
+
+
+    QStringList candidates() const;
+    void setCandidates(const QStringList &candidates);
+
+
+Q_SIGNALS:
+    void onBasePathChanged();
+    void onCandidatesChanged();
 
 private:
-    QCache<QString, QString> m_paths;
+    QCache<QString, QString> m_possiblePaths;
+    QString m_basePath;
+    QStringList m_candidates;
 };
 
 #endif

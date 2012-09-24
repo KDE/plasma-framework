@@ -19,9 +19,8 @@
 
 #include "fallbackcomponent.h"
 
-
+#include <QDir>
 #include <QFile>
-
 
 #include <KStandardDirs>
 #include <KDebug>
@@ -32,14 +31,38 @@ FallbackComponent::FallbackComponent(QObject *parent)
 {
 }
 
-QString FallbackComponent::resolvePath(const QString &component, const QStringList &paths)
+QString FallbackComponent::basePath() const
+{
+    return m_basePath;
+}
+
+void FallbackComponent::setBasePath(const QString &basePath)
+{
+    if (basePath != m_basePath) {
+        m_basePath = basePath;
+        emit onBasePathChanged();
+    }
+}
+
+QStringList FallbackComponent::candidates() const
+{
+    return m_candidates;
+}
+
+void FallbackComponent::setCandidates(const QStringList &candidates)
+{
+    m_candidates = candidates;
+    emit onCandidatesChanged();
+}
+
+QString FallbackComponent::filePath(const QString &key)
 {
     QString resolved;
-    foreach (const QString &path, paths) {
-        //kDebug() << "Searching for" << path;
-        const QString key = component + '/' + path;
-        if (m_paths.contains(key)) {
-            resolved = *m_paths.object(key);
+
+    foreach (const QString &path, m_candidates) {
+        kDebug() << "Searching for!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << path;
+        if (m_possiblePaths.contains(key)) {
+            resolved = *m_possiblePaths.object(key);
             if (!resolved.isEmpty()) {
                 break;
             } else {
@@ -47,8 +70,14 @@ QString FallbackComponent::resolvePath(const QString &component, const QStringLi
             }
         }
 
-        resolved = KStandardDirs::locate("data", "plasma/" + key);
-        m_paths.insert(key, new QString(resolved));
+        QDir tmpPath(m_basePath);
+        if (tmpPath.isAbsolute()) {
+            resolved = m_basePath + path;
+        } else {
+            resolved = KStandardDirs::locate("data", m_basePath + '/' + path);
+        }
+
+        m_possiblePaths.insert(key, new QString(resolved));
         if (!resolved.isEmpty()) {
             break;
         }
