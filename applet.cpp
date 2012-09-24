@@ -87,13 +87,11 @@
 #include "scripting/appletscript.h"
 #include "svg.h"
 #include "framesvg.h"
-#include "popupapplet.h"
 #include "private/applethandle_p.h"
 #include "private/framesvg_p.h"
 #include "remote/authorizationmanager.h"
 #include "remote/authorizationmanager_p.h"
 #include "theme.h"
-#include "view.h"
 #include "widgets/iconwidget.h"
 #include "widgets/label.h"
 #include "tooltipmanager.h"
@@ -107,7 +105,6 @@
 #include "private/package_p.h"
 #include "private/packages_p.h"
 #include "private/plasmoidservice_p.h"
-#include "private/popupapplet_p.h"
 #include "private/remotedataengine_p.h"
 #include "private/service_p.h"
 #include "ui_publish.h"
@@ -374,6 +371,87 @@ KConfigGroup Applet::globalConfig() const
     return KConfigGroup(&globalAppletConfig, d->globalName());
 }
 
+QSizeF Applet::size() const
+{
+    return QSizeF();
+}
+
+QRectF Applet::geometry() const
+{
+    return QRectF();
+}
+
+void Applet::setGeometry(const QRectF &rect)
+{
+    
+}
+
+QRectF Applet::boundingRect() const
+{
+    return QRectF();
+}
+
+void Applet::resize(const QSizeF &size)
+{
+    
+}
+
+int Applet::zValue() const
+{
+    return 0;
+}
+
+void Applet::setZValue(int val)
+{
+    
+}
+
+QTransform Applet::transform() const
+{
+    return QTransform();
+}
+
+void Applet::setTransform(const QTransform &transform)
+{
+    
+}
+
+QPointF Applet::pos() const
+{
+    return QPointF();
+}
+
+void Applet::setPos(const QPointF &pos)
+{
+    
+}
+
+void Applet::setPos(int x, int y)
+{
+    
+}
+
+bool Applet::hasFocus() const
+{
+    return false;
+}
+
+void Applet::setFocus(Qt::FocusReason)
+{
+    
+}
+
+void Applet::setSizePolicy(const QSizePolicy& policy)
+{
+
+}
+
+QSizePolicy Applet::sizePolicy() const
+{
+    return QSizePolicy();
+}
+
+
 void Applet::destroy()
 {
     if (immutability() != Mutable || d->transient || !d->started) {
@@ -435,7 +513,9 @@ QPoint Applet::popupPosition(const QSize &s, Qt::AlignmentFlag alignment) const
     }
     Q_ASSERT(corona);
 
-    return corona->popupPosition(this, s, alignment);
+    return QPoint();
+    //FIXME: port away from QGV
+    //return corona->popupPosition(this, s, alignment);
 }
 
 void Applet::updateConstraints(Plasma::Constraints constraints)
@@ -814,10 +894,12 @@ void Applet::flushPendingConstraintsEvents()
         containment->d->containmentConstraintsEvent(c);
     }
 
+    //FIXME: port away from popupapplet
+    /*
     PopupApplet* popup = qobject_cast<Plasma::PopupApplet*>(this);
     if (popup) {
         popup->d->popupConstraintsEvent(c);
-    }
+    }*/
 
     // pass the constraint on to the actual subclass
     constraintsEvent(c);
@@ -881,10 +963,11 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 
     if (widget && d->isContainment) {
         // note that the widget we get is actually the viewport of the view, not the view itself
-        View* v = qobject_cast<Plasma::View*>(widget->parent());
+//        View* v = qobject_cast<Plasma::View*>(widget->parent());
         Containment* c = qobject_cast<Plasma::Containment*>(this);
 
-        if (!v || v->isWallpaperEnabled()) {
+        //FIXME: new View?
+        if (1/*!v || v->isWallpaperEnabled()*/) {
 
             // paint the wallpaper
             if (c && c->drawWallpaper() && c->wallpaper()) {
@@ -917,7 +1000,8 @@ FormFactor Applet::formFactor() const
     }
 
 
-    const PopupApplet *pa = dynamic_cast<const PopupApplet *>(this);
+    //FIXME: port away popupapplet
+    //const PopupApplet *pa = dynamic_cast<const PopupApplet *>(this);
 
     //if the applet is in a widget that isn't a containment
     //try to retrieve the formFactor from the parent size
@@ -926,9 +1010,9 @@ FormFactor Applet::formFactor() const
     // a normal applet should to but
     //FIXME: not always constrained to not break systemmonitor
     if (parentApplet && parentApplet != c && c != this) {
-        if (pa || (parentApplet->size().height() < sizeHint(Qt::MinimumSize).height())) {
+        if (parentApplet->size().height() < sizeHint(Qt::MinimumSize).height()) {
             return Plasma::Horizontal;
-        } else if (pa || (parentApplet->size().width() < sizeHint(Qt::MinimumSize).width())) {
+        } else if (parentApplet->size().width() < sizeHint(Qt::MinimumSize).width()) {
             return Plasma::Vertical;
         }
         return parentApplet->formFactor();
@@ -1038,11 +1122,13 @@ Plasma::AspectRatioMode Applet::aspectRatioMode() const
 
 void Applet::setAspectRatioMode(Plasma::AspectRatioMode mode)
 {
+    //FIXME: port away from popupapplet
+    /*
     PopupApplet *popup = qobject_cast<PopupApplet *>(this);
     if (popup && popup->d->dialogPtr) {
         popup->d->dialogPtr.data()->setAspectRatioMode(mode);
         popup->d->savedAspectRatio = mode;
-    }
+    }*/
 
     d->aspectRatioMode = mode;
 }
@@ -1409,9 +1495,10 @@ Applet *Applet::loadPlasmoid(const QString &path, uint appletId, const QVariantL
 
         if (types.contains("Plasma/Containment")) {
             return new Containment(path, appletId, args);
-        } else if (types.contains("Plasma/PopupApplet")) {
+        }//FIXME: port away popupapplet
+        /* else if (types.contains("Plasma/PopupApplet")) {
             return new PopupApplet(path, appletId, args);
-        } else {
+        }*/ else {
             return new Applet(path, appletId, args);
         }
     }

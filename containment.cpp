@@ -1104,6 +1104,37 @@ KConfigGroup Containment::containmentActionsConfig()
     return cfg;
 }
 
+void Containment::setAcceptDrops(bool accept)
+{
+    
+}
+
+bool Containment::acceptDrops() const
+{
+    return false;
+}
+
+void Containment::setMaximumSize(QSizeF size)
+{
+
+}
+
+QSizeF Containment::maximumSize() const
+{
+    return QSizeF();
+}
+
+void Containment::setMinimumSize(QSizeF size)
+{
+
+}
+
+QSizeF Containment::minimumSize() const
+{
+    return QSizeF();
+}
+
+
 } // Plasma namespace
 
 

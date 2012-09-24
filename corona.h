@@ -1,6 +1,7 @@
 /*
  *   Copyright 2007 Aaron Seigo <aseigo@kde.org>
  *   Copyright 2007 Matt Broadstone <mbroadst@gmail.com>
+ *   Copyright 2012 Marco MArtin <mart@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -18,8 +19,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_CORONA_H
-#define PLASMA_CORONA_H
+#ifndef PLASMA_CORONABASE_H
+#define PLASMA_CORONABASE_H
 
 #include <QGraphicsScene>
 
@@ -40,11 +41,11 @@ class ContainmentActionsPluginsConfig;
 class AbstractDialogManager;
 
 /**
- * @class Corona plasma/corona.h <Plasma/Corona>
+ * @class CoronaBase plasma/CoronaBase.h <Plasma/CoronaBase>
  *
  * @short A QGraphicsScene for Plasma::Applets
  */
-class PLASMA_EXPORT Corona : public QGraphicsScene
+class PLASMA_EXPORT Corona : public QObject
 {
     Q_OBJECT
 
@@ -72,22 +73,22 @@ public:
     QString defaultContainmentPlugin() const;
 
     /**
-     * @return all containments on this Corona
+     * @return all containments on this CoronaBase
      */
     QList<Containment*> containments() const;
 
     /**
-     * Clear the Corona from all applets.
+     * Clear the CoronaBase from all applets.
      */
     void clearContainments();
 
     /**
-     * Returns the config file used to store the configuration for this Corona
+     * Returns the config file used to store the configuration for this CoronaBase
      */
     KSharedConfig::Ptr config() const;
 
     /**
-     * Adds a Containment to the Corona
+     * Adds a Containment to the CoronaBase
      *
      * @param name the plugin name for the containment, as given by
      *        KPluginInfo::pluginName(). If an empty string is passed in, the default
@@ -148,25 +149,6 @@ public:
     Containment *containmentForScreen(int screen, int desktop,
                                       const QString &defaultPluginIfNonExistent,
                                       const QVariantList &defaultArgs = QVariantList());
-    /**
-     * Adds a widget in the topleft quadrant in the scene. Widgets in the topleft quadrant are
-     * normally never shown unless you specifically aim a view at it, which makes it ideal for
-     * toplevel views etc.
-     * @param widget the widget to add.
-     */
-    void addOffscreenWidget(QGraphicsWidget *widget);
-
-    /**
-     * Removes a widget from the topleft quadrant in the scene.
-     * @param widget the widget to remove.
-     */
-    void removeOffscreenWidget(QGraphicsWidget *widget);
-
-    /**
-     * @return the list of all offscreen widgets
-     * @since 4.3
-     */
-    QList <QGraphicsWidget *> offscreenWidgets() const;
 
     /**
      * Returns the number of screens available to plasma.
@@ -192,17 +174,6 @@ public:
      * behavior should override this method.
      */
     virtual QRegion availableScreenRegion(int id) const;
-
-    /**
-     * @since 4.4
-     * Recommended position for a popup window like a menu or a tooltip
-     * given its size
-     * @param item the item that the popup should appear adjacent to (an applet, say)
-     * @param size size of the popup
-     * @param alignment alignment of the popup, valid flags are Qt::AlignLeft, Qt::AlignRight and Qt::AlignCenter
-     * @returns reccomended position
-     */
-    QPoint popupPosition(const QObject *item, const QSize &size, Qt::AlignmentFlag alignment = Qt::AlignCenter);
 
     /**
      * This method is useful in order to retrieve the list of available
@@ -237,8 +208,8 @@ public:
 
     /**
      * @since 4.3
-     * Updates keyboard shortcuts for all the corona's actions.
-     * If you've added actions to the corona you'll need to
+     * Updates keyboard shortcuts for all the CoronaBase's actions.
+     * If you've added actions to the CoronaBase you'll need to
      * call this for them to be configurable.
      */
     void updateShortcuts();
@@ -246,7 +217,7 @@ public:
     /**
      * @since 4.3
      * Adds a set of actions to the shortcut config dialog.
-     * don't use this on actions in the corona's own actioncollection,
+     * don't use this on actions in the CoronaBase's own actioncollection,
      * those are handled automatically. this is for stuff outside of that.
      */
     void addShortcuts(KActionCollection *newShortcuts);
@@ -342,12 +313,12 @@ public Q_SLOTS:
     void saveLayout(const QString &config = QString()) const;
 
     /**
-     * @return The type of immutability of this Corona
+     * @return The type of immutability of this CoronaBase
      */
     ImmutabilityType immutability() const;
 
     /**
-     * Sets the immutability type for this Corona (not immutable,
+     * Sets the immutability type for this CoronaBase (not immutable,
      * user immutable or system immutable)
      * @param immutable the new immutability type of this applet
      */
@@ -368,18 +339,10 @@ public Q_SLOTS:
      */
     void requireConfigSync();
 
-    /**
-     * @since 4.5
-     * Layout the containments on this corona. The default implementation
-     * organizes them in a grid-like view, but subclasses can reimplement
-     * this slot to provide their own layout.
-     */
-    virtual void layoutContainments();
-
 Q_SIGNALS:
     /**
      * This signal indicates a new containment has been added to
-     * the Corona
+     * the CoronaBase
      */
     void containmentAdded(Plasma::Containment *containment);
 
@@ -423,7 +386,7 @@ Q_SIGNALS:
      * @since 4.3
      * emitted when the user changes keyboard shortcut settings
      * connect to this if you've put some extra shortcuts in your app
-     * that are NOT in corona's actioncollection.
+     * that are NOT in CoronaBase's actioncollection.
      * if your code's not in shells/ it probably shouldn't be using this function.
      * @see addShortcuts
      */
@@ -434,24 +397,6 @@ protected:
      * Loads the default (system wide) layout for this user
      **/
     virtual void loadDefaultLayout();
-
-    /**
-     * Maps a stock animation to one of the semantic animations. Used to control things such
-     * as what animation is used to make a Plasma::Appear appear in a containment.
-     * @param from the animation to map a new value to
-     * @param to the animation value to map to from
-     * @since 4.5
-     */
-    void mapAnimation(Animator::Animation from, Animator::Animation to);
-
-    /**
-     * Maps a loadable animation to one of the semantic animations. Used to control things such
-     * as what animation is used to make a Plasma::Appear appear in a containment.
-     * @param from the animation to map a new value to
-     * @param to the animation value to map to from; this must map to a Javascript animation
-     * @since 4.5
-     */
-    void mapAnimation(Animator::Animation from, const QString &to);
 
     /**
      * @return The preferred toolbox plugin name for a given containment type.
@@ -470,9 +415,13 @@ protected:
 private:
     CoronaPrivate *const d;
 
-    Q_PRIVATE_SLOT(d, void offscreenWidgetDestroyed(QObject *))
+    Q_PRIVATE_SLOT(d, void containmentDestroyed(QObject*))
+    Q_PRIVATE_SLOT(d, void syncConfig())
+    Q_PRIVATE_SLOT(d, void toggleImmutability())
+    Q_PRIVATE_SLOT(d, void showShortcutConfig())
 
     friend class CoronaPrivate;
+    friend class Corona;
     friend class View;
 };
 

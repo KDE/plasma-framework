@@ -37,7 +37,6 @@
 #include "containmentactions.h"
 #include "dataengine.h"
 #include "package.h"
-#include "popupapplet.h"
 #include "private/applet_p.h"
 #include "private/packages_p.h"
 #include "private/service_p.h" // for NullService
@@ -151,8 +150,6 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         } else {
             if (offer->serviceTypes().contains("Plasma/Containment")) {
                 return new Containment(0, allArgs);
-            } else if (offer->serviceTypes().contains("Plasma/PopupApplet")) {
-                return new PopupApplet(0, allArgs);
             } else {
                 return new Applet(0, allArgs);
             }

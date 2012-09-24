@@ -958,7 +958,7 @@ class PLASMA_EXPORT Applet : public QObject
         //Corona needs to access setFailedToLaunch and init
         friend class Corona;
         friend class CoronaPrivate;
-        friend class CoronaBase;
+        friend class Corona;
         friend class CoronaBasePrivate;
         friend class Containment;
         friend class ContainmentPrivate;

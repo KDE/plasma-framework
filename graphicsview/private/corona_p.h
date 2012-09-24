@@ -30,7 +30,7 @@ namespace Plasma
 {
 
 class Containment;
-class CoronaBase;
+class Corona;
 
 class CoronaPrivate
 {

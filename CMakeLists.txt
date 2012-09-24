@@ -105,7 +105,6 @@ set(plasma_LIB_SRCS
     configloader.cpp
     containmentactions.cpp
     containmentactionspluginsconfig.cpp
-    coronabase.cpp
     datacontainer.cpp
     dataengine.cpp
     dataengineconsumer.cpp
@@ -168,7 +167,8 @@ set(plasma_LIB_SRCS
     svg.cpp
     theme.cpp
     tooltipcontent.cpp
-    tooltipmanager.cpp
+    #FIXME: re-enable
+    #tooltipmanager.cpp
     version.cpp
     wallpaper.cpp
 
@@ -188,14 +188,15 @@ set(plasma_LIB_SRCS
     private/qtjolie-branch/qtjolie/serverthread.cpp
 
     #FIXME: all these must move into the qgv library
-    private/themedwidgetinterface.cpp
-    widgets/iconwidget.cpp
+    #private/themedwidgetinterface.cpp
+    #widgets/iconwidget.cpp
     #view.cpp
     applet.cpp
     containment.cpp
     corona.cpp
     #dialog.cpp
-    popupapplet.cpp
+    #should popupapplet still exist?
+    #popupapplet.cpp
 )
 
 set (plasmaqgv_LIB_SRCS
