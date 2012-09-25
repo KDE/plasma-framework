@@ -199,7 +199,6 @@ set(plasma_LIB_SRCS
 
 #TODO: all those files will have to be deleted
 # set (plasmaqgv_LIB_SRCS
-#     abstracttoolbox.cpp
 #     dialog.cpp
 #     view.cpp
 #     private/themedwidgetinterface.cpp
@@ -265,7 +264,6 @@ generate_export_header(plasma)
 set(plasma_LIB_INCLUDES
     abstractdialogmanager.h
     abstractrunner.h
-    abstracttoolbox.h
     applet.h
     configloader.h
     containment.h
@@ -329,7 +327,6 @@ install(FILES
    data/servicetypes/plasma-runner.desktop
    data/servicetypes/plasma-scriptengine.desktop
    data/servicetypes/plasma-service.desktop
-   data/servicetypes/plasma-toolbox.desktop
    data/servicetypes/plasma-wallpaper.desktop
    DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
