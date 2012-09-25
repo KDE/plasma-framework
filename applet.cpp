@@ -33,13 +33,9 @@
 #include <QApplication>
 #include <QEvent>
 #include <QFile>
-#include <QGraphicsGridLayout>
-#include <QGraphicsSceneMouseEvent>
-#include <QGraphicsView>
 #include <QHostInfo>
 #include <QLabel>
 #include <QList>
-#include <QGraphicsLinearLayout>
 #include <QPainter>
 #include <QRegExp>
 #include <QSize>

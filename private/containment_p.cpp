@@ -26,6 +26,7 @@
 #include <QClipboard>
 #include <QMimeData>
 #include <QMimeDatabase>
+#include <QDropEvent>
 #include <qtemporaryfile.h>
 
 #include <kaction.h>

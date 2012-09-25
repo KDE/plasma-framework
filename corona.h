@@ -22,13 +22,10 @@
 #ifndef PLASMA_CORONABASE_H
 #define PLASMA_CORONABASE_H
 
-#include <QGraphicsScene>
-
 #include <plasma/containment.h>
 #include <plasma/plasma.h>
 #include <plasma/plasma_export.h>
 
-class QGraphicsGridLayout;
 class QAction;
 
 class KAction;
@@ -43,7 +40,7 @@ class AbstractDialogManager;
 /**
  * @class CoronaBase plasma/CoronaBase.h <Plasma/CoronaBase>
  *
- * @short A QGraphicsScene for Plasma::Applets
+ * @short A bookkeeping Scene for Plasma::Applets
  */
 class PLASMA_EXPORT Corona : public QObject
 {

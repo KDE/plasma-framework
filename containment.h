@@ -523,7 +523,7 @@ Q_SIGNALS:
          * @reimp
          * @sa QObject::resizeEvent()
          */
-        void resizeEvent(QGraphicsSceneResizeEvent *event);
+        void resizeEvent(QResizeEvent *event);
 
         //FIXME: kill those
         QSizeF maximumSize() const;

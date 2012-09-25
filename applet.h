@@ -23,7 +23,6 @@
 #define PLASMA_APPLET_H
 
 #include <QObject>
-#include <QGraphicsWidget>
 #include <QIcon>
 
 #include <kconfiggroup.h>
@@ -39,7 +38,6 @@
 class QWidget;
 
 class KConfigDialog;
-class QGraphicsView;
 class KActionCollection;
 
 namespace Plasma
@@ -425,8 +423,7 @@ class PLASMA_EXPORT Applet : public QObject
          * This method returns screen coordinates for the widget; this method can be somewhat
          * expensive and should ONLY be called when screen coordinates are required. For
          * example when positioning top level widgets on top of the view to create the
-         * appearance of unit. This should NOT be used for popups (@see popupPosition) or
-         * for normal widget use (use Plasma:: widgets or QGraphicsProxyWidget instead).
+         * appearance of unit.
          *
          * @return a rect of the applet in screen coordinates.
          */
@@ -715,7 +712,7 @@ class PLASMA_EXPORT Applet : public QObject
 
         /**
          * This method is called once the applet is loaded and added to a Corona.
-         * If the applet requires a QGraphicsScene or has an particularly intensive
+         * If the applet requires a Scene or has an particularly intensive
          * set of initialization routines to go through, consider implementing it
          * in this method instead of the constructor.
          *

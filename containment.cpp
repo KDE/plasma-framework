@@ -746,7 +746,7 @@ void Containment::dropEvent(QDropEvent *event)
     }
 }
 
-void Containment::resizeEvent(QGraphicsSceneResizeEvent *event)
+void Containment::resizeEvent(QResizeEvent *event)
 {
     if (isContainment()) {
         if (d->wallpaper) {
