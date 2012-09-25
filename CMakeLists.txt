@@ -199,7 +199,6 @@ set(plasma_LIB_SRCS
 
 #TODO: all those files will have to be deleted
 # set (plasmaqgv_LIB_SRCS
-#     private/applethandle.cpp
 #     abstracttoolbox.cpp
 #     delegate.cpp
 #     dialog.cpp
