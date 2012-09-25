@@ -76,7 +76,6 @@
 #include <solid/powermanagement.h>
 #endif
 
-#include "abstracttoolbox.h"
 #include "authorizationrule.h"
 #include "configloader.h"
 #include "containment.h"

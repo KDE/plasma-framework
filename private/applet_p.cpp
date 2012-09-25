@@ -35,7 +35,6 @@
 #include <kkeysequencewidget.h>
 #include <kstandarddirs.h>
 
-#include "abstracttoolbox.h"
 #include "containment.h"
 #include "corona.h"
 #include "pluginloader.h"
@@ -291,14 +290,14 @@ KActionCollection* AppletPrivate::defaultActions(QObject *parent)
     configAction->setText(i18n("Widget Settings"));
     configAction->setIcon(KDE::icon("configure"));
     configAction->setShortcut(KShortcut("alt+d, s"));
-    configAction->setData(AbstractToolBox::ConfigureTool);
+    configAction->setData(Containment::ConfigureTool);
 
     KAction *closeApplet = actions->addAction("remove");
     closeApplet->setAutoRepeat(false);
     closeApplet->setText(i18n("Remove this Widget"));
     closeApplet->setIcon(KDE::icon("edit-delete"));
     closeApplet->setShortcut(KShortcut("alt+d, r"));
-    closeApplet->setData(AbstractToolBox::DestructiveTool);
+    closeApplet->setData(Containment::DestructiveTool);
 
     KAction *runAssociatedApplication = actions->addAction("run associated application");
     runAssociatedApplication->setAutoRepeat(false);
@@ -307,7 +306,7 @@ KActionCollection* AppletPrivate::defaultActions(QObject *parent)
     runAssociatedApplication->setShortcut(KShortcut("alt+d, t"));
     runAssociatedApplication->setVisible(false);
     runAssociatedApplication->setEnabled(false);
-    runAssociatedApplication->setData(AbstractToolBox::ControlTool);
+    runAssociatedApplication->setData(Containment::ControlTool);
 
     return actions;
 }

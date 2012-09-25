@@ -40,7 +40,6 @@
 #include <kwindowsystem.h>
 
 #include "abstractdialogmanager.h"
-#include "abstracttoolbox.h"
 #include "containment.h"
 #include "containmentactionspluginsconfig.h"
 #include "pluginloader.h"
@@ -476,7 +475,7 @@ void CoronaPrivate::init()
     lockAction->setText(i18n("Lock Widgets"));
     lockAction->setAutoRepeat(true);
     lockAction->setIcon(KDE::icon("object-locked"));
-    lockAction->setData(AbstractToolBox::ControlTool);
+    lockAction->setData(Containment::ControlTool);
     lockAction->setShortcut(KShortcut("alt+d, l"));
     lockAction->setShortcutContext(Qt::ApplicationShortcut);
 
@@ -488,7 +487,7 @@ void CoronaPrivate::init()
     action->setText(i18n("Shortcut Settings"));
     action->setIcon(KDE::icon("configure-shortcuts"));
     action->setAutoRepeat(false);
-    action->setData(AbstractToolBox::ConfigureTool);
+    action->setData(Containment::ConfigureTool);
     //action->setShortcut(KShortcut("ctrl+h"));
     action->setShortcutContext(Qt::ApplicationShortcut);
 
