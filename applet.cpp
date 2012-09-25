@@ -678,43 +678,6 @@ void Applet::setBackgroundHints(const Plasma::BackgroundHints hints)
     }
 
     d->backgroundHints = hints;
-    d->preferredBackgroundHints = hints;
-
-    //Draw the standard background?
-    if ((hints & StandardBackground) || (hints & TranslucentBackground)) {
-        if (!d->background) {
-            d->background = new Plasma::FrameSvg(this);
-        }
-
-        if ((hints & TranslucentBackground) &&
-            Plasma::Theme::defaultTheme()->currentThemeHasImage("widgets/translucentbackground")) {
-            d->background->setImagePath("widgets/translucentbackground");
-        } else {
-            d->background->setImagePath("widgets/background");
-        }
-
-        d->background->setEnabledBorders(Plasma::FrameSvg::AllBorders);
-        qreal left, top, right, bottom;
-        d->background->getMargins(left, top, right, bottom);
-        QSizeF fitSize(left + right, top + bottom);
-        d->background->resizeFrame(boundingRect().size());
-
-        //if the background has an "overlay" element decide a random position for it and then save it so it's consistent across plasma starts
-        if (d->background->hasElement("overlay")) {
-            QSize overlaySize = d->background->elementSize("overlay");
-
-            //position is in the boundaries overlaySize.width()*2, overlaySize.height()
-            qsrand(id());
-            d->background->d->overlayPos.rx() = - (overlaySize.width() /2) + (overlaySize.width() /4) * (qrand() % (4 + 1));
-            d->background->d->overlayPos.ry() = (- (overlaySize.height() /2) + (overlaySize.height() /4) * (qrand() % (4 + 1)))/2;
-        }
-    } else if (d->background) {
-        qreal left, top, right, bottom;
-        d->background->getMargins(left, top, right, bottom);
-
-        delete d->background;
-        d->background = 0;
-    }
 }
 
 bool Applet::hasFailedToLaunch() const
@@ -837,13 +800,6 @@ void Applet::flushPendingConstraintsEvents()
 
     if (c & Plasma::FormFactorConstraint) {
         FormFactor f = formFactor();
-        if (!d->isContainment && f != Vertical && f != Horizontal) {
-            setBackgroundHints(d->preferredBackgroundHints);
-        } else {
-            BackgroundHints hints = d->preferredBackgroundHints;
-            setBackgroundHints(NoBackground);
-            d->preferredBackgroundHints = hints;
-        }
 
         // avoid putting rotated applets in panels
         if (f == Vertical || f == Horizontal) {
@@ -927,57 +883,6 @@ QAction *Applet::action(QString name) const
 void Applet::addAction(QString name, QAction *action)
 {
     d->actions->addAction(name, action);
-}
-
-void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-    if (!d->started) {
-        //kDebug() << "not started";
-        return;
-    }
-
-    if (transform().isRotating()) {
-        painter->setRenderHint(QPainter::SmoothPixmapTransform);
-        painter->setRenderHint(QPainter::Antialiasing);
-    }
-
-    if (d->background &&
-        formFactor() != Plasma::Vertical &&
-        formFactor() != Plasma::Horizontal) {
-        //kDebug() << "option rect is" << option->rect;
-        d->background->paintFrame(painter);
-    }
-
-    if (d->failed) {
-        //kDebug() << "failed!";
-        return;
-    }
-
-    if (widget && d->isContainment) {
-        // note that the widget we get is actually the viewport of the view, not the view itself
-//        View* v = qobject_cast<Plasma::View*>(widget->parent());
-        Containment* c = qobject_cast<Plasma::Containment*>(this);
-
-        //FIXME: new View?
-        if (1/*!v || v->isWallpaperEnabled()*/) {
-
-            // paint the wallpaper
-            if (c && c->drawWallpaper() && c->wallpaper()) {
-                Wallpaper *w = c->wallpaper();
-                if (!w->isInitialized()) {
-                    // delayed paper initialization
-                    KConfigGroup wallpaperConfig = c->config();
-                    wallpaperConfig = KConfigGroup(&wallpaperConfig, "Wallpaper");
-                    wallpaperConfig = KConfigGroup(&wallpaperConfig, w->pluginName());
-                    w->restore(wallpaperConfig);
-                }
-
-                painter->save();
-                c->wallpaper()->paint(painter, option->exposedRect);
-                painter->restore();
-            }
-        }
-    }
 }
 
 FormFactor Applet::formFactor() const

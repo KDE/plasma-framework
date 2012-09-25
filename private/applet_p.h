@@ -138,7 +138,6 @@ public:
 
     // applet attributes
     Service *remotingService;
-    BackgroundHints preferredBackgroundHints;
     BackgroundHints backgroundHints;
     AspectRatioMode aspectRatioMode;
     ImmutabilityType immutability;
@@ -148,7 +147,6 @@ public:
     QVariantList args;
 
     // bookkeeping
-    Plasma::FrameSvg *background;
     KConfigGroup *mainConfig;
     Plasma::Constraints pendingConstraints;
 
