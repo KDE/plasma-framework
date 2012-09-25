@@ -174,20 +174,6 @@ class PLASMA_EXPORT Applet : public QObject
         Package package() const;
 
         /**
-         * Maps a QRect from a view's coordinates to local coordinates.
-         * @param view the view from which rect should be mapped
-         * @param rect the rect to be mapped
-         */
-        QRectF mapFromView(const QGraphicsView *view, const QRect &rect) const;
-
-        /**
-         * Maps a QRectF from local coordinates to a view's coordinates.
-         * @param view the view to which rect should be mapped
-         * @param rect the rect to be mapped
-         */
-        QRect mapToView(const QGraphicsView *view, const QRectF &rect) const;
-
-        /**
          * Reccomended position for a popup window like a menu or a tooltip
          * given its size
          * @param s size of the popup

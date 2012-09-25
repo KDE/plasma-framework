@@ -482,22 +482,6 @@ Package Applet::package() const
     return d->package ? *d->package : Package();
 }
 
-QRectF Applet::mapFromView(const QGraphicsView *view, const QRect &rect) const
-{
-    return QRect();
-    /*TODO: port away qgv
-    // Why is this adjustment needed? Qt calculation error?
-    return mapFromScene(view->mapToScene(rect)).boundingRect().adjusted(0, 0, 1, 1);*/
-}
-
-QRect Applet::mapToView(const QGraphicsView *view, const QRectF &rect) const
-{
-    return QRect();
-    /*TODO: port away qgv
-    // Why is this adjustment needed? Qt calculation error?
-    return view->mapFromScene(mapToScene(rect)).boundingRect().adjusted(0, 0, -1, -1);*/
-}
-
 QPoint Applet::popupPosition(const QSize &s) const
 {
     return popupPosition(s, Qt::AlignLeft);

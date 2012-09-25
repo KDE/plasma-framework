@@ -174,7 +174,6 @@ public:
 
     // timerEvent bookkeeping
     QBasicTimer constraintsTimer;
-    QBasicTimer busyWidgetTimer;
     QBasicTimer *modificationsTimer;
 
     // a great green field of booleans :)
