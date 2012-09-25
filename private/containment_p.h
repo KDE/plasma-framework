@@ -124,11 +124,10 @@ public:
 
     /**
      * Handles dropped/pasted mimetype data
-     * @param scenePos scene-relative position
      * @param screenPos screen-relative position
      * @param dropEvent the drop event (if null, the clipboard is used instead)
      */
-    void dropData(QPointF scenePos, QPoint screenPos, QGraphicsSceneDragDropEvent *dropEvent = 0);
+    void dropData(QPoint screenPos, QDropEvent *dropEvent = 0);
 
     /**
      * inits the containmentactions if necessary

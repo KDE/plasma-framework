@@ -739,10 +739,10 @@ QStringList Containment::listContainmentTypes()
     return types.toList();
 }
 
-void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
+void Containment::dropEvent(QDropEvent *event)
 {
     if (isContainment()) {
-        d->dropData(event->scenePos(), event->screenPos(), event);
+        d->dropData(event->pos(), event);
     }
 }
 

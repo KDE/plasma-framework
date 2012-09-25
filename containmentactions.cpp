@@ -233,7 +233,7 @@ void ContainmentActions::paste(QPointF scenePos, QPoint screenPos)
 {
     Containment *c = containment();
     if (c) {
-        c->d->dropData(scenePos, screenPos);
+        c->d->dropData(screenPos);
     }
 }
 

@@ -25,8 +25,6 @@
 
 #include <config-plasma.h>
 
-#include <QGraphicsLayout>
-#include <QGraphicsView>
 #include <QHostInfo>
 #include <qstandardpaths.h>
 

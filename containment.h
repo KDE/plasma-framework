@@ -517,7 +517,7 @@ Q_SIGNALS:
          * @reimp
          * @sa QGraphicsItem::dropEvent()
          */
-        void dropEvent(QGraphicsSceneDragDropEvent *event);
+        void dropEvent(QDropEvent *event);
 
         /**
          * @reimp

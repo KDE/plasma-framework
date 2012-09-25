@@ -24,10 +24,8 @@
 
 #include <QApplication>
 #include <QClipboard>
-#include <QGraphicsSceneDragDropEvent>
 #include <QMimeData>
 #include <QMimeDatabase>
-#include <QGraphicsView>
 #include <qtemporaryfile.h>
 
 #include <kaction.h>
@@ -348,7 +346,7 @@ void ContainmentPrivate::showDropZoneDelayed()
     dropPoints.remove(0);
 }
 
-void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsSceneDragDropEvent *dropEvent)
+void ContainmentPrivate::dropData(QPoint screenPos, QDropEvent *dropEvent)
 {
     if (q->immutability() != Mutable) {
         return;
@@ -381,7 +379,7 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
         const QStringList appletNames = data.split('\n', QString::SkipEmptyParts);
         foreach (const QString &appletName, appletNames) {
             //kDebug() << "doing" << appletName;
-            QRectF geom(scenePos, QSize(0, 0));
+            QRectF geom(screenPos, QSize(0, 0));
             q->addApplet(appletName, QVariantList(), geom);
         }
         if (dropEvent) {
@@ -397,7 +395,7 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
                 if (dropEvent) {
                     dropPoints[job] = dropEvent->pos();
                 } else {
-                    dropPoints[job] = scenePos;
+                    dropPoints[job] = screenPos;
                 }
                 QObject::connect(AccessManager::self(), SIGNAL(finished(Plasma::AccessAppletJob*)),
                                  q, SLOT(remoteAppletReady(Plasma::AccessAppletJob*)));
@@ -407,7 +405,7 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
                 QMimeDatabase db;
                 QMimeType mime = db.mimeTypeForUrl(url);
                 QString mimeName = mime.name();
-                QRectF geom(scenePos, QSize());
+                QRectF geom(screenPos, QSize());
                 QVariantList args;
                 args << url.toString();
 #ifndef NDEBUG
@@ -420,7 +418,7 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
                 if (dropEvent) {
                     dropPoints[job] = dropEvent->pos();
                 } else {
-                    dropPoints[job] = scenePos;
+                    dropPoints[job] = screenPos;
                 }
 
                 QObject::connect(job, SIGNAL(result(KJob*)), q, SLOT(dropJobResult(KJob*)));
@@ -430,7 +428,7 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
                 KMenu *choices = new KMenu("Content dropped");
                 choices->addAction(KDE::icon("process-working"), i18n("Fetching file type..."));
                 if (dropEvent) {
-                    choices->popup(dropEvent->screenPos());
+                    choices->popup(dropEvent->pos());
                 } else {
                     choices->popup(screenPos);
                 }
@@ -509,7 +507,7 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
                     stream.writeRawData(data, data.size());
                 }
 
-                QRectF geom(scenePos, QSize());
+                QRectF geom(screenPos, QSize());
                 QVariantList args;
                 args << tempFile.fileName();
 #ifndef NDEBUG

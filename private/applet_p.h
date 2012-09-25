@@ -23,7 +23,6 @@
 #define PLASMA_APPLET_P_H
 
 #include <QBasicTimer>
-#include <QGraphicsProxyWidget>
 
 #include <kactioncollection.h>
 #include <kconfigdialog.h>

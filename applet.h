@@ -893,20 +893,8 @@ class PLASMA_EXPORT Applet : public QObject
          */
         virtual void constraintsEvent(Plasma::Constraints constraints);
 
-        /**
-         * Reimplemented from QGraphicsLayoutItem
-         */
+
         QSizeF sizeHint(Qt::SizeHint which, const QSizeF & constraint = QSizeF()) const;
-
-        /**
-         * Reimplemented from QGraphicsLayoutItem
-         */
-        void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
-
-        /**
-         * Reimplemented from QGraphicsLayoutItem
-         */
-        void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
         /**
          * Reimplemented from QObject
