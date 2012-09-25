@@ -342,28 +342,28 @@ QWidget *Wallpaper::createConfigurationInterface(QWidget *parent)
     }
 }
 
-void Wallpaper::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+void Wallpaper::mouseMoveEvent(QMouseEvent *event)
 {
     if (d->script) {
         return d->script->mouseMoveEvent(event);
     }
 }
 
-void Wallpaper::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void Wallpaper::mousePressEvent(QMouseEvent *event)
 {
     if (d->script) {
         return d->script->mousePressEvent(event);
     }
 }
 
-void Wallpaper::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+void Wallpaper::mouseReleaseEvent(QMouseEvent *event)
 {
     if (d->script) {
         return d->script->mouseReleaseEvent(event);
     }
 }
 
-void Wallpaper::wheelEvent(QGraphicsSceneWheelEvent *event)
+void Wallpaper::wheelEvent(QWheelEvent *event)
 {
     if (d->script) {
         return d->script->wheelEvent(event);

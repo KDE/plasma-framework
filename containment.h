@@ -509,9 +509,9 @@ Q_SIGNALS:
          */
         virtual void restoreContents(KConfigGroup &group);
 
-        void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+        void contextMenuEvent(QContextMenuEvent *event);
         void keyPressEvent(QKeyEvent *event);
-        void wheelEvent(QGraphicsSceneWheelEvent *event);
+        void wheelEvent(QWheelEvent *event);
 
         /**
          * @reimp

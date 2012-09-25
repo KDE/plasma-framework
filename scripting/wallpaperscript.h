@@ -110,7 +110,7 @@ public:
      *
      * @param event the mouse event object
      */
-    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    virtual void mouseMoveEvent(QMouseEvent *event);
 
     /**
      * Mouse press event. To prevent further propagation of the even,
@@ -118,7 +118,7 @@ public:
      *
      * @param event the mouse event object
      */
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    virtual void mousePressEvent(QMouseEvent *event);
 
     /**
      * Mouse release event. To prevent further propagation of the event,
@@ -126,7 +126,7 @@ public:
      *
      * @param event the mouse event object
      */
-    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent *event);
 
     /**
      * Mouse wheel event. To prevent further propagation of the event,
@@ -134,7 +134,7 @@ public:
      *
      * @param event the wheel event object
      */
-    virtual void wheelEvent(QGraphicsSceneWheelEvent *event);
+    virtual void wheelEvent(QWheelEvent *event);
 
     /**
      * Adds urls (e.g. from a drop)

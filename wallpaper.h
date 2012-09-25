@@ -21,11 +21,16 @@
 #ifndef PLASMA_WALLPAPER_H
 #define PLASMA_WALLPAPER_H
 
+#include <QColor>
+
 #include <kplugininfo.h>
 
 #include <plasma/package.h>
 #include <plasma/plasma.h>
 #include <plasma/version.h>
+
+class QMouseEvent;
+class QWheelEvent;
 
 namespace Plasma
 {
@@ -249,7 +254,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
          *
          * @param event the mouse event object
          */
-        virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+        virtual void mouseMoveEvent(QMouseEvent *event);
 
         /**
          * Mouse press event. To prevent further propagation of the even,
@@ -257,7 +262,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
          *
          * @param event the mouse event object
          */
-        virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
+        virtual void mousePressEvent(QMouseEvent *event);
 
         /**
          * Mouse release event. To prevent further propagation of the event,
@@ -265,7 +270,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
          *
          * @param event the mouse event object
          */
-        virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+        virtual void mouseReleaseEvent(QMouseEvent *event);
 
         /**
          * Mouse wheel event. To prevent further propagation of the event,
@@ -273,7 +278,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
          *
          * @param event the wheel event object
          */
-        virtual void wheelEvent(QGraphicsSceneWheelEvent *event);
+        virtual void wheelEvent(QWheelEvent *event);
 
         /**
          * Loads the given DataEngine

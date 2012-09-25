@@ -29,10 +29,10 @@
 #include <plasma/plasma_export.h>
 #include <plasma/plasma.h>
 
-class QGraphicsObject;
 class QIODevice;
 class QWidget;
 class QUrl;
+class QGraphicsObject;
 
 namespace Plasma
 {
@@ -157,42 +157,6 @@ public:
     Q_INVOKABLE QString name() const;
 
     /**
-     * Assoicates a widget with an operation, which allows the service to
-     * automatically manage, for example, the enabled state of a widget.
-     *
-     * This will remove any previous associations the widget had with
-     * operations on this engine.
-     *
-     * @param widget the QWidget to associate with the service
-     * @param operation the operation to associate the widget with
-     */
-    Q_INVOKABLE void associateWidget(QWidget *widget, const QString &operation);
-
-    /**
-     * Disassociates a widget if it has been associated with an operation
-     * on this service.
-     *
-     * This will not change the enabled state of the widget.
-     *
-     * @param widget the QWidget to disassociate.
-     */
-    Q_INVOKABLE void disassociateWidget(QWidget *widget);
-
-    /**
-     * This method only exists to maintain binary compatibility.
-     *
-     * @see associateItem
-     */
-    Q_INVOKABLE void associateWidget(QGraphicsWidget *widget, const QString &operation);
-
-    /**
-     * This method only exists to maintain binary compatibility.
-     *
-     * @see disassociateItem
-     */
-    Q_INVOKABLE void disassociateWidget(QGraphicsWidget *widget);
-
-    /**
      * Associates a graphics item with an operation, which allows the service to
      * automatically manage, for example, the enabled state of the item.
      *
@@ -289,7 +253,7 @@ protected:
 
 private:
     Q_PRIVATE_SLOT(d, void associatedWidgetDestroyed(QObject *))
-    Q_PRIVATE_SLOT(d, void associatedGraphicsWidgetDestroyed(QObject *))
+    Q_PRIVATE_SLOT(d, void associatedItemDestroyed(QObject *))
 
     ServicePrivate * const d;
 

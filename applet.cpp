@@ -841,11 +841,6 @@ void Applet::flushPendingConstraintsEvents()
     }
 }
 
-int Applet::type() const
-{
-    return Type;
-}
-
 QList<QAction*> Applet::contextualActions()
 {
     //kDebug() << "empty context actions";

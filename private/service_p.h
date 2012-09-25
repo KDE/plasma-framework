@@ -23,7 +23,6 @@
 #include "servicejob.h"
 #include "service.h"
 
-#include <QGraphicsWidget>
 #include <QMap>
 #include <QMultiHash>
 #include <QWidget>
@@ -95,7 +94,7 @@ public:
 
     void associatedWidgetDestroyed(QObject *obj);
 
-    void associatedGraphicsWidgetDestroyed(QObject *obj);
+    void associatedItemDestroyed(QObject *obj);
 
     void publish(AnnouncementMethods methods, const QString &name,
                  const KPluginInfo &metadata = KPluginInfo());
@@ -115,7 +114,7 @@ public:
     DNSSD::PublicService *publicService;
     ServiceProvider *serviceProvider;
     QMultiHash<QWidget *, QString> associatedWidgets;
-    QMultiHash<QGraphicsObject *, QString> associatedGraphicsWidgets;
+    QMultiHash<QGraphicsObject *, QString> associatedItems;
     QSet<QString> disabledOperations;
 };
 

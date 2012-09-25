@@ -22,13 +22,11 @@
 
 /** @header plasma/plasma.h <Plasma/Plasma> */
 
-#include <QGraphicsItem>
 #include <QPainterPath>
 
 #include <plasma/plasma_export.h>
 
 class QAction;
-class QGraphicsView;
 
 /**
  * Namespace for everything in libplasma
@@ -163,11 +161,6 @@ enum IntervalAlignment {
     AlignToHour /**< Align to the hour **/
 };
 
-enum ItemTypes {
-    AppletType = QGraphicsItem::UserType + 1,
-    LineEditType = QGraphicsItem::UserType + 2
-};
-
 /**
  * Defines the immutability of items like applets, corona and containments
  * they can be free to modify, locked down by the user or locked down by the
@@ -288,14 +281,6 @@ PLASMA_EXPORT Direction locationToDirection(Location location);
  * @return the visual direction the element should be oriented in
  **/
 PLASMA_EXPORT Direction locationToInverseDirection(Location location);
-
-/**
- * Returns the most appropriate QGraphicsView for the item.
- *
- * @param item the QGraphicsItem to locate a view for
- * @return pointer to a view, or 0 if none was found
- */
-PLASMA_EXPORT QGraphicsView *viewFor(const QGraphicsItem *item);
 
 } // Plasma namespace
 

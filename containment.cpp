@@ -28,7 +28,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QFile>
-#include <QGraphicsSceneContextMenuEvent>
+#include <QContextMenuEvent>
 #include <QGraphicsView>
 #include <QMimeData>
 #include <QPainter>
@@ -427,23 +427,21 @@ void Containment::showDropZone(const QPoint pos)
 void Containment::showContextMenu(const QPointF &containmentPos, const QPoint &screenPos)
 {
     //kDebug() << containmentPos << screenPos;
-    QGraphicsSceneContextMenuEvent gvevent;
-    gvevent.setScreenPos(screenPos);
-    gvevent.setPos(containmentPos);
-    gvevent.setReason(QGraphicsSceneContextMenuEvent::Mouse);
+    QContextMenuEvent gvevent(QContextMenuEvent::Mouse, screenPos);
+
     //FIXME: do we need views here? 
     //gvevent.setWidget(view());
     contextMenuEvent(&gvevent);
 }
 
-void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+void Containment::contextMenuEvent(QContextMenuEvent *event)
 {
     if (!isContainment() || !KAuthorized::authorizeKAction("plasma/containment_context_menu")) {
         return;
     }
 
     KMenu desktopMenu;
-    Applet *applet = d->appletAt(event->scenePos());
+    Applet *applet = d->appletAt(event->pos());
     //kDebug() << "context menu event " << (QObject*)applet;
 
     if (applet) {
@@ -461,20 +459,20 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     }
 
     if (!menu->isEmpty()) {
-        QPoint pos = event->screenPos();
+        QPoint pos = event->globalPos();
         if (applet && d->isPanelContainment()) {
             menu->adjustSize();
             pos = applet->popupPosition(menu->size());
-            if (event->reason() == QGraphicsSceneContextMenuEvent::Mouse) {
+            if (event->reason() == QContextMenuEvent::Mouse) {
                 // if the menu pops up way away from the mouse press, then move it
                 // to the mouse press
                 if (d->formFactor == Vertical) {
-                    if (pos.y() + menu->height() < event->screenPos().y()) {
-                        pos.setY(event->screenPos().y());
+                    if (pos.y() + menu->height() < event->globalPos().y()) {
+                        pos.setY(event->globalPos().y());
                     }
                 } else if (d->formFactor == Horizontal) {
-                    if (pos.x() + menu->width() < event->screenPos().x()) {
-                        pos.setX(event->screenPos().x());
+                    if (pos.x() + menu->width() < event->globalPos().x()) {
+                        pos.setX(event->globalPos().x());
                     }
                 }
             }
@@ -769,10 +767,10 @@ void Containment::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void Containment::wheelEvent(QGraphicsSceneWheelEvent *event)
+void Containment::wheelEvent(QWheelEvent *event)
 {
     event->ignore();
-    if (d->appletAt(event->scenePos())) {
+    if (d->appletAt(event->pos())) {
         return; //no unexpected click-throughs
     }
 
@@ -787,7 +785,7 @@ void Containment::wheelEvent(QGraphicsSceneWheelEvent *event)
 
     QString trigger = ContainmentActions::eventToString(event);
 
-    if (d->prepareContainmentActions(trigger, event->screenPos())) {
+    if (d->prepareContainmentActions(trigger, event->globalPos())) {
         d->actionPlugins()->value(trigger)->contextEvent(event);
         event->accept();
     }

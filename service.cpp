@@ -24,7 +24,7 @@
 #include "config-plasma.h"
 
 #include <QFile>
-#include <QGraphicsWidget>
+#include <QGraphicsObject>
 #include <QTimer>
 
 #include <kdebug.h>
@@ -76,9 +76,9 @@ void ServicePrivate::associatedWidgetDestroyed(QObject *obj)
     associatedWidgets.remove(static_cast<QWidget*>(obj));
 }
 
-void ServicePrivate::associatedGraphicsWidgetDestroyed(QObject *obj)
+void ServicePrivate::associatedItemDestroyed(QObject *obj)
 {
-    associatedGraphicsWidgets.remove(static_cast<QGraphicsObject*>(obj));
+    associatedItems.remove(static_cast<QGraphicsObject*>(obj));
 }
 
 void ServicePrivate::publish(AnnouncementMethods methods, const QString &name, const KPluginInfo &metadata)
@@ -252,40 +252,6 @@ ServiceJob *Service::startOperationCall(const KConfigGroup &description, QObject
     return job;
 }
 
-void Service::associateWidget(QWidget *widget, const QString &operation)
-{
-    if (!widget) {
-        return;
-    }
-
-    disassociateWidget(widget);
-    d->associatedWidgets.insert(widget, operation);
-    connect(widget, SIGNAL(destroyed(QObject*)), this, SLOT(associatedWidgetDestroyed(QObject*)));
-
-    widget->setEnabled(!d->disabledOperations.contains(operation));
-}
-
-void Service::disassociateWidget(QWidget *widget)
-{
-    if (!widget) {
-        return;
-    }
-
-    disconnect(widget, SIGNAL(destroyed(QObject*)),
-               this, SLOT(associatedWidgetDestroyed(QObject*)));
-    d->associatedWidgets.remove(widget);
-}
-
-void Service::associateWidget(QGraphicsWidget *widget, const QString &operation)
-{
-    associateItem(widget, operation);
-}
-
-void Service::disassociateWidget(QGraphicsWidget *widget)
-{
-    disassociateItem(widget);
-}
-
 void Service::associateItem(QGraphicsObject *widget, const QString &operation)
 {
     if (!widget) {
@@ -293,9 +259,9 @@ void Service::associateItem(QGraphicsObject *widget, const QString &operation)
     }
 
     disassociateItem(widget);
-    d->associatedGraphicsWidgets.insert(widget, operation);
+    d->associatedItems.insert(widget, operation);
     connect(widget, SIGNAL(destroyed(QObject*)),
-            this, SLOT(associatedGraphicsWidgetDestroyed(QObject*)));
+            this, SLOT(associatedItemDestroyed(QObject*)));
 
     widget->setEnabled(!d->disabledOperations.contains(operation));
 }
@@ -307,8 +273,8 @@ void Service::disassociateItem(QGraphicsObject *widget)
     }
 
     disconnect(widget, SIGNAL(destroyed(QObject*)),
-               this, SLOT(associatedGraphicsWidgetDestroyed(QObject*)));
-    d->associatedGraphicsWidgets.remove(widget);
+               this, SLOT(associatedItemDestroyed(QObject*)));
+    d->associatedItems.remove(widget);
 }
 
 QString Service::name() const
@@ -355,7 +321,7 @@ void Service::setOperationEnabled(const QString &operation, bool enable)
     }
 
     {
-        QHashIterator<QGraphicsObject *, QString> it(d->associatedGraphicsWidgets);
+        QHashIterator<QGraphicsObject *, QString> it(d->associatedItems);
         while (it.hasNext()) {
             it.next();
             if (it.value() == operation) {
@@ -392,7 +358,7 @@ void Service::setOperationsScheme(QIODevice *xml)
     }
 
     {
-        QHashIterator<QGraphicsObject *, QString> it(d->associatedGraphicsWidgets);
+        QHashIterator<QGraphicsObject *, QString> it(d->associatedItems);
         while (it.hasNext()) {
             it.next();
             it.key()->setEnabled(d->config->hasGroup(it.value()));

@@ -430,14 +430,6 @@ class PLASMA_EXPORT Applet : public QObject
         QRect screenRect() const;
 
         /**
-         * Reimplemented from QObject
-         **/
-        int type() const;
-        enum {
-            Type = Plasma::AppletType
-        };
-
-        /**
          * @return the Containment, if any, this applet belongs to
          **/
         Containment *containment() const;
@@ -918,18 +910,12 @@ class PLASMA_EXPORT Applet : public QObject
         Q_PRIVATE_SLOT(d, void globalShortcutChanged())
         Q_PRIVATE_SLOT(d, void propagateConfigChanged())
 
-        /**
-         * Reimplemented from QObject
-         **/
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-
         AppletPrivate *const d;
 
         //Corona needs to access setFailedToLaunch and init
         friend class Corona;
         friend class CoronaPrivate;
         friend class Corona;
-        friend class CoronaBasePrivate;
         friend class Containment;
         friend class ContainmentPrivate;
         friend class AppletScript;
