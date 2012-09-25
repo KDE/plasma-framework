@@ -212,38 +212,8 @@ set(plasma_LIB_SRCS
 # 
 #     private/declarative/declarativenetworkaccessmanagerfactory.cpp
 #     private/declarative/dataenginebindings.cpp
-#     graphicsview/private/animablegraphicswebview.cpp
-#     graphicsview/private/focusindicator.cpp
-#     graphicsview/private/nativetabbar.cpp
-#     graphicsview/private/style.cpp
-#     graphicsview/private/kineticscroll.cpp
 # 
-#     widgets/label.cpp
-#     widgets/scrollbar.cpp
-#     widgets/svgwidget.cpp
-#     widgets/scrollwidget.cpp
-#     widgets/textedit.cpp
-#     widgets/textbrowser.cpp
-#     widgets/busywidget.cpp
-#     widgets/checkbox.cpp
-#     widgets/combobox.cpp
 #     widgets/declarativewidget.cpp
-#     widgets/flashinglabel.cpp
-#     widgets/frame.cpp
-#     widgets/groupbox.cpp
-#     widgets/itembackground.cpp
-#     widgets/lineedit.cpp
-#     widgets/meter.cpp
-#     widgets/pushbutton.cpp
-#     widgets/radiobutton.cpp
-#     widgets/signalplotter.cpp
-#     widgets/slider.cpp
-#     widgets/spinbox.cpp
-#     widgets/toolbutton.cpp
-#     widgets/separator.cpp
-#     widgets/tabbar.cpp
-#     widgets/treeview.cpp
-#     widgets/webview.cpp
 # )
 
 kconfig_add_kcfg_files(plasma_LIB_SRCS data/kconfigxt/libplasma-theme-global.kcfgc)
@@ -342,35 +312,6 @@ install(FILES
         ${plasma_LIB_INCLUDES}
         DESTINATION ${INCLUDE_INSTALL_DIR}/plasma COMPONENT Devel)
 
-install(FILES
-    widgets/checkbox.h
-    widgets/combobox.h
-    widgets/declarativewidget.h
-    widgets/flashinglabel.h
-    widgets/frame.h
-    widgets/groupbox.h
-    widgets/iconwidget.h
-    widgets/itembackground.h
-    widgets/label.h
-    widgets/lineedit.h
-    widgets/meter.h
-    widgets/pushbutton.h
-    widgets/toolbutton.h
-    widgets/radiobutton.h
-    widgets/scrollbar.h
-    widgets/signalplotter.h
-    widgets/slider.h
-    widgets/spinbox.h
-    widgets/busywidget.h
-    widgets/separator.h
-    widgets/svgwidget.h
-    widgets/scrollwidget.h
-    widgets/tabbar.h
-    widgets/textbrowser.h
-    widgets/treeview.h
-    widgets/textedit.h
-    widgets/webview.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets COMPONENT Devel)
 
 install(FILES
     scripting/appletscript.h
@@ -379,13 +320,6 @@ install(FILES
     scripting/wallpaperscript.h
     scripting/scriptengine.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/scripting COMPONENT Devel)
-
-if(PHONON_FOUND)
-    install (FILES
-        widgets/videowidget.h
-        DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets COMPONENT Devel)
-endif(PHONON_FOUND)
-
 
 install(FILES
    data/servicetypes/plasma-applet.desktop
