@@ -91,8 +91,6 @@
 #include "remote/authorizationmanager.h"
 #include "remote/authorizationmanager_p.h"
 #include "theme.h"
-#include "widgets/iconwidget.h"
-#include "widgets/label.h"
 #include "tooltipmanager.h"
 #include "wallpaper.h"
 #include "paintutils.h"

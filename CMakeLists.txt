@@ -209,21 +209,6 @@ set(plasma_LIB_SRCS
 #     private/themedwidgetinterface.cpp
 # 
 #     graphicsview/private/graphicsviewappletprivate.cpp
-#     animator.cpp
-#     animations/animation.cpp
-#     animations/easinganimation.cpp
-#     animations/fade.cpp
-#     animations/grow.cpp
-#     animations/pendulumcurve.cpp
-#     animations/pixmaptransition.cpp
-#     animations/pulser.cpp
-#     animations/rotation.cpp
-#     animations/rotationstacked.cpp
-#     animations/slide.cpp
-#     animations/stackedlayout.cpp
-#     animations/geometry.cpp
-#     animations/widgetsnapshot.cpp
-#     animations/zoom.cpp
 # 
 #     private/declarative/declarativenetworkaccessmanagerfactory.cpp
 #     private/declarative/dataenginebindings.cpp
@@ -312,8 +297,6 @@ set(plasma_LIB_INCLUDES
     abstractdialogmanager.h
     abstractrunner.h
     abstracttoolbox.h
-    animations/animation.h
-    animator.h
     applet.h
     configloader.h
     containment.h
@@ -403,13 +386,8 @@ if(PHONON_FOUND)
         DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets COMPONENT Devel)
 endif(PHONON_FOUND)
 
-install(FILES
-    animations/animation.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/animations COMPONENT Devel)
-
 
 install(FILES
-   data/servicetypes/plasma-animator.desktop
    data/servicetypes/plasma-applet.desktop
    data/servicetypes/plasma-applet-popupapplet.desktop
    data/servicetypes/plasma-containment.desktop

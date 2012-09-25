@@ -33,7 +33,6 @@
 
 #include <plasma/configloader.h>
 #include <plasma/plasma.h>
-#include <plasma/animator.h>
 #include <plasma/version.h>
 #include <plasma/framesvg.h>
 

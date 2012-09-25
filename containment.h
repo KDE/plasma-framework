@@ -29,7 +29,6 @@
 #include <ksharedconfig.h>
 
 #include <plasma/applet.h>
-#include <plasma/animator.h>
 
 
 namespace Plasma

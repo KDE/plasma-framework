@@ -52,7 +52,6 @@
 #include "kio/scheduler.h"
 #endif
 
-#include "animator.h"
 #include "containmentactions.h"
 #include "containmentactionspluginsconfig.h"
 #include "corona.h"
