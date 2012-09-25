@@ -200,7 +200,6 @@ set(plasma_LIB_SRCS
 #TODO: all those files will have to be deleted
 # set (plasmaqgv_LIB_SRCS
 #     abstracttoolbox.cpp
-#     delegate.cpp
 #     dialog.cpp
 #     view.cpp
 #     private/themedwidgetinterface.cpp
@@ -275,7 +274,6 @@ set(plasma_LIB_INCLUDES
     corona.h
     datacontainer.h
     dataengine.h
-    delegate.h
     dialog.h
     pluginloader.h
     paintutils.h
