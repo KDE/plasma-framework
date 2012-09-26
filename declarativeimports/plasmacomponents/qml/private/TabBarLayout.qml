@@ -55,6 +55,7 @@ Properties:
 **/
 
 import QtQuick 1.1
+import org.kde.qtextracomponents 0.1
 import "AppManager.js" as Utils
 
 Item {
@@ -65,42 +66,62 @@ Item {
     onWidthChanged: priv.layoutChildren()
     onHeightChanged: priv.layoutChildren()
 
+
     Keys.onPressed: {
         if (event.key == Qt.Key_Right || event.key == Qt.Key_Left) {
-            var oldIndex = priv.currentButtonIndex();
+            
             if (event.key == Qt.Key_Right || priv.mirrored) {
-                while (oldIndex < root.children.length - 1) {
-                    ++oldIndex
-                    if (root.children[oldIndex].visible) {
-                        priv.setCurrentButtonIndex(oldIndex)
-                        event.accepted = true
-                        break
-                    }
-                }
+                priv.goNextTab()
+                event.accepted = true
             } else if (event.key == Qt.Key_Left || priv.mirrored) {
-                while (oldIndex > 0) {
-                    --oldIndex
-                    if (root.children[oldIndex].visible) {
-                        priv.setCurrentButtonIndex(oldIndex)
-                        event.accepted = true
-                        break
-                    }
-                }
+                priv.goPreviousTab()
+                event.accepted = true
             }
         }
     }
 
     focus: true
 
-    QtObject {
+    MouseEventListener {
+        anchors.fill: parent
+        onWheelMoved: {
+            if (wheel.delta > 0) {
+                goNextTab()
+            } else {
+                goPreviousTab()
+            }
+        }
+
         id: priv
-        property Item firstButton: root.children.length > 0 ? root.children[0] : null
+        property Item firstButton: root.children.length > 1 ? root.children[1] : null
         property Item firstTab: firstButton ? (firstButton.tab != null ? firstButton.tab : null) : null
-        property Item tabGroup: firstTab ? (firstTab.parent ? firstTab.parent.parent.parent : null) : null
+        property Item tabGroup: firstTab ? Utils.findParent(firstTab, "currentTab") : null
         property bool mirrored: root.LayoutMirroring.enabled
         property Item tabBar: Utils.findParent(root, "currentTab")
 
         onMirroredChanged: layoutChildren()
+
+        function goNextTab() {
+            var oldIndex = priv.currentButtonIndex();
+            while (oldIndex < root.children.length - 1) {
+                ++oldIndex
+                if (root.children[oldIndex].visible) {
+                    priv.setCurrentButtonIndex(oldIndex)
+                    break
+                }
+            }
+        }
+
+        function goPreviousTab() {
+            var oldIndex = priv.currentButtonIndex();
+            while (oldIndex > 0) {
+                --oldIndex
+                if (root.children[oldIndex].visible) {
+                    priv.setCurrentButtonIndex(oldIndex)
+                    break
+                }
+            }
+        }
 
         function currentButtonIndex() {
             for (var i = 0; i < root.children.length; ++i) {
@@ -114,6 +135,7 @@ Item {
             if (tabGroup) {
                 tabGroup.currentTab = root.children[index].tab
             }
+            
             priv.tabBar.currentTab = root.children[index]
         }
 
