@@ -87,13 +87,14 @@ FocusScope {
         prefix: "sunken"
     }
 
+    clip: true
     PlasmaCore.FrameSvgItem {
         id: buttonFrame
 
         visible: currentTab !== null
-        x: currentTab.x + backgroundFrame.margins.left
+        x: tabBarLayout.x + currentTab.x + backgroundFrame.margins.left
         y: backgroundFrame.margins.top
-        width: currentTab.width + buttonFrame.margins.left + buttonFrame.margins.right
+        width: currentTab.width
         height: currentTab.height + buttonFrame.margins.top + buttonFrame.margins.bottom
         imagePath: "widgets/button"
         prefix: "normal"
@@ -105,14 +106,46 @@ FocusScope {
         }
     }
 
-    Private.TabBarLayout {
-        id: tabBarLayout
+    Item {
+        id: tabbarScroller
+        clip: true
         anchors {
             fill: parent
             leftMargin: backgroundFrame.margins.left + buttonFrame.margins.left
             topMargin: backgroundFrame.margins.top + buttonFrame.margins.top
-            rightMargin: backgroundFrame.margins.right + buttonFrame.margins.right
+            rightMargin: backgroundFrame.margins.right + buttonFrame.margins.right + (buttonsLayout.visible ? buttonsLayout.width : 0)
             bottomMargin: backgroundFrame.margins.bottom + buttonFrame.margins.bottom
+        }
+        
+        Private.TabBarLayout {
+            id: tabBarLayout
+            width: Math.max(parent.width, implicitWidth)
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
+            }
+        }
+    }
+    Row {
+        id: buttonsLayout
+        visible: tabBarLayout.width > root.width - backgroundFrame.margins.left - backgroundFrame.margins.right
+        height: Math.min(parent.height, theme.mediumIconSize)
+        anchors {
+            right: parent.right
+            verticalCenter: parent.verticalCenter
+            rightMargin: Math.min(y, backgroundFrame.margins.right)
+        }
+        ToolButton {
+            height: parent.height
+            width: height
+            iconSource: "go-previous"
+            onClicked: tabBarLayout.x = Math.min(0, tabBarLayout.x + tabBarLayout.height)
+        }
+        ToolButton {
+            height: parent.height
+            width: height
+            iconSource: "go-next"
+            onClicked: tabBarLayout.x = Math.max(-tabBarLayout.width + tabbarScroller.width, tabBarLayout.x - tabBarLayout.height)
         }
     }
 }

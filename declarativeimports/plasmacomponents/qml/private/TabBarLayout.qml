@@ -55,6 +55,7 @@ Properties:
 **/
 
 import QtQuick 1.1
+import "AppManager.js" as Utils
 
 Item {
     id: root
@@ -89,12 +90,13 @@ Item {
         property Item firstTab: firstButton ? (firstButton.tab != null ? firstButton.tab : null) : null
         property Item tabGroup: firstTab ? (firstTab.parent ? firstTab.parent.parent.parent : null) : null
         property bool mirrored: root.LayoutMirroring.enabled
+        property Item tabBar: Utils.findParent(root, "currentTab")
 
         onMirroredChanged: layoutChildren()
 
         function currentButtonIndex() {
             for (var i = 0; i < root.children.length; ++i) {
-                if (root.children[i] == root.parent.currentTab)
+                if (root.children[i] == priv.tabBar.currentTab)
                     return i
             }
             return -1
@@ -104,7 +106,7 @@ Item {
             if (tabGroup) {
                 tabGroup.currentTab = root.children[index].tab
             }
-            root.parent.currentTab = root.children[index]
+            priv.tabBar.currentTab = root.children[index]
         }
 
         function layoutChildren() {
@@ -146,12 +148,12 @@ Item {
             }
             root.implicitWidth = contentWidth
             root.implicitHeight = contentHeight
-            if (root.parent.currentTab === null) {
+            if (priv.tabBar.currentTab === null) {
                 //99% of the cases this loop will be length 1 but a tabbar can also have other children, such as Repeater
                 for (var i = 0; i < tabBarLayout.children.length; ++i) {
                     //anything with a checked property may act as tabbutton
                     if (tabBarLayout.children[i].checked !== undefined) {
-                        root.parent.currentTab = tabBarLayout.children[i]
+                        priv.tabBar.currentTab = tabBarLayout.children[i]
                         break;
                     }
                 }

@@ -83,7 +83,7 @@ Item {
 
     // Common Public API
     property Item tab
-    property bool checked: (internal.tabGroup == null) ? (root.parent.parent.currentTab == root) : (internal.tabGroup.currentTab == tab)
+    property bool checked: (internal.tabGroup == null) ? (internal.tabBar.currentTab == root) : (internal.tabGroup.currentTab == tab)
 
     property bool pressed: mouseArea.pressed == true && mouseArea.containsMouse
     property alias text: label.text
@@ -100,8 +100,8 @@ Item {
         target: root
         onPressedChanged: {
             //TabBar is the granparent
-            root.parent.parent.currentTab = root
-            root.parent.parent.forceActiveFocus()
+            internal.tabBar.currentTab = root
+            internal.tabBar.forceActiveFocus()
         }
         onVisibleChanged: root.parent.childrenChanged()
     }
@@ -109,6 +109,7 @@ Item {
     QtObject {
         id: internal
 
+        property Item tabBar: Utils.findParent(root, "currentTab")
         property Item tabGroup: Utils.findParent(tab, "currentTab")
         property bool portrait: root.height >= label.paintedHeight + 16
 
@@ -168,7 +169,7 @@ Item {
                 internal.tabGroup.currentTab = tab
             }
             //TabBar is the granparent, done here too in case of no tabgroup
-            root.parent.parent.currentTab = root
+            internal.tabBar.currentTab = root
         }
 
         anchors.fill: parent
