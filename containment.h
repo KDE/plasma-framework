@@ -509,14 +509,10 @@ Q_SIGNALS:
          */
         virtual void restoreContents(KConfigGroup &group);
 
+        //FIXME: events should go away
         void contextMenuEvent(QContextMenuEvent *event);
         void keyPressEvent(QKeyEvent *event);
         void wheelEvent(QWheelEvent *event);
-
-        /**
-         * @reimp
-         * @sa QGraphicsItem::dropEvent()
-         */
         void dropEvent(QDropEvent *event);
 
         /**

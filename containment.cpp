@@ -29,12 +29,9 @@
 #include <QClipboard>
 #include <QFile>
 #include <QContextMenuEvent>
-#include <QGraphicsView>
 #include <QMimeData>
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
-#include <QGraphicsLayout>
-#include <QGraphicsLinearLayout>
 #include <qtemporaryfile.h>
 
 #include <kaction.h>
