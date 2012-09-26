@@ -69,14 +69,22 @@ Item {
         if (event.key == Qt.Key_Right || event.key == Qt.Key_Left) {
             var oldIndex = priv.currentButtonIndex();
             if (event.key == Qt.Key_Right || priv.mirrored) {
-                if (oldIndex != root.children.length - 1) {
-                    priv.setCurrentButtonIndex(oldIndex + 1)
-                    event.accepted = true
+                while (oldIndex < root.children.length - 1) {
+                    ++oldIndex
+                    if (root.children[oldIndex].visible) {
+                        priv.setCurrentButtonIndex(oldIndex)
+                        event.accepted = true
+                        break
+                    }
                 }
             } else if (event.key == Qt.Key_Left || priv.mirrored) {
-                if (oldIndex != 0) {
-                    priv.setCurrentButtonIndex(oldIndex -1)
-                    event.accepted = true
+                while (oldIndex > 0) {
+                    --oldIndex
+                    if (root.children[oldIndex].visible) {
+                        priv.setCurrentButtonIndex(oldIndex)
+                        event.accepted = true
+                        break
+                    }
                 }
             }
         }
