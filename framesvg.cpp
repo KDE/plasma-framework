@@ -844,22 +844,26 @@ void FrameSvgPrivate::generateFrameBackground(FrameData *frame)
     if (frame->stretchBorders) {
         if (frame->enabledBorders & FrameSvg::LeftBorder || frame->enabledBorders & FrameSvg::RightBorder) {
             if (q->hasElement(prefix % "left") &&
-                frame->enabledBorders & FrameSvg::LeftBorder) {
+                frame->enabledBorders & FrameSvg::LeftBorder &&
+                contentHeight > 0) {
                 q->paint(&p, QRect(leftOffset, contentTop, frame->leftWidth, contentHeight), prefix % "left");
             }
 
             if (q->hasElement(prefix % "right") &&
-                frame->enabledBorders & FrameSvg::RightBorder) {
+                frame->enabledBorders & FrameSvg::RightBorder &&
+                contentHeight > 0) {
                 q->paint(&p, QRect(rightOffset, contentTop, frame->rightWidth, contentHeight), prefix % "right");
             }
         }
 
         if (frame->enabledBorders & FrameSvg::TopBorder || frame->enabledBorders & FrameSvg::BottomBorder) {
-            if (frame->enabledBorders & FrameSvg::TopBorder && q->hasElement(prefix % "top")) {
+            if (frame->enabledBorders & FrameSvg::TopBorder && q->hasElement(prefix % "top") &&
+                contentWidth > 0) {
                 q->paint(&p, QRect(contentLeft, topOffset, contentWidth, frame->topHeight), prefix % "top");
             }
 
-            if (frame->enabledBorders & FrameSvg::BottomBorder && q->hasElement(prefix % "bottom")) {
+            if (frame->enabledBorders & FrameSvg::BottomBorder && q->hasElement(prefix % "bottom") &&
+                contentWidth > 0) {
                 q->paint(&p, QRect(contentLeft, bottomOffset, contentWidth, frame->bottomHeight), prefix % "bottom");
             }
         }
