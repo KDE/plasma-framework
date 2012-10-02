@@ -43,7 +43,7 @@ class PluginLoaderPrivate;
  * default PluginLoader implementation will be used. The reimplemented version should
  * not do more than simply returning a loaded plugin. It should not init() it, and it should not
  * hang on to it. The associated methods will be called only when a component of Plasma
- * needs to load a _new_ plugin. (e.g. DataEngine does it's own caching).
+ * needs to load a _new_ plugin. (e.g. DataEngine does its own caching).
  *
  * @author Ryan Rix <ry@n.rix.si>
  * @since 4.6
