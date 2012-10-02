@@ -85,7 +85,7 @@ Item {
     MouseEventListener {
         anchors.fill: parent
         onWheelMoved: {
-            if (wheel.delta > 0) {
+            if (wheel.delta < 0) {
                 goNextTab()
             } else {
                 goPreviousTab()
