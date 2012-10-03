@@ -67,6 +67,17 @@ Properties:
 Signals:
       * clicked():
         This handler is called when there is a click.
+
+
+Plasma properties:
+
+      * real minimumWidth:
+         This property holds the smallest width this button can be to show all the contents
+
+      * real minimumHeight:
+         This property holds the smallest height this button can be to show all the contents
+
+
 **/
 
 import QtQuick 1.1
@@ -85,17 +96,20 @@ Item {
     property alias iconSource: icon.source
     property alias font: label.font
 
+    //icon + label + left margin + right margin + spacing between icon and text
+    property real minimumWidth: icon.width + label.implicitWidth + surfaceNormal.margins.left + surfaceNormal.margins.right + ((icon.valid) ? surfaceNormal.margins.left : 0)
+    property real minimumHeight: Math.max(icon.height, label.paintedHeight) + surfaceNormal.margins.top + surfaceNormal.margins.bottom
+
     signal clicked()
 
-    implicitWidth:
+    implicitWidth: {
         if (label.implicitWidth == 0) {
-            height
+            return height;
         } else {
-            //return Math.max(theme.defaultFont.mSize.width*12, label.paintedWidth)
-            Math.max(theme.defaultFont.mSize.width*12, icon.width + label.implicitWidth + surfaceNormal.margins.left + surfaceNormal.margins.right) + ((icon.valid) ? surfaceNormal.margins.left : 0)
+            return Math.max(theme.defaultFont.mSize.width*12, minimumWidth);
         }
-
-    implicitHeight: Math.max(theme.defaultFont.mSize.height*1.6, Math.max(icon.height, label.paintedHeight) + surfaceNormal.margins.top/2 + surfaceNormal.margins.bottom/2)
+    }
+    implicitHeight: Math.max(theme.defaultFont.mSize.height*1.6, minimumHeight)
 
     // TODO: needs to define if there will be specific graphics for
     //     disabled buttons
@@ -178,7 +192,7 @@ Item {
 
         states: [
             State { name: "normal" },
-            State { name: "pressed" 
+            State { name: "pressed"
                     PropertyChanges {
                         target: surfaceNormal
                         opacity: 0
