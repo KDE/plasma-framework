@@ -29,10 +29,12 @@
 
 #include <Plasma/FrameSvg>
 #include <Plasma/Svg>
+#include <Plasma/QueryMatch>
 
 #include "datasource.h"
 #include "datamodel.h"
 #include "framesvgitem.h"
+#include "runnermodel.h"
 #include "svgitem.h"
 #include "theme.h"
 #include "dialog.h"
@@ -85,6 +87,10 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterInterface<Plasma::ServiceJob>("ServiceJob");
     qRegisterMetaType<Plasma::ServiceJob*>("ServiceJob");
     qmlRegisterType<QAbstractItemModel>();
+
+    qmlRegisterType<RunnerModel>(uri, 0, 1, "RunnerModel");
+    qmlRegisterInterface<Plasma::QueryMatch>("QueryMatch");
+    qRegisterMetaType<Plasma::QueryMatch *>("QueryMatch");
 
     /*qmlRegisterInterface<Plasma::DataSource>("DataSource");
     qRegisterMetaType<Plasma::DataSource*>("DataSource");*/

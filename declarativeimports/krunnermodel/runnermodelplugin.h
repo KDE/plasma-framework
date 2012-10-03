@@ -22,7 +22,9 @@
 
 #include <QDeclarativeExtensionPlugin>
 
-
+/*
+ * FIXME: This plugin is deprecated, it should be removed for plasma2
+ */
 class RunnerModelPlugin : public QDeclarativeExtensionPlugin
 {
     Q_OBJECT
