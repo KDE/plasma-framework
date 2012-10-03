@@ -1,7 +1,7 @@
 project(runnermodel)
 
 set(runnermodel_SRCS
-    runnermodel.cpp
+    ../core/runnermodel.cpp
     runnermodelplugin.cpp
     )
 
@@ -17,4 +17,3 @@ target_link_libraries(runnermodelplugin
 install(TARGETS runnermodelplugin DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/runnermodel)
 install(FILES qmldir DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/runnermodel)
 
-#add_subdirectory(test)

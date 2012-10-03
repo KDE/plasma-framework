@@ -18,7 +18,7 @@
  */
 #include <../tests/columnproxymodeltest.h>
 #include <columnproxymodel.h>
-#include <../../krunnermodel/test/modeltest.h>
+#include <../../core/tests/modeltest.h>
 
 #include <qtest_kde.h>
 #include <QStandardItemModel>

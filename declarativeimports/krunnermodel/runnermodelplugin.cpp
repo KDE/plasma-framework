@@ -23,7 +23,7 @@
 
 #include <Plasma/QueryMatch>
 
-#include "runnermodel.h"
+#include "../core/runnermodel.h"
 
 void RunnerModelPlugin::registerTypes(const char *uri)
 {

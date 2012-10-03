@@ -1,6 +1,6 @@
 INCLUDE_DIRECTORIES(.. .)
 
-kde4_add_unit_test(fullmodelaccesstest columnproxymodeltest.cpp ../columnproxymodel.cpp ../../krunnermodel/test/modeltest.cpp)
+kde4_add_unit_test(fullmodelaccesstest columnproxymodeltest.cpp ../columnproxymodel.cpp ../../core/tests/modeltest.cpp)
 target_link_libraries(fullmodelaccesstest
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
