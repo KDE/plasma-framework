@@ -87,14 +87,14 @@ Item {
 
     signal clicked()
 
-    implicitWidth: {
-        if (label.paintedWidth == 0) {
-            return height
+    implicitWidth:
+        if (label.implicitWidth == 0) {
+            height
         } else {
             //return Math.max(theme.defaultFont.mSize.width*12, label.paintedWidth)
-            return Math.max(theme.defaultFont.mSize.width*12, icon.width + label.paintedWidth + surfaceNormal.margins.left + surfaceNormal.margins.right) + ((icon.valid) ? surfaceNormal.margins.left : 0)
+            Math.max(theme.defaultFont.mSize.width*12, icon.width + label.implicitWidth + surfaceNormal.margins.left + surfaceNormal.margins.right) + ((icon.valid) ? surfaceNormal.margins.left : 0)
         }
-    }
+
     implicitHeight: Math.max(theme.defaultFont.mSize.height*1.6, Math.max(icon.height, label.paintedHeight) + surfaceNormal.margins.top/2 + surfaceNormal.margins.bottom/2)
 
     // TODO: needs to define if there will be specific graphics for
@@ -249,6 +249,7 @@ Item {
             color: theme.buttonTextColor
             horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
+            elide: button.width < button.implicitWidth ? Text.ElideRight : Text.ElideNone
         }
     }
 
