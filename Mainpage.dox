@@ -4,22 +4,22 @@ Plasma Runtime components.
 The classes documented here are not C++ public libraries: they are intended to be used from QML, with the following imports:
 
 <h3>org.kde.draganddrop</h3>
-<p>Bindings for the Qt drag and drop system @ref draganddrop </p>
+<p>Bindings for the Qt drag and drop system, see @ref draganddrop </p>
 
 <h3>org.kde.locale</h3>
-<p>Bindings for the use of KLocale</p>
+<p>Bindings for the use of KLocale, see <a href="classLocale.html">Locale</a></p>
 
 <h3>org.kde.plasma.components</h3>
-<p>Graphical components for common items such as buttons, lineedits, tabbars and so on. Compatible subset of the MeeGo components used on the N9</p>
+<p>Graphical components for common items such as buttons, lineedits, tabbars and so on. Compatible subset of the MeeGo components used on the N9, see @ref components </p>
 
 <h3>org.kde.plasma.core</h3>
-<p>Bindings for libplasma functionality, such as DataEngines and FrameSvgs</p>
+<p>Bindings for libplasma functionality, such as DataEngines and FrameSvgs, see @ref core </p>
 
 <h3>org.kde.plasma.extras</h3>
-<p>Extra graphical components that extend org.kde.plasma.components but are not in the standard api</p>
+<p>Extra graphical components that extend org.kde.plasma.components but are not in the standard api, see @ref extras </p>
 
 <h3>org.kde.qtextracomponents</h3>
-<p>Bindings for some functionality in Qt not included in the primitive QML components set, sich as support for QImages, QPixmaps, QIcons and mouse and wheel events with screen coordinates</p>
+<p>Bindings for some functionality in Qt not included in the primitive QML components set, sich as support for QImages, QPixmaps, QIcons and mouse and wheel events with screen coordinates, see @ref qtextracomponents </p>
 
 
 @authors
@@ -44,6 +44,95 @@ Aaron Seigo \<aseigo at kde.org\>
 <li><a href="classDeclarativeMimeData.html">DeclarativeMimeData</a></li>
 </ul>
 
+*/
+
+/** @page components
+<h2>import org.kde.plasma.components</h2>
+<ul>
+<li><a href="/4.x-api/plasma-qml-apidocs/BusyIndicator.html">BusyIndicator</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/Button.html">Button</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/ButtonColumn.html">ButtonColumn</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/ButtonRow.html">ButtonRow</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/CheckBox.html">CheckBox</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/CommonDialog.html">CommonDialog</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/ContextMenu.html">ContextMenu</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/Dialog.html">Dialog</a></li>
+<li><a href="classDialogStatus.html">DialogStatus</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/DisappearAnimation.html">DisappearAnimation</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/Highlight.html">Highlight</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/Label.html">Label</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/ListItem.html">ListItem</a></li>
+<li><a href="classQMenuProxy.html">Menu</a></li>
+<li><a href="classQMenuItem.html">MenuItem</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/Page.html">Page</a></li>
+<li><a href="classPageOrientation.html">PageOrientation</a></li>
+<li><a href="classPageStatus.html">PageStatus</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/PageStack.html">PageStack</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/ProgressBar.html">ProgressBar</a></li>
+<li><a href="classQueryDialog.html">QueryDialog</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/RadioButton.html">RadioButton</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/ScrollBar.html">ScrollBar</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/SectionScroller.html">SectionScroller</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/SelectionDialog.html">SelectionDialog</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/Sheet.html">Sheet</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/Slider.html">Slider</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/Switch.html">Switch</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/TabBar.html">TabBar</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/TabButton.html">TabButton</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/TabGroup.html">TabGroup</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/TextArea.html">TextArea</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/TextField.html">TextField</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/ToolBar.html">ToolBar</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/ToolBarLayout.html">ToolBarLayout</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/ToolButton.html">ToolButton</a></li>
+</ul>
+*/
+
+/** @page core
+<h2>import org.kde.plasma.core</h2>
+<ul>
+<li><a href="classDataModel.html">DataModel</a></li>
+<li><a href="classDataSource.html">DataSource</a></li>
+<li><a href="classDialog.html">Dialog</a></li>
+<li><a href="../plasma/html/classPlasma_1_1FrameSvg.html">FrameSvg</a></li>
+<li><a href="classFrameSvgItem.html">FrameSvgItem</a></li>
+<li><a href="classRunnerModel.html">RunnerModel</a></li>
+<li><a href="../plasma/html/classPlasma_1_1Svg.html">Svg</a></li>
+<li><a href="classSvgItem.html">SvgItem</a></li>
+<li><a href="classTheme.html">Theme</a></li>
+<li><a href="classToolTip.html">ToolTip</a></li>
+<li><a href="classSortFilterModel.html">SortFilterModel</a></li>
+</ul>
+*/
+
+/** @page extras
+<h2>import org.kde.plasma.extras</h2>
+<ul>
+<li><a href="/4.x-api/plasma-qml-apidocs/App.html">App</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/Heading.html">Heading</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/Paragraph.html">Paragraph</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/PageRow.html">PageRow</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/ScrollArea.html">ScrollArea</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/Title.html">Title</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/ActivateAnimation.html">ActivateAnimation</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/AppearAnimation.html">AppearAnimation</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/PressedAnimation.html">PressedAnimation</a></li>
+<li><a href="/4.x-api/plasma-qml-apidocs/ReleasedAnimation.html">ReleasedAnimation</a></li>
+<li><a href="classFallbackComponent.html">FallbackComponent</a></li>
+<li><a href="classResourceInstance.html">ResourceInstance</a></li>
+</ul>
+*/
+
+/** @page qtextracomponents
+<h2>import org.kde.plasma.qtextracomponents</h2>
+<ul>
+<li><a href="classQPixmapItem.html">QPixmapItem</a></li>
+<li><a href="classQImageItem.html">QImageItem</a></li>
+<li><a href="classQIconItem.html">QIconItem</a></li>
+<li><a href="classMouseEventListener.html">MouseEventListener</a></li>
+<li><a href="classColumnProxyModel.html">ColumnProxyModel</a></li>
+<li><a href="classQModelIndex.html">QModelIndex</a></li>
+</ul>
 */
 
 // DOXYGEN_SET_PROJECT_NAME = Plasma Runtime

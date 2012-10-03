@@ -27,7 +27,14 @@ class QMenuItem : public QAction
 {
     Q_OBJECT
 
+    /**
+     * The parent object
+     */
     Q_PROPERTY(QObject *parent READ parent WRITE setParent)
+
+    /**
+     * If true, the menu item will behave like a separator
+     */
     Q_PROPERTY(bool separator READ isSeparator WRITE setSeparator)
 
 public:
