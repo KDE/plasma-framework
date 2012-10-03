@@ -1,8 +1,11 @@
 /** @mainpage Plasma Runtime
 
-Plasma Runtime components
+Plasma Runtime components.
+The classes documented here are not C++ public libraries: they are intended to be used from QML.
 
 @authors
+Marco Martin \<mart at kde.org\>
+Aaron Seigo \<aseigo at kde.org\>
 
 @maintainers
 
