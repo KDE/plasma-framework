@@ -40,7 +40,7 @@ void FallbackComponent::setBasePath(const QString &basePath)
 {
     if (basePath != m_basePath) {
         m_basePath = basePath;
-        emit onBasePathChanged();
+        emit basePathChanged();
     }
 }
 
@@ -52,7 +52,7 @@ QStringList FallbackComponent::candidates() const
 void FallbackComponent::setCandidates(const QStringList &candidates)
 {
     m_candidates = candidates;
-    emit onCandidatesChanged();
+    emit candidatesChanged();
 }
 
 QString FallbackComponent::filePath(const QString &key)

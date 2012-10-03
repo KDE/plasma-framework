@@ -29,8 +29,8 @@ class FallbackComponent : public QObject
 {
     Q_OBJECT
 
-Q_PROPERTY(QString basePath READ basePath WRITE setBasePath NOTIFY onBasePathChanged)
-Q_PROPERTY(QStringList candidates READ candidates WRITE setCandidates NOTIFY onCandidatesChanged)
+Q_PROPERTY(QString basePath READ basePath WRITE setBasePath NOTIFY basePathChanged)
+Q_PROPERTY(QStringList candidates READ candidates WRITE setCandidates NOTIFY candidatesChanged)
 
 public:
     FallbackComponent(QObject *parent = 0);
@@ -46,8 +46,8 @@ public:
 
 
 Q_SIGNALS:
-    void onBasePathChanged();
-    void onCandidatesChanged();
+    void basePathChanged();
+    void candidatesChanged();
 
 private:
     QCache<QString, QString> m_possiblePaths;
