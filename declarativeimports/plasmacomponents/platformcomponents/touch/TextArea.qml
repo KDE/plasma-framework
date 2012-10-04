@@ -30,8 +30,8 @@ Item {
     property int inputMethodHints
     property bool errorHighlight
     property alias cursorPosition: textEdit.cursorPosition
-    property alias horizontalAlignment: textEdit.cursorPosition
-    property alias verticalAlignment: textEdit.cursorPosition
+    property alias horizontalAlignment: textEdit.horizontalAlignment
+    property alias verticalAlignment: textEdit.verticalAlignment
     property alias readOnly: textEdit.readOnly
     property alias selectedText: textEdit.selectedText // read-only
     property alias selectionEnd: textEdit.selectionEnd // read-only
