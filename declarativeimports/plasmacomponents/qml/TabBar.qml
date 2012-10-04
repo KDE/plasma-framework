@@ -106,6 +106,10 @@ FocusScope {
         }
     }
 
+    onCurrentTabChanged: tabBarLayout.x = Math.min(0, -(currentTab.x + currentTab.width - tabbarScroller.width))
+
+    onWidthChanged: tabBarLayout.x = Math.min(0, -(currentTab.x + currentTab.width - tabbarScroller.width))
+
     Item {
         id: tabbarScroller
         clip: true
@@ -116,7 +120,7 @@ FocusScope {
             rightMargin: backgroundFrame.margins.right + buttonFrame.margins.right + (buttonsLayout.visible ? buttonsLayout.width : 0)
             bottomMargin: backgroundFrame.margins.bottom + buttonFrame.margins.bottom
         }
-        
+
         Private.TabBarLayout {
             id: tabBarLayout
             width: Math.max(parent.width, implicitWidth)
@@ -139,13 +143,13 @@ FocusScope {
             height: parent.height
             width: height
             iconSource: "go-previous"
-            onClicked: tabBarLayout.x = Math.min(0, tabBarLayout.x + tabBarLayout.height)
+            onClicked: tabBarLayout.x = Math.min(0, tabBarLayout.x + tabBarLayout.width/tabBarLayout.children.length)
         }
         ToolButton {
             height: parent.height
             width: height
             iconSource: "go-next"
-            onClicked: tabBarLayout.x = Math.max(-tabBarLayout.width + tabbarScroller.width, tabBarLayout.x - tabBarLayout.height)
+            onClicked: tabBarLayout.x = Math.max(-tabBarLayout.width + tabbarScroller.width, tabBarLayout.x - tabBarLayout.width/tabBarLayout.children.length)
         }
     }
 }
