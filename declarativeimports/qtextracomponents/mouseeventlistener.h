@@ -123,12 +123,28 @@ private:
 class MouseEventListener : public QDeclarativeItem
 {
     Q_OBJECT
+    /**
+     * This property holds whether hover events are handled.
+     * By default hover events are disabled
+     */
+    Q_PROPERTY(bool hoverEnabled READ hoverEnabled WRITE setHoverEnabled NOTIFY hoverEnabledChanged)
+
+    /**
+     * True if this MouseEventListener or any of its children contains the mouse cursor: this property will change only when the mouse button is pressed if hoverEnabled is false
+     */
+    Q_PROPERTY(bool containsMouse READ containsMouse NOTIFY containsMouseChanged)
 
 public:
     MouseEventListener(QDeclarativeItem *parent=0);
     ~MouseEventListener();
 
+    bool containsMouse() const;
+    void setHoverEnabled(bool enable);
+    bool hoverEnabled() const;
+
 protected:
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
@@ -141,6 +157,8 @@ Q_SIGNALS:
     void released(KDeclarativeMouseEvent *mouse);
     void pressAndHold(KDeclarativeMouseEvent *mouse);
     void wheelMoved(KDeclarativeWheelEvent *wheel);
+    void containsMouseChanged(bool containsMouseChanged);
+    void hoverEnabledChanged(bool hoverEnabled);
 
 private Q_SLOTS:
     void handlePressAndHold();
@@ -150,6 +168,7 @@ private:
     QPointF m_pressAndHoldPosition;
     //Important: used only for comparison. If you will ever need to access this pointer, make it a QWekapointer
     QEvent *m_lastEvent;
+    bool m_containsMouse;
 };
 
 #endif

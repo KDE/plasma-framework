@@ -29,7 +29,8 @@ MouseEventListener::MouseEventListener(QDeclarativeItem *parent)
     : QDeclarativeItem(parent),
     m_pressed(false),
     m_pressAndHoldEvent(0),
-    m_lastEvent(0)
+    m_lastEvent(0),
+    m_containsMouse(false)
 {
     qmlRegisterType<KDeclarativeMouseEvent>();
     qmlRegisterType<KDeclarativeWheelEvent>();
@@ -40,6 +41,38 @@ MouseEventListener::MouseEventListener(QDeclarativeItem *parent)
 
 MouseEventListener::~MouseEventListener()
 {
+}
+
+void MouseEventListener::setHoverEnabled(bool enable)
+{
+    if (enable == acceptHoverEvents()) {
+        return;
+    }
+
+    setAcceptHoverEvents(enable);
+    emit hoverEnabledChanged(enable);
+}
+
+bool MouseEventListener::hoverEnabled() const
+{
+    return acceptHoverEvents();
+}
+
+void MouseEventListener::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
+    m_containsMouse = true;
+    emit containsMouseChanged(true);
+}
+
+void MouseEventListener::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+    m_containsMouse = false;
+    emit containsMouseChanged(false);
+}
+
+bool MouseEventListener::containsMouse() const
+{
+    return m_containsMouse;
 }
 
 void MouseEventListener::mousePressEvent(QGraphicsSceneMouseEvent *me)
