@@ -111,9 +111,6 @@ QString SortFilterModel::filterRole() const
 
 void SortFilterModel::setSortRole(const QString &role)
 {
-    if (m_sortRole == role) {
-        return;
-    }
     m_sortRole = role;
     if (role.isEmpty()) {
         sort(-1, Qt::AscendingOrder);
