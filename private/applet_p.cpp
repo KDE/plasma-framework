@@ -683,7 +683,6 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
         return mainConfig;
     }
 
-    bool newGroup = false;
     if (isContainment) {
         Corona *corona = qobject_cast<Corona*>(q->scene());
         KConfigGroup containmentConfig;
@@ -693,10 +692,6 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
             containmentConfig = KConfigGroup(corona->config(), "Containments");
         } else {
             containmentConfig =  KConfigGroup(KSharedConfig::openConfig(), "Containments");
-        }
-
-        if (package && !containmentConfig.hasGroup(QString::number(appletId))) {
-            newGroup = true;
         }
 
         mainConfig = new KConfigGroup(&containmentConfig, QString::number(appletId));
@@ -719,23 +714,7 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
             appletConfig = KConfigGroup(KSharedConfig::openConfig(), "Applets");
         }
 
-        if (package && !appletConfig.hasGroup(QString::number(appletId))) {
-            newGroup = true;
-        }
-
         mainConfig = new KConfigGroup(&appletConfig, QString::number(appletId));
-    }
-
-    if (newGroup) {
-        //see if we have a default configuration in our package
-        const QString defaultConfigFile = package->filePath("defaultconfig");
-        if (!defaultConfigFile.isEmpty()) {
-#ifndef NDEBUG
-            kDebug() << "copying default config: " << package->filePath("defaultconfig");
-#endif
-            KConfigGroup defaultConfig(KSharedConfig::openConfig(defaultConfigFile)->group("Configuration"));
-            defaultConfig.copyTo(mainConfig);
-        }
     }
 
     return mainConfig;

@@ -118,7 +118,6 @@ void PlasmoidPackage::initPackage(Package *package)
 
     package->addFileDefinition("mainconfigui", "ui/config.ui", i18n("Main Config UI File"));
     package->addFileDefinition("mainconfigxml", "config/main.xml", i18n("Configuration XML file"));
-    package->addFileDefinition("defaultconfig", "config/default-configrc", i18n("Default configuration"));
     package->addDirectoryDefinition("animations", "animations", i18n("Animation scripts"));
 }
 
