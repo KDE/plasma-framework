@@ -48,20 +48,20 @@ Properties:
         This property holds the current cursor position.
 
       * enumeration horizontalAlignment:
-      * enumeration verticalAlignment:
-        Sets the horizontal and vertical alignment of the text within the TextArea item's width and height.
+        Sets the horizontal alignment of the text within the TextArea item's width and height.
     By default, the text alignment follows the natural alignment of the text,
     for example text that is read from left to right will be aligned to the left.
-
-    Valid values for horizontalAlignment are:
-
+        Valid values:
         * TextEdit.AlignLeft (default)
         * TextEdit.AlignRight
         * TextEdit.AlignHCenter
         * TextEdit.AlignJustify
 
-    Valid values for verticalAlignment are:
-
+      * enumeration verticalAlignment:
+        Sets the vertical alignment of the text within the TextArea item's width and height.
+    By default, the text alignment follows the natural alignment of the text,
+    for example text that is read from left to right will be aligned to the left.
+        Valid values:
         * TextEdit.AlignTop (default)
         * TextEdit.AlignBottom
         * TextEdit.AlignVCenter
