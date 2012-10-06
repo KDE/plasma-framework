@@ -23,6 +23,12 @@
 
 #include <config-plasma.h>
 
+#if HAVE_X11 && QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#pragma message("X11 Pixmap code disabled, X11 <=> Qt pixmap conversion code not available in Qt 5.0")
+#undef HAVE_X11
+#define HAVE_X11 0
+#endif
+
 #if HAVE_X11
 #include <QX11Info>
 #include <X11/Xatom.h>
