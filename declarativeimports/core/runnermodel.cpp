@@ -37,8 +37,6 @@ RunnerModel::RunnerModel(QObject *parent)
     QHash<int, QByteArray> roles;
     roles.insert(Qt::DisplayRole, "label");
     roles.insert(Qt::DecorationRole, "icon");
-    roles.insert(Qt::DisplayRole, "display");
-    roles.insert(Qt::DecorationRole, "decoration");
     roles.insert(Type, "type");
     roles.insert(Relevance, "relevance");
     roles.insert(Data, "data");
