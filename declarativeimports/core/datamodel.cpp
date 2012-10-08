@@ -78,6 +78,7 @@ void SortFilterModel::setModel(QAbstractItemModel* model)
         connect(model, SIGNAL(modelReset()), this, SLOT(syncRoleNames()));
     }
     QSortFilterProxyModel::setSourceModel(model);
+    syncRoleNames();
     sourceModelChanged(model);
 }
 
@@ -114,7 +115,7 @@ void SortFilterModel::setSortRole(const QString &role)
     m_sortRole = role;
     if (role.isEmpty()) {
         sort(-1, Qt::AscendingOrder);
-    } else {
+    } else if (sourceModel()) {
         QSortFilterProxyModel::setSortRole(roleNameToId(role));
         sort(0, sortOrder());
     }
