@@ -74,12 +74,15 @@ void SortFilterModel::setModel(QAbstractItemModel* model)
     if (sourceModel()) {
         disconnect(sourceModel(), SIGNAL(modelReset()), this, SLOT(syncRoleNames()));
     }
+
+    QSortFilterProxyModel::setSourceModel(model);
+
     if (model) {
         connect(model, SIGNAL(modelReset()), this, SLOT(syncRoleNames()));
+        syncRoleNames();
     }
-    QSortFilterProxyModel::setSourceModel(model);
-    syncRoleNames();
-    sourceModelChanged(model);
+
+    emit sourceModelChanged(model);
 }
 
 
