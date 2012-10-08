@@ -103,12 +103,13 @@ Item {
     signal clicked()
 
     implicitWidth: {
-        if (label.implicitWidth == 0) {
+        if (label.text.length == 0) {
             height;
         } else {
             Math.max(theme.defaultFont.mSize.width*12, minimumWidth);
         }
     }
+
     implicitHeight: Math.max(theme.defaultFont.mSize.height*1.6, minimumHeight)
 
     // TODO: needs to define if there will be specific graphics for
@@ -227,8 +228,8 @@ Item {
 
             anchors {
                 verticalCenter: parent.verticalCenter
-                left: label.paintedWidth > 0 ? parent.left : undefined
-                horizontalCenter: label.paintedWidth > 0 ? undefined : parent.horizontalCenter
+                left: label.text.length > 0 ? parent.left : undefined
+                horizontalCenter: label.text.length > 0 ? undefined : parent.horizontalCenter
             }
             height: roundToStandardSize(parent.height)
             width: height
@@ -239,8 +240,8 @@ Item {
 
             //FIXME: why this is needed?
             onPaintedWidthChanged: {
-                icon.anchors.horizontalCenter = label.paintedWidth > 0 ? undefined : icon.parent.horizontalCenter
-                icon.anchors.left = label.paintedWidth > 0 ? icon.parent.left : undefined
+                icon.anchors.horizontalCenter = label.text.length > 0 ? undefined : icon.parent.horizontalCenter
+                icon.anchors.left = label.text.length > 0 ? icon.parent.left : undefined
             }
 
             anchors {
