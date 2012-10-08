@@ -66,6 +66,8 @@ public:
      */
     enum Roles {
         Type = Qt::UserRole + 1,
+        Label,
+        Icon,
         Relevance,
         Data,
         Id,

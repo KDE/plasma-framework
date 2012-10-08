@@ -35,8 +35,10 @@ RunnerModel::RunnerModel(QObject *parent)
       m_running(false)
 {
     QHash<int, QByteArray> roles;
-    roles.insert(Qt::DisplayRole, "label");
-    roles.insert(Qt::DecorationRole, "icon");
+    roles.insert(Qt::DisplayRole, "display");
+    roles.insert(Qt::DecorationRole, "decoration");
+    roles.insert(Label, "label");
+    roles.insert(Icon, "icon");
     roles.insert(Type, "type");
     roles.insert(Relevance, "relevance");
     roles.insert(Data, "data");
@@ -119,9 +121,9 @@ QVariant RunnerModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
-    if (role == Qt::DisplayRole) {
+    if (role == Qt::DisplayRole || role == Label) {
         return m_matches.at(index.row()).text();
-    } else if (role == Qt::DecorationRole) {
+    } else if (role == Qt::DecorationRole || role == Icon) {
         return m_matches.at(index.row()).icon();
     } else if (role == Type) {
         return m_matches.at(index.row()).type();
