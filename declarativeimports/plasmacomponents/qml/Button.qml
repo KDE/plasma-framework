@@ -104,9 +104,9 @@ Item {
 
     implicitWidth: {
         if (label.implicitWidth == 0) {
-            return height;
+            height;
         } else {
-            return Math.max(theme.defaultFont.mSize.width*12, minimumWidth);
+            Math.max(theme.defaultFont.mSize.width*12, minimumWidth);
         }
     }
     implicitHeight: Math.max(theme.defaultFont.mSize.height*1.6, minimumHeight)
