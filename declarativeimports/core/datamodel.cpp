@@ -38,6 +38,7 @@ SortFilterModel::SortFilterModel(QObject* parent)
             this, SIGNAL(countChanged()));
     connect(this, SIGNAL(modelReset()),
             this, SIGNAL(countChanged()));
+    connect(this,  SIGNAL(countChanged()), this, SLOT(syncRoleNames()));
 }
 
 SortFilterModel::~SortFilterModel()
@@ -46,6 +47,10 @@ SortFilterModel::~SortFilterModel()
 
 void SortFilterModel::syncRoleNames()
 {
+    if (!sourceModel() || sourceModel()->roleNames() == roleNames()) {
+        return;
+    }
+
     m_roleIds.clear();
 
     setRoleNames(sourceModel()->roleNames());
@@ -84,9 +89,6 @@ void SortFilterModel::setModel(QAbstractItemModel* model)
 
     emit sourceModelChanged(model);
 }
-
-
-
 
 void SortFilterModel::setFilterRegExp(const QString &exp)
 {
@@ -366,8 +368,6 @@ void DataModel::setItems(const QString &sourceName, const QVariantList &list)
                 }
             }
         }
-
-        setRoleNames(m_roleNames);
     }
 
     setRoleNames(m_roleNames);
