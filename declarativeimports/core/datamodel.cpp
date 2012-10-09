@@ -47,17 +47,17 @@ SortFilterModel::~SortFilterModel()
 
 void SortFilterModel::syncRoleNames()
 {
-    if (!sourceModel() || sourceModel()->roleNames() == roleNames()) {
+    if (!sourceModel()) {
         return;
     }
 
     m_roleIds.clear();
-
-    setRoleNames(sourceModel()->roleNames());
     QHash<int, QByteArray>::const_iterator i;
     for (i = roleNames().constBegin(); i != roleNames().constEnd(); ++i) {
         m_roleIds[i.value()] = i.key();
     }
+
+    setRoleNames(sourceModel()->roleNames());
     setFilterRole(m_filterRole);
     setSortRole(m_sortRole);
 }
