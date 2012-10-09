@@ -218,7 +218,10 @@ Item {
             id: updateFromHandleTimer
             interval: 10
             onTriggered: {
-                if (internalLoader.isVertical && enabled && interactive) {
+                if(!enabled || !interactive)
+                    return;
+                
+                if (internalLoader.isVertical) {
                     range.position = internalLoader.item.handle.y
                 } else {
                     range.position = internalLoader.item.handle.x
