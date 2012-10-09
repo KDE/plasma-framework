@@ -104,8 +104,8 @@ Item {
     property bool pressed: internalLoader.item.mouseArea?internalLoader.item.mouseArea.pressed:false
     property real scrollButtonInterval: 50
 
-    implicitWidth: internalLoader.isVertical ? (interactive ? 16 : 12) : 200
-    implicitHeight: internalLoader.isVertical ? 200 : (interactive ? 16 : 12)
+    implicitWidth: internalLoader.isVertical ? (internalLoader.item ? internalLoader.item.implicitWidth : 12) : 200
+    implicitHeight: internalLoader.isVertical ? 200 : (internalLoader.item ? internalLoader.item.implicitHeight : 12)
     // TODO: needs to define if there will be specific graphics for
     //     disabled scroll bars
     opacity: enabled ? 1.0 : 0.5

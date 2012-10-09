@@ -28,6 +28,9 @@ PlasmaCore.FrameSvgItem {
     imagePath:"widgets/scrollbar"
     prefix: internalLoader.isVertical ? "background-vertical" : "background-horizontal"
 
+    property int implicitWidth: scrollbarSvg.hasElement("hint-scrollbar-size") ? scrollbarSvg.elementSize("hint-scrollbar-size").width : 12
+    property int implicitHeight: scrollbarSvg.hasElement("hint-scrollbar-size") ? scrollbarSvg.elementSize("hint-scrollbar-size").height : 12
+
      Keys.onUpPressed: {
         if (!enabled || !internalLoader.isVertical)
             return;
@@ -75,10 +78,10 @@ PlasmaCore.FrameSvgItem {
         id: contents
         anchors {
             fill: parent
-            leftMargin: internalLoader.isVertical || stepSize <= 0 ? 0 : leftButton.width
-            rightMargin: internalLoader.isVertical || stepSize <= 0 ? 0 : rightButton.width
-            topMargin: internalLoader.isVertical && stepSize > 0 ? leftButton.height : 0
-            bottomMargin: internalLoader.isVertical && stepSize > 0 ? rightButton.height : 0
+            leftMargin: (!internalLoader.isVertical && leftButton.visible) ? leftButton.width : 0
+            rightMargin: (!internalLoader.isVertical && rightButton.visible) ? rightButton.width : 0
+            topMargin: (internalLoader.isVertical && leftButton.visible) ? leftButton.height : 0
+            bottomMargin: (internalLoader.isVertical && rightButton.visible) ? rightButton.height : 0
         }
 
         PlasmaCore.FrameSvgItem {
@@ -106,11 +109,14 @@ PlasmaCore.FrameSvgItem {
     PlasmaCore.Svg {
         id: scrollbarSvg
         imagePath: "widgets/scrollbar"
+        property bool arrowPresent: scrollbarSvg.hasElement("arrow-up")
+        //new theme may be different
+        onRepaintNeeded: arrowPresent = scrollbarSvg.hasElement("arrow-up")
     }
 
     PlasmaCore.SvgItem {
         id: leftButton
-        visible: stepSize > 0
+        visible: stepSize > 0 && scrollbarSvg.arrowPresent
 
         anchors {
             left: internalLoader.isVertical ? undefined : parent.left
@@ -160,7 +166,7 @@ PlasmaCore.FrameSvgItem {
 
     PlasmaCore.SvgItem {
         id: rightButton
-        visible: stepSize > 0
+        visible: leftButton.visible
 
         anchors {
             right: internalLoader.isVertical ? undefined : parent.right
