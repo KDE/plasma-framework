@@ -305,6 +305,26 @@ QRect Style::subControlRect(ComplexControl control, const QStyleOptionComplex *o
         }
         break;
     }
+    case CC_ScrollBar: {
+        const bool hasButtons = d->scrollbar->hasElement("arrow-up");
+        switch (subControl) {
+        //If one of the arrows is missing, don't reserve space for them
+        case SC_ScrollBarAddLine:
+            if (!hasButtons) {
+                rect.setRect(0,0,0,0);
+            }
+            break;
+
+        case SC_ScrollBarSubLine:
+            if (!hasButtons) {
+                rect.setRect(0,0,0,0);
+            }
+            break;
+
+        default:
+            break;
+        }
+    }
     default:
         break;
     }
