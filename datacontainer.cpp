@@ -171,9 +171,8 @@ void DataContainer::setNeedsToBeStored(bool store)
 
 DataEngine* DataContainer::getDataEngine()
 {
-    QObject *o = NULL;
+    QObject *o = this;
     DataEngine *de = NULL;
-    o = this;
     while (de == NULL)
     {
         o = dynamic_cast<QObject *> (o->parent());
