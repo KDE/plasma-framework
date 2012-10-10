@@ -28,6 +28,7 @@ Item {
     property string hoverElement: "hover"
     property string focusElement: "focus"
     property alias shadowElement: shadow.elementId
+    property bool hasOverState: false
 
     PlasmaCore.Svg {
         id: shadowSvg

@@ -152,7 +152,7 @@ Item {
         property QtObject margins: item.margins
         property string shadowState: "shadow"
         sourceComponent: {
-            if (label.paintedWidth == 0 && !flat) {
+            if (label.text.length == 0) {
                 return roundButtonComponent
             } else {
                 return buttonComponent
@@ -198,6 +198,8 @@ Item {
                 property int bottom: width/8
             }
             Private.RoundShadow {
+                id: roundShadow
+                visible: !flat
                 anchors.fill: parent
                 state: delegate.shadowState
             }
@@ -213,6 +215,11 @@ Item {
                 elementId: (internal.userPressed || checked) ? "pressed" : "normal"
                 width: parent.height
                 height: width
+                //internal: if there is no hover status, don't paint on mouse over in touchscreens
+                opacity: (internal.userPressed || checked || !flat || (roundShadow.hasOverState && mouse.containsMouse)) ? 1 : 0
+                Behavior on opacity {
+                    PropertyAnimation { duration: 250 }
+                }
             }
         }
     }

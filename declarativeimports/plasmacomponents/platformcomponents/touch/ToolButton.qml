@@ -99,7 +99,7 @@ Item {
         anchors.fill:parent
         property QtObject margins: item.margins
         sourceComponent: {
-            if (label.paintedWidth == 0 && !flat) {
+            if (label.text.length == 0) {
                 return roundButtonComponent
             } else {
                 return buttonComponent
@@ -145,7 +145,9 @@ Item {
                 property int bottom: width/8
             }
             Private.RoundShadow {
+                id: roundShadow
                 anchors.fill: parent
+                visible: !flat
                 state: (internal.userPressed || checked) ? "hidden" : "shadow"
             }
 
@@ -160,6 +162,11 @@ Item {
                 elementId: (internal.userPressed || checked) ? "pressed" : "normal"
                 width: parent.height
                 height: width
+                opacity: (internal.userPressed || checked || !flat || (roundShadow.hasOverState && mouse.containsMouse)) ? 1 : 0
+
+                Behavior on opacity {
+                    PropertyAnimation { duration: 250 }
+                }
             }
         }
     }

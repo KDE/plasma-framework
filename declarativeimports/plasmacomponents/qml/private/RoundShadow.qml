@@ -45,6 +45,9 @@ Item {
     property string focusElement: "focus"
     property alias shadowElement: shadow.elementId
 
+    //used to tell apart this implementation with the touch components one
+    property bool hasOverState: true
+
     PlasmaCore.Svg {
         id: shadowSvg
         imagePath: "widgets/actionbutton"
