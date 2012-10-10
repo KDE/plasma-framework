@@ -237,21 +237,22 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
         QLinearGradient g(QPoint(0, 0), QPoint(m_decorationRect.width(), 0));
         //fading out panel
-        if (m_rect.height() > qreal(minimumHeight()) * 1.25) {
+        if (m_applet->backgroundHints() != Plasma::Applet::NoBackground &&
+            m_rect.height() > qreal(minimumHeight()) * 1.25) {
             if (m_buttonsOnRight) {
                 qreal opaquePoint =
                     (m_background->marginSize(LeftMargin) - translation) / m_decorationRect.width();
                 //kDebug() << "opaquePoint" << opaquePoint
                 //         << m_background->marginSize(LeftMargin) << m_decorationRect.width();
                 g.setColorAt(0.0, Qt::transparent);
-                g.setColorAt(qMax(0.0, opaquePoint - 0.05), Qt::transparent); //krazy:exclude=qminmax
+                g.setColorAt(qMax(0.0, opaquePoint - 0.01), Qt::transparent); //krazy:exclude=qminmax
                 g.setColorAt(opaquePoint, transparencyColor);
                 g.setColorAt(1.0, transparencyColor);
             } else {
                 qreal opaquePoint =
                     1 - ((m_background->marginSize(RightMargin) + translation) / m_decorationRect.width());
                 g.setColorAt(1.0, Qt::transparent);
-                g.setColorAt(opaquePoint + 0.05, Qt::transparent);
+                g.setColorAt(opaquePoint + 0.01, Qt::transparent);
                 g.setColorAt(qMax(qreal(0), opaquePoint), transparencyColor);
                 g.setColorAt(0.0, transparencyColor);
             }
@@ -1030,29 +1031,32 @@ void AppletHandle::calculateSize()
     qreal marginLeft, marginTop, marginRight, marginBottom;
     m_background->getMargins(marginLeft, marginTop, marginRight, marginBottom);
 
-    if (m_buttonsOnRight) {
-        //put the rect on the right of the applet
-        m_rect = QRectF(m_applet->size().width(), top, handleWidth, handleHeight);
-    } else {
-        //put the rect on the left of the applet
-        m_rect = QRectF(-handleWidth, top, handleWidth, handleHeight);
+    int leftShadowWidth = m_background->elementSize("hint-left-shadow").width();
+    int rightShadowWidth = m_background->elementSize("hint-right-shadow").width();
+
+    //no precise hint? let's go for heuristics
+    if (leftShadowWidth <= 0) {
+        leftShadowWidth = marginLeft/1.6;
+    }
+    if (rightShadowWidth <= 0) {
+        rightShadowWidth = marginRight/1.6;
     }
 
-    if (m_applet->contentsRect().height() > qreal(minimumHeight()) * 1.25) {
-        int addedMargin = marginLeft / 2;
+    if (m_applet->backgroundHints() == Plasma::Applet::NoBackground) {
+        leftShadowWidth = 0;
+        rightShadowWidth = 0;
+    }
+    if (m_buttonsOnRight) {
+        //put the rect on the right of the applet
+        m_rect = QRectF(m_applet->size().width() - rightShadowWidth + HANDLE_MARGIN, top, handleWidth, handleHeight);
+    } else {
+        //put the rect on the left of the applet
+        m_rect = QRectF(-handleWidth + leftShadowWidth - HANDLE_MARGIN, top, handleWidth, handleHeight);
+    }
 
-        // now we check to see if the shape is smaller than the contents,
-        // and that the shape is not just the bounding rect; in those cases
-        // we have a shaped guy and we draw a full panel;
-        // TODO: allow applets to mark when they have translucent areas and
-        //       should therefore skip this test?
-        if (!m_applet->shape().contains(m_applet->contentsRect())) {
-            QPainterPath p;
-            p.addRect(m_applet->boundingRect());
-            if (m_applet->shape() != p) {
-                addedMargin = m_applet->contentsRect().width() / 2;
-            }
-        }
+    if (m_applet->backgroundHints() != Plasma::Applet::NoBackground &&
+        m_applet->contentsRect().height() > qreal(minimumHeight()) * 1.25) {
+        int addedMargin = HANDLE_MARGIN;
 
         if (m_buttonsOnRight) {
             marginLeft += addedMargin;
