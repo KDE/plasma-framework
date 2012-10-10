@@ -987,7 +987,7 @@ void AppletHandle::startFading(FadeType anim, const QPointF &hoverPos, bool pres
 
     m_animType = anim;
     //kDebug() << "animating for " << time << "ms";
-    if (m_animType == FadeIn) {
+    if (m_animType == FadeIn && propAnim) {
         propAnim->setDirection(QAbstractAnimation::Forward);
         propAnim->start();
     } else if (propAnim) {
