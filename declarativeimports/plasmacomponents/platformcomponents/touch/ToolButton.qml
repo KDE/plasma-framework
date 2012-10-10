@@ -99,7 +99,7 @@ Item {
         anchors.fill:parent
         property QtObject margins: item.margins
         sourceComponent: {
-            if (label.text.length == 0) {
+            if (label.text.length == 0 && button.width == button.height) {
                 return roundButtonComponent
             } else {
                 return buttonComponent
