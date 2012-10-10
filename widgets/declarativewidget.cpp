@@ -46,6 +46,7 @@ public:
     DeclarativeWidgetPrivate(DeclarativeWidget *parent)
         : q(parent),
           engine(0),
+          scriptEngine(0),
           component(0),
           root(0),
           delay(false)

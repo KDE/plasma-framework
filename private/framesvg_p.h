@@ -44,7 +44,8 @@ public:
         bottomMargin(0),
         noBorderPadding(false),
         stretchBorders(false),
-        tileCenter(false)
+        tileCenter(false),
+        composeOverBorder(false)
     {
         ref(svg);
     }
