@@ -865,6 +865,41 @@ bool AppletHandle::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 {
     if (watched == m_applet && event->type() == QEvent::GraphicsSceneHoverLeave) {
         hoverLeaveEvent(static_cast<QGraphicsSceneHoverEvent*>(event));
+    } else if (watched == m_applet && event->type() == QEvent::GraphicsSceneMousePress) {
+        QGraphicsSceneMouseEvent *me = static_cast<QGraphicsSceneMouseEvent *>(event);
+
+        QPointF pos = mapFromScene(me->scenePos());
+        if (m_applet->contentsRect().contains(pos)) {
+            return false;
+        }
+
+        me->setPos(pos);
+        mousePressEvent(me);
+        return true;
+    } else if (watched == m_applet && event->type() == QEvent::GraphicsSceneMouseRelease) {
+        if (m_pressedButton == NoButton) {
+            return false;
+        }
+
+        QGraphicsSceneMouseEvent *me = static_cast<QGraphicsSceneMouseEvent *>(event);
+
+        QPointF pos = mapFromScene(me->scenePos());
+        me->setPos(pos);
+        mouseReleaseEvent(me);
+        return true;
+    } else if (watched == m_applet && event->type() == QEvent::GraphicsSceneMouseMove) {
+        if (m_pressedButton == NoButton) {
+            return false;
+        }
+
+        QGraphicsSceneMouseEvent *me = static_cast<QGraphicsSceneMouseEvent *>(event);
+
+        QPointF pos = mapFromScene(me->scenePos());
+
+
+        me->setPos(pos);
+        mouseMoveEvent(me);
+        return true;
     }
 
     return false;
