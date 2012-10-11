@@ -76,6 +76,8 @@ FocusScope {
     //Plasma extension
     property Item currentTab
 
+    clip: true
+
     implicitWidth: layout.implicitWidth + backgroundFrame.margins.left + backgroundFrame.margins.right
     implicitHeight: layout.implicitHeight + backgroundFrame.margins.top + backgroundFrame.margins.bottom
 
@@ -87,15 +89,14 @@ FocusScope {
         prefix: "sunken"
     }
 
-    clip: true
     PlasmaCore.FrameSvgItem {
         id: buttonFrame
 
         visible: currentTab !== null
         x: tabBarLayout.x + currentTab.x + backgroundFrame.margins.left
         y: backgroundFrame.margins.top
-        width: currentTab.width
-        height: currentTab.height + buttonFrame.margins.top + buttonFrame.margins.bottom
+        width: currentTab.width + margins.left + margins.right
+        height: currentTab.height + margins.top + margins.bottom
         imagePath: "widgets/button"
         prefix: "normal"
         Behavior on x {
@@ -107,10 +108,6 @@ FocusScope {
     }
 
     onCurrentTabChanged: tabBarLayout.x = Math.max(Math.min(0, -(currentTab.x + currentTab.width/2) + tabbarScroller.width/2), -tabBarLayout.width + tabbarScroller.width)
-
-Text {
-    text: tabBarLayout.implicitWidth + " " + tabBarLayout.width + " " + tabbarScroller.width
-}
 
     onWidthChanged: tabBarLayout.x = Math.max(Math.min(0, -(currentTab.x + currentTab.width/2) + tabbarScroller.width/2), -tabBarLayout.width + tabbarScroller.width)
 
