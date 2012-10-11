@@ -76,8 +76,6 @@ FocusScope {
     //Plasma extension
     property Item currentTab
 
-    clip: true
-
     implicitWidth: layout.implicitWidth + backgroundFrame.margins.left + backgroundFrame.margins.right
     implicitHeight: layout.implicitHeight + backgroundFrame.margins.top + backgroundFrame.margins.bottom
 
@@ -89,21 +87,63 @@ FocusScope {
         prefix: "sunken"
     }
 
-    PlasmaCore.FrameSvgItem {
-        id: buttonFrame
+    Item {
+        id: buttonCutter
+        anchors {
+            fill: parent
+            leftMargin: 1
+            rightMargin: (buttonsLayout.visible ? buttonsLayout.width : 0) + 1
+        }
+        clip: true
+        PlasmaCore.FrameSvgItem {
+            id: buttonFrame
 
-        visible: currentTab !== null
-        x: tabBarLayout.x + currentTab.x + backgroundFrame.margins.left
-        y: backgroundFrame.margins.top
-        width: currentTab.width + margins.left + margins.right
-        height: currentTab.height + margins.top + margins.bottom
-        imagePath: "widgets/button"
-        prefix: "normal"
-        Behavior on x {
-            PropertyAnimation {
-                easing.type: Easing.InQuad
-                duration: 250
+            visible: currentTab !== null
+            x: tabBarLayout.x + currentTab.x + backgroundFrame.margins.left -1
+            y: backgroundFrame.margins.top
+            width: currentTab.width + margins.left + margins.right -1
+            height: currentTab.height + margins.top + margins.bottom
+            imagePath: "widgets/button"
+            prefix: "normal"
+            Behavior on x {
+                PropertyAnimation {
+                    easing.type: Easing.InQuad
+                    duration: 250
+                }
             }
+        }
+    }
+
+    PlasmaCore.Svg {
+        id: scrollWidgetSvg
+        imagePath: "widgets/scrollwidget"
+    }
+    PlasmaCore.SvgItem {
+        svg: scrollWidgetSvg
+        elementId: "border-left"
+        width: naturalSize.width
+        visible: buttonsLayout.visible
+        anchors {
+            left: buttonCutter.left
+            leftMargin: -1
+            top: buttonCutter.top
+            bottom: buttonCutter.bottom
+            topMargin: backgroundFrame.margins.top
+            bottomMargin: backgroundFrame.margins.bottom
+        }
+    }
+    PlasmaCore.SvgItem {
+        svg: scrollWidgetSvg
+        elementId: "border-right"
+        width: naturalSize.width
+        visible: buttonsLayout.visible
+        anchors {
+            right: buttonCutter.right
+            rightMargin: -1
+            top: buttonCutter.top
+            bottom: buttonCutter.bottom
+            topMargin: backgroundFrame.margins.top
+            bottomMargin: backgroundFrame.margins.bottom
         }
     }
 
@@ -118,7 +158,7 @@ FocusScope {
             fill: parent
             leftMargin: backgroundFrame.margins.left + buttonFrame.margins.left
             topMargin: backgroundFrame.margins.top + buttonFrame.margins.top
-            rightMargin: backgroundFrame.margins.right + buttonFrame.margins.right + (buttonsLayout.visible ? buttonsLayout.width : 0)
+            rightMargin: backgroundFrame.margins.right + (buttonsLayout.visible ? buttonsLayout.width : buttonFrame.margins.right)
             bottomMargin: backgroundFrame.margins.bottom + buttonFrame.margins.bottom
         }
 
