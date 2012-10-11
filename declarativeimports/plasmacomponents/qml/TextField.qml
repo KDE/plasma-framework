@@ -228,8 +228,8 @@ FocusScope {
     property alias activeFocus: textInput.activeFocus
 
     // TODO: fix default size
-    implicitWidth: theme.defaultFont.mSize.width*12
-    implicitHeight: theme.defaultFont.mSize.height*1.6
+    implicitWidth: theme.defaultFont.mSize.width*12 + base.internalPadding*2
+    implicitHeight: theme.defaultFont.mSize.height + base.internalPadding*2
     // TODO: needs to define if there will be specific graphics for
     //     disabled text fields
     opacity: enabled ? 1.0 : 0.5
@@ -247,6 +247,7 @@ FocusScope {
         anchors.fill: parent
         imagePath: "widgets/lineedit"
         prefix: "base"
+        property real internalPadding: theme.defaultFont.mSize.height*0.3
     }
 
     MouseArea {
@@ -266,8 +267,8 @@ FocusScope {
             left: parent.left
             right: parent.right
             verticalCenter: parent.verticalCenter
-            leftMargin: 2 * base.margins.left
-            rightMargin: 2 * base.margins.right
+            leftMargin: base.margins.left + base.internalPadding
+            rightMargin: base.margins.right + base.internalPadding
         }
         text: placeholderText
         visible: textInput.text == "" && !textField.activeFocus
@@ -295,8 +296,8 @@ FocusScope {
             right: parent.right
             verticalCenter: parent.verticalCenter
             // TODO: see what is the correct policy for margins
-            leftMargin: 2 * base.margins.left
-            rightMargin: 2 * base.margins.right + (clearButton.opacity > 0 ? clearButton.width : 0)
+            leftMargin: base.margins.left + base.internalPadding
+            rightMargin: base.margins.right + (clearButton.opacity > 0 ? clearButton.width : 0)  + base.internalPadding
         }
         passwordCharacter: "•"
         selectByMouse: true
