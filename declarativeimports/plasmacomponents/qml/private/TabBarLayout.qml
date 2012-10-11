@@ -105,9 +105,17 @@ Item {
             var oldIndex = priv.currentButtonIndex();
             while (oldIndex < root.children.length) {
                 ++oldIndex
+
                 if (oldIndex > root.children.length - 1) {
                     oldIndex = 1
                 }
+
+                //anything with a checked property may act as tabbutton
+                if (root.children[oldIndex].checked === undefined) {
+                    continue
+                }
+
+
                 if (root.children[oldIndex].visible) {
                     priv.setCurrentButtonIndex(oldIndex)
                     break
@@ -119,9 +127,16 @@ Item {
             var oldIndex = priv.currentButtonIndex();
             while (oldIndex > 0) {
                 --oldIndex
+
                 if (oldIndex <= 0) {
                     oldIndex = root.children.length - 1
                 }
+
+                //anything with a checked property may act as tabbutton
+                if (root.children[oldIndex].checked === undefined) {
+                    continue
+                }
+
                 if (root.children[oldIndex].visible) {
                     priv.setCurrentButtonIndex(oldIndex)
                     break
