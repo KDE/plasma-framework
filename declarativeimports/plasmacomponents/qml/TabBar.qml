@@ -108,6 +108,9 @@ FocusScope {
 
     onCurrentTabChanged: tabBarLayout.x = Math.max(Math.min(0, -(currentTab.x + currentTab.width/2) + tabbarScroller.width/2), -tabBarLayout.width + tabbarScroller.width)
 
+Text {
+    text: tabBarLayout.implicitWidth + " " + tabBarLayout.width + " " + tabbarScroller.width
+}
 
     onWidthChanged: tabBarLayout.x = Math.max(Math.min(0, -(currentTab.x + currentTab.width/2) + tabbarScroller.width/2), -tabBarLayout.width + tabbarScroller.width)
 
@@ -124,7 +127,8 @@ FocusScope {
 
         Private.TabBarLayout {
             id: tabBarLayout
-            width: Math.max(parent.width, implicitWidth)
+            //A bit of snap before scolling the layout
+            width: (implicitWidth - parent.width < theme.defaultFont.mSize.width*4) ? parent.width : implicitWidth
             anchors {
                 top: parent.top
                 bottom: parent.bottom
