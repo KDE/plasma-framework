@@ -106,9 +106,10 @@ FocusScope {
         }
     }
 
-    onCurrentTabChanged: tabBarLayout.x = Math.min(0, -(currentTab.x + currentTab.width - tabbarScroller.width))
+    onCurrentTabChanged: tabBarLayout.x = Math.max(Math.min(0, -(currentTab.x + currentTab.width/2) + tabbarScroller.width/2), -tabBarLayout.width + tabbarScroller.width)
 
-    onWidthChanged: tabBarLayout.x = Math.min(0, -(currentTab.x + currentTab.width - tabbarScroller.width))
+
+    onWidthChanged: tabBarLayout.x = Math.max(Math.min(0, -(currentTab.x + currentTab.width/2) + tabbarScroller.width/2), -tabBarLayout.width + tabbarScroller.width)
 
     Item {
         id: tabbarScroller
@@ -128,12 +129,19 @@ FocusScope {
                 top: parent.top
                 bottom: parent.bottom
             }
+            Behavior on x {
+                NumberAnimation {
+                    duration: 250
+                    easing: Easing.InOutQuad
+                }
+            }
         }
     }
     Row {
         id: buttonsLayout
         visible: tabBarLayout.width > root.width - backgroundFrame.margins.left - backgroundFrame.margins.right
         height: Math.min(parent.height, theme.mediumIconSize)
+
         anchors {
             right: parent.right
             verticalCenter: parent.verticalCenter
@@ -143,12 +151,14 @@ FocusScope {
             height: parent.height
             width: height
             iconSource: "go-previous"
+            enabled: tabBarLayout.x < 0
             onClicked: tabBarLayout.x = Math.min(0, tabBarLayout.x + tabBarLayout.width/tabBarLayout.children.length)
         }
         ToolButton {
             height: parent.height
             width: height
             iconSource: "go-next"
+            enabled: tabBarLayout.x > -tabBarLayout.width + tabbarScroller.width
             onClicked: tabBarLayout.x = Math.max(-tabBarLayout.width + tabbarScroller.width, tabBarLayout.x - tabBarLayout.width/tabBarLayout.children.length)
         }
     }
