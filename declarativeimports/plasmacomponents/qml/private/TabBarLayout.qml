@@ -103,8 +103,11 @@ Item {
 
         function goNextTab() {
             var oldIndex = priv.currentButtonIndex();
-            while (oldIndex < root.children.length - 1) {
+            while (oldIndex < root.children.length) {
                 ++oldIndex
+                if (oldIndex > root.children.length - 1) {
+                    oldIndex = 1
+                }
                 if (root.children[oldIndex].visible) {
                     priv.setCurrentButtonIndex(oldIndex)
                     break
@@ -116,6 +119,9 @@ Item {
             var oldIndex = priv.currentButtonIndex();
             while (oldIndex > 0) {
                 --oldIndex
+                if (oldIndex <= 0) {
+                    oldIndex = root.children.length - 1
+                }
                 if (root.children[oldIndex].visible) {
                     priv.setCurrentButtonIndex(oldIndex)
                     break
