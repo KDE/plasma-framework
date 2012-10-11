@@ -181,10 +181,6 @@ Item {
             rightMargin: delegate.margins.right
             bottomMargin: delegate.margins.bottom
         }
-        scale: internal.userPressed ? 0.9 : 1
-        Behavior on scale {
-            PropertyAnimation { duration: 100 }
-        }
 
         Private.IconLoader {
             id: icon
