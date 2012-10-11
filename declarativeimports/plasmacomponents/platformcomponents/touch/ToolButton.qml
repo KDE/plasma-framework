@@ -162,7 +162,7 @@ Item {
                 elementId: (internal.userPressed || checked) ? "pressed" : "normal"
                 width: parent.height
                 height: width
-                opacity: (internal.userPressed || checked || !flat || (roundShadow.hasOverState && mouse.containsMouse)) ? 1 : 0
+                opacity: (internal.userPressed || checked || !flat || (roundShadow.hasOverState && mouse.containsMouse && button.enabled)) ? 1 : 0
 
                 Behavior on opacity {
                     PropertyAnimation { duration: 250 }

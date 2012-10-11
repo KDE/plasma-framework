@@ -179,7 +179,7 @@ Item {
                 imagePath: "widgets/button"
                 prefix: (internal.userPressed || checked) ? "pressed" : "normal"
                 //internal: if there is no hover status, don't paint on mouse over in touchscreens
-                opacity: (internal.userPressed || checked || !flat || (shadow.hasOverState && mouse.containsMouse)) ? 1 : 0
+                opacity: (internal.userPressed || checked || !flat || (shadow.hasOverState && mouse.containsMouse && button.enabled)) ? 1 : 0
                 Behavior on opacity {
                     PropertyAnimation { duration: 250 }
                 }
