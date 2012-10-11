@@ -137,12 +137,14 @@ Item {
     Component {
         id: roundButtonComponent
         Item {
+            id: roundButtonDelegate
+            parent: delegate
             anchors.fill: parent
             property QtObject margins: QtObject {
-                property int left: width/8
-                property int top: width/8
-                property int right: width/8
-                property int bottom: width/8
+                property int left: delegate.width/8
+                property int top: delegate.width/8
+                property int right: delegate.width/8
+                property int bottom: delegate.width/8
             }
             Private.RoundShadow {
                 id: roundShadow
