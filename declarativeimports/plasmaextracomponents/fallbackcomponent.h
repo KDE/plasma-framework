@@ -29,12 +29,32 @@ class FallbackComponent : public QObject
 {
     Q_OBJECT
 
+/**
+ * Prefix of the path
+ * This should be something like "plasma","kwin","plasmate",etc
+ * If the basePath is "plasma", it will be set for the data of plasma like,
+ * or it can be an absolute path
+ **/
 Q_PROPERTY(QString basePath READ basePath WRITE setBasePath NOTIFY basePathChanged)
+
+/**
+ * The possible candidates in order to have a complete path.
+ * basepath/candidate, where candidate is the first one in the list of candidates
+ * in order of importance that matches an existing file
+ **/
 Q_PROPERTY(QStringList candidates READ candidates WRITE setCandidates NOTIFY candidatesChanged)
 
 public:
     FallbackComponent(QObject *parent = 0);
 
+    /**
+    * This method must be called after the the basePath and the candidates property
+    * This method resolves a file path based on the base path and the candidates.
+    * it searches for a file named key under basepath/candidate/key, and returns
+    * the path constructed with the first candidate that matches, if any.
+    *
+    * @param key the name of the file to search for
+    **/
     Q_INVOKABLE QString filePath(const QString& key);
 
     QString basePath() const;
