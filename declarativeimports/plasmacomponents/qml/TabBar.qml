@@ -177,7 +177,7 @@ FocusScope {
             Behavior on x {
                 NumberAnimation {
                     duration: 250
-                    easing: Easing.InOutQuad
+                    easing.type: Easing.InOutQuad
                 }
             }
         }
