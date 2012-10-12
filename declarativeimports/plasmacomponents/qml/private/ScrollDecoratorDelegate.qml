@@ -39,6 +39,11 @@ PlasmaCore.FrameSvgItem {
         }
     }
 
+    PlasmaCore.Svg {
+        id: scrollbarSvg
+        imagePath: "widgets/scrollbar"
+    }
+
     property Item handle: handle
 
     property Item contents: contents

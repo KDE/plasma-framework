@@ -112,6 +112,7 @@ Item {
         Item {
             anchors.fill: parent
             property alias margins: surface.margins
+            property alias surfaceOpacity: surface.opacity
             Private.ButtonShadow {
                 id: shadow
                 anchors.fill: parent
@@ -140,6 +141,7 @@ Item {
             id: roundButtonDelegate
             parent: delegate
             anchors.fill: parent
+            property alias surfaceOpacity: buttonItem.opacity
             property QtObject margins: QtObject {
                 property int left: delegate.width/8
                 property int top: delegate.width/8
@@ -218,7 +220,7 @@ Item {
             font.underline: theme.defaultFont.underline
             font.weight: theme.defaultFont.weight
             font.wordSpacing: theme.defaultFont.wordSpacing
-            color: surface.opacity == 1 ? theme.buttonTextColor : theme.textColor
+            color: delegate.item.surfaceOpacity > 0.5 ? theme.buttonTextColor : theme.textColor
             horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
