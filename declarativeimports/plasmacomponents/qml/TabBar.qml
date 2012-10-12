@@ -149,7 +149,11 @@ FocusScope {
 
     onCurrentTabChanged: tabBarLayout.x = Math.max(Math.min(0, -(currentTab.x + currentTab.width/2) + tabbarScroller.width/2), -tabBarLayout.width + tabbarScroller.width)
 
-    onWidthChanged: tabBarLayout.x = Math.max(Math.min(0, -(currentTab.x + currentTab.width/2) + tabbarScroller.width/2), -tabBarLayout.width + tabbarScroller.width)
+    onWidthChanged: {
+        if (currentTab) {
+            tabBarLayout.x = Math.max(Math.min(0, -(currentTab.x + currentTab.width/2) + tabbarScroller.width/2), -tabBarLayout.width + tabbarScroller.width)
+        }
+    }
 
     Item {
         id: tabbarScroller

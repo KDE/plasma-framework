@@ -161,6 +161,7 @@ Item {
         }
 
         function layoutChildren() {
+            priv.tabBar = Utils.findParent(root, "currentTab")
             var childCount = root.children.length
             var visibleChildCount = childCount
             var contentWidth = 0
@@ -201,7 +202,7 @@ Item {
             }
             root.implicitWidth = contentWidth
             root.implicitHeight = contentHeight
-            if (priv.tabBar.currentTab === null) {
+            if ( priv.tabBar.currentTab === null) {
                 //99% of the cases this loop will be length 1 but a tabbar can also have other children, such as Repeater
                 for (var i = 0; i < tabBarLayout.children.length; ++i) {
                     //anything with a checked property may act as tabbutton
