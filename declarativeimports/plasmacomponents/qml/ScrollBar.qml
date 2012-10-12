@@ -113,10 +113,10 @@ Item {
     visible: flickableItem && internalLoader.handleEnabled
 
     anchors {
-        right: flickableItem.right
-        left: (orientation == Qt.Vertical) ? undefined : flickableItem.left
-        top: (orientation == Qt.Vertical) ? flickableItem.top : undefined
-        bottom: flickableItem.bottom
+        right: internalLoader.anchorableWithFlickable ? flickableItem.right : undefined
+        left: (orientation == Qt.Vertical) ? undefined : (internalLoader.anchorableWithFlickable ? flickableItem.left : undefined)
+        top: (orientation == Qt.Vertical) ? (internalLoader.anchorableWithFlickable ? flickableItem.top : undefined) : undefined
+        bottom: internalLoader.anchorableWithFlickable ? flickableItem.bottom : undefined
     }
 
     Loader {
@@ -125,6 +125,7 @@ Item {
         //property bool handleEnabled: internalLoader.isVertical ? item.handle.height < item.contents.height : item.handle.width < item.contents.width
         property bool handleEnabled: internalLoader.isVertical ? flickableItem.contentHeight > flickableItem.height : flickableItem.contentWidth > flickableItem.width
         property bool isVertical: orientation == Qt.Vertical
+        property bool anchorableWithFlickable: parent == flickableItem || parent == flickableItem.parent
 
         function incrementValue(increment)
         {
