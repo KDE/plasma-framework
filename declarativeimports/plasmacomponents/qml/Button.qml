@@ -97,7 +97,7 @@ Item {
     property alias font: label.font
 
     //icon + label + left margin + right margin + spacing between icon and text
-    property real minimumWidth: icon.width + label.implicitWidth + surfaceNormal.margins.left + surfaceNormal.margins.right + ((icon.valid) ? surfaceNormal.margins.left : 0)
+    property real minimumWidth: icon.width + label.preferredWidth + surfaceNormal.margins.left + surfaceNormal.margins.right + ((icon.valid) ? surfaceNormal.margins.left : 0)
     property real minimumHeight: Math.max(icon.height, label.paintedHeight) + surfaceNormal.margins.top + surfaceNormal.margins.bottom
 
     signal clicked()
@@ -239,10 +239,12 @@ Item {
             id: label
 
             //FIXME: why this is needed?
-            onPaintedWidthChanged: {
+            onTextChanged: {
                 icon.anchors.horizontalCenter = label.text.length > 0 ? undefined : icon.parent.horizontalCenter
                 icon.anchors.left = label.text.length > 0 ? icon.parent.left : undefined
             }
+
+            property int preferredWidth: button.width < button.implicitWidth ? paintedWidth: paintedWidth
 
             anchors {
                 top: parent.top
