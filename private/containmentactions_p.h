@@ -31,6 +31,7 @@ public:
     ContainmentActionsPrivate(KService::Ptr service, ContainmentActions *containmentActions) :
         q(containmentActions),
         containmentActionsDescription(service),
+        package(0),
         initialized(false),
         needsConfig(false),
         containment(0)

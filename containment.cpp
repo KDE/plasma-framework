@@ -145,10 +145,10 @@ Containment::Containment(const QString &packagePath, uint appletId, const QVaria
 
 Containment::~Containment()
 {
-    delete d;
     // Applet touches our dptr if we are a containment and is the superclass (think of dtors)
     // so we reset this as we exit the building
     Applet::d->isContainment = false;
+    delete d;
 }
 
 void Containment::init()

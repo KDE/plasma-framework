@@ -38,6 +38,7 @@ class ClientPrivate : public QObject
 public:
     ClientPrivate(Client *client)
         : q(client),
+          readerThread(0),
           error(Client::NoError) {}
 
 public slots:
