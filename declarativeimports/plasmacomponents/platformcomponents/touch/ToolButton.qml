@@ -116,12 +116,42 @@ Item {
             Private.ButtonShadow {
                 id: shadow
                 anchors.fill: parent
-                visible: !flat
+                visible: !flat && (surface.enabledBorders == "AllBorders" || state == "hover" || state == "focus")
                 state: (internal.userPressed || checked) ? "hidden" : "shadow"
             }
 
             PlasmaCore.FrameSvgItem {
                 id: surface
+
+                enabledBorders: {
+                    if (flat || button.parent.width < button.parent.implicitWidth ||
+                        button.parent.checkedButton === undefined) {
+                        if (shadows !== null) {
+                            shadows.destroy()
+                        }
+                        return "AllBorders"
+                    }
+
+                    var borders = new Array()
+                    if (button.x == 0) {
+                        borders.push("LeftBorder")
+                    }
+                    if (button.y == 0) {
+                        borders.push("TopBorder")
+                    }
+                    if (button.x + button.width >= button.parent.width) {
+                        borders.push("RightBorder")
+                    }
+                    if (button.y + button.height >= button.parent.height) {
+                        borders.push("BottomBorder")
+                    }
+
+                    if (shadows === null) {
+                        shadows = shadowsComponent.createObject(surface)
+                    }
+
+                    return borders.join("|")
+                }
 
                 anchors.fill: parent
                 imagePath: "widgets/button"
@@ -130,6 +160,69 @@ Item {
                 opacity: (internal.userPressed || checked || !flat || (shadow.hasOverState && mouse.containsMouse)) ? 1 : 0
                 Behavior on opacity {
                     PropertyAnimation { duration: 250 }
+                }
+                property Item shadows
+                Component {
+                    id: shadowsComponent
+                    Item {
+                        anchors.fill: parent
+                        PlasmaCore.Svg {
+                            id: bordersSvg
+                            imagePath: "widgets/button"
+                        }
+                        PlasmaCore.SvgItem {
+                            svg: bordersSvg
+                            width: naturalSize.width
+                            elementId: surface.prefix+"-left"
+                            visible: button.x > 0
+                            anchors {
+                                left: parent.left
+                                top: parent.top
+                                bottom: parent.bottom
+                                margins: 2
+                                leftMargin: -2
+                            }
+                        }
+                        PlasmaCore.SvgItem {
+                            svg: bordersSvg
+                            width: naturalSize.width
+                            elementId: surface.prefix+"-right"
+                            visible: button.x + button.width < button.parent.width
+                            anchors {
+                                right: parent.right
+                                top: parent.top
+                                bottom: parent.bottom
+                                margins: 2
+                                rightMargin: -2
+                            }
+                        }
+                        PlasmaCore.SvgItem {
+                            svg: bordersSvg
+                            height: naturalSize.height
+                            elementId: surface.prefix+"-top"
+                            visible: button.y > 0
+                            anchors {
+                                left: parent.left
+                                top: parent.top
+                                right: parent.right
+                                margins: 2
+                                topMargin: -2
+                            }
+                        }
+                        PlasmaCore.SvgItem {
+                            svg: bordersSvg
+                            width: naturalSize.width
+                            elementId: surface.prefix+"-bottom"
+                            visible: button.y + button.height < button.parent.height
+                            anchors {
+                                left: parent.left
+                                right: parent.right
+                                bottom: parent.bottom
+                                margins: 2
+                                bottomMargin: -2
+                            }
+                        }
+                    }
                 }
             }
         }

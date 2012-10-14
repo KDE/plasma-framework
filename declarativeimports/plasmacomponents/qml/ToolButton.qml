@@ -57,6 +57,14 @@ Properties:
 Signals:
         onClicked:
         The signal is being emmited when the button is being clicked.
+
+Plasma properties:
+
+      * real minimumWidth:
+         This property holds the smallest width this button can be to show all the contents
+
+      * real minimumHeight:
+         This property holds the smallest height this button can be to show all the contents
 **/
 
 import QtQuick 1.1
@@ -83,14 +91,19 @@ Item {
 
     enabled: defaultAction == undefined || defaultAction.enabled
 
+    //icon + label + left margin + right margin + spacing between icon and text
+    property real minimumWidth: icon.width + label.preferredWidth + delegate.marginsa.left + delegate.margins.right + ((icon.valid) ? delegate.margin.left : 0)
+    property real minimumHeight: Math.max(icon.height, label.paintedHeight) + delegate.margins.top + delegate.margins.bottom
+
     implicitWidth: {
-        if (label.paintedWidth == 0) {
-            return implicitHeight
+        if (label.text.length == 0) {
+            height;
         } else {
-            return icon.width + label.paintedWidth + delegate.margins.left + delegate.margins.right + ((icon.valid) ? delegate.margins.left : 0)
+            Math.max(theme.defaultFont.mSize.width*12, minimumWidth);
         }
     }
-    implicitHeight: Math.max(theme.defaultFont.mSize.height*1.6, Math.max(icon.height, label.paintedHeight) + delegate.margins.top/2 + delegate.margins.bottom/2)
+
+    implicitHeight: Math.max(theme.defaultFont.mSize.height*1.6, minimumHeight)
 
     // TODO: needs to define if there will be specific graphics for
     //     disabled buttons
@@ -152,7 +165,7 @@ Item {
         property QtObject margins: item.margins
         property string shadowState: "shadow"
         sourceComponent: {
-            if (label.text.length == 0 && button.width == button.height) {
+            if (label.text.length == 0 && button.width == button.height && button.parent.checkedButton === undefined && !flat) {
                 return roundButtonComponent
             } else {
                 return buttonComponent
@@ -169,12 +182,44 @@ Item {
             Private.ButtonShadow {
                 id: shadow
                 anchors.fill: parent
-                visible: !flat
+                visible: !flat && (surface.enabledBorders == "AllBorders" || state == "hover" || state == "focus")
                 state: delegate.shadowState
             }
 
             PlasmaCore.FrameSvgItem {
                 id: surface
+
+                enabledBorders: {
+                    if (flat ||
+                        button.parent.width < button.parent.implicitWidth ||
+                        button.parent.checkedButton === undefined ||
+                        !bordersSvg.hasElement("pressed-hint-compose-over-border")) {
+                        if (shadows !== null) {
+                            shadows.destroy()
+                        }
+                        return "AllBorders"
+                    }
+
+                    var borders = new Array()
+                    if (button.x == 0) {
+                        borders.push("LeftBorder")
+                    }
+                    if (button.y == 0) {
+                        borders.push("TopBorder")
+                    }
+                    if (button.x + button.width + delegate.margins.right >= button.parent.width) {
+                        borders.push("RightBorder")
+                    }
+                    if (button.y + button.height + delegate.margins.bottom >= button.parent.height) {
+                        borders.push("BottomBorder")
+                    }
+
+                    if (shadows === null) {
+                        shadows = shadowsComponent.createObject(surface)
+                    }
+
+                    return borders.join("|")
+                }
 
                 anchors.fill: parent
                 imagePath: "widgets/button"
@@ -183,6 +228,72 @@ Item {
                 opacity: (internal.userPressed || checked || !flat || (shadow.hasOverState && mouse.containsMouse && button.enabled)) ? 1 : 0
                 Behavior on opacity {
                     PropertyAnimation { duration: 250 }
+                }
+
+                PlasmaCore.Svg {
+                    id: bordersSvg
+                    imagePath: "widgets/button"
+                }
+
+                property Item shadows
+                Component {
+                    id: shadowsComponent
+                    Item {
+                        anchors.fill: parent
+
+                        PlasmaCore.SvgItem {
+                            svg: bordersSvg
+                            width: naturalSize.width
+                            elementId: surface.prefix+"-left"
+                            visible: button.x > 0
+                            anchors {
+                                left: parent.left
+                                top: parent.top
+                                bottom: parent.bottom
+                                margins: 1
+                                leftMargin: -1
+                            }
+                        }
+                        PlasmaCore.SvgItem {
+                            svg: bordersSvg
+                            width: naturalSize.width
+                            elementId: surface.prefix+"-right"
+                            visible: button.x + button.width < button.parent.width
+                            anchors {
+                                right: parent.right
+                                top: parent.top
+                                bottom: parent.bottom
+                                margins: 1
+                                rightMargin: -1
+                            }
+                        }
+                        PlasmaCore.SvgItem {
+                            svg: bordersSvg
+                            height: naturalSize.height
+                            elementId: surface.prefix+"-top"
+                            visible: button.y > 0
+                            anchors {
+                                left: parent.left
+                                top: parent.top
+                                right: parent.right
+                                margins: 1
+                                topMargin: -1
+                            }
+                        }
+                        PlasmaCore.SvgItem {
+                            svg: bordersSvg
+                            width: naturalSize.width
+                            elementId: surface.prefix+"-bottom"
+                            visible: button.y + button.height < button.parent.height
+                            anchors {
+                                left: parent.left
+                                right: parent.right
+                                bottom: parent.bottom
+                                margins: 1
+                                bottomMargin: -1
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -297,9 +408,10 @@ Item {
         onClicked: internal.clickButton()
 
         onEntered: {
-            if (!flat) {
+            if (!flat && !internal.userPressed && !checked) {
                 delegate.shadowState = "hover"
             }
+            button.z += 2
         }
         onExited: {
             if (!flat) {
@@ -311,6 +423,7 @@ Item {
                     delegate.shadowState = "shadow"
                 }
             }
+            button.z -= 2
         }
     }
 }
