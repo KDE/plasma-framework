@@ -179,6 +179,7 @@ Item {
             parent: delegate
             anchors.fill: parent
             property alias margins: surface.margins
+            property alias hasOverState: shadow.hasOverState
             Private.ButtonShadow {
                 id: shadow
                 anchors.fill: parent
@@ -311,6 +312,7 @@ Item {
                 property int right: delegate.width/8
                 property int bottom: delegate.width/8
             }
+            property alias hasOverState: roundShadow.hasOverState
             Private.RoundShadow {
                 id: roundShadow
                 visible: !flat
@@ -397,7 +399,7 @@ Item {
         id: mouse
 
         anchors.fill: parent
-        hoverEnabled: true
+        hoverEnabled: delegate.item.hasOverState
 
         onPressed: internal.userPressed = true
         onReleased: internal.userPressed = false
@@ -408,7 +410,7 @@ Item {
         onClicked: internal.clickButton()
 
         onEntered: {
-            if (!flat && !internal.userPressed && !checked) {
+            if (delegate.item.hasOverState && !flat && !internal.userPressed && !checked) {
                 delegate.shadowState = "hover"
             }
             button.z += 2
