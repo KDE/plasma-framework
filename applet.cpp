@@ -25,8 +25,6 @@
 
 #include "config-plasma.h"
 
-#include <plasma/animations/animation.h>
-
 #include <cmath>
 #include <limits>
 
