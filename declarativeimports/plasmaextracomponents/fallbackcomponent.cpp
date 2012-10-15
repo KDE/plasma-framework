@@ -60,9 +60,9 @@ QString FallbackComponent::filePath(const QString &key)
     QString resolved;
 
     foreach (const QString &path, m_candidates) {
-        kDebug() << "Searching for:" << path;
-        if (m_possiblePaths.contains(key)) {
-            resolved = *m_possiblePaths.object(key);
+        kDebug() << "Searching for:" << path + path;
+        if (m_possiblePaths.contains(path + key)) {
+            resolved = *m_possiblePaths.object(path + key);
             if (!resolved.isEmpty()) {
                 break;
             } else {
@@ -71,13 +71,15 @@ QString FallbackComponent::filePath(const QString &key)
         }
 
         QDir tmpPath(m_basePath);
+
         if (tmpPath.isAbsolute()) {
-            resolved = m_basePath + path;
+            resolved = m_basePath + path + key;
         } else {
-            resolved = KStandardDirs::locate("data", m_basePath + '/' + path);
+
+            resolved = KStandardDirs::locate("data", m_basePath + '/' + path + key);
         }
 
-        m_possiblePaths.insert(key, new QString(resolved));
+        m_possiblePaths.insert(path + key, new QString(resolved));
         if (!resolved.isEmpty()) {
             break;
         }

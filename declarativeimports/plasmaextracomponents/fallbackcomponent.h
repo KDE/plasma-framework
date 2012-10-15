@@ -55,7 +55,7 @@ public:
     *
     * @param key the name of the file to search for
     **/
-    Q_INVOKABLE QString filePath(const QString& key);
+    Q_INVOKABLE QString filePath(const QString& key = QString());
 
     QString basePath() const;
     void setBasePath(const QString &basePath);
