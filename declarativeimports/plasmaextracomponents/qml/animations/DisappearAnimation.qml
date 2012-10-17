@@ -34,12 +34,16 @@ SequentialAnimation {
         PropertyAnimation {
             properties: "opacity"
             duration: disappearAnimation.duration
+            from: 1.0
+            to: 0
             target: disappearAnimation.targetItem
             easing.type: Easing.OutExpo;
         }
         PropertyAnimation {
             properties: "scale"
             target: disappearAnimation.targetItem
+            from: 1.0
+            to: 0.8
             duration: disappearAnimation.duration * 0.6
             easing.type: Easing.OutExpo;
         }
