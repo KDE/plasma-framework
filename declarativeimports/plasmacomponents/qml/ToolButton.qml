@@ -92,7 +92,7 @@ Item {
     enabled: defaultAction == undefined || defaultAction.enabled
 
     //icon + label + left margin + right margin + spacing between icon and text
-    property real minimumWidth: icon.width + label.preferredWidth + delegate.marginsa.left + delegate.margins.right + ((icon.valid) ? delegate.margin.left : 0)
+    property real minimumWidth: icon.width + label.preferredWidth + delegate.margins.left + delegate.margins.right + ((icon.valid) ? delegate.margins.left : 0)
     property real minimumHeight: Math.max(icon.height, label.paintedHeight) + delegate.margins.top + delegate.margins.bottom
 
     implicitWidth: {
