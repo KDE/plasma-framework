@@ -98,7 +98,7 @@ Item {
 
     //icon + label + left margin + right margin + spacing between icon and text
     property real minimumWidth: icon.width + label.preferredWidth + surfaceNormal.margins.left + surfaceNormal.margins.right + ((icon.valid) ? surfaceNormal.margins.left : 0)
-    property real minimumHeight: Math.max(icon.height, label.paintedHeight) + surfaceNormal.margins.top + surfaceNormal.margins.bottom
+    property real minimumHeight: Math.max(theme.smallIconSize, label.paintedHeight) + surfaceNormal.margins.top + surfaceNormal.margins.bottom
 
     signal clicked()
 
