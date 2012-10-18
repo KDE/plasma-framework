@@ -92,7 +92,7 @@ Item {
     enabled: defaultAction == undefined || defaultAction.enabled
 
     //icon + label + left margin + right margin + spacing between icon and text
-    property real minimumWidth: icon.width + label.preferredWidth + delegate.margins.left + delegate.margins.right + ((icon.valid) ? delegate.margins.left : 0)
+    property real minimumWidth: theme.smallIconSize + label.preferredWidth + delegate.margins.left + delegate.margins.right + ((icon.valid) ? delegate.margins.left : 0)
     property real minimumHeight: Math.max(theme.smallIconSize, label.paintedHeight) + delegate.margins.top + delegate.margins.bottom
 
     implicitWidth: {
@@ -369,6 +369,8 @@ Item {
                 icon.anchors.horizontalCenter = label.paintedWidth > 0 ? undefined : icon.parent.horizontalCenter
                 icon.anchors.left = label.paintedWidth > 0 ? icon.parent.left : undefined
             }
+
+            property int preferredWidth: button.width < button.implicitWidth ? paintedWidth: paintedWidth
 
             anchors {
                 top: parent.top
