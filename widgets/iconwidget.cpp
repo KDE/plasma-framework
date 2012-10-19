@@ -810,16 +810,34 @@ QPixmap IconWidgetPrivate::decoration(const QStyleOptionGraphicsItem *option, bo
     QIcon::Mode mode   = option->state & QStyle::State_Enabled ? QIcon::Normal : QIcon::Disabled;
     QIcon::State state = option->state & QStyle::State_Open ? QIcon::On : QIcon::Off;
 
+    QSize finalSize(iconSize.toSize());
+    //for small sizes, use a standard size
+    if (finalSize.width() < KIconLoader::SizeSmallMedium) {
+        finalSize = QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall);
+    } else if (finalSize.width() < KIconLoader::SizeMedium) {
+        finalSize = QSize(KIconLoader::SizeSmallMedium, KIconLoader::SizeSmallMedium);
+    } else if (finalSize.width() < KIconLoader::SizeLarge) {
+        finalSize = QSize(KIconLoader::SizeMedium, KIconLoader::SizeMedium);
+    }
+
     if (iconSvg) {
         if (iconSvgElementChanged || iconSvgPixmap.size() != iconSize.toSize()) {
-            iconSvg->resize(iconSize);
+            //even the svg is returned at standard sizes because:
+            // * it may have a version optimized for that size
+            // * look aligned with other icons
+            iconSvg->resize(finalSize);
             iconSvgPixmap = iconSvg->pixmap(iconSvgElement);
             iconSvgElementChanged = false;
         }
         result = iconSvgPixmap;
     } else {
-        const QSize size = icon.actualSize(iconSize.toSize(), mode, state);
-        result = icon.pixmap(size, mode, state);
+        QSize size(iconSize.toSize());
+        //the QIcon isn't filled with available sizes, return a near standard size for small pixmaps
+        if (!icon.availableSizes().isEmpty()) {
+            finalSize = icon.actualSize(iconSize.toSize(), mode, state);
+        }
+
+        result = icon.pixmap(finalSize, mode, state);
     }
 
     if (usePressedEffect) {
