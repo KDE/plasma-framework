@@ -49,6 +49,8 @@ Item {
 
     signal clicked
 
+    property bool checkable: false
+
     implicitWidth: textArea.paintedWidth + iconLoader.width*2 + 6
     implicitHeight: Math.max(theme.smallIconSize, textArea.paintedHeight + 6)
     width: Math.max(implicitWidth, parent.width)
