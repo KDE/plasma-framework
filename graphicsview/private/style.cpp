@@ -305,6 +305,26 @@ QRect Style::subControlRect(ComplexControl control, const QStyleOptionComplex *o
         }
         break;
     }
+    case CC_ScrollBar: {
+        const bool hasButtons = d->scrollbar->hasElement("arrow-up");
+        switch (subControl) {
+        //If one of the arrows is missing, don't reserve space for them
+        case SC_ScrollBarAddLine:
+            if (!hasButtons) {
+                rect.setRect(0,0,0,0);
+            }
+            break;
+
+        case SC_ScrollBarSubLine:
+            if (!hasButtons) {
+                rect.setRect(0,0,0,0);
+            }
+            break;
+
+        default:
+            break;
+        }
+    }
     default:
         break;
     }
@@ -331,11 +351,21 @@ int Style::pixelMetric(PixelMetric metric, const QStyleOption *option, const QWi
     switch (metric) {
     case PM_ScrollBarExtent: {
         d->createScrollbar();
+        const QSizeF hintSize = d->scrollbar->elementSize("hint-scrollbar-size");
         const QStyleOptionSlider *scrollOption = qstyleoption_cast<const QStyleOptionSlider *>(option);
+
         if (scrollOption && scrollOption->orientation == Qt::Vertical) {
-            return d->scrollbar->elementSize("arrow-down").width() + 2;
+            if (hintSize.isEmpty()) {
+                return d->scrollbar->elementSize("arrow-down").width() + 2;
+            } else {
+                return hintSize.width();
+            }
         } else {
-            return d->scrollbar->elementSize("arrow-left").height() + 2;
+            if (hintSize.isEmpty()) {
+                return d->scrollbar->elementSize("arrow-left").height() + 2;
+            } else {
+                return hintSize.height();
+            }
         }
     }
     default:

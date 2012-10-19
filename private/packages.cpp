@@ -161,7 +161,11 @@ void ThemePackage::initPackage(Package *package)
     package->addDirectoryDefinition("dialogs", "dialogs/", i18n("Images for dialogs"));
     package->addFileDefinition("dialogs/background", "dialogs/background.svg",
                       i18n("Generic dialog background"));
+    package->addFileDefinition("dialogs/background", "dialogs/background.svgz",
+                      i18n("Generic dialog background"));
     package->addFileDefinition("dialogs/shutdowndialog", "dialogs/shutdowndialog.svg",
+                      i18n("Theme for the logout dialog"));
+    package->addFileDefinition("dialogs/shutdowndialog", "dialogs/shutdowndialog.svgz",
                       i18n("Theme for the logout dialog"));
 
     package->addDirectoryDefinition("wallpapers", "wallpapers/", i18n("Wallpaper packages"));
@@ -170,44 +174,76 @@ void ThemePackage::initPackage(Package *package)
     package->addDirectoryDefinition("widgets", "widgets/", i18n("Images for widgets"));
     package->addFileDefinition("widgets/background", "widgets/background.svg",
                       i18n("Background image for widgets"));
+    package->addFileDefinition("widgets/background", "widgets/background.svgz",
+                      i18n("Background image for widgets"));
     package->addFileDefinition("widgets/clock", "widgets/clock.svg",
+                      i18n("Analog clock face"));
+    package->addFileDefinition("widgets/clock", "widgets/clock.svgz",
                       i18n("Analog clock face"));
     package->addFileDefinition("widgets/panel-background", "widgets/panel-background.svg",
                       i18n("Background image for panels"));
+    package->addFileDefinition("widgets/panel-background", "widgets/panel-background.svgz",
+                      i18n("Background image for panels"));
     package->addFileDefinition("widgets/plot-background", "widgets/plot-background.svg",
                       i18n("Background for graphing widgets"));
+    package->addFileDefinition("widgets/plot-background", "widgets/plot-background.svgz",
+                      i18n("Background for graphing widgets"));
     package->addFileDefinition("widgets/tooltip", "widgets/tooltip.svg",
+                      i18n("Background image for tooltips"));
+    package->addFileDefinition("widgets/tooltip", "widgets/tooltip.svgz",
                       i18n("Background image for tooltips"));
 
     package->addDirectoryDefinition("opaque/dialogs", "opaque/dialogs/", i18n("Opaque images for dialogs"));
     package->addFileDefinition("opaque/dialogs/background", "opaque/dialogs/background.svg",
                       i18n("Opaque generic dialog background"));
+    package->addFileDefinition("opaque/dialogs/background", "opaque/dialogs/background.svgz",
+                      i18n("Opaque generic dialog background"));
     package->addFileDefinition("opaque/dialogs/shutdowndialog", "opaque/dialogs/shutdowndialog.svg",
+                      i18n("Opaque theme for the logout dialog"));
+    package->addFileDefinition("opaque/dialogs/shutdowndialog", "opaque/dialogs/shutdowndialog.svgz",
                       i18n("Opaque theme for the logout dialog"));
 
     package->addDirectoryDefinition("opaque/widgets", "opaque/widgets/", i18n("Opaque images for widgets"));
     package->addFileDefinition("opaque/widgets/panel-background", "opaque/widgets/panel-background.svg",
                       i18n("Opaque background image for panels"));
+    package->addFileDefinition("opaque/widgets/panel-background", "opaque/widgets/panel-background.svgz",
+                      i18n("Opaque background image for panels"));
     package->addFileDefinition("opaque/widgets/tooltip", "opaque/widgets/tooltip.svg",
+                      i18n("Opaque background image for tooltips"));
+    package->addFileDefinition("opaque/widgets/tooltip", "opaque/widgets/tooltip.svgz",
                       i18n("Opaque background image for tooltips"));
 
     package->addDirectoryDefinition("locolor/dialogs", "locolor/dialogs/",
                            i18n("Low color images for dialogs"));
     package->addFileDefinition("locolor/dialogs/background", "locolor/dialogs/background.svg",
                       i18n("Low color generic dialog background"));
+    package->addFileDefinition("locolor/dialogs/background", "locolor/dialogs/background.svgz",
+                      i18n("Low color generic dialog background"));
     package->addFileDefinition("locolor/dialogs/shutdowndialog", "locolor/dialogs/shutdowndialog.svg",
+                      i18n("Low color theme for the logout dialog"));
+    package->addFileDefinition("locolor/dialogs/shutdowndialog", "locolor/dialogs/shutdowndialog.svgz",
                       i18n("Low color theme for the logout dialog"));
 
     package->addDirectoryDefinition("locolor/widgets", "locolor/widgets/", i18n("Images for widgets"));
     package->addFileDefinition("locolor/widgets/background", "locolor/widgets/background.svg",
                       i18n("Low color background image for widgets"));
+    package->addFileDefinition("locolor/widgets/background", "locolor/widgets/background.svgz",
+                      i18n("Low color background image for widgets"));
     package->addFileDefinition("locolor/widgets/clock", "locolor/widgets/clock.svg",
+                      i18n("Low color analog clock face"));
+    package->addFileDefinition("locolor/widgets/clock", "locolor/widgets/clock.svgz",
                       i18n("Low color analog clock face"));
     package->addFileDefinition("locolor/widgets/panel-background", "locolor/widgets/panel-background.svg",
                       i18n("Low color background image for panels"));
+    package->addFileDefinition("locolor/widgets/panel-background", "locolor/widgets/panel-background.svgz",
+                      i18n("Low color background image for panels"));
     package->addFileDefinition("locolor/widgets/plot-background", "locolor/widgets/plot-background.svg",
                       i18n("Low color background for graphing widgets"));
+    package->addFileDefinition("locolor/widgets/plot-background", "locolor/widgets/plot-background.svgz",
+                      i18n("Low color background for graphing widgets"));
     package->addFileDefinition("locolor/widgets/tooltip", "locolor/widgets/tooltip.svg",
+                      i18n("Low color background image for tooltips"));
+    package->addFileDefinition("locolor/widgets/tooltip", "locolor/widgets/tooltip.svgz",
                       i18n("Low color background image for tooltips"));
 
     package->addFileDefinition("colors", "colors", i18n("KColorScheme configuration file"));
