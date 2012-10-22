@@ -88,6 +88,7 @@ Item {
                     verticalScrollBar = verticalScrollBarComponent.createObject(root)
                 //from normal to section
                 } else if (flickableItem.section && flickableItem.section.property &&
+                    flickableItem.model.get !== undefines &&
                     (!verticalScrollBar || verticalScrollBar.orientation !== undefined)) {
                     if (verticalScrollBar) verticalScrollBar.destroy()
                     verticalScrollBar = sectionScrollerComponent.createObject(root)
