@@ -47,6 +47,17 @@ Item {
     property bool hover: ListView ? true : false
     property bool pressed: false
 
+    Connections {
+        target: highlight.ListView.view
+        onCurrentIndexChanged: {
+            if (highlight.ListView.view.currentIndex >= 0) {
+                background.opacity = 1
+            } else {
+                background.opacity = 0
+            }
+        }
+    }
+
     PlasmaCore.FrameSvgItem {
         id: background
         imagePath: "widgets/viewitem"
