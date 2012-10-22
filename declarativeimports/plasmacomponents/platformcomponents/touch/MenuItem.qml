@@ -50,6 +50,7 @@ Item {
     signal clicked
 
     property bool checkable: false
+    property alias font: textArea.font
 
     implicitWidth: textArea.paintedWidth + iconLoader.width*2 + 6
     implicitHeight: Math.max(theme.smallIconSize, textArea.paintedHeight + 6)
