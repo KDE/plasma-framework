@@ -43,7 +43,8 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 Item {
     id: highlight
 
-    property bool hover: false
+    //in the case we are the highlight of a listview, it follows the mouse, so hover = true
+    property bool hover: ListView ? true : false
     property bool pressed: false
 
     PlasmaCore.FrameSvgItem {
