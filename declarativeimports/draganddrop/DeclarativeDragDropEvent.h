@@ -27,18 +27,19 @@
 #include <QObject>
 #include <QGraphicsSceneDragDropEvent>
 #include "DeclarativeMimeData.h"
+#include "DeclarativeDropArea.h"
 
 class DeclarativeDragDropEvent : public QObject
 {
     Q_OBJECT
 
     /**
-     * The mouse X position of the event relative to the view that sent the event.
+     * The mouse X position of the event relative to the DropArea that is receiving the event.
      */
     Q_PROPERTY(int x READ x)
 
     /**
-     * The mouse Y position of the event relative to the view that sent the event.
+     * The mouse Y position of the event relative to the DropArea that is receiving the event.
      */
     Q_PROPERTY(int y READ y)
 
@@ -94,7 +95,7 @@ class DeclarativeDragDropEvent : public QObject
 
 public:
 
-    DeclarativeDragDropEvent(QGraphicsSceneDragDropEvent* e, QObject* parent = 0);
+    DeclarativeDragDropEvent(QGraphicsSceneDragDropEvent* e, DeclarativeDropArea* parent = 0);
 
     int x() const { return m_x; }
     int y() const { return m_y; }
