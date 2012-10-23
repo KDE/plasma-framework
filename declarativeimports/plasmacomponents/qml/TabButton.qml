@@ -103,6 +103,13 @@ Item {
             internal.tabBar.currentTab = root
             internal.tabBar.forceActiveFocus()
         }
+        onClicked: {
+            if (internal.tabGroup) {
+                internal.tabGroup.currentTab = tab
+            }
+            //TabBar is the granparent, done here too in case of no tabgroup
+            internal.tabBar.currentTab = root
+        }
         onVisibleChanged: root.parent.childrenChanged()
     }
 
@@ -163,14 +170,7 @@ Item {
     MouseArea {
         id: mouseArea
 
-        onClicked: {
-            root.clicked()
-            if (internal.tabGroup) {
-                internal.tabGroup.currentTab = tab
-            }
-            //TabBar is the granparent, done here too in case of no tabgroup
-            internal.tabBar.currentTab = root
-        }
+        onClicked: root.clicked()
 
         anchors.fill: parent
     }
