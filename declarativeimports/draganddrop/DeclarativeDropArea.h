@@ -58,6 +58,13 @@ Q_SIGNALS:
     void dragLeave(DeclarativeDragDropEvent* event);
 
     /**
+     * Emitted when the mouse cursor dragging something moves over the drag area
+     * @arg DeclarativeDragDropEvent description of the dragged content
+     * @see DeclarativeDragDropEvent
+     */
+    void dragMove(DeclarativeDragDropEvent *event);
+
+    /**
      * Emitted when the user drops something in the area
      * @arg DeclarativeDragDropEvent description of the dragged content
      * @see DeclarativeDragDropEvent
@@ -69,6 +76,7 @@ Q_SIGNALS:
 protected:
     void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
     void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
+    void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
     void dropEvent(QGraphicsSceneDragDropEvent *event);
 
 private:

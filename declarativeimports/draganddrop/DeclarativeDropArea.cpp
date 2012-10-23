@@ -45,6 +45,12 @@ void DeclarativeDropArea::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
     emit dragLeave(&dde);
 }
 
+void DeclarativeDropArea::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
+{
+    DeclarativeDragDropEvent dde(event, this);
+    emit dragMove(&dde);
+}
+
 void DeclarativeDropArea::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
     DeclarativeDragDropEvent dde(event, this);
