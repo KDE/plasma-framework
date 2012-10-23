@@ -29,13 +29,19 @@ Description:
     For instance the contents of the tabs of a TabBar can be loaded only when they become the current page
 
 Properties:
-    bool when: boolean condition that tells when to load the declarative component
-    variant source: it can be a string with a path name of a qml file or a Component. It's the component that will be loaded when "when" is true. If the component changes the old instantiated component will be deleted and the new will be loaded instead.
+    bool when:
+    Boolean condition that tells when to load the declarative component
+
+    variant source:
+    It can be a string with a path name of a qml file or a Component. It's the component that will be loaded when "when" is true. If the component changes the old instantiated component will be deleted and the new will be loaded instead.
+
+    Item item: the item instantiated from component, if any.
 **/
 Item {
     id: root
     property alias when: loader.when
     property alias source: loader.conditionalSource
+    property alias item: loader.item
 
     Loader {
         id: loader
