@@ -28,10 +28,10 @@
 #include <QDebug>
 #include <QTimer>
 
-#include <KIcon>
-#include <KIconLoader>
-#include <Plasma/ToolTipContent>
-#include <Plasma/ToolTipManager>
+#include <KDE/KIcon>
+#include <KDE/KIconLoader>
+#include <KDE/Plasma/ToolTipContent>
+#include <KDE/Plasma/ToolTipManager>
 
 
 ToolTipProxy::ToolTipProxy(QObject *parent)
@@ -138,13 +138,12 @@ void ToolTipProxy::setSubText(const QString &text)
     emit subTextChanged();
 }
 
-// ###TODO: SHOULD BE PIXMAP OR QICON??
-QString ToolTipProxy::image() const
+QVariant ToolTipProxy::image() const
 {
     return m_image;
 }
 
-void ToolTipProxy::setImage(const QString &name)
+void ToolTipProxy::setImage(QVariant name)
 {
     if (name == m_image) {
         return;
@@ -163,11 +162,34 @@ void ToolTipProxy::updateToolTip()
     Plasma::ToolTipContent data;
     data.setMainText(m_mainText);
     data.setSubText(m_subText);
-    if (!m_image.isEmpty()) {
-        KIcon icon(m_image);
-        if (!icon.isNull()) {
-            data.setImage(icon.pixmap(IconSize(KIconLoader::Desktop)));
+
+    // set image
+    switch (m_image.type()) {
+        case QVariant::String: {
+            QString name = m_image.toString();
+            if (!name.isEmpty()) {
+                KIcon icon(name);
+                if (!icon.isNull()) {
+                    data.setImage(icon.pixmap(IconSize(KIconLoader::Desktop)));
+                }
+            }
+            break;
         }
+
+        case QVariant::Icon: {
+            QIcon icon = m_image.value<QIcon>();
+            data.setImage(icon);
+            break;
+        }
+
+        case QVariant::Pixmap: {
+            QPixmap pixmap = m_image.value<QPixmap>();
+            data.setImage(pixmap);
+            break;
+        }
+
+        default:
+            break;
     }
     Plasma::ToolTipManager::self()->setContent(m_widget, data);
 }

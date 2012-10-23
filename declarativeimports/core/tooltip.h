@@ -23,6 +23,7 @@
 
 #include <QObject>
 #include <QWeakPointer>
+#include <QtCore/QVariant>
 
 class QGraphicsObject;
 class QGraphicsWidget;
@@ -48,9 +49,9 @@ class ToolTipProxy : public QObject
     Q_PROPERTY(QString subText READ subText WRITE setSubText NOTIFY subTextChanged)
 
     /**
-     * Image to display in the tooltip, can be an image full path or a Freedesktop icon name
+     * Image to display in the tooltip, can be an image full path or a Freedesktop icon name or QIcon or QPixmap
      */
-    Q_PROPERTY(QString image READ image WRITE setImage NOTIFY imageChanged)
+    Q_PROPERTY(QVariant image READ image WRITE setImage NOTIFY imageChanged)
 
 public:
     ToolTipProxy(QObject *parent = 0);
@@ -65,9 +66,8 @@ public:
     QString subText() const;
     void setSubText(const QString &text);
 
-    // SHOULD BE PIXMAP OR QICON
-    QString image() const;
-    void setImage(const QString &name);
+    QVariant image() const;
+    void setImage(QVariant name);
 
 Q_SIGNALS:
     void targetChanged();
@@ -82,7 +82,7 @@ protected Q_SLOTS:
 private:
     QString m_mainText;
     QString m_subText;
-    QString m_image;
+    QVariant m_image;
     QGraphicsWidget *m_widget;
     QWeakPointer<DeclarativeItemContainer> m_declarativeItemContainer;
     QWeakPointer<QGraphicsObject> m_target;
