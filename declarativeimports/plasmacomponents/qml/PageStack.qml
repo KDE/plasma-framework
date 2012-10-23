@@ -295,6 +295,12 @@ Item {
             // Performs a push enter transition.
             function pushEnter(immediate, orientationChanges)
             {
+                //FIXME: why the first time pageParent is null?
+                if (container.pageParent === null) {
+                    container.pageParent = container
+                    page.parent = container
+                }
+
                 if (!immediate) {
                     if (orientationChanges)
                         setState("LandscapeRight");
