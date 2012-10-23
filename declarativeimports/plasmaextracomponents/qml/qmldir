@@ -1,6 +1,7 @@
 plugin plasmaextracomponentsplugin
 
 App 0.1 App.qml
+ConditionalLoader 0.1 ConditionalLoader.qml
 Heading 0.1 Heading.qml
 Paragraph 0.1 Paragraph.qml
 PageRow 0.1 PageRow.qml
