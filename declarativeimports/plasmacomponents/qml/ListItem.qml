@@ -103,7 +103,7 @@ Item {
             top: parent.top
         }
         height: naturalSize.height
-        visible: listItem.sectionDelegate || (index != undefined && index > 0 && !listItem.checked && !itemMouse.pressed)
+        visible: listItem.sectionDelegate || (typeof(index) != "undefined" && index > 0 && !listItem.checked && !itemMouse.pressed)
     }
 
     MouseArea {
