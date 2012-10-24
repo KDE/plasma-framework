@@ -21,6 +21,8 @@
 
 #include "appletinterface.h"
 
+#include "../declarative/appletcontainer.h"
+
 #include <QAction>
 #include <QDir>
 #include <QFile>
@@ -609,6 +611,9 @@ ContainmentInterface::ContainmentInterface(AbstractJsAppletScript *parent)
          connect(containment()->corona(), SIGNAL(availableScreenRegionChanged()),
                  this, SIGNAL(availableScreenRegionChanged()));
      }
+
+    qmlRegisterType<AppletContainer>("org.kde.plasma.containments", 0, 1, "AppletContainer");
+
 }
 
 QScriptValue ContainmentInterface::applets()

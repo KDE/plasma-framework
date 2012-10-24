@@ -12,6 +12,7 @@ set(simple_javascript_engine_SRCS
     common/extension_io.cpp
     common/guiscriptenv.cpp
     common/javascriptaddonpackagestructure.cpp
+    declarative/appletcontainer.cpp
     plasmoid/abstractjsappletscript.cpp
     plasmoid/appletauthorization.cpp
     plasmoid/jsappletinterface.cpp
@@ -53,6 +54,7 @@ target_link_libraries(plasma_appletscript_simple_javascript
                        ${KDE4_KDECORE_LIBS}
                        ${KDE4_KIO_LIBS}
                        ${KDE4_PLASMA_LIBS}
+                       ${QT_QTDECLARATIVE_LIBRARY}
                        ${QT_QTSCRIPT_LIBRARY}
                        ${QT_QTUITOOLS_LIBRARY}
                        ${QT_QTXML_LIBRARY}
@@ -129,6 +131,7 @@ set(declarative_appletscript_SRCS
     common/extension_io.cpp
     common/javascriptaddonpackagestructure.cpp
     common/declarativescriptenv.cpp
+    declarative/appletcontainer.cpp
     declarative/declarativeitemcontainer.cpp
     declarative/packageaccessmanager.cpp
     declarative/packageaccessmanagerfactory.cpp
