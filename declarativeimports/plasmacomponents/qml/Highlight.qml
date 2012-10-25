@@ -46,7 +46,7 @@ Item {
     //in the case we are the highlight of a listview, it follows the mouse, so hover = true
     property bool hover: ListView ? true : false
     property bool pressed: false
-    width: ListView ? ListView.view.width : undefined
+    width: ListView.view ? ListView.view.width : undefined
 
     Connections {
         target: highlight.ListView.view
