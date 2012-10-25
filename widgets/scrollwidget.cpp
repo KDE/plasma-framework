@@ -665,11 +665,12 @@ public:
 
     void handleMouseMoveEvent(QGraphicsSceneMouseEvent *event)
     {
-        if (lastPosTime.isNull())
+        if (lastPosTime.isNull()) {
             return;
+        }
+
         bool rejectY = false;
         bool rejectX = false;
-        bool moved = false;
 
         if (canYFlick()) {
             int dy = int(event->scenePos().y() - pressPos.y());

@@ -314,7 +314,6 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     //XXX this code is duplicated in the next function
     QPointF basePoint = m_rect.topLeft() + QPointF(HANDLE_MARGIN, iconMargin);
     QPointF step = QPointF(0, m_iconSize + iconMargin);
-    QPointF separator = step + QPointF(0, iconMargin);
     //end duplicate code
 
     QPointF shiftC;
@@ -401,7 +400,6 @@ AppletHandle::ButtonType AppletHandle::mapToButton(const QPointF &point) const
     //XXX this code is duplicated in the prev. function
     QPointF basePoint = m_rect.topLeft() + QPointF(HANDLE_MARGIN, iconMargin);
     QPointF step = QPointF(0, m_iconSize + iconMargin);
-    QPointF separator = step + QPointF(0, iconMargin);
    //end duplicate code
 
     QRectF activeArea = QRectF(basePoint, QSizeF(m_iconSize, m_iconSize));

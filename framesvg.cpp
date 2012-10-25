@@ -700,7 +700,6 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
     QSize overlaySize;
     QPoint actualOverlayPos = QPoint(0, 0);
     if (overlayAvailable && !overlayCached) {
-        QPoint pos = QPoint(0, 0);
         overlaySize = q->elementSize(prefix % "overlay");
 
         if (q->hasElement(prefix % "hint-overlay-pos-right")) {
