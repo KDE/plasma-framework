@@ -35,24 +35,24 @@ Properties:
 
         real minimumValue:
         This property holds the minimum value that the slider's value can assume.
-	The default value is 0.
+        The default value is 0.
 
         real maximumValue:
-	    This property holds the maximum value that the slider's value can assume.
-	The default value is 1.
+        This property holds the maximum value that the slider's value can assume.
+        The default value is 1.
 
         real value:
         This property holds the value selected inside the minimum to maximum range of value.
-	The default value is 0.
+        The default value is 0.
 
         enumeration orientation:
-   	    This property holds the orientation for this component.
-	The orientation can assume Qt.Horizontal and Qt.Vertical values.
-	The default is Qt.Horizontal.
+        This property holds the orientation for this component.
+        The orientation can assume Qt.Horizontal and Qt.Vertical values.
+        The default is Qt.Horizontal.
 
         bool pressed:
-   	    This property holds if the Slider is being pressed or not.
-	Read-only.
+        This property holds if the Slider is being pressed or not.
+        Read-only.
 
         bool valueIndicatorVisible:
         This property holds if a value indicator element will be shown while is dragged or not.
