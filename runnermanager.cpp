@@ -293,6 +293,9 @@ public:
             kDebug() << "================= loading runner:" << service->name() << "=================";
             QObject::connect(runner, SIGNAL(matchingSuspended(bool)), q, SLOT(runnerMatchingSuspended(bool)));
             QMetaObject::invokeMethod(runner, "init");
+            if (prepped) {
+                emit runner->prepare();
+            }
         }
 
         return runner;
