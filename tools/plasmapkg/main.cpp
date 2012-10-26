@@ -333,7 +333,7 @@ int main(int argc, char **argv)
     } else if (type.compare(i18nc("package type", "kwineffect"), Qt::CaseInsensitive) == 0 ||
                type.compare("kwineffect", Qt::CaseInsensitive) == 0) {
         packageRoot = "kwin/effects/";
-        servicePrefix = "kwin-effect-";
+        servicePrefix = "kwin4_effect_";
         pluginTypes << "KWin/Effect";
     } else if (type.compare(i18nc("package type", "windowswitcher"), Qt::CaseInsensitive) == 0 ||
                type.compare("windowswitcher", Qt::CaseInsensitive) == 0) {
