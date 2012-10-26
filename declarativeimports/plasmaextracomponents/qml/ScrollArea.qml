@@ -134,9 +134,9 @@ Item {
             property bool isScrollBar: true
             anchors {
                 left: undefined
-                top: parent.top
+                top: flickableItem.top
                 right: parent.right
-                bottom: parent.bottom
+                bottom: flickableItem.bottom
             }
         }
     }
@@ -146,9 +146,9 @@ Item {
             flickableItem: root.flickableItem
             orientation: Qt.Horizontal
             anchors {
-                left: parent.left
+                left: flickableItem.left
                 top: undefined
-                right: parent.right
+                right: flickableItem.right
                 bottom: parent.bottom
             }
         }
@@ -160,9 +160,9 @@ Item {
             property bool isScrollBar: false
             anchors {
                 left: undefined
-                top: parent.top
+                top: flickableItem.top
                 right: parent.right
-                bottom: parent.bottom
+                bottom: flickableItem.bottom
             }
         }
     }
