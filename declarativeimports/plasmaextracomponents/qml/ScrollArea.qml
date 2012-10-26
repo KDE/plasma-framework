@@ -134,9 +134,10 @@ Item {
             property bool isScrollBar: true
             anchors {
                 left: undefined
-                top: flickableItem.top
+                top: parent.top
                 right: parent.right
-                bottom: flickableItem.bottom
+                bottom: parent.bottom
+                bottomMargin: parent.height - root.flickableItem.height
             }
         }
     }
@@ -146,10 +147,11 @@ Item {
             flickableItem: root.flickableItem
             orientation: Qt.Horizontal
             anchors {
-                left: flickableItem.left
+                left: parent.left
                 top: undefined
-                right: flickableItem.right
+                right: parent.right
                 bottom: parent.bottom
+                rightMargin: parent.width - root.flickableItem.width
             }
         }
     }
@@ -160,9 +162,10 @@ Item {
             property bool isScrollBar: false
             anchors {
                 left: undefined
-                top: flickableItem.top
+                top: parent.top
                 right: parent.right
-                bottom: flickableItem.bottom
+                bottom: parent.bottom
+                bottomMargin: parent.height - root.flickableItem.height
             }
         }
     }
