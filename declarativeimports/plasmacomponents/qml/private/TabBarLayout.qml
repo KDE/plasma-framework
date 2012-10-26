@@ -195,7 +195,7 @@ Item {
 
                     if (child.implicitWidth != undefined) {
                         maxChildWidth = Math.max(maxChildWidth, child.implicitWidth)
-                        contentWidth = Math.max(contentWidth + i*10, (maxChildWidth + buttonFrame.margins.left + buttonFrame.margins.right) * childCount)
+                        contentWidth = Math.max(contentWidth, (maxChildWidth + buttonFrame.margins.left + buttonFrame.margins.right) * childCount)
                         contentHeight = Math.max(contentHeight, (child.implicitHeight + buttonFrame.margins.top + buttonFrame.margins.bottom))
                     }
                 }
