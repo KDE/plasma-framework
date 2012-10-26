@@ -216,7 +216,7 @@ Item {
                     }
                 }
             }
-            onMovementEnded: {print(Math.round(contentX/columnWidth))
+            onMovementEnded: {
                 scrollToLevel(Math.round(contentX/columnWidth)+1)
             }
         }
