@@ -692,7 +692,6 @@ public:
                 }
                 if (!rejectY && stealEvent) {
                     setWidgetY(qRound(newY));
-                    moved = true;
                 }
                 if (qAbs(dy) > QApplication::startDragDistance())
                     stealEvent = true;
@@ -719,7 +718,6 @@ public:
                 }
                 if (!rejectX && stealEvent) {
                     setWidgetX(qRound(newX));
-                    moved = true;
                 }
 
                 if (qAbs(dx) > QApplication::startDragDistance())
