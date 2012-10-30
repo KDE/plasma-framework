@@ -34,7 +34,9 @@
 #include <knewstuff3/downloaddialog.h>
 #endif
 
-#include "plasma/private/wallpaper_p.h"
+#include "kdeclarative.h"
+
+#include "private/wallpaper_p.h"
 
 namespace Plasma
 {
@@ -42,12 +44,10 @@ namespace Plasma
 PlasmoidPackage::PlasmoidPackage(QObject *parent)
     : Plasma::PackageStructure(parent, QString("Plasmoid"))
 {
-    QString pathsString(getenv("PLASMA_CUSTOM_PREFIX_PATHS"));
-    if (!pathsString.isEmpty()) {
-        QStringList prefixPaths(pathsString.split(":"));
-        if (!prefixPaths.isEmpty()) {
-            setContentsPrefixPaths(prefixPaths);
-        }
+    QStringList platform = KDeclarative::runtimePlatform();
+    if (!platform.isEmpty()) {
+        platform.append("contents");
+        setContentsPrefixPaths(platform);
     }
 
     addDirectoryDefinition("images", "images", i18n("Images"));
