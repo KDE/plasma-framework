@@ -73,7 +73,6 @@ void ChangeableMainScriptPackage::pathChanged(Package *package)
 
 QString PlasmoidPackage::findMainScript(Package *package)
 {
-<<<<<<< HEAD
     const QString mainScript = package->path() + "/ui/main.qml";
     if (QFile::exists(mainScript)) {
         return mainScript;
@@ -84,19 +83,10 @@ QString PlasmoidPackage::findMainScript(Package *package)
 
 void PlasmoidPackage::initPackage(Package *package)
 {
-    ChangeableMainScriptPackage::initPackage(package);
-    QString pathsString(getenv("PLASMA_CUSTOM_PREFIX_PATHS"));
-    if (!pathsString.isEmpty()) {
-        QStringList prefixPaths(pathsString.split(":"));
-        if (!prefixPaths.isEmpty()) {
-            package->setContentsPrefixPaths(prefixPaths);
-        }
-=======
     QStringList platform = KDeclarative::runtimePlatform();
     if (!platform.isEmpty()) {
         platform.append("contents");
         setContentsPrefixPaths(platform);
->>>>>>> use KDeclarative to determine the platform paths
     }
 
     package->setServicePrefix("plasma-applet-");
