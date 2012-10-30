@@ -29,6 +29,8 @@
 #include <KSharedConfig>
 #include <KDebug>
 
+#include <kdeclarative.h>
+
 #include "enums.h"
 #include "qmenu.h"
 #include "qmenuitem.h"
@@ -89,20 +91,14 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.components"));
 
-    QString componentsPlatform = getenv("KDE_PLASMA_COMPONENTS_PLATFORM");
-    if (componentsPlatform.isEmpty()) {
-        KConfigGroup cg(KSharedConfig::openConfig("kdeclarativerc"), "Components-platform");
-        componentsPlatform = cg.readEntry("name", "desktop");
-    }
-
     //platform specific c++ components
-    if (componentsPlatform == "desktop") {
+    const QString target = KDeclarative::componentsTarget();
+    if (target == KDeclarative::defaultComponentsTarget()) {
         qmlRegisterType<KDialogProxy>(uri, 0, 1, "QueryDialog");
-
         qmlRegisterType<QMenuProxy>(uri, 0, 1, "Menu");
         qmlRegisterType<QMenuItem>(uri, 0, 1, "MenuItem");
-    //on touch systems the dialog is fullscreen, c++ needed to do that
     } else {
+        //on touch systems the dialog is fullscreen, c++ needed to do that
         qmlRegisterType<FullScreenDialog>(uri, 0, 1, "Dialog");
         qmlRegisterType<FullScreenSheet>(uri, 0, 1, "Sheet");
     }

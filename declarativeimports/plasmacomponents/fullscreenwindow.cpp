@@ -36,6 +36,8 @@
 #include <KWindowSystem>
 #include <KStandardDirs>
 
+#include <kdeclarative.h>
+
 #include <Plasma/Corona>
 #include <Plasma/WindowEffects>
 
@@ -122,31 +124,22 @@ void FullScreenWindow::init(const QString &componentName)
     }
 
     //Try to figure out the path of the dialog component
-    QString componentsPlatform = getenv("KDE_PLASMA_COMPONENTS_PLATFORM");
-    if (componentsPlatform.isEmpty()) {
-        KConfigGroup cg(KSharedConfig::openConfig("kdeclarativerc"), "Components-platform");
-        componentsPlatform = cg.readEntry("name", "desktop");
-    }
-
+    const QString target = KDeclarative::componentsTarget();
     QString filePath;
-    if (componentsPlatform == "desktop") {
-        foreach(const QString &importPath, KGlobal::dirs()->findDirs("module", "imports/")) {
-            filePath = importPath % "org/kde/plasma/components/" % componentName % ".qml";
-            QFile f(filePath);
-            if (f.exists()) {
-                break;
-            }
-        }
-    } else {
-        foreach(const QString &importPath, KGlobal::dirs()->findDirs("module", "platformimports/" % componentsPlatform)) {
-            filePath = importPath % "org/kde/plasma/components/" % componentName % ".qml";
-            QFile f(filePath);
-            if (f.exists()) {
-                break;
-            }
-        }
+    if (target != KDeclarative::defaultComponentsTarget()) {
+        const QString file = "platformimports/" % target % "org/kde/plasma/components/" % componentName % ".qml";
+        filePath = KStandardDirs::locate("module", file);
     }
 
+    if (filePath.isEmpty()) {
+        const QString file = "imports/org/kde/plasma/components/" % componentName % ".qml";
+        filePath = KStandardDirs::locate("module", file);
+    }
+
+    if (filePath.isEmpty()) {
+        kWarning() << "Component not found:" << componentName;
+        return;
+    }
 
     QDeclarativeEngine *engine = EngineBookKeeping::self()->engine();
     if (!engine) {
