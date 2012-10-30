@@ -170,7 +170,7 @@ public:
 #ifdef Q_WS_X11
     static EffectWatcher *s_blurEffectWatcher;
 #endif
-    
+
     Theme *q;
     QString themeName;
     QList<QString> fallbackThemes;

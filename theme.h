@@ -193,12 +193,12 @@ class PLASMA_EXPORT Theme : public QObject
         Q_INVOKABLE QFont font(FontRole role) const;
 
         /**
-         * Returns the font metrics for the font to be used by themed items
+         * @return the font metrics for the font to be used by themed items
          */
         Q_INVOKABLE QFontMetrics fontMetrics() const;
 
         /**
-         * Returns if the window manager effects (e.g. translucency, compositing) is active or not
+         * @return true if the window manager effects (e.g. translucency, compositing) is active or not
          */
         Q_INVOKABLE bool windowTranslucencyEnabled() const;
 
