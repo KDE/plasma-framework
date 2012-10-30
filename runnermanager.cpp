@@ -301,6 +301,9 @@ public:
 #endif
             QObject::connect(runner, SIGNAL(matchingSuspended(bool)), q, SLOT(runnerMatchingSuspended(bool)));
             runner->init();
+            if (prepped) {
+                emit runner->prepare();
+            }
         }
 
         return runner;

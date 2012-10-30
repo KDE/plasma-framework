@@ -236,7 +236,7 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
         QLinearGradient g(QPoint(0, 0), QPoint(m_decorationRect.width(), 0));
         //fading out panel
-        if (m_applet->backgroundHints() != Plasma::NoBackground &&
+        if (m_applet && m_applet->backgroundHints() != Plasma::NoBackground &&
             m_rect.height() > qreal(minimumHeight()) * 1.25) {
             if (m_buttonsOnRight) {
                 qreal opaquePoint =
