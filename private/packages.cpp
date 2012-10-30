@@ -30,6 +30,7 @@
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 
+#include "kdeclarative.h"
 #include "private/wallpaper_p.h"
 #include "package.h"
 #include "config-plasma.h"
@@ -72,6 +73,7 @@ void ChangeableMainScriptPackage::pathChanged(Package *package)
 
 QString PlasmoidPackage::findMainScript(Package *package)
 {
+<<<<<<< HEAD
     const QString mainScript = package->path() + "/ui/main.qml";
     if (QFile::exists(mainScript)) {
         return mainScript;
@@ -89,6 +91,12 @@ void PlasmoidPackage::initPackage(Package *package)
         if (!prefixPaths.isEmpty()) {
             package->setContentsPrefixPaths(prefixPaths);
         }
+=======
+    QStringList platform = KDeclarative::runtimePlatform();
+    if (!platform.isEmpty()) {
+        platform.append("contents");
+        setContentsPrefixPaths(platform);
+>>>>>>> use KDeclarative to determine the platform paths
     }
 
     package->setServicePrefix("plasma-applet-");
