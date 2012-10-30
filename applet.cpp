@@ -234,6 +234,14 @@ void Applet::setLocked(bool locked)
     }
 
     app->setImmutability(locked ? Plasma::UserImmutable : Plasma::Mutable);
+    KConfigGroup cg = app->config();
+    if (!app->isContainment()) {
+        cg = cg.parent();
+    }
+
+    if (cg.isValid()) {
+        cg.writeEntry("immutability", (int)app->immutability());
+    }
 }
 
 bool Applet::locked() const

@@ -161,6 +161,10 @@ void Widget::setGeometry(const QRectF &geometry)
 {
     if (d->applet) {
         d->applet.data()->setGeometry(geometry);
+        KConfigGroup cg = d->applet.data()->config().parent();
+        if (cg.isValid()) {
+            cg.writeEntry("geometry", geometry);
+        }
     }
 }
 
