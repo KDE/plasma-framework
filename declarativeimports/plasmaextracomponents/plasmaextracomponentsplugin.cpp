@@ -39,15 +39,6 @@ void PlasmaExtraComponentsPlugin::initializeEngine(QDeclarativeEngine *engine, c
 void PlasmaExtraComponentsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.extras"));
-    /*
-    // Enable when adding touch-specific components
-    QString componentsPlatform = getenv("KDE_PLASMA_COMPONENTS_PLATFORM");
-    if (componentsPlatform.isEmpty()) {
-        KConfigGroup cg(KSharedConfig::openConfig("kdeclarativerc"), "Components-platform");
-        componentsPlatform = cg.readEntry("name", "desktop");
-    }
-    */
-    // Register additional types here...
     qmlRegisterType<ResourceInstance>(uri, 0, 1, "ResourceInstance");
     qmlRegisterType<FallbackComponent>(uri, 0, 1, "FallbackComponent");
 }
