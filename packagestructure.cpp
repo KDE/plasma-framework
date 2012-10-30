@@ -23,6 +23,7 @@
 
 #include <QDir>
 #include <QMap>
+#include <QMutableListIterator>
 #include <QFileInfo>
 
 #include <kconfiggroup.h>
@@ -548,6 +549,17 @@ QStringList PackageStructure::contentsPrefixPaths() const
 void PackageStructure::setContentsPrefixPaths(const QStringList &prefixPaths)
 {
     d->contentsPrefixPaths = prefixPaths;
+
+    // the code assumes that the prefixes have a trailing slash
+    // so let's make that true here
+    QMutableStringListIterator it(d->contentsPrefixPaths);
+    while (it.hasNext()) {
+        it.next();
+
+        if (!it.value().endsWith('/')) {
+            it.setValue(it.value() % '/');
+        }
+    }
 }
 
 bool PackageStructure::installPackage(const QString &package, const QString &packageRoot)
