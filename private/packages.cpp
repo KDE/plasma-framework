@@ -46,6 +46,11 @@ PlasmoidPackage::PlasmoidPackage(QObject *parent)
 {
     QStringList platform = KDeclarative::runtimePlatform();
     if (!platform.isEmpty()) {
+        QMutableStringListIterator it(platform);
+        while (it.hasNext()) {
+            it.next();
+            it.setValue("platformcontents/" + it.value());
+        }
         platform.append("contents");
         setContentsPrefixPaths(platform);
     }
