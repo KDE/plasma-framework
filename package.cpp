@@ -521,6 +521,17 @@ void Package::setContentsPrefixPaths(const QStringList &prefixPaths)
     d->contentsPrefixPaths = prefixPaths;
     if (d->contentsPrefixPaths.isEmpty()) {
         d->contentsPrefixPaths << QString();
+    } else {
+        // the code assumes that the prefixes have a trailing slash
+        // so let's make that true here
+        QMutableStringListIterator it(d->contentsPrefixPaths);
+        while (it.hasNext()) {
+            it.next();
+
+            if (!it.value().endsWith('/')) {
+                it.setValue(it.value() % '/');
+            }
+        }
     }
 }
 
