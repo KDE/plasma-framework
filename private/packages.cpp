@@ -86,7 +86,7 @@ void PlasmoidPackage::initPackage(Package *package)
     QStringList platform = KDeclarative::runtimePlatform();
     if (!platform.isEmpty()) {
         platform.append("contents");
-        setContentsPrefixPaths(platform);
+        package->setContentsPrefixPaths(platform);
     }
 
     package->setServicePrefix("plasma-applet-");

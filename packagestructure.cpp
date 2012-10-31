@@ -18,34 +18,7 @@
 *******************************************************************************/
 
 #include "packagestructure.h"
-
-<<<<<<< HEAD
 #include "private/package_p.h"
-=======
-#include "config-plasma.h"
-
-#include <QDir>
-#include <QMap>
-#include <QMutableListIterator>
-#include <QFileInfo>
-
-#include <kconfiggroup.h>
-#include <kdebug.h>
-#ifndef PLASMA_NO_KIO
-#include <kio/job.h>
-#endif
-#include <kmimetype.h>
-#include <kstandarddirs.h>
-#include <kservicetypetrader.h>
-#include <ktar.h>
-#include <ktemporaryfile.h>
-#include <ktempdir.h>
-#include <kurl.h>
-#include <kzip.h>
-
-#include "package.h"
-#include "private/packages_p.h"
-#include "theme.h"
 
 namespace Plasma
 {
