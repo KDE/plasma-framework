@@ -33,6 +33,7 @@ public:
 private Q_SLOTS:
     void copyPerformance();
     void emptyContentsPrefix();
+    void multiplePaths();
     void directories();
     void requiredDirectories();
     void files();
@@ -41,8 +42,6 @@ private Q_SLOTS:
     void name();
     void required();
     void mimeTypes();
-
-    //TODO: add tests for copy construction
 
 private:
     Plasma::Package ps;

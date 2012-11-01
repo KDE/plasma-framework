@@ -35,6 +35,8 @@ public:
     {
         setContentsPrefixPaths(QStringList());
         addDirectoryDefinition("bin", "bin", "bin");
+        addFileDefinition("MultiplePaths", "first", "Description proper");
+        addFileDefinition("MultiplePaths", "second", "Description proper");
         setPath("/");
     }
 };
@@ -69,6 +71,12 @@ void PackageStructureTest::emptyContentsPrefix()
     QString path(package.filePath("bin", "ls"));
     //qDebug() << path;
     QCOMPARE(path, QString("/bin/ls"));
+}
+
+void PackageStructureTest::multiplePaths()
+{
+    NoPrefixes package;
+    QCOMPARE(package.name("MultiplePaths"), QString("Description proper"));
 }
 
 void PackageStructureTest::directories()
