@@ -483,6 +483,37 @@ bool RunnerContext::removeMatch(const QString matchId)
     return true;
 }
 
+bool RunnerContext::removeMatches(Plasma::AbstractRunner *runner)
+{
+    if (!isValid()) {
+        return false;
+    }
+
+    QList<QueryMatch> presentMatchList;
+
+    LOCK_FOR_READ(d)
+    foreach(const QueryMatch &match, d->matches) {
+        if (match.runner() == runner) {
+            presentMatchList << match;
+        }
+    }
+    UNLOCK(d)
+
+    if (presentMatchList.isEmpty()) {
+        return false;
+    }
+
+    LOCK_FOR_WRITE(d)
+    foreach (const QueryMatch &match, presentMatchList) {
+        d->matchesById.remove(match.id());
+        d->matches.removeAll(match);
+    }
+    UNLOCK(d)
+
+    emit d->q->matchesChanged();
+    return true;
+}
+
 QList<QueryMatch> RunnerContext::matches() const
 {
     LOCK_FOR_READ(d)
