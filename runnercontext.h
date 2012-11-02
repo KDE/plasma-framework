@@ -163,9 +163,9 @@ class PLASMA_EXPORT RunnerContext : public QObject
          * @param matchId the id of match to remove
          *
          * @return true if the match was removed, false otherwise.
-	 * @since 4.4
+         * @since 4.4
          */
-	bool removeMatch(const QString matchId);
+        bool removeMatch(const QString matchId);
 
         /**
          * Removes lists of matches from the existing list of matches.
@@ -178,6 +178,18 @@ class PLASMA_EXPORT RunnerContext : public QObject
          * @since 4.4
          */
         bool removeMatches(const QStringList matchIdList);
+
+        /**
+         * Removes lists of matches from a given AbstractRunner
+         *
+         * This method is thread safe and causes the matchesChanged() signal to be emitted.
+         *
+         * @param runner the AbstractRunner from which to remove matches
+         *
+         * @return true if at least one match was removed, false otherwise.
+         * @since 4.10
+         */
+        bool removeMatches(AbstractRunner *runner);
 
         /**
          * Retrieves all available matches for the current search term.
