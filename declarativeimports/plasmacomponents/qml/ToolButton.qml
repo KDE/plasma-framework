@@ -92,8 +92,10 @@ Item {
     enabled: defaultAction == undefined || defaultAction.enabled
 
     //icon + label + left margin + right margin + spacing between icon and text
-    property real minimumWidth: theme.smallIconSize + label.preferredWidth + delegate.margins.left + delegate.margins.right + ((icon.valid) ? delegate.margins.left : 0)
-    property real minimumHeight: Math.max(theme.smallIconSize, label.paintedHeight) + delegate.margins.top + delegate.margins.bottom
+    //here it assumesleft margin = right top = bottom, why?
+    // because the right and bottom margins can be disabled, so they would return 0, but their actual size is still needed for size hints
+    property real minimumWidth: theme.smallIconSize + label.preferredWidth + delegate.margins.left + delegate.margins.left + ((icon.valid) ? delegate.margins.left : 0)
+    property real minimumHeight: Math.max(theme.smallIconSize, label.paintedHeight) + delegate.margins.top + delegate.margins.top
 
     implicitWidth: {
         if (label.text.length == 0) {
@@ -208,10 +210,10 @@ Item {
                     if (button.y == 0) {
                         borders.push("TopBorder")
                     }
-                    if (button.x + button.width + delegate.margins.right >= button.parent.width) {
+                    if (button.x + button.width >= button.parent.width) {
                         borders.push("RightBorder")
                     }
-                    if (button.y + button.height + delegate.margins.bottom >= button.parent.height) {
+                    if (button.y + button.height >= button.parent.height) {
                         borders.push("BottomBorder")
                     }
 
