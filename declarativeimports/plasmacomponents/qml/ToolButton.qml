@@ -163,7 +163,7 @@ Item {
 
     Loader {
         id: delegate
-        anchors.fill:parent
+        anchors.fill: parent
         property QtObject margins: item.margins
         property string shadowState: "shadow"
         sourceComponent: {
