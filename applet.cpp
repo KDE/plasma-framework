@@ -487,6 +487,10 @@ bool Applet::isBusy() const
 
 QString Applet::name() const
 {
+    if (!d->customName.isEmpty()) {
+        return d->customName;
+    }
+
     if (d->isContainment) {
         const Containment *c = qobject_cast<const Containment*>(this);
         if (c && c->d->isPanelContainment()) {
@@ -501,6 +505,11 @@ QString Applet::name() const
     }
 
     return d->appletDescription.name();
+}
+
+void Applet::setName(const QString &name) const
+{
+    d->customName = name;
 }
 
 QFont Applet::font() const

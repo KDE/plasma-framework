@@ -148,6 +148,7 @@ public:
     // applet info we keep around in case its needed
     KPluginInfo appletDescription;
     QVariantList args;
+    QString name;
 
     // bookkeeping
     QSet<QGraphicsItem*> registeredAsDragHandle;

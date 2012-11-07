@@ -74,7 +74,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
 {
     Q_OBJECT
     Q_PROPERTY(bool hasConfigurationInterface READ hasConfigurationInterface)
-    Q_PROPERTY(QString name READ name)
+    Q_PROPERTY(QString name READ name WRITE setName)
     Q_PROPERTY(QString pluginName READ pluginName)
     Q_PROPERTY(QString category READ category)
     Q_PROPERTY(ImmutabilityType immutability READ immutability WRITE setImmutability)
@@ -354,11 +354,17 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
 
         /**
          * Returns the user-visible name for the applet, as specified in the
-         * .desktop file.
+         * .desktop file. Can be changed with @see setName
          *
          * @return the user-visible name for the applet.
          **/
         QString name() const;
+
+        /**
+         * Sets a custom name for this instance of the applet. E.g. a clock might
+         * use the timezone as its name rather than the .desktop file
+         */
+        void setName(const QString &name) const;
 
         /**
          * @return the font currently set for this widget
