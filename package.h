@@ -106,7 +106,7 @@ public:
 
     /**
      * Sets the path to the root of this package
-     * @param path and absolute path
+     * @param path an absolute path, or a relative path to the default package root
      * @since 4.3
      */
     void setPath(const QString &path);
