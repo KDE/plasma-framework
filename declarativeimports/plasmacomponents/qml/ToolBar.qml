@@ -199,6 +199,9 @@ Item{
             bottomMargin: frameSvg.margins.bottom
         }
 
+        // We have two containers here so that when we transition from one set of tools to another
+        // we can have a nice transition animation with the old tools in one container and the
+        // new tools in the other
         Item {
             id: containerA
             width: parent.width
