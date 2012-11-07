@@ -35,6 +35,7 @@
 #include <Plasma/ToolTipContent>
 
 #include "abstractjsappletscript.h"
+#include "../declarative/toolboxproxy.h"
 
 class QAction;
 class QmlAppletScript;
@@ -417,6 +418,7 @@ class ContainmentInterface : public APPLETSUPERCLASS
     Q_PROPERTY(bool movableApplets READ hasMovableApplets WRITE setMovableApplets)
     Q_PROPERTY(QString activityName READ activityName NOTIFY activityNameChanged)
     Q_PROPERTY(QString activityId READ activityId NOTIFY activityIdChanged)
+    Q_PROPERTY(ToolBoxProxy* toolBox READ toolBox CONSTANT)
     Q_ENUMS(Type)
 
 public:
@@ -446,6 +448,8 @@ public:
     QString activityName() const;
     QString activityId() const;
 
+    ToolBoxProxy* toolBox();
+
     Q_INVOKABLE QScriptValue screenGeometry(int id) const;
     Q_INVOKABLE QScriptValue availableScreenRegion(int id) const;
 
@@ -463,6 +467,7 @@ protected Q_SLOTS:
 
 private:
     bool m_movableApplets;
+    ToolBoxProxy* m_toolBox;
 };
 
 #endif

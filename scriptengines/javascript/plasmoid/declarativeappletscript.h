@@ -96,6 +96,7 @@ Q_SIGNALS:
 private:
     void callPlasmoidFunction(const QString &functionName, const QScriptValueList &args, ScriptEnv *env);
     Plasma::DeclarativeWidget *m_declarativeWidget;
+    Plasma::DeclarativeWidget *m_toolBoxWidget;
     AppletInterface *m_interface;
     EngineAccess *m_engineAccess;
     QScriptEngine *m_engine;

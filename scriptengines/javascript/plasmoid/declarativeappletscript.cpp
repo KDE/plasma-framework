@@ -68,6 +68,8 @@ QScriptValue constructQPointClass(QScriptEngine *engine);
 void registerSimpleAppletMetaTypes(QScriptEngine *engine);
 DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariantList &args)
     : AbstractJsAppletScript(parent, args),
+      m_declarativeWidget(0),
+      m_toolBoxWidget(0),
       m_interface(0),
       m_engine(0),
       m_env(0),
@@ -164,6 +166,34 @@ void DeclarativeAppletScript::qmlCreationFinished()
             }
         } else {
             pa->setPopupIcon(a->icon());
+        }
+    }
+
+    Plasma::Containment *pc = qobject_cast<Plasma::Containment *>(a);
+    if (pc) {
+        Plasma::PackageStructure::Ptr structure = Plasma::PackageStructure::load("Plasma/Generic");
+        Plasma::Package pkg = Plasma::Package(QString(), "org.kde.toolbox", structure);
+        if (pkg.isValid()) {
+            const QString qmlPath = pkg.filePath("mainscript");
+
+            m_toolBoxWidget = new Plasma::DeclarativeWidget(pc);
+            m_toolBoxWidget->setInitializationDelayed(true);
+            m_toolBoxWidget->setQmlPath(qmlPath);
+
+            QGraphicsLinearLayout *toolBoxScreenLayout = new QGraphicsLinearLayout(m_declarativeWidget);
+            toolBoxScreenLayout->addItem(m_toolBoxWidget);
+            toolBoxScreenLayout->setContentsMargins(0, 0, 0, 0);
+
+            QScriptEngine *engine = m_toolBoxWidget->scriptEngine();
+            if (!engine) {
+                return;
+            }
+            QScriptValue global = engine->globalObject();
+            m_self = engine->newQObject(m_interface);
+            m_self.setScope(global);
+            global.setProperty("plasmoid", m_self);
+        } else {
+            kWarning() << "Could not load org.kde.toolbox package.";
         }
     }
 }

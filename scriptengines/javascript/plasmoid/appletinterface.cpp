@@ -20,7 +20,6 @@
  */
 
 #include "appletinterface.h"
-
 #include "../declarative/appletcontainer.h"
 
 #include <QAction>
@@ -596,7 +595,8 @@ void PopupAppletInterface::sourceAppletPopupEvent(bool show)
 
 ContainmentInterface::ContainmentInterface(AbstractJsAppletScript *parent)
     : APPLETSUPERCLASS(parent),
-      m_movableApplets(true)
+      m_movableApplets(true),
+      m_toolBox(0)
 {
     connect(containment(), SIGNAL(appletRemoved(Plasma::Applet *)), this, SLOT(appletRemovedForward(Plasma::Applet *)));
 
@@ -613,7 +613,7 @@ ContainmentInterface::ContainmentInterface(AbstractJsAppletScript *parent)
      }
 
     qmlRegisterType<AppletContainer>("org.kde.plasma.containments", 0, 1, "AppletContainer");
-
+    qmlRegisterType<ToolBoxProxy>();
 }
 
 QScriptValue ContainmentInterface::applets()
@@ -725,6 +725,15 @@ QString ContainmentInterface::activityName() const
 QString ContainmentInterface::activityId() const
 {
     return containment()->context()->currentActivityId();
+}
+
+ToolBoxProxy* ContainmentInterface::toolBox()
+{
+    if (!m_toolBox) {
+        m_toolBox = new ToolBoxProxy(containment(), this);
+        //m_appletScriptEngine->setToolBox(m_toolBox); // setToolBox() is protected :/
+    }
+    return m_toolBox;
 }
 
 #ifndef USE_JS_SCRIPTENGINE
