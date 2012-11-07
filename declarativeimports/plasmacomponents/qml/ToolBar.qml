@@ -45,6 +45,9 @@ Properties:
               pop         follows page stack pop animation
               replace     follows page stack replace animation
 
+        Object margins:
+          margins from the toolbar to the contents. it had 4 properties: left, top, right, bottom
+
 Methods:
         void setTools( tools, transition ):
         This sets the tools for the ToolBar and the transition type that
@@ -61,6 +64,8 @@ Item{
     width: parent.width
     height: (tools && enabled) ? tools.height + frameSvg.margins.top + frameSvg.margins.bottom : 0
     visible: height > 0
+    property alias margins: frameSvg.margins
+
     Behavior on height {
         PropertyAnimation { 
             id: heightAnimation
@@ -117,12 +122,11 @@ Item{
             }
             containerA.current = !containerA.current
 
-            if(tools) {
+            if (tools) {
                 tools.parent = newContainer
                 tools.visible = true
                 tools.anchors.left = newContainer.left
                 tools.anchors.right = newContainer.right
-                tools.anchors.verticalCenter = newContainer.verticalCenter
             }
 
             switch (transition) {
@@ -189,10 +193,10 @@ Item{
         clip: containerAOpacityAnimation.running || heightAnimation.running
         anchors {
             fill: parent
-            leftMargin: frameSvg.margins.left/2
-            topMargin: frameSvg.margins.top/2
-            rightMargin: frameSvg.margins.right/2
-            bottomMargin: frameSvg.margins.bottom/2
+            leftMargin: frameSvg.margins.left
+            topMargin: frameSvg.margins.top
+            rightMargin: frameSvg.margins.right
+            bottomMargin: frameSvg.margins.bottom
         }
 
         Item {
