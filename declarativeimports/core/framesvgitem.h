@@ -59,6 +59,9 @@ public:
     qreal right() const;
     qreal bottom() const;
 
+public Q_SLOTS:
+    void update();
+
 Q_SIGNALS:
     void marginsChanged();
 

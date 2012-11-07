@@ -31,7 +31,8 @@ FrameSvgItemMargins::FrameSvgItemMargins(Plasma::FrameSvg *frameSvg, QObject *pa
     : QObject(parent),
       m_frameSvg(frameSvg)
 {
-    connect(m_frameSvg, SIGNAL(repaintNeeded()), this, SIGNAL(marginsChanged()));
+    kDebug() << "margins at: " << left() << top() << right() << bottom();
+    connect(m_frameSvg, SIGNAL(repaintNeeded()), this, SLOT(update()));
 }
 
 qreal FrameSvgItemMargins::left() const
@@ -54,6 +55,11 @@ qreal FrameSvgItemMargins::bottom() const
     return m_frameSvg->marginSize(BottomMargin);
 }
 
+void FrameSvgItemMargins::update()
+{
+    emit marginsChanged();
+}
+
 FrameSvgItem::FrameSvgItem(QDeclarativeItem *parent)
     : QDeclarativeItem(parent)
 {
@@ -70,8 +76,9 @@ FrameSvgItem::~FrameSvgItem()
 
 void FrameSvgItem::setImagePath(const QString &path)
 {
-    if (m_frameSvg->imagePath() == path)
+    if (m_frameSvg->imagePath() == path) {
         return;
+    }
 
     m_frameSvg->setImagePath(path);
     m_frameSvg->setElementPrefix(m_prefix);
@@ -88,13 +95,15 @@ QString FrameSvgItem::imagePath() const
 
 void FrameSvgItem::setPrefix(const QString &prefix)
 {
-    if (m_prefix == prefix)
+    if (m_prefix == prefix) {
         return;
+    }
 
     m_frameSvg->setElementPrefix(prefix);
     m_prefix = prefix;
 
     emit prefixChanged();
+    m_margins->update();
     update();
 }
 
