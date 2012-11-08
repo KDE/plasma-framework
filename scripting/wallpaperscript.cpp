@@ -94,22 +94,22 @@ QWidget *WallpaperScript::createConfigurationInterface(QWidget *parent)
     return 0;
 }
 
-void WallpaperScript::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+void WallpaperScript::mouseMoveEvent(QMouseEvent *event)
 {
     Q_UNUSED(event)
 }
 
-void WallpaperScript::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void WallpaperScript::mousePressEvent(QMouseEvent *event)
 {
     Q_UNUSED(event)
 }
 
-void WallpaperScript::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+void WallpaperScript::mouseReleaseEvent(QMouseEvent *event)
 {
     Q_UNUSED(event)
 }
 
-void WallpaperScript::wheelEvent(QGraphicsSceneWheelEvent *event)
+void WallpaperScript::wheelEvent(QWheelEvent *event)
 {
     Q_UNUSED(event)
 }

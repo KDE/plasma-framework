@@ -22,8 +22,8 @@
 
 #include <QHash>
 #include <QEvent>
-#include <QGraphicsSceneMouseEvent>
-#include <QGraphicsSceneWheelEvent>
+#include <QMouseEvent>
+#include <QWheelEvent>
 #include <QString>
 
 #include <kdebug.h>
@@ -76,18 +76,15 @@ void ContainmentActionsPluginsConfig::addPlugin(QEvent *trigger, const QString &
 
 void ContainmentActionsPluginsConfig::addPlugin(Qt::KeyboardModifiers modifiers, Qt::MouseButton button, const QString &name)
 {
-    QGraphicsSceneMouseEvent event(QEvent::GraphicsSceneMousePress);
-    event.setButton(button);
-    event.setModifiers(modifiers);
+    QMouseEvent event(QEvent::MouseButtonPress, QPoint(), button, button, modifiers);
     QString s = ContainmentActions::eventToString(&event);
     d->plugins.insert(s, name);
 }
 
 void ContainmentActionsPluginsConfig::addPlugin(Qt::KeyboardModifiers modifiers, Qt::Orientation wheelDirection, const QString &name)
 {
-    QGraphicsSceneWheelEvent event(QEvent::GraphicsSceneWheel);
-    event.setOrientation(wheelDirection);
-    event.setModifiers(modifiers);
+    //most of those parameters are just fillers
+    QWheelEvent event(QPoint(0,0), 0, Qt::NoButton, modifiers, wheelDirection);
     QString s = ContainmentActions::eventToString(&event);
     d->plugins.insert(s, name);
 }

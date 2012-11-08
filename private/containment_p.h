@@ -21,6 +21,7 @@
 #ifndef CONTAINMENT_P_H
 #define CONTAINMENT_P_H
 
+#include <kactioncollection.h>
 #include <kmenu.h>
 
 #include "plasma.h"
@@ -28,7 +29,6 @@
 #include "corona.h"
 
 static const int INTER_CONTAINMENT_MARGIN = 6;
-static const int TOOLBOX_MARGIN = 150;
 static const int CONTAINMENT_COLUMNS = 2;
 static const int VERTICAL_STACKING_OFFSET = 10000;
 
@@ -44,7 +44,6 @@ namespace Plasma
 
 class AccessAppletJob;
 class Containment;
-class AbstractToolBox;
 
 class ContainmentPrivate
 {
@@ -79,9 +78,6 @@ public:
         dropMenus.clear();
     }
 
-    void createToolBox();
-    void positionToolBox();
-    void updateToolBoxVisibility();
     void triggerShowAddWidgets();
     void requestConfiguration();
     void checkStatus(Plasma::ItemStatus status);
@@ -97,10 +93,7 @@ public:
     void initApplets();
     void checkContainmentFurniture();
     bool regionIsEmpty(const QRectF &region, Applet *ignoredApplet=0) const;
-    void positionPanel(bool force = false);
     bool isPanelContainment() const;
-    QPointF preferredPos(Corona *corona) const;
-    QPointF preferredPanelPos(Corona *corona) const;
     void setLockToolText();
     void appletDeleted(Applet*);
     void appletAppeared(Applet*);
@@ -131,11 +124,10 @@ public:
 
     /**
      * Handles dropped/pasted mimetype data
-     * @param scenePos scene-relative position
      * @param screenPos screen-relative position
      * @param dropEvent the drop event (if null, the clipboard is used instead)
      */
-    void dropData(QPointF scenePos, QPoint screenPos, QGraphicsSceneDragDropEvent *dropEvent = 0);
+    void dropData(QPoint screenPos, QDropEvent *dropEvent = 0);
 
     /**
      * inits the containmentactions if necessary
@@ -171,7 +163,7 @@ public:
     int lastScreen;
     int desktop;
     int lastDesktop;
-    QWeakPointer<AbstractToolBox> toolBox;
+    QList<QAction *> toolBoxActions;
     QString activityId;
     Containment::Type type;
     QHash<KJob*, QPointF> dropPoints;

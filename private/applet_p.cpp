@@ -25,8 +25,7 @@
 
 #include <config-plasma.h>
 
-#include <QGraphicsLayout>
-#include <QGraphicsView>
+#include <QFile>
 #include <QHostInfo>
 #include <qstandardpaths.h>
 
@@ -35,7 +34,6 @@
 #include <kkeysequencewidget.h>
 #include <kstandarddirs.h>
 
-#include "abstracttoolbox.h"
 #include "containment.h"
 #include "corona.h"
 #include "pluginloader.h"
@@ -56,12 +54,10 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
         : appletId(uniqueID),
           q(applet),
           remotingService(0),
-          preferredBackgroundHints(StandardBackground),
-          backgroundHints(NoBackground),
+          backgroundHints(StandardBackground),
           aspectRatioMode(Plasma::KeepAspectRatio),
           immutability(Mutable),
           appletDescription(info ? *info : KPluginInfo(service)),
-          background(0),
           mainConfig(0),
           pendingConstraints(NoConstraint),
           script(0),
@@ -131,7 +127,6 @@ void AppletPrivate::init(const QString &packagePath)
                  << "You probably want to be passing in a Service::Ptr "
                  << "or a QVariantList with a valid storageid as arg[0].";
 #endif
-        q->resize(size);
         return;
     }
 
@@ -140,7 +135,6 @@ void AppletPrivate::init(const QString &packagePath)
         size = s.toSize();
     }
     //kDebug() << "size" << size;
-    q->resize(size);
 
     QString api = appletDescription.property("X-Plasma-API").toString();
 
@@ -205,15 +199,11 @@ void AppletPrivate::init(const QString &packagePath)
     }
 }
 
-void AppletPrivate::setFocus()
-{
-    //kDebug() << "setting focus";
-    q->setFocus(Qt::ShortcutFocusReason);
-}
-
 void AppletPrivate::selectItemToDestroy()
 {
     //FIXME: this will not work nicely with multiple screens and being zoomed out!
+    //TODO: port away from QGV
+    /*
     if (isContainment) {
         QGraphicsView *view = q->view();
         if (view && view->transform().isScaling() &&
@@ -229,14 +219,9 @@ void AppletPrivate::selectItemToDestroy()
                 }
             }
         }
-    }
+    }*/
 
     q->destroy();
-}
-
-void AppletPrivate::updateRect(const QRectF &rect)
-{
-    q->update(rect);
 }
 
 void AppletPrivate::cleanUpAndDelete()
@@ -304,14 +289,14 @@ KActionCollection* AppletPrivate::defaultActions(QObject *parent)
     configAction->setText(i18n("Widget Settings"));
     configAction->setIcon(KDE::icon("configure"));
     configAction->setShortcut(KShortcut("alt+d, s"));
-    configAction->setData(AbstractToolBox::ConfigureTool);
+    configAction->setData(Containment::ConfigureTool);
 
     KAction *closeApplet = actions->addAction("remove");
     closeApplet->setAutoRepeat(false);
     closeApplet->setText(i18n("Remove this Widget"));
     closeApplet->setIcon(KDE::icon("edit-delete"));
     closeApplet->setShortcut(KShortcut("alt+d, r"));
-    closeApplet->setData(AbstractToolBox::DestructiveTool);
+    closeApplet->setData(Containment::DestructiveTool);
 
     KAction *runAssociatedApplication = actions->addAction("run associated application");
     runAssociatedApplication->setAutoRepeat(false);
@@ -320,7 +305,7 @@ KActionCollection* AppletPrivate::defaultActions(QObject *parent)
     runAssociatedApplication->setShortcut(KShortcut("alt+d, t"));
     runAssociatedApplication->setVisible(false);
     runAssociatedApplication->setEnabled(false);
-    runAssociatedApplication->setData(AbstractToolBox::ControlTool);
+    runAssociatedApplication->setData(Containment::ControlTool);
 
     return actions;
 }
@@ -684,7 +669,7 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
     }
 
     if (isContainment) {
-        Corona *corona = qobject_cast<Corona*>(q->scene());
+        Corona *corona = static_cast<Containment*>(q)->corona();
         KConfigGroup containmentConfig;
         //kDebug() << "got a corona, baby?" << (QObject*)corona << (QObject*)q;
 
@@ -733,22 +718,6 @@ QString AppletPrivate::visibleFailureText(const QString &reason)
     return text;
 }
 
-void AppletPrivate::themeChanged()
-{
-    if (background) {
-        //do again the translucent background fallback
-        q->setBackgroundHints(backgroundHints);
-
-        qreal left;
-        qreal right;
-        qreal top;
-        qreal bottom;
-        background->getMargins(left, top, right, bottom);
-        q->setContentsMargins(left, right, top, bottom);
-    }
-    q->update();
-}
-
 void AppletPrivate::resetConfigurationObject()
 {
     // make sure mainConfigGroup exists in all cases
@@ -758,21 +727,12 @@ void AppletPrivate::resetConfigurationObject()
     delete mainConfig;
     mainConfig = 0;
 
-    Corona * corona = qobject_cast<Corona*>(q->scene());
+    if (!q->containment()) {
+        return;
+    }
+    Corona * corona = q->containment()->corona();
     if (corona) {
         corona->requireConfigSync();
-    }
-}
-
-void AppletPrivate::handleDisappeared(AppletHandle *h)
-{
-    if (h == handle.data()) {
-        h->detachApplet();
-        QGraphicsScene *scene = q->scene();
-        if (scene && h->scene() == scene) {
-            scene->removeItem(h);
-        }
-        h->deleteLater();
     }
 }
 

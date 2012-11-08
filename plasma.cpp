@@ -20,8 +20,6 @@
 #include <plasma/plasma.h>
 
 #include <QAction>
-#include <QGraphicsScene>
-#include <QGraphicsView>
 #include <QMenu>
 
 #include "containment.h"
@@ -71,25 +69,6 @@ Direction locationToInverseDirection(Location location)
     }
 
     return Up;
-}
-
-QGraphicsView *viewFor(const QGraphicsItem *item)
-{
-    if (!item || !item->scene()) {
-        return 0;
-    }
-
-    QGraphicsView *found = 0;
-    foreach (QGraphicsView *view, item->scene()->views()) {
-        if (view->sceneRect().intersects(item->sceneBoundingRect()) ||
-            view->sceneRect().contains(item->scenePos())) {
-            if (!found || view->isActiveWindow()) {
-                found = view;
-            }
-        }
-    }
-
-    return found;
 }
 
 } // Plasma namespace

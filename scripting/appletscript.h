@@ -111,11 +111,6 @@ public:
     virtual QList<QAction*> contextualActions();
 
     /**
-     * Returns the shape of the widget, defaults to the bounding rect
-     */
-    virtual QPainterPath shape() const;
-
-    /**
      * Sets whether or not this script has a configuration interface or not
      *
      * @param hasInterface true if the applet is user configurable
@@ -229,21 +224,6 @@ protected:
      * @see Applet
      */
     void showMessage(const QIcon &icon, const QString &message, const MessageButtons buttons);
-
-    /**
-     * @see Applet
-     */
-    void registerAsDragHandle(QGraphicsItem *item);
-
-    /**
-     * @see Applet
-     */
-    void unregisterAsDragHandle(QGraphicsItem *item);
-
-    /**
-     * @see Applet
-     */
-    bool isRegisteredAsDragHandle(QGraphicsItem *item);
 
 private:
     friend class Applet;

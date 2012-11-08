@@ -22,15 +22,13 @@
 #ifndef PLASMA_CONTAINMENT_H
 #define PLASMA_CONTAINMENT_H
 
-#include <QGraphicsItem>
+#include <QObject>
 #include <QWidget>
-#include <QStyleOptionGraphicsItem>
 
 #include <kplugininfo.h>
 #include <ksharedconfig.h>
 
 #include <plasma/applet.h>
-#include <plasma/animator.h>
 
 
 namespace Plasma
@@ -73,27 +71,6 @@ class PLASMA_EXPORT Containment : public Applet
     Q_OBJECT
 
     public:
-        class PLASMA_EXPORT StyleOption : public QStyleOptionGraphicsItem
-        {
-            public:
-                explicit StyleOption();
-                explicit StyleOption(const StyleOption &other);
-                explicit StyleOption(const QStyleOptionGraphicsItem &other);
-
-                enum StyleOptionType {
-                    Type = SO_CustomBase + 1
-                };
-                enum StyleOptionVersion {
-                    Version = QStyleOptionGraphicsItem::Version + 1
-                };
-
-                /**
-                 * The View, if any, that this containment is currently
-                 * being rendered into. Note: this may be NULL, so be
-                 * sure to check it before using it!
-                 */
-                Plasma::View *view;
-        };
 
         enum Type {
             NoContainmentType = -1,  /**< @internal */
@@ -104,14 +81,24 @@ class PLASMA_EXPORT Containment : public Applet
             CustomPanelContainment = 128 /**< A customized desktop panel */
         };
 
+        enum ToolType {
+            AddTool = 0,
+            ConfigureTool = 100,
+            ControlTool = 200,
+            MiscTool = 300,
+            DestructiveTool = 400,
+            UserToolType = DestructiveTool + 1000
+        };
+        Q_ENUMS(ToolType)
+
         /**
-         * @param parent the QGraphicsItem this applet is parented to
+         * @param parent the QObject this applet is parented to
          * @param serviceId the name of the .desktop file containing the
          *      information about the widget
          * @param containmentId a unique id used to differentiate between multiple
          *      instances of the same Applet type
          */
-        explicit Containment(QGraphicsItem *parent = 0,
+        explicit Containment(QObject *parent = 0,
                              const QString &serviceId = QString(),
                              uint containmentId = 0);
 
@@ -300,29 +287,6 @@ class PLASMA_EXPORT Containment : public Applet
         void removeToolBoxAction(QAction *action);
 
         /**
-         * Sets the open or closed state of the Containment's toolbox
-         *
-         * @param open true to open the ToolBox, false to close it
-         */
-        void setToolBoxOpen(bool open);
-
-        /**
-         * @return true if the toolbox is open
-         * @since 4.5
-         */
-        bool isToolBoxOpen() const;
-
-        /**
-         * Open the Containment's toolbox
-         */
-        void openToolBox();
-
-        /**
-         * Closes Containment's toolbox
-         */
-        void closeToolBox();
-
-        /**
          * associate actions with this widget, including ones added after this call.
          * needed to make keyboard shortcuts work.
          */
@@ -408,6 +372,9 @@ class PLASMA_EXPORT Containment : public Applet
          * @since 4.6
          */
         KConfigGroup containmentActionsConfig();
+
+        void setAcceptDrops(bool accept);
+        bool acceptDrops() const;
 
 Q_SIGNALS:
         /**
@@ -542,59 +509,23 @@ Q_SIGNALS:
          */
         virtual void restoreContents(KConfigGroup &group);
 
-        void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-        void mousePressEvent(QGraphicsSceneMouseEvent *event);
-        void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-        void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+        //FIXME: events should go away
+        void contextMenuEvent(QContextMenuEvent *event);
         void keyPressEvent(QKeyEvent *event);
-        void wheelEvent(QGraphicsSceneWheelEvent *event);
-        QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+        void wheelEvent(QWheelEvent *event);
+        void dropEvent(QDropEvent *event);
 
         /**
          * @reimp
-         * @sa QGraphicsItem::dragEnterEvent()
+         * @sa QObject::resizeEvent()
          */
-        void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
+        void resizeEvent(QResizeEvent *event);
 
-        /**
-         * @reimp
-         * @sa QGraphicsItem::dragLeaveEvent()
-         */
-        void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
-
-        /**
-         * @reimp
-         * @sa QGraphicsItem::dragMoveEvent()
-         */
-        void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
-
-        /**
-         * @reimp
-         * @sa QGraphicsItem::dropEvent()
-         */
-        void dropEvent(QGraphicsSceneDragDropEvent *event);
-
-        /**
-         * @reimp
-         * @sa QGraphicsItem::resizeEvent()
-         */
-        void resizeEvent(QGraphicsSceneResizeEvent *event);
-
-        /**
-         * Sets a custom ToolBox
-         * if there was an old one it will be deleted
-         * and the new one won't have any actions in it
-         *
-         * @param item the new toolbox item
-         * @since 4.4
-         */
-        void setToolBox(AbstractToolBox *toolBox);
-
-        /**
-         * @return the ToolBox
-         * @since 4.4
-         */
-        AbstractToolBox *toolBox() const;
+        //FIXME: kill those
+        QSizeF maximumSize() const;
+        void setMaximumSize(QSizeF size);
+        QSizeF minimumSize() const;
+        void setMinimumSize(QSizeF size);
 
     private:
         /**
@@ -609,9 +540,7 @@ Q_SIGNALS:
 
         Q_PRIVATE_SLOT(d, void appletDeleted(Plasma::Applet*))
         Q_PRIVATE_SLOT(d, void triggerShowAddWidgets())
-        Q_PRIVATE_SLOT(d, void positionToolBox())
         Q_PRIVATE_SLOT(d, void requestConfiguration())
-        Q_PRIVATE_SLOT(d, void updateToolBoxVisibility())
         Q_PRIVATE_SLOT(d, void showDropZoneDelayed())
         Q_PRIVATE_SLOT(d, void checkStatus(Plasma::ItemStatus))
         Q_PRIVATE_SLOT(d, void remoteAppletReady(Plasma::AccessAppletJob *))

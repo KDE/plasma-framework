@@ -23,13 +23,14 @@
 #define PLASMA_APPLET_P_H
 
 #include <QBasicTimer>
-#include <QGraphicsProxyWidget>
 
 #include <kactioncollection.h>
 #include <kconfigdialog.h>
+#include <kconfigskeleton.h>
+#include <kservice.h>
+#include <kplugininfo.h>
 
-#include "plasma/animator.h"
-#include "plasma/private/applethandle_p.h"
+#include "plasma/applet.h"
 #include "plasma/dataengineconsumer.h"
 #include "plasma/ui_publish.h"
 
@@ -100,18 +101,14 @@ public:
      */
     void setIsContainment(bool isContainment, bool forceUpdate = false);
 
-    void handleDisappeared(AppletHandle *handle);
     QString globalName() const;
     QString instanceName();
     void scheduleConstraintsUpdate(Plasma::Constraints c);
     void scheduleModificationNotification();
     KConfigGroup *mainConfigGroup();
     QString visibleFailureText(const QString &reason);
-    void themeChanged();
     void resetConfigurationObject();
     void selectItemToDestroy();
-    void updateRect(const QRectF &rect);
-    void setFocus();
     void addGlobalShortcutsPage(KConfigDialog *dialog);
     void addPublishPage(KConfigDialog *dialog);
     void configDialogFinished();
@@ -140,7 +137,6 @@ public:
 
     // applet attributes
     Service *remotingService;
-    BackgroundHints preferredBackgroundHints;
     BackgroundHints backgroundHints;
     AspectRatioMode aspectRatioMode;
     ImmutabilityType immutability;
@@ -151,8 +147,6 @@ public:
     QString name;
 
     // bookkeeping
-    QSet<QGraphicsItem*> registeredAsDragHandle;
-    Plasma::FrameSvg *background;
     KConfigGroup *mainConfig;
     Plasma::Constraints pendingConstraints;
 
@@ -160,7 +154,6 @@ public:
     AppletScript *script;
     Package *package;
     ConfigLoader *configLoader;
-    QWeakPointer<AppletHandle> handle;
 
     // actions stuff; put activationAction into actions?
     KActionCollection *actions;
@@ -181,7 +174,6 @@ public:
 
     // timerEvent bookkeeping
     QBasicTimer constraintsTimer;
-    QBasicTimer busyWidgetTimer;
     QBasicTimer *modificationsTimer;
 
     // a great green field of booleans :)

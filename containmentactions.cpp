@@ -27,9 +27,9 @@
 #include <QMetaEnum>
 #include <QMouseEvent>
 #include <QWheelEvent>
-#include <QGraphicsSceneContextMenuEvent>
-#include <QGraphicsSceneMouseEvent>
-#include <QGraphicsSceneWheelEvent>
+#include <QContextMenuEvent>
+#include <QMouseEvent>
+#include <QWheelEvent>
 
 #include <kdebug.h>
 #include <klocalizedstring.h>
@@ -169,19 +169,9 @@ QString ContainmentActions::eventToString(QEvent *event)
     switch (event->type()) {
         case QEvent::MouseButtonPress:
         case QEvent::MouseButtonRelease:
+        case QEvent::MouseButtonDblClick:
         {
             QMouseEvent *e = static_cast<QMouseEvent*>(event);
-            int m = QObject::staticQtMetaObject.indexOfEnumerator("MouseButtons");
-            QMetaEnum mouse = QObject::staticQtMetaObject.enumerator(m);
-            trigger += mouse.valueToKey(e->button());
-            modifiers = e->modifiers();
-            break;
-        }
-        case QEvent::GraphicsSceneMousePress:
-        case QEvent::GraphicsSceneMouseRelease:
-        case QEvent::GraphicsSceneMouseDoubleClick:
-        {
-            QGraphicsSceneMouseEvent *e = static_cast<QGraphicsSceneMouseEvent*>(event);
             int m = QObject::staticQtMetaObject.indexOfEnumerator("MouseButtons");
             QMetaEnum mouse = QObject::staticQtMetaObject.enumerator(m);
             trigger += mouse.valueToKey(e->button());
@@ -198,17 +188,6 @@ QString ContainmentActions::eventToString(QEvent *event)
             modifiers = e->modifiers();
             break;
         }
-        case QEvent::GraphicsSceneWheel:
-        {
-            QGraphicsSceneWheelEvent *e = static_cast<QGraphicsSceneWheelEvent*>(event);
-            int o = QObject::staticQtMetaObject.indexOfEnumerator("Orientations");
-            QMetaEnum orient = QObject::staticQtMetaObject.enumerator(o);
-            trigger = "wheel:";
-            trigger += orient.valueToKey(e->orientation());
-            modifiers = e->modifiers();
-            break;
-        }
-        case QEvent::GraphicsSceneContextMenu:
         case QEvent::ContextMenu:
         {
             int m = QObject::staticQtMetaObject.indexOfEnumerator("MouseButtons");
@@ -233,23 +212,23 @@ void ContainmentActions::paste(QPointF scenePos, QPoint screenPos)
 {
     Containment *c = containment();
     if (c) {
-        c->d->dropData(scenePos, screenPos);
+        c->d->dropData(screenPos);
     }
 }
 
 QPoint screenPosFromEvent(QEvent *event)
 {
     switch (event->type()) {
-        case QEvent::GraphicsSceneMousePress:
-        case QEvent::GraphicsSceneMouseRelease:
-        case QEvent::GraphicsSceneMouseDoubleClick:
-            return static_cast<QGraphicsSceneMouseEvent*>(event)->screenPos();
+        case QEvent::MouseButtonPress:
+        case QEvent::MouseButtonRelease:
+        case QEvent::MouseButtonDblClick:
+            return static_cast<QMouseEvent*>(event)->globalPos();
             break;
-        case QEvent::GraphicsSceneWheel:
-            return static_cast<QGraphicsSceneWheelEvent*>(event)->screenPos();
+        case QEvent::Wheel:
+            return static_cast<QWheelEvent*>(event)->globalPos();
             break;
-        case QEvent::GraphicsSceneContextMenu:
-            return static_cast<QGraphicsSceneContextMenuEvent*>(event)->screenPos();
+        case QEvent::ContextMenu:
+            return static_cast<QContextMenuEvent*>(event)->globalPos();
             break;
         default:
             break;
@@ -261,16 +240,16 @@ QPoint screenPosFromEvent(QEvent *event)
 QPointF scenePosFromEvent(QEvent *event)
 {
     switch (event->type()) {
-        case QEvent::GraphicsSceneMousePress:
-        case QEvent::GraphicsSceneMouseRelease:
-        case QEvent::GraphicsSceneMouseDoubleClick:
-            return static_cast<QGraphicsSceneMouseEvent*>(event)->scenePos();
+        case QEvent::MouseButtonPress:
+        case QEvent::MouseButtonRelease:
+        case QEvent::MouseButtonDblClick:
+            return static_cast<QMouseEvent*>(event)->pos();
             break;
-        case QEvent::GraphicsSceneWheel:
-            return static_cast<QGraphicsSceneWheelEvent*>(event)->scenePos();
+        case QEvent::Wheel:
+            return static_cast<QWheelEvent*>(event)->pos();
             break;
-        case QEvent::GraphicsSceneContextMenu:
-            return static_cast<QGraphicsSceneContextMenuEvent*>(event)->scenePos();
+        case QEvent::ContextMenu:
+            return static_cast<QContextMenuEvent*>(event)->pos();
             break;
         default:
             break;
@@ -281,7 +260,7 @@ QPointF scenePosFromEvent(QEvent *event)
 
 bool isNonSceneEvent(QEvent *event)
 {
-    return dynamic_cast<QGraphicsSceneEvent *>(event) == 0;
+    return dynamic_cast<QEvent *>(event) == 0;
 }
 
 QPoint ContainmentActions::popupPosition(const QSize &s, QEvent *event)
@@ -300,8 +279,8 @@ QPoint ContainmentActions::popupPosition(const QSize &s, QEvent *event)
     QPoint pos = screenPos;
     if (applet && containment()->d->isPanelContainment()) {
         pos = applet->popupPosition(s);
-        if (event->type() != QEvent::GraphicsSceneContextMenu ||
-            static_cast<QGraphicsSceneContextMenuEvent *>(event)->reason() == QGraphicsSceneContextMenuEvent::Mouse) {
+        if (event->type() != QEvent::ContextMenu ||
+            static_cast<QContextMenuEvent *>(event)->reason() == QContextMenuEvent::Mouse) {
             // if the menu pops up way away from the mouse press, then move it
             // to the mouse press
             if (c->formFactor() == Vertical) {

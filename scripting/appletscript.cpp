@@ -86,17 +86,6 @@ QList<QAction*> AppletScript::contextualActions()
     return QList<QAction*>();
 }
 
-QPainterPath AppletScript::shape() const
-{
-    if (applet()) {
-        QPainterPath path;
-        path.addRect(applet()->boundingRect());
-        return path;
-    }
-
-    return QPainterPath();
-}
-
 void AppletScript::setHasConfigurationInterface(bool hasInterface)
 {
     if (applet()) {
@@ -155,28 +144,6 @@ void AppletScript::showMessage(const QIcon &icon, const QString &message, const 
     if (applet()) {
         applet()->showMessage(icon, message, buttons);
     }
-}
-
-void AppletScript::registerAsDragHandle(QGraphicsItem *item)
-{
-    if (applet()) {
-        applet()->registerAsDragHandle(item);
-    }
-}
-
-void AppletScript::unregisterAsDragHandle(QGraphicsItem *item)
-{
-    if (applet()) {
-        applet()->unregisterAsDragHandle(item);
-    }
-}
-
-bool AppletScript::isRegisteredAsDragHandle(QGraphicsItem *item)
-{
-    if (applet()) {
-        return applet()->isRegisteredAsDragHandle(item);
-    }
-    return false;
 }
 
 void AppletScript::configChanged()

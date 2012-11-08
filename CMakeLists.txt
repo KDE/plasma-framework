@@ -105,7 +105,6 @@ set(plasma_LIB_SRCS
     configloader.cpp
     containmentactions.cpp
     containmentactionspluginsconfig.cpp
-    coronabase.cpp
     datacontainer.cpp
     dataengine.cpp
     dataengineconsumer.cpp
@@ -168,7 +167,8 @@ set(plasma_LIB_SRCS
     svg.cpp
     theme.cpp
     tooltipcontent.cpp
-    tooltipmanager.cpp
+    #FIXME: re-enable
+    #tooltipmanager.cpp
     version.cpp
     wallpaper.cpp
 
@@ -188,75 +188,31 @@ set(plasma_LIB_SRCS
     private/qtjolie-branch/qtjolie/serverthread.cpp
 
     #FIXME: all these must move into the qgv library
-    private/themedwidgetinterface.cpp
-    widgets/iconwidget.cpp
-    abstracttoolbox.cpp
-    view.cpp
+    #view.cpp
     applet.cpp
     containment.cpp
     corona.cpp
-    dialog.cpp
-    popupapplet.cpp
-    private/applethandle.cpp
+    #dialog.cpp
+    #should popupapplet still exist?
+    #popupapplet.cpp
 )
 
-set (plasmaqgv_LIB_SRCS
-    delegate.cpp
-    #FIXME: this is duplicated with libplasma because iconwidget requires it!
-    private/themedwidgetinterface.cpp
-
-    graphicsview/private/graphicsviewappletprivate.cpp
-    animator.cpp
-    animations/animation.cpp
-    animations/easinganimation.cpp
-    animations/fade.cpp
-    animations/grow.cpp
-    animations/pendulumcurve.cpp
-    animations/pixmaptransition.cpp
-    animations/pulser.cpp
-    animations/rotation.cpp
-    animations/rotationstacked.cpp
-    animations/slide.cpp
-    animations/stackedlayout.cpp
-    animations/geometry.cpp
-    animations/widgetsnapshot.cpp
-    animations/zoom.cpp
-
-    private/declarative/declarativenetworkaccessmanagerfactory.cpp
-    private/declarative/dataenginebindings.cpp
-    graphicsview/private/animablegraphicswebview.cpp
-    graphicsview/private/focusindicator.cpp
-    graphicsview/private/nativetabbar.cpp
-    graphicsview/private/style.cpp
-    graphicsview/private/kineticscroll.cpp
-
-    widgets/label.cpp
-    widgets/scrollbar.cpp
-    widgets/svgwidget.cpp
-    widgets/scrollwidget.cpp
-    widgets/textedit.cpp
-    widgets/textbrowser.cpp
-    widgets/busywidget.cpp
-    widgets/checkbox.cpp
-    widgets/combobox.cpp
-    widgets/declarativewidget.cpp
-    widgets/flashinglabel.cpp
-    widgets/frame.cpp
-    widgets/groupbox.cpp
-    widgets/itembackground.cpp
-    widgets/lineedit.cpp
-    widgets/meter.cpp
-    widgets/pushbutton.cpp
-    widgets/radiobutton.cpp
-    widgets/signalplotter.cpp
-    widgets/slider.cpp
-    widgets/spinbox.cpp
-    widgets/toolbutton.cpp
-    widgets/separator.cpp
-    widgets/tabbar.cpp
-    widgets/treeview.cpp
-    widgets/webview.cpp
-)
+#TODO: all those files will have to be deleted
+# set (plasmaqgv_LIB_SRCS
+#     dialog.cpp
+#     view.cpp
+#     private/themedwidgetinterface.cpp
+#     widgets/iconwidget.cpp
+#     #FIXME: this is duplicated with libplasma because iconwidget requires it!
+#     private/themedwidgetinterface.cpp
+# 
+#     graphicsview/private/graphicsviewappletprivate.cpp
+# 
+#     private/declarative/declarativenetworkaccessmanagerfactory.cpp
+#     private/declarative/dataenginebindings.cpp
+# 
+#     widgets/declarativewidget.cpp
+# )
 
 kconfig_add_kcfg_files(plasma_LIB_SRCS data/kconfigxt/libplasma-theme-global.kcfgc)
 
@@ -272,27 +228,13 @@ kde4_add_ui_files(plasma_LIB_SRCS
 #)
 
 
-if (PHONON_FOUND)
-    message(STATUS "Adding support for Phonon to libplasma")
-    include_directories(${KDE4_PHONON_INCLUDES})
-    set(plasmaqgv_LIB_SRCS
-        ${plasmaqgv_LIB_SRCS}
-        widgets/videowidget.cpp)
-endif(PHONON_FOUND)
-
 kde4_add_library(plasma ${LIBRARY_TYPE} ${plasma_LIB_SRCS})
-
-kde4_add_library(plasmaqgv ${LIBRARY_TYPE} ${plasmaqgv_LIB_SRCS})
 
 target_link_libraries(plasma ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
                              ${QT_QTSCRIPT_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTSQL_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY}
                              ${KDE4_KDEUI_LIBS} kdnssd threadweaver kauth kwindowsystem ${PLASMA_EXTRA_LIBS} kcoreaddons ${QtMimeTypes_LIBRARY})
 #FIXME gpgme++ is in kdepimlibs, neeeds to be elsewhere
 target_link_libraries(plasma ${KDEPIMLIBS_GPGMEPP_LIBS} kdeclarative karchive)
-
-target_link_libraries(plasmaqgv plasma ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
-                             ${QT_QTSCRIPT_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY}
-                             ${KDE4_KDEUI_LIBS} kdeclarative ${PLASMA_EXTRA_LIBS} kcoreaddons ${QtMimeTypes_LIBRARY})
 
 if(QCA2_FOUND)
    target_link_libraries(plasma ${QCA2_LIBRARIES})
@@ -301,10 +243,6 @@ endif(QCA2_FOUND)
 if(X11_FOUND)
    target_link_libraries(plasma ${X11_LIBRARIES})
 endif(X11_FOUND)
-
-if(PHONON_FOUND)
-   target_link_libraries(plasmaqgv ${KDE4_PHONON_LIBS})
-endif(PHONON_FOUND)
 
 if(DL_LIBRARY)
     target_link_libraries(plasma ${DL_LIBRARY})
@@ -318,13 +256,7 @@ set_target_properties(plasma PROPERTIES
                              SOVERSION 4
                       )
 
-set_target_properties(plasmaqgv PROPERTIES
-                             VERSION 1.0.0
-                             SOVERSION 1
-                      )
-
 install(TARGETS plasma EXPORT kdelibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
-install(TARGETS plasmaqgv EXPORT kdelibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 generate_export_header(plasma)
@@ -332,9 +264,6 @@ generate_export_header(plasma)
 set(plasma_LIB_INCLUDES
     abstractdialogmanager.h
     abstractrunner.h
-    abstracttoolbox.h
-    animations/animation.h
-    animator.h
     applet.h
     configloader.h
     containment.h
@@ -343,7 +272,6 @@ set(plasma_LIB_INCLUDES
     corona.h
     datacontainer.h
     dataengine.h
-    delegate.h
     dialog.h
     pluginloader.h
     paintutils.h
@@ -380,35 +308,6 @@ install(FILES
         ${plasma_LIB_INCLUDES}
         DESTINATION ${INCLUDE_INSTALL_DIR}/plasma COMPONENT Devel)
 
-install(FILES
-    widgets/checkbox.h
-    widgets/combobox.h
-    widgets/declarativewidget.h
-    widgets/flashinglabel.h
-    widgets/frame.h
-    widgets/groupbox.h
-    widgets/iconwidget.h
-    widgets/itembackground.h
-    widgets/label.h
-    widgets/lineedit.h
-    widgets/meter.h
-    widgets/pushbutton.h
-    widgets/toolbutton.h
-    widgets/radiobutton.h
-    widgets/scrollbar.h
-    widgets/signalplotter.h
-    widgets/slider.h
-    widgets/spinbox.h
-    widgets/busywidget.h
-    widgets/separator.h
-    widgets/svgwidget.h
-    widgets/scrollwidget.h
-    widgets/tabbar.h
-    widgets/textbrowser.h
-    widgets/treeview.h
-    widgets/textedit.h
-    widgets/webview.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets COMPONENT Devel)
 
 install(FILES
     scripting/appletscript.h
@@ -418,19 +317,7 @@ install(FILES
     scripting/scriptengine.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/scripting COMPONENT Devel)
 
-if(PHONON_FOUND)
-    install (FILES
-        widgets/videowidget.h
-        DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets COMPONENT Devel)
-endif(PHONON_FOUND)
-
 install(FILES
-    animations/animation.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/animations COMPONENT Devel)
-
-
-install(FILES
-   data/servicetypes/plasma-animator.desktop
    data/servicetypes/plasma-applet.desktop
    data/servicetypes/plasma-applet-popupapplet.desktop
    data/servicetypes/plasma-containment.desktop
@@ -440,7 +327,6 @@ install(FILES
    data/servicetypes/plasma-runner.desktop
    data/servicetypes/plasma-scriptengine.desktop
    data/servicetypes/plasma-service.desktop
-   data/servicetypes/plasma-toolbox.desktop
    data/servicetypes/plasma-wallpaper.desktop
    DESTINATION ${SERVICETYPES_INSTALL_DIR})
 

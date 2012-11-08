@@ -25,17 +25,18 @@
 #include <kactioncollection.h>
 
 class KShortcutsDialog;
+class QGraphicsWidget;
 
 namespace Plasma
 {
 
 class Containment;
 
-class CoronaBasePrivate
+class CoronaPrivate
 {
 public:
-    CoronaBasePrivate(CoronaBase *corona);
-    ~CoronaBasePrivate();
+    CoronaPrivate(Corona *corona);
+    ~CoronaPrivate();
 
     void init();
     void showShortcutConfig();
@@ -50,7 +51,7 @@ public:
 
     static bool s_positioningContainments;
 
-    CoronaBase *q;
+    Corona *q;
     ImmutabilityType immutability;
     QString mimetype;
     QString configName;

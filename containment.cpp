@@ -28,13 +28,10 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QFile>
-#include <QGraphicsSceneContextMenuEvent>
-#include <QGraphicsView>
+#include <QContextMenuEvent>
 #include <QMimeData>
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
-#include <QGraphicsLayout>
-#include <QGraphicsLinearLayout>
 #include <qtemporaryfile.h>
 
 #include <kaction.h>
@@ -52,8 +49,6 @@
 #include "kio/scheduler.h"
 #endif
 
-#include "abstracttoolbox.h"
-#include "animator.h"
 #include "containmentactions.h"
 #include "containmentactionspluginsconfig.h"
 #include "corona.h"
@@ -73,31 +68,7 @@
 namespace Plasma
 {
 
-Containment::StyleOption::StyleOption()
-    : QStyleOptionGraphicsItem(),
-      view(0)
-{
-    version = Version;
-    type = Type;
-}
-
-Containment::StyleOption::StyleOption(const Containment::StyleOption & other)
-    : QStyleOptionGraphicsItem(other),
-      view(other.view)
-{
-    version = Version;
-    type = Type;
-}
-
-Containment::StyleOption::StyleOption(const QStyleOptionGraphicsItem &other)
-    : QStyleOptionGraphicsItem(other),
-      view(0)
-{
-    version = Version;
-    type = Type;
-}
-
-Containment::Containment(QGraphicsItem *parent,
+Containment::Containment(QObject *parent,
                          const QString &serviceId,
                          uint containmentId)
     : Applet(parent, serviceId, containmentId),
@@ -148,11 +119,7 @@ void Containment::init()
         return;
     }
 
-    setCacheMode(NoCache);
-    setFlag(QGraphicsItem::ItemIsMovable, false);
-    setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
     setAcceptDrops(true);
-    setAcceptsHoverEvents(true);
 
     if (d->type == NoContainmentType) {
         setContainmentType(DesktopContainment);
@@ -273,10 +240,7 @@ void Containment::restore(KConfigGroup &group)
 
 
     resize(geo.size());
-    //are we an offscreen containment?
-    if (containmentType() != PanelContainment && containmentType() != CustomPanelContainment && geo.right() < 0) {
-        corona()->addOffscreenWidget(this);
-    }
+    //FIXME: unbreak containments just for dashboard
 
     setLocation((Plasma::Location)group.readEntry("location", (int)d->location));
     setFormFactor((Plasma::FormFactor)group.readEntry("formfactor", (int)d->formFactor));
@@ -292,10 +256,6 @@ void Containment::restore(KConfigGroup &group)
 
     setWallpaper(group.readEntry("wallpaperplugin", ContainmentPrivate::defaultWallpaper),
                  group.readEntry("wallpaperpluginmode", ContainmentPrivate::defaultWallpaperMode));
-
-    if (d->toolBox) {
-        d->toolBox.data()->restore(group);
-    }
 
     KConfigGroup cfg;
     if (containmentType() == PanelContainment || containmentType() == CustomPanelContainment) {
@@ -383,10 +343,6 @@ void Containment::save(KConfigGroup &g) const
     group.writeEntry("location", (int)d->location);
     group.writeEntry("activityId", d->activityId);
 
-    if (d->toolBox) {
-        d->toolBox.data()->save(group);
-    }
-
 
     if (d->wallpaper) {
         group.writeEntry("wallpaperplugin", d->wallpaper->pluginName());
@@ -450,86 +406,13 @@ void Containment::setContainmentType(Containment::Type type)
         return;
     }
 
-    delete d->toolBox.data();
     d->type = type;
     d->checkContainmentFurniture();
 }
 
 Corona *Containment::corona() const
 {
-    return qobject_cast<Corona*>(scene());
-}
-
-void Containment::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
-{
-    event->ignore();
-    if (d->wallpaper && d->wallpaper->isInitialized()) {
-        QGraphicsItem *item = scene()->itemAt(event->scenePos());
-        if (item == this) {
-            d->wallpaper->mouseMoveEvent(event);
-        }
-    }
-
-    if (!event->isAccepted()) {
-        event->accept();
-        Applet::mouseMoveEvent(event);
-    }
-}
-
-void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{
-    //close a toolbox if exists, to emulate qmenu behavior
-    if (d->toolBox) {
-        d->toolBox.data()->setShowing(false);
-    }
-    event->ignore();
-    if (d->appletAt(event->scenePos())) {
-        return; //no unexpected click-throughs
-    }
-
-    if (d->wallpaper && d->wallpaper->isInitialized() && !event->isAccepted()) {
-        d->wallpaper->mousePressEvent(event);
-    }
-
-    if (event->isAccepted()) {
-        setFocus(Qt::MouseFocusReason);
-    } else if (event->button() == Qt::RightButton && event->modifiers() == Qt::NoModifier) {
-        // we'll catch this in the context menu even
-        Applet::mousePressEvent(event);
-    } else {
-        QString trigger = ContainmentActions::eventToString(event);
-        if (d->prepareContainmentActions(trigger, event->screenPos())) {
-            d->actionPlugins()->value(trigger)->contextEvent(event);
-        }
-
-        if (!event->isAccepted()) {
-            Applet::mousePressEvent(event);
-        }
-    }
-}
-
-void Containment::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
-{
-    event->ignore();
-
-    if (d->appletAt(event->scenePos())) {
-        return; //no unexpected click-throughs
-    }
-
-    QString trigger = ContainmentActions::eventToString(event);
-
-    if (d->wallpaper && d->wallpaper->isInitialized()) {
-        d->wallpaper->mouseReleaseEvent(event);
-    }
-
-    if (!event->isAccepted() && isContainment()) {
-        if (d->prepareContainmentActions(trigger, event->screenPos())) {
-            d->actionPlugins()->value(trigger)->contextEvent(event);
-        }
-
-        event->accept();
-        Applet::mouseReleaseEvent(event);
-    }
+    return qobject_cast<Corona*>(parent());
 }
 
 void Containment::showDropZone(const QPoint pos)
@@ -541,24 +424,21 @@ void Containment::showDropZone(const QPoint pos)
 void Containment::showContextMenu(const QPointF &containmentPos, const QPoint &screenPos)
 {
     //kDebug() << containmentPos << screenPos;
-    QGraphicsSceneContextMenuEvent gvevent;
-    gvevent.setScreenPos(screenPos);
-    gvevent.setScenePos(mapToScene(containmentPos));
-    gvevent.setPos(containmentPos);
-    gvevent.setReason(QGraphicsSceneContextMenuEvent::Mouse);
-    gvevent.setWidget(view());
+    QContextMenuEvent gvevent(QContextMenuEvent::Mouse, screenPos);
+
+    //FIXME: do we need views here? 
+    //gvevent.setWidget(view());
     contextMenuEvent(&gvevent);
 }
 
-void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+void Containment::contextMenuEvent(QContextMenuEvent *event)
 {
     if (!isContainment() || !KAuthorized::authorizeKAction("plasma/containment_context_menu")) {
-        Applet::contextMenuEvent(event);
         return;
     }
 
     KMenu desktopMenu;
-    Applet *applet = d->appletAt(event->scenePos());
+    Applet *applet = d->appletAt(event->pos());
     //kDebug() << "context menu event " << (QObject*)applet;
 
     if (applet) {
@@ -576,20 +456,20 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     }
 
     if (!menu->isEmpty()) {
-        QPoint pos = event->screenPos();
+        QPoint pos = event->globalPos();
         if (applet && d->isPanelContainment()) {
             menu->adjustSize();
             pos = applet->popupPosition(menu->size());
-            if (event->reason() == QGraphicsSceneContextMenuEvent::Mouse) {
+            if (event->reason() == QContextMenuEvent::Mouse) {
                 // if the menu pops up way away from the mouse press, then move it
                 // to the mouse press
                 if (d->formFactor == Vertical) {
-                    if (pos.y() + menu->height() < event->screenPos().y()) {
-                        pos.setY(event->screenPos().y());
+                    if (pos.y() + menu->height() < event->globalPos().y()) {
+                        pos.setY(event->globalPos().y());
                     }
                 } else if (d->formFactor == Horizontal) {
-                    if (pos.x() + menu->width() < event->screenPos().x()) {
-                        pos.setX(event->screenPos().x());
+                    if (pos.x() + menu->width() < event->globalPos().x()) {
+                        pos.setX(event->globalPos().x());
                     }
                 }
             }
@@ -597,8 +477,6 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 
         menu->exec(pos);
         event->accept();
-    } else {
-        Applet::contextMenuEvent(event);
     }
 }
 
@@ -610,16 +488,6 @@ void Containment::setFormFactor(FormFactor formFactor)
 
     //kDebug() << "switching FF to " << formFactor;
     d->formFactor = formFactor;
-
-    if (isContainment() &&
-        (d->type == PanelContainment || d->type == CustomPanelContainment)) {
-        // we are a panel and we have chaged our orientation
-        d->positionPanel(true);
-    }
-
-    if (d->toolBox) {
-        d->toolBox.data()->reposition();
-    }
 
     updateConstraints(Plasma::FormFactorConstraint);
 
@@ -720,7 +588,6 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
         disconnect(applet, 0, currentContainment, 0);
         KConfigGroup oldConfig = applet->config();
         currentContainment->d->applets.removeAll(applet);
-        applet->setParentItem(this);
         applet->setParent(this);
 
         // now move the old config to the new location
@@ -731,7 +598,6 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
 
         disconnect(applet, SIGNAL(activate()), currentContainment, SIGNAL(activate()));
     } else {
-        applet->setParentItem(this);
         applet->setParent(this);
     }
 
@@ -754,7 +620,6 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
         d->appletAppeared(applet);
     }
 
-    applet->setFlag(QGraphicsItem::ItemIsMovable, true);
     applet->updateConstraints(Plasma::AllConstraints);
     if (!delayInit) {
         applet->flushPendingConstraintsEvents();
@@ -869,114 +734,16 @@ QStringList Containment::listContainmentTypes()
     return types.toList();
 }
 
-void Containment::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
-{
-    //kDebug() << immutability() << Mutable << (immutability() == Mutable);
-    event->setAccepted(immutability() == Mutable &&
-                       (event->mimeData()->hasFormat(static_cast<Corona*>(scene())->appletMimeType()) ||
-                        event->mimeData()->hasUrls()));
-
-    if (!event->isAccepted()) {
-        // check to see if we have an applet that accepts the format.
-        QStringList formats = event->mimeData()->formats();
-
-        foreach (const QString &format, formats) {
-            KPluginInfo::List appletList = Applet::listAppletInfoForMimeType(format);
-            if (!appletList.isEmpty()) {
-                event->setAccepted(true);
-                break;
-            }
-        }
-
-        if (!event->isAccepted()) {
-            foreach (const QString &format, formats) {
-                KPluginInfo::List wallpaperList = Wallpaper::listWallpaperInfoForMimeType(format);
-                if (!wallpaperList.isEmpty()) {
-                    event->setAccepted(true);
-                    break;
-                }
-            }
-        }
-    }
-
-    if (event->isAccepted()) {
-        if (d->dropZoneStarted) {
-            showDropZone(event->pos().toPoint());
-        } else {
-            if (!d->showDropZoneDelayTimer) {
-                d->showDropZoneDelayTimer = new QTimer(this);
-                d->showDropZoneDelayTimer->setInterval(300);
-                d->showDropZoneDelayTimer->setSingleShot(true);
-                connect(d->showDropZoneDelayTimer, SIGNAL(timeout()), this, SLOT(showDropZoneDelayed()));
-            }
-
-            d->dropPoints.insert(0, event->pos());
-            d->showDropZoneDelayTimer->start();
-        }
-    }
-}
-
-void Containment::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
-{
-    //kDebug() << event->pos() << size().height() << size().width();
-    if (d->showDropZoneDelayTimer) {
-        d->showDropZoneDelayTimer->stop();
-    }
-
-    if (event->pos().y() < 1 || event->pos().y() > size().height() ||
-        event->pos().x() < 1 || event->pos().x() > size().width()) {
-        showDropZone(QPoint());
-        d->dropZoneStarted = false;
-    }
-}
-
-void Containment::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
-{
-    QGraphicsItem *item = scene()->itemAt(event->scenePos());
-    event->setAccepted(item == this || item == d->toolBox.data() || !item);
-    //kDebug() << event->isAccepted() << d->showDropZoneDelayTimer->isActive();
-    if (!event->isAccepted()) {
-        if (d->showDropZoneDelayTimer) {
-            d->showDropZoneDelayTimer->stop();
-        }
-    } else if (!d->showDropZoneDelayTimer->isActive() && immutability() == Plasma::Mutable) {
-        showDropZone(event->pos().toPoint());
-    }
-}
-
-void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
+void Containment::dropEvent(QDropEvent *event)
 {
     if (isContainment()) {
-        d->dropData(event->scenePos(), event->screenPos(), event);
-    } else {
-        Applet::dropEvent(event);
+        d->dropData(event->pos(), event);
     }
 }
 
-void Containment::setToolBox(AbstractToolBox *toolBox)
+void Containment::resizeEvent(QResizeEvent *event)
 {
-    if (d->toolBox.data()) {
-        d->toolBox.data()->deleteLater();
-    }
-    d->toolBox = toolBox;
-}
-
-AbstractToolBox *Containment::toolBox() const
-{
-    return d->toolBox.data();
-}
-
-void Containment::resizeEvent(QGraphicsSceneResizeEvent *event)
-{
-    Applet::resizeEvent(event);
-
     if (isContainment()) {
-        if (d->isPanelContainment()) {
-            d->positionPanel();
-        } else if (corona()) {
-            corona()->layoutContainments();
-        }
-
         if (d->wallpaper) {
             d->wallpaper->setBoundingRect(QRectF(QPointF(0, 0), size()));
         }
@@ -997,57 +764,28 @@ void Containment::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void Containment::wheelEvent(QGraphicsSceneWheelEvent *event)
+void Containment::wheelEvent(QWheelEvent *event)
 {
     event->ignore();
-    if (d->appletAt(event->scenePos())) {
+    if (d->appletAt(event->pos())) {
         return; //no unexpected click-throughs
     }
 
     if (d->wallpaper && d->wallpaper->isInitialized()) {
-        QGraphicsItem *item = scene()->itemAt(event->scenePos());
-        if (item == this) {
-            event->ignore();
-            d->wallpaper->wheelEvent(event);
+        event->ignore();
+        d->wallpaper->wheelEvent(event);
 
-            if (event->isAccepted()) {
-                return;
-            }
+        if (event->isAccepted()) {
+            return;
         }
     }
 
     QString trigger = ContainmentActions::eventToString(event);
 
-    if (d->prepareContainmentActions(trigger, event->screenPos())) {
+    if (d->prepareContainmentActions(trigger, event->globalPos())) {
         d->actionPlugins()->value(trigger)->contextEvent(event);
         event->accept();
-    } else {
-        event->ignore();
-        Applet::wheelEvent(event);
     }
-}
-
-QVariant Containment::itemChange(GraphicsItemChange change, const QVariant &value)
-{
-    //FIXME if the applet is moved to another containment we need to unfocus it
-
-    if (isContainment() &&
-        (change == QGraphicsItem::ItemSceneHasChanged ||
-         change == QGraphicsItem::ItemPositionHasChanged)) {
-        switch (d->type) {
-            case PanelContainment:
-            case CustomPanelContainment:
-                d->positionPanel();
-                break;
-            default:
-                if (corona()) {
-                    corona()->layoutContainments();
-                }
-                break;
-        }
-    }
-
-    return Applet::itemChange(change, value);
 }
 
 void Containment::enableAction(const QString &name, bool enable)
@@ -1061,47 +799,12 @@ void Containment::enableAction(const QString &name, bool enable)
 
 void Containment::addToolBoxAction(QAction *action)
 {
-    d->createToolBox();
-    if (d->toolBox) {
-        d->toolBox.data()->addTool(action);
-    }
+    d->toolBoxActions << action;
 }
 
 void Containment::removeToolBoxAction(QAction *action)
 {
-    if (d->toolBox) {
-        d->toolBox.data()->removeTool(action);
-    }
-}
-
-void Containment::setToolBoxOpen(bool open)
-{
-    if (open) {
-        openToolBox();
-    } else {
-        closeToolBox();
-    }
-}
-
-bool Containment::isToolBoxOpen() const
-{
-    return (d->toolBox && d->toolBox.data()->isShowing());
-}
-
-void Containment::openToolBox()
-{
-    if (d->toolBox && !d->toolBox.data()->isShowing()) {
-        d->toolBox.data()->setShowing(true);
-        emit toolBoxVisibilityChanged(true);
-    }
-}
-
-void Containment::closeToolBox()
-{
-    if (d->toolBox && d->toolBox.data()->isShowing()) {
-        d->toolBox.data()->setShowing(false);
-        emit toolBoxVisibilityChanged(false);
-    }
+    d->toolBoxActions.removeAll(action);
 }
 
 void Containment::addAssociatedWidget(QWidget *widget)
@@ -1194,8 +897,6 @@ void Containment::setWallpaper(const QString &pluginName, const QString &mode)
                 cfg.writeEntry("wallpaperpluginmode", mode);
             }
         }
-
-        update();
     }
 
     if (!d->wallpaper) {
@@ -1284,10 +985,6 @@ void Containment::setActivity(const QString &activityId)
     KConfigGroup c = config();
     c.writeEntry("activityId", activityId);
 
-    if (d->toolBox) {
-        d->toolBox.data()->update();
-    }
-
     emit configNeedsSaving();
 }
 
@@ -1347,7 +1044,8 @@ void Containment::destroy(bool confirm)
         const QString title = i18nc("@title:window %1 is the name of the containment", "Remove %1", name());
         KGuiItem remove = KStandardGuiItem::remove();
         remove.setText(title);
-        if (KMessageBox::warningContinueCancel(view(),
+        //FIXME: make the view accessible?
+        if (KMessageBox::warningContinueCancel(0/*view()*/,
             i18nc("%1 is the name of the containment", "Do you really want to remove this %1?", name()),
             title, remove) != KMessageBox::Continue) {
             return;
@@ -1375,6 +1073,37 @@ KConfigGroup Containment::containmentActionsConfig()
     }
     return cfg;
 }
+
+void Containment::setAcceptDrops(bool accept)
+{
+    
+}
+
+bool Containment::acceptDrops() const
+{
+    return false;
+}
+
+void Containment::setMaximumSize(QSizeF size)
+{
+
+}
+
+QSizeF Containment::maximumSize() const
+{
+    return QSizeF();
+}
+
+void Containment::setMinimumSize(QSizeF size)
+{
+
+}
+
+QSizeF Containment::minimumSize() const
+{
+    return QSizeF();
+}
+
 
 } // Plasma namespace
 
