@@ -20,6 +20,10 @@ Functionality Blocks
 * View -> dump
 * Default Package classes
     * Can this be provided by the graphics system specialization?
+* make (all?) plugins able to only be available from specific workspaces
+    * does this mean simply implementing pluginLoaders for the shells?
+    * better yet -> add shell-specific constraints for PluginLoader to use
+    * OR not exists [X-Plasma-<something>] or [X-Plasma-<something>] = 'foo'
 
 Porting of Applet and Containment
 =================================
