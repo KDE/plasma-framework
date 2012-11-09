@@ -208,27 +208,6 @@ QString ContainmentActions::eventToString(QEvent *event)
     return trigger;
 }
 
-QPoint screenPosFromEvent(QEvent *event)
-{
-    switch (event->type()) {
-        case QEvent::MouseButtonPress:
-        case QEvent::MouseButtonRelease:
-        case QEvent::MouseButtonDblClick:
-            return static_cast<QMouseEvent*>(event)->globalPos();
-            break;
-        case QEvent::Wheel:
-            return static_cast<QWheelEvent*>(event)->globalPos();
-            break;
-        case QEvent::ContextMenu:
-            return static_cast<QContextMenuEvent*>(event)->globalPos();
-            break;
-        default:
-            break;
-    }
-
-    return QPoint();
-}
-
 void ContainmentActions::setContainment(Containment *newContainment) {
     d->containment = newContainment;
 }
