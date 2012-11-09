@@ -67,15 +67,6 @@ void AppletScript::paintInterface(QPainter *painter,
     Q_UNUSED(contentsRect);
 }
 
-QSizeF AppletScript::size() const
-{
-    if (applet()) {
-        return applet()->size();
-    }
-
-    return QSizeF();
-}
-
 void AppletScript::constraintsEvent(Plasma::Constraints constraints)
 {
     Q_UNUSED(constraints);

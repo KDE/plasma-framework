@@ -222,23 +222,8 @@ void Applet::save(KConfigGroup &g) const
     group.writeEntry("immutability", (int)d->immutability);
     group.writeEntry("plugin", pluginName());
 
-    group.writeEntry("geometry", geometry());
-    group.writeEntry("zvalue", zValue());
-
     if (!d->started) {
         return;
-    }
-
-    //kDebug() << pluginName() << "geometry is" << geometry()
-    //         << "pos is" << pos() << "bounding rect is" << boundingRect();
-    if (transform() == QTransform()) {
-        group.deleteEntry("transform");
-    } else {
-        QList<qreal> m;
-        QTransform t = transform();
-        m << t.m11() << t.m12() << t.m13() << t.m21() << t.m22() << t.m23() << t.m31() << t.m32() << t.m33();
-        group.writeEntry("transform", m);
-        //group.writeEntry("transform", transformToString(transform()));
     }
 
     KConfigGroup appletConfigGroup(&group, "Configuration");
@@ -255,28 +240,8 @@ void Applet::save(KConfigGroup &g) const
 
 void Applet::restore(KConfigGroup &group)
 {
-    QList<qreal> m = group.readEntry("transform", QList<qreal>());
-    if (m.count() == 9) {
-        QTransform t(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8]);
-        setTransform(t);
-    }
-
-    qreal z = group.readEntry("zvalue", 0);
-
-    if (z >= AppletPrivate::s_maxZValue) {
-        AppletPrivate::s_maxZValue = z;
-    }
-
-    if (z > 0) {
-        setZValue(z);
-    }
 
     setImmutability((ImmutabilityType)group.readEntry("immutability", (int)Mutable));
-
-    QRectF geom = group.readEntry("geometry", QRectF());
-    if (geom.isValid()) {
-        setGeometry(geom);
-    }
 
     KConfigGroup shortcutConfig(&group, "Shortcuts");
     QString shortcutText = shortcutConfig.readEntryUntranslated("global", QString());
@@ -360,66 +325,6 @@ KConfigGroup Applet::globalConfig() const
     return KConfigGroup(&globalAppletConfig, d->globalName());
 }
 
-QSizeF Applet::size() const
-{
-    return QSizeF();
-}
-
-QRectF Applet::geometry() const
-{
-    return QRectF();
-}
-
-void Applet::setGeometry(const QRectF &rect)
-{
-    
-}
-
-QRectF Applet::boundingRect() const
-{
-    return QRectF();
-}
-
-void Applet::resize(const QSizeF &size)
-{
-    
-}
-
-int Applet::zValue() const
-{
-    return 0;
-}
-
-void Applet::setZValue(int val)
-{
-    
-}
-
-QTransform Applet::transform() const
-{
-    return QTransform();
-}
-
-void Applet::setTransform(const QTransform &transform)
-{
-    
-}
-
-QPointF Applet::pos() const
-{
-    return QPointF();
-}
-
-void Applet::setPos(const QPointF &pos)
-{
-    
-}
-
-void Applet::setPos(int x, int y)
-{
-    
-}
-
 bool Applet::hasFocus() const
 {
     return false;
@@ -429,17 +334,6 @@ void Applet::setFocus(Qt::FocusReason)
 {
     
 }
-
-void Applet::setSizePolicy(const QSizePolicy& policy)
-{
-
-}
-
-QSizePolicy Applet::sizePolicy() const
-{
-    return QSizePolicy();
-}
-
 
 void Applet::destroy()
 {
@@ -783,40 +677,6 @@ void Applet::flushPendingConstraintsEvents()
 
     if (c & Plasma::FormFactorConstraint) {
         FormFactor f = formFactor();
-
-        // avoid putting rotated applets in panels
-        if (f == Vertical || f == Horizontal) {
-            QTransform at;
-            at.rotateRadians(0);
-            setTransform(at);
-        }
-
-        //was a size saved for a particular form factor?
-        if (d->sizeForFormFactor.contains(f)) {
-            resize(d->sizeForFormFactor.value(f));
-        }
-    }
-
-    if (!size().isEmpty() &&
-        ((c & Plasma::StartupCompletedConstraint) || (c & Plasma::SizeConstraint && !(c & Plasma::FormFactorConstraint)))) {
-        d->sizeForFormFactor[formFactor()] = size();
-    }
-
-    if (c & Plasma::SizeConstraint || c & Plasma::FormFactorConstraint) {
-        if (aspectRatioMode() == Plasma::Square || aspectRatioMode() == Plasma::ConstrainedSquare) {
-            // enforce square size in panels
-            //save the old size policy. since ignored doesn't (yet) have a valid use case in containments, use it as special unset value
-            if (d->preferredSizePolicy == QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored)) {
-                d->preferredSizePolicy = sizePolicy();
-            }
-            if (formFactor() == Horizontal) {
-                setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding));
-            } else if (formFactor() == Vertical) {
-                setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
-            } else if (d->preferredSizePolicy != QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored)) {
-                setSizePolicy(d->preferredSizePolicy);
-            }
-        }
     }
 
     // now take care of constraints in special subclasses: Contaiment and PopupApplet
@@ -872,25 +732,6 @@ FormFactor Applet::formFactor() const
     while (!parentApplet && pw && pw->parent()) {
         pw = pw->parent();
         parentApplet = qobject_cast<Plasma::Applet *>(pw);
-    }
-
-
-    //FIXME: port away popupapplet
-    //const PopupApplet *pa = dynamic_cast<const PopupApplet *>(this);
-
-    //if the applet is in a widget that isn't a containment
-    //try to retrieve the formFactor from the parent size
-    //we can't use our own sizeHint here because it needs formFactor, so endless recursion.
-    // a popupapplet can always be constrained.
-    // a normal applet should to but
-    //FIXME: not always constrained to not break systemmonitor
-    if (parentApplet && parentApplet != c && c != this) {
-        if (parentApplet->size().height() < sizeHint(Qt::MinimumSize).height()) {
-            return Plasma::Horizontal;
-        } else if (parentApplet->size().width() < sizeHint(Qt::MinimumSize).width()) {
-            return Plasma::Vertical;
-        }
-        return parentApplet->formFactor();
     }
 
     return c ? c->d->formFactor : Plasma::Planar;
@@ -1381,40 +1222,6 @@ Applet *Applet::loadPlasmoid(const QString &path, uint appletId, const QVariantL
     return 0;
 }
 
-QSizeF Applet::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
-{
-    QSizeF hint(-1, -1);
-    const FormFactor ff = formFactor();
-
-    // in panels make sure that the contents won't exit from the panel
-    if (which == Qt::MinimumSize) {
-        if (ff == Horizontal) {
-            hint.setHeight(0);
-        } else if (ff == Vertical) {
-            hint.setWidth(0);
-        }
-    }
-
-    // enforce a square size in panels
-    if (d->aspectRatioMode == Plasma::Square) {
-        if (ff == Horizontal) {
-            hint.setWidth(size().height());
-        } else if (ff == Vertical) {
-            hint.setHeight(size().width());
-        }
-    } else if (d->aspectRatioMode == Plasma::ConstrainedSquare) {
-        //enforce a size not wider than tall
-        if (ff == Horizontal) {
-            hint.setWidth(size().height());
-        //enforce a size not taller than wide
-        } else if (ff == Vertical && (which == Qt::MaximumSize || size().width() <= KIconLoader::SizeLarge)) {
-            hint.setHeight(size().width());
-        }
-    }
-
-    return hint;
-}
-
 void Applet::timerEvent(QTimerEvent *event)
 {
     if (d->transient) {
@@ -1441,16 +1248,6 @@ void Applet::timerEvent(QTimerEvent *event)
         save(cg);
         emit configNeedsSaving();
     }
-}
-
-void Applet::raise()
-{
-    setZValue(++AppletPrivate::s_maxZValue);
-}
-
-void Applet::lower()
-{
-    setZValue(--AppletPrivate::s_minZValue);
 }
 
 bool Applet::isContainment() const

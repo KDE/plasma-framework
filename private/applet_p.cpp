@@ -712,8 +712,6 @@ void AppletPrivate::resetConfigurationObject()
 }
 
 uint AppletPrivate::s_maxAppletId = 0;
-int AppletPrivate::s_maxZValue = 0;
-int AppletPrivate::s_minZValue = 0;
 QSet<QString> AppletPrivate::s_customCategories;
 
 } //namespace Plasma

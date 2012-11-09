@@ -78,7 +78,6 @@ class PLASMA_EXPORT Applet : public QObject
     Q_PROPERTY(bool hasFailedToLaunch READ hasFailedToLaunch WRITE setFailedToLaunch)
     Q_PROPERTY(bool busy READ isBusy WRITE setBusy)
     Q_PROPERTY(bool configurationRequired READ configurationRequired WRITE setConfigurationRequired)
-    Q_PROPERTY(QRectF geometry READ geometry WRITE setGeometry)
     Q_PROPERTY(bool shouldConserveResources READ shouldConserveResources)
     Q_PROPERTY(uint id READ id)
     Q_PROPERTY(BackgroundHints backgroundHints READ backgroundHints WRITE setBackgroundHints)
@@ -635,8 +634,6 @@ class PLASMA_EXPORT Applet : public QObject
          */
         void immutabilityChanged(Plasma::ImmutabilityType immutable);
         
-        void geometryChanged();
-
     public Q_SLOTS:
         /**
          * Sets the immutability type for this applet (not immutable,
@@ -681,16 +678,6 @@ class PLASMA_EXPORT Applet : public QObject
          * @since 4.5
          */
         bool isUserConfiguring() const;
-
-        /**
-         * Causes this applet to raise above all other applets.
-         */
-        void raise();
-
-        /**
-         * Causes this applet to lower below all the other applets.
-         */
-        void lower();
 
         /**
          * Sends all pending contraints updates to the applet. Will usually
@@ -763,22 +750,6 @@ class PLASMA_EXPORT Applet : public QObject
 
         bool hasFocus() const;
         void setFocus(Qt::FocusReason);
-
-        //Geometry functions: FIXME: to remove?
-        QSizeF size() const;
-        QRectF geometry() const;
-        void setGeometry(const QRectF &rect);
-        QRectF boundingRect() const;
-        void resize(const QSizeF &size);
-        int zValue() const;
-        void setZValue(int val);
-        QTransform transform() const;
-        void setTransform(const QTransform &transform);
-        QPointF pos() const;
-        void setPos(const QPointF &pos);
-        void setPos(int x, int y);
-        QSizePolicy sizePolicy() const;
-        void setSizePolicy(const QSizePolicy &policy);
 
     protected:
         /**
@@ -878,8 +849,6 @@ class PLASMA_EXPORT Applet : public QObject
          */
         virtual void constraintsEvent(Plasma::Constraints constraints);
 
-
-        QSizeF sizeHint(Qt::SizeHint which, const QSizeF & constraint = QSizeF()) const;
 
         /**
          * Reimplemented from QObject

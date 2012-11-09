@@ -92,7 +92,6 @@ public:
 
     void initApplets();
     void checkContainmentFurniture();
-    bool regionIsEmpty(const QRectF &region, Applet *ignoredApplet=0) const;
     bool isPanelContainment() const;
     void setLockToolText();
     void appletDeleted(Applet*);

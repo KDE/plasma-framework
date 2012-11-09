@@ -76,7 +76,6 @@ Containment::Containment(QObject *parent,
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
-    setPos(0, 0);
     setBackgroundHints(NoBackground);
     setContainmentType(CustomContainment);
     setHasConfigurationInterface(false);
@@ -88,7 +87,6 @@ Containment::Containment(QObject *parent, const QVariantList &args)
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
-    setPos(0, 0);
     setBackgroundHints(NoBackground);
     setHasConfigurationInterface(false);
 }
@@ -99,7 +97,6 @@ Containment::Containment(const QString &packagePath, uint appletId, const QVaria
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
-    setPos(0, 0);
     setBackgroundHints(NoBackground);
     setHasConfigurationInterface(false);
 }
@@ -503,12 +500,6 @@ void Containment::setLocation(Location location)
         applet->updateConstraints(Plasma::LocationConstraint);
     }
 
-    if (emitGeomChange) {
-        // our geometry on the scene will not actually change,
-        // but for the purposes of views it has
-        emit geometryChanged();
-    }
-
     updateConstraints(Plasma::LocationConstraint);
 
     KConfigGroup c = config();
@@ -591,10 +582,6 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
     connect(applet, SIGNAL(appletDeleted(Plasma::Applet*)), this, SLOT(appletDestroyed(Plasma::Applet*)));
     connect(applet, SIGNAL(newStatus(Plasma::ItemStatus)), this, SLOT(checkStatus(Plasma::ItemStatus)));
     connect(applet, SIGNAL(activate()), this, SIGNAL(activate()));
-
-    if (pos != QPointF(-1, -1)) {
-        applet->setPos(pos);
-    }
 
     if (!delayInit && !currentContainment) {
         applet->restore(*applet->d->mainConfigGroup());
@@ -724,11 +711,12 @@ void Containment::dropEvent(QDropEvent *event)
     }
 }
 
+//TODO: remove and make it GSS
 void Containment::resizeEvent(QResizeEvent *event)
 {
     if (isContainment()) {
         if (d->wallpaper) {
-            d->wallpaper->setBoundingRect(QRectF(QPointF(0, 0), size()));
+            d->wallpaper->setBoundingRect(QRectF(QPointF(0, 0), event->size()));
         }
     }
 }
@@ -860,7 +848,6 @@ void Containment::setWallpaper(const QString &pluginName, const QString &mode)
 
         if (d->wallpaper) {
             d->wallpaper->setParent(this);
-            d->wallpaper->setBoundingRect(QRectF(QPointF(0, 0), size()));
             d->wallpaper->setRenderingMode(mode);
 
             if (newPlugin) {

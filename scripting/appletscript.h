@@ -85,11 +85,6 @@ public:
                                 const QRect &contentsRect);
 
     /**
-     * Returns the area within which contents can be painted.
-     **/
-    Q_INVOKABLE QSizeF size() const;
-
-    /**
      * Called when any of the geometry constraints have been updated.
      *
      * This is always called prior to painting and should be used as an

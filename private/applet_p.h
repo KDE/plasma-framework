@@ -126,8 +126,6 @@ public:
     static QString parentAppConstraint(const QString &parentApp = QString());
 
     static uint s_maxAppletId;
-    static int s_maxZValue;
-    static int s_minZValue;
     static QSet<QString> s_customCategories;
 
     //      number of members at this point.

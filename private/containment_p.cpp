@@ -262,10 +262,6 @@ void ContainmentPrivate::setScreen(int newScreen, int newDesktop, bool preventIn
         }
     }
 
-    if (newScreen < numScreens && newScreen > -1 && isDesktopContainment) {
-        q->resize(corona->screenGeometry(newScreen).size());
-    }
-
     int oldDesktop = desktop;
     desktop = newDesktop;
 
@@ -831,16 +827,6 @@ Applet *ContainmentPrivate::addApplet(const QString &name, const QVariantList &a
 
     q->addApplet(applet, appletGeometry.topLeft(), delayInit);
     return applet;
-}
-
-bool ContainmentPrivate::regionIsEmpty(const QRectF &region, Applet *ignoredApplet) const
-{
-    foreach (Applet *applet, applets) {
-        if (applet != ignoredApplet && applet->geometry().intersects(region)) {
-            return false;
-        }
-    }
-    return true;
 }
 
 void ContainmentPrivate::appletDeleted(Plasma::Applet *applet)
