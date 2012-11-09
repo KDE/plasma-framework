@@ -45,7 +45,6 @@
 #include "pluginloader.h"
 #include "private/applet_p.h"
 #include "private/containment_p.h"
-#include "tooltipmanager.h"
 #include "view.h"
 
 using namespace Plasma;

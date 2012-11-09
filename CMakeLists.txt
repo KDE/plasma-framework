@@ -133,7 +133,6 @@ set(plasma_LIB_SRCS
     private/serviceprovider.cpp
     private/storage.cpp
     private/storagethread.cpp
-    private/tooltip.cpp
     private/wallpaperrenderthread.cpp
     private/windowpreview.cpp
     private/windowshadows.cpp
@@ -166,9 +165,6 @@ set(plasma_LIB_SRCS
     servicejob.cpp
     svg.cpp
     theme.cpp
-    tooltipcontent.cpp
-    #FIXME: re-enable
-    #tooltipmanager.cpp
     version.cpp
     wallpaper.cpp
 
@@ -186,33 +182,10 @@ set(plasma_LIB_SRCS
     private/qtjolie-branch/qtjolie/pendingreply.cpp
     private/qtjolie-branch/qtjolie/server.cpp
     private/qtjolie-branch/qtjolie/serverthread.cpp
-
-    #FIXME: all these must move into the qgv library
-    #view.cpp
     applet.cpp
     containment.cpp
     corona.cpp
-    #dialog.cpp
-    #should popupapplet still exist?
-    #popupapplet.cpp
 )
-
-#TODO: all those files will have to be deleted
-# set (plasmaqgv_LIB_SRCS
-#     dialog.cpp
-#     view.cpp
-#     private/themedwidgetinterface.cpp
-#     widgets/iconwidget.cpp
-#     #FIXME: this is duplicated with libplasma because iconwidget requires it!
-#     private/themedwidgetinterface.cpp
-# 
-#     graphicsview/private/graphicsviewappletprivate.cpp
-# 
-#     private/declarative/declarativenetworkaccessmanagerfactory.cpp
-#     private/declarative/dataenginebindings.cpp
-# 
-#     widgets/declarativewidget.cpp
-# )
 
 kconfig_add_kcfg_files(plasma_LIB_SRCS data/kconfigxt/libplasma-theme-global.kcfgc)
 
@@ -272,7 +245,6 @@ set(plasma_LIB_INCLUDES
     corona.h
     datacontainer.h
     dataengine.h
-    dialog.h
     pluginloader.h
     paintutils.h
     framesvg.h
@@ -280,7 +252,6 @@ set(plasma_LIB_INCLUDES
     packagestructure.h
     plasma.h
     ${CMAKE_CURRENT_BINARY_DIR}/plasma_export.h
-    popupapplet.h
     querymatch.h
     remote/accessappletjob.h
     remote/accessmanager.h
@@ -297,8 +268,6 @@ set(plasma_LIB_INCLUDES
     servicejob.h
     svg.h
     theme.h
-    tooltipcontent.h
-    tooltipmanager.h
     version.h
     view.h
     wallpaper.h)
@@ -319,7 +288,6 @@ install(FILES
 
 install(FILES
    data/servicetypes/plasma-applet.desktop
-   data/servicetypes/plasma-applet-popupapplet.desktop
    data/servicetypes/plasma-containment.desktop
    data/servicetypes/plasma-containmentactions.desktop
    data/servicetypes/plasma-dataengine.desktop

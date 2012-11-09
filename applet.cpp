@@ -84,7 +84,6 @@
 #include "remote/authorizationmanager.h"
 #include "remote/authorizationmanager_p.h"
 #include "theme.h"
-#include "tooltipmanager.h"
 #include "wallpaper.h"
 #include "paintutils.h"
 #include "abstractdialogmanager.h"
