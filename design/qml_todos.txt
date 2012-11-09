@@ -1,0 +1,20 @@
+Implementation Items
+====================
+* Applet::screenRect
+
+Functionality Blocks
+====================
+* QML Wallpaper
+* QML Containment
+    * port Sebas' work for QML Containment to libplasma2
+    * wallpaper loading
+    * action plugins access
+    * applet geometry save/restore
+* ContainmentActions
+    * add ToolBox as a recognized trigger
+    * only return sets of actions
+* PopupApplet -> merge into Applet with functionality implemented in QML rather than in libplasma
+* QML Tooltips
+    * ToolTipManager -> replace with a QML component
+    * QML tips
+* View -> dump
