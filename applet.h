@@ -588,11 +588,6 @@ class PLASMA_EXPORT Applet : public QObject
         void appletTransformedItself();
 
         /**
-         * Emitted by Applet subclasses when they change a sizeHint and wants to announce the change
-         */
-        void sizeHintChanged(Qt::SizeHint which);
-
-        /**
          * Emitted when an applet has changed values in its configuration
          * and wishes for them to be saved at the next save point. As this implies
          * disk activity, this signal should be used with care.
