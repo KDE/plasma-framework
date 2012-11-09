@@ -1443,27 +1443,6 @@ void Applet::timerEvent(QTimerEvent *event)
     }
 }
 
-QRect Applet::screenRect() const
-{
-    //TODO: port away QGV
-    /*
-    QGraphicsView *v = view();
-
-    if (v) {
-        QPointF bottomRight = pos();
-        bottomRight.rx() += size().width();
-        bottomRight.ry() += size().height();
-
-        QPoint tL = v->mapToGlobal(v->mapFromScene(pos()));
-        QPoint bR = v->mapToGlobal(v->mapFromScene(bottomRight));
-        return QRect(QPoint(tL.x(), tL.y()), QSize(bR.x() - tL.x(), bR.y() - tL.y()));
-    }*/
-
-    //The applet doesn't have a view on it.
-    //So a screenRect isn't relevant.
-    return QRect(QPoint(0, 0), QSize(0, 0));
-}
-
 void Applet::raise()
 {
     setZValue(++AppletPrivate::s_maxZValue);

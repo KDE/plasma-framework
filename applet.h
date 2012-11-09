@@ -426,16 +426,6 @@ class PLASMA_EXPORT Applet : public QObject
         bool isContainment() const;
 
         /**
-         * This method returns screen coordinates for the widget; this method can be somewhat
-         * expensive and should ONLY be called when screen coordinates are required. For
-         * example when positioning top level widgets on top of the view to create the
-         * appearance of unit.
-         *
-         * @return a rect of the applet in screen coordinates.
-         */
-        QRect screenRect() const;
-
-        /**
          * @return the Containment, if any, this applet belongs to
          **/
         Containment *containment() const;
