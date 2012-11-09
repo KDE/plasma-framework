@@ -274,7 +274,8 @@ QPoint ContainmentActions::popupPosition(const QSize &s, QEvent *event)
         return screenPosFromEvent(event);
     }
 
-    Applet *applet = c->d->appletAt(scenePosFromEvent(event));
+    //TODO: port to new architecture
+    Applet *applet = 0;//c->d->appletAt(scenePosFromEvent(event));
     QPoint screenPos = screenPosFromEvent(event);
     QPoint pos = screenPos;
     if (applet && containment()->d->isPanelContainment()) {

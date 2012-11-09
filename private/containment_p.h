@@ -141,8 +141,6 @@ public:
      */
     bool prepareContainmentActions(const QString &trigger, const QPoint &screenPos, KMenu *menu = 0);
 
-    Applet *appletAt(const QPointF &point);
-
     /**
      * Delayed drop zone display
      */

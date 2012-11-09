@@ -208,39 +208,6 @@ void ContainmentPrivate::addAppletActions(KMenu &desktopMenu, Applet *applet, QE
     }
 }
 
-Applet* ContainmentPrivate::appletAt(const QPointF &point)
-{
-  return 0;
-  /*TODO: port away qgv
-    Applet *applet = 0;
-
-    QGraphicsItem *item = q->scene()->itemAt(point);
-    if (item == q) {
-        item = 0;
-    }
-
-    while (item) {
-        if (item->isWidget()) {
-            applet = qobject_cast<Applet*>(static_cast<QGraphicsWidget*>(item));
-            if (applet) {
-                if (applet->isContainment()) {
-                    applet = 0;
-                }
-                break;
-            }
-        }
-        AppletHandle *handle = dynamic_cast<AppletHandle*>(item);
-        if (handle) {
-            //pretend it was on the applet
-            applet = handle->applet();
-            break;
-        }
-        item = item->parentItem();
-    }
-    return applet;
-    */
-}
-
 void ContainmentPrivate::setScreen(int newScreen, int newDesktop, bool preventInvalidDesktops)
 {
     // What we want to do in here is:

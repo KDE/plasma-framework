@@ -24,7 +24,7 @@ Functionality Blocks
 Porting of Applet and Containment
 =================================
 
-* ContainmentPrivate::appletAt(const QPointF &point)
+* ContainmentPrivate::appletAt(const QPointF &point)   -> depends from ContainmentActions refactoring : disabled now in the code
 * ContainmentPrivate::setScreen(int newScreen, int newDesktop, bool preventInvalidDesktops)
 * all geometry functions in Applet and Containment (width, height, geometry, raise, lower...)
 

@@ -438,7 +438,8 @@ void Containment::contextMenuEvent(QContextMenuEvent *event)
     }
 
     KMenu desktopMenu;
-    Applet *applet = d->appletAt(event->pos());
+    //TODO: port to the new containmentactions architecture
+    Applet *applet = 0;//d->appletAt(event->pos());
     //kDebug() << "context menu event " << (QObject*)applet;
 
     if (applet) {
@@ -767,9 +768,6 @@ void Containment::keyPressEvent(QKeyEvent *event)
 void Containment::wheelEvent(QWheelEvent *event)
 {
     event->ignore();
-    if (d->appletAt(event->pos())) {
-        return; //no unexpected click-throughs
-    }
 
     if (d->wallpaper && d->wallpaper->isInitialized()) {
         event->ignore();
