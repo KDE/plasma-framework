@@ -255,42 +255,6 @@ bool isNonSceneEvent(QEvent *event)
     return dynamic_cast<QEvent *>(event) == 0;
 }
 
-QPoint ContainmentActions::popupPosition(const QSize &s, QEvent *event)
-{
-    if (isNonSceneEvent(event)) {
-        return screenPosFromEvent(event);
-    }
-
-    Containment *c = containment();
-    if (!c) {
-        return screenPosFromEvent(event);
-    }
-
-    //TODO: port to new architecture
-    Applet *applet = 0;//c->d->appletAt(scenePosFromEvent(event));
-    QPoint screenPos = screenPosFromEvent(event);
-    QPoint pos = screenPos;
-    if (applet && containment()->d->isPanelContainment()) {
-        pos = applet->popupPosition(s);
-        if (event->type() != QEvent::ContextMenu ||
-            static_cast<QContextMenuEvent *>(event)->reason() == QContextMenuEvent::Mouse) {
-            // if the menu pops up way away from the mouse press, then move it
-            // to the mouse press
-            if (c->formFactor() == Vertical) {
-                if (pos.y() + s.height() < screenPos.y()) {
-                    pos.setY(screenPos.y());
-                }
-            } else if (c->formFactor() == Horizontal) {
-                if (pos.x() + s.width() < screenPos.x()) {
-                    pos.setX(screenPos.x());
-                }
-            }
-        }
-    }
-
-    return pos;
-}
-
 void ContainmentActions::setContainment(Containment *newContainment) {
     d->containment = newContainment;
 }

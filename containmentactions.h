@@ -161,16 +161,6 @@ class PLASMA_EXPORT ContainmentActions : public QObject
         static QString eventToString(QEvent *event);
 
         /**
-         * Returns a popup position appropriate to the event and the size.
-         * 
-         * @param s size of the popup
-         * @param event a pointer to the event that triggered the popup
-         * @return the preferred top-left position for the popup
-         * @since 4.6
-         */
-        QPoint popupPosition(const QSize &s, QEvent *event);
-
-        /**
          * @p newContainment the containment the plugin should be associated with.
          * @since 4.6
          */
