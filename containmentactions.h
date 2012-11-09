@@ -54,9 +54,10 @@ class ContainmentActionsPrivate;
 class PLASMA_EXPORT ContainmentActions : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString name READ name)
-    Q_PROPERTY(QString pluginName READ pluginName)
-    Q_PROPERTY(QString icon READ icon)
+    Q_PROPERTY(QString name READ name CONSTANT)
+    Q_PROPERTY(QString pluginName READ pluginName CONSTANT)
+    Q_PROPERTY(QString icon READ icon CONSTANT)
+    Q_PROPERTY(bool configurationRequired READ configurationRequired NOTIFY configurationRequiredChanged)
 
     public:
         /**
@@ -126,7 +127,7 @@ class PLASMA_EXPORT ContainmentActions : public QObject
          * for example, when right-clicking an applet, the "Activity Options" submenu is populated
          * with this.
          */
-        virtual QList<QAction*> contextualActions();
+        Q_INVOKABLE virtual QList<QAction*> contextualActions();
 
         /**
          * Loads the given DataEngine
@@ -165,6 +166,12 @@ class PLASMA_EXPORT ContainmentActions : public QObject
          * @since 4.6
          */
         void setContainment(Containment *newContainment);
+
+    Q_SIGNALS:
+        /**
+         * Emitted when @see configurationRequired() changes
+         */
+        void configurationRequiredChanged();
 
     protected:
         /**

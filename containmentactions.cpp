@@ -141,7 +141,6 @@ void ContainmentActions::contextEvent(QEvent *event)
 
 QList<QAction*> ContainmentActions::contextualActions()
 {
-    //empty list
     return QList<QAction*>();
 }
 
@@ -157,8 +156,10 @@ bool ContainmentActions::configurationRequired() const
 
 void ContainmentActions::setConfigurationRequired(bool needsConfig)
 {
-    //TODO: reason?
-    d->needsConfig = needsConfig;
+    if (d->needsConfig != needsConfig) {
+        d->needsConfig = needsConfig;
+        emit configurationRequiredChanged();
+    }
 }
 
 QString ContainmentActions::eventToString(QEvent *event)
