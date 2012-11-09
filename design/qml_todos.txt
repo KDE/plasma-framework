@@ -18,3 +18,5 @@ Functionality Blocks
     * ToolTipManager -> replace with a QML component
     * QML tips
 * View -> dump
+* Default Package classes
+    * Can this be provided by the graphics system specialization?
