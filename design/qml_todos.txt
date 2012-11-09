@@ -24,7 +24,6 @@ Functionality Blocks
 Porting of Applet and Containment
 =================================
 
-* AppletPrivate::selectItemToDestroy()
 * ContainmentPrivate::appletAt(const QPointF &point)
 * ContainmentPrivate::setScreen(int newScreen, int newDesktop, bool preventInvalidDesktops)
 * all geometry functions in Applet and Containment (width, height, geometry, raise, lower...)

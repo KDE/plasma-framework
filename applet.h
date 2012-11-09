@@ -899,7 +899,6 @@ class PLASMA_EXPORT Applet : public QObject
         Applet(const QString &packagePath, uint appletId, const QVariantList &args);
 
         Q_PRIVATE_SLOT(d, void cleanUpAndDelete())
-        Q_PRIVATE_SLOT(d, void selectItemToDestroy())
         Q_PRIVATE_SLOT(d, void configDialogFinished())
         Q_PRIVATE_SLOT(d, void updateShortcuts())
         Q_PRIVATE_SLOT(d, void publishCheckboxStateChanged(int state))

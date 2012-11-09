@@ -725,7 +725,7 @@ void Applet::flushPendingConstraintsEvents()
         if (closeApplet) {
             closeApplet->setEnabled(unlocked);
             closeApplet->setVisible(unlocked);
-            connect(closeApplet, SIGNAL(triggered(bool)), this, SLOT(selectItemToDestroy()), Qt::UniqueConnection);
+            connect(closeApplet, SIGNAL(triggered(bool)), this, SLOT(destroy()), Qt::UniqueConnection);
         }
 
         QAction *configAction = d->actions->action("configure");

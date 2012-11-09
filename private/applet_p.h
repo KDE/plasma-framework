@@ -108,7 +108,6 @@ public:
     KConfigGroup *mainConfigGroup();
     QString visibleFailureText(const QString &reason);
     void resetConfigurationObject();
-    void selectItemToDestroy();
     void addGlobalShortcutsPage(KConfigDialog *dialog);
     void addPublishPage(KConfigDialog *dialog);
     void configDialogFinished();

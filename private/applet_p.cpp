@@ -199,31 +199,6 @@ void AppletPrivate::init(const QString &packagePath)
     }
 }
 
-void AppletPrivate::selectItemToDestroy()
-{
-    //FIXME: this will not work nicely with multiple screens and being zoomed out!
-    //TODO: port away from QGV
-    /*
-    if (isContainment) {
-        QGraphicsView *view = q->view();
-        if (view && view->transform().isScaling() &&
-            q->scene()->focusItem() != q) {
-            QGraphicsItem *focus = q->scene()->focusItem();
-
-            if (focus) {
-                Containment *toDestroy = dynamic_cast<Containment*>(focus->topLevelItem());
-
-                if (toDestroy) {
-                    toDestroy->destroy();
-                    return;
-                }
-            }
-        }
-    }*/
-
-    q->destroy();
-}
-
 void AppletPrivate::cleanUpAndDelete()
 {
     // reimplemented in the UI specific library
