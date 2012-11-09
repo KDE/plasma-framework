@@ -147,7 +147,7 @@ class PLASMA_EXPORT ContainmentActions : public QObject
          *         could not be loaded
          *
          */
-        Q_INVOKABLE DataEngine *dataEngine(const QString &name) const;
+        DataEngine *dataEngine(const QString &name) const;
 
         /**
          * @return true if the containmentactions currently needs to be configured,
