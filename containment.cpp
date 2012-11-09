@@ -482,18 +482,6 @@ void Containment::setLocation(Location location)
         return;
     }
 
-    bool emitGeomChange = false;
-
-    if ((location == TopEdge || location == BottomEdge) &&
-        (d->location == TopEdge || d->location == BottomEdge)) {
-        emitGeomChange = true;
-    }
-
-    if ((location == RightEdge || location == LeftEdge) &&
-        (d->location == RightEdge || d->location == LeftEdge)) {
-        emitGeomChange = true;
-    }
-
     d->location = location;
 
     foreach (Applet *applet, d->applets) {
@@ -751,7 +739,11 @@ void Containment::wheelEvent(QWheelEvent *event)
     QString trigger = ContainmentActions::eventToString(event);
 
     if (d->prepareContainmentActions(trigger, event->globalPos())) {
-        d->actionPlugins()->value(trigger)->contextEvent(event);
+        if (event->delta() > 0) {
+            d->actionPlugins()->value(trigger)->performNext();
+        } else {
+            d->actionPlugins()->value(trigger)->performPrevious();
+        }
         event->accept();
     }
 }

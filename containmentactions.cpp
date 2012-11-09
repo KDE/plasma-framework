@@ -128,9 +128,17 @@ void ContainmentActions::configurationAccepted()
     //do nothing by default
 }
 
-void ContainmentActions::contextEvent(QEvent *event)
+QAction *ContainmentActions::triggerableContextAction()
 {
-    Q_UNUSED(event)
+    return 0;
+}
+
+void ContainmentActions::performNext()
+{
+}
+
+void ContainmentActions::performPrevious()
+{
 }
 
 QList<QAction*> ContainmentActions::contextualActions()

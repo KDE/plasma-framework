@@ -115,7 +115,9 @@ class PLASMA_EXPORT ContainmentActions : public QObject
          * those parameters.
          * The event may be a QMouseEvent or a QWheelEvent.
          */
-        virtual void contextEvent(QEvent *event);
+        virtual QAction *triggerableContextAction();
+        virtual void performNext();
+        virtual void performPrevious();
 
         /**
          * Implement this to provide a list of actions that can be added to another menu
