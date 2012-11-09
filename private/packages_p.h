@@ -33,7 +33,8 @@ public:
     void initPackage(Package *package);
 
 protected:
-    virtual QString findMainScript(Package *package);
+    virtual QString findMainScript(Package *package) const;
+    virtual QString mainScriptConfigKey() const;
     void pathChanged(Package *package);
 };
 
@@ -43,7 +44,13 @@ public:
     void initPackage(Package *package);
 
 protected:
-    QString findMainScript(Package *package);
+    QString findMainScript(Package *package) const;
+};
+
+class ContainmentPackage : public PlasmoidPackage
+{
+public:
+    QString mainScriptConfigKey() const;
 };
 
 class DataEnginePackage : public ChangeableMainScriptPackage

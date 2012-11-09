@@ -44,17 +44,22 @@ void ChangeableMainScriptPackage::initPackage(Package *package)
     package->setRequired("mainscript", true);
 }
 
-QString ChangeableMainScriptPackage::findMainScript(Package *package)
+QString ChangeableMainScriptPackage::findMainScript(Package *package) const
 {
     Q_UNUSED(package)
     return QString();
+}
+
+QString ChangeableMainScriptPackage::mainScriptConfigKey() const
+{
+    return QLatin1String("X-Plasma-MainScript");
 }
 
 void ChangeableMainScriptPackage::pathChanged(Package *package)
 {
     KDesktopFile config(package->path() + "/metadata.desktop");
     KConfigGroup cg = config.desktopGroup();
-    QString mainScript = cg.readEntry("X-Plasma-MainScript", QString());
+    QString mainScript = cg.readEntry(mainScriptConfigKey(), QString());
     if (mainScript.isEmpty()) {
         mainScript = findMainScript(package);
 
@@ -71,7 +76,7 @@ void ChangeableMainScriptPackage::pathChanged(Package *package)
     }
 }
 
-QString PlasmoidPackage::findMainScript(Package *package)
+QString PlasmoidPackage::findMainScript(Package *package) const
 {
     const QString mainScript = package->path() + "/ui/main.qml";
     if (QFile::exists(mainScript)) {
@@ -123,6 +128,11 @@ void PlasmoidPackage::initPackage(Package *package)
     package->addFileDefinition("mainconfigui", "ui/config.ui", i18n("Main Config UI File"));
     package->addFileDefinition("mainconfigxml", "config/main.xml", i18n("Configuration XML file"));
     package->addDirectoryDefinition("animations", "animations", i18n("Animation scripts"));
+}
+
+QString ContainmentPackage::mainScriptConfigKey() const
+{
+    return QLatin1String("X-Plasma-Containment-MainScript");
 }
 
 void DataEnginePackage::initPackage(Package *package)
