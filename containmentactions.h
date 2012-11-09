@@ -213,11 +213,6 @@ class PLASMA_EXPORT ContainmentActions : public QObject
          */
         Containment *containment();
 
-        /**
-         * pastes the clipboard at a given location
-         */
-        void paste(QPointF scenePos, QPoint screenPos);
-
     private:
         friend class ContainmentActionsPackage;
         friend class ContainmentActionsPrivate;

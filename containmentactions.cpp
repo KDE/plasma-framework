@@ -208,14 +208,6 @@ QString ContainmentActions::eventToString(QEvent *event)
     return trigger;
 }
 
-void ContainmentActions::paste(QPointF scenePos, QPoint screenPos)
-{
-    Containment *c = containment();
-    if (c) {
-        c->d->dropData(screenPos);
-    }
-}
-
 QPoint screenPosFromEvent(QEvent *event)
 {
     switch (event->type()) {

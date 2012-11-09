@@ -10,6 +10,8 @@ Functionality Blocks
     * wallpaper loading
     * action plugins access
     * applet geometry save/restore
+    * move ContainmentPrivate::dropData to be a protected member (slot?) so QML Containment can
+      provide a drop action
 * ContainmentActions
     * add ToolBox as a recognized trigger
     * only return sets of actions
