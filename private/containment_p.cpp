@@ -230,7 +230,6 @@ void ContainmentPrivate::setScreen(int newScreen, int newDesktop, bool preventIn
         return;
     }*/
 
-    int numScreens = corona->numScreens();
     if (newScreen < -1) {
         newScreen = -1;
     }
