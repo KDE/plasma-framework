@@ -117,11 +117,11 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         }
     }
 
-    /* if (offers.count() > 1) {
 #ifndef NDEBUG
+    if (offers.count() > 1) {
         kDebug() << "hey! we got more than one! let's blindly take the first one";
+    }
 #endif
-    } */
 
     AppletPrivate::filterOffers(offers);
     if (offers.isEmpty()) {
