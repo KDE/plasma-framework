@@ -86,11 +86,6 @@ class PLASMA_EXPORT ContainmentActions : public QObject
         QString icon() const;
 
         /**
-         * @return true if initialized (usually by calling restore), false otherwise
-         */
-        bool isInitialized() const;
-
-        /**
          * This method should be called once the plugin is loaded or settings are changed.
          * @param config Config group to load settings
          * @see init
@@ -167,6 +162,11 @@ class PLASMA_EXPORT ContainmentActions : public QObject
          */
         void setContainment(Containment *newContainment);
 
+        /**
+         * @return the containment the plugin is associated with.
+         */
+        Containment *containment();
+
     Q_SIGNALS:
         /**
          * Emitted when @see configurationRequired() changes
@@ -199,11 +199,6 @@ class PLASMA_EXPORT ContainmentActions : public QObject
          *                         or false if it doesn't
          */
         void setConfigurationRequired(bool needsConfiguring = true);
-
-        /**
-         * @return the containment the plugin is associated with.
-         */
-        Containment *containment();
 
     private:
         friend class ContainmentActionsPackage;

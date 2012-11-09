@@ -102,15 +102,9 @@ QString ContainmentActions::pluginName() const
     return d->containmentActionsDescription.pluginName();
 }
 
-bool ContainmentActions::isInitialized() const
-{
-    return d->initialized;
-}
-
 void ContainmentActions::restore(const KConfigGroup &config)
 {
     init(config);
-    d->initialized = true;
 }
 
 void ContainmentActions::init(const KConfigGroup &config)

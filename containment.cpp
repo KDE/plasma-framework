@@ -896,19 +896,15 @@ void Containment::setContainmentActions(const QString &trigger, const QString &p
         if (plugin->pluginName() != pluginName) {
             d->actionPlugins()->remove(trigger);
             delete plugin;
-            plugin=0;
+            plugin = 0;
         }
     }
+
     if (pluginName.isEmpty()) {
         cfg.deleteEntry(trigger);
     } else if (plugin) {
-        //it already existed, just reload config
-        if (plugin->isInitialized()) {
-            plugin->setContainment(this); //to be safe
-            //FIXME make a truly unique config group
-            KConfigGroup pluginConfig = KConfigGroup(&cfg, trigger);
-            plugin->restore(pluginConfig);
-        }
+        // it already existed, reset the containment so it wil reload config on next show
+        plugin->setContainment(0);
     } else {
         switch (d->containmentActionsSource) {
         case ContainmentPrivate::Activity:
@@ -919,6 +915,7 @@ void Containment::setContainmentActions(const QString &trigger, const QString &p
         default:
             plugin = PluginLoader::self()->loadContainmentActions(0, pluginName);
         }
+
         if (plugin) {
             cfg.writeEntry(trigger, pluginName);
             d->actionPlugins()->insert(trigger, plugin);

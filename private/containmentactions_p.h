@@ -32,9 +32,8 @@ public:
         q(containmentActions),
         containmentActionsDescription(service),
         package(0),
-        initialized(false),
-        needsConfig(false),
-        containment(0)
+        containment(0),
+        needsConfig(false)
     {
     };
 
@@ -42,9 +41,8 @@ public:
     KPluginInfo containmentActionsDescription;
     Package *package;
     KServiceAction mode;
-    bool initialized : 1;
-    bool needsConfig : 1;
     Containment *containment;
+    bool needsConfig;
 };
 
 } // namespace Plasma

@@ -859,9 +859,11 @@ bool ContainmentPrivate::prepareContainmentActions(const QString &trigger, const
     if (!plugin) {
         return false;
     }
-    plugin->setContainment(q);
 
-    if (!plugin->isInitialized()) {
+    if (plugin->containment() != q) {
+        plugin->setContainment(q);
+
+        // now configure it
         KConfigGroup cfg = q->containmentActionsConfig();
         KConfigGroup pluginConfig = KConfigGroup(&cfg, trigger);
         plugin->restore(pluginConfig);
