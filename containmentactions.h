@@ -171,11 +171,6 @@ class PLASMA_EXPORT ContainmentActions : public QObject
         QPoint popupPosition(const QSize &s, QEvent *event);
 
         /**
-         * @reimplemented
-         */
-        bool event(QEvent *e);
-
-        /**
          * @p newContainment the containment the plugin should be associated with.
          * @since 4.6
          */

@@ -291,12 +291,6 @@ QPoint ContainmentActions::popupPosition(const QSize &s, QEvent *event)
     return pos;
 }
 
-bool ContainmentActions::event(QEvent *)
-{
-    //no longer needed
-    return false;
-}
-
 void ContainmentActions::setContainment(Containment *newContainment) {
     d->containment = newContainment;
 }
