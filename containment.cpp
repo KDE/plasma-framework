@@ -226,22 +226,6 @@ void Containment::restore(KConfigGroup &group)
         return;
     }
 
-    QRectF geo = group.readEntry("geometry", geometry());
-    //override max/min
-    //this ensures panels are set to their saved size even when they have max & min set to prevent
-    //resizing
-    if (geo.size() != geo.size().boundedTo(maximumSize())) {
-        setMaximumSize(maximumSize().expandedTo(geo.size()));
-    }
-
-    if (geo.size() != geo.size().expandedTo(minimumSize())) {
-        setMinimumSize(minimumSize().boundedTo(geo.size()));
-    }
-
-
-    resize(geo.size());
-    //FIXME: unbreak containments just for dashboard
-
     setLocation((Plasma::Location)group.readEntry("location", (int)d->location));
     setFormFactor((Plasma::FormFactor)group.readEntry("formfactor", (int)d->formFactor));
     //kDebug() << "setScreen from restore";
@@ -1082,25 +1066,6 @@ bool Containment::acceptDrops() const
     return false;
 }
 
-void Containment::setMaximumSize(QSizeF size)
-{
-
-}
-
-QSizeF Containment::maximumSize() const
-{
-    return QSizeF();
-}
-
-void Containment::setMinimumSize(QSizeF size)
-{
-
-}
-
-QSizeF Containment::minimumSize() const
-{
-    return QSizeF();
-}
 
 
 } // Plasma namespace

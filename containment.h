@@ -521,11 +521,6 @@ Q_SIGNALS:
          */
         void resizeEvent(QResizeEvent *event);
 
-        //FIXME: kill those
-        QSizeF maximumSize() const;
-        void setMaximumSize(QSizeF size);
-        QSizeF minimumSize() const;
-        void setMinimumSize(QSizeF size);
 
     private:
         /**
