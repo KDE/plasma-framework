@@ -20,3 +20,12 @@ Functionality Blocks
 * View -> dump
 * Default Package classes
     * Can this be provided by the graphics system specialization?
+
+Porting of Applet and Containment
+=================================
+
+* Applet::screenRect()
+* AppletPrivate::selectItemToDestroy()
+* ContainmentPrivate::appletAt(const QPointF &point)
+* ContainmentPrivate::setScreen(int newScreen, int newDesktop, bool preventInvalidDesktops)
+
