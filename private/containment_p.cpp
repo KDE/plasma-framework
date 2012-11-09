@@ -772,7 +772,6 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
         //update actions
         checkRemoveAction();
         const bool unlocked = q->immutability() == Mutable;
-        q->setAcceptDrops(unlocked);
         q->enableAction("add widgets", unlocked);
 
         // tell the applets too

@@ -119,8 +119,6 @@ void Containment::init()
         return;
     }
 
-    setAcceptDrops(true);
-
     if (d->type == NoContainmentType) {
         setContainmentType(DesktopContainment);
     }
@@ -1055,17 +1053,6 @@ KConfigGroup Containment::containmentActionsConfig()
     }
     return cfg;
 }
-
-void Containment::setAcceptDrops(bool accept)
-{
-    
-}
-
-bool Containment::acceptDrops() const
-{
-    return false;
-}
-
 
 
 } // Plasma namespace

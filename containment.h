@@ -373,8 +373,6 @@ class PLASMA_EXPORT Containment : public Applet
          */
         KConfigGroup containmentActionsConfig();
 
-        void setAcceptDrops(bool accept);
-        bool acceptDrops() const;
 
 Q_SIGNALS:
         /**
