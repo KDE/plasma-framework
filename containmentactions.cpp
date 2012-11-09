@@ -229,32 +229,6 @@ QPoint screenPosFromEvent(QEvent *event)
     return QPoint();
 }
 
-QPointF scenePosFromEvent(QEvent *event)
-{
-    switch (event->type()) {
-        case QEvent::MouseButtonPress:
-        case QEvent::MouseButtonRelease:
-        case QEvent::MouseButtonDblClick:
-            return static_cast<QMouseEvent*>(event)->pos();
-            break;
-        case QEvent::Wheel:
-            return static_cast<QWheelEvent*>(event)->pos();
-            break;
-        case QEvent::ContextMenu:
-            return static_cast<QContextMenuEvent*>(event)->pos();
-            break;
-        default:
-            break;
-    }
-
-    return QPoint();
-}
-
-bool isNonSceneEvent(QEvent *event)
-{
-    return dynamic_cast<QEvent *>(event) == 0;
-}
-
 void ContainmentActions::setContainment(Containment *newContainment) {
     d->containment = newContainment;
 }
