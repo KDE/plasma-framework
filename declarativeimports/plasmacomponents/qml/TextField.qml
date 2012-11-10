@@ -311,6 +311,7 @@ FocusScope {
             }
         }
         onAccepted: textField.accepted()
+        Keys.forwardTo: textField
     }
 
     Private.IconLoader {

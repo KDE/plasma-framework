@@ -168,8 +168,7 @@ Item {
 
         // Proxying keys events  is not required by the
         //     common API but is desired in the plasma API.
-        Keys.onPressed: textField.Keys.pressed(event);
-        Keys.onReleased: textField.Keys.released(event);
+        Keys.forwardTo: textField
     }
 
 
