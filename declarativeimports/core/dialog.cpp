@@ -40,6 +40,7 @@ int DialogProxy::offscreenY = 0;
 
 DialogMargins::DialogMargins(Plasma::Dialog *dialog, QObject *parent)
     : QObject(parent),
+      m_left(0), m_top(0), m_right(0), m_bottom(0),
       m_dialog(dialog)
 {
     checkMargins();
