@@ -133,6 +133,7 @@ set(plasma_LIB_SRCS
     private/dataengineconsumer.cpp
     private/dataengineservice.cpp
     private/denyallauthorization.cpp
+    private/dialogshadows.cpp
     private/effectwatcher.cpp
     private/extenderapplet.cpp
     private/extenderitemmimedata.cpp

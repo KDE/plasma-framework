@@ -20,6 +20,7 @@
 
 #include "tooltip_p.h"
 #include "windowpreview_p.h"
+#include "dialogshadows_p.h"
 
 #include <QAbstractTextDocumentLayout>
 #include <QBitmap>
@@ -196,6 +197,9 @@ ToolTip::ToolTip(QWidget *parent)
     mainLayout->addLayout(iconTextHBoxLayout);
 
     setLayout(mainLayout);
+    DialogShadows *shadow = new DialogShadows(this);
+    shadow->setImagePath("widgets/tooltip");
+    shadow->addWindow(this);
 }
 
 ToolTip::~ToolTip()

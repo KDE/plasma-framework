@@ -51,6 +51,7 @@
 #include "plasma/corona.h"
 #include "plasma/extenders/extender.h"
 #include "plasma/private/extender_p.h"
+#include "plasma/private/dialogshadows_p.h"
 #include "plasma/framesvg.h"
 #include "plasma/theme.h"
 #include "plasma/widgets/scrollwidget.h"
@@ -99,6 +100,7 @@ void DialogPrivate::themeChanged()
     // WA_NoSystemBackground is going to fail combined with sliding popups, but is needed
     // when we aren't compositing
     q->setAttribute(Qt::WA_NoSystemBackground, !translucency);
+    WindowEffects::overrideShadow(q->winId(), !DialogShadows::self()->hasElement("shadow-left"));
     updateMask();
     q->update();
 }
@@ -241,6 +243,7 @@ void DialogPrivate::checkBorders(bool updateMaskIfNeeded)
     }
 
     background->setEnabledBorders(borders);
+    DialogShadows::self()->addWindow(q, borders);
 
     if (extender)  {
         FrameSvg::EnabledBorders disabledBorders = FrameSvg::NoBorder;
@@ -397,7 +400,7 @@ Dialog::Dialog(QWidget *parent, Qt::WindowFlags f)
     QPalette pal = palette();
     pal.setColor(backgroundRole(), Qt::transparent);
     setPalette(pal);
-    WindowEffects::overrideShadow(winId(), true);
+    WindowEffects::overrideShadow(winId(), !DialogShadows::self()->hasElement("shadow-left"));
 
     d->adjustViewTimer = new QTimer(this);
     d->adjustViewTimer->setSingleShot(true);
@@ -726,7 +729,8 @@ void Dialog::showEvent(QShowEvent * event)
     }
 
     emit dialogVisible(true);
-    WindowEffects::overrideShadow(winId(), true);
+   // WindowEffects::overrideShadow(winId(), true);
+    DialogShadows::self()->addWindow(this, d->background->enabledBorders());
 }
 
 void Dialog::focusInEvent(QFocusEvent *event)
