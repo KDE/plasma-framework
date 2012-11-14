@@ -110,13 +110,26 @@ class PLASMA_EXPORT ContainmentActions : public QObject
         virtual void configurationAccepted();
 
         /**
-         * Implement this to respond to events.
-         * The user can configure whatever button and modifier they like, so please don't look at
-         * those parameters.
-         * The event may be a QMouseEvent or a QWheelEvent.
+         * @return the action that is to be immediately triggered when this plugin is
+         *         activated for a context action, or NULL if there is no such action
+         *         @see contextualActions
          */
         virtual QAction *triggerableContextAction();
+
+        /**
+         * Called when a "next" action is triggered (e.g. by mouse wheel scroll). This
+         * can be used to scroll through a list of items this plugin manages such as
+         * windows, virtual desktops, activities, etc.
+         * @see performPrevious
+         */
         virtual void performNext();
+
+        /**
+         * Called when a "previous" action is triggered (e.g. by mouse wheel scroll). This
+         * can be used to scroll through a list of items this plugin manages such as
+         * windows, virtual desktops, activities, etc.
+         * @see performNext
+         */
         virtual void performPrevious();
 
         /**
