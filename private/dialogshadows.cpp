@@ -48,6 +48,7 @@ public:
     void clearPixmaps();
     void setupPixmaps();
     void initPixmap(const QString &element);
+    QPixmap initEmptyPixmap(const QSize &size);
     void updateShadow(const QWidget *window, Plasma::FrameSvg::EnabledBorders);
     void clearShadow(const QWidget *window);
     void updateShadows();
@@ -56,7 +57,15 @@ public:
 
     DialogShadows *q;
     QList<QPixmap> m_shadowPixmaps;
-    QList<QPixmap> m_emptyShadowPixmaps;
+
+    QPixmap m_emptyCornerPix;
+    QPixmap m_emptyCornerLeftPix;
+    QPixmap m_emptyCornerTopPix;
+    QPixmap m_emptyCornerRightPix;
+    QPixmap m_emptyCornerBottomPix;
+    QPixmap m_emptyVerticalPix;
+    QPixmap m_emptyHorizontalPix;
+
     QHash<Plasma::FrameSvg::EnabledBorders, QVector<unsigned long> > data;
     QHash<const QWidget *, Plasma::FrameSvg::EnabledBorders> m_windows;
     bool m_managePixmaps;
@@ -144,18 +153,18 @@ void DialogShadows::Private::initPixmap(const QString &element)
         p.drawPixmap(QPoint(0, 0), pix);
         m_shadowPixmaps << tempPix;
         m_managePixmaps = true;
-
-        //make an empty pixmap for when the border is sisabled
-        QSize size = q->elementSize(element);
-        xPix = XCreatePixmap(QX11Info::display(), QX11Info::appRootWindow(), size.width(), size.height(), 32);
-        tempPix = QPixmap::fromX11Pixmap(xPix, QPixmap::ExplicitlyShared);
-        tempPix.fill(Qt::transparent);
-        m_emptyShadowPixmaps << tempPix;
     } else {
         m_shadowPixmaps << pix;
-        m_emptyShadowPixmaps << pix;
     }
 #endif
+}
+
+QPixmap DialogShadows::Private::initEmptyPixmap(const QSize &size)
+{
+    Pixmap emptyXPix = XCreatePixmap(QX11Info::display(), QX11Info::appRootWindow(), size.width(), size.height(), 32);
+    QPixmap tempEmptyPix = QPixmap::fromX11Pixmap(emptyXPix, QPixmap::ExplicitlyShared);
+    tempEmptyPix.fill(Qt::transparent);
+    return tempEmptyPix;
 }
 
 void DialogShadows::Private::setupPixmaps()
@@ -169,6 +178,15 @@ void DialogShadows::Private::setupPixmaps()
     initPixmap("shadow-bottomleft");
     initPixmap("shadow-left");
     initPixmap("shadow-topleft");
+
+    m_emptyCornerPix = initEmptyPixmap(QSize(1,1));
+    m_emptyCornerLeftPix = initEmptyPixmap(QSize(q->elementSize("shadow-topleft").width(), 1));
+    m_emptyCornerTopPix = initEmptyPixmap(QSize(1, q->elementSize("shadow-topleft").height()));
+    m_emptyCornerRightPix = initEmptyPixmap(QSize(q->elementSize("shadow-bottomright").width(), 1));
+    m_emptyCornerBottomPix = initEmptyPixmap(QSize(1, q->elementSize("shadow-bottomright").height()));
+    m_emptyVerticalPix = initEmptyPixmap(QSize(1, q->elementSize("shadow-left").height()));
+    m_emptyHorizontalPix = initEmptyPixmap(QSize(q->elementSize("shadow-top").width(), 1));
+
 }
 
 
@@ -183,60 +201,76 @@ void DialogShadows::Private::setupData(Plasma::FrameSvg::EnabledBorders enabledB
     if (enabledBorders & Plasma::FrameSvg::TopBorder) {
         data[enabledBorders] << m_shadowPixmaps[0].handle();
     } else {
-        data[enabledBorders] << m_emptyShadowPixmaps[0].handle();
+        data[enabledBorders] << m_emptyHorizontalPix.handle();
     }
 
     //shadow-topright
     if (enabledBorders & Plasma::FrameSvg::TopBorder &&
         enabledBorders & Plasma::FrameSvg::RightBorder) {
         data[enabledBorders] << m_shadowPixmaps[1].handle();
+    } else if (enabledBorders & Plasma::FrameSvg::TopBorder) {
+        data[enabledBorders] << m_emptyCornerTopPix.handle();
+    } else if (enabledBorders & Plasma::FrameSvg::RightBorder) {
+        data[enabledBorders] << m_emptyCornerRightPix.handle();
     } else {
-        data[enabledBorders] << m_emptyShadowPixmaps[1].handle();
+        data[enabledBorders] << m_emptyCornerPix.handle();
     }
 
     //shadow-right
     if (enabledBorders & Plasma::FrameSvg::RightBorder) {
         data[enabledBorders] << m_shadowPixmaps[2].handle();
     } else {
-        data[enabledBorders] << m_emptyShadowPixmaps[2].handle();
+        data[enabledBorders] << m_emptyVerticalPix.handle();
     }
 
     //shadow-bottomright
     if (enabledBorders & Plasma::FrameSvg::BottomBorder &&
         enabledBorders & Plasma::FrameSvg::RightBorder) {
         data[enabledBorders] << m_shadowPixmaps[3].handle();
+    } else if (enabledBorders & Plasma::FrameSvg::BottomBorder) {
+        data[enabledBorders] << m_emptyCornerBottomPix.handle();
+    } else if (enabledBorders & Plasma::FrameSvg::RightBorder) {
+        data[enabledBorders] << m_emptyCornerRightPix.handle();
     } else {
-        data[enabledBorders] << m_emptyShadowPixmaps[3].handle();
+        data[enabledBorders] << m_emptyCornerPix.handle();
     }
 
     //shadow-bottom
     if (enabledBorders & Plasma::FrameSvg::BottomBorder) {
         data[enabledBorders] << m_shadowPixmaps[4].handle();
     } else {
-        data[enabledBorders] << m_emptyShadowPixmaps[4].handle();
+        data[enabledBorders] << m_emptyHorizontalPix.handle();
     }
 
     //shadow-bottomleft
     if (enabledBorders & Plasma::FrameSvg::BottomBorder &&
         enabledBorders & Plasma::FrameSvg::LeftBorder) {
         data[enabledBorders] << m_shadowPixmaps[5].handle();
+    } else if (enabledBorders & Plasma::FrameSvg::BottomBorder) {
+        data[enabledBorders] << m_emptyCornerBottomPix.handle();
+    } else if (enabledBorders & Plasma::FrameSvg::LeftBorder) {
+        data[enabledBorders] << m_emptyCornerLeftPix.handle();
     } else {
-        data[enabledBorders] << m_emptyShadowPixmaps[5].handle();
+        data[enabledBorders] << m_emptyCornerPix.handle();
     }
 
     //shadow-left
     if (enabledBorders & Plasma::FrameSvg::LeftBorder) {
         data[enabledBorders] << m_shadowPixmaps[6].handle();
     } else {
-        data[enabledBorders] << m_emptyShadowPixmaps[6].handle();
+        data[enabledBorders] << m_emptyVerticalPix.handle();
     }
 
     //shadow-topleft
     if (enabledBorders & Plasma::FrameSvg::TopBorder &&
         enabledBorders & Plasma::FrameSvg::LeftBorder) {
         data[enabledBorders] << m_shadowPixmaps[7].handle();
+    } else if (enabledBorders & Plasma::FrameSvg::TopBorder) {
+        data[enabledBorders] << m_emptyCornerTopPix.handle();
+    } else if (enabledBorders & Plasma::FrameSvg::LeftBorder) {
+        data[enabledBorders] << m_emptyCornerLeftPix.handle();
     } else {
-        data[enabledBorders] << m_emptyShadowPixmaps[7].handle();
+        data[enabledBorders] << m_emptyCornerPix.handle();
     }
 #endif
 
@@ -252,7 +286,7 @@ void DialogShadows::Private::setupData(Plasma::FrameSvg::EnabledBorders enabledB
             top = m_shadowPixmaps[0].height(); // top
         }
     } else {
-        top = m_shadowPixmaps[7].height(); // topleft
+        top = 1;
     }
 
     if (enabledBorders & Plasma::FrameSvg::RightBorder) {
@@ -264,7 +298,7 @@ void DialogShadows::Private::setupData(Plasma::FrameSvg::EnabledBorders enabledB
             right = m_shadowPixmaps[2].width(); // right
         }
     } else {
-        right = m_shadowPixmaps[1].width(); // topright
+        right = 1;
     }
 
     if (enabledBorders & Plasma::FrameSvg::BottomBorder) {
@@ -275,7 +309,7 @@ void DialogShadows::Private::setupData(Plasma::FrameSvg::EnabledBorders enabledB
             bottom = m_shadowPixmaps[4].height(); // bottom
         }
     } else {
-        bottom = m_shadowPixmaps[5].height(); // bottomleft
+        bottom = 1;
     }
 
     if (enabledBorders & Plasma::FrameSvg::LeftBorder) {
@@ -286,7 +320,7 @@ void DialogShadows::Private::setupData(Plasma::FrameSvg::EnabledBorders enabledB
             left = m_shadowPixmaps[6].width(); // left
         }
     } else {
-        left = m_shadowPixmaps[7].width(); // topleft
+        left = 1;
     }
 
     data[enabledBorders] << top << right << bottom << left;
@@ -299,14 +333,19 @@ void DialogShadows::Private::clearPixmaps()
         foreach (const QPixmap &pixmap, m_shadowPixmaps) {
             XFreePixmap(QX11Info::display(), pixmap.handle());
         }
-        foreach (const QPixmap &pixmap, m_emptyShadowPixmaps) {
-            XFreePixmap(QX11Info::display(), pixmap.handle());
-        }
+
+        XFreePixmap(QX11Info::display(), m_emptyCornerPix.handle());
+        XFreePixmap(QX11Info::display(), m_emptyCornerBottomPix.handle());
+        XFreePixmap(QX11Info::display(), m_emptyCornerLeftPix.handle());
+        XFreePixmap(QX11Info::display(), m_emptyCornerRightPix.handle());
+        XFreePixmap(QX11Info::display(), m_emptyCornerTopPix.handle());
+        XFreePixmap(QX11Info::display(), m_emptyVerticalPix.handle());
+        XFreePixmap(QX11Info::display(), m_emptyHorizontalPix.handle());
+
         m_managePixmaps = false;
     }
 #endif
     m_shadowPixmaps.clear();
-    m_emptyShadowPixmaps.clear();
     data.clear();
 }
 
