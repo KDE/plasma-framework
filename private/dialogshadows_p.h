@@ -30,14 +30,14 @@ class DialogShadows : public Plasma::Svg
     Q_OBJECT
 
 public:
-    explicit DialogShadows(QObject *parent = 0);
+    explicit DialogShadows(QObject *parent = 0, const QString &prefix = "dialogs/background");
 
     static DialogShadows *self();
 
     void addWindow(const QWidget *window, Plasma::FrameSvg::EnabledBorders enabledBorders = Plasma::FrameSvg::AllBorders);
     void removeWindow(const QWidget *window);
 
-private Q_SLOTS:
+    bool enabled() const;
 
 private:
     class Private;

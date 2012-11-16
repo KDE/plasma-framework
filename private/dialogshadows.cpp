@@ -83,11 +83,11 @@ public:
 
 K_GLOBAL_STATIC(DialogShadowsSingleton, privateDialogShadowsSelf)
 
-DialogShadows::DialogShadows(QObject *parent)
+DialogShadows::DialogShadows(QObject *parent, const QString &prefix)
     : Plasma::Svg(parent),
       d(new Private(this))
 {
-    setImagePath("dialogs/background");
+    setImagePath(prefix);
     connect(this, SIGNAL(repaintNeeded()), this, SLOT(updateShadows()));
 }
 
@@ -193,10 +193,6 @@ void DialogShadows::Private::setupPixmaps()
 void DialogShadows::Private::setupData(Plasma::FrameSvg::EnabledBorders enabledBorders)
 {
 #ifdef Q_WS_X11
-    /*foreach (const QPixmap &pixmap, m_shadowPixmaps) {
-        data[enabledBorders] << pixmap.handle();
-    }*/
-
     //shadow-top
     if (enabledBorders & Plasma::FrameSvg::TopBorder) {
         data[enabledBorders] << m_shadowPixmaps[0].handle();
@@ -279,7 +275,6 @@ void DialogShadows::Private::setupData(Plasma::FrameSvg::EnabledBorders enabledB
     QSize marginHint;
     if (enabledBorders & Plasma::FrameSvg::TopBorder) {
         marginHint = q->elementSize("shadow-hint-top-margin");
-        kDebug() << "top margin hint is:" << marginHint;
         if (marginHint.isValid()) {
             top = marginHint.height();
         } else {
@@ -291,7 +286,6 @@ void DialogShadows::Private::setupData(Plasma::FrameSvg::EnabledBorders enabledB
 
     if (enabledBorders & Plasma::FrameSvg::RightBorder) {
         marginHint = q->elementSize("shadow-hint-right-margin");
-        kDebug() << "right margin hint is:" << marginHint;
         if (marginHint.isValid()) {
             right = marginHint.width();
         } else {
@@ -352,7 +346,7 @@ void DialogShadows::Private::clearPixmaps()
 void DialogShadows::Private::updateShadow(const QWidget *window, Plasma::FrameSvg::EnabledBorders enabledBorders)
 {
 #ifdef Q_WS_X11
-    if (m_shadowPixmaps.size() == 0) {
+    if (m_shadowPixmaps.isEmpty()) {
         setupPixmaps();
     }
 
@@ -376,6 +370,11 @@ void DialogShadows::Private::clearShadow(const QWidget *window)
     Atom atom = XInternAtom(dpy, "_KDE_NET_WM_SHADOW", False);
     XDeleteProperty(dpy, window->winId(), atom);
 #endif
+}
+
+bool DialogShadows::enabled() const
+{
+     return hasElement("shadow-left");
 }
 
 #include "dialogshadows_p.moc"
