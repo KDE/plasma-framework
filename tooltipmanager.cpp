@@ -48,6 +48,7 @@
 #include "plasma/theme.h"
 #include "plasma/view.h"
 #include "plasma/private/tooltip_p.h"
+#include "plasma/private/dialogshadows_p.h"
 
 namespace Plasma
 {
@@ -57,6 +58,7 @@ class ToolTipManagerPrivate
 public :
     ToolTipManagerPrivate(ToolTipManager *manager)
         : q(manager),
+          shadow(new DialogShadows(q, "widgets/tooltip")),
           currentWidget(0),
           showTimer(new QTimer(manager)),
           hideTimer(new QTimer(manager)),
@@ -90,6 +92,7 @@ public :
     void hideTipWidget();
 
     ToolTipManager *q;
+    DialogShadows *shadow;
     QGraphicsWidget *currentWidget;
     QTimer *showTimer;
     QTimer *hideTimer;
@@ -298,6 +301,8 @@ void ToolTipManagerPrivate::createTipWidget()
     }
 
     tipWidget = new ToolTip(0);
+    shadow->addWindow(tipWidget);
+
     QObject::connect(tipWidget, SIGNAL(activateWindowByWId(WId,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)),
                      q, SIGNAL(windowPreviewActivated(WId,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)));
     QObject::connect(tipWidget, SIGNAL(linkActivated(QString,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)),
