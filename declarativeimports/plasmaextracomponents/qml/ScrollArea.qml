@@ -73,8 +73,7 @@ Item {
         property Item verticalScrollBar
         property Item horizontalScrollBar
 
-        function checkVerticalScrollBar()
-        {
+        function checkVerticalScrollBar() {
             if (!flickableItem) {
                 return
             }
@@ -94,10 +93,13 @@ Item {
                     verticalScrollBar = sectionScrollerComponent.createObject(root)
                 }
             }
+            checkVerticalScrollBarMargins()
+        }
 
+        function checkVerticalScrollBarMargins() {
             //undefined in case of SectionScroller
             if ((flickableItem.contentHeight > flickableItem.height) &&
-                (verticalScrollBar.interactive || (verticalScrollBar.orientation === undefined &&
+                ((verticalScrollBar.interactive && verticalScrollBar.visible) || (verticalScrollBar.orientation === undefined &&
                 //FIXME: heuristic on width to distinguish the touch sectionscroller
                 verticalScrollBar.width < 30))) {
                 flickableItem.anchors.rightMargin = verticalScrollBar.width
@@ -106,8 +108,7 @@ Item {
             }
         }
 
-        function checkHorizontalScrollBar()
-        {
+        function checkHorizontalScrollBar() {
             if (!flickableItem || horizontalScrollBar) {
                 return
             }
@@ -117,9 +118,12 @@ Item {
                     horizontalScrollBar = horizontalScrollBarComponent.createObject(root)
                 }
             }
+            checkHorizontalScrollBarMargins()
+        }
 
+        function checkHorizontalScrollBarMargins() {
             if ((flickableItem.contentWidth > flickableItem.width) &&
-                horizontalScrollBar.interactive) {
+                horizontalScrollBar.interactive && horizontalScrollBar.visible) {
                 flickableItem.anchors.bottomMargin = horizontalScrollBar.height
             } else {
                 flickableItem.anchors.bottomMargin = 0
@@ -140,6 +144,7 @@ Item {
                 bottom: parent.bottom
                 bottomMargin: parent.height - root.flickableItem.height
             }
+            onVisibleChanged: internal.checkVerticalScrollBarMargins()
         }
     }
     Component {
@@ -155,6 +160,7 @@ Item {
                 bottom: parent.bottom
                 rightMargin: parent.width - root.flickableItem.width
             }
+            onVisibleChanged: internal.checkHorizontalScrollBarMargins()
         }
     }
     Component {
@@ -170,6 +176,7 @@ Item {
                 bottom: parent.bottom
                 bottomMargin: parent.height - root.flickableItem.height
             }
+            onVisibleChanged: internal.checkVerticalScrollBarMargins()
         }
     }
     //FIXME: create all this stuff only on demand, like scrollbars?
@@ -194,6 +201,7 @@ Item {
             left: parent.left
             top: parent.top
             right: parent.right
+            topMargin: flickableItem.anchors.topMargin
         }
     }
     PlasmaCore.SvgItem {
@@ -213,6 +221,7 @@ Item {
             left: parent.left
             bottom: parent.bottom
             right: parent.right
+            bottomMargin: flickableItem.anchors.bottomMargin
         }
     }
     PlasmaCore.SvgItem {
@@ -231,6 +240,7 @@ Item {
             left: parent.left
             top: parent.top
             bottom: parent.bottom
+            leftMargin: flickableItem.anchors.leftMargin
         }
     }
     PlasmaCore.SvgItem {
@@ -249,6 +259,7 @@ Item {
             top: parent.top
             bottom: parent.bottom
             right: parent.right
+            rightMargin: flickableItem.anchors.rightMargin
         }
     }
 }
