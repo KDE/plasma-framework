@@ -32,7 +32,7 @@
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "datacontainer.h"
 #include "package.h"
@@ -706,7 +706,7 @@ void DataEnginePrivate::setupScriptSupport()
     const QString translationsPath = package->filePath("translations");
     if (!translationsPath.isEmpty()) {
         KGlobal::dirs()->addResourceDir("locale", translationsPath);
-        KLocale::global()->insertCatalog(dataEngineDescription.pluginName());
+        KLocalizedString::insertCatalog(dataEngineDescription.pluginName());
     }
 }
 

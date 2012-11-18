@@ -36,7 +36,7 @@
 #include <kglobal.h>
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #if !PLASMA_NO_KIO
 #include <kio/job.h>
@@ -560,7 +560,7 @@ void WallpaperPrivate::setupScriptSupport()
     const QString translationsPath = package->filePath("translations");
     if (!translationsPath.isEmpty()) {
         KGlobal::dirs()->addResourceDir("locale", translationsPath);
-        KLocale::global()->insertCatalog(wallpaperDescription.pluginName());
+        KLocalizedString::insertCatalog(wallpaperDescription.pluginName());
     }
 }
 

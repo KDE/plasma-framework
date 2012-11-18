@@ -31,7 +31,7 @@
 #include <kplugininfo.h>
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kiconloader.h>
 #include <qstandardpaths.h>
 
@@ -449,7 +449,7 @@ void AbstractRunnerPrivate::setupScriptSupport()
     const QString translationsPath = package->filePath("translations");
     if (!translationsPath.isEmpty()) {
         KGlobal::dirs()->addResourceDir("locale", translationsPath);
-        KLocale::global()->insertCatalog(runnerDescription.pluginName());
+        KLocalizedString::insertCatalog(runnerDescription.pluginName());
     }
 }
 
