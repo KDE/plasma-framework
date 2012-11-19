@@ -263,15 +263,15 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
         //If the popup is more than two times larger than the applet
         //center it (or taller in case of vertical panels
         if (f == Plasma::Vertical) {
-            if ((gWidget && gWidget->size().height() > q->size().height() *2 ) ||
-                (qWidget && qWidget->size().height() > q->size().height() *2 )) {
+            if ((gWidget && gWidget->size().height() > q->size().height() / 2) ||
+                (qWidget && qWidget->size().height() > q->size().height() / 2)) {
                 popupAlignment = Qt::AlignCenter;
             } else {
                 popupAlignment = Qt::AlignLeft;
             }
         } else {
-            if ((gWidget && gWidget->size().width() > q->size().width() *2 ) ||
-                (qWidget && qWidget->size().width() > q->size().width() *2 )) {
+            if ((gWidget && gWidget->size().width() > q->size().width() / 2) ||
+                (qWidget && qWidget->size().width() > q->size().width() / 2)) {
                 popupAlignment = Qt::AlignCenter;
             } else {
                 popupAlignment = Qt::AlignLeft;
