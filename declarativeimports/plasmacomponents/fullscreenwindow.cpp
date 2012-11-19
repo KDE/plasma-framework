@@ -127,7 +127,7 @@ void FullScreenWindow::init(const QString &componentName)
     const QString target = KDeclarative::componentsTarget();
     QString filePath;
     if (target != KDeclarative::defaultComponentsTarget()) {
-        const QString file = "platformimports/" % target % "org/kde/plasma/components/" % componentName % ".qml";
+        const QString file = "platformimports/" % target % "/org/kde/plasma/components/" % componentName % ".qml";
         filePath = KStandardDirs::locate("module", file);
     }
 
