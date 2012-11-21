@@ -87,6 +87,8 @@ QString PlasmoidPackage::findMainScript(Package *package) const
 
 void PlasmoidPackage::initPackage(Package *package)
 {
+    ChangeableMainScriptPackage::initPackage(package);
+
     QStringList platform = KDeclarative::runtimePlatform();
     if (!platform.isEmpty()) {
         QMutableStringListIterator it(platform);
