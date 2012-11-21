@@ -60,7 +60,6 @@
 
 #include "private/applet_p.h"
 #include "private/containmentactionspluginsconfig_p.h"
-#include "private/wallpaper_p.h"
 
 #include "plasma/plasma.h"
 

@@ -31,7 +31,6 @@
 #include <kmessagebox.h>
 
 #include "kdeclarative.h"
-#include "private/wallpaper_p.h"
 #include "package.h"
 #include "config-plasma.h"
 
