@@ -133,7 +133,6 @@ set(plasma_LIB_SRCS
     private/serviceprovider.cpp
     private/storage.cpp
     private/storagethread.cpp
-    private/wallpaperrenderthread.cpp
     private/windowpreview.cpp
     private/windowshadows.cpp
     private/applet_p.cpp
@@ -159,14 +158,12 @@ set(plasma_LIB_SRCS
     scripting/appletscript.cpp
     scripting/dataenginescript.cpp
     scripting/runnerscript.cpp
-    scripting/wallpaperscript.cpp
     scripting/scriptengine.cpp
     service.cpp
     servicejob.cpp
     svg.cpp
     theme.cpp
     version.cpp
-    wallpaper.cpp
 
 
     #Temporary QtJolie branch
@@ -269,8 +266,7 @@ set(plasma_LIB_INCLUDES
     svg.h
     theme.h
     version.h
-    view.h
-    wallpaper.h)
+    view.h)
 
 
 install(FILES
@@ -282,7 +278,6 @@ install(FILES
     scripting/appletscript.h
     scripting/dataenginescript.h
     scripting/runnerscript.h
-    scripting/wallpaperscript.h
     scripting/scriptengine.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/scripting COMPONENT Devel)
 
@@ -295,7 +290,6 @@ install(FILES
    data/servicetypes/plasma-runner.desktop
    data/servicetypes/plasma-scriptengine.desktop
    data/servicetypes/plasma-service.desktop
-   data/servicetypes/plasma-wallpaper.desktop
    DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
 install(FILES

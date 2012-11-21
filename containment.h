@@ -316,7 +316,12 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * Return wallpaper plugin.
          */
-        Plasma::Wallpaper *wallpaper() const;
+        QString wallpaper() const;
+
+        /**
+         * Return wallpaper rendering mode.
+         */
+        QString wallpaperMode() const;
 
         /**
          * Sets the current activity by id
@@ -449,16 +454,6 @@ Q_SIGNALS:
         void addSiblingContainment();
 
         /**
-         * switch keyboard focus to the next of our applets
-         */
-        void focusNextApplet();
-
-        /**
-         * switch keyboard focus to the previous one of our applets
-         */
-        void focusPreviousApplet();
-
-        /**
          * Destroys this containment and all its applets (after a confirmation dialog);
          * it will be removed nicely and deleted.
          * Its configuration will also be deleted.
@@ -511,13 +506,6 @@ Q_SIGNALS:
         void contextMenuEvent(QContextMenuEvent *event);
         void keyPressEvent(QKeyEvent *event);
         void wheelEvent(QWheelEvent *event);
-        void dropEvent(QDropEvent *event);
-
-        /**
-         * @reimp
-         * @sa QObject::resizeEvent()
-         */
-        void resizeEvent(QResizeEvent *event);
 
 
     private:
@@ -534,14 +522,7 @@ Q_SIGNALS:
         Q_PRIVATE_SLOT(d, void appletDeleted(Plasma::Applet*))
         Q_PRIVATE_SLOT(d, void triggerShowAddWidgets())
         Q_PRIVATE_SLOT(d, void requestConfiguration())
-        Q_PRIVATE_SLOT(d, void showDropZoneDelayed())
         Q_PRIVATE_SLOT(d, void checkStatus(Plasma::ItemStatus))
-        Q_PRIVATE_SLOT(d, void remoteAppletReady(Plasma::AccessAppletJob *))
-        /**
-        * This slot is called when the 'stat' after a job event has finished.
-        */
-        Q_PRIVATE_SLOT(d, void mimeTypeRetrieved(KIO::Job *, const QString &))
-        Q_PRIVATE_SLOT(d, void dropJobResult(KJob *))
 
         friend class Applet;
         friend class AppletPrivate;

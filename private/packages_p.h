@@ -22,7 +22,6 @@
 
 #include "packagestructure.h"
 #include "plasma.h"
-#include "wallpaper.h"
 
 namespace Plasma
 {
@@ -69,31 +68,6 @@ class ThemePackage : public PackageStructure
 {
 public:
     void initPackage(Package *package);
-};
-
-class WallpaperPackage : public PackageStructure
-{
-    Q_OBJECT
-
-public:
-    explicit WallpaperPackage(Wallpaper *paper = 0);
-    void initPackage(Package *package);
-    void pathChanged(Package *package);
-
-private:
-    QSize resSize(const QString &str) const;
-    void findBestPaper(Package *package);
-    float distance(const QSize& size, const QSize& desired,
-                   Plasma::Wallpaper::ResizeMethod method) const;
-
-private Q_SLOTS:
-    void renderHintsChanged();
-
-private:
-    Wallpaper *m_paper;
-    bool m_fullPackage;
-    QSize m_targetSize;
-    Wallpaper::ResizeMethod m_resizeMethod;
 };
 
 class ContainmentActionsPackage : public ChangeableMainScriptPackage

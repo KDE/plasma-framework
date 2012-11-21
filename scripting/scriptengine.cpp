@@ -31,7 +31,6 @@
 #include "scripting/appletscript.h"
 #include "scripting/dataenginescript.h"
 #include "scripting/runnerscript.h"
-#include "scripting/wallpaperscript.h"
 
 namespace Plasma
 {
@@ -94,14 +93,6 @@ QStringList knownLanguages(ComponentTypes types)
         constraint.append(constraintTemplate.arg("Runner"));
     }
 
-    if (types & WallpaperComponent) {
-        if (!constraint.isEmpty()) {
-            constraint.append(" or ");
-        }
-
-        constraint.append(constraintTemplate.arg("Wallpaper"));
-    }
-
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/ScriptEngine", constraint);
     //kDebug() << "Applet::knownApplets constraint was '" << constraint
     //         << "' which got us " << offers.count() << " matches";
@@ -142,9 +133,6 @@ KService::List engineOffers(const QString &language, ComponentType type)
     case RunnerComponent:
         component = "Runner";
         break;
-    case WallpaperComponent:
-        component = "Wallpaper";
-        break;
     default:
         return KService::List();
         break;
@@ -182,9 +170,6 @@ ScriptEngine *loadEngine(const QString &language, ComponentType type, QObject *p
                 break;
             case RunnerComponent:
                 engine = service->createInstance<Plasma::RunnerScript>(parent, args, &error);
-                break;
-            case WallpaperComponent:
-                engine = service->createInstance<Plasma::WallpaperScript>(parent, args, &error);
                 break;
             default:
                 return 0;
@@ -237,18 +222,6 @@ RunnerScript *loadScriptEngine(const QString &language, AbstractRunner *runner)
 
     if (engine) {
         engine->setRunner(runner);
-    }
-
-    return engine;
-}
-
-WallpaperScript *loadScriptEngine(const QString &language, Wallpaper *wallpaper)
-{
-    WallpaperScript *engine =
-        static_cast<WallpaperScript*>(loadEngine(language, WallpaperComponent, wallpaper));
-
-    if (engine) {
-        engine->setWallpaper(wallpaper);
     }
 
     return engine;

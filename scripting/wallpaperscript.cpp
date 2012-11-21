@@ -94,26 +94,6 @@ QWidget *WallpaperScript::createConfigurationInterface(QWidget *parent)
     return 0;
 }
 
-void WallpaperScript::mouseMoveEvent(QMouseEvent *event)
-{
-    Q_UNUSED(event)
-}
-
-void WallpaperScript::mousePressEvent(QMouseEvent *event)
-{
-    Q_UNUSED(event)
-}
-
-void WallpaperScript::mouseReleaseEvent(QMouseEvent *event)
-{
-    Q_UNUSED(event)
-}
-
-void WallpaperScript::wheelEvent(QWheelEvent *event)
-{
-    Q_UNUSED(event)
-}
-
 void WallpaperScript::addUrls(const QList<QUrl> & urls)
 {
     Q_UNUSED(urls)
@@ -135,12 +115,6 @@ QRectF WallpaperScript::boundingRect() const
     return QRectF();
 }
 
-DataEngine *WallpaperScript::dataEngine(const QString &name) const
-{
-    Q_ASSERT(d->wallpaper);
-    return d->wallpaper->dataEngine(name);
-}
-
 void WallpaperScript::setResizeMethodHint(Wallpaper::ResizeMethod resizeMethod)
 {
     if (d->wallpaper) {
@@ -159,37 +133,6 @@ void WallpaperScript::setConfigurationRequired(bool needsConfiguring, const QStr
 {
     if (d->wallpaper) {
         d->wallpaper->setConfigurationRequired(needsConfiguring, reason);
-    }
-}
-
-void WallpaperScript::render(const QString &sourceImagePath, const QSize &size,
-        Wallpaper::ResizeMethod resizeMethod, const QColor &color)
-{
-    if (d->wallpaper) {
-        d->wallpaper->setWallpaperPath(sourceImagePath);
-        d->wallpaper->render(size, resizeMethod, color);
-    }
-}
-
-void WallpaperScript::setUsingRenderingCache(bool useCache)
-{
-    if (d->wallpaper) {
-        d->wallpaper->setUsingRenderingCache(useCache);
-    }
-}
-
-bool WallpaperScript::findInCache(const QString &key, QImage &image, unsigned int lastModified)
-{
-    if (d->wallpaper) {
-        return d->wallpaper->findInCache(key, image, lastModified);
-    }
-    return false;
-}
-
-void WallpaperScript::insertIntoCache(const QString& key, const QImage &image)
-{
-    if (d->wallpaper) {
-        d->wallpaper->insertIntoCache(key, image);
     }
 }
 

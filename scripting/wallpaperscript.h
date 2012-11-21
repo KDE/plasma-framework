@@ -105,38 +105,6 @@ public:
     virtual QWidget *createConfigurationInterface(QWidget *parent);
 
     /**
-     * Mouse move event. To prevent further propagation of the event,
-     * the event must be accepted.
-     *
-     * @param event the mouse event object
-     */
-    virtual void mouseMoveEvent(QMouseEvent *event);
-
-    /**
-     * Mouse press event. To prevent further propagation of the even,
-     * and to receive mouseMoveEvents, the event must be accepted.
-     *
-     * @param event the mouse event object
-     */
-    virtual void mousePressEvent(QMouseEvent *event);
-
-    /**
-     * Mouse release event. To prevent further propagation of the event,
-     * the event must be accepted.
-     *
-     * @param event the mouse event object
-     */
-    virtual void mouseReleaseEvent(QMouseEvent *event);
-
-    /**
-     * Mouse wheel event. To prevent further propagation of the event,
-     * the event must be accepted.
-     *
-     * @param event the wheel event object
-     */
-    virtual void wheelEvent(QWheelEvent *event);
-
-    /**
      * Adds urls (e.g. from a drop)
      */
     virtual void addUrls(const QList<QUrl>& urls);
@@ -161,16 +129,9 @@ protected:
 
     bool isInitialized() const;
     QRectF boundingRect() const;
-    DataEngine *dataEngine(const QString &name) const;
     void setResizeMethodHint(Wallpaper::ResizeMethod resizeMethod);
     void setTargetSizeHint(const QSizeF &targetSize);
     void setConfigurationRequired(bool needsConfiguring, const QString &reason = QString());
-    void render(const QString &sourceImagePath, const QSize &size,
-                Wallpaper::ResizeMethod resizeMethod = Plasma::Wallpaper::ScaledResize,
-                const QColor &color = QColor(0, 0, 0));
-    void setUsingRenderingCache(bool useCache);
-    bool findInCache(const QString &key, QImage &image, unsigned int lastModified = 0);
-    void insertIntoCache(const QString& key, const QImage &image);
     void setContextualActions(const QList<QAction*> &actions);
     void update(const QRectF &exposedArea);
     void configNeedsSaving();

@@ -52,16 +52,12 @@ public:
         : q(c),
           formFactor(Planar),
           location(Floating),
-          focusedApplet(0),
-          wallpaper(0),
           screen(-1), // no screen
           lastScreen(-1),
           desktop(-1), // all desktops
           lastDesktop(-1),
           type(Containment::NoContainmentType),
-          showDropZoneDelayTimer(0),
           drawWallpaper(true),
-          dropZoneStarted(false),
           containmentActionsSource(Global)
     {
     }
@@ -73,9 +69,6 @@ public:
             delete applets.first();
         }
         applets.clear();
-
-        qDeleteAll(dropMenus);
-        dropMenus.clear();
     }
 
     void triggerShowAddWidgets();
@@ -96,10 +89,6 @@ public:
     void setLockToolText();
     void appletDeleted(Applet*);
     void appletAppeared(Applet*);
-    void clearDataForMimeJob(KIO::Job *job);
-    void remoteAppletReady(Plasma::AccessAppletJob *job);
-    void mimeTypeRetrieved(KIO::Job *job, const QString &mimetype);
-    void dropJobResult(KJob *);
     void addContainmentActions(KMenu &desktopMenu, QEvent *event);
     void addAppletActions(KMenu &desktopMenu, Applet *applet, QEvent *event);
     void checkRemoveAction();
@@ -117,18 +106,6 @@ public:
     static void addDefaultActions(KActionCollection *actions, Containment *c = 0);
 
     /**
-     * give keyboard focus to applet within this containment
-     */
-    void focusApplet(Plasma::Applet *applet);
-
-    /**
-     * Handles dropped/pasted mimetype data
-     * @param screenPos screen-relative position
-     * @param dropEvent the drop event (if null, the clipboard is used instead)
-     */
-    void dropData(QPoint screenPos, QDropEvent *dropEvent = 0);
-
-    /**
      * inits the containmentactions if necessary
      * if it needs configuring, this warns the user and returns false
      * if a menu is passed in, then it populates that menu with the actions from the plugin
@@ -140,11 +117,8 @@ public:
      */
     bool prepareContainmentActions(const QString &trigger, const QPoint &screenPos, KMenu *menu = 0);
 
-    /**
-     * Delayed drop zone display
-     */
-    void showDropZoneDelayed();
 
+    
     QHash<QString, ContainmentActions*> *actionPlugins();
 
     static bool s_positioningPanels;
@@ -153,8 +127,8 @@ public:
     FormFactor formFactor;
     Location location;
     Applet::List applets;
-    Applet *focusedApplet;
-    Plasma::Wallpaper *wallpaper;
+    QString wallpaper;
+    QString wallpaperMode;
     QHash<QString, ContainmentActions*> localActionPlugins;
     int screen;
     int lastScreen;
@@ -163,11 +137,7 @@ public:
     QList<QAction *> toolBoxActions;
     QString activityId;
     Containment::Type type;
-    QHash<KJob*, QPointF> dropPoints;
-    QHash<KJob*, KMenu*> dropMenus;
-    QTimer *showDropZoneDelayTimer;
     bool drawWallpaper : 1;
-    bool dropZoneStarted : 1;
 
     enum ContainmentActionsSource {
         Global = 0,

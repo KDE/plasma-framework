@@ -54,7 +54,6 @@
 #include "corona.h"
 #include "pluginloader.h"
 #include "svg.h"
-#include "wallpaper.h"
 
 #include "remote/accessappletjob.h"
 #include "remote/accessmanager.h"
@@ -323,16 +322,10 @@ void Containment::save(KConfigGroup &g) const
     group.writeEntry("activityId", d->activityId);
 
 
-    if (d->wallpaper) {
-        group.writeEntry("wallpaperplugin", d->wallpaper->pluginName());
-        group.writeEntry("wallpaperpluginmode", d->wallpaper->renderingMode().name());
+    group.writeEntry("wallpaperplugin", d->wallpaper);
+    group.writeEntry("wallpaperpluginmode", d->wallpaperMode);
 
-        if (d->wallpaper->isInitialized()) {
-            KConfigGroup wallpaperConfig(&group, "Wallpaper");
-            wallpaperConfig = KConfigGroup(&wallpaperConfig, d->wallpaper->pluginName());
-            d->wallpaper->save(wallpaperConfig);
-        }
-    }
+    //TODO: the wallpaper implementation must know it has to save at this point
 
     saveContents(group);
 }
@@ -543,9 +536,6 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
 
     if (currentContainment && currentContainment != this) {
         emit currentContainment->appletRemoved(applet);
-        if (currentContainment->d->focusedApplet == applet) {
-            currentContainment->d->focusedApplet = 0;
-        }
 
         disconnect(applet, 0, currentContainment, 0);
         KConfigGroup oldConfig = applet->config();
@@ -692,23 +682,6 @@ QStringList Containment::listContainmentTypes()
     return types.toList();
 }
 
-void Containment::dropEvent(QDropEvent *event)
-{
-    if (isContainment()) {
-        d->dropData(event->pos(), event);
-    }
-}
-
-//TODO: remove and make it GSS
-void Containment::resizeEvent(QResizeEvent *event)
-{
-    if (isContainment()) {
-        if (d->wallpaper) {
-            d->wallpaper->setBoundingRect(QRectF(QPointF(0, 0), event->size()));
-        }
-    }
-}
-
 void Containment::keyPressEvent(QKeyEvent *event)
 {
     //kDebug() << "keyPressEvent with" << event->key()
@@ -726,15 +699,6 @@ void Containment::keyPressEvent(QKeyEvent *event)
 void Containment::wheelEvent(QWheelEvent *event)
 {
     event->ignore();
-
-    if (d->wallpaper && d->wallpaper->isInitialized()) {
-        event->ignore();
-        d->wallpaper->wheelEvent(event);
-
-        if (event->isAccepted()) {
-            return;
-        }
-    }
 
     QString trigger = ContainmentActions::eventToString(event);
 
@@ -769,10 +733,12 @@ void Containment::removeToolBoxAction(QAction *action)
 
 void Containment::addAssociatedWidget(QWidget *widget)
 {
+    //TODO: move this whole method in the c++ part of the QML implementation
     Applet::addAssociatedWidget(widget);
-    if (d->focusedApplet) {
+
+    /*if (d->focusedApplet) {
         d->focusedApplet->addAssociatedWidget(widget);
-    }
+    }*/
 
     foreach (const Applet *applet, d->applets) {
         if (applet->d->activationAction) {
@@ -783,10 +749,11 @@ void Containment::addAssociatedWidget(QWidget *widget)
 
 void Containment::removeAssociatedWidget(QWidget *widget)
 {
+    //TODO: move this whole method in the c++ part of the QML implementation
     Applet::removeAssociatedWidget(widget);
-    if (d->focusedApplet) {
+    /*if (d->focusedApplet) {
         d->focusedApplet->removeAssociatedWidget(widget);
-    }
+    }*/
 
     foreach (const Applet *applet, d->applets) {
         if (applet->d->activationAction) {
@@ -798,15 +765,6 @@ void Containment::removeAssociatedWidget(QWidget *widget)
 void Containment::setDrawWallpaper(bool drawWallpaper)
 {
     d->drawWallpaper = drawWallpaper;
-    if (drawWallpaper) {
-        KConfigGroup cfg = config();
-        const QString wallpaper = cfg.readEntry("wallpaperplugin", ContainmentPrivate::defaultWallpaper);
-        const QString mode = cfg.readEntry("wallpaperpluginmode", ContainmentPrivate::defaultWallpaperMode);
-        setWallpaper(wallpaper, mode);
-    } else {
-        delete d->wallpaper;
-        d->wallpaper = 0;
-    }
 }
 
 bool Containment::drawWallpaper()
@@ -817,65 +775,32 @@ bool Containment::drawWallpaper()
 void Containment::setWallpaper(const QString &pluginName, const QString &mode)
 {
     KConfigGroup cfg = config();
-    bool newPlugin = true;
-    bool newMode = true;
+    bool newPlugin = pluginName != d->wallpaper;
+    bool newMode = mode != d->wallpaperMode;
 
-    if (d->drawWallpaper) {
-        if (d->wallpaper) {
-            // we have a wallpaper, so let's decide whether we need to swap it out
-            if (d->wallpaper->pluginName() != pluginName) {
-                delete d->wallpaper;
-                d->wallpaper = 0;
-            } else {
-                // it's the same plugin, so let's save its state now so when
-                // we call restore later on we're safe
-                newMode = d->wallpaper->renderingMode().name() != mode;
-                newPlugin = false;
-            }
-        }
-
-        if (!pluginName.isEmpty() && !d->wallpaper) {
-            d->wallpaper = Plasma::Wallpaper::load(pluginName);
-        }
-
-        if (d->wallpaper) {
-            d->wallpaper->setParent(this);
-            d->wallpaper->setRenderingMode(mode);
-
-            if (newPlugin) {
-                cfg.writeEntry("wallpaperplugin", pluginName);
-            }
-
-            if (d->wallpaper->isInitialized()) {
-                KConfigGroup wallpaperConfig = KConfigGroup(&cfg, "Wallpaper");
-                wallpaperConfig = KConfigGroup(&wallpaperConfig, pluginName);
-                d->wallpaper->restore(wallpaperConfig);
-            }
-
-            if (newMode) {
-                cfg.writeEntry("wallpaperpluginmode", mode);
-            }
-        }
-    }
-
-    if (!d->wallpaper) {
-        cfg.deleteEntry("wallpaperplugin");
-        cfg.deleteEntry("wallpaperpluginmode");
-    }
 
     if (newPlugin || newMode) {
-        if (newPlugin && d->wallpaper) {
-            connect(d->wallpaper, SIGNAL(configureRequested()), this, SLOT(requestConfiguration()));
-            connect(d->wallpaper, SIGNAL(configNeedsSaving()), this, SIGNAL(configNeedsSaving()));
-        }
+        d->wallpaper = pluginName;
+        d->wallpaperMode = mode;
 
+        if (newMode) {
+            cfg.writeEntry("wallpaperpluginmode", mode);
+        }
+        if (newPlugin) {
+            cfg.writeEntry("wallpaperplugin", pluginName);
+        }
         emit configNeedsSaving();
     }
 }
 
-Plasma::Wallpaper *Containment::wallpaper() const
+QString Containment::wallpaper() const
 {
     return d->wallpaper;
+}
+
+QString Containment::wallpaperMode() const
+{
+    return d->wallpaperMode;
 }
 
 void Containment::setContainmentActions(const QString &trigger, const QString &pluginName)
@@ -947,36 +872,6 @@ void Containment::setActivity(const QString &activityId)
 QString Containment::activity() const
 {
     return d->activityId;
-}
-
-void Containment::focusNextApplet()
-{
-    if (d->applets.isEmpty()) {
-        return;
-    }
-    int index = d->focusedApplet ? d->applets.indexOf(d->focusedApplet) + 1 : 0;
-    if (index >= d->applets.size()) {
-        index = 0;
-    }
-#ifndef NDEBUG
-    kDebug() << "index" << index;
-#endif
-    d->focusApplet(d->applets.at(index));
-}
-
-void Containment::focusPreviousApplet()
-{
-    if (d->applets.isEmpty()) {
-        return;
-    }
-    int index = d->focusedApplet ? d->applets.indexOf(d->focusedApplet) - 1 : -1;
-    if (index < 0) {
-        index = d->applets.size() - 1;
-    }
-#ifndef NDEBUG
-    kDebug() << "index" << index;
-#endif
-    d->focusApplet(d->applets.at(index));
 }
 
 void Containment::destroy()

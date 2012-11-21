@@ -33,4 +33,11 @@ Porting of Applet and Containment
 * ContainmentPrivate::appletAt(const QPointF &point)   -> depends from ContainmentActions refactoring : disabled now in the code
 * ContainmentPrivate::setScreen(int newScreen, int newDesktop, bool preventInvalidDesktops)
 * all geometry functions in Applet and Containment (width, height, geometry, raise, lower...)
+* move Containment::addAssociatedWidget/removeAssociatedWidget in the c++ part of the QML implementation
 
+Porting of Wallpaper
+====================
+* port complete dropData/mimeTypeRetrieved from ContainmentPrivate to the c++ part of the Containment implementation. The code is right now in intoDeclarativeEngine/declarativecontainment_p.cpp
+* Containments should just have a string property for wallpapers that is the name of a Package with the wallpaper qml
+* the qml wallpaper must receive a signal when Containment::save() is called so it can do own config save (TODO around line 329 of containment.cpp)
+* redo WallpaperPackage, but this time is a package to load qml

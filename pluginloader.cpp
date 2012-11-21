@@ -356,8 +356,6 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
             structure = new DataEnginePackage();
         } else if (packageFormat.endsWith("/Runner")) {
             structure = new RunnerPackage();
-        } else if (packageFormat.endsWith("/Wallpaper")) {
-            structure = new WallpaperPackage();
         } else if (packageFormat.endsWith("/Theme")) {
             structure = new ThemePackage();
         } else if (packageFormat.endsWith("/ContainmentActions")) {

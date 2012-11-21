@@ -29,9 +29,6 @@
 #include <plasma/plasma.h>
 #include <plasma/version.h>
 
-class QMouseEvent;
-class QWheelEvent;
-
 namespace Plasma
 {
 
@@ -59,13 +56,11 @@ class WallpaperPrivate;
 class PLASMA_EXPORT Wallpaper : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QRectF boundingRect READ boundingRect WRITE setBoundingRect)
     Q_PROPERTY(QString name READ name)
     Q_PROPERTY(QString pluginName READ pluginName)
     Q_PROPERTY(QString icon READ icon)
     Q_PROPERTY(KServiceAction renderingMode READ renderingMode)
     Q_PROPERTY(QList<KServiceAction> listRenderingModes READ listRenderingModes)
-    Q_PROPERTY(bool usingRenderingCache READ isUsingRenderingCache WRITE setUsingRenderingCache)
     Q_PROPERTY(bool previewing READ isPreviewing WRITE setPreviewing)
     Q_PROPERTY(ResizeMethod resizeMethod READ resizeMethodHint WRITE setResizeMethodHint)
     Q_PROPERTY(QSizeF targetSize READ targetSizeHint WRITE setTargetSizeHint)
@@ -210,14 +205,6 @@ class PLASMA_EXPORT Wallpaper : public QObject
         virtual void addUrls(const QList<QUrl> &urls);
 
         /**
-         * This method is called when the wallpaper should be painted.
-         *
-         * @param painter the QPainter to use to do the painting
-         * @param exposedRect the rect to paint within
-         **/
-        virtual void paint(QPainter *painter, const QRectF &exposedRect) = 0;
-
-        /**
          * This method should be called once the wallpaper is loaded or mode is changed.
          * @param config Config group to load settings
          * @see init
@@ -231,88 +218,11 @@ class PLASMA_EXPORT Wallpaper : public QObject
         virtual void save(KConfigGroup &config);
 
         /**
-         * Returns a widget that can be used to configure the options (if any)
-         * associated with this wallpaper. It will be deleted by the caller
-         * when it complete. The default implementation returns a null pointer.
-         *
-         * To signal that settings have changed connect to
-         * settingsChanged(bool modified) in @p parent.
-         *
-         * @code connect(this, SIGNAL(settingsChanged(bool), parent, SLOT(settingsChanged(bool)))
-         * @endcode
-         *
-         * Emit settingsChanged(true) when the settings are changed and false when the original state is restored.
-         *
-         * Implementation detail note: for best visual results, use a QGridLayout with two columns,
-         * with the option labels in column 0
-         */
-        virtual QWidget *createConfigurationInterface(QWidget *parent);
-
-        /**
-         * Mouse move event. To prevent further propagation of the event,
-         * the event must be accepted.
-         *
-         * @param event the mouse event object
-         */
-        virtual void mouseMoveEvent(QMouseEvent *event);
-
-        /**
-         * Mouse press event. To prevent further propagation of the even,
-         * and to receive mouseMoveEvents, the event must be accepted.
-         *
-         * @param event the mouse event object
-         */
-        virtual void mousePressEvent(QMouseEvent *event);
-
-        /**
-         * Mouse release event. To prevent further propagation of the event,
-         * the event must be accepted.
-         *
-         * @param event the mouse event object
-         */
-        virtual void mouseReleaseEvent(QMouseEvent *event);
-
-        /**
-         * Mouse wheel event. To prevent further propagation of the event,
-         * the event must be accepted.
-         *
-         * @param event the wheel event object
-         */
-        virtual void wheelEvent(QWheelEvent *event);
-
-        /**
-         * Loads the given DataEngine
-         *
-         * Tries to load the data engine given by @p name.  Each engine is
-         * only loaded once, and that instance is re-used on all subsequent
-         * requests.
-         *
-         * If the data engine was not found, an invalid data engine is returned
-         * (see DataEngine::isValid()).
-         *
-         * Note that you should <em>not</em> delete the returned engine.
-         *
-         * @param name Name of the data engine to load
-         * @return pointer to the data engine if it was loaded,
-         *         or an invalid data engine if the requested engine
-         *         could not be loaded
-         *
-         * @since 4.3
-         */
-        Q_INVOKABLE DataEngine *dataEngine(const QString &name) const;
-
-        /**
          * @return true if the wallpaper currently needs to be configured,
          *         otherwise, false
          * @since 4.3
          */
         bool configurationRequired() const;
-
-        /**
-         * @return true if disk caching is turned on.
-         * @since 4.3
-         */
-        bool isUsingRenderingCache() const;
 
         virtual void setWallpaperPath(const QString& path);
 
@@ -404,12 +314,6 @@ class PLASMA_EXPORT Wallpaper : public QObject
         void configNeedsSaving();
 
         /**
-         * Emitted when a wallpaper image render is completed.
-         * @since 4.3
-         */
-        void renderCompleted(const QImage &image);
-
-        /**
          * @internal
          */
         void renderHintsChanged();
@@ -448,78 +352,6 @@ class PLASMA_EXPORT Wallpaper : public QObject
         void setConfigurationRequired(bool needsConfiguring, const QString &reason = QString());
 
         /**
-         * Renders the wallpaper asyncronously with the given parameters. When the rendering is
-         * complete, the renderCompleted signal is emitted.
-         *
-         * @param sourceImagePath the path to the image file on disk. Common image formats such as
-         *                        PNG, JPEG and SVG are supported
-         * @param size the size to render the image as
-         * @param resizeMethod the method to use when resizing the image to fit size, @see
-         *                     ResizeMethod
-         * @param color the color to use to pad the rendered image if it doesn't take up the
-         *              entire size with the given ResizeMethod
-         * @since 4.3
-         */
-        void render(const QSize &size, Wallpaper::ResizeMethod resizeMethod = ScaledResize,
-                    const QColor &color = QColor(0, 0, 0));
-
-        /**
-         * Renders the wallpaper asyncronously with the given parameters. When the rendering is
-         * complete, the renderCompleted signal is emitted.
-         *
-         * @param image the raw QImage
-         * @param size the size to render the image as
-         * @param resizeMethod the method to use when resizing the image to fit size, @see
-         *                     ResizeMethod
-         * @param color the color to use to pad the rendered image if it doesn't take up the
-         *              entire size with the given ResizeMethod
-         * @since 4.7.4
-         */
-        void render(const QImage &image, const QSize &size,
-                    Wallpaper::ResizeMethod resizeMethod = ScaledResize,
-                    const QColor &color = QColor(0, 0, 0));
-
-        /**
-         * Sets whether or not to cache on disk the results of calls to render. If the wallpaper
-         * changes often or is innexpensive to render, then it's probably best not to cache them.
-         *
-         * The default is not to cache.
-         *
-         * @see render
-         * @param useCache true to cache rendered papers on disk, false not to cache
-         * @since 4.3
-         */
-        void setUsingRenderingCache(bool useCache);
-
-        /**
-         * Tries to load pixmap with the specified key from cache.
-         *
-         * @param key the name to use in the cache for this image
-         * @param image the image object to populate with the resulting data if found
-         * @param lastModified if non-zero, the time stamp is also checked on the file,
-         *                     and must be newer than the timestamp to be loaded
-         *
-         * @return true when pixmap was found and loaded from cache, false otherwise
-         * @since 4.3
-         **/
-        bool findInCache(const QString &key, QImage &image, unsigned int lastModified = 0);
-
-        /**
-         * Insert specified pixmap into the cache if usingRenderingCache.
-         * If the cache already contains pixmap with the specified key then it is
-         * overwritten.
-         *
-         * @param key the name use in the cache for this image; if the image is specific
-         *            to this wallpaper plugin, consider including the name() as part of
-         *            the cache key to avoid collisions with other plugins.
-         * @param image the image to store in the cache; passing in a null image will cause
-         *              the cached image to be removed from the cache
-         *
-         * @since 4.3
-         **/
-        void insertIntoCache(const QString& key, const QImage &image);
-
-        /**
          * Sets the contextual actions for this wallpaper.
          *
          * @param actions A list of contextual actions for this wallpaper
@@ -539,8 +371,6 @@ class PLASMA_EXPORT Wallpaper : public QObject
         void setPreviewDuringConfiguration(const bool preview);
 
     private:
-        Q_PRIVATE_SLOT(d, void newRenderCompleted(const WallpaperRenderRequest &request,
-                                                  const QImage &image))
         Q_PRIVATE_SLOT(d, void initScript())
 
         friend class WallpaperPackage;

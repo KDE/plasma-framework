@@ -42,12 +42,8 @@ public:
                      int resizeMethod, const QColor &color) const;
     void initScript();
 
-    bool findInCache(const QString &key, unsigned int lastModified = 0);
 
-    void newRenderCompleted(const WallpaperRenderRequest &render, const QImage &image);
     void setupScriptSupport();
-    void renderWallpaper(const QString &sourceImagePath, const QImage &image, const QSize &size,
-                         Wallpaper::ResizeMethod resizeMethod, const QColor &color);
 
     Wallpaper *q;
     KPluginInfo wallpaperDescription;
@@ -67,20 +63,6 @@ public:
     bool scriptInitialized : 1;
     bool previewing : 1;
     bool needsPreviewDuringConfiguration : 1;
-};
-
-class LoadImageThread : public QObject, public QRunnable
-{
-    Q_OBJECT
-public:
-    LoadImageThread(const QString &filePath);
-    void run();
-
-Q_SIGNALS:
-    void done(const QImage &pixmap);
-
-private:
-    QString m_filePath;
 };
 
 } // namespace Plasma

@@ -53,52 +53,6 @@
 namespace Plasma
 {
 
-class SaveImageThread : public QRunnable
-{
-    QImage m_image;
-    QString m_filePath;
-
-    public:
-    SaveImageThread(const QImage &image, const QString &filePath)
-    {
-        m_image = image;
-        m_filePath = filePath;
-    }
-
-    void run()
-    {
-        m_image.save(m_filePath);
-    }
-};
-
-LoadImageThread::LoadImageThread(const QString &filePath)
-{
-    m_filePath = filePath;
-}
-
-void LoadImageThread::run()
-{
-    QImage image;
-    image.load(m_filePath);
-    emit done(image);
-}
-
-class WallpaperWithPaint : public Wallpaper
-{
-public:
-    WallpaperWithPaint(QObject *parent, const QVariantList &args)
-        : Wallpaper(parent, args)
-    {
-    }
-
-    virtual void paint(QPainter *painter, const QRectF &exposedRect)
-    {
-        if (d->script) {
-            d->script->paint(painter, exposedRect);
-        }
-    }
-};
-
 Wallpaper::Wallpaper(QObject * parentObject)
     : d(new WallpaperPrivate(KService::serviceByStorageId(QString()), this))
 {
@@ -188,7 +142,7 @@ Wallpaper *Wallpaper::load(const QString &wallpaperName, const QVariantList &arg
         kDebug() << "we have a script using the"
                  << offer->property("X-Plasma-API").toString() << "API";
 #endif
-        return new WallpaperWithPaint(0, allArgs);
+        return new Wallpaper(0, allArgs);
     }
 
     KPluginLoader plugin(*offer);
@@ -318,6 +272,7 @@ void Wallpaper::restore(const KConfigGroup &config)
     d->initialized = true;
 }
 
+
 void Wallpaper::init(const KConfigGroup &config)
 {
     if (d->script) {
@@ -333,47 +288,6 @@ void Wallpaper::save(KConfigGroup &config)
     }
 }
 
-QWidget *Wallpaper::createConfigurationInterface(QWidget *parent)
-{
-    if (d->script) {
-        return d->script->createConfigurationInterface(parent);
-    } else {
-        return 0;
-    }
-}
-
-void Wallpaper::mouseMoveEvent(QMouseEvent *event)
-{
-    if (d->script) {
-        return d->script->mouseMoveEvent(event);
-    }
-}
-
-void Wallpaper::mousePressEvent(QMouseEvent *event)
-{
-    if (d->script) {
-        return d->script->mousePressEvent(event);
-    }
-}
-
-void Wallpaper::mouseReleaseEvent(QMouseEvent *event)
-{
-    if (d->script) {
-        return d->script->mouseReleaseEvent(event);
-    }
-}
-
-void Wallpaper::wheelEvent(QWheelEvent *event)
-{
-    if (d->script) {
-        return d->script->wheelEvent(event);
-    }
-}
-
-DataEngine *Wallpaper::dataEngine(const QString &name) const
-{
-    return d->dataEngine(name);
-}
 
 bool Wallpaper::configurationRequired() const
 {
@@ -392,16 +306,6 @@ void Wallpaper::setConfigurationRequired(bool needsConfig, const QString &reason
 
     d->needsConfig = needsConfig;
     emit configurationRequired(needsConfig);
-}
-
-bool Wallpaper::isUsingRenderingCache() const
-{
-    return d->cacheRendering;
-}
-
-void Wallpaper::setUsingRenderingCache(bool useCache)
-{
-    d->cacheRendering = useCache;
 }
 
 void Wallpaper::setResizeMethodHint(Wallpaper::ResizeMethod resizeMethod)
@@ -429,51 +333,6 @@ void Wallpaper::setTargetSizeHint(const QSizeF &targetSize)
 QSizeF Wallpaper::targetSizeHint() const
 {
     return d->targetSize;
-}
-
-void Wallpaper::render(const QImage &image, const QSize &size,
-                       Wallpaper::ResizeMethod resizeMethod, const QColor &color)
-{
-    if (image.isNull()) {
-        return;
-    }
-
-    d->renderWallpaper(QString(), image, size, resizeMethod, color);
-}
-
-void Wallpaper::render(const QSize &size, Wallpaper::ResizeMethod resizeMethod,
-                       const QColor &color)
-{
-    d->renderWallpaper(d->wallpaperPath, QImage(), size, resizeMethod, color);
-}
-
-void WallpaperPrivate::renderWallpaper(const QString &sourceImagePath, const QImage &image, const QSize &size,
-                                       Wallpaper::ResizeMethod resizeMethod, const QColor &color)
-{
-    resizeMethod = qBound(Wallpaper::ScaledResize, resizeMethod, Wallpaper::LastResizeMethod);
-    if (lastResizeMethod != resizeMethod) {
-        lastResizeMethod = resizeMethod;
-        emit q->renderHintsChanged();
-    }
-
-    if (cacheRendering) {
-        QFileInfo info(sourceImagePath);
-        QString cache = cacheKey(sourceImagePath, size, resizeMethod, color);
-        if (findInCache(cache, info.lastModified().toTime_t())) {
-            return;
-        }
-    }
-
-    WallpaperRenderRequest request;
-    renderToken = request.token;
-    request.requester = q;
-    request.providedImage = image;
-    request.file = sourceImagePath;
-    request.size = size;
-    request.resizeMethod = resizeMethod;
-    request.color = color;
-    WallpaperRenderThread::render(request);
-    //kDebug() << "rendering" << sourceImagePath << ", token is" << d->renderToken;
 }
 
 WallpaperPrivate::WallpaperPrivate(KService::Ptr service, Wallpaper *wallpaper) :
@@ -529,24 +388,6 @@ QString WallpaperPrivate::cachePath(const QString &key) const
     return QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QLatin1Char('/') + "plasma-wallpapers/" + key + ".png";
 }
 
-void WallpaperPrivate::newRenderCompleted(const WallpaperRenderRequest &request, const QImage &image)
-{
-#ifndef NDEBUG
-    kDebug() << request.token << renderToken;
-#endif
-    if (request.token != renderToken) {
-        //kDebug() << "render token mismatch" << token << renderToken;
-        return;
-    }
-
-    if (cacheRendering) {
-        q->insertIntoCache(cacheKey(request.file, request.size, request.resizeMethod, request.color), image);
-    }
-
-    //kDebug() << "rendering complete!";
-    emit q->renderCompleted(image);
-}
-
 // put all setup routines for script here. at this point we can assume that
 // package exists and that we have a script engine
 void WallpaperPrivate::setupScriptSupport()
@@ -570,65 +411,6 @@ void WallpaperPrivate::initScript()
         setupScriptSupport();
         script->init();
         scriptInitialized = true;
-    }
-}
-
-bool WallpaperPrivate::findInCache(const QString &key, unsigned int lastModified)
-{
-    if (cacheRendering) {
-        QString cache = cachePath(key);
-        if (QFile::exists(cache)) {
-            if (lastModified > 0) {
-                QFileInfo info(cache);
-                if (info.lastModified().toTime_t() < lastModified) {
-                    return false;
-                }
-            }
-
-            LoadImageThread *loadImageT = new LoadImageThread(cache);
-            q->connect(loadImageT, SIGNAL(done(QImage)), q, SIGNAL(renderCompleted(QImage)));
-            QThreadPool::globalInstance()->start(loadImageT);
-
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool Wallpaper::findInCache(const QString &key, QImage &image, unsigned int lastModified)
-{
-    if (d->cacheRendering) {
-        QString cache = d->cachePath(key);
-        if (QFile::exists(cache)) {
-            if (lastModified > 0) {
-                QFileInfo info(cache);
-                if (info.lastModified().toTime_t() < lastModified) {
-                    return false;
-                }
-            }
-
-            image.load(cache);
-            return true;
-        }
-    }
-
-    return false;
-}
-
-void Wallpaper::insertIntoCache(const QString& key, const QImage &image)
-{
-    //TODO: cache limits?
-    if (key.isEmpty()) {
-        return;
-    }
-
-    if (d->cacheRendering) {
-        if (image.isNull()) {
-            QFile::remove(d->cachePath(key));
-        } else {
-            QThreadPool::globalInstance()->start(new SaveImageThread(image, d->cachePath(key)));
-        }
     }
 }
 
