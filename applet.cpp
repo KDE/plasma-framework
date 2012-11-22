@@ -1827,6 +1827,10 @@ bool Applet::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
     case QEvent::GraphicsSceneMousePress:
     case QEvent::GraphicsSceneMouseRelease:
     {
+        if (watched == this) {
+            event->setAccepted(false);
+            return false;
+        }
         // don't move when the containment is not mutable,
         // in the rare case the containment doesn't exists consider it as mutable
         if ((flags() & ItemIsMovable) && d->registeredAsDragHandle.contains(watched)) {
