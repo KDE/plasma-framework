@@ -74,8 +74,10 @@ enum FormFactor {
                     referred to as a "ten foot interface".*/
     Horizontal,  /**< The applet is constrained vertically, but
                     can expand horizontally. */
-    Vertical     /**< The applet is constrained horizontally, but
+    Vertical,     /**< The applet is constrained horizontally, but
                     can expand vertically. */
+    Application /**< The Applet lives in a plane and should be optimized to look as a full application,
+                     for the desktop or the particular device. */
 };
 
 /**
