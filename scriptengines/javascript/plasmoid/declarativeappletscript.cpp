@@ -471,7 +471,7 @@ void DeclarativeAppletScript::setupObjects()
     global.setProperty("loadui", fun);
 
     ScriptEnv::registerEnums(global, AppletInterface::staticMetaObject);
-    //Make enum values accessible also as plasmoid.Planer etc
+    //Make enum values accessible also as plasmoid.Planar etc
     ScriptEnv::registerEnums(m_self, AppletInterface::staticMetaObject);
 
     global.setProperty("dataEngine", m_engine->newFunction(DeclarativeAppletScript::dataEngine));
