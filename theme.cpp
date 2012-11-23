@@ -319,7 +319,7 @@ void ThemePrivate::discardCache(CacheTypes caches)
             f.remove();
         }
 
-        const QString svgElementsFile = QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QLatin1Char('/') + "plasma-svgelements-" + themeName;
+        const QString svgElementsFile = QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation) + QLatin1Char('/') + "plasma-svgelements-" + themeName;
         svgElementsCache = KSharedConfig::openConfig(svgElementsFile);
     }
 }
