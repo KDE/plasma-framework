@@ -20,24 +20,24 @@
 #ifndef BLURWATCHER_H
 #define BLURWATCHER_H
 
-#include <QWidget>
+#include <QObject>
+
+#include <QAbstractNativeEventFilter>
 
 namespace Plasma
 {
 
-class EffectWatcher: public QWidget
+class EffectWatcher: public QObject, public QAbstractNativeEventFilter
 {
     Q_OBJECT
 
 public:
-    EffectWatcher(QString property, QWidget *parent = 0);
+    EffectWatcher(const QString& property, QObject *parent = 0);
 
 protected:
     bool isEffectActive() const;
-#pragma message("Port to Qt5 native filter")
-#if 0
-    bool x11Event(XEvent *event);
-#endif
+
+    bool nativeEventFilter(const QByteArray& eventType, void *message, long *result) Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
     void effectChanged(bool on);
@@ -47,6 +47,6 @@ private:
     bool m_effectActive;
 };
 
-}
+} // namespace Plasma
 
-#endif 
+#endif

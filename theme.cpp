@@ -31,7 +31,9 @@
 
 #if HAVE_X11
 #include <QX11Info>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 #include "private/effectwatcher_p.h"
+#endif
 #endif
 
 #include <kcolorscheme.h>
@@ -113,7 +115,7 @@ public:
 
         if (QPixmap::defaultDepth() > 8) {
             QObject::connect(KWindowSystem::self(), SIGNAL(compositingChanged(bool)), q, SLOT(compositingChanged(bool)));
-#if HAVE_X11
+#if HAVE_X11 && QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
             //watch for blur effect property changes as well
             if (!s_blurEffectWatcher) {
                 s_blurEffectWatcher = new EffectWatcher("_KDE_NET_WM_BLUR_BEHIND_REGION");
@@ -170,7 +172,7 @@ public:
     static const char *defaultTheme;
     static const char *systemColorsTheme;
     static const char *themeRcFile;
-#if HAVE_X11
+#if HAVE_X11 && QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
     static EffectWatcher *s_blurEffectWatcher;
 #endif
 
@@ -215,7 +217,7 @@ const char *ThemePrivate::themeRcFile = "plasmarc";
 // the system colors theme is used to cache unthemed svgs with colorization needs
 // these svgs do not follow the theme's colors, but rather the system colors
 const char *ThemePrivate::systemColorsTheme = "internal-system-colors";
-#if HAVE_X11
+#if HAVE_X11 && QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 EffectWatcher *ThemePrivate::s_blurEffectWatcher = 0;
 #endif
 

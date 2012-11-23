@@ -19,25 +19,23 @@
 
 #include "effectwatcher_p.h"
 
-#include <kdebug.h>
+#include <QCoreApplication>
 
-#if 0 // Port to Qt5 native filters
 #include <X11/Xlib.h>
-#include <QX11Info>
-#endif
+#include <xcb/xcb.h>
+#include <qx11info_x11.h>
 
 namespace Plasma
 {
 
-
-EffectWatcher::EffectWatcher(QString property, QWidget *parent)
-    : QWidget(parent),
+EffectWatcher::EffectWatcher(const QString& property, QObject *parent)
+    : QObject(parent),
       m_property(property)
 {
     m_effectActive = isEffectActive();
-#pragma message("Port to Qt5 native filter")
-#if 0
-    kapp->installX11EventFilter( this );
+
+    QCoreApplication::instance()->installNativeEventFilter(this);
+
     Display *dpy = QX11Info::display();
     Window root = DefaultRootWindow(dpy);
     XWindowAttributes attrs;
@@ -45,33 +43,33 @@ EffectWatcher::EffectWatcher(QString property, QWidget *parent)
     XGetWindowAttributes(dpy, root, &attrs);
     attrs.your_event_mask |= PropertyChangeMask;
     XSelectInput(dpy, root, attrs.your_event_mask);
-#endif
 }
 
-
-#pragma message("Port to Qt5 native filter")
-#if 0
-bool EffectWatcher::x11Event(XEvent *event)
+bool EffectWatcher::nativeEventFilter(const QByteArray& eventType, void *message, long *result)
 {
-    if (event->type == PropertyNotify) {
-        Display *dpy = QX11Info::display();
-        Atom testAtom = XInternAtom(dpy, m_property.toLatin1(), False);
-        if (event->xproperty.atom == testAtom) {
-            bool nowEffectActive = isEffectActive();
-            if (m_effectActive != nowEffectActive) {
-                m_effectActive = nowEffectActive;
-                emit effectChanged(m_effectActive);
-            }
+    Q_UNUSED(result);
+    if (eventType != "xcb_generic_event_t")
+        return false;
+    xcb_generic_event_t* event = reinterpret_cast<xcb_generic_event_t *>(message);
+    uint response_type = event->response_type & ~0x80;
+    if (response_type != XCB_PROPERTY_NOTIFY)
+        return false;
+
+    xcb_property_notify_event_t* prop_event = reinterpret_cast<xcb_property_notify_event_t *>(event);
+    Display *dpy = QX11Info::display();
+    Atom testAtom = XInternAtom(dpy, m_property.toLatin1(), False);
+    if (prop_event->atom == testAtom) {
+        bool nowEffectActive = isEffectActive();
+        if (m_effectActive != nowEffectActive) {
+            m_effectActive = nowEffectActive;
+            emit effectChanged(m_effectActive);
         }
     }
-    return QWidget::x11Event(event);
+    return false;
 }
-#endif
 
 bool EffectWatcher::isEffectActive() const
 {
-#pragma message("Port to Qt5 native filter")
-#if 0
     Display *dpy = QX11Info::display();
     Atom testAtom = XInternAtom(dpy, m_property.toLatin1(), False);
 
@@ -83,11 +81,6 @@ bool EffectWatcher::isEffectActive() const
         XFree(list);
     }
     return nowEffectActive;
-#else
-    return false;
-#endif
 }
 
-}
-
-#include "moc_effectwatcher_p.cpp"
+} // namespace Plasma
