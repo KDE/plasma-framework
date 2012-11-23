@@ -109,6 +109,7 @@ void PlasmoidPackage::createNewWidgetBrowser(QWidget *parent)
         m_knsDialog = knsDialog = new KNS3::DownloadDialog("plasmoids.knsrc", parent);
         knsDialog->setProperty("DoNotCloseController", true);
         connect(knsDialog, SIGNAL(accepted()), this, SIGNAL(newWidgetBrowserFinished()));
+	connect(knsDialog, SIGNAL(accepted()), knsDialog, SLOT(deleteLater()));
     }
 
     knsDialog->show();
