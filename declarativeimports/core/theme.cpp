@@ -19,6 +19,8 @@
 
 #include "theme.h"
 
+#include <QDeclarativePropertyMap>
+
 #include <KIconLoader>
 
 class FontProxySingleton
@@ -154,6 +156,14 @@ ThemeProxy::ThemeProxy(QObject *parent)
     : QObject(parent)
 {
     m_defaultIconSize = KIconLoader::global()->currentSize(KIconLoader::Desktop);
+
+    m_iconSizes = new QDeclarativePropertyMap(this);
+    m_iconSizes->insert("desktop", QVariant(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
+    m_iconSizes->insert("toolbar", KIconLoader::global()->currentSize(KIconLoader::Toolbar));
+    m_iconSizes->insert("mainToolbar", KIconLoader::global()->currentSize(KIconLoader::MainToolbar));
+    m_iconSizes->insert("small", KIconLoader::global()->currentSize(KIconLoader::Small));
+    m_iconSizes->insert("panel", KIconLoader::global()->currentSize(KIconLoader::Panel));
+    m_iconSizes->insert("dialog", KIconLoader::global()->currentSize(KIconLoader::Dialog));
 
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), this, SIGNAL(themeChanged()));
     connect(KIconLoader::global(), SIGNAL(iconLoaderSettingsChanged()), this, SLOT(iconLoaderSettingsChanged()));
@@ -316,12 +326,26 @@ void ThemeProxy::iconLoaderSettingsChanged()
 
     m_defaultIconSize = KIconLoader::global()->currentSize(KIconLoader::Desktop);
 
+    m_iconSizes->insert("desktop", QVariant(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
+    m_iconSizes->insert("toolbar", KIconLoader::global()->currentSize(KIconLoader::Toolbar));
+    m_iconSizes->insert("mainToolbar", KIconLoader::global()->currentSize(KIconLoader::MainToolbar));
+    m_iconSizes->insert("small", KIconLoader::global()->currentSize(KIconLoader::Small));
+    m_iconSizes->insert("panel", KIconLoader::global()->currentSize(KIconLoader::Panel));
+    m_iconSizes->insert("dialog", KIconLoader::global()->currentSize(KIconLoader::Dialog));
+
+
     emit defaultIconSizeChanged();
+    emit iconSizesChanged();
 }
 
 int ThemeProxy::defaultIconSize() const
 {
     return m_defaultIconSize;
+}
+
+QDeclarativePropertyMap *ThemeProxy::iconSizes() const
+{
+    return m_iconSizes;
 }
 
 #include "theme.moc"

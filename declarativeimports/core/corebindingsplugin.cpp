@@ -92,6 +92,8 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterInterface<Plasma::QueryMatch>("QueryMatch");
     qRegisterMetaType<Plasma::QueryMatch *>("QueryMatch");
 
+    qmlRegisterType<QDeclarativePropertyMap>();
+
     /*qmlRegisterInterface<Plasma::DataSource>("DataSource");
     qRegisterMetaType<Plasma::DataSource*>("DataSource");*/
 }

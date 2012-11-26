@@ -27,6 +27,8 @@
 
 #include <Plasma/Theme>
 
+class QDeclarativePropertyMap;
+
 class FontProxy : public QObject
 {
     Q_OBJECT
@@ -204,6 +206,19 @@ class ThemeProxy : public QObject
     Q_PROPERTY(int enormousIconSize READ enormousIconSize CONSTANT)
     Q_PROPERTY(int defaultIconSize READ defaultIconSize NOTIFY defaultIconSizeChanged)
 
+    /**
+     * icon sizes depending from the context: use those if possible
+     * Access with theme.iconSizes.desktop theme.iconSizes.small etc.
+     * available keys are:
+     * * desktop
+     * * toolbar
+     * * mainToolbar
+     * * small
+     * * panel
+     * * dialog
+     */
+    Q_PROPERTY(QDeclarativePropertyMap *iconSizes READ iconSizes NOTIFY iconSizesChanged)
+
 public:
     ThemeProxy(QObject *parent = 0);
     ~ThemeProxy();
@@ -240,6 +255,7 @@ public:
     int hugeIconSize() const;
     int enormousIconSize() const;
     int defaultIconSize() const;
+    QDeclarativePropertyMap *iconSizes() const;
 
 private Q_SLOTS:
     void iconLoaderSettingsChanged();
@@ -247,9 +263,11 @@ private Q_SLOTS:
 Q_SIGNALS:
     void themeChanged();
     void defaultIconSizeChanged();
+    void iconSizesChanged();
 
 private:
     int m_defaultIconSize;
+    QDeclarativePropertyMap *m_iconSizes;
 };
 
 #endif
