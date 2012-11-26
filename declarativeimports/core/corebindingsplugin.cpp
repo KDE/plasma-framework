@@ -38,6 +38,7 @@
 #include "svgitem.h"
 #include "theme.h"
 #include "dialog.h"
+#include "iconitem.h"
 #include "tooltip.h"
 #include "dataenginebindings_p.h"
 
@@ -93,6 +94,7 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qRegisterMetaType<Plasma::QueryMatch *>("QueryMatch");
 
     qmlRegisterType<QDeclarativePropertyMap>();
+    qmlRegisterType<IconItem>(uri, 0, 1, "IconItem");
 
     /*qmlRegisterInterface<Plasma::DataSource>("DataSource");
     qRegisterMetaType<Plasma::DataSource*>("DataSource");*/

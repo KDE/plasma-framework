@@ -40,7 +40,6 @@
 
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
-import "private" as Private
 
 Item {
     id: root
@@ -52,7 +51,7 @@ Item {
     property bool checkable: false
     property alias font: textArea.font
 
-    implicitWidth: textArea.paintedWidth + iconLoader.width*2 + 6
+    implicitWidth: textArea.paintedWidth + iconItem.width*2 + 6
     implicitHeight: Math.max(theme.smallIconSize, textArea.paintedHeight + 6)
     width: Math.max(implicitWidth, parent.width)
 
@@ -64,12 +63,12 @@ Item {
             internal.separatorItem.destroy()
         }
     }
-    property alias icon: iconLoader.source
+    property alias icon: iconItem.source
 
     enabled: !separator
 
-    Private.IconLoader {
-        id: iconLoader
+    PlasmaCore.IconItem {
+        id: iconItem
         width: parent.height
         anchors {
             verticalCenter: parent.verticalCenter

@@ -13,6 +13,7 @@ set(corebindings_SRCS
     dialog.cpp
     tooltip.cpp
     dataenginebindings.cpp
+    iconitem.cpp
     )
 
 INCLUDE_DIRECTORIES(

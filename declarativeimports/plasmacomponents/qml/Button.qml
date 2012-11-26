@@ -223,7 +223,7 @@ Item {
             bottomMargin: surfaceNormal.margins.bottom
         }
 
-        Private.IconLoader {
+        PlasmaCore.IconItem {
             id: icon
 
             anchors {
@@ -231,8 +231,9 @@ Item {
                 left: label.text.length > 0 ? parent.left : undefined
                 horizontalCenter: label.text.length > 0 ? undefined : parent.horizontalCenter
             }
-            height: roundToStandardSize(parent.height)
-            width: height
+            active: shadow.hasOverState && mouse.containsMouse
+            height: parent.height
+            width: parent.height
         }
 
         Text {

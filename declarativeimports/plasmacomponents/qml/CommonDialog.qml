@@ -42,7 +42,6 @@
 
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
-import "private" as Private
 import "." 0.1
 
 
@@ -163,7 +162,7 @@ Dialog {
             }
         }
 
-        Private.IconLoader {
+        PlasmaCore.IconItem {
             id: titleAreaIcon
             width: theme.iconSizeSmall
             height: theme.iconSizeSmall

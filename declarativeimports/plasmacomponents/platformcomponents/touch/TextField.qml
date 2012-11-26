@@ -21,7 +21,6 @@ import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.qtextracomponents 0.1
 import "EditBubble.js" as EditBubbleHelper
-import "private" as Private
 
 Item {
     id: textField
@@ -172,7 +171,7 @@ Item {
     }
 
 
-    Private.IconLoader {
+    PlasmaCore.IconItem {
         parent: mouseEventListener // reparent to the MouseFilter for MouseArea to work
         id: clearButton
         source: "edit-clear-locationbar-rtl"

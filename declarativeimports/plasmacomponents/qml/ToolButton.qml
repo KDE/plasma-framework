@@ -351,7 +351,7 @@ Item {
             bottomMargin: delegate.margins.bottom
         }
 
-        Private.IconLoader {
+        PlasmaCore.IconItem {
             id: icon
 
             anchors {
@@ -359,8 +359,9 @@ Item {
                 left: label.text ? parent.left : undefined
                 horizontalCenter: label.text ? undefined : parent.horizontalCenter
             }
-            height: roundToStandardSize(parent.height)
-            width: height
+            height: parent.height
+            width:  parent.height
+            active: delegate.item.hasOverState && mouse.containsMouse
         }
 
         Text {

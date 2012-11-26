@@ -314,7 +314,7 @@ FocusScope {
         Keys.forwardTo: textField
     }
 
-    Private.IconLoader {
+    PlasmaCore.IconItem {
         id: clearButton
         source: "edit-clear-locationbar-rtl"
         height: Math.max(textInput.height, theme.smallIconSize)

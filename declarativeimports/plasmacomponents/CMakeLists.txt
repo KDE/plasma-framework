@@ -65,7 +65,6 @@ install(FILES qml/ToolButton.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimpor
 
 #Now install the private stuff!
 install(FILES qml/private/DualStateButton.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components/private)
-install(FILES qml/private/IconLoader.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components/private)
 install(FILES qml/private/PageStack.js DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components/private)
 install(FILES qml/private/TabGroup.js DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components/private)
 install(FILES qml/private/ScrollBarDelegate.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components/private)

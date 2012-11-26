@@ -76,7 +76,7 @@ Signals:
 
 import QtQuick 1.1
 import "private/AppManager.js" as Utils
-import "private" as Private
+import org.kde.plasma.core 0.1 as PlasmaCore
 
 Item {
     id: root
@@ -154,7 +154,7 @@ Item {
         color: root.checked ? theme.buttonTextColor : theme.textColor
     }
 
-    Private.IconLoader {
+    PlasmaCore.IconItem {
         id: imageLoader
 
         implicitWidth: internal.portrait ? Math.max(theme.smallIconSize, root.height - (label.text ? label.height : 0)) : Math.max(theme.smallIconSize, root.height)
