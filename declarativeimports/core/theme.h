@@ -212,9 +212,7 @@ class ThemeProxy : public QObject
      * available keys are:
      * * desktop
      * * toolbar
-     * * mainToolbar
      * * small
-     * * panel
      * * dialog
      */
     Q_PROPERTY(QDeclarativePropertyMap *iconSizes READ iconSizes NOTIFY iconSizesChanged)
