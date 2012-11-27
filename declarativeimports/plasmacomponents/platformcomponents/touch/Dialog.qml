@@ -48,8 +48,8 @@ import "." 0.1
 Item {
     id: root
 
-    width: 600
-    height: 400
+    width: 300
+    height: 200
 
     property alias title: titleBar.children
     property alias content: contentItem.children
@@ -129,7 +129,6 @@ Item {
             }
 
 
-
             // Consume all key events that are not processed by children
             Keys.onPressed: event.accepted = true
             Keys.onReleased: event.accepted = true
@@ -148,14 +147,19 @@ Item {
                 id: contentItem
 
                 clip: true
-                onChildrenRectChanged: {
+
+                function adjustSize() {
                     root.width = Math.max(childrenRect.width, buttonItem.childrenRect.width) + dialog.margins.left + dialog.margins.right
-                    root.height = childrenRect.height + titleBar.height + buttonItem.height + dialog.margins.top + dialog.margins.bottom
+
+                    root.height = Math.max(children[0].implicitHeight, childrenRect.height) + titleBar.height + buttonItem.height + dialog.margins.top + dialog.margins.bottom
                 }
-                width: childrenRect.width > 0 ? Math.min(childrenRect.width, parent.width) : parent.width
+                onChildrenRectChanged: adjustSize()
+                Component.onCompleted: adjustSize()
+
                 anchors {
                     top: titleBar.bottom
-                    horizontalCenter: parent.horizontalCenter
+                    left: parent.left
+                    right: parent.right
                     bottom: buttonItem.top
                 }
             }
@@ -164,6 +168,8 @@ Item {
                 id: buttonItem
 
                 height: childrenRect.height
+                onChildrenRectChanged: contentItem.adjustSize()
+                Component.onCompleted: contentItem.adjustSize()
                 anchors {
                     left: parent.left
                     right: parent.right

@@ -108,7 +108,8 @@ CommonDialog {
         id: contentItem
         property alias filterText: filterField.filterText
         implicitWidth: theme.defaultFont.mSize.width * 40
-        height: theme.defaultFont.mSize.height * 12
+        implicitHeight: theme.defaultFont.mSize.height * 12
+        height: implicitHeight
 
         TextField {
             id: filterField

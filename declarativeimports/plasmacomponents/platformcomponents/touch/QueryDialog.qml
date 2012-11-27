@@ -41,7 +41,7 @@
 ****************************************************************************/
 
 import QtQuick 1.1
-
+import org.kde.plasma.extras 0.1 as PlasmaExtras
 import "." 0.1
 
 CommonDialog {
@@ -49,8 +49,8 @@ CommonDialog {
     objectName: "root"
 
     property string message
-    property string acceptButtonText
-    property string rejectButtonText
+    property string acceptButtonText: i18n("Ok")
+    property string rejectButtonText: i18n("Cancel")
 
     onAcceptButtonTextChanged: internal.updateButtonTexts()
     onRejectButtonTextChanged: internal.updateButtonTexts()
@@ -63,22 +63,24 @@ CommonDialog {
     }
 
     content: Item {
-        implicitHeight: Math.min(theme.defaultFont.mSize.height*12, label.paintedHeight+12)
-        width: parent.width
+        implicitHeight: Math.min(theme.defaultFont.mSize.height * 12, label.paintedHeight + 32)
+        width: Math.max(parent.width, theme.defaultFont.mSize.width*20)
+        height: Math.max(parent.height, implicitHeight)
 
-        Item {
+        PlasmaExtras.ScrollArea {
             anchors {
-                top: parent.top; topMargin: 6
-                bottom: parent.bottom; bottomMargin: 6
-                left: parent.left; leftMargin: 6
+                top: parent.top
+                topMargin: 6
+                bottom: parent.bottom
+                bottomMargin: 6
+                left: parent.left
+                leftMargin: 6
                 right: parent.right
             }
 
             Flickable {
                 id: flickable
-                width: parent.width
-                height: parent.height
-                anchors { left: parent.left; top: parent.top }
+                anchors.fill: parent
                 contentHeight: label.paintedHeight
                 flickableDirection: Flickable.VerticalFlick
                 clip: true
@@ -92,16 +94,6 @@ CommonDialog {
                     text: root.message
                     horizontalAlignment: Text.AlignLeft
                 }
-            }
-
-            ScrollBar {
-                id: scrollBar
-                height: parent.height
-                anchors { top: flickable.top; right: flickable.right }
-                flickableItem: flickable
-                interactive: false
-                orientation: Qt.Vertical
-                //platformInverted: root.platformInverted
             }
         }
     }
