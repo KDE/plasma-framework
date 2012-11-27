@@ -53,6 +53,9 @@ IconItem::IconItem(QDeclarativeItem *parent)
             this, SLOT(implicitHeightChanged()));
 
 
+    connect(this, SIGNAL(enabledChanged()),
+            this, SLOT(loadPixmap()));
+
     //initialize implicit size to the Dialog size
     setImplicitWidth(KIconLoader::global()->currentSize(KIconLoader::Dialog));
     setImplicitHeight(KIconLoader::global()->currentSize(KIconLoader::Dialog));
@@ -247,7 +250,6 @@ void IconItem::valueChanged(const QVariant &value)
 void IconItem::loadPixmap()
 {
     int size = qMin(width(), height());
-
 
     //FIXME: Heuristic: allow 24x24 for icons/ that are in the systray(ugly)
     if (m_svgIcon && m_svgIcon->imagePath().contains("icons/") &&

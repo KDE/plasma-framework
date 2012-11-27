@@ -77,12 +77,11 @@ Q_SIGNALS:
     void implicitHeightChanged();
 
 private Q_SLOTS:
+    void loadPixmap();
     void animationFinished();
     void valueChanged(const QVariant &value);
 
 private:
-    void loadPixmap();
-
     //all the ways we can set an source. Only one of them will be valid
     QIcon m_icon;
     Plasma::Svg *m_svgIcon;
