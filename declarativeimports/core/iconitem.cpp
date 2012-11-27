@@ -305,6 +305,7 @@ void IconItem::loadPixmap()
     //if an animation was already running, immediate transition, to not overload
     if (m_animation->state() == QAbstractAnimation::Running) {
         m_animation->stop();
+        m_iconPixmaps.pop_front();
     } else if (m_iconPixmaps.count() > 1) {
         m_animation->setStartValue((qreal)0);
         m_animation->setEndValue((qreal)1);
