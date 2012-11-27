@@ -83,6 +83,14 @@ void FrameSvgItem::setImagePath(const QString &path)
     m_frameSvg->setImagePath(path);
     m_frameSvg->setElementPrefix(m_prefix);
 
+    if (implicitWidth() <= 0) {
+        setImplicitWidth(m_frameSvg->marginSize(Plasma::LeftMargin) + m_frameSvg->marginSize(Plasma::RightMargin));
+    }
+
+    if (implicitHeight() <= 0) {
+        setImplicitHeight(m_frameSvg->marginSize(Plasma::TopMargin) + m_frameSvg->marginSize(Plasma::BottomMargin));
+    }
+
     emit imagePathChanged();
     update();
 }
@@ -101,6 +109,14 @@ void FrameSvgItem::setPrefix(const QString &prefix)
 
     m_frameSvg->setElementPrefix(prefix);
     m_prefix = prefix;
+
+    if (implicitWidth() <= 0) {
+        setImplicitWidth(m_frameSvg->marginSize(Plasma::LeftMargin) + m_frameSvg->marginSize(Plasma::RightMargin));
+    }
+
+    if (implicitHeight() <= 0) {
+        setImplicitHeight(m_frameSvg->marginSize(Plasma::TopMargin) + m_frameSvg->marginSize(Plasma::BottomMargin));
+    }
 
     emit prefixChanged();
     m_margins->update();
@@ -148,7 +164,47 @@ void FrameSvgItem::geometryChanged(const QRectF &newGeometry,
 
 void FrameSvgItem::doUpdate()
 {
+    if (implicitWidth() <= 0) {
+        setImplicitWidth(m_frameSvg->marginSize(Plasma::LeftMargin) + m_frameSvg->marginSize(Plasma::RightMargin));
+    }
+
+    if (implicitHeight() <= 0) {
+        setImplicitHeight(m_frameSvg->marginSize(Plasma::TopMargin) + m_frameSvg->marginSize(Plasma::BottomMargin));
+    }
+
     update();
+}
+
+void FrameSvgItem::setImplicitWidth(qreal width)
+{
+    if (implicitWidth() == width) {
+        return;
+    }
+
+    QDeclarativeItem::setImplicitWidth(width);
+
+    emit implicitWidthChanged();
+}
+
+qreal FrameSvgItem::implicitWidth() const
+{
+    return QDeclarativeItem::implicitWidth();
+}
+
+void FrameSvgItem::setImplicitHeight(qreal height)
+{
+    if (implicitHeight() == height) {
+        return;
+    }
+
+    QDeclarativeItem::setImplicitHeight(height);
+
+    emit implicitHeightChanged();
+}
+
+qreal FrameSvgItem::implicitHeight() const
+{
+    return QDeclarativeItem::implicitHeight();
 }
 
 } // Plasma namespace

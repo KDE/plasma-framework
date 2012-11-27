@@ -54,6 +54,7 @@ public:
 
     void setImplicitWidth(qreal width);
     qreal implicitWidth() const;
+
     void setImplicitHeight(qreal height);
     qreal implicitHeight() const;
 

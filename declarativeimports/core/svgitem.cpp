@@ -45,6 +45,13 @@ void SvgItem::setElementId(const QString &elementID)
         return;
     }
 
+    if (implicitWidth() <= 0) {
+        setImplicitWidth(naturalSize().width());
+    }
+    if (implicitHeight() <= 0) {
+        setImplicitHeight(naturalSize().height());
+    }
+
     m_elementID = elementID;
     emit elementIdChanged();
     emit naturalSizeChanged();
@@ -79,6 +86,14 @@ void SvgItem::setSvg(Plasma::Svg *svg)
         connect(svg, SIGNAL(repaintNeeded()), this, SIGNAL(naturalSizeChanged()));
         connect(svg, SIGNAL(sizeChanged()), this, SIGNAL(naturalSizeChanged()));
     }
+
+    if (implicitWidth() <= 0) {
+        setImplicitWidth(naturalSize().width());
+    }
+    if (implicitHeight() <= 0) {
+        setImplicitHeight(naturalSize().height());
+    }
+
     emit svgChanged();
     emit naturalSizeChanged();
 }
@@ -126,7 +141,45 @@ void SvgItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, Q
 
 void SvgItem::updateNeeded()
 {
+    if (implicitWidth() <= 0) {
+        setImplicitWidth(naturalSize().width());
+    }
+    if (implicitHeight() <= 0) {
+        setImplicitHeight(naturalSize().height());
+    }
     update();
+}
+
+void SvgItem::setImplicitWidth(qreal width)
+{
+    if (implicitWidth() == width) {
+        return;
+    }
+
+    QDeclarativeItem::setImplicitWidth(width);
+
+    emit implicitWidthChanged();
+}
+
+qreal SvgItem::implicitWidth() const
+{
+    return QDeclarativeItem::implicitWidth();
+}
+
+void SvgItem::setImplicitHeight(qreal height)
+{
+    if (implicitHeight() == height) {
+        return;
+    }
+
+    QDeclarativeItem::setImplicitHeight(height);
+
+    emit implicitHeightChanged();
+}
+
+qreal SvgItem::implicitHeight() const
+{
+    return QDeclarativeItem::implicitHeight();
 }
 
 } // Plasma namespace

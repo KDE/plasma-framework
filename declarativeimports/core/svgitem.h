@@ -56,6 +56,16 @@ class SvgItem : public QDeclarativeItem
      */
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
 
+    /**
+     * suggested default size hint for width (default to naturalSize.width)
+     */
+    Q_PROPERTY(qreal implicitWidth READ implicitWidth WRITE setImplicitWidth NOTIFY implicitWidthChanged)
+
+    /**
+     * suggested default size hint for height (default to naturalSize.height)
+     */
+    Q_PROPERTY(qreal implicitHeight READ implicitHeight WRITE setImplicitHeight NOTIFY implicitHeightChanged)
+
 public:
     SvgItem(QDeclarativeItem *parent=0);
     ~SvgItem();
@@ -73,11 +83,19 @@ public:
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
+    void setImplicitWidth(qreal width);
+    qreal implicitWidth() const;
+
+    void setImplicitHeight(qreal height);
+    qreal implicitHeight() const;
+
 Q_SIGNALS:
     void elementIdChanged();
     void svgChanged();
     void naturalSizeChanged();
     void smoothChanged();
+    void implicitWidthChanged();
+    void implicitHeightChanged();
 
 protected Q_SLOTS:
     void updateNeeded();

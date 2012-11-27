@@ -102,6 +102,16 @@ class FrameSvgItem : public QDeclarativeItem
      */
     Q_PROPERTY(Plasma::FrameSvg::EnabledBorders enabledBorders READ enabledBorders WRITE setEnabledBorders NOTIFY enabledBordersChanged)
 
+    /**
+     * suggested default size hint for width
+     */
+    Q_PROPERTY(qreal implicitWidth READ implicitWidth WRITE setImplicitWidth NOTIFY implicitWidthChanged)
+
+    /**
+     * suggested default size hint for height
+     */
+    Q_PROPERTY(qreal implicitHeight READ implicitHeight WRITE setImplicitHeight NOTIFY implicitHeightChanged)
+
 public:
     FrameSvgItem(QDeclarativeItem *parent=0);
     ~FrameSvgItem();
@@ -122,10 +132,18 @@ public:
     void geometryChanged(const QRectF &newGeometry,
                               const QRectF &oldGeometry);
 
+    void setImplicitWidth(qreal width);
+    qreal implicitWidth() const;
+
+    void setImplicitHeight(qreal height);
+    qreal implicitHeight() const;
+
 signals:
     void imagePathChanged();
     void prefixChanged();
     void enabledBordersChanged();
+    void implicitWidthChanged();
+    void implicitHeightChanged();
 
 private Q_SLOTS:
     void doUpdate();
