@@ -35,7 +35,7 @@ Properties:
 **/
 
 import QtQuick 1.1
-import org.kde.plasma.components 0.1
+import org.kde.plasma.components 0.1 as PlasmaComponents
 import org.kde.plasma.core 0.1 as PlasmaCore
 
 Item {
@@ -44,13 +44,13 @@ Item {
     property Flickable flickableItem
     //FIXME: this alias seems necessary for it to correctly parse
     default property alias flickableItemDefault: root.flickableItem
-    clip: true
 
     Connections {
         target: root
         onFlickableItemChanged: {
             root.flickableItem.parent = root
             root.flickableItem.anchors.fill = root
+            root.flickableItem.clip = true
             internal.checkVerticalScrollBar()
             internal.checkHorizontalScrollBar()
         }
@@ -58,6 +58,7 @@ Item {
     Component.onCompleted: {
         root.flickableItem.parent = root
         root.flickableItem.anchors.fill = root
+        root.flickableItem.clip = true
         internal.checkVerticalScrollBar()
         internal.checkHorizontalScrollBar()
     }
@@ -132,49 +133,49 @@ Item {
     }
     Component {
         id: verticalScrollBarComponent
-        ScrollBar {
+        PlasmaComponents.ScrollBar {
             flickableItem: root.flickableItem
             orientation: Qt.Vertical
             property bool isScrollBar: true
             z: root.flickableItem.z + 1
             anchors {
                 left: undefined
-                top: parent.top
-                right: parent.right
-                bottom: parent.bottom
-                bottomMargin: parent.height - root.flickableItem.height
+                top: root.top
+                right: root.right
+                bottom: root.bottom
+                bottomMargin: root.height - root.flickableItem.height
             }
             onVisibleChanged: internal.checkVerticalScrollBarMargins()
         }
     }
     Component {
         id: horizontalScrollBarComponent
-        ScrollBar {
+        PlasmaComponents.ScrollBar {
             flickableItem: root.flickableItem
             orientation: Qt.Horizontal
             z: root.flickableItem.z + 1
             anchors {
-                left: parent.left
+                left: root.left
                 top: undefined
-                right: parent.right
-                bottom: parent.bottom
-                rightMargin: parent.width - root.flickableItem.width
+                right: root.right
+                bottom: root.bottom
+                rightMargin: root.width - root.flickableItem.width
             }
             onVisibleChanged: internal.checkHorizontalScrollBarMargins()
         }
     }
     Component {
         id: sectionScrollerComponent
-        SectionScroller {
+        PlasmaComponents.SectionScroller {
             listView: root.flickableItem
             property bool isScrollBar: false
             z: root.flickableItem.z + 1
             anchors {
                 left: undefined
-                top: parent.top
-                right: parent.right
-                bottom: parent.bottom
-                bottomMargin: parent.height - root.flickableItem.height
+                top: root.top
+                right: root.right
+                bottom: root.bottom
+                bottomMargin: root.height - root.flickableItem.height
             }
             onVisibleChanged: internal.checkVerticalScrollBarMargins()
         }
