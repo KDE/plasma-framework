@@ -66,7 +66,7 @@ Properties:
         Sets the text for the button.
 
         string iconSource:
-        Icon for the button. It can be a Freedesktop icon name, a full path to a ong/svg file,
+        Icon for the button. It can be a Freedesktop icon name, a full path to a png/svg file,
         or any name for which the application has an image handler registered.
 
 Signals:
