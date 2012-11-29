@@ -19,7 +19,7 @@
 #ifndef DIALOG_PROXY_P
 #define DIALOG_PROXY_P
 
-#include <QObject>
+#include <QDeclarativeItem>
 #include <QWeakPointer>
 #include <QPoint>
 
@@ -84,7 +84,7 @@ private:
     friend class DialogProxy;
 };
 
-class DialogProxy : public QObject
+class DialogProxy : public QDeclarativeItem
 {
     Q_OBJECT
 
@@ -152,7 +152,7 @@ public:
         WA_X11NetWmWindowTypeDock = Qt::WA_X11NetWmWindowTypeDock
     };
 
-    DialogProxy(QObject *parent = 0);
+    DialogProxy(QDeclarativeItem *parent = 0);
     ~DialogProxy();
 
     QGraphicsObject *mainItem() const;

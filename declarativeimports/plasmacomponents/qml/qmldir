@@ -15,6 +15,7 @@ ListItem 0.1 ListItem.qml
 Page 0.1 Page.qml
 PageStack 0.1 PageStack.qml
 ProgressBar 0.1 ProgressBar.qml
+QueryDialog 0.1 QueryDialog.qml
 RadioButton 0.1 RadioButton.qml
 ScrollBar 0.1 ScrollBar.qml
 SectionScroller 0.1 SectionScroller.qml

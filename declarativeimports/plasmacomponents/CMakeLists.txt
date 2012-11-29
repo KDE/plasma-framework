@@ -1,7 +1,6 @@
 project(plasmacomponents)
 
 set(plasmacomponents_SRCS
-    fullscreendialog.cpp
     fullscreensheet.cpp
     fullscreenwindow.cpp
     plasmacomponentsplugin.cpp
@@ -9,7 +8,6 @@ set(plasmacomponents_SRCS
     enums.cpp
     qmenu.cpp
     qmenuitem.cpp
-    kdialogproxy.cpp
     ../core/declarativeitemcontainer.cpp
     )
 
@@ -43,12 +41,14 @@ install(FILES qml/Button.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/t
 install(FILES qml/ButtonRow.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
 install(FILES qml/CheckBox.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
 install(FILES qml/CommonDialog.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
+install(FILES qml/Dialog.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
 install(FILES qml/Highlight.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
 install(FILES qml/Label.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
 install(FILES qml/ListItem.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
 install(FILES qml/Page.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
 install(FILES qml/PageStack.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
 install(FILES qml/ProgressBar.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
+install(FILES qml/QueryDialog.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
 install(FILES qml/RadioButton.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
 install(FILES qml/SelectionDialog.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
 install(FILES qml/Slider.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
@@ -65,6 +65,7 @@ install(FILES qml/ToolButton.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimpor
 
 #Now install the private stuff!
 install(FILES qml/private/DualStateButton.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components/private)
+install(FILES qml/private/InlineDialog.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components/private)
 install(FILES qml/private/PageStack.js DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components/private)
 install(FILES qml/private/TabGroup.js DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components/private)
 install(FILES qml/private/ScrollBarDelegate.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components/private)

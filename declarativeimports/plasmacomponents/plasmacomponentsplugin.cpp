@@ -28,14 +28,13 @@
 
 #include <KSharedConfig>
 #include <KDebug>
+#include <KGlobal>
 
 #include <kdeclarative.h>
 
 #include "enums.h"
 #include "qmenu.h"
 #include "qmenuitem.h"
-#include "kdialogproxy.h"
-#include "fullscreendialog.h"
 #include "fullscreensheet.h"
 
 Q_EXPORT_PLUGIN2(plasmacomponentsplugin, PlasmaComponentsPlugin)
@@ -94,12 +93,9 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
     //platform specific c++ components
     const QString target = KDeclarative::componentsTarget();
     if (target == KDeclarative::defaultComponentsTarget()) {
-        qmlRegisterType<KDialogProxy>(uri, 0, 1, "QueryDialog");
         qmlRegisterType<QMenuProxy>(uri, 0, 1, "Menu");
         qmlRegisterType<QMenuItem>(uri, 0, 1, "MenuItem");
     } else {
-        //on touch systems the dialog is fullscreen, c++ needed to do that
-        qmlRegisterType<FullScreenDialog>(uri, 0, 1, "Dialog");
         qmlRegisterType<FullScreenSheet>(uri, 0, 1, "Sheet");
     }
 

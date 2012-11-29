@@ -71,7 +71,7 @@ Properties:
         A list of items in the dialog's title area. You can use a Text component but also any number of components that are based on Item. For example, you can use Text and Image components.
 
         Item visualParent:
-        The item that is dimmed when the dialog opens. By default the root parent object is visualParent.
+        The item that the dialog refers to. The dialog will usually be positioned relative to VisualParent
 
 Signals:
         accepted():
@@ -87,7 +87,7 @@ Signals:
 
 Methods:
         void accept():
-        Accepts the dialog's request without any user interaction. The method emits the accepted() signal and closes the dialog.
+        Accepts the dialog's request without any user interaction. The method emits the accepted() signal and closes the internalLoader.dialog.
         See also reject().
 
         void close():
@@ -97,7 +97,7 @@ Methods:
         Shows the dialog to the user.
 
         void reject():
-        Rejects the dialog's request without any user interaction. The method emits the rejected() signal and closes the dialog.
+        Rejects the dialog's request without any user interaction. The method emits the rejected() signal and closes the internalLoader.dialog.
         See also accept().
 **/
 
@@ -105,6 +105,7 @@ import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 import "private/AppManager.js" as Utils
 import "." 0.1
+import "private" as Private
 
 Item {
     id: root
@@ -112,7 +113,7 @@ Item {
     property alias title: titleBar.children
     property alias content: contentItem.children
     property alias buttons: buttonItem.children
-//    property alias visualParent: dialog.visualParent
+    property Item visualParent
     property int status: DialogStatus.Closed
 
 
@@ -123,105 +124,174 @@ Item {
     signal rejected
     signal clickedOutside
 
-    function open()
-    {
-        var pos = dialog.popupPosition(null, Qt.AlignCenter)
-        dialog.x = pos.x
-        dialog.y = pos.y
+    function open() {
+        dialogLayout.parent = internalLoader.item.mainItem
 
-        dialog.visible = true
-        dialog.activateWindow()
+        if (internalLoader.dialog) {
+            var pos = internalLoader.dialog.popupPosition(root.visualParent, Qt.AlignCenter)
+            internalLoader.dialog.x = pos.x
+            internalLoader.dialog.y = pos.y
+
+            internalLoader.dialog.visible = true
+            internalLoader.dialog.activateWindow()
+        } else {
+            internalLoader.inlineDialog.open()
+        }
     }
 
-    function accept()
-    {
+    function accept() {
         if (status == DialogStatus.Open) {
-            dialog.visible = false
+            if (internalLoader.dialog) {
+                internalLoader.dialog.visible = false
+            } else {
+                internalLoader.inlineDialog.close()
+            }
             accepted()
         }
     }
 
     function reject() {
         if (status == DialogStatus.Open) {
-            dialog.visible = false
+            if (internalLoader.dialog) {
+                internalLoader.dialog.visible = false
+            } else {
+                internalLoader.inlineDialog.close()
+            }
             rejected()
         }
     }
 
     function close() {
-        dialog.visible = false
+        if (internalLoader.dialog) {
+            internalLoader.dialog.visible = false
+        } else {
+            internalLoader.inlineDialog.close()
+        }
     }
 
     visible: false
 
-    PlasmaCore.Dialog {
-        id: dialog
-        windowFlags: Qt.Dialog
-
-
-        //onFaderClicked: root.clickedOutside()
+    Loader {
+        id: internalLoader
+        //the root item of the scene. Determines if there is enough room for an inline dialog
         property Item rootItem
 
-        //state: "Hidden"
-        visible: false
-        onVisibleChanged: {
-            if (visible) {
-                status = DialogStatus.Open
-            } else {
-                status = DialogStatus.Closed
-            }
-        }
+        //this is when the dialog is a separate window
+        property Item dialog: sourceComponent == dialogComponent ? item : null
+        //this is when the dialog is inline
+        property Item inlineDialog: sourceComponent == inlineDialogComponent ? item : null
 
-        mainItem: Item {
-            id: mainItem
-            width: theme.defaultFont.mSize.width * 40
-            height: titleBar.childrenRect.height + contentItem.childrenRect.height + buttonItem.childrenRect.height + 8
-
-            // Consume all key events that are not processed by children
-            Keys.onPressed: event.accepted = true
-            Keys.onReleased: event.accepted = true
-
-            Item {
-                id: titleBar
-
-                height: childrenRect.height
-                anchors {
-                    top: parent.top
-                    left: parent.left
-                    right: parent.right
-                }
-            }
-
-            Item {
-                id: contentItem
-
-                onChildrenRectChanged: mainItem.width = Math.max(childrenRect.width, buttonItem.childrenRect.width)
-
-                clip: true
-                anchors {
-                    top: titleBar.bottom
-                    left: parent.left
-                    right: parent.right
-                    bottom: buttonItem.top
-                    bottomMargin: 8
-                }
-            }
-
-            Item {
-                id: buttonItem
-
-                height: childrenRect.height
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                    bottom: parent.bottom
-                    bottomMargin: 4
-                }
-            }
-        }
+        property bool loadCompleted: false
 
         Component.onCompleted: {
             rootItem = Utils.rootObject()
+            loadCompleted = true
+        }
+
+        sourceComponent: {
+            if (loadCompleted) {
+                if (rootItem == null || dialogLayout.width > rootItem.width || dialogLayout.height > rootItem.height) {
+                    dialogComponent
+                } else {
+                    inlineDialogComponent
+                }
+            }
+        }
+    }
+
+    Component {
+        id: dialogComponent
+        PlasmaCore.Dialog {
+            windowFlags: Qt.Popup
+
+            //state: "Hidden"
+            visible: false
+            onVisibleChanged: {
+                if (visible) {
+                    root.status = DialogStatus.Open
+                } else {
+                    root.status = DialogStatus.Closed
+                }
+            }
+
+            mainItem: Item {
+                id: dialogMainItem
+                width: dialogLayout.width
+                height: dialogLayout.height
+            }
+
+            Component.onCompleted: dialogLayout.parent = dialogMainItem
+            Component.onDestruction: dialogLayout.parent = root
+        }
+    }
+
+    Component {
+        id: inlineDialogComponent
+        Private.InlineDialog {
+            id: inlineDialog
+            visualParent: root.visualParent
+            property Item mainItem: inlineDialogMainItem
+            onStatusChanged: root.status = status
+
+            Item {
+                id: inlineDialogMainItem
+                width: dialogLayout.width
+                height: dialogLayout.height
+            }
+
+            Component.onCompleted: {
+                dialogLayout.parent = inlineDialogMainItem
+            }
+            Component.onDestruction: dialogLayout.parent = root
+        }
+    }
+
+    Item {
+        id: dialogLayout
+        width: theme.defaultFont.mSize.width * 40
+        height: titleBar.childrenRect.height + contentItem.childrenRect.height + buttonItem.childrenRect.height + 8
+
+        parent: internalLoader.dialog ? internalLoader.dialog : internalLoader.inlineDialog
+        // Consume all key events that are not processed by children
+        Keys.onPressed: event.accepted = true
+        Keys.onReleased: event.accepted = true
+
+        Item {
+            id: titleBar
+
+            height: childrenRect.height
+            anchors {
+                top: parent.top
+                left: parent.left
+                right: parent.right
+            }
+        }
+
+        Item {
+            id: contentItem
+
+            onChildrenRectChanged: mainItem.width = Math.max(childrenRect.width, buttonItem.childrenRect.width)
+
+            clip: true
+            anchors {
+                top: titleBar.bottom
+                left: parent.left
+                right: parent.right
+                bottom: buttonItem.top
+                bottomMargin: 8
+            }
+        }
+
+        Item {
+            id: buttonItem
+
+            height: childrenRect.height
+            anchors {
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
+                bottomMargin: 4
+            }
         }
     }
 }

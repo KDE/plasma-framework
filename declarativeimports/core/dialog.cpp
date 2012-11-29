@@ -89,8 +89,8 @@ int DialogMargins::bottom() const
     return m_bottom;
 }
 
-DialogProxy::DialogProxy(QObject *parent)
-    : QObject(parent),
+DialogProxy::DialogProxy(QDeclarativeItem *parent)
+    : QDeclarativeItem(parent),
       m_declarativeItemContainer(0),
       m_activeWindow(false),
       m_location(Plasma::Floating)

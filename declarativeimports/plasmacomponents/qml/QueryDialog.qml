@@ -57,9 +57,9 @@ CommonDialog {
 
     onButtonClicked: {
         if (acceptButtonText && index == 0)
-            accepted()
+            accept()
         else
-            rejected()
+            reject()
     }
 
     content: Item {
