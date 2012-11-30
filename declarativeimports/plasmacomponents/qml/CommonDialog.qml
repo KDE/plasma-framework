@@ -127,6 +127,7 @@ Dialog {
     title: PlasmaCore.FrameSvgItem {
         imagePath: "widgets/extender-dragger"
         prefix: "root"
+        visible: titleAreaText.text != ""
         anchors.left: parent.left
         anchors.right: parent.right
         //FIXME: +5 because of Plasma::Dialog margins

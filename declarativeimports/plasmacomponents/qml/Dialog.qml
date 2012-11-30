@@ -248,8 +248,8 @@ Item {
 
     Item {
         id: dialogLayout
-        width: theme.defaultFont.mSize.width * 40
-        height: titleBar.childrenRect.height + contentItem.childrenRect.height + buttonItem.childrenRect.height + 8
+        width: Math.max(buttonItem.childrenRect.width,  Math.min(contentItem.childrenRect.width, theme.defaultFont.mSize.width * 30))
+        height: titleBar.height + contentItem.childrenRect.height + buttonItem.childrenRect.height + 10
 
         parent: internalLoader.dialog ? internalLoader.dialog : internalLoader.inlineDialog
         // Consume all key events that are not processed by children
@@ -259,7 +259,7 @@ Item {
         Item {
             id: titleBar
 
-            height: childrenRect.height
+            height: children.length > 0 && children[0].visible ? childrenRect.height : 0
             anchors {
                 top: parent.top
                 left: parent.left
@@ -270,15 +270,13 @@ Item {
         Item {
             id: contentItem
 
-            onChildrenRectChanged: mainItem.width = Math.max(childrenRect.width, buttonItem.childrenRect.width)
-
             clip: true
             anchors {
                 top: titleBar.bottom
                 left: parent.left
                 right: parent.right
                 bottom: buttonItem.top
-                bottomMargin: 8
+                bottomMargin: 6
             }
         }
 

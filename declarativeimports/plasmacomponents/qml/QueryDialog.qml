@@ -63,16 +63,19 @@ CommonDialog {
     }
 
     content: Item {
-        implicitHeight: Math.min(theme.defaultFont.mSize.height * 12, label.paintedHeight + 32)
-        width: Math.max(parent.width, theme.defaultFont.mSize.width*20)
-        height: Math.max(parent.height, implicitHeight)
+        implicitWidth: Math.max(theme.defaultFont.mSize.width * 15,  Math.min(label.implicitWidth+12, theme.defaultFont.mSize.width * 25))
+
+        implicitHeight: Math.min(theme.defaultFont.mSize.height * 12, label.paintedHeight + 6)
+
+
+        width: implicitWidth
+        height: implicitHeight
 
         PlasmaExtras.ScrollArea {
             anchors {
                 top: parent.top
                 topMargin: 6
                 bottom: parent.bottom
-                bottomMargin: 6
                 left: parent.left
                 leftMargin: 6
                 right: parent.right
@@ -83,16 +86,19 @@ CommonDialog {
                 anchors.fill: parent
                 contentHeight: label.paintedHeight
                 flickableDirection: Flickable.VerticalFlick
-                clip: true
                 interactive: contentHeight > height
 
                 Label {
                     id: label
-                    anchors { right: parent.right }
-                    width: flickable.width 
+                    anchors {
+                        top: parent.top
+                        right: parent.right
+                    }
+                    width: flickable.width
+                    height: paintedHeight
                     wrapMode: Text.WordWrap
                     text: root.message
-                    horizontalAlignment: Text.AlignLeft
+                    horizontalAlignment: lineCount > 1 ? Text.AlignLeft : Text.AlignHCenter
                 }
             }
         }
