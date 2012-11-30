@@ -19,6 +19,7 @@
 
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
+import org.kde.plasma.extras 0.1 as PlasmaExtras
 import org.kde.plasma.components 0.1 as PlasmaComponents
 
 Item {
@@ -62,11 +63,42 @@ Item {
         z: 9000
         anchors.fill: parent
         opacity: 0
+        //to not pass hover events to the background
+        hoverEnabled: true
 
+        //FIXME: this is an hack: it's taking the dialog background making sure no opaque or transparent are selected
+        //in Plasma2 we need to have the backingstore blur there as well
+        PlasmaExtras.FallbackComponent {
+            id: fallbackComponent
+            basePath: "desktoptheme"
+            candidates: [theme.themeName, "default"]
+            property string svgPath: fallbackComponent.filePath("/dialogs/background.svgz")
+        }
+        Connections {
+            target: theme
+            //fallback if inline-background doesn't work
+            onThemeChanged: {
+                fallbackComponent.svgPath = fallbackComponent.filePath("/dialogs/background.svgz")
+                shadowFrame.visible = backgroundSvg.hasElement("shadow-top")
+            }
+        }
+        PlasmaCore.FrameSvgItem {
+            id: shadowFrame
+            imagePath: fallbackComponent.svgPath
+            prefix: "shadow"
+            anchors {
+                fill: internal
+                leftMargin: -margins.left
+                topMargin: -margins.top
+                rightMargin: -margins.right
+                bottomMargin: -margins.bottom
+            }
+            Component.onCompleted: shadowFrame.visible = backgroundSvg.hasElement("shadow-top")
+        }
         PlasmaCore.FrameSvgItem {
             id: internal
             property variant parentPos
-            imagePath: "widgets/background"
+            imagePath: fallbackComponent.svgPath
             property bool under: root.visualParent ? internal.parentPos.y + root.visualParent.height + height < dismissArea.height : true
             //bindings won't work inside anchers definition
             onUnderChanged: {
@@ -105,15 +137,15 @@ Item {
                 visible: root.visualParent != null
                 svg: PlasmaCore.Svg {
                     id: backgroundSvg
-                    imagePath: "widgets/background"
+                    imagePath: fallbackComponent.svgPath
                 }
                 elementId: internal.under ? "baloon-tip-top" : "baloon-tip-bottom"
                 anchors {
                     horizontalCenter: parent.horizontalCenter
                     bottom: parent.top
                     top: parent.bottom
-                    topMargin: -backgroundSvg.elementSize("hint-bottom-shadow").height
-                    bottomMargin: -backgroundSvg.elementSize("hint-top-shadow").height
+                    topMargin: -backgroundSvg.elementSize("hint-bottom-shadow").height - 1
+                    bottomMargin: -backgroundSvg.elementSize("hint-top-shadow").height - 1
                 }
                 width: naturalSize.width
                 height: naturalSize.height
