@@ -124,6 +124,7 @@ set(plasma_LIB_SRCS
     private/dataenginemanager.cpp
     private/dataengineservice.cpp
     private/effects/halopainter.cpp
+    private/dialogshadows.cpp
     private/getsource.cpp
     private/packages.cpp
     private/plasmoidservice.cpp
