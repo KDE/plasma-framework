@@ -22,26 +22,22 @@
 #ifndef PLASMA_APPLET_H
 #define PLASMA_APPLET_H
 
-#include <QtGui/QGraphicsItem>
-#include <QtGui/QGraphicsWidget>
-#include <QtGui/QIcon>
+#include <QObject>
+#include <QIcon>
 
 #include <kconfiggroup.h>
-#include <kgenericfactory.h>
 #include <kplugininfo.h>
 #include <kshortcut.h>
+#include <kurl.h>
 
 #include <plasma/configloader.h>
-#include <plasma/packagestructure.h>
 #include <plasma/plasma.h>
-#include <plasma/animator.h>
 #include <plasma/version.h>
 #include <plasma/framesvg.h>
 
 class QWidget;
 
 class KConfigDialog;
-class QGraphicsView;
 class KActionCollection;
 
 namespace Plasma
@@ -49,10 +45,7 @@ namespace Plasma
 
 class AppletPrivate;
 class Containment;
-class Context;
 class DataEngine;
-class Extender;
-class ExtenderItem;
 class Package;
 
 
@@ -74,49 +67,27 @@ class Package;
  *
  * See techbase.kde.org for tutorials on writing Applets using this class.
  */
-class PLASMA_EXPORT Applet : public QGraphicsWidget
+class PLASMA_EXPORT Applet : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool hasConfigurationInterface READ hasConfigurationInterface)
-    Q_PROPERTY(QString name READ name CONSTANT)
-    Q_PROPERTY(QString pluginName READ pluginName CONSTANT)
-    Q_PROPERTY(QString category READ category CONSTANT)
+    Q_PROPERTY(QString name READ name WRITE setName)
+    Q_PROPERTY(QString pluginName READ pluginName)
+    Q_PROPERTY(QString category READ category)
     Q_PROPERTY(ImmutabilityType immutability READ immutability WRITE setImmutability)
     Q_PROPERTY(bool hasFailedToLaunch READ hasFailedToLaunch WRITE setFailedToLaunch)
-    Q_PROPERTY(bool isBusy READ isBusy WRITE setBusy) //KDE5: remove
     Q_PROPERTY(bool busy READ isBusy WRITE setBusy)
     Q_PROPERTY(bool configurationRequired READ configurationRequired WRITE setConfigurationRequired)
-    Q_PROPERTY(QRectF geometry READ geometry WRITE setGeometry)
     Q_PROPERTY(bool shouldConserveResources READ shouldConserveResources)
-    Q_PROPERTY(uint id READ id CONSTANT)
-    Q_PROPERTY(bool userConfiguring READ isUserConfiguring)
+    Q_PROPERTY(uint id READ id)
     Q_PROPERTY(BackgroundHints backgroundHints READ backgroundHints WRITE setBackgroundHints)
-    Q_ENUMS(BackgroundHints)
+    Q_PROPERTY(bool userConfiguring READ isUserConfiguring)
 
     public:
         typedef QList<Applet*> List;
         typedef QHash<QString, Applet*> Dict;
 
-        /**
-         * Description on how draw a background for the applet
-         */
-        enum BackgroundHint {
-            NoBackground = 0,         /**< Not drawing a background under the
-                                          applet, the applet has its own implementation */
-            StandardBackground = 1,   /**< The standard background from the theme is drawn */
-            TranslucentBackground = 2, /**< An alternate version of the background is drawn,
-                                          usually more translucent */
-            DefaultBackground = StandardBackground /**< Default settings:
-                                          both standard background */
-        };
-        Q_DECLARE_FLAGS(BackgroundHints, BackgroundHint)
-
         ~Applet();
-
-        /**
-         * @return a package structure representing an Applet
-         */
-        static PackageStructure::Ptr packageStructure();
 
         /**
          * @return the id of this applet
@@ -131,15 +102,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         * in the Plasma appdata directory.
         **/
         KConfigGroup config() const;
-
-        /**
-         * Returns a config group with the name provided. This ensures
-         * that the group name is properly namespaced to avoid collision
-         * with other applets that may be sharing this config file
-         *
-         * @param group the name of the group to access
-         **/
-        KConfigGroup config(const QString &group) const;
 
         /**
          * Saves state information about this applet that will
@@ -205,29 +167,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *
          * @return the Package object, or 0 if none
          **/
-        const Package *package() const;
-
-        /**
-         * Returns the view this widget is visible on, or 0 if none can be found.
-         * @warning do NOT assume this will always return a view!
-         * a null view probably means that either plasma isn't finished loading, or your applet is
-         * on an activity that's not being shown anywhere.
-         */
-        QGraphicsView *view() const;
-
-        /**
-         * Maps a QRect from a view's coordinates to local coordinates.
-         * @param view the view from which rect should be mapped
-         * @param rect the rect to be mapped
-         */
-        QRectF mapFromView(const QGraphicsView *view, const QRect &rect) const;
-
-        /**
-         * Maps a QRectF from local coordinates to a view's coordinates.
-         * @param view the view to which rect should be mapped
-         * @param rect the rect to be mapped
-         */
-        QRect mapToView(const QGraphicsView *view, const QRectF &rect) const;
+        Package package() const;
 
         /**
          * Reccomended position for a popup window like a menu or a tooltip
@@ -271,11 +211,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         virtual Location location() const;
 
         /**
-         * Returns the workspace context which the applet is operating in
-         */
-        Context *context() const;
-
-        /**
          * @return the preferred aspect ratio mode for placement and resizing
          */
         Plasma::AspectRatioMode aspectRatioMode() const;
@@ -310,7 +245,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *
          * @return list of applets
          **/
-        static KPluginInfo::List listAppletInfoForMimetype(const QString &mimetype);
+        static KPluginInfo::List listAppletInfoForMimeType(const QString &mimetype);
 
         /**
          * Returns a list of all known applets associated with a certain URL.
@@ -366,38 +301,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
                                     const QVariantList &args = QVariantList());
 
         /**
-         * Attempts to load an applet
-         *
-         * Returns a pointer to the applet if successful.
-         * The caller takes responsibility for the applet, including
-         * deleting it when no longer needed.
-         *
-         * @param name the plugin name, as returned by KPluginInfo::pluginName()
-         * @param appletId unique ID to assign the applet, or zero to have one
-         *        assigned automatically.
-         * @param args to send the applet extra arguments
-         * @return a pointer to the loaded applet, or 0 on load failure
-         **/
-        static Applet *load(const QString &name, uint appletId = 0,
-                            const QVariantList &args = QVariantList());
-
-        /**
-         * Attempts to load an applet
-         *
-         * Returns a pointer to the applet if successful.
-         * The caller takes responsibility for the applet, including
-         * deleting it when no longer needed.
-         *
-         * @param info KPluginInfo object for the desired applet
-         * @param appletId unique ID to assign the applet, or zero to have one
-         *        assigned automatically.
-         * @param args to send the applet extra arguments
-         * @return a pointer to the loaded applet, or 0 on load failure
-         **/
-        static Applet *load(const KPluginInfo &info, uint appletId = 0,
-                            const QVariantList &args = QVariantList());
-
-        /**
          * Get the category of the given applet
          *
          * @param applet a KPluginInfo object for the applet
@@ -412,24 +315,18 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         static QString category(const QString &appletName);
 
         /**
-         * This method is called when the interface should be painted.
-         *
-         * @param painter the QPainter to use to do the paintiner
-         * @param option the style options object
-         * @param contentsRect the rect to paint within; automatically adjusted for
-         *                     the background, if any
-         **/
-        virtual void paintInterface(QPainter *painter,
-                                    const QStyleOptionGraphicsItem *option,
-                                    const QRect &contentsRect);
-
-        /**
          * Returns the user-visible name for the applet, as specified in the
-         * .desktop file.
+         * .desktop file. Can be changed with @see setName
          *
          * @return the user-visible name for the applet.
          **/
         QString name() const;
+
+        /**
+         * Sets a custom name for this instance of the applet. E.g. a clock might
+         * use the timezone as its name rather than the .desktop file
+         */
+        void setName(const QString &name) const;
 
         /**
          * @return the font currently set for this widget
@@ -464,9 +361,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @return The type of immutability of this applet
          */
         ImmutabilityType immutability() const;
-
-        void paintWindowFrame(QPainter *painter,
-                              const QStyleOptionGraphicsItem *option, QWidget *widget);
 
         /**
          * If for some reason, the applet fails to get up on its feet (the
@@ -517,37 +411,18 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *
          * @param hints the BackgroundHint combination for this applet
          */
-        void setBackgroundHints(const BackgroundHints hints);
+        void setBackgroundHints(const Plasma::BackgroundHints hint);
 
         /**
          * @return BackgroundHints flags combination telling if the standard background is shown
          *         and if it has a drop shadow
          */
-        BackgroundHints backgroundHints() const;
+        Plasma::BackgroundHints backgroundHints() const;
 
         /**
          * @return true if this Applet is currently being used as a Containment, false otherwise
          */
         bool isContainment() const;
-
-        /**
-         * This method returns screen coordinates for the widget; this method can be somewhat
-         * expensive and should ONLY be called when screen coordinates are required. For
-         * example when positioning top level widgets on top of the view to create the
-         * appearance of unit. This should NOT be used for popups (@see popupPosition) or
-         * for normal widget use (use Plasma:: widgets or QGraphicsProxyWidget instead).
-         *
-         * @return a rect of the applet in screen coordinates.
-         */
-        QRect screenRect() const;
-
-        /**
-         * Reimplemented from QGraphicsItem
-         **/
-        int type() const;
-        enum {
-            Type = Plasma::AppletType
-        };
 
         /**
          * @return the Containment, if any, this applet belongs to
@@ -585,46 +460,25 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         virtual void removeAssociatedWidget(QWidget *widget);
 
         /**
-         * Gets called when an extender item has to be initialized after a plasma restart. If you
-         * create ExtenderItems in your applet, you should implement this function to again create
-         * the widget that should be shown in this extender item. This function might look something
-         * like this:
-         *
-         * @code
-         * SuperCoolWidget *widget = new SuperCoolWidget();
-         * dataEngine("engine")->connectSource(item->config("dataSourceName"), widget);
-         * item->setWidget(widget);
-         * @endcode
-         *
-         * You can also add one or more custom qactions to this extender item in this function.
-         *
-         * Note that by default, not all ExtenderItems are persistent. Only items that are detached,
-         * will have their configuration stored when plasma exits.
-         */
-        virtual void initExtenderItem(ExtenderItem *item);
-
-        /**
-         * @param parent the QGraphicsItem this applet is parented to
+         * @param parent the QObject this applet is parented to
          * @param serviceId the name of the .desktop file containing the
          *      information about the widget
          * @param appletId a unique id used to differentiate between multiple
          *      instances of the same Applet type
          */
-        explicit Applet(QGraphicsItem *parent = 0,
-                        const QString &serviceId = QString(),
-                        uint appletId = 0);
+        explicit Applet(QObject *parent = 0, const QString &serviceId = QString(), uint appletId = 0);
 
         /**
-         * @param parent the QGraphicsItem this applet is parented to
+         * @param parent the QObject this applet is parented to
          * @param info the plugin information object for this Applet
          * @param appletId a unique id used to differentiate between multiple
          *      instances of the same Applet type
          * @since 4.6
          */
-        explicit Applet(const KPluginInfo &info, QGraphicsItem *parent = 0, uint appletId = 0);
+        explicit Applet(const KPluginInfo &info, QObject *parent = 0, uint appletId = 0);
 
         /**
-         * @param parent the QGraphicsItem this applet is parented to
+         * @param parent the QObject this applet is parented to
          * @param serviceId the name of the .desktop file containing the
          *      information about the widget
          * @param appletId a unique id used to differentiate between multiple
@@ -633,10 +487,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *      and the applet id
          * @since 4.3
          */
-        explicit Applet(QGraphicsItem *parent,
-                        const QString &serviceId,
-                        uint appletId,
-                        const QVariantList &args);
+        explicit Applet(QObject *parent, const QString &serviceId, uint appletId, const QVariantList &args);
 
 
         /**
@@ -697,7 +548,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *
          * @param urls
          */
-        void setAssociatedApplicationUrls(const KUrl::List &urls);
+        void setAssociatedApplicationUrls(const QList<QUrl> &urls);
 
         /**
          * @return the application associated to this applet
@@ -709,7 +560,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @return the urls associated to this applet
          * @since 4.4
          */
-        KUrl::List associatedApplicationUrls() const;
+        QList<QUrl> associatedApplicationUrls() const;
 
         /**
          * @return true if the applet has a valid associated application or urls
@@ -726,18 +577,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
         void releaseVisualFocus();
 
-#if QT_VERSION >= 0x040700
-    protected:
-        void geometryChanged(); // in QGraphicsWidget now; preserve BC
-#else
-        /**
-         * Emitted whenever the applet makes a geometry change, so that views
-         * can coordinate themselves with these changes if they desire.
-         */
-        void geometryChanged();
-#endif
-
-    Q_SIGNALS:
         /**
          * Emitted when the user completes a transformation of the applet.
          */
@@ -747,11 +586,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * Emitted when the applet changes its own geometry or transform.
          */
         void appletTransformedItself();
-
-        /**
-         * Emitted by Applet subclasses when they change a sizeHint and wants to announce the change
-         */
-        void sizeHintChanged(Qt::SizeHint which);
 
         /**
          * Emitted when an applet has changed values in its configuration
@@ -781,7 +615,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         /**
          * Emitted when the applet is deleted
          */
-        void appletDestroyed(Plasma::Applet *applet);
+        void appletDeleted(Plasma::Applet *applet);
 
         /**
          * Emitted when the applet status changes
@@ -790,16 +624,11 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         void newStatus(Plasma::ItemStatus status);
 
         /**
-         * Emitted when an ExtenderItem in a scripting applet needs to be initialized
-         */
-        void extenderItemRestored(Plasma::ExtenderItem *item);
-
-        /**
          * Emitted when the immutability changes
          * @since 4.4
          */
         void immutabilityChanged(Plasma::ImmutabilityType immutable);
-
+        
     public Q_SLOTS:
         /**
          * Sets the immutability type for this applet (not immutable,
@@ -846,16 +675,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         bool isUserConfiguring() const;
 
         /**
-         * Causes this applet to raise above all other applets.
-         */
-        void raise();
-
-        /**
-         * Causes this applet to lower below all the other applets.
-         */
-        void lower();
-
-        /**
          * Sends all pending contraints updates to the applet. Will usually
          * be called automatically, but can also be called manually if needed.
          */
@@ -863,7 +682,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
 
         /**
          * This method is called once the applet is loaded and added to a Corona.
-         * If the applet requires a QGraphicsScene or has an particularly intensive
+         * If the applet requires a Scene or has an particularly intensive
          * set of initialization routines to go through, consider implementing it
          * in this method instead of the constructor.
          *
@@ -923,6 +742,9 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @since 4.4
          */
         void runAssociatedApplication();
+
+        bool hasFocus() const;
+        void setFocus(Qt::FocusReason);
 
     protected:
         /**
@@ -1022,84 +844,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
         virtual void constraintsEvent(Plasma::Constraints constraints);
 
-        /**
-         * Register the widgets that manage mouse clicks but you still want
-         * to be able to drag the applet around when holding the mouse pointer
-         * on that widget.
-         *
-         * Calling this results in an eventFilter being places on the widget.
-         *
-         * @param item the item to watch for mouse move
-         */
-        void registerAsDragHandle(QGraphicsItem *item);
-
-        /**
-         * Unregister a widget registered with registerAsDragHandle.
-         *
-         * @param item the item to unregister
-         */
-        void unregisterAsDragHandle(QGraphicsItem *item);
-
-        /**
-         * @param item the item to look for if it is registered or not
-         * @return true if it is registered, false otherwise
-         */
-        bool isRegisteredAsDragHandle(QGraphicsItem *item);
-
-        /**
-         * @return the extender of this applet.
-         */
-        Extender *extender() const;
-
-        /**
-         * @internal event filter; used for focus watching
-         **/
-        bool eventFilter(QObject *o, QEvent *e);
-
-        /**
-         * @internal scene event filter; used to manage applet dragging
-         */
-        bool sceneEventFilter (QGraphicsItem *watched, QEvent *event);
-
-        /**
-         * @internal manage the mouse movement to drag the applet around
-         */
-        void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-
-        /**
-         * Reimplemented from QGraphicsItem
-         */
-        void focusInEvent(QFocusEvent *event);
-
-        /**
-         * Reimplemented from QGraphicsItem
-         */
-        void resizeEvent(QGraphicsSceneResizeEvent *event);
-
-        /**
-         * Reimplemented from QGraphicsItem
-         */
-        QVariant itemChange(GraphicsItemChange change, const QVariant &value);
-
-        /**
-         * Reimplemented from QGraphicsItem
-         */
-        QPainterPath shape() const;
-
-        /**
-         * Reimplemented from QGraphicsLayoutItem
-         */
-        QSizeF sizeHint(Qt::SizeHint which, const QSizeF & constraint = QSizeF()) const;
-
-        /**
-         * Reimplemented from QGraphicsLayoutItem
-         */
-        void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
-
-        /**
-         * Reimplemented from QGraphicsLayoutItem
-         */
-        void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
         /**
          * Reimplemented from QObject
@@ -1118,23 +862,12 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
         Applet(const QString &packagePath, uint appletId, const QVariantList &args);
 
-        Q_PRIVATE_SLOT(d, void setFocus())
-        Q_PRIVATE_SLOT(d, void themeChanged())
         Q_PRIVATE_SLOT(d, void cleanUpAndDelete())
-        Q_PRIVATE_SLOT(d, void selectItemToDestroy())
-        Q_PRIVATE_SLOT(d, void updateRect(const QRectF& rect))
-        Q_PRIVATE_SLOT(d, void destroyMessageOverlay())
         Q_PRIVATE_SLOT(d, void configDialogFinished())
         Q_PRIVATE_SLOT(d, void updateShortcuts())
         Q_PRIVATE_SLOT(d, void publishCheckboxStateChanged(int state))
         Q_PRIVATE_SLOT(d, void globalShortcutChanged())
         Q_PRIVATE_SLOT(d, void propagateConfigChanged())
-        Q_PRIVATE_SLOT(d, void handleDisappeared(AppletHandle *handle))
-
-        /**
-         * Reimplemented from QGraphicsItem
-         **/
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
         AppletPrivate *const d;
 
@@ -1147,21 +880,14 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         friend class AppletHandle;
         friend class AppletPrivate;
         friend class AccessAppletJobPrivate;
+        friend class GraphicsViewAppletPrivate;
         friend class PluginLoader;
         friend class PopupApplet;
         friend class PopupAppletPrivate;
         friend class AssociatedApplicationManager;
-
-        friend class Extender;
-        friend class ExtenderGroup;
-        friend class ExtenderGroupPrivate;
-        friend class ExtenderPrivate;
-        friend class ExtenderItem;
 };
 
 } // Plasma namespace
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Applet::BackgroundHints)
 
 /**
  * Register an applet when it is contained in a loadable module
