@@ -30,7 +30,6 @@
 #include "config-plasma.h"
 
 #if HAVE_X11
-#include <QX11Info>
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 #include "private/effectwatcher_p.h"
 #endif
