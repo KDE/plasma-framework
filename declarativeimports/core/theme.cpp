@@ -318,10 +318,6 @@ int ThemeProxy::enormousIconSize() const
 
 void ThemeProxy::iconLoaderSettingsChanged()
 {
-    if (m_defaultIconSize == KIconLoader::global()->currentSize(KIconLoader::Desktop)) {
-        return;
-    }
-
     m_defaultIconSize = KIconLoader::global()->currentSize(KIconLoader::Desktop);
 
     m_iconSizes->insert("desktop", QVariant(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
