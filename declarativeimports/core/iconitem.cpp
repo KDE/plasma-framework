@@ -48,9 +48,9 @@ IconItem::IconItem(QDeclarativeItem *parent)
     setFlag(QGraphicsItem::ItemHasNoContents, false);
 
     connect(KIconLoader::global(), SIGNAL(iconLoaderSettingsChanged()),
-            this, SLOT(implicitWidthChanged()));
+            this, SIGNAL(implicitWidthChanged()));
     connect(KIconLoader::global(), SIGNAL(iconLoaderSettingsChanged()),
-            this, SLOT(implicitHeightChanged()));
+            this, SIGNAL(implicitHeightChanged()));
 
 
     connect(this, SIGNAL(enabledChanged()),
