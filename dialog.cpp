@@ -415,6 +415,7 @@ Dialog::Dialog(QWidget *parent, Qt::WindowFlags f)
 
 Dialog::~Dialog()
 {
+    DialogShadows::self()->removeWindow(this);
     delete d;
 }
 

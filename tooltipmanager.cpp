@@ -73,6 +73,7 @@ public :
     ~ToolTipManagerPrivate()
     {
         if (!QCoreApplication::closingDown()) {
+            shadow->removeWindow(tipWidget);
             delete tipWidget;
         }
     }
@@ -313,6 +314,7 @@ void ToolTipManagerPrivate::createTipWidget()
 void ToolTipManagerPrivate::hideTipWidget()
 {
     if (tipWidget) {
+        shadow->removeWindow(tipWidget);
         tipWidget->hide();
         tipWidget->deleteLater();
         tipWidget = 0;
