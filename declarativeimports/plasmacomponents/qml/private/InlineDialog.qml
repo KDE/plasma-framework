@@ -139,7 +139,7 @@ Item {
                     id: backgroundSvg
                     imagePath: fallbackComponent.svgPath
                 }
-                elementId: internal.under ? "baloon-tip-top" : "baloon-tip-bottom"
+                elementId: internal.under ? "balloon-tip-top" : "balloon-tip-bottom"
                 anchors {
                     horizontalCenter: parent.horizontalCenter
                     bottom: parent.top
