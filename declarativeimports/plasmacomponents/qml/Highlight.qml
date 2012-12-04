@@ -59,6 +59,13 @@ Item {
         }
     }
 
+    Behavior on opacity {
+        NumberAnimation {
+            duration: 250
+            easing.type: Easing.OutQuad
+        }
+    }
+
     PlasmaCore.FrameSvgItem {
         id: background
         imagePath: "widgets/viewitem"

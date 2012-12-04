@@ -19,11 +19,14 @@
 
 #include "mouseeventlistener.h"
 
+#include <QApplication>
 #include <QEvent>
 #include <QGraphicsSceneMouseEvent>
 #include <QtCore/QTimer>
 
 #include <KDebug>
+
+static const int PressAndHoldDelay = 800;
 
 MouseEventListener::MouseEventListener(QDeclarativeItem *parent)
     : QDeclarativeItem(parent),
@@ -32,6 +35,11 @@ MouseEventListener::MouseEventListener(QDeclarativeItem *parent)
     m_lastEvent(0),
     m_containsMouse(false)
 {
+    m_pressAndHoldTimer = new QTimer(this);
+    m_pressAndHoldTimer->setSingleShot(true);
+    connect(m_pressAndHoldTimer, SIGNAL(timeout()),
+            this, SLOT(handlePressAndHold()));
+
     qmlRegisterType<KDeclarativeMouseEvent>();
     qmlRegisterType<KDeclarativeWheelEvent>();
 
@@ -60,12 +68,16 @@ bool MouseEventListener::hoverEnabled() const
 
 void MouseEventListener::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
+    Q_UNUSED(event);
+
     m_containsMouse = true;
     emit containsMouseChanged(true);
 }
 
 void MouseEventListener::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
+    Q_UNUSED(event);
+
     m_containsMouse = false;
     emit containsMouseChanged(false);
 }
@@ -93,10 +105,8 @@ void MouseEventListener::mousePressEvent(QGraphicsSceneMouseEvent *me)
     m_pressAndHoldEvent = new KDeclarativeMouseEvent(me->pos().x(), me->pos().y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
     emit pressed(&dme);
     m_pressed = true;
-    //delete m_pressAndHoldEvent;
-    //m_pressAndHoldEvent = &dme;
-    //new KDeclarativeMouseEvent(me->pos().x(), me->pos().y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());;
-    QTimer::singleShot(800, this, SLOT(handlePressAndHold()));
+
+    m_pressAndHoldTimer->start(PressAndHoldDelay);
 }
 
 void MouseEventListener::mouseMoveEvent(QGraphicsSceneMouseEvent *me)
@@ -118,6 +128,11 @@ void MouseEventListener::mouseReleaseEvent(QGraphicsSceneMouseEvent *me)
     KDeclarativeMouseEvent dme(me->pos().x(), me->pos().y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
     m_pressed = false;
     emit released(&dme);
+
+    if (QPointF(me->pos() - me->buttonDownPos(me->button())).manhattanLength() <= QApplication::startDragDistance() && m_pressAndHoldTimer->isActive()) {
+        emit clicked(&dme);
+        m_pressAndHoldTimer->stop();
+    }
 }
 
 void MouseEventListener::wheelEvent(QGraphicsSceneWheelEvent *we)
@@ -133,9 +148,6 @@ void MouseEventListener::wheelEvent(QGraphicsSceneWheelEvent *we)
 void MouseEventListener::handlePressAndHold()
 {
     if (m_pressed) {
-        //KDeclarativeMouseEvent dme = m_pressAndHoldEvent;
-        //const QPointF myPos = m_pressAndHoldEvent->pos();
-        //KDeclarativeMouseEvent dme(myPos.x(), myPos.y(), m_pressAndHoldEvent->screenPos().x(), m_pressAndHoldEvent->screenPos().y(), m_pressAndHoldEvent->button(), m_pressAndHoldEvent->buttons(), m_pressAndHoldEvent->modifiers());
         emit pressAndHold(m_pressAndHoldEvent);
         //delete m_pressAndHoldEvent;
     }
@@ -160,10 +172,8 @@ bool MouseEventListener::sceneEventFilter(QGraphicsItem *item, QEvent *event)
         //kDebug() << "pressed in sceneEventFilter";
         emit pressed(&dme);
         m_pressed = true;
-        //delete m_pressAndHoldEvent;
-        //m_pressAndHoldEvent = new KDeclarativeMouseEvent(me->pos().x(), me->pos().y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());;
-        //m_pressAndHoldEvent = &dme;
-        QTimer::singleShot(800, this, SLOT(handlePressAndHold()));
+
+        m_pressAndHoldTimer->start(PressAndHoldDelay);
         break;
     }
     case QEvent::GraphicsSceneMouseMove: {
@@ -179,8 +189,14 @@ bool MouseEventListener::sceneEventFilter(QGraphicsItem *item, QEvent *event)
         QGraphicsSceneMouseEvent *me = static_cast<QGraphicsSceneMouseEvent *>(event);
         const QPointF myPos = item->mapToItem(this, me->pos());
         KDeclarativeMouseEvent dme(myPos.x(), myPos.y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
-        emit released(&dme);
         m_pressed = false;
+
+        emit released(&dme);
+
+        if (QPointF(me->pos() - me->buttonDownPos(me->button())).manhattanLength() <= QApplication::startDragDistance() && m_pressAndHoldTimer->isActive()) {
+            emit clicked(&dme);
+            m_pressAndHoldTimer->stop();
+        }
         break;
     }
     case QEvent::GraphicsSceneWheel: {

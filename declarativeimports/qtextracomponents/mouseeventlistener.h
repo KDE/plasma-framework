@@ -155,6 +155,7 @@ Q_SIGNALS:
     void pressed(KDeclarativeMouseEvent *mouse);
     void positionChanged(KDeclarativeMouseEvent *mouse);
     void released(KDeclarativeMouseEvent *mouse);
+    void clicked(KDeclarativeMouseEvent *mouse);
     void pressAndHold(KDeclarativeMouseEvent *mouse);
     void wheelMoved(KDeclarativeWheelEvent *wheel);
     void containsMouseChanged(bool containsMouseChanged);
@@ -168,6 +169,7 @@ private:
     QPointF m_pressAndHoldPosition;
     //Important: used only for comparison. If you will ever need to access this pointer, make it a QWekapointer
     QEvent *m_lastEvent;
+    QTimer *m_pressAndHoldTimer;
     bool m_containsMouse;
 };
 
