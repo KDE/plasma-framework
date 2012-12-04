@@ -62,4 +62,6 @@ Text {
     font.weight: theme.defaultFont.weight
     font.wordSpacing: theme.defaultFont.wordSpacing
     color: theme.textColor
+
+    opacity: enabled? 1 : 0.6
 }
