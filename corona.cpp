@@ -592,6 +592,9 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
     if (!loadingNull) {
         applet = PluginLoader::self()->loadApplet(pluginName, id, args);
         containment = dynamic_cast<Containment*>(applet);
+        if (containment) {
+            containment->setParent(q);
+        }
     }
 
     if (!containment) {
@@ -609,7 +612,7 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
             applet->init();
             delete applet;
         }
-        applet = containment = new Containment(0, 0, id);
+        applet = containment = new Containment(q, 0, id);
 
         if (loadingNull) {
             containment->setDrawWallpaper(false);
