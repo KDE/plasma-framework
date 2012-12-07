@@ -7,7 +7,6 @@
 set(CMAKE_AUTOMOC_RELAXED_MODE ON)
 
 if(KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
-    set(PLASMA_NO_KDEWEBKIT TRUE)
     set(PLASMA_NO_KNEWSTUFF TRUE)
     set(PLASMA_NO_SOLID TRUE)
     set(PLASMA_NO_KIO TRUE)
@@ -56,12 +55,6 @@ if(NOT PLASMA_NO_KIO)
    include_directories(${KDE4_KIO_INCLUDES})
    set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} ${KDE4_KIO_LIBS})
 endif(NOT PLASMA_NO_KIO)
-
-if(NOT PLASMA_NO_KDEWEBKIT)
-    include_directories(${CMAKE_SOURCE_DIR}/kdewebkit/)
-    include_directories(${CMAKE_BINARY_DIR}/kdewebkit/)
-    set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} kdewebkit)
-endif(NOT PLASMA_NO_KDEWEBKIT)
 
 if(NOT PLASMA_NO_KNEWSTUFF)
     include_directories(${CMAKE_SOURCE_DIR}/knewstuff/)
@@ -124,7 +117,6 @@ set(plasma_LIB_SRCS
     private/dataenginemanager.cpp
     private/dataengineservice.cpp
     private/effects/halopainter.cpp
-    private/dialogshadows.cpp
     private/getsource.cpp
     private/packages.cpp
     private/plasmoidservice.cpp
