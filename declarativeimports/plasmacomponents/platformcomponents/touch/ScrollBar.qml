@@ -64,7 +64,7 @@ Item {
         //property bool handleEnabled: internalLoader.isVertical ? item.handle.height < item.contents.height : item.handle.width < item.contents.width
         property bool handleEnabled: internalLoader.isVertical ? flickableItem.contentHeight > flickableItem.height : flickableItem.contentWidth > flickableItem.width
         property bool isVertical: orientation == Qt.Vertical
-        property bool anchorableWithFlickable: parent == flickableItem || parent == flickableItem.parent
+        property bool anchorableWithFlickable: scrollbar.parent == flickableItem || scrollbar.parent == flickableItem.parent
 
         function incrementValue(increment)
         {
