@@ -22,18 +22,13 @@
 
 #include "package.h"
 
-#include <QDBusInterface>
-#include <QDBusPendingCall>
-#include <QFile>
-#include <QIODevice>
-#include <QRegExp>
-#include <QtNetwork/QHostInfo>
 #include <qtemporarydir.h>
 
 #include <karchive.h>
 #include <kdebug.h>
 #include <kdesktopfile.h>
 #include <kservicetypetrader.h>
+#include <kstandarddirs.h>
 #include <ktar.h>
 #include <kzip.h>
 
@@ -46,69 +41,10 @@
 #include "pluginloader.h"
 #include "private/package_p.h"
 #include "private/packages_p.h"
+#include "private/packagejob_p.h"
 
 namespace Plasma
 {
-
-bool copyFolder(QString sourcePath, QString targetPath)
-{
-    QDir source(sourcePath);
-    if (!source.exists()) {
-        return false;
-    }
-
-    QDir target(targetPath);
-    if (!target.exists()) {
-        QString targetName = target.dirName();
-        target.cdUp();
-        target.mkdir(targetName);
-        target = QDir(targetPath);
-    }
-
-    foreach (const QString &fileName, source.entryList(QDir::Files)) {
-        QString sourceFilePath = sourcePath + QDir::separator() + fileName;
-        QString targetFilePath = targetPath + QDir::separator() + fileName;
-
-        if (!QFile::copy(sourceFilePath, targetFilePath)) {
-            return false;
-        }
-    }
-
-    foreach (const QString &subFolderName, source.entryList(QDir::AllDirs | QDir::NoDotAndDotDot)) {
-        QString sourceSubFolderPath = sourcePath + QDir::separator() + subFolderName;
-        QString targetSubFolderPath = targetPath + QDir::separator() + subFolderName;
-
-        if (!copyFolder(sourceSubFolderPath, targetSubFolderPath)) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-// Qt5 TODO: use QDir::removeRecursively() instead
-bool removeFolder(QString folderPath)
-{
-    QDir folder(folderPath);
-    if(!folder.exists())
-        return false;
-
-    foreach (const QString &fileName, folder.entryList(QDir::Files)) {
-        if (!QFile::remove(folderPath + QDir::separator() + fileName)) {
-            return false;
-        }
-    }
-
-    foreach (const QString &subFolderName, folder.entryList(QDir::AllDirs | QDir::NoDotAndDotDot)) {
-        if (!removeFolder(folderPath + QDir::separator() + subFolderName)) {
-            return false;
-        }
-    }
-
-    QString folderName = folder.dirName();
-    folder.cdUp();
-    return folder.rmdir(folderName);
-}
 
 Package::Package(PackageStructure *structure)
     : d(new PackagePrivate())
@@ -433,6 +369,7 @@ QStringList Package::entryList(const char *key) const
 
 void Package::setPath(const QString &path)
 {
+    kDebug() << "Package::setPath() " << path;
     if (path == d->path) {
         return;
     }
@@ -453,17 +390,17 @@ void Package::setPath(const QString &path)
     QDir dir(path);
     if (dir.isRelative()) {
         QString location;
+        //kDebug() <<
         if (!d->defaultPackageRoot.isEmpty()) {
             dir.setPath(d->defaultPackageRoot);
             if (dir.isRelative()) {
-                location = QStandardPaths::locate(QStandardPaths::GenericDataLocation, d->defaultPackageRoot + path);
+                 location = QStandardPaths::locate(QStandardPaths::GenericDataLocation, d->defaultPackageRoot + path, QStandardPaths::LocateDirectory);
             } else {
                 location = d->defaultPackageRoot + path;
             }
         }
-
         if (location.isEmpty()) {
-            location = QStandardPaths::locate(QStandardPaths::GenericDataLocation, path);
+            location = QStandardPaths::locate(QStandardPaths::GenericDataLocation, path, QStandardPaths::LocateDirectory);
 
             if (location.isEmpty()) {
                 d->path.clear();
@@ -471,7 +408,6 @@ void Package::setPath(const QString &path)
                 return;
             }
         }
-
         dir.setPath(location);
     }
 
@@ -483,7 +419,7 @@ void Package::setPath(const QString &path)
         if (info.isDir() && !basePath.endsWith('/')) {
             basePath.append('/');
         }
-        //kDebug() << "basePath is" << basePath;
+        kDebug() << "basePath is" << basePath;
     } else {
 #ifndef NDEBUG
         kDebug() << path << "invalid, basePath is" << basePath;
@@ -706,213 +642,27 @@ QList<const char*> Package::requiredFiles() const
     return files;
 }
 
-bool Package::installPackage(const QString &package, const QString &packageRoot)
+KJob* Package::install(const QString &sourcePackage, const QString &packageRoot)
 {
-    if (d->structure) {
-        return d->structure.data()->installPackage(this, package, packageRoot);
-    }
-
-    return PackagePrivate::installPackage(package, packageRoot, d->servicePrefix);
+    const QString src = sourcePackage;
+    const QString dest = packageRoot.isEmpty() ? defaultPackageRoot() : packageRoot;
+    //kDebug() << "Source: " << src;
+    //kDebug() << "PackageRoot: " << dest;
+    d->path = packageRoot + "plasma-applet-org.kde.microblog-qml";
+    KJob *j = d->structure.data()->install(this, src, dest);
+    //connect(j, SIGNAL(finished(bool)), SLOT(installFinished(bool)));
+    return j;
 }
 
-bool PackagePrivate::installPackage(const QString &package, const QString &packageRoot, const QString &servicePrefix)
+KJob* Package::uninstall(const QString &packageName, const QString &packageRoot)
 {
-    //TODO: report *what* failed if something does fail
-    QDir root(packageRoot);
 
-    if (!root.exists()) {
-        QDir().mkpath(packageRoot);
-        if (!root.exists()) {
-            kWarning() << "Could not create package root directory:" << packageRoot;
-            return false;
-        }
-    }
+    const QString pname = metadata().pluginName();
 
-    QFileInfo fileInfo(package);
-    if (!fileInfo.exists()) {
-        kWarning() << "No such file:" << package;
-        return false;
-    }
-
-    QString path;
-    QTemporaryDir tempdir;
-    bool archivedPackage = false;
-
-    if (fileInfo.isDir()) {
-        // we have a directory, so let's just install what is in there
-        path = package;
-
-        // make sure we end in a slash!
-        if (path[path.size() - 1] != '/') {
-            path.append('/');
-        }
-    } else {
-        KArchive *archive = 0;
-        QMimeDatabase db;
-        QMimeType mimetype = db.mimeTypeForFile(package);
-
-        if (mimetype.inherits("application/zip")) {
-            archive = new KZip(package);
-        } else if (mimetype.inherits("application/x-compressed-tar") ||
-                   mimetype.inherits("application/x-tar")|| mimetype.inherits("application/x-bzip-compressed-tar") ||
-                   mimetype.inherits("application/x-xz") || mimetype.inherits("application/x-lzma")) {
-            archive = new KTar(package);
-        } else {
-            kWarning() << "Could not open package file, unsupported archive format:" << package << mimetype.name();
-            return false;
-        }
-
-        if (!archive->open(QIODevice::ReadOnly)) {
-            kWarning() << "Could not open package file:" << package;
-        delete archive;
-            return false;
-        }
-
-        archivedPackage = true;
-        path = tempdir.path() + '/';
-
-        const KArchiveDirectory *source = archive->directory();
-        source->copyTo(path);
-
-        QStringList entries = source->entries();
-        if (entries.count() == 1) {
-            const KArchiveEntry *entry = source->entry(entries[0]);
-            if (entry->isDirectory()) {
-                path.append(entry->name()).append("/");
-            }
-        }
-
-        delete archive;
-    }
-
-    QString metadataPath = path + "metadata.desktop";
-    if (!QFile::exists(metadataPath)) {
-        kWarning() << "No metadata file in package" << package << metadataPath;
-        return false;
-    }
-
-    KPluginInfo meta(metadataPath);
-    QString targetName = meta.pluginName();
-
-    if (targetName.isEmpty()) {
-        kWarning() << "Package plugin name not specified";
-        return false;
-    }
-
-    // Ensure that package names are safe so package uninstall can't inject
-    // bad characters into the paths used for removal.
-    QRegExp validatePluginName("^[\\w-\\.]+$"); // Only allow letters, numbers, underscore and period.
-    if (!validatePluginName.exactMatch(targetName)) {
-        kWarning() << "Package plugin name " << targetName << "contains invalid characters";
-        return false;
-    }
-
-    targetName = packageRoot + '/' + targetName;
-    if (QFile::exists(targetName)) {
-        kWarning() << targetName << "already exists";
-        return false;
-    }
-
-    if (archivedPackage) {
-        // it's in a temp dir, so just move it over.
-        const bool ok = copyFolder(path, targetName);
-        removeFolder(path);
-        if (!ok) {
-            kWarning() << "Could not move package to destination:" << targetName;
-            return false;
-        }
-    } else {
-        // it's a directory containing the stuff, so copy the contents rather
-        // than move them
-        const bool ok = copyFolder(path, targetName);
-        if (!ok) {
-            kWarning() << "Could not copy package to destination:" << targetName;
-            return false;
-        }
-    }
-
-    if (archivedPackage) {
-        // no need to remove the temp dir (which has been successfully moved if it's an archive)
-        tempdir.setAutoRemove(false);
-    }
-
-    if (!servicePrefix.isEmpty()) {
-        // and now we register it as a service =)
-        QString metaPath = targetName + "/metadata.desktop";
-        KDesktopFile df(metaPath);
-        KConfigGroup cg = df.desktopGroup();
-
-        // Q: should not installing it as a service disqualify it?
-        // Q: i don't think so since KServiceTypeTrader may not be
-        // used by the installing app in any case, and the
-        // package is properly installed - aseigo
-
-        //TODO: reduce code duplication with registerPackage below
-
-        const QString serviceName = servicePrefix + meta.pluginName() + ".desktop";
-
-        QString service = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/kde5/services/") + serviceName;
-        const bool ok = QFile::copy(metaPath, service);
-        if (ok) {
-            // the icon in the installed file needs to point to the icon in the
-            // installation dir!
-            QString iconPath = targetName + '/' + cg.readEntry("Icon");
-            QFile icon(iconPath);
-            if (icon.exists()) {
-                KDesktopFile df(service);
-                KConfigGroup cg = df.desktopGroup();
-                cg.writeEntry("Icon", iconPath);
-            }
-        } else {
-            kWarning() << "Could not register package as service (this is not necessarily fatal):" << serviceName;
-        }
-    }
-
-    QDBusInterface sycoca("org.kde.kded5", "/kbuildsycoca");
-    sycoca.asyncCall("recreate");
-    return true;
-}
-
-bool Package::uninstallPackage(const QString &packageName, const QString &packageRoot)
-{
-    if (d->structure) {
-        return d->structure.data()->uninstallPackage(this, packageName, packageRoot);
-    }
-
-    return PackagePrivate::uninstallPackage(packageName, packageRoot, d->servicePrefix);
-}
-
-bool PackagePrivate::uninstallPackage(const QString &packageName, const QString &packageRoot, const QString &servicePrefix)
-{
-    // We need to remove the package directory and its metadata file.
-    const QString targetName = packageRoot + '/' + packageName;
-
-    if (!QFile::exists(targetName)) {
-        kWarning() << targetName << "does not exist";
-        return false;
-    }
-
-    const QString serviceName = servicePrefix + packageName + ".desktop";
-
-    QString service = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/kde5/services/") + serviceName;
-#ifndef NDEBUG
-    kDebug() << "Removing service file " << service;
-#endif
-    bool ok = QFile::remove(service);
-
-    if (!ok) {
-        kWarning() << "Unable to remove " << service;
-    }
-
-    ok = removeFolder(targetName);
-    if (!ok) {
-        kWarning() << "Could not delete package from:" << targetName;
-        return false;
-    }
-
-    QDBusInterface sycoca("org.kde.kded5", "/kbuildsycoca");
-    sycoca.asyncCall("recreate");
-    return true;
+    QString proot = path();
+    proot.replace(pname, "");
+    kDebug() << "Package::uninstalling ... " << packageRoot << proot << pname << packageName;
+    return d->structure.data()->uninstall(this, packageRoot);
 }
 
 PackagePrivate::PackagePrivate()

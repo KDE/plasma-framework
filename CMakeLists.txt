@@ -118,7 +118,10 @@ set(plasma_LIB_SRCS
     private/dataengineservice.cpp
     private/effects/halopainter.cpp
     private/getsource.cpp
+
     private/packages.cpp
+    private/packagejob.cpp
+    private/packagejobthread.cpp
     private/plasmoidservice.cpp
     private/remotedataengine.cpp
     private/remoteservice.cpp

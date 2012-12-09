@@ -38,6 +38,7 @@ class PLASMA_EXPORT PackageStructure : public QObject
     Q_OBJECT
 
 public:
+
     explicit PackageStructure(QObject *parent = 0, const QVariantList &args = QVariantList());
 
     ~PackageStructure();
@@ -70,9 +71,9 @@ public:
      * @param archivePath path to the package archive file
      * @param packageRoot path to the directory where the package should be
      *                    installed to
-     * @return true on successful installation, false otherwise
+     * @return KJob* to track the installation status
      **/
-    virtual bool installPackage(Package *package, const QString &archivePath, const QString &packageRoot);
+    virtual KJob* install(Package *package, const QString &archivePath, const QString &packageRoot);
 
     /**
      * Uninstalls a package matching this package structure.
@@ -81,12 +82,12 @@ public:
      * accessing file paths
      * @param packageName the name of the package to remove
      * @param packageRoot path to the directory where the package should be installed to
-     * @return true on successful removal of the package, false otherwise
+     * @return KJob* to track the installation status
      */
-    virtual bool uninstallPackage(Package *package, const QString &packageName, const QString &packageRoot);
+    virtual KJob* uninstall(Package *package, const QString &packageRoot);
 
 private:
-    PackageStructurePrivate *const d;
+    PackageStructurePrivate* d;
 };
 
 } // Plasma namespace

@@ -27,6 +27,8 @@
 #include <plasma/plasma.h>
 #include <plasma/plasma_export.h>
 
+class KJob;
+
 namespace Plasma
 {
 
@@ -65,7 +67,7 @@ namespace Plasma
  * Subclassing PackageStructure does have provide a number of potential const benefits:
  *    * the package can be notified of path changes via the virtual pathChanged() method
  *    * the subclass may implement mechanisms to install and remove packages using the
- *      virtual installPackage and uninstallPackage methods
+ *      virtual install and uninstall methods
  *    * subclasses can be compiled as plugins for easy re-use
  **/
 //TODO: write documentation on USING a package
@@ -117,7 +119,7 @@ public:
     const QString path() const;
 
     /**
-     * Get the path to a given file based on the key and.an optional filename.
+     * Get the path to a given file based on the key and an optional filename.
      * Example: finding the main script in a scripting package:
      *      filePath("mainscript")
      *
@@ -305,21 +307,16 @@ public:
      * Installs a package matching this package structure. By default installs a
      * native Plasma::Package.
      *
-     * @param archivePath path to the package archive file
-     * @param packageRoot path to the directory where the package should be
-     *                    installed to
-     * @return true on successful installation, false otherwise
+     * @return KJob to track installation progress and result
      **/
-    bool installPackage(const QString &archivePath, const QString &packageRoot);
+    KJob* install(const QString &sourcePackage, const QString &packageRoot = QString());
 
     /**
      * Uninstalls a package matching this package structure.
      *
-     * @param packageName the name of the package to remove
-     * @param packageRoot path to the directory where the package should be installed to
-     * @return true on successful removal of the package, false otherwise
+     * @return KJob to track removal progress and result
      */
-    bool uninstallPackage(const QString &packageName, const QString &packageRoot);
+    KJob* uninstall(const QString &packageName, const QString &packageRoot);
 
 private:
     QExplicitlySharedDataPointer<PackagePrivate> d;

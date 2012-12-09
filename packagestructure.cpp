@@ -18,6 +18,8 @@
 *******************************************************************************/
 
 #include "packagestructure.h"
+#include <kdebug.h>
+#include <private/packagejob_p.h>
 #include "private/package_p.h"
 
 namespace Plasma
@@ -44,14 +46,19 @@ void PackageStructure::pathChanged(Package *package)
     Q_UNUSED(package)
 }
 
-bool PackageStructure::installPackage(Package *package, const QString &archivePath, const QString &packageRoot)
+KJob* PackageStructure::install(Package *package, const QString &archivePath, const QString &packageRoot)
 {
-    return PackagePrivate::installPackage(archivePath, packageRoot, package->servicePrefix());
+    PackageJob* j = new PackageJob(package->servicePrefix(), this);
+    j->install(archivePath, packageRoot);
+    return j;
 }
 
-bool PackageStructure::uninstallPackage(Package *package, const QString &packageName, const QString &packageRoot)
+KJob* PackageStructure::uninstall(Package *package, const QString &packageRoot)
 {
-    return PackagePrivate::uninstallPackage(packageName, packageRoot, package->servicePrefix());
+    PackageJob* j = new PackageJob(package->servicePrefix(), this);
+    kDebug() << "PS: " << package->path() << package->isValid();
+    j->uninstall(package->path());
+    return j;
 }
 
 }

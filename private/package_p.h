@@ -72,8 +72,6 @@ public:
 
     void createPackageMetadata(const QString &path);
     void updateHash(const QString &basePath, const QString &subPath, const QDir &dir, QCryptographicHash &hash);
-    static bool installPackage(const QString &archivePath, const QString &packageRoot, const QString &servicePrefix);
-    static bool uninstallPackage(const QString &packageName, const QString &packageRoot, const QString &servicePrefix);
 
     QWeakPointer<PackageStructure> structure;
     QString path;
