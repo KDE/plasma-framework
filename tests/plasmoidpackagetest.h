@@ -22,6 +22,7 @@
 #include <qtest_kde.h>
 
 #include "plasma/package.h"
+#include "plasma/packagestructure.h"
 
 class PlasmoidPackageTest : public QObject
 {
@@ -37,12 +38,17 @@ private Q_SLOTS:
     void filePath();
     void entryList();
 
+    void packageInstalled(KJob* j);
+    void packageUninstalled(KJob* j);
+
 private:
     void createTestPackage(const QString &packageName);
 
     QString m_packageRoot;
     QString m_package;
+    KJob* m_packageJob;
     Plasma::Package m_defaultPackage;
+    Plasma::PackageStructure* m_defaultPackageStructure;
 };
 
 #endif
