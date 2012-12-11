@@ -152,7 +152,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     }
 
     if (!applet) {
-        kDebug() << "Couldn't load applet \"" << name << "\"! reason given: " << error;
+        kWarning() << "Could not load applet" << name << "! reason given:" << error;
     }
 
     return applet;
