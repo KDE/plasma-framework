@@ -49,27 +49,43 @@ void DeclarativeItemContainer::setDeclarativeItem(QDeclarativeItem *item, bool r
     connect(m_declarativeItem.data(), SIGNAL(widthChanged()), this, SLOT(widthChanged()));
     connect(m_declarativeItem.data(), SIGNAL(heightChanged()), this, SLOT(heightChanged()));
 
-    qreal minimumWidth = 0;
-    qreal minimumHeight = 0;
-    qreal maximumWidth = 0;
-    qreal maximumHeight = 0;
-    qreal preferredWidth = 0;
-    qreal preferredHeight = 0;
+    qreal minimumWidth = -1;
+    qreal minimumHeight = -1;
+    qreal maximumWidth = -1;
+    qreal maximumHeight = -1;
+    qreal preferredWidth = -1;
+    qreal preferredHeight = -1;
 
-    minimumWidth = item->property("minimumWidth").toReal();
-    minimumHeight = item->property("minimumHeight").toReal();
-    QObject::connect(item, SIGNAL(minimumWidthChanged()), this, SLOT(minimumWidthChanged()));
-    QObject::connect(item, SIGNAL(minimumHeightChanged()), this, SLOT(minimumHeightChanged()));
 
-    maximumWidth = item->property("maximumWidth").toReal();
-    maximumHeight = item->property("maximumHeight").toReal();
-    QObject::connect(item, SIGNAL(maximumWidthChanged()), this, SLOT(maximumWidthChanged()));
-    QObject::connect(item, SIGNAL(maximumHeightChanged()), this, SLOT(maximumHeightChanged()));
+    if (item->metaObject()->indexOfProperty("minimumWidth") >= 0 ) {
+        minimumWidth = item->property("minimumWidth").toReal();
+        QObject::connect(item, SIGNAL(minimumWidthChanged()), this, SLOT(minimumWidthChanged()));
+    }
 
-    preferredWidth = item->property("preferredWidth").toReal();
-    preferredHeight = item->property("preferredHeight").toReal();
-    QObject::connect(item, SIGNAL(preferredWidthChanged()), this, SLOT(preferredWidthChanged()));
-    QObject::connect(item, SIGNAL(preferredHeightChanged()), this, SLOT(preferredHeightChanged()));
+    if (item->metaObject()->indexOfProperty("minimumHeight") >= 0 ) {
+        minimumHeight = item->property("minimumHeight").toReal();
+        QObject::connect(item, SIGNAL(minimumHeightChanged()), this, SLOT(minimumHeightChanged()));
+    }
+
+    if (item->metaObject()->indexOfProperty("maximumWidth") >= 0 ) {
+        maximumWidth = item->property("maximumWidth").toReal();
+        QObject::connect(item, SIGNAL(maximumWidthChanged()), this, SLOT(maximumWidthChanged()));
+    }
+
+    if (item->metaObject()->indexOfProperty("maximumHeight") >= 0 ) {
+        maximumHeight = item->property("maximumHeight").toReal();
+        QObject::connect(item, SIGNAL(maximumHeightChanged()), this, SLOT(maximumHeightChanged()));
+    }
+
+    if (item->metaObject()->indexOfProperty("preferredWidth") >= 0 ) {
+        preferredWidth = item->property("preferredWidth").toReal();
+        QObject::connect(item, SIGNAL(preferredWidthChanged()), this, SLOT(preferredWidthChanged()));
+    }
+
+    if (item->metaObject()->indexOfProperty("preferredHeight") >= 0 ) {
+        preferredHeight = item->property("preferredHeight").toReal();
+        QObject::connect(item, SIGNAL(preferredHeightChanged()), this, SLOT(preferredHeightChanged()));
+    }
 
     if (minimumWidth > 0 && minimumHeight > 0) {
         setMinimumSize(minimumWidth, minimumHeight);
