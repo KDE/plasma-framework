@@ -91,9 +91,9 @@ void RemoteServiceJob::start()
     Jolie::Message message(m_location.path(KUrl::RemoveTrailingSlash).remove(0, 1).toUtf8(),
                            "startOperationCall");
     Jolie::Value data;
-    data.children(JolieMessage::Field::OPERATION) << (Jolie::Value(operationName().toAscii()));
+    data.children(JolieMessage::Field::OPERATION) << (Jolie::Value(operationName().toLatin1()));
     data.children(JolieMessage::Field::PARAMETERS) << Jolie::Value(params);
-    data.children(JolieMessage::Field::DESTINATION) << Jolie::Value(destination().toAscii());
+    data.children(JolieMessage::Field::DESTINATION) << Jolie::Value(destination().toLatin1());
     message.setData(data);
 
     Jolie::Client *client = m_service->m_client;

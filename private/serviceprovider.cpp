@@ -201,7 +201,7 @@ void ServiceProvider::relay(Jolie::Server *server, int descriptor,
 
         Jolie::Message response(message.resourcePath(), message.operationName(), message.id());
         QByteArray uuid = JolieMessage::field(JolieMessage::Field::UUID, message);
-        response = appendToken(response, identity.id().toAscii(), uuid);
+        response = appendToken(response, identity.id().toLatin1(), uuid);
         AuthorizationManager::self()->d->server->sendReply(descriptor, response);
 
         return;
@@ -246,7 +246,7 @@ void ServiceProvider::operationCompleted(Plasma::ServiceJob *job)
     data.children(JolieMessage::Field::RESULT) << Jolie::Value(byteArrayResult);
     response.setData(data);
     if (job->error()) {
-        response.setFault(Jolie::Fault(job->errorString().toAscii()));
+        response.setFault(Jolie::Fault(job->errorString().toLatin1()));
     }
 
     QByteArray id = JolieMessage::field(JolieMessage::Field::IDENTITYID, message);

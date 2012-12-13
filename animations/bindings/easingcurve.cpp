@@ -74,7 +74,7 @@ static QScriptValue type(QScriptContext *ctx, QScriptEngine *eng)
             QMetaObject meta = QEasingCurve::staticMetaObject;
             QMetaEnum easingCurveEnum = meta.enumerator(meta.indexOfEnumerator("Type"));
 
-            type = easingCurveEnum.keyToValue(arg.toString().toAscii().data());
+            type = easingCurveEnum.keyToValue(arg.toString().toLatin1().data());
         }
         if (type > -1 && type < QEasingCurve::Custom) {
             self->setType(static_cast<QEasingCurve::Type>(type));

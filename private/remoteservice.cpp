@@ -111,7 +111,7 @@ void RemoteService::setLocation(const KUrl &location)
                              "startConnection");
     Jolie::Value data;
     data.children(JolieMessage::Field::IDENTITY) << Jolie::Value(identityByteArray);
-    data.children(JolieMessage::Field::UUID) << Jolie::Value(m_uuid.toAscii());
+    data.children(JolieMessage::Field::UUID) << Jolie::Value(m_uuid.toLatin1());
     getOpDesc.setData(data);
 
     Jolie::PendingCall pendingReply = m_client->asyncCall(getOpDesc);
@@ -199,7 +199,7 @@ void RemoteService::slotGotPin(Plasma::ClientPinRequest *request)
     Jolie::Value value;
     value.children(JolieMessage::Field::PARAMETERS) << Jolie::Value(QByteArray());
     if (!request->pin().isEmpty()) {
-        value.children(JolieMessage::Field::PIN) << Jolie::Value(request->pin().toAscii());
+        value.children(JolieMessage::Field::PIN) << Jolie::Value(request->pin().toLatin1());
     }
     getOpDesc.setData(value);
     //TODO: async
@@ -269,9 +269,9 @@ Jolie::Message RemoteService::signMessage(const Jolie::Message &message) const
     }
 
     Jolie::Value data = response.data();
-    data.children(JolieMessage::Field::IDENTITYID) << Jolie::Value(identity.id().toAscii());
+    data.children(JolieMessage::Field::IDENTITYID) << Jolie::Value(identity.id().toLatin1());
     data.children(JolieMessage::Field::TOKEN) << Jolie::Value(m_token);
-    data.children(JolieMessage::Field::UUID) << Jolie::Value(m_uuid.toAscii());
+    data.children(JolieMessage::Field::UUID) << Jolie::Value(m_uuid.toLatin1());
     response.setData(data);
     data.children(JolieMessage::Field::SIGNATURE) <<
                 Jolie::Value(identity.signMessage(JolieMessage::payload(response)));

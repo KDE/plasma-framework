@@ -484,7 +484,7 @@ void PackageStructure::read(const KConfigBase *config)
     QStringList groups = config->groupList();
     foreach (const QString &group, groups) {
         KConfigGroup entry(config, group);
-        QByteArray key = group.toAscii();
+        QByteArray key = group.toLatin1();
 
         QString path = entry.readEntry("Path", QString());
         QString name = entry.readEntry("Name", QString());
