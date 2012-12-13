@@ -113,7 +113,7 @@ Credentials Credentials::createCredentials(const QString &name)
     QCA::KeyGenerator generator;
     QCA::PrivateKey key = generator.createRSA(2048);
     QString pemKey(key.toPublicKey().toPEM());
-    QString id = QCryptographicHash::hash(pemKey.toAscii(), QCryptographicHash::Sha1);
+    QString id = QCryptographicHash::hash(pemKey.toLatin1(), QCryptographicHash::Sha1);
     return Credentials(id, name, key.toPEM(), true);
 #else
     return Credentials();
@@ -147,7 +147,7 @@ bool Credentials::isValid() const
     if (d->publicKey.isNull()) {
         return false;
     } else {
-        QString id = QCryptographicHash::hash(d->publicKey.toPEM().toAscii(), QCryptographicHash::Sha1);
+        QString id = QCryptographicHash::hash(d->publicKey.toPEM().toLatin1(), QCryptographicHash::Sha1);
         return (id == d->id);
     }
 #else

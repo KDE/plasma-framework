@@ -72,7 +72,7 @@ SigningPrivate::SigningPrivate(Signing *auth, const QString &path)
         KUser user;
         m_keystorePath.append(user.homeDir()).append("/.gnupg/");
     } else {
-        error = m_gpgContext->setEngineHomeDirectory(m_keystorePath.toAscii().data());
+        error = m_gpgContext->setEngineHomeDirectory(m_keystorePath.toLatin1().data());
         if (error) {
 #ifndef NDEBUG
             kDebug() << "Failed setting custom gpg keystore directory: using default.";
@@ -130,7 +130,7 @@ void SigningPrivate::registerUltimateTrustKeys()
 
     foreach (QString keyFile, keyFiles) {
         FILE *fp;
-        fp = fopen(keyFile.toAscii().data(), "r");
+        fp = fopen(keyFile.toLatin1().data(), "r");
         GpgME::Data data(fp);
         GpgME::ImportResult iRes = m_gpgContext->importKeys(data);
         if (iRes.error()) {
@@ -364,7 +364,7 @@ void SigningPrivate::keyAdded(const QString &path)
     m_keystoreDir->stopScan();
 
     FILE *fp;
-    fp = fopen(path.toAscii().data(), "r");
+    fp = fopen(path.toLatin1().data(), "r");
     GpgME::Data data(fp);
     GpgME::ImportResult iRes = m_gpgContext->importKeys(data);
 
@@ -455,7 +455,7 @@ QStringList SigningPrivate::signersOf(const QString id) const
 {
     QStringList result;
     GpgME::Error error;
-    GpgME::Key key = m_gpgContext->key(id.toAscii().data(), error);
+    GpgME::Key key = m_gpgContext->key(id.toLatin1().data(), error);
 
     if (!error) {
         for (unsigned int i = 0; i < key.numUserIDs(); ++i) {
@@ -510,13 +510,13 @@ TrustLevel Signing::trustLevelOf(const QString &keyID) const
     for (int i = (int)Plasma::UnverifiableTrust; i <= (int)Plasma::UltimatelyTrusted; ++i) {
         QSet<QByteArray> tmp = d->keys[(Plasma::TrustLevel)i];
         foreach (QByteArray key, tmp) {
-            if (key.contains(keyID.toAscii().data())) {
+            if (key.contains(keyID.toLatin1().data())) {
                 return (Plasma::TrustLevel)i;
             }
         }
     }
 
-    return d->addKeyToCache(keyID.toAscii());
+    return d->addKeyToCache(keyID.toLatin1());
 }
 
 QString Signing::signerOf(const Package &package) const
@@ -649,7 +649,7 @@ QString Signing::descriptiveString(const QString &keyID) const
     }
 
     GpgME::Error error;
-    GpgME::Key key = d->m_gpgContext->key(keyID.toAscii().data(), error);
+    GpgME::Key key = d->m_gpgContext->key(keyID.toLatin1().data(), error);
     if (error) {
         return QString();
     }
