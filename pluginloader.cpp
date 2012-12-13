@@ -167,9 +167,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     applet = offer->createInstance<Plasma::Applet>(0, allArgs, &error);
 
     if (!applet) {
-#ifndef NDEBUG
-        kDebug() << "Couldn't load applet \"" << name << "\"! reason given: " << error;
-#endif
+        kWarning() << "Could not load applet" << name << "! reason given:" << error;
     }
 
     return applet;
