@@ -20,66 +20,14 @@
 */
 
 
-/**Documented API
-Inherits:
-        Item
-
-Imports:
-        org.kde.plasma.core
-        QtQuick 1.0
-
-Description:
-        A simple button, with optional label and icon which uses the plasma theme.
-        This button component can also be used as a checkable button by using the checkable
-        and checked properties for that.
-        Plasma theme is the theme which changes via the systemsetting-workspace appearance
-        -desktop theme.
-
-Properties:
-      * bool checked:
-        This property holds whether this button is checked or not.
-        The button must be in the checkable state for enable users check or uncheck it.
-        The default value is false.
-        See also checkable property.
-
-      * bool checkable:
-        This property holds if the button is acting like a checkable button or not.
-        The default value is false.
-
- * bool pressed:
-        This property holds if the button is pressed or not.
-        Read-only.
-
- * string text:
-        This property holds the text label for the button.
-        For example,the ok button has text 'ok'.
-        The default value for this property is an empty string.
-
-      * url iconSource:
-        This property holds the source url for the Button's icon.
-        The default value is an empty url, which displays no icon.
-        It can be any image from any protocol supported by the Image element, or a freedesktop-compatible icon name
-
-      * font font:
-        This property holds the font used by the button label.
-        See also Qt documentation for font type.
-
-Signals:
-      * clicked():
-        This handler is called when there is a click.
-
-
-Plasma properties:
-
-      * real minimumWidth:
-         This property holds the smallest width this button can be to show all the contents
-
-      * real minimumHeight:
-         This property holds the smallest height this button can be to show all the contents
-
-
-**/
-
+/**
+ * A button with optional label and icon which uses the plasma theme.
+ *
+ * This button component can also be used as a checkable button by using
+ * the checkable and checked properties for that.  Plasma theme is the
+ * theme which changes via the systemsetting-workspace appearance -desktop
+ * theme.
+ */
 import QtQuick 1.1
 
 import org.kde.plasma.core 0.1 as PlasmaCore
@@ -88,18 +36,74 @@ import "private" as Private
 Item {
     id: button
 
+
     // Commmon API
+    /**
+     * This property holds whether this button is checked or not.
+     * The button must be in the checkable state to enable users to check or
+     * uncheck it.
+     *
+     * The default value is false.
+     *
+     * @see checkable
+     */
     property bool checked: false
+
+    /**
+     * This property holds if the button is acting like a checkable button or
+     * not.
+     *
+     * The default value is false.
+     */
     property bool checkable: false
+
+    /**
+     * type:bool
+     * This property holds if the button is pressed or not.
+     * Read-only.
+     */
     property alias pressed: mouse.pressed
+
+    /**
+     * type:string
+     * This property holds the text label for the button.
+     */
     property alias text: label.text
+
+    /**
+     * type:string
+     *
+     * This property holds the source url for the Button's icon.
+     * It can be any image from any protocol supported by the Image element, or
+     * a freedesktop-compatible icon name
+     *
+     * The default value is an empty url, which displays no icon.
+     */
     property alias iconSource: icon.source
+
+    /**
+     * type:font
+     *
+     * This property holds the font used by the button label.
+     *
+     * See also Qt documentation for font type.
+     */
     property alias font: label.font
 
     //icon + label + left margin + right margin + spacing between icon and text
+    /**
+     * Smallest width this button can be to show all the contents
+     */
     property real minimumWidth: icon.width + label.preferredWidth + surfaceNormal.margins.left + surfaceNormal.margins.right + ((icon.valid) ? surfaceNormal.margins.left : 0)
+
+    /**
+     * Smallest height this button can be to show all the contents
+     */
     property real minimumHeight: Math.max(theme.smallIconSize, label.paintedHeight) + surfaceNormal.margins.top + surfaceNormal.margins.bottom
 
+    /**
+     * This signal is emitted when the button is clicked.
+     */
     signal clicked()
 
     implicitWidth: {
