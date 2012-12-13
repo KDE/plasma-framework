@@ -26,10 +26,13 @@ Imports:
         org.kde.plasma.core
 
 Description:
-        You can bind the Switch component to a feature that the application
-        has to enable or disable depending on the user's input, for example.
-        Switch has similar usage and API as CheckBox, except that Switch does
-        not provide a built-in label.
+        A boolean toggle button with the visual representation of a "realistic" switch
+        with a movable toggle showing the state of the Switch. Generally easier to use
+        on touch devices than a CheckBox due to the larger surface space and more evident
+        state visualization.
+
+        You can bind the Switch component, for example, to a feature that the application
+        has to enable or disable depending on the user's input.
 
 Properties:
             bool checked:
@@ -41,9 +44,7 @@ Properties:
             it returns false.
 
             string text:
-            Sets the text for the switch.
-            The default value is empty.No text
-            will be displayed.
+            Sets the text for the switch. The default value is empty.
 
 Signals:
         onClicked:
