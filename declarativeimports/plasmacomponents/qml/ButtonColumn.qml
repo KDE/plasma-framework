@@ -39,44 +39,43 @@
 **
 ****************************************************************************/
 
-/**Documented API
-Inherits:
-        Column
-
-Imports:
-        ButtonGroup.js
-        Qt 4.7
-
-
-Description:
-        A ButtonColumn allows you to group Buttons in a column. It provides a selection-behavior as well.
-        Note: This component don't support the enabled property.
-        If you need to disable it you should disable all the buttons inside it.
-        This is an example,
-        <code>
-        ButtonColumn {
-            Button { text: "Top" }
-            Button { text: "Bottom" }
-            }
-        </code>
-
-Properties:
-        bool exclusive:
-        Specifies the grouping behavior. If enabled, the checked property on buttons contained
-        in the group will be exclusive.The default value is true.
-        Note that a button in an exclusive group will allways be checkable
-
-        Item checkedButton:
-        Returns the last checked button.
-**/
 import Qt 4.7
 import "ButtonGroup.js" as Behavior
 
+/**
+ * A ButtonColumn allows you to group Buttons in a column.
+ *
+ * It provides a selection-behavior as well.
+ *
+ * Note: This component doesn't support the enabled property. If you need to
+ * disable it you should disable all the buttons inside it.
+ *
+ * This is an example:
+ *
+ * @code
+ * ButtonColumn {
+ *     Button { text: "Top" }
+ *     Button { text: "Bottom" }
+ * }
+ * @endcode
+ */
 Column {
     id: root
 
+    /**
+     * Specifies the grouping behavior.
+     * If enabled, the checked property on buttons contained in the group will
+     * be exclusive.
+     *
+     * The default value is true.
+     *
+     * Note that a button in an exclusive group will always be checkable.
+     */
     property bool exclusive: true
 
+    /**
+     * Returns the last checked button.
+     */
     property Item checkedButton;
 
     Component.onCompleted: {
