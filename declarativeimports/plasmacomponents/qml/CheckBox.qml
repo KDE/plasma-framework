@@ -17,36 +17,23 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-/**Documented API
-Inherits:
-        The private DualStateButton
-Imports:
-        QtQuick 1.0
-        org.kde.plasma.core
-
-Description:
-        A check box is a component that can be switched on (checked) or off (unchecked). Check boxes are typically used to represent features in an application that can be enabled or disabled without affecting others, but different types of behavior can be implemented. When a check box is checked or unchecked it sends a clicked signal for the application to handle.
-        When a check box has the focus, its state can be toggled using the Qt.Key_Select, Qt.Key_Return, and Qt.Key_Enter hardware keys that send the clicked signal.
-
-Properties:
-        bool checked:
-        If the button is checked, its checked property is true; otherwise false. The property is false by default.
-
-        bool pressed:
-        If the button is pressed, its pressed property is true.
-            See also clicked.
-
-        string text:
-        The text is shown beside the check box. By default text is an empty string.
-Signals:
-        clicked():
-            Emitted when the user clicked a mouse button over the checkbox (or tapped on the touch screen)
-**/
-
 import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 import "private" as Private
 
+/**
+ * A check box is a component that can be switched on (checked) or off
+ * (unchecked). Check boxes are typically used to represent features in an
+ * application that can be enabled or disabled without affecting others, but
+ * different types of behavior can be implemented. When a check box is checked
+ * or unchecked it sends a clicked signal for the application to handle.
+ *
+ * When a check box has the focus, its state can be toggled using the
+ * Qt.Key_Select, Qt.Key_Return, and Qt.Key_Enter hardware keys that send the
+ * clicked signal.
+ *
+ * All properties of this component are defined in DualStateButton, its base component.
+ */
 Private.DualStateButton {
     id: checkBox
     view: PlasmaCore.FrameSvgItem {

@@ -17,53 +17,39 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-/**Documented API
-Inherits:
-        Item
-
-Imports:
-        QtQuick 1.0
-        org.kde.plasma.core
-
-Description:
- TODO i need more info here
-
-Properties:
-            bool checked:
-            Returns if the Button is checked or not.
-
-            alias pressed:
-            TODO i need more info here
-
-            alias text:
-            Sets the text for the button
-
-            QtObject theme:
-            TODO needs info
-
-            alias view:
-            TODO needs info
-
-            alias shadow:
-            TODO needs info
-Signals:
-        clicked:
-        The signal is emited when the button is clicked!
-**/
-
 import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 
+/**
+ * Private base component for several public components. Any element documented here
+ * can be used in components inheriting from DualStateButton.
+ */
 Item {
     id: dualButton
 
     // Common API
+    /**
+     * If the button is checked, its checked property is true; otherwise false. The property is false by default.
+     */
     property bool checked
+
+    /**
+     * type:bool
+     * If the button is pressed, its pressed property is true.
+     * @see clicked
+     */
     property alias pressed: mouseArea.pressed
 
+    /**
+     * Emitted when the user clicked a mouse button over the button (or
+     * tapped on the touch screen)
+     */
     signal clicked()
 
     // Plasma API
+    /**
+     * The text is shown beside the button. By default text is an empty string.
+     */
     property alias text: label.text // TODO: Not yet part of the common API
     property alias view: surfaceLoader.sourceComponent
     property alias shadow: shadowLoader.sourceComponent
