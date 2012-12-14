@@ -1,0 +1,14 @@
+/** @mainpage Qt Extra Components
+
+<h2>import org.kde.plasma.qtextracomponents</h2>
+
+- QPixmapItem
+- QImageItem
+- QIconItem
+- MouseEventListener
+- ColumnProxyModel
+
+*/
+
+// DOXYGEN_SET_PROJECT_NAME = QtExtraComponents
+// vim:ts=4:sw=4:expandtab:filetype=doxygen

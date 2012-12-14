@@ -1,0 +1,43 @@
+/** @mainpage Plasma Components
+
+<h2>import org.kde.plasma.components</h2>
+
+- BusyIndicator
+- Button
+- ButtonColumn
+- ButtonRow
+- CheckBox
+- CommonDialog
+- ContextMenu
+- Dialog
+- DialogStatus
+- Highlight
+- Label
+- ListItem
+- Menu
+- MenuItem
+- Page
+- PageOrientation
+- PageStatus
+- PageStack
+- ProgressBar
+- QueryDialog
+- RadioButton
+- ScrollBar
+- SectionScroller
+- SelectionDialog
+- Sheet
+- Slider
+- Switch
+- TabBar
+- TabButton
+- TabGroup
+- TextArea
+- TextField
+- ToolBar
+- ToolBarLayout
+- ToolButton
+*/
+
+// DOXYGEN_SET_PROJECT_NAME = PlasmaComponents
+// vim:ts=4:sw=4:expandtab:filetype=doxygen

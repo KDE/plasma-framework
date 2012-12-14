@@ -1,0 +1,24 @@
+/** @mainpage Plasma Core
+
+<h2>import org.kde.plasma.core</h2>
+
+- Plasma::DataModel
+- Plasma::DataSource
+- Plasma::FrameSvgItem
+- Plasma::SvgItem
+- Plasma::SortFilterModel
+- DialogProxy
+- ThemeProxy
+- ToolTipProxy
+- RunnerModel
+- IconItem
+
+Elements from kdelibs which are exposed by PlasmaCore:
+
+- <a href="http://api.kde.org/4.x-api/kdelibs-apidocs/plasma/html/classPlasma_1_1Svg.html">Plasma::Svg</a>
+- <a href="http://api.kde.org/4.x-api/kdelibs-apidocs/plasma/html/classPlasma_1_1FrameSvg.html">Plasma::FrameSvg</a>
+
+*/
+
+// DOXYGEN_SET_PROJECT_NAME = PlasmaCore
+// vim:ts=4:sw=4:expandtab:filetype=doxygen
