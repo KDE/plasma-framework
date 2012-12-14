@@ -165,6 +165,11 @@ private:
     Plasma::Theme::FontRole m_fontRole;
 };
 
+/**
+ * QML wrapper for kdelibs Plasma::Theme
+ *
+ * Exposed as `Theme` in QML.
+ */
 class ThemeProxy : public QObject
 {
     Q_OBJECT

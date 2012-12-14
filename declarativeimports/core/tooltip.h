@@ -29,6 +29,11 @@ class QGraphicsObject;
 class QGraphicsWidget;
 class DeclarativeItemContainer;
 
+/**
+ * QML wrapper for kdelibs Plasma::ToolTip
+ *
+ * Exposed as `ToolTip` in QML.
+ */
 class ToolTipProxy : public QObject
 {
     Q_OBJECT

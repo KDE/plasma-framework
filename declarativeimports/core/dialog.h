@@ -84,6 +84,11 @@ private:
     friend class DialogProxy;
 };
 
+/**
+ * QML wrapper for kdelibs Plasma::Dialog
+ *
+ * Exposed as `Dialog` in QML.
+ */
 class DialogProxy : public QDeclarativeItem
 {
     Q_OBJECT
