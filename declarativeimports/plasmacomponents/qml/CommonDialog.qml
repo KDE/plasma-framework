@@ -44,42 +44,30 @@ import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import "." 0.1
 
-
-/**Documented API
-Inherits:
-        Dialog
-
-Imports:
-        QtQuick 1.0
-        org.kde.plasma.core
-
-Description:
-        CommonDialog is a convenience component that provides a dialog with the platform-style title area. You only have to define titleText. CommonDialog handles its layout automatically.
-        Note: This component is experimental, so it may be changed or removed in future releases.
-
-Properties:
-        string titleText:
-        the title of the dialog.
-
-        string titleIcon:
-        the name or path of the dialog title icon
-
-        Array variant buttonTexts:
-        the texts of all the buttons
-
-Signals:
-        buttonClicked(int index):
-        Emitted when the user clicks on a button
-        @arg int index: the index of the clicked button: buttonTexts[index] will hold the text of the clicked button.
-
-**/
+/**
+ * CommonDialog is a convenience component that provides a dialog with the
+ * platform-style title area. You only have to define titleText. CommonDialog
+ * handles its layout automatically.
+ *
+ * Note: This component is experimental, so it may be changed or removed in
+ * future releases.
+ */
 Dialog {
     id: root
 
+    /** type:string the title of the dialog */
     property alias titleText: titleAreaText.text
+
+    /** the name or path of the dialog title icon */
     property string titleIcon
+
+    /** the texts of all the buttons */
     property variant buttonTexts: []
 
+    /**
+     * Emitted when the use clicks on a button
+     * @param index the index of the clicked button: buttonTexts[index] will hold the text of the clicked button.
+     */
     signal buttonClicked(int index)
 
     onButtonTextsChanged: {
