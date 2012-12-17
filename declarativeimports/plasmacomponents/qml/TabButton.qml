@@ -40,55 +40,50 @@
 **
 ****************************************************************************/
 
-/**Documented API
-Inherits:
-        Item
-
-Imports:
-        QtQuick 1.1
-        AppManager.js
-
-Description:
-        A simple tab button which is using the  plasma theme.
-
-Properties:
-        Item tab:
-        The reference to the tab content (one of the children of a TabGroup,
-        usually a Page) that is activated when this TabButton is clicked.
-
-        bool checked:
-        True if the button is checked,otherwise false.
-
-        bool pressed:
-        True if the button is being pressed,otherwise false.
-
-        string text:
-        Sets the text for the button.
-
-        string iconSource:
-        Icon for the button. It can be a Freedesktop icon name, a full path to a png/svg file,
-        or any name for which the application has an image handler registered.
-
-Signals:
-        onClicked:
-        The signal is emmited when the button is clicked.
-**/
-
 import QtQuick 1.1
 import "private/AppManager.js" as Utils
 import org.kde.plasma.core 0.1 as PlasmaCore
 
+/**
+ * A simple tab button which is using the plasma theme.
+ */
 Item {
     id: root
 
     // Common Public API
+    /**
+     * The reference to the tab content (one of the children of a TabGroup,
+     * usually a Page) that is activated when this TabButton is clicked.
+     */
     property Item tab
+
+    /**
+     * True if the button is checked, false otherwise.
+     */
     property bool checked: (internal.tabGroup == null) ? (internal.tabBar.currentTab == root) : (internal.tabGroup.currentTab == tab)
 
+    /**
+     * True if the button is being pressed, false otherwise.
+     */
     property bool pressed: mouseArea.pressed == true && mouseArea.containsMouse
+
+    /**
+     * type:string
+     * The text for the button.
+     */
     property alias text: label.text
+
+    /**
+     * type:string
+     * Icon for the button. It can be a Freedesktop icon name, a full path to a
+     * png/svg file, or any name for which the application has an image handler
+     * registered.
+     */
     property alias iconSource: imageLoader.source
 
+    /**
+     * Emitted when the button is clicked.
+     */
     signal clicked
 
     implicitWidth: label.implicitWidth + (internal.portrait ? 0 : (iconSource != null ? 16 : 0))
