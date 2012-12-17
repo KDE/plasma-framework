@@ -17,35 +17,19 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-/**Documented API
-Inherits:
-        Text
-
-Imports:
-        QtQuick 1.1
-        org.kde.plasma.core
-
-Description:
-    This is a label which uses the plasma theme.
-    The characteristics of the text will be automatically set
-    according to the plasma theme. If you need a more customized
-    text item use the Text component from QtQuick.
-
-Properties:
-    string text:
-    The most important property is "text".
-    For the other ones see the primitive QML Text element
-
-Methods:
-    See the primitive QML Text element
-
-Signals:
-    See the primitive QML Text element
-**/
-
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 
+/**
+ * This is a label which uses the plasma theme.
+ *
+ * The characteristics of the text will be automatically set according to the
+ * plasma theme. If you need a more customized text item use the Text component
+ * from QtQuick.
+ *
+ * You can use all elements of the QML Text component, in particular the "text"
+ * property to define the label text.
+ */
 Text {
     id: root
 
