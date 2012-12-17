@@ -17,30 +17,23 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-/**Documented API
-Inherits:
-        Item
-
-Imports:
-        QtQuick 1.1
-        org.kde.plasma.components 0.1
-
-Description:
-    This item takes a Flickable and automatically puts scrollbars in adjusting the layout if needed. The scrollbars will be interactive or not, depending on the platform.
-    If flickableItem is a categorized ListView the vertical scrollbar will be a SectionScroller.
-
-Properties:
-    Item flickableItem:
-    The Flickable of this area: it can be either a Flickable or a subclass, ListView or GridView
-**/
-
 import QtQuick 1.1
 import org.kde.plasma.components 0.1 as PlasmaComponents
 import org.kde.plasma.core 0.1 as PlasmaCore
 
+/**
+ * This item takes a Flickable and automatically puts scrollbars in adjusting
+ * the layout if needed. The scrollbars will be interactive or not, depending
+ * on the platform. If flickableItem is a categorized ListView the vertical
+ * scrollbar will be a SectionScroller.
+ */
 Item {
     id: root
 
+    /**
+     * The Flickable of this area: it can be either a Flickable or a subclass,
+     * ListView or GridView
+     */
     property Flickable flickableItem
     //FIXME: this alias seems necessary for it to correctly parse
     default property alias flickableItemDefault: root.flickableItem
