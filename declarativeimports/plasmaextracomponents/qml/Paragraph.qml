@@ -17,52 +17,31 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-/**Documented API
-Inherits:
-        Label
-
-Imports:
-        QtQuick 1.1
-        org.kde.plasma.extras
-
-Description:
-    This is a paragraph Label which uses the plasma theme. The characteristics of the text will
-    be automatically set according to the plasma theme. Use this components for paragraphs
-    of text in your application. Use this component for blocks of text in your app.
-
-    Example usage:
-    <code>
-import org.kde.plasma.extras 0.1 as PlasmaExtras
-[...]
-Column{
-    PlasmaExtras.Title { text: "Fruit sweetness on the rise" }
-    PlasmaExtras.Heading { text: "Apples in the sunlight"; level: 2 }
-    PlasmaExtras.Paragraph { text: "Long text about fruit and apples [...]" }
-  [...]
-}
-</code>
-
-    See Plasma Component's Label and primitive QML Text element API for additional properties,
-    methods and signals.
-
-Properties:
-    string text:
-    The most important property is "text", which applies to the text property of Label
-    For the other ones see Plasma Component's Label or QML primitive Text element
-
-    int level:
-    The level determines how big the section header is display, values between 1 (big)
-    and 5 (small) are accepted
-
-Methods:
-
-Signals:
-    See Plasma Component's Label and primitive QML Text element
-**/
-
 import QtQuick 1.1
 import org.kde.plasma.components 0.1
 
+/**
+ * This is a paragraph Label which uses the plasma theme.
+ *
+ * The characteristics of the text will be automatically set according to the
+ * plasma theme. Use this components for paragraphs of text in your
+ * application. Use this component for blocks of text in your app.
+ *
+ * Example usage:
+ * @code
+ * import org.kde.plasma.extras 0.1 as PlasmaExtras
+ * [...]
+ * Column {
+ *     PlasmaExtras.Title { text: "Fruit sweetness on the rise" }
+ *     PlasmaExtras.Heading { text: "Apples in the sunlight"; level: 2 }
+ *     PlasmaExtras.Paragraph { text: "Long text about fruit and apples [...]" }
+ *   [...]
+ * }
+ * @endcode
+ *
+ * See PlasmaComponents Label and primitive QML Text element API for additional
+ * properties, methods and signals.
+ */
 Label {
     id: paragraph
     width: parent.width
