@@ -17,53 +17,23 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-/**Documented API
-Inherits:
-        PlasmaCore.FrameSvgItem
-
-Imports:
-        QtQuick 1.1
-        org.kde.plasma.core
-
-Description:
-        A plasma theme based toolbar.
-
-Properties:
-
-        Item tools:
-        The ToolBarLayout that contains the ToolButton components that
-        are contained in the ToolBar. ToolBarLayout is not mandatory.
-        The default value is NULL.
-
-
-        string transition:
-        The type of transition to be used for the ToolBar when
-        the page changes on the relevant PageStack.
-        The possible values can be one of the following:
-              set         an instantaneous change (default)
-              push        follows page stack push animation
-              pop         follows page stack pop animation
-              replace     follows page stack replace animation
-
-        Object margins:
-          margins from the toolbar to the contents. it had 4 properties: left, top, right, bottom
-
-Methods:
-        void setTools( tools, transition ):
-        This sets the tools for the ToolBar and the transition type that
-        will be used when the page changes on the relevant PageStack.
-        @arg Item tools see tool property
-        @arg string transition see transition property
-**/
-
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 
+/**
+ * A plasma theme based toolbar.
+ */
 Item{
     id: toolBar
     width: parent.width
     height: (tools && enabled) ? tools.height + frameSvg.margins.top + frameSvg.margins.bottom : 0
     visible: height > 0
+
+    /**
+     * type:Object margins
+     * margins from the toolbar to the contents. It has 4 properties: left,
+     * top, right, bottom
+     */
     property alias margins: frameSvg.margins
 
     Behavior on height {
@@ -74,14 +44,25 @@ Item{
     }
     z: 1000
 
-    // The current set of tools; null if none.
+    /**
+     * The ToolBarLayout that contains the ToolButton components that are
+     * contained in the ToolBar. ToolBarLayout is not mandatory.
+     *
+     * The default value is null.
+     */
     property Item tools
 
-    // The transition type. One of the following:
-    //      set         an instantaneous change (default)
-    //      push        follows page stack push animation
-    //      pop         follows page stack pop animation
-    //      replace     follows page stack replace animation
+    /**
+     * The type of transition to be used for the ToolBar when the page changes
+     * on the relevant PageStack.
+     *
+     * The possible values can be one of the following:
+     *
+     * - set: an instantaneous change (default)
+     * - push: follows page stack push animation
+     * - pop: follows page stack pop animation
+     * - replace: follows page stack replace animation
+     */
     property string transition: "set"
 
     //This invisible item keeps all the old dismissed tools:
@@ -90,7 +71,14 @@ Item{
         id: oldToolsItem
         visible: false
     }
-    // Sets the tools with a transition.
+
+    /**
+     * This sets the tools for the ToolBar and the transition type that will be
+     * used when the page changes on the relevant PageStack.
+     *
+     * @param type:Item tools see tool property
+     * @param type:string transition see transition property
+     */
     function setTools(tools, transition)
     {
         if (toolBar.tools == tools) {

@@ -17,25 +17,13 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-
-// ToolBarLayout is a container for items on a toolbar that automatically
-// implements an appropriate layout for its children.
-
-/**Documented API
-Inherits:
-        Row
-
-Imports:
-        QtQuick 1.1
-
-Description:
-        ToolBarLayout is a container for items on a toolbar that automatically implements an appropriate layout for its children.
-**/
-
 import QtQuick 1.1
 import "." 0.1
 
-
+/**
+ * ToolBarLayout is a container for items on a toolbar that automatically
+ * implements an appropriate layout for its children.
+ */
 Row {
     id: root
 
