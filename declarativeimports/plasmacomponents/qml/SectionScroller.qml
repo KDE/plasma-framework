@@ -37,37 +37,28 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-/**Documented API
-Inherits:
-        Item
-
-Imports:
-        QtQuick 1.1
-        org.kde.plasma.core
-
-Description:
-        It's similar to a ScrollBar or a ScrollDecorator.
-        It's interactive and works on ListViews that have section.property set,
-        so its contents are categorized.
-        An indicator will say to what category the user scrolled to.
-        Useful for things like address books or things sorted by date.
-        Don't use with models too big (thousands of items) because implies
-        loading all the items to memory, as well loses precision.
-
-Properties:
-        ListView listView:
-         As The ScrollBar, this is the listview the sectionScroller will operate on. This component doesn't work with simple Flickable or GridView.
-**/
 
 import QtQuick 1.1
 import "private/SectionScroller.js" as Sections
 import org.kde.plasma.core 0.1 as PlasmaCore
 
+/**
+ * Similar to a ScrollBar or a ScrollDecorator.
+ *
+ * It's interactive and works on ListViews that have section.property set, so
+ * its contents are categorized.
+ *
+ * An indicator will say to what category the user scrolled to. Useful for
+ * things like address books or things sorted by date. Don't use with models
+ * too big (thousands of items) because it implies loading all the items to
+ * memory, as well loses precision.
+ */
 Item {
     id: root
 
-    /*
-     * The listview this scroll indicator will work on
+    /**
+     * The listview the sectionScroller will operate on. This component doesn't
+     * work with Flickable or GridView.
      */
     property ListView listView
 
