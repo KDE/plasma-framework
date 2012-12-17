@@ -17,43 +17,21 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-/**Documented API
-Inherits:
-        DualStateButton
-
-Imports:
-        QtQuick 1.0
-        org.kde.plasma.core
-
-Description:
-        A boolean toggle button with the visual representation of a "realistic" switch
-        with a movable toggle showing the state of the Switch. Generally easier to use
-        on touch devices than a CheckBox due to the larger surface space and more evident
-        state visualization.
-
-        You can bind the Switch component, for example, to a feature that the application
-        has to enable or disable depending on the user's input.
-
-Properties:
-            bool checked:
-            Returns true if the Button is checked, otherwise
-            it returns false.
-
-            bool pressed:
-            Returns true if the Button is pressed, otherwise
-            it returns false.
-
-            string text:
-            Sets the text for the switch. The default value is empty.
-
-Signals:
-        onClicked:
-        The signal is emited when the button is clicked!
-**/
 import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 import "private" as Private
 
+/**
+ * A boolean toggle button with the visual representation of a "realistic"
+ * switch with a movable toggle showing the state of the Switch. Generally
+ * easier to use on touch devices than a CheckBox due to the larger surface
+ * space and more evident state visualization.
+ *
+ * You can bind the Switch component, for example, to a feature that the
+ * application has to enable or disable depending on the user's input.
+ *
+ * All elements of this component are defined in DualStateButton, its base component.
+ */
 Private.DualStateButton {
     id: switchItem
 
