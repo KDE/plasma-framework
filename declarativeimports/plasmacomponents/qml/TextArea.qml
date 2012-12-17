@@ -17,215 +17,269 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-/**Documented API
-Inherits:
-        Item
-
-Imports:
-        QtQuick 1.1
-        org.kde.plasma.core 0.1
-
-Description:
-        Creates a simple plasma theme based text area.
-        Like kates..
-
-Properties:
-      * font font:
-        This property holds the font used in the text field.
-    The default font value is the font from plasma desktop theme.
-
-      * Qt::InputMethodHints inputMethodHints:
-        This property holds the the currently supported input method hints
-     for the text field.
-     The default values is Qt.ImhNone.
-
-      * bool errorHighlight:
-        This property holds if the text field is highlighted or not
-    If it is true then the problematic lines will be highlighted.
-    This feature is defined in the Common API but is unimplemented in plasma components.
-
-      * int cursorPosition:
-        This property holds the current cursor position.
-
-      * enumeration horizontalAlignment:
-        Sets the horizontal alignment of the text within the TextArea item's width and height.
-    By default, the text alignment follows the natural alignment of the text,
-    for example text that is read from left to right will be aligned to the left.
-        Valid values:
-        * TextEdit.AlignLeft (default)
-        * TextEdit.AlignRight
-        * TextEdit.AlignHCenter
-        * TextEdit.AlignJustify
-
-      * enumeration verticalAlignment:
-        Sets the vertical alignment of the text within the TextArea item's width and height.
-    By default, the text alignment follows the natural alignment of the text,
-    for example text that is read from left to right will be aligned to the left.
-        Valid values:
-        * TextEdit.AlignTop (default)
-        * TextEdit.AlignBottom
-        * TextEdit.AlignVCenter
-
-      * bool readOnly:
-        This property holds if the TextArea can be modified by the user interaction.
-    The default value is false.
-
-      * string selectedText:
-        This property holds the text selected by the user.
-    If no text is selected it holds an empty string.
-    This property is read-only.
-
-      * int selectionEnd:
-        This property holds the cursor position after the last character in the current selection.
-    This property is read-only.
-
-      * int selectionStart:
-        This property holds the cursor position before the first character in the current selection.
-    This property is read-only.
-
-      * string text:
-        This property holds the entire text in the TextArea.
-
-      * enumeration textFormat:
-        The way the text property should be displayed.
-
-        * TextEdit.AutoText
-        * TextEdit.PlainText
-        * TextEdit.RichText
-        * TextEdit.StyledText
-
-    The default is TextEdit.AutoText. If the text format is TextEdit.AutoText the text edit will automatically determine whether the text should be treated as rich text. This determination is made using Qt::mightBeRichText().
-
-      * enumeration wrapMode:
-        Set this property to wrap the text to the TextArea item's width. The text will only wrap if an explicit width has been set.
-        * TextEdit.NoWrap - no wrapping will be performed.
-            If the text contains insufficient newlines, then implicitWidth will exceed a set width.
-        * TextEdit.WordWrap - wrapping is done on word boundaries only.
-            If a word is too long, implicitWidth will exceed a set width.
-        * TextEdit.WrapAnywhere - wrapping is done at any point on a line, even if it occurs in the middle of a word.
-        * TextEdit.Wrap - if possible, wrapping occurs at a word boundary; otherwise it will occur at the appropriate point on the line, even in the middle of a word.
-
-    The default is TextEdit.NoWrap. If you set a width, consider using TextEdit.Wrap.
-
-      * string placeholderText:
-        This property holds the text displayed in when the text is empty.
-    The default value is empty string, meaning no placeholderText shown.
-
-
-Plasma properties:
-
-      * bool interactive:
-        This property describes whether the user can interact with the TextArea flicking content.
-    A user cannot drag or flick a TextArea that is not interactive.
-    This property is useful for temporarily disabling flicking.
-
-      * int contentMaxWidth:
-        This property holds the maximum width that the text content can have.
-
-      * int contentMaxHeight:
-        This property holds the maximum height that the text content can have.
-
-      * property real scrollWidth:
-        This property holds the stepSize of the ScrollBar present at the TextArea
-    when it's content are bigger than it's size.
-
-Methods:
-       * void copy():
-         Copies the currently selected text to the system clipboard.
-
-       * void cut():
-         Moves the currently selected text to the system clipboard.
-
-       * void deselect():
-         Removes active text selection.
-
-       * void paste():
-         Replaces the currently selected text by the contents of the system clipboard.
-
-       * void select(int start, int end):
-         Causes the text from start to end to be selected.
-     If either start or end is out of range, the selection is not changed.
-     After calling this, selectionStart will become the lesser and selectionEnd will become the greater
-     (regardless of the order passed to this method).
-
-       * void selectAll():
-         Causes all text to be selected.
-
-       * void selectWord():
-         Causes the word closest to the current cursor position to be selected.
-
-       * void positionAt(int position):
-         This function returns the character position at x pixels from the left of the TextArea.
-     Position 0 is before the first character, position 1 is after the first character but before the second,
-     and so on until position text.length, which is after all characters.
-     This means that for all x values before the first character this function returns 0,
-     and for all x values after the last character this function returns text.length.
-
-       * rectangle positionToRectangle(position):
-         Returns the rectangle at the given position in the text.
-     The x, y, and height properties correspond to the cursor that would describe that position.
-
-**/
-
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import "private" as Private
 
+/**
+ * A plasma theme based text area.
+ */
 Item {
     id: textArea
 
     // Common API
-    property alias font: textEdit.font // alias to textEdit.font
+    /**
+     * type:font
+     * Font used in the text field.
+     *
+     * The default font value is the font from plasma desktop theme.
+     */
+    property alias font: textEdit.font
+
+    /**
+     * The currently supported input method hints for the text field.
+     *
+     * The default values is Qt.ImhNone.
+     */
     property int inputMethodHints
+
+    /**
+     * Whether the text field is highlighted or not.
+     *
+     * If it is true then the problematic lines will be highlighted.
+     *
+     * @warning unimplemented in plasma components.
+     */
     property bool errorHighlight
+
+    /**
+     * type:int
+     * Current cursor position.
+     */
     property alias cursorPosition: textEdit.cursorPosition
+
+    /**
+     * type:enum
+     * Sets the horizontal alignment of the text within the TextArea item's
+     * width and height.
+     *
+     * By default, the text alignment follows the natural alignment of the
+     * text, for example text that is read from left to right will be aligned
+     * to the left.
+     *
+     * Valid values:
+     *
+     * - TextEdit.AlignLeft (default)
+     * - TextEdit.AlignRight
+     * - TextEdit.AlignHCenter
+     * - TextEdit.AlignJustify
+     */
     property alias horizontalAlignment: textEdit.horizontalAlignment
+
+    /**
+     * type:enum
+     * Sets the vertical alignment of the text within the TextArea item's width
+     * and height.
+     *
+     * Valid values:
+     *
+     * - TextEdit.AlignTop (default)
+     * - TextEdit.AlignBottom
+     * - TextEdit.AlignVCenter
+     */
     property alias verticalAlignment: textEdit.verticalAlignment
+
+    /**
+     * type:bool
+     * Whether the TextArea is in read-only mode, and cannot be modified by the
+     * user.
+     *
+     * The default value is false.
+     */
     property alias readOnly: textEdit.readOnly
-    property alias selectedText: textEdit.selectedText // read-only
-    property alias selectionEnd: textEdit.selectionEnd // read-only
-    property alias selectionStart: textEdit.selectionStart // read-only
+
+    /**
+     * type:string
+     * The text selected by the user.  If no text is selected it holds an empty
+     * string.
+     *
+     * This property is read-only.
+     */
+    property alias selectedText: textEdit.selectedText
+
+    /**
+     * type:int
+     * The cursor position after the last character in the current selection.
+     *
+     * This property is read-only.
+     */
+    property alias selectionEnd: textEdit.selectionEnd
+
+    /**
+     * type:int
+     * The cursor position before the first character in the current selection.
+     *
+     * This property is read-only.
+     */
+    property alias selectionStart: textEdit.selectionStart
+
+
+    /**
+     * type:string
+     * The text in the TextArea.
+     */
     property alias text: textEdit.text
-    property alias textFormat: textEdit.textFormat // enumeration
-    property alias wrapMode: textEdit.wrapMode // enumeration
+
+    /**
+     * type:enum
+     * The way the text property should be displayed.
+     *
+     * Valid values:
+     *
+     * - TextEdit.AutoText
+     * - TextEdit.PlainText
+     * - TextEdit.RichText
+     * - TextEdit.StyledText
+     *
+     * The default is TextEdit.AutoText. If the text format is
+     * TextEdit.AutoText the text edit will automatically determine whether the
+     * text should be treated as rich text. This determination is made using
+     * Qt::mightBeRichText().
+     */
+    property alias textFormat: textEdit.textFormat
+
+    /**
+     * type:enum
+     * Set this property to wrap the text to the TextArea item's width. The
+     * text will only wrap if an explicit width has been set.
+     *
+     * Valid values:
+     *
+     * - TextEdit.NoWrap: no wrapping will be performed.  If the text contains
+     *   insufficient newlines, then implicitWidth will exceed a set width.
+     * - TextEdit.WordWrap: wrapping is done on word boundaries only.  If a
+     *   word is too long, implicitWidth will exceed a set width.
+     * - TextEdit.WrapAnywhere: wrapping is done at any point on a line, even
+     *   if it occurs in the middle of a word.
+     * - TextEdit.Wrap: if possible, wrapping occurs at a word boundary;
+     *   otherwise it will occur at the appropriate point on the line, even in
+     *   the middle of a word.
+     *
+     * The default is TextEdit.NoWrap. If you set a width, consider using
+     * TextEdit.Wrap.
+     */
+    property alias wrapMode: textEdit.wrapMode
+
+    /**
+     * The text displayed when the text property is empty.
+     *
+     * The default value is an empty string, meaning no placeholderText shown.
+     */
     property string placeholderText
 
     // functions
+    /**
+     * Copies the currently selected text to the system clipboard.
+     */
     function copy() {
         textEdit.copy();
     }
-
+    /**
+     * Replaces the currently selected text by the contents of the system
+     * clipboard.
+     */
     function paste() {
         textEdit.paste();
     }
 
+    /**
+     * Moves the currently selected text to the system clipboard.
+     */
     function cut() {
         textEdit.cut();
     }
 
+    /**
+     * Causes the text from start to end to be selected.
+     *
+     * If either start or end is out of range, the selection is not changed.
+     * After calling this, selectionStart will become the lesser and
+     * selectionEnd will become the greater (regardless of the order passed to
+     * this method).
+     *
+     * @param int start Start of selection
+     * @param int end End of selection
+     */
     function select(start, end) {
         textEdit.select(start, end);
     }
 
+    /**
+     * Causes all text to be selected.
+     */
     function selectAll() {
         textEdit.selectAll();
     }
 
+    /**
+     * Causes the word closest to the current cursor position to be selected.
+     */
     function selectWord() {
         textEdit.selectWord();
     }
 
+    /**
+     * This function returns the character position at x pixels from the left
+     * of the TextArea.
+     *
+     * Position 0 is before the first character, position 1 is after the first
+     * character but before the second, and so on until position text.length,
+     * which is after all characters.  This means that for all x values before
+     * the first character this function returns 0, and for all x values after
+     * the last character this function returns text.length.
+     *
+     * @param int pos x-coordinate we are interested in.
+     * @return int the character position
+     */
+    // Does this work at all? doc for TextEdit says positionAt() accepts two
+    // ints: x and y
     function positionAt(pos) {
         return textEdit.positionAt(pos);
     }
 
+    /**
+     * Returns the rectangle at the given position in the text.
+     *
+     * The x, y, and height properties correspond to the cursor that would
+     * describe that position.
+     *
+     * @param int pos the text position
+     * @param type:rectangle the cursor rectangle
+     */
     function positionToRectangle(pos) {
         return textEdit.positionToRectangle(pos);
     }
 
     // Plasma API
+    /**
+     * type:bool
+     * This property describes whether the user can interact with the TextArea
+     * flicking content. A user cannot drag or flick a TextArea that is not
+     * interactive. This property is useful for temporarily disabling
+     * flicking.
+     */
     property alias interactive: flickArea.interactive
+
+    /**
+     * type:int
+     * Maximum width that the text content can have.
+     */
     property alias contentMaxWidth: textEdit.width
+
+    /**
+     * type:int
+     * Maximum height that the text content can have.
+     */
     property alias contentMaxHeight: textEdit.height
 
     // Set active focus to it's internal textInput.
