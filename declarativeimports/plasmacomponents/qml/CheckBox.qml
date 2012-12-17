@@ -32,7 +32,7 @@ import "private" as Private
  * Qt.Key_Select, Qt.Key_Return, and Qt.Key_Enter hardware keys that send the
  * clicked signal.
  *
- * All properties of this component are defined in DualStateButton, its base component.
+ * All elements of this component are defined in DualStateButton, its base component.
  */
 Private.DualStateButton {
     id: checkBox
