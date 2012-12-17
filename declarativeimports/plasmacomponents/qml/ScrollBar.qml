@@ -18,90 +18,72 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-/**Documented API
-Inherits:
-        Item
-
-Imports:
-        org.kde.plasma.core
-        QtQuick 1.1
-
-Description:
-        Just a simple Scroll Bar which is using the plasma theme.
-        This component does not belong to the QtComponents API specification
-        but it was base on ScrollDecorator component.
-        You should not use it for touch interfaces, use a flickable and a
-        ScrollDecorator instead.
-        By default, this component will look and behave like a scroll decorator
-        on touchscreens
-
-Properties:
-
-        enumeration orientation:
-        This property holds the orientation where the ScrollBar will scroll.
-        The orientation can be either Qt.Horizontal or Qt.Vertical
-        The default value is Qt.Vertical.
-
-        bool inverted:
-        This property holds if the ScrollBar will increase the Flickable
-        content in the normal direction (Left to Right or Top to Bottom) or
-        if this will be inverted.
-        The default value is false.
-
-        bool updateValueWhileDragging:
-        This property holds if the Scrollbar will update the Flickeble
-        position while dragging or only when released.
-        The default value is true.
-
-        real stepSize:
-        This property holds how many steps exists while moving the handler.
-        If you want the ScrollBar buttons to appear you must set this property
-        with a value bigger than 0.
-        The default value is 0.
-
-        bool pressed:
-        This property holds if the ScrollBar is pressed.
-
-        real scrollButtonInterval:
-        This property holds the interval time used by the ScrollBar button
-        to increase or decrease steps.
-
-        Flickable flickableItem:
-        This property holds the Flickable component which the ScrollBar will
-        interact with.
-
-        bool interactive:
-        This property holds  if the ScrollBar is interactive.
-        The default value is true.
-
-        bool enabeld:
-        This property holds if the button will be enabled for user
-        interaction.
-        The default value is true.
-**/
-
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import "private" as Private
 
 /**
- * A generic ScrollBar/ScrollDecorator component:
- * Always prefer this to ScrollDecorator that is not available on desktop.
- * By default, this component will look and behave like a scroll decorator on touchscreens
+ * A simple Scroll Bar using the plasma theme.
+ *
+ * This component does not belong to the QtComponents API specification but it
+ * was based on the ScrollDecorator component. You should not use it for touch
+ * interfaces, use a flickable and a ScrollDecorator instead.
+ *
+ * By default, this component looks and behaves like a scroll decorator
+ * on touchscreens.
  */
 // TODO: add support mouse wheel events
 Item {
     id: scrollbar
 
     // Common API
+    /**
+     * The Flickable component which the ScrollBar will interact with.
+     */
     property Flickable flickableItem: null
+    /**
+     * The orientation where the ScrollBar will scroll.
+     * The orientation * can be either Qt.Horizontal or Qt.Vertical.
+     *
+     * The default value is Qt.Vertical.
+     */
     property int orientation: Qt.Vertical
+
+    /**
+     * Whether the ScrollBar is interactive.
+     *
+     * The default value is true.
+     */
     property bool interactive: true
 
     // Plasma API
+    /**
+     * Whether the ScrollBar will increase the Flickable content in the normal
+     * direction (Left to Right or Top to Bottom) or if this will be inverted.
+     *
+     * The default value is false.
+     */
     property bool inverted: false
+
+    /**
+     * type:bool
+     * How many steps exist while moving the handler. If you want the
+     * ScrollBar buttons to appear you must set this property to a value
+     * bigger than 0.
+     *
+     * The default value is 0.
+     */
     property alias stepSize: range.stepSize
+
+    /**
+     * Indicates if the ScrollBar is pressed.
+     */
     property bool pressed: internalLoader.item.mouseArea?internalLoader.item.mouseArea.pressed:false
+
+    /**
+     * The interval time used by the ScrollBar button to increase or decrease
+     * steps.
+     */
     property real scrollButtonInterval: 50
 
     implicitWidth: internalLoader.isVertical ? (internalLoader.item ? internalLoader.item.implicitWidth : 12) : 200
