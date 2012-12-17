@@ -18,71 +18,61 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-/**Documented API
-Inherits:
-        Item
-
-Imports:
-        QtQuick 1.1
-        org.kde.plasma.core
-
-Description:
-        A plasma theme based toolbutton.
-
-Properties:
-        bool flat:
-        Returns true if the button is flat.
-
-        bool checked: false
-        Returns true if the button is checked.
-
-        bool checkable:
-        Returns true if the button is checkable.
-
-        bool pressed:
-        Returns true if the button is pressed.
-        alias text:
-        Sets the text for the button.
-
-        variant iconSource:
-        Sets the icon for the button.
-        It can be any image from any protocol supported by the Image element, or a freedesktop-compatible icon name
-
-        string font:
-        Sets the font for the button.
-
-        bool enabled:
-        Returns whether the button is currently enabled and receives user input.
-
-Signals:
-        onClicked:
-        The signal is being emmited when the button is being clicked.
-
-Plasma properties:
-
-      * real minimumWidth:
-         This property holds the smallest width this button can be to show all the contents
-
-      * real minimumHeight:
-         This property holds the smallest height this button can be to show all the contents
-**/
-
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import "private" as Private
 
+/**
+ * A plasma theme based toolbutton.
+ */
 Item {
     id: button
 
     // Commmon API
+    /**
+     * true if the button is flat.
+     */
     property bool flat: true
+
+    /**
+     * true if the button is checked.
+     */
     property bool checked: defaultAction ? defaultAction.checked : false
+
+    /**
+     * true if the button is checkable.
+     */
     property bool checkable: defaultAction ? defaultAction.checkable : false
+
+    /**
+     * type:string
+     * true if the button is currently pressed.
+     */
     property alias pressed: mouse.pressed
+
+    /**
+     * type:string
+     * The text of the button
+     */
     property alias text: label.text
+
+    /**
+     * type:variant
+     *
+     * Sets the icon for the button. It can be any image from any protocol
+     * supported by the Image element, or a freedesktop-compatible icon name
+     */
     property alias iconSource: icon.source
+
+    /**
+     * type:font
+     * The font for the button
+     */
     property alias font: label.font
 
+    /**
+     * Emited when the button is clicked.
+     */
     signal clicked()
 
     // Plasma extensiuons
@@ -91,10 +81,17 @@ Item {
 
     enabled: defaultAction == undefined || defaultAction.enabled
 
+    /**
+     * The smallest width this button can be to show all the contents
+     */
     //icon + label + left margin + right margin + spacing between icon and text
     //here it assumesleft margin = right top = bottom, why?
     // because the right and bottom margins can be disabled, so they would return 0, but their actual size is still needed for size hints
     property real minimumWidth: theme.smallIconSize + label.preferredWidth + delegate.margins.left + delegate.margins.left + ((icon.valid) ? delegate.margins.left : 0)
+
+    /**
+     * The smallest height this button can be to show all the contents
+     */
     property real minimumHeight: Math.max(theme.smallIconSize, label.paintedHeight) + delegate.margins.top + delegate.margins.top
 
     implicitWidth: {
