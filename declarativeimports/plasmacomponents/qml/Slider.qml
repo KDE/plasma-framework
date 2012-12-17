@@ -17,79 +17,90 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-/**Documented API
-Inherits:
-        Item
-
-Imports:
-        QtQuick 1.0
-        org.kde.plasma.core
-
-Description:
-        An interactive slider component with Plasma look and feel.
-
-Properties:
-        int stepSize: range.stepSize
-        This property holds in how many steps the slider value can be selected within it's
-    range value.
-
-        real minimumValue:
-        This property holds the minimum value that the slider's value can assume.
-        The default value is 0.
-
-        real maximumValue:
-        This property holds the maximum value that the slider's value can assume.
-        The default value is 1.
-
-        real value:
-        This property holds the value selected inside the minimum to maximum range of value.
-        The default value is 0.
-
-        enumeration orientation:
-        This property holds the orientation for this component.
-        The orientation can assume Qt.Horizontal and Qt.Vertical values.
-        The default is Qt.Horizontal.
-
-        bool pressed:
-        This property holds if the Slider is being pressed or not.
-        Read-only.
-
-        bool valueIndicatorVisible:
-        This property holds if a value indicator element will be shown while is dragged or not.
-    ! The value indicator is not implemented in the Plasma Slider.
-    The default value is false.
-
-        string valueIndicatorText:
-    This property holds the text being displayed in the value indicator.
-    ! The value indicator is not implemented in the Plasma Slider.
-    Read-only.
-
-Plasma Properties:
-
-        alias inverted:
-        This property holds if the slider visualizations has an inverted direction.
-    The default value is false.
-**/
-
 import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 import "private" as Private
 
 // TODO: create a value indicator for plasma?
+/**
+ * An interactive slider component with Plasma look and feel.
+ */
 Item {
     id: slider
 
     // Common API
+    /**
+     * type:real
+     * How many steps the slider value can be selected within its range value.
+     */
     property alias stepSize: range.stepSize
+
+    /**
+     * type:real
+     * Minimum value that the slider's value can assume.
+     *
+     * The default value is 0.
+     */
     property alias minimumValue: range.minimumValue
+
+    /**
+     * type:real
+     * Maximum value that the slider's value can assume.
+     *
+     * The default value is 1.
+     */
     property alias maximumValue: range.maximumValue
+
+    /**
+     * type:real
+     * This property holds the value selected inside the minimum to maximum
+     * range of value.
+     *
+     * The default value is 0.
+     */
     property alias value: range.value
+
+    /**
+     * Orientation for this component.
+     *
+     * The orientation can be either Qt.Horizontal or Qt.Vertical.
+     *
+     * The default is Qt.Horizontal.
+     */
     property int orientation: Qt.Horizontal
+
+    /**
+     * type:bool
+     *
+     * True if the Slider is being pressed.
+     */
     property alias pressed: mouseArea.pressed
+
+    /**
+     * This property holds if a value indicator element will be shown while is
+     * dragged or not.
+     *
+     * @warning The value indicator is not implemented in the Plasma Slider.
+     *
+     * The default value is false.
+     */
     property bool valueIndicatorVisible: false
+
+    /**
+     * This property holds the text being displayed in the value indicator.
+     *
+     * @warning The value indicator is not implemented in the Plasma Slider.
+     */
     property string valueIndicatorText: value
 
     // Plasma API
+    /**
+     * type:bool
+     * This property holds if the slider visualizations has an inverted
+     * direction.
+     *
+     * The default value is false.
+     */
     property alias inverted: range.inverted
 
     width: contents.isVertical ? theme.defaultFont.mSize.height*1.6 : 200
