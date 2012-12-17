@@ -40,90 +40,97 @@
 **
 ****************************************************************************/
 
-/**Documented API
-Inherits:
-        Item
-
-Imports:
-        QtQuick 1.0
-        org.kde.plasma.core
-
-Description:
-        Provides a top-level window for short-term tasks and brief interaction with the user.
-        A dialog floats on the top layer of the application view, usually overlapping the area reserved for the application content. Normally, a dialog provides information and gives warnings to the user, or asks the user to answer a question or select an option.
-
-Properties:
-        list<Item> buttons:
-        A list of items in the dialog's button area. For example, you can use Row or Button components but you can also use any number of components that are based on Item component.
-
-        list<Item> content:
-        A list of items in the dialog's content area. You can use any component that is based on Item. For example, you can use ListView, so that the user can select from a list of names.
-
-        int status:
-        Indicates the dialog's phase in its life cycle. The values are as follows:
-            - DialogStatus.Opening - the dialog is opening
-            - DialogStatus.Open - the dialog is open and visible to the user
-            - DialogStatus.Closing - the dialog is closing
-            - DialogStatus.Closed - the dialog is closed and not visible to the user
-        The dialog's initial status is DialogStatus.Closed.
-
-        list<Item> title:
-        A list of items in the dialog's title area. You can use a Text component but also any number of components that are based on Item. For example, you can use Text and Image components.
-
-        Item visualParent:
-        The item that the dialog refers to. The dialog will usually be positioned relative to VisualParent
-
-Signals:
-        accepted():
-        This signal is emitted when the user accepts the dialog's request or the accept() method is called.
-        See also rejected().
-
-        clickedOutside(): This signal is emitted when the user taps in the area that is inside the dialog's visual parent area but outside the dialog's area. Normally the visual parent is the root object. In that case this signal is emitted if the user taps anywhere outside the dialog's area.
-        See also visualParent.
-
-        rejected():
-        This signal is emitted when the user rejects the dialog's request or the reject() method is called.
-        See also accepted().
-
-Methods:
-        void accept():
-        Accepts the dialog's request without any user interaction. The method emits the accepted() signal and closes the internalLoader.dialog.
-        See also reject().
-
-        void close():
-        Closes the dialog without any user interaction.
-
-        void open():
-        Shows the dialog to the user.
-
-        void reject():
-        Rejects the dialog's request without any user interaction. The method emits the rejected() signal and closes the internalLoader.dialog.
-        See also accept().
-**/
-
 import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 import "private/AppManager.js" as Utils
 import "." 0.1
 import "private" as Private
 
+/**
+ * Top-level window for short-term tasks and brief interaction with the user
+ *
+ * A dialog floats on the top layer of the application view, usually
+ * overlapping the area reserved for the application content. Normally, a
+ * dialog provides information and gives warnings to the user, or asks the user
+ * to answer a question or select an option.
+ */
 Item {
     id: root
 
+    /**
+     * type:list<Item> A list of items in the dialog's title area. You can use
+     * a Text component but also any number of components that are based on
+     * Item. For example, you can use Text and Image components.
+     */
     property alias title: titleBar.children
+
+    /**
+     * type:list<Item> A list of items in the dialog's content area. You can
+     * use any component that is based on Item. For example, you can use
+     * ListView, so that the user can select from a list of names.
+     */
     property alias content: contentItem.children
+
+    /**
+     * type:list<Item> A list of items in the dialog's button area. For
+     * example, you can use Row or Button components but you can also use any
+     * number of components that are based on Item component.
+     */
     property alias buttons: buttonItem.children
+
+    /**
+     * The item that the dialog refers to. The dialog will usually be
+     * positioned relative to VisualParent
+     */
     property Item visualParent
+
+    /**
+     * Indicates the dialog's phase in its life cycle. The values are as follows:
+     *
+     * - DialogStatus.Opening - the dialog is opening
+     * - DialogStatus.Open - the dialog is open and visible to the user
+     * - DialogStatus.Closing - the dialog is closing
+     * - DialogStatus.Closed - the dialog is closed and not visible to the user
+     *
+     * The dialog's initial status is DialogStatus.Closed.
+     */
     property int status: DialogStatus.Closed
 
 
     property alias privateTitleHeight: titleBar.height
     property alias privateButtonsHeight: buttonItem.height
 
+    /**
+     * This signal is emitted when the user accepts the dialog's request or the
+     * accept() method is called.
+     *
+     * @see rejected()
+     */
     signal accepted
+
+    /**
+     *
+     * This signal is emitted when the user rejects the dialog's request or the
+     * reject() method is called.
+     *
+     * @see accepted()
+     */
+
     signal rejected
+
+    /**
+     * This signal is emitted when the user taps in the area that is inside the
+     * dialog's visual parent area but outside the dialog's area. Normally the
+     * visual parent is the root object. In that case this signal is emitted if
+     * the user taps anywhere outside the dialog's area.
+     *
+     * @see visualParent
+     */
     signal clickedOutside
 
+    /**
+     * Shows the dialog to the user.
+     */
     function open() {
         dialogLayout.parent = internalLoader.item.mainItem
 
@@ -139,6 +146,12 @@ Item {
         }
     }
 
+    /**
+     * Accepts the dialog's request without any user interaction. The method
+     * emits the accepted() signal and closes the internalLoader.dialog.
+     *
+     * @see reject()
+     */
     function accept() {
         if (status == DialogStatus.Open) {
             if (internalLoader.dialog) {
@@ -150,6 +163,12 @@ Item {
         }
     }
 
+    /**
+     * Rejects the dialog's request without any user interaction. The method
+     * emits the rejected() signal and closes the internalLoader.dialog.
+     *
+     * @see accept()
+     */
     function reject() {
         if (status == DialogStatus.Open) {
             if (internalLoader.dialog) {
@@ -161,6 +180,9 @@ Item {
         }
     }
 
+    /**
+     * Closes the dialog without any user interaction.
+     */
     function close() {
         if (internalLoader.dialog) {
             internalLoader.dialog.visible = false
