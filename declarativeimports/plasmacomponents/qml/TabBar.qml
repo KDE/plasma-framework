@@ -40,40 +40,32 @@
 **
 ****************************************************************************/
 
-/**Documented API
-Inherits:
-        DualStateButton
-
-Imports:
-        QtQuick 1.1
-        org.kde.plasma.core
-
-Description:
-        TabBar is a plasma themed component that you can
-        use as a container for the tab buttons.
-
-Properties:
-        Item currentTab:
-        Returns the current tabbar button.
-
-        default alias content:
-        This property represends the the content of
-        the TabBarLayout.
-
-        Item tabBarLayout:
-        This is an alias for the layout of the tabbar.
-**/
-
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import "private" as Private
 
+/**
+ * TabBar is a plasma-themed component that you can use as a container for
+ * tab buttons.
+ */
 FocusScope {
     id: root
+    /**
+     * type:list<Item>
+     * The content of the TabBarLayout.
+     */
     default property alias content: tabBarLayout.data
+
+    /**
+     * type:TabBarLayout
+     * The layout of the TabBar.
+     */
     property alias layout: tabBarLayout
 
     //Plasma extension
+    /**
+     * The current tabbar button.
+     */
     property Item currentTab
 
     implicitWidth: layout.implicitWidth + backgroundFrame.margins.left + backgroundFrame.margins.right
