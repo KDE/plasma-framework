@@ -17,30 +17,36 @@
 */
 import QtQuick 1.1
 
-/**Documented API
-Inherits:
-        Item
-
-Imports:
-        QtQuick 1.1
-
-Description:
-    This item can load any qml component, just like a Loader. Important difference, the component will be only loaded when the "when" property is satisfied (ie evaluates to true) in this way it's easy to have big (and memory expensive) parts of the user interface load only when a certain condition is satisfied.
-    For instance the contents of the tabs of a TabBar can be loaded only when they become the current page
-
-Properties:
-    bool when:
-    Boolean condition that tells when to load the declarative component
-
-    variant source:
-    It can be a string with a path name of a qml file or a Component. It's the component that will be loaded when "when" is true. If the component changes the old instantiated component will be deleted and the new will be loaded instead.
-
-    Item item: the item instantiated from component, if any.
-**/
+/**
+ * This item can load any qml component, just like a Loader. Important
+ * difference, the component will only be loaded when the "when" property is
+ * satisfied (ie evaluates to true) in this way it's easy to have big (and
+ * memory expensive) parts of the user interface load only when a certain
+ * condition is satisfied.  For instance the contents of the tabs of a TabBar
+ * can be loaded only when they become the current page.
+ */
 Item {
     id: root
+
+    /**
+     * type:bool
+     * Condition that tells when to load the declarative component
+     */
     property alias when: loader.when
+
+    /**
+     * type:variant
+     * It can be a string with a path name of a qml file or a Component. It's
+     * the component that will be loaded when "when" is true. If the component
+     * changes the old instantiated component will be deleted and the new one
+     * will be loaded instead.
+     */
     property alias source: loader.conditionalSource
+
+    /**
+     * type:Item
+     * The item instantiated from component, if any.
+     */
     property alias item: loader.item
 
     Loader {
