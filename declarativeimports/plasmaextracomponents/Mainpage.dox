@@ -3,17 +3,21 @@
 <h2>import org.kde.plasma.extras</h2>
 
 - App
-- Heading
-- Paragraph
 - PageRow
 - ScrollArea
+- FallbackComponent
+- ResourceInstance
+
+Text formatting
+- Heading
+- Paragraph
 - Title
+
+Animations
 - ActivateAnimation
 - AppearAnimation
 - PressedAnimation
 - ReleasedAnimation
-- FallbackComponent
-- ResourceInstance
 
 */
 
