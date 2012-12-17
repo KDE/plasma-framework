@@ -17,67 +17,64 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-/**Documented API
-Inherits:
-    Item
-
-Imports:
-    QtQuick 1.1
-    org.kde.plasma.extras
-
-Description:
-    This is a container for Apps. Navigation and Content area layout can vary depending on the
-    available size. This class can be used as top level Item or inside your top-level item. It
-    will manage context or navigation area, content area and toolbars in a way consistent with
-    other apps, and adaptive to the device.
-
-    Note that App is experimental, its API might change.
-
-    Example usage:
-<pre>import QtQuick 1.1
-import org.kde.plasma.core 0.1 as PlasmaCore
-import org.kde.plasma.extras 0.1 as PlasmaExtras
-
-PlasmaExtras.App {
-    id: app
-    width: 800
-    height: 600
-
-    navigation: navigationItem
-    content: contentItem
-
-    Item {
-        id: navigationItem
-        // [...] this is the navigation area
-    }
-
-    Loader {
-        id: contentItem
-        source: "gallery/Extras.qml"
-        parent: contentArea
-    }
-}</pre>
-
-Properties:
-    Item navigation:
-    Navigation or Context Area.
-
-    Item content:
-    The "main view"
-
-    ToolBarLayout tools:
-    alias to the topBar's ToolBar.tools
-
-**/
-
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
 
+/**
+ * This is a container for Apps. Navigation and Content area layout can vary
+ * depending on the available size. This class can be used as top level Item or
+ * inside your top-level item. It will manage context or navigation area,
+ * content area and toolbars in a way consistent with other apps, and adaptive
+ * to the device.
+ *
+ * @remark App is experimental, its API might change.
+ *
+ * Example usage:
+ * @code
+ * import QtQuick 1.1
+ * import org.kde.plasma.core 0.1 as PlasmaCore
+ * import org.kde.plasma.extras 0.1 as PlasmaExtras
+ *
+ * PlasmaExtras.App {
+ *     id: app
+ *     width: 800
+ *     height: 600
+ *
+ *     navigation: navigationItem
+ *     content: contentItem
+ *
+ *     Item {
+ *         id: navigationItem
+ *         // [...] this is the navigation area
+ *     }
+ *
+ *     Loader {
+ *         id: contentItem
+ *         source: "gallery/Extras.qml"
+ *         parent: contentArea
+ *     }
+ * }
+ * @endcode
+ */
 Item {
     id: app
+    /**
+     * type:Item
+     * Navigation or Context Area.
+     */
     property alias navigation: navigationItem.children
+
+    /**
+     * type:Item
+     * The "main view"
+     */
     property alias content: contentItem.children
+
+    /**
+     * type:Item
+     * the topBar's ToolBar.tools
+     */
     property alias tools: topBar.tools
 
     property alias contentArea: contentBackground
