@@ -17,34 +17,27 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**Documented API
-Inherits:
-        Item
-
-Imports:
-        QtQuick 1.1
-        org.kde.plasma.core
-
-Description:
-        Used to highlight an item of a list. to be used only as the "highlight" property of the ListView and GridView primitive QML components (or their derivates)
-        Provides built-in animation of Behavior on opacity Easing.OutQuad for a duration of 250. (TODO, make optional? e.g. animate: false)
-
-Properties:
-        bool hover:
-        true if the user is hovering over the component
-
-        bool pressed:
-        true if the mouse button is pressed over the component.
-**/
-
 import QtQuick 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 
+/**
+ * Used to highlight an item of a list. to be used only as the "highlight"
+ * property of the ListView and GridView primitive QML components (or their
+ * derivates)
+ *
+ * Provides built-in animation of Behavior on opacity Easing.OutQuad for a
+ * duration of 250.
+ *
+ * (TODO, make optional? e.g. animate: false)
+ */
 Item {
     id: highlight
 
+    /** true if the user is hovering over the component */
     //in the case we are the highlight of a listview, it follows the mouse, so hover = true
     property bool hover: ListView ? true : false
+
+    /** true if the mouse button is pressed over the component. */
     property bool pressed: false
     width: ListView.view ? ListView.view.width : undefined
 
