@@ -40,31 +40,14 @@
 **
 ****************************************************************************/
 
-/**Documented API
-Inherits:
-        Item
-
-Imports:
-        QtQuick 1.1
-        org.kde.plasma.components
-
-Description:
-        Provides a component with list of options that the user can choose from.
-
-Properties:
-      * QtObject model:
-        This property holds the model providing data for the menu.
-        The model provides the set of data that is used to create the items in the view.
-        Each model item must have a property called "text" or "display".
-
-Methods:
-      * void rebuildMenu():
-        Rebuild the menu if property model is defined.
-**/
-
 import QtQuick 1.1
 import org.kde.plasma.components 0.1
 
+/**
+ * Provides a component with list of options that the user can choose from.
+ *
+ * All elements of this component are defined in Menu, its base component.
+ */
 Menu {
     id: root
 }
