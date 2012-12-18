@@ -19,7 +19,7 @@
 
 #ifndef PACKAGEMETADATATEST_H
 
-#include <qtest_kde.h>
+#include <QtTest/QtTest>
 
 #include "plasma/runnercontext.h"
 

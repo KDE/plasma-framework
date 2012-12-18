@@ -20,7 +20,7 @@
 #ifndef CONFIGLOADERTEST_H
 #define CONFIGLOADERTEST_H
 
-#include <qtest_kde.h>
+#include <QtTest/QtTest>
 
 namespace Plasma
 {

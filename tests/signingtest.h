@@ -19,7 +19,7 @@
 
 #ifndef SIGNINGTEST_H
 
-#include <qtest_kde.h>
+#include <QtTest/QtTest>
 
 #include "plasma/package.h"
 
@@ -36,8 +36,7 @@ public:
     explicit SigningTest(QObject *parent = 0);
 
 public Q_SLOTS:
-    void init();
-    void cleanup();
+    void initTestCase();
 
 private Q_SLOTS:
     void confirmCtorPerformance();

@@ -178,6 +178,6 @@ void PackageStructureTest::mimeTypes()
     QCOMPARE(ps.mimeTypes("images"), mimeTypes);
 }
 
-QTEST_KDEMAIN(PackageStructureTest, NoGUI)
+QTEST_MAIN(PackageStructureTest)
 
 

@@ -19,7 +19,7 @@
 
 #ifndef PACKAGETEST_H
 
-#include <qtest_kde.h>
+#include <QtTest/QtTest>
 
 #include "plasma/package.h"
 #include "plasma/packagestructure.h"
@@ -29,6 +29,7 @@ class PlasmoidPackageTest : public QObject
     Q_OBJECT
 
 public Q_SLOTS:
+    void initTestCase();
     void init();
     void cleanup();
 

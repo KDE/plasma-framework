@@ -20,14 +20,14 @@
 #ifndef STORAGETEST_H
 #define STORAGETEST_H
 
-#include <qtest_kde.h>
+#include <QtTest/QtTest>
 
 class StorageTest : public QObject
 {
     Q_OBJECT
 
 public Q_SLOTS:
-    void init();
+    void initTestCase();
 
 private Q_SLOTS:
     void store();

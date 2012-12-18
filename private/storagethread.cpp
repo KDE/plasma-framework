@@ -20,6 +20,7 @@
 #include "storagethread_p.h"
 
 #include <QCoreApplication>
+#include <QDir>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlField>
@@ -68,7 +69,9 @@ void StorageThread::initializeDb(StorageJob *caller)
 {
     if (!m_db.open()) {
         m_db = QSqlDatabase::addDatabase("QSQLITE", QString("plasma-storage-%1").arg((quintptr)this));
-        m_db.setDatabaseName(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + "plasma-storage2.db");
+        const QString storageDir = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+        QDir().mkpath(storageDir);
+        m_db.setDatabaseName(storageDir + QLatin1Char('/') + "plasma-storage2.db");
     }
 
     if (!m_db.open()) {

@@ -23,19 +23,24 @@
 #include <QDir>
 #include <QFile>
 #include <kzip.h>
-#include <kstandarddirs.h>
-#include <kio/netaccess.h>
+#include <kjob.h>
+#include <QStandardPaths>
 
 #include <kdebug.h>
 
 #include "applet.h"
 #include "pluginloader.h"
 
+void PlasmoidPackageTest::initTestCase()
+{
+    QStandardPaths::enableTestMode(true);
+}
+
 void PlasmoidPackageTest::init()
 {
     kDebug() << "PlasmoidPackage::init()";
     m_package = QString("Package");
-    m_packageRoot = QDir::homePath() + "/.kde-unit-test/packageRoot";
+    m_packageRoot = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/packageRoot";
     m_defaultPackage = Plasma::PluginLoader::self()->loadPackage("Plasma/Applet");
     cleanup(); // to prevent previous runs from interfering with this one
 }
@@ -44,7 +49,7 @@ void PlasmoidPackageTest::cleanup()
 {
     kDebug() << "cleaning up";
     // Clean things up.
-    KIO::NetAccess::del(KUrl(QDir::homePath() + QLatin1String("/.kde-unit-test/packageRoot")), 0);
+    QDir(m_packageRoot).removeRecursively();
 }
 
 void PlasmoidPackageTest::createTestPackage(const QString &packageName)
@@ -301,5 +306,4 @@ void PlasmoidPackageTest::packageUninstalled(KJob* j)
 }
 
 
-//QTEST_KDEMAIN(PlasmoidPackageTest, NoGUI)
-QTEST_KDEMAIN(PlasmoidPackageTest, GUI)
+QTEST_MAIN(PlasmoidPackageTest)

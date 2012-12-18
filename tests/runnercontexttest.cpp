@@ -57,4 +57,4 @@ void RunnerContextTest::typeDetection()
     QCOMPARE(int(m_context.type()), int(type));
 }
 
-QTEST_KDEMAIN(RunnerContextTest, NoGUI)
+QTEST_MAIN(RunnerContextTest)

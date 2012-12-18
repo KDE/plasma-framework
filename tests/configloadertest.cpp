@@ -17,6 +17,7 @@
 *   Boston, MA 02110-1301, USA.                                                 *
 *********************************************************************************/
 
+#include <QtTestWidgets>
 #include "configloadertest.h"
 
 #include <kconfig.h>
@@ -207,6 +208,6 @@ void ConfigLoaderTest::ulongLongDefaultValue()
 }
 
 
-QTEST_KDEMAIN(ConfigLoaderTest, NoGUI)
+QTEST_MAIN(ConfigLoaderTest)
 
 

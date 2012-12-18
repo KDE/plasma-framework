@@ -18,11 +18,14 @@
 *********************************************************************************/
 
 #include "storagetest.h"
+#include <QStandardPaths>
 
 #include "../private/storage_p.h"
 
-void StorageTest::init()
+void StorageTest::initTestCase()
 {
+    QStandardPaths::enableTestMode(true);
+
     m_data.insert("String 1", "Fork");
     m_data.insert("String 2", "Spoon");
     m_data.insert("String 3", "Knife");
@@ -92,5 +95,5 @@ void StorageTest::deleteEntry()
     }
 }
 
-QTEST_KDEMAIN(StorageTest, NoGUI)
+QTEST_MAIN(StorageTest)
 

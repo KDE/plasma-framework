@@ -26,6 +26,7 @@
 #include "applet.h"
 #include "remote/signing.h"
 #include "pluginloader.h"
+#include <QStandardPaths>
 
 static const QString fingerprint("8B8B22090C6F7C47B1EAEE75D6B72EB1A7F1DB43");
 static const QString shortFingerprint("D6B72EB1A7F1DB43");
@@ -42,12 +43,9 @@ SigningTest::SigningTest(QObject *parent)
     m_invalidSig = prefix + "signed.plasmoid.invalid.sig";
 }
 
-void SigningTest::init()
+void SigningTest::initTestCase()
 {
-}
-
-void SigningTest::cleanup()
-{
+    QStandardPaths::enableTestMode(true);
 }
 
 void SigningTest::confirmCtorPerformance()
@@ -102,5 +100,5 @@ void SigningTest::confirmDtorPerformance()
     QVERIFY(t.elapsed() < 50);
 }
 
-QTEST_KDEMAIN(SigningTest, NoGUI)
+QTEST_MAIN(SigningTest)
 
