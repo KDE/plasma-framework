@@ -2,41 +2,62 @@
 
 <h2>import org.kde.plasma.components</h2>
 
-- BusyIndicator
+## Widgets
+Input:
+- TextArea
+- TextField
+- CheckBox
+- RadioButton
+- Switch
+- Slider
+
+Buttons:
 - Button
 - ButtonColumn
 - ButtonRow
-- CheckBox
-- CommonDialog
-- ContextMenu
-- Dialog
-- DialogStatus
-- Highlight
+- ToolButton
+
+Misc:
+- BusyIndicator
+- ProgressBar
 - Label
-- ListItem
-- Menu
-- MenuItem
+
+## Containers
+Pages:
 - Page
 - PageOrientation
 - PageStatus
 - PageStack
-- ProgressBar
+
+Dialogs:
+- Dialog
+- DialogStatus
+- CommonDialog
 - QueryDialog
-- RadioButton
-- ScrollBar
-- SectionScroller
 - SelectionDialog
-- Sheet
-- Slider
-- Switch
+
+Tab bars:
 - TabBar
 - TabButton
 - TabGroup
-- TextArea
-- TextField
+
+Misc:
+- Sheet
+- ScrollBar
+
+## Menus
+- Menu
+- MenuItem
+- ContextMenu
+
+## Lists
+- ListItem
+- Highlight
+- SectionScroller
+
+## Toolbar
 - ToolBar
 - ToolBarLayout
-- ToolButton
 */
 
 // DOXYGEN_SET_PROJECT_NAME = PlasmaComponents
