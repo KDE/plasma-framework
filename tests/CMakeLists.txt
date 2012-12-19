@@ -33,4 +33,5 @@ if(QCA2_FOUND)
   target_link_libraries(plasmoidpackagetest ${QCA2_LIBRARIES})
 endif(QCA2_FOUND)
 
+add_subdirectory(shelltest)
 
