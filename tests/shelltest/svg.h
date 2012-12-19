@@ -21,8 +21,8 @@
 
 #include <QtQuick/QQuickPaintedItem>
 
-#include <Plasma/Svg>
-#include <Plasma/FrameSvg>
+#include <plasma/svg.h>
+#include <plasma/framesvg.h>
 
 //TODO: this will be replaced by PlasmaCore.SvgItem
 class Svg : public QQuickPaintedItem

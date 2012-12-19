@@ -21,12 +21,14 @@
 #include <QtCore/QDebug>
 #include "svg.h"
 
-#include <KAboutData>
-#include <KCmdLineArgs>
-#include <KLocalizedString>
+#include <kaboutdata.h>
+#include <kcmdlineargs.h>
+#include <klocalizedstring.h>
 
-#include <Plasma/Corona>
-#include <Plasma/Containment>
+
+
+#include <plasma/corona.h>
+#include <plasma/containment.h>
 
 static const char description[] = "Plasma2 library tests";
 static const char version[] = "1.0";
