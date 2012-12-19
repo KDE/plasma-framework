@@ -87,7 +87,7 @@ Item {
     //icon + label + left margin + right margin + spacing between icon and text
     //here it assumesleft margin = right top = bottom, why?
     // because the right and bottom margins can be disabled, so they would return 0, but their actual size is still needed for size hints
-    property real minimumWidth: theme.smallIconSize + label.preferredWidth + delegate.margins.left + delegate.margins.left + ((icon.valid) ? delegate.margins.left : 0)
+    property real minimumWidth: theme.smallIconSize + label.paintedWidth + delegate.margins.left + delegate.margins.left + ((icon.valid) ? delegate.margins.left : 0)
 
     /**
      * The smallest height this button can be to show all the contents
@@ -339,7 +339,7 @@ Item {
         }
     }
 
-    Item {
+    Row {
         anchors {
             fill: parent
             leftMargin: delegate.margins.left
@@ -348,37 +348,22 @@ Item {
             bottomMargin: delegate.margins.bottom
         }
 
+        spacing: icon.valid ? delegate.margins.left : 0
+
         PlasmaCore.IconItem {
             id: icon
-
-            anchors {
-                verticalCenter: parent.verticalCenter
-                left: label.text ? parent.left : undefined
-                horizontalCenter: label.text ? undefined : parent.horizontalCenter
-            }
-            height: parent.height
-            width:  parent.height
+            anchors.verticalCenter: parent.verticalCenter
+            width: valid ? parent.height: 0
+            height: width
             active: delegate.item.hasOverState && mouse.containsMouse
         }
 
         Text {
             id: label
 
-            //FIXME: why this is needed?
-            onPaintedWidthChanged: {
-                icon.anchors.horizontalCenter = label.paintedWidth > 0 ? undefined : icon.parent.horizontalCenter
-                icon.anchors.left = label.paintedWidth > 0 ? icon.parent.left : undefined
-            }
+            width: parent.width - icon.width - parent.spacing
+            height: parent.height
 
-            property int preferredWidth: button.width < button.implicitWidth ? paintedWidth: paintedWidth
-
-            anchors {
-                top: parent.top
-                bottom: parent.bottom
-                left: icon.valid ? icon.right : parent.left
-                leftMargin: icon.valid ? delegate.margins.left : 0
-                right: parent.right
-            }
             font.capitalization: theme.defaultFont.capitalization
             font.family: theme.defaultFont.family
             font.italic: theme.defaultFont.italic

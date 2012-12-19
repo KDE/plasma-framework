@@ -94,7 +94,7 @@ Item {
     /**
      * Smallest width this button can be to show all the contents
      */
-    property real minimumWidth: icon.width + label.preferredWidth + surfaceNormal.margins.left + surfaceNormal.margins.right + ((icon.valid) ? surfaceNormal.margins.left : 0)
+    property real minimumWidth: icon.width + label.paintedWidth + surfaceNormal.margins.left + surfaceNormal.margins.right + ((icon.valid) ? surfaceNormal.margins.left : 0)
 
     /**
      * Smallest height this button can be to show all the contents
@@ -191,9 +191,10 @@ Item {
         opacity: 0
     }
 
-    Item {
+    Row {
         id: buttonContent
         state: (internal.userPressed || checked) ? "pressed" : "normal"
+        spacing: icon.valid ? surfaceNormal.margins.left : 0
 
         states: [
             State { name: "normal" },
@@ -229,35 +230,17 @@ Item {
 
         PlasmaCore.IconItem {
             id: icon
-
-            anchors {
-                verticalCenter: parent.verticalCenter
-                left: label.text.length > 0 ? parent.left : undefined
-                horizontalCenter: label.text.length > 0 ? undefined : parent.horizontalCenter
-            }
+            anchors.verticalCenter: parent.verticalCenter
+            width: valid? parent.height: 0
+            height: width
             active: shadow.hasOverState && mouse.containsMouse
-            height: parent.height
-            width: parent.height
         }
 
         Text {
             id: label
 
-            //FIXME: why this is needed?
-            onTextChanged: {
-                icon.anchors.horizontalCenter = label.text.length > 0 ? undefined : icon.parent.horizontalCenter
-                icon.anchors.left = label.text.length > 0 ? icon.parent.left : undefined
-            }
-
-            property int preferredWidth: button.width < button.implicitWidth ? paintedWidth: paintedWidth
-
-            anchors {
-                top: parent.top
-                bottom: parent.bottom
-                right: parent.right
-                left: icon.valid ? icon.right : parent.left
-                leftMargin: icon.valid ? parent.anchors.leftMargin : 0
-            }
+            width: parent.width - icon.width - parent.spacing
+            height: parent.height
 
             font.capitalization: theme.defaultFont.capitalization
             font.family: theme.defaultFont.family
