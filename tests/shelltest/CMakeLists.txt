@@ -18,13 +18,15 @@ add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
 
 find_package(Qt5Transitional REQUIRED Core)
+find_package(Qt5Qml REQUIRED)
+find_package(Qt5Quick REQUIRED)
 
 # The Qt5Widgets_INCLUDES also includes the include directories for
 # dependencies QtCore and QtGui
 include_directories(${Qt5Widgets_DEFINITIONS} ${Qt5Quick_DEFINITIONS} ${QT_INCLUDES} ${KDE4_INCLUDES})
 
 # We need add -DQT_WIDGETS_LIB when using QtWidgets in Qt 5.
-add_definitions(${Qt5Widgets_DEFINITIONS} ${Qt5Quick_DEFINITIONS})
+add_definitions(${Qt5Widgets_DEFINITIONS} ${Qt5Quick_DEFINITIONS} ${Qt5Qml_DEFINITIONS})
 
 # Executables fail to build with Qt 5 in the default configuration
 # without -fPIE. We add that here.
@@ -36,6 +38,7 @@ add_executable(testplasma2 main.cpp svg.cpp)
 target_link_libraries(testplasma2
  ${Qt5Widgets_LIBRARIES}
  ${Qt5Quick_LIBRARIES}
+ ${Qt5Qml_LIBRARIES}
  ${kcoreaddons}
  ${KDE4_PLASMA_LIBS}
  #plasma
