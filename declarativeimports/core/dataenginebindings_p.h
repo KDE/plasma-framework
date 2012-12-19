@@ -28,10 +28,8 @@
 #include <plasma/service.h>
 #include <plasma/servicejob.h>
 
-using namespace Plasma;
-
-Q_DECLARE_METATYPE(DataEngine::Dict)
-Q_DECLARE_METATYPE(DataEngine::Data)
+Q_DECLARE_METATYPE(Plasma::DataEngine::Dict)
+Q_DECLARE_METATYPE(Plasma::DataEngine::Data)
 
 template <class M>
 QScriptValue qScriptValueFromMap(QScriptEngine *eng, const M &map)
