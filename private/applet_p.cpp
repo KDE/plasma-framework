@@ -31,6 +31,7 @@
 
 #include <kaction.h>
 #include <kdebug.h>
+#include <klocale.h>
 #include <kkeysequencewidget.h>
 #include <kstandarddirs.h>
 
