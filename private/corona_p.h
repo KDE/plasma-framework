@@ -45,7 +45,8 @@ public:
     void updateContainmentImmutability();
     void containmentDestroyed(QObject *obj);
     void syncConfig();
-    Containment *addContainment(const QString &name, const QVariantList &args, uint id, bool delayedInit);
+    Containment *addContainment(const QString &name, const QVariantList &args, uint id);
+    void delayedContainmentInit();
     void offscreenWidgetDestroyed(QObject *);
     QList<Plasma::Containment *> importLayout(const KConfigGroup &conf, bool mergeConfig);
 
@@ -57,8 +58,10 @@ public:
     QString configName;
     QString defaultContainmentPlugin;
     KSharedConfigPtr config;
-    QTimer configSyncTimer;
+    QTimer *configSyncTimer;
+    QTimer *delayedInitTimer;
     QList<Containment*> containments;
+    QList<QWeakPointer<Containment> > containmentsNeedingInit;
     QHash<uint, QGraphicsWidget*> offscreenWidgets;
     KActionCollection actions;
     QMap<Containment::Type, ContainmentActionsPluginsConfig> containmentActionsDefaults;

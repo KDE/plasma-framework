@@ -46,8 +46,6 @@ class PLASMA_EXPORT Corona : public QObject
 {
     Q_OBJECT
 
-//typedef QHash<QString, QList<Plasma::Applet*> > layouts;
-
 public:
     explicit Corona(QObject * parent = 0);
     ~Corona();
@@ -100,27 +98,6 @@ public:
      * or successfully loaded.
      */
     Containment *addContainment(const QString &name, const QVariantList &args = QVariantList());
-
-    /**
-     * Loads a containment with delayed initialization, primarily useful
-     * for implementations of loadDefaultLayout. The caller is responsible
-     * for all initializating, saving and notification of a new containment.
-     *
-     * @param name the plugin name for the containment, as given by
-     *        KPluginInfo::pluginName(). If an empty string is passed in, the defalt
-     *        containment plugin will be used (usually DesktopContainment). If the
-     *        string literal "null" is passed in, then no plugin will be loaded and
-     *        a simple Containment object will be created instead.
-     * @param args argument list to pass to the containment
-     *
-     * @return a pointer to the containment on success, or 0 on failure. Failure can
-     * be caused by the Immutability type being too restrictive, as containments can't be added
-     * when widgets are locked, or if the requested containment plugin can not be located
-     * or successfully loaded.
-     * @see addContainment
-     **/
-    Containment *addContainmentDelayed(const QString &name,
-                                       const QVariantList &args = QVariantList());
 
     /**
      * Returns the Containment, if any, for a given physical screen and desktop

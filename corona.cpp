@@ -156,8 +156,8 @@ void Corona::requestConfigSync()
     //      it should at least compress these activities a bit and provide a way for applet
     //      authors to ween themselves from the sync() disease. A more interesting/dynamic
     //      algorithm for determining when to actually sync() to disk might be better, though.
-    if (!d->configSyncTimer.isActive()) {
-        d->configSyncTimer.start(CONFIG_SYNC_TIMEOUT);
+    if (!d->configSyncTimer->isActive()) {
+        d->configSyncTimer->start(CONFIG_SYNC_TIMEOUT);
     }
 }
 
@@ -225,7 +225,7 @@ Containment *Corona::containmentForScreen(int screen, int desktop,
         // screen requests are allowed to bypass immutability
         if (screen >= 0 && screen < numScreens() &&
             desktop >= -1 && desktop < KWindowSystem::numberOfDesktops()) {
-            containment = d->addContainment(defaultPluginIfNonExistent, defaultArgs, 0, false);
+            containment = d->addContainment(defaultPluginIfNonExistent, defaultArgs, 0);
             if (containment) {
                 containment->setScreen(screen, desktop);
             }
@@ -259,16 +259,7 @@ KSharedConfigPtr Corona::config() const
 Containment *Corona::addContainment(const QString &name, const QVariantList &args)
 {
     if (d->immutability == Mutable) {
-        return d->addContainment(name, args, 0, false);
-    }
-
-    return 0;
-}
-
-Containment *Corona::addContainmentDelayed(const QString &name, const QVariantList &args)
-{
-    if (d->immutability == Mutable) {
-        return d->addContainment(name, args, 0, true);
+        return d->addContainment(name, args, 0);
     }
 
     return 0;
@@ -281,7 +272,6 @@ int Corona::numScreens() const
 
 QRect Corona::screenGeometry(int id) const
 {
-    //This is unreliable, give better implementations in subclasses
     return qApp->desktop()->screenGeometry(id);
 }
 
@@ -297,7 +287,6 @@ void Corona::loadDefaultLayout()
 void Corona::setPreferredToolBoxPlugin(const Containment::Type type, const QString &plugin)
 {
     d->toolBoxPlugins[type] = plugin;
-    //TODO: react to plugin changes on the fly? still don't see the use case (maybe for laptops that become tablets?)
 }
 
 QString Corona::preferredToolBoxPlugin(const Containment::Type type) const
@@ -447,6 +436,8 @@ CoronaPrivate::CoronaPrivate(Corona *corona)
       mimetype("text/x-plasmoidservicename"),
       defaultContainmentPlugin("desktop"),
       config(0),
+      configSyncTimer(new QTimer(corona)),
+      delayedInitTimer(new QTimer(corona)),
       actions(corona)
 {
     if (QCoreApplication::instance()) {
@@ -463,8 +454,11 @@ CoronaPrivate::~CoronaPrivate()
 
 void CoronaPrivate::init()
 {
-    configSyncTimer.setSingleShot(true);
-    QObject::connect(&configSyncTimer, SIGNAL(timeout()), q, SLOT(syncConfig()));
+    delayedInitTimer->setInterval(100);
+    delayedInitTimer->setSingleShot(true);
+    QObject::connect(delayedInitTimer, SIGNAL(timeout()), q, SLOT(delayedContainmentInit()));
+    configSyncTimer->setSingleShot(true);
+    QObject::connect(configSyncTimer, SIGNAL(timeout()), q, SLOT(syncConfig()));
 
     //some common actions
     actions.setConfigGroup("Shortcuts");
@@ -575,7 +569,7 @@ void CoronaPrivate::syncConfig()
     emit q->configSynced();
 }
 
-Containment *CoronaPrivate::addContainment(const QString &name, const QVariantList &args, uint id, bool delayedInit)
+Containment *CoronaPrivate::addContainment(const QString &name, const QVariantList &args, uint id)
 {
     QString pluginName = name;
     Containment *containment = 0;
@@ -635,16 +629,8 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
     applet->d->isContainment = true;
     applet->d->setIsContainment(true, true);
     containments.append(containment);
-
-    if (!delayedInit) {
-        containment->init();
-        KConfigGroup cg = containment->config();
-        containment->restore(cg);
-        containment->updateConstraints(Plasma::StartupCompletedConstraint);
-        containment->save(cg);
-        q->requestConfigSync();
-        containment->flushPendingConstraintsEvents();
-    }
+    containmentsNeedingInit.append(containment);
+    delayedInitTimer->start();
 
     QObject::connect(containment, SIGNAL(destroyed(QObject*)),
             q, SLOT(containmentDestroyed(QObject*)));
@@ -655,11 +641,28 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
     QObject::connect(containment, SIGNAL(screenChanged(int,int,Plasma::Containment*)),
             q, SIGNAL(screenOwnerChanged(int,int,Plasma::Containment*)));
 
-    if (!delayedInit) {
+    return containment;
+}
+
+void CoronaPrivate::delayedContainmentInit()
+{
+    foreach (QWeakPointer<Containment> c, containmentsNeedingInit) {
+        Containment *containment = c.data();
+        if (!containment) {
+            continue;
+        }
+
+        containment->init();
+        KConfigGroup cg = containment->config();
+        containment->restore(cg);
+        containment->updateConstraints(Plasma::StartupCompletedConstraint);
+        containment->save(cg);
+        q->requestConfigSync();
+        containment->flushPendingConstraintsEvents();
         emit q->containmentAdded(containment);
     }
 
-    return containment;
+    containmentsNeedingInit.clear();
 }
 
 QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &conf, bool mergeConfig)
@@ -703,7 +706,7 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &con
 #ifndef NDEBUG
         kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Adding Containment" << containmentConfig.readEntry("plugin", QString());
 #endif
-        Containment *c = addContainment(containmentConfig.readEntry("plugin", QString()), QVariantList(), cid, true);
+        Containment *c = addContainment(containmentConfig.readEntry("plugin", QString()), QVariantList(), cid);
         if (!c) {
             continue;
         }
