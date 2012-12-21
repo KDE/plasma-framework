@@ -33,7 +33,7 @@ void RunnerContextTest::typeDetection_data()
       QTest::newRow("man page listing") << "man:/" << Plasma::RunnerContext::NetworkLocation;
       QTest::newRow("ls man page listing") << "man://ls" << Plasma::RunnerContext::NetworkLocation;
     }
-    QTest::newRow("http without host") << "http://" << Plasma::RunnerContext::NetworkLocation; // QUrl::fromUserInput changes this compared to KDE4
+    QTest::newRow("http without host") << "http://" << Plasma::RunnerContext::UnknownType;
     QTest::newRow("http with host") << "http://kde.org" << Plasma::RunnerContext::NetworkLocation;
     QTest::newRow("file double slash") << "file://home" << Plasma::RunnerContext::Directory;
     QTest::newRow("file triple slash") << "file:///home" << Plasma::RunnerContext::Directory;
