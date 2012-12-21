@@ -46,23 +46,32 @@ public:
 
 Q_GLOBAL_STATIC(StorageThreadSingleton, privateStorageThreadSelf)
 
+static void closeConnection()
+{
+    StorageThread::self()->closeDb();
+    StorageThread::self()->quit();
+}
 
 StorageThread::StorageThread(QObject *parent)
     : QThread(parent)
 {
+    qAddPostRoutine(closeConnection);
 }
 
 StorageThread::~StorageThread()
 {
-    if (!QCoreApplication::closingDown()) {
-        QString name = m_db.connectionName();
-        QSqlDatabase::removeDatabase(name);
-    }
 }
 
 Plasma::StorageThread *StorageThread::self()
 {
     return &privateStorageThreadSelf()->self;
+}
+
+void StorageThread::closeDb()
+{
+    QString name = m_db.connectionName();
+    QSqlDatabase::removeDatabase(name);
+    m_db = QSqlDatabase();
 }
 
 void StorageThread::initializeDb(StorageJob *caller)

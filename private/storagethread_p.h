@@ -41,6 +41,8 @@ public:
 
     static Plasma::StorageThread *self();
 
+    void closeDb();
+
 public Q_SLOTS:
     void save(QWeakPointer<StorageJob> caller, const QVariantHash &parameters);
     void retrieve(QWeakPointer<StorageJob> caller, const QVariantHash &parameters);
