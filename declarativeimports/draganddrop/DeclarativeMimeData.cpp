@@ -48,7 +48,7 @@ DeclarativeMimeData::DeclarativeMimeData(const QMimeData* copy)
 {
     // Copy the standard MIME data
     foreach(QString format, copy->formats()) {
-            this->setData(format, copy->data(format));
+        QMimeData::setData(format, copy->data(format));
     }
 
     // If the object we are copying actually is a DeclarativeMimeData, copy our extended properties as well
