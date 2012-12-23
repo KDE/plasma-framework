@@ -156,8 +156,8 @@ void PackageStructureTest::path()
 {
     qDebug() << "real paths are" << ps.filePath("images") << ps.filePath("mainscript");
     qDebug() << "we wants" << QString(m_packagePath + QString("contents/images")) << QString(m_packagePath + QString("contents/code/main.js"));
-    QCOMPARE(ps.filePath("images"), QString(m_packagePath + QString("contents/images")));
-    QCOMPARE(ps.filePath("mainscript"), QString(m_packagePath + QString("contents/code/main.js")));
+    QCOMPARE(ps.filePath("images"), QFileInfo(m_packagePath + QString("contents/images")).canonicalFilePath());
+    QCOMPARE(ps.filePath("mainscript"), QFileInfo(m_packagePath + QString("contents/code/main.js")).canonicalFilePath());
 }
 
 void PackageStructureTest::name()
