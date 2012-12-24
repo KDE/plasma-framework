@@ -161,10 +161,14 @@ void DialogShadows::Private::initPixmap(const QString &element)
 
 QPixmap DialogShadows::Private::initEmptyPixmap(const QSize &size)
 {
+#ifdef Q_WS_X11
     Pixmap emptyXPix = XCreatePixmap(QX11Info::display(), QX11Info::appRootWindow(), size.width(), size.height(), 32);
     QPixmap tempEmptyPix = QPixmap::fromX11Pixmap(emptyXPix, QPixmap::ExplicitlyShared);
     tempEmptyPix.fill(Qt::transparent);
     return tempEmptyPix;
+#else
+    return QPixmap();
+#endif
 }
 
 void DialogShadows::Private::setupPixmaps()
