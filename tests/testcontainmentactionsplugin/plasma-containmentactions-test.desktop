@@ -2,6 +2,7 @@
 Name=Test
 Name[ar]=اختبار
 Name[bg]=Проба
+Name[bs]=Test
 Name[ca]=Prova
 Name[ca@valencia]=Prova
 Name[cs]=Test
@@ -64,6 +65,7 @@ Name[zh_TW]=測試
 Comment=A dummy plugin for testing
 Comment[ar]=إضافة وهمية من أجل الاختبار
 Comment[bg]=Празна приставка за изпробване
+Comment[bs]=Lažni priključak za probe
 Comment[ca]=Un connector fals per a provar
 Comment[ca@valencia]=Un connector fals per a provar
 Comment[cs]=Prázdný zásuvný modul pro testování
