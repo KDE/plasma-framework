@@ -2,6 +2,7 @@
 Name=Application dashboard
 Name[bg]=Табло за програми
 Name[bn]=অ্যাপলিকেশন ড্যাশবোর্ড
+Name[bs]=Programska instrument tabla
 Name[ca]=Tauler d'aplicacions
 Name[ca@valencia]=Tauler d'aplicacions
 Name[cs]=Pracovní plocha aplikace
@@ -60,6 +61,7 @@ Name[zh_TW]=應用程式控制面板
 Comment=Intended as Application dashboard default
 Comment[bg]=Табло със стандартни програми
 Comment[bn]=অ্যাপলিকেশন ড্যাশবোর্ড ডিফল্ট হিসাবে পরিকল্পিত
+Comment[bs]=Namijenjeno kao podrazumijevana programska instrument tabla
 Comment[ca]=Proposat com a tauler d'aplicacions per defecte
 Comment[ca@valencia]=Proposat com a tauler d'aplicacions per defecte
 Comment[cs]=Zamýšleno jako výchozí pracovní plocha aplikace
