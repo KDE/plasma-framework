@@ -161,5 +161,5 @@ X-KDE-PluginInfo-EnabledByDefault=true
 [Wallpaper]
 defaultWallpaperTheme=Elarun
 defaultFileSuffix=.png
-defaultWidth=1920
-defaultHeight=1200
+defaultWidth=2560
+defaultHeight=1600
