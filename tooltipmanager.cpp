@@ -314,8 +314,8 @@ void ToolTipManagerPrivate::createTipWidget()
 void ToolTipManagerPrivate::hideTipWidget()
 {
     if (tipWidget) {
-        shadow->removeWindow(tipWidget);
         tipWidget->hide();
+        shadow->removeWindow(tipWidget);
         tipWidget->deleteLater();
         tipWidget = 0;
     }
