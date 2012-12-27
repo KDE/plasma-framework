@@ -24,6 +24,7 @@
 
 #include <kdebug.h>
 #include <kdesktopfile.h>
+#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kzip.h>
 

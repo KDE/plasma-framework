@@ -35,6 +35,7 @@
 
 #include <kaction.h>
 #include <kdebug.h>
+#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kshortcutsdialog.h>
 #include <kwindowsystem.h>

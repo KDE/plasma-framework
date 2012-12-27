@@ -32,6 +32,7 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kcoreauthorized.h>
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kurlmimedata.h>
 #include <kwindowsystem.h>
