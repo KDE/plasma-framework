@@ -27,6 +27,7 @@
 #include <QGraphicsLinearLayout>
 #include <QTimer>
 #include <QVBoxLayout>
+#include <QDeclarativeItem>
 
 #ifdef Q_WS_X11
 #include <QX11Info>
@@ -242,10 +243,13 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
 
         //99% of the times q->parentWidget() is the containment, but using it  we can also manage the applet-in-applet case (i.e. systray)
         //there are also cases where the parentlayoutitem is bigger than the containment (e.g. newspaper)
+        QDeclarativeItem *di = qobject_cast<QDeclarativeItem *>(q->parentObject());
         if (q->parentLayoutItem()) {
             parentSize = q->parentLayoutItem()->geometry().size();
         } else if (q->parentWidget()) {
             parentSize = q->parentWidget()->size();
+        } else if (di) {
+            parentSize = QSizeF(di->width(), di->height());
         }
 
         //check if someone did the nasty trick of applets in applets, in this case we always want to be collapsed
