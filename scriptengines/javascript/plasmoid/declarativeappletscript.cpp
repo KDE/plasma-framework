@@ -160,7 +160,7 @@ void DeclarativeAppletScript::qmlCreationFinished()
                 lay->setContentsMargins(0, 0, 0, 0);
                 DeclarativeItemContainer *declarativeItemContainer = new DeclarativeItemContainer(a);
                 lay->addItem(declarativeItemContainer);
-                declarativeItemContainer->setDeclarativeItem(declarativeIcon);
+                declarativeItemContainer->setDeclarativeItem(declarativeIcon, true);
             } else {
                 pa->setPopupIcon(a->icon());
             }
