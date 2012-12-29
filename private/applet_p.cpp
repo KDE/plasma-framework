@@ -35,6 +35,7 @@
 #include <klocale.h>
 #include <kkeysequencewidget.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 #include "containment.h"
 #include "corona.h"

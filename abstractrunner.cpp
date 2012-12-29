@@ -33,6 +33,7 @@
 #include <kstandarddirs.h>
 #include <klocalizedstring.h>
 #include <kiconloader.h>
+#include <kglobal.h>
 #include <qstandardpaths.h>
 
 #include "package.h"

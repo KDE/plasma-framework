@@ -29,6 +29,7 @@
 
 #include <kdebug.h>
 #include <kplugininfo.h>
+#include <kglobal.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>

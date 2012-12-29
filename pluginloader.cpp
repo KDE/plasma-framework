@@ -23,6 +23,7 @@
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 #include <kplugininfo.h>
 
 #include "config-plasma.h"

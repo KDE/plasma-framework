@@ -26,7 +26,7 @@
 
 #include <karchive.h>
 #include <kdesktopfile.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <ktar.h>
 #include <kzip.h>
 
