@@ -164,7 +164,7 @@ Item {
         property QtObject margins: item.margins
         property string shadowState: "shadow"
         sourceComponent: {
-            if (label.text.length == 0 && button.width == button.height && button.parent.checkedButton === undefined && !flat) {
+            if (label.text.length == 0 && button.width == button.height && (button.parent && button.parent.checkedButton === undefined) && !flat) {
                 return roundButtonComponent
             } else {
                 return buttonComponent
