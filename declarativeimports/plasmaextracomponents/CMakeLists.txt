@@ -1,9 +1,11 @@
 project(plasmaextracomponents)
 
-find_package(KActivities NO_MODULE)
-macro_log_feature(KActivities_FOUND "KActivities" "Library and infrastructure for using Activities from applications" "git://anongit.kde.org/kactivities" TRUE "" "Provides the ability to access activities from QML.")
-
-#include(KDE4Defaults)
+find_package(KActivities QUIET CONFIG)
+set_package_properties(KActivities PROPERTIES DESCRIPTION "Library and infrastructure for using Activities from applications"
+                       URL "https://projects.kde.org/kactivities"
+                       TYPE REQUIRED
+                       PURPOSE "Provides the ability to access activities from QML."
+                      )
 
 set(plasmaextracomponents_SRCS
     appbackgroundprovider.cpp
