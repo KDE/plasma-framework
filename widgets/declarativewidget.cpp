@@ -145,9 +145,6 @@ void DeclarativeWidgetPrivate::finishExecute()
 
     if (object) {
         static_cast<QGraphicsItem *>(object)->setParentItem(q);
-        if (q->scene()) {
-            q->scene()->addItem(object);
-        }
     }
 
     if (widget) {
