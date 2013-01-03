@@ -62,7 +62,7 @@ void PackageStructureTest::copyPerformance()
         const QString bar = foo.filePath("mainscript");
     }
 
-    QVERIFY(t.elapsed() < 100);
+    QVERIFY(t.elapsed() < 200);
 }
 
 void PackageStructureTest::emptyContentsPrefix()
