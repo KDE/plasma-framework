@@ -23,7 +23,9 @@
 #include "ui_pinpairing.h"
 
 #include <kdebug.h>
-#include <kdialog.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
 
 namespace Plasma
 {
@@ -35,28 +37,35 @@ public:
         : q(q),
           rule(rule),
           request(request),
-          dialog(new KDialog(0))
+          dialog(new QDialog(0))
     {
-        QWidget *widget = new QWidget(dialog);
-        pairingUI.setupUi(widget);
-        dialog->setMainWidget(widget);
+        QWidget *mainWidget = new QWidget(dialog);
+        pairingUI.setupUi(mainWidget);
         if (rule) {
-            dialog->setCaption(i18n("Incoming connection request"));
+            dialog->setWindowTitle(i18n("Incoming connection request"));
             pairingUI.descriptionLabel->setText(rule->description());
         }
 
         if (request) {
-            dialog->setCaption(i18n("Connect with remote widget"));
+            dialog->setWindowTitle(i18n("Connect with remote widget"));
             pairingUI.persistentCheckbox->setVisible(false);
             pairingUI.allServicesCheckbox->setVisible(false);
             pairingUI.descriptionLabel->setText(request->description());
         }
 
-        dialog->setButtons(KDialog::Ok | KDialog::Cancel);
+        QDialogButtonBox *buttonBox = new QDialogButtonBox(dialog);
+        buttonBox->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+        q->connect(buttonBox, SIGNAL(accepted()), dialog, SLOT(accept()));
+        q->connect(buttonBox, SIGNAL(rejected()), dialog, SLOT(reject()));
+
+        QVBoxLayout *layout = new QVBoxLayout;
+        layout->addWidget(mainWidget);
+        layout->addWidget(buttonBox);
+        dialog->setLayout(layout);
         dialog->show();
 
-        q->connect(dialog, SIGNAL(okClicked()), q, SLOT(slotAccept()));
-        q->connect(dialog, SIGNAL(cancelClicked()), q, SLOT(slotReject()));
+        q->connect(dialog, SIGNAL(accepted()), q, SLOT(slotAccept()));
+        q->connect(dialog, SIGNAL(rejected()), q, SLOT(slotReject()));
     }
 
     ~PinPairingDialogPrivate()
@@ -97,7 +106,7 @@ public:
     AuthorizationRule *rule;
     ClientPinRequest *request;
     Ui::pairingDialog pairingUI;
-    KDialog *dialog;
+    QDialog *dialog;
 };
 
 PinPairingDialog::PinPairingDialog(AuthorizationRule &rule, QObject *parent)
