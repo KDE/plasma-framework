@@ -19,6 +19,7 @@
 
 #include "accessappletjob.h"
 
+#include <QPushButton>
 #include <qtimer.h>
 #include <qtemporarydir.h>
 
@@ -129,17 +130,19 @@ public:
             message+= i18n("</table>");
             message+= i18n("<br><br>Are you sure you want to open this widget on your system?");
 
-            KDialog *dialog = new KDialog;
+            QDialog *dialog = new QDialog;
             dialog->setWindowTitle(i18n("Remote Widget"));
-            dialog->setButtons(KDialog::Yes|KDialog::No);
-            dialog->setButtonText(KDialog::Yes, i18n("Open Widget"));
-            dialog->setButtonText(KDialog::No, i18n("Reject Widget"));
 
-            int answer = KMessageBox::createKMessageBox(dialog, KDE::icon(iconName), message,
+            QDialogButtonBox *buttonBox = new QDialogButtonBox;
+            buttonBox->setStandardButtons(QDialogButtonBox::Yes | QDialogButtonBox::No);
+            buttonBox->button(QDialogButtonBox::Yes)->setText(i18n("Open Widget"));
+            buttonBox->button(QDialogButtonBox::No)->setText(i18n("Reject Widget"));
+
+            int answer = KMessageBox::createKMessageBox(dialog, buttonBox, KDE::icon(iconName), message,
                                                         QStringList(), QString(), 0,
                                                         KMessageBox::Dangerous);
 
-            if (answer!=KDialog::Yes) {
+            if (answer!=QDialogButtonBox::Yes) {
                 q->setError(-1);
                 q->setErrorText(i18nc("A remote widget was rejected by the user.", "User rejected"));
                 q->emitResult();

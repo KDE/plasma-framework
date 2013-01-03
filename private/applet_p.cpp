@@ -335,10 +335,9 @@ KConfigDialog *AppletPrivate::generateGenericConfigDialog()
     dialog->setWindowTitle(configWindowTitle());
     dialog->setAttribute(Qt::WA_DeleteOnClose, true);
     q->createConfigurationInterface(dialog);
-    dialog->showButton(KDialog::Default, false);
-    dialog->showButton(KDialog::Help, false);
-    QObject::connect(dialog, SIGNAL(applyClicked()), q, SLOT(configDialogFinished()));
-    QObject::connect(dialog, SIGNAL(okClicked()), q, SLOT(configDialogFinished()));
+    dialog->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Cancel);
+    QObject::connect(dialog->button(QDialogButtonBox::Apply), SIGNAL(clicked()), q, SLOT(configDialogFinished()));
+    QObject::connect(dialog->button(QDialogButtonBox::Ok), SIGNAL(clicked()), q, SLOT(configDialogFinished()));
     return dialog;
 }
 
@@ -450,7 +449,7 @@ void AppletPrivate::configDialogFinished()
         // the config loader will trigger this for us, so we don't need to.
         propagateConfigChanged();
         if (KConfigDialog *dialog = qobject_cast<KConfigDialog *>(q->sender())) {
-            dialog->enableButton(KDialog::Apply, false);
+            dialog->button(QDialogButtonBox::Apply)->setEnabled(false);
         }
     }
 }
