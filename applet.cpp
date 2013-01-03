@@ -47,7 +47,6 @@
 #include <kactioncollection.h>
 #include <kcoreauthorized.h>
 #include <kcolorscheme.h>
-#include <kdialog.h>
 #include <kdesktopfile.h>
 #include <kiconloader.h>
 #include <kkeysequencewidget.h>
