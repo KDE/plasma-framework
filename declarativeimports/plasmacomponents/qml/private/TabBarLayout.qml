@@ -175,7 +175,8 @@ Item {
                     }
                 }
 
-                var itemWidth = (root.width - (visibleChildCount-1)*10) / visibleChildCount
+                var maxAllowedWidth = theme.defaultFont.mSize.width * 14
+                var itemWidth = Math.min(maxAllowedWidth, (root.width - (visibleChildCount-1)*10) / visibleChildCount)
 
                 var itemIndex = mirrored ? childCount - 1 : 0
                 var increment = mirrored ? - 1 : 1
@@ -194,7 +195,7 @@ Item {
                     child.height = root.height
 
                     if (child.implicitWidth != undefined) {
-                        maxChildWidth = Math.max(maxChildWidth, child.implicitWidth)
+                        maxChildWidth = Math.max(maxChildWidth, Math.min(maxAllowedWidth, child.implicitWidth))
                         contentWidth = Math.max(contentWidth, (maxChildWidth + buttonFrame.margins.left + buttonFrame.margins.right) * childCount)
                         contentHeight = Math.max(contentHeight, (child.implicitHeight + buttonFrame.margins.top + buttonFrame.margins.bottom))
                     }
