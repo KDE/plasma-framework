@@ -105,7 +105,7 @@ bool DeclarativeAppletScript::init()
     if (!m_declarativeWidget->engine() || !m_declarativeWidget->engine()->rootContext() || !m_declarativeWidget->engine()->rootContext()->isValid() || m_declarativeWidget->mainComponent()->isError()) {
         QString reason;
         foreach (QDeclarativeError error, m_declarativeWidget->mainComponent()->errors()) {
-            reason += error.toString();
+            reason += error.toString()+'\n';
         }
         setFailedToLaunch(true, reason);
         return false;
