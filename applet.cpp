@@ -1256,7 +1256,6 @@ bool Applet::isContainment() const
 // PRIVATE CLASS IMPLEMENTATION
 
 
-
 void ContainmentPrivate::checkRemoveAction()
 {
     q->enableAction("remove", q->immutability() == Mutable);
