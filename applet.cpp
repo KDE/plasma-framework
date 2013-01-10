@@ -2973,7 +2973,9 @@ QString AppletPrivate::visibleFailureText(const QString &reason)
     if (reason.isEmpty()) {
         text = i18n("This object could not be created.");
     } else {
-        text = i18n("This object could not be created for the following reason:<p><b>%1</b></p>", reason);
+        QString r = reason;
+        r.replace('\n', "<br/>");
+        text = i18n("This object could not be created for the following reason:<p><b>%1</b></p>", r);
     }
 
     return text;
