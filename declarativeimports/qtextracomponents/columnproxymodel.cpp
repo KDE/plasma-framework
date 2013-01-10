@@ -129,7 +129,7 @@ void ColumnProxyModel::setRootIndex(const QModelIndex& index)
 
 QModelIndex ColumnProxyModel::indexFromModel(QAbstractItemModel* model, int row, int column, const QModelIndex& parent)
 {
-    return model->index(row, column, parent);
+    return model ? model->index(row, column, parent) : QModelIndex();
 }
 
 QVariant ColumnProxyModel::data(const QModelIndex& index, int role) const
