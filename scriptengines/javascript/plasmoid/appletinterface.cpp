@@ -198,7 +198,8 @@ void AppletInterface::writeConfig(const QString &entry, const QVariant &value)
             config->blockSignals(false);
             m_appletScriptEngine->configNeedsSaving();
         }
-    }
+    } else
+        kWarning() << "Couldn't find a configuration entry";
 }
 
 QScriptValue AppletInterface::readConfig(const QString &entry) const
