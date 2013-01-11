@@ -45,8 +45,13 @@ void DeclarativeItemContainer::setDeclarativeItem(QDeclarativeItem *item, bool r
     connect(m_declarativeItem.data(), SIGNAL(widthChanged()), this, SLOT(widthChanged()));
     connect(m_declarativeItem.data(), SIGNAL(heightChanged()), this, SLOT(heightChanged()));
 
-    QObject::connect(m_declarativeItem.data(), SIGNAL(minimumWidthChanged()), this, SLOT(minimumWidthChanged()));
-    QObject::connect(m_declarativeItem.data(), SIGNAL(minimumHeightChanged()), this, SLOT(minimumHeightChanged()));
+    if (m_declarativeItem.data()->metaObject()->indexOfProperty("minimumWidth") >= 0) {
+        QObject::connect(m_declarativeItem.data(), SIGNAL(minimumWidthChanged()), this, SLOT(minimumWidthChanged()));
+    }
+
+    if (m_declarativeItem.data()->metaObject()->indexOfProperty("minimumHeight") >= 0) {
+        QObject::connect(m_declarativeItem.data(), SIGNAL(minimumHeightChanged()), this, SLOT(minimumHeightChanged()));
+    }
     minimumWidthChanged();
     minimumHeightChanged();
 }
