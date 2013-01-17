@@ -178,7 +178,7 @@ X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-EnabledByDefault=true
 
 [Wallpaper]
-defaultWallpaperTheme=Ariya
+defaultWallpaperTheme=Elarun
 defaultFileSuffix=.png
-defaultWidth=1920
-defaultHeight=1200
+defaultWidth=2560
+defaultHeight=1600
