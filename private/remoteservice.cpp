@@ -134,11 +134,7 @@ void RemoteService::setLocation(const QUrl &location)
 
 QString RemoteService::location() const
 {
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-    return m_location.toString();
-#else
     return m_location.toDisplayString();
-#endif
 }
 
 bool RemoteService::isReady() const
