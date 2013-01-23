@@ -92,6 +92,7 @@ void FrameSvgItem::setImagePath(const QString &path)
     }
 
     emit imagePathChanged();
+    m_margins->update();
     update();
 }
 
