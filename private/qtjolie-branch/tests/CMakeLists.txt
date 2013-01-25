@@ -14,7 +14,7 @@ ENDMACRO(SODEP_UNIT_TESTS)
 MACRO(SODEP_EXECUTABLE_TESTS)
   FOREACH(_testname ${ARGN})
     add_executable(${_testname} NOGUI ${_testname}.cpp)
-    target_link_libraries(${_testname} ${QT_QTGUI_LIBRARY} ${QT_QTNETWORK_LIBRARY} QtJolie)
+    target_link_libraries(${_testname} Qt5::Widgets ${QT_QTNETWORK_LIBRARY} QtJolie)
     ecm_mark_as_test(${_testname})`
     add_definitions(-DDATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}\\"")
   ENDFOREACH(_testname)
