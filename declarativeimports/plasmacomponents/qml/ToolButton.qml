@@ -353,7 +353,7 @@ Item {
         PlasmaCore.IconItem {
             id: icon
             anchors.verticalCenter: parent.verticalCenter
-            width: valid ? parent.height: 0
+            width: valid ? Math.min(parent.width, parent.height): 0
             height: width
             active: delegate.item.hasOverState && mouse.containsMouse
         }
