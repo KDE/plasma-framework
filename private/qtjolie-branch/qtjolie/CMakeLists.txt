@@ -22,7 +22,7 @@ set(qtjolie_LIB_SRCS
 
 kde4_add_library(QtJolie ${LIBRARY_TYPE} ${qtjolie_LIB_SRCS})
 
-target_link_libraries(QtJolie ${QT_QTCORE_LIBRARY} ${QT_QTNETWORK_LIBRARY})
+target_link_libraries(QtJolie ${QT_QTNETWORK_LIBRARY})
 
 install(TARGETS QtJolie
         DESTINATION ${LIB_INSTALL_DIR})
