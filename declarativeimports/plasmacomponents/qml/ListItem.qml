@@ -89,7 +89,7 @@ Item {
         prefix: "normal"
 
         anchors.fill: parent
-        visible: listItem.ListView.view ? listItem.ListView.view.highlight === null : false
+        visible: listItem.ListView.view ? listItem.ListView.view.highlight === null : true
         opacity: itemMouse.containsMouse && !itemMouse.pressed ? 0.5 : 1
         Component.onCompleted: {
             prefix = (listItem.sectionDelegate ? "section" : (listItem.checked ? "pressed" : "normal"))
