@@ -22,7 +22,7 @@
 #include <QApplication>
 #include <QDebug>
 #include <QDesktopWidget>
-#include <QQuickView>
+#include "view.h"
 
 static const QString s_panelTemplatesPath("plasma-layout-templates/panels/*");
 
@@ -166,15 +166,13 @@ void DesktopCorona::checkViews()
         return;
     } else if (m_views.count() < m_desktopWidget->screenCount()) {
         for (int i = m_views.count(); i < m_desktopWidget->screenCount(); ++i) {
-            QQuickView *view = new QQuickView;
-            view->setResizeMode(QQuickView::SizeRootObjectToView);
-            view->setSource(QUrl::fromLocalFile("../main.qml"));
-            view->show();
+            View *view = new View;
+            
             m_views << view;
         }
     } else {
         for (int i = m_desktopWidget->screenCount(); i < m_views.count(); ++i) {
-            QQuickView *view = m_views.last();
+            View *view = m_views.last();
             view->deleteLater();
             m_views.pop_back();
         }

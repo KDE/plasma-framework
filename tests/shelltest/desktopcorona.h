@@ -24,7 +24,7 @@ class  *   Free Software Foundation, Inc.,
 #include "plasma/corona.h"
 
 class QDesktopWidget;
-class QQuickView;
+class View;
 
 namespace Plasma
 {
@@ -72,7 +72,7 @@ protected Q_SLOTS:
 
 private:
     QDesktopWidget *m_desktopWidget;
-    QList <QQuickView *> m_views;
+    QList <View *> m_views;
 };
 
 #endif

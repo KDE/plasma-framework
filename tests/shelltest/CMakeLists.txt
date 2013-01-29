@@ -36,6 +36,7 @@ add_executable(testplasma2
     main.cpp
     svg.cpp
     desktopcorona.cpp
+    view.cpp
 )
 
 # The Qt5Widgets_LIBRARIES variable also includes QtGui and QtCore
