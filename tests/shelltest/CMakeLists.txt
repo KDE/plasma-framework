@@ -32,7 +32,11 @@ add_definitions(${Qt5Widgets_DEFINITIONS} ${Qt5Quick_DEFINITIONS} ${Qt5Qml_DEFIN
 # without -fPIE. We add that here.
 set(CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 
-add_executable(testplasma2 main.cpp svg.cpp)
+add_executable(testplasma2
+    main.cpp
+    svg.cpp
+    desktopcorona.cpp
+)
 
 # The Qt5Widgets_LIBRARIES variable also includes QtGui and QtCore
 target_link_libraries(testplasma2

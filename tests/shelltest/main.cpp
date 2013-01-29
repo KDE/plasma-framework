@@ -27,7 +27,7 @@
 
 
 
-#include <plasma/corona.h>
+#include "desktopcorona.h"
 #include <plasma/containment.h>
 
 static const char description[] = "Plasma2 library tests";
@@ -50,15 +50,9 @@ int main(int argc, char** argv)
     
     
     
-    QQuickView view;
-    view.setResizeMode(QQuickView::SizeRootObjectToView);
-    view.setSource(QUrl::fromLocalFile("../main.qml"));
-    view.show();
-
-    Plasma::Corona *corona = new Plasma::Corona();
-    Plasma::Containment *cont = corona->addContainment("desktop");
-    Plasma::Applet *appl = cont->addApplet("foo");
-    qDebug() << "Applet:" << appl->name() << appl;
+    DesktopCorona *corona = new DesktopCorona();
+    corona->initializeLayout();
+    corona->checkScreens();
     
     return app.exec();
 }
