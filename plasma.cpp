@@ -23,7 +23,6 @@
 #include <QMenu>
 
 #include "containment.h"
-#include "view.h"
 #include "private/packages_p.h"
 
 namespace Plasma

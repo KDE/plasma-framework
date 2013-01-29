@@ -266,8 +266,7 @@ set(plasma_LIB_INCLUDES
     servicejob.h
     svg.h
     theme.h
-    version.h
-    view.h)
+    version.h)
 
 
 install(FILES

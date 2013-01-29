@@ -25,7 +25,6 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
-#include <QGraphicsView>
 #include <QGraphicsGridLayout>
 #include <QMimeData>
 #include <QPainter>
@@ -46,7 +45,6 @@
 #include "pluginloader.h"
 #include "private/applet_p.h"
 #include "private/containment_p.h"
-#include "view.h"
 
 using namespace Plasma;
 
