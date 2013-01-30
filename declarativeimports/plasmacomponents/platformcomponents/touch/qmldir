@@ -1,0 +1,36 @@
+plugin plasmacomponentsplugin
+
+BusyIndicator 0.1 BusyIndicator.qml
+Button 0.1 Button.qml
+ButtonColumn 0.1 ButtonColumn.qml
+ButtonGroup 0.1 ButtonGroup.js
+ButtonRow 0.1 ButtonRow.qml
+CheckBox 0.1 CheckBox.qml
+CommonDialog 0.1 CommonDialog.qml
+ContextMenu 0.1 Menu.qml
+Dialog 0.1 Dialog.qml
+Highlight 0.1 Highlight.qml
+Label 0.1 Label.qml
+ListItem 0.1 ListItem.qml
+Menu 0.1 Menu.qml
+MenuItem 0.1 MenuItem.qml
+Page 0.1 Page.qml
+PageStack 0.1 PageStack.qml
+ProgressBar 0.1 ProgressBar.qml
+QueryDialog 0.1 QueryDialog.qml
+RadioButton 0.1 RadioButton.qml
+ScrollBar 0.1 ScrollBar.qml
+ScrollDecorator 0.1 ScrollDecorator.qml
+SectionScroller 0.1 SectionScroller.qml
+SelectionDialog 0.1 SelectionDialog.qml
+Slider 0.1 Slider.qml
+Switch 0.1 Switch.qml
+TabBar 0.1 TabBar.qml
+TabButton 0.1 TabButton.qml
+TabGroup 0.1 TabGroup.qml
+TextArea 0.1 TextArea.qml
+TextField 0.1 TextField.qml
+ToolBar 0.1 ToolBar.qml
+ToolBarLayout 0.1 ToolBarLayout.qml
+ToolButton 0.1 ToolButton.qml
+Window 0.1 Window.qml

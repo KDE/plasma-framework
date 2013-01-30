@@ -1,0 +1,66 @@
+/** @mainpage Plasma Components
+
+<h2>import org.kde.plasma.components</h2>
+
+## Widgets
+Input:
+- TextArea
+- TextField
+- CheckBox
+- RadioButton
+- Switch
+- Slider
+
+Buttons:
+- Button
+- ButtonColumn
+- ButtonRow
+- ToolButton
+
+Misc:
+- BusyIndicator
+- ProgressBar
+- Label
+
+## Containers
+Pages:
+- Page
+- PageOrientation
+- PageStatus
+- PageStack
+
+Dialogs:
+- Dialog
+- DialogStatus
+- CommonDialog
+- QueryDialog
+- SelectionDialog
+
+Tab bars:
+- TabBar
+- TabButton
+- TabGroup
+
+Misc:
+- Sheet
+- ScrollBar
+
+## Menus
+- Menu
+- MenuItem
+- ContextMenu
+
+## Lists
+- ListItem
+- Highlight
+- SectionScroller
+
+## Toolbar
+- ToolBar
+- ToolBarLayout
+*/
+
+// DOXYGEN_SET_PROJECT_NAME = PlasmaComponents
+// Maybe there should be a touch-specific api doc?
+// DOXYGEN_SET_EXCLUDE += @topdir@/plasma/declarativeimports/plasmacomponents/platformcomponents
+// vim:ts=4:sw=4:expandtab:filetype=doxygen

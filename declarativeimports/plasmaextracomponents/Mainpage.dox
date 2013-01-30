@@ -1,0 +1,25 @@
+/** @mainpage Plasma Extra Components
+
+<h2>import org.kde.plasma.extras</h2>
+
+- App
+- PageRow
+- ScrollArea
+- FallbackComponent
+- ResourceInstance
+
+Text formatting
+- Heading
+- Paragraph
+- Title
+
+Animations
+- ActivateAnimation
+- AppearAnimation
+- PressedAnimation
+- ReleasedAnimation
+
+*/
+
+// DOXYGEN_SET_PROJECT_NAME = PlasmaExtraComponents
+// vim:ts=4:sw=4:expandtab:filetype=doxygen

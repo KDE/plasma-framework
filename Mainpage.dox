@@ -1,0 +1,36 @@
+/** @mainpage Plasma Runtime
+
+Plasma Runtime components.
+The classes documented here are not C++ public libraries: they are intended to be used from QML, with the following imports:
+
+<h3>org.kde.draganddrop</h3>
+<p>Bindings for the Qt drag and drop system, see <a href="../declarativeimports/draganddrop/html/index.html">draganddrop</a> </p>
+
+<h3>org.kde.locale</h3>
+<p>Bindings for the use of KLocale, see <a href="classLocale.html">Locale</a></p>
+
+<h3>org.kde.plasma.components</h3>
+<p>Graphical components for common items such as buttons, lineedits, tabbars and so on. Compatible subset of the MeeGo components used on the N9, see <a href="../declarativeimports/plasmacomponents/html/index.html">plasmacomponents</a> </p>
+
+<h3>org.kde.plasma.core</h3>
+<p>Bindings for libplasma functionality, such as DataEngines and FrameSvgs, see <a href="../declarativeimports/core/html/index.html">core</a> </p>
+
+<h3>org.kde.plasma.extras</h3>
+<p>Extra graphical components that extend org.kde.plasma.components but are not in the standard api, see <a href="../declarativeimports/plasmaextracomponents/html/index.html">extras</a> </p>
+
+<h3>org.kde.qtextracomponents</h3>
+<p>Bindings for some functionality in Qt not included in the primitive QML components set, sich as support for QImages, QPixmaps, QIcons and mouse and wheel events with screen coordinates, see <a href="../declarativeimports/qtextracomponents/html/index.html">qtextracomponents</a></p>
+
+
+@authors
+- Marco Martin \<mart at kde.org\>
+- Aaron Seigo \<aseigo at kde.org\>
+
+@maintainers
+
+@licenses
+@gpl
+
+*/
+
+// DOXYGEN_SET_PROJECT_NAME = Plasma Runtime

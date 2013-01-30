@@ -1,0 +1,15 @@
+/** @mainpage Drag and Drop
+
+<h2>import org.kde.draganddrop</h2>
+
+Use those elements if you want to add drag and drop support to your application
+
+- DeclarativeDragArea
+- DeclarativeDropArea
+- DeclarativeDragDropEvent
+- DeclarativeMimeData
+
+*/
+
+// DOXYGEN_SET_PROJECT_NAME = DragAndDrop
+// vim:ts=4:sw=4:expandtab:filetype=doxygen
