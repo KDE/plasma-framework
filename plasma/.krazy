@@ -1,0 +1,2 @@
+EXTRA defines,kdebug,qenums,tipsandthis
+SKIP /widgets/template\.h

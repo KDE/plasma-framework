@@ -1,0 +1,13 @@
+QTJOLIE_INCDIR = @INCLUDE_INSTALL_DIR@
+QTJOLIE_LIBDIR = @LIB_INSTALL_DIR@
+
+CONFIG *= qt
+INCLUDEPATH += $$QTJOLIE_INCDIR
+LIBS += -L$$QTJOLIE_LIBDIR
+
+LINKAGE = -llibQtJolie
+CONFIG(debug, debug|release) {
+	windows:LINKAGE = -llibQtJolied
+	mac:LINKAGE = -llibQtJolie_debug
+}
+LIBS += $$LINKAGE

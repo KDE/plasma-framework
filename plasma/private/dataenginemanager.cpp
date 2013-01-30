@@ -1,0 +1,213 @@
+/*
+ *   Copyright 2006-2007 Aaron Seigo <aseigo@kde.org>
+ *
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU Library General Public License as
+ *   published by the Free Software Foundation; either version 2, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details
+ *
+ *   You should have received a copy of the GNU Library General Public
+ *   License along with this program; if not, write to the
+ *   Free Software Foundation, Inc.,
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
+#include "dataenginemanager_p.h"
+
+#include <QFile>
+#include <QTextStream>
+
+#include <kdebug.h>
+#include <klocale.h>
+
+#include <kservicetypetrader.h>
+#include <qstandardpaths.h>
+
+#include "datacontainer.h"
+#include "pluginloader.h"
+#include "private/componentinstaller_p.h"
+#include "private/dataengine_p.h"
+#include "private/datacontainer_p.h"
+#include "scripting/scriptengine.h"
+
+namespace Plasma
+{
+
+class NullEngine : public DataEngine
+{
+    public:
+        NullEngine(QObject *parent = 0)
+            : DataEngine(parent)
+        {
+            setValid(false);
+
+            // ref() ourselves to ensure we never get deleted
+            d->ref();
+        }
+};
+
+class DataEngineManagerPrivate
+{
+    public:
+        DataEngineManagerPrivate()
+            : nullEng(0)
+        {}
+
+        ~DataEngineManagerPrivate()
+        {
+            foreach (Plasma::DataEngine *engine, engines) {
+                delete engine;
+            }
+            engines.clear();
+            delete nullEng;
+        }
+
+        DataEngine *nullEngine()
+        {
+            if (!nullEng) {
+                nullEng = new NullEngine;
+            }
+
+            return nullEng;
+        }
+
+        DataEngine::Dict engines;
+        DataEngine *nullEng;
+};
+
+class DataEngineManagerSingleton
+{
+    public:
+        DataEngineManager self;
+};
+
+Q_GLOBAL_STATIC(DataEngineManagerSingleton, privateDataEngineManagerSelf)
+
+DataEngineManager *DataEngineManager::self()
+{
+    return &privateDataEngineManagerSelf()->self;
+}
+
+DataEngineManager::DataEngineManager()
+    : d(new DataEngineManagerPrivate)
+{
+    //startTimer(30000);
+}
+
+DataEngineManager::~DataEngineManager()
+{
+    delete d;
+}
+
+Plasma::DataEngine *DataEngineManager::engine(const QString &name) const
+{
+    if (name.isEmpty()) {
+        return d->nullEngine();
+    }
+
+    Plasma::DataEngine::Dict::const_iterator it = d->engines.constFind(name);
+    if (it != d->engines.constEnd()) {
+        // ref and return the engine
+        //Plasma::DataEngine *engine = *it;
+        return *it;
+    }
+
+    return d->nullEngine();
+}
+
+Plasma::DataEngine *DataEngineManager::loadEngine(const QString &name)
+{
+    Plasma::DataEngine::Dict::const_iterator it = d->engines.constFind(name);
+
+    if (it != d->engines.constEnd()) {
+        DataEngine *engine = *it;
+        engine->d->ref();
+        return engine;
+    }
+
+    DataEngine *engine = PluginLoader::self()->loadDataEngine(name);
+    if (!engine) {
+        // Try installing the engine. However, it's too late for this request.
+        ComponentInstaller::self()->installMissingComponent("dataengine", name);
+
+        return d->nullEngine();
+    }
+
+    engine->init();
+    d->engines[name] = engine;
+    return engine;
+}
+
+void DataEngineManager::unloadEngine(const QString &name)
+{
+    Plasma::DataEngine::Dict::iterator it = d->engines.find(name);
+
+    if (it != d->engines.end()) {
+        Plasma::DataEngine *engine = *it;
+        engine->d->deref();
+
+        if (!engine->d->isUsed()) {
+            d->engines.erase(it);
+            delete engine;
+        }
+    }
+}
+
+void DataEngineManager::timerEvent(QTimerEvent *)
+{
+#ifndef NDEBUG
+    QString path = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + "plasma_dataenginemanager_log";
+    QFile f(path);
+    if (!f.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) {
+        kDebug() << "faild to open" << path;
+        return;
+    }
+
+    QTextStream out(&f);
+
+    QHashIterator<QString, DataEngine*> it(d->engines);
+    out << "================================== " << KLocale::global()->formatDateTime(QDateTime::currentDateTime()) << endl;
+    while (it.hasNext()) {
+        it.next();
+        DataEngine *engine = it.value();
+        out << "DataEngine: " << it.key() << ' ' << engine << endl;
+        out << "            Claimed # of sources: " << engine->sources().count() << endl;
+        out << "            Actual # of sources: " << engine->containerDict().count() << endl;
+        out << endl << "            Source Details" << endl;
+
+        foreach (DataContainer *dc, engine->containerDict()) {
+            out << "                * " << dc->objectName() << endl;
+            out << "                       Data count: " << dc->d->data.count() << endl;
+            out << "                       Stored: " << dc->isStorageEnabled() << ' ' << endl;
+            const int directs = dc->receivers(SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)));
+            if (directs > 0) {
+                out << "                       Direction Connections: " << directs << ' ' << endl;
+            }
+
+            const int relays = dc->d->relays.count();
+            if (relays > 0) {
+                out << "                       Relays: " << dc->d->relays.count() << endl;
+                QString times;
+                foreach (SignalRelay *relay, dc->d->relays) {
+                    times.append(' ').append(QString::number(relay->m_interval));
+                }
+                out << "                       Relay Timeouts: " << times << ' '  << endl;
+            }
+        }
+
+        out << endl << "-----" << endl;
+    }
+    out << endl << endl;
+#endif
+//    killTimer(event->timerId());
+}
+
+} // namespace Plasma
+
+
+#include "moc_dataenginemanager_p.cpp"

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM
+    "http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+<kcfg>
+    <group name="save">
+        <entry name="group" type="String">
+            <label>Group the key/value saved belongs to</label>
+        </entry>
+        <entry name="key" type="String">
+            <label>The key that indicizes the value in the storage</label>
+        </entry>
+        <entry name="data" type="Int">
+            <label>The actual data to be stored.</label>
+        </entry>
+        <entry name="data" type="String">
+            <label>The actual data to be stored.</label>
+        </entry>
+        <entry name="data" type="StringList">
+            <label>The actual data to be stored.</label>
+        </entry>
+  </group>
+  <group name="retrieve">
+      <entry name="group" type="String">
+          <label>Group the key/value saved belongs to</label>
+      </entry>
+      <entry name="key" type="String">
+           <label>The key that indicizes the value in the storage. If empty all group will be retrieved.</label>
+      </entry>
+  </group>
+  <group name="delete">
+      <entry name="group" type="String">
+          <label>Group the key/value saved belongs to</label>
+      </entry>
+      <entry name="key" type="String">
+           <label>The key that indicizes the value in the storage. If empty all group will be deleted</label>
+      </entry>
+  </group>
+  <group name="expire">
+      <entry name="group" type="String">
+          <label>Group the key/value saved belongs to. If empty all ntries will be checked for expiration.</label>
+      </entry>
+      <entry name="age" type="UInt">
+          <label>Set the age the stored data will expire in seconds. Default is 4 days.</label>
+          <default>345600</default>
+      </entry>
+  </group>
+</kcfg>

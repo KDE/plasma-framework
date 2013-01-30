@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+                           http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
+  <kcfgfile name="plasmarc" />
+    <group name="CachePolicies">
+        <entry key="CacheTheme" type="Bool">
+            <label>Whether or not to create an on-disk cache for the theme.</label>
+            <default>true</default>
+        </entry>
+
+        <entry key="ThemeCacheKb" type="Int">
+            <label>The maximum size of the on-disk Theme cache in kilobytes. Note that these files are sparse files, so the maximum size may not be used. Setting a larger size is therefore often quite safe.</label>
+            <default>81920</default>
+        </entry>
+    </group>
+</kcfg>
+

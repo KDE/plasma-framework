@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM
+    "http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+<kcfg>
+    <group name="GetSource">
+        <entry name="SourceName" type="String">
+            <label>The name of the desired datasource.</label>
+        </entry>
+        <entry name="UUID" type="String">
+            <label>Specify a UUID here.</label>
+        </entry>
+    </group>
+    <group name="ServiceForSource">
+        <entry name="SourceName" type="String">
+            <label>The name of the desired datasource's service.</label>
+        </entry>
+    </group>
+    <group name="GetSourceNames" />
+</kcfg>
