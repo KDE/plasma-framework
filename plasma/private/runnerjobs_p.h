@@ -24,8 +24,8 @@
 #include <QMutex>
 #include <QSet>
 
-#include <Weaver/Job.h>
-#include <Weaver/QueuePolicy.h>
+#include <threadweaver/Job.h>
+#include <threadweaver/QueuePolicy.h>
 
 #include "abstractrunner.h"
 

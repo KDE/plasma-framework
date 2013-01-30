@@ -24,7 +24,7 @@
 #include <kdebug.h>
 
 //#include <Weaver/DebuggingAids.h>
-#include <Weaver/ThreadWeaver.h>
+#include <threadweaver/ThreadWeaver.h>
 
 #include "runnermanager.h"
 #include "plasma/querymatch.h"

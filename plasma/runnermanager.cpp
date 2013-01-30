@@ -37,10 +37,10 @@
 #include <solid/deviceinterface.h>
 #endif
 
-#include <Weaver/DebuggingAids.h>
-#include <Weaver/State.h>
-#include <Weaver/Thread.h>
-#include <Weaver/ThreadWeaver.h>
+#include <threadweaver/DebuggingAids.h>
+#include <threadweaver/State.h>
+#include <threadweaver/Thread.h>
+#include <threadweaver/ThreadWeaver.h>
 
 #include "private/runnerjobs_p.h"
 #include "pluginloader.h"

@@ -73,7 +73,6 @@
 #include "configloader.h"
 #include "containment.h"
 #include "corona.h"
-#include "dialog.h"
 #include "package.h"
 #include "plasma.h"
 #include "scripting/appletscript.h"

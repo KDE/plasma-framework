@@ -24,31 +24,34 @@ endif(NOT X11_FOUND)
 #find_package(Gpgme)
 #macro_log_feature(KDEPIMLIBS_FOUND "kdepimlibs" "KDE PIM libraries" "http://www.kde.org" FALSE "" "Needed for building several Plasma DataEngines")
 
-
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}
-                    ${KDE4_KDECORE_INCLUDES}
-                    ${KDE4_KDEUI_INCLUDES}
-                    ${CMAKE_SOURCE_DIR}/experimental/libkdeclarative
-                    ${CMAKE_BINARY_DIR}/experimental/libkdeclarative
-                    ${karchive_SOURCE_DIR}/src
-                    ${karchive_BINARY_DIR}/src
-                    ${CMAKE_SOURCE_DIR}/tier2/kauth/src/
-                    ${CMAKE_BINARY_DIR}/tier2/kauth/src/
-                    ${CMAKE_SOURCE_DIR}/tier1/threadweaver/src
-                    ${CMAKE_BINARY_DIR}/tier1/threadweaver/src
-                    ${CMAKE_BINARY_DIR}/tier1/threadweaver/src/Weaver
-                    ${CMAKE_SOURCE_DIR}/tier1/kwindowsystem/
-                    ${CMAKE_BINARY_DIR}/tier1/kwindowsystem/
-                    ${CMAKE_SOURCE_DIR}/tier1/solid/src
-                    ${CMAKE_BINARY_DIR}/tier1/solid/src
+                    ${KDE4_INCLUDE_DIR}
+                    ${KDE4_INCLUDE_DIR}/KDE
+#                    ${KDE4_KDEUI_INCLUDES}
+#                     ${CMAKE_SOURCE_DIR}/experimental/libkdeclarative
+#                     ${CMAKE_BINARY_DIR}/experimental/libkdeclarative
+#                     ${karchive_SOURCE_DIR}/src
+#                     ${karchive_BINARY_DIR}/src
+#                     ${CMAKE_SOURCE_DIR}/tier2/kauth/src/
+#                     ${CMAKE_BINARY_DIR}/tier2/kauth/src/
+#                     ${CMAKE_SOURCE_DIR}/tier1/threadweaver/src
+#                     ${CMAKE_BINARY_DIR}/tier1/threadweaver/src
+#                     ${CMAKE_BINARY_DIR}/tier1/threadweaver/src/Weaver
+#                     ${CMAKE_SOURCE_DIR}/tier1/kwindowsystem/
+#                     ${CMAKE_BINARY_DIR}/tier1/kwindowsystem/
+#                     ${CMAKE_SOURCE_DIR}/tier1/solid/src
+#                     ${CMAKE_BINARY_DIR}/tier1/solid/src
+#                     ${CMAKE_SOURCE_DIR}/tier1/kcoreaddons/src/caching
                     ${CMAKE_SOURCE_DIR}/plasma/remote
                     ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch/qtjolie
                     ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch
                     ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch/includes
-                    ${CMAKE_SOURCE_DIR}/tier1/kcoreaddons/src/caching
                     ${ki18n_SOURCE_DIR}/src
                     ${ki18n_BINARY_DIR}/src
+                    ${KDE4_INCLUDE_DIR}/threadweaver
+                    #FIXME: this will go into Qt upstream
+                    ${CMAKE_INSTALL_PREFIX}/include/kdeqt5staging/
                     )
 
 if(NOT PLASMA_NO_KIO)
