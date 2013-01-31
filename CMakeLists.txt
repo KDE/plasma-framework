@@ -59,8 +59,18 @@ configure_file(${CMAKE_SOURCE_DIR}/CTestCustom.cmake ${CMAKE_BINARY_DIR}/CTestCu
 set (QT_MIN_VERSION "5.0.0")
 
 find_package(KDE4Internal REQUIRED)
+#find_package(KF5Transitional REQUIRED)
 include(KDE4Defaults)
 #include (MacroLibrary)
+
+find_package(kidletime REQUIRED)
+find_package(itemmodels REQUIRED)
+find_package(kwidgetsaddons REQUIRED)
+find_package(kwindowsystem REQUIRED)
+find_package(kcodecs REQUIRED)
+find_package(ki18n REQUIRED)
+find_package(kcoreaddons REQUIRED)
+find_package(solid REQUIRED)
 if (APPLE)
    find_package(Carbon REQUIRED)
 endif (APPLE)
