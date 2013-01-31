@@ -23,7 +23,7 @@
 
 #include <X11/Xlib.h>
 #include <xcb/xcb.h>
-#include <qx11info_x11.h>
+#include <QtX11Extras/QX11Info>
 
 namespace Plasma
 {
