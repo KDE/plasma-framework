@@ -145,6 +145,9 @@ QString Containment::formFactor() const
         case Plasma::Vertical:
             return "vertical";
             break;
+        case Plasma::Application:
+            return "application";
+            break;
     }
 
     return "Planar";
