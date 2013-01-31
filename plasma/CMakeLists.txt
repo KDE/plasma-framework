@@ -28,21 +28,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}
                     ${KDE4_INCLUDE_DIR}
                     ${KDE4_INCLUDE_DIR}/KDE
-#                    ${KDE4_KDEUI_INCLUDES}
-#                     ${CMAKE_SOURCE_DIR}/experimental/libkdeclarative
-#                     ${CMAKE_BINARY_DIR}/experimental/libkdeclarative
-#                     ${karchive_SOURCE_DIR}/src
-#                     ${karchive_BINARY_DIR}/src
-#                     ${CMAKE_SOURCE_DIR}/tier2/kauth/src/
-#                     ${CMAKE_BINARY_DIR}/tier2/kauth/src/
-#                     ${CMAKE_SOURCE_DIR}/tier1/threadweaver/src
-#                     ${CMAKE_BINARY_DIR}/tier1/threadweaver/src
-#                     ${CMAKE_BINARY_DIR}/tier1/threadweaver/src/Weaver
-#                     ${CMAKE_SOURCE_DIR}/tier1/kwindowsystem/
-#                     ${CMAKE_BINARY_DIR}/tier1/kwindowsystem/
-#                     ${CMAKE_SOURCE_DIR}/tier1/solid/src
-#                     ${CMAKE_BINARY_DIR}/tier1/solid/src
-#                     ${CMAKE_SOURCE_DIR}/tier1/kcoreaddons/src/caching
                     ${CMAKE_SOURCE_DIR}/plasma/remote
                     ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch/qtjolie
                     ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch
@@ -60,14 +45,10 @@ if(NOT PLASMA_NO_KIO)
 endif(NOT PLASMA_NO_KIO)
 
 if(NOT PLASMA_NO_KNEWSTUFF)
-    include_directories(${CMAKE_SOURCE_DIR}/knewstuff/)
-    include_directories(${CMAKE_BINARY_DIR}/knewstuff/)
     set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} knewstuff3)
 endif(NOT PLASMA_NO_KNEWSTUFF)
 
 if(NOT PLASMA_NO_SOLID)
-    include_directories(${CMAKE_BINARY_DIR}/tier1/solid/)
-    include_directories(${CMAKE_SOURCE_DIR}/tier1/solid/)
     set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} ${solid_LIBRARIES})
 endif(NOT PLASMA_NO_SOLID)
 
@@ -77,8 +58,6 @@ if(NOT PLASMA_NO_PACKAGEKIT)
 endif(NOT PLASMA_NO_PACKAGEKIT)
 
 if (NOT PLASMA_NO_KUTILS)
-    include_directories(${CMAKE_SOURCE_DIR}/kutils)
-    include_directories(${CMAKE_BINARY_DIR}/kutils)
     set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} ${KDE4_KUTILS_LIBS})
 endif(NOT PLASMA_NO_KUTILS)
 
