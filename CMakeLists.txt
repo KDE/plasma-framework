@@ -193,6 +193,7 @@ include(KConfigMacros)
 
 ################# list the subdirectories #################
 
+add_subdirectory( desktoptheme )
 add_subdirectory( plasma )
 
 feature_summary(WHAT ALL   FATAL_ON_MISSING_REQUIRED_PACKAGES)
