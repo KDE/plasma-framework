@@ -48,3 +48,5 @@ target_link_libraries(testplasma2
  ${KDE4_PLASMA_LIBS}
  #plasma
 )
+
+install(TARGETS testplasma2 ${INSTALL_TARGETS_DEFAULT_ARGS})
