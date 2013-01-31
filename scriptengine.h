@@ -65,6 +65,7 @@ Q_SIGNALS:
 
 private:
     void setupEngine();
+    static QString onlyExec(const QString &commandLine);
 
     // containment accessors
     static QStringList availableContainments(const QString &type);
@@ -95,7 +96,7 @@ private:
     QScriptValue m_scriptSelf;
 };
 
-static const int PLASMA_DESKTOP_SCRIPTING_VERSION = 4;
+static const int PLASMA_DESKTOP_SCRIPTING_VERSION = 5;
 }
 
 #endif

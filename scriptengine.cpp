@@ -349,6 +349,15 @@ QScriptValue ScriptEngine::applicationExists(QScriptContext *context, QScriptEng
     return false;
 }
 
+QString ScriptEngine::onlyExec(const QString &commandLine)
+{
+    if (commandLine.isEmpty()) {
+        return commandLine;
+    }
+
+    return KShell::splitArgs(commandLine, KShell::TildeExpand).first();
+}
+
 QScriptValue ScriptEngine::defaultApplication(QScriptContext *context, QScriptEngine *engine)
 {
     Q_UNUSED(engine)
@@ -373,17 +382,16 @@ QScriptValue ScriptEngine::defaultApplication(QScriptContext *context, QScriptEn
         QString command = settings.getSetting(KEMailSettings::ClientProgram);
         if (command.isEmpty()) {
             if (KService::Ptr kontact = KService::serviceByStorageId("kontact")) {
-                return storageId ? kontact->storageId() : kontact->exec();
+                return storageId ? kontact->storageId() : onlyExec(kontact->exec());
             } else if (KService::Ptr kmail = KService::serviceByStorageId("kmail")) {
-                return storageId ? kmail->storageId() : kmail->exec();
+                return storageId ? kmail->storageId() : onlyExec(kmail->exec());
             }
         }
 
         if (!command.isEmpty()) {
             if (settings.getSetting(KEMailSettings::ClientTerminal) == "true") {
                 KConfigGroup confGroup(KGlobal::config(), "General");
-                const QString preferredTerminal = confGroup.readPathEntry("TerminalApplication",
-                        QString::fromLatin1("konsole"));
+                const QString preferredTerminal = confGroup.readPathEntry("TerminalApplication", QString::fromLatin1("konsole"));
                 command = preferredTerminal + QString::fromLatin1(" -e ") + command;
             }
 
@@ -401,21 +409,21 @@ QScriptValue ScriptEngine::defaultApplication(QScriptContext *context, QScriptEn
             browserApp = browserApp.mid(1);
         }
 
-        return browserApp;
+        return onlyExec(browserApp);
     } else if (application.compare("terminal", Qt::CaseInsensitive) == 0) {
         KConfigGroup confGroup(KGlobal::config(), "General");
-        return confGroup.readPathEntry("TerminalApplication", QString::fromLatin1("konsole"));
+        return onlyExec(confGroup.readPathEntry("TerminalApplication", QString::fromLatin1("konsole")));
     } else if (application.compare("filemanager", Qt::CaseInsensitive) == 0) {
         KService::Ptr service = KMimeTypeTrader::self()->preferredService("inode/directory");
         if (service) {
-            return storageId ? service->storageId() : service->exec();
+            return storageId ? service->storageId() : onlyExec(service->exec());
         }
     } else if (application.compare("windowmanager", Qt::CaseInsensitive) == 0) {
         KConfig cfg("ksmserverrc", KConfig::NoGlobals);
         KConfigGroup confGroup(&cfg, "General");
-        return confGroup.readEntry("windowManager", QString::fromLatin1("konsole"));
+        return onlyExec(confGroup.readEntry("windowManager", QString::fromLatin1("kwin")));
     } else if (KService::Ptr service = KMimeTypeTrader::self()->preferredService(application)) {
-        return storageId ? service->storageId() : service->exec();
+        return storageId ? service->storageId() : onlyExec(service->exec());
     } else {
         // try the files in share/apps/kcm_componentchooser/
         const QStringList services = KGlobal::dirs()->findAllResources("data","kcm_componentchooser/*.desktop", KStandardDirs::NoDuplicates);
