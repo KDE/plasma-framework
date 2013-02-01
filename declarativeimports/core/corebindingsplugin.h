@@ -26,7 +26,7 @@
 #include <QQmlEngine>
 #include <QQmlExtensionPlugin>
 
-#include <Plasma/Service>
+#include <plasma/service.h>
 
 class CoreBindingsPlugin : public QQmlExtensionPlugin
 {
