@@ -20,6 +20,7 @@
 #ifndef ICONITEM_H
 #define ICONITEM_H
 
+#include <QIcon>
 #include <QQuickItem>
 #include <QPixmap>
 #include <QVariant>
@@ -63,7 +64,7 @@ public:
 
     bool isValid() const;
 
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    void paint(QPainter *painter);
 
     void geometryChanged(const QRectF &newGeometry,
                          const QRectF &oldGeometry);

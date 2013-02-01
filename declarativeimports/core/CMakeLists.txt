@@ -8,12 +8,12 @@ set(corebindings_SRCS
 #     datamodel.cpp
 #     datasource.cpp
 #     runnermodel.cpp
-      svgitem.cpp
+    svgitem.cpp
 #     framesvgitem.cpp
 #     dialog.cpp
 #     tooltip.cpp
 #     dataenginebindings.cpp
-#     iconitem.cpp
+    iconitem.cpp
     )
 
 INCLUDE_DIRECTORIES(

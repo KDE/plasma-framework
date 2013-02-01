@@ -19,12 +19,10 @@
 
 #include "iconitem.h"
 
-#include <KIcon>
 #include <KIconLoader>
 #include <KIconEffect>
 #include <QPainter>
 #include <QPropertyAnimation>
-#include <QStyleOptionGraphicsItem>
 
 #include <Plasma/PaintUtils>
 #include <Plasma/Svg>
@@ -45,7 +43,7 @@ IconItem::IconItem(QQuickItem *parent)
     m_animation->setEasingCurve(QEasingCurve::InOutQuad);
     m_animation->setDuration(250);
 
-    setFlag(QGraphicsItem::ItemHasNoContents, false);
+    setFlag(ItemHasContents, true);
 
     connect(KIconLoader::global(), SIGNAL(iconLoaderSettingsChanged()),
             this, SIGNAL(implicitWidthChanged()));
@@ -98,7 +96,7 @@ void IconItem::setSource(const QVariant &source)
 
         //ok, svg not available
         } else {
-            m_icon = KIcon(source.toString());
+            m_icon = QIcon(source.toString());
             delete m_svgIcon;
             m_svgIcon = 0;
         }
@@ -206,11 +204,8 @@ bool IconItem::isValid() const
     return !m_iconPixmaps.isEmpty();
 }
 
-void IconItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void IconItem::paint(QPainter *painter)
 {
-    Q_UNUSED(option);
-    Q_UNUSED(widget);
-
     if (m_iconPixmaps.isEmpty()) {
         return;
     }
