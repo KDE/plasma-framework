@@ -27,11 +27,11 @@
 namespace Plasma
 {
 
-SvgItem::SvgItem(QDeclarativeItem *parent)
-    : QDeclarativeItem(parent),
+SvgItem::SvgItem(QQuickItem *parent)
+    : QQuickItem(parent),
       m_smooth(false)
 {
-    setFlag(QGraphicsItem::ItemHasNoContents, false);
+    setFlag(QQuickItem::ItemHasContents, true);
 }
 
 
@@ -118,11 +118,8 @@ bool SvgItem::smooth() const
     return m_smooth;
 }
 
-void SvgItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void SvgItem::paint(QPainter *painter)
 {
-    Q_UNUSED(option);
-    Q_UNUSED(widget);
-
     if (!m_svg) {
         return;
     }
@@ -156,14 +153,14 @@ void SvgItem::setImplicitWidth(qreal width)
         return;
     }
 
-    QDeclarativeItem::setImplicitWidth(width);
+    QQuickItem::setImplicitWidth(width);
 
     emit implicitWidthChanged();
 }
 
 qreal SvgItem::implicitWidth() const
 {
-    return QDeclarativeItem::implicitWidth();
+    return QQuickItem::implicitWidth();
 }
 
 void SvgItem::setImplicitHeight(qreal height)
@@ -172,14 +169,14 @@ void SvgItem::setImplicitHeight(qreal height)
         return;
     }
 
-    QDeclarativeItem::setImplicitHeight(height);
+    QQuickItem::setImplicitHeight(height);
 
     emit implicitHeightChanged();
 }
 
 qreal SvgItem::implicitHeight() const
 {
-    return QDeclarativeItem::implicitHeight();
+    return QQuickItem::implicitHeight();
 }
 
 } // Plasma namespace

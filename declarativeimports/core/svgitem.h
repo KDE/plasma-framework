@@ -19,13 +19,13 @@
 #ifndef SVGITEM_P
 #define SVGITEM_P
 
-#include <QDeclarativeItem>
+#include <QQuickItem>
 
 namespace Plasma {
 
     class Svg;
 
-class SvgItem : public QDeclarativeItem
+class SvgItem : public QQuickItem
 {
     Q_OBJECT
 
@@ -67,7 +67,7 @@ class SvgItem : public QDeclarativeItem
     Q_PROPERTY(qreal implicitHeight READ implicitHeight WRITE setImplicitHeight NOTIFY implicitHeightChanged)
 
 public:
-    SvgItem(QDeclarativeItem *parent=0);
+    SvgItem(QQuickItem *parent=0);
     ~SvgItem();
 
     void setElementId(const QString &elementID);
@@ -81,7 +81,7 @@ public:
 
     QSizeF naturalSize() const;
 
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    void paint(QPainter *painter);
 
     void setImplicitWidth(qreal width);
     qreal implicitWidth() const;
