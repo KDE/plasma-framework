@@ -28,8 +28,8 @@
 
 #include <kdeclarative.h>
 
-// #include <Plasma/FrameSvg>
-// #include <Plasma/Svg>
+#include <plasma/framesvg.h>
+#include <plasma/svg.h>
 // #include <Plasma/QueryMatch>
 
 // // #include "datasource.h"
@@ -71,8 +71,8 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.core"));
 
-//     qmlRegisterType<Plasma::Svg>(uri, 0, 1, "Svg");
-//     qmlRegisterType<Plasma::FrameSvg>(uri, 0, 1, "FrameSvg");
+    qmlRegisterType<Plasma::Svg>(uri, 0, 1, "Svg");
+    qmlRegisterType<Plasma::FrameSvg>(uri, 0, 1, "FrameSvg");
     qmlRegisterType<Plasma::SvgItem>(uri, 0, 1, "SvgItem");
     qmlRegisterType<Plasma::FrameSvgItem>(uri, 0, 1, "FrameSvgItem");
 // 
