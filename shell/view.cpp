@@ -18,11 +18,22 @@
 
 #include "view.h"
 
+#include <QDebug>
+
+#include "plasma/pluginloader.h"
+
 View::View(QWindow *parent)
     : QQuickView(parent)
 {
+    m_package = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
+    m_package.setPath("org.kde.homescreen.desktop");
+
+    if (!m_package.isValid()) {
+        qWarning() << "Invalid home screen package";
+    }
+
     setResizeMode(View::SizeRootObjectToView);
-    setSource(QUrl::fromLocalFile("../main.qml"));
+    setSource(QUrl::fromLocalFile(m_package.filePath("mainscript")));
     show();
 }
 

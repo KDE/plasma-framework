@@ -76,7 +76,8 @@ public:
     void initPackage(Package *package);
 };
 
-class GenericPackage : public PackageStructure
+//FIXME: this should be aPlasmoidPackage or a base one?
+class GenericPackage : public PlasmoidPackage
 {
 public:
     void initPackage(Package *package);

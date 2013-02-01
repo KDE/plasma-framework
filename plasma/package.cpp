@@ -254,8 +254,9 @@ QString Package::filePath(const char *fileType, const QString &filename) const
     QStringList paths;
 
     if (qstrlen(fileType) != 0) {
+        kDebug()<<d->contents.keys();
         if (!d->contents.contains(fileType)) {
-            //kDebug() << "package does not contain" << fileType << filename;
+            kDebug() << "package does not contain" << fileType << filename;
             return QString();
         }
 

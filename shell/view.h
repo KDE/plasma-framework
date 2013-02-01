@@ -22,13 +22,19 @@
 #include <QtQuick/QQuickView>
 
 
+#include "plasma/package.h"
+
 
 class View : public QQuickView
 {
-Q_OBJECT
+    Q_OBJECT
+
 public:
     View(QWindow *parent = 0);
     virtual ~View();
+
+private:
+    Plasma::Package m_package;
 };
 
 #endif // VIEW_H
