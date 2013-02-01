@@ -193,6 +193,7 @@ include(KConfigMacros)
 
 ################# list the subdirectories #################
 
+add_subdirectory( declarativeimports )
 add_subdirectory( desktoptheme )
 add_subdirectory( plasma )
 add_subdirectory( shell )
