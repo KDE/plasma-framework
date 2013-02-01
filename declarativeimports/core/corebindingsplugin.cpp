@@ -2,6 +2,7 @@
  *   Copyright 2009 by Alan Alpert <alan.alpert@nokia.com>
  *   Copyright 2010 by Ménard Alexis <menard@kde.org>
  *   Copyright 2010 by Marco Martin <mart@kde.org>
+ *   Copyright 2013 by Sebastian Kügler <sebas@kde.org>
 
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -35,7 +36,7 @@
 // // #include "datamodel.h"
 // #include "framesvgitem.h"
 // #include "runnermodel.h"
-// #include "svgitem.h"
+#include "svgitem.h"
 // #include "theme.h"
 // #include "dialog.h"
 // #include "iconitem.h"
@@ -94,7 +95,7 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
 //     qmlRegisterInterface<Plasma::QueryMatch>("QueryMatch");
 //     qRegisterMetaType<Plasma::QueryMatch *>("QueryMatch");
 // 
-//     qmlRegisterType<QDeclarativePropertyMap>();
+//     qmlRegisterType<QQmlPropertyMap>();
 //     qmlRegisterType<IconItem>(uri, 0, 1, "IconItem");
 
     /*qmlRegisterInterface<Plasma::DataSource>("DataSource");

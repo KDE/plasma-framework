@@ -8,7 +8,7 @@ set(corebindings_SRCS
 #     datamodel.cpp
 #     datasource.cpp
 #     runnermodel.cpp
-#     svgitem.cpp
+      svgitem.cpp
 #     framesvgitem.cpp
 #     dialog.cpp
 #     tooltip.cpp
