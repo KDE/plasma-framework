@@ -24,8 +24,8 @@
 #include <QPainter>
 #include <QPropertyAnimation>
 
-#include <Plasma/PaintUtils>
-#include <Plasma/Svg>
+#include <plasma/paintutils.h>
+#include <plasma/svg.h>
 
 IconItem::IconItem(QQuickItem *parent)
     : QQuickItem(parent),
