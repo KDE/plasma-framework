@@ -1,7 +1,6 @@
 project(testplasma2)
 
 
-
 # Tell CMake to run moc when necessary:
 set(CMAKE_AUTOMOC ON)
 # As moc files are generated in the binary dir, tell CMake
@@ -50,3 +49,5 @@ target_link_libraries(testplasma2
 )
 
 install(TARGETS testplasma2 ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+add_subdirectory(qmlpackages)
