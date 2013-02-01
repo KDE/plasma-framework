@@ -35,6 +35,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${ki18n_SOURCE_DIR}/src
                     ${ki18n_BINARY_DIR}/src
                     ${KDE4_INCLUDE_DIR}/threadweaver
+                    ${KDE4_INCLUDE_DIR}/kio
                     #FIXME: this will go into Qt upstream
                     ${CMAKE_INSTALL_PREFIX}/include/kdeqt5staging/
                     )
