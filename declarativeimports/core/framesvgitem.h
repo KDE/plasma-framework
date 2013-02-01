@@ -19,7 +19,7 @@
 #ifndef FRAMESVGITEM_P
 #define FRAMESVGITEM_P
 
-#include <QDeclarativeItem>
+#include <QQuickItem>
 
 #include <Plasma/FrameSvg>
 
@@ -69,7 +69,7 @@ private:
     FrameSvg *m_frameSvg;
 };
 
-class FrameSvgItem : public QDeclarativeItem
+class FrameSvgItem : public QQuickItem
 {
     Q_OBJECT
 
@@ -113,7 +113,7 @@ class FrameSvgItem : public QDeclarativeItem
     Q_PROPERTY(qreal implicitHeight READ implicitHeight WRITE setImplicitHeight NOTIFY implicitHeightChanged)
 
 public:
-    FrameSvgItem(QDeclarativeItem *parent=0);
+    FrameSvgItem(QQuickItem *parent=0);
     ~FrameSvgItem();
 
     void setImagePath(const QString &path);

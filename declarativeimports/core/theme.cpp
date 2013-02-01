@@ -19,7 +19,7 @@
 
 #include "theme.h"
 
-#include <QDeclarativePropertyMap>
+#include <QQmlPropertyMap>
 
 #include <KIconLoader>
 
@@ -157,7 +157,7 @@ ThemeProxy::ThemeProxy(QObject *parent)
 {
     m_defaultIconSize = KIconLoader::global()->currentSize(KIconLoader::Desktop);
 
-    m_iconSizes = new QDeclarativePropertyMap(this);
+    m_iconSizes = new QQmlPropertyMap(this);
     m_iconSizes->insert("desktop", QVariant(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
     m_iconSizes->insert("toolbar", KIconLoader::global()->currentSize(KIconLoader::Toolbar));
     m_iconSizes->insert("small", KIconLoader::global()->currentSize(KIconLoader::Small));
@@ -335,7 +335,7 @@ int ThemeProxy::defaultIconSize() const
     return m_defaultIconSize;
 }
 
-QDeclarativePropertyMap *ThemeProxy::iconSizes() const
+QQmlPropertyMap *ThemeProxy::iconSizes() const
 {
     return m_iconSizes;
 }

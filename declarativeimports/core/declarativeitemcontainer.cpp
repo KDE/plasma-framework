@@ -30,7 +30,7 @@ DeclarativeItemContainer::~DeclarativeItemContainer()
 {
 }
 
-void DeclarativeItemContainer::setDeclarativeItem(QDeclarativeItem *item, bool reparent)
+void DeclarativeItemContainer::setDeclarativeItem(QQuickItem *item, bool reparent)
 {
     if (m_declarativeItem) {
         disconnect(m_declarativeItem.data(), 0, this, 0);
@@ -106,7 +106,7 @@ void DeclarativeItemContainer::setDeclarativeItem(QDeclarativeItem *item, bool r
     }
 }
 
-QDeclarativeItem *DeclarativeItemContainer::declarativeItem() const
+QQuickItem *DeclarativeItemContainer::declarativeItem() const
 {
     return m_declarativeItem.data();
 }

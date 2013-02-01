@@ -60,8 +60,8 @@ void FrameSvgItemMargins::update()
     emit marginsChanged();
 }
 
-FrameSvgItem::FrameSvgItem(QDeclarativeItem *parent)
-    : QDeclarativeItem(parent)
+FrameSvgItem::FrameSvgItem(QQuickItem *parent)
+    : QQuickItem(parent)
 {
     m_frameSvg = new Plasma::FrameSvg(this);
     m_margins = new FrameSvgItemMargins(m_frameSvg, this);
@@ -160,7 +160,7 @@ void FrameSvgItem::geometryChanged(const QRectF &newGeometry,
                                           const QRectF &oldGeometry)
 {
     m_frameSvg->resizeFrame(newGeometry.size());
-    QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
+    QQuickItem::geometryChanged(newGeometry, oldGeometry);
 }
 
 void FrameSvgItem::doUpdate()
@@ -182,14 +182,14 @@ void FrameSvgItem::setImplicitWidth(qreal width)
         return;
     }
 
-    QDeclarativeItem::setImplicitWidth(width);
+    QQuickItem::setImplicitWidth(width);
 
     emit implicitWidthChanged();
 }
 
 qreal FrameSvgItem::implicitWidth() const
 {
-    return QDeclarativeItem::implicitWidth();
+    return QQuickItem::implicitWidth();
 }
 
 void FrameSvgItem::setImplicitHeight(qreal height)
@@ -198,14 +198,14 @@ void FrameSvgItem::setImplicitHeight(qreal height)
         return;
     }
 
-    QDeclarativeItem::setImplicitHeight(height);
+    QQuickItem::setImplicitHeight(height);
 
     emit implicitHeightChanged();
 }
 
 qreal FrameSvgItem::implicitHeight() const
 {
-    return QDeclarativeItem::implicitHeight();
+    return QQuickItem::implicitHeight();
 }
 
 } // Plasma namespace

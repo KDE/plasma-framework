@@ -29,8 +29,8 @@
 #include <Plasma/PaintUtils>
 #include <Plasma/Svg>
 
-IconItem::IconItem(QDeclarativeItem *parent)
-    : QDeclarativeItem(parent),
+IconItem::IconItem(QQuickItem *parent)
+    : QQuickItem(parent),
       m_svgIcon(0),
       m_smooth(false),
       m_active(false),
@@ -161,14 +161,14 @@ void IconItem::setImplicitWidth(qreal width)
         return;
     }
 
-    QDeclarativeItem::setImplicitWidth(width);
+    QQuickItem::setImplicitWidth(width);
 
     emit implicitWidthChanged();
 }
 
 qreal IconItem::implicitWidth() const
 {
-    return QDeclarativeItem::implicitWidth();
+    return QQuickItem::implicitWidth();
 }
 
 void IconItem::setImplicitHeight(qreal height)
@@ -177,14 +177,14 @@ void IconItem::setImplicitHeight(qreal height)
         return;
     }
 
-    QDeclarativeItem::setImplicitHeight(height);
+    QQuickItem::setImplicitHeight(height);
 
     emit implicitHeightChanged();
 }
 
 qreal IconItem::implicitHeight() const
 {
-    return QDeclarativeItem::implicitHeight();
+    return QQuickItem::implicitHeight();
 }
 
 void IconItem::setSmooth(const bool smooth)
@@ -322,7 +322,7 @@ void IconItem::geometryChanged(const QRectF &newGeometry,
         loadPixmap();
     }
 
-    QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
+    QQuickItem::geometryChanged(newGeometry, oldGeometry);
 }
 
 #include "iconitem.moc"

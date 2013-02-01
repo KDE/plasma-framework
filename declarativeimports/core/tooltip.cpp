@@ -21,7 +21,7 @@
 #include "tooltip.h"
 #include "declarativeitemcontainer_p.h"
 
-#include <QDeclarativeItem>
+#include <QQuickItem>
 #include <QGraphicsObject>
 #include <QGraphicsWidget>
 #include <QGraphicsScene>
@@ -87,7 +87,7 @@ void ToolTipProxy::syncTarget()
         }
     }
 
-    QDeclarativeItem *item = qobject_cast<QDeclarativeItem*>(m_target.data());
+    QQuickItem *item = qobject_cast<QQuickItem*>(m_target.data());
     if (!item) {
         return;
     }

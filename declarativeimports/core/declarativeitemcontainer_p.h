@@ -20,7 +20,7 @@
 #ifndef DECLARATIVEITEMCONTAINER_P
 #define DECLARATIVEITEMCONTAINER_P
 
-#include <QDeclarativeItem>
+#include <QQuickItem>
 #include <QGraphicsObject>
 #include <QGraphicsWidget>
 #include <QGraphicsSceneResizeEvent>
@@ -34,8 +34,8 @@ public:
     DeclarativeItemContainer(QGraphicsItem *parent = 0);
     ~DeclarativeItemContainer();
 
-    void setDeclarativeItem(QDeclarativeItem *item, bool reparent = true);
-    QDeclarativeItem *declarativeItem() const;
+    void setDeclarativeItem(QQuickItem *item, bool reparent = true);
+    QQuickItem *declarativeItem() const;
 
 protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
@@ -53,7 +53,7 @@ protected Q_SLOTS:
     void preferredHeightChanged();
 
 private:
-    QWeakPointer<QDeclarativeItem> m_declarativeItem;
+    QWeakPointer<QQuickItem> m_declarativeItem;
 };
 
 #endif

@@ -20,7 +20,7 @@
 #ifndef ICONITEM_H
 #define ICONITEM_H
 
-#include <QDeclarativeItem>
+#include <QQuickItem>
 #include <QPixmap>
 #include <QVariant>
 
@@ -30,7 +30,7 @@ namespace Plasma {
     class Svg;
 }
 
-class IconItem : public QDeclarativeItem
+class IconItem : public QQuickItem
 {
     Q_OBJECT
 
@@ -43,7 +43,7 @@ class IconItem : public QDeclarativeItem
 
 public:
 
-    IconItem(QDeclarativeItem *parent=0);
+    IconItem(QQuickItem *parent=0);
     ~IconItem();
 
     void setSource(const QVariant &source);

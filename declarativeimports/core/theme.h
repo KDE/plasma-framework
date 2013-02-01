@@ -27,7 +27,7 @@
 
 #include <Plasma/Theme>
 
-class QDeclarativePropertyMap;
+class QQmlPropertyMap;
 
 class FontProxy : public QObject
 {
@@ -220,7 +220,7 @@ class ThemeProxy : public QObject
      * * small
      * * dialog
      */
-    Q_PROPERTY(QDeclarativePropertyMap *iconSizes READ iconSizes NOTIFY iconSizesChanged)
+    Q_PROPERTY(QQmlPropertyMap *iconSizes READ iconSizes NOTIFY iconSizesChanged)
 
 public:
     ThemeProxy(QObject *parent = 0);
@@ -258,7 +258,7 @@ public:
     int hugeIconSize() const;
     int enormousIconSize() const;
     int defaultIconSize() const;
-    QDeclarativePropertyMap *iconSizes() const;
+    QQmlPropertyMap *iconSizes() const;
 
 private Q_SLOTS:
     void iconLoaderSettingsChanged();
@@ -270,7 +270,7 @@ Q_SIGNALS:
 
 private:
     int m_defaultIconSize;
-    QDeclarativePropertyMap *m_iconSizes;
+    QQmlPropertyMap *m_iconSizes;
 };
 
 #endif

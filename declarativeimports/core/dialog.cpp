@@ -21,7 +21,7 @@
 #include "declarativeitemcontainer_p.h"
 
 #include <QApplication>
-#include <QDeclarativeItem>
+#include <QQuickItem>
 #include <QDesktopWidget>
 #include <QGraphicsObject>
 #include <QGraphicsWidget>
@@ -89,8 +89,8 @@ int DialogMargins::bottom() const
     return m_bottom;
 }
 
-DialogProxy::DialogProxy(QDeclarativeItem *parent)
-    : QDeclarativeItem(parent),
+DialogProxy::DialogProxy(QQuickItem *parent)
+    : QQuickItem(parent),
       m_declarativeItemContainer(0),
       m_activeWindow(false),
       m_location(Plasma::Floating)
@@ -173,7 +173,7 @@ void DialogProxy::syncMainItem()
             m_declarativeItemContainer = 0;
         }
     } else {
-        QDeclarativeItem *di = qobject_cast<QDeclarativeItem *>(m_mainItem.data());
+        QQuickItem *di = qobject_cast<QQuickItem *>(m_mainItem.data());
         if (di) {
             if (!m_declarativeItemContainer) {
                 m_declarativeItemContainer = new DeclarativeItemContainer();
