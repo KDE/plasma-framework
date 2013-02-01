@@ -127,7 +127,7 @@ public:
 
     FrameSvgItemMargins *margins() const;
 
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    void paint(QPainter *painter);
 
     void geometryChanged(const QRectF &newGeometry,
                               const QRectF &oldGeometry);

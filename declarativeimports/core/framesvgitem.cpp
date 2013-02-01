@@ -65,7 +65,7 @@ FrameSvgItem::FrameSvgItem(QQuickItem *parent)
 {
     m_frameSvg = new Plasma::FrameSvg(this);
     m_margins = new FrameSvgItemMargins(m_frameSvg, this);
-    setFlag(QGraphicsItem::ItemHasNoContents, false);
+    setFlag(ItemHasContents, true);
     connect(m_frameSvg, SIGNAL(repaintNeeded()), this, SLOT(doUpdate()));
 }
 
@@ -148,11 +148,8 @@ Plasma::FrameSvg::EnabledBorders FrameSvgItem::enabledBorders() const
     return m_frameSvg->enabledBorders();
 }
 
-void FrameSvgItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void FrameSvgItem::paint(QPainter *painter)
 {
-    Q_UNUSED(option);
-    Q_UNUSED(widget);
-
     m_frameSvg->paintFrame(painter);
 }
 

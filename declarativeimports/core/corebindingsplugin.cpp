@@ -34,7 +34,7 @@
 
 // // #include "datasource.h"
 // // #include "datamodel.h"
-// #include "framesvgitem.h"
+#include "framesvgitem.h"
 // #include "runnermodel.h"
 #include "svgitem.h"
 // #include "theme.h"
@@ -74,7 +74,7 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
 //     qmlRegisterType<Plasma::Svg>(uri, 0, 1, "Svg");
 //     qmlRegisterType<Plasma::FrameSvg>(uri, 0, 1, "FrameSvg");
     qmlRegisterType<Plasma::SvgItem>(uri, 0, 1, "SvgItem");
-//     qmlRegisterType<Plasma::FrameSvgItem>(uri, 0, 1, "FrameSvgItem");
+    qmlRegisterType<Plasma::FrameSvgItem>(uri, 0, 1, "FrameSvgItem");
 // 
 //     qmlRegisterType<ThemeProxy>(uri, 0, 1, "Theme");
 // 
