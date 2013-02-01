@@ -22,20 +22,20 @@
 #ifndef COREBINDINGSPLUGIN_H
 #define COREBINDINGSPLUGIN_H
 
-#include <QDeclarativeEngine>
-#include <QDeclarativeExtensionPlugin>
+#include <QQmlEngine>
+#include <QQmlExtensionPlugin>
 
 #include <Plasma/Service>
 
-class CoreBindingsPlugin : public QDeclarativeExtensionPlugin
+class CoreBindingsPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
 
 public:
-    void initializeEngine(QDeclarativeEngine *engine, const char *uri);
+    void initializeEngine(QQmlEngine *engine, const char *uri);
     void registerTypes(const char *uri);
 };
 
-Q_EXPORT_PLUGIN2(corebindingsplugin, CoreBindingsPlugin)
+//Q_EXPORT_PLUGIN2(corebindingsplugin, CoreBindingsPlugin)
 
 #endif
