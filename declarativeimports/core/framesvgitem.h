@@ -19,7 +19,7 @@
 #ifndef FRAMESVGITEM_P
 #define FRAMESVGITEM_P
 
-#include <QQuickItem>
+#include <QQuickPaintedItem>
 
 #include <Plasma/FrameSvg>
 
@@ -69,7 +69,7 @@ private:
     FrameSvg *m_frameSvg;
 };
 
-class FrameSvgItem : public QQuickItem
+class FrameSvgItem : public QQuickPaintedItem
 {
     Q_OBJECT
 

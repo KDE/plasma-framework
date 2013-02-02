@@ -61,7 +61,7 @@ void FrameSvgItemMargins::update()
 }
 
 FrameSvgItem::FrameSvgItem(QQuickItem *parent)
-    : QQuickItem(parent)
+    : QQuickPaintedItem(parent)
 {
     m_frameSvg = new Plasma::FrameSvg(this);
     m_margins = new FrameSvgItemMargins(m_frameSvg, this);

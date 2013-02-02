@@ -43,6 +43,8 @@
 // #include "tooltip.h"
 // #include "dataenginebindings_p.h"
 
+#include <QDebug>
+
 void CoreBindingsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 {
     QQmlExtensionPlugin::initializeEngine(engine, uri);
@@ -65,6 +67,7 @@ void CoreBindingsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 
     registerDataEngineMetaTypes(scriptEngine);
     */
+    qDebug() << "====> org.kde.plasma.core loaded.";
 }
 
 void CoreBindingsPlugin::registerTypes(const char *uri)
@@ -100,6 +103,7 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
 
     /*qmlRegisterInterface<Plasma::DataSource>("DataSource");
     qRegisterMetaType<Plasma::DataSource*>("DataSource");*/
+    qDebug() << "====> org.kde.plasma.core registered.";
 }
 
 
