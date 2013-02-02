@@ -17,26 +17,51 @@
  */
 
 import QtQuick 2.0
-import org.kde.plasma 2.0
+//import org.kde.plasma 2.0
+
+import org.kde.plasma.core 0.1 as PlasmaCore
 
 Rectangle {
-    color: "red"
+    color: "darkblue"
     width: 640
     height: 480
-    Svg {
-        width: 100
-        height: 100
+    PlasmaCore.FrameSvgItem {
+        id: frame
+        x: 50
+        y: 50
+        width: txt.paintedWidth + 80
+        height: txt.paintedHeight + 80 * 2
+        property int small: 100
+        property int large: parent.width - width - 150
+        imagePath: "widgets/background"
         MouseArea {
             anchors.fill: parent
             drag.target: parent
+            onClicked: {
+                var s = (frame.x == frame.large) ? frame.small : frame.large;
+                frame.x = s
+                frame.height = s
+            }
+        }
+        Behavior on x { PropertyAnimation { easing.type: Easing.OutElastic; duration: 800 } }
+        //Behavior on y { PropertyAnimation { easing.type: Easing.OutElastic; duration: 800 } }
+        Behavior on height { PropertyAnimation { easing.type: Easing.InOutDouble; duration: 300 } }
+
+        Text {
+            id: txt
+            text: "Click or Drag";
+            anchors.centerIn: parent
         }
     }
-    Svg {
-        width: 100
-        height: 100
-        MouseArea {
-            anchors.fill: parent
-            drag.target: parent
-        }
-    }
+
+//     Svg {
+//         x: 200
+//         y: 200
+//         width: 100
+//         height: 100
+//         MouseArea {
+//             anchors.fill: parent
+//             drag.target: parent
+//         }
+//     }
 }
