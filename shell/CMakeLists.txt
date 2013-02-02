@@ -33,14 +33,14 @@ set(CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 
 add_executable(testplasma2
     main.cpp
-    svg.cpp
+#    svg.cpp
     desktopcorona.cpp
     view.cpp
 )
 
 # The Qt5Widgets_LIBRARIES variable also includes QtGui and QtCore
 target_link_libraries(testplasma2
- ${Qt5Widgets_LIBRARIES}
+ #${Qt5Widgets_LIBRARIES}
  ${Qt5Quick_LIBRARIES}
  ${Qt5Qml_LIBRARIES}
  ${kcoreaddons}

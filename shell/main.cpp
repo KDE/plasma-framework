@@ -19,7 +19,7 @@
 #include <QApplication>
 #include <QtQuick/QQuickView>
 #include <QtCore/QDebug>
-#include "svg.h"
+//#include "svg.h"
 
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
