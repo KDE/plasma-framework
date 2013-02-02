@@ -27,8 +27,10 @@
 #include <plasma/paintutils.h>
 #include <plasma/svg.h>
 
+#include <QDebug>
+
 IconItem::IconItem(QQuickItem *parent)
-    : QQuickItem(parent),
+    : QQuickPaintedItem(parent),
       m_svgIcon(0),
       m_smooth(false),
       m_active(false),
@@ -207,14 +209,21 @@ bool IconItem::isValid() const
 void IconItem::paint(QPainter *painter)
 {
     if (m_iconPixmaps.isEmpty()) {
+        qDebug() << "XXXXXXXXXX icons pixmap empty";
         return;
     }
+    foreach (QPixmap pix, m_iconPixmaps) {
+        qDebug() << "pixmap: " << pix.size();
+    }
+
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing, m_smooth);
     painter->setRenderHint(QPainter::SmoothPixmapTransform, m_smooth);
 
     const QRect destRect(QPointF(boundingRect().center() - QPointF(m_iconPixmaps.first().width()/2, m_iconPixmaps.first().height()/2)).toPoint(),
                          m_iconPixmaps.first().size());
+                         //QSize(32,32));
+    qDebug() << "XXXXXXXXXX icons pixmap THERE" << destRect;
 
     if (m_animation->state() == QAbstractAnimation::Running) {
         QPixmap result = m_iconPixmaps.first();
@@ -265,8 +274,6 @@ void IconItem::loadPixmap()
         size = KIconLoader::SizeLarge;
     //if size is more than 64, leave as is
     }
-
-
 
     //final pixmap to paint
     QPixmap result;

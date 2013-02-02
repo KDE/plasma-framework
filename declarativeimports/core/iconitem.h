@@ -21,7 +21,7 @@
 #define ICONITEM_H
 
 #include <QIcon>
-#include <QQuickItem>
+#include <QQuickPaintedItem>
 #include <QPixmap>
 #include <QVariant>
 
@@ -31,7 +31,7 @@ namespace Plasma {
     class Svg;
 }
 
-class IconItem : public QQuickItem
+class IconItem : public QQuickPaintedItem
 {
     Q_OBJECT
 
