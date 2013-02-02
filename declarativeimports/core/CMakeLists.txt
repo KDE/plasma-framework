@@ -25,6 +25,10 @@ INCLUDE_DIRECTORIES(
 
 qt4_automoc(${corebindings_SRCS})
 
+# Qt installs plugins here:
+# /home/sebas/kf5/qt5/qtdeclarative/src/imports/window/plugins.qmltypes /home/sebas/kf5/install/qml/QtQuick/Window.2/
+set(IMPORTS_INSTALL_DIR "qml")
+message("!!! Forcing Imports install location: ${IMPORTS_INSTALL_DIR}")
 
 
 add_library(corebindingsplugin SHARED ${corebindings_SRCS})
