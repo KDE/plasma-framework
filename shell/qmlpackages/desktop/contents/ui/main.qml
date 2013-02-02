@@ -25,6 +25,12 @@ Rectangle {
     color: "darkblue"
     width: 640
     height: 480
+
+    PlasmaCore.Svg {
+        id: actionssvg
+        imagePath: "widgets/configuration-icons"
+    }
+
     PlasmaCore.FrameSvgItem {
         id: frame
         x: 50
@@ -52,6 +58,32 @@ Rectangle {
             text: "Click or Drag";
             anchors.centerIn: parent
         }
+        PlasmaCore.SvgItem {
+            svg: actionssvg
+            elementId: "rotate"
+            width: 16
+            height: width
+            anchors.margins: frame.margins.left
+            anchors {
+                top: parent.top
+                left: parent.left
+            }
+            //Rectangle { color: "white"; opacity: 0.2; anchors.fill: parent; }
+        }
+    }
+//     PlasmaCore.SvgItem {
+//         svg: actionssvg
+//         elementId: "rotate"
+//         width: 128
+//         height: width
+//     }
+    PlasmaCore.IconItem {
+        source: "accessories-dictionary"
+        x: 50
+        y: 350
+        width: 48
+        height: 48
+        Rectangle { color: "white"; opacity: 0.2; anchors.fill: parent; }
     }
 
 //     Svg {
