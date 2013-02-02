@@ -28,7 +28,7 @@ namespace Plasma
 {
 
 SvgItem::SvgItem(QQuickItem *parent)
-    : QQuickItem(parent),
+    : QQuickPaintedItem(parent),
       m_smooth(false)
 {
     setFlag(QQuickItem::ItemHasContents, true);

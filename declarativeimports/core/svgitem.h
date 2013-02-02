@@ -19,13 +19,13 @@
 #ifndef SVGITEM_P
 #define SVGITEM_P
 
-#include <QQuickItem>
+#include <QQuickPaintedItem>
 
 namespace Plasma {
 
     class Svg;
 
-class SvgItem : public QQuickItem
+class SvgItem : public QQuickPaintedItem
 {
     Q_OBJECT
 
