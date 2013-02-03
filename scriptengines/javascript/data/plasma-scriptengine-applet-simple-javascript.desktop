@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=JavaScript Widget
+Name[de]=JavaScript-Programm
+Name[nl]=JavaScript-widget
+Name[pt_BR]=Widget de JavaScript
+Name[uk]=Віджет JavaScript
+Name[x-test]=xxJavaScript Widgetxx
 Comment=Native Plasma widget written in JavaScript
+Comment[de]=Echtes Plasma-Programm, geschrieben in JavaScript
+Comment[nl]=Plasma-widget geschreven in JavaScript
+Comment[pt_BR]=Widget do Plasma nativo escrito em JavaScript
+Comment[uk]=Віджет Плазми, написаний на JavaScript
+Comment[x-test]=xxNative Plasma widget written in JavaScriptxx
 X-KDE-ServiceTypes=Plasma/ScriptEngine
 Type=Service
 Icon=text-x-script

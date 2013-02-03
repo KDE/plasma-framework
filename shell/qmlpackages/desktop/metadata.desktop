@@ -1,8 +1,16 @@
 [Desktop Entry]
 Comment=Desktop view furniture
+Comment[pt_BR]=Acessório de visualização da área de trabalho
+Comment[uk]=Компоненти для перегляду стільниці
+Comment[x-test]=xxDesktop view furniturexx
 Encoding=UTF-8
 Keywords=
 Name=Desktop
+Name[de]=Arbeitsfläche
+Name[nl]=Bureaublad
+Name[pt_BR]=Área de trabalho
+Name[uk]=Стільниця
+Name[x-test]=xxDesktopxx
 Type=Service
 
 X-KDE-ServiceTypes=Plasma/GenericPackage

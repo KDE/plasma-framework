@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=JavaScript Runner
+Name[de]=JavaScript-Ausführung
+Name[nl]=JavaScript-runner
+Name[pt_BR]=Mecanismo JavaScript
+Name[uk]=Механізм запуску JavaScript
+Name[x-test]=xxJavaScript Runnerxx
 Comment=JavaScript Runner
+Comment[de]=JavaScript-Ausführung
+Comment[nl]=JavaScript-runner
+Comment[pt_BR]=Mecanismo JavaScript
+Comment[uk]=Механізм запуску JavaScript
+Comment[x-test]=xxJavaScript Runnerxx
 X-KDE-ServiceTypes=Plasma/ScriptEngine
 Type=Service
 Icon=text-x-script

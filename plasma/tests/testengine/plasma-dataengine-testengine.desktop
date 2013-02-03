@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=Test Data Engine
+Name[de]=Test-Datentreiber
+Name[pt_BR]=Mecanismo de dados de teste
+Name[uk]=Перевірка рушія даних
+Name[x-test]=xxTest Data Enginexx
 X-KDE-ServiceTypes=Plasma/DataEngine
 Type=Service
 Icon=unknown

@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Oxygen
+Name[de]=Oxygen
+Name[nl]=Oxygen
+Name[pt_BR]=Oxygen
+Name[uk]=Oxygen
+Name[x-test]=xxOxygenxx
 Comment=Theme done in the Oxygen style
+Comment[de]=Oberflächen-Design im Oxygen-Stil
+Comment[nl]=Thema in Oxygen-stijl
+Comment[pt_BR]=Tema criado no estilo Oxygen
+Comment[uk]=Тема в стилі Oxygen
+Comment[x-test]=xxTheme done in the Oxygen stylexx
 
 X-KDE-PluginInfo-Author=The Oxygen Project
 X-KDE-PluginInfo-Email=kde-artists@kde.org

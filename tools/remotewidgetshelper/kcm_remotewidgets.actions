@@ -1,4 +1,14 @@
 [org.kde.kcontrol.kcmremotewidgets.save]
 Name=Save remote widgets' policies
+Name[de]=Regelungen für entfernte Miniprogramme speichern
+Name[nl]=Beleidsregels voor widgets op afstand opslaan
+Name[pt_BR]=Salvar políticas de widgets remotos
+Name[uk]=Зберегти правила для віддалених віджетів
+Name[x-test]=xxSave remote widgets' policiesxx
 Description=Prevents the system from saving remote plasma widgets' policies
+Description[de]=Hindert das System daran, Regelungen für entfernte Miniprogramme zu speichern.
+Description[nl]=Voorkomt het opslaan door het systeem van beleidsregels voor widgets op afstand
+Description[pt_BR]=Previne o sistema de salvar as políticas de widgets Plasma remotos
+Description[uk]=Заборонити системі зберігати правила для віддалених віджетів Плазми
+Description[x-test]=xxPrevents the system from saving remote plasma widgets' policiesxx
 Policy=auth_admin

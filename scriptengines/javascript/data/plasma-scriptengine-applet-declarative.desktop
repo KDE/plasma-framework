@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Declarative widget
+Name[de]=Deklaratives Bedienelement
+Name[nl]=Widget voor declaratie
+Name[pt_BR]=Widget declarativo
+Name[uk]=Декларативний віджет
+Name[x-test]=xxDeclarative widgetxx
 Comment=Native Plasma widget written in QML and JavaScript
+Comment[de]=Echtes Plasma-Programm, geschrieben in QML und JavaScript
+Comment[nl]=Hier thuishorend Plasma-widget geschreven in QML en JavaScript
+Comment[pt_BR]=Widget do Plasma nativo escrito em QML e JavaScript
+Comment[uk]=Віджет Плазми, написаний на QML та JavaScript
+Comment[x-test]=xxNative Plasma widget written in QML and JavaScriptxx
 Type=Service
 Icon=text-x-script
 

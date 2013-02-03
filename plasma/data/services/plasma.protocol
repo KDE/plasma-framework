@@ -7,6 +7,11 @@ output=none
 
 Icon=plasma
 Description=A protocol for Plasma services
+Description[de]=Ein Protokoll für Plasma-Dienste
+Description[nl]=Een protocol voor Plasma-services
+Description[pt_BR]=Protocolo para os serviços do Plasma
+Description[uk]=Протокол для служб Плазми
+Description[x-test]=xxA protocol for Plasma servicesxx
 
 helper=true
 Class=:internet

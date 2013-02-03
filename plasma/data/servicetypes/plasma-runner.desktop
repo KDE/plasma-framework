@@ -3,6 +3,10 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/Runner
 
 Comment=KRunner plugin
+Comment[de]=KRunner-Modul
+Comment[pt_BR]=Plugin do KRunner
+Comment[uk]=Додаток до KRunner
+Comment[x-test]=xxKRunner pluginxx
 
 [PropertyDef::X-Plasma-AdvertiseSingleRunnerQueryMode]
 Type=bool
