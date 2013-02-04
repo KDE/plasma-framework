@@ -53,9 +53,9 @@ void DesktopCorona::loadDefaultLayout()
     Plasma::Containment *cont = addContainment("org.kde.testcontainment");
     cont->setScreen(0);
     qDebug() << containmentForScreen(0);
-    //Plasma::Applet *appl = cont->addApplet("foo");
+    Plasma::Applet *appl = cont->addApplet("foo");
     qDebug() << "Containment:" << cont << cont->name();
-    //qDebug() << "Applet:" << appl->name() << appl;
+    qDebug() << "Applet:" << appl->name() << appl;
 }
 
 void DesktopCorona::checkScreens(bool signalWhenExists)

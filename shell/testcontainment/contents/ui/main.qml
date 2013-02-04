@@ -55,10 +55,15 @@ Rectangle {
         //Behavior on y { PropertyAnimation { easing.type: Easing.OutElastic; duration: 800 } }
         Behavior on height { PropertyAnimation { easing.type: Easing.InOutDouble; duration: 300 } }
 
-        Text {
-            id: txt
-            text: "Click or Drag";
+        Column {
             anchors.centerIn: parent
+            Text {
+                id: txt
+                text: "Click or Drag";
+            }
+            Text {
+                text: plasmoid
+            }
         }
         PlasmaCore.SvgItem {
             svg: actionssvg
@@ -88,5 +93,11 @@ Rectangle {
         Rectangle { color: "white"; opacity: 0.2; anchors.fill: parent; }
     }
 
-    Component.onCompleted: print("Test Containment loaded")
+    Component.onCompleted: {
+        print("Test Containment loaded")
+        print(plasmoid)
+        for (var i in plasmoid) {
+            print(i+" "+plasmoid[i])
+        }
+    }
 }

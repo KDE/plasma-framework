@@ -20,6 +20,7 @@
 
 #include <QDebug>
 #include <QQuickItem>
+#include <QQmlContext>
 #include <QTimer>
 #include "plasma/pluginloader.h"
 
@@ -35,7 +36,7 @@ View::View(QWindow *parent)
 
     setResizeMode(View::SizeRootObjectToView);
     setSource(QUrl::fromLocalFile(m_package.filePath("mainscript")));
-    show();
+    show();rootContext()->setContextProperty("plasmoid", this);
 }
 
 View::~View()

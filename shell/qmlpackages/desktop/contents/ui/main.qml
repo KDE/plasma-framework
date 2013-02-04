@@ -36,5 +36,7 @@ Rectangle {
         containment.anchors.fill = root
     }
 
-    Component.onCompleted: print("View QML loaded")
+    Component.onCompleted: {
+        print("View QML loaded")
+    }
 }

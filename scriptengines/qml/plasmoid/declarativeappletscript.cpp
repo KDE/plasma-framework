@@ -278,6 +278,8 @@ ScriptEnv *DeclarativeAppletScript::scriptEnv()
 
 void DeclarativeAppletScript::setupObjects()
 {
+    m_qmlObject->engine()->rootContext()->setContextProperty("plasmoid", m_interface);
+
 #if 0
 TODO: make this work with QQmlEngine
     m_engine = m_qmlObject->scriptEngine();

@@ -24,6 +24,8 @@
 #include <QAction>
 #include <QDir>
 #include <QFile>
+#include <QQmlEngine>
+#include <QQmlComponent>
 #include <QScriptEngine>
 #include <QSignalMapper>
 #include <QTimer>
@@ -46,6 +48,7 @@ AppletInterface::AppletInterface(AbstractJsAppletScript *parent)
       m_appletScriptEngine(parent),
       m_actionSignals(0)
 {
+    qmlRegisterType<AppletInterface>();
     connect(this, SIGNAL(releaseVisualFocus()), applet(), SIGNAL(releaseVisualFocus()));
     connect(this, SIGNAL(configNeedsSaving()), applet(), SIGNAL(configNeedsSaving()));
     connect(applet(), SIGNAL(immutabilityChanged(Plasma::ImmutabilityType)), this, SIGNAL(immutableChanged()));
@@ -388,6 +391,7 @@ ContainmentInterface::ContainmentInterface(AbstractJsAppletScript *parent)
     : APPLETSUPERCLASS(parent),
       m_movableApplets(true)
 {
+    qmlRegisterType<ContainmentInterface>();
     connect(containment(), SIGNAL(appletRemoved(Plasma::Applet *)), this, SLOT(appletRemovedForward(Plasma::Applet *)));
 
     connect(containment(), SIGNAL(appletAdded(Plasma::Applet *, const QPointF &)), this, SLOT(appletAddedForward(Plasma::Applet *, const QPointF &)));
