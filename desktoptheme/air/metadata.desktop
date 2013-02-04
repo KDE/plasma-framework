@@ -2,12 +2,14 @@
 Name=Air
 Name[de]=Air
 Name[nl]=Air
+Name[pt]=Air
 Name[pt_BR]=Air
 Name[uk]=Air
 Name[x-test]=xxAirxx
 Comment=A breath of fresh air
 Comment[de]=Ein Atemzug frische Luft
 Comment[nl]=Een hap frisse lucht
+Comment[pt]=Uma brisa de ar fresco
 Comment[pt_BR]=Uma brisa de ar fresco
 Comment[uk]=Ковток свіжого повітря
 Comment[x-test]=xxA breath of fresh airxx

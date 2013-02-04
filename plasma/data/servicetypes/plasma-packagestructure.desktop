@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/PackageStructure
 Comment=Plasma package structure definition
 Comment[de]=Plasma-Paket-Struktur-Definition
+Comment[pt]=Definição da estrutura de pacotes do Plasma
 Comment[pt_BR]=Definição de estrutura de pacote do Plasma
 Comment[uk]=Опис структури пакунка плазми
 Comment[x-test]=xxPlasma package structure definitionxx
