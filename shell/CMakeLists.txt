@@ -51,3 +51,4 @@ target_link_libraries(testplasma2
 install(TARGETS testplasma2 ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 add_subdirectory(qmlpackages)
+add_subdirectory(testcontainment)
