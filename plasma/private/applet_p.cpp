@@ -192,6 +192,7 @@ void AppletPrivate::init(const QString &packagePath)
         // deleted when the applet does
 
     script = Plasma::loadScriptEngine(api, q);
+
     if (!script) {
         delete package;
         package = 0;

@@ -125,7 +125,8 @@ void DeclarativeAppletScript::qmlCreationFinished()
 {
     //If it's a popupapplet and the root object has a "compactRepresentation" component, use that instead of the icon
     Plasma::Applet *a = applet();
-    m_self->setProperty("rootItem", QVariant::fromValue(m_qmlObject->rootObject()));
+    //TODO: access rootItem from m_interface
+    //m_self->setProperty("rootItem", QVariant::fromValue(m_qmlObject->rootObject()));
 
     /*TODO: all applets must become pa
     if (pa) {

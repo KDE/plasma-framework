@@ -147,6 +147,7 @@ Applet::Applet(QObject *parentObject, const QVariantList &args)
     // now remove those first two items since those are managed by Applet and subclasses shouldn't
     // need to worry about them. yes, it violates the constness of this var, but it lets us add
     // or remove items later while applets can just pretend that their args always start at 0
+
     QVariantList &mutableArgs = const_cast<QVariantList &>(args);
     if (!mutableArgs.isEmpty()) {
         mutableArgs.removeFirst();

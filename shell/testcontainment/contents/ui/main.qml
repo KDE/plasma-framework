@@ -26,5 +26,5 @@ Rectangle {
     width: 640
     height: 480
 
-
+    Component.onCompleted: print("Test Containment loaded")
 }

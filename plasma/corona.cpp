@@ -574,7 +574,7 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
     Containment *containment = 0;
     Applet *applet = 0;
 
-    //kDebug() << "Loading" << name << args << id;
+    kDebug() << "Loading" << name << args << id;
 
     if (pluginName.isEmpty() || pluginName == "default") {
         // default to the desktop containment

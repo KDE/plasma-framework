@@ -156,6 +156,7 @@ QmlObject::~QmlObject()
 
 void QmlObject::setQmlPath(const QString &path)
 {
+    qDebug() << "Opening" << path;
     d->qmlPath = path;
     d->execute(path);
 }
