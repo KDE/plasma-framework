@@ -17,14 +17,76 @@
  */
 
 import QtQuick 2.0
-//import org.kde.plasma 2.0
 
 import org.kde.plasma.core 0.1 as PlasmaCore
 
 Rectangle {
-    color: "red"
+    id: root
+    color: "darkblue"
     width: 640
     height: 480
+
+    property Item containment
+
+    PlasmaCore.Svg {
+        id: actionssvg
+        imagePath: "widgets/configuration-icons"
+    }
+
+    PlasmaCore.FrameSvgItem {
+        id: frame
+        x: 50
+        y: 50
+        width: txt.paintedWidth + 80
+        height: txt.paintedHeight + 80 * 2
+        property int small: 100
+        property int large: parent.width - width - 150
+        imagePath: "widgets/background"
+        MouseArea {
+            anchors.fill: parent
+            drag.target: parent
+            onClicked: {
+                var s = (frame.x == frame.large) ? frame.small : frame.large;
+                frame.x = s
+                frame.height = s
+            }
+        }
+        Behavior on x { PropertyAnimation { easing.type: Easing.OutElastic; duration: 800 } }
+        //Behavior on y { PropertyAnimation { easing.type: Easing.OutElastic; duration: 800 } }
+        Behavior on height { PropertyAnimation { easing.type: Easing.InOutDouble; duration: 300 } }
+
+        Text {
+            id: txt
+            text: "Click or Drag";
+            anchors.centerIn: parent
+        }
+        PlasmaCore.SvgItem {
+            svg: actionssvg
+            elementId: "rotate"
+            width: 16
+            height: width
+            anchors.margins: frame.margins.left
+            anchors {
+                top: parent.top
+                left: parent.left
+            }
+            //Rectangle { color: "white"; opacity: 0.2; anchors.fill: parent; }
+        }
+    }
+//     PlasmaCore.SvgItem {
+//         svg: actionssvg
+//         elementId: "rotate"
+//         width: 128
+//         height: width
+//     }
+    PlasmaCore.IconItem {
+        source: "accessories-dictionary"
+        x: 50
+        y: 350
+        width: 48
+        height: 48
+        Rectangle { color: "white"; opacity: 0.2; anchors.fill: parent; }
+    }
 
     Component.onCompleted: print("Test Containment loaded")
 }

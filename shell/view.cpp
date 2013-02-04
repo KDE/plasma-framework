@@ -19,7 +19,8 @@
 #include "view.h"
 
 #include <QDebug>
-
+#include <QQuickItem>
+#include <QTimer>
 #include "plasma/pluginloader.h"
 
 View::View(QWindow *parent)
@@ -43,5 +44,42 @@ View::~View()
 }
 
 
+
+void View::setContainment(Plasma::Containment *cont)
+{
+    if (m_containment) {
+        disconnect(m_containment.data(), 0, this, 0);
+    }
+
+    m_containment = cont;
+
+    if (!cont) {
+        return;
+    }
+
+    connect(cont, SIGNAL(graphicObjectChanged()), this, SLOT(syncGraphicObject()));
+
+    if (m_containment.data()->graphicObject()) {
+        syncGraphicObject();
+    }
+}
+
+Plasma::Containment *View::containment() const
+{
+    return m_containment.data();
+}
+
+void View::syncGraphicObject()
+{
+    qDebug() << "using as graphic containment" << m_containment.data()->graphicObject()<<m_containment.data();
+    if (!m_containment || !m_containment.data()->graphicObject()) {
+        qWarning() << "Containment not valid (yet?)";
+        return;
+    }
+
+    m_containment.data()->graphicObject()->setProperty("visible", false);
+    m_containment.data()->graphicObject()->setProperty("parent", QVariant::fromValue(rootObject()));
+    rootObject()->setProperty("containment", QVariant::fromValue(m_containment.data()->graphicObject()));
+}
 
 #include "moc_view.cpp"

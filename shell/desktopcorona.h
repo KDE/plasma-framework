@@ -69,6 +69,7 @@ protected Q_SLOTS:
     void workAreaResized(int screen);
 
     void checkViews();
+    void updateScreenOwner(int wasScreen, int isScreen, Plasma::Containment *containment);
 
 private:
     QDesktopWidget *m_desktopWidget;

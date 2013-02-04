@@ -104,8 +104,6 @@ bool DeclarativeAppletScript::init()
     Plasma::Applet *a = applet();
     Plasma::Containment *cont = qobject_cast<Plasma::Containment *>(a);
 
-    //TODO: assign the graphical root object
-
     if (cont) {
         m_interface = new ContainmentInterface(this);
     //fail? so it's a normal Applet
@@ -125,6 +123,8 @@ void DeclarativeAppletScript::qmlCreationFinished()
 {
     //If it's a popupapplet and the root object has a "compactRepresentation" component, use that instead of the icon
     Plasma::Applet *a = applet();
+    a->setGraphicObject(m_qmlObject->rootObject());
+
     //TODO: access rootItem from m_interface
     //m_self->setProperty("rootItem", QVariant::fromValue(m_qmlObject->rootObject()));
 

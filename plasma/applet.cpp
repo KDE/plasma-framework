@@ -203,6 +203,20 @@ uint Applet::id() const
     return d->appletId;
 }
 
+QObject *Applet::graphicObject() const
+{
+    return d->graphicObject;
+}
+
+void Applet::setGraphicObject(QObject *obj)
+{
+    if (d->graphicObject == obj) {
+        return;
+    }
+    d->graphicObject = obj;
+    emit graphicObjectChanged();
+}
+
 void Applet::save(KConfigGroup &g) const
 {
     if (d->transient) {

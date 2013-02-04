@@ -37,6 +37,8 @@ DesktopCorona::DesktopCorona(QObject *parent)
     connect(m_desktopWidget, SIGNAL(workAreaResized(int)),
             this, SLOT(workAreaResized(int)));
 
+    connect(this, SIGNAL(screenOwnerChanged(int, int, Plasma::Containment *)),
+            this, SLOT(updateScreenOwner(int, int, Plasma::Containment *)));
     checkViews();
 }
 
@@ -49,8 +51,11 @@ DesktopCorona::~DesktopCorona()
 void DesktopCorona::loadDefaultLayout()
 {
     Plasma::Containment *cont = addContainment("org.kde.testcontainment");
-    Plasma::Applet *appl = cont->addApplet("foo");
-    qDebug() << "Containment:" << cont->name() << "Applet:" << appl->name() << appl;
+    cont->setScreen(0);
+    qDebug() << containmentForScreen(0);
+    //Plasma::Applet *appl = cont->addApplet("foo");
+    qDebug() << "Containment:" << cont << cont->name();
+    //qDebug() << "Applet:" << appl->name() << appl;
 }
 
 void DesktopCorona::checkScreens(bool signalWhenExists)
@@ -79,7 +84,7 @@ void DesktopCorona::checkScreen(int screen, bool signalWhenExists)
     //TODO: restore activities
     //Activity *currentActivity = activity(m_activityController->currentActivity());
     //ensure the desktop(s) have a containment and view
-    checkDesktop(/*currentActivity,*/ signalWhenExists, screen, 0);
+    checkDesktop(/*currentActivity,*/ signalWhenExists, screen, -1);
 
 
     //ensure the panels get views too
@@ -182,6 +187,17 @@ void DesktopCorona::checkViews()
     for (int i = 0; i < m_desktopWidget->screenCount(); ++i) {
         
     }
+}
+
+void DesktopCorona::updateScreenOwner(int wasScreen, int isScreen, Plasma::Containment *containment)
+{
+    qDebug() << "Was screen" << wasScreen << "Is screen" << isScreen <<"Containment" << containment;
+    if (isScreen < 0 || m_views.count() < isScreen + 1) {
+        qWarning() << "Invalid screen";
+        return;
+    }
+
+    m_views[isScreen]->setContainment(containment);
 }
 
 #include "desktopcorona.moc"

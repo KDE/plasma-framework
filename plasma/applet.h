@@ -95,6 +95,13 @@ class PLASMA_EXPORT Applet : public QObject
         uint id() const;
 
         /**
+         * @since: 5.0
+         * A pointer to the graphical representation of this applet
+         */
+        QObject *graphicObject() const;
+        void setGraphicObject(QObject *obj);
+
+        /**
         * Returns the KConfigGroup to access the applets configuration.
         *
         * This config object will write to an instance
@@ -569,6 +576,11 @@ class PLASMA_EXPORT Applet : public QObject
         bool hasValidAssociatedApplication() const;
 
     Q_SIGNALS:
+        /**
+         * emitted when/if the graphic representation of the applet changes
+         */
+        void graphicObjectChanged();
+
         /**
          * This signal indicates that an application launch, window
          * creation or window focus event was triggered. This is used, for instance,

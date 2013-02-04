@@ -23,6 +23,7 @@
 
 
 #include "plasma/package.h"
+#include "plasma/containment.h"
 
 
 class View : public QQuickView
@@ -33,8 +34,15 @@ public:
     View(QWindow *parent = 0);
     virtual ~View();
 
+    void setContainment(Plasma::Containment *cont);
+    Plasma::Containment *containment() const;
+
+protected Q_SLOTS:
+    void syncGraphicObject();
+
 private:
     Plasma::Package m_package;
+    QWeakPointer<Plasma::Containment> m_containment;
 };
 
 #endif // VIEW_H
