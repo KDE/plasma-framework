@@ -191,6 +191,15 @@ set(KCONFIG_KCFGC_EXECUTABLE kconfig_compiler)
 include(KConfigMacros)
 
 
+MACRO(installPackage dir component)
+   SET(root ${ARGN})
+   IF(NOT root)
+      SET(root plasma/plasmoids)
+   ENDIF(NOT root)
+   install(DIRECTORY ${dir}/ DESTINATION ${DATA_INSTALL_DIR}/${root}/${component} PATTERN Messages.sh EXCLUDE)
+   install(FILES ${dir}/metadata.desktop DESTINATION ${SERVICES_INSTALL_DIR} RENAME plasma-applet-${component}.desktop)
+ENDMACRO(installPackage)
+
 ################# list the subdirectories #################
 
 add_subdirectory( declarativeimports )
