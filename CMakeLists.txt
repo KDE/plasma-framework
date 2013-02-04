@@ -196,6 +196,7 @@ include(KConfigMacros)
 add_subdirectory( declarativeimports )
 add_subdirectory( desktoptheme )
 add_subdirectory( plasma )
+add_subdirectory( scriptengines )
 add_subdirectory( shell )
 
 feature_summary(WHAT ALL   FATAL_ON_MISSING_REQUIRED_PACKAGES)

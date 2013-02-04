@@ -1,0 +1,87 @@
+/*
+ *   Copyright 2009 by Alan Alpert <alan.alpert@nokia.com>
+ *   Copyright 2010 by Ménard Alexis <menard@kde.org>
+
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU Library General Public License as
+ *   published by the Free Software Foundation; either version 2, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details
+ *
+ *   You should have received a copy of the GNU Library General Public
+ *   License along with this program; if not, write to the
+ *   Free Software Foundation, Inc.,
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
+#ifndef DECLARATIVE_APPLETSCRIPT_H
+#define DECLARATIVE_APPLETSCRIPT_H
+
+#include <kdemacros.h>
+
+#include "abstractjsappletscript.h"
+#include "plasmoid/appletauthorization.h"
+#include <Plasma/DataEngine>
+
+class AppletInterface;
+
+class QmlObject;
+class ScriptEnv;
+class EngineAccess;
+
+class DeclarativeAppletScript : public AbstractJsAppletScript
+{
+    Q_OBJECT
+
+public:
+    DeclarativeAppletScript(QObject *parent, const QVariantList &args);
+    ~DeclarativeAppletScript();
+
+    QString filePath(const QString &type, const QString &file) const;
+
+    QList<QAction*> contextualActions();
+
+    void constraintsEvent(Plasma::Constraints constraints);
+
+    bool include(const QString &path);
+
+    ScriptEnv *scriptEnv();
+    QQmlEngine *engine() const;
+
+    static QObject *loadui(const QString &filename);
+    QObject *dataEngine(const QString &dataEngineName);
+    QObject *service(const QString &dataEngine, const QString &source);
+    QObject *loadService(const QString &pluginName);
+
+public Q_SLOTS:
+    void executeAction(const QString &name);
+    void dataUpdated(const QString &name, const Plasma::DataEngine::Data &data);
+    //void signalHandlerException(const QObject &exception);
+    void popupEvent(bool popped);
+    void activate();
+    void configChanged();
+    void qmlCreationFinished();
+
+protected:
+    bool init();
+    void setupObjects();
+
+Q_SIGNALS:
+    void formFactorChanged();
+    void locationChanged();
+    void contextChanged();
+
+private:
+    QmlObject *m_qmlObject;
+    QmlObject *m_toolBoxWidget;
+    AppletInterface *m_interface;
+    QObject *m_self;
+    ScriptEnv *m_env;
+    AppletAuthorization m_auth;
+};
+
+#endif
