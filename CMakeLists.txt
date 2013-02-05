@@ -110,26 +110,26 @@ if(X11_FOUND)
   endif(UNIX AND NOT X11_SM_FOUND)
 endif(X11_FOUND)
 
-# find_package(OpenSSL)
-# set_package_properties(OpenSSL PROPERTIES DESCRIPTION "Support for secure network communications (SSL and TLS)"
-#                        URL "http://openssl.org"
-#                        TYPE RECOMMENDED
-#                        PURPOSE "KDE uses OpenSSL for the bulk of secure communications, including secure web browsing via HTTPS"
-#                       )
-# 
-# find_package(Libintl)
-# set_package_properties(Libintl PROPERTIES DESCRIPTION "Support for multiple languages"
-#                        URL "http://www.gnu.org/software/gettext"
-#                        TYPE RECOMMENDED
-#                        PURPOSE "Enables KDE to be available in many different languages"
-#                       )
+find_package(OpenSSL)
+set_package_properties(OpenSSL PROPERTIES DESCRIPTION "Support for secure network communications (SSL and TLS)"
+                       URL "http://openssl.org"
+                       TYPE RECOMMENDED
+                       PURPOSE "KDE uses OpenSSL for the bulk of secure communications, including secure web browsing via HTTPS"
+                      )
+
+find_package(Libintl)
+set_package_properties(Libintl PROPERTIES DESCRIPTION "Support for multiple languages"
+                       URL "http://www.gnu.org/software/gettext"
+                       TYPE RECOMMENDED
+                       PURPOSE "Enables KDE to be available in many different languages"
+                      )
 
 #FIXME: when we have a qca for qt5, reenable
-#find_package(QCA2 2.0.0)
-#set_package_properties(QCA2 PROPERTIES DESCRIPTION "Support for remote plasma widgets"
-#                       URL "http://delta.affinix.com/qca"
-#                       TYPE OPTIONAL
-#                      )
+find_package(QCA2 2.0.0)
+set_package_properties(QCA2 PROPERTIES DESCRIPTION "Support for remote plasma widgets"
+                       URL "http://delta.affinix.com/qca"
+                       TYPE OPTIONAL
+                      )
 
 find_package(DBusMenuQt)
 set_package_properties(DBusMenuQt PROPERTIES DESCRIPTION "Support for notification area menus via the DBusMenu protocol"
