@@ -391,13 +391,13 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
 }
 
 Applet *ContainmentPrivate::addApplet(const QString &name, const QVariantList &args,
-                                      const QRectF &appletGeometry, uint id, bool delayInit)
+                                      const QRectF &appletGeometry, uint id)
 {
     if (!q->isContainment()) {
         return 0;
     }
 
-    if (!delayInit && q->immutability() != Mutable) {
+    if (q->immutability() != Mutable) {
 #ifndef NDEBUG
         kDebug() << "addApplet for" << name << "requested, but we're currently immutable!";
 #endif
@@ -416,7 +416,7 @@ Applet *ContainmentPrivate::addApplet(const QString &name, const QVariantList &a
 
     //kDebug() << applet->name() << "sizehint:" << applet->sizeHint() << "geometry:" << applet->geometry();
 
-    q->addApplet(applet, appletGeometry.topLeft(), delayInit);
+    q->addApplet(applet, appletGeometry.topLeft());
     return applet;
 }
 

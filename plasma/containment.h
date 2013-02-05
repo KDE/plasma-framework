@@ -202,15 +202,10 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * Add an existing applet to this Containment
          *
-         * If dontInit is true, the pending constraints are not flushed either.
-         * So it is your responsibility to call both init() and
-         * flushPendingConstraints() on the applet.
-         *
          * @param applet the applet that should be added
          * @param pos the containment-relative position
-         * @param dontInit if true, init() will not be called on the applet
          */
-        void addApplet(Applet *applet, const QPointF &pos = QPointF(-1, -1), bool dontInit = true);
+        void addApplet(Applet *applet, const QPointF &pos = QPointF(-1, -1));
 
         /**
          * @return the applets currently in this Containment

@@ -362,7 +362,7 @@ void Containment::restoreContents(KConfigGroup &group)
             continue;
         }
 
-        d->addApplet(plugin, QVariantList(), appletConfig.readEntry("geometry", QRectF()), appId, false);
+        d->addApplet(plugin, QVariantList(), appletConfig.readEntry("geometry", QRectF()), appId);
     }
 }
 
@@ -507,9 +507,9 @@ Applet *Containment::addApplet(const QString &name, const QVariantList &args,
     return d->addApplet(name, args, appletGeometry);
 }
 
-void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
+void Containment::addApplet(Applet *applet, const QPointF &pos)
 {
-    if (!isContainment() || (!delayInit && immutability() != Mutable)) {
+    if (!isContainment() || immutability() != Mutable) {
         return;
     }
 
@@ -560,7 +560,7 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
     connect(applet, SIGNAL(newStatus(Plasma::ItemStatus)), this, SLOT(checkStatus(Plasma::ItemStatus)));
     connect(applet, SIGNAL(activate()), this, SIGNAL(activate()));
 
-    if (!delayInit && !currentContainment) {
+    if (!currentContainment) {
         applet->restore(*applet->d->mainConfigGroup());
         applet->init();
         //FIXME: an on-appear animation would be nice to have again
@@ -568,21 +568,16 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
     }
 
     applet->updateConstraints(Plasma::AllConstraints);
-    if (!delayInit) {
-        applet->flushPendingConstraintsEvents();
-    }
+    applet->flushPendingConstraintsEvents();
+
     emit appletAdded(applet, pos);
 
     if (!currentContainment) {
         applet->updateConstraints(Plasma::StartupCompletedConstraint);
-        if (!delayInit) {
-            applet->flushPendingConstraintsEvents();
-        }
+        applet->flushPendingConstraintsEvents();
     }
 
-    if (!delayInit) {
-        applet->d->scheduleModificationNotification();
-    }
+    applet->d->scheduleModificationNotification();
 }
 
 Applet::List Containment::applets() const
