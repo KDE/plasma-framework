@@ -281,5 +281,3 @@ void GenericPackage::initPackage(Package *package)
 
 } // namespace Plasma
 
-#include "moc_packages_p.cpp"
-
