@@ -88,7 +88,7 @@ bool DeclarativeAppletScript::init()
     QQmlNetworkAccessManagerFactory *factory = engine->networkAccessManagerFactory();
     engine->setNetworkAccessManagerFactory(0);
     delete factory;
-    engine->setNetworkAccessManagerFactory(new PackageAccessManagerFactory(&package(), &m_auth));
+    engine->setNetworkAccessManagerFactory(new PackageAccessManagerFactory(package(), &m_auth));
 
     m_qmlObject->setQmlPath(mainScript());
     

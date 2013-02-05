@@ -23,22 +23,19 @@
 #include <QQmlNetworkAccessManagerFactory>
 
 
-namespace Plasma
-{
-    class Package;
-}
+#include <Plasma/Package>
 
 class AppletAuthorization;
 
 class PackageAccessManagerFactory : public QQmlNetworkAccessManagerFactory
 {
 public:
-    PackageAccessManagerFactory(const Plasma::Package *package, AppletAuthorization *auth);
+    PackageAccessManagerFactory(const Plasma::Package &package, AppletAuthorization *auth);
     ~PackageAccessManagerFactory();
     QNetworkAccessManager *create(QObject *parent);
 
 private:
-    const Plasma::Package *m_package;
+    Plasma::Package m_package;
     AppletAuthorization *m_auth;
 };
 

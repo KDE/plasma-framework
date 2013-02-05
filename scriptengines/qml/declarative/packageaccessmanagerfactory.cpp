@@ -19,12 +19,10 @@
 
 #include "packageaccessmanagerfactory.h"
 
-#include <Plasma/Package>
-
 #include "packageaccessmanager.h"
 #include "plasmoid/appletauthorization.h"
 
-PackageAccessManagerFactory::PackageAccessManagerFactory(const Plasma::Package *package, AppletAuthorization *auth)
+PackageAccessManagerFactory::PackageAccessManagerFactory(const Plasma::Package &package, AppletAuthorization *auth)
    : QQmlNetworkAccessManagerFactory(),
      m_package(package),
      m_auth(auth)

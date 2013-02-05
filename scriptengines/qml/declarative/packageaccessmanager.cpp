@@ -21,8 +21,6 @@
 
 #include <QNetworkReply>
 
-#include <Plasma/Package>
-
 #include "plasmoid/appletauthorization.h"
 
 class ErrorReply : public QNetworkReply
@@ -49,7 +47,7 @@ public:
     }
 };
 
-PackageAccessManager::PackageAccessManager(const Plasma::Package *package, AppletAuthorization *auth, QObject *parent)
+PackageAccessManager::PackageAccessManager(const Plasma::Package &package, AppletAuthorization *auth, QObject *parent)
     : KIO::AccessManager(parent),
       m_package(package),
       m_auth(auth)
@@ -68,7 +66,7 @@ QNetworkReply *PackageAccessManager::createRequest(QNetworkAccessManager::Operat
     if (reqUrl.scheme() == "plasmapackage") {
         QNetworkRequest request = req;
         reqUrl.setScheme("file");
-        reqUrl.setPath(m_package->filePath(0, reqUrl.path()));
+        reqUrl.setPath(m_package.filePath(0, reqUrl.path()));
         request.setUrl(reqUrl);
         return QNetworkAccessManager::createRequest(op, request, outgoingData);
     } else if ((reqUrl.scheme() == "http" && !m_auth->authorizeRequiredExtension("http")) ||

@@ -22,6 +22,8 @@
 
 #include <kdemacros.h>
 
+#include <Plasma/Package>
+
 #ifndef PLASMA_NO_KIO
 #include <kio/accessmanager.h>
 #else
@@ -43,14 +45,14 @@ public KIO::AccessManager
 #endif
 {
 public:
-    PackageAccessManager(const Plasma::Package *package, AppletAuthorization *auth, QObject *parent = 0);
+    PackageAccessManager(const Plasma::Package &package, AppletAuthorization *auth, QObject *parent = 0);
     ~PackageAccessManager();
 
 protected:
     QNetworkReply *createRequest(QNetworkAccessManager::Operation op, const QNetworkRequest &req, QIODevice *outgoingData = 0);
 
 private:
-    const Plasma::Package *m_package;
+    Plasma::Package m_package;
     AppletAuthorization *m_auth;
 };
 
