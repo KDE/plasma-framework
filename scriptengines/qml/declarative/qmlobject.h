@@ -77,6 +77,8 @@ public:
      * In this case will be possible to assign new objects in the main engine context
      * before the main component gets initialized.
      * So it will be possible to access it immediately from the QML code.
+     * The initialization will either be completed automatically asyncronously
+     * or explicitly by calling completeInitialization()
      *
      * @param delay if true the initialization of the QML file will be delayed 
      *              at the end of the event loop
@@ -104,6 +106,13 @@ public:
      */
     QQmlComponent *mainComponent() const;
 
+public Q_SLOTS:
+    /**
+     * Finishes the process of initialization.
+     * If isInitializationDelayed() is false, calling this will have no effect.
+     */
+    void completeInitialization();
+
 Q_SIGNALS:
     /**
      * Emitted when the parsing and execution of the QML file is terminated
@@ -114,7 +123,6 @@ private:
     friend class QmlObjectPrivate;
     QmlObjectPrivate * const d;
 
-    Q_PRIVATE_SLOT(d, void finishExecute())
     Q_PRIVATE_SLOT(d, void scheduleExecutionEnd())
 };
 

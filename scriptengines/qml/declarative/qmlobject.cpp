@@ -52,7 +52,6 @@ public:
 
     void errorPrint();
     void execute(const QString &fileName);
-    void finishExecute();
     void scheduleExecutionEnd();
     void minimumWidthChanged();
     void minimumHeightChanged();
@@ -111,29 +110,10 @@ void QmlObjectPrivate::execute(const QString &fileName)
 void QmlObjectPrivate::scheduleExecutionEnd()
 {
     if (component->isReady() || component->isError()) {
-        finishExecute();
+        q->completeInitialization();
     } else {
-        QObject::connect(component, SIGNAL(statusChanged(QQmlComponent::Status)), q, SLOT(finishExecute()));
+        QObject::connect(component, SIGNAL(statusChanged(QQmlComponent::Status)), q, SLOT(completeInitialization()));
     }
-}
-
-void QmlObjectPrivate::finishExecute()
-{
-    if (component->isError()) {
-        errorPrint();
-    }
-
-    root = component->create();
-
-    if (!root) {
-        errorPrint();
-    }
-
-#ifndef NDEBUG
-    kDebug() << "Execution of QML done!";
-#endif
-
-    emit q->finished();
 }
 
 QmlObject::QmlObject(QObject *parent)
@@ -191,7 +171,25 @@ QQmlComponent *QmlObject::mainComponent() const
     return d->component;
 }
 
+void QmlObject::completeInitialization()
+{
+    if (d->component->status() != QQmlComponent::Ready || d->component->isError()) {
+        d->errorPrint();
+        return;
+    }
 
+    d->root = d->component->create();
+
+    if (!d->root) {
+        d->errorPrint();
+    }
+
+#ifndef NDEBUG
+    kDebug() << "Execution of QML done!";
+#endif
+
+    emit finished();
+}
 
 
 
