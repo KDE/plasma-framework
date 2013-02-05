@@ -91,6 +91,7 @@ bool DeclarativeAppletScript::init()
     engine->setNetworkAccessManagerFactory(new PackageAccessManagerFactory(&package(), &m_auth));
 
     m_qmlObject->setQmlPath(mainScript());
+    
 
     if (!m_qmlObject->engine() || !m_qmlObject->engine()->rootContext() || !m_qmlObject->engine()->rootContext()->isValid() || m_qmlObject->mainComponent()->isError()) {
         QString reason;
@@ -102,7 +103,9 @@ bool DeclarativeAppletScript::init()
     }
 
     Plasma::Applet *a = applet();
+
     Plasma::Containment *cont = qobject_cast<Plasma::Containment *>(a);
+    
 
     if (cont) {
         m_interface = new ContainmentInterface(this);
@@ -115,6 +118,8 @@ bool DeclarativeAppletScript::init()
             this, SLOT(activate()));
 
     setupObjects();
+    m_qmlObject->completeInitialization();
+    a->setGraphicObject(m_qmlObject->rootObject());
 
     return true;
 }
@@ -123,7 +128,6 @@ void DeclarativeAppletScript::qmlCreationFinished()
 {
     //If it's a popupapplet and the root object has a "compactRepresentation" component, use that instead of the icon
     Plasma::Applet *a = applet();
-    a->setGraphicObject(m_qmlObject->rootObject());
 
     //TODO: access rootItem from m_interface
     //m_self->setProperty("rootItem", QVariant::fromValue(m_qmlObject->rootObject()));

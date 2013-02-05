@@ -37,9 +37,6 @@ public:
     void setContainment(Plasma::Containment *cont);
     Plasma::Containment *containment() const;
 
-protected Q_SLOTS:
-    void syncGraphicObject();
-
 private:
     Plasma::Package m_package;
     QWeakPointer<Plasma::Containment> m_containment;
