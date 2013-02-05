@@ -460,7 +460,6 @@ QVariantList ContainmentInterface::availableScreenRegion(int id) const
     }
 
     QVariantList regVal;
-    int i = 0;
     foreach (QRect rect, reg.rects()) {
         regVal << QVariant::fromValue(QRectF(rect));
     }
