@@ -253,6 +253,10 @@ install(FILES
         ${plasma_LIB_INCLUDES}
         DESTINATION ${INCLUDE_INSTALL_DIR}/plasma COMPONENT Devel)
 
+install(DIRECTORY
+        includes/Plasma
+        DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/ COMPONENT Devel)
+
 
 install(FILES
     scripting/appletscript.h

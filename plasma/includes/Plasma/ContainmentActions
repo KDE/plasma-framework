@@ -1,0 +1,3 @@
+#include "../../plasma/containmentactions.h"
+#include "../../plasma/containmentactionspluginsconfig.h"
+
