@@ -122,7 +122,6 @@ public:
 
     static KActionCollection* defaultActions(QObject *parent);
     static QSet<QString> knownCategories();
-    static void filterOffers(QList<KService::Ptr> &offers);
     static QString parentAppConstraint(const QString &parentApp = QString());
 
     static uint s_maxAppletId;

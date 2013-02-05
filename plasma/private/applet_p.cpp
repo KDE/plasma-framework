@@ -148,33 +148,10 @@ void AppletPrivate::init(const QString &packagePath)
     }
 
 
+    const QString path = packagePath.isEmpty() ? appletDescription.pluginName() : packagePath;
     package = new Package(PluginLoader::self()->loadPackage("Plasma/Applet", api));
-
-    // find where the Package is
-    QString path = packagePath;
-    if (path.isEmpty()) {
-        const QString subPath = package->defaultPackageRoot() + appletDescription.pluginName() + '/';
-        path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, subPath + "metadata.desktop");
-        if (path.isEmpty()) {
-            path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, subPath);
-        } else {
-            path.remove(QString("metadata.desktop"));
-        }
-    } else if (!path.endsWith('/')) {
-        path.append('/');
-    }
-
-    if (path.isEmpty()) {
-        delete package;
-        package = 0;
-        q->setFailedToLaunch(true,
-                             i18nc("Package file, name of the widget",
-                                   "Could not locate the %1 package required for the %2 widget.",
-                                   appletDescription.pluginName(), appletDescription.name()));
-        return;
-    }
-
     package->setPath(path);
+
     if (!package->isValid()) {
         delete package;
         package = 0;
@@ -492,39 +469,6 @@ void AppletPrivate::propagateConfigChanged()
     }
 
     q->configChanged();
-}
-
-void AppletPrivate::filterOffers(QList<KService::Ptr> &offers)
-{
-    KConfigGroup constraintGroup(KSharedConfig::openConfig(), "Constraints");
-    foreach (const QString &key, constraintGroup.keyList()) {
-        //kDebug() << "security constraint" << key;
-        if (constraintGroup.readEntry(key, true)) {
-            continue;
-        }
-
-        //ugh. a qlist of ksharedptr<kservice>
-        QMutableListIterator<KService::Ptr> it(offers);
-        while (it.hasNext()) {
-            KService::Ptr p = it.next();
-            QString prop = QString("X-Plasma-Requires-").append(key);
-            QVariant req = p->property(prop, QVariant::String);
-            //valid values: Required/Optional/Unused
-            QString reqValue;
-            if (req.isValid()) {
-                reqValue = req.toString();
-            } else if (p->property("X-Plasma-API").toString().toLower() == "javascript") {
-                //TODO: be able to check whether or not a script engine provides "controled"
-                //bindings; for now we just give a pass to the qscript ones
-                reqValue = "Unused";
-            }
-
-            if (!(reqValue == "Optional" || reqValue == "Unused")) {
-            //if (reqValue == "Required") {
-                it.remove();
-            }
-        }
-    }
 }
 
 QString AppletPrivate::parentAppConstraint(const QString &parentApp)

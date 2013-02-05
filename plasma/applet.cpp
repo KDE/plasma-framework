@@ -1116,7 +1116,6 @@ KPluginInfo::List Applet::listAppletInfoForMimeType(const QString &mimeType)
     constraint.append(QString(" and '%1' in [X-Plasma-DropMimeTypes]").arg(mimeType));
     //kDebug() << "listAppletInfoForMimetype with" << mimeType << constraint;
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
-    AppletPrivate::filterOffers(offers);
     return KPluginInfo::fromServices(offers);
 }
 
@@ -1125,7 +1124,6 @@ KPluginInfo::List Applet::listAppletInfoForUrl(const QUrl &url)
     QString constraint = AppletPrivate::parentAppConstraint();
     constraint.append(" and exist [X-Plasma-DropUrlPatterns]");
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
-    AppletPrivate::filterOffers(offers);
 
     KPluginInfo::List allApplets = KPluginInfo::fromServices(offers);
     KPluginInfo::List filtered;
@@ -1158,7 +1156,6 @@ QStringList Applet::listCategories(const QString &parentApp, bool visibleOnly)
     }
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
-    AppletPrivate::filterOffers(offers);
 
     QStringList categories;
     QSet<QString> known = AppletPrivate::knownCategories();
