@@ -362,7 +362,7 @@ void Containment::restoreContents(KConfigGroup &group)
             continue;
         }
 
-        d->addApplet(plugin, QVariantList(), appletConfig.readEntry("geometry", QRectF()), appId, true);
+        d->addApplet(plugin, QVariantList(), appletConfig.readEntry("geometry", QRectF()), appId, false);
     }
 }
 

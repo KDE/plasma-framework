@@ -62,7 +62,7 @@ void View::setContainment(Plasma::Containment *cont)
     if (graphicObject) {
         qDebug() << "using as graphic containment" << graphicObject << m_containment.data();
 
-        graphicObject->setProperty("visible", false);
+        //graphicObject->setProperty("visible", false);
         graphicObject->setProperty("parent", QVariant::fromValue(rootObject()));
         rootObject()->setProperty("containment", QVariant::fromValue(graphicObject));
     } else {

@@ -23,6 +23,7 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 
 
 Rectangle {
+    id: root
     color: "red"
     width: 640
     height: 480
@@ -30,7 +31,7 @@ Rectangle {
     property Item containment
 
     onContainmentChanged: {
-        print("New Containment: " + containment + containment.parent)
+        print("New Containment: " + containment)
         //containment.parent = root
         containment.visible = true
         containment.anchors.fill = root

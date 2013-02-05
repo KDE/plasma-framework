@@ -473,9 +473,6 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet, const QPoi
     QObject *contGraphicObject = containment()->property("graphicObject").value<QObject *>();
 
     qDebug() << "Applet added:" << applet << applet->name() << appletGraphicObject;
-foreach(Plasma::Applet *appl, containment()->applets()) {
-    qDebug() << appl << applet->name() << appl->property("graphicObject");
-}
 
     if (applet && contGraphicObject && appletGraphicObject) {
         appletGraphicObject->setProperty("visible", false);
