@@ -37,7 +37,6 @@
 
 #include <Plasma/PackageStructure>
 #include <Plasma/Package>
-#include <Plasma/PackageMetadata>
 
 static const char description[] = I18N_NOOP("Install, list, remove Plasma packages");
 static const char version[] = "0.2";
