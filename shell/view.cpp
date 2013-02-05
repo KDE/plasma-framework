@@ -36,7 +36,7 @@ View::View(QWindow *parent)
 
     setResizeMode(View::SizeRootObjectToView);
     setSource(QUrl::fromLocalFile(m_package.filePath("mainscript")));
-    show();rootContext()->setContextProperty("plasmoid", this);
+    show();
 }
 
 View::~View()

@@ -120,7 +120,7 @@ bool DeclarativeAppletScript::init()
     setupObjects();
     m_qmlObject->completeInitialization();
     a->setGraphicObject(m_qmlObject->rootObject());
-
+    qDebug()<<"Graphic object created:"<<a<<a->graphicObject();
     return true;
 }
 

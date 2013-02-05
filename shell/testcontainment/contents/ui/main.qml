@@ -26,7 +26,14 @@ Rectangle {
     width: 640
     height: 480
 
-    property Item containment
+    Connections {
+        target: plasmoid
+        onAppletAdded: {
+            print("Applet added: " + applet)
+            applet.parent = root
+            applet.visible = true
+        }
+    }
 
     PlasmaCore.Svg {
         id: actionssvg
