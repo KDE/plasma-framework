@@ -124,11 +124,12 @@ endif(X11_FOUND)
 #                        PURPOSE "Enables KDE to be available in many different languages"
 #                       )
 
-find_package(QCA2 2.0.0)
-set_package_properties(QCA2 PROPERTIES DESCRIPTION "Support for remote plasma widgets"
-                       URL "http://delta.affinix.com/qca"
-                       TYPE OPTIONAL
-                      )
+#FIXME: when we have a qca for qt5, reenable
+#find_package(QCA2 2.0.0)
+#set_package_properties(QCA2 PROPERTIES DESCRIPTION "Support for remote plasma widgets"
+#                       URL "http://delta.affinix.com/qca"
+#                       TYPE OPTIONAL
+#                      )
 
 find_package(DBusMenuQt)
 set_package_properties(DBusMenuQt PROPERTIES DESCRIPTION "Support for notification area menus via the DBusMenu protocol"
