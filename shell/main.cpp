@@ -46,9 +46,6 @@ int main(int argc, char** argv)
 
     QApplication app(argc, argv);
 
-    //qmlRegisterType<Svg>("org.kde.plasma", 2, 0, "Svg");
-    
-    
     
     DesktopCorona *corona = new DesktopCorona();
     corona->initializeLayout();

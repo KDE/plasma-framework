@@ -29,8 +29,12 @@ Rectangle {
     Connections {
         target: plasmoid
         onAppletAdded: {
+            var container = appletContainerComponent.createObject(root)
+            container.visible = true
             print("Applet added: " + applet)
-            applet.parent = root
+            applet.parent = container
+            container.applet = applet
+            applet.anchors.fill= applet.parent
             applet.visible = true
         }
     }
@@ -40,57 +44,56 @@ Rectangle {
         imagePath: "widgets/configuration-icons"
     }
 
-    PlasmaCore.FrameSvgItem {
-        id: frame
-        x: 50
-        y: 50
-        width: txt.paintedWidth + 80
-        height: txt.paintedHeight + 80 * 2
-        property int small: 100
-        property int large: parent.width - width - 150
-        imagePath: "widgets/background"
-        MouseArea {
-            anchors.fill: parent
-            drag.target: parent
-            onClicked: {
-                var s = (frame.x == frame.large) ? frame.small : frame.large;
-                frame.x = s
-                frame.height = s
+    Component {
+        id: appletContainerComponent
+        PlasmaCore.FrameSvgItem {
+            id: frame
+            x: 50
+            y: 50
+            width: 150
+            height: 150
+            property alias applet: appletContainer.children
+            property int small: 100
+            property int large: parent.width - width - 150
+            imagePath: "widgets/background"
+            MouseArea {
+                anchors.fill: parent
+                drag.target: parent
+                onClicked: {
+                    var s = (frame.x == frame.large) ? frame.small : frame.large;
+                    frame.x = s
+                    frame.height = s
+                }
             }
-        }
-        Behavior on x { PropertyAnimation { easing.type: Easing.OutElastic; duration: 800 } }
-        //Behavior on y { PropertyAnimation { easing.type: Easing.OutElastic; duration: 800 } }
-        Behavior on height { PropertyAnimation { easing.type: Easing.InOutDouble; duration: 300 } }
+            Behavior on x { PropertyAnimation { easing.type: Easing.OutElastic; duration: 800 } }
+            //Behavior on y { PropertyAnimation { easing.type: Easing.OutElastic; duration: 800 } }
+            Behavior on height { PropertyAnimation { easing.type: Easing.InOutDouble; duration: 300 } }
 
-        Column {
-            anchors.centerIn: parent
-            Text {
-                id: txt
-                text: "Click or Drag";
+            Item {
+                id: appletContainer
+                anchors {
+                    fill: parent
+                    leftMargin: frame.margins.left
+                    rightMargin: parent.margins.right
+                    topMargin: parent.margins.top
+                    bottomMargin: parent.margins.bottom
+                }
             }
-            Text {
-                text: plasmoid
+            PlasmaCore.SvgItem {
+                svg: actionssvg
+                elementId: "rotate"
+                width: 16
+                height: width
+                anchors.margins: frame.margins.left
+                anchors {
+                    top: parent.top
+                    left: parent.left
+                }
+                //Rectangle { color: "white"; opacity: 0.2; anchors.fill: parent; }
             }
-        }
-        PlasmaCore.SvgItem {
-            svg: actionssvg
-            elementId: "rotate"
-            width: 16
-            height: width
-            anchors.margins: frame.margins.left
-            anchors {
-                top: parent.top
-                left: parent.left
-            }
-            //Rectangle { color: "white"; opacity: 0.2; anchors.fill: parent; }
         }
     }
-//     PlasmaCore.SvgItem {
-//         svg: actionssvg
-//         elementId: "rotate"
-//         width: 128
-//         height: width
-//     }
+
     PlasmaCore.IconItem {
         source: "accessories-dictionary"
         x: 50

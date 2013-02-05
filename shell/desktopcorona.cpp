@@ -117,6 +117,11 @@ void DesktopCorona::checkDesktop(/*Activity *activity,*/ bool signalWhenExists, 
     }
 
     c->setScreen(screen, desktop);
+    if (screen >= 0 || m_views.count() >= screen + 1) {
+        m_views[screen]->setContainment(c);
+    } else {
+        qWarning() << "Invalid screen";
+    }
     c->flushPendingConstraintsEvents();
     requestConfigSync();
 

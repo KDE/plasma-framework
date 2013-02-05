@@ -436,7 +436,6 @@ CoronaPrivate::CoronaPrivate(Corona *corona)
       defaultContainmentPlugin("desktop"),
       config(0),
       configSyncTimer(new QTimer(corona)),
-      delayedInitTimer(new QTimer(corona)),
       actions(corona)
 {
     if (QCoreApplication::instance()) {
@@ -453,9 +452,6 @@ CoronaPrivate::~CoronaPrivate()
 
 void CoronaPrivate::init()
 {
-    delayedInitTimer->setInterval(100);
-    delayedInitTimer->setSingleShot(true);
-    QObject::connect(delayedInitTimer, SIGNAL(timeout()), q, SLOT(delayedContainmentInit()));
     configSyncTimer->setSingleShot(true);
     QObject::connect(configSyncTimer, SIGNAL(timeout()), q, SLOT(syncConfig()));
 
@@ -628,8 +624,6 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
     applet->d->isContainment = true;
     applet->d->setIsContainment(true, true);
     containments.append(containment);
-    containmentsNeedingInit.append(containment);
-    delayedInitTimer->start();
 
     QObject::connect(containment, SIGNAL(destroyed(QObject*)),
             q, SLOT(containmentDestroyed(QObject*)));
@@ -640,28 +634,16 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
     QObject::connect(containment, SIGNAL(screenChanged(int,int,Plasma::Containment*)),
             q, SIGNAL(screenOwnerChanged(int,int,Plasma::Containment*)));
 
+    containment->init();
+    KConfigGroup cg = containment->config();
+    containment->restore(cg);
+    containment->updateConstraints(Plasma::StartupCompletedConstraint);
+    containment->save(cg);
+    q->requestConfigSync();
+    containment->flushPendingConstraintsEvents();
+    emit q->containmentAdded(containment);
+
     return containment;
-}
-
-void CoronaPrivate::delayedContainmentInit()
-{
-    foreach (QWeakPointer<Containment> c, containmentsNeedingInit) {
-        Containment *containment = c.data();
-        if (!containment) {
-            continue;
-        }
-
-        containment->init();
-        KConfigGroup cg = containment->config();
-        containment->restore(cg);
-        containment->updateConstraints(Plasma::StartupCompletedConstraint);
-        containment->save(cg);
-        q->requestConfigSync();
-        containment->flushPendingConstraintsEvents();
-        emit q->containmentAdded(containment);
-    }
-
-    containmentsNeedingInit.clear();
 }
 
 QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &conf, bool mergeConfig)
