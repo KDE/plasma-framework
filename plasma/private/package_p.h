@@ -86,6 +86,7 @@ public:
     KPluginInfo *metadata;
     bool externalPaths : 1;
     bool valid : 1;
+    bool checkedValid : 1;
 };
 
 }

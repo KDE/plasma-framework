@@ -75,9 +75,11 @@ Package &Package::operator=(const Package &rhs)
 
 bool Package::isValid() const
 {
-    if (!d->valid) {
-        return false;
+    if (d->checkedValid) {
+        return d->valid;
     }
+
+    d->valid = false;
 
     //search for the file in all prefixes and in all possible paths for each prefix
     //even if it's a big nested loop, usually there is one prefix and one location
@@ -97,6 +99,7 @@ bool Package::isValid() const
                     break;
                 }
             }
+
             if (!failed) {
                 break;
             }
@@ -105,11 +108,11 @@ bool Package::isValid() const
         if (failed) {
             kWarning() << "Could not find required" << (it.value().directory ? "directory" : "file") << it.key();
             d->valid = false;
-            return false;
+            break;
         }
     }
 
-    return true;
+    return d->valid;
 }
 
 QString Package::name(const char *key) const
@@ -388,54 +391,49 @@ void Package::setPath(const QString &path)
         return;
     }
 
-    QDir dir(path);
-    if (dir.isRelative()) {
-        QString location;
-        //kDebug() <<
+    QStringList paths;
+    if (QDir::isRelativePath(path)) {
+        QString p;
         if (!d->defaultPackageRoot.isEmpty()) {
-            dir.setPath(d->defaultPackageRoot);
-            if (dir.isRelative()) {
-                 location = QStandardPaths::locate(QStandardPaths::GenericDataLocation, d->defaultPackageRoot + path, QStandardPaths::LocateDirectory);
-            } else {
-                location = d->defaultPackageRoot + path;
+            p = path % "/";
+        } else {
+            p = d->defaultPackageRoot % "/" % path % "/";
+        }
+
+        if (QDir::isRelativePath(p)) {
+            paths << QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, path, QStandardPaths::LocateDirectory);
+        } else {
+            const QDir dir(p);
+            if (QFile::exists(dir.canonicalPath())) {
+                paths << p;
             }
         }
-        if (location.isEmpty()) {
-            location = QStandardPaths::locate(QStandardPaths::GenericDataLocation, path, QStandardPaths::LocateDirectory);
-
-            if (location.isEmpty()) {
-                d->path.clear();
-                d->valid = false;
-                return;
-            }
-        }
-        dir.setPath(location);
-    }
-
-    QString basePath = dir.canonicalPath();
-    bool valid = QFile::exists(basePath);
-
-    if (valid) {
-        QFileInfo info(basePath);
-        if (info.isDir() && !basePath.endsWith('/')) {
-            basePath.append('/');
-        }
-        kDebug() << "basePath is" << basePath;
     } else {
-#ifndef NDEBUG
-        kDebug() << path << "invalid, basePath is" << basePath;
-#endif
+        const QDir dir(path);
+        if (QFile::exists(dir.canonicalPath())) {
+            paths << path;
+        }
+    }
+
+    const QString previousPath = d->path;
+    foreach (const QString &p, paths) {
+        d->checkedValid = false;
+        d->path = p;
+        if (!d->path.endsWith('/')) {
+            d->path.append('/');
+        }
+
+        if (isValid()) {
+            break;
+        }
+    }
+
+    if (d->path == previousPath) {
         return;
     }
 
-    if (d->path == basePath) {
-        return;
-    }
-
-    d->path = basePath;
     delete d->metadata;
     d->metadata = 0;
-    d->valid = !d->path.isEmpty();
 
     if (d->structure) {
         d->structure.data()->pathChanged(this);
@@ -671,7 +669,8 @@ PackagePrivate::PackagePrivate()
           servicePrefix("plasma-applet-"),
           metadata(0),
           externalPaths(false),
-          valid(false)
+          valid(false),
+          checkedValid(false)
 {
     contentsPrefixPaths << "contents/";
 }
