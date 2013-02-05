@@ -183,7 +183,7 @@ kde4_add_library(plasma ${LIBRARY_TYPE} ${plasma_LIB_SRCS})
 
 target_link_libraries(plasma ${QT_QTUITOOLS_LIBRARY}
                               ${QT_QTNETWORK_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTSQL_LIBRARY} 
-                             ${KDE4_KDEUI_LIBS} kdnssd threadweaver kauth kwindowsystem ${PLASMA_EXTRA_LIBS} kcoreaddons ki18n)
+                             ${KDE4_KDEUI_LIBS} kdnssd threadweaver kauth KF5::kwindowsystem ${PLASMA_EXTRA_LIBS} kcoreaddons ki18n)
 #FIXME gpgme++ is in kdepimlibs, neeeds to be elsewhere
 target_link_libraries(plasma ${KDEPIMLIBS_GPGMEPP_LIBS} kdeclarative karchive)
 
@@ -199,7 +199,7 @@ if(DL_LIBRARY)
     target_link_libraries(plasma ${DL_LIBRARY})
 endif(DL_LIBRARY)
 
-target_link_libraries(plasma LINK_INTERFACE_LIBRARIES kdeui kdecore kwindowsystem Qt5::Widgets)
+target_link_libraries(plasma LINK_INTERFACE_LIBRARIES kdecore Qt5::Widgets)
 
 #do NOT use GENERIC versioning -- the plasma team will take care of versioning
 set_target_properties(plasma PROPERTIES
