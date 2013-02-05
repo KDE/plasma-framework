@@ -469,17 +469,23 @@ QVariantList ContainmentInterface::availableScreenRegion(int id) const
 
 void ContainmentInterface::appletAddedForward(Plasma::Applet *applet, const QPointF &pos)
 {
-    qDebug()<<"Applet added:"<<applet<<applet->name()<<applet->graphicObject();
-    if (applet && containment()->graphicObject() && applet->graphicObject()) {
-        applet->graphicObject()->setProperty("visible", false);
-        applet->graphicObject()->setProperty("parent", QVariant::fromValue(containment()->graphicObject()));
+    QObject *appletGraphicObject = applet->property("graphicObject").value<QObject *>();
+    QObject *contGraphicObject = containment()->property("graphicObject").value<QObject *>();
+
+    qDebug() << "Applet added:" << applet << applet->name() << appletGraphicObject;
+
+    if (applet && contGraphicObject && appletGraphicObject) {
+        appletGraphicObject->setProperty("visible", false);
+        appletGraphicObject->setProperty("parent", QVariant::fromValue(contGraphicObject));
     }
-    emit appletAdded(applet->graphicObject(), pos);
+
+    emit appletAdded(appletGraphicObject, pos);
 }
 
 void ContainmentInterface::appletRemovedForward(Plasma::Applet *applet)
 {
-    emit appletRemoved(applet);
+    QObject *appletGraphicObject = applet->property("graphicObject").value<QObject *>();
+    emit appletRemoved(appletGraphicObject);
 }
 
 QString ContainmentInterface::activityName() const

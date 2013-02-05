@@ -118,9 +118,11 @@ bool DeclarativeAppletScript::init()
             this, SLOT(activate()));
 
     setupObjects();
+
     m_qmlObject->completeInitialization();
-    a->setGraphicObject(m_qmlObject->rootObject());
-    qDebug()<<"Graphic object created:"<<a<<a->graphicObject();
+    a->setProperty("graphicObject", QVariant::fromValue(m_qmlObject->rootObject()));
+    qDebug() << "Graphic object created:" << a << a->property("graphicObject");
+
     return true;
 }
 

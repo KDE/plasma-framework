@@ -173,9 +173,6 @@ public:
     QBasicTimer constraintsTimer;
     QBasicTimer *modificationsTimer;
 
-    // Everything graphics related that remains in Applet
-    QObject *graphicObject;
-
     // a great green field of booleans :)
     bool hasConfigurationInterface : 1;
     bool failed : 1;

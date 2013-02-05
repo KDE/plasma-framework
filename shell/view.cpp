@@ -58,16 +58,15 @@ void View::setContainment(Plasma::Containment *cont)
         return;
     }
 
-    if (m_containment.data()->graphicObject()) {
-        qDebug() << "using as graphic containment" << m_containment.data()->graphicObject()<<m_containment.data();
-        if (!m_containment || !m_containment.data()->graphicObject()) {
-            qWarning() << "Containment not valid (yet?)";
-            return;
-        }
+    QObject *graphicObject = m_containment.data()->property("graphicObject").value<QObject *>();
+    if (graphicObject) {
+        qDebug() << "using as graphic containment" << graphicObject << m_containment.data();
 
-        m_containment.data()->graphicObject()->setProperty("visible", false);
-        m_containment.data()->graphicObject()->setProperty("parent", QVariant::fromValue(rootObject()));
-        rootObject()->setProperty("containment", QVariant::fromValue(m_containment.data()->graphicObject()));
+        graphicObject->setProperty("visible", false);
+        graphicObject->setProperty("parent", QVariant::fromValue(rootObject()));
+        rootObject()->setProperty("containment", QVariant::fromValue(graphicObject));
+    } else {
+        qWarning() << "Containment graphic object not valid";
     }
 }
 
