@@ -3,6 +3,7 @@ Name=Test Data Engine
 Name[de]=Test-Datentreiber
 Name[pt]=Motor de Dados de Teste
 Name[pt_BR]=Mecanismo de dados de teste
+Name[sk]=Testovací dátový nástroj
 Name[uk]=Перевірка рушія даних
 Name[x-test]=xxTest Data Enginexx
 X-KDE-ServiceTypes=Plasma/DataEngine

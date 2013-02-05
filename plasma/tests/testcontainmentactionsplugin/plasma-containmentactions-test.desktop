@@ -1,15 +1,18 @@
 [Desktop Entry]
 Name=Test
+Name[cs]=Test
 Name[de]=Test
 Name[nl]=Test
 Name[pt]=Teste
 Name[pt_BR]=Teste
+Name[sk]=Test
 Name[uk]=Тест
 Name[x-test]=xxTestxx
 Comment=A dummy plugin for testing
 Comment[de]=Ein Dummy-Modul zum Testen.
 Comment[pt]=Um 'plugin' de exemplo para testes
 Comment[pt_BR]=Um plugin fictício para testes
+Comment[sk]=Ukážkový modul pre testovanie
 Comment[uk]=Додаток для тестування
 Comment[x-test]=xxA dummy plugin for testingxx
 Type=Service
