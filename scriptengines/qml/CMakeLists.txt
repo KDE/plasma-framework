@@ -14,9 +14,6 @@ include_directories(${KDE4_INCLUDE_DIR}/KDE ${PHONON_INCLUDES} ${CMAKE_CURRENT_S
 #DECLARATIVE APPLET
 set(declarative_appletscript_SRCS
     common/scriptenv.cpp
-    #declarative/toolboxproxy.cpp
-    #declarative/appletcontainer.cpp
-    #declarative/declarativeitemcontainer.cpp
     declarative/packageaccessmanager.cpp
     declarative/packageaccessmanagerfactory.cpp
     declarative/qmlobject.cpp
