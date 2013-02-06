@@ -1189,7 +1189,7 @@ void Applet::setCustomCategories(const QStringList &categories)
     AppletPrivate::s_customCategories = QSet<QString>::fromList(categories);
 }
 
-QStringList Applet::customCategories()
+QStringList Applet::customCategories() const
 {
     return AppletPrivate::s_customCategories.toList();
 }

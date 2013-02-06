@@ -281,7 +281,7 @@ class PLASMA_EXPORT Applet : public QObject
          * @return the list of custom categories known to libplasma
          * @since 4.3
          */
-        QStringList customCategories();
+        QStringList customCategories() const;
 
         /**
          * Attempts to load an applet from a package
