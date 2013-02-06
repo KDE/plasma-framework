@@ -22,7 +22,6 @@
 
 #include <QObject>
 
-#include <QtDeclarative/qdeclarative.h>
 
 class DialogStatus : public QObject
 {

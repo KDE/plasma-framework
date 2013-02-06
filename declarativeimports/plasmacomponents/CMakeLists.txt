@@ -1,27 +1,39 @@
 project(plasmacomponents)
 
+find_package(KDeclarative REQUIRED)
+
 set(plasmacomponents_SRCS
-    fullscreensheet.cpp
-    fullscreenwindow.cpp
+    #fullscreensheet.cpp
+    #fullscreenwindow.cpp
     plasmacomponentsplugin.cpp
     qrangemodel.cpp
     enums.cpp
     qmenu.cpp
     qmenuitem.cpp
-    ../core/declarativeitemcontainer.cpp
+    #../core/declarativeitemcontainer.cpp
     )
 
 INCLUDE_DIRECTORIES(
         ${CMAKE_SOURCE_DIR}
         ${CMAKE_BINARY_DIR}
         ${KDE4_INCLUDES}
+        ${KDECLARATIVE_INCLUDE_DIR}
 )
 
 qt4_automoc(${plasmacomponents_SRCS})
 
+set(IMPORTS_INSTALL_DIR "qml")
+message("!!! Forcing Imports install location: ${IMPORTS_INSTALL_DIR}")
 
 add_library(plasmacomponentsplugin SHARED ${plasmacomponents_SRCS})
-target_link_libraries(plasmacomponentsplugin ${QT_QTCORE_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY} ${QT_QTGUI_LIBRARY} ${KDE4_KDEUI_LIBRARY} ${KDECLARATIVE_LIBRARIES} ${KDE4_PLASMA_LIBS})
+target_link_libraries(plasmacomponentsplugin
+        ${QT_QTCORE_LIBRARY}
+        ${Qt5Quick_LIBRARIES}
+        ${Qt5Qml_LIBRARIES}
+        ${QT_QTGUI_LIBRARY}
+        ${KDE4_KDEUI_LIBRARY}
+        ${KDECLARATIVE_LIBRARIES}
+        plasma)
 
 install(TARGETS plasmacomponentsplugin DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/plasma/components)
 

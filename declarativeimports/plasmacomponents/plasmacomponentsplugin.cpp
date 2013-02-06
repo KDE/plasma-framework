@@ -19,10 +19,9 @@
 
 #include "plasmacomponentsplugin.h"
 
-#include <QtDeclarative/qdeclarative.h>
-#include <QtDeclarative/QDeclarativeEngine>
-#include <QtDeclarative/QDeclarativeContext>
-#include <QtDeclarative/QDeclarativeItem>
+#include <QQmlEngine>
+#include <QQmlContext>
+#include <QQuickItem>
 
 #include "qrangemodel.h"
 
@@ -35,9 +34,9 @@
 #include "enums.h"
 #include "qmenu.h"
 #include "qmenuitem.h"
-#include "fullscreensheet.h"
+//#include "fullscreensheet.h"
 
-Q_EXPORT_PLUGIN2(plasmacomponentsplugin, PlasmaComponentsPlugin)
+//Q_EXPORT_PLUGIN2(plasmacomponentsplugin, PlasmaComponentsPlugin)
 
 class BKSingleton
 {
@@ -55,7 +54,7 @@ EngineBookKeeping *EngineBookKeeping::self()
     return &privateBKSelf->self;
 }
 
-QDeclarativeEngine *EngineBookKeeping::engine() const
+QQmlEngine *EngineBookKeeping::engine() const
 {
     //for components creation, any engine will do, as long is valid
     if (m_engines.isEmpty()) {
@@ -66,7 +65,7 @@ QDeclarativeEngine *EngineBookKeeping::engine() const
     }
 }
 
-void EngineBookKeeping::insertEngine(QDeclarativeEngine *engine)
+void EngineBookKeeping::insertEngine(QQmlEngine *engine)
 {
     connect(engine, SIGNAL(destroyed(QObject *)),
             this, SLOT(engineDestroyed(QObject *)));
@@ -75,14 +74,14 @@ void EngineBookKeeping::insertEngine(QDeclarativeEngine *engine)
 
 void EngineBookKeeping::engineDestroyed(QObject *deleted)
 {
-    m_engines.remove(static_cast<QDeclarativeEngine *>(deleted));
+    m_engines.remove(static_cast<QQmlEngine *>(deleted));
 }
 
 
 
-void PlasmaComponentsPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
+void PlasmaComponentsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 {
-    QDeclarativeExtensionPlugin::initializeEngine(engine, uri);
+    QQmlExtensionPlugin::initializeEngine(engine, uri);
     EngineBookKeeping::self()->insertEngine(engine);
 }
 
@@ -96,7 +95,7 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
         qmlRegisterType<QMenuProxy>(uri, 0, 1, "Menu");
         qmlRegisterType<QMenuItem>(uri, 0, 1, "MenuItem");
     } else {
-        qmlRegisterType<FullScreenSheet>(uri, 0, 1, "Sheet");
+       // qmlRegisterType<FullScreenSheet>(uri, 0, 1, "Sheet");
     }
 
     qmlRegisterType<Plasma::QRangeModel>(uri, 0, 1, "RangeModel");
@@ -107,5 +106,5 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
 }
 
 
-#include "plasmacomponentsplugin.moc"
+#include "moc_plasmacomponentsplugin.cpp"
 

@@ -20,11 +20,11 @@
 #ifndef PLASMACOMPONENTSPLUGIN_H
 #define PLASMACOMPONENTSPLUGIN_H
 
-#include <QDeclarativeExtensionPlugin>
+#include <QQmlExtensionPlugin>
 #include <QSet>
 
-class QDeclarativeEngine;
-class QDeclarativeItem;
+class QQmlEngine;
+class QQuickItem;
 class PlasmaComponentsPlugin;
 
 class EngineBookKeeping : public QObject
@@ -35,22 +35,23 @@ public:
     EngineBookKeeping();
     static EngineBookKeeping *self();
 
-    void insertEngine(QDeclarativeEngine *engine);
-    QDeclarativeEngine *engine() const;
+    void insertEngine(QQmlEngine *engine);
+    QQmlEngine *engine() const;
 
 private Q_SLOTS:
     void engineDestroyed(QObject *deleted);
 
 private:
-    QSet <QDeclarativeEngine*> m_engines;
+    QSet <QQmlEngine*> m_engines;
 };
 
-class PlasmaComponentsPlugin : public QDeclarativeExtensionPlugin
+class PlasmaComponentsPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
 
 public:
-    void initializeEngine(QDeclarativeEngine *engine, const char *uri);
+    void initializeEngine(QQmlEngine *engine, const char *uri);
     void registerTypes(const char *uri);
 };
 

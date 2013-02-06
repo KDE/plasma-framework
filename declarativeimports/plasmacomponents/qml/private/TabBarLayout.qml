@@ -54,7 +54,7 @@ Properties:
 
 **/
 
-import QtQuick 1.1
+import QtQuick 2.0
 import org.kde.qtextracomponents 0.1
 import "AppManager.js" as Utils
 

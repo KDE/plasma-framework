@@ -183,4 +183,4 @@ void DeclarativeItemContainer::preferredHeightChanged()
     setPreferredHeight(preferredHeight);
 }
 
-#include "declarativeitemcontainer_p.moc"
+#include "declarativeitemcontainer.moc"

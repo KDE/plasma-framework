@@ -21,4 +21,4 @@
 
 
 
-#include "enums.moc"
+#include "moc_enums.cpp"

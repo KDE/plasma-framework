@@ -17,7 +17,7 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-import QtQuick 1.1
+import QtQuick 2.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 import "private" as Private
 
@@ -122,7 +122,7 @@ FocusScope {
      * integers between 11 and 31 into the text input:
      *
      * @code
-     * import QtQuick 1.0
+     * import QtQuick 2.0
      * TextInput {
      *     validator: IntValidator { bottom: 11; top: 31 }
      *     focus: true
