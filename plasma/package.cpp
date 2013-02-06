@@ -79,7 +79,7 @@ bool Package::isValid() const
         return d->valid;
     }
 
-    d->valid = false;
+    d->valid = true;
 
     //search for the file in all prefixes and in all possible paths for each prefix
     //even if it's a big nested loop, usually there is one prefix and one location
@@ -397,7 +397,7 @@ void Package::setPath(const QString &path)
         if (d->defaultPackageRoot.isEmpty()) {
             p = path % "/";
         } else {
-            p = d->defaultPackageRoot % "/" % path % "/";
+            p = d->defaultPackageRoot % path % "/";
         }
 
         if (QDir::isRelativePath(p)) {
@@ -419,6 +419,7 @@ void Package::setPath(const QString &path)
     foreach (const QString &p, paths) {
         d->checkedValid = false;
         d->path = p;
+
         if (!d->path.endsWith('/')) {
             d->path.append('/');
         }
