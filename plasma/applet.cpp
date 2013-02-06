@@ -673,10 +673,6 @@ void Applet::flushPendingConstraintsEvents()
         d->positionMessageOverlay();
     }
 
-    if (c & Plasma::FormFactorConstraint) {
-        FormFactor f = formFactor();
-    }
-
     // now take care of constraints in special subclasses: Contaiment and PopupApplet
     Containment* containment = qobject_cast<Plasma::Containment*>(this);
     if (d->isContainment && containment) {
