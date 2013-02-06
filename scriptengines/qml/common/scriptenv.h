@@ -20,9 +20,6 @@
 #ifndef SCRIPTENV_H
 #define SCRIPTENV_H
 
-#define USEGUI
-#define DECLARATIVE
-
 #include <kdemacros.h>
 #include <QScriptEngine>
 #include <QSet>

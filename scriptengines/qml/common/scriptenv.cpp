@@ -65,9 +65,7 @@ void ScriptEnv::setupGlobalObject()
     global.setProperty("__plasma_scriptenv", m_engine->newQObject(this),
                        QScriptValue::ReadOnly|QScriptValue::Undeletable|QScriptValue::SkipInEnumeration);
     // Add utility functions
-#ifndef DECLARATIVE
-    global.setProperty("print", m_engine->newFunction(ScriptEnv::print));
-#endif
+
     global.setProperty("debug", m_engine->newFunction(ScriptEnv::debug));
 }
 
@@ -522,6 +520,4 @@ bool ScriptEnv::removeEventListener(const QString &event, const QScriptValue &fu
     return found;
 }
 
-#ifndef USEGUI
-#include "scriptenv.moc"
-#endif
+#include "moc_scriptenv.cpp"
