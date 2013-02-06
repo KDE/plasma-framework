@@ -369,6 +369,7 @@ Q_SIGNALS:
 protected Q_SLOTS:
     void appletAddedForward(Plasma::Applet *applet, const QPointF &pos);
     void appletRemovedForward(Plasma::Applet *applet);
+    void loadWallpaper();
 
 private:
     bool m_movableApplets;

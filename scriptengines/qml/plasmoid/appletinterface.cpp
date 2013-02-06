@@ -392,13 +392,12 @@ ContainmentInterface::ContainmentInterface(AbstractJsAppletScript *parent)
       m_movableApplets(true)
 {
     qmlRegisterType<ContainmentInterface>();
+
     connect(containment(), SIGNAL(appletRemoved(Plasma::Applet *)), this, SLOT(appletRemovedForward(Plasma::Applet *)));
-
     connect(containment(), SIGNAL(appletAdded(Plasma::Applet *, const QPointF &)), this, SLOT(appletAddedForward(Plasma::Applet *, const QPointF &)));
-
     connect(containment(), SIGNAL(screenChanged(int, int, Plasma::Containment*)), this, SIGNAL(screenChanged()));
-
     connect(containment(), SIGNAL(activityChanged()), this, SIGNAL(activityChanged()));
+    connect(containment(), SIGNAL(wallpaperChanged()), this, SLOT(loadWallpaper()));
 
      if (containment()->corona()) {
          connect(containment()->corona(), SIGNAL(availableScreenRegionChanged()),
@@ -485,6 +484,11 @@ void ContainmentInterface::appletRemovedForward(Plasma::Applet *applet)
 {
     QObject *appletGraphicObject = applet->property("graphicObject").value<QObject *>();
     emit appletRemoved(appletGraphicObject);
+}
+
+void ContainmentInterface::loadWallpaper()
+{
+
 }
 
 QString ContainmentInterface::activityName() const
