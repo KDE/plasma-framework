@@ -165,7 +165,9 @@ void DeclarativeAppletScript::qmlCreationFinished()
             m_toolBoxWidget->setInitializationDelayed(true);
             m_toolBoxWidget->setQmlPath(qmlPath);
 
-            m_toolBoxWidget->rootObject()->setProperty("plasmoid", QVariant::fromValue(m_self));
+            if (m_toolBoxWidget->rootObject()) {
+                m_toolBoxWidget->rootObject()->setProperty("plasmoid", QVariant::fromValue(m_self));
+            }
         } else {
             kWarning() << "Could not load org.kde.toolbox package.";
         }
