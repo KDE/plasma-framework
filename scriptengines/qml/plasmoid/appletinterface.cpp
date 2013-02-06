@@ -491,13 +491,6 @@ void ContainmentInterface::loadWallpaper()
 
 }
 
-QString ContainmentInterface::activityName() const
-{
-    //TODO
-    return QString();
-    //return containment()->activityName();
-}
-
 QString ContainmentInterface::activityId() const
 {
     return containment()->activity();

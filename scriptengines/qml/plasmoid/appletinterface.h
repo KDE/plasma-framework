@@ -327,7 +327,6 @@ class ContainmentInterface : public APPLETSUPERCLASS
     Q_PROPERTY(bool drawWallpaper READ drawWallpaper WRITE setDrawWallpaper)
     Q_PROPERTY(Type containmentType READ containmentType WRITE setContainmentType)
     Q_PROPERTY(int screen READ screen NOTIFY screenChanged)
-    Q_PROPERTY(QString activityName READ activityName NOTIFY activityNameChanged)
     Q_PROPERTY(QString activityId READ activityId NOTIFY activityIdChanged)
     Q_ENUMS(Type)
 
@@ -352,7 +351,6 @@ public:
     void setContainmentType(Type type);
     int screen() const;
 
-    QString activityName() const;
     QString activityId() const;
 
     Q_INVOKABLE QRectF screenGeometry(int id) const;
@@ -362,7 +360,6 @@ Q_SIGNALS:
     void appletAdded(QObject *applet, const QPointF &pos);
     void appletRemoved(QObject *applet);
     void screenChanged();
-    void activityNameChanged();
     void activityIdChanged();
     void availableScreenRegionChanged();
 
