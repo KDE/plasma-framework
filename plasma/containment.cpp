@@ -487,11 +487,6 @@ void Containment::setLocation(Location location)
     emit configNeedsSaving();
 }
 
-void Containment::addSiblingContainment()
-{
-    emit addSiblingContainment(this);
-}
-
 void Containment::clearApplets()
 {
     foreach (Applet *applet, d->applets) {

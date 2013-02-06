@@ -397,12 +397,6 @@ Q_SIGNALS:
         void toolBoxVisibilityChanged(bool);
 
         /**
-         * Emitted when the containment wants a new containment to be created.
-         * Usually only used for desktop containments.
-         */
-        void addSiblingContainment(Plasma::Containment *);
-
-        /**
          * Emitted when the containment requests an add widgets dialog is shown.
          * Usually only used for desktop containments.
          *
@@ -442,11 +436,6 @@ Q_SIGNALS:
          * Applets.
          */
         void setFormFactor(Plasma::FormFactor formFactor);
-
-        /**
-         * Tells the corona to create a new desktop containment
-         */
-        void addSiblingContainment();
 
         /**
          * Destroys this containment and all its applets (after a confirmation dialog);
