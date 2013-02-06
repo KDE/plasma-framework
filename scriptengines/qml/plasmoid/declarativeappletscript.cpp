@@ -59,7 +59,7 @@ void registerSimpleAppletMetaTypes(QScriptEngine *engine);
 DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariantList &args)
     : AbstractJsAppletScript(parent, args),
       m_qmlObject(0),
-      m_toolBoxWidget(0),
+      m_toolBoxObject(0),
       m_interface(0),
       m_env(0),
       m_auth(this)
@@ -161,12 +161,12 @@ void DeclarativeAppletScript::qmlCreationFinished()
         if (pkg.isValid()) {
             const QString qmlPath = pkg.filePath("mainscript");
 
-            m_toolBoxWidget = new QmlObject(pc);
-            m_toolBoxWidget->setInitializationDelayed(true);
-            m_toolBoxWidget->setQmlPath(qmlPath);
+            m_toolBoxObject = new QmlObject(pc);
+            m_toolBoxObject->setInitializationDelayed(true);
+            m_toolBoxObject->setQmlPath(qmlPath);
 
-            if (m_toolBoxWidget->rootObject()) {
-                m_toolBoxWidget->rootObject()->setProperty("plasmoid", QVariant::fromValue(m_self));
+            if (m_toolBoxObject->rootObject()) {
+                m_toolBoxObject->rootObject()->setProperty("plasmoid", QVariant::fromValue(m_self));
             }
         } else {
             kWarning() << "Could not load org.kde.toolbox package.";

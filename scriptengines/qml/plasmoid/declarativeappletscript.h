@@ -77,7 +77,7 @@ Q_SIGNALS:
 
 private:
     QmlObject *m_qmlObject;
-    QmlObject *m_toolBoxWidget;
+    QmlObject *m_toolBoxObject;
     AppletInterface *m_interface;
     QObject *m_self;
     ScriptEnv *m_env;
