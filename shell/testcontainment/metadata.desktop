@@ -2,6 +2,8 @@
 Encoding=UTF-8
 Keywords=
 Name=Containment Test
+Name[uk]=Тестування контейнера
+Name[x-test]=xxContainment Testxx
 Type=Service
 
 X-KDE-ServiceTypes=Plasma/Applet,Plasma/Containment
