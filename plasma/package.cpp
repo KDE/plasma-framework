@@ -394,14 +394,14 @@ void Package::setPath(const QString &path)
     QStringList paths;
     if (QDir::isRelativePath(path)) {
         QString p;
-        if (!d->defaultPackageRoot.isEmpty()) {
+        if (d->defaultPackageRoot.isEmpty()) {
             p = path % "/";
         } else {
             p = d->defaultPackageRoot % "/" % path % "/";
         }
 
         if (QDir::isRelativePath(p)) {
-            paths << QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, path, QStandardPaths::LocateDirectory);
+            paths << QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, p, QStandardPaths::LocateDirectory);
         } else {
             const QDir dir(p);
             if (QFile::exists(dir.canonicalPath())) {
