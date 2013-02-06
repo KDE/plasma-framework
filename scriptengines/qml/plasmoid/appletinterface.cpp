@@ -65,12 +65,6 @@ AppletInterface::~AppletInterface()
 {
 }
 
-AppletInterface *AppletInterface::extract(QScriptEngine *engine)
-{
-    QScriptValue appletValue = engine->globalObject().property("plasmoid");
-    return qobject_cast<AppletInterface*>(appletValue.toQObject());
-}
-
 Plasma::DataEngine* AppletInterface::dataEngine(const QString &name)
 {
     return applet()->dataEngine(name);
@@ -377,11 +371,6 @@ QStringList AppletInterface::downloadedFiles() const
     const QString downloadDir = KGlobalSettings::downloadPath() + "/Plasma/" + applet()->pluginName();
     QDir dir(downloadDir);
     return dir.entryList(QDir::Files | QDir::NoSymLinks | QDir::Readable);
-}
-
-void AppletInterface::gc()
-{
-    QTimer::singleShot(0, m_appletScriptEngine, SLOT(collectGarbage()));
 }
 
 

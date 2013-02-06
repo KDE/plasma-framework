@@ -219,7 +219,6 @@ enum IntervalAlignment {
 
 //-------------------------------------------------------------------
 
-    Q_INVOKABLE void gc();
     Q_INVOKABLE FormFactor formFactor() const;
 
     Location location() const;
@@ -269,7 +268,6 @@ enum IntervalAlignment {
     bool userConfiguring() const;
     int apiVersion() const;
 
-    static AppletInterface *extract(QScriptEngine *engine);
     inline Plasma::Applet *applet() const { return m_appletScriptEngine->applet(); }
 
     void setAssociatedApplication(const QString &string);
