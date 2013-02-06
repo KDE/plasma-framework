@@ -231,8 +231,7 @@ void Containment::restore(KConfigGroup &group)
     restoreContents(group);
     setImmutability((ImmutabilityType)group.readEntry("immutability", (int)Mutable));
 
-    setWallpaper(group.readEntry("wallpaperplugin", ContainmentPrivate::defaultWallpaper),
-                 group.readEntry("wallpaperpluginmode", ContainmentPrivate::defaultWallpaperMode));
+    setWallpaper(group.readEntry("wallpaperplugin", ContainmentPrivate::defaultWallpaper));
 
     KConfigGroup cfg;
     if (containmentType() == PanelContainment || containmentType() == CustomPanelContainment) {
@@ -288,8 +287,6 @@ void Containment::restore(KConfigGroup &group)
 #endif
                 "screen" << screen() <<
                 "geometry is" << geometry() <<
-                "wallpaper" << ((d->wallpaper) ? d->wallpaper->pluginName() : QString()) <<
-                "wallpaper mode" << wallpaperMode() <<
                 "config entries" << group.entryMap();
     */
 }
@@ -320,11 +317,7 @@ void Containment::save(KConfigGroup &g) const
     group.writeEntry("location", (int)d->location);
     group.writeEntry("activityId", d->activityId);
 
-
     group.writeEntry("wallpaperplugin", d->wallpaper);
-    group.writeEntry("wallpaperpluginmode", d->wallpaperMode);
-
-    //TODO: the wallpaper implementation must know it has to save at this point
 
     saveContents(group);
 }
@@ -761,35 +754,21 @@ bool Containment::drawWallpaper()
     return d->drawWallpaper;
 }
 
-void Containment::setWallpaper(const QString &pluginName, const QString &mode)
+void Containment::setWallpaper(const QString &pluginName)
 {
-    KConfigGroup cfg = config();
-    bool newPlugin = pluginName != d->wallpaper;
-    bool newMode = mode != d->wallpaperMode;
-
-
-    if (newPlugin || newMode) {
+    if (pluginName != d->wallpaper) {
         d->wallpaper = pluginName;
-        d->wallpaperMode = mode;
 
-        if (newMode) {
-            cfg.writeEntry("wallpaperpluginmode", mode);
-        }
-        if (newPlugin) {
-            cfg.writeEntry("wallpaperplugin", pluginName);
-        }
+        KConfigGroup cfg = config();
+        cfg.writeEntry("wallpaperplugin", d->wallpaper);
         emit configNeedsSaving();
+        emit wallpaperChanged();
     }
 }
 
 QString Containment::wallpaper() const
 {
     return d->wallpaper;
-}
-
-QString Containment::wallpaperMode() const
-{
-    return d->wallpaperMode;
 }
 
 void Containment::setContainmentActions(const QString &trigger, const QString &pluginName)

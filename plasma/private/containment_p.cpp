@@ -310,11 +310,8 @@ KActionCollection* ContainmentPrivate::actions()
 
 void ContainmentPrivate::configChanged()
 {
-    if (drawWallpaper) {
-        KConfigGroup group = q->config();
-        q->setWallpaper(group.readEntry("wallpaperplugin", defaultWallpaper),
-                        group.readEntry("wallpaperpluginmode", defaultWallpaperMode));
-    }
+    KConfigGroup group = q->config();
+    q->setWallpaper(group.readEntry("wallpaperplugin", defaultWallpaper));
 }
 
 void ContainmentPrivate::requestConfiguration()

@@ -127,7 +127,6 @@ public:
     Location location;
     Applet::List applets;
     QString wallpaper;
-    QString wallpaperMode;
     QHash<QString, ContainmentActions*> localActionPlugins;
     int screen;
     int lastScreen;

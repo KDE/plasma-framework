@@ -69,6 +69,7 @@ class AbstractToolBox;
 class PLASMA_EXPORT Containment : public Applet
 {
     Q_OBJECT
+    Q_PROPERTY(QString wallpaper READ wallpaper WRITE setWallpaper NOTIFY wallpaperChanged)
 
     public:
 
@@ -302,21 +303,13 @@ class PLASMA_EXPORT Containment : public Applet
          * Sets wallpaper plugin.
          *
          * @param pluginName the name of the wallpaper to attempt to load
-         * @param mode optional mode or the wallpaper plugin (e.g. "Slideshow").
-         *        These values are pugin specific and enumerated in the plugin's
-         *        .desktop file.
          */
-        void setWallpaper(const QString &pluginName, const QString &mode = QString());
+        void setWallpaper(const QString &pluginName);
 
         /**
          * Return wallpaper plugin.
          */
         QString wallpaper() const;
-
-        /**
-         * Return wallpaper rendering mode.
-         */
-        QString wallpaperMode() const;
 
         /**
          * Sets the current activity by id
@@ -419,6 +412,11 @@ Q_SIGNALS:
          * Emitted when the user wants to configure/change containment.
          */
         void configureRequested(Plasma::Containment *containment);
+
+        /**
+         * Emitted when the wallpaper plugin is changed
+         */
+        void wallpaperChanged();
 
     public Q_SLOTS:
         /**
