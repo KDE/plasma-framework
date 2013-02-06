@@ -31,7 +31,7 @@
 #include <Plasma/DataEngine>
 #include <Plasma/Theme>
 
-#include "abstractjsappletscript.h"
+#include "declarativeappletscript.h"
 
 class QAction;
 class QmlAppletScript;
@@ -76,7 +76,7 @@ class AppletInterface : public QObject
     Q_PROPERTY(QString associatedApplication WRITE setAssociatedApplication READ associatedApplication)
 
 public:
-    AppletInterface(AbstractJsAppletScript *parent);
+    AppletInterface(DeclarativeAppletScript *parent);
     ~AppletInterface();
 
 //------------------------------------------------------------------
@@ -292,7 +292,7 @@ Q_SIGNALS:
     void statusChanged();
 
 protected:
-    AbstractJsAppletScript *m_appletScriptEngine;
+    DeclarativeAppletScript *m_appletScriptEngine;
 
 private:
     QStringList m_actions;
@@ -307,7 +307,7 @@ class JsAppletInterface : public AppletInterface
     Q_PROPERTY(QObject *sender READ sender)
 
 public:
-    JsAppletInterface(AbstractJsAppletScript *parent)
+    JsAppletInterface(DeclarativeAppletScript *parent)
         : AppletInterface(parent)
     {
     }
@@ -339,7 +339,7 @@ public:
                                     but something application specific */
         CustomPanelContainment = 128 /**< A customized desktop panel */
     };
-    ContainmentInterface(AbstractJsAppletScript *parent);
+    ContainmentInterface(DeclarativeAppletScript *parent);
 
     inline Plasma::Containment *containment() const { return static_cast<Plasma::Containment *>(m_appletScriptEngine->applet()); }
 

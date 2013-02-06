@@ -43,7 +43,7 @@
 
 Q_DECLARE_METATYPE(AppletInterface*)
 
-AppletInterface::AppletInterface(AbstractJsAppletScript *parent)
+AppletInterface::AppletInterface(DeclarativeAppletScript *parent)
     : QObject(parent),
       m_appletScriptEngine(parent),
       m_actionSignals(0)
@@ -387,7 +387,7 @@ void AppletInterface::gc()
 
 ///////////// ContainmentInterface
 
-ContainmentInterface::ContainmentInterface(AbstractJsAppletScript *parent)
+ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
     : APPLETSUPERCLASS(parent),
       m_movableApplets(true)
 {

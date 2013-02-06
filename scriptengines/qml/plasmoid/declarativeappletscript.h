@@ -23,7 +23,9 @@
 
 #include <kdemacros.h>
 
-#include "abstractjsappletscript.h"
+#include <QQmlEngine>
+
+#include <Plasma/AppletScript>
 #include "plasmoid/appletauthorization.h"
 #include <Plasma/DataEngine>
 
@@ -33,7 +35,7 @@ class QmlObject;
 class ScriptEnv;
 class EngineAccess;
 
-class DeclarativeAppletScript : public AbstractJsAppletScript
+class DeclarativeAppletScript : public Plasma::AppletScript
 {
     Q_OBJECT
 

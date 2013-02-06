@@ -57,7 +57,7 @@ QScriptValue constructKUrlClass(QScriptEngine *engine);
 QScriptValue constructQPointClass(QScriptEngine *engine);
 void registerSimpleAppletMetaTypes(QScriptEngine *engine);
 DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariantList &args)
-    : AbstractJsAppletScript(parent, args),
+    : Plasma::AppletScript(parent),
       m_qmlObject(0),
       m_toolBoxObject(0),
       m_interface(0),
