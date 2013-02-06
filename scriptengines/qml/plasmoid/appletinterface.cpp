@@ -484,6 +484,4 @@ QString ContainmentInterface::activityId() const
     return containment()->activity();
 }
 
-#ifndef USE_JS_SCRIPTENGINE
-#include "appletinterface.moc"
-#endif
+#include "moc_appletinterface.cpp"
