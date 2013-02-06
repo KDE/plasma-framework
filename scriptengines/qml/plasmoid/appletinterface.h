@@ -314,13 +314,8 @@ public:
 
 };
 
-#ifdef USE_JS_SCRIPTENGINE
-#define APPLETSUPERCLASS JsAppletInterface
-#else
-#define APPLETSUPERCLASS AppletInterface
-#endif
 
-class ContainmentInterface : public APPLETSUPERCLASS
+class ContainmentInterface : public AppletInterface
 {
     Q_OBJECT
     Q_PROPERTY(QVariantList applets READ applets)

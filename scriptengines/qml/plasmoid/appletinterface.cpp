@@ -388,7 +388,7 @@ void AppletInterface::gc()
 ///////////// ContainmentInterface
 
 ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
-    : APPLETSUPERCLASS(parent),
+    : AppletInterface(parent),
       m_movableApplets(true)
 {
     qmlRegisterType<ContainmentInterface>();
