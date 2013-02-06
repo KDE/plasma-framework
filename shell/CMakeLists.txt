@@ -43,7 +43,8 @@ target_link_libraries(testplasma2
  ${Qt5Quick_LIBRARIES}
  ${Qt5Qml_LIBRARIES}
  ${kcoreaddons}
- #${KDE4_PLASMA_LIBS}
+ ${KDE4_KDEUI_LIBS}
+ ${KDE4_KDECORE_LIBS} 
  plasma
 )
 

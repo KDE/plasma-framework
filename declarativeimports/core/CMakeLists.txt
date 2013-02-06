@@ -32,7 +32,13 @@ message("!!! Forcing Imports install location: ${IMPORTS_INSTALL_DIR}")
 
 
 add_library(corebindingsplugin SHARED ${corebindings_SRCS})
-target_link_libraries(corebindingsplugin ${QT_QTSCRIPT_LIBRARY} ${Qt5Quick_LIBRARIES} ${Qt5Qml_LIBRARIES} ${KDECLARATIVE_LIBRARIES} plasma)
+target_link_libraries(corebindingsplugin
+        ${QT_QTSCRIPT_LIBRARY}
+        ${Qt5Quick_LIBRARIES}
+        ${Qt5Qml_LIBRARIES}
+        ${KDECLARATIVE_LIBRARIES}
+        ${KDE4_KDEUI_LIBS}
+        plasma)
 
 install(TARGETS corebindingsplugin DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/plasma/core)
 install(FILES qmldir DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/plasma/core)
