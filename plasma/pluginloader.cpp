@@ -95,7 +95,6 @@ PluginLoader *PluginLoader::self()
 
 Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVariantList &args)
 {
-    // the application-specific appletLoader failed to create an applet, here we try with our own logic.
     if (name.isEmpty()) {
         return 0;
     }
@@ -105,6 +104,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         return applet;
     }
 
+    // the application-specific appletLoader failed to create an applet, here we try with our own logic.
     const QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(name);
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
 
