@@ -22,12 +22,17 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 
 Rectangle {
     id: root
-    color: "darkred"
-    width: 100
-    height: 100
+    color: "white"
+    width: mainText.width
+    height: mainText.height
 
+    anchors {
+        top: parent.top
+        right: parent.right
+    }
 
     Text {
+        id: mainText
         text: "esktop Toolbo"
     }
 

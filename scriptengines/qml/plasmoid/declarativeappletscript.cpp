@@ -166,7 +166,17 @@ void DeclarativeAppletScript::qmlCreationFinished()
             m_toolBoxObject->setQmlPath(qmlPath);
 
             if (m_toolBoxObject->rootObject()) {
-                m_toolBoxObject->rootObject()->setProperty("plasmoid", QVariant::fromValue(m_self));
+                m_toolBoxObject->rootObject()->setProperty("plasmoid", QVariant::fromValue(m_interface));
+            }
+
+            m_toolBoxObject->completeInitialization();
+
+            QObject *containmentGraphicObject = pc->property("graphicObject").value<QObject *>();
+
+            if (containmentGraphicObject && m_toolBoxObject->rootObject()) {
+                m_toolBoxObject->rootObject()->setProperty("parent", QVariant::fromValue(containmentGraphicObject));
+
+                containmentGraphicObject->setProperty("toolBox", QVariant::fromValue(m_toolBoxObject->rootObject()));
             }
         } else {
             kWarning() << "Could not load org.kde.toolbox package.";
