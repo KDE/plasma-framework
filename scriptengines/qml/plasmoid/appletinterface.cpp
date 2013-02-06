@@ -26,7 +26,6 @@
 #include <QFile>
 #include <QQmlEngine>
 #include <QQmlComponent>
-#include <QScriptEngine>
 #include <QSignalMapper>
 #include <QTimer>
 
