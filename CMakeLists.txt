@@ -88,7 +88,7 @@ find_package(solid REQUIRED NO_MODULE)
 # those are not "done" yet:
 find_package(ki18n REQUIRED NO_MODULE)
 find_package(kio REQUIRED NO_MODULE)
-find_package(KDeclarative REQUIRED NO_MODULE)
+find_package(kdeclarative REQUIRED NO_MODULE)
 
 if (APPLE)
    find_package(Carbon REQUIRED)
