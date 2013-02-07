@@ -19,7 +19,7 @@ add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 find_package(Qt5Core REQUIRED NO_MODULE)
 
 find_package(Qt5Transitional MODULE)
-find_package(Qt5Quick REQUIRED)
+find_package(Qt5Quick REQUIRED NO_MODULE)
 
 if (Qt5_POSITION_INDEPENDENT_CODE)
   set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -58,23 +58,25 @@ configure_file(${CMAKE_SOURCE_DIR}/CTestCustom.cmake ${CMAKE_BINARY_DIR}/CTestCu
 
 set (QT_MIN_VERSION "5.0.0")
 
-find_package(KF5 REQUIRED)
-find_package(KDE4Internal REQUIRED)
+find_package(KF5 REQUIRED MODULE)
+find_package(KDE4Internal REQUIRED MODULE)
 #find_package(KF5Transitional REQUIRED)
 
 include(KDE4Defaults)
 #include (MacroLibrary)
 
-find_package(kdeqt5staging REQUIRED)
-find_package(kidletime REQUIRED)
-find_package(itemmodels REQUIRED)
-find_package(kwidgetsaddons REQUIRED)
-find_package(kwindowsystem REQUIRED)
-find_package(kcodecs REQUIRED)
-find_package(karchive REQUIRED)
-find_package(ki18n REQUIRED)
-find_package(kcoreaddons REQUIRED)
-find_package(solid REQUIRED)
+find_package(kdeqt5staging REQUIRED NO_MODULE)
+find_package(kidletime REQUIRED NO_MODULE)
+find_package(itemmodels REQUIRED NO_MODULE)
+find_package(kwidgetsaddons REQUIRED NO_MODULE)
+find_package(kwindowsystem REQUIRED NO_MODULE)
+find_package(kcodecs REQUIRED NO_MODULE)
+find_package(karchive REQUIRED NO_MODULE)
+find_package(ki18n REQUIRED NO_MODULE)
+find_package(kcoreaddons REQUIRED NO_MODULE)
+find_package(solid REQUIRED NO_MODULE)
+
+
 if (APPLE)
    find_package(Carbon REQUIRED)
 endif (APPLE)
@@ -160,9 +162,9 @@ add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 
 ################# setup the include directories #################
-
+include_directories( ${kdeqt5staging_INCLUDE_DIR})
 # for including config.h and for includes like <kparts/foo.h>
-include_directories( ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/interfaces)
+include_directories( ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/interfaces ${CMAKE_SOURCE_DIR}/plasma/includes)
 
 if(QCA2_FOUND)
     include_directories(
