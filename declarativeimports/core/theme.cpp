@@ -38,7 +38,7 @@ public:
    FontProxy smallestFont;
 };
 
-K_GLOBAL_STATIC(FontProxySingleton, privateFontProxySingleton)
+Q_GLOBAL_STATIC(FontProxySingleton, privateFontProxySingleton)
 
 FontProxy::FontProxy(Plasma::Theme::FontRole role, QObject *parent)
     : QObject(parent),

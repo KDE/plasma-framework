@@ -37,7 +37,7 @@
 #include "framesvgitem.h"
 // #include "runnermodel.h"
 #include "svgitem.h"
-// #include "theme.h"
+#include "theme.h"
 // #include "dialog.h"
 #include "iconitem.h"
 // #include "tooltip.h"
@@ -50,11 +50,11 @@ void CoreBindingsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
     QQmlExtensionPlugin::initializeEngine(engine, uri);
 
     QQmlContext *context = engine->rootContext();
-/*
+
     ThemeProxy *theme = new ThemeProxy(context);
     context->setContextProperty("theme", theme);
 
-    KDeclarative kdeclarative;
+/*    KDeclarative kdeclarative;
     kdeclarative.setDeclarativeEngine(engine);
     kdeclarative.initialize();
     QScriptEngine *scriptEngine = kdeclarative.scriptEngine();
@@ -78,8 +78,8 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterType<Plasma::FrameSvg>(uri, 0, 1, "FrameSvg");
     qmlRegisterType<Plasma::SvgItem>(uri, 0, 1, "SvgItem");
     qmlRegisterType<Plasma::FrameSvgItem>(uri, 0, 1, "FrameSvgItem");
-// 
-//     qmlRegisterType<ThemeProxy>(uri, 0, 1, "Theme");
+ 
+    qmlRegisterType<ThemeProxy>(uri, 0, 1, "Theme");
 // 
 //     qmlRegisterType<Plasma::DataSource>(uri, 0, 1, "DataSource");
 //     qmlRegisterType<Plasma::DataModel>(uri, 0, 1, "DataModel");
