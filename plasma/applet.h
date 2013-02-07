@@ -629,7 +629,13 @@ class PLASMA_EXPORT Applet : public QObject
          * @since 4.4
          */
         void immutabilityChanged(Plasma::ImmutabilityType immutable);
-        
+
+        /**
+         * Emitted when background hints change
+         * @since 5.0
+         */
+        void backgroundHintsChanged(Plasma::BackgroundHints backgroundHints);
+
     public Q_SLOTS:
         /**
          * Sets the immutability type for this applet (not immutable,

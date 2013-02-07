@@ -23,7 +23,7 @@ import org.kde.plasma.components 0.1 as PlasmaComponents
 
 Rectangle {
     id: root
-    color: "darkgreen"
+    color: "transparent"
     width: 100
     height: 100
 
@@ -33,7 +33,17 @@ Rectangle {
             text: "I'm an applet"
         }
         PlasmaComponents.Button {  
-        text: "hello"
+            text: "Background"
+            onClicked: {
+                print("Background hints: " + plasmoid.backgroundHints)
+                if (plasmoid.backgroundHints == 0) {
+                    plasmoid.backgroundHints = 1//TODO: make work "StandardBackground"
+                    root.color = "transparent"
+                } else {
+                    plasmoid.backgroundHints = 0//TODO: make work "NoBackground"
+                    root.color = "darkgreen"
+                }
+            }
         }
     }
     Component.onCompleted: {

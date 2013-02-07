@@ -52,6 +52,7 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *parent)
     connect(this, SIGNAL(configNeedsSaving()), applet(), SIGNAL(configNeedsSaving()));
     connect(applet(), SIGNAL(immutabilityChanged(Plasma::ImmutabilityType)), this, SIGNAL(immutableChanged()));
     connect(applet(), SIGNAL(newStatus(Plasma::ItemStatus)), this, SIGNAL(statusChanged()));
+    connect(applet(), SIGNAL(backgroundHintsChanged(Plasma::BackgroundHints)), this, SIGNAL(backgroundHintsChanged()));
     connect(m_appletScriptEngine, SIGNAL(formFactorChanged()),
             this, SIGNAL(formFactorChanged()));
     connect(m_appletScriptEngine, SIGNAL(locationChanged()),

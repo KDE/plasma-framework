@@ -68,7 +68,7 @@ class AppletInterface : public QObject
     Q_PROPERTY(bool shouldConserveResources READ shouldConserveResources)
     Q_PROPERTY(QString activeConfig WRITE setActiveConfig READ activeConfig)
     Q_PROPERTY(bool busy WRITE setBusy READ isBusy)
-    Q_PROPERTY(BackgroundHints backgroundHints WRITE setBackgroundHints READ backgroundHints)
+    Q_PROPERTY(BackgroundHints backgroundHints WRITE setBackgroundHints READ backgroundHints NOTIFY backgroundHintsChanged)
     Q_PROPERTY(bool immutable READ immutable NOTIFY immutableChanged)
     Q_PROPERTY(bool userConfiguring READ userConfiguring) // @since 4.5
     Q_PROPERTY(int apiVersion READ apiVersion CONSTANT)
@@ -288,6 +288,7 @@ Q_SIGNALS:
     void contextChanged();
     void immutableChanged();
     void statusChanged();
+    void backgroundHintsChanged();
 
 protected:
     DeclarativeAppletScript *m_appletScriptEngine;

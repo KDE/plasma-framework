@@ -553,6 +553,7 @@ void Applet::setBackgroundHints(const Plasma::BackgroundHints hints)
     }
 
     d->backgroundHints = hints;
+    emit backgroundHintsChanged(hints);
 }
 
 bool Applet::hasFailedToLaunch() const
