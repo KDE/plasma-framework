@@ -67,27 +67,28 @@ configure_file(${CMAKE_SOURCE_DIR}/CTestCustom.cmake ${CMAKE_BINARY_DIR}/CTestCu
 
 set (QT_MIN_VERSION "5.0.0")
 
-include(FeatureSummary)
-
 find_package(KF5 REQUIRED MODULE)
 find_package(KDE4Internal REQUIRED MODULE)
 #find_package(KF5Transitional REQUIRED)
 
 include(KDE4Defaults)
-include (MacroLibrary)
 
 find_package(kdeqt5staging REQUIRED NO_MODULE)
+
+# the following are already somewhat "done" tier1 libs from kdelibs:
 find_package(kidletime REQUIRED NO_MODULE)
 find_package(itemmodels REQUIRED NO_MODULE)
 find_package(kwidgetsaddons REQUIRED NO_MODULE)
 find_package(kwindowsystem REQUIRED NO_MODULE)
 find_package(kcodecs REQUIRED NO_MODULE)
 find_package(karchive REQUIRED NO_MODULE)
-find_package(ki18n REQUIRED NO_MODULE)
 find_package(kcoreaddons REQUIRED NO_MODULE)
 find_package(solid REQUIRED NO_MODULE)
+
+# those are not "done" yet:
+find_package(ki18n REQUIRED NO_MODULE)
 find_package(kio REQUIRED NO_MODULE)
-find_package(kdeclarative REQUIRED NO_MODULE)
+find_package(KDeclarative REQUIRED NO_MODULE)
 
 if (APPLE)
    find_package(Carbon REQUIRED)
