@@ -68,9 +68,6 @@ find_package(KDELibs4 NO_MODULE)
 
 find_package(kdeclarative REQUIRED NO_MODULE)
 
-if (APPLE)
-   find_package(Carbon REQUIRED)
-endif ()
 
 #required features:
 # Perl is used e.g. in khtml, kjs, kjsembed and others
