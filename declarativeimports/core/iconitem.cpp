@@ -277,7 +277,10 @@ void IconItem::loadPixmap()
 
     //final pixmap to paint
     QPixmap result;
-    if (m_svgIcon) {
+    if (size<=0) {
+        m_iconPixmaps.clear();
+        return;
+    } else if (m_svgIcon) {
         m_svgIcon->resize(size, size);
         result = m_svgIcon->pixmap(m_source.toString());
     } else if (!m_source.isNull()) {
