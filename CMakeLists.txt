@@ -63,6 +63,7 @@ find_package(KDE4Internal REQUIRED)
 include(KDE4Defaults)
 #include (MacroLibrary)
 
+find_package(kdeqt5staging REQUIRED)
 find_package(kidletime REQUIRED)
 find_package(itemmodels REQUIRED)
 find_package(kwidgetsaddons REQUIRED)
