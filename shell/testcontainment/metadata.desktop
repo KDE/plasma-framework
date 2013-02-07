@@ -2,6 +2,9 @@
 Encoding=UTF-8
 Keywords=
 Name=Containment Test
+Name[pt]=Teste de Contentores
+Name[pt_BR]=Teste de contenção
+Name[sk]=Test uzavretia
 Name[uk]=Тестування контейнера
 Name[x-test]=xxContainment Testxx
 Type=Service
