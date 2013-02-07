@@ -11,7 +11,7 @@ include(CPack)
 find_package(ECM 0.0.6 REQUIRED NO_MODULE)
 
 # where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_INSTALL_PREFIX}/share/cmake/modules" "${CMAKE_SOURCE_DIR}/cmake/modules" ${ECM_MODULE_PATH})
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_INSTALL_PREFIX}/share/cmake/modules" "${CMAKE_SOURCE_DIR}/cmake/modules" ${ECM_MODULE_PATH} "${CMAKE_PREFIX_PATH}/share/cmake/modules")
 find_path(KDE_MODULES_DIR NAMES KDE4Macros.cmake PATH_SUFFIXES share/cmake/modules "${CMAKE_PREFIX_PATH}/share/cmake/modules")
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
