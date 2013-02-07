@@ -3,15 +3,24 @@ cmake_minimum_required(VERSION 2.8.10.1)
 
 project(plasma)
 
+################# Disallow in-source build #################
+
+if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
+   message(FATAL_ERROR "plasma requires an out of source build. Please create a separate build directory and run 'cmake path_to_plasma [options]' there.")
+endif()
+
+
 # Make CPack available to easy generate binary packages
 include(CPack)
+
+include(FeatureSummary)
 
 ################# set KDE specific information #################
 
 find_package(ECM 0.0.6 REQUIRED NO_MODULE)
 
 # where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_INSTALL_PREFIX}/share/cmake/modules" "${CMAKE_SOURCE_DIR}/cmake/modules" ${ECM_MODULE_PATH} "${CMAKE_PREFIX_PATH}/share/cmake/modules")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_INSTALL_PREFIX}/share/cmake/modules" ${ECM_MODULE_PATH})
 find_path(KDE_MODULES_DIR NAMES KDE4Macros.cmake PATH_SUFFIXES share/cmake/modules "${CMAKE_PREFIX_PATH}/share/cmake/modules")
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
@@ -100,17 +109,15 @@ set_package_properties(ZLIB PROPERTIES DESCRIPTION "Support for gzip compressed 
 #optional features
 find_package(X11)
 if(X11_FOUND)
-  macro_bool_to_01(X11_FOUND HAVE_X11)
+  set(HAVE_X11 X11_FOUND)
   #X11_Xrender discovery is done by FindX11
   add_feature_info("X Rendering Extension (libXrender)" X11_Xrender_FOUND "Support for compositing, rendering operations, and alpha-blending. STRONGLY RECOMMENDED")
-  macro_bool_to_01(X11_Xscreensaver_FOUND HAVE_XSCREENSAVER)
-  macro_bool_to_01(X11_XSync_FOUND HAVE_XSYNC)
-  add_feature_info("X Screensaver Extension (libXss)" HAVE_XSCREENSAVER "Support for KIdleTime (fallback mode)")
-  add_feature_info("X Sync Extension (libXext)" HAVE_XSYNC "Efficient operation of KIdleTime. STRONGLY RECOMMENDED")
+  add_feature_info("X Screensaver Extension (libXss)" X11_Xscreensaver_FOUND "Support for KIdleTime (fallback mode)")
+  add_feature_info("X Sync Extension (libXext)" X11_XSync_FOUND "Efficient operation of KIdleTime. STRONGLY RECOMMENDED")
 
-  if(NOT HAVE_XSYNC AND NOT HAVE_XSCREENSAVER)
+  if(NOT X11_XSync_FOUND AND NOT X11_Xscreensaver_FOUND)
     message(FATAL_ERROR "\nNeither the XSync (libXext) nor XScreensaver (libXss) development package was found.\nPlease install one of them (XSync is recommended)\n")
-  endif(NOT HAVE_XSYNC AND NOT HAVE_XSCREENSAVER)
+  endif()
 
   #X11 Session Management (SM) is required
   #X11_SM_FOUND is set in FindX11, which is required by KDE4Internal
@@ -146,16 +153,6 @@ set_package_properties(DBusMenuQt PROPERTIES DESCRIPTION "Support for notificati
                        TYPE REQUIRED
                       )
 
-################# Disallow in-source build #################
-
-macro_ensure_out_of_source_build("kdelibs requires an out of source build. Please create a separate build directory and run 'cmake path_to_kdelibs [options]' there.")
-
-# ... and warn in case of an earlier in-source build
-set(generatedFileInSourceDir EXISTS ${kdelibs_SOURCE_DIR}/config.h OR EXISTS ${kdelibs_SOURCE_DIR}/config-prefix.h)
-if(${generatedFileInSourceDir})
-   message(STATUS "config.h or config-prefix.h exists in your source directory.")
-   message(FATAL_ERROR "Please run git clean, it would seem that your source directory has generated files in it.")
-endif(${generatedFileInSourceDir})
 #########################################################################
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
@@ -165,7 +162,7 @@ add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 
 ################# setup the include directories #################
-include_directories( ${kdeqt5staging_INCLUDE_DIRS})
+include_directories( ${kdeqt5staging_INCLUDE_DIRS} ${kdeqt5staging_INCLUDE_DIR})
 # for including config.h and for includes like <kparts/foo.h>
 include_directories( ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/interfaces ${CMAKE_SOURCE_DIR}/plasma/includes)
 
