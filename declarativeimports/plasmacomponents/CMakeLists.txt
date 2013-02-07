@@ -1,6 +1,6 @@
 project(plasmacomponents)
 
-find_package(KDeclarative REQUIRED)
+#find_package(kdeclarative REQUIRED NO_MODULE)
 
 set(plasmacomponents_SRCS
     #fullscreensheet.cpp
