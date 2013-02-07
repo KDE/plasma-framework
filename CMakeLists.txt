@@ -59,8 +59,8 @@ configure_file(${CMAKE_SOURCE_DIR}/CTestCustom.cmake ${CMAKE_BINARY_DIR}/CTestCu
 set (QT_MIN_VERSION "5.0.0")
 
 find_package(KF5 REQUIRED)
-#find_package(KDE4Internal REQUIRED)
-find_package(KF5Transitional REQUIRED)
+find_package(KDE4Internal REQUIRED)
+#find_package(KF5Transitional REQUIRED)
 
 include(KDE4Defaults)
 #include (MacroLibrary)
