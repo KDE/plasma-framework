@@ -38,22 +38,11 @@ include_directories(${Qt5Widgets_DEFINITIONS} ${Qt5Quick_DEFINITIONS} ${QT_INCLU
 # We need add -DQT_WIDGETS_LIB when using QtWidgets in Qt 5.
 add_definitions(${Qt5Widgets_DEFINITIONS} ${Qt5Quick_DEFINITIONS} ${Qt5Qml_DEFINITIONS})
 
-set(CMAKE_AUTOMOC ON)
-
-
-# By default don't add any linked libraries to the "exported"
-# link interfaces of shared libraries, so that executables linking
-# against these libraries will not automatically add implicit
-# dependencies to their link list.
-#
-# This reduces inter-package dependencies and makes it easier to remove
-# dependencies of shared libraries without breaking binary compatibility.
-set(CMAKE_LINK_INTERFACE_LIBRARIES "")
 
 if(KDE_PLATFORM_FEATURE_DISABLE_DEPRECATED)
    set(KDE_NO_DEPRECATED TRUE)
    set(CMAKE_AUTOMOC_MOC_OPTIONS "-DKDE_NO_DEPRECATED")
-endif(KDE_PLATFORM_FEATURE_DISABLE_DEPRECATED)
+endif()
 
 ############### Load the CTest options ###############
 # CTestCustom.cmake has to be in the CTEST_BINARY_DIR.
@@ -81,7 +70,7 @@ find_package(kdeclarative REQUIRED NO_MODULE)
 
 if (APPLE)
    find_package(Carbon REQUIRED)
-endif (APPLE)
+endif ()
 
 #required features:
 # Perl is used e.g. in khtml, kjs, kjsembed and others
@@ -113,8 +102,8 @@ if(X11_FOUND)
   #X11_SM_FOUND is set in FindX11, which is required by KDE4Internal
   if(UNIX AND NOT X11_SM_FOUND)
     message(FATAL_ERROR "\nThe X11 Session Management (SM) development package could not be found.\nPlease install libSM.\n")
-  endif(UNIX AND NOT X11_SM_FOUND)
-endif(X11_FOUND)
+  endif()
+endif()
 
 find_package(OpenSSL)
 set_package_properties(OpenSSL PROPERTIES DESCRIPTION "Support for secure network communications (SSL and TLS)"
@@ -165,7 +154,7 @@ if(QCA2_FOUND)
     include_directories(
         ${QCA2_INCLUDE_DIR}
     )
-endif(QCA2_FOUND)
+endif()
 
 
 
@@ -174,15 +163,15 @@ endif(QCA2_FOUND)
 if(WINCE)
   set(STATIC_LIBRARY ON)
   add_definitions(-DSTATIC_INSTALL_PATH=L\\\"/programme/kde\\\")
-endif(WINCE)
+endif()
 
 if(STATIC_LIBRARY)
   set(LIBRARY_TYPE STATIC)
   add_definitions(-DKDELIBS_STATIC_LIBS)
   message(STATUS "Building kdelibs as static libraries")
-else(STATIC_LIBRARY)
+else()
   set(LIBRARY_TYPE SHARED)
-endif(STATIC_LIBRARY)
+endif()
 
 # now create config headers
 configure_file(config-prefix.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-prefix.h )
@@ -192,14 +181,14 @@ configure_file(config-compiler.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-compil
 set(KCONFIG_KCFGC_EXECUTABLE kconfig_compiler)
 
 
-MACRO(installPackage dir component)
-   SET(root ${ARGN})
-   IF(NOT root)
-      SET(root plasma/plasmoids)
-   ENDIF(NOT root)
+macro(installPackage dir component)
+   set(root ${ARGN})
+   if(NOT root)
+      set(root plasma/plasmoids)
+   endif()
    install(DIRECTORY ${dir}/ DESTINATION ${DATA_INSTALL_DIR}/${root}/${component} PATTERN Messages.sh EXCLUDE)
    install(FILES ${dir}/metadata.desktop DESTINATION ${SERVICES_INSTALL_DIR} RENAME plasma-applet-${component}.desktop)
-ENDMACRO(installPackage)
+endmacro()
 
 ################# list the subdirectories #################
 
