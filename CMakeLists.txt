@@ -20,10 +20,7 @@ include(FeatureSummary)
 find_package(ECM 0.0.6 REQUIRED NO_MODULE)
 
 # where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_INSTALL_PREFIX}/share/cmake/modules" ${ECM_MODULE_PATH})
-find_path(KDE_MODULES_DIR NAMES KDE4Macros.cmake PATH_SUFFIXES share/cmake/modules "${CMAKE_PREFIX_PATH}/share/cmake/modules")
-
-add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
 
 find_package(Qt5Core REQUIRED NO_MODULE)
 
@@ -36,7 +33,7 @@ endif()
 
 # The Qt5Widgets_INCLUDES also includes the include directories for
 # dependencies QtCore and QtGui
-include_directories(${Qt5Widgets_DEFINITIONS} ${Qt5Quick_DEFINITIONS} ${QT_INCLUDES} ${KDE4_INCLUDES})
+include_directories(${Qt5Widgets_DEFINITIONS} ${Qt5Quick_DEFINITIONS} ${QT_INCLUDES})
 
 # We need add -DQT_WIDGETS_LIB when using QtWidgets in Qt 5.
 add_definitions(${Qt5Widgets_DEFINITIONS} ${Qt5Quick_DEFINITIONS} ${Qt5Qml_DEFINITIONS})
@@ -67,11 +64,8 @@ configure_file(${CMAKE_SOURCE_DIR}/CTestCustom.cmake ${CMAKE_BINARY_DIR}/CTestCu
 
 set (QT_MIN_VERSION "5.0.0")
 
-find_package(KF5 REQUIRED MODULE)
-find_package(KDE4Internal REQUIRED MODULE)
+find_package(KF5 MODULE REQUIRED CMake Compiler InstallDirs)
 #find_package(KF5Transitional REQUIRED)
-
-include(KDE4Defaults)
 
 find_package(kdeqt5staging REQUIRED NO_MODULE)
 
@@ -88,7 +82,14 @@ find_package(solid REQUIRED NO_MODULE)
 # those are not "done" yet:
 find_package(ki18n REQUIRED NO_MODULE)
 find_package(kio REQUIRED NO_MODULE)
+
+find_package(KDELibs4 NO_MODULE)
+
 find_package(kdeclarative REQUIRED NO_MODULE)
+
+add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
+
+remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_STRICT_ITERATORS -DQT_NO_CAST_FROM_BYTEARRAY -DQT_NO_KEYWORDS)
 
 if (APPLE)
    find_package(Carbon REQUIRED)
@@ -163,7 +164,7 @@ add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 
 ################# setup the include directories #################
-include_directories( ${kdeqt5staging_INCLUDE_DIRS} ${kdeqt5staging_INCLUDE_DIR})
+include_directories( ${kdeqt5staging_INCLUDE_DIRS} ${kdeqt5staging_INCLUDE_DIR}  ${KDE4_INCLUDES})
 # for including config.h and for includes like <kparts/foo.h>
 include_directories( ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/interfaces ${CMAKE_SOURCE_DIR}/plasma/includes)
 
@@ -196,7 +197,6 @@ configure_file(config-compiler.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-compil
 
 # Needed for the calls to kconfig_add_kcfg_files in some modules
 set(KCONFIG_KCFGC_EXECUTABLE kconfig_compiler)
-include(KConfigMacros)
 
 
 MACRO(installPackage dir component)
