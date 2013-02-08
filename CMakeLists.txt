@@ -144,19 +144,6 @@ endif()
 
 ################# configure checks and create the configured files #################
 
-if(WINCE)
-  set(STATIC_LIBRARY ON)
-  add_definitions(-DSTATIC_INSTALL_PATH=L\\\"/programme/kde\\\")
-endif()
-
-if(STATIC_LIBRARY)
-  set(LIBRARY_TYPE STATIC)
-  add_definitions(-DKDELIBS_STATIC_LIBS)
-  message(STATUS "Building kdelibs as static libraries")
-else()
-  set(LIBRARY_TYPE SHARED)
-endif()
-
 # now create config headers
 configure_file(config-prefix.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-prefix.h )
 configure_file(config-compiler.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-compiler.h )

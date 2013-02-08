@@ -179,10 +179,10 @@ kde4_add_ui_files(plasma_LIB_SRCS
 #)
 
 
-kde4_add_library(plasma ${LIBRARY_TYPE} ${plasma_LIB_SRCS})
+kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
 
 target_link_libraries(plasma ${QT_QTUITOOLS_LIBRARY}
-                              ${QT_QTNETWORK_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTSQL_LIBRARY} 
+                              ${QT_QTNETWORK_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTSQL_LIBRARY}
                              ${KDE4_KDEUI_LIBS} kdnssd KF5::threadweaver kauth KF5::kwindowsystem ${PLASMA_EXTRA_LIBS} kcoreaddons ki18n)
 #FIXME gpgme++ is in kdepimlibs, neeeds to be elsewhere
 target_link_libraries(plasma ${KDEPIMLIBS_GPGMEPP_LIBS} kdeclarative KF5::karchive)
