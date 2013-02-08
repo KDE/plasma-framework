@@ -1,5 +1,13 @@
 project(corebindings)
 
+INCLUDE_DIRECTORIES(
+        ${CMAKE_SOURCE_DIR}
+        ${CMAKE_BINARY_DIR}
+        ${KDE4_INCLUDES}
+        ${KDE4_INCLUDE_DIR}
+        ${KDECLARATIVE_INCLUDE_DIR}
+)
+
 set(corebindings_SRCS
 #     declarativeitemcontainer.cpp
     corebindingsplugin.cpp
@@ -16,12 +24,6 @@ set(corebindings_SRCS
     iconitem.cpp
     )
 
-INCLUDE_DIRECTORIES(
-        ${CMAKE_SOURCE_DIR}
-        ${CMAKE_BINARY_DIR}
-        ${KDE4_INCLUDES}
-        ${KDECLARATIVE_INCLUDE_DIR}
-)
 
 qt4_automoc(${corebindings_SRCS})
 
