@@ -56,6 +56,10 @@ QString ChangeableMainScriptPackage::mainScriptConfigKey() const
 
 void ChangeableMainScriptPackage::pathChanged(Package *package)
 {
+    if (package->path().isEmpty()) {
+        return;
+    }
+
     KDesktopFile config(package->path() + "/metadata.desktop");
     KConfigGroup cg = config.desktopGroup();
     QString mainScript = cg.readEntry(mainScriptConfigKey(), QString());
