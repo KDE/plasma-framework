@@ -26,7 +26,6 @@
 #include <kdeversion.h>
 #include <KServiceTypeTrader>
 #include <KShell>
-#include <KStandardDirs>
 
 #include <Plasma/Applet>
 #include <Plasma/Containment>
@@ -144,7 +143,9 @@ QScriptValue ScriptEngine::loadTemplate(QScriptContext *context, QScriptEngine *
 
     Plasma::PackageStructure::Ptr structure(new LayoutTemplatePackageStructure);
     KPluginInfo info(offers.first());
-    const QString path = KStandardDirs::locate("data", structure->defaultPackageRoot() + '/' + info.pluginName() + '/');
+    const QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                                structure->defaultPackageRoot() + '/' + info.pluginName() + '/',
+                                                QStandardPaths::LocateDirectory);
     if (path.isEmpty()) {
         kDebug() << "script path is empty";
         return false;
