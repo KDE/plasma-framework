@@ -22,6 +22,7 @@
 #include <QQmlContext>
 #include <QQmlEngine>
 #include <QQmlExpression>
+#include <QQmlProperty>
 #include <QFile>
 #include <QTimer>
 #include <QUiLoader>
@@ -60,6 +61,7 @@ DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariant
       m_env(0),
       m_auth(this)
 {
+    qmlRegisterType<AppletInterface>();
     Q_UNUSED(args);
 }
 
@@ -109,6 +111,7 @@ bool DeclarativeAppletScript::init()
     } else {
         m_interface = new AppletInterface(this);
     }
+    m_interface->setParent(this);
 
     connect(applet(), SIGNAL(activate()),
             this, SLOT(activate()));
@@ -116,7 +119,12 @@ bool DeclarativeAppletScript::init()
     setupObjects();
 
     m_qmlObject->completeInitialization();
-    a->setProperty("graphicObject", QVariant::fromValue(m_qmlObject->rootObject()));
+    m_qmlObject->rootObject()->setProperty("parent", QVariant::fromValue(m_interface));
+    m_qmlObject->rootObject()->setProperty("anchors.fill", "parent");
+    QQmlExpression expr(m_qmlObject->engine()->rootContext(), m_qmlObject->rootObject(), "parent");
+    QQmlProperty prop(m_qmlObject->rootObject(), "anchors.fill");
+    prop.write(expr.evaluate());
+    a->setProperty("graphicObject", QVariant::fromValue(m_interface));
     qDebug() << "Graphic object created:" << a << a->property("graphicObject");
 
     return true;

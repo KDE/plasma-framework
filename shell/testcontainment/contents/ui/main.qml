@@ -58,7 +58,7 @@ Rectangle {
             property alias applet: appletContainer.children
             property int small: 100
             property int large: parent.width - width - 150
-            imagePath: "widgets/background"
+            imagePath: applet[0].backgroundHints == 0 ? "" : "widgets/background"
             MouseArea {
                 anchors.fill: parent
                 drag.target: parent

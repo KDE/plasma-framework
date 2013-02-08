@@ -29,7 +29,8 @@ target_link_libraries(plasma_appletscript_declarative
     ${KDE4_KIO_LIBS}
     ${KDE4_KDE4SUPPORT_LIBS}
     ${QT_QTSCRIPT_LIBRARY}
-    ${QT_QTQML_LIBRARY}
+    ${Qt5Quick_LIBRARIES}
+    ${Qt5Qml_LIBRARIES}
     ${QT_QTUITOOLS_LIBRARY}
     ${KDE4_KDECORE_LIBS}
     plasma

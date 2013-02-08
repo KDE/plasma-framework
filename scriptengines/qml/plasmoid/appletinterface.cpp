@@ -42,9 +42,9 @@
 
 Q_DECLARE_METATYPE(AppletInterface*)
 
-AppletInterface::AppletInterface(DeclarativeAppletScript *parent)
-    : QObject(parent),
-      m_appletScriptEngine(parent),
+AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *parent)
+    : QQuickItem(parent),
+      m_appletScriptEngine(script),
       m_actionSignals(0)
 {
     qmlRegisterType<AppletInterface>();

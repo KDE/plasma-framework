@@ -23,7 +23,7 @@
 #define APPLETINTERFACE_H
 
 #include <QAbstractAnimation>
-#include <QObject>
+#include <QQuickItem>
 #include <QScriptValue>
 
 #include <Plasma/Applet>
@@ -44,7 +44,7 @@ namespace Plasma
     class ConfigLoader;
 } // namespace Plasa
 
-class AppletInterface : public QObject
+class AppletInterface : public QQuickItem
 {
     Q_OBJECT
     Q_ENUMS(FormFactor)
@@ -76,7 +76,7 @@ class AppletInterface : public QObject
     Q_PROPERTY(QString associatedApplication WRITE setAssociatedApplication READ associatedApplication)
 
 public:
-    AppletInterface(DeclarativeAppletScript *parent);
+    AppletInterface(DeclarativeAppletScript *script, QQuickItem *parent = 0);
     ~AppletInterface();
 
 //------------------------------------------------------------------
