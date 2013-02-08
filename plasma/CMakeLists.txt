@@ -75,7 +75,6 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1209)
 
 set(plasma_LIB_SRCS
     abstractrunner.cpp
-    ${plasmagik_SRCS}
     abstractdialogmanager.cpp
     configloader.cpp
     containmentactions.cpp
