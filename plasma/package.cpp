@@ -374,23 +374,36 @@ QStringList Package::entryList(const char *key) const
 void Package::setPath(const QString &path)
 {
     kDebug() << "Package::setPath() " << path;
+    // if the path is already what we have, don't bother
     if (path == d->path) {
         return;
     }
 
+    // our dptr is shared, and it is almost certainly doing to change.
+    // hold onto the old pointer just incase!
+    QExplicitlySharedDataPointer<PackagePrivate> oldD(d);
     d.detach();
-    d->discoveries.clear();
-    if (path.isEmpty()) {
+
+    // whithout structure we doomed
+    if (!d->structure) {
         d->path.clear();
+        d->discoveries.clear();
         d->valid = false;
-
-        if (d->structure) {
-            d->structure.data()->pathChanged(this);
-        }
-
+        d->checkedValid = true;
         return;
     }
 
+    // empty path => nothing to do
+    if (path.isEmpty()) {
+        d->path.clear();
+        d->discoveries.clear();
+        d->valid = false;
+        d->structure.data()->pathChanged(this);
+        return;
+    }
+
+    // now we look for all possible paths, including resolving
+    // relative paths against the system search paths
     QStringList paths;
     if (QDir::isRelativePath(path)) {
         QString p;
@@ -415,6 +428,8 @@ void Package::setPath(const QString &path)
         }
     }
 
+    // now we search each path found, caching our previous path to know if
+    // anything actually really changed
     const QString previousPath = d->path;
     foreach (const QString &p, paths) {
         d->checkedValid = false;
@@ -424,19 +439,29 @@ void Package::setPath(const QString &path)
             d->path.append('/');
         }
 
+        // we need to tell the structure we're changing paths ...
+        d->structure.data()->pathChanged(this);
+        // ... and then testing the results for validity
         if (isValid()) {
             break;
         }
     }
 
+    // if nothing did change, then we go back to the old dptr
     if (d->path == previousPath) {
+        d = oldD;
         return;
     }
 
+    // .. but something did change, so we get rid of our discovery cache
+    d->discoveries.clear();
     delete d->metadata;
     d->metadata = 0;
 
-    if (d->structure) {
+    // uh-oh, but we didn't end up with anything valid, so we sadly reset ourselves
+    // to futility.
+    if (!d->valid) {
+        d->path.clear();
         d->structure.data()->pathChanged(this);
     }
 }
