@@ -161,9 +161,7 @@ set(plasma_LIB_SRCS
     corona.cpp
 )
 
-if (QT5_BUILD)
-  set(plasma_LIB_SRCS ${plasma_LIB_SRCS} private/effectwatcher.cpp)
-endif()
+set(plasma_LIB_SRCS ${plasma_LIB_SRCS} private/effectwatcher.cpp)
 
 kconfig_add_kcfg_files(plasma_LIB_SRCS data/kconfigxt/libplasma-theme-global.kcfgc)
 
