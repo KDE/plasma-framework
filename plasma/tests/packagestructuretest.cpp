@@ -25,13 +25,14 @@
 #include <klocalizedstring.h>
 
 #include "applet.h"
+#include "packagestructure.h"
 #include "pluginloader.h"
 
 class NoPrefixes : public Plasma::Package
 {
 public:
     explicit NoPrefixes()
-        : Plasma::Package()
+        : Plasma::Package(new Plasma::PackageStructure)
     {
         setContentsPrefixPaths(QStringList());
         addDirectoryDefinition("bin", "bin", "bin");
