@@ -55,16 +55,17 @@ set (QT_MIN_VERSION "5.0.0")
 
 find_package(kdeqt5staging REQUIRED NO_MODULE)
 
-# Load CMake, Compiler and InstallDirs settings from KF5 and the following are already somewhat "done" tier1 libs from kdelibs:
+# Load CMake, Compiler and InstallDirs settings from KF5 and the following are already somewhat "done" tier1/tier2 libs from kdelibs:
 find_package(KF5 MODULE REQUIRED CMake Compiler InstallDirs
-                                 kidletime itemmodels kwidgetsaddons kwindowsystem kcodecs karchive kcoreaddons solid)
+                                 kidletime itemmodels kwidgetsaddons kwindowsystem kcodecs karchive kcoreaddons solid
+                                 kconfig )
 #find_package(KF5Transitional REQUIRED)
 
 # those are not "done" yet:
 find_package(ki18n REQUIRED NO_MODULE)
 find_package(kio REQUIRED NO_MODULE)
 
-find_package(KDELibs4 NO_MODULE)
+find_package(KDELibs4 REQUIRED NO_MODULE)
 
 find_package(kdeclarative REQUIRED NO_MODULE)
 
@@ -147,9 +148,6 @@ endif()
 # now create config headers
 configure_file(config-prefix.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-prefix.h )
 configure_file(config-compiler.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-compiler.h )
-
-# Needed for the calls to kconfig_add_kcfg_files in some modules
-set(KCONFIG_KCFGC_EXECUTABLE kconfig_compiler)
 
 
 macro(installPackage dir component)
