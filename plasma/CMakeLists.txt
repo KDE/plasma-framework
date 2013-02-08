@@ -109,8 +109,6 @@ set(plasma_LIB_SRCS
     private/serviceprovider.cpp
     private/storage.cpp
     private/storagethread.cpp
-    private/windowpreview.cpp
-    private/windowshadows.cpp
     private/applet_p.cpp
     private/containment_p.cpp
 
