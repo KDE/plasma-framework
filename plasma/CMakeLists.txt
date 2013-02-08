@@ -194,7 +194,7 @@ if(DL_LIBRARY)
     target_link_libraries(plasma ${DL_LIBRARY})
 endif(DL_LIBRARY)
 
-target_link_libraries(plasma LINK_INTERFACE_LIBRARIES kdecore Qt5::Widgets)
+target_link_libraries(plasma LINK_INTERFACE_LIBRARIES ${KDE4_KDECORE_LIBS} Qt5::Widgets)
 
 #do NOT use GENERIC versioning -- the plasma team will take care of versioning
 set_target_properties(plasma PROPERTIES
