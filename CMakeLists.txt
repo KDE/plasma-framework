@@ -69,21 +69,8 @@ find_package(KDELibs4 NO_MODULE)
 find_package(kdeclarative REQUIRED NO_MODULE)
 
 
-#required features:
-# Perl is used e.g. in khtml, kjs, kjsembed and others
-find_package(Perl)
-set_package_properties(Perl PROPERTIES URL "http://www.perl.org" TYPE REQUIRED PURPOSE "Needed for building kdelibs")
-
-find_package(ZLIB)
-set_package_properties(ZLIB PROPERTIES DESCRIPTION "Support for gzip compressed files and data streams"
-                       URL "http://www.zlib.net"
-                       TYPE REQUIRED
-                       PURPOSE "Required by the core KDE libraries and some critical kioslaves"
-                      )
-
-
 #optional features
-find_package(X11)
+find_package(X11 MODULE)
 if(X11_FOUND)
   set(HAVE_X11 X11_FOUND)
   #X11_Xrender discovery is done by FindX11
@@ -102,14 +89,14 @@ if(X11_FOUND)
   endif()
 endif()
 
-find_package(OpenSSL)
+find_package(OpenSSL MODULE)
 set_package_properties(OpenSSL PROPERTIES DESCRIPTION "Support for secure network communications (SSL and TLS)"
                        URL "http://openssl.org"
                        TYPE RECOMMENDED
                        PURPOSE "KDE uses OpenSSL for the bulk of secure communications, including secure web browsing via HTTPS"
                       )
 
-find_package(Libintl)
+find_package(Libintl MODULE)
 set_package_properties(Libintl PROPERTIES DESCRIPTION "Support for multiple languages"
                        URL "http://www.gnu.org/software/gettext"
                        TYPE RECOMMENDED
@@ -117,13 +104,13 @@ set_package_properties(Libintl PROPERTIES DESCRIPTION "Support for multiple lang
                       )
 
 #FIXME: when we have a qca for qt5, reenable
-find_package(QCA2 2.0.0)
+find_package(QCA2 2.0.0 MODULE)
 set_package_properties(QCA2 PROPERTIES DESCRIPTION "Support for remote plasma widgets"
                        URL "http://delta.affinix.com/qca"
                        TYPE OPTIONAL
                       )
 
-find_package(DBusMenuQt)
+find_package(DBusMenuQt MODULE)
 set_package_properties(DBusMenuQt PROPERTIES DESCRIPTION "Support for notification area menus via the DBusMenu protocol"
                        URL "https://launchpad.net/libdbusmenu-qt"
                        TYPE REQUIRED
