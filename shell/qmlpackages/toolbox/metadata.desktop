@@ -2,6 +2,12 @@
 Encoding=UTF-8
 Keywords=
 Name=Desktop Toolbox
+Name[cs]=Nástroje plochy
+Name[nl]=Bureaubladhulpmiddel
+Name[pt]=Ferramentas da Área de Trabalho
+Name[pt_BR]=Barra de ferramentas da área de trabalho
+Name[uk]=Набір інструментів для стаціонарних комп’ютерів
+Name[x-test]=xxDesktop Toolboxxx
 Type=Service
 
 X-KDE-ServiceTypes=Plasma/Applet

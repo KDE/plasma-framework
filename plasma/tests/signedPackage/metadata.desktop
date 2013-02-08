@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=JavaScript File Operations
 Name[de]=JavaScript-Datei-Aktionen
+Name[nl]=Bestandsbewerkingen in JavaScript
 Name[pt]=Operações do Ficheiro de JavaScript
 Name[pt_BR]=Operações com arquivos JavaScript
 Name[sk]=JavaScriptové súborové operácie
@@ -8,6 +9,7 @@ Name[uk]=Дії з файлами за допомогою JavaScript
 Name[x-test]=xxJavaScript File Operationsxx
 Comment=Demonstrates accessing data via HTTP in JavaScript
 Comment[de]=Demonstriert den Zugriff auf Daten über HTTP in JavaScript
+Comment[nl]=Demonstreert toegang tot gegevens via HTTP in JavaScript
 Comment[pt]=Demonstra o acesso aos dados por HTTP em JavaScript
 Comment[pt_BR]=Demonstra o acesso a dados por HTTP em JavaScript
 Comment[sk]=Demonštruje prístup k údajom cez HTTP v JavaScripte

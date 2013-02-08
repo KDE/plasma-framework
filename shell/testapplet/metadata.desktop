@@ -2,6 +2,11 @@
 Encoding=UTF-8
 Keywords=
 Name=Applet Test
+Name[nl]=Test van applet
+Name[pt]=Teste de 'Applets'
+Name[pt_BR]=Teste de miniaplicativo
+Name[uk]=Тест аплету
+Name[x-test]=xxApplet Testxx
 Type=Service
 
 X-KDE-ServiceTypes=Plasma/Applet

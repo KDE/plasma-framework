@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Package metadata test file
 Name[de]=Testdatei für Paket-Metadaten
+Name[nl]=Testbestand voor pakketmetadata
 Name[pt]=Ficheiro de testes de meta-dados dos pacotes
 Name[pt_BR]=Arquivo de teste dos metadados do pacote
 Name[sk]=Testovací súbor metadát balíčku
@@ -8,6 +9,7 @@ Name[uk]=Файл перевірки метаданих пакунка
 Name[x-test]=xxPackage metadata test filexx
 Comment=A test desktop file to test the PackageMetaData class.
 Comment[de]=Eine Test-Desktop-Datei zum Testen der Klasse „PackageMetaData“.
+Comment[nl]=Een desktop-bestand voor het testen van de PackageMetaData-klasse.
 Comment[pt]=Um ficheiro 'desktop' de testes da classe PackageMetaData.
 Comment[pt_BR]=Um arquivo desktop de testes para a classe PackageMetaData.
 Comment[sk]=Testovací súbor plochy na testovanie triedy PackageMetaData.
