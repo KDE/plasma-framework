@@ -45,7 +45,7 @@ Inherits:
         Item
 
 Imports:
-        QtQuick 1.1
+        QtQuick 2.0
 
 Description:
  TODO

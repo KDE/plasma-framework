@@ -23,7 +23,7 @@ Inherits:
         Item
 
 Imports:
-        QtQuick 1.0
+        QtQuick 2.0
         org.kde.plasma.core
 
 Description:
