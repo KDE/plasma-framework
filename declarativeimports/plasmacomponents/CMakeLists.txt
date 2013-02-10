@@ -22,8 +22,9 @@ INCLUDE_DIRECTORIES(
 
 qt4_automoc(${plasmacomponents_SRCS})
 
-set(IMPORTS_INSTALL_DIR "qml")
-message("!!! Forcing Imports install location: ${IMPORTS_INSTALL_DIR}")
+set(QML_INSTALL_DIR "/qml")
+message("!!! Forcing Imports install location: ${QML_INSTALL_DIR}")
+message("!!! Remove once merged into cmake-extra-modules")
 
 add_library(plasmacomponentsplugin SHARED ${plasmacomponents_SRCS})
 target_link_libraries(plasmacomponentsplugin
@@ -35,9 +36,9 @@ target_link_libraries(plasmacomponentsplugin
         ${KDECLARATIVE_LIBRARIES}
         plasma)
 
-install(TARGETS plasmacomponentsplugin DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/plasma/components)
+install(TARGETS plasmacomponentsplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/components)
 
-install(DIRECTORY qml/ DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/plasma/components)
+install(DIRECTORY qml/ DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/components)
 
 
 
