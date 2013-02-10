@@ -26,6 +26,7 @@ find_package(Qt5Core REQUIRED NO_MODULE)
 
 find_package(Qt5Transitional MODULE)
 find_package(Qt5Quick REQUIRED NO_MODULE)
+find_package(Qt5X11Extras REQUIRED NO_MODULE)
 
 if (Qt5_POSITION_INDEPENDENT_CODE)
   set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -58,7 +59,7 @@ find_package(kdeqt5staging REQUIRED NO_MODULE)
 # Load CMake, Compiler and InstallDirs settings from KF5 and the following are already somewhat "done" tier1/tier2 libs from kdelibs:
 find_package(KF5 MODULE REQUIRED COMPONENTS CMake Compiler InstallDirs
                                             kidletime itemmodels kwidgetsaddons kwindowsystem kcodecs karchive kcoreaddons solid
-                                            kconfig kauth)
+                                            kconfig kauth kjs)
 #find_package(KF5Transitional REQUIRED)
 
 # those are not "done" yet:
