@@ -27,11 +27,9 @@ set(corebindings_SRCS
 
 qt4_automoc(${corebindings_SRCS})
 
-# Qt installs plugins here:
-# /home/sebas/kf5/qt5/qtdeclarative/src/imports/window/plugins.qmltypes /home/sebas/kf5/install/qml/QtQuick/Window.2/
-set(IMPORTS_INSTALL_DIR "qml")
-message("!!! Forcing Imports install location: ${IMPORTS_INSTALL_DIR}")
-
+set(QML_INSTALL_DIR "/qml")
+message("!!! Forcing Imports install location: ${QML_INSTALL_DIR}")
+message("!!! Remove once merged into cmake-extra-modules")
 
 add_library(corebindingsplugin SHARED ${corebindings_SRCS})
 target_link_libraries(corebindingsplugin
@@ -43,7 +41,7 @@ target_link_libraries(corebindingsplugin
         ${KDE4_KDECORE_LIBS}
         plasma)
 
-install(TARGETS corebindingsplugin DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/plasma/core)
-install(FILES qmldir DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/plasma/core)
+install(TARGETS corebindingsplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/core)
+install(FILES qmldir DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/core)
 
 #add_subdirectory(tests)
