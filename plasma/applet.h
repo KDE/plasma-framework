@@ -682,7 +682,7 @@ class PLASMA_EXPORT Applet : public QObject
         bool isUserConfiguring() const;
 
         /**
-         * Sends all pending contraints updates to the applet. Will usually
+         * Sends all pending constraints updates to the applet. Will usually
          * be called automatically, but can also be called manually if needed.
          */
         void flushPendingConstraintsEvents();

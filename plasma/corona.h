@@ -350,7 +350,7 @@ Q_SIGNALS:
 
     /**
      * emitted when immutability changes.
-     * this is for use by things that don't get contraints events, like plasmaapp.
+     * this is for use by things that don't get constraints events, like plasmaapp.
      * it's NOT for containments or applets or any of the other stuff on the scene.
      * if your code's not in shells/ it probably shouldn't be using it.
      */
