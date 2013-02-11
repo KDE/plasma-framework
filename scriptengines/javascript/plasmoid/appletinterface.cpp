@@ -91,16 +91,6 @@ QString AppletInterface::currentActivity() const
     return applet()->context()->currentActivity();
 }
 
-AppletInterface::AspectRatioMode AppletInterface::aspectRatioMode() const
-{
-    return static_cast<AspectRatioMode>(applet()->aspectRatioMode());
-}
-
-void AppletInterface::setAspectRatioMode(AppletInterface::AspectRatioMode mode)
-{
-    applet()->setAspectRatioMode(static_cast<Plasma::AspectRatioMode>(mode));
-}
-
 bool AppletInterface::shouldConserveResources() const
 {
     return applet()->shouldConserveResources();

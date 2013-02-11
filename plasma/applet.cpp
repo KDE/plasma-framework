@@ -826,24 +826,6 @@ Location Applet::location() const
     return c ? c->d->location : Plasma::Desktop;
 }
 
-Plasma::AspectRatioMode Applet::aspectRatioMode() const
-{
-    return d->aspectRatioMode;
-}
-
-void Applet::setAspectRatioMode(Plasma::AspectRatioMode mode)
-{
-    //FIXME: port away from popupapplet
-    /*
-    PopupApplet *popup = qobject_cast<PopupApplet *>(this);
-    if (popup && popup->d->dialogPtr) {
-        popup->d->dialogPtr.data()->setAspectRatioMode(mode);
-        popup->d->savedAspectRatio = mode;
-    }*/
-
-    d->aspectRatioMode = mode;
-}
-
 bool Applet::hasConfigurationInterface() const
 {
     return d->hasConfigurationInterface;

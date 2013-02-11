@@ -58,7 +58,6 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
           q(applet),
           remotingService(0),
           backgroundHints(StandardBackground),
-          aspectRatioMode(Plasma::KeepAspectRatio),
           immutability(Mutable),
           appletDescription(info ? *info : KPluginInfo(service)),
           mainConfig(0),

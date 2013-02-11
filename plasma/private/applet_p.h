@@ -134,7 +134,6 @@ public:
     // applet attributes
     Service *remotingService;
     BackgroundHints backgroundHints;
-    AspectRatioMode aspectRatioMode;
     ImmutabilityType immutability;
 
     // applet info we keep around in case its needed

@@ -177,22 +177,6 @@ enum ImmutabilityType {
 };
 
 /**
- * Defines the aspect ratio used when resizing an applet
- */
-enum AspectRatioMode {
-    InvalidAspectRatioMode = -1, /**< Unset mode used for dev convenience
-                                    when there is a need to store the
-                                    aspectRatioMode somewhere */
-    IgnoreAspectRatio = 0,       /**< The applet can be freely resized */
-    KeepAspectRatio = 1,         /**< The applet keeps a fixed aspect ratio */
-    Square = 2,                  /**< The applet is always a square */
-    ConstrainedSquare = 3,       /**< The applet is no wider (in horizontal
-                                    formfactors) or no higher (in vertical
-                                    ones) than a square */
-    FixedSize = 4                /** The applet cannot be resized */
-};
-
-/**
  * The ComonentType enumeration refers to the various types of components,
  * or plugins, supported by plasma.
  */

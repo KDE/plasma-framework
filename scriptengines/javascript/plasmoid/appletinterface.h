@@ -54,7 +54,6 @@ class AppletInterface : public QObject
     Q_OBJECT
     Q_ENUMS(FormFactor)
     Q_ENUMS(Location)
-    Q_ENUMS(AspectRatioMode)
     Q_ENUMS(BackgroundHints)
     Q_ENUMS(QtOrientation)
     Q_ENUMS(QtModifiers)
@@ -67,7 +66,6 @@ class AppletInterface : public QObject
     Q_ENUMS(IntervalAlignment)
     Q_ENUMS(ThemeColors)
     Q_ENUMS(ItemStatus)
-    Q_PROPERTY(AspectRatioMode aspectRatioMode READ aspectRatioMode WRITE setAspectRatioMode)
     Q_PROPERTY(FormFactor formFactor READ formFactor NOTIFY formFactorChanged)
     Q_PROPERTY(Location location READ location NOTIFY locationChanged)
     Q_PROPERTY(QString currentActivity READ currentActivity NOTIFY contextChanged)
@@ -121,19 +119,6 @@ enum Location {
     BottomEdge,   /**< Along the bottom of the screen*/
     LeftEdge,     /**< Along the left side of the screen */
     RightEdge     /**< Along the right side of the screen */
-};
-
-enum AspectRatioMode {
-    InvalidAspectRatioMode = -1, /**< Unsetted mode used for dev convenience
-                                    when there is a need to store the
-                                    aspectRatioMode somewhere */
-    IgnoreAspectRatio = 0,       /**< The applet can be freely resized */
-    KeepAspectRatio = 1,         /**< The applet keeps a fixed aspect ratio */
-    Square = 2,                  /**< The applet is always a square */
-    ConstrainedSquare = 3,       /**< The applet is no wider (in horizontal
-                                    formfactors) or no higher (in vertical
-                                    ones) than a square */
-    FixedSize = 4                /** The applet cannot be resized */
 };
 
 enum ItemStatus {
@@ -245,9 +230,6 @@ enum IntervalAlignment {
     Location location() const;
     QString currentActivity() const;
     bool shouldConserveResources() const;
-
-    Q_INVOKABLE AspectRatioMode aspectRatioMode() const;
-    Q_INVOKABLE void setAspectRatioMode(AspectRatioMode mode);
 
     Q_INVOKABLE void setFailedToLaunch(bool failed, const QString &reason = QString());
 

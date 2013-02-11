@@ -157,16 +157,6 @@ class PLASMA_EXPORT Applet : public QObject
         virtual Location location() const;
 
         /**
-         * @return the preferred aspect ratio mode for placement and resizing
-         */
-        Plasma::AspectRatioMode aspectRatioMode() const;
-
-        /**
-         * Sets the preferred aspect ratio mode for placement and resizing
-         */
-        void setAspectRatioMode(Plasma::AspectRatioMode);
-
-        /**
          * @return true is there is a popup assoiated with this Applet
          * showing, such as the dialog of a PopupApplet. May be reimplemented
          * for custom popup implementations.
