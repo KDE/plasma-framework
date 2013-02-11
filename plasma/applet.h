@@ -430,7 +430,7 @@ class PLASMA_EXPORT Applet : public QObject
         Containment *containment() const;
 
         /**
-         * Sets the global shorcut to associate with this widget.
+         * Sets the global shortcut to associate with this widget.
          */
         void setGlobalShortcut(const KShortcut &shortcut);
 
