@@ -364,25 +364,6 @@ Package Applet::package() const
     return d->package ? *d->package : Package();
 }
 
-QPoint Applet::popupPosition(const QSize &s) const
-{
-    return popupPosition(s, Qt::AlignLeft);
-}
-
-QPoint Applet::popupPosition(const QSize &s, Qt::AlignmentFlag alignment) const
-{
-    Containment *cont = containment();
-    Corona *corona = 0;
-    if (cont) {
-        corona = cont->corona();
-    }
-    Q_ASSERT(corona);
-
-    return QPoint();
-    //FIXME: port away from QGV
-    //return corona->popupPosition(this, s, alignment);
-}
-
 void Applet::updateConstraints(Plasma::Constraints constraints)
 {
     d->scheduleConstraintsUpdate(constraints);
@@ -674,18 +655,11 @@ void Applet::flushPendingConstraintsEvents()
         d->positionMessageOverlay();
     }
 
-    // now take care of constraints in special subclasses: Contaiment and PopupApplet
+    // now take care of constraints in special subclass: Contaiment
     Containment* containment = qobject_cast<Plasma::Containment*>(this);
     if (d->isContainment && containment) {
         containment->d->containmentConstraintsEvent(c);
     }
-
-    //FIXME: port away from popupapplet
-    /*
-    PopupApplet* popup = qobject_cast<Plasma::PopupApplet*>(this);
-    if (popup) {
-        popup->d->popupConstraintsEvent(c);
-    }*/
 
     // pass the constraint on to the actual subclass
     constraintsEvent(c);
@@ -803,11 +777,6 @@ KShortcut Applet::globalShortcut() const
     }
 
     return KShortcut();
-}
-
-bool Applet::isPopupShowing() const
-{
-    return false;
 }
 
 void Applet::addAssociatedWidget(QWidget *widget)
@@ -1185,10 +1154,7 @@ Applet *Applet::loadPlasmoid(const QString &path, uint appletId, const QVariantL
 
         if (types.contains("Plasma/Containment")) {
             return new Containment(path, appletId, args);
-        }//FIXME: port away popupapplet
-        /* else if (types.contains("Plasma/PopupApplet")) {
-            return new PopupApplet(path, appletId, args);
-        }*/ else {
+        } else {
             return new Applet(path, appletId, args);
         }
     }

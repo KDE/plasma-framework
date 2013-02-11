@@ -424,7 +424,7 @@ void Containment::contextMenuEvent(QContextMenuEvent *event)
         QPoint pos = event->globalPos();
         if (applet && d->isPanelContainment()) {
             menu->adjustSize();
-            pos = applet->popupPosition(menu->size());
+            pos = QPoint(); //TODO: port context menus away from Containment applet->popupPosition(menu->size());
             if (event->reason() == QContextMenuEvent::Mouse) {
                 // if the menu pops up way away from the mouse press, then move it
                 // to the mouse press

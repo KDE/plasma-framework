@@ -156,13 +156,6 @@ class PLASMA_EXPORT Applet : public QObject
          */
         virtual Location location() const;
 
-        /**
-         * @return true is there is a popup assoiated with this Applet
-         * showing, such as the dialog of a PopupApplet. May be reimplemented
-         * for custom popup implementations.
-         */
-        virtual bool isPopupShowing() const;
-
 //CONFIGURATION
         /**
         * Returns the KConfigGroup to access the applets configuration.
@@ -485,24 +478,6 @@ class PLASMA_EXPORT Applet : public QObject
         bool hasValidAssociatedApplication() const;
 
 //Completely UI-specific, remove or move to scriptengine
-        /**
-         * Reccomended position for a popup window like a menu or a tooltip
-         * given its size
-         * @param s size of the popup
-         * @returns recommended position
-         */
-        QPoint popupPosition(const QSize &s) const;
-
-        /**
-         * @since 4.4
-         * Reccomended position for a popup window like a menu or a tooltip
-         * given its size
-         * @param s size of the popup
-         * @param alignment alignment of the popup, valid flags are Qt::AlignLeft, Qt::AlignRight and Qt::AlignCenter
-         * @returns recommended position
-         */
-        QPoint popupPosition(const QSize &s, Qt::AlignmentFlag alignment) const;
-
         /**
          * @return the font currently set for this widget
          **/

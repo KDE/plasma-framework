@@ -512,7 +512,6 @@ Q_SIGNALS:
         friend class CoronaBasePrivate;
         friend class ContainmentPrivate;
         friend class ContainmentActions;
-        friend class PopupApplet;
         friend class View;
         ContainmentPrivate *const d;
 };
