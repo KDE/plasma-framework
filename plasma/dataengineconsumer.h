@@ -64,13 +64,8 @@ public:
      *
      * @param name the name of the DataEngine. This corresponds to the plugin name
      *             of the DataEngine.
-     * @param location if a non-empty URI is passed in, then a connection with a
-     *                 remote DataEngine at the location is attempted to be made.
-     *                 The returned pointer is a proxy object for this connection.
-     *                 In the common case, location is always an empty URI (QUrl())
-     *                 and the DataEngine is loaded locally.
      */
-    DataEngine *dataEngine(const QString &name, const QUrl &location = QUrl());
+    DataEngine *dataEngine(const QString &name);
 
 private:
     DataEngineConsumerPrivate * const d;

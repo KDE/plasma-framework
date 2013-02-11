@@ -709,19 +709,6 @@ class PLASMA_EXPORT Applet : public QObject
          */
         void runAssociatedApplication();
 
-//REMOTE WIDGETS
-        /**
-         * Publishes and optionally announces this applet on the network for remote access.
-         * @param methods the methods to use for announcing this applet.
-         * @param resourceName the name under which this applet will be published (has to be unique
-         * for each machine)
-         */
-        void publish(Plasma::AnnouncementMethods methods, const QString &resourceName);
-
-        void unpublish();
-
-        bool isPublished() const;
-
 //Completely UI-specific, remove or move to scriptengine
         /**
          * Shows a busy indicator that overlays the applet
@@ -856,7 +843,6 @@ class PLASMA_EXPORT Applet : public QObject
         Q_PRIVATE_SLOT(d, void cleanUpAndDelete())
         Q_PRIVATE_SLOT(d, void configDialogFinished())
         Q_PRIVATE_SLOT(d, void updateShortcuts())
-        Q_PRIVATE_SLOT(d, void publishCheckboxStateChanged(int state))
         Q_PRIVATE_SLOT(d, void globalShortcutChanged())
         Q_PRIVATE_SLOT(d, void propagateConfigChanged())
 

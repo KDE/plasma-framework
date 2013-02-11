@@ -94,38 +94,18 @@ set(plasma_LIB_SRCS
     private/componentinstaller.cpp
     private/datacontainer_p.cpp
     private/dataenginemanager.cpp
-    private/dataengineservice.cpp
     private/effects/halopainter.cpp
-    private/getsource.cpp
 
     private/packages.cpp
     private/packagejob.cpp
     private/packagejobthread.cpp
-    private/plasmoidservice.cpp
-    private/remotedataengine.cpp
-    private/remoteservice.cpp
-    private/remoteservicejob.cpp
     private/runnerjobs.cpp
-    private/serviceprovider.cpp
     private/storage.cpp
     private/storagethread.cpp
     private/applet_p.cpp
     private/containment_p.cpp
 
     querymatch.cpp
-    remote/accessmanager.cpp
-    remote/accessappletjob.cpp
-    remote/authorizationinterface.cpp
-    remote/authorizationmanager.cpp
-    remote/authorizationrule.cpp
-    remote/clientpinrequest.cpp
-    remote/credentials.cpp
-    remote/denyallauthorization.cpp
-    remote/pinpairingauthorization.cpp
-    remote/pinpairingdialog.cpp
-    remote/serviceaccessjob.cpp
-    #remote/signing.cpp TODO: re-enable, needs gpgmepp though
-    remote/trustedonlyauthorization.cpp
     runnercontext.cpp
     runnermanager.cpp
     runnersyntax.cpp
@@ -139,20 +119,6 @@ set(plasma_LIB_SRCS
     theme.cpp
     version.cpp
 
-
-    #Temporary QtJolie branch
-    private/qtjolie-branch/qtjolie/abstractadaptor.cpp
-    private/qtjolie-branch/qtjolie/client.cpp
-    private/qtjolie-branch/qtjolie/clientthread.cpp
-    private/qtjolie-branch/qtjolie/value.cpp
-    private/qtjolie-branch/qtjolie/fault.cpp
-    private/qtjolie-branch/qtjolie/message.cpp
-    private/qtjolie-branch/qtjolie/metaservice.cpp
-    private/qtjolie-branch/qtjolie/pendingcall.cpp
-    private/qtjolie-branch/qtjolie/pendingcallwatcher.cpp
-    private/qtjolie-branch/qtjolie/pendingreply.cpp
-    private/qtjolie-branch/qtjolie/server.cpp
-    private/qtjolie-branch/qtjolie/serverthread.cpp
     applet.cpp
     containment.cpp
     corona.cpp
@@ -162,9 +128,6 @@ set(plasma_LIB_SRCS ${plasma_LIB_SRCS} private/effectwatcher.cpp)
 
 kconfig_add_kcfg_files(plasma_LIB_SRCS data/kconfigxt/libplasma-theme-global.kcfgc)
 
-kde4_add_ui_files(plasma_LIB_SRCS
-                  remote/pinpairing.ui
-                  private/publish.ui)
 #NEPOMUK_GENERATE_FROM_ONTOLOGY(
 #   nwc.nrl
 #   ${metadata_test_BINARY_DIR}
@@ -226,14 +189,6 @@ set(plasma_LIB_INCLUDES
     plasma.h
     ${CMAKE_CURRENT_BINARY_DIR}/plasma_export.h
     querymatch.h
-    remote/accessappletjob.h
-    remote/accessmanager.h
-    remote/authorizationmanager.h
-    remote/authorizationrule.h
-    remote/authorizationinterface.h
-    remote/clientpinrequest.h
-    remote/credentials.h
-    remote/serviceaccessjob.h
     runnercontext.h
     runnermanager.h
     runnersyntax.h

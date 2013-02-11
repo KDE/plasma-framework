@@ -36,6 +36,7 @@
 
 #include <kaction.h>
 #include <kcoreauthorized.h>
+#include <klocalizedstring.h>
 #include <kmenu.h>
 #include <kmessagebox.h>
 #include <qmimedatabase.h>
@@ -54,9 +55,6 @@
 #include "corona.h"
 #include "pluginloader.h"
 #include "svg.h"
-
-#include "remote/accessappletjob.h"
-#include "remote/accessmanager.h"
 
 #include "private/applet_p.h"
 #include "private/containmentactionspluginsconfig_p.h"

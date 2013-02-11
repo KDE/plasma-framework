@@ -30,7 +30,6 @@ namespace Plasma
 {
 
 class DataEngineConsumer;
-class RemoteDataEngine;
 class Service;
 class ServiceMonitor;
 class ServiceJob;
@@ -41,9 +40,7 @@ class DataEngineConsumerPrivate : public QObject
 
 public:
     QSet<QString> loadedEngines;
-    QMap<QPair<QString, QString>, RemoteDataEngine*> remoteEngines;
     QMap<Service*, QString> engineNameForService;
-    DataEngine *remoteDataEngine(const QString &name, const QUrl &location);
 
 public Q_SLOTS:
     void slotJobFinished(Plasma::ServiceJob *job);

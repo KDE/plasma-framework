@@ -28,7 +28,6 @@
 #include <kdebug.h>
 
 #include "private/dataenginemanager_p.h"
-#include "private/remotedataengine_p.h"
 #include "servicejob.h"
 
 namespace Plasma
@@ -45,18 +44,6 @@ void DataEngineConsumerPrivate::slotJobFinished(Plasma::ServiceJob *job)
 #ifndef NDEBUG
     kDebug() << "pair = " << pair;
 #endif
-    if (!remoteEngines.contains(pair)) {
-#ifndef NDEBUG
-        kDebug() << "engine does not exist yet!";
-#endif
-    } else {
-        QUrlPathInfo engineLocation = QUrlPathInfo(QUrl(location));
-        engineLocation.setFileName(job->result().toString());
-#ifndef NDEBUG
-        kDebug() << "setting location : " << engineLocation.url();
-#endif
-        remoteEngines[pair]->setLocation(engineLocation.url());
-    }
 }
 
 void DataEngineConsumerPrivate::slotServiceReady(Plasma::Service *plasmoidService)
@@ -87,36 +74,6 @@ void DataEngineConsumerPrivate::slotServiceReady(Plasma::Service *plasmoidServic
             this, SLOT(slotJobFinished(Plasma::ServiceJob*)));
 }
 
-DataEngine *DataEngineConsumerPrivate::remoteDataEngine(const QString &name, const QUrl &location)
-{
-    QPair<QString, QString> pair(location.toString(), name);
-#ifndef NDEBUG
-    kDebug() << "pair = " << pair;
-#endif
-    if (remoteEngines.contains(pair)) {
-#ifndef NDEBUG
-        kDebug() << "existing remote dataengine at " << location;
-#endif
-        return remoteEngines[pair];
-    }
-
-#ifndef NDEBUG
-    kDebug() << "new remote dataengine at " << location;
-#endif
-    RemoteDataEngine *engine = new RemoteDataEngine(QUrl());
-    remoteEngines[pair] = engine;
-    Service *plasmoidService = Service::access(location);
-    plasmoidService->setDestination(location.toString());
-    engineNameForService[plasmoidService] = name;
-#ifndef NDEBUG
-    kDebug() << "name = " << name;
-#endif
-
-    connect(plasmoidService, SIGNAL(serviceReady(Plasma::Service*)),
-            this, SLOT(slotServiceReady(Plasma::Service*)));
-    return engine;
-}
-
 DataEngineConsumer::DataEngineConsumer()
     : d(new DataEngineConsumerPrivate)
 {
@@ -131,12 +88,8 @@ DataEngineConsumer::~DataEngineConsumer()
     delete d;
 }
 
-DataEngine *DataEngineConsumer::dataEngine(const QString &name, const QUrl &location)
+DataEngine *DataEngineConsumer::dataEngine(const QString &name)
 {
-    if (!location.isEmpty()) {
-        return d->remoteDataEngine(name, location);
-    }
-
     if (d->loadedEngines.contains(name)) {
         DataEngine *engine = DataEngineManager::self()->engine(name);
         if (engine->isValid()) {

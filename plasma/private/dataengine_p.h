@@ -63,21 +63,6 @@ class DataEnginePrivate
         bool isUsed() const;
 
         /**
-         * @param methods ways to announce this engine on the network.
-         */
-        void publish(AnnouncementMethods methods, const QString &name);
-
-        /**
-         * remove this engine from the network.
-         */
-        void unpublish(const QString &name = QString());
-
-        /**
-         * @return whether or not this engine is published.
-         */
-        bool isPublished() const;
-
-        /**
          * a datacontainer has been destroyed, clean up stuff
          */
         void sourceDestroyed(QObject *object);
@@ -113,7 +98,6 @@ class DataEnginePrivate
         QString engineName;
         QString serviceName;
         Package *package;
-        Service *publishedService;
         QString waitingSourceRequest;
 };
 

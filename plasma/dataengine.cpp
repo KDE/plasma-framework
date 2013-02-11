@@ -38,14 +38,10 @@
 #include "datacontainer.h"
 #include "package.h"
 #include "pluginloader.h"
-#include "remote/authorizationmanager.h"
-#include "remote/authorizationmanager_p.h"
 #include "service.h"
 #include "scripting/dataenginescript.h"
 
 #include "private/datacontainer_p.h"
-#include "private/dataengineservice_p.h"
-#include "private/remotedataengine_p.h"
 #include "private/service_p.h"
 #include "private/storage_p.h"
 
@@ -415,40 +411,6 @@ Service* DataEngine::createDefaultService(QObject *parent)
     return PluginLoader::self()->loadService(d->serviceName, args, parent);
 }
 
-void DataEnginePrivate::publish(AnnouncementMethods methods, const QString &name)
-{
-    if (!publishedService) {
-        publishedService = new DataEngineService(q);
-    }
-
-    //QString resourceName =
-    //i18nc("%1 is the name of a dataengine, %2 the name of the machine that engine is published
-//on",
-          //"%1 dataengine on %2", name(), AuthorizationManager::self()->d->myCredentials.name());
-#ifndef NDEBUG
-    kDebug() << "name: " << name;
-#endif
-    publishedService->d->publish(methods, name);
-}
-
-void DataEnginePrivate::unpublish(const QString &name)
-{
-    Q_UNUSED(name)
-
-    if (publishedService) {
-        publishedService->d->unpublish();
-    }
-}
-
-bool DataEnginePrivate::isPublished() const
-{
-    if (publishedService) {
-        return publishedService->d->isPublished();
-    } else {
-        return false;
-    }
-}
-
 Package DataEngine::package() const
 {
     return d->package ? *d->package : Package();
@@ -492,8 +454,7 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info)
       minPollingInterval(-1),
       valid(true),
       script(0),
-      package(0),
-      publishedService(0)
+      package(0)
 {
     updateTimestamp.start();
 
@@ -612,10 +573,6 @@ void DataEnginePrivate::connectSource(DataContainer *s, QObject *visualization,
 {
     //kDebug() << "connect source called" << s->objectName() << "with interval" << pollingInterval;
 
-    //FIXME: at the moment a remote dataengine can only poll, a push mechanism will be needed instead
-    if (pollingInterval == 0 && qobject_cast<RemoteDataEngine *>(q)) {
-        pollingInterval = 5000;
-    }
     if (pollingInterval > 0) {
         // never more frequently than allowed, never more than 20 times per second
         uint min = qMax(50, minPollingInterval); // for qMax below

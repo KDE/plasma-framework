@@ -27,12 +27,14 @@
 
 #include <QFile>
 #include <QHostInfo>
+#include <QVBoxLayout>
 #include <qstandardpaths.h>
 
 #include <kaction.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <klocalizedstring.h>
 #include <kkeysequencewidget.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
@@ -43,12 +45,6 @@
 #include "scripting/scriptengine.h"
 #include "scripting/appletscript.h"
 #include "private/containment_p.h"
-
-#if ENABLE_REMOTE_WIDGETS
-#include "remote/authorizationmanager.h"
-#include "remote/authorizationmanager_p.h"
-#include "remote/authorizationrule.h"
-#endif
 
 namespace Plasma
 {
@@ -321,7 +317,6 @@ KConfigDialog *AppletPrivate::generateGenericConfigDialog()
 void AppletPrivate::addStandardConfigurationPages(KConfigDialog *dialog)
 {
     addGlobalShortcutsPage(dialog);
-    addPublishPage(dialog);
 }
 
 void AppletPrivate::addGlobalShortcutsPage(KConfigDialog *dialog)
@@ -349,40 +344,6 @@ void AppletPrivate::addGlobalShortcutsPage(KConfigDialog *dialog)
 #endif
 }
 
-void AppletPrivate::addPublishPage(KConfigDialog *dialog)
-{
-#if ENABLE_REMOTE_WIDGETS
-    QWidget *page = new QWidget;
-    publishUI.setupUi(page);
-    publishUI.publishCheckbox->setChecked(q->isPublished());
-    QObject::connect(publishUI.publishCheckbox, SIGNAL(clicked(bool)), dialog, SLOT(settingsModified()));
-    publishUI.allUsersCheckbox->setEnabled(q->isPublished());
-    QObject::connect(publishUI.allUsersCheckbox, SIGNAL(clicked(bool)), dialog, SLOT(settingsModified()));
-
-    QString resourceName =
-    i18nc("%1 is the name of a plasmoid, %2 the name of the machine that plasmoid is published on",
-          "%1 on %2", q->name(), QHostInfo::localHostName());
-    if (AuthorizationManager::self()->d->matchingRule(resourceName, Credentials())) {
-        publishUI.allUsersCheckbox->setChecked(true);
-    } else {
-        publishUI.allUsersCheckbox->setChecked(false);
-    }
-
-    q->connect(publishUI.publishCheckbox, SIGNAL(stateChanged(int)),
-               q, SLOT(publishCheckboxStateChanged(int)));
-    dialog->addPage(page, i18n("Share"), "applications-internet");
-#endif
-}
-
-void AppletPrivate::publishCheckboxStateChanged(int state)
-{
-    if (state == Qt::Checked) {
-        publishUI.allUsersCheckbox->setEnabled(true);
-    } else {
-        publishUI.allUsersCheckbox->setEnabled(false);
-    }
-}
-
 void AppletPrivate::configDialogFinished()
 {
     if (shortcutEditor) {
@@ -392,35 +353,6 @@ void AppletPrivate::configDialogFinished()
             emit q->configNeedsSaving();
         }
     }
-
-#if ENABLE_REMOTE_WIDGETS
-    if (KConfigDialog::exists(configDialogId()) && publishUI.publishCheckbox) {
-        q->config().writeEntry("Share", publishUI.publishCheckbox->isChecked());
-
-        if (publishUI.publishCheckbox->isChecked()) {
-            QString resourceName =
-                i18nc("%1 is the name of a plasmoid, %2 the name of the machine that plasmoid is published on",
-                        "%1 on %2", q->name(), QHostInfo::localHostName());
-            q->publish(Plasma::ZeroconfAnnouncement, resourceName);
-            if (publishUI.allUsersCheckbox->isChecked()) {
-                if (!AuthorizationManager::self()->d->matchingRule(resourceName, Credentials())) {
-                    AuthorizationRule *rule = new AuthorizationRule(resourceName, "");
-                    rule->setPolicy(AuthorizationRule::Allow);
-                    rule->setTargets(AuthorizationRule::AllUsers);
-                    AuthorizationManager::self()->d->rules.append(rule);
-                }
-            } else {
-                AuthorizationRule *matchingRule =
-                    AuthorizationManager::self()->d->matchingRule(resourceName, Credentials());
-                if (matchingRule) {
-                    AuthorizationManager::self()->d->rules.removeAll(matchingRule);
-                }
-            }
-        } else {
-            q->unpublish();
-        }
-    }
-#endif
 
     if (!configLoader) {
         // the config loader will trigger this for us, so we don't need to.

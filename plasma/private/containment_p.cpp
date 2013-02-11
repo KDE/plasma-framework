@@ -34,6 +34,7 @@
 #include <kcoreauthorized.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <klocalizedstring.h>
 #include <kurlmimedata.h>
 #include <kwindowsystem.h>
 
@@ -50,9 +51,6 @@
 #include "corona.h"
 #include "pluginloader.h"
 #include "svg.h"
-
-#include "remote/accessappletjob.h"
-#include "remote/accessmanager.h"
 
 #include "private/applet_p.h"
 #include "private/containmentactionspluginsconfig_p.h"

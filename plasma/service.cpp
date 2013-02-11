@@ -19,7 +19,6 @@
 
 #include "service.h"
 #include "private/service_p.h"
-#include "private/serviceprovider_p.h"
 
 #include "config-plasma.h"
 
@@ -39,10 +38,7 @@
 #include "configloader.h"
 #include "version.h"
 #include "private/configloader_p.h"
-#include "private/remoteservice_p.h"
-#include "private/remoteservicejob_p.h"
 #include "pluginloader.h"
-#include "remote/authorizationmanager_p.h"
 
 namespace Plasma
 {
@@ -62,13 +58,7 @@ Service::Service(QObject *parent, const QVariantList &args)
 
 Service::~Service()
 {
-    d->unpublish();
     delete d;
-}
-
-Service *Service::access(const QUrl &url, QObject *parent)
-{
-    return new RemoteService(parent, url);
 }
 
 void ServicePrivate::associatedWidgetDestroyed(QObject *obj)
@@ -79,64 +69,6 @@ void ServicePrivate::associatedWidgetDestroyed(QObject *obj)
 void ServicePrivate::associatedItemDestroyed(QObject *obj)
 {
     associatedItems.remove(static_cast<QGraphicsObject*>(obj));
-}
-
-void ServicePrivate::publish(AnnouncementMethods methods, const QString &name, const KPluginInfo &metadata)
-{
-#if ENABLE_REMOTE_WIDGETS
-    if (!serviceProvider) {
-        AuthorizationManager::self()->d->prepareForServicePublication();
-
-        serviceProvider = new ServiceProvider(name, q);
-
-        if (methods.testFlag(ZeroconfAnnouncement) &&
-            (DNSSD::ServiceBrowser::isAvailable() == DNSSD::ServiceBrowser::Working)) {
-            //TODO: dynamically pick a free port number.
-            publicService = new DNSSD::PublicService(name, "_plasma._tcp", 4000);
-
-            QMap<QString, QByteArray> textData;
-            textData["name"] = name.toUtf8();
-            textData["plasmoidname"] = metadata.name().toUtf8();
-            textData["description"] = metadata.comment().toUtf8();
-            textData["icon"] = metadata.icon().toUtf8();
-            publicService->setTextData(textData);
-#ifndef NDEBUG
-            kDebug() << "about to publish";
-#endif
-
-            publicService->publishAsync();
-        } else if (methods.testFlag(ZeroconfAnnouncement) &&
-                (DNSSD::ServiceBrowser::isAvailable() != DNSSD::ServiceBrowser::Working)) {
-#ifndef NDEBUG
-            kDebug() << "sorry, but your zeroconf daemon doesn't seem to be running.";
-#endif
-        }
-    } else {
-#ifndef NDEBUG
-        kDebug() << "already published!";
-#endif
-    }
-#else
-    kWarning() << "libplasma is compiled without support for remote widgets. not publishing.";
-#endif
-}
-
-void ServicePrivate::unpublish()
-{
-        delete serviceProvider;
-        serviceProvider = 0;
-
-        delete publicService;
-        publicService = 0;
-}
-
-bool ServicePrivate::isPublished() const
-{
-    if (serviceProvider) {
-        return true;
-    } else {
-        return false;
-    }
 }
 
 KConfigGroup ServicePrivate::dummyGroup()
@@ -212,19 +144,7 @@ ServiceJob *Service::startOperationCall(const KConfigGroup &description, QObject
     ServiceJob *job = 0;
     const QString op = description.isValid() ? description.name() : QString();
 
-    RemoteService *rs = qobject_cast<RemoteService *>(this);
-    if (!op.isEmpty() && rs && !rs->isReady()) {
-        // if we have an operation, but a non-ready remote service, just let it through
-#ifndef NDEBUG
-        kDebug() << "Remote service is not ready; queueing operation";
-#endif
-        QHash<QString, QVariant> params;
-        job = createJob(op, params);
-        RemoteServiceJob *rsj = qobject_cast<RemoteServiceJob *>(job);
-        if (rsj) {
-            rsj->setDelayedDescription(description);
-        }
-    } else if (!d->config) {
+    if (!d->config) {
 #ifndef NDEBUG
         kDebug() << "No valid operations scheme has been registered";
 #endif

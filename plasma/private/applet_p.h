@@ -32,7 +32,6 @@
 
 #include "plasma/applet.h"
 #include "plasma/dataengineconsumer.h"
-#include "plasma/ui_publish.h"
 
 class KKeySequenceWidget;
 
@@ -159,7 +158,6 @@ public:
 
     ItemStatus itemStatus;
     KUrl remoteLocation;
-    Ui::publishWidget publishUI;
 
     // the applet can change size policy by itself, so save the old one for eventual restore
     QSizePolicy preferredSizePolicy;

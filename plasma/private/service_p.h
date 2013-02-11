@@ -35,13 +35,11 @@
 #include <dnssd/servicebrowser.h>
 
 #include "plasma/configloader.h"
-#include "accessmanager_p.h"
 
 namespace Plasma
 {
 
 class ConfigLoader;
-class ServiceProvider;
 
 class NullServiceJob : public ServiceJob
 {
@@ -81,8 +79,7 @@ public:
         : q(service),
           config(0),
           dummyConfig(0),
-          publicService(0),
-          serviceProvider(0)
+          publicService(0)
     {
     }
 
@@ -96,13 +93,6 @@ public:
 
     void associatedItemDestroyed(QObject *obj);
 
-    void publish(AnnouncementMethods methods, const QString &name,
-                 const KPluginInfo &metadata = KPluginInfo());
-
-    void unpublish();
-
-    bool isPublished() const;
-
     KConfigGroup dummyGroup();
 
     Service *q;
@@ -112,7 +102,6 @@ public:
     ConfigLoader *config;
     KConfig *dummyConfig;
     DNSSD::PublicService *publicService;
-    ServiceProvider *serviceProvider;
     QMultiHash<QWidget *, QString> associatedWidgets;
     QMultiHash<QGraphicsObject *, QString> associatedItems;
     QSet<QString> disabledOperations;

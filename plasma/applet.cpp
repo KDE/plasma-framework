@@ -69,7 +69,6 @@
 #include <solid/powermanagement.h>
 #endif
 
-#include "authorizationrule.h"
 #include "configloader.h"
 #include "containment.h"
 #include "corona.h"
@@ -79,8 +78,6 @@
 #include "svg.h"
 #include "framesvg.h"
 #include "private/framesvg_p.h"
-#include "remote/authorizationmanager.h"
-#include "remote/authorizationmanager_p.h"
 #include "theme.h"
 #include "paintutils.h"
 #include "abstractdialogmanager.h"
@@ -90,10 +87,7 @@
 #include "private/containment_p.h"
 #include "private/package_p.h"
 #include "private/packages_p.h"
-#include "private/plasmoidservice_p.h"
-#include "private/remotedataengine_p.h"
 #include "private/service_p.h"
-#include "ui_publish.h"
 
 
 namespace Plasma
@@ -356,7 +350,7 @@ ConfigLoader *Applet::configScheme() const
 
 DataEngine *Applet::dataEngine(const QString &name) const
 {
-    return d->dataEngine(name, d->remoteLocation);
+    return d->dataEngine(name);
 }
 
 Package Applet::package() const
@@ -800,43 +794,6 @@ bool Applet::hasConfigurationInterface() const
     return d->hasConfigurationInterface;
 }
 
-void Applet::publish(AnnouncementMethods methods, const QString &resourceName)
-{
-    if (!d->remotingService) {
-        d->remotingService = new PlasmoidService(this);
-    }
-
-    const QString resName = resourceName.isEmpty() ?  i18nc("%1 is the name of a plasmoid, %2 the name of the machine that plasmoid is published on",
-                                                         "%1 on %2", name(), QHostInfo::localHostName())
-                                                   : resourceName;
-#ifndef NDEBUG
-    kDebug() << "publishing package under name " << resName;
-#endif
-    if (d->package && d->package->isValid()) {
-        d->remotingService->d->publish(methods, resName, d->package->metadata());
-    } else if (!d->package && d->appletDescription.isValid()) {
-        d->remotingService->d->publish(methods, resName, d->appletDescription);
-    } else {
-        delete d->remotingService;
-        d->remotingService  = 0;
-#ifndef NDEBUG
-        kDebug() << "Can not publish invalid applets.";
-#endif
-    }
-}
-
-void Applet::unpublish()
-{
-    if (d->remotingService) {
-        d->remotingService->d->unpublish();
-    }
-}
-
-bool Applet::isPublished() const
-{
-    return d->remotingService && d->remotingService->d->isPublished();
-}
-
 void Applet::setHasConfigurationInterface(bool hasInterface)
 {
     if (hasInterface == d->hasConfigurationInterface) {
@@ -880,7 +837,6 @@ void Applet::showConfigurationInterface()
         return;
     }
 
-    d->publishUI.publishCheckbox = 0;
     if (d->package) {
         KConfigDialog *dialog = 0;
 
@@ -949,7 +905,6 @@ void Applet::showConfigurationInterface()
 
             if (hasPages) {
                 d->addGlobalShortcutsPage(dialog);
-                d->addPublishPage(dialog);
                 dialog->show();
             } else {
                 delete dialog;

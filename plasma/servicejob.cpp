@@ -83,11 +83,6 @@ QHash<QString, QVariant> ServiceJob::parameters() const
     return d->parameters;
 }
 
-Credentials ServiceJob::identity() const
-{
-    return d->identity;
-}
-
 QVariant ServiceJob::result() const
 {
     return d->result;
