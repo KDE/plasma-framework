@@ -76,17 +76,17 @@ FontProxy::~FontProxy()
 
 FontProxy *FontProxy::defaultFont()
 {
-    return &privateFontProxySingleton->defaultFont;
+    return &privateFontProxySingleton()->defaultFont;
 }
 
 FontProxy *FontProxy::desktopFont()
 {
-    return &privateFontProxySingleton->desktopFont;
+    return &privateFontProxySingleton()->desktopFont;
 }
 
 FontProxy *FontProxy::smallestFont()
 {
-    return &privateFontProxySingleton->smallestFont;
+    return &privateFontProxySingleton()->smallestFont;
 }
 
 bool FontProxy::bold() const
