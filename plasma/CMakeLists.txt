@@ -28,7 +28,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}
                     ${KDE4_INCLUDE_DIR}
                     ${KDE4_INCLUDE_DIR}/KDE
-                    ${CMAKE_SOURCE_DIR}/plasma/remote
                     ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch/qtjolie
                     ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch
                     ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch/includes
@@ -59,10 +58,6 @@ if (NOT PLASMA_NO_KUTILS)
     set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} ${KDE4_KUTILS_LIBS})
 endif(NOT PLASMA_NO_KUTILS)
 
-if(QCA2_FOUND)
-    include_directories(${QCA2_INCLUDE_DIR})
-    set(ENABLE_REMOTE_WIDGETS TRUE)
-endif(QCA2_FOUND)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-plasma.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-plasma.h)
 
 #FIXME: gpgme++ is in kdepimlibs, must move somewhere else!
@@ -144,10 +139,6 @@ target_link_libraries(plasma ${QT_QTUITOOLS_LIBRARY}
                              ${KDE4_KDEUI_LIBS} kdnssd KF5::threadweaver kauth KF5::kwindowsystem ${PLASMA_EXTRA_LIBS} kcoreaddons ki18n)
 #FIXME gpgme++ is in kdepimlibs, neeeds to be elsewhere
 target_link_libraries(plasma ${KDEPIMLIBS_GPGMEPP_LIBS} kdeclarative KF5::karchive)
-
-if(QCA2_FOUND)
-   target_link_libraries(plasma ${QCA2_LIBRARIES})
-endif(QCA2_FOUND)
 
 if(X11_FOUND)
    target_link_libraries(plasma ${X11_LIBRARIES})
