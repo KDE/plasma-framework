@@ -173,7 +173,7 @@ class PLASMA_EXPORT Applet : public QObject
          * Reccomended position for a popup window like a menu or a tooltip
          * given its size
          * @param s size of the popup
-         * @returns reccomended position
+         * @returns recommended position
          */
         QPoint popupPosition(const QSize &s) const;
 
@@ -183,7 +183,7 @@ class PLASMA_EXPORT Applet : public QObject
          * given its size
          * @param s size of the popup
          * @param alignment alignment of the popup, valid flags are Qt::AlignLeft, Qt::AlignRight and Qt::AlignCenter
-         * @returns reccomended position
+         * @returns recommended position
          */
         QPoint popupPosition(const QSize &s, Qt::AlignmentFlag alignment) const;
 
