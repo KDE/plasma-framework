@@ -409,11 +409,6 @@ void Applet::setTitle(const QString &title) const
     d->customTitle = title;
 }
 
-QFont Applet::font() const
-{
-    return QApplication::font();
-}
-
 QString Applet::icon() const
 {
     if (!d->appletDescription.isValid()) {

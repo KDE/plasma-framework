@@ -448,11 +448,6 @@ class PLASMA_EXPORT Applet : public QObject
 
 //Completely UI-specific, remove or move to scriptengine
         /**
-         * @return the font currently set for this widget
-         **/
-        QFont font() const;
-
-        /**
          * @return true if the applet is busy and is showing an indicator widget for that
          */
         bool isBusy() const;
