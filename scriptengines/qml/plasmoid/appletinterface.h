@@ -275,6 +275,9 @@ private:
     QSignalMapper *m_actionSignals;
     QString m_currentConfig;
     QMap<QString, Plasma::ConfigLoader*> m_configs;
+
+//UI-specific properties
+    Plasma::BackgroundHints m_backgroundHints;
 };
 
 class JsAppletInterface : public AppletInterface

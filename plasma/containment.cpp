@@ -72,7 +72,6 @@ Containment::Containment(QObject *parent,
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
-    setBackgroundHints(NoBackground);
     setContainmentType(CustomContainment);
     setHasConfigurationInterface(false);
 }
@@ -83,7 +82,6 @@ Containment::Containment(QObject *parent, const QVariantList &args)
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
-    setBackgroundHints(NoBackground);
     setHasConfigurationInterface(false);
 }
 
@@ -93,7 +91,6 @@ Containment::Containment(const QString &packagePath, uint appletId, const QVaria
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
-    setBackgroundHints(NoBackground);
     setHasConfigurationInterface(false);
 }
 
@@ -513,11 +510,6 @@ void Containment::addApplet(Applet *applet, const QPointF &pos)
     }
 
     Containment *currentContainment = applet->containment();
-
-    if (d->type == PanelContainment) {
-        //panels don't want backgrounds, which is important when setting geometry
-        setBackgroundHints(NoBackground);
-    }
 
     if (currentContainment && currentContainment != this) {
         emit currentContainment->appletRemoved(applet);

@@ -53,7 +53,6 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
         : appletId(uniqueID),
           q(applet),
           remotingService(0),
-          backgroundHints(StandardBackground),
           immutability(Mutable),
           appletDescription(info ? *info : KPluginInfo(service)),
           mainConfig(0),
@@ -103,9 +102,6 @@ void AppletPrivate::init(const QString &packagePath)
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
 
-    //set a default size before any saved settings are read
-    QSize size(200, 200);
-    q->setBackgroundHints(DefaultBackground);
     q->setHasConfigurationInterface(true); //FIXME why not default it to true in the constructor?
 
     QAction *closeApplet = actions->action("remove");
@@ -127,12 +123,6 @@ void AppletPrivate::init(const QString &packagePath)
 #endif
         return;
     }
-
-    QVariant s = appletDescription.property("X-Plasma-DefaultSize");
-    if (s.isValid()) {
-        size = s.toSize();
-    }
-    //kDebug() << "size" << size;
 
     QString api = appletDescription.property("X-Plasma-API").toString();
 

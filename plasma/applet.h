@@ -463,19 +463,6 @@ class PLASMA_EXPORT Applet : public QObject
         bool hasConfigurationInterface() const;
 
         /**
-         * Sets the BackgroundHints for this applet @see BackgroundHint
-         *
-         * @param hints the BackgroundHint combination for this applet
-         */
-        void setBackgroundHints(const Plasma::BackgroundHints hint);
-
-        /**
-         * @return BackgroundHints flags combination telling if the standard background is shown
-         *         and if it has a drop shadow
-         */
-        Plasma::BackgroundHints backgroundHints() const;
-
-        /**
          * Reimplement this method so provide a configuration interface,
          * parented to the supplied widget. Ownership of the widgets is passed
          * to the parent widget.
@@ -543,12 +530,6 @@ class PLASMA_EXPORT Applet : public QObject
          * @since 4.3
          */
         void messageButtonPressed(const Plasma::MessageButton button);
-
-        /**
-         * Emitted when background hints change
-         * @since 5.0
-         */
-        void backgroundHintsChanged(Plasma::BackgroundHints backgroundHints);
 
 
 //Completely UI-specific, remove or move to scriptengine

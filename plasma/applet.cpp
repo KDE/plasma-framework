@@ -489,21 +489,6 @@ void Applet::setImmutability(const ImmutabilityType immutable)
     updateConstraints(ImmutableConstraint);
 }
 
-BackgroundHints Applet::backgroundHints() const
-{
-    return d->backgroundHints;
-}
-
-void Applet::setBackgroundHints(const Plasma::BackgroundHints hints)
-{
-    if (d->backgroundHints == hints) {
-        return;
-    }
-
-    d->backgroundHints = hints;
-    emit backgroundHintsChanged(hints);
-}
-
 bool Applet::hasFailedToLaunch() const
 {
     return d->failed;

@@ -45,14 +45,14 @@ Q_DECLARE_METATYPE(AppletInterface*)
 AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *parent)
     : QQuickItem(parent),
       m_appletScriptEngine(script),
-      m_actionSignals(0)
+      m_actionSignals(0),
+      m_backgroundHints(Plasma::StandardBackground)
 {
     qmlRegisterType<AppletInterface>();
     connect(this, SIGNAL(releaseVisualFocus()), applet(), SIGNAL(releaseVisualFocus()));
     connect(this, SIGNAL(configNeedsSaving()), applet(), SIGNAL(configNeedsSaving()));
     connect(applet(), SIGNAL(immutabilityChanged(Plasma::ImmutabilityType)), this, SIGNAL(immutableChanged()));
     connect(applet(), SIGNAL(newStatus(Plasma::ItemStatus)), this, SIGNAL(statusChanged()));
-    connect(applet(), SIGNAL(backgroundHintsChanged(Plasma::BackgroundHints)), this, SIGNAL(backgroundHintsChanged()));
     connect(m_appletScriptEngine, SIGNAL(formFactorChanged()),
             this, SIGNAL(formFactorChanged()));
     connect(m_appletScriptEngine, SIGNAL(locationChanged()),
@@ -97,12 +97,17 @@ void AppletInterface::setBusy(bool busy)
 
 AppletInterface::BackgroundHints AppletInterface::backgroundHints() const
 {
-    return static_cast<BackgroundHints>(static_cast<int>(applet()->backgroundHints()));
+    return (BackgroundHints)m_backgroundHints;
 }
 
 void AppletInterface::setBackgroundHints(BackgroundHints hint)
 {
-    applet()->setBackgroundHints(Plasma::BackgroundHints(hint));
+    if (m_backgroundHints == (Plasma::BackgroundHints)hint) {
+        return;
+    }
+
+    m_backgroundHints = (Plasma::BackgroundHints)hint;
+    emit backgroundHintsChanged();
 }
 
 void AppletInterface::setConfigurationRequired(bool needsConfiguring, const QString &reason)
