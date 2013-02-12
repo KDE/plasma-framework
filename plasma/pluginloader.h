@@ -141,14 +141,28 @@ public:
      *
      * @return list of applets
      **/
-    static KPluginInfo::List listAppletInfoForMimeType(const QString &mimetype);
+    KPluginInfo::List listAppletInfoForMimeType(const QString &mimetype);
 
     /**
      * Returns a list of all known applets associated with a certain URL.
      *
      * @return list of applets
      **/
-    static KPluginInfo::List listAppletInfoForUrl(const QUrl &url);
+    KPluginInfo::List listAppletInfoForUrl(const QUrl &url);
+
+    /**
+     * Returns a list of all the categories used by installed applets.
+     *
+     * @param parentApp the application to filter applets on. Uses the
+     *                  X-KDE-ParentApp entry (if any) in the plugin info.
+     *                  The default value of QString() will result in a
+     *                  list containing only applets not specifically
+     *                  registered to an application.
+     * @return list of categories
+     * @param visibleOnly true if it should only return applets that are marked as visible
+     */
+    QStringList listAppletCategories(const QString &parentApp = QString(),
+                                     bool visibleOnly = true);
 
     /**
      * Returns a list of all known DataEngines.
