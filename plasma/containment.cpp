@@ -566,7 +566,7 @@ void Containment::addApplet(Applet *applet, const QPointF &pos)
     applet->d->scheduleModificationNotification();
 }
 
-Applet::List Containment::applets() const
+QList<Applet *> Containment::applets() const
 {
     return d->applets;
 }

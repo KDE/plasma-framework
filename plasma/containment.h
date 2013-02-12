@@ -211,7 +211,7 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * @return the applets currently in this Containment
          */
-        Applet::List applets() const;
+        QList<Applet *> applets() const;
 
         /**
          * Removes all applets from this Containment

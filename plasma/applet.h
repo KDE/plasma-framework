@@ -72,9 +72,6 @@ class PLASMA_EXPORT Applet : public QObject
     Q_OBJECT
 
     public:
-        typedef QList<Applet*> List;
-        typedef QHash<QString, Applet*> Dict;
-
 //CONSTRUCTORS
         /**
          * @param parent the QObject this applet is parented to

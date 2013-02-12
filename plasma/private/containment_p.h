@@ -125,7 +125,7 @@ public:
     Containment *q;
     FormFactor formFactor;
     Location location;
-    Applet::List applets;
+    QList<Applet *> applets;
     QString wallpaper;
     QHash<QString, ContainmentActions*> localActionPlugins;
     int screen;
