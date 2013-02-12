@@ -931,40 +931,6 @@ bool Applet::hasValidAssociatedApplication() const
     return AssociatedApplicationManager::self()->appletHasValidAssociatedApplication(this);
 }
 
-KPluginInfo::List Applet::listAppletInfoForMimeType(const QString &mimeType)
-{
-    QString constraint = AppletPrivate::parentAppConstraint();
-    constraint.append(QString(" and '%1' in [X-Plasma-DropMimeTypes]").arg(mimeType));
-    //kDebug() << "listAppletInfoForMimetype with" << mimeType << constraint;
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
-    return KPluginInfo::fromServices(offers);
-}
-
-KPluginInfo::List Applet::listAppletInfoForUrl(const QUrl &url)
-{
-    QString constraint = AppletPrivate::parentAppConstraint();
-    constraint.append(" and exist [X-Plasma-DropUrlPatterns]");
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
-
-    KPluginInfo::List allApplets = KPluginInfo::fromServices(offers);
-    KPluginInfo::List filtered;
-    foreach (const KPluginInfo &info, allApplets) {
-        QStringList urlPatterns = info.property("X-Plasma-DropUrlPatterns").toStringList();
-        foreach (const QString &glob, urlPatterns) {
-            QRegExp rx(glob);
-            rx.setPatternSyntax(QRegExp::Wildcard);
-            if (rx.exactMatch(url.toString())) {
-#ifndef NDEBUG
-                kDebug() << info.name() << "matches" << glob << url;
-#endif
-                filtered << info;
-            }
-        }
-    }
-
-    return filtered;
-}
-
 QStringList Applet::listCategories(const QString &parentApp, bool visibleOnly)
 {
     QString constraint = AppletPrivate::parentAppConstraint(parentApp);

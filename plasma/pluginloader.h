@@ -137,6 +137,20 @@ public:
     KPluginInfo::List listAppletInfo(const QString &category, const QString &parentApp = QString());
 
     /**
+     * Returns a list of all known applets associated with a certain mimetype.
+     *
+     * @return list of applets
+     **/
+    static KPluginInfo::List listAppletInfoForMimeType(const QString &mimetype);
+
+    /**
+     * Returns a list of all known applets associated with a certain URL.
+     *
+     * @return list of applets
+     **/
+    static KPluginInfo::List listAppletInfoForUrl(const QUrl &url);
+
+    /**
      * Returns a list of all known DataEngines.
      *
      * @param parentApp the application to filter applets on. Uses the
