@@ -509,6 +509,22 @@ QStringList PluginLoader::customAppletCategories() const
     return AppletPrivate::s_customCategories.toList();
 }
 
+QString PluginLoader::appletCategory(const QString& appletName)
+{
+    if (appletName.isEmpty()) {
+        return QString();
+    }
+
+    const QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(appletName);
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
+
+    if (offers.isEmpty()) {
+        return QString();
+    }
+
+    return offers.first()->property("X-KDE-PluginInfo-Category").toString();
+}
+
 
 KPluginInfo::List PluginLoader::listDataEngineInfo(const QString &parentApp)
 {

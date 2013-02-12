@@ -179,6 +179,13 @@ public:
     QStringList customAppletCategories() const;
 
     /**
+     * Get the category of the given applet
+     *
+     * @param appletName the name of the applet
+     */
+    QString appletCategory(const QString &appletName);
+
+    /**
      * Returns a list of all known DataEngines.
      *
      * @param parentApp the application to filter applets on. Uses the

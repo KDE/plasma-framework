@@ -407,22 +407,6 @@ KPluginInfo Applet::pluginInfo() const
     return d->appletDescription;
 }
 
-QString Applet::category(const QString &appletName)
-{
-    if (appletName.isEmpty()) {
-        return QString();
-    }
-
-    const QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(appletName);
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
-
-    if (offers.isEmpty()) {
-        return QString();
-    }
-
-    return offers.first()->property("X-KDE-PluginInfo-Category").toString();
-}
-
 ImmutabilityType Applet::immutability() const
 {
     // if this object is itself system immutable, then just return that; it's the most

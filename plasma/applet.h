@@ -284,12 +284,6 @@ class PLASMA_EXPORT Applet : public QObject
         static Applet *loadPlasmoid(const QString &path, uint appletId = 0,
                                     const QVariantList &args = QVariantList());
 
-        /**
-         * Get the category of the given applet
-         *
-         * @param appletName the name of the applet
-         */
-        static QString category(const QString &appletName);
 
         /**
          * Returns the icon related to this applet
