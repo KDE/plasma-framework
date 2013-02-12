@@ -72,6 +72,11 @@ Corona::~Corona()
     delete d;
 }
 
+Plasma::Package Corona::package() const
+{
+    return d->package;
+}
+
 void Corona::setAppletMimeType(const QString &type)
 {
     d->mimetype = type;
@@ -438,6 +443,10 @@ CoronaPrivate::CoronaPrivate(Corona *corona)
       configSyncTimer(new QTimer(corona)),
       actions(corona)
 {
+    //TODO: make Package path configurable
+    package = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
+    package.setPath("org.kde.homescreen.desktop");
+
     if (QCoreApplication::instance()) {
         configName = QCoreApplication::instance()->applicationName() + "-appletsrc";
     } else {

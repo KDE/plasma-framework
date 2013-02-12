@@ -24,18 +24,16 @@
 #include <QTimer>
 #include "plasma/pluginloader.h"
 
-View::View(QWindow *parent)
-    : QQuickView(parent)
+View::View(Plasma::Corona *corona, QWindow *parent)
+    : QQuickView(parent),
+      m_corona(corona)
 {
-    m_package = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
-    m_package.setPath("org.kde.homescreen.desktop");
-
-    if (!m_package.isValid()) {
+    if (!m_corona->package().isValid()) {
         qWarning() << "Invalid home screen package";
     }
 
     setResizeMode(View::SizeRootObjectToView);
-    setSource(QUrl::fromLocalFile(m_package.filePath("mainscript")));
+    setSource(QUrl::fromLocalFile(m_corona->package().filePath("mainscript")));
     show();
 }
 

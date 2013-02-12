@@ -219,7 +219,7 @@ class PLASMA_EXPORT Applet : public QObject
          * Accessor for the associated Package object if any.
          * Generally, only Plasmoids come in a Package.
          *
-         * @return the Package object, or 0 if none
+         * @return the Package object, or an invalid one if none
          **/
         Package package() const;
 

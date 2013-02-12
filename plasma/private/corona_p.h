@@ -24,6 +24,8 @@
 
 #include <kactioncollection.h>
 
+#include "package.h"
+
 class KShortcutsDialog;
 class QGraphicsWidget;
 
@@ -52,6 +54,7 @@ public:
     static bool s_positioningContainments;
 
     Corona *q;
+    Package package;
     ImmutabilityType immutability;
     QString mimetype;
     QString configName;

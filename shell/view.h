@@ -22,7 +22,7 @@
 #include <QtQuick/QQuickView>
 
 
-#include "plasma/package.h"
+#include "plasma/corona.h"
 #include "plasma/containment.h"
 
 
@@ -31,14 +31,14 @@ class View : public QQuickView
     Q_OBJECT
 
 public:
-    View(QWindow *parent = 0);
+    View(Plasma::Corona *corona, QWindow *parent = 0);
     virtual ~View();
 
     void setContainment(Plasma::Containment *cont);
     Plasma::Containment *containment() const;
 
 private:
-    Plasma::Package m_package;
+    Plasma::Corona *m_corona;
     QWeakPointer<Plasma::Containment> m_containment;
 };
 
