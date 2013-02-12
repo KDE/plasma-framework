@@ -165,6 +165,20 @@ public:
                                      bool visibleOnly = true);
 
     /**
+     * Sets the list of custom categories that are used in addition to the default
+     * set of categories known to libplasma for Applets.
+     * @param categories a list of categories
+     * @since 4.3
+     */
+    void setCustomAppletCategories(const QStringList &categories);
+
+    /**
+     * @return the list of custom categories known to libplasma
+     * @since 4.3
+     */
+    QStringList customAppletCategories() const;
+
+    /**
      * Returns a list of all known DataEngines.
      *
      * @param parentApp the application to filter applets on. Uses the

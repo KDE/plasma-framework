@@ -931,16 +931,6 @@ bool Applet::hasValidAssociatedApplication() const
     return AssociatedApplicationManager::self()->appletHasValidAssociatedApplication(this);
 }
 
-void Applet::setCustomCategories(const QStringList &categories)
-{
-    AppletPrivate::s_customCategories = QSet<QString>::fromList(categories);
-}
-
-QStringList Applet::customCategories() const
-{
-    return AppletPrivate::s_customCategories.toList();
-}
-
 Applet *Applet::loadPlasmoid(const QString &path, uint appletId, const QVariantList &args)
 {
     if (QFile::exists(path + "/metadata.desktop")) {

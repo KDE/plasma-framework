@@ -268,20 +268,6 @@ class PLASMA_EXPORT Applet : public QObject
         void setTitle(const QString &title) const;
 
         /**
-         * Sets the list of custom categories that are used in addition to the default
-         * set of categories known to libplasma for Applets.
-         * @param categories a list of categories
-         * @since 4.3
-         */
-        void setCustomCategories(const QStringList &categories);
-
-        /**
-         * @return the list of custom categories known to libplasma
-         * @since 4.3
-         */
-        QStringList customCategories() const;
-
-        /**
          * Attempts to load an applet from a package
          *
          * Returns a pointer to the applet if successful.

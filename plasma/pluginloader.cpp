@@ -499,6 +499,16 @@ QStringList PluginLoader::listAppletCategories(const QString &parentApp, bool vi
     return categories;
 }
 
+void PluginLoader::setCustomAppletCategories(const QStringList &categories)
+{
+    AppletPrivate::s_customCategories = QSet<QString>::fromList(categories);
+}
+
+QStringList PluginLoader::customAppletCategories() const
+{
+    return AppletPrivate::s_customCategories.toList();
+}
+
 
 KPluginInfo::List PluginLoader::listDataEngineInfo(const QString &parentApp)
 {
