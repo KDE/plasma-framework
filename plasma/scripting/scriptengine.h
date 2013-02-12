@@ -40,8 +40,6 @@ class AppletScript;
 class DataEngine;
 class DataEngineScript;
 class RunnerScript;
-class Wallpaper;
-class WallpaperScript;
 class ScriptEnginePrivate;
 
 /**
@@ -118,17 +116,6 @@ PLASMA_EXPORT DataEngineScript *loadScriptEngine(const QString &language, DataEn
  *         for the return object which will be parented to the AbstractRunner
  **/
 PLASMA_EXPORT RunnerScript *loadScriptEngine(const QString &language, AbstractRunner *runner);
-
-/**
- * Loads an Wallpaper script engine for the given language.
- *
- * @param language the language to load for
- * @param runner the Plasma::Wallpaper for this script
- * @return pointer to the RunnerScript or 0 on failure; the caller is responsible
- *         for the return object which will be parented to the Wallpaper
- **/
-PLASMA_EXPORT WallpaperScript *loadScriptEngine(const QString &language, Wallpaper *wallpaper);
-
 
 } // namespace Plasma
 
