@@ -109,7 +109,7 @@ bool DeclarativeAppletScript::init()
             m_qmlObject->rootObject()->setProperty("reason", reason);
         }
 
-        setFailedToLaunch(true, reason);
+        setLaunchErrorMessage(reason);
     }
 
     Plasma::Applet *a = applet();

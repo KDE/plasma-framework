@@ -98,7 +98,7 @@ bool AppletInterface::shouldConserveResources() const
 
 void AppletInterface::setFailedToLaunch(bool failed, const QString &reason)
 {
-    m_appletScriptEngine->setFailedToLaunch(failed, reason);
+    m_appletScriptEngine->setLaunchErrorMessage(failed, reason);
 }
 
 bool AppletInterface::isBusy() const
@@ -224,7 +224,7 @@ QList<QAction*> AppletInterface::contextualActions() const
 {
     QList<QAction*> actions;
     Plasma::Applet *a = applet();
-    if (a->hasFailedToLaunch()) {
+    if (a->launchErrorMessage()) {
         return actions;
     }
 

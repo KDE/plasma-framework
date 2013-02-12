@@ -615,7 +615,7 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
         if (loadingNull) {
             containment->setDrawWallpaper(false);
         } else {
-            containment->setFailedToLaunch(false);
+            containment->setLaunchErrorMessage(false);
         }
 
         // we want to provide something and don't care about the failure to launch

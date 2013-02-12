@@ -129,7 +129,7 @@ void SimpleJavaScriptApplet::reportError(ScriptEnv *env, bool fatal)
                                     file, error.property("lineNumber").toString(),
                                     error.toString());
     if (fatal) {
-        setFailedToLaunch(true, failureMsg);
+        setLaunchErrorMessage(true, failureMsg);
     } else {
         showMessage(KIcon("dialog-error"), failureMsg, Plasma::ButtonOk);
     }

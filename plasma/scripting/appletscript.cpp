@@ -91,10 +91,10 @@ void AppletScript::setConfigurationRequired(bool req, const QString &reason)
     }
 }
 
-void AppletScript::setFailedToLaunch(bool failed, const QString &reason)
+void AppletScript::setLaunchErrorMessage(const QString &reason)
 {
     if (applet()) {
-        applet()->setFailedToLaunch(failed, reason);
+        applet()->setLaunchErrorMessage(reason);
     }
 }
 

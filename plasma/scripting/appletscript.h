@@ -120,7 +120,7 @@ public:
     /**
      * @see Applet
      */
-    void setFailedToLaunch(bool failed, const QString &reason = QString());
+    void setLaunchErrorMessage(const QString &reason = QString());
 
     /**
      * @see Applet

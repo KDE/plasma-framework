@@ -126,7 +126,7 @@ void AppletPrivate::init(const QString &packagePath)
 
     // we have a scripted plasmoid
     if (api.isEmpty()) {
-        q->setFailedToLaunch(true, i18n("The %2 widget did not define which ScriptEngine to use.", appletDescription.name()));
+        q->setLaunchErrorMessage(i18n("The %2 widget did not define which ScriptEngine to use.", appletDescription.name()));
         return;
     }
 
@@ -138,7 +138,7 @@ void AppletPrivate::init(const QString &packagePath)
     if (!package->isValid()) {
         delete package;
         package = 0;
-        q->setFailedToLaunch(true, i18nc("Package file, name of the widget",
+        q->setLaunchErrorMessage(i18nc("Package file, name of the widget",
                                          "Could not open the %1 package required for the %2 widget.",
                                          appletDescription.pluginName(), appletDescription.name()));
         return;
@@ -156,7 +156,7 @@ void AppletPrivate::init(const QString &packagePath)
     if (!script) {
         delete package;
         package = 0;
-        q->setFailedToLaunch(true,
+        q->setLaunchErrorMessage(
                              i18nc("API or programming language the widget was written in, name of the widget",
                                    "Could not create a %1 ScriptEngine for the %2 widget.",
                                    api, appletDescription.name()));
@@ -172,12 +172,6 @@ void AppletPrivate::showConfigurationRequiredMessage(bool show, const QString &r
 {
     // reimplemented in the UI specific library
     Q_UNUSED(show)
-    Q_UNUSED(reason)
-}
-
-void AppletPrivate::updateFailedToLaunch(const QString &reason)
-{
-    // reimplemented in the UI specific library
     Q_UNUSED(reason)
 }
 

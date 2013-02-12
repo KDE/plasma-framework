@@ -207,8 +207,6 @@ enum IntervalAlignment {
     Location location() const;
     QString currentActivity() const;
 
-    Q_INVOKABLE void setFailedToLaunch(bool failed, const QString &reason = QString());
-
     Q_INVOKABLE bool isBusy() const;
     Q_INVOKABLE void setBusy(bool busy);
 

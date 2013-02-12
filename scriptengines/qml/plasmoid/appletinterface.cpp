@@ -81,11 +81,6 @@ QString AppletInterface::currentActivity() const
     return applet()->containment()->activity();
 }
 
-void AppletInterface::setFailedToLaunch(bool failed, const QString &reason)
-{
-    m_appletScriptEngine->setFailedToLaunch(failed, reason);
-}
-
 bool AppletInterface::isBusy() const
 {
     return m_busy;
@@ -204,7 +199,7 @@ QList<QAction*> AppletInterface::contextualActions() const
 {
     QList<QAction*> actions;
     Plasma::Applet *a = applet();
-    if (a->hasFailedToLaunch()) {
+    if (a->failedToLaunch()) {
         return actions;
     }
 
@@ -455,6 +450,18 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet, const QPoi
     if (applet && contGraphicObject && appletGraphicObject) {
         appletGraphicObject->setProperty("visible", false);
         appletGraphicObject->setProperty("parent", QVariant::fromValue(contGraphicObject));
+    //if an appletGraphicObject is not set, we have to display some error message
+    } else if (applet && contGraphicObject) {
+        QQmlComponent *component = new QQmlComponent(m_appletScriptEngine->engine(), applet);
+        component->loadUrl(QUrl::fromLocalFile(containment()->corona()->package().filePath("ui", "AppletError.qml")));
+        QObject *errorUi = component->create();
+
+        if (errorUi) {
+            errorUi->setProperty("visible", false);
+            errorUi->setProperty("parent", QVariant::fromValue(contGraphicObject));
+            errorUi->setProperty("reason", applet->launchErrorMessage());
+            appletGraphicObject = errorUi;
+        }
     }
 
     emit appletAdded(appletGraphicObject, pos);

@@ -33,7 +33,7 @@ bool AppletAuthorization::authorizeRequiredExtension(const QString &extension)
     bool ok = m_scriptEngine->applet()->hasAuthorization(extension);
 
     if (!ok) {
-        m_scriptEngine->setFailedToLaunch(true,
+        m_scriptEngine->setLaunchErrorMessage(true,
                                           i18n("Authorization for required extension '%1' was denied.",
                                                extension));
     }

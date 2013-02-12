@@ -79,7 +79,6 @@ public:
     // the interface
     virtual void showConfigurationRequiredMessage(bool show, const QString &reason);
     virtual void cleanUpAndDelete();
-    virtual void updateFailedToLaunch(const QString &reason);
 
     // put all setup routines for script here. at this point we can assume that
     // package exists and that we have a script engin
@@ -122,6 +121,7 @@ public:
 
     // applet attributes
     ImmutabilityType immutability;
+    QString launchErrorMessage;
 
     // applet info we keep around in case its needed
     KPluginInfo appletDescription;
@@ -152,8 +152,8 @@ public:
 
     // a great green field of booleans :)
     bool hasConfigurationInterface : 1;
-    bool failed : 1;
     bool isContainment : 1;
+    bool failed : 1;
     bool transient : 1;
     bool needsConfig : 1;
     bool started : 1;

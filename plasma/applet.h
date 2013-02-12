@@ -119,9 +119,17 @@ class PLASMA_EXPORT Applet : public QObject
         /**
          * If for some reason, the applet fails to get up on its feet (the
          * library couldn't be loaded, necessary hardware support wasn't found,
-         * etc..) this method returns true
+         * etc..) this method returns the reason why, in an user-readable way.
+         * @since 5.0
          **/
-        bool hasFailedToLaunch() const;
+        QString launchErrorMessage() const;
+
+        /**
+         * If for some reason, the applet fails to get up on its feet (the
+         * library couldn't be loaded, necessary hardware support wasn't found,
+         * etc..) this method returns true.
+         **/
+        bool failedToLaunch() const;
 
         /**
          * @return true if destroy() was called; useful for Applets which should avoid
@@ -652,8 +660,9 @@ class PLASMA_EXPORT Applet : public QObject
          * @param failed true when the applet failed, false when it succeeded
          * @param reason an optional reason to show the user why the applet
          *               failed to launch
+         * @since 5.0
          **/
-        void setFailedToLaunch(bool failed, const QString &reason = QString());
+        void setLaunchErrorMessage(const QString &reason = QString());
 
 //CONFIGURATION
         /**
@@ -738,7 +747,7 @@ class PLASMA_EXPORT Applet : public QObject
 
         AppletPrivate *const d;
 
-        //Corona needs to access setFailedToLaunch and init
+        //Corona needs to access setLaunchErrorMessage and init
         friend class Corona;
         friend class CoronaPrivate;
         friend class Containment;

@@ -406,7 +406,7 @@ Applet *ContainmentPrivate::addApplet(const QString &name, const QVariantList &a
         kDebug() << "Applet" << name << "could not be loaded.";
 #endif
         applet = new Applet(0, QString(), id);
-        applet->setFailedToLaunch(true, i18n("Could not find requested component: %1", name));
+        applet->setLaunchErrorMessage(i18n("Could not find requested component: %1", name));
     }
 
     //kDebug() << applet->title() << "sizehint:" << applet->sizeHint() << "geometry:" << applet->geometry();

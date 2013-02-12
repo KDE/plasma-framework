@@ -187,7 +187,7 @@ void Applet::init()
         d->setupScriptSupport();
 
         if (!d->script->init() && !d->failed) {
-            setFailedToLaunch(true, i18n("Script initialization failed"));
+            setLaunchErrorMessage(i18n("Script initialization failed"));
         }
     }
 }
@@ -264,10 +264,14 @@ void Applet::restore(KConfigGroup &group)
     */
 }
 
-void Applet::setFailedToLaunch(bool failed, const QString &reason)
+void Applet::setLaunchErrorMessage(const QString &message)
 {
-    d->failed = failed;
-    d->updateFailedToLaunch(reason);
+    if (message == d->launchErrorMessage) {
+        return;
+    }
+
+    d->failed = true;
+    d->launchErrorMessage = message;
 }
 
 void Applet::saveState(KConfigGroup &group) const
@@ -464,7 +468,12 @@ void Applet::setImmutability(const ImmutabilityType immutable)
     updateConstraints(ImmutableConstraint);
 }
 
-bool Applet::hasFailedToLaunch() const
+QString Applet::launchErrorMessage() const
+{
+    return d->launchErrorMessage;
+}
+
+bool Applet::failedToLaunch() const
 {
     return d->failed;
 }
