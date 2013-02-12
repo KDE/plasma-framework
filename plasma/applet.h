@@ -560,16 +560,6 @@ class PLASMA_EXPORT Applet : public QObject
          */
         void releaseVisualFocus();
 
-        /**
-         * Emitted when the user completes a transformation of the applet.
-         */
-        void appletTransformedByUser();
-
-        /**
-         * Emitted when the applet changes its own geometry or transform.
-         */
-        void appletTransformedItself();
-
 //TODO: fix usage in containment, port to QObject::destroyed
         /**
          * Emitted when the applet is deleted
@@ -588,6 +578,7 @@ class PLASMA_EXPORT Applet : public QObject
         /**
          * Destroys the applet; it will be removed nicely and deleted.
          * Its configuration will also be deleted.
+         * If you want to remove the Applet configuration, use this, don't just delete the Applet *
          */
         virtual void destroy();
 

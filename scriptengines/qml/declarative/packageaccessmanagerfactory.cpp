@@ -20,7 +20,6 @@
 #include "packageaccessmanagerfactory.h"
 
 #include "packageaccessmanager.h"
-#include "plasmoid/appletauthorization.h"
 
 PackageAccessManagerFactory::PackageAccessManagerFactory(const Plasma::Package &package)
    : QQmlNetworkAccessManagerFactory(),
