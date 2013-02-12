@@ -150,14 +150,14 @@ class PLASMA_EXPORT Applet : public QObject
          *
          * @see Plasma::FormFactor
          */
-        virtual FormFactor formFactor() const;
+        FormFactor formFactor() const;
 
         /**
          * Returns the location of the scene which is displaying applet.
          *
          * @see Plasma::Location
          */
-        virtual Location location() const;
+        Location location() const;
 
 //CONFIGURATION
         /**
