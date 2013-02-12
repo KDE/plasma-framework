@@ -407,11 +407,6 @@ KPluginInfo Applet::pluginInfo() const
     return d->appletDescription;
 }
 
-QString Applet::category(const KPluginInfo &applet)
-{
-    return applet.property("X-KDE-PluginInfo-Category").toString();
-}
-
 QString Applet::category(const QString &appletName)
 {
     if (appletName.isEmpty()) {

@@ -287,13 +287,6 @@ class PLASMA_EXPORT Applet : public QObject
         /**
          * Get the category of the given applet
          *
-         * @param applet a KPluginInfo object for the applet
-         */
-        static QString category(const KPluginInfo &applet);
-
-        /**
-         * Get the category of the given applet
-         *
          * @param appletName the name of the applet
          */
         static QString category(const QString &appletName);
