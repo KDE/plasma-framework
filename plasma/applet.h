@@ -235,6 +235,13 @@ class PLASMA_EXPORT Applet : public QObject
 
 //METADATA
         /**
+         * @return metadata information about this plugin
+         * @see KPluginInfo
+         * @since 5.0
+         */
+        KPluginInfo pluginInfo() const;
+
+        /**
          * Returns the user-visible title for the applet, as specified in the
          * Name field of the .desktop file. Can be changed with @see setTitle
          *
@@ -347,20 +354,9 @@ class PLASMA_EXPORT Applet : public QObject
         static QString category(const QString &appletName);
 
         /**
-         * Returns the plugin name for the applet
-         */
-        QString pluginName() const;
-
-        /**
          * Returns the icon related to this applet
          **/
         QString icon() const;
-
-        /**
-         * Returns the category the applet is in, as specified in the
-         * .desktop file.
-         */
-        QString category() const;
 
         /**
          * Whether the applet should conserve resources. If true, try to avoid doing stuff which

@@ -353,7 +353,7 @@ QString AppletInterface::downloadPath(const QString &file)
 
 QStringList AppletInterface::downloadedFiles() const
 {
-    const QString downloadDir = KGlobalSettings::downloadPath() + "/Plasma/" + applet()->pluginName();
+    const QString downloadDir = KGlobalSettings::downloadPath() + "/Plasma/" + applet()->pluginInfo().pluginName();
     QDir dir(downloadDir);
     return dir.entryList(QDir::Files | QDir::NoSymLinks | QDir::Readable);
 }
