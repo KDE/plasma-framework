@@ -26,7 +26,6 @@
 #include <QQmlEngine>
 
 #include <Plasma/AppletScript>
-#include "plasmoid/appletauthorization.h"
 
 class AppletInterface;
 
@@ -79,7 +78,6 @@ private:
     AppletInterface *m_interface;
     QObject *m_self;
     ScriptEnv *m_env;
-    AppletAuthorization m_auth;
 };
 
 #endif

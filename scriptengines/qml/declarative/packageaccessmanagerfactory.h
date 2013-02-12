@@ -30,13 +30,12 @@ class AppletAuthorization;
 class PackageAccessManagerFactory : public QQmlNetworkAccessManagerFactory
 {
 public:
-    PackageAccessManagerFactory(const Plasma::Package &package, AppletAuthorization *auth);
+    PackageAccessManagerFactory(const Plasma::Package &package);
     ~PackageAccessManagerFactory();
     QNetworkAccessManager *create(QObject *parent);
 
 private:
     Plasma::Package m_package;
-    AppletAuthorization *m_auth;
 };
 
 #endif

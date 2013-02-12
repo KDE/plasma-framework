@@ -22,10 +22,9 @@
 #include "packageaccessmanager.h"
 #include "plasmoid/appletauthorization.h"
 
-PackageAccessManagerFactory::PackageAccessManagerFactory(const Plasma::Package &package, AppletAuthorization *auth)
+PackageAccessManagerFactory::PackageAccessManagerFactory(const Plasma::Package &package)
    : QQmlNetworkAccessManagerFactory(),
-     m_package(package),
-     m_auth(auth)
+     m_package(package)
 {
 }
 
@@ -35,7 +34,7 @@ PackageAccessManagerFactory::~PackageAccessManagerFactory()
 
 QNetworkAccessManager *PackageAccessManagerFactory::create(QObject *parent)
 {
-    return new PackageAccessManager(m_package, m_auth, parent);
+    return new PackageAccessManager(m_package, parent);
 }
 
 

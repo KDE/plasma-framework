@@ -927,12 +927,6 @@ void Applet::createConfigurationInterface(KConfigDialog *parent)
     // do not put anything here ...
 }
 
-bool Applet::hasAuthorization(const QString &constraint) const
-{
-    KConfigGroup constraintGroup(KSharedConfig::openConfig(), "Constraints");
-    return constraintGroup.readEntry(constraint, true);
-}
-
 void Applet::setAssociatedApplication(const QString &string)
 {
     AssociatedApplicationManager::self()->setApplication(this, string);
@@ -940,7 +934,6 @@ void Applet::setAssociatedApplication(const QString &string)
     QAction *runAssociatedApplication = d->actions->action("run associated application");
     if (runAssociatedApplication) {
         bool valid = AssociatedApplicationManager::self()->appletHasValidAssociatedApplication(this);
-        valid = valid && hasAuthorization("LaunchApp"); //obey security!
         runAssociatedApplication->setVisible(valid);
         runAssociatedApplication->setEnabled(valid);
     }
@@ -953,7 +946,6 @@ void Applet::setAssociatedApplicationUrls(const QList<QUrl> &urls)
     QAction *runAssociatedApplication = d->actions->action("run associated application");
     if (runAssociatedApplication) {
         bool valid = AssociatedApplicationManager::self()->appletHasValidAssociatedApplication(this);
-        valid = valid && hasAuthorization("LaunchApp"); //obey security!
         runAssociatedApplication->setVisible(valid);
         runAssociatedApplication->setEnabled(valid);
     }
@@ -971,9 +963,7 @@ QList<QUrl> Applet::associatedApplicationUrls() const
 
 void Applet::runAssociatedApplication()
 {
-    if (hasAuthorization("LaunchApp")) {
-        AssociatedApplicationManager::self()->run(this);
-    }
+    AssociatedApplicationManager::self()->run(this);
 }
 
 bool Applet::hasValidAssociatedApplication() const

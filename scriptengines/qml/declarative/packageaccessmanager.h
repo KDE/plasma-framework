@@ -35,8 +35,6 @@ namespace Plasma
     class Package;
 }
 
-class AppletAuthorization;
-
 class PackageAccessManager :
 #ifdef PLASMA_NO_KIO
 public QNetworkAccessManager
@@ -45,7 +43,7 @@ public KIO::AccessManager
 #endif
 {
 public:
-    PackageAccessManager(const Plasma::Package &package, AppletAuthorization *auth, QObject *parent = 0);
+    PackageAccessManager(const Plasma::Package &package, QObject *parent = 0);
     ~PackageAccessManager();
 
 protected:
@@ -53,7 +51,6 @@ protected:
 
 private:
     Plasma::Package m_package;
-    AppletAuthorization *m_auth;
 };
 
 #endif

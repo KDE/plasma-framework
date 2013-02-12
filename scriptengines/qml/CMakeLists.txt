@@ -17,7 +17,6 @@ set(declarative_appletscript_SRCS
     declarative/packageaccessmanager.cpp
     declarative/packageaccessmanagerfactory.cpp
     declarative/qmlobject.cpp
-    plasmoid/appletauthorization.cpp
     plasmoid/appletinterface.cpp
     plasmoid/declarativeappletscript.cpp
     )

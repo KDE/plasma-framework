@@ -405,13 +405,6 @@ class PLASMA_EXPORT Applet : public QObject
          */
         virtual void removeAssociatedWidget(QWidget *widget);
 
-        /**
-         * Returns true if the applet is allowed to perform functions covered by the given constraint
-         * eg. hasAuthorization("FileDialog") returns true if applets are allowed to show filedialogs.
-         * @since 4.3
-         */
-        bool hasAuthorization(const QString &constraint) const;
-
 // ASSOCIATED APPLICATION
         /**
          * Sets an application associated to this applet, that will be

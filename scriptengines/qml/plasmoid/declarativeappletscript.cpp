@@ -58,8 +58,7 @@ DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariant
       m_qmlObject(0),
       m_toolBoxObject(0),
       m_interface(0),
-      m_env(0),
-      m_auth(this)
+      m_env(0)
 {
     qmlRegisterType<AppletInterface>();
     Q_UNUSED(args);
@@ -86,7 +85,7 @@ bool DeclarativeAppletScript::init()
     QQmlNetworkAccessManagerFactory *factory = engine->networkAccessManagerFactory();
     engine->setNetworkAccessManagerFactory(0);
     delete factory;
-    engine->setNetworkAccessManagerFactory(new PackageAccessManagerFactory(package(), &m_auth));
+    engine->setNetworkAccessManagerFactory(new PackageAccessManagerFactory(package()));
 
     m_qmlObject->setQmlPath(mainScript());
     
