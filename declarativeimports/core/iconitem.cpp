@@ -155,38 +155,6 @@ void IconItem::setActive(bool active)
     emit activeChanged();
 }
 
-void IconItem::setImplicitWidth(qreal width)
-{
-    if (implicitWidth() == width) {
-        return;
-    }
-
-    QQuickItem::setImplicitWidth(width);
-
-    emit implicitWidthChanged();
-}
-
-qreal IconItem::implicitWidth() const
-{
-    return QQuickItem::implicitWidth();
-}
-
-void IconItem::setImplicitHeight(qreal height)
-{
-    if (implicitHeight() == height) {
-        return;
-    }
-
-    QQuickItem::setImplicitHeight(height);
-
-    emit implicitHeightChanged();
-}
-
-qreal IconItem::implicitHeight() const
-{
-    return QQuickItem::implicitHeight();
-}
-
 void IconItem::setSmooth(const bool smooth)
 {
     if (smooth == m_smooth) {

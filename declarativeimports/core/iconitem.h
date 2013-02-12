@@ -37,8 +37,6 @@ class IconItem : public QQuickPaintedItem
 
     Q_PROPERTY(QVariant source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
-    Q_PROPERTY(qreal implicitWidth READ implicitWidth WRITE setImplicitWidth NOTIFY implicitWidthChanged)
-    Q_PROPERTY(qreal implicitHeight READ implicitHeight WRITE setImplicitHeight NOTIFY implicitHeightChanged)
     Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
     Q_PROPERTY(bool valid READ isValid NOTIFY validChanged)
 
@@ -52,12 +50,6 @@ public:
 
     bool isActive() const;
     void setActive(bool active);
-
-    void setImplicitWidth(qreal width);
-    qreal implicitWidth() const;
-
-    void setImplicitHeight(qreal height);
-    qreal implicitHeight() const;
 
     void setSmooth(const bool smooth);
     bool smooth() const;
@@ -74,8 +66,6 @@ Q_SIGNALS:
     void sourceChanged();
     void smoothChanged();
     void validChanged();
-    void implicitWidthChanged();
-    void implicitHeightChanged();
 
 private Q_SLOTS:
     void loadPixmap();
