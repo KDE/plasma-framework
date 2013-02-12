@@ -37,11 +37,7 @@ class KKeySequenceWidget;
 namespace Plasma
 {
 
-class Dialog;
-class FrameSvg;
 class AppletScript;
-class Wallpaper;
-class PushButton;
 class Service;
 
 class AppletConfigDialog : public KConfigDialog
