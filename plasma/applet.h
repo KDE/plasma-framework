@@ -721,23 +721,6 @@ class PLASMA_EXPORT Applet : public QObject
          */
         virtual void constraintsEvent(Plasma::Constraints constraints);
 
-//Completely UI-specific, remove or move to scriptengine
-        /**
-         * Shows a message as an overlay of the applet: the message has an
-         * icon, text and (optional) buttons
-         *
-         * @param icon the icon that will be shown
-         * @param message the message string that will be shown.
-         *                If the message is empty nothng will be shown
-         *                and if there was a message already it will be hidden
-         * @param buttons an OR combination of all the buttons needed
-         *
-         * @see Plasma::MessageButtons
-         * @see messageButtonPressed
-         * @since 4.3
-         */
-        void showMessage(const QIcon &icon, const QString &message, const Plasma::MessageButtons buttons);
-
 //TODO: timerEvent should go into AppletPrivate
         /**
          * Reimplemented from QObject

@@ -484,11 +484,6 @@ void Applet::setConfigurationRequired(bool needsConfig, const QString &reason)
     d->showConfigurationRequiredMessage(needsConfig, reason);
 }
 
-void Applet::showMessage(const QIcon &icon, const QString &message, const MessageButtons buttons)
-{
-    d->showMessage(icon, message, buttons);
-}
-
 QVariantList Applet::startupArguments() const
 {
     return d->args;

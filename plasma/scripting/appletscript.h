@@ -209,11 +209,6 @@ protected:
      */
     void addStandardConfigurationPages(KConfigDialog *dialog);
 
-    /**
-     * @see Applet
-     */
-    void showMessage(const QIcon &icon, const QString &message, const MessageButtons buttons);
-
 private:
     friend class Applet;
     friend class PopupApplet;

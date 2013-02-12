@@ -175,14 +175,6 @@ void AppletPrivate::showConfigurationRequiredMessage(bool show, const QString &r
     Q_UNUSED(reason)
 }
 
-void AppletPrivate::showMessage(const QIcon &icon, const QString &message, const MessageButtons buttons)
-{
-    // reimplemented in the UI specific library
-    Q_UNUSED(icon)
-    Q_UNUSED(message)
-    Q_UNUSED(buttons)
-}
-
 void AppletPrivate::positionMessageOverlay()
 {
     // reimplemented in the UI specific library

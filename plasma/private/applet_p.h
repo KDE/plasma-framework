@@ -79,7 +79,6 @@ public:
     // the interface
     virtual void showConfigurationRequiredMessage(bool show, const QString &reason);
     virtual void cleanUpAndDelete();
-    virtual void showMessage(const QIcon &icon, const QString &message, const MessageButtons buttons);
     virtual void positionMessageOverlay();
     virtual void updateFailedToLaunch(const QString &reason);
 

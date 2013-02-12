@@ -126,12 +126,8 @@ void AssociatedApplicationManager::run(Plasma::Applet *applet)
         execCommand = execCommand.trimmed();
 
         QStringList parameters = d->urlLists.value(applet).toStringList();
-        bool success = QProcess::startDetached(execCommand, parameters);
+        QProcess::startDetached(execCommand, parameters);
 #endif
-
-        if (!success) {
-            applet->showMessage(KDE::icon("application-exit"), i18n("There was an error attempting to exec the associated application with this widget."), ButtonOk);
-        }
 
     } else if (d->urlLists.contains(applet) && !d->urlLists.value(applet).isEmpty()) {
 #if !PLASMA_NO_KIO
