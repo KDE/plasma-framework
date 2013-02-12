@@ -228,34 +228,6 @@ QString AppletPrivate::configWindowTitle() const
     return i18nc("@title:window", "%1 Settings", q->title());
 }
 
-QSet<QString> AppletPrivate::knownCategories()
-{
-    // this is to trick the tranlsation tools into making the correct
-    // strings for translation
-    QSet<QString> categories = s_customCategories;
-    categories << QString(I18N_NOOP("Accessibility")).toLower()
-               << QString(I18N_NOOP("Application Launchers")).toLower()
-               << QString(I18N_NOOP("Astronomy")).toLower()
-               << QString(I18N_NOOP("Date and Time")).toLower()
-               << QString(I18N_NOOP("Development Tools")).toLower()
-               << QString(I18N_NOOP("Education")).toLower()
-               << QString(I18N_NOOP("Environment and Weather")).toLower()
-               << QString(I18N_NOOP("Examples")).toLower()
-               << QString(I18N_NOOP("File System")).toLower()
-               << QString(I18N_NOOP("Fun and Games")).toLower()
-               << QString(I18N_NOOP("Graphics")).toLower()
-               << QString(I18N_NOOP("Language")).toLower()
-               << QString(I18N_NOOP("Mapping")).toLower()
-               << QString(I18N_NOOP("Miscellaneous")).toLower()
-               << QString(I18N_NOOP("Multimedia")).toLower()
-               << QString(I18N_NOOP("Online Services")).toLower()
-               << QString(I18N_NOOP("Productivity")).toLower()
-               << QString(I18N_NOOP("System Information")).toLower()
-               << QString(I18N_NOOP("Utilities")).toLower()
-               << QString(I18N_NOOP("Windows and Tasks")).toLower();
-    return categories;
-}
-
 KConfigDialog *AppletPrivate::generateGenericConfigDialog()
 {
     KConfigSkeleton *nullManager = new KConfigSkeleton(0);
@@ -357,21 +329,6 @@ void AppletPrivate::propagateConfigChanged()
     }
 
     q->configChanged();
-}
-
-QString AppletPrivate::parentAppConstraint(const QString &parentApp)
-{
-    if (parentApp.isEmpty()) {
-        QCoreApplication *app = QCoreApplication::instance();
-        if (!app) {
-            return QString();
-        }
-
-        return QString("((not exist [X-KDE-ParentApp] or [X-KDE-ParentApp] == '') or [X-KDE-ParentApp] == '%1')")
-                      .arg(app->applicationName());
-    }
-
-    return QString("[X-KDE-ParentApp] == '%1'").arg(parentApp);
 }
 
 void AppletPrivate::setIsContainment(bool nowIsContainment, bool forceUpdate)
@@ -525,6 +482,5 @@ void AppletPrivate::resetConfigurationObject()
 }
 
 uint AppletPrivate::s_maxAppletId = 0;
-QSet<QString> AppletPrivate::s_customCategories;
 
 } //namespace Plasma

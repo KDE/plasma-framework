@@ -50,9 +50,60 @@ static PluginLoader *s_pluginLoader = 0;
 class PluginLoaderPrivate
 {
 public:
+    static QSet<QString> knownCategories();
+    static QString parentAppConstraint(const QString &parentApp = QString());
+
+    static QSet<QString> s_customCategories;
     QHash<QString, QWeakPointer<PackageStructure> > structures;
     bool isDefaultLoader;
 };
+
+QSet<QString> PluginLoaderPrivate::s_customCategories;
+
+QSet<QString> PluginLoaderPrivate::knownCategories()
+{
+    // this is to trick the tranlsation tools into making the correct
+    // strings for translation
+    QSet<QString> categories = s_customCategories;
+    categories << QString(I18N_NOOP("Accessibility")).toLower()
+               << QString(I18N_NOOP("Application Launchers")).toLower()
+               << QString(I18N_NOOP("Astronomy")).toLower()
+               << QString(I18N_NOOP("Date and Time")).toLower()
+               << QString(I18N_NOOP("Development Tools")).toLower()
+               << QString(I18N_NOOP("Education")).toLower()
+               << QString(I18N_NOOP("Environment and Weather")).toLower()
+               << QString(I18N_NOOP("Examples")).toLower()
+               << QString(I18N_NOOP("File System")).toLower()
+               << QString(I18N_NOOP("Fun and Games")).toLower()
+               << QString(I18N_NOOP("Graphics")).toLower()
+               << QString(I18N_NOOP("Language")).toLower()
+               << QString(I18N_NOOP("Mapping")).toLower()
+               << QString(I18N_NOOP("Miscellaneous")).toLower()
+               << QString(I18N_NOOP("Multimedia")).toLower()
+               << QString(I18N_NOOP("Online Services")).toLower()
+               << QString(I18N_NOOP("Productivity")).toLower()
+               << QString(I18N_NOOP("System Information")).toLower()
+               << QString(I18N_NOOP("Utilities")).toLower()
+               << QString(I18N_NOOP("Windows and Tasks")).toLower();
+    return categories;
+}
+
+QString PluginLoaderPrivate::parentAppConstraint(const QString &parentApp)
+{
+    if (parentApp.isEmpty()) {
+        QCoreApplication *app = QCoreApplication::instance();
+        if (!app) {
+            return QString();
+        }
+
+        return QString("((not exist [X-KDE-ParentApp] or [X-KDE-ParentApp] == '') or [X-KDE-ParentApp] == '%1')")
+                      .arg(app->applicationName());
+    }
+
+    return QString("[X-KDE-ParentApp] == '%1'").arg(parentApp);
+}
+
+
 
 PluginLoader::PluginLoader()
     : d(new PluginLoaderPrivate)
@@ -398,7 +449,7 @@ KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QS
         list = internalAppletInfo(category);
     }
 
-    QString constraint = AppletPrivate::parentAppConstraint(parentApp);
+    QString constraint = PluginLoaderPrivate::parentAppConstraint(parentApp);
 
     //note: constraint guaranteed non-empty from here down
     if (category.isEmpty()) { //use all but the excluded categories
@@ -423,7 +474,7 @@ KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QS
 
 KPluginInfo::List PluginLoader::listAppletInfoForMimeType(const QString &mimeType)
 {
-    QString constraint = AppletPrivate::parentAppConstraint();
+    QString constraint = PluginLoaderPrivate::parentAppConstraint();
     constraint.append(QString(" and '%1' in [X-Plasma-DropMimeTypes]").arg(mimeType));
     //kDebug() << "listAppletInfoForMimetype with" << mimeType << constraint;
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
@@ -432,7 +483,7 @@ KPluginInfo::List PluginLoader::listAppletInfoForMimeType(const QString &mimeTyp
 
 KPluginInfo::List PluginLoader::listAppletInfoForUrl(const QUrl &url)
 {
-    QString constraint = AppletPrivate::parentAppConstraint();
+    QString constraint = PluginLoaderPrivate::parentAppConstraint();
     constraint.append(" and exist [X-Plasma-DropUrlPatterns]");
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
 
@@ -457,7 +508,7 @@ KPluginInfo::List PluginLoader::listAppletInfoForUrl(const QUrl &url)
 
 QStringList PluginLoader::listAppletCategories(const QString &parentApp, bool visibleOnly)
 {
-    QString constraint = AppletPrivate::parentAppConstraint(parentApp);
+    QString constraint = PluginLoaderPrivate::parentAppConstraint(parentApp);
     constraint.append(" and exist [X-KDE-PluginInfo-Category]");
 
     KConfigGroup group(KSharedConfig::openConfig(), "General");
@@ -469,7 +520,7 @@ QStringList PluginLoader::listAppletCategories(const QString &parentApp, bool vi
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
 
     QStringList categories;
-    QSet<QString> known = AppletPrivate::knownCategories();
+    QSet<QString> known = PluginLoaderPrivate::knownCategories();
     foreach (const KService::Ptr &applet, offers) {
         QString appletCategory = applet->property("X-KDE-PluginInfo-Category").toString();
         if (visibleOnly && applet->noDisplay()) {
@@ -501,12 +552,12 @@ QStringList PluginLoader::listAppletCategories(const QString &parentApp, bool vi
 
 void PluginLoader::setCustomAppletCategories(const QStringList &categories)
 {
-    AppletPrivate::s_customCategories = QSet<QString>::fromList(categories);
+    PluginLoaderPrivate::s_customCategories = QSet<QString>::fromList(categories);
 }
 
 QStringList PluginLoader::customAppletCategories() const
 {
-    return AppletPrivate::s_customCategories.toList();
+    return PluginLoaderPrivate::s_customCategories.toList();
 }
 
 QString PluginLoader::appletCategory(const QString& appletName)

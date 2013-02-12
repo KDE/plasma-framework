@@ -971,4 +971,3 @@ void ContainmentPrivate::checkRemoveAction()
 } // Plasma namespace
 
 #include "moc_applet.cpp"
-#include "private/moc_applet_p.cpp"

@@ -105,11 +105,9 @@ public:
     void propagateConfigChanged();
 
     static KActionCollection* defaultActions(QObject *parent);
-    static QSet<QString> knownCategories();
-    static QString parentAppConstraint(const QString &parentApp = QString());
+
 
     static uint s_maxAppletId;
-    static QSet<QString> s_customCategories;
 
     //      number of members at this point.
     uint appletId;
