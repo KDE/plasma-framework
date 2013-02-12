@@ -148,12 +148,6 @@ public:
 
     ItemStatus itemStatus;
 
-    // the applet can change size policy by itself, so save the old one for eventual restore
-    QSizePolicy preferredSizePolicy;
-
-    //keep last sizes for formfactors, useful when the containment changes
-    QHash<FormFactor, QSizeF> sizeForFormFactor;
-
     // timerEvent bookkeeping
     QBasicTimer constraintsTimer;
     QBasicTimer *modificationsTimer;
@@ -162,7 +156,6 @@ public:
     bool hasConfigurationInterface : 1;
     bool failed : 1;
     bool isContainment : 1;
-    bool square : 1;
     bool transient : 1;
     bool needsConfig : 1;
     bool started : 1;

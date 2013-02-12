@@ -62,7 +62,6 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
           actions(AppletPrivate::defaultActions(applet)),
           activationAction(0),
           itemStatus(UnknownStatus),
-          preferredSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored),
           modificationsTimer(0),
           hasConfigurationInterface(false),
           failed(false),
