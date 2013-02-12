@@ -435,15 +435,6 @@ QString AppletPrivate::globalName() const
     return appletDescription.service()->library();
 }
 
-QString AppletPrivate::instanceName()
-{
-    if (!appletDescription.isValid()) {
-        return QString();
-    }
-
-    return appletDescription.service()->library() + QString::number(appletId);
-}
-
 void AppletPrivate::scheduleConstraintsUpdate(Plasma::Constraints c)
 {
     // Don't start up a timer if we're just starting up
@@ -513,19 +504,6 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
     }
 
     return mainConfig;
-}
-
-QString AppletPrivate::visibleFailureText(const QString &reason)
-{
-    QString text;
-
-    if (reason.isEmpty()) {
-        text = i18n("This object could not be created.");
-    } else {
-        text = i18n("This object could not be created for the following reason:<p><b>%1</b></p>", reason);
-    }
-
-    return text;
 }
 
 void AppletPrivate::resetConfigurationObject()

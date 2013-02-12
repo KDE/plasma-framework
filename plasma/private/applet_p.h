@@ -90,21 +90,17 @@ public:
     void setIsContainment(bool isContainment, bool forceUpdate = false);
 
     QString globalName() const;
-    QString instanceName();
     void scheduleConstraintsUpdate(Plasma::Constraints c);
     void scheduleModificationNotification();
     KConfigGroup *mainConfigGroup();
-    QString visibleFailureText(const QString &reason);
     void resetConfigurationObject();
     void addGlobalShortcutsPage(KConfigDialog *dialog);
-    void addPublishPage(KConfigDialog *dialog);
     void configDialogFinished();
     KConfigDialog *generateGenericConfigDialog();
     void addStandardConfigurationPages(KConfigDialog *dialog);
     QString configDialogId() const;
     QString configWindowTitle() const;
     void updateShortcuts();
-    void publishCheckboxStateChanged(int state);
     void globalShortcutChanged();
     void propagateConfigChanged();
 
