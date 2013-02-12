@@ -36,6 +36,7 @@
 #include <klocalizedstring.h>
 
 #include <Plasma/Applet>
+#include <Plasma/Corona>
 #include <Plasma/Package>
 #include <Plasma/PluginLoader>
 #include <Plasma/Service>
@@ -95,8 +96,20 @@ bool DeclarativeAppletScript::init()
         foreach (QQmlError error, m_qmlObject->mainComponent()->errors()) {
             reason += error.toString()+'\n';
         }
+        reason = i18n("Error loading QML file: %1", reason);
+
+        m_qmlObject->setQmlPath(applet()->containment()->corona()->package().filePath("ui", "AppletError.qml"));
+        m_qmlObject->completeInitialization();
+
+
+        //even the error message QML may fail
+        if (m_qmlObject->mainComponent()->isError()) {
+            return false;
+        } else {
+            m_qmlObject->rootObject()->setProperty("reason", reason);
+        }
+
         setFailedToLaunch(true, reason);
-        return false;
     }
 
     Plasma::Applet *a = applet();
@@ -110,6 +123,7 @@ bool DeclarativeAppletScript::init()
     } else {
         m_interface = new AppletInterface(this);
     }
+
     m_interface->setParent(this);
 
     connect(applet(), SIGNAL(activate()),
@@ -118,11 +132,15 @@ bool DeclarativeAppletScript::init()
     setupObjects();
 
     m_qmlObject->completeInitialization();
+
     m_qmlObject->rootObject()->setProperty("parent", QVariant::fromValue(m_interface));
-    m_qmlObject->rootObject()->setProperty("anchors.fill", "parent");
+
+    //set anchors
     QQmlExpression expr(m_qmlObject->engine()->rootContext(), m_qmlObject->rootObject(), "parent");
     QQmlProperty prop(m_qmlObject->rootObject(), "anchors.fill");
     prop.write(expr.evaluate());
+
+    // set the graphicObject dynamic property on applet
     a->setProperty("graphicObject", QVariant::fromValue(m_interface));
     qDebug() << "Graphic object created:" << a << a->property("graphicObject");
 

@@ -116,8 +116,5 @@ Rectangle {
     Component.onCompleted: {
         print("Test Containment loaded")
         print(plasmoid)
-        for (var i in plasmoid) {
-            print(i+" "+plasmoid[i])
-        }
     }
 }

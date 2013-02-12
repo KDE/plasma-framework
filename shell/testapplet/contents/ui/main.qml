@@ -26,6 +26,8 @@ Rectangle {
     color: "transparent"
     width: 100
     height: 100
+    radius: 10
+    smooth: true
 
     Column {
         anchors.centerIn: parent

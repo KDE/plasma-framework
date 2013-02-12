@@ -92,6 +92,11 @@ void QmlObjectPrivate::execute(const QString &fileName)
         return;
     }
 
+    delete component;
+    component = new QQmlComponent(engine, q);
+    delete root;
+    root = 0;
+
     KDeclarative kdeclarative;
     kdeclarative.setDeclarativeEngine(engine);
     kdeclarative.initialize();
@@ -122,8 +127,6 @@ QmlObject::QmlObject(QObject *parent)
 {
     d->engine = new QQmlEngine(this);
     //d->engine->setNetworkAccessManagerFactory(new PackageAccessManagerFactory());
-
-    d->component = new QQmlComponent(d->engine, this);
 }
 
 QmlObject::~QmlObject()
@@ -173,6 +176,9 @@ QQmlComponent *QmlObject::mainComponent() const
 
 void QmlObject::completeInitialization()
 {
+    if (d->root) {
+        return;
+    }
     if (d->component->status() != QQmlComponent::Ready || d->component->isError()) {
         d->errorPrint();
         return;

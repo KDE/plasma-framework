@@ -280,6 +280,7 @@ void ContainmentActionsPackage::initPackage(Package *package)
 
 void GenericPackage::initPackage(Package *package)
 {
+    PlasmoidPackage::initPackage(package);
     package->setDefaultPackageRoot("plasma/packages/");
 }
 
