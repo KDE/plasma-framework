@@ -25,8 +25,8 @@
 #include <QPainter>
 
 
-QIconItem::QIconItem(QDeclarativeItem *parent)
-    : QDeclarativeItem(parent),
+QIconItem::QIconItem(QQuickItem *parent)
+    : QQuickItem(parent),
       m_smooth(false),
       m_state(DefaultState)
 {

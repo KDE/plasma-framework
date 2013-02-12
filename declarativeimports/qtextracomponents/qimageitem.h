@@ -19,10 +19,10 @@
 #ifndef QIMAGEITEM_H
 #define QIMAGEITEM_H
 
-#include <QDeclarativeItem>
+#include <QQuickItem>
 #include <QImage>
 
-class QImageItem : public QDeclarativeItem
+class QImageItem : public QQuickItem
 {
     Q_OBJECT
 
@@ -44,7 +44,7 @@ public:
         TileHorizontally //the image is stretched vertically and tiled horizontally
     };
 
-    QImageItem(QDeclarativeItem *parent=0);
+    QImageItem(QQuickItem *parent=0);
     ~QImageItem();
 
     void setImage(const QImage &image);

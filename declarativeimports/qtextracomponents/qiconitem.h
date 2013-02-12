@@ -19,11 +19,11 @@
 #ifndef QICONITEM_H
 #define QICONITEM_H
 
-#include <QDeclarativeItem>
+#include <QQuickItem>
 #include <QPixmap>
 #include <QVariant>
 
-class QIconItem : public QDeclarativeItem
+class QIconItem : public QQuickItem
 {
     Q_OBJECT
 
@@ -43,7 +43,7 @@ public:
         DisabledState ///Icon is disabled.
     };
 
-    QIconItem(QDeclarativeItem *parent=0);
+    QIconItem(QQuickItem *parent=0);
     ~QIconItem();
 
     void setIcon(const QVariant &icon);

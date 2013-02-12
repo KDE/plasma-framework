@@ -20,7 +20,7 @@
 #ifndef MOUSEEVENTLISTENER_H
 #define MOUSEEVENTLISTENER_H
 
-#include <QDeclarativeItem>
+#include <QQuickItem>
 
 class KDeclarativeMouseEvent : public QObject
 {
@@ -120,7 +120,7 @@ private:
     Qt::Orientation m_orientation;
 };
 
-class MouseEventListener : public QDeclarativeItem
+class MouseEventListener : public QQuickItem
 {
     Q_OBJECT
     /**
@@ -135,7 +135,7 @@ class MouseEventListener : public QDeclarativeItem
     Q_PROPERTY(bool containsMouse READ containsMouse NOTIFY containsMouseChanged)
 
 public:
-    MouseEventListener(QDeclarativeItem *parent=0);
+    MouseEventListener(QQuickItem *parent=0);
     ~MouseEventListener();
 
     bool containsMouse() const;

@@ -22,8 +22,8 @@
 #include <QPainter>
 
 
-QPixmapItem::QPixmapItem(QDeclarativeItem *parent)
-    : QDeclarativeItem(parent),
+QPixmapItem::QPixmapItem(QQuickItem *parent)
+    : QQuickItem(parent),
       m_smooth(false),
       m_fillMode(QPixmapItem::Stretch)
 {

@@ -28,8 +28,8 @@
 
 static const int PressAndHoldDelay = 800;
 
-MouseEventListener::MouseEventListener(QDeclarativeItem *parent)
-    : QDeclarativeItem(parent),
+MouseEventListener::MouseEventListener(QQuickItem *parent)
+    : QQuickItem(parent),
     m_pressed(false),
     m_pressAndHoldEvent(0),
     m_lastEvent(0),
@@ -209,7 +209,7 @@ bool MouseEventListener::sceneEventFilter(QGraphicsItem *item, QEvent *event)
         break;
     }
 
-    return QDeclarativeItem::sceneEventFilter(item, event);
+    return QQuickItem::sceneEventFilter(item, event);
 }
 
 #include "mouseeventlistener.moc"
