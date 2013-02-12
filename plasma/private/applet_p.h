@@ -79,7 +79,6 @@ public:
     // the interface
     virtual void showConfigurationRequiredMessage(bool show, const QString &reason);
     virtual void cleanUpAndDelete();
-    virtual void positionMessageOverlay();
     virtual void updateFailedToLaunch(const QString &reason);
 
     // put all setup routines for script here. at this point we can assume that

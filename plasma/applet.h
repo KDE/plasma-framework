@@ -512,15 +512,6 @@ class PLASMA_EXPORT Applet : public QObject
          */
         void activate();
 
-        /**
-         * Emitted when the user clicked on a button of the message overlay
-         *
-         * @see showMessage
-         * @see Plasma::MessageButton
-         * @since 4.3
-         */
-        void messageButtonPressed(const Plasma::MessageButton button);
-
 
 //Completely UI-specific, remove or move to scriptengine
         /**

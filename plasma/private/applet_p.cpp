@@ -175,11 +175,6 @@ void AppletPrivate::showConfigurationRequiredMessage(bool show, const QString &r
     Q_UNUSED(reason)
 }
 
-void AppletPrivate::positionMessageOverlay()
-{
-    // reimplemented in the UI specific library
-}
-
 void AppletPrivate::updateFailedToLaunch(const QString &reason)
 {
     // reimplemented in the UI specific library

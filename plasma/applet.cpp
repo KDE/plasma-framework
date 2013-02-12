@@ -573,10 +573,6 @@ void Applet::flushPendingConstraintsEvents()
         emit immutabilityChanged(immutability());
     }
 
-    if (c & Plasma::SizeConstraint) {
-        d->positionMessageOverlay();
-    }
-
     // now take care of constraints in special subclass: Contaiment
     Containment* containment = qobject_cast<Plasma::Containment*>(this);
     if (d->isContainment && containment) {
