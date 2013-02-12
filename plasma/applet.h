@@ -358,14 +358,6 @@ class PLASMA_EXPORT Applet : public QObject
          **/
         QString icon() const;
 
-        /**
-         * Whether the applet should conserve resources. If true, try to avoid doing stuff which
-         * is computationally heavy. Try to conserve power and resources.
-         *
-         * @return true if it should conserve resources, false if it does not.
-         */
-        bool shouldConserveResources() const;
-
 
 
 //ACTIONS

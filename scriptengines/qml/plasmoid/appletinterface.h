@@ -62,7 +62,6 @@ class AppletInterface : public QQuickItem
     Q_PROPERTY(FormFactor formFactor READ formFactor NOTIFY formFactorChanged)
     Q_PROPERTY(Location location READ location NOTIFY locationChanged)
     Q_PROPERTY(QString currentActivity READ currentActivity NOTIFY contextChanged)
-    Q_PROPERTY(bool shouldConserveResources READ shouldConserveResources)
     Q_PROPERTY(QString activeConfig WRITE setActiveConfig READ activeConfig)
     Q_PROPERTY(bool busy WRITE setBusy READ isBusy)
     Q_PROPERTY(BackgroundHints backgroundHints WRITE setBackgroundHints READ backgroundHints NOTIFY backgroundHintsChanged)
@@ -207,7 +206,6 @@ enum IntervalAlignment {
 
     Location location() const;
     QString currentActivity() const;
-    bool shouldConserveResources() const;
 
     Q_INVOKABLE void setFailedToLaunch(bool failed, const QString &reason = QString());
 

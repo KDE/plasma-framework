@@ -80,11 +80,6 @@ QString AppletInterface::currentActivity() const
     return applet()->containment()->activity();
 }
 
-bool AppletInterface::shouldConserveResources() const
-{
-    return applet()->shouldConserveResources();
-}
-
 void AppletInterface::setFailedToLaunch(bool failed, const QString &reason)
 {
     m_appletScriptEngine->setFailedToLaunch(failed, reason);

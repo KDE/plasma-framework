@@ -428,15 +428,6 @@ KPluginInfo Applet::pluginInfo() const
     return d->appletDescription;
 }
 
-bool Applet::shouldConserveResources() const
-{
-#if !PLASMA_NO_SOLID
-    return Solid::PowerManagement::appShouldConserveResources();
-#else
-    return true;
-#endif
-}
-
 QString Applet::category(const KPluginInfo &applet)
 {
     return applet.property("X-KDE-PluginInfo-Category").toString();
