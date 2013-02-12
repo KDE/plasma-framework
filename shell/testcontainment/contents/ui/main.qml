@@ -19,6 +19,7 @@
 import QtQuick 2.0
 
 import org.kde.plasma.core 0.1 as PlasmaCore
+import org.kde.plasma.components 0.1 as PlasmaComponents
 
 Rectangle {
     id: root
@@ -93,6 +94,12 @@ Rectangle {
                     left: parent.left
                 }
                 //Rectangle { color: "white"; opacity: 0.2; anchors.fill: parent; }
+            }
+            PlasmaComponents.BusyIndicator {
+                z: 1000
+                visible: applet[0].busy
+                running: visible
+                anchors.centerIn: parent
             }
         }
     }

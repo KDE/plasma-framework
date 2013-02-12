@@ -45,6 +45,13 @@ Rectangle {
                 }
             }
         }
+        PlasmaComponents.Button {  
+            text: "Busy"
+            checked: plasmoid.busy
+            onClicked: {
+                plasmoid.busy = !plasmoid.busy
+            }
+        }
     }
     Component.onCompleted: {
         print("Test Applet loaded")
