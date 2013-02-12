@@ -111,7 +111,7 @@ void ContainmentPrivate::initApplets()
         applet->restore(*applet->d->mainConfigGroup());
         applet->init();
 #ifndef NDEBUG
-        kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Applet" << applet->name();
+        kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Applet" << applet->title();
 #endif
     }
 
@@ -122,7 +122,7 @@ void ContainmentPrivate::initApplets()
     }
 
 #ifndef NDEBUG
-    kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Containment's applets initialized" << q->name();
+    kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Containment's applets initialized" << q->title();
 #endif
 }
 
@@ -165,7 +165,7 @@ void ContainmentPrivate::addAppletActions(KMenu &desktopMenu, Applet *applet, QE
         }
     }
 
-    KMenu *containmentMenu = new KMenu(i18nc("%1 is the name of the containment", "%1 Options", q->name()), &desktopMenu);
+    KMenu *containmentMenu = new KMenu(i18nc("%1 is the name of the containment", "%1 Options", q->title()), &desktopMenu);
     addContainmentActions(*containmentMenu, event);
     if (!containmentMenu->isEmpty()) {
         int enabled = 0;
@@ -409,7 +409,7 @@ Applet *ContainmentPrivate::addApplet(const QString &name, const QVariantList &a
         applet->setFailedToLaunch(true, i18n("Could not find requested component: %1", name));
     }
 
-    //kDebug() << applet->name() << "sizehint:" << applet->sizeHint() << "geometry:" << applet->geometry();
+    //kDebug() << applet->title() << "sizehint:" << applet->sizeHint() << "geometry:" << applet->geometry();
 
     q->addApplet(applet, appletGeometry.topLeft());
     return applet;

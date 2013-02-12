@@ -83,7 +83,7 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
 AppletPrivate::~AppletPrivate()
 {
     if (activationAction && activationAction->isGlobalShortcutEnabled()) {
-        //kDebug() << "reseting global action for" << q->name() << activationAction->objectName();
+        //kDebug() << "reseting global action for" << q->title() << activationAction->objectName();
         activationAction->forgetGlobalShortcut();
     }
 
@@ -110,12 +110,12 @@ void AppletPrivate::init(const QString &packagePath)
 
     QAction *closeApplet = actions->action("remove");
     if (closeApplet) {
-        closeApplet->setText(i18nc("%1 is the name of the applet", "Remove this %1", q->name()));
+        closeApplet->setText(i18nc("%1 is the name of the applet", "Remove this %1", q->title()));
     }
 
     QAction *configAction = actions->action("configure");
     if (configAction) {
-        configAction->setText(i18nc("%1 is the name of the applet", "%1 Settings", q->name()));
+        configAction->setText(i18nc("%1 is the name of the applet", "%1 Settings", q->title()));
     }
 
     QObject::connect(q, SIGNAL(activate()), q, SLOT(setFocus()));
@@ -263,12 +263,12 @@ KActionCollection* AppletPrivate::defaultActions(QObject *parent)
 
 QString AppletPrivate::configDialogId() const
 {
-    return QString("%1settings%2").arg(appletId).arg(q->name());
+    return QString("%1settings%2").arg(appletId).arg(q->title());
 }
 
 QString AppletPrivate::configWindowTitle() const
 {
-    return i18nc("@title:window", "%1 Settings", q->name());
+    return i18nc("@title:window", "%1 Settings", q->title());
 }
 
 QSet<QString> AppletPrivate::knownCategories()
@@ -548,7 +548,7 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
             appletConfig = c->config();
             appletConfig = KConfigGroup(&appletConfig, "Applets");
         } else {
-            kWarning() << "requesting config for" << q->name() << "without a containment!";
+            kWarning() << "requesting config for" << q->title() << "without a containment!";
             appletConfig = KConfigGroup(KSharedConfig::openConfig(), "Applets");
         }
 

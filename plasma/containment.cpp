@@ -120,16 +120,16 @@ void Containment::init()
     ContainmentPrivate::addDefaultActions(d->actions(), this);
     bool unlocked = immutability() == Mutable;
 
-    //fix the text of the actions that need name()
-    //btw, do we really want to use name() when it's a desktopcontainment?
+    //fix the text of the actions that need title()
+    //btw, do we really want to use title() when it's a desktopcontainment?
     QAction *closeApplet = action("remove");
     if (closeApplet) {
-        closeApplet->setText(i18nc("%1 is the name of the applet", "Remove this %1", name()));
+        closeApplet->setText(i18nc("%1 is the name of the applet", "Remove this %1", title()));
     }
 
     QAction *configAction = action("configure");
     if (configAction) {
-        configAction->setText(i18nc("%1 is the name of the applet", "%1 Settings", name()));
+        configAction->setText(i18nc("%1 is the name of the applet", "%1 Settings", title()));
     }
 
     QAction *appletBrowserAction = action("add widgets");
@@ -858,12 +858,12 @@ void Containment::destroy(bool confirm)
 
     if (isContainment() && confirm) {
         //FIXME: should not be blocking
-        const QString title = i18nc("@title:window %1 is the name of the containment", "Remove %1", name());
+        const QString title = i18nc("@title:window %1 is the name of the containment", "Remove %1", Containment::title());
         KGuiItem remove = KStandardGuiItem::remove();
         remove.setText(title);
         //FIXME: make the view accessible?
         if (KMessageBox::warningContinueCancel(0/*view()*/,
-            i18nc("%1 is the name of the containment", "Do you really want to remove this %1?", name()),
+            i18nc("%1 is the name of the containment", "Do you really want to remove this %1?", Containment::title()),
             title, remove) != KMessageBox::Continue) {
             return;
         }

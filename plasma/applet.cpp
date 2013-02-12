@@ -382,10 +382,10 @@ bool Applet::isBusy() const
     return d->isBusy();
 }
 
-QString Applet::name() const
+QString Applet::title() const
 {
-    if (!d->customName.isEmpty()) {
-        return d->customName;
+    if (!d->customTitle.isEmpty()) {
+        return d->customTitle;
     }
 
     if (d->isContainment) {
@@ -404,9 +404,9 @@ QString Applet::name() const
     return d->appletDescription.name();
 }
 
-void Applet::setName(const QString &name) const
+void Applet::setTitle(const QString &title) const
 {
-    d->customName = name;
+    d->customTitle = title;
 }
 
 QFont Applet::font() const
@@ -737,7 +737,7 @@ void Applet::setGlobalShortcut(const KShortcut &shortcut)
 {
     if (!d->activationAction) {
         d->activationAction = new KAction(this);
-        d->activationAction->setText(i18n("Activate %1 Widget", name()));
+        d->activationAction->setText(i18n("Activate %1 Widget", title()));
         d->activationAction->setObjectName(QString("activate widget %1").arg(id())); // NO I18N
         connect(d->activationAction, SIGNAL(triggered()), this, SIGNAL(activate()));
         connect(d->activationAction, SIGNAL(globalShortcutChanged(QKeySequence)),
@@ -855,7 +855,7 @@ void Applet::showConfigurationInterface()
             QUiLoader loader;
             QWidget *w = loader.load(&f);
             if (w) {
-                dialog->addPage(w, i18n("Settings"), icon(), i18n("%1 Settings", name()));
+                dialog->addPage(w, i18n("Settings"), icon(), i18n("%1 Settings", title()));
                 hasPages = true;
             }
 
@@ -891,7 +891,7 @@ void Applet::showConfigurationInterface()
                         hasPages = true;
                     } else {
 #ifndef NDEBUG
-                        kDebug() << "failed to load kcm" << kcm << "for" << name();
+                        kDebug() << "failed to load kcm" << kcm << "for" << title();
 #endif
                     }
                 }

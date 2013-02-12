@@ -137,7 +137,7 @@ public:
     // applet info we keep around in case its needed
     KPluginInfo appletDescription;
     QVariantList args;
-    QString customName;
+    QString customTitle;
 
     // bookkeeping
     KConfigGroup *mainConfig;

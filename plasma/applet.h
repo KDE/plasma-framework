@@ -235,18 +235,22 @@ class PLASMA_EXPORT Applet : public QObject
 
 //METADATA
         /**
-         * Returns the user-visible name for the applet, as specified in the
-         * .desktop file. Can be changed with @see setName
+         * Returns the user-visible title for the applet, as specified in the
+         * Name field of the .desktop file. Can be changed with @see setTitle
          *
-         * @return the user-visible name for the applet.
+         * @since 5.0
+         * @return the user-visible title for the applet.
          **/
-        QString name() const;
+        QString title() const;
 
         /**
-         * Sets a custom name for this instance of the applet. E.g. a clock might
+         * Sets a custom title for this instance of the applet. E.g. a clock might
          * use the timezone as its name rather than the .desktop file
+         * 
+         * @since 5.0
+         * @param title the user-visible title for the applet.
          */
-        void setName(const QString &name) const;
+        void setTitle(const QString &title) const;
 
         /**
          * Returns a list of all known applets.
