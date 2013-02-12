@@ -44,13 +44,11 @@ enum Constraint {
     FormFactorConstraint = 1, /**< The FormFactor for an object */
     LocationConstraint = 2, /**< The Location of an object */
     ScreenConstraint = 4, /**< Which screen an object is on */
-    SizeConstraint = 8, /**< the size of the applet was changed */
-    ImmutableConstraint = 16, /**< the immutability (locked) nature of the applet changed  */
-    StartupCompletedConstraint = 32, /**< application startup has completed */
-    ContextConstraint = 64, /**< the context (e.g. activity) has changed */
-    PopupConstraint = 128, /**< the position of the popup needs to be recalculated*/
+    ImmutableConstraint = 8, /**< the immutability (locked) nature of the applet changed  */
+    StartupCompletedConstraint = 16, /**< application startup has completed */
+    ContextConstraint = 32, /**< the context (e.g. activity) has changed */
     AllConstraints = FormFactorConstraint | LocationConstraint | ScreenConstraint |
-    SizeConstraint | ImmutableConstraint | PopupConstraint
+    ImmutableConstraint
 };
 Q_DECLARE_FLAGS(Constraints, Constraint)
 
