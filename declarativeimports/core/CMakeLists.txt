@@ -27,10 +27,6 @@ set(corebindings_SRCS
 
 qt4_automoc(${corebindings_SRCS})
 
-set(QML_INSTALL_DIR "/qml")
-message("!!! Forcing Imports install location: ${QML_INSTALL_DIR}")
-message("!!! Remove once merged into cmake-extra-modules")
-
 add_library(corebindingsplugin SHARED ${corebindings_SRCS})
 target_link_libraries(corebindingsplugin
         ${QT_QTSCRIPT_LIBRARY}
