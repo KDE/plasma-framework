@@ -189,18 +189,6 @@ void AppletPrivate::positionMessageOverlay()
     // reimplemented in the UI specific library
 }
 
-void AppletPrivate::setBusy(bool busy)
-{
-    // reimplemented in the UI specific library
-    Q_UNUSED(busy)
-}
-
-bool AppletPrivate::isBusy() const
-{
-    // reimplemented in the UI specific library
-    return false;
-}
-
 void AppletPrivate::updateFailedToLaunch(const QString &reason)
 {
     // reimplemented in the UI specific library

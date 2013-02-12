@@ -63,7 +63,7 @@ class AppletInterface : public QQuickItem
     Q_PROPERTY(Location location READ location NOTIFY locationChanged)
     Q_PROPERTY(QString currentActivity READ currentActivity NOTIFY contextChanged)
     Q_PROPERTY(QString activeConfig WRITE setActiveConfig READ activeConfig)
-    Q_PROPERTY(bool busy WRITE setBusy READ isBusy)
+    Q_PROPERTY(bool busy WRITE setBusy READ isBusy NOTIFY busyChanged)
     Q_PROPERTY(BackgroundHints backgroundHints WRITE setBackgroundHints READ backgroundHints NOTIFY backgroundHintsChanged)
     Q_PROPERTY(bool immutable READ immutable NOTIFY immutableChanged)
     Q_PROPERTY(bool userConfiguring READ userConfiguring) // @since 4.5
@@ -266,6 +266,7 @@ Q_SIGNALS:
     void immutableChanged();
     void statusChanged();
     void backgroundHintsChanged();
+    void busyChanged();
 
 protected:
     DeclarativeAppletScript *m_appletScriptEngine;
@@ -278,6 +279,7 @@ private:
 
 //UI-specific properties
     Plasma::BackgroundHints m_backgroundHints;
+    bool m_busy : 1;
 };
 
 class JsAppletInterface : public AppletInterface

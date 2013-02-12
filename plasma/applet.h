@@ -448,11 +448,6 @@ class PLASMA_EXPORT Applet : public QObject
 
 //Completely UI-specific, remove or move to scriptengine
         /**
-         * @return true if the applet is busy and is showing an indicator widget for that
-         */
-        bool isBusy() const;
-
-        /**
          * @return true if this plasmoid provides a GUI configuration
          **/
         bool hasConfigurationInterface() const;
@@ -640,11 +635,6 @@ class PLASMA_EXPORT Applet : public QObject
         void runAssociatedApplication();
 
 //Completely UI-specific, remove or move to scriptengine
-        /**
-         * Shows a busy indicator that overlays the applet
-         * @param busy show or hide the busy indicator
-         */
-        void setBusy(bool busy);
 
         bool hasFocus() const;
         void setFocus(Qt::FocusReason);

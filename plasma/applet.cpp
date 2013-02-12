@@ -372,16 +372,6 @@ void Applet::constraintsEvent(Plasma::Constraints constraints)
     }
 }
 
-void Applet::setBusy(bool busy)
-{
-    d->setBusy(busy);
-}
-
-bool Applet::isBusy() const
-{
-    return d->isBusy();
-}
-
 QString Applet::title() const
 {
     if (!d->customTitle.isEmpty()) {

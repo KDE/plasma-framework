@@ -46,7 +46,8 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
     : QQuickItem(parent),
       m_appletScriptEngine(script),
       m_actionSignals(0),
-      m_backgroundHints(Plasma::StandardBackground)
+      m_backgroundHints(Plasma::StandardBackground),
+      m_busy(false)
 {
     qmlRegisterType<AppletInterface>();
     connect(this, SIGNAL(releaseVisualFocus()), applet(), SIGNAL(releaseVisualFocus()));
@@ -87,12 +88,17 @@ void AppletInterface::setFailedToLaunch(bool failed, const QString &reason)
 
 bool AppletInterface::isBusy() const
 {
-    return applet()->isBusy();
+    return m_busy;
 }
 
 void AppletInterface::setBusy(bool busy)
 {
-    applet()->setBusy(busy);
+    if (m_busy == busy) {
+        return;
+    }
+
+    m_busy = busy;
+    emit busyChanged();
 }
 
 AppletInterface::BackgroundHints AppletInterface::backgroundHints() const

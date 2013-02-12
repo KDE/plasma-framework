@@ -41,7 +41,6 @@ class Dialog;
 class FrameSvg;
 class AppletScript;
 class Wallpaper;
-class BusyWidget;
 class PushButton;
 class Service;
 
@@ -86,8 +85,6 @@ public:
     virtual void cleanUpAndDelete();
     virtual void showMessage(const QIcon &icon, const QString &message, const MessageButtons buttons);
     virtual void positionMessageOverlay();
-    virtual void setBusy(bool busy);
-    virtual bool isBusy() const;
     virtual void updateFailedToLaunch(const QString &reason);
 
     // put all setup routines for script here. at this point we can assume that
