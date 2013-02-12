@@ -38,7 +38,7 @@
 #include <Plasma/Applet>
 #include <Plasma/Package>
 #include <Plasma/PluginLoader>
-
+#include <Plasma/Service>
 
 #include "plasmoid/declarativeappletscript.h"
 
@@ -251,20 +251,6 @@ void DeclarativeAppletScript::popupEvent(bool popped)
     m_env->callEventListeners("popupEvent", args);
 }
 
-void DeclarativeAppletScript::dataUpdated(const QString &name, const Plasma::DataEngine::Data &data)
-{
-#if 0
-TODO: callEventListeners is broken without qscriptengine
-    if (!m_engine) {
-        return;
-    }
-    QScriptValueList args;
-    args << m_engine->toScriptValue(name) << m_engine->toScriptValue(data);
-
-    m_env->callEventListeners("dataUpdated", args);
-#endif
-}
-
 void DeclarativeAppletScript::activate()
 {
 #if 0
@@ -342,7 +328,6 @@ TODO: make this work with QQmlEngine
     //Make enum values accessible also as plasmoid.Planar etc
     ScriptEnv::registerEnums(m_self, AppletInterface::staticMetaObject);
 
-    global.setProperty("dataEngine", m_engine->newFunction(DeclarativeAppletScript::dataEngine));
     global.setProperty("service", m_engine->newFunction(DeclarativeAppletScript::service));
     global.setProperty("loadService", m_engine->newFunction(DeclarativeAppletScript::loadService));
 
@@ -367,17 +352,6 @@ TODO: make this work with QQmlEngine
     registerSimpleAppletMetaTypes(m_engine);
     QTimer::singleShot(0, this, SLOT(configChanged()));
 #endif
-}
-
-QObject *DeclarativeAppletScript::dataEngine(const QString &dataEngineName)
-{
-    return applet()->dataEngine(dataEngineName);
-}
-
-QObject *DeclarativeAppletScript::service(const QString &dataEngine, const QString &source)
-{
-    Plasma::DataEngine *data = applet()->dataEngine(dataEngine);
-    return data->serviceForSource(source);
 }
 
 QObject *DeclarativeAppletScript::loadService(const QString &pluginName)

@@ -141,12 +141,6 @@ void AppletScript::configChanged()
 {
 }
 
-DataEngine *AppletScript::dataEngine(const QString &engine) const
-{
-    Q_ASSERT(d->applet);
-    return d->applet->dataEngine(engine);
-}
-
 QString AppletScript::mainScript() const
 {
     Q_ASSERT(d->applet);

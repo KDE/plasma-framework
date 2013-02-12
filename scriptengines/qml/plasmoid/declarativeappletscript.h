@@ -27,7 +27,6 @@
 
 #include <Plasma/AppletScript>
 #include "plasmoid/appletauthorization.h"
-#include <Plasma/DataEngine>
 
 class AppletInterface;
 
@@ -55,13 +54,10 @@ public:
     QQmlEngine *engine() const;
 
     static QObject *loadui(const QString &filename);
-    QObject *dataEngine(const QString &dataEngineName);
-    QObject *service(const QString &dataEngine, const QString &source);
     QObject *loadService(const QString &pluginName);
 
 public Q_SLOTS:
     void executeAction(const QString &name);
-    void dataUpdated(const QString &name, const Plasma::DataEngine::Data &data);
     //void signalHandlerException(const QObject &exception);
     void popupEvent(bool popped);
     void activate();

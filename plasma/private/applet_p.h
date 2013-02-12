@@ -31,7 +31,6 @@
 #include <kplugininfo.h>
 
 #include "plasma/applet.h"
-#include "plasma/dataengineconsumer.h"
 
 class KKeySequenceWidget;
 
@@ -74,7 +73,7 @@ private:
     bool m_changed;
 };
 
-class PLASMA_EXPORT AppletPrivate : public DataEngineConsumer
+class PLASMA_EXPORT AppletPrivate
 {
 public:
     AppletPrivate(KService::Ptr service, const KPluginInfo *info, int uniqueID, Applet *applet);

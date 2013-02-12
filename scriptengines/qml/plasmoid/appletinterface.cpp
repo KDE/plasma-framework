@@ -65,11 +65,6 @@ AppletInterface::~AppletInterface()
 {
 }
 
-Plasma::DataEngine* AppletInterface::dataEngine(const QString &name)
-{
-    return applet()->dataEngine(name);
-}
-
 AppletInterface::FormFactor AppletInterface::formFactor() const
 {
     return static_cast<FormFactor>(applet()->formFactor());

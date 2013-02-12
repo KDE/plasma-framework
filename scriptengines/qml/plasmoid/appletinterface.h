@@ -28,7 +28,6 @@
 
 #include <Plasma/Applet>
 #include <Plasma/Containment>
-#include <Plasma/DataEngine>
 #include <Plasma/Theme>
 
 #include "declarativeappletscript.h"
@@ -242,8 +241,6 @@ enum IntervalAlignment {
     Q_INVOKABLE bool include(const QString &script);
 
     Q_INVOKABLE void debug(const QString &msg);
-
-    Plasma::DataEngine *dataEngine(const QString &name);
 
     QList<QAction*> contextualActions() const;
     bool immutable() const;

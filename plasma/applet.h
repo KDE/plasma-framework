@@ -224,25 +224,6 @@ class PLASMA_EXPORT Applet : public QObject
         Package package() const;
 
         /**
-         * Loads the given DataEngine
-         *
-         * Tries to load the data engine given by @p name.  Each engine is
-         * only loaded once, and that instance is re-used on all subsequent
-         * requests.
-         *
-         * If the data engine was not found, an invalid data engine is returned
-         * (see DataEngine::isValid()).
-         *
-         * Note that you should <em>not</em> delete the returned engine.
-         *
-         * @param name Name of the data engine to load
-         * @return pointer to the data engine if it was loaded,
-         *         or an invalid data engine if the requested engine
-         *         could not be loaded
-         */
-        DataEngine *dataEngine(const QString &name) const;
-
-        /**
          * Called when any of the geometry constraints have been updated.
          * This method calls constraintsEvent, which may be reimplemented,
          * once the Applet has been prepared for updating the constraints.

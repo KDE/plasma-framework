@@ -348,11 +348,6 @@ ConfigLoader *Applet::configScheme() const
     return d->configLoader;
 }
 
-DataEngine *Applet::dataEngine(const QString &name) const
-{
-    return d->dataEngine(name);
-}
-
 Package Applet::package() const
 {
     return d->package ? *d->package : Package();

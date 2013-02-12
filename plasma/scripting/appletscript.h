@@ -177,12 +177,6 @@ public Q_SLOTS:
 
 protected:
     /**
-     * @param engine name of the engine
-     * @return a data engine associated with this plasmoid
-     */
-    Q_INVOKABLE DataEngine *dataEngine(const QString &engine) const;
-
-    /**
      * @return absolute path to the main script file for this plasmoid
      */
     QString mainScript() const;
