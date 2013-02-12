@@ -1,5 +1,3 @@
-#cmakedefine01 ENABLE_REMOTE_WIDGETS
-
 #cmakedefine01 PLASMA_NO_KDEWEBKIT
 #cmakedefine01 PLASMA_NO_SOLID
 #cmakedefine01 PLASMA_NO_KIO

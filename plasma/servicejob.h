@@ -120,8 +120,6 @@ private:
     Q_PRIVATE_SLOT(d, void preventAutoStart())
 
     ServiceJobPrivate * const d;
-
-    friend class RemoteServiceJob;
 };
 
 } // namespace Plasma

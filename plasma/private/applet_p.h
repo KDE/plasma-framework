@@ -130,7 +130,6 @@ public:
     Applet *q;
 
     // applet attributes
-    Service *remotingService;
     ImmutabilityType immutability;
 
     // applet info we keep around in case its needed
@@ -155,7 +154,6 @@ public:
     QWeakPointer<KKeySequenceWidget> shortcutEditor; //TODO: subclass KConfigDialog and encapsulate this in there
 
     ItemStatus itemStatus;
-    KUrl remoteLocation;
 
     // the applet can change size policy by itself, so save the old one for eventual restore
     QSizePolicy preferredSizePolicy;

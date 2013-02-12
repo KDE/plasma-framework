@@ -52,7 +52,6 @@ namespace Plasma
 AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int uniqueID, Applet *applet)
         : appletId(uniqueID),
           q(applet),
-          remotingService(0),
           immutability(Mutable),
           appletDescription(info ? *info : KPluginInfo(service)),
           mainConfig(0),
