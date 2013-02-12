@@ -93,7 +93,7 @@ QScriptValue ScriptEngine::knownWidgetTypes(QScriptContext *context, QScriptEngi
     Q_UNUSED(engine)
 
     QStringList widgets;
-    KPluginInfo::List infos = Plasma::Applet::listAppletInfo();
+    KPluginInfo::List infos = PluginLoader::self()->listAppletInfo();
 
     foreach (const KPluginInfo &info, infos) {
         widgets.append(info.pluginName());

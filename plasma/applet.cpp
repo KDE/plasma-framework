@@ -931,11 +931,6 @@ bool Applet::hasValidAssociatedApplication() const
     return AssociatedApplicationManager::self()->appletHasValidAssociatedApplication(this);
 }
 
-KPluginInfo::List Applet::listAppletInfo(const QString &category, const QString &parentApp)
-{
-   return PluginLoader::self()->listAppletInfo(category, parentApp);
-}
-
 KPluginInfo::List Applet::listAppletInfoForMimeType(const QString &mimeType)
 {
     QString constraint = AppletPrivate::parentAppConstraint();
