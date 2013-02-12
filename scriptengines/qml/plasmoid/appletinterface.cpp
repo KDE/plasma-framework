@@ -53,7 +53,7 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
     connect(this, SIGNAL(releaseVisualFocus()), applet(), SIGNAL(releaseVisualFocus()));
     connect(this, SIGNAL(configNeedsSaving()), applet(), SIGNAL(configNeedsSaving()));
     connect(applet(), SIGNAL(immutabilityChanged(Plasma::ImmutabilityType)), this, SIGNAL(immutableChanged()));
-    connect(applet(), SIGNAL(newStatus(Plasma::ItemStatus)), this, SIGNAL(statusChanged()));
+    connect(applet(), SIGNAL(statusChanged(Plasma::ItemStatus)), this, SIGNAL(statusChanged()));
     connect(m_appletScriptEngine, SIGNAL(formFactorChanged()),
             this, SIGNAL(formFactorChanged()));
     connect(m_appletScriptEngine, SIGNAL(locationChanged()),

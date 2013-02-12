@@ -321,7 +321,7 @@ void ContainmentPrivate::checkStatus(Plasma::ItemStatus appletStatus)
 {
     //kDebug() << "================== "<< appletStatus << q->status();
     if (appletStatus == q->status()) {
-        emit q->newStatus(appletStatus);
+        emit q->statusChanged(appletStatus);
         return;
     }
 

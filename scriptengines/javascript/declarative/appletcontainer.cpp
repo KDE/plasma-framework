@@ -59,7 +59,7 @@ void AppletContainer::setApplet(QGraphicsWidget *widget)
     m_applet = applet;
 
     connect(applet, SIGNAL(sizeHintChanged(Qt::SizeHint)), this, SLOT(sizeHintChanged(Qt::SizeHint)));
-    connect(applet, SIGNAL(newStatus(Plasma::ItemStatus)), this, SIGNAL(statusChanged()));
+    connect(applet, SIGNAL(statusChanged(Plasma::ItemStatus)), this, SIGNAL(statusChanged()));
 
     applet->setParentItem(this);
     applet->setGeometry(0, 0, qMax((qreal)16, width()), qMax((qreal)16, height()));

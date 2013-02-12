@@ -506,7 +506,7 @@ ItemStatus Applet::status() const
 void Applet::setStatus(const ItemStatus status)
 {
     d->itemStatus = status;
-    emit newStatus(status);
+    emit statusChanged(status);
 }
 
 void Applet::flushPendingConstraintsEvents()
