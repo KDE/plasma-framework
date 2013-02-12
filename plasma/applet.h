@@ -140,6 +140,12 @@ class PLASMA_EXPORT Applet : public QObject
         bool isContainment() const;
 
         /**
+         * @return the status of the applet
+         * @since 4.4
+         */
+        ItemStatus status() const;
+
+        /**
          * Returns the current form factor the applet is being displayed in.
          *
          * @see Plasma::FormFactor
@@ -618,12 +624,6 @@ class PLASMA_EXPORT Applet : public QObject
          * Its configuration will also be deleted.
          */
         virtual void destroy();
-
-        /**
-         * @return the status of the applet
-         * @since 4.4
-         */
-        ItemStatus status() const;
 
         /**
          * sets the status for this applet
