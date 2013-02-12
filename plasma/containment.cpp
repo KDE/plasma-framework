@@ -654,20 +654,6 @@ QStringList Containment::listContainmentTypes()
     return types.toList();
 }
 
-void Containment::keyPressEvent(QKeyEvent *event)
-{
-    //kDebug() << "keyPressEvent with" << event->key()
-    //         << "and hoping and wishing for a" << Qt::Key_Tab;
-    if (event->key() == Qt::Key_Tab) { // && event->modifiers() == 0) {
-        if (!d->applets.isEmpty()) {
-#ifndef NDEBUG
-            kDebug() << "let's give focus to...." << (QObject*)d->applets.first();
-#endif
-            d->applets.first()->setFocus(Qt::TabFocusReason);
-        }
-    }
-}
-
 void Containment::wheelEvent(QWheelEvent *event)
 {
     event->ignore();

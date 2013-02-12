@@ -634,10 +634,6 @@ class PLASMA_EXPORT Applet : public QObject
          */
         void runAssociatedApplication();
 
-//Completely UI-specific, remove or move to scriptengine
-
-        bool hasFocus() const;
-        void setFocus(Qt::FocusReason);
 
     protected:
 //CONSTRUCTORS

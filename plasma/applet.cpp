@@ -317,16 +317,6 @@ KConfigGroup Applet::globalConfig() const
     return KConfigGroup(&globalAppletConfig, d->globalName());
 }
 
-bool Applet::hasFocus() const
-{
-    return false;
-}
-
-void Applet::setFocus(Qt::FocusReason)
-{
-    
-}
-
 void Applet::destroy()
 {
     if (immutability() != Mutable || d->transient || !d->started) {

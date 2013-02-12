@@ -486,7 +486,6 @@ Q_SIGNALS:
 
         //FIXME: events should go away
         void contextMenuEvent(QContextMenuEvent *event);
-        void keyPressEvent(QKeyEvent *event);
         void wheelEvent(QWheelEvent *event);
 
 
