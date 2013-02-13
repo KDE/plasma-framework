@@ -29,6 +29,15 @@ Rectangle {
     radius: 10
     smooth: true
 
+    property Component compactRepresentation: Component {
+        Rectangle {
+            MouseArea {
+                anchors.fill: parent
+                onClicked: plasmoid.expanded = !plasmoid.expanded
+            }
+        }
+    }
+
     Column {
         anchors.centerIn: parent
         Text {

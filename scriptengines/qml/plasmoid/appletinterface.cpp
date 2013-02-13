@@ -417,8 +417,12 @@ void AppletInterface::geometryChanged(const QRectF &newGeometry, const QRectF &o
 
         //build the icon representation
         if (m_compactUiObject) {
-            QQmlComponent *compactComponent = new QQmlComponent(m_appletScriptEngine->engine(), this);
-            compactComponent->loadUrl(QUrl::fromLocalFile(applet()->containment()->corona()->package().filePath("ui", "DefaultCompactRepresentation.qml")));
+            QQmlComponent *compactComponent = m_uiObject.data()->property("compactRepresentation").value<QQmlComponent *>();
+            
+            if (!compactComponent) {
+                compactComponent = new QQmlComponent(m_appletScriptEngine->engine(), this);
+                compactComponent->loadUrl(QUrl::fromLocalFile(applet()->containment()->corona()->package().filePath("ui", "DefaultCompactRepresentation.qml")));
+            }
             compactRepresentation = compactComponent->create(m_appletScriptEngine->engine()->rootContext());
             if (compactRepresentation) {
                 compactComponent->setParent(compactRepresentation);
