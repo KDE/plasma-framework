@@ -70,9 +70,15 @@ public:
     AppletInterface(DeclarativeAppletScript *script, QQuickItem *parent = 0);
     ~AppletInterface();
 
+//API not intended for the QML part
+    void setUiObject(QObject *object);
+    QObject *uiObject() const;
+
 //------------------------------------------------------------------
 //enums copy&pasted from plasma.h because qtscript is evil
 
+
+//TODO: all of this should go from here
 enum FormFactor {
     Planar = 0,  /**< The applet lives in a plane and has two
                     degrees of freedom to grow. Optimize for
@@ -140,7 +146,7 @@ enum IntervalAlignment {
     AlignToHour
 };
 
-//-------------------------------------------------------------------
+//QML API-------------------------------------------------------------------
 
     Q_INVOKABLE void setConfigurationRequired(bool needsConfiguring, const QString &reason = QString());
 
@@ -159,8 +165,6 @@ enum IntervalAlignment {
     Q_INVOKABLE QString file(const QString &fileType);
     Q_INVOKABLE QString file(const QString &fileType, const QString &filePath);
 
-    Q_INVOKABLE bool include(const QString &script);
-
     Q_INVOKABLE void debug(const QString &msg);
 
     QList<QAction*> contextualActions() const;
@@ -171,7 +175,7 @@ enum IntervalAlignment {
     Q_INVOKABLE QStringList downloadedFiles() const;
 
 
-//PROPERTY ACCESSORS
+//PROPERTY ACCESSORS-------------------------------------------------------------------
     FormFactor formFactor() const;
 
     Location location() const;
@@ -201,6 +205,7 @@ Q_SIGNALS:
     void releaseVisualFocus();
     void configNeedsSaving();
 
+//PROPERTY change notifiers--------------
     void formFactorChanged();
     void locationChanged();
     void contextChanged();
@@ -218,7 +223,10 @@ private:
     QString m_currentConfig;
     QMap<QString, Plasma::ConfigLoader*> m_configs;
 
-//UI-specific properties
+
+//UI-specific members ------------------
+    QWeakPointer<QObject> m_uiObject;
+
     Plasma::BackgroundHints m_backgroundHints;
     bool m_busy : 1;
 };

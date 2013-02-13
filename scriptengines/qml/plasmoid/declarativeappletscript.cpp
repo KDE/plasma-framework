@@ -132,12 +132,7 @@ bool DeclarativeAppletScript::init()
 
     m_qmlObject->completeInitialization();
 
-    m_qmlObject->rootObject()->setProperty("parent", QVariant::fromValue(m_interface));
-
-    //set anchors
-    QQmlExpression expr(m_qmlObject->engine()->rootContext(), m_qmlObject->rootObject(), "parent");
-    QQmlProperty prop(m_qmlObject->rootObject(), "anchors.fill");
-    prop.write(expr.evaluate());
+    m_interface->setUiObject(m_qmlObject->rootObject());
 
     // set the graphicObject dynamic property on applet
     a->setProperty("graphicObject", QVariant::fromValue(m_interface));

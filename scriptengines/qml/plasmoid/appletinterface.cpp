@@ -25,6 +25,8 @@
 #include <QDir>
 #include <QFile>
 #include <QQmlEngine>
+#include <QQmlExpression>
+#include <QQmlProperty>
 #include <QQmlComponent>
 #include <QSignalMapper>
 #include <QTimer>
@@ -64,6 +66,28 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
 
 AppletInterface::~AppletInterface()
 {
+}
+
+void AppletInterface::setUiObject(QObject *object)
+{
+    if (m_uiObject.data() == object) {
+        return;
+    }
+
+    m_uiObject = object;
+
+    //set parent, both as object hyerarchy and visually
+    object->setProperty("parent", QVariant::fromValue(this));
+
+    //set anchors
+    QQmlExpression expr(m_appletScriptEngine->engine()->rootContext(), object, "parent");
+    QQmlProperty prop(object, "anchors.fill");
+    prop.write(expr.evaluate());
+}
+
+QObject *AppletInterface::uiObject() const
+{
+    return m_uiObject.data();
 }
 
 AppletInterface::FormFactor AppletInterface::formFactor() const
@@ -304,17 +328,6 @@ int AppletInterface::apiVersion() const
     }
 
     return offers.first()->property("X-KDE-PluginInfo-Version", QVariant::Int).toInt();
-}
-
-bool AppletInterface::include(const QString &script)
-{
-    const QString path = m_appletScriptEngine->filePath("scripts", script);
-
-    if (path.isEmpty()) {
-        return false;
-    }
-
-    return m_appletScriptEngine->include(path);
 }
 
 void AppletInterface::debug(const QString &msg)
