@@ -17,39 +17,15 @@
  */
 
 import QtQuick 2.0
-import QtQuick.Window 2.0
 
 import org.kde.plasma.core 0.1 as PlasmaCore
-import org.kde.plasma.components 0.1 as PlasmaComponents
 
-Item {
+Rectangle {
     id: root
+    color: "darkgreen"
 
-    property Item applet
-    property Item compactRepresentation
-
-
-    onAppletChanged: applet.parent = appletParent
-    onCompactRepresentationChanged: {
-        compactRepresentation.parent = root
-        compactRepresentation.anchors.fill = root
-    }
-
-
-    Window {
-        id: popupWindow
-        visible: plasmoid.expanded
-        onVisibleChanged: {
-            if (!visible) {
-                plasmoid.expanded = false
-            }
-        }
-        width: 200
-        height: 200
-        Item {
-            id: appletParent
-            width: applet.implicitWidth
-            height: applet.implicitHeight
-        }
+    MouseArea {
+        anchors.fill: parent
+        onClicked: plasmoid.expanded = !plasmoid.expanded
     }
 }

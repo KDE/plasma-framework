@@ -59,6 +59,7 @@ class AppletInterface : public QQuickItem
     Q_PROPERTY(QString currentActivity READ currentActivity NOTIFY contextChanged)
     Q_PROPERTY(QString activeConfig WRITE setActiveConfig READ activeConfig)
     Q_PROPERTY(bool busy WRITE setBusy READ isBusy NOTIFY busyChanged)
+    Q_PROPERTY(bool expanded WRITE setExpanded READ isExpanded NOTIFY expandedChanged)
     Q_PROPERTY(BackgroundHints backgroundHints WRITE setBackgroundHints READ backgroundHints NOTIFY backgroundHintsChanged)
     Q_PROPERTY(bool immutable READ immutable NOTIFY immutableChanged)
     Q_PROPERTY(bool userConfiguring READ userConfiguring) // @since 4.5
@@ -185,6 +186,9 @@ enum IntervalAlignment {
     bool isBusy() const;
     void setBusy(bool busy);
 
+    bool isExpanded() const;
+    void setExpanded(bool expanded);
+
     BackgroundHints backgroundHints() const;
     void setBackgroundHints(BackgroundHints hint);
 
@@ -213,6 +217,7 @@ Q_SIGNALS:
     void statusChanged();
     void backgroundHintsChanged();
     void busyChanged();
+    void expandedChanged();
 
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
@@ -232,6 +237,7 @@ private:
 
     Plasma::BackgroundHints m_backgroundHints;
     bool m_busy : 1;
+    bool m_expanded : 1;
 };
 
 

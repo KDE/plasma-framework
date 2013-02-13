@@ -49,7 +49,8 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
       m_appletScriptEngine(script),
       m_actionSignals(0),
       m_backgroundHints(Plasma::StandardBackground),
-      m_busy(false)
+      m_busy(false),
+      m_expanded(false)
 {
     qmlRegisterType<AppletInterface>();
     connect(this, SIGNAL(releaseVisualFocus()), applet(), SIGNAL(releaseVisualFocus()));
@@ -118,6 +119,23 @@ void AppletInterface::setBusy(bool busy)
 
     m_busy = busy;
     emit busyChanged();
+}
+
+bool AppletInterface::isExpanded() const
+{
+    return m_expanded;
+}
+
+void AppletInterface::setExpanded(bool expanded)
+{
+    //if there is no compact representation it means it's always expanded
+    //Containnments are always expanded
+    if (!m_compactUiObject || qobject_cast<ContainmentInterface *>(this) || m_expanded == expanded) {
+        return;
+    }
+
+    m_expanded = expanded;
+    emit expandedChanged();
 }
 
 AppletInterface::BackgroundHints AppletInterface::backgroundHints() const
@@ -377,13 +395,15 @@ void AppletInterface::geometryChanged(const QRectF &newGeometry, const QRectF &o
     Q_UNUSED(oldGeometry)
 
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
-   
+
     if (!m_uiObject || qobject_cast<ContainmentInterface *>(this)) {
         return;
     }
 
     //TODO: completely arbitrary for now
     if (newGeometry.width() < 100 || newGeometry.height() < 100) {
+        m_expanded = false;
+
         //we are already an icon: nothing to do
         if (m_compactUiObject) {
             return;
@@ -391,11 +411,29 @@ void AppletInterface::geometryChanged(const QRectF &newGeometry, const QRectF &o
 
         QQmlComponent *component = new QQmlComponent(m_appletScriptEngine->engine(), this);
         component->loadUrl(QUrl::fromLocalFile(applet()->containment()->corona()->package().filePath("ui", "CompactApplet.qml")));
-        m_compactUiObject = component->create();
+        m_compactUiObject = component->create(m_appletScriptEngine->engine()->rootContext());
 
+        QObject *compactRepresentation = 0;
+
+        //build the icon representation
         if (m_compactUiObject) {
+            QQmlComponent *compactComponent = new QQmlComponent(m_appletScriptEngine->engine(), this);
+            compactComponent->loadUrl(QUrl::fromLocalFile(applet()->containment()->corona()->package().filePath("ui", "DefaultCompactRepresentation.qml")));
+            compactRepresentation = compactComponent->create(m_appletScriptEngine->engine()->rootContext());
+            if (compactRepresentation) {
+                compactComponent->setParent(compactRepresentation);
+            } else {
+                delete compactComponent;
+            }
+        }
+
+        if (m_compactUiObject && compactRepresentation) {
             //for memory management
             component->setParent(m_compactUiObject.data());
+
+            //put compactRepresentation in the icon place
+            compactRepresentation->setProperty("parent", QVariant::fromValue(m_compactUiObject.data()));
+            m_compactUiObject.data()->setProperty("compactRepresentation", QVariant::fromValue(compactRepresentation));
 
             //replace the full applet with the collapsed view
             m_compactUiObject.data()->setProperty("visible", true);
@@ -408,13 +446,19 @@ void AppletInterface::geometryChanged(const QRectF &newGeometry, const QRectF &o
             m_uiObject.data()->setProperty("parent", QVariant::fromValue(m_compactUiObject.data()));
             m_compactUiObject.data()->setProperty("applet", QVariant::fromValue(m_uiObject.data()));
         
-        //failed to create UI, don't do anything
+        //failed to create UI, don't do anything, return in expanded status
         } else {
             qWarning() << component->errors();
+            m_expanded = true;
             delete component;
         }
 
+        emit expandedChanged();
+
     } else {
+        m_expanded = true;
+        emit expandedChanged();
+
         //we are already expanded: nothing to do
         if (!m_compactUiObject) {
             return;
