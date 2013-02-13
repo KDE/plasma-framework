@@ -53,23 +53,26 @@ Rectangle {
             id: frame
             x: 50
             y: 50
-            width: 150
-            height: 150
+            width: 200
+            height: 200
+
             property alias applet: appletContainer.children
             property int small: 100
-            property int large: parent.width - width - 150
+            property int large: root.width /2
             imagePath: applet[0].backgroundHints == 0 ? "" : "widgets/background"
             MouseArea {
                 anchors.fill: parent
                 drag.target: parent
                 onClicked: {
-                    var s = (frame.x == frame.large) ? frame.small : frame.large;
+                    var s = (frame.width == frame.large) ? frame.small : frame.large;
                     frame.x = s
                     frame.height = s
+                    frame.width = s
                 }
             }
             Behavior on x { PropertyAnimation { easing.type: Easing.OutElastic; duration: 800 } }
             //Behavior on y { PropertyAnimation { easing.type: Easing.OutElastic; duration: 800 } }
+            Behavior on width { PropertyAnimation { easing.type: Easing.InOutDouble; duration: 300 } }
             Behavior on height { PropertyAnimation { easing.type: Easing.InOutDouble; duration: 300 } }
 
             Item {

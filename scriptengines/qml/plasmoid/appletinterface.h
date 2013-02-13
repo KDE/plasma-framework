@@ -215,6 +215,8 @@ Q_SIGNALS:
     void busyChanged();
 
 protected:
+    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
+
     DeclarativeAppletScript *m_appletScriptEngine;
 
 private:
@@ -226,6 +228,7 @@ private:
 
 //UI-specific members ------------------
     QWeakPointer<QObject> m_uiObject;
+    QWeakPointer<QObject> m_compactUiObject;
 
     Plasma::BackgroundHints m_backgroundHints;
     bool m_busy : 1;

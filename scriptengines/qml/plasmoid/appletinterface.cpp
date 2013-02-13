@@ -372,6 +372,65 @@ QStringList AppletInterface::downloadedFiles() const
     return dir.entryList(QDir::Files | QDir::NoSymLinks | QDir::Readable);
 }
 
+void AppletInterface::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+{
+    Q_UNUSED(oldGeometry)
+
+    QQuickItem::geometryChanged(newGeometry, oldGeometry);
+   
+    if (!m_uiObject || qobject_cast<ContainmentInterface *>(this)) {
+        return;
+    }
+
+    //TODO: completely arbitrary for now
+    if (newGeometry.width() < 100 || newGeometry.height() < 100) {
+        //we are already an icon: nothing to do
+        if (m_compactUiObject) {
+            return;
+        }
+
+        QQmlComponent *component = new QQmlComponent(m_appletScriptEngine->engine(), this);
+        component->loadUrl(QUrl::fromLocalFile(applet()->containment()->corona()->package().filePath("ui", "CompactApplet.qml")));
+        m_compactUiObject = component->create();
+
+        if (m_compactUiObject) {
+            //for memory management
+            component->setParent(m_compactUiObject.data());
+
+            //replace the full applet with the collapsed view
+            m_compactUiObject.data()->setProperty("visible", true);
+            m_compactUiObject.data()->setProperty("parent", QVariant::fromValue(this));
+            //set anchors
+            QQmlExpression expr(m_appletScriptEngine->engine()->rootContext(), m_compactUiObject.data(), "parent");
+            QQmlProperty prop(m_compactUiObject.data(), "anchors.fill");
+            prop.write(expr.evaluate());
+            
+            m_uiObject.data()->setProperty("parent", QVariant::fromValue(m_compactUiObject.data()));
+            m_compactUiObject.data()->setProperty("applet", QVariant::fromValue(m_uiObject.data()));
+        
+        //failed to create UI, don't do anything
+        } else {
+            qWarning() << component->errors();
+            delete component;
+        }
+
+    } else {
+        //we are already expanded: nothing to do
+        if (!m_compactUiObject) {
+            return;
+        }
+
+        m_uiObject.data()->setProperty("parent", QVariant::fromValue(this));
+        m_compactUiObject.data()->deleteLater();
+    }
+}
+
+
+
+
+
+
+
 
 ///////////// ContainmentInterface
 
@@ -463,6 +522,7 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet, const QPoi
     if (applet && contGraphicObject && appletGraphicObject) {
         appletGraphicObject->setProperty("visible", false);
         appletGraphicObject->setProperty("parent", QVariant::fromValue(contGraphicObject));
+
     //if an appletGraphicObject is not set, we have to display some error message
     } else if (applet && contGraphicObject) {
         QQmlComponent *component = new QQmlComponent(m_appletScriptEngine->engine(), applet);
