@@ -43,7 +43,6 @@
 #include <kmanagerselection.h>
 #include <kimagecache.h>
 #include <ksharedconfig.h>
-#include <kstandarddirs.h>
 #include <kwindoweffects.h>
 #include <kwindowsystem.h>
 #include <qstandardpaths.h>
@@ -508,12 +507,6 @@ Theme::~Theme()
 
     d->onAppExitCleanup();
     delete d;
-}
-
-KPluginInfo::List Theme::listThemeInfo()
-{
-    const QStringList themes = KGlobal::dirs()->findAllResources("data", "desktoptheme/*/metadata.desktop", KStandardDirs::NoDuplicates);
-    return KPluginInfo::fromFiles(themes);
 }
 
 void ThemePrivate::settingsFileChanged(const QString &file)

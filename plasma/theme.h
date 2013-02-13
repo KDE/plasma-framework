@@ -105,12 +105,6 @@ class PLASMA_EXPORT Theme : public QObject
         ~Theme();
 
         /**
-         * @return a list of all known themes
-         * @since 4.3
-         */
-        static KPluginInfo::List listThemeInfo();
-
-        /**
          * Sets the current theme being used.
          */
         void setThemeName(const QString &themeName);
