@@ -21,12 +21,8 @@
 
 #include "containmentinterface.h"
 
-#include <QQmlComponent>
-
 #include <KDebug>
 
-#include <Plasma/Plasma>
-#include <Plasma/Applet>
 #include <Plasma/Corona>
 #include <Plasma/Package>
 

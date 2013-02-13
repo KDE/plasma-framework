@@ -21,25 +21,9 @@
 #ifndef CONTAINMENTINTERFACE_H
 #define CONTAINMENTINTERFACE_H
 
-#include <QQuickItem>
-#include <QScriptValue>
-
-#include <Plasma/Applet>
 #include <Plasma/Containment>
-#include <Plasma/Theme>
 
 #include "appletinterface.h"
-
-class QAction;
-class QmlAppletScript;
-class QSignalMapper;
-class QSizeF;
-
-
-namespace Plasma
-{
-    class ConfigLoader;
-} // namespace Plasma
 
 class ContainmentInterface : public AppletInterface
 {
