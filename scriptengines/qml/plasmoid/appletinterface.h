@@ -172,7 +172,7 @@ enum IntervalAlignment {
 
     inline Plasma::Applet *applet() const { return m_appletScriptEngine->applet(); }
 
-//    Q_INVOKABLE QString downloadPath(const QString &file);
+    Q_INVOKABLE QString downloadPath(const QString &file);
     Q_INVOKABLE QStringList downloadedFiles() const;
 
 

@@ -373,19 +373,21 @@ AppletInterface::ItemStatus AppletInterface::status() const
     return (AppletInterface::ItemStatus)((int)(applet()->status()));
 }
 
-/*
 QString AppletInterface::downloadPath(const QString &file)
 {
-    KDesktopFile config(v.toVariant().value<Plasma::Package>().path() + "/metadata.desktop");
-    KConfigGroup cg = config.desktopGroup();
-    const QString pluginName = cg.readEntry("X-KDE-PluginInfo-Name", QString());
-    destination = KGlobalSettings::downloadPath() + "/Plasma/" + pluginName + '/';
+    const QString downloadDir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + "/Plasma/" + applet()->pluginInfo().pluginName() + '/';
+
+    if (!QFile::exists(downloadDir)) {
+        QDir dir(QChar('/'));
+        dir.mkpath(downloadDir);
+    }
+
+    return downloadDir;
 }
-*/
 
 QStringList AppletInterface::downloadedFiles() const
 {
-    const QString downloadDir = KGlobalSettings::downloadPath() + "/Plasma/" + applet()->pluginInfo().pluginName();
+    const QString downloadDir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + "/Plasma/" + applet()->pluginInfo().pluginName() + '/';
     QDir dir(downloadDir);
     return dir.entryList(QDir::Files | QDir::NoSymLinks | QDir::Readable);
 }
