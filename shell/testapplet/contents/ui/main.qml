@@ -36,6 +36,7 @@ Rectangle {
         }
         PlasmaComponents.Button {  
             text: "Background"
+            checked: plasmoid.backgroundHints == 1
             onClicked: {
                 print("Background hints: " + plasmoid.backgroundHints)
                 if (plasmoid.backgroundHints == 0) {
