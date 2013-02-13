@@ -53,8 +53,8 @@ Rectangle {
             id: frame
             x: 50
             y: 50
-            width: 200
-            height: 200
+            width: large
+            height: large
 
             property alias applet: appletContainer.children
             property int small: 100
