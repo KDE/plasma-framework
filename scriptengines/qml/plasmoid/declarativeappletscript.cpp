@@ -44,6 +44,7 @@
 #include "plasmoid/declarativeappletscript.h"
 
 #include "plasmoid/appletinterface.h"
+#include "plasmoid/containmentinterface.h"
 
 #include "common/scriptenv.h"
 #include "declarative/qmlobject.h"

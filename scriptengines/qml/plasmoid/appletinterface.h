@@ -27,7 +27,6 @@
 #include <QScriptValue>
 
 #include <Plasma/Applet>
-#include <Plasma/Containment>
 #include <Plasma/Theme>
 
 #include "declarativeappletscript.h"
@@ -238,59 +237,6 @@ private:
     Plasma::BackgroundHints m_backgroundHints;
     bool m_busy : 1;
     bool m_expanded : 1;
-};
-
-
-class ContainmentInterface : public AppletInterface
-{
-    Q_OBJECT
-    Q_PROPERTY(QVariantList applets READ applets)
-    Q_PROPERTY(bool drawWallpaper READ drawWallpaper WRITE setDrawWallpaper)
-    Q_PROPERTY(Type containmentType READ containmentType WRITE setContainmentType)
-    Q_PROPERTY(int screen READ screen NOTIFY screenChanged)
-    Q_PROPERTY(QString activityId READ activityId NOTIFY activityIdChanged)
-    Q_ENUMS(Type)
-
-public:
-    enum Type {
-        NoContainmentType = -1,  /**< @internal */
-        DesktopContainment = 0,  /**< A desktop containment */
-        PanelContainment,        /**< A desktop panel */
-        CustomContainment = 127, /**< A containment that is neither a desktop nor a panel
-                                    but something application specific */
-        CustomPanelContainment = 128 /**< A customized desktop panel */
-    };
-    ContainmentInterface(DeclarativeAppletScript *parent);
-
-    inline Plasma::Containment *containment() const { return static_cast<Plasma::Containment *>(m_appletScriptEngine->applet()); }
-
-    QVariantList applets();
-
-    void setDrawWallpaper(bool drawWallpaper);
-    bool drawWallpaper();
-    Type containmentType() const;
-    void setContainmentType(Type type);
-    int screen() const;
-
-    QString activityId() const;
-
-    Q_INVOKABLE QRectF screenGeometry(int id) const;
-    Q_INVOKABLE QVariantList availableScreenRegion(int id) const;
-
-Q_SIGNALS:
-    void appletAdded(QObject *applet, const QPointF &pos);
-    void appletRemoved(QObject *applet);
-    void screenChanged();
-    void activityIdChanged();
-    void availableScreenRegionChanged();
-
-protected Q_SLOTS:
-    void appletAddedForward(Plasma::Applet *applet, const QPointF &pos);
-    void appletRemovedForward(Plasma::Applet *applet);
-    void loadWallpaper();
-
-private:
-    bool m_movableApplets;
 };
 
 #endif
