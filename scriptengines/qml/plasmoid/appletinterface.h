@@ -49,12 +49,6 @@ class AppletInterface : public QQuickItem
     Q_ENUMS(FormFactor)
     Q_ENUMS(Location)
     Q_ENUMS(BackgroundHints)
-    Q_ENUMS(QtOrientation)
-    Q_ENUMS(QtModifiers)
-    Q_ENUMS(QtAnchorPoint)
-    Q_ENUMS(QtCorner)
-    Q_ENUMS(QtAlignment)
-    Q_ENUMS(QtMouseButton)
     Q_ENUMS(AnimationDirection)
     Q_ENUMS(IntervalAlignment)
     Q_ENUMS(ThemeColors)
@@ -117,36 +111,6 @@ enum ItemStatus {
     AcceptingInputStatus = 4 /**< The Item is accepting input **/
 };
 
-//From Qt namespace
-enum QtModifiers {
-    QtNoModifier = Qt::NoModifier,
-    QtShiftModifier = Qt::ShiftModifier,
-    QtControlModifier = Qt::ControlModifier,
-    QtAltModifier = Qt::AltModifier,
-    QtMetaModifier = Qt::MetaModifier
-};
-
-enum QtOrientation {
-    QtHorizontal= Qt::Horizontal,
-    QtVertical = Qt::Vertical
-};
-
-enum QtAnchorPoint {
-    QtAnchorLeft = Qt::AnchorLeft,
-    QtAnchorRight = Qt::AnchorRight,
-    QtAnchorBottom = Qt::AnchorBottom,
-    QtAnchorTop = Qt::AnchorTop,
-    QtAnchorHorizontalCenter = Qt::AnchorHorizontalCenter,
-    QtAnchorVerticalCenter = Qt::AnchorVerticalCenter
-};
-
-enum QtCorner {
-    QtTopLeftCorner = Qt::TopLeftCorner,
-    QtTopRightCorner = Qt::TopRightCorner,
-    QtBottomLeftCorner = Qt::BottomLeftCorner,
-    QtBottomRightCorner = Qt::BottomRightCorner
-};
-
 enum BackgroundHints {
     NoBackground = Plasma::NoBackground,
     StandardBackground = Plasma::StandardBackground,
@@ -162,31 +126,6 @@ enum ThemeColors {
     ButtonBackgroundColor = Plasma::Theme::ButtonBackgroundColor,
     LinkColor = Plasma::Theme::LinkColor,
     VisitedLinkColor = Plasma::Theme::VisitedLinkColor
-};
-
-enum QtAlignment {
-    QtAlignLeft = 0x0001,
-    QtAlignRight = 0x0002,
-    QtAlignHCenter = 0x0004,
-    QtAlignJustify = 0x0005,
-    QtAlignTop = 0x0020,
-    QtAlignBottom = 0x0020,
-    QtAlignVCenter = 0x0080
-};
-
-enum QtMouseButton {
-    QtNoButton = Qt::NoButton,
-    QtLeftButton = Qt::LeftButton,
-    QtRightButton = Qt::RightButton,
-    QtMidButton = Qt::MidButton,
-    QtXButton1 = Qt::XButton1,
-    QtXButton2 = Qt::XButton2
-};
-
-enum QtScrollBarPolicy {
-    QtScrollBarAsNeeded = Qt::ScrollBarAsNeeded,
-    QtScrollBarAlwaysOff = Qt::ScrollBarAlwaysOff,
-    QtScrollBarAlwaysOn = Qt::ScrollBarAlwaysOn
 };
 
 enum AnimationDirection {

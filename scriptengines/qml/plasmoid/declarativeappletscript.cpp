@@ -47,7 +47,6 @@
 
 #include "common/scriptenv.h"
 #include "declarative/qmlobject.h"
-//#include "declarative/declarativeitemcontainer_p.h"
 #include "declarative/packageaccessmanagerfactory.h"
 
 
