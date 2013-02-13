@@ -98,7 +98,7 @@ void IconItem::setSource(const QVariant &source)
 
         //ok, svg not available
         } else {
-            m_icon = QIcon(source.toString());
+            m_icon = QIcon::fromTheme(source.toString());
             delete m_svgIcon;
             m_svgIcon = 0;
         }
