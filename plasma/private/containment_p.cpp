@@ -105,27 +105,6 @@ void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containme
     action->setData(Containment::ControlTool);
 }
 
-void ContainmentPrivate::initApplets()
-{
-    foreach (Applet *applet, applets) {
-        applet->restore(*applet->d->mainConfigGroup());
-        applet->init();
-#ifndef NDEBUG
-        kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Applet" << applet->title();
-#endif
-    }
-
-    q->flushPendingConstraintsEvents();
-
-    foreach (Applet *applet, applets) {
-        applet->flushPendingConstraintsEvents();
-    }
-
-#ifndef NDEBUG
-    kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Containment's applets initialized" << q->title();
-#endif
-}
-
 void ContainmentPrivate::checkContainmentFurniture()
 {
     if (q->isContainment() &&

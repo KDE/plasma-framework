@@ -83,7 +83,6 @@ public:
      */
     void containmentConstraintsEvent(Plasma::Constraints constraints);
 
-    void initApplets();
     void checkContainmentFurniture();
     bool isPanelContainment() const;
     void setLockToolText();
