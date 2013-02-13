@@ -256,19 +256,19 @@ QString ThemePrivate::findInTheme(const QString &image, const QString &theme, bo
 
     if (locolor) {
         search = QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/locolor/") % image;
-        search =  QStandardPaths::locate(QStandardPaths::GenericDataLocation, search);
+        search = QStandardPaths::locate(QStandardPaths::GenericDataLocation, search);
     } else if (!compositingActive) {
         search = QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/opaque/") % image;
         search =  QStandardPaths::locate(QStandardPaths::GenericDataLocation, search);
     } else if (KWindowEffects::isEffectAvailable(KWindowEffects::BlurBehind)) {
         search = QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/translucent/") % image;
-        search =  QStandardPaths::locate(QStandardPaths::GenericDataLocation, search);
+        search = QStandardPaths::locate(QStandardPaths::GenericDataLocation, search);
     }
 
     //not found or compositing enabled
     if (search.isEmpty()) {
         search = QLatin1Literal("desktoptheme/") % theme % QLatin1Char('/') % image;
-        search =  QStandardPaths::locate(QStandardPaths::GenericDataLocation, search);
+        search = QStandardPaths::locate(QStandardPaths::GenericDataLocation, search);
     }
 
     if (cache && !search.isEmpty()) {
