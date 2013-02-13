@@ -255,18 +255,6 @@ void DeclarativeAppletScript::constraintsEvent(Plasma::Constraints constraints)
     }
 }
 
-void DeclarativeAppletScript::popupEvent(bool popped)
-{
-    if (!m_env) {
-        return;
-    }
-
-    QScriptValueList args;
-    args << popped;
-
-    m_env->callEventListeners("popupEvent", args);
-}
-
 void DeclarativeAppletScript::activate()
 {
 #if 0

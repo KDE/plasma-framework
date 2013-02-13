@@ -57,8 +57,6 @@ public:
 
 public Q_SLOTS:
     void executeAction(const QString &name);
-    //void signalHandlerException(const QObject &exception);
-    void popupEvent(bool popped);
     void activate();
     void configChanged();
     void qmlCreationFinished();
