@@ -219,19 +219,6 @@ private:
     bool m_busy : 1;
 };
 
-class JsAppletInterface : public AppletInterface
-{
-    Q_OBJECT
-    Q_PROPERTY(QObject *sender READ sender)
-
-public:
-    JsAppletInterface(DeclarativeAppletScript *parent)
-        : AppletInterface(parent)
-    {
-    }
-
-};
-
 
 class ContainmentInterface : public AppletInterface
 {
