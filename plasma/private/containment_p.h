@@ -88,7 +88,6 @@ public:
     bool isPanelContainment() const;
     void setLockToolText();
     void appletDeleted(Applet*);
-    void appletAppeared(Applet*);
     void addContainmentActions(KMenu &desktopMenu, QEvent *event);
     void addAppletActions(KMenu &desktopMenu, Applet *applet, QEvent *event);
     void checkRemoveAction();

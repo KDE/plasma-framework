@@ -423,14 +423,6 @@ void ContainmentPrivate::appletDeleted(Plasma::Applet *applet)
     emit q->configNeedsSaving();
 }
 
-void ContainmentPrivate::appletAppeared(Applet *applet)
-{
-    //kDebug() << type << Containment::DesktopContainment;
-    KConfigGroup *cg = applet->d->mainConfigGroup();
-    applet->save(*cg);
-    emit q->configNeedsSaving();
-}
-
 bool ContainmentPrivate::isPanelContainment() const
 {
     return type == Containment::PanelContainment || type == Containment::CustomPanelContainment;

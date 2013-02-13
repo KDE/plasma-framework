@@ -539,10 +539,19 @@ void Containment::addApplet(Applet *applet, const QPointF &pos)
     connect(applet, SIGNAL(activate()), this, SIGNAL(activate()));
 
     if (!currentContainment) {
-        applet->restore(*applet->d->mainConfigGroup());
+        const bool isNew = applet->d->mainConfigGroup()->entryMap().isEmpty();
+
+        if (!isNew) {
+            applet->restore(*applet->d->mainConfigGroup());
+        }
+
         applet->init();
+
+        if (isNew) {
+            applet->save(*applet->d->mainConfigGroup());
+            emit configNeedsSaving();
+        }
         //FIXME: an on-appear animation would be nice to have again
-        d->appletAppeared(applet);
     }
 
     applet->updateConstraints(Plasma::AllConstraints);
