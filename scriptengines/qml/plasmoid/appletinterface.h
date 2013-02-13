@@ -53,6 +53,7 @@ class AppletInterface : public QQuickItem
     Q_ENUMS(IntervalAlignment)
     Q_ENUMS(ThemeColors)
     Q_ENUMS(ItemStatus)
+
     Q_PROPERTY(FormFactor formFactor READ formFactor NOTIFY formFactorChanged)
     Q_PROPERTY(Location location READ location NOTIFY locationChanged)
     Q_PROPERTY(QString currentActivity READ currentActivity NOTIFY contextChanged)
@@ -141,17 +142,6 @@ enum IntervalAlignment {
 
 //-------------------------------------------------------------------
 
-    Q_INVOKABLE FormFactor formFactor() const;
-
-    Location location() const;
-    QString currentActivity() const;
-
-    Q_INVOKABLE bool isBusy() const;
-    Q_INVOKABLE void setBusy(bool busy);
-
-    Q_INVOKABLE BackgroundHints backgroundHints() const;
-    Q_INVOKABLE void setBackgroundHints(BackgroundHints hint);
-
     Q_INVOKABLE void setConfigurationRequired(bool needsConfiguring, const QString &reason = QString());
 
     Q_INVOKABLE void setActionSeparator(const QString &name);
@@ -161,10 +151,6 @@ enum IntervalAlignment {
     Q_INVOKABLE void removeAction(const QString &name);
 
     Q_INVOKABLE QAction *action(QString name) const;
-
-    Q_INVOKABLE QString activeConfig() const;
-
-    Q_INVOKABLE void setActiveConfig(const QString &name);
 
     Q_INVOKABLE QVariant readConfig(const QString &entry) const;
 
@@ -178,11 +164,25 @@ enum IntervalAlignment {
     Q_INVOKABLE void debug(const QString &msg);
 
     QList<QAction*> contextualActions() const;
-    bool immutable() const;
-    bool userConfiguring() const;
-    int apiVersion() const;
 
     inline Plasma::Applet *applet() const { return m_appletScriptEngine->applet(); }
+
+//    Q_INVOKABLE QString downloadPath(const QString &file);
+    Q_INVOKABLE QStringList downloadedFiles() const;
+
+
+//PROPERTY ACCESSORS
+    FormFactor formFactor() const;
+
+    Location location() const;
+
+    QString currentActivity() const;
+
+    bool isBusy() const;
+    void setBusy(bool busy);
+
+    BackgroundHints backgroundHints() const;
+    void setBackgroundHints(BackgroundHints hint);
 
     void setAssociatedApplication(const QString &string);
     QString associatedApplication() const;
@@ -190,8 +190,12 @@ enum IntervalAlignment {
     void setStatus(const ItemStatus &status);
     ItemStatus status() const;
 
-//    Q_INVOKABLE QString downloadPath(const QString &file);
-    Q_INVOKABLE QStringList downloadedFiles() const;
+    QString activeConfig() const;
+    void setActiveConfig(const QString &name);
+
+    bool immutable() const;
+    bool userConfiguring() const;
+    int apiVersion() const;
 
 Q_SIGNALS:
     void releaseVisualFocus();

@@ -393,7 +393,7 @@ QVariantList ContainmentInterface::applets()
 
 void ContainmentInterface::setDrawWallpaper(bool drawWallpaper)
 {
-   m_appletScriptEngine->setDrawWallpaper(drawWallpaper);
+    m_appletScriptEngine->setDrawWallpaper(drawWallpaper);
 }
 
 bool ContainmentInterface::drawWallpaper()
