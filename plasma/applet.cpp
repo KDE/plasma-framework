@@ -199,7 +199,7 @@ uint Applet::id() const
 
 void Applet::save(KConfigGroup &g) const
 {
-    if (d->transient) {
+    if (d->transient || !d->appletDescription.isValid()) {
         return;
     }
 
