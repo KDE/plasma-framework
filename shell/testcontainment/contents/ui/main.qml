@@ -29,7 +29,6 @@ Rectangle {
 
     property Item toolBox
 
-    
     Connections {
         target: plasmoid
         onAppletAdded: {
