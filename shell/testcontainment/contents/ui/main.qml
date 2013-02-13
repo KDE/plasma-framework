@@ -59,7 +59,7 @@ Rectangle {
             property alias applet: appletContainer.children
             property int small: 90
             property int large: root.width /2
-            imagePath: applet[0].backgroundHints == 0 ? "" : "widgets/background"
+            imagePath: applet.length > 0 && applet[0].backgroundHints == 0 ? "" : "widgets/background"
             MouseArea {
                 anchors.fill: parent
                 drag.target: parent
@@ -99,7 +99,7 @@ Rectangle {
             }
             PlasmaComponents.BusyIndicator {
                 z: 1000
-                visible: applet[0].busy
+                visible: applet.length > 0 && applet[0].busy
                 running: visible
                 anchors.centerIn: parent
             }
