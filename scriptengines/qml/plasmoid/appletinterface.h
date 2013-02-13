@@ -41,7 +41,7 @@ class QSizeF;
 namespace Plasma
 {
     class ConfigLoader;
-} // namespace Plasa
+} // namespace Plasma
 
 class AppletInterface : public QQuickItem
 {

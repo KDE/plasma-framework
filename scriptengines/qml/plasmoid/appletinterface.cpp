@@ -297,7 +297,7 @@ bool AppletInterface::userConfiguring() const
 
 int AppletInterface::apiVersion() const
 {
-    const QString constraint("[X-Plasma-API] == 'javascript' and 'Applet' in [X-Plasma-ComponentTypes]");
+    const QString constraint("[X-Plasma-API] == 'declarative' and 'Applet' in [X-Plasma-ComponentTypes]");
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/ScriptEngine", constraint);
     if (offers.isEmpty()) {
         return -1;
