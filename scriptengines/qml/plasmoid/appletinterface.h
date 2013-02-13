@@ -22,7 +22,6 @@
 #ifndef APPLETINTERFACE_H
 #define APPLETINTERFACE_H
 
-#include <QAbstractAnimation>
 #include <QQuickItem>
 #include <QScriptValue>
 
@@ -133,11 +132,6 @@ enum ThemeColors {
     ButtonBackgroundColor = Plasma::Theme::ButtonBackgroundColor,
     LinkColor = Plasma::Theme::LinkColor,
     VisitedLinkColor = Plasma::Theme::VisitedLinkColor
-};
-
-enum AnimationDirection {
-    AnimationForward = QAbstractAnimation::Forward,
-    AnimationBackward = QAbstractAnimation::Backward
 };
 
 enum IntervalAlignment {
