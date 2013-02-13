@@ -716,10 +716,14 @@ void RunnerManager::launchQuery(const QString &untrimmedTerm, const QString &run
     QString term = untrimmedTerm.trimmed();
 
     setSingleModeRunnerId(runnerName);
-    setSingleMode(!runnerName.isEmpty());
+    setSingleMode(d->currentSingleRunner);
+    if (!runnerName.isEmpty() && !d->currentSingleRunner) {
+        reset();
+        return;
+    }
 
     if (term.isEmpty()) {
-        if (d->singleMode && d->currentSingleRunner && d->currentSingleRunner->defaultSyntax()) {
+        if (d->singleMode && d->currentSingleRunner->defaultSyntax()) {
             term = d->currentSingleRunner->defaultSyntax()->exampleQueries().first().remove(QRegExp(":q:"));
         } else {
             reset();
@@ -732,12 +736,7 @@ void RunnerManager::launchQuery(const QString &untrimmedTerm, const QString &run
         return;
     }
 
-    if (d->singleMode && !d->currentSingleRunner) {
-        reset();
-        return;
-    }
-
-    if (d->runners.isEmpty()) {
+    if (!d->singleMode && d->runners.isEmpty()) {
         d->loadRunners();
     }
 
@@ -748,7 +747,7 @@ void RunnerManager::launchQuery(const QString &untrimmedTerm, const QString &run
     QHash<QString, AbstractRunner*> runable;
 
     //if the name is not empty we will launch only the specified runner
-    if (d->singleMode && d->currentSingleRunner) {
+    if (d->singleMode) {
         runable.insert(QString(), d->currentSingleRunner);
         d->context.setSingleRunnerQueryMode(true);
     } else {
