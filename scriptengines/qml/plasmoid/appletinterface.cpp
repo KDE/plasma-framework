@@ -23,6 +23,7 @@
 #include <QAction>
 #include <QDir>
 #include <QFile>
+#include <QIcon>
 #include <QQmlEngine>
 #include <QQmlExpression>
 #include <QQmlProperty>
@@ -32,7 +33,6 @@
 
 #include <KDebug>
 #include <KGlobalSettings>
-#include <KIcon>
 #include <KService>
 #include <KServiceTypeTrader>
 
@@ -297,7 +297,7 @@ void AppletInterface::setAction(const QString &name, const QString &text, const 
     }
 
     if (!icon.isEmpty()) {
-        action->setIcon(KIcon(icon));
+        action->setIcon(QIcon::fromTheme(icon));
     }
 
     if (!shortcut.isEmpty()) {
