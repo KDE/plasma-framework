@@ -20,6 +20,7 @@ import QtQuick 2.0
 
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
+import org.kde.qtextracomponents 0.1 as QtExtras
 
 Rectangle {
     id: root
@@ -51,14 +52,20 @@ Rectangle {
         id: appletContainerComponent
         PlasmaCore.FrameSvgItem {
             id: frame
-            x: 50
-            y: 50
-            width: large
-            height: large
+            x: 50 - tmargin
+            y: 50 - lmargin
+            width: large + lmargin + rmargin
+            height: large + tmargin + bmargin
 
             property alias applet: appletContainer.children
             property int small: 90
-            property int large: root.width /2
+            property int large: 400
+
+            property int lmargin: imagePath != "" ? frame.margins.left : 0
+            property int rmargin: imagePath != "" ? frame.margins.right : 0
+            property int tmargin: imagePath != "" ? frame.margins.top : 0
+            property int bmargin: imagePath != "" ? frame.margins.bottom : 0
+
             imagePath: applet.length > 0 && applet[0].backgroundHints == 0 ? "" : "widgets/background"
             MouseArea {
                 anchors.fill: parent
@@ -70,10 +77,6 @@ Rectangle {
                     frame.width = s
                 }
             }
-            Behavior on x { PropertyAnimation { easing.type: Easing.OutElastic; duration: 800 } }
-            //Behavior on y { PropertyAnimation { easing.type: Easing.OutElastic; duration: 800 } }
-            Behavior on width { PropertyAnimation { easing.type: Easing.InOutDouble; duration: 300 } }
-            Behavior on height { PropertyAnimation { easing.type: Easing.InOutDouble; duration: 300 } }
 
             Item {
                 id: appletContainer
@@ -106,13 +109,35 @@ Rectangle {
         }
     }
 
+    QtExtras.QIconItem {
+        icon: "preferences-desktop-icons"
+        width: 96
+        height: width
+        MouseArea {
+            anchors.fill: parent
+            drag.target: parent
+            onClicked: {
+                var n = parent.width == 96 ? 256 : 96;
+                parent.width = n;
+                parent.height = n;
+            }
+        }
+        Behavior on width { PropertyAnimation { easing.type: Easing.InOutDouble; duration: 100 } }
+        Behavior on height { PropertyAnimation { easing.type: Easing.InOutDouble; duration: 100 } }
+    }
+
     PlasmaCore.IconItem {
         source: "accessories-dictionary"
         x: 50
         y: 350
         width: 48
         height: 48
-        Rectangle { color: "white"; opacity: 0.2; anchors.fill: parent; }
+        //Rectangle { color: "white"; opacity: 0.2; anchors.fill: parent; }
+        MouseArea {
+            anchors.fill: parent
+            drag.target: parent
+        }
+
     }
 
     Component.onCompleted: {
