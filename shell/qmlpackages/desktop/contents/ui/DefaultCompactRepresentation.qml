@@ -20,12 +20,17 @@ import QtQuick 2.0
 
 import org.kde.plasma.core 0.1 as PlasmaCore
 
-Rectangle {
-    id: root
-    color: "darkgreen"
+PlasmaCore.IconItem {
+    id: icon
+
+    source: plasmoid.icon ? plasmoid.icon : "plasma"
+    active: mouseArea.containsMouse
 
     MouseArea {
+        id: mouseArea
+
         anchors.fill: parent
+        hoverEnabled: true
         onClicked: plasmoid.expanded = !plasmoid.expanded
     }
 }

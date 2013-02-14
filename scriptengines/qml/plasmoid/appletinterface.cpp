@@ -107,6 +107,26 @@ QString AppletInterface::currentActivity() const
     return applet()->containment()->activity();
 }
 
+QString AppletInterface::icon() const
+{
+    return applet()->icon();
+}
+
+QString AppletInterface::title() const
+{
+    return applet()->title();
+}
+
+void AppletInterface::setTitle(const QString &title)
+{
+    if (applet()->title() == title) {
+        return;
+    }
+
+    applet()->setTitle(title);
+    emit titleChanged();
+}
+
 bool AppletInterface::isBusy() const
 {
     return m_busy;
