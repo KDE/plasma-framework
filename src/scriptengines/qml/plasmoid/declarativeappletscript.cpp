@@ -68,6 +68,22 @@ DeclarativeAppletScript::~DeclarativeAppletScript()
 
 bool DeclarativeAppletScript::init()
 {
+    Plasma::Containment *pc = qobject_cast<Plasma::Containment *>(applet());
+
+    if (pc) {
+        QString type = pc->pluginInfo().property("X-Plasma-ContainmentType").toString();
+
+        if (type == "DesktopContainment") {
+            pc->setContainmentType(Plasma::Containment::DesktopContainment);
+        } else if (type == "PanelContainment") {
+            pc->setContainmentType(Plasma::Containment::PanelContainment);
+        } if (type == "CustomContainment") {
+            pc->setContainmentType(Plasma::Containment::CustomContainment);
+        } else if (type == "CustomPanelContainment") {
+            pc->setContainmentType(Plasma::Containment::CustomPanelContainment);
+        }
+    }
+
     m_qmlObject = new QmlObject(applet());
     m_qmlObject->setInitializationDelayed(true);
     //FIXME: what replaced this?
@@ -134,9 +150,7 @@ bool DeclarativeAppletScript::init()
     a->setProperty("graphicObject", QVariant::fromValue(m_interface));
     qDebug() << "Graphic object created:" << a << a->property("graphicObject");
 
-    //Is this a containment?
-    Plasma::Containment *pc = qobject_cast<Plasma::Containment *>(a);
-
+    //Create the ToolBox
     if (pc) {
         Plasma::Package pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
         pkg.setPath("org.kde.toolbox");
