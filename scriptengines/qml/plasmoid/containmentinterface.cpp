@@ -21,10 +21,16 @@
 
 #include "containmentinterface.h"
 
+#include <QQmlExpression>
+#include <QQmlProperty>
+
 #include <KDebug>
 
 #include <Plasma/Corona>
 #include <Plasma/Package>
+#include <Plasma/PluginLoader>
+
+#include "declarative/qmlobject.h"
 
 ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
     : AppletInterface(parent)
@@ -41,6 +47,7 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
          connect(containment()->corona(), SIGNAL(availableScreenRegionChanged()),
                  this, SIGNAL(availableScreenRegionChanged()));
      }
+     loadWallpaper();
 }
 
 QVariantList ContainmentInterface::applets()
@@ -56,7 +63,13 @@ QVariantList ContainmentInterface::applets()
 
 void ContainmentInterface::setDrawWallpaper(bool drawWallpaper)
 {
+    if (drawWallpaper == m_appletScriptEngine->drawWallpaper()) {
+        return;
+    }
+
     m_appletScriptEngine->setDrawWallpaper(drawWallpaper);
+
+    loadWallpaper();
 }
 
 bool ContainmentInterface::drawWallpaper()
@@ -139,7 +152,41 @@ void ContainmentInterface::appletRemovedForward(Plasma::Applet *applet)
 
 void ContainmentInterface::loadWallpaper()
 {
+    if (m_appletScriptEngine->drawWallpaper()) {
+        if (m_wallpaperQmlObject) {
+            return;
+        }
 
+        Plasma::Package pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
+        pkg.setPath("org.kde.wallpaper.image");
+
+        m_wallpaperQmlObject = new QmlObject(this);
+        m_wallpaperQmlObject->setQmlPath(pkg.filePath("mainscript"));
+
+        if (m_wallpaperQmlObject->mainComponent() &&
+            m_wallpaperQmlObject->rootObject() &&
+            !m_wallpaperQmlObject->mainComponent()->isError()) {
+            m_wallpaperQmlObject->rootObject()->setProperty("z", -1000);
+            m_wallpaperQmlObject->rootObject()->setProperty("parent", QVariant::fromValue(this));
+
+            //set anchors
+            QQmlExpression expr(m_appletScriptEngine->engine()->rootContext(), m_wallpaperQmlObject->rootObject(), "parent");
+            QQmlProperty prop(m_wallpaperQmlObject->rootObject(), "anchors.fill");
+            prop.write(expr.evaluate());
+
+        } else if (m_wallpaperQmlObject->mainComponent()) {
+            qWarning() << "Error loading the wallpaper" << m_wallpaperQmlObject->mainComponent()->errors();
+            m_wallpaperQmlObject->deleteLater();
+            m_wallpaperQmlObject = 0;
+
+        } else {
+            qWarning() << "Error loading the wallpaper, package not found";
+        }
+
+    } else {
+        m_wallpaperQmlObject->deleteLater();
+        m_wallpaperQmlObject = 0;
+    }
 }
 
 QString ContainmentInterface::activityId() const

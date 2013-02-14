@@ -61,6 +61,7 @@ void View::setContainment(Plasma::Containment *cont)
         qDebug() << "using as graphic containment" << graphicObject << m_containment.data();
 
         //graphicObject->setProperty("visible", false);
+        graphicObject->setProperty("drawWallpaper", true);
         graphicObject->setProperty("parent", QVariant::fromValue(rootObject()));
         rootObject()->setProperty("containment", QVariant::fromValue(graphicObject));
     } else {

@@ -11,7 +11,6 @@ Name[uk]=Набір інструментів для стаціонарних к�
 Name[x-test]=xxDesktop Toolboxxx
 Type=Service
 
-X-KDE-ServiceTypes=Plasma/Applet
 X-KDE-ParentApp=
 X-KDE-PluginInfo-Author=Marco Martin
 X-KDE-PluginInfo-Category=

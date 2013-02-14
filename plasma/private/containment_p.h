@@ -57,7 +57,7 @@ public:
           desktop(-1), // all desktops
           lastDesktop(-1),
           type(Containment::NoContainmentType),
-          drawWallpaper(true),
+          drawWallpaper(false),
           containmentActionsSource(Global)
     {
     }
