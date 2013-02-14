@@ -59,7 +59,6 @@ public Q_SLOTS:
     void executeAction(const QString &name);
     void activate();
     void configChanged();
-    void qmlCreationFinished();
 
 protected:
     bool init();
@@ -72,7 +71,6 @@ Q_SIGNALS:
 
 private:
     QmlObject *m_qmlObject;
-    QmlObject *m_toolBoxObject;
     AppletInterface *m_interface;
     ScriptEnv *m_env;
 };

@@ -57,7 +57,6 @@ K_EXPORT_PLASMA_APPLETSCRIPTENGINE(declarativeappletscript, DeclarativeAppletScr
 DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariantList &args)
     : Plasma::AppletScript(parent),
       m_qmlObject(0),
-      m_toolBoxObject(0),
       m_interface(0),
       m_env(0)
 {
@@ -73,7 +72,6 @@ bool DeclarativeAppletScript::init()
 {
     m_qmlObject = new QmlObject(applet());
     m_qmlObject->setInitializationDelayed(true);
-    connect(m_qmlObject, SIGNAL(finished()), this, SLOT(qmlCreationFinished()));
     //FIXME: what replaced this?
     //KGlobal::locale()->insertCatalog("plasma_applet_" % description().pluginName());
 
@@ -138,65 +136,36 @@ bool DeclarativeAppletScript::init()
     a->setProperty("graphicObject", QVariant::fromValue(m_interface));
     qDebug() << "Graphic object created:" << a << a->property("graphicObject");
 
-    return true;
-}
-
-void DeclarativeAppletScript::qmlCreationFinished()
-{
-    //If it's a popupapplet and the root object has a "compactRepresentation" component, use that instead of the icon
-    Plasma::Applet *a = applet();
-
-    //TODO: access rootItem from m_interface
-    //m_self->setProperty("rootItem", QVariant::fromValue(m_qmlObject->rootObject()));
-
-    /*TODO: all applets must become pa
-    if (pa) {
-        QQmlComponent *iconComponent = m_qmlObject->rootObject()->property("compactRepresentation").value<QQmlComponent *>();
-        if (iconComponent) {
-            QDeclarativeItem *declarativeIcon = qobject_cast<QDeclarativeItem *>(iconComponent->create(iconComponent->creationContext()));
-            if (declarativeIcon) {
-                pa->setPopupIcon(QIcon());
-                QGraphicsLinearLayout *lay = new QGraphicsLinearLayout(a);
-                lay->setContentsMargins(0, 0, 0, 0);
-                DeclarativeItemContainer *declarativeItemContainer = new DeclarativeItemContainer(a);
-                lay->addItem(declarativeItemContainer);
-                declarativeItemContainer->setDeclarativeItem(declarativeIcon, true);
-            } else {
-                pa->setPopupIcon(a->icon());
-            }
-        } else {
-            pa->setPopupIcon(a->icon());
-        }
-    }*/
-
+    //Is this a containment?
     Plasma::Containment *pc = qobject_cast<Plasma::Containment *>(a);
+
     if (pc) {
         Plasma::Package pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
         pkg.setPath("org.kde.toolbox");
+
         if (pkg.isValid()) {
-            const QString qmlPath = pkg.filePath("mainscript");
+            QQmlComponent *toolBoxComponent = new QQmlComponent(m_qmlObject->engine(), this);
+            toolBoxComponent->loadUrl(QUrl::fromLocalFile(pkg.filePath("mainscript")));
+            QObject *toolBoxObject = toolBoxComponent->create(engine->rootContext());
 
-            m_toolBoxObject = new QmlObject(pc);
-            m_toolBoxObject->setInitializationDelayed(true);
-            m_toolBoxObject->setQmlPath(qmlPath);
+            QObject *containmentGraphicObject = m_interface->uiObject();
 
-            if (m_toolBoxObject->rootObject()) {
-                m_toolBoxObject->rootObject()->setProperty("plasmoid", QVariant::fromValue(m_interface));
-            }
+            if (containmentGraphicObject && toolBoxObject) {
+                //memory management
+                toolBoxComponent->setParent(toolBoxObject);
+                toolBoxObject->setProperty("parent", QVariant::fromValue(containmentGraphicObject));
 
-            m_toolBoxObject->completeInitialization();
-
-            QObject *containmentGraphicObject = pc->property("graphicObject").value<QObject *>();
-
-            if (containmentGraphicObject && m_toolBoxObject->rootObject()) {
-                m_toolBoxObject->rootObject()->setProperty("parent", QVariant::fromValue(containmentGraphicObject));
-
-                containmentGraphicObject->setProperty("toolBox", QVariant::fromValue(m_toolBoxObject->rootObject()));
+                containmentGraphicObject->setProperty("toolBox", QVariant::fromValue(toolBoxObject));
+            } else {
+                delete toolBoxComponent;
+                delete toolBoxObject;
             }
         } else {
             kWarning() << "Could not load org.kde.toolbox package.";
         }
     }
+
+    return !a->failedToLaunch();
 }
 
 QString DeclarativeAppletScript::filePath(const QString &type, const QString &file) const
