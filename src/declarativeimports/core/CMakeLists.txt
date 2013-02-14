@@ -2,6 +2,7 @@ project(corebindings)
 
 INCLUDE_DIRECTORIES(
         ${CMAKE_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/src/plasma/includes
         ${CMAKE_BINARY_DIR}
         ${KDE4_INCLUDES}
         ${KDE4_INCLUDE_DIR}
