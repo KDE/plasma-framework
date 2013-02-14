@@ -26,6 +26,8 @@ endif(NOT X11_FOUND)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}
+                    ${CMAKE_CURRENT_BINARY_DIR}/src
+                    ${CMAKE_CURRENT_SOURCE_DIR}/src
                     ${KDE4_INCLUDE_DIR}
                     ${KDE4_INCLUDE_DIR}/KDE
                     ${ki18n_SOURCE_DIR}/src

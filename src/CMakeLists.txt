@@ -1,0 +1,5 @@
+add_subdirectory(plasma)
+add_subdirectory(declarativeimports)
+#add_subdirectory(kpart)
+add_subdirectory(scriptengines)
+add_subdirectory(shell)

@@ -162,12 +162,12 @@ macro(installPackage dir component)
 endmacro()
 
 ################# list the subdirectories #################
-
+add_subdirectory(src)
 add_subdirectory( desktoptheme )
-add_subdirectory( plasma )
-add_subdirectory( declarativeimports )
-add_subdirectory( scriptengines )
-add_subdirectory( shell )
+# add_subdirectory( plasma )
+# add_subdirectory( declarativeimports )
+# add_subdirectory( scriptengines )
+# add_subdirectory( shell )
 #FIXME: port tools
 add_subdirectory( tools )
 
