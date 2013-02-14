@@ -39,14 +39,8 @@ namespace Plasma
 
 void ChangeableMainScriptPackage::initPackage(Package *package)
 {
-    package->addFileDefinition("mainscript", "code/main", i18n("Main Script File"));
+    package->addFileDefinition("mainscript", "ui/main.qml", i18n("Main Script File"));
     package->setRequired("mainscript", true);
-}
-
-QString ChangeableMainScriptPackage::findMainScript(Package *package) const
-{
-    Q_UNUSED(package)
-    return QString();
 }
 
 QString ChangeableMainScriptPackage::mainScriptConfigKey() const
@@ -63,33 +57,13 @@ void ChangeableMainScriptPackage::pathChanged(Package *package)
     KDesktopFile config(package->path() + "/metadata.desktop");
     KConfigGroup cg = config.desktopGroup();
     QString mainScript = cg.readEntry(mainScriptConfigKey(), QString());
-    if (mainScript.isEmpty()) {
-        mainScript = findMainScript(package);
-
-        if (mainScript.isEmpty()) {
-            mainScript = package->path() + "/code/main.js";
-            if (!QFile::exists(mainScript)) {
-                mainScript.clear();
-            }
-        }
-    }
 
     if (!mainScript.isEmpty()) {
         package->addFileDefinition("mainscript", mainScript, i18n("Main Script File"));
     }
 }
 
-QString PlasmoidPackage::findMainScript(Package *package) const
-{
-    const QString mainScript = package->path() + "/ui/main.qml";
-    if (QFile::exists(mainScript)) {
-        return mainScript;
-    }
-
-    return QString();
-}
-
-void PlasmoidPackage::initPackage(Package *package)
+void GenericPackage::initPackage(Package *package)
 {
     ChangeableMainScriptPackage::initPackage(package);
 
@@ -105,8 +79,7 @@ void PlasmoidPackage::initPackage(Package *package)
         package->setContentsPrefixPaths(platform);
     }
 
-    package->setServicePrefix("plasma-applet-");
-    package->setDefaultPackageRoot("plasma/plasmoids");
+    package->setDefaultPackageRoot("plasma/packages/");
 
     package->addDirectoryDefinition("images", "images", i18n("Images"));
     QStringList mimetypes;
@@ -119,7 +92,6 @@ void PlasmoidPackage::initPackage(Package *package)
     package->setMimeTypes("config", mimetypes);
 
     package->addDirectoryDefinition("ui", "ui", i18n("User Interface"));
-    package->setMimeTypes("ui", mimetypes);
 
     package->addDirectoryDefinition("data", "data", i18n("Data Files"));
 
@@ -129,6 +101,13 @@ void PlasmoidPackage::initPackage(Package *package)
     package->setMimeTypes("scripts", mimetypes);
 
     package->addDirectoryDefinition("translations", "locale", i18n("Translations"));
+}
+
+void PlasmoidPackage::initPackage(Package *package)
+{
+    GenericPackage::initPackage(package);
+    package->setServicePrefix("plasma-applet-");
+    package->setDefaultPackageRoot("plasma/plasmoids/");
 
     package->addFileDefinition("mainconfigui", "ui/config.ui", i18n("Main Config UI File"));
     package->addFileDefinition("mainconfigxml", "config/main.xml", i18n("Configuration XML file"));
@@ -274,12 +253,6 @@ void ContainmentActionsPackage::initPackage(Package *package)
 {
     ChangeableMainScriptPackage::initPackage(package);
     package->setDefaultPackageRoot("plasma/containmentactions/");
-}
-
-void GenericPackage::initPackage(Package *package)
-{
-    PlasmoidPackage::initPackage(package);
-    package->setDefaultPackageRoot("plasma/packages/");
 }
 
 } // namespace Plasma

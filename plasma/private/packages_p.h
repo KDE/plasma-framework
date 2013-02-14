@@ -32,18 +32,20 @@ public:
     void initPackage(Package *package);
 
 protected:
-    virtual QString findMainScript(Package *package) const;
     virtual QString mainScriptConfigKey() const;
     void pathChanged(Package *package);
 };
 
-class PlasmoidPackage : public ChangeableMainScriptPackage
+class GenericPackage : public ChangeableMainScriptPackage
 {
 public:
     void initPackage(Package *package);
+};
 
-protected:
-    QString findMainScript(Package *package) const;
+class PlasmoidPackage : public GenericPackage
+{
+public:
+    void initPackage(Package *package);
 };
 
 class ContainmentPackage : public PlasmoidPackage
@@ -71,13 +73,6 @@ public:
 };
 
 class ContainmentActionsPackage : public ChangeableMainScriptPackage
-{
-public:
-    void initPackage(Package *package);
-};
-
-//FIXME: this should be aPlasmoidPackage or a base one?
-class GenericPackage : public PlasmoidPackage
 {
 public:
     void initPackage(Package *package);
