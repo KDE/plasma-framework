@@ -33,7 +33,8 @@
 #include "declarative/qmlobject.h"
 
 ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
-    : AppletInterface(parent)
+    : AppletInterface(parent),
+      m_wallpaperQmlObject(0)
 {
     qmlRegisterType<ContainmentInterface>();
 
@@ -184,8 +185,10 @@ void ContainmentInterface::loadWallpaper()
         }
 
     } else {
-        m_wallpaperQmlObject->deleteLater();
-        m_wallpaperQmlObject = 0;
+        if (m_wallpaperQmlObject) {
+            m_wallpaperQmlObject->deleteLater();
+            m_wallpaperQmlObject = 0;
+        }
     }
 }
 
