@@ -83,7 +83,7 @@ void PackageStructureTest::multiplePaths()
 void PackageStructureTest::directories()
 {
     QList<const char*> dirs;
-    dirs << "animations" << "config" << "data" << "images" << "scripts" << "translations" << "ui";
+    dirs << "config" << "data" << "images" << "scripts" << "translations" << "ui";
 
     QList<const char*> psDirs = ps.directories();
 
