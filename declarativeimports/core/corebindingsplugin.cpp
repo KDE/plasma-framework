@@ -22,7 +22,6 @@
 
 #include "corebindingsplugin.h"
 
-//#include <QtDeclarative/qdeclarative.h>
 #include <QQmlContext>
 #include <QScriptEngine>
 

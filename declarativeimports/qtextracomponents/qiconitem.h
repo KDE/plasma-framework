@@ -19,11 +19,12 @@
 #ifndef QICONITEM_H
 #define QICONITEM_H
 
-#include <QQuickItem>
+#include <QIcon>
+#include <QQuickPaintedItem>
 #include <QPixmap>
 #include <QVariant>
 
-class QIconItem : public QQuickItem
+class QIconItem : public QQuickPaintedItem
 {
     Q_OBJECT
 
@@ -58,7 +59,7 @@ public:
     void setSmooth(const bool smooth);
     bool smooth() const;
 
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    void paint(QPainter *painter);
 
 Q_SIGNALS:
     void stateChanged(State state);

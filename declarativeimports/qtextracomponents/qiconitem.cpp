@@ -19,18 +19,19 @@
 
 #include "qiconitem.h"
 
-#include <KIcon>
 #include <KIconLoader>
 #include <KIconEffect>
+
+#include <QIcon>
 #include <QPainter>
 
 
 QIconItem::QIconItem(QQuickItem *parent)
-    : QQuickItem(parent),
+    : QQuickPaintedItem(parent),
       m_smooth(false),
       m_state(DefaultState)
 {
-    setFlag(QGraphicsItem::ItemHasNoContents, false);
+    setFlag(ItemHasContents, true);
 }
 
 
@@ -43,7 +44,7 @@ void QIconItem::setIcon(const QVariant &icon)
     if(icon.canConvert<QIcon>()) {
         m_icon = icon.value<QIcon>();
     } else if(icon.canConvert<QString>()) {
-        m_icon = KIcon(icon.toString());
+        m_icon = QIcon::fromTheme(icon.toString());
     } else {
         m_icon = QIcon();
     }
@@ -95,11 +96,8 @@ bool QIconItem::smooth() const
     return m_smooth;
 }
 
-void QIconItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void QIconItem::paint(QPainter *painter)
 {
-    Q_UNUSED(option);
-    Q_UNUSED(widget);
-
     if (m_icon.isNull()) {
         return;
     }

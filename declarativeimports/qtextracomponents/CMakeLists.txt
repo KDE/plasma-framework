@@ -8,9 +8,9 @@ set(qtextracomponents_SRCS
     qtextracomponentsplugin.cpp
 #     qpixmapitem.cpp
 #     qimageitem.cpp
-#     qiconitem.cpp
+     qiconitem.cpp
 #     mouseeventlistener.cpp
-#     columnproxymodel.cpp
+    columnproxymodel.cpp
     )
 
 INCLUDE_DIRECTORIES(
@@ -31,12 +31,6 @@ target_link_libraries(qtextracomponentsplugin
         ${KDE4_KDEUI_LIBRARY}
         ${KDECLARATIVE_LIBRARIES}
         plasma)
-#${KDE4_KDEUI_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${Qt5Quick_LIBRARIES} ${Qt5Qml_LIBRARIES})
-
-# set(QML_INSTALL_DIR "/home/sebas/kf5/install/lib/qml")
-# message("!!! Forcing Imports install location: ${QML_INSTALL_DIR}")
-# message("!!! Remove once merged into cmake-extra-modules")
-message("### QML_INSTALL_DIR ${QML_INSTALL_DIR}")
 
 install(TARGETS qtextracomponentsplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/qtextracomponents)
 
