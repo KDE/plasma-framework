@@ -30,73 +30,143 @@ Item {
     property int _s: 12
     property int _h: 32
 
-    Item {
-        id: pageOne
+    PlasmaComponents.TabBar {
+        id: tabBar
+
         anchors {
-            fill: parent
-            margins: _s
+            left: parent.left
+            right: parent.right
+            top: parent.top
         }
-        Column {
-            anchors.fill: parent
-            spacing: _s
+        height: _h
 
-            PlasmaComponents.Label {
-                width: parent.width
-                text: "This is a <i>PlasmaComponent</i>"
-                font.pointSize: 18
-            }
-
-            PlasmaComponents.Label {
-                width: parent.width
-                text: "Icons"
-            }
-//             PlasmaComponents.TabBar {
-//                 height: 32
-//                 width: parent.width
-//             }
-            Row {
-                height: _h*2
-                spacing: _s
-
-                QtExtras.QIconItem {
-                    icon: "preferences-desktop-icons"
-                    width: parent.height
-                    height: width
-                }
-
-                PlasmaCore.IconItem {
-                    source: "configure"
-                    width: parent.height
-                    height: width
-                }
-
-                PlasmaCore.IconItem {
-                    source: "akonadi"
-                    width: parent.height
-                    height: width
-                }
-            }
-            PlasmaComponents.Label {
-                width: parent.width
-                text: "Buttons"
-            }
-            Row {
-                height: _h
-                spacing: _s
-
-                PlasmaComponents.Button {
-                    text: "Button"
-                    iconSource: "call-start"
-                }
-                PlasmaComponents.ToolButton {
-                    //text: "ToolButton"
-                    iconSource: "call-stop"
-                }
-            }
-
-        }
+        currentTab: pageOne
+        PlasmaComponents.TabButton { tab: pageOne; text: "Icons & Buttons"; iconSource: "edit-image-face-show"}
+        PlasmaComponents.TabButton { tab: pageTwo; text: "Plasmoid"; iconSource: "basket"}
     }
 
+    PlasmaComponents.TabGroup {
+        anchors {
+            left: parent.left
+            right: parent.right
+            top: tabBar.bottom
+            bottom: parent.bottom
+        }
+
+        //currentTab: tabBar.currentTab
+
+        PlasmaComponents.Page {
+            id: pageOne
+            anchors {
+                fill: parent
+                margins: _s
+            }
+            Column {
+                anchors.fill: parent
+                spacing: _s
+
+                PlasmaComponents.Label {
+                    width: parent.width
+                    text: "This is a <i>PlasmaComponent</i>"
+                    font.pointSize: 18
+                }
+                PlasmaComponents.Label {
+                    width: parent.width
+                    text: "Icons"
+                }
+                Row {
+                    height: _h
+                    spacing: _s
+
+                    PlasmaCore.IconItem {
+                        source: "configure"
+                        width: parent.height
+                        height: width
+                    }
+                    PlasmaCore.IconItem {
+                        source: "dialog-ok"
+                        width: parent.height
+                        height: width
+                    }
+
+                    PlasmaCore.IconItem {
+                        source: "maximize"
+                        width: parent.height
+                        height: width
+                    }
+
+
+                    PlasmaCore.IconItem {
+                        source: "akonadi"
+                        width: parent.height
+                        height: width
+                    }
+                    PlasmaCore.IconItem {
+                        source: "clock"
+                        width: parent.height
+                        height: width
+                    }
+                    QtExtras.QIconItem {
+                        icon: "preferences-desktop-icons"
+                        width: parent.height
+                        height: width
+                    }
+
+                }
+                PlasmaComponents.Label {
+                    width: parent.width
+                    text: "Buttons"
+                }
+                Column {
+                    width: parent.width
+                    spacing: _s
+
+                    PlasmaComponents.Button {
+                        text: "Button"
+                        iconSource: "call-start"
+                    }
+                    PlasmaComponents.ToolButton {
+                        text: "ToolButton"
+                        iconSource: "call-stop"
+                    }
+                    PlasmaComponents.RadioButton {
+                        text: "RadioButton"
+                        //iconSource: "call-stop"
+                    }
+                }
+
+            }
+        }
+
+        PlasmaComponents.Page {
+            id: pageTwo
+            Column {
+                anchors.centerIn: parent
+                Text {
+                    text: "I'm an applet"
+                }
+                PlasmaComponents.Button {
+                    text: "Background"
+                    checked: plasmoid.backgroundHints == 1
+                    onClicked: {
+                        print("Background hints: " + plasmoid.backgroundHints)
+                        if (plasmoid.backgroundHints == 0) {
+                            plasmoid.backgroundHints = 1//TODO: make work "StandardBackground"
+                        } else {
+                            plasmoid.backgroundHints = 0//TODO: make work "NoBackground"
+                        }
+                    }
+                }
+                PlasmaComponents.Button {
+                    text: "Busy"
+                    checked: plasmoid.busy
+                    onClicked: {
+                        plasmoid.busy = !plasmoid.busy
+                    }
+                }
+            }
+        }
+    }
 
     Component.onCompleted: {
         print("Components Test Applet loaded")
