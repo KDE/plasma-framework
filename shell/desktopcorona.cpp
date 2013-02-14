@@ -186,6 +186,7 @@ void DesktopCorona::checkViews()
     } else if (m_views.count() < m_desktopWidget->screenCount()) {
         for (int i = m_views.count(); i < m_desktopWidget->screenCount(); ++i) {
             View *view = new View(this);
+            view->init();
             view->show();
             
             m_views << view;
@@ -207,12 +208,14 @@ void DesktopCorona::checkViews()
 void DesktopCorona::updateScreenOwner(int wasScreen, int isScreen, Plasma::Containment *containment)
 {
     qDebug() << "Was screen" << wasScreen << "Is screen" << isScreen <<"Containment" << containment;
-    
+
     if (containment->formFactor() == Plasma::Horizontal ||
         containment->formFactor() == Plasma::Vertical) {
 
         if (isScreen >= 0) {
             m_panelViews[containment] = new PanelView(this);
+            m_panelViews[containment]->init();
+            m_panelViews[containment]->setContainment(containment);
             m_panelViews[containment]->show();
         } else {
             if (m_panelViews.contains(containment)) {

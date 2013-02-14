@@ -28,12 +28,6 @@ View::View(Plasma::Corona *corona, QWindow *parent)
     : QQuickView(parent),
       m_corona(corona)
 {
-    if (!m_corona->package().isValid()) {
-        qWarning() << "Invalid home screen package";
-    }
-
-    setResizeMode(View::SizeRootObjectToView);
-    setSource(QUrl::fromLocalFile(m_corona->package().filePath("mainscript")));
 }
 
 View::~View()
@@ -41,7 +35,15 @@ View::~View()
     
 }
 
+void View::init()
+{
+    if (!m_corona->package().isValid()) {
+        qWarning() << "Invalid home screen package";
+    }
 
+    setResizeMode(View::SizeRootObjectToView);
+    setSource(QUrl::fromLocalFile(m_corona->package().filePath("mainscript")));
+}
 
 void View::setContainment(Plasma::Containment *cont)
 {

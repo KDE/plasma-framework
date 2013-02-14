@@ -23,9 +23,13 @@
 PanelView::PanelView(Plasma::Corona *corona, QWindow *parent)
     : View(corona, parent)
 {
+    //FIXME: this works only if done in View
     QSurfaceFormat format;
     format.setAlphaBufferSize(8);
     setFormat(format);
+    setClearBeforeRendering(true);
+    setColor(QColor(Qt::transparent));
+    setFlags(Qt::FramelessWindowHint);
 }
 
 PanelView::~PanelView()

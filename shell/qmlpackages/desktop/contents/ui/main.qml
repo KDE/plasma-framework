@@ -25,6 +25,7 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 Rectangle {
     id: root
     color: "red"
+    radius: 10
     width: 640
     height: 480
 
