@@ -26,8 +26,6 @@ endif(NOT X11_FOUND)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}
-                    ${CMAKE_CURRENT_BINARY_DIR}/src
-                    ${CMAKE_CURRENT_SOURCE_DIR}/src
                     ${KDE4_INCLUDE_DIR}
                     ${KDE4_INCLUDE_DIR}/KDE
                     ${ki18n_SOURCE_DIR}/src
@@ -37,6 +35,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     #FIXME: this will go into Qt upstream
                     ${CMAKE_INSTALL_PREFIX}/include/kdeqt5staging/
                     )
+
+
 
 if(NOT PLASMA_NO_KIO)
    include_directories(${KDE4_KIO_INCLUDES})

@@ -21,7 +21,7 @@
 
 #include <kdebug.h>
 
-#include "private/servicejob_p.h"
+#include <plasma/private/servicejob_p.h>
 
 namespace Plasma
 {
