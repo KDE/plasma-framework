@@ -173,21 +173,13 @@ bool IconItem::smooth() const
 
 bool IconItem::isValid() const
 {
-    bool v = !m_iconPixmaps.isEmpty();
-    v = m_icon.isNull() || m_svgIcon || !m_pixmapIcon.isNull() || m_imageIcon.isNull();
-    qDebug() << "valid??????" << v;
-    //return true;
-    return v;
+    return m_icon.isNull() || m_svgIcon || !m_pixmapIcon.isNull() || m_imageIcon.isNull();
 }
 
 void IconItem::paint(QPainter *painter)
 {
     if (m_iconPixmaps.isEmpty()) {
-        qDebug() << "XXXXXXXXXX icons pixmap empty";
         return;
-    }
-    foreach (QPixmap pix, m_iconPixmaps) {
-        qDebug() << "pixmap: " << pix.size();
     }
 
     painter->save();
@@ -196,8 +188,6 @@ void IconItem::paint(QPainter *painter)
 
     const QRect destRect(QPointF(boundingRect().center() - QPointF(m_iconPixmaps.first().width()/2, m_iconPixmaps.first().height()/2)).toPoint(),
                          m_iconPixmaps.first().size());
-                         //QSize(32,32));
-    qDebug() << "XXXXXXXXXX icons pixmap THERE" << destRect;
 
     if (m_animation->state() == QAbstractAnimation::Running) {
         QPixmap result = m_iconPixmaps.first();
