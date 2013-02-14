@@ -128,7 +128,9 @@ void IconItem::setSource(const QVariant &source)
         m_svgIcon = 0;
     }
 
-    loadPixmap();
+    if (width() > 0 && height() > 0) {
+        loadPixmap();
+    }
 
     emit sourceChanged();
     emit validChanged();
@@ -171,7 +173,11 @@ bool IconItem::smooth() const
 
 bool IconItem::isValid() const
 {
-    return !m_iconPixmaps.isEmpty();
+    bool v = !m_iconPixmaps.isEmpty();
+    v = m_icon.isNull() || m_svgIcon || !m_pixmapIcon.isNull() || m_imageIcon.isNull();
+    qDebug() << "valid??????" << v;
+    //return true;
+    return v;
 }
 
 void IconItem::paint(QPainter *painter)
@@ -246,7 +252,9 @@ void IconItem::loadPixmap()
     //final pixmap to paint
     QPixmap result;
     if (size<=0) {
-        m_iconPixmaps.clear();
+        //m_iconPixmaps.clear();
+        m_animation->stop();
+        update();
         return;
     } else if (m_svgIcon) {
         m_svgIcon->resize(size, size);
@@ -259,6 +267,8 @@ void IconItem::loadPixmap()
         result = QPixmap::fromImage(m_imageIcon);
     } else {
         m_iconPixmaps.clear();
+        m_animation->stop();
+        update();
         return;
     }
 
@@ -292,10 +302,12 @@ void IconItem::geometryChanged(const QRectF &newGeometry,
 {
     if (newGeometry.size() != oldGeometry.size()) {
         m_iconPixmaps.clear();
-        loadPixmap();
-    }
+        if (newGeometry.width() > 0 && newGeometry.height() > 0) {
+            loadPixmap();
+        }
 
-    QQuickItem::geometryChanged(newGeometry, oldGeometry);
+        QQuickItem::geometryChanged(newGeometry, oldGeometry);
+    }
 }
 
 #include "iconitem.moc"
