@@ -132,7 +132,6 @@ void PlasmoidPackage::initPackage(Package *package)
 
     package->addFileDefinition("mainconfigui", "ui/config.ui", i18n("Main Config UI File"));
     package->addFileDefinition("mainconfigxml", "config/main.xml", i18n("Configuration XML file"));
-    package->addDirectoryDefinition("animations", "animations", i18n("Animation scripts"));
 }
 
 QString ContainmentPackage::mainScriptConfigKey() const
@@ -188,7 +187,6 @@ void ThemePackage::initPackage(Package *package)
                       i18n("Theme for the logout dialog"));
 
     package->addDirectoryDefinition("wallpapers", "wallpapers/", i18n("Wallpaper packages"));
-    package->addDirectoryDefinition("animations", "animations/", i18n("Animation scripts"));
 
     package->addDirectoryDefinition("widgets", "widgets/", i18n("Images for widgets"));
     package->addFileDefinition("widgets/background", "widgets/background.svg",
