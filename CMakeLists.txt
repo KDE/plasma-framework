@@ -135,7 +135,7 @@ include_directories( ${kdeqt5staging_INCLUDE_DIRS} ${kdeqt5staging_INCLUDE_DIR} 
                    )
 
 # for including config.h and for includes like <kparts/foo.h>
-include_directories( ${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/interfaces ${CMAKE_SOURCE_DIR}src/plasma/includes)
+include_directories( ${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR} ${CMAKE_BINARY_DIR}/src ${CMAKE_SOURCE_DIR}/interfaces ${CMAKE_SOURCE_DIR}src/plasma/includes)
 
 if(QCA2_FOUND)
     include_directories(
