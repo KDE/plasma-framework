@@ -1,7 +1,5 @@
 project(qtextracomponents)
 
-#include(KDE4Defaults)
-
 add_subdirectory(tests)
 
 set(qtextracomponents_SRCS

@@ -24,8 +24,8 @@
 #include <QtQml>
 #include <QDebug>
 
-// #include "qpixmapitem.h"
-// #include "qimageitem.h"
+#include "qpixmapitem.h"
+#include "qimageitem.h"
 #include "qiconitem.h"
 #include "mouseeventlistener.h"
 #include "columnproxymodel.h"
@@ -39,8 +39,8 @@ void QtExtraComponentsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.qtextracomponents"));
     qDebug() << "=========> import loading: " << uri;
-//     qmlRegisterType<QPixmapItem>(uri, 0, 1, "QPixmapItem");
-//     qmlRegisterType<QImageItem>(uri, 0, 1, "QImageItem");
+    qmlRegisterType<QPixmapItem>(uri, 0, 1, "QPixmapItem");
+    qmlRegisterType<QImageItem>(uri, 0, 1, "QImageItem");
     qmlRegisterType<QIconItem>(uri, 0, 1, "QIconItem");
     qmlRegisterType<MouseEventListener>(uri, 0, 1, "MouseEventListener");
     qmlRegisterType<ColumnProxyModel>(uri, 0, 1, "ColumnProxyModel");
