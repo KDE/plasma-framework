@@ -143,13 +143,13 @@ public:
     bool hoverEnabled() const;
 
 protected:
-    void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
-    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
-    void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-    void wheelEvent(QGraphicsSceneWheelEvent *event);
-    bool sceneEventFilter(QGraphicsItem *i, QEvent *e);
+//     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+//     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+//     void mousePressEvent(QGraphicsSceneMouseEvent *event);
+//     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+//     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+//     void wheelEvent(QGraphicsSceneWheelEvent *event);
+//     bool sceneEventFilter(QGraphicsItem *i, QEvent *e);
 
 Q_SIGNALS:
     void pressed(KDeclarativeMouseEvent *mouse);
