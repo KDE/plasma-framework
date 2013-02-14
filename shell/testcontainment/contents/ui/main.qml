@@ -20,7 +20,6 @@ import QtQuick 2.0
 
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
-import org.kde.qtextracomponents 0.1 as QtExtras
 
 Rectangle {
     id: root
@@ -41,11 +40,6 @@ Rectangle {
             applet.anchors.fill= applet.parent
             applet.visible = true
         }
-    }
-
-    PlasmaCore.Svg {
-        id: actionssvg
-        imagePath: "widgets/configuration-icons"
     }
 
     Component {
@@ -103,18 +97,7 @@ Rectangle {
                     bottomMargin: parent.margins.bottom
                 }
             }
-            PlasmaCore.SvgItem {
-                svg: actionssvg
-                elementId: "rotate"
-                width: 16
-                height: width
-                anchors.margins: frame.margins.left
-                anchors {
-                    top: parent.top
-                    left: parent.left
-                }
-                //Rectangle { color: "white"; opacity: 0.2; anchors.fill: parent; }
-            }
+
             PlasmaComponents.BusyIndicator {
                 z: 1000
                 visible: applet.length > 0 && applet[0].busy
@@ -122,37 +105,6 @@ Rectangle {
                 anchors.centerIn: parent
             }
         }
-    }
-
-    QtExtras.QIconItem {
-        icon: "preferences-desktop-icons"
-        width: 96
-        height: width
-        MouseArea {
-            anchors.fill: parent
-            drag.target: parent
-            onClicked: {
-                var n = parent.width == 96 ? 256 : 96;
-                parent.width = n;
-                parent.height = n;
-            }
-        }
-        Behavior on width { PropertyAnimation { easing.type: Easing.InOutDouble; duration: 100 } }
-        Behavior on height { PropertyAnimation { easing.type: Easing.InOutDouble; duration: 100 } }
-    }
-
-    PlasmaCore.IconItem {
-        source: "configure"
-        x: 50
-        y: 350
-        width: 48
-        height: 48
-        //Rectangle { color: "white"; opacity: 0.2; anchors.fill: parent; }
-        MouseArea {
-            anchors.fill: parent
-            drag.target: parent
-        }
-
     }
 
     Component.onCompleted: {
