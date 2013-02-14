@@ -19,10 +19,10 @@
 #ifndef QPIXMAPITEM_H
 #define QPIXMAPITEM_H
 
-#include <QQuickItem>
+#include <QQuickPaintedItem>
 #include <QPixmap>
 
-class QPixmapItem : public QQuickItem
+class QPixmapItem : public QQuickPaintedItem
 {
     Q_OBJECT
 
@@ -59,7 +59,7 @@ public:
     FillMode fillMode() const;
     void setFillMode(FillMode mode);
 
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    void paint(QPainter *painter);
 
     bool isNull() const;
 

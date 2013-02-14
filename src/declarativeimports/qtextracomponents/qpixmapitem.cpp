@@ -23,11 +23,11 @@
 
 
 QPixmapItem::QPixmapItem(QQuickItem *parent)
-    : QQuickItem(parent),
+    : QQuickPaintedItem(parent),
       m_smooth(false),
       m_fillMode(QPixmapItem::Stretch)
 {
-    setFlag(QGraphicsItem::ItemHasNoContents, false);
+    setFlag(ItemHasContents, true);
 }
 
 
@@ -93,11 +93,8 @@ void QPixmapItem::setFillMode(QPixmapItem::FillMode mode)
     emit fillModeChanged();
 }
 
-void QPixmapItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void QPixmapItem::paint(QPainter *painter)
 {
-    Q_UNUSED(option);
-    Q_UNUSED(widget);
-
     if (m_pixmap.isNull()) {
         return;
     }

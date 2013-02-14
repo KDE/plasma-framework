@@ -6,7 +6,7 @@ add_subdirectory(tests)
 
 set(qtextracomponents_SRCS
     qtextracomponentsplugin.cpp
-#     qpixmapitem.cpp
+    qpixmapitem.cpp
 #     qimageitem.cpp
     qiconitem.cpp
     mouseeventlistener.cpp
