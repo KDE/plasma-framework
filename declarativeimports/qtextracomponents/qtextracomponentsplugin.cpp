@@ -21,7 +21,7 @@
 
 #include "qtextracomponentsplugin.h"
 
-#include <QQmlComponent>
+#include <QtQml>
 #include <QDebug>
 
 // #include "qpixmapitem.h"
