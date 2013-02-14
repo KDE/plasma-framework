@@ -27,23 +27,36 @@ Item {
     width: 100
     height: 100
 
+    property int _s: 12
+    property int _h: 32
+
     Item {
         id: pageOne
         anchors {
             fill: parent
+            margins: _s
         }
         Column {
             anchors.fill: parent
+            spacing: _s
+
             PlasmaComponents.Label {
                 width: parent.width
                 text: "This is a <i>PlasmaComponent</i>"
+                font.pointSize: 18
+            }
+
+            PlasmaComponents.Label {
+                width: parent.width
+                text: "Icons"
             }
 //             PlasmaComponents.TabBar {
 //                 height: 32
 //                 width: parent.width
 //             }
             Row {
-                height: 96
+                height: _h*2
+                spacing: _s
 
                 QtExtras.QIconItem {
                     icon: "preferences-desktop-icons"
@@ -57,7 +70,30 @@ Item {
                     height: width
                 }
 
+                PlasmaCore.IconItem {
+                    source: "akonadi"
+                    width: parent.height
+                    height: width
+                }
             }
+            PlasmaComponents.Label {
+                width: parent.width
+                text: "Buttons"
+            }
+            Row {
+                height: _h
+                spacing: _s
+
+                PlasmaComponents.Button {
+                    text: "Button"
+                    iconSource: "call-start"
+                }
+                PlasmaComponents.ToolButton {
+                    //text: "ToolButton"
+                    iconSource: "call-stop"
+                }
+            }
+
         }
     }
 
