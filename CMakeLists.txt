@@ -130,8 +130,7 @@ remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_STRICT_ITERATORS -DQT_NO_CAST_FR
 
 
 ################# setup the include directories #################
-include_directories( ${CMAKE_SOURCE_DIR}/src/plasma/includes
-                     ${kdeqt5staging_INCLUDE_DIRS}
+include_directories( ${kdeqt5staging_INCLUDE_DIRS}
                      ${kdeqt5staging_INCLUDE_DIR} 
                      ${KDE4_INCLUDES}
                      ${KF5_INCLUDE_DIRS}  # since e-c-m 0.0.7
