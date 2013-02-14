@@ -30,8 +30,6 @@
 class AppletInterface;
 
 class QmlObject;
-class ScriptEnv;
-class EngineAccess;
 
 class DeclarativeAppletScript : public Plasma::AppletScript
 {
@@ -49,7 +47,6 @@ public:
 
     bool include(const QString &path);
 
-    ScriptEnv *scriptEnv();
     QQmlEngine *engine() const;
 
     static QObject *loadui(const QString &filename);
@@ -72,7 +69,6 @@ Q_SIGNALS:
 private:
     QmlObject *m_qmlObject;
     AppletInterface *m_interface;
-    ScriptEnv *m_env;
 };
 
 #endif

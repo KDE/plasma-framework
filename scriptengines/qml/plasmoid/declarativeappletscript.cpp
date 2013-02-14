@@ -46,7 +46,6 @@
 #include "plasmoid/appletinterface.h"
 #include "plasmoid/containmentinterface.h"
 
-#include "common/scriptenv.h"
 #include "declarative/qmlobject.h"
 #include "declarative/packageaccessmanagerfactory.h"
 
@@ -57,8 +56,7 @@ K_EXPORT_PLASMA_APPLETSCRIPTENGINE(declarativeappletscript, DeclarativeAppletScr
 DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariantList &args)
     : Plasma::AppletScript(parent),
       m_qmlObject(0),
-      m_interface(0),
-      m_env(0)
+      m_interface(0)
 {
     qmlRegisterType<AppletInterface>();
     Q_UNUSED(args);
@@ -170,22 +168,18 @@ bool DeclarativeAppletScript::init()
 
 QString DeclarativeAppletScript::filePath(const QString &type, const QString &file) const
 {
-    const QString path = m_env->filePathFromScriptContext(type.toLocal8Bit().constData(), file);
-
-    if (!path.isEmpty()) {
-        return path;
-    }
-
     return package().filePath(type.toLocal8Bit().constData(), file);
 }
 
 void DeclarativeAppletScript::configChanged()
 {
+/*TODO: invent something that can replace event listeners
     if (!m_env) {
         return;
     }
 
     m_env->callEventListeners("configchanged");
+*/
 }
 
 QObject *DeclarativeAppletScript::loadui(const QString &filename)
@@ -233,10 +227,6 @@ TODO: callEventListeners is broken without qscriptengine
 
 void DeclarativeAppletScript::executeAction(const QString &name)
 {
-    if (!m_env) {
-        return;
-    }
-
     if (m_qmlObject->rootObject()) {
          QMetaObject::invokeMethod(m_qmlObject->rootObject(), QString("action_" + name).toLatin1(), Qt::DirectConnection);
     }
@@ -244,12 +234,10 @@ void DeclarativeAppletScript::executeAction(const QString &name)
 
 bool DeclarativeAppletScript::include(const QString &path)
 {
+    /*TODO: probably include() doesn't make any sense anymore
     return m_env->include(path);
-}
-
-ScriptEnv *DeclarativeAppletScript::scriptEnv()
-{
-    return m_env;
+    */
+    return false;
 }
 
 void DeclarativeAppletScript::setupObjects()
