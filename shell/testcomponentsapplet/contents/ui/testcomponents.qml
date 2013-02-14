@@ -1,5 +1,5 @@
 /*
- *  Copyright 2013 Marco Martin <mart@kde.org>
+ *  Copyright 2013 Sebastian Kügler <sebas@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,10 +27,40 @@ Item {
     width: 100
     height: 100
 
-    PlasmaComponents.Label {
-        anchors.centerIn: parent
-        text: "This is a PlasmaComponent"
+    Item {
+        id: pageOne
+        anchors {
+            fill: parent
+        }
+        Column {
+            anchors.fill: parent
+            PlasmaComponents.Label {
+                width: parent.width
+                text: "This is a <i>PlasmaComponent</i>"
+            }
+//             PlasmaComponents.TabBar {
+//                 height: 32
+//                 width: parent.width
+//             }
+            Row {
+                height: 96
+
+                QtExtras.QIconItem {
+                    icon: "preferences-desktop-icons"
+                    width: parent.height
+                    height: width
+                }
+
+                PlasmaCore.IconItem {
+                    source: "configure"
+                    width: parent.height
+                    height: width
+                }
+
+            }
+        }
     }
+
 
     Component.onCompleted: {
         print("Components Test Applet loaded")
