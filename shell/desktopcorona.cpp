@@ -22,7 +22,10 @@
 #include <QApplication>
 #include <QDebug>
 #include <QDesktopWidget>
+
+#include "panelview.h"
 #include "view.h"
+
 
 static const QString s_panelTemplatesPath("plasma-layout-templates/panels/*");
 
@@ -183,6 +186,7 @@ void DesktopCorona::checkViews()
     } else if (m_views.count() < m_desktopWidget->screenCount()) {
         for (int i = m_views.count(); i < m_desktopWidget->screenCount(); ++i) {
             View *view = new View(this);
+            view->show();
             
             m_views << view;
         }
@@ -203,12 +207,31 @@ void DesktopCorona::checkViews()
 void DesktopCorona::updateScreenOwner(int wasScreen, int isScreen, Plasma::Containment *containment)
 {
     qDebug() << "Was screen" << wasScreen << "Is screen" << isScreen <<"Containment" << containment;
-    if (isScreen < 0 || m_views.count() < isScreen + 1) {
-        qWarning() << "Invalid screen";
-        return;
-    }
+    
+    if (containment->formFactor() == Plasma::Horizontal ||
+        containment->formFactor() == Plasma::Vertical) {
 
-    m_views[isScreen]->setContainment(containment);
+        if (isScreen >= 0) {
+            m_panelViews[containment] = new PanelView(this);
+            m_panelViews[containment]->show();
+        } else {
+            if (m_panelViews.contains(containment)) {
+                m_panelViews[containment]->setContainment(0);
+                m_panelViews[containment]->deleteLater();
+                m_panelViews.remove(containment);
+            }
+        }
+    
+    //Desktop view
+    } else {
+    
+        if (isScreen < 0 || m_views.count() < isScreen + 1) {
+            qWarning() << "Invalid screen";
+            return;
+        }
+
+        m_views[isScreen]->setContainment(containment);
+    }
 }
 
 #include "desktopcorona.moc"

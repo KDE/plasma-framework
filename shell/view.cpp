@@ -34,7 +34,6 @@ View::View(Plasma::Corona *corona, QWindow *parent)
 
     setResizeMode(View::SizeRootObjectToView);
     setSource(QUrl::fromLocalFile(m_corona->package().filePath("mainscript")));
-    show();
 }
 
 View::~View()
@@ -48,6 +47,11 @@ void View::setContainment(Plasma::Containment *cont)
 {
     if (m_containment) {
         disconnect(m_containment.data(), 0, this, 0);
+        QObject *oldGraphicObject = m_containment.data()->property("graphicObject").value<QObject *>();
+        if (oldGraphicObject) {
+            //make sure the graphic object won't die with us
+            oldGraphicObject->setParent(cont);
+        }
     }
 
     m_containment = cont;

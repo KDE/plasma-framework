@@ -35,6 +35,7 @@ set(CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 add_executable(testplasma2
     main.cpp
     desktopcorona.cpp
+    panelview.cpp
     view.cpp
 )
 
