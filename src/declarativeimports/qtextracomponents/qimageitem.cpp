@@ -22,12 +22,12 @@
 #include <QPainter>
 
 
-QImageItem::QImageItem(QDeclarativeItem *parent)
-    : QDeclarativeItem(parent),
+QImageItem::QImageItem(QQuickItem *parent)
+    : QQuickPaintedItem(parent),
       m_smooth(false),
       m_fillMode(QImageItem::Stretch)
 {
-    setFlag(QGraphicsItem::ItemHasNoContents, false);
+    setFlag(ItemHasContents, true);
 }
 
 
@@ -93,11 +93,8 @@ void QImageItem::setFillMode(QImageItem::FillMode mode)
     emit fillModeChanged();
 }
 
-void QImageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void QImageItem::paint(QPainter *painter)
 {
-    Q_UNUSED(option);
-    Q_UNUSED(widget);
-
     if (m_image.isNull()) {
         return;
     }
