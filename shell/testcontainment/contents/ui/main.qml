@@ -52,21 +52,36 @@ Rectangle {
         id: appletContainerComponent
         PlasmaCore.FrameSvgItem {
             id: frame
-            x: 50 - tmargin
-            y: 50 - lmargin
-            width: large + lmargin + rmargin
-            height: large + tmargin + bmargin
+            x: 50
+            y: 50
+
+            width: large + frame.margins.left + frame.margins.right
+            height: large + frame.margins.top + frame.margins.bottom
 
             property alias applet: appletContainer.children
+
             property int small: 90
             property int large: 400
 
-            property int lmargin: imagePath != "" ? frame.margins.left : 0
-            property int rmargin: imagePath != "" ? frame.margins.right : 0
-            property int tmargin: imagePath != "" ? frame.margins.top : 0
-            property int bmargin: imagePath != "" ? frame.margins.bottom : 0
+            property int tm: 0
+            property int lm: 0
 
             imagePath: applet.length > 0 && applet[0].backgroundHints == 0 ? "" : "widgets/background"
+
+            onImagePathChanged: {
+                // Reposition applet so it fits into the frame
+                if (imagePath == "") {
+                    frame.x = frame.x + lm;
+                    frame.y = frame.y + tm;
+                } else {
+                    // Cache values, so we can subtract them when the background is removed
+                    frame.lm = frame.margins.left;
+                    frame.tm = frame.margins.top;
+
+                    frame.x = frame.x - frame.margins.left;
+                    frame.y = frame.y - frame.margins.top;
+                }
+            }
             MouseArea {
                 anchors.fill: parent
                 drag.target: parent
@@ -127,7 +142,7 @@ Rectangle {
     }
 
     PlasmaCore.IconItem {
-        source: "accessories-dictionary"
+        source: "configure"
         x: 50
         y: 350
         width: 48
