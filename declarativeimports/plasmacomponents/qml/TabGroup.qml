@@ -41,7 +41,7 @@
 import QtQuick 2.0
 import "private/TabGroup.js" as Engine
 
-import "." 0.1
+import "." 0.1 as PlasmaComponents
 
 /**
  * Provides a set of pages for a tab-based interface.
@@ -156,7 +156,7 @@ Item {
                 state = ""
                 if (priv.incomingPage) {
                     if (priv.incomingPage.status != undefined) {
-                        priv.incomingPage.status = PageStatus.Active
+                        priv.incomingPage.status = PlasmaComponents.PageStatus.Active
                     }
                     priv.incomingPage = null
                 }
@@ -165,7 +165,7 @@ Item {
             function outgoingDone() {
                 if (priv.outgoingPage) {
                     if (priv.outgoingPage.status != undefined) {
-                        priv.outgoingPage.status = PageStatus.Active
+                        priv.outgoingPage.status = PlasmaComponents.PageStatus.Active
                     }
                     priv.outgoingPage.visible = false
                     priv.outgoingPage = null
@@ -245,7 +245,7 @@ Item {
             incomingPage = currentTabContainer.children[0]
             incomingPage.visible = true
             if (incomingPage.status != undefined) {
-                incomingPage.status = PageStatus.Activating
+                incomingPage.status = PlasmaComponents.PageStatus.Activating
             }
             if (currentIndex < newCurrentIndex) {
                 currentTabContainer.state = "HiddenLeft"

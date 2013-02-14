@@ -40,7 +40,7 @@
 
 import QtQuick 2.0
 
-import "." 0.1
+import "." 0.1 as PlasmaComponents
 
 /**
  * Defines the content of a piece of the user interface, it's meant to be
@@ -62,7 +62,7 @@ Item {
      * - PageStatus.Active: the page is the current active page
      * - PageStatus.Deactivating: the page is transitioning into becoming inactive
      */
-    property int status: PageStatus.Inactive
+    property int status: PlasmaComponents.PageStatus.Inactive
 
     /**
      * type:PageStack
@@ -73,7 +73,7 @@ Item {
     /**
      * Sets the orientation for the Page
      */
-    property int orientationLock: PageOrientation.Automatic
+    property int orientationLock: PlasmaComponents.PageOrientation.Automatic
 
     /**
      * Defines the toolbar contents for the page. If the page stack is set up
