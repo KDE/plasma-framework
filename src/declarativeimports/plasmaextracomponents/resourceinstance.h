@@ -19,7 +19,7 @@
 #ifndef RESOURCEINSTANCE_H
 #define RESOURCEINSTANCE_H
 
-#include <QDeclarativeItem>
+#include <QQuickItem>
 #include <QUrl>
 
 namespace KActivities {
@@ -29,7 +29,7 @@ namespace KActivities {
 class QTimer;
 class QGraphicsView;
 
-class ResourceInstance : public QDeclarativeItem
+class ResourceInstance : public QQuickItem
 {
     Q_OBJECT
 
@@ -39,7 +39,7 @@ class ResourceInstance : public QDeclarativeItem
     //Q_PROPERTY(OpenReason openReason READ openReason)
 
 public:
-    ResourceInstance(QDeclarativeItem *parent = 0);
+    ResourceInstance(QQuickItem *parent = 0);
     ~ResourceInstance();
 
     QUrl uri() const;

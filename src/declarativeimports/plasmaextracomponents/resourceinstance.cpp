@@ -28,8 +28,8 @@
 #include <KDebug>
 
 
-ResourceInstance::ResourceInstance(QDeclarativeItem *parent)
-    : QDeclarativeItem(parent)
+ResourceInstance::ResourceInstance(QQuickItem *parent)
+    : QQuickItem(parent)
 {
     m_syncTimer = new QTimer(this);
     m_syncTimer->setSingleShot(true);

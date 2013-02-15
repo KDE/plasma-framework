@@ -21,19 +21,18 @@
 #ifndef PLASMAEXTRACOMPONENTSPLUGIN_H
 #define PLASMAEXTRACOMPONENTSPLUGIN_H
 
-#include <QDeclarativeExtensionPlugin>
+#include <QQmlExtensionPlugin>
 
-class QDeclarativeEngine;
+class QQmlEngine;
 
-class PlasmaExtraComponentsPlugin : public QDeclarativeExtensionPlugin
+class PlasmaExtraComponentsPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
 
 public:
-    void initializeEngine(QDeclarativeEngine *engine, const char *uri);
+    void initializeEngine(QQmlEngine *engine, const char *uri);
     void registerTypes(const char *uri);
 };
-
-Q_EXPORT_PLUGIN2(plasmaexracomponentsplugin, PlasmaExtraComponentsPlugin);
 
 #endif

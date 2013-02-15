@@ -28,7 +28,7 @@
 #include <Plasma/Theme>
 
 AppBackgroundProvider::AppBackgroundProvider()
-  : QDeclarativeImageProvider(QDeclarativeImageProvider::Image)
+  : QQuickImageProvider(QQuickImageProvider::Image)
 {
 }
 

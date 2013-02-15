@@ -20,17 +20,17 @@
 #include "plasmaextracomponentsplugin.h"
 
 #include "appbackgroundprovider_p.h"
-#include "resourceinstance.h"
+//#include "resourceinstance.h"
 #include "fallbackcomponent.h"
 
-#include <QtDeclarative/qdeclarative.h>
-#include <QtDeclarative/QDeclarativeEngine>
+#include <QtQml>
+#include <QQmlEngine>
 
 
 // #include <KSharedConfig>
 // #include <KConfigGroup>
 
-void PlasmaExtraComponentsPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
+void PlasmaExtraComponentsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.extras"));
     engine->addImageProvider(QLatin1String("appbackgrounds"), new AppBackgroundProvider);
@@ -39,7 +39,7 @@ void PlasmaExtraComponentsPlugin::initializeEngine(QDeclarativeEngine *engine, c
 void PlasmaExtraComponentsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.extras"));
-    qmlRegisterType<ResourceInstance>(uri, 0, 1, "ResourceInstance");
+    //qmlRegisterType<ResourceInstance>(uri, 0, 1, "ResourceInstance");
     qmlRegisterType<FallbackComponent>(uri, 0, 1, "FallbackComponent");
 }
 

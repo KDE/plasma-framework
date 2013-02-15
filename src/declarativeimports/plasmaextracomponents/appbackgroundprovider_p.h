@@ -20,10 +20,10 @@
 #ifndef APPBACKGROUND_PROVIDER_H
 #define APPBACKGROUND_PROVIDER_H
 
-#include <QDeclarativeImageProvider>
+#include <QQuickImageProvider>
 
 
-class AppBackgroundProvider : public QDeclarativeImageProvider
+class AppBackgroundProvider : public QQuickImageProvider
 {
 
 public:
