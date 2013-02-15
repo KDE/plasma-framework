@@ -212,10 +212,24 @@ void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)
     desktopMenu.addAction("Menu Item 1");
     desktopMenu.addAction("Menu Item 2");
 
-    
-    foreach (QAction *action, applet()->contextualActions()) {
-        if (action) {
-            desktopMenu.addAction(action);
+    //FIXME: very inefficient appletAt() implementation
+    AppletInterface *applet = 0;
+    foreach (QObject *appletObject, m_appletInterfaces) {
+        if (applet = qobject_cast<AppletInterface *>(appletObject)) {
+            if (applet->contains(applet->mapFromItem(this, event->posF()))) {
+                break;
+            } else {
+                applet = 0;
+            }
+        }
+    }
+    qDebug() << "Invoking menu for applet" << applet;
+
+    if (applet) {
+        foreach (QAction *action, applet->contextualActions()) {
+            if (action) {
+                desktopMenu.addAction(action);
+            }
         }
     }
     desktopMenu.exec(event->globalPos());
