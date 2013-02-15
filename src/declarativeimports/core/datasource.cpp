@@ -89,6 +89,7 @@ void DataSource::setInterval(const int interval)
 //TODO: event compression for this
 void DataSource::setupData()
 {
+//     qDebug() << " loading engine " << m_engine;
     //FIXME: should all services be deleted just because we're changing the interval, etc?
     qDeleteAll(m_services);
     m_services.clear();
@@ -99,6 +100,7 @@ void DataSource::setupData()
         qWarning() << "DataEngine" << m_engine << "not found";
         return;
     }
+//     qDebug() << "Engine loaed .. . " << m_engine << m_dataEngineConsumer;
 
     if (engine != m_dataEngine) {
         if (m_dataEngine) {

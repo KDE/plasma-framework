@@ -457,7 +457,7 @@ QModelIndex DataModel::index(int row, int column, const QModelIndex &parent) con
         return QModelIndex();
     }
 
-    return createIndex(row, column, 0);
+    return createIndex(row, column);
 }
 
 QModelIndex DataModel::parent(const QModelIndex &child) const

@@ -32,7 +32,7 @@
 // #include <Plasma/QueryMatch>
 
 #include "datasource.h"
-// // #include "datamodel.h"
+#include "datamodel.h"
 #include "framesvgitem.h"
 // #include "runnermodel.h"
 #include "svgitem.h"
@@ -81,7 +81,7 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterType<ThemeProxy>(uri, 0, 1, "Theme");
 
     qmlRegisterType<Plasma::DataSource>(uri, 0, 1, "DataSource");
-//     qmlRegisterType<Plasma::DataModel>(uri, 0, 1, "DataModel");
+    qmlRegisterType<Plasma::DataModel>(uri, 0, 1, "DataModel");
 //     qmlRegisterType<Plasma::SortFilterModel>(uri, 0, 1, "SortFilterModel");
 // 
 //     qmlRegisterType<DialogProxy>(uri, 0, 1, "Dialog");
