@@ -35,6 +35,8 @@ class QmlAppletScript;
 class QSignalMapper;
 class QSizeF;
 
+class ConfigPropertyMap;
+
 
 namespace Plasma
 {
@@ -58,6 +60,7 @@ class AppletInterface : public QQuickItem
     Q_PROPERTY(FormFactor formFactor READ formFactor NOTIFY formFactorChanged)
     Q_PROPERTY(Location location READ location NOTIFY locationChanged)
     Q_PROPERTY(QString currentActivity READ currentActivity NOTIFY contextChanged)
+    Q_PROPERTY(QObject* configuration READ configuration CONSTANT)
     Q_PROPERTY(QString activeConfig WRITE setActiveConfig READ activeConfig)
     Q_PROPERTY(bool busy WRITE setBusy READ isBusy NOTIFY busyChanged)
     Q_PROPERTY(bool expanded WRITE setExpanded READ isExpanded NOTIFY expandedChanged)
@@ -184,6 +187,8 @@ enum IntervalAlignment {
 
     QString currentActivity() const;
 
+    QObject* configuration() const;
+
     bool isBusy() const;
     void setBusy(bool busy);
 
@@ -232,6 +237,8 @@ private:
     QString m_currentConfig;
     QMap<QString, Plasma::ConfigLoader*> m_configs;
 
+
+    ConfigPropertyMap *m_configuration;
 
 //UI-specific members ------------------
     QWeakPointer<QObject> m_uiObject;

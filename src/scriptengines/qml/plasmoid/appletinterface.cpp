@@ -42,6 +42,7 @@
 #include <Plasma/Package>
 
 #include "containmentinterface.h"
+#include "declarative/configpropertymap.h"
 
 Q_DECLARE_METATYPE(AppletInterface*)
 
@@ -54,6 +55,9 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
       m_expanded(false)
 {
     qmlRegisterType<AppletInterface>();
+    
+    m_configuration = new ConfigPropertyMap(applet()->configScheme(), this);
+
     connect(this, SIGNAL(releaseVisualFocus()), applet(), SIGNAL(releaseVisualFocus()));
     connect(this, SIGNAL(configNeedsSaving()), applet(), SIGNAL(configNeedsSaving()));
     connect(applet(), SIGNAL(immutabilityChanged(Plasma::ImmutabilityType)), this, SIGNAL(immutableChanged()));
@@ -105,6 +109,11 @@ AppletInterface::Location AppletInterface::location() const
 QString AppletInterface::currentActivity() const
 {
     return applet()->containment()->activity();
+}
+
+QObject* AppletInterface::configuration() const
+{
+    return m_configuration;
 }
 
 QString AppletInterface::icon() const
