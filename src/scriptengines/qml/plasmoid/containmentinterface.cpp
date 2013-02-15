@@ -310,6 +310,7 @@ void ContainmentInterface::addContainmentActions(KMenu &desktopMenu, QEvent *eve
         return;
     }
 
+    //STUB
     desktopMenu.addAction("Containment Menu Item 1");
     desktopMenu.addAction("Containment Menu Item 2");
     //TODO: reenable ContainmentActions plugins

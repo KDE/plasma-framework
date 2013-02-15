@@ -166,6 +166,13 @@ void AppletPrivate::init(const QString &packagePath)
 void AppletPrivate::cleanUpAndDelete()
 {
     // reimplemented in the UI specific library
+    if (configLoader) {
+        configLoader->setDefaults();
+    }
+
+    resetConfigurationObject();
+
+    q->deleteLater();
 }
 
 void AppletPrivate::showConfigurationRequiredMessage(bool show, const QString &reason)
