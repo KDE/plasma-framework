@@ -19,7 +19,7 @@
 #ifndef CREDENTIALS_H
 #define CREDENTIALS_H
 
-#include "plasma.h"
+#include "plasma/plasma.h"
 
 #include <QtCore/QObject>
 #include <QtCore/QDataStream>

@@ -19,6 +19,7 @@
 #ifndef SERVICEJOB_P_H
 #define SERVICEJOB_P_H
 
+#include "../remote/credentials.h"
 #include "../servicejob.h"
 
 #include <QString>
@@ -44,6 +45,7 @@ public:
     QString operation;
     QHash<QString, QVariant> parameters;
     QVariant result;
+    Credentials identity;
     bool m_allowAutoStart;
 };
 
