@@ -63,6 +63,10 @@ public:
     Q_INVOKABLE QRectF screenGeometry(int id) const;
     Q_INVOKABLE QVariantList availableScreenRegion(int id) const;
 
+protected:
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+
 Q_SIGNALS:
     void appletAdded(QObject *applet, const QPointF &pos);
     void appletRemoved(QObject *applet);

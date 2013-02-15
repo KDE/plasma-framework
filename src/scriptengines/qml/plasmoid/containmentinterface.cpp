@@ -25,6 +25,7 @@
 #include <QQmlProperty>
 
 #include <KDebug>
+#include <KMenu>
 
 #include <Plasma/Corona>
 #include <Plasma/Package>
@@ -36,6 +37,9 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
     : AppletInterface(parent),
       m_wallpaperQmlObject(0)
 {
+    //TODO: will accept all events specified as registered with containment actions
+    setAcceptedMouseButtons(Qt::RightButton);
+
     qmlRegisterType<ContainmentInterface>();
 
     connect(containment(), SIGNAL(appletRemoved(Plasma::Applet *)), this, SLOT(appletRemovedForward(Plasma::Applet *)));
@@ -195,6 +199,29 @@ void ContainmentInterface::loadWallpaper()
 QString ContainmentInterface::activityId() const
 {
     return containment()->activity();
+}
+
+
+
+void ContainmentInterface::mousePressEvent(QMouseEvent *event)
+{
+    event->accept();
+}
+
+void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)
+{
+    KMenu desktopMenu;
+    desktopMenu.addAction("Menu Item 1");
+    desktopMenu.addAction("Menu Item 2");
+
+    
+    foreach (QAction *action, applet()->contextualActions()) {
+        if (action) {
+            desktopMenu.addAction(action);
+        }
+    }
+    desktopMenu.exec(event->globalPos());
+    event->accept();
 }
 
 #include "moc_containmentinterface.cpp"
