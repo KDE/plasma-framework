@@ -26,7 +26,6 @@
 #include <kservice.h>
 
 #include <plasma/plasma_export.h>
-#include "plasma/remote/credentials.h"
 
 namespace Plasma
 {
@@ -92,11 +91,6 @@ public:
     QHash<QString, QVariant> parameters() const;
 
     /**
-     * @return the identity of the caller of this operation
-     */
-    Credentials identity() const;
-
-    /**
      * Returns the result of the operation
      *
      * The result will be invalid if the job has not completed yet, or
@@ -126,9 +120,6 @@ private:
     Q_PRIVATE_SLOT(d, void preventAutoStart())
 
     ServiceJobPrivate * const d;
-
-    friend class ServiceProvider;
-    friend class RemoteServiceJob;
 };
 
 } // namespace Plasma
