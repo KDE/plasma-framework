@@ -22,7 +22,6 @@
 #include <QScriptEngine>
 #include <QScriptValue>
 #include <QScriptValueIterator>
-#include <kdebug.h>
 
 #include <plasma/dataengine.h>
 #include <plasma/service.h>
@@ -34,7 +33,7 @@ Q_DECLARE_METATYPE(Plasma::DataEngine::Data)
 template <class M>
 QScriptValue qScriptValueFromMap(QScriptEngine *eng, const M &map)
 {
-    //kDebug() << "qScriptValueFromMap called";
+    //qDebug() << "qScriptValueFromMap called";
     QScriptValue obj = eng->newObject();
     typename M::const_iterator begin = map.constBegin();
     typename M::const_iterator end = map.constEnd();
@@ -55,7 +54,7 @@ QScriptValue qScriptValueFromMap(QScriptEngine *eng, const M &map)
 template <class M>
 void qScriptValueToMap(const QScriptValue &value, M &map)
 {
-    //kDebug() << "qScriptValueToMap called";
+    //qDebug() << "qScriptValueToMap called";
     QScriptValueIterator it(value);
     while (it.hasNext()) {
         it.next();
