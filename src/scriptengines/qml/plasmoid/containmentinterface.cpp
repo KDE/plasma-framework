@@ -55,15 +55,9 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
      loadWallpaper();
 }
 
-QVariantList ContainmentInterface::applets()
+QList <QObject *> ContainmentInterface::applets()
 {
-    QVariantList list;
-    int i = 0;
-    foreach (Plasma::Applet *applet, containment()->applets()) {
-        list << QVariant::fromValue(applet);
-        ++i;
-    }
-    return list;
+    return m_appletInterfaces;
 }
 
 void ContainmentInterface::setDrawWallpaper(bool drawWallpaper)
@@ -146,13 +140,17 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet, const QPoi
         }
     }
 
+    m_appletInterfaces << appletGraphicObject;
     emit appletAdded(appletGraphicObject, pos);
+    emit appletsChanged();
 }
 
 void ContainmentInterface::appletRemovedForward(Plasma::Applet *applet)
 {
     QObject *appletGraphicObject = applet->property("graphicObject").value<QObject *>();
+    m_appletInterfaces.removeAll(appletGraphicObject);
     emit appletRemoved(appletGraphicObject);
+    emit appletsChanged();
 }
 
 void ContainmentInterface::loadWallpaper()

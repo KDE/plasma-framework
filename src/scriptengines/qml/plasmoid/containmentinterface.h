@@ -30,7 +30,7 @@ class QmlObject;
 class ContainmentInterface : public AppletInterface
 {
     Q_OBJECT
-    Q_PROPERTY(QVariantList applets READ applets)
+    Q_PROPERTY(QList <QObject *> applets READ applets NOTIFY appletsChanged)
     Q_PROPERTY(bool drawWallpaper READ drawWallpaper WRITE setDrawWallpaper)
     Q_PROPERTY(Type containmentType READ containmentType WRITE setContainmentType)
     Q_PROPERTY(int screen READ screen NOTIFY screenChanged)
@@ -50,7 +50,7 @@ public:
 
     inline Plasma::Containment *containment() const { return static_cast<Plasma::Containment *>(m_appletScriptEngine->applet()); }
 
-    QVariantList applets();
+    QList<QObject *> applets();
 
     void setDrawWallpaper(bool drawWallpaper);
     bool drawWallpaper();
@@ -73,6 +73,7 @@ Q_SIGNALS:
     void screenChanged();
     void activityIdChanged();
     void availableScreenRegionChanged();
+    void appletsChanged();
 
 protected Q_SLOTS:
     void appletAddedForward(Plasma::Applet *applet, const QPointF &pos);
@@ -81,6 +82,7 @@ protected Q_SLOTS:
 
 private:
     QmlObject *m_wallpaperQmlObject;
+    QList<QObject *> m_appletInterfaces;
 };
 
 #endif
