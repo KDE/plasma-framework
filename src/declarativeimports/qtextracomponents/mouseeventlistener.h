@@ -150,7 +150,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void wheelEvent(QWheelEvent *event);
-//     bool sceneEventFilter(QGraphicsItem *i, QEvent *e);
+    bool childMouseEventFilter(QQuickItem *item, QEvent *event);
 
 Q_SIGNALS:
     void pressed(KDeclarativeMouseEvent *mouse);
