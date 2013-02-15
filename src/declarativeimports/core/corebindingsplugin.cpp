@@ -29,12 +29,13 @@
 
 #include <plasma/framesvg.h>
 #include <plasma/svg.h>
-// #include <Plasma/QueryMatch>
+#include <Plasma/QueryMatch>
+#include <Plasma/ServiceJob>
 
 #include "datasource.h"
 #include "datamodel.h"
 #include "framesvgitem.h"
-// #include "runnermodel.h"
+#include "runnermodel.h"
 #include "svgitem.h"
 #include "theme.h"
 // #include "dialog.h"
@@ -87,21 +88,21 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
 //     qmlRegisterType<DialogProxy>(uri, 0, 1, "Dialog");
 //     qmlRegisterType<ToolTipProxy>(uri, 0, 1, "ToolTip");
 // 
-//     qmlRegisterInterface<Plasma::Service>("Service");
-//     qRegisterMetaType<Plasma::Service*>("Service");
-//     qmlRegisterInterface<Plasma::ServiceJob>("ServiceJob");
-//     qRegisterMetaType<Plasma::ServiceJob*>("ServiceJob");
-//     qmlRegisterType<QAbstractItemModel>();
-// 
-//     qmlRegisterType<RunnerModel>(uri, 0, 1, "RunnerModel");
-//     qmlRegisterInterface<Plasma::QueryMatch>("QueryMatch");
-//     qRegisterMetaType<Plasma::QueryMatch *>("QueryMatch");
-// 
-//     qmlRegisterType<QQmlPropertyMap>();
+    qmlRegisterInterface<Plasma::Service>("Service");
+    qRegisterMetaType<Plasma::Service*>("Service");
+    qmlRegisterInterface<Plasma::ServiceJob>("ServiceJob");
+    qRegisterMetaType<Plasma::ServiceJob*>("ServiceJob");
+    qmlRegisterType<QAbstractItemModel>();
+
+    qmlRegisterType<RunnerModel>(uri, 0, 1, "RunnerModel");
+    qmlRegisterInterface<Plasma::QueryMatch>("QueryMatch");
+    qRegisterMetaType<Plasma::QueryMatch *>("QueryMatch");
+
+    qmlRegisterType<QQmlPropertyMap>();
     qmlRegisterType<IconItem>(uri, 0, 1, "IconItem");
 
-    /*qmlRegisterInterface<Plasma::DataSource>("DataSource");
-    qRegisterMetaType<Plasma::DataSource*>("DataSource");*/
+    qmlRegisterInterface<Plasma::DataSource>("DataSource");
+    qRegisterMetaType<Plasma::DataSource*>("DataSource");
     qDebug() << "====> org.kde.plasma.core registered.";
 }
 

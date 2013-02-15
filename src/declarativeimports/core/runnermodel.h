@@ -23,6 +23,8 @@
 #include <QAbstractListModel>
 #include <QStringList>
 
+#include <Plasma/QueryMatch>
+
 namespace Plasma
 {
     class RunnerManager;

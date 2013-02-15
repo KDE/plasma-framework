@@ -16,7 +16,7 @@ set(corebindings_SRCS
     theme.cpp
     datamodel.cpp
     datasource.cpp
-#     runnermodel.cpp
+    runnermodel.cpp
     svgitem.cpp
     framesvgitem.cpp
 #     dialog.cpp
