@@ -21,16 +21,15 @@
 #ifndef LOCALEBINDINGSPLUGIN_H
 #define LOCALEBINDINGSPLUGIN_H
 
-#include <QDeclarativeExtensionPlugin>
+#include <QQmlExtensionPlugin>
 
-class LocaleBindingsPlugin : public QDeclarativeExtensionPlugin
+class LocaleBindingsPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
 
 public:
     void registerTypes(const char *uri);
 };
-
-Q_EXPORT_PLUGIN2(localebindingsplugin, LocaleBindingsPlugin)
 
 #endif

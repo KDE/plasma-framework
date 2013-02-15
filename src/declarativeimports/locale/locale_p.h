@@ -27,7 +27,7 @@
 
 //KDE
 #include <KLocale>
-
+#include <QLocale>
 class QString;
 class QDate;
 class QTime;
@@ -1547,7 +1547,7 @@ public:
     Q_INVOKABLE void reparseConfiguration();
 
 private:
-    KLocale *m_locale;
+    KLocale* m_locale;
 
 Q_SIGNALS:
     void binaryUnitDialectChanged();

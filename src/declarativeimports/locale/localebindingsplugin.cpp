@@ -19,7 +19,7 @@
  */
 
 #include "localebindingsplugin.h"
-#include <QtDeclarative/qdeclarative.h>
+#include <QtQml>
 #include "locale_p.h"
 #include "calendarsystem.h"
 

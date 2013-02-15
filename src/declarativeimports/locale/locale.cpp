@@ -22,12 +22,17 @@
 #include "locale_p.h"
 
 //KDE
-#include <KGlobal>
+#include <KLocale>
+#include <QLocale>
+
+//Qt
+#include <QDebug>
 
 Locale::Locale(QObject* parent)
         : QObject(parent)
 {
-    m_locale = KGlobal::locale();
+    //m_locale = KGlobal::locale();
+    m_locale = KLocale::global();
 }
 
 bool Locale::setCountryDivisionCode(const QString &countryDivisionCode)
@@ -45,7 +50,10 @@ void Locale::setCurrencyCode(const QString &newCurrencyCode)
 
 bool Locale::isApplicationTranslatedInto(const QString &lang)
 {
-    return m_locale->isApplicationTranslatedInto(lang);
+#warning "Locale::isApplicationTranslatedInto needs porting"
+    qWarning() << " has not been ported";
+    //return m_locale->isApplicationTranslatedInto(lang);
+    return true;
 }
 
 void Locale::splitLocale(const QString &locale, QString &language, QString &country, QString &modifier,
@@ -76,7 +84,10 @@ QString Locale::currencyCode() const
 
 QString Locale::translateQt(const char *context, const char *sourceText, const char *comment) const
 {
-    return m_locale->translateQt(context, sourceText, comment);
+#warning "Locale::translateQt needs porting"
+    //return m_locale->translateQt(context, sourceText, comment);
+    qWarning() << " has not been ported";
+    return sourceText;
 }
 
 QList<int> Locale::allDigitSetsList() const
@@ -483,7 +494,10 @@ QString Locale::defaultCurrencyCode()
 
 bool Locale::useTranscript() const
 {
-    return m_locale->useTranscript();
+#warning "Locale::useTranscript needs porting"
+    qWarning() << " has not been ported";
+    return true;
+    //return m_locale->useTranscript();
 }
 
 int Locale::fileEncodingMib() const
@@ -540,7 +554,9 @@ Locale::WeekNumberSystem Locale::weekNumberSystem() const
 
 QString Locale::removeAcceleratorMarker(const QString &label) const
 {
-    return m_locale->removeAcceleratorMarker(label);
+    QString _l(label);
+    return _l.replace("&", "");
+    //return m_locale->removeAcceleratorMarker(label);
 }
 
 void Locale::setDigitSet(Locale::DigitSet digitSet)
