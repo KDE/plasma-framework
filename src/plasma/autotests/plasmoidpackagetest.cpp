@@ -54,7 +54,6 @@ void PlasmoidPackageTest::cleanup()
 
 void PlasmoidPackageTest::createTestPackage(const QString &packageName)
 {
-    return;
     kDebug() << "Create test package" << m_packageRoot;
     QDir pRoot(m_packageRoot);
     // Create the root and package dir.
@@ -80,11 +79,11 @@ void PlasmoidPackageTest::createTestPackage(const QString &packageName)
 
     kDebug() << "OUT: " << packageName;
 
-    // Create the code dir.
-    QVERIFY(QDir().mkpath(m_packageRoot + "/" + packageName + "/contents/code"));
+    // Create the ui dir.
+    QVERIFY(QDir().mkpath(m_packageRoot + "/" + packageName + "/contents/ui"));
 
     // Create the main file.
-    file.setFileName(m_packageRoot + "/" + packageName + "/contents/code/main");
+    file.setFileName(m_packageRoot + "/" + packageName + "/contents/ui/main.qml");
     QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
 
     out << "THIS IS A PLASMOID SCRIPT.....";
@@ -92,7 +91,7 @@ void PlasmoidPackageTest::createTestPackage(const QString &packageName)
     file.close();
 
 
-    kDebug() << "THIS IS A PLASMOID SCRIPT THIGN";
+    kDebug() << "THIS IS A PLASMOID SCRIPT THING";
     // Now we have a minimal plasmoid package which is valid. Let's add some
     // files to it for test purposes.
 
@@ -126,7 +125,7 @@ void PlasmoidPackageTest::isValid()
 
     // A PlasmoidPackage is valid when:
     // - The package root exists.
-    // - The package root consists an file named "code/main"
+    // - The package root consists an file named "ui/main.qml"
     QVERIFY(!p->isValid());
 
     // Create the root and package dir.
@@ -150,8 +149,8 @@ void PlasmoidPackageTest::isValid()
     file.flush();
     file.close();
 
-    // Create the code dir.
-    QVERIFY(QDir().mkpath(m_packageRoot + "/" + m_package + "/contents/code"));
+    // Create the ui dir.
+    QVERIFY(QDir().mkpath(m_packageRoot + "/" + m_package + "/contents/ui"));
 
     // No main file yet so should still be invalid.
     delete p;
@@ -160,7 +159,7 @@ void PlasmoidPackageTest::isValid()
     QVERIFY(!p->isValid());
 
     // Create the main file.
-    file.setFileName(m_packageRoot + "/" + m_package + "/contents/code/main");
+    file.setFileName(m_packageRoot + "/" + m_package + "/contents/ui/main.qml");
     QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
 
     out.setDevice(&file);
@@ -189,8 +188,8 @@ void PlasmoidPackageTest::filePath()
 
     QCOMPARE(p->filePath("scripts", "main"), QString());
 
-    QVERIFY(QDir().mkpath(m_packageRoot + "/" + m_package + "/contents/code"));
-    QFile file(m_packageRoot + "/" + m_package + "/contents/code/main");
+    QVERIFY(QDir().mkpath(m_packageRoot + "/" + m_package + "/contents/ui/main.qml"));
+    QFile file(m_packageRoot + "/" + m_package + "/contents/ui/main.qml");
     QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
 
     QTextStream out(&file);
@@ -203,7 +202,7 @@ void PlasmoidPackageTest::filePath()
     p = new Plasma::Package(m_defaultPackage);
     p->setPath(m_packageRoot + '/' + m_package);
 
-    const QString path = QFileInfo(m_packageRoot + "/" + m_package + "/contents/code/main").canonicalFilePath();
+    const QString path = QFileInfo(m_packageRoot + "/" + m_package + "/contents/ui/main.qml").canonicalFilePath();
 
     // Two ways to get the same info.
     // 1. Give the file type which refers to a class of files (a directory) in
@@ -219,7 +218,6 @@ void PlasmoidPackageTest::filePath()
 
 void PlasmoidPackageTest::entryList()
 {
-    return;
     // Create a package named @p packageName which is valid and has some images.
     createTestPackage(m_package);
 
@@ -248,35 +246,32 @@ void PlasmoidPackageTest::createAndInstallPackage()
 {
     kDebug() << "                   ";
     kDebug() << "   CreateAndInstall ";
-//     createTestPackage("plasmoid_to_package");
-//     const QString packagePath = m_packageRoot + '/' + "testpackage.plasmoid";
-//
-//     KZip creator(packagePath);
-//     QVERIFY(creator.open(QIODevice::WriteOnly));
-//     creator.addLocalDirectory(m_packageRoot + '/' + "plasmoid_to_package", ".");
-//     creator.close();
-//     KIO::NetAccess::del(KUrl(m_packageRoot + "/plasmoid_to_package"), 0);
-//
-//     QVERIFY(QFile::exists(packagePath));
-//
-//     KZip package(packagePath);
-//     QVERIFY(package.open(QIODevice::ReadOnly));
-//     const KArchiveDirectory *dir = package.directory();
-//     QVERIFY(dir);//
-//     QVERIFY(dir->entry("metadata.desktop"));
-//     const KArchiveEntry *contentsEntry = dir->entry("contents");
-//     QVERIFY(contentsEntry);
-//     QVERIFY(contentsEntry->isDirectory());
-//     const KArchiveDirectory *contents = static_cast<const KArchiveDirectory *>(contentsEntry);
-//     QVERIFY(contents->entry("code"));
-//     QVERIFY(contents->entry("images"));
+    createTestPackage("plasmoid_to_package");
+    const QString packagePath = m_packageRoot + '/' + "testpackage.plasmoid";
 
-    QString archivePath = "/home/sebas/kde5/src/kdelibs/plasma/tests/microblog.plasmoid";
+    KZip creator(packagePath);
+    QVERIFY(creator.open(QIODevice::WriteOnly));
+    creator.addLocalDirectory(m_packageRoot + '/' + "plasmoid_to_package", ".");
+    creator.close();
+    KIO::NetAccess::del(KUrl(m_packageRoot + "/plasmoid_to_package"), 0);
+
+    QVERIFY(QFile::exists(packagePath));
+
+    KZip package(packagePath);
+    QVERIFY(package.open(QIODevice::ReadOnly));
+    const KArchiveDirectory *dir = package.directory();
+    QVERIFY(dir);//
+    QVERIFY(dir->entry("metadata.desktop"));
+    const KArchiveEntry *contentsEntry = dir->entry("contents");
+    QVERIFY(contentsEntry);
+    QVERIFY(contentsEntry->isDirectory());
+    const KArchiveDirectory *contents = static_cast<const KArchiveDirectory *>(contentsEntry);
+    QVERIFY(contents->entry("ui"));
+    QVERIFY(contents->entry("images"));
 
     m_defaultPackageStructure = new Plasma::PackageStructure(this);
     Plasma::Package *p = new Plasma::Package(m_defaultPackageStructure);
     kDebug() << "Installing " << archivePath;
-//     p->setPath(,z
     //const QString packageRoot = "plasma/plasmoids/";
     //const QString servicePrefix = "plasma-applet-";
     KJob* job = p->install(archivePath, m_packageRoot);

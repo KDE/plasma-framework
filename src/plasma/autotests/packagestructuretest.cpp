@@ -45,7 +45,7 @@ public:
 
 void PackageStructureTest::initTestCase()
 {
-    m_packagePath = QString::fromLatin1(KDESRCDIR) + "testpackage";
+    m_packagePath = QString::fromLatin1(KDESRCDIR) + "data/testpackage";
     ps = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
     ps.setPath(m_packagePath);
 }

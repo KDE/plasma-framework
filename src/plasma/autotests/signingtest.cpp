@@ -24,7 +24,7 @@
 #include <kdebug.h>
 
 #include "applet.h"
-#include "remote/signing.h"
+#include "signing.h"
 #include "pluginloader.h"
 #include <QStandardPaths>
 
@@ -36,8 +36,8 @@ SigningTest::SigningTest(QObject *parent)
       m_signing(0),
       m_package(Plasma::PluginLoader::self()->loadPackage("Plasma/Applet"))
 {
-    m_package.setPath(QString::fromLatin1(KDESRCDIR) + "signedPackage");
-    const QString prefix = QString::fromLatin1(KDESRCDIR);
+    const QString prefix = QString::fromLatin1(KDESRCDIR) + "data/;
+    m_package.setPath(prefix + "signedPackage");
     m_path = prefix + "signed.plasmoid";
     m_sig = prefix + "signed.plasmoid.sig";
     m_invalidSig = prefix + "signed.plasmoid.invalid.sig";

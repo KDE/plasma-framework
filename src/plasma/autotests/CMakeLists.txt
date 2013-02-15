@@ -18,7 +18,7 @@ ENDMACRO(PLASMA_UNIT_TESTS)
 PLASMA_UNIT_TESTS(
     configloadertest
     packagestructuretest
-    plasmoidpackagetest
+    #    plasmoidpackagetest
     runnercontexttest
 )
 
@@ -29,6 +29,6 @@ if(QT_QTOPENGL_FOUND)
 endif(QT_QTOPENGL_FOUND)
 
 if(QCA2_FOUND)
-  target_link_libraries(plasmoidpackagetest ${QCA2_LIBRARIES})
+   #  target_link_libraries(plasmoidpackagetest ${QCA2_LIBRARIES})
 endif(QCA2_FOUND)
 

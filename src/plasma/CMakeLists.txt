@@ -62,7 +62,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-plasma.h.cmake ${CMAKE_CURRENT
 #FIXME: gpgme++ is in kdepimlibs, must move somewhere else!
 include_directories(${KDEPIMLIBS_INCLUDE_DIRS} ${GPGME_INCLUDES})
 
-add_subdirectory(tests)
+add_subdirectory(autotests)
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1209)
 
 ########### next target ###############
@@ -84,8 +84,6 @@ set(plasma_LIB_SRCS
     plasma.cpp
     pluginloader.cpp
 
-    remote/credentials.cpp
-    
     private/associatedapplicationmanager.cpp
     private/componentinstaller.cpp
     private/datacontainer_p.cpp
