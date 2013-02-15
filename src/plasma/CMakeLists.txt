@@ -84,6 +84,8 @@ set(plasma_LIB_SRCS
     plasma.cpp
     pluginloader.cpp
 
+    remote/credentials.cpp
+    
     private/associatedapplicationmanager.cpp
     private/componentinstaller.cpp
     private/datacontainer_p.cpp
