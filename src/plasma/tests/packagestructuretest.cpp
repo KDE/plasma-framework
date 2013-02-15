@@ -43,10 +43,10 @@ public:
 };
 
 
-PackageStructureTest::PackageStructureTest()
+void PackageStructureTest::initTestCase()
 {
-    m_packagePath = QString::fromLatin1(KDESRCDIR) + "signedPackage/";
-    ps = Plasma::PluginLoader::self()->loadPackage("Plasma/Applet");
+    m_packagePath = QString::fromLatin1(KDESRCDIR) + "testpackage";
+    ps = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
     ps.setPath(m_packagePath);
 }
 
@@ -155,10 +155,8 @@ void PackageStructureTest::requiredFiles()
 
 void PackageStructureTest::path()
 {
-    qDebug() << "real paths are" << ps.filePath("images") << ps.filePath("mainscript");
-    qDebug() << "we wants" << QString(m_packagePath + QString("contents/images")) << QString(m_packagePath + QString("contents/code/main.js"));
-    QCOMPARE(ps.filePath("images"), QFileInfo(m_packagePath + QString("contents/images")).canonicalFilePath());
-    QCOMPARE(ps.filePath("mainscript"), QFileInfo(m_packagePath + QString("contents/code/main.js")).canonicalFilePath());
+    QCOMPARE(ps.filePath("images"), QDir(m_packagePath + QString("/contents/images")).canonicalPath());
+    QCOMPARE(ps.filePath("mainscript"), QFileInfo(m_packagePath + QString("/contents/ui/main.qml")).canonicalFilePath());
 }
 
 void PackageStructureTest::name()

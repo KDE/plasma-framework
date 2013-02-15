@@ -373,7 +373,6 @@ QStringList Package::entryList(const char *key) const
 
 void Package::setPath(const QString &path)
 {
-    kDebug() << "Package::setPath() " << path;
     // if the path is already what we have, don't bother
     if (path == d->path) {
         return;

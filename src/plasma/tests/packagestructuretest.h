@@ -27,10 +27,8 @@ class PackageStructureTest : public QObject
 {
     Q_OBJECT
 
-public:
-    PackageStructureTest();
-
 private Q_SLOTS:
+    void initTestCase();
     void copyPerformance();
     void emptyContentsPrefix();
     void multiplePaths();
