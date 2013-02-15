@@ -1,5 +1,6 @@
 /*
     Copyright 2011 Marco Martin <notmart@gmail.com>
+    Copyright 2013 Sebastian Kügler <sebas@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -143,12 +144,12 @@ public:
     bool hoverEnabled() const;
 
 protected:
-//     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
-//     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
-//     void mousePressEvent(QGraphicsSceneMouseEvent *event);
-//     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-//     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-//     void wheelEvent(QGraphicsSceneWheelEvent *event);
+    void hoverEnterEvent(QHoverEvent *event);
+    void hoverLeaveEvent(QHoverEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+    void wheelEvent(QWheelEvent *event);
 //     bool sceneEventFilter(QGraphicsItem *i, QEvent *e);
 
 Q_SIGNALS:
@@ -163,11 +164,13 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void handlePressAndHold();
+
 private:
+    QPointF buttonDownPos(int btn) const;
     bool m_pressed;
     KDeclarativeMouseEvent* m_pressAndHoldEvent;
-    QPointF m_pressAndHoldPosition;
-    //Important: used only for comparison. If you will ever need to access this pointer, make it a QWekapointer
+    QHash<int, QPointF> m_buttonDownPos;
+    //Important: used only for comparison. If you will ever need to access this pointer, make it a QWeakPointer
     QEvent *m_lastEvent;
     QTimer *m_pressAndHoldTimer;
     bool m_containsMouse;

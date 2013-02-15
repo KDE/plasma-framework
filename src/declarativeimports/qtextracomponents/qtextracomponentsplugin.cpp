@@ -30,11 +30,6 @@
 #include "mouseeventlistener.h"
 #include "columnproxymodel.h"
 
-// void QtExtraComponentsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
-// {
-//     qDebug() << "=========> QtExtras engine : " << uri;
-// }
-
 void QtExtraComponentsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.qtextracomponents"));
