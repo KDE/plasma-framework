@@ -213,13 +213,14 @@ void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)
     desktopMenu.addAction("Menu Item 2");
 
     //FIXME: very inefficient appletAt() implementation
-    AppletInterface *applet = 0;
+    Plasma::Applet *applet = 0;
     foreach (QObject *appletObject, m_appletInterfaces) {
-        if (applet = qobject_cast<AppletInterface *>(appletObject)) {
-            if (applet->contains(applet->mapFromItem(this, event->posF()))) {
+        if (AppletInterface *ai = qobject_cast<AppletInterface *>(appletObject)) {
+            if (ai->contains(ai->mapFromItem(this, event->posF()))) {
+                applet = ai->applet();
                 break;
             } else {
-                applet = 0;
+                ai = 0;
             }
         }
     }
