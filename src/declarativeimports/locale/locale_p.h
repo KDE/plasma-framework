@@ -116,7 +116,6 @@ Q_PROPERTY(bool use12Clock READ use12Clock CONSTANT)
 Q_PROPERTY(QString defaultLanguage READ defaultLanguage CONSTANT)//read-only
 Q_PROPERTY(QString defaultCountry READ defaultCountry CONSTANT)//read-only
 Q_PROPERTY(QString defaultCurrencyCode READ defaultCurrencyCode CONSTANT)//read-only
-Q_PROPERTY(bool useTranscript READ useTranscript CONSTANT) //read-only
 Q_PROPERTY(int fileEncodingMib READ fileEncodingMib CONSTANT) //read-only
 Q_PROPERTY(QStringList languageList READ languageList CONSTANT) //read-only
 Q_PROPERTY(QStringList currencyCodeList READ currencyCodeList CONSTANT) //read-only
@@ -1354,13 +1353,6 @@ public:
     void setMeasureSystem(MeasureSystem value);
 
     /**
-     * Translates a message as a QTranslator is supposed to.
-     * The parameters are similar to i18n(), but the result
-     * value has other semantics (it can be QString())
-     */
-    Q_INVOKABLE QString translateQt(const char *context, const char *sourceText, const char *comment) const;
-
-    /**
      * Provides list of all known language codes.
      *
      * Use languageCodeToName(language) to get human readable, localized
@@ -1471,13 +1463,6 @@ public:
      * @return ISO Currency Code of the default currency
      */
     QString defaultCurrencyCode();
-
-    /**
-     * Reports whether evaluation of translation scripts is enabled.
-     *
-     * @return true if script evaluation is enabled, false otherwise.
-     */
-    bool useTranscript() const;
 
     /**
      * Checks whether or not the active catalog is found for the given language.

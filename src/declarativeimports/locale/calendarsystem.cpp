@@ -30,7 +30,7 @@
 CalendarSystem::CalendarSystem(QObject* parent)
         : QObject(parent)
 {
-    m_calendarSystem = KCalendarSystem::create(KGlobal::locale()->calendarSystem());
+    m_calendarSystem = KCalendarSystem::create(KLocale::global()->calendarSystem());
 }
 
 QList<int> CalendarSystem::calendarSystemsList()

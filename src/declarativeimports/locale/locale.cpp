@@ -23,7 +23,7 @@
 
 //KDE
 #include <KLocale>
-#include <QLocale>
+#include <KLocalizedString>
 
 //Qt
 #include <QDebug>
@@ -31,7 +31,6 @@
 Locale::Locale(QObject* parent)
         : QObject(parent)
 {
-    //m_locale = KGlobal::locale();
     m_locale = KLocale::global();
 }
 
@@ -50,10 +49,7 @@ void Locale::setCurrencyCode(const QString &newCurrencyCode)
 
 bool Locale::isApplicationTranslatedInto(const QString &lang)
 {
-#warning "Locale::isApplicationTranslatedInto needs porting"
-    qWarning() << " has not been ported";
-    //return m_locale->isApplicationTranslatedInto(lang);
-    return true;
+    return KLocalizedString::isApplicationTranslatedInto(lang);
 }
 
 void Locale::splitLocale(const QString &locale, QString &language, QString &country, QString &modifier,
@@ -80,14 +76,6 @@ QString Locale::countryDivisionCode() const
 QString Locale::currencyCode() const
 {
     return m_locale->currencyCode();
-}
-
-QString Locale::translateQt(const char *context, const char *sourceText, const char *comment) const
-{
-#warning "Locale::translateQt needs porting"
-    //return m_locale->translateQt(context, sourceText, comment);
-    qWarning() << " has not been ported";
-    return sourceText;
 }
 
 QList<int> Locale::allDigitSetsList() const
@@ -492,14 +480,6 @@ QString Locale::defaultCurrencyCode()
     return KLocale::defaultCurrencyCode();
 }
 
-bool Locale::useTranscript() const
-{
-#warning "Locale::useTranscript needs porting"
-    qWarning() << " has not been ported";
-    return true;
-    //return m_locale->useTranscript();
-}
-
 int Locale::fileEncodingMib() const
 {
     return m_locale->fileEncodingMib();
@@ -554,9 +534,7 @@ Locale::WeekNumberSystem Locale::weekNumberSystem() const
 
 QString Locale::removeAcceleratorMarker(const QString &label) const
 {
-    QString _l(label);
-    return _l.replace("&", "");
-    //return m_locale->removeAcceleratorMarker(label);
+    return KLocalizedString::removeAcceleratorMarker(label);
 }
 
 void Locale::setDigitSet(Locale::DigitSet digitSet)
