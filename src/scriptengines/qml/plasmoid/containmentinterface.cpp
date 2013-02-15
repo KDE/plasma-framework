@@ -24,8 +24,9 @@
 #include <QQmlExpression>
 #include <QQmlProperty>
 
+#include <KAuthorized>
 #include <KDebug>
-#include <KMenu>
+#include <KLocalizedString>
 
 #include <Plasma/Corona>
 #include <Plasma/Package>
@@ -201,6 +202,10 @@ QString ContainmentInterface::activityId() const
 
 
 
+
+
+//PROTECTED--------------------
+
 void ContainmentInterface::mousePressEvent(QMouseEvent *event)
 {
     event->accept();
@@ -209,8 +214,6 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
 void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)
 {
     KMenu desktopMenu;
-    desktopMenu.addAction("Menu Item 1");
-    desktopMenu.addAction("Menu Item 2");
 
     //FIXME: very inefficient appletAt() implementation
     Plasma::Applet *applet = 0;
@@ -227,14 +230,91 @@ void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)
     qDebug() << "Invoking menu for applet" << applet;
 
     if (applet) {
-        foreach (QAction *action, applet->contextualActions()) {
-            if (action) {
-                desktopMenu.addAction(action);
-            }
-        }
+        addAppletActions(desktopMenu, applet, event);
+    } else {
+        addContainmentActions(desktopMenu, event);
     }
     desktopMenu.exec(event->globalPos());
     event->accept();
+}
+
+
+
+void ContainmentInterface::addAppletActions(KMenu &desktopMenu, Plasma::Applet *applet, QEvent *event)
+{
+    foreach (QAction *action, applet->contextualActions()) {
+        if (action) {
+            desktopMenu.addAction(action);
+        }
+    }
+
+    if (!applet->failedToLaunch()) {
+        QAction *configureApplet = applet->action("configure");
+        if (configureApplet && configureApplet->isEnabled()) {
+            desktopMenu.addAction(configureApplet);
+        }
+
+        QAction *runAssociatedApplication = applet->action("run associated application");
+        if (runAssociatedApplication && runAssociatedApplication->isEnabled()) {
+            desktopMenu.addAction(runAssociatedApplication);
+        }
+    }
+
+    KMenu *containmentMenu = new KMenu(i18nc("%1 is the name of the containment", "%1 Options", containment()->title()), &desktopMenu);
+    addContainmentActions(*containmentMenu, event);
+
+    if (!containmentMenu->isEmpty()) {
+        int enabled = 0;
+        //count number of real actions
+        QListIterator<QAction *> actionsIt(containmentMenu->actions());
+        while (enabled < 3 && actionsIt.hasNext()) {
+            QAction *action = actionsIt.next();
+            if (action->isVisible() && !action->isSeparator()) {
+                ++enabled;
+            }
+        }
+
+        if (enabled) {
+            //if there is only one, don't create a submenu
+            if (enabled < 2) {
+                foreach (QAction *action, containmentMenu->actions()) {
+                    if (action->isVisible() && !action->isSeparator()) {
+                        desktopMenu.addAction(action);
+                    }
+                }
+            } else {
+                desktopMenu.addMenu(containmentMenu);
+            }
+        }
+    }
+
+    if (containment()->immutability() == Plasma::Mutable) {
+        QAction *closeApplet = applet->action("remove");
+        //kDebug() << "checking for removal" << closeApplet;
+        if (closeApplet) {
+            if (!desktopMenu.isEmpty()) {
+                desktopMenu.addSeparator();
+            }
+
+            //kDebug() << "adding close action" << closeApplet->isEnabled() << closeApplet->isVisible();
+            desktopMenu.addAction(closeApplet);
+        }
+    }
+}
+
+void ContainmentInterface::addContainmentActions(KMenu &desktopMenu, QEvent *event)
+{
+    if (containment()->corona()->immutability() != Plasma::Mutable &&
+        !KAuthorized::authorizeKAction("plasma/containment_actions")) {
+        //kDebug() << "immutability";
+        return;
+    }
+
+    desktopMenu.addAction("Containment Menu Item 1");
+    desktopMenu.addAction("Containment Menu Item 2");
+    //TODO: reenable ContainmentActions plugins
+    /*const QString trigger = ContainmentActions::eventToString(event);
+    prepareContainmentActions(trigger, QPoint(), &desktopMenu);*/
 }
 
 #include "moc_containmentinterface.cpp"
