@@ -1,8 +1,9 @@
 /*
  *   Copyright 2009 by Alan Alpert <alan.alpert@nokia.com>
  *   Copyright 2010 by Ménard Alexis <menard@kde.org>
- *   Copyright 2010 by Marco MArtin <mart@kde.org>
-
+ *   Copyright 2010 by Marco Martin <mart@kde.org>
+ *   Copyright 2013 by Sebastian Kügler <sebas@kde.org>
+ *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
  *   published by the Free Software Foundation; either version 2, or
@@ -21,19 +22,13 @@
 
 #include "datasource.h"
 
-#include "qdeclarativeengine.h"
-#include "qdeclarativecontext.h"
-
-
-#include <Plasma/Applet>
-
-
 namespace Plasma
 {
 DataSource::DataSource(QObject* parent)
     : QObject(parent),
       m_interval(0),
-      m_dataEngine(0)
+      m_dataEngine(0),
+      m_dataEngineConsumer(0)
 {
     setObjectName("DataSource");
 }
@@ -98,16 +93,19 @@ void DataSource::setupData()
     qDeleteAll(m_services);
     m_services.clear();
 
+    m_dataEngineConsumer = new Plasma::DataEngineConsumer();
     Plasma::DataEngine *engine = dataEngine(m_engine);
     if (!engine) {
-        kWarning() << "DataEngine" << m_engine << "not found";
+        qWarning() << "DataEngine" << m_engine << "not found";
         return;
     }
 
     if (engine != m_dataEngine) {
         if (m_dataEngine) {
             m_dataEngine->disconnect(this);
-            finishedWithEngine(m_dataEngine->pluginName());
+            // Deleting the consumer triggers the reference counting
+            delete m_dataEngineConsumer;
+            m_dataEngineConsumer = 0;
         }
 
         /*

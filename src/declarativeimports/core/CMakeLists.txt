@@ -13,9 +13,9 @@ set(corebindings_SRCS
 #     declarativeitemcontainer.cpp
     corebindingsplugin.cpp
 #     dataengineconsumer.cpp
-     theme.cpp
+    theme.cpp
 #     datamodel.cpp
-#     datasource.cpp
+    datasource.cpp
 #     runnermodel.cpp
     svgitem.cpp
     framesvgitem.cpp

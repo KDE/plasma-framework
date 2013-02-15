@@ -2,7 +2,8 @@
  *   Copyright 2009 by Alan Alpert <alan.alpert@nokia.com>
  *   Copyright 2010 by Ménard Alexis <menard@kde.org>
  *   Copyright 2010 by Marco MArtin <mart@kde.org>
-
+ *   Copyright 2013 by Sebastian Kügler <sebas@kde.org>
+ *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
  *   published by the Free Software Foundation; either version 2, or
@@ -23,13 +24,11 @@
 #define DATASOURCE_H
 
 #include <QObject>
-
-
+#include <QtQml>
 #include <QQmlPropertyMap>
 
-#include "dataengineconsumer_p.h"
+#include <Plasma/DataEngineConsumer>
 #include <Plasma/DataEngine>
-#include <qdeclarative.h>
 
 
 class QQmlPropertyMap;
@@ -134,6 +133,7 @@ private:
     QString m_engine;
     QVariantHash m_data;
     Plasma::DataEngine* m_dataEngine;
+    Plasma::DataEngineConsumer* m_dataEngineConsumer;
     QStringList m_connectedSources;
     QStringList m_oldSources;
     QStringList m_newSources;

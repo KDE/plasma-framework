@@ -66,7 +66,7 @@ void CoreBindingsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 
     registerDataEngineMetaTypes(scriptEngine);
     */
-    qDebug() << "====> org.kde.plasma.core loaded.";
+    //qDebug() << "====> org.kde.plasma.core loaded.";
 }
 
 void CoreBindingsPlugin::registerTypes(const char *uri)
