@@ -31,7 +31,7 @@
 #include <plasma/svg.h>
 // #include <Plasma/QueryMatch>
 
-// // #include "datasource.h"
+#include "datasource.h"
 // // #include "datamodel.h"
 #include "framesvgitem.h"
 // #include "runnermodel.h"
@@ -79,8 +79,8 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterType<Plasma::FrameSvgItem>(uri, 0, 1, "FrameSvgItem");
  
     qmlRegisterType<ThemeProxy>(uri, 0, 1, "Theme");
-// 
-//     qmlRegisterType<Plasma::DataSource>(uri, 0, 1, "DataSource");
+
+    qmlRegisterType<Plasma::DataSource>(uri, 0, 1, "DataSource");
 //     qmlRegisterType<Plasma::DataModel>(uri, 0, 1, "DataModel");
 //     qmlRegisterType<Plasma::SortFilterModel>(uri, 0, 1, "SortFilterModel");
 // 
