@@ -223,7 +223,7 @@ void RunnerModel::matchesChanged(const QList<Plasma::QueryMatch> &matches)
         }
         if (!fullReset) {
             // Not a full reset, inserting rows
-            beginInsertRows(QModelIndex(), oldCount, newCount);
+            beginInsertRows(QModelIndex(), oldCount, newCount-1);
             m_matches = matches;
             endInsertRows();
             emit countChanged();
