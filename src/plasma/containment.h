@@ -295,25 +295,13 @@ class PLASMA_EXPORT Containment : public Applet
          * @param pluginName the name of the plugin to attempt to load. blank = set no plugin.
          * @since 4.4
          */
-        void setContainmentActions(const QString &trigger, const QString &pluginName);
+        void addContainmentActions(const QString &trigger, const QString &pluginName);
 
         /**
-         * @return a list of all triggers that have a containmentactions plugin associated
-         * @since 4.4
+         * @return All the loaded containment action plugins, indexed by trigger name
+         * @since 5.0
          */
-        QStringList containmentActionsTriggers();
-
-        /**
-         * @return the plugin name for the given trigger
-         * @since 4.4
-         */
-        QString containmentActions(const QString &trigger);
-
-        /**
-         * @return the config group that containmentactions plugins go in
-         * @since 4.6
-         */
-        KConfigGroup containmentActionsConfig();
+        QHash<QString, ContainmentActions*> containmentActions();
 
 
 Q_SIGNALS:

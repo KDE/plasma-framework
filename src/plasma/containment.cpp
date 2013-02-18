@@ -250,7 +250,7 @@ void Containment::restore(KConfigGroup &group)
     if (cfg.exists()) {
         foreach (const QString &key, cfg.keyList()) {
             //kDebug() << "loading" << key;
-            setContainmentActions(key, cfg.readEntry(key, QString()));
+            addContainmentActions(key, cfg.readEntry(key, QString()));
         }
     } else { //shell defaults
         ContainmentActionsPluginsConfig conf = corona()->containmentActionsDefaults(d->type);
@@ -258,7 +258,7 @@ void Containment::restore(KConfigGroup &group)
         QHash<QString,QString> defaults = conf.d->plugins;
         for (QHash<QString,QString>::const_iterator it = defaults.constBegin(),
                 end = defaults.constEnd(); it != end; ++it) {
-            setContainmentActions(it.key(), it.value());
+            addContainmentActions(it.key(), it.value());
         }
     }
 
@@ -622,9 +622,9 @@ QString Containment::wallpaper() const
     return d->wallpaper;
 }
 
-void Containment::setContainmentActions(const QString &trigger, const QString &pluginName)
+void Containment::addContainmentActions(const QString &trigger, const QString &pluginName)
 {
-    KConfigGroup cfg = containmentActionsConfig();
+    KConfigGroup cfg = d->containmentActionsConfig();
     ContainmentActions *plugin = 0;
 
     if (d->actionPlugins()->contains(trigger)) {
@@ -664,15 +664,16 @@ void Containment::setContainmentActions(const QString &trigger, const QString &p
     emit configNeedsSaving();
 }
 
-QStringList Containment::containmentActionsTriggers()
+QHash<QString, ContainmentActions*> Containment::containmentActions()
 {
-    return d->actionPlugins()->keys();
-}
-
-QString Containment::containmentActions(const QString &trigger)
-{
-    ContainmentActions *c = d->actionPlugins()->value(trigger);
-    return c ? c->pluginName() : QString();
+    switch (d->containmentActionsSource) {
+        case ContainmentPrivate::Activity:
+            //FIXME
+        case ContainmentPrivate::Local:
+            return d->localActionPlugins;
+        default:
+            return d->globalActionPlugins;
+    }
 }
 
 void Containment::setActivity(const QString &activityId)
@@ -698,26 +699,6 @@ void Containment::showConfigurationInterface()
 {
     Applet::showConfigurationInterface();
 }
-
-KConfigGroup Containment::containmentActionsConfig()
-{
-    KConfigGroup cfg;
-    switch (d->containmentActionsSource) {
-    case ContainmentPrivate::Local:
-        cfg = config();
-        cfg = KConfigGroup(&cfg, "ActionPlugins");
-        break;
-    case ContainmentPrivate::Activity:
-        cfg = KConfigGroup(corona()->config(), "Activities");
-        cfg = KConfigGroup(&cfg, d->activityId);
-        cfg = KConfigGroup(&cfg, "ActionPlugins");
-        break;
-    default:
-        cfg = KConfigGroup(corona()->config(), "ActionPlugins");
-    }
-    return cfg;
-}
-
 
 } // Plasma namespace
 

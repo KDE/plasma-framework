@@ -390,6 +390,25 @@ bool ContainmentPrivate::isPanelContainment() const
     return type == Containment::PanelContainment || type == Containment::CustomPanelContainment;
 }
 
+KConfigGroup ContainmentPrivate::containmentActionsConfig() const
+{
+    KConfigGroup cfg;
+    switch (containmentActionsSource) {
+    case ContainmentPrivate::Local:
+        cfg = q->config();
+        cfg = KConfigGroup(&cfg, "ActionPlugins");
+        break;
+    case ContainmentPrivate::Activity:
+        cfg = KConfigGroup(q->corona()->config(), "Activities");
+        cfg = KConfigGroup(&cfg, activityId);
+        cfg = KConfigGroup(&cfg, "ActionPlugins");
+        break;
+    default:
+        cfg = KConfigGroup(q->corona()->config(), "ActionPlugins");
+    }
+    return cfg;
+}
+
 bool ContainmentPrivate::prepareContainmentActions(const QString &trigger, const QPoint &screenPos, KMenu *menu)
 {
     ContainmentActions *plugin = actionPlugins()->value(trigger);
@@ -401,7 +420,7 @@ bool ContainmentPrivate::prepareContainmentActions(const QString &trigger, const
         plugin->setContainment(q);
 
         // now configure it
-        KConfigGroup cfg = q->containmentActionsConfig();
+        KConfigGroup cfg = containmentActionsConfig();
         KConfigGroup pluginConfig = KConfigGroup(&cfg, trigger);
         plugin->restore(pluginConfig);
     }

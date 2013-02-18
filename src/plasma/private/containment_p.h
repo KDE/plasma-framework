@@ -99,6 +99,12 @@ public:
     static void addDefaultActions(KActionCollection *actions, Containment *c = 0);
 
     /**
+     * @return the config group that containmentactions plugins go in
+     * @since 4.6
+     */
+    KConfigGroup containmentActionsConfig() const;
+    
+    /**
      * inits the containmentactions if necessary
      * if it needs configuring, this warns the user and returns false
      * if a menu is passed in, then it populates that menu with the actions from the plugin
