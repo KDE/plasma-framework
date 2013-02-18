@@ -380,66 +380,6 @@ void Containment::showDropZone(const QPoint pos)
     //Base implementation does nothing, don't put code here
 }
 
-void Containment::showContextMenu(const QPointF &containmentPos, const QPoint &screenPos)
-{
-    //kDebug() << containmentPos << screenPos;
-    QContextMenuEvent gvevent(QContextMenuEvent::Mouse, screenPos);
-
-    //FIXME: do we need views here? 
-    //gvevent.setWidget(view());
-    contextMenuEvent(&gvevent);
-}
-
-void Containment::contextMenuEvent(QContextMenuEvent *event)
-{
-    if (!isContainment() || !KAuthorized::authorizeKAction("plasma/containment_context_menu")) {
-        return;
-    }
-
-    KMenu desktopMenu;
-    //TODO: port to the new containmentactions architecture
-    Applet *applet = 0;//d->appletAt(event->pos());
-    //kDebug() << "context menu event " << (QObject*)applet;
-
-    if (applet) {
-        d->addAppletActions(desktopMenu, applet, event);
-    } else {
-        d->addContainmentActions(desktopMenu, event);
-    }
-
-    //kDebug() << "executing at" << screenPos;
-    QMenu *menu = &desktopMenu;
-    //kDebug() << "showing menu, actions" << desktopMenu.actions().size() << desktopMenu.actions().first()->menu();
-    if (desktopMenu.actions().size() == 1 && desktopMenu.actions().first()->menu()) {
-        // we have a menu with a single top level menu; just show that top level menu instad.
-        menu = desktopMenu.actions().first()->menu();
-    }
-
-    if (!menu->isEmpty()) {
-        QPoint pos = event->globalPos();
-        if (applet && d->isPanelContainment()) {
-            menu->adjustSize();
-            pos = QPoint(); //TODO: port context menus away from Containment applet->popupPosition(menu->size());
-            if (event->reason() == QContextMenuEvent::Mouse) {
-                // if the menu pops up way away from the mouse press, then move it
-                // to the mouse press
-                if (d->formFactor == Vertical) {
-                    if (pos.y() + menu->height() < event->globalPos().y()) {
-                        pos.setY(event->globalPos().y());
-                    }
-                } else if (d->formFactor == Horizontal) {
-                    if (pos.x() + menu->width() < event->globalPos().x()) {
-                        pos.setX(event->globalPos().x());
-                    }
-                }
-            }
-        }
-
-        menu->exec(pos);
-        event->accept();
-    }
-}
-
 void Containment::setFormFactor(FormFactor formFactor)
 {
     if (d->formFactor == formFactor) {
@@ -660,22 +600,6 @@ QStringList Containment::listContainmentTypes()
     }
 
     return types.toList();
-}
-
-void Containment::wheelEvent(QWheelEvent *event)
-{
-    event->ignore();
-
-    QString trigger = ContainmentActions::eventToString(event);
-
-    if (d->prepareContainmentActions(trigger, event->globalPos())) {
-        if (event->delta() > 0) {
-            d->actionPlugins()->value(trigger)->performNext();
-        } else {
-            d->actionPlugins()->value(trigger)->performPrevious();
-        }
-        event->accept();
-    }
 }
 
 void Containment::enableAction(const QString &name, bool enable)

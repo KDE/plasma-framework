@@ -323,12 +323,6 @@ class PLASMA_EXPORT Containment : public Applet
         QString activity() const;
 
         /**
-         * Shows the context menu for the containment directly, bypassing Applets
-         * altogether.
-         */
-        void showContextMenu(const QPointF &containmentPos, const QPoint &screenPos);
-
-        /**
          * Shows a visual clue for drag and drop
          * The default implementation does nothing,
          * reimplement in containments that need it
@@ -483,9 +477,6 @@ Q_SIGNALS:
          */
         virtual void restoreContents(KConfigGroup &group);
 
-        //FIXME: events should go away
-        void contextMenuEvent(QContextMenuEvent *event);
-        void wheelEvent(QWheelEvent *event);
 
 
     private:
