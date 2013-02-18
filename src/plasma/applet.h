@@ -474,7 +474,7 @@ class PLASMA_EXPORT Applet : public QObject
          * Its configuration will also be deleted.
          * If you want to remove the Applet configuration, use this, don't just delete the Applet *
          */
-        virtual void destroy();
+        void destroy();
 
         /**
          * sets the status for this applet
