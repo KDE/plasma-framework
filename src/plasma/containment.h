@@ -43,7 +43,6 @@ class View;
 class Wallpaper;
 class ContainmentActions;
 class ContainmentPrivate;
-class AbstractToolBox;
 
 /**
  * @class Containment plasma/containment.h <Plasma/Containment>
@@ -319,17 +318,6 @@ Q_SIGNALS:
          * Emitted when the activity id has changed
          */
         void activityChanged(const QString &activity);
-
-        /**
-         * Emitted when the user clicks on the toolbox
-         */
-        void toolBoxToggled();
-
-        /**
-         * Emitted when the toolbox is hidden or shown
-         * @since 4.3
-         */
-        void toolBoxVisibilityChanged(bool);
 
         /**
          * Emitted when the containment requests an add widgets dialog is shown.
