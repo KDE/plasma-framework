@@ -24,12 +24,8 @@ qt4_automoc(${plasmaextracomponents_SRCS})
 add_library(plasmaextracomponentsplugin SHARED ${plasmaextracomponents_SRCS})
 
 target_link_libraries(plasmaextracomponentsplugin
-        ${QT_QTCORE_LIBRARY}
         ${Qt5Quick_LIBRARIES}
         ${Qt5Qml_LIBRARIES}
-        ${QT_QTGUI_LIBRARY}
-        ${KDE4_KDEUI_LIBRARY}
-        ${KDECLARATIVE_LIBRARIES}
         ${KACTIVITIES_LIBRARY}
         plasma)
 
