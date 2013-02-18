@@ -73,7 +73,7 @@ protected:
     void addContainmentActions(KMenu &desktopMenu, QEvent *event);
 
 Q_SIGNALS:
-    void appletAdded(QObject *applet, const QPointF &pos);
+    void appletAdded(QObject *applet);
     void appletRemoved(QObject *applet);
     void screenChanged();
     void activityIdChanged();
@@ -81,7 +81,7 @@ Q_SIGNALS:
     void appletsChanged();
 
 protected Q_SLOTS:
-    void appletAddedForward(Plasma::Applet *applet, const QPointF &pos);
+    void appletAddedForward(Plasma::Applet *applet);
     void appletRemovedForward(Plasma::Applet *applet);
     void loadWallpaper();
 

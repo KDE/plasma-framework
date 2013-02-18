@@ -43,11 +43,16 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
 
     qmlRegisterType<ContainmentInterface>();
 
-    connect(containment(), SIGNAL(appletRemoved(Plasma::Applet *)), this, SLOT(appletRemovedForward(Plasma::Applet *)));
-    connect(containment(), SIGNAL(appletAdded(Plasma::Applet *, const QPointF &)), this, SLOT(appletAddedForward(Plasma::Applet *, const QPointF &)));
-    connect(containment(), SIGNAL(screenChanged(int, int, Plasma::Containment*)), this, SIGNAL(screenChanged()));
-    connect(containment(), SIGNAL(activityChanged()), this, SIGNAL(activityChanged()));
-    connect(containment(), SIGNAL(wallpaperChanged()), this, SLOT(loadWallpaper()));
+    connect(containment(), &Plasma::Containment::appletRemoved,
+            this, &ContainmentInterface::appletRemovedForward);
+    connect(containment(), &Plasma::Containment::appletAdded,
+            this, &ContainmentInterface::appletAddedForward);
+    connect(containment(), SIGNAL(screenChanged(int, int, Plasma::Containment*)),
+            this, SIGNAL(screenChanged()));
+    connect(containment(), SIGNAL(activityChanged()),
+            this, SIGNAL(activityChanged()));
+    connect(containment(), SIGNAL(wallpaperChanged()),
+            this, SLOT(loadWallpaper()));
 
      if (containment()->corona()) {
          connect(containment()->corona(), SIGNAL(availableScreenRegionChanged()),
@@ -116,7 +121,7 @@ QVariantList ContainmentInterface::availableScreenRegion(int id) const
     return regVal;
 }
 
-void ContainmentInterface::appletAddedForward(Plasma::Applet *applet, const QPointF &pos)
+void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
 {
     QObject *appletGraphicObject = applet->property("graphicObject").value<QObject *>();
     QObject *contGraphicObject = containment()->property("graphicObject").value<QObject *>();
@@ -142,7 +147,7 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet, const QPoi
     }
 
     m_appletInterfaces << appletGraphicObject;
-    emit appletAdded(appletGraphicObject, pos);
+    emit appletAdded(appletGraphicObject);
     emit appletsChanged();
 }
 
