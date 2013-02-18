@@ -20,19 +20,18 @@
 #ifndef RUNNERMODELPLUGIN_H
 #define RUNNERMODELPLUGIN_H
 
-#include <QDeclarativeExtensionPlugin>
+#include <QQmlExtensionPlugin>
 
 /*
  * FIXME: This plugin is deprecated, it should be removed for plasma2
  */
-class RunnerModelPlugin : public QDeclarativeExtensionPlugin
+class RunnerModelPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
 
 public:
     void registerTypes(const char *uri);
 };
-
-Q_EXPORT_PLUGIN2(datamodelsplugin, RunnerModelPlugin)
 
 #endif

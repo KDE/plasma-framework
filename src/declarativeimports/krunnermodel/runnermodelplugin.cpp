@@ -19,7 +19,7 @@
 
 #include "runnermodelplugin.h"
 
-#include <QtDeclarative/qdeclarative.h>
+#include <QtQml>
 
 #include <KDebug>
 

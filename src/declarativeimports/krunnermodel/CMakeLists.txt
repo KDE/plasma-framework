@@ -7,13 +7,13 @@ set(runnermodel_SRCS
 
 qt4_automoc(${runnermodel_SRCS})
 
-kde4_add_library(runnermodelplugin SHARED ${runnermodel_SRCS})
+add_library(runnermodelplugin SHARED ${runnermodel_SRCS})
 target_link_libraries(runnermodelplugin
-        ${QT_QTCORE_LIBRARY}
-        ${QT_QTDECLARATIVE_LIBRARY}
-        ${KDE4_PLASMA_LIBS}
-        )
+        ${Qt5Quick_LIBRARIES}
+        ${Qt5Qml_LIBRARIES}
+        plasma)
 
-install(TARGETS runnermodelplugin DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/runnermodel)
-install(FILES qmldir DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/runnermodel)
+
+install(TARGETS runnermodelplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/runnermodel)
+install(FILES qmldir DESTINATION ${QML_INSTALL_DIR}/org/kde/runnermodel)
 
