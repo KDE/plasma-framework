@@ -34,7 +34,7 @@ endif()
 
 # The Qt5Widgets_INCLUDES also includes the include directories for
 # dependencies QtCore and QtGui
-include_directories(${Qt5Widgets_DEFINITIONS} ${Qt5Quick_DEFINITIONS} ${QT_INCLUDES})
+include_directories(${Qt5Widgets_DEFINITIONS} ${Qt5Quick_DEFINITIONS} ${QT_INCLUDES} ${Qt5Quick_INCLUDE_DIRS})
 
 # We need add -DQT_WIDGETS_LIB when using QtWidgets in Qt 5.
 add_definitions(${Qt5Widgets_DEFINITIONS} ${Qt5Quick_DEFINITIONS} ${Qt5Qml_DEFINITIONS})
@@ -131,7 +131,7 @@ remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_STRICT_ITERATORS -DQT_NO_CAST_FR
 
 ################# setup the include directories #################
 include_directories( ${kdeqt5staging_INCLUDE_DIRS}
-                     ${kdeqt5staging_INCLUDE_DIR} 
+                     ${kdeqt5staging_INCLUDE_DIR}
                      ${KDE4_INCLUDES}
                      ${KF5_INCLUDE_DIRS}  # since e-c-m 0.0.7
                    )
