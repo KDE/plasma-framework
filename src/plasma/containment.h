@@ -213,11 +213,6 @@ class PLASMA_EXPORT Containment : public Applet
         QList<Applet *> applets() const;
 
         /**
-         * Removes all applets from this Containment
-         */
-        void clearApplets();
-
-        /**
          * Sets the physical screen this Containment is associated with.
          *
          * @param screen the screen number this containment is the desktop for, or -1

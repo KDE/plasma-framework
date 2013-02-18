@@ -409,15 +409,6 @@ void Containment::setLocation(Location location)
     emit configNeedsSaving();
 }
 
-void Containment::clearApplets()
-{
-    foreach (Applet *applet, d->applets) {
-        applet->d->cleanUpAndDelete();
-    }
-
-    d->applets.clear();
-}
-
 Applet *Containment::addApplet(const QString &name, const QVariantList &args)
 {
     return d->addApplet(name, args);
