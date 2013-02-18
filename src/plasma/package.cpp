@@ -201,14 +201,21 @@ KPluginInfo Package::metadata() const
         if (!metadataPath.isEmpty()) {
             d->createPackageMetadata(metadataPath);
         } else {
-            QFileInfo fileInfo(d->path);
+            // d->path might still be a file, if its path has a trailing /,
+            // the fileInfo lookup will fail, so remove it.
+            QString p = d->path;
+            if (d->path.endsWith("/")) {
+                p = p.remove(p.count()-1, 1);
+            }
+            d->path = p;
+            QFileInfo fileInfo(p);
 
             if (fileInfo.isDir()) {
                 d->createPackageMetadata(d->path);
             } else if (fileInfo.exists()) {
                 KArchive *archive = 0;
                 QMimeDatabase db;
-                QMimeType mimeType = db.mimeTypeForFile(d->path);
+                QMimeType mimeType = db.mimeTypeForFile(p);
 
                 if (mimeType.inherits("application/zip")) {
                     archive = new KZip(d->path);
