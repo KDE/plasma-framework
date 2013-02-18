@@ -197,7 +197,6 @@ bool PackageJobThread::installPackage(const QString& src, const QString &dest)
         archivedPackage = true;
         path = tempdir.path() + '/';
 
-        //kDebug() << "path: " << path;
         d->installPath = path;
 
         const KArchiveDirectory *source = archive->directory();
@@ -216,7 +215,7 @@ bool PackageJobThread::installPackage(const QString& src, const QString &dest)
 
     QString metadataPath = path + "metadata.desktop";
     if (!QFile::exists(metadataPath)) {
-        //kWarning() << "No metadata file in package" << src << metadataPath;
+        kDebug() << "No metadata file in package" << src << metadataPath;
         d->errorMessage = i18n("No metadata file in package: %1", src);
         return false;
     }
@@ -234,7 +233,7 @@ bool PackageJobThread::installPackage(const QString& src, const QString &dest)
     // bad characters into the paths used for removal.
     QRegExp validatePluginName("^[\\w-\\.]+$"); // Only allow letters, numbers, underscore and period.
     if (!validatePluginName.exactMatch(pluginName)) {
-        //kWarning() << "Package plugin name " << pluginName << "contains invalid characters";
+        //kDebug() << "Package plugin name " << pluginName << "contains invalid characters";
         d->errorMessage = i18n("Package plugin name %1 contains invalid characters", pluginName);
         return false;
     }
@@ -245,7 +244,6 @@ bool PackageJobThread::installPackage(const QString& src, const QString &dest)
     }
     targetName.append(pluginName);
 
-    //kDebug() << " Target installation path: " << targetName;
     if (QFile::exists(targetName)) {
         //kWarning() << targetName << "already exists";
         d->errorMessage = i18n("%1 already exists", targetName);
@@ -292,10 +290,15 @@ bool PackageJobThread::installPackage(const QString& src, const QString &dest)
 
         const QString serviceName = d->servicePrefix + meta.pluginName() + ".desktop";
 
-        QString service = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/kde5/services/") + serviceName;
-        //kDebug() << "Copying from " <<  metaPath << " to " << service;
+        QString localServiceDirectory = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/kde5/services/");
+        if (!QDir().mkpath(localServiceDirectory)) {
+            kDebug() << "Failed to create ... " << localServiceDirectory;
+        }
+        QString service = localServiceDirectory + serviceName;
+
         const bool ok = QFile::copy(metaPath, service);
         if (ok) {
+            //kDebug() << "Copying metadata went ok.";
             // the icon in the installed file needs to point to the icon in the
             // installation dir!
             QString iconPath = targetName + '/' + cg.readEntry("Icon");
@@ -306,7 +309,7 @@ bool PackageJobThread::installPackage(const QString& src, const QString &dest)
                 cg.writeEntry("Icon", iconPath);
             }
         } else {
-            //kWarning() << "Could not register package as service (this is not necessarily fatal):" << serviceName;
+            kDebug() << "Could not register package as service (this is not necessarily fatal):" << serviceName;
             d->errorMessage = i18n("Could not register package as service (this is not necessarily fatal): %1", serviceName);
         }
     }
