@@ -172,7 +172,15 @@ void Corona::requireConfigSync()
 
 void Corona::initializeLayout(const QString &configName)
 {
-    clearContainments();
+    {
+        QList<Containment *> containments = d->containments;
+        d->containments.clear();
+        foreach (Containment *containment, containments) {
+            disconnect(containment, 0, this, 0);
+            containment->destroy();
+        }
+    }
+
     loadLayout(configName);
 
     if (d->containments.isEmpty()) {
@@ -242,13 +250,6 @@ Containment *Corona::containmentForScreen(int screen, int desktop,
 QList<Containment*> Corona::containments() const
 {
     return d->containments;
-}
-
-void Corona::clearContainments()
-{
-    foreach (Containment *containment, d->containments) {
-        containment->clearApplets();
-    }
 }
 
 KSharedConfigPtr Corona::config() const

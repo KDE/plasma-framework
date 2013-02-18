@@ -85,11 +85,6 @@ public:
     QList<Containment*> containments() const;
 
     /**
-     * Clear the CoronaBase from all applets.
-     */
-    void clearContainments();
-
-    /**
      * Returns the config file used to store the configuration for this CoronaBase
      */
     KSharedConfig::Ptr config() const;
