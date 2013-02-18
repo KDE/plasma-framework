@@ -47,16 +47,16 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
             this, &ContainmentInterface::appletRemovedForward);
     connect(containment(), &Plasma::Containment::appletAdded,
             this, &ContainmentInterface::appletAddedForward);
-    connect(containment(), SIGNAL(screenChanged(int, int, Plasma::Containment*)),
-            this, SIGNAL(screenChanged()));
-    connect(containment(), SIGNAL(activityChanged()),
-            this, SIGNAL(activityChanged()));
-    connect(containment(), SIGNAL(wallpaperChanged()),
-            this, SLOT(loadWallpaper()));
+    connect(containment(), &Plasma::Containment::screenChanged,
+            this, &ContainmentInterface::screenChanged);
+    connect(containment(), &Plasma::Containment::activityChanged,
+            this, &ContainmentInterface::activityChanged);
+    connect(containment(), &Plasma::Containment::wallpaperChanged,
+            this, &ContainmentInterface::loadWallpaper);
 
      if (containment()->corona()) {
-         connect(containment()->corona(), SIGNAL(availableScreenRegionChanged()),
-                 this, SIGNAL(availableScreenRegionChanged()));
+         connect(containment()->corona(), &Plasma::Corona::availableScreenRegionChanged,
+                 this, &ContainmentInterface::availableScreenRegionChanged);
      }
      loadWallpaper();
 }
@@ -200,7 +200,7 @@ void ContainmentInterface::loadWallpaper()
     }
 }
 
-QString ContainmentInterface::activityId() const
+QString ContainmentInterface::activity() const
 {
     return containment()->activity();
 }

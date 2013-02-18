@@ -338,6 +338,11 @@ Q_SIGNALS:
         void appletRemoved(Plasma::Applet *applet);
 
         /**
+         * Emitted when the activity id has changed
+         */
+        void activityChanged(const QString &activity);
+
+        /**
          * Emitted when the user clicks on the toolbox
          */
         void toolBoxToggled();

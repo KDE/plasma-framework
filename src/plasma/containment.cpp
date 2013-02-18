@@ -699,7 +699,7 @@ QString Containment::containmentActions(const QString &trigger)
 
 void Containment::setActivity(const QString &activityId)
 {
-    if (activityId.isEmpty()) {
+    if (activityId.isEmpty() || d->activityId == activityId) {
         return;
     }
 
@@ -708,6 +708,7 @@ void Containment::setActivity(const QString &activityId)
     c.writeEntry("activityId", activityId);
 
     emit configNeedsSaving();
+    emit activityChanged(activityId);
 }
 
 QString Containment::activity() const

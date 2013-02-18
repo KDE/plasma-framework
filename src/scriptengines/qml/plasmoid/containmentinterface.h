@@ -36,7 +36,7 @@ class ContainmentInterface : public AppletInterface
     Q_PROPERTY(bool drawWallpaper READ drawWallpaper WRITE setDrawWallpaper)
     Q_PROPERTY(Type containmentType READ containmentType WRITE setContainmentType)
     Q_PROPERTY(int screen READ screen NOTIFY screenChanged)
-    Q_PROPERTY(QString activityId READ activityId NOTIFY activityIdChanged)
+    Q_PROPERTY(QString activity READ activity NOTIFY activityChanged)
     Q_ENUMS(Type)
 
 public:
@@ -60,7 +60,7 @@ public:
     void setContainmentType(Type type);
     int screen() const;
 
-    QString activityId() const;
+    QString activity() const;
 
     Q_INVOKABLE QRectF screenGeometry(int id) const;
     Q_INVOKABLE QVariantList availableScreenRegion(int id) const;
@@ -76,7 +76,7 @@ Q_SIGNALS:
     void appletAdded(QObject *applet);
     void appletRemoved(QObject *applet);
     void screenChanged();
-    void activityIdChanged();
+    void activityChanged();
     void availableScreenRegionChanged();
     void appletsChanged();
 
