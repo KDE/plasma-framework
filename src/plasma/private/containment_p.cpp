@@ -313,7 +313,7 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
         return;
     }
 
-    //kDebug() << "got containmentConstraintsEvent" << constraints << (QObject*)toolBox;
+    //kDebug() << "got containmentConstraintsEvent" << constraints;
     if (constraints & Plasma::ImmutableConstraint) {
         //update actions
         checkRemoveAction();
@@ -344,7 +344,6 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
     }
 
     if (constraints & Plasma::StartupCompletedConstraint && type < Containment::CustomContainment) {
-        q->addToolBoxAction(q->action("remove"));
         checkRemoveAction();
     }
 }

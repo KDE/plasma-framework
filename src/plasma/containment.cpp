@@ -166,18 +166,6 @@ void Containment::init()
                 d->actions()->addAction("configure shortcuts", act);
             }
         }
-
-        if (d->type == DesktopContainment) {
-            addToolBoxAction(action("add widgets"));
-
-            //TODO: do we need some way to allow this be overridden?
-            //      it's always available because shells rely on this
-            //      to offer their own custom configuration as well
-            QAction *configureContainment = action("configure");
-            if (configureContainment) {
-                addToolBoxAction(configureContainment);
-            }
-        }
     }
 }
 
@@ -574,16 +562,6 @@ void Containment::enableAction(const QString &name, bool enable)
         action->setEnabled(enable);
         action->setVisible(enable);
     }
-}
-
-void Containment::addToolBoxAction(QAction *action)
-{
-    d->toolBoxActions << action;
-}
-
-void Containment::removeToolBoxAction(QAction *action)
-{
-    d->toolBoxActions.removeAll(action);
 }
 
 void Containment::addAssociatedWidget(QWidget *widget)

@@ -248,16 +248,6 @@ class PLASMA_EXPORT Containment : public Applet
         void enableAction(const QString &name, bool enable);
 
         /**
-         * Add an action to the toolbox
-         */
-        void addToolBoxAction(QAction *action);
-
-        /**
-         * Remove an action from the toolbox
-         */
-        void removeToolBoxAction(QAction *action);
-
-        /**
          * associate actions with this widget, including ones added after this call.
          * needed to make keyboard shortcuts work.
          */
