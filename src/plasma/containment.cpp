@@ -374,12 +374,6 @@ Corona *Containment::corona() const
     return qobject_cast<Corona*>(parent());
 }
 
-void Containment::showDropZone(const QPoint pos)
-{
-    Q_UNUSED(pos)
-    //Base implementation does nothing, don't put code here
-}
-
 void Containment::setFormFactor(FormFactor formFactor)
 {
     if (d->formFactor == formFactor) {

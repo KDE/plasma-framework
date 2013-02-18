@@ -323,16 +323,6 @@ class PLASMA_EXPORT Containment : public Applet
         QString activity() const;
 
         /**
-         * Shows a visual clue for drag and drop
-         * The default implementation does nothing,
-         * reimplement in containments that need it
-         *
-         * @param pos point where to show the drop target; if an invalid point is passed in
-         *        the drop zone should not be shown
-         */
-        virtual void showDropZone(const QPoint pos);
-
-        /**
          * Sets a containmentactions plugin.
          *
          * @param trigger the mouse button (and optional modifier) to associate the plugin with
