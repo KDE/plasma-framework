@@ -204,15 +204,15 @@ KPluginInfo Package::metadata() const
             // d->path might still be a file, if its path has a trailing /,
             // the fileInfo lookup will fail, so remove it.
             QString p = d->path;
-            if (d->path.endsWith("/")) {
-                p = p.remove(p.count()-1, 1);
+            if (p.endsWith("/")) {
+                p.chop(1);
             }
-            d->path = p;
             QFileInfo fileInfo(p);
 
             if (fileInfo.isDir()) {
                 d->createPackageMetadata(d->path);
             } else if (fileInfo.exists()) {
+                d->path = p;
                 KArchive *archive = 0;
                 QMimeDatabase db;
                 QMimeType mimeType = db.mimeTypeForFile(p);
