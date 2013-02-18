@@ -506,21 +506,6 @@ int Containment::screen() const
     return d->screen;
 }
 
-int Containment::lastScreen() const
-{
-    return d->lastScreen;
-}
-
-int Containment::desktop() const
-{
-    return d->desktop;
-}
-
-int Containment::lastDesktop() const
-{
-    return d->lastDesktop;
-}
-
 KPluginInfo::List Containment::listContainments(const QString &category,
                                                 const QString &parentApp)
 {

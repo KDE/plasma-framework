@@ -232,7 +232,7 @@ void ContainmentPrivate::setScreen(int newScreen, int newDesktop, bool preventIn
                          << "and is" << currently->activity()
                          << (QObject*)currently << "i'm" << (QObject*)q;
 #endif
-                currently->setScreen(-1, currently->desktop());
+                currently->setScreen(-1, -1);
                 swapScreensWith = currently;
             }
         }
