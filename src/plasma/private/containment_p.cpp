@@ -185,7 +185,7 @@ void ContainmentPrivate::addAppletActions(KMenu &desktopMenu, Applet *applet, QE
     }
 }
 
-void ContainmentPrivate::setScreen(int newScreen, int newDesktop, bool preventInvalidDesktops)
+void ContainmentPrivate::setScreen(int newScreen)
 {
     // What we want to do in here is:
     //   * claim the screen as our own
@@ -211,12 +211,7 @@ void ContainmentPrivate::setScreen(int newScreen, int newDesktop, bool preventIn
         newScreen = -1;
     }
 
-    // -1 == All desktops
-    if (newDesktop < -1 || (preventInvalidDesktops && newDesktop > KWindowSystem::numberOfDesktops() - 1)) {
-        newDesktop = -1;
-    }
-
-    //kDebug() << activity() << "setting screen to " << newScreen << newDesktop << "and type is" << type;
+    //kDebug() << activity() << "setting screen to " << newScreen << "and type is" << type;
 
     Containment *swapScreensWith(0);
     const bool isDesktopContainment = type == Containment::DesktopContainment ||
@@ -224,7 +219,7 @@ void ContainmentPrivate::setScreen(int newScreen, int newDesktop, bool preventIn
     if (isDesktopContainment) {
         if (newScreen > -1) {
             // sanity check to make sure someone else doesn't have this screen already!
-            Containment *currently = corona->containmentForScreen(newScreen, newDesktop);
+            Containment *currently = corona->containmentForScreen(newScreen);
             if (currently && currently != q) {
 #ifndef NDEBUG
                 kDebug() << "currently is on screen" << currently->screen()
@@ -232,44 +227,34 @@ void ContainmentPrivate::setScreen(int newScreen, int newDesktop, bool preventIn
                          << "and is" << currently->activity()
                          << (QObject*)currently << "i'm" << (QObject*)q;
 #endif
-                currently->setScreen(-1, -1);
+                currently->setScreen(-1);
                 swapScreensWith = currently;
             }
         }
     }
-
-    int oldDesktop = desktop;
-    desktop = newDesktop;
 
     int oldScreen = screen;
     screen = newScreen;
 
     q->updateConstraints(Plasma::ScreenConstraint);
 
-    if (oldScreen != newScreen || oldDesktop != newDesktop) {
+    if (oldScreen != newScreen) {
         /*
 #ifndef NDEBUG
         kDebug() << "going to signal change for" << q
 #endif
-                 << ", old screen & desktop:" << oldScreen << oldDesktop
+                 << ", old screen & desktop:" << oldScreen
                  << ", new:" << screen << desktop;
                  */
         KConfigGroup c = q->config();
         c.writeEntry("screen", screen);
-        c.writeEntry("desktop", desktop);
-        if (newScreen != -1) {
-            lastScreen = newScreen;
-            lastDesktop = newDesktop;
-            c.writeEntry("lastScreen", lastScreen);
-            c.writeEntry("lastDesktop", lastDesktop);
-        }
         emit q->configNeedsSaving();
         emit q->screenChanged(oldScreen, newScreen, q);
     }
 
     if (swapScreensWith) {
         //kDebug() << "setScreen due to swap, part 2";
-        swapScreensWith->setScreen(oldScreen, oldDesktop);
+        swapScreensWith->setScreen(oldScreen);
     }
 
     checkRemoveAction();

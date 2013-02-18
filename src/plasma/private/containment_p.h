@@ -53,9 +53,6 @@ public:
           formFactor(Planar),
           location(Floating),
           screen(-1), // no screen
-          lastScreen(-1),
-          desktop(-1), // all desktops
-          lastDesktop(-1),
           type(Containment::NoContainmentType),
           drawWallpaper(false),
           containmentActionsSource(Global)
@@ -74,7 +71,7 @@ public:
     void triggerShowAddWidgets();
     void requestConfiguration();
     void checkStatus(Plasma::ItemStatus status);
-    void setScreen(int newScreen, int newDesktop, bool preventInvalidDesktops = true);
+    void setScreen(int newScreen);
 
     /**
      * Called when constraints have been updated on this containment to provide
@@ -126,9 +123,6 @@ public:
     QString wallpaper;
     QHash<QString, ContainmentActions*> localActionPlugins;
     int screen;
-    int lastScreen;
-    int desktop;
-    int lastDesktop;
     QList<QAction *> toolBoxActions;
     QString activityId;
     Containment::Type type;

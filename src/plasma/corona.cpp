@@ -215,7 +215,7 @@ QList<Plasma::Containment *> Corona::importLayout(const KConfigGroup &conf)
     return d->importLayout(conf, true);
 }
 
-Containment *Corona::containmentForScreen(int screen, int desktop) const
+Containment *Corona::containmentForScreen(int screen) const
 {
     foreach (Containment *containment, d->containments) {
         if (containment->screen() == screen &&
@@ -228,17 +228,16 @@ Containment *Corona::containmentForScreen(int screen, int desktop) const
     return 0;
 }
 
-Containment *Corona::containmentForScreen(int screen, int desktop,
+Containment *Corona::containmentForScreen(int screen,
                                           const QString &defaultPluginIfNonExistent, const QVariantList &defaultArgs)
 {
-    Containment *containment = containmentForScreen(screen, desktop);
+    Containment *containment = containmentForScreen(screen);
     if (!containment && !defaultPluginIfNonExistent.isEmpty()) {
         // screen requests are allowed to bypass immutability
-        if (screen >= 0 && screen < numScreens() &&
-            desktop >= -1 && desktop < KWindowSystem::numberOfDesktops()) {
+        if (screen >= 0 && screen < numScreens()) {
             containment = d->addContainment(defaultPluginIfNonExistent, defaultArgs, 0);
             if (containment) {
-                containment->setScreen(screen, desktop);
+                containment->setScreen(screen);
             }
         }
     }

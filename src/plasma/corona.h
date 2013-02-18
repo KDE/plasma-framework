@@ -113,7 +113,7 @@ public:
      * @param desktop the virtual desktop) to locate; if < 0 then it will
      *        simply return the first Containment associated with screen
      */
-    Containment *containmentForScreen(int screen, int desktop = -1) const;
+    Containment *containmentForScreen(int screen) const;
 
     /**
      * Returns the Containment for a given physical screen and desktop, creating one
@@ -127,7 +127,7 @@ public:
      * @param defaultArgs optional arguments to pass in when creating a Containment if needed
      * @since 4.6
      */
-    Containment *containmentForScreen(int screen, int desktop,
+    Containment *containmentForScreen(int screen,
                                       const QString &defaultPluginIfNonExistent,
                                       const QVariantList &defaultArgs = QVariantList());
 

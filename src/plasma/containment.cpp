@@ -217,9 +217,7 @@ void Containment::restore(KConfigGroup &group)
     setLocation((Plasma::Location)group.readEntry("location", (int)d->location));
     setFormFactor((Plasma::FormFactor)group.readEntry("formfactor", (int)d->formFactor));
     //kDebug() << "setScreen from restore";
-    d->lastScreen = group.readEntry("lastScreen", d->lastScreen);
-    d->lastDesktop = group.readEntry("lastDesktop", d->lastDesktop);
-    d->setScreen(group.readEntry("screen", d->screen), group.readEntry("desktop", d->desktop), false);
+    d->setScreen(group.readEntry("screen", d->screen));
     d->activityId = group.readEntry("activityId", QString());
 
     flushPendingConstraintsEvents();
@@ -305,9 +303,6 @@ void Containment::save(KConfigGroup &g) const
     }
 
     group.writeEntry("screen", d->screen);
-    group.writeEntry("lastScreen", d->lastScreen);
-    group.writeEntry("desktop", d->desktop);
-    group.writeEntry("lastDesktop", d->lastDesktop);
     group.writeEntry("formfactor", (int)d->formFactor);
     group.writeEntry("location", (int)d->location);
     group.writeEntry("activityId", d->activityId);
@@ -496,9 +491,9 @@ QList<Applet *> Containment::applets() const
     return d->applets;
 }
 
-void Containment::setScreen(int newScreen, int newDesktop)
+void Containment::setScreen(int newScreen)
 {
-    d->setScreen(newScreen, newDesktop);
+    d->setScreen(newScreen);
 }
 
 int Containment::screen() const
