@@ -716,36 +716,9 @@ QString Containment::activity() const
     return d->activityId;
 }
 
-void Containment::destroy()
-{
-    destroy(true);
-}
-
 void Containment::showConfigurationInterface()
 {
     Applet::showConfigurationInterface();
-}
-
-void Containment::destroy(bool confirm)
-{
-    if (immutability() != Mutable || Applet::d->transient) {
-        return;
-    }
-
-    if (isContainment() && confirm) {
-        //FIXME: should not be blocking
-        const QString title = i18nc("@title:window %1 is the name of the containment", "Remove %1", Containment::title());
-        KGuiItem remove = KStandardGuiItem::remove();
-        remove.setText(title);
-        //FIXME: make the view accessible?
-        if (KMessageBox::warningContinueCancel(0/*view()*/,
-            i18nc("%1 is the name of the containment", "Do you really want to remove this %1?", Containment::title()),
-            title, remove) != KMessageBox::Continue) {
-            return;
-        }
-    }
-
-    Applet::destroy();
 }
 
 KConfigGroup Containment::containmentActionsConfig()

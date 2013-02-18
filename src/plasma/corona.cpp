@@ -138,7 +138,7 @@ void Corona::exportLayout(KConfigGroup &config, QList<Containment*> containments
             a->d->immutability = Mutable;
         }
 
-        c->destroy(false);
+        c->destroy();
     }
 
     //restore immutability
