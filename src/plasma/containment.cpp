@@ -350,7 +350,7 @@ void Containment::restoreContents(KConfigGroup &group)
             continue;
         }
 
-        d->addApplet(plugin, QVariantList(), appletConfig.readEntry("geometry", QRectF()), appId);
+        d->addApplet(plugin, QVariantList(), appId);
     }
 }
 
@@ -484,13 +484,12 @@ void Containment::clearApplets()
     d->applets.clear();
 }
 
-Applet *Containment::addApplet(const QString &name, const QVariantList &args,
-                               const QRectF &appletGeometry)
+Applet *Containment::addApplet(const QString &name, const QVariantList &args)
 {
-    return d->addApplet(name, args, appletGeometry);
+    return d->addApplet(name, args);
 }
 
-void Containment::addApplet(Applet *applet, const QPointF &pos)
+void Containment::addApplet(Applet *applet)
 {
     if (!isContainment() || immutability() != Mutable) {
         return;
@@ -557,7 +556,7 @@ void Containment::addApplet(Applet *applet, const QPointF &pos)
     applet->updateConstraints(Plasma::AllConstraints);
     applet->flushPendingConstraintsEvents();
 
-    emit appletAdded(applet, pos);
+    emit appletAdded(applet);
 
     if (!currentContainment) {
         applet->updateConstraints(Plasma::StartupCompletedConstraint);

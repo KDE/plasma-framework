@@ -364,8 +364,7 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
     }
 }
 
-Applet *ContainmentPrivate::addApplet(const QString &name, const QVariantList &args,
-                                      const QRectF &appletGeometry, uint id)
+Applet *ContainmentPrivate::addApplet(const QString &name, const QVariantList &args, uint id)
 {
     if (!q->isContainment()) {
         return 0;
@@ -390,7 +389,7 @@ Applet *ContainmentPrivate::addApplet(const QString &name, const QVariantList &a
 
     //kDebug() << applet->title() << "sizehint:" << applet->sizeHint() << "geometry:" << applet->geometry();
 
-    q->addApplet(applet, appletGeometry.topLeft());
+    q->addApplet(applet);
     return applet;
 }
 

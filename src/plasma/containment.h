@@ -197,8 +197,7 @@ class PLASMA_EXPORT Containment : public Applet
          *
          * @return a pointer to the applet on success, or 0 on failure
          */
-        Applet *addApplet(const QString &name, const QVariantList &args = QVariantList(),
-                                  const QRectF &geometry = QRectF(-1, -1, -1, -1));
+        Applet *addApplet(const QString &name, const QVariantList &args = QVariantList());
 
         /**
          * Add an existing applet to this Containment
@@ -206,7 +205,7 @@ class PLASMA_EXPORT Containment : public Applet
          * @param applet the applet that should be added
          * @param pos the containment-relative position
          */
-        void addApplet(Applet *applet, const QPointF &pos = QPointF(-1, -1));
+        void addApplet(Applet *applet);
 
         /**
          * @return the applets currently in this Containment
@@ -371,7 +370,7 @@ Q_SIGNALS:
         /**
          * This signal is emitted when a new applet is created by the containment
          */
-        void appletAdded(Plasma::Applet *applet, const QPointF &pos);
+        void appletAdded(Plasma::Applet *applet);
 
         /**
          * This signal is emitted when an applet is destroyed

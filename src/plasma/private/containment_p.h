@@ -92,8 +92,7 @@ public:
     void checkRemoveAction();
     void configChanged();
 
-    Applet *addApplet(const QString &name, const QVariantList &args = QVariantList(),
-                      const QRectF &geometry = QRectF(-1, -1, -1, -1), uint id = 0);
+    Applet *addApplet(const QString &name, const QVariantList &args = QVariantList(), uint id = 0);
 
     KActionCollection *actions();
 
