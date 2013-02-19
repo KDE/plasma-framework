@@ -270,7 +270,7 @@ FocusScope {
     }
 
     // Overriding QtQuick.Item activeFocus property.
-    property alias activeFocus: textInput.activeFocus
+    //property alias activeFocus: textInput.activeFocus
 
     // TODO: fix default size
     implicitWidth: theme.defaultFont.mSize.width*12 + base.internalPadding*2
