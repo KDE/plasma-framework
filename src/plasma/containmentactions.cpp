@@ -102,6 +102,39 @@ QString ContainmentActions::pluginName() const
     return d->containmentActionsDescription.pluginName();
 }
 
+void ContainmentActions::setSource(ContainmentActionsSource source)
+{
+    d->containmentActionsSource = source;
+}
+
+ContainmentActions::ContainmentActionsSource ContainmentActions::source() const
+{
+    return d->containmentActionsSource;
+}
+
+KConfigGroup ContainmentActions::config() const
+{
+    KConfigGroup cfg;
+    if (!d->containment) {
+        return cfg;
+    }
+
+    switch (d->containmentActionsSource) {
+    case Local:
+        cfg = d->containment->config();
+        cfg = KConfigGroup(&cfg, "ActionPlugins");
+        break;
+    case Activity:
+        cfg = KConfigGroup(d->containment->corona()->config(), "Activities");
+        cfg = KConfigGroup(&cfg, d->containment->activity());
+        cfg = KConfigGroup(&cfg, "ActionPlugins");
+        break;
+    default:
+        cfg = KConfigGroup(d->containment->corona()->config(), "ActionPlugins");
+    }
+    return cfg;
+}
+
 void ContainmentActions::restore(const KConfigGroup &config)
 {
     init(config);
@@ -211,7 +244,8 @@ QString ContainmentActions::eventToString(QEvent *event)
     return trigger;
 }
 
-void ContainmentActions::setContainment(Containment *newContainment) {
+void ContainmentActions::setContainment(Containment *newContainment)
+{
     d->containment = newContainment;
 }
 

@@ -61,6 +61,18 @@ class PLASMA_EXPORT ContainmentActions : public QObject
 
     public:
         /**
+         * Where the actions come from.
+         * Containments can use a global set of actions or a personalized set,
+         * with granularity to Activity or Containment
+         */
+        enum ContainmentActionsSource {
+            Global = 0,
+            Activity,
+            Local
+        };
+        Q_ENUMS(ContainmentActionsSource)
+
+        /**
          * Default constructor for an empty or null containmentactions
          */
         explicit ContainmentActions(QObject * parent = 0);
@@ -84,6 +96,25 @@ class PLASMA_EXPORT ContainmentActions : public QObject
          * Returns the icon related to this containmentactions
          **/
         QString icon() const;
+
+        /**
+         * Returns the configurations of this containmentactions
+         * @since 5.0
+         */
+        KConfigGroup config() const;
+
+        /**
+         * Sets the source, for this containmentactions Global, Activity or Local
+         * @param source @see ContainmentActionsSource
+         * @since 5.0
+         */
+        void setSource(ContainmentActionsSource source);
+
+        /**
+         * @return the source of this containmentactions
+         * @since 5.0
+         */
+        ContainmentActionsSource source() const;
 
         /**
          * This method should be called once the plugin is loaded or settings are changed.

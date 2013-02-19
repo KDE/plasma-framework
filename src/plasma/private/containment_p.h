@@ -27,6 +27,7 @@
 #include "plasma.h"
 #include "applet.h"
 #include "corona.h"
+#include "containmentactions.h"
 
 static const int INTER_CONTAINMENT_MARGIN = 6;
 static const int CONTAINMENT_COLUMNS = 2;
@@ -55,7 +56,7 @@ public:
           screen(-1), // no screen
           type(Containment::NoContainmentType),
           drawWallpaper(false),
-          containmentActionsSource(Global)
+          containmentActionsSource(ContainmentActions::Global)
     {
     }
 
@@ -134,12 +135,7 @@ public:
     Containment::Type type;
     bool drawWallpaper : 1;
 
-    enum ContainmentActionsSource {
-        Global = 0,
-        Activity,
-        Local
-    };
-    ContainmentActionsSource containmentActionsSource;
+    ContainmentActions::ContainmentActionsSource containmentActionsSource;
     static QHash<QString, ContainmentActions*> globalActionPlugins;
     static const char defaultWallpaper[];
     static const char defaultWallpaperMode[];

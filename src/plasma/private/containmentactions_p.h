@@ -33,11 +33,15 @@ public:
         containmentActionsDescription(service),
         package(0),
         containment(0),
-        needsConfig(false)
+        needsConfig(false),
+        containmentActionsSource(ContainmentActions::Global)
     {
     };
 
     ContainmentActions *q;
+
+    ContainmentActions::ContainmentActionsSource containmentActionsSource;
+    QString currentTrigger;
     KPluginInfo containmentActionsDescription;
     Package *package;
     KServiceAction mode;

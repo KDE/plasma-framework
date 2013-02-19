@@ -34,13 +34,9 @@
 namespace Plasma
 {
 
-class AccessAppletJob;
-class AppletHandle;
 class DataEngine;
 class Package;
 class Corona;
-class View;
-class Wallpaper;
 class ContainmentActions;
 class ContainmentPrivate;
 

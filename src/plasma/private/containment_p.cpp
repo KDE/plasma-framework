@@ -394,11 +394,11 @@ KConfigGroup ContainmentPrivate::containmentActionsConfig() const
 {
     KConfigGroup cfg;
     switch (containmentActionsSource) {
-    case ContainmentPrivate::Local:
+    case ContainmentActions::Local:
         cfg = q->config();
         cfg = KConfigGroup(&cfg, "ActionPlugins");
         break;
-    case ContainmentPrivate::Activity:
+    case ContainmentActions::Activity:
         cfg = KConfigGroup(q->corona()->config(), "Activities");
         cfg = KConfigGroup(&cfg, activityId);
         cfg = KConfigGroup(&cfg, "ActionPlugins");
@@ -456,9 +456,9 @@ bool ContainmentPrivate::prepareContainmentActions(const QString &trigger, const
 QHash<QString, ContainmentActions*> * ContainmentPrivate::actionPlugins()
 {
     switch (containmentActionsSource) {
-        case Activity:
+        case ContainmentActions::Activity:
             //FIXME
-        case Local:
+        case ContainmentActions::Local:
             return &localActionPlugins;
         default:
             return &globalActionPlugins;

@@ -219,21 +219,21 @@ void Containment::restore(KConfigGroup &group)
         //don't let global desktop actions conflict with panels
         //this also prevents panels from sharing config with each other
         //but the panels aren't configurable anyways, and I doubt that'll change.
-        d->containmentActionsSource = ContainmentPrivate::Local;
+        d->containmentActionsSource = ContainmentActions::Local;
         cfg = KConfigGroup(&group, "ActionPlugins");
     } else {
         const QString source = group.readEntry("ActionPluginsSource", QString());
         if (source == "Global") {
             cfg = KConfigGroup(corona()->config(), "ActionPlugins");
-            d->containmentActionsSource = ContainmentPrivate::Global;
+            d->containmentActionsSource = ContainmentActions::Global;
         } else if (source == "Activity") {
             cfg = KConfigGroup(corona()->config(), "Activities");
             cfg = KConfigGroup(&cfg, d->activityId);
             cfg = KConfigGroup(&cfg, "ActionPlugins");
-            d->containmentActionsSource = ContainmentPrivate::Activity;
+            d->containmentActionsSource = ContainmentActions::Activity;
         } else if (source == "Local") {
             cfg = group;
-            d->containmentActionsSource = ContainmentPrivate::Local;
+            d->containmentActionsSource = ContainmentActions::Local;
         } else {
             //default to global
             //but, if there is no global config, try copying it from local.
@@ -241,7 +241,7 @@ void Containment::restore(KConfigGroup &group)
             if (!cfg.exists()) {
                 cfg = KConfigGroup(&group, "ActionPlugins");
             }
-            d->containmentActionsSource = ContainmentPrivate::Global;
+            d->containmentActionsSource = ContainmentActions::Global;
             group.writeEntry("ActionPluginsSource", "Global");
         }
     }
@@ -643,9 +643,9 @@ void Containment::addContainmentActions(const QString &trigger, const QString &p
         plugin->setContainment(0);
     } else {
         switch (d->containmentActionsSource) {
-        case ContainmentPrivate::Activity:
+        case ContainmentActions::Activity:
             //FIXME
-        case ContainmentPrivate::Local:
+        case ContainmentActions::Local:
             plugin = PluginLoader::self()->loadContainmentActions(this, pluginName);
             break;
         default:
@@ -654,6 +654,7 @@ void Containment::addContainmentActions(const QString &trigger, const QString &p
 
         if (plugin) {
             cfg.writeEntry(trigger, pluginName);
+            plugin->setSource(d->containmentActionsSource);
             d->actionPlugins()->insert(trigger, plugin);
         } else {
             //bad plugin... gets removed. is this a feature or a bug?
@@ -667,9 +668,9 @@ void Containment::addContainmentActions(const QString &trigger, const QString &p
 QHash<QString, ContainmentActions*> Containment::containmentActions()
 {
     switch (d->containmentActionsSource) {
-        case ContainmentPrivate::Activity:
+        case ContainmentActions::Activity:
             //FIXME
-        case ContainmentPrivate::Local:
+        case ContainmentActions::Local:
             return d->localActionPlugins;
         default:
             return d->globalActionPlugins;

@@ -28,6 +28,7 @@
 #include <KDebug>
 #include <KLocalizedString>
 
+#include <Plasma/ContainmentActions>
 #include <Plasma/Corona>
 #include <Plasma/Package>
 #include <Plasma/PluginLoader>
@@ -315,12 +316,42 @@ void ContainmentInterface::addContainmentActions(KMenu &desktopMenu, QEvent *eve
         return;
     }
 
-    //STUB
-    desktopMenu.addAction("Containment Menu Item 1");
-    desktopMenu.addAction("Containment Menu Item 2");
-    //TODO: reenable ContainmentActions plugins
-    /*const QString trigger = ContainmentActions::eventToString(event);
-    prepareContainmentActions(trigger, QPoint(), &desktopMenu);*/
+    //this is what ContainmentPrivate::prepareContainmentActions was
+    const QString trigger = Plasma::ContainmentActions::eventToString(event);
+    Plasma::ContainmentActions *plugin = containment()->containmentActions().value(trigger);
+
+    if (!plugin) {
+        return;
+    }
+
+    if (plugin->containment() != containment()) {
+        plugin->setContainment(containment());
+
+        // now configure it
+        KConfigGroup cfg = plugin->config();
+        KConfigGroup pluginConfig = KConfigGroup(&cfg, trigger);
+        plugin->restore(pluginConfig);
+    }
+
+    if (plugin->configurationRequired()) {
+        desktopMenu.addTitle(i18n("This plugin needs to be configured"));
+        desktopMenu.addAction(containment()->action("configure"));
+
+        return;
+    } else {
+        QList<QAction*> actions = plugin->contextualActions();
+        if (actions.isEmpty()) {
+            //it probably didn't bother implementing the function. give the user a chance to set
+            //a better plugin.  note that if the user sets no-plugin this won't happen...
+            if ((containment()->containmentType() != Plasma::Containment::PanelContainment && containment()->containmentType() != Plasma::Containment::CustomPanelContainment) && containment()->action("configure")) {
+                desktopMenu.addAction(containment()->action("configure"));
+            }
+        } else {
+            desktopMenu.addActions(actions);
+        }
+    }
+
+    return;
 }
 
 #include "moc_containmentinterface.cpp"
