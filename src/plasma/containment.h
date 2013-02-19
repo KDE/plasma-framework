@@ -128,60 +128,6 @@ class PLASMA_EXPORT Containment : public Applet
         Corona *corona() const;
 
         /**
-         * Returns a list of all known containments.
-         *
-         * @param category Only containments matching this category will be returned.
-         *                 Useful in conjunction with knownCategories.
-         *                 If "Miscellaneous" is passed in, then applets without a
-         *                 Categories= entry are also returned.
-         *                 If an empty string is passed in, all applets are
-         *                 returned.
-         * @param parentApp the application to filter applets on. Uses the
-         *                  X-KDE-ParentApp entry (if any) in the plugin info.
-         *                  The default value of QString() will result in a
-         *                  list containing only applets not specifically
-         *                  registered to an application.
-         * @return list of applets
-         **/
-        static KPluginInfo::List listContainments(const QString &category = QString(),
-                                                  const QString &parentApp = QString());
-
-        /**
-         * Returns a list of all known Containments that match the parameters.
-         *
-         * @param type Only Containments with this string in X-Plasma-ContainmentCategories
-         *             in their .desktop files will be returned. Common values are panel and
-         *             desktop
-         * @param category Only applets matchin this category will be returned.
-         *                 Useful in conjunction with knownCategories.
-         *                 If "Miscellaneous" is passed in, then applets without a
-         *                 Categories= entry are also returned.
-         *                 If an empty string is passed in, all applets are
-         *                 returned.
-         * @param parentApp the application to filter applets on. Uses the
-         *                  X-KDE-ParentApp entry (if any) in the plugin info.
-         *                  The default value of QString() will result in a
-         *                  list containing only applets not specifically
-         *                  registered to an application.
-         * @return list of applets
-         **/
-        static KPluginInfo::List listContainmentsOfType(const QString &type,
-                                                        const QString &category = QString(),
-                                                        const QString &parentApp = QString());
-
-        /**
-         * @return a list of all known types of Containments on this system
-         */
-        static QStringList listContainmentTypes();
-
-        /**
-         * Returns a list of all known applets associated with a certain MimeType
-         *
-         * @return list of applets
-         **/
-        static KPluginInfo::List listContainmentsForMimeType(const QString &mimeType);
-
-        /**
          * Adds an applet to this Containment
          *
          * @param name the plugin name for the applet, as given by
