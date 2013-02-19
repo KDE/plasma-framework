@@ -173,7 +173,7 @@ bool IconItem::smooth() const
 
 bool IconItem::isValid() const
 {
-    return m_icon.isNull() || m_svgIcon || !m_pixmapIcon.isNull() || m_imageIcon.isNull();
+    return !m_icon.isNull() || m_svgIcon || !m_pixmapIcon.isNull() || !m_imageIcon.isNull();
 }
 
 void IconItem::paint(QPainter *painter)
