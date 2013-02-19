@@ -627,10 +627,10 @@ void Containment::addContainmentActions(const QString &trigger, const QString &p
     KConfigGroup cfg = d->containmentActionsConfig();
     ContainmentActions *plugin = 0;
 
-    if (d->actionPlugins()->contains(trigger)) {
-        plugin = d->actionPlugins()->value(trigger);
+    if (containmentActions().contains(trigger)) {
+        plugin = containmentActions().value(trigger);
         if (plugin->pluginName() != pluginName) {
-            d->actionPlugins()->remove(trigger);
+            containmentActions().remove(trigger);
             delete plugin;
             plugin = 0;
         }
@@ -655,7 +655,7 @@ void Containment::addContainmentActions(const QString &trigger, const QString &p
         if (plugin) {
             cfg.writeEntry(trigger, pluginName);
             plugin->setSource(d->containmentActionsSource);
-            d->actionPlugins()->insert(trigger, plugin);
+            containmentActions().insert(trigger, plugin);
         } else {
             //bad plugin... gets removed. is this a feature or a bug?
             cfg.deleteEntry(trigger);
@@ -665,7 +665,7 @@ void Containment::addContainmentActions(const QString &trigger, const QString &p
     emit configNeedsSaving();
 }
 
-QHash<QString, ContainmentActions*> Containment::containmentActions()
+QHash<QString, ContainmentActions*> &Containment::containmentActions()
 {
     switch (d->containmentActionsSource) {
         case ContainmentActions::Activity:

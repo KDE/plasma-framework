@@ -112,79 +112,6 @@ void ContainmentPrivate::checkContainmentFurniture()
     }
 }
 
-void ContainmentPrivate::addContainmentActions(KMenu &desktopMenu, QEvent *event)
-{
-    if (q->corona()->immutability() != Mutable &&
-        !KAuthorized::authorizeKAction("plasma/containment_actions")) {
-        //kDebug() << "immutability";
-        return;
-    }
-
-    const QString trigger = ContainmentActions::eventToString(event);
-    prepareContainmentActions(trigger, QPoint(), &desktopMenu);
-}
-
-void ContainmentPrivate::addAppletActions(KMenu &desktopMenu, Applet *applet, QEvent *event)
-{
-    foreach (QAction *action, applet->contextualActions()) {
-        if (action) {
-            desktopMenu.addAction(action);
-        }
-    }
-
-    if (!applet->d->failed) {
-        QAction *configureApplet = applet->d->actions->action("configure");
-        if (configureApplet && configureApplet->isEnabled()) {
-            desktopMenu.addAction(configureApplet);
-        }
-
-        QAction *runAssociatedApplication = applet->d->actions->action("run associated application");
-        if (runAssociatedApplication && runAssociatedApplication->isEnabled()) {
-            desktopMenu.addAction(runAssociatedApplication);
-        }
-    }
-
-    KMenu *containmentMenu = new KMenu(i18nc("%1 is the name of the containment", "%1 Options", q->title()), &desktopMenu);
-    addContainmentActions(*containmentMenu, event);
-    if (!containmentMenu->isEmpty()) {
-        int enabled = 0;
-        //count number of real actions
-        QListIterator<QAction *> actionsIt(containmentMenu->actions());
-        while (enabled < 3 && actionsIt.hasNext()) {
-            QAction *action = actionsIt.next();
-            if (action->isVisible() && !action->isSeparator()) {
-                ++enabled;
-            }
-        }
-
-        if (enabled) {
-            //if there is only one, don't create a submenu
-            if (enabled < 2) {
-                foreach (QAction *action, containmentMenu->actions()) {
-                    if (action->isVisible() && !action->isSeparator()) {
-                        desktopMenu.addAction(action);
-                    }
-                }
-            } else {
-                desktopMenu.addMenu(containmentMenu);
-            }
-        }
-    }
-
-    if (q->immutability() == Mutable) {
-        QAction *closeApplet = applet->d->actions->action("remove");
-        //kDebug() << "checking for removal" << closeApplet;
-        if (closeApplet) {
-            if (!desktopMenu.isEmpty()) {
-                desktopMenu.addSeparator();
-            }
-
-            //kDebug() << "adding close action" << closeApplet->isEnabled() << closeApplet->isVisible();
-            desktopMenu.addAction(closeApplet);
-        }
-    }
-}
-
 void ContainmentPrivate::setScreen(int newScreen)
 {
     // What we want to do in here is:
@@ -264,6 +191,24 @@ void ContainmentPrivate::setScreen(int newScreen)
     }
 }
 
+KConfigGroup ContainmentPrivate::containmentActionsConfig() const
+{
+    KConfigGroup cfg;
+    switch (containmentActionsSource) {
+    case ContainmentActions::Local:
+        cfg = q->config();
+        cfg = KConfigGroup(&cfg, "ActionPlugins");
+        break;
+    case ContainmentActions::Activity:
+        cfg = KConfigGroup(q->corona()->config(), "Activities");
+        cfg = KConfigGroup(&cfg, activityId);
+        cfg = KConfigGroup(&cfg, "ActionPlugins");
+        break;
+    default:
+        cfg = KConfigGroup(q->corona()->config(), "ActionPlugins");
+    }
+    return cfg;
+}
 
 KActionCollection* ContainmentPrivate::actions()
 {
@@ -388,81 +333,6 @@ void ContainmentPrivate::appletDeleted(Plasma::Applet *applet)
 bool ContainmentPrivate::isPanelContainment() const
 {
     return type == Containment::PanelContainment || type == Containment::CustomPanelContainment;
-}
-
-KConfigGroup ContainmentPrivate::containmentActionsConfig() const
-{
-    KConfigGroup cfg;
-    switch (containmentActionsSource) {
-    case ContainmentActions::Local:
-        cfg = q->config();
-        cfg = KConfigGroup(&cfg, "ActionPlugins");
-        break;
-    case ContainmentActions::Activity:
-        cfg = KConfigGroup(q->corona()->config(), "Activities");
-        cfg = KConfigGroup(&cfg, activityId);
-        cfg = KConfigGroup(&cfg, "ActionPlugins");
-        break;
-    default:
-        cfg = KConfigGroup(q->corona()->config(), "ActionPlugins");
-    }
-    return cfg;
-}
-
-bool ContainmentPrivate::prepareContainmentActions(const QString &trigger, const QPoint &screenPos, KMenu *menu)
-{
-    ContainmentActions *plugin = actionPlugins()->value(trigger);
-    if (!plugin) {
-        return false;
-    }
-
-    if (plugin->containment() != q) {
-        plugin->setContainment(q);
-
-        // now configure it
-        KConfigGroup cfg = containmentActionsConfig();
-        KConfigGroup pluginConfig = KConfigGroup(&cfg, trigger);
-        plugin->restore(pluginConfig);
-    }
-
-    if (plugin->configurationRequired()) {
-        KMenu *localMenu = menu ? menu : new KMenu();
-
-        localMenu->addTitle(i18n("This plugin needs to be configured"));
-        localMenu->addAction(q->action("configure"));
-
-        if (!menu) {
-            localMenu->exec(screenPos);
-            delete localMenu;
-        }
-
-        return false;
-    } else if (menu) {
-        QList<QAction*> actions = plugin->contextualActions();
-        if (actions.isEmpty()) {
-            //it probably didn't bother implementing the function. give the user a chance to set
-            //a better plugin.  note that if the user sets no-plugin this won't happen...
-            if (!isPanelContainment() && q->action("configure")) {
-                menu->addAction(q->action("configure"));
-            }
-        } else {
-            menu->addActions(actions);
-        }
-    }
-
-    return true;
-}
-
-QHash<QString, ContainmentActions*> * ContainmentPrivate::actionPlugins()
-{
-    switch (containmentActionsSource) {
-        case ContainmentActions::Activity:
-            //FIXME
-        case ContainmentActions::Local:
-            return &localActionPlugins;
-        default:
-            return &globalActionPlugins;
-    }
 }
 
 }

@@ -85,8 +85,6 @@ public:
     bool isPanelContainment() const;
     void setLockToolText();
     void appletDeleted(Applet*);
-    void addContainmentActions(KMenu &desktopMenu, QEvent *event);
-    void addAppletActions(KMenu &desktopMenu, Applet *applet, QEvent *event);
     void checkRemoveAction();
     void configChanged();
 
@@ -95,31 +93,16 @@ public:
     KActionCollection *actions();
 
     /**
-     * add the regular actions & keyboard shortcuts onto Applet's collection
-     */
-    static void addDefaultActions(KActionCollection *actions, Containment *c = 0);
-
-    /**
+     * FIXME: this should completely go from here
      * @return the config group that containmentactions plugins go in
      * @since 4.6
      */
     KConfigGroup containmentActionsConfig() const;
-    
+
     /**
-     * inits the containmentactions if necessary
-     * if it needs configuring, this warns the user and returns false
-     * if a menu is passed in, then it populates that menu with the actions from the plugin
-     * @param trigger the string to identify the correct plugin with
-     * @param screenPos used to show the configure menu, only used if no menu is passed in
-     * @param menu an optional menu to use to populate with actions, instead of triggering the
-     *             action directly
-     * @return true if it's ok to run the action
+     * add the regular actions & keyboard shortcuts onto Applet's collection
      */
-    bool prepareContainmentActions(const QString &trigger, const QPoint &screenPos, KMenu *menu = 0);
-
-
-    
-    QHash<QString, ContainmentActions*> *actionPlugins();
+    static void addDefaultActions(KActionCollection *actions, Containment *c = 0);
 
     static bool s_positioningPanels;
 

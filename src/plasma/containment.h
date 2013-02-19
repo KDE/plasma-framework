@@ -296,7 +296,7 @@ class PLASMA_EXPORT Containment : public Applet
          * @return All the loaded containment action plugins, indexed by trigger name
          * @since 5.0
          */
-        QHash<QString, ContainmentActions*> containmentActions();
+        QHash<QString, ContainmentActions*> &containmentActions();
 
 
 Q_SIGNALS:
