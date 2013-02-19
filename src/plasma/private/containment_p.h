@@ -29,9 +29,6 @@
 #include "corona.h"
 #include "containmentactions.h"
 
-static const int INTER_CONTAINMENT_MARGIN = 6;
-static const int CONTAINMENT_COLUMNS = 2;
-static const int VERTICAL_STACKING_OFFSET = 10000;
 
 class KJob;
 
@@ -43,7 +40,6 @@ namespace KIO
 namespace Plasma
 {
 
-class AccessAppletJob;
 class Containment;
 
 class ContainmentPrivate
@@ -113,7 +109,6 @@ public:
     QString wallpaper;
     QHash<QString, ContainmentActions*> localActionPlugins;
     int screen;
-    QList<QAction *> toolBoxActions;
     QString activityId;
     Containment::Type type;
     bool drawWallpaper : 1;
