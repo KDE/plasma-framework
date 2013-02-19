@@ -37,6 +37,7 @@ class QSizeF;
 
 class ConfigPropertyMap;
 
+class QmlObject;
 
 namespace Plasma
 {
@@ -76,8 +77,7 @@ public:
     ~AppletInterface();
 
 //API not intended for the QML part
-    void setUiObject(QObject *object);
-    QObject *uiObject() const;
+    QmlObject *qmlObject();
 
 //------------------------------------------------------------------
 //enums copy&pasted from plasma.h because qtscript is evil
@@ -226,6 +226,10 @@ Q_SIGNALS:
     void busyChanged();
     void expandedChanged();
 
+//it's important this slot is private because must not be invokable by qml
+public Q_SLOTS:
+    void init();
+
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
     void itemChange(ItemChange change, const ItemChangeData &value);
@@ -242,7 +246,7 @@ private:
     ConfigPropertyMap *m_configuration;
 
 //UI-specific members ------------------
-    QWeakPointer<QObject> m_uiObject;
+    QmlObject *m_qmlObject;
     QWeakPointer<QObject> m_compactUiObject;
 
     QTimer *m_creationTimer;

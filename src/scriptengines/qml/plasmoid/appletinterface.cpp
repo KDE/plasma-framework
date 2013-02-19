@@ -24,6 +24,7 @@
 #include <QDir>
 #include <QFile>
 #include <QIcon>
+#include <QQmlContext>
 #include <QQmlEngine>
 #include <QQmlExpression>
 #include <QQmlProperty>
@@ -35,14 +36,18 @@
 #include <KGlobalSettings>
 #include <KService>
 #include <KServiceTypeTrader>
+#include <KLocalizedString>
 
 #include <Plasma/Plasma>
 #include <Plasma/Applet>
 #include <Plasma/Corona>
 #include <Plasma/Package>
+#include <Plasma/PluginLoader>
 
 #include "containmentinterface.h"
 #include "declarative/configpropertymap.h"
+#include "declarative/qmlobject.h"
+#include "declarative/packageaccessmanagerfactory.h"
 
 Q_DECLARE_METATYPE(AppletInterface*)
 
@@ -68,39 +73,101 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
             this, SIGNAL(locationChanged()));
     connect(m_appletScriptEngine, SIGNAL(contextChanged()),
             this, SIGNAL(contextChanged()));
-    
+
+    m_qmlObject = new QmlObject(this);
+    m_qmlObject->setInitializationDelayed(true);
+
     m_creationTimer = new QTimer(this);
     m_creationTimer->setSingleShot(true);
-    connect(m_creationTimer, &QTimer::timeout, m_appletScriptEngine, &DeclarativeAppletScript::delayedInit);
+    connect(m_creationTimer, &QTimer::timeout, this, &AppletInterface::init);
 }
 
 AppletInterface::~AppletInterface()
 {
 }
 
-void AppletInterface::setUiObject(QObject *object)
+void AppletInterface::init()
 {
-    if (m_uiObject.data() == object) {
+    if (m_qmlObject->rootObject()) {
         return;
     }
 
-    m_uiObject = object;
+    //use our own custom network access manager that will access Plasma packages and to manage security (i.e. deny access to remote stuff when the proper extension isn't enabled
+    QQmlEngine *engine = m_qmlObject->engine();
+    QQmlNetworkAccessManagerFactory *factory = engine->networkAccessManagerFactory();
+    engine->setNetworkAccessManagerFactory(0);
+    delete factory;
+    engine->setNetworkAccessManagerFactory(new PackageAccessManagerFactory(m_appletScriptEngine->package()));
+
+    m_qmlObject->setQmlPath(m_appletScriptEngine->mainScript());
+    
+
+    if (!m_qmlObject->engine() || !m_qmlObject->engine()->rootContext() || !m_qmlObject->engine()->rootContext()->isValid() || m_qmlObject->mainComponent()->isError()) {
+        QString reason;
+        foreach (QQmlError error, m_qmlObject->mainComponent()->errors()) {
+            reason += error.toString()+'\n';
+        }
+        reason = i18n("Error loading QML file: %1", reason);
+
+        m_qmlObject->setQmlPath(applet()->containment()->corona()->package().filePath("ui", "AppletError.qml"));
+        m_qmlObject->completeInitialization();
+
+
+        //even the error message QML may fail
+        if (m_qmlObject->mainComponent()->isError()) {
+            return;
+        } else {
+            m_qmlObject->rootObject()->setProperty("reason", reason);
+        }
+
+        m_appletScriptEngine->setLaunchErrorMessage(reason);
+    }
+
+
+    m_qmlObject->engine()->rootContext()->setContextProperty("plasmoid", this);
+
+    m_qmlObject->completeInitialization();
+
+    qDebug() << "Graphic object created:" << applet() << applet()->property("graphicObject");
+
+    //Create the ToolBox
+    Plasma::Containment *pc = qobject_cast<Plasma::Containment *>(applet());
+    if (pc) {
+        Plasma::Package pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
+        pkg.setPath("org.kde.toolbox");
+
+        if (pkg.isValid()) {
+            QQmlComponent *toolBoxComponent = new QQmlComponent(m_qmlObject->engine(), this);
+            toolBoxComponent->loadUrl(QUrl::fromLocalFile(pkg.filePath("mainscript")));
+            QObject *toolBoxObject = toolBoxComponent->create(engine->rootContext());
+
+            QObject *containmentGraphicObject = m_qmlObject->rootObject();
+
+            if (containmentGraphicObject && toolBoxObject) {
+                //memory management
+                toolBoxComponent->setParent(toolBoxObject);
+                toolBoxObject->setProperty("parent", QVariant::fromValue(containmentGraphicObject));
+
+                containmentGraphicObject->setProperty("toolBox", QVariant::fromValue(toolBoxObject));
+            } else {
+                delete toolBoxComponent;
+                delete toolBoxObject;
+            }
+        } else {
+            kWarning() << "Could not load org.kde.toolbox package.";
+        }
+    }
 
     //set parent, both as object hyerarchy and visually
-    object->setProperty("parent", QVariant::fromValue(this));
+    m_qmlObject->rootObject()->setProperty("parent", QVariant::fromValue(this));
 
     //set anchors
-    QQmlExpression expr(m_appletScriptEngine->engine()->rootContext(), object, "parent");
-    QQmlProperty prop(object, "anchors.fill");
+    QQmlExpression expr(m_qmlObject->engine()->rootContext(), m_qmlObject->rootObject(), "parent");
+    QQmlProperty prop(m_qmlObject->rootObject(), "anchors.fill");
     prop.write(expr.evaluate());
 
     geometryChanged(QRectF(), QRectF(x(), y(), width(), height()));
     emit busyChanged();
-}
-
-QObject *AppletInterface::uiObject() const
-{
-    return m_uiObject.data();
 }
 
 AppletInterface::FormFactor AppletInterface::formFactor() const
@@ -145,7 +212,7 @@ void AppletInterface::setTitle(const QString &title)
 
 bool AppletInterface::isBusy() const
 {
-    return !m_uiObject || m_busy;
+    return !m_qmlObject->rootObject() || m_busy;
 }
 
 void AppletInterface::setBusy(bool busy)
@@ -435,7 +502,7 @@ void AppletInterface::geometryChanged(const QRectF &newGeometry, const QRectF &o
 
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
 
-    if (!m_uiObject || qobject_cast<ContainmentInterface *>(this)) {
+    if (!m_qmlObject->rootObject() || qobject_cast<ContainmentInterface *>(this)) {
         return;
     }
 
@@ -448,21 +515,21 @@ void AppletInterface::geometryChanged(const QRectF &newGeometry, const QRectF &o
             return;
         }
 
-        QQmlComponent *component = new QQmlComponent(m_appletScriptEngine->engine(), this);
+        QQmlComponent *component = new QQmlComponent(m_qmlObject->engine(), this);
         component->loadUrl(QUrl::fromLocalFile(applet()->containment()->corona()->package().filePath("ui", "CompactApplet.qml")));
-        m_compactUiObject = component->create(m_appletScriptEngine->engine()->rootContext());
+        m_compactUiObject = component->create(m_qmlObject->engine()->rootContext());
 
         QObject *compactRepresentation = 0;
 
         //build the icon representation
         if (m_compactUiObject) {
-            QQmlComponent *compactComponent = m_uiObject.data()->property("compactRepresentation").value<QQmlComponent *>();
+            QQmlComponent *compactComponent = m_qmlObject->rootObject()->property("compactRepresentation").value<QQmlComponent *>();
             
             if (!compactComponent) {
-                compactComponent = new QQmlComponent(m_appletScriptEngine->engine(), this);
+                compactComponent = new QQmlComponent(m_qmlObject->engine(), this);
                 compactComponent->loadUrl(QUrl::fromLocalFile(applet()->containment()->corona()->package().filePath("ui", "DefaultCompactRepresentation.qml")));
             }
-            compactRepresentation = compactComponent->create(m_appletScriptEngine->engine()->rootContext());
+            compactRepresentation = compactComponent->create(m_qmlObject->engine()->rootContext());
             if (compactRepresentation) {
                 compactComponent->setParent(compactRepresentation);
             } else {
@@ -482,12 +549,12 @@ void AppletInterface::geometryChanged(const QRectF &newGeometry, const QRectF &o
             m_compactUiObject.data()->setProperty("visible", true);
             m_compactUiObject.data()->setProperty("parent", QVariant::fromValue(this));
             //set anchors
-            QQmlExpression expr(m_appletScriptEngine->engine()->rootContext(), m_compactUiObject.data(), "parent");
+            QQmlExpression expr(m_qmlObject->engine()->rootContext(), m_compactUiObject.data(), "parent");
             QQmlProperty prop(m_compactUiObject.data(), "anchors.fill");
             prop.write(expr.evaluate());
             
-            m_uiObject.data()->setProperty("parent", QVariant::fromValue(m_compactUiObject.data()));
-            m_compactUiObject.data()->setProperty("applet", QVariant::fromValue(m_uiObject.data()));
+            m_qmlObject->rootObject()->setProperty("parent", QVariant::fromValue(m_compactUiObject.data()));
+            m_compactUiObject.data()->setProperty("applet", QVariant::fromValue(m_qmlObject->rootObject()));
         
         //failed to create UI, don't do anything, return in expanded status
         } else {
@@ -507,7 +574,7 @@ void AppletInterface::geometryChanged(const QRectF &newGeometry, const QRectF &o
             return;
         }
 
-        m_uiObject.data()->setProperty("parent", QVariant::fromValue(this));
+        m_qmlObject->rootObject()->setProperty("parent", QVariant::fromValue(this));
         m_compactUiObject.data()->deleteLater();
     }
 }
@@ -516,8 +583,8 @@ void AppletInterface::itemChange(ItemChange change, const ItemChangeData &value)
 {
     if (change == QQuickItem::ItemSceneChange) {
         //we have a window: create the 
-        if (value.window && !m_uiObject && !m_creationTimer->isActive()) {
-            m_appletScriptEngine->delayedInit();
+        if (value.window && !m_qmlObject->rootObject() && !m_creationTimer->isActive()) {
+            init();
 
             /*Experiment on even more delayed, doesn't seem to be good
             QTime time = QTime::currentTime();
@@ -528,6 +595,11 @@ void AppletInterface::itemChange(ItemChange change, const ItemChangeData &value)
         }
     }
     QQuickItem::itemChange(change, value);
+}
+
+QmlObject *AppletInterface::qmlObject()
+{
+    return m_qmlObject;
 }
 
 #include "moc_appletinterface.cpp"

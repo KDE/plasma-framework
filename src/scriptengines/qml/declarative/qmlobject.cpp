@@ -41,13 +41,13 @@ public:
         : q(parent),
           engine(0),
           component(0),
-          root(0),
           delay(false)
     {
     }
 
     ~QmlObjectPrivate()
     {
+        delete root.data();
     }
 
     void errorPrint();
@@ -67,7 +67,7 @@ public:
     QQmlEngine* engine;
     QQmlIncubator incubator;
     QQmlComponent* component;
-    QObject *root;
+    QWeakPointer<QObject> root;
     bool delay : 1;
 };
 
@@ -95,8 +95,7 @@ void QmlObjectPrivate::execute(const QString &fileName)
 
     delete component;
     component = new QQmlComponent(engine, q);
-    delete root;
-    root = 0;
+    delete root.data();
 
     KDeclarative kdeclarative;
     kdeclarative.setDeclarativeEngine(engine);
@@ -168,7 +167,7 @@ QQmlEngine* QmlObject::engine()
 
 QObject *QmlObject::rootObject() const
 {
-    return d->root;
+    return d->root.data();
 }
 
 QQmlComponent *QmlObject::mainComponent() const

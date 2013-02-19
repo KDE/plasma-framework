@@ -135,7 +135,7 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
 
     //if an appletGraphicObject is not set, we have to display some error message
     } else if (applet && contGraphicObject) {
-        QQmlComponent *component = new QQmlComponent(m_appletScriptEngine->engine(), applet);
+        QQmlComponent *component = new QQmlComponent(qmlObject()->engine(), applet);
         component->loadUrl(QUrl::fromLocalFile(containment()->corona()->package().filePath("ui", "AppletError.qml")));
         QObject *errorUi = component->create();
 
@@ -180,7 +180,7 @@ void ContainmentInterface::loadWallpaper()
             m_wallpaperQmlObject->rootObject()->setProperty("parent", QVariant::fromValue(this));
 
             //set anchors
-            QQmlExpression expr(m_appletScriptEngine->engine()->rootContext(), m_wallpaperQmlObject->rootObject(), "parent");
+            QQmlExpression expr(qmlObject()->engine()->rootContext(), m_wallpaperQmlObject->rootObject(), "parent");
             QQmlProperty prop(m_wallpaperQmlObject->rootObject(), "anchors.fill");
             prop.write(expr.evaluate());
 

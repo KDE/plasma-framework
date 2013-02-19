@@ -47,7 +47,6 @@ public:
 
     bool include(const QString &path);
 
-    QQmlEngine *engine() const;
 
     static QObject *loadui(const QString &filename);
     QObject *loadService(const QString &pluginName);
@@ -56,11 +55,9 @@ public Q_SLOTS:
     void executeAction(const QString &name);
     void activate();
     void configChanged();
-    bool delayedInit();
 
 protected:
     bool init();
-    void setupObjects();
 
 Q_SIGNALS:
     void formFactorChanged();
@@ -68,8 +65,8 @@ Q_SIGNALS:
     void contextChanged();
 
 private:
-    QmlObject *m_qmlObject;
     AppletInterface *m_interface;
+    friend class AppletInterface;
 };
 
 #endif
