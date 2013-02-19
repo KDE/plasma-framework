@@ -167,18 +167,10 @@ void Containment::init()
 // helper function for sorting the list of applets
 bool appletConfigLessThan(const KConfigGroup &c1, const KConfigGroup &c2)
 {
-    QPointF p1 = c1.readEntry("geometry", QRectF()).topLeft();
-    QPointF p2 = c2.readEntry("geometry", QRectF()).topLeft();
+    int i1 = c1.readEntry("id", 0);
+    int i2 = c2.readEntry("id", 0);
 
-    if (!qFuzzyCompare(p1.x(), p2.x())) {
-        if (QApplication::layoutDirection() == Qt::RightToLeft) {
-            return p1.x() > p2.x();
-        }
-
-        return p1.x() < p2.x();
-    }
-
-    return qFuzzyCompare(p1.y(), p2.y()) || p1.y() < p2.y();
+    return (i1 < i2);
 }
 
 void Containment::restore(KConfigGroup &group)
