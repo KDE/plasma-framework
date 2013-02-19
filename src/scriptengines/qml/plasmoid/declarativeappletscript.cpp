@@ -68,9 +68,13 @@ DeclarativeAppletScript::~DeclarativeAppletScript()
 
 bool DeclarativeAppletScript::init()
 {
-    Plasma::Containment *pc = qobject_cast<Plasma::Containment *>(applet());
+    Plasma::Applet *a = applet();
+    Plasma::Containment *pc = qobject_cast<Plasma::Containment *>(a);
 
     if (pc) {
+        m_interface = new ContainmentInterface(this);
+
+        //Try to determine the containment type
         QString type = pc->pluginInfo().property("X-Plasma-ContainmentType").toString();
 
         if (type == "DesktopContainment") {
@@ -82,7 +86,18 @@ bool DeclarativeAppletScript::init()
         } else if (type == "CustomPanelContainment") {
             pc->setContainmentType(Plasma::CustomPanelContainment);
         }
+    //fail? so it's a normal Applet
+    } else {
+        m_interface = new AppletInterface(this);
     }
+
+    m_interface->setParent(this);
+    // set the graphicObject dynamic property on applet
+    a->setProperty("graphicObject", QVariant::fromValue(m_interface));
+
+    connect(applet(), SIGNAL(activate()),
+            this, SLOT(activate()));
+
 
     m_qmlObject = new QmlObject(applet());
     m_qmlObject->setInitializationDelayed(true);
@@ -124,19 +139,6 @@ bool DeclarativeAppletScript::init()
         setLaunchErrorMessage(reason);
     }
 
-    Plasma::Applet *a = applet();
-
-    if (pc) {
-        m_interface = new ContainmentInterface(this);
-    //fail? so it's a normal Applet
-    } else {
-        m_interface = new AppletInterface(this);
-    }
-
-    m_interface->setParent(this);
-
-    connect(applet(), SIGNAL(activate()),
-            this, SLOT(activate()));
 
     setupObjects();
 
@@ -144,8 +146,6 @@ bool DeclarativeAppletScript::init()
 
     m_interface->setUiObject(m_qmlObject->rootObject());
 
-    // set the graphicObject dynamic property on applet
-    a->setProperty("graphicObject", QVariant::fromValue(m_interface));
     qDebug() << "Graphic object created:" << a << a->property("graphicObject");
 
     //Create the ToolBox
