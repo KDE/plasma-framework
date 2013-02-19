@@ -98,7 +98,15 @@ bool DeclarativeAppletScript::init()
     connect(applet(), SIGNAL(activate()),
             this, SLOT(activate()));
 
+    //FIXME: everything should be delayed
+    if (pc) {
+        delayedInit();
+    }
+    return true;
+}
 
+bool DeclarativeAppletScript::delayedInit()
+{
     m_qmlObject = new QmlObject(applet());
     m_qmlObject->setInitializationDelayed(true);
     //FIXME: what replaced this?
@@ -146,9 +154,10 @@ bool DeclarativeAppletScript::init()
 
     m_interface->setUiObject(m_qmlObject->rootObject());
 
-    qDebug() << "Graphic object created:" << a << a->property("graphicObject");
+    qDebug() << "Graphic object created:" << applet() << applet()->property("graphicObject");
 
     //Create the ToolBox
+    Plasma::Containment *pc = qobject_cast<Plasma::Containment *>(applet());
     if (pc) {
         Plasma::Package pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
         pkg.setPath("org.kde.toolbox");
@@ -175,7 +184,7 @@ bool DeclarativeAppletScript::init()
         }
     }
 
-    return !a->failedToLaunch();
+    return !applet()->failedToLaunch();
 }
 
 QString DeclarativeAppletScript::filePath(const QString &type, const QString &file) const

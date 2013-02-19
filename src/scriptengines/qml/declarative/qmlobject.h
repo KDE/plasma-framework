@@ -21,13 +21,65 @@
 #define QMLOBJECT_H
 
 #include <QObject>
+#include <QQmlIncubationController>
 
+#include <QWindow>
+#include <QAnimationDriver>
+#include <QGuiApplication>
+#include <QScreen>
 
 class QQmlEngine;
 class QQmlComponent;
 
 
 class QmlObjectPrivate;
+
+class QmlObjectIncubationController : public QObject, public QQmlIncubationController
+{
+    Q_OBJECT
+
+public:
+    QmlObjectIncubationController(QObject *parent)
+        : QQmlIncubationController(),
+          QObject(parent)
+    {
+        // Allow incubation for 1/3 of a frame.
+        m_incubation_time = qMax(1, int(1000 / QGuiApplication::primaryScreen()->refreshRate()) / 3);
+    }
+
+protected:
+    virtual bool event(QEvent *e)
+    {
+        if (e->type() == QEvent::User) {
+            incubate();
+            return true;
+        }
+        return QObject::event(e);
+    }
+
+public slots:
+    void incubate()
+    {
+        if (incubatingObjectCount()) {
+            incubateFor(m_incubation_time * 2);
+            if (incubatingObjectCount()) {
+                QCoreApplication::postEvent(this, new QEvent(QEvent::User));
+            }
+        }
+    }
+
+    void animationStopped() { incubate(); }
+
+protected:
+    virtual void incubatingObjectCountChanged(int count)
+    {
+        if (count) {
+            QCoreApplication::postEvent(this, new QEvent(QEvent::User));
+        }
+    }
+private:
+    int m_incubation_time;
+};
 
 /**
  * @class QmlObject plasma/declarativewidget.h <Plasma/QmlObject>

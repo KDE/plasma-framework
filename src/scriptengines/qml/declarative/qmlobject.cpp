@@ -34,7 +34,6 @@
 //#include "private/declarative/dataenginebindings_p.h"
 
 
-
 class QmlObjectPrivate
 {
 public:
@@ -66,6 +65,7 @@ public:
 
     QString qmlPath;
     QQmlEngine* engine;
+    QQmlIncubator incubator;
     QQmlComponent* component;
     QObject *root;
     bool delay : 1;
@@ -127,6 +127,7 @@ QmlObject::QmlObject(QObject *parent)
       d(new QmlObjectPrivate(this))
 {
     d->engine = new QQmlEngine(this);
+    d->engine->setIncubationController(new QmlObjectIncubationController(0));
     //d->engine->setNetworkAccessManagerFactory(new PackageAccessManagerFactory());
 }
 
@@ -185,14 +186,14 @@ void QmlObject::completeInitialization()
         return;
     }
 
-    QQmlIncubator incubator;
-    d->component->create(incubator);
+    d->component->create(d->incubator);
 
-    while (!incubator.isReady() && incubator.status() != QQmlIncubator::Error) {
+    while (!d->incubator.isReady() && d->incubator.status() != QQmlIncubator::Error) {
         QCoreApplication::processEvents(QEventLoop::AllEvents, 50);
     }
 
-    d->root = incubator.object();
+    d->root = d->incubator.object();
+    //d->root = d->component->create();
 
     if (!d->root) {
         d->errorPrint();

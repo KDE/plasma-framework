@@ -68,6 +68,10 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
             this, SIGNAL(locationChanged()));
     connect(m_appletScriptEngine, SIGNAL(contextChanged()),
             this, SIGNAL(contextChanged()));
+    
+    m_creationTimer = new QTimer(this);
+    m_creationTimer->setSingleShot(true);
+    connect(m_creationTimer, &QTimer::timeout, m_appletScriptEngine, &DeclarativeAppletScript::delayedInit);
 }
 
 AppletInterface::~AppletInterface()
@@ -89,6 +93,9 @@ void AppletInterface::setUiObject(QObject *object)
     QQmlExpression expr(m_appletScriptEngine->engine()->rootContext(), object, "parent");
     QQmlProperty prop(object, "anchors.fill");
     prop.write(expr.evaluate());
+
+    geometryChanged(QRectF(), QRectF(x(), y(), width(), height()));
+    emit busyChanged();
 }
 
 QObject *AppletInterface::uiObject() const
@@ -138,7 +145,7 @@ void AppletInterface::setTitle(const QString &title)
 
 bool AppletInterface::isBusy() const
 {
-    return m_busy;
+    return !m_uiObject || m_busy;
 }
 
 void AppletInterface::setBusy(bool busy)
@@ -503,6 +510,24 @@ void AppletInterface::geometryChanged(const QRectF &newGeometry, const QRectF &o
         m_uiObject.data()->setProperty("parent", QVariant::fromValue(this));
         m_compactUiObject.data()->deleteLater();
     }
+}
+
+void AppletInterface::itemChange(ItemChange change, const ItemChangeData &value)
+{
+    if (change == QQuickItem::ItemSceneChange) {
+        //we have a window: create the 
+        if (value.window && !m_uiObject && !m_creationTimer->isActive()) {
+            m_appletScriptEngine->delayedInit();
+
+            /*Experiment on even more delayed, doesn't seem to be good
+            QTime time = QTime::currentTime();
+            qsrand((uint)time.msec());
+            const int interval = qrand() % ((1000 + 1) - 50) + 50;
+            //QTimer::singleShot(interval, m_appletScriptEngine, SLOT(delayedInit()));
+            m_creationTimer->start(interval);*/
+        }
+    }
+    QQuickItem::itemChange(change, value);
 }
 
 #include "moc_appletinterface.cpp"

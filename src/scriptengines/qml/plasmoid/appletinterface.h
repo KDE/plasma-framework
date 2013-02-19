@@ -228,6 +228,7 @@ Q_SIGNALS:
 
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
+    void itemChange(ItemChange change, const ItemChangeData &value);
 
     DeclarativeAppletScript *m_appletScriptEngine;
 
@@ -243,6 +244,8 @@ private:
 //UI-specific members ------------------
     QWeakPointer<QObject> m_uiObject;
     QWeakPointer<QObject> m_compactUiObject;
+
+    QTimer *m_creationTimer;
 
     Plasma::BackgroundHints m_backgroundHints;
     bool m_busy : 1;
