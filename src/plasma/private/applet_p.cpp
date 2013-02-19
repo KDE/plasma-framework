@@ -209,14 +209,14 @@ KActionCollection* AppletPrivate::defaultActions(QObject *parent)
     configAction->setText(i18n("Widget Settings"));
     configAction->setIcon(KDE::icon("configure"));
     configAction->setShortcut(KShortcut("alt+d, s"));
-    configAction->setData(Containment::ConfigureTool);
+    configAction->setData(Plasma::ConfigureAction);
 
     KAction *closeApplet = actions->addAction("remove");
     closeApplet->setAutoRepeat(false);
     closeApplet->setText(i18n("Remove this Widget"));
     closeApplet->setIcon(KDE::icon("edit-delete"));
     closeApplet->setShortcut(KShortcut("alt+d, r"));
-    closeApplet->setData(Containment::DestructiveTool);
+    closeApplet->setData(Plasma::DestructiveAction);
 
     KAction *runAssociatedApplication = actions->addAction("run associated application");
     runAssociatedApplication->setAutoRepeat(false);
@@ -225,7 +225,7 @@ KActionCollection* AppletPrivate::defaultActions(QObject *parent)
     runAssociatedApplication->setShortcut(KShortcut("alt+d, t"));
     runAssociatedApplication->setVisible(false);
     runAssociatedApplication->setEnabled(false);
-    runAssociatedApplication->setData(Containment::ControlTool);
+    runAssociatedApplication->setData(Plasma::ControlAction);
 
     return actions;
 }

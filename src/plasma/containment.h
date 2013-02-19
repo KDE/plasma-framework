@@ -67,17 +67,6 @@ class PLASMA_EXPORT Containment : public Applet
     Q_PROPERTY(QString wallpaper READ wallpaper WRITE setWallpaper NOTIFY wallpaperChanged)
 
     public:
-
-        enum ToolType {
-            AddTool = 0,
-            ConfigureTool = 100,
-            ControlTool = 200,
-            MiscTool = 300,
-            DestructiveTool = 400,
-            UserToolType = DestructiveTool + 1000
-        };
-        Q_ENUMS(ToolType)
-
         /**
          * @param parent the QObject this applet is parented to
          * @param serviceId the name of the .desktop file containing the

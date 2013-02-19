@@ -471,7 +471,7 @@ void CoronaPrivate::init()
     lockAction->setText(i18n("Lock Widgets"));
     lockAction->setAutoRepeat(true);
     lockAction->setIcon(KDE::icon("object-locked"));
-    lockAction->setData(Containment::ControlTool);
+    lockAction->setData(Plasma::ControlAction);
     lockAction->setShortcut(KShortcut("alt+d, l"));
     lockAction->setShortcutContext(Qt::ApplicationShortcut);
 
@@ -483,7 +483,7 @@ void CoronaPrivate::init()
     action->setText(i18n("Shortcut Settings"));
     action->setIcon(KDE::icon("configure-shortcuts"));
     action->setAutoRepeat(false);
-    action->setData(Containment::ConfigureTool);
+    action->setData(Plasma::ConfigureAction);
     //action->setShortcut(KShortcut("ctrl+h"));
     action->setShortcutContext(Qt::ApplicationShortcut);
 
