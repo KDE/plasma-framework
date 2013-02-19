@@ -23,6 +23,7 @@
 #include <QQmlComponent>
 #include <QQmlEngine>
 #include <QQmlContext>
+#include <QQmlIncubator>
 #include <QTimer>
 
 #include <kdebug.h>
@@ -184,7 +185,14 @@ void QmlObject::completeInitialization()
         return;
     }
 
-    d->root = d->component->create();
+    QQmlIncubator incubator;
+    d->component->create(incubator);
+
+    while (!incubator.isReady() && incubator.status() != QQmlIncubator::Error) {
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 50);
+    }
+
+    d->root = incubator.object();
 
     if (!d->root) {
         d->errorPrint();
