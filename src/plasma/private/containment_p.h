@@ -50,7 +50,7 @@ public:
           formFactor(Planar),
           location(Floating),
           screen(-1), // no screen
-          type(Containment::NoContainmentType),
+          type(Plasma::NoContainmentType),
           drawWallpaper(false),
           containmentActionsSource(ContainmentActions::Global)
     {
@@ -107,7 +107,7 @@ public:
     QHash<QString, ContainmentActions*> localActionPlugins;
     int screen;
     QString activityId;
-    Containment::Type type;
+    ContainmentType type;
     bool drawWallpaper : 1;
 
     ContainmentActions::ContainmentActionsSource containmentActionsSource;

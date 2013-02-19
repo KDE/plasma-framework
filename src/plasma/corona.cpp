@@ -219,8 +219,8 @@ Containment *Corona::containmentForScreen(int screen) const
 {
     foreach (Containment *containment, d->containments) {
         if (containment->screen() == screen &&
-            (containment->containmentType() == Containment::DesktopContainment ||
-             containment->containmentType() == Containment::CustomContainment)) {
+            (containment->containmentType() == Plasma::DesktopContainment ||
+             containment->containmentType() == Plasma::CustomContainment)) {
             return containment;
         }
     }
@@ -287,12 +287,12 @@ void Corona::loadDefaultLayout()
 {
 }
 
-void Corona::setPreferredToolBoxPlugin(const Containment::Type type, const QString &plugin)
+void Corona::setPreferredToolBoxPlugin(const Plasma::ContainmentType type, const QString &plugin)
 {
     d->toolBoxPlugins[type] = plugin;
 }
 
-QString Corona::preferredToolBoxPlugin(const Containment::Type type) const
+QString Corona::preferredToolBoxPlugin(const Plasma::ContainmentType type) const
 {
     return d->toolBoxPlugins.value(type);
 }
@@ -413,12 +413,12 @@ void Corona::addShortcuts(KActionCollection *newShortcuts)
     }
 }
 
-void Corona::setContainmentActionsDefaults(Containment::Type containmentType, const ContainmentActionsPluginsConfig &config)
+void Corona::setContainmentActionsDefaults(Plasma::ContainmentType containmentType, const ContainmentActionsPluginsConfig &config)
 {
     d->containmentActionsDefaults.insert(containmentType, config);
 }
 
-ContainmentActionsPluginsConfig Corona::containmentActionsDefaults(Containment::Type containmentType)
+ContainmentActionsPluginsConfig Corona::containmentActionsDefaults(Plasma::ContainmentType containmentType)
 {
     return d->containmentActionsDefaults.value(containmentType);
 }

@@ -77,6 +77,21 @@ enum FormFactor {
 };
 
 /**
+ * This enumeration describes the type of the Containment.
+ * DesktopContainments represent main containments that will own a screen in a mutually exclusive fashion,
+ * while PanelContainments are accessories which can be present multiple per screen.
+ */
+enum ContainmentType {
+    NoContainmentType = -1,  /**< @internal */
+    DesktopContainment = 0,  /**< A desktop containment */
+    PanelContainment,        /**< A desktop panel */
+    CustomContainment = 127, /**< A containment that is neither a desktop nor a panel
+                                but something application specific */
+    CustomPanelContainment = 128 /**< A customized desktop panel */
+};
+Q_ENUMS(ContainmentType)
+
+/**
  * The Direction enumeration describes in which direction, relative to the
  * Applet (and its managing container), popup menus, expanders, balloons,
  * message boxes, arrows and other such visually associated widgets should

@@ -64,10 +64,10 @@ public:
     QList<Containment*> containments;
     QHash<uint, QGraphicsWidget*> offscreenWidgets;
     KActionCollection actions;
-    QMap<Containment::Type, ContainmentActionsPluginsConfig> containmentActionsDefaults;
+    QMap<Plasma::ContainmentType, ContainmentActionsPluginsConfig> containmentActionsDefaults;
     QWeakPointer<KShortcutsDialog> shortcutsDlg;
     QWeakPointer<AbstractDialogManager> dialogManager;
-    QHash<Containment::Type, QString> toolBoxPlugins;
+    QHash<Plasma::ContainmentType, QString> toolBoxPlugins;
     QList<QWeakPointer<KActionCollection> > actionCollections;
 };
 

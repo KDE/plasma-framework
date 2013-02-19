@@ -216,13 +216,13 @@ public:
      * @since 4.4
      * Sets the default containmentactions plugins for the given containment type
      */
-    void setContainmentActionsDefaults(Containment::Type containmentType, const ContainmentActionsPluginsConfig &config);
+    void setContainmentActionsDefaults(ContainmentType containmentType, const ContainmentActionsPluginsConfig &config);
 
     /**
      * @since 4.4
      * Returns the default containmentactions plugins for the given containment type
      */
-    ContainmentActionsPluginsConfig containmentActionsDefaults(Containment::Type containmentType);
+    ContainmentActionsPluginsConfig containmentActionsDefaults(ContainmentType containmentType);
 
     /**
      * @param the AbstractDialogManager implementaion
@@ -245,7 +245,7 @@ public:
      * @param type the containment type of which we want to know the associated toolbox plugin
      * @since 4.6
      */
-    QString preferredToolBoxPlugin(const Containment::Type type) const;
+    QString preferredToolBoxPlugin(const ContainmentType type) const;
 
     /**
      * Imports an applet layout from a config file. The results will be added to the
@@ -385,7 +385,7 @@ protected:
      * @param plugin the toolbox plugin name
      * @since 4.6
      */
-    void setPreferredToolBoxPlugin(const Containment::Type type, const QString &plugin);
+    void setPreferredToolBoxPlugin(const ContainmentType type, const QString &plugin);
 
     /**
      * Sets the default containment plugin to try and load

@@ -90,7 +90,7 @@ ContainmentInterface::Type ContainmentInterface::containmentType() const
 
 void ContainmentInterface::setContainmentType(ContainmentInterface::Type type)
 {
-    m_appletScriptEngine->setContainmentType((Plasma::Containment::Type)type);
+    m_appletScriptEngine->setContainmentType((Plasma::ContainmentType)type);
 }
 
 int ContainmentInterface::screen() const
@@ -343,7 +343,7 @@ void ContainmentInterface::addContainmentActions(KMenu &desktopMenu, QEvent *eve
         if (actions.isEmpty()) {
             //it probably didn't bother implementing the function. give the user a chance to set
             //a better plugin.  note that if the user sets no-plugin this won't happen...
-            if ((containment()->containmentType() != Plasma::Containment::PanelContainment && containment()->containmentType() != Plasma::Containment::CustomPanelContainment) && containment()->action("configure")) {
+            if ((containment()->containmentType() != Plasma::PanelContainment && containment()->containmentType() != Plasma::CustomPanelContainment) && containment()->action("configure")) {
                 desktopMenu.addAction(containment()->action("configure"));
             }
         } else {

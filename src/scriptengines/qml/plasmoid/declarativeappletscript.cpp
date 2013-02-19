@@ -74,13 +74,13 @@ bool DeclarativeAppletScript::init()
         QString type = pc->pluginInfo().property("X-Plasma-ContainmentType").toString();
 
         if (type == "DesktopContainment") {
-            pc->setContainmentType(Plasma::Containment::DesktopContainment);
+            pc->setContainmentType(Plasma::DesktopContainment);
         } else if (type == "PanelContainment") {
-            pc->setContainmentType(Plasma::Containment::PanelContainment);
+            pc->setContainmentType(Plasma::PanelContainment);
         } if (type == "CustomContainment") {
-            pc->setContainmentType(Plasma::Containment::CustomContainment);
+            pc->setContainmentType(Plasma::CustomContainment);
         } else if (type == "CustomPanelContainment") {
-            pc->setContainmentType(Plasma::Containment::CustomPanelContainment);
+            pc->setContainmentType(Plasma::CustomPanelContainment);
         }
     }
 

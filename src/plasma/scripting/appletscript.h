@@ -144,13 +144,13 @@ public:
       * @see Containment
       * @since 4.7
       */
-     Containment::Type containmentType() const;
+     Plasma::ContainmentType containmentType() const;
 
      /**
       * @see Containment
       * @since 4.7
       */
-     void setContainmentType(Containment::Type type);
+     void setContainmentType(Plasma::ContainmentType type);
 
 Q_SIGNALS:
     /**

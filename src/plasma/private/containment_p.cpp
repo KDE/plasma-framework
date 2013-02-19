@@ -115,8 +115,8 @@ void ContainmentPrivate::setScreen(int newScreen)
     //kDebug() << activity() << "setting screen to " << newScreen << "and type is" << type;
 
     Containment *swapScreensWith(0);
-    const bool isDesktopContainment = type == Containment::DesktopContainment ||
-                                      type == Containment::CustomContainment;
+    const bool isDesktopContainment = type == Plasma::DesktopContainment ||
+                                      type == Plasma::CustomContainment;
     if (isDesktopContainment) {
         if (newScreen > -1) {
             // sanity check to make sure someone else doesn't have this screen already!
@@ -262,7 +262,7 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
         }
     }
 
-    if (constraints & Plasma::StartupCompletedConstraint && type < Containment::CustomContainment) {
+    if (constraints & Plasma::StartupCompletedConstraint && type < Plasma::CustomContainment) {
         checkRemoveAction();
     }
 }
@@ -306,7 +306,7 @@ void ContainmentPrivate::appletDeleted(Plasma::Applet *applet)
 
 bool ContainmentPrivate::isPanelContainment() const
 {
-    return type == Containment::PanelContainment || type == Containment::CustomPanelContainment;
+    return type == Plasma::PanelContainment || type == Plasma::CustomPanelContainment;
 }
 
 }

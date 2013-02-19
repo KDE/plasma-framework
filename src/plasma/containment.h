@@ -68,15 +68,6 @@ class PLASMA_EXPORT Containment : public Applet
 
     public:
 
-        enum Type {
-            NoContainmentType = -1,  /**< @internal */
-            DesktopContainment = 0,  /**< A desktop containment */
-            PanelContainment,        /**< A desktop panel */
-            CustomContainment = 127, /**< A containment that is neither a desktop nor a panel
-                                        but something application specific */
-            CustomPanelContainment = 128 /**< A customized desktop panel */
-        };
-
         enum ToolType {
             AddTool = 0,
             ConfigureTool = 100,
@@ -120,7 +111,7 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * Returns the type of containment
          */
-        Type containmentType() const;
+        Plasma::ContainmentType containmentType() const;
 
         /**
          * Returns the Corona (if any) that this Containment is hosted by
@@ -316,7 +307,7 @@ Q_SIGNALS:
         /**
          * Sets the type of this containment.
          */
-        void setContainmentType(Containment::Type type);
+        void setContainmentType(Plasma::ContainmentType type);
 
         /**
          * Sets whether wallpaper is painted or not.
