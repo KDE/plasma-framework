@@ -137,20 +137,15 @@ void AppletInterface::init()
         pkg.setPath("org.kde.toolbox");
 
         if (pkg.isValid()) {
-            QQmlComponent *toolBoxComponent = new QQmlComponent(m_qmlObject->engine(), this);
-            toolBoxComponent->loadUrl(QUrl::fromLocalFile(pkg.filePath("mainscript")));
-            QObject *toolBoxObject = toolBoxComponent->create(engine->rootContext());
+            QObject *toolBoxObject = m_qmlObject->createObjectFromSource(QUrl::fromLocalFile(pkg.filePath("mainscript")));
 
             QObject *containmentGraphicObject = m_qmlObject->rootObject();
 
             if (containmentGraphicObject && toolBoxObject) {
-                //memory management
-                toolBoxComponent->setParent(toolBoxObject);
                 toolBoxObject->setProperty("parent", QVariant::fromValue(containmentGraphicObject));
 
                 containmentGraphicObject->setProperty("toolBox", QVariant::fromValue(toolBoxObject));
             } else {
-                delete toolBoxComponent;
                 delete toolBoxObject;
             }
         } else {
@@ -515,9 +510,7 @@ void AppletInterface::geometryChanged(const QRectF &newGeometry, const QRectF &o
             return;
         }
 
-        QQmlComponent *component = new QQmlComponent(m_qmlObject->engine(), this);
-        component->loadUrl(QUrl::fromLocalFile(applet()->containment()->corona()->package().filePath("ui", "CompactApplet.qml")));
-        m_compactUiObject = component->create(m_qmlObject->engine()->rootContext());
+        m_compactUiObject = m_qmlObject->createObjectFromSource(QUrl::fromLocalFile(applet()->containment()->corona()->package().filePath("ui", "CompactApplet.qml")));
 
         QObject *compactRepresentation = 0;
 
@@ -525,12 +518,13 @@ void AppletInterface::geometryChanged(const QRectF &newGeometry, const QRectF &o
         if (m_compactUiObject) {
             QQmlComponent *compactComponent = m_qmlObject->rootObject()->property("compactRepresentation").value<QQmlComponent *>();
             
-            if (!compactComponent) {
-                compactComponent = new QQmlComponent(m_qmlObject->engine(), this);
-                compactComponent->loadUrl(QUrl::fromLocalFile(applet()->containment()->corona()->package().filePath("ui", "DefaultCompactRepresentation.qml")));
+            if (compactComponent) {
+                compactRepresentation = compactComponent->create(m_qmlObject->engine()->rootContext());
+            } else {
+                compactRepresentation = m_qmlObject->createObjectFromSource(QUrl::fromLocalFile(applet()->containment()->corona()->package().filePath("ui", "DefaultCompactRepresentation.qml")));
             }
-            compactRepresentation = compactComponent->create(m_qmlObject->engine()->rootContext());
-            if (compactRepresentation) {
+
+            if (compactRepresentation && compactComponent) {
                 compactComponent->setParent(compactRepresentation);
             } else {
                 delete compactComponent;
@@ -538,9 +532,6 @@ void AppletInterface::geometryChanged(const QRectF &newGeometry, const QRectF &o
         }
 
         if (m_compactUiObject && compactRepresentation) {
-            //for memory management
-            component->setParent(m_compactUiObject.data());
-
             //put compactRepresentation in the icon place
             compactRepresentation->setProperty("parent", QVariant::fromValue(m_compactUiObject.data()));
             m_compactUiObject.data()->setProperty("compactRepresentation", QVariant::fromValue(compactRepresentation));
@@ -558,9 +549,7 @@ void AppletInterface::geometryChanged(const QRectF &newGeometry, const QRectF &o
         
         //failed to create UI, don't do anything, return in expanded status
         } else {
-            qWarning() << component->errors();
             m_expanded = true;
-            delete component;
         }
 
         emit expandedChanged();

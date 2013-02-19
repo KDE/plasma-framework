@@ -135,9 +135,7 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
 
     //if an appletGraphicObject is not set, we have to display some error message
     } else if (applet && contGraphicObject) {
-        QQmlComponent *component = new QQmlComponent(qmlObject()->engine(), applet);
-        component->loadUrl(QUrl::fromLocalFile(containment()->corona()->package().filePath("ui", "AppletError.qml")));
-        QObject *errorUi = component->create();
+        QObject *errorUi = qmlObject()->createObjectFromSource(QUrl::fromLocalFile(containment()->corona()->package().filePath("ui", "AppletError.qml")));
 
         if (errorUi) {
             errorUi->setProperty("visible", false);

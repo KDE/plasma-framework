@@ -158,6 +158,14 @@ public:
      */
     QQmlComponent *mainComponent() const;
 
+    /**
+     * Creates and returns an object based on the provided url to a Qml file
+     * with the same QQmlEngine and the same root context as the amin object,
+     * that will be the parent of the newly created object 
+     * @param source url where the QML file is located
+     */
+    QObject *createObjectFromSource(const QUrl &source);
+
 public Q_SLOTS:
     /**
      * Finishes the process of initialization.

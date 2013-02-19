@@ -50,7 +50,7 @@ public:
         delete root.data();
     }
 
-    void errorPrint();
+    void errorPrint(QQmlComponent *component);
     void execute(const QUrl &source);
     void scheduleExecutionEnd();
     void minimumWidthChanged();
@@ -71,7 +71,7 @@ public:
     bool delay : 1;
 };
 
-void QmlObjectPrivate::errorPrint()
+void QmlObjectPrivate::errorPrint(QQmlComponent *component)
 {
     QString errorStr = "Error loading QML file.\n";
     if(component->isError()){
@@ -181,7 +181,7 @@ void QmlObject::completeInitialization()
         return;
     }
     if (d->component->status() != QQmlComponent::Ready || d->component->isError()) {
-        d->errorPrint();
+        d->errorPrint(d->component);
         return;
     }
 
@@ -195,7 +195,7 @@ void QmlObject::completeInitialization()
     //d->root = d->component->create();
 
     if (!d->root) {
-        d->errorPrint();
+        d->errorPrint(d->component);
     }
 
 #ifndef NDEBUG
@@ -205,6 +205,29 @@ void QmlObject::completeInitialization()
     emit finished();
 }
 
+QObject *QmlObject::createObjectFromSource(const QUrl &source)
+{
+    QQmlComponent *component = new QQmlComponent(d->engine, this);
+    component->loadUrl(source);
+    component->create(d->incubator, d->engine->rootContext());
+    while (!d->incubator.isReady() && d->incubator.status() != QQmlIncubator::Error) {
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 50);
+    }
+    QObject *object = d->incubator.object();
+
+    if (!component->isError() && d->root && object) {
+        //memory management
+        component->setParent(object);
+        object->setProperty("parent", QVariant::fromValue(d->root.data()));
+        return object;
+
+    } else {
+        d->errorPrint(component);
+        delete component;
+        delete object;
+        return 0;
+    }
+}
 
 
 #include "moc_qmlobject.cpp"
