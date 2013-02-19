@@ -104,10 +104,6 @@ bool DeclarativeAppletScript::init()
     connect(applet(), SIGNAL(activate()),
             this, SLOT(activate()));
 
-    //FIXME: everything should be delayed
-    if (pc) {
-        m_interface->init();
-    }
     return true;
 }
 
