@@ -99,7 +99,7 @@ void AppletInterface::init()
     delete factory;
     engine->setNetworkAccessManagerFactory(new PackageAccessManagerFactory(m_appletScriptEngine->package()));
 
-    m_qmlObject->setQmlPath(m_appletScriptEngine->mainScript());
+    m_qmlObject->setSource(QUrl::fromLocalFile(m_appletScriptEngine->mainScript()));
     
 
     if (!m_qmlObject->engine() || !m_qmlObject->engine()->rootContext() || !m_qmlObject->engine()->rootContext()->isValid() || m_qmlObject->mainComponent()->isError()) {
@@ -109,7 +109,7 @@ void AppletInterface::init()
         }
         reason = i18n("Error loading QML file: %1", reason);
 
-        m_qmlObject->setQmlPath(applet()->containment()->corona()->package().filePath("ui", "AppletError.qml"));
+        m_qmlObject->setSource(QUrl::fromLocalFile(applet()->containment()->corona()->package().filePath("ui", "AppletError.qml")));
         m_qmlObject->completeInitialization();
 
 

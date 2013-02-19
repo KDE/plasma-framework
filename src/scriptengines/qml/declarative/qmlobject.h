@@ -98,7 +98,7 @@ class QmlObject : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString qmlPath READ qmlPath WRITE setQmlPath)
+    Q_PROPERTY(QUrl source READ source WRITE setSource)
     Q_PROPERTY(bool initializationDelayed READ isInitializationDelayed WRITE setInitializationDelayed)
     Q_PROPERTY(QObject * rootObject READ rootObject)
 
@@ -117,12 +117,12 @@ public:
      *
      * @param path the absolute path of a QML file
      */
-    void setQmlPath(const QString &path);
+    void setSource(const QUrl &source);
 
     /**
      * @return the absolute path of the current QML file
      */
-    QString qmlPath() const;
+    QUrl source() const;
 
     /**
      * Sets whether the execution of the QML file has to be delayed later in the event loop. It has to be called before setQmlPath().

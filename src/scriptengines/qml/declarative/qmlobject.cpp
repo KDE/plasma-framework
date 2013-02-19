@@ -51,7 +51,7 @@ public:
     }
 
     void errorPrint();
-    void execute(const QString &fileName);
+    void execute(const QUrl &source);
     void scheduleExecutionEnd();
     void minimumWidthChanged();
     void minimumHeightChanged();
@@ -63,7 +63,7 @@ public:
 
     QmlObject *q;
 
-    QString qmlPath;
+    QUrl source;
     QQmlEngine* engine;
     QQmlIncubator incubator;
     QQmlComponent* component;
@@ -84,9 +84,9 @@ void QmlObjectPrivate::errorPrint()
     kWarning() << component->url().toString() + '\n' + errorStr;
 }
 
-void QmlObjectPrivate::execute(const QString &fileName)
+void QmlObjectPrivate::execute(const QUrl &source)
 {
-    if (fileName.isEmpty()) {
+    if (source.isEmpty()) {
 #ifndef NDEBUG
         kDebug() << "File name empty!";
 #endif
@@ -103,7 +103,7 @@ void QmlObjectPrivate::execute(const QString &fileName)
     //binds things like kconfig and icons
     kdeclarative.setupBindings();
 
-    component->loadUrl(QUrl::fromLocalFile(fileName));
+    component->loadUrl(source);
 
     if (delay) {
         QTimer::singleShot(0, q, SLOT(scheduleExecutionEnd()));
@@ -138,16 +138,16 @@ QmlObject::~QmlObject()
     delete d;
 }
 
-void QmlObject::setQmlPath(const QString &path)
+void QmlObject::setSource(const QUrl &source)
 {
-    qDebug() << "Opening" << path;
-    d->qmlPath = path;
-    d->execute(path);
+    qDebug() << "Opening" << source;
+    d->source = source;
+    d->execute(source);
 }
 
-QString QmlObject::qmlPath() const
+QUrl QmlObject::source() const
 {
-    return d->qmlPath;
+    return d->source;
 }
 
 void QmlObject::setInitializationDelayed(const bool delay)

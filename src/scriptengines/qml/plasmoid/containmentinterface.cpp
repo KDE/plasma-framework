@@ -171,7 +171,7 @@ void ContainmentInterface::loadWallpaper()
         pkg.setPath("org.kde.wallpaper.image");
 
         m_wallpaperQmlObject = new QmlObject(this);
-        m_wallpaperQmlObject->setQmlPath(pkg.filePath("mainscript"));
+        m_wallpaperQmlObject->setSource(QUrl::fromLocalFile(pkg.filePath("mainscript")));
 
         if (m_wallpaperQmlObject->mainComponent() &&
             m_wallpaperQmlObject->rootObject() &&
