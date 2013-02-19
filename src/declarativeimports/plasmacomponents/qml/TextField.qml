@@ -350,11 +350,6 @@ FocusScope {
         enabled: textField.enabled
         clip: true
         focus: true
-        onActiveFocusChanged: {
-            if (!textField.activeFocus) {
-                textInput.closeSoftwareInputPanel()
-            }
-        }
         onAccepted: textField.accepted()
         Keys.forwardTo: textField
     }
@@ -364,7 +359,7 @@ FocusScope {
         source: "edit-clear-locationbar-rtl"
         height: Math.max(textInput.height, theme.smallIconSize)
         width: height
-        opacity: (textInput.text != "" && clearButtonShown) ? 1 : 0
+        opacity: (textInput.text != "" && clearButtonShown && textField.enabled) ? 1 : 0
         Behavior on opacity {
             NumberAnimation {
                 duration: 250
@@ -373,7 +368,7 @@ FocusScope {
         }
         anchors {
             right: parent.right
-            rightMargin: y
+            rightMargin: 6
             verticalCenter: textInput.verticalCenter
         }
         MouseArea {

@@ -393,11 +393,6 @@ Item {
                 color: theme.buttonTextColor
                 opacity: 0.5
             }
-            onActiveFocusChanged: {
-                if (!textEdit.activeFocus) {
-                    textEdit.closeSoftwareInputPanel()
-                }
-            }
         }
     }
 
