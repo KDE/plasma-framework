@@ -33,16 +33,12 @@
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 #include <qtemporaryfile.h>
+#include <qmimedatabase.h>
 
 #include <kaction.h>
 #include <kcoreauthorized.h>
 #include <klocalizedstring.h>
-#include <kmenu.h>
-#include <kmessagebox.h>
-#include <qmimedatabase.h>
 #include <kservicetypetrader.h>
-
-#include <kwindowsystem.h>
 
 #if !PLASMA_NO_KIO
 #include "kio/jobclasses.h" // for KIO::JobFlags
@@ -54,7 +50,6 @@
 #include "containmentactionspluginsconfig.h"
 #include "corona.h"
 #include "pluginloader.h"
-#include "svg.h"
 
 #include "private/applet_p.h"
 #include "private/containmentactionspluginsconfig_p.h"
@@ -349,7 +344,6 @@ void Containment::setContainmentType(Containment::Type type)
     }
 
     d->type = type;
-    d->checkContainmentFurniture();
 }
 
 Corona *Containment::corona() const

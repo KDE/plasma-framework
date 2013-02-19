@@ -22,44 +22,25 @@
 
 #include "private/containment_p.h"
 
-#include <QApplication>
-#include <QClipboard>
-#include <QMimeData>
-#include <QMimeDatabase>
-#include <QDropEvent>
-#include <qtemporaryfile.h>
 
 #include <kaction.h>
 #include <kactioncollection.h>
-#include <kcoreauthorized.h>
 #include <kiconloader.h>
-#include <klocale.h>
 #include <klocalizedstring.h>
-#include <kurlmimedata.h>
 #include <kwindowsystem.h>
 
 #include "config-plasma.h"
 
-#if !PLASMA_NO_KIO
-#include "kio/jobclasses.h" // for KIO::JobFlags
-#include "kio/job.h"
-#include "kio/scheduler.h"
-#endif
-
 #include "containmentactions.h"
-#include "containmentactionspluginsconfig.h"
 #include "corona.h"
 #include "pluginloader.h"
-#include "svg.h"
 
 #include "private/applet_p.h"
-#include "private/containmentactionspluginsconfig_p.h"
 
 
 namespace Plasma
 {
 
-bool ContainmentPrivate::s_positioningPanels = false;
 QHash<QString, ContainmentActions*> ContainmentPrivate::globalActionPlugins;
 
 const char ContainmentPrivate::defaultWallpaper[] = "image";
@@ -103,13 +84,6 @@ void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containme
     //no icon
     action->setShortcut(KShortcut("alt+d, p"));
     action->setData(Containment::ControlTool);
-}
-
-void ContainmentPrivate::checkContainmentFurniture()
-{
-    if (q->isContainment() &&
-        (type == Containment::DesktopContainment || type == Containment::PanelContainment)) {
-    }
 }
 
 void ContainmentPrivate::setScreen(int newScreen)

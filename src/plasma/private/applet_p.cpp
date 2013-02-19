@@ -26,7 +26,6 @@
 #include <config-plasma.h>
 
 #include <QFile>
-#include <QHostInfo>
 #include <QVBoxLayout>
 #include <qstandardpaths.h>
 
@@ -357,11 +356,6 @@ void AppletPrivate::setIsContainment(bool nowIsContainment, bool forceUpdate)
 
     delete mainConfig;
     mainConfig = 0;
-
-    Containment *c = q->containment();
-    if (c) {
-        c->d->checkContainmentFurniture();
-    }
 }
 
 // put all setup routines for script here. at this point we can assume that

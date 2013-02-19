@@ -77,7 +77,6 @@ public:
      */
     void containmentConstraintsEvent(Plasma::Constraints constraints);
 
-    void checkContainmentFurniture();
     bool isPanelContainment() const;
     void setLockToolText();
     void appletDeleted(Applet*);
@@ -99,8 +98,6 @@ public:
      * add the regular actions & keyboard shortcuts onto Applet's collection
      */
     static void addDefaultActions(KActionCollection *actions, Containment *c = 0);
-
-    static bool s_positioningPanels;
 
     Containment *q;
     FormFactor formFactor;

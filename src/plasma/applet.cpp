@@ -28,35 +28,21 @@
 #include <cmath>
 #include <limits>
 
-#include <QApplication>
-#include <QEvent>
 #include <QFile>
-#include <QHostInfo>
-#include <QLabel>
 #include <QList>
-#include <QPainter>
-#include <QRegExp>
-#include <QSize>
-#include <QStyleOptionGraphicsItem>
-#include <QTextDocument>
 #include <QUiLoader>
-#include <QVBoxLayout>
-#include <QWidget>
 
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kcoreauthorized.h>
 #include <kcolorscheme.h>
 #include <kdesktopfile.h>
-#include <kiconloader.h>
-#include <kkeysequencewidget.h>
 #include <kplugininfo.h>
-
+#include <klocalizedstring.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kshortcut.h>
 #include <kwindowsystem.h>
-#include <kpushbutton.h>
 
 #if !PLASMA_NO_KUTILS
 #include <kcmoduleinfo.h>
@@ -65,29 +51,18 @@
 #include <kcmodule.h>
 #endif
 
-#if !PLASMA_NO_SOLID
-#include <solid/powermanagement.h>
-#endif
-
 #include "configloader.h"
 #include "containment.h"
 #include "corona.h"
 #include "package.h"
 #include "plasma.h"
 #include "scripting/appletscript.h"
-#include "svg.h"
-#include "framesvg.h"
-#include "private/framesvg_p.h"
-#include "theme.h"
 #include "paintutils.h"
 #include "abstractdialogmanager.h"
 #include "pluginloader.h"
 
 #include "private/associatedapplicationmanager_p.h"
 #include "private/containment_p.h"
-#include "private/package_p.h"
-#include "private/packages_p.h"
-#include "private/service_p.h"
 
 
 namespace Plasma
