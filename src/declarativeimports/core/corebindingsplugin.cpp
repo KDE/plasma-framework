@@ -103,7 +103,7 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
 
     qmlRegisterInterface<Plasma::DataSource>("DataSource");
     qRegisterMetaType<Plasma::DataSource*>("DataSource");
-    qDebug() << "====> org.kde.plasma.core registered.";
+
 }
 
 
