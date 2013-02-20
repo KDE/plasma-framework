@@ -43,7 +43,7 @@
 import QtQuick 2.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 
-import "." 0.1
+import "." 0.1 as PlasmaComponents
 
 /**
  * A plasma themed SelectionDialog, which can be customized by overriding the
@@ -52,7 +52,7 @@ import "." 0.1
  * By default SelectionDialog provides a scrollable list of textual menu items.
  * The user can choose one item from the list at a time.
  */
-CommonDialog {
+PlasmaComponents.CommonDialog {
     id: root
 
     // Common API
@@ -146,7 +146,7 @@ CommonDialog {
             }
         }
 
-        ScrollBar {
+        PlasmaComponents.ScrollBar {
             id: scrollBar
             flickableItem: listView
             visible: listView.contentHeight > contentItem.height
