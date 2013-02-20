@@ -43,7 +43,7 @@
 import QtQuick 2.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 import "private/AppManager.js" as Utils
-import "." 0.1
+import "." 0.1 as PlasmaComponents
 
 /**
  * Provides a top-level window for short-term tasks and brief interaction with
@@ -82,7 +82,7 @@ Item {
      *
      * The dialog's initial status is DialogStatus.Closed.
      */
-    property int status: DialogStatus.Closed
+    property int status: PlasmaComponents.DialogStatus.Closed
     property alias acceptButtonText: acceptButton.text
     property alias rejectButtonText: rejectButton.text
     /**
@@ -223,7 +223,7 @@ Item {
                         bottomMargin: parent.margins.bottom
                     }
 
-                    Label {
+                    PlasmaComponents.Label {
                         id: titleLabel
                         elide: Text.ElideRight
                         height: paintedHeight
@@ -266,12 +266,12 @@ Item {
                     bottomMargin: theme.defaultFont.mSize.height*0.6
                 }
 
-                Button {
+                PlasmaComponents.Button {
                     id: acceptButton
                     onClicked: accept()
                 }
 
-                Button {
+                PlasmaComponents.Button {
                     id: rejectButton
                     onClicked: reject()
                 }
