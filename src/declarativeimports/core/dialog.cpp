@@ -139,72 +139,8 @@ void DialogProxy::setMainItem(QQuickItem *mainItem)
         }
 
         //if this is called in Compenent.onCompleted we have to wait a loop the item is added to a scene
-        QTimer::singleShot(0, this, SLOT(syncMainItem()));
         emit mainItemChanged();
     }
-}
-
-void DialogProxy::syncMainItem()
-{
-    /*
-    if (!m_mainItem) {
-        return;
-    }
-
-    if (static_cast<QQuickItem *>(m_dialog->graphicsWidget()) == m_mainItem.data() ||
-        (m_declarativeItemContainer && m_declarativeItemContainer->declarativeItem() == m_mainItem.data())) {
-        return;
-    }
-
-    //not have a scene? go up in the hyerarchy until we find something with a scene
-    QGraphicsScene *scene = m_mainItem.data()->scene();
-    if (!scene) {
-        QObject *parent = m_mainItem.data();
-        while ((parent = parent->parent())) {
-            QQuickItem *qo = qobject_cast<QQuickItem *>(parent);
-            if (qo) {
-                scene = qo->scene();
-                if (scene) {
-                    scene->addItem(m_mainItem.data());
-                    break;
-                }
-            }
-        }
-    }
-
-    if (!scene) {
-        return;
-    }
-
-    //the parent of the qobject never changed, only the parentitem, so put it back what it was
-    m_mainItem.data()->setParentItem(qobject_cast<QQuickItem *>(m_mainItem.data()->parent()));
-
-    QQuickItem *widget = qobject_cast<QQuickItem *>(m_mainItem.data());
-    if (widget) {
-        if (m_declarativeItemContainer) {
-            m_declarativeItemContainer->deleteLater();
-            m_declarativeItemContainer = 0;
-        }
-    } else {
-        QQuickItem *di = qobject_cast<QQuickItem *>(m_mainItem.data());
-        if (di) {
-            if (!m_declarativeItemContainer) {
-                m_declarativeItemContainer = new DeclarativeItemContainer();
-                scene->addItem(m_declarativeItemContainer);
-            }
-            m_declarativeItemContainer->setDeclarativeItem(di);
-            widget = m_declarativeItemContainer;
-        }
-    }
-    //m_dialog->setGraphicsWidget(widget);
-    widget->setParent(m_dialog);
-
-    if (!qobject_cast<Plasma::Corona *>(scene)) {
-        offscreenX -= 10000;
-        offscreenY -= 10000;
-        widget->setPos(offscreenX, offscreenY);
-    }
-    */
 }
 
 bool DialogProxy::isVisible() const
@@ -259,8 +195,6 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, int alignment)
         }
     }
 
-    //ensure the dialog has the proper size
-    syncMainItem();
     //m_dialog->syncToGraphicsWidget();
 
     Plasma::Corona *corona = qobject_cast<Plasma::Corona *>(actualItem->scene());

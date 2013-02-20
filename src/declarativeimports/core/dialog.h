@@ -225,8 +225,6 @@ Q_SIGNALS:
     void activeWindowChanged();
     void locationChanged();
 
-protected Q_SLOTS:
-    void syncMainItem();
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
