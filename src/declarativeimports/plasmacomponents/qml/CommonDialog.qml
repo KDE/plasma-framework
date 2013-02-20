@@ -42,7 +42,7 @@
 
 import QtQuick 2.0
 import org.kde.plasma.core 0.1 as PlasmaCore
-import "." 0.1
+import "." 0.1 as PlasmaComponents
 
 /**
  * CommonDialog is a convenience component that provides a dialog with the
@@ -52,7 +52,7 @@ import "." 0.1
  * Note: This component is experimental, so it may be changed or removed in
  * future releases.
  */
-Dialog {
+PlasmaComponents.Dialog {
     id: root
 
     /** type:string the title of the dialog */
@@ -83,7 +83,7 @@ Dialog {
 
     Component {
         id: buttonComponent
-        Button {
+        PlasmaComponents.Button {
             property int index
 
             onClicked: {
@@ -137,7 +137,7 @@ Dialog {
                 bottomMargin: parent.margins.bottom
             }
 
-            Label {
+            PlasmaComponents.Label {
                 id: titleAreaText
                 LayoutMirroring.enabled: root.LayoutMirroring.enabled
                 elide: Text.ElideRight
