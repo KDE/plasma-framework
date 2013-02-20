@@ -106,27 +106,6 @@ class DialogProxy : public QQuickWindow
     Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY visibleChanged)
 
     /**
-     * X position of the dialog window in screen coordinates.
-     */
-   // Q_PROPERTY(int x READ x WRITE setX NOTIFY xChanged)
-
-    /**
-     * X position of the dialog window in screen coordinates.
-     */
-   // Q_PROPERTY(int y READ y WRITE setY NOTIFY yChanged)
-    //to set the size try to force doing so from the inner item
-
-    /**
-     * Read only width of the dialog window. It depends from the width of the mainItem
-     */
-    //Q_PROPERTY(int width READ width NOTIFY widthChanged)
-
-    /**
-     * Read only height of the dialog window. It depends from the height of the mainItem
-     */
-    //Q_PROPERTY(int height READ height NOTIFY heightChanged)
-
-    /**
      * Window flags of the Dialog window
      */
     Q_PROPERTY(int windowFlags READ windowFlags WRITE setWindowFlags)
@@ -167,15 +146,6 @@ public:
 
     bool isVisible() const;
     void setVisible(const bool visible);
-
-//     int x() const;
-//     void setX(int x);
-// 
-//     int y() const;
-//     void setY(int y);
-// 
-//     int width() const;
-//     int height() const;
 
     bool isActiveWindow() const;
 
@@ -231,7 +201,6 @@ protected:
     void resizeEvent(QResizeEvent *re);
 
 private:
-    QQuickWindow *m_dialog;
     Qt::WindowFlags m_flags;
     QQuickItem *m_declarativeItemContainer;
     QWeakPointer<QQuickItem> m_mainItem;

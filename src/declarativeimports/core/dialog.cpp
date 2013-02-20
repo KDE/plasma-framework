@@ -106,9 +106,7 @@ DialogProxy::DialogProxy(QQuickItem *parent)
     setColor(QColor(Qt::transparent));
     setFlags(Qt::FramelessWindowHint);
 
-    //m_dialog = new QQuickWindow();
-    m_margins = new DialogMargins(m_dialog, this);
-    //m_dialog->installEventFilter(this);
+    m_margins = new DialogMargins(this, this);
     m_flags = flags();
 }
 
@@ -155,13 +153,15 @@ void DialogProxy::setVisible(const bool visible)
         const QSize s = QSize(m_mainItem.data()->width(), m_mainItem.data()->height());
         //resize(0,0);
         resize(s);
+        emit widthChanged(s.width());
+        emit heightChanged(s.height());
+        
 
         const QRect workArea(KWindowSystem::workArea());
         if (!workArea.contains(geometry())) {
-            //FIXME
-//             m_dialog->move(qBound(workArea.left(), m_dialog->x(), workArea.right() - m_dialog->width()),
-//                              qBound(workArea.top(), m_dialog->y(), workArea.bottom() - m_dialog->height())
-//             );
+             setPosition(qBound(workArea.left(), x(), workArea.right() - width()),
+                              qBound(workArea.top(), y(), workArea.bottom() - height())
+             );
         }
 
         QQuickWindow::setVisible(visible);
@@ -271,36 +271,6 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, int alignment)
     return QPoint(200, 400);
 }
 
-
-// int DialogProxy::x() const
-// {
-//     return geometry().topLeft().x();
-// }
-//
-// void DialogProxy::setX(int x)
-// {
-//     //m_dialog->move(x, m_dialog->geometry().topLeft().y());
-// }
-// 
-// int DialogProxy::y() const
-// {
-//     return geometry().topLeft().y();
-// }
-// 
-// void DialogProxy::setY(int y)
-// {
-//     //m_dialog->move(m_dialog->geometry().topLeft().x(), y);
-// }
-// 
-// int DialogProxy::width() const
-// {
-//     return size().width();
-// }
-// 
-// int DialogProxy::height() const
-// {
-//     return size().height();
-// }
 
 bool DialogProxy::isActiveWindow() const
 {
