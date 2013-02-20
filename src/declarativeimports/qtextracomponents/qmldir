@@ -1,3 +1,4 @@
+module org.kde.qtextracomponents
 plugin qtextracomponentsplugin
 
 

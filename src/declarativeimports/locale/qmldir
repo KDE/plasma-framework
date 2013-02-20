@@ -1,1 +1,2 @@
+module org.kde.locale
 plugin localebindingsplugin

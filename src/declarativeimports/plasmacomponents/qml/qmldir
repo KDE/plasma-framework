@@ -1,3 +1,4 @@
+module org.kde.plasma.components
 plugin plasmacomponentsplugin
 
 BusyIndicator 0.1 BusyIndicator.qml
