@@ -18,7 +18,7 @@
 */
 
 import QtQuick 2.0
-import "." 0.1
+//import "." 0.1
 
 /**
  * ToolBarLayout is a container for items on a toolbar that automatically
