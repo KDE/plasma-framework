@@ -41,6 +41,7 @@
 import QtQuick 2.0
 import "private/SectionScroller.js" as Sections
 import org.kde.plasma.core 0.1 as PlasmaCore
+import org.kde.plasma.components 0.1 as PlasmaComponents
 
 /**
  * It's similar to a ScrollBar or a ScrollDecorator.
@@ -104,7 +105,7 @@ Item {
         }
     }
 
-    RangeModel {
+    PlasmaComponents.RangeModel {
         id: range
 
         minimumValue: 0
