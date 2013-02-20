@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2011 Marco Martin <mart@kde.org>                            *
+ *   Copyright 2013 Sebastian Kügler <sebas@kde.org>                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,7 +34,7 @@
 #include <Plasma/Corona>
 // #include <Plasma/Dialog>
 //#include <Plasma/WindowEffects>
-
+#include <QDebug>
 
 int DialogProxy::offscreenX = 0;
 int DialogProxy::offscreenY = 0;
@@ -48,7 +49,11 @@ DialogMargins::DialogMargins(QQuickWindow *dialog, QObject *parent)
 
 void DialogMargins::checkMargins()
 {
-    int left, top, right, bottom;
+    int _m = 16;
+    int top = _m;
+    int bottom = _m;
+    int left = _m;
+    int right = _m;
     //m_dialog->getContentsMargins(&left, &top, &right, &bottom);
 
     if (left != m_left) {
@@ -90,21 +95,19 @@ int DialogMargins::bottom() const
 }
 
 DialogProxy::DialogProxy(QQuickItem *parent)
-    : QQuickItem(parent),
-      m_declarativeItemContainer(0),
+    : QQuickWindow(),
       m_activeWindow(false),
       m_location(Plasma::Floating)
 {
-    m_dialog = new QQuickWindow();
+    //m_dialog = new QQuickWindow();
     m_margins = new DialogMargins(m_dialog, this);
-    m_dialog->installEventFilter(this);
-    m_flags = m_dialog->flags();
+    //m_dialog->installEventFilter(this);
+    m_flags = flags();
 }
 
 DialogProxy::~DialogProxy()
 {
-    delete m_declarativeItemContainer;
-    delete m_dialog;
+    //delete m_dialog;
 }
 
 QQuickItem *DialogProxy::mainItem() const
@@ -114,7 +117,9 @@ QQuickItem *DialogProxy::mainItem() const
 
 void DialogProxy::setMainItem(QQuickItem *mainItem)
 {
+    qDebug() << "XXXXX Main ITem: " << mainItem->width() << mainItem->height();
     if (m_mainItem.data() != mainItem) {
+        qDebug() << "YYYYY Main ITem: " << mainItem->width() << mainItem->height();
         if (m_mainItem) {
             m_mainItem.data()->setParent(mainItem ? mainItem->parent() : 0);
         }
@@ -122,7 +127,7 @@ void DialogProxy::setMainItem(QQuickItem *mainItem)
         m_mainItem = mainItem;
 
         if (mainItem) {
-            mainItem->setParentItem(0);
+            //mainItem->setParentItem(0);
             mainItem->setParent(this);
         }
 
@@ -197,28 +202,28 @@ void DialogProxy::syncMainItem()
 
 bool DialogProxy::isVisible() const
 {
-    return m_dialog->isVisible();
+    return QQuickWindow::isVisible();
 }
 
 void DialogProxy::setVisible(const bool visible)
 {
-    if (m_dialog->isVisible() != visible) {
+    if (isVisible() != visible) {
         //FIXME: workaround to prevent dialogs of Popup type disappearing on the second show
-        const QSize s = m_dialog->size();
-        m_dialog->resize(0,0);
-        m_dialog->resize(s);
+        const QSize s = QSize(m_mainItem.data()->width(), m_mainItem.data()->height());
+        //resize(0,0);
+        resize(s);
 
         const QRect workArea(KWindowSystem::workArea());
-        if (!workArea.contains(m_dialog->geometry())) {
+        if (!workArea.contains(geometry())) {
             //FIXME
 //             m_dialog->move(qBound(workArea.left(), m_dialog->x(), workArea.right() - m_dialog->width()),
 //                              qBound(workArea.top(), m_dialog->y(), workArea.bottom() - m_dialog->height())
 //             );
         }
 
-        m_dialog->setVisible(visible);
+        QQuickWindow::setVisible(visible);
         if (visible) {
-            m_dialog->raise();
+            raise();
         }
     }
 }
@@ -328,7 +333,7 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, int alignment)
 
 int DialogProxy::x() const
 {
-    return m_dialog->geometry().topLeft().x();
+    return geometry().topLeft().x();
 }
 
 void DialogProxy::setX(int x)
@@ -338,7 +343,7 @@ void DialogProxy::setX(int x)
 
 int DialogProxy::y() const
 {
-    return m_dialog->geometry().topLeft().y();
+    return geometry().topLeft().y();
 }
 
 void DialogProxy::setY(int y)
@@ -348,12 +353,12 @@ void DialogProxy::setY(int y)
 
 int DialogProxy::width() const
 {
-    return m_dialog->size().width();
+    return size().width();
 }
 
 int DialogProxy::height() const
 {
-    return m_dialog->size().height();
+    return size().height();
 }
 
 bool DialogProxy::isActiveWindow() const
@@ -363,6 +368,7 @@ bool DialogProxy::isActiveWindow() const
 
 void DialogProxy::activateWindow()
 {
+    setWindowState(Qt::WindowActive);
     //m_dialog->activateWindow();
 }
 
@@ -374,14 +380,14 @@ int DialogProxy::windowFlags() const
 #ifndef Q_WS_WIN
 qulonglong DialogProxy::windowId() const
 {
-    return m_dialog->winId();
+    return winId();
 }
 #endif
 
 void DialogProxy::setWindowFlags(const int flags)
 {
     m_flags = (Qt::WindowFlags)flags;
-    m_dialog->setFlags(Qt::FramelessWindowHint|m_flags);
+    setFlags(Qt::FramelessWindowHint|m_flags);
 }
 
 int DialogProxy::location() const
@@ -406,7 +412,7 @@ QObject *DialogProxy::margins() const
 
 bool DialogProxy::eventFilter(QObject *watched, QEvent *event)
 {
-    if (watched == m_dialog && event->type() == QEvent::Move) {
+    if (watched == this && event->type() == QEvent::Move) {
         QMoveEvent *me = static_cast<QMoveEvent *>(event);
         if (me->oldPos().x() != me->pos().x()) {
             emit xChanged();
@@ -417,7 +423,7 @@ bool DialogProxy::eventFilter(QObject *watched, QEvent *event)
         if ((me->oldPos().x() != me->pos().x()) || (me->oldPos().y() != me->pos().y())) {
             m_margins->checkMargins();
         }
-    } else if (watched == m_dialog && event->type() == QEvent::Resize) {
+    } else if (watched == this && event->type() == QEvent::Resize) {
         QResizeEvent *re = static_cast<QResizeEvent *>(event);
         if (re->oldSize().width() != re->size().width()) {
             emit widthChanged();
@@ -425,7 +431,7 @@ bool DialogProxy::eventFilter(QObject *watched, QEvent *event)
         if (re->oldSize().height() != re->size().height()) {
             emit heightChanged();
         }
-    } else if (watched == m_dialog && event->type() == QEvent::Show) {
+    } else if (watched == this && event->type() == QEvent::Show) {
         //Plasma::WindowEffects::slideWindow(m_dialog, m_location);
 //         if (m_dialog->testAttribute(Qt::WA_X11NetWmWindowTypeDock)) {
 //             KWindowSystem::setOnAllDesktops(m_dialog->winId(), true);
@@ -433,13 +439,13 @@ bool DialogProxy::eventFilter(QObject *watched, QEvent *event)
 //             KWindowSystem::setOnAllDesktops(m_dialog->winId(), false);
 //         }
         emit visibleChanged();
-    } else if (watched == m_dialog && event->type() == QEvent::Hide) {
+    } else if (watched == this && event->type() == QEvent::Hide) {
         //Plasma::WindowEffects::slideWindow(m_dialog, m_location);
         emit visibleChanged();
-    } else if (watched == m_dialog && event->type() == QEvent::WindowActivate) {
+    } else if (watched == this && event->type() == QEvent::WindowActivate) {
         m_activeWindow = true;
         emit activeWindowChanged();
-    } else if (watched == m_dialog && event->type() == QEvent::WindowDeactivate) {
+    } else if (watched == this && event->type() == QEvent::WindowDeactivate) {
         m_activeWindow = false;
         emit activeWindowChanged();
     }
@@ -451,9 +457,9 @@ void DialogProxy::setAttribute(int attribute, bool on)
     //m_dialog->setAttribute((Qt::WidgetAttribute)attribute, on);
 
     if (attribute == Qt::WA_X11NetWmWindowTypeDock) {
-        KWindowSystem::setOnAllDesktops(m_dialog->winId(), true);
+        KWindowSystem::setOnAllDesktops(winId(), true);
     } else {
-        KWindowSystem::setOnAllDesktops(m_dialog->winId(), false);
+        KWindowSystem::setOnAllDesktops(winId(), false);
     }
 }
 

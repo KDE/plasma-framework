@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2011 Marco Martin <mart@kde.org>                            *
+ *   Copyright 2013 Sebastian Kügler <sebas@kde.org>                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -90,7 +91,7 @@ private:
  *
  * Exposed as `Dialog` in QML.
  */
-class DialogProxy : public QQuickItem
+class DialogProxy : public QQuickWindow
 {
     Q_OBJECT
 
