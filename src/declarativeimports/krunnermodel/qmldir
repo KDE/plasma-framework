@@ -1,2 +1,3 @@
+module org.kde.runnermodel
 plugin runnermodelplugin
 
