@@ -19,6 +19,7 @@
 
 import QtQuick 2.0
 import org.kde.plasma.core 0.1 as PlasmaCore
+import org.kde.plasma.components 0.1 as PlasmaComponents
 import org.kde.qtextracomponents 0.1
 
 /**
@@ -64,7 +65,7 @@ Item {
     height: 20
     opacity: enabled ? 1.0 : 0.5
 
-    RangeModel {
+    PlasmaComponents.RangeModel {
         id: range
 
         // default values

@@ -19,6 +19,7 @@
 
 import QtQuick 2.0
 import org.kde.plasma.core 0.1 as PlasmaCore
+import org.kde.plasma.components 0.1 as PlasmaComponents
 import "private" as Private
 
 // TODO: create a value indicator for plasma?
@@ -169,7 +170,7 @@ Item {
 
         anchors.centerIn: parent
 
-        RangeModel {
+        PlasmaComponents.RangeModel {
             id: range
 
             minimumValue: 0.0
