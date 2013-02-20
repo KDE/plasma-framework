@@ -42,9 +42,9 @@
 
 import QtQuick 2.0
 import org.kde.plasma.extras 0.1 as PlasmaExtras
-import "." 0.1
+import "." 0.1 as PlasmaComponents
 
-CommonDialog {
+PlasmaComponents.CommonDialog {
     id: root
     objectName: "root"
 
@@ -88,7 +88,7 @@ CommonDialog {
                 flickableDirection: Flickable.VerticalFlick
                 interactive: contentHeight > height
 
-                Label {
+                PlasmaComponents.Label {
                     id: label
                     anchors {
                         top: parent.top
