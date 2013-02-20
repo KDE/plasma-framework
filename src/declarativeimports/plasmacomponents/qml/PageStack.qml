@@ -44,7 +44,7 @@
 // navigation model. Pages can be defined as QML items or components.
 
 import QtQuick 2.0
-import "." 0.1
+import "." 0.1 as PlasmaComponents
 import "private/PageStack.js" as Engine
 
 /**
@@ -76,7 +76,7 @@ Item {
      * If toolbar is null, then no tools are shown even if a page does have
      * tools.
      */
-    property ToolBar toolBar
+    property Item toolBar
 
     /**
      * The page to be automatically loaded when this PageStack component gets
@@ -176,7 +176,7 @@ Item {
     // Called when the page stack visibility changes.
     onVisibleChanged: {
         if (currentPage) {
-            internal.setPageStatus(currentPage, visible ? PageStatus.Active : PageStatus.Inactive);
+            internal.setPageStatus(currentPage, visible ? PlasmaComponents.PageStatus.Active : PlasmaComponents.PageStatus.Inactive);
             if (visible)
                 currentPage.visible = currentPage.parent.visible = true;
         }
@@ -218,10 +218,10 @@ Item {
         {
             if (page != null) {
                 if (page.status !== undefined) {
-                    if (status == PageStatus.Active && page.status == PageStatus.Inactive)
-                        page.status = PageStatus.Activating;
-                    else if (status == PageStatus.Inactive && page.status == PageStatus.Active)
-                        page.status = PageStatus.Deactivating;
+                    if (status == PlasmaComponents.PageStatus.Active && page.status == PlasmaComponents.PageStatus.Inactive)
+                        page.status = PlasmaComponents.PageStatus.Activating;
+                    else if (status == PlasmaComponents.PageStatus.Inactive && page.status == PlasmaComponents.PageStatus.Active)
+                        page.status = PlasmaComponents.PageStatus.Deactivating;
 
                     page.status = status;
                 }
@@ -304,7 +304,7 @@ Item {
                 setState("");
                 page.visible = true;
                 if (root.visible && immediate)
-                    internal.setPageStatus(page, PageStatus.Active);
+                    internal.setPageStatus(page, PlasmaComponents.PageStatus.Active);
             }
 
             // Performs a push exit transition.
@@ -315,7 +315,7 @@ Item {
                 else
                     setState(immediate ? "Hidden" : "Left");
                 if (root.visible && immediate)
-                    internal.setPageStatus(page, PageStatus.Inactive);
+                    internal.setPageStatus(page, PlasmaComponents.PageStatus.Inactive);
                 if (replace) {
                     if (immediate)
                         cleanup();
@@ -332,7 +332,7 @@ Item {
                 setState("");
                 page.visible = true;
                 if (root.visible && immediate)
-                    internal.setPageStatus(page, PageStatus.Active);
+                    internal.setPageStatus(page, PlasmaComponents.PageStatus.Active);
             }
 
             // Performs a pop exit transition.
@@ -344,7 +344,7 @@ Item {
                     setState(immediate ? "Hidden" : "Right");
 
                 if (root.visible && immediate)
-                    internal.setPageStatus(page, PageStatus.Inactive);
+                    internal.setPageStatus(page, PlasmaComponents.PageStatus.Inactive);
                 if (immediate)
                     cleanup();
                 else
@@ -357,7 +357,7 @@ Item {
                 transitionAnimationRunning = true;
                 internal.ongoingTransitionCount++;
                 if (root.visible) {
-                    internal.setPageStatus(page, (state == "") ? PageStatus.Activating : PageStatus.Deactivating);
+                    internal.setPageStatus(page, (state == "") ? PlasmaComponents.PageStatus.Activating : PlasmaComponents.PageStatus.Deactivating);
                 }
             }
 
@@ -367,7 +367,7 @@ Item {
                 if (state != "")
                     state = "Hidden";
                 if (root.visible)
-                    internal.setPageStatus(page, (state == "") ? PageStatus.Active : PageStatus.Inactive);
+                    internal.setPageStatus(page, (state == "") ? PlasmaComponents.PageStatus.Active : PlasmaComponents.PageStatus.Inactive);
 
                 internal.ongoingTransitionCount--;
                 transitionAnimationRunning = false;
@@ -519,8 +519,8 @@ Item {
             function cleanup()
             {
                 if (page != null) {
-                    if (page.status == PageStatus.Active) {
-                        internal.setPageStatus(page, PageStatus.Inactive)
+                    if (page.status == PlasmaComponents.PageStatus.Active) {
+                        internal.setPageStatus(page, PlasmaComponents.PageStatus.Inactive)
                     }
                     if (owner != container) {
                         // container is not the owner of the page - re-parent back to original owner

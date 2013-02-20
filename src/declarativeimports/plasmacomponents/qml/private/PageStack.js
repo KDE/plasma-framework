@@ -212,8 +212,8 @@ function pop(page, immediate) {
 
 // Checks if the orientation changes between oldPage and newPage
 function orientationChanges(oldPage, newPage) {
-    return newPage.orientationLock != PageOrientation.Automatic
-           && newPage.orientationLock != PageOrientation.LockPrevious
+    return newPage.orientationLock != PlasmaComponents.PageOrientation.Automatic
+           && newPage.orientationLock != PlasmaComponents.PageOrientation.LockPrevious
            && newPage.orientationLock != oldPage.orientationLock
 }
 
