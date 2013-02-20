@@ -190,10 +190,6 @@ public:
 Q_SIGNALS:
     void mainItemChanged();
     void visibleChanged();
-//     void xChanged();
-//     void yChanged();
-//     void widthChanged();
-//     void heightChanged();
     void activeWindowChanged();
     void locationChanged();
 
@@ -203,17 +199,16 @@ private Q_SLOTS:
 protected:
    // bool eventFilter(QObject *watched, QEvent *event);
     void resizeEvent(QResizeEvent *re);
+    void focusInEvent(QFocusEvent *ev);
+    void focusOutEvent(QFocusEvent *ev);
 
 private:
     Qt::WindowFlags m_flags;
-    QQuickItem *m_declarativeItemContainer;
     QTimer *m_syncTimer;
     QWeakPointer<QQuickItem> m_mainItem;
     DialogMargins *m_margins;
     bool m_activeWindow;
     Plasma::Location m_location;
-    static int offscreenX;
-    static int offscreenY;
 };
 
 #endif

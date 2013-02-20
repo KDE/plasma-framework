@@ -36,8 +36,6 @@
 //#include <Plasma/WindowEffects>
 #include <QDebug>
 
-int DialogProxy::offscreenX = 0;
-int DialogProxy::offscreenY = 0;
 
 DialogMargins::DialogMargins(QQuickWindow *dialog, QObject *parent)
     : QObject(parent),
@@ -175,9 +173,8 @@ bool DialogProxy::isVisible() const
 
 void DialogProxy::setVisible(const bool visible)
 {
-    if (isVisible() != visible) {
+    if (visible) {
         syncToMainItemSize();
-        
 
         const QRect workArea(KWindowSystem::workArea());
         if (!workArea.contains(geometry())) {
@@ -186,11 +183,9 @@ void DialogProxy::setVisible(const bool visible)
              );
         }
 
-        QQuickWindow::setVisible(visible);
-        if (visible) {
-            raise();
-        }
+        raise();
     }
+    QQuickWindow::setVisible(visible);
 }
 
 QPoint DialogProxy::popupPosition(QQuickItem *item, int alignment)
@@ -422,6 +417,20 @@ void DialogProxy::setAttribute(int attribute, bool on)
     } else {
         KWindowSystem::setOnAllDesktops(winId(), false);
     }
+}
+
+void DialogProxy::focusInEvent(QFocusEvent *ev)
+{
+    Q_UNUSED(ev)
+    m_activeWindow = true;
+    emit activeWindowChanged();
+}
+
+void DialogProxy::focusOutEvent(QFocusEvent *ev)
+{
+    Q_UNUSED(ev)
+    m_activeWindow = false;
+    emit activeWindowChanged();
 }
 
 #include "moc_dialog.cpp"
