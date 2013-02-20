@@ -28,6 +28,7 @@
 #include <QQuickItem>
 #include <QTimer>
 #include <QLayout>
+#include <QScreen>
 
 #include <KWindowSystem>
 
@@ -166,6 +167,25 @@ void DialogProxy::setMainItem(QQuickItem *mainItem)
     }
 }
 
+QQuickItem *DialogProxy::visualParent() const
+{
+    return m_visualParent.data();
+}
+
+void DialogProxy::setVisualParent(QQuickItem *visualParent)
+{
+    if (m_visualParent.data() == visualParent) {
+        return;
+    }
+
+    if (visualParent) {
+        setPosition(popupPosition(visualParent, Qt::AlignCenter));
+    }
+
+    m_visualParent = visualParent;
+    emit visualParentChanged();
+}
+
 bool DialogProxy::isVisible() const
 {
     return QQuickWindow::isVisible();
@@ -175,6 +195,10 @@ void DialogProxy::setVisible(const bool visible)
 {
     if (visible) {
         syncToMainItemSize();
+
+        if (m_visualParent) {
+            setPosition(popupPosition(m_visualParent.data(), Qt::AlignCenter));
+        }
 
         const QRect workArea(KWindowSystem::workArea());
         if (!workArea.contains(geometry())) {
@@ -190,102 +214,47 @@ void DialogProxy::setVisible(const bool visible)
 
 QPoint DialogProxy::popupPosition(QQuickItem *item, int alignment)
 {
-    /*
-    QQuickItem *actualItem = item;
-
-    //if no item is passed search the root item in order to figure out the view
-    if (!actualItem) {
-        actualItem = qobject_cast<QQuickItem *>(parent());
-
-        //search the root object
-        while (true) {
-            QQuickItem *ancestor = qobject_cast<QQuickItem *>(actualItem->parent());
-
-            if (ancestor) {
-                actualItem = ancestor;
-            } else {
-                break;
-            }
-        }
-        if (!actualItem) {
-            return QPoint();
-        }
-    }
-
-    //m_dialog->syncToGraphicsWidget();
-
-    Plasma::Corona *corona = qobject_cast<Plasma::Corona *>(actualItem->scene());
-    if (corona && item) {
-        return corona->popupPosition(actualItem, m_dialog->size(), (Qt::AlignmentFlag)alignment);
-    } else {
-
-        if (!actualItem->scene()) {
-            return QPoint();
-        }
-
-        QList<QGraphicsView*> views = actualItem->scene()->views();
-
-
-        if (views.size() < 1) {
-            return QPoint();
-        }
-
-        QGraphicsView *view = 0;
-        if (views.size() == 1) {
-            view = views[0];
+    if (!item) {
+        //If no item was specified try to align at the center of the parent view
+        QQuickItem *parentItem = qobject_cast<QQuickItem *>(parent());
+        if (parentItem && parentItem->window()) {
+            return parentItem->window()->geometry().center() - QPoint(width()/2, height()/2);
         } else {
-            QGraphicsView *found = 0;
-            QGraphicsView *possibleFind = 0;
-
-            foreach (QGraphicsView *v, views) {
-                if (v->sceneRect().intersects(actualItem->sceneBoundingRect()) ||
-                    v->sceneRect().contains(actualItem->scenePos())) {
-                    if (v->isActiveWindow()) {
-                        found = v;
-                    } else {
-                        possibleFind = v;
-                    }
-                }
-            }
-            view = found ? found : possibleFind;
-        }
-
-        if (!view) {
             return QPoint();
         }
-
-        //if no item was explicitly specified, align the dialog in the center of the parent view
-        if (!item) {
-            return view->geometry().center() - QPoint(m_dialog->width()/2, m_dialog->height()/2);
-        }
-
-        //swap direction if necessary
-        if (QApplication::isRightToLeft() && alignment != Qt::AlignCenter) {
-            if (alignment == Qt::AlignRight) {
-                alignment = Qt::AlignLeft;
-            } else {
-                alignment = Qt::AlignRight;
-            }
-        }
-
-        int xOffset = 0;
-
-        if (alignment == Qt::AlignCenter) {
-            xOffset = actualItem->boundingRect().width()/2 - m_dialog->width()/2;
-        } else if (alignment == Qt::AlignRight) {
-            xOffset = actualItem->boundingRect().width() - m_dialog->width();
-        }
-
-        const QRect avail = QApplication::desktop()->availableGeometry(view);
-        QPoint menuPos = view->mapToGlobal(view->mapFromScene(actualItem->scenePos()+QPoint(xOffset, actualItem->boundingRect().height())));
-
-        if (menuPos.y() + m_dialog->height() > avail.bottom()) {
-            menuPos = view->mapToGlobal(view->mapFromScene(actualItem->scenePos() - QPoint(-xOffset, m_dialog->height())));
-        }
-        return menuPos;
     }
-    */
-    return QPoint(200, 400);
+
+    QPointF pos = item->mapToScene(QPointF(0, 0));
+    if (item->window() && item->window()->screen()) {
+        pos = item->window()->mapToGlobal(pos.toPoint());
+    } else {
+        return QPoint();
+    }
+
+    //swap direction if necessary
+    if (QApplication::isRightToLeft() && alignment != Qt::AlignCenter) {
+        if (alignment == Qt::AlignRight) {
+            alignment = Qt::AlignLeft;
+        } else {
+            alignment = Qt::AlignRight;
+        }
+    }
+
+    int xOffset = 0;
+
+    if (alignment == Qt::AlignCenter) {
+        xOffset = item->boundingRect().width()/2 - width()/2;
+    } else if (alignment == Qt::AlignRight) {
+        xOffset = item->boundingRect().width() - width();
+    }
+
+    const QRect avail = item->window()->screen()->availableGeometry();
+    QPoint menuPos = pos.toPoint() + QPoint(xOffset, item->boundingRect().height());
+
+    if (menuPos.y() + height() > avail.bottom()) {
+        menuPos = pos.toPoint() + QPoint(xOffset, -height());
+    }
+    return menuPos;
 }
 
 

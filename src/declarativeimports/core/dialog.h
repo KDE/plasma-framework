@@ -101,6 +101,11 @@ class DialogProxy : public QQuickWindow
     Q_PROPERTY(QQuickItem *mainItem READ mainItem WRITE setMainItem NOTIFY mainItemChanged)
 
     /**
+     * The main QML item that will be displayed in the Dialog
+     */
+    Q_PROPERTY(QQuickItem *visualParent READ visualParent WRITE setVisualParent NOTIFY visualParentChanged)
+
+    /**
      * Visibility of the Dialog window. Doesn't have anything to do with the visibility of the mainItem.
      */
     Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY visibleChanged)
@@ -146,6 +151,9 @@ public:
     QQuickItem *mainItem() const;
     void setMainItem(QQuickItem *mainItem);
 
+    QQuickItem *visualParent() const;
+    void setVisualParent(QQuickItem *visualParent);
+
     bool isVisible() const;
     void setVisible(const bool visible);
 
@@ -176,7 +184,7 @@ public:
      * @arg alignment alignment of the popup compared to the item
      */
     //FIXME: alignment should be Qt::AlignmentFlag
-    Q_INVOKABLE QPoint popupPosition(QQuickItem *item, int alignment=Qt::AlignLeft) ;
+    QPoint popupPosition(QQuickItem *item, int alignment=Qt::AlignLeft) ;
 
     /**
      * Set a Qt.WidgetAttribute to the dialog window
@@ -192,6 +200,7 @@ Q_SIGNALS:
     void visibleChanged();
     void activeWindowChanged();
     void locationChanged();
+    void visualParentChanged();
 
 private Q_SLOTS:
     void syncToMainItemSize();
@@ -206,6 +215,7 @@ private:
     Qt::WindowFlags m_flags;
     QTimer *m_syncTimer;
     QWeakPointer<QQuickItem> m_mainItem;
+    QWeakPointer<QQuickItem> m_visualParent;
     DialogMargins *m_margins;
     bool m_activeWindow;
     Plasma::Location m_location;
