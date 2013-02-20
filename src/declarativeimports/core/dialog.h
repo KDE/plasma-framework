@@ -133,6 +133,8 @@ class DialogProxy : public QQuickWindow
     Q_PROPERTY(qulonglong windowId READ windowId CONSTANT)
 #endif
 
+    Q_CLASSINFO("DefaultProperty", "mainItem")
+
 public:
     enum WidgetAttribute {
         WA_X11NetWmWindowTypeDock = Qt::WA_X11NetWmWindowTypeDock
@@ -195,6 +197,8 @@ Q_SIGNALS:
     void activeWindowChanged();
     void locationChanged();
 
+private Q_SLOTS:
+    void syncToMainItemSize();
 
 protected:
    // bool eventFilter(QObject *watched, QEvent *event);
@@ -203,6 +207,7 @@ protected:
 private:
     Qt::WindowFlags m_flags;
     QQuickItem *m_declarativeItemContainer;
+    QTimer *m_syncTimer;
     QWeakPointer<QQuickItem> m_mainItem;
     DialogMargins *m_margins;
     bool m_activeWindow;

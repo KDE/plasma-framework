@@ -108,11 +108,15 @@ DialogProxy::DialogProxy(QQuickItem *parent)
 
     m_margins = new DialogMargins(this, this);
     m_flags = flags();
+
+    m_syncTimer = new QTimer(this);
+    m_syncTimer->setSingleShot(true);
+    m_syncTimer->setInterval(250);
+    connect(m_syncTimer, &QTimer::timeout, this,  &DialogProxy::syncToMainItemSize);
 }
 
 DialogProxy::~DialogProxy()
 {
-    //delete m_dialog;
 }
 
 QQuickItem *DialogProxy::mainItem() const
@@ -128,12 +132,35 @@ void DialogProxy::setMainItem(QQuickItem *mainItem)
         if (m_mainItem) {
             m_mainItem.data()->setParent(parent());
         }
+        //HACK: this property is invoked due to the initialization that gets done to contentItem() in the getter
+        property("data");
+
 
         m_mainItem = mainItem;
 
         if (mainItem) {
             //mainItem->setParentItem(0);
             mainItem->setParent(contentItem());
+            mainItem->setProperty("parent", QVariant::fromValue(contentItem()));
+
+            if (mainItem->metaObject()->indexOfSignal("widthChanged")) {
+                connect(mainItem, SIGNAL(widthChanged()), m_syncTimer, SIGNAL(start()));
+            }
+            if (mainItem->metaObject()->indexOfSignal("heightChanged")) {
+                connect(mainItem, SIGNAL(heightChanged()), m_syncTimer, SIGNAL(start()));
+            }
+            if (mainItem->metaObject()->indexOfSignal("minimumWidthChanged")) {
+                connect(mainItem, SIGNAL(minimumWidthChanged()), this, SIGNAL(minimumWidthChanged()));
+            }
+            if (mainItem->metaObject()->indexOfSignal("minimumHeightChanged")) {
+                connect(mainItem, SIGNAL(minimumHeightChanged()), this, SIGNAL(minimumHeightChanged()));
+            }
+            if (mainItem->metaObject()->indexOfSignal("maximumWidthChanged")) {
+                connect(mainItem, SIGNAL(maximumWidthChanged()), this, SIGNAL(maximumWidthChanged()));
+            }
+            if (mainItem->metaObject()->indexOfSignal("maximumHeightChanged")) {
+                connect(mainItem, SIGNAL(maximumHeightChanged()), this, SIGNAL(maximumHeightChanged()));
+            }
         }
 
         //if this is called in Compenent.onCompleted we have to wait a loop the item is added to a scene
@@ -149,12 +176,7 @@ bool DialogProxy::isVisible() const
 void DialogProxy::setVisible(const bool visible)
 {
     if (isVisible() != visible) {
-        //FIXME: workaround to prevent dialogs of Popup type disappearing on the second show
-        const QSize s = QSize(m_mainItem.data()->width(), m_mainItem.data()->height());
-        //resize(0,0);
-        resize(s);
-        emit widthChanged(s.width());
-        emit heightChanged(s.height());
+        syncToMainItemSize();
         
 
         const QRect workArea(KWindowSystem::workArea());
@@ -334,6 +356,20 @@ void DialogProxy::resizeEvent(QResizeEvent *re)
     QQuickWindow::resizeEvent(re);
 }
 
+void DialogProxy::syncToMainItemSize()
+{
+    if (!m_mainItem) {
+        return;
+    }
+
+    //FIXME: workaround to prevent dialogs of Popup type disappearing on the second show
+    const QSize s = QSize(m_mainItem.data()->width(), m_mainItem.data()->height());
+    //resize(0,0);
+    resize(s);
+    emit widthChanged(s.width());
+    emit heightChanged(s.height());
+}
+
 /*
 bool DialogProxy::eventFilter(QObject *watched, QEvent *event)
 {
@@ -388,5 +424,5 @@ void DialogProxy::setAttribute(int attribute, bool on)
     }
 }
 
-#include "dialog.moc"
+#include "moc_dialog.cpp"
 
