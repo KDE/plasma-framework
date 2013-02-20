@@ -43,7 +43,7 @@
 import QtQuick 2.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 import "private/AppManager.js" as Utils
-import "." 0.1
+import "." 0.1 as PlasmaComponents
 import "private" as Private
 
 /**
@@ -94,7 +94,7 @@ Item {
      *
      * The dialog's initial status is DialogStatus.Closed.
      */
-    property int status: DialogStatus.Closed
+    property int status: PlasmaComponents.DialogStatus.Closed
 
 
     property alias privateTitleHeight: titleBar.height
