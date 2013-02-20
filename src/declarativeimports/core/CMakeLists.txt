@@ -17,7 +17,7 @@ set(corebindings_SRCS
     runnermodel.cpp
     svgitem.cpp
     framesvgitem.cpp
-#     dialog.cpp
+    dialog.cpp
 #     tooltip.cpp
     dataenginebindings.cpp
     iconitem.cpp

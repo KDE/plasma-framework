@@ -20,12 +20,13 @@
 #define DIALOG_PROXY_P
 
 #include <QQuickItem>
+#include <QQuickWindow>
 #include <QWeakPointer>
 #include <QPoint>
 
 #include <Plasma/Plasma>
 
-class QGraphicsObject;
+class QQuickItem;
 
 namespace Plasma
 {
@@ -59,7 +60,7 @@ class DialogMargins : public QObject
     Q_PROPERTY(int bottom READ bottom NOTIFY bottomChanged)
 
 public:
-    DialogMargins(Plasma::Dialog *dialog, QObject *parent = 0);
+    DialogMargins(QQuickWindow *dialog, QObject *parent = 0);
 
     int left() const;
     int top() const;
@@ -80,7 +81,7 @@ private:
     int m_top;
     int m_right;
     int m_bottom;
-    Plasma::Dialog *m_dialog;
+    QQuickWindow *m_dialog;
     friend class DialogProxy;
 };
 
@@ -96,7 +97,7 @@ class DialogProxy : public QQuickItem
     /**
      * The main QML item that will be displayed in the Dialog
      */
-    Q_PROPERTY(QGraphicsObject *mainItem READ mainItem WRITE setMainItem NOTIFY mainItemChanged)
+    Q_PROPERTY(QQuickItem *mainItem READ mainItem WRITE setMainItem NOTIFY mainItemChanged)
 
     /**
      * Visibility of the Dialog window. Doesn't have anything to do with the visibility of the mainItem.
@@ -160,8 +161,8 @@ public:
     DialogProxy(QQuickItem *parent = 0);
     ~DialogProxy();
 
-    QGraphicsObject *mainItem() const;
-    void setMainItem(QGraphicsObject *mainItem);
+    QQuickItem *mainItem() const;
+    void setMainItem(QQuickItem *mainItem);
 
     bool isVisible() const;
     void setVisible(const bool visible);
@@ -202,7 +203,7 @@ public:
      * @arg alignment alignment of the popup compared to the item
      */
     //FIXME: alignment should be Qt::AlignmentFlag
-    Q_INVOKABLE QPoint popupPosition(QGraphicsObject *item, int alignment=Qt::AlignLeft) ;
+    Q_INVOKABLE QPoint popupPosition(QQuickItem *item, int alignment=Qt::AlignLeft) ;
 
     /**
      * Set a Qt.WidgetAttribute to the dialog window
@@ -230,10 +231,10 @@ protected:
     bool eventFilter(QObject *watched, QEvent *event);
 
 private:
-    Plasma::Dialog *m_dialog;
+    QQuickWindow *m_dialog;
     Qt::WindowFlags m_flags;
-    DeclarativeItemContainer *m_declarativeItemContainer;
-    QWeakPointer<QGraphicsObject> m_mainItem;
+    QQuickItem *m_declarativeItemContainer;
+    QWeakPointer<QQuickItem> m_mainItem;
     DialogMargins *m_margins;
     bool m_activeWindow;
     Plasma::Location m_location;
