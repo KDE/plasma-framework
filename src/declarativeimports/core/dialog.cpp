@@ -128,14 +128,14 @@ void DialogProxy::setMainItem(QQuickItem *mainItem)
     if (m_mainItem.data() != mainItem) {
         qDebug() << "YYYYY Main ITem: " << mainItem->width() << mainItem->height();
         if (m_mainItem) {
-            m_mainItem.data()->setParent(mainItem ? mainItem->parent() : 0);
+            m_mainItem.data()->setParent(parent());
         }
 
         m_mainItem = mainItem;
 
         if (mainItem) {
             //mainItem->setParentItem(0);
-            mainItem->setParent(this);
+            mainItem->setParent(contentItem());
         }
 
         //if this is called in Compenent.onCompleted we have to wait a loop the item is added to a scene
@@ -272,35 +272,35 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, int alignment)
 }
 
 
-int DialogProxy::x() const
-{
-    return geometry().topLeft().x();
-}
-
-void DialogProxy::setX(int x)
-{
-    //m_dialog->move(x, m_dialog->geometry().topLeft().y());
-}
-
-int DialogProxy::y() const
-{
-    return geometry().topLeft().y();
-}
-
-void DialogProxy::setY(int y)
-{
-    //m_dialog->move(m_dialog->geometry().topLeft().x(), y);
-}
-
-int DialogProxy::width() const
-{
-    return size().width();
-}
-
-int DialogProxy::height() const
-{
-    return size().height();
-}
+// int DialogProxy::x() const
+// {
+//     return geometry().topLeft().x();
+// }
+//
+// void DialogProxy::setX(int x)
+// {
+//     //m_dialog->move(x, m_dialog->geometry().topLeft().y());
+// }
+// 
+// int DialogProxy::y() const
+// {
+//     return geometry().topLeft().y();
+// }
+// 
+// void DialogProxy::setY(int y)
+// {
+//     //m_dialog->move(m_dialog->geometry().topLeft().x(), y);
+// }
+// 
+// int DialogProxy::width() const
+// {
+//     return size().width();
+// }
+// 
+// int DialogProxy::height() const
+// {
+//     return size().height();
+// }
 
 bool DialogProxy::isActiveWindow() const
 {
@@ -353,16 +353,18 @@ QObject *DialogProxy::margins() const
 
 void DialogProxy::resizeEvent(QResizeEvent *re)
 {
-    if (contentItem()) {
-        contentItem()->setWidth(re->size().width());
-        contentItem()->setHeight(re->size().height());
-    }
+    contentItem()->setX(0);
+    contentItem()->setY(0);
     if (m_mainItem) {
+        m_mainItem.data()->setX(0);
+        m_mainItem.data()->setY(0);
         m_mainItem.data()->setWidth(re->size().width());
         m_mainItem.data()->setHeight(re->size().height());
     }
+    QQuickWindow::resizeEvent(re);
 }
 
+/*
 bool DialogProxy::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == this && event->type() == QEvent::Move) {
@@ -403,7 +405,7 @@ bool DialogProxy::eventFilter(QObject *watched, QEvent *event)
         emit activeWindowChanged();
     }
     return false;
-}
+}*/
 
 void DialogProxy::setAttribute(int attribute, bool on)
 {

@@ -565,6 +565,11 @@ void AppletInterface::geometryChanged(const QRectF &newGeometry, const QRectF &o
 
         m_qmlObject->rootObject()->setProperty("parent", QVariant::fromValue(this));
         m_compactUiObject.data()->deleteLater();
+
+        //set anchors
+        QQmlExpression expr(m_qmlObject->engine()->rootContext(), m_qmlObject->rootObject(), "parent");
+        QQmlProperty prop(m_qmlObject->rootObject(), "anchors.fill");
+        prop.write(expr.evaluate());
     }
 }
 
