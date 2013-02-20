@@ -103,6 +103,8 @@ DialogProxy::DialogProxy(QQuickItem *parent)
     m_margins = new DialogMargins(m_dialog, this);
     //m_dialog->installEventFilter(this);
     m_flags = flags();
+    setWindowFlags(Qt::FramelessWindowHint);
+    setColor(Qt::transparent);
 }
 
 DialogProxy::~DialogProxy()
