@@ -289,7 +289,7 @@ Item {
     }
 
     // Overriding QtQuick.Item activeFocus property.
-    property alias activeFocus: textEdit.activeFocus
+    //property alias activeFocus: textEdit.activeFocus
 
     opacity: enabled ? 1.0 : 0.5
 
