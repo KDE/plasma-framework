@@ -230,6 +230,7 @@ protected Q_SLOTS:
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
+    void resizeEvent(QResizeEvent *re);
 
 private:
     QQuickWindow *m_dialog;

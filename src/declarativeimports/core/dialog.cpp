@@ -99,12 +99,17 @@ DialogProxy::DialogProxy(QQuickItem *parent)
       m_activeWindow(false),
       m_location(Plasma::Floating)
 {
+    QSurfaceFormat format;
+    format.setAlphaBufferSize(8);
+    setFormat(format);
+    setClearBeforeRendering(true);
+    setColor(QColor(Qt::transparent));
+    setFlags(Qt::FramelessWindowHint);
+
     //m_dialog = new QQuickWindow();
     m_margins = new DialogMargins(m_dialog, this);
     //m_dialog->installEventFilter(this);
     m_flags = flags();
-    setWindowFlags(Qt::FramelessWindowHint);
-    setColor(Qt::transparent);
 }
 
 DialogProxy::~DialogProxy()
@@ -410,6 +415,18 @@ void DialogProxy::setLocation(int location)
 QObject *DialogProxy::margins() const
 {
     return m_margins;
+}
+
+void DialogProxy::resizeEvent(QResizeEvent *re)
+{
+    if (contentItem()) {
+        contentItem()->setWidth(re->size().width());
+        contentItem()->setHeight(re->size().height());
+    }
+    if (m_mainItem) {
+        m_mainItem.data()->setWidth(re->size().width());
+        m_mainItem.data()->setHeight(re->size().height());
+    }
 }
 
 bool DialogProxy::eventFilter(QObject *watched, QEvent *event)
