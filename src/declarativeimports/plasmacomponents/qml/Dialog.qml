@@ -43,7 +43,7 @@
 import QtQuick 2.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 import "private/AppManager.js" as Utils
-import "." 0.1 as PlasmaComponents
+import org.kde.plasma.components 0.1 as PlasmaComponents
 import "private" as Private
 
 /**
@@ -87,12 +87,12 @@ Item {
     /**
      * Indicates the dialog's phase in its life cycle. The values are as follows:
      *
-     * - DialogStatus.Opening - the dialog is opening
-     * - DialogStatus.Open - the dialog is open and visible to the user
-     * - DialogStatus.Closing - the dialog is closing
-     * - DialogStatus.Closed - the dialog is closed and not visible to the user
+     * - PlasmaComponents.DialogStatus.Opening - the dialog is opening
+     * - PlasmaComponents.DialogStatus.Open - the dialog is open and visible to the user
+     * - PlasmaComponents.DialogStatus.Closing - the dialog is closing
+     * - PlasmaComponents.DialogStatus.Closed - the dialog is closed and not visible to the user
      *
-     * The dialog's initial status is DialogStatus.Closed.
+     * The dialog's initial status is PlasmaComponents.DialogStatus.Closed.
      */
     property int status: PlasmaComponents.DialogStatus.Closed
 
@@ -153,12 +153,13 @@ Item {
      * @see reject()
      */
     function accept() {
-        if (status == DialogStatus.Open) {
-            if (internalLoader.dialog) {
-                internalLoader.dialog.visible = false
-            } else {
-                internalLoader.inlineDialog.close()
-            }
+        if (status == PlasmaComponents.DialogStatus.Open) {
+            coreDialog.visible = false;
+//             if (internalLoader.dialog) {
+//                 internalLoader.dialog.visible = false
+//             } else {
+//                 internalLoader.inlineDialog.close()
+//             }
             accepted()
         }
     }
@@ -170,12 +171,13 @@ Item {
      * @see accept()
      */
     function reject() {
-        if (status == DialogStatus.Open) {
-            if (internalLoader.dialog) {
-                internalLoader.dialog.visible = false
-            } else {
-                internalLoader.inlineDialog.close()
-            }
+        if (status == PlasmaComponents.DialogStatus.Open) {
+            coreDialog.visible = false;
+//             if (internalLoader.dialog) {
+//                 internalLoader.dialog.visible = false
+//             } else {
+//                 internalLoader.inlineDialog.close()
+//             }
             rejected()
         }
     }
@@ -184,11 +186,12 @@ Item {
      * Closes the dialog without any user interaction.
      */
     function close() {
-        if (internalLoader.dialog) {
-            internalLoader.dialog.visible = false
-        } else {
-            internalLoader.inlineDialog.close()
-        }
+        internalLoader.sourceComponent.coreDialog.visible = false;
+//         if (internalLoader.dialog) {
+//             internalLoader.dialog.visible = false
+//         } else {
+//             internalLoader.inlineDialog.close()
+//         }
     }
 
     visible: false
@@ -199,7 +202,7 @@ Item {
         property Item rootItem
 
         //this is when the dialog is a separate window
-        property Item dialog: sourceComponent == dialogComponent ? item : null
+        property QtObject dialog: sourceComponent == dialogComponent ? item : null
         //this is when the dialog is inline
         property Item inlineDialog: sourceComponent == inlineDialogComponent ? item : null
 
@@ -223,16 +226,18 @@ Item {
 
     Component {
         id: dialogComponent
+        //property bool visible: coreDialog.visible
         PlasmaCore.Dialog {
+            id: coreDialog
             windowFlags: Qt.Popup
 
-            //state: "Hidden"
+//             state: "Hidden"
             visible: false
             onVisibleChanged: {
                 if (visible) {
-                    root.status = DialogStatus.Open
+                    root.status = PlasmaComponents.DialogStatus.Open
                 } else {
-                    root.status = DialogStatus.Closed
+                    root.status = PlasmaComponents.DialogStatus.Closed
                 }
             }
 
