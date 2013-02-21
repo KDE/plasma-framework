@@ -31,10 +31,9 @@ class QQuickItem;
 
 namespace Plasma
 {
-    class Dialog;
+    class FrameSvgItem;
 }
 
-class DeclarativeItemContainer;
 
 class DialogMargins : public QObject
 {
@@ -219,6 +218,7 @@ private:
     DialogMargins *m_margins;
     bool m_activeWindow;
     Plasma::Location m_location;
+    Plasma::FrameSvgItem *m_frameSvgItem;
 };
 
 #endif

@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include "dialog.h"
-//#include "declarativeitemcontainer_p.h"
+#include "framesvgitem.h"
 
 #include <QApplication>
 #include <QQuickItem>
@@ -112,6 +112,12 @@ DialogProxy::DialogProxy(QQuickItem *parent)
     m_syncTimer->setSingleShot(true);
     m_syncTimer->setInterval(250);
     connect(m_syncTimer, &QTimer::timeout, this,  &DialogProxy::syncToMainItemSize);
+
+    //HACK: this property is invoked due to the initialization that gets done to contentItem() in the getter
+    property("data");
+    //Create the FrameSvg background.
+    m_frameSvgItem = new Plasma::FrameSvgItem(contentItem());
+    m_frameSvgItem->setImagePath("dialogs/background");
 }
 
 DialogProxy::~DialogProxy()
@@ -131,8 +137,6 @@ void DialogProxy::setMainItem(QQuickItem *mainItem)
         if (m_mainItem) {
             m_mainItem.data()->setParent(parent());
         }
-        //HACK: this property is invoked due to the initialization that gets done to contentItem() in the getter
-        property("data");
 
 
         m_mainItem = mainItem;
@@ -309,15 +313,23 @@ QObject *DialogProxy::margins() const
 
 void DialogProxy::resizeEvent(QResizeEvent *re)
 {
-    contentItem()->setX(0);
-    contentItem()->setY(0);
-    if (m_mainItem) {
-        m_mainItem.data()->setX(0);
-        m_mainItem.data()->setY(0);
-        m_mainItem.data()->setWidth(re->size().width());
-        m_mainItem.data()->setHeight(re->size().height());
-    }
+    syncMainItemToSize();
     QQuickWindow::resizeEvent(re);
+}
+
+void DialogProxy::syncMainItemToSize()
+{
+    m_frameSvgItem->setX(0);
+    m_frameSvgItem->setY(0);
+    m_frameSvgItem->setWidth(width());
+    m_frameSvgItem->setHeight(height());
+
+    if (m_mainItem) {
+        m_mainItem.data()->setX(m_frameSvgItem->margins()->left());
+        m_mainItem.data()->setY(m_frameSvgItem->margins()->top());
+        m_mainItem.data()->setWidth(width() - m_frameSvgItem->margins()->left() - m_frameSvgItem->margins()->right());
+        m_mainItem.data()->setHeight(height() - m_frameSvgItem->margins()->top() - m_frameSvgItem->margins()->bottom());
+    }
 }
 
 void DialogProxy::syncToMainItemSize()
@@ -327,7 +339,9 @@ void DialogProxy::syncToMainItemSize()
     }
 
     //FIXME: workaround to prevent dialogs of Popup type disappearing on the second show
-    const QSize s = QSize(m_mainItem.data()->width(), m_mainItem.data()->height());
+    const QSize s = QSize(m_mainItem.data()->width(), m_mainItem.data()->height()) +
+                    QSize(m_frameSvgItem->margins()->left() + m_frameSvgItem->margins()->right(),
+                          m_frameSvgItem->margins()->top() + m_frameSvgItem->margins()->bottom());
     //resize(0,0);
     resize(s);
     emit widthChanged(s.width());
