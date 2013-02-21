@@ -39,61 +39,6 @@
 #include <QDebug>
 
 
-DialogMargins::DialogMargins(QQuickWindow *dialog, QObject *parent)
-    : QObject(parent),
-      m_left(0), m_top(0), m_right(0), m_bottom(0),
-      m_dialog(dialog)
-{
-    checkMargins();
-}
-
-void DialogMargins::checkMargins()
-{
-    int _m = 16;
-    int top = _m;
-    int bottom = _m;
-    int left = _m;
-    int right = _m;
-    //m_dialog->getContentsMargins(&left, &top, &right, &bottom);
-
-    if (left != m_left) {
-        m_left = left;
-        emit leftChanged();
-    }
-    if (top != m_top) {
-        m_top = top;
-        emit topChanged();
-    }
-    if (right != m_right) {
-        m_right = right;
-        emit rightChanged();
-    }
-    if (bottom != m_bottom) {
-        m_bottom = bottom;
-        emit bottomChanged();
-    }
-}
-
-int DialogMargins::left() const
-{
-    return m_left;
-}
-
-int DialogMargins::top() const
-{
-    return m_top;
-}
-
-int DialogMargins::right() const
-{
-    return m_right;
-}
-
-int DialogMargins::bottom() const
-{
-    return m_bottom;
-}
-
 DialogProxy::DialogProxy(QQuickItem *parent)
     : QQuickWindow(),
       m_activeWindow(false),
@@ -106,7 +51,6 @@ DialogProxy::DialogProxy(QQuickItem *parent)
     setColor(QColor(Qt::transparent));
     setFlags(Qt::FramelessWindowHint);
 
-    m_margins = new DialogMargins(this, this);
     m_flags = flags();
 
     m_syncTimer = new QTimer(this);
@@ -309,7 +253,7 @@ void DialogProxy::setLocation(int location)
 
 QObject *DialogProxy::margins() const
 {
-    return m_margins;
+    return m_frameSvgItem->margins();
 }
 
 void DialogProxy::resizeEvent(QResizeEvent *re)

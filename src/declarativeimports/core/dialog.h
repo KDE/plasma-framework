@@ -35,56 +35,6 @@ namespace Plasma
 }
 
 
-class DialogMargins : public QObject
-{
-    Q_OBJECT
-
-    /**
-     * Width in pixels of the left margin
-     */
-    Q_PROPERTY(int left READ left NOTIFY leftChanged)
-
-    /**
-     * Height in pixels of the top margin
-     */
-    Q_PROPERTY(int top READ top NOTIFY topChanged)
-
-    /**
-     * Width in pixels of the right margin
-     */
-    Q_PROPERTY(int right READ right NOTIFY rightChanged)
-
-    /**
-     * Height in pixels of the bottom margin
-     */
-    Q_PROPERTY(int bottom READ bottom NOTIFY bottomChanged)
-
-public:
-    DialogMargins(QQuickWindow *dialog, QObject *parent = 0);
-
-    int left() const;
-    int top() const;
-    int right() const;
-    int bottom() const;
-
-Q_SIGNALS:
-    void leftChanged();
-    void rightChanged();
-    void topChanged();
-    void bottomChanged();
-
-protected:
-    void checkMargins();
-
-private:
-    int m_left;
-    int m_top;
-    int m_right;
-    int m_bottom;
-    QQuickWindow *m_dialog;
-    friend class DialogProxy;
-};
-
 /**
  * QML wrapper for kdelibs Plasma::Dialog
  *
@@ -216,7 +166,6 @@ private:
     QTimer *m_syncTimer;
     QWeakPointer<QQuickItem> m_mainItem;
     QWeakPointer<QQuickItem> m_visualParent;
-    DialogMargins *m_margins;
     bool m_activeWindow;
     Plasma::Location m_location;
     Plasma::FrameSvgItem *m_frameSvgItem;
