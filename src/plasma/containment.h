@@ -270,6 +270,18 @@ Q_SIGNALS:
          */
         void wallpaperChanged();
 
+        /**
+         * Emitted when the location has changed
+         * @since 5.0
+         */
+        void locationChanged(Plasma::Location location);
+
+        /**
+         * Emitted when the formFactor has changed
+         * @since 5.0
+         */
+        void formFactorChanged(Plasma::FormFactor formFactor);
+
     public Q_SLOTS:
         /**
          * Informs the Corona as to what position it is in. This is informational

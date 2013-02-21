@@ -357,6 +357,7 @@ void Containment::setFormFactor(FormFactor formFactor)
     KConfigGroup c = config();
     c.writeEntry("formfactor", (int)formFactor);
     emit configNeedsSaving();
+    emit formFactorChanged(formFactor);
 }
 
 void Containment::setLocation(Location location)
@@ -376,6 +377,7 @@ void Containment::setLocation(Location location)
     KConfigGroup c = config();
     c.writeEntry("location", (int)location);
     emit configNeedsSaving();
+    emit locationChanged(location);
 }
 
 Applet *Containment::addApplet(const QString &name, const QVariantList &args)
