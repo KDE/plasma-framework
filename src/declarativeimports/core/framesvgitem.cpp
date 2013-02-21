@@ -209,6 +209,11 @@ qreal FrameSvgItem::implicitHeight() const
     return QQuickItem::implicitHeight();
 }
 
+Plasma::FrameSvg *FrameSvgItem::frameSvg() const
+{
+    return m_frameSvg;
+}
+
 } // Plasma namespace
 
 #include "framesvgitem.moc"

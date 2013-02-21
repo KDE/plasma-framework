@@ -138,6 +138,11 @@ public:
     void setImplicitHeight(qreal height);
     qreal implicitHeight() const;
 
+    /**
+     * Only to be used from inside this library, is not intended to be invokable
+     */
+    Plasma::FrameSvg *frameSvg() const;
+
 signals:
     void imagePathChanged();
     void prefixChanged();

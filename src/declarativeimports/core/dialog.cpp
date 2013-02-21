@@ -31,6 +31,7 @@
 #include <QScreen>
 
 #include <KWindowSystem>
+#include <kwindoweffects.h>
 
 #include <Plasma/Corona>
 // #include <Plasma/Dialog>
@@ -323,6 +324,7 @@ void DialogProxy::syncMainItemToSize()
     m_frameSvgItem->setY(0);
     m_frameSvgItem->setWidth(width());
     m_frameSvgItem->setHeight(height());
+    KWindowEffects::enableBlurBehind(winId(), true, m_frameSvgItem->frameSvg()->mask());
 
     if (m_mainItem) {
         m_mainItem.data()->setX(m_frameSvgItem->margins()->left());
