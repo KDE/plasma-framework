@@ -202,6 +202,7 @@ Q_SIGNALS:
     void visualParentChanged();
 
 private Q_SLOTS:
+    void syncMainItemToSize();
     void syncToMainItemSize();
 
 protected:
