@@ -176,7 +176,7 @@ void DialogProxy::setVisible(const bool visible)
     QQuickWindow::setVisible(visible);
 }
 
-QPoint DialogProxy::popupPosition(QQuickItem *item, int alignment)
+QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
 {
     if (!item) {
         //If no item was specified try to align at the center of the parent view
