@@ -42,7 +42,7 @@
 DialogProxy::DialogProxy(QQuickItem *parent)
     : QQuickWindow(),
       m_activeWindow(false),
-      m_location(Plasma::Floating)
+      m_location(Qt::AlignCenter)
 {
     QSurfaceFormat format;
     format.setAlphaBufferSize(8);
@@ -212,6 +212,24 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
     int xOffset = 0;
     int yOffset = 0;
 
+    int _x = 0;
+    int _y = 0;
+
+    if (location() == Qt::AlignBottom) {
+        _y = item->y() + item->height();
+    } else if (location() == Qt::AlignTop) {
+        _y = item->y() - height();
+    } else if ((location() & Qt::AlignCenter) || (location() & Qt::AlignVCenter)) {
+        // align our item's vertical center with our own vertical center
+        _y = (item->y() + item->height()/2) - height()/2;
+    } else {
+
+        // Location is left or right
+    }
+
+
+
+
     if (alignment == Qt::AlignCenter) {
         xOffset = item->boundingRect().width()/2 - width()/2;
         yOffset = item->boundingRect().height()/2 - height()/2;
@@ -262,17 +280,17 @@ void DialogProxy::setWindowFlags(const int flags)
     setFlags(Qt::FramelessWindowHint|m_flags);
 }
 
-int DialogProxy::location() const
+Qt::AlignmentFlag DialogProxy::location() const
 {
-    return (int)m_location;
+    return (Qt::AlignmentFlag)m_location;
 }
 
-void DialogProxy::setLocation(int location)
+void DialogProxy::setLocation(Qt::AlignmentFlag location)
 {
     if (m_location == location) {
         return;
     }
-    m_location = (Plasma::Location)location;
+    m_location = (Qt::AlignmentFlag)location;
     emit locationChanged();
 }
 
