@@ -627,6 +627,12 @@ void AppletInterface::setConfigurationInterfaceShown(bool show)
 
         m_configView.data()->setResizeMode(QQuickView::SizeRootObjectToView);
         m_configView.data()->setSource(QUrl::fromLocalFile(applet()->containment()->corona()->package().filePath("ui", "Configuration.qml")));
+
+        if (m_configView.data()->rootObject()) {
+            m_configView.data()->engine()->rootContext()->setContextProperty("plasmoid", this);
+            m_configView.data()->rootObject()->metaObject()->invokeMethod(m_configView.data()->rootObject(), "addConfigPage", Q_ARG(QVariant, QUrl::fromLocalFile(m_appletScriptEngine->package().filePath("ui", "ConfigGeneral.qml"))));
+        }
+
         m_configView.data()->show();
     } else {
         if (m_configView) {
