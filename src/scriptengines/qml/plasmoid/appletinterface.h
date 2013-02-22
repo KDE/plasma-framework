@@ -37,6 +37,7 @@ class QSignalMapper;
 class QSizeF;
 
 class ConfigPropertyMap;
+class ConfigView;
 
 class QmlObject;
 
@@ -251,7 +252,7 @@ private:
 //UI-specific members ------------------
     QmlObject *m_qmlObject;
     QWeakPointer<QObject> m_compactUiObject;
-    QWeakPointer<QQuickView> m_configView;
+    QWeakPointer<ConfigView> m_configView;
 
     QTimer *m_creationTimer;
 

@@ -45,6 +45,7 @@
 #include <Plasma/PluginLoader>
 
 #include "containmentinterface.h"
+#include "configview.h"
 #include "declarative/configpropertymap.h"
 #include "declarative/qmlobject.h"
 #include "declarative/packageaccessmanagerfactory.h"
@@ -611,29 +612,12 @@ void AppletInterface::setConfigurationInterfaceShown(bool show)
     }
 
     if (show) {
-        if (m_configView) {
-            m_configView.data()->show();
-            return;
-        } else {
-            m_configView = new QQuickView();
-            //FIXME: problem on nvidia, all windows should be transparent or won't show
-            m_configView.data()->setColor(Qt::transparent);
-            m_configView.data()->setTitle(i18n("%1 Settings", applet()->title()));
-        }
-
-        if (!applet()->containment()->corona()->package().isValid()) {
-            qWarning() << "Invalid home screen package";
-        }
-
-        m_configView.data()->setResizeMode(QQuickView::SizeRootObjectToView);
-        m_configView.data()->setSource(QUrl::fromLocalFile(applet()->containment()->corona()->package().filePath("ui", "Configuration.qml")));
-
-        if (m_configView.data()->rootObject()) {
-            m_configView.data()->engine()->rootContext()->setContextProperty("plasmoid", this);
-            m_configView.data()->rootObject()->metaObject()->invokeMethod(m_configView.data()->rootObject(), "addConfigPage", Q_ARG(QVariant, QUrl::fromLocalFile(m_appletScriptEngine->package().filePath("ui", "ConfigGeneral.qml"))));
+        if (!m_configView) {
+            m_configView = new ConfigView(this);
         }
 
         m_configView.data()->show();
+
     } else {
         if (m_configView) {
             m_configView.data()->hide();
