@@ -151,7 +151,8 @@ Item {
 //             internalLoader.dialog.y = pos.y
 
             internalLoader.dialog.visible = true
-            internalLoader.dialog.activateWindow()
+            internalLoader.dialog.activateWindow();
+            //internalLoader.dialog.open();
         } else {
             print("inlining.");
             internalLoader.inlineDialog.open()
