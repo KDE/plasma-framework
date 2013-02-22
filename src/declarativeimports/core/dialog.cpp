@@ -167,15 +167,19 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, int alignment)
         //If no item was specified try to align at the center of the parent view
         QQuickItem *parentItem = qobject_cast<QQuickItem *>(parent());
         if (parentItem && parentItem->window()) {
+            qDebug() << "popping up at " << parentItem->window()->geometry().center() - QPoint(width()/2, height()/2);
             return parentItem->window()->geometry().center() - QPoint(width()/2, height()/2);
         } else {
+            qDebug() << "zero-zero";
             return QPoint();
         }
     }
 
     QPointF pos = item->mapToScene(QPointF(0, 0));
+    qDebug() << " we have an item at " << pos;
     if (item->window() && item->window()->screen()) {
         pos = item->window()->mapToGlobal(pos.toPoint());
+        qDebug() << "popping up at " << pos;
     } else {
         return QPoint();
     }
