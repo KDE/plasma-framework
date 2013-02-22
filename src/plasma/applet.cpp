@@ -489,11 +489,11 @@ void Applet::flushPendingConstraintsEvents()
 
         QAction *configAction = d->actions->action("configure");
         if (configAction) {
-            if (d->isContainment) {
+            /*if (d->isContainment) {
                 connect(configAction, SIGNAL(triggered(bool)), this, SLOT(requestConfiguration()), Qt::UniqueConnection);
             } else {
                 connect(configAction, SIGNAL(triggered(bool)), this, SLOT(showConfigurationInterface()), Qt::UniqueConnection);
-            }
+            }*/
 
             if (d->hasConfigurationInterface) {
                 bool canConfig = unlocked || KAuthorized::authorize("plasma/allow_configure_when_locked");

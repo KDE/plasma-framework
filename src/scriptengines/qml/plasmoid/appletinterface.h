@@ -24,6 +24,7 @@
 
 #include <QQuickItem>
 #include <QScriptValue>
+#include <QQuickView>
 
 #include <Plasma/Applet>
 #include <Plasma/Theme>
@@ -226,13 +227,15 @@ Q_SIGNALS:
     void busyChanged();
     void expandedChanged();
 
-//it's important this slot is private because must not be invokable by qml
-public Q_SLOTS:
+//it's important those slots are private because must not be invokable by qml
+private Q_SLOTS:
     void init();
+    void configureTriggered();
 
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
     void itemChange(ItemChange change, const ItemChangeData &value);
+    void setConfigurationInterfaceShown(bool show);
 
     DeclarativeAppletScript *m_appletScriptEngine;
 
@@ -248,6 +251,7 @@ private:
 //UI-specific members ------------------
     QmlObject *m_qmlObject;
     QWeakPointer<QObject> m_compactUiObject;
+    QWeakPointer<QQuickView> m_configView;
 
     QTimer *m_creationTimer;
 

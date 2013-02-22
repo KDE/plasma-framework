@@ -74,6 +74,9 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
     connect(m_appletScriptEngine, SIGNAL(contextChanged()),
             this, SIGNAL(contextChanged()));
 
+    connect(applet()->action("configure"), &QAction::triggered,
+            this, &AppletInterface::configureTriggered);
+
     m_qmlObject = new QmlObject(this);
     m_qmlObject->setInitializationDelayed(true);
 
@@ -594,6 +597,43 @@ void AppletInterface::itemChange(ItemChange change, const ItemChangeData &value)
 QmlObject *AppletInterface::qmlObject()
 {
     return m_qmlObject;
+}
+
+void AppletInterface::configureTriggered()
+{
+    setConfigurationInterfaceShown(true);
+}
+
+void AppletInterface::setConfigurationInterfaceShown(bool show)
+{
+    if (!applet()->containment() || !applet()->containment()->corona()) {
+        return;
+    }
+
+    if (show) {
+        if (m_configView) {
+            m_configView.data()->show();
+            return;
+        } else {
+            m_configView = new QQuickView();
+            //FIXME: problem on nvidia, all windows should be transparent or won't show
+            m_configView.data()->setColor(Qt::transparent);
+            m_configView.data()->setTitle(i18n("%1 Settings", applet()->title()));
+        }
+
+        if (!applet()->containment()->corona()->package().isValid()) {
+            qWarning() << "Invalid home screen package";
+        }
+
+        m_configView.data()->setResizeMode(QQuickView::SizeRootObjectToView);
+        m_configView.data()->setSource(QUrl::fromLocalFile(applet()->containment()->corona()->package().filePath("ui", "Configuration.qml")));
+        m_configView.data()->show();
+    } else {
+        if (m_configView) {
+            m_configView.data()->hide();
+            m_configView.data()->deleteLater();
+        }
+    }
 }
 
 #include "moc_appletinterface.cpp"
