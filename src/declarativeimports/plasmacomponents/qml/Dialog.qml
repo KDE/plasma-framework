@@ -128,20 +128,32 @@ Item {
      */
     signal clickedOutside
 
+    function showObj(o) {
+        print("Showing object: " + o);
+        var e;
+        for (e in o) {
+            print(" e[" + e + "] = " + o[e]);
+        }
+    }
+
+
     /**
      * Shows the dialog to the user.
      */
     function open() {
         dialogLayout.parent = internalLoader.item.mainItem
 
+        print("opening.");
         if (internalLoader.dialog) {
-            var pos = internalLoader.dialog.popupPosition(root.visualParent, Qt.AlignCenter)
-            internalLoader.dialog.x = pos.x
-            internalLoader.dialog.y = pos.y
+            print("Have dialog.");
+//             var pos = internalLoader.dialog.popupPosition(root.visualParent, Qt.AlignCenter)
+//             internalLoader.dialog.x = pos.x
+//             internalLoader.dialog.y = pos.y
 
             internalLoader.dialog.visible = true
             internalLoader.dialog.activateWindow()
         } else {
+            print("inlining.");
             internalLoader.inlineDialog.open()
         }
     }
@@ -154,12 +166,12 @@ Item {
      */
     function accept() {
         if (status == PlasmaComponents.DialogStatus.Open) {
-            coreDialog.visible = false;
-//             if (internalLoader.dialog) {
-//                 internalLoader.dialog.visible = false
-//             } else {
-//                 internalLoader.inlineDialog.close()
-//             }
+//             coreDialog.visible = false;
+            if (internalLoader.dialog) {
+                internalLoader.dialog.visible = false
+            } else {
+                internalLoader.inlineDialog.close()
+            }
             accepted()
         }
     }
@@ -172,12 +184,12 @@ Item {
      */
     function reject() {
         if (status == PlasmaComponents.DialogStatus.Open) {
-            coreDialog.visible = false;
-//             if (internalLoader.dialog) {
-//                 internalLoader.dialog.visible = false
-//             } else {
-//                 internalLoader.inlineDialog.close()
-//             }
+//             coreDialog.visible = false;
+            if (internalLoader.dialog) {
+                internalLoader.dialog.visible = false
+            } else {
+                internalLoader.inlineDialog.close()
+            }
             rejected()
         }
     }
@@ -186,12 +198,13 @@ Item {
      * Closes the dialog without any user interaction.
      */
     function close() {
-        internalLoader.sourceComponent.coreDialog.visible = false;
-//         if (internalLoader.dialog) {
-//             internalLoader.dialog.visible = false
-//         } else {
-//             internalLoader.inlineDialog.close()
-//         }
+        //internalLoader.sourceComponent.
+        //coreDialog.visible = false;
+        if (internalLoader.dialog) {
+            internalLoader.dialog.visible = false
+        } else {
+            internalLoader.inlineDialog.close()
+        }
     }
 
     visible: false
@@ -214,10 +227,14 @@ Item {
         }
 
         sourceComponent: {
+            print(" XXX Loading Source component XXX");
+            print(" root: " + rootItem.width + "x" + rootItem.height + " dlg: " + dialogLayout.width + "x" + dialogLayout.height);
             if (loadCompleted) {
-                if (rootItem == null || dialogLayout.width > rootItem.width || dialogLayout.height > rootItem.height) {
+                if (true || rootItem == null || dialogLayout.width > rootItem.width || dialogLayout.height > rootItem.height) {
+                    print(" in external window");
                     dialogComponent
                 } else {
+                    print(" inline window");
                     inlineDialogComponent
                 }
             }
@@ -229,8 +246,8 @@ Item {
         //property bool visible: coreDialog.visible
         PlasmaCore.Dialog {
             id: coreDialog
-            windowFlags: Qt.Popup
-
+            //windowFlags: Qt.Popup
+            visualParent: root.visualParent
 //             state: "Hidden"
             visible: false
             onVisibleChanged: {
