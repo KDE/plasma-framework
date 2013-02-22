@@ -22,19 +22,24 @@
 
 
 #include <QQuickView>
+#include <QJSValue>
 
 class AppletInterface;
 
 class ConfigView : public QQuickView
 {
     Q_OBJECT
+    Q_PROPERTY(QVariantList configPages READ configPages CONSTANT)
 
 public:
     ConfigView(AppletInterface *scriptEngine, QWindow *parent = 0);
     virtual ~ConfigView();
 
+    QVariantList configPages() const;
+
 private:
     AppletInterface *m_appletInterface;
+    QVariantList m_configPages;
 };
 
 #endif // multiple inclusion guard

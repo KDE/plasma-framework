@@ -43,16 +43,35 @@ ConfigView::ConfigView(AppletInterface *interface, QWindow *parent)
     }
 
     setResizeMode(QQuickView::SizeRootObjectToView);
+
+
+    //rootObject()->metaObject()->invokeMethod(rootObject(), "addConfigPage", Q_ARG(QVariant, QUrl::fromLocalFile(m_appletInterface->applet()->package().filePath("ui", "ConfigGeneral.qml"))));
+
+    QVariantMap page;
+    page["title"] = i18n("General");
+    if (m_appletInterface->applet()->icon().isEmpty()) {
+        page["icon"] = "configure";
+    } else {
+        page["icon"] = m_appletInterface->applet()->icon();
+    }
+    page["component"] = QVariant::fromValue(new QQmlComponent(engine(), QUrl::fromLocalFile(m_appletInterface->applet()->package().filePath("ui", "ConfigGeneral.qml")), this));
+    m_configPages << page;
+
+    engine()->rootContext()->setContextProperty("plasmoid", interface);
+    engine()->rootContext()->setContextProperty("configDialog", this);
     setSource(QUrl::fromLocalFile(m_appletInterface->applet()->containment()->corona()->package().filePath("ui", "Configuration.qml")));
 
-    if (rootObject()) {
-        engine()->rootContext()->setContextProperty("plasmoid", interface);
-        rootObject()->metaObject()->invokeMethod(rootObject(), "addConfigPage", Q_ARG(QVariant, QUrl::fromLocalFile(m_appletInterface->applet()->package().filePath("ui", "ConfigGeneral.qml"))));
-    }
+
 }
 
 ConfigView::~ConfigView()
 {
+}
+
+
+QVariantList ConfigView::configPages() const
+{
+    return m_configPages;
 }
 
 #include "moc_configview.cpp"
