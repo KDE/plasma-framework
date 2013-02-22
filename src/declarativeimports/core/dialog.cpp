@@ -142,6 +142,7 @@ bool DialogProxy::isVisible() const
 
 void DialogProxy::setVisible(const bool visible)
 {
+    qDebug() << visible;
     if (visible) {
         syncToMainItemSize();
 
@@ -151,9 +152,23 @@ void DialogProxy::setVisible(const bool visible)
 
         const QRect workArea(KWindowSystem::workArea());
         if (!workArea.contains(geometry())) {
-             setPosition(qBound(workArea.left(), x(), workArea.right() - width()),
-                              qBound(workArea.top(), y(), workArea.bottom() - height())
-             );
+            const int _x = qBound(workArea.left(), x(), workArea.right() - width());
+            const int _y = qBound(workArea.top(), y(), workArea.bottom() - height());
+            setPosition(_x, _y);
+             //);
+            qDebug() << "workarea l/r: " << workArea.left() << workArea.right();
+            qDebug() << "workarea x/y: " << x() << y();
+            qDebug() << "workarea t/b: " << workArea.top() << workArea.bottom();
+            qDebug() << "XXX Workspace. Pop up at: " << _x << "," << _y << workArea << geometry();;
+        } else if (!m_visualParent) {
+            const int _x = (workArea.width() - width()) / 2;
+            const int _y = (workArea.height() - height()) / 2;
+            qDebug() << "Positioning inside workarea: " << workArea << geometry();
+            qDebug() << "workarea l/r: " << workArea.left() << workArea.right();
+            qDebug() << "workarea x/y: " << x() << y();
+            qDebug() << "workarea t/b: " << workArea.top() << workArea.bottom();
+            qDebug() << "XXX Workspace. Pop up at: " << _x << "," << _y << workArea << geometry();;
+            setPosition(_x, _y);
         }
 
         raise();
@@ -167,10 +182,10 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, int alignment)
         //If no item was specified try to align at the center of the parent view
         QQuickItem *parentItem = qobject_cast<QQuickItem *>(parent());
         if (parentItem && parentItem->window()) {
-            qDebug() << "popping up at " << parentItem->window()->geometry().center() - QPoint(width()/2, height()/2);
+            qDebug() << "no item, popping up at " << parentItem->window()->geometry().center() - QPoint(width()/2, height()/2);
             return parentItem->window()->geometry().center() - QPoint(width()/2, height()/2);
         } else {
-            qDebug() << "zero-zero";
+            qDebug() << "no item, zero-zero";
             return QPoint();
         }
     }
@@ -179,8 +194,9 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, int alignment)
     qDebug() << " we have an item at " << pos;
     if (item->window() && item->window()->screen()) {
         pos = item->window()->mapToGlobal(pos.toPoint());
-        qDebug() << "popping up at " << pos;
+        qDebug() << " ========= popping up at " << pos;
     } else {
+        qDebug() << " ========= popping up at zerozero";
         return QPoint();
     }
 
@@ -194,19 +210,24 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, int alignment)
     }
 
     int xOffset = 0;
+    int yOffset = 0;
 
     if (alignment == Qt::AlignCenter) {
         xOffset = item->boundingRect().width()/2 - width()/2;
+        yOffset = item->boundingRect().height()/2 - height()/2;
+        qDebug() << "Centering..." << xOffset << yOffset;
     } else if (alignment == Qt::AlignRight) {
         xOffset = item->boundingRect().width() - width();
     }
 
     const QRect avail = item->window()->screen()->availableGeometry();
-    QPoint menuPos = pos.toPoint() + QPoint(xOffset, item->boundingRect().height());
+    //QPoint menuPos = pos.toPoint() + QPoint(xOffset, item->boundingRect().height());
+    QPoint menuPos = pos.toPoint() + QPoint(xOffset, yOffset);
 
     if (menuPos.y() + height() > avail.bottom()) {
         menuPos = pos.toPoint() + QPoint(xOffset, -height());
     }
+    qDebug() << "PUP" << menuPos;
     return menuPos;
 }
 
@@ -218,6 +239,7 @@ bool DialogProxy::isActiveWindow() const
 
 void DialogProxy::activateWindow()
 {
+    qDebug();
     setWindowState(Qt::WindowActive);
     //m_dialog->activateWindow();
 }

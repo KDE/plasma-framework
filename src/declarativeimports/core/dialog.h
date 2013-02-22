@@ -133,7 +133,7 @@ public:
      * @arg alignment alignment of the popup compared to the item
      */
     //FIXME: alignment should be Qt::AlignmentFlag
-    QPoint popupPosition(QQuickItem *item, int alignment=Qt::AlignLeft) ;
+    QPoint popupPosition(QQuickItem *item, int alignment=Qt::AlignCenter) ;
 
     /**
      * Set a Qt.WidgetAttribute to the dialog window
