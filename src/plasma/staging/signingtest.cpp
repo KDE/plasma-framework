@@ -36,7 +36,7 @@ SigningTest::SigningTest(QObject *parent)
       m_signing(0),
       m_package(Plasma::PluginLoader::self()->loadPackage("Plasma/Applet"))
 {
-    const QString prefix = QString::fromLatin1(KDESRCDIR) + "data/;
+    const QString prefix = QString::fromLatin1(KDESRCDIR) + "data/";
     m_package.setPath(prefix + "signedPackage");
     m_path = prefix + "signed.plasmoid";
     m_sig = prefix + "signed.plasmoid.sig";
