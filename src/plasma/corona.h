@@ -213,16 +213,22 @@ public:
     KAction* addAction(QString name);
 
     /**
-     * @since 4.4
+     * @since 5.0
      * Sets the default containmentactions plugins for the given containment type
      */
-    void setContainmentActionsDefaults(ContainmentType containmentType, const ContainmentActionsPluginsConfig &config);
+    void setContainmentActionsDefault(Plasma::ContainmentType containmentType, QEvent *trigger, const QString &name);
 
     /**
-     * @since 4.4
+     * @since 5.0
      * Returns the default containmentactions plugins for the given containment type
      */
-    ContainmentActionsPluginsConfig containmentActionsDefaults(ContainmentType containmentType);
+    QString containmentActionsDefault(ContainmentType containmentType, QEvent *trigger) const;
+
+    /**
+     * @since 5.0
+     * Returns the default containmentactions plugins for the given containment type
+     */
+    QHash<QString, QString> containmentActionsDefaults(ContainmentType containmentType) const;
 
     /**
      * @param the AbstractDialogManager implementaion

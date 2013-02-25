@@ -72,7 +72,6 @@ set(plasma_LIB_SRCS
     abstractdialogmanager.cpp
     configloader.cpp
     containmentactions.cpp
-    containmentactionspluginsconfig.cpp
     datacontainer.cpp
     dataengine.cpp
     dataengineconsumer.cpp
@@ -167,7 +166,6 @@ set(plasma_LIB_INCLUDES
     configloader.h
     containment.h
     containmentactions.h
-    containmentactionspluginsconfig.h
     corona.h
     datacontainer.h
     dataengine.h

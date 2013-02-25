@@ -41,7 +41,6 @@
 
 #include "abstractdialogmanager.h"
 #include "containment.h"
-#include "containmentactionspluginsconfig.h"
 #include "pluginloader.h"
 #include "private/applet_p.h"
 #include "private/containment_p.h"
@@ -413,12 +412,17 @@ void Corona::addShortcuts(KActionCollection *newShortcuts)
     }
 }
 
-void Corona::setContainmentActionsDefaults(Plasma::ContainmentType containmentType, const ContainmentActionsPluginsConfig &config)
+void Corona::setContainmentActionsDefault(Plasma::ContainmentType containmentType, QEvent *trigger, const QString &name)
 {
-    d->containmentActionsDefaults.insert(containmentType, config);
+    d->containmentActionsDefaults[containmentType].insert(ContainmentActions::eventToString(trigger), name);
 }
 
-ContainmentActionsPluginsConfig Corona::containmentActionsDefaults(Plasma::ContainmentType containmentType)
+QString Corona::containmentActionsDefault(Plasma::ContainmentType containmentType, QEvent *trigger) const
+{
+    return d->containmentActionsDefaults.value(containmentType).value(ContainmentActions::eventToString(trigger));
+}
+
+QHash<QString, QString> Corona::containmentActionsDefaults(ContainmentType containmentType) const
 {
     return d->containmentActionsDefaults.value(containmentType);
 }

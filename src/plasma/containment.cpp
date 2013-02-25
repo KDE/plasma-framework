@@ -47,12 +47,10 @@
 #endif
 
 #include "containmentactions.h"
-#include "containmentactionspluginsconfig.h"
 #include "corona.h"
 #include "pluginloader.h"
 
 #include "private/applet_p.h"
-#include "private/containmentactionspluginsconfig_p.h"
 
 #include "plasma/plasma.h"
 
@@ -240,9 +238,8 @@ void Containment::restore(KConfigGroup &group)
             addContainmentActions(key, cfg.readEntry(key, QString()));
         }
     } else { //shell defaults
-        ContainmentActionsPluginsConfig conf = corona()->containmentActionsDefaults(d->type);
         //steal the data directly, for efficiency
-        QHash<QString,QString> defaults = conf.d->plugins;
+        QHash<QString,QString> defaults = corona()->containmentActionsDefaults(d->type);
         for (QHash<QString,QString>::const_iterator it = defaults.constBegin(),
                 end = defaults.constEnd(); it != end; ++it) {
             addContainmentActions(it.key(), it.value());
