@@ -41,8 +41,6 @@
 namespace Plasma
 {
 
-QHash<QString, ContainmentActions*> ContainmentPrivate::globalActionPlugins;
-
 const char ContainmentPrivate::defaultWallpaper[] = "image";
 const char ContainmentPrivate::defaultWallpaperMode[] = "SingleImage";
 

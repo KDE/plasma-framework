@@ -586,14 +586,7 @@ void Containment::addContainmentActions(const QString &trigger, const QString &p
 
 QHash<QString, ContainmentActions*> &Containment::containmentActions()
 {
-    switch (d->containmentActionsSource) {
-        case ContainmentActions::Activity:
-            //FIXME
-        case ContainmentActions::Local:
-            return d->localActionPlugins;
-        default:
-            return d->globalActionPlugins;
-    }
+    return d->localActionPlugins;
 }
 
 void Containment::setActivity(const QString &activityId)

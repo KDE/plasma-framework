@@ -111,7 +111,6 @@ public:
     bool drawWallpaper : 1;
 
     ContainmentActions::ContainmentActionsSource containmentActionsSource;
-    static QHash<QString, ContainmentActions*> globalActionPlugins;
     static const char defaultWallpaper[];
     static const char defaultWallpaperMode[];
 };
