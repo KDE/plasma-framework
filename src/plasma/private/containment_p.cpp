@@ -69,18 +69,6 @@ void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containme
     appletBrowserAction->setIcon(KDE::icon("list-add"));
     appletBrowserAction->setShortcut(KShortcut("alt+d, a"));
     appletBrowserAction->setData(Plasma::AddAction);
-
-    KAction *action = actions->addAction("next applet");
-    action->setText(i18n("Next Widget"));
-    //no icon
-    action->setShortcut(KShortcut("alt+d, n"));
-    action->setData(Plasma::ControlAction);
-
-    action = actions->addAction("previous applet");
-    action->setText(i18n("Previous Widget"));
-    //no icon
-    action->setShortcut(KShortcut("alt+d, p"));
-    action->setData(Plasma::ControlAction);
 }
 
 void ContainmentPrivate::setScreen(int newScreen)

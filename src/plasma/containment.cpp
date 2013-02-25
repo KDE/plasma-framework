@@ -129,16 +129,6 @@ void Containment::init()
         connect(appletBrowserAction, SIGNAL(triggered()), this, SLOT(triggerShowAddWidgets()));
     }
 
-    QAction *act = action("next applet");
-    if (act) {
-        connect(act, SIGNAL(triggered()), this, SLOT(focusNextApplet()));
-    }
-
-    act = action("previous applet");
-    if (act) {
-        connect(act, SIGNAL(triggered()), this, SLOT(focusPreviousApplet()));
-    }
-
     if (immutability() != SystemImmutable && corona()) {
         QAction *lockDesktopAction = corona()->action("lock widgets");
         //keep a pointer so nobody notices it moved to corona
