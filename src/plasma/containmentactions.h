@@ -76,22 +76,11 @@ class PLASMA_EXPORT ContainmentActions : public QObject
         ~ContainmentActions();
 
         /**
-         * Returns the user-visible name for the containmentactions, as specified in the
-         * .desktop file.
-         *
-         * @return the user-visible name for the containmentactions.
-         **/
-        QString name() const;
-
-        /**
-         * Returns the plugin name for the containmentactions
+         * @return the plugin info for this ContainmentActions instance,
+         *         including name, pluginName and icon
+         * @since 5.0
          */
-        QString pluginName() const;
-
-        /**
-         * Returns the icon related to this containmentactions
-         **/
-        QString icon() const;
+        KPluginInfo pluginInfo() const;
 
         /**
          * Returns the configurations of this containmentactions

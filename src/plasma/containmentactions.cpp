@@ -66,39 +66,17 @@ ContainmentActions::~ContainmentActions()
     delete d;
 }
 
+KPluginInfo ContainmentActions::pluginInfo() const
+{
+    return d->containmentActionsDescription;
+}
+
 Containment *ContainmentActions::containment()
 {
     if (d->containment) {
         return d->containment;
     }
     return qobject_cast<Containment*>(parent());
-}
-
-QString ContainmentActions::name() const
-{
-    if (!d->containmentActionsDescription.isValid()) {
-        return i18n("Unknown ContainmentActions");
-    }
-
-    return d->containmentActionsDescription.name();
-}
-
-QString ContainmentActions::icon() const
-{
-    if (!d->containmentActionsDescription.isValid()) {
-        return QString();
-    }
-
-    return d->containmentActionsDescription.icon();
-}
-
-QString ContainmentActions::pluginName() const
-{
-    if (!d->containmentActionsDescription.isValid()) {
-        return QString();
-    }
-
-    return d->containmentActionsDescription.pluginName();
 }
 
 void ContainmentActions::setSource(ContainmentActionsSource source)

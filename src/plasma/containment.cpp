@@ -551,7 +551,7 @@ void Containment::addContainmentActions(const QString &trigger, const QString &p
 
     if (containmentActions().contains(trigger)) {
         plugin = containmentActions().value(trigger);
-        if (plugin->pluginName() != pluginName) {
+        if (plugin->pluginInfo().pluginName() != pluginName) {
             containmentActions().remove(trigger);
             delete plugin;
             plugin = 0;
