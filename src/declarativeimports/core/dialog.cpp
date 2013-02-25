@@ -42,7 +42,7 @@
 DialogProxy::DialogProxy(QQuickItem *parent)
     : QQuickWindow(),
       m_activeWindow(false),
-      m_location(Qt::AlignCenter)
+      m_location(Plasma::TopEdge)
 {
     QSurfaceFormat format;
     format.setAlphaBufferSize(8);
@@ -215,6 +215,7 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
     int _x = 0;
     int _y = 0;
 
+    /*
     if (location() == Qt::AlignBottom) {
         _y = item->y() + item->height();
     } else if (location() == Qt::AlignTop) {
@@ -233,7 +234,7 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
             qDebug() << "Neither left nor right. I'm confused.";
         }
     }
-
+    */
     // Correct position for screen geometry
 
     if (alignment == Qt::AlignCenter) {
@@ -286,17 +287,17 @@ void DialogProxy::setWindowFlags(const int flags)
     setFlags(Qt::FramelessWindowHint|m_flags);
 }
 
-Qt::AlignmentFlag DialogProxy::location() const
+int DialogProxy::location() const
 {
-    return (Qt::AlignmentFlag)m_location;
+    return (Plasma::Location)m_location;
 }
 
-void DialogProxy::setLocation(Qt::AlignmentFlag location)
+void DialogProxy::setLocation(int location)
 {
     if (m_location == location) {
         return;
     }
-    m_location = (Qt::AlignmentFlag)location;
+    m_location = (Plasma::Location)location;
     emit locationChanged();
 }
 
@@ -412,5 +413,5 @@ void DialogProxy::focusOutEvent(QFocusEvent *ev)
     emit activeWindowChanged();
 }
 
-#include "moc_dialog.cpp"
+#include "dialog.moc"
 

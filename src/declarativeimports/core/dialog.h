@@ -78,7 +78,7 @@ class DialogProxy : public QQuickWindow
     /**
      * Plasma Location of the dialog window. Useful if this dialog is apopup for a panel
      */
-    Q_PROPERTY(Qt::AlignmentFlag location READ location WRITE setLocation NOTIFY locationChanged)
+    Q_PROPERTY(int location READ location WRITE setLocation NOTIFY locationChanged)
 //This won't be available on windows, but should be used only by kwin and never by applets anyways
 #ifndef Q_WS_WIN
     /**
@@ -118,8 +118,8 @@ public:
     int windowFlags() const;
     void setWindowFlags(const int);
 
-    Qt::AlignmentFlag location() const;
-    void setLocation(Qt::AlignmentFlag location);
+    int location() const;
+    void setLocation(int location);
 
     QObject *margins() const;
 
@@ -167,7 +167,7 @@ private:
     QWeakPointer<QQuickItem> m_mainItem;
     QWeakPointer<QQuickItem> m_visualParent;
     bool m_activeWindow;
-    Qt::AlignmentFlag m_location;
+    Plasma::Location m_location;
     Plasma::FrameSvgItem *m_frameSvgItem;
 };
 
