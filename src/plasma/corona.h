@@ -165,21 +165,6 @@ public:
     QList<Plasma::Location> freeEdges(int screen) const;
 
     /**
-     * Returns the QAction with the given name from our collection
-     */
-    QAction *action(QString name) const;
-
-    /**
-     * Adds the action to our collection under the given name
-     */
-    void addAction(QString name, QAction *action);
-
-    /**
-     * Returns all the actions in our collection
-     */
-    QList<QAction*> actions() const;
-
-    /**
      * convenience function - enables or disables an action by name
      *
      * @param name the name of the action in our collection
@@ -204,13 +189,9 @@ public:
     void addShortcuts(KActionCollection *newShortcuts);
 
     /**
-     * @since 4.3
-     * Creates an action in our collection under the given name
-     * @return the new action
-     * FIXME I'm wrapping so much of kactioncollection API now, maybe I should just expose the
-     * collection itself :P
+     * The actions assocated with this Corona
      */
-    KAction* addAction(QString name);
+    KActionCollection* actions() const;
 
     /**
      * @since 5.0

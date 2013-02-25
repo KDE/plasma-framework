@@ -130,7 +130,7 @@ void Containment::init()
     }
 
     if (immutability() != SystemImmutable && corona()) {
-        QAction *lockDesktopAction = corona()->action("lock widgets");
+        QAction *lockDesktopAction = corona()->actions()->action("lock widgets");
         //keep a pointer so nobody notices it moved to corona
         if (lockDesktopAction) {
             actions()->addAction("lock widgets", lockDesktopAction);

@@ -63,8 +63,8 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
           itemStatus(UnknownStatus),
           modificationsTimer(0),
           hasConfigurationInterface(false),
-          failed(false),
           isContainment(false),
+          failed(false),
           transient(false),
           needsConfig(false),
           started(false)

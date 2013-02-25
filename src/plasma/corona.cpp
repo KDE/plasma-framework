@@ -356,24 +356,9 @@ QList<Plasma::Location> Corona::freeEdges(int screen) const
     return freeEdges;
 }
 
-QAction *Corona::action(QString name) const
+KActionCollection *Corona::actions() const
 {
-    return d->actions.action(name);
-}
-
-void Corona::addAction(QString name, QAction *action)
-{
-    d->actions.addAction(name, action);
-}
-
-KAction* Corona::addAction(QString name)
-{
-    return d->actions.addAction(name);
-}
-
-QList<QAction*> Corona::actions() const
-{
-    return d->actions.actions();
+    return &d->actions;
 }
 
 void Corona::enableAction(const QString &name, bool enable)
