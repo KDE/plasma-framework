@@ -563,14 +563,9 @@ QList<QAction*> Applet::contextualActions()
     return d->script ? d->script->contextualActions() : QList<QAction*>();
 }
 
-QAction *Applet::action(QString name) const
+KActionCollection *Applet::actions() const
 {
-    return d->actions->action(name);
-}
-
-void Applet::addAction(QString name, QAction *action)
-{
-    d->actions->addAction(name, action);
+    return d->actions;
 }
 
 FormFactor Applet::formFactor() const

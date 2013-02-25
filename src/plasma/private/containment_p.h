@@ -85,8 +85,6 @@ public:
 
     Applet *addApplet(const QString &name, const QVariantList &args = QVariantList(), uint id = 0);
 
-    KActionCollection *actions();
-
     /**
      * FIXME: this should completely go from here
      * @return the config group that containmentactions plugins go in

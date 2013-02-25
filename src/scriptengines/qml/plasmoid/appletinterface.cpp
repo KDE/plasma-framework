@@ -32,6 +32,7 @@
 #include <QSignalMapper>
 #include <QTimer>
 
+#include <KActionCollection>
 #include <KDebug>
 #include <KGlobalSettings>
 #include <KService>
@@ -75,7 +76,7 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
     connect(m_appletScriptEngine, SIGNAL(contextChanged()),
             this, SIGNAL(contextChanged()));
 
-    connect(applet()->action("configure"), &QAction::triggered,
+    connect(applet()->actions()->action("configure"), &QAction::triggered,
             this, &AppletInterface::configureTriggered);
 
     m_qmlObject = new QmlObject(this);
@@ -349,7 +350,7 @@ QList<QAction*> AppletInterface::contextualActions() const
     }
 
     foreach (const QString &name, m_actions) {
-        QAction *action = a->action(name);
+        QAction *action = a->actions()->action(name);
 
         if (action) {
             actions << action;
@@ -362,14 +363,14 @@ QList<QAction*> AppletInterface::contextualActions() const
 void AppletInterface::setActionSeparator(const QString &name)
 {
     Plasma::Applet *a = applet();
-    QAction *action = a->action(name);
+    QAction *action = a->actions()->action(name);
 
     if (action) {
         action->setSeparator(true);
     } else {
         action = new QAction(this);
         action->setSeparator(true);
-        a->addAction(name, action);
+        a->actions()->addAction(name, action);
         m_actions.append(name);
     }
 }
@@ -377,13 +378,13 @@ void AppletInterface::setActionSeparator(const QString &name)
 void AppletInterface::setAction(const QString &name, const QString &text, const QString &icon, const QString &shortcut)
 {
     Plasma::Applet *a = applet();
-    QAction *action = a->action(name);
+    QAction *action = a->actions()->action(name);
 
     if (action) {
         action->setText(text);
     } else {
         action = new QAction(text, this);
-        a->addAction(name, action);
+        a->actions()->addAction(name, action);
 
         Q_ASSERT(!m_actions.contains(name));
         m_actions.append(name);
@@ -412,7 +413,7 @@ void AppletInterface::setAction(const QString &name, const QString &text, const 
 void AppletInterface::removeAction(const QString &name)
 {
     Plasma::Applet *a = applet();
-    QAction *action = a->action(name);
+    QAction *action = a->actions()->action(name);
 
     if (action) {
         if (m_actionSignals) {
@@ -427,7 +428,7 @@ void AppletInterface::removeAction(const QString &name)
 
 QAction *AppletInterface::action(QString name) const
 {
-    return applet()->action(name);
+    return applet()->actions()->action(name);
 }
 
 bool AppletInterface::immutable() const

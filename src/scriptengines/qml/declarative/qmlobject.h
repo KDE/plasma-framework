@@ -40,8 +40,8 @@ class QmlObjectIncubationController : public QObject, public QQmlIncubationContr
 
 public:
     QmlObjectIncubationController(QObject *parent)
-        : QQmlIncubationController(),
-          QObject(parent)
+        : QObject(parent),
+          QQmlIncubationController()
     {
         // Allow incubation for 1/3 of a frame.
         m_incubation_time = qMax(1, int(1000 / QGuiApplication::primaryScreen()->refreshRate()) / 3);

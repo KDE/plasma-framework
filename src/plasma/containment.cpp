@@ -107,22 +107,22 @@ void Containment::init()
     }
 
     //connect actions
-    ContainmentPrivate::addDefaultActions(d->actions(), this);
+    ContainmentPrivate::addDefaultActions(actions(), this);
     bool unlocked = immutability() == Mutable;
 
     //fix the text of the actions that need title()
     //btw, do we really want to use title() when it's a desktopcontainment?
-    QAction *closeApplet = action("remove");
+    QAction *closeApplet = actions()->action("remove");
     if (closeApplet) {
         closeApplet->setText(i18nc("%1 is the name of the applet", "Remove this %1", title()));
     }
 
-    QAction *configAction = action("configure");
+    QAction *configAction = actions()->action("configure");
     if (configAction) {
         configAction->setText(i18nc("%1 is the name of the applet", "%1 Settings", title()));
     }
 
-    QAction *appletBrowserAction = action("add widgets");
+    QAction *appletBrowserAction = actions()->action("add widgets");
     if (appletBrowserAction) {
         appletBrowserAction->setVisible(unlocked);
         appletBrowserAction->setEnabled(unlocked);
@@ -133,7 +133,7 @@ void Containment::init()
         QAction *lockDesktopAction = corona()->action("lock widgets");
         //keep a pointer so nobody notices it moved to corona
         if (lockDesktopAction) {
-            d->actions()->addAction("lock widgets", lockDesktopAction);
+            actions()->addAction("lock widgets", lockDesktopAction);
         }
     }
 }
@@ -452,7 +452,7 @@ int Containment::screen() const
 
 void Containment::enableAction(const QString &name, bool enable)
 {
-    QAction *action = this->action(name);
+    QAction *action = actions()->action(name);
     if (action) {
         action->setEnabled(enable);
         action->setVisible(enable);

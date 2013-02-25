@@ -169,11 +169,6 @@ KConfigGroup ContainmentPrivate::containmentActionsConfig() const
     return cfg;
 }
 
-KActionCollection* ContainmentPrivate::actions()
-{
-    return static_cast<Applet*>(q)->d->actions;
-}
-
 void ContainmentPrivate::configChanged()
 {
     KConfigGroup group = q->config();

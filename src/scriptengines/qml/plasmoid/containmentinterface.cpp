@@ -24,6 +24,7 @@
 #include <QQmlExpression>
 #include <QQmlProperty>
 
+#include <KActionCollection>
 #include <KAuthorized>
 #include <KDebug>
 #include <KLocalizedString>
@@ -253,12 +254,12 @@ void ContainmentInterface::addAppletActions(KMenu &desktopMenu, Plasma::Applet *
     }
 
     if (!applet->failedToLaunch()) {
-        QAction *configureApplet = applet->action("configure");
+        QAction *configureApplet = applet->actions()->action("configure");
         if (configureApplet && configureApplet->isEnabled()) {
             desktopMenu.addAction(configureApplet);
         }
 
-        QAction *runAssociatedApplication = applet->action("run associated application");
+        QAction *runAssociatedApplication = applet->actions()->action("run associated application");
         if (runAssociatedApplication && runAssociatedApplication->isEnabled()) {
             desktopMenu.addAction(runAssociatedApplication);
         }
@@ -293,7 +294,7 @@ void ContainmentInterface::addAppletActions(KMenu &desktopMenu, Plasma::Applet *
     }
 
     if (containment()->immutability() == Plasma::Mutable) {
-        QAction *closeApplet = applet->action("remove");
+        QAction *closeApplet = applet->actions()->action("remove");
         //kDebug() << "checking for removal" << closeApplet;
         if (closeApplet) {
             if (!desktopMenu.isEmpty()) {
@@ -336,8 +337,10 @@ void ContainmentInterface::addContainmentActions(KMenu &desktopMenu, QEvent *eve
     if (actions.isEmpty()) {
         //it probably didn't bother implementing the function. give the user a chance to set
         //a better plugin.  note that if the user sets no-plugin this won't happen...
-        if ((containment()->containmentType() != Plasma::PanelContainment && containment()->containmentType() != Plasma::CustomPanelContainment) && containment()->action("configure")) {
-            desktopMenu.addAction(containment()->action("configure"));
+        if ((containment()->containmentType() != Plasma::PanelContainment &&
+             containment()->containmentType() != Plasma::CustomPanelContainment) &&
+            containment()->actions()->action("configure")) {
+            desktopMenu.addAction(containment()->actions()->action("configure"));
         }
     } else {
         desktopMenu.addActions(actions);

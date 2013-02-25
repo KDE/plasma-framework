@@ -305,14 +305,9 @@ class PLASMA_EXPORT Applet : public QObject
         virtual QList<QAction*> contextualActions();
 
         /**
-         * Returns the QAction with the given name from our collection
+         * Returns the collection of actions for this Applet
          */
-        QAction *action(QString name) const;
-
-        /**
-         * Adds the action to our collection under the given name
-         */
-        void addAction(QString name, QAction *action);
+        KActionCollection *actions() const;
 
         /**
          * Sets the global shortcut to associate with this widget.
