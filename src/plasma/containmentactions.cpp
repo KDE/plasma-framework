@@ -136,11 +136,6 @@ KConfigGroup ContainmentActions::config() const
 
 void ContainmentActions::restore(const KConfigGroup &config)
 {
-    init(config);
-}
-
-void ContainmentActions::init(const KConfigGroup &config)
-{
     Q_UNUSED(config);
 }
 

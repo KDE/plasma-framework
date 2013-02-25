@@ -117,7 +117,7 @@ class PLASMA_EXPORT ContainmentActions : public QObject
          * @param config Config group to load settings
          * @see init
          **/
-        void restore(const KConfigGroup &config);
+        virtual void restore(const KConfigGroup &config);
 
         /**
          * This method is called when settings need to be saved.
@@ -193,13 +193,6 @@ class PLASMA_EXPORT ContainmentActions : public QObject
          * @param args a list of strings containing one entry: the service id
          */
         ContainmentActions(QObject *parent, const QVariantList &args);
-
-        /**
-         * This method is called once the containmentactions is loaded or settings are changed.
-         *
-         * @param config Config group to load settings
-         **/
-        virtual void init(const KConfigGroup &config);
 
     private:
         friend class ContainmentActionsPackage;
