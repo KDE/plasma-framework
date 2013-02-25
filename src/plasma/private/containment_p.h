@@ -112,7 +112,6 @@ public:
 
     ContainmentActions::ContainmentActionsSource containmentActionsSource;
     static const char defaultWallpaper[];
-    static const char defaultWallpaperMode[];
 };
 
 } // Plasma namespace

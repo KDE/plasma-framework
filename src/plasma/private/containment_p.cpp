@@ -42,7 +42,6 @@ namespace Plasma
 {
 
 const char ContainmentPrivate::defaultWallpaper[] = "image";
-const char ContainmentPrivate::defaultWallpaperMode[] = "SingleImage";
 
 void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containment *c)
 {
