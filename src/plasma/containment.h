@@ -161,14 +161,6 @@ class PLASMA_EXPORT Containment : public Applet
         void restore(KConfigGroup &group);
 
         /**
-         * convenience function - enables or disables an action by name
-         *
-         * @param name the name of the action in our collection
-         * @param enable true to enable, false to disable
-         */
-        void enableAction(const QString &name, bool enable);
-
-        /**
          * Return whether wallpaper is painted or not.
          */
         bool drawWallpaper();

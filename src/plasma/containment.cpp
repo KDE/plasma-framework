@@ -450,15 +450,6 @@ int Containment::screen() const
     return d->screen;
 }
 
-void Containment::enableAction(const QString &name, bool enable)
-{
-    QAction *action = actions()->action(name);
-    if (action) {
-        action->setEnabled(enable);
-        action->setVisible(enable);
-    }
-}
-
 void Containment::setDrawWallpaper(bool drawWallpaper)
 {
     d->drawWallpaper = drawWallpaper;

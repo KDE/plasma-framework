@@ -165,14 +165,6 @@ public:
     QList<Plasma::Location> freeEdges(int screen) const;
 
     /**
-     * convenience function - enables or disables an action by name
-     *
-     * @param name the name of the action in our collection
-     * @param enable true to enable, false to disable
-     */
-    void enableAction(const QString &name, bool enable);
-
-    /**
      * @since 4.3
      * Updates keyboard shortcuts for all the CoronaBase's actions.
      * If you've added actions to the CoronaBase you'll need to

@@ -143,8 +143,6 @@ void ContainmentPrivate::setScreen(int newScreen)
         swapScreensWith->setScreen(oldScreen);
     }
 
-    checkRemoveAction();
-
     if (newScreen >= 0) {
         emit q->activate();
     }
@@ -215,9 +213,19 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
     //kDebug() << "got containmentConstraintsEvent" << constraints;
     if (constraints & Plasma::ImmutableConstraint) {
         //update actions
-        checkRemoveAction();
         const bool unlocked = q->immutability() == Mutable;
-        q->enableAction("add widgets", unlocked);
+
+        QAction *action = q->actions()->action("remove");
+        if (action) {
+            action->setEnabled(unlocked);
+            action->setVisible(unlocked);
+        }
+
+        action = q->actions()->action("add widgets");
+        if (action) {
+            action->setEnabled(unlocked);
+            action->setVisible(unlocked);
+        }
 
         // tell the applets too
         foreach (Applet *a, applets) {
@@ -240,10 +248,6 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
         foreach (Applet *applet, applets) {
             applet->updateConstraints(appletConstraints);
         }
-    }
-
-    if (constraints & Plasma::StartupCompletedConstraint && type < Plasma::CustomContainment) {
-        checkRemoveAction();
     }
 }
 

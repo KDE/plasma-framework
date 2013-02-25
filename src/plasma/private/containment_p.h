@@ -80,7 +80,6 @@ public:
     bool isPanelContainment() const;
     void setLockToolText();
     void appletDeleted(Applet*);
-    void checkRemoveAction();
     void configChanged();
 
     Applet *addApplet(const QString &name, const QVariantList &args = QVariantList(), uint id = 0);

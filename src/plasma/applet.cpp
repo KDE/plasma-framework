@@ -914,15 +914,6 @@ bool Applet::isContainment() const
     return d->isContainment;
 }
 
-// PRIVATE CLASS IMPLEMENTATION
-
-
-void ContainmentPrivate::checkRemoveAction()
-{
-    q->enableAction("remove", q->immutability() == Mutable);
-}
-
-
 } // Plasma namespace
 
 #include "moc_applet.cpp"
