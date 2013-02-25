@@ -223,12 +223,18 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
         // align our item's vertical center with our own vertical center
         _y = (item->y() + item->height()/2) - height()/2;
     } else {
-
         // Location is left or right
+        _y = item->y() - (height() - item->height()/2);
+        if (location() == Qt::AlignLeft) {
+            _x = item->x() - width();
+        } else if (location() == Qt::AlignRight) {
+            _x = item->x() + item->width();
+        } else {
+            qDebug() << "Neither left nor right. I'm confused.";
+        }
     }
 
-
-
+    // Correct position for screen geometry
 
     if (alignment == Qt::AlignCenter) {
         xOffset = item->boundingRect().width()/2 - width()/2;
