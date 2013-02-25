@@ -20,12 +20,11 @@
 #ifndef PLASMA_CONTAINMENTACTIONSPRIVATE_H
 #define PLASMA_CONTAINMENTACTIONSPRIVATE_H
 
-#include "dataengineconsumer.h"
 
 namespace Plasma
 {
 
-class ContainmentActionsPrivate : public DataEngineConsumer
+class ContainmentActionsPrivate
 {
 public:
     ContainmentActionsPrivate(KService::Ptr service, ContainmentActions *containmentActions) :

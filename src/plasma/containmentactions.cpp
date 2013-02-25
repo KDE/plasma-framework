@@ -35,7 +35,6 @@
 #include <klocalizedstring.h>
 #include <kservicetypetrader.h>
 
-#include "dataengineconsumer.h"
 #include "version.h"
 
 namespace Plasma
@@ -177,11 +176,6 @@ void ContainmentActions::performPrevious()
 QList<QAction*> ContainmentActions::contextualActions()
 {
     return QList<QAction*>();
-}
-
-DataEngine *ContainmentActions::dataEngine(const QString &name) const
-{
-    return d->dataEngine(name);
 }
 
 bool ContainmentActions::configurationRequired() const
