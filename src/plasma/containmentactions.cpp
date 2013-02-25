@@ -155,11 +155,6 @@ void ContainmentActions::configurationAccepted()
     //do nothing by default
 }
 
-QAction *ContainmentActions::triggerableContextAction()
-{
-    return 0;
-}
-
 void ContainmentActions::performNext()
 {
 }

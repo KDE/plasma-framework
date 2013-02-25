@@ -137,13 +137,6 @@ class PLASMA_EXPORT ContainmentActions : public QObject
         virtual void configurationAccepted();
 
         /**
-         * @return the action that is to be immediately triggered when this plugin is
-         *         activated for a context action, or NULL if there is no such action
-         *         @see contextualActions
-         */
-        virtual QAction *triggerableContextAction();
-
-        /**
          * Called when a "next" action is triggered (e.g. by mouse wheel scroll). This
          * can be used to scroll through a list of items this plugin manages such as
          * windows, virtual desktops, activities, etc.
