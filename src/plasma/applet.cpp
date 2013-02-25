@@ -634,11 +634,6 @@ void Applet::setGlobalShortcut(const KShortcut &shortcut)
         connect(d->activationAction, SIGNAL(triggered()), this, SIGNAL(activate()));
         connect(d->activationAction, SIGNAL(globalShortcutChanged(QKeySequence)),
                 this, SLOT(globalShortcutChanged()));
-
-        QList<QWidget *> widgets = d->actions->associatedWidgets();
-        foreach (QWidget *w, widgets) {
-            w->addAction(d->activationAction);
-        }
     } else if (d->activationAction->globalShortcut() == shortcut) {
         return;
     }
@@ -658,16 +653,6 @@ KShortcut Applet::globalShortcut() const
     }
 
     return KShortcut();
-}
-
-void Applet::addAssociatedWidget(QWidget *widget)
-{
-    d->actions->addAssociatedWidget(widget);
-}
-
-void Applet::removeAssociatedWidget(QWidget *widget)
-{
-    d->actions->removeAssociatedWidget(widget);
 }
 
 Location Applet::location() const

@@ -483,37 +483,6 @@ void Containment::enableAction(const QString &name, bool enable)
     }
 }
 
-void Containment::addAssociatedWidget(QWidget *widget)
-{
-    //TODO: move this whole method in the c++ part of the QML implementation
-    Applet::addAssociatedWidget(widget);
-
-    /*if (d->focusedApplet) {
-        d->focusedApplet->addAssociatedWidget(widget);
-    }*/
-
-    foreach (const Applet *applet, d->applets) {
-        if (applet->d->activationAction) {
-            widget->addAction(applet->d->activationAction);
-        }
-    }
-}
-
-void Containment::removeAssociatedWidget(QWidget *widget)
-{
-    //TODO: move this whole method in the c++ part of the QML implementation
-    Applet::removeAssociatedWidget(widget);
-    /*if (d->focusedApplet) {
-        d->focusedApplet->removeAssociatedWidget(widget);
-    }*/
-
-    foreach (const Applet *applet, d->applets) {
-        if (applet->d->activationAction) {
-            widget->removeAction(applet->d->activationAction);
-        }
-    }
-}
-
 void Containment::setDrawWallpaper(bool drawWallpaper)
 {
     d->drawWallpaper = drawWallpaper;

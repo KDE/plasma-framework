@@ -169,18 +169,6 @@ class PLASMA_EXPORT Containment : public Applet
         void enableAction(const QString &name, bool enable);
 
         /**
-         * associate actions with this widget, including ones added after this call.
-         * needed to make keyboard shortcuts work.
-         */
-        void addAssociatedWidget(QWidget *widget);
-
-        /**
-         * un-associate actions from this widget, including ones added after this call.
-         * needed to make keyboard shortcuts work.
-         */
-        void removeAssociatedWidget(QWidget *widget);
-
-        /**
          * Return whether wallpaper is painted or not.
          */
         bool drawWallpaper();

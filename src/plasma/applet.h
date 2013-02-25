@@ -325,18 +325,6 @@ class PLASMA_EXPORT Applet : public QObject
          */
         KShortcut globalShortcut() const;
 
-        /**
-         * associate actions with this widget, including ones added after this call.
-         * needed to make keyboard shortcuts work.
-         */
-        virtual void addAssociatedWidget(QWidget *widget);
-
-        /**
-         * un-associate actions from this widget, including ones added after this call.
-         * needed to make keyboard shortcuts work.
-         */
-        virtual void removeAssociatedWidget(QWidget *widget);
-
 // ASSOCIATED APPLICATION
         /**
          * Sets an application associated to this applet, that will be
