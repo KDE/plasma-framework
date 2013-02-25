@@ -82,7 +82,7 @@ public:
 
     // put all setup routines for script here. at this point we can assume that
     // package exists and that we have a script engin
-    void setupScriptSupport();
+    void setupPackage();
 
     /**
      * Sets whether or not this Applet is acting as a Containment
@@ -119,7 +119,6 @@ public:
 
     // applet info we keep around in case its needed
     KPluginInfo appletDescription;
-    QVariantList args;
     QString customTitle;
 
     // bookkeeping

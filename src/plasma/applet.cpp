@@ -75,6 +75,7 @@ Applet::Applet(const KPluginInfo &info, QObject *parent, uint appletId)
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
     d->init();
+    d->setupPackage();
 }
 
 Applet::Applet(QObject *parent, const QString &serviceID, uint appletId)
@@ -84,27 +85,7 @@ Applet::Applet(QObject *parent, const QString &serviceID, uint appletId)
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
     d->init();
-}
-
-Applet::Applet(QObject *parent, const QString &serviceID, uint appletId, const QVariantList &args)
-    :  QObject(parent),
-       d(new AppletPrivate(KService::serviceByStorageId(serviceID), 0, appletId, this))
-{
-    // WARNING: do not access config() OR globalConfig() in this method!
-    //          that requires a scene, which is not available at this point
-
-    QVariantList &mutableArgs = const_cast<QVariantList &>(args);
-    if (!mutableArgs.isEmpty()) {
-        mutableArgs.removeFirst();
-
-        if (!mutableArgs.isEmpty()) {
-            mutableArgs.removeFirst();
-        }
-    }
-
-    d->args = mutableArgs;
-
-    d->init();
+    d->setupPackage();
 }
 
 Applet::Applet(QObject *parentObject, const QVariantList &args)
@@ -113,37 +94,20 @@ Applet::Applet(QObject *parentObject, const QVariantList &args)
              KService::serviceByStorageId(args.count() > 0 ? args[0].toString() : QString()), 0,
              args.count() > 1 ? args[1].toInt() : 0, this))
 {
-    // now remove those first two items since those are managed by Applet and subclasses shouldn't
-    // need to worry about them. yes, it violates the constness of this var, but it lets us add
-    // or remove items later while applets can just pretend that their args always start at 0
-
-    QVariantList &mutableArgs = const_cast<QVariantList &>(args);
-    if (!mutableArgs.isEmpty()) {
-        mutableArgs.removeFirst();
-
-        if (!mutableArgs.isEmpty()) {
-            mutableArgs.removeFirst();
-        }
-    }
-
-    d->args = mutableArgs;
-
     setParent(parentObject);
 
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
     d->init();
-
-    // the brain damage seen in the initialization list is due to the
-    // inflexibility of KService::createInstance
+    d->setupPackage();
 }
 
-Applet::Applet(const QString &packagePath, uint appletId, const QVariantList &args)
+Applet::Applet(const QString &packagePath, uint appletId)
     : QObject(0),
       d(new AppletPrivate(KService::Ptr(new KService(packagePath + "/metadata.desktop")), 0, appletId, this))
 {
-    Q_UNUSED(args) // FIXME?
     d->init(packagePath);
+    d->setupPackage();
 }
 
 Applet::~Applet()
@@ -159,8 +123,6 @@ Applet::~Applet()
 void Applet::init()
 {
     if (d->script) {
-        d->setupScriptSupport();
-
         if (!d->script->init() && !d->failed) {
             setLaunchErrorMessage(i18n("Script initialization failed"));
         }
@@ -445,11 +407,6 @@ void Applet::setConfigurationRequired(bool needsConfig, const QString &reason)
 
     d->needsConfig = needsConfig;
     d->showConfigurationRequiredMessage(needsConfig, reason);
-}
-
-QVariantList Applet::startupArguments() const
-{
-    return d->args;
 }
 
 ItemStatus Applet::status() const
@@ -865,16 +822,16 @@ bool Applet::hasValidAssociatedApplication() const
     return AssociatedApplicationManager::self()->appletHasValidAssociatedApplication(this);
 }
 
-Applet *Applet::loadPlasmoid(const QString &path, uint appletId, const QVariantList &args)
+Applet *Applet::loadPlasmoid(const QString &path, uint appletId)
 {
     if (QFile::exists(path + "/metadata.desktop")) {
         KService service(path + "/metadata.desktop");
         const QStringList &types = service.serviceTypes();
 
         if (types.contains("Plasma/Containment")) {
-            return new Containment(path, appletId, args);
+            return new Containment(path, appletId);
         } else {
-            return new Applet(path, appletId, args);
+            return new Applet(path, appletId);
         }
     }
 

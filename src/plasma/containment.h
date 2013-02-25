@@ -319,11 +319,9 @@ Q_SIGNALS:
          * @internal This constructor is to be used with the Package loading system.
          *
          * @param parent a QObject parent; you probably want to pass in 0
-         * @param args a list of strings containing two entries: the service id
-         *      and the applet id
          * @since 4.3
          */
-        Containment(const QString &packagePath, uint appletId, const QVariantList &args);
+        Containment(const QString &packagePath, uint appletId);
 
         Q_PRIVATE_SLOT(d, void appletDeleted(Plasma::Applet*))
         Q_PRIVATE_SLOT(d, void triggerShowAddWidgets())

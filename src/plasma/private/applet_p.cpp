@@ -97,9 +97,8 @@ AppletPrivate::~AppletPrivate()
 void AppletPrivate::init(const QString &packagePath)
 {
     // WARNING: do not access config() OR globalConfig() in this method!
-    //          that requires a scene, which is not available at this point
-
-    q->setHasConfigurationInterface(true); //FIXME why not default it to true in the constructor?
+    //          that requires a Corona, which is not available at this point
+    q->setHasConfigurationInterface(true);
 
     QAction *closeApplet = actions->action("remove");
     if (closeApplet) {
@@ -123,12 +122,10 @@ void AppletPrivate::init(const QString &packagePath)
 
     QString api = appletDescription.property("X-Plasma-API").toString();
 
-    // we have a scripted plasmoid
     if (api.isEmpty()) {
         q->setLaunchErrorMessage(i18n("The %2 widget did not define which ScriptEngine to use.", appletDescription.name()));
         return;
     }
-
 
     const QString path = packagePath.isEmpty() ? appletDescription.pluginName() : packagePath;
     package = new Package(PluginLoader::self()->loadPackage("Plasma/Applet", api));
@@ -143,13 +140,9 @@ void AppletPrivate::init(const QString &packagePath)
         return;
     }
 
-    // create the package and see if we have something real
-    //kDebug() << "trying for" << path;
-
-        // now we try and set up the script engine.
-        // it will be parented to this applet and so will get
-        // deleted when the applet does
-
+    // now we try and set up the script engine.
+    // it will be parented to this applet and so will get
+    // deleted when the applet does
     script = Plasma::loadScriptEngine(api, q);
 
     if (!script) {
@@ -360,9 +353,11 @@ void AppletPrivate::setIsContainment(bool nowIsContainment, bool forceUpdate)
 
 // put all setup routines for script here. at this point we can assume that
 // package exists and that we have a script engine
-void AppletPrivate::setupScriptSupport()
+void AppletPrivate::setupPackage()
 {
     if (!package) {
+        delete configLoader;
+        configLoader = 0;
         return;
     }
 

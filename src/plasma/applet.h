@@ -91,18 +91,6 @@ class PLASMA_EXPORT Applet : public QObject
          */
         explicit Applet(const KPluginInfo &info, QObject *parent = 0, uint appletId = 0);
 
-        /**
-         * @param parent the QObject this applet is parented to
-         * @param serviceId the name of the .desktop file containing the
-         *      information about the widget
-         * @param appletId a unique id used to differentiate between multiple
-         *      instances of the same Applet type
-         * @param args  a list of strings containing two entries: the service id
-         *      and the applet id
-         * @since 4.3
-         */
-        explicit Applet(QObject *parent, const QString &serviceId, uint appletId, const QVariantList &args);
-
         ~Applet();
 
 //BOOKKEEPING
@@ -277,13 +265,10 @@ class PLASMA_EXPORT Applet : public QObject
          * @param path the path to the package
          * @param appletId unique ID to assign the applet, or zero to have one
          *        assigned automatically.
-         * @param args to send the applet extra arguments
          * @return a pointer to the loaded applet, or 0 on load failure
          * @since 4.3
          **/
-        static Applet *loadPlasmoid(const QString &path, uint appletId = 0,
-                                    const QVariantList &args = QVariantList());
-
+        static Applet *loadPlasmoid(const QString &path, uint appletId = 0);
 
         /**
          * Returns the icon related to this applet
@@ -465,12 +450,6 @@ class PLASMA_EXPORT Applet : public QObject
          */
         void setStatus(const ItemStatus stat);
 
-        /**
-         * @return the list of arguments which the applet was called with
-         * @since KDE4.3
-         */
-        QVariantList startupArguments() const;
-
 //CONFIGURATION
         /**
          * Lets the user interact with the plasmoid options.
@@ -644,7 +623,7 @@ class PLASMA_EXPORT Applet : public QObject
          *      and the applet id
          * @since 4.3
          */
-        Applet(const QString &packagePath, uint appletId, const QVariantList &args);
+        Applet(const QString &packagePath, uint appletId);
 
         Q_PRIVATE_SLOT(d, void cleanUpAndDelete())
         Q_PRIVATE_SLOT(d, void configDialogFinished())
