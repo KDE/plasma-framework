@@ -178,19 +178,6 @@ QList<QAction*> ContainmentActions::contextualActions()
     return QList<QAction*>();
 }
 
-bool ContainmentActions::configurationRequired() const
-{
-    return d->needsConfig;
-}
-
-void ContainmentActions::setConfigurationRequired(bool needsConfig)
-{
-    if (d->needsConfig != needsConfig) {
-        d->needsConfig = needsConfig;
-        emit configurationRequiredChanged();
-    }
-}
-
 QString ContainmentActions::eventToString(QEvent *event)
 {
     QString trigger;

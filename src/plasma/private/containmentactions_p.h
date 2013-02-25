@@ -32,7 +32,6 @@ public:
         containmentActionsDescription(service),
         package(0),
         containment(0),
-        needsConfig(false),
         containmentActionsSource(ContainmentActions::Global)
     {
     };
@@ -45,7 +44,6 @@ public:
     Package *package;
     KServiceAction mode;
     Containment *containment;
-    bool needsConfig;
 };
 
 } // namespace Plasma

@@ -167,12 +167,6 @@ class PLASMA_EXPORT ContainmentActions : public QObject
         virtual QList<QAction*> contextualActions();
 
         /**
-         * @return true if the containmentactions currently needs to be configured,
-         *         otherwise, false
-         */
-        bool configurationRequired() const;
-
-        /**
          * Turns a mouse or wheel event into a string suitable for a ContainmentActions
          * @return the string representation of the event
          */
@@ -188,12 +182,6 @@ class PLASMA_EXPORT ContainmentActions : public QObject
          * @return the containment the plugin is associated with.
          */
         Containment *containment();
-
-    Q_SIGNALS:
-        /**
-         * Emitted when @see configurationRequired() changes
-         */
-        void configurationRequiredChanged();
 
     protected:
         /**
@@ -212,15 +200,6 @@ class PLASMA_EXPORT ContainmentActions : public QObject
          * @param config Config group to load settings
          **/
         virtual void init(const KConfigGroup &config);
-
-        /**
-         * When the containmentactions needs to be configured before being usable, this
-         * method can be called to denote that action is required
-         *
-         * @param needsConfiguring true if the applet needs to be configured,
-         *                         or false if it doesn't
-         */
-        void setConfigurationRequired(bool needsConfiguring = true);
 
     private:
         friend class ContainmentActionsPackage;

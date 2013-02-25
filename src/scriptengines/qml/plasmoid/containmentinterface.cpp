@@ -331,23 +331,18 @@ void ContainmentInterface::addContainmentActions(KMenu &desktopMenu, QEvent *eve
         plugin->restore(pluginConfig);
     }
 
-    if (plugin->configurationRequired()) {
-        desktopMenu.addTitle(i18n("This plugin needs to be configured"));
-        desktopMenu.addAction(containment()->action("configure"));
 
-        return;
-    } else {
-        QList<QAction*> actions = plugin->contextualActions();
-        if (actions.isEmpty()) {
-            //it probably didn't bother implementing the function. give the user a chance to set
-            //a better plugin.  note that if the user sets no-plugin this won't happen...
-            if ((containment()->containmentType() != Plasma::PanelContainment && containment()->containmentType() != Plasma::CustomPanelContainment) && containment()->action("configure")) {
-                desktopMenu.addAction(containment()->action("configure"));
-            }
-        } else {
-            desktopMenu.addActions(actions);
+    QList<QAction*> actions = plugin->contextualActions();
+    if (actions.isEmpty()) {
+        //it probably didn't bother implementing the function. give the user a chance to set
+        //a better plugin.  note that if the user sets no-plugin this won't happen...
+        if ((containment()->containmentType() != Plasma::PanelContainment && containment()->containmentType() != Plasma::CustomPanelContainment) && containment()->action("configure")) {
+            desktopMenu.addAction(containment()->action("configure"));
         }
+    } else {
+        desktopMenu.addActions(actions);
     }
+
 
     return;
 }
