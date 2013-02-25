@@ -136,20 +136,6 @@ void Containment::init()
             d->actions()->addAction("lock widgets", lockDesktopAction);
         }
     }
-    if (d->type != PanelContainment && d->type != CustomPanelContainment) {
-        if (corona()) {
-            //FIXME this is just here because of the darn keyboard shortcut :/
-            act = corona()->action("manage activities");
-            if (act) {
-                d->actions()->addAction("manage activities", act);
-            }
-            //a stupid hack to make this one's keyboard shortcut work
-            act = corona()->action("configure shortcuts");
-            if (act) {
-                d->actions()->addAction("configure shortcuts", act);
-            }
-        }
-    }
 }
 
 // helper function for sorting the list of applets
