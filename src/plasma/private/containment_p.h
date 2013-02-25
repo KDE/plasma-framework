@@ -51,8 +51,7 @@ public:
           location(Floating),
           screen(-1), // no screen
           type(Plasma::NoContainmentType),
-          drawWallpaper(false),
-          containmentActionsSource(ContainmentActions::Global)
+          drawWallpaper(false)
     {
     }
 
@@ -107,7 +106,6 @@ public:
     ContainmentType type;
     bool drawWallpaper : 1;
 
-    ContainmentActions::ContainmentActionsSource containmentActionsSource;
     static const char defaultWallpaper[];
 };
 

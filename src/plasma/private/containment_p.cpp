@@ -150,21 +150,8 @@ void ContainmentPrivate::setScreen(int newScreen)
 
 KConfigGroup ContainmentPrivate::containmentActionsConfig() const
 {
-    KConfigGroup cfg;
-    switch (containmentActionsSource) {
-    case ContainmentActions::Local:
-        cfg = q->config();
-        cfg = KConfigGroup(&cfg, "ActionPlugins");
-        break;
-    case ContainmentActions::Activity:
-        cfg = KConfigGroup(q->corona()->config(), "Activities");
-        cfg = KConfigGroup(&cfg, activityId);
-        cfg = KConfigGroup(&cfg, "ActionPlugins");
-        break;
-    default:
-        cfg = KConfigGroup(q->corona()->config(), "ActionPlugins");
-    }
-    return cfg;
+    KConfigGroup cfg = KConfigGroup(q->corona()->config(), "ActionPlugins");
+    return KConfigGroup(&cfg, QString::number(type));
 }
 
 void ContainmentPrivate::configChanged()

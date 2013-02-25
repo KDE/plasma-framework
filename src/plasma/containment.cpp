@@ -175,37 +175,9 @@ void Containment::restore(KConfigGroup &group)
 
     setWallpaper(group.readEntry("wallpaperplugin", ContainmentPrivate::defaultWallpaper));
 
-    KConfigGroup cfg;
-    if (containmentType() == PanelContainment || containmentType() == CustomPanelContainment) {
-        //don't let global desktop actions conflict with panels
-        //this also prevents panels from sharing config with each other
-        //but the panels aren't configurable anyways, and I doubt that'll change.
-        d->containmentActionsSource = ContainmentActions::Local;
-        cfg = KConfigGroup(&group, "ActionPlugins");
-    } else {
-        const QString source = group.readEntry("ActionPluginsSource", QString());
-        if (source == "Global") {
-            cfg = KConfigGroup(corona()->config(), "ActionPlugins");
-            d->containmentActionsSource = ContainmentActions::Global;
-        } else if (source == "Activity") {
-            cfg = KConfigGroup(corona()->config(), "Activities");
-            cfg = KConfigGroup(&cfg, d->activityId);
-            cfg = KConfigGroup(&cfg, "ActionPlugins");
-            d->containmentActionsSource = ContainmentActions::Activity;
-        } else if (source == "Local") {
-            cfg = group;
-            d->containmentActionsSource = ContainmentActions::Local;
-        } else {
-            //default to global
-            //but, if there is no global config, try copying it from local.
-            cfg = KConfigGroup(corona()->config(), "ActionPlugins");
-            if (!cfg.exists()) {
-                cfg = KConfigGroup(&group, "ActionPlugins");
-            }
-            d->containmentActionsSource = ContainmentActions::Global;
-            group.writeEntry("ActionPluginsSource", "Global");
-        }
-    }
+    KConfigGroup cfg = KConfigGroup(corona()->config(), "ActionPlugins");
+    cfg = KConfigGroup(&cfg, QString::number(containmentType()));
+    
 
     //kDebug() << cfg.keyList();
     if (cfg.exists()) {
@@ -497,19 +469,10 @@ void Containment::addContainmentActions(const QString &trigger, const QString &p
         // it already existed, reset the containment so it wil reload config on next show
         plugin->setContainment(0);
     } else {
-        switch (d->containmentActionsSource) {
-        case ContainmentActions::Activity:
-            //FIXME
-        case ContainmentActions::Local:
-            plugin = PluginLoader::self()->loadContainmentActions(this, pluginName);
-            break;
-        default:
-            plugin = PluginLoader::self()->loadContainmentActions(0, pluginName);
-        }
+        plugin = PluginLoader::self()->loadContainmentActions(this, pluginName);
 
         if (plugin) {
             cfg.writeEntry(trigger, pluginName);
-            plugin->setSource(d->containmentActionsSource);
             containmentActions().insert(trigger, plugin);
         } else {
             //bad plugin... gets removed. is this a feature or a bug?

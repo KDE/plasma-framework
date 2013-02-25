@@ -79,16 +79,6 @@ Containment *ContainmentActions::containment()
     return qobject_cast<Containment*>(parent());
 }
 
-void ContainmentActions::setSource(ContainmentActionsSource source)
-{
-    d->containmentActionsSource = source;
-}
-
-ContainmentActions::ContainmentActionsSource ContainmentActions::source() const
-{
-    return d->containmentActionsSource;
-}
-
 KConfigGroup ContainmentActions::config() const
 {
     KConfigGroup cfg;
@@ -96,20 +86,8 @@ KConfigGroup ContainmentActions::config() const
         return cfg;
     }
 
-    switch (d->containmentActionsSource) {
-    case Local:
-        cfg = d->containment->config();
-        cfg = KConfigGroup(&cfg, "ActionPlugins");
-        break;
-    case Activity:
-        cfg = KConfigGroup(d->containment->corona()->config(), "Activities");
-        cfg = KConfigGroup(&cfg, d->containment->activity());
-        cfg = KConfigGroup(&cfg, "ActionPlugins");
-        break;
-    default:
-        cfg = KConfigGroup(d->containment->corona()->config(), "ActionPlugins");
-    }
-    return cfg;
+    cfg = KConfigGroup(d->containment->corona()->config(), "ActionPlugins");
+    return KConfigGroup(&cfg, QString::number(d->containment->containmentType()));
 }
 
 void ContainmentActions::restore(const KConfigGroup &config)

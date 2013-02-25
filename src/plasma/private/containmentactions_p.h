@@ -31,14 +31,12 @@ public:
         q(containmentActions),
         containmentActionsDescription(service),
         package(0),
-        containment(0),
-        containmentActionsSource(ContainmentActions::Global)
+        containment(0)
     {
     };
 
     ContainmentActions *q;
 
-    ContainmentActions::ContainmentActionsSource containmentActionsSource;
     QString currentTrigger;
     KPluginInfo containmentActionsDescription;
     Package *package;
