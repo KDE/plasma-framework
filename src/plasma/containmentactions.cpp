@@ -155,12 +155,14 @@ void ContainmentActions::configurationAccepted()
     //do nothing by default
 }
 
-void ContainmentActions::performNext()
+void ContainmentActions::performNextAction()
 {
+    //do nothing by default, implement in subclasses
 }
 
-void ContainmentActions::performPrevious()
+void ContainmentActions::performPreviousAction()
 {
+    //do nothing by default, implement in subclasses
 }
 
 QList<QAction*> ContainmentActions::contextualActions()

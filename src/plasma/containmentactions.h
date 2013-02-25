@@ -142,7 +142,7 @@ class PLASMA_EXPORT ContainmentActions : public QObject
          * windows, virtual desktops, activities, etc.
          * @see performPrevious
          */
-        virtual void performNext();
+        virtual void performNextAction();
 
         /**
          * Called when a "previous" action is triggered (e.g. by mouse wheel scroll). This
@@ -150,7 +150,7 @@ class PLASMA_EXPORT ContainmentActions : public QObject
          * windows, virtual desktops, activities, etc.
          * @see performNext
          */
-        virtual void performPrevious();
+        virtual void performPreviousAction();
 
         /**
          * Implement this to provide a list of actions that can be added to another menu
