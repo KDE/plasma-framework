@@ -195,8 +195,6 @@ class PLASMA_EXPORT ContainmentActions : public QObject
         ContainmentActions(QObject *parent, const QVariantList &args);
 
     private:
-        friend class ContainmentActionsPackage;
-        friend class ContainmentActionsPrivate;
         ContainmentActionsPrivate *const d;
 };
 
