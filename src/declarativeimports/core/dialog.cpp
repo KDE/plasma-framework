@@ -38,6 +38,7 @@
 //#include <Plasma/WindowEffects>
 #include <QDebug>
 
+// just for debugging purposes, FIXME: remove later
 QString locString(const Plasma::Location l) {
     QString o = "Unknown: " + l;
     if (l == Plasma::Floating) {
@@ -169,28 +170,6 @@ void DialogProxy::setVisible(const bool visible)
         if (m_visualParent) {
             setPosition(popupPosition(m_visualParent.data(), Qt::AlignCenter));
         }
-
-//         const QRect workArea(KWindowSystem::workArea());
-//         if (!workArea.contains(geometry())) {
-//             const int _x = qBound(workArea.left(), x(), workArea.right() - width());
-//             const int _y = qBound(workArea.top(), y(), workArea.bottom() - height());
-//             setPosition(_x, _y);
-//              //);
-//             qDebug() << "workarea l/r: " << workArea.left() << workArea.right();
-//             qDebug() << "workarea x/y: " << x() << y();
-//             qDebug() << "workarea t/b: " << workArea.top() << workArea.bottom();
-//             qDebug() << "XXX Workspace. Pop up at: " << _x << "," << _y << workArea << geometry();;
-//         } else if (!m_visualParent) {
-//             const int _x = (workArea.width() - width()) / 2;
-//             const int _y = (workArea.height() - height()) / 2;
-//             qDebug() << "Positioning inside workarea: " << workArea << geometry();
-//             qDebug() << "workarea l/r: " << workArea.left() << workArea.right();
-//             qDebug() << "workarea x/y: " << x() << y();
-//             qDebug() << "workarea t/b: " << workArea.top() << workArea.bottom();
-//             qDebug() << "XXX Workspace. Pop up at: " << _x << "," << _y << workArea << geometry();;
-//             setPosition(_x, _y);
-//         }
-
         raise();
     }
     QQuickWindow::setVisible(visible);
@@ -214,7 +193,7 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
     qDebug() << " we have an item at " << pos;
     if (item->window() && item->window()->screen()) {
         pos = item->window()->mapToGlobal(pos.toPoint());
-        qDebug() << " ========= popping up at " << pos;
+        qDebug() << " ========= Item Screenposition " << pos << "Screen" << item->window()->screen();
     } else {
         qDebug() << " ========= popping up at zerozero";
         return QPoint();
@@ -229,37 +208,8 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
         }
     }
 
-    int xOffset = 0;
-    int yOffset = 0;
-
-    int _x = 0;
-    int _y = 0;
-
     QPoint offset(0, 0);
-
-    /*
-    if (location() == Qt::AlignBottom) {
-        _y = item->y() + item->height();
-    } else if (location() == Qt::AlignTop) {
-        _y = item->y() - height();
-    } else if ((location() & Qt::AlignCenter) || (location() & Qt::AlignVCenter)) {
-        // align our item's vertical center with our own vertical center
-        _y = (item->y() + item->height()/2) - height()/2;
-    } else {
-        // Location is left or right
-        _y = item->y() - (height() - item->height()/2);
-        if (location() == Qt::AlignLeft) {
-            _x = item->x() - width();
-        } else if (location() == Qt::AlignRight) {
-            _x = item->x() + item->width();
-        } else {
-            qDebug() << "Neither left nor right. I'm confused.";
-        }
-    }
-    */
-    // Correct position for screen geometry
-/*
- * enum Location {
+// * enum Location {
 //     Floating = 0, /**< Free floating. Neither geometry or z-ordering
 //                      is described precisely by this value. */
 //     Desktop,      /**< On the planar desktop layer, extending across
@@ -273,52 +223,83 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
 //
     Plasma::Location l = (Plasma::Location)location();
 
-    QPoint topPoint(item->boundingRect().width()/2 - width()/2,
+    QPoint topPoint((item->boundingRect().width() - width())/2,
                     -height());
-    QPoint bottomPoint(item->boundingRect().width()/2 - width()/2,
+    QPoint bottomPoint((item->boundingRect().width() - width())/2,
                        item->boundingRect().height());
     QPoint leftPoint(-width(),
-                     item->boundingRect().height()/2 - height()/2);
+                     (item->boundingRect().height() - height())/2);
 
     QPoint rightPoint(item->boundingRect().width(),
-                      item->boundingRect().height()/2 - height()/2);
+                      (item->boundingRect().height() - height())/2);
 
     if (l == Plasma::BottomEdge) {
         offset = bottomPoint;
-        //qDebug() << "Centering..." << offset;
     } else if (l == Plasma::LeftEdge) {
         offset = leftPoint;
-//         xOffset = -width();
-//         yOffset = item->boundingRect().height()/2 - height()/2;
     } else if (l == Plasma::RightEdge) {
         offset = rightPoint;
-//         xOffset = item->boundingRect().width();
-//         yOffset = item->boundingRect().height()/2 - height()/2;
     } else { // TopEdge
         offset = topPoint;
-//         yOffset = -height();
-//         xOffset = item->boundingRect().width()/2 - width()/2;
     }
-    /*
-    if (alignment == Qt::AlignCenter) {
-        xOffset = item->boundingRect().width()/2 - width()/2;
-        yOffset = item->boundingRect().height()/2 - height()/2;
-        qDebug() << "Centering..." << xOffset << yOffset;
-    } else if (alignment == Qt::AlignRight) {
-        xOffset = item->boundingRect().width() - width();
-    }
-    */
 
     const QRect avail = item->window()->screen()->availableGeometry();
-    //QPoint menuPos = pos.toPoint() + QPoint(xOffset, item->boundingRect().height());
-    //QPoint menuPos = pos.toPoint() + QPoint(xOffset, yOffset);
     QPoint menuPos = pos.toPoint() + offset;
 
+    qDebug() << "ITem geom/boundingRect" << item->position() << item->width() << item->boundingRect();
+    qDebug() << "Before correction pos = " << pos << " menuPos = " << menuPos << " offset" << offset;
     if (menuPos.y() + height() > avail.bottom()) {
         //menuPos = pos.toPoint() + QPoint(offset.x(), -height());
-        menuPos = pos.toPoint() + bottomPoint;
-        qDebug() << "COrrected to BottomEdge" << menuPos;
+        //menuPos = pos.toPoint() + bottomPoint;
+        //qDebug() << "COrrected to BottomEdge" << menuPos;
     }
+    //const int _m = 8;
+    const int leftMargin = m_frameSvgItem->margins()->left();
+    const int rightMargin = m_frameSvgItem->margins()->right();
+    const int topMargin = m_frameSvgItem->margins()->top();
+    const int bottomMargin = m_frameSvgItem->margins()->bottom();
+
+    if (menuPos.x() < leftMargin) {
+        // popup hits lhs
+        qDebug() << "hitting lhs";
+        if (l == Plasma::TopEdge || l == Plasma::BottomEdge) {
+            // move it
+            menuPos.setX(0-leftMargin);
+        } else {
+            // swap edge
+            menuPos.setX(pos.x() + rightPoint.x());
+        }
+    }
+    if (menuPos.x() + width() > avail.width() - rightMargin) {
+        // popup hits rhs
+        qDebug() << "hitting rhs";
+        if (l == Plasma::TopEdge || l == Plasma::BottomEdge) {
+            menuPos.setX(avail.width() - item->boundingRect().width() + rightMargin);
+        } else {
+            menuPos.setX(pos.x() + leftPoint.x());
+        }
+    }
+    if (menuPos.y() < topMargin) {
+        // hitting top
+        qDebug() << "hitting top";
+        if (l == Plasma::LeftEdge || l == Plasma::RightEdge) {
+            menuPos.setY(0-topMargin);
+        } else {
+            menuPos.setY(pos.y() + bottomPoint.y());
+        }
+    }
+    if (menuPos.y() + height() > avail.height() - bottomMargin) {
+        qDebug() << "Hitting bottom" << menuPos;
+        // hitting bottom
+        if (l == Plasma::TopEdge || l == Plasma::BottomEdge) {
+            menuPos.setY(pos.y() + topPoint.y());
+        } else {
+            menuPos.setY(avail.height() - item->boundingRect().height() + bottomMargin);
+        }
+        qDebug() << menuPos;
+    }
+
+    qDebug() << "--> After correction pos = " << pos << " menuPos = " << menuPos << " offset" << offset;
     qDebug() << "PUP" << menuPos << " Location: Plasma::" <<locString(l) << topPoint;
     return menuPos;
 }
