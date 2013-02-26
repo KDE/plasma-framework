@@ -68,11 +68,14 @@ void ConfigLoaderPrivate::parse(ConfigLoader *loader, QIODevice *xml)
 {
     clearData();
     loader->clearItems();
-    QXmlInputSource source(xml);
-    QXmlSimpleReader reader;
-    ConfigLoaderHandler handler(loader, this);
-    reader.setContentHandler(&handler);
-    reader.parse(&source, false);
+
+    if (xml) {
+        QXmlInputSource source(xml);
+        QXmlSimpleReader reader;
+        ConfigLoaderHandler handler(loader, this);
+        reader.setContentHandler(&handler);
+        reader.parse(&source, false);
+    }
 }
 
 ConfigLoaderHandler::ConfigLoaderHandler(ConfigLoader *config, ConfigLoaderPrivate *d)
@@ -84,7 +87,7 @@ ConfigLoaderHandler::ConfigLoaderHandler(ConfigLoader *config, ConfigLoaderPriva
 }
 
 bool ConfigLoaderHandler::startElement(const QString &namespaceURI, const QString &localName,
-                                    const QString &qName, const QXmlAttributes &attrs)
+                                       const QString &qName, const QXmlAttributes &attrs)
 {
     Q_UNUSED(namespaceURI)
     Q_UNUSED(qName)
