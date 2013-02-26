@@ -454,7 +454,9 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
 
     if (configLoader) {
         configLoader->setSharedConfig(KSharedConfig::openConfig(mainConfig->config()->name()));
+        configLoader->readConfig();
     }
+
     return mainConfig;
 }
 
