@@ -35,6 +35,11 @@ class ConfigLoaderPrivate
 
         ~ConfigLoaderPrivate()
         {
+            clearData();
+        }
+
+        void clearData()
+        {
             qDeleteAll(bools);
             qDeleteAll(strings);
             qDeleteAll(stringlists);

@@ -66,6 +66,8 @@ private:
 
 void ConfigLoaderPrivate::parse(ConfigLoader *loader, QIODevice *xml)
 {
+    clearData();
+    loader->clearItems();
     QXmlInputSource source(xml);
     QXmlSimpleReader reader;
     ConfigLoaderHandler handler(loader, this);
