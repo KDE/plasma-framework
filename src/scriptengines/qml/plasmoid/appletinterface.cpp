@@ -62,8 +62,6 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
       m_expanded(false)
 {
     qmlRegisterType<AppletInterface>();
-    
-    m_configuration = new ConfigPropertyMap(applet()->configScheme(), this);
 
     connect(this, SIGNAL(releaseVisualFocus()), applet(), SIGNAL(releaseVisualFocus()));
     connect(this, SIGNAL(configNeedsSaving()), applet(), SIGNAL(configNeedsSaving()));
@@ -96,6 +94,8 @@ void AppletInterface::init()
     if (m_qmlObject->rootObject()) {
         return;
     }
+
+    m_configuration = new ConfigPropertyMap(applet()->configScheme(), this);
 
     //use our own custom network access manager that will access Plasma packages and to manage security (i.e. deny access to remote stuff when the proper extension isn't enabled
     QQmlEngine *engine = m_qmlObject->engine();

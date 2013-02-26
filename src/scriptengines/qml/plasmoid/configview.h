@@ -37,6 +37,9 @@ public:
 
     QVariantList configPages() const;
 
+protected:
+     void hideEvent(QHideEvent *ev);
+
 private:
     AppletInterface *m_appletInterface;
     QVariantList m_configPages;

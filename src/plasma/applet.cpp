@@ -37,6 +37,7 @@
 #include <kcoreauthorized.h>
 #include <kcolorscheme.h>
 #include <kdesktopfile.h>
+#include <kdebug.h>
 #include <kplugininfo.h>
 #include <klocalizedstring.h>
 #include <kservice.h>

@@ -74,4 +74,11 @@ QVariantList ConfigView::configPages() const
     return m_configPages;
 }
 
+//To emulate Qt::WA_DeleteOnClose that QWindow doesn't have
+void ConfigView::hideEvent(QHideEvent *ev)
+{
+    QQuickWindow::hideEvent(ev);
+    deleteLater();
+}
+
 #include "moc_configview.cpp"
