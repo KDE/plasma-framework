@@ -169,6 +169,7 @@ private:
     bool m_activeWindow;
     Plasma::Location m_location;
     Plasma::FrameSvgItem *m_frameSvgItem;
+    QRect m_cachedGeometry;
 };
 
 #endif
