@@ -21,6 +21,7 @@ set(corebindings_SRCS
 #     tooltip.cpp
     dataenginebindings.cpp
     iconitem.cpp
+    plasmanamespace.cpp
     )
 
 

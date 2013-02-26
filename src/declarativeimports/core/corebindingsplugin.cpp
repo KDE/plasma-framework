@@ -42,6 +42,7 @@
 #include "iconitem.h"
 // #include "tooltip.h"
 // #include "dataenginebindings_p.h"
+#include "plasmanamespace.h"
 
 #include <QDebug>
 
@@ -73,6 +74,8 @@ void CoreBindingsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 void CoreBindingsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.core"));
+
+    qmlRegisterUncreatableType<PlasmaNamespace>(uri, 0, 1, "Plasma", "");
 
     qmlRegisterType<Plasma::Svg>(uri, 0, 1, "Svg");
     qmlRegisterType<Plasma::FrameSvg>(uri, 0, 1, "FrameSvg");
