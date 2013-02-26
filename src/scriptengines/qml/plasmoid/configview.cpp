@@ -60,8 +60,6 @@ ConfigView::ConfigView(AppletInterface *interface, QWindow *parent)
     engine()->rootContext()->setContextProperty("plasmoid", interface);
     engine()->rootContext()->setContextProperty("configDialog", this);
     setSource(QUrl::fromLocalFile(m_appletInterface->applet()->containment()->corona()->package().filePath("ui", "Configuration.qml")));
-
-
 }
 
 ConfigView::~ConfigView()
