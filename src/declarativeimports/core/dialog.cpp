@@ -63,7 +63,7 @@ QString locString(const Plasma::Location l) {
 DialogProxy::DialogProxy(QQuickItem *parent)
     : QQuickWindow(),
       m_activeWindow(false),
-      m_location(Plasma::TopEdge)
+      m_location(Plasma::LeftEdge)
 {
     QSurfaceFormat format;
     format.setAlphaBufferSize(8);
@@ -76,14 +76,16 @@ DialogProxy::DialogProxy(QQuickItem *parent)
 
     m_syncTimer = new QTimer(this);
     m_syncTimer->setSingleShot(true);
-    m_syncTimer->setInterval(250);
+    m_syncTimer->setInterval(2500);
     connect(m_syncTimer, &QTimer::timeout, this,  &DialogProxy::syncToMainItemSize);
 
     //HACK: this property is invoked due to the initialization that gets done to contentItem() in the getter
     property("data");
     //Create the FrameSvg background.
     m_frameSvgItem = new Plasma::FrameSvgItem(contentItem());
-    m_frameSvgItem->setImagePath("dialogs/background");
+    //m_frameSvgItem->setImagePath("dialogs/background");
+    m_frameSvgItem->setImagePath("widgets/background");
+    setVisualParent(parent);
 }
 
 DialogProxy::~DialogProxy()
@@ -144,6 +146,7 @@ QQuickItem *DialogProxy::visualParent() const
 
 void DialogProxy::setVisualParent(QQuickItem *visualParent)
 {
+    qDebug() << "Settting Parent.....";
     if (m_visualParent.data() == visualParent) {
         return;
     }
@@ -165,7 +168,43 @@ void DialogProxy::setVisible(const bool visible)
 {
     qDebug() << visible;
     if (visible) {
+        m_frameSvgItem->setEnabledBorders(Plasma::FrameSvg::AllBorders);
         syncToMainItemSize();
+        QPoint p = popupPosition(m_visualParent.data(), Qt::AlignCenter);
+
+        const QRect avail = m_visualParent.data()->window()->screen()->availableGeometry();
+        int borders = Plasma::FrameSvg::AllBorders;
+        if (p.x() <= 0) {
+            //m_frameSvgItem->setEnabledBorders(Plasma::FrameSvg::TopBorder | Plasma::FrameSvg::RightBorder | Plasma::FrameSvg::BottomBorder);
+            //m_frameSvgItem->setEnabledBorders(Plasma::FrameSvg::AllBorders & ~Plasma::FrameSvg::LeftBorder);
+            borders = borders & ~Plasma::FrameSvg::LeftBorder;
+        }
+        if (p.y() <= 0) {
+            //m_frameSvgItem->setEnabledBorders(Plasma::FrameSvg::LeftBorder | Plasma::FrameSvg::RightBorder | Plasma::FrameSvg::BottomBorder);
+            //m_frameSvgItem->setEnabledBorders(Plasma::FrameSvg::AllBorders & ~Plasma::FrameSvg::TopBorder);
+            borders = borders & ~Plasma::FrameSvg::TopBorder;
+
+        }
+        if (avail.width() <= p.x() + m_visualParent.data()->width()) {
+            //m_frameSvgItem->setEnabledBorders(Plasma::FrameSvg::LeftBorder | Plasma::FrameSvg::TopBorder | Plasma::FrameSvg::BottomBorder);
+            borders = borders & ~Plasma::FrameSvg::RightBorder;
+
+        }
+        if (avail.height() <= p.y() + m_visualParent.data()->height()) {
+            borders = borders & ~Plasma::FrameSvg::BottomBorder;
+
+            //m_frameSvgItem->setEnabledBorders(Plasma::FrameSvg::LeftBorder | Plasma::FrameSvg::RightBorder | Plasma::FrameSvg::TopBorder);
+        }
+        m_frameSvgItem->setEnabledBorders((Plasma::FrameSvg::EnabledBorder)borders);
+        syncToMainItemSize();
+//         enum EnabledBorder {
+//             NoBorder = 0,
+//             TopBorder = 1,
+//             BottomBorder = 2,
+//             LeftBorder = 4,
+//             RightBorder = 8,
+//             AllBorders = TopBorder | BottomBorder | LeftBorder | RightBorder
+//         };
 
         if (m_visualParent) {
             setPosition(popupPosition(m_visualParent.data(), Qt::AlignCenter));
@@ -283,7 +322,7 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
         // hitting top
         qDebug() << "hitting top";
         if (l == Plasma::LeftEdge || l == Plasma::RightEdge) {
-            menuPos.setY(0-topMargin);
+            menuPos.setY(0);
         } else {
             menuPos.setY(pos.y() + bottomPoint.y());
         }
@@ -380,6 +419,10 @@ void DialogProxy::syncToMainItemSize()
 {
     if (!m_mainItem) {
         return;
+    }
+    if (m_visualParent.isNull()) {
+        qDebug() << "booom: " << qobject_cast<QQuickItem*>(parent());
+        setVisualParent(qobject_cast<QQuickItem*>(parent()));
     }
 
     //FIXME: workaround to prevent dialogs of Popup type disappearing on the second show
