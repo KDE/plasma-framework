@@ -32,11 +32,31 @@
 
 #include <KWindowSystem>
 #include <kwindoweffects.h>
-
+#include <Plasma/Plasma>
 #include <Plasma/Corona>
 // #include <Plasma/Dialog>
 //#include <Plasma/WindowEffects>
 #include <QDebug>
+
+QString locString(const Plasma::Location l) {
+    QString o = "Unknown: " + l;
+    if (l == Plasma::Floating) {
+        o = "Floating";
+    } else if (l == Plasma::Desktop) {
+        o = "Desktop";
+    } else if (l == Plasma::FullScreen) {
+        o = "FullScreen";
+    } else if (l == Plasma::TopEdge) {
+        o = "TopEdge";
+    } else if (l == Plasma::BottomEdge) {
+        o = "BottomEdge";
+    } else if (l == Plasma::LeftEdge) {
+        o = "LeftEdge";
+    } else if (l == Plasma::RightEdge) {
+        o = "RightEdge";
+    }
+    return o;
+}
 
 
 DialogProxy::DialogProxy(QQuickItem *parent)
@@ -150,26 +170,26 @@ void DialogProxy::setVisible(const bool visible)
             setPosition(popupPosition(m_visualParent.data(), Qt::AlignCenter));
         }
 
-        const QRect workArea(KWindowSystem::workArea());
-        if (!workArea.contains(geometry())) {
-            const int _x = qBound(workArea.left(), x(), workArea.right() - width());
-            const int _y = qBound(workArea.top(), y(), workArea.bottom() - height());
-            setPosition(_x, _y);
-             //);
-            qDebug() << "workarea l/r: " << workArea.left() << workArea.right();
-            qDebug() << "workarea x/y: " << x() << y();
-            qDebug() << "workarea t/b: " << workArea.top() << workArea.bottom();
-            qDebug() << "XXX Workspace. Pop up at: " << _x << "," << _y << workArea << geometry();;
-        } else if (!m_visualParent) {
-            const int _x = (workArea.width() - width()) / 2;
-            const int _y = (workArea.height() - height()) / 2;
-            qDebug() << "Positioning inside workarea: " << workArea << geometry();
-            qDebug() << "workarea l/r: " << workArea.left() << workArea.right();
-            qDebug() << "workarea x/y: " << x() << y();
-            qDebug() << "workarea t/b: " << workArea.top() << workArea.bottom();
-            qDebug() << "XXX Workspace. Pop up at: " << _x << "," << _y << workArea << geometry();;
-            setPosition(_x, _y);
-        }
+//         const QRect workArea(KWindowSystem::workArea());
+//         if (!workArea.contains(geometry())) {
+//             const int _x = qBound(workArea.left(), x(), workArea.right() - width());
+//             const int _y = qBound(workArea.top(), y(), workArea.bottom() - height());
+//             setPosition(_x, _y);
+//              //);
+//             qDebug() << "workarea l/r: " << workArea.left() << workArea.right();
+//             qDebug() << "workarea x/y: " << x() << y();
+//             qDebug() << "workarea t/b: " << workArea.top() << workArea.bottom();
+//             qDebug() << "XXX Workspace. Pop up at: " << _x << "," << _y << workArea << geometry();;
+//         } else if (!m_visualParent) {
+//             const int _x = (workArea.width() - width()) / 2;
+//             const int _y = (workArea.height() - height()) / 2;
+//             qDebug() << "Positioning inside workarea: " << workArea << geometry();
+//             qDebug() << "workarea l/r: " << workArea.left() << workArea.right();
+//             qDebug() << "workarea x/y: " << x() << y();
+//             qDebug() << "workarea t/b: " << workArea.top() << workArea.bottom();
+//             qDebug() << "XXX Workspace. Pop up at: " << _x << "," << _y << workArea << geometry();;
+//             setPosition(_x, _y);
+//         }
 
         raise();
     }
@@ -215,6 +235,8 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
     int _x = 0;
     int _y = 0;
 
+    QPoint offset(0, 0);
+
     /*
     if (location() == Qt::AlignBottom) {
         _y = item->y() + item->height();
@@ -236,7 +258,48 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
     }
     */
     // Correct position for screen geometry
+/*
+ * enum Location {
+//     Floating = 0, /**< Free floating. Neither geometry or z-ordering
+//                      is described precisely by this value. */
+//     Desktop,      /**< On the planar desktop layer, extending across
+//                      the full screen from edge to edge */
+//     FullScreen,   /**< Full screen */
+//     TopEdge,      /**< Along the top of the screen*/
+//     BottomEdge,   /**< Along the bottom of the screen*/
+//     LeftEdge,     /**< Along the left side of the screen */
+//     RightEdge     /**< Along the right side of the screen */
+// };
+//
+    Plasma::Location l = (Plasma::Location)location();
 
+    QPoint topPoint(item->boundingRect().width()/2 - width()/2,
+                    -height());
+    QPoint bottomPoint(item->boundingRect().width()/2 - width()/2,
+                       item->boundingRect().height());
+    QPoint leftPoint(-width(),
+                     item->boundingRect().height()/2 - height()/2);
+
+    QPoint rightPoint(item->boundingRect().width(),
+                      item->boundingRect().height()/2 - height()/2);
+
+    if (l == Plasma::BottomEdge) {
+        offset = bottomPoint;
+        //qDebug() << "Centering..." << offset;
+    } else if (l == Plasma::LeftEdge) {
+        offset = leftPoint;
+//         xOffset = -width();
+//         yOffset = item->boundingRect().height()/2 - height()/2;
+    } else if (l == Plasma::RightEdge) {
+        offset = rightPoint;
+//         xOffset = item->boundingRect().width();
+//         yOffset = item->boundingRect().height()/2 - height()/2;
+    } else { // TopEdge
+        offset = topPoint;
+//         yOffset = -height();
+//         xOffset = item->boundingRect().width()/2 - width()/2;
+    }
+    /*
     if (alignment == Qt::AlignCenter) {
         xOffset = item->boundingRect().width()/2 - width()/2;
         yOffset = item->boundingRect().height()/2 - height()/2;
@@ -244,18 +307,21 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
     } else if (alignment == Qt::AlignRight) {
         xOffset = item->boundingRect().width() - width();
     }
+    */
 
     const QRect avail = item->window()->screen()->availableGeometry();
     //QPoint menuPos = pos.toPoint() + QPoint(xOffset, item->boundingRect().height());
-    QPoint menuPos = pos.toPoint() + QPoint(xOffset, yOffset);
+    //QPoint menuPos = pos.toPoint() + QPoint(xOffset, yOffset);
+    QPoint menuPos = pos.toPoint() + offset;
 
     if (menuPos.y() + height() > avail.bottom()) {
-        menuPos = pos.toPoint() + QPoint(xOffset, -height());
+        //menuPos = pos.toPoint() + QPoint(offset.x(), -height());
+        menuPos = pos.toPoint() + bottomPoint;
+        qDebug() << "COrrected to BottomEdge" << menuPos;
     }
-    qDebug() << "PUP" << menuPos;
+    qDebug() << "PUP" << menuPos << " Location: Plasma::" <<locString(l) << topPoint;
     return menuPos;
 }
-
 
 bool DialogProxy::isActiveWindow() const
 {
