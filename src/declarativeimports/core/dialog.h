@@ -36,9 +36,9 @@ namespace Plasma
 
 
 /**
- * QML wrapper for kdelibs Plasma::Dialog
+ * QML wrapper for dialogs
  *
- * Exposed as `Dialog` in QML.
+ * Exposed as `PlasmaCore.Dialog` in QML.
  */
 class DialogProxy : public QQuickWindow
 {
@@ -110,7 +110,7 @@ public:
 
     /**
      * Ask the window manager to activate the window.
-     * The window manager may or may not accept the activiation request
+     * The window manager may or may not accept the activation request
      */
     Q_INVOKABLE void activateWindow();
 
