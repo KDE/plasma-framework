@@ -82,7 +82,9 @@ void IconItem::setSource(const QVariant &source)
         m_svgIcon = 0;
 
     } else if (source.canConvert<QString>()) {
-        m_svgIcon = new Plasma::Svg(this);
+        if (!m_svgIcon) {
+            m_svgIcon = new Plasma::Svg(this);
+        }
         //try as a svg toolbar icon
         m_svgIcon->setImagePath("toolbar-icons/" + source.toString().split("-").first());
 
