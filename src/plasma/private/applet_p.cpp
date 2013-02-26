@@ -356,8 +356,6 @@ void AppletPrivate::setIsContainment(bool nowIsContainment, bool forceUpdate)
 void AppletPrivate::setupPackage()
 {
     if (!package) {
-        delete configLoader;
-        configLoader = 0;
         return;
     }
 
@@ -370,14 +368,6 @@ void AppletPrivate::setupPackage()
     if (!translationsPath.isEmpty()) {
         KGlobal::dirs()->addResourceDir("locale", translationsPath);
         KLocalizedString::insertCatalog(appletDescription.pluginName());
-    }
-
-    const QString xmlPath = package->filePath("mainconfigxml");
-    if (!xmlPath.isEmpty()) {
-        QFile file(xmlPath);
-        KConfigGroup config = q->config();
-        configLoader = new ConfigLoader(&config, &file);
-        QObject::connect(configLoader, SIGNAL(configChanged()), q, SLOT(propagateConfigChanged()));
     }
 
     if (!package->filePath("mainconfigui").isEmpty()) {
@@ -462,6 +452,9 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
         mainConfig = new KConfigGroup(&appletConfig, QString::number(appletId));
     }
 
+    if (configLoader) {
+        configLoader->setSharedConfig(KSharedConfig::openConfig(mainConfig->config()->name()));
+    }
     return mainConfig;
 }
 

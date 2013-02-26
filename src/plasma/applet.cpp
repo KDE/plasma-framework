@@ -277,6 +277,18 @@ bool Applet::destroyed() const
 
 ConfigLoader *Applet::configScheme() const
 {
+    if (!d->configLoader) {
+        const QString xmlPath = d->package? d->package->filePath("mainconfigxml") : QString();
+        KConfigGroup cfg = config();
+        if (xmlPath.isEmpty()) {
+            d->configLoader = new ConfigLoader(&cfg, 0);
+        } else {
+            QFile file(xmlPath);
+            d->configLoader = new ConfigLoader(&cfg, &file);
+            QObject::connect(d->configLoader, SIGNAL(configChanged()), this, SLOT(propagateConfigChanged()));
+        }
+    }
+
     return d->configLoader;
 }
 
@@ -669,7 +681,7 @@ void Applet::showConfigurationInterface()
         KDesktopFile df(d->package->path() + "/metadata.desktop");
         const QStringList kcmPlugins = df.desktopGroup().readEntry("X-Plasma-ConfigPlugins", QStringList());
         if (!uiFile.isEmpty() || !kcmPlugins.isEmpty()) {
-            KConfigSkeleton *configLoader = d->configLoader ? d->configLoader : new KConfigSkeleton(0);
+            KConfigSkeleton *configLoader = configScheme() ? d->configLoader : new KConfigSkeleton(0);
             dialog = new AppletConfigDialog(0, d->configDialogId(), configLoader);
 
             if (!d->configLoader) {
