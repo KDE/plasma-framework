@@ -23,26 +23,27 @@
 
 #include <QQuickView>
 #include <QJSValue>
+#include <QQmlListProperty>
 
 class AppletInterface;
 
 class ConfigView : public QQuickView
 {
     Q_OBJECT
-    Q_PROPERTY(QVariantList configPages READ configPages CONSTANT)
+    Q_PROPERTY(QQmlListProperty<QObject> configPages READ configPages CONSTANT)
 
 public:
     ConfigView(AppletInterface *scriptEngine, QWindow *parent = 0);
     virtual ~ConfigView();
 
-    QVariantList configPages() const;
+    QQmlListProperty<QObject> configPages() const;
 
 protected:
      void hideEvent(QHideEvent *ev);
 
 private:
     AppletInterface *m_appletInterface;
-    QVariantList m_configPages;
+    QQmlListProperty<QObject> m_configPages;
 };
 
 #endif // multiple inclusion guard
