@@ -163,7 +163,9 @@ void DialogProxy::setVisible(const bool visible)
 {
     qDebug() << visible;
     QRect avail = QRect(400, 300, 1200, 800);
+
     if (visible) {
+        syncToMainItemSize();
         if (!m_visualParent.isNull()) {
             avail = m_visualParent.data()->window()->screen()->availableGeometry();
             if (location() == Plasma::FullScreen) {
@@ -172,7 +174,6 @@ void DialogProxy::setVisible(const bool visible)
 
             } else {
                 m_frameSvgItem->setEnabledBorders(Plasma::FrameSvg::AllBorders);
-                syncToMainItemSize();
                 QPoint p = popupPosition(m_visualParent.data(), Qt::AlignCenter);
 
                 int borders = Plasma::FrameSvg::AllBorders;
