@@ -30,7 +30,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${KDE4_INCLUDE_DIR}/KDE
                     ${ki18n_SOURCE_DIR}/src
                     ${ki18n_BINARY_DIR}/src
-                    ${KDE4_INCLUDE_DIR}/threadweaver
                     ${KDE4_INCLUDE_DIR}/kio
                     #FIXME: this will go into Qt upstream
                     ${CMAKE_INSTALL_PREFIX}/include/kdeqt5staging/
@@ -44,7 +43,7 @@ if(NOT PLASMA_NO_KIO)
 endif(NOT PLASMA_NO_KIO)
 
 if(NOT PLASMA_NO_SOLID)
-    set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} ${solid_LIBRARIES})
+    set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} ${Solid_LIBRARIES})
 endif(NOT PLASMA_NO_SOLID)
 
 if(NOT PLASMA_NO_PACKAGEKIT)
@@ -134,9 +133,9 @@ kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
 
 target_link_libraries(plasma ${QT_QTUITOOLS_LIBRARY}
                               ${QT_QTNETWORK_LIBRARY} ${QT_QTSQL_LIBRARY}
-                             ${KDE4_KDEUI_LIBS} KF5::threadweaver kauth KF5::kwindowsystem ${PLASMA_EXTRA_LIBS} ki18n)
+                             ${KDE4_KDEUI_LIBS} ${ThreadWeaver_LIBRARIES} ${KAuth_LIBRARIES} ${KWindowSystem_LIBRARIES} ${PLASMA_EXTRA_LIBS} ki18n)
 #FIXME gpgme++ is in kdepimlibs, neeeds to be elsewhere
-target_link_libraries(plasma kdeclarative KF5::karchive)
+target_link_libraries(plasma kdeclarative ${KArchive_LIBRARIES})
 
 if(X11_FOUND)
    target_link_libraries(plasma ${X11_LIBRARIES})
