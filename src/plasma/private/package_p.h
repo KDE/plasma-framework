@@ -71,10 +71,12 @@ public:
     PackagePrivate &operator=(const PackagePrivate &rhs);
 
     void createPackageMetadata(const QString &path);
+    QString unpack(const QString &filePath);
     void updateHash(const QString &basePath, const QString &subPath, const QDir &dir, QCryptographicHash &hash);
 
     QWeakPointer<PackageStructure> structure;
     QString path;
+    QString tempRoot;
     QStringList contentsPrefixPaths;
     QString defaultPackageRoot;
     QString servicePrefix;

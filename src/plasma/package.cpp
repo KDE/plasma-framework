@@ -85,6 +85,10 @@ bool Package::isValid() const
     //even if it's a big nested loop, usually there is one prefix and one location
     //so shouldn't cause too much disk access
     QHashIterator<QByteArray, ContentStructure> it(d->contents);
+    QString p = d->path;
+    if (!d->tempRoot.isEmpty()) {
+        p = d->tempRoot;
+    }
     while (it.hasNext()) {
         it.next();
         if (!it.value().required) {
@@ -94,7 +98,7 @@ bool Package::isValid() const
         bool failed = true;
         foreach (const QString &path, it.value().paths) {
             foreach (const QString &prefix, d->contentsPrefixPaths) {
-                if (QFile::exists(d->path + prefix + path)) {
+                if (QFile::exists(p + prefix + path)) {
                     failed = false;
                     break;
                 }
@@ -213,30 +217,7 @@ KPluginInfo Package::metadata() const
                 d->createPackageMetadata(d->path);
             } else if (fileInfo.exists()) {
                 d->path = p;
-                KArchive *archive = 0;
-                QMimeDatabase db;
-                QMimeType mimeType = db.mimeTypeForFile(p);
-
-                if (mimeType.inherits("application/zip")) {
-                    archive = new KZip(d->path);
-                } else if (mimeType.inherits("application/x-compressed-tar") || mimeType.inherits("application/x-gzip") ||
-                           mimeType.inherits("application/x-tar") || mimeType.inherits("application/x-bzip-compressed-tar") ||
-                           mimeType.inherits("application/x-xz") || mimeType.inherits("application/x-lzma")) {
-                    archive = new KTar(d->path);
-                } else {
-                    kWarning() << "Could not open package file, unsupported archive format:" << d->path << mimeType.name();
-                }
-
-                if (archive && archive->open(QIODevice::ReadOnly)) {
-                    const KArchiveDirectory *source = archive->directory();
-                    QTemporaryDir tempdir;
-                    source->copyTo(tempdir.path() + '/');
-                    d->createPackageMetadata(tempdir.path() + '/');
-                } else {
-                    kWarning() << "Could not open package file:" << d->path;
-                }
-
-                delete archive;
+                d->tempRoot = d->unpack(p);
             }
         }
     }
@@ -246,6 +227,36 @@ KPluginInfo Package::metadata() const
     }
 
     return *d->metadata;
+}
+
+QString PackagePrivate::unpack(const QString& filePath) {
+    KArchive *archive = 0;
+    QMimeDatabase db;
+    QMimeType mimeType = db.mimeTypeForFile(filePath);
+
+    if (mimeType.inherits("application/zip")) {
+        archive = new KZip(filePath);
+    } else if (mimeType.inherits("application/x-compressed-tar") || mimeType.inherits("application/x-gzip") ||
+                mimeType.inherits("application/x-tar") || mimeType.inherits("application/x-bzip-compressed-tar") ||
+                mimeType.inherits("application/x-xz") || mimeType.inherits("application/x-lzma")) {
+        archive = new KTar(filePath);
+    } else {
+        kWarning() << "Could not open package file, unsupported archive format:" << filePath << mimeType.name();
+    }
+    QString tempRoot;
+    if (archive && archive->open(QIODevice::ReadOnly)) {
+        const KArchiveDirectory *source = archive->directory();
+        QTemporaryDir tempdir;
+        tempdir.setAutoRemove(false);
+        source->copyTo(tempdir.path() + '/');
+        createPackageMetadata(tempdir.path() + '/');
+        tempRoot = tempdir.path() + '/';
+    } else {
+        kWarning() << "Could not open package file:" << path;
+    }
+
+    delete archive;
+    return tempRoot;
 }
 
 QString Package::filePath(const char *fileType, const QString &filename) const
@@ -418,7 +429,6 @@ void Package::setPath(const QString &path)
         } else {
             p = d->defaultPackageRoot % path % "/";
         }
-
         if (QDir::isRelativePath(p)) {
             paths << QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, p, QStandardPaths::LocateDirectory);
         } else {
@@ -432,6 +442,13 @@ void Package::setPath(const QString &path)
         if (QFile::exists(dir.canonicalPath())) {
             paths << path;
         }
+    }
+    QFileInfo fileInfo(path);
+
+    if (fileInfo.isFile() && d->tempRoot.isEmpty()) {
+        qDebug() << "before unzip: path " << path;
+        d->path = path;
+        d->tempRoot = d->unpack(path);
     }
 
     // now we search each path found, caching our previous path to know if
@@ -714,6 +731,10 @@ PackagePrivate::PackagePrivate(const PackagePrivate &other)
 
 PackagePrivate::~PackagePrivate()
 {
+    if (!tempRoot.isEmpty()) {
+        QDir dir(tempRoot);
+        dir.removeRecursively();
+    }
     delete metadata;
 }
 
