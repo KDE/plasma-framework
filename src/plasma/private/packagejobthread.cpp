@@ -140,7 +140,6 @@ bool PackageJobThread::installPackage(const QString& src, const QString &dest)
 {
     QString packageRoot = dest;
     QDir root(dest);
-    // FIXME: make sure package root is there.
     if (!root.exists()) {
         QDir().mkpath(dest);
         if (!root.exists()) {
@@ -331,12 +330,9 @@ bool PackageJobThread::uninstall(const QString &packagePath)
 
 bool PackageJobThread::uninstallPackage(const QString& packagePath)
 {
-    // We need to remove the package directory and its metadata file.
-    const QString targetName = packagePath; // FIXME : remove
-
-    if (!QFile::exists(targetName)) {
-        kWarning() << targetName << "does not exist";
-        return false; // FIXME: KJob!
+    if (!QFile::exists(packagePath)) {
+        d->errorMessage = i18n("%1 does not exist", packagePath);
+        return false;
     }
     QString pkg;
     { // FIXME: remove, pass in packageroot, type and pluginName separately?
@@ -346,10 +342,7 @@ bool PackageJobThread::uninstallPackage(const QString& packagePath)
         if (packagePath.endsWith('/')) {
             ix = ps.count()-2;
         }
-        //kDebug() << " PJT: split: " << pkg << ps;
         pkg = ps[ix];
-        kDebug() << " PJT: split: " << pkg << ps;
-
     }
     const QString &packageName = pkg;
 
@@ -362,15 +355,15 @@ bool PackageJobThread::uninstallPackage(const QString& packagePath)
         kWarning() << "Unable to remove " << service;
     }
 
-    ok = removeFolder(targetName);
+    ok = removeFolder(packagePath);
     if (!ok) {
-        d->errorMessage = i18n("Could not delete package from: %1", targetName);
-        return false; // FIXME: KJob!
+        d->errorMessage = i18n("Could not delete package from: %1", packagePath);
+        return false;
     }
 
     QDBusInterface sycoca("org.kde.kded5", "/kbuildsycoca");
     sycoca.asyncCall("recreate");
-    return true; // FIXME: KJob!
+    return true;
 }
 
 
