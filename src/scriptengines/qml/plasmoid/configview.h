@@ -24,8 +24,72 @@
 #include <QQuickView>
 #include <QJSValue>
 #include <QQmlListProperty>
+#include <QStandardItemModel>
 
 class AppletInterface;
+
+
+class ConfigCategory : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+    Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged)
+    Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
+
+public:
+    ConfigCategory(QObject *parent = 0);
+    ~ConfigCategory();
+
+    QString name() const;
+    void setName(const QString &name);
+
+    QString icon() const;
+    void setIcon(const QString &icon);
+
+    QString source() const;
+    void setSource(const QString &source);
+
+Q_SIGNALS:
+    void nameChanged();
+    void iconChanged();
+    void sourceChanged();
+
+private:
+    QString m_name;
+    QString m_icon;
+    QString m_source;
+};
+
+class ConfigModel : public QAbstractListModel
+{
+    Q_OBJECT
+    Q_PROPERTY(QQmlListProperty<ConfigCategory> categories READ categories CONSTANT)
+    Q_CLASSINFO("DefaultProperty", "categories")
+public:
+    enum Roles {
+        NameRole = Qt::UserRole+1,
+        IconRole,
+        SourceRole
+    };
+    ConfigModel(QObject *parent = 0);
+    ~ConfigModel();
+
+    void appendCategory(ConfigCategory *c);
+    void clear();
+
+    virtual int rowCount(const QModelIndex &index) const;
+    virtual QVariant data(const QModelIndex&, int) const;
+
+    QQmlListProperty<ConfigCategory> categories();
+    
+    static ConfigCategory *categories_at(QQmlListProperty<ConfigCategory> *prop, int index);
+    static void categories_append(QQmlListProperty<ConfigCategory> *prop, ConfigCategory *o);
+    static int categories_count(QQmlListProperty<ConfigCategory> *prop);
+    static void categories_clear(QQmlListProperty<ConfigCategory> *prop);
+
+private:
+    QList<ConfigCategory*>m_categories;
+};
 
 class ConfigView : public QQuickView
 {
