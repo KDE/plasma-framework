@@ -24,11 +24,11 @@
 #ifndef DECLARATIVEDROPAREA_H
 #define DECLARATIVEDROPAREA_H
 
-#include <QDeclarativeItem>
+#include <QQuickItem>
 
 class DeclarativeDragDropEvent;
 
-class DeclarativeDropArea : public QDeclarativeItem
+class DeclarativeDropArea : public QQuickItem
 {
     Q_OBJECT
 
@@ -38,7 +38,7 @@ class DeclarativeDropArea : public QDeclarativeItem
     Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled NOTIFY enabledChanged)
 
 public:
-    DeclarativeDropArea(QDeclarativeItem *parent=0);
+    DeclarativeDropArea(QQuickItem *parent=0);
     bool isEnabled() const;
     void setEnabled(bool enabled);
 
@@ -74,10 +74,10 @@ Q_SIGNALS:
     void enabledChanged();
 
 protected:
-    void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
-    void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
-    void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
-    void dropEvent(QGraphicsSceneDragDropEvent *event);
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dragLeaveEvent(QDragLeaveEvent *event);
+    void dragMoveEvent(QDragMoveEvent *event);
+    void dropEvent(QDropEvent *event);
 
 private:
     bool m_enabled;

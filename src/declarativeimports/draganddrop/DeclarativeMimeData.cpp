@@ -132,11 +132,11 @@ void DeclarativeMimeData::setData(const QString &mimeType, const QString &data)
   In the case of inter-application drag and drop operations, the source will not be available, and will be 0.
   Be sure to test it in your QML code, before using it, or it will generate errors in the console.
 */
-QDeclarativeItem* DeclarativeMimeData::source() const
+QQuickItem* DeclarativeMimeData::source() const
 {
     return m_source;
 }
-void DeclarativeMimeData::setSource(QDeclarativeItem* source)
+void DeclarativeMimeData::setSource(QQuickItem* source)
 {
     if (m_source != source) {
         m_source = source;

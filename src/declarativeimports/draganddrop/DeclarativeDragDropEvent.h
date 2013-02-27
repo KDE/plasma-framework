@@ -95,7 +95,7 @@ class DeclarativeDragDropEvent : public QObject
 
 public:
 
-    DeclarativeDragDropEvent(QGraphicsSceneDragDropEvent* e, DeclarativeDropArea* parent = 0);
+    DeclarativeDragDropEvent(QEvent* e, DeclarativeDropArea* parent = 0);
 
     int x() const { return m_x; }
     int y() const { return m_y; }

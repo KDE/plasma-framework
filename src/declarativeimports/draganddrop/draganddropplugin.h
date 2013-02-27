@@ -23,9 +23,9 @@
 #ifndef DRAGANDDROPPLUGIN_H
 #define DRAGANDDROPPLUGIN_H
 
-#include <QDeclarativeExtensionPlugin>
+#include <QQmlExtensionPlugin>
 
-class DragAndDropPlugin : public QDeclarativeExtensionPlugin
+class DragAndDropPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
 

@@ -27,7 +27,7 @@
 #include <QMimeData>
 #include <QColor>
 #include <QUrl>
-#include <QDeclarativeItem>
+#include <QQuickItem>
 
 class DeclarativeMimeData : public QMimeData
 {
@@ -62,7 +62,7 @@ class DeclarativeMimeData : public QMimeData
     /**
      * The graphical item on the scene that started the drag event. It may be null.
      */
-    Q_PROPERTY(QDeclarativeItem* source READ source WRITE setSource NOTIFY sourceChanged)
+    Q_PROPERTY(QQuickItem* source READ source WRITE setSource NOTIFY sourceChanged)
     //TODO: Image property
 
 public:
@@ -80,8 +80,8 @@ public:
 
     Q_INVOKABLE void setData(const QString &mimeType, const QString &data);
 
-    QDeclarativeItem* source() const;
-    void setSource(QDeclarativeItem* source);
+    QQuickItem* source() const;
+    void setSource(QQuickItem* source);
 
     
     /*
@@ -100,7 +100,7 @@ signals:
     void sourceChanged();
 
 private:
-    QDeclarativeItem* m_source;
+    QQuickItem* m_source;
 };
 
 #endif // DECLARATIVEMIMEDATA_H

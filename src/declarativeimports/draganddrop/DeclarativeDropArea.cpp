@@ -27,31 +27,34 @@
 #include <QGraphicsSceneDragDropEvent>
 #include <QMimeData>
 
-DeclarativeDropArea::DeclarativeDropArea(QDeclarativeItem *parent)
-    : QDeclarativeItem(parent),
+DeclarativeDropArea::DeclarativeDropArea(QQuickItem *parent)
+    : QQuickItem(parent),
     m_enabled(true)
 {
-    setAcceptDrops(m_enabled);
+//     setAcceptDrops(m_enabled);
+    if (m_enabled) {
+        setFlag(ItemAcceptsDrops);
+    }
 }
 
-void DeclarativeDropArea::dragEnterEvent(QGraphicsSceneDragDropEvent *event) {
+void DeclarativeDropArea::dragEnterEvent(QDragEnterEvent *event) {
     DeclarativeDragDropEvent dde(event, this);
     emit dragEnter(&dde);
 }
 
-void DeclarativeDropArea::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
+void DeclarativeDropArea::dragLeaveEvent(QDragLeaveEvent *event)
 {
     DeclarativeDragDropEvent dde(event, this);
     emit dragLeave(&dde);
 }
 
-void DeclarativeDropArea::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
+void DeclarativeDropArea::dragMoveEvent(QDragMoveEvent *event)
 {
     DeclarativeDragDropEvent dde(event, this);
     emit dragMove(&dde);
 }
 
-void DeclarativeDropArea::dropEvent(QGraphicsSceneDragDropEvent *event)
+void DeclarativeDropArea::dropEvent(QDropEvent *event)
 {
     DeclarativeDragDropEvent dde(event, this);
     emit drop(&dde);

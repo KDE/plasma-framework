@@ -25,19 +25,20 @@
 #include "DeclarativeMimeData.h"
 
 #include <QDrag>
+#include <QIcon>
 #include <QMimeData>
-#include <QGraphicsSceneMouseEvent>
+#include <QMouseEvent>
 #include <QApplication>
 #include <QGraphicsScene>
 #include <QGraphicsView>
-#include <QDeclarativeContext>
+#include <QQmlContext>
 
 /*!
     A DragArea is used to make an item draggable.
 */
 
-DeclarativeDragArea::DeclarativeDragArea(QDeclarativeItem *parent)
-    : QDeclarativeItem(parent),
+DeclarativeDragArea::DeclarativeDragArea(QQuickItem *parent)
+    : QQuickItem(parent),
     m_delegate(0),
     m_source(0),
     m_target(0),
@@ -48,7 +49,8 @@ DeclarativeDragArea::DeclarativeDragArea(QDeclarativeItem *parent)
 {
     m_startDragDistance = QApplication::startDragDistance();
     setAcceptedMouseButtons(Qt::LeftButton);
-    setFiltersChildEvents(true);
+    //setFiltersChildEvents(true);
+    setFiltersChildMouseEvents(true);
 }
 
 DeclarativeDragArea::~DeclarativeDragArea()
@@ -62,12 +64,12 @@ DeclarativeDragArea::~DeclarativeDragArea()
   The delegate is the item that will be displayed next to the mouse cursor during the drag and drop operation.
   It usually consists of a large, semi-transparent icon representing the data being dragged.
 */
-QDeclarativeComponent* DeclarativeDragArea::delegate() const
+QQmlComponent* DeclarativeDragArea::delegate() const
 {
     return m_delegate;
 }
 
-void DeclarativeDragArea::setDelegate(QDeclarativeComponent *delegate)
+void DeclarativeDragArea::setDelegate(QQmlComponent *delegate)
 {
     if (m_delegate != delegate) {
         m_delegate = delegate;
@@ -83,12 +85,12 @@ void DeclarativeDragArea::resetDelegate()
   The QML element that is the source of this drag and drop operation. This can be defined to any item, and will
   be available to the DropArea as event.data.source
 */
-QDeclarativeItem* DeclarativeDragArea::source() const
+QQuickItem* DeclarativeDragArea::source() const
 {
     return m_source;
 }
 
-void DeclarativeDragArea::setSource(QDeclarativeItem* source)
+void DeclarativeDragArea::setSource(QQuickItem* source)
 {
     if (m_source != source) {
         m_source = source;
@@ -102,7 +104,7 @@ void DeclarativeDragArea::resetSource()
 }
 
 // target
-QDeclarativeItem* DeclarativeDragArea::target() const
+QQuickItem* DeclarativeDragArea::target() const
 {
     //TODO: implement me
     return 0;
@@ -190,7 +192,7 @@ void DeclarativeDragArea::setDefaultAction(Qt::DropAction action)
     }
 }
 
-void DeclarativeDragArea::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+void DeclarativeDragArea::mouseMoveEvent(QMouseEvent *event)
 {
     if ( !m_enabled
          || QLineF(event->screenPos(), event->buttonDownScreenPos(Qt::LeftButton)).length()
@@ -208,7 +210,7 @@ void DeclarativeDragArea::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         drag->setPixmap(QPixmap::fromImage(m_delegateImage));
     } else if (m_delegate) {
         // Render the delegate to a Pixmap
-        QDeclarativeItem* item = qobject_cast<QDeclarativeItem *>(m_delegate->create(m_delegate->creationContext()));
+        QQuickItem* item = qobject_cast<QQuickItem *>(m_delegate->create(m_delegate->creationContext()));
 
         QGraphicsScene scene;
         scene.addItem(item);
@@ -234,16 +236,17 @@ void DeclarativeDragArea::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     emit drop(action);
 }
 
-bool DeclarativeDragArea::sceneEventFilter(QGraphicsItem *item, QEvent *event)
+bool DeclarativeDragArea::childMouseEventFilter(QQuickItem *item, QEvent *event);
+
 {
     if (!isEnabled()) {
         return false;
     }
 
-    if (event->type() == QEvent::GraphicsSceneMouseMove) {
-        QGraphicsSceneMouseEvent *me = static_cast<QGraphicsSceneMouseEvent *>(event);
+    if (event->type() == QEvent::MouseMove) {
+        QMouseEvent *me = static_cast<QMouseEvent *>(event);
         mouseMoveEvent(me);
     }
 
-    return QDeclarativeItem::sceneEventFilter(item, event);
+    return QQuickItem::childMouseEventFilter(item, event);
 }
