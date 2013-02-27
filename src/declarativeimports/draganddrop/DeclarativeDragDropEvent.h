@@ -95,7 +95,8 @@ class DeclarativeDragDropEvent : public QObject
 
 public:
 
-    DeclarativeDragDropEvent(QEvent* e, DeclarativeDropArea* parent = 0);
+    DeclarativeDragDropEvent(QDropEvent* e, DeclarativeDropArea* parent = 0);
+    DeclarativeDragDropEvent(QDragLeaveEvent* e, DeclarativeDropArea* parent = 0);
 
     int x() const { return m_x; }
     int y() const { return m_y; }
@@ -109,6 +110,7 @@ public Q_SLOTS:
     void accept(int action);
 
 private:
+    void init();
     int m_x;
     int m_y;
     Qt::MouseButtons m_buttons;

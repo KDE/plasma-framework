@@ -1,5 +1,6 @@
 /*
     Copyright (C) 2010 by BetterInbox <contact@betterinbox.com>
+    Copyright 2013 by Sebastian Kügler <sebas@kde.org>
     Original author: Gregory Schlomoff <greg@betterinbox.com>
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,24 +24,34 @@
 
 #include "DeclarativeDragDropEvent.h"
 
-DeclarativeDragDropEvent::DeclarativeDragDropEvent(QEvent* e, DeclarativeDropArea* parent) :
+DeclarativeDragDropEvent::DeclarativeDragDropEvent(QDropEvent* e, DeclarativeDropArea* parent) :
     QObject(parent),
-//     m_x(e->pos().x()),
-//     m_y(e->pos().y()),
-//     m_buttons(e->buttons()),
-//     m_modifiers(e->modifiers()),
-//     m_data(e->mimeData()),
+    m_x(e->pos().x()),
+    m_y(e->pos().y()),
+    m_buttons(e->mouseButtons()),
+    m_modifiers(e->keyboardModifiers()),
+    m_data(e->mimeData()),
+    m_event(e)
+{
+    init();
+}
+
+DeclarativeDragDropEvent::DeclarativeDragDropEvent(QDragLeaveEvent* e, DeclarativeDropArea* parent) :
+    QObject(parent),
+    m_x(0),
+    m_y(0),
+    m_buttons(Qt::NoButton),
+    m_modifiers(Qt::NoModifier),
+    //m_data(e->mimeData()),
     m_event(0)
 {
-    QPointF pos;
-    m_event = dynamic_cast<QDropEvent*>(e); // also covers enter
+}
 
-    if (m_event) {
-//         m_x = m_event->pos.x();
-//         m_y = m_event->pos.y();
-        m_buttons = m_event->mouseButtons();
-    }
-    if (parent) {
+void DeclarativeDragDropEvent::init()
+{
+    QPointF pos;
+
+    if (parent()) {
         //pos = parent->mapFromScene(e->scenePos());
         m_x = pos.x();
         m_y = pos.y();
