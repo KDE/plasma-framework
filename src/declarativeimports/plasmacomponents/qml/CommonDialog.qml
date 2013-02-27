@@ -71,6 +71,7 @@ PlasmaComponents.Dialog {
     signal buttonClicked(int index)
 
     onButtonTextsChanged: {
+        print("btex6tchanged:"  + buttonTexts);
         for (var i = buttonRow.children.length; i > 0; --i) {
             buttonRow.children[i - 1].destroy()
         }
@@ -87,11 +88,13 @@ PlasmaComponents.Dialog {
             property int index
 
             onClicked: {
-                if (root.status == DialogStatus.Open) {
+                if (root.status == PlasmaComponents.DialogStatus.Open) {
+                    print("Clicked...." + index);
                     root.buttonClicked(index)
                     root.close()
                 }
             }
+            Component.onCompleted: print("++++++++++++++++++++++ COmpleted button")
         }
     }
 

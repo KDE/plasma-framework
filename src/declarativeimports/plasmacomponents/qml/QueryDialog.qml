@@ -56,6 +56,7 @@ PlasmaComponents.CommonDialog {
     onRejectButtonTextChanged: internal.updateButtonTexts()
 
     onButtonClicked: {
+        print("QueryDialog.buttonClicked");
         if (acceptButtonText && index == 0)
             accept()
         else
@@ -113,6 +114,7 @@ PlasmaComponents.CommonDialog {
                 newButtonTexts.push(acceptButtonText)
             if (rejectButtonText)
                 newButtonTexts.push(rejectButtonText)
+            print("+++ new BUtton texts"+newButtonTexts)
             root.buttonTexts = newButtonTexts
         }
     }
