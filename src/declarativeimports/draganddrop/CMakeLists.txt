@@ -4,10 +4,10 @@ include(KDE4Defaults)
 
 set(declarativedragdrop_SRCS
     draganddropplugin.cpp
-    DeclarativeDragArea.cpp
-    DeclarativeDragDropEvent.cpp
-    DeclarativeDropArea.cpp
-    DeclarativeMimeData.cpp
+#     DeclarativeDragArea.cpp
+     DeclarativeDragDropEvent.cpp
+     DeclarativeDropArea.cpp
+     DeclarativeMimeData.cpp
     )
 
 INCLUDE_DIRECTORIES(

@@ -25,15 +25,23 @@
 
 DeclarativeDragDropEvent::DeclarativeDragDropEvent(QEvent* e, DeclarativeDropArea* parent) :
     QObject(parent),
-    m_x(e->pos().x()),
-    m_y(e->pos().y()),
-    m_buttons(e->buttons()),
-    m_modifiers(e->modifiers()),
-    m_data(e->mimeData()), 
-    m_event(e)
+//     m_x(e->pos().x()),
+//     m_y(e->pos().y()),
+//     m_buttons(e->buttons()),
+//     m_modifiers(e->modifiers()),
+//     m_data(e->mimeData()),
+    m_event(0)
 {
+    QPointF pos;
+    m_event = dynamic_cast<QDropEvent*>(e); // also covers enter
+
+    if (m_event) {
+//         m_x = m_event->pos.x();
+//         m_y = m_event->pos.y();
+        m_buttons = m_event->mouseButtons();
+    }
     if (parent) {
-        QPointF pos = parent->mapFromScene(e->scenePos());
+        //pos = parent->mapFromScene(e->scenePos());
         m_x = pos.x();
         m_y = pos.y();
     }

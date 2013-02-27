@@ -1,5 +1,5 @@
 add_subdirectory(core)
-#add_subdirectory(draganddrop)
+add_subdirectory(draganddrop)
 add_subdirectory(krunnermodel)
 add_subdirectory(qtextracomponents)
 add_subdirectory(plasmacomponents)

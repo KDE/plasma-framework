@@ -114,7 +114,7 @@ private:
     Qt::MouseButtons m_buttons;
     Qt::KeyboardModifiers m_modifiers;
     DeclarativeMimeData m_data;
-    QGraphicsSceneDragDropEvent* m_event;
+    QDropEvent* m_event;
 };
 
 #endif // DECLARATIVEDRAGDROPEVENT_H

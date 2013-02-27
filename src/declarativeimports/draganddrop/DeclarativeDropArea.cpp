@@ -31,10 +31,7 @@ DeclarativeDropArea::DeclarativeDropArea(QQuickItem *parent)
     : QQuickItem(parent),
     m_enabled(true)
 {
-//     setAcceptDrops(m_enabled);
-    if (m_enabled) {
-        setFlag(ItemAcceptsDrops);
-    }
+    setFlag(ItemAcceptsDrops, m_enabled);
 }
 
 void DeclarativeDropArea::dragEnterEvent(QDragEnterEvent *event) {
@@ -72,6 +69,6 @@ void DeclarativeDropArea::setEnabled(bool enabled)
     }
 
     m_enabled = enabled;
-    setAcceptDrops(m_enabled);
+    setFlag(ItemAcceptsDrops, m_enabled);
     emit enabledChanged();
 }
