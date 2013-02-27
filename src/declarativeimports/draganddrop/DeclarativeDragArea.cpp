@@ -31,6 +31,8 @@
 #include <QApplication>
 #include <QQmlContext>
 
+#include <QDebug>
+
 /*!
     A DragArea is used to make an item draggable.
 */
@@ -249,6 +251,7 @@ bool DeclarativeDragArea::childMouseEventFilter(QQuickItem *item, QEvent *event)
 
     if (event->type() == QEvent::MouseMove) {
         QMouseEvent *me = static_cast<QMouseEvent *>(event);
+        qDebug() << "move in dragarea";
         mouseMoveEvent(me);
     }
 

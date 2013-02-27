@@ -31,6 +31,7 @@
 
 void DragAndDropPlugin::registerTypes(const char *uri)
 {
+    qDebug() << " ********** " << uri << "loaded.";
     Q_ASSERT(uri == QLatin1String("org.kde.draganddrop"));
 
     qmlRegisterType<DeclarativeDropArea>(uri, 1, 0, "DropArea");
