@@ -156,6 +156,7 @@ void PlasmaPkg::runMain()
         if (package.isValid()) {
             serviceType = package.metadata().property("X-Plasma-ServiceType").toString();
         }
+
         if (!serviceType.isEmpty()) {
             if (serviceType.contains("Plasma/Applet") ||
                 serviceType.contains("Plasma/PopupApplet") ||
@@ -255,13 +256,14 @@ void PlasmaPkg::runMain()
         //d->packageRoot = d->installer->defaultPackageRoot();
         //pluginTypes << d->installer->type();
     }
-    qDebug() << " 245 dp:" << d->package;
+
     if (d->args->isSet("list")) {
         listPackages(d->pluginTypes);
         exit(0);
     } else {
         // install, remove or upgrade
         if (!d->installer) {
+
             d->installer = new Plasma::Package(new Plasma::PackageStructure());
             //d->installer->setServicePrefix(d->servicePrefix);
         }
@@ -281,7 +283,9 @@ void PlasmaPkg::runMain()
                     continue;
                 }
             }
-            //d->installer->setPath(d->package);
+            if (d->args->isSet("upgrade")) {
+                d->installer->setPath(d->package);
+            }
             QString _p = d->packageRoot;
             if (!_p.endsWith('/')) {
                 _p.append('/');
@@ -291,7 +295,7 @@ void PlasmaPkg::runMain()
             d->metadata = d->installer->metadata();
 
             QString pluginName;
-            if (d->metadata.pluginName().isEmpty()) {
+            if (!d->metadata.isValid() && d->metadata.pluginName().isEmpty()) {
                 // plugin name given in command line
                 pluginName = d->package;
             } else {
