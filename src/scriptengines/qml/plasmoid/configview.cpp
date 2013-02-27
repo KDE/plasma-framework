@@ -252,7 +252,7 @@ ConfigView::ConfigView(AppletInterface *interface, QWindow *parent)
     setResizeMode(QQuickView::SizeViewToRootObject);
 
 
-    QQmlComponent *component = new QQmlComponent(engine(), QUrl::fromLocalFile(m_appletInterface->applet()->package().filePath("ui", "config.qml")), this);
+    QQmlComponent *component = new QQmlComponent(engine(), QUrl::fromLocalFile(m_appletInterface->applet()->package().filePath("config", "config.qml")), this);
     QObject *object = component->create(engine()->rootContext());
     m_configModel = qobject_cast<ConfigModel *>(object);
     if (m_configModel) {
