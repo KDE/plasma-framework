@@ -140,7 +140,6 @@ bool PackageJobThread::installPackage(const QString& src, const QString &dest)
 {
     QString packageRoot = dest;
     QDir root(dest);
-
     // FIXME: make sure package root is there.
     if (!root.exists()) {
         QDir().mkpath(dest);
@@ -154,7 +153,6 @@ bool PackageJobThread::installPackage(const QString& src, const QString &dest)
     QFileInfo fileInfo(src);
     if (!fileInfo.exists()) {
         d->errorMessage = i18n("No such file: %1", src);
-        //kWarning() << "No such file:" << src;
         return false;
     }
 
@@ -165,7 +163,6 @@ bool PackageJobThread::installPackage(const QString& src, const QString &dest)
     if (fileInfo.isDir()) {
         // we have a directory, so let's just install what is in there
         path = src;
-
         // make sure we end in a slash!
         if (path[path.size() - 1] != '/') {
             path.append('/');
@@ -174,7 +171,6 @@ bool PackageJobThread::installPackage(const QString& src, const QString &dest)
         KArchive *archive = 0;
         QMimeDatabase db;
         QMimeType mimetype = db.mimeTypeForFile(src);
-
         if (mimetype.inherits("application/zip")) {
             archive = new KZip(src);
         } else if (mimetype.inherits("application/x-compressed-tar") ||
@@ -245,7 +241,6 @@ bool PackageJobThread::installPackage(const QString& src, const QString &dest)
     targetName.append(pluginName);
 
     if (QFile::exists(targetName)) {
-        //kWarning() << targetName << "already exists";
         d->errorMessage = i18n("%1 already exists", targetName);
         return false;
     }
@@ -292,7 +287,9 @@ bool PackageJobThread::installPackage(const QString& src, const QString &dest)
 
         QString localServiceDirectory = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/kde5/services/");
         if (!QDir().mkpath(localServiceDirectory)) {
-            kDebug() << "Failed to create ... " << localServiceDirectory;
+            qDebug() << "Failed to create ... " << localServiceDirectory;
+            d->errorMessage = i18n("Could not create local service directory: %1", localServiceDirectory);
+            return false;
         }
         QString service = localServiceDirectory + serviceName;
 
@@ -313,10 +310,8 @@ bool PackageJobThread::installPackage(const QString& src, const QString &dest)
             d->errorMessage = i18n("Could not register package as service (this is not necessarily fatal): %1", serviceName);
         }
     }
-    /*
     QDBusInterface sycoca("org.kde.kded5", "/kbuildsycoca");
     sycoca.asyncCall("recreate");
-    */
     d->installPath = targetName;
 
     //kWarning() << "Not updating kbuildsycoca4, since that will go away. Do it yourself for now if needed.";
@@ -361,11 +356,8 @@ bool PackageJobThread::uninstallPackage(const QString& packagePath)
     const QString serviceName = d->servicePrefix + packageName + ".desktop";
 
     QString service = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/kde5/services/") + serviceName;
-#ifndef NDEBUG
-    kDebug() << "Removing service file " << service;
-#endif
-    bool ok = QFile::remove(service);
 
+    bool ok = QFile::remove(service);
     if (!ok) {
         kWarning() << "Unable to remove " << service;
     }
@@ -376,8 +368,8 @@ bool PackageJobThread::uninstallPackage(const QString& packagePath)
         return false; // FIXME: KJob!
     }
 
-//     QDBusInterface sycoca("org.kde.kded5", "/kbuildsycoca");
-//     sycoca.asyncCall("recreate");
+    QDBusInterface sycoca("org.kde.kded5", "/kbuildsycoca");
+    sycoca.asyncCall("recreate");
     return true; // FIXME: KJob!
 }
 

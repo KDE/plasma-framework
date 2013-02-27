@@ -390,7 +390,7 @@ void Package::setPath(const QString &path)
     QExplicitlySharedDataPointer<PackagePrivate> oldD(d);
     d.detach();
 
-    // whithout structure we doomed
+    // without structure we're doomed
     if (!d->structure) {
         d->path.clear();
         d->discoveries.clear();
@@ -691,7 +691,6 @@ KJob* Package::uninstall(const QString &packageName, const QString &packageRoot)
 
     QString proot = path();
     proot.replace(pname, "");
-    kDebug() << "Package::uninstalling ... " << packageRoot << proot << pname << packageName;
     return d->structure.data()->uninstall(this, packageRoot);
 }
 
