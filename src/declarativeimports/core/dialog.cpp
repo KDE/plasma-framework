@@ -444,16 +444,16 @@ void DialogProxy::setAttribute(int attribute, bool on)
 
 void DialogProxy::focusInEvent(QFocusEvent *ev)
 {
-    Q_UNUSED(ev)
     m_activeWindow = true;
     emit activeWindowChanged();
+    QQuickWindow::focusInEvent(ev);
 }
 
 void DialogProxy::focusOutEvent(QFocusEvent *ev)
 {
-    Q_UNUSED(ev)
     m_activeWindow = false;
     emit activeWindowChanged();
+    QQuickWindow::focusOutEvent(ev);
 }
 
 #include "dialog.moc"
