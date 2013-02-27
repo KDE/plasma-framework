@@ -40,6 +40,7 @@ public:
 
 protected:
      void hideEvent(QHideEvent *ev);
+     void resizeEvent(QResizeEvent *re);
 
 private:
     AppletInterface *m_appletInterface;

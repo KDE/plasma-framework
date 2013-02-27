@@ -42,7 +42,7 @@ ConfigView::ConfigView(AppletInterface *interface, QWindow *parent)
         qWarning() << "Invalid home screen package";
     }
 
-    setResizeMode(QQuickView::SizeRootObjectToView);
+    setResizeMode(QQuickView::SizeViewToRootObject);
 
 
     QQmlComponent *component = new QQmlComponent(engine(), QUrl::fromLocalFile(m_appletInterface->applet()->package().filePath("ui", "config.qml")), this);
@@ -75,5 +75,13 @@ void ConfigView::hideEvent(QHideEvent *ev)
     QQuickWindow::hideEvent(ev);
     deleteLater();
 }
+
+void ConfigView::resizeEvent(QResizeEvent *re)
+{
+    rootObject()->setWidth(re->size().width());
+    rootObject()->setHeight(re->size().height());
+    QQuickWindow::resizeEvent(re);
+}
+
 
 #include "moc_configview.cpp"
