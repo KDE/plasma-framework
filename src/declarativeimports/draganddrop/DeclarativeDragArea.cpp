@@ -29,8 +29,6 @@
 #include <QMimeData>
 #include <QMouseEvent>
 #include <QApplication>
-#include <QGraphicsScene>
-#include <QGraphicsView>
 #include <QQmlContext>
 
 /*!
@@ -192,17 +190,23 @@ void DeclarativeDragArea::setDefaultAction(Qt::DropAction action)
     }
 }
 
+void DeclarativeDragArea::mousePressEvent(QMouseEvent* event)
+{
+    m_buttonDownPos = event->screenPos();
+}
+
+
 void DeclarativeDragArea::mouseMoveEvent(QMouseEvent *event)
 {
     if ( !m_enabled
-         || QLineF(event->screenPos(), event->buttonDownScreenPos(Qt::LeftButton)).length()
+         || QLineF(event->screenPos(), m_buttonDownPos).length()
             < m_startDragDistance) {
         return;
     }
 
     emit dragStarted();
 
-    QDrag *drag = new QDrag(event->widget());
+    QDrag *drag = new QDrag(parent());
     DeclarativeMimeData* dataCopy = new DeclarativeMimeData(m_data); //Qt will take ownership of this copy and delete it.
     drag->setMimeData(dataCopy);
 
@@ -210,22 +214,23 @@ void DeclarativeDragArea::mouseMoveEvent(QMouseEvent *event)
         drag->setPixmap(QPixmap::fromImage(m_delegateImage));
     } else if (m_delegate) {
         // Render the delegate to a Pixmap
-        QQuickItem* item = qobject_cast<QQuickItem *>(m_delegate->create(m_delegate->creationContext()));
+//         QQuickItem* item = qobject_cast<QQuickItem *>(m_delegate->create(m_delegate->creationContext()));
 
-        QGraphicsScene scene;
-        scene.addItem(item);
+//         QGraphicsScene scene;
+//         scene.addItem(item);
 
-        QPixmap pixmap(scene.sceneRect().width(), scene.sceneRect().height());
-        pixmap.fill(Qt::transparent);
-
-        QPainter painter(&pixmap);
-        painter.setRenderHint(QPainter::Antialiasing);
-        painter.setRenderHint(QPainter::SmoothPixmapTransform);
-        scene.render(&painter);
-        painter.end();
-        delete item;
-
-        drag->setPixmap(pixmap);
+//         QPixmap pixmap(scene.sceneRect().width(), scene.sceneRect().height());
+//         pixmap.fill(Qt::transparent);
+//
+//         QPainter painter(&pixmap);
+//         painter.setRenderHint(QPainter::Antialiasing);
+//         painter.setRenderHint(QPainter::SmoothPixmapTransform);
+//         scene.render(&painter);
+//         painter.end();
+//         delete item;
+//
+//         drag->setPixmap(pixmap);
+        drag->setPixmap(QIcon::fromTheme("plasma").pixmap(64,64));
     }
 
     drag->setHotSpot(QPoint(drag->pixmap().width()/2, drag->pixmap().height()/2)); // TODO: Make a property for that
@@ -236,8 +241,7 @@ void DeclarativeDragArea::mouseMoveEvent(QMouseEvent *event)
     emit drop(action);
 }
 
-bool DeclarativeDragArea::childMouseEventFilter(QQuickItem *item, QEvent *event);
-
+bool DeclarativeDragArea::childMouseEventFilter(QQuickItem *item, QEvent *event)
 {
     if (!isEnabled()) {
         return false;

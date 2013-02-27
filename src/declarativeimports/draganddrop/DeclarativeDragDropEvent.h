@@ -110,7 +110,6 @@ public Q_SLOTS:
     void accept(int action);
 
 private:
-    void init();
     int m_x;
     int m_y;
     Qt::MouseButtons m_buttons;

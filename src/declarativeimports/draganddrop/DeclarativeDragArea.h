@@ -132,7 +132,7 @@ signals:
 
 protected:
     void mouseMoveEvent(QMouseEvent *event);
-    void mousePressEvent(QMouseEvent *) {}
+    void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *) {}
     bool childMouseEventFilter(QQuickItem *item, QEvent *event);
     //bool sceneEventFilter(QGraphicsItem *item, QEvent *event);
@@ -147,6 +147,7 @@ private:
     DeclarativeMimeData* const m_data;
     QImage m_delegateImage;
     int m_startDragDistance;
+    QPointF m_buttonDownPos;
 };
 
 #endif // DECLARATIVEDRAGAREA_H

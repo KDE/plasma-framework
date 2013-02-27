@@ -105,7 +105,7 @@ void DeclarativeMimeData::setUrls(const QVariantList &urls)
 // color
 QColor DeclarativeMimeData::color() const
 {
-    if ( this->hasColor()) {
+    if (this->hasColor()) {
          return qvariant_cast<QColor>(this->colorData());
      }
     return QColor();

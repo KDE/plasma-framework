@@ -33,7 +33,13 @@ DeclarativeDragDropEvent::DeclarativeDragDropEvent(QDropEvent* e, DeclarativeDro
     m_data(e->mimeData()),
     m_event(e)
 {
-    init();
+    QPointF pos;
+
+    if (parent) {
+        pos = parent->mapFromScene(e->pos());
+        m_x = pos.x();
+        m_y = pos.y();
+    }
 }
 
 DeclarativeDragDropEvent::DeclarativeDragDropEvent(QDragLeaveEvent* e, DeclarativeDropArea* parent) :
@@ -45,17 +51,7 @@ DeclarativeDragDropEvent::DeclarativeDragDropEvent(QDragLeaveEvent* e, Declarati
     //m_data(e->mimeData()),
     m_event(0)
 {
-}
-
-void DeclarativeDragDropEvent::init()
-{
-    QPointF pos;
-
-    if (parent()) {
-        //pos = parent->mapFromScene(e->scenePos());
-        m_x = pos.x();
-        m_y = pos.y();
-    }
+    Q_UNUSED(e);
 }
 
 void DeclarativeDragDropEvent::accept(int action)
