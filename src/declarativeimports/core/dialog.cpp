@@ -208,13 +208,16 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
         //If no item was specified try to align at the center of the parent view
         QQuickItem *parentItem = qobject_cast<QQuickItem *>(parent());
         if (parentItem && parentItem->window()) {
+            qDebug() << "NO visual parent ... Centering at " << (parentItem->window()->geometry().center() - QPoint(width()/2, height()/2));
             return parentItem->window()->geometry().center() - QPoint(width()/2, height()/2);
         } else {
+            qDebug() << "No QQuickItem as parent found";
             return QPoint();
         }
     }
-
+    qDebug() << "I've an Item";
     QPointF pos = item->mapToScene(QPointF(0, 0));
+    qDebug() << "I've an Item at " << pos;
     if (item->window() && item->window()->screen()) {
         pos = item->window()->mapToGlobal(pos.toPoint());
     } else {
@@ -309,7 +312,7 @@ bool DialogProxy::isActiveWindow() const
 void DialogProxy::activateWindow()
 {
     qDebug();
-    setWindowState(Qt::WindowActive);
+    //setWindowState(Qt::WindowActive);
 }
 
 int DialogProxy::windowFlags() const
