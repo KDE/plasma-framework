@@ -65,6 +65,8 @@ class ConfigModel : public QAbstractListModel
     Q_OBJECT
     Q_PROPERTY(QQmlListProperty<ConfigCategory> categories READ categories CONSTANT)
     Q_CLASSINFO("DefaultProperty", "categories")
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
+
 public:
     enum Roles {
         NameRole = Qt::UserRole+1,
@@ -77,8 +79,13 @@ public:
     void appendCategory(ConfigCategory *c);
     void clear();
 
-    virtual int rowCount(const QModelIndex &index) const;
+    void setAppletInterface(AppletInterface *interface);
+    AppletInterface *appletInterface() const;
+
+    int count() {return rowCount();}
+    virtual int rowCount(const QModelIndex &index = QModelIndex()) const;
     virtual QVariant data(const QModelIndex&, int) const;
+    Q_INVOKABLE QVariant get(int row) const;
 
     QQmlListProperty<ConfigCategory> categories();
     
@@ -87,20 +94,24 @@ public:
     static int categories_count(QQmlListProperty<ConfigCategory> *prop);
     static void categories_clear(QQmlListProperty<ConfigCategory> *prop);
 
+Q_SIGNALS:
+    void countChanged();
+
 private:
     QList<ConfigCategory*>m_categories;
+    QWeakPointer<AppletInterface> m_appletInterface;
 };
 
 class ConfigView : public QQuickView
 {
     Q_OBJECT
-    Q_PROPERTY(QQmlListProperty<QObject> configPages READ configPages CONSTANT)
+    Q_PROPERTY(QObject *configModel READ configModel CONSTANT)
 
 public:
     ConfigView(AppletInterface *scriptEngine, QWindow *parent = 0);
     virtual ~ConfigView();
 
-    QQmlListProperty<QObject> configPages() const;
+    QObject *configModel() const;
 
 protected:
      void hideEvent(QHideEvent *ev);
@@ -108,7 +119,7 @@ protected:
 
 private:
     AppletInterface *m_appletInterface;
-    QQmlListProperty<QObject> m_configPages;
+    ConfigModel *m_configModel;
 };
 
 #endif // multiple inclusion guard

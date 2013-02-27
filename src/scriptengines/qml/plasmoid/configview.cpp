@@ -121,10 +121,31 @@ QVariant ConfigModel::data(const QModelIndex& index, int role) const
     case IconRole:
         return m_categories.at(index.row())->icon();
     case SourceRole:
-        return m_categories.at(index.row())->source();
+        if (m_appletInterface) {
+            return QUrl::fromLocalFile(m_appletInterface.data()->applet()->package().filePath("ui", m_categories.at(index.row())->source()));
+        } else {
+            return m_categories.at(index.row())->source();
+        }
     default:
         return QVariant();
     }
+}
+
+QVariant ConfigModel::get(int row) const
+{
+    QVariantMap value;
+    if (row < 0 || row >= m_categories.count()) {
+        return value;
+    }
+
+    value["name"] = m_categories.at(row)->name();
+    value["icon"] = m_categories.at(row)->icon();
+    if (m_appletInterface) {
+        value["source"] = QUrl::fromLocalFile(m_appletInterface.data()->applet()->package().filePath("ui", m_categories.at(row)->source()));
+    } else {
+        value["source"] = m_categories.at(row)->source();
+    }
+    return value;
 }
 
 void ConfigModel::appendCategory(ConfigCategory *c)
@@ -132,6 +153,7 @@ void ConfigModel::appendCategory(ConfigCategory *c)
     beginInsertRows(QModelIndex(), m_categories.size(), m_categories.size());
     m_categories.append(c);
     endInsertRows();
+    emit countChanged();
 }
 
 void ConfigModel::clear()
@@ -142,6 +164,17 @@ void ConfigModel::clear()
         m_categories.pop_front();
     }
     endResetModel();
+    emit countChanged();
+}
+
+void ConfigModel::setAppletInterface(AppletInterface *interface)
+{
+    m_appletInterface = interface;
+}
+
+AppletInterface *ConfigModel::appletInterface() const
+{
+    return m_appletInterface.data();
 }
 
 QQmlListProperty<ConfigCategory> ConfigModel::categories()
@@ -220,10 +253,12 @@ ConfigView::ConfigView(AppletInterface *interface, QWindow *parent)
 
 
     QQmlComponent *component = new QQmlComponent(engine(), QUrl::fromLocalFile(m_appletInterface->applet()->package().filePath("ui", "config.qml")), this);
-
-    QObject *configObject = component->create(engine()->rootContext());
-    if (configObject) {
-        m_configPages = configObject->property("modules").value<QQmlListProperty<QObject> >();
+    QObject *object = component->create(engine()->rootContext());
+    m_configModel = qobject_cast<ConfigModel *>(object);
+    if (m_configModel) {
+        m_configModel->setAppletInterface(m_appletInterface);
+    } else {
+        delete object;
     }
 
     delete component;
@@ -238,9 +273,9 @@ ConfigView::~ConfigView()
 }
 
 
-QQmlListProperty<QObject> ConfigView::configPages() const
+QObject *ConfigView::configModel() const
 {
-    return m_configPages;
+    return m_configModel;
 }
 
 //To emulate Qt::WA_DeleteOnClose that QWindow doesn't have
