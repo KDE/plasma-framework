@@ -238,7 +238,7 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
     }
 }
 
-Applet *ContainmentPrivate::addApplet(const QString &name, const QVariantList &args, uint id)
+Applet *ContainmentPrivate::createApplet(const QString &name, const QVariantList &args, uint id)
 {
     if (!q->isContainment()) {
         return 0;

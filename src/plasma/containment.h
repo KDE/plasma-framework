@@ -118,7 +118,7 @@ class PLASMA_EXPORT Containment : public Applet
          *
          * @return a pointer to the applet on success, or 0 on failure
          */
-        Applet *addApplet(const QString &name, const QVariantList &args = QVariantList());
+        Applet *createApplet(const QString &name, const QVariantList &args = QVariantList());
 
         /**
          * Add an existing applet to this Containment

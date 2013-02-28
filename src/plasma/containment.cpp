@@ -265,7 +265,7 @@ void Containment::restoreContents(KConfigGroup &group)
             continue;
         }
 
-        d->addApplet(plugin, QVariantList(), appId);
+        d->createApplet(plugin, QVariantList(), appId);
     }
 }
 
@@ -325,9 +325,9 @@ void Containment::setLocation(Location location)
     emit locationChanged(location);
 }
 
-Applet *Containment::addApplet(const QString &name, const QVariantList &args)
+Applet *Containment::createApplet(const QString &name, const QVariantList &args)
 {
-    return d->addApplet(name, args);
+    return d->createApplet(name, args);
 }
 
 void Containment::addApplet(Applet *applet)

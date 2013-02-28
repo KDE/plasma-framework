@@ -81,7 +81,7 @@ public:
     void appletDeleted(Applet*);
     void configChanged();
 
-    Applet *addApplet(const QString &name, const QVariantList &args = QVariantList(), uint id = 0);
+    Applet *createApplet(const QString &name, const QVariantList &args = QVariantList(), uint id = 0);
 
     /**
      * FIXME: this should completely go from here

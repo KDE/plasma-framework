@@ -135,7 +135,7 @@ void PlasmaKPart::createView(Plasma::Containment *containment)
 void PlasmaKPart::addApplet(const QString& name, const QVariantList& args, const QRectF& geometry )
 {
     Q_ASSERT(containment());
-    containment()->addApplet(name, args, geometry);
+    containment()->createApplet(name, args, geometry);
 }
 
 Plasma::Applet::List PlasmaKPart::listActiveApplets() const
