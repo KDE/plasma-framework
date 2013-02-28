@@ -320,6 +320,8 @@ void ContainmentInterface::addContainmentActions(KMenu &desktopMenu, QEvent *eve
     Plasma::ContainmentActions *plugin = containment()->containmentActions().value(trigger);
 
     if (!plugin) {
+        //FIXME: this action is here only for testing purposes, remove it when plugins work
+        desktopMenu.addAction(containment()->actions()->action("configure"));
         return;
     }
 
@@ -334,6 +336,7 @@ void ContainmentInterface::addContainmentActions(KMenu &desktopMenu, QEvent *eve
 
 
     QList<QAction*> actions = plugin->contextualActions();
+
     if (actions.isEmpty()) {
         //it probably didn't bother implementing the function. give the user a chance to set
         //a better plugin.  note that if the user sets no-plugin this won't happen...

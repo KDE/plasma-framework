@@ -66,7 +66,7 @@ Containment::Containment(QObject *parent,
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
     setContainmentType(CustomContainment);
-    setHasConfigurationInterface(false);
+    setHasConfigurationInterface(true);
 }
 
 Containment::Containment(QObject *parent, const QVariantList &args)
@@ -75,7 +75,7 @@ Containment::Containment(QObject *parent, const QVariantList &args)
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
-    setHasConfigurationInterface(false);
+    setHasConfigurationInterface(true);
 }
 
 Containment::Containment(const QString &packagePath, uint appletId)
@@ -84,7 +84,7 @@ Containment::Containment(const QString &packagePath, uint appletId)
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
-    setHasConfigurationInterface(false);
+    setHasConfigurationInterface(true);
 }
 
 Containment::~Containment()
