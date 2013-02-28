@@ -167,6 +167,7 @@ void ContainmentInterface::loadWallpaper()
         }
 
         Plasma::Package pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
+        pkg.setDefaultPackageRoot("plasma/wallpapers");
         pkg.setPath("org.kde.wallpaper.image");
 
         m_wallpaperQmlObject = new QmlObject(this);

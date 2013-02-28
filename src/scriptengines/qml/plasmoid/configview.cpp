@@ -21,13 +21,16 @@
 #include "plasmoid/appletinterface.h"
 
 #include <QDebug>
+#include <QDir>
 #include <QQmlComponent>
 #include <QQmlEngine>
 #include <QQmlContext>
 
+#include <KGlobal>
 #include <KLocalizedString>
 
 #include <Plasma/Corona>
+#include <Plasma/PluginLoader>
 
 ///////////////////////ConfigCategory
 
@@ -235,7 +238,8 @@ void ConfigModel::categories_clear(QQmlListProperty<ConfigCategory> *prop)
 //////////////////////////////ConfigView
 ConfigView::ConfigView(AppletInterface *interface, QWindow *parent)
     : QQuickView(parent),
-      m_appletInterface(interface)
+      m_appletInterface(interface),
+      m_wallpaperConfigModel(0)
 {
     qmlRegisterType<ConfigModel>("org.kde.plasma.configuration", 0, 1, "ConfigModel");
     qmlRegisterType<ConfigCategory>("org.kde.plasma.configuration", 0, 1, "ConfigCategory");
@@ -252,6 +256,7 @@ ConfigView::ConfigView(AppletInterface *interface, QWindow *parent)
     setResizeMode(QQuickView::SizeViewToRootObject);
 
 
+    //config model local of the applet
     QQmlComponent *component = new QQmlComponent(engine(), QUrl::fromLocalFile(m_appletInterface->applet()->package().filePath("config", "config.qml")), this);
     QObject *object = component->create(engine()->rootContext());
     m_configModel = qobject_cast<ConfigModel *>(object);
@@ -260,8 +265,8 @@ ConfigView::ConfigView(AppletInterface *interface, QWindow *parent)
     } else {
         delete object;
     }
-
     delete component;
+
 
     engine()->rootContext()->setContextProperty("plasmoid", interface);
     engine()->rootContext()->setContextProperty("configDialog", this);
@@ -273,9 +278,40 @@ ConfigView::~ConfigView()
 }
 
 
-QObject *ConfigView::configModel() const
+ConfigModel *ConfigView::configModel() const
 {
     return m_configModel;
+}
+
+ConfigModel *ConfigView::wallpaperConfigModel()
+{
+    if (!m_wallpaperConfigModel) {
+        m_wallpaperConfigModel = new ConfigModel(this);
+        QStringList dirs(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "plasma/wallpapers", QStandardPaths::LocateDirectory));
+        Plasma::Package pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
+        foreach (const QString &dirPath, dirs) {
+            QDir dir(dirPath);
+            pkg.setDefaultPackageRoot(dirPath);
+            QStringList packages;
+
+            foreach (const QString &sdir, dir.entryList(QDir::AllDirs | QDir::Readable)) {
+                QString metadata = dirPath + '/' + sdir + "/metadata.desktop";
+                if (QFile::exists(metadata)) {
+                    packages << sdir;
+                }
+            }
+
+            foreach (const QString &package, packages) {
+                pkg.setPath(package);
+                ConfigCategory *cat = new ConfigCategory(m_wallpaperConfigModel);
+                cat->setName(pkg.metadata().name());
+                cat->setIcon(pkg.metadata().icon());
+                cat->setSource(pkg.filePath("ui", "config.qml"));
+                m_wallpaperConfigModel->appendCategory(cat);
+            }
+        }
+    }
+    return m_wallpaperConfigModel;
 }
 
 //To emulate Qt::WA_DeleteOnClose that QWindow doesn't have

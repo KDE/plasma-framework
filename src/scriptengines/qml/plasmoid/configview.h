@@ -105,13 +105,15 @@ private:
 class ConfigView : public QQuickView
 {
     Q_OBJECT
-    Q_PROPERTY(QObject *configModel READ configModel CONSTANT)
+    Q_PROPERTY(ConfigModel *configModel READ configModel CONSTANT)
+    Q_PROPERTY(ConfigModel *wallpaperConfigModel READ wallpaperConfigModel CONSTANT)
 
 public:
     ConfigView(AppletInterface *scriptEngine, QWindow *parent = 0);
     virtual ~ConfigView();
 
-    QObject *configModel() const;
+    ConfigModel *configModel() const;
+    ConfigModel *wallpaperConfigModel();
 
 protected:
      void hideEvent(QHideEvent *ev);
@@ -120,6 +122,7 @@ protected:
 private:
     AppletInterface *m_appletInterface;
     ConfigModel *m_configModel;
+    ConfigModel *m_wallpaperConfigModel;
 };
 
 #endif // multiple inclusion guard
