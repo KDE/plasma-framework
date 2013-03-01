@@ -259,7 +259,7 @@ ConfigView::ConfigView(AppletInterface *interface, QWindow *parent)
 
 
     //config model local of the applet
-    QQmlComponent *component = new QQmlComponent(engine(), QUrl::fromLocalFile(m_appletInterface->applet()->package().filePath("config", "config.qml")), this);
+    QQmlComponent *component = new QQmlComponent(engine(), QUrl::fromLocalFile(m_appletInterface->applet()->package().filePath("configmodel")), this);
     QObject *object = component->create(engine()->rootContext());
     m_configModel = qobject_cast<ConfigModel *>(object);
     if (m_configModel) {
