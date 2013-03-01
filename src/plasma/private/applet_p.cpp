@@ -26,7 +26,6 @@
 #include <config-plasma.h>
 
 #include <QFile>
-#include <QVBoxLayout>
 #include <qstandardpaths.h>
 
 #include <kaction.h>

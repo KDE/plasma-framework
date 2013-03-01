@@ -25,7 +25,6 @@
 #include <QBasicTimer>
 
 #include <kactioncollection.h>
-#include <kconfigdialog.h>
 #include <kconfigskeleton.h>
 #include <kservice.h>
 #include <kplugininfo.h>
@@ -40,35 +39,7 @@ namespace Plasma
 class AppletScript;
 class Service;
 
-class AppletConfigDialog : public KConfigDialog
-{
-    Q_OBJECT
-
-public:
-    AppletConfigDialog(QWidget* parent, const QString &id, KConfigSkeleton *s)
-        : KConfigDialog(parent, id, s),
-          m_changed(false)
-    {
-    }
-
-public Q_SLOTS:
-    void settingsModified(bool modified = true)
-    {
-        m_changed = modified;
-        updateButtons();
-    }
-
-protected:
-    bool hasChanged()
-    {
-        return m_changed || KConfigDialog::hasChanged();
-    }
-
-private:
-    bool m_changed;
-};
-
-class PLASMA_EXPORT AppletPrivate
+class AppletPrivate
 {
 public:
     AppletPrivate(KService::Ptr service, const KPluginInfo *info, int uniqueID, Applet *applet);
@@ -103,7 +74,6 @@ public:
 
     static uint s_maxAppletId;
 
-    //      number of members at this point.
     uint appletId;
     Applet *q;
 
