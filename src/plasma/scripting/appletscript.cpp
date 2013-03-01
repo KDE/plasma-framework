@@ -20,7 +20,6 @@
 #include "scripting/appletscript.h"
 
 #include "kconfig.h"
-#include "kconfigdialog.h"
 
 #include "applet.h"
 #include "package.h"

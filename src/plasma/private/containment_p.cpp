@@ -41,7 +41,7 @@
 namespace Plasma
 {
 
-const char ContainmentPrivate::defaultWallpaper[] = "image";
+const char ContainmentPrivate::defaultWallpaper[] = "org.kde.image";
 
 void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containment *c)
 {

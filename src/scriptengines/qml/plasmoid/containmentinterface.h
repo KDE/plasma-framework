@@ -28,6 +28,7 @@
 #include "appletinterface.h"
 
 class QmlObject;
+class WallpaperInterface;
 
 class ContainmentInterface : public AppletInterface
 {
@@ -86,7 +87,7 @@ protected Q_SLOTS:
     void loadWallpaper();
 
 private:
-    QmlObject *m_wallpaperQmlObject;
+    WallpaperInterface *m_wallpaperInterface;
     QList<QObject *> m_appletInterfaces;
 };
 

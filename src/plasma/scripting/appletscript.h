@@ -33,7 +33,6 @@
 class QAction;
 class QPainter;
 class QStyleOptionGraphicsItem;
-class KConfigDialog;
 
 namespace Plasma
 {

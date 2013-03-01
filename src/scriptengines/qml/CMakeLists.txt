@@ -21,6 +21,7 @@ set(declarative_appletscript_SRCS
     plasmoid/configview.cpp
     plasmoid/containmentinterface.cpp
     plasmoid/declarativeappletscript.cpp
+    plasmoid/wallpaperinterface.cpp
     )
 
 include_directories(${PHONON_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/common)

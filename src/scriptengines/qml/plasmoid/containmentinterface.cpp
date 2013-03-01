@@ -20,6 +20,8 @@
  */
 
 #include "containmentinterface.h"
+#include "wallpaperinterface.h"
+#include "declarative/qmlobject.h"
 
 #include <QQmlExpression>
 #include <QQmlProperty>
@@ -34,11 +36,10 @@
 #include <Plasma/Package>
 #include <Plasma/PluginLoader>
 
-#include "declarative/qmlobject.h"
 
 ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
     : AppletInterface(parent),
-      m_wallpaperQmlObject(0)
+      m_wallpaperInterface(0)
 {
     //TODO: will accept all events specified as registered with containment actions
     setAcceptedMouseButtons(Qt::RightButton);
@@ -162,41 +163,23 @@ void ContainmentInterface::appletRemovedForward(Plasma::Applet *applet)
 void ContainmentInterface::loadWallpaper()
 {
     if (m_appletScriptEngine->drawWallpaper()) {
-        if (m_wallpaperQmlObject) {
+        if (m_wallpaperInterface) {
             return;
         }
 
-        Plasma::Package pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
-        pkg.setDefaultPackageRoot("plasma/wallpapers");
-        pkg.setPath("org.kde.wallpaper.image");
+        m_wallpaperInterface = new WallpaperInterface(this);
+        //Qml seems happier if the parent gets set in this way
+        m_wallpaperInterface->setProperty("parent", QVariant::fromValue(this));
 
-        m_wallpaperQmlObject = new QmlObject(this);
-        m_wallpaperQmlObject->setSource(QUrl::fromLocalFile(pkg.filePath("mainscript")));
-
-        if (m_wallpaperQmlObject->mainComponent() &&
-            m_wallpaperQmlObject->rootObject() &&
-            !m_wallpaperQmlObject->mainComponent()->isError()) {
-            m_wallpaperQmlObject->rootObject()->setProperty("z", -1000);
-            m_wallpaperQmlObject->rootObject()->setProperty("parent", QVariant::fromValue(this));
-
-            //set anchors
-            QQmlExpression expr(qmlObject()->engine()->rootContext(), m_wallpaperQmlObject->rootObject(), "parent");
-            QQmlProperty prop(m_wallpaperQmlObject->rootObject(), "anchors.fill");
-            prop.write(expr.evaluate());
-
-        } else if (m_wallpaperQmlObject->mainComponent()) {
-            qWarning() << "Error loading the wallpaper" << m_wallpaperQmlObject->mainComponent()->errors();
-            m_wallpaperQmlObject->deleteLater();
-            m_wallpaperQmlObject = 0;
-
-        } else {
-            qWarning() << "Error loading the wallpaper, package not found";
-        }
+        //set anchors
+        QQmlExpression expr(qmlObject()->engine()->rootContext(), m_wallpaperInterface, "parent");
+        QQmlProperty prop(m_wallpaperInterface, "anchors.fill");
+        prop.write(expr.evaluate());
 
     } else {
-        if (m_wallpaperQmlObject) {
-            m_wallpaperQmlObject->deleteLater();
-            m_wallpaperQmlObject = 0;
+        if (m_wallpaperInterface) {
+            m_wallpaperInterface->deleteLater();
+            m_wallpaperInterface = 0;
         }
     }
 }

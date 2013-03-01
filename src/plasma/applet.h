@@ -37,7 +37,6 @@
 
 class QWidget;
 
-class KConfigDialog;
 class KActionCollection;
 
 namespace Plasma
