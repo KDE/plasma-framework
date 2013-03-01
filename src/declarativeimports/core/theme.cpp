@@ -159,6 +159,7 @@ ThemeProxy::ThemeProxy(QObject *parent)
 
     m_iconSizes = new QQmlPropertyMap(this);
     m_iconSizes->insert("desktop", QVariant(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
+    m_iconSizes->insert("panel", QVariant(KIconLoader::global()->currentSize(KIconLoader::Panel)));
     m_iconSizes->insert("toolbar", KIconLoader::global()->currentSize(KIconLoader::Toolbar));
     m_iconSizes->insert("small", KIconLoader::global()->currentSize(KIconLoader::Small));
     m_iconSizes->insert("dialog", KIconLoader::global()->currentSize(KIconLoader::Dialog));
