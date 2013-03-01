@@ -105,31 +105,6 @@ void AppletScript::configNeedsSaving() const
     }
 }
 
-void AppletScript::showConfigurationInterface()
-{
-    if (applet()) {
-        KConfigDialog *dialog = applet()->d->generateGenericConfigDialog();
-        applet()->d->addStandardConfigurationPages(dialog);
-        dialog->show();
-    }
-}
-
-KConfigDialog *AppletScript::standardConfigurationDialog()
-{
-    if (applet()) {
-        return applet()->d->generateGenericConfigDialog();
-    }
-
-    return 0;
-}
-
-void AppletScript::addStandardConfigurationPages(KConfigDialog *dialog)
-{
-    if (applet()) {
-        applet()->d->addStandardConfigurationPages(dialog);
-    }
-}
-
 void AppletScript::configChanged()
 {
 }

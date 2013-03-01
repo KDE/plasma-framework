@@ -438,7 +438,7 @@ bool AppletInterface::immutable() const
 
 bool AppletInterface::userConfiguring() const
 {
-    return applet()->isUserConfiguring();
+    return m_configView.data()->isVisible();
 }
 
 int AppletInterface::apiVersion() const

@@ -116,8 +116,6 @@ Applet::~Applet()
     //let people know that i will die
     emit appletDeleted(this);
 
-    // clean up our config dialog, if any
-    delete KConfigDialog::exists(d->configDialogId());
     delete d;
 }
 
@@ -459,11 +457,6 @@ void Applet::flushPendingConstraintsEvents()
 
         QAction *configAction = d->actions->action("configure");
         if (configAction) {
-            /*if (d->isContainment) {
-                connect(configAction, SIGNAL(triggered(bool)), this, SLOT(requestConfiguration()), Qt::UniqueConnection);
-            } else {
-                connect(configAction, SIGNAL(triggered(bool)), this, SLOT(showConfigurationInterface()), Qt::UniqueConnection);
-            }*/
 
             if (d->hasConfigurationInterface) {
                 bool canConfig = unlocked || KAuthorized::authorize("plasma/allow_configure_when_locked");
@@ -650,130 +643,6 @@ void Applet::setHasConfigurationInterface(bool hasInterface)
     d->hasConfigurationInterface = hasInterface;
 }
 
-bool Applet::isUserConfiguring() const
-{
-    return KConfigDialog::exists(d->configDialogId());
-}
-
-void Applet::showConfigurationInterface()
-{
-    if (!hasConfigurationInterface()) {
-        return;
-    }
-
-    if (immutability() != Mutable && !KAuthorized::authorize("plasma/allow_configure_when_locked")) {
-        return;
-    }
-
-    KConfigDialog *dlg = KConfigDialog::exists(d->configDialogId());
-
-    if (dlg) {
-        KWindowSystem::setOnDesktop(dlg->winId(), KWindowSystem::currentDesktop());
-        dlg->show();
-        KWindowSystem::activateWindow(dlg->winId());
-        return;
-    }
-
-    if (d->package) {
-        KConfigDialog *dialog = 0;
-
-        const QString uiFile = d->package->filePath("mainconfigui");
-        KDesktopFile df(d->package->path() + "/metadata.desktop");
-        const QStringList kcmPlugins = df.desktopGroup().readEntry("X-Plasma-ConfigPlugins", QStringList());
-        if (!uiFile.isEmpty() || !kcmPlugins.isEmpty()) {
-            KConfigSkeleton *configLoader = configScheme() ? d->configLoader : new KConfigSkeleton(0);
-            dialog = new AppletConfigDialog(0, d->configDialogId(), configLoader);
-
-            if (!d->configLoader) {
-                // delete the temporary when this dialog is done
-                configLoader->setParent(dialog);
-            }
-
-            dialog->setWindowTitle(d->configWindowTitle());
-            dialog->setAttribute(Qt::WA_DeleteOnClose, true);
-            bool hasPages = false;
-
-            QFile f(uiFile);
-            QUiLoader loader;
-            QWidget *w = loader.load(&f);
-            if (w) {
-                dialog->addPage(w, i18n("Settings"), icon(), i18n("%1 Settings", title()));
-                hasPages = true;
-            }
-
-            foreach (const QString &kcm, kcmPlugins) {
-#if !PLASMA_NO_KUTILS
-                KCModuleProxy *module = new KCModuleProxy(kcm);
-                if (module->realModule()) {
-                    //preemptively load modules to prevent save() crashing on some kcms, like powerdevil ones
-                    module->load();
-                    connect(module, SIGNAL(changed(bool)), dialog, SLOT(settingsModified(bool)));
-                    connect(dialog, SIGNAL(okClicked()),
-                            module->realModule(), SLOT(save()));
-                    connect(dialog, SIGNAL(applyClicked()),
-                            module->realModule(), SLOT(save()));
-                    dialog->addPage(module, module->moduleInfo().moduleName(), module->moduleInfo().icon());
-                    hasPages = true;
-                } else {
-                    delete module;
-                }
-#else
-                KService::Ptr service = KService::serviceByStorageId(kcm);
-                if (service) {
-                    QString error;
-                    KCModule *module = service->createInstance<KCModule>(dialog, QVariantList(), &error);
-                    if (module) {
-                        module->load();
-                        connect(module, SIGNAL(changed(bool)), dialog, SLOT(settingsModified(bool)));
-                        connect(dialog, SIGNAL(okClicked()),
-                                module, SLOT(save()));
-                        connect(dialog, SIGNAL(applyClicked()), 
-                                module, SLOT(save()));
-                        dialog->addPage(module, service->name(), service->icon());
-                        hasPages = true;
-                    } else {
-#ifndef NDEBUG
-                        kDebug() << "failed to load kcm" << kcm << "for" << title();
-#endif
-                    }
-                }
-#endif
-            }
-
-            if (hasPages) {
-                d->addGlobalShortcutsPage(dialog);
-                dialog->show();
-            } else {
-                delete dialog;
-                dialog = 0;
-            }
-        }
-
-        if (!dialog && d->script) {
-            d->script->showConfigurationInterface();
-        }
-    } else if (d->script) {
-        d->script->showConfigurationInterface();
-    } else {
-        KConfigDialog *dialog = d->generateGenericConfigDialog();
-        d->addStandardConfigurationPages(dialog);
-        showConfigurationInterface(dialog);
-    }
-
-    emit releaseVisualFocus();
-}
-
-void Applet::showConfigurationInterface(QWidget *widget)
-{
-    if (!containment() || !containment()->corona() ||
-        !containment()->corona()->dialogManager()) {
-        widget->show();
-        return;
-    }
-
-    QMetaObject::invokeMethod(containment()->corona()->dialogManager(), "showDialog", Q_ARG(QWidget *, widget), Q_ARG(Plasma::Applet *, this));
-}
-
 void Applet::configChanged()
 {
     if (d->script) {
@@ -782,13 +651,6 @@ void Applet::configChanged()
         }
         d->script->configChanged();
     }
-}
-
-void Applet::createConfigurationInterface(KConfigDialog *parent)
-{
-    Q_UNUSED(parent)
-    // virtual method reimplemented by subclasses.
-    // do not put anything here ...
 }
 
 void Applet::setAssociatedApplication(const QString &string)

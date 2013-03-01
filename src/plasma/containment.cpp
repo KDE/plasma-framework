@@ -507,11 +507,6 @@ QString Containment::activity() const
     return d->activityId;
 }
 
-void Containment::showConfigurationInterface()
-{
-    Applet::showConfigurationInterface();
-}
-
 } // Plasma namespace
 
 

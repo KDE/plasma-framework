@@ -161,11 +161,6 @@ Q_SIGNALS:
 public Q_SLOTS:
 
     /**
-     * Show a configuration dialog.
-     */
-    virtual void showConfigurationInterface();
-
-    /**
      * Configure was changed.
      */
     virtual void configChanged();
@@ -187,22 +182,6 @@ protected:
      * @return the KPluginInfo associated with this plasmoid
      */
     KPluginInfo description() const;
-
-    /**
-     * @return a standard Plasma applet configuration dialog, ready
-     * to have pages added to it.
-     *
-     * Note that the dialog returned is set to delete on close.
-     */
-    KConfigDialog *standardConfigurationDialog();
-
-    /**
-     * This method should be called after a scripting applet has added
-     * its own pages to a configuration dialog
-     *
-     * @since 4.3.1
-     */
-    void addStandardConfigurationPages(KConfigDialog *dialog);
 
 private:
     friend class Applet;

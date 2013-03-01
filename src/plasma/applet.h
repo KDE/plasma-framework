@@ -352,31 +352,6 @@ class PLASMA_EXPORT Applet : public QObject
          **/
         bool hasConfigurationInterface() const;
 
-        /**
-         * Reimplement this method so provide a configuration interface,
-         * parented to the supplied widget. Ownership of the widgets is passed
-         * to the parent widget.
-         *
-         * Typically one would add custom pages to the config dialog @p parent
-         * and then connect to the applyClicked() and okClicked() signals
-         * or @p parent to react on config changes:
-         *
-         * @code
-         * connect(parent, SIGNAL(applyClicked()), this, SLOT(myConfigAccepted()));
-         * connect(parent, SIGNAL(okClicked()), this, SLOT(myConfigAccepted()));
-         * @endcode
-         *
-         * With this approach it makes sense to store the custom pages in member
-         * variables to make their fields accessible from the myConfigAccepted()
-         * slot.
-         *
-         * Use config() to store your configuration.
-         *
-         * @param parent the dialog which is the parent of the configuration
-         *               widgets
-         */
-        virtual void createConfigurationInterface(KConfigDialog *parent);
-
     Q_SIGNALS:
 //BOOKEEPING
         /**
@@ -402,7 +377,6 @@ class PLASMA_EXPORT Applet : public QObject
          * applets.
          */
         void configNeedsSaving();
-
         
 
 //ACTIONS
@@ -451,37 +425,6 @@ class PLASMA_EXPORT Applet : public QObject
         void setStatus(const ItemStatus stat);
 
 //CONFIGURATION
-        /**
-         * Lets the user interact with the plasmoid options.
-         * Called when the user selects the configure entry
-         * from the context menu.
-         *
-         * Unless there is good reason for overriding this method,
-         * Applet subclasses should actually override createConfigurationInterface
-         * instead. A good example of when this isn't plausible is
-         * when using a dialog prepared by another library, such
-         * as KPropertiesDialog from libkfile.
-         * You probably want to call showConfigurationInterface(QWidget*)
-         * with the custom widget you created to actually show your interface
-         */
-        virtual void showConfigurationInterface();
-
-        /**
-         * Actually show your custom configuration interface
-         * Use this only if you reimplemented showConfigurationInterface()
-         *
-         * @param widget the widget representing your configuration interface
-         *
-         * @since 4.5
-         */
-        void showConfigurationInterface(QWidget *widget);
-
-        /**
-         * @return true when the configuration interface is being shown
-         * @since 4.5
-         */
-        bool isUserConfiguring() const;
-
         /**
          * Called when applet configuration values have changed.
          */
@@ -626,7 +569,6 @@ class PLASMA_EXPORT Applet : public QObject
         Applet(const QString &packagePath, uint appletId);
 
         Q_PRIVATE_SLOT(d, void cleanUpAndDelete())
-        Q_PRIVATE_SLOT(d, void configDialogFinished())
         Q_PRIVATE_SLOT(d, void updateShortcuts())
         Q_PRIVATE_SLOT(d, void globalShortcutChanged())
         Q_PRIVATE_SLOT(d, void propagateConfigChanged())

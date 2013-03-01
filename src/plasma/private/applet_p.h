@@ -94,12 +94,6 @@ public:
     void scheduleModificationNotification();
     KConfigGroup *mainConfigGroup();
     void resetConfigurationObject();
-    void addGlobalShortcutsPage(KConfigDialog *dialog);
-    void configDialogFinished();
-    KConfigDialog *generateGenericConfigDialog();
-    void addStandardConfigurationPages(KConfigDialog *dialog);
-    QString configDialogId() const;
-    QString configWindowTitle() const;
     void updateShortcuts();
     void globalShortcutChanged();
     void propagateConfigChanged();
@@ -133,9 +127,6 @@ public:
     // actions stuff; put activationAction into actions?
     KActionCollection *actions;
     KAction *activationAction;
-
-    // configuration
-    QWeakPointer<KKeySequenceWidget> shortcutEditor; //TODO: subclass KConfigDialog and encapsulate this in there
 
     ItemStatus itemStatus;
 

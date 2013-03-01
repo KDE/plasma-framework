@@ -280,12 +280,6 @@ Q_SIGNALS:
         void setFormFactor(Plasma::FormFactor formFactor);
 
         /**
-         * @reimp
-         * @sa Applet::showConfigurationInterface()
-         */
-        void showConfigurationInterface();
-
-        /**
          * Sets the type of this containment.
          */
         void setContainmentType(Plasma::ContainmentType type);
