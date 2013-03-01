@@ -34,12 +34,9 @@
 WallpaperInterface::WallpaperInterface(ContainmentInterface *parent)
     : QQuickItem(parent),
       m_containmentInterface(parent),
-      m_qmlObject(0)
+      m_qmlObject(0),
+      m_configLoader(0)
 {
-    if (configScheme()) {
-        m_configuration = new ConfigPropertyMap(configScheme(), this);
-    }
-
     connect(m_containmentInterface->containment(), &Plasma::Containment::wallpaperChanged,
             this, &WallpaperInterface::syncWallpaperPackage);
 
@@ -64,8 +61,10 @@ Plasma::ConfigLoader *WallpaperInterface::configScheme()
 {
     if (!m_configLoader) {
         const QString xmlPath = m_pkg.filePath("mainconfigxml");
+
         KConfigGroup cfg = m_containmentInterface->containment()->config();
         cfg = KConfigGroup(&cfg, "Wallpaper");
+
         if (xmlPath.isEmpty()) {
             m_configLoader = new Plasma::ConfigLoader(&cfg, 0);
         } else {
@@ -87,6 +86,10 @@ void WallpaperInterface::syncWallpaperPackage()
     m_pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
     m_pkg.setDefaultPackageRoot("plasma/wallpapers");
     m_pkg.setPath(m_containmentInterface->containment()->wallpaper());
+
+    if (configScheme()) {
+        m_configuration = new ConfigPropertyMap(configScheme(), this);
+    }
 
     m_qmlObject->setSource(QUrl::fromLocalFile(m_pkg.filePath("mainscript")));
     m_qmlObject->engine()->rootContext()->setContextProperty("wallpaper", this);
