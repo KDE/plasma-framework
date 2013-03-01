@@ -35,7 +35,8 @@ WallpaperInterface::WallpaperInterface(ContainmentInterface *parent)
     : QQuickItem(parent),
       m_containmentInterface(parent),
       m_qmlObject(0),
-      m_configLoader(0)
+      m_configLoader(0),
+      m_configuration(0)
 {
     connect(m_containmentInterface->containment(), &Plasma::Containment::wallpaperChanged,
             this, &WallpaperInterface::syncWallpaperPackage);
@@ -60,7 +61,8 @@ QObject* WallpaperInterface::configuration() const
 Plasma::ConfigLoader *WallpaperInterface::configScheme()
 {
     if (!m_configLoader) {
-        const QString xmlPath = m_pkg.filePath("mainconfigxml");
+        //FIXME: do we need "mainconfigxml" in wallpaper packagestructures?
+        const QString xmlPath = m_pkg.filePath("config", "main.xml");
 
         KConfigGroup cfg = m_containmentInterface->containment()->config();
         cfg = KConfigGroup(&cfg, "Wallpaper");
@@ -87,6 +89,8 @@ void WallpaperInterface::syncWallpaperPackage()
     m_pkg.setDefaultPackageRoot("plasma/wallpapers");
     m_pkg.setPath(m_containmentInterface->containment()->wallpaper());
 
+    m_configLoader->deleteLater();
+    m_configuration->deleteLater();
     if (configScheme()) {
         m_configuration = new ConfigPropertyMap(configScheme(), this);
     }
@@ -116,6 +120,7 @@ void WallpaperInterface::syncWallpaperPackage()
     }
 
     emit packageChanged();
+    emit configurationChanged();
 }
 
 #include "moc_wallpaperinterface.cpp"

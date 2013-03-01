@@ -102,11 +102,15 @@ private:
     QWeakPointer<AppletInterface> m_appletInterface;
 };
 
+
+//TODO: the config view for the containment should be a subclass
+//TODO: is it possible to move this in the shell?
 class ConfigView : public QQuickView
 {
     Q_OBJECT
     Q_PROPERTY(ConfigModel *configModel READ configModel CONSTANT)
     Q_PROPERTY(ConfigModel *wallpaperConfigModel READ wallpaperConfigModel CONSTANT)
+    Q_PROPERTY(QObject *wallpaperConfiguration READ wallpaperConfiguration CONSTANT)
 
 public:
     ConfigView(AppletInterface *scriptEngine, QWindow *parent = 0);
@@ -114,6 +118,7 @@ public:
 
     ConfigModel *configModel() const;
     ConfigModel *wallpaperConfigModel();
+    QObject *wallpaperConfiguration() const;
 
 protected:
      void hideEvent(QHideEvent *ev);

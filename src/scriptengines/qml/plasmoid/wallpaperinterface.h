@@ -37,7 +37,7 @@ class WallpaperInterface : public QQuickItem
     Q_OBJECT
 
     //Q_PROPERTY(QString plugin READ plugin WRITE setPlugin NOTIFY pluginChanged)
-    Q_PROPERTY(QObject* configuration READ configuration CONSTANT)
+    Q_PROPERTY(QObject* configuration READ configuration NOTIFY configurationChanged)
 
 public:
     WallpaperInterface(ContainmentInterface *parent = 0);
@@ -51,6 +51,7 @@ public:
 
 Q_SIGNALS:
     void packageChanged();
+    void configurationChanged();
 
 private Q_SLOTS:
     void syncWallpaperPackage();

@@ -50,9 +50,12 @@ public:
         CustomPanelContainment = 128 /**< A customized desktop panel */
     };
     ContainmentInterface(DeclarativeAppletScript *parent);
-
+//Not for QML
     inline Plasma::Containment *containment() const { return static_cast<Plasma::Containment *>(m_appletScriptEngine->applet()); }
 
+    inline WallpaperInterface *wallpaperInterface() const { return m_wallpaperInterface;}
+
+//For QML use
     QList<QObject *> applets();
 
     void setDrawWallpaper(bool drawWallpaper);

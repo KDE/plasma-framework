@@ -61,7 +61,6 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
          connect(containment()->corona(), &Plasma::Corona::availableScreenRegionChanged,
                  this, &ContainmentInterface::availableScreenRegionChanged);
      }
-     loadWallpaper();
 }
 
 QList <QObject *> ContainmentInterface::applets()
@@ -163,11 +162,12 @@ void ContainmentInterface::appletRemovedForward(Plasma::Applet *applet)
 void ContainmentInterface::loadWallpaper()
 {
     if (m_appletScriptEngine->drawWallpaper()) {
-        if (m_wallpaperInterface) {
+        if (m_wallpaperInterface || containment()->wallpaper().isEmpty()) {
             return;
         }
 
         m_wallpaperInterface = new WallpaperInterface(this);
+        m_wallpaperInterface->setZ(-1000);
         //Qml seems happier if the parent gets set in this way
         m_wallpaperInterface->setProperty("parent", QVariant::fromValue(this));
 

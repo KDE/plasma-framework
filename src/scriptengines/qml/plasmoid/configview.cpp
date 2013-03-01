@@ -19,6 +19,8 @@
 
 #include "configview.h"
 #include "plasmoid/appletinterface.h"
+#include "plasmoid/containmentinterface.h"
+#include "plasmoid/wallpaperinterface.h"
 
 #include <QDebug>
 #include <QDir>
@@ -312,6 +314,15 @@ ConfigModel *ConfigView::wallpaperConfigModel()
         }
     }
     return m_wallpaperConfigModel;
+}
+
+QObject *ConfigView::wallpaperConfiguration() const
+{
+    ContainmentInterface *cont = qobject_cast<ContainmentInterface *>(m_appletInterface);
+    if (cont) {
+        return cont->wallpaperInterface()->configuration();
+    }
+    return 0;
 }
 
 //To emulate Qt::WA_DeleteOnClose that QWindow doesn't have
