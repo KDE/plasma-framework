@@ -137,22 +137,6 @@ public:
     QList<Plasma::Location> freeEdges(int screen) const;
 
     /**
-     * @since 4.3
-     * Updates keyboard shortcuts for all the Corona's actions.
-     * If you've added actions to the Corona you'll need to
-     * call this for them to be configurable.
-     */
-    void updateShortcuts();
-
-    /**
-     * @since 4.3
-     * Adds a set of actions to the shortcut config dialog.
-     * don't use this on actions in the Corona's own actioncollection,
-     * those are handled automatically. this is for stuff outside of that.
-     */
-    void addShortcuts(KActionCollection *newShortcuts);
-
-    /**
      * The actions assocated with this Corona
      */
     KActionCollection* actions() const;

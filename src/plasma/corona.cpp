@@ -333,33 +333,6 @@ KActionCollection *Corona::actions() const
     return &d->actions;
 }
 
-void Corona::updateShortcuts()
-{
-    QMutableListIterator<QWeakPointer<KActionCollection> > it(d->actionCollections);
-    while (it.hasNext()) {
-        it.next();
-        KActionCollection *collection = it.value().data();
-        if (!collection) {
-            // get rid of KActionCollections that have been deleted behind our backs
-            it.remove();
-            continue;
-        }
-
-        collection->readSettings();
-        if (d->shortcutsDlg) {
-            d->shortcutsDlg.data()->addCollection(collection);
-        }
-    }
-}
-
-void Corona::addShortcuts(KActionCollection *newShortcuts)
-{
-    d->actionCollections << newShortcuts;
-    if (d->shortcutsDlg) {
-        d->shortcutsDlg.data()->addCollection(newShortcuts);
-    }
-}
-
 QHash<QString, QString> Corona::defaultContainmentActionsPlugins(ContainmentType containmentType) const
 {
     //FIXME: need to read these out of the package
@@ -407,23 +380,27 @@ void CoronaPrivate::init()
     lockAction->setShortcut(KShortcut("alt+d, l"));
     lockAction->setShortcutContext(Qt::ApplicationShortcut);
 
-    //FIXME this doesn't really belong here. desktop KCM maybe?
-    //but should the shortcuts be per-app or really-global?
-    //I don't know how to make kactioncollections use plasmarc
-    KAction *action = actions.add<KAction>("configure shortcuts");
-    QObject::connect(action, SIGNAL(triggered()), q, SLOT(showShortcutConfig()));
-    action->setText(i18n("Shortcut Settings"));
-    action->setIcon(KDE::icon("configure-shortcuts"));
-    action->setAutoRepeat(false);
-    action->setData(Plasma::ConfigureAction);
-    //action->setShortcut(KShortcut("ctrl+h"));
-    action->setShortcutContext(Qt::ApplicationShortcut);
-
     //fake containment/applet actions
     KActionCollection *containmentActions = AppletPrivate::defaultActions(q); //containment has to start with applet stuff
     ContainmentPrivate::addDefaultActions(containmentActions); //now it's really containment
     actionCollections << &actions << AppletPrivate::defaultActions(q) << containmentActions;
-    q->updateShortcuts();
+
+    //Update the shortcuts
+    QMutableListIterator<QWeakPointer<KActionCollection> > it(actionCollections);
+    while (it.hasNext()) {
+        it.next();
+        KActionCollection *collection = it.value().data();
+        if (!collection) {
+            // get rid of KActionCollections that have been deleted behind our backs
+            it.remove();
+            continue;
+        }
+
+        collection->readSettings();
+        if (shortcutsDlg) {
+            shortcutsDlg.data()->addCollection(collection);
+        }
+    }
 }
 
 void CoronaPrivate::showShortcutConfig()
