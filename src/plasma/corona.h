@@ -257,16 +257,6 @@ Q_SIGNALS:
      */
     void immutabilityChanged(Plasma::ImmutabilityType immutability);
 
-    /**
-     * @since 4.3
-     * emitted when the user changes keyboard shortcut settings
-     * connect to this if you've put some extra shortcuts in your app
-     * that are NOT in Corona's actioncollection.
-     * if your code's not in shells/ it probably shouldn't be using this function.
-     * @see addShortcuts
-     */
-    void shortcutsChanged();
-
 protected:
     /**
      * Loads the default (system wide) layout for this user

@@ -475,9 +475,6 @@ void Applet::flushPendingConstraintsEvents()
         if (cont) {
             corona = cont->corona();
         }
-        if (corona) {
-            connect(corona, SIGNAL(shortcutsChanged()), this, SLOT(updateShortcuts()), Qt::UniqueConnection);
-        }
     }
 
     if (c & Plasma::ImmutableConstraint) {
