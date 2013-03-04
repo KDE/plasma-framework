@@ -325,12 +325,12 @@ Q_SIGNALS:
     void releaseVisualFocus();
 
     /**
-     * This signal indicates that the configuration file was flushed to disc.
+     * This signal indicates that the configuration file was flushed to disk.
      */
     void configSynced();
 
     /**
-     * This signal inicates that a change in available screen goemetry occurred.
+     * This signal indicates that a change in available screen gemetry occurred.
      */
     void availableScreenRegionChanged();
 
