@@ -19,8 +19,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_CORONABASE_H
-#define PLASMA_CORONABASE_H
+#ifndef PLASMA_CORONA_H
+#define PLASMA_CORONA_H
 
 #include <plasma/containment.h>
 #include <plasma/plasma.h>
@@ -38,7 +38,7 @@ class ContainmentActionsPluginsConfig;
 class AbstractDialogManager;
 
 /**
- * @class CoronaBase plasma/CoronaBase.h <Plasma/CoronaBase>
+ * @class Corona plasma/Corona.h <Plasma/Corona>
  *
  * @short A bookkeeping Scene for Plasma::Applets
  */
@@ -80,17 +80,17 @@ public:
     QString defaultContainmentPlugin() const;
 
     /**
-     * @return all containments on this CoronaBase
+     * @return all containments on this Corona
      */
     QList<Containment*> containments() const;
 
     /**
-     * Returns the config file used to store the configuration for this CoronaBase
+     * Returns the config file used to store the configuration for this Corona
      */
     KSharedConfig::Ptr config() const;
 
     /**
-     * Adds a Containment to the CoronaBase
+     * Adds a Containment to the Corona
      *
      * @param name the plugin name for the containment, as given by
      *        KPluginInfo::pluginName(). If an empty string is passed in, the default
@@ -166,8 +166,8 @@ public:
 
     /**
      * @since 4.3
-     * Updates keyboard shortcuts for all the CoronaBase's actions.
-     * If you've added actions to the CoronaBase you'll need to
+     * Updates keyboard shortcuts for all the Corona's actions.
+     * If you've added actions to the Corona you'll need to
      * call this for them to be configurable.
      */
     void updateShortcuts();
@@ -175,7 +175,7 @@ public:
     /**
      * @since 4.3
      * Adds a set of actions to the shortcut config dialog.
-     * don't use this on actions in the CoronaBase's own actioncollection,
+     * don't use this on actions in the Corona's own actioncollection,
      * those are handled automatically. this is for stuff outside of that.
      */
     void addShortcuts(KActionCollection *newShortcuts);
@@ -264,12 +264,12 @@ public Q_SLOTS:
     void saveLayout(const QString &config = QString()) const;
 
     /**
-     * @return The type of immutability of this CoronaBase
+     * @return The type of immutability of this Corona
      */
     ImmutabilityType immutability() const;
 
     /**
-     * Sets the immutability type for this CoronaBase (not immutable,
+     * Sets the immutability type for this Corona (not immutable,
      * user immutable or system immutable)
      * @param immutable the new immutability type of this applet
      */
@@ -293,7 +293,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     /**
      * This signal indicates a new containment has been added to
-     * the CoronaBase
+     * the Corona
      */
     void containmentAdded(Plasma::Containment *containment);
 
@@ -337,7 +337,7 @@ Q_SIGNALS:
      * @since 4.3
      * emitted when the user changes keyboard shortcut settings
      * connect to this if you've put some extra shortcuts in your app
-     * that are NOT in CoronaBase's actioncollection.
+     * that are NOT in Corona's actioncollection.
      * if your code's not in shells/ it probably shouldn't be using this function.
      * @see addShortcuts
      */
