@@ -68,7 +68,6 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1209)
 
 set(plasma_LIB_SRCS
     abstractrunner.cpp
-    abstractdialogmanager.cpp
     configloader.cpp
     containmentactions.cpp
     datacontainer.cpp
@@ -159,7 +158,6 @@ install(TARGETS plasma EXPORT kdelibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_AR
 generate_export_header(plasma)
 
 set(plasma_LIB_INCLUDES
-    abstractdialogmanager.h
     abstractrunner.h
     applet.h
     configloader.h

@@ -39,7 +39,6 @@
 #include <kshortcutsdialog.h>
 #include <kwindowsystem.h>
 
-#include "abstractdialogmanager.h"
 #include "containment.h"
 #include "pluginloader.h"
 #include "private/applet_p.h"
@@ -392,16 +391,6 @@ QHash<QString, QString> Corona::defaultContainmentActionsPlugins(ContainmentType
 {
     //FIXME: need to read these out of the package
     return d->containmentActionsDefaults.value(containmentType);
-}
-
-void Corona::setDialogManager(AbstractDialogManager *dialogManager)
-{
-    d->dialogManager = dialogManager;
-}
-
-AbstractDialogManager *Corona::dialogManager()
-{
-    return d->dialogManager.data();
 }
 
 CoronaPrivate::CoronaPrivate(Corona *corona)

@@ -66,7 +66,6 @@ public:
     KActionCollection actions;
     QMap<Plasma::ContainmentType, QHash<QString, QString> > containmentActionsDefaults;
     QWeakPointer<KShortcutsDialog> shortcutsDlg;
-    QWeakPointer<AbstractDialogManager> dialogManager;
     QHash<Plasma::ContainmentType, QString> toolBoxPlugins;
     QList<QWeakPointer<KActionCollection> > actionCollections;
 };

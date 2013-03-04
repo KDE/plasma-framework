@@ -35,7 +35,6 @@ namespace Plasma
 
 class CoronaPrivate;
 class ContainmentActionsPluginsConfig;
-class AbstractDialogManager;
 
 /**
  * @class Corona plasma/Corona.h <Plasma/Corona>
@@ -193,20 +192,6 @@ public:
      * @return a hash containing the triggers and the plugin names associated with them
      */
     QHash<QString, QString> defaultContainmentActionsPlugins(ContainmentType containmentType) const;
-
-    /**
-     * @param the AbstractDialogManager implementation
-     *
-     * @since 4.5
-     */
-    void setDialogManager(AbstractDialogManager *manager);
-
-    /**
-     * @return the AbstractDialogManager that will show dialogs used by applets, like configuration dialogs
-     *
-     * @since 4.5
-     */
-    AbstractDialogManager *dialogManager();
 
     /**
      * Returns the name of the preferred plugin to be used as containment toolboxes.
