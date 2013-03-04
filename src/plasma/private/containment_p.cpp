@@ -63,7 +63,7 @@ void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containme
     }
 
     //add our own actions
-    KAction *appletBrowserAction = actions->addAction("add widgets");
+    KAction *appletBrowserAction = actions->add<KAction>("add widgets");
     appletBrowserAction->setAutoRepeat(false);
     appletBrowserAction->setText(i18n("Add Widgets..."));
     appletBrowserAction->setIcon(KDE::icon("list-add"));

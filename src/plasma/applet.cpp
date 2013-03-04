@@ -59,7 +59,6 @@
 #include "plasma.h"
 #include "scripting/appletscript.h"
 #include "paintutils.h"
-#include "abstractdialogmanager.h"
 #include "pluginloader.h"
 
 #include "private/associatedapplicationmanager_p.h"

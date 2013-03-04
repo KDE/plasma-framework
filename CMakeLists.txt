@@ -27,6 +27,7 @@ find_package(Qt5Core REQUIRED NO_MODULE)
 find_package(Qt5Transitional MODULE)
 find_package(Qt5Quick REQUIRED NO_MODULE)
 find_package(Qt5X11Extras REQUIRED NO_MODULE)
+find_package(kde4support REQUIRED NO_MODULE)
 
 if (Qt5_POSITION_INDEPENDENT_CODE)
   set(CMAKE_POSITION_INDEPENDENT_CODE ON)

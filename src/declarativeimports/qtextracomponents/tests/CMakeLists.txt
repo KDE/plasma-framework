@@ -6,4 +6,5 @@ target_link_libraries(fullmodelaccesstest
     ${QT_QTGUI_LIBRARY}
     ${QT_QTTEST_LIBRARY}
     ${KDE4_KDECORE_LIBS}
+    ${kde4support_LIBRARY}
     )

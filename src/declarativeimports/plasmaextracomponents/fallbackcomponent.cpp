@@ -21,8 +21,8 @@
 
 #include <QDir>
 #include <QFile>
+#include <QStandardPaths>
 
-#include <KStandardDirs>
 #include <KDebug>
 
 
@@ -76,7 +76,7 @@ QString FallbackComponent::filePath(const QString &key)
             resolved = m_basePath + path + key;
         } else {
 
-            resolved = KStandardDirs::locate("data", m_basePath + '/' + path + key);
+            resolved = QStandardPaths::locate(QStandardPaths::GenericDataLocation, m_basePath + '/' + path + key);
         }
 
         m_possiblePaths.insert(path + key, new QString(resolved));

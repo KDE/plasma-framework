@@ -196,21 +196,21 @@ KActionCollection* AppletPrivate::defaultActions(QObject *parent)
     KActionCollection *actions = new KActionCollection(parent);
     actions->setConfigGroup("Shortcuts-Applet");
 
-    KAction *configAction = actions->addAction("configure");
+    KAction *configAction = actions->add<KAction>("configure");
     configAction->setAutoRepeat(false);
     configAction->setText(i18n("Widget Settings"));
     configAction->setIcon(KDE::icon("configure"));
     configAction->setShortcut(KShortcut("alt+d, s"));
     configAction->setData(Plasma::ConfigureAction);
 
-    KAction *closeApplet = actions->addAction("remove");
+    KAction *closeApplet = actions->add<KAction>("remove");
     closeApplet->setAutoRepeat(false);
     closeApplet->setText(i18n("Remove this Widget"));
     closeApplet->setIcon(KDE::icon("edit-delete"));
     closeApplet->setShortcut(KShortcut("alt+d, r"));
     closeApplet->setData(Plasma::DestructiveAction);
 
-    KAction *runAssociatedApplication = actions->addAction("run associated application");
+    KAction *runAssociatedApplication = actions->add<KAction>("run associated application");
     runAssociatedApplication->setAutoRepeat(false);
     runAssociatedApplication->setText(i18n("Run the Associated Application"));
     runAssociatedApplication->setIcon(KDE::icon("system-run"));
@@ -241,7 +241,7 @@ void AppletPrivate::updateShortcuts()
         for (int i = 0; i < names.size(); ++i) {
             QAction *a = qactions.at(i);
             if (a) {
-                actions->addAction(names.at(i), a);
+                actions->add<KAction>(names.at(i), a);
             }
         }
     } else {

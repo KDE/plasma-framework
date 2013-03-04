@@ -426,7 +426,7 @@ void CoronaPrivate::init()
     //some common actions
     actions.setConfigGroup("Shortcuts");
 
-    KAction *lockAction = actions.addAction("lock widgets");
+    KAction *lockAction = actions.add<KAction>("lock widgets");
     QObject::connect(lockAction, SIGNAL(triggered(bool)), q, SLOT(toggleImmutability()));
     lockAction->setText(i18n("Lock Widgets"));
     lockAction->setAutoRepeat(true);
@@ -438,7 +438,7 @@ void CoronaPrivate::init()
     //FIXME this doesn't really belong here. desktop KCM maybe?
     //but should the shortcuts be per-app or really-global?
     //I don't know how to make kactioncollections use plasmarc
-    KAction *action = actions.addAction("configure shortcuts");
+    KAction *action = actions.add<KAction>("configure shortcuts");
     QObject::connect(action, SIGNAL(triggered()), q, SLOT(showShortcutConfig()));
     action->setText(i18n("Shortcut Settings"));
     action->setIcon(KDE::icon("configure-shortcuts"));

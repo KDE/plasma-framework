@@ -22,8 +22,7 @@
 #include <QLatin1Literal>
 #include <QPixmap>
 #include <QSize>
-
-#include <KStandardDirs>
+#include <QStandardPaths>
 
 #include <Plasma/Theme>
 
@@ -37,7 +36,7 @@ QImage AppBackgroundProvider::requestImage(const QString &id, QSize *size, const
     Q_UNUSED(size)
     Q_UNUSED(requestedSize)
     QString search = QLatin1Literal("desktoptheme/") % Plasma::Theme::defaultTheme()->themeName() % QLatin1Literal("/appbackgrounds/") % id % ".png";
-    search =  KStandardDirs::locate("data", search);
+    search = QStandardPaths::locate(QStandardPaths::GenericDataLocation, search);
     return QImage(search);
 }
 
