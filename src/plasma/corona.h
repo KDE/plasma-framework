@@ -250,14 +250,6 @@ Q_SIGNALS:
     void screenOwnerChanged(int wasScreen, int isScreen, Plasma::Containment *containment);
 
     /**
-     * This signal indicates that an application launch, window
-     * creation or window focus event was triggered. This is used, for instance,
-     * to ensure that the Dashboard view in Plasma hides when such an event is
-     * triggered by an item it is displaying.
-     */
-    void releaseVisualFocus();
-
-    /**
      * This signal indicates that the configuration file was flushed to disk.
      */
     void configSynced();
