@@ -36,7 +36,6 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kshortcutsdialog.h>
 #include <kwindowsystem.h>
 
 #include "containment.h"
@@ -383,54 +382,6 @@ void CoronaPrivate::init()
     //fake containment/applet actions
     KActionCollection *containmentActions = AppletPrivate::defaultActions(q); //containment has to start with applet stuff
     ContainmentPrivate::addDefaultActions(containmentActions); //now it's really containment
-    actionCollections << &actions << AppletPrivate::defaultActions(q) << containmentActions;
-
-    //Update the shortcuts
-    QMutableListIterator<QWeakPointer<KActionCollection> > it(actionCollections);
-    while (it.hasNext()) {
-        it.next();
-        KActionCollection *collection = it.value().data();
-        if (!collection) {
-            // get rid of KActionCollections that have been deleted behind our backs
-            it.remove();
-            continue;
-        }
-
-        collection->readSettings();
-        if (shortcutsDlg) {
-            shortcutsDlg.data()->addCollection(collection);
-        }
-    }
-}
-
-void CoronaPrivate::showShortcutConfig()
-{
-    //show a kshortcutsdialog with the actions
-    KShortcutsDialog *dlg = shortcutsDlg.data();
-    if (!dlg) {
-        dlg = new KShortcutsDialog();
-        dlg->setModal(false);
-        dlg->setAttribute(Qt::WA_DeleteOnClose, true);
-        QObject::connect(dlg, SIGNAL(saved()), q, SIGNAL(shortcutsChanged()));
-
-        dlg->addCollection(&actions);
-        QMutableListIterator<QWeakPointer<KActionCollection> > it(actionCollections);
-        while (it.hasNext()) {
-            it.next();
-            KActionCollection *collection = it.value().data();
-            if (!collection) {
-                // get rid of KActionCollections that have been deleted behind our backs
-                it.remove();
-                continue;
-            }
-
-            dlg->addCollection(collection);
-        }
-    }
-
-    KWindowSystem::setOnDesktop(dlg->winId(), KWindowSystem::currentDesktop());
-    dlg->configure();
-    dlg->raise();
 }
 
 void CoronaPrivate::toggleImmutability()

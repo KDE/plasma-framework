@@ -311,7 +311,6 @@ private:
     Q_PRIVATE_SLOT(d, void containmentDestroyed(QObject*))
     Q_PRIVATE_SLOT(d, void syncConfig())
     Q_PRIVATE_SLOT(d, void toggleImmutability())
-    Q_PRIVATE_SLOT(d, void showShortcutConfig())
 
     friend class CoronaPrivate;
     friend class View;

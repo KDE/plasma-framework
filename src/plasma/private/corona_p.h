@@ -41,7 +41,6 @@ public:
     ~CoronaPrivate();
 
     void init();
-    void showShortcutConfig();
     void toggleImmutability();
     void saveLayout(KSharedConfigPtr cg) const;
     void updateContainmentImmutability();
@@ -64,9 +63,7 @@ public:
     QHash<uint, QGraphicsWidget*> offscreenWidgets;
     KActionCollection actions;
     QMap<Plasma::ContainmentType, QHash<QString, QString> > containmentActionsDefaults;
-    QWeakPointer<KShortcutsDialog> shortcutsDlg;
     QHash<Plasma::ContainmentType, QString> toolBoxPlugins;
-    QList<QWeakPointer<KActionCollection> > actionCollections;
 };
 
 }
