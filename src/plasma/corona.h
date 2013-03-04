@@ -104,22 +104,6 @@ public:
     Containment *containmentForScreen(int screen) const;
 
     /**
-     * Returns the Containment for a given physical screen and desktop, creating one
-     * if none exists
-     *
-     * @param screen number of the physical screen to locate
-     * @param desktop the virtual desktop) to locate; if < 0 then it will
-     *        simply return the first Containment associated with screen
-     * @param defaultPluginIfNonExistent the plugin to load by default; "null" is an empty
-     * Containment and "default" creates the default plugin
-     * @param defaultArgs optional arguments to pass in when creating a Containment if needed
-     * @since 4.6
-     */
-    Containment *containmentForScreen(int screen,
-                                      const QString &defaultPluginIfNonExistent,
-                                      const QVariantList &defaultArgs = QVariantList());
-
-    /**
      * Returns the number of screens available to plasma.
      * Subclasses should override this method as the default
      * implementation returns a meaningless value.
