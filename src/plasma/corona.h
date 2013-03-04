@@ -204,7 +204,7 @@ public:
     QHash<QString, QString> containmentActionsDefaults(ContainmentType containmentType) const;
 
     /**
-     * @param the AbstractDialogManager implementaion
+     * @param the AbstractDialogManager implementation
      *
      * @since 4.5
      */
