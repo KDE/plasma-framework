@@ -187,7 +187,7 @@ void Containment::restore(KConfigGroup &group)
         }
     } else { //shell defaults
         //steal the data directly, for efficiency
-        QHash<QString,QString> defaults = corona()->containmentActionsDefaults(d->type);
+        QHash<QString,QString> defaults = corona()->defaultContainmentActionsPlugins(d->type);
         for (QHash<QString,QString>::const_iterator it = defaults.constBegin(),
                 end = defaults.constEnd(); it != end; ++it) {
             addContainmentActions(it.key(), it.value());

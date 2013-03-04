@@ -187,21 +187,12 @@ public:
 
     /**
      * @since 5.0
-     * Sets the default containmentactions plugins for the given containment type
+     * Returns the default containmentactions plugins for the given containment type.
+     *
+     * @arg containmentType  the type of containment these actions apply to
+     * @return a hash containing the triggers and the plugin names associated with them
      */
-    void setContainmentActionsDefault(Plasma::ContainmentType containmentType, QEvent *trigger, const QString &name);
-
-    /**
-     * @since 5.0
-     * Returns the default containmentactions plugins for the given containment type
-     */
-    QString containmentActionsDefault(ContainmentType containmentType, QEvent *trigger) const;
-
-    /**
-     * @since 5.0
-     * Returns the default containmentactions plugins for the given containment type
-     */
-    QHash<QString, QString> containmentActionsDefaults(ContainmentType containmentType) const;
+    QHash<QString, QString> defaultContainmentActionsPlugins(ContainmentType containmentType) const;
 
     /**
      * @param the AbstractDialogManager implementation

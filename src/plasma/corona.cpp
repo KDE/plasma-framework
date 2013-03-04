@@ -388,18 +388,9 @@ void Corona::addShortcuts(KActionCollection *newShortcuts)
     }
 }
 
-void Corona::setContainmentActionsDefault(Plasma::ContainmentType containmentType, QEvent *trigger, const QString &name)
+QHash<QString, QString> Corona::defaultContainmentActionsPlugins(ContainmentType containmentType) const
 {
-    d->containmentActionsDefaults[containmentType].insert(ContainmentActions::eventToString(trigger), name);
-}
-
-QString Corona::containmentActionsDefault(Plasma::ContainmentType containmentType, QEvent *trigger) const
-{
-    return d->containmentActionsDefaults.value(containmentType).value(ContainmentActions::eventToString(trigger));
-}
-
-QHash<QString, QString> Corona::containmentActionsDefaults(ContainmentType containmentType) const
-{
+    //FIXME: need to read these out of the package
     return d->containmentActionsDefaults.value(containmentType);
 }
 
