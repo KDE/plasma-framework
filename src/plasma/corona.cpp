@@ -157,34 +157,6 @@ void Corona::requireConfigSync()
     d->syncConfig();
 }
 
-void Corona::initializeLayout(const QString &configName)
-{
-    {
-        QList<Containment *> containments = d->containments;
-        d->containments.clear();
-        foreach (Containment *containment, containments) {
-            disconnect(containment, 0, this, 0);
-            containment->destroy();
-        }
-    }
-
-    loadLayout(configName);
-
-    if (d->containments.isEmpty()) {
-        loadDefaultLayout();
-        if (!d->containments.isEmpty()) {
-            requestConfigSync();
-        }
-    }
-
-    if (config()->isImmutable()) {
-        setImmutability(SystemImmutable);
-    } else {
-        KConfigGroup coronaConfig(config(), "General");
-        setImmutability((ImmutabilityType)coronaConfig.readEntry("immutability", (int)Mutable));
-    }
-}
-
 void Corona::loadLayout(const QString &configName)
 {
     if (!configName.isEmpty() && configName != d->configName) {
