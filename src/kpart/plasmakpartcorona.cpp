@@ -42,7 +42,7 @@ PlasmaKPartCorona::PlasmaKPartCorona(QObject *parent)
 void PlasmaKPartCorona::loadDefaultLayout()
 {
     // used to force a save into the config file
-    Plasma::Containment *c = addContainment(QString());
+    Plasma::Containment *c = createContainment(QString());
 
     if (!c) {
         // do some error reporting?

@@ -56,7 +56,6 @@ public:
     Corona *q;
     Package package;
     ImmutabilityType immutability;
-    QString mimetype;
     QString configName;
     QString defaultContainmentPlugin;
     KSharedConfigPtr config;

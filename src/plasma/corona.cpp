@@ -75,16 +75,6 @@ Plasma::Package Corona::package() const
     return d->package;
 }
 
-void Corona::setAppletMimeType(const QString &type)
-{
-    d->mimetype = type;
-}
-
-QString Corona::appletMimeType()
-{
-    return d->mimetype;
-}
-
 void Corona::setDefaultContainmentPlugin(const QString &name)
 {
     // we could check if it is in:
@@ -257,7 +247,7 @@ KSharedConfigPtr Corona::config() const
     return d->config;
 }
 
-Containment *Corona::addContainment(const QString &name, const QVariantList &args)
+Containment *Corona::createContainment(const QString &name, const QVariantList &args)
 {
     if (d->immutability == Mutable) {
         return d->addContainment(name, args, 0);
@@ -396,7 +386,6 @@ QHash<QString, QString> Corona::defaultContainmentActionsPlugins(ContainmentType
 CoronaPrivate::CoronaPrivate(Corona *corona)
     : q(corona),
       immutability(Mutable),
-      mimetype("text/x-plasmoidservicename"),
       defaultContainmentPlugin("desktop"),
       config(0),
       configSyncTimer(new QTimer(corona)),

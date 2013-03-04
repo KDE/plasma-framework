@@ -62,17 +62,6 @@ public:
     Plasma::Package package() const;
 
     /**
-     *  Sets the mimetype of Drag/Drop items. Default is
-     *  text/x-plasmoidservicename
-     */
-    void setAppletMimeType(const QString &mimetype);
-
-    /**
-     * The current mime type of Drag/Drop items.
-     */
-    QString appletMimeType();
-
-    /**
      * @return the default containment plugin type
      * @since 4.7
      */
@@ -103,7 +92,7 @@ public:
      * when widgets are locked, or if the requested containment plugin can not be located
      * or successfully loaded.
      */
-    Containment *addContainment(const QString &name, const QVariantList &args = QVariantList());
+    Containment *createContainment(const QString &name, const QVariantList &args = QVariantList());
 
     /**
      * Returns the Containment, if any, for a given physical screen and desktop
