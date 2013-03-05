@@ -127,7 +127,7 @@ QVariant ConfigModel::data(const QModelIndex& index, int role) const
         return m_categories.at(index.row())->icon();
     case SourceRole:
         if (m_appletInterface) {
-            return QUrl::fromLocalFile(m_appletInterface.data()->applet()->package().filePath("ui", m_categories.at(index.row())->source()));
+            return QUrl::fromLocalFile(m_appletInterface.data()->applet()->package().filePath("components", m_categories.at(index.row())->source()));
         } else {
             return m_categories.at(index.row())->source();
         }
@@ -146,7 +146,7 @@ QVariant ConfigModel::get(int row) const
     value["name"] = m_categories.at(row)->name();
     value["icon"] = m_categories.at(row)->icon();
     if (m_appletInterface) {
-        value["source"] = QUrl::fromLocalFile(m_appletInterface.data()->applet()->package().filePath("ui", m_categories.at(row)->source()));
+        value["source"] = QUrl::fromLocalFile(m_appletInterface.data()->applet()->package().filePath("components", m_categories.at(row)->source()));
     } else {
         value["source"] = m_categories.at(row)->source();
     }
@@ -272,7 +272,7 @@ ConfigView::ConfigView(AppletInterface *interface, QWindow *parent)
 
     engine()->rootContext()->setContextProperty("plasmoid", interface);
     engine()->rootContext()->setContextProperty("configDialog", this);
-    setSource(QUrl::fromLocalFile(m_appletInterface->applet()->containment()->corona()->package().filePath("ui", "Configuration.qml")));
+    setSource(QUrl::fromLocalFile(m_appletInterface->applet()->containment()->corona()->package().filePath("configurationui")));
 }
 
 ConfigView::~ConfigView()

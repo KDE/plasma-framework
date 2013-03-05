@@ -114,7 +114,7 @@ void AppletInterface::init()
         }
         reason = i18n("Error loading QML file: %1", reason);
 
-        m_qmlObject->setSource(QUrl::fromLocalFile(applet()->containment()->corona()->package().filePath("ui", "AppletError.qml")));
+        m_qmlObject->setSource(QUrl::fromLocalFile(applet()->containment()->corona()->package().filePath("appleterror")));
         m_qmlObject->completeInitialization();
 
 
@@ -515,7 +515,7 @@ void AppletInterface::geometryChanged(const QRectF &newGeometry, const QRectF &o
             return;
         }
 
-        m_compactUiObject = m_qmlObject->createObjectFromSource(QUrl::fromLocalFile(applet()->containment()->corona()->package().filePath("ui", "CompactApplet.qml")));
+        m_compactUiObject = m_qmlObject->createObjectFromSource(QUrl::fromLocalFile(applet()->containment()->corona()->package().filePath("compactapplet")));
 
         QObject *compactRepresentation = 0;
 
@@ -526,7 +526,7 @@ void AppletInterface::geometryChanged(const QRectF &newGeometry, const QRectF &o
             if (compactComponent) {
                 compactRepresentation = compactComponent->create(m_qmlObject->engine()->rootContext());
             } else {
-                compactRepresentation = m_qmlObject->createObjectFromSource(QUrl::fromLocalFile(applet()->containment()->corona()->package().filePath("ui", "DefaultCompactRepresentation.qml")));
+                compactRepresentation = m_qmlObject->createObjectFromSource(QUrl::fromLocalFile(applet()->containment()->corona()->package().filePath("defaultcompactrepresentation")));
             }
 
             if (compactRepresentation && compactComponent) {
