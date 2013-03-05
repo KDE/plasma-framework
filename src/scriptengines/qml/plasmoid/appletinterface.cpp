@@ -137,8 +137,15 @@ void AppletInterface::init()
     //Create the ToolBox
     Plasma::Containment *pc = qobject_cast<Plasma::Containment *>(applet());
     if (pc) {
+        KConfigGroup defaults;
+        if (pc->containmentType() == Plasma::DesktopContainment) {
+            defaults = KConfigGroup(KSharedConfig::openConfig(pc->corona()->package().filePath("defaults")), "Desktop");
+        } else if (pc->containmentType() == Plasma::PanelContainment) {
+            defaults = KConfigGroup(KSharedConfig::openConfig(pc->corona()->package().filePath("defaults")), "Panel");
+        }
+
         Plasma::Package pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
-        pkg.setPath("org.kde.toolbox");
+        pkg.setPath(defaults.readEntry("ToolBox", "org.kde.toolbox"));
 
         if (pkg.isValid()) {
             QObject *toolBoxObject = m_qmlObject->createObjectFromSource(QUrl::fromLocalFile(pkg.filePath("mainscript")));
