@@ -4,11 +4,13 @@ include_directories ( ${karchive_SOURCE_DIR}/src
                       ${karchive_BINARY_DIR}/src
 )
 
+find_package(KCoreAddons REQUIRED)
+
 MACRO(PLASMA_UNIT_TESTS)
        FOREACH(_testname ${ARGN})
                kde4_add_unit_test(${_testname} TESTNAME plasma-${_testname} ${_testname}.cpp)
                target_link_libraries(${_testname} ${QT_QTTEST_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY}
-                                     ${KDE4_KIO_LIBS} ${KDE4_KDEUI_LIBS} plasma ${KArchive_LIBRARIES} )
+                                     ${KDE4_KIO_LIBS} ${KDE4_KDEUI_LIBS} plasma ${KArchive_LIBRARIES} ${KCoreAddons_LIBRARIES})
                if(QT_QTOPENGL_FOUND)
                    target_link_libraries(${_testname} ${QT_QTOPENGL_LIBRARY})
                endif(QT_QTOPENGL_FOUND)
