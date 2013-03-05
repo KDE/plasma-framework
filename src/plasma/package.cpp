@@ -75,6 +75,10 @@ Package &Package::operator=(const Package &rhs)
 
 bool Package::isValid() const
 {
+    if (!d->structure) {
+        return false;
+    }
+
     if (d->checkedValid) {
         return d->valid;
     }

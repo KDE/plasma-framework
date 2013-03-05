@@ -105,7 +105,6 @@ void AppletInterface::init()
     engine->setNetworkAccessManagerFactory(new PackageAccessManagerFactory(m_appletScriptEngine->package()));
 
     m_qmlObject->setSource(QUrl::fromLocalFile(m_appletScriptEngine->mainScript()));
-    
 
     if (!m_qmlObject->engine() || !m_qmlObject->engine()->rootContext() || !m_qmlObject->engine()->rootContext()->isValid() || m_qmlObject->mainComponent()->isError()) {
         QString reason;
