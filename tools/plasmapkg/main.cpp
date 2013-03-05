@@ -35,7 +35,7 @@
 #include <kstandarddirs.h>
 //#include <KSycocai>
 #include <klocalizedstring.h>
-#include <qlocalizedstring_porting.h>
+
 
 #include <plasma/packagestructure.h>
 #include <plasma/package.h>
