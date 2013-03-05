@@ -319,8 +319,9 @@ CoronaPrivate::CoronaPrivate(Corona *corona)
       actions(corona)
 {
     //TODO: make Package path configurable
+    KConfigGroup config(KSharedConfig::openConfig(), "General");
     package = Plasma::PluginLoader::self()->loadPackage("Plasma/Shell");
-    package.setPath("org.kde.desktop");
+    package.setPath(config.readEntry("shell", "org.kde.desktop"));
 
     if (QCoreApplication::instance()) {
         configName = QCoreApplication::instance()->applicationName() + "-appletsrc";
