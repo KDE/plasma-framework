@@ -35,6 +35,7 @@
 #include <kstandarddirs.h>
 //#include <KSycocai>
 #include <klocalizedstring.h>
+#include <qlocalizedstring_porting.h>
 
 #include <plasma/packagestructure.h>
 #include <plasma/package.h>
@@ -53,48 +54,48 @@ void output(const QString &msg)
 
 int main(int argc, char **argv)
 {
-//     KAboutData aboutData("plasmapkg", 0, qi18n("Plasma Package Manager"),
-//                          version, qi18n(description), KAboutData::License_GPL,
-//                          qi18n("(C) 2008, Aaron Seigo"));
-//     aboutData.addAuthor( qi18n("Aaron Seigo"),
-//                          qi18n("Original author"),
+//     KAboutData aboutData("plasmapkg", 0, ki18n("Plasma Package Manager"),
+//                          version, ki18n(description), KAboutData::License_GPL,
+//                          ki18n("(C) 2008, Aaron Seigo"));
+//     aboutData.addAuthor( ki18n("Aaron Seigo"),
+//                          ki18n("Original author"),
 //                         "aseigo@kde.org" );
 //
 //     KComponentData componentData(aboutData);
-    QLocalizedString description = qi18n("Plasma Package Manager");
+    KLocalizedString description = ki18n("Plasma Package Manager");
 
     const char version[] = "1.90";
 
-    KCmdLineArgs::init(argc, argv, "plasmapkg", "plasmapkg", qi18n("Plasma Package Manager"), version, description);
+    KCmdLineArgs::init(argc, argv, "plasmapkg", "plasmapkg", ki18n("Plasma Package Manager"), version, description);
 
     //KCmdLineArgs::init( argc, argv, &aboutData );
 
     KCmdLineOptions options;
     options.add("h");
-    options.add("hash <path>", qi18nc("Do not translate <path>", "Generate a SHA1 hash for the package at <path>"));
+    options.add("hash <path>", ki18nc("Do not translate <path>", "Generate a SHA1 hash for the package at <path>"));
     options.add("g");
-    options.add("global", qi18n("For install or remove, operates on packages installed for all users."));
+    options.add("global", ki18n("For install or remove, operates on packages installed for all users."));
     options.add("t");
     options.add("type <type>",
-                qi18nc("theme, wallpaper, etc. are keywords, but they may be translated, as both versions "
+                ki18nc("theme, wallpaper, etc. are keywords, but they may be translated, as both versions "
                        "are recognized by the application "
                        "(if translated, should be same as messages with 'package type' context below)",
                        "The type of package, e.g. theme, wallpaper, plasmoid, dataengine, runner, layout-template, etc."),
                 "plasmoid");
     //options.add("s");
     options.add("i");
-    options.add("install <path>", qi18nc("Do not translate <path>", "Install the package at <path>"));
+    options.add("install <path>", ki18nc("Do not translate <path>", "Install the package at <path>"));
     options.add("s");
-    options.add("show <name>", qi18nc("Do not translate <name>", "Show information of package <name>"));
+    options.add("show <name>", ki18nc("Do not translate <name>", "Show information of package <name>"));
     options.add("u");
-    options.add("upgrade <path>", qi18nc("Do not translate <path>", "Upgrade the package at <path>"));
+    options.add("upgrade <path>", ki18nc("Do not translate <path>", "Upgrade the package at <path>"));
     options.add("l");
-    options.add("list", qi18n("List installed packages"));
-    options.add("list-types", qi18n("lists all known Package types that can be installed"));
+    options.add("list", ki18n("List installed packages"));
+    options.add("list-types", ki18n("lists all known Package types that can be installed"));
     options.add("r");
-    options.add("remove <name>", qi18nc("Do not translate <name>", "Remove the package named <name>"));
+    options.add("remove <name>", ki18nc("Do not translate <name>", "Remove the package named <name>"));
     options.add("p");
-    options.add("packageroot <path>", qi18n("Absolute path to the package root. If not supplied, then the standard data directories for this KDE session will be searched instead."));
+    options.add("packageroot <path>", ki18n("Absolute path to the package root. If not supplied, then the standard data directories for this KDE session will be searched instead."));
     KCmdLineArgs::addCmdLineOptions( options );
 
     Plasma::PlasmaPkg app(argc, argv);
