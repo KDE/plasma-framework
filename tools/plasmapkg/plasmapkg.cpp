@@ -22,12 +22,9 @@
 
 #include <kcmdlineargs.h>
 #include <kdebug.h>
-//#include <KLocale>
-//#include <KPluginInfo>
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kshell.h>
-#include <kstandarddirs.h>
 #include <KSycoca>
 #include <klocalizedstring.h>
 
@@ -42,6 +39,7 @@
 #include <QDBusInterface>
 #include <QFileInfo>
 #include <QMap>
+#include <QStandardPaths>
 #include <QStringList>
 #include <QTimer>
 
@@ -390,10 +388,10 @@ QString PlasmaPkg::findPackageRoot(const QString& pluginName, const QString& pre
         packageRoot = d->args->getOption("packageroot");
         qDebug() << "(set via arg) d->packageRoot is: " << d->packageRoot;
     } else if (d->args->isSet("global")) {
-        packageRoot = KStandardDirs::locate("data", d->packageRoot);
-        qDebug() << "(set via locate) d->packageRoot is: " << d->packageRoot;
+        packageRoot = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, d->packageRoot, QStandardPaths::LocateDirectory).last();
+        qDebug() << "(set via locateAll) d->packageRoot is: " << d->packageRoot;
     } else {
-        packageRoot = KStandardDirs::locateLocal("data", d->packageRoot);
+        packageRoot = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') +  d->packageRoot;
         qDebug() << "(set via locateLocal) d->packageRoot is: " << d->packageRoot;
     }
     return packageRoot;
@@ -401,7 +399,6 @@ QString PlasmaPkg::findPackageRoot(const QString& pluginName, const QString& pre
 
 void PlasmaPkg::listPackages(const QStringList& types)
 {
-    qDebug() << "Listign...";
     QStringList list = d->packages(types);
     list.sort();
     foreach (const QString& package, list) {
@@ -495,7 +492,8 @@ void PlasmaPkgPrivate::listTypes()
         renderTypeTable(plugins);
     }
 
-    QStringList desktopFiles = KGlobal::dirs()->findAllResources("data", "plasma/packageformats/*rc", KStandardDirs::NoDuplicates);
+    QStringList desktopFiles = QStandardPaths::locateAll(QStandardPaths::DataLocation, "plasma/packageformats/*rc", QStandardPaths::LocateFile);
+
     if (!desktopFiles.isEmpty()) {
         coutput(i18n("Provided by .desktop files:"));
         Plasma::PackageStructure structure;
