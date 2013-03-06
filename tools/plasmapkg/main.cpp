@@ -1,5 +1,6 @@
 /*
- * Copyright 2008 Aaron Seigo <aseigo@kde.org>
+ *   Copyright 2008 Aaron Seigo <aseigo@kde.org>
+ *   Copyright 2013 Sebastian Kügler <sebas@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as
@@ -17,58 +18,18 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <iostream>
-#include <iomanip>
-
-#include <QDir>
-#include <QDBusInterface>
-
-//#include <KApplication>
-//#include <KAboutData>
-#include <kcmdlineargs.h>
-#include <kdebug.h>
-//#include <KLocale>
-//#include <KPluginInfo>
-#include <kservice.h>
-#include <kservicetypetrader.h>
-#include <kshell.h>
-#include <kstandarddirs.h>
-//#include <KSycocai>
-#include <klocalizedstring.h>
-
-
-#include <plasma/packagestructure.h>
-#include <plasma/package.h>
-//#include <plasma/packagemetadata.h>
+#include <KCmdLineArgs>
+#include <KLocalizedString>
 
 #include "plasmapkg.h"
 
-// static const char description[] = I18N_NOOP("Install, list, remove Plasma packages");
-// static const char version[] = "0.2";
-
-void output(const QString &msg)
-{
-    std::cout << msg.toLocal8Bit().constData() << std::endl;
-}
-
-
 int main(int argc, char **argv)
 {
-//     KAboutData aboutData("plasmapkg", 0, ki18n("Plasma Package Manager"),
-//                          version, ki18n(description), KAboutData::License_GPL,
-//                          ki18n("(C) 2008, Aaron Seigo"));
-//     aboutData.addAuthor( ki18n("Aaron Seigo"),
-//                          ki18n("Original author"),
-//                         "aseigo@kde.org" );
-//
-//     KComponentData componentData(aboutData);
     KLocalizedString description = ki18n("Plasma Package Manager");
 
-    const char version[] = "1.90";
+    const char version[] = "2.0";
 
     KCmdLineArgs::init(argc, argv, "plasmapkg", "plasmapkg", ki18n("Plasma Package Manager"), version, description);
-
-    //KCmdLineArgs::init( argc, argv, &aboutData );
 
     KCmdLineOptions options;
     options.add("h");
@@ -99,7 +60,6 @@ int main(int argc, char **argv)
     KCmdLineArgs::addCmdLineOptions( options );
 
     Plasma::PlasmaPkg app(argc, argv);
-    //app.runMain();
     return app.exec();
 }
 
