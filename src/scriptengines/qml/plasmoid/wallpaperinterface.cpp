@@ -53,7 +53,7 @@ Plasma::Package WallpaperInterface::package() const
     return m_pkg;
 }
 
-QObject* WallpaperInterface::configuration() const
+ConfigPropertyMap *WallpaperInterface::configuration() const
 {
     return m_configuration;
 }

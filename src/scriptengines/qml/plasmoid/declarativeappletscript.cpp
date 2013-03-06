@@ -48,6 +48,7 @@
 
 #include "declarative/qmlobject.h"
 #include "declarative/packageaccessmanagerfactory.h"
+#include "declarative/configpropertymap.h"
 
 
 K_EXPORT_PLASMA_APPLETSCRIPTENGINE(declarativeappletscript, DeclarativeAppletScript)
@@ -58,6 +59,7 @@ DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariant
       m_interface(0)
 {
     qmlRegisterType<AppletInterface>();
+    qmlRegisterType<ConfigPropertyMap>();
     Q_UNUSED(args);
 }
 

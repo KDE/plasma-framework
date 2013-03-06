@@ -37,7 +37,7 @@ class WallpaperInterface : public QQuickItem
     Q_OBJECT
 
     //Q_PROPERTY(QString plugin READ plugin WRITE setPlugin NOTIFY pluginChanged)
-    Q_PROPERTY(QObject* configuration READ configuration NOTIFY configurationChanged)
+    Q_PROPERTY(ConfigPropertyMap *configuration READ configuration NOTIFY configurationChanged)
 
 public:
     WallpaperInterface(ContainmentInterface *parent = 0);
@@ -45,7 +45,7 @@ public:
 
     Plasma::Package package() const;
 
-    QObject* configuration() const;
+    ConfigPropertyMap *configuration() const;
 
     Plasma::ConfigLoader *configScheme();
 

@@ -27,6 +27,7 @@
 #include <QStandardItemModel>
 
 class AppletInterface;
+class ConfigPropertyMap;
 
 
 class ConfigCategory : public QObject
@@ -35,6 +36,7 @@ class ConfigCategory : public QObject
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged)
     Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
+    Q_PROPERTY(QString pluginName READ pluginName WRITE setPluginName NOTIFY pluginNameChanged)
 
 public:
     ConfigCategory(QObject *parent = 0);
@@ -49,15 +51,20 @@ public:
     QString source() const;
     void setSource(const QString &source);
 
+    QString pluginName() const;
+    void setPluginName(const QString &pluginName);
+
 Q_SIGNALS:
     void nameChanged();
     void iconChanged();
     void sourceChanged();
+    void pluginNameChanged();
 
 private:
     QString m_name;
     QString m_icon;
     QString m_source;
+    QString m_pluginName;
 };
 
 class ConfigModel : public QAbstractListModel
@@ -71,7 +78,8 @@ public:
     enum Roles {
         NameRole = Qt::UserRole+1,
         IconRole,
-        SourceRole
+        SourceRole,
+        PluginNameRole
     };
     ConfigModel(QObject *parent = 0);
     ~ConfigModel();
@@ -110,15 +118,22 @@ class ConfigView : public QQuickView
     Q_OBJECT
     Q_PROPERTY(ConfigModel *configModel READ configModel CONSTANT)
     Q_PROPERTY(ConfigModel *wallpaperConfigModel READ wallpaperConfigModel CONSTANT)
-    Q_PROPERTY(QObject *wallpaperConfiguration READ wallpaperConfiguration CONSTANT)
+    Q_PROPERTY(ConfigPropertyMap *wallpaperConfiguration READ wallpaperConfiguration CONSTANT)
+    Q_PROPERTY(QString currentWallpaper READ currentWallpaper WRITE setCurrentWallpaper NOTIFY currentWallpaperChanged)
 
 public:
     ConfigView(AppletInterface *scriptEngine, QWindow *parent = 0);
     virtual ~ConfigView();
 
     ConfigModel *configModel() const;
+
     ConfigModel *wallpaperConfigModel();
-    QObject *wallpaperConfiguration() const;
+    QString currentWallpaper() const;
+    void setCurrentWallpaper(const QString &wallpaper);
+    ConfigPropertyMap *wallpaperConfiguration() const;
+
+Q_SIGNALS:
+    void currentWallpaperChanged();
 
 protected:
      void hideEvent(QHideEvent *ev);
@@ -128,6 +143,8 @@ private:
     AppletInterface *m_appletInterface;
     ConfigModel *m_configModel;
     ConfigModel *m_wallpaperConfigModel;
+    QString m_currentWallpaper;
+    ConfigPropertyMap *m_currentWallpaperConfig;
 };
 
 #endif // multiple inclusion guard

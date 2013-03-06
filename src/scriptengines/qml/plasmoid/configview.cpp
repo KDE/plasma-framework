@@ -21,6 +21,7 @@
 #include "plasmoid/appletinterface.h"
 #include "plasmoid/containmentinterface.h"
 #include "plasmoid/wallpaperinterface.h"
+#include "declarative/configpropertymap.h"
 
 #include <QDebug>
 #include <QDir>
@@ -91,6 +92,22 @@ void ConfigCategory::setSource(const QString &source)
     emit sourceChanged();
 }
 
+QString ConfigCategory::pluginName() const
+{
+    return m_pluginName;
+}
+
+void ConfigCategory::setPluginName(const QString &name)
+{
+    if (m_pluginName == name) {
+        return;
+    }
+
+    m_pluginName = name;
+    emit pluginNameChanged();
+}
+
+
 
 //////////////////////////////ConfigModel
 ConfigModel::ConfigModel(QObject *parent)
@@ -100,6 +117,7 @@ ConfigModel::ConfigModel(QObject *parent)
     roleNames[NameRole] = "name";
     roleNames[IconRole] = "icon";
     roleNames[SourceRole] = "source";
+    roleNames[PluginNameRole] = "pluginName";
 
     setRoleNames(roleNames);
 }
@@ -131,6 +149,8 @@ QVariant ConfigModel::data(const QModelIndex& index, int role) const
         } else {
             return m_categories.at(index.row())->source();
         }
+    case PluginNameRole:
+        return m_categories.at(index.row())->pluginName();
     default:
         return QVariant();
     }
@@ -241,7 +261,8 @@ void ConfigModel::categories_clear(QQmlListProperty<ConfigCategory> *prop)
 ConfigView::ConfigView(AppletInterface *interface, QWindow *parent)
     : QQuickView(parent),
       m_appletInterface(interface),
-      m_wallpaperConfigModel(0)
+      m_wallpaperConfigModel(0),
+      m_currentWallpaperConfig(0)
 {
     qmlRegisterType<ConfigModel>("org.kde.plasma.configuration", 0, 1, "ConfigModel");
     qmlRegisterType<ConfigCategory>("org.kde.plasma.configuration", 0, 1, "ConfigCategory");
@@ -269,6 +290,11 @@ ConfigView::ConfigView(AppletInterface *interface, QWindow *parent)
     }
     delete component;
 
+    ContainmentInterface *cont = qobject_cast<ContainmentInterface *>(m_appletInterface);
+
+    if (cont) {
+        setCurrentWallpaper(cont->containment()->wallpaper());
+    }
 
     engine()->rootContext()->setContextProperty("plasmoid", interface);
     engine()->rootContext()->setContextProperty("configDialog", this);
@@ -309,6 +335,7 @@ ConfigModel *ConfigView::wallpaperConfigModel()
                 cat->setName(pkg.metadata().name());
                 cat->setIcon(pkg.metadata().icon());
                 cat->setSource(pkg.filePath("ui", "config.qml"));
+                cat->setPluginName(package);
                 m_wallpaperConfigModel->appendCategory(cat);
             }
         }
@@ -316,13 +343,50 @@ ConfigModel *ConfigView::wallpaperConfigModel()
     return m_wallpaperConfigModel;
 }
 
-QObject *ConfigView::wallpaperConfiguration() const
+ConfigPropertyMap *ConfigView::wallpaperConfiguration() const
 {
-    ContainmentInterface *cont = qobject_cast<ContainmentInterface *>(m_appletInterface);
-    if (cont) {
-        return cont->wallpaperInterface()->configuration();
+    return m_currentWallpaperConfig;
+}
+
+QString ConfigView::currentWallpaper() const
+{
+    return m_currentWallpaper;
+}
+
+void ConfigView::setCurrentWallpaper(const QString &wallpaper)
+{
+    if (m_currentWallpaper == wallpaper) {
+        return;
     }
-    return 0;
+
+    ContainmentInterface *cont = qobject_cast<ContainmentInterface *>(m_appletInterface);
+
+    if (!cont) {
+        return;
+    }
+
+    
+    
+    if (cont->containment()->wallpaper() == wallpaper) {
+        delete m_currentWallpaperConfig;
+        m_currentWallpaperConfig = cont->wallpaperInterface()->configuration();
+    } else {
+        if (cont->containment()->wallpaper() != m_currentWallpaper) {
+            delete m_currentWallpaperConfig;
+        }
+
+        //we have to construct an independent ConfigPropertyMap when we want to configure wallpapers that are not the current one
+        Plasma::Package pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
+        pkg.setDefaultPackageRoot("plasma/wallpapers");
+        pkg.setPath(wallpaper);
+        QFile file(pkg.filePath("config", "main.xml"));
+        KConfigGroup cfg = cont->containment()->config();
+        cfg = KConfigGroup(&cfg, "Wallpaper");
+        m_currentWallpaperConfig = new ConfigPropertyMap(new Plasma::ConfigLoader(&cfg, &file), this);
+    }
+
+    m_currentWallpaper = wallpaper;
+    emit currentWallpaperChanged();
 }
 
 //To emulate Qt::WA_DeleteOnClose that QWindow doesn't have
