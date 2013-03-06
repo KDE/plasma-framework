@@ -38,12 +38,9 @@ class PlasmaPkg : public QCoreApplication
         PlasmaPkg(int& argc, char** argv);
         virtual ~PlasmaPkg();
 
-
         void listPackages(const QStringList &types);
         void showPackageInfo(const QString &pluginName);
-
         QString findPackageRoot(const QString &pluginName, const QString &prefix);
-
 
     private Q_SLOTS:
         void runMain();
