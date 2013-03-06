@@ -117,23 +117,14 @@ class ConfigView : public QQuickView
 {
     Q_OBJECT
     Q_PROPERTY(ConfigModel *configModel READ configModel CONSTANT)
-    Q_PROPERTY(ConfigModel *wallpaperConfigModel READ wallpaperConfigModel CONSTANT)
-    Q_PROPERTY(ConfigPropertyMap *wallpaperConfiguration READ wallpaperConfiguration CONSTANT)
-    Q_PROPERTY(QString currentWallpaper READ currentWallpaper WRITE setCurrentWallpaper NOTIFY currentWallpaperChanged)
 
 public:
     ConfigView(AppletInterface *scriptEngine, QWindow *parent = 0);
     virtual ~ConfigView();
 
+    void init();
+
     ConfigModel *configModel() const;
-
-    ConfigModel *wallpaperConfigModel();
-    QString currentWallpaper() const;
-    void setCurrentWallpaper(const QString &wallpaper);
-    ConfigPropertyMap *wallpaperConfiguration() const;
-
-Q_SIGNALS:
-    void currentWallpaperChanged();
 
 protected:
      void hideEvent(QHideEvent *ev);
@@ -142,9 +133,6 @@ protected:
 private:
     AppletInterface *m_appletInterface;
     ConfigModel *m_configModel;
-    ConfigModel *m_wallpaperConfigModel;
-    QString m_currentWallpaper;
-    ConfigPropertyMap *m_currentWallpaperConfig;
 };
 
 #endif // multiple inclusion guard

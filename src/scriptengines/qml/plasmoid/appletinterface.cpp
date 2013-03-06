@@ -47,6 +47,7 @@
 
 #include "containmentinterface.h"
 #include "configview.h"
+#include "containmentconfigview.h"
 #include "declarative/configpropertymap.h"
 #include "declarative/qmlobject.h"
 #include "declarative/packageaccessmanagerfactory.h"
@@ -620,7 +621,14 @@ void AppletInterface::setConfigurationInterfaceShown(bool show)
 
     if (show) {
         if (!m_configView) {
-            m_configView = new ConfigView(this);
+            ContainmentInterface *ci = qobject_cast<ContainmentInterface *>(this);
+
+            if (ci) {
+                m_configView = new ContainmentConfigView(ci);
+            } else {
+                m_configView = new ConfigView(this);
+            }
+            m_configView.data()->init();
         }
 
         m_configView.data()->show();

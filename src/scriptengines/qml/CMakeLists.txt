@@ -19,6 +19,7 @@ set(declarative_appletscript_SRCS
     declarative/qmlobject.cpp
     plasmoid/appletinterface.cpp
     plasmoid/configview.cpp
+    plasmoid/containmentconfigview.cpp
     plasmoid/containmentinterface.cpp
     plasmoid/declarativeappletscript.cpp
     plasmoid/wallpaperinterface.cpp
