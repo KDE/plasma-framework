@@ -39,9 +39,11 @@ DeclarativeDropArea::DeclarativeDropArea(QQuickItem *parent)
 
 }
 
-void DeclarativeDropArea::dragEnterEvent(QDragEnterEvent *event) {
+void DeclarativeDropArea::dragEnterEvent(QDragEnterEvent *event)
+{
     DeclarativeDragDropEvent dde(event, this);
     qDebug() << "enter.";
+    event->accept();
     emit dragEnter(&dde);
 }
 
@@ -56,6 +58,7 @@ void DeclarativeDropArea::dragMoveEvent(QDragMoveEvent *event)
 {
     DeclarativeDragDropEvent dde(event, this);
     qDebug() << "move.";
+    event->accept();
     emit dragMove(&dde);
 }
 

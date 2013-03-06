@@ -142,6 +142,7 @@ private:
     QQuickItem* m_source;
     QQuickItem* m_target;
     bool m_enabled;
+    bool m_draggingJustStarted;
     Qt::DropActions m_supportedActions;
     Qt::DropAction m_defaultAction;
     DeclarativeMimeData* const m_data;

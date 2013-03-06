@@ -43,6 +43,7 @@ DeclarativeDragArea::DeclarativeDragArea(QQuickItem *parent)
     m_source(0),
     m_target(0),
     m_enabled(true),
+    m_draggingJustStarted(false),
     m_supportedActions(Qt::MoveAction),
     m_defaultAction(Qt::MoveAction),
     m_data(new DeclarativeMimeData())    // m_data is owned by us, and we shouldn't pass it to Qt directly as it will automatically delete it after the drag and drop.
@@ -195,6 +196,7 @@ void DeclarativeDragArea::setDefaultAction(Qt::DropAction action)
 void DeclarativeDragArea::mousePressEvent(QMouseEvent* event)
 {
     m_buttonDownPos = event->screenPos();
+    m_draggingJustStarted = true;
 }
 
 
@@ -205,42 +207,44 @@ void DeclarativeDragArea::mouseMoveEvent(QMouseEvent *event)
             < m_startDragDistance) {
         return;
     }
+    if (m_draggingJustStarted) {
+        emit dragStarted();
+        m_draggingJustStarted = false;
 
-    emit dragStarted();
+        QDrag *drag = new QDrag(parent());
+        DeclarativeMimeData* dataCopy = new DeclarativeMimeData(m_data); //Qt will take ownership of this copy and delete it.
+        drag->setMimeData(dataCopy);
 
-    QDrag *drag = new QDrag(parent());
-    DeclarativeMimeData* dataCopy = new DeclarativeMimeData(m_data); //Qt will take ownership of this copy and delete it.
-    drag->setMimeData(dataCopy);
+        if (!m_delegateImage.isNull()) {
+            drag->setPixmap(QPixmap::fromImage(m_delegateImage));
+        } else if (m_delegate) {
+            // Render the delegate to a Pixmap
+    //         QQuickItem* item = qobject_cast<QQuickItem *>(m_delegate->create(m_delegate->creationContext()));
 
-    if (!m_delegateImage.isNull()) {
-        drag->setPixmap(QPixmap::fromImage(m_delegateImage));
-    } else if (m_delegate) {
-        // Render the delegate to a Pixmap
-//         QQuickItem* item = qobject_cast<QQuickItem *>(m_delegate->create(m_delegate->creationContext()));
+    //         QGraphicsScene scene;
+    //         scene.addItem(item);
 
-//         QGraphicsScene scene;
-//         scene.addItem(item);
+    //         QPixmap pixmap(scene.sceneRect().width(), scene.sceneRect().height());
+    //         pixmap.fill(Qt::transparent);
+    //
+    //         QPainter painter(&pixmap);
+    //         painter.setRenderHint(QPainter::Antialiasing);
+    //         painter.setRenderHint(QPainter::SmoothPixmapTransform);
+    //         scene.render(&painter);
+    //         painter.end();
+    //         delete item;
+    //
+    //         drag->setPixmap(pixmap);
+            drag->setPixmap(QIcon::fromTheme("plasma").pixmap(64,64));
+        }
 
-//         QPixmap pixmap(scene.sceneRect().width(), scene.sceneRect().height());
-//         pixmap.fill(Qt::transparent);
-//
-//         QPainter painter(&pixmap);
-//         painter.setRenderHint(QPainter::Antialiasing);
-//         painter.setRenderHint(QPainter::SmoothPixmapTransform);
-//         scene.render(&painter);
-//         painter.end();
-//         delete item;
-//
-//         drag->setPixmap(pixmap);
-        drag->setPixmap(QIcon::fromTheme("plasma").pixmap(64,64));
+        drag->setHotSpot(QPoint(drag->pixmap().width()/2, drag->pixmap().height()/2)); // TODO: Make a property for that
+        //setCursor(Qt::OpenHandCursor);    //TODO? Make a property for the cursor
+
+        Qt::DropAction action = drag->exec(m_supportedActions, m_defaultAction);
+        emit drop(action);
     }
 
-    drag->setHotSpot(QPoint(drag->pixmap().width()/2, drag->pixmap().height()/2)); // TODO: Make a property for that
-
-    //setCursor(Qt::OpenHandCursor);    //TODO? Make a property for the cursor
-
-    Qt::DropAction action = drag->exec(m_supportedActions, m_defaultAction);
-    emit drop(action);
 }
 
 bool DeclarativeDragArea::childMouseEventFilter(QQuickItem *item, QEvent *event)
