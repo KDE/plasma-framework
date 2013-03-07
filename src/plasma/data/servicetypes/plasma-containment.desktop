@@ -13,8 +13,5 @@ Comment[sv]=Plasmaminiprogram-omgivning och bakgrundsuppritning
 Comment[uk]=Контейнер аплетів Плазми і малювання у тлі
 Comment[x-test]=xxPlasma applet container and background painterxx
 
-[PropertyDef::X-Plasma-ContainmentCategories]
-Type=QStringList
-
 [PropertyDef::X-Plasma-ContainmentType]
 Type=QString

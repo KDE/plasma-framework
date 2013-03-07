@@ -27,6 +27,7 @@
 
 #include <QApplication>
 #include <QClipboard>
+#include <QDebug>
 #include <QFile>
 #include <QContextMenuEvent>
 #include <QMimeData>
@@ -103,7 +104,20 @@ void Containment::init()
     }
 
     if (d->type == NoContainmentType) {
-        setContainmentType(DesktopContainment);
+        //setContainmentType(Plasma::DesktopContainment);
+        //Try to determine the containment type. It must be done as soon as possible
+        QString type = pluginInfo().property("X-Plasma-ContainmentType").toString();
+
+        if (type == "Panel") {
+            setContainmentType(Plasma::PanelContainment);
+        } else if (type == "Custom") {
+            setContainmentType(Plasma::CustomContainment);
+        } else if (type == "CustomPanel") {
+            setContainmentType(Plasma::CustomPanelContainment);
+        //default to desktop
+        } else {
+            setContainmentType(Plasma::DesktopContainment);
+        }
     }
 
     //connect actions

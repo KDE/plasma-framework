@@ -82,18 +82,6 @@ bool DeclarativeAppletScript::init()
     if (pc) {
         m_interface = new ContainmentInterface(this);
 
-        //Try to determine the containment type
-        QString type = pc->pluginInfo().property("X-Plasma-ContainmentType").toString();
-
-        if (type == "DesktopContainment") {
-            pc->setContainmentType(Plasma::DesktopContainment);
-        } else if (type == "PanelContainment") {
-            pc->setContainmentType(Plasma::PanelContainment);
-        } if (type == "CustomContainment") {
-            pc->setContainmentType(Plasma::CustomContainment);
-        } else if (type == "CustomPanelContainment") {
-            pc->setContainmentType(Plasma::CustomPanelContainment);
-        }
     //fail? so it's a normal Applet
     } else {
         m_interface = new AppletInterface(this);
