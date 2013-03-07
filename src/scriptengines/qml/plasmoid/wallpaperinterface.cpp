@@ -91,6 +91,8 @@ void WallpaperInterface::syncWallpaperPackage()
 
     m_configLoader->deleteLater();
     m_configuration->deleteLater();
+    m_configLoader = 0;
+    m_configuration = 0;
     if (configScheme()) {
         m_configuration = new ConfigPropertyMap(configScheme(), this);
     }

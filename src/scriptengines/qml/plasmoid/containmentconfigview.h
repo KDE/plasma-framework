@@ -44,6 +44,8 @@ public:
     void setCurrentWallpaper(const QString &wallpaper);
     ConfigPropertyMap *wallpaperConfiguration() const;
 
+    Q_INVOKABLE void applyWallpaper();
+
 Q_SIGNALS:
     void currentWallpaperChanged();
 
