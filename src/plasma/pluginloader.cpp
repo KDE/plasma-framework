@@ -600,7 +600,7 @@ KPluginInfo::List PluginLoader::listContainmentsOfType(const QString &type,
             constraint.append(" and ");
         }
 
-        constraint.append("'").append(type).append("' ~in [X-Plasma-ContainmentCategories]");
+        constraint.append("'").append(type).append("' ~in [X-Plasma-ContainmentType]");
     }
 
     if (!category.isEmpty()) {
@@ -633,7 +633,7 @@ QStringList PluginLoader::listContainmentTypes()
     QSet<QString> types;
 
     foreach (const KPluginInfo &containmentInfo, containmentInfos) {
-        QStringList theseTypes = containmentInfo.service()->property("X-Plasma-ContainmentCategories").toStringList();
+        QStringList theseTypes = containmentInfo.service()->property("X-Plasma-ContainmentType").toStringList();
         foreach (const QString &type, theseTypes) {
             types.insert(type);
         }

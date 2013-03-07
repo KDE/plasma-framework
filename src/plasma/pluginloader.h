@@ -207,7 +207,7 @@ public:
     /**
      * Returns a list of all known Containments that match the parameters.
      *
-     * @param type Only Containments with this string in X-Plasma-ContainmentCategories
+     * @param type Only Containments with this string in X-Plasma-ContainmentType
      *             in their .desktop files will be returned. Common values are panel and
      *             desktop
      * @param category Only applets matchin this category will be returned.
