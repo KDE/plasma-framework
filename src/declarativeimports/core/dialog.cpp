@@ -161,7 +161,7 @@ bool DialogProxy::isVisible() const
 
 void DialogProxy::setVisible(const bool visible)
 {
-    qDebug() << visible;
+    //qDebug() << visible;
     QRect avail = QRect(400, 300, 1200, 800);
 
     if (visible) {
@@ -208,16 +208,15 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
         //If no item was specified try to align at the center of the parent view
         QQuickItem *parentItem = qobject_cast<QQuickItem *>(parent());
         if (parentItem && parentItem->window()) {
-            qDebug() << "NO visual parent ... Centering at " << (parentItem->window()->geometry().center() - QPoint(width()/2, height()/2));
+            //qDebug() << "NO visual parent ... Centering at " << (parentItem->window()->geometry().center() - QPoint(width()/2, height()/2));
             return parentItem->window()->geometry().center() - QPoint(width()/2, height()/2);
         } else {
-            qDebug() << "No QQuickItem as parent found";
+            //qDebug() << "No QQuickItem as parent found";
             return QPoint();
         }
     }
-    qDebug() << "I've an Item";
     QPointF pos = item->mapToScene(QPointF(0, 0));
-    qDebug() << "I've an Item at " << pos;
+    //qDebug() << "I've an Item at " << pos;
     if (item->window() && item->window()->screen()) {
         pos = item->window()->mapToGlobal(pos.toPoint());
     } else {
@@ -297,10 +296,10 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
         } else {
             menuPos.setY(avail.height() - item->boundingRect().height() + bottomMargin);
         }
-        qDebug() << menuPos;
+        //qDebug() << menuPos;
     }
 
-    qDebug() << "Popup position" << menuPos << " Location: Plasma::" <<locString(l);
+    //qDebug() << "Popup position" << menuPos << " Location: Plasma::" <<locString(l);
     return menuPos;
 }
 
@@ -311,7 +310,7 @@ bool DialogProxy::isActiveWindow() const
 
 void DialogProxy::activateWindow()
 {
-    qDebug();
+    //qDebug();
     //setWindowState(Qt::WindowActive);
 }
 

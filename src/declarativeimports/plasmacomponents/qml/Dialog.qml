@@ -228,8 +228,8 @@ Item {
         }
 
         sourceComponent: {
-            print(" XXX Loading Source component XXX");
-            print(" root: " + rootItem.width + "x" + rootItem.height + " dlg: " + dialogLayout.width + "x" + dialogLayout.height);
+            //print(" XXX Loading Source component XXX");
+            //print(" root: " + rootItem.width + "x" + rootItem.height + " dlg: " + dialogLayout.width + "x" + dialogLayout.height);
             if (loadCompleted) {
                 if (true || rootItem == null || dialogLayout.width > rootItem.width || dialogLayout.height > rootItem.height) {
                     print(" in external window");

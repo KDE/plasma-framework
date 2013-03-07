@@ -94,7 +94,6 @@ PlasmaComponents.Dialog {
                     root.close()
                 }
             }
-            Component.onCompleted: print("++++++++++++++++++++++ COmpleted button")
         }
     }
 

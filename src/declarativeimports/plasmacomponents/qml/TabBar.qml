@@ -160,7 +160,7 @@ FocusScope {
 
         Private.TabBarLayout {
             id: tabBarLayout
-            //A bit of snap before scolling the layout
+            //A bit of snap before scrolling the layout
             width: (implicitWidth - parent.width < theme.defaultFont.mSize.width*4) ? parent.width : implicitWidth
             anchors {
                 top: parent.top
