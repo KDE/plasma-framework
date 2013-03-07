@@ -57,7 +57,7 @@ void DeclarativeDropArea::dragLeaveEvent(QDragLeaveEvent *event)
 void DeclarativeDropArea::dragMoveEvent(QDragMoveEvent *event)
 {
     DeclarativeDragDropEvent dde(event, this);
-    qDebug() << "move.";
+    //qDebug() << "move.";
     event->accept();
     emit dragMove(&dde);
 }
