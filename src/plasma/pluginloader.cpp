@@ -597,10 +597,15 @@ KPluginInfo::List PluginLoader::listContainmentsOfType(const QString &type,
 
     if (!type.isEmpty()) {
         if (!constraint.isEmpty()) {
-            constraint.append(" and ");
+            constraint.append(" and (");
         }
 
-        constraint.append("'").append(type).append("' ~in [X-Plasma-ContainmentType]");
+        //constraint.append("'").append(type).append("' == [X-Plasma-ContainmentType]");
+        if (type == "Desktop") {
+            constraint += "not exist [X-Plasma-ContainmentType] or ";
+        }
+        constraint += "[X-Plasma-ContainmentType] == '" + type + "')";
+        //by default containments are Desktop, so is not mandatory to specify it
     }
 
     if (!category.isEmpty()) {
@@ -615,7 +620,7 @@ KPluginInfo::List PluginLoader::listContainmentsOfType(const QString &type,
     }
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Containment", constraint);
-    //kDebug() << "constraint was" << constraint << "which got us" << offers.count() << "matches";
+    kDebug() << "constraint was" << constraint << "which got us" << offers.count() << "matches";
     return KPluginInfo::fromServices(offers);
 }
 
