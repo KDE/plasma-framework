@@ -32,7 +32,7 @@ class ContainmentConfigView : public ConfigView
 {
     Q_OBJECT
     Q_PROPERTY(ConfigModel *wallpaperConfigModel READ wallpaperConfigModel CONSTANT)
-    Q_PROPERTY(ConfigPropertyMap *wallpaperConfiguration READ wallpaperConfiguration CONSTANT)
+    Q_PROPERTY(ConfigPropertyMap *wallpaperConfiguration READ wallpaperConfiguration NOTIFY wallpaperConfigurationChanged)
     Q_PROPERTY(QString currentWallpaper READ currentWallpaper WRITE setCurrentWallpaper NOTIFY currentWallpaperChanged)
 
 public:
@@ -48,6 +48,7 @@ public:
 
 Q_SIGNALS:
     void currentWallpaperChanged();
+    void wallpaperConfigurationChanged();
 
 private:
     ContainmentInterface *m_contianmentInterface;

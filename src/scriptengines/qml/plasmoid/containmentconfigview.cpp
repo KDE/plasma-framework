@@ -115,11 +115,18 @@ void ContainmentConfigView::setCurrentWallpaper(const QString &wallpaper)
 
     m_currentWallpaper = wallpaper;
     emit currentWallpaperChanged();
+    emit wallpaperConfigurationChanged();
 }
 
 void ContainmentConfigView::applyWallpaper()
 {
     m_contianmentInterface->containment()->setWallpaper(m_currentWallpaper);
+
+    if (m_currentWallpaperConfig != m_contianmentInterface->wallpaperInterface()->configuration()) {
+        delete m_currentWallpaperConfig;
+        m_currentWallpaperConfig = m_contianmentInterface->wallpaperInterface()->configuration();
+        emit wallpaperConfigurationChanged();
+    }
 }
 
 #include "moc_containmentconfigview.cpp"
