@@ -50,8 +50,8 @@ Item {
     property alias item: loader.item
 
 
-    implicitWidth: loader.item.implicitWidth
-    implicitHeight: loader.item.implicitHeight
+    implicitWidth: loader.item ? loader.item.implicitWidth : 0
+    implicitHeight: loader.item ? loader.item.implicitHeight : 0
 
     Loader {
         id: loader
