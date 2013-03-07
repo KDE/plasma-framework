@@ -49,6 +49,10 @@ Item {
      */
     property alias item: loader.item
 
+
+    implicitWidth: loader.item.implicitWidth
+    implicitHeight: loader.item.implicitHeight
+
     Loader {
         id: loader
         anchors.fill: parent
