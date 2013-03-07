@@ -173,6 +173,9 @@ Item {
         return Engine.find(func);
     }
 
+    implicitWidth: currentPage ? currentPage.implicitWidth : 0
+    implicitHeight: currentPage ? currentPage.implicitHeight : 0
+
     // Called when the page stack visibility changes.
     onVisibleChanged: {
         if (currentPage) {
