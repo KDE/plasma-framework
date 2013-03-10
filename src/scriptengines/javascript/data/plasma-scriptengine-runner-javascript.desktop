@@ -2,6 +2,7 @@
 Name=JavaScript Runner
 Name[cs]=Spouštěč JavaScriptu
 Name[de]=JavaScript-Ausführung
+Name[mr]=जावास्क्रिप्ट चालक
 Name[nl]=JavaScript-runner
 Name[pt]=Execução de JavaScript
 Name[pt_BR]=Mecanismo JavaScript
@@ -12,6 +13,7 @@ Name[x-test]=xxJavaScript Runnerxx
 Comment=JavaScript Runner
 Comment[cs]=Spouštěč JavaScriptu
 Comment[de]=JavaScript-Ausführung
+Comment[mr]=जावास्क्रिप्ट चालक
 Comment[nl]=JavaScript-runner
 Comment[pt]=Execução de JavaScript
 Comment[pt_BR]=Mecanismo JavaScript

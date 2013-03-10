@@ -2,6 +2,7 @@
 Name=Javascript Addon
 Name[cs]=Doplněk JavaScript
 Name[de]=JavaScript-Erweiterung
+Name[mr]=जावास्क्रिप्ट Addon
 Name[nl]=Addon voor JavaScript
 Name[pt]=Extensão de JavaScript
 Name[pt_BR]=Complementos de JavaScript
@@ -12,6 +13,7 @@ Name[x-test]=xxJavascript Addonxx
 Comment=Addons for Javascript Plasma plugins
 Comment[cs]=Doplňky pro javascriptové zásuvné moduly plasmy
 Comment[de]=Erweiterungen für JavaScript-Module in Plasma
+Comment[mr]=जावास्क्रिप्ट प्लाज्मा प्लगइनचे Addon
 Comment[nl]=Addons voor Javascript Plasma plugins
 Comment[pt]=Extras para os 'plugins' do Plasma em JavaScript
 Comment[pt_BR]=Complementos para os plugins do Plasma em JavaScript

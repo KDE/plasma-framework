@@ -2,6 +2,7 @@
 Name=Application dashboard
 Name[cs]=Pracovní plocha aplikace
 Name[de]=Anwendungsübersicht
+Name[mr]=अनुप्रयोग प्रक्षेपक
 Name[nl]=Toepassingendashboard
 Name[pt]=Painel da aplicação
 Name[pt_BR]=Painel de aplicativos
@@ -12,6 +13,7 @@ Name[x-test]=xxApplication dashboardxx
 Comment=Intended as Application dashboard default
 Comment[cs]=Zamýšleno jako výchozí pracovní plocha aplikace
 Comment[de]=Als Voreinstellung für Anwendungsübersicht angedacht
+Comment[mr]=अनुप्रयोग प्रक्षेपकास अभिप्रेत मूलभूत
 Comment[nl]=Bedoelt als standaard in het toepassingendashboard
 Comment[pt]=Pretendido como predefinição do painel da aplicação
 Comment[pt_BR]=Pretende ser o painel de aplicativos padrão

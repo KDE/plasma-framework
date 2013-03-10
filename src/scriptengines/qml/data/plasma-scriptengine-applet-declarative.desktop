@@ -2,6 +2,7 @@
 Name=Declarative widget
 Name[cs]=Deklarativní widget
 Name[de]=Deklaratives Bedienelement
+Name[mr]=वर्णनात्मक विजेट
 Name[nl]=Widget voor declaratie
 Name[pt]=Item declarativo
 Name[pt_BR]=Widget declarativo
@@ -12,6 +13,7 @@ Name[x-test]=xxDeclarative widgetxx
 Comment=Native Plasma widget written in QML and JavaScript
 Comment[cs]=Nativní Plasma widget napsaný v  QML a JavaScriptu
 Comment[de]=Echtes Plasma-Programm, geschrieben in QML und JavaScript
+Comment[mr]=जावास्क्रिप्ट व QML अंतर्गत लिहीले गेलेले मूळ प्लाज्मा विजेट
 Comment[nl]=Hier thuishorend Plasma-widget geschreven in QML en JavaScript
 Comment[pt]=Elemento nativo do Plasma feito em QML e JavaScript
 Comment[pt_BR]=Widget do Plasma nativo escrito em QML e JavaScript
