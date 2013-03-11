@@ -12,7 +12,7 @@
 
         <entry key="ThemeCacheKb" type="Int">
             <label>The maximum size of the on-disk Theme cache in kilobytes. Note that these files are sparse files, so the maximum size may not be used. Setting a larger size is therefore often quite safe.</label>
-            <default>81920</default>
+            <default>16384</default>
         </entry>
     </group>
 </kcfg>
