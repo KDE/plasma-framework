@@ -85,8 +85,8 @@ public:
           defaultWallpaperSuffix(DEFAULT_WALLPAPER_SUFFIX),
           defaultWallpaperWidth(DEFAULT_WALLPAPER_WIDTH),
           defaultWallpaperHeight(DEFAULT_WALLPAPER_HEIGHT),
-          cacheSize(0),
           pixmapCache(0),
+          cacheSize(0),
           cachesToDiscard(NoCache),
           locolor(false),
           compositingActive(KWindowSystem::self()->compositingActive()),
@@ -173,6 +173,7 @@ public:
 
     Theme *q;
     QString themeName;
+    KPluginInfo pluginInfo;
     QList<QString> fallbackThemes;
     KSharedConfigPtr colors;
     KColorScheme colorScheme;
@@ -597,6 +598,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     if (realTheme) {
         const QString metadataPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/metadata.desktop")));
         KConfig metadata(metadataPath);
+        pluginInfo = KPluginInfo(metadataPath);
 
         processWallpaperSettings(&metadata);
 
@@ -997,12 +999,9 @@ void Theme::setCacheLimit(int kbytes)
     d->pixmapCache = 0;
 }
 
-QUrl Theme::homepage() const
+KPluginInfo Theme::pluginInfo() const
 {
-    const QString metadataPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal("desktoptheme/") % d->themeName % QLatin1Literal("/metadata.desktop")));
-    KConfig metadata(metadataPath);
-    KConfigGroup brandConfig(&metadata, "Branding");
-    return brandConfig.readEntry("homepage", QUrl("http://www.kde.org"));
+    return d->pluginInfo;
 }
 
 }

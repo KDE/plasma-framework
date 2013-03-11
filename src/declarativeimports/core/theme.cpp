@@ -73,11 +73,6 @@ QSizeF ThemeProxy::mSize(const QFont &font) const
 }
 
 
-KUrl ThemeProxy::homepage() const
-{
-    return Plasma::Theme::defaultTheme()->homepage();
-}
-
 bool ThemeProxy::useGlobalSettings() const
 {
     return Plasma::Theme::defaultTheme()->useGlobalSettings();

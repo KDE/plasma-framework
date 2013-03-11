@@ -304,10 +304,11 @@ class PLASMA_EXPORT Theme : public QObject
         void releaseRectsCache(const QString &image);
 
         /**
-         * @return the default homepage to use in conjunction with the branding svg content
-         * @since 4.7
+         * @return plugin info for this theme, with informations such as
+         * name, description, author, website etc
+         * @since 5.0
          */
-        QUrl homepage() const;
+        KPluginInfo pluginInfo() const;
 
     Q_SIGNALS:
         /**
