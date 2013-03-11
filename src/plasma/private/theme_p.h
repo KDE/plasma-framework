@@ -65,8 +65,10 @@ class ThemePrivate : public QObject
     Q_OBJECT
 
 public:
-    ThemePrivate(Theme *theme);
+    ThemePrivate(QObject *parent = 0);
     ~ThemePrivate();
+
+    static ThemePrivate *self();
 
     KConfigGroup &config();
 
@@ -100,7 +102,10 @@ public:
 #if HAVE_X11
     static EffectWatcher *s_blurEffectWatcher;
 #endif
-    static QHash<QString, ThemePrivate *>dAssociations;
+    static ThemePrivate *globalTheme;
+    static int globalThemeRefCount;
+    static QHash<QString, ThemePrivate *> themes;
+    static QHash<QString, int> themesRefCount;
 
     QString themeName;
     KPluginInfo pluginInfo;

@@ -24,6 +24,7 @@
 #include <QFile>
 #include <QFileInfo>
 
+#include <kdirwatch.h>
 #include <kglobalsettings.h>
 #include <kwindoweffects.h>
 
@@ -39,23 +40,49 @@ const char *ThemePrivate::systemColorsTheme = "internal-system-colors";
 EffectWatcher *ThemePrivate::s_blurEffectWatcher = 0;
 #endif
 
-ThemePrivate::ThemePrivate(Theme *theme)
-    : colorScheme(QPalette::Active, KColorScheme::Window, KSharedConfigPtr(0)),
-        buttonColorScheme(QPalette::Active, KColorScheme::Button, KSharedConfigPtr(0)),
-        viewColorScheme(QPalette::Active, KColorScheme::View, KSharedConfigPtr(0)),
-        defaultWallpaperTheme(DEFAULT_WALLPAPER_THEME),
-        defaultWallpaperSuffix(DEFAULT_WALLPAPER_SUFFIX),
-        defaultWallpaperWidth(DEFAULT_WALLPAPER_WIDTH),
-        defaultWallpaperHeight(DEFAULT_WALLPAPER_HEIGHT),
-        pixmapCache(0),
-        cacheSize(0),
-        cachesToDiscard(NoCache),
-        locolor(false),
-        compositingActive(KWindowSystem::self()->compositingActive()),
-        blurActive(false),
-        isDefault(false),
-        useGlobal(true),
-        hasWallpapers(false)
+ThemePrivate *ThemePrivate::globalTheme = 0;
+int ThemePrivate::globalThemeRefCount = 0;
+QHash<QString, ThemePrivate *> ThemePrivate::themes = QHash<QString, ThemePrivate*>();
+QHash<QString, int> ThemePrivate::themesRefCount = QHash<QString, int>();
+
+
+class ThemePrivateSingleton
+{
+public:
+    ThemePrivateSingleton()
+    {
+        self.isDefault = true;
+
+        //FIXME: if/when kconfig gets change notification, this will be unnecessary
+        KDirWatch::self()->addFile(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + QLatin1Char('/') + ThemePrivate::themeRcFile);
+        QObject::connect(KDirWatch::self(), SIGNAL(created(QString)), &self, SLOT(settingsFileChanged(QString)));
+        QObject::connect(KDirWatch::self(), SIGNAL(dirty(QString)), &self, SLOT(settingsFileChanged(QString)));
+    }
+
+   ThemePrivate self;
+};
+
+Q_GLOBAL_STATIC(ThemePrivateSingleton, themePrivateSelf)
+
+
+ThemePrivate::ThemePrivate(QObject *parent)
+    : QObject(parent),
+      colorScheme(QPalette::Active, KColorScheme::Window, KSharedConfigPtr(0)),
+      buttonColorScheme(QPalette::Active, KColorScheme::Button, KSharedConfigPtr(0)),
+      viewColorScheme(QPalette::Active, KColorScheme::View, KSharedConfigPtr(0)),
+      defaultWallpaperTheme(DEFAULT_WALLPAPER_THEME),
+      defaultWallpaperSuffix(DEFAULT_WALLPAPER_SUFFIX),
+      defaultWallpaperWidth(DEFAULT_WALLPAPER_WIDTH),
+      defaultWallpaperHeight(DEFAULT_WALLPAPER_HEIGHT),
+      pixmapCache(0),
+      cacheSize(0),
+      cachesToDiscard(NoCache),
+      locolor(false),
+      compositingActive(KWindowSystem::self()->compositingActive()),
+      blurActive(false),
+      isDefault(false),
+      useGlobal(true),
+      hasWallpapers(false)
 {
     ThemeConfig config;
     cacheTheme = config.cacheTheme();
@@ -85,6 +112,11 @@ ThemePrivate::ThemePrivate(Theme *theme)
 ThemePrivate::~ThemePrivate()
 {
     delete pixmapCache;
+}
+
+ThemePrivate *ThemePrivate::self()
+{
+    return &themePrivateSelf()->self;
 }
 
 KConfigGroup &ThemePrivate::config()

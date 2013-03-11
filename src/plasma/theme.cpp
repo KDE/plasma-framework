@@ -74,8 +74,15 @@ Theme *Theme::defaultTheme()
 
 Theme::Theme(QObject *parent)
     : QObject(parent),
-      d(new ThemePrivate(this))
+      d(ThemePrivate::self())
 {
+    if (!ThemePrivate::globalTheme) {
+        ThemePrivate::globalTheme = new ThemePrivate;
+        ++ThemePrivate::globalThemeRefCount;
+    }
+
+    d = ThemePrivate::globalTheme;
+
     d->settingsChanged();
     if (QCoreApplication::instance()) {
         connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()),
@@ -85,13 +92,20 @@ Theme::Theme(QObject *parent)
 }
 
 Theme::Theme(const QString &themeName, QObject *parent)
-    : QObject(parent),
-      d(new ThemePrivate(this))
+    : QObject(parent)
 {
+    if (!ThemePrivate::themes.contains(themeName)) {
+        ThemePrivate::themes[themeName] = new ThemePrivate;
+        ThemePrivate::themesRefCount[themeName] = 0;
+    }
+
+    ++ThemePrivate::themesRefCount[themeName];
+    d = ThemePrivate::themes[themeName];
+
     // turn off caching so we don't accidently trigger unnecessary disk activity at this point
     bool useCache = d->cacheTheme;
     d->cacheTheme = false;
-    setThemeName(themeName);
+    d->setThemeName(themeName, true);
     d->cacheTheme = useCache;
     if (QCoreApplication::instance()) {
         connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()),
@@ -111,11 +125,48 @@ Theme::~Theme()
     }
 
     d->onAppExitCleanup();
+
+    if (d == ThemePrivate::globalTheme) {
+        --ThemePrivate::globalThemeRefCount;
+        if (ThemePrivate::globalThemeRefCount == 0) {
+            delete ThemePrivate::globalTheme;
+        }
+    } else {
+        --ThemePrivate::themesRefCount[d->themeName];
+        if (ThemePrivate::themesRefCount[d->themeName] == 0) {
+            ThemePrivate *themePrivate = ThemePrivate::themes[d->themeName];
+            ThemePrivate::themes.remove(d->themeName);
+            ThemePrivate::themesRefCount.remove(d->themeName);
+            delete themePrivate;
+        }
+    }
     delete d;
 }
 
 void Theme::setThemeName(const QString &themeName)
 {
+    if (d->themeName == themeName) {
+        return;
+    }
+
+    if (d != ThemePrivate::globalTheme) {
+        --ThemePrivate::themesRefCount[d->themeName];
+        if (ThemePrivate::themesRefCount[d->themeName] == 0) {
+            ThemePrivate *themePrivate = ThemePrivate::themes[d->themeName];
+            ThemePrivate::themes.remove(d->themeName);
+            ThemePrivate::themesRefCount.remove(d->themeName);
+            delete themePrivate;
+        }
+    }
+
+    if (!ThemePrivate::themes.contains(themeName)) {
+        ThemePrivate::themes[themeName] = new ThemePrivate;
+        ThemePrivate::themesRefCount[themeName] = 0;
+    }
+
+    ++ThemePrivate::themesRefCount[themeName];
+    d = ThemePrivate::themes[themeName];
+
     d->setThemeName(themeName, true);
 }
 
