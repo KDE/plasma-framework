@@ -19,6 +19,7 @@
 #ifndef THEME_PROXY_P
 #define THEME_PROXY_P
 
+#include <QApplication>
 #include <QObject>
 
 #include <KUrl>
@@ -28,142 +29,6 @@
 #include <Plasma/Theme>
 
 class QQmlPropertyMap;
-
-class FontProxy : public QObject
-{
-    Q_OBJECT
-
-    /**
-     * true if the font is bold
-     */
-    Q_PROPERTY(bool bold READ bold NOTIFY boldChanged)
-
-    /**
-     * One of
-     * MixedCase: The text is not changed
-     * AllUppercase: the text becomes UPPERCASE
-     * AllLowercase: the text becomes all lowercase
-     * SmallCaps: the lowercase characters becomes smaller uppercase ones
-     * Capitalize: the first letter of all words are uppercase
-     */
-    Q_PROPERTY(Capitalization capitalization READ capitalization  NOTIFY capitalizationChanged )
-
-    /**
-     * name of the font family
-     */
-    Q_PROPERTY(QString family READ family NOTIFY familyChanged )
-
-    /**
-     * true if the font is italic
-     */
-    Q_PROPERTY(bool italic READ italic NOTIFY italicChanged )
-
-    /**
-     * horizontal space between letters
-     */
-    Q_PROPERTY(qreal letterSpacing READ letterSpacing NOTIFY letterSpacingChanged )
-
-    /**
-     * Size of the font in pixels: settings this is strongly discouraged.
-     * @see pointSize
-     */
-    Q_PROPERTY(int pixelSize READ pixelSize NOTIFY pixelSizeChanged )
-
-    /**
-     * Size of the font in points
-     */
-    Q_PROPERTY(qreal pointSize READ pointSize NOTIFY pointSizeChanged )
-
-    /**
-     * True if the text is striked out with an horizontal line
-     */
-    Q_PROPERTY(bool strikeout READ strikeout NOTIFY strikeoutChanged )
-
-    /**
-     * True if all the text will be underlined
-     */
-    Q_PROPERTY(bool underline READ underline NOTIFY underlineChanged )
-
-    /**
-     * One of:
-     * Light
-     * Normal
-     * DemiBold
-     * Bold
-     * Black
-     */
-    Q_PROPERTY(Weight weight READ weight NOTIFY weightChanged )
-
-    /**
-     * Horizontal space between words
-     */
-    Q_PROPERTY(qreal wordSpacing READ wordSpacing NOTIFY wordSpacingChanged )
-
-    /**
-     * Size in pixels of an uppercase "M" letter
-     */
-    Q_PROPERTY(QSize mSize READ mSize NOTIFY mSizeChanged )
-
-    Q_ENUMS(Capitalization)
-    Q_ENUMS(Weight)
-
-public:
-    enum Capitalization {
-        MixedCase = 0,
-        AllUppercase = 1,
-        AllLowercase = 2,
-        SmallCaps = 3,
-        Capitalize = 4
-    };
-
-    enum Weight {
-        Light = 25,
-        Normal = 50,
-        DemiBold = 63,
-        Bold = 75,
-        Black = 87
-    };
-
-    FontProxy(Plasma::Theme::FontRole role, QObject *parent = 0);
-    ~FontProxy();
-    static FontProxy *defaultFont();
-    static FontProxy *desktopFont();
-    static FontProxy *smallestFont();
-
-    bool bold() const;
-    Capitalization capitalization() const;
-    QString family() const;
-    bool italic() const;
-    qreal letterSpacing() const;
-    int pixelSize() const;
-    qreal pointSize() const;
-    bool strikeout() const;
-    bool underline() const;
-    Weight weight() const;
-    qreal wordSpacing() const;
-
-    /**
-     * @return The size of an uppercase M in this font
-     */
-    QSize mSize() const;
-
-Q_SIGNALS:
-    void boldChanged();
-    void capitalizationChanged();
-    void familyChanged();
-    void italicChanged();
-    void letterSpacingChanged();
-    void pixelSizeChanged();
-    void pointSizeChanged();
-    void strikeoutChanged();
-    void underlineChanged();
-    void weightChanged();
-    void wordSpacingChanged();
-    void mSizeChanged();
-
-private:
-    Plasma::Theme::FontRole m_fontRole;
-};
 
 /**
  * QML wrapper for kdelibs Plasma::Theme
@@ -181,9 +46,8 @@ class ThemeProxy : public QObject
     Q_PROPERTY(QString wallpaperPath READ wallpaperPath NOTIFY themeChanged)
 
     //fonts
-    Q_PROPERTY(QObject *defaultFont READ defaultFont CONSTANT)
-    Q_PROPERTY(QObject *desktopFont READ desktopFont CONSTANT)
-    Q_PROPERTY(QObject *smallestFont READ smallestFont CONSTANT)
+    Q_PROPERTY(QFont defaultFont READ defaultFont CONSTANT)
+    Q_PROPERTY(QFont smallestFont READ smallestFont CONSTANT)
 
     // colors
     Q_PROPERTY(QColor textColor READ textColor NOTIFY themeChanged)
@@ -227,9 +91,13 @@ public:
     ~ThemeProxy();
 
     QString themeName() const;
-    QObject *defaultFont() const;
-    QObject *desktopFont() const;
-    QObject *smallestFont() const;
+    QFont defaultFont() const;
+    QFont smallestFont() const;
+    /**
+     * @return The size of an uppercase M in a font, defaultFont() by default
+     */
+    QSizeF mSize(const QFont &font = QApplication::font()) const;
+
     bool windowTranslucencyEnabled() const;
     KUrl homepage() const;
     bool useGlobalSettings() const;

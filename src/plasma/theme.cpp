@@ -96,7 +96,6 @@ public:
           hasWallpapers(false),
           useNativeWidgetStyle(false)
     {
-        generalFont = QApplication::font();
         ThemeConfig config;
         cacheTheme = config.cacheTheme();
 
@@ -181,7 +180,6 @@ public:
     KColorScheme buttonColorScheme;
     KColorScheme viewColorScheme;
     KConfigGroup cfg;
-    QFont generalFont;
     QString defaultWallpaperTheme;
     QString defaultWallpaperSuffix;
     int defaultWallpaperWidth;
@@ -378,7 +376,7 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
             stylesheet = QString("\n\
                         body {\n\
                             color: %textcolor;\n\
-                            font-size: %fontsize;\n\
+                            generalfont-size: %fontsize;\n\
                             font-family: %fontfamily;\n\
                         }\n\
                         a:active  { color: %activatedlink; }\n\
@@ -436,7 +434,7 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
     elements["%viewhovercolor"] = q->color(Theme::ViewHoverColor).name();
     elements["%viewfocuscolor"] = q->color(Theme::ViewFocusColor).name();
 
-    QFont font = q->font(Theme::DefaultFont);
+    QFont font = QApplication::font();
     elements["%fontsize"] = QString("%1pt").arg(font.pointSize());
     elements["%fontfamily"] = font.family().split('[').first();
     elements["%smallfontsize"] = QString("%1pt").arg(KGlobalSettings::smallestReadableFont().pointSize());
@@ -829,34 +827,6 @@ QColor Theme::color(ColorRole role) const
     }
 
     return QColor();
-}
-
-void Theme::setFont(const QFont &font, FontRole role)
-{
-    Q_UNUSED(role)
-    d->generalFont = font;
-}
-
-QFont Theme::font(FontRole role) const
-{
-    switch (role) {
-    case DesktopFont: {
-        KConfigGroup cg(KSharedConfig::openConfig(), "General");
-        return cg.readEntry("desktopFont", d->generalFont);
-        }
-        break;
-
-    case DefaultFont:
-    default:
-        return d->generalFont;
-        break;
-
-    case SmallestFont:
-        return KGlobalSettings::smallestReadableFont();
-        break;
-    }
-
-    return d->generalFont;
 }
 
 bool Theme::windowTranslucencyEnabled() const

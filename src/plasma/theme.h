@@ -155,22 +155,6 @@ class PLASMA_EXPORT Theme : public QObject
         QColor color(ColorRole role) const;
 
         /**
-         * Sets the default font to be used with themed items. Defaults to
-         * the application wide default font.
-         *
-         * @param font the new font
-         * @param role which role (usage pattern) to set the font for
-         */
-        void setFont(const QFont &font, FontRole role = DefaultFont);
-
-        /**
-         * Returns the font to be used by themed items
-         *
-         * @param role which role (usage pattern) to get the font for
-         */
-        QFont font(FontRole role) const;
-
-        /**
          * @return true if the window manager effects (e.g. translucency, compositing) is active or not
          */
         bool windowTranslucencyEnabled() const;
