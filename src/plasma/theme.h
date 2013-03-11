@@ -348,11 +348,6 @@ class PLASMA_EXPORT Theme : public QObject
          */
         QUrl homepage() const;
 
-        /**
-         * @return the default tool tip delay; -1 means "no tooltips"
-         */
-        int toolTipDelay() const;
-
     Q_SIGNALS:
         /**
          * Emitted when the user changes the theme. Stylesheet usage, colors, etc. should

@@ -85,6 +85,7 @@ public:
           defaultWallpaperSuffix(DEFAULT_WALLPAPER_SUFFIX),
           defaultWallpaperWidth(DEFAULT_WALLPAPER_WIDTH),
           defaultWallpaperHeight(DEFAULT_WALLPAPER_HEIGHT),
+          cacheSize(0),
           pixmapCache(0),
           cachesToDiscard(NoCache),
           locolor(false),
@@ -195,7 +196,7 @@ public:
     QHash<QString, QString> discoveries;
     QTimer *saveTimer;
     QTimer *updateNotificationTimer;
-    int toolTipDelay;
+    unsigned cacheSize;
     CacheTypes cachesToDiscard;
 
     bool locolor : 1;
@@ -220,8 +221,11 @@ EffectWatcher *ThemePrivate::s_blurEffectWatcher = 0;
 bool ThemePrivate::useCache()
 {
     if (cacheTheme && !pixmapCache) {
-        ThemeConfig config;
-        pixmapCache = new KImageCache("plasma_theme_" + themeName, config.themeCacheKb() * 1024);
+        if (cacheSize == 0) {
+            ThemeConfig config;
+            cacheSize = config.themeCacheKb();
+        }
+        pixmapCache = new KImageCache("plasma_theme_" + themeName, cacheSize * 1024);
         if (themeName != systemColorsTheme) {
             //check for expired cache
             // FIXME: when using the system colors, if they change while the application is not running
@@ -521,8 +525,6 @@ void Theme::settingsChanged()
 {
     KConfigGroup cg = d->config();
     d->setThemeName(cg.readEntry("name", ThemePrivate::defaultTheme), false);
-    cg = KConfigGroup(cg.config(), "PlasmaToolTips");
-    d->toolTipDelay = cg.readEntry("Delay", 700);
 }
 
 void Theme::setThemeName(const QString &themeName)
@@ -1039,12 +1041,9 @@ void Theme::releaseRectsCache(const QString &image)
 
 void Theme::setCacheLimit(int kbytes)
 {
-    Q_UNUSED(kbytes)
-    if (d->useCache()) {
-        ;
-        // Too late for you bub.
-        // d->pixmapCache->setCacheLimit(kbytes);
-    }
+    d->cacheSize = kbytes;
+    delete d->pixmapCache;
+    d->pixmapCache = 0;
 }
 
 QUrl Theme::homepage() const
@@ -1053,11 +1052,6 @@ QUrl Theme::homepage() const
     KConfig metadata(metadataPath);
     KConfigGroup brandConfig(&metadata, "Branding");
     return brandConfig.readEntry("homepage", QUrl("http://www.kde.org"));
-}
-
-int Theme::toolTipDelay() const
-{
-    return d->toolTipDelay;
 }
 
 }
