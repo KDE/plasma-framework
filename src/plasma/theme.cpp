@@ -109,7 +109,6 @@ public:
         QObject::connect(updateNotificationTimer, SIGNAL(timeout()), q, SLOT(notifyOfChanged()));
 
         if (QPixmap::defaultDepth() > 8) {
-            QObject::connect(KWindowSystem::self(), SIGNAL(compositingChanged(bool)), q, SLOT(compositingChanged(bool)));
 #if HAVE_X11
             //watch for blur effect property changes as well
             if (!s_blurEffectWatcher) {
