@@ -163,12 +163,6 @@ class PLASMA_EXPORT Theme : public QObject
         bool useGlobalSettings() const;
 
         /**
-         * @return true if the native widget styles should be used instead of themed
-         * widgets. Defaults is false.
-         */
-        bool useNativeWidgetStyle() const;
-
-        /**
          * Provides a Plasma::Theme-themed stylesheet for hybrid (web / native Plasma) widgets.
          *
          * You can use this method to retrieve a basic default stylesheet, or to theme your

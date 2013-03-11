@@ -93,8 +93,7 @@ public:
           blurActive(false),
           isDefault(false),
           useGlobal(true),
-          hasWallpapers(false),
-          useNativeWidgetStyle(false)
+          hasWallpapers(false)
     {
         ThemeConfig config;
         cacheTheme = config.cacheTheme();
@@ -204,7 +203,6 @@ public:
     bool useGlobal : 1;
     bool hasWallpapers : 1;
     bool cacheTheme : 1;
-    bool useNativeWidgetStyle :1;
 };
 
 const char *ThemePrivate::defaultTheme = "default";
@@ -603,7 +601,6 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
         processWallpaperSettings(&metadata);
 
         KConfigGroup cg(&metadata, "Settings");
-        useNativeWidgetStyle = cg.readEntry("UseNativeWidgetStyle", false);
         QString fallback = cg.readEntry("FallbackTheme", QString());
 
         fallbackThemes.clear();
@@ -844,11 +841,6 @@ void Theme::setUseGlobalSettings(bool useGlobal)
 bool Theme::useGlobalSettings() const
 {
     return d->useGlobal;
-}
-
-bool Theme::useNativeWidgetStyle() const
-{
-    return d->useNativeWidgetStyle;
 }
 
 bool Theme::findInCache(const QString &key, QPixmap &pix, unsigned int lastModified)
