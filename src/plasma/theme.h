@@ -171,11 +171,6 @@ class PLASMA_EXPORT Theme : public QObject
         QFont font(FontRole role) const;
 
         /**
-         * @return the font metrics for the font to be used by themed items
-         */
-        QFontMetrics fontMetrics() const;
-
-        /**
          * @return true if the window manager effects (e.g. translucency, compositing) is active or not
          */
         bool windowTranslucencyEnabled() const;

@@ -859,12 +859,6 @@ QFont Theme::font(FontRole role) const
     return d->generalFont;
 }
 
-QFontMetrics Theme::fontMetrics() const
-{
-    //TODO: allow this to be overridden with a plasma specific font?
-    return QFontMetrics(d->generalFont);
-}
-
 bool Theme::windowTranslucencyEnabled() const
 {
     return d->compositingActive;
