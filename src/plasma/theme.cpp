@@ -111,6 +111,7 @@ Theme::Theme(const QString &themeName, QObject *parent)
         connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()),
                 this, SLOT(onAppExitCleanup()));
     }
+    connect(d, &ThemePrivate::themeChanged, this, &Theme::themeChanged);
 }
 
 Theme::~Theme()
@@ -157,11 +158,12 @@ void Theme::setThemeName(const QString &themeName)
             ThemePrivate::themesRefCount.remove(d->themeName);
             delete themePrivate;
         }
-    }
 
-    if (!ThemePrivate::themes.contains(themeName)) {
-        ThemePrivate::themes[themeName] = new ThemePrivate;
-        ThemePrivate::themesRefCount[themeName] = 0;
+        if (!ThemePrivate::themes.contains(themeName)) {
+            ThemePrivate::themes[themeName] = new ThemePrivate;
+            ThemePrivate::themesRefCount[themeName] = 0;
+        }
+        connect(d, &ThemePrivate::themeChanged, this, &Theme::themeChanged);
     }
 
     ++ThemePrivate::themesRefCount[themeName];
