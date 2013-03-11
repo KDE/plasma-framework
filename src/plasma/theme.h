@@ -74,12 +74,6 @@ class PLASMA_EXPORT Theme : public QObject
             ViewFocusColor = 2048 /** color for focus effect on view */
         };
 
-        enum FontRole {
-            DefaultFont = 0, /**< The standard text font */
-            DesktopFont, /**< The standard text font */
-            SmallestFont /**< The smallest readable font */
-        };
-
         /**
          * Singleton pattern accessor
          **/
