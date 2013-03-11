@@ -39,8 +39,8 @@ Private.DualStateButton {
     view: PlasmaCore.FrameSvgItem {
         imagePath: "widgets/button"
         prefix: "normal"
-        width: theme.defaultFont.mSize.height + margins.left
-        height: theme.defaultFont.mSize.height + margins.top
+        width: theme.mSize(theme.defaultFont).height + margins.left
+        height: theme.mSize(theme.defaultFont).height + margins.top
 
         PlasmaCore.SvgItem {
             svg: PlasmaCore.Svg {

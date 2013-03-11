@@ -293,7 +293,7 @@ Item {
 
     Item {
         id: dialogLayout
-        width: Math.max(buttonItem.childrenRect.width,  Math.min(contentItem.childrenRect.width, theme.defaultFont.mSize.width * 30))
+        width: Math.max(buttonItem.childrenRect.width,  Math.min(contentItem.childrenRect.width, theme.mSize(theme.defaultFont).width * 30))
         height: titleBar.height + contentItem.childrenRect.height + buttonItem.childrenRect.height + 10
 
         parent: internalLoader.dialog ? internalLoader.dialog : internalLoader.inlineDialog

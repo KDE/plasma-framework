@@ -104,8 +104,8 @@ Item {
      */
     property alias inverted: range.inverted
 
-    width: contents.isVertical ? theme.defaultFont.mSize.height*1.6 : 200
-    height: contents.isVertical ? 200 : theme.defaultFont.mSize.height*1.6
+    width: contents.isVertical ? theme.mSize(theme.defaultFont).height*1.6 : 200
+    height: contents.isVertical ? 200 : theme.mSize(theme.defaultFont).height*1.6
     // TODO: needs to define if there will be specific graphics for
     //     disabled sliders
     opacity: enabled ? 1.0 : 0.5

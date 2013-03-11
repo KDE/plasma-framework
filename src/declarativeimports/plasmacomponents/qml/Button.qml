@@ -110,11 +110,11 @@ Item {
         if (label.text.length == 0) {
             height;
         } else {
-            Math.max(theme.defaultFont.mSize.width*12, minimumWidth);
+            Math.max(theme.mSize(theme.defaultFont).width*12, minimumWidth);
         }
     }
 
-    implicitHeight: Math.max(theme.defaultFont.mSize.height*1.6, minimumHeight)
+    implicitHeight: Math.max(theme.mSize(theme.defaultFont).height*1.6, minimumHeight)
 
     // TODO: needs to define if there will be specific graphics for
     //     disabled buttons

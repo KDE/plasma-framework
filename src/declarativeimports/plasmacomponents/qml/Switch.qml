@@ -39,7 +39,7 @@ Private.DualStateButton {
         imagePath: "widgets/slider"
         prefix: "groove"
         width: height * 2
-        height: Math.max(theme.defaultFont.mSize.height + margins.top + margins.bottom,
+        height: Math.max(theme.mSize(theme.defaultFont).height + margins.top + margins.bottom,
                          button.margins.top + button.margins.bottom)
 
         PlasmaCore.FrameSvgItem {

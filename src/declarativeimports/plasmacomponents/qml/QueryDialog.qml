@@ -64,9 +64,9 @@ PlasmaComponents.CommonDialog {
     }
 
     content: Item {
-        implicitWidth: Math.max(theme.defaultFont.mSize.width * 15,  Math.min(label.implicitWidth+12, theme.defaultFont.mSize.width * 25))
+        implicitWidth: Math.max(theme.mSize(theme.defaultFont).width * 15,  Math.min(label.implicitWidth+12, theme.mSize(theme.defaultFont).width * 25))
 
-        implicitHeight: Math.min(theme.defaultFont.mSize.height * 12, label.paintedHeight + 6)
+        implicitHeight: Math.min(theme.mSize(theme.defaultFont).height * 12, label.paintedHeight + 6)
 
 
         width: implicitWidth

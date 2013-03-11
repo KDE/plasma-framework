@@ -193,8 +193,8 @@ Item {
 
         mainItem: Item {
             id: mainItem
-            width: theme.defaultFont.mSize.width * 40
-            height: Math.max(titleBar.childrenRect.height + contentItem.childrenRect.height + buttonsRow.childrenRect.height + 8, theme.defaultFont.mSize.height * 25)
+            width: theme.mSize(theme.defaultFont).width * 40
+            height: Math.max(titleBar.childrenRect.height + contentItem.childrenRect.height + buttonsRow.childrenRect.height + 8, theme.mSize(theme.defaultFont).height * 25)
 
             // Consume all key events that are not processed by children
             Keys.onPressed: event.accepted = true
@@ -263,7 +263,7 @@ Item {
                     bottom: parent.bottom
                     horizontalCenter: parent.horizontalCenter
                     //the bottom margin is disabled but we want it anyways
-                    bottomMargin: theme.defaultFont.mSize.height*0.6
+                    bottomMargin: theme.mSize(theme.defaultFont).height*0.6
                 }
 
                 PlasmaComponents.Button {

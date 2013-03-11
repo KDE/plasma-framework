@@ -96,8 +96,8 @@ Item {
         mainItem: Item {
             id: contentItem
 
-            width: Math.max(menuColumn.width, theme.defaultFont.mSize.width * 12)
-            height: Math.min(menuColumn.height, theme.defaultFont.mSize.height * 25)
+            width: Math.max(menuColumn.width, theme.mSize(theme.defaultFont).width * 12)
+            height: Math.min(menuColumn.height, theme.mSize(theme.defaultFont).height * 25)
 
 
 

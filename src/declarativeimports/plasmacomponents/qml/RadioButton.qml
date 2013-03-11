@@ -39,7 +39,7 @@ Private.DualStateButton {
             imagePath: "widgets/actionbutton"
         }
         elementId: "normal"
-        width: theme.defaultFont.mSize.height + 6
+        width: theme.mSize(theme.defaultFont).height + 6
         height: width
 
         PlasmaCore.SvgItem {

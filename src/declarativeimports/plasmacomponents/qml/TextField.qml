@@ -273,8 +273,8 @@ FocusScope {
     //property alias activeFocus: textInput.activeFocus
 
     // TODO: fix default size
-    implicitWidth: theme.defaultFont.mSize.width*12 + base.internalPadding*2
-    implicitHeight: theme.defaultFont.mSize.height + base.internalPadding*2
+    implicitWidth: theme.mSize(theme.defaultFont).width*12 + base.internalPadding*2
+    implicitHeight: theme.mSize(theme.defaultFont).height + base.internalPadding*2
     // TODO: needs to define if there will be specific graphics for
     //     disabled text fields
     opacity: enabled ? 1.0 : 0.5
@@ -292,7 +292,7 @@ FocusScope {
         anchors.fill: parent
         imagePath: "widgets/lineedit"
         prefix: "base"
-        property real internalPadding: theme.defaultFont.mSize.height*0.3
+        property real internalPadding: theme.mSize(theme.defaultFont).height*0.3
     }
 
     MouseArea {

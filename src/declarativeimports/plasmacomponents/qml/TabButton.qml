@@ -137,7 +137,7 @@ Item {
         anchors {
             top: internal.portrait && iconSource != null ? imageLoader.bottom : parent.top
             left: internal.portrait || iconSource == null ? parent.left : imageLoader.right
-            leftMargin: iconSource == null ? 0 : theme.defaultFont.mSize.width
+            leftMargin: iconSource == null ? 0 : theme.mSize(theme.defaultFont).width
             right: parent.right
             bottom: parent.bottom
         }

@@ -96,7 +96,7 @@ public:
     /**
      * @return The size of an uppercase M in a font, defaultFont() by default
      */
-    QSizeF mSize(const QFont &font = QApplication::font()) const;
+    Q_INVOKABLE QSizeF mSize(const QFont &font = QApplication::font()) const;
 
     bool windowTranslucencyEnabled() const;
     KUrl homepage() const;
