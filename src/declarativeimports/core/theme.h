@@ -46,8 +46,8 @@ class ThemeProxy : public QObject
     Q_PROPERTY(QString wallpaperPath READ wallpaperPath NOTIFY themeChanged)
 
     //fonts
-    Q_PROPERTY(QFont defaultFont READ defaultFont CONSTANT)
-    Q_PROPERTY(QFont smallestFont READ smallestFont CONSTANT)
+    Q_PROPERTY(QFont defaultFont READ defaultFont NOTIFY defaultFontChanged)
+    Q_PROPERTY(QFont smallestFont READ smallestFont NOTIFY smallestFontChanged)
 
     // colors
     Q_PROPERTY(QColor textColor READ textColor NOTIFY themeChanged)
@@ -135,6 +135,8 @@ Q_SIGNALS:
     void themeChanged();
     void defaultIconSizeChanged();
     void iconSizesChanged();
+    void defaultFontChanged();
+    void smallestFontChanged();
 
 private:
     int m_defaultIconSize;
