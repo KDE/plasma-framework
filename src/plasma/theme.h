@@ -55,7 +55,6 @@ class ThemePrivate;
 class PLASMA_EXPORT Theme : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString themeName READ themeName)
 
     public:
         enum ColorRole {
@@ -121,7 +120,7 @@ class PLASMA_EXPORT Theme : public QObject
          *           ".svg" part or a leading slash)
          * @return the full path to the requested file for the current theme
          */
-        Q_INVOKABLE QString imagePath(const QString &name) const;
+        QString imagePath(const QString &name) const;
 
         /**
          * Retrieves the default wallpaper associated with this theme.
@@ -130,7 +129,7 @@ class PLASMA_EXPORT Theme : public QObject
          *           is passed in, then a default size will be provided instead.
          * @return the full path to the wallpaper image
          */
-        Q_INVOKABLE QString wallpaperPath(const QSize &size = QSize()) const;
+        QString wallpaperPath(const QSize &size = QSize()) const;
 
         /**
          * Checks if this theme has an image named in a certain way
@@ -139,21 +138,21 @@ class PLASMA_EXPORT Theme : public QObject
          *           ".svg" part or a leading slash)
          * @return true if the image exists for this theme
          */
-        Q_INVOKABLE bool currentThemeHasImage(const QString &name) const;
+        bool currentThemeHasImage(const QString &name) const;
 
         /**
          * Returns the color scheme configurationthat goes along this theme.
          * This can be used with KStatefulBrush and KColorScheme to determine
          * the proper colours to use along with the visual elements in this theme.
          */
-        Q_INVOKABLE KSharedConfigPtr colorScheme() const;
+        KSharedConfigPtr colorScheme() const;
 
         /**
          * Returns the text color to be used by items resting on the background
          *
          * @param role which role (usage pattern) to get the color for
          */
-        Q_INVOKABLE QColor color(ColorRole role) const;
+        QColor color(ColorRole role) const;
 
         /**
          * Sets the default font to be used with themed items. Defaults to
@@ -162,24 +161,24 @@ class PLASMA_EXPORT Theme : public QObject
          * @param font the new font
          * @param role which role (usage pattern) to set the font for
          */
-        Q_INVOKABLE void setFont(const QFont &font, FontRole role = DefaultFont);
+        void setFont(const QFont &font, FontRole role = DefaultFont);
 
         /**
          * Returns the font to be used by themed items
          *
          * @param role which role (usage pattern) to get the font for
          */
-        Q_INVOKABLE QFont font(FontRole role) const;
+        QFont font(FontRole role) const;
 
         /**
          * @return the font metrics for the font to be used by themed items
          */
-        Q_INVOKABLE QFontMetrics fontMetrics() const;
+        QFontMetrics fontMetrics() const;
 
         /**
          * @return true if the window manager effects (e.g. translucency, compositing) is active or not
          */
-        Q_INVOKABLE bool windowTranslucencyEnabled() const;
+        bool windowTranslucencyEnabled() const;
 
         /**
          * Tells the theme whether to follow the global settings or use application
@@ -238,7 +237,7 @@ class PLASMA_EXPORT Theme : public QObject
          *
          * @since 4.5
          */
-        Q_INVOKABLE QString styleSheet(const QString &css = QString()) const;
+        QString styleSheet(const QString &css = QString()) const;
 
 
         /**
