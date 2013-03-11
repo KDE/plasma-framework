@@ -319,20 +319,11 @@ QString Applet::title() const
         return d->customTitle;
     }
 
-    if (d->isContainment) {
-        const Containment *c = qobject_cast<const Containment*>(this);
-        if (c && c->d->isPanelContainment()) {
-            return i18n("Panel");
-        } else if (!d->appletDescription.isValid()) {
-            return i18n("Unknown");
-        } else {
-            return d->appletDescription.name();
-        }
-    } else if (!d->appletDescription.isValid()) {
-        return i18n("Unknown Widget");
+    if (d->appletDescription.isValid()) {
+        return d->appletDescription.name();
     }
 
-    return d->appletDescription.name();
+    return i18n("Unknown");
 }
 
 void Applet::setTitle(const QString &title) const
