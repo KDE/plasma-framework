@@ -321,13 +321,6 @@ class PLASMA_EXPORT Theme : public QObject
          */
         void themeChanged();
 
-    public Q_SLOTS:
-        /**
-         * Notifies the Theme object that the theme settings have changed
-         * and should be read from the config file
-         **/
-        void settingsChanged();
-
     private:
         friend class ThemeSingleton;
         friend class ThemePrivate;
@@ -340,6 +333,7 @@ class PLASMA_EXPORT Theme : public QObject
         Q_PRIVATE_SLOT(d, void scheduledCacheUpdate())
         Q_PRIVATE_SLOT(d, void onAppExitCleanup())
         Q_PRIVATE_SLOT(d, void notifyOfChanged())
+        Q_PRIVATE_SLOT(d, void settingsChanged())
 };
 
 } // Plasma namespace

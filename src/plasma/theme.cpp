@@ -155,6 +155,7 @@ public:
     void scheduleThemeChangeNotification(CacheTypes caches);
     void notifyOfChanged();
     void colorsChanged();
+    void settingsChanged();
     void blurBehindChanged(bool blur);
     bool useCache();
     void settingsFileChanged(const QString &);
@@ -473,7 +474,7 @@ Theme::Theme(QObject *parent)
     : QObject(parent),
       d(new ThemePrivate(this))
 {
-    settingsChanged();
+    d->settingsChanged();
     if (QCoreApplication::instance()) {
         connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()),
                 this, SLOT(onAppExitCleanup()));
@@ -514,14 +515,14 @@ void ThemePrivate::settingsFileChanged(const QString &file)
 {
     if (file.endsWith(themeRcFile)) {
         config().config()->reparseConfiguration();
-        q->settingsChanged();
+        settingsChanged();
     }
 }
 
-void Theme::settingsChanged()
+void ThemePrivate::settingsChanged()
 {
-    KConfigGroup cg = d->config();
-    d->setThemeName(cg.readEntry("name", ThemePrivate::defaultTheme), false);
+    KConfigGroup cg = config();
+    setThemeName(cg.readEntry("name", ThemePrivate::defaultTheme), false);
 }
 
 void Theme::setThemeName(const QString &themeName)
@@ -837,7 +838,7 @@ void Theme::setUseGlobalSettings(bool useGlobal)
     d->useGlobal = useGlobal;
     d->cfg = KConfigGroup();
     d->themeName.clear();
-    settingsChanged();
+    d->settingsChanged();
 }
 
 bool Theme::useGlobalSettings() const
