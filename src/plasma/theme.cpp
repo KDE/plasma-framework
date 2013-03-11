@@ -829,11 +829,6 @@ QColor Theme::color(ColorRole role) const
     return QColor();
 }
 
-bool Theme::windowTranslucencyEnabled() const
-{
-    return d->compositingActive;
-}
-
 void Theme::setUseGlobalSettings(bool useGlobal)
 {
     if (d->useGlobal == useGlobal) {

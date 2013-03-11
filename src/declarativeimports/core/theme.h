@@ -40,7 +40,6 @@ class ThemeProxy : public QObject
     Q_OBJECT
 
     Q_PROPERTY(QString themeName READ themeName NOTIFY themeChanged)
-    Q_PROPERTY(bool windowTranslucentEnabled READ windowTranslucencyEnabled NOTIFY themeChanged)
     Q_PROPERTY(KUrl homepage READ homepage NOTIFY themeChanged)
     Q_PROPERTY(bool useGlobalSettings READ useGlobalSettings NOTIFY themeChanged)
     Q_PROPERTY(QString wallpaperPath READ wallpaperPath NOTIFY themeChanged)
@@ -98,7 +97,6 @@ public:
      */
     Q_INVOKABLE QSizeF mSize(const QFont &font = QApplication::font()) const;
 
-    bool windowTranslucencyEnabled() const;
     KUrl homepage() const;
     bool useGlobalSettings() const;
     QString wallpaperPath() const;

@@ -73,11 +73,6 @@ QSizeF ThemeProxy::mSize(const QFont &font) const
 }
 
 
-bool ThemeProxy::windowTranslucencyEnabled() const
-{
-    return Plasma::Theme::defaultTheme()->windowTranslucencyEnabled();
-}
-
 KUrl ThemeProxy::homepage() const
 {
     return Plasma::Theme::defaultTheme()->homepage();

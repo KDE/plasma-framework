@@ -149,11 +149,6 @@ class PLASMA_EXPORT Theme : public QObject
         QColor color(ColorRole role) const;
 
         /**
-         * @return true if the window manager effects (e.g. translucency, compositing) is active or not
-         */
-        bool windowTranslucencyEnabled() const;
-
-        /**
          * Tells the theme whether to follow the global settings or use application
          * specific settings
          *
