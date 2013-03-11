@@ -21,6 +21,7 @@
 #ifndef PLASMA_THEME_P_H
 #define PLASMA_THEME_P_H
 
+#include "theme.h"
 #include <QHash>
 
 #include <kdebug.h>
@@ -37,6 +38,8 @@
 
 namespace Plasma
 {
+
+class Theme;
 
 //NOTE: Default wallpaper can be set from the theme configuration
 #define DEFAULT_WALLPAPER_THEME "default"
@@ -57,105 +60,48 @@ enum CacheType {
 Q_DECLARE_FLAGS(CacheTypes, CacheType)
 Q_DECLARE_OPERATORS_FOR_FLAGS(CacheTypes)
     
-class ThemePrivate
+class ThemePrivate : public QObject
 {
+    Q_OBJECT
+
 public:
-    ThemePrivate(Theme *theme)
-        : q(theme),
-          colorScheme(QPalette::Active, KColorScheme::Window, KSharedConfigPtr(0)),
-          buttonColorScheme(QPalette::Active, KColorScheme::Button, KSharedConfigPtr(0)),
-          viewColorScheme(QPalette::Active, KColorScheme::View, KSharedConfigPtr(0)),
-          defaultWallpaperTheme(DEFAULT_WALLPAPER_THEME),
-          defaultWallpaperSuffix(DEFAULT_WALLPAPER_SUFFIX),
-          defaultWallpaperWidth(DEFAULT_WALLPAPER_WIDTH),
-          defaultWallpaperHeight(DEFAULT_WALLPAPER_HEIGHT),
-          pixmapCache(0),
-          cacheSize(0),
-          cachesToDiscard(NoCache),
-          locolor(false),
-          compositingActive(KWindowSystem::self()->compositingActive()),
-          blurActive(false),
-          isDefault(false),
-          useGlobal(true),
-          hasWallpapers(false)
-    {
-        ThemeConfig config;
-        cacheTheme = config.cacheTheme();
+    ThemePrivate(Theme *theme);
+    ~ThemePrivate();
 
-        saveTimer = new QTimer(q);
-        saveTimer->setSingleShot(true);
-        saveTimer->setInterval(600);
-        QObject::connect(saveTimer, SIGNAL(timeout()), q, SLOT(scheduledCacheUpdate()));
-
-        updateNotificationTimer = new QTimer(q);
-        updateNotificationTimer->setSingleShot(true);
-        updateNotificationTimer->setInterval(500);
-        QObject::connect(updateNotificationTimer, SIGNAL(timeout()), q, SLOT(notifyOfChanged()));
-
-        if (QPixmap::defaultDepth() > 8) {
-#if HAVE_X11
-            //watch for blur effect property changes as well
-            if (!s_blurEffectWatcher) {
-                s_blurEffectWatcher = new EffectWatcher("_KDE_NET_WM_BLUR_BEHIND_REGION");
-            }
-
-            QObject::connect(s_blurEffectWatcher, SIGNAL(effectChanged(bool)), q, SLOT(blurBehindChanged(bool)));
-#endif
-        }
-    }
-
-    ~ThemePrivate()
-    {
-       delete pixmapCache;
-    }
-
-    KConfigGroup &config()
-    {
-        if (!cfg.isValid()) {
-            QString groupName = "Theme";
-
-            if (!useGlobal) {
-                QString app = QCoreApplication::applicationName();
-
-                if (!app.isEmpty()) {
-#ifndef NDEBUG
-                    kDebug() << "using theme for app" << app;
-#endif
-                    groupName.append("-").append(app);
-                }
-            }
-
-            cfg = KConfigGroup(KSharedConfig::openConfig(themeRcFile), groupName);
-        }
-
-        return cfg;
-    }
+    KConfigGroup &config();
 
     QString findInTheme(const QString &image, const QString &theme, bool cache = true);
-    void compositingChanged(bool active);
     void discardCache(CacheTypes caches);
-    void scheduledCacheUpdate();
     void scheduleThemeChangeNotification(CacheTypes caches);
-    void notifyOfChanged();
-    void colorsChanged();
-    void settingsChanged();
-    void blurBehindChanged(bool blur);
     bool useCache();
-    void settingsFileChanged(const QString &);
     void setThemeName(const QString &themeName, bool writeSettings);
-    void onAppExitCleanup();
     void processWallpaperSettings(KConfigBase *metadata);
 
     const QString processStyleSheet(const QString &css);
+    QColor color(Theme::ColorRole role) const;
 
+public Q_SLOTS:
+    void compositingChanged(bool active);
+    void colorsChanged();
+    void blurBehindChanged(bool blur);
+    void settingsFileChanged(const QString &settings);
+    void scheduledCacheUpdate();
+    void onAppExitCleanup();
+    void notifyOfChanged();
+    void settingsChanged();
+
+Q_SIGNALS:
+    void themeChanged();
+
+public:
     static const char *defaultTheme;
     static const char *systemColorsTheme;
     static const char *themeRcFile;
 #if HAVE_X11
     static EffectWatcher *s_blurEffectWatcher;
 #endif
+    static QHash<QString, ThemePrivate *>dAssociations;
 
-    Theme *q;
     QString themeName;
     KPluginInfo pluginInfo;
     QList<QString> fallbackThemes;

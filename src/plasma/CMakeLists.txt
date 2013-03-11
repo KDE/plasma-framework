@@ -95,6 +95,7 @@ set(plasma_LIB_SRCS
     private/storagethread.cpp
     private/applet_p.cpp
     private/containment_p.cpp
+    private/theme_p.cpp
 
     querymatch.cpp
     runnercontext.cpp
