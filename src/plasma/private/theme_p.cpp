@@ -290,29 +290,6 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
         }
 
         return stylesheet;
-    } else if (css == "SVG") {
-        stylesheet = cachedStyleSheets.value(SVGSTYLE);
-        if (stylesheet.isEmpty()) {
-            QString skel = ".ColorScheme-%1{color:%2;}";
-
-            stylesheet += skel.arg("Text","%textcolor");
-            stylesheet += skel.arg("Background","%backgroundcolor");
-
-            stylesheet += skel.arg("ButtonText","%buttontextcolor");
-            stylesheet += skel.arg("ButtonBackground","%buttonbackgroundcolor");
-            stylesheet += skel.arg("ButtonHover","%buttonhovercolor");
-            stylesheet += skel.arg("ButtonFocus","%buttonfocuscolor");
-
-            stylesheet += skel.arg("ViewText","%viewtextcolor");
-            stylesheet += skel.arg("ViewBackground","%viewbackgroundcolor");
-            stylesheet += skel.arg("ViewHover","%viewhovercolor");
-            stylesheet += skel.arg("ViewFocus","%viewfocuscolor");
-
-            stylesheet = processStyleSheet(stylesheet);
-            cachedStyleSheets.insert(SVGSTYLE, stylesheet);
-        }
-
-        return stylesheet;
     } else {
         stylesheet = css;
     }
@@ -345,6 +322,32 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
     for ( ; it != itEnd; ++it) {
         stylesheet.replace(it.key(), it.value());
     }
+    return stylesheet;
+}
+
+const QString ThemePrivate::svgStyleSheet()
+{
+    QString stylesheet = cachedStyleSheets.value(SVGSTYLE);
+    if (stylesheet.isEmpty()) {
+        QString skel = ".ColorScheme-%1{color:%2;}";
+
+        stylesheet += skel.arg("Text","%textcolor");
+        stylesheet += skel.arg("Background","%backgroundcolor");
+
+        stylesheet += skel.arg("ButtonText","%buttontextcolor");
+        stylesheet += skel.arg("ButtonBackground","%buttonbackgroundcolor");
+        stylesheet += skel.arg("ButtonHover","%buttonhovercolor");
+        stylesheet += skel.arg("ButtonFocus","%buttonfocuscolor");
+
+        stylesheet += skel.arg("ViewText","%viewtextcolor");
+        stylesheet += skel.arg("ViewBackground","%viewbackgroundcolor");
+        stylesheet += skel.arg("ViewHover","%viewhovercolor");
+        stylesheet += skel.arg("ViewFocus","%viewfocuscolor");
+
+        stylesheet = processStyleSheet(stylesheet);
+        cachedStyleSheets.insert(SVGSTYLE, stylesheet);
+    }
+
     return stylesheet;
 }
 

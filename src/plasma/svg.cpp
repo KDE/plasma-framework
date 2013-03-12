@@ -20,6 +20,7 @@
 
 #include "svg.h"
 #include "private/svg_p.h"
+#include "private/theme_p.h"
 
 #include <cmath>
 
@@ -413,7 +414,7 @@ void SvgPrivate::createRenderer()
     //kDebug() << "FAIL! **************************";
     //kDebug() << path << "**";
 
-    QString styleSheet = cacheAndColorsTheme()->styleSheet("SVG");
+    QString styleSheet = cacheAndColorsTheme()->d->svgStyleSheet();
     styleCrc = qChecksum(styleSheet.toUtf8(), styleSheet.size());
 
     QHash<QString, SharedSvgRenderer::Ptr>::const_iterator it = s_renderers.constFind(styleCrc + path);

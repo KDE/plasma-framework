@@ -34,6 +34,7 @@ namespace Plasma
 {
 
 class ThemePrivate;
+class SvgPrivate;
 
 /**
  * @class Theme plasma/theme.h <Plasma/Theme>
@@ -312,7 +313,7 @@ class PLASMA_EXPORT Theme : public QObject
         void themeChanged();
 
     private:
-        friend class ThemeSingleton;
+        friend class SvgPrivate;
         friend class ThemePrivate;
         ThemePrivate *d;
 };

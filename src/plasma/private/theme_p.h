@@ -78,6 +78,7 @@ public:
     void processWallpaperSettings(KConfigBase *metadata);
 
     const QString processStyleSheet(const QString &css);
+    const QString svgStyleSheet();
     QColor color(Theme::ColorRole role) const;
 
 public Q_SLOTS:
