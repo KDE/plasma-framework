@@ -41,7 +41,8 @@ ThemeProxy::ThemeProxy(QObject *parent)
     m_iconSizes->insert("small", KIconLoader::global()->currentSize(KIconLoader::Small));
     m_iconSizes->insert("dialog", KIconLoader::global()->currentSize(KIconLoader::Dialog));
 
-    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), this, SIGNAL(themeChanged()));
+    m_theme = new Plasma::Theme(this);
+    connect(m_theme, SIGNAL(themeChanged()), this, SIGNAL(themeChanged()));
     connect(KIconLoader::global(), SIGNAL(iconLoaderSettingsChanged()), this, SLOT(iconLoaderSettingsChanged()));
 
     connect(KGlobalSettings::self(), &KGlobalSettings::kdisplayFontChanged, this, &ThemeProxy::defaultFontChanged);
@@ -54,7 +55,7 @@ ThemeProxy::~ThemeProxy()
 
 QString ThemeProxy::themeName() const
 {
-    return Plasma::Theme::defaultTheme()->themeName();
+    return m_theme->themeName();
 }
 
 QFont ThemeProxy::defaultFont() const
@@ -75,87 +76,87 @@ QSizeF ThemeProxy::mSize(const QFont &font) const
 
 bool ThemeProxy::useGlobalSettings() const
 {
-    return Plasma::Theme::defaultTheme()->useGlobalSettings();
+    return m_theme->useGlobalSettings();
 }
 
 QString ThemeProxy::wallpaperPath() const
 {
-    return Plasma::Theme::defaultTheme()->wallpaperPath();
+    return m_theme->wallpaperPath();
 }
 
 QString ThemeProxy::wallpaperPathForSize(int width, int height) const
 {
-    return Plasma::Theme::defaultTheme()->wallpaperPath(QSize(width, height));
+    return m_theme->wallpaperPath(QSize(width, height));
 }
 
 QColor ThemeProxy::textColor() const
 {
-    return Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
+    return m_theme->color(Plasma::Theme::TextColor);
 }
 
 QColor ThemeProxy::highlightColor() const
 {
-    return Plasma::Theme::defaultTheme()->color(Plasma::Theme::HighlightColor);
+    return m_theme->color(Plasma::Theme::HighlightColor);
 }
 
 QColor ThemeProxy::backgroundColor() const
 {
-    return Plasma::Theme::defaultTheme()->color(Plasma::Theme::BackgroundColor);
+    return m_theme->color(Plasma::Theme::BackgroundColor);
 }
 
 QColor ThemeProxy::buttonTextColor() const
 {
-    return Plasma::Theme::defaultTheme()->color(Plasma::Theme::ButtonTextColor);
+    return m_theme->color(Plasma::Theme::ButtonTextColor);
 }
 
 QColor ThemeProxy::buttonBackgroundColor() const
 {
-    return Plasma::Theme::defaultTheme()->color(Plasma::Theme::ButtonBackgroundColor);
+    return m_theme->color(Plasma::Theme::ButtonBackgroundColor);
 }
 
 QColor ThemeProxy::linkColor() const
 {
-    return Plasma::Theme::defaultTheme()->color(Plasma::Theme::LinkColor);
+    return m_theme->color(Plasma::Theme::LinkColor);
 }
 
 QColor ThemeProxy::visitedLinkColor() const
 {
-    return Plasma::Theme::defaultTheme()->color(Plasma::Theme::VisitedLinkColor);
+    return m_theme->color(Plasma::Theme::VisitedLinkColor);
 }
 
 QColor ThemeProxy::buttonHoverColor() const
 {
-    return Plasma::Theme::defaultTheme()->color(Plasma::Theme::ButtonHoverColor);
+    return m_theme->color(Plasma::Theme::ButtonHoverColor);
 }
 
 QColor ThemeProxy::buttonFocusColor() const
 {
-    return Plasma::Theme::defaultTheme()->color(Plasma::Theme::ButtonFocusColor);
+    return m_theme->color(Plasma::Theme::ButtonFocusColor);
 }
 
 QColor ThemeProxy::viewTextColor() const
 {
-    return Plasma::Theme::defaultTheme()->color(Plasma::Theme::ViewTextColor);
+    return m_theme->color(Plasma::Theme::ViewTextColor);
 }
 
 QColor ThemeProxy::viewBackgroundColor() const
 {
-    return Plasma::Theme::defaultTheme()->color(Plasma::Theme::ViewBackgroundColor);
+    return m_theme->color(Plasma::Theme::ViewBackgroundColor);
 }
 
 QColor ThemeProxy::viewHoverColor() const
 {
-    return Plasma::Theme::defaultTheme()->color(Plasma::Theme::ViewHoverColor);
+    return m_theme->color(Plasma::Theme::ViewHoverColor);
 }
 
 QColor ThemeProxy::viewFocusColor() const
 {
-    return Plasma::Theme::defaultTheme()->color(Plasma::Theme::ViewFocusColor);
+    return m_theme->color(Plasma::Theme::ViewFocusColor);
 }
 
 QString ThemeProxy::styleSheet() const
 {
-    return Plasma::Theme::defaultTheme()->styleSheet(QString());
+    return m_theme->styleSheet(QString());
 }
 
 int ThemeProxy::smallIconSize() const

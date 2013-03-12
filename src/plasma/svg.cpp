@@ -240,7 +240,7 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
 Theme *SvgPrivate::actualTheme()
 {
     if (!theme) {
-        theme = Plasma::Theme::defaultTheme();
+        theme = new Plasma::Theme(q);
     }
 
     return theme.data();
@@ -820,7 +820,7 @@ void Svg::setTheme(Plasma::Theme *theme)
 
 Theme *Svg::theme() const
 {
-    return d->theme ? d->theme.data() : Theme::defaultTheme();
+    return d->theme.data();
 }
 
 } // Plasma namespace

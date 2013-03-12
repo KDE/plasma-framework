@@ -52,58 +52,6 @@ void shadowBlur(QImage &image, int radius, const QColor &color)
     p.end();
 }
 
-//TODO: we should have shadowText methods that paint the results directly into a QPainter passed in
-QPixmap shadowText(QString text, QColor textColor, QColor shadowColor, QPoint offset, int radius)
-{
-    return shadowText(text, qApp->font(), textColor, shadowColor, offset, radius);
-}
-
-QPixmap shadowText(QString text, const QFont &font, QColor textColor, QColor shadowColor, QPoint offset, int radius)
-{
-    //don't try to paint stuff on a future null pixmap because the text is empty
-    if (text.isEmpty()) {
-        return QPixmap();
-    }
-
-    // Draw text
-    QFontMetrics fm(font);
-    QRect textRect = fm.boundingRect(text);
-    QPixmap textPixmap(textRect.width(), fm.height());
-    textPixmap.fill(Qt::transparent);
-    QPainter p(&textPixmap);
-    p.setPen(textColor);
-    p.setFont(font);
-    // FIXME: the center alignment here is odd: the rect should be the size needed by
-    //        the text, but for some fonts and configurations this is off by a pixel or so
-    //        and "centering" the text painting 'fixes' that. Need to research why
-    //        this is the case and determine if we should be painting it differently here,
-    //        doing soething different with the boundingRect call or if it's a problem
-    //        in Qt itself
-    p.drawText(textPixmap.rect(), Qt::AlignCenter, text);
-    p.end();
-
-    //Draw blurred shadow
-    QImage img(textRect.size() + QSize(radius * 2, radius * 2), QImage::Format_ARGB32_Premultiplied);
-    img.fill(0);
-    p.begin(&img);
-    p.drawImage(QPoint(radius, radius), textPixmap.toImage());
-    p.end();
-    shadowBlur(img, radius, shadowColor);
-
-    //Compose text and shadow
-    int addSizeX = qMax(0, qAbs(offset.x()) - radius);
-    int addSizeY = qMax(0, qAbs(offset.y()) - radius);
-
-    QPixmap finalPixmap(img.size() + QSize(addSizeX, addSizeY));
-    finalPixmap.fill(Qt::transparent);
-    p.begin(&finalPixmap);
-    p.drawImage(qMax(0, offset.x()), qMax(0, offset.y()), img);
-    p.drawPixmap(radius + qMax(0, -offset.x()), radius + qMax(0, -offset.y()), textPixmap);
-    p.end();
-
-    return finalPixmap;
-}
-
 QPixmap texturedText(const QString &text, const QFont &font, Plasma::Svg *texture)
 {
     QFontMetrics fm(font);

@@ -100,10 +100,11 @@ public:
 #if HAVE_X11
     static EffectWatcher *s_blurEffectWatcher;
 #endif
+//Ref counting of ThemePrivate instances
     static ThemePrivate *globalTheme;
-    static int globalThemeRefCount;
+    static QAtomicInt globalThemeRefCount;
     static QHash<QString, ThemePrivate *> themes;
-    static QHash<QString, int> themesRefCount;
+    static QHash<QString, QAtomicInt> themesRefCount;
 
     QString themeName;
     KPluginInfo pluginInfo;

@@ -679,7 +679,6 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
 
     const QString id = cacheId(frame, prefix);
 
-    Theme *theme = Theme::defaultTheme();
     bool frameCached = !frame->cachedBackground.isNull();
     bool overlayCached = false;
     const bool overlayAvailable = !prefix.startsWith(QLatin1String("mask-")) && q->hasElement(prefix % "overlay");
@@ -958,11 +957,11 @@ void FrameSvgPrivate::cacheFrame(const QString &prefixToSave, const QPixmap &bac
 
     //kDebug()<<"Saving to cache frame"<<id;
 
-    Theme::defaultTheme()->insertIntoCache(id, background, QString::number((qint64)q, 16) % prefixToSave);
+    theme->insertIntoCache(id, background, QString::number((qint64)q, 16) % prefixToSave);
 
     if (!overlay.isNull()) {
         //insert overlay
-        Theme::defaultTheme()->insertIntoCache("overlay_" % id, overlay, QString::number((qint64)q, 16) % prefixToSave % "overlay");
+        theme->insertIntoCache("overlay_" % id, overlay, QString::number((qint64)q, 16) % prefixToSave % "overlay");
     }
 }
 

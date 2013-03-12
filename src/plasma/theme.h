@@ -40,10 +40,6 @@ class ThemePrivate;
  *
  * @short Interface to the Plasma theme
  *
- * Accessed via Plasma::Theme::defaultTheme() e.g:
- * \code
- * QString imagePath = Plasma::Theme::defaultTheme()->imagePath("widgets/clock")
- * \endcode
  *
  * Plasma::Theme provides access to a common and standardized set of graphic
  * elements stored in SVG format. This allows artists to create single packages
@@ -76,20 +72,13 @@ class PLASMA_EXPORT Theme : public QObject
         };
 
         /**
-         * Singleton pattern accessor
-         **/
-        static Theme *defaultTheme();
-
-        /**
-         * Default constructor. Usually you want to use the singleton instead.
-         * @see defaultTheme
+         * Default constructor. It will be the global theme configured in plasmarc
          * @param parent the parent object
          */
         explicit Theme(QObject *parent = 0);
 
         /**
-         * Construct a theme. Usually you want to use the singleton instead.
-         * @see defaultTheme
+         * Construct a theme. It will be a custom theme instance of themeName.
          * @param themeName the name of the theme to create
          * @param parent the parent object
          * @since 4.3

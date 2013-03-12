@@ -26,6 +26,8 @@
 
 #include <kdebug.h>
 
+#include <Plasma/Theme>
+
 namespace Plasma
 {
 class FrameData
@@ -113,6 +115,7 @@ class FrameSvgPrivate
 public:
     FrameSvgPrivate(FrameSvg *psvg)
       : q(psvg),
+        theme(new Plasma::Theme(q)),
         cacheAll(false),
         overlayPos(0,0)
     {
@@ -135,6 +138,7 @@ public:
     QString prefix;
 
     FrameSvg *q;
+    Plasma::Theme *theme;
 
     bool cacheAll : 1;
     QPoint overlayPos;

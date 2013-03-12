@@ -137,6 +137,7 @@ Q_SIGNALS:
 private:
     int m_defaultIconSize;
     QQmlPropertyMap *m_iconSizes;
+    Plasma::Theme *m_theme;
 };
 
 #endif

@@ -41,9 +41,9 @@ EffectWatcher *ThemePrivate::s_blurEffectWatcher = 0;
 #endif
 
 ThemePrivate *ThemePrivate::globalTheme = 0;
-int ThemePrivate::globalThemeRefCount = 0;
+QAtomicInt ThemePrivate::globalThemeRefCount = QAtomicInt();
 QHash<QString, ThemePrivate *> ThemePrivate::themes = QHash<QString, ThemePrivate*>();
-QHash<QString, int> ThemePrivate::themesRefCount = QHash<QString, int>();
+QHash<QString, QAtomicInt> ThemePrivate::themesRefCount = QHash<QString, QAtomicInt>();
 
 
 ThemePrivate::ThemePrivate(QObject *parent)

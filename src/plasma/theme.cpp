@@ -49,43 +49,19 @@
 namespace Plasma
 {
 
-class ThemeSingleton
-{
-public:
-    ThemeSingleton()
-    {
-        self.d->isDefault = true;
-
-        //FIXME: if/when kconfig gets change notification, this will be unnecessary
-        KDirWatch::self()->addFile(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + QLatin1Char('/') + ThemePrivate::themeRcFile);
-        QObject::connect(KDirWatch::self(), SIGNAL(created(QString)), &self, SLOT(settingsFileChanged(QString)));
-        QObject::connect(KDirWatch::self(), SIGNAL(dirty(QString)), &self, SLOT(settingsFileChanged(QString)));
-    }
-
-   Theme self;
-};
-
-Q_GLOBAL_STATIC(ThemeSingleton, privateThemeSelf)
-
-Theme *Theme::defaultTheme()
-{
-    return &privateThemeSelf()->self;
-}
-
 Theme::Theme(QObject *parent)
     : QObject(parent)
 {
     if (!ThemePrivate::globalTheme) {
         ThemePrivate::globalTheme = new ThemePrivate;
-        ++ThemePrivate::globalThemeRefCount;
     }
-
+    ThemePrivate::globalThemeRefCount.ref();
     d = ThemePrivate::globalTheme;
 
     d->settingsChanged();
     if (QCoreApplication::instance()) {
         connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()),
-                this, SLOT(onAppExitCleanup()));
+                d, SLOT(onAppExitCleanup()));
     }
     connect(d, &ThemePrivate::themeChanged, this, &Theme::themeChanged);
 }
@@ -95,10 +71,10 @@ Theme::Theme(const QString &themeName, QObject *parent)
 {
     if (!ThemePrivate::themes.contains(themeName)) {
         ThemePrivate::themes[themeName] = new ThemePrivate;
-        ThemePrivate::themesRefCount[themeName] = 0;
+        ThemePrivate::themesRefCount[themeName] = QAtomicInt();
     }
 
-    ++ThemePrivate::themesRefCount[themeName];
+    ThemePrivate::themesRefCount[themeName].ref();
     d = ThemePrivate::themes[themeName];
 
     // turn off caching so we don't accidently trigger unnecessary disk activity at this point
@@ -108,7 +84,7 @@ Theme::Theme(const QString &themeName, QObject *parent)
     d->cacheTheme = useCache;
     if (QCoreApplication::instance()) {
         connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()),
-                this, SLOT(onAppExitCleanup()));
+                d, SLOT(onAppExitCleanup()));
     }
     connect(d, &ThemePrivate::themeChanged, this, &Theme::themeChanged);
 }
@@ -127,20 +103,20 @@ Theme::~Theme()
     d->onAppExitCleanup();
 
     if (d == ThemePrivate::globalTheme) {
-        --ThemePrivate::globalThemeRefCount;
-        if (ThemePrivate::globalThemeRefCount == 0) {
+        if (!ThemePrivate::globalThemeRefCount.deref()) {
+            disconnect(ThemePrivate::globalTheme, 0, this, 0);
             delete ThemePrivate::globalTheme;
+            ThemePrivate::globalTheme = 0;
+            d = 0;
         }
     } else {
-        --ThemePrivate::themesRefCount[d->themeName];
-        if (ThemePrivate::themesRefCount[d->themeName] == 0) {
+        if (!ThemePrivate::themesRefCount[d->themeName].deref()) {
             ThemePrivate *themePrivate = ThemePrivate::themes[d->themeName];
             ThemePrivate::themes.remove(d->themeName);
             ThemePrivate::themesRefCount.remove(d->themeName);
             delete themePrivate;
         }
     }
-    delete d;
 }
 
 void Theme::setThemeName(const QString &themeName)
@@ -150,23 +126,25 @@ void Theme::setThemeName(const QString &themeName)
     }
 
     if (d != ThemePrivate::globalTheme) {
-        --ThemePrivate::themesRefCount[d->themeName];
-        if (ThemePrivate::themesRefCount[d->themeName] == 0) {
+        disconnect(QCoreApplication::instance(), 0, d, 0);
+        if (!ThemePrivate::themesRefCount[d->themeName].deref()) {
             ThemePrivate *themePrivate = ThemePrivate::themes[d->themeName];
             ThemePrivate::themes.remove(d->themeName);
             ThemePrivate::themesRefCount.remove(d->themeName);
             delete themePrivate;
         }
-
         if (!ThemePrivate::themes.contains(themeName)) {
             ThemePrivate::themes[themeName] = new ThemePrivate;
-            ThemePrivate::themesRefCount[themeName] = 0;
+            ThemePrivate::themesRefCount[themeName] = QAtomicInt();
+        }
+        ThemePrivate::themesRefCount[themeName].ref();
+        d = ThemePrivate::themes[themeName];
+        if (QCoreApplication::instance()) {
+            connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()),
+                    d, SLOT(onAppExitCleanup()));
         }
         connect(d, &ThemePrivate::themeChanged, this, &Theme::themeChanged);
     }
-
-    ++ThemePrivate::themesRefCount[themeName];
-    d = ThemePrivate::themes[themeName];
 
     d->setThemeName(themeName, true);
 }

@@ -22,13 +22,20 @@
 
 #include <QQuickImageProvider>
 
+namespace Plasma
+{
+    class Theme;
+}
 
 class AppBackgroundProvider : public QQuickImageProvider
 {
 
 public:
     AppBackgroundProvider();
+    ~AppBackgroundProvider();
     virtual QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
+private:
+    Plasma::Theme *m_theme;
 };
 
 #endif

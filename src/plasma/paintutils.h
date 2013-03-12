@@ -46,23 +46,6 @@ namespace PaintUtils
  */
 PLASMA_EXPORT void shadowBlur(QImage &image, int radius, const QColor &color);
 
-/**
- * Returns a pixmap containing text with blurred shadow.
- * Text and shadow colors default to Plasma::Theme colors.
- */
-PLASMA_EXPORT QPixmap shadowText(QString text,
-    const QFont &font,
-    QColor textColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor),
-    QColor shadowColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::BackgroundColor),
-    QPoint offset = QPoint(1,1),
-    int radius = 2);
-
-PLASMA_EXPORT QPixmap shadowText(QString text,
-    QColor textColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor),
-    QColor shadowColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::BackgroundColor),
-    QPoint offset = QPoint(1,1),
-    int radius = 2);
-
 PLASMA_EXPORT QPixmap texturedText(const QString &text, const QFont &font, Plasma::Svg *texture);
 
 PLASMA_EXPORT void drawHalo(QPainter *painter, const QRectF &rect);
