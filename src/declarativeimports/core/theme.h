@@ -35,7 +35,7 @@ class QQmlPropertyMap;
  *
  * Exposed as `Theme` in QML.
  */
-class ThemeProxy : public QObject
+class ThemeProxy : public Plasma::Theme
 {
     Q_OBJECT
 
@@ -137,7 +137,6 @@ Q_SIGNALS:
 private:
     int m_defaultIconSize;
     QQmlPropertyMap *m_iconSizes;
-    Plasma::Theme *m_theme;
 };
 
 #endif
