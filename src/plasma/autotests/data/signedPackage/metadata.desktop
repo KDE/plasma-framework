@@ -2,6 +2,7 @@
 Name=JavaScript File Operations
 Name[cs]=Operace souboru JavaScript
 Name[de]=JavaScript-Datei-Aktionen
+Name[es]=Operaciones de archivo JavaScript
 Name[mr]=जावास्क्रिप्ट फाईलच्या क्रिया
 Name[nl]=Bestandsbewerkingen in JavaScript
 Name[pt]=Operações com Ficheiros em JavaScript
@@ -12,6 +13,7 @@ Name[uk]=Дії з файлами за допомогою JavaScript
 Name[x-test]=xxJavaScript File Operationsxx
 Comment=Demonstrates accessing data via HTTP in JavaScript
 Comment[de]=Demonstriert den Zugriff auf Daten über HTTP in JavaScript
+Comment[es]=Demuestra el acceso a datos usando HTTP en JavaScript
 Comment[mr]=जावास्क्रिप्ट मध्ये डेटा HTTP ने बघण्याचे प्रदर्शन
 Comment[nl]=Demonstreert toegang tot gegevens via HTTP in JavaScript
 Comment[pt]=Demonstra o acesso a dados por HTTP em JavaScript

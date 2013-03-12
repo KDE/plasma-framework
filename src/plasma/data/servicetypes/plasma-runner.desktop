@@ -4,6 +4,7 @@ X-KDE-ServiceType=Plasma/Runner
 
 Comment=KRunner plugin
 Comment[de]=KRunner-Modul
+Comment[es]=Complemento para KRunner
 Comment[mr]=KRunner प्लगइन
 Comment[nl]=KRunner-plugin
 Comment[pt]='Plugin' do KRunner

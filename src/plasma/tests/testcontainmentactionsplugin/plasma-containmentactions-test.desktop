@@ -2,6 +2,7 @@
 Name=Test
 Name[cs]=Test
 Name[de]=Test
+Name[es]=Prueba
 Name[mr]=चाचणी
 Name[nl]=Test
 Name[pt]=Teste
@@ -12,6 +13,7 @@ Name[uk]=Тест
 Name[x-test]=xxTestxx
 Comment=A dummy plugin for testing
 Comment[de]=Ein Dummy-Modul zum Testen.
+Comment[es]=Un complemento de simulación para hacer pruebas
 Comment[mr]=चाचणीसाठी नकली प्लगइन
 Comment[nl]=Een dummy plugin voor testen
 Comment[pt]=Um 'plugin' de exemplo para testes
