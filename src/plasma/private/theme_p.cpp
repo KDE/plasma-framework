@@ -46,25 +46,6 @@ QHash<QString, ThemePrivate *> ThemePrivate::themes = QHash<QString, ThemePrivat
 QHash<QString, int> ThemePrivate::themesRefCount = QHash<QString, int>();
 
 
-class ThemePrivateSingleton
-{
-public:
-    ThemePrivateSingleton()
-    {
-        self.isDefault = true;
-
-        //FIXME: if/when kconfig gets change notification, this will be unnecessary
-        KDirWatch::self()->addFile(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + QLatin1Char('/') + ThemePrivate::themeRcFile);
-        QObject::connect(KDirWatch::self(), SIGNAL(created(QString)), &self, SLOT(settingsFileChanged(QString)));
-        QObject::connect(KDirWatch::self(), SIGNAL(dirty(QString)), &self, SLOT(settingsFileChanged(QString)));
-    }
-
-   ThemePrivate self;
-};
-
-Q_GLOBAL_STATIC(ThemePrivateSingleton, themePrivateSelf)
-
-
 ThemePrivate::ThemePrivate(QObject *parent)
     : QObject(parent),
       colorScheme(QPalette::Active, KColorScheme::Window, KSharedConfigPtr(0)),
@@ -112,11 +93,6 @@ ThemePrivate::ThemePrivate(QObject *parent)
 ThemePrivate::~ThemePrivate()
 {
     delete pixmapCache;
-}
-
-ThemePrivate *ThemePrivate::self()
-{
-    return &themePrivateSelf()->self;
 }
 
 KConfigGroup &ThemePrivate::config()

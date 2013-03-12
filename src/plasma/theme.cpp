@@ -73,8 +73,7 @@ Theme *Theme::defaultTheme()
 }
 
 Theme::Theme(QObject *parent)
-    : QObject(parent),
-      d(ThemePrivate::self())
+    : QObject(parent)
 {
     if (!ThemePrivate::globalTheme) {
         ThemePrivate::globalTheme = new ThemePrivate;

@@ -68,8 +68,6 @@ public:
     ThemePrivate(QObject *parent = 0);
     ~ThemePrivate();
 
-    static ThemePrivate *self();
-
     KConfigGroup &config();
 
     QString findInTheme(const QString &image, const QString &theme, bool cache = true);
