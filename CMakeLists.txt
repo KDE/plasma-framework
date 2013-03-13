@@ -167,11 +167,5 @@ endmacro()
 ################# list the subdirectories #################
 add_subdirectory(src)
 add_subdirectory( desktoptheme )
-# add_subdirectory( plasma )
-# add_subdirectory( declarativeimports )
-# add_subdirectory( scriptengines )
-# add_subdirectory( shell )
-#FIXME: port tools
-add_subdirectory( tools )
 
 feature_summary(WHAT ALL   FATAL_ON_MISSING_REQUIRED_PACKAGES)
