@@ -49,8 +49,6 @@ public:
     Containment *addContainment(const QString &name, const QVariantList &args, uint id);
     QList<Plasma::Containment *> importLayout(const KConfigGroup &conf, bool mergeConfig);
 
-    static bool s_positioningContainments;
-
     Corona *q;
     Package package;
     KConfigGroup desktopDefaultsConfig;

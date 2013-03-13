@@ -47,8 +47,6 @@ using namespace Plasma;
 namespace Plasma
 {
 
-bool CoronaPrivate::s_positioningContainments = false;
-
 Corona::Corona(QObject *parent)
     : QObject(parent),
       d(new CoronaPrivate(this))
