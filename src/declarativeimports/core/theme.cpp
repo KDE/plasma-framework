@@ -21,6 +21,7 @@
 
 #include <QQmlPropertyMap>
 
+#include <QFontMetrics>
 #include <KGlobalSettings>
 #include <KIconLoader>
 #include <QApplication>

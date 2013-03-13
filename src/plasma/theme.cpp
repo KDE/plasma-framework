@@ -22,6 +22,7 @@
 
 #include <QApplication>
 #include <QFile>
+#include <QFont>
 #include <QFileInfo>
 #include <QMutableListIterator>
 #include <QPair>
