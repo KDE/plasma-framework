@@ -67,53 +67,61 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1209)
 ########### next target ###############
 
 set(plasma_LIB_SRCS
-    abstractrunner.cpp
-    configloader.cpp
-    containmentactions.cpp
-    datacontainer.cpp
-    dataengine.cpp
-    dataengineconsumer.cpp
-    package.cpp
-    packagestructure.cpp
-    paintutils.cpp
-    pluginloader.cpp
-    framesvg.cpp
+#global
     plasma.cpp
     pluginloader.cpp
-
-    private/associatedapplicationmanager.cpp
+    version.cpp
     private/componentinstaller.cpp
-    private/datacontainer_p.cpp
-    private/dataenginemanager.cpp
-    private/effects/halopainter.cpp
 
-    private/packages.cpp
-    private/packagejob.cpp
-    private/packagejobthread.cpp
-    private/runnerjobs.cpp
-    private/storage.cpp
-    private/storagethread.cpp
-    private/applet_p.cpp
-    private/containment_p.cpp
-    private/theme_p.cpp
-
+#runners
+    abstractrunner.cpp
     querymatch.cpp
     runnercontext.cpp
     runnermanager.cpp
     runnersyntax.cpp
+    private/runnerjobs.cpp
+
+#applets,containments,corona
+    applet.cpp
+    configloader.cpp
+    containment.cpp
+    containmentactions.cpp
+    corona.cpp
+    private/applet_p.cpp
+    private/associatedapplicationmanager.cpp
+    private/containment_p.cpp
+
+#Dataengines, services
+    datacontainer.cpp
+    dataengine.cpp
+    dataengineconsumer.cpp
+    service.cpp
+    servicejob.cpp
+    private/datacontainer_p.cpp
+    private/dataenginemanager.cpp
+    private/storage.cpp
+    private/storagethread.cpp
+
+#packages
+    package.cpp
+    packagestructure.cpp
+    private/packagejob.cpp
+    private/packagejobthread.cpp
+    private/packages.cpp
+
+#graphics
+    framesvg.cpp
+    paintutils.cpp
+    svg.cpp
+    theme.cpp
+    private/effects/halopainter.cpp
+    private/theme_p.cpp
+
+#scripting
     scripting/appletscript.cpp
     scripting/dataenginescript.cpp
     scripting/runnerscript.cpp
     scripting/scriptengine.cpp
-    service.cpp
-    servicejob.cpp
-    svg.cpp
-    theme.cpp
-    version.cpp
-
-    applet.cpp
-    containment.cpp
-    corona.cpp
 )
 
 set(plasma_LIB_SRCS ${plasma_LIB_SRCS} private/effectwatcher.cpp)
