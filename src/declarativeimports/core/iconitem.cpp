@@ -27,7 +27,6 @@
 #include <KIconLoader>
 #include <KIconEffect>
 
-#include <plasma/paintutils.h>
 #include <plasma/svg.h>
 
 
