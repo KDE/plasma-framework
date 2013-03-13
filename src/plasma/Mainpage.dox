@@ -29,25 +29,11 @@ Other important classes are:
  - Plasma::Corona: the canvas that containments are placed on
  - Plasma::View: a QWidget for displaying a containment
  - Plasma::Theme: provides theming support
- - Plasma::Animator: provides animations for things like elements appearing
-   and disappearing
- - Plasma::Delegate: provides an item delegate for Qt's
-   <a href="http://doc.trolltech.com/latest/model-view-programming.html">Model /
-   View framework</a> for menu items.
- - Plasma::ToolTipManager: allows widgets have (themed) tooltips displayed when the
-   mouse is hovered over them
- - Plasma::Dialog: displays a themed application dialog
- - Plasma::Extender: provides detachable sections to Plasma::Applet
- - Plasma::GLApplet: provides an OpenGL-rendered Plasma::Applet
  - Plasma::Package: provides descriptions of packages containing plugins
    for libplasma
- - Plasma::PopupApplet: provides a simple way of implementing a Plasma::Applet
-   consisting of an icon that shows a popup when clicked
  - Plasma::Svg and Plasma::FrameSvg: provides themable, cached SVGs
- - Plasma::Wallpaper: provides pluggable backgrounds for containments
  - Plasma::AppletScript, Plasma::DataEngineScript, Plasma::RunnerScript and
    Plasma::ScriptEngine: provide scripting interfaces for plugins
- - Various themed QGraphicsWidgets for use in creating a Plasma::Applet
 
 
 The
