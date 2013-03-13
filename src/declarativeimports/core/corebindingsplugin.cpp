@@ -75,21 +75,21 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.core"));
 
-    qmlRegisterUncreatableType<PlasmaNamespace>(uri, 0, 1, "Plasma", "");
+    qmlRegisterUncreatableType<PlasmaNamespace>(uri, 2, 0, "Plasma", "");
 
-    qmlRegisterType<Plasma::Svg>(uri, 0, 1, "Svg");
-    qmlRegisterType<Plasma::FrameSvg>(uri, 0, 1, "FrameSvg");
-    qmlRegisterType<Plasma::SvgItem>(uri, 0, 1, "SvgItem");
-    qmlRegisterType<Plasma::FrameSvgItem>(uri, 0, 1, "FrameSvgItem");
+    qmlRegisterType<Plasma::Svg>(uri, 2, 0, "Svg");
+    qmlRegisterType<Plasma::FrameSvg>(uri, 2, 0, "FrameSvg");
+    qmlRegisterType<Plasma::SvgItem>(uri, 2, 0, "SvgItem");
+    qmlRegisterType<Plasma::FrameSvgItem>(uri, 2, 0, "FrameSvgItem");
  
-    qmlRegisterType<ThemeProxy>(uri, 0, 1, "Theme");
+    qmlRegisterType<ThemeProxy>(uri, 2, 0, "Theme");
 
-    qmlRegisterType<Plasma::DataSource>(uri, 0, 1, "DataSource");
-    qmlRegisterType<Plasma::DataModel>(uri, 0, 1, "DataModel");
-    qmlRegisterType<Plasma::SortFilterModel>(uri, 0, 1, "SortFilterModel");
+    qmlRegisterType<Plasma::DataSource>(uri, 2, 0, "DataSource");
+    qmlRegisterType<Plasma::DataModel>(uri, 2, 0, "DataModel");
+    qmlRegisterType<Plasma::SortFilterModel>(uri, 2, 0, "SortFilterModel");
 
-    qmlRegisterType<DialogProxy>(uri, 0, 1, "Dialog");
-//     qmlRegisterType<ToolTipProxy>(uri, 0, 1, "ToolTip");
+    qmlRegisterType<DialogProxy>(uri, 2, 0, "Dialog");
+//     qmlRegisterType<ToolTipProxy>(uri, 2, 0, "ToolTip");
 // 
     qmlRegisterInterface<Plasma::Service>("Service");
     qRegisterMetaType<Plasma::Service*>("Service");
@@ -97,12 +97,12 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qRegisterMetaType<Plasma::ServiceJob*>("ServiceJob");
     qmlRegisterType<QAbstractItemModel>();
 
-    qmlRegisterType<RunnerModel>(uri, 0, 1, "RunnerModel");
+    qmlRegisterType<RunnerModel>(uri, 2, 0, "RunnerModel");
     qmlRegisterInterface<Plasma::QueryMatch>("QueryMatch");
     qRegisterMetaType<Plasma::QueryMatch *>("QueryMatch");
 
     qmlRegisterType<QQmlPropertyMap>();
-    qmlRegisterType<IconItem>(uri, 0, 1, "IconItem");
+    qmlRegisterType<IconItem>(uri, 2, 0, "IconItem");
 
     qmlRegisterInterface<Plasma::DataSource>("DataSource");
     qRegisterMetaType<Plasma::DataSource*>("DataSource");

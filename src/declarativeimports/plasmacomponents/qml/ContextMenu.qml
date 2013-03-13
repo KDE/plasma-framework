@@ -41,7 +41,7 @@
 ****************************************************************************/
 
 import QtQuick 2.0
-import org.kde.plasma.components 0.1
+import org.kde.plasma.components 2.0
 
 /**
  * Provides a component with list of options that the user can choose from.

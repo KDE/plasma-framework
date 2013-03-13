@@ -34,11 +34,11 @@ void QtExtraComponentsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.qtextracomponents"));
     qDebug() << "=========> import loading: " << uri;
-    qmlRegisterType<QPixmapItem>(uri, 0, 1, "QPixmapItem");
-    qmlRegisterType<QImageItem>(uri, 0, 1, "QImageItem");
-    qmlRegisterType<QIconItem>(uri, 0, 1, "QIconItem");
-    qmlRegisterType<MouseEventListener>(uri, 0, 1, "MouseEventListener");
-    qmlRegisterType<ColumnProxyModel>(uri, 0, 1, "ColumnProxyModel");
+    qmlRegisterType<QPixmapItem>(uri, 2, 0, "QPixmapItem");
+    qmlRegisterType<QImageItem>(uri, 2, 0, "QImageItem");
+    qmlRegisterType<QIconItem>(uri, 2, 0, "QIconItem");
+    qmlRegisterType<MouseEventListener>(uri, 2, 0, "MouseEventListener");
+    qmlRegisterType<ColumnProxyModel>(uri, 2, 0, "ColumnProxyModel");
 
     qmlRegisterType<QAbstractItemModel>();
     qRegisterMetaType<QModelIndex>("QModelIndex");

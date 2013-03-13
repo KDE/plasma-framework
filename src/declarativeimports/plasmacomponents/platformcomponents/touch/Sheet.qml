@@ -43,7 +43,7 @@
 import QtQuick 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import "private/AppManager.js" as Utils
-import "." 0.1
+import "." 2.0
 
 /**Documented API
 Inherits:

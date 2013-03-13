@@ -27,8 +27,8 @@ void LocaleBindingsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.locale"));
 
-    qmlRegisterType<Locale>(uri, 0, 1, "Locale");
-    qmlRegisterType<CalendarSystem>(uri, 0, 1, "CalendarSystem");
+    qmlRegisterType<Locale>(uri, 2, 0, "Locale");
+    qmlRegisterType<CalendarSystem>(uri, 2, 0, "CalendarSystem");
 }
 
 #include "localebindingsplugin.moc"

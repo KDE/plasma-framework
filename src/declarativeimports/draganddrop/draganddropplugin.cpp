@@ -34,10 +34,10 @@ void DragAndDropPlugin::registerTypes(const char *uri)
     qDebug() << " ********** " << uri << "loaded.";
     Q_ASSERT(uri == QLatin1String("org.kde.draganddrop"));
 
-    qmlRegisterType<DeclarativeDropArea>(uri, 1, 0, "DropArea");
-    qmlRegisterType<DeclarativeDragArea>(uri, 1, 0, "DragArea");
-    qmlRegisterUncreatableType<DeclarativeMimeData>(uri, 1, 0, "MimeData", "MimeData cannot be created from QML.");
-    qmlRegisterUncreatableType<DeclarativeDragDropEvent>(uri, 1, 0, "DragDropEvent", "DragDropEvent cannot be created from QML.");
+    qmlRegisterType<DeclarativeDropArea>(uri, 2, 0, "DropArea");
+    qmlRegisterType<DeclarativeDragArea>(uri, 2, 0, "DragArea");
+    qmlRegisterUncreatableType<DeclarativeMimeData>(uri, 2, 0, "MimeData", "MimeData cannot be created from QML.");
+    qmlRegisterUncreatableType<DeclarativeDragDropEvent>(uri, 2, 0, "DragDropEvent", "DragDropEvent cannot be created from QML.");
 }
 
 //Q_EXPORT_PLUGIN2(draganddropplugin, DragAndDropPlugin)

@@ -31,7 +31,7 @@ void RunnerModelPlugin::registerTypes(const char *uri)
 {
     kWarning() << "Using deprecated import org.kde.runnermodel, please port to org.kde.plasma.core";
     Q_ASSERT(uri == QLatin1String("org.kde.runnermodel"));
-    qmlRegisterType<RunnerModel>(uri, 0, 1, "RunnerModel");
+    qmlRegisterType<RunnerModel>(uri, 2, 0, "RunnerModel");
     qmlRegisterInterface<Plasma::QueryMatch>("QueryMatch");
     qRegisterMetaType<Plasma::QueryMatch *>("QueryMatch");
 }
