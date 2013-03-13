@@ -41,8 +41,8 @@
 ****************************************************************************/
 
 import QtQuick 2.0
-import org.kde.plasma.extras 0.1 as PlasmaExtras
-import "." 0.1 as PlasmaComponents
+import org.kde.plasma.extras 2.0 as PlasmaExtras
+import "." 2.0 as PlasmaComponents
 
 PlasmaComponents.CommonDialog {
     id: root

@@ -27,7 +27,7 @@ import org.kde.plasma.components 0.1
  *
  * Example usage:
  * @code
- * import org.kde.plasma.extras 0.1 as PlasmaExtras
+ * import org.kde.plasma.extras 2.0 as PlasmaExtras
  * [...]
  * Column {
  *     PlasmaExtras.Title { text: "Fruit sweetness on the rise" }

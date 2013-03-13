@@ -1,16 +1,16 @@
 module org.kde.plasma.extras
 plugin plasmaextracomponentsplugin
 
-App 0.1 App.qml
-ConditionalLoader 0.1 ConditionalLoader.qml
-Heading 0.1 Heading.qml
-Paragraph 0.1 Paragraph.qml
-PageRow 0.1 PageRow.qml
-ScrollArea 0.1 ScrollArea.qml
-Title 0.1 Title.qml
+App 2.0 App.qml
+ConditionalLoader 2.0 ConditionalLoader.qml
+Heading 2.0 Heading.qml
+Paragraph 2.0 Paragraph.qml
+PageRow 2.0 PageRow.qml
+ScrollArea 2.0 ScrollArea.qml
+Title 2.0 Title.qml
 
-ActivateAnimation 0.1 animations/ActivateAnimation.qml
-AppearAnimation 0.1 animations/AppearAnimation.qml
-DisappearAnimation 0.1 animations/DisappearAnimation.qml
-PressedAnimation 0.1 animations/PressedAnimation.qml
-ReleasedAnimation 0.1 animations/ReleasedAnimation.qml
+ActivateAnimation 2.0 animations/ActivateAnimation.qml
+AppearAnimation 2.0 animations/AppearAnimation.qml
+DisappearAnimation 2.0 animations/DisappearAnimation.qml
+PressedAnimation 2.0 animations/PressedAnimation.qml
+ReleasedAnimation 2.0 animations/ReleasedAnimation.qml

@@ -41,9 +41,9 @@
 ****************************************************************************/
 
 import QtQuick 2.0
-import org.kde.plasma.core 0.1 as PlasmaCore
+import org.kde.plasma.core 2.0 as PlasmaCore
 
-import "." 0.1 as PlasmaComponents
+import "." 2.0 as PlasmaComponents
 
 /**
  * A plasma themed SelectionDialog, which can be customized by overriding the

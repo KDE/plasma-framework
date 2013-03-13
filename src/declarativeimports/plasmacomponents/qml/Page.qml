@@ -40,7 +40,7 @@
 
 import QtQuick 2.0
 
-import "." 0.1 as PlasmaComponents
+import "." 2.0 as PlasmaComponents
 
 /**
  * Defines the content of a piece of the user interface, it's meant to be

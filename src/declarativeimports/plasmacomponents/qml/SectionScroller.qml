@@ -40,8 +40,8 @@
 
 import QtQuick 2.0
 import "private/SectionScroller.js" as Sections
-import org.kde.plasma.core 0.1 as PlasmaCore
-import "." 0.1 as PlasmaComponents
+import org.kde.plasma.core 2.0 as PlasmaCore
+import "." 2.0 as PlasmaComponents
 
 /**
  * Similar to a ScrollBar or a ScrollDecorator.

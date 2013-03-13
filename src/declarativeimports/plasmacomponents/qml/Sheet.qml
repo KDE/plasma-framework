@@ -41,9 +41,9 @@
 ****************************************************************************/
 
 import QtQuick 2.0
-import org.kde.plasma.core 0.1 as PlasmaCore
+import org.kde.plasma.core 2.0 as PlasmaCore
 import "private/AppManager.js" as Utils
-import "." 0.1 as PlasmaComponents
+import "." 2.0 as PlasmaComponents
 
 /**
  * Provides a top-level window for short-term tasks and brief interaction with

@@ -44,7 +44,7 @@
 // navigation model. Pages can be defined as QML items or components.
 
 import QtQuick 2.0
-import "." 0.1 as PlasmaComponents
+import "." 2.0 as PlasmaComponents
 import "private/PageStack.js" as Engine
 
 /**

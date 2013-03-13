@@ -41,7 +41,7 @@
 import QtQuick 2.0
 import "private/TabGroup.js" as Engine
 
-import "." 0.1 as PlasmaComponents
+import "." 2.0 as PlasmaComponents
 
 /**
  * Provides a set of pages for a tab-based interface.

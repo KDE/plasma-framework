@@ -18,7 +18,7 @@
  */
 
 import QtQuick 2.0
-import org.kde.plasma.core 0.1 as PlasmaCore
+import org.kde.plasma.core 2.0 as PlasmaCore
 
 /**
  * Used to highlight an item of a list. to be used only as the "highlight"
