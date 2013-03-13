@@ -63,7 +63,6 @@ public:
     QHash<uint, QGraphicsWidget*> offscreenWidgets;
     KActionCollection actions;
     QMap<Plasma::ContainmentType, QHash<QString, QString> > containmentActionsDefaults;
-    QHash<Plasma::ContainmentType, QString> toolBoxPlugins;
 };
 
 }

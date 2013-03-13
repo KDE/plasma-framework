@@ -213,16 +213,7 @@ QRegion Corona::availableScreenRegion(int id) const
 
 void Corona::loadDefaultLayout()
 {
-}
-
-void Corona::setPreferredToolBoxPlugin(const Plasma::ContainmentType type, const QString &plugin)
-{
-    d->toolBoxPlugins[type] = plugin;
-}
-
-QString Corona::preferredToolBoxPlugin(const Plasma::ContainmentType type) const
-{
-    return d->toolBoxPlugins.value(type);
+    //Default implementation does nothing
 }
 
 ImmutabilityType Corona::immutability() const

@@ -145,15 +145,6 @@ public:
     QHash<QString, QString> defaultContainmentActionsPlugins(ContainmentType containmentType) const;
 
     /**
-     * Returns the name of the preferred plugin to be used as containment toolboxes.
-     * CustomContainments and CustomPanelContainments can still override it as their liking. It's also not guaranteed that the plugin will actually exist.
-     *
-     * @param type the containment type of which we want to know the associated toolbox plugin
-     * @since 4.6
-     */
-    QString preferredToolBoxPlugin(const ContainmentType type) const;
-
-    /**
      * Imports an applet layout from a config file. The results will be added to the
      * current set of Containments.
      *
@@ -256,14 +247,6 @@ protected:
      * Loads the default (system wide) layout for this user
      **/
     virtual void loadDefaultLayout();
-
-    /**
-     * @return The preferred toolbox plugin name for a given containment type.
-     * @param type the containment type of which we want to know the preferred toolbox plugin.
-     * @param plugin the toolbox plugin name
-     * @since 4.6
-     */
-    void setPreferredToolBoxPlugin(const ContainmentType type, const QString &plugin);
 
 private:
     CoronaPrivate *const d;
