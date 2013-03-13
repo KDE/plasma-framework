@@ -111,10 +111,8 @@ set(plasma_LIB_SRCS
 
 #graphics
     framesvg.cpp
-    paintutils.cpp
     svg.cpp
     theme.cpp
-    private/effects/halopainter.cpp
     private/theme_p.cpp
 
 #scripting
@@ -176,7 +174,6 @@ set(plasma_LIB_INCLUDES
     datacontainer.h
     dataengine.h
     pluginloader.h
-    paintutils.h
     framesvg.h
     package.h
     packagestructure.h
