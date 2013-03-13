@@ -54,9 +54,9 @@ public:
 
     Corona *q;
     Package package;
+    KConfigGroup desktopDefaultsConfig;
     ImmutabilityType immutability;
     QString configName;
-    QString defaultContainmentPlugin;
     KSharedConfigPtr config;
     QTimer *configSyncTimer;
     QList<Containment*> containments;

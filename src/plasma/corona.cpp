@@ -74,20 +74,6 @@ Plasma::Package Corona::package() const
     return d->package;
 }
 
-void Corona::setDefaultContainmentPlugin(const QString &name)
-{
-    // we could check if it is in:
-    // Containment::listContainments().contains(name) ||
-    // Containment::listContainments(QString(), QCoreApplication::instance()->applicationName()).contains(name)
-    // but that seems like overkill
-    d->defaultContainmentPlugin = name;
-}
-
-QString Corona::defaultContainmentPlugin() const
-{
-    return d->defaultContainmentPlugin;
-}
-
 void Corona::saveLayout(const QString &configName) const
 {
     KSharedConfigPtr c;
@@ -313,7 +299,6 @@ QHash<QString, QString> Corona::defaultContainmentActionsPlugins(ContainmentType
 CoronaPrivate::CoronaPrivate(Corona *corona)
     : q(corona),
       immutability(Mutable),
-      defaultContainmentPlugin("desktop"),
       config(0),
       configSyncTimer(new QTimer(corona)),
       actions(corona)
@@ -337,6 +322,8 @@ CoronaPrivate::~CoronaPrivate()
 
 void CoronaPrivate::init()
 {
+    desktopDefaultsConfig = KConfigGroup(KSharedConfig::openConfig(package.filePath("defaults")), "Desktop");
+
     configSyncTimer->setSingleShot(true);
     QObject::connect(configSyncTimer, SIGNAL(timeout()), q, SLOT(syncConfig()));
 
@@ -415,7 +402,7 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
 
     if (pluginName.isEmpty() || pluginName == "default") {
         // default to the desktop containment
-        pluginName = defaultContainmentPlugin;
+        pluginName = desktopDefaultsConfig.readEntry("Containment", "org.kde.desktop");
     }
 
     bool loadingNull = pluginName == "null";
