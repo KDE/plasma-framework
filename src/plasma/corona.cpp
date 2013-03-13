@@ -25,7 +25,6 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
-#include <QGraphicsGridLayout>
 #include <QMimeData>
 #include <QPainter>
 #include <QTimer>

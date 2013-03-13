@@ -47,7 +47,6 @@ public:
     void containmentDestroyed(QObject *obj);
     void syncConfig();
     Containment *addContainment(const QString &name, const QVariantList &args, uint id);
-    void offscreenWidgetDestroyed(QObject *);
     QList<Plasma::Containment *> importLayout(const KConfigGroup &conf, bool mergeConfig);
 
     static bool s_positioningContainments;
@@ -60,7 +59,6 @@ public:
     KSharedConfigPtr config;
     QTimer *configSyncTimer;
     QList<Containment*> containments;
-    QHash<uint, QGraphicsWidget*> offscreenWidgets;
     KActionCollection actions;
     QMap<Plasma::ContainmentType, QHash<QString, QString> > containmentActionsDefaults;
 };
