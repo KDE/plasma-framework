@@ -20,8 +20,7 @@
 #include "resourceinstance.h"
 
 #include <QApplication>
-#include <QGraphicsObject>
-#include <QGraphicsView>
+#include <QWindow>
 #include <QTimer>
 
 #include <KActivities/ResourceInstance>
@@ -41,43 +40,14 @@ ResourceInstance::~ResourceInstance()
 
 }
 
-QGraphicsView *ResourceInstance::view() const
-{
-    // It's assumed that we won't be visible on more than one view here.
-    // Anything that actually needs view() should only really care about
-    // one of them anyway though.
-    if (!scene()) {
-        return 0;
-    }
-
-    QGraphicsView *found = 0;
-    QGraphicsView *possibleFind = 0;
-    //kDebug() << "looking through" << scene()->views().count() << "views";
-    foreach (QGraphicsView *view, scene()->views()) {
-        //kDebug() << "     checking" << view << view->sceneRect()
-        //         << "against" << sceneBoundingRect() << scenePos();
-        if (view->sceneRect().intersects(sceneBoundingRect()) ||
-            view->sceneRect().contains(scenePos())) {
-            //kDebug() << "     found something!" << view->isActiveWindow();
-            if (view->isActiveWindow()) {
-                found = view;
-            } else {
-                possibleFind = view;
-            }
-        }
-    }
-
-    return found ? found : possibleFind;
-}
-
 void ResourceInstance::syncWid()
 {
-    QGraphicsView *v = view();
-    if (!v) {
+    QWindow *w = window();
+    if (!w) {
         return;
     }
 
-    WId wid = v->topLevelWidget()->effectiveWinId();
+    WId wid = w->winId();
     if (!m_resourceInstance || m_resourceInstance->winId() != wid) {
         delete m_resourceInstance;
 

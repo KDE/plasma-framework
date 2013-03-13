@@ -27,7 +27,6 @@
 #include "package.h"
 
 class KShortcutsDialog;
-class QGraphicsWidget;
 
 namespace Plasma
 {

@@ -94,7 +94,7 @@ void MouseEventListener::mousePressEvent(QMouseEvent *me)
         return;
     }
 
-    //FIXME: when a popup window is visible: a click anywhere hides it: but the old qgraphicswidget will continue to think it's under the mouse
+    //FIXME: when a popup window is visible: a click anywhere hides it: but the old qquickitem will continue to think it's under the mouse
     //doesn't seem to be any good way to properly reset this.
     //this msolution will still caused a missed click after the popup is gone, but gets the situation unblocked.
     if (!isUnderMouse()) {
@@ -164,7 +164,6 @@ QPointF MouseEventListener::buttonDownPos(int btn) const
 }
 
 
-// bool MouseEventListener::sceneEventFilter(QGraphicsItem *item, QEvent *event)
 bool MouseEventListener::childMouseEventFilter(QQuickItem *item, QEvent *event)
 {
     if (!isEnabled()) {

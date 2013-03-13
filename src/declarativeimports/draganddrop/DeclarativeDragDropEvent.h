@@ -25,7 +25,6 @@
 #define DECLARATIVEDRAGDROPEVENT_H
 
 #include <QObject>
-#include <QGraphicsSceneDragDropEvent>
 #include "DeclarativeMimeData.h"
 #include "DeclarativeDropArea.h"
 

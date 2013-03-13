@@ -135,7 +135,6 @@ protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *) {}
     bool childMouseEventFilter(QQuickItem *item, QEvent *event);
-    //bool sceneEventFilter(QGraphicsItem *item, QEvent *event);
 
 private:
     QQmlComponent* m_delegate;

@@ -24,7 +24,6 @@
 #include "DeclarativeDropArea.h"
 #include "DeclarativeDragDropEvent.h"
 
-#include <QGraphicsSceneDragDropEvent>
 #include <QMimeData>
 
 #include <QDebug>

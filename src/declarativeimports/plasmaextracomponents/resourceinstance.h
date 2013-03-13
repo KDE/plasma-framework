@@ -27,7 +27,6 @@ namespace KActivities {
 }
 
 class QTimer;
-class QGraphicsView;
 
 class ResourceInstance : public QQuickItem
 {
@@ -50,9 +49,6 @@ public:
 
     QString title() const;
     void setTitle(const QString &title);
-
-protected:
-    QGraphicsView *view() const;
 
 protected Q_SLOTS:
     void syncWid();
