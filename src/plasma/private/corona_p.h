@@ -58,7 +58,6 @@ public:
     QTimer *configSyncTimer;
     QList<Containment*> containments;
     KActionCollection actions;
-    QMap<Plasma::ContainmentType, QHash<QString, QString> > containmentActionsDefaults;
 };
 
 }

@@ -191,7 +191,7 @@ void Containment::restore(KConfigGroup &group)
 
     KConfigGroup cfg = KConfigGroup(corona()->config(), "ActionPlugins");
     cfg = KConfigGroup(&cfg, QString::number(containmentType()));
-    
+
 
     //kDebug() << cfg.keyList();
     if (cfg.exists()) {
@@ -200,11 +200,18 @@ void Containment::restore(KConfigGroup &group)
             addContainmentActions(key, cfg.readEntry(key, QString()));
         }
     } else { //shell defaults
-        //steal the data directly, for efficiency
-        QHash<QString,QString> defaults = corona()->defaultContainmentActionsPlugins(d->type);
-        for (QHash<QString,QString>::const_iterator it = defaults.constBegin(),
-                end = defaults.constEnd(); it != end; ++it) {
-            addContainmentActions(it.key(), it.value());
+        KConfigGroup defaultActionsCfg;
+        if (d->type == Plasma::PanelContainment) {
+            defaultActionsCfg = KConfigGroup(KSharedConfig::openConfig(corona()->package().filePath("defaults")), "Panel");
+        //Plasma::DesktopContainment
+        } else {
+            defaultActionsCfg = KConfigGroup(KSharedConfig::openConfig(corona()->package().filePath("defaults")), "Desktop");
+        }
+        defaultActionsCfg = KConfigGroup(&defaultActionsCfg, "ContainmentActions");
+
+        foreach (const QString &key, defaultActionsCfg.keyList()) {
+            //kDebug() << "loading" << key;
+            addContainmentActions(key, cfg.readEntry(key, QString()));
         }
     }
 

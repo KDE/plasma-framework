@@ -278,12 +278,6 @@ KActionCollection *Corona::actions() const
     return &d->actions;
 }
 
-QHash<QString, QString> Corona::defaultContainmentActionsPlugins(ContainmentType containmentType) const
-{
-    //FIXME: need to read these out of the package
-    return d->containmentActionsDefaults.value(containmentType);
-}
-
 CoronaPrivate::CoronaPrivate(Corona *corona)
     : q(corona),
       immutability(Mutable),

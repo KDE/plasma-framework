@@ -34,7 +34,6 @@ namespace Plasma
 {
 
 class CoronaPrivate;
-class ContainmentActionsPluginsConfig;
 
 /**
  * @class Corona plasma/Corona.h <Plasma/Corona>
@@ -134,15 +133,6 @@ public:
      * The actions assocated with this Corona
      */
     KActionCollection* actions() const;
-
-    /**
-     * @since 5.0
-     * Returns the default containmentactions plugins for the given containment type.
-     *
-     * @arg containmentType  the type of containment these actions apply to
-     * @return a hash containing the triggers and the plugin names associated with them
-     */
-    QHash<QString, QString> defaultContainmentActionsPlugins(ContainmentType containmentType) const;
 
     /**
      * Imports an applet layout from a config file. The results will be added to the
