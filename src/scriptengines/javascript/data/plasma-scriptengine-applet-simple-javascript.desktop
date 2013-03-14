@@ -2,6 +2,7 @@
 Name=JavaScript Widget
 Name[cs]=JavaScript Widget
 Name[de]=JavaScript-Programm
+Name[fr]=Composant graphique de JavaScript
 Name[mr]=जावास्क्रिप्ट विजेट
 Name[nl]=JavaScript-widget
 Name[pt]=Elemento de JavaScript
@@ -13,6 +14,7 @@ Name[x-test]=xxJavaScript Widgetxx
 Comment=Native Plasma widget written in JavaScript
 Comment[cs]=Nativní Plasma widget napsaný v JavaScriptu
 Comment[de]=Echtes Plasma-Programm, geschrieben in JavaScript
+Comment[fr]=Composant graphique natif écrit en JavaScript
 Comment[mr]=जावास्क्रिप्ट अंतर्गत लिहीले गेलेले मूळ प्लाज्मा विजेट
 Comment[nl]=Plasma-widget geschreven in JavaScript
 Comment[pt]=Elemento nativo do Plasma feito em JavaScript
