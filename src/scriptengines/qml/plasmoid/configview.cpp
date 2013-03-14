@@ -262,8 +262,8 @@ ConfigView::ConfigView(AppletInterface *interface, QWindow *parent)
     : QQuickView(parent),
       m_appletInterface(interface)
 {
-    qmlRegisterType<ConfigModel>("org.kde.plasma.configuration", 0, 1, "ConfigModel");
-    qmlRegisterType<ConfigCategory>("org.kde.plasma.configuration", 0, 1, "ConfigCategory");
+    qmlRegisterType<ConfigModel>("org.kde.plasma.configuration", 2, 0, "ConfigModel");
+    qmlRegisterType<ConfigCategory>("org.kde.plasma.configuration", 2, 0, "ConfigCategory");
 
     //FIXME: problem on nvidia, all windows should be transparent or won't show
     setColor(Qt::transparent);
