@@ -7,6 +7,7 @@ output=none
 
 Icon=plasma
 Description=A protocol for Plasma services
+Description[cs]=Protokol pro služby Plasma
 Description[de]=Ein Protokoll für Plasma-Dienste
 Description[es]=Un protocolo para los servicios de Plasma
 Description[fr]=Un protocole pour les services de Plasma

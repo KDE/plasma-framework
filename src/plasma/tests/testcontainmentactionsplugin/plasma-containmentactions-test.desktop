@@ -13,6 +13,7 @@ Name[sv]=Test
 Name[uk]=Тест
 Name[x-test]=xxTestxx
 Comment=A dummy plugin for testing
+Comment[cs]=Falešný zásuvný modul pro testování
 Comment[de]=Ein Dummy-Modul zum Testen.
 Comment[es]=Un complemento de simulación para hacer pruebas
 Comment[fr]=Un module externe factice pour tester
