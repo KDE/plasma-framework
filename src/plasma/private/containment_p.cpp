@@ -25,6 +25,7 @@
 
 #include <kaction.h>
 #include <kactioncollection.h>
+#include <kdebug.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kwindowsystem.h>
@@ -109,7 +110,7 @@ void ContainmentPrivate::setScreen(int newScreen)
             if (currently && currently != q) {
 #ifndef NDEBUG
                 kDebug() << "currently is on screen" << currently->screen()
-                         << "desktop" << currently->desktop()
+//                          << "desktop" << currently->desktop()
                          << "and is" << currently->activity()
                          << (QObject*)currently << "i'm" << (QObject*)q;
 #endif

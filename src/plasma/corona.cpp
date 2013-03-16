@@ -502,7 +502,7 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &con
         containmentsIds.insert(c->id());
 
 #ifndef NDEBUG
-        kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Restored Containment" << c->pluginName();
+//         kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Restored Containment" << c->pluginName();
 #endif
     }
 
@@ -510,7 +510,7 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &con
         containment->updateConstraints(Plasma::StartupCompletedConstraint);
         emit q->containmentAdded(containment);
 #ifndef NDEBUG
-        kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Containment" << containment->name();
+//         kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Containment" << containment->name();
 #endif
     }
 
