@@ -161,6 +161,7 @@ void AppletInterface::init()
             } else {
                 delete toolBoxObject;
             }
+            qDebug() << "Loaded org.kde.toolbox";
         } else {
             kWarning() << "Could not load org.kde.toolbox package.";
         }
