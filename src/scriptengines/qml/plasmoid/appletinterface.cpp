@@ -209,6 +209,11 @@ QString AppletInterface::title() const
     return applet()->title();
 }
 
+uint AppletInterface::id() const
+{
+    return applet()->id();
+}
+
 void AppletInterface::setTitle(const QString &title)
 {
     if (applet()->title() == title) {

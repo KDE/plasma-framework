@@ -60,6 +60,7 @@ class AppletInterface : public QQuickItem
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     //TODO: writable icon
     Q_PROPERTY(QString icon READ icon CONSTANT)
+    Q_PROPERTY(uint id READ id CONSTANT)
     Q_PROPERTY(FormFactor formFactor READ formFactor NOTIFY formFactorChanged)
     Q_PROPERTY(Location location READ location NOTIFY locationChanged)
     Q_PROPERTY(QString currentActivity READ currentActivity NOTIFY contextChanged)
@@ -182,6 +183,8 @@ enum IntervalAlignment {
 
     QString title() const;
     void setTitle(const QString &title);
+
+    uint id() const;
 
     FormFactor formFactor() const;
 
