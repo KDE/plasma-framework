@@ -63,6 +63,7 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
       m_expanded(false)
 {
     qmlRegisterType<AppletInterface>();
+    qmlRegisterType<QAction>();
 
     connect(this, SIGNAL(releaseVisualFocus()), applet(), SIGNAL(releaseVisualFocus()));
     connect(this, SIGNAL(configNeedsSaving()), applet(), SIGNAL(configNeedsSaving()));
