@@ -11,8 +11,8 @@
 # changes made.
 
 
-echo "For your own safety, this script does nothing unless you edit it."
-exit
+#echo "For your own safety, this script does nothing unless you edit it."
+#exit
 
 # The following is useful for porting QML plasmoids
 
@@ -20,7 +20,14 @@ exit
 # Be a bit more specific for draganddrop (1.0 -> 2.0 in this case)
 
 for FS in `find $PWD  -name '*.qml'`; do
-    perl -p -i -e 's/ 0\.1/ 2.0/g' $FS
+    perl -p -i -e 's/org\.kde\.plasma\.core 0\.1/org.kde.plasma.core 2.0/g' $FS
+    perl -p -i -e 's/org\.kde\.plasma\.components 0\.1/org.kde.plasma.components 2.0/g' $FS
+    perl -p -i -e 's/org\.kde\.plasma\.extras 0\.1/org.kde.plasma.extras 2.0/g' $FS
+
+    perl -p -i -e 's/org\.kde\.qtextracomponents 0\.1/org.kde.qtextracomponents 2.0/g' $FS
+    perl -p -i -e 's/org\.kde\.runnermodel 0\.1/org.kde.runnermodel 2.0/g' $FS
+    perl -p -i -e 's/org\.kde\.locale 0\.1/org.kde.locale 2.0/g' $FS
+
     perl -p -i -e 's/org\.kde\.draganddrop 1\.0/org.kde.draganddrop 2.0/g' $FS
 done
 
