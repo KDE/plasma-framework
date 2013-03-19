@@ -116,18 +116,6 @@ void DialogProxy::setMainItem(QQuickItem *mainItem)
             if (mainItem->metaObject()->indexOfSignal("heightChanged")) {
                 connect(mainItem, SIGNAL(heightChanged()), m_syncTimer, SIGNAL(start()));
             }
-            if (mainItem->metaObject()->indexOfSignal("minimumWidthChanged")) {
-                connect(mainItem, SIGNAL(minimumWidthChanged()), this, SIGNAL(minimumWidthChanged()));
-            }
-            if (mainItem->metaObject()->indexOfSignal("minimumHeightChanged")) {
-                connect(mainItem, SIGNAL(minimumHeightChanged()), this, SIGNAL(minimumHeightChanged()));
-            }
-            if (mainItem->metaObject()->indexOfSignal("maximumWidthChanged")) {
-                connect(mainItem, SIGNAL(maximumWidthChanged()), this, SIGNAL(maximumWidthChanged()));
-            }
-            if (mainItem->metaObject()->indexOfSignal("maximumHeightChanged")) {
-                connect(mainItem, SIGNAL(maximumHeightChanged()), this, SIGNAL(maximumHeightChanged()));
-            }
         }
 
         //if this is called in Compenent.onCompleted we have to wait a loop the item is added to a scene
