@@ -97,7 +97,9 @@ void ContainmentConfigView::setCurrentWallpaper(const QString &wallpaper)
 
     if (m_contianmentInterface->containment()->wallpaper() == wallpaper) {
         delete m_currentWallpaperConfig;
-        m_currentWallpaperConfig = m_contianmentInterface->wallpaperInterface()->configuration();
+        if (m_contianmentInterface->wallpaperInterface()) {
+            m_currentWallpaperConfig = m_contianmentInterface->wallpaperInterface()->configuration();
+        }
     } else {
         if (m_contianmentInterface->containment()->wallpaper() != m_currentWallpaper) {
             delete m_currentWallpaperConfig;
