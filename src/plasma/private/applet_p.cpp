@@ -109,7 +109,6 @@ void AppletPrivate::init(const QString &packagePath)
         configAction->setText(i18nc("%1 is the name of the applet", "%1 Settings", q->title()));
     }
 
-    QObject::connect(q, SIGNAL(activate()), q, SLOT(setFocus()));
     if (!appletDescription.isValid()) {
 #ifndef NDEBUG
         kDebug() << "Check your constructor! "
