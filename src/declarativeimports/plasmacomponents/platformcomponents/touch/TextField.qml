@@ -175,7 +175,7 @@ Item {
         parent: mouseEventListener // reparent to the MouseFilter for MouseArea to work
         id: clearButton
         source: "edit-clear-locationbar-rtl"
-        height: Math.max(textInput.height, theme.smallIconSize)
+        height: Math.max(textInput.height, theme.mediumIconSize)
         width: height
         opacity: (textInput.text != "" && clearButtonShown) ? 1 : 0
         Behavior on opacity {
