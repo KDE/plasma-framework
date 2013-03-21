@@ -262,8 +262,6 @@ Applet *ContainmentPrivate::createApplet(const QString &name, const QVariantList
         applet->setLaunchErrorMessage(i18n("Could not find requested component: %1", name));
     }
 
-    //kDebug() << applet->title() << "sizehint:" << applet->sizeHint() << "geometry:" << applet->geometry();
-
     q->addApplet(applet);
     return applet;
 }

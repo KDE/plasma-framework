@@ -138,7 +138,7 @@ void AppletInterface::init()
 
     //Create the ToolBox
     Plasma::Containment *pc = qobject_cast<Plasma::Containment *>(applet());
-    if (pc) {
+    if (pc && !qobject_cast<Plasma::Applet *>(pc->parent())) {
         KConfigGroup defaults;
         if (pc->containmentType() == Plasma::DesktopContainment) {
             defaults = KConfigGroup(KSharedConfig::openConfig(pc->corona()->package().filePath("defaults")), "Desktop");

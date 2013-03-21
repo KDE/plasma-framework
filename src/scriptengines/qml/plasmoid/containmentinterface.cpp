@@ -46,6 +46,13 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
 
     qmlRegisterType<ContainmentInterface>();
 
+    
+}
+
+void ContainmentInterface::init()
+{
+    AppletInterface::init();
+
     connect(containment(), &Plasma::Containment::appletRemoved,
             this, &ContainmentInterface::appletRemovedForward);
     connect(containment(), &Plasma::Containment::appletAdded,

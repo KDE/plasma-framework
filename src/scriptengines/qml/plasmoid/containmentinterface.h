@@ -51,7 +51,7 @@ public:
     };
     ContainmentInterface(DeclarativeAppletScript *parent);
 //Not for QML
-    inline Plasma::Containment *containment() const { return static_cast<Plasma::Containment *>(m_appletScriptEngine->applet()); }
+    inline Plasma::Containment *containment() const { return static_cast<Plasma::Containment *>(m_appletScriptEngine->applet()->containment()); }
 
     inline WallpaperInterface *wallpaperInterface() const { return m_wallpaperInterface;}
 
@@ -70,6 +70,7 @@ public:
     Q_INVOKABLE QVariantList availableScreenRegion(int id) const;
 
 protected:
+    void init();
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
 
