@@ -22,8 +22,7 @@
 #include <QApplication>
 #include <QDebug>
 #include <QDesktopWidget>
-// #include <QQuickItem>
-// #include <QGraphicsView>
+#include <QQuickWindow>
 #include <QQuickItem>
 
 #include "plasmacomponentsplugin.h"
@@ -174,6 +173,12 @@ void QMenuProxy::open(int x, int y)
     } else {
         parentItem = qobject_cast<QQuickItem *>(parent());
     }
+    QPointF pos = parentItem->mapToScene(QPointF(x, y));
+    //qDebug() << "I've an Item at " << pos;
+    if (parentItem->window() && parentItem->window()->screen()) {
+        pos = parentItem->window()->mapToGlobal(pos.toPoint());
+    }
+    screenPos = pos.toPoint();
     /*
     if (!parentItem || !parentItem->scene()) {
         m_menu->popup(QPoint(0, 0));
@@ -235,6 +240,7 @@ void QMenuProxy::open()
     } else {
         parentItem = qobject_cast<QQuickItem *>(parent());
     }
+
 /*
     if (!parentItem || !parentItem->scene()) {
         m_menu->popup(QPoint(0, 0));

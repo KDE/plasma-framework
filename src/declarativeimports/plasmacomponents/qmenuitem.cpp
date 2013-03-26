@@ -19,6 +19,7 @@
 
 #include "qmenuitem.h"
 
+
 QMenuItem::QMenuItem(QQuickItem *parent)
     : QQuickItem(parent),
     m_action(0)
@@ -43,15 +44,17 @@ void QMenuItem::setAction(QAction* a)
     }
 }
 
-QIcon QMenuItem::icon() const
+QString QMenuItem::icon() const
 {
-    return m_action->icon();
+    return m_icon;
 }
 
-void QMenuItem::setIcon(const QIcon& i)
+void QMenuItem::setIcon(const QString& i)
 {
-    m_action->setIcon(i);
-    emit iconChanged();
+    if (i != m_icon) {
+        m_action->setIcon(QIcon::fromTheme(i));
+        emit iconChanged();
+    }
 }
 
 bool QMenuItem::separator() const
