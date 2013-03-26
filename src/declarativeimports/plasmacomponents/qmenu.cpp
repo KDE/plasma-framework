@@ -22,9 +22,9 @@
 #include <QApplication>
 #include <QDebug>
 #include <QDesktopWidget>
-#include <QGraphicsObject>
-#include <QGraphicsView>
-#include <QDeclarativeItem>
+// #include <QQuickItem>
+// #include <QGraphicsView>
+#include <QQuickItem>
 
 #include "plasmacomponentsplugin.h"
 QMenuProxy::QMenuProxy (QObject *parent)
@@ -41,9 +41,9 @@ QMenuProxy::~QMenuProxy()
     delete m_menu;
 }
 
-QDeclarativeListProperty<QMenuItem> QMenuProxy::content()
+QQmlListProperty<QMenuItem> QMenuProxy::content()
 {
-    return QDeclarativeListProperty<QMenuItem>(this, m_items);
+    return QQmlListProperty<QMenuItem>(this, m_items);
 }
 
 int QMenuProxy::actionCount() const
@@ -84,7 +84,7 @@ void QMenuProxy::setVisualParent(QObject *parent)
         action->setMenu(m_menu);
         m_menu->clear();
         foreach(QMenuItem* item, m_items) {
-            m_menu->addAction(item);
+            m_menu->addAction(item->action());
         }
         m_menu->updateGeometry();
     }
@@ -101,7 +101,7 @@ bool QMenuProxy::event(QEvent *event)
         QMenuItem *mi = qobject_cast<QMenuItem *>(ce->child());
         //FIXME: linear complexity here
         if (mi && !m_items.contains(mi)) {
-            m_menu->addAction(mi);
+            m_menu->addAction(mi->action());
             m_items << mi;
         }
         break;
@@ -113,7 +113,7 @@ bool QMenuProxy::event(QEvent *event)
 
         //FIXME: linear complexity here
         if (mi) {
-            m_menu->removeAction(mi);
+            m_menu->removeAction(mi->action());
             m_items.removeAll(mi);
         }
         break;
@@ -134,15 +134,15 @@ void QMenuProxy::clearMenuItems()
 
 void QMenuProxy::addMenuItem(const QString &text)
 {
-    QMenuItem *item = new QMenuItem(this);
+    QMenuItem *item = new QMenuItem();
     item->setText(text);
-    m_menu->addAction(item);
+    m_menu->addAction(item->action());
     m_items << item;
 }
 
 void QMenuProxy::addMenuItem(QMenuItem *item)
 {
-    m_menu->addAction(item);
+    m_menu->addAction(item->action());
     m_items << item;
 }
 
@@ -162,25 +162,25 @@ void QMenuProxy::open(int x, int y)
 {
     m_menu->clear();
     foreach(QMenuItem* item, m_items) {
-        m_menu->addAction (item);
+        qDebug() <<"Adding action: " << item->text();
+        m_menu->addAction(item->action());
     }
 
     QPoint screenPos;
 
-    QGraphicsObject *parentItem;
+    QQuickItem *parentItem;
     if (m_visualParent) {
-        parentItem = qobject_cast<QGraphicsObject *>(m_visualParent.data());
+        parentItem = qobject_cast<QQuickItem *>(m_visualParent.data());
     } else {
-        parentItem = qobject_cast<QGraphicsObject *>(parent());
+        parentItem = qobject_cast<QQuickItem *>(parent());
     }
-
+    /*
     if (!parentItem || !parentItem->scene()) {
         m_menu->popup(QPoint(0, 0));
         m_status = DialogStatus::Open;
         emit statusChanged();
         return;
     }
-
     QList<QGraphicsView*> views = parentItem->scene()->views();
 
     if (views.size() < 1) {
@@ -214,7 +214,7 @@ void QMenuProxy::open(int x, int y)
     } else {
         screenPos = QApplication::activeWindow()->mapToGlobal(QPoint(x, y));
     }
-
+    */
     m_menu->popup(screenPos);
     m_status = DialogStatus::Open;
     emit statusChanged();
@@ -225,24 +225,24 @@ void QMenuProxy::open()
     m_menu->clear();
 
     foreach(QMenuItem* item, m_items) {
-        m_menu->addAction (item);
+        m_menu->addAction(item->action());
     }
     m_menu->updateGeometry();
 
-    QGraphicsObject *parentItem;
+    QQuickItem *parentItem;
     if (m_visualParent) {
-        parentItem = qobject_cast<QGraphicsObject *>(m_visualParent.data());
+        parentItem = qobject_cast<QQuickItem *>(m_visualParent.data());
     } else {
-        parentItem = qobject_cast<QGraphicsObject *>(parent());
+        parentItem = qobject_cast<QQuickItem *>(parent());
     }
-
+/*
     if (!parentItem || !parentItem->scene()) {
         m_menu->popup(QPoint(0, 0));
         m_status = DialogStatus::Open;
         emit statusChanged();
         return;
-    }
-
+    }*/
+    /*
     QList<QGraphicsView*> views = parentItem->scene()->views();
 
     if (views.size() < 1) {
@@ -272,10 +272,12 @@ void QMenuProxy::open()
     }
 
     if (!view) {
+        */
         m_menu->popup(QPoint(0, 0));
         m_status = DialogStatus::Open;
         emit statusChanged();
         return;
+        /*
     }
 
     const QRect avail = QApplication::desktop()->availableGeometry(view);
@@ -288,6 +290,7 @@ void QMenuProxy::open()
     m_menu->popup(menuPos);
     m_status = DialogStatus::Open;
     emit statusChanged();
+    */
 }
 
 void QMenuProxy::close()

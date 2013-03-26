@@ -19,11 +19,64 @@
 
 #include "qmenuitem.h"
 
-QMenuItem::QMenuItem(QObject *parent)
-    : QAction(parent)
+QMenuItem::QMenuItem(QQuickItem *parent)
+    : QQuickItem(parent),
+    m_action(0)
+
 {
-    connect(this, SIGNAL(triggered(bool)), this, SIGNAL(clicked()));
+    setAction(new QAction(this));
+    connect(m_action, &QAction::triggered, this, &QMenuItem::clicked);
 }
+
+QAction* QMenuItem::action() const
+{
+    return m_action;
+}
+
+void QMenuItem::setAction(QAction* a)
+{
+    if (m_action != a) {
+        m_action = a;
+        connect(m_action, &QAction::changed, this, &QMenuItem::textChanged);
+        connect(m_action, &QAction::changed, this, &QMenuItem::textChanged);
+        emit actionChanged();
+    }
+}
+
+QIcon QMenuItem::icon() const
+{
+    return m_action->icon();
+}
+
+void QMenuItem::setIcon(const QIcon& i)
+{
+    m_action->setIcon(i);
+    emit iconChanged();
+}
+
+bool QMenuItem::separator() const
+{
+    return m_action->isSeparator();
+}
+
+void QMenuItem::setSeparator(bool s)
+{
+    m_action->setSeparator(s);
+}
+
+QString QMenuItem::text() const
+{
+    return m_action->text();
+}
+
+void QMenuItem::setText(const QString& t)
+{
+    if (m_action->text() != t) {
+        m_action->setText(t);
+        // signal comes from m_action
+    }
+}
+
 
 #include "qmenuitem.moc"
 

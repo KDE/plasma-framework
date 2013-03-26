@@ -22,7 +22,7 @@
 
 #include <QObject>
 #include <QMenu>
-#include <QDeclarativeListProperty>
+#include <QQmlListProperty>
 #include "qmenuitem.h"
 #include "enums.h"
 
@@ -32,7 +32,7 @@ class QMenuProxy : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QDeclarativeListProperty<QMenuItem> content READ content CONSTANT)
+    Q_PROPERTY(QQmlListProperty<QMenuItem> content READ content CONSTANT)
     Q_CLASSINFO("DefaultProperty", "content")
 
     /**
@@ -45,7 +45,7 @@ public:
     QMenuProxy(QObject *parent = 0);
     ~QMenuProxy();
 
-    QDeclarativeListProperty<QMenuItem> content();
+    QQmlListProperty<QMenuItem> content();
     int actionCount() const;
     QMenuItem *action(int) const;
     DialogStatus::Status status() const;

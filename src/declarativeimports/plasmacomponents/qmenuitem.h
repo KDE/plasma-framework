@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2011 Viranch Mehta <viranch.mehta@gmail.com>                *
+ *   Copyright 2013 Sebastian Kügler <sebas@kde.org>                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,9 +22,9 @@
 #define QMENUITEM_H
 
 #include <QAction>
-#include <QObject>
+#include <QQuickItem>
 
-class QMenuItem : public QAction
+class QMenuItem : public QQuickItem
 {
     Q_OBJECT
 
@@ -35,13 +36,33 @@ class QMenuItem : public QAction
     /**
      * If true, the menu item will behave like a separator
      */
-    Q_PROPERTY(bool separator READ isSeparator WRITE setSeparator)
+    Q_PROPERTY(bool separator READ separator WRITE setSeparator NOTIFY separatorChanged)
+    Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
+    Q_PROPERTY(QIcon icon READ icon WRITE setIcon NOTIFY iconChanged)
+    Q_PROPERTY(QAction* action READ action WRITE setAction NOTIFY actionChanged)
 
 public:
-    QMenuItem(QObject *parent = 0);
+    QMenuItem(QQuickItem *parent = 0);
+
+    QAction* action() const;
+    void setAction(QAction* a);
+    QIcon icon() const;
+    void setIcon(const QIcon& i);
+    bool separator() const;
+    void setSeparator(bool s);
+    QString text() const;
+    void setText(const QString &t);
 
 Q_SIGNALS:
     void clicked();
+
+    void actionChanged();
+    void iconChanged();
+    void separatorChanged();
+    void textChanged();
+
+private:
+    QAction* m_action;
 };
 
 #endif // QMENUITEM_H
