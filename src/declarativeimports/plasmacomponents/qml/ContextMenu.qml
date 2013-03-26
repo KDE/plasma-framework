@@ -41,13 +41,13 @@
 ****************************************************************************/
 
 import QtQuick 2.0
-import org.kde.plasma.components 2.0
+import org.kde.plasma.components 2.0 as PlasmaComponents
 
 /**
  * Provides a component with list of options that the user can choose from.
  *
  * All elements of this component are defined in Menu, its base component.
  */
-Menu {
+PlasmaComponents.Menu {
     id: root
 }
