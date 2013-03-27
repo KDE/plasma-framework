@@ -74,6 +74,8 @@ Row {
      */
     property Item checkedButton;
 
+    spacing: theme.defaultFont.pointSize
+
     Component.onCompleted: {
         Behavior.create(root, {direction: Qt.Horizontal});
     }
