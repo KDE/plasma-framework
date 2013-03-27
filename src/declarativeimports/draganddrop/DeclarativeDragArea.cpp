@@ -30,6 +30,9 @@
 #include <QMouseEvent>
 #include <QApplication>
 #include <QQmlContext>
+#include <QQuickWindow>
+
+#include <KMimeType>
 
 #include <QDebug>
 
@@ -65,14 +68,15 @@ DeclarativeDragArea::~DeclarativeDragArea()
   The delegate is the item that will be displayed next to the mouse cursor during the drag and drop operation.
   It usually consists of a large, semi-transparent icon representing the data being dragged.
 */
-QQmlComponent* DeclarativeDragArea::delegate() const
+QQuickItem* DeclarativeDragArea::delegate() const
 {
     return m_delegate;
 }
 
-void DeclarativeDragArea::setDelegate(QQmlComponent *delegate)
+void DeclarativeDragArea::setDelegate(QQuickItem *delegate)
 {
     if (m_delegate != delegate) {
+        qDebug() << " ______________________________________________ " << delegate;
         m_delegate = delegate;
         emit delegateChanged();
     }
@@ -204,42 +208,53 @@ void DeclarativeDragArea::mouseMoveEvent(QMouseEvent *event)
 {
     if ( !m_enabled
          || QLineF(event->screenPos(), m_buttonDownPos).length()
-            < m_startDragDistance) {
+            < m_startDragDistance && false) {
+        qDebug() << "return";
         return;
     }
     if (m_draggingJustStarted) {
-        emit dragStarted();
         m_draggingJustStarted = false;
 
         QDrag *drag = new QDrag(parent());
         DeclarativeMimeData* dataCopy = new DeclarativeMimeData(m_data); //Qt will take ownership of this copy and delete it.
         drag->setMimeData(dataCopy);
 
+        QSize _s(48,48);
+
         if (!m_delegateImage.isNull()) {
             drag->setPixmap(QPixmap::fromImage(m_delegateImage));
-        } else if (m_delegate) {
-            // Render the delegate to a Pixmap
-    //         QQuickItem* item = qobject_cast<QQuickItem *>(m_delegate->create(m_delegate->creationContext()));
+            qDebug() << "++++++isntnull";
+        } else {
+            if (m_delegate) {
+                QRectF rf;
+                qDebug() << "has delegate" << m_delegate;
+                rf = QRectF(0, 0, m_delegate->width(), m_delegate->height());
+                rf = m_delegate->mapRectToScene(rf);
+                QImage grabbed = window()->grabWindow();
+                //rf = rf.intersected(QRectF(0, 0, grabbed.width(), grabbed.height()));
+                grabbed = grabbed.copy(rf.toAlignedRect());
+                qDebug() << " +++++++++++++++++++++++ dim: " << rf;
+                grabbed.save("file:///tmp/grabbed.png");
+                QPixmap pm = QPixmap::fromImage(grabbed);
+                qDebug() << " set new pixmap" << grabbed.size();
+                drag->setPixmap(pm);
 
-    //         QGraphicsScene scene;
-    //         scene.addItem(item);
-
-    //         QPixmap pixmap(scene.sceneRect().width(), scene.sceneRect().height());
-    //         pixmap.fill(Qt::transparent);
-    //
-    //         QPainter painter(&pixmap);
-    //         painter.setRenderHint(QPainter::Antialiasing);
-    //         painter.setRenderHint(QPainter::SmoothPixmapTransform);
-    //         scene.render(&painter);
-    //         painter.end();
-    //         delete item;
-    //
-    //         drag->setPixmap(pixmap);
-            drag->setPixmap(QIcon::fromTheme("plasma").pixmap(64,64));
+            } else if (mimeData()->hasImage()) {
+//                 rf = QRectF(x(), y(), width(), height());
+//                 rf = mapRectToScene(rf);
+                QImage im = qvariant_cast<QImage>(mimeData()->imageData());
+                drag->setPixmap(QPixmap::fromImage(im));
+            } else if (mimeData()->hasColor()) {
+                QPixmap px(_s);
+                px.fill(mimeData()->color());
+                drag->setPixmap(px);
+            }
         }
 
         drag->setHotSpot(QPoint(drag->pixmap().width()/2, drag->pixmap().height()/2)); // TODO: Make a property for that
         //setCursor(Qt::OpenHandCursor);    //TODO? Make a property for the cursor
+
+        emit dragStarted();
 
         Qt::DropAction action = drag->exec(m_supportedActions, m_defaultAction);
         emit drop(action);

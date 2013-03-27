@@ -38,7 +38,7 @@ class DeclarativeDragArea : public QQuickItem
      * The delegate is the item that will be displayed next to the mouse cursor during the drag and drop operation.
      * It usually consists of a large, semi-transparent icon representing the data being dragged.
      */
-    Q_PROPERTY(QQmlComponent* delegate READ delegate WRITE setDelegate NOTIFY delegateChanged RESET resetDelegate)
+    Q_PROPERTY(QQuickItem* delegate READ delegate WRITE setDelegate NOTIFY delegateChanged RESET resetDelegate)
 
     /**
      * The QML element that is the source of the resulting drag and drop operation. This can be defined to any item, and will
@@ -90,8 +90,8 @@ public:
     DeclarativeDragArea(QQuickItem *parent=0);
     ~DeclarativeDragArea();
 
-    QQmlComponent *delegate() const;
-    void setDelegate(QQmlComponent* delegate);
+    QQuickItem *delegate() const;
+    void setDelegate(QQuickItem* delegate);
     void resetDelegate();
 
     QVariant delegateImage() const;
@@ -137,7 +137,7 @@ protected:
     bool childMouseEventFilter(QQuickItem *item, QEvent *event);
 
 private:
-    QQmlComponent* m_delegate;
+    QQuickItem* m_delegate;
     QQuickItem* m_source;
     QQuickItem* m_target;
     bool m_enabled;
