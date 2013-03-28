@@ -51,7 +51,7 @@ Q_SIGNALS:
     void wallpaperConfigurationChanged();
 
 private:
-    ContainmentInterface *m_contianmentInterface;
+    ContainmentInterface *m_containmentInterface;
     ConfigModel *m_wallpaperConfigModel;
     QString m_currentWallpaper;
     ConfigPropertyMap *m_currentWallpaperConfig;
