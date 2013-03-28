@@ -355,10 +355,10 @@ QStringList PlasmaPkgPrivate::packages(const QStringList& types)
 
     foreach (const QString& type, types) {
         if (type.compare("Plasma/Wallpaper", Qt::CaseInsensitive) == 0) {
-            QStringList wallies = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "plasma/wallpapers/", QStandardPaths::LocateDirectory);
+            const QStringList &wallies = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "plasma/wallpapers/", QStandardPaths::LocateDirectory);
             foreach (const QString &wpath, wallies) {
-                QDir cd(wpath);
-                QStringList entries = cd.entryList(QDir::Dirs);
+                const QDir cd(wpath);
+                const QStringList &entries = cd.entryList(QDir::Dirs);
                 foreach (const QString wallpap, entries) {
                     if ((wallpap != "." && wallpap != "..") &&
                         (QFile::exists(wpath+'/'+wallpap+"/metadata.desktop"))) {
