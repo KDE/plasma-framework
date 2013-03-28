@@ -367,14 +367,12 @@ QStringList PlasmaPkgPrivate::packages(const QStringList& types)
                     }
                 }
             }
-
-        } else {
-            const KService::List services = KServiceTypeTrader::self()->query(type);
-            foreach (const KService::Ptr &service, services) {
-                const QString _plugin = service->property("X-KDE-PluginInfo-Name", QVariant::String).toString();
-                if (!result.contains(_plugin)) {
-                    result << _plugin;
-                }
+        }
+        const KService::List services = KServiceTypeTrader::self()->query(type);
+        foreach (const KService::Ptr &service, services) {
+            const QString _plugin = service->property("X-KDE-PluginInfo-Name", QVariant::String).toString();
+            if (!result.contains(_plugin)) {
+                result << _plugin;
             }
         }
     }
