@@ -181,7 +181,12 @@ void PlasmaPkg::runMain()
                 type = serviceType;
                 qDebug() << "fallthrough type is" << serviceType;
             }
+        } else {
+            if (type.compare(i18nc("package type", "wallpaper"), Qt::CaseInsensitive) == 0) {
+                serviceType = "Plasma/Wallpaper";
+            }
         }
+        qDebug() << "end wallpaper branch" << serviceType;
     }
 
     if (type.compare(i18nc("package type", "plasmoid"), Qt::CaseInsensitive) == 0 ||
@@ -196,7 +201,9 @@ void PlasmaPkg::runMain()
         d->packageRoot = "desktoptheme/";
     } else if (type.compare(i18nc("package type", "wallpaper"), Qt::CaseInsensitive) == 0 ||
                type.compare("wallpaper", Qt::CaseInsensitive) == 0) {
-        d->packageRoot = "wallpapers/";
+        d->pluginTypes << "Plasma/Wallpaper";
+        d->packageRoot = "plasma/wallpapers/";
+        d->servicePrefix = "plasma-wallpaper-";
     } else if (type.compare(i18nc("package type", "dataengine"), Qt::CaseInsensitive) == 0 ||
                type.compare("dataengine", Qt::CaseInsensitive) == 0) {
         d->packageRoot = "plasma/dataengines/";
@@ -256,6 +263,7 @@ void PlasmaPkg::runMain()
     }
 
     if (d->args->isSet("list")) {
+        qDebug() << "listing " << d->pluginTypes << "!";
         listPackages(d->pluginTypes);
         exit(0);
     } else {
@@ -346,11 +354,27 @@ QStringList PlasmaPkgPrivate::packages(const QStringList& types)
     QStringList result;
 
     foreach (const QString& type, types) {
-        const KService::List services = KServiceTypeTrader::self()->query(type);
-        foreach (const KService::Ptr &service, services) {
-            const QString _plugin = service->property("X-KDE-PluginInfo-Name", QVariant::String).toString();
-            if (!result.contains(_plugin)) {
-                result << _plugin;
+        if (type.compare("Plasma/Wallpaper", Qt::CaseInsensitive) == 0) {
+            QStringList wallies = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "plasma/wallpapers/", QStandardPaths::LocateDirectory);
+            foreach (const QString &wpath, wallies) {
+                QDir cd(wpath);
+                QStringList entries = cd.entryList(QDir::Dirs);
+                foreach (const QString wallpap, entries) {
+                    if (wallpap != "." && wallpap != "..") {
+                        if (QFile::exists(wpath+'/'+wallpap+"/metadata.desktop")) {
+                            result << wallpap;
+                        }
+                    }
+                }
+            }
+
+        } else {
+            const KService::List services = KServiceTypeTrader::self()->query(type);
+            foreach (const KService::Ptr &service, services) {
+                const QString _plugin = service->property("X-KDE-PluginInfo-Name", QVariant::String).toString();
+                if (!result.contains(_plugin)) {
+                    result << _plugin;
+                }
             }
         }
     }
