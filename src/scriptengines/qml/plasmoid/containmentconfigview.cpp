@@ -67,8 +67,10 @@ ConfigModel *ContainmentConfigView::wallpaperConfigModel()
 
             foreach (const QString &package, packages) {
                 pkg.setPath(package);
+                if (!pkg.isValid()) {
+                    continue;
+                }
                 ConfigCategory *cat = new ConfigCategory(m_wallpaperConfigModel);
-                qDebug() << "newed ConfigCategory";
                 cat->setName(pkg.metadata().name());
                 cat->setIcon(pkg.metadata().icon());
                 cat->setSource(pkg.filePath("ui", "config.qml"));
