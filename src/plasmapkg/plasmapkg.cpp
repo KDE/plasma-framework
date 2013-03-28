@@ -360,10 +360,10 @@ QStringList PlasmaPkgPrivate::packages(const QStringList& types)
                 QDir cd(wpath);
                 QStringList entries = cd.entryList(QDir::Dirs);
                 foreach (const QString wallpap, entries) {
-                    if (wallpap != "." && wallpap != "..") {
-                        if (QFile::exists(wpath+'/'+wallpap+"/metadata.desktop")) {
-                            result << wallpap;
-                        }
+                    if ((wallpap != "." && wallpap != "..") &&
+                        (QFile::exists(wpath+'/'+wallpap+"/metadata.desktop"))) {
+
+                        result << wallpap;
                     }
                 }
             }
