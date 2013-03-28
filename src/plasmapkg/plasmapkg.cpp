@@ -289,6 +289,10 @@ void PlasmaPkg::runMain()
                     continue;
                 }
             }
+            if (pkgPath.isEmpty()) {
+                pkgPath = d->package;
+            }
+
             if (d->args->isSet("upgrade")) {
                 d->installer->setPath(d->package);
             }
@@ -298,18 +302,21 @@ void PlasmaPkg::runMain()
             }
             _p.append(d->package);
             d->installer->setPath(pkgPath);
-            d->metadata = d->installer->metadata();
-
             QString pluginName;
-            if (!d->metadata.isValid() && d->metadata.pluginName().isEmpty()) {
-                // plugin name given in command line
-                pluginName = d->package;
-            } else {
-                // Parameter was a plasma package, get plugin name from the package
-                pluginName = d->metadata.pluginName();
+            if (d->installer->isValid()) {
+                d->metadata = d->installer->metadata();
+                if (!d->metadata.isValid()) {
+                    pluginName = d->package;
+                } else if (!d->metadata.isValid() && d->metadata.pluginName().isEmpty()) {
+                    // plugin name given in command line
+                    pluginName = d->package;
+                } else {
+                    // Parameter was a plasma package, get plugin name from the package
+                    pluginName = d->metadata.pluginName();
+                }
             }
-
             QStringList installed = d->packages(d->pluginTypes);
+            qDebug() << "installed wallpapers:"  << installed << d->pluginTypes;
             if (installed.contains(pluginName)) {
                 d->installer->setPath(pluginName);
                 KJob *uninstallJob = d->installer->uninstall(pluginName, d->packageRoot);
@@ -390,7 +397,10 @@ void PlasmaPkg::showPackageInfo(const QString& pluginName)
     pkg.setPath(pluginName);
 
     KPluginInfo i = pkg.metadata();
-
+    if (!i.isValid()) {
+        d->coutput(i18n("Can't find plugin metadata: %1", pluginName));
+        exit(1);
+    }
     d->coutput(i18n("Showing info for package: %1", pluginName));
     d->coutput(i18n("      Name : %1", i.name()));
     d->coutput(i18n("   Comment : %1", i.comment()));
