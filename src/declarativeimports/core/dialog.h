@@ -132,7 +132,6 @@ public:
      * @arg item the item the popup has to be positioned relatively to. if null, the popup will be positioned in the center of the window
      * @arg alignment alignment of the popup compared to the item
      */
-    //FIXME: alignment should be Qt::AlignmentFlag
     QPoint popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment=Qt::AlignCenter) ;
 
     /**
