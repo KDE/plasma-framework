@@ -18,30 +18,29 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
  ***************************************************************************/
 
-#ifndef TOOLTIP_PROXY_P
-#define TOOLTIP_PROXY_P
+#ifndef TOOLTIP_WINDOW_P
+#define TOOLTIP_WINDOW_P
 
-#include <QObject>
+#include <QQuickWindow>
 #include <QWeakPointer>
 #include <QtCore/QVariant>
 
-class QGraphicsObject;
+class QQuickItem;
 class QGraphicsWidget;
-class DeclarativeItemContainer;
 
 /**
  * QML wrapper for kdelibs Plasma::ToolTip
  *
  * Exposed as `ToolTip` in QML.
  */
-class ToolTipProxy : public QObject
+class ToolTipWindow : public QQuickWindow
 {
     Q_OBJECT
 
     /**
      * The item that will display this tooltip on mouse over 
      */
-    Q_PROPERTY(QGraphicsObject *target READ target WRITE setTarget NOTIFY targetChanged)
+    Q_PROPERTY(QQuickItem *target READ target WRITE setTarget NOTIFY targetChanged)
 
     /**
      * The title of the tooltip, not more that 2-3 words
@@ -59,11 +58,11 @@ class ToolTipProxy : public QObject
     Q_PROPERTY(QVariant image READ image WRITE setImage NOTIFY imageChanged)
 
 public:
-    ToolTipProxy(QObject *parent = 0);
-    ~ToolTipProxy();
+    ToolTipWindow(QWindow *parent = 0);
+    ~ToolTipWindow();
 
-    QGraphicsObject *target() const;
-    void setTarget(QGraphicsObject *target);
+    QQuickItem *target() const;
+    void setTarget(QQuickItem *target);
 
     QString mainText() const;
     void setMainText(const QString &text);
@@ -89,8 +88,8 @@ private:
     QString m_subText;
     QVariant m_image;
     QGraphicsWidget *m_widget;
-    QWeakPointer<DeclarativeItemContainer> m_declarativeItemContainer;
-    QWeakPointer<QGraphicsObject> m_target;
+    QWeakPointer<QQuickItem> m_declarativeItemContainer;
+    QWeakPointer<QQuickItem> m_target;
 };
 
 #endif

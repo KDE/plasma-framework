@@ -19,23 +19,21 @@
  ***************************************************************************/
 
 #include "tooltip.h"
-#include "declarativeitemcontainer_p.h"
 
 #include <QQuickItem>
-#include <QGraphicsObject>
-#include <QGraphicsWidget>
-#include <QGraphicsScene>
+// #include <QGraphicsWidget>
+// #include <QGraphicsScene>
 #include <QDebug>
 #include <QTimer>
 
-#include <KDE/KIcon>
-#include <KDE/KIconLoader>
-#include <KDE/Plasma/ToolTipContent>
-#include <KDE/Plasma/ToolTipManager>
+//#include <KIcon>
+// #include <KIconLoader>
+// #include <Plasma/ToolTipContent>
+// #include <Plasma/ToolTipManager>
 
 
-ToolTipProxy::ToolTipProxy(QObject *parent)
-    : QObject(parent), m_mainText(""), m_subText(""), m_widget(0)
+ToolTipWindow::ToolTipWindow(QWindow *parent)
+    : QQuickWindow(parent), m_mainText(""), m_subText(""), m_widget(0)
 {
     connect(this, SIGNAL(targetChanged()), this, SLOT(updateToolTip()));
     connect(this, SIGNAL(mainTextChanged()), this, SLOT(updateToolTip()));
@@ -43,33 +41,34 @@ ToolTipProxy::ToolTipProxy(QObject *parent)
     connect(this, SIGNAL(imageChanged()), this, SLOT(updateToolTip()));
 }
 
-ToolTipProxy::~ToolTipProxy()
+ToolTipWindow::~ToolTipWindow()
 {
 }
 
-QGraphicsObject *ToolTipProxy::target() const
+QQuickItem *ToolTipWindow::target() const
 {
     return m_target.data();
 }
 
-void ToolTipProxy::setTarget(QGraphicsObject *target)
+void ToolTipWindow::setTarget(QQuickItem *target)
 {
     if (m_target.data() != target) {
         m_target = target;
-
+/*
         m_widget = qobject_cast<QGraphicsWidget*>(m_target.data());
         if (!m_widget) {
             // if this is called in Compenent.onCompleted we have to
             // wait a loop for the item to be added to a scene
             QTimer::singleShot(0, this, SLOT(syncTarget()));
             return;
-        }
+        }*/
         emit targetChanged();
     }
 }
 
-void ToolTipProxy::syncTarget()
+void ToolTipWindow::syncTarget()
 {
+    /*
     if (!m_target) {
         return;
     }
@@ -78,7 +77,7 @@ void ToolTipProxy::syncTarget()
     if (!scene) {
         QObject *parent = m_target.data();
         while ((parent = parent->parent())) {
-            QGraphicsObject *qo = qobject_cast<QGraphicsObject*>(parent);
+            QQuickItem *qo = qobject_cast<QQuickItem*>(parent);
             if (qo && qo->scene()) {
                 scene = qo->scene();
                 scene->addItem(m_target.data());
@@ -93,7 +92,7 @@ void ToolTipProxy::syncTarget()
     }
 
     if (!m_declarativeItemContainer && scene) {
-        m_declarativeItemContainer = QWeakPointer<DeclarativeItemContainer>(new DeclarativeItemContainer());
+        m_declarativeItemContainer = QWeakPointer<QQuickItem>(new QQuickItem());
         m_declarativeItemContainer.data()->setObjectName("DIContainer");
         scene->addItem(m_declarativeItemContainer.data());
     }
@@ -106,14 +105,15 @@ void ToolTipProxy::syncTarget()
         m_widget = m_declarativeItemContainer.data();
         emit targetChanged();
     }
+    */
 }
 
-QString ToolTipProxy::mainText() const
+QString ToolTipWindow::mainText() const
 {
     return m_mainText;
 }
 
-void ToolTipProxy::setMainText(const QString &text)
+void ToolTipWindow::setMainText(const QString &text)
 {
     if (text == m_mainText) {
         return;
@@ -123,12 +123,12 @@ void ToolTipProxy::setMainText(const QString &text)
     emit mainTextChanged();
 }
 
-QString ToolTipProxy::subText() const
+QString ToolTipWindow::subText() const
 {
     return m_subText;
 }
 
-void ToolTipProxy::setSubText(const QString &text)
+void ToolTipWindow::setSubText(const QString &text)
 {
     if (text == m_subText) {
         return;
@@ -138,12 +138,12 @@ void ToolTipProxy::setSubText(const QString &text)
     emit subTextChanged();
 }
 
-QVariant ToolTipProxy::image() const
+QVariant ToolTipWindow::image() const
 {
     return m_image;
 }
 
-void ToolTipProxy::setImage(QVariant name)
+void ToolTipWindow::setImage(QVariant name)
 {
     if (name == m_image) {
         return;
@@ -153,24 +153,24 @@ void ToolTipProxy::setImage(QVariant name)
     emit imageChanged();
 }
 
-void ToolTipProxy::updateToolTip()
+void ToolTipWindow::updateToolTip()
 {
     if (!m_widget) {
         return;
     }
 
-    Plasma::ToolTipContent data;
-    data.setMainText(m_mainText);
-    data.setSubText(m_subText);
+//     Plasma::ToolTipContent data;
+//     data.setMainText(m_mainText);
+//     data.setSubText(m_subText);
 
     // set image
     switch (m_image.type()) {
         case QVariant::String: {
             QString name = m_image.toString();
             if (!name.isEmpty()) {
-                KIcon icon(name);
+                QIcon icon = QIcon::fromTheme(name);
                 if (!icon.isNull()) {
-                    data.setImage(icon.pixmap(IconSize(KIconLoader::Desktop)));
+//                     data.setImage(icon.pixmap(IconSize(KIconLoader::Desktop)));
                 }
             }
             break;
@@ -178,21 +178,21 @@ void ToolTipProxy::updateToolTip()
 
         case QVariant::Icon: {
             QIcon icon = m_image.value<QIcon>();
-            data.setImage(icon);
+//             data.setImage(icon);
             break;
         }
 
         case QVariant::Pixmap: {
             QPixmap pixmap = m_image.value<QPixmap>();
-            data.setImage(pixmap);
+//             data.setImage(pixmap);
             break;
         }
 
         default:
             break;
     }
-    Plasma::ToolTipManager::self()->setContent(m_widget, data);
+    //Plasma::ToolTipManager::self()->setContent(m_widget, data);
 }
 
-#include "tooltip.moc"
+//#include "tooltip.moc"
 
