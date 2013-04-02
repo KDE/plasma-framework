@@ -23,8 +23,8 @@
 #include "config-plasma.h"
 
 #include <QFile>
-#include <QGraphicsObject>
 #include <QTimer>
+#include <QQuickItem>
 
 #include <kdebug.h>
 #include <kservice.h>
@@ -68,7 +68,7 @@ void ServicePrivate::associatedWidgetDestroyed(QObject *obj)
 
 void ServicePrivate::associatedItemDestroyed(QObject *obj)
 {
-    associatedItems.remove(static_cast<QGraphicsObject*>(obj));
+    associatedItems.remove(static_cast<QQuickItem*>(obj));
 }
 
 KConfigGroup ServicePrivate::dummyGroup()
@@ -172,7 +172,7 @@ ServiceJob *Service::startOperationCall(const KConfigGroup &description, QObject
     return job;
 }
 
-void Service::associateItem(QGraphicsObject *widget, const QString &operation)
+void Service::associateItem(QQuickItem *widget, const QString &operation)
 {
     if (!widget) {
         return;
@@ -186,7 +186,7 @@ void Service::associateItem(QGraphicsObject *widget, const QString &operation)
     widget->setEnabled(!d->disabledOperations.contains(operation));
 }
 
-void Service::disassociateItem(QGraphicsObject *widget)
+void Service::disassociateItem(QQuickItem *widget)
 {
     if (!widget) {
         return;
@@ -241,7 +241,7 @@ void Service::setOperationEnabled(const QString &operation, bool enable)
     }
 
     {
-        QHashIterator<QGraphicsObject *, QString> it(d->associatedItems);
+        QHashIterator<QQuickItem *, QString> it(d->associatedItems);
         while (it.hasNext()) {
             it.next();
             if (it.value() == operation) {
@@ -278,7 +278,7 @@ void Service::setOperationsScheme(QIODevice *xml)
     }
 
     {
-        QHashIterator<QGraphicsObject *, QString> it(d->associatedItems);
+        QHashIterator<QQuickItem *, QString> it(d->associatedItems);
         while (it.hasNext()) {
             it.next();
             it.key()->setEnabled(d->config->hasGroup(it.value()));

@@ -32,7 +32,7 @@
 class QIODevice;
 class QWidget;
 class QUrl;
-class QGraphicsObject;
+class QQuickItem;
 
 namespace Plasma
 {
@@ -166,7 +166,7 @@ public:
      * @param item the QGraphicsObject to associate with the service
      * @param operation the operation to associate the item with
      */
-    Q_INVOKABLE void associateItem(QGraphicsObject *item, const QString &operation);
+    Q_INVOKABLE void associateItem(QQuickItem *item, const QString &operation);
 
     /**
      * Disassociates a graphics item if it has been associated with an operation
@@ -176,7 +176,7 @@ public:
      *
      * @param widget the QGraphicsItem to disassociate.
      */
-    Q_INVOKABLE void disassociateItem(QGraphicsObject *widget);
+    Q_INVOKABLE void disassociateItem(QQuickItem *widget);
 
     /**
      * @return a parameter map for the given description

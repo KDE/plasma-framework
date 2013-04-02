@@ -137,9 +137,18 @@ kconfig_add_kcfg_files(plasma_LIB_SRCS data/kconfigxt/libplasma-theme-global.kcf
 
 kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
 
-target_link_libraries(plasma ${QT_QTUITOOLS_LIBRARY}
-                              ${QT_QTNETWORK_LIBRARY} ${QT_QTSQL_LIBRARY}
-                             ${KDE4_KDEUI_LIBS} ${ThreadWeaver_LIBRARIES} ${KAuth_LIBRARIES} ${KWindowSystem_LIBRARIES} ${PLASMA_EXTRA_LIBS} ki18n ${kde4support_LIBRARY})
+target_link_libraries(plasma
+    ${QT_QTUITOOLS_LIBRARY}
+    ${QT_QTNETWORK_LIBRARY} ${QT_QTSQL_LIBRARY}
+    ${Qt5Quick_LIBRARIES}
+    ${KDE4_KDEUI_LIBS}
+    ${ThreadWeaver_LIBRARIES}
+    ${KAuth_LIBRARIES}
+    ${KWindowSystem_LIBRARIES}
+    ${PLASMA_EXTRA_LIBS}
+    ki18n
+    ${kde4support_LIBRARY}
+)
 #FIXME gpgme++ is in kdepimlibs, neeeds to be elsewhere
 target_link_libraries(plasma kdeclarative ${KArchive_LIBRARIES})
 

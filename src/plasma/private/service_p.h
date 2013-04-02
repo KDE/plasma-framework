@@ -103,7 +103,7 @@ public:
     KConfig *dummyConfig;
     DNSSD::PublicService *publicService;
     QMultiHash<QWidget *, QString> associatedWidgets;
-    QMultiHash<QGraphicsObject *, QString> associatedItems;
+    QMultiHash<QQuickItem *, QString> associatedItems;
     QSet<QString> disabledOperations;
 };
 
