@@ -57,10 +57,10 @@ class PLASMA_EXPORT RunnerManager : public QObject
 
         /**
          * Finds and returns a loaded runner or NULL
-         * @param name the name of the runner
+         * @param pluginName the name of the runner plugin
          * @return Pointer to the runner
          */
-        AbstractRunner *runner(const QString &name) const;
+        AbstractRunner *runner(const QString &pluginName) const;
 
         /**
          * @return the currently active "single mode" runner, or null if none
@@ -203,7 +203,7 @@ class PLASMA_EXPORT RunnerManager : public QObject
          * @return mime data of the specified match
          * @since 4.5
          */
-        QMimeData * mimeDataForMatch(const QString &id) const;
+        QMimeData * mimeDataForMatch(const QString &matchId) const;
 
         /**
          * Returns a list of all known Runner implementations

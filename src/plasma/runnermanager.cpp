@@ -601,9 +601,9 @@ QList<QueryMatch> RunnerManager::matches() const
     return d->context.matches();
 }
 
-void RunnerManager::run(const QString &id)
+void RunnerManager::run(const QString &matchId)
 {
-    run(d->context.match(id));
+    run(d->context.match(matchId));
 }
 
 void RunnerManager::run(const QueryMatch &match)
