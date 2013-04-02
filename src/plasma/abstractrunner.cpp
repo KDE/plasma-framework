@@ -298,7 +298,7 @@ QString AbstractRunner::name() const
 QIcon AbstractRunner::icon() const
 {
     if (d->runnerDescription.isValid()) {
-        return KDE::icon(d->runnerDescription.icon());
+        return QIcon::fromTheme(d->runnerDescription.icon());
     }
 
     return QIcon();

@@ -67,7 +67,7 @@ void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containme
     KAction *appletBrowserAction = actions->add<KAction>("add widgets");
     appletBrowserAction->setAutoRepeat(false);
     appletBrowserAction->setText(i18n("Add Widgets..."));
-    appletBrowserAction->setIcon(KDE::icon("list-add"));
+    appletBrowserAction->setIcon(QIcon::fromTheme("list-add"));
     appletBrowserAction->setShortcut(KShortcut("alt+d, a"));
     appletBrowserAction->setData(Plasma::AddAction);
 }

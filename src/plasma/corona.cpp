@@ -241,7 +241,7 @@ void Corona::setImmutability(const ImmutabilityType immutable)
         } else {
             bool unlocked = d->immutability == Mutable;
             action->setText(unlocked ? i18n("Lock Widgets") : i18n("Unlock Widgets"));
-            action->setIcon(KDE::icon(unlocked ? "object-locked" : "object-unlocked"));
+            action->setIcon(QIcon::fromTheme(unlocked ? "object-locked" : "object-unlocked"));
             action->setEnabled(true);
             action->setVisible(true);
         }
@@ -316,7 +316,7 @@ void CoronaPrivate::init()
     QObject::connect(lockAction, SIGNAL(triggered(bool)), q, SLOT(toggleImmutability()));
     lockAction->setText(i18n("Lock Widgets"));
     lockAction->setAutoRepeat(true);
-    lockAction->setIcon(KDE::icon("object-locked"));
+    lockAction->setIcon(QIcon::fromTheme("object-locked"));
     lockAction->setData(Plasma::ControlAction);
     lockAction->setShortcut(KShortcut("alt+d, l"));
     lockAction->setShortcutContext(Qt::ApplicationShortcut);

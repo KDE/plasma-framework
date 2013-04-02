@@ -300,3 +300,4 @@ class PLASMA_EXPORT RunnerManager : public QObject
 }
 
 #endif
+
