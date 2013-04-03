@@ -385,16 +385,6 @@ void DataEngine::forceImmediateUpdateOfAllVisualizations()
     }
 }
 
-void DataEngine::setIcon(const QString &icon)
-{
-    d->icon = icon;
-}
-
-QString DataEngine::icon() const
-{
-    return d->icon;
-}
-
 QString DataEngine::pluginName() const
 {
     if (!d->dataEngineDescription.isValid()) {
@@ -453,7 +443,6 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info)
     updateTimestamp.start();
 
     e->setObjectName(info.name());
-    icon = info.icon();
 
     if (dataEngineDescription.isValid()) {
         QString api = dataEngineDescription.property("X-Plasma-API").toString();

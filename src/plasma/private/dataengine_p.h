@@ -92,7 +92,6 @@ class DataEnginePrivate
         int minPollingInterval;
         QTime updateTimestamp;
         DataEngine::SourceDict sources;
-        QString icon;
         bool valid;
         DataEngineScript *script;
         QString serviceName;

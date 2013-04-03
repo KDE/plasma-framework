@@ -174,13 +174,6 @@ DataEngine::SourceDict DataEngineScript::containerDict() const
     return DataEngine::SourceDict();
 }
 
-void DataEngineScript::setIcon(const QString &icon)
-{
-    if (d->dataEngine) {
-        d->dataEngine->setIcon(icon);
-    }
-}
-
 void DataEngineScript::scheduleSourcesUpdated()
 {
     if (d->dataEngine) {
