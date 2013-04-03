@@ -40,7 +40,7 @@ ToolTipWindow::ToolTipWindow(QWindow *parent)
     setFormat(format);
     setClearBeforeRendering(true);
     setColor(QColor(Qt::transparent));
-    setFlags(Qt::FramelessWindowHint);
+//     setFlags(Qt::FramelessWindowHint);
 //             tooltipDialog.setAttribute(Qt.WA_X11NetWmWindowTypeToolTip, true)
 //             tooltipDialog.windowFlags = Qt.Window|Qt.WindowStaysOnTopHint|Qt.X11BypassWindowManagerHint
 
@@ -82,46 +82,12 @@ void ToolTipWindow::setTarget(QQuickItem *target)
     }
 }
 
-void ToolTipWindow::syncTarget()
+void ToolTipWindow::syncGeometry()
 {
-    /*
-    if (!m_target) {
-        return;
-    }
-    // find the scene
-    QGraphicsScene *scene = m_target.data()->scene();
-    if (!scene) {
-        QObject *parent = m_target.data();
-        while ((parent = parent->parent())) {
-            QQuickItem *qo = qobject_cast<QQuickItem*>(parent);
-            if (qo && qo->scene()) {
-                scene = qo->scene();
-                scene->addItem(m_target.data());
-                break;
-            }
-        }
-    }
-
-    QQuickItem *item = qobject_cast<QQuickItem*>(m_target.data());
-    if (!item) {
-        return;
-    }
-
-    if (!m_declarativeItemContainer && scene) {
-        m_declarativeItemContainer = QWeakPointer<QQuickItem>(new QQuickItem());
-        m_declarativeItemContainer.data()->setObjectName("DIContainer");
-        scene->addItem(m_declarativeItemContainer.data());
-    }
-
-    if (m_declarativeItemContainer) {
-        m_target.data()->setObjectName("Original Item");
-        m_declarativeItemContainer.data()->setDeclarativeItem(item, false);
-        m_declarativeItemContainer.data()->setAcceptHoverEvents(true);
-        m_declarativeItemContainer.data()->setParentItem(m_target.data());
-        m_widget = m_declarativeItemContainer.data();
-        emit targetChanged();
-    }
-    */
+    qDebug() << " XXX synching geometry";
+    qDebug() << "XXXX mainitem : " << mainItem()->width() << mainItem()->height();
+    resize(mainItem()->width(), mainItem()->height());
+    setPosition(100, 100);
 }
 
 QString ToolTipWindow::mainText() const
@@ -217,20 +183,24 @@ QQuickItem *ToolTipWindow::mainItem() const
 
 void ToolTipWindow::setMainItem(QQuickItem *mainItem)
 {
-    qDebug() << "mainitem changed: " << mainItem->width() << mainItem->height();
+    qDebug() << "XXXX mainitem changed: " << mainItem->width() << mainItem->height();
 
-    //resize(mainItem->width(), mainItem->height());
-
-    resize(400, 200);
+//    resize(400, 200);
     if (m_mainItem.data() != mainItem) {
+        qDebug() << " XXX new mainItem";
+        disconnect(m_mainItem.data(), &QQuickItem::widthChanged, this, &ToolTipWindow::syncGeometry);
+        disconnect(m_mainItem.data(), &QQuickItem::heightChanged, this, &ToolTipWindow::syncGeometry);
         if (m_mainItem) {
             m_mainItem.data()->setParent(parent());
         }
-
         m_mainItem = mainItem;
+
 
         if (mainItem) {
             //mainItem->setParentItem(0);
+            connect(m_mainItem.data(), &QQuickItem::widthChanged, this, &ToolTipWindow::syncGeometry);
+            connect(m_mainItem.data(), &QQuickItem::heightChanged, this, &ToolTipWindow::syncGeometry);
+            qDebug() << "XXX new mainITem connected";
             mainItem->setParent(contentItem());
             mainItem->setProperty("parent", QVariant::fromValue(contentItem()));
 

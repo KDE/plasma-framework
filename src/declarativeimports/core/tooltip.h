@@ -111,7 +111,7 @@ Q_SIGNALS:
     void visibleChanged();
 
 protected Q_SLOTS:
-    void syncTarget();
+    void syncGeometry();
     void updateToolTip();
 
 private:

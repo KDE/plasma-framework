@@ -39,27 +39,32 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  */
 MouseArea {
 
+    property alias mainText: tooltipWindow.mainText
+    property alias subText: tooltipWindow.subText
+    property alias image: tooltipWindow.image
+
+
     property int _s: theme.iconSizes.small / 2
 
     hoverEnabled: true
     onEntered: {
         print("entere");
-        toolTipWindow.visible = true;
-        toolTipHideTimer.running = false;
-        print(" ttsvg: w " + toolTipSvg.width);
-        print(" ttsvg: h " + toolTipSvg.height);
+        tooltipWindow.visible = true;
+        tooltipHideTimer.running = false;
+        print(" ttsvg: w " + tooltipSvg.width);
+        print(" ttsvg: h " + tooltipSvg.height);
 
     }
 
     onExited: {
         print("exit");
-        toolTipHideTimer.running = true
+        tooltipHideTimer.running = true
 
     }
 
 
     Timer {
-        id: toolTipHideTimer
+        id: tooltipHideTimer
         running: false
         repeat: false
         interval: 100
@@ -67,15 +72,15 @@ MouseArea {
 
         onTriggered: {
             print("Hiding tooltip ...");
-            toolTipWindow.visible = false;
+            tooltipWindow.visible = false;
         }
     }
 
     PlasmaCore.ToolTipWindow {
-        id: toolTipWindow
+        id: tooltipWindow
 
         mainItem: PlasmaCore.FrameSvgItem {
-            id: toolTipSvg
+            id: tooltipSvg
             imagePath: "widgets/tooltip"
             width: childrenRect.width + margins.left + margins.right
             height: childrenRect.height + margins.top + margins.bottom
@@ -84,9 +89,9 @@ MouseArea {
             onChildrenRectChanged: print("XXXX childrenRect chagned" + childrenRect.width + " " + childrenRect.height)
 
             Item {
-                id: toolTipContentItem
-                x: toolTipSvg.margins.left
-                y: toolTipSvg.margins.top
+                id: tooltipContentItem
+                x: tooltipSvg.margins.left
+                y: tooltipSvg.margins.top
                 width: childrenRect.width
                 height: childrenRect.height
                 anchors {
@@ -94,6 +99,8 @@ MouseArea {
                     leftMargin: parent.anchors.margins.left
                     //fill: parent
                 }
+
+                // FIXME: Image { source: tooltipWindow.image }
 
                 PlasmaCore.IconItem {
                     id: tooltipIcon
@@ -108,7 +115,7 @@ MouseArea {
                 PlasmaExtras.Heading {
                     id: tooltipMaintext
                     level: 4
-                    text: "Emperor fish sighted"
+                    text: tooltipWindow.mainText
                     anchors {
                         left: tooltipIcon.right
                         leftMargin: _s
@@ -118,7 +125,7 @@ MouseArea {
                 }
                 PlasmaComponents.Label {
                     id: tooltipSubtext
-                    text: "You've come across a beautiful sea creature"
+                    text: tooltipWindow.subText
                     anchors {
                         left: tooltipIcon.right
                         leftMargin: _s
