@@ -58,10 +58,6 @@ class DataEnginePrivate;
 class PLASMA_EXPORT DataEngine : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QStringList sources READ sources)
-    Q_PROPERTY(bool valid READ isValid)
-    Q_PROPERTY(QString icon READ icon WRITE setIcon)
-    Q_PROPERTY(QString name READ name)
 
     public:
         typedef QHash<QString, DataEngine*> Dict;
@@ -110,11 +106,6 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @return description of the plugin that implements this DataEngine
          */
         KPluginInfo pluginInfo() const;
-
-        /**
-         * Returns the engine name for the DataEngine
-         */
-        QString name() const;
 
         /**
          * Connects a source to an object for data updates. The object must
@@ -457,11 +448,6 @@ NoAlignment) const;
          * Reimplemented from QObject
          **/
         void timerEvent(QTimerEvent *event);
-
-        /**
-         * Sets the engine name for the DataEngine
-         */
-        void setName(const QString &name);
 
         /**
          * Sets the icon for this data engine

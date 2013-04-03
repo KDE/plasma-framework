@@ -135,7 +135,6 @@ protected:
     void removeAllSources();
     void addSource(DataContainer *source);
     DataEngine::SourceDict containerDict() const;
-    void setName(const QString &name);
     void setIcon(const QString &icon);
     void scheduleSourcesUpdated();
     void removeSource(const QString &source);

@@ -430,17 +430,6 @@ void DataEngine::scheduleSourcesUpdated()
     d->checkSourcesTimerId = startTimer(0);
 }
 
-QString DataEngine::name() const
-{
-    return d->engineName;
-}
-
-void DataEngine::setName(const QString &name)
-{
-    d->engineName = name;
-    setObjectName(name);
-}
-
 void DataEngine::setStorageEnabled(const QString &source, bool store)
 {
     DataContainer *s = d->source(source, false);
@@ -463,16 +452,7 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info)
 {
     updateTimestamp.start();
 
-    if (!info.isValid()) {
-        engineName = i18n("Unnamed");
-        return;
-    }
-
-    engineName = info.name();
-    if (engineName.isEmpty()) {
-        engineName = i18n("Unnamed");
-    }
-    e->setObjectName(engineName);
+    e->setObjectName(info.name());
     icon = info.icon();
 
     if (dataEngineDescription.isValid()) {

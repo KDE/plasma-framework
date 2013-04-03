@@ -174,13 +174,6 @@ DataEngine::SourceDict DataEngineScript::containerDict() const
     return DataEngine::SourceDict();
 }
 
-void DataEngineScript::setName(const QString &name)
-{
-    if (d->dataEngine) {
-        d->dataEngine->setName(name);
-    }
-}
-
 void DataEngineScript::setIcon(const QString &icon)
 {
     if (d->dataEngine) {

@@ -95,7 +95,6 @@ class DataEnginePrivate
         QString icon;
         bool valid;
         DataEngineScript *script;
-        QString engineName;
         QString serviceName;
         Package *package;
         QString waitingSourceRequest;
