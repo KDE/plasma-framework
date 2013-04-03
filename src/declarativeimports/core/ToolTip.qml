@@ -19,6 +19,8 @@
 
 import QtQuick 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 /**
  * This is a Plasma-themed tooltip. It is rendered in its own window
@@ -36,6 +38,8 @@ import org.kde.plasma.core 2.0 as PlasmaCore
  *
  */
 MouseArea {
+
+    property int _s: theme.iconSizes.small / 2
 
     hoverEnabled: true
     onEntered: {
@@ -73,19 +77,56 @@ MouseArea {
         mainItem: PlasmaCore.FrameSvgItem {
             id: toolTipSvg
             imagePath: "widgets/tooltip"
-            width: childrenRect.width + 50
-            height: childrenRect.height + 50
+            width: childrenRect.width + margins.left + margins.right
+            height: childrenRect.height + margins.top + margins.bottom
+
+            onWidthChanged: print("XXXX ====================================== svgframe width: " + width)
+            onChildrenRectChanged: print("XXXX childrenRect chagned" + childrenRect.width + " " + childrenRect.height)
 
             Item {
-                width: 300
-                height: 200
+                id: toolTipContentItem
+                x: toolTipSvg.margins.left
+                y: toolTipSvg.margins.top
+                width: childrenRect.width
+                height: childrenRect.height
                 anchors {
                     topMargin: parent.anchors.margins.top
                     leftMargin: parent.anchors.margins.left
-                    fill: parent
+                    //fill: parent
                 }
-                id: toolTipContentItem
-                Rectangle { width: 280; height: 140; color: "orange"; }
+
+                PlasmaCore.IconItem {
+                    id: tooltipIcon
+                    width: theme.iconSizes.desktop
+                    height: width
+                    source: "zanshin"
+//                     anchors {
+//                         left: parent.left
+//                         verticalCenter: parent.verticalCenter
+//                     }
+                }
+                PlasmaExtras.Heading {
+                    id: tooltipMaintext
+                    level: 4
+                    text: "Emperor fish sighted"
+                    anchors {
+                        left: tooltipIcon.right
+                        leftMargin: _s
+                        //right: parent.right
+                        top: parent.top
+                    }
+                }
+                PlasmaComponents.Label {
+                    id: tooltipSubtext
+                    text: "You've come across a beautiful sea creature"
+                    anchors {
+                        left: tooltipIcon.right
+                        leftMargin: _s
+                        topMargin: _s
+                        //right: parent.right
+                        top: tooltipMaintext.bottom
+                    }
+                }
 
             }
 

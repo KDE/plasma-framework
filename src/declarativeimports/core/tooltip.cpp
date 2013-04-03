@@ -221,7 +221,7 @@ void ToolTipWindow::setMainItem(QQuickItem *mainItem)
 
     //resize(mainItem->width(), mainItem->height());
 
-    resize(200, 200);
+    resize(400, 200);
     if (m_mainItem.data() != mainItem) {
         if (m_mainItem) {
             m_mainItem.data()->setParent(parent());
