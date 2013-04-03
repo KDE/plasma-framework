@@ -35,6 +35,22 @@
 ToolTipWindow::ToolTipWindow(QWindow *parent)
     : QQuickWindow(parent), m_mainText(""), m_subText(""), m_widget(0)
 {
+    QSurfaceFormat format;
+    format.setAlphaBufferSize(8);
+    setFormat(format);
+    setClearBeforeRendering(true);
+    setColor(QColor(Qt::transparent));
+    setFlags(Qt::FramelessWindowHint);
+//             tooltipDialog.setAttribute(Qt.WA_X11NetWmWindowTypeToolTip, true)
+//             tooltipDialog.windowFlags = Qt.Window|Qt.WindowStaysOnTopHint|Qt.X11BypassWindowManagerHint
+
+    //m_flags = flags();
+
+    m_syncTimer = new QTimer(this);
+    m_syncTimer->setSingleShot(true);
+    m_syncTimer->setInterval(250);
+//    connect(m_syncTimer, &QTimer::timeout, this,  &DialogProxy::syncToMainItemSize);
+
     connect(this, SIGNAL(targetChanged()), this, SLOT(updateToolTip()));
     connect(this, SIGNAL(mainTextChanged()), this, SLOT(updateToolTip()));
     connect(this, SIGNAL(subTextChanged()), this, SLOT(updateToolTip()));
@@ -194,5 +210,91 @@ void ToolTipWindow::updateToolTip()
     //Plasma::ToolTipManager::self()->setContent(m_widget, data);
 }
 
+QQuickItem *ToolTipWindow::mainItem() const
+{
+    return m_mainItem.data();
+}
+
+void ToolTipWindow::setMainItem(QQuickItem *mainItem)
+{
+    qDebug() << "mainitem changed: " << mainItem->width() << mainItem->height();
+
+    //resize(mainItem->width(), mainItem->height());
+
+    resize(200, 200);
+    if (m_mainItem.data() != mainItem) {
+        if (m_mainItem) {
+            m_mainItem.data()->setParent(parent());
+        }
+
+        m_mainItem = mainItem;
+
+        if (mainItem) {
+            //mainItem->setParentItem(0);
+            mainItem->setParent(contentItem());
+            mainItem->setProperty("parent", QVariant::fromValue(contentItem()));
+
+            if (mainItem->metaObject()->indexOfSignal("widthChanged")) {
+                connect(mainItem, SIGNAL(widthChanged()), m_syncTimer, SIGNAL(start()));
+            }
+            if (mainItem->metaObject()->indexOfSignal("heightChanged")) {
+                connect(mainItem, SIGNAL(heightChanged()), m_syncTimer, SIGNAL(start()));
+            }
+        }
+
+        //if this is called in Compenent.onCompleted we have to wait a loop the item is added to a scene
+        emit mainItemChanged();
+    }
+}
+
+QQuickItem *ToolTipWindow::visualParent() const
+{
+    return m_visualParent.data();
+}
+
+void ToolTipWindow::setVisualParent(QQuickItem *visualParent)
+{
+    if (m_visualParent.data() == visualParent) {
+        return;
+    }
+
+    if (visualParent) {
+        setPosition(popupPosition(visualParent, Qt::AlignCenter));
+    }
+
+    m_visualParent = visualParent;
+    emit visualParentChanged();
+}
+
+
+bool ToolTipWindow::isVisible() const
+{
+    return QQuickWindow::isVisible();
+
+}
+
+void ToolTipWindow::setVisible(const bool visible)
+{
+    qDebug() << visible;
+    if (visible) {
+        setPosition(popupPosition());
+        raise();
+    }
+    QQuickWindow::setVisible(visible);
+}
+
+QPoint ToolTipWindow::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
+{
+    // FIXME :: Item
+    QQuickItem *parentItem = qobject_cast<QQuickItem *>(parent());
+    if (parentItem && parentItem->window()) {
+        qDebug() << "NO visual parent ... Centering at " << (parentItem->window()->geometry().center() - QPoint(width()/2, height()/2));
+        qDebug() << parentItem->window()->geometry().center() - QPoint(width()/2, height()/2);
+        return parentItem->window()->geometry().center() - QPoint(width()/2, height()/2);
+    } else {
+        qDebug() << "No QQuickItem as parent found";
+        return QPoint();
+    }
+}
 //#include "tooltip.moc"
 

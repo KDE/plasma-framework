@@ -21,6 +21,7 @@
 #ifndef TOOLTIP_WINDOW_P
 #define TOOLTIP_WINDOW_P
 
+#include <QTimer>
 #include <QQuickWindow>
 #include <QWeakPointer>
 #include <QtCore/QVariant>
@@ -57,6 +58,22 @@ class ToolTipWindow : public QQuickWindow
      */
     Q_PROPERTY(QVariant image READ image WRITE setImage NOTIFY imageChanged)
 
+    /**
+     * The main QML item that will be displayed in the Dialog
+     */
+    Q_PROPERTY(QQuickItem *mainItem READ mainItem WRITE setMainItem NOTIFY mainItemChanged)
+
+    /**
+     * The main QML item that will be displayed in the Dialog
+     */
+    Q_PROPERTY(QQuickItem *visualParent READ visualParent WRITE setVisualParent NOTIFY visualParentChanged)
+
+    /**
+     * Visibility of the Dialog window. Doesn't have anything to do with the visibility of the mainItem.
+     */
+    Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY visibleChanged)
+
+
 public:
     ToolTipWindow(QWindow *parent = 0);
     ~ToolTipWindow();
@@ -73,21 +90,38 @@ public:
     QVariant image() const;
     void setImage(QVariant name);
 
+    QQuickItem *mainItem() const;
+    void setMainItem(QQuickItem *mainItem);
+
+    QQuickItem *visualParent() const;
+    void setVisualParent(QQuickItem *visualParent);
+
+    bool isVisible() const;
+    void setVisible(const bool visible);
+
+    QPoint popupPosition(QQuickItem *item = 0, Qt::AlignmentFlag alignment=Qt::AlignCenter) ;
+
 Q_SIGNALS:
     void targetChanged();
     void mainTextChanged();
     void subTextChanged();
     void imageChanged();
+    void mainItemChanged();
+    void visualParentChanged();
+    void visibleChanged();
 
 protected Q_SLOTS:
     void syncTarget();
     void updateToolTip();
 
 private:
+    QTimer *m_syncTimer;
     QString m_mainText;
     QString m_subText;
     QVariant m_image;
     QGraphicsWidget *m_widget;
+    QWeakPointer<QQuickItem> m_mainItem;
+    QWeakPointer<QQuickItem> m_visualParent;
     QWeakPointer<QQuickItem> m_declarativeItemContainer;
     QWeakPointer<QQuickItem> m_target;
 };

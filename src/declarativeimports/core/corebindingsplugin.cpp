@@ -40,7 +40,7 @@
 #include "theme.h"
 #include "dialog.h"
 #include "iconitem.h"
-// #include "tooltip.h"
+#include "tooltip.h"
 // #include "dataenginebindings_p.h"
 #include "plasmanamespace.h"
 
@@ -89,8 +89,8 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterType<Plasma::SortFilterModel>(uri, 2, 0, "SortFilterModel");
 
     qmlRegisterType<DialogProxy>(uri, 2, 0, "Dialog");
-//     qmlRegisterType<ToolTipProxy>(uri, 2, 0, "ToolTip");
-// 
+    qmlRegisterType<ToolTipWindow>(uri, 2, 0, "ToolTipWindow");
+
     qmlRegisterInterface<Plasma::Service>("Service");
     qRegisterMetaType<Plasma::Service*>("Service");
     qmlRegisterInterface<Plasma::ServiceJob>("ServiceJob");

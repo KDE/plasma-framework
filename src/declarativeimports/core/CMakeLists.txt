@@ -38,6 +38,6 @@ target_link_libraries(corebindingsplugin
         plasma)
 
 install(TARGETS corebindingsplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/core)
-install(FILES qmldir DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/core)
+install(FILES qmldir ToolTip.qml DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/core)
 
 #add_subdirectory(tests)
