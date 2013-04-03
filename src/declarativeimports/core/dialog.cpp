@@ -150,7 +150,7 @@ bool DialogProxy::isVisible() const
 void DialogProxy::setVisible(const bool visible)
 {
     //qDebug() << visible;
-    QRect avail = QRect(400, 300, 1200, 800);
+    QRect avail = QRect(400, 300, 1200, 800); // FIXME
 
     if (visible) {
         syncToMainItemSize();
