@@ -107,6 +107,11 @@ class PLASMA_EXPORT DataEngine : public QObject
         Q_INVOKABLE virtual Service *serviceForSource(const QString &source);
 
         /**
+         * @return description of the plugin that implements this DataEngine
+         */
+        KPluginInfo pluginInfo() const;
+
+        /**
          * Returns the engine name for the DataEngine
          */
         QString name() const;

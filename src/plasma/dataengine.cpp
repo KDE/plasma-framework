@@ -87,6 +87,11 @@ Service *DataEngine::serviceForSource(const QString &source)
     return new NullService(source, this);
 }
 
+KPluginInfo DataEngine::pluginInfo() const
+{
+    return d->dataEngineDescription;
+}
+
 void DataEngine::connectSource(const QString &source, QObject *visualization,
                                uint pollingInterval,
                                Plasma::IntervalAlignment intervalAlignment) const
