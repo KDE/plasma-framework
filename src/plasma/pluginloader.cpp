@@ -266,6 +266,48 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
     return engine;
 }
 
+QStringList PluginLoader::listAllEngines(const QString &parentApp)
+{
+    QString constraint;
+
+    if (parentApp.isEmpty()) {
+        constraint.append("(not exist [X-KDE-ParentApp] or [X-KDE-ParentApp] == '')");
+    } else {
+        constraint.append("[X-KDE-ParentApp] == '").append(parentApp).append("'");
+    }
+
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/DataEngine", constraint);
+
+    QStringList engines;
+    foreach (const KService::Ptr &service, offers) {
+        QString name = service->property("X-KDE-PluginInfo-Name").toString();
+        if (!name.isEmpty()) {
+            engines.append(name);
+        }
+    }
+
+    return engines;
+}
+
+KPluginInfo::List PluginLoader::listEngineInfo(const QString &parentApp)
+{
+    return PluginLoader::self()->listDataEngineInfo(parentApp);
+}
+
+KPluginInfo::List PluginLoader::listEngineInfoByCategory(const QString &category, const QString &parentApp)
+{
+    QString constraint = QString("[X-KDE-PluginInfo-Category] == '%1'").arg(category);
+
+    if (parentApp.isEmpty()) {
+        constraint.append(" and not exist [X-KDE-ParentApp]");
+    } else {
+        constraint.append(" and [X-KDE-ParentApp] == '").append(parentApp).append("'");
+    }
+
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/DataEngine", constraint);
+    return KPluginInfo::fromServices(offers);
+}
+
 AbstractRunner *PluginLoader::loadRunner(const QString &name)
 {
     // FIXME: RunnerManager is all wrapped around runner loading; that should be sorted out
