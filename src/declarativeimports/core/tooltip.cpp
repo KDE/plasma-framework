@@ -25,6 +25,9 @@
 #include <QDebug>
 #include <QTimer>
 
+#include "framesvgitem.h"
+#include <kwindoweffects.h>
+
 ToolTipWindow::ToolTipWindow(QWindow *parent)
     : QQuickWindow(parent), m_mainText(""), m_subText(""), m_widget(0)
 {
@@ -33,12 +36,7 @@ ToolTipWindow::ToolTipWindow(QWindow *parent)
     setFormat(format);
     setClearBeforeRendering(true);
     setColor(QColor(Qt::transparent));
-    setFlags(Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint | Qt::ToolTip);
-    //setAttribute
-    //setAttribute(Qt::WA_X11NetWmWindowTypeToolTip, true)
-//             tooltipDialog.windowFlags = Qt.Window|Qt.WindowStaysOnTopHint|Qt.X11BypassWindowManagerHint
-
-    //m_flags = flags();
+    setFlags(Qt::ToolTip);
 
     m_syncTimer = new QTimer(this);
     m_syncTimer->setSingleShot(true);
@@ -82,6 +80,11 @@ void ToolTipWindow::syncGeometry()
     qDebug() << "XXXX mainitem : " << mainItem()->width() << mainItem()->height();
     resize(mainItem()->width(), mainItem()->height());
     setPosition(popupPosition(visualParent()));
+
+    Plasma::FrameSvgItem *frameSvg = qobject_cast<Plasma::FrameSvgItem*>(mainItem());
+    if (frameSvg) {
+        KWindowEffects::enableBlurBehind(winId(), true, frameSvg->frameSvg()->mask());
+    }
 }
 
 QString ToolTipWindow::mainText() const
