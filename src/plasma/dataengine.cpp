@@ -48,21 +48,9 @@
 namespace Plasma
 {
 
-DataEngine::DataEngine(QObject *parent, KService::Ptr service)
-    : QObject(parent),
-      d(new DataEnginePrivate(this, KPluginInfo(service)))
-{
-}
-
-DataEngine::DataEngine(QObject *parent, const KPluginInfo &plugin)
+DataEngine::DataEngine(const KPluginInfo &plugin, QObject *parent)
     : QObject(parent),
       d(new DataEnginePrivate(this, plugin))
-{
-}
-
-DataEngine::DataEngine(QObject *parent, const QVariantList &args)
-    : QObject(parent),
-      d(new DataEnginePrivate(this, KPluginInfo(KService::serviceByStorageId(args.count() > 0 ?  args[0].toString() : QString()))))
 {
 }
 

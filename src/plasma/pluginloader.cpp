@@ -253,7 +253,7 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
                 }
             }
         } else {
-            engine = new DataEngine(0, offers.first());
+            engine = new DataEngine(KPluginInfo(offers.first()), 0);
         }
     }
 
