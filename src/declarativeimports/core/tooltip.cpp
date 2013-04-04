@@ -20,6 +20,7 @@
  ***************************************************************************/
 
 #include "tooltip.h"
+#include "tooltipdialog.h"
 
 #include <QQuickItem>
 #include <QDebug>
@@ -114,11 +115,19 @@ bool ToolTip::isVisible() const
 
 void ToolTip::setVisible(const bool visible)
 {
+    ToolTipDialog *dlg = ToolTipDialog::instance();
     qDebug() << visible;
     if (visible) {
-        //setPosition(popupPosition());
+        qDebug() << " showing tooltip: " << ToolTipDialog::instance();
+        dlg->setMainItem(mainItem());
+        dlg->setVisualParent(m_visualParent.data());
+        dlg->setPosition(dlg->popupPosition(visualParent()));
+        dlg->setVisible(true);
+
 //         syncGeometry();
 //         raise();
+    } else {
+        dlg->setVisible(false);
     }
     //QQuickWindow::setVisible(visible);
 }

@@ -40,8 +40,8 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
 MouseArea {
     id: tooltip
 
-    property alias mainText: tooltipWindow.mainText // string
-    property alias subText: tooltipWindow.subText // string
+    property alias mainText: tooltipMaintext.text // string
+    property alias subText: tooltipSubtext.text // string
     property alias iconSource: tooltipIcon.source // icon name
     property alias image: tooltipImage.source // string / url to the image
     property Item target: parent
@@ -71,13 +71,13 @@ MouseArea {
         }
     }
 
-    PlasmaCore.ToolTipWindow {
+    PlasmaCore.ToolTipProxy {
         id: tooltipWindow
         visualParent: tooltip.target
 
         mainItem: PlasmaCore.FrameSvgItem {
             id: tooltipSvg
-            imagePath: "widgets/tooltip"
+            //imagePath: "widgets/tooltip"
             width: childrenRect.width + margins.left + margins.right + 2*_s
             height: childrenRect.height + margins.top + margins.bottom + 2*_s
 
