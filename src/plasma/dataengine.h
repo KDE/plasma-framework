@@ -185,18 +185,6 @@ NoAlignment) const;
         Q_INVOKABLE DataContainer *containerForSource(const QString &source);
 
         /**
-         * Gets the Data associated with a data source.
-         *
-         * The data is a QHash of QVariants keyed by QString names, allowing
-         * one data source to provide sets of related data.
-         *
-         * @param source the data source to retrieve the data for
-         * @return the Data associated with the source; if the source doesn't
-         *         exist an empty data set is returned
-         **/
-        Q_INVOKABLE DataEngine::Data query(const QString &source) const;
-
-        /**
          * Returns true if this engine is valid, otherwise returns false
          *
          * @return true if the engine is valid
@@ -223,11 +211,6 @@ NoAlignment) const;
          * @return the Package object, or 0 if none
          **/
         Package package() const;
-
-        /**
-         * @return the plugin name for the applet
-         */
-        QString pluginName() const;
 
         /**
          * Initializes and returns a new service from the name that was set

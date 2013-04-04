@@ -136,26 +136,6 @@ DataContainer *DataEngine::containerForSource(const QString &source)
     return d->source(source, false);
 }
 
-DataEngine::Data DataEngine::query(const QString &source) const
-{
-    bool newSource;
-    DataContainer *s = d->requestSource(source, &newSource);
-
-    if (!s) {
-        return DataEngine::Data();
-    } else if (!newSource && d->minPollingInterval >= 0 &&
-               s->timeSinceLastUpdate() >= uint(d->minPollingInterval)) {
-        DataEngine *unconstThis = const_cast<DataEngine*>(this);
-        if (unconstThis->updateSourceEvent(source)) {
-            unconstThis->scheduleSourcesUpdated();
-        }
-    }
-
-    DataEngine::Data data = s->data();
-    s->d->checkUsage();
-    return data;
-}
-
 void DataEngine::init()
 {
     if (d->script) {
@@ -383,15 +363,6 @@ void DataEngine::forceImmediateUpdateOfAllVisualizations()
     foreach (DataContainer *source, d->sources) {
         source->forceImmediateUpdate();
     }
-}
-
-QString DataEngine::pluginName() const
-{
-    if (!d->dataEngineDescription.isValid()) {
-        return QString();
-    }
-
-    return d->dataEngineDescription.pluginName();
 }
 
 void DataEngine::setDefaultService(const QString &serviceName)
