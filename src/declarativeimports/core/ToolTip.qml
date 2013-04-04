@@ -82,8 +82,8 @@ MouseArea {
         mainItem: PlasmaCore.FrameSvgItem {
             id: tooltipSvg
             imagePath: "widgets/tooltip"
-            width: childrenRect.width + margins.left + margins.right
-            height: childrenRect.height + margins.top + margins.bottom
+            width: childrenRect.width + margins.left + margins.right + 2*_s
+            height: childrenRect.height + margins.top + margins.bottom + 2*_s
 
             onWidthChanged: print("XXXX ====================================== svgframe width: " + width)
             onChildrenRectChanged: print("XXXX childrenRect chagned" + childrenRect.width + " " + childrenRect.height)
@@ -96,7 +96,8 @@ MouseArea {
                 height: childrenRect.height
                 anchors {
                     topMargin: parent.anchors.margins.top
-                    leftMargin: parent.anchors.margins.left
+                    leftMargin: parent.anchors.margins.left + _s
+                    rightMargin: _s
                     //fill: parent
                 }
 
@@ -119,7 +120,7 @@ MouseArea {
                     anchors {
                         left: tooltipIcon.right
                         leftMargin: _s
-                        //right: parent.right
+                        topMargin: _s
                         top: parent.top
                     }
                 }
@@ -130,7 +131,7 @@ MouseArea {
                         left: tooltipIcon.right
                         leftMargin: _s
                         topMargin: _s
-                        //right: parent.right
+                        bottomMargin: _s
                         top: tooltipMaintext.bottom
                     }
                 }

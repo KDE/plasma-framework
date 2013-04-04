@@ -40,8 +40,9 @@ ToolTipWindow::ToolTipWindow(QWindow *parent)
     setFormat(format);
     setClearBeforeRendering(true);
     setColor(QColor(Qt::transparent));
-//     setFlags(Qt::FramelessWindowHint);
-//             tooltipDialog.setAttribute(Qt.WA_X11NetWmWindowTypeToolTip, true)
+    setFlags(Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint | Qt::ToolTip);
+    //setAttribute
+    //setAttribute(Qt::WA_X11NetWmWindowTypeToolTip, true)
 //             tooltipDialog.windowFlags = Qt.Window|Qt.WindowStaysOnTopHint|Qt.X11BypassWindowManagerHint
 
     //m_flags = flags();
@@ -87,7 +88,7 @@ void ToolTipWindow::syncGeometry()
     qDebug() << " XXX synching geometry";
     qDebug() << "XXXX mainitem : " << mainItem()->width() << mainItem()->height();
     resize(mainItem()->width(), mainItem()->height());
-    setPosition(100, 100);
+    setPosition(popupPosition());
 }
 
 QString ToolTipWindow::mainText() const
@@ -258,12 +259,12 @@ QPoint ToolTipWindow::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignmen
     // FIXME :: Item
     QQuickItem *parentItem = qobject_cast<QQuickItem *>(parent());
     if (parentItem && parentItem->window()) {
-        qDebug() << "NO visual parent ... Centering at " << (parentItem->window()->geometry().center() - QPoint(width()/2, height()/2));
+        qDebug() << "XXX NO visual parent ... Centering at " << (parentItem->window()->geometry().center() - QPoint(width()/2, height()/2));
         qDebug() << parentItem->window()->geometry().center() - QPoint(width()/2, height()/2);
         return parentItem->window()->geometry().center() - QPoint(width()/2, height()/2);
     } else {
-        qDebug() << "No QQuickItem as parent found";
-        return QPoint();
+        qDebug() << "XXX No QQuickItem as parent found";
+        return QPoint(100, 100);
     }
 }
 //#include "tooltip.moc"
