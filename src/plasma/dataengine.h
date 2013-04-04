@@ -76,17 +76,6 @@ class PLASMA_EXPORT DataEngine : public QObject
         ~DataEngine();
 
         /**
-         * This method is called when the DataEngine is started. When this
-         * method is called the DataEngine is fully constructed and ready to be
-         * used. This method should be reimplemented by DataEngine subclasses
-         * which need to perform a startup routine.
-         *
-         * The default implementation does nothing. Reimplementations in
-         * subclasses don't need to call this one.
-         **/
-        virtual void init();
-
-        /**
          * @return a list of all the data sources available via this DataEngine
          *         Whether these sources are currently available (which is what
          *         the default implementation provides) or not is up to the

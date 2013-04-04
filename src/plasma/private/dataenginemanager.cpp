@@ -138,7 +138,6 @@ Plasma::DataEngine *DataEngineManager::loadEngine(const QString &name)
         return d->nullEngine();
     }
 
-    engine->init();
     d->engines[name] = engine;
     return engine;
 }

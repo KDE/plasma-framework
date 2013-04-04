@@ -52,6 +52,14 @@ DataEngine::DataEngine(const KPluginInfo &plugin, QObject *parent)
     : QObject(parent),
       d(new DataEnginePrivate(this, plugin))
 {
+    if (d->script) {
+        d->setupScriptSupport();
+        d->script->init();
+    } else {
+        // kDebug() << "called";
+        // default implementation does nothing. this is for engines that have to
+        // start things in motion external to themselves before they can work
+    }
 }
 
 DataEngine::~DataEngine()
@@ -128,18 +136,6 @@ void DataEngine::disconnectSource(const QString &source, QObject *visualization)
 DataContainer *DataEngine::containerForSource(const QString &source)
 {
     return d->source(source, false);
-}
-
-void DataEngine::init()
-{
-    if (d->script) {
-        d->setupScriptSupport();
-        d->script->init();
-    } else {
-        // kDebug() << "called";
-        // default implementation does nothing. this is for engines that have to
-        // start things in motion external to themselves before they can work
-    }
 }
 
 bool DataEngine::sourceRequestEvent(const QString &name)
