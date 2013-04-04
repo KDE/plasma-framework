@@ -174,13 +174,6 @@ DataEngine::SourceDict DataEngineScript::containerDict() const
     return DataEngine::SourceDict();
 }
 
-void DataEngineScript::scheduleSourcesUpdated()
-{
-    if (d->dataEngine) {
-        d->dataEngine->scheduleSourcesUpdated();
-    }
-}
-
 void DataEngineScript::removeSource(const QString &source)
 {
     if (d->dataEngine) {

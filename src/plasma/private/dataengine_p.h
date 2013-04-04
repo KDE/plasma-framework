@@ -84,6 +84,13 @@ class DataEnginePrivate
          */
         void retrieveStoredData(DataContainer *s);
 
+        /**
+         * Call this method when you call setData directly on a DataContainer instead
+         * of using the DataEngine::setData methods.
+         * If this method is not called, no dataUpdated(..) signals will be emitted!
+         */
+        void scheduleSourcesUpdated();
+
         DataEngine *q;
         KPluginInfo dataEngineDescription;
         int refCount;

@@ -436,13 +436,6 @@ NoAlignment) const;
 
     protected Q_SLOTS:
         /**
-         * Call this method when you call setData directly on a DataContainer instead
-         * of using the DataEngine::setData methods.
-         * If this method is not called, no dataUpdated(..) signals will be emitted!
-         */
-        void scheduleSourcesUpdated();
-
-        /**
          * Removes a data source.
          * @param source the name of the data source to remove
          **/
@@ -474,6 +467,7 @@ NoAlignment) const;
 
         Q_PRIVATE_SLOT(d, void internalUpdateSource(DataContainer *source))
         Q_PRIVATE_SLOT(d, void sourceDestroyed(QObject *object))
+        Q_PRIVATE_SLOT(d, void scheduleSourcesUpdated())
 
         DataEnginePrivate *const d;
 };

@@ -187,7 +187,7 @@ void DataEngine::setData(const QString &source, const QString &key, const QVaria
         emit sourceAdded(source);
     }
 
-    scheduleSourcesUpdated();
+    d->scheduleSourcesUpdated();
 }
 
 void DataEngine::setData(const QString &source, const Data &data)
@@ -209,7 +209,7 @@ void DataEngine::setData(const QString &source, const Data &data)
         emit sourceAdded(source);
     }
 
-    scheduleSourcesUpdated();
+    d->scheduleSourcesUpdated();
 }
 
 void DataEngine::removeAllData(const QString &source)
@@ -217,7 +217,7 @@ void DataEngine::removeAllData(const QString &source)
     DataContainer *s = d->source(source, false);
     if (s) {
         s->removeAllData();
-        scheduleSourcesUpdated();
+        d->scheduleSourcesUpdated();
     }
 }
 
@@ -226,7 +226,7 @@ void DataEngine::removeData(const QString &source, const QString &key)
     DataContainer *s = d->source(source, false);
     if (s) {
         s->setData(key, QVariant());
-        scheduleSourcesUpdated();
+        d->scheduleSourcesUpdated();
     }
 }
 
@@ -244,7 +244,7 @@ void DataEngine::addSource(DataContainer *source)
     QObject::connect(source, SIGNAL(destroyed(QObject*)), this, SLOT(sourceDestroyed(QObject*)));
     d->sources.insert(source->objectName(), source);
     emit sourceAdded(source->objectName());
-    scheduleSourcesUpdated();
+    d->scheduleSourcesUpdated();
 }
 
 void DataEngine::setMinimumPollingInterval(int minimumMs)
@@ -355,7 +355,7 @@ void DataEngine::updateAllSources()
         updateSourceEvent(it.key());
     }
 
-    scheduleSourcesUpdated();
+    d->scheduleSourcesUpdated();
 }
 
 void DataEngine::forceImmediateUpdateOfAllVisualizations()
@@ -368,15 +368,6 @@ void DataEngine::forceImmediateUpdateOfAllVisualizations()
 Package DataEngine::package() const
 {
     return d->package ? *d->package : Package();
-}
-
-void DataEngine::scheduleSourcesUpdated()
-{
-    if (d->checkSourcesTimerId) {
-        return;
-    }
-
-    d->checkSourcesTimerId = startTimer(0);
 }
 
 void DataEngine::setStorageEnabled(const QString &source, bool store)
@@ -453,7 +444,7 @@ void DataEnginePrivate::internalUpdateSource(DataContainer *source)
 
     if (q->updateSourceEvent(source->objectName())) {
         //kDebug() << "queuing an update";
-        q->scheduleSourcesUpdated();
+        scheduleSourcesUpdated();
     }/* else {
 #ifndef NDEBUG
         kDebug() << "no update";
@@ -600,6 +591,15 @@ void DataEnginePrivate::setupScriptSupport()
         KGlobal::dirs()->addResourceDir("locale", translationsPath);
         KLocalizedString::insertCatalog(dataEngineDescription.pluginName());
     }
+}
+
+void DataEnginePrivate::scheduleSourcesUpdated()
+{
+    if (checkSourcesTimerId) {
+        return;
+    }
+
+    checkSourcesTimerId = q->startTimer(0);
 }
 
 QStringList DataEngine::listAllEngines(const QString &parentApp)

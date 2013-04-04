@@ -135,7 +135,6 @@ protected:
     void removeAllSources();
     void addSource(DataContainer *source);
     DataEngine::SourceDict containerDict() const;
-    void scheduleSourcesUpdated();
     void removeSource(const QString &source);
     void updateAllSources();
     void forceImmediateUpdateOfAllVisualizations();
