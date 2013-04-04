@@ -43,6 +43,8 @@ public:
     ToolTipDialog(QQuickItem *parent = 0);
     ~ToolTipDialog();
 
+    static ToolTipDialog* instance();
+
 Q_SIGNALS:
 
 private:

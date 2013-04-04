@@ -22,13 +22,26 @@
 #include <QQuickItem>
 #include <QDebug>
 
+#include "framesvgitem.h"
+
+Q_GLOBAL_STATIC(ToolTipDialog, toolTipDialogInstance)
+
 ToolTipDialog::ToolTipDialog(QQuickItem  *parent)
     : DialogProxy(parent)
 {
+    setFlags(Qt::ToolTip);
+    m_frameSvgItem->setImagePath("widgets/tooltip");
+    qDebug() << "XXX TOolTip ctor'ed";
 }
 
 ToolTipDialog::~ToolTipDialog()
 {
 }
+
+ToolTipDialog* ToolTipDialog::instance()
+{
+    return toolTipDialogInstance();
+}
+
 
 

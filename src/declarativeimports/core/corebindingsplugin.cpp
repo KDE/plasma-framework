@@ -41,6 +41,9 @@
 #include "dialog.h"
 #include "iconitem.h"
 #include "tooltipwindow.h"
+
+#include "tooltip.h"
+
 // #include "dataenginebindings_p.h"
 #include "plasmanamespace.h"
 
@@ -90,6 +93,7 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
 
     qmlRegisterType<DialogProxy>(uri, 2, 0, "Dialog");
     qmlRegisterType<ToolTipWindow>(uri, 2, 0, "ToolTipWindow");
+    qmlRegisterType<ToolTip>(uri, 2, 0, "ToolTipProxy");
 
     qmlRegisterInterface<Plasma::Service>("Service");
     qRegisterMetaType<Plasma::Service*>("Service");
