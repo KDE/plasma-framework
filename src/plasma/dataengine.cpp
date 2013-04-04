@@ -269,7 +269,7 @@ void DataEngine::setPollingInterval(uint frequency)
 
 void DataEngine::removeSource(const QString &source)
 {
-    SourceDict::iterator it = d->sources.find(source);
+    QHash<QString, DataContainer*>::iterator it = d->sources.find(source);
     if (it != d->sources.end()) {
         DataContainer *s = it.value();
         s->d->store();
@@ -309,7 +309,7 @@ void DataEngine::setValid(bool valid)
     d->valid = valid;
 }
 
-DataEngine::SourceDict DataEngine::containerDict() const
+QHash<QString, DataContainer*> DataEngine::containerDict() const
 {
     return d->sources;
 }
@@ -363,18 +363,6 @@ void DataEngine::forceImmediateUpdateOfAllVisualizations()
     foreach (DataContainer *source, d->sources) {
         source->forceImmediateUpdate();
     }
-}
-
-void DataEngine::setDefaultService(const QString &serviceName)
-{
-    d->serviceName = serviceName;
-}
-
-Service* DataEngine::createDefaultService(QObject *parent)
-{
-    QVariantList args;
-    args << QVariant::fromValue<DataEngine*>(this);
-    return PluginLoader::self()->loadService(d->serviceName, args, parent);
 }
 
 Package DataEngine::package() const
@@ -490,7 +478,7 @@ bool DataEnginePrivate::isUsed() const
 
 DataContainer *DataEnginePrivate::source(const QString &sourceName, bool createWhenMissing)
 {
-    DataEngine::SourceDict::const_iterator it = sources.constFind(sourceName);
+    QHash<QString, DataContainer*>::const_iterator it = sources.constFind(sourceName);
     if (it != sources.constEnd()) {
         DataContainer *s = it.value();
         return s;
@@ -547,7 +535,7 @@ void DataEnginePrivate::connectSource(DataContainer *s, QObject *visualization,
 
 void DataEnginePrivate::sourceDestroyed(QObject *object)
 {
-    DataEngine::SourceDict::iterator it = sources.begin();
+    QHash<QString, DataContainer*>::iterator it = sources.begin();
     while (it != sources.end()) {
         if (it.value() == object) {
             sources.erase(it);
