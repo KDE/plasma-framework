@@ -160,14 +160,15 @@ protected:
     void focusInEvent(QFocusEvent *ev);
     void focusOutEvent(QFocusEvent *ev);
 
-private:
-    Qt::WindowFlags m_flags;
     QTimer *m_syncTimer;
-    QWeakPointer<QQuickItem> m_mainItem;
-    QWeakPointer<QQuickItem> m_visualParent;
-    bool m_activeWindow;
     Plasma::Location m_location;
     Plasma::FrameSvgItem *m_frameSvgItem;
+    QWeakPointer<QQuickItem> m_mainItem;
+    QWeakPointer<QQuickItem> m_visualParent;
+
+private:
+    Qt::WindowFlags m_flags;
+    bool m_activeWindow;
     QRect m_cachedGeometry;
 };
 

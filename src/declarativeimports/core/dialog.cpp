@@ -34,8 +34,7 @@
 #include <kwindoweffects.h>
 #include <Plasma/Plasma>
 #include <Plasma/Corona>
-// #include <Plasma/Dialog>
-//#include <Plasma/WindowEffects>
+
 #include <QDebug>
 
 // just for debugging purposes, FIXME: remove later
@@ -58,7 +57,6 @@ QString locString(const Plasma::Location l) {
     }
     return o;
 }
-
 
 DialogProxy::DialogProxy(QQuickItem *parent)
     : QQuickWindow(),
