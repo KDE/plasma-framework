@@ -339,7 +339,7 @@ NoAlignment) const;
          * @param source the name of the data source
          * @param data the data to add to the source
          **/
-        void setData(const QString &source, const Data &data);
+        void setData(const QString &source, const QHash<QString, QVariant> &data);
 
         /**
          * Removes all the data associated with a data source.
