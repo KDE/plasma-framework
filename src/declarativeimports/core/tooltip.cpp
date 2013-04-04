@@ -1,6 +1,7 @@
 /***************************************************************************
  *   Copyright 2011 Marco Martin <mart@kde.org>                            *
  *   Copyright 2011 Artur Duque de Souza <asouza@kde.org>                  *
+ *   Copyright 2013 Sebastian Kügler <sebas@kde.org>                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,16 +22,8 @@
 #include "tooltip.h"
 
 #include <QQuickItem>
-// #include <QGraphicsWidget>
-// #include <QGraphicsScene>
 #include <QDebug>
 #include <QTimer>
-
-//#include <KIcon>
-// #include <KIconLoader>
-// #include <Plasma/ToolTipContent>
-// #include <Plasma/ToolTipManager>
-
 
 ToolTipWindow::ToolTipWindow(QWindow *parent)
     : QQuickWindow(parent), m_mainText(""), m_subText(""), m_widget(0)
@@ -50,7 +43,7 @@ ToolTipWindow::ToolTipWindow(QWindow *parent)
     m_syncTimer = new QTimer(this);
     m_syncTimer->setSingleShot(true);
     m_syncTimer->setInterval(250);
-//    connect(m_syncTimer, &QTimer::timeout, this,  &DialogProxy::syncToMainItemSize);
+    connect(m_syncTimer, &QTimer::timeout, this,  &ToolTipWindow::syncGeometry);
 
     connect(this, SIGNAL(targetChanged()), this, SLOT(updateToolTip()));
     connect(this, SIGNAL(mainTextChanged()), this, SLOT(updateToolTip()));
@@ -88,7 +81,7 @@ void ToolTipWindow::syncGeometry()
     qDebug() << " XXX synching geometry";
     qDebug() << "XXXX mainitem : " << mainItem()->width() << mainItem()->height();
     resize(mainItem()->width(), mainItem()->height());
-    setPosition(popupPosition());
+    setPosition(popupPosition(visualParent()));
 }
 
 QString ToolTipWindow::mainText() const
@@ -232,8 +225,13 @@ void ToolTipWindow::setVisualParent(QQuickItem *visualParent)
     if (visualParent) {
         setPosition(popupPosition(visualParent, Qt::AlignCenter));
     }
+    disconnect(m_visualParent.data(), &QQuickItem::xChanged, this, &ToolTipWindow::syncGeometry);
+    disconnect(m_visualParent.data(), &QQuickItem::yChanged, this, &ToolTipWindow::syncGeometry);
+    //disconnect(visualParent, &QQuickItem::yChanged, this, &ToolTipWindow::syncGeometry);
 
     m_visualParent = visualParent;
+    connect(m_visualParent.data(), &QQuickItem::xChanged, this, &ToolTipWindow::syncGeometry);
+    connect(m_visualParent.data(), &QQuickItem::yChanged, this, &ToolTipWindow::syncGeometry);
     emit visualParentChanged();
 }
 
@@ -248,7 +246,8 @@ void ToolTipWindow::setVisible(const bool visible)
 {
     qDebug() << visible;
     if (visible) {
-        setPosition(popupPosition());
+        //setPosition(popupPosition());
+        syncGeometry();
         raise();
     }
     QQuickWindow::setVisible(visible);
@@ -257,13 +256,23 @@ void ToolTipWindow::setVisible(const bool visible)
 QPoint ToolTipWindow::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
 {
     // FIXME :: Item
-    QQuickItem *parentItem = qobject_cast<QQuickItem *>(parent());
-    if (parentItem && parentItem->window()) {
-        qDebug() << "XXX NO visual parent ... Centering at " << (parentItem->window()->geometry().center() - QPoint(width()/2, height()/2));
-        qDebug() << parentItem->window()->geometry().center() - QPoint(width()/2, height()/2);
-        return parentItem->window()->geometry().center() - QPoint(width()/2, height()/2);
+    if (!item) {
+        item = qobject_cast<QQuickItem *>(visualParent());
+    }
+    if (item && item->window()) {
+        QPointF itemScreenPos;
+
+        QPointF pos = item->mapToScene(QPointF(0, 0));
+        //qDebug() << "I've an Item at " << pos;
+        if (item->window() && item->window()->screen()) {
+            pos = item->window()->mapToGlobal(pos.toPoint());
+        } else {
+        }
+        itemScreenPos = QPoint(pos.x() + (item->width() - mainItem()->width())/2, pos.y()-mainItem()->height());
+        qDebug() << "XXX Centering at visualParent" << itemScreenPos;
+        return itemScreenPos.toPoint();
     } else {
-        qDebug() << "XXX No QQuickItem as parent found";
+        qDebug() << "XXX No QQuickItem visualParent found";
         return QPoint(100, 100);
     }
 }

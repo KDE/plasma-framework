@@ -38,46 +38,42 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  *
  */
 MouseArea {
+    id: tooltip
 
-    property alias mainText: tooltipWindow.mainText
-    property alias subText: tooltipWindow.subText
-    property alias image: tooltipWindow.image
+    property alias mainText: tooltipWindow.mainText // string
+    property alias subText: tooltipWindow.subText // string
+    property alias iconSource: tooltipIcon.source // icon name
+    property alias image: tooltipImage.source // string / url to the image
+    property Item visualParent: parent
 
-
+    // private props
     property int _s: theme.iconSizes.small / 2
 
     hoverEnabled: true
     onEntered: {
-        print("entere");
+        print("entered");
         tooltipWindow.visible = true;
         tooltipHideTimer.running = false;
-        print(" ttsvg: w " + tooltipSvg.width);
-        print(" ttsvg: h " + tooltipSvg.height);
-
     }
-
     onExited: {
         print("exit");
         tooltipHideTimer.running = true
-
     }
-
 
     Timer {
         id: tooltipHideTimer
         running: false
         repeat: false
-        interval: 100
-
-
+        interval: 50
         onTriggered: {
-            print("Hiding tooltip ...");
+            //print("Hiding tooltip ...");
             tooltipWindow.visible = false;
         }
     }
 
     PlasmaCore.ToolTipWindow {
         id: tooltipWindow
+        visualParent: tooltip.visualParent
 
         mainItem: PlasmaCore.FrameSvgItem {
             id: tooltipSvg
@@ -85,60 +81,55 @@ MouseArea {
             width: childrenRect.width + margins.left + margins.right + 2*_s
             height: childrenRect.height + margins.top + margins.bottom + 2*_s
 
-            onWidthChanged: print("XXXX ====================================== svgframe width: " + width)
-            onChildrenRectChanged: print("XXXX childrenRect chagned" + childrenRect.width + " " + childrenRect.height)
-
             Item {
                 id: tooltipContentItem
-                x: tooltipSvg.margins.left
-                y: tooltipSvg.margins.top
-                width: childrenRect.width
+                x: tooltipSvg.margins.left + _s
+                y: tooltipSvg.margins.top + _s
+                width: childrenRect.width + _s
                 height: childrenRect.height
-                anchors {
-                    topMargin: parent.anchors.margins.top
-                    leftMargin: parent.anchors.margins.left + _s
-                    rightMargin: _s
-                    //fill: parent
-                }
 
-                // FIXME: Image { source: tooltipWindow.image }
+                property int maxTextSize: Math.max(tooltipMaintext.paintedWidth, tooltipSubtext.paintedWidth)
+                property int maxSize: theme.iconSizes.desktop * 6
+                property int preferredTextWidth: Math.min(maxTextSize, maxSize)
+
+                Image {
+                    id: tooltipImage
+                }
 
                 PlasmaCore.IconItem {
                     id: tooltipIcon
                     width: theme.iconSizes.desktop
                     height: width
-                    source: "zanshin"
-//                     anchors {
-//                         left: parent.left
-//                         verticalCenter: parent.verticalCenter
-//                     }
+                    anchors {
+                        leftMargin: _s
+                    }
                 }
                 PlasmaExtras.Heading {
                     id: tooltipMaintext
-                    level: 4
+                    level: 3
+                    width: parent.preferredTextWidth
+                    wrapMode: Text.WordWrap
                     text: tooltipWindow.mainText
                     anchors {
-                        left: tooltipIcon.right
-                        leftMargin: _s
-                        topMargin: _s
-                        top: parent.top
+                        left: (tooltipImage.source != "") ? tooltipImage.right : tooltipIcon.right
+                        leftMargin: _s*2
+                        top: tooltipIcon.top
                     }
                 }
                 PlasmaComponents.Label {
                     id: tooltipSubtext
+                    width: parent.preferredTextWidth
+                    wrapMode: Text.WordWrap
                     text: tooltipWindow.subText
+                    opacity: 0.5
                     anchors {
-                        left: tooltipIcon.right
-                        leftMargin: _s
+                        left: tooltipMaintext.left
                         topMargin: _s
                         bottomMargin: _s
                         top: tooltipMaintext.bottom
                     }
                 }
-
             }
-
         }
-
     }
 }
