@@ -40,7 +40,7 @@
 #include "theme.h"
 #include "dialog.h"
 #include "iconitem.h"
-#include "tooltip.h"
+#include "tooltipwindow.h"
 // #include "dataenginebindings_p.h"
 #include "plasmanamespace.h"
 

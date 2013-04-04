@@ -19,8 +19,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
  ***************************************************************************/
 
-#ifndef TOOLTIPOBJECT_H
-#define TOOLTIPOBJECT_H
+#ifndef TOOLTIP_WINDOW_P
+#define TOOLTIP_WINDOW_P
 
 #include <QTimer>
 #include <QQuickWindow>
@@ -35,7 +35,7 @@ class QGraphicsWidget;
  *
  * Exposed as `ToolTip` in QML.
  */
-class ToolTip : public QObject
+class ToolTipWindow : public QQuickWindow
 {
     Q_OBJECT
 
@@ -43,6 +43,21 @@ class ToolTip : public QObject
      * The item that will display this tooltip on mouse over 
      */
     Q_PROPERTY(QQuickItem *target READ target WRITE setTarget NOTIFY targetChanged)
+
+    /**
+     * The title of the tooltip, not more that 2-3 words
+     */
+    Q_PROPERTY(QString mainText READ mainText WRITE setMainText NOTIFY mainTextChanged)
+
+    /**
+     * subtitle of the tooltip. needed if a longer description is needed
+     */
+    Q_PROPERTY(QString subText READ subText WRITE setSubText NOTIFY subTextChanged)
+
+    /**
+     * Image to display in the tooltip, can be an image full path or a Freedesktop icon name or QIcon or QPixmap
+     */
+    Q_PROPERTY(QVariant image READ image WRITE setImage NOTIFY imageChanged)
 
     /**
      * The main QML item that will be displayed in the Dialog
@@ -61,11 +76,20 @@ class ToolTip : public QObject
 
 
 public:
-    ToolTip(QObject *parent = 0);
-    ~ToolTip();
+    ToolTipWindow(QWindow *parent = 0);
+    ~ToolTipWindow();
 
     QQuickItem *target() const;
     void setTarget(QQuickItem *target);
+
+    QString mainText() const;
+    void setMainText(const QString &text);
+
+    QString subText() const;
+    void setSubText(const QString &text);
+
+    QVariant image() const;
+    void setImage(QVariant name);
 
     QQuickItem *mainItem() const;
     void setMainItem(QQuickItem *mainItem);
@@ -80,12 +104,23 @@ public:
 
 Q_SIGNALS:
     void targetChanged();
+    void mainTextChanged();
+    void subTextChanged();
+    void imageChanged();
     void mainItemChanged();
     void visualParentChanged();
     void visibleChanged();
 
+protected Q_SLOTS:
+    void syncGeometry();
+    void updateToolTip();
+
 private:
     QTimer *m_syncTimer;
+    QString m_mainText;
+    QString m_subText;
+    QVariant m_image;
+    QGraphicsWidget *m_widget;
     QWeakPointer<QQuickItem> m_mainItem;
     QWeakPointer<QQuickItem> m_visualParent;
     QWeakPointer<QQuickItem> m_declarativeItemContainer;

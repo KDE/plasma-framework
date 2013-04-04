@@ -19,6 +19,7 @@ set(corebindings_SRCS
     framesvgitem.cpp
     dialog.cpp
     tooltip.cpp
+    tooltipwindow.cpp
     dataenginebindings.cpp
     iconitem.cpp
     plasmanamespace.cpp
