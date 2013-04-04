@@ -44,7 +44,7 @@ MouseArea {
     property alias subText: tooltipWindow.subText // string
     property alias iconSource: tooltipIcon.source // icon name
     property alias image: tooltipImage.source // string / url to the image
-    property Item visualParent: parent
+    property Item target: parent
 
     // private props
     property int _s: theme.iconSizes.small / 2
@@ -73,7 +73,7 @@ MouseArea {
 
     PlasmaCore.ToolTipWindow {
         id: tooltipWindow
-        visualParent: tooltip.visualParent
+        visualParent: tooltip.target
 
         mainItem: PlasmaCore.FrameSvgItem {
             id: tooltipSvg
