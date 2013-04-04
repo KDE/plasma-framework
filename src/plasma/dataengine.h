@@ -72,6 +72,16 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @param service pointer to the service that describes the engine
          **/
         explicit DataEngine(QObject *parent = 0, KService::Ptr service = KService::Ptr(0));
+
+        /**
+         * Constructor.
+         *
+         * @param parent The parent object.
+         * @param plugin plugin info that describes the engine
+         * TODO: default parameters when the other ctors are removed
+         **/
+        explicit DataEngine(QObject *parent, const KPluginInfo &plugin);
+
         DataEngine(QObject *parent, const QVariantList &args);
         ~DataEngine();
 
