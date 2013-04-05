@@ -40,11 +40,12 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
 MouseArea {
     id: tooltip
 
-    property alias mainText: tooltipMaintext.text // string
-    property alias subText: tooltipSubtext.text // string
-    property alias iconSource: tooltipIcon.source // icon name
-    property alias image: tooltipImage.source // string / url to the image
+    property string mainText: tooltipMaintext.text // string
+    property string subText: tooltipSubtext.text // string
+    property string iconSource: tooltipIcon.source // icon name
+    property string image: tooltipImage.source // string / url to the image
     property Item target: parent
+    property alias mainItem: tooltipWindow.mainItem
 
     // private props
     property int _s: theme.iconSizes.small / 2
@@ -52,11 +53,28 @@ MouseArea {
     hoverEnabled: true
     onEntered: {
         print("entered");
-        tooltipWindow.visible = true;
-        tooltipHideTimer.running = false;
+        show();
     }
     onExited: {
         print("exit");
+        hide();
+    }
+
+    function show() {
+        var mi = tooltip.mainItem;
+        if (mi == null) {
+            mi = tooltipWindow.mainComponent.createObject( tooltip.target, { "mainText": tooltip.mainText, "subText": tooltip.subText, "iconSource": tooltip.iconSource, "image": tooltip.image });
+        } else {
+            // TODO: update properties
+        }
+        //return;
+        tooltipWindow.visualParent = tooltip.target;
+        tooltipWindow.mainItem = mi;
+        tooltipWindow.visible = true;
+        tooltipHideTimer.running = false;
+    }
+
+    function hide() {
         tooltipHideTimer.running = true
     }
 
@@ -64,10 +82,11 @@ MouseArea {
         id: tooltipHideTimer
         running: false
         repeat: false
-        interval: 50
+        interval: 0
         onTriggered: {
             //print("Hiding tooltip ...");
             tooltipWindow.visible = false;
+            tooltipWindow.mainItem.destroy();
         }
     }
 
@@ -75,31 +94,40 @@ MouseArea {
         id: tooltipWindow
         visualParent: tooltip.target
 
-        mainItem: PlasmaCore.FrameSvgItem {
+        mainComponent: Component {
             id: tooltipSvg
             //imagePath: "widgets/tooltip"
-            width: childrenRect.width + margins.left + margins.right + 2*_s
-            height: childrenRect.height + margins.top + margins.bottom + 2*_s
+//             width: childrenRect.width + margins.left + margins.right + 2*_s
+//             height: childrenRect.height + margins.top + margins.bottom + 2*_s
 
             Item {
                 id: tooltipContentItem
-                x: tooltipSvg.margins.left + _s
-                y: tooltipSvg.margins.top + _s
+                x: _s
+                y: _s
                 width: childrenRect.width + _s
                 height: childrenRect.height
+
+                property string mainText: "Default mainText" // string
+                property string subText: "Default subText" // string
+                property string iconSource: "klipper" // icon name
+                property string image: "" // string / url to the image
 
                 property int maxTextSize: Math.max(tooltipMaintext.paintedWidth, tooltipSubtext.paintedWidth)
                 property int maxSize: theme.iconSizes.desktop * 6
                 property int preferredTextWidth: Math.min(maxTextSize, maxSize)
 
+                property int _s: theme.iconSizes.small / 2
+
                 Image {
                     id: tooltipImage
+                    source: image
                 }
 
                 PlasmaCore.IconItem {
                     id: tooltipIcon
                     width: theme.iconSizes.desktop
                     height: width
+                    source: iconSource
                     anchors {
                         leftMargin: _s
                     }
@@ -109,7 +137,7 @@ MouseArea {
                     level: 3
                     width: parent.preferredTextWidth
                     wrapMode: Text.WordWrap
-                    text: tooltipWindow.mainText
+                    text: mainText
                     anchors {
                         left: (tooltipImage.source != "") ? tooltipImage.right : tooltipIcon.right
                         leftMargin: _s*2
@@ -120,7 +148,7 @@ MouseArea {
                     id: tooltipSubtext
                     width: parent.preferredTextWidth
                     wrapMode: Text.WordWrap
-                    text: tooltipWindow.subText
+                    text: subText
                     opacity: 0.5
                     anchors {
                         left: tooltipMaintext.left
@@ -129,6 +157,8 @@ MouseArea {
                         top: tooltipMaintext.bottom
                     }
                 }
+                Component.onCompleted: print("XXX Tooltip mainItem created.")
+                Component.onDestruction: print("XXX Tooltip mainItem destroyed.")
             }
         }
     }

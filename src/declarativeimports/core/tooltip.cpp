@@ -51,6 +51,16 @@ void ToolTip::setTarget(QQuickItem *target)
     }
 }
 
+QQmlComponent* ToolTip::mainComponent() const
+{
+    return m_mainComponent.data();
+}
+
+void ToolTip::setMainComponent(QQmlComponent* mainComponent)
+{
+    m_mainComponent = mainComponent;
+}
+
 QQuickItem *ToolTip::mainItem() const
 {
     return m_mainItem.data();
@@ -77,12 +87,12 @@ void ToolTip::setMainItem(QQuickItem *mainItem)
             //mainItem->setParent(contentItem());
             //mainItem->setProperty("parent", QVariant::fromValue(contentItem()));
 
-            if (mainItem->metaObject()->indexOfSignal("widthChanged")) {
-                connect(mainItem, SIGNAL(widthChanged()), m_syncTimer, SIGNAL(start()));
-            }
-            if (mainItem->metaObject()->indexOfSignal("heightChanged")) {
-                connect(mainItem, SIGNAL(heightChanged()), m_syncTimer, SIGNAL(start()));
-            }
+//             if (mainItem->metaObject()->indexOfSignal("widthChanged")) {
+//                 connect(mainItem, SIGNAL(widthChanged()), m_syncTimer, SIGNAL(start()));
+//             }
+//             if (mainItem->metaObject()->indexOfSignal("heightChanged")) {
+//                 connect(mainItem, SIGNAL(heightChanged()), m_syncTimer, SIGNAL(start()));
+//             }
         }
 
         //if this is called in Compenent.onCompleted we have to wait a loop the item is added to a scene
@@ -118,7 +128,14 @@ void ToolTip::setVisible(const bool visible)
     ToolTipDialog *dlg = ToolTipDialog::instance();
     qDebug() << visible;
     if (visible) {
-        qDebug() << " showing tooltip: " << ToolTipDialog::instance();
+        //dlg->mainItem()->deleteLater();
+
+//         QObject *myObject = m_mainComponent.data()->create();
+//         QQuickItem *item = qobject_cast<QQuickItem*>(myObject);
+        qDebug() << "XXX Setting visible: " << mainItem();
+        setMainItem(mainItem());
+
+        qDebug() << "XXX showing tooltip: " << ToolTipDialog::instance();
         dlg->setMainItem(mainItem());
         dlg->setVisualParent(m_visualParent.data());
         dlg->setPosition(dlg->popupPosition(visualParent()));
@@ -128,6 +145,7 @@ void ToolTip::setVisible(const bool visible)
 //         raise();
     } else {
         dlg->setVisible(false);
+        //dlg->mainItem()->deleteLater();
     }
     //QQuickWindow::setVisible(visible);
 }

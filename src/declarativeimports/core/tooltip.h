@@ -24,6 +24,7 @@
 
 #include <QTimer>
 #include <QQuickWindow>
+#include <QQmlComponent>
 #include <QWeakPointer>
 #include <QtCore/QVariant>
 
@@ -48,6 +49,7 @@ class ToolTip : public QObject
      * The main QML item that will be displayed in the Dialog
      */
     Q_PROPERTY(QQuickItem *mainItem READ mainItem WRITE setMainItem NOTIFY mainItemChanged)
+    Q_PROPERTY(QQmlComponent *mainComponent READ mainComponent WRITE setMainComponent NOTIFY mainComponentChanged)
 
     /**
      * The main QML item that will be displayed in the Dialog
@@ -67,6 +69,9 @@ public:
     QQuickItem *target() const;
     void setTarget(QQuickItem *target);
 
+    QQmlComponent* mainComponent() const;
+    void setMainComponent(QQmlComponent *mainComponent);
+
     QQuickItem *mainItem() const;
     void setMainItem(QQuickItem *mainItem);
 
@@ -80,12 +85,14 @@ public:
 
 Q_SIGNALS:
     void targetChanged();
+    void mainComponentChanged();
     void mainItemChanged();
     void visualParentChanged();
     void visibleChanged();
 
 private:
     QTimer *m_syncTimer;
+    QWeakPointer<QQmlComponent> m_mainComponent;
     QWeakPointer<QQuickItem> m_mainItem;
     QWeakPointer<QQuickItem> m_visualParent;
     QWeakPointer<QQuickItem> m_declarativeItemContainer;
