@@ -113,7 +113,6 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
     void syncGeometry();
-    void updateToolTip();
 
 private:
     QTimer *m_syncTimer;

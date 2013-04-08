@@ -40,10 +40,10 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
 MouseArea {
     id: tooltip
 
-    property string mainText: tooltipMaintext.text // string
-    property string subText: tooltipSubtext.text // string
-    property string iconSource: tooltipIcon.source // icon name
-    property string image: tooltipImage.source // string / url to the image
+    property string mainText // string
+    property string subText // string
+    property string iconSource // icon name
+    property string image // string / url to the image
     property Item target: parent
     property alias mainItem: tooltipWindow.mainItem
 

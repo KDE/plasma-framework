@@ -132,12 +132,12 @@ void DialogProxy::setVisualParent(QQuickItem *visualParent)
         return;
     }
 
-    if (visualParent) {
-        setPosition(popupPosition(visualParent, Qt::AlignCenter));
-    }
 
     m_visualParent = visualParent;
     emit visualParentChanged();
+    if (visualParent && isVisible()) {
+        setPosition(popupPosition(visualParent, Qt::AlignCenter));
+    }
 }
 
 bool DialogProxy::isVisible() const
@@ -147,9 +147,8 @@ bool DialogProxy::isVisible() const
 
 void DialogProxy::setVisible(const bool visible)
 {
-    //qDebug() << visible;
-    QRect avail = QRect(400, 300, 1200, 800); // FIXME
-
+    //QRect avail = QRect(400, 300, 1200, 800); // FIXME
+    QRect avail;
     if (visible) {
         syncToMainItemSize();
         if (!m_visualParent.isNull()) {
@@ -194,15 +193,13 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
         //If no item was specified try to align at the center of the parent view
         QQuickItem *parentItem = qobject_cast<QQuickItem *>(parent());
         if (parentItem && parentItem->window()) {
-            //qDebug() << "NO visual parent ... Centering at " << (parentItem->window()->geometry().center() - QPoint(width()/2, height()/2));
             return parentItem->window()->geometry().center() - QPoint(width()/2, height()/2);
         } else {
-            //qDebug() << "No QQuickItem as parent found";
             return QPoint();
         }
     }
     QPointF pos = item->mapToScene(QPointF(0, 0));
-    //qDebug() << "I've an Item at " << pos;
+
     if (item->window() && item->window()->screen()) {
         pos = item->window()->mapToGlobal(pos.toPoint());
     } else {
@@ -282,7 +279,6 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
         } else {
             menuPos.setY(avail.height() - item->boundingRect().height() + bottomMargin);
         }
-        //qDebug() << menuPos;
     }
 
     //qDebug() << "Popup position" << menuPos << " Location: Plasma::" <<locString(l);
@@ -362,10 +358,11 @@ void DialogProxy::syncMainItemToSize()
 
 void DialogProxy::syncToMainItemSize()
 {
+    qDebug() << "XXXX XXX size sync";
     if (!m_mainItem) {
         return;
     }
-
+    //qDebug() << " main item: " << m_mainItem.
     //FIXME: workaround to prevent dialogs of Popup type disappearing on the second show
     const QSize s = QSize(m_mainItem.data()->width(), m_mainItem.data()->height()) +
                     QSize(m_frameSvgItem->margins()->left() + m_frameSvgItem->margins()->right(),

@@ -31,7 +31,6 @@ ToolTipDialog::ToolTipDialog(QQuickItem  *parent)
 {
     setFlags(Qt::ToolTip);
     m_frameSvgItem->setImagePath("widgets/tooltip");
-    qDebug() << "XXX TOolTip ctor'ed";
 }
 
 ToolTipDialog::~ToolTipDialog()

@@ -102,7 +102,14 @@ void ToolTip::setMainItem(QQuickItem *mainItem)
 
 QQuickItem *ToolTip::visualParent() const
 {
-    return m_visualParent.data();
+    if (m_visualParent.data()) {
+        qDebug() << "returning real visualParent";
+        return m_visualParent.data();
+    } else {
+        qDebug() << "returning parent as visualParent";
+        QQuickItem *qqi = qobject_cast<QQuickItem*>(parent());
+        return qqi;
+    }
 }
 
 void ToolTip::setVisualParent(QQuickItem *visualParent)
@@ -126,19 +133,22 @@ bool ToolTip::isVisible() const
 void ToolTip::setVisible(const bool visible)
 {
     ToolTipDialog *dlg = ToolTipDialog::instance();
-    qDebug() << visible;
+    qDebug() << "creating tooltipdialog" << visible;
     if (visible) {
         //dlg->mainItem()->deleteLater();
 
 //         QObject *myObject = m_mainComponent.data()->create();
 //         QQuickItem *item = qobject_cast<QQuickItem*>(myObject);
-        qDebug() << "XXX Setting visible: " << mainItem();
+        qDebug() << "---- XXX Setting visible: " << mainItem();
         setMainItem(mainItem());
 
+
         qDebug() << "XXX showing tooltip: " << ToolTipDialog::instance();
+        qDebug() << "XXX positioning near: " << visualParent()->objectName();
         dlg->setMainItem(mainItem());
-        dlg->setVisualParent(m_visualParent.data());
-        dlg->setPosition(dlg->popupPosition(visualParent()));
+        dlg->setVisualParent(visualParent());
+        dlg->syncToMainItemSize();
+        //dlg->setPosition(dlg->popupPosition(visualParent()));
         dlg->setVisible(true);
 
 //         syncGeometry();

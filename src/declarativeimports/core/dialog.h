@@ -150,7 +150,7 @@ Q_SIGNALS:
     void locationChanged();
     void visualParentChanged();
 
-private Q_SLOTS:
+public Q_SLOTS:
     void syncMainItemToSize();
     void syncToMainItemSize();
 

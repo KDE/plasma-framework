@@ -42,11 +42,6 @@ ToolTipWindow::ToolTipWindow(QWindow *parent)
     m_syncTimer->setSingleShot(true);
     m_syncTimer->setInterval(250);
     connect(m_syncTimer, &QTimer::timeout, this,  &ToolTipWindow::syncGeometry);
-
-    connect(this, SIGNAL(targetChanged()), this, SLOT(updateToolTip()));
-    connect(this, SIGNAL(mainTextChanged()), this, SLOT(updateToolTip()));
-    connect(this, SIGNAL(subTextChanged()), this, SLOT(updateToolTip()));
-    connect(this, SIGNAL(imageChanged()), this, SLOT(updateToolTip()));
 }
 
 ToolTipWindow::~ToolTipWindow()
@@ -76,8 +71,6 @@ void ToolTipWindow::setTarget(QQuickItem *target)
 
 void ToolTipWindow::syncGeometry()
 {
-    qDebug() << " XXX synching geometry";
-    qDebug() << "XXXX mainitem : " << mainItem()->width() << mainItem()->height();
     resize(mainItem()->width(), mainItem()->height());
     setPosition(popupPosition(visualParent()));
 
@@ -132,47 +125,6 @@ void ToolTipWindow::setImage(QVariant name)
     emit imageChanged();
 }
 
-void ToolTipWindow::updateToolTip()
-{
-    if (!m_widget) {
-        return;
-    }
-
-//     Plasma::ToolTipContent data;
-//     data.setMainText(m_mainText);
-//     data.setSubText(m_subText);
-
-    // set image
-    switch (m_image.type()) {
-        case QVariant::String: {
-            QString name = m_image.toString();
-            if (!name.isEmpty()) {
-                QIcon icon = QIcon::fromTheme(name);
-                if (!icon.isNull()) {
-//                     data.setImage(icon.pixmap(IconSize(KIconLoader::Desktop)));
-                }
-            }
-            break;
-        }
-
-        case QVariant::Icon: {
-            QIcon icon = m_image.value<QIcon>();
-//             data.setImage(icon);
-            break;
-        }
-
-        case QVariant::Pixmap: {
-            QPixmap pixmap = m_image.value<QPixmap>();
-//             data.setImage(pixmap);
-            break;
-        }
-
-        default:
-            break;
-    }
-    //Plasma::ToolTipManager::self()->setContent(m_widget, data);
-}
-
 QQuickItem *ToolTipWindow::mainItem() const
 {
     return m_mainItem.data();
@@ -180,11 +132,7 @@ QQuickItem *ToolTipWindow::mainItem() const
 
 void ToolTipWindow::setMainItem(QQuickItem *mainItem)
 {
-    qDebug() << "XXXX mainitem changed: " << mainItem->width() << mainItem->height();
-
-//    resize(400, 200);
     if (m_mainItem.data() != mainItem) {
-        qDebug() << " XXX new mainItem";
         disconnect(m_mainItem.data(), &QQuickItem::widthChanged, this, &ToolTipWindow::syncGeometry);
         disconnect(m_mainItem.data(), &QQuickItem::heightChanged, this, &ToolTipWindow::syncGeometry);
         if (m_mainItem) {
@@ -194,7 +142,6 @@ void ToolTipWindow::setMainItem(QQuickItem *mainItem)
 
 
         if (mainItem) {
-            //mainItem->setParentItem(0);
             connect(m_mainItem.data(), &QQuickItem::widthChanged, this, &ToolTipWindow::syncGeometry);
             connect(m_mainItem.data(), &QQuickItem::heightChanged, this, &ToolTipWindow::syncGeometry);
             qDebug() << "XXX new mainITem connected";
@@ -209,7 +156,7 @@ void ToolTipWindow::setMainItem(QQuickItem *mainItem)
             }
         }
 
-        //if this is called in Compenent.onCompleted we have to wait a loop the item is added to a scene
+        //if this is called in Component.onCompleted we have to wait a loop the item is added to a scene
         emit mainItemChanged();
     }
 }
@@ -230,7 +177,6 @@ void ToolTipWindow::setVisualParent(QQuickItem *visualParent)
     }
     disconnect(m_visualParent.data(), &QQuickItem::xChanged, this, &ToolTipWindow::syncGeometry);
     disconnect(m_visualParent.data(), &QQuickItem::yChanged, this, &ToolTipWindow::syncGeometry);
-    //disconnect(visualParent, &QQuickItem::yChanged, this, &ToolTipWindow::syncGeometry);
 
     m_visualParent = visualParent;
     connect(m_visualParent.data(), &QQuickItem::xChanged, this, &ToolTipWindow::syncGeometry);
@@ -242,14 +188,12 @@ void ToolTipWindow::setVisualParent(QQuickItem *visualParent)
 bool ToolTipWindow::isVisible() const
 {
     return QQuickWindow::isVisible();
-
 }
 
 void ToolTipWindow::setVisible(const bool visible)
 {
     qDebug() << visible;
     if (visible) {
-        //setPosition(popupPosition());
         syncGeometry();
         raise();
     }
@@ -266,7 +210,6 @@ QPoint ToolTipWindow::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignmen
         QPointF itemScreenPos;
 
         QPointF pos = item->mapToScene(QPointF(0, 0));
-        //qDebug() << "I've an Item at " << pos;
         if (item->window() && item->window()->screen()) {
             pos = item->window()->mapToGlobal(pos.toPoint());
         } else {
