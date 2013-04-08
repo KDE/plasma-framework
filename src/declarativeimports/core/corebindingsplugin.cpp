@@ -40,7 +40,6 @@
 #include "theme.h"
 #include "dialog.h"
 #include "iconitem.h"
-#include "tooltipwindow.h"
 
 #include "tooltip.h"
 
@@ -84,7 +83,7 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterType<Plasma::FrameSvg>(uri, 2, 0, "FrameSvg");
     qmlRegisterType<Plasma::SvgItem>(uri, 2, 0, "SvgItem");
     qmlRegisterType<Plasma::FrameSvgItem>(uri, 2, 0, "FrameSvgItem");
- 
+
     qmlRegisterType<ThemeProxy>(uri, 2, 0, "Theme");
 
     qmlRegisterType<Plasma::DataSource>(uri, 2, 0, "DataSource");
@@ -92,7 +91,6 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterType<Plasma::SortFilterModel>(uri, 2, 0, "SortFilterModel");
 
     qmlRegisterType<DialogProxy>(uri, 2, 0, "Dialog");
-    qmlRegisterType<ToolTipWindow>(uri, 2, 0, "ToolTipWindow");
     qmlRegisterType<ToolTip>(uri, 2, 0, "ToolTipProxy");
 
     qmlRegisterInterface<Plasma::Service>("Service");
