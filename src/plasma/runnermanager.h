@@ -253,22 +253,6 @@ class PLASMA_EXPORT RunnerManager : public QObject
         void launchQuery(const QString &term);
 
         /**
-         * Execute a query, this method will only return when the query is executed
-         * This means that the method may be dangerous as it wait a variable amount
-         * of time for the runner to finish.
-         * The runner parameter is mandatory, to avoid launching unwanted runners.
-         * @param term the term we want to find matches for
-         * @param runner the runner we will use, it is mandatory
-         * @return 0 if nothing was launched, 1 if launched.
-         */
-        bool execQuery(const QString &term, const QString &runnerName);
-
-        /**
-         * Convenience version of above
-         */
-        bool execQuery(const QString &term);
-
-        /**
          * Reset the current data and stops the query
          */
         void reset();

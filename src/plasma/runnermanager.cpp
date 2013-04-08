@@ -766,51 +766,6 @@ void RunnerManager::launchQuery(const QString &untrimmedTerm, const QString &run
     d->delayTimer.start(RunnerManagerPrivate::slowRunDelay);
 }
 
-bool RunnerManager::execQuery(const QString &term)
-{
-    return execQuery(term, QString());
-}
-
-bool RunnerManager::execQuery(const QString &untrimmedTerm, const QString &runnerName)
-{
-    QString term = untrimmedTerm.trimmed();
-
-    if (term.isEmpty()) {
-        reset();
-        return false;
-    }
-
-    if (d->runners.isEmpty()) {
-        d->loadRunners();
-    }
-
-    if (d->context.query() == term) {
-        // we already are searching for this!
-        emit matchesChanged(d->context.matches());
-        return false;
-    }
-
-    reset();
-    //kDebug() << "executing query about " << term << "on" << runnerName;
-    d->context.setQuery(term);
-    AbstractRunner *r = runner(runnerName);
-
-    if (!r) {
-        //kDebug() << "failed to find the runner";
-        return false;
-    }
-
-    if ((r->ignoredTypes() & d->context.type()) != 0) {
-        //kDebug() << "ignored!";
-        return false;
-    }
-
-    r->performMatch(d->context);
-    //kDebug() << "succeeded with" << d->context.matches().count() << "results";
-    emit matchesChanged(d->context.matches());
-    return true;
-}
-
 QString RunnerManager::query() const
 {
     return d->context.query();
