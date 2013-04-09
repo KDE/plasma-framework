@@ -382,7 +382,11 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info)
 {
     updateTimestamp.start();
 
-    e->setObjectName(info.name());
+    if (info.isValid()) {
+        e->setObjectName(info.name());
+    } else {
+        e->setObjectName("NullEngine");
+    }
 
     if (dataEngineDescription.isValid()) {
         QString api = dataEngineDescription.property("X-Plasma-API").toString();
