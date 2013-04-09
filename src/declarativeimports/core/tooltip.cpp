@@ -24,7 +24,6 @@
 
 #include <QQuickItem>
 #include <QDebug>
-#include <QTimer>
 
 #include "framesvgitem.h"
 #include <kwindoweffects.h>
@@ -68,34 +67,11 @@ QQuickItem *ToolTip::mainItem() const
 
 void ToolTip::setMainItem(QQuickItem *mainItem)
 {
-    qDebug() << "XXXX mainitem changed: " << mainItem->width() << mainItem->height();
-
     if (m_mainItem.data() != mainItem) {
-        qDebug() << " XXX new mainItem";
-//         disconnect(m_mainItem.data(), &QQuickItem::widthChanged, this, &ToolTip::syncGeometry);
-//         disconnect(m_mainItem.data(), &QQuickItem::heightChanged, this, &ToolTip::syncGeometry);
         if (m_mainItem) {
             m_mainItem.data()->setParent(parent());
         }
         m_mainItem = mainItem;
-
-        if (mainItem) {
-            //mainItem->setParentItem(0);
-//             connect(m_mainItem.data(), &QQuickItem::widthChanged, this, &ToolTip::syncGeometry);
-//             connect(m_mainItem.data(), &QQuickItem::heightChanged, this, &ToolTip::syncGeometry);
-            qDebug() << "XXX new mainITem connected";
-            //mainItem->setParent(contentItem());
-            //mainItem->setProperty("parent", QVariant::fromValue(contentItem()));
-
-//             if (mainItem->metaObject()->indexOfSignal("widthChanged")) {
-//                 connect(mainItem, SIGNAL(widthChanged()), m_syncTimer, SIGNAL(start()));
-//             }
-//             if (mainItem->metaObject()->indexOfSignal("heightChanged")) {
-//                 connect(mainItem, SIGNAL(heightChanged()), m_syncTimer, SIGNAL(start()));
-//             }
-        }
-
-        //if this is called in Compenent.onCompleted we have to wait a loop the item is added to a scene
         emit mainItemChanged();
     }
 }
@@ -103,10 +79,8 @@ void ToolTip::setMainItem(QQuickItem *mainItem)
 QQuickItem *ToolTip::visualParent() const
 {
     if (m_visualParent.data()) {
-        qDebug() << "returning real visualParent";
         return m_visualParent.data();
     } else {
-        qDebug() << "returning parent as visualParent";
         QQuickItem *qqi = qobject_cast<QQuickItem*>(parent());
         return qqi;
     }
@@ -117,46 +91,24 @@ void ToolTip::setVisualParent(QQuickItem *visualParent)
     if (m_visualParent.data() == visualParent) {
         return;
     }
-
-    if (visualParent) {
-        //setPosition(popupPosition(visualParent, Qt::AlignCenter));
-    }
     emit visualParentChanged();
 }
 
 bool ToolTip::isVisible() const
 {
-    //return QQuickWindow::isVisible();
-    return true;
+    ToolTipDialog *dlg = ToolTipDialog::instance();
+    return (dlg->mainItem() == mainItem() && mainItem() && mainItem()->isVisible());
 }
 
 void ToolTip::setVisible(const bool visible)
 {
     ToolTipDialog *dlg = ToolTipDialog::instance();
-    qDebug() << "creating tooltipdialog" << visible;
     if (visible) {
-        //dlg->mainItem()->deleteLater();
-
-//         QObject *myObject = m_mainComponent.data()->create();
-//         QQuickItem *item = qobject_cast<QQuickItem*>(myObject);
-        qDebug() << "---- XXX Setting visible: " << mainItem();
-        setMainItem(mainItem());
-
-
-        qDebug() << "XXX showing tooltip: " << ToolTipDialog::instance();
-        qDebug() << "XXX positioning near: " << visualParent()->objectName();
         dlg->setMainItem(mainItem());
         dlg->setVisualParent(visualParent());
-        dlg->syncToMainItemSize();
-        //dlg->setPosition(dlg->popupPosition(visualParent()));
         dlg->setVisible(true);
-
-//         syncGeometry();
-//         raise();
     } else {
         dlg->setVisible(false);
-        //dlg->mainItem()->deleteLater();
     }
-    //QQuickWindow::setVisible(visible);
 }
 

@@ -32,9 +32,7 @@ class QQuickItem;
 class QGraphicsWidget;
 
 /**
- * QML wrapper for kdelibs Plasma::ToolTip
- *
- * Exposed as `ToolTip` in QML.
+ * Exposed as `ToolTipProxy` in QML.
  */
 class ToolTip : public QObject
 {
@@ -46,10 +44,10 @@ class ToolTip : public QObject
     Q_PROPERTY(QQuickItem *target READ target WRITE setTarget NOTIFY targetChanged)
 
     /**
-     * The main QML item that will be displayed in the Dialog
+     * T
      */
     Q_PROPERTY(QQuickItem *mainItem READ mainItem WRITE setMainItem NOTIFY mainItemChanged)
-    Q_PROPERTY(QQmlComponent *mainComponent READ mainComponent WRITE setMainComponent NOTIFY mainComponentChanged)
+
 
     /**
      * The main QML item that will be displayed in the Dialog

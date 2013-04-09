@@ -109,10 +109,10 @@ void DialogProxy::setMainItem(QQuickItem *mainItem)
             mainItem->setProperty("parent", QVariant::fromValue(contentItem()));
 
             if (mainItem->metaObject()->indexOfSignal("widthChanged")) {
-                connect(mainItem, SIGNAL(widthChanged()), m_syncTimer, SIGNAL(start()));
+                connect(mainItem, SIGNAL(widthChanged()), m_syncTimer, SLOT(start()));
             }
             if (mainItem->metaObject()->indexOfSignal("heightChanged")) {
-                connect(mainItem, SIGNAL(heightChanged()), m_syncTimer, SIGNAL(start()));
+                connect(mainItem, SIGNAL(heightChanged()), m_syncTimer, SLOT(start()));
             }
         }
 
@@ -358,7 +358,6 @@ void DialogProxy::syncMainItemToSize()
 
 void DialogProxy::syncToMainItemSize()
 {
-    qDebug() << "XXXX XXX size sync";
     if (!m_mainItem) {
         return;
     }

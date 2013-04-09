@@ -45,29 +45,21 @@ MouseArea {
     property string iconSource // icon name
     property string image // string / url to the image
     property Item target: parent
-    property alias mainItem: tooltipWindow.mainItem
+    property Component mainComponent: tooltipComponent // custom component to create inside the tooltip
 
     // private props
     property int _s: theme.iconSizes.small / 2
 
     hoverEnabled: true
-    onEntered: {
-        print("entered");
-        show();
-    }
-    onExited: {
-        print("exit");
-        hide();
-    }
+
+    onEntered: show();
+    onExited: hide();
 
     function show() {
         var mi = tooltip.mainItem;
         if (mi == null) {
-            mi = tooltipWindow.mainComponent.createObject( tooltip.target, { "mainText": tooltip.mainText, "subText": tooltip.subText, "iconSource": tooltip.iconSource, "image": tooltip.image });
-        } else {
-            // TODO: update properties
+            mi = tooltip.mainComponent.createObject( tooltip.target, { "mainText": tooltip.mainText, "subText": tooltip.subText, "iconSource": tooltip.iconSource, "image": tooltip.image });
         }
-        //return;
         tooltipWindow.visualParent = tooltip.target;
         tooltipWindow.mainItem = mi;
         tooltipWindow.visible = true;
@@ -89,77 +81,70 @@ MouseArea {
             tooltipWindow.mainItem.destroy();
         }
     }
+    Component {
+        id: tooltipComponent
 
+        Item {
+            id: tooltipContentItem
+            x: _s
+            y: _s
+            width: childrenRect.width + _s
+            height: childrenRect.height
+
+            property string mainText: "" // string
+            property string subText: "" // string
+            property string iconSource: "" // icon name
+            property string image: "" // string / url to the image
+
+            property int maxTextSize: Math.max(tooltipMaintext.paintedWidth, tooltipSubtext.paintedWidth)
+            property int maxSize: theme.iconSizes.desktop * 6
+            property int preferredTextWidth: Math.min(maxTextSize, maxSize)
+
+            property int _s: theme.iconSizes.small / 2
+
+            Image {
+                id: tooltipImage
+                source: image
+            }
+
+            PlasmaCore.IconItem {
+                id: tooltipIcon
+                width: theme.iconSizes.desktop
+                height: width
+                source: iconSource
+                anchors {
+                    leftMargin: _s
+                }
+            }
+            PlasmaExtras.Heading {
+                id: tooltipMaintext
+                level: 3
+                width: parent.preferredTextWidth
+                wrapMode: Text.WordWrap
+                text: mainText
+                anchors {
+                    left: (tooltipImage.source != "") ? tooltipImage.right : tooltipIcon.right
+                    leftMargin: _s*2
+                    top: tooltipIcon.top
+                }
+            }
+            PlasmaComponents.Label {
+                id: tooltipSubtext
+                width: parent.preferredTextWidth
+                wrapMode: Text.WordWrap
+                text: subText
+                opacity: 0.5
+                anchors {
+                    left: tooltipMaintext.left
+                    topMargin: _s
+                    bottomMargin: _s
+                    top: tooltipMaintext.bottom
+                }
+            }
+        }
+    }
     PlasmaCore.ToolTipProxy {
         id: tooltipWindow
         visualParent: tooltip.target
-
-        mainComponent: Component {
-            id: tooltipSvg
-            //imagePath: "widgets/tooltip"
-//             width: childrenRect.width + margins.left + margins.right + 2*_s
-//             height: childrenRect.height + margins.top + margins.bottom + 2*_s
-
-            Item {
-                id: tooltipContentItem
-                x: _s
-                y: _s
-                width: childrenRect.width + _s
-                height: childrenRect.height
-
-                property string mainText: "Default mainText" // string
-                property string subText: "Default subText" // string
-                property string iconSource: "klipper" // icon name
-                property string image: "" // string / url to the image
-
-                property int maxTextSize: Math.max(tooltipMaintext.paintedWidth, tooltipSubtext.paintedWidth)
-                property int maxSize: theme.iconSizes.desktop * 6
-                property int preferredTextWidth: Math.min(maxTextSize, maxSize)
-
-                property int _s: theme.iconSizes.small / 2
-
-                Image {
-                    id: tooltipImage
-                    source: image
-                }
-
-                PlasmaCore.IconItem {
-                    id: tooltipIcon
-                    width: theme.iconSizes.desktop
-                    height: width
-                    source: iconSource
-                    anchors {
-                        leftMargin: _s
-                    }
-                }
-                PlasmaExtras.Heading {
-                    id: tooltipMaintext
-                    level: 3
-                    width: parent.preferredTextWidth
-                    wrapMode: Text.WordWrap
-                    text: mainText
-                    anchors {
-                        left: (tooltipImage.source != "") ? tooltipImage.right : tooltipIcon.right
-                        leftMargin: _s*2
-                        top: tooltipIcon.top
-                    }
-                }
-                PlasmaComponents.Label {
-                    id: tooltipSubtext
-                    width: parent.preferredTextWidth
-                    wrapMode: Text.WordWrap
-                    text: subText
-                    opacity: 0.5
-                    anchors {
-                        left: tooltipMaintext.left
-                        topMargin: _s
-                        bottomMargin: _s
-                        top: tooltipMaintext.bottom
-                    }
-                }
-                Component.onCompleted: print("XXX Tooltip mainItem created.")
-                Component.onDestruction: print("XXX Tooltip mainItem destroyed.")
-            }
-        }
     }
 }
