@@ -37,29 +37,6 @@ ToolTip::~ToolTip()
 {
 }
 
-QQuickItem *ToolTip::target() const
-{
-    return m_target.data();
-}
-
-void ToolTip::setTarget(QQuickItem *target)
-{
-    if (m_target.data() != target) {
-        m_target = target;
-        emit targetChanged();
-    }
-}
-
-QQmlComponent* ToolTip::mainComponent() const
-{
-    return m_mainComponent.data();
-}
-
-void ToolTip::setMainComponent(QQmlComponent* mainComponent)
-{
-    m_mainComponent = mainComponent;
-}
-
 QQuickItem *ToolTip::mainItem() const
 {
     return m_mainItem.data();

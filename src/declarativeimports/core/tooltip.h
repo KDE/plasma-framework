@@ -32,22 +32,18 @@ class QQuickItem;
 class QGraphicsWidget;
 
 /**
- * Exposed as `ToolTipProxy` in QML.
+ * Exposed as `ToolTipProxy` in QML. This is used only internally for WIndow handling
+ *
+ * DO NOT USE THIS API, PlasmaCore.ToolTip is what you should use.
  */
 class ToolTip : public QObject
 {
     Q_OBJECT
 
     /**
-     * The item that will display this tooltip on mouse over 
-     */
-    Q_PROPERTY(QQuickItem *target READ target WRITE setTarget NOTIFY targetChanged)
-
-    /**
-     * T
+     * The item shown inside the tooltip.
      */
     Q_PROPERTY(QQuickItem *mainItem READ mainItem WRITE setMainItem NOTIFY mainItemChanged)
-
 
     /**
      * The main QML item that will be displayed in the Dialog
@@ -64,12 +60,6 @@ public:
     ToolTip(QObject *parent = 0);
     ~ToolTip();
 
-    QQuickItem *target() const;
-    void setTarget(QQuickItem *target);
-
-    QQmlComponent* mainComponent() const;
-    void setMainComponent(QQmlComponent *mainComponent);
-
     QQuickItem *mainItem() const;
     void setMainItem(QQuickItem *mainItem);
 
@@ -83,18 +73,14 @@ public:
 
 Q_SIGNALS:
     void targetChanged();
-    void mainComponentChanged();
     void mainItemChanged();
     void visualParentChanged();
     void visibleChanged();
 
 private:
     QTimer *m_syncTimer;
-    QWeakPointer<QQmlComponent> m_mainComponent;
     QWeakPointer<QQuickItem> m_mainItem;
     QWeakPointer<QQuickItem> m_visualParent;
-    QWeakPointer<QQuickItem> m_declarativeItemContainer;
-    QWeakPointer<QQuickItem> m_target;
 };
 
 #endif
