@@ -67,8 +67,6 @@ public:
     bool isVisible() const;
     void setVisible(const bool visible);
 
-    QPoint popupPosition(QQuickItem *item = 0, Qt::AlignmentFlag alignment=Qt::AlignCenter) ;
-
 Q_SIGNALS:
     void mainItemChanged();
     void visualParentChanged();

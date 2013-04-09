@@ -23,16 +23,25 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 /**
- * This is a Plasma-themed tooltip. It is rendered in its own window
+ * This is a Plasma-themed tooltip. It is rendered in its own window.
  *
  * Example usage:
  * @code
  * import org.kde.plasma.core 2.0 as PlasmaCore
- * import org.kde.plasma.components 2.0 as PlasmaComponents
+ *
  * [...]
  * PlasmaComponents.IconItem {
- *     PlasmaCore.ToolTip { ... }
- *   [...]
+ *     ...
+ *     PlasmaCore.ToolTip {
+ *         mainText: "Tooltip Title"
+ *         subText: "Some explanation."
+ *         iconSource: "plasma"
+ *         // alternatively, you can specify your own component
+ *         // to be loaded when the tooltip shows
+ *         mainComponent: Component {
+ *              YourCustomItem { ...  }
+ *         }
+ * ... }
  * }
  * @endcode
  *
@@ -40,11 +49,11 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
 MouseArea {
     id: tooltip
 
-    property string mainText // string
-    property string subText // string
+    property string mainText // title text of the tooltip
+    property string subText // description text
     property string iconSource // icon name
     property string image // string / url to the image
-    property Item target: parent
+    property Item target: parent // The item that has the tooltip, defaulting to parent item
     property Component mainComponent: tooltipComponent // custom component to create inside the tooltip
 
     // private props
@@ -76,7 +85,6 @@ MouseArea {
         repeat: false
         interval: 0
         onTriggered: {
-            //print("Hiding tooltip ...");
             tooltipWindow.visible = false;
             tooltipWindow.mainItem.destroy();
         }
