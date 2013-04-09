@@ -23,7 +23,14 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 /**
- * This is a Plasma-themed tooltip. It is rendered in its own window.
+ * An Item managing a Plasma-themed tooltip. It is rendered in its own window.
+ * You can either specify iconSource, mainText and subText, or a custom Component
+ * that will be put inside the tooltip. By specifying the target property, you
+ * "attach" the ToolTip to an item in your code, by default the tooltip will be
+ * rendered when hovering over the parent item.
+ *
+ * The item inside the ToolTip is loaded on demand and will be destroyed when the
+ * tooltip is being hidden.
  *
  * Example usage:
  * @code
@@ -56,9 +63,6 @@ MouseArea {
     property Item target: parent // The item that has the tooltip, defaulting to parent item
     property Component mainComponent: tooltipComponent // custom component to create inside the tooltip
 
-    // private props
-    property int _s: theme.iconSizes.small / 2
-
     hoverEnabled: true
 
     onEntered: show();
@@ -67,28 +71,23 @@ MouseArea {
     function show() {
         var mi = tooltip.mainItem;
         if (mi == null) {
-            mi = tooltip.mainComponent.createObject( tooltip.target, { "mainText": tooltip.mainText, "subText": tooltip.subText, "iconSource": tooltip.iconSource, "image": tooltip.image });
+            mi = tooltip.mainComponent.createObject( tooltip.target, {
+                "mainText": tooltip.mainText,
+                "subText": tooltip.subText,
+                "iconSource": tooltip.iconSource,
+                "image": tooltip.image
+            });
         }
         tooltipWindow.visualParent = tooltip.target;
         tooltipWindow.mainItem = mi;
         tooltipWindow.visible = true;
-        tooltipHideTimer.running = false;
     }
 
     function hide() {
-        tooltipHideTimer.running = true
+        tooltipWindow.visible = false;
+        tooltipWindow.mainItem.destroy();
     }
 
-    Timer {
-        id: tooltipHideTimer
-        running: false
-        repeat: false
-        interval: 0
-        onTriggered: {
-            tooltipWindow.visible = false;
-            tooltipWindow.mainItem.destroy();
-        }
-    }
     Component {
         id: tooltipComponent
 
@@ -107,7 +106,6 @@ MouseArea {
             property int maxTextSize: Math.max(tooltipMaintext.paintedWidth, tooltipSubtext.paintedWidth)
             property int maxSize: theme.iconSizes.desktop * 6
             property int preferredTextWidth: Math.min(maxTextSize, maxSize)
-
             property int _s: theme.iconSizes.small / 2
 
             Image {
