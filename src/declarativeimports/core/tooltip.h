@@ -22,9 +22,7 @@
 #ifndef TOOLTIPOBJECT_H
 #define TOOLTIPOBJECT_H
 
-#include <QTimer>
-#include <QQuickWindow>
-#include <QQmlComponent>
+#include <QQuickItem>
 #include <QWeakPointer>
 #include <QtCore/QVariant>
 
@@ -72,13 +70,11 @@ public:
     QPoint popupPosition(QQuickItem *item = 0, Qt::AlignmentFlag alignment=Qt::AlignCenter) ;
 
 Q_SIGNALS:
-    void targetChanged();
     void mainItemChanged();
     void visualParentChanged();
     void visibleChanged();
 
 private:
-    QTimer *m_syncTimer;
     QWeakPointer<QQuickItem> m_mainItem;
     QWeakPointer<QQuickItem> m_visualParent;
 };
