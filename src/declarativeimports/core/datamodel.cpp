@@ -157,7 +157,11 @@ int SortFilterModel::mapRowToSource(int row) const
 
 int SortFilterModel::mapRowFromSource(int row) const
 {
-    QModelIndex idx = index(row, 0);
+    if (!sourceModel()) {
+        kWarning() << "No source model defined!";
+        return -1;
+    }
+    QModelIndex idx = sourceModel()->index(row, 0);
     return mapFromSource(idx).row();
 }
 

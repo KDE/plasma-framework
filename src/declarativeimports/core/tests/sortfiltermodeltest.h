@@ -30,6 +30,8 @@ private Q_SLOTS:
     void setFilterRegExp();
     void setModel();
     void setEmptyModel();
+    void mapRowToSource();
+    void mapRowFromSource();
 };
 
 #endif /* SORTFILTERMODELTEST_H */

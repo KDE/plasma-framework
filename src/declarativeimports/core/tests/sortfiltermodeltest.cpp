@@ -25,6 +25,7 @@
 
 // Qt
 #include <QStandardItemModel>
+#include <QStringListModel>
 #include <QSignalSpy>
 
 using namespace Plasma;
@@ -71,6 +72,48 @@ void SortFilterModelTest::setFilterRegExp()
 
     filterModel.setFilterRegExp("foo");
     QCOMPARE(spy.count(), 0);
+}
+
+void SortFilterModelTest::mapRowToSource()
+{
+    QStringList list = QStringList() << "Foo" << "Bar" << "Baz";
+    QStringListModel model(list);
+
+    SortFilterModel filterModel;
+    filterModel.setSourceModel(&model);
+
+    QCOMPARE(filterModel.mapRowToSource(0), 0);
+    QCOMPARE(filterModel.mapRowToSource(2), 2);
+    QCOMPARE(filterModel.mapRowToSource(3), -1);
+    QCOMPARE(filterModel.mapRowToSource(-1), -1);
+
+    filterModel.setFilterRegExp("Ba");
+    // filterModel now contains "Bar" and "Baz"
+    QCOMPARE(filterModel.mapRowToSource(0), 1);
+    QCOMPARE(filterModel.mapRowToSource(1), 2);
+    QCOMPARE(filterModel.mapRowToSource(2), -1);
+    QCOMPARE(filterModel.mapRowToSource(-1), -1);
+}
+
+void SortFilterModelTest::mapRowFromSource()
+{
+    QStringList list = QStringList() << "Foo" << "Bar" << "Baz";
+    QStringListModel model(list);
+
+    SortFilterModel filterModel;
+    filterModel.setSourceModel(&model);
+
+    QCOMPARE(filterModel.mapRowFromSource(0), 0);
+    QCOMPARE(filterModel.mapRowFromSource(2), 2);
+    QCOMPARE(filterModel.mapRowFromSource(3), -1);
+    QCOMPARE(filterModel.mapRowFromSource(-1), -1);
+
+    filterModel.setFilterRegExp("Ba");
+    // filterModel now contains "Bar" and "Baz"
+    QCOMPARE(filterModel.mapRowFromSource(0), -1);
+    QCOMPARE(filterModel.mapRowFromSource(1), 0);
+    QCOMPARE(filterModel.mapRowFromSource(2), 1);
+    QCOMPARE(filterModel.mapRowFromSource(-1), -1);
 }
 
 #include <sortfiltermodeltest.moc>
