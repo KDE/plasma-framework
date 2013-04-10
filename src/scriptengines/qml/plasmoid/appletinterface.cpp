@@ -168,13 +168,14 @@ void AppletInterface::init()
     }
 
     //set parent, both as object hyerarchy and visually
-    m_qmlObject->rootObject()->setProperty("parent", QVariant::fromValue(this));
+    if (m_qmlObject->rootObject()) {
+        m_qmlObject->rootObject()->setProperty("parent", QVariant::fromValue(this));
 
-    //set anchors
-    QQmlExpression expr(m_qmlObject->engine()->rootContext(), m_qmlObject->rootObject(), "parent");
-    QQmlProperty prop(m_qmlObject->rootObject(), "anchors.fill");
-    prop.write(expr.evaluate());
-
+        //set anchors
+        QQmlExpression expr(m_qmlObject->engine()->rootContext(), m_qmlObject->rootObject(), "parent");
+        QQmlProperty prop(m_qmlObject->rootObject(), "anchors.fill");
+        prop.write(expr.evaluate());
+    }
     geometryChanged(QRectF(), QRectF(x(), y(), width(), height()));
     emit busyChanged();
 }
