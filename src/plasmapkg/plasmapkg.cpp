@@ -160,6 +160,8 @@ void PlasmaPkg::runMain()
                 serviceType.contains("Plasma/PopupApplet") ||
                 serviceType.contains("Plasma/Containment")) {
                 type = "plasmoid";
+            } else if (serviceType == "Plasma/Generic") {
+                type = "package";
             } else if (serviceType == "Plasma/DataEngine") {
                 type = "dataengine";
             } else if (serviceType == "Plasma/Runner") {
@@ -196,6 +198,11 @@ void PlasmaPkg::runMain()
         d->pluginTypes << "Plasma/Applet";
         d->pluginTypes << "Plasma/PopupApplet";
         d->pluginTypes << "Plasma/Containment";
+    } else if (type.compare(i18nc("package type", "package"), Qt::CaseInsensitive) == 0 ||
+               type.compare("theme", Qt::CaseInsensitive) == 0) {
+        d->packageRoot = "plasma/packages/";
+        d->servicePrefix = "plasma-package-";
+        d->pluginTypes << "Plasma/Generic";
     } else if (type.compare(i18nc("package type", "theme"), Qt::CaseInsensitive) == 0 ||
                type.compare("theme", Qt::CaseInsensitive) == 0) {
         d->packageRoot = "desktoptheme/";
@@ -375,6 +382,20 @@ QStringList PlasmaPkgPrivate::packages(const QStringList& types)
                 }
             }
         }
+        if (type.compare("Plasma/Generic", Qt::CaseInsensitive) == 0) {
+            const QStringList &packs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "plasma/packages/", QStandardPaths::LocateDirectory);
+            foreach (const QString &ppath, packs) {
+                const QDir cd(ppath);
+                const QStringList &entries = cd.entryList(QDir::Dirs);
+                foreach (const QString pack, entries) {
+                    if ((pack != "." && pack != "..") &&
+                        (QFile::exists(ppath+'/'+pack+"/metadata.desktop"))) {
+
+                        result << pack;
+                    }
+                }
+            }
+        }
         const KService::List services = KServiceTypeTrader::self()->query(type);
         foreach (const KService::Ptr &service, services) {
             const QString _plugin = service->property("X-KDE-PluginInfo-Name", QVariant::String).toString();
@@ -489,6 +510,7 @@ void PlasmaPkgPrivate::listTypes()
     QMap<QString, QStringList> builtIns;
     builtIns.insert(i18n("DataEngine"), QStringList() << "Plasma/DataEngine" << "plasma/dataengines/");
     builtIns.insert(i18n("Layout Template"), QStringList() << "Plasma/LayoutTemplate" << "plasma/layout-templates/");
+    builtIns.insert(i18n("Packages"), QStringList() << "Plasma/Generic" << "plasma/packages/");
     builtIns.insert(i18n("Plasmoid"), QStringList() << "Plasma/Applet" << "plasma/plasmoids/");
     builtIns.insert(i18n("Runner"), QStringList() << "Plasma/Runner" << "plasma/runners/");
     builtIns.insert(i18n("Theme"), QStringList() << "" << "desktoptheme/");
