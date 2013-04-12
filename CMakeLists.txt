@@ -29,17 +29,7 @@ find_package(Qt5Quick REQUIRED NO_MODULE)
 find_package(Qt5X11Extras REQUIRED NO_MODULE)
 find_package(kde4support REQUIRED NO_MODULE)
 
-if (Qt5_POSITION_INDEPENDENT_CODE)
-  set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-endif()
-
-# The Qt5Widgets_INCLUDES also includes the include directories for
-# dependencies QtCore and QtGui
-include_directories(${Qt5Widgets_DEFINITIONS} ${Qt5Quick_DEFINITIONS} ${QT_INCLUDES} ${Qt5Quick_INCLUDE_DIRS})
-
-# We need add -DQT_WIDGETS_LIB when using QtWidgets in Qt 5.
-add_definitions(${Qt5Widgets_DEFINITIONS} ${Qt5Quick_DEFINITIONS} ${Qt5Qml_DEFINITIONS})
-
+add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0)
 
 if(KDE_PLATFORM_FEATURE_DISABLE_DEPRECATED)
    set(KDE_NO_DEPRECATED TRUE)
@@ -122,7 +112,7 @@ set_package_properties(DBusMenuQt PROPERTIES DESCRIPTION "Support for notificati
 
 #########################################################################
 
-add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
+add_definitions(${KDE4_DEFINITIONS})
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 
