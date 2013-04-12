@@ -181,14 +181,13 @@ void PlasmaPkg::runMain()
                 type = "layout-template";
             } else {
                 type = serviceType;
-                qDebug() << "fallthrough type is" << serviceType;
+                //qDebug() << "fallthrough type is" << serviceType;
             }
         } else {
             if (type.compare(i18nc("package type", "wallpaper"), Qt::CaseInsensitive) == 0) {
                 serviceType = "Plasma/Wallpaper";
             }
         }
-        qDebug() << "end wallpaper branch" << serviceType;
     }
 
     if (type.compare(i18nc("package type", "plasmoid"), Qt::CaseInsensitive) == 0 ||
@@ -251,6 +250,7 @@ void PlasmaPkg::runMain()
         KService::List offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure", constraint);
         if (offers.isEmpty()) {
             d->coutput(i18n("Could not find a suitable installer for package of type %1", type));
+            exit(1);
             return;
         }
         kWarning() << "custom PackageStructure plugins not ported";
@@ -323,7 +323,7 @@ void PlasmaPkg::runMain()
                 }
             }
             QStringList installed = d->packages(d->pluginTypes);
-            qDebug() << "installed wallpapers:"  << installed << d->pluginTypes;
+            //qDebug() << "installed wallpapers:"  << installed << d->pluginTypes;
             if (installed.contains(pluginName)) {
                 d->installer->setPath(pluginName);
                 KJob *uninstallJob = d->installer->uninstall(pluginName, d->packageRoot);
@@ -410,7 +410,7 @@ QStringList PlasmaPkgPrivate::packages(const QStringList& types)
 
 void PlasmaPkg::showPackageInfo(const QString& pluginName)
 {
-    qDebug() << "showPackageInfo" << pluginName;
+//     qDebug() << "showPackageInfo" << pluginName;
     Plasma::Package pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Applet");
 
     //QString p = findPackageRoot("org.kde.microblog-qml", "plasma/plasmoids/");
@@ -439,13 +439,13 @@ QString PlasmaPkg::findPackageRoot(const QString& pluginName, const QString& pre
         KCmdLineArgs::usageError(i18nc("The user entered conflicting options packageroot and global, this is the error message telling the user he can use only one", "The packageroot and global options conflict each other, please select only one."));
     } else if (d->args->isSet("packageroot")) {
         packageRoot = d->args->getOption("packageroot");
-        qDebug() << "(set via arg) d->packageRoot is: " << d->packageRoot;
+        //qDebug() << "(set via arg) d->packageRoot is: " << d->packageRoot;
     } else if (d->args->isSet("global")) {
         packageRoot = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, d->packageRoot, QStandardPaths::LocateDirectory).last();
-        qDebug() << "(set via locateAll) d->packageRoot is: " << d->packageRoot;
+        //qDebug() << "(set via locateAll) d->packageRoot is: " << d->packageRoot;
     } else {
         packageRoot = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') +  d->packageRoot;
-        qDebug() << "(set via locateLocal) d->packageRoot is: " << d->packageRoot;
+        //qDebug() << "(set via locateLocal) d->packageRoot is: " << d->packageRoot;
     }
     return packageRoot;
 }
@@ -566,11 +566,14 @@ void PlasmaPkgPrivate::listTypes()
 
 void PlasmaPkg::packageInstalled(KJob *job)
 {
-    //KJob *j = qobject_cast<KJob*>(sender());
     bool success = (job->error() == KJob::NoError);
     int exitcode = 0;
     if (success) {
-        d->coutput(i18n("Successfully installed %1", d->packageFile));
+        if (d->args->isSet("upgrade")) {
+            d->coutput(i18n("Successfully upgraded %1", d->packageFile));
+        } else {
+            d->coutput(i18n("Successfully installed %1", d->packageFile));
+        }
     } else {
         d->coutput(i18n("Installation of %1 failed: %2", d->packageFile, job->errorText()));
         exitcode = 1;
@@ -583,12 +586,13 @@ void PlasmaPkg::packageUninstalled(KJob *job)
     bool success = (job->error() == KJob::NoError);
     int exitcode = 0;
     if (success) {
-        d->coutput(i18n("Successfully uninstalled %1", d->packageFile));
         if (d->args->isSet("upgrade")) {
-            qDebug() << " -------- Now installing packageFile: " << d->packageFile;
+            d->coutput(i18n("Upgrading package from file: %1", d->packageFile));
             KJob *installJob = d->installer->install(d->packageFile, d->packageRoot);
             connect(installJob, SIGNAL(result(KJob*)), SLOT(packageInstalled(KJob*)));
+            return;
         }
+        d->coutput(i18n("Successfully uninstalled %1", d->packageFile));
     } else {
         d->coutput(i18n("Uninstallation of %1 failed: %2", d->packageFile, job->errorText()));
         exitcode = 1;
