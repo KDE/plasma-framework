@@ -270,7 +270,7 @@ void PlasmaPkg::runMain()
     }
 
     if (d->args->isSet("list")) {
-        qDebug() << "listing " << d->pluginTypes << "!";
+        d->coutput(i18n("Listing service types: %1", d->pluginTypes.join(", ")));
         listPackages(d->pluginTypes);
         exit(0);
     } else {
@@ -330,7 +330,7 @@ void PlasmaPkg::runMain()
                 connect(uninstallJob, SIGNAL(result(KJob*)), SLOT(packageUninstalled(KJob*)));
                 return;
             } else {
-                d->coutput(i18n("Plugin %1 is not installed.", pluginName));
+                d->coutput(i18n("Error: Plugin %1 is not installed.", pluginName));
                 exit(1);
             }
         }
@@ -419,7 +419,7 @@ void PlasmaPkg::showPackageInfo(const QString& pluginName)
 
     KPluginInfo i = pkg.metadata();
     if (!i.isValid()) {
-        d->coutput(i18n("Can't find plugin metadata: %1", pluginName));
+        d->coutput(i18n("Error: Can't find plugin metadata: %1", pluginName));
         exit(1);
     }
     d->coutput(i18n("Showing info for package: %1", pluginName));
@@ -510,7 +510,7 @@ void PlasmaPkgPrivate::listTypes()
     QMap<QString, QStringList> builtIns;
     builtIns.insert(i18n("DataEngine"), QStringList() << "Plasma/DataEngine" << "plasma/dataengines/");
     builtIns.insert(i18n("Layout Template"), QStringList() << "Plasma/LayoutTemplate" << "plasma/layout-templates/");
-    builtIns.insert(i18n("Packages"), QStringList() << "Plasma/Generic" << "plasma/packages/");
+    builtIns.insert(i18n("Package"), QStringList() << "Plasma/Generic" << "plasma/packages/");
     builtIns.insert(i18n("Plasmoid"), QStringList() << "Plasma/Applet" << "plasma/plasmoids/");
     builtIns.insert(i18n("Runner"), QStringList() << "Plasma/Runner" << "plasma/runners/");
     builtIns.insert(i18n("Theme"), QStringList() << "" << "desktoptheme/");
@@ -523,7 +523,7 @@ void PlasmaPkgPrivate::listTypes()
 
     KService::List offers;
     //if (KSycoca::isAvailable()) {
-        offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure");
+    offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure");
     //}
     if (!offers.isEmpty()) {
         std::cout << std::endl;
@@ -575,7 +575,7 @@ void PlasmaPkg::packageInstalled(KJob *job)
             d->coutput(i18n("Successfully installed %1", d->packageFile));
         }
     } else {
-        d->coutput(i18n("Installation of %1 failed: %2", d->packageFile, job->errorText()));
+        d->coutput(i18n("Error: Installation of %1 failed: %2", d->packageFile, job->errorText()));
         exitcode = 1;
     }
     exit(exitcode);
@@ -594,7 +594,7 @@ void PlasmaPkg::packageUninstalled(KJob *job)
         }
         d->coutput(i18n("Successfully uninstalled %1", d->packageFile));
     } else {
-        d->coutput(i18n("Uninstallation of %1 failed: %2", d->packageFile, job->errorText()));
+        d->coutput(i18n("Error: Uninstallation of %1 failed: %2", d->packageFile, job->errorText()));
         exitcode = 1;
     }
     exit(exitcode);
