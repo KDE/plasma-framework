@@ -25,9 +25,6 @@ set(corebindings_SRCS
     plasmanamespace.cpp
     )
 
-
-qt4_automoc(${corebindings_SRCS})
-
 add_library(corebindingsplugin SHARED ${corebindings_SRCS})
 target_link_libraries(corebindingsplugin
         ${QT_QTSCRIPT_LIBRARY}

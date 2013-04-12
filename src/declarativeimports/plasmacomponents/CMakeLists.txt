@@ -20,8 +20,6 @@ INCLUDE_DIRECTORIES(
         ${KDECLARATIVE_INCLUDE_DIR}
 )
 
-qt4_automoc(${plasmacomponents_SRCS})
-
 add_library(plasmacomponentsplugin SHARED ${plasmacomponents_SRCS})
 target_link_libraries(plasmacomponentsplugin
         ${QT_QTCORE_LIBRARY}

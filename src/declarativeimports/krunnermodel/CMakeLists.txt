@@ -5,8 +5,6 @@ set(runnermodel_SRCS
     runnermodelplugin.cpp
     )
 
-qt4_automoc(${runnermodel_SRCS})
-
 add_library(runnermodelplugin SHARED ${runnermodel_SRCS})
 target_link_libraries(runnermodelplugin
         ${Qt5Quick_LIBRARIES}

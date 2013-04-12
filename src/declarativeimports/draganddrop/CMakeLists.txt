@@ -10,9 +10,6 @@ set(declarativedragdrop_SRCS
     DeclarativeMimeData.cpp
     )
 
-qt4_automoc(${declarativedragdrop_SRCS})
-
-
 add_library(draganddropplugin SHARED ${declarativedragdrop_SRCS})
 target_link_libraries(draganddropplugin
         ${QT_QTCORE_LIBRARY}

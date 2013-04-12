@@ -14,8 +14,6 @@ set(localebindings_SRCS
 #         ${KDE4_INCLUDES}
 # )
 
-qt4_automoc(${localebindings_SRCS})
-
 add_library(localebindingsplugin SHARED ${localebindings_SRCS})
 target_link_libraries(localebindingsplugin
         ${QT_QTCORE_LIBRARY}

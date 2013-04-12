@@ -18,9 +18,6 @@ include_directories(
         ${KACTIVITIES_INCLUDE_DIRS}
 )
 
-qt4_automoc(${plasmaextracomponents_SRCS})
-
-
 add_library(plasmaextracomponentsplugin SHARED ${plasmaextracomponents_SRCS})
 
 target_link_libraries(plasmaextracomponentsplugin

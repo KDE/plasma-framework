@@ -17,8 +17,6 @@ INCLUDE_DIRECTORIES(
         ${KDE4_INCLUDES}
 )
 
-qt4_automoc(${qtextracomponents_SRCS})
-
 add_library(qtextracomponentsplugin SHARED ${qtextracomponents_SRCS})
 
 target_link_libraries(qtextracomponentsplugin
