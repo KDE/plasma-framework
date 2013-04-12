@@ -157,7 +157,7 @@ void PlasmaPkg::runMain()
 
         if (!serviceType.isEmpty()) {
             if (serviceType.contains("Plasma/Applet") ||
-                serviceType.contains("Plasma/PopupApplet") ||
+                //serviceType.contains("Plasma/PopupApplet") ||
                 serviceType.contains("Plasma/Containment")) {
                 type = "plasmoid";
             } else if (serviceType == "Plasma/Generic") {
@@ -195,7 +195,7 @@ void PlasmaPkg::runMain()
         d->packageRoot = "plasma/plasmoids/";
         d->servicePrefix = "plasma-applet-";
         d->pluginTypes << "Plasma/Applet";
-        d->pluginTypes << "Plasma/PopupApplet";
+        //d->pluginTypes << "Plasma/PopupApplet";
         d->pluginTypes << "Plasma/Containment";
     } else if (type.compare(i18nc("package type", "package"), Qt::CaseInsensitive) == 0 ||
                type.compare("theme", Qt::CaseInsensitive) == 0) {
