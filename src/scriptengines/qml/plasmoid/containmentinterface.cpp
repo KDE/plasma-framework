@@ -45,8 +45,6 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
     setAcceptedMouseButtons(Qt::RightButton);
 
     qmlRegisterType<ContainmentInterface>();
-
-    
 }
 
 void ContainmentInterface::init()
