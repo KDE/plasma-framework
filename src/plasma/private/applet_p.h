@@ -72,6 +72,7 @@ public:
 
     static KActionCollection* defaultActions(QObject *parent);
 
+    void requestConfiguration();
 
     static uint s_maxAppletId;
 

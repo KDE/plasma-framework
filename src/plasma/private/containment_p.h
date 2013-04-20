@@ -65,7 +65,6 @@ public:
     }
 
     void triggerShowAddWidgets();
-    void requestConfiguration();
     void checkStatus(Plasma::ItemStatus status);
     void setScreen(int newScreen);
 

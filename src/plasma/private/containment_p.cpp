@@ -161,11 +161,6 @@ void ContainmentPrivate::configChanged()
     q->setWallpaper(group.readEntry("wallpaperplugin", defaultWallpaper));
 }
 
-void ContainmentPrivate::requestConfiguration()
-{
-    emit q->configureRequested(q);
-}
-
 void ContainmentPrivate::checkStatus(Plasma::ItemStatus appletStatus)
 {
     //kDebug() << "================== "<< appletStatus << q->status();

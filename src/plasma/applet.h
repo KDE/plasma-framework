@@ -364,7 +364,6 @@ class PLASMA_EXPORT Applet : public QObject
          * @since 4.4
          */
         void statusChanged(Plasma::ItemStatus status);
-
         
 //CONFIGURATION
         /**
@@ -571,6 +570,7 @@ class PLASMA_EXPORT Applet : public QObject
         Q_PRIVATE_SLOT(d, void updateShortcuts())
         Q_PRIVATE_SLOT(d, void globalShortcutChanged())
         Q_PRIVATE_SLOT(d, void propagateConfigChanged())
+        Q_PRIVATE_SLOT(d, void requestConfiguration())
 
         AppletPrivate *const d;
 

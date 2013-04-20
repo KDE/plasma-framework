@@ -241,9 +241,9 @@ Q_SIGNALS:
         void screenChanged(int wasScreen, int isScreen, Plasma::Containment *containment);
 
         /**
-         * Emitted when the user wants to configure/change containment.
+         * Emitted when the user wants to configure/change the containment, or an applet inside it.
          */
-        void configureRequested(Plasma::Containment *containment);
+        void configureRequested(Plasma::Applet *applet);
 
         /**
          * Emitted when the wallpaper plugin is changed
@@ -319,7 +319,6 @@ Q_SIGNALS:
 
         Q_PRIVATE_SLOT(d, void appletDeleted(Plasma::Applet*))
         Q_PRIVATE_SLOT(d, void triggerShowAddWidgets())
-        Q_PRIVATE_SLOT(d, void requestConfiguration())
         Q_PRIVATE_SLOT(d, void checkStatus(Plasma::ItemStatus))
 
         friend class Applet;

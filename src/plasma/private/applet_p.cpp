@@ -73,6 +73,8 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
     } else if (appletId > s_maxAppletId) {
         s_maxAppletId = appletId;
     }
+    QObject::connect(actions->action("configure"), SIGNAL(QAction::triggered()),
+                     q, SLOT(Applet::requestConfiguration));
 }
 
 AppletPrivate::~AppletPrivate()
@@ -219,6 +221,13 @@ KActionCollection* AppletPrivate::defaultActions(QObject *parent)
     runAssociatedApplication->setData(Plasma::ControlAction);
 
     return actions;
+}
+
+void AppletPrivate::requestConfiguration()
+{
+    if (q->containment()) {
+        emit q->containment()->configureRequested(q);
+    }
 }
 
 void AppletPrivate::updateShortcuts()
