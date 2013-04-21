@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
 X-KDE-ServiceTypes=KDEDModule
-X-KDE-Library=kded_platformstatus
+X-KDE-Library=platformstatus
 X-KDE-DBus-ModuleName=plaformstatus
 X-KDE-Kded-autoload=true
 X-KDE-Kded-load-on-demand=false
