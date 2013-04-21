@@ -4,6 +4,7 @@
 #include <QStandardPaths>
 
 #include <KConfigGroup>
+#include <KDebug>
 #include <KDirWatch>
 #include <KPluginFactory>
 
@@ -29,7 +30,9 @@ void PlatformStatus::findShellPackage(bool sendSignal)
     KConfigGroup group(KSharedConfig::openConfig("kdeglobals"), "DesktopShell");
     const QString package = group.readEntry("shellPackage", defaultPackage);
 
-    const QString path = QStandardPaths::locate(QStandardPaths::DataLocation, "plasma/shells/" + package + "/");
+    const QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                                "plasma/shells/" + package + '/',
+                                                QStandardPaths::LocateDirectory);
     if (path.isEmpty()) {
         if (package != defaultPackage) {
             group.deleteEntry("ShellPackage");
@@ -41,10 +44,10 @@ void PlatformStatus::findShellPackage(bool sendSignal)
 
     m_shellPackage = package;
 
-    QString runtimePlatform = group.readEntry("runtimePlatform", QString());
+    QString runtimePlatform = group.readEntry("RuntimePlatform", QString());
     KConfig packageDefaults(path + "contents/defaults", KConfig::SimpleConfig);
-    group = KConfigGroup(&packageDefaults, "DesktopShell");
-    runtimePlatform = group.readEntry("runtimePlatform", runtimePlatform);
+    group = KConfigGroup(&packageDefaults, "Desktop");
+    runtimePlatform = group.readEntry("RuntimePlatform", runtimePlatform);
     const bool runtimeChanged = runtimePlatform != m_runtimePlatform.join(',');
     if (runtimeChanged) {
         m_runtimePlatform = runtimePlatform.split(',');
