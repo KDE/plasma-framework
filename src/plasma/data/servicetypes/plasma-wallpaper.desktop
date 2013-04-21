@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Plasma/Wallpaper
+Name=Plasma Wallpaper
+Comment=QML Wallpaper Packages

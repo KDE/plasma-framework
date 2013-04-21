@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Plasma/Shell
+Name=Plasma Shell
+Comment=Plasma Shell Components
+

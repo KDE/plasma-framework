@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Plasma/LookAndFeel
+Name=Plasma Look and Feel
+Comment=Defines the Visual Language for Plasma Shells
+
+
