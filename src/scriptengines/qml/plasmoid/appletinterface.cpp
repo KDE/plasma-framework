@@ -147,7 +147,11 @@ void AppletInterface::init()
         }
 
         Plasma::Package pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
-        pkg.setPath(defaults.readEntry("ToolBox", "org.kde.toolbox"));
+        if (defaults.isValid()) {
+            pkg.setPath(defaults.readEntry("ToolBox", "org.kde.toolbox"));
+        } else {
+            pkg.setPath("org.kde.toolbox");
+        }
 
         if (pkg.isValid()) {
             QObject *toolBoxObject = m_qmlObject->createObjectFromSource(QUrl::fromLocalFile(pkg.filePath("mainscript")));
