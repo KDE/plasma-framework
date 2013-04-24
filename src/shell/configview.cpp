@@ -18,16 +18,17 @@
  */
 
 #include "configview.h"
-#include "plasmoid/appletinterface.h"
-#include "plasmoid/containmentinterface.h"
-#include "plasmoid/wallpaperinterface.h"
-#include "declarative/configpropertymap.h"
+#include "Plasma/Applet"
+#include "Plasma/Containment"
+//#include "plasmoid/wallpaperinterface.h"
+#include "kdeclarative/configpropertymap.h"
 
 #include <QDebug>
 #include <QDir>
 #include <QQmlComponent>
 #include <QQmlEngine>
 #include <QQmlContext>
+#include <QQuickItem>
 
 #include <KGlobal>
 #include <KLocalizedString>
@@ -146,7 +147,7 @@ QVariant ConfigModel::data(const QModelIndex& index, int role) const
         return m_categories.at(index.row())->icon();
     case SourceRole:
         if (m_appletInterface) {
-            return QUrl::fromLocalFile(m_appletInterface.data()->applet()->package().filePath("ui", m_categories.at(index.row())->source()));
+            return QUrl::fromLocalFile(m_appletInterface.data()->package().filePath("ui", m_categories.at(index.row())->source()));
         } else {
             return m_categories.at(index.row())->source();
         }
@@ -167,7 +168,7 @@ QVariant ConfigModel::get(int row) const
     value["name"] = m_categories.at(row)->name();
     value["icon"] = m_categories.at(row)->icon();
     if (m_appletInterface) {
-        value["source"] = QUrl::fromLocalFile(m_appletInterface.data()->applet()->package().filePath("components", m_categories.at(row)->source()));
+        value["source"] = QUrl::fromLocalFile(m_appletInterface.data()->package().filePath("components", m_categories.at(row)->source()));
     } else {
         value["source"] = m_categories.at(row)->source();
     }
@@ -193,12 +194,12 @@ void ConfigModel::clear()
     emit countChanged();
 }
 
-void ConfigModel::setAppletInterface(AppletInterface *interface)
+void ConfigModel::setApplet(Plasma::Applet *interface)
 {
     m_appletInterface = interface;
 }
 
-AppletInterface *ConfigModel::appletInterface() const
+Plasma::Applet *ConfigModel::applet() const
 {
     return m_appletInterface.data();
 }
@@ -259,19 +260,19 @@ void ConfigModel::categories_clear(QQmlListProperty<ConfigCategory> *prop)
 
 
 //////////////////////////////ConfigView
-ConfigView::ConfigView(AppletInterface *interface, QWindow *parent)
+ConfigView::ConfigView(Plasma::Applet *interface, QWindow *parent)
     : QQuickView(parent),
-      m_appletInterface(interface)
+      m_applet(interface)
 {
     qmlRegisterType<ConfigModel>("org.kde.plasma.configuration", 2, 0, "ConfigModel");
     qmlRegisterType<ConfigCategory>("org.kde.plasma.configuration", 2, 0, "ConfigCategory");
 
     //FIXME: problem on nvidia, all windows should be transparent or won't show
     setColor(Qt::transparent);
-    setTitle(i18n("%1 Settings", m_appletInterface->applet()->title()));
+    setTitle(i18n("%1 Settings", m_applet->title()));
 
 
-    if (!m_appletInterface->applet()->containment()->corona()->package().isValid()) {
+    if (!m_applet->containment()->corona()->package().isValid()) {
         qWarning() << "Invalid home screen package";
     }
 
@@ -279,17 +280,17 @@ ConfigView::ConfigView(AppletInterface *interface, QWindow *parent)
 
 
     //config model local of the applet
-    QQmlComponent *component = new QQmlComponent(engine(), QUrl::fromLocalFile(m_appletInterface->applet()->package().filePath("configmodel")), this);
+    QQmlComponent *component = new QQmlComponent(engine(), QUrl::fromLocalFile(m_applet->package().filePath("configmodel")), this);
     QObject *object = component->create(engine()->rootContext());
     m_configModel = qobject_cast<ConfigModel *>(object);
     if (m_configModel) {
-        m_configModel->setAppletInterface(m_appletInterface);
+        m_configModel->setApplet(m_applet);
     } else {
         delete object;
     }
     delete component;
 
-    ContainmentInterface *cont = qobject_cast<ContainmentInterface *>(m_appletInterface);
+    Plasma::Containment *cont = qobject_cast<Plasma::Containment *>(m_applet);
 
     engine()->rootContext()->setContextProperty("plasmoid", interface);
     engine()->rootContext()->setContextProperty("configDialog", this);
@@ -301,7 +302,7 @@ ConfigView::~ConfigView()
 
 void ConfigView::init()
 {
-    setSource(QUrl::fromLocalFile(m_appletInterface->applet()->containment()->corona()->package().filePath("configurationui")));
+    setSource(QUrl::fromLocalFile(m_applet->containment()->corona()->package().filePath("configurationui")));
 }
 
 ConfigModel *ConfigView::configModel() const

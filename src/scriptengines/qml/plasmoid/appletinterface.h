@@ -231,15 +231,10 @@ Q_SIGNALS:
     void busyChanged();
     void expandedChanged();
 
-//it's important those slots are private because must not be invokable by qml
-private Q_SLOTS:
-    void configureTriggered();
-
 protected:
     virtual void init();
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
     void itemChange(ItemChange change, const ItemChangeData &value);
-    void setConfigurationInterfaceShown(bool show);
 
     DeclarativeAppletScript *m_appletScriptEngine;
 
@@ -255,7 +250,6 @@ private:
 //UI-specific members ------------------
     QmlObject *m_qmlObject;
     QWeakPointer<QObject> m_compactUiObject;
-    QWeakPointer<ConfigView> m_configView;
 
     QTimer *m_creationTimer;
 
