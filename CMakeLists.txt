@@ -146,12 +146,16 @@ configure_file(config-compiler.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-compil
 
 
 macro(installPackage dir component)
-   set(root ${ARGN})
+   set(root ${ARGV2})
+   set(type ${ARGV3})
    if(NOT root)
       set(root plasma/plasmoids)
    endif()
+   if(NOT type)
+      set(type applet)
+   endif()
    install(DIRECTORY ${dir}/ DESTINATION ${DATA_INSTALL_DIR}/${root}/${component} PATTERN Messages.sh EXCLUDE)
-   install(FILES ${dir}/metadata.desktop DESTINATION ${SERVICES_INSTALL_DIR} RENAME plasma-applet-${component}.desktop)
+   install(FILES ${dir}/metadata.desktop DESTINATION ${SERVICES_INSTALL_DIR} RENAME plasma-${type}-${component}.desktop)
 endmacro()
 
 ################# list the subdirectories #################
