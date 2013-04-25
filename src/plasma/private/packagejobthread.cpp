@@ -305,7 +305,7 @@ bool PackageJobThread::installPackage(const QString& src, const QString &dest)
                 cg.writeEntry("Icon", iconPath);
             }
         } else {
-            kDebug() << "Could not register package as service (this is not necessarily fatal):" << serviceName;
+            qDebug() << "Could not register package as service (this is not necessarily fatal):" << serviceName;
             d->errorMessage = i18n("Could not register package as service (this is not necessarily fatal): %1", serviceName);
         }
     }
