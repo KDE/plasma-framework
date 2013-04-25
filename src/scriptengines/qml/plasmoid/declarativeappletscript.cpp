@@ -46,9 +46,9 @@
 #include "plasmoid/appletinterface.h"
 #include "plasmoid/containmentinterface.h"
 
-#include "declarative/qmlobject.h"
+#include <kdeclarative/qmlobject.h>
 #include "declarative/packageaccessmanagerfactory.h"
-#include "declarative/configpropertymap.h"
+#include <kdeclarative/configpropertymap.h>
 
 
 K_EXPORT_PLASMA_APPLETSCRIPTENGINE(declarativeappletscript, DeclarativeAppletScript)

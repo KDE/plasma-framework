@@ -13,10 +13,8 @@ include_directories(${KDE4_INCLUDE_DIR}/KDE ${PHONON_INCLUDES} ${CMAKE_CURRENT_S
 
 #DECLARATIVE APPLET
 set(declarative_appletscript_SRCS
-    declarative/configpropertymap.cpp
     declarative/packageaccessmanager.cpp
     declarative/packageaccessmanagerfactory.cpp
-    declarative/qmlobject.cpp
     plasmoid/appletinterface.cpp
     plasmoid/containmentinterface.cpp
     plasmoid/declarativeappletscript.cpp

@@ -21,7 +21,7 @@
 
 #include "containmentinterface.h"
 #include "wallpaperinterface.h"
-#include "declarative/qmlobject.h"
+#include <kdeclarative/qmlobject.h>
 
 #include <QQmlExpression>
 #include <QQmlProperty>

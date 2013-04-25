@@ -46,8 +46,8 @@
 #include <Plasma/PluginLoader>
 
 #include "containmentinterface.h"
-#include "declarative/configpropertymap.h"
-#include "declarative/qmlobject.h"
+#include <kdeclarative/configpropertymap.h>
+#include <kdeclarative/qmlobject.h>
 #include "declarative/packageaccessmanagerfactory.h"
 
 Q_DECLARE_METATYPE(AppletInterface*)
