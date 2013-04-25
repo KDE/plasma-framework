@@ -210,6 +210,7 @@ void PlasmaPkg::runMain()
         d->pluginTypes << "Plasma/Wallpaper";
         d->packageRoot = "plasma/wallpapers/";
         d->servicePrefix = "plasma-wallpaper-";
+        qDebug() << "service type and root set " << d->servicePrefix << d->packageRoot << d->pluginTypes;
     } else if (type.compare(i18nc("package type", "dataengine"), Qt::CaseInsensitive) == 0 ||
                type.compare("dataengine", Qt::CaseInsensitive) == 0) {
         d->packageRoot = "plasma/dataengines/";
@@ -225,6 +226,7 @@ void PlasmaPkg::runMain()
         d->packageRoot = "plasma/wallpapers/";
         d->servicePrefix = "plasma-wallpaper-";
         d->pluginTypes << "Plasma/Wallpaper";
+        qDebug() << "2service type and root set " << d->servicePrefix << d->packageRoot << d->pluginTypes;
     } else if (type.compare(i18nc("package type", "layout-template"), Qt::CaseInsensitive) == 0 ||
                type.compare("layout-template", Qt::CaseInsensitive) == 0) {
         d->packageRoot = "plasma/layout-templates/";
@@ -278,7 +280,7 @@ void PlasmaPkg::runMain()
         if (!d->installer) {
 
             d->installer = new Plasma::Package(new Plasma::PackageStructure());
-            //d->installer->setServicePrefix(d->servicePrefix);
+            d->installer->setServicePrefix(d->servicePrefix);
         }
 
         d->packageRoot = findPackageRoot(d->package, d->packageRoot);
@@ -308,6 +310,7 @@ void PlasmaPkg::runMain()
                 _p.append('/');
             }
             _p.append(d->package);
+            d->installer->setDefaultPackageRoot(d->packageRoot);
             d->installer->setPath(pkgPath);
             QString pluginName;
             if (d->installer->isValid()) {
@@ -323,7 +326,6 @@ void PlasmaPkg::runMain()
                 }
             }
             QStringList installed = d->packages(d->pluginTypes);
-            //qDebug() << "installed wallpapers:"  << installed << d->pluginTypes;
             if (installed.contains(pluginName)) {
                 d->installer->setPath(pluginName);
                 KJob *uninstallJob = d->installer->uninstall(pluginName, d->packageRoot);
@@ -366,24 +368,9 @@ void PlasmaPkgPrivate::runKbuildsycoca()
 QStringList PlasmaPkgPrivate::packages(const QStringList& types)
 {
     QStringList result;
-
+    qDebug() << "listing " << types;
     foreach (const QString& type, types) {
-        /*
-        if (type.compare("Plasma/Wallpaper", Qt::CaseInsensitive) == 0) {
-            const QStringList &wallies = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "plasma/wallpapers/", QStandardPaths::LocateDirectory);
-            foreach (const QString &wpath, wallies) {
-                const QDir cd(wpath);
-                const QStringList &entries = cd.entryList(QDir::Dirs);
-                foreach (const QString wallpap, entries) {
-                    if ((wallpap != "." && wallpap != "..") &&
-                        (QFile::exists(wpath+'/'+wallpap+"/metadata.desktop"))) {
 
-                        result << wallpap;
-                    }
-                }
-            }
-        }
-        */
         if (type.compare("Plasma/Generic", Qt::CaseInsensitive) == 0) {
             const QStringList &packs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "plasma/packages/", QStandardPaths::LocateDirectory);
             foreach (const QString &ppath, packs) {
@@ -401,6 +388,7 @@ QStringList PlasmaPkgPrivate::packages(const QStringList& types)
         const KService::List services = KServiceTypeTrader::self()->query(type);
         foreach (const KService::Ptr &service, services) {
             const QString _plugin = service->property("X-KDE-PluginInfo-Name", QVariant::String).toString();
+            //qDebug() << "Found plugin: " << _plugin;
             if (!result.contains(_plugin)) {
                 result << _plugin;
             }

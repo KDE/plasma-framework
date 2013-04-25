@@ -204,6 +204,7 @@ void Package::setAllowExternalPaths(bool allow)
 
 KPluginInfo Package::metadata() const
 {
+    qDebug() << "metadata: " << d->path << filePath("metadata");
     if (!d->metadata && !d->path.isEmpty()) {
         const QString metadataPath = filePath("metadata");
         if (!metadataPath.isEmpty()) {
@@ -441,6 +442,7 @@ void Package::setPath(const QString &path)
                 paths << p;
             }
         }
+        qDebug() << "paths:" << p << paths << d->defaultPackageRoot;
     } else {
         const QDir dir(path);
         if (QFile::exists(dir.canonicalPath())) {
@@ -822,7 +824,7 @@ void PackagePrivate::createPackageMetadata(const QString &path)
 
     QString metadataPath(path + "/metadata.desktop");
     if (!QFile::exists(metadataPath)) {
-        kWarning() << "No metadata file in the package, expected it at:" << metadataPath;
+        qWarning() << "No metadata file in the package, expected it at:" << metadataPath;
         metadataPath.clear();
     }
 

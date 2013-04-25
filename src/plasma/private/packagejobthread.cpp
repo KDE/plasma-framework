@@ -210,14 +210,14 @@ bool PackageJobThread::installPackage(const QString& src, const QString &dest)
 
     QString metadataPath = path + "metadata.desktop";
     if (!QFile::exists(metadataPath)) {
-        kDebug() << "No metadata file in package" << src << metadataPath;
+        qDebug() << "No metadata file in package" << src << metadataPath;
         d->errorMessage = i18n("No metadata file in package: %1", src);
         return false;
     }
 
     KPluginInfo meta(metadataPath);
     QString pluginName = meta.pluginName();
-    kDebug() << "pluginname: " << meta.pluginName();
+    qDebug() << "pluginname: " << meta.pluginName();
     if (pluginName.isEmpty()) {
         //kWarning() << "Package plugin name not specified";
         d->errorMessage = i18n("Package plugin name not specified: %1", src);
@@ -292,9 +292,10 @@ bool PackageJobThread::installPackage(const QString& src, const QString &dest)
         }
         QString service = localServiceDirectory + serviceName;
 
+        qDebug() << "-- Copying " << metaPath << service;
         const bool ok = QFile::copy(metaPath, service);
         if (ok) {
-            //kDebug() << "Copying metadata went ok.";
+            qDebug() << "Copying metadata went ok.";
             // the icon in the installed file needs to point to the icon in the
             // installation dir!
             QString iconPath = targetName + '/' + cg.readEntry("Icon");
