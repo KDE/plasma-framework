@@ -224,6 +224,9 @@ install(FILES
    data/servicetypes/plasma-runner.desktop
    data/servicetypes/plasma-scriptengine.desktop
    data/servicetypes/plasma-service.desktop
+   data/servicetypes/plasma-shell.desktop
+   data/servicetypes/plasma-lookandfeel.desktop
+   data/servicetypes/plasma-wallpaper.desktop
    DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
 install(FILES
