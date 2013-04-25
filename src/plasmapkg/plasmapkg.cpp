@@ -368,6 +368,7 @@ QStringList PlasmaPkgPrivate::packages(const QStringList& types)
     QStringList result;
 
     foreach (const QString& type, types) {
+        /*
         if (type.compare("Plasma/Wallpaper", Qt::CaseInsensitive) == 0) {
             const QStringList &wallies = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "plasma/wallpapers/", QStandardPaths::LocateDirectory);
             foreach (const QString &wpath, wallies) {
@@ -382,6 +383,7 @@ QStringList PlasmaPkgPrivate::packages(const QStringList& types)
                 }
             }
         }
+        */
         if (type.compare("Plasma/Generic", Qt::CaseInsensitive) == 0) {
             const QStringList &packs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "plasma/packages/", QStandardPaths::LocateDirectory);
             foreach (const QString &ppath, packs) {
