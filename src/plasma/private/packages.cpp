@@ -30,7 +30,7 @@
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 
-#include "kdeclarative.h"
+#include <kdeclarative/kdeclarative.h>
 #include "package.h"
 #include "config-plasma.h"
 

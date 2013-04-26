@@ -36,7 +36,7 @@
 #include <KWindowSystem>
 #include <KStandardDirs>
 
-#include <kdeclarative.h>
+#include <kdeclarative/kdeclarative.h>
 
 #include <Plasma/Corona>
 #include <Plasma/WindowEffects>

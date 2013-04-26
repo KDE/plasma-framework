@@ -25,7 +25,7 @@
 #include <QQmlContext>
 #include <QScriptEngine>
 
-#include <kdeclarative.h>
+#include <kdeclarative/kdeclarative.h>
 
 #include <plasma/framesvg.h>
 #include <plasma/svg.h>

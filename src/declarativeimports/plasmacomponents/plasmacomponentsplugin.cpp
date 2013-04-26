@@ -29,7 +29,7 @@
 #include <KDebug>
 #include <KGlobal>
 
-#include <kdeclarative.h>
+#include <kdeclarative/kdeclarative.h>
 
 #include "enums.h"
 #include "qmenu.h"
