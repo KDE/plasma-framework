@@ -73,8 +73,8 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
     } else if (appletId > s_maxAppletId) {
         s_maxAppletId = appletId;
     }
-    QObject::connect(actions->action("configure"), SIGNAL(QAction::triggered()),
-                     q, SLOT(Applet::requestConfiguration));
+    QObject::connect(actions->action("configure"), SIGNAL(triggered()),
+                     q, SLOT(requestConfiguration()));
 }
 
 AppletPrivate::~AppletPrivate()

@@ -23,7 +23,9 @@
 
 #include "configview.h"
 
-class ContainmentInterface;
+namespace Plasma {
+    class Containment;
+}
 class ConfigPropertyMap;
 
 
@@ -36,8 +38,10 @@ class ContainmentConfigView : public ConfigView
     Q_PROPERTY(QString currentWallpaper READ currentWallpaper WRITE setCurrentWallpaper NOTIFY currentWallpaperChanged)
 
 public:
-    ContainmentConfigView(ContainmentInterface *interface, QWindow *parent = 0);
+    ContainmentConfigView(Plasma::Containment *interface, QWindow *parent = 0);
     virtual ~ContainmentConfigView();
+
+    virtual void init();
 
     ConfigModel *wallpaperConfigModel();
     QString currentWallpaper() const;
@@ -51,10 +55,11 @@ Q_SIGNALS:
     void wallpaperConfigurationChanged();
 
 private:
-    ContainmentInterface *m_containmentInterface;
+    Plasma::Containment *m_containment;
     ConfigModel *m_wallpaperConfigModel;
     QString m_currentWallpaper;
     ConfigPropertyMap *m_currentWallpaperConfig;
+    ConfigPropertyMap *m_ownWallpaperConfig;
 };
 
 #endif // multiple inclusion guard

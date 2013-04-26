@@ -46,10 +46,8 @@
 #include <Plasma/PluginLoader>
 
 #include "containmentinterface.h"
-#include "configview.h"
-#include "containmentconfigview.h"
-#include "declarative/configpropertymap.h"
-#include "declarative/qmlobject.h"
+#include <kdeclarative/configpropertymap.h>
+#include <kdeclarative/qmlobject.h>
 #include "declarative/packageaccessmanagerfactory.h"
 
 Q_DECLARE_METATYPE(AppletInterface*)
@@ -75,9 +73,6 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
             this, SIGNAL(locationChanged()));
     connect(m_appletScriptEngine, SIGNAL(contextChanged()),
             this, SIGNAL(contextChanged()));
-
-    connect(applet()->actions()->action("configure"), &QAction::triggered,
-            this, &AppletInterface::configureTriggered);
 
     m_qmlObject = new QmlObject(this);
     m_qmlObject->setInitializationDelayed(true);
@@ -457,7 +452,8 @@ bool AppletInterface::immutable() const
 
 bool AppletInterface::userConfiguring() const
 {
-    return m_configView.data()->isVisible();
+    //FIXME
+    return false;
 }
 
 int AppletInterface::apiVersion() const
@@ -618,39 +614,6 @@ void AppletInterface::itemChange(ItemChange change, const ItemChangeData &value)
 QmlObject *AppletInterface::qmlObject()
 {
     return m_qmlObject;
-}
-
-void AppletInterface::configureTriggered()
-{
-    setConfigurationInterfaceShown(true);
-}
-
-void AppletInterface::setConfigurationInterfaceShown(bool show)
-{
-    if (!applet()->containment() || !applet()->containment()->corona()) {
-        return;
-    }
-
-    if (show) {
-        if (!m_configView) {
-            ContainmentInterface *ci = qobject_cast<ContainmentInterface *>(this);
-
-            if (ci) {
-                m_configView = new ContainmentConfigView(ci);
-            } else {
-                m_configView = new ConfigView(this);
-            }
-            m_configView.data()->init();
-        }
-
-        m_configView.data()->show();
-
-    } else {
-        if (m_configView) {
-            m_configView.data()->hide();
-            m_configView.data()->deleteLater();
-        }
-    }
 }
 
 #include "moc_appletinterface.cpp"

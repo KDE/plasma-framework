@@ -20,8 +20,8 @@
 #include "wallpaperinterface.h"
 
 #include "containmentinterface.h"
-#include "declarative/configpropertymap.h"
-#include "declarative/qmlobject.h"
+#include <kdeclarative/configpropertymap.h>
+#include <kdeclarative/qmlobject.h>
 
 #include <QDebug>
 #include <QQmlExpression>

@@ -109,7 +109,7 @@ void PlasmoidPackage::initPackage(Package *package)
     package->setServicePrefix("plasma-applet-");
     package->setDefaultPackageRoot("plasma/plasmoids/");
 
-    package->addFileDefinition("configmodel", "ui/config.qml", i18n("Configuration UI pages model"));
+    package->addFileDefinition("configmodel", "config/config.qml", i18n("Configuration UI pages model"));
     package->addFileDefinition("mainconfigxml", "config/main.xml", i18n("Configuration XML file"));
 }
 

@@ -26,7 +26,10 @@
 #include <QQmlListProperty>
 #include <QStandardItemModel>
 
-class AppletInterface;
+namespace Plasma {
+    class Applet;
+}
+
 class ConfigPropertyMap;
 
 
@@ -87,8 +90,8 @@ public:
     void appendCategory(ConfigCategory *c);
     void clear();
 
-    void setAppletInterface(AppletInterface *interface);
-    AppletInterface *appletInterface() const;
+    void setApplet(Plasma::Applet *interface);
+    Plasma::Applet *applet() const;
 
     int count() {return rowCount();}
     virtual int rowCount(const QModelIndex &index = QModelIndex()) const;
@@ -107,7 +110,7 @@ Q_SIGNALS:
 
 private:
     QList<ConfigCategory*>m_categories;
-    QWeakPointer<AppletInterface> m_appletInterface;
+    QWeakPointer<Plasma::Applet> m_appletInterface;
 };
 
 
@@ -119,10 +122,10 @@ class ConfigView : public QQuickView
     Q_PROPERTY(ConfigModel *configModel READ configModel CONSTANT)
 
 public:
-    ConfigView(AppletInterface *scriptEngine, QWindow *parent = 0);
+    ConfigView(Plasma::Applet *applet, QWindow *parent = 0);
     virtual ~ConfigView();
 
-    void init();
+    virtual void init();
 
     ConfigModel *configModel() const;
 
@@ -131,7 +134,7 @@ protected:
      void resizeEvent(QResizeEvent *re);
 
 private:
-    AppletInterface *m_appletInterface;
+    Plasma::Applet *m_applet;
     ConfigModel *m_configModel;
 };
 
