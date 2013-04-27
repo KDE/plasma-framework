@@ -469,9 +469,11 @@ void PlasmaPkgPrivate::renderTypeTable(const QMap<QString, QStringList> &plugins
     const QString nameHeader = i18n("Addon Name");
     const QString pluginHeader = i18n("Service Type");
     const QString pathHeader = i18n("Path");
+    const QString typeHeader = i18n("Type Argument");
     int nameWidth = nameHeader.length();
     int pluginWidth = pluginHeader.length();
     int pathWidth = pathHeader.length();
+    int typeWidth = typeHeader.length();
 
     QMapIterator<QString, QStringList> pluginIt(plugins);
     while (pluginIt.hasNext()) {
@@ -487,14 +489,20 @@ void PlasmaPkgPrivate::renderTypeTable(const QMap<QString, QStringList> &plugins
         if (pluginIt.value()[1].length() > pathWidth) {
             pathWidth = pluginIt.value()[1].length();
         }
+
+        if (pluginIt.value()[2].length() > typeWidth) {
+            typeWidth = pluginIt.value()[2].length();
+        }
     }
 
     std::cout << nameHeader.toLocal8Bit().constData() << std::setw(nameWidth - nameHeader.length() + 2) << ' '
               << pluginHeader.toLocal8Bit().constData() << std::setw(pluginWidth - pluginHeader.length() + 2) << ' '
-              << pathHeader.toLocal8Bit().constData() << std::endl;
+              << pathHeader.toLocal8Bit().constData() << std::setw(pathWidth - pathHeader.length() + 2) << ' '
+              << typeHeader.toLocal8Bit().constData() << std::endl;
     std::cout << std::setfill('-') << std::setw(nameWidth) << '-' << "  "
               << std::setw(pluginWidth) << '-' << "  "
-              << std::setw(pathWidth) << '-' << std::endl;
+              << std::setw(pathWidth) << '-' << "  "
+              << std::setw(typeWidth) << '-' << std::endl;
     std::cout << std::setfill(' ');
 
     pluginIt.toFront();
@@ -502,7 +510,8 @@ void PlasmaPkgPrivate::renderTypeTable(const QMap<QString, QStringList> &plugins
         pluginIt.next();
         std::cout << pluginIt.key().toLocal8Bit().constData() << std::setw(nameWidth - pluginIt.key().length() + 2) << ' '
                   << pluginIt.value()[0].toLocal8Bit().constData() << std::setw(pluginWidth - pluginIt.value()[0].length() + 2) << ' '
-                  << pluginIt.value()[1].toLocal8Bit().constData() << std::endl;
+                  << pluginIt.value()[1].toLocal8Bit().constData() << std::setw(pathWidth - pluginIt.value()[1].length() + 2) << ' '
+                  << pluginIt.value()[2].toLocal8Bit().constData() << std::endl;
     }
 }
 
@@ -512,19 +521,19 @@ void PlasmaPkgPrivate::listTypes()
     coutput(i18n("Built in:"));
 
     QMap<QString, QStringList> builtIns;
-    builtIns.insert(i18n("DataEngine"), QStringList() << "Plasma/DataEngine" << "plasma/dataengines/");
-    builtIns.insert(i18n("Layout Template"), QStringList() << "Plasma/LayoutTemplate" << "plasma/layout-templates/");
-    builtIns.insert(i18n("Look and Feel"), QStringList() << "Plasma/LookAndFeel" << "plasma/look-and-feel/");
-    builtIns.insert(i18n("Package"), QStringList() << "Plasma/Generic" << "plasma/packages/");
-    builtIns.insert(i18n("Plasmoid"), QStringList() << "Plasma/Applet" << "plasma/plasmoids/");
-    builtIns.insert(i18n("Runner"), QStringList() << "Plasma/Runner" << "plasma/runners/");
-    builtIns.insert(i18n("Shell"), QStringList() << "Plasma/Shell" << "plasma/shells/");
-    builtIns.insert(i18n("Theme"), QStringList() << "" << "desktoptheme/");
-    builtIns.insert(i18n("Wallpaper Images"), QStringList() << "" << "wallpapers/");
-    builtIns.insert(i18n("Wallpaper Plugin"), QStringList() << "Plasma/Wallpaper" << "plasma/wallpapers/");
-    builtIns.insert(i18n("KWin Effect"), QStringList() << "KWin/Effect" << "kwin/effects/");
-    builtIns.insert(i18n("KWin Window Switcher"), QStringList() << "KWin/WindowSwitcher" << "kwin/tabbox/");
-    builtIns.insert(i18n("KWin Script"), QStringList() << "KWin/Script" << "kwin/scripts/");
+    builtIns.insert(i18n("DataEngine"), QStringList() << "Plasma/DataEngine" << "plasma/dataengines/" << "dataengine");
+    builtIns.insert(i18n("Layout Template"), QStringList() << "Plasma/LayoutTemplate" << "plasma/layout-templates/" << "layout-template");
+    builtIns.insert(i18n("Look and Feel"), QStringList() << "Plasma/LookAndFeel" << "plasma/look-and-feel/" << "lookandfeel");
+    builtIns.insert(i18n("Package"), QStringList() << "Plasma/Generic" << "plasma/packages/" << "package");
+    builtIns.insert(i18n("Plasmoid"), QStringList() << "Plasma/Applet" << "plasma/plasmoids/" << "plasmoid");
+    builtIns.insert(i18n("Runner"), QStringList() << "Plasma/Runner" << "plasma/runners/" << "runner");
+    builtIns.insert(i18n("Shell"), QStringList() << "Plasma/Shell" << "plasma/shells/" << "shell");
+    builtIns.insert(i18n("Theme"), QStringList() << "" << "desktoptheme/" << "theme");
+    builtIns.insert(i18n("Wallpaper Images"), QStringList() << "" << "wallpapers/" << "wallpaper");
+    builtIns.insert(i18n("Wallpaper Plugin"), QStringList() << "Plasma/Wallpaper" << "plasma/wallpapers/" << "wallpaperplugin");
+    builtIns.insert(i18n("KWin Effect"), QStringList() << "KWin/Effect" << "kwin/effects/" << "kwineffect");
+    builtIns.insert(i18n("KWin Window Switcher"), QStringList() << "KWin/WindowSwitcher" << "kwin/tabbox/" << "windowswitcher");
+    builtIns.insert(i18n("KWin Script"), QStringList() << "KWin/Script" << "kwin/scripts/" << "kwinscript");
     renderTypeTable(builtIns);
 
     KService::List offers;
