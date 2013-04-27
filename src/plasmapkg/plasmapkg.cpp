@@ -123,13 +123,6 @@ void PlasmaPkg::runMain()
         d->package = d->args->getOption("show");
     }
 
-    if (d->args->isSet("show")) {
-        const QString pluginName = d->package;
-        showPackageInfo(pluginName);
-        exit(0);
-        return;
-    }
-
     if (!QDir::isAbsolutePath(d->package)) {
         d->packageFile = QDir(QDir::currentPath() + '/' + d->package).absolutePath();
         d->packageFile = QFileInfo(d->packageFile).canonicalFilePath();
@@ -284,6 +277,12 @@ void PlasmaPkg::runMain()
         //d->packageRoot = d->installer->defaultPackageRoot();
         //pluginTypes << d->installer->type();
     }
+    if (d->args->isSet("show")) {
+        const QString pluginName = d->package;
+        showPackageInfo(pluginName);
+        exit(0);
+        return;
+    }
 
     if (d->args->isSet("list")) {
         d->coutput(i18n("Listing service types: %1", d->pluginTypes.join(", ")));
@@ -418,6 +417,7 @@ void PlasmaPkg::showPackageInfo(const QString& pluginName)
     Plasma::Package pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Applet");
 
     //QString p = findPackageRoot("org.kde.microblog-qml", "plasma/plasmoids/");
+    pkg.setDefaultPackageRoot(d->packageRoot);
 
     pkg.setPath(pluginName);
 
