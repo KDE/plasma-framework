@@ -1,6 +1,6 @@
 /******************************************************************************
 *   Copyright 2008 Aaron Seigo <aseigo@kde.org>                               *
-*   Copyright 2012 Sebastian Kügler <sebas@kde.org>                           *
+*   Copyright 2012-2013 Sebastian Kügler <sebas@kde.org>                      *
 *                                                                             *
 *   This library is free software; you can redistribute it and/or             *
 *   modify it under the terms of the GNU Library General Public               *
@@ -166,6 +166,10 @@ void PlasmaPkg::runMain()
                 type = "dataengine";
             } else if (serviceType == "Plasma/Runner") {
                 type = "runner";
+            } else if (serviceType == "Plasma/LookAndFeel") {
+                type = "lookandfeel";
+            } else if (serviceType == "Plasma/Shell") {
+                type = "shell";
             } else if (serviceType == "Plasma/Wallpaper") {
                 // This also changes type to wallpaperplugin when --type wallpaper
                 // was specified and we have wallpaper plugin package (instead of
@@ -227,6 +231,16 @@ void PlasmaPkg::runMain()
         d->servicePrefix = "plasma-wallpaper-";
         d->pluginTypes << "Plasma/Wallpaper";
         qDebug() << "2service type and root set " << d->servicePrefix << d->packageRoot << d->pluginTypes;
+    } else if (type.compare(i18nc("package type", "lookandfeel"), Qt::CaseInsensitive) == 0 ||
+               type.compare("lookandfeel", Qt::CaseInsensitive) == 0) {
+        d->packageRoot = "plasma/look-and-feel/";
+        d->servicePrefix = "plasma-lookandfeel-";
+        d->pluginTypes << "Plasma/LookAndFeel";
+    } else if (type.compare(i18nc("package type", "shell"), Qt::CaseInsensitive) == 0 ||
+               type.compare("shell", Qt::CaseInsensitive) == 0) {
+        d->packageRoot = "plasma/shells/";
+        d->servicePrefix = "plasma-shell-";
+        d->pluginTypes << "Plasma/Shell";
     } else if (type.compare(i18nc("package type", "layout-template"), Qt::CaseInsensitive) == 0 ||
                type.compare("layout-template", Qt::CaseInsensitive) == 0) {
         d->packageRoot = "plasma/layout-templates/";
@@ -500,9 +514,11 @@ void PlasmaPkgPrivate::listTypes()
     QMap<QString, QStringList> builtIns;
     builtIns.insert(i18n("DataEngine"), QStringList() << "Plasma/DataEngine" << "plasma/dataengines/");
     builtIns.insert(i18n("Layout Template"), QStringList() << "Plasma/LayoutTemplate" << "plasma/layout-templates/");
+    builtIns.insert(i18n("Look and Feel"), QStringList() << "Plasma/LookAndFeel" << "plasma/look-and-feel/");
     builtIns.insert(i18n("Package"), QStringList() << "Plasma/Generic" << "plasma/packages/");
     builtIns.insert(i18n("Plasmoid"), QStringList() << "Plasma/Applet" << "plasma/plasmoids/");
     builtIns.insert(i18n("Runner"), QStringList() << "Plasma/Runner" << "plasma/runners/");
+    builtIns.insert(i18n("Shell"), QStringList() << "Plasma/Shell" << "plasma/shells/");
     builtIns.insert(i18n("Theme"), QStringList() << "" << "desktoptheme/");
     builtIns.insert(i18n("Wallpaper Images"), QStringList() << "" << "wallpapers/");
     builtIns.insert(i18n("Wallpaper Plugin"), QStringList() << "Plasma/Wallpaper" << "plasma/wallpapers/");
