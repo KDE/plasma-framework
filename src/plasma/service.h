@@ -257,11 +257,7 @@ private:
 
     ServicePrivate * const d;
 
-    friend class Applet;
     friend class DataEnginePrivate;
-    friend class GetSource;
-    friend class PackagePrivate;
-    friend class RemoveService;
     friend class PluginLoader;
 };
 
