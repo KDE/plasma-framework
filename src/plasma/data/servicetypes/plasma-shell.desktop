@@ -2,6 +2,8 @@
 Type=ServiceType
 X-KDE-ServiceType=Plasma/Shell
 Name=Plasma Shell
+Name[de]=Plasma-Umgebung
+Name[fr]=Terminal de Plasma
 Name[nl]=Plasma Shell
 Name[pt]=Consola do Plasma
 Name[pt_BR]=Plasma Shell
@@ -10,6 +12,7 @@ Name[sv]=Plasma skal
 Name[uk]=Оболонка Плазми
 Name[x-test]=xxPlasma Shellxx
 Comment=Plasma Shell Components
+Comment[fr]=Composant des terminaux de Plasma
 Comment[nl]=Plasma Shell-componenten
 Comment[pt]=Componentes da Consola do Plasma
 Comment[pt_BR]=Componentes do Plasma Shell
