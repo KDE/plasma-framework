@@ -152,7 +152,11 @@ void DialogProxy::setVisible(const bool visible)
     if (visible) {
         syncToMainItemSize();
         if (!m_visualParent.isNull()) {
-            avail = m_visualParent.data()->window()->screen()->availableGeometry();
+            if (m_visualParent.data()->window()) {
+                avail = m_visualParent.data()->window()->screen()->availableGeometry();
+            } else {
+                avail = QRect(m_visualParent.data()->x(), m_visualParent.data()->y(), m_visualParent.data()->width(), m_visualParent.data()->height());
+            }
             if (location() == Plasma::FullScreen) {
                 m_frameSvgItem->setEnabledBorders(Plasma::FrameSvg::NoBorder);
                 setGeometry(avail);
