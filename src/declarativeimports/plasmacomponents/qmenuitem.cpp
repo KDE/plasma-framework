@@ -45,17 +45,20 @@ void QMenuItem::setAction(QAction* a)
     }
 }
 
-QString QMenuItem::icon() const
+QVariant QMenuItem::icon() const
 {
     return m_icon;
 }
 
-void QMenuItem::setIcon(const QString& i)
+void QMenuItem::setIcon(const QVariant& i)
 {
-    if (i != m_icon) {
-        m_action->setIcon(QIcon::fromTheme(i));
-        emit iconChanged();
+    m_icon = i;
+    if (i.canConvert<QIcon>()) {
+        m_action->setIcon(i.value<QIcon>());
+    } else if (i.canConvert<QString>()) {
+        m_action->setIcon(QIcon::fromTheme(i.value<QString>()));
     }
+    emit iconChanged();
 }
 
 bool QMenuItem::separator() const

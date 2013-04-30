@@ -38,7 +38,7 @@ class QMenuItem : public QQuickItem
      */
     Q_PROPERTY(bool separator READ separator WRITE setSeparator NOTIFY separatorChanged)
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
-    Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged)
+    Q_PROPERTY(QVariant icon READ icon WRITE setIcon NOTIFY iconChanged)
     Q_PROPERTY(QAction* action READ action WRITE setAction NOTIFY actionChanged)
 
 public:
@@ -46,8 +46,8 @@ public:
 
     QAction* action() const;
     void setAction(QAction* a);
-    QString icon() const;
-    void setIcon(const QString& i);
+    QVariant icon() const;
+    void setIcon(const QVariant& i);
     bool separator() const;
     void setSeparator(bool s);
     QString text() const;
@@ -63,7 +63,7 @@ Q_SIGNALS:
 
 private:
     QAction* m_action;
-    QString m_icon;
+    QVariant m_icon;
 };
 
 #endif // QMENUITEM_H
