@@ -151,12 +151,8 @@ void DialogProxy::setVisible(const bool visible)
     QRect avail;
     if (visible) {
         syncToMainItemSize();
-        if (!m_visualParent.isNull()) {
-            if (m_visualParent.data()->window()) {
-                avail = m_visualParent.data()->window()->screen()->availableGeometry();
-            } else {
-                avail = QRect(m_visualParent.data()->x(), m_visualParent.data()->y(), m_visualParent.data()->width(), m_visualParent.data()->height());
-            }
+        if (!m_visualParent.isNull() && m_visualParent.data()->window()) {
+            avail = m_visualParent.data()->window()->screen()->availableGeometry();
             if (location() == Plasma::FullScreen) {
                 m_frameSvgItem->setEnabledBorders(Plasma::FrameSvg::NoBorder);
                 setGeometry(avail);
@@ -183,7 +179,7 @@ void DialogProxy::setVisible(const bool visible)
                 setPosition(popupPosition(m_visualParent.data(), Qt::AlignCenter));
             }
         } else {
-            // no visual parent -> center on screen
+            // no visual parent or window -> center on screen
             setPosition((avail.width() - width()) / 2, (avail.height() - height()) / 2);
         }
         raise();
