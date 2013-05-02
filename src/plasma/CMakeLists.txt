@@ -220,6 +220,7 @@ install(FILES
    data/servicetypes/plasma-containment.desktop
    data/servicetypes/plasma-containmentactions.desktop
    data/servicetypes/plasma-dataengine.desktop
+   data/servicetypes/plasma-generic.desktop
    data/servicetypes/plasma-packagestructure.desktop
    data/servicetypes/plasma-runner.desktop
    data/servicetypes/plasma-scriptengine.desktop

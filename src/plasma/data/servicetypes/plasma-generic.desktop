@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Plasma/Generic
+Name=Plasma Package
+Comment=Generic Plasma Package
+
