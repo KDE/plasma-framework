@@ -38,15 +38,125 @@
 #include "configloader.h"
 #include "version.h"
 #include "private/configloader_p.h"
+#include "private/configloaderhandler_p.h"
 #include "pluginloader.h"
 
 namespace Plasma
 {
 
+class ConfigLoaderHandlerMap : public ConfigLoaderHandler
+{
+public:
+    ConfigLoaderHandlerMap(ConfigLoader *config, ConfigLoaderPrivate *d)
+        : ConfigLoaderHandler(config, d)
+    {}
+
+    void addItem();
+
+//private:
+    QVariantMap m_map;
+};
+
+void ConfigLoaderHandlerMap::addItem()
+{
+    if (name().isEmpty()) {
+        if (key().isEmpty()) {
+            return;
+        }
+
+        setName(key());
+    } else if (key().isEmpty()) {
+        if (name().isEmpty()) {
+            return;
+        }
+
+        setKey(name());
+    }
+
+    QVariantMap map;
+    if (m_map.contains(currentGroup())) {
+        map = m_map[currentGroup()].value<QVariantMap>();
+    } else {
+        m_map[currentGroup()] = QVariantMap();
+    }
+
+
+    if (type() == "bool") {
+        bool defaultVal = defaultValue().toLower() == "true";
+        map[key()] = defaultVal;
+    } else if (type() == "color") {
+        map[key()] = QColor(defaultValue());
+    } else if (type() == "datetime") {
+        map[key()] = QDateTime::fromString(defaultValue());
+    } else if (type() == "enum") {
+        key() = (key().isEmpty()) ? name() : key();
+        map[key()] = defaultValue().toUInt();
+    } else if (type() == "font") {
+        map[key()] = QFont(defaultValue());
+    } else if (type() == "int") {
+        map[key()] = defaultValue().toInt();
+    } else if (type() == "password") {
+        map[key()] = defaultValue();
+    } else if (type() == "path") {
+        map[key()] = defaultValue();
+    } else if (type() == "string") {
+        map[key()] = defaultValue();
+    } else if (type() == "stringlist") {
+        //FIXME: the split() is naive and will break on lists with ,'s in them
+        map[key()] = defaultValue().split(',');
+    } else if (type() == "uint") {
+        map[key()] = defaultValue().toUInt();
+    } else if (type() == "url") {
+        setKey((key().isEmpty()) ? name() : key());
+        map[key()] = QUrl::fromUserInput(defaultValue());
+    } else if (type() == "double") {
+        map[key()] = defaultValue().toDouble();
+    } else if (type() == "intlist") {
+        QStringList tmpList = defaultValue().split(',');
+        QList<int> defaultList;
+        foreach (const QString &tmp, tmpList) {
+            defaultList.append(tmp.toInt());
+        }
+        map[key()] = QVariant::fromValue(defaultList);
+    } else if (type() == "longlong") {
+        map[key()] = defaultValue().toLongLong();
+    } else if (type() == "point") {
+        QPoint defaultPoint;
+        QStringList tmpList = defaultValue().split(',');
+        if (tmpList.size() >= 2) {
+            defaultPoint.setX(tmpList[0].toInt());
+            defaultPoint.setY(tmpList[1].toInt());
+        }
+        map[key()] = defaultPoint;
+    } else if (type() == "rect") {
+        QRect defaultRect;
+        QStringList tmpList = defaultValue().split(',');
+        if (tmpList.size() >= 4) {
+            defaultRect.setCoords(tmpList[0].toInt(), tmpList[1].toInt(),
+                                  tmpList[2].toInt(), tmpList[3].toInt());
+        }
+        map[key()] = tmpList;
+    } else if (type() == "size") {
+        QSize defaultSize;
+        QStringList tmpList = defaultValue().split(',');
+        if (tmpList.size() >= 2) {
+            defaultSize.setWidth(tmpList[0].toInt());
+            defaultSize.setHeight(tmpList[1].toInt());
+        }
+        map[key()] = tmpList;
+    } else if (type() == "ulonglong") {
+        map[key()] = defaultValue().toULongLong();
+    }
+
+    m_map[currentGroup()] = map;
+}
+
 Service::Service(QObject *parent)
     : QObject(parent),
       d(new ServicePrivate(this))
 {
+    ConfigLoaderPrivate *cl = new ConfigLoaderPrivate;
+    ConfigLoaderHandlerMap map(0, cl);
 }
 
 Service::Service(QObject *parent, const QVariantList &args)
@@ -54,6 +164,8 @@ Service::Service(QObject *parent, const QVariantList &args)
       d(new ServicePrivate(this))
 {
     Q_UNUSED(args)
+    ConfigLoaderPrivate *cl = new ConfigLoaderPrivate;
+    ConfigLoaderHandlerMap map(0, cl);
 }
 
 Service::~Service()

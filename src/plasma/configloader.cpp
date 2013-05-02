@@ -82,7 +82,10 @@ bool ConfigLoaderHandler::startElement(const QString &namespaceURI, const QStrin
                 group = d->baseGroup + '\x1d' + group;
             }
         }
-        m_config->setCurrentGroup(group);
+        m_currentGroup = group;
+        if (m_config) {
+            m_config->setCurrentGroup(group);
+        }
     } else if (tag == "entry") {
         for (int i = 0; i < numAttrs; ++i) {
             QString name = attrs.localName(i).toLower();
@@ -114,6 +117,41 @@ bool ConfigLoaderHandler::characters(const QString &ch)
 {
     m_cdata.append(ch);
     return true;
+}
+
+QString ConfigLoaderHandler::name() const
+{
+    return m_name;
+}
+
+void ConfigLoaderHandler::setName(const QString &name)
+{
+    m_name = name;
+}
+
+QString ConfigLoaderHandler::key() const
+{
+    return m_key;
+}
+
+void ConfigLoaderHandler::setKey(const QString &key)
+{
+    m_key = key;
+}
+
+QString ConfigLoaderHandler::type() const
+{
+    return m_type;
+}
+
+QString ConfigLoaderHandler::currentGroup() const
+{
+    return m_currentGroup;
+}
+
+QString ConfigLoaderHandler::defaultValue() const
+{
+    return m_default;
 }
 
 bool ConfigLoaderHandler::endElement(const QString &namespaceURI,

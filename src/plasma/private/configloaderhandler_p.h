@@ -38,14 +38,23 @@ public:
                     const QString &qName);
     bool characters(const QString &ch);
 
+    QString name() const;
+    void setName(const QString &name);
+    QString key() const;
+    void setKey(const QString &name);
+    QString type() const;
+    QString currentGroup() const;
+    QString defaultValue() const;
+
 private:
-    void addItem();
+    virtual void addItem();
     void resetState();
 
     ConfigLoader *m_config;
     ConfigLoaderPrivate *d;
     int m_min;
     int m_max;
+    QString m_currentGroup;
     QString m_name;
     QString m_key;
     QString m_type;

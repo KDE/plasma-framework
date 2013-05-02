@@ -80,7 +80,7 @@ public:
           config(0),
           dummyConfig(0),
           publicService(0)
-    {
+    {        
     }
 
     ~ServicePrivate()
