@@ -158,8 +158,39 @@ macro(installPackage dir component)
    install(FILES ${dir}/metadata.desktop DESTINATION ${SERVICES_INSTALL_DIR} RENAME plasma-${type}-${component}.desktop)
 endmacro()
 
+################ create PlasmaConfig.cmake and install it ###########################
+
+
+# create a Config.cmake and a ConfigVersion.cmake file and install them
+set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/Plasma")
+
+include(CMakePackageConfigHelpers)
+
+include(ECMSetupVersion)
+ecm_setup_version(2 0 0 VARIABLE_PREFIX PLASMA
+                        VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/plasma_version.h"
+                        PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/PlasmaConfigVersion.cmake")
+
+configure_package_config_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/PlasmaConfig.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/PlasmaConfig.cmake"
+  INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
+  PATH_VARS  INCLUDE_INSTALL_DIR CMAKE_INSTALL_PREFIX
+)
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/plasma_version.h
+        DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel )
+
+install(FILES
+  "${CMAKE_CURRENT_BINARY_DIR}/PlasmaConfig.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/PlasmaConfigVersion.cmake"
+  DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+  COMPONENT Devel
+)
+
+
 ################# list the subdirectories #################
-add_subdirectory(src)
-add_subdirectory( desktoptheme )
+# add_subdirectory(src)
+# add_subdirectory( desktoptheme )
 
 feature_summary(WHAT ALL   FATAL_ON_MISSING_REQUIRED_PACKAGES)
