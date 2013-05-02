@@ -32,7 +32,7 @@
 class StorageJob : public Plasma::ServiceJob
 {
     Q_OBJECT
-    Q_PROPERTY(QVariantHash data READ data WRITE setData)
+    Q_PROPERTY(QVariantMap data READ data WRITE setData)
 
 public:
     StorageJob(const QString& destination,
@@ -40,8 +40,8 @@ public:
                const QVariantMap& parameters,
                QObject *parent = 0);
     ~StorageJob();
-    void setData(const QVariantHash &data);
-    QVariantHash data() const;
+    void setData(const QVariantMap &data);
+    QVariantMap data() const;
     void start();
     QString clientName() const;
 
@@ -50,7 +50,7 @@ protected Q_SLOTS:
 
 private:
     QString m_clientName;
-    QVariantHash m_data;
+    QVariantMap m_data;
 };
 //End StorageJob
 

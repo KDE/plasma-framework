@@ -113,7 +113,7 @@ void StorageThread::save(QWeakPointer<StorageJob> wcaller, const QVariantMap &pa
         caller->data().insert(params.value("key").toString(), params.value("data"));
     }
 
-    QHashIterator<QString, QVariant> it(caller->data());
+    QMapIterator<QString, QVariant> it(caller->data());
 
     QString ids;
     while (it.hasNext()) {
@@ -247,7 +247,7 @@ void StorageThread::retrieve(QWeakPointer<StorageJob> wcaller, const QVariantMap
         const int floatColumn = rec.indexOf("float");
         const int binaryColumn = rec.indexOf("binary");
 
-        QVariantHash data;
+        QVariantMap data;
         while (query.next()) {
             const QString key = query.value(keyColumn).toString();
             if (!query.value(textColumn).isNull()) {

@@ -36,7 +36,7 @@ private Q_SLOTS:
 
 
 private:
-    QVariantHash m_data;
+    QVariantMap m_data;
 };
 
 #endif

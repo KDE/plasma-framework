@@ -61,8 +61,8 @@ class PLASMA_EXPORT DataEngine : public QObject
 
     public:
         typedef QHash<QString, DataEngine*> Dict;
-        typedef QHash<QString, QVariant> Data;
-        typedef QHashIterator<QString, QVariant> DataIterator;
+        typedef QMap<QString, QVariant> Data;
+        typedef QMapIterator<QString, QVariant> DataIterator;
         typedef QHash<QString, DataContainer*> SourceDict;
 
         /**
@@ -287,7 +287,7 @@ NoAlignment) const;
          * @param source the name of the data source
          * @param data the data to add to the source
          **/
-        void setData(const QString &source, const QHash<QString, QVariant> &data);
+        void setData(const QString &source, const QVariantMap &data);
 
         /**
          * Removes all the data associated with a data source.

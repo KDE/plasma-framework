@@ -58,12 +58,12 @@ StorageJob::~StorageJob()
 {
 }
 
-void StorageJob::setData(const QVariantHash &data)
+void StorageJob::setData(const QVariantMap &data)
 {
     m_data = data;
 }
 
-QVariantHash StorageJob::data() const
+QVariantMap StorageJob::data() const
 {
     return m_data;
 }
@@ -102,8 +102,8 @@ void StorageJob::start()
 void StorageJob::resultSlot(StorageJob *job, const QVariant &result)
 {
     if (job == this) {
-        if (result.type() == QVariant::Hash) {
-            m_data = result.toHash();
+        if (result.type() == QVariant::Map) {
+            m_data = result.toMap();
         }
         setResult(result);
     }

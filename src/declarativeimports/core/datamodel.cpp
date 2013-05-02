@@ -224,7 +224,7 @@ void DataModel::dataUpdated(const QString &sourceName, const Plasma::DataEngine:
         } else if (m_keyRoleFilterRE.isValid()) {
             //try to match the key we want with a regular expression if set
             QVariantList list;
-            QHash<QString, QVariant>::const_iterator i;
+            QVariantMap::const_iterator i;
             for (i = data.constBegin(); i != data.constEnd(); ++i) {
                 if (m_keyRoleFilterRE.exactMatch(i.key())) {
                     list.append(i.value());

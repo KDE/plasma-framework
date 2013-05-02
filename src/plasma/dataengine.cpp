@@ -180,7 +180,7 @@ void DataEngine::setData(const QString &source, const QString &key, const QVaria
     d->scheduleSourcesUpdated();
 }
 
-void DataEngine::setData(const QString &source, const QHash<QString, QVariant> &data)
+void DataEngine::setData(const QString &source, const QVariantMap &data)
 {
     DataContainer *s = d->source(source, false);
     bool isNew = !s;
