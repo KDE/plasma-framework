@@ -170,16 +170,6 @@ Service::~Service()
     delete d;
 }
 
-void ServicePrivate::associatedWidgetDestroyed(QObject *obj)
-{
-    associatedWidgets.remove(static_cast<QWidget*>(obj));
-}
-
-void ServicePrivate::associatedItemDestroyed(QObject *obj)
-{
-    associatedItems.remove(static_cast<QQuickItem*>(obj));
-}
-
 KConfigGroup ServicePrivate::dummyGroup()
 {
     if (!dummyConfig) {
@@ -259,31 +249,6 @@ ServiceJob *Service::startOperationCall(const QVariantMap &description, QObject 
     return job;
 }
 
-void Service::associateItem(QQuickItem *widget, const QString &operation)
-{
-    if (!widget) {
-        return;
-    }
-
-    disassociateItem(widget);
-    d->associatedItems.insert(widget, operation);
-    connect(widget, SIGNAL(destroyed(QObject*)),
-            this, SLOT(associatedItemDestroyed(QObject*)));
-
-    widget->setEnabled(!d->disabledOperations.contains(operation));
-}
-
-void Service::disassociateItem(QQuickItem *widget)
-{
-    if (!widget) {
-        return;
-    }
-
-    disconnect(widget, SIGNAL(destroyed(QObject*)),
-               this, SLOT(associatedItemDestroyed(QObject*)));
-    d->associatedItems.remove(widget);
-}
-
 QString Service::name() const
 {
     return d->name;
@@ -316,25 +281,6 @@ void Service::setOperationEnabled(const QString &operation, bool enable)
         d->disabledOperations.insert(operation);
     }
 
-    {
-        QHashIterator<QWidget *, QString> it(d->associatedWidgets);
-        while (it.hasNext()) {
-            it.next();
-            if (it.value() == operation) {
-                it.key()->setEnabled(enable);
-            }
-        }
-    }
-
-    {
-        QHashIterator<QQuickItem *, QString> it(d->associatedItems);
-        while (it.hasNext()) {
-            it.next();
-            if (it.value() == operation) {
-                it.key()->setEnabled(enable);
-            }
-        }
-    }
     emit operationEnabledChanged(operation, enable);
 }
 
@@ -359,22 +305,6 @@ void Service::setOperationsScheme(QIODevice *xml)
     reader.parse(&source, false);
     d->operationsMap = configLoaderHandler.groupsMap();
     delete configLoaderPrivate;
-
-    {
-        QHashIterator<QWidget *, QString> it(d->associatedWidgets);
-        while (it.hasNext()) {
-            it.next();
-            it.key()->setEnabled(d->operationsMap.contains(it.value()));
-        }
-    }
-
-    {
-        QHashIterator<QQuickItem *, QString> it(d->associatedItems);
-        while (it.hasNext()) {
-            it.next();
-            it.key()->setEnabled(d->operationsMap.contains(it.value()));
-        }
-    }
 }
 
 void Service::registerOperationsScheme()

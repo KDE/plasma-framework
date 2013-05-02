@@ -100,8 +100,6 @@ public:
     QMap<QString, QVariantMap> operationsMap;
     KConfig *dummyConfig;
     DNSSD::PublicService *publicService;
-    QMultiHash<QWidget *, QString> associatedWidgets;
-    QMultiHash<QQuickItem *, QString> associatedItems;
     QSet<QString> disabledOperations;
 };
 

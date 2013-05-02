@@ -150,28 +150,6 @@ public:
      */
     Q_INVOKABLE QString name() const;
 
-    /**
-     * Associates a graphics item with an operation, which allows the service to
-     * automatically manage, for example, the enabled state of the item.
-     *
-     * This will remove any previous associations the item had with
-     * operations on this engine.
-     *
-     * @param item the QGraphicsObject to associate with the service
-     * @param operation the operation to associate the item with
-     */
-    Q_INVOKABLE void associateItem(QQuickItem *item, const QString &operation);
-
-    /**
-     * Disassociates a graphics item if it has been associated with an operation
-     * on this service.
-     *
-     * This will not change the enabled state of the item.
-     *
-     * @param widget the QGraphicsItem to disassociate.
-     */
-    Q_INVOKABLE void disassociateItem(QQuickItem *widget);
-
 Q_SIGNALS:
     /**
      * Emitted when this service is ready for use
@@ -237,9 +215,6 @@ protected:
     void setOperationEnabled(const QString &operation, bool enable);
 
 private:
-    Q_PRIVATE_SLOT(d, void associatedWidgetDestroyed(QObject *))
-    Q_PRIVATE_SLOT(d, void associatedItemDestroyed(QObject *))
-
     ServicePrivate * const d;
 
     friend class DataEnginePrivate;
