@@ -201,8 +201,8 @@ void DataContainerPrivate::store()
         storage = new Storage(q);
     }
 
-    KConfigGroup op = storage->operationDescription("save");
-    op.writeEntry("group", q->objectName());
+    QVariantMap op = storage->operationDescription("save");
+    op["group"] = q->objectName();
     StorageJob *job = static_cast<StorageJob *>(storage->startOperationCall(op));
     job->setData(data);
     storageCount++;
@@ -229,8 +229,8 @@ void DataContainerPrivate::retrieve()
         storage = new Storage(q);
     }
 
-    KConfigGroup retrieveGroup = storage->operationDescription("retrieve");
-    retrieveGroup.writeEntry("group", q->objectName());
+    QVariantMap retrieveGroup = storage->operationDescription("retrieve");
+    retrieveGroup["group"] = q->objectName();
     ServiceJob* retrieveJob = storage->startOperationCall(retrieveGroup);
     QObject::connect(retrieveJob, SIGNAL(result(KJob*)), q,
             SLOT(populateFromStoredData(KJob*)));
@@ -255,9 +255,9 @@ void DataContainerPrivate::populateFromStoredData(KJob *job)
         q->forceImmediateUpdate();
     }
 
-    KConfigGroup expireGroup = storage->operationDescription("expire");
+    QVariantMap expireGroup = storage->operationDescription("expire");
     //expire things older than 4 days
-    expireGroup.writeEntry("age", 345600);
+    expireGroup["age"] = 345600;
     storage->startOperationCall(expireGroup);
 }
 

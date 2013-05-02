@@ -45,7 +45,7 @@ class NullServiceJob : public ServiceJob
 {
 public:
     NullServiceJob(const QString &destination, const QString &operation, QObject *parent)
-        : ServiceJob(destination, operation, QHash<QString, QVariant>(), parent)
+        : ServiceJob(destination, operation, QVariantMap(), parent)
     {
     }
 
@@ -66,7 +66,7 @@ public:
         setName("NullService");
     }
 
-    ServiceJob *createJob(const QString &operation, QHash<QString, QVariant> &)
+    ServiceJob *createJob(const QString &operation, QVariantMap &)
     {
         return new NullServiceJob(destination(), operation, this);
     }
@@ -77,7 +77,6 @@ class ServicePrivate
 public:
     ServicePrivate(Service *service)
         : q(service),
-          config(0),
           dummyConfig(0),
           publicService(0)
     {        
@@ -85,7 +84,6 @@ public:
 
     ~ServicePrivate()
     {
-        delete config;
         delete dummyConfig;
     }
 
@@ -99,7 +97,7 @@ public:
     QString destination;
     QString name;
     QString resourcename;
-    ConfigLoader *config;
+    QMap<QString, QVariantMap> operationsMap;
     KConfig *dummyConfig;
     DNSSD::PublicService *publicService;
     QMultiHash<QWidget *, QString> associatedWidgets;

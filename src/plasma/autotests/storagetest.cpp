@@ -38,8 +38,8 @@ void StorageTest::initTestCase()
 void StorageTest::store()
 {
     Storage storage;
-    KConfigGroup op = storage.operationDescription("save");
-    op.writeEntry("group", "Test");
+    QVariantMap op = storage.operationDescription("save");
+    op["group"] = "Test";
     Plasma::ServiceJob *job = storage.startOperationCall(op);
     StorageJob *storageJob = qobject_cast<StorageJob *>(job);
 
@@ -54,8 +54,8 @@ void StorageTest::store()
 void StorageTest::retrieve()
 {
     Storage storage;
-    KConfigGroup op = storage.operationDescription("retrieve");
-    op.writeEntry("group", "Test");
+    QVariantMap op = storage.operationDescription("retrieve");
+    op["group"] = "Test";
     Plasma::ServiceJob *job = storage.startOperationCall(op);
     StorageJob *storageJob = qobject_cast<StorageJob *>(job);
 
@@ -70,8 +70,8 @@ void StorageTest::retrieve()
 void StorageTest::deleteEntry()
 {
     Storage storage;
-    KConfigGroup op = storage.operationDescription("delete");
-    op.writeEntry("group", "Test");
+    QVariantMap op = storage.operationDescription("delete");
+    op["group"] = "Test";
     Plasma::ServiceJob *job = storage.startOperationCall(op);
     StorageJob *storageJob = qobject_cast<StorageJob *>(job);
 
@@ -83,7 +83,7 @@ void StorageTest::deleteEntry()
     }
 
     op = storage.operationDescription("retrieve");
-    op.writeEntry("group", "Test");
+    op["group"] = "Test";
     job = storage.startOperationCall(op);
     storageJob = qobject_cast<StorageJob *>(job);
 

@@ -67,8 +67,8 @@ void DataEngineConsumerPrivate::slotServiceReady(Plasma::Service *plasmoidServic
 #ifndef NDEBUG
     kDebug() << "requesting dataengine!";
 #endif
-    KConfigGroup op = plasmoidService->operationDescription("DataEngine");
-    op.writeEntry("EngineName", engineNameForService.value(plasmoidService));
+    QVariantMap op = plasmoidService->operationDescription("DataEngine");
+    op["EngineName"] = engineNameForService.value(plasmoidService);
     plasmoidService->startOperationCall(op);
     connect(plasmoidService, SIGNAL(finished(Plasma::ServiceJob*)),
             this, SLOT(slotJobFinished(Plasma::ServiceJob*)));

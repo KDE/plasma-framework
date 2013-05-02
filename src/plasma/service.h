@@ -126,7 +126,7 @@ public:
      * @param operationName the operation to retrieve parameters for
      * @return KConfigGroup containing the parameters
      */
-    Q_INVOKABLE KConfigGroup operationDescription(const QString &operationName);
+    Q_INVOKABLE QVariantMap operationDescription(const QString &operationName);
 
     /**
      * Called to create a ServiceJob which is associated with a given
@@ -135,7 +135,7 @@ public:
      * @return a started ServiceJob; the consumer may connect to relevant
      *         signals before returning to the event loop
      */
-    Q_INVOKABLE ServiceJob *startOperationCall(const KConfigGroup &description, QObject *parent = 0);
+    Q_INVOKABLE ServiceJob *startOperationCall(const QVariantMap &description, QObject *parent = 0);
 
     /**
      * Query to find if an operation is enabled or not.
@@ -177,7 +177,7 @@ public:
      * @param description the configuration values to turn into the parameter map
      * @since 4.4
      */
-    Q_INVOKABLE QHash<QString, QVariant> parametersFromDescription(const KConfigGroup &description);
+   /*Q_INVOKABLE QVariantMap parametersFromDescription(const KConfigGroup &description);*/
 
 Q_SIGNALS:
     /**
@@ -213,7 +213,7 @@ protected:
      * @return a ServiceJob that can be started and monitored by the consumer
      */
     virtual ServiceJob *createJob(const QString &operation,
-                                  QHash<QString, QVariant> &parameters) = 0;
+                                  QVariantMap &parameters) = 0;
 
     /**
      * By default this is based on the file in plasma/services/name.operations, but can be

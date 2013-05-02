@@ -52,9 +52,10 @@ public:
     {}
 
     void addItem();
+    const QMap<QString, QVariantMap> &groupsMap() const;
 
-//private:
-    QVariantMap m_map;
+private:
+    QMap<QString, QVariantMap> m_groupsMap;
 };
 
 void ConfigLoaderHandlerMap::addItem()
@@ -73,53 +74,50 @@ void ConfigLoaderHandlerMap::addItem()
         setKey(name());
     }
 
-    QVariantMap map;
-    if (m_map.contains(currentGroup())) {
-        map = m_map[currentGroup()].value<QVariantMap>();
-    } else {
-        m_map[currentGroup()] = QVariantMap();
+    if (!m_groupsMap.contains(currentGroup())) {
+        m_groupsMap[currentGroup()] = QVariantMap();
     }
 
 
     if (type() == "bool") {
         bool defaultVal = defaultValue().toLower() == "true";
-        map[key()] = defaultVal;
+        m_groupsMap[currentGroup()][key()] = defaultVal;
     } else if (type() == "color") {
-        map[key()] = QColor(defaultValue());
+        m_groupsMap[currentGroup()][key()] = QColor(defaultValue());
     } else if (type() == "datetime") {
-        map[key()] = QDateTime::fromString(defaultValue());
+        m_groupsMap[currentGroup()][key()] = QDateTime::fromString(defaultValue());
     } else if (type() == "enum") {
         key() = (key().isEmpty()) ? name() : key();
-        map[key()] = defaultValue().toUInt();
+        m_groupsMap[currentGroup()][key()] = defaultValue().toUInt();
     } else if (type() == "font") {
-        map[key()] = QFont(defaultValue());
+        m_groupsMap[currentGroup()][key()] = QFont(defaultValue());
     } else if (type() == "int") {
-        map[key()] = defaultValue().toInt();
+        m_groupsMap[currentGroup()][key()] = defaultValue().toInt();
     } else if (type() == "password") {
-        map[key()] = defaultValue();
+        m_groupsMap[currentGroup()][key()] = defaultValue();
     } else if (type() == "path") {
-        map[key()] = defaultValue();
+        m_groupsMap[currentGroup()][key()] = defaultValue();
     } else if (type() == "string") {
-        map[key()] = defaultValue();
+        m_groupsMap[currentGroup()][key()] = defaultValue();
     } else if (type() == "stringlist") {
         //FIXME: the split() is naive and will break on lists with ,'s in them
-        map[key()] = defaultValue().split(',');
+        m_groupsMap[currentGroup()][key()] = defaultValue().split(',');
     } else if (type() == "uint") {
-        map[key()] = defaultValue().toUInt();
+        m_groupsMap[currentGroup()][key()] = defaultValue().toUInt();
     } else if (type() == "url") {
         setKey((key().isEmpty()) ? name() : key());
-        map[key()] = QUrl::fromUserInput(defaultValue());
+        m_groupsMap[currentGroup()][key()] = QUrl::fromUserInput(defaultValue());
     } else if (type() == "double") {
-        map[key()] = defaultValue().toDouble();
+        m_groupsMap[currentGroup()][key()] = defaultValue().toDouble();
     } else if (type() == "intlist") {
         QStringList tmpList = defaultValue().split(',');
         QList<int> defaultList;
         foreach (const QString &tmp, tmpList) {
             defaultList.append(tmp.toInt());
         }
-        map[key()] = QVariant::fromValue(defaultList);
+        m_groupsMap[currentGroup()][key()] = QVariant::fromValue(defaultList);
     } else if (type() == "longlong") {
-        map[key()] = defaultValue().toLongLong();
+        m_groupsMap[currentGroup()][key()] = defaultValue().toLongLong();
     } else if (type() == "point") {
         QPoint defaultPoint;
         QStringList tmpList = defaultValue().split(',');
@@ -127,7 +125,7 @@ void ConfigLoaderHandlerMap::addItem()
             defaultPoint.setX(tmpList[0].toInt());
             defaultPoint.setY(tmpList[1].toInt());
         }
-        map[key()] = defaultPoint;
+        m_groupsMap[currentGroup()][key()] = defaultPoint;
     } else if (type() == "rect") {
         QRect defaultRect;
         QStringList tmpList = defaultValue().split(',');
@@ -135,7 +133,7 @@ void ConfigLoaderHandlerMap::addItem()
             defaultRect.setCoords(tmpList[0].toInt(), tmpList[1].toInt(),
                                   tmpList[2].toInt(), tmpList[3].toInt());
         }
-        map[key()] = tmpList;
+        m_groupsMap[currentGroup()][key()] = tmpList;
     } else if (type() == "size") {
         QSize defaultSize;
         QStringList tmpList = defaultValue().split(',');
@@ -143,20 +141,21 @@ void ConfigLoaderHandlerMap::addItem()
             defaultSize.setWidth(tmpList[0].toInt());
             defaultSize.setHeight(tmpList[1].toInt());
         }
-        map[key()] = tmpList;
+        m_groupsMap[currentGroup()][key()] = tmpList;
     } else if (type() == "ulonglong") {
-        map[key()] = defaultValue().toULongLong();
+        m_groupsMap[currentGroup()][key()] = defaultValue().toULongLong();
     }
+}
 
-    m_map[currentGroup()] = map;
+const QMap<QString, QVariantMap> &ConfigLoaderHandlerMap::groupsMap() const
+{
+    return m_groupsMap;
 }
 
 Service::Service(QObject *parent)
     : QObject(parent),
       d(new ServicePrivate(this))
 {
-    ConfigLoaderPrivate *cl = new ConfigLoaderPrivate;
-    ConfigLoaderHandlerMap map(0, cl);
 }
 
 Service::Service(QObject *parent, const QVariantList &args)
@@ -164,8 +163,6 @@ Service::Service(QObject *parent, const QVariantList &args)
       d(new ServicePrivate(this))
 {
     Q_UNUSED(args)
-    ConfigLoaderPrivate *cl = new ConfigLoaderPrivate;
-    ConfigLoaderHandlerMap map(0, cl);
 }
 
 Service::~Service()
@@ -204,38 +201,35 @@ QString Service::destination() const
 
 QStringList Service::operationNames() const
 {
-    if (!d->config) {
+    if (!d->operationsMap.keys().isEmpty()) {
 #ifndef NDEBUG
         kDebug() << "No valid operations scheme has been registered";
 #endif
         return QStringList();
     }
 
-    return d->config->groupList();
+    return d->operationsMap.keys();
 }
 
-KConfigGroup Service::operationDescription(const QString &operationName)
+QVariantMap Service::operationDescription(const QString &operationName)
 {
-    if (!d->config) {
+    if (!d->operationsMap.keys().isEmpty()) {
 #ifndef NDEBUG
         kDebug() << "No valid operations scheme has been registered";
 #endif
-        return d->dummyGroup();
+        return QVariantMap();
     }
 
-    d->config->writeConfig();
-    KConfigGroup params(d->config->config(), operationName);
     //kDebug() << "operation" << operationName
-    //         << "requested, has keys" << params.keyList() << "from"
-    //         << d->config->config()->name();
-    return params;
+    //         << "requested, has keys" << d->operationsMap.keys();
+    return d->operationsMap.value(operationName);
 }
 
-QHash<QString, QVariant> Service::parametersFromDescription(const KConfigGroup &description)
+/*QHash<QString, QVariant> Service::parametersFromDescription(const KConfigGroup &description)
 {
     QHash<QString, QVariant> params;
 
-    if (!d->config || !description.isValid()) {
+    if (!d->operationsMap.keys().isEmpty() || !description.isValid()) {
         return params;
     }
 
@@ -248,30 +242,30 @@ QHash<QString, QVariant> Service::parametersFromDescription(const KConfigGroup &
     }
 
     return params;
-}
+}*/
 
-ServiceJob *Service::startOperationCall(const KConfigGroup &description, QObject *parent)
+ServiceJob *Service::startOperationCall(const QVariantMap &description, QObject *parent)
 {
     // TODO: nested groups?
     ServiceJob *job = 0;
-    const QString op = description.isValid() ? description.name() : QString();
+    const QString op = !description.isEmpty() ? description.value("_name").toString() : QString();
 
-    if (!d->config) {
+    if (!d->operationsMap.keys().isEmpty()) {
 #ifndef NDEBUG
         kDebug() << "No valid operations scheme has been registered";
 #endif
-    } else if (!op.isEmpty() && d->config->hasGroup(op)) {
+    } else if (!op.isEmpty() && d->operationsMap.contains(op)) {
         if (d->disabledOperations.contains(op)) {
 #ifndef NDEBUG
             kDebug() << "Operation" << op << "is disabled";
 #endif
         } else {
-            QHash<QString, QVariant> params = parametersFromDescription(description);
-            job = createJob(op, params);
+            QVariantMap map = description;
+            job = createJob(op, map);
         }
     } else {
 #ifndef NDEBUG
-    kDebug() << op << "is not a valid group; valid groups are:" << d->config->groupList();
+    kDebug() << op << "is not a valid group; valid groups are:" << d->operationsMap->keys();
 #endif
     }
 
@@ -319,8 +313,7 @@ void Service::setName(const QString &name)
     d->name = name;
 
     // now reset the config, which may be based on our name
-    delete d->config;
-    d->config = 0;
+    d->operationsMap.clear();
 
     delete d->dummyConfig;
     d->dummyConfig = 0;
@@ -332,7 +325,7 @@ void Service::setName(const QString &name)
 
 void Service::setOperationEnabled(const QString &operation, bool enable)
 {
-    if (!d->config || !d->config->hasGroup(operation)) {
+    if (!d->operationsMap.keys().isEmpty() || !d->operationsMap.contains(operation)) {
         return;
     }
 
@@ -365,19 +358,25 @@ void Service::setOperationEnabled(const QString &operation, bool enable)
 
 bool Service::isOperationEnabled(const QString &operation) const
 {
-    return d->config && d->config->hasGroup(operation) && !d->disabledOperations.contains(operation);
+    return d->operationsMap.contains(operation) && !d->disabledOperations.contains(operation);
 }
 
 void Service::setOperationsScheme(QIODevice *xml)
 {
-    delete d->config;
+    d->operationsMap.clear();
 
     delete d->dummyConfig;
     d->dummyConfig = 0;
 
-    KSharedConfigPtr c = KSharedConfig::openConfig(QString(), KConfig::SimpleConfig);
-    d->config = new ConfigLoader(c, xml, this);
-    d->config->d->setWriteDefaults(true);
+    ConfigLoaderPrivate *configLoaderPrivate = new ConfigLoaderPrivate;
+    configLoaderPrivate->setWriteDefaults(true);
+    ConfigLoaderHandlerMap configLoaderHandler(0, configLoaderPrivate);
+    QXmlInputSource source(xml);
+    QXmlSimpleReader reader;
+    reader.setContentHandler(&configLoaderHandler);
+    reader.parse(&source, false);
+    d->operationsMap = configLoaderHandler.groupsMap();
+    delete configLoaderPrivate;
 
     emit operationsChanged();
 
@@ -385,7 +384,7 @@ void Service::setOperationsScheme(QIODevice *xml)
         QHashIterator<QWidget *, QString> it(d->associatedWidgets);
         while (it.hasNext()) {
             it.next();
-            it.key()->setEnabled(d->config->hasGroup(it.value()));
+            it.key()->setEnabled(d->operationsMap.contains(it.value()));
         }
     }
 
@@ -393,14 +392,14 @@ void Service::setOperationsScheme(QIODevice *xml)
         QHashIterator<QQuickItem *, QString> it(d->associatedItems);
         while (it.hasNext()) {
             it.next();
-            it.key()->setEnabled(d->config->hasGroup(it.value()));
+            it.key()->setEnabled(d->operationsMap.contains(it.value()));
         }
     }
 }
 
 void Service::registerOperationsScheme()
 {
-    if (d->config) {
+    if (!d->operationsMap.keys().isEmpty()) {
         // we've already done our job. let's go home.
         return;
     }

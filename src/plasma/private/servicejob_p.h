@@ -34,7 +34,7 @@ public:
     ServiceJobPrivate(ServiceJob *owner,
                       const QString &dest,
                       const QString &op,
-                      const QHash<QString, QVariant> &params);
+                      const QVariantMap &params);
 
     void preventAutoStart();
     void autoStart();
@@ -42,7 +42,7 @@ public:
     ServiceJob *q;
     QString destination;
     QString operation;
-    QHash<QString, QVariant> parameters;
+    QVariantMap parameters;
     QVariant result;
     bool m_allowAutoStart;
 };
