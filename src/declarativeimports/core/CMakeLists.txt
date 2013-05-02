@@ -20,6 +20,7 @@ set(corebindings_SRCS
     dialog.cpp
     tooltip.cpp
     tooltipdialog.cpp
+    serviceoperationstatus.cpp
     dataenginebindings.cpp
     iconitem.cpp
     plasmanamespace.cpp
