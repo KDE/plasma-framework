@@ -19,6 +19,7 @@
 
 #include "configloader.h"
 #include "private/configloader_p.h"
+#include "private/configloaderhandler_p.h"
 
 #include <QColor>
 #include <QFont>
@@ -32,37 +33,6 @@
 
 namespace Plasma
 {
-class ConfigLoaderHandler : public QXmlDefaultHandler
-{
-public:
-    ConfigLoaderHandler(ConfigLoader *config, ConfigLoaderPrivate *d);
-    bool startElement(const QString &namespaceURI, const QString &localName,
-                      const QString &qName, const QXmlAttributes &atts);
-    bool endElement(const QString &namespaceURI, const QString &localName,
-                    const QString &qName);
-    bool characters(const QString &ch);
-
-private:
-    void addItem();
-    void resetState();
-
-    ConfigLoader *m_config;
-    ConfigLoaderPrivate *d;
-    int m_min;
-    int m_max;
-    QString m_name;
-    QString m_key;
-    QString m_type;
-    QString m_label;
-    QString m_default;
-    QString m_cdata;
-    QString m_whatsThis;
-    KConfigSkeleton::ItemEnum::Choice m_choice;
-    QList<KConfigSkeleton::ItemEnum::Choice> m_enumChoices;
-    bool m_haveMin;
-    bool m_haveMax;
-    bool m_inChoice;
-};
 
 void ConfigLoaderPrivate::parse(ConfigLoader *loader, QIODevice *xml)
 {
