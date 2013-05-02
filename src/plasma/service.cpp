@@ -76,8 +76,8 @@ void ConfigLoaderHandlerMap::addItem()
 
     if (!m_groupsMap.contains(currentGroup())) {
         m_groupsMap[currentGroup()] = QVariantMap();
+        m_groupsMap[currentGroup()]["_name"] = currentGroup();
     }
-
 
     if (type() == "bool") {
         bool defaultVal = defaultValue().toLower() == "true";
@@ -201,7 +201,7 @@ QString Service::destination() const
 
 QStringList Service::operationNames() const
 {
-    if (!d->operationsMap.keys().isEmpty()) {
+    if (d->operationsMap.keys().isEmpty()) {
 #ifndef NDEBUG
         kDebug() << "No valid operations scheme has been registered";
 #endif
@@ -213,7 +213,7 @@ QStringList Service::operationNames() const
 
 QVariantMap Service::operationDescription(const QString &operationName)
 {
-    if (!d->operationsMap.keys().isEmpty()) {
+    if (d->operationsMap.keys().isEmpty()) {
 #ifndef NDEBUG
         kDebug() << "No valid operations scheme has been registered";
 #endif
@@ -225,32 +225,13 @@ QVariantMap Service::operationDescription(const QString &operationName)
     return d->operationsMap.value(operationName);
 }
 
-/*QHash<QString, QVariant> Service::parametersFromDescription(const KConfigGroup &description)
-{
-    QHash<QString, QVariant> params;
-
-    if (!d->operationsMap.keys().isEmpty() || !description.isValid()) {
-        return params;
-    }
-
-    const QString op = description.name();
-    foreach (const QString &key, description.keyList()) {
-        KConfigSkeletonItem *item = d->config->findItem(op, key);
-        if (item) {
-            params.insert(key, description.readEntry(key, item->property()));
-        }
-    }
-
-    return params;
-}*/
-
 ServiceJob *Service::startOperationCall(const QVariantMap &description, QObject *parent)
 {
     // TODO: nested groups?
     ServiceJob *job = 0;
     const QString op = !description.isEmpty() ? description.value("_name").toString() : QString();
 
-    if (!d->operationsMap.keys().isEmpty()) {
+    if (d->operationsMap.keys().isEmpty()) {
 #ifndef NDEBUG
         kDebug() << "No valid operations scheme has been registered";
 #endif
@@ -325,7 +306,7 @@ void Service::setName(const QString &name)
 
 void Service::setOperationEnabled(const QString &operation, bool enable)
 {
-    if (!d->operationsMap.keys().isEmpty() || !d->operationsMap.contains(operation)) {
+    if (d->operationsMap.keys().isEmpty() || !d->operationsMap.contains(operation)) {
         return;
     }
 

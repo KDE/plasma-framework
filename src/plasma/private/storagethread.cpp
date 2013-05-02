@@ -96,7 +96,7 @@ void StorageThread::initializeDb(StorageJob *caller)
     m_db.transaction();
 }
 
-void StorageThread::save(QWeakPointer<StorageJob> wcaller, const QVariantHash &params)
+void StorageThread::save(QWeakPointer<StorageJob> wcaller, const QVariantMap &params)
 {
     StorageJob *caller = wcaller.data();
     if (!caller) {
@@ -198,7 +198,7 @@ void StorageThread::save(QWeakPointer<StorageJob> wcaller, const QVariantHash &p
     emit newResult(caller, true);
 }
 
-void StorageThread::retrieve(QWeakPointer<StorageJob> wcaller, const QVariantHash &params)
+void StorageThread::retrieve(QWeakPointer<StorageJob> wcaller, const QVariantMap &params)
 {
     StorageJob *caller = wcaller.data();
     if (!caller) {
@@ -263,7 +263,6 @@ void StorageThread::retrieve(QWeakPointer<StorageJob> wcaller, const QVariantHas
                 data.insert(key, v);
             }
         }
-
         result = data;
     } else {
         result = false;
@@ -272,7 +271,7 @@ void StorageThread::retrieve(QWeakPointer<StorageJob> wcaller, const QVariantHas
     emit newResult(caller, result);
 }
 
-void StorageThread::deleteEntry(QWeakPointer<StorageJob> wcaller, const QVariantHash &params)
+void StorageThread::deleteEntry(QWeakPointer<StorageJob> wcaller, const QVariantMap &params)
 {
     StorageJob *caller = wcaller.data();
     if (!caller) {
@@ -302,7 +301,7 @@ void StorageThread::deleteEntry(QWeakPointer<StorageJob> wcaller, const QVariant
     emit newResult(caller, success);
 }
 
-void StorageThread::expire(QWeakPointer<StorageJob> wcaller, const QVariantHash &params)
+void StorageThread::expire(QWeakPointer<StorageJob> wcaller, const QVariantMap &params)
 {
     StorageJob *caller = wcaller.data();
     if (!caller) {

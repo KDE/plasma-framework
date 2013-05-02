@@ -63,7 +63,8 @@ void StorageTest::retrieve()
     if (storageJob) {
         QVERIFY(storageJob->exec());
         QVERIFY(storageJob->result().type() != QVariant::Bool);
-        QCOMPARE(storageJob->data(), m_data);
+        QVariantHash h = storageJob->result().value<QVariantHash>();
+        QCOMPARE(h, m_data);
     }
 }
 
