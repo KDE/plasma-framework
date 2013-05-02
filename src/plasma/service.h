@@ -103,12 +103,6 @@ public:
     ~Service();
 
     /**
-     * Used to access a service from an url. Always check for the signal serviceReady() that fires
-     * when this service is actually ready for use.
-     */
-    static Service *access(const QUrl &url, QObject *parent = 0);
-
-    /**
      * Sets the destination for this Service to operate on
      *
      * @param destination specific to each Service, this sets which
