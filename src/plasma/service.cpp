@@ -360,8 +360,6 @@ void Service::setOperationsScheme(QIODevice *xml)
     d->operationsMap = configLoaderHandler.groupsMap();
     delete configLoaderPrivate;
 
-    emit operationsChanged();
-
     {
         QHashIterator<QWidget *, QString> it(d->associatedWidgets);
         while (it.hasNext()) {

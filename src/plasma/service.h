@@ -174,13 +174,6 @@ public:
 
 Q_SIGNALS:
     /**
-     * Emitted when the Service's operations change. For example, a
-     * media player service may change what operations are available
-     * in response to the state of the player.
-     */
-    void operationsChanged();
-
-    /**
      * Emitted when this service is ready for use
      */
     void serviceReady(Plasma::Service *service);
