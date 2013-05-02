@@ -185,6 +185,11 @@ Q_SIGNALS:
      */
     void serviceReady(Plasma::Service *service);
 
+    /**
+     * Emitted when an operation got enabled or disabled
+     */
+    void operationEnabledChanged(const QString &operation, bool enabled);
+
 protected:
     /**
      * Default constructor

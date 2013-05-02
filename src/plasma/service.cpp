@@ -335,6 +335,7 @@ void Service::setOperationEnabled(const QString &operation, bool enable)
             }
         }
     }
+    emit operationEnabledChanged(operation, enable);
 }
 
 bool Service::isOperationEnabled(const QString &operation) const
