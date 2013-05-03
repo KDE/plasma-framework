@@ -5,8 +5,12 @@
 set(Plasma_INSTALL_PREFIX "@PACKAGE_CMAKE_INSTALL_PREFIX@")
 set_and_check(Plasma_INCLUDE_DIR    "@PACKAGE_INCLUDE_INSTALL_DIR@")
 
-
+include("PlasmaMacros.cmake")
+#include("${CMAKE_CURRENT_SOURCE_DIR}/PlasmaMacros.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/PlasmaTargets.cmake")
 
-set(KArchive_LIBRARIES KF5::KArchive)
-set(KArchive_INCLUDE_DIRS ${KArchive_INCLUDE_DIR})
+
+macro(fsck)
+    message("FSCK!!!!")
+endmacro()
+

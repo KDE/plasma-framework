@@ -187,10 +187,17 @@ install(FILES
   DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
   COMPONENT Devel
 )
+install(FILES
+            "${CMAKE_CURRENT_SOURCE_DIR}/PlasmaMacros.cmake"
+            "FindPlasma.cmake"
+        DESTINATION
+            ${DATA_INSTALL_DIR}/cmake/modules
+       )
+
 
 
 ################# list the subdirectories #################
-# add_subdirectory(src)
-# add_subdirectory( desktoptheme )
+add_subdirectory(src)
+add_subdirectory( desktoptheme )
 
 feature_summary(WHAT ALL   FATAL_ON_MISSING_REQUIRED_PACKAGES)
