@@ -222,6 +222,20 @@ void ServicePrivate::xmlParseCompleted(const QMap<QString, QVariantMap > &parsed
     emit q->serviceReadyChanged(q);
 }
 
+void ServicePrivate::processQueuedOperations()
+{
+    if (!ready) {
+        return;
+    }
+
+    QList<QPair<QVariantMap, QObject *> >::const_iterator i = operationsQueue.constBegin();
+    while (i != operationsQueue.constEnd()) {
+        q->startOperationCall((*i).first, (*i).second);
+        ++i;
+    }
+    operationsQueue.clear();
+}
+
 void Service::setDestination(const QString &destination)
 {
     d->destination = destination;
@@ -246,12 +260,13 @@ QStringList Service::operationNames() const
 
 QVariantMap Service::operationDescription(const QString &operationName)
 {
-    if (!isServiceReady()) {
+    //FIXME: remove this sync loop
+    /*if (!isServiceReady()) {
         QEventLoop loop;
         connect(this, SIGNAL(serviceReadyChanged(Plasma::Service*)),
                 &loop, SLOT(quit()));
         loop.exec();
-    }
+    }*/
     if (d->operationsMap.keys().isEmpty()) {
 #ifndef NDEBUG
         kDebug() << "No valid operations scheme has been registered";
@@ -266,6 +281,11 @@ QVariantMap Service::operationDescription(const QString &operationName)
 
 ServiceJob *Service::startOperationCall(const QVariantMap &description, QObject *parent)
 {
+    if (!isServiceReady()) {
+        d->operationsQueue.append(QPair<QVariantMap, QObject *> (description, parent));
+        return 0;
+    }
+
     // TODO: nested groups?
     ServiceJob *job = 0;
     const QString op = !description.isEmpty() ? description.value("_name").toString() : QString();

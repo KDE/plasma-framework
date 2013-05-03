@@ -91,6 +91,7 @@ public:
     }
 
     void xmlParseCompleted(const QMap<QString, QVariantMap > &operationsMap);
+    void processQueuedOperations();
 
     KConfigGroup dummyGroup();
 
@@ -99,6 +100,8 @@ public:
     QString name;
     QString resourcename;
     QMap<QString, QVariantMap> operationsMap;
+    //this is only used when the service isn't ready yet
+    QList<QPair<QVariantMap, QObject *> > operationsQueue;
     KConfig *dummyConfig;
     DNSSD::PublicService *publicService;
     QSet<QString> disabledOperations;
