@@ -27,6 +27,7 @@
 #include <QMultiHash>
 #include <QWidget>
 #include <QSet>
+#include <QRunnable>
 
 #include <kplugininfo.h>
 #include <klocalizedstring.h>
@@ -78,8 +79,10 @@ public:
     ServicePrivate(Service *service)
         : q(service),
           dummyConfig(0),
-          publicService(0)
-    {        
+          publicService(0),
+          ready(false)
+    {
+        qRegisterMetaType<QMap< QString, QVariantMap > >();
     }
 
     ~ServicePrivate()
@@ -87,9 +90,7 @@ public:
         delete dummyConfig;
     }
 
-    void associatedWidgetDestroyed(QObject *obj);
-
-    void associatedItemDestroyed(QObject *obj);
+    void xmlParseCompleted(const QMap<QString, QVariantMap > &operationsMap);
 
     KConfigGroup dummyGroup();
 
@@ -101,6 +102,25 @@ public:
     KConfig *dummyConfig;
     DNSSD::PublicService *publicService;
     QSet<QString> disabledOperations;
+    bool ready : 1;
+};
+
+class ConfigParser : public QObject, public QRunnable
+{
+    Q_OBJECT
+
+public:
+    explicit ConfigParser(QObject* parent = 0);
+    void run();
+
+    void setXml(const QString &xml);
+    QString xml() const;
+
+Q_SIGNALS:
+    void parsingCompleted(const QMap<QString, QVariantMap > &parametersMap);
+
+private:
+    QString m_xml;
 };
 
 } // namespace Plasma

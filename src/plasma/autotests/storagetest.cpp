@@ -21,6 +21,7 @@
 #include <QStandardPaths>
 
 #include "../private/storage_p.h"
+ #include <unistd.h>
 
 void StorageTest::initTestCase()
 {

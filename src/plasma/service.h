@@ -95,6 +95,7 @@ class PLASMA_EXPORT Service : public QObject
     Q_PROPERTY(QString destination READ destination WRITE setDestination)
     Q_PROPERTY(QStringList operationNames READ operationNames)
     Q_PROPERTY(QString name READ name)
+    Q_PROPERTY(bool ready READ isServiceReady NOTIFY serviceReadyChanged)
 
 public:
     /**
@@ -150,11 +151,16 @@ public:
      */
     Q_INVOKABLE QString name() const;
 
+    /**
+     * @returns true if the service is loaded and ready to use
+     */
+    bool isServiceReady() const;
+
 Q_SIGNALS:
     /**
      * Emitted when this service is ready for use
      */
-    void serviceReady(Plasma::Service *service);
+    void serviceReadyChanged(Plasma::Service *service);
 
     /**
      * Emitted when an operation got enabled or disabled
@@ -196,7 +202,7 @@ protected:
      * Sets the XML used to define the operation schema for
      * this Service.
      */
-    void setOperationsScheme(QIODevice *xml);
+    void setOperationsScheme(const QString &path);
 
     /**
      * Sets the name of the Service; useful for Services not loaded from plugins,
@@ -216,6 +222,8 @@ protected:
 
 private:
     ServicePrivate * const d;
+
+    Q_PRIVATE_SLOT(d, void xmlParseCompleted(const QMap<QString, QVariantMap > &operationsMap))
 
     friend class DataEnginePrivate;
     friend class PluginLoader;

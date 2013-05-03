@@ -25,6 +25,8 @@
 #include <QFile>
 #include <QTimer>
 #include <QQuickItem>
+#include <QRunnable>
+#include <QThreadPool>
 
 #include <kdebug.h>
 #include <kservice.h>
@@ -152,6 +154,40 @@ const QMap<QString, QVariantMap> &ConfigLoaderHandlerMap::groupsMap() const
     return m_groupsMap;
 }
 
+
+
+ConfigParser::ConfigParser(QObject* parent)
+    : QObject(parent)
+{}
+
+void ConfigParser::run()
+{
+    qWarning() << "Hello from thread " << QThread::currentThread();
+
+    ConfigLoaderPrivate *configLoaderPrivate = new ConfigLoaderPrivate;
+    configLoaderPrivate->setWriteDefaults(true);
+    ConfigLoaderHandlerMap configLoaderHandler(0, configLoaderPrivate);
+    QFile f(m_xml);
+    QXmlInputSource source(&f);
+    QXmlSimpleReader reader;
+    reader.setContentHandler(&configLoaderHandler);
+    reader.parse(&source, false);
+    emit parsingCompleted(configLoaderHandler.groupsMap());
+    delete configLoaderPrivate;
+}
+
+void ConfigParser::setXml(const QString &xml)
+{
+    m_xml = xml;
+}
+
+QString ConfigParser::xml() const
+{
+    return m_xml;
+}
+
+
+
 Service::Service(QObject *parent)
     : QObject(parent),
       d(new ServicePrivate(this))
@@ -179,6 +215,13 @@ KConfigGroup ServicePrivate::dummyGroup()
     return KConfigGroup(dummyConfig, "DummyGroup");
 }
 
+void ServicePrivate::xmlParseCompleted(const QMap<QString, QVariantMap > &parsedMap)
+{
+    operationsMap = parsedMap;
+    ready = true;
+    emit q->serviceReadyChanged(q);
+}
+
 void Service::setDestination(const QString &destination)
 {
     d->destination = destination;
@@ -203,6 +246,12 @@ QStringList Service::operationNames() const
 
 QVariantMap Service::operationDescription(const QString &operationName)
 {
+    if (!isServiceReady()) {
+        QEventLoop loop;
+        connect(this, SIGNAL(serviceReadyChanged(Plasma::Service*)),
+                &loop, SLOT(quit()));
+        loop.exec();
+    }
     if (d->operationsMap.keys().isEmpty()) {
 #ifndef NDEBUG
         kDebug() << "No valid operations scheme has been registered";
@@ -265,9 +314,13 @@ void Service::setName(const QString &name)
     d->dummyConfig = 0;
 
     registerOperationsScheme();
-
-    emit serviceReady(this);
 }
+
+bool Service::isServiceReady() const
+{
+    return d->ready;
+}
+
 
 void Service::setOperationEnabled(const QString &operation, bool enable)
 {
@@ -289,22 +342,18 @@ bool Service::isOperationEnabled(const QString &operation) const
     return d->operationsMap.contains(operation) && !d->disabledOperations.contains(operation);
 }
 
-void Service::setOperationsScheme(QIODevice *xml)
+void Service::setOperationsScheme(const QString &xml)
 {
     d->operationsMap.clear();
 
     delete d->dummyConfig;
     d->dummyConfig = 0;
 
-    ConfigLoaderPrivate *configLoaderPrivate = new ConfigLoaderPrivate;
-    configLoaderPrivate->setWriteDefaults(true);
-    ConfigLoaderHandlerMap configLoaderHandler(0, configLoaderPrivate);
-    QXmlInputSource source(xml);
-    QXmlSimpleReader reader;
-    reader.setContentHandler(&configLoaderHandler);
-    reader.parse(&source, false);
-    d->operationsMap = configLoaderHandler.groupsMap();
-    delete configLoaderPrivate;
+    ConfigParser *p = new ConfigParser;
+    p->setXml(xml);
+    connect(p, SIGNAL(parsingCompleted(const QMap<QString, QVariantMap > &)),
+            this, SLOT(xmlParseCompleted(const QMap<QString, QVariantMap > &)));
+    QThreadPool::globalInstance()->start(p);
 }
 
 void Service::registerOperationsScheme()
@@ -330,12 +379,11 @@ void Service::registerOperationsScheme()
         return;
     }
 
-    QFile file(path);
-    setOperationsScheme(&file);
+    setOperationsScheme(path);
 }
 
 } // namespace Plasma
 
 
-
+#include "private/moc_service_p.cpp"
 #include "moc_service.cpp"
