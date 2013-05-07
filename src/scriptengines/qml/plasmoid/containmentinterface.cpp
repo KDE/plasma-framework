@@ -36,6 +36,7 @@
 #include <Plasma/Package>
 #include <Plasma/PluginLoader>
 
+#include "kdeclarative/configpropertymap.h"
 
 ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
     : AppletInterface(parent),
@@ -167,9 +168,7 @@ void ContainmentInterface::appletRemovedForward(Plasma::Applet *applet)
 void ContainmentInterface::loadWallpaper()
 {
     if (m_appletScriptEngine->drawWallpaper()) {
-        if (m_wallpaperInterface || containment()->wallpaper().isEmpty()) {
-            return;
-        }
+        delete m_wallpaperInterface;
 
         m_wallpaperInterface = new WallpaperInterface(this);
         m_wallpaperInterface->setZ(-1000);
@@ -181,6 +180,7 @@ void ContainmentInterface::loadWallpaper()
         QQmlProperty prop(m_wallpaperInterface, "anchors.fill");
         prop.write(expr.evaluate());
 
+        containment()->setProperty("wallpaperGraphicsObject", QVariant::fromValue(m_wallpaperInterface));
     } else {
         if (m_wallpaperInterface) {
             m_wallpaperInterface->deleteLater();
