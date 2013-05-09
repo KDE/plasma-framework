@@ -38,9 +38,14 @@ QAction* QMenuItem::action() const
 void QMenuItem::setAction(QAction* a)
 {
     if (m_action != a) {
+        if (m_action) {
+            disconnect(m_action, 0, this, 0);
+        }
         m_action = a;
         connect(m_action, &QAction::changed, this, &QMenuItem::textChanged);
         connect(m_action, &QAction::changed, this, &QMenuItem::textChanged);
+        connect(m_action, SIGNAL(toggled(bool)), this, SIGNAL(toggled(bool)));
+        connect(m_action, SIGNAL(checkableChanged()), this, SIGNAL(checkableChanged()));
         emit actionChanged();
     }
 }
@@ -84,6 +89,25 @@ void QMenuItem::setText(const QString& t)
     }
 }
 
+bool QMenuItem::checkable() const
+{
+    return m_action->isCheckable();
+}
+
+void QMenuItem::setCheckable(bool checkable)
+{
+    m_action->setCheckable(checkable);
+}
+
+bool QMenuItem::checked() const
+{
+    return m_action->isChecked();
+}
+
+void QMenuItem::setChecked(bool checked)
+{
+    m_action->setChecked(checked);
+}
 
 #include "qmenuitem.moc"
 
