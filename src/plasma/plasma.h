@@ -34,6 +34,13 @@ class QAction;
 namespace Plasma
 {
 
+class PLASMA_EXPORT Types : public QObject
+{
+    Q_OBJECT
+    Q_ENUMS(Constraint)
+    Q_ENUMS(FormFactor)
+
+public:
 /**
  * The Constraint enumeration lists the various constraints that Plasma
  * objects have managed for them and which they may wish to react to,
@@ -246,12 +253,6 @@ enum ItemStatus {
 };
 Q_ENUMS(ItemStatus)
 
-enum AnnouncementMethod {
-    NoAnnouncement = 0, /**< No announcements **/
-    ZeroconfAnnouncement = 1 /**< Announcements via ZeroConf **/
-};
-Q_DECLARE_FLAGS(AnnouncementMethods, AnnouncementMethod)
-
 enum TrustLevel {
     UnverifiableTrust = 0,      /**< The trust of the object can not be verified, usually because no
                                      trust information (e.g. a cryptographic signature) was provided */
@@ -276,6 +277,8 @@ enum BackgroundHints {
 };
 Q_ENUMS(BackgroundHints)
 
+};
+
 /**
  * Converts a location to a direction. Handy for figuring out which way to send a popup based on
  * location or to point arrows and other directional items.
@@ -283,7 +286,7 @@ Q_ENUMS(BackgroundHints)
  * @param location the location of the container the element will appear in
  * @return the visual direction the element should be oriented in
  **/
-PLASMA_EXPORT Direction locationToDirection(Location location);
+PLASMA_EXPORT Types::Direction locationToDirection(Types::Location location);
 
 /**
  * Converts a location to the direction facing it. Handy for figuring out which way to collapse
@@ -292,13 +295,36 @@ PLASMA_EXPORT Direction locationToDirection(Location location);
  * @param location the location of the container the element will appear in
  * @return the visual direction the element should be oriented in
  **/
-PLASMA_EXPORT Direction locationToInverseDirection(Location location);
+PLASMA_EXPORT Types::Direction locationToInverseDirection(Types::Location location);
+
+//For porting
+//TODO: remove
+typedef Types::Constraint Constraint;
+Q_DECLARE_FLAGS(Constraints, Constraint)
+typedef Types::FormFactor FormFactor;
+typedef Types::ContainmentType ContainmentType;
+typedef Types::ActionType ActionType;
+typedef Types::Direction Direction;
+typedef Types::Location Location;
+typedef Types::Position Position;
+typedef Types::PopupPlacement PopupPlacement;
+typedef Types::FlipDirection FlipDirection;
+typedef Types::IntervalAlignment IntervalAlignment;
+typedef Types::ImmutabilityType ImmutabilityType;
+typedef Types::ComponentType ComponentType;
+typedef Types::MarginEdge MarginEdge;
+typedef Types::MessageButton MessageButton;
+typedef Types::ItemStatus ItemStatus;
+typedef Types::TrustLevel TrustLevel;
+typedef Types::BackgroundHints BackgroundHints;
 
 } // Plasma namespace
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Constraints)
-Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Flip)
+
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Types::Constraints)
+/*Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Flip)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::ComponentTypes)
-Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::MessageButtons)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::MessageButtons)*/
 
 #endif // multiple inclusion guard

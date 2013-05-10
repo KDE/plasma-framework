@@ -183,16 +183,16 @@ FrameSvg::EnabledBorders FrameSvg::enabledBorders() const
 void FrameSvg::setElementPrefix(Plasma::Location location)
 {
     switch (location) {
-        case TopEdge:
+        case Types::TopEdge:
             setElementPrefix("north");
             break;
-        case BottomEdge:
+        case Types::BottomEdge:
             setElementPrefix("south");
             break;
-        case LeftEdge:
+        case Types::LeftEdge:
             setElementPrefix("west");
             break;
-        case RightEdge:
+        case Types::RightEdge:
             setElementPrefix("east");
             break;
         default:
@@ -269,7 +269,7 @@ void FrameSvg::setElementPrefix(const QString &prefix)
         }
     }
 
-    d->location = Floating;
+    d->location = Types::Floating;
 }
 
 bool FrameSvg::hasElementPrefix(const QString & prefix) const
@@ -286,16 +286,16 @@ bool FrameSvg::hasElementPrefix(const QString & prefix) const
 bool FrameSvg::hasElementPrefix(Plasma::Location location) const
 {
     switch (location) {
-        case TopEdge:
+        case Types::TopEdge:
             return hasElementPrefix("north");
             break;
-        case BottomEdge:
+        case Types::BottomEdge:
             return hasElementPrefix("south");
             break;
-        case LeftEdge:
+        case Types::LeftEdge:
             return hasElementPrefix("west");
             break;
-        case RightEdge:
+        case Types::RightEdge:
             return hasElementPrefix("east");
             break;
         default:
@@ -393,15 +393,15 @@ qreal FrameSvg::marginSize(const Plasma::MarginEdge edge) const
     }
 
     switch (edge) {
-    case Plasma::TopMargin:
+    case Plasma::Types::TopMargin:
         return d->frames[d->prefix]->topMargin;
     break;
 
-    case Plasma::LeftMargin:
+    case Plasma::Types::LeftMargin:
         return d->frames[d->prefix]->leftMargin;
     break;
 
-    case Plasma::RightMargin:
+    case Plasma::Types::RightMargin:
         return d->frames[d->prefix]->rightMargin;
     break;
 

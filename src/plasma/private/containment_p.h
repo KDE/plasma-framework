@@ -47,10 +47,10 @@ class ContainmentPrivate
 public:
     ContainmentPrivate(Containment *c)
         : q(c),
-          formFactor(Planar),
-          location(Floating),
+          formFactor(Types::Planar),
+          location(Types::Floating),
           screen(-1), // no screen
-          type(Plasma::NoContainmentType),
+          type(Plasma::Types::NoContainmentType),
           drawWallpaper(false)
     {
     }

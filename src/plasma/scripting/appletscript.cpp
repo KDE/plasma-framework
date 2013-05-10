@@ -153,7 +153,7 @@ Plasma::ContainmentType AppletScript::containmentType() const
     if (cont) {
         return cont->containmentType();
     } else {
-        return Plasma::NoContainmentType;
+        return Plasma::Types::NoContainmentType;
     }
 }
 

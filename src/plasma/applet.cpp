@@ -167,7 +167,7 @@ void Applet::save(KConfigGroup &g) const
 void Applet::restore(KConfigGroup &group)
 {
 
-    setImmutability((ImmutabilityType)group.readEntry("immutability", (int)Mutable));
+    setImmutability((ImmutabilityType)group.readEntry("immutability", (int)Types::Mutable));
 
     KConfigGroup shortcutConfig(&group, "Shortcuts");
     QString shortcutText = shortcutConfig.readEntryUntranslated("global", QString());
@@ -257,7 +257,7 @@ KConfigGroup Applet::globalConfig() const
 
 void Applet::destroy()
 {
-    if (immutability() != Mutable || d->transient || !d->started) {
+    if (immutability() != Types::Mutable || d->transient || !d->started) {
         return; //don't double delete
     }
 
@@ -350,18 +350,18 @@ ImmutabilityType Applet::immutability() const
     // restrictive setting possible and will override anything that might be happening above it
     // in the Corona->Containment->Applet hierarchy
     if (d->transient || (d->mainConfig && d->mainConfig->isImmutable())) {
-        return SystemImmutable;
+        return Types::SystemImmutable;
     }
 
     //Returning the more strict immutability between the applet immutability, Containment and Corona
-    ImmutabilityType upperImmutability = Mutable;
+    ImmutabilityType upperImmutability = Types::Mutable;
     Containment *cont = d->isContainment ? 0 : containment();
 
     if (cont) {
         upperImmutability = cont->immutability();
     }
 
-    if (upperImmutability != Mutable) {
+    if (upperImmutability != Types::Mutable) {
         // it's either system or user immutable, and we already check for local system immutability,
         // so upperImmutability is guaranteed to be as or more severe as this object's immutability
         return upperImmutability;
@@ -372,7 +372,7 @@ ImmutabilityType Applet::immutability() const
 
 void Applet::setImmutability(const ImmutabilityType immutable)
 {
-    if (d->immutability == immutable || immutable == Plasma::SystemImmutable) {
+    if (d->immutability == immutable || immutable == Types::SystemImmutable) {
         // we do not store system immutability in d->immutability since that gets saved
         // out to the config file; instead, we check with
         // the config group itself for this information at all times. this differs from
@@ -381,7 +381,7 @@ void Applet::setImmutability(const ImmutabilityType immutable)
     }
 
     d->immutability = immutable;
-    updateConstraints(ImmutableConstraint);
+    updateConstraints(Types::ImmutableConstraint);
 }
 
 QString Applet::launchErrorMessage() const
@@ -422,7 +422,7 @@ void Applet::setStatus(const ItemStatus status)
 
 void Applet::flushPendingConstraintsEvents()
 {
-    if (d->pendingConstraints == NoConstraint) {
+    if (d->pendingConstraints == Types::NoConstraint) {
         return;
     }
 
@@ -432,11 +432,11 @@ void Applet::flushPendingConstraintsEvents()
 
     //kDebug() << "fushing constraints: " << d->pendingConstraints << "!!!!!!!!!!!!!!!!!!!!!!!!!!!";
     Plasma::Constraints c = d->pendingConstraints;
-    d->pendingConstraints = NoConstraint;
+    d->pendingConstraints = Types::NoConstraint;
 
-    if (c & Plasma::StartupCompletedConstraint) {
+    if (c & Plasma::Types::StartupCompletedConstraint) {
         //common actions
-        bool unlocked = immutability() == Mutable;
+        bool unlocked = immutability() == Types::Mutable;
         QAction *closeApplet = d->actions->action("remove");
         if (closeApplet) {
             closeApplet->setEnabled(unlocked);
@@ -467,8 +467,8 @@ void Applet::flushPendingConstraintsEvents()
         }
     }
 
-    if (c & Plasma::ImmutableConstraint) {
-        bool unlocked = immutability() == Mutable;
+    if (c & Plasma::Types::ImmutableConstraint) {
+        bool unlocked = immutability() == Types::Mutable;
         QAction *action = d->actions->action("remove");
         if (action) {
             action->setVisible(unlocked);
@@ -494,7 +494,7 @@ void Applet::flushPendingConstraintsEvents()
     // pass the constraint on to the actual subclass
     constraintsEvent(c);
 
-    if (c & StartupCompletedConstraint) {
+    if (c & Types::StartupCompletedConstraint) {
         // start up is done, we can now go do a mod timer
         if (d->modificationsTimer) {
             if (d->modificationsTimer->isActive()) {
@@ -528,7 +528,7 @@ FormFactor Applet::formFactor() const
         parentApplet = qobject_cast<Plasma::Applet *>(pw);
     }
 
-    return c ? c->d->formFactor : Plasma::Planar;
+    return c ? c->d->formFactor : Plasma::Types::Planar;
 }
 
 Containment *Applet::containment() const
@@ -602,7 +602,7 @@ KShortcut Applet::globalShortcut() const
 Location Applet::location() const
 {
     Containment *c = containment();
-    return c ? c->d->location : Plasma::Desktop;
+    return c ? c->d->location : Plasma::Types::Desktop;
 }
 
 bool Applet::hasConfigurationInterface() const
@@ -620,7 +620,7 @@ void Applet::setHasConfigurationInterface(bool hasInterface)
     if (configAction) {
         bool enable = hasInterface;
         if (enable) {
-            const bool unlocked = immutability() == Mutable;
+            const bool unlocked = immutability() == Types::Mutable;
             enable = unlocked || KAuthorized::authorize("plasma/allow_configure_when_locked");
         }
         configAction->setEnabled(enable);
@@ -714,7 +714,7 @@ void Applet::timerEvent(QTimerEvent *event)
 
         // Don't flushPendingConstraints if we're just starting up
         // flushPendingConstraints will be called by Corona
-        if(!(d->pendingConstraints & Plasma::StartupCompletedConstraint)) {
+        if(!(d->pendingConstraints & Plasma::Types::StartupCompletedConstraint)) {
             flushPendingConstraintsEvents();
         }
     } else if (d->modificationsTimer && event->timerId() == d->modificationsTimer->timerId()) {

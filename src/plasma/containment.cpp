@@ -67,7 +67,7 @@ Containment::Containment(QObject *parent,
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
-    setContainmentType(CustomContainment);
+    setContainmentType(Types::CustomContainment);
     setHasConfigurationInterface(true);
 }
 
@@ -104,26 +104,26 @@ void Containment::init()
         return;
     }
 
-    if (d->type == NoContainmentType) {
-        //setContainmentType(Plasma::DesktopContainment);
+    if (d->type == Types::NoContainmentType) {
+        //setContainmentType(Plasma::Types::DesktopContainment);
         //Try to determine the containment type. It must be done as soon as possible
         QString type = pluginInfo().property("X-Plasma-ContainmentType").toString();
 
         if (type == "Panel") {
-            setContainmentType(Plasma::PanelContainment);
+            setContainmentType(Plasma::Types::PanelContainment);
         } else if (type == "Custom") {
-            setContainmentType(Plasma::CustomContainment);
+            setContainmentType(Plasma::Types::CustomContainment);
         } else if (type == "CustomPanel") {
-            setContainmentType(Plasma::CustomPanelContainment);
+            setContainmentType(Plasma::Types::CustomPanelContainment);
         //default to desktop
         } else {
-            setContainmentType(Plasma::DesktopContainment);
+            setContainmentType(Plasma::Types::DesktopContainment);
         }
     }
 
     //connect actions
     ContainmentPrivate::addDefaultActions(actions(), this);
-    bool unlocked = immutability() == Mutable;
+    bool unlocked = immutability() == Types::Mutable;
 
     //fix the text of the actions that need title()
     //btw, do we really want to use title() when it's a desktopcontainment?
@@ -144,7 +144,7 @@ void Containment::init()
         connect(appletBrowserAction, SIGNAL(triggered()), this, SLOT(triggerShowAddWidgets()));
     }
 
-    if (immutability() != SystemImmutable && corona()) {
+    if (immutability() != Types::SystemImmutable && corona()) {
         QAction *lockDesktopAction = corona()->actions()->action("lock widgets");
         //keep a pointer so nobody notices it moved to corona
         if (lockDesktopAction) {
@@ -186,7 +186,7 @@ void Containment::restore(KConfigGroup &group)
 
     flushPendingConstraintsEvents();
     restoreContents(group);
-    setImmutability((ImmutabilityType)group.readEntry("immutability", (int)Mutable));
+    setImmutability((ImmutabilityType)group.readEntry("immutability", (int)Types::Mutable));
 
     setWallpaper(group.readEntry("wallpaperplugin", ContainmentPrivate::defaultWallpaper));
 
@@ -202,9 +202,9 @@ void Containment::restore(KConfigGroup &group)
         }
     } else { //shell defaults
         KConfigGroup defaultActionsCfg;
-        if (d->type == Plasma::PanelContainment) {
+        if (d->type == Plasma::Types::PanelContainment) {
             defaultActionsCfg = KConfigGroup(KSharedConfig::openConfig(corona()->package().filePath("defaults")), "Panel");
-        //Plasma::DesktopContainment
+        //Plasma::Types::DesktopContainment
         } else {
             defaultActionsCfg = KConfigGroup(KSharedConfig::openConfig(corona()->package().filePath("defaults")), "Desktop");
         }
@@ -319,7 +319,7 @@ void Containment::setFormFactor(FormFactor formFactor)
     //kDebug() << "switching FF to " << formFactor;
     d->formFactor = formFactor;
 
-    updateConstraints(Plasma::FormFactorConstraint);
+    updateConstraints(Plasma::Types::FormFactorConstraint);
 
     KConfigGroup c = config();
     c.writeEntry("formfactor", (int)formFactor);
@@ -336,10 +336,10 @@ void Containment::setLocation(Location location)
     d->location = location;
 
     foreach (Applet *applet, d->applets) {
-        applet->updateConstraints(Plasma::LocationConstraint);
+        applet->updateConstraints(Plasma::Types::LocationConstraint);
     }
 
-    updateConstraints(Plasma::LocationConstraint);
+    updateConstraints(Plasma::Types::LocationConstraint);
 
     KConfigGroup c = config();
     c.writeEntry("location", (int)location);
@@ -354,7 +354,7 @@ Applet *Containment::createApplet(const QString &name, const QVariantList &args)
 
 void Containment::addApplet(Applet *applet)
 {
-    if (!isContainment() || immutability() != Mutable) {
+    if (!isContainment() || immutability() != Types::Mutable) {
         return;
     }
 
@@ -416,13 +416,13 @@ void Containment::addApplet(Applet *applet)
         //FIXME: an on-appear animation would be nice to have again
     }
 
-    applet->updateConstraints(Plasma::AllConstraints);
+    applet->updateConstraints(Plasma::Types::AllConstraints);
     applet->flushPendingConstraintsEvents();
 
     emit appletAdded(applet);
 
     if (!currentContainment) {
-        applet->updateConstraints(Plasma::StartupCompletedConstraint);
+        applet->updateConstraints(Plasma::Types::StartupCompletedConstraint);
         applet->flushPendingConstraintsEvents();
     }
 

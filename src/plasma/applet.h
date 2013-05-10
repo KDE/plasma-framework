@@ -225,7 +225,7 @@ class PLASMA_EXPORT Applet : public QObject
          *
          * @param constraints the type of constraints that were updated
          */
-        void updateConstraints(Plasma::Constraints constraints = Plasma::AllConstraints);
+        void updateConstraints(Plasma::Constraints constraints = Plasma::Types::AllConstraints);
 
 
 //METADATA

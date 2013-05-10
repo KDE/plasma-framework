@@ -37,22 +37,22 @@ FrameSvgItemMargins::FrameSvgItemMargins(Plasma::FrameSvg *frameSvg, QObject *pa
 
 qreal FrameSvgItemMargins::left() const
 {
-    return m_frameSvg->marginSize(LeftMargin);
+    return m_frameSvg->marginSize(Types::LeftMargin);
 }
 
 qreal FrameSvgItemMargins::top() const
 {
-    return m_frameSvg->marginSize(TopMargin);
+    return m_frameSvg->marginSize(Types::TopMargin);
 }
 
 qreal FrameSvgItemMargins::right() const
 {
-    return m_frameSvg->marginSize(RightMargin);
+    return m_frameSvg->marginSize(Types::RightMargin);
 }
 
 qreal FrameSvgItemMargins::bottom() const
 {
-    return m_frameSvg->marginSize(BottomMargin);
+    return m_frameSvg->marginSize(Types::BottomMargin);
 }
 
 void FrameSvgItemMargins::update()
@@ -84,11 +84,11 @@ void FrameSvgItem::setImagePath(const QString &path)
     m_frameSvg->setElementPrefix(m_prefix);
 
     if (implicitWidth() <= 0) {
-        setImplicitWidth(m_frameSvg->marginSize(Plasma::LeftMargin) + m_frameSvg->marginSize(Plasma::RightMargin));
+        setImplicitWidth(m_frameSvg->marginSize(Plasma::Types::LeftMargin) + m_frameSvg->marginSize(Plasma::Types::RightMargin));
     }
 
     if (implicitHeight() <= 0) {
-        setImplicitHeight(m_frameSvg->marginSize(Plasma::TopMargin) + m_frameSvg->marginSize(Plasma::BottomMargin));
+        setImplicitHeight(m_frameSvg->marginSize(Plasma::Types::TopMargin) + m_frameSvg->marginSize(Plasma::Types::BottomMargin));
     }
 
     emit imagePathChanged();
@@ -114,11 +114,11 @@ void FrameSvgItem::setPrefix(const QString &prefix)
     m_prefix = prefix;
 
     if (implicitWidth() <= 0) {
-        setImplicitWidth(m_frameSvg->marginSize(Plasma::LeftMargin) + m_frameSvg->marginSize(Plasma::RightMargin));
+        setImplicitWidth(m_frameSvg->marginSize(Plasma::Types::LeftMargin) + m_frameSvg->marginSize(Plasma::Types::RightMargin));
     }
 
     if (implicitHeight() <= 0) {
-        setImplicitHeight(m_frameSvg->marginSize(Plasma::TopMargin) + m_frameSvg->marginSize(Plasma::BottomMargin));
+        setImplicitHeight(m_frameSvg->marginSize(Plasma::Types::TopMargin) + m_frameSvg->marginSize(Plasma::Types::BottomMargin));
     }
 
     emit prefixChanged();
@@ -167,11 +167,11 @@ void FrameSvgItem::geometryChanged(const QRectF &newGeometry,
 void FrameSvgItem::doUpdate()
 {
     if (implicitWidth() <= 0) {
-        setImplicitWidth(m_frameSvg->marginSize(Plasma::LeftMargin) + m_frameSvg->marginSize(Plasma::RightMargin));
+        setImplicitWidth(m_frameSvg->marginSize(Plasma::Types::LeftMargin) + m_frameSvg->marginSize(Plasma::Types::RightMargin));
     }
 
     if (implicitHeight() <= 0) {
-        setImplicitHeight(m_frameSvg->marginSize(Plasma::TopMargin) + m_frameSvg->marginSize(Plasma::BottomMargin));
+        setImplicitHeight(m_frameSvg->marginSize(Plasma::Types::TopMargin) + m_frameSvg->marginSize(Plasma::Types::BottomMargin));
     }
 
     update();

@@ -67,7 +67,7 @@ SignalRelay::SignalRelay(DataContainer *parent, DataContainerPrivate *data, uint
 {
     //kDebug() << "signal relay with time of" << m_timerId << "being set up";
     m_timerId = startTimer(immediateUpdate ? 0 : m_interval);
-    if (m_align != Plasma::NoAlignment) {
+    if (m_align != Plasma::Types::NoAlignment) {
         checkAlignment();
     }
 }
@@ -87,12 +87,12 @@ void SignalRelay::checkAlignment()
     int newTime = 0;
 
     QTime t = QTime::currentTime();
-    if (m_align == Plasma::AlignToMinute) {
+    if (m_align == Plasma::Types::AlignToMinute) {
         int seconds = t.second();
         if (seconds > 2) {
             newTime = ((60 - seconds) * 1000) + 500;
         }
-    } else if (m_align == Plasma::AlignToHour) {
+    } else if (m_align == Plasma::Types::AlignToHour) {
         int minutes = t.minute();
         int seconds = t.second();
         if (minutes > 1 || seconds > 10) {
@@ -147,7 +147,7 @@ void SignalRelay::timerEvent(QTimerEvent *event)
         m_resetTimer = false;
     }
 
-    if (m_align != Plasma::NoAlignment) {
+    if (m_align != Plasma::Types::NoAlignment) {
         checkAlignment();
     }
 

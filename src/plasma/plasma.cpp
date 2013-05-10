@@ -28,46 +28,46 @@
 namespace Plasma
 {
 
-Direction locationToDirection(Location location)
+Types::Direction locationToDirection(Types::Location location)
 {
     switch (location) {
-    case Floating:
-    case Desktop:
-    case TopEdge:
-    case FullScreen:
+    case Types::Floating:
+    case Types::Desktop:
+    case Types::TopEdge:
+    case Types::FullScreen:
         //TODO: should we be smarter for floating and planer?
         //      perhaps we should take a QRect and/or QPos as well?
-        return Down;
-    case BottomEdge:
-        return Up;
-    case LeftEdge:
-        return Right;
-    case RightEdge:
-        return Left;
+        return Types::Down;
+    case Types::BottomEdge:
+        return Types::Up;
+    case Types::LeftEdge:
+        return Types::Right;
+    case Types::RightEdge:
+        return Types::Left;
     }
 
-    return Down;
+    return Types::Down;
 }
 
-Direction locationToInverseDirection(Location location)
+Types::Direction locationToInverseDirection(Types::Location location)
 {
     switch (location) {
-    case Floating:
-    case Desktop:
-    case TopEdge:
-    case FullScreen:
+    case Types::Floating:
+    case Types::Desktop:
+    case Types::TopEdge:
+    case Types::FullScreen:
         //TODO: should we be smarter for floating and planer?
         //      perhaps we should take a QRect and/or QPos as well?
-        return Up;
-    case BottomEdge:
-        return Down;
-    case LeftEdge:
-        return Left;
-    case RightEdge:
-        return Right;
+        return Types::Up;
+    case Types::BottomEdge:
+        return Types::Down;
+    case Types::LeftEdge:
+        return Types::Left;
+    case Types::RightEdge:
+        return Types::Right;
     }
 
-    return Up;
+    return Types::Up;
 }
 
 } // Plasma namespace
