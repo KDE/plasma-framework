@@ -82,9 +82,11 @@ void GenericPackage::initPackage(Package *package)
     package->setDefaultPackageRoot("plasma/packages/");
 
     package->addDirectoryDefinition("images", "images", i18n("Images"));
+    package->addDirectoryDefinition("theme", "theme", i18n("Themed Images"));
     QStringList mimetypes;
     mimetypes << "image/svg+xml" << "image/png" << "image/jpeg";
     package->setMimeTypes("images", mimetypes);
+    package->setMimeTypes("theme", mimetypes);
 
     package->addDirectoryDefinition("config", "config", i18n("Configuration Definitions"));
     mimetypes.clear();
