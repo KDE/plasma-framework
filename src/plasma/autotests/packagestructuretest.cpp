@@ -83,7 +83,7 @@ void PackageStructureTest::multiplePaths()
 void PackageStructureTest::directories()
 {
     QList<const char*> dirs;
-    dirs << "config" << "data" << "images" << "scripts" << "translations" << "ui";
+    dirs << "config" << "data" << "images" << "theme" << "scripts" << "translations" << "ui";
 
     QList<const char*> psDirs = ps.directories();
 
@@ -156,6 +156,7 @@ void PackageStructureTest::requiredFiles()
 void PackageStructureTest::path()
 {
     QCOMPARE(ps.filePath("images"), QDir(m_packagePath + QString("/contents/images")).canonicalPath());
+    QCOMPARE(ps.filePath("theme"), QDir(m_packagePath + QString("/contents/theme")).canonicalPath());
     QCOMPARE(ps.filePath("mainscript"), QFileInfo(m_packagePath + QString("/contents/ui/main.qml")).canonicalFilePath());
 }
 
@@ -175,6 +176,7 @@ void PackageStructureTest::mimeTypes()
     QStringList mimeTypes;
     mimeTypes << "image/svg+xml" << "image/png" << "image/jpeg";
     QCOMPARE(ps.mimeTypes("images"), mimeTypes);
+    QCOMPARE(ps.mimeTypes("theme"), mimeTypes);
 }
 
 QTEST_MAIN(PackageStructureTest)
