@@ -236,7 +236,7 @@ ServiceJob *Service::startOperationCall(const QVariantMap &description, QObject 
         }
     } else {
 #ifndef NDEBUG
-    kDebug() << op << "is not a valid group; valid groups are:" << d->operationsMap->keys();
+    kDebug() << op << "is not a valid group; valid groups are:" << d->operationsMap.keys();
 #endif
     }
 
