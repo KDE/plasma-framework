@@ -507,7 +507,6 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &con
     }
 
     foreach (Containment *containment, newContainments) {
-        containment->updateConstraints(Plasma::Types::StartupCompletedConstraint);
         emit q->containmentAdded(containment);
 #ifndef NDEBUG
 //         kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Containment" << containment->name();
