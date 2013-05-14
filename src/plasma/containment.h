@@ -319,7 +319,7 @@ Q_SIGNALS:
 
         Q_PRIVATE_SLOT(d, void appletDeleted(Plasma::Applet*))
         Q_PRIVATE_SLOT(d, void triggerShowAddWidgets())
-        Q_PRIVATE_SLOT(d, void checkStatus(Plasma::ItemStatus))
+        Q_PRIVATE_SLOT(d, void checkStatus(Plasma::Types::ItemStatus))
 
         friend class Applet;
         friend class AppletPrivate;

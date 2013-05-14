@@ -161,7 +161,7 @@ void ContainmentPrivate::configChanged()
     q->setWallpaper(group.readEntry("wallpaperplugin", defaultWallpaper));
 }
 
-void ContainmentPrivate::checkStatus(Plasma::ItemStatus appletStatus)
+void ContainmentPrivate::checkStatus(Plasma::Types::ItemStatus appletStatus)
 {
     //kDebug() << "================== "<< appletStatus << q->status();
     if (appletStatus == q->status()) {

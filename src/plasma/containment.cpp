@@ -397,7 +397,7 @@ void Containment::addApplet(Applet *applet)
     connect(applet, SIGNAL(configNeedsSaving()), this, SIGNAL(configNeedsSaving()));
     connect(applet, SIGNAL(releaseVisualFocus()), this, SIGNAL(releaseVisualFocus()));
     connect(applet, SIGNAL(appletDeleted(Plasma::Applet*)), this, SLOT(appletDeleted(Plasma::Applet*)));
-    connect(applet, SIGNAL(statusChanged(Plasma::ItemStatus)), this, SLOT(checkStatus(Plasma::ItemStatus)));
+    connect(applet, SIGNAL(statusChanged(Plasma::Types::ItemStatus)), this, SLOT(checkStatus(Plasma::Types::ItemStatus)));
     connect(applet, SIGNAL(activate()), this, SIGNAL(activate()));
 
     if (!currentContainment) {

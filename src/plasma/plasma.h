@@ -231,15 +231,6 @@ enum MarginEdge {
     RightMargin /**< The right margin **/
 };
 
-enum MessageButton {
-    ButtonNone = 0, /**< None **/
-    ButtonOk = 1, /**< OK Button **/
-    ButtonYes = 2, /**< Yes Button **/
-    ButtonNo = 4, /**< No Button **/
-    ButtonCancel = 8 /**< Cancel Button **/
-};
-Q_DECLARE_FLAGS(MessageButtons, MessageButton)
-
 /**
  * Status of an applet
  * @since 4.3
@@ -313,8 +304,7 @@ PLASMA_EXPORT Types::Direction locationToInverseDirection(Types::Location locati
 //typedef Types::ImmutabilityType ImmutabilityType;
 //typedef Types::ComponentType ComponentType;
 //typedef Types::MarginEdge MarginEdge;
-typedef Types::MessageButton MessageButton;
-typedef Types::ItemStatus ItemStatus;
+//typedef Types::ItemStatus ItemStatus;
 typedef Types::TrustLevel TrustLevel;
 typedef Types::BackgroundHints BackgroundHints;
 

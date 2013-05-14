@@ -100,7 +100,7 @@ public:
     KActionCollection *actions;
     KAction *activationAction;
 
-    ItemStatus itemStatus;
+    Types::ItemStatus itemStatus;
 
     // timerEvent bookkeeping
     QBasicTimer constraintsTimer;

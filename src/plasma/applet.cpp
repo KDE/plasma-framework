@@ -409,12 +409,12 @@ void Applet::setConfigurationRequired(bool needsConfig, const QString &reason)
     d->showConfigurationRequiredMessage(needsConfig, reason);
 }
 
-ItemStatus Applet::status() const
+Types::ItemStatus Applet::status() const
 {
     return d->itemStatus;
 }
 
-void Applet::setStatus(const ItemStatus status)
+void Applet::setStatus(const Types::ItemStatus status)
 {
     d->itemStatus = status;
     emit statusChanged(status);

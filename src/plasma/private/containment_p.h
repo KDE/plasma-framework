@@ -65,7 +65,7 @@ public:
     }
 
     void triggerShowAddWidgets();
-    void checkStatus(Plasma::ItemStatus status);
+    void checkStatus(Plasma::Types::ItemStatus status);
     void setScreen(int newScreen);
 
     /**
