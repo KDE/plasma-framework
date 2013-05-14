@@ -1,0 +1,19 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="org.kde.PlatformStatus">
+    <property name="shellPackage" type="s" access="read"/>
+    <property name="runtimePlatform" type="as" access="read"/>
+    <signal name="shellPackageChanged">
+      <arg name="package" type="s" direction="out"/>
+    </signal>
+    <signal name="runtimePlatformChanged">
+      <arg name="runtimePlatform" type="as" direction="out"/>
+    </signal>
+    <method name="shellPackage">
+      <arg type="s" direction="out"/>
+    </method>
+    <method name="runtimePlatform">
+      <arg type="as" direction="out"/>
+    </method>
+  </interface>
+</node>
