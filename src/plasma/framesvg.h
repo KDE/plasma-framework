@@ -140,7 +140,7 @@ class PLASMA_EXPORT FrameSvg : public Svg
          * @param edge the margin edge we want, top, bottom, left or right
          * @return the margin size
          */
-        Q_INVOKABLE qreal marginSize(const Plasma::MarginEdge edge) const;
+        Q_INVOKABLE qreal marginSize(const Plasma::Types::MarginEdge edge) const;
 
         /**
          * Convenience method that extracts the size of the four margins

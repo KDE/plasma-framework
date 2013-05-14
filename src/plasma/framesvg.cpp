@@ -386,7 +386,7 @@ QSizeF FrameSvg::frameSize() const
     }
 }
 
-qreal FrameSvg::marginSize(const Plasma::MarginEdge edge) const
+qreal FrameSvg::marginSize(const Plasma::Types::MarginEdge edge) const
 {
     if (d->frames[d->prefix]->noBorderPadding) {
         return .0;

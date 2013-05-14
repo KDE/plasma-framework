@@ -312,7 +312,7 @@ PLASMA_EXPORT Types::Direction locationToInverseDirection(Types::Location locati
 //typedef Types::IntervalAlignment IntervalAlignment;
 //typedef Types::ImmutabilityType ImmutabilityType;
 //typedef Types::ComponentType ComponentType;
-typedef Types::MarginEdge MarginEdge;
+//typedef Types::MarginEdge MarginEdge;
 typedef Types::MessageButton MessageButton;
 typedef Types::ItemStatus ItemStatus;
 typedef Types::TrustLevel TrustLevel;
