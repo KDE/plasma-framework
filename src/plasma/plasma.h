@@ -288,26 +288,6 @@ PLASMA_EXPORT Types::Direction locationToDirection(Types::Location location);
  **/
 PLASMA_EXPORT Types::Direction locationToInverseDirection(Types::Location location);
 
-//For porting
-//TODO: remove
-//typedef Types::Constraint Constraint;
-//Q_DECLARE_FLAGS(Constraints, Constraint)
-//typedef Types::FormFactor FormFactor;
-//typedef Types::ContainmentType ContainmentType;
-//typedef Types::ActionType ActionType;
-//typedef Types::Direction Direction;
-//typedef Types::Location Location;
-//typedef Types::Position Position;
-//typedef Types::PopupPlacement PopupPlacement;
-//typedef Types::FlipDirection FlipDirection;
-//typedef Types::IntervalAlignment IntervalAlignment;
-//typedef Types::ImmutabilityType ImmutabilityType;
-//typedef Types::ComponentType ComponentType;
-//typedef Types::MarginEdge MarginEdge;
-//typedef Types::ItemStatus ItemStatus;
-typedef Types::TrustLevel TrustLevel;
-typedef Types::BackgroundHints BackgroundHints;
-
 } // Plasma namespace
 
 

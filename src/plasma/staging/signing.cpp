@@ -590,10 +590,10 @@ TrustLevel Signing::trustLevelOf(const QString &keyID) const
         return Plasma::UnverifiableTrust;
 
     for (int i = (int)Plasma::UnverifiableTrust; i <= (int)Plasma::UltimatelyTrusted; ++i) {
-        QList< QByteArray > tmp = d->keys[(Plasma::TrustLevel)i];
+        QList< QByteArray > tmp = d->keys[(Plasma::Types::TrustLevel)i];
         foreach(QByteArray key, tmp) {
             if (key.contains(keyID.toAscii().data()))
-                return (Plasma::TrustLevel)i;
+                return (Plasma::Types::TrustLevel)i;
         }
 
     }
