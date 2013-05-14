@@ -146,7 +146,7 @@ void AppletScript::setDrawWallpaper(bool drawWallpaper)
     }
 }
 
-Plasma::ContainmentType AppletScript::containmentType() const
+Plasma::Types::ContainmentType AppletScript::containmentType() const
 {
     Q_ASSERT(d->applet);
     Plasma::Containment *cont = qobject_cast<Plasma::Containment *>(d->applet);
@@ -157,7 +157,7 @@ Plasma::ContainmentType AppletScript::containmentType() const
     }
 }
 
-void AppletScript::setContainmentType(Plasma::ContainmentType type)
+void AppletScript::setContainmentType(Plasma::Types::ContainmentType type)
 {
     Q_ASSERT(d->applet);
     Plasma::Containment *cont = qobject_cast<Plasma::Containment *>(d->applet);

@@ -100,7 +100,7 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * Returns the type of containment
          */
-        Plasma::ContainmentType containmentType() const;
+        Plasma::Types::ContainmentType containmentType() const;
 
         /**
          * Returns the Corona (if any) that this Containment is hosted by
@@ -282,7 +282,7 @@ Q_SIGNALS:
         /**
          * Sets the type of this containment.
          */
-        void setContainmentType(Plasma::ContainmentType type);
+        void setContainmentType(Plasma::Types::ContainmentType type);
 
         /**
          * Sets whether wallpaper is painted or not.

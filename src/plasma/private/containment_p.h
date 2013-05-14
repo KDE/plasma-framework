@@ -102,7 +102,7 @@ public:
     QHash<QString, ContainmentActions*> localActionPlugins;
     int screen;
     QString activityId;
-    ContainmentType type;
+    Types::ContainmentType type;
     bool drawWallpaper : 1;
 
     static const char defaultWallpaper[];

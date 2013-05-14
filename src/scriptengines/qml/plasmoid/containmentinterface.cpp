@@ -97,7 +97,7 @@ ContainmentInterface::Type ContainmentInterface::containmentType() const
 
 void ContainmentInterface::setContainmentType(ContainmentInterface::Type type)
 {
-    m_appletScriptEngine->setContainmentType((Plasma::ContainmentType)type);
+    m_appletScriptEngine->setContainmentType((Plasma::Types::ContainmentType)type);
 }
 
 int ContainmentInterface::screen() const

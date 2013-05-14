@@ -291,12 +291,12 @@ void Containment::restoreContents(KConfigGroup &group)
     }
 }
 
-Plasma::ContainmentType Containment::containmentType() const
+Plasma::Types::ContainmentType Containment::containmentType() const
 {
     return d->type;
 }
 
-void Containment::setContainmentType(Plasma::ContainmentType type)
+void Containment::setContainmentType(Plasma::Types::ContainmentType type)
 {
     if (d->type == type) {
         return;
