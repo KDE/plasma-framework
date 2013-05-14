@@ -34,7 +34,7 @@ class PlasmaKPartView : public Plasma::View
 {
 Q_OBJECT
 public:
-    typedef Plasma::ImmutabilityType ImmutabilityType;
+    typedef Plasma::Types::ImmutabilityType ImmutabilityType;
     PlasmaKPartView(Plasma::Containment *containment, int uid, QWidget *parent = 0);
     ~PlasmaKPartView();
 

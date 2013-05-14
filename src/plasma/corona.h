@@ -173,14 +173,14 @@ public Q_SLOTS:
     /**
      * @return The type of immutability of this Corona
      */
-    ImmutabilityType immutability() const;
+    Types::ImmutabilityType immutability() const;
 
     /**
      * Sets the immutability type for this Corona (not immutable,
      * user immutable or system immutable)
      * @param immutable the new immutability type of this applet
      */
-    void setImmutability(const ImmutabilityType immutable);
+    void setImmutability(const Types::ImmutabilityType immutable);
 
     /**
      * Schedules a flush-to-disk synchronization of the configuration state
@@ -230,7 +230,7 @@ Q_SIGNALS:
      * it's NOT for containments or applets or any of the other stuff on the scene.
      * if your code's not in shells/ it probably shouldn't be using it.
      */
-    void immutabilityChanged(Plasma::ImmutabilityType immutability);
+    void immutabilityChanged(Plasma::Types::ImmutabilityType immutability);
 
 protected:
     /**

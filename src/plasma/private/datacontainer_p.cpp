@@ -25,7 +25,7 @@ namespace Plasma
 
 SignalRelay *DataContainerPrivate::signalRelay(const DataContainer *dc, QObject *visualization,
                                                uint pollingInterval,
-                                               Plasma::IntervalAlignment align,
+                                               Plasma::Types::IntervalAlignment align,
                                                bool immediateUpdate)
 {
     QMap<uint, SignalRelay *>::const_iterator relayIt = relays.constFind(pollingInterval);
@@ -56,7 +56,7 @@ bool DataContainerPrivate::hasUpdates()
 }
 
 SignalRelay::SignalRelay(DataContainer *parent, DataContainerPrivate *data, uint ival,
-                         Plasma::IntervalAlignment align, bool immediateUpdate)
+                         Plasma::Types::IntervalAlignment align, bool immediateUpdate)
     : QObject(parent),
       dc(parent),
       d(data),

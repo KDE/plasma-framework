@@ -60,7 +60,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void actionDestroyed(QObject *object);
-    void immutabilityChanged(Plasma::ImmutabilityType immutability);
+    void immutabilityChanged(Plasma::Types::ImmutabilityType immutability);
 
 private:
     void init();

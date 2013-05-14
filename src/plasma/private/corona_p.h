@@ -51,7 +51,7 @@ public:
     Corona *q;
     Package package;
     KConfigGroup desktopDefaultsConfig;
-    ImmutabilityType immutability;
+    Types::ImmutabilityType immutability;
     QString configName;
     KSharedConfigPtr config;
     QTimer *configSyncTimer;

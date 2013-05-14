@@ -101,7 +101,7 @@ class PLASMA_EXPORT Applet : public QObject
         /**
          * @return The type of immutability of this applet
          */
-        ImmutabilityType immutability() const;
+        Types::ImmutabilityType immutability() const;
 
         /**
          * If for some reason, the applet fails to get up on its feet (the
@@ -357,7 +357,7 @@ class PLASMA_EXPORT Applet : public QObject
          * Emitted when the immutability changes
          * @since 4.4
          */
-        void immutabilityChanged(Plasma::ImmutabilityType immutable);
+        void immutabilityChanged(Plasma::Types::ImmutabilityType immutable);
 
         /**
          * Emitted when the applet status changes
@@ -407,7 +407,7 @@ class PLASMA_EXPORT Applet : public QObject
          * user immutable or system immutable)
          * @param immutable the new immutability type of this applet
          */
-        void setImmutability(const ImmutabilityType immutable);
+        void setImmutability(const Types::ImmutabilityType immutable);
 
         /**
          * Destroys the applet; it will be removed nicely and deleted.

@@ -92,7 +92,7 @@ void Corona::exportLayout(KConfigGroup &config, QList<Containment*> containments
     }
 
     //temporarily unlock so that removal works
-    ImmutabilityType oldImm = immutability();
+    Types::ImmutabilityType oldImm = immutability();
     d->immutability = Types::Mutable;
 
     KConfigGroup dest(&config, "Containments");
@@ -213,12 +213,12 @@ void Corona::loadDefaultLayout()
     //Default implementation does nothing
 }
 
-ImmutabilityType Corona::immutability() const
+Types::ImmutabilityType Corona::immutability() const
 {
     return d->immutability;
 }
 
-void Corona::setImmutability(const ImmutabilityType immutable)
+void Corona::setImmutability(const Types::ImmutabilityType immutable)
 {
     if (d->immutability == immutable || d->immutability == Types::SystemImmutable) {
         return;

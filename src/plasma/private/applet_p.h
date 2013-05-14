@@ -80,7 +80,7 @@ public:
     Applet *q;
 
     // applet attributes
-    ImmutabilityType immutability;
+    Types::ImmutabilityType immutability;
     QString launchErrorMessage;
 
     // applet info we keep around in case its needed

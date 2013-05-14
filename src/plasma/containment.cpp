@@ -186,7 +186,7 @@ void Containment::restore(KConfigGroup &group)
 
     flushPendingConstraintsEvents();
     restoreContents(group);
-    setImmutability((ImmutabilityType)group.readEntry("immutability", (int)Types::Mutable));
+    setImmutability((Types::ImmutabilityType)group.readEntry("immutability", (int)Types::Mutable));
 
     setWallpaper(group.readEntry("wallpaperplugin", ContainmentPrivate::defaultWallpaper));
 

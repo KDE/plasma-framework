@@ -167,7 +167,7 @@ void Applet::save(KConfigGroup &g) const
 void Applet::restore(KConfigGroup &group)
 {
 
-    setImmutability((ImmutabilityType)group.readEntry("immutability", (int)Types::Mutable));
+    setImmutability((Types::ImmutabilityType)group.readEntry("immutability", (int)Types::Mutable));
 
     KConfigGroup shortcutConfig(&group, "Shortcuts");
     QString shortcutText = shortcutConfig.readEntryUntranslated("global", QString());
@@ -344,7 +344,7 @@ KPluginInfo Applet::pluginInfo() const
     return d->appletDescription;
 }
 
-ImmutabilityType Applet::immutability() const
+Types::Types::ImmutabilityType Applet::immutability() const
 {
     // if this object is itself system immutable, then just return that; it's the most
     // restrictive setting possible and will override anything that might be happening above it
@@ -354,7 +354,7 @@ ImmutabilityType Applet::immutability() const
     }
 
     //Returning the more strict immutability between the applet immutability, Containment and Corona
-    ImmutabilityType upperImmutability = Types::Mutable;
+    Types::ImmutabilityType upperImmutability = Types::Mutable;
     Containment *cont = d->isContainment ? 0 : containment();
 
     if (cont) {
@@ -370,7 +370,7 @@ ImmutabilityType Applet::immutability() const
     }
 }
 
-void Applet::setImmutability(const ImmutabilityType immutable)
+void Applet::setImmutability(const Types::Types::ImmutabilityType immutable)
 {
     if (d->immutability == immutable || immutable == Types::SystemImmutable) {
         // we do not store system immutability in d->immutability since that gets saved
