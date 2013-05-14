@@ -254,7 +254,7 @@ Q_SIGNALS:
          * Emitted when the location has changed
          * @since 5.0
          */
-        void locationChanged(Plasma::Location location);
+        void locationChanged(Plasma::Types::Location location);
 
         /**
          * Emitted when the formFactor has changed
@@ -270,7 +270,7 @@ Q_SIGNALS:
          *
          * @param location the new location of this Corona
          */
-        void setLocation(Plasma::Location location);
+        void setLocation(Plasma::Types::Location location);
 
         /**
          * Sets the form factor for this Containment. This may cause changes in both

@@ -599,7 +599,7 @@ KShortcut Applet::globalShortcut() const
     return KShortcut();
 }
 
-Location Applet::location() const
+Types::Location Applet::location() const
 {
     Containment *c = containment();
     return c ? c->d->location : Plasma::Types::Desktop;

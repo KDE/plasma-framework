@@ -180,7 +180,7 @@ FrameSvg::EnabledBorders FrameSvg::enabledBorders() const
     }
 }
 
-void FrameSvg::setElementPrefix(Plasma::Location location)
+void FrameSvg::setElementPrefix(Plasma::Types::Location location)
 {
     switch (location) {
         case Types::TopEdge:
@@ -283,7 +283,7 @@ bool FrameSvg::hasElementPrefix(const QString & prefix) const
     }
 }
 
-bool FrameSvg::hasElementPrefix(Plasma::Location location) const
+bool FrameSvg::hasElementPrefix(Plasma::Types::Location location) const
 {
     switch (location) {
         case Types::TopEdge:

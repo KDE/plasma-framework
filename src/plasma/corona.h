@@ -127,7 +127,7 @@ public:
      * @param screen the id of the screen to look for free edges.
      * @returns a list of free edges not filled with panel type containments.
      */
-    QList<Plasma::Location> freeEdges(int screen) const;
+    QList<Plasma::Types::Location> freeEdges(int screen) const;
 
     /**
      * The actions assocated with this Corona

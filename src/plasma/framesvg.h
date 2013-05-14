@@ -166,7 +166,7 @@ class PLASMA_EXPORT FrameSvg : public Svg
          * called successfully after setImagePath is called.
          * @param location location in the UI this frame will be drawn
          */
-        Q_INVOKABLE void setElementPrefix(Plasma::Location location);
+        Q_INVOKABLE void setElementPrefix(Plasma::Types::Location location);
 
         /**
          * Sets the prefix for the SVG elements to be used for painting. For example,
@@ -201,7 +201,7 @@ class PLASMA_EXPORT FrameSvg : public Svg
          * to draw a frame.
          * @param location the given prefix we want to check if drawable
          */
-        Q_INVOKABLE bool hasElementPrefix(Plasma::Location location) const;
+        Q_INVOKABLE bool hasElementPrefix(Plasma::Types::Location location) const;
 
         /**
          * Returns the prefix for SVG elements of the FrameSvg

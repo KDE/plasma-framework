@@ -257,9 +257,9 @@ void Corona::setImmutability(const ImmutabilityType immutable)
     }
 }
 
-QList<Plasma::Location> Corona::freeEdges(int screen) const
+QList<Plasma::Types::Location> Corona::freeEdges(int screen) const
 {
-    QList<Plasma::Location> freeEdges;
+    QList<Plasma::Types::Location> freeEdges;
     freeEdges << Plasma::Types::TopEdge << Plasma::Types::BottomEdge
               << Plasma::Types::LeftEdge << Plasma::Types::RightEdge;
 

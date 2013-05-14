@@ -150,7 +150,7 @@ class PLASMA_EXPORT Applet : public QObject
         /**
          * Returns the location of the scene which is displaying applet.
          *
-         * @see Plasma::Location
+         * @see Plasma::Types::Location
          */
         Types::Location location() const;
 

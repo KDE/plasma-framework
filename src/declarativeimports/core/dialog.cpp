@@ -38,7 +38,7 @@
 #include <QDebug>
 
 // just for debugging purposes, FIXME: remove later
-QString locString(const Plasma::Location l) {
+QString locString(const Plasma::Types::Location l) {
     QString o = "Unknown: " + l;
     if (l == Plasma::Types::Floating) {
         o = "Floating";
@@ -215,7 +215,7 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
         }
     }
 
-    Plasma::Location l = (Plasma::Location)location();
+    Plasma::Types::Location l = (Plasma::Types::Location)location();
 
     QPoint topPoint((item->boundingRect().width() - width())/2,
                     -height());
@@ -316,7 +316,7 @@ void DialogProxy::setWindowFlags(const int flags)
 
 int DialogProxy::location() const
 {
-    return (Plasma::Location)m_location;
+    return (Plasma::Types::Location)m_location;
 }
 
 void DialogProxy::setLocation(int location)
@@ -324,7 +324,7 @@ void DialogProxy::setLocation(int location)
     if (m_location == location) {
         return;
     }
-    m_location = (Plasma::Location)location;
+    m_location = (Plasma::Types::Location)location;
     emit locationChanged();
 }
 
