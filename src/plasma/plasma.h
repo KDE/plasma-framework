@@ -311,7 +311,7 @@ PLASMA_EXPORT Types::Direction locationToInverseDirection(Types::Location locati
 //typedef Types::FlipDirection FlipDirection;
 //typedef Types::IntervalAlignment IntervalAlignment;
 //typedef Types::ImmutabilityType ImmutabilityType;
-typedef Types::ComponentType ComponentType;
+//typedef Types::ComponentType ComponentType;
 typedef Types::MarginEdge MarginEdge;
 typedef Types::MessageButton MessageButton;
 typedef Types::ItemStatus ItemStatus;
@@ -324,7 +324,7 @@ typedef Types::BackgroundHints BackgroundHints;
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Types::Constraints)
 /*Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Flip)
-Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::ComponentTypes)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Types::ComponentTypes)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::MessageButtons)*/
 
 #endif // multiple inclusion guard

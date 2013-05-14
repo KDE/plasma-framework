@@ -108,7 +108,7 @@ QStringList knownLanguages(Types::ComponentTypes types)
     return languages;
 }
 
-KService::List engineOffers(const QString &language, ComponentType type)
+KService::List engineOffers(const QString &language, Types::ComponentType type)
 {
     if (language.isEmpty()) {
         return KService::List();
@@ -152,7 +152,7 @@ KService::List engineOffers(const QString &language, ComponentType type)
     return offers;
 }
 
-ScriptEngine *loadEngine(const QString &language, ComponentType type, QObject *parent)
+ScriptEngine *loadEngine(const QString &language, Types::ComponentType type, QObject *parent)
 {
     KService::List offers = engineOffers(language, type);
 
