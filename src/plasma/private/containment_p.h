@@ -95,8 +95,8 @@ public:
     static void addDefaultActions(KActionCollection *actions, Containment *c = 0);
 
     Containment *q;
-    FormFactor formFactor;
-    Location location;
+    Types::FormFactor formFactor;
+    Types::Location location;
     QList<Applet *> applets;
     QString wallpaper;
     QHash<QString, ContainmentActions*> localActionPlugins;

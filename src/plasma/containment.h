@@ -260,7 +260,7 @@ Q_SIGNALS:
          * Emitted when the formFactor has changed
          * @since 5.0
          */
-        void formFactorChanged(Plasma::FormFactor formFactor);
+        void formFactorChanged(Plasma::Types::FormFactor formFactor);
 
     public Q_SLOTS:
         /**
@@ -277,7 +277,7 @@ Q_SIGNALS:
          * the arrangement of Applets as well as the display choices of individual
          * Applets.
          */
-        void setFormFactor(Plasma::FormFactor formFactor);
+        void setFormFactor(Plasma::Types::FormFactor formFactor);
 
         /**
          * Sets the type of this containment.

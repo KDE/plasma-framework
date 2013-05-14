@@ -517,7 +517,7 @@ KActionCollection *Applet::actions() const
     return d->actions;
 }
 
-FormFactor Applet::formFactor() const
+Types::FormFactor Applet::formFactor() const
 {
     Containment *c = containment();
     QObject *pw = qobject_cast<QObject *>(parent());

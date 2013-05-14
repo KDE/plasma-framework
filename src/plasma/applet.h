@@ -138,21 +138,21 @@ class PLASMA_EXPORT Applet : public QObject
          * @return the status of the applet
          * @since 4.4
          */
-        ItemStatus status() const;
+        Types::ItemStatus status() const;
 
         /**
          * Returns the current form factor the applet is being displayed in.
          *
          * @see Plasma::FormFactor
          */
-        FormFactor formFactor() const;
+        Types::FormFactor formFactor() const;
 
         /**
          * Returns the location of the scene which is displaying applet.
          *
          * @see Plasma::Location
          */
-        Location location() const;
+        Types::Location location() const;
 
 //CONFIGURATION
         /**

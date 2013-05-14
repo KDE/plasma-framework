@@ -178,8 +178,8 @@ void Containment::restore(KConfigGroup &group)
         return;
     }
 
-    setLocation((Plasma::Location)group.readEntry("location", (int)d->location));
-    setFormFactor((Plasma::FormFactor)group.readEntry("formfactor", (int)d->formFactor));
+    setLocation((Plasma::Types::Location)group.readEntry("location", (int)d->location));
+    setFormFactor((Plasma::Types::FormFactor)group.readEntry("formfactor", (int)d->formFactor));
     //kDebug() << "setScreen from restore";
     d->setScreen(group.readEntry("screen", d->screen));
     d->activityId = group.readEntry("activityId", QString());
@@ -310,7 +310,7 @@ Corona *Containment::corona() const
     return qobject_cast<Corona*>(parent());
 }
 
-void Containment::setFormFactor(FormFactor formFactor)
+void Containment::setFormFactor(Types::FormFactor formFactor)
 {
     if (d->formFactor == formFactor) {
         return;
@@ -327,7 +327,7 @@ void Containment::setFormFactor(FormFactor formFactor)
     emit formFactorChanged(formFactor);
 }
 
-void Containment::setLocation(Location location)
+void Containment::setLocation(Types::Location location)
 {
     if (d->location == location) {
         return;
