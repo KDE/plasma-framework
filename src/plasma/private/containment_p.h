@@ -73,7 +73,7 @@ public:
      * constraint services common to all containments. Containments should still
      * implement their own constraintsEvent method
      */
-    void containmentConstraintsEvent(Plasma::Constraints constraints);
+    void containmentConstraintsEvent(Plasma::Types::Constraints constraints);
 
     bool isPanelContainment() const;
     void setLockToolText();

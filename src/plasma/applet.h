@@ -225,7 +225,7 @@ class PLASMA_EXPORT Applet : public QObject
          *
          * @param constraints the type of constraints that were updated
          */
-        void updateConstraints(Plasma::Constraints constraints = Plasma::Types::AllConstraints);
+        void updateConstraints(Plasma::Types::Constraints constraints = Plasma::Types::AllConstraints);
 
 
 //METADATA
@@ -546,7 +546,7 @@ class PLASMA_EXPORT Applet : public QObject
          * @param constraints the type of constraints that were updated
          * @property constraint
          */
-        virtual void constraintsEvent(Plasma::Constraints constraints);
+        virtual void constraintsEvent(Plasma::Types::Constraints constraints);
 
 //TODO: timerEvent should go into AppletPrivate
         /**

@@ -299,8 +299,8 @@ PLASMA_EXPORT Types::Direction locationToInverseDirection(Types::Location locati
 
 //For porting
 //TODO: remove
-typedef Types::Constraint Constraint;
-Q_DECLARE_FLAGS(Constraints, Constraint)
+//typedef Types::Constraint Constraint;
+//Q_DECLARE_FLAGS(Constraints, Constraint)
 typedef Types::FormFactor FormFactor;
 typedef Types::ContainmentType ContainmentType;
 typedef Types::ActionType ActionType;

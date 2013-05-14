@@ -66,7 +66,7 @@ void AppletScript::paintInterface(QPainter *painter,
     Q_UNUSED(contentsRect);
 }
 
-void AppletScript::constraintsEvent(Plasma::Constraints constraints)
+void AppletScript::constraintsEvent(Plasma::Types::Constraints constraints)
 {
     Q_UNUSED(constraints);
 }

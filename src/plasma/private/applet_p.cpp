@@ -317,7 +317,7 @@ QString AppletPrivate::globalName() const
     return appletDescription.service()->library();
 }
 
-void AppletPrivate::scheduleConstraintsUpdate(Plasma::Constraints c)
+void AppletPrivate::scheduleConstraintsUpdate(Plasma::Types::Constraints c)
 {
     // Don't start up a timer if we're just starting up
     // flushPendingConstraints will be called by Corona

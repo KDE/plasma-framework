@@ -293,12 +293,12 @@ Package Applet::package() const
     return d->package ? *d->package : Package();
 }
 
-void Applet::updateConstraints(Plasma::Constraints constraints)
+void Applet::updateConstraints(Plasma::Types::Constraints constraints)
 {
     d->scheduleConstraintsUpdate(constraints);
 }
 
-void Applet::constraintsEvent(Plasma::Constraints constraints)
+void Applet::constraintsEvent(Plasma::Types::Constraints constraints)
 {
     //NOTE: do NOT put any code in here that reacts to constraints updates
     //      as it will not get called for any applet that reimplements constraintsEvent
@@ -431,7 +431,7 @@ void Applet::flushPendingConstraintsEvents()
     }
 
     //kDebug() << "fushing constraints: " << d->pendingConstraints << "!!!!!!!!!!!!!!!!!!!!!!!!!!!";
-    Plasma::Constraints c = d->pendingConstraints;
+    Plasma::Types::Constraints c = d->pendingConstraints;
     d->pendingConstraints = Types::NoConstraint;
 
     if (c & Plasma::Types::StartupCompletedConstraint) {

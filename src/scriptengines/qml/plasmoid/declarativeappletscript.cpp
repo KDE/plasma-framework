@@ -129,7 +129,7 @@ QObject *DeclarativeAppletScript::loadui(const QString &filename)
 }
 
 
-void DeclarativeAppletScript::constraintsEvent(Plasma::Constraints constraints)
+void DeclarativeAppletScript::constraintsEvent(Plasma::Types::Constraints constraints)
 {
     if (constraints & Plasma::Types::FormFactorConstraint) {
         emit formFactorChanged();

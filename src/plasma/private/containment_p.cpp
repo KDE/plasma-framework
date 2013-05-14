@@ -187,7 +187,7 @@ void ContainmentPrivate::triggerShowAddWidgets()
     emit q->showAddWidgetsInterface(QPointF());
 }
 
-void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constraints)
+void ContainmentPrivate::containmentConstraintsEvent(Plasma::Types::Constraints constraints)
 {
     if (!q->isContainment()) {
         return;
@@ -218,7 +218,7 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
     }
 
     // pass on the constraints that are relevant here
-    Constraints appletConstraints = Types::NoConstraint;
+    Types::Constraints appletConstraints = Types::NoConstraint;
     if (constraints & Types::FormFactorConstraint) {
         appletConstraints |= Types::FormFactorConstraint;
     }
