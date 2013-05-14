@@ -303,7 +303,7 @@ PLASMA_EXPORT Types::Direction locationToInverseDirection(Types::Location locati
 //Q_DECLARE_FLAGS(Constraints, Constraint)
 //typedef Types::FormFactor FormFactor;
 //typedef Types::ContainmentType ContainmentType;
-typedef Types::ActionType ActionType;
+//typedef Types::ActionType ActionType;
 typedef Types::Direction Direction;
 //typedef Types::Location Location;
 typedef Types::Position Position;
