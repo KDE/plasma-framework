@@ -37,8 +37,6 @@ namespace Plasma
 class PLASMA_EXPORT Types : public QObject
 {
     Q_OBJECT
-    Q_ENUMS(Constraint)
-    Q_ENUMS(FormFactor)
 
 public:
 /**
@@ -57,6 +55,7 @@ enum Constraint {
     AllConstraints = FormFactorConstraint | LocationConstraint | ScreenConstraint |
     ImmutableConstraint
 };
+Q_ENUMS(Constraint)
 Q_DECLARE_FLAGS(Constraints, Constraint)
 
 /**
@@ -82,6 +81,7 @@ enum FormFactor {
     Application /**< The Applet lives in a plane and should be optimized to look as a full application,
                      for the desktop or the particular device. */
 };
+Q_ENUMS(FormFactor)
 
 /**
  * This enumeration describes the type of the Containment.
@@ -123,6 +123,7 @@ enum Direction {
     Left,     /**< Display to the left */
     Right     /**< Display to the right */
 };
+Q_ENUMS(Direction)
 
 /**
  * The Location enumeration describes where on screen an element, such as an
@@ -139,6 +140,7 @@ enum Location {
     LeftEdge,     /**< Along the left side of the screen */
     RightEdge     /**< Along the right side of the screen */
 };
+Q_ENUMS(Location)
 
 /**
  * The position enumeration
@@ -151,12 +153,12 @@ enum Position {
     BottomPositioned,  /**< Positioned bottom */
     CenterPositioned   /**< Positioned in the center */
 };
+Q_ENUMS(Position)
 
 /**
  * The popup position enumeration relatively to his attached widget
  *
  **/
-
 enum PopupPlacement {
     FloatingPopup = 0,            /**< Free floating, non attached popup */
     TopPosedLeftAlignedPopup,     /**< Popup positioned on the top, aligned
@@ -176,6 +178,7 @@ enum PopupPlacement {
     RightPosedBottomAlignedPopup  /**< Popup positioned on the right, aligned
                                      to the bottom of the widget */
 };
+Q_ENUMS(PopupPlacement)
 
 /**
  * Flip enumeration
@@ -185,6 +188,7 @@ enum FlipDirection {
     HorizontalFlip = 1,  /**< Flip horizontally */
     VerticalFlip = 2     /**< Flip vertically */
 };
+Q_ENUMS(FlipDirection)
 Q_DECLARE_FLAGS(Flip, FlipDirection)
 
 /**
@@ -195,6 +199,7 @@ enum IntervalAlignment {
     AlignToMinute, /**< Align to the minute **/
     AlignToHour /**< Align to the hour **/
 };
+Q_ENUMS(IntervalAlignment)
 
 /**
  * Defines the immutability of items like applets, corona and containments
@@ -208,6 +213,7 @@ enum ImmutabilityType {
     SystemImmutable = 4 /**<  the item is locked down by the system, the user
                            can't unlock it **/
 };
+Q_ENUMS(ImmutabilityType)
 
 /**
  * The ComonentType enumeration refers to the various types of components,
@@ -222,6 +228,7 @@ enum ComponentType {
     WallpaperComponent = 32,   /**< Plasma::Wallpaper based plugins **/
     GenericComponent = 64      /** Generic repositories of files, usually they keep QML files and their assets **/
 };
+Q_ENUMS(ComponentType)
 Q_DECLARE_FLAGS(ComponentTypes, ComponentType)
 
 enum MarginEdge {
@@ -230,6 +237,7 @@ enum MarginEdge {
     LeftMargin, /**< The left margin **/
     RightMargin /**< The right margin **/
 };
+Q_ENUMS(MarginEdge)
 
 /**
  * Status of an applet
@@ -293,8 +301,7 @@ PLASMA_EXPORT Types::Direction locationToInverseDirection(Types::Location locati
 
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Types::Constraints)
-/*Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Flip)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Types::Flip)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Types::ComponentTypes)
-Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::MessageButtons)*/
 
 #endif // multiple inclusion guard
