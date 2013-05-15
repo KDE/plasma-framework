@@ -39,6 +39,7 @@ class PLASMA_EXPORT Types : public QObject
     Q_OBJECT
 
 public:
+    ~Types();
 /**
  * The Constraint enumeration lists the various constraints that Plasma
  * objects have managed for them and which they may wish to react to,
@@ -276,6 +277,8 @@ enum BackgroundHints {
 };
 Q_ENUMS(BackgroundHints)
 
+private:
+    Types(QObject *parent = 0);
 };
 
 /**

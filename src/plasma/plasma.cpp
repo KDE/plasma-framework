@@ -28,6 +28,15 @@
 namespace Plasma
 {
 
+Types::Types(QObject *parent)
+    : QObject(parent)
+{
+}
+
+Types::~Types()
+{
+}
+
 Types::Direction locationToDirection(Types::Location location)
 {
     switch (location) {
