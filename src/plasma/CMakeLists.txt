@@ -227,12 +227,7 @@ install(FILES
    data/servicetypes/plasma-service.desktop
    data/servicetypes/plasma-shell.desktop
    data/servicetypes/plasma-lookandfeel.desktop
-   data/servicetypes/plasma-wallpaper.desktop
    DESTINATION ${SERVICETYPES_INSTALL_DIR})
-
-install(FILES
-   data/services/plasma.protocol
-   DESTINATION ${SERVICES_INSTALL_DIR})
 
 install(FILES data/operations/dataengineservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
 install(FILES data/operations/plasmoidservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
