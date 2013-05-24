@@ -5,7 +5,7 @@ add_executable(plasmapkg
     plasmapkg.cpp
 )
 
-target_link_libraries(plasmapkg ${KDE4_KDECORE_LIBS} plasma)
+target_link_libraries(plasmapkg kdeqt5staging plasma)
 
 message("INSTALL_TARGETS_DEFAULT_ARGS ${INSTALL_TARGETS_DEFAULT_ARGS}")
 
