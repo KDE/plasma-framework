@@ -22,64 +22,45 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 import "private" as Private
 
 /**
- * A boolean toggle button with the visual representation of a "realistic"
- * switch with a movable toggle showing the state of the Switch. Generally
- * easier to use on touch devices than a CheckBox due to the larger surface
- * space and more evident state visualization.
+ * A check box is a component that can be switched on (checked) or off
+ * (unchecked). Check boxes are typically used to represent features in an
+ * application that can be enabled or disabled without affecting others, but
+ * different types of behavior can be implemented. When a check box is checked
+ * or unchecked it sends a clicked signal for the application to handle.
  *
- * You can bind the Switch component, for example, to a feature that the
- * application has to enable or disable depending on the user's input.
+ * When a check box has the focus, its state can be toggled using the
+ * Qt.Key_Select, Qt.Key_Return, and Qt.Key_Enter hardware keys that send the
+ * clicked signal.
  *
  * All elements of this component are defined in DualStateButton, its base component.
  */
 Private.DualStateButton {
-    id: switchItem
-
+    id: checkBox
     view: PlasmaCore.FrameSvgItem {
-        imagePath: "widgets/slider"
-        prefix: "groove"
-        width: height * 2
-        height: Math.max(theme.mSize(theme.defaultFont).height + margins.top + margins.bottom,
-                         button.margins.top + button.margins.bottom)
+        imagePath: "widgets/button"
+        prefix: "normal"
+        width: theme.mSize(theme.defaultFont).height + margins.left
+        height: theme.mSize(theme.defaultFont).height + margins.top
 
-        PlasmaCore.FrameSvgItem {
-            id: highlight
-            imagePath: "widgets/slider"
-            prefix: "groove-highlight"
-            anchors.fill: parent
-
+        PlasmaCore.SvgItem {
+            svg: PlasmaCore.Svg {
+                id: checkmarkSvg
+                imagePath: "widgets/checkmarks"
+            }
+            elementId: "checkbox"
             opacity: checked ? 1 : 0
+            anchors {
+                fill: parent
+                margins: parent.margins.left/2
+            }
             Behavior on opacity {
-                PropertyAnimation { duration: 100 }
-            }
-        }
-
-        PlasmaCore.FrameSvgItem {
-            imagePath: "widgets/button"
-            prefix: "shadow"
-            anchors {
-                fill: button
-                leftMargin: -margins.left
-                topMargin: -margins.top
-                rightMargin: -margins.right
-                bottomMargin: -margins.bottom
-            }
-        }
-
-        PlasmaCore.FrameSvgItem {
-            id: button
-            imagePath: "widgets/button"
-            prefix: "normal"
-            anchors {
-                top: parent.top
-                bottom: parent.bottom
-            }
-            width: height
-            x: checked ? width : 0
-            Behavior on x {
-                PropertyAnimation { duration: 100 }
+                NumberAnimation {
+                    duration: 250
+                    easing.type: Easing.InOutQuad
+                }
             }
         }
     }
-}
 
+    shadow: Private.ButtonShadow {}
+}
