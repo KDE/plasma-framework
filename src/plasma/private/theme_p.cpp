@@ -152,7 +152,7 @@ bool ThemePrivate::useCache()
             // application is not running.
             const QFile f(cacheFile);
             const QFileInfo fileInfo(f);
-            if (fileInfo.lastModified().toTime_t() > uint(pixmapCache->lastModifiedTime())) {
+            if (fileInfo.lastModified().toTime_t() > uint(pixmapCache->lastModifiedTime().toTime_t())) {
                 discardCache(PixmapCache | SvgElementsCache);
             }
         }
