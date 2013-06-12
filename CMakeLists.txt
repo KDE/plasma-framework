@@ -185,15 +185,21 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/plasma_version.h
 install(FILES
   "${CMAKE_CURRENT_BINARY_DIR}/PlasmaConfig.cmake"
   "${CMAKE_CURRENT_BINARY_DIR}/PlasmaConfigVersion.cmake"
+  "${CMAKE_CURRENT_SOURCE_DIR}/PlasmaMacros.cmake"
   DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
   COMPONENT Devel
 )
-install(FILES
-            "${CMAKE_CURRENT_SOURCE_DIR}/PlasmaMacros.cmake"
-            "FindPlasma.cmake"
-        DESTINATION
-            ${DATA_INSTALL_DIR}/cmake/modules
-       )
+
+# install(EXPORT plasmaTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+#         FILE plasmaTargets.cmake COMPONENT Devel)
+
+
+# install(FILES
+#             "${CMAKE_CURRENT_SOURCE_DIR}/PlasmaMacros.cmake"
+#             "FindPlasma.cmake"
+#         DESTINATION
+#             ${DATA_INSTALL_DIR}/cmake/modules
+#        )
 
 
 
