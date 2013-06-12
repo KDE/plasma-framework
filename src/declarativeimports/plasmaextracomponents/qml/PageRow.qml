@@ -98,7 +98,9 @@ Item {
     // See push() for details.
     function replace(page, properties, immediate)
     {
-        return Engine.push(page, properties, true, immediate);
+        var item = Engine.push(page, properties, true, immediate);
+        scrollToLevel(depth)
+        return item
     }
 
     // Clears the page stack.
@@ -207,7 +209,7 @@ Item {
             Row {
                 id: root
                 spacing: -100
-                width: columnWidth*depth
+                width: childrenRect.width - 100
                 height: parent.height
                 Behavior on width {
                     NumberAnimation {
@@ -252,7 +254,8 @@ Item {
         Item {
             id: container
 
-            width: columnWidth + 100
+            implicitWidth: actualContainer.width + 100
+            width: implicitWidth
             height: parent ? parent.height : 0
 
             x: 0
@@ -305,7 +308,7 @@ Item {
                     right: parent.right
                     rightMargin: 100
                 }
-                width: columnWidth
+                width: (container.pageDepth >= actualRoot.depth ? Math.min(actualRoot.width, Math.max(1, Math.round(page.implicitWidth/columnWidth))*columnWidth) : columnWidth)
             }
 
             Image {
@@ -430,7 +433,7 @@ Item {
                 State {
                     name: ""
                     PropertyChanges { target: container; visible: true; opacity: 1 }
-                    PropertyChanges { target: container; width: columnWidth+100}
+                    PropertyChanges { target: container; width: container.implicitWidth}
                 },
                 // Start state for pop entry, end state for push exit.
                 State {
@@ -448,7 +451,7 @@ Item {
                 State {
                     name: "Hidden"
                     PropertyChanges { target: container; visible: false }
-                    PropertyChanges { target: container; width: columnWidth+100}
+                    PropertyChanges { target: container; width: container.implicitWidth}
                 }
             ]
 

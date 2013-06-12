@@ -296,7 +296,7 @@ bool Theme::useGlobalSettings() const
 
 bool Theme::findInCache(const QString &key, QPixmap &pix, unsigned int lastModified)
 {
-    if (lastModified != 0 && d->useCache() && lastModified > uint(d->pixmapCache->lastModifiedTime())) {
+    if (lastModified != 0 && d->useCache() && lastModified > uint(d->pixmapCache->lastModifiedTime().toTime_t())) {
         return false;
     }
 

@@ -164,8 +164,8 @@ target_link_libraries(plasma LINK_INTERFACE_LIBRARIES ${KDE4_KDECORE_LIBS} Qt5::
 
 #do NOT use GENERIC versioning -- the plasma team will take care of versioning
 set_target_properties(plasma PROPERTIES
-                             VERSION 4.0.0
-                             SOVERSION 4
+                             VERSION 5.0.0
+                             SOVERSION 5
                       )
 
 install(TARGETS plasma EXPORT kdelibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
@@ -227,12 +227,7 @@ install(FILES
    data/servicetypes/plasma-service.desktop
    data/servicetypes/plasma-shell.desktop
    data/servicetypes/plasma-lookandfeel.desktop
-   data/servicetypes/plasma-wallpaper.desktop
    DESTINATION ${SERVICETYPES_INSTALL_DIR})
-
-install(FILES
-   data/services/plasma.protocol
-   DESTINATION ${SERVICES_INSTALL_DIR})
 
 install(FILES data/operations/dataengineservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
 install(FILES data/operations/plasmoidservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)

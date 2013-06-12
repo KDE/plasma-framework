@@ -23,6 +23,7 @@
 
 #include <QCoreApplication>
 
+class QCommandLineParser;
 class KJob;
 
 namespace Plasma
@@ -35,7 +36,7 @@ class PlasmaPkg : public QCoreApplication
     Q_OBJECT
 
     public:
-        PlasmaPkg(int& argc, char** argv);
+        PlasmaPkg(int& argc, char** argv, QCommandLineParser *parser);
         virtual ~PlasmaPkg();
 
         void listPackages(const QStringList &types);

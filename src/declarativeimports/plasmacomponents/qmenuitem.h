@@ -40,6 +40,8 @@ class QMenuItem : public QQuickItem
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
     Q_PROPERTY(QVariant icon READ icon WRITE setIcon NOTIFY iconChanged)
     Q_PROPERTY(QAction* action READ action WRITE setAction NOTIFY actionChanged)
+    Q_PROPERTY(bool checkable READ checkable WRITE setCheckable NOTIFY checkableChanged)
+    Q_PROPERTY(bool checked READ checked WRITE setChecked NOTIFY toggled)
 
 public:
     QMenuItem(QQuickItem *parent = 0);
@@ -53,6 +55,12 @@ public:
     QString text() const;
     void setText(const QString &t);
 
+    bool checkable() const;
+    void setCheckable(bool checkable);
+
+    bool checked() const;
+    void setChecked(bool checked);
+
 Q_SIGNALS:
     void clicked();
 
@@ -60,6 +68,8 @@ Q_SIGNALS:
     void iconChanged();
     void separatorChanged();
     void textChanged();
+    void toggled(bool checked);
+    void checkableChanged();
 
 private:
     QAction* m_action;

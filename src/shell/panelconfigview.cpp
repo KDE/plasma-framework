@@ -29,6 +29,7 @@
 
 #include <KGlobal>
 #include <KLocalizedString>
+#include <kwindoweffects.h>
 
 #include <Plasma/Containment>
 #include <Plasma/Corona>
@@ -42,6 +43,8 @@ PanelConfigView::PanelConfigView(Plasma::Containment *containment, PanelView *pa
 {
 
     setFlags(Qt::FramelessWindowHint);
+
+    KWindowEffects::enableBlurBehind(winId(), true);
 
     engine()->rootContext()->setContextProperty("panel", panelView);
     engine()->rootContext()->setContextProperty("configDialog", this);
@@ -65,25 +68,30 @@ void PanelConfigView::syncGeometry()
         return;
     }
 
-    if (m_containment->formFactor() == Plasma::Vertical) {
-        resize(128, screen()->size().height());
+    if (m_containment->formFactor() == Plasma::Types::Vertical) {
+        resize(rootObject()->implicitWidth(), screen()->size().height());
 
-        if (m_containment->location() == Plasma::LeftEdge) {
-            setPosition(screen()->geometry().left() + m_panelView->thickness(), 0);
-        } else if (m_containment->location() == Plasma::RightEdge) {
-            setPosition(screen()->geometry().right() - 128 - m_panelView->thickness(), 0);
+        if (m_containment->location() == Plasma::Types::LeftEdge) {
+            setPosition(screen()->geometry().left() + m_panelView->thickness(), screen()->geometry().top());
+        } else if (m_containment->location() == Plasma::Types::RightEdge) {
+            setPosition(screen()->geometry().right() - width() - m_panelView->thickness(), screen()->geometry().top());
         }
 
     } else {
-        resize(screen()->size().width(), 128);
+        resize(screen()->size().width(), rootObject()->implicitHeight());
 
-        if (m_containment->location() == Plasma::TopEdge) {
-            setPosition(0, screen()->geometry().top() + m_panelView->thickness());
-        } else if (m_containment->location() == Plasma::BottomEdge) {
-            setPosition(0, screen()->geometry().bottom() - 128 - m_panelView->thickness());
+        if (m_containment->location() == Plasma::Types::TopEdge) {
+            setPosition(screen()->geometry().left(), screen()->geometry().top() + m_panelView->thickness());
+        } else if (m_containment->location() == Plasma::Types::BottomEdge) {
+            setPosition(screen()->geometry().left(), screen()->geometry().bottom() - height() - m_panelView->thickness());
         }
     }
 }
 
+void PanelConfigView::focusOutEvent(QFocusEvent *ev)
+{
+    Q_UNUSED(ev)
+    close();
+}
 
 #include "moc_panelconfigview.cpp"

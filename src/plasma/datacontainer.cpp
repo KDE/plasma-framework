@@ -83,7 +83,7 @@ bool DataContainer::visualizationIsConnected(QObject *visualization) const
 }
 
 void DataContainer::connectVisualization(QObject *visualization, uint pollingInterval,
-                                         Plasma::IntervalAlignment alignment)
+                                         Plasma::Types::IntervalAlignment alignment)
 {
     //kDebug() << "connecting visualization" << visualization << "at interval of"
     //         << pollingInterval << "to" << objectName();

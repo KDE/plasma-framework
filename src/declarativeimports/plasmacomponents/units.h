@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2013 Sebastian Kügler <sebas@kde.org>                       *
+ *   Copyright 2013 Marco Martin <mart@kde.org>                            *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,16 +17,50 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
  ***************************************************************************/
 
-#include "plasmanamespace.h"
+#ifndef UNITS_H
+#define UNITS_H
 
-PlasmaNamespace::PlasmaNamespace(QObject *parent)
-    : QObject(parent)
+#include <QObject>
+
+#include <Plasma/Theme>
+
+class Units : public QObject
 {
-}
+    Q_OBJECT
 
-PlasmaNamespace::~PlasmaNamespace()
-{
-}
+    /**
+     * The fundamental unit of space that should be used for sizes, expressed in pixels.
+     * Given the screen has an accurate DPI settings, it corresponds to a millimeter
+     */
+    Q_PROPERTY(qreal gridUnit READ gridUnit NOTIFY gridUnitChanged())
 
-#include "plasmanamespace.moc"
+public:
+    Units(QObject *parent = 0);
+    ~Units();
+
+    qreal gridUnit() const;
+
+    /**
+     * @returns the number of pixels value density independent pixels correspond to.
+     */
+    Q_INVOKABLE qreal dp(qreal value) const;
+
+    /**
+     * @returns the number of pixels value grid units correspond to.
+     */
+    Q_INVOKABLE qreal gu(qreal value) const;
+
+
+Q_SIGNALS:
+    void gridUnitChanged();
+
+private Q_SLOTS:
+    void themeChanged();
+
+private:
+    int m_gridUnit;
+    Plasma::Theme m_theme;
+};
+
+#endif //UNITS_H
 

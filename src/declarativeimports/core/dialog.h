@@ -161,7 +161,7 @@ protected:
     void focusOutEvent(QFocusEvent *ev);
 
     QTimer *m_syncTimer;
-    Plasma::Location m_location;
+    Plasma::Types::Location m_location;
     Plasma::FrameSvgItem *m_frameSvgItem;
     QWeakPointer<QQuickItem> m_mainItem;
     QWeakPointer<QQuickItem> m_visualParent;

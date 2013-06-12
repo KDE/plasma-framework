@@ -38,22 +38,22 @@
 #include <QDebug>
 
 // just for debugging purposes, FIXME: remove later
-QString locString(const Plasma::Location l) {
+QString locString(const Plasma::Types::Location l) {
     QString o = "Unknown: " + l;
-    if (l == Plasma::Floating) {
+    if (l == Plasma::Types::Floating) {
         o = "Floating";
-    } else if (l == Plasma::Desktop) {
+    } else if (l == Plasma::Types::Desktop) {
         o = "Desktop";
-    } else if (l == Plasma::FullScreen) {
+    } else if (l == Plasma::Types::FullScreen) {
         o = "FullScreen";
-    } else if (l == Plasma::TopEdge) {
-        o = "TopEdge";
-    } else if (l == Plasma::BottomEdge) {
-        o = "BottomEdge";
-    } else if (l == Plasma::LeftEdge) {
-        o = "LeftEdge";
-    } else if (l == Plasma::RightEdge) {
-        o = "RightEdge";
+    } else if (l == Plasma::Types::TopEdge) {
+        o = "Types::TopEdge";
+    } else if (l == Plasma::Types::BottomEdge) {
+        o = "Types::BottomEdge";
+    } else if (l == Plasma::Types::LeftEdge) {
+        o = "Types::LeftEdge";
+    } else if (l == Plasma::Types::RightEdge) {
+        o = "Types::RightEdge";
     }
     return o;
 }
@@ -61,7 +61,7 @@ QString locString(const Plasma::Location l) {
 DialogProxy::DialogProxy(QQuickItem *parent)
     : QQuickWindow(),
       m_activeWindow(false),
-      m_location(Plasma::TopEdge)
+      m_location(Plasma::Types::TopEdge)
 {
     QSurfaceFormat format;
     format.setAlphaBufferSize(8);
@@ -153,7 +153,7 @@ void DialogProxy::setVisible(const bool visible)
         syncToMainItemSize();
         if (!m_visualParent.isNull() && m_visualParent.data()->window()) {
             avail = m_visualParent.data()->window()->screen()->availableGeometry();
-            if (location() == Plasma::FullScreen) {
+            if (location() == Plasma::Types::FullScreen) {
                 m_frameSvgItem->setEnabledBorders(Plasma::FrameSvg::NoBorder);
                 setGeometry(avail);
 
@@ -215,7 +215,7 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
         }
     }
 
-    Plasma::Location l = (Plasma::Location)location();
+    Plasma::Types::Location l = (Plasma::Types::Location)location();
 
     QPoint topPoint((item->boundingRect().width() - width())/2,
                     -height());
@@ -228,13 +228,13 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
                       (item->boundingRect().height() - height())/2);
 
     QPoint offset(0, 0);
-    if (l == Plasma::BottomEdge) {
+    if (l == Plasma::Types::BottomEdge) {
         offset = bottomPoint;
-    } else if (l == Plasma::LeftEdge) {
+    } else if (l == Plasma::Types::LeftEdge) {
         offset = leftPoint;
-    } else if (l == Plasma::RightEdge) {
+    } else if (l == Plasma::Types::RightEdge) {
         offset = rightPoint;
-    } else { // TopEdge
+    } else { // Types::TopEdge
         offset = topPoint;
     }
 
@@ -248,7 +248,7 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
 
     if (menuPos.x() < leftMargin) {
         // popup hits lhs
-        if (l == Plasma::TopEdge || l == Plasma::BottomEdge) {
+        if (l == Plasma::Types::TopEdge || l == Plasma::Types::BottomEdge) {
             // move it
             menuPos.setX(0-leftMargin);
         } else {
@@ -258,7 +258,7 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
     }
     if (menuPos.x() + width() > avail.width() - rightMargin) {
         // popup hits rhs
-        if (l == Plasma::TopEdge || l == Plasma::BottomEdge) {
+        if (l == Plasma::Types::TopEdge || l == Plasma::Types::BottomEdge) {
             menuPos.setX(avail.width() - item->boundingRect().width() + rightMargin);
         } else {
             menuPos.setX(pos.x() + leftPoint.x());
@@ -266,7 +266,7 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
     }
     if (menuPos.y() < topMargin) {
         // hitting top
-        if (l == Plasma::LeftEdge || l == Plasma::RightEdge) {
+        if (l == Plasma::Types::LeftEdge || l == Plasma::Types::RightEdge) {
             menuPos.setY(0);
         } else {
             menuPos.setY(pos.y() + bottomPoint.y());
@@ -274,7 +274,7 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
     }
     if (menuPos.y() + height() > avail.height() - bottomMargin) {
         // hitting bottom
-        if (l == Plasma::TopEdge || l == Plasma::BottomEdge) {
+        if (l == Plasma::Types::TopEdge || l == Plasma::Types::BottomEdge) {
             menuPos.setY(pos.y() + topPoint.y());
         } else {
             menuPos.setY(avail.height() - item->boundingRect().height() + bottomMargin);
@@ -316,7 +316,7 @@ void DialogProxy::setWindowFlags(const int flags)
 
 int DialogProxy::location() const
 {
-    return (Plasma::Location)m_location;
+    return (Plasma::Types::Location)m_location;
 }
 
 void DialogProxy::setLocation(int location)
@@ -324,7 +324,7 @@ void DialogProxy::setLocation(int location)
     if (m_location == location) {
         return;
     }
-    m_location = (Plasma::Location)location;
+    m_location = (Plasma::Types::Location)location;
     emit locationChanged();
 }
 

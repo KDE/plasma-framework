@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2013 Sebastian Kügler <sebas@kde.org>                       *
+ *   Copyright 2013 Marco Martin <mart@kde.org            >                *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -16,31 +16,60 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
  ***************************************************************************/
-#ifndef PLASMA_NAMESPACE_CORE
-#define PLASMA_NAMESPACE_CORE
 
-#include <QObject>
+#include "units.h"
 
-class PlasmaNamespace : public QObject
+#include <QApplication>
+#include <QDebug>
+#include <QDesktopWidget>
+#include <QtGlobal>
+#include <cmath>
+
+
+Units::Units (QObject *parent)
+    : QObject(parent),
+      m_gridUnit(-1)
 {
-    Q_OBJECT
-    Q_ENUMS(Location)
+    themeChanged();
+    connect(&m_theme, SIGNAL(themeChanged()),
+            this, SLOT(themeChanged()));
+}
 
-public:
-    enum Location {
-        Floating = 0, /**< Free floating. Neither geometry or z-ordering
-                        is described precisely by this value. */
-        Desktop,      /**< On the planar desktop layer, extending across
-                        the full screen from edge to edge */
-        FullScreen,   /**< Full screen */
-        TopEdge,      /**< Along the top of the screen*/
-        BottomEdge,   /**< Along the bottom of the screen*/
-        LeftEdge,     /**< Along the left side of the screen */
-        RightEdge     /**< Along the right side of the screen */
-    };
+Units::~Units()
+{
+}
 
-    PlasmaNamespace(QObject *parent = 0);
-    ~PlasmaNamespace();
-};
+qreal Units::gridUnit() const
+{
+    return m_gridUnit;
+}
 
-#endif
+qreal Units::dp(qreal value) const
+{
+    //Usual "default" is 96 dpi
+    //that magic ratio follows the definition of "device independent pixel" by Microsoft
+    const qreal ratio = (qreal)QApplication::desktop()->physicalDpiX() / (qreal)96;
+
+    if (value <= 2.0) {
+        return qRound(value * floor(ratio));
+    } else {
+        return qRound(value * ratio);
+    }
+}
+
+qreal Units::gu(qreal value) const
+{
+    return qRound(m_gridUnit * value);
+}
+
+void Units::themeChanged()
+{
+    const int gridUnit = QFontMetrics(QApplication::font()).boundingRect("M").width();
+    if (gridUnit != m_gridUnit) {
+        m_gridUnit = gridUnit;
+        emit gridUnitChanged();
+    }
+}
+
+#include "units.moc"
+

@@ -10,6 +10,7 @@ set(plasmacomponents_SRCS
     enums.cpp
     qmenu.cpp
     qmenuitem.cpp
+    units.cpp
     #../core/declarativeitemcontainer.cpp
     )
 
@@ -60,7 +61,6 @@ install(FILES qml/QueryDialog.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimpo
 install(FILES qml/RadioButton.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
 install(FILES qml/SelectionDialog.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
 install(FILES qml/Slider.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
-install(FILES qml/Switch.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
 install(FILES qml/TabBar.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
 install(FILES qml/TabButton.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)
 install(FILES qml/TabGroup.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/components)

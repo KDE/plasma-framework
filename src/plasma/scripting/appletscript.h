@@ -94,7 +94,7 @@ public:
      *
      * @param constraints the type of constraints that were updated
      */
-    virtual void constraintsEvent(Plasma::Constraints constraints);
+    virtual void constraintsEvent(Plasma::Types::Constraints constraints);
 
     /**
      * Returns a list of context-related QAction instances.
@@ -143,13 +143,13 @@ public:
       * @see Containment
       * @since 4.7
       */
-     Plasma::ContainmentType containmentType() const;
+     Plasma::Types::ContainmentType containmentType() const;
 
      /**
       * @see Containment
       * @since 4.7
       */
-     void setContainmentType(Plasma::ContainmentType type);
+     void setContainmentType(Plasma::Types::ContainmentType type);
 
 Q_SIGNALS:
     /**

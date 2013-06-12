@@ -36,6 +36,7 @@
 #include <Plasma/Package>
 #include <Plasma/PluginLoader>
 
+#include "kdeclarative/configpropertymap.h"
 
 ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
     : AppletInterface(parent),
@@ -96,7 +97,7 @@ ContainmentInterface::Type ContainmentInterface::containmentType() const
 
 void ContainmentInterface::setContainmentType(ContainmentInterface::Type type)
 {
-    m_appletScriptEngine->setContainmentType((Plasma::ContainmentType)type);
+    m_appletScriptEngine->setContainmentType((Plasma::Types::ContainmentType)type);
 }
 
 int ContainmentInterface::screen() const
@@ -167,9 +168,7 @@ void ContainmentInterface::appletRemovedForward(Plasma::Applet *applet)
 void ContainmentInterface::loadWallpaper()
 {
     if (m_appletScriptEngine->drawWallpaper()) {
-        if (m_wallpaperInterface || containment()->wallpaper().isEmpty()) {
-            return;
-        }
+        delete m_wallpaperInterface;
 
         m_wallpaperInterface = new WallpaperInterface(this);
         m_wallpaperInterface->setZ(-1000);
@@ -181,6 +180,7 @@ void ContainmentInterface::loadWallpaper()
         QQmlProperty prop(m_wallpaperInterface, "anchors.fill");
         prop.write(expr.evaluate());
 
+        containment()->setProperty("wallpaperGraphicsObject", QVariant::fromValue(m_wallpaperInterface));
     } else {
         if (m_wallpaperInterface) {
             m_wallpaperInterface->deleteLater();
@@ -282,7 +282,7 @@ void ContainmentInterface::addAppletActions(KMenu &desktopMenu, Plasma::Applet *
         }
     }
 
-    if (containment()->immutability() == Plasma::Mutable) {
+    if (containment()->immutability() == Plasma::Types::Mutable) {
         QAction *closeApplet = applet->actions()->action("remove");
         //kDebug() << "checking for removal" << closeApplet;
         if (closeApplet) {
@@ -298,7 +298,7 @@ void ContainmentInterface::addAppletActions(KMenu &desktopMenu, Plasma::Applet *
 
 void ContainmentInterface::addContainmentActions(KMenu &desktopMenu, QEvent *event)
 {
-    if (containment()->corona()->immutability() != Plasma::Mutable &&
+    if (containment()->corona()->immutability() != Plasma::Types::Mutable &&
         !KAuthorized::authorizeKAction("plasma/containment_actions")) {
         //kDebug() << "immutability";
         return;
@@ -329,8 +329,8 @@ void ContainmentInterface::addContainmentActions(KMenu &desktopMenu, QEvent *eve
     if (actions.isEmpty()) {
         //it probably didn't bother implementing the function. give the user a chance to set
         //a better plugin.  note that if the user sets no-plugin this won't happen...
-        if ((containment()->containmentType() != Plasma::PanelContainment &&
-             containment()->containmentType() != Plasma::CustomPanelContainment) &&
+        if ((containment()->containmentType() != Plasma::Types::PanelContainment &&
+             containment()->containmentType() != Plasma::Types::CustomPanelContainment) &&
             containment()->actions()->action("configure")) {
             desktopMenu.addAction(containment()->actions()->action("configure"));
         }

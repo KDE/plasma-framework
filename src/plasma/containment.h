@@ -100,7 +100,7 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * Returns the type of containment
          */
-        Plasma::ContainmentType containmentType() const;
+        Plasma::Types::ContainmentType containmentType() const;
 
         /**
          * Returns the Corona (if any) that this Containment is hosted by
@@ -254,13 +254,13 @@ Q_SIGNALS:
          * Emitted when the location has changed
          * @since 5.0
          */
-        void locationChanged(Plasma::Location location);
+        void locationChanged(Plasma::Types::Location location);
 
         /**
          * Emitted when the formFactor has changed
          * @since 5.0
          */
-        void formFactorChanged(Plasma::FormFactor formFactor);
+        void formFactorChanged(Plasma::Types::FormFactor formFactor);
 
     public Q_SLOTS:
         /**
@@ -270,19 +270,19 @@ Q_SIGNALS:
          *
          * @param location the new location of this Corona
          */
-        void setLocation(Plasma::Location location);
+        void setLocation(Plasma::Types::Location location);
 
         /**
          * Sets the form factor for this Containment. This may cause changes in both
          * the arrangement of Applets as well as the display choices of individual
          * Applets.
          */
-        void setFormFactor(Plasma::FormFactor formFactor);
+        void setFormFactor(Plasma::Types::FormFactor formFactor);
 
         /**
          * Sets the type of this containment.
          */
-        void setContainmentType(Plasma::ContainmentType type);
+        void setContainmentType(Plasma::Types::ContainmentType type);
 
         /**
          * Sets whether wallpaper is painted or not.
@@ -319,7 +319,7 @@ Q_SIGNALS:
 
         Q_PRIVATE_SLOT(d, void appletDeleted(Plasma::Applet*))
         Q_PRIVATE_SLOT(d, void triggerShowAddWidgets())
-        Q_PRIVATE_SLOT(d, void checkStatus(Plasma::ItemStatus))
+        Q_PRIVATE_SLOT(d, void checkStatus(Plasma::Types::ItemStatus))
 
         friend class Applet;
         friend class AppletPrivate;

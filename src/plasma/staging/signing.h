@@ -70,7 +70,7 @@ class SigningPrivate;
   * QString signer = m_auth->signerOf(plasmoidPath);
   *
   * // If you need to know the authentication level associated with a specific signer, simply call:
-  * Plasma::TrustLevel level = m_auth->trustLevelOf(signer)
+  * Plasma::Types::TrustLevel level = m_auth->trustLevelOf(signer)
   *
   * // If you need more details about a key with a given keyID, you have to call:
   * QString info = m_auth->descriptiveString(keyID);
