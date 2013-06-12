@@ -43,7 +43,7 @@ public:
 
     QList<QAction*> contextualActions();
 
-    void constraintsEvent(Plasma::Constraints constraints);
+    void constraintsEvent(Plasma::Types::Constraints constraints);
 
     bool include(const QString &path);
 

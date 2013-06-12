@@ -34,6 +34,12 @@ class QAction;
 namespace Plasma
 {
 
+class PLASMA_EXPORT Types : public QObject
+{
+    Q_OBJECT
+
+public:
+    ~Types();
 /**
  * The Constraint enumeration lists the various constraints that Plasma
  * objects have managed for them and which they may wish to react to,
@@ -50,6 +56,7 @@ enum Constraint {
     AllConstraints = FormFactorConstraint | LocationConstraint | ScreenConstraint |
     ImmutableConstraint
 };
+Q_ENUMS(Constraint)
 Q_DECLARE_FLAGS(Constraints, Constraint)
 
 /**
@@ -75,6 +82,7 @@ enum FormFactor {
     Application /**< The Applet lives in a plane and should be optimized to look as a full application,
                      for the desktop or the particular device. */
 };
+Q_ENUMS(FormFactor)
 
 /**
  * This enumeration describes the type of the Containment.
@@ -116,6 +124,7 @@ enum Direction {
     Left,     /**< Display to the left */
     Right     /**< Display to the right */
 };
+Q_ENUMS(Direction)
 
 /**
  * The Location enumeration describes where on screen an element, such as an
@@ -132,6 +141,7 @@ enum Location {
     LeftEdge,     /**< Along the left side of the screen */
     RightEdge     /**< Along the right side of the screen */
 };
+Q_ENUMS(Location)
 
 /**
  * The position enumeration
@@ -144,12 +154,12 @@ enum Position {
     BottomPositioned,  /**< Positioned bottom */
     CenterPositioned   /**< Positioned in the center */
 };
+Q_ENUMS(Position)
 
 /**
  * The popup position enumeration relatively to his attached widget
  *
  **/
-
 enum PopupPlacement {
     FloatingPopup = 0,            /**< Free floating, non attached popup */
     TopPosedLeftAlignedPopup,     /**< Popup positioned on the top, aligned
@@ -169,6 +179,7 @@ enum PopupPlacement {
     RightPosedBottomAlignedPopup  /**< Popup positioned on the right, aligned
                                      to the bottom of the widget */
 };
+Q_ENUMS(PopupPlacement)
 
 /**
  * Flip enumeration
@@ -178,6 +189,7 @@ enum FlipDirection {
     HorizontalFlip = 1,  /**< Flip horizontally */
     VerticalFlip = 2     /**< Flip vertically */
 };
+Q_ENUMS(FlipDirection)
 Q_DECLARE_FLAGS(Flip, FlipDirection)
 
 /**
@@ -188,6 +200,7 @@ enum IntervalAlignment {
     AlignToMinute, /**< Align to the minute **/
     AlignToHour /**< Align to the hour **/
 };
+Q_ENUMS(IntervalAlignment)
 
 /**
  * Defines the immutability of items like applets, corona and containments
@@ -201,6 +214,7 @@ enum ImmutabilityType {
     SystemImmutable = 4 /**<  the item is locked down by the system, the user
                            can't unlock it **/
 };
+Q_ENUMS(ImmutabilityType)
 
 /**
  * The ComonentType enumeration refers to the various types of components,
@@ -215,6 +229,7 @@ enum ComponentType {
     WallpaperComponent = 32,   /**< Plasma::Wallpaper based plugins **/
     GenericComponent = 64      /** Generic repositories of files, usually they keep QML files and their assets **/
 };
+Q_ENUMS(ComponentType)
 Q_DECLARE_FLAGS(ComponentTypes, ComponentType)
 
 enum MarginEdge {
@@ -223,15 +238,7 @@ enum MarginEdge {
     LeftMargin, /**< The left margin **/
     RightMargin /**< The right margin **/
 };
-
-enum MessageButton {
-    ButtonNone = 0, /**< None **/
-    ButtonOk = 1, /**< OK Button **/
-    ButtonYes = 2, /**< Yes Button **/
-    ButtonNo = 4, /**< No Button **/
-    ButtonCancel = 8 /**< Cancel Button **/
-};
-Q_DECLARE_FLAGS(MessageButtons, MessageButton)
+Q_ENUMS(MarginEdge)
 
 /**
  * Status of an applet
@@ -245,12 +252,6 @@ enum ItemStatus {
     AcceptingInputStatus = 4 /**< The Item is accepting input **/
 };
 Q_ENUMS(ItemStatus)
-
-enum AnnouncementMethod {
-    NoAnnouncement = 0, /**< No announcements **/
-    ZeroconfAnnouncement = 1 /**< Announcements via ZeroConf **/
-};
-Q_DECLARE_FLAGS(AnnouncementMethods, AnnouncementMethod)
 
 enum TrustLevel {
     UnverifiableTrust = 0,      /**< The trust of the object can not be verified, usually because no
@@ -276,6 +277,10 @@ enum BackgroundHints {
 };
 Q_ENUMS(BackgroundHints)
 
+private:
+    Types(QObject *parent = 0);
+};
+
 /**
  * Converts a location to a direction. Handy for figuring out which way to send a popup based on
  * location or to point arrows and other directional items.
@@ -283,7 +288,7 @@ Q_ENUMS(BackgroundHints)
  * @param location the location of the container the element will appear in
  * @return the visual direction the element should be oriented in
  **/
-PLASMA_EXPORT Direction locationToDirection(Location location);
+PLASMA_EXPORT Types::Direction locationToDirection(Types::Location location);
 
 /**
  * Converts a location to the direction facing it. Handy for figuring out which way to collapse
@@ -292,13 +297,14 @@ PLASMA_EXPORT Direction locationToDirection(Location location);
  * @param location the location of the container the element will appear in
  * @return the visual direction the element should be oriented in
  **/
-PLASMA_EXPORT Direction locationToInverseDirection(Location location);
+PLASMA_EXPORT Types::Direction locationToInverseDirection(Types::Location location);
 
 } // Plasma namespace
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Constraints)
-Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Flip)
-Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::ComponentTypes)
-Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::MessageButtons)
+
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Types::Constraints)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Types::Flip)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Types::ComponentTypes)
 
 #endif // multiple inclusion guard

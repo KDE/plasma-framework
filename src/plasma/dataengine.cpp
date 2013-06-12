@@ -96,7 +96,7 @@ KPluginInfo DataEngine::pluginInfo() const
 
 void DataEngine::connectSource(const QString &source, QObject *visualization,
                                uint pollingInterval,
-                               Plasma::IntervalAlignment intervalAlignment) const
+                               Plasma::Types::IntervalAlignment intervalAlignment) const
 {
     //kDebug() << "connectSource" << source;
     bool newSource;
@@ -117,7 +117,7 @@ void DataEngine::connectSource(const QString &source, QObject *visualization,
 }
 
 void DataEngine::connectAllSources(QObject *visualization, uint pollingInterval,
-                                   Plasma::IntervalAlignment intervalAlignment) const
+                                   Plasma::Types::IntervalAlignment intervalAlignment) const
 {
     foreach (DataContainer *s, d->sources) {
         d->connectSource(s, visualization, pollingInterval, intervalAlignment);
@@ -486,7 +486,7 @@ DataContainer *DataEnginePrivate::source(const QString &sourceName, bool createW
 
 void DataEnginePrivate::connectSource(DataContainer *s, QObject *visualization,
                                       uint pollingInterval,
-                                      Plasma::IntervalAlignment align,
+                                      Plasma::Types::IntervalAlignment align,
                                       bool immediateCall)
 {
     //kDebug() << "connect source called" << s->objectName() << "with interval" << pollingInterval;

@@ -134,7 +134,7 @@ public:
     void updateAndSignalSizes();
     QSizeF frameSize(FrameData *frame) const;
 
-    Location location;
+    Types::Location location;
     QString prefix;
 
     FrameSvg *q;

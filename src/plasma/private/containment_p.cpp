@@ -69,7 +69,7 @@ void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containme
     appletBrowserAction->setText(i18n("Add Widgets..."));
     appletBrowserAction->setIcon(QIcon::fromTheme("list-add"));
     appletBrowserAction->setShortcut(KShortcut("alt+d, a"));
-    appletBrowserAction->setData(Plasma::AddAction);
+    appletBrowserAction->setData(Plasma::Types::AddAction);
 }
 
 void ContainmentPrivate::setScreen(int newScreen)
@@ -101,8 +101,8 @@ void ContainmentPrivate::setScreen(int newScreen)
     //kDebug() << activity() << "setting screen to " << newScreen << "and type is" << type;
 
     Containment *swapScreensWith(0);
-    const bool isDesktopContainment = type == Plasma::DesktopContainment ||
-                                      type == Plasma::CustomContainment;
+    const bool isDesktopContainment = type == Plasma::Types::DesktopContainment ||
+                                      type == Plasma::Types::CustomContainment;
     if (isDesktopContainment) {
         if (newScreen > -1) {
             // sanity check to make sure someone else doesn't have this screen already!
@@ -123,7 +123,7 @@ void ContainmentPrivate::setScreen(int newScreen)
     int oldScreen = screen;
     screen = newScreen;
 
-    q->updateConstraints(Plasma::ScreenConstraint);
+    q->updateConstraints(Plasma::Types::ScreenConstraint);
 
     if (oldScreen != newScreen) {
         /*
@@ -161,7 +161,7 @@ void ContainmentPrivate::configChanged()
     q->setWallpaper(group.readEntry("wallpaperplugin", defaultWallpaper));
 }
 
-void ContainmentPrivate::checkStatus(Plasma::ItemStatus appletStatus)
+void ContainmentPrivate::checkStatus(Plasma::Types::ItemStatus appletStatus)
 {
     //kDebug() << "================== "<< appletStatus << q->status();
     if (appletStatus == q->status()) {
@@ -187,16 +187,16 @@ void ContainmentPrivate::triggerShowAddWidgets()
     emit q->showAddWidgetsInterface(QPointF());
 }
 
-void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constraints)
+void ContainmentPrivate::containmentConstraintsEvent(Plasma::Types::Constraints constraints)
 {
     if (!q->isContainment()) {
         return;
     }
 
     //kDebug() << "got containmentConstraintsEvent" << constraints;
-    if (constraints & Plasma::ImmutableConstraint) {
+    if (constraints & Plasma::Types::ImmutableConstraint) {
         //update actions
-        const bool unlocked = q->immutability() == Mutable;
+        const bool unlocked = q->immutability() == Types::Mutable;
 
         QAction *action = q->actions()->action("remove");
         if (action) {
@@ -213,21 +213,21 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
         // tell the applets too
         foreach (Applet *a, applets) {
             a->setImmutability(q->immutability());
-            a->updateConstraints(ImmutableConstraint);
+            a->updateConstraints(Types::ImmutableConstraint);
         }
     }
 
     // pass on the constraints that are relevant here
-    Constraints appletConstraints = NoConstraint;
-    if (constraints & FormFactorConstraint) {
-        appletConstraints |= FormFactorConstraint;
+    Types::Constraints appletConstraints = Types::NoConstraint;
+    if (constraints & Types::FormFactorConstraint) {
+        appletConstraints |= Types::FormFactorConstraint;
     }
 
-    if (constraints & ScreenConstraint) {
-        appletConstraints |= ScreenConstraint;
+    if (constraints & Types::ScreenConstraint) {
+        appletConstraints |= Types::ScreenConstraint;
     }
 
-    if (appletConstraints != NoConstraint) {
+    if (appletConstraints != Types::NoConstraint) {
         foreach (Applet *applet, applets) {
             applet->updateConstraints(appletConstraints);
         }
@@ -240,7 +240,7 @@ Applet *ContainmentPrivate::createApplet(const QString &name, const QVariantList
         return 0;
     }
 
-    if (q->immutability() != Mutable) {
+    if (q->immutability() != Types::Mutable) {
 #ifndef NDEBUG
         kDebug() << "addApplet for" << name << "requested, but we're currently immutable!";
 #endif
@@ -271,7 +271,7 @@ void ContainmentPrivate::appletDeleted(Plasma::Applet *applet)
 
 bool ContainmentPrivate::isPanelContainment() const
 {
-    return type == Plasma::PanelContainment || type == Plasma::CustomPanelContainment;
+    return type == Plasma::Types::PanelContainment || type == Plasma::Types::CustomPanelContainment;
 }
 
 }

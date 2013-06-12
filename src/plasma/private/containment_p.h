@@ -47,10 +47,10 @@ class ContainmentPrivate
 public:
     ContainmentPrivate(Containment *c)
         : q(c),
-          formFactor(Planar),
-          location(Floating),
+          formFactor(Types::Planar),
+          location(Types::Floating),
           screen(-1), // no screen
-          type(Plasma::NoContainmentType),
+          type(Plasma::Types::NoContainmentType),
           drawWallpaper(false)
     {
     }
@@ -65,7 +65,7 @@ public:
     }
 
     void triggerShowAddWidgets();
-    void checkStatus(Plasma::ItemStatus status);
+    void checkStatus(Plasma::Types::ItemStatus status);
     void setScreen(int newScreen);
 
     /**
@@ -73,7 +73,7 @@ public:
      * constraint services common to all containments. Containments should still
      * implement their own constraintsEvent method
      */
-    void containmentConstraintsEvent(Plasma::Constraints constraints);
+    void containmentConstraintsEvent(Plasma::Types::Constraints constraints);
 
     bool isPanelContainment() const;
     void setLockToolText();
@@ -95,14 +95,14 @@ public:
     static void addDefaultActions(KActionCollection *actions, Containment *c = 0);
 
     Containment *q;
-    FormFactor formFactor;
-    Location location;
+    Types::FormFactor formFactor;
+    Types::Location location;
     QList<Applet *> applets;
     QString wallpaper;
     QHash<QString, ContainmentActions*> localActionPlugins;
     int screen;
     QString activityId;
-    ContainmentType type;
+    Types::ContainmentType type;
     bool drawWallpaper : 1;
 
     static const char defaultWallpaper[];

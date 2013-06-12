@@ -61,12 +61,12 @@ QString ScriptEngine::mainScript() const
     return QString();
 }
 
-QStringList knownLanguages(ComponentTypes types)
+QStringList knownLanguages(Types::ComponentTypes types)
 {
     QString constraintTemplate = "'%1' in [X-Plasma-ComponentTypes]";
     QString constraint;
 
-    if (types & AppletComponent) {
+    if (types & Types::AppletComponent) {
         // currently this if statement is not needed, but this future proofs
         // the code against someone initializing constraint to something
         // before we get here.
@@ -77,7 +77,7 @@ QStringList knownLanguages(ComponentTypes types)
         constraint.append(constraintTemplate.arg("Applet"));
     }
 
-    if (types & DataEngineComponent) {
+    if (types & Types::DataEngineComponent) {
         if (!constraint.isEmpty()) {
             constraint.append(" or ");
         }
@@ -85,7 +85,7 @@ QStringList knownLanguages(ComponentTypes types)
         constraint.append(constraintTemplate.arg("DataEngine"));
     }
 
-    if (types & RunnerComponent) {
+    if (types & Types::RunnerComponent) {
         if (!constraint.isEmpty()) {
             constraint.append(" or ");
         }
@@ -108,7 +108,7 @@ QStringList knownLanguages(ComponentTypes types)
     return languages;
 }
 
-KService::List engineOffers(const QString &language, ComponentType type)
+KService::List engineOffers(const QString &language, Types::ComponentType type)
 {
     if (language.isEmpty()) {
         return KService::List();
@@ -124,13 +124,13 @@ KService::List engineOffers(const QString &language, ComponentType type)
 
     QString component;
     switch (type) {
-    case AppletComponent:
+    case Types::AppletComponent:
         component = "Applet";
         break;
-    case DataEngineComponent:
+    case Types::DataEngineComponent:
         component = "DataEngine";
         break;
-    case RunnerComponent:
+    case Types::RunnerComponent:
         component = "Runner";
         break;
     default:
@@ -152,7 +152,7 @@ KService::List engineOffers(const QString &language, ComponentType type)
     return offers;
 }
 
-ScriptEngine *loadEngine(const QString &language, ComponentType type, QObject *parent)
+ScriptEngine *loadEngine(const QString &language, Types::ComponentType type, QObject *parent)
 {
     KService::List offers = engineOffers(language, type);
 
@@ -162,13 +162,13 @@ ScriptEngine *loadEngine(const QString &language, ComponentType type, QObject *p
     ScriptEngine *engine = 0;
     foreach (const KService::Ptr &service, offers) {
         switch (type) {
-            case AppletComponent:
+            case Types::AppletComponent:
                 engine = service->createInstance<Plasma::AppletScript>(parent, args, &error);
                 break;
-            case DataEngineComponent:
+            case Types::DataEngineComponent:
                 engine = service->createInstance<Plasma::DataEngineScript>(parent, args, &error);
                 break;
-            case RunnerComponent:
+            case Types::RunnerComponent:
                 engine = service->createInstance<Plasma::RunnerScript>(parent, args, &error);
                 break;
             default:
@@ -195,7 +195,7 @@ ScriptEngine *loadEngine(const QString &language, ComponentType type, QObject *p
 AppletScript *loadScriptEngine(const QString &language, Applet *applet)
 {
     AppletScript *engine =
-        static_cast<AppletScript*>(loadEngine(language, AppletComponent, applet));
+        static_cast<AppletScript*>(loadEngine(language, Types::AppletComponent, applet));
 
     if (engine) {
         engine->setApplet(applet);
@@ -207,7 +207,7 @@ AppletScript *loadScriptEngine(const QString &language, Applet *applet)
 DataEngineScript *loadScriptEngine(const QString &language, DataEngine *dataEngine)
 {
     DataEngineScript *engine =
-        static_cast<DataEngineScript*>(loadEngine(language, DataEngineComponent, dataEngine));
+        static_cast<DataEngineScript*>(loadEngine(language, Types::DataEngineComponent, dataEngine));
 
     if (engine) {
         engine->setDataEngine(dataEngine);
@@ -218,7 +218,7 @@ DataEngineScript *loadScriptEngine(const QString &language, DataEngine *dataEngi
 
 RunnerScript *loadScriptEngine(const QString &language, AbstractRunner *runner)
 {
-    RunnerScript *engine = static_cast<RunnerScript*>(loadEngine(language, RunnerComponent, runner));
+    RunnerScript *engine = static_cast<RunnerScript*>(loadEngine(language, Types::RunnerComponent, runner));
 
     if (engine) {
         engine->setRunner(runner);

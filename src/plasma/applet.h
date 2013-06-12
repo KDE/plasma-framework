@@ -101,7 +101,7 @@ class PLASMA_EXPORT Applet : public QObject
         /**
          * @return The type of immutability of this applet
          */
-        ImmutabilityType immutability() const;
+        Types::ImmutabilityType immutability() const;
 
         /**
          * If for some reason, the applet fails to get up on its feet (the
@@ -138,21 +138,21 @@ class PLASMA_EXPORT Applet : public QObject
          * @return the status of the applet
          * @since 4.4
          */
-        ItemStatus status() const;
+        Types::ItemStatus status() const;
 
         /**
          * Returns the current form factor the applet is being displayed in.
          *
          * @see Plasma::FormFactor
          */
-        FormFactor formFactor() const;
+        Types::FormFactor formFactor() const;
 
         /**
          * Returns the location of the scene which is displaying applet.
          *
-         * @see Plasma::Location
+         * @see Plasma::Types::Location
          */
-        Location location() const;
+        Types::Location location() const;
 
 //CONFIGURATION
         /**
@@ -225,7 +225,7 @@ class PLASMA_EXPORT Applet : public QObject
          *
          * @param constraints the type of constraints that were updated
          */
-        void updateConstraints(Plasma::Constraints constraints = Plasma::AllConstraints);
+        void updateConstraints(Plasma::Types::Constraints constraints = Plasma::Types::AllConstraints);
 
 
 //METADATA
@@ -357,13 +357,13 @@ class PLASMA_EXPORT Applet : public QObject
          * Emitted when the immutability changes
          * @since 4.4
          */
-        void immutabilityChanged(Plasma::ImmutabilityType immutable);
+        void immutabilityChanged(Plasma::Types::ImmutabilityType immutable);
 
         /**
          * Emitted when the applet status changes
          * @since 4.4
          */
-        void statusChanged(Plasma::ItemStatus status);
+        void statusChanged(Plasma::Types::ItemStatus status);
         
 //CONFIGURATION
         /**
@@ -407,7 +407,7 @@ class PLASMA_EXPORT Applet : public QObject
          * user immutable or system immutable)
          * @param immutable the new immutability type of this applet
          */
-        void setImmutability(const ImmutabilityType immutable);
+        void setImmutability(const Types::ImmutabilityType immutable);
 
         /**
          * Destroys the applet; it will be removed nicely and deleted.
@@ -420,7 +420,7 @@ class PLASMA_EXPORT Applet : public QObject
          * sets the status for this applet
          * @since 4.4
          */
-        void setStatus(const ItemStatus stat);
+        void setStatus(const Types::ItemStatus stat);
 
 //CONFIGURATION
         /**
@@ -546,7 +546,7 @@ class PLASMA_EXPORT Applet : public QObject
          * @param constraints the type of constraints that were updated
          * @property constraint
          */
-        virtual void constraintsEvent(Plasma::Constraints constraints);
+        virtual void constraintsEvent(Plasma::Types::Constraints constraints);
 
 //TODO: timerEvent should go into AppletPrivate
         /**

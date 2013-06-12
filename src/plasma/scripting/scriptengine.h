@@ -85,7 +85,7 @@ private:
  *            language support for
  * @return a list of all supported languages for the given type(s).
  **/
-PLASMA_EXPORT QStringList knownLanguages(ComponentTypes types);
+PLASMA_EXPORT QStringList knownLanguages(Types::ComponentTypes types);
 
 /**
  * Loads an Applet script engine for the given language.

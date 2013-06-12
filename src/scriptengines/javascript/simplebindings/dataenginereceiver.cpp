@@ -128,12 +128,12 @@ QScriptValue DataEngineReceiver::connectAllSources(QScriptContext *context, QScr
     }
 
     int pollingInterval = 0;
-    Plasma::IntervalAlignment intervalAlignment = Plasma::NoAlignment;
+    Plasma::Types::IntervalAlignment intervalAlignment = Plasma::NoAlignment;
     if (context->argumentCount() > 1) {
         pollingInterval = context->argument(2).toInt32();
 
         if (context->argumentCount() > 2) {
-            intervalAlignment = static_cast<Plasma::IntervalAlignment>(context->argument(4).toInt32());
+            intervalAlignment = static_cast<Plasma::Types::IntervalAlignment>(context->argument(4).toInt32());
         }
     }
 
@@ -168,12 +168,12 @@ QScriptValue DataEngineReceiver::connectSource(QScriptContext *context, QScriptE
     }
 
     int pollingInterval = 0;
-    Plasma::IntervalAlignment intervalAlignment = Plasma::NoAlignment;
+    Plasma::Types::IntervalAlignment intervalAlignment = Plasma::NoAlignment;
     if (context->argumentCount() > 2) {
         pollingInterval = context->argument(2).toInt32();
 
         if (context->argumentCount() > 3) {
-            intervalAlignment = static_cast<Plasma::IntervalAlignment>(context->argument(4).toInt32());
+            intervalAlignment = static_cast<Plasma::Types::IntervalAlignment>(context->argument(4).toInt32());
         }
     }
 

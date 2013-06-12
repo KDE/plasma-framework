@@ -92,8 +92,8 @@ void Corona::exportLayout(KConfigGroup &config, QList<Containment*> containments
     }
 
     //temporarily unlock so that removal works
-    ImmutabilityType oldImm = immutability();
-    d->immutability = Mutable;
+    Types::ImmutabilityType oldImm = immutability();
+    d->immutability = Types::Mutable;
 
     KConfigGroup dest(&config, "Containments");
     KConfigGroup dummy;
@@ -102,10 +102,10 @@ void Corona::exportLayout(KConfigGroup &config, QList<Containment*> containments
         c->config().reparent(&dest);
 
         //ensure the containment is unlocked
-        //this is done directly because we have to bypass any SystemImmutable checks
-        c->Applet::d->immutability = Mutable;
+        //this is done directly because we have to bypass any Types::SystemImmutable checks
+        c->Applet::d->immutability = Types::Mutable;
         foreach (Applet *a, c->applets()) {
-            a->d->immutability = Mutable;
+            a->d->immutability = Types::Mutable;
         }
 
         c->destroy();
@@ -161,8 +161,8 @@ Containment *Corona::containmentForScreen(int screen) const
 {
     foreach (Containment *containment, d->containments) {
         if (containment->screen() == screen &&
-            (containment->containmentType() == Plasma::DesktopContainment ||
-             containment->containmentType() == Plasma::CustomContainment)) {
+            (containment->containmentType() == Plasma::Types::DesktopContainment ||
+             containment->containmentType() == Plasma::Types::CustomContainment)) {
             return containment;
         }
     }
@@ -186,7 +186,7 @@ KSharedConfigPtr Corona::config() const
 
 Containment *Corona::createContainment(const QString &name, const QVariantList &args)
 {
-    if (d->immutability == Mutable) {
+    if (d->immutability == Types::Mutable) {
         return d->addContainment(name, args, 0);
     }
 
@@ -213,14 +213,14 @@ void Corona::loadDefaultLayout()
     //Default implementation does nothing
 }
 
-ImmutabilityType Corona::immutability() const
+Types::ImmutabilityType Corona::immutability() const
 {
     return d->immutability;
 }
 
-void Corona::setImmutability(const ImmutabilityType immutable)
+void Corona::setImmutability(const Types::ImmutabilityType immutable)
 {
-    if (d->immutability == immutable || d->immutability == SystemImmutable) {
+    if (d->immutability == immutable || d->immutability == Types::SystemImmutable) {
         return;
     }
 
@@ -235,11 +235,11 @@ void Corona::setImmutability(const ImmutabilityType immutable)
     //update our actions
     QAction *action = d->actions.action("lock widgets");
     if (action) {
-        if (d->immutability == SystemImmutable) {
+        if (d->immutability == Types::SystemImmutable) {
             action->setEnabled(false);
             action->setVisible(false);
         } else {
-            bool unlocked = d->immutability == Mutable;
+            bool unlocked = d->immutability == Types::Mutable;
             action->setText(unlocked ? i18n("Lock Widgets") : i18n("Unlock Widgets"));
             action->setIcon(QIcon::fromTheme(unlocked ? "object-locked" : "object-unlocked"));
             action->setEnabled(true);
@@ -247,7 +247,7 @@ void Corona::setImmutability(const ImmutabilityType immutable)
         }
     }
 
-    if (d->immutability != SystemImmutable) {
+    if (d->immutability != Types::SystemImmutable) {
         KConfigGroup cg(config(), "General");
 
         // we call the dptr member directly for locked since isImmutable()
@@ -257,11 +257,11 @@ void Corona::setImmutability(const ImmutabilityType immutable)
     }
 }
 
-QList<Plasma::Location> Corona::freeEdges(int screen) const
+QList<Plasma::Types::Location> Corona::freeEdges(int screen) const
 {
-    QList<Plasma::Location> freeEdges;
-    freeEdges << Plasma::TopEdge << Plasma::BottomEdge
-              << Plasma::LeftEdge << Plasma::RightEdge;
+    QList<Plasma::Types::Location> freeEdges;
+    freeEdges << Plasma::Types::TopEdge << Plasma::Types::BottomEdge
+              << Plasma::Types::LeftEdge << Plasma::Types::RightEdge;
 
     foreach (Containment *containment, containments()) {
         if (containment->screen() == screen &&
@@ -280,7 +280,7 @@ KActionCollection *Corona::actions() const
 
 CoronaPrivate::CoronaPrivate(Corona *corona)
     : q(corona),
-      immutability(Mutable),
+      immutability(Types::Mutable),
       config(0),
       configSyncTimer(new QTimer(corona)),
       actions(corona)
@@ -317,7 +317,7 @@ void CoronaPrivate::init()
     lockAction->setText(i18n("Lock Widgets"));
     lockAction->setAutoRepeat(true);
     lockAction->setIcon(QIcon::fromTheme("object-locked"));
-    lockAction->setData(Plasma::ControlAction);
+    lockAction->setData(Plasma::Types::ControlAction);
     lockAction->setShortcut(KShortcut("alt+d, l"));
     lockAction->setShortcutContext(Qt::ApplicationShortcut);
 
@@ -328,10 +328,10 @@ void CoronaPrivate::init()
 
 void CoronaPrivate::toggleImmutability()
 {
-    if (immutability == Mutable) {
-        q->setImmutability(UserImmutable);
+    if (immutability == Types::Mutable) {
+        q->setImmutability(Types::UserImmutable);
     } else {
-        q->setImmutability(Mutable);
+        q->setImmutability(Types::Mutable);
     }
 }
 
@@ -349,7 +349,7 @@ void CoronaPrivate::updateContainmentImmutability()
 {
     foreach (Containment *c, containments) {
         // we need to tell each containment that immutability has been altered
-        c->updateConstraints(ImmutableConstraint);
+        c->updateConstraints(Types::ImmutableConstraint);
     }
 }
 
@@ -418,7 +418,7 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
         }
 
         // we want to provide something and don't care about the failure to launch
-        containment->setFormFactor(Plasma::Planar);
+        containment->setFormFactor(Plasma::Types::Planar);
     }
 
     // if this is a new containment, we need to ensure that there are no stale
@@ -443,7 +443,7 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
     containment->init();
     KConfigGroup cg = containment->config();
     containment->restore(cg);
-    containment->updateConstraints(Plasma::StartupCompletedConstraint);
+    containment->updateConstraints(Plasma::Types::StartupCompletedConstraint);
     containment->save(cg);
     q->requestConfigSync();
     containment->flushPendingConstraintsEvents();

@@ -50,16 +50,16 @@ namespace Plasma
 AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int uniqueID, Applet *applet)
         : appletId(uniqueID),
           q(applet),
-          immutability(Mutable),
+          immutability(Types::Mutable),
           appletDescription(info ? *info : KPluginInfo(service)),
           mainConfig(0),
-          pendingConstraints(NoConstraint),
+          pendingConstraints(Types::NoConstraint),
           script(0),
           package(0),
           configLoader(0),
           actions(AppletPrivate::defaultActions(applet)),
           activationAction(0),
-          itemStatus(UnknownStatus),
+          itemStatus(Types::UnknownStatus),
           modificationsTimer(0),
           hasConfigurationInterface(false),
           isContainment(false),
@@ -202,14 +202,14 @@ KActionCollection* AppletPrivate::defaultActions(QObject *parent)
     configAction->setText(i18n("Widget Settings"));
     configAction->setIcon(QIcon::fromTheme("configure"));
     configAction->setShortcut(KShortcut("alt+d, s"));
-    configAction->setData(Plasma::ConfigureAction);
+    configAction->setData(Plasma::Types::ConfigureAction);
 
     KAction *closeApplet = actions->add<KAction>("remove");
     closeApplet->setAutoRepeat(false);
     closeApplet->setText(i18n("Remove this Widget"));
     closeApplet->setIcon(QIcon::fromTheme("edit-delete"));
     closeApplet->setShortcut(KShortcut("alt+d, r"));
-    closeApplet->setData(Plasma::DestructiveAction);
+    closeApplet->setData(Plasma::Types::DestructiveAction);
 
     KAction *runAssociatedApplication = actions->add<KAction>("run associated application");
     runAssociatedApplication->setAutoRepeat(false);
@@ -218,7 +218,7 @@ KActionCollection* AppletPrivate::defaultActions(QObject *parent)
     runAssociatedApplication->setShortcut(KShortcut("alt+d, t"));
     runAssociatedApplication->setVisible(false);
     runAssociatedApplication->setEnabled(false);
-    runAssociatedApplication->setData(Plasma::ControlAction);
+    runAssociatedApplication->setData(Plasma::Types::ControlAction);
 
     return actions;
 }
@@ -317,15 +317,15 @@ QString AppletPrivate::globalName() const
     return appletDescription.service()->library();
 }
 
-void AppletPrivate::scheduleConstraintsUpdate(Plasma::Constraints c)
+void AppletPrivate::scheduleConstraintsUpdate(Plasma::Types::Constraints c)
 {
     // Don't start up a timer if we're just starting up
     // flushPendingConstraints will be called by Corona
-    if (started && !constraintsTimer.isActive() && !(c & Plasma::StartupCompletedConstraint)) {
+    if (started && !constraintsTimer.isActive() && !(c & Plasma::Types::StartupCompletedConstraint)) {
         constraintsTimer.start(0, q);
     }
 
-    if (c & Plasma::StartupCompletedConstraint) {
+    if (c & Plasma::Types::StartupCompletedConstraint) {
         started = true;
     }
 

@@ -66,7 +66,7 @@ void AppletScript::paintInterface(QPainter *painter,
     Q_UNUSED(contentsRect);
 }
 
-void AppletScript::constraintsEvent(Plasma::Constraints constraints)
+void AppletScript::constraintsEvent(Plasma::Types::Constraints constraints)
 {
     Q_UNUSED(constraints);
 }
@@ -146,18 +146,18 @@ void AppletScript::setDrawWallpaper(bool drawWallpaper)
     }
 }
 
-Plasma::ContainmentType AppletScript::containmentType() const
+Plasma::Types::ContainmentType AppletScript::containmentType() const
 {
     Q_ASSERT(d->applet);
     Plasma::Containment *cont = qobject_cast<Plasma::Containment *>(d->applet);
     if (cont) {
         return cont->containmentType();
     } else {
-        return Plasma::NoContainmentType;
+        return Plasma::Types::NoContainmentType;
     }
 }
 
-void AppletScript::setContainmentType(Plasma::ContainmentType type)
+void AppletScript::setContainmentType(Plasma::Types::ContainmentType type)
 {
     Q_ASSERT(d->applet);
     Plasma::Containment *cont = qobject_cast<Plasma::Containment *>(d->applet);

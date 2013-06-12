@@ -23,7 +23,6 @@ set(corebindings_SRCS
     serviceoperationstatus.cpp
     dataenginebindings.cpp
     iconitem.cpp
-    plasmanamespace.cpp
     )
 
 add_library(corebindingsplugin SHARED ${corebindings_SRCS})

@@ -129,17 +129,17 @@ QObject *DeclarativeAppletScript::loadui(const QString &filename)
 }
 
 
-void DeclarativeAppletScript::constraintsEvent(Plasma::Constraints constraints)
+void DeclarativeAppletScript::constraintsEvent(Plasma::Types::Constraints constraints)
 {
-    if (constraints & Plasma::FormFactorConstraint) {
+    if (constraints & Plasma::Types::FormFactorConstraint) {
         emit formFactorChanged();
     }
 
-    if (constraints & Plasma::LocationConstraint) {
+    if (constraints & Plasma::Types::LocationConstraint) {
         emit locationChanged();
     }
 
-    if (constraints & Plasma::ContextConstraint) {
+    if (constraints & Plasma::Types::ContextConstraint) {
         emit contextChanged();
     }
 }

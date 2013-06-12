@@ -70,8 +70,8 @@ void ToolBoxProxy::init()
     d->configureAction = 0;
 
     if (d->containment) {
-        connect(d->containment, SIGNAL(immutabilityChanged(Plasma::ImmutabilityType)),
-                this, SLOT(immutabilityChanged(Plasma::ImmutabilityType)));
+        connect(d->containment, SIGNAL(immutabilityChanged(Plasma::Types::ImmutabilityType)),
+                this, SLOT(immutabilityChanged(Plasma::Types::ImmutabilityType)));
         connect(this, SIGNAL(configureRequested(Plasma::Containment*)),
                 d->containment, SIGNAL(configureRequested(Plasma::Containment*)));
         connect(this, SIGNAL(showAddWidgetsInterface(const QPointF&)),
@@ -171,7 +171,7 @@ void ToolBoxProxy::setShowing(const bool show)
     d->showing = show;
 }
 
-void ToolBoxProxy::immutabilityChanged(Plasma::ImmutabilityType immutability)
+void ToolBoxProxy::immutabilityChanged(Plasma::Types::ImmutabilityType immutability)
 {
     Q_UNUSED(immutability);
     loadActions();

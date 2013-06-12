@@ -62,7 +62,7 @@ public:
     void setIsContainment(bool isContainment, bool forceUpdate = false);
 
     QString globalName() const;
-    void scheduleConstraintsUpdate(Plasma::Constraints c);
+    void scheduleConstraintsUpdate(Plasma::Types::Constraints c);
     void scheduleModificationNotification();
     KConfigGroup *mainConfigGroup();
     void resetConfigurationObject();
@@ -80,7 +80,7 @@ public:
     Applet *q;
 
     // applet attributes
-    ImmutabilityType immutability;
+    Types::ImmutabilityType immutability;
     QString launchErrorMessage;
 
     // applet info we keep around in case its needed
@@ -89,7 +89,7 @@ public:
 
     // bookkeeping
     KConfigGroup *mainConfig;
-    Plasma::Constraints pendingConstraints;
+    Plasma::Types::Constraints pendingConstraints;
 
     // sripting and package stuff
     AppletScript *script;
@@ -100,7 +100,7 @@ public:
     KActionCollection *actions;
     KAction *activationAction;
 
-    ItemStatus itemStatus;
+    Types::ItemStatus itemStatus;
 
     // timerEvent bookkeeping
     QBasicTimer constraintsTimer;

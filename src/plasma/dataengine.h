@@ -120,7 +120,7 @@ class PLASMA_EXPORT DataEngine : public QObject
         Q_INVOKABLE void connectSource(
             const QString &source, QObject *visualization,
             uint pollingInterval = 0,
-            Plasma::IntervalAlignment intervalAlignment = NoAlignment) const;
+            Plasma::Types::IntervalAlignment intervalAlignment = Types::NoAlignment) const;
 
         /**
          * Connects all currently existing sources to an object for data updates.
@@ -150,8 +150,8 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @param intervalAlignment the number of ms to align the interval to
          **/
         Q_INVOKABLE void connectAllSources(QObject *visualization, uint pollingInterval = 0,
-                                           Plasma::IntervalAlignment intervalAlignment =
-NoAlignment) const;
+                                           Plasma::Types::IntervalAlignment intervalAlignment =
+Types::NoAlignment) const;
 
         /**
          * Disconnects a source from an object that was receiving data updates.

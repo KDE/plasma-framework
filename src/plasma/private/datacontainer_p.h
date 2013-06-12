@@ -59,7 +59,7 @@ public:
     void checkUsage();
 
     SignalRelay *signalRelay(const DataContainer *dc, QObject *visualization,
-                             uint pollingInterval, Plasma::IntervalAlignment align,
+                             uint pollingInterval, Plasma::Types::IntervalAlignment align,
                              bool immediateUpdate);
 
     bool hasUpdates();
@@ -100,7 +100,7 @@ class SignalRelay : public QObject
 
 public:
     SignalRelay(DataContainer *parent, DataContainerPrivate *data,
-                uint ival, Plasma::IntervalAlignment align, bool immediateUpdate);
+                uint ival, Plasma::Types::IntervalAlignment align, bool immediateUpdate);
 
     int receiverCount() const;
     bool isUnused() const;
@@ -112,7 +112,7 @@ public:
     DataContainer *dc;
     DataContainerPrivate *d;
     uint m_interval;
-    Plasma::IntervalAlignment m_align;
+    Plasma::Types::IntervalAlignment m_align;
     int m_timerId;
     bool m_resetTimer;
     bool m_queued;

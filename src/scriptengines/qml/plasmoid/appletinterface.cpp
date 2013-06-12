@@ -56,7 +56,7 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
     : QQuickItem(parent),
       m_appletScriptEngine(script),
       m_actionSignals(0),
-      m_backgroundHints(Plasma::StandardBackground),
+      m_backgroundHints(Plasma::Types::StandardBackground),
       m_busy(false),
       m_expanded(false)
 {
@@ -65,8 +65,8 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
 
     connect(this, SIGNAL(releaseVisualFocus()), applet(), SIGNAL(releaseVisualFocus()));
     connect(this, SIGNAL(configNeedsSaving()), applet(), SIGNAL(configNeedsSaving()));
-    connect(applet(), SIGNAL(immutabilityChanged(Plasma::ImmutabilityType)), this, SIGNAL(immutableChanged()));
-    connect(applet(), SIGNAL(statusChanged(Plasma::ItemStatus)), this, SIGNAL(statusChanged()));
+    connect(applet(), SIGNAL(immutabilityChanged(Plasma::Types::ImmutabilityType)), this, SIGNAL(immutableChanged()));
+    connect(applet(), SIGNAL(statusChanged(Plasma::Types::ItemStatus)), this, SIGNAL(statusChanged()));
     connect(m_appletScriptEngine, SIGNAL(formFactorChanged()),
             this, SIGNAL(formFactorChanged()));
     connect(m_appletScriptEngine, SIGNAL(locationChanged()),
@@ -135,9 +135,9 @@ void AppletInterface::init()
     Plasma::Containment *pc = qobject_cast<Plasma::Containment *>(applet());
     if (pc && !qobject_cast<Plasma::Applet *>(pc->parent())) {
         KConfigGroup defaults;
-        if (pc->containmentType() == Plasma::DesktopContainment) {
+        if (pc->containmentType() == Plasma::Types::DesktopContainment) {
             defaults = KConfigGroup(KSharedConfig::openConfig(pc->corona()->package().filePath("defaults")), "Desktop");
-        } else if (pc->containmentType() == Plasma::PanelContainment) {
+        } else if (pc->containmentType() == Plasma::Types::PanelContainment) {
             defaults = KConfigGroup(KSharedConfig::openConfig(pc->corona()->package().filePath("defaults")), "Panel");
         }
 
@@ -179,14 +179,14 @@ void AppletInterface::init()
     emit busyChanged();
 }
 
-AppletInterface::FormFactor AppletInterface::formFactor() const
+Plasma::Types::FormFactor AppletInterface::formFactor() const
 {
-    return static_cast<FormFactor>(applet()->formFactor());
+    return applet()->formFactor();
 }
 
-AppletInterface::Location AppletInterface::location() const
+Plasma::Types::Location AppletInterface::location() const
 {
-    return static_cast<Location>(applet()->location());
+    return applet()->location();
 }
 
 QString AppletInterface::currentActivity() const
@@ -256,18 +256,18 @@ void AppletInterface::setExpanded(bool expanded)
     emit expandedChanged();
 }
 
-AppletInterface::BackgroundHints AppletInterface::backgroundHints() const
+Plasma::Types::BackgroundHints AppletInterface::backgroundHints() const
 {
-    return (BackgroundHints)m_backgroundHints;
+    return m_backgroundHints;
 }
 
-void AppletInterface::setBackgroundHints(BackgroundHints hint)
+void AppletInterface::setBackgroundHints(Plasma::Types::BackgroundHints hint)
 {
-    if (m_backgroundHints == (Plasma::BackgroundHints)hint) {
+    if (m_backgroundHints == hint) {
         return;
     }
 
-    m_backgroundHints = (Plasma::BackgroundHints)hint;
+    m_backgroundHints = hint;
     emit backgroundHintsChanged();
 }
 
@@ -447,7 +447,7 @@ QAction *AppletInterface::action(QString name) const
 
 bool AppletInterface::immutable() const
 {
-    return applet()->immutability() != Plasma::Mutable;
+    return applet()->immutability() != Plasma::Types::Mutable;
 }
 
 bool AppletInterface::userConfiguring() const
@@ -482,14 +482,14 @@ QString AppletInterface::associatedApplication() const
     return applet()->associatedApplication();
 }
 
-void AppletInterface::setStatus(const AppletInterface::ItemStatus &status)
+void AppletInterface::setStatus(const Plasma::Types::ItemStatus &status)
 {
-    applet()->setStatus((Plasma::ItemStatus)status);
+    applet()->setStatus(status);
 }
 
-AppletInterface::ItemStatus AppletInterface::status() const
+Plasma::Types::ItemStatus AppletInterface::status() const
 {
-    return (AppletInterface::ItemStatus)((int)(applet()->status()));
+    return applet()->status();
 }
 
 QString AppletInterface::downloadPath(const QString &file)
