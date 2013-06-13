@@ -1,6 +1,4 @@
 
-
-
 find_package(KF5 MODULE REQUIRED COMPONENTS InstallDirs)
 
 macro(installPackage dir component)

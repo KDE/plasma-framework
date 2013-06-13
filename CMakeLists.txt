@@ -137,27 +137,13 @@ if(QCA2_FOUND)
     )
 endif()
 
-
+include(PlasmaMacros.cmake)
 
 ################# configure checks and create the configured files #################
 
 # now create config headers
 configure_file(config-prefix.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-prefix.h )
 configure_file(config-compiler.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-compiler.h )
-
-
-macro(installPackage dir component)
-   set(root ${ARGV2})
-   set(type ${ARGV3})
-   if(NOT root)
-      set(root plasma/plasmoids)
-   endif()
-   if(NOT type)
-      set(type applet)
-   endif()
-   install(DIRECTORY ${dir}/ DESTINATION ${DATA_INSTALL_DIR}/${root}/${component} PATTERN .svn EXCLUDE PATTERN CMakeLists.txt EXCLUDE PATTERN Messages.sh EXCLUDE)
-   install(FILES ${dir}/metadata.desktop DESTINATION ${SERVICES_INSTALL_DIR} RENAME plasma-${type}-${component}.desktop)
-endmacro()
 
 ################ create PlasmaConfig.cmake and install it ###########################
 
@@ -192,15 +178,6 @@ install(FILES
 
 # install(EXPORT plasmaTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
 #         FILE plasmaTargets.cmake COMPONENT Devel)
-
-
-# install(FILES
-#             "${CMAKE_CURRENT_SOURCE_DIR}/PlasmaMacros.cmake"
-#             "FindPlasma.cmake"
-#         DESTINATION
-#             ${DATA_INSTALL_DIR}/cmake/modules
-#        )
-
 
 
 ################# list the subdirectories #################
