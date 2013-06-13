@@ -233,3 +233,5 @@ install(FILES data/operations/dataengineservice.operations DESTINATION ${DATA_IN
 install(FILES data/operations/plasmoidservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
 install(FILES data/operations/storage.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
 
+install(TARGETS plasma EXPORT PlasmaTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
+
