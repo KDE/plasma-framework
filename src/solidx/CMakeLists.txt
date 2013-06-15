@@ -1,0 +1,50 @@
+include(CheckCXXSourceCompiles)
+
+add_definitions("-std=c++11")
+
+set(solidx_LIB_SRCS
+#    pointer.cpp
+    main.cpp
+    )
+
+include(CheckIncludeFiles)
+include(CheckFunctionExists)
+include(CheckCXXSourceCompiles)
+
+add_executable(SolidX ${solidx_LIB_SRCS})
+
+find_package(X11 REQUIRED)
+find_package(XCB REQUIRED)
+find_package(X11_XCB)
+
+include_directories(${XCB_INCLUDE_DIR})
+
+message("X11_X11_LIB                     ${X11_X11_LIB}")
+message("X11_Xext_LIB                    ${X11_Xext_LIB}")
+message("X11_ICE_LIB                     ${X11_ICE_LIB}")
+message("X11_SM_LIB                      ${X11_SM_LIB}")
+message("X11_Xcursor_LIB                 ${X11_Xcursor_LIB}")
+message("X11_Xrandr_LIB                  ${X11_Xrandr_LIB}")
+message("X11_Xdamage_LIB                 ${X11_Xdamage_LIB}")
+message("X11_Xrender_LIB                 ${X11_Xrender_LIB}")
+message("X11_Xfixes_LIB                  ${X11_Xfixes_LIB}")
+message("X11_XCB_LIBRARIES               ${X11_XCB_LIBRARIES}")
+message("XCB_XCB_LIBRARIES               ${XCB_XCB_LIBRARIES}")
+message("XCB_XFIXES_LIBRARIES            ${XCB_XFIXES_LIBRARIES}")
+message("XCB_DAMAGE_LIBRARIES            ${XCB_DAMAGE_LIBRARIES}")
+message("XCB_COMPOSITE_LIBRARIES         ${XCB_COMPOSITE_LIBRARIES}")
+message("XCB_SHAPE_LIBRARIES             ${XCB_SHAPE_LIBRARIES}")
+message("XCB_SYNC_LIBRARIES              ${XCB_SYNC_LIBRARIES}")
+message("XCB_RENDER_LIBRARIES            ${XCB_RENDER_LIBRARIES}")
+message("XCB_RANDR_LIBRARIES             ${XCB_RANDR_LIBRARIES}")
+message("XCB_KEYSYMS_LIBRARIES           ${XCB_KEYSYMS_LIBRARIES}")
+message("XCB_ICCCM_LIBRARIES             ${XCB_ICCCM_LIBRARIES}")
+
+target_link_libraries(
+    SolidX
+    #${X11_X11_LIB}
+    ${XCB_XCB_LIBRARIES}
+    #${X11_XCB_LIBRARIES}
+)
+# target_link_libraries(SolidX LINK_PUBLIC Qt5::Core Qt5::Gui ${XCB_XCB_LIBRARIES} ${X11_XCB_LIBRARIES})
+
