@@ -2,6 +2,12 @@ include(CheckCXXSourceCompiles)
 
 add_definitions("-std=c++11")
 
+set(
+    CMAKE_MODULE_PATH
+    /opt/kf5/usr/kde/share/ECM-0.0.8/find-modules/
+    ${CMAKE_MODULE_PATH}
+    )
+
 set(solidx_LIB_SRCS
 #    pointer.cpp
     main.cpp
@@ -42,9 +48,10 @@ message("XCB_ICCCM_LIBRARIES             ${XCB_ICCCM_LIBRARIES}")
 
 target_link_libraries(
     SolidX
-    #${X11_X11_LIB}
+    ${X11_X11_LIB}
+    ${X11_INPUT_LIB} -lXi
     ${XCB_XCB_LIBRARIES}
-    #${X11_XCB_LIBRARIES}
+    ${X11_XCB_LIBRARIES}
 )
 # target_link_libraries(SolidX LINK_PUBLIC Qt5::Core Qt5::Gui ${XCB_XCB_LIBRARIES} ${X11_XCB_LIBRARIES})
 

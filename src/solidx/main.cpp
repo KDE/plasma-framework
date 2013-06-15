@@ -21,10 +21,10 @@
 
 #include <xcb/xcb.h>
 
-// #include <QDebug>
 #include <iostream>
 #include <unistd.h>
 
+#include <X11/extensions/XInput.h>
 
 int main(int argc, char *argv[])
 {
@@ -61,20 +61,54 @@ int main(int argc, char *argv[])
     //xcb_map_window(connection, window);
     //xcb_flush(connection);
 
-    while (1) {
+    for (int i = 0; i < setup->roots_len; i++) {
         xcb_screen_next(&screen);
         auto data = screen.data;
 
-        std::cerr << "Informations of screen" << data->root << std::endl;
+        std::cerr << "Informations of screen: " << data->root << std::endl;
         std::cerr << "  width.........: " << data->width_in_pixels << std::endl;
         std::cerr << "  height........: " << data->height_in_pixels << std::endl;
         std::cerr << "  white pixel...: " << data->white_pixel << std::endl;
         std::cerr << "  black pixel...: " << data->black_pixel << std::endl;
     }
 
-    sleep(5);
+    std::cerr << "-------------------------------------" << std::endl;
 
     xcb_disconnect(connection);
+
+    // XLib opening connection
+    int  device_count = -1;
+    auto display = XOpenDisplay(nullptr);
+
+    if (!display) return EXIT_FAILURE;
+
+    // Listing screens
+    auto screen_count = XScreenCount(display);
+
+    std::cerr << "Display has screens:" << screen_count << std::endl;
+
+    for (int i = 0; i < screen_count; i++) {
+        auto height = XDisplayHeight(display, i);
+        auto width  = XDisplayWidth(display, i);
+
+        std::cerr << "size is " << width << "x" << height << std::endl;
+    }
+
+    // Listing input devices
+    auto devices = XListInputDevices(display, &device_count);
+
+    if (devices) for (int i = 0; i < device_count; i++) {
+        auto device = devices[i];
+
+        std::cerr
+            << device.name << " "
+            << device.use << " "
+            << device.id << std::endl;
+    }
+
+
+    XFreeDeviceList(devices);
+    XCloseDisplay(display);
 
     std::cerr << "out" << std::endl;
 
