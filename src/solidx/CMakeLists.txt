@@ -1,29 +1,37 @@
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
 include(CheckCXXSourceCompiles)
 
 add_definitions("-std=c++11")
 
-set(
-    CMAKE_MODULE_PATH
+set(CMAKE_MODULE_PATH
     /opt/kf5/usr/kde/share/ECM-0.0.8/find-modules/
     ${CMAKE_MODULE_PATH}
     )
 
 set(solidx_LIB_SRCS
-#    pointer.cpp
     main.cpp
+    backends/xlib/connection.cpp
+    backends/xlib/input.cpp
     )
 
 include(CheckIncludeFiles)
 include(CheckFunctionExists)
 include(CheckCXXSourceCompiles)
 
-add_executable(SolidX ${solidx_LIB_SRCS})
-
 find_package(X11 REQUIRED)
 find_package(XCB REQUIRED)
 find_package(X11_XCB)
+find_package(Qt5 5.2.0 REQUIRED NO_MODULE COMPONENTS Core Widgets)
 
-include_directories(${XCB_INCLUDE_DIR})
+include_directories(
+    ${XCB_INCLUDE_DIR}
+    )
+
+add_executable(SolidX ${solidx_LIB_SRCS})
+
+qt5_use_modules(SolidX Core Widgets)
 
 message("X11_X11_LIB                     ${X11_X11_LIB}")
 message("X11_Xext_LIB                    ${X11_Xext_LIB}")

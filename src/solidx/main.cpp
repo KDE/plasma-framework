@@ -19,100 +19,42 @@
 
 // #include "pointer.h"
 
-#include <xcb/xcb.h>
+#include <QCoreApplication>
+#include <QAbstractNativeEventFilter>
+#include <QDebug>
 
-#include <iostream>
-#include <unistd.h>
-
-#include <X11/extensions/XInput.h>
+#include "backends/xlib/connection.h"
+#include "backends/xlib/input.h"
 
 int main(int argc, char *argv[])
 {
-    int screenNum = -1;
-    xcb_connection_t * connection = xcb_connect(NULL, &screenNum);
-
-    if (!connection) {
-        std::cerr << "Error: Can not open the display" << std::endl;
-    }
-
-    auto setup = xcb_get_setup(connection);
-
-
-
-    auto screen = xcb_setup_roots_iterator(xcb_get_setup(connection));
-
-    uint32_t mask = XCB_CW_BACK_PIXEL | XCB_CW_EVENT_MASK;
-    uint32_t values[] = { screen.data->white_pixel, XCB_EVENT_MASK_EXPOSURE | XCB_EVENT_MASK_KEY_PRESS };
-
-    auto window = xcb_generate_id(connection);
-
-    xcb_create_window(
-            connection, XCB_COPY_FROM_PARENT, window, screen.data->root,
-            10, 10, 100, 100, 1,
-            XCB_WINDOW_CLASS_INPUT_OUTPUT,
-            screen.data->root_visual,
-            mask, values);
-
-    std::cerr << "Successfully connected to the X server" << std::endl;
-    std::cerr << "connection:        " << connection << std::endl;
-    std::cerr << "number of screens: " << screenNum << std::endl;
-    std::cerr << "number of screens: " << (int)setup->roots_len << std::endl;
-
-    //xcb_map_window(connection, window);
-    //xcb_flush(connection);
-
-    for (int i = 0; i < setup->roots_len; i++) {
-        xcb_screen_next(&screen);
-        auto data = screen.data;
-
-        std::cerr << "Informations of screen: " << data->root << std::endl;
-        std::cerr << "  width.........: " << data->width_in_pixels << std::endl;
-        std::cerr << "  height........: " << data->height_in_pixels << std::endl;
-        std::cerr << "  white pixel...: " << data->white_pixel << std::endl;
-        std::cerr << "  black pixel...: " << data->black_pixel << std::endl;
-    }
-
-    std::cerr << "-------------------------------------" << std::endl;
-
-    xcb_disconnect(connection);
+    QCoreApplication application(argc, argv);
 
     // XLib opening connection
-    int  device_count = -1;
-    auto display = XOpenDisplay(nullptr);
+    backends::xlib::Connection connection;
 
-    if (!display) return EXIT_FAILURE;
+    // // Listing screens
+    // auto screen_count = XScreenCount(connection.display());
 
-    // Listing screens
-    auto screen_count = XScreenCount(display);
+    // std::cerr << "Display has screens:" << screen_count << std::endl;
 
-    std::cerr << "Display has screens:" << screen_count << std::endl;
+    // for (int i = 0; i < screen_count; i++) {
+    //     auto height = XDisplayHeight(connection.display(), i);
+    //     auto width  = XDisplayWidth(connection.display(), i);
 
-    for (int i = 0; i < screen_count; i++) {
-        auto height = XDisplayHeight(display, i);
-        auto width  = XDisplayWidth(display, i);
+    //     std::cerr << "size is " << width << "x" << height << std::endl;
+    // }
 
-        std::cerr << "size is " << width << "x" << height << std::endl;
-    }
+    // std::cerr << "out" << std::endl;
 
-    // Listing input devices
-    auto devices = XListInputDevices(display, &device_count);
+    // backends::xlib::Input input;
+    // input.test();
 
-    if (devices) for (int i = 0; i < device_count; i++) {
-        auto device = devices[i];
-
-        std::cerr
-            << device.name << " "
-            << device.use << " "
-            << device.id << std::endl;
-    }
+    // application.installNativeEventFilter(new MyXcbEventFilter());
 
 
-    XFreeDeviceList(devices);
-    XCloseDisplay(display);
 
-    std::cerr << "out" << std::endl;
-
-    return 0;
+    return application.exec();
 }
 
 
