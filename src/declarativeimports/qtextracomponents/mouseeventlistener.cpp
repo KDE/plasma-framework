@@ -131,7 +131,7 @@ void MouseEventListener::mouseReleaseEvent(QMouseEvent *me)
     m_pressed = false;
     emit released(&dme);
 
-    if (QPointF(me->pos() - buttonDownPos(me->button())).manhattanLength() <= QApplication::startDragDistance() && m_pressAndHoldTimer->isActive()) {
+    if (boundingRect().contains(me->pos()) && m_pressAndHoldTimer->isActive()) {
         emit clicked(&dme);
         m_pressAndHoldTimer->stop();
     }
