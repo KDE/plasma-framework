@@ -74,8 +74,8 @@ Item {
         elementId: "busywidget"
 
         anchors.centerIn: parent
-        width: busy.width
-        height: busy.height
+        width:  Math.min(busy.width, busy.height)
+        height: width
         smooth: !running || smoothAnimation
     }
 }
