@@ -22,7 +22,9 @@ endif(NOT X11_FOUND)
 
 #find_package(KdepimLibs 4.5.60)
 #find_package(Gpgme)
-#macro_log_feature(KDEPIMLIBS_FOUND "kdepimlibs" "KDE PIM libraries" "http://www.kde.org" FALSE "" "Needed for building several Plasma DataEngines")
+#set_package_properties(KDEPIMLIBS PROPERTIES DESCRIPTION "KDE PIM libraries"
+#                       URL "http://www.kde.org" TYPE OPTIONAL
+#                       PURPOSE "Needed for building several Plasma DataEngines")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}
