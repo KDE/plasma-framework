@@ -18,7 +18,6 @@
  */
 
 #include "columnproxymodel.h"
-#include <KDebug>
 
 ColumnProxyModel::ColumnProxyModel(QObject* parent)
     : QAbstractListModel(parent)
