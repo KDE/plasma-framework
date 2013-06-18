@@ -57,12 +57,11 @@ find_package(KF5 MODULE REQUIRED COMPONENTS CMake Compiler InstallDirs
 # those are not "done" yet:
 find_package(ki18n REQUIRED NO_MODULE)
 find_package(kio REQUIRED NO_MODULE)
-find_package(kguiaddons REQUIRED NO_MODULE)
-
-find_package(KDELibs4 REQUIRED NO_MODULE)
-
 find_package(kdeclarative REQUIRED NO_MODULE)
 
+# Needed for kde4_add_unit_test and some includes from KDE/ (KMimeType, etc.)
+# FIXME: remove when kdeui is fully split up
+find_package(KDELibs4 REQUIRED NO_MODULE)
 
 #optional features
 find_package(X11 MODULE)
@@ -113,7 +112,7 @@ set_package_properties(DBusMenuQt PROPERTIES DESCRIPTION "Support for notificati
 
 #########################################################################
 
-add_definitions(${KDE4_DEFINITIONS})
+#add_definitions(${KDE4_DEFINITIONS})
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 
