@@ -23,15 +23,15 @@
 #include <QAbstractNativeEventFilter>
 #include <QDebug>
 
-#include "backends/xlib/connection.h"
-#include "backends/xlib/input.h"
+// #include "backends/xlib/connection.h"
+#include "backends/xlib/inputdevice.h"
 
 int main(int argc, char *argv[])
 {
     QCoreApplication application(argc, argv);
 
     // XLib opening connection
-    backends::xlib::Connection connection;
+    // backends::xlib::Connection connection;
 
     // // Listing screens
     // auto screen_count = XScreenCount(connection.display());
@@ -52,6 +52,7 @@ int main(int argc, char *argv[])
 
     // application.installNativeEventFilter(new MyXcbEventFilter());
 
+    backends::xlib::InputDeviceList list;
 
 
     return application.exec();

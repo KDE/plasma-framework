@@ -13,7 +13,7 @@ set(CMAKE_MODULE_PATH
 set(solidx_LIB_SRCS
     main.cpp
     backends/xlib/connection.cpp
-    backends/xlib/input.cpp
+    backends/xlib/inputdevice.cpp
     )
 
 include(CheckIncludeFiles)

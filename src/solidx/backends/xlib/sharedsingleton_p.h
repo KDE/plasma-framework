@@ -17,37 +17,35 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "input.h"
+#ifndef SOLID_XLIB_SHAREDPRIVATE_P_H
+#define SOLID_XLIB_SHAREDPRIVATE_P_H
 
-#include <X11/extensions/XInput.h>
+#include <memory>
 
-#include <iostream>
+template <typename Target>
+class SharedSingleton {
+public:
+    static std::shared_ptr<Target> instance()
+    {
+        // TODO: Make this thread safe
 
-namespace backends {
-namespace xlib {
+        auto ptr = s_instance.lock();
 
-void Input::test() const
-{
-    // Listing input devices
-    int  device_count = -1;
+        if (!ptr) {
+            ptr = std::make_shared<Target>();
+            s_instance = ptr;
+        }
 
-    auto devices = XListInputDevices(connection.display(), &device_count);
-
-    if (devices) for (int i = 0; i < device_count; i++) {
-        auto device = devices[i];
-
-        std::cerr
-            << device.name << " "
-            << device.use << " "
-            << device.id << std::endl;
+        return ptr;
     }
 
-    XFreeDeviceList(devices);
+private:
+    static std::weak_ptr<Target> s_instance;
+};
 
-}
-
-} // namespace xlib
-} // namespace backends
+template <typename Target>
+std::weak_ptr<Target> SharedSingleton<Target>::s_instance;
 
 
+#endif /* SOLID_XLIB_SHAREDPRIVATE_P_H */
 

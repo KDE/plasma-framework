@@ -23,8 +23,12 @@
 #include <QObject>
 
 #include <memory>
+#include <functional>
 
-class _XDisplay;
+#include <X11/extensions/XI.h>
+
+struct _XDisplay;
+union  _XEvent;
 
 namespace backends {
 namespace xlib {
@@ -34,15 +38,18 @@ namespace xlib {
  */
 class Connection: public QObject {
 public:
-    virtual ~Connection();
     Connection();
+    virtual ~Connection();
 
     _XDisplay * display() const;
+
+    void handleExtensionEvent(int eventType, XEventClass & eventClass, std::function<void(const _XEvent &)> handler);
+    void releaseExtensionEventHandler(int eventType);
 
 private:
 
     class Private;
-    std::shared_ptr<Private> d;
+    const std::shared_ptr<Private> d;
 };
 
 

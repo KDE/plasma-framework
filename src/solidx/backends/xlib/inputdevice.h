@@ -17,25 +17,26 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef SOLIDX_XLIB_INPUT_H
-#define SOLIDX_XLIB_INPUT_H
+#ifndef SOLIDX_XLIB_INPUTDEVICE_H
+#define SOLIDX_XLIB_INPUTDEVICE_H
 
-#include "connection.h"
+#include <memory>
 
 namespace backends {
 namespace xlib {
 
-class Input {
+class InputDeviceList {
 public:
-    void test() const;
+    InputDeviceList();
+    virtual ~InputDeviceList();
 
 private:
-    Connection connection;
+    class Private;
+    const std::shared_ptr<Private> d;
 };
 
 } // namespace xlib
 } // namespace backends
 
-
-#endif /* SOLIDX_XLIB_INPUT_H */
+#endif /* SOLIDX_XLIB_INPUTDEVICE_H */
 
