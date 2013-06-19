@@ -1,4 +1,5 @@
 add_subdirectory(core)
+add_subdirectory(dirmodel)
 add_subdirectory(draganddrop)
 add_subdirectory(krunnermodel)
 add_subdirectory(qtextracomponents)
