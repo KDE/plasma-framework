@@ -22,7 +22,6 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
 #include <kconfigskeleton.h>
 
 #include "plasma/configloader.h"
@@ -43,7 +42,7 @@ Q_DECLARE_METATYPE(QList<int>)
 void ConfigLoaderTest::init()
 {
     QString fileName = TEST_NAME + QString::fromLatin1(".xml");
-    configFile = new QFile(QString::fromLatin1(KDESRCDIR) + QString::fromLatin1("/") + fileName);
+    configFile = new QFile(QFINDTESTDATA(QString::fromLatin1("/") + fileName));
     cl = new Plasma::ConfigLoader(configFile->fileName(), configFile);
 }
 
