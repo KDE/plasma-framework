@@ -59,7 +59,7 @@ find_package(ki18n REQUIRED NO_MODULE)
 find_package(kio REQUIRED NO_MODULE)
 find_package(kdeclarative REQUIRED NO_MODULE)
 
-# Needed for kde4_add_unit_test and some includes from KDE/ (KMimeType, etc.)
+# Needed for some includes from KDE/ (KMimeType, etc.)
 # FIXME: remove when kdeui is fully split up
 find_package(KDELibs4 REQUIRED NO_MODULE)
 
