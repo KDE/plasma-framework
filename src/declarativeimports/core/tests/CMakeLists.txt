@@ -2,9 +2,11 @@ INCLUDE_DIRECTORIES(
     ${corebindings_SOURCE_DIR}
     )
 
-kde4_add_unit_test(sortfiltermodeltest
+include(ECMMarkAsTest)
+
+add_executable(sortfiltermodeltest
     sortfiltermodeltest.cpp
-    ${corebindings_SOURCE_DIR}/dataengineconsumer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../../plasma/dataengineconsumer.cpp
     ${corebindings_SOURCE_DIR}/datamodel.cpp
     ${corebindings_SOURCE_DIR}/datasource.cpp
     )
@@ -12,10 +14,15 @@ kde4_add_unit_test(sortfiltermodeltest
 qt4_automoc(sortfiltermodeltest.cpp)
 
 target_link_libraries(sortfiltermodeltest
-    ${KDE4_PLASMA_LIBS}
+    plasma
+    KDE4__kde4support
     ${QT_QTGUI_LIBRARY}
     ${QT_QTTEST_LIBRARY}
     )
+
+
+add_test(plasma-sortfiltermodeltest sortfiltermodeltest)
+ecm_mark_as_test(sortfiltermodeltest)
 
 set(runnermodeltest_SRCS
     main.cpp
@@ -25,6 +32,7 @@ set(runnermodeltest_SRCS
     )
 
 qt4_automoc(${runnermodeltest_SRCS})
-#kde4_add_library(datamodelsplugin SHARED ${datamodels_SRCS})
-kde4_add_executable(runnermodeltest ${runnermodeltest_SRCS})
-target_link_libraries(runnermodeltest ${QT_QTTEST_LIBRARY} ${KDE4_PLASMA_LIBS})
+add_executable(runnermodeltest ${runnermodeltest_SRCS})
+target_link_libraries(runnermodeltest ${QT_QTTEST_LIBRARY} ${plasma_LIBRARIES} plasma)
+add_test(plasma-runnermodeltest runnermodeltest)
+ecm_mark_as_test(runnermodeltest)
