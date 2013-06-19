@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 
     // application.installNativeEventFilter(new MyXcbEventFilter());
 
-    backends::xlib::InputDeviceList list;
+    backends::xlib::InputDeviceListModel list;
 
 
     return application.exec();

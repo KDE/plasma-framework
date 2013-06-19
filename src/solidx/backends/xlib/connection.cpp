@@ -41,6 +41,9 @@ public:
     ~Private();
 
     Display * const display;
+
+    // Using std::map because of: https://bugreports.qt-project.org/browse/QTBUG-25997
+    // and we don't need COW or other QMap fancy things like that.
     std::map<int, std::function<void(const XEvent &)>> eventHandlers;
 
 protected:

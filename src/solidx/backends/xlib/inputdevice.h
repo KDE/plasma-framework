@@ -22,13 +22,21 @@
 
 #include <memory>
 
+#include <QAbstractListModel>
+
 namespace backends {
 namespace xlib {
 
-class InputDeviceList {
+class InputDeviceListModel: public QAbstractListModel {
+    Q_OBJECT
 public:
-    InputDeviceList();
-    virtual ~InputDeviceList();
+    explicit InputDeviceListModel(QObject *parent = 0);
+    ~InputDeviceListModel();
+
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    QModelIndex sibling(int row, int column, const QModelIndex &idx) const;
+
+    QVariant data(const QModelIndex &index, int role) const;
 
 private:
     class Private;
