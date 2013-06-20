@@ -26,6 +26,7 @@ find_package(X11_XCB)
 find_package(Qt5 5.2.0 REQUIRED NO_MODULE COMPONENTS Core Widgets)
 
 include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/utils
     ${XCB_INCLUDE_DIR}
     )
 

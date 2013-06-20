@@ -24,7 +24,7 @@
 #include <QDebug>
 
 #include "inputdevice.h"
-#include "sharedsingleton_p.h"
+#include "utils/sharedsingleton.h"
 #include "connection.h"
 
 #include <X11/extensions/XInput.h>
@@ -38,7 +38,7 @@ namespace backends {
 namespace xlib {
 
 class InputDeviceListModel::Private
-    : public QObject, public SharedSingleton<Private>
+    : public QObject, public utils::SharedSingleton<Private>
 {
     Q_OBJECT
 

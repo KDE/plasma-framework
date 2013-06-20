@@ -17,10 +17,12 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef SOLID_XLIB_SHAREDPRIVATE_P_H
-#define SOLID_XLIB_SHAREDPRIVATE_P_H
+#ifndef SHARED_SINGLETON_P_H
+#define SHARED_SINGLETON_P_H
 
 #include <memory>
+
+namespace utils {
 
 template <typename Target>
 class SharedSingleton {
@@ -46,6 +48,7 @@ private:
 template <typename Target>
 std::weak_ptr<Target> SharedSingleton<Target>::s_instance;
 
+} // namespace utils
 
-#endif /* SOLID_XLIB_SHAREDPRIVATE_P_H */
+#endif /* SHARED_SINGLETON_P_H */
 

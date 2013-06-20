@@ -18,7 +18,7 @@
  */
 
 #include "inputdevice.h"
-#include "sharedsingleton_p.h"
+#include "utils/sharedsingleton.h"
 #include "connection.h"
 
 #include <QDebug>

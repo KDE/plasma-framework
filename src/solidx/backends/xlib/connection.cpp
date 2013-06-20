@@ -18,7 +18,7 @@
  */
 
 #include "connection.h"
-#include "sharedsingleton_p.h"
+#include "utils/sharedsingleton.h"
 
 #include <QBasicTimer>
 #include <QTimerEvent>
@@ -34,7 +34,7 @@ namespace xlib {
 
 class Connection::Private:
     public QObject,
-    public SharedSingleton<Private>
+    public utils::SharedSingleton<Private>
 {
 public:
     Private();
