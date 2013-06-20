@@ -101,34 +101,21 @@ public:
      */
     void processEvent(const _XEvent & event)
     {
+        using std::bind;
+        using std::placeholders::_1;
+
         auto presenceEvent = (XDevicePresenceNotifyEvent*)(&event);
 
-        switch (presenceEvent->devchange) {
-        case DeviceEnabled:
-            processInputDevice(presenceEvent->deviceid,
-                [this] (const XDeviceInfo & device) {
-                    addDevice(device);
-                }
-            );
-            break;
-
-        default:
-            if (!processInputDevice(presenceEvent->deviceid,
-                    [&] (const XDeviceInfo & device) {
-                        qDebug()
-                            << "something happened, no idea what: "
-                            << presenceEvent->devchange << " "
-                            << device.id << " " << device.name;
-                    }
-            )) {
-                removeDevice(presenceEvent->deviceid);
-            }
+        if (!processInputDevice(presenceEvent->deviceid, bind(&Private::addDevice, this, _1))) {
+            removeDevice(presenceEvent->deviceid);
         }
-
     }
 
     Private()
     {
+        using std::bind;
+        using std::placeholders::_1;
+
         int xiEventType;
         XEventClass xiEventClass;
 
@@ -136,12 +123,9 @@ public:
         DevicePresence(connection.display(), xiEventType, xiEventClass);
 
         connection.handleExtensionEvent(xiEventType, xiEventClass,
-                [this] (const _XEvent & event) { processEvent(event); }
-            );
+                bind(&Private::processEvent, this, _1));
 
-        processInputDevices([this] (const XDeviceInfo & device) {
-            addDevice(device);
-        });
+        processInputDevices(bind(&Private::addDevice, this, _1));
     }
 
     /**
