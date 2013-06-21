@@ -37,116 +37,6 @@
 #include <algorithm>
 #include <set>
 
-// struct _XDisplay;
-// struct _XDeviceInfo;
-// union  _XEvent;
-//
-static void
-print_property_xi2(Display *dpy, int deviceid, Atom property)
-{
-    Atom                act_type;
-    char                *name;
-    int                 act_format;
-    unsigned long       nitems, bytes_after;
-    unsigned char       *data, *ptr;
-    int                 j, done = False;
-
-    name = XGetAtomName(dpy, property);
-    printf("\t[%s] (%ld):\t", name, property);
-
-    if (XIGetProperty(dpy, deviceid, property, 0, 1000, False,
-                           AnyPropertyType, &act_type, &act_format,
-                           &nitems, &bytes_after, &data) == Success)
-    {
-        Atom float_atom = XInternAtom(dpy, "FLOAT", True);
-
-        ptr = data;
-
-        if (nitems == 0)
-            printf("<no items>");
-
-        for (j = 0; j < nitems; j++)
-        {
-            switch(act_type)
-            {
-                case XA_INTEGER:
-                    switch(act_format)
-                    {
-                        case 8:
-                            printf("%d", *((int8_t*)ptr));
-                            break;
-                        case 16:
-                            printf("%d", *((int16_t*)ptr));
-                            break;
-                        case 32:
-                            printf("%d", *((int32_t*)ptr));
-                            break;
-                    }
-                    break;
-                case XA_CARDINAL:
-                    switch(act_format)
-                    {
-                        case 8:
-                            printf("%u", *((uint8_t*)ptr));
-                            break;
-                        case 16:
-                            printf("%u", *((uint16_t*)ptr));
-                            break;
-                        case 32:
-                            printf("%u", *((uint32_t*)ptr));
-                            break;
-                    }
-                    break;
-                case XA_STRING:
-                    if (act_format != 8)
-                    {
-                        printf("Unknown string format.\n");
-                        done = True;
-                        break;
-                    }
-                    printf("\"%s\"", ptr);
-                    j += strlen((char*)ptr); /* The loop's j++ jumps over the
-                                                terminating 0 */
-                    ptr += strlen((char*)ptr); /* ptr += size below jumps over
-                                                  the terminating 0 */
-                    break;
-                case XA_ATOM:
-                    {
-                        Atom a = *(uint32_t*)ptr;
-                        printf("\"%s\" (%ld)",
-                                (a) ? XGetAtomName(dpy, a) : "None",
-                                a);
-                        break;
-                    }
-                    break;
-                default:
-                    if (float_atom != None && act_type == float_atom)
-                    {
-                        printf("%f", *((float*)ptr));
-                        break;
-                    }
-
-                    printf("\t... of unknown type %s\n",
-                            XGetAtomName(dpy, act_type));
-                    done = True;
-                    break;
-            }
-
-            ptr += act_format/8;
-
-            if (done == True)
-                break;
-            if (j < nitems - 1)
-                printf(", ");
-        }
-        printf("\n");
-        XFree(data);
-    } else
-        printf("\tFetch failure\n");
-
-}
-
-
 namespace backends {
 namespace xlib {
 
@@ -239,7 +129,7 @@ public:
           synapticsOff          (propertyAtom("Synaptics Off")),
           touchMaxContacts      (propertyAtom("Max Contacts")),
           touchAxesPerContact   (propertyAtom("Axes Per Contact")),
-          test                  (propertyAtom("THISDOESNOTEXISTRIGHT"))
+          deviceNode            (propertyAtom("Device Node"))
     {
         using std::bind;
         using std::placeholders::_1;
@@ -318,7 +208,8 @@ public:
                 synapticsOff,
                 synapticsCapabilities,
                 touchMaxContacts,
-                touchAxesPerContact
+                touchAxesPerContact,
+                deviceNode
             };
 
             auto properties = presentProperties(device, testProperties);
@@ -327,10 +218,12 @@ public:
                 // The name of the device as reported by X server
                 device.name,
 
+
                 // Ignoring the core devices since we can not tell anything from them
                 device.use == IsXExtensionKeyboard ? Device::Type::Keyboard :
                 device.use == IsXExtensionPointer  ? Device::Type::Pointer :
                 /* default */                        Device::Type::Unknown,
+
 
                 // Trying to find out whether we have a touch-screen
                 // or a touchpad
@@ -339,8 +232,21 @@ public:
                 properties.count(touchMaxContacts)      ? Device::Subtype::Touchscreen :
                 properties.count(touchAxesPerContact)   ? Device::Subtype::Touchscreen :
 
-                // Testing keyboard
-                name.startsWith("AT")                   ? Device::Subtype::Keyboard
+                // TODO: Do the keyboard detection via udev
+                // Currently, we are using some weird heuristics to
+                // bypass the X server's unawareness of keyboard details.
+                //
+                // Something is a full keyboard if its name says so.
+                // But, for the standard "AT Translated Set 2 keyboard" device,
+                // it is a real keyboard if it has a 'Device Node' property.
+                (
+                    newDevice.type == Device::Type::Keyboard &&
+                    newDevice.name.toLower().contains("keyboard") &&
+                    (
+                        properties.count(deviceNode) ||
+                        newDevice.name != "AT Translated Set 2 keyboard"
+                    )
+                )                                       ? Device::Subtype::FullKeyboard :
 
                 /* default */                             Device::Subtype::Unknown
 
@@ -348,6 +254,7 @@ public:
 
             // Ignoring the XTEST devices for good measure
             if (!newDevice.name.contains("XTEST")) {
+
                 knownDevices[device.id] = newDevice;
 
                 qDebug() << "We got a new input device: "
@@ -388,7 +295,7 @@ private:
     const Atom synapticsOff;
     const Atom touchMaxContacts;
     const Atom touchAxesPerContact;
-    const Atom test;
+    const Atom deviceNode;
 
 };
 
