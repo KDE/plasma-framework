@@ -47,7 +47,7 @@ class ColumnProxyModel : public QAbstractListModel
         virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
         virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
-    signals:
+    Q_SIGNALS:
         void rootIndexChanged();
 
     private:
@@ -58,7 +58,7 @@ class ColumnProxyModel : public QAbstractListModel
         QModelIndex m_index;
         QAbstractItemModel* m_sourceModel;
 
-    private slots:
+    private Q_SLOTS:
         void considerRowsAboutToBeInserted(const QModelIndex&,int,int);
         void considerRowsAboutToBeMoved(const QModelIndex& sourceParent, int rA, int rB, const QModelIndex& destParent, int rD);
         void considerRowsAboutToBeRemoved(const QModelIndex&,int,int);

@@ -64,7 +64,7 @@ public:
 
   void clear();
 
-protected slots:
+protected Q_SLOTS:
 
   /**
   Finds the parent id of the string with id @p searchId.

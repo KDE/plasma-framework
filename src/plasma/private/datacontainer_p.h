@@ -117,7 +117,7 @@ public:
     bool m_resetTimer;
     bool m_queued;
 
-signals:
+Q_SIGNALS:
     void dataUpdated(const QString &, const Plasma::DataEngine::Data &);
 
 protected:

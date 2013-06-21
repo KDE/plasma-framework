@@ -55,7 +55,7 @@ public:
     ByteArrayPrototype(QObject *parent = 0);
     ~ByteArrayPrototype();
 
-public slots:
+public Q_SLOTS:
     void chop(int n);
     bool equals(const QByteArray &other);
     QByteArray left(int len) const;

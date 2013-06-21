@@ -117,7 +117,7 @@ public:
 
     DeclarativeMimeData* mimeData() const;
 
-signals:
+Q_SIGNALS:
     void dragStarted();
     void delegateChanged();
     void sourceChanged();

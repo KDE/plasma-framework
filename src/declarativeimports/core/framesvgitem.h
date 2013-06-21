@@ -143,7 +143,7 @@ public:
      */
     Plasma::FrameSvg *frameSvg() const;
 
-signals:
+Q_SIGNALS:
     void imagePathChanged();
     void prefixChanged();
     void enabledBordersChanged();
