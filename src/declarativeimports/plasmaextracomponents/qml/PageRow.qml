@@ -125,7 +125,7 @@ Item {
             return
         }
 
-        scrollAnimation.to = Math.max(0, Math.min(Math.max(0, columnWidth * level - columnWidth), columnWidth*depth- mainFlickable.width))
+        scrollAnimation.to = Math.max(0, Math.min(Math.max(0, columnWidth * level - columnWidth), mainFlickable.contentWidth - mainFlickable.width))
         scrollAnimation.running = true
     }
 
@@ -209,7 +209,8 @@ Item {
             Row {
                 id: root
                 spacing: -100
-                width: childrenRect.width - 100
+                width: Math.max((depth-1+children[children.length-1].takenColumns) * columnWidth, childrenRect.width - 100) 
+
                 height: parent.height
                 Behavior on width {
                     NumberAnimation {
@@ -291,6 +292,9 @@ Item {
             // State to be set after previous state change animation has finished
             property string pendingState: "none"
 
+            //how many columns take the page?
+            property alias takenColumns: actualContainer.takenColumns
+
             // Ensures that transition finish actions are executed
             // in case the object is destroyed before reaching the
             // end state of an ongoing transition
@@ -308,7 +312,10 @@ Item {
                     right: parent.right
                     rightMargin: 100
                 }
-                width: (container.pageDepth >= actualRoot.depth ? Math.min(actualRoot.width, Math.max(1, Math.round(page.implicitWidth/columnWidth))*columnWidth) : columnWidth)
+
+                property int takenColumns: Math.max(1, Math.round(container.page ? container.page.implicitWidth/columnWidth : 1));
+
+                width: (container.pageDepth >= actualRoot.depth ? Math.min(actualRoot.width, takenColumns*columnWidth) : columnWidth)
             }
 
             Image {
@@ -368,6 +375,10 @@ Item {
             // Performs a push exit transition.
             function pushExit(replace, immediate, orientationChanges)
             {
+                if (replace) {
+                    setState(immediate ? "Hidden" : "Left");
+                }
+
                 if (actualRoot.visible && immediate)
                     internal.setPageStatus(page, PageStatus.Inactive);
                 if (replace) {
@@ -523,8 +534,9 @@ Item {
                         page.parent = owner;
                     }
                 }
-
-                container.destroy();
+                container.parent = null;
+                container.visible = false;
+                destroy();
             }
         }
     }
