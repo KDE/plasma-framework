@@ -23,9 +23,34 @@
 #include <memory>
 
 #include <QAbstractListModel>
+#include <QString>
 
 namespace backends {
 namespace xlib {
+
+struct Device {
+    QString name;
+
+    enum class Type {
+        Unknown       = 0,
+        Keyboard      = 1,
+        Pointer       = 2,
+        Error         = 255
+    } type;
+
+    enum class Subtype {
+        Unknown       = 0,
+
+        Touchpad      = 1,
+        Touchscreen   = 2,
+
+        FullKeyboard  = 3,
+        SpecialKeys   = 4,
+
+        Error         = 255
+    } subtype;
+};
+
 
 class InputDeviceListModel: public QAbstractListModel {
     Q_OBJECT
