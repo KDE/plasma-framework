@@ -64,6 +64,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-plasma.h.cmake ${CMAKE_CURRENT
 include_directories(${KDEPIMLIBS_INCLUDE_DIRS} ${GPGME_INCLUDES})
 
 add_subdirectory(autotests)
+add_subdirectory(tests)
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1209)
 
 ########### next target ###############
