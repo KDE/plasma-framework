@@ -9,6 +9,7 @@
 #include <KPluginFactory>
 
 #include "platformstatusadaptor.h"
+#include "splash/splashwindow.h"
 
 const char *defaultPackage = "org.kde.desktop";
 
@@ -77,6 +78,11 @@ void PlatformStatus::fileDirtied(const QString &path)
     if (path.endsWith("kdeglobals")) {
         findShellPackage(true);
     }
+}
+
+void PlatformStatus::testShowSplash() const
+{
+    SplashWindow::showSplash();
 }
 
 #include "platformstatus.moc"

@@ -15,5 +15,7 @@
     <method name="runtimePlatform">
       <arg type="as" direction="out"/>
     </method>
+    <method name="testShowSplash">
+    </method>
   </interface>
 </node>

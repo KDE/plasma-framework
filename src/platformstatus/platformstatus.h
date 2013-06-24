@@ -19,6 +19,8 @@ public Q_SLOTS:
     QString shellPackage() const;
     QStringList runtimePlatform() const;
 
+    void testShowSplash() const;
+
 Q_SIGNALS:
     void shellPackageChanged(const QString &package);
     void runtimePlatformChanged(const QStringList &runtimePlatform);

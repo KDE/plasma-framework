@@ -1,6 +1,7 @@
 set(
    kded_platformstatus_SRCS
    platformstatus.cpp
+   splash/splashwindow.cpp
    )
 
 include_directories("../utils")
