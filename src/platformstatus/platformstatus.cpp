@@ -82,7 +82,7 @@ void PlatformStatus::fileDirtied(const QString &path)
 
 void PlatformStatus::testShowSplash() const
 {
-    SplashWindow::showSplash();
+    SplashWindow::splashAllScreens();
 }
 
 #include "platformstatus.moc"

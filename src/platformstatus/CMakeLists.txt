@@ -2,6 +2,7 @@ set(
    kded_platformstatus_SRCS
    platformstatus.cpp
    splash/splashwindow.cpp
+   ../shell/lookandfeelpackage.cpp
    )
 
 include_directories("../utils")
@@ -18,6 +19,7 @@ target_link_libraries(
    kded_platformstatus
    ${KDE4_KDECORE_LIBS}
    ${KCoreAddons_LIBRARIES}
+   plasma
    Qt5::DBus
    Qt5::Quick
    )

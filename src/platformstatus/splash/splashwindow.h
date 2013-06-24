@@ -23,12 +23,15 @@
 #include <QQuickView>
 #include <utils/d_ptr.h>
 
+class QScreen;
+
 /**
  * SplashWindow
  */
 class SplashWindow: public QQuickView {
 public:
-    static void showSplash();
+    static void splashScreen(QScreen * screen);
+    static void splashAllScreens();
 
 private:
     SplashWindow();

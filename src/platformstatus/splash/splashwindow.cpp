@@ -23,11 +23,18 @@
 #include <QGuiApplication>
 #include <QScreen>
 #include <QHash>
+#include <QDebug>
+
+#include <kwindoweffects.h>
+#include <shell/lookandfeelpackage.h>
 
 class SplashWindow::Private {
 public:
     static
     QHash<QString, SplashWindow*> windows;
+
+    LookAndFeelPackageStructure * packageStructure;
+    Plasma::Package * package;
 };
 
 QHash<QString, SplashWindow*> SplashWindow::Private::windows;
@@ -35,22 +42,40 @@ QHash<QString, SplashWindow*> SplashWindow::Private::windows;
 SplashWindow::SplashWindow()
     : QQuickView(Q_NULLPTR)
 {
-
+    d->packageStructure = new LookAndFeelPackageStructure();
+    d->package = new Plasma::Package(d->packageStructure);
+    d->package->setPath(
+        QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+            d->package->defaultPackageRoot() + "org.kde.lookandfeel", QStandardPaths::LocateDirectory)
+        );
+    setSource(QUrl::fromLocalFile(d->package->filePath("splash", "PlatformChangeSplash.qml")));
+    setResizeMode(QQuickView::SizeRootObjectToView);
 }
 
 SplashWindow::~SplashWindow()
 {
 }
 
-void SplashWindow::showSplash()
+void SplashWindow::splashScreen(QScreen * screen)
+{
+    // TODO: This could be a bit more like the screen locker
+    auto & window = Private::windows[screen->name()];
+
+    if (!window) {
+        window = new SplashWindow();
+    }
+
+    window->setScreen(screen);
+    window->setFlags(Qt::WindowStaysOnTopHint);
+    window->showFullScreen();
+
+    // TODO: Add some effect as well
+}
+
+void SplashWindow::splashAllScreens()
 {
     foreach (auto screen, QGuiApplication::screens()) {
-        auto window = new SplashWindow();
-        window->setScreen(screen);
-        window->resize(100, 100);
-        window->show();
-
-        Private::windows[screen->name()] = window;
+        splashScreen(screen);
     }
 }
 
