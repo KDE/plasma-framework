@@ -432,7 +432,7 @@ QStringList ConfigLoader::groupList() const
     return d->groups;
 }
 
-void ConfigLoader::usrWriteConfig()
+bool ConfigLoader::usrWriteConfig()
 {
     if (d->saveDefaults) {
         KConfigSkeletonItem::List itemList = items();
@@ -441,6 +441,7 @@ void ConfigLoader::usrWriteConfig()
             cg.writeEntry(itemList.at(i)->key(), "");
         }
     }
+    return true;
 }
 
 } // Plasma namespace
