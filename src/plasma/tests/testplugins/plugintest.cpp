@@ -19,7 +19,7 @@
 
 #include "plugintest.h"
 
-#include <kqpluginfactoryinterface.h>
+#include <kqpluginfactory.h>
 
 #include <kdebug.h>
 #include <kservice.h>
@@ -90,14 +90,17 @@ void PluginTest::loadKQPlugin()
     QCoreApplication::addLibraryPath(pluginPath);
     //QPluginLoader loader("/home/sebas/kf5/install/lib/x86_64-linux-gnu/kplugins/libkqpluginfactory.so", this);
     QPluginLoader loader("/home/sebas/kf5/install/lib/x86_64-linux-gnu/plugins/kf5/kplugins/libplasma_engine_time.so", this);
-    KQPluginFactoryInterface *factory = qobject_cast<KQPluginFactoryInterface*>(loader.instance());
+    KQPluginFactory *factory = qobject_cast<KQPluginFactory*>(loader.instance());
     //QObject *factory = loader.instance();
     if (factory) {
         qDebug() << "loaded successfully and cast";
         qDebug() << "metadata: " << loader.metaData();
-        QObject *o = factory->createPlugin("time");
-        qDebug() << " objec name:" << o->objectName();
-        Plasma::DataEngine *time_engine = qobject_cast<Plasma::DataEngine*>(o);
+        //QObject *o = factory->createPlugin("time");
+        //qDebug() << " objec name:" << o->objectName();
+        Plasma::DataEngine *time_engine = qobject_cast<Plasma::DataEngine*>(factory->createPlugin("time"));
+        //Plasma::DataEngine *time_engine = factory->create<Plasma::DataEngine>(this);
+        //OtherInterface *p2  = factory->create<OtherInterface>(parent);
+
         if (time_engine) {
             qDebug() << "Successfully loaded timeengine";
             time_engine->connectSource("Europe/Amsterdam", this);
@@ -183,8 +186,6 @@ void PluginTest::loadDataEngine(const QString &name)
 void PluginTest::dataUpdated(QString s, Plasma::DataEngine::Data d)
 {
     qDebug() << "new data for source:  " << s << d;
-
-
 }
 
 } // namespace Plasma
