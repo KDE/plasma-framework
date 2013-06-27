@@ -38,7 +38,7 @@ QScriptValue ScriptEnv::openUrl(QScriptContext *context, QScriptEngine *engine)
     }
 
     QScriptValue v = context->argument(0);
-    QUrl url = v.isString() ? QUrl(v.toString()) : qscriptvalue_cast<QUrl>(v);
+    QUrl url = v.isString() ? QUrl::fromUserInput(v.toString()) : qscriptvalue_cast<QUrl>(v);
 
     if (!url.isValid()) {
         return false;
@@ -66,7 +66,7 @@ QScriptValue ScriptEnv::getUrl(QScriptContext *context, QScriptEngine *engine)
     }
 
     QScriptValue v = context->argument(0);
-    QUrl url = v.isString() ? QUrl(v.toString()) : qscriptvalue_cast<QUrl>(v);
+    QUrl url = v.isString() ? QUrl::fromUserInput(v.toString()) : qscriptvalue_cast<QUrl>(v);
 
     if (!url.isValid()) {
         return engine->undefinedValue();
@@ -98,7 +98,7 @@ QScriptValue ScriptEnv::download(QScriptContext *context, QScriptEngine *engine)
     }
 
     QScriptValue v = context->argument(0);
-    QUrl url = v.isString() ? QUrl(v.toString()) : qscriptvalue_cast<QUrl>(v);
+    QUrl url = v.isString() ? QUrl::fromUserInput(v.toString()) : qscriptvalue_cast<QUrl>(v);
 
     if (!url.isValid()) {
         return engine->undefinedValue();
