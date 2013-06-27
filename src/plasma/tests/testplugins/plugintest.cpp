@@ -97,7 +97,7 @@ void PluginTest::loadKQPlugin()
         qDebug() << "metadata: " << loader.metaData();
         //QObject *o = factory->createPlugin("time");
         //qDebug() << " objec name:" << o->objectName();
-        Plasma::DataEngine *time_engine = qobject_cast<Plasma::DataEngine*>(factory->createPlugin("time"));
+        Plasma::DataEngine *time_engine = qobject_cast<Plasma::DataEngine*>(factory->create(this, QVariantList()));
         //Plasma::DataEngine *time_engine = factory->create<Plasma::DataEngine>(this);
         //OtherInterface *p2  = factory->create<OtherInterface>(parent);
 
