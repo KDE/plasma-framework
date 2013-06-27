@@ -45,6 +45,7 @@ class PluginTest : public QApplication
 
     public Q_SLOTS:
         void runMain();
+        void loadKQPlugin();
         void loadDataEngine(const QString &name = QString());
         void dataUpdated(QString s, Plasma::DataEngine::Data d);
 

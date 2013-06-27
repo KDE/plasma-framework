@@ -19,6 +19,8 @@
 
 #include "plugintest.h"
 
+#include <kqpluginfactoryinterface.h>
+
 #include <kdebug.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
@@ -43,6 +45,7 @@
 #include <QStandardPaths>
 #include <QStringList>
 #include <QTimer>
+#include <QJsonObject>
 
 #include <iostream>
 #include <iomanip>
@@ -72,9 +75,43 @@ PluginTest::~PluginTest()
 void PluginTest::runMain()
 {
     qDebug() << "plugin test runs: ";
-    loadDataEngine();
+    //loadDataEngine();
+    qDebug() << " libs are in: " << QCoreApplication::libraryPaths();
+    qDebug() << " - - - -- - - - - ------------------------------------\n";
+    loadKQPlugin();
     exit(0);
     return;
+}
+
+void PluginTest::loadKQPlugin()
+{
+    qDebug() << "Load KQPlugin";
+    QString pluginPath = "/home/sebas/kf5/install/lib/x86_64-linux-gnu/kplugins/";
+    QCoreApplication::addLibraryPath(pluginPath);
+    //QPluginLoader loader("/home/sebas/kf5/install/lib/x86_64-linux-gnu/kplugins/libkqpluginfactory.so", this);
+    QPluginLoader loader("/home/sebas/kf5/install/lib/x86_64-linux-gnu/plugins/kf5/kplugins/libplasma_engine_time.so", this);
+    KQPluginFactoryInterface *factory = qobject_cast<KQPluginFactoryInterface*>(loader.instance());
+    //QObject *factory = loader.instance();
+    if (factory) {
+        qDebug() << "loaded successfully and cast";
+        qDebug() << "metadata: " << loader.metaData();
+        QObject *o = factory->createPlugin("time");
+        qDebug() << " objec name:" << o->objectName();
+        Plasma::DataEngine *time_engine = qobject_cast<Plasma::DataEngine*>(o);
+        if (time_engine) {
+            qDebug() << "Successfully loaded timeengine";
+            time_engine->connectSource("Europe/Amsterdam", this);
+            qDebug() << "SOURCE: " << time_engine->sources();
+        } else {
+            qDebug() << "Timeengine failed to load. :(";
+
+        }
+
+    } else {
+        qDebug() << "loading failed somehow";
+    }
+    //KQPluginFactory* factory = new KQPluginFactory(KPluginInfo(), this);
+
 }
 
 void PluginTest::loadDataEngine(const QString &name)
@@ -146,9 +183,6 @@ void PluginTest::loadDataEngine(const QString &name)
 void PluginTest::dataUpdated(QString s, Plasma::DataEngine::Data d)
 {
     qDebug() << "new data for source:  " << s << d;
-
-
-
 
 
 }
