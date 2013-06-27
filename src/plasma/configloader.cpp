@@ -338,7 +338,7 @@ void ConfigLoaderHandler::addItem()
         QStringList tmpList = m_default.split(",");
         QList<QUrl> defaultList;
         foreach (const QString& tmp, tmpList) {
-            defaultList.append(KUrl(tmp));
+            defaultList.append(QUrl(tmp));
         }
         item = m_config->addItemUrlList(m_name, *d->newUrlList(), defaultList, m_key);*/
     }

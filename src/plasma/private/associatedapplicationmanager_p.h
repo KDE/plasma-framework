@@ -21,8 +21,7 @@
 #define PLASMA_ASSOCIATEDAPPLICATIONMANAGER_P_H
 
 #include <QObject>
-
-#include <kurl.h>
+#include <QUrl>
 
 namespace Plasma
 {

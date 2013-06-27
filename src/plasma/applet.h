@@ -24,11 +24,11 @@
 
 #include <QObject>
 #include <QIcon>
+#include <QUrl>
 
 #include <kconfiggroup.h>
 #include <kplugininfo.h>
 #include <kshortcut.h>
-#include <kurl.h>
 
 #include <plasma/configloader.h>
 #include <plasma/plasma.h>

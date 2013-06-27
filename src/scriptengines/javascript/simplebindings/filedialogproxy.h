@@ -30,9 +30,9 @@ class QScriptContext;
 class FileDialogProxy : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(KUrl url READ selectedUrl WRITE setUrl)
-    Q_PROPERTY(KUrl::List urls READ selectedUrls)
-    Q_PROPERTY(KUrl baseUrl READ baseUrl)
+    Q_PROPERTY(QUrl url READ selectedUrl WRITE setUrl)
+    Q_PROPERTY(QList<QUrl> urls READ selectedUrls)
+    Q_PROPERTY(QUrl baseUrl READ baseUrl)
     Q_PROPERTY(QString file READ selectedFile)
     Q_PROPERTY(QStringList files READ selectedFiles)
     Q_PROPERTY(QString filter READ filter WRITE setFilter)
@@ -44,11 +44,11 @@ public:
     FileDialogProxy(KFileDialog::OperationMode mode, QObject *parent = 0);
     ~FileDialogProxy();
 
-    KUrl selectedUrl() const;
-    void setUrl(const KUrl &url);
+    QUrl selectedUrl() const;
+    void setUrl(const QUrl &url);
 
-    KUrl::List selectedUrls() const;
-    KUrl baseUrl() const;
+    QList<QUrl> selectedUrls() const;
+    QUrl baseUrl() const;
     QString selectedFile() const;
     QStringList selectedFiles() const;
 

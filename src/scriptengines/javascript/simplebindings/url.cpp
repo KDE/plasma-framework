@@ -19,32 +19,32 @@
 #include <QtScript/QScriptValue>
 #include <QtScript/QScriptEngine>
 #include <QtScript/QScriptContext>
-#include <KUrl>
+#include <QUrl>
 #include "backportglobal.h"
 
-Q_DECLARE_METATYPE(KUrl*)
-//Q_DECLARE_METATYPE(KUrl) unneeded; found in kurl.h
+Q_DECLARE_METATYPE(QUrl*)
+//Q_DECLARE_METATYPE(QUrl) unneeded; found in qurl.h
 
 static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
 {
     if (ctx->argumentCount() == 1)
     {
         QString url = ctx->argument(0).toString();
-        return qScriptValueFromValue(eng, KUrl(url));
+        return qScriptValueFromValue(eng, QUrl(url));
     }
 
-    return qScriptValueFromValue(eng, KUrl());
+    return qScriptValueFromValue(eng, QUrl());
 }
 
 static QScriptValue toString(QScriptContext *ctx, QScriptEngine *eng)
 {
-    DECLARE_SELF(KUrl, toString);
+    DECLARE_SELF(QUrl, toString);
     return QScriptValue(eng, self->prettyUrl());
 }
 
 static QScriptValue protocol(QScriptContext *ctx, QScriptEngine *eng)
 {
-    DECLARE_SELF(KUrl, protocol);
+    DECLARE_SELF(QUrl, protocol);
     if (ctx->argumentCount()) {
         QString v = ctx->argument(0).toString();
         self->setProtocol(v);
@@ -55,7 +55,7 @@ static QScriptValue protocol(QScriptContext *ctx, QScriptEngine *eng)
 
 static QScriptValue host(QScriptContext *ctx, QScriptEngine *eng)
 {
-    DECLARE_SELF(KUrl, protocol);
+    DECLARE_SELF(QUrl, protocol);
     if (ctx->argumentCount()) {
         QString v = ctx->argument(0).toString();
         self->setHost(v);
@@ -66,7 +66,7 @@ static QScriptValue host(QScriptContext *ctx, QScriptEngine *eng)
 
 static QScriptValue path(QScriptContext *ctx, QScriptEngine *eng)
 {
-    DECLARE_SELF(KUrl, path);
+    DECLARE_SELF(QUrl, path);
     if (ctx->argumentCount()) {
         QString v = ctx->argument(0).toString();
         self->setPath(v);
@@ -77,7 +77,7 @@ static QScriptValue path(QScriptContext *ctx, QScriptEngine *eng)
 
 static QScriptValue user(QScriptContext *ctx, QScriptEngine *eng)
 {
-    DECLARE_SELF(KUrl, user);
+    DECLARE_SELF(QUrl, user);
     if (ctx->argumentCount()) {
         QString v = ctx->argument(0).toString();
         self->setUser(v);
@@ -88,7 +88,7 @@ static QScriptValue user(QScriptContext *ctx, QScriptEngine *eng)
 
 static QScriptValue password(QScriptContext *ctx, QScriptEngine *eng)
 {
-    DECLARE_SELF(KUrl, password);
+    DECLARE_SELF(QUrl, password);
     if (ctx->argumentCount()) {
         QString v = ctx->argument(0).toString();
         self->setPassword(v);
@@ -97,9 +97,9 @@ static QScriptValue password(QScriptContext *ctx, QScriptEngine *eng)
     return QScriptValue(eng, self->password());
 }
 
-QScriptValue constructKUrlClass(QScriptEngine *eng)
+QScriptValue constructQUrlClass(QScriptEngine *eng)
 {
-    QScriptValue proto = qScriptValueFromValue(eng, KUrl());
+    QScriptValue proto = qScriptValueFromValue(eng, QUrl());
     QScriptValue::PropertyFlags getter = QScriptValue::PropertyGetter;
     QScriptValue::PropertyFlags setter = QScriptValue::PropertySetter;
 
@@ -110,8 +110,8 @@ QScriptValue constructKUrlClass(QScriptEngine *eng)
     proto.setProperty("user", eng->newFunction(user), getter | setter);
     proto.setProperty("password", eng->newFunction(password), getter | setter);
 
-    eng->setDefaultPrototype(qMetaTypeId<KUrl*>(), proto);
-    eng->setDefaultPrototype(qMetaTypeId<KUrl>(), proto);
+    eng->setDefaultPrototype(qMetaTypeId<QUrl*>(), proto);
+    eng->setDefaultPrototype(qMetaTypeId<QUrl>(), proto);
 
     return eng->newFunction(ctor, proto);
 }

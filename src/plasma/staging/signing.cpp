@@ -611,7 +611,7 @@ QStringList Signing::publicKeys() const
     return d->keysID(false);
 }
 
-QString Signing::signerOf(const KUrl &plasmoidPath, const KUrl &plasmoidSignaturePath) const
+QString Signing::signerOf(const QUrl &plasmoidPath, const QUrl &plasmoidSignaturePath) const
 {
     kDebug() << "Checking existence of " << plasmoidPath.pathOrUrl();
     kDebug() << "Checking existence of " << plasmoidSignaturePath.pathOrUrl();

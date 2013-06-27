@@ -58,9 +58,9 @@ void SigningTest::confirmCtorPerformance()
 
 void SigningTest::missingFiles()
 {
-    QVERIFY(m_signing->signerOf(KUrl("/nonexistantpackage"), KUrl("/noneexistantsignature")).isEmpty());
-    QVERIFY(m_signing->signerOf(KUrl(m_path), KUrl("/noneexistantsignature")).isEmpty());
-    QVERIFY(m_signing->signerOf(KUrl("/nonexistantpackage"), KUrl(m_sig)).isEmpty());
+    QVERIFY(m_signing->signerOf(QUrl::fromLocalFile("/nonexistantpackage"), QUrl::fromLocalFile("/noneexistantsignature")).isEmpty());
+    QVERIFY(m_signing->signerOf(QUrl::fromLocalFile(m_path), QUrl::fromLocalFile("/noneexistantsignature")).isEmpty());
+    QVERIFY(m_signing->signerOf(QUrl::fromLocalFile("/nonexistantpackage"), QUrl::fromLocalFile(m_sig)).isEmpty());
 }
 
 void SigningTest::invalidSignature()

@@ -25,7 +25,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QDateTime>
 
-#include <kurl.h>
+#include <QUrl>
 
 #include <plasma.h>
 
@@ -138,7 +138,7 @@ public:
       *
       * @return a Qstring with the signer's unique key id, or an empty one if a signer was not found.
       */
-    QString signerOf(const KUrl &plasmoidPath, const KUrl &plasmoidSignaturePath = KUrl()) const ;
+    QString signerOf(const QUrl &plasmoidPath, const QUrl &plasmoidSignaturePath = QUrl()) const ;
 
 
     /**

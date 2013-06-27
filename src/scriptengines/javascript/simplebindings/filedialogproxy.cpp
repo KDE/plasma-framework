@@ -24,7 +24,7 @@
 
 FileDialogProxy::FileDialogProxy(KFileDialog::OperationMode mode, QObject *parent)
     : QObject(parent),
-      m_dialog(new KFileDialog(KUrl("~"), QString(), 0))
+      m_dialog(new KFileDialog(QUrl::fromLocalFile("~"), QString(), 0))
 {
     m_dialog->setOperationMode(mode);
     connect(m_dialog, SIGNAL(finished()), this, SLOT(dialogFinished()));
@@ -35,22 +35,22 @@ FileDialogProxy::~FileDialogProxy()
     delete m_dialog;
 }
 
-KUrl FileDialogProxy::selectedUrl() const
+QUrl FileDialogProxy::selectedUrl() const
 {
     return m_dialog->selectedUrl();
 }
 
-void FileDialogProxy::setUrl(const KUrl &url)
+void FileDialogProxy::setUrl(const QUrl &url)
 {
     m_dialog->setUrl(url);
 }
 
-KUrl::List FileDialogProxy::selectedUrls() const
+QUrl::List FileDialogProxy::selectedUrls() const
 {
     return m_dialog->selectedUrls();
 }
 
-KUrl FileDialogProxy::baseUrl() const
+QUrl FileDialogProxy::baseUrl() const
 {
     return m_dialog->baseUrl();
 }

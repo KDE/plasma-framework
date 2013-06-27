@@ -23,8 +23,6 @@
 
 #include <QXmlDefaultHandler>
 
-#include <kurl.h>
-
 namespace Plasma
 {
 
