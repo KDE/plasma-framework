@@ -14,11 +14,15 @@ set(solidx_LIB_SRCS
     main.cpp
     inputdevice.cpp
     inputdevicemodel.cpp
+    interface.cpp
+
     backends/abstractinputdevicebackend.cpp
 
     backends/xlib/xlibconnection.cpp
     backends/xlib/xlibinputdevicebackend.cpp
     backends/fake/fakeinputdevicebackend.cpp
+
+
     )
 
 include(CheckIncludeFiles)

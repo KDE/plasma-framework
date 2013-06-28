@@ -32,8 +32,10 @@ namespace solidx {
 InputDeviceModel::Private::Private(InputDeviceModel * parent)
     : q(parent)
 {
-    backends << new backends::xlib::XlibInputDeviceBackend(this);
-    backends << new backends::fake::FakeInputDeviceBackend(this);
+    backends
+        << new backends::xlib::XlibInputDeviceBackend(this)
+        << new backends::fake::FakeInputDeviceBackend(this)
+        ;
 
     foreach (auto backend, backends) {
         connect(backend, SIGNAL(addedDevice(QString)),

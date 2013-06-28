@@ -29,16 +29,21 @@
 #include "xlibconnection.h"
 #include "utils/sharedsingleton.h"
 
-#include <X11/extensions/XInput.h>
-#include <X11/extensions/XInput2.h>
-#include <X11/extensions/XIproto.h>
-#include <X11/Xatom.h>
-
 #include <functional>
 #include <iterator>
 #include <algorithm>
 #include <map>
 #include <set>
+
+#include <X11/X.h>
+#include <X11/extensions/XInput.h>
+#include <X11/extensions/XInput2.h>
+#include <X11/extensions/XIproto.h>
+
+// Somebody thought it was a smart thing to define
+// a 'Bool' macro in XLib, which screws up with the
+// QMetaType::Bool
+#undef Bool
 
 namespace solidx {
 namespace backends {
@@ -56,124 +61,40 @@ public:
      * RAII class to handle the list of X Input devices, and
      * to provide an iterator-enabled interface
      */
-    class XDeviceInfoList {
-    public:
-        XDeviceInfoList(_XDisplay * display)
-            : m_deviceCount(-1),
-              m_start(XListInputDevices(display, &m_deviceCount))
-        {
-        }
-
-        ~XDeviceInfoList() { XFreeDeviceList(m_start); }
-
-        const _XDeviceInfo * begin() const { return m_start; }
-        const _XDeviceInfo * end()   const { return m_start + m_deviceCount; }
-
-    private:
-        int           m_deviceCount;
-        _XDeviceInfo * m_start;
-
-    };
+    class XDeviceInfoList;
 
     /**
      * Applies a function to all the input devices
      */
     template <typename F>
-    void processInputDevices(F what) const
-    {
-        const XDeviceInfoList devices(connection.display());
-
-        std::for_each(devices.begin(), devices.end(), what);
-    }
+    void processInputDevices(F what) const;
 
     /**
      * Applies a function to the input device with the specified
      * id. Returns true if such a device has been found
      */
     template <typename F>
-    bool processInputDevice(int id, F what) const
-    {
-        const XDeviceInfoList devices(connection.display());
-
-        const auto device = std::find_if(devices.begin(), devices.end(),
-            [id] (const XDeviceInfo & device) { return device.id == id; });
-
-        const auto found = device != devices.end();
-
-        if (found) what(*device);
-
-        return found;
-    }
+    bool processInputDevice(int id, F what) const;
 
     /**
      * Process the event sent by the X server
      */
-    void processEvent(const _XEvent & event)
-    {
-        using std::bind;
-        using std::placeholders::_1;
-
-        auto presenceEvent = (XDevicePresenceNotifyEvent*)(&event);
-
-        if (!processInputDevice(presenceEvent->deviceid, bind(&Private::addDevice, this, _1))) {
-            removeDevice(presenceEvent->deviceid);
-        }
-    }
+    void processEvent(const _XEvent & event);
 
     /**
      * Constructs an XAtom that represents the property
      * with the given name
      */
     inline
-    Atom propertyAtom(const char * name)
-    {
-        return XInternAtom(connection.display(), name, True);
-    }
+    Atom propertyAtom(const char * name);
 
-    Private()
-        : synapticsCapabilities (propertyAtom("Synaptics Capabilities")),
-          synapticsOff          (propertyAtom("Synaptics Off")),
-          touchMaxContacts      (propertyAtom("Max Contacts")),
-          touchAxesPerContact   (propertyAtom("Axes Per Contact")),
-          deviceNode            (propertyAtom("Device Node"))
-    {
-        using std::bind;
-        using std::placeholders::_1;
-
-        int xiEventType;
-        XEventClass xiEventClass;
-
-        // Getting the type and class from the server
-        DevicePresence(connection.display(), xiEventType, xiEventClass);
-
-        connection.handleExtensionEvent(xiEventType, xiEventClass,
-                bind(&Private::processEvent, this, _1));
-
-        processInputDevices(bind(&Private::addDevice, this, _1));
-    }
+    Private();
 
     /**
      * Tests whether the device has the specified property
      */
     inline
-    bool hasProperty(XIDeviceInfo * info, Atom property)
-    {
-        Atom atomType;
-        int  atomFormat;
-        unsigned long countItems, bytesAfter;
-        unsigned char * data;
-
-        return property &&
-            Success == XIGetProperty(
-                connection.display(),
-                info->deviceid,
-                property,
-                0, 1000, False,
-                AnyPropertyType,
-                &atomType, &atomFormat, &countItems, &bytesAfter, &data
-            )
-            && atomFormat && data;
-    }
+    bool hasProperty(XIDeviceInfo * info, Atom property);
 
     /**
      * Checks which properties a specific device has
@@ -182,118 +103,19 @@ public:
      */
     inline
     std::set<Atom> presentProperties(const XDeviceInfo & device,
-            const std::vector<Atom> & propertiesToCheck)
-    {
-        std::set<Atom> result;
-
-        int count = -1;
-        auto info = XIQueryDevice(connection.display(), device.id, &count);
-
-        if (count) {
-            std::copy_if(
-                propertiesToCheck.begin(), propertiesToCheck.end(),
-                std::inserter(result, result.end()),
-                [=] (Atom property) {
-                    return hasProperty(info, property);
-                }
-            );
-        }
-
-        XIFreeDeviceInfo(info);
-
-        return result;
-    }
+            const std::vector<Atom> & propertiesToCheck);
 
     /**
      * Adding the device to the list and
      * sends the appropriate event
      */
-    void addDevice(const XDeviceInfo & device)
-    {
-        if (!knownDevices.count(device.id)) {
-
-            static const std::vector<Atom> testProperties = {
-                synapticsOff,
-                synapticsCapabilities,
-                touchMaxContacts,
-                touchAxesPerContact,
-                deviceNode
-            };
-
-            auto properties = presentProperties(device, testProperties);
-
-            auto deviceType =
-                // Ignoring the core devices since we can not tell anything from them
-                device.use == IsXExtensionKeyboard ? InputDevice::Type::Keyboard :
-                device.use == IsXExtensionPointer  ? InputDevice::Type::Pointer :
-                /* default */                        InputDevice::Type::Any;
-
-            auto deviceSubtype =
-                // Trying to find out whether we have a touch-screen
-                // or a touchpad
-                properties.count(synapticsOff)          ? InputDevice::Subtype::Touchpad :
-                properties.count(synapticsCapabilities) ? InputDevice::Subtype::Touchpad :
-                properties.count(touchMaxContacts)      ? InputDevice::Subtype::Touchscreen :
-                properties.count(touchAxesPerContact)   ? InputDevice::Subtype::Touchscreen :
-
-                // TODO: Do the keyboard detection via udev
-                // Currently, we are using some weird heuristics to
-                // bypass the X server's unawareness of keyboard details.
-                //
-                // Something is a full keyboard if its name says so.
-                // But, for the standard "AT Translated Set 2 keyboard" device,
-                // it is a real keyboard if it has a 'Device Node' property.
-                (
-                    deviceType == InputDevice::Type::Keyboard &&
-                    QString(device.name).toLower().contains("keyboard") &&
-                    (
-                        properties.count(deviceNode) ||
-                        device.name != "AT Translated Set 2 keyboard"
-                    )
-                )                                       ? InputDevice::Subtype::FullKeyboard :
-
-                /* default */                             InputDevice::Subtype::Any
-            ;
-
-            std::unique_ptr<InputDevice> newDevice(new InputDevice {
-                QString::number(device.id) + " " + device.name, device.name, deviceType, deviceSubtype
-            });
-
-            // Ignoring the XTEST devices for good measure
-            if (!newDevice->name.contains("XTEST")) {
-
-                internalDeviceIds[newDevice->id] = device.id;
-
-                qDebug() << "We got a new input device: "
-                     << device.id
-                     << "\t of type " << (int)newDevice->type
-                     << "/" << (int)newDevice->subtype
-                     << " name: " << newDevice->name
-                     ;
-
-                emit addedDevice(newDevice->id);
-
-                knownDevices[device.id] = std::move(newDevice);
-            }
-        }
-    }
+    void addDevice(const XDeviceInfo & device);
 
     /**
      * Removing the device from the list and
      * sends the appropriate event
      */
-    void removeDevice(XID id)
-    {
-        if (knownDevices.count(id)) {
-            qDebug() << "Lost an input device: " << id << " " << knownDevices[id]->name;
-            auto device = std::move(knownDevices[id]);
-
-            emit removedDevice(device->id);
-
-            internalDeviceIds.erase(device->id);
-            knownDevices.erase(id);
-        }
-    }
+    void removeDevice(XID id);
 
 Q_SIGNALS:
     void addedDevice(const QString & id);

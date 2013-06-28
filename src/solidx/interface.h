@@ -17,47 +17,40 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef SOLIDX_XLIB_CONNECTION_H
-#define SOLIDX_XLIB_CONNECTION_H
+#ifndef SOLIDX_INTERFACE_H
+#define SOLIDX_INTERFACE_H
 
 #include <QObject>
+#include <QString>
 
-#include <memory>
-#include <functional>
-
-#include <X11/extensions/XI.h>
-
-struct _XDisplay;
-union  _XEvent;
+#include "utils/d_ptr.h"
 
 namespace solidx {
-namespace backends {
-namespace xlib {
 
 /**
- * XlibConnection
+ * InputDevices
  */
-class XlibConnection {
+class Interface: public QObject {
+    Q_OBJECT
+
+    Q_PROPERTY(bool keyboardPresent READ isKeyboardPresent NOTIFY keyboardPresenceChanged);
+    Q_PROPERTY(bool touchscreenPresent READ isTouchscreenPresent NOTIFY touchscreenPresenceChanged);
+
 public:
-    XlibConnection();
-    virtual ~XlibConnection();
+    Interface(QObject * parent = Q_NULLPTR);
 
-    _XDisplay * display() const;
+    bool isKeyboardPresent() const;
+    bool isTouchscreenPresent() const;
 
-    void handleExtensionEvent(int eventType, XEventClass & eventClass, std::function<void(const _XEvent &)> handler);
-    void releaseExtensionEventHandler(int eventType);
+Q_SIGNALS:
+    void keyboardPresenceChanged(bool present);
+    void touchscreenPresenceChanged(bool present);
 
 private:
-
-    class Private;
-    const std::shared_ptr<Private> d;
+    D_PTR;
 };
 
-
-} // namespace xlib
-} // namespace backends
 } // namespace solidx
 
-
-#endif /* SOLIDX_XLIB_CONNECTION_H */
+#endif /* SOLIDX_INTERFACE_H */
 
