@@ -20,6 +20,8 @@
 #ifndef SOLIDX_XLIB_INPUTDEVICE_H
 #define SOLIDX_XLIB_INPUTDEVICE_H
 
+#include "inputdevice.h"
+
 #include <memory>
 
 #include <QAbstractListModel>
@@ -36,12 +38,16 @@ public:
     explicit InputDeviceBackend(QObject *parent = 0);
     ~InputDeviceBackend();
 
+    QStringList devices() const;
+    const InputDevice & device(const QString & id) const;
+
 Q_SIGNALS:
     void addedDevice(const QString & id);
     void removedDevice(const QString & id);
 
 private:
     class Private;
+    friend class Private;
     const std::shared_ptr<Private> d;
 };
 

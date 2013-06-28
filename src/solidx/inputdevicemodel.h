@@ -32,19 +32,30 @@ namespace solidx {
  * InputDevices
  */
 class InputDeviceModel: public QAbstractListModel {
+    Q_OBJECT
+
+    Q_PROPERTY(solidx::InputDevice::Type type READ type WRITE setType)
+    Q_PROPERTY(solidx::InputDevice::Subtype subtype READ subtype WRITE setSubtype)
+
 public:
-    explicit InputDeviceModel(
-            InputDevice::Type type = InputDevice::Type::Any,
-            InputDevice::Subtype subtype = InputDevice::Subtype::Any,
-            QObject * parent = Q_NULLPTR
-        );
-    explicit InputDeviceModel(QObject * parent);
+    // explicit InputDeviceModel(
+    //         InputDevice::Type type = InputDevice::Type::Any,
+    //         InputDevice::Subtype subtype = InputDevice::Subtype::Any,
+    //         QObject * parent = Q_NULLPTR
+    //     );
+    explicit InputDeviceModel(QObject * parent = Q_NULLPTR);
     virtual ~InputDeviceModel();
 
     int rowCount(const QModelIndex & parent = QModelIndex()) const;
     QModelIndex sibling(int row, int column, const QModelIndex & index) const;
 
     QVariant data(const QModelIndex & index, int role) const;
+
+    void setType(InputDevice::Type type);
+    InputDevice::Type type() const;
+
+    void setSubtype(InputDevice::Subtype subtype);
+    InputDevice::Subtype subtype() const;
 
 private:
     D_PTR;

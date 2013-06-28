@@ -37,6 +37,7 @@
 #include <functional>
 #include <iterator>
 #include <algorithm>
+#include <map>
 #include <set>
 
 namespace solidx {
@@ -47,6 +48,8 @@ class InputDeviceBackend::Private
     : public QObject, public utils::SharedSingleton<Private>
 {
     Q_OBJECT
+
+    friend class InputDeviceBackend;
 
 public:
     /**
@@ -207,7 +210,7 @@ public:
      */
     void addDevice(const XDeviceInfo & device)
     {
-        if (!knownDevices.contains(device.id)) {
+        if (!knownDevices.count(device.id)) {
 
             static const std::vector<Atom> testProperties = {
                 synapticsOff,
@@ -219,26 +222,19 @@ public:
 
             auto properties = presentProperties(device, testProperties);
 
-            solidx::InputDevice newDevice {
-                // The id of the device
-                device.name,
-
-                // The name of the device as reported by X server
-                device.name,
-
-
+            auto deviceType =
                 // Ignoring the core devices since we can not tell anything from them
-                device.use == IsXExtensionKeyboard ? solidx::InputDevice::Type::Keyboard :
-                device.use == IsXExtensionPointer  ? solidx::InputDevice::Type::Pointer :
-                /* default */                        solidx::InputDevice::Type::Any,
+                device.use == IsXExtensionKeyboard ? InputDevice::Type::Keyboard :
+                device.use == IsXExtensionPointer  ? InputDevice::Type::Pointer :
+                /* default */                        InputDevice::Type::Any;
 
-
+            auto deviceSubtype =
                 // Trying to find out whether we have a touch-screen
                 // or a touchpad
-                properties.count(synapticsOff)          ? solidx::InputDevice::Subtype::Touchpad :
-                properties.count(synapticsCapabilities) ? solidx::InputDevice::Subtype::Touchpad :
-                properties.count(touchMaxContacts)      ? solidx::InputDevice::Subtype::Touchscreen :
-                properties.count(touchAxesPerContact)   ? solidx::InputDevice::Subtype::Touchscreen :
+                properties.count(synapticsOff)          ? InputDevice::Subtype::Touchpad :
+                properties.count(synapticsCapabilities) ? InputDevice::Subtype::Touchpad :
+                properties.count(touchMaxContacts)      ? InputDevice::Subtype::Touchscreen :
+                properties.count(touchAxesPerContact)   ? InputDevice::Subtype::Touchscreen :
 
                 // TODO: Do the keyboard detection via udev
                 // Currently, we are using some weird heuristics to
@@ -248,32 +244,36 @@ public:
                 // But, for the standard "AT Translated Set 2 keyboard" device,
                 // it is a real keyboard if it has a 'Device Node' property.
                 (
-                    newDevice.type == solidx::InputDevice::Type::Keyboard &&
-                    newDevice.name.toLower().contains("keyboard") &&
+                    deviceType == InputDevice::Type::Keyboard &&
+                    QString(device.name).toLower().contains("keyboard") &&
                     (
                         properties.count(deviceNode) ||
-                        newDevice.name != "AT Translated Set 2 keyboard"
+                        device.name != "AT Translated Set 2 keyboard"
                     )
-                )                                       ? solidx::InputDevice::Subtype::FullKeyboard :
+                )                                       ? InputDevice::Subtype::FullKeyboard :
 
-                /* default */                             solidx::InputDevice::Subtype::Any
+                /* default */                             InputDevice::Subtype::Any
+            ;
 
-            };
+            std::unique_ptr<InputDevice> newDevice(new InputDevice {
+                QString::number(device.id) + " " + device.name, device.name, deviceType, deviceSubtype
+            });
 
             // Ignoring the XTEST devices for good measure
-            if (!newDevice.name.contains("XTEST")) {
+            if (!newDevice->name.contains("XTEST")) {
 
-                knownDevices[device.id] = newDevice;
-                internalDeviceIds[newDevice.id] = device.id;
+                internalDeviceIds[newDevice->id] = device.id;
 
                 qDebug() << "We got a new input device: "
                      << device.id
-                     << "\t of type " << (int)newDevice.type
-                     << "/" << (int)newDevice.subtype
-                     << " name: " << newDevice.name
+                     << "\t of type " << (int)newDevice->type
+                     << "/" << (int)newDevice->subtype
+                     << " name: " << newDevice->name
                      ;
 
-                emit addedDevice(newDevice.id);
+                emit addedDevice(newDevice->id);
+
+                knownDevices[device.id] = std::move(newDevice);
             }
         }
     }
@@ -284,14 +284,14 @@ public:
      */
     void removeDevice(XID id)
     {
-        if (knownDevices.contains(id)) {
-            qDebug() << "Lost an input device: " << id << " " << knownDevices[id].name;
-            auto device = knownDevices[id];
+        if (knownDevices.count(id)) {
+            qDebug() << "Lost an input device: " << id << " " << knownDevices[id]->name;
+            auto device = std::move(knownDevices[id]);
 
-            knownDevices.remove(id);
-            internalDeviceIds.remove(device.id);
+            emit removedDevice(device->id);
 
-            emit removedDevice(device.id);
+            internalDeviceIds.erase(device->id);
+            knownDevices.erase(id);
         }
     }
 
@@ -301,8 +301,10 @@ Q_SIGNALS:
 
 private:
     Connection connection;
-    QMap<XID, solidx::InputDevice> knownDevices;
-    QMap<QString, XID> internalDeviceIds;
+
+    // QMap doesn't work with the unique_ptr
+    std::map<XID, std::unique_ptr<InputDevice>> knownDevices;
+    std::map<QString, XID> internalDeviceIds;
 
     const Atom synapticsCapabilities;
     const Atom synapticsOff;

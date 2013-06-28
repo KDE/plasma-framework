@@ -18,25 +18,60 @@
  */
 
 #include "inputdevicemodel.h"
+#include "inputdevicemodel_p.h"
 
 #include "utils/d_ptr_implementation.h"
 
+#include <QDebug>
+
 namespace solidx {
 
-class InputDeviceModel::Private {
-public:
-
-};
-
-InputDeviceModel::InputDeviceModel(QObject * parent)
+InputDeviceModel::Private::Private(InputDeviceModel * parent)
+    : q(parent)
 {
+    connect(&backendXLib, SIGNAL(addedDevice(QString)),
+            this, SLOT(addedDevice(QString)));
+    connect(&backendXLib, SIGNAL(removedDevice(QString)),
+            this, SLOT(removedDevice(QString)));
 }
 
-InputDeviceModel::InputDeviceModel(InputDevice::Type type,
-        InputDevice::Subtype subtype,
-        QObject * parent
-    )
+void InputDeviceModel::Private::addedDevice(const QString & id)
 {
+    if (devices.contains(id)) return;
+
+    // TODO: Do this more efficient, and report
+    // adding a specific model item, not resetting it
+    q->beginResetModel();
+    devices << id;
+    q->endResetModel();
+
+}
+
+void InputDeviceModel::Private::removedDevice(const QString & id)
+{
+    if (!devices.contains(id)) return;
+
+    // TODO: Do this more efficient, and report
+    // erasing a specific model item, not resetting it
+    q->beginResetModel();
+    devices.removeAll(id);
+    q->endResetModel();
+}
+
+void InputDeviceModel::Private::reload()
+{
+    q->beginResetModel();
+
+    devices = backendXLib.devices();
+
+    q->endResetModel();
+}
+
+InputDeviceModel::InputDeviceModel(QObject * parent)
+    : d(this)
+{
+    d->reload();
+    qDebug() << "Gaga!" << d->devices;
 }
 
 InputDeviceModel::~InputDeviceModel()
@@ -48,7 +83,7 @@ int InputDeviceModel::rowCount(const QModelIndex & parent) const
 {
     if (parent.isValid()) return 0;
 
-    return 1;
+    return d->devices.size();
 }
 
 QModelIndex InputDeviceModel::sibling(int row, int column, const QModelIndex & index) const
@@ -61,14 +96,35 @@ QModelIndex InputDeviceModel::sibling(int row, int column, const QModelIndex & i
 
 QVariant InputDeviceModel::data(const QModelIndex & index, int role) const
 {
-    if (index.row() < 0 || index.row() >= 1)
+    if (index.row() < 0 || index.row() >= d->devices.size())
         return QVariant();
 
     if (role == Qt::DisplayRole || role == Qt::EditRole)
-        return "asd";
+        return d->devices.at(index.row());
 
     return QVariant();
 }
+
+void InputDeviceModel::setType(InputDevice::Type type)
+{
+    d->type = type;
+}
+
+InputDevice::Type InputDeviceModel::type() const
+{
+    return d->type;
+}
+
+void InputDeviceModel::setSubtype(InputDevice::Subtype subtype)
+{
+    d->subtype = subtype;
+}
+
+InputDevice::Subtype InputDeviceModel::subtype() const
+{
+    return d->subtype;
+}
+
 
 
 } // namespace solidx

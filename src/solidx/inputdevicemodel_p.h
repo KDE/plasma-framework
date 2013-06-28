@@ -17,60 +17,38 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef SOLIDX_INPUTDEVICE_H
-#define SOLIDX_INPUTDEVICE_H
+#ifndef SOLIDX_INPUTDEVICEMODEL_P_H
+#define SOLIDX_INPUTDEVICEMODEL_P_H
 
-#include <QAbstractListModel>
-#include <QString>
+#include "inputdevicemodel.h"
 
-#include "utils/d_ptr.h"
+#include "backends/xlib/inputdevicebackend.h"
 
 namespace solidx {
 
-/**
- * InputDevices
- */
-class InputDevice: public QObject {
+class InputDeviceModel::Private: public QObject {
     Q_OBJECT
 
 public:
-    enum class Type {
-        Any          = 0,
+    Private(InputDeviceModel * parent);
+    void reload();
 
-        Keyboard     = 1,
-        Pointer      = 2,
+public Q_SLOTS:
+    void addedDevice(const QString & id);
+    void removedDevice(const QString & id);
 
-        Error        = 255
-    };
+public:
+    QStringList devices;
+    backends::xlib::InputDeviceBackend backendXLib;
 
-    enum class Subtype {
-        Any          = 0,
+    InputDevice::Type type;
+    InputDevice::Subtype subtype;
 
-        Touchpad     = 1,
-        Touchscreen  = 2,
-
-        FullKeyboard = 3,
-        SpecialKeys  = 4,
-
-        Error        = 255
-    };
-
-    InputDevice(
-            const QString & id,
-            const QString & name,
-            Type type = Type::Error,
-            Subtype subtype = Subtype::Error
-        );
-
-    QString id;
-    QString name;
-    Type type;
-    Subtype subtype;
-
-    static InputDevice null;
+    bool initialized;
+    InputDeviceModel * const q;
 };
 
 } // namespace solidx
 
-#endif /* SOLIDX_INPUTDEVICE_H */
+#endif /* SOLIDX_INPUTDEVICEMODEL_P_H */
 

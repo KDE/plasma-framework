@@ -47,6 +47,28 @@ InputDeviceBackend::~InputDeviceBackend()
 {
 }
 
+QStringList InputDeviceBackend::devices() const
+{
+    QStringList result;
+
+    foreach (auto item, d->internalDeviceIds) {
+        result << item.first;
+    }
+
+    return result;
+}
+
+const InputDevice & InputDeviceBackend::device(const QString & id) const
+{
+    if (!d->internalDeviceIds.count(id)) return InputDevice::null;
+
+    auto internalId = d->internalDeviceIds[id];
+
+    if (!d->knownDevices.count(internalId)) return InputDevice::null;
+
+    return *(d->knownDevices[internalId].get());
+}
+
 } // namespace xlib
 } // namespace backends
 } // namespace solidx

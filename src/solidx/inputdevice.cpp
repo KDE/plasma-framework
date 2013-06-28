@@ -21,6 +21,23 @@
 
 namespace solidx {
 
+InputDevice::InputDevice(
+        const QString & _id,
+        const QString & _name,
+        Type _type,
+        Subtype _subtype
+    )
+    : id(_id), name(_name), type(_type), subtype(_subtype)
+{
+}
+
+InputDevice InputDevice::null {
+    QString(),
+    QString(),
+    Type::Error,
+    Subtype::Error
+};
+
 } // namespace solidx
 
 
