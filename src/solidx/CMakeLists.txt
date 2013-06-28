@@ -14,9 +14,11 @@ set(solidx_LIB_SRCS
     main.cpp
     inputdevice.cpp
     inputdevicemodel.cpp
+    backends/abstractinputdevicebackend.cpp
 
-    backends/xlib/connection.cpp
-    backends/xlib/inputdevicebackend.cpp
+    backends/xlib/xlibconnection.cpp
+    backends/xlib/xlibinputdevicebackend.cpp
+    backends/fake/fakeinputdevicebackend.cpp
     )
 
 include(CheckIncludeFiles)
@@ -26,7 +28,7 @@ include(CheckCXXSourceCompiles)
 find_package(X11 REQUIRED)
 find_package(XCB REQUIRED)
 find_package(X11_XCB)
-find_package(Qt5 5.2.0 REQUIRED NO_MODULE COMPONENTS Core Widgets)
+find_package(Qt5 5.2.0 REQUIRED NO_MODULE COMPONENTS Core Widgets DBus)
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/utils
@@ -64,6 +66,9 @@ target_link_libraries(
     ${X11_INPUT_LIB} -lXi
     ${XCB_XCB_LIBRARIES}
     ${X11_XCB_LIBRARIES}
+    Qt5::Core
+    Qt5::Widgets
+    Qt5::DBus
 )
 # target_link_libraries(SolidX LINK_PUBLIC Qt5::Core Qt5::Gui ${XCB_XCB_LIBRARIES} ${X11_XCB_LIBRARIES})
 

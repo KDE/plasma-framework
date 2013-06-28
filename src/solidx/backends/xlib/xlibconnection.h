@@ -17,38 +17,47 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef SOLIDX_INPUTDEVICEMODEL_P_H
-#define SOLIDX_INPUTDEVICEMODEL_P_H
+#ifndef SOLIDX_XLIB_CONNECTION_H
+#define SOLIDX_XLIB_CONNECTION_H
 
-#include "inputdevicemodel.h"
+#include <QObject>
+
+#include <memory>
+#include <functional>
+
+#include <X11/extensions/XI.h>
+
+struct _XDisplay;
+union  _XEvent;
 
 namespace solidx {
+namespace backends {
+namespace xlib {
 
-class AbstractInputDeviceBackend;
-
-class InputDeviceModel::Private: public QObject {
-    Q_OBJECT
-
+/**
+ * XlibConnection
+ */
+class XlibConnection: public QObject {
 public:
-    Private(InputDeviceModel * parent);
-    void reload();
+    XlibConnection();
+    virtual ~XlibConnection();
 
-public Q_SLOTS:
-    void addedDevice(const QString & id);
-    void removedDevice(const QString & id);
+    _XDisplay * display() const;
 
-public:
-    QStringList devices;
-    QVector<AbstractInputDeviceBackend *> backends;
+    void handleExtensionEvent(int eventType, XEventClass & eventClass, std::function<void(const _XEvent &)> handler);
+    void releaseExtensionEventHandler(int eventType);
 
-    InputDevice::Type type;
-    InputDevice::Subtype subtype;
+private:
 
-    bool initialized;
-    InputDeviceModel * const q;
+    class Private;
+    const std::shared_ptr<Private> d;
 };
 
+
+} // namespace xlib
+} // namespace backends
 } // namespace solidx
 
-#endif /* SOLIDX_INPUTDEVICEMODEL_P_H */
+
+#endif /* SOLIDX_XLIB_CONNECTION_H */
 

@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "connection.h"
+#include "xlibconnection.h"
 #include "utils/sharedsingleton.h"
 
 #include <QBasicTimer>
@@ -33,7 +33,7 @@ namespace solidx {
 namespace backends {
 namespace xlib {
 
-class Connection::Private:
+class XlibConnection::Private:
     public QObject,
     public utils::SharedSingleton<Private>
 {
@@ -57,7 +57,7 @@ private:
 };
 
 
-Connection::Private::Private()
+XlibConnection::Private::Private()
     : display(XOpenDisplay(nullptr))
 {
     Q_ASSERT_X(display != nullptr, "Xlib connection", "Display not accessible");
@@ -65,12 +65,12 @@ Connection::Private::Private()
     startTimer();
 }
 
-Connection::Private::~Private() {
+XlibConnection::Private::~Private() {
     m_timer.stop();
     XCloseDisplay(display);
 }
 
-void Connection::Private::timerEvent(QTimerEvent * e)
+void XlibConnection::Private::timerEvent(QTimerEvent * e)
 {
     XEvent event;
 
@@ -81,34 +81,34 @@ void Connection::Private::timerEvent(QTimerEvent * e)
     }
 }
 
-void Connection::Private::startTimer()
+void XlibConnection::Private::startTimer()
 {
     qDebug() << "Timer started";
     m_timer.start(500, Qt::CoarseTimer, this);
 }
 
 
-Connection::Connection()
+XlibConnection::XlibConnection()
     : d(Private::instance())
 {
 }
 
-Connection::~Connection()
+XlibConnection::~XlibConnection()
 {
 }
 
-Display * Connection::display() const
+Display * XlibConnection::display() const
 {
     return d->display;
 }
 
-void Connection::handleExtensionEvent(int eventType, XEventClass & eventClass, std::function<void(const XEvent &)> handler)
+void XlibConnection::handleExtensionEvent(int eventType, XEventClass & eventClass, std::function<void(const XEvent &)> handler)
 {
     d->eventHandlers[eventType] = handler;
     XSelectExtensionEvent(d->display, DefaultRootWindow(d->display), &eventClass, 1);
 }
 
-void Connection::releaseExtensionEventHandler(int eventType)
+void XlibConnection::releaseExtensionEventHandler(int eventType)
 {
 
 }

@@ -17,21 +17,16 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "inputdevicebackend.h"
-
-#include "utils/sharedsingleton.h"
-#include "connection.h"
-
-#include <QDebug>
-
-#include "inputdevicebackend_p.h"
+#include "xlibinputdevicebackend.h"
+#include "xlibconnection.h"
+#include "xlibinputdevicebackend_p.h"
 
 namespace solidx {
 namespace backends {
 namespace xlib {
 
-InputDeviceBackend::InputDeviceBackend(QObject * parent)
-    : QObject(parent), d(Private::instance())
+XlibInputDeviceBackend::XlibInputDeviceBackend(QObject * parent)
+    : AbstractInputDeviceBackend(parent), d(Private::instance())
 {
     connect(
         d.get(), SIGNAL(addedDevice(QString)),
@@ -43,11 +38,11 @@ InputDeviceBackend::InputDeviceBackend(QObject * parent)
     );
 }
 
-InputDeviceBackend::~InputDeviceBackend()
+XlibInputDeviceBackend::~XlibInputDeviceBackend()
 {
 }
 
-QStringList InputDeviceBackend::devices() const
+QStringList XlibInputDeviceBackend::devices() const
 {
     QStringList result;
 
@@ -58,7 +53,7 @@ QStringList InputDeviceBackend::devices() const
     return result;
 }
 
-const InputDevice & InputDeviceBackend::device(const QString & id) const
+const InputDevice & XlibInputDeviceBackend::device(const QString & id) const
 {
     if (!d->internalDeviceIds.count(id)) return InputDevice::null;
 

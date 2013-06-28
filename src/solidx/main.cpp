@@ -25,7 +25,6 @@
 #include <QApplication>
 
 #include "inputdevicemodel.h"
-#include "backends/xlib/inputdevicebackend.h"
 
 int main(int argc, char *argv[])
 {
@@ -53,7 +52,7 @@ int main(int argc, char *argv[])
 
     // application.installNativeEventFilter(new MyXcbEventFilter());
 
-    solidx::backends::xlib::InputDeviceBackend xlibbackend;
+    // solidx::backends::xlib::InputDeviceBackend xlibbackend;
 
     auto model = new solidx::InputDeviceModel();
     auto list  = new QListView();

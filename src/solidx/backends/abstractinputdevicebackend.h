@@ -17,38 +17,35 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef SOLIDX_INPUTDEVICEMODEL_P_H
-#define SOLIDX_INPUTDEVICEMODEL_P_H
+#ifndef SOLIDX_ABSTRACT_INPUTDEVICE_H
+#define SOLIDX_ABSTRACT_INPUTDEVICE_H
 
-#include "inputdevicemodel.h"
+#include "inputdevice.h"
+
+#include <QStringList>
 
 namespace solidx {
 
-class AbstractInputDeviceBackend;
-
-class InputDeviceModel::Private: public QObject {
+class AbstractInputDeviceBackend: public QObject {
     Q_OBJECT
 
 public:
-    Private(InputDeviceModel * parent);
-    void reload();
+    explicit AbstractInputDeviceBackend(QObject *parent = 0);
+    ~AbstractInputDeviceBackend();
 
-public Q_SLOTS:
-    void addedDevice(const QString & id);
-    void removedDevice(const QString & id);
+    virtual
+    QStringList devices() const = 0;
 
-public:
-    QStringList devices;
-    QVector<AbstractInputDeviceBackend *> backends;
+    virtual
+    const InputDevice & device(const QString & id) const = 0;
 
-    InputDevice::Type type;
-    InputDevice::Subtype subtype;
+//  Q_SIGNALS:
+//      void addedDevice(const QString & id);
+//      void removedDevice(const QString & id);
 
-    bool initialized;
-    InputDeviceModel * const q;
 };
 
 } // namespace solidx
 
-#endif /* SOLIDX_INPUTDEVICEMODEL_P_H */
+#endif /* SOLIDX_ABSTRACT_INPUTDEVICE_H */
 

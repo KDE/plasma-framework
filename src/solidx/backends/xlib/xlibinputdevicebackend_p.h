@@ -25,9 +25,9 @@
 
 #include "inputdevice.h"
 
-#include "inputdevicebackend.h"
+#include "xlibinputdevicebackend.h"
+#include "xlibconnection.h"
 #include "utils/sharedsingleton.h"
-#include "connection.h"
 
 #include <X11/extensions/XInput.h>
 #include <X11/extensions/XInput2.h>
@@ -44,12 +44,12 @@ namespace solidx {
 namespace backends {
 namespace xlib {
 
-class InputDeviceBackend::Private
+class XlibInputDeviceBackend::Private
     : public QObject, public utils::SharedSingleton<Private>
 {
     Q_OBJECT
 
-    friend class InputDeviceBackend;
+    friend class XlibInputDeviceBackend;
 
 public:
     /**
@@ -300,7 +300,7 @@ Q_SIGNALS:
     void removedDevice(const QString & id);
 
 private:
-    Connection connection;
+    XlibConnection connection;
 
     // QMap doesn't work with the unique_ptr
     std::map<XID, std::unique_ptr<InputDevice>> knownDevices;

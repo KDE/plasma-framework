@@ -22,6 +22,9 @@
 
 #include "utils/d_ptr_implementation.h"
 
+#include "backends/xlib/xlibinputdevicebackend.h"
+#include "backends/fake/fakeinputdevicebackend.h"
+
 #include <QDebug>
 
 namespace solidx {
@@ -29,10 +32,15 @@ namespace solidx {
 InputDeviceModel::Private::Private(InputDeviceModel * parent)
     : q(parent)
 {
-    connect(&backendXLib, SIGNAL(addedDevice(QString)),
+    backends << new backends::xlib::XlibInputDeviceBackend(this);
+    backends << new backends::fake::FakeInputDeviceBackend(this);
+
+    foreach (auto backend, backends) {
+        connect(backend, SIGNAL(addedDevice(QString)),
             this, SLOT(addedDevice(QString)));
-    connect(&backendXLib, SIGNAL(removedDevice(QString)),
+        connect(backend, SIGNAL(removedDevice(QString)),
             this, SLOT(removedDevice(QString)));
+    }
 }
 
 void InputDeviceModel::Private::addedDevice(const QString & id)
@@ -62,7 +70,11 @@ void InputDeviceModel::Private::reload()
 {
     q->beginResetModel();
 
-    devices = backendXLib.devices();
+    foreach (auto backend, backends) {
+        foreach (auto device, backend->devices()) {
+            addedDevice(device);
+        }
+    }
 
     q->endResetModel();
 }

@@ -17,38 +17,40 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef SOLIDX_INPUTDEVICEMODEL_P_H
-#define SOLIDX_INPUTDEVICEMODEL_P_H
+#ifndef SOLIDX_XLIB_INPUTDEVICE_H
+#define SOLIDX_XLIB_INPUTDEVICE_H
 
-#include "inputdevicemodel.h"
+#include "../abstractinputdevicebackend.h"
+
+#include <memory>
 
 namespace solidx {
+namespace backends {
+namespace xlib {
 
-class AbstractInputDeviceBackend;
-
-class InputDeviceModel::Private: public QObject {
+class XlibInputDeviceBackend: public AbstractInputDeviceBackend {
     Q_OBJECT
 
 public:
-    Private(InputDeviceModel * parent);
-    void reload();
+    explicit XlibInputDeviceBackend(QObject *parent = 0);
+    ~XlibInputDeviceBackend();
 
-public Q_SLOTS:
+    QStringList devices() const Q_DECL_OVERRIDE;
+    const InputDevice & device(const QString & id) const Q_DECL_OVERRIDE;
+
+Q_SIGNALS:
     void addedDevice(const QString & id);
     void removedDevice(const QString & id);
 
-public:
-    QStringList devices;
-    QVector<AbstractInputDeviceBackend *> backends;
-
-    InputDevice::Type type;
-    InputDevice::Subtype subtype;
-
-    bool initialized;
-    InputDeviceModel * const q;
+private:
+    class Private;
+    friend class Private;
+    const std::shared_ptr<Private> d;
 };
 
+} // namespace xlib
+} // namespace backends
 } // namespace solidx
 
-#endif /* SOLIDX_INPUTDEVICEMODEL_P_H */
+#endif /* SOLIDX_XLIB_INPUTDEVICE_H */
 
