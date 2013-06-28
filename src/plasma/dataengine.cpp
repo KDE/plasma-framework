@@ -62,6 +62,12 @@ DataEngine::DataEngine(const KPluginInfo &plugin, QObject *parent)
     }
 }
 
+DataEngine::DataEngine(QObject* parent, const QVariantList &args)
+    : Plasma::DataEngine(KPluginInfo(), parent)
+{
+    qDebug() << "wrong constructor for timeengine :(";
+}
+
 DataEngine::~DataEngine()
 {
     //kDebug() << objectName() << ": bye bye birdy! ";

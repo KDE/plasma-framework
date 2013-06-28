@@ -73,6 +73,8 @@ class PLASMA_EXPORT DataEngine : public QObject
          **/
         explicit DataEngine(const KPluginInfo &plugin, QObject *parent = 0);
 
+        explicit DataEngine(QObject* parent = 0, const QVariantList& args = QVariantList());
+
         ~DataEngine();
 
         /**
