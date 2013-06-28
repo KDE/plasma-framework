@@ -19,16 +19,17 @@
 
 // #include "pointer.h"
 
-#include <QCoreApplication>
-#include <QAbstractNativeEventFilter>
 #include <QDebug>
 
-// #include "backends/xlib/connection.h"
-#include "backends/xlib/inputdevice.h"
+#include <QListView>
+#include <QApplication>
+
+#include "inputdevicemodel.h"
+#include "backends/xlib/inputdevicebackend.h"
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication application(argc, argv);
+    QApplication application(argc, argv);
 
     // XLib opening connection
     // backends::xlib::Connection connection;
@@ -52,8 +53,13 @@ int main(int argc, char *argv[])
 
     // application.installNativeEventFilter(new MyXcbEventFilter());
 
-    backends::xlib::InputDeviceListModel list;
+    solidx::backends::xlib::InputDeviceBackend xlibbackend;
 
+    auto model = new solidx::InputDeviceModel();
+    auto list  = new QListView();
+
+    list->setModel(model);
+    list->show();
 
     return application.exec();
 }

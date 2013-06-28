@@ -17,25 +17,10 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "pointer.h"
+#include "inputdevice.h"
 
-namespace SolidX {
+namespace solidx {
 
+} // namespace solidx
 
-Pointer::Pointer(QObject * parent)
-    : QObject(parent)
-{
-}
-
-Pointer::~Pointer()
-{
-}
-
-int Pointer::buttonsNumber() const
-{
-    return 5;
-}
-
-
-} // namespace SolidX
 

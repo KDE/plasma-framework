@@ -17,42 +17,49 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "inputdevice.h"
-#include "utils/sharedsingleton.h"
-#include "connection.h"
+#include "inputdevicemodel.h"
 
-#include <QDebug>
+#include "utils/d_ptr_implementation.h"
 
-#include "inputdevice_p.h"
+namespace solidx {
 
-namespace backends {
-namespace xlib {
+class InputDeviceModel::Private {
+public:
 
-InputDeviceListModel::InputDeviceListModel(QObject * parent)
-    : QAbstractListModel(parent), d(Private::instance())
+};
+
+InputDeviceModel::InputDeviceModel(QObject * parent)
 {
 }
 
-InputDeviceListModel::~InputDeviceListModel()
+InputDeviceModel::InputDeviceModel(InputDevice::Type type,
+        InputDevice::Subtype subtype,
+        QObject * parent
+    )
 {
 }
 
-int InputDeviceListModel::rowCount(const QModelIndex &parent) const
+InputDeviceModel::~InputDeviceModel()
+{
+}
+
+
+int InputDeviceModel::rowCount(const QModelIndex & parent) const
 {
     if (parent.isValid()) return 0;
 
     return 1;
 }
 
-QModelIndex InputDeviceListModel::sibling(int row, int column, const QModelIndex &idx) const
+QModelIndex InputDeviceModel::sibling(int row, int column, const QModelIndex & index) const
 {
-    if (!idx.isValid() || column != 0 || row >= 1)
+    if (!index.isValid() || column != 0 || row >= 1)
         return QModelIndex();
 
     return createIndex(row, 0);
 }
 
-QVariant InputDeviceListModel::data(const QModelIndex &index, int role) const
+QVariant InputDeviceModel::data(const QModelIndex & index, int role) const
 {
     if (index.row() < 0 || index.row() >= 1)
         return QVariant();
@@ -61,9 +68,9 @@ QVariant InputDeviceListModel::data(const QModelIndex &index, int role) const
         return "asd";
 
     return QVariant();
-
 }
 
 
-} // namespace xlib
-} // namespace backends
+} // namespace solidx
+
+

@@ -17,47 +17,48 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef SOLIDX_XLIB_CONNECTION_H
-#define SOLIDX_XLIB_CONNECTION_H
+#ifndef SOLIDX_INPUTDEVICE_H
+#define SOLIDX_INPUTDEVICE_H
 
-#include <QObject>
+#include <QAbstractListModel>
+#include <QString>
 
-#include <memory>
-#include <functional>
-
-#include <X11/extensions/XI.h>
-
-struct _XDisplay;
-union  _XEvent;
+#include "utils/d_ptr.h"
 
 namespace solidx {
-namespace backends {
-namespace xlib {
 
 /**
- * Connection
+ * InputDevices
  */
-class Connection: public QObject {
-public:
-    Connection();
-    virtual ~Connection();
+struct InputDevice {
 
-    _XDisplay * display() const;
+    QString id;
+    QString name;
 
-    void handleExtensionEvent(int eventType, XEventClass & eventClass, std::function<void(const _XEvent &)> handler);
-    void releaseExtensionEventHandler(int eventType);
+    enum class Type {
+        Any          = 0,
 
-private:
+        Keyboard     = 1,
+        Pointer      = 2,
 
-    class Private;
-    const std::shared_ptr<Private> d;
+        Error        = 255
+    } type;
+
+    enum class Subtype {
+        Any          = 0,
+
+        Touchpad     = 1,
+        Touchscreen  = 2,
+
+        FullKeyboard = 3,
+        SpecialKeys  = 4,
+
+        Error        = 255
+    } subtype;
+
 };
 
-
-} // namespace xlib
-} // namespace backends
 } // namespace solidx
 
-
-#endif /* SOLIDX_XLIB_CONNECTION_H */
+#endif /* SOLIDX_INPUTDEVICE_H */
 

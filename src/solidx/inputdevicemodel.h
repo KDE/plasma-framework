@@ -17,47 +17,40 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef SOLIDX_XLIB_CONNECTION_H
-#define SOLIDX_XLIB_CONNECTION_H
+#ifndef SOLIDX_INPUTDEVICEMODEL_H
+#define SOLIDX_INPUTDEVICEMODEL_H
 
-#include <QObject>
+#include <QAbstractListModel>
+#include <QString>
 
-#include <memory>
-#include <functional>
-
-#include <X11/extensions/XI.h>
-
-struct _XDisplay;
-union  _XEvent;
+#include "utils/d_ptr.h"
+#include "inputdevice.h"
 
 namespace solidx {
-namespace backends {
-namespace xlib {
 
 /**
- * Connection
+ * InputDevices
  */
-class Connection: public QObject {
+class InputDeviceModel: public QAbstractListModel {
 public:
-    Connection();
-    virtual ~Connection();
+    explicit InputDeviceModel(
+            InputDevice::Type type = InputDevice::Type::Any,
+            InputDevice::Subtype subtype = InputDevice::Subtype::Any,
+            QObject * parent = Q_NULLPTR
+        );
+    explicit InputDeviceModel(QObject * parent);
+    virtual ~InputDeviceModel();
 
-    _XDisplay * display() const;
+    int rowCount(const QModelIndex & parent = QModelIndex()) const;
+    QModelIndex sibling(int row, int column, const QModelIndex & index) const;
 
-    void handleExtensionEvent(int eventType, XEventClass & eventClass, std::function<void(const _XEvent &)> handler);
-    void releaseExtensionEventHandler(int eventType);
+    QVariant data(const QModelIndex & index, int role) const;
 
 private:
-
-    class Private;
-    const std::shared_ptr<Private> d;
+    D_PTR;
 };
 
-
-} // namespace xlib
-} // namespace backends
 } // namespace solidx
 
-
-#endif /* SOLIDX_XLIB_CONNECTION_H */
+#endif /* SOLIDX_INPUTDEVICEMODEL_H */
 

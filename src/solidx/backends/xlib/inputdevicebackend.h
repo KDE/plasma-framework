@@ -25,43 +25,20 @@
 #include <QAbstractListModel>
 #include <QString>
 
+namespace solidx {
 namespace backends {
 namespace xlib {
 
-struct Device {
-    QString name;
-
-    enum class Type {
-        Unknown       = 0,
-        Keyboard      = 1,
-        Pointer       = 2,
-        Error         = 255
-    } type;
-
-    enum class Subtype {
-        Unknown       = 0,
-
-        Touchpad      = 1,
-        Touchscreen   = 2,
-
-        FullKeyboard  = 3,
-        SpecialKeys   = 4,
-
-        Error         = 255
-    } subtype;
-};
-
-
-class InputDeviceListModel: public QAbstractListModel {
+class InputDeviceBackend: public QObject {
     Q_OBJECT
+
 public:
-    explicit InputDeviceListModel(QObject *parent = 0);
-    ~InputDeviceListModel();
+    explicit InputDeviceBackend(QObject *parent = 0);
+    ~InputDeviceBackend();
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    QModelIndex sibling(int row, int column, const QModelIndex &idx) const;
-
-    QVariant data(const QModelIndex &index, int role) const;
+Q_SIGNALS:
+    void addedDevice(const QString & id);
+    void removedDevice(const QString & id);
 
 private:
     class Private;
@@ -70,6 +47,7 @@ private:
 
 } // namespace xlib
 } // namespace backends
+} // namespace solidx
 
 #endif /* SOLIDX_XLIB_INPUTDEVICE_H */
 

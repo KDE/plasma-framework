@@ -17,31 +17,37 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef pointer_h
-#define pointer_h
+#include "inputdevicebackend.h"
 
-#include <QObject>
+#include "utils/sharedsingleton.h"
+#include "connection.h"
 
-namespace SolidX {
-    class PointerPrivate;
-    class Device;
+#include <QDebug>
 
-    class Pointer: public QObject
-    {
-        Q_OBJECT
-        Q_DECLARE_PRIVATE(Pointer)
+#include "inputdevicebackend_p.h"
 
-    private:
-        explicit Pointer(QObject * parent);
+namespace solidx {
+namespace backends {
+namespace xlib {
 
-    public:
-        virtual ~Pointer();
+InputDeviceBackend::InputDeviceBackend(QObject * parent)
+    : QObject(parent), d(Private::instance())
+{
+    connect(
+        d.get(), SIGNAL(addedDevice(QString)),
+        this,    SIGNAL(addedDevice(QString))
+    );
+    connect(
+        d.get(), SIGNAL(removedDevice(QString)),
+        this,    SIGNAL(removedDevice(QString))
+    );
+}
 
-        int buttonsNumber() const;
+InputDeviceBackend::~InputDeviceBackend()
+{
+}
 
-    };
-
-} // namespace SolidX
-
-#endif /* pointer_h */
+} // namespace xlib
+} // namespace backends
+} // namespace solidx
 
