@@ -20,7 +20,7 @@
 #ifndef PLASMA_CONFIGLOADER_P_H
 #define PLASMA_CONFIGLOADER_P_H
 
-#include <kurl.h>
+#include <QUrl>
 
 namespace Plasma
 {
@@ -108,9 +108,9 @@ class ConfigLoaderPrivate
             return v;
         }
 
-        KUrl *newUrl()
+        QUrl *newUrl()
         {
-            KUrl *v = new KUrl;
+            QUrl *v = new QUrl;
             urls.append(v);
             return v;
         }
@@ -206,7 +206,7 @@ class ConfigLoaderPrivate
         QList<QFont *> fonts;
         QList<qint32 *> ints;
         QList<quint32 *> uints;
-        QList<KUrl *> urls;
+        QList<QUrl *> urls;
         QList<QDateTime *> dateTimes;
         QList<double *> doubles;
         QList<QList<qint32> *> intlists;

@@ -338,7 +338,7 @@ void ConfigLoaderHandler::addItem()
         QStringList tmpList = m_default.split(",");
         QList<QUrl> defaultList;
         foreach (const QString& tmp, tmpList) {
-            defaultList.append(KUrl(tmp));
+            defaultList.append(QUrl(tmp));
         }
         item = m_config->addItemUrlList(m_name, *d->newUrlList(), defaultList, m_key);*/
     }
@@ -432,7 +432,7 @@ QStringList ConfigLoader::groupList() const
     return d->groups;
 }
 
-void ConfigLoader::usrWriteConfig()
+bool ConfigLoader::usrWriteConfig()
 {
     if (d->saveDefaults) {
         KConfigSkeletonItem::List itemList = items();
@@ -441,6 +441,7 @@ void ConfigLoader::usrWriteConfig()
             cg.writeEntry(itemList.at(i)->key(), "");
         }
     }
+    return true;
 }
 
 } // Plasma namespace

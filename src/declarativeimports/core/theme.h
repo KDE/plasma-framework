@@ -22,7 +22,6 @@
 #include <QApplication>
 #include <QObject>
 
-#include <KUrl>
 #include <QFont>
 #include <QColor>
 

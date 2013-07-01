@@ -253,7 +253,7 @@ void PlasmoidPackageTest::createAndInstallPackage()
     QVERIFY(creator.open(QIODevice::WriteOnly));
     creator.addLocalDirectory(m_packageRoot + '/' + "plasmoid_to_package", ".");
     creator.close();
-    KIO::NetAccess::del(KUrl(m_packageRoot + "/plasmoid_to_package"), 0);
+    KIO::NetAccess::del(QUrl::fromLocalFile(m_packageRoot + "/plasmoid_to_package"), 0);
 
     QVERIFY(QFile::exists(packagePath));
 

@@ -57,7 +57,7 @@ find_package(kdeqt5staging REQUIRED NO_MODULE)
 find_package(KF5 MODULE REQUIRED COMPONENTS CMake Compiler InstallDirs
                                             XmlGui KIdleTime ItemModels KWidgetsAddons KWindowSystem KCodecs KArchive KCoreAddons Solid ThreadWeaver
                                             KConfig KAuth kjs KWallet
-                                            ki18n kguiaddons kservice kwidgets ItemViews KNotifications KCompletion KJobWidgets KConfigWidgets KIconThemes)
+                                            ki18n kguiaddons kservice kwidgets ItemViews KNotifications KIconThemes KCompletion KJobWidgets KConfigWidgets)
 #find_package(KF5Transitional REQUIRED)
 
 # those are not "done" yet:
@@ -185,7 +185,5 @@ install(FILES
 add_subdirectory(src)
 add_subdirectory( desktoptheme )
 
-# install(EXPORT plasmaTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-#         FILE plasmaTargets.cmake COMPONENT Devel)
 install(EXPORT PlasmaTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" FILE PlasmaTargets.cmake NAMESPACE KF5:: COMPONENT Devel)
 feature_summary(WHAT ALL   FATAL_ON_MISSING_REQUIRED_PACKAGES)

@@ -48,7 +48,6 @@
 #include <kconfiggroup.h>
 #include <kdebug.h>
 
-#include <kurl.h>
 #include <kwallet.h>
 
 namespace Plasma

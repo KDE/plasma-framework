@@ -38,7 +38,7 @@ QScriptValue ScriptEnv::openUrl(QScriptContext *context, QScriptEngine *engine)
     }
 
     QScriptValue v = context->argument(0);
-    KUrl url = v.isString() ? KUrl(v.toString()) : qscriptvalue_cast<KUrl>(v);
+    QUrl url = v.isString() ? QUrl::fromUserInput(v.toString()) : qscriptvalue_cast<QUrl>(v);
 
     if (!url.isValid()) {
         return false;
@@ -66,7 +66,7 @@ QScriptValue ScriptEnv::getUrl(QScriptContext *context, QScriptEngine *engine)
     }
 
     QScriptValue v = context->argument(0);
-    KUrl url = v.isString() ? KUrl(v.toString()) : qscriptvalue_cast<KUrl>(v);
+    QUrl url = v.isString() ? QUrl::fromUserInput(v.toString()) : qscriptvalue_cast<QUrl>(v);
 
     if (!url.isValid()) {
         return engine->undefinedValue();
@@ -98,7 +98,7 @@ QScriptValue ScriptEnv::download(QScriptContext *context, QScriptEngine *engine)
     }
 
     QScriptValue v = context->argument(0);
-    KUrl url = v.isString() ? KUrl(v.toString()) : qscriptvalue_cast<KUrl>(v);
+    QUrl url = v.isString() ? QUrl::fromUserInput(v.toString()) : qscriptvalue_cast<QUrl>(v);
 
     if (!url.isValid()) {
         return engine->undefinedValue();
@@ -148,7 +148,7 @@ QScriptValue ScriptEnv::download(QScriptContext *context, QScriptEngine *engine)
     }
 
     //TODO: allow showing desktop progress info?
-    KIO::CopyJob *job = KIO::copy(url, KUrl(requestedFileName), KIO::HideProgressInfo);
+    KIO::CopyJob *job = KIO::copy(url, QUrl::fromLocalFile(requestedFileName), KIO::HideProgressInfo);
     return engine->newQObject(job);
 }
 

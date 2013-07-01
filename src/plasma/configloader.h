@@ -142,7 +142,7 @@ protected:
     /**
      * Hack used to force writing when no default exists in config file.
      */
-    void usrWriteConfig();
+    bool usrWriteConfig();
 
 private:
     friend class Service;
