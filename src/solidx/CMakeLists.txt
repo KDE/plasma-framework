@@ -10,19 +10,22 @@ set(CMAKE_MODULE_PATH
     ${CMAKE_MODULE_PATH}
     )
 
-set(solidx_LIB_SRCS
-    main.cpp
+set(solidx_common_SRCS
     inputdevice.cpp
     inputdevicemodel.cpp
     interface.cpp
+    solidxextensionplugin.cpp
 
     backends/abstractinputdevicebackend.cpp
 
     backends/xlib/xlibconnection.cpp
     backends/xlib/xlibinputdevicebackend.cpp
     backends/fake/fakeinputdevicebackend.cpp
+    )
 
-
+set(solidx_LIB_SRCS
+    ${solidx_common_SRCS}
+    solidxextensionplugin.cpp
     )
 
 include(CheckIncludeFiles)
@@ -32,40 +35,19 @@ include(CheckCXXSourceCompiles)
 find_package(X11 REQUIRED)
 find_package(XCB REQUIRED)
 find_package(X11_XCB)
-find_package(Qt5 5.2.0 REQUIRED NO_MODULE COMPONENTS Core Widgets DBus)
+find_package(Qt5 5.2.0 REQUIRED NO_MODULE COMPONENTS Core Widgets DBus Declarative Quick Qml)
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/utils
     ${XCB_INCLUDE_DIR}
     )
 
-add_executable(SolidX ${solidx_LIB_SRCS})
+add_library(solidxextensionplugin SHARED ${solidx_LIB_SRCS})
 
-qt5_use_modules(SolidX Core Widgets)
-
-message("X11_X11_LIB                     ${X11_X11_LIB}")
-message("X11_Xext_LIB                    ${X11_Xext_LIB}")
-message("X11_ICE_LIB                     ${X11_ICE_LIB}")
-message("X11_SM_LIB                      ${X11_SM_LIB}")
-message("X11_Xcursor_LIB                 ${X11_Xcursor_LIB}")
-message("X11_Xrandr_LIB                  ${X11_Xrandr_LIB}")
-message("X11_Xdamage_LIB                 ${X11_Xdamage_LIB}")
-message("X11_Xrender_LIB                 ${X11_Xrender_LIB}")
-message("X11_Xfixes_LIB                  ${X11_Xfixes_LIB}")
-message("X11_XCB_LIBRARIES               ${X11_XCB_LIBRARIES}")
-message("XCB_XCB_LIBRARIES               ${XCB_XCB_LIBRARIES}")
-message("XCB_XFIXES_LIBRARIES            ${XCB_XFIXES_LIBRARIES}")
-message("XCB_DAMAGE_LIBRARIES            ${XCB_DAMAGE_LIBRARIES}")
-message("XCB_COMPOSITE_LIBRARIES         ${XCB_COMPOSITE_LIBRARIES}")
-message("XCB_SHAPE_LIBRARIES             ${XCB_SHAPE_LIBRARIES}")
-message("XCB_SYNC_LIBRARIES              ${XCB_SYNC_LIBRARIES}")
-message("XCB_RENDER_LIBRARIES            ${XCB_RENDER_LIBRARIES}")
-message("XCB_RANDR_LIBRARIES             ${XCB_RANDR_LIBRARIES}")
-message("XCB_KEYSYMS_LIBRARIES           ${XCB_KEYSYMS_LIBRARIES}")
-message("XCB_ICCCM_LIBRARIES             ${XCB_ICCCM_LIBRARIES}")
+qt5_use_modules(solidxextensionplugin Core Widgets Declarative DBus Quick Qml)
 
 target_link_libraries(
-    SolidX
+    solidxextensionplugin
     ${X11_X11_LIB}
     ${X11_INPUT_LIB} -lXi
     ${XCB_XCB_LIBRARIES}
@@ -73,6 +55,9 @@ target_link_libraries(
     Qt5::Core
     Qt5::Widgets
     Qt5::DBus
+    Qt5::Declarative
 )
-# target_link_libraries(SolidX LINK_PUBLIC Qt5::Core Qt5::Gui ${XCB_XCB_LIBRARIES} ${X11_XCB_LIBRARIES})
+
+install(TARGETS solidxextensionplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/solidx)
+install(FILES qmldir DESTINATION ${QML_INSTALL_DIR}/org/kde/solidx)
 

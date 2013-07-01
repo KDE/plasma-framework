@@ -219,10 +219,10 @@ void XlibInputDeviceBackend::Private::addDevice(const XDeviceInfo & device)
             // it is a real keyboard if it has a 'Device Node' property.
             (
                 deviceType == InputDevice::Type::Keyboard &&
-                QString(device.name).toLower().contains("keyboard") &&
+                QString::fromLatin1(device.name).toLower().contains(QLatin1String("keyboard")) &&
                 (
                     properties.count(deviceNode) ||
-                    device.name != "AT Translated Set 2 keyboard"
+                    QLatin1String(device.name) != QLatin1String("AT Translated Set 2 keyboard")
                 )
             )                                       ? InputDevice::Subtype::FullKeyboard :
 
@@ -230,11 +230,12 @@ void XlibInputDeviceBackend::Private::addDevice(const XDeviceInfo & device)
         ;
 
         std::unique_ptr<InputDevice> newDevice(new InputDevice {
-            QString::number(device.id) + " " + device.name, device.name, deviceType, deviceSubtype
+            QString::number(device.id) + QString::fromLatin1(device.name),
+            QString::fromLatin1(device.name), deviceType, deviceSubtype
         });
 
         // Ignoring the XTEST devices for good measure
-        if (!newDevice->name.contains("XTEST")) {
+        if (!newDevice->name.contains(QLatin1String("XTEST"))) {
 
             internalDeviceIds[newDevice->id] = device.id;
 

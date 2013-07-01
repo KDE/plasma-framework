@@ -2,7 +2,13 @@ cmake_minimum_required(VERSION 2.8.10.20130309)
 
 project(SolidX)
 
-# find_package(ECM 0.0.8 REQUIRED NO_MODULE)
+find_package(ECM 0.0.8 REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
+
+find_package(
+    KF5 MODULE REQUIRED
+    COMPONENTS CMake Compiler InstallDirs
+    )
 
 # set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 

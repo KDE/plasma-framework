@@ -28,9 +28,10 @@ namespace fake {
 
 FakeInputDeviceBackend::Private::Private()
 {
-    QDBusConnection::sessionBus().registerService("org.kde.SolidXTest");
+    QDBusConnection::sessionBus().registerService(QLatin1String("org.kde.SolidXTest"));
     QDBusConnection::sessionBus().registerObject(
-            "/FakeInput", this,
+            QLatin1String("/FakeInput"),
+            this,
             QDBusConnection::ExportAllContents
         );
 
@@ -57,9 +58,9 @@ void FakeInputDeviceBackend::Private::removeDevice(const QString & id)
 {
     if (!devices.count(id)) return;
 
-    devices.erase(id);
-
     emit removedDevice(id);
+
+    devices.erase(id);
 }
 
 FakeInputDeviceBackend::FakeInputDeviceBackend(QObject * parent)

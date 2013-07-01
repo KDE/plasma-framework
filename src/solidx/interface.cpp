@@ -18,38 +18,118 @@
  */
 
 #include "interface.h"
+#include "interface_p.h"
 
 #include "utils/d_ptr_implementation.h"
 
-#include "backends/abstractinputdevicebackend.h"
 #include "backends/xlib/xlibinputdevicebackend.h"
 #include "backends/fake/fakeinputdevicebackend.h"
 
+#include <QDebug>
+
 namespace solidx {
 
-class Interface::Private {
-public:
-    QList<AbstractInputDeviceBackend*> backends;
-
-};
-
-Interface::Interface(QObject * parent)
-    : QObject(parent)
+Interface::Private::Private(Interface * parent)
+    : q(parent),
+      numKeyboard(0),
+      numTouchscreen(0)
 {
-    d->backends
+    backends
         << new backends::xlib::XlibInputDeviceBackend(this)
         << new backends::fake::FakeInputDeviceBackend(this)
     ;
+
+    foreach (const auto & backend, backends) {
+        connect(backend, SIGNAL(addedDevice(QString)),
+            this, SLOT(addedDevice(QString)));
+        connect(backend, SIGNAL(removedDevice(QString)),
+            this, SLOT(removedDevice(QString)));
+
+        foreach(const auto & device, backend->devices()) {
+            addedDevice(backend, device);
+        }
+    }
+
+}
+
+void Interface::Private::addedDevice(const QString & id)
+{
+    auto backend = static_cast<AbstractInputDeviceBackend*>(sender());
+
+    addedDevice(backend, id);
+}
+
+void Interface::Private::addedDevice(
+        AbstractInputDeviceBackend * backend,
+        const QString & id)
+{
+    auto & device = backend->device(id);
+
+    qDebug() << "added device " << id;
+
+    if (device.type == InputDevice::Type::Keyboard &&
+            device.subtype == InputDevice::Subtype::FullKeyboard
+    ) {
+        qDebug() << "added a keyboard";
+        if (++numKeyboard == 1) {
+            q->keyboardPresenceChanged(true);
+        }
+    }
+
+    else if (device.type == InputDevice::Type::Pointer &&
+            device.subtype == InputDevice::Subtype::Touchscreen
+    ) {
+        qDebug() << "added a touchscreen";
+        if (++numTouchscreen == 1) {
+            q->touchscreenPresenceChanged(true);
+        }
+    }
+}
+
+void Interface::Private::removedDevice(const QString & id)
+{
+    auto backend = static_cast<AbstractInputDeviceBackend*>(sender());
+    auto & device = backend->device(id);
+
+    qDebug() << "removed device " << id;
+
+    if (device.type == InputDevice::Type::Keyboard &&
+            device.subtype == InputDevice::Subtype::FullKeyboard
+    ) {
+        qDebug() << "removed a keyboard";
+        if (--numKeyboard == 0) {
+            q->keyboardPresenceChanged(false);
+        }
+    }
+
+    else if (device.type == InputDevice::Type::Pointer &&
+            device.subtype == InputDevice::Subtype::Touchscreen
+    ) {
+        qDebug() << "removed a touchscreen";
+        if (--numTouchscreen == 0) {
+            q->touchscreenPresenceChanged(false);
+        }
+    }
+
+}
+
+Interface::Interface(QObject * parent)
+    : QObject(parent), d(this)
+{
+}
+
+Interface::~Interface()
+{
 }
 
 bool Interface::isKeyboardPresent() const
 {
-    return true;
+    return d->numKeyboard > 0;
 }
 
 bool Interface::isTouchscreenPresent() const
 {
-    return true;
+    return d->numTouchscreen > 0;
 }
 
 } // namespace solidx

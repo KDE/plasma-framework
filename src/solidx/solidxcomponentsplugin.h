@@ -17,41 +17,10 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef SOLIDX_INTERFACE_H
-#define SOLIDX_INTERFACE_H
+#ifndef SOLIDXCOMPONENTSPLUGIN_H
+#define SOLIDXCOMPONENTSPLUGIN_H
 
-#include <QObject>
-#include <QString>
 
-#include "utils/d_ptr.h"
 
-namespace solidx {
-
-/**
- * InputDevices
- */
-class Interface: public QObject {
-    Q_OBJECT
-
-    Q_PROPERTY(bool keyboardPresent READ isKeyboardPresent NOTIFY keyboardPresenceChanged);
-    Q_PROPERTY(bool touchscreenPresent READ isTouchscreenPresent NOTIFY touchscreenPresenceChanged);
-
-public:
-    Interface(QObject * parent = Q_NULLPTR);
-    ~Interface();
-
-    bool isKeyboardPresent() const;
-    bool isTouchscreenPresent() const;
-
-Q_SIGNALS:
-    void keyboardPresenceChanged(bool present);
-    void touchscreenPresenceChanged(bool present);
-
-private:
-    D_PTR;
-};
-
-} // namespace solidx
-
-#endif /* SOLIDX_INTERFACE_H */
+#endif /* SOLIDXCOMPONENTSPLUGIN_H */
 

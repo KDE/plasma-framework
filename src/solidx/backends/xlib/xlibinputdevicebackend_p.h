@@ -43,7 +43,9 @@
 // Somebody thought it was a smart thing to define
 // a 'Bool' macro in XLib, which screws up with the
 // QMetaType::Bool
+#include <fixx11h.h>
 #undef Bool
+#undef None
 
 namespace solidx {
 namespace backends {

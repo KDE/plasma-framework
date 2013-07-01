@@ -17,41 +17,44 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef SOLIDX_INTERFACE_H
-#define SOLIDX_INTERFACE_H
+#ifndef SOLIDX_INTERFACE_P_H
+#define SOLIDX_INTERFACE_P_H
+
+#include "interface.h"
 
 #include <QObject>
-#include <QString>
-
-#include "utils/d_ptr.h"
+#include <QList>
+#include "backends/abstractinputdevicebackend.h"
 
 namespace solidx {
 
-/**
- * InputDevices
- */
-class Interface: public QObject {
+class Interface::Private: public QObject {
     Q_OBJECT
 
-    Q_PROPERTY(bool keyboardPresent READ isKeyboardPresent NOTIFY keyboardPresenceChanged);
-    Q_PROPERTY(bool touchscreenPresent READ isTouchscreenPresent NOTIFY touchscreenPresenceChanged);
-
 public:
-    Interface(QObject * parent = Q_NULLPTR);
-    ~Interface();
+    Private(Interface * parent);
+    void addedDevice(AbstractInputDeviceBackend * backend, const QString & id);
 
-    bool isKeyboardPresent() const;
-    bool isTouchscreenPresent() const;
+public Q_SLOTS:
+    void addedDevice(const QString & id);
+    void removedDevice(const QString & id);
 
 Q_SIGNALS:
     void keyboardPresenceChanged(bool present);
     void touchscreenPresenceChanged(bool present);
 
 private:
-    D_PTR;
+    Interface * const q;
+
+public:
+    int numKeyboard;
+    int numTouchscreen;
+
+    QList<AbstractInputDeviceBackend*> backends;
 };
 
 } // namespace solidx
 
-#endif /* SOLIDX_INTERFACE_H */
+
+#endif /* SOLIDX_INTERFACE_P_H */
 
