@@ -142,11 +142,21 @@ void DataSource::dataUpdated(const QString &sourceName, const Plasma::DataEngine
     if (m_connectedSources.contains(sourceName)) {
         m_data.insert(sourceName.toLatin1(), data);
 
+        qDebug() << " new data: " << sourceName; //<< m_data[sourceName.toLatin1()];
         emit dataChanged();
         emit newData(sourceName, data);
     } else if (m_dataEngine) {
         m_dataEngine->disconnectSource(sourceName, this);
     }
+}
+
+QVariantMap DataSource::tdata()
+{
+    QVariantMap m;
+    foreach (const QString &k, m_data.keys()) {
+        m[k] = m_data[k];
+    }
+    return m;
 }
 
 void DataSource::removeSource(const QString &source)
