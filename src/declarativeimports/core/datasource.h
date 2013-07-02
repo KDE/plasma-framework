@@ -94,9 +94,6 @@ public:
     Q_PROPERTY(QVariantMap data READ data NOTIFY dataChanged);
     QVariantMap data() const {return m_data;}
 
-//     Q_PROPERTY(QVariantMap tdata READ tdata NOTIFY dataChanged);
-//     QVariantMap tdata();
-
     /**
      * @returns a Plasma::Service given a source name
      * @arg QString source source name we want a service of

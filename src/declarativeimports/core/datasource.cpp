@@ -150,15 +150,6 @@ void DataSource::dataUpdated(const QString &sourceName, const Plasma::DataEngine
     }
 }
 
-QVariantMap DataSource::tdata()
-{
-    QVariantMap m;
-    foreach (const QString &k, m_data.keys()) {
-        m[k] = m_data[k];
-    }
-    return m;
-}
-
 void DataSource::removeSource(const QString &source)
 {
     m_data.remove(source);
