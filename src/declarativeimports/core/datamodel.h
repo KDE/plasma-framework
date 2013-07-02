@@ -96,7 +96,7 @@ public:
      *
      * @arg int i the row we want
      */
-    Q_INVOKABLE QVariantHash get(int i) const;
+    Q_INVOKABLE QVariantMap get(int i) const;
 
     Q_INVOKABLE int mapRowToSource(int i) const;
 
@@ -184,7 +184,7 @@ public:
      *
      * @arg int i the row we want
      */
-    Q_INVOKABLE QVariantHash get(int i) const;
+    Q_INVOKABLE QVariantMap get(int i) const;
 
 protected:
     void setItems(const QString &sourceName, const QVariantList &list);
