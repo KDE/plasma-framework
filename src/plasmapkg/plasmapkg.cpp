@@ -87,7 +87,7 @@ void PlasmaPkg::runMain()
 {
     Plasma::PackageStructure* structure = new Plasma::PackageStructure;
     if (d->parser->isSet("hash")) {
-        const QString path = d->parser->argument("hash");
+        const QString path = d->parser->value("hash");
         Plasma::Package package(structure);
         package.setPath(path);
         const QString hash = package.contentsHash();
@@ -107,19 +107,19 @@ void PlasmaPkg::runMain()
         return;
     }
 
-    QString type = d->parser->argument("type");
+    QString type = d->parser->value("type");
     QString packageRoot = type;
     d->pluginTypes.clear();
     d->installer = 0;
 
     if (d->parser->isSet("remove")) {
-        d->package = d->parser->argument("remove");
+        d->package = d->parser->value("remove");
     } else if (d->parser->isSet("upgrade")) {
-        d->package = d->parser->argument("upgrade");
+        d->package = d->parser->value("upgrade");
     } else if (d->parser->isSet("install")) {
-        d->package = d->parser->argument("install");
+        d->package = d->parser->value("install");
     } else if (d->parser->isSet("show")) {
-        d->package = d->parser->argument("show");
+        d->package = d->parser->value("show");
     }
 
     if (!QDir::isAbsolutePath(d->package)) {
@@ -269,7 +269,7 @@ void PlasmaPkg::runMain()
 
         if (!d->installer) {
             d->coutput(i18n("Could not load installer for package of type %1. Error reported was: %2",
-                        d->parser->argument("type"), error));
+                        d->parser->value("type"), error));
             return;
         }
 
@@ -442,7 +442,7 @@ QString PlasmaPkg::findPackageRoot(const QString& pluginName, const QString& pre
         qWarning() << i18nc("The user entered conflicting options packageroot and global, this is the error message telling the user he can use only one", "The packageroot and global options conflict each other, please select only one.");
         ::exit(1);
     } else if (d->parser->isSet("packageroot")) {
-        packageRoot = d->parser->argument("packageroot");
+        packageRoot = d->parser->value("packageroot");
         //qDebug() << "(set via arg) d->packageRoot is: " << d->packageRoot;
     } else if (d->parser->isSet("global")) {
         packageRoot = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, d->packageRoot, QStandardPaths::LocateDirectory).last();
