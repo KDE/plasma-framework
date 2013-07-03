@@ -71,9 +71,9 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @param parent The parent object.
          * @param plugin plugin info that describes the engine
          **/
-        explicit DataEngine(const KPluginInfo &plugin, QObject *parent = 0);
+        explicit DataEngine(const KPluginInfo &plugin, QObject *parent = 0, const QVariantList &args = QVariantList());
 
-        explicit DataEngine(QObject* parent = 0, const QVariantList& args = QVariantList());
+        explicit DataEngine(QObject *parent = 0, const QVariantList &args = QVariantList());
 
         ~DataEngine();
 

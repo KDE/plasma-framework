@@ -48,9 +48,9 @@
 namespace Plasma
 {
 
-DataEngine::DataEngine(const KPluginInfo &plugin, QObject *parent)
+DataEngine::DataEngine(const KPluginInfo &plugin, QObject *parent, const QVariantList &args)
     : QObject(parent),
-      d(new DataEnginePrivate(this, plugin))
+      d(new DataEnginePrivate(this, plugin, args))
 {
     if (d->script) {
         d->setupScriptSupport();
@@ -63,9 +63,9 @@ DataEngine::DataEngine(const KPluginInfo &plugin, QObject *parent)
 }
 
 DataEngine::DataEngine(QObject* parent, const QVariantList &args)
-    : Plasma::DataEngine(KPluginInfo(), parent)
+    : Plasma::DataEngine(KPluginInfo(), parent, args)
 {
-    qDebug() << "wrong constructor for timeengine :(";
+
 }
 
 DataEngine::~DataEngine()
@@ -375,7 +375,7 @@ void DataEngine::setStorageEnabled(const QString &source, bool store)
 }
 
 // Private class implementations
-DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info)
+DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info, const QVariantList &args)
     : q(e),
       dataEngineDescription(info),
       refCount(-1), // first ref
@@ -388,10 +388,43 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info)
 {
     updateTimestamp.start();
 
-    if (info.isValid()) {
-        e->setObjectName(info.name());
+    if (!info.isValid()) {
+        qDebug() << "######################################################";
+        qDebug() << "\n\n arg constructor for timeengine :(" << args.count() << args;
+        qDebug() << "\n######################################################";
+        KConfig _c("/tmp/pluginconfig.desktop", KConfig::SimpleConfig);
+        KConfigGroup c = _c.group("Desktop Entry");
+        foreach (const QVariant &v, args) {
+            qDebug() << "------------------";
+            qDebug() << " V: " << v;
+            if (v.canConvert<QVariantMap>()) {
+                QVariantMap m = v.toMap();
+                //c.setName(QLatin1String("Desktop Entry"));
+                foreach (const QString &k, m.keys()) {
+                    qDebug() << "  info " << k;// << m[k];
+                    if (k == QLatin1String("MetaData") && m[k].canConvert<QVariantMap>()) {
+                        qDebug() << "found the metadata object" << k;
+                        QVariantMap meta = m[k].toMap();
+                        foreach (const QString &l, meta.keys()) {
+                            qDebug() << " " << l << " = " << meta[l];
+                            c.writeEntry("eins", "foobar");
+                        }
+                    }
+                }
+            }
+        }
+        c.sync();
+
+        dataEngineDescription = KPluginInfo("/tmp/pluginconfig.desktop");
+        //dataEngineDescription.load(c);
+    }
+
+    if (dataEngineDescription.isValid()) {
+        e->setObjectName(dataEngineDescription.name());
+        qDebug() << "Plugininfo is valid! :-)";
     } else {
         e->setObjectName("NullEngine");
+        qDebug() << "Plugininfo is INVALID! :-)";
     }
 
     if (dataEngineDescription.isValid()) {
