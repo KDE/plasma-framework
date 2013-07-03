@@ -436,11 +436,8 @@ QVariant DataModel::data(const QModelIndex &index, int role) const
 
     //is it the reserved role: DataEngineSource ?
     //also, if each source is an item DataEngineSource is a role between all the others, otherwise we know it from the role variable
-    //finally, sub items are some times QVariantMap some times QVariantMaps
     if (!m_keyRoleFilter.isEmpty() && m_roleNames.value(role) == "DataEngineSource") {
         return source;
-    } else if (m_items.value(source).value(actualRow).canConvert<QVariantMap>()) {
-        return m_items.value(source).value(actualRow).value<QVariantMap>().value(m_roleNames.value(role));
     } else {
         return m_items.value(source).value(actualRow).value<QVariantMap>().value(m_roleNames.value(role));
     }
@@ -494,14 +491,14 @@ int DataModel::columnCount(const QModelIndex &parent) const
 QVariantMap DataModel::get(int row) const
 {
     QModelIndex idx = index(row, 0);
-    QVariantMap hash;
+    QVariantMap map;
 
     QHash<int, QByteArray>::const_iterator i;
     for (i = roleNames().constBegin(); i != roleNames().constEnd(); ++i) {
-        hash[i.value()] = data(idx, i.key());
+        map[i.value()] = data(idx, i.key());
     }
 
-    return hash;
+    return map;
 }
 
 int DataModel::roleNameToId(const QString &name)
