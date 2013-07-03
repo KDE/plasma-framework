@@ -191,7 +191,7 @@ bool ScriptEnv::importBuiltinExtension(const QString &extension, QScriptValue &o
 
 bool ScriptEnv::importExtensions(const KPluginInfo &info, QScriptValue &obj, Authorization &auth)
 {
-    QStringList requiredExtensions = info.service()->property("X-Plasma-RequiredExtensions", QVariant::StringList).toStringList();
+    QStringList requiredExtensions = info.property("X-Plasma-RequiredExtensions", QVariant::StringList).toStringList();
     if (!requiredExtensions.isEmpty()) {
         kDebug() << "required extensions are" << requiredExtensions;
     }
@@ -219,7 +219,7 @@ bool ScriptEnv::importExtensions(const KPluginInfo &info, QScriptValue &obj, Aut
         }
     }
 
-    QStringList optionalExtensions = info.service()->property("X-Plasma-OptionalExtensions", QVariant::StringList).toStringList();
+    QStringList optionalExtensions = info.property("X-Plasma-OptionalExtensions", QVariant::StringList).toStringList();
     if (!optionalExtensions.isEmpty()) {
         kDebug() << "optional extensions are" << optionalExtensions;
     }
