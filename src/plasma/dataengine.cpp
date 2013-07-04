@@ -63,8 +63,16 @@ DataEngine::DataEngine(const KPluginInfo &plugin, QObject *parent, const QVarian
 }
 
 DataEngine::DataEngine(QObject* parent, const QVariantList &args)
-    : Plasma::DataEngine(KPluginInfo(), parent, args)
+    : Plasma::DataEngine(KPluginInfo(args), parent, args)
 {
+    if (d->script) {
+        d->setupScriptSupport();
+        d->script->init();
+    } else {
+        // kDebug() << "called";
+        // default implementation does nothing. this is for engines that have to
+        // start things in motion external to themselves before they can work
+    }
 
 }
 
@@ -390,7 +398,7 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info, con
 
     if (!info.isValid()) {
         qDebug() << "######################################################";
-        qDebug() << "\n\n arg constructor for timeengine :(" << args.count() << args;
+        qDebug() << "\n\n arg constructor for DataEngine :(" << args.count() << args;
         qDebug() << "\n######################################################";
         KConfig _c("/tmp/pluginconfig.desktop", KConfig::SimpleConfig);
         KConfigGroup c = _c.group("Desktop Entry");
