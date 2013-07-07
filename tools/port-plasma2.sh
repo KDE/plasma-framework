@@ -61,6 +61,10 @@ for FS in `find $PWD -type f -name 'CMakeLists.txt'`; do
     perl -p -i -e 's/IMPORTS_INSTALL_DIR/QML_INSTALL_DIR/g' $FS
 done
 
+for FS in `find $PWD -type f -name '*.h'`; do
+    perl -p -i -e 's/slots/Q_SLOTS/g' $FS
+done
+
 #exit;
 
 
