@@ -21,7 +21,7 @@
 #ifndef CONTAINMENTINTERFACE_H
 #define CONTAINMENTINTERFACE_H
 
-#include <KMenu>
+#include <QMenu>
 
 #include <Plasma/Containment>
 
@@ -74,8 +74,8 @@ protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
 
-    void addAppletActions(KMenu &desktopMenu, Plasma::Applet *applet, QEvent *event);
-    void addContainmentActions(KMenu &desktopMenu, QEvent *event);
+    void addAppletActions(QMenu &desktopMenu, Plasma::Applet *applet, QEvent *event);
+    void addContainmentActions(QMenu &desktopMenu, QEvent *event);
 
 Q_SIGNALS:
     void appletAdded(QObject *applet);
