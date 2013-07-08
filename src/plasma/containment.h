@@ -23,7 +23,7 @@
 #define PLASMA_CONTAINMENT_H
 
 #include <QObject>
-#include <QWidget>
+#include <QtWidgets/QWidget>
 
 #include <kplugininfo.h>
 #include <ksharedconfig.h>

@@ -19,7 +19,7 @@
 
 #include "querymatch.h"
 
-#include <QAction>
+#include <QtWidgets/QAction>
 #include <QIcon>
 #include <QReadWriteLock>
 #include <QSharedData>
