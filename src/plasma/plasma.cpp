@@ -19,7 +19,7 @@
 
 #include <plasma/plasma.h>
 
-#include <QAction>
+#include <QtWidgets/QAction>
 #include <QMenu>
 
 #include "containment.h"
