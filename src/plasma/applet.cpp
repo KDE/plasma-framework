@@ -32,7 +32,6 @@
 #include <QList>
 #include <QUiLoader>
 
-#include <kaction.h>
 #include <kactioncollection.h>
 #include <kcoreauthorized.h>
 #include <kcolorscheme.h>

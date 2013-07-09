@@ -28,8 +28,6 @@
 
 class QAction;
 
-class KAction;
-
 namespace Plasma
 {
 

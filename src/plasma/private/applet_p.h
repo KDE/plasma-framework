@@ -25,7 +25,6 @@
 #include <QAction>
 #include <QBasicTimer>
 
-//#include <KAction>
 #include <kactioncollection.h>
 #include <kconfigskeleton.h>
 #include <kservice.h>
