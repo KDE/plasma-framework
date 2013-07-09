@@ -197,25 +197,25 @@ KActionCollection* AppletPrivate::defaultActions(QObject *parent)
     KActionCollection *actions = new KActionCollection(parent);
     actions->setConfigGroup("Shortcuts-Applet");
 
-    KAction *configAction = actions->add<KAction>("configure");
+    QAction *configAction = actions->add<QAction>("configure");
     configAction->setAutoRepeat(false);
     configAction->setText(i18n("Widget Settings"));
     configAction->setIcon(QIcon::fromTheme("configure"));
-    configAction->setShortcut(KShortcut("alt+d, s"));
+    configAction->setShortcut(QKeySequence("alt+d, s"));
     configAction->setData(Plasma::Types::ConfigureAction);
 
-    KAction *closeApplet = actions->add<KAction>("remove");
+    QAction *closeApplet = actions->add<QAction>("remove");
     closeApplet->setAutoRepeat(false);
     closeApplet->setText(i18n("Remove this Widget"));
     closeApplet->setIcon(QIcon::fromTheme("edit-delete"));
-    closeApplet->setShortcut(KShortcut("alt+d, r"));
+    closeApplet->setShortcut(QKeySequence("alt+d, r"));
     closeApplet->setData(Plasma::Types::DestructiveAction);
 
-    KAction *runAssociatedApplication = actions->add<KAction>("run associated application");
+    QAction *runAssociatedApplication = actions->add<QAction>("run associated application");
     runAssociatedApplication->setAutoRepeat(false);
     runAssociatedApplication->setText(i18n("Run the Associated Application"));
     runAssociatedApplication->setIcon(QIcon::fromTheme("system-run"));
-    runAssociatedApplication->setShortcut(KShortcut("alt+d, t"));
+    runAssociatedApplication->setShortcut(QKeySequence("alt+d, t"));
     runAssociatedApplication->setVisible(false);
     runAssociatedApplication->setEnabled(false);
     runAssociatedApplication->setData(Plasma::Types::ControlAction);
