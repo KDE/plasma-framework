@@ -31,7 +31,7 @@
 
 #include <cmath>
 
-#include <kaction.h>
+//#include <kaction.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
@@ -312,13 +312,13 @@ void CoronaPrivate::init()
     //some common actions
     actions.setConfigGroup("Shortcuts");
 
-    KAction *lockAction = actions.add<KAction>("lock widgets");
+    QAction *lockAction = actions.add<QAction>("lock widgets");
     QObject::connect(lockAction, SIGNAL(triggered(bool)), q, SLOT(toggleImmutability()));
     lockAction->setText(i18n("Lock Widgets"));
     lockAction->setAutoRepeat(true);
     lockAction->setIcon(QIcon::fromTheme("object-locked"));
     lockAction->setData(Plasma::Types::ControlAction);
-    lockAction->setShortcut(KShortcut("alt+d, l"));
+    lockAction->setShortcut(QKeySequence("alt+d, l"));
     lockAction->setShortcutContext(Qt::ApplicationShortcut);
 
     //fake containment/applet actions
