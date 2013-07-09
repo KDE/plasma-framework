@@ -22,9 +22,10 @@
 #ifndef PLASMA_APPLET_P_H
 #define PLASMA_APPLET_P_H
 
+#include <QAction>
 #include <QBasicTimer>
 
-#include <KAction>
+//#include <KAction>
 #include <kactioncollection.h>
 #include <kconfigskeleton.h>
 #include <kservice.h>
@@ -98,7 +99,7 @@ public:
 
     // actions stuff; put activationAction into actions?
     KActionCollection *actions;
-    KAction *activationAction;
+    QAction *activationAction;
 
     Types::ItemStatus itemStatus;
 
@@ -113,6 +114,7 @@ public:
     bool transient : 1;
     bool needsConfig : 1;
     bool started : 1;
+    bool globalShortcutEnabled : 1;
 };
 
 } // Plasma namespace
