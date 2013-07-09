@@ -27,7 +27,6 @@ find_package(Qt5Core REQUIRED NO_MODULE)
 find_package(Qt5Transitional MODULE)
 find_package(Qt5Quick REQUIRED NO_MODULE)
 find_package(Qt5X11Extras REQUIRED NO_MODULE)
-find_package(kde4support REQUIRED NO_MODULE)
 
 add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0)
 
@@ -58,11 +57,13 @@ find_package(kdeqt5staging REQUIRED NO_MODULE)
 # Load CMake, Compiler and InstallDirs settings from KF5 and the following are already somewhat "done" tier1/tier2 libs from kdelibs:
 find_package(KF5 MODULE REQUIRED COMPONENTS CMake Compiler InstallDirs
                                             XmlGui KIdleTime ItemModels KWidgetsAddons KWindowSystem KCodecs KArchive KCoreAddons Solid ThreadWeaver
-                                            KConfig KAuth kjs KWallet
-                                            ki18n kguiaddons kservice kwidgets ItemViews KNotifications KIconThemes KCompletion KJobWidgets KConfigWidgets)
+                                            KConfig KAuth kjs KWallet KDBusAddons
+                                            ki18n kguiaddons kservice kwidgets ItemViews KNotifications KIconThemes KCompletion KJobWidgets KConfigWidgets Sonnet)
 #find_package(KF5Transitional REQUIRED)
 
 # those are not "done" yet:
+find_package(kde4support REQUIRED NO_MODULE)
+find_package(ktextwidgets REQUIRED NO_MODULE)
 find_package(ki18n REQUIRED NO_MODULE)
 find_package(kio REQUIRED NO_MODULE)
 find_package(kdeclarative REQUIRED NO_MODULE)

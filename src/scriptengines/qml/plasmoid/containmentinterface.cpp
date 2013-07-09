@@ -207,7 +207,7 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
 
 void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)
 {
-    KMenu desktopMenu;
+    QMenu desktopMenu;
 
     //FIXME: very inefficient appletAt() implementation
     Plasma::Applet *applet = 0;
@@ -234,7 +234,7 @@ void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)
 
 
 
-void ContainmentInterface::addAppletActions(KMenu &desktopMenu, Plasma::Applet *applet, QEvent *event)
+void ContainmentInterface::addAppletActions(QMenu &desktopMenu, Plasma::Applet *applet, QEvent *event)
 {
     foreach (QAction *action, applet->contextualActions()) {
         if (action) {
@@ -254,7 +254,7 @@ void ContainmentInterface::addAppletActions(KMenu &desktopMenu, Plasma::Applet *
         }
     }
 
-    KMenu *containmentMenu = new KMenu(i18nc("%1 is the name of the containment", "%1 Options", containment()->title()), &desktopMenu);
+    QMenu *containmentMenu = new QMenu(i18nc("%1 is the name of the containment", "%1 Options", containment()->title()), &desktopMenu);
     addContainmentActions(*containmentMenu, event);
 
     if (!containmentMenu->isEmpty()) {
@@ -296,7 +296,7 @@ void ContainmentInterface::addAppletActions(KMenu &desktopMenu, Plasma::Applet *
     }
 }
 
-void ContainmentInterface::addContainmentActions(KMenu &desktopMenu, QEvent *event)
+void ContainmentInterface::addContainmentActions(QMenu &desktopMenu, QEvent *event)
 {
     if (containment()->corona()->immutability() != Plasma::Types::Mutable &&
         !KAuthorized::authorizeKAction("plasma/containment_actions")) {

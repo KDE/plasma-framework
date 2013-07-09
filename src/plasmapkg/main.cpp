@@ -26,30 +26,30 @@
 
 int main(int argc, char **argv)
 {
-    QCommandLineParser *parser = new QCommandLineParser;
-    Plasma::PlasmaPkg app(argc, argv, parser);
+    QCommandLineParser parser;
+    Plasma::PlasmaPkg app(argc, argv, &parser);
 
     const QString description = i18n("Plasma Package Manager");
     const char version[] = "2.0";
 
     app.setApplicationVersion(version);
-    parser->addVersionOption();
-    parser->addHelpOption(description);
-    parser->addOption(QCommandLineOption(QStringList() << "h" << "hash", i18nc("Do not translate <path>", "Generate a SHA1 hash for the package at <path>"), "path"));
-    parser->addOption(QCommandLineOption(QStringList() << "g" << "global", i18n("For install or remove, operates on packages installed for all users.")));
-    parser->addOption(QCommandLineOption(QStringList() << "type",
+    parser.addVersionOption();
+    parser.addHelpOption(description);
+    parser.addOption(QCommandLineOption(QStringList() << "h" << "hash", i18nc("Do not translate <path>", "Generate a SHA1 hash for the package at <path>"), "path"));
+    parser.addOption(QCommandLineOption(QStringList() << "g" << "global", i18n("For install or remove, operates on packages installed for all users.")));
+    parser.addOption(QCommandLineOption(QStringList() << "type",
                 i18nc("theme, wallpaper, etc. are keywords, but they may be translated, as both versions "
                        "are recognized by the application "
                        "(if translated, should be same as messages with 'package type' context below)",
                        "The type of package, e.g. theme, wallpaper, plasmoid, dataengine, runner, layout-template, etc."),
-                "type", false, QStringList() << "plasmoid"));
-    parser->addOption(QCommandLineOption(QStringList() << "i" << "install", i18nc("Do not translate <path>", "Install the package at <path>"), "path"));
-    parser->addOption(QCommandLineOption(QStringList() << "s" << "show", i18nc("Do not translate <name>", "Show information of package <name>"), "name"));
-    parser->addOption(QCommandLineOption(QStringList() << "u" << "upgrade", i18nc("Do not translate <path>", "Upgrade the package at <path>"), "path"));
-    parser->addOption(QCommandLineOption(QStringList() << "l" << "list", i18n("List installed packages")));
-    parser->addOption(QCommandLineOption(QStringList() << "list-types", i18n("lists all known Package types that can be installed")));
-    parser->addOption(QCommandLineOption(QStringList() << "r" << "remove", i18nc("Do not translate <name>", "Remove the package named <name>"), "name"));
-    parser->addOption(QCommandLineOption(QStringList() << "p" << "packageroot", i18n("Absolute path to the package root. If not supplied, then the standard data directories for this KDE session will be searched instead."), "path"));
+                "type", "plasmoid"));
+    parser.addOption(QCommandLineOption(QStringList() << "i" << "install", i18nc("Do not translate <path>", "Install the package at <path>"), "path"));
+    parser.addOption(QCommandLineOption(QStringList() << "s" << "show", i18nc("Do not translate <name>", "Show information of package <name>"), "name"));
+    parser.addOption(QCommandLineOption(QStringList() << "u" << "upgrade", i18nc("Do not translate <path>", "Upgrade the package at <path>"), "path"));
+    parser.addOption(QCommandLineOption(QStringList() << "l" << "list", i18n("List installed packages")));
+    parser.addOption(QCommandLineOption(QStringList() << "list-types", i18n("lists all known Package types that can be installed")));
+    parser.addOption(QCommandLineOption(QStringList() << "r" << "remove", i18nc("Do not translate <name>", "Remove the package named <name>"), "name"));
+    parser.addOption(QCommandLineOption(QStringList() << "p" << "packageroot", i18n("Absolute path to the package root. If not supplied, then the standard data directories for this KDE session will be searched instead."), "path"));
 
     return app.exec();
 }

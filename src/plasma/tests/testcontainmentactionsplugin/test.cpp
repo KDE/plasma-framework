@@ -23,7 +23,7 @@
 #include <QGraphicsSceneWheelEvent>
 
 #include <KDebug>
-#include <KMenu>
+#include <QMenu>
 
 #include <Plasma/Containment>
 
@@ -60,7 +60,7 @@ void ContextTest::contextEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
 
-    KMenu desktopMenu;
+    QMenu desktopMenu;
     desktopMenu.addTitle(m_text);
     desktopMenu.addAction(c->action("configure"));
     desktopMenu.exec(event->screenPos());

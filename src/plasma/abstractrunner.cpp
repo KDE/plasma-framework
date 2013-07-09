@@ -19,7 +19,7 @@
 
 #include "abstractrunner.h"
 
-#include <QAction>
+#include <QtWidgets/QAction>
 #include <QHash>
 #include <QMenu>
 #include <QMimeData>
