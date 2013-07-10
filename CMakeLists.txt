@@ -50,7 +50,7 @@ find_package(kdeqt5staging REQUIRED NO_MODULE)
 find_package(KF5 MODULE REQUIRED COMPONENTS CMake Compiler InstallDirs
                                             XmlGui KIdleTime ItemModels KWidgetsAddons KWindowSystem KCodecs KArchive KCoreAddons Solid ThreadWeaver
                                             KConfig KAuth kjs KWallet KDBusAddons
-					    ki18n kguiaddons kservice kwidgets ItemViews KNotifications KIconThemes KCompletion KJobWidgets KConfigWidgets Sonnet)
+                                            ki18n kguiaddons kservice kwidgets ItemViews KNotifications KIconThemes KCompletion KJobWidgets KConfigWidgets Sonnet)
 #find_package(KF5Transitional REQUIRED)
 
 # those are not "done" yet:
