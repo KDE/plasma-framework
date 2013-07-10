@@ -19,10 +19,11 @@
 
 #include "pluginloader.h"
 
+#include <QStandardPaths>
+
 #include <kdebug.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
-#include <kstandarddirs.h>
 #include <kglobal.h>
 #include <kplugininfo.h>
 
@@ -818,7 +819,9 @@ KPluginInfo::List PluginLoader::internalContainmentActionsInfo() const
 
 static KPluginInfo::List standardInternalInfo(const QString &type, const QString &category = QString())
 {
-    QStringList files = KGlobal::dirs()->findAllResources("appdata", "plasma/internal/" + type + "/*.desktop", KStandardDirs::NoDuplicates);
+    QStringList files = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
+                                                  "plasma/internal/" + type + "/*.desktop",
+                                                  QStandardPaths::LocateFile);
 
     KPluginInfo::List allInfo = KPluginInfo::fromFiles(files);
 

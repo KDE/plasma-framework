@@ -24,11 +24,11 @@
 
 #include <QObject>
 #include <QIcon>
+#include <QKeySequence>
 #include <QUrl>
 
 #include <kconfiggroup.h>
 #include <kplugininfo.h>
-#include <kshortcut.h>
 
 #include <plasma/configloader.h>
 #include <plasma/plasma.h>
@@ -296,13 +296,13 @@ class PLASMA_EXPORT Applet : public QObject
         /**
          * Sets the global shortcut to associate with this widget.
          */
-        void setGlobalShortcut(const KShortcut &shortcut);
+        void setGlobalShortcut(const QKeySequence &shortcut);
 
         /**
          * @return the global shortcut associated with this wiget, or
          * an empty shortcut if no global shortcut is associated.
          */
-        KShortcut globalShortcut() const;
+        QKeySequence globalShortcut() const;
 
 // ASSOCIATED APPLICATION
         /**

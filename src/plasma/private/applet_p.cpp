@@ -28,7 +28,6 @@
 #include <QFile>
 #include <qstandardpaths.h>
 
-#include <kaction.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -36,6 +35,7 @@
 #include <kkeysequencewidget.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
+#include <kglobalaccel.h>
 
 #include "containment.h"
 #include "corona.h"
@@ -66,7 +66,8 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
           failed(false),
           transient(false),
           needsConfig(false),
-          started(false)
+          started(false),
+          globalShortcutEnabled(false)
 {
     if (appletId == 0) {
         appletId = ++s_maxAppletId;
@@ -79,9 +80,9 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
 
 AppletPrivate::~AppletPrivate()
 {
-    if (activationAction && activationAction->isGlobalShortcutEnabled()) {
-        //kDebug() << "reseting global action for" << q->title() << activationAction->objectName();
-        activationAction->forgetGlobalShortcut();
+    if (activationAction && globalShortcutEnabled) {
+        //kDebug() << "resetting global action for" << q->title() << activationAction->objectName();
+        KGlobalAccel::self()->removeAllShortcuts(activationAction);
     }
 
     delete script;
@@ -187,7 +188,7 @@ void AppletPrivate::globalShortcutChanged()
     }
 
     KConfigGroup shortcutConfig(mainConfigGroup(), "Shortcuts");
-    shortcutConfig.writeEntry("global", activationAction->globalShortcut().toString());
+    shortcutConfig.writeEntry("global", activationAction->shortcut().toString());
     scheduleModificationNotification();
     //kDebug() << "after" << shortcut.primary() << d->activationAction->globalShortcut().primary();
 }
@@ -249,7 +250,7 @@ void AppletPrivate::updateShortcuts()
         for (int i = 0; i < names.size(); ++i) {
             QAction *a = qactions.at(i);
             if (a) {
-                actions->add<KAction>(names.at(i), a);
+                actions->add<QAction>(names.at(i), a);
             }
         }
     } else {

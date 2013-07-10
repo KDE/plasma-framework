@@ -32,17 +32,16 @@
 #include <QList>
 #include <QUiLoader>
 
-#include <kaction.h>
 #include <kactioncollection.h>
 #include <kcoreauthorized.h>
 #include <kcolorscheme.h>
 #include <kdesktopfile.h>
 #include <kdebug.h>
+#include <kglobalaccel.h>
 #include <kplugininfo.h>
 #include <klocalizedstring.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
-#include <kshortcut.h>
 #include <kwindowsystem.h>
 
 #if !PLASMA_NO_KUTILS
@@ -172,7 +171,7 @@ void Applet::restore(KConfigGroup &group)
     KConfigGroup shortcutConfig(&group, "Shortcuts");
     QString shortcutText = shortcutConfig.readEntryUntranslated("global", QString());
     if (!shortcutText.isEmpty()) {
-        setGlobalShortcut(KShortcut(shortcutText));
+        setGlobalShortcut(QKeySequence(shortcutText));
         /*
 #ifndef NDEBUG
         kDebug() << "got global shortcut for" << name() << "of" << QKeySequence(shortcutText);
@@ -569,34 +568,33 @@ Containment *Applet::containment() const
     return c;
 }
 
-void Applet::setGlobalShortcut(const KShortcut &shortcut)
+void Applet::setGlobalShortcut(const QKeySequence &shortcut)
 {
     if (!d->activationAction) {
-        d->activationAction = new KAction(this);
+        d->activationAction = new QAction(this);
         d->activationAction->setText(i18n("Activate %1 Widget", title()));
         d->activationAction->setObjectName(QString("activate widget %1").arg(id())); // NO I18N
         connect(d->activationAction, SIGNAL(triggered()), this, SIGNAL(activate()));
         connect(d->activationAction, SIGNAL(globalShortcutChanged(QKeySequence)),
                 this, SLOT(globalShortcutChanged()));
-    } else if (d->activationAction->globalShortcut() == shortcut) {
+    } else if (d->activationAction->shortcut() == shortcut) {
         return;
     }
 
-    //kDebug() << "before" << shortcut.primary() << d->activationAction->globalShortcut().primary();
-    d->activationAction->setGlobalShortcut(
-        shortcut,
-        KAction::ShortcutTypes(KAction::ActiveShortcut | KAction::DefaultShortcut),
-        KAction::NoAutoloading);
+    d->globalShortcutEnabled = true;
+    QList<QKeySequence> seqs;
+    seqs << shortcut;
+    KGlobalAccel::self()->setDefaultShortcut(d->activationAction, seqs, KGlobalAccel::NoAutoloading);
     d->globalShortcutChanged();
 }
 
-KShortcut Applet::globalShortcut() const
+QKeySequence Applet::globalShortcut() const
 {
     if (d->activationAction) {
-        return d->activationAction->globalShortcut();
+        return d->activationAction->shortcut();
     }
 
-    return KShortcut();
+    return QKeySequence();
 }
 
 Types::Location Applet::location() const
