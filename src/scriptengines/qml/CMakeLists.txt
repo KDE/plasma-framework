@@ -26,7 +26,7 @@ include_directories(${PHONON_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/common)
 kde4_add_plugin(plasma_appletscript_declarative ${declarative_appletscript_SRCS})
 target_link_libraries(plasma_appletscript_declarative
     ${KDE4_KIO_LIBS}
-    ${KDE4_KDE4SUPPORT_LIBS}
+    ${KDE4Support_LIBRARIES}
     ${QT_QTSCRIPT_LIBRARY}
     ${Qt5Quick_LIBRARIES}
     ${Qt5Qml_LIBRARIES}

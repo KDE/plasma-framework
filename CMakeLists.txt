@@ -54,7 +54,6 @@ find_package(KF5 MODULE REQUIRED COMPONENTS CMake Compiler InstallDirs
 #find_package(KF5Transitional REQUIRED)
 
 # those are not "done" yet:
-find_package(kde4support REQUIRED NO_MODULE)
 find_package(ktextwidgets REQUIRED NO_MODULE)
 find_package(ki18n REQUIRED NO_MODULE)
 find_package(kio REQUIRED NO_MODULE)
@@ -63,6 +62,9 @@ find_package(kdeclarative REQUIRED NO_MODULE)
 # Needed for some includes from KDE/ (KMimeType, etc.)
 # FIXME: remove when kdeui is fully split up
 find_package(KDELibs4 REQUIRED NO_MODULE)
+
+# must be after KDELibs4, since it links against imported targets coming from KDELibs4Config.cmake:
+find_package(KDE4Support REQUIRED NO_MODULE)
 
 #optional features
 find_package(X11 MODULE)
