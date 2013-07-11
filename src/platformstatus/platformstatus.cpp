@@ -99,4 +99,29 @@ void PlatformStatus::fileDirtied(const QString &path)
     }
 }
 
+void PlatformStatus::registerClient(const QString & dbus)
+{
+    if (!m_clients.contains(dbus))
+        m_clients << dbus;
+}
+
+void PlatformStatus::clientChangeStarted(const QString & dbus, int changeId, int maximumTime)
+{
+    Q_UNUSED(dbus);
+    Q_UNUSED(maximumTime);
+    Q_UNUSED(changeId);
+}
+
+void PlatformStatus::clientChangeFinished(const QString & dbus, int changeId)
+{
+    Q_UNUSED(dbus);
+    Q_UNUSED(changeId);
+}
+
+void PlatformStatus::startPlatformChange(const QString & dbus, const QString & platform)
+{
+    Q_UNUSED(dbus);
+    Q_UNUSED(platform);
+}
+
 #include "platformstatus.moc"

@@ -36,6 +36,60 @@ public:
     PlatformStatus(QObject *parent, const QVariantList &);
 
 public Q_SLOTS:
+    /**
+     * Registers a client interested in the
+     * platform changes.
+     * @arg dbus dbus object of the client
+     */
+    void registerClient(const QString & dbus);
+
+    /**
+     * Notifies the service that the client
+     * wants to react to the platform changes.
+     * @arg dbus dbus object of the client
+     * @arg changeId id of the change the client is interested in
+     * @arg maximumTime maximum time it should take
+     * the client to adapt.
+     */
+    void clientChangeStarted(const QString & dbus, int changeId, int maximumTime);
+
+    /**
+     * Notifies the service that the client
+     * ended adapting to the platform change.
+     * @arg dbus dbus object of the client
+     * @arg changeId id of the change the client is interested in
+     */
+    void clientChangeFinished(const QString & dbus, int changeId);
+
+    /**
+     * Starting the platform change.
+     * This method should mainly be invoked by plasma shell.
+     * @arg dbus the requesting client
+     * @arg platform new platform
+     */
+    void startPlatformChange(const QString & dbus, const QString & platform);
+
+
+Q_SIGNALS:
+    /**
+     * The platform is about to change.
+     * The clients need to respond to this signal
+     * and notify the service if it wants to react
+     * to the platform change.
+     * This will allow the service to tell whether
+     * all platform changes have finished.
+     * @see clientChangeStarted
+     * @arg platform new platform that is being loaded
+     * @arg changeId identifier of a particular change
+     */
+    void platformAboutToChange(const QString & platform, int changeId);
+
+    /**
+     * Signals when the change has finished
+     */
+    void platformChanged(const QString & platform, int changeId);
+
+public Q_SLOTS:
     QString shellPackage() const;
     QStringList runtimePlatform() const;
 
@@ -52,6 +106,7 @@ private Q_SLOTS:
 private:
     QString m_shellPackage;
     QStringList m_runtimePlatform;
+    QStringList m_clients;
 };
 
 #endif
