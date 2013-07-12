@@ -11,7 +11,7 @@ target_link_libraries(dirmodelplugin
         ${QT_QTCORE_LIBRARY}
         ${Qt5Qml_LIBRARIES}
         ${KDE4_KIO_LIBS}
-        KDE4__kde4support
+        ${KDE4Support_LIBRARIES}
         )
 
 install(TARGETS dirmodelplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/dirmodel)
