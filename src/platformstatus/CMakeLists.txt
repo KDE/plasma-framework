@@ -1,9 +1,12 @@
 set(
    kded_platformstatus_SRCS
    platformstatus.cpp
+   platformchangeprocess.cpp
    )
 
 include_directories("../utils")
+
+add_definitions("--std=c++0x")
 
 qt4_add_dbus_adaptor (
    kded_platformstatus_SRCS

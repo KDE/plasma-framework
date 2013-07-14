@@ -25,6 +25,8 @@
 
 #include <QStringList>
 
+#include <utils/d_ptr.h>
+
 class PlatformStatus : public KDEDModule
 {
     Q_OBJECT
@@ -34,6 +36,8 @@ class PlatformStatus : public KDEDModule
 
 public:
     PlatformStatus(QObject *parent, const QVariantList &);
+
+    ~PlatformStatus();
 
 public Q_SLOTS:
     /**
@@ -69,6 +73,11 @@ public Q_SLOTS:
      */
     void startPlatformChange(const QString & dbus, const QString & platform);
 
+    /**
+     * Invoked when the platform change has finished
+     */
+    void changeProcessFinished(int id);
+
 
 Q_SIGNALS:
     /**
@@ -82,7 +91,7 @@ Q_SIGNALS:
      * @arg platform new platform that is being loaded
      * @arg changeId identifier of a particular change
      */
-    void platformAboutToChange(const QString & platform, int changeId);
+    void platformAboutToChange(int changeId, const QString & platform);
 
     /**
      * Signals when the change has finished
@@ -104,9 +113,7 @@ private Q_SLOTS:
     void fileDirtied(const QString &path);
 
 private:
-    QString m_shellPackage;
-    QStringList m_runtimePlatform;
-    QStringList m_clients;
+    D_PTR;
 };
 
 #endif

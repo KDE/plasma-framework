@@ -4,8 +4,8 @@
     <property name="shellPackage" type="s" access="read"/>
     <property name="runtimePlatform" type="as" access="read"/>
     <signal name="platformAboutToChange">
-      <arg name="platform" type="s" direction="out"/>
       <arg name="changeId" type="i" direction="out"/>
+      <arg name="platform" type="s" direction="out"/>
     </signal>
     <signal name="platformChanged">
       <arg name="platform" type="s" direction="out"/>
@@ -32,6 +32,9 @@
     <method name="startPlatformChange">
       <arg name="dbus" type="s" direction="in"/>
       <arg name="platform" type="s" direction="in"/>
+    </method>
+    <method name="changeProcessFinished">
+      <arg name="id" type="i" direction="in"/>
     </method>
     <method name="shellPackage">
       <arg type="s" direction="out"/>
