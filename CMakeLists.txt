@@ -55,7 +55,6 @@ find_package(KF5 MODULE REQUIRED COMPONENTS CMake Compiler InstallDirs
 
 # those are not "done" yet:
 find_package(KCrash REQUIRED NO_MODULE)
-find_package(ki18n REQUIRED NO_MODULE)
 find_package(kio REQUIRED NO_MODULE)
 find_package(kdeclarative REQUIRED NO_MODULE)
 
