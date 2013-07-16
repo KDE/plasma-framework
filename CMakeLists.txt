@@ -56,16 +56,13 @@ find_package(kdeqt5staging REQUIRED NO_MODULE)
 
 # Load CMake, Compiler and InstallDirs settings from KF5 and the following are already somewhat "done" tier1/tier2 libs from kdelibs:
 find_package(KF5 MODULE REQUIRED COMPONENTS CMake Compiler InstallDirs
-                                            XmlGui KIdleTime ItemModels KWidgetsAddons KWindowSystem KCodecs KArchive KCoreAddons Solid ThreadWeaver
+                                            KIdleTime ItemModels KWidgetsAddons KWindowSystem KCodecs KArchive KCoreAddons Solid ThreadWeaver
                                             KConfig KAuth kjs KWallet KDBusAddons
-                                            ki18n kguiaddons kservice kwidgets ItemViews KNotifications KIconThemes KCompletion KJobWidgets KConfigWidgets Sonnet)
+                                            KI18n KGuiAddons KService KWidgets ItemViews KNotifications KIconThemes KCompletion KJobWidgets KConfigWidgets Sonnet KTextWidgets XmlGui KCrash)
 #find_package(KF5Transitional REQUIRED)
 
 # those are not "done" yet:
-find_package(KCrash REQUIRED NO_MODULE)
-find_package(ktextwidgets REQUIRED NO_MODULE)
-find_package(ki18n REQUIRED NO_MODULE)
-find_package(kio REQUIRED NO_MODULE)
+find_package(Kio REQUIRED NO_MODULE)
 find_package(kdeclarative REQUIRED NO_MODULE)
 
 # Needed for some includes from KDE/ (KMimeType, etc.)
@@ -119,6 +116,13 @@ set_package_properties(QCA2 PROPERTIES DESCRIPTION "Support for remote plasma wi
 find_package(DBusMenuQt MODULE)
 set_package_properties(DBusMenuQt PROPERTIES DESCRIPTION "Support for notification area menus via the DBusMenu protocol"
                        URL "https://launchpad.net/libdbusmenu-qt"
+                       TYPE REQUIRED
+                      )
+
+# TODO remove it in future
+find_package(LibAttica NO_MODULE)
+set_package_properties(LibAttica PROPERTIES DESCRIPTION "Support for Get Hot New Stuff related stuff"
+                       URL "https://projects.kde.org/attica"
                        TYPE REQUIRED
                       )
 

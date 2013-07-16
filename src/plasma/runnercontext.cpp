@@ -35,7 +35,7 @@
 #include <kshell.h>
 #include <qstandardpaths.h>
 #include <qurl.h>
-#include <kio/kprotocolinfo.h>
+#include <kprotocolinfo.h>
 
 #include "abstractrunner.h"
 #include "querymatch.h"
