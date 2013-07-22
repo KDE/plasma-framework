@@ -388,7 +388,7 @@ public:
         }
 
         DummyJob *dummy = new DummyJob(q);
-        Weaver::instance()->enqueue(dummy);
+        Weaver::instance()->enqueueRaw(dummy);
         QObject::connect(dummy, SIGNAL(done(ThreadWeaver::Job*)), dummy, SLOT(deleteLater()));
     }
 
@@ -413,7 +413,7 @@ public:
             if (runner->speed() == AbstractRunner::SlowSpeed) {
                 job->setDelayTimer(&delayTimer);
             }
-            Weaver::instance()->enqueue(job);
+            Weaver::instance()->enqueueRaw(job);
             searchJobs.insert(job);
         }
     }
@@ -780,7 +780,7 @@ void RunnerManager::reset()
         d->oldSearchJobs.clear();
     } else {
         Q_FOREACH(FindMatchesJob *job, d->searchJobs) {
-            Weaver::instance()->dequeue(job);
+            Weaver::instance()->dequeueRaw(job);
         }
         d->oldSearchJobs += d->searchJobs;
     }
