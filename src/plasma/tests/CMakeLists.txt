@@ -1,1 +1,1 @@
-add_subdirectory(testplugins)
+add_subdirectory(kplugins)
