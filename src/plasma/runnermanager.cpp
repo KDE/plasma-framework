@@ -780,7 +780,8 @@ void RunnerManager::reset()
         d->oldSearchJobs.clear();
     } else {
         Q_FOREACH(FindMatchesJob *job, d->searchJobs) {
-            Weaver::instance()->dequeueRaw(job);
+#warning Reenable the following line one dequeueRaw API has been merged into ThreadWeaver
+            //Weaver::instance()->dequeueRaw(job);
         }
         d->oldSearchJobs += d->searchJobs;
     }
