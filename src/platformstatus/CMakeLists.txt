@@ -17,6 +17,7 @@ target_link_libraries(
    kded_platformstatus
    ${KDE4_KDECORE_LIBS}
    ${KCoreAddons_LIBRARIES}
+   ${KDBusAddons_LIBRARIES}
    Qt5::DBus
    Qt5::Quick
    )
