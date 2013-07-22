@@ -236,7 +236,7 @@ void DesktopCorona::checkViews()
             QSurfaceFormat format;
             view->init();
             view->show();
-            
+
             m_views << view;
         }
     } else {
@@ -272,10 +272,10 @@ void DesktopCorona::updateScreenOwner(int wasScreen, int isScreen, Plasma::Conta
                 m_panelViews.remove(containment);
             }
         }
-    
+
     //Desktop view
     } else {
-    
+
         if (isScreen < 0 || m_views.count() < isScreen + 1) {
             qWarning() << "Invalid screen";
             return;

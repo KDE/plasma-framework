@@ -158,6 +158,7 @@ void PlatformStatus::startPlatformChange(const QString & dbus, const QString & p
     changeProcess->start();
 
     // Show splash
+    qDebug() << "Starting the process";
 }
 
 void PlatformStatus::changeProcessFinished(int id)
@@ -174,6 +175,7 @@ void PlatformStatus::changeProcessFinished(int id)
     emit changeProcessFinished(id);
 
     // Hide splash
+    qDebug() << "Starting the process";
 }
 
 #include "platformstatus.moc"
