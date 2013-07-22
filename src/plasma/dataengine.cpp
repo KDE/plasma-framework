@@ -22,6 +22,7 @@
 #include "private/datacontainer_p.h"
 
 #include <QQueue>
+#include <QTemporaryFile>
 #include <QTimer>
 #include <QTime>
 #include <QTimerEvent>
@@ -395,37 +396,6 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info, con
       package(0)
 {
     updateTimestamp.start();
-
-    if (!info.isValid()) {
-        qDebug() << "######################################################";
-        qDebug() << "\n\n arg constructor for DataEngine :(" << args.count() << args;
-        qDebug() << "\n######################################################";
-        KConfig _c("/tmp/pluginconfig.desktop", KConfig::SimpleConfig);
-        KConfigGroup c = _c.group("Desktop Entry");
-        foreach (const QVariant &v, args) {
-            qDebug() << "------------------";
-            qDebug() << " V: " << v;
-            if (v.canConvert<QVariantMap>()) {
-                QVariantMap m = v.toMap();
-                //c.setName(QLatin1String("Desktop Entry"));
-                foreach (const QString &k, m.keys()) {
-                    qDebug() << "  info " << k;// << m[k];
-                    if (k == QLatin1String("MetaData") && m[k].canConvert<QVariantMap>()) {
-                        qDebug() << "found the metadata object" << k;
-                        QVariantMap meta = m[k].toMap();
-                        foreach (const QString &l, meta.keys()) {
-                            qDebug() << " " << l << " = " << meta[l];
-                            c.writeEntry("eins", "foobar");
-                        }
-                    }
-                }
-            }
-        }
-        c.sync();
-
-        dataEngineDescription = KPluginInfo("/tmp/pluginconfig.desktop");
-        //dataEngineDescription.load(c);
-    }
 
     if (dataEngineDescription.isValid()) {
         e->setObjectName(dataEngineDescription.name());
