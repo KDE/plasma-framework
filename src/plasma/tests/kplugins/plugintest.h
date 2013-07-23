@@ -26,7 +26,6 @@
 #include <Plasma/DataEngine>
 
 class QCommandLineParser;
-class KJob;
 
 namespace Plasma
 {
@@ -45,9 +44,11 @@ class PluginTest : public QApplication
 
     public Q_SLOTS:
         void runMain();
-        void loadKPlugin();
+        bool loadKPlugin();
+        bool loadFromKService(const QString &name = "time");
+        bool loadFromPlasma();
         void loadKQPlugin();
-        void loadKService(const QString &name = QString());
+        bool loadKService(const QString &name = QString());
         void dataUpdated(QString s, Plasma::DataEngine::Data d);
 
     private:

@@ -79,15 +79,19 @@ void PluginTest::runMain()
     qDebug() << " - - - -- - - - - ------------------------------------\n";
     qDebug() << " libs are in: " << QCoreApplication::libraryPaths();
     //loadKQPlugin();
-    loadKPlugin();
+    qDebug() << "::: loadKPlugin() == " << loadKPlugin();
     qDebug() << " - - - -- - - - - ------------------------------------\n";
-    loadKService();
+    qDebug() << "::: loadKService() == " << loadKService();
+
+    qDebug() << " - - - -- - - - - ------------------------------------\n";
+    qDebug() << "::: loadKFromPlasma() == " << loadFromPlasma();
     exit(0);
     return;
 }
 
-void PluginTest::loadKPlugin()
+bool PluginTest::loadKPlugin()
 {
+    bool ok = false;
     qDebug() << "Load KPlugin";
     QString pluginPath = "/home/sebas/kf5/install/lib/x86_64-linux-gnu/kplugins/";
     QCoreApplication::addLibraryPath(pluginPath);
@@ -109,6 +113,7 @@ void PluginTest::loadKPlugin()
             qDebug() << "Successfully loaded timeengine";
             time_engine->connectSource("Europe/Amsterdam", this);
             qDebug() << "SOURCE: " << time_engine->sources();
+            ok = true;
         } else {
             qDebug() << "Timeengine failed to load. :(";
 
@@ -118,8 +123,61 @@ void PluginTest::loadKPlugin()
         qDebug() << "loading failed somehow";
     }
     //KQPluginFactory* factory = new KQPluginFactory(KPluginInfo(), this);
+    return ok;
 
 }
+
+bool PluginTest::loadFromKService(const QString &name)
+{
+    DataEngine *engine = 0;
+
+    // load the engine, add it to the engines
+    QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(name);
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/DataEngine",
+                                                              constraint);
+    QString error;
+
+    if (offers.isEmpty()) {
+        qDebug() << "offers are empty for " << name << " with constraint " << constraint;
+    } else {
+        QVariantList allArgs;
+        allArgs << offers.first()->storageId();
+        QString api = offers.first()->property("X-Plasma-API").toString();
+        if (api.isEmpty()) {
+            if (offers.first()) {
+                KPluginLoader plugin(*offers.first());
+                if (Plasma::isPluginVersionCompatible(plugin.pluginVersion())) {
+                    engine = offers.first()->createInstance<Plasma::DataEngine>(0, allArgs, &error);
+                }
+            }
+        } else {
+            engine = new DataEngine(KPluginInfo(offers.first()), 0);
+        }
+    }
+
+    return engine != 0;
+}
+
+
+bool PluginTest::loadFromPlasma()
+{
+    bool ok = false;
+    const QStringList allEngines = Plasma::PluginLoader::self()->listAllEngines();
+    qDebug() << "All engines: " << allEngines;
+    foreach (const QString &e, allEngines) {
+        Plasma::DataEngine *engine = Plasma::PluginLoader::self()->loadDataEngine(e);
+        if (engine) {
+            engine->connectSource("Europe/Amsterdam", this);
+            engine->connectSource("Battery", this);
+            engine->connectAllSources(this);
+            qDebug() << "SOURCE: " << engine->sources();
+            ok = true;
+        }
+
+    }
+    return ok;
+}
+
 
 void PluginTest::loadKQPlugin()
 {
@@ -156,7 +214,7 @@ void PluginTest::loadKQPlugin()
 #endif
 }
 
-void PluginTest::loadKService(const QString &name)
+bool PluginTest::loadKService(const QString &name)
 {
 //     DataEngine *engine = d->isDefaultLoader ? 0 : internalLoadDataEngine(name);
 //     if (engine) {
@@ -223,7 +281,7 @@ void PluginTest::loadKService(const QString &name)
         qDebug() << "Couldn't load engine \"" << name << "\". Error given: " << error;
     }
 
-    //return engine;
+    return engine != 0;
 }
 
 void PluginTest::dataUpdated(QString s, Plasma::DataEngine::Data d)
