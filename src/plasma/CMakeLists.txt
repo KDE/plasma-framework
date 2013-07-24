@@ -30,8 +30,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}
                     ${KDE4_INCLUDE_DIR}
                     ${KDE4_INCLUDE_DIR}/KDE
-                    ${ki18n_SOURCE_DIR}/src
-                    ${ki18n_BINARY_DIR}/src
                     ${KDE4_INCLUDE_DIR}/kio
                     #FIXME: this will go into Qt upstream
                     ${CMAKE_INSTALL_PREFIX}/include/kdeqt5staging/
@@ -148,8 +146,8 @@ target_link_libraries(plasma
     ${KAuth_LIBRARIES}
     ${KWindowSystem_LIBRARIES}
     ${PLASMA_EXTRA_LIBS}
-    ki18n
-    ${kde4support_LIBRARY}
+    KI18n
+    ${KDE4Support_LIBRARIES}
 )
 #FIXME gpgme++ is in kdepimlibs, neeeds to be elsewhere
 target_link_libraries(plasma kdeclarative ${KArchive_LIBRARIES})

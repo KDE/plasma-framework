@@ -22,7 +22,6 @@
 #define CONTAINMENT_P_H
 
 #include <kactioncollection.h>
-#include <kmenu.h>
 
 #include "plasma.h"
 #include "applet.h"

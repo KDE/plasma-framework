@@ -28,7 +28,6 @@
 #include <QFile>
 #include <qstandardpaths.h>
 
-#include <kaction.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -36,6 +35,7 @@
 #include <kkeysequencewidget.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
+#include <kglobalaccel.h>
 
 #include "containment.h"
 #include "corona.h"
@@ -66,7 +66,8 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
           failed(false),
           transient(false),
           needsConfig(false),
-          started(false)
+          started(false),
+          globalShortcutEnabled(false)
 {
     if (appletId == 0) {
         appletId = ++s_maxAppletId;
@@ -79,9 +80,9 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
 
 AppletPrivate::~AppletPrivate()
 {
-    if (activationAction && activationAction->isGlobalShortcutEnabled()) {
-        //kDebug() << "reseting global action for" << q->title() << activationAction->objectName();
-        activationAction->forgetGlobalShortcut();
+    if (activationAction && globalShortcutEnabled) {
+        //kDebug() << "resetting global action for" << q->title() << activationAction->objectName();
+        KGlobalAccel::self()->removeAllShortcuts(activationAction);
     }
 
     delete script;
@@ -187,7 +188,7 @@ void AppletPrivate::globalShortcutChanged()
     }
 
     KConfigGroup shortcutConfig(mainConfigGroup(), "Shortcuts");
-    shortcutConfig.writeEntry("global", activationAction->globalShortcut().toString());
+    shortcutConfig.writeEntry("global", activationAction->shortcut().toString());
     scheduleModificationNotification();
     //kDebug() << "after" << shortcut.primary() << d->activationAction->globalShortcut().primary();
 }
@@ -197,25 +198,25 @@ KActionCollection* AppletPrivate::defaultActions(QObject *parent)
     KActionCollection *actions = new KActionCollection(parent);
     actions->setConfigGroup("Shortcuts-Applet");
 
-    KAction *configAction = actions->add<KAction>("configure");
+    QAction *configAction = actions->add<QAction>("configure");
     configAction->setAutoRepeat(false);
     configAction->setText(i18n("Widget Settings"));
     configAction->setIcon(QIcon::fromTheme("configure"));
-    configAction->setShortcut(KShortcut("alt+d, s"));
+    configAction->setShortcut(QKeySequence("alt+d, s"));
     configAction->setData(Plasma::Types::ConfigureAction);
 
-    KAction *closeApplet = actions->add<KAction>("remove");
+    QAction *closeApplet = actions->add<QAction>("remove");
     closeApplet->setAutoRepeat(false);
     closeApplet->setText(i18n("Remove this Widget"));
     closeApplet->setIcon(QIcon::fromTheme("edit-delete"));
-    closeApplet->setShortcut(KShortcut("alt+d, r"));
+    closeApplet->setShortcut(QKeySequence("alt+d, r"));
     closeApplet->setData(Plasma::Types::DestructiveAction);
 
-    KAction *runAssociatedApplication = actions->add<KAction>("run associated application");
+    QAction *runAssociatedApplication = actions->add<QAction>("run associated application");
     runAssociatedApplication->setAutoRepeat(false);
     runAssociatedApplication->setText(i18n("Run the Associated Application"));
     runAssociatedApplication->setIcon(QIcon::fromTheme("system-run"));
-    runAssociatedApplication->setShortcut(KShortcut("alt+d, t"));
+    runAssociatedApplication->setShortcut(QKeySequence("alt+d, t"));
     runAssociatedApplication->setVisible(false);
     runAssociatedApplication->setEnabled(false);
     runAssociatedApplication->setData(Plasma::Types::ControlAction);
@@ -249,7 +250,7 @@ void AppletPrivate::updateShortcuts()
         for (int i = 0; i < names.size(); ++i) {
             QAction *a = qactions.at(i);
             if (a) {
-                actions->add<KAction>(names.at(i), a);
+                actions->add<QAction>(names.at(i), a);
             }
         }
     } else {

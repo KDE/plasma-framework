@@ -1,5 +1,5 @@
 
-cmake_minimum_required(VERSION 2.8.10.1)
+cmake_minimum_required(VERSION 2.8.11)
 
 project(plasma)
 
@@ -27,7 +27,6 @@ find_package(Qt5Core REQUIRED NO_MODULE)
 find_package(Qt5Transitional MODULE)
 find_package(Qt5Quick REQUIRED NO_MODULE)
 find_package(Qt5X11Extras REQUIRED NO_MODULE)
-find_package(kde4support REQUIRED NO_MODULE)
 
 add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0)
 
@@ -41,6 +40,12 @@ endif()
 # in the KDE build system, this is the same as CMAKE_BINARY_DIR.
 configure_file(${CMAKE_SOURCE_DIR}/CTestCustom.cmake ${CMAKE_BINARY_DIR}/CTestCustom.cmake COPYONLY)
 
+################# Enable C++11 features for clang and gcc #################
+
+if(UNIX)
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++0x")
+endif()
+
 ################# now find all used packages #################
 
 set (QT_MIN_VERSION "5.2.0")
@@ -49,19 +54,21 @@ find_package(kdeqt5staging REQUIRED NO_MODULE)
 
 # Load CMake, Compiler and InstallDirs settings from KF5 and the following are already somewhat "done" tier1/tier2 libs from kdelibs:
 find_package(KF5 MODULE REQUIRED COMPONENTS CMake Compiler InstallDirs
-                                            XmlGui KIdleTime ItemModels KWidgetsAddons KWindowSystem KCodecs KArchive KCoreAddons Solid ThreadWeaver
-                                            KConfig KAuth kjs KWallet KDBusAddons
-                                            ki18n kguiaddons kservice kwidgets ItemViews KNotifications KIconThemes KCompletion KJobWidgets KConfigWidgets Sonnet ktextwidgets)
+                                            KIdleTime ItemModels KWidgetsAddons KWindowSystem KCodecs KArchive KCoreAddons Solid ThreadWeaver
+                                            KConfig KAuth KJS KWallet KDBusAddons
+                                            KI18n KGuiAddons KService KWidgets ItemViews KNotifications KIconThemes KCompletion KJobWidgets KConfigWidgets Sonnet KTextWidgets XmlGui KCrash)
 #find_package(KF5Transitional REQUIRED)
 
 # those are not "done" yet:
-find_package(ki18n REQUIRED NO_MODULE)
-find_package(kio REQUIRED NO_MODULE)
+find_package(KIO REQUIRED NO_MODULE)
 find_package(kdeclarative REQUIRED NO_MODULE)
 
 # Needed for some includes from KDE/ (KMimeType, etc.)
 # FIXME: remove when kdeui is fully split up
 find_package(KDELibs4 REQUIRED NO_MODULE)
+
+# must be after KDELibs4, since it links against imported targets coming from KDELibs4Config.cmake:
+find_package(KDE4Support REQUIRED NO_MODULE)
 
 #optional features
 find_package(X11 MODULE)
@@ -107,6 +114,13 @@ set_package_properties(QCA2 PROPERTIES DESCRIPTION "Support for remote plasma wi
 find_package(DBusMenuQt MODULE)
 set_package_properties(DBusMenuQt PROPERTIES DESCRIPTION "Support for notification area menus via the DBusMenu protocol"
                        URL "https://launchpad.net/libdbusmenu-qt"
+                       TYPE REQUIRED
+                      )
+
+# TODO remove it in future
+find_package(LibAttica NO_MODULE)
+set_package_properties(LibAttica PROPERTIES DESCRIPTION "Support for Get Hot New Stuff related stuff"
+                       URL "https://projects.kde.org/attica"
                        TYPE REQUIRED
                       )
 

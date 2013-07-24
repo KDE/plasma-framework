@@ -151,7 +151,7 @@ function initPage(page, properties) {
     }
 
     container.page = page;
-    if (page.parent == null) {
+    if (page.parent == null || page.parent == container.pageParent) {
         container.owner = container;
     } else {
         container.owner = page.parent;

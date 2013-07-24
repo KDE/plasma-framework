@@ -36,7 +36,6 @@
 #include <qtemporaryfile.h>
 #include <qmimedatabase.h>
 
-#include <kaction.h>
 #include <kdebug.h>
 #include <kcoreauthorized.h>
 #include <klocalizedstring.h>
