@@ -69,6 +69,5 @@ private:
     friend class AppletInterface;
 };
 
-K_PLUGIN_HEADER(DeclarativeAppletScriptFactory, DeclarativeAppletScript, "")
 
 #endif
