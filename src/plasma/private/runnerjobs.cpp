@@ -170,7 +170,7 @@ Plasma::AbstractRunner* FindMatchesJob::runner() const
     return m_runner;
 }
 
-DelayedJobCleaner::DelayedJobCleaner(const QSet<FindMatchesJob *> &jobs, const QSet<AbstractRunner *> &runners)
+DelayedJobCleaner::DelayedJobCleaner(const QSet<QSharedPointer<FindMatchesJob> > &jobs, const QSet<AbstractRunner *> &runners)
     : QObject(Weaver::instance()),
       m_weaver(Weaver::instance()),
       m_jobs(jobs),
@@ -178,8 +178,8 @@ DelayedJobCleaner::DelayedJobCleaner(const QSet<FindMatchesJob *> &jobs, const Q
 {
     connect(m_weaver, SIGNAL(finished()), this, SLOT(checkIfFinished()));
 
-    foreach (FindMatchesJob *job, m_jobs) {
-        connect(job, SIGNAL(done(ThreadWeaver::Job*)), this, SLOT(jobDone(ThreadWeaver::Job*)));
+    for (auto it = m_jobs.constBegin(); it != m_jobs.constEnd(); ++it) {
+        connect((*it).data(), &Job::done, this, &DelayedJobCleaner::jobDone);
     }
 }
 
@@ -188,9 +188,9 @@ DelayedJobCleaner::~DelayedJobCleaner()
     qDeleteAll(m_runners);
 }
 
-void DelayedJobCleaner::jobDone(ThreadWeaver::Job *job)
+void DelayedJobCleaner::jobDone(ThreadWeaver::JobPointer job)
 {
-    FindMatchesJob *runJob = dynamic_cast<FindMatchesJob *>(job);
+    auto runJob = job.dynamicCast<FindMatchesJob>();
 
     if (!runJob) {
         return;
@@ -207,7 +207,6 @@ void DelayedJobCleaner::jobDone(ThreadWeaver::Job *job)
 void DelayedJobCleaner::checkIfFinished()
 {
     if (m_weaver->isIdle()) {
-        qDeleteAll(m_jobs);
         m_jobs.clear();
         deleteLater();
     }

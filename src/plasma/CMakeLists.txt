@@ -147,8 +147,9 @@ target_link_libraries(plasma
     ${KAuth_LIBRARIES}
     ${KWindowSystem_LIBRARIES}
     ${PLASMA_EXTRA_LIBS}
-    KI18n
+    KF5::KI18n
     ${KDE4Support_LIBRARIES}
+    KF5::KDE4Attic
 )
 #FIXME gpgme++ is in kdepimlibs, neeeds to be elsewhere
 target_link_libraries(plasma kdeclarative ${KArchive_LIBRARIES})
