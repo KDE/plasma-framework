@@ -272,7 +272,7 @@ class PLASMA_EXPORT RunnerManager : public QObject
     private:
         Q_PRIVATE_SLOT(d, void scheduleMatchesChanged())
         Q_PRIVATE_SLOT(d, void matchesChanged())
-        Q_PRIVATE_SLOT(d, void jobDone(ThreadWeaver::Job*))
+        Q_PRIVATE_SLOT(d, void jobDone(ThreadWeaver::JobPointer))
         Q_PRIVATE_SLOT(d, void unblockJobs())
         Q_PRIVATE_SLOT(d, void runnerMatchingSuspended(bool))
 

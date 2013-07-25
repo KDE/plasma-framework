@@ -231,19 +231,27 @@ public:
         }
 
         if (!deadRunners.isEmpty()) {
-                QSet<FindMatchesJob *> deadJobs;
-                foreach (FindMatchesJob *job, searchJobs) {
+                QSet<QSharedPointer<FindMatchesJob> > deadJobs;
+                auto it = searchJobs.begin();
+                while (it != searchJobs.end()) {
+                    auto &job = (*it);
                     if (deadRunners.contains(job->runner())) {
-                        QObject::disconnect(job, SIGNAL(done(ThreadWeaver::Job*)), q, SLOT(jobDone(ThreadWeaver::Job*)));
-                        searchJobs.remove(job);
+                        QObject::disconnect(job.data(), SIGNAL(done(ThreadWeaver::JobPointer)), q, SLOT(jobDone(ThreadWeaver::JobPointer)));
+                        it = searchJobs.erase(it);
                         deadJobs.insert(job);
+                    } else {
+                        it++;
                     }
                 }
 
-                foreach (FindMatchesJob *job, oldSearchJobs) {
+                it = oldSearchJobs.begin();
+                while (it != oldSearchJobs.end()) {
+                    auto &job = (*it);
                     if (deadRunners.contains(job->runner())) {
-                        oldSearchJobs.remove(job);
+                        it = oldSearchJobs.erase(it);
                         deadJobs.insert(job);
+                    } else {
+                        it++;
                     }
                 }
 
@@ -309,9 +317,9 @@ public:
         return runner;
     }
 
-    void jobDone(ThreadWeaver::Job *job)
+    void jobDone(ThreadWeaver::JobPointer job)
     {
-        FindMatchesJob *runJob = dynamic_cast<FindMatchesJob *>(job);
+        auto runJob = job.dynamicCast<FindMatchesJob>();
 
         if (!runJob) {
             return;
@@ -347,9 +355,7 @@ public:
         }
 
         if (Weaver::instance()->isIdle()) {
-            qDeleteAll(searchJobs);
             searchJobs.clear();
-            qDeleteAll(oldSearchJobs);
             oldSearchJobs.clear();
         }
 
@@ -381,7 +387,6 @@ public:
     {
         // WORKAROUND: Queue an empty job to force ThreadWeaver to awaken threads
         if (searchJobs.isEmpty() && Weaver::instance()->isIdle()) {
-            qDeleteAll(oldSearchJobs);
             oldSearchJobs.clear();
             checkTearDown();
             return;
@@ -408,12 +413,12 @@ public:
     void startJob(AbstractRunner *runner)
     {
         if ((runner->ignoredTypes() & context.type()) == 0) {
-            FindMatchesJob *job = new FindMatchesJob(runner, &context, Weaver::instance());
-            QObject::connect(job, SIGNAL(done(ThreadWeaver::Job*)), q, SLOT(jobDone(ThreadWeaver::Job*)));
+            QSharedPointer<FindMatchesJob> job(new FindMatchesJob(runner, &context, Weaver::instance()));
+            QObject::connect(job.data(), SIGNAL(done(ThreadWeaver::JobPointer)), q, SLOT(jobDone(ThreadWeaver::JobPointer)));
             if (runner->speed() == AbstractRunner::SlowSpeed) {
                 job->setDelayTimer(&delayTimer);
             }
-            Weaver::instance()->enqueueRaw(job);
+            Weaver::instance()->enqueue(job);
             searchJobs.insert(job);
         }
     }
@@ -429,8 +434,8 @@ public:
     QHash<QString, AbstractRunner*> runners;
     QHash<QString, QString> advertiseSingleRunnerIds;
     AbstractRunner* currentSingleRunner;
-    QSet<FindMatchesJob*> searchJobs;
-    QSet<FindMatchesJob*> oldSearchJobs;
+    QSet<QSharedPointer<FindMatchesJob> > searchJobs;
+    QSet<QSharedPointer<FindMatchesJob> > oldSearchJobs;
     KConfigGroup conf;
     QString singleModeRunnerId;
     bool loadAll : 1;
@@ -615,8 +620,8 @@ void RunnerManager::run(const QueryMatch &match)
     //TODO: this function is not const as it may be used for learning
     AbstractRunner *runner = match.runner();
 
-    foreach (FindMatchesJob *job, d->searchJobs) {
-        if (job->runner() == runner && !job->isFinished()) {
+    for (auto it = d->searchJobs.constBegin(); it != d->searchJobs.constEnd(); ++it) {
+        if ((*it)->runner() == runner && !(*it)->isFinished()) {
 #ifndef NDEBUG
             kDebug() << "deferred run";
 #endif
@@ -775,12 +780,10 @@ void RunnerManager::reset()
 {
     // If ThreadWeaver is idle, it is safe to clear previous jobs
     if (Weaver::instance()->isIdle()) {
-        qDeleteAll(d->searchJobs);
-        qDeleteAll(d->oldSearchJobs);
         d->oldSearchJobs.clear();
     } else {
-        Q_FOREACH(FindMatchesJob *job, d->searchJobs) {
-            Weaver::instance()->dequeueRaw(job);
+        for (auto it = d->searchJobs.constBegin(); it != d->searchJobs.constEnd(); ++it) {
+            Weaver::instance()->dequeue((*it));
         }
         d->oldSearchJobs += d->searchJobs;
     }
