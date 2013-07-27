@@ -3,12 +3,39 @@
   <interface name="org.kde.PlatformStatus">
     <property name="shellPackage" type="s" access="read"/>
     <property name="runtimePlatform" type="as" access="read"/>
+    <signal name="platformAboutToChange">
+      <arg name="changeId" type="i" direction="out"/>
+      <arg name="platform" type="s" direction="out"/>
+    </signal>
+    <signal name="platformChanged">
+      <arg name="platform" type="s" direction="out"/>
+      <arg name="changeId" type="i" direction="out"/>
+    </signal>
     <signal name="shellPackageChanged">
       <arg name="package" type="s" direction="out"/>
     </signal>
     <signal name="runtimePlatformChanged">
       <arg name="runtimePlatform" type="as" direction="out"/>
     </signal>
+    <method name="registerClient">
+      <arg name="dbus" type="s" direction="in"/>
+    </method>
+    <method name="clientChangeStarted">
+      <arg name="dbus" type="s" direction="in"/>
+      <arg name="changeId" type="i" direction="in"/>
+      <arg name="maximumTime" type="i" direction="in"/>
+    </method>
+    <method name="clientChangeFinished">
+      <arg name="dbus" type="s" direction="in"/>
+      <arg name="changeId" type="i" direction="in"/>
+    </method>
+    <method name="startPlatformChange">
+      <arg name="dbus" type="s" direction="in"/>
+      <arg name="platform" type="s" direction="in"/>
+    </method>
+    <method name="changeProcessFinished">
+      <arg name="id" type="i" direction="in"/>
+    </method>
     <method name="shellPackage">
       <arg type="s" direction="out"/>
     </method>

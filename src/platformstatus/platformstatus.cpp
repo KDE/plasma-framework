@@ -1,14 +1,48 @@
+/*
+ *   Copyright (C) 2013 by Aaron Seigo <aseigo@kde.org>
+ *   Copyright (C) 2013 by Ivan Cukic <ivan.cukic(at)kde.org>
+ *
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License version 2,
+ *   or (at your option) any later version, as published by the Free
+ *   Software Foundation
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details
+ *
+ *   You should have received a copy of the GNU General Public
+ *   License along with this program; if not, write to the
+ *   Free Software Foundation, Inc.,
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
 #include <platformstatus.h>
 
 #include <QDBusConnection>
 #include <QStandardPaths>
+#include <QMap>
 
 #include <KConfigGroup>
 #include <KDebug>
 #include <KDirWatch>
 #include <KPluginFactory>
 
+#include "platformchangeprocess.h"
 #include "platformstatusadaptor.h"
+
+#include <utils/d_ptr_implementation.h>
+
+class PlatformStatus::Private {
+public:
+    QString shellPackage;
+    QStringList runtimePlatform;
+
+    QStringList clients;
+    int lastId = 0;
+    QMap<int, PlatformChangeProcess*> changeProcesses;
+};
 
 const char *defaultPackage = "org.kde.desktop";
 
@@ -28,6 +62,10 @@ PlatformStatus::PlatformStatus(QObject *parent, const QVariantList &)
     KDirWatch::self()->addFile(globalrcPath);
 }
 
+PlatformStatus::~PlatformStatus()
+{
+}
+
 void PlatformStatus::findShellPackage(bool sendSignal)
 {
     KConfigGroup group(KSharedConfig::openConfig("kdeglobals"), "DesktopShell");
@@ -45,31 +83,31 @@ void PlatformStatus::findShellPackage(bool sendSignal)
         return;
     }
 
-    m_shellPackage = package;
+    d->shellPackage = package;
 
     QString runtimePlatform = group.readEntry("RuntimePlatform", QString());
     KConfig packageDefaults(path + "contents/defaults", KConfig::SimpleConfig);
     group = KConfigGroup(&packageDefaults, "Desktop");
     runtimePlatform = group.readEntry("RuntimePlatform", runtimePlatform);
-    const bool runtimeChanged = runtimePlatform != m_runtimePlatform.join(',');
+    const bool runtimeChanged = runtimePlatform != d->runtimePlatform.join(',');
     if (runtimeChanged) {
-        m_runtimePlatform = runtimePlatform.split(',');
+        d->runtimePlatform = runtimePlatform.split(',');
     }
 
     if (sendSignal) {
-        emit shellPackageChanged(m_shellPackage);
-        emit runtimePlatformChanged(m_runtimePlatform);
+        emit shellPackageChanged(d->shellPackage);
+        emit runtimePlatformChanged(d->runtimePlatform);
     }
 }
 
 QString PlatformStatus::shellPackage() const
 {
-    return m_shellPackage;
+    return d->shellPackage;
 }
 
 QStringList PlatformStatus::runtimePlatform() const
 {
-    return m_runtimePlatform;
+    return d->runtimePlatform;
 }
 
 void PlatformStatus::fileDirtied(const QString &path)
@@ -79,4 +117,66 @@ void PlatformStatus::fileDirtied(const QString &path)
     }
 }
 
+void PlatformStatus::registerClient(const QString & dbus)
+{
+    if (d->clients.contains(dbus))
+        return;
+
+    d->clients << dbus;
+}
+
+void PlatformStatus::clientChangeStarted(const QString & dbus, int changeId, int maximumTime)
+{
+    Q_UNUSED(maximumTime);
+
+    if (!d->changeProcesses.contains(changeId))
+        return;
+
+    d->changeProcesses[changeId]->clientChangeStarted(dbus);
+}
+
+void PlatformStatus::clientChangeFinished(const QString & dbus, int changeId)
+{
+    if (!d->changeProcesses.contains(changeId))
+        return;
+
+    d->changeProcesses[changeId]->clientChangeFinished(dbus);
+}
+
+void PlatformStatus::startPlatformChange(const QString & dbus, const QString & platform)
+{
+    auto changeProcess =
+        new PlatformChangeProcess(++d->lastId, dbus, platform);
+
+    connect(changeProcess, SIGNAL(finished(int)),
+            this, SLOT(changeProcessFinished(int)));
+
+    d->changeProcesses[d->lastId] = changeProcess;
+
+    emit platformAboutToChange(d->lastId, platform);
+
+    changeProcess->start();
+
+    // Show splash
+    qDebug() << "Starting the process";
+}
+
+void PlatformStatus::changeProcessFinished(int id)
+{
+    if (!d->changeProcesses.contains(id))
+        return;
+
+    auto changeProcess = d->changeProcesses[id];
+    changeProcess->deleteLater();
+    d->changeProcesses.remove(id);
+
+    // ...
+
+    emit changeProcessFinished(id);
+
+    // Hide splash
+    qDebug() << "Starting the process";
+}
+
 #include "platformstatus.moc"
+

@@ -20,6 +20,7 @@ import QtQuick 2.0
 
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.plasma.platformcomponents 1.0 as Platform
 
 Item {
     id: root
@@ -27,6 +28,11 @@ Item {
     height: 480
 
     property Item toolBox
+
+    Platform.Application {
+        application: "xterm"
+        running: true // solidx.touchscreenPresent
+    }
 
     Connections {
         target: plasmoid
@@ -85,12 +91,12 @@ Item {
                 }
                 MouseArea {
                     id: mouseArea
-                    
+
                     property real dx: 0
                     property real dy: 0
                     property real startX
                     property real startY
-                    
+
                     anchors.fill: parent
                     drag.target: frameParent
                     onClicked: {
@@ -176,7 +182,7 @@ Item {
                 property real dy: mouseArea.dy
                 property real startX: mouseArea.startX/mouseArea.width
                 property real startY: mouseArea.startY/mouseArea.height
-                
+
                 NumberAnimation on dx { id: dxAnim; to: 0; duration: 350; easing.type: Easing.OutElastic }
                 NumberAnimation on dy { id: dyAnim; to: 0; duration: 350; easing.type: Easing.OutElastic }
                 //! [fragment]

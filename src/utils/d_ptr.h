@@ -39,7 +39,7 @@ public:
 
     T * operator->() const;
 
-    T * get() const;
+    // T * get() const;
 };
 
 #define D_PTR \
