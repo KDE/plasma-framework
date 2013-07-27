@@ -21,6 +21,7 @@
 #ifndef DESKTOPCORONA_H
 #define DESKTOPCORONA_H
 
+#include "shellhandler.h"
 #include "plasma/corona.h"
 
 #include "configview.h"

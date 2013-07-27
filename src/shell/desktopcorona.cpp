@@ -328,5 +328,8 @@ void DesktopCorona::printScriptMessage(const QString &message)
     qDebug() << message;
 }
 
+// Desktop corona handler
+
+
 #include "moc_desktopcorona.cpp"
 
