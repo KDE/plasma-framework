@@ -49,9 +49,9 @@
 namespace Plasma
 {
 
-DataEngine::DataEngine(const KPluginInfo &plugin, QObject *parent, const QVariantList &args)
+DataEngine::DataEngine(const KPluginInfo &plugin, QObject *parent)
     : QObject(parent),
-      d(new DataEnginePrivate(this, plugin, args))
+      d(new DataEnginePrivate(this, plugin))
 {
     if (d->script) {
         d->setupScriptSupport();
@@ -64,7 +64,7 @@ DataEngine::DataEngine(const KPluginInfo &plugin, QObject *parent, const QVarian
 }
 
 DataEngine::DataEngine(QObject* parent, const QVariantList &args)
-    : Plasma::DataEngine(KPluginInfo(args), parent, args)
+    : Plasma::DataEngine(KPluginInfo(args), parent)
 {
     if (d->script) {
         d->setupScriptSupport();
