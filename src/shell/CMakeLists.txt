@@ -59,14 +59,14 @@ add_executable(plasma-shell
     main.cpp
     configview.cpp
     containmentconfigview.cpp
+    desktopcorona.cpp
+    panelview.cpp
     shellpluginloader.cpp
     shellpackage.cpp
+    shellmanager.cpp
     lookandfeelpackage.cpp
     view.cpp
     panelconfigview.cpp
-    shellhandler.cpp
-    panelview.cpp
-    desktopcorona.cpp
     ${scripting_SRC}
     ${widgetexplorer_SRC}
 )

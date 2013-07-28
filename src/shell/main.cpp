@@ -22,9 +22,9 @@
 #include <kcmdlineargs.h>
 #include <klocalizedstring.h>
 
-#include "shellpluginloader.h"
-#include "shellhandler.h"
 #include "desktopcorona.h"
+#include "shellpluginloader.h"
+#include "shellmanager.h"
 
 static const char description[] = "Plasma Shell";
 static const char version[] = "2.0";
@@ -46,8 +46,6 @@ int main(int argc, char** argv)
     QApplication app(argc, argv);
 
     Plasma::PluginLoader::setPluginLoader(new ShellPluginLoader);
-    ShellManager::instance();
-
     DesktopCorona *corona = new DesktopCorona();
     corona->loadLayout();
     if (corona->containments().isEmpty()) {
@@ -55,6 +53,8 @@ int main(int argc, char** argv)
     }
     corona->processUpdateScripts();
     corona->checkScreens();
+
+    ShellManager::instance();
 
     return app.exec();
 }

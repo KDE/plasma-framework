@@ -17,42 +17,12 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef SHELLHANDLER_H
-#define SHELLHANDLER_H
+#ifndef SHELLMANAGER_H
+#define SHELLMANAGER_H
 
 #include <utils/d_ptr.h>
 
 #include <QObject>
-
-class ShellHandler: public QObject {
-    Q_OBJECT
-    Q_PROPERTY(bool willing READ willing WRITE setWilling NOTIFY willingnessChanged)
-    Q_PROPERTY(unsigned short priority READ priority WRITE setPriority NOTIFY priorityChanged)
-
-public:
-    ShellHandler();
-    ~ShellHandler();
-
-public Q_SLOTS:
-    bool willing() const;
-    unsigned short priority() const;
-
-    void setWilling(bool willing);
-    void setPriority(unsigned short priority);
-
-    virtual void load() = 0;
-    virtual void unload() = 0;
-
-Q_SIGNALS:
-    void willingnessChanged(bool willing);
-    void priorityChanged(unsigned short priority);
-
-private:
-    D_PTR;
-
-    typedef std::unique_ptr<ShellHandler> Ptr;
-    friend class ShellManager;
-};
 
 class ShellManager: public QObject {
     Q_OBJECT
@@ -62,8 +32,9 @@ public:
 
     void loadHandlers();
 
-protected:
-    void registerHandler(ShellHandler * handler);
+protected Q_SLOTS:
+    void registerHandler(QObject * handler);
+    void deregisterHandler(QObject * handler);
 
 public Q_SLOTS:
     void updateShell();
@@ -72,9 +43,7 @@ private:
     ShellManager();
 
     D_PTR;
-
-    friend class ShellHandler;
 };
 
-#endif /* SHELLHANDLER_H */
+#endif /* SHELLMANAGER_H */
 
