@@ -432,6 +432,11 @@ K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
 K_EXPORT_PLUGIN(factory("plasma_engine_" #libname)) \
 K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
 
+#define K_EXPORT_PLASMA_DATAENGINE_WITH_METADATA(libname, classname, jsonFile) \
+K_PLUGIN_FACTORY_WITH_METADATA(factory, jsonFile, registerPlugin<classname>();) \
+K_EXPORT_PLUGIN(factory("plasma_engine_" #libname)) \
+K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
+
 Q_DECLARE_METATYPE(Plasma::DataEngine*)
 
 #endif // multiple inclusion guard

@@ -22,7 +22,6 @@
 #include "private/datacontainer_p.h"
 
 #include <QQueue>
-#include <QTemporaryFile>
 #include <QTimer>
 #include <QTime>
 #include <QTimerEvent>
@@ -57,7 +56,6 @@ DataEngine::DataEngine(const KPluginInfo &plugin, QObject *parent)
         d->setupScriptSupport();
         d->script->init();
     } else {
-        // kDebug() << "called";
         // default implementation does nothing. this is for engines that have to
         // start things in motion external to themselves before they can work
     }
@@ -69,12 +67,9 @@ DataEngine::DataEngine(QObject* parent, const QVariantList &args)
     if (d->script) {
         d->setupScriptSupport();
         d->script->init();
-    } else {
-        // kDebug() << "called";
-        // default implementation does nothing. this is for engines that have to
-        // start things in motion external to themselves before they can work
     }
-
+    qDebug() << "PWC dataengine: " << d->dataEngineDescription.isValid() << d->dataEngineDescription.name();
+    qDebug() << "PWC args: " << args;
 }
 
 DataEngine::~DataEngine()
@@ -399,10 +394,8 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info, con
 
     if (dataEngineDescription.isValid()) {
         e->setObjectName(dataEngineDescription.name());
-        qDebug() << "Plugininfo is valid! :-)";
     } else {
         e->setObjectName("NullEngine");
-        qDebug() << "Plugininfo is INVALID! :-)";
     }
 
     if (dataEngineDescription.isValid()) {
