@@ -14,11 +14,13 @@ qt4_add_dbus_adaptor (
    platformstatus.h PlatformStatus
    )
 
-kde4_add_plugin( kded_platformstatus ${kded_platformstatus_SRCS} )
+add_library(kded_platformstatus MODULE ${kded_platformstatus_SRCS} )
+set_target_properties(kded_platformstatus PROPERTIES PREFIX "")
 
 target_link_libraries(
    kded_platformstatus
-   ${KDE4_KDECORE_LIBS}
+   ${KCore_LIBRARIES}
+   ${KService_LIBRARIES}
    ${KCoreAddons_LIBRARIES}
    ${KDBusAddons_LIBRARIES}
    Qt5::DBus
