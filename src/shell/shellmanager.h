@@ -37,6 +37,7 @@ protected Q_SLOTS:
     void deregisterHandler(QObject * handler);
 
 public Q_SLOTS:
+    void requestShellUpdate();
     void updateShell();
 
 private:

@@ -26,6 +26,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QList>
+#include <QTimer>
 
 #include <QQmlEngine>
 #include <QQmlComponent>
@@ -44,16 +45,23 @@ public:
     Private()
         : currentHandler(nullptr)
     {
+        shellUpdateDelay.setInterval(100);
+        shellUpdateDelay.setSingleShot(true);
     }
 
     QList<QObject *> handlers;
     QObject * currentHandler;
+    QTimer shellUpdateDelay;
 };
 
 ShellManager::ShellManager()
 {
-    loadHandlers();
+    connect(
+        &d->shellUpdateDelay, &QTimer::timeout,
+        this, &ShellManager::updateShell
+    );
 
+    loadHandlers();
 }
 
 ShellManager::~ShellManager()
@@ -66,13 +74,13 @@ void ShellManager::loadHandlers()
 {
     // For the time being, we are 'loading' static shells
     // TODO: Make this plugin-based
-    QQmlEngine engine;
+    static QQmlEngine * engine = new QQmlEngine(this);
 
     for (const auto & dir: QDir(s_shellsDir).entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
         for (const auto & qml: QDir(s_shellsDir + dir).entryList(QStringList() << "*.qml")) {
             qDebug() << "Making a new instance of " << qml;
 
-            QQmlComponent handlerComponent(&engine,
+            QQmlComponent handlerComponent(engine,
                     QUrl::fromLocalFile(s_shellsDir + dir + "/" + qml)
                 );
             auto handler = handlerComponent.create();
@@ -102,7 +110,7 @@ void ShellManager::registerHandler(QObject * handler)
 
     connect(
         handler, SIGNAL(updated()),
-        this,    SLOT(updateShell())
+        this,    SLOT(requestShellUpdate())
     );
 
     d->handlers.push_back(handler);
@@ -120,8 +128,16 @@ void ShellManager::deregisterHandler(QObject * handler)
         d->currentHandler = nullptr;
 }
 
+void ShellManager::requestShellUpdate()
+{
+    qDebug() << "Somebody wants us to check whether we should change the current shell";
+    d->shellUpdateDelay.start();
+}
+
 void ShellManager::updateShell()
 {
+    d->shellUpdateDelay.stop();
+
     qDebug() << "We got a request to update the current shell";
 
     if (d->handlers.isEmpty()) {

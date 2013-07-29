@@ -52,5 +52,6 @@ Item {
     SolidX.Interface {
         id: solidx
     }
+
 }
 
