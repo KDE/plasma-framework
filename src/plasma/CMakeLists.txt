@@ -146,6 +146,8 @@ target_link_libraries(plasma
     ${KWindowSystem_LIBRARIES}
     ${PLASMA_EXTRA_LIBS}
     KF5::KI18n
+    KF5::KDE4Attic
+    ${KDE4Attic_LIBRARIES}
     ${KDE4Support_LIBRARIES} # needed for KStandardDirs and KGlobal
 )
 #FIXME gpgme++ is in kdepimlibs, needs to be elsewhere
