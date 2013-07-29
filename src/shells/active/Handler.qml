@@ -21,9 +21,11 @@
 import QtQuick 2
 import org.kde.plasma.shells.active 0.1 as Active
 import org.kde.solidx 0.1 as SolidX
+import QtQuick.Window 2.0
 
 Item {
     id: main
+    state: "Active"
 
     property bool loaded   : false
     property bool willing  : solidx.touchscreenPresent
@@ -51,6 +53,28 @@ Item {
 
     SolidX.Interface {
         id: solidx
+    }
+
+    Window {
+        id: activeDialog
+
+        visible: main.loaded
+
+        width: 500
+        height: 500
+
+        Rectangle {
+            anchors.fill: parent
+            color: "white"
+        }
+
+        Text {
+            anchors.fill: parent
+            font.pointSize: 32
+            text: "Active"
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment:   Text.AlignVCenter
+        }
     }
 }
 

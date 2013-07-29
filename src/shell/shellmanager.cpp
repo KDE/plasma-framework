@@ -148,12 +148,16 @@ void ShellManager::updateShell()
     // Finding the handler that has the priority closest to zero.
     // We will return a handler even if there are no willing ones.
 
+    qDebug() << "We have " << d->handlers.count() << " candidates";
+
     auto handler =* std::min_element(d->handlers.cbegin(), d->handlers.cend(),
             [] (QObject * left, QObject * right)
             {
                 auto willing = [] (QObject * handler)
                 {
-                    qDebug() << "willing? " << handler->property("willing");
+                    qDebug()
+                        << handler->property("state")
+                        << "willing? " << handler->property("willing");
                     return handler->property("willing").toBool();
                 };
 
@@ -186,8 +190,8 @@ void ShellManager::updateShell()
     d->currentHandler = handler;
 
     qDebug() << "Loaded?" << d->currentHandler->property("loaded");
-    qDebug() << "Loaded?" << d->currentHandler->property("willing");
-    qDebug() << "Loaded?" << d->currentHandler->property("priority");
+    qDebug() << "Willing?" << d->currentHandler->property("willing");
+    qDebug() << "Priority?" << d->currentHandler->property("priority");
 
     d->currentHandler->setProperty("loaded", true);
 }

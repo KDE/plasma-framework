@@ -21,9 +21,11 @@
 import QtQuick 2
 import org.kde.plasma.shells.desktop 0.1 as Desktop
 import org.kde.solidx 0.1 as SolidX
+import QtQuick.Window 2.0
 
 Item {
     id: main
+    state: "Desktop"
 
     property bool loaded   : false
     property bool willing  : !solidx.touchscreenPresent
@@ -53,5 +55,26 @@ Item {
         id: solidx
     }
 
+    Window {
+        id: desktopDialog
+
+        visible: main.loaded
+
+        width: 500
+        height: 500
+
+        Rectangle {
+            anchors.fill: parent
+            color: "white"
+        }
+
+        Text {
+            anchors.fill: parent
+            font.pointSize: 32
+            text: "Desktop"
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment:   Text.AlignVCenter
+        }
+    }
 }
 
