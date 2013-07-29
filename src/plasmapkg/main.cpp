@@ -51,6 +51,8 @@ int main(int argc, char **argv)
     parser.addOption(QCommandLineOption(QStringList() << "r" << "remove", i18nc("Do not translate <name>", "Remove the package named <name>"), "name"));
     parser.addOption(QCommandLineOption(QStringList() << "p" << "packageroot", i18n("Absolute path to the package root. If not supplied, then the standard data directories for this KDE session will be searched instead."), "path"));
 
+    parser.process(app);
+
     return app.exec();
 }
 
