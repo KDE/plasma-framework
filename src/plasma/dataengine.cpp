@@ -379,7 +379,7 @@ void DataEngine::setStorageEnabled(const QString &source, bool store)
 }
 
 // Private class implementations
-DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info, const QVariantList &args)
+DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info)
     : q(e),
       dataEngineDescription(info),
       refCount(-1), // first ref
