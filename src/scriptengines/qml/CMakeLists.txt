@@ -23,15 +23,18 @@ set(declarative_appletscript_SRCS
 
 include_directories(${PHONON_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/common)
 
-kde4_add_plugin(plasma_appletscript_declarative ${declarative_appletscript_SRCS})
+add_library(plasma_appletscript_declarative MODULE ${declarative_appletscript_SRCS} )
+set_target_properties(plasma_appletscript_declarative PROPERTIES PREFIX "")
+
 target_link_libraries(plasma_appletscript_declarative
     ${KDE4_KIO_LIBS}
     ${KDE4Support_LIBRARIES}
+    ${KDE4Attic_LIBRARIES}
     ${QT_QTSCRIPT_LIBRARY}
     ${Qt5Quick_LIBRARIES}
     ${Qt5Qml_LIBRARIES}
     ${QT_QTUITOOLS_LIBRARY}
-    ${KDE4_KDECORE_LIBS}
+    ${KCore_LIBRARIES}
     plasma
     kdeclarative
 )
