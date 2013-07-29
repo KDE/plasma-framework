@@ -21,7 +21,7 @@
 
 #include <QTimer>
 
-#include <kdebug.h>
+#include <QDebug>
 
 //#include <Weaver/DebuggingAids.h>
 #include <threadweaver/ThreadWeaver.h>
@@ -52,7 +52,7 @@ bool DelayedRunnerPolicy::canRun(Job *job)
     FindMatchesJob *aJob = static_cast<FindMatchesJob*>(job);
     if (QTimer *t = aJob->delayTimer()) {
         // If the timer is active, the required delay has not been reached
-        //kDebug() << "delayed timer" << aJob->runner()->name() << !t->isActive();
+        //qDebug() << "delayed timer" << aJob->runner()->name() << !t->isActive();
         return !t->isActive();
     }
 
@@ -153,7 +153,7 @@ void FindMatchesJob::setDelayTimer(QTimer *timer)
 
 void FindMatchesJob::run()
 {
-//     kDebug() << "Running match for " << m_runner->objectName()
+//     qDebug() << "Running match for " << m_runner->objectName()
 //              << " in Thread " << thread()->id() << endl;
     if (m_context.isValid()) {
         m_runner->performMatch(m_context);

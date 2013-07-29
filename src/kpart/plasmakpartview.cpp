@@ -76,7 +76,7 @@ void PlasmaKPartView::updateGeometry()
         return;
     }
 
-    kDebug() << "New containment geometry is" << c->geometry();
+    // qDebug() << "New containment geometry is" << c->geometry();
 
     if (c->size().toSize() != size()) {
         c->setMaximumSize(size());

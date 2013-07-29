@@ -63,7 +63,7 @@ void PlasmaKPartCorona::evaluateScripts(const QStringList &scripts)
         QFile file(script);
         if (file.open(QIODevice::ReadOnly | QIODevice::Text) ) {
             QString code = file.readAll();
-            kDebug() << "evaluating startup script:" << script;
+            // qDebug() << "evaluating startup script:" << script;
             scriptEngine.evaluateScript(code);
         }
     }
@@ -71,12 +71,12 @@ void PlasmaKPartCorona::evaluateScripts(const QStringList &scripts)
 
 void PlasmaKPartCorona::printScriptError(const QString &error)
 {
-    kWarning() << "Startup script error:" << error;
+    qWarning() << "Startup script error:" << error;
 }
 
 void PlasmaKPartCorona::printScriptMessage(const QString &error)
 {
-    kDebug() << "Startup script: " << error;
+    // qDebug() << "Startup script: " << error;
 }
 
 #include "plasmakpartcorona.moc"

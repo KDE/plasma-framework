@@ -158,7 +158,7 @@ int SortFilterModel::mapRowToSource(int row) const
 int SortFilterModel::mapRowFromSource(int row) const
 {
     if (!sourceModel()) {
-        kWarning() << "No source model defined!";
+        qWarning() << "No source model defined!";
         return -1;
     }
     QModelIndex idx = sourceModel()->index(row, 0);
@@ -239,7 +239,7 @@ void DataModel::setDataSource(QObject *object)
 {
     DataSource *source = qobject_cast<DataSource *>(object);
     if (!source) {
-        kWarning() << "Error: DataSource type expected";
+        qWarning() << "Error: DataSource type expected";
         return;
     }
     if (m_dataSource == source) {

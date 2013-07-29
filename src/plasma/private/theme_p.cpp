@@ -105,7 +105,7 @@ KConfigGroup &ThemePrivate::config()
 
                 if (!app.isEmpty()) {
 #ifndef NDEBUG
-                    kDebug() << "using theme for app" << app;
+                    // qDebug() << "using theme for app" << app;
 #endif
                     groupName.append("-").append(app);
                 }
@@ -206,7 +206,7 @@ void ThemePrivate::compositingChanged(bool active)
 #if HAVE_X11
     if (compositingActive != active) {
         compositingActive = active;
-        //kDebug() << QTime::currentTime();
+        //qDebug() << QTime::currentTime();
         scheduleThemeChangeNotification(PixmapCache | SvgElementsCache);
     }
 #endif
@@ -282,7 +282,7 @@ void ThemePrivate::scheduleThemeChangeNotification(CacheTypes caches)
 
 void ThemePrivate::notifyOfChanged()
 {
-    //kDebug() << cachesToDiscard;
+    //qDebug() << cachesToDiscard;
     discardCache(cachesToDiscard);
     cachesToDiscard = NoCache;
     emit themeChanged();
@@ -456,7 +456,7 @@ void ThemePrivate::processWallpaperSettings(KConfigBase *metadata)
 
 void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings)
 {
-    //kDebug() << tempThemeName;
+    //qDebug() << tempThemeName;
     QString theme = tempThemeName;
     if (theme.isEmpty() || theme == themeName) {
         // let's try and get the default theme at least
@@ -494,7 +494,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     const QString colorsFile = realTheme ? QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/colors"))
                                          : QString();
 
-    //kDebug() << "we're going for..." << colorsFile << "*******************";
+    //qDebug() << "we're going for..." << colorsFile << "*******************";
 
     // load the wallpaper settings, if any
     if (realTheme) {

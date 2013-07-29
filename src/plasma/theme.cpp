@@ -34,7 +34,7 @@
 #include <kcolorscheme.h>
 #include <kcomponentdata.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <kdirwatch.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
@@ -160,7 +160,7 @@ QString Theme::imagePath(const QString &name) const
     // look for a compressed svg file in the theme
     if (name.contains("../") || name.isEmpty()) {
         // we don't support relative paths
-        //kDebug() << "Theme says: bad image path " << name;
+        //qDebug() << "Theme says: bad image path " << name;
         return QString();
     }
 
@@ -191,7 +191,7 @@ QString Theme::imagePath(const QString &name) const
     /*
     if (path.isEmpty()) {
 #ifndef NDEBUG
-        kDebug() << "Theme says: bad image path " << name;
+        // qDebug() << "Theme says: bad image path " << name;
 #endif
     }
     */
@@ -236,19 +236,19 @@ QString Theme::wallpaperPath(const QSize &size) const
 
     if (fullPath.isEmpty()) {
         // we failed to find it in the theme, so look in the standard directories
-        //kDebug() << "looking for" << image;
+        //qDebug() << "looking for" << image;
         fullPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("wallpapers/") + image);
     }
 
     if (fullPath.isEmpty()) {
         // we still failed to find it in the theme, so look for the default in
         // the standard directories
-        //kDebug() << "looking for" << defaultImage;
+        //qDebug() << "looking for" << defaultImage;
         fullPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("wallpapers/") + defaultImage);
 
         if (fullPath.isEmpty()) {
 #ifndef NDEBUG
-            kDebug() << "exhausted every effort to find a wallpaper.";
+            // qDebug() << "exhausted every effort to find a wallpaper.";
 #endif
         }
     }

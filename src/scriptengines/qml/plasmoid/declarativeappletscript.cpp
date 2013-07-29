@@ -117,7 +117,7 @@ QObject *DeclarativeAppletScript::loadui(const QString &filename)
 {
     QFile f(filename);
     if (!f.open(QIODevice::ReadOnly)) {
-        kWarning() << i18n("Unable to open '%1'",filename);
+        qWarning() << i18n("Unable to open '%1'",filename);
         return 0;
     }
 

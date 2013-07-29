@@ -137,13 +137,13 @@ void FullScreenWindow::init(const QString &componentName)
     }
 
     if (filePath.isEmpty()) {
-        kWarning() << "Component not found:" << componentName;
+        qWarning() << "Component not found:" << componentName;
         return;
     }
 
     QDeclarativeEngine *engine = EngineBookKeeping::self()->engine();
     if (!engine) {
-        kWarning() << "Warning, no QDeclarativeEngines available anymore, should never happen";
+        qWarning() << "Warning, no QDeclarativeEngines available anymore, should never happen";
         Q_ASSERT(0);
     }
     QDeclarativeComponent *component = new QDeclarativeComponent(engine, filePath, this);
@@ -151,7 +151,7 @@ void FullScreenWindow::init(const QString &componentName)
     QDeclarativeContext *creationContext = component->creationContext();
     m_rootObject = component->create(creationContext);
     if (component->status() == QDeclarativeComponent::Error) {
-        kWarning()<<component->errors();
+        qWarning()<<component->errors();
     }
 
     if (m_rootObject) {

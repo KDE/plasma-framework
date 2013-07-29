@@ -21,7 +21,7 @@
 
 #include <QPainter>
 
-#include "kdebug.h"
+#include "QDebug"
 #include "plasma/svg.h"
 
 namespace Plasma

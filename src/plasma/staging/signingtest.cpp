@@ -21,7 +21,7 @@
 
 #include <QTime>
 
-#include <kdebug.h>
+#include <QDebug>
 
 #include "applet.h"
 #include "signing.h"

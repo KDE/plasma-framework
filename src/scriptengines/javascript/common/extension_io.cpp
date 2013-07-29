@@ -74,7 +74,7 @@ QScriptValue ScriptEnv::getUrl(QScriptContext *context, QScriptEngine *engine)
 
     ScriptEnv *env = ScriptEnv::findScriptEnv(engine);
     if (!env) {
-        //kDebug() << "findScriptEnv failed";
+        //qDebug() << "findScriptEnv failed";
         return engine->undefinedValue();
     }
 
@@ -111,7 +111,7 @@ QScriptValue ScriptEnv::download(QScriptContext *context, QScriptEngine *engine)
 
     ScriptEnv *env = ScriptEnv::findScriptEnv(engine);
     if (!env) {
-        //kDebug() << "findScriptEnv failed";
+        //qDebug() << "findScriptEnv failed";
         return engine->undefinedValue();
     }
 

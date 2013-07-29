@@ -49,14 +49,14 @@ void ContextTest::contextEvent(QEvent *event)
 
 void ContextTest::contextEvent(QGraphicsSceneMouseEvent *event)
 {
-    kDebug() << "test!!!!!!!!!!!!!!!!!!!!!!!" << event->pos();
-    kDebug() << event->buttons() << event->modifiers();
+    // qDebug() << "test!!!!!!!!!!!!!!!!!!!!!!!" << event->pos();
+    // qDebug() << event->buttons() << event->modifiers();
 
     Plasma::Containment *c = containment();
     if (c) {
-        kDebug() << c->name();
+        // qDebug() << c->name();
     } else {
-        kDebug() << "fail";
+        // qDebug() << "fail";
         return;
     }
 
@@ -69,9 +69,9 @@ void ContextTest::contextEvent(QGraphicsSceneMouseEvent *event)
 
 void ContextTest::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
-    kDebug() << "test!!!!!!!!!!!!!11111111!!";
-    kDebug() << event->orientation() << event->delta();
-    kDebug() << event->buttons() << event->modifiers();
+    // qDebug() << "test!!!!!!!!!!!!!11111111!!";
+    // qDebug() << event->orientation() << event->delta();
+    // qDebug() << event->buttons() << event->modifiers();
 }
 
 void ContextTest::init(const KConfigGroup &config)

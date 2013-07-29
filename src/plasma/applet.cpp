@@ -36,7 +36,7 @@
 #include <kcoreauthorized.h>
 #include <kcolorscheme.h>
 #include <kdesktopfile.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <kglobalaccel.h>
 #include <kplugininfo.h>
 #include <klocalizedstring.h>
@@ -141,7 +141,7 @@ void Applet::save(KConfigGroup &g) const
         group = *d->mainConfigGroup();
     }
 
-    //kDebug() << "saving" << pluginName() << "to" << group.name();
+    //qDebug() << "saving" << pluginName() << "to" << group.name();
     // we call the dptr member directly for locked since isImmutable()
     // also checks kiosk and parent containers
     group.writeEntry("immutability", (int)d->immutability);
@@ -174,10 +174,10 @@ void Applet::restore(KConfigGroup &group)
         setGlobalShortcut(QKeySequence(shortcutText));
         /*
 #ifndef NDEBUG
-        kDebug() << "got global shortcut for" << name() << "of" << QKeySequence(shortcutText);
+        // qDebug() << "got global shortcut for" << name() << "of" << QKeySequence(shortcutText);
 #endif
 #ifndef NDEBUG
-        kDebug() << "set to" << d->activationAction->objectName()
+        // qDebug() << "set to" << d->activationAction->objectName()
 #endif
                  << d->activationAction->globalShortcut().primary();
                  */
@@ -304,7 +304,7 @@ void Applet::constraintsEvent(Plasma::Types::Constraints constraints)
     //      without calling the Applet:: version as well, which it shouldn't need to.
     //      INSTEAD put such code into flushPendingConstraintsEvents
     Q_UNUSED(constraints)
-    //kDebug() << constraints << "constraints are FormFactor: " << formFactor()
+    //qDebug() << constraints << "constraints are FormFactor: " << formFactor()
     //         << ", Location: " << location();
     if (d->script) {
         d->script->constraintsEvent(constraints);
@@ -429,7 +429,7 @@ void Applet::flushPendingConstraintsEvents()
         d->constraintsTimer.stop();
     }
 
-    //kDebug() << "fushing constraints: " << d->pendingConstraints << "!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+    //qDebug() << "fushing constraints: " << d->pendingConstraints << "!!!!!!!!!!!!!!!!!!!!!!!!!!!";
     Plasma::Types::Constraints c = d->pendingConstraints;
     d->pendingConstraints = Types::NoConstraint;
 
@@ -507,7 +507,7 @@ void Applet::flushPendingConstraintsEvents()
 
 QList<QAction*> Applet::contextualActions()
 {
-    //kDebug() << "empty context actions";
+    //qDebug() << "empty context actions";
     return d->script ? d->script->contextualActions() : QList<QAction*>();
 }
 

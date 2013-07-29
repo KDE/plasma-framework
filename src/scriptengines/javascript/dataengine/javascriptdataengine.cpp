@@ -123,7 +123,7 @@ QScriptValue JavaScriptDataEngine::jsSetData(QScriptContext *context, QScriptEng
     if (context->argumentCount() == 1) {
         iFace->setData(source, DataEngine::Data());
     } else if (context->argument(1).isArray()  || context->argument(1).isObject()) {
-        kDebug( )<< "array or object";
+        // qDebug()<< "array or object";
         QScriptValueIterator it(context->argument(1));
         DataEngine::Data data;
 
@@ -262,9 +262,9 @@ void JavaScriptDataEngine::reportError(ScriptEnv *env, bool fatal) const
 {
     Q_UNUSED(fatal)
 
-    kDebug() << "Error: " << env->engine()->uncaughtException().toString()
+    // qDebug() << "Error: " << env->engine()->uncaughtException().toString()
              << " at line " << env->engine()->uncaughtExceptionLineNumber() << endl;
-    kDebug() << env->engine()->uncaughtExceptionBacktrace();
+    // qDebug() << env->engine()->uncaughtExceptionBacktrace();
 }
 
 QStringList JavaScriptDataEngine::sources() const

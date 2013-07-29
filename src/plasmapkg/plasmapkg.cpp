@@ -20,7 +20,7 @@
 
 #include "plasmapkg.h"
 
-#include <kdebug.h>
+#include <QDebug>
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kshell.h>
@@ -261,7 +261,7 @@ void PlasmaPkg::runMain()
             exit(1);
             return;
         }
-        kWarning() << "custom PackageStructure plugins not ported";
+        qWarning() << "custom PackageStructure plugins not ported";
         KService::Ptr offer = offers.first();
         QString error;
 

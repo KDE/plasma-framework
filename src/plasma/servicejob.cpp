@@ -19,7 +19,7 @@
 
 #include "servicejob.h"
 
-#include <kdebug.h>
+#include <QDebug>
 
 #include <plasma/private/servicejob_p.h>
 
