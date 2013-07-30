@@ -31,7 +31,7 @@
 #include <QThreadStorage>
 
 //KDE
-#include <kdebug.h>
+#include <QDebug>
 
 
 //Plasma

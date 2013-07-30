@@ -21,7 +21,7 @@
 
 #include <QStandardPaths>
 
-#include <kdebug.h>
+#include <QDebug>
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kglobal.h>
@@ -127,7 +127,7 @@ void PluginLoader::setPluginLoader(PluginLoader* loader)
         s_pluginLoader = loader;
     } else {
 #ifndef NDEBUG
-        kDebug() << "Cannot set pluginLoader, already set!" << s_pluginLoader;
+        // qDebug() << "Cannot set pluginLoader, already set!" << s_pluginLoader;
 #endif
     }
 }
@@ -172,14 +172,14 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
 
     if (offers.isEmpty()) {
 #ifndef NDEBUG
-        kDebug() << "offers is empty for " << name;
+        // qDebug() << "offers is empty for " << name;
 #endif
         return 0;
     }
 
 #ifndef NDEBUG
     if (offers.count() > 1) {
-        kDebug() << "hey! we got more than one! let's blindly take the first one";
+        // qDebug() << "hey! we got more than one! let's blindly take the first one";
     }
 #endif
 
@@ -194,7 +194,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
 
     if (!offer->property("X-Plasma-API").toString().isEmpty()) {
 #ifndef NDEBUG
-        kDebug() << "we have a script using the"
+        // qDebug() << "we have a script using the"
                  << offer->property("X-Plasma-API").toString() << "API";
 #endif
         if (isContainment) {
@@ -219,7 +219,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     applet = offer->createInstance<Plasma::Applet>(0, allArgs, &error);
 
     if (!applet) {
-        kWarning() << "Could not load applet" << name << "! reason given:" << error;
+        qWarning() << "Could not load applet" << name << "! reason given:" << error;
     }
 
     return applet;
@@ -240,7 +240,7 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
 
     if (offers.isEmpty()) {
 #ifndef NDEBUG
-        kDebug() << "offers are empty for " << name << " with constraint " << constraint;
+        // qDebug() << "offers are empty for " << name << " with constraint " << constraint;
 #endif
     } else {
         QVariantList allArgs;
@@ -260,7 +260,7 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
 
     if (!engine) {
 #ifndef NDEBUG
-        kDebug() << "Couldn't load engine \"" << name << "\". Error given: " << error;
+        // qDebug() << "Couldn't load engine \"" << name << "\". Error given: " << error;
 #endif
     }
 
@@ -335,7 +335,7 @@ Service *PluginLoader::loadService(const QString &name, const QVariantList &args
 
     if (offers.isEmpty()) {
 #ifndef NDEBUG
-        kDebug() << "offers is empty for " << name;
+        // qDebug() << "offers is empty for " << name;
 #endif
         return new NullService(name, parent);
     }
@@ -349,7 +349,7 @@ Service *PluginLoader::loadService(const QString &name, const QVariantList &args
 
     if (!service) {
 #ifndef NDEBUG
-        kDebug() << "Couldn't load Service \"" << name << "\"! reason given: " << error;
+        // qDebug() << "Couldn't load Service \"" << name << "\"! reason given: " << error;
 #endif
         return new NullService(name, parent);
     }
@@ -377,7 +377,7 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
 
     if (offers.isEmpty()) {
 #ifndef NDEBUG
-        kDebug() << "offers is empty for " << name;
+        // qDebug() << "offers is empty for " << name;
 #endif
         return 0;
     }
@@ -396,7 +396,7 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
 
     if (!actions) {
 #ifndef NDEBUG
-        kDebug() << "Couldn't load containmentActions \"" << name << "\"! reason given: " << error;
+        // qDebug() << "Couldn't load containmentActions \"" << name << "\"! reason given: " << error;
 #endif
     }
 
@@ -477,7 +477,7 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
         }
 
 #ifndef NDEBUG
-        kDebug() << "Couldn't load Package for" << packageFormat << "! reason given: " << error;
+        // qDebug() << "Couldn't load Package for" << packageFormat << "! reason given: " << error;
 #endif
     }
 
@@ -510,7 +510,7 @@ KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QS
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
 
-    //kDebug() << "Applet::listAppletInfo constraint was '" << constraint
+    //qDebug() << "Applet::listAppletInfo constraint was '" << constraint
     //         << "' which got us " << offers.count() << " matches";
     return KPluginInfo::fromServices(offers);
 }
@@ -519,7 +519,7 @@ KPluginInfo::List PluginLoader::listAppletInfoForMimeType(const QString &mimeTyp
 {
     QString constraint = PluginLoaderPrivate::parentAppConstraint();
     constraint.append(QString(" and '%1' in [X-Plasma-DropMimeTypes]").arg(mimeType));
-    //kDebug() << "listAppletInfoForMimetype with" << mimeType << constraint;
+    //qDebug() << "listAppletInfoForMimetype with" << mimeType << constraint;
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
     return KPluginInfo::fromServices(offers);
 }
@@ -539,7 +539,7 @@ KPluginInfo::List PluginLoader::listAppletInfoForUrl(const QUrl &url)
             rx.setPatternSyntax(QRegExp::Wildcard);
             if (rx.exactMatch(url.toString())) {
 #ifndef NDEBUG
-                kDebug() << info.name() << "matches" << glob << url;
+                // qDebug() << info.name() << "matches" << glob << url;
 #endif
                 filtered << info;
             }
@@ -571,10 +571,10 @@ QStringList PluginLoader::listAppletCategories(const QString &parentApp, bool vi
             continue;
         }
 
-        //kDebug() << "   and we have " << appletCategory;
+        //qDebug() << "   and we have " << appletCategory;
         if (!appletCategory.isEmpty() && !known.contains(appletCategory.toLower())) {
 #ifndef NDEBUG
-            kDebug() << "Unknown category: " << applet->name() << "says it is in the"
+            // qDebug() << "Unknown category: " << applet->name() << "says it is in the"
                      << appletCategory << "category which is unknown to us";
 #endif
             appletCategory.clear();
@@ -663,14 +663,14 @@ KPluginInfo::List PluginLoader::listContainmentsOfType(const QString &type,
     }
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Containment", constraint);
-    kDebug() << "constraint was" << constraint << "which got us" << offers.count() << "matches";
+    // qDebug() << "constraint was" << constraint << "which got us" << offers.count() << "matches";
     return KPluginInfo::fromServices(offers);
 }
 
 KPluginInfo::List PluginLoader::listContainmentsForMimeType(const QString &mimeType)
 {
     const QString constraint = QString("'%1' in [X-Plasma-DropMimeTypes]").arg(mimeType);
-    //kDebug() << mimeType << constraint;
+    //qDebug() << mimeType << constraint;
     const KService::List offers = KServiceTypeTrader::self()->query("Plasma/Containment", constraint);
     return KPluginInfo::fromServices(offers);
 }

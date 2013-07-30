@@ -27,7 +27,7 @@
 #include <QTimerEvent>
 #include <QVariant>
 
-#include <kdebug.h>
+#include <QDebug>
 #include <kplugininfo.h>
 #include <kglobal.h>
 #include <kservice.h>
@@ -74,7 +74,7 @@ DataEngine::DataEngine(QObject* parent, const QVariantList &args)
 
 DataEngine::~DataEngine()
 {
-    //kDebug() << objectName() << ": bye bye birdy! ";
+    //qDebug() << objectName() << ": bye bye birdy! ";
     delete d;
 }
 
@@ -108,7 +108,7 @@ void DataEngine::connectSource(const QString &source, QObject *visualization,
                                uint pollingInterval,
                                Plasma::Types::IntervalAlignment intervalAlignment) const
 {
-    //kDebug() << "connectSource" << source;
+    //qDebug() << "connectSource" << source;
     bool newSource;
     DataContainer *s = d->requestSource(source, &newSource);
 
@@ -122,7 +122,7 @@ void DataEngine::connectSource(const QString &source, QObject *visualization,
         }
         d->connectSource(s, visualization, pollingInterval, intervalAlignment,
                          !newSource || pollingInterval > 0);
-        //kDebug() << " ==> source connected";
+        //qDebug() << " ==> source connected";
     }
 }
 
@@ -162,7 +162,7 @@ bool DataEngine::updateSourceEvent(const QString &source)
     if (d->script) {
         return d->script->updateSourceEvent(source);
     } else {
-        //kDebug() << source;
+        //qDebug() << source;
         return false; //TODO: should this be true to trigger, even needless, updates on every tick?
     }
 }
@@ -234,7 +234,7 @@ void DataEngine::addSource(DataContainer *source)
 {
     if (d->sources.contains(source->objectName())) {
 #ifndef NDEBUG
-        kDebug() << "source named \"" << source->objectName() << "\" already exists.";
+        // qDebug() << "source named \"" << source->objectName() << "\" already exists.";
 #endif
         return;
     }
@@ -316,17 +316,17 @@ QHash<QString, DataContainer*> DataEngine::containerDict() const
 
 void DataEngine::timerEvent(QTimerEvent *event)
 {
-    //kDebug();
+    //qDebug();
     if (event->timerId() == d->updateTimerId) {
         // if the freq update is less than 0, don't bother
         if (d->minPollingInterval < 0) {
-            //kDebug() << "uh oh.. no polling allowed!";
+            //qDebug() << "uh oh.. no polling allowed!";
             return;
         }
 
         // minPollingInterval
         if (d->updateTimestamp.elapsed() < d->minPollingInterval) {
-            //kDebug() << "hey now.. slow down!";
+            //qDebug() << "hey now.. slow down!";
             return;
         }
 
@@ -351,7 +351,7 @@ void DataEngine::updateAllSources()
     QHashIterator<QString, Plasma::DataContainer*> it(d->sources);
     while (it.hasNext()) {
         it.next();
-        //kDebug() << "updating" << it.key();
+        //qDebug() << "updating" << it.key();
         updateSourceEvent(it.key());
     }
 
@@ -415,7 +415,7 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info)
 
             if (!script) {
 #ifndef NDEBUG
-                kDebug() << "Could not create a" << api << "ScriptEngine for the"
+                // qDebug() << "Could not create a" << api << "ScriptEngine for the"
                         << dataEngineDescription.name() << "DataEngine.";
 #endif
                 delete package;
@@ -438,7 +438,7 @@ void DataEnginePrivate::internalUpdateSource(DataContainer *source)
     if (minPollingInterval > 0 &&
         source->timeSinceLastUpdate() < (uint)minPollingInterval) {
         // skip updating this source; it's been too soon
-        //kDebug() << "internal update source is delaying" << source->timeSinceLastUpdate() << minPollingInterval;
+        //qDebug() << "internal update source is delaying" << source->timeSinceLastUpdate() << minPollingInterval;
         //but fake an update so that the signalrelay that triggered this gets the data from the
         //recent update. this way we don't have to worry about queuing - the relay will send a
         //signal immediately and everyone else is undisturbed.
@@ -447,11 +447,11 @@ void DataEnginePrivate::internalUpdateSource(DataContainer *source)
     }
 
     if (q->updateSourceEvent(source->objectName())) {
-        //kDebug() << "queuing an update";
+        //qDebug() << "queuing an update";
         scheduleSourcesUpdated();
     }/* else {
 #ifndef NDEBUG
-        kDebug() << "no update";
+        // qDebug() << "no update";
 #endif
     }*/
 }
@@ -483,7 +483,7 @@ DataContainer *DataEnginePrivate::source(const QString &sourceName, bool createW
         return 0;
     }
 
-    //kDebug() << "DataEngine " << q->objectName() << ": could not find DataContainer " << sourceName << ", creating";
+    //qDebug() << "DataEngine " << q->objectName() << ": could not find DataContainer " << sourceName << ", creating";
     DataContainer *s = new DataContainer(q);
     s->setObjectName(sourceName);
     sources.insert(sourceName, s);
@@ -499,7 +499,7 @@ void DataEnginePrivate::connectSource(DataContainer *s, QObject *visualization,
                                       Plasma::Types::IntervalAlignment align,
                                       bool immediateCall)
 {
-    //kDebug() << "connect source called" << s->objectName() << "with interval" << pollingInterval;
+    //qDebug() << "connect source called" << s->objectName() << "with interval" << pollingInterval;
 
     if (pollingInterval > 0) {
         // never more frequently than allowed, never more than 20 times per second
@@ -513,7 +513,7 @@ void DataEnginePrivate::connectSource(DataContainer *s, QObject *visualization,
     if (immediateCall) {
         // we don't want to do an immediate call if we are simply
         // reconnecting
-        //kDebug() << "immediate call requested, we have:" << s->visualizationIsConnected(visualization);
+        //qDebug() << "immediate call requested, we have:" << s->visualizationIsConnected(visualization);
         immediateCall = !s->data().isEmpty() &&
                         !s->visualizationIsConnected(visualization);
     }
@@ -547,12 +547,12 @@ DataContainer *DataEnginePrivate::requestSource(const QString &sourceName, bool 
         *newSource = false;
     }
 
-    //kDebug() << "requesting source " << sourceName;
+    //qDebug() << "requesting source " << sourceName;
     DataContainer *s = source(sourceName, false);
 
     if (!s) {
         // we didn't find a data source, so give the engine an opportunity to make one
-        /*kDebug() << "DataEngine " << q->objectName()
+        /*// qDebug() << "DataEngine " << q->objectName()
             << ": could not find DataContainer " << sourceName
             << " will create on request" << endl;*/
         waitingSourceRequest = sourceName;
@@ -584,7 +584,7 @@ void DataEnginePrivate::setupScriptSupport()
 
     /*
 #ifndef NDEBUG
-    kDebug() << "sletting up script support, package is in" << package->path()
+    // qDebug() << "sletting up script support, package is in" << package->path()
 #endif
              << "which is a" << package->structure()->type() << "package"
              << ", main script is" << package->filePath("mainscript");

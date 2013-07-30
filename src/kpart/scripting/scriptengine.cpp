@@ -122,13 +122,13 @@ QScriptValue ScriptEngine::loadTemplate(QScriptContext *context, QScriptEngine *
 {
     Q_UNUSED(engine)
     if (context->argumentCount() == 0) {
-        kDebug() << "no arguments";
+        // qDebug() << "no arguments";
         return false;
     }
 
     const QString layout = context->argument(0).toString();
     if (layout.isEmpty() || layout.contains("'")) {
-        kDebug() << "layout is empty";
+        // qDebug() << "layout is empty";
         return false;
     }
 
@@ -137,7 +137,7 @@ QScriptValue ScriptEngine::loadTemplate(QScriptContext *context, QScriptEngine *
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/LayoutTemplate", constraint);
 
     if (offers.isEmpty()) {
-        kDebug() << "offers fail" << constraint;
+        // qDebug() << "offers fail" << constraint;
         return false;
     }
 
@@ -147,26 +147,26 @@ QScriptValue ScriptEngine::loadTemplate(QScriptContext *context, QScriptEngine *
                                                 structure->defaultPackageRoot() + '/' + info.pluginName() + '/',
                                                 QStandardPaths::LocateDirectory);
     if (path.isEmpty()) {
-        kDebug() << "script path is empty";
+        // qDebug() << "script path is empty";
         return false;
     }
 
     Plasma::Package package(path, structure);
     const QString scriptFile = package.filePath("mainscript");
     if (scriptFile.isEmpty()) {
-        kDebug() << "scriptfile is empty";
+        // qDebug() << "scriptfile is empty";
         return false;
     }
 
     QFile file(scriptFile);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        kWarning() << QString("Unable to load script file: %1").arg(path);
+        qWarning() << QString("Unable to load script file: %1").arg(path);
         return false;
     }
 
     QString script = file.readAll();
     if (script.isEmpty()) {
-        kDebug() << "script is empty";
+        // qDebug() << "script is empty";
         return false;
     }
 
@@ -199,10 +199,10 @@ void ScriptEngine::setupEngine()
 
 bool ScriptEngine::evaluateScript(const QString &script, const QString &path)
 {
-    //kDebug() << "evaluating" << m_editor->toPlainText();
+    //qDebug() << "evaluating" << m_editor->toPlainText();
     evaluate(script, path);
     if (hasUncaughtException()) {
-        //kDebug() << "catch the exception!";
+        //qDebug() << "catch the exception!";
         QString error = QString("Error: %1 at line %2\n\nBacktrace:\n%3").arg(
                              uncaughtException().toString(),
                              QString::number(uncaughtExceptionLineNumber()),
@@ -216,7 +216,7 @@ bool ScriptEngine::evaluateScript(const QString &script, const QString &path)
 
 void ScriptEngine::exception(const QScriptValue &value)
 {
-    //kDebug() << "exception caught!" << value.toVariant();
+    //qDebug() << "exception caught!" << value.toVariant();
     emit printError(value.toVariant().toString());
 }
 
@@ -227,7 +227,7 @@ QStringList ScriptEngine::pendingUpdateScripts()
     QStringList scriptPaths;
 
     if (scripts.isEmpty()) {
-        //kDebug() << "no update scripts";
+        //qDebug() << "no update scripts";
         return scriptPaths;
     }
 
@@ -242,7 +242,7 @@ QStringList ScriptEngine::pendingUpdateScripts()
         }
 
         if (script.startsWith(localDir) || script.startsWith(localXdgDir)) {
-            kDebug() << "skipping user local script: " << script;
+            // qDebug() << "skipping user local script: " << script;
             continue;
         }
 
@@ -262,7 +262,7 @@ QStringList ScriptEngine::defaultLayoutScripts()
     QStringList scriptPaths;
 
     if (scripts.isEmpty()) {
-        //kDebug() << "no javascript based layouts";
+        //qDebug() << "no javascript based layouts";
         return scriptPaths;
     }
 
@@ -272,7 +272,7 @@ QStringList ScriptEngine::defaultLayoutScripts()
     QSet<QString> scriptNames;
     foreach (const QString &script, scripts) {
         if (script.startsWith(localDir) || script.startsWith(localXdgDir)) {
-            kDebug() << "skipping user local script: " << script;
+            // qDebug() << "skipping user local script: " << script;
             continue;
         }
 
@@ -325,7 +325,7 @@ QScriptValue ScriptEngine::addWidget(QScriptContext *context, QScriptEngine *eng
         if (v.isNumber()) {
             column = v.toUInt16();
         }
-        kDebug() << "Calculated position as" << row << column;
+        // qDebug() << "Calculated position as" << row << column;
     }
 
     QScriptValue v = context->argument(0);

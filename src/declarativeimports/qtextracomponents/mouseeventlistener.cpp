@@ -179,7 +179,7 @@ bool MouseEventListener::childMouseEventFilter(QQuickItem *item, QEvent *event)
         const QPointF myPos = item->mapToItem(this, me->pos());
         KDeclarativeMouseEvent dme(myPos.x(), myPos.y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
         m_pressAndHoldEvent = new KDeclarativeMouseEvent(myPos.x(), myPos.y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
-        //kDebug() << "pressed in sceneEventFilter";
+        //qDebug() << "pressed in sceneEventFilter";
         emit pressed(&dme);
         m_pressed = true;
 
@@ -190,7 +190,7 @@ bool MouseEventListener::childMouseEventFilter(QQuickItem *item, QEvent *event)
         QMouseEvent *me = static_cast<QMouseEvent *>(event);
         const QPointF myPos = item->mapToItem(this, me->pos());
         KDeclarativeMouseEvent dme(myPos.x(), myPos.y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
-        //kDebug() << "positionChanged..." << dme.x() << dme.y();
+        //qDebug() << "positionChanged..." << dme.x() << dme.y();
         m_pressAndHoldEvent = new KDeclarativeMouseEvent(myPos.x(), myPos.y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
         emit positionChanged(&dme);
         break;

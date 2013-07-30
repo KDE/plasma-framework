@@ -21,7 +21,7 @@
 #include "packagejobthread_p.h"
 #include "config-plasma.h"
 
-#include <kdebug.h>
+#include <QDebug>
 
 namespace Plasma
 {

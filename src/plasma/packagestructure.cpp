@@ -18,7 +18,7 @@
 *******************************************************************************/
 
 #include "packagestructure.h"
-#include <kdebug.h>
+#include <QDebug>
 #include <private/packagejob_p.h>
 #include "private/package_p.h"
 

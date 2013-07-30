@@ -24,7 +24,7 @@
 #include <QHash>
 #include <QStringBuilder>
 
-#include <kdebug.h>
+#include <QDebug>
 
 #include <Plasma/Theme>
 

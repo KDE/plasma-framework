@@ -162,7 +162,7 @@ void AppletInterface::init()
             }
             qDebug() << "Loaded org.kde.toolbox";
         } else {
-            kWarning() << "Could not load org.kde.toolbox package.";
+            qWarning() << "Could not load org.kde.toolbox package.";
         }
     }
 
@@ -324,7 +324,7 @@ void AppletInterface::writeConfig(const QString &entry, const QVariant &value)
             m_appletScriptEngine->configNeedsSaving();
         }
     } else
-        kWarning() << "Couldn't find a configuration entry";
+        qWarning() << "Couldn't find a configuration entry";
 }
 
 QVariant AppletInterface::readConfig(const QString &entry) const
@@ -469,7 +469,7 @@ int AppletInterface::apiVersion() const
 
 void AppletInterface::debug(const QString &msg)
 {
-    kDebug() << msg;
+    qDebug() << msg;
 }
 
 void AppletInterface::setAssociatedApplication(const QString &string)

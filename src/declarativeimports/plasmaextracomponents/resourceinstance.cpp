@@ -51,7 +51,7 @@ void ResourceInstance::syncWid()
     if (!m_resourceInstance || m_resourceInstance->winId() != wid) {
         delete m_resourceInstance;
 
-        kDebug() << "Creating a new instance of the resource" << m_uri << "window id" << wid;
+        // qDebug() << "Creating a new instance of the resource" << m_uri << "window id" << wid;
         m_resourceInstance = new KActivities::ResourceInstance(wid, m_uri, m_mimetype, m_title);
     } else {
 
@@ -59,13 +59,13 @@ void ResourceInstance::syncWid()
             const QString & oldPath = m_uri.path();
             m_uri.setPath(oldPath.left(oldPath.length() - 1));
 
-            kDebug() << "Old and new path" << oldPath << m_uri;
+            // qDebug() << "Old and new path" << oldPath << m_uri;
 
         } else {
             m_resourceInstance->setUri(m_uri);
         }
 
-        kDebug() << "Setting" << m_uri << m_mimetype << "to window" << wid;
+        // qDebug() << "Setting" << m_uri << m_mimetype << "to window" << wid;
 
         m_resourceInstance->setMimetype(m_mimetype);
         m_resourceInstance->setTitle(m_title);

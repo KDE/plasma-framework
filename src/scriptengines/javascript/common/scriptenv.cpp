@@ -106,9 +106,9 @@ void ScriptEnv::registerEnums(QScriptValue &scriptValue, const QMetaObject &meta
     QScriptEngine *engine = scriptValue.engine();
     for (int i = 0; i < meta.enumeratorCount(); ++i) {
         QMetaEnum e = meta.enumerator(i);
-        //kDebug() << e.name();
+        //qDebug() << e.name();
         for (int i=0; i < e.keyCount(); ++i) {
-            //kDebug() << e.key(i) << e.value(i);
+            //qDebug() << e.key(i) << e.value(i);
             scriptValue.setProperty(e.key(i), QScriptValue(engine, e.value(i)));
         }
     }
@@ -118,12 +118,12 @@ bool ScriptEnv::include(const QString &path)
 {
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        kWarning() << i18n("Unable to load script file: %1", path);
+        qWarning() << i18n("Unable to load script file: %1", path);
         return false;
     }
 
     QString script = file.readAll();
-    //kDebug() << "Script says" << script;
+    //qDebug() << "Script says" << script;
 
     // change the context to the parent context so that the include is actually
     // executed in the same context as the caller; seems to be what javascript
@@ -154,7 +154,7 @@ bool ScriptEnv::checkForErrors(bool fatal)
 
 bool ScriptEnv::importBuiltinExtension(const QString &extension, QScriptValue &obj)
 {
-    kDebug() << extension;
+    // qDebug() << extension;
     if ("filedialog" == extension) {
 #ifdef USEGUI
         FileDialogProxy::registerWithRuntime(m_engine);
@@ -193,7 +193,7 @@ bool ScriptEnv::importExtensions(const KPluginInfo &info, QScriptValue &obj, Aut
 {
     QStringList requiredExtensions = info.property("X-Plasma-RequiredExtensions", QVariant::StringList).toStringList();
     if (!requiredExtensions.isEmpty()) {
-        kDebug() << "required extensions are" << requiredExtensions;
+        // qDebug() << "required extensions are" << requiredExtensions;
     }
 
     foreach (const QString &ext, requiredExtensions) {
@@ -221,7 +221,7 @@ bool ScriptEnv::importExtensions(const KPluginInfo &info, QScriptValue &obj, Aut
 
     QStringList optionalExtensions = info.property("X-Plasma-OptionalExtensions", QVariant::StringList).toStringList();
     if (!optionalExtensions.isEmpty()) {
-        kDebug() << "optional extensions are" << optionalExtensions;
+        // qDebug() << "optional extensions are" << optionalExtensions;
     }
 
     foreach (const QString &ext, optionalExtensions) {
@@ -260,7 +260,7 @@ QScriptValue ScriptEnv::debug(QScriptContext *context, QScriptEngine *engine)
         return throwNonFatalError(i18n("debug takes one argument"), context, engine);
     }
 
-    kDebug() << context->argument(0).toString();
+    // qDebug() << context->argument(0).toString();
     return engine->undefinedValue();
 }
 
@@ -353,7 +353,7 @@ QScriptValue ScriptEnv::loadAddon(QScriptContext *context, QScriptEngine *engine
                                                  QScriptValue::ReadOnly |
                                                  QScriptValue::Undeletable |
                                                  QScriptValue::SkipInEnumeration);
-    //kDebug() << "context is" << innerContext;
+    //qDebug() << "context is" << innerContext;
     engine->evaluate(code, file.fileName());
     engine->popContext();
 
@@ -391,11 +391,11 @@ QScriptValue ScriptEnv::registerAddon(QScriptContext *context, QScriptEngine *en
 
 QString ScriptEnv::filePathFromScriptContext(const char *type, const QString &file) const
 {
-    //kDebug() << type << file;
+    //qDebug() << type << file;
     QScriptContext *c = m_engine->currentContext();
     while (c) {
         QScriptValue v = c->activationObject().property("__plasma_package");
-        //kDebug() << "variant in parent context?" << v.isVariant();
+        //qDebug() << "variant in parent context?" << v.isVariant();
         if (v.isVariant()) {
             const QString path = v.toVariant().value<Plasma::Package>().filePath(type, file);
             if (!path.isEmpty()) {
@@ -406,7 +406,7 @@ QString ScriptEnv::filePathFromScriptContext(const char *type, const QString &fi
         c = c->parentContext();
     }
 
-    //kDebug() << "fail";
+    //qDebug() << "fail";
     return QString();
 }
 

@@ -118,8 +118,8 @@ static QScriptValue setThemeColor(QScriptContext *ctx, QScriptEngine *)
     if (ctx->argumentCount() > 0) {
         const qint32 arg = ctx->argument(0).toInt32();
         if (arg >= 0 && arg <= Plasma::Theme::VisitedLinkColor) {
-            kDebug() << "setting to: " << static_cast<Plasma::Theme::ColorRole>(arg);
-            kDebug() << "color is: " << Plasma::Theme::defaultTheme()->color(static_cast<Plasma::Theme::ColorRole>(arg));
+            // qDebug() << "setting to: " << static_cast<Plasma::Theme::ColorRole>(arg);
+            // qDebug() << "color is: " << Plasma::Theme::defaultTheme()->color(static_cast<Plasma::Theme::ColorRole>(arg));
             self->setRgba(Plasma::Theme::defaultTheme()->color(static_cast<Plasma::Theme::ColorRole>(arg)).rgba());
         }
     }

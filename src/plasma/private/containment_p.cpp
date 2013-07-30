@@ -24,7 +24,7 @@
 
 
 #include <kactioncollection.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kwindowsystem.h>
@@ -97,7 +97,7 @@ void ContainmentPrivate::setScreen(int newScreen)
         newScreen = -1;
     }
 
-    //kDebug() << activity() << "setting screen to " << newScreen << "and type is" << type;
+    //qDebug() << activity() << "setting screen to " << newScreen << "and type is" << type;
 
     Containment *swapScreensWith(0);
     const bool isDesktopContainment = type == Plasma::Types::DesktopContainment ||
@@ -108,7 +108,7 @@ void ContainmentPrivate::setScreen(int newScreen)
             Containment *currently = corona->containmentForScreen(newScreen);
             if (currently && currently != q) {
 #ifndef NDEBUG
-                kDebug() << "currently is on screen" << currently->screen()
+                // qDebug() << "currently is on screen" << currently->screen()
 //                          << "desktop" << currently->desktop()
                          << "and is" << currently->activity()
                          << (QObject*)currently << "i'm" << (QObject*)q;
@@ -127,7 +127,7 @@ void ContainmentPrivate::setScreen(int newScreen)
     if (oldScreen != newScreen) {
         /*
 #ifndef NDEBUG
-        kDebug() << "going to signal change for" << q
+        // qDebug() << "going to signal change for" << q
 #endif
                  << ", old screen & desktop:" << oldScreen
                  << ", new:" << screen << desktop;
@@ -139,7 +139,7 @@ void ContainmentPrivate::setScreen(int newScreen)
     }
 
     if (swapScreensWith) {
-        //kDebug() << "setScreen due to swap, part 2";
+        //qDebug() << "setScreen due to swap, part 2";
         swapScreensWith->setScreen(oldScreen);
     }
 
@@ -162,7 +162,7 @@ void ContainmentPrivate::configChanged()
 
 void ContainmentPrivate::checkStatus(Plasma::Types::ItemStatus appletStatus)
 {
-    //kDebug() << "================== "<< appletStatus << q->status();
+    //qDebug() << "================== "<< appletStatus << q->status();
     if (appletStatus == q->status()) {
         emit q->statusChanged(appletStatus);
         return;
@@ -192,7 +192,7 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Types::Constraints 
         return;
     }
 
-    //kDebug() << "got containmentConstraintsEvent" << constraints;
+    //qDebug() << "got containmentConstraintsEvent" << constraints;
     if (constraints & Plasma::Types::ImmutableConstraint) {
         //update actions
         const bool unlocked = q->immutability() == Types::Mutable;
@@ -241,7 +241,7 @@ Applet *ContainmentPrivate::createApplet(const QString &name, const QVariantList
 
     if (q->immutability() != Types::Mutable) {
 #ifndef NDEBUG
-        kDebug() << "addApplet for" << name << "requested, but we're currently immutable!";
+        // qDebug() << "addApplet for" << name << "requested, but we're currently immutable!";
 #endif
         return 0;
     }
@@ -250,7 +250,7 @@ Applet *ContainmentPrivate::createApplet(const QString &name, const QVariantList
 
     if (!applet) {
 #ifndef NDEBUG
-        kDebug() << "Applet" << name << "could not be loaded.";
+        // qDebug() << "Applet" << name << "could not be loaded.";
 #endif
         applet = new Applet(0, QString(), id);
         applet->setLaunchErrorMessage(i18n("Could not find requested component: %1", name));

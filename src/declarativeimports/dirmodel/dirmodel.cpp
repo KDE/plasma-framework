@@ -169,7 +169,7 @@ void DirModel::delayedPreview()
     if (list.size() > 0) {
         KIO::PreviewJob* job = KIO::filePreview(list, m_screenshotSize);
         job->setIgnoreMaximumSize(true);
-        kDebug() << "Created job" << job;
+        // qDebug() << "Created job" << job;
         connect(job, SIGNAL(gotPreview(KFileItem,QPixmap)),
                 this, SLOT(showPreview(KFileItem,QPixmap)));
         connect(job, SIGNAL(failed(KFileItem)),
@@ -189,7 +189,7 @@ void DirModel::showPreview(const KFileItem &item, const QPixmap &preview)
     }
 
     m_imageCache->insertImage(item.url().toString(), preview.toImage());
-    //kDebug() << "preview size:" << preview.size();
+    //qDebug() << "preview size:" << preview.size();
     emit dataChanged(index, index);
 }
 

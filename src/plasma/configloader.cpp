@@ -29,7 +29,7 @@
 #include <QXmlSimpleReader>
 #include <QUrl>
 
-#include <kdebug.h>
+#include <QDebug>
 
 namespace Plasma
 {
@@ -62,7 +62,7 @@ bool ConfigLoaderHandler::startElement(const QString &namespaceURI, const QStrin
     Q_UNUSED(namespaceURI)
     Q_UNUSED(qName)
 
-//     kDebug() << "ConfigLoaderHandler::startElement(" << localName << qName;
+//     qDebug() << "ConfigLoaderHandler::startElement(" << localName << qName;
     int numAttrs = attrs.count();
     QString tag = localName.toLower();
     if (tag == "group") {
@@ -70,7 +70,7 @@ bool ConfigLoaderHandler::startElement(const QString &namespaceURI, const QStrin
         for (int i = 0; i < numAttrs; ++i) {
             QString name = attrs.localName(i).toLower();
             if (name == "name") {
-                //kDebug() << "set group to" << attrs.value(i);
+                //qDebug() << "set group to" << attrs.value(i);
                 group = attrs.value(i);
             }
         }
@@ -160,7 +160,7 @@ bool ConfigLoaderHandler::endElement(const QString &namespaceURI,
     Q_UNUSED(namespaceURI)
     Q_UNUSED(qName)
 
-//     kDebug() << "ConfigLoaderHandler::endElement(" << localName << qName;
+//     qDebug() << "ConfigLoaderHandler::endElement(" << localName << qName;
     const QString tag = localName.toLower();
     if (tag == "entry") {
         addItem();

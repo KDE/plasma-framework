@@ -46,7 +46,7 @@
 #include <kauthaction.h>
 #include <kauthexecutejob.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
+#include <QDebug>
 
 #include <kwallet.h>
 
@@ -82,7 +82,7 @@ void AuthorizationManager::setAuthorizationPolicy(AuthorizationPolicy policy)
 {
     if (d->locked) {
 #ifndef NDEBUG
-        kDebug() << "Can't change AuthorizationPolicy: interface locked.";
+        // qDebug() << "Can't change AuthorizationPolicy: interface locked.";
 #endif
         return;
     }
@@ -119,7 +119,7 @@ void AuthorizationManager::setAuthorizationInterface(AuthorizationInterface *int
 {
     if (d->authorizationInterface) {
 #ifndef NDEBUG
-        kDebug() << "Can't change AuthorizationInterface: interface locked.";
+        // qDebug() << "Can't change AuthorizationInterface: interface locked.";
 #endif
         return;
     }
@@ -171,7 +171,7 @@ void AuthorizationManagerPrivate::prepareForServicePublication()
 void AuthorizationManagerPrivate::saveRules()
 {
 #ifndef NDEBUG
-    kDebug() << "SAVE RULES";
+    // qDebug() << "SAVE RULES";
 #endif
 
     QTemporaryFile tempFile;
@@ -183,7 +183,7 @@ void AuthorizationManagerPrivate::saveRules()
     foreach (AuthorizationRule *rule, rules) {
         if (rule->persistence() == AuthorizationRule::Persistent) {
 #ifndef NDEBUG
-            kDebug() << "adding rule " << i;
+            // qDebug() << "adding rule " << i;
 #endif
             rulesGroup.group(QString::number(i)).writeEntry("CredentialsID", rule->credentials().id());
             rulesGroup.group(QString::number(i)).writeEntry("serviceName", rule->serviceName());
@@ -197,7 +197,7 @@ void AuthorizationManagerPrivate::saveRules()
     tempFile.close();
 
 #ifndef NDEBUG
-    kDebug() << "tempfile = " << tempFile.fileName();
+    // qDebug() << "tempfile = " << tempFile.fileName();
 #endif
 
     KAuth::Action action("org.kde.kcontrol.kcmremotewidgets.save");
@@ -207,7 +207,7 @@ void AuthorizationManagerPrivate::saveRules()
 
     if (!job->exec()) {
 #ifndef NDEBUG
-        kDebug() << "KAuth failed.... YOU SUCK!";
+        // qDebug() << "KAuth failed.... YOU SUCK!";
 #endif
     }
 }
@@ -218,7 +218,7 @@ void AuthorizationManagerPrivate::slotWalletOpened()
 
     if (!wallet->readEntry("Credentials", identity)) {
 #ifndef NDEBUG
-        kDebug() << "Existing identity found";
+        // qDebug() << "Existing identity found";
 #endif
         QDataStream stream(&identity, QIODevice::ReadOnly);
         stream >> myCredentials;
@@ -226,7 +226,7 @@ void AuthorizationManagerPrivate::slotWalletOpened()
 
     if (!myCredentials.isValid()) {
 #ifndef NDEBUG
-        kDebug() << "Creating a new identity";
+        // qDebug() << "Creating a new identity";
 #endif
         myCredentials = Credentials::createCredentials(QHostInfo::localHostName());
         QDataStream stream(&identity, QIODevice::WriteOnly);
@@ -248,7 +248,7 @@ void AuthorizationManagerPrivate::slotLoadRules()
         //Credentials storedCredentials = identities[identityID];
         if (serviceName.isEmpty()) {
 #ifndef NDEBUG
-            kDebug() << "Invalid rule";
+            // qDebug() << "Invalid rule";
 #endif
         } else {
             AuthorizationRule *rule = new AuthorizationRule(serviceName, identityID);
@@ -281,11 +281,11 @@ AuthorizationRule *AuthorizationManagerPrivate::matchingRule(const QString &serv
 
     if (!matchingRule) {
 #ifndef NDEBUG
-        kDebug() << "no matching rule";
+        // qDebug() << "no matching rule";
 #endif
     } else {
 #ifndef NDEBUG
-        kDebug() << "matching rule found: " << matchingRule->description();
+        // qDebug() << "matching rule found: " << matchingRule->description();
 #endif
     }
     return matchingRule;
@@ -306,7 +306,7 @@ void AuthorizationManagerPrivate::addCredentials(const Credentials &identity)
         return;
     } else if (identity.isValid()) {
 #ifndef NDEBUG
-        kDebug() << "Adding a new identity for " << identity.id();
+        // qDebug() << "Adding a new identity for " << identity.id();
 #endif
         identities[identity.id()] = identity;
     }

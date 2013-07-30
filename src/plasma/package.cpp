@@ -25,7 +25,7 @@
 #include <qtemporarydir.h>
 
 #include <karchive.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <kdesktopfile.h>
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>
@@ -114,7 +114,7 @@ bool Package::isValid() const
         }
 
         if (failed) {
-            kWarning() << "Could not find required" << (it.value().directory ? "directory" : "file") << it.key();
+            qWarning() << "Could not find required" << (it.value().directory ? "directory" : "file") << it.key();
             d->valid = false;
             break;
         }
@@ -246,7 +246,7 @@ QString PackagePrivate::unpack(const QString& filePath) {
                 mimeType.inherits("application/x-xz") || mimeType.inherits("application/x-lzma")) {
         archive = new KTar(filePath);
     } else {
-        kWarning() << "Could not open package file, unsupported archive format:" << filePath << mimeType.name();
+        qWarning() << "Could not open package file, unsupported archive format:" << filePath << mimeType.name();
     }
     QString tempRoot;
     if (archive && archive->open(QIODevice::ReadOnly)) {
@@ -257,7 +257,7 @@ QString PackagePrivate::unpack(const QString& filePath) {
         createPackageMetadata(tempdir.path() + '/');
         tempRoot = tempdir.path() + '/';
     } else {
-        kWarning() << "Could not open package file:" << path;
+        qWarning() << "Could not open package file:" << path;
     }
 
     delete archive;
@@ -267,7 +267,7 @@ QString PackagePrivate::unpack(const QString& filePath) {
 QString Package::filePath(const char *fileType, const QString &filename) const
 {
     if (!d->valid) {
-        //kDebug() << "package is not valid";
+        //qDebug() << "package is not valid";
         return QString();
     }
 
@@ -280,16 +280,16 @@ QString Package::filePath(const char *fileType, const QString &filename) const
     QStringList paths;
 
     if (qstrlen(fileType) != 0) {
-        kDebug()<<d->contents.keys();
+        qDebug()<<d->contents.keys();
         if (!d->contents.contains(fileType)) {
-            kDebug() << "package does not contain" << fileType << filename;
+            qDebug() << "package does not contain" << fileType << filename;
             return QString();
         }
 
         paths = d->contents[fileType].paths;
 
         if (paths.isEmpty()) {
-            //kDebug() << "no matching path came of it, while looking for" << fileType << filename;
+            //qDebug() << "no matching path came of it, while looking for" << fileType << filename;
             d->discoveries.insert(discoveryKey, QString());
             return QString();
         }
@@ -299,7 +299,7 @@ QString Package::filePath(const char *fileType, const QString &filename) const
     }
 
     //Nested loop, but in the medium case resolves to just one iteration
-    //kDebug() << "prefixes:" << prefixes.count() << prefixes;
+    //qDebug() << "prefixes:" << prefixes.count() << prefixes;
     foreach (const QString &contentsPrefix, d->contentsPrefixPaths) {
         const QString prefix(d->path + contentsPrefix);
 
@@ -310,10 +310,10 @@ QString Package::filePath(const char *fileType, const QString &filename) const
                 file.append("/").append(filename);
             }
 
-            //kDebug() << "testing" << file << QFile::exists("/bin/ls") << QFile::exists(file);
+            //qDebug() << "testing" << file << QFile::exists("/bin/ls") << QFile::exists(file);
             if (QFile::exists(file)) {
                 if (d->externalPaths) {
-                    //kDebug() << "found" << file;
+                    //qDebug() << "found" << file;
                     d->discoveries.insert(discoveryKey, file);
                     return file;
                 }
@@ -323,9 +323,9 @@ QString Package::filePath(const char *fileType, const QString &filename) const
                 QDir dir(file);
                 QString canonicalized = dir.canonicalPath() + QDir::separator();
 
-                //kDebug() << "testing that" << canonicalized << "is in" << d->path;
+                //qDebug() << "testing that" << canonicalized << "is in" << d->path;
                 if (canonicalized.startsWith(d->path)) {
-                    //kDebug() << "found" << file;
+                    //qDebug() << "found" << file;
                     d->discoveries.insert(discoveryKey, file);
                     return file;
                 }
@@ -333,7 +333,7 @@ QString Package::filePath(const char *fileType, const QString &filename) const
         }
     }
 
-    //kDebug() << fileType << filename << "does not exist in" << prefixes << "at root" << d->path;
+    //qDebug() << fileType << filename << "does not exist in" << prefixes << "at root" << d->path;
     return QString();
 }
 
@@ -345,18 +345,18 @@ QStringList Package::entryList(const char *key) const
 
     QHash<QByteArray, ContentStructure>::const_iterator it = d->contents.constFind(key);
     if (it == d->contents.constEnd()) {
-        //kDebug() << "couldn't find" << key;
+        //qDebug() << "couldn't find" << key;
         return QStringList();
     }
 
-    //kDebug() << "going to list" << key;
+    //qDebug() << "going to list" << key;
     QStringList list;
     foreach (const QString &prefix, d->contentsPrefixPaths) {
-        //kDebug() << "     looking in" << prefix;
+        //qDebug() << "     looking in" << prefix;
         foreach (const QString &path, it.value().paths) {
-            //kDebug() << "         looking in" << path;
+            //qDebug() << "         looking in" << path;
             if (it.value().directory) {
-                //kDebug() << "it's a directory, so trying out" << d->path + prefix + path;
+                //qDebug() << "it's a directory, so trying out" << d->path + prefix + path;
                 QDir dir(d->path + prefix + path);
 
                 if (d->externalPaths) {
@@ -371,7 +371,7 @@ QStringList Package::entryList(const char *key) const
                 }
             } else {
                 const QString fullPath = d->path + prefix + path;
-                //kDebug() << "it's a file at" << fullPath << QFile::exists(fullPath);
+                //qDebug() << "it's a file at" << fullPath << QFile::exists(fullPath);
                 if (!QFile::exists(fullPath)) {
                     continue;
                 }
@@ -382,7 +382,7 @@ QStringList Package::entryList(const char *key) const
                     QDir dir(fullPath);
                     QString canonicalized = dir.canonicalPath() + QDir::separator();
 
-                    //kDebug() << "testing that" << canonicalized << "is in" << d->path;
+                    //qDebug() << "testing that" << canonicalized << "is in" << d->path;
                     if (canonicalized.startsWith(d->path)) {
                         list += fullPath;
                     }
@@ -528,7 +528,7 @@ void Package::setContentsPrefixPaths(const QStringList &prefixPaths)
 QString Package::contentsHash() const
 {
     if (!d->valid) {
-        kWarning() << "can not create hash due to Package being invalid";
+        qWarning() << "can not create hash due to Package being invalid";
         return QString();
     }
 
@@ -541,10 +541,10 @@ QString Package::contentsHash() const
                 hash.addData(f.read(1024));
             }
         } else {
-            kWarning() << "could not add" << f.fileName() << "to the hash; file could not be opened for reading.";
+            qWarning() << "could not add" << f.fileName() << "to the hash; file could not be opened for reading.";
         }
     } else {
-        kWarning() << "no metadata at" << metadataPath;
+        qWarning() << "no metadata at" << metadataPath;
     }
 
     foreach (QString prefix, d->contentsPrefixPaths) {
@@ -700,8 +700,8 @@ KJob* Package::install(const QString &sourcePackage, const QString &packageRoot)
 {
     const QString src = sourcePackage;
     const QString dest = packageRoot.isEmpty() ? defaultPackageRoot() : packageRoot;
-    //kDebug() << "Source: " << src;
-    //kDebug() << "PackageRoot: " << dest;
+    //qDebug() << "Source: " << src;
+    //qDebug() << "PackageRoot: " << dest;
     KJob *j = d->structure.data()->install(this, src, dest);
     //connect(j, SIGNAL(finished(bool)), SLOT(installFinished(bool)));
     return j;
@@ -797,7 +797,7 @@ void PackagePrivate::updateHash(const QString &basePath, const QString &subPath,
                     hash.addData(f.read(1024));
                 }
             } else {
-                kWarning() << "could not add" << f.fileName() << "to the hash; file could not be opened for reading. "
+                qWarning() << "could not add" << f.fileName() << "to the hash; file could not be opened for reading. "
                            << "permissions fail?" << info.permissions() << info.isFile();
             }
         }

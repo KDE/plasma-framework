@@ -22,7 +22,7 @@
 #include <QFile>
 #include <QTextStream>
 
-#include <kdebug.h>
+#include <QDebug>
 #include <klocale.h>
 
 #include <kservicetypetrader.h>
@@ -163,7 +163,7 @@ void DataEngineManager::timerEvent(QTimerEvent *)
     QString path = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + "plasma_dataenginemanager_log";
     QFile f(path);
     if (!f.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) {
-        kDebug() << "faild to open" << path;
+        // qDebug() << "faild to open" << path;
         return;
     }
 

@@ -68,12 +68,12 @@ bool JavaScriptRunner::init()
 
     QFile file(mainScript());
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text) ) {
-        kWarning() << "Unable to load script file";
+        qWarning() << "Unable to load script file";
         return false;
     }
 
     QString script = file.readAll();
-    kDebug() << "Script says" << script;
+    // qDebug() << "Script says" << script;
 
     m_engine->evaluate(script);
     if (m_engine->hasUncaughtException()) {
@@ -88,7 +88,7 @@ void JavaScriptRunner::match(Plasma::RunnerContext &search)
 {
     QScriptValue fun = m_self.property("match");
     if (!fun.isFunction()) {
-        kDebug() << "Script: match is not a function, " << fun.toString();
+        // qDebug() << "Script: match is not a function, " << fun.toString();
         return;
     }
 
@@ -110,7 +110,7 @@ void JavaScriptRunner::exec(const Plasma::RunnerContext *search, const Plasma::Q
 {
     QScriptValue fun = m_self.property("exec");
     if (!fun.isFunction()) {
-        kDebug() << "Script: exec is not a function, " << fun.toString();
+        // qDebug() << "Script: exec is not a function, " << fun.toString();
         return;
     }
 
@@ -144,9 +144,9 @@ void JavaScriptRunner::setupObjects()
 void JavaScriptRunner::reportError(ScriptEnv *env, bool fatal)
 {
     Q_UNUSED(fatal)
-    kDebug() << "Error: " << env->engine()->uncaughtException().toString()
+    // qDebug() << "Error: " << env->engine()->uncaughtException().toString()
              << " at line " << env->engine()->uncaughtExceptionLineNumber() << endl;
-    kDebug() << env->engine()->uncaughtExceptionBacktrace();
+    // qDebug() << env->engine()->uncaughtExceptionBacktrace();
 }
 
 QString JavaScriptRunner::filePath(const char *type, const QString &file) const
