@@ -76,13 +76,13 @@ void PluginTest::runMain()
 {
     qDebug() << "plugin test runs: ";
     //loadDataEngine();
-    qDebug() << " - - - -- - - - - ------------------------------------\n";
-    qDebug() << " libs are in: " << QCoreApplication::libraryPaths();
-    //loadKQPlugin();
+//     qDebug() << " - - - -- - - - - ------------------------------------\n";
+//     qDebug() << " libs are in: " << QCoreApplication::libraryPaths();
+//     //loadKQPlugin();
     qDebug() << "::: loadKPlugin() == " << loadKPlugin();
-    qDebug() << " - - - -- - - - - ------------------------------------\n";
-    qDebug() << "::: loadKService() == " << loadKService();
-
+//     qDebug() << " - - - -- - - - - ------------------------------------\n";
+//     qDebug() << "::: loadKService() == " << loadKService();
+//
     qDebug() << " - - - -- - - - - ------------------------------------\n";
     qDebug() << "::: loadKFromPlasma() == " << loadFromPlasma();
     exit(0);
@@ -286,7 +286,7 @@ bool PluginTest::loadKService(const QString &name)
 
 void PluginTest::dataUpdated(QString s, Plasma::DataEngine::Data d)
 {
-    qDebug() << "new data for source:  " << s << d;
+//     qDebug() << "new data for source:  " << s << d;
 }
 
 } // namespace Plasma

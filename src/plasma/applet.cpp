@@ -70,6 +70,7 @@ Applet::Applet(const KPluginInfo &info, QObject *parent, uint appletId)
     :  QObject(parent),
        d(new AppletPrivate(KService::Ptr(), &info, appletId, this))
 {
+    qDebug() << " From KPluginInfo, valid? " << info.isValid();
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
     d->init();
