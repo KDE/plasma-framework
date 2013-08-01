@@ -444,7 +444,7 @@ void AbstractRunnerPrivate::setupScriptSupport()
 
 #ifndef NDEBUG
     // qDebug() << "setting up script support, package is in" << package->path()
-             << ", main script is" << package->filePath("mainscript");
+    //         << ", main script is" << package->filePath("mainscript");
 #endif
 
     const QString translationsPath = package->filePath("translations");
