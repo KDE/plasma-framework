@@ -406,7 +406,7 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info)
             if (!script) {
 #ifndef NDEBUG
                 // qDebug() << "Could not create a" << api << "ScriptEngine for the"
-                        << dataEngineDescription.name() << "DataEngine.";
+                //        << dataEngineDescription.name() << "DataEngine.";
 #endif
                 delete package;
                 package = 0;

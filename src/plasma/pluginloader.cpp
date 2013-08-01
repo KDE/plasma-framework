@@ -195,7 +195,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     if (!offer->property("X-Plasma-API").toString().isEmpty()) {
 #ifndef NDEBUG
         // qDebug() << "we have a script using the"
-                 << offer->property("X-Plasma-API").toString() << "API";
+        //         << offer->property("X-Plasma-API").toString() << "API";
 #endif
         if (isContainment) {
             return new Containment(0, allArgs);
@@ -575,7 +575,7 @@ QStringList PluginLoader::listAppletCategories(const QString &parentApp, bool vi
         if (!appletCategory.isEmpty() && !known.contains(appletCategory.toLower())) {
 #ifndef NDEBUG
             // qDebug() << "Unknown category: " << applet->name() << "says it is in the"
-                     << appletCategory << "category which is unknown to us";
+            //         << appletCategory << "category which is unknown to us";
 #endif
             appletCategory.clear();
         }

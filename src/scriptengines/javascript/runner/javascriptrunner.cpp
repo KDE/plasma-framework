@@ -145,7 +145,7 @@ void JavaScriptRunner::reportError(ScriptEnv *env, bool fatal)
 {
     Q_UNUSED(fatal)
     // qDebug() << "Error: " << env->engine()->uncaughtException().toString()
-             << " at line " << env->engine()->uncaughtExceptionLineNumber() << endl;
+    //         << " at line " << env->engine()->uncaughtExceptionLineNumber() << endl;
     // qDebug() << env->engine()->uncaughtExceptionBacktrace();
 }
 

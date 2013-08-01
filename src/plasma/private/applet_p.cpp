@@ -115,8 +115,8 @@ void AppletPrivate::init(const QString &packagePath)
     if (!appletDescription.isValid()) {
 #ifndef NDEBUG
         // qDebug() << "Check your constructor! "
-                 << "You probably want to be passing in a Service::Ptr "
-                 << "or a QVariantList with a valid storageid as arg[0].";
+        //         << "You probably want to be passing in a Service::Ptr "
+        //         << "or a QVariantList with a valid storageid as arg[0].";
 #endif
         return;
     }
@@ -295,7 +295,7 @@ void AppletPrivate::setupPackage()
 
 #ifndef NDEBUG
     // qDebug() << "setting up script support, package is in" << package->path()
-             << ", main script is" << package->filePath("mainscript");
+    //         << ", main script is" << package->filePath("mainscript");
 #endif
 
     const QString translationsPath = package->filePath("translations");
