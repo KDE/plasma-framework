@@ -28,7 +28,7 @@
 #include <QFile>
 #include <qstandardpaths.h>
 
-#include <kdebug.h>
+#include <QDebug>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <klocalizedstring.h>
@@ -81,7 +81,7 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
 AppletPrivate::~AppletPrivate()
 {
     if (activationAction && globalShortcutEnabled) {
-        //kDebug() << "resetting global action for" << q->title() << activationAction->objectName();
+        //qDebug() << "resetting global action for" << q->title() << activationAction->objectName();
         KGlobalAccel::self()->removeAllShortcuts(activationAction);
     }
 
@@ -114,7 +114,7 @@ void AppletPrivate::init(const QString &packagePath)
 
     if (!appletDescription.isValid()) {
 #ifndef NDEBUG
-        kDebug() << "Check your constructor! "
+        // qDebug() << "Check your constructor! "
                  << "You probably want to be passing in a Service::Ptr "
                  << "or a QVariantList with a valid storageid as arg[0].";
 #endif
@@ -190,7 +190,7 @@ void AppletPrivate::globalShortcutChanged()
     KConfigGroup shortcutConfig(mainConfigGroup(), "Shortcuts");
     shortcutConfig.writeEntry("global", activationAction->shortcut().toString());
     scheduleModificationNotification();
-    //kDebug() << "after" << shortcut.primary() << d->activationAction->globalShortcut().primary();
+    //qDebug() << "after" << shortcut.primary() << d->activationAction->globalShortcut().primary();
 }
 
 KActionCollection* AppletPrivate::defaultActions(QObject *parent)
@@ -294,7 +294,7 @@ void AppletPrivate::setupPackage()
     }
 
 #ifndef NDEBUG
-    kDebug() << "setting up script support, package is in" << package->path()
+    // qDebug() << "setting up script support, package is in" << package->path()
              << ", main script is" << package->filePath("mainscript");
 #endif
 
@@ -355,7 +355,7 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
     if (isContainment) {
         Corona *corona = static_cast<Containment*>(q)->corona();
         KConfigGroup containmentConfig;
-        //kDebug() << "got a corona, baby?" << (QObject*)corona << (QObject*)q;
+        //qDebug() << "got a corona, baby?" << (QObject*)corona << (QObject*)q;
 
         if (corona) {
             containmentConfig = KConfigGroup(corona->config(), "Containments");
@@ -379,7 +379,7 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
             appletConfig = c->config();
             appletConfig = KConfigGroup(&appletConfig, "Applets");
         } else {
-            kWarning() << "requesting config for" << q->title() << "without a containment!";
+            qWarning() << "requesting config for" << q->title() << "without a containment!";
             appletConfig = KConfigGroup(KSharedConfig::openConfig(), "Applets");
         }
 

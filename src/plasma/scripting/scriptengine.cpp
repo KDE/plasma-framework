@@ -19,7 +19,7 @@
 
 #include "scripting/scriptengine.h"
 
-#include <kdebug.h>
+#include <QDebug>
 #include <kservice.h>
 #include <kservicetypetrader.h>
 
@@ -94,7 +94,7 @@ QStringList knownLanguages(Types::ComponentTypes types)
     }
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/ScriptEngine", constraint);
-    //kDebug() << "Applet::knownApplets constraint was '" << constraint
+    //qDebug() << "Applet::knownApplets constraint was '" << constraint
     //         << "' which got us " << offers.count() << " matches";
 
     QStringList languages;
@@ -117,7 +117,7 @@ KService::List engineOffers(const QString &language, Types::ComponentType type)
     QRegExp re("[^a-zA-Z0-9\\-_]");
     if (re.indexIn(language) != -1) {
 #ifndef NDEBUG
-        kDebug() << "invalid language attempted:" << language;
+        // qDebug() << "invalid language attempted:" << language;
 #endif
         return KService::List();
     }
@@ -141,11 +141,11 @@ KService::List engineOffers(const QString &language, Types::ComponentType type)
     QString constraint = QString("[X-Plasma-API] == '%1' and "
                                  "'%2' in [X-Plasma-ComponentTypes]").arg(language, component);
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/ScriptEngine", constraint);
-    /* kDebug() << "********************* loadingApplet with Plasma/ScriptEngine" << constraint
+    /* // qDebug() << "********************* loadingApplet with Plasma/ScriptEngine" << constraint
              << "resulting in" << offers.count() << "results";*/
     if (offers.isEmpty()) {
 #ifndef NDEBUG
-        kDebug() << "No offers for \"" << language << "\"";
+        // qDebug() << "No offers for \"" << language << "\"";
 #endif
     }
 
@@ -181,7 +181,7 @@ ScriptEngine *loadEngine(const QString &language, Types::ComponentType type, QOb
         }
 
 #ifndef NDEBUG
-        kDebug() << "Couldn't load script engine for language " << language
+        // qDebug() << "Couldn't load script engine for language " << language
                  << "! error reported: " << error;
 #endif
     }

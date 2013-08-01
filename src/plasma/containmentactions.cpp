@@ -31,7 +31,7 @@
 #include <QMouseEvent>
 #include <QWheelEvent>
 
-#include <kdebug.h>
+#include <QDebug>
 #include <klocalizedstring.h>
 #include <kservicetypetrader.h>
 

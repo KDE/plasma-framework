@@ -21,7 +21,7 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <klocalizedstring.h>
 
 #include "applet.h"

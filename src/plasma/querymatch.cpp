@@ -27,7 +27,7 @@
 #include <QVariant>
 #include <QWeakPointer>
 
-#include <kdebug.h>
+#include <QDebug>
 
 #include "abstractrunner.h"
 
@@ -93,7 +93,7 @@ class QueryMatchPrivate : public QSharedData
 QueryMatch::QueryMatch(AbstractRunner *runner)
     : d(new QueryMatchPrivate(runner))
 {
-//    kDebug() << "new match created";
+//    qDebug() << "new match created";
 }
 
 QueryMatch::QueryMatch(const QueryMatch &other)
@@ -300,7 +300,7 @@ bool QueryMatch::operator!=(const QueryMatch &other) const
 
 void QueryMatch::run(const RunnerContext &context) const
 {
-    //kDebug() << "we run the term" << context->query() << "whose type is" << context->mimetype();
+    //qDebug() << "we run the term" << context->query() << "whose type is" << context->mimetype();
     if (d->runner) {
         d->runner.data()->run(context, *this);
     }

@@ -26,7 +26,7 @@
 #include <kjob.h>
 #include <QStandardPaths>
 
-#include <kdebug.h>
+#include <QDebug>
 
 #include "applet.h"
 #include "pluginloader.h"
@@ -38,7 +38,7 @@ void PlasmoidPackageTest::initTestCase()
 
 void PlasmoidPackageTest::init()
 {
-    kDebug() << "PlasmoidPackage::init()";
+    qDebug() << "PlasmoidPackage::init()";
     m_package = QString("Package");
     m_packageRoot = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/packageRoot";
     m_defaultPackage = Plasma::PluginLoader::self()->loadPackage("Plasma/Applet");
@@ -47,14 +47,14 @@ void PlasmoidPackageTest::init()
 
 void PlasmoidPackageTest::cleanup()
 {
-    kDebug() << "cleaning up";
+    qDebug() << "cleaning up";
     // Clean things up.
     QDir(m_packageRoot).removeRecursively();
 }
 
 void PlasmoidPackageTest::createTestPackage(const QString &packageName)
 {
-    kDebug() << "Create test package" << m_packageRoot;
+    qDebug() << "Create test package" << m_packageRoot;
     QDir pRoot(m_packageRoot);
     // Create the root and package dir.
     if (!pRoot.exists()) {
@@ -63,7 +63,7 @@ void PlasmoidPackageTest::createTestPackage(const QString &packageName)
 
     // Create the package dir
     QVERIFY(QDir().mkpath(m_packageRoot + "/" + packageName));
-    kDebug() << "Created" << (m_packageRoot + "/" + packageName);
+    qDebug() << "Created" << (m_packageRoot + "/" + packageName);
 
     // Create the metadata.desktop file
     QFile file(m_packageRoot + "/" + packageName + "/metadata.desktop");
@@ -77,7 +77,7 @@ void PlasmoidPackageTest::createTestPackage(const QString &packageName)
     file.flush();
     file.close();
 
-    kDebug() << "OUT: " << packageName;
+    qDebug() << "OUT: " << packageName;
 
     // Create the ui dir.
     QVERIFY(QDir().mkpath(m_packageRoot + "/" + packageName + "/contents/ui"));
@@ -91,7 +91,7 @@ void PlasmoidPackageTest::createTestPackage(const QString &packageName)
     file.close();
 
 
-    kDebug() << "THIS IS A PLASMOID SCRIPT THING";
+    qDebug() << "THIS IS A PLASMOID SCRIPT THING";
     // Now we have a minimal plasmoid package which is valid. Let's add some
     // files to it for test purposes.
 
@@ -244,8 +244,8 @@ void PlasmoidPackageTest::entryList()
 
 void PlasmoidPackageTest::createAndInstallPackage()
 {
-    kDebug() << "                   ";
-    kDebug() << "   CreateAndInstall ";
+    qDebug() << "                   ";
+    qDebug() << "   CreateAndInstall ";
     createTestPackage("plasmoid_to_package");
     const QString packagePath = m_packageRoot + '/' + "testpackage.plasmoid";
 
@@ -271,7 +271,7 @@ void PlasmoidPackageTest::createAndInstallPackage()
 
     m_defaultPackageStructure = new Plasma::PackageStructure(this);
     Plasma::Package *p = new Plasma::Package(m_defaultPackageStructure);
-    kDebug() << "Installing " << archivePath;
+    qDebug() << "Installing " << archivePath;
     //const QString packageRoot = "plasma/plasmoids/";
     //const QString servicePrefix = "plasma-applet-";
     KJob* job = p->install(archivePath, m_packageRoot);
@@ -283,7 +283,7 @@ void PlasmoidPackageTest::createAndInstallPackage()
 
 void PlasmoidPackageTest::packageInstalled(KJob* j)
 {
-    kDebug() << "!!!!!!!!!!!!!!!!!!!! package installed" << (j->error() == KJob::NoError);
+    qDebug() << "!!!!!!!!!!!!!!!!!!!! package installed" << (j->error() == KJob::NoError);
     QVERIFY(j->error() == KJob::NoError);
     //QVERIFY(p->path());
 
@@ -296,7 +296,7 @@ void PlasmoidPackageTest::packageInstalled(KJob* j)
 
 void PlasmoidPackageTest::packageUninstalled(KJob* j)
 {
-    kDebug() << "!!!!!!!!!!!!!!!!!!!!! package uninstalled";
+    qDebug() << "!!!!!!!!!!!!!!!!!!!!! package uninstalled";
     QVERIFY(j->error() == KJob::NoError);
 }
 

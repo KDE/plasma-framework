@@ -24,7 +24,7 @@
 #include "theme.h"
 #include <QHash>
 
-#include <kdebug.h>
+#include <QDebug>
 #include <KColorScheme>
 #include <KImageCache>
 #include <KWindowSystem>

@@ -27,7 +27,7 @@
 #include <QMutexLocker>
 #include <QTimer>
 
-#include <kdebug.h>
+#include <QDebug>
 #include <kplugininfo.h>
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>
@@ -144,7 +144,7 @@ void AbstractRunner::performMatch(Plasma::RunnerContext &localContext)
         // we punish runners that return too slowly, even if they don't bring
         // back matches
 #ifndef NDEBUG
-        kDebug() << id() << "runner is too slow, putting it on the back burner.";
+        // qDebug() << id() << "runner is too slow, putting it on the back burner.";
 #endif
         d->fastRuns = 0;
         setSpeed(SlowSpeed);
@@ -157,7 +157,7 @@ void AbstractRunner::performMatch(Plasma::RunnerContext &localContext)
             // we reward slowed runners who bring back matches fast enough
             // 3 times in a row
 #ifndef NDEBUG
-            kDebug() << id() << "runner is faster than we thought, kicking it up a notch";
+            // qDebug() << id() << "runner is faster than we thought, kicking it up a notch";
 #endif
             setSpeed(NormalSpeed);
         }
@@ -390,7 +390,7 @@ void AbstractRunnerPrivate::init(const KService::Ptr service)
             prepScripting(path, api);
             if (!script) {
 #ifndef NDEBUG
-                kDebug() << "Could not create a(n)" << api << "ScriptEngine for the" << runnerDescription.name() << "Runner.";
+                // qDebug() << "Could not create a(n)" << api << "ScriptEngine for the" << runnerDescription.name() << "Runner.";
 #endif
             }
         }
@@ -422,7 +422,7 @@ void AbstractRunnerPrivate::prepScripting(const QString &path, const QString &ap
 
     if (!package->isValid()) {
 #ifndef NDEBUG
-        kDebug() << "Invalid Runner package at" << path;
+        // qDebug() << "Invalid Runner package at" << path;
 #endif
         return;
     }
@@ -443,7 +443,7 @@ void AbstractRunnerPrivate::setupScriptSupport()
     }
 
 #ifndef NDEBUG
-    kDebug() << "setting up script support, package is in" << package->path()
+    // qDebug() << "setting up script support, package is in" << package->path()
              << ", main script is" << package->filePath("mainscript");
 #endif
 

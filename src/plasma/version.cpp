@@ -18,7 +18,7 @@
  */
 
 #include <plasma/version.h>
-#include <kdebug.h>
+#include <QDebug>
 
 namespace Plasma
 {
@@ -52,7 +52,7 @@ bool isPluginVersionCompatible(unsigned int version)
 {
     if (version == quint32(-1)) {
         // unversioned, just let it through
-        kWarning() << "unversioned plugin detected, may result in instability";
+        qWarning() << "unversioned plugin detected, may result in instability";
         return true;
     }
 
@@ -62,7 +62,7 @@ bool isPluginVersionCompatible(unsigned int version)
 
     if (version < minVersion || version > maxVersion) {
 #ifndef NDEBUG
-        kDebug() << "plugin is compiled against incompatible Plasma version  " << version
+        // qDebug() << "plugin is compiled against incompatible Plasma version  " << version
                  << "This build is compatible with" << PLASMA_VERSION_MAJOR << ".0.0 (" << minVersion
                  << ") to" << PLASMA_VERSION_STRING << "(" << maxVersion << ")";
 #endif

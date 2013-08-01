@@ -66,7 +66,7 @@ JavaScriptService::JavaScriptService(const QString &serviceName, JavaScriptDataE
 
 JavaScriptService::~JavaScriptService()
 {
-//    kDebug();
+//    qDebug();
 }
 
 Plasma::ServiceJob *JavaScriptService::createJob(const QString &operation, QMap<QString, QVariant> &parameters)
@@ -96,7 +96,7 @@ void JavaScriptService::registerOperationsScheme()
     const QString path = m_dataEngine.data()->filePath("services", name() + ".operations");
 
     if (path.isEmpty()) {
-        kDebug() << "Cannot find operations description:" << name() << ".operations";
+        // qDebug() << "Cannot find operations description:" << name() << ".operations";
         m_dataEngine.clear();
         return;
     }

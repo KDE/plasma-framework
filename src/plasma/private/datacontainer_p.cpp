@@ -65,7 +65,7 @@ SignalRelay::SignalRelay(DataContainer *parent, DataContainerPrivate *data, uint
       m_resetTimer(true),
       m_queued(true)
 {
-    //kDebug() << "signal relay with time of" << m_timerId << "being set up";
+    //qDebug() << "signal relay with time of" << m_timerId << "being set up";
     m_timerId = startTimer(immediateUpdate ? 0 : m_interval);
     if (m_align != Plasma::Types::NoAlignment) {
         checkAlignment();
@@ -110,7 +110,7 @@ void SignalRelay::checkAlignment()
 
 void SignalRelay::checkQueueing()
 {
-    //kDebug() << m_queued;
+    //qDebug() << m_queued;
     if (m_queued) {
         emit dataUpdated(dc->objectName(), d->data);
         m_queued = false;
@@ -153,13 +153,13 @@ void SignalRelay::timerEvent(QTimerEvent *event)
 
     emit dc->updateRequested(dc);
     if (d->hasUpdates()) {
-        //kDebug() << "emitting data updated directly" << d->data;
+        //qDebug() << "emitting data updated directly" << d->data;
         emit dataUpdated(dc->objectName(), d->data);
         m_queued = false;
     } else {
         // the source wasn't actually updated; so let's put ourselves in the queue
         // so we get a dataUpdated() call when the data does arrive
-        //kDebug() << "queued";
+        //qDebug() << "queued";
         m_queued = true;
     }
 }

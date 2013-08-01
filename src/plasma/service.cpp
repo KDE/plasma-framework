@@ -26,7 +26,7 @@
 #include <QTimer>
 #include <QQuickItem>
 
-#include <kdebug.h>
+#include <QDebug>
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <ksharedconfig.h>
@@ -193,7 +193,7 @@ QStringList Service::operationNames() const
 {
     if (d->operationsMap.keys().isEmpty()) {
 #ifndef NDEBUG
-        kDebug() << "No valid operations scheme has been registered";
+        // qDebug() << "No valid operations scheme has been registered";
 #endif
         return QStringList();
     }
@@ -205,12 +205,12 @@ QVariantMap Service::operationDescription(const QString &operationName)
 {
     if (d->operationsMap.keys().isEmpty()) {
 #ifndef NDEBUG
-        kDebug() << "No valid operations scheme has been registered";
+        // qDebug() << "No valid operations scheme has been registered";
 #endif
         return QVariantMap();
     }
 
-    //kDebug() << "operation" << operationName
+    //qDebug() << "operation" << operationName
     //         << "requested, has keys" << d->operationsMap.keys();
     return d->operationsMap.value(operationName);
 }
@@ -223,12 +223,12 @@ ServiceJob *Service::startOperationCall(const QVariantMap &description, QObject 
 
     if (d->operationsMap.keys().isEmpty()) {
 #ifndef NDEBUG
-        kDebug() << "No valid operations scheme has been registered";
+        // qDebug() << "No valid operations scheme has been registered";
 #endif
     } else if (!op.isEmpty() && d->operationsMap.contains(op)) {
         if (d->disabledOperations.contains(op)) {
 #ifndef NDEBUG
-            kDebug() << "Operation" << op << "is disabled";
+            // qDebug() << "Operation" << op << "is disabled";
 #endif
         } else {
             QVariantMap map = description;
@@ -236,7 +236,7 @@ ServiceJob *Service::startOperationCall(const QVariantMap &description, QObject 
         }
     } else {
 #ifndef NDEBUG
-    kDebug() << op << "is not a valid group; valid groups are:" << d->operationsMap.keys();
+    // qDebug() << op << "is not a valid group; valid groups are:" << d->operationsMap.keys();
 #endif
     }
 
@@ -316,7 +316,7 @@ void Service::registerOperationsScheme()
 
     if (d->name.isEmpty()) {
 #ifndef NDEBUG
-        kDebug() << "No name found";
+        // qDebug() << "No name found";
 #endif
         return;
     }
@@ -325,7 +325,7 @@ void Service::registerOperationsScheme()
 
     if (path.isEmpty()) {
 #ifndef NDEBUG
-        kDebug() << "Cannot find operations description:" << d->name << ".operations";
+        // qDebug() << "Cannot find operations description:" << d->name << ".operations";
 #endif
         return;
     }

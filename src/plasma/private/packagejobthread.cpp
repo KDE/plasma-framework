@@ -41,7 +41,7 @@
 #include <QtNetwork/QHostInfo>
 #include <qtemporarydir.h>
 
-#include <kdebug.h>
+#include <QDebug>
 
 namespace Plasma
 {
@@ -144,7 +144,7 @@ bool PackageJobThread::installPackage(const QString& src, const QString &dest)
         QDir().mkpath(dest);
         if (!root.exists()) {
             d->errorMessage = i18n("Could not create package root directory: %1", dest);
-            //kWarning() << "Could not create package root directory: " << dest;
+            //qWarning() << "Could not create package root directory: " << dest;
             return false;
         }
     }
@@ -177,13 +177,13 @@ bool PackageJobThread::installPackage(const QString& src, const QString &dest)
                    mimetype.inherits("application/x-xz") || mimetype.inherits("application/x-lzma")) {
             archive = new KTar(src);
         } else {
-            //kWarning() << "Could not open package file, unsupported archive format:" << src << mimetype.name();
+            //qWarning() << "Could not open package file, unsupported archive format:" << src << mimetype.name();
             d->errorMessage = i18n("Could not open package file, unsupported archive format: %1 %2", src, mimetype.name());
             return false;
         }
 
         if (!archive->open(QIODevice::ReadOnly)) {
-            //kWarning() << "Could not open package file:" << src;
+            //qWarning() << "Could not open package file:" << src;
             delete archive;
             d->errorMessage = i18n("Could not open package file: %1", src);
             return false;
@@ -219,7 +219,7 @@ bool PackageJobThread::installPackage(const QString& src, const QString &dest)
     QString pluginName = meta.pluginName();
     qDebug() << "pluginname: " << meta.pluginName();
     if (pluginName.isEmpty()) {
-        //kWarning() << "Package plugin name not specified";
+        //qWarning() << "Package plugin name not specified";
         d->errorMessage = i18n("Package plugin name not specified: %1", src);
         return false;
     }
@@ -228,7 +228,7 @@ bool PackageJobThread::installPackage(const QString& src, const QString &dest)
     // bad characters into the paths used for removal.
     QRegExp validatePluginName("^[\\w-\\.]+$"); // Only allow letters, numbers, underscore and period.
     if (!validatePluginName.exactMatch(pluginName)) {
-        //kDebug() << "Package plugin name " << pluginName << "contains invalid characters";
+        //qDebug() << "Package plugin name " << pluginName << "contains invalid characters";
         d->errorMessage = i18n("Package plugin name %1 contains invalid characters", pluginName);
         return false;
     }
@@ -249,7 +249,7 @@ bool PackageJobThread::installPackage(const QString& src, const QString &dest)
         const bool ok = copyFolder(path, targetName);
         removeFolder(path);
         if (!ok) {
-            //kWarning() << "Could not move package to destination:" << targetName;
+            //qWarning() << "Could not move package to destination:" << targetName;
             d->errorMessage = i18n("Could not move package to destination: %1", targetName);
             return false;
         }
@@ -258,7 +258,7 @@ bool PackageJobThread::installPackage(const QString& src, const QString &dest)
         // than move them
         const bool ok = copyFolder(path, targetName);
         if (!ok) {
-            //kWarning() << "Could not copy package to destination:" << targetName;
+            //qWarning() << "Could not copy package to destination:" << targetName;
             d->errorMessage = i18n("Could not copy package to destination: %1", targetName);
             return false;
         }
@@ -314,7 +314,7 @@ bool PackageJobThread::installPackage(const QString& src, const QString &dest)
     sycoca.asyncCall("recreate");
     d->installPath = targetName;
 
-    //kWarning() << "Not updating kbuildsycoca4, since that will go away. Do it yourself for now if needed.";
+    //qWarning() << "Not updating kbuildsycoca4, since that will go away. Do it yourself for now if needed.";
     return true;
 
 }
@@ -322,9 +322,9 @@ bool PackageJobThread::installPackage(const QString& src, const QString &dest)
 bool PackageJobThread::uninstall(const QString &packagePath)
 {
     bool ok = uninstallPackage(packagePath);
-    //kDebug() << "emit installPathChanged " << d->installPath;
+    //qDebug() << "emit installPathChanged " << d->installPath;
     emit installPathChanged(QString());
-    //kDebug() << "Thread: installFinished" << ok;
+    //qDebug() << "Thread: installFinished" << ok;
     emit finished(ok, d->errorMessage);
     return ok;
 }
@@ -353,7 +353,7 @@ bool PackageJobThread::uninstallPackage(const QString& packagePath)
 
     bool ok = QFile::remove(service);
     if (!ok) {
-        kWarning() << "Unable to remove " << service;
+        qWarning() << "Unable to remove " << service;
     }
 
     ok = removeFolder(packagePath);

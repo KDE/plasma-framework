@@ -80,9 +80,9 @@ bool CalendarSystem::isValid(const QDate &date) const
     return m_calendarSystem->isValid(date);
 }
 
-QVariantHash CalendarSystem::getDate(const QDate date) const
+QVariantMap CalendarSystem::getDate(const QDate date) const
 {
-    QVariantHash hash;
+    QVariantMap hash;
 
     int year;
     int month;
@@ -143,9 +143,9 @@ QDate CalendarSystem::addDays(const QDate &date, int numDays) const
     return m_calendarSystem->addDays(date, numDays);
 }
 
-QVariantHash CalendarSystem::dateDifference(const QDate &fromDate, const QDate &toDate) const
+QVariantMap CalendarSystem::dateDifference(const QDate &fromDate, const QDate &toDate) const
 {
-    QVariantHash hash;
+    QVariantMap hash;
 
     int yearsDiff;
     int monthsDiff;

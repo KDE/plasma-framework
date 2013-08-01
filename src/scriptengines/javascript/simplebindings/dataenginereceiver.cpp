@@ -46,7 +46,7 @@ DataEngineReceiver::DataEngineReceiver(const Plasma::DataEngine *engine, const Q
 DataEngineReceiver::~DataEngineReceiver()
 {
     s_receivers.remove(this);
-    //kDebug() << s_receivers.count();
+    //qDebug() << s_receivers.count();
 }
 
 bool DataEngineReceiver::isValid() const
@@ -189,13 +189,13 @@ QScriptValue DataEngineReceiver::disconnectSource(QScriptContext *context, QScri
 
     DataEngine *dataEngine = qobject_cast<DataEngine *>(context->thisObject().toQObject());
     if (!dataEngine) {
-        //kDebug() << "no engine!";
+        //qDebug() << "no engine!";
         return engine->undefinedValue();
     }
 
     const QString source = context->argument(0).toString();
     if (source.isEmpty()) {
-        //kDebug() << "no source!";
+        //qDebug() << "no source!";
         return engine->undefinedValue();
     }
 
@@ -214,7 +214,7 @@ QScriptValue DataEngineReceiver::disconnectSource(QScriptContext *context, QScri
     }
 
     if (!obj) {
-        //kDebug() << "no object!";
+        //qDebug() << "no object!";
         return engine->undefinedValue();
     }
 

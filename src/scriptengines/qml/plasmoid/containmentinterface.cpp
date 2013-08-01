@@ -284,13 +284,13 @@ void ContainmentInterface::addAppletActions(QMenu &desktopMenu, Plasma::Applet *
 
     if (containment()->immutability() == Plasma::Types::Mutable) {
         QAction *closeApplet = applet->actions()->action("remove");
-        //kDebug() << "checking for removal" << closeApplet;
+        //qDebug() << "checking for removal" << closeApplet;
         if (closeApplet) {
             if (!desktopMenu.isEmpty()) {
                 desktopMenu.addSeparator();
             }
 
-            //kDebug() << "adding close action" << closeApplet->isEnabled() << closeApplet->isVisible();
+            //qDebug() << "adding close action" << closeApplet->isEnabled() << closeApplet->isVisible();
             desktopMenu.addAction(closeApplet);
         }
     }
@@ -300,7 +300,7 @@ void ContainmentInterface::addContainmentActions(QMenu &desktopMenu, QEvent *eve
 {
     if (containment()->corona()->immutability() != Plasma::Types::Mutable &&
         !KAuthorized::authorizeKAction("plasma/containment_actions")) {
-        //kDebug() << "immutability";
+        //qDebug() << "immutability";
         return;
     }
 

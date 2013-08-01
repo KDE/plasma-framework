@@ -20,7 +20,7 @@
 #include "private/datacontainer_p.h"
 #include "private/storage_p.h"
 
-#include <kdebug.h>
+#include <QDebug>
 
 #include "plasma.h"
 
@@ -85,7 +85,7 @@ bool DataContainer::visualizationIsConnected(QObject *visualization) const
 void DataContainer::connectVisualization(QObject *visualization, uint pollingInterval,
                                          Plasma::Types::IntervalAlignment alignment)
 {
-    //kDebug() << "connecting visualization" << visualization << "at interval of"
+    //qDebug() << "connecting visualization" << visualization << "at interval of"
     //         << pollingInterval << "to" << objectName();
     QMap<QObject *, SignalRelay *>::iterator objIt = d->relayObjects.find(visualization);
     bool connected = objIt != d->relayObjects.end();
@@ -95,15 +95,15 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
         SignalRelay *relay = objIt.value();
         if (relay) {
             // connected to a relay
-            //kDebug() << "     already connected, but to a relay";
+            //qDebug() << "     already connected, but to a relay";
             if (relay->m_interval == pollingInterval) {
-                //kDebug() << "    already connected to a relay of the same interval of"
+                //qDebug() << "    already connected to a relay of the same interval of"
                 //          << pollingInterval << ", nothing to do";
                 return;
             }
 
             if (relay->receiverCount() == 1) {
-                //kDebug() << "    removing relay, as it is now unused";
+                //qDebug() << "    removing relay, as it is now unused";
                 d->relays.remove(relay->m_interval);
                 delete relay;
             } else {
@@ -115,7 +115,7 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
             // the visualization was connected already, but not to a relay
             // and it still doesn't want to connect to a relay, so we have
             // nothing to do!
-            //kDebug() << "     already connected, nothing to do";
+            //qDebug() << "     already connected, nothing to do";
             return;
         } else {
             disconnect(this, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
@@ -127,12 +127,12 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
     }
 
     if (pollingInterval < 1) {
-        //kDebug() << "    connecting directly";
+        //qDebug() << "    connecting directly";
         d->relayObjects[visualization] = 0;
         connect(this, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                 visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
     } else {
-        //kDebug() << "    connecting to a relay";
+        //qDebug() << "    connecting to a relay";
         // we only want to do an imediate update if this is not the first object to connect to us
         // if it is the first visualization, then the source will already have been populated
         // engine's sourceRequested method
@@ -289,7 +289,7 @@ void DataContainer::disconnectVisualization(QObject *visualization)
 
 void DataContainer::checkForUpdate()
 {
-    //kDebug() << objectName() << d->dirty;
+    //qDebug() << objectName() << d->dirty;
     if (d->dirty) {
         emit dataUpdated(objectName(), d->data);
 
@@ -343,7 +343,7 @@ void DataContainer::timerEvent(QTimerEvent * event)
     if (event->timerId() == d->checkUsageTimer.timerId()) {
         if (!isUsed()) {
             // DO NOT CALL ANYTHING AFTER THIS LINE AS IT MAY GET DELETED!
-            //kDebug() << objectName() << "is unused";
+            //qDebug() << objectName() << "is unused";
             emit becameUnused(objectName());
         }
         d->checkUsageTimer.stop();

@@ -30,7 +30,7 @@
 
 #include <kcompletion.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <qmimedatabase.h>
 #include <kshell.h>
 #include <qstandardpaths.h>
@@ -60,35 +60,35 @@ Returns true on success and false on error, in case of error, correctCasePath is
 */
 bool correctLastComponentCase(const QString &path, QString &correctCasePath, const bool mustBeDir)
 {
-    //kDebug() << "Correcting " << path;
+    //qDebug() << "Correcting " << path;
 
     // If the file already exists then no need to search for it.
     if (QFile::exists(path)) {
         correctCasePath = path;
-        //kDebug() << "Correct path is" << correctCasePath;
+        //qDebug() << "Correct path is" << correctCasePath;
         return true;
     }
 
     const QFileInfo pathInfo(path);
 
     const QDir fileDir = pathInfo.dir();
-    //kDebug() << "Directory is" << fileDir;
+    //qDebug() << "Directory is" << fileDir;
 
     const QString filename = pathInfo.fileName();
-    //kDebug() << "Filename is" << filename;
+    //qDebug() << "Filename is" << filename;
 
-    //kDebug() << "searching for a" << (mustBeDir ? "directory" : "directory/file");
+    //qDebug() << "searching for a" << (mustBeDir ? "directory" : "directory/file");
 
     const QStringList matchingFilenames = fileDir.entryList(QStringList(filename),
                                           mustBeDir ? QDir::Dirs : QDir::NoFilter);
 
     if (matchingFilenames.empty()) {
-        //kDebug() << "No matches found!!\n";
+        //qDebug() << "No matches found!!\n";
         return false;
     } else {
         /*if (matchingFilenames.size() > 1) {
 #ifndef NDEBUG
-            kDebug() << "Found multiple matches!!\n";
+            // qDebug() << "Found multiple matches!!\n";
 #endif
         }*/
 
@@ -98,7 +98,7 @@ bool correctLastComponentCase(const QString &path, QString &correctCasePath, con
             correctCasePath = fileDir.path() + QDir::separator() + matchingFilenames[0];
         }
 
-        //kDebug() << "Correct path is" << correctCasePath;
+        //qDebug() << "Correct path is" << correctCasePath;
         return true;
     }
 }
@@ -126,7 +126,7 @@ bool correctPathCase(const QString& path, QString &corrected)
 
     const bool mustBeDir = components.back().isEmpty();
 
-    //kDebug() << "Components are" << components;
+    //qDebug() << "Components are" << components;
 
     if (mustBeDir) {
         components.pop_back();
@@ -142,7 +142,7 @@ bool correctPathCase(const QString& path, QString &corrected)
         const QString tmp = components[0] + QDir::separator() + components[1];
 
         if (!correctLastComponentCase(tmp, correctPath, components.size() > 2 || mustBeDir)) {
-            //kDebug() << "search was not successful";
+            //qDebug() << "search was not successful";
             return false;
         }
 
@@ -172,7 +172,7 @@ class RunnerContextPrivate : public QSharedData
               q(p.q),
               singleRunnerQueryMode(false)
         {
-            //kDebug() << "¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿boo yeah" << type;
+            //qDebug() << "¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿boo yeah" << type;
         }
 
         ~RunnerContextPrivate()
@@ -200,7 +200,7 @@ class RunnerContextPrivate : public QSharedData
             } else {
                 QUrl url = QUrl::fromUserInput(term);
                 // check for a normal URL first
-                //kDebug() << url << KProtocolInfo::protocolClass(url.scheme()) << url.hasHost() <<
+                //qDebug() << url << KProtocolInfo::protocolClass(url.scheme()) << url.hasHost() <<
                 //    url.host() << url.isLocalFile() << path << path.indexOf('/');
                 const bool hasProtocol = !url.scheme().isEmpty();
                 const bool isLocalProtocol = KProtocolInfo::protocolClass(url.scheme()) == ":local";
@@ -215,13 +215,13 @@ class RunnerContextPrivate : public QSharedData
                     // but if a path doesn't have any slashes
                     // it's too ambiguous to be sure we're in a filesystem context
                     path = QDir::cleanPath(url.toLocalFile());
-                    //kDebug( )<< "slash check" << path;
+                    //qDebug()<< "slash check" << path;
                     if (hasProtocol || ((path.indexOf('/') != -1 || path.indexOf('\\') != -1))) {
                         QString correctCasePath;
                         if (correctPathCase(path, correctCasePath)) {
                             path = correctCasePath;
                             QFileInfo info(path);
-                            //kDebug( )<< "correct cas epath is" << correctCasePath << info.isSymLink() <<
+                            //qDebug()<< "correct cas epath is" << correctCasePath << info.isSymLink() <<
                             //    info.isDir() << info.isFile();
 
                             if (info.isSymLink()) {
@@ -244,7 +244,7 @@ class RunnerContextPrivate : public QSharedData
                 }
             }
 
-            //kDebug() << "term2type" << term << type;
+            //qDebug() << "term2type" << term << type;
         }
 
         void invalidate()
@@ -329,7 +329,7 @@ void RunnerContext::reset()
     d->mimeType.clear();
     d->type = UnknownType;
     d->singleRunnerQueryMode = false;
-    //kDebug() << "match count" << d->matches.count();
+    //qDebug() << "match count" << d->matches.count();
 }
 
 void RunnerContext::setQuery(const QString &term)
@@ -386,13 +386,13 @@ bool RunnerContext::addMatches(const QList<QueryMatch> &matches)
         d->matches.append(match);
 #ifndef NDEBUG
         if (d->matchesById.contains(match.id())) {
-            kDebug() << "Duplicate match id " << match.id() << "from" << match.runner()->name();
+            // qDebug() << "Duplicate match id " << match.id() << "from" << match.runner()->name();
         }
 #endif
         d->matchesById.insert(match.id(), &d->matches.at(d->matches.size() - 1));
     }
     UNLOCK(d);
-    //kDebug()<< "add matches";
+    //qDebug()<< "add matches";
     // A copied searchContext may share the d pointer,
     // we always want to sent the signal of the object that created
     // the d pointer
@@ -419,7 +419,7 @@ bool RunnerContext::addMatch(const QueryMatch &match)
     d->matches.append(m);
     d->matchesById.insert(m.id(), &d->matches.at(d->matches.size() - 1));
     UNLOCK(d);
-    //kDebug()<< "added match" << match->text();
+    //qDebug()<< "added match" << match->text();
     emit d->q->matchesChanged();
 
     return true;

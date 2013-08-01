@@ -252,7 +252,7 @@ public:
      * ["day"] the day of the date
      * @param date date to get year, month and day for
      */
-    Q_INVOKABLE QVariantHash getDate(const QDate date) const;
+    Q_INVOKABLE QVariantMap getDate(const QDate date) const;
 
     /**
      * Returns the year portion of a given date in the current calendar system
@@ -355,7 +355,7 @@ public:
      * @param fromDate The date to start from
      * @param toDate The date to end at
      */
-    Q_INVOKABLE QVariantHash dateDifference(const QDate &fromDate, const QDate &toDate)const;
+    Q_INVOKABLE QVariantMap dateDifference(const QDate &fromDate, const QDate &toDate)const;
 
     /**
     * Returns the difference between two dates in completed calendar years.

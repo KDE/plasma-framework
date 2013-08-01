@@ -114,7 +114,7 @@ UiLoader::UiLoader()
 
 UiLoader::~UiLoader()
 {
-    kDebug();
+    // qDebug();
 }
 
 QStringList UiLoader::availableWidgets() const

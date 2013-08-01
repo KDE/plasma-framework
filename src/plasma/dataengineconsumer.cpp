@@ -25,7 +25,7 @@
 #include <QSet>
 #include <qurlpathinfo.h>
 
-#include <kdebug.h>
+#include <QDebug>
 
 #include "private/dataenginemanager_p.h"
 #include "servicejob.h"
@@ -36,36 +36,36 @@ namespace Plasma
 void DataEngineConsumerPrivate::slotJobFinished(Plasma::ServiceJob *job)
 {
 #ifndef NDEBUG
-    kDebug() << "engine ready!";
+    // qDebug() << "engine ready!";
 #endif
     QString engineName = job->parameters()["EngineName"].toString();
     QString location = job->destination();
     QPair<QString, QString> pair(location, engineName);
 #ifndef NDEBUG
-    kDebug() << "pair = " << pair;
+    // qDebug() << "pair = " << pair;
 #endif
 }
 
 void DataEngineConsumerPrivate::slotServiceReady(Plasma::Service *plasmoidService)
 {
 #ifndef NDEBUG
-    kDebug() << "service ready!";
+    // qDebug() << "service ready!";
 #endif
     if (!engineNameForService.contains(plasmoidService)) {
 #ifndef NDEBUG
-        kDebug() << "no engine name for service!";
+        // qDebug() << "no engine name for service!";
 #endif
 #ifndef NDEBUG
-        kDebug() << "amount of services in map: " << engineNameForService.count();
+        // qDebug() << "amount of services in map: " << engineNameForService.count();
 #endif
     } else {
 #ifndef NDEBUG
-        kDebug() << "value = " << engineNameForService.value(plasmoidService);
+        // qDebug() << "value = " << engineNameForService.value(plasmoidService);
 #endif
     }
 
 #ifndef NDEBUG
-    kDebug() << "requesting dataengine!";
+    // qDebug() << "requesting dataengine!";
 #endif
     QVariantMap op = plasmoidService->operationDescription("DataEngine");
     op["EngineName"] = engineNameForService.value(plasmoidService);

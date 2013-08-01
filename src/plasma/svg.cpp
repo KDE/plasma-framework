@@ -32,7 +32,7 @@
 
 #include <kcolorscheme.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <kfilterdev.h>
 #include <kiconeffect.h>
 #include <kglobalsettings.h>
@@ -207,7 +207,7 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
         path = imagePath;
     } else {
 #ifndef NDEBUG
-        kDebug() << "file '" << path << "' does not exist!";
+        // qDebug() << "file '" << path << "' does not exist!";
 #endif
     }
 
@@ -223,9 +223,9 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
         } else {
             createRenderer();
             naturalSize = renderer->defaultSize();
-            //kDebug() << "natural size for" << path << "from renderer is" << naturalSize;
+            //qDebug() << "natural size for" << path << "from renderer is" << naturalSize;
             cacheAndColorsTheme()->insertIntoRectsCache(path, "_Natural", QRectF(QPointF(0,0), naturalSize));
-            //kDebug() << "natural size for" << path << "from cache is" << naturalSize;
+            //qDebug() << "natural size for" << path << "from cache is" << naturalSize;
         }
     }
 
@@ -334,17 +334,17 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
         id.append(actualElementId);
     }
 
-    //kDebug() << "id is " << id;
+    //qDebug() << "id is " << id;
 
     QPixmap p;
     if (cacheRendering && cacheAndColorsTheme()->findInCache(id, p, lastModified)) {
-        //kDebug() << "found cached version of " << id << p.size();
+        //qDebug() << "found cached version of " << id << p.size();
         return p;
     }
 
-    //kDebug() << "didn't find cached version of " << id << ", so re-rendering";
+    //qDebug() << "didn't find cached version of " << id << ", so re-rendering";
 
-    //kDebug() << "size for " << actualElementId << " is " << s;
+    //qDebug() << "size for " << actualElementId << " is " << s;
     // we have to re-render this puppy
 
     createRenderer();
@@ -386,7 +386,7 @@ void SvgPrivate::createRenderer()
         return;
     }
 
-    //kDebug() << kBacktrace();
+    //qDebug() << kBacktrace();
     if (themed && path.isEmpty() && !themeFailed) {
         Applet *applet = qobject_cast<Applet*>(q->parent());
         //FIXME: this maybe could be more efficient if we knew if the package was empty, e.g. for
@@ -405,14 +405,14 @@ void SvgPrivate::createRenderer()
             path = actualTheme()->imagePath(themePath);
             themeFailed = path.isEmpty();
             if (themeFailed) {
-                kWarning() << "No image path found for" << themePath;
+                qWarning() << "No image path found for" << themePath;
             }
         }
     }
 
-    //kDebug() << "********************************";
-    //kDebug() << "FAIL! **************************";
-    //kDebug() << path << "**";
+    //qDebug() << "********************************";
+    //qDebug() << "FAIL! **************************";
+    //qDebug() << path << "**";
 
     QString styleSheet = cacheAndColorsTheme()->d->svgStyleSheet();
     styleCrc = qChecksum(styleSheet.toUtf8(), styleSheet.size());
@@ -420,7 +420,7 @@ void SvgPrivate::createRenderer()
     QHash<QString, SharedSvgRenderer::Ptr>::const_iterator it = s_renderers.constFind(styleCrc + path);
 
     if (it != s_renderers.constEnd()) {
-        //kDebug() << "gots us an existing one!";
+        //qDebug() << "gots us an existing one!";
         renderer = it.value();
     } else {
         if (path.isEmpty()) {
@@ -599,7 +599,7 @@ QRectF SvgPrivate::makeUniform(const QRectF &orig, const QRectF &dst)
         res.setHeight(res.height() + offset);
     }
 
-    //kDebug()<<"Aligning Rects, origin:"<<orig<<"destination:"<<dst<<"result:"<<res;
+    //qDebug()<<"Aligning Rects, origin:"<<orig<<"destination:"<<dst<<"result:"<<res;
     return res;
 }
 
@@ -619,7 +619,7 @@ void SvgPrivate::themeChanged()
     eraseRenderer();
     setImagePath(currentPath);
 
-    //kDebug() << themePath << ">>>>>>>>>>>>>>>>>> theme changed";
+    //qDebug() << themePath << ">>>>>>>>>>>>>>>>>> theme changed";
     emit q->repaintNeeded();
 }
 
@@ -630,7 +630,7 @@ void SvgPrivate::colorsChanged()
     }
 
     eraseRenderer();
-    //kDebug() << "repaint needed from colorsChanged";
+    //qDebug() << "repaint needed from colorsChanged";
     emit q->repaintNeeded();
 }
 
@@ -754,7 +754,7 @@ FIXME: implement when Qt can support us!
     QSizeF naturalSize = d->renderer->defaultSize();
     qreal dx = d->size.width() / naturalSize.width();
     qreal dy = d->size.height() / naturalSize.height();
-    //kDebug() << point << "is really"
+    //qDebug() << point << "is really"
     //         << QPoint(point.x() *dx, naturalSize.height() - point.y() * dy);
 
     return QString(); // d->renderer->elementAtPoint(QPoint(point.x() *dx, naturalSize.height() - point.y() * dy));
@@ -784,7 +784,7 @@ bool Svg::containsMultipleImages() const
 void Svg::setImagePath(const QString &svgFilePath)
 {
     if (d->setImagePath(svgFilePath)) {
-        //kDebug() << "repaintNeeded";
+        //qDebug() << "repaintNeeded";
         emit repaintNeeded();
     }
 }
