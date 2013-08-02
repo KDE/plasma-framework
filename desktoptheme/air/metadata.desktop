@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Air
+Name[bs]=Vazduh
 Name[cs]=Vzduch
 Name[de]=Air
 Name[es]=Aire
@@ -16,6 +17,7 @@ Name[sv]=Luft
 Name[uk]=Air
 Name[x-test]=xxAirxx
 Comment=A breath of fresh air
+Comment[bs]=Dašak svježeg vazduha
 Comment[cs]=Závan čerstvého vzduchu
 Comment[de]=Ein Atemzug frische Luft
 Comment[es]=Una bocanada de aire fresco

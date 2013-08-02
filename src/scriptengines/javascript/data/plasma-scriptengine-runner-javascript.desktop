@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=JavaScript Runner
+Name[bs]=Javascript izvođač
 Name[cs]=Spouštěč JavaScriptu
 Name[de]=JavaScript-Ausführung
 Name[es]=Lanzador JavaScript
@@ -14,6 +15,7 @@ Name[sv]=Kör Javascript
 Name[uk]=Механізм запуску JavaScript
 Name[x-test]=xxJavaScript Runnerxx
 Comment=JavaScript Runner
+Comment[bs]=Javascript izvođač
 Comment[cs]=Spouštěč JavaScriptu
 Comment[de]=JavaScript-Ausführung
 Comment[es]=Lanzador JavaScript

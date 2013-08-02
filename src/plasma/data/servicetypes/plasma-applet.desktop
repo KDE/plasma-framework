@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/Applet
 
 Comment=Plasma applet
+Comment[bs]=Plazma aplet
 Comment[cs]=Aplet Plasma
 Comment[de]=Plasma-Miniprogramm
 Comment[es]=Miniaplicación para Plasma
