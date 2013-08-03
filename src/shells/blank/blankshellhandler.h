@@ -17,17 +17,17 @@
  *
  */
 
-#ifndef ACTIVESHELLHANDLER_H
-#define ACTIVESHELLHANDLER_H
+#ifndef BLANKSHELLHANDLER_H
+#define BLANKSHELLHANDLER_H
 
 #include <QObject>
 
-class ActiveShellHandler: public QObject {
+class BlankShellHandler: public QObject {
     Q_OBJECT
 
 public:
-    ActiveShellHandler(QObject * parent = nullptr);
-    ~ActiveShellHandler();
+    BlankShellHandler(QObject * parent = nullptr);
+    ~BlankShellHandler();
 
 public Q_SLOTS:
     void load();
@@ -35,4 +35,4 @@ public Q_SLOTS:
 
 };
 
-#endif // ACTIVESHELLHANDLER_H
+#endif // BLANKSHELLHANDLER_H

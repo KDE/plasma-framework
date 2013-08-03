@@ -17,18 +17,18 @@
  *
  */
 
-#include "activeshellplugin.h"
-#include "activeshellhandler.h"
+#include "blankshellplugin.h"
+#include "blankshellhandler.h"
 
 #include <QtQml>
 #include <QDebug>
 
-void ActiveShellPlugin::registerTypes(const char *uri)
+void BlankShellPlugin::registerTypes(const char *uri)
 {
     qDebug() << "This is me registering a plugin" << uri;
-    Q_ASSERT(uri == QLatin1String("org.kde.plasma.shells.active"));
-    qmlRegisterType<ActiveShellHandler>(uri, 0, 1, "HandlerObject");
+    Q_ASSERT(uri == QLatin1String("org.kde.plasma.shells.blank"));
+    qmlRegisterType<BlankShellHandler>(uri, 0, 1, "HandlerObject");
 }
 
-#include "moc_activeshellplugin.cpp"
+#include "moc_blankshellplugin.cpp"
 

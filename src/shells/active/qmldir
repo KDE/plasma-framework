@@ -1,4 +1,0 @@
-module org.kde.plasma.shells.active
-plugin activeshellplugin
-Handler 1.0 Handler.qml
-

@@ -59,6 +59,11 @@ public:
     Plasma::Package package() const;
 
     /**
+     * Setting the package name
+     */
+    void setPackage(const QString & package);
+
+    /**
      * @return all containments on this Corona
      */
     QList<Containment*> containments() const;

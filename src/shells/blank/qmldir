@@ -1,0 +1,4 @@
+module org.kde.plasma.shells.blank
+plugin blankshellplugin
+Handler 1.0 Handler.qml
+

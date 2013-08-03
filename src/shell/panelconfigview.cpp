@@ -50,6 +50,8 @@ PanelConfigView::PanelConfigView(Plasma::Containment *containment, PanelView *pa
     engine()->rootContext()->setContextProperty("configDialog", this);
     connect(containment, &Plasma::Containment::formFactorChanged,
             this, &PanelConfigView::syncGeometry);
+
+    QObject::connect(containment, &Plasma::Containment::formFactorChanged, [=] () { qDebug() << "blah blah"; });
 }
 
 PanelConfigView::~PanelConfigView()

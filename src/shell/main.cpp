@@ -45,14 +45,14 @@ int main(int argc, char** argv)
 
     QApplication app(argc, argv);
 
-    Plasma::PluginLoader::setPluginLoader(new ShellPluginLoader);
-    DesktopCorona *corona = new DesktopCorona();
-    corona->loadLayout();
-    if (corona->containments().isEmpty()) {
-        corona->loadDefaultLayout();
-    }
-    corona->processUpdateScripts();
-    corona->checkScreens();
+    // Plasma::PluginLoader::setPluginLoader(new ShellPluginLoader);
+    // DesktopCorona *corona = new DesktopCorona();
+    // corona->loadLayout();
+    // if (corona->containments().isEmpty()) {
+    //     corona->loadDefaultLayout();
+    // }
+    // corona->processUpdateScripts();
+    // corona->checkScreens();
 
     ShellManager::instance();
 

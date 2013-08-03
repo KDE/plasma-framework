@@ -17,29 +17,29 @@
  *
  */
 
-#include "activeshellhandler.h"
+#include "blankshellhandler.h"
 
 #include <QDebug>
 
-ActiveShellHandler::ActiveShellHandler(QObject *parent)
+BlankShellHandler::BlankShellHandler(QObject *parent)
 {
-    qDebug() << "Instantiating the active shell handler";
+    qDebug() << "Instantiating the blank shell handler";
 }
 
-ActiveShellHandler::~ActiveShellHandler()
+BlankShellHandler::~BlankShellHandler()
 {
-    qDebug() << "Killing the active shell handler";
+    qDebug() << "Killing the blank shell handler";
 }
 
-void ActiveShellHandler::load()
+void BlankShellHandler::load()
 {
-    qDebug() << "Loading the active shell";
+    qDebug() << "Loading the blank shell";
 }
 
-void ActiveShellHandler::unload()
+void BlankShellHandler::unload()
 {
-    qDebug() << "Unloading the active shell";
+    qDebug() << "Unloading the blank shell";
 }
 
 
-#include "moc_activeshellhandler.cpp"
+#include "moc_blankshellhandler.cpp"

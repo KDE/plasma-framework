@@ -40,6 +40,9 @@ public Q_SLOTS:
     void requestShellUpdate();
     void updateShell();
 
+Q_SIGNALS:
+    void shellChanged(const QString & shell);
+
 private:
     ShellManager();
 

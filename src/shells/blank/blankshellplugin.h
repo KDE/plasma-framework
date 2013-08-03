@@ -17,13 +17,13 @@
  *
  */
 
-#ifndef ACTIVESHELLPLUGIN_H
-#define ACTIVESHELLPLUGIN_H
+#ifndef BLANKSHELLPLUGIN_H
+#define BLANKSHELLPLUGIN_H
 
 #include <QQmlExtensionPlugin>
 
 
-class ActiveShellPlugin: public QQmlExtensionPlugin
+class BlankShellPlugin: public QQmlExtensionPlugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
@@ -32,4 +32,4 @@ public:
     void registerTypes(const char *uri);
 };
 
-#endif // ACTIVESHELLPLUGIN_H
+#endif // BLANKSHELLPLUGIN_H

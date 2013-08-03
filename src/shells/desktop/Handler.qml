@@ -25,8 +25,8 @@ import QtQuick.Window 2.0
 
 Item {
     id: main
-    state: "Desktop"
 
+    property string shell  : "org.kde.desktop"
     property bool loaded   : false
     property bool willing  : !solidx.touchscreenPresent
     property int  priority : 1

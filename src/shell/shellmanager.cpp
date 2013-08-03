@@ -32,6 +32,8 @@
 #include <QQmlComponent>
 
 #include <config-prefix.h>
+#include "shellcorona.h"
+#include "shellpluginloader.h"
 
 static const QString s_shellsDir(
         QString(CMAKE_INSTALL_PREFIX) + "/" + LIB_INSTALL_DIR + "/" + "qml/org/kde/plasma/shells/");
@@ -52,13 +54,23 @@ public:
     QList<QObject *> handlers;
     QObject * currentHandler;
     QTimer shellUpdateDelay;
+    ShellCorona * corona;
 };
 
 ShellManager::ShellManager()
 {
+    ShellPluginLoader::init();
+
     connect(
         &d->shellUpdateDelay, &QTimer::timeout,
         this, &ShellManager::updateShell
+    );
+
+    d->corona = new ShellCorona(this);
+
+    connect(
+        this,      &ShellManager::shellChanged,
+        d->corona, &ShellCorona::setShell
     );
 
     loadHandlers();
@@ -72,8 +84,7 @@ ShellManager::~ShellManager()
 
 void ShellManager::loadHandlers()
 {
-    // For the time being, we are 'loading' static shells
-    // TODO: Make this plugin-based
+    // TODO: Use corona's qml engine when it switches from QScriptEngine
     static QQmlEngine * engine = new QQmlEngine(this);
 
     for (const auto & dir: QDir(s_shellsDir).entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
@@ -194,6 +205,9 @@ void ShellManager::updateShell()
     qDebug() << "Priority?" << d->currentHandler->property("priority");
 
     d->currentHandler->setProperty("loaded", true);
+
+    // d->corona->setShell(d->currentHandler->property("shell").toString());
+    emit shellChanged(d->currentHandler->property("shell").toString());
 }
 
 ShellManager * ShellManager::instance()

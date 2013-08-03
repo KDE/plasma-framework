@@ -19,14 +19,14 @@
  */
 
 import QtQuick 2
-import org.kde.plasma.shells.active 0.1 as Active
+import org.kde.plasma.shells.blank 0.1 as Blank
 import org.kde.solidx 0.1 as SolidX
 import QtQuick.Window 2.0
 
 Item {
     id: main
-    state: "Active"
 
+    property string shell  : "org.kde.blank"
     property bool loaded   : false
     property bool willing  : solidx.touchscreenPresent
     property int  priority : 0
@@ -34,7 +34,7 @@ Item {
     signal updated()
 
     onWillingChanged:  {
-        console.log("This is the new status - is active shell willing? " + willing)
+        console.log("This is the new status - is blank shell willing? " + willing)
         main.updated()
     }
 
@@ -47,7 +47,7 @@ Item {
             handler.unload()
         }
 
-    Active.HandlerObject {
+    Blank.HandlerObject {
         id: handler
     }
 
@@ -56,7 +56,7 @@ Item {
     }
 
     Window {
-        id: activeDialog
+        id: blankDialog
 
         visible: main.loaded
 
@@ -71,7 +71,7 @@ Item {
         Text {
             anchors.fill: parent
             font.pointSize: 32
-            text: "Active"
+            text: "Blank"
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment:   Text.AlignVCenter
         }
