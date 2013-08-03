@@ -1,4 +1,0 @@
-module org.kde.plasma.shells.desktop
-plugin desktopshellplugin
-Handler 1.0 Handler.qml
-

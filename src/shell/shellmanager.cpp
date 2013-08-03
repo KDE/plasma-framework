@@ -36,7 +36,8 @@
 #include "shellpluginloader.h"
 
 static const QString s_shellsDir(
-        QString(CMAKE_INSTALL_PREFIX) + "/" + LIB_INSTALL_DIR + "/" + "qml/org/kde/plasma/shells/");
+        QString(CMAKE_INSTALL_PREFIX) + "/" + DATA_INSTALL_DIR + "/" + "plasma/shells/");
+static const QString s_shellLoaderPath = QString("/contents/loader.qml");
 
 //
 // ShellManager
@@ -87,25 +88,25 @@ void ShellManager::loadHandlers()
     // TODO: Use corona's qml engine when it switches from QScriptEngine
     static QQmlEngine * engine = new QQmlEngine(this);
 
+    qDebug() << "Searching for shells inside this directory:" << s_shellsDir;
+
     for (const auto & dir: QDir(s_shellsDir).entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
-        for (const auto & qml: QDir(s_shellsDir + dir).entryList(QStringList() << "*.qml")) {
-            qDebug() << "Making a new instance of " << qml;
+        qDebug() << "Yada!!!";
+        const QString qmlFile = s_shellsDir + dir + s_shellLoaderPath;
+        qDebug() << "Making a new instance of " << qmlFile;
 
-            QQmlComponent handlerComponent(engine,
-                    QUrl::fromLocalFile(s_shellsDir + dir + "/" + qml)
-                );
-            auto handler = handlerComponent.create();
+        QQmlComponent handlerComponent(engine,
+                QUrl::fromLocalFile(qmlFile)
+            );
+        auto handler = handlerComponent.create();
 
-            // Writing out the errors
-            for (const auto & error: handlerComponent.errors()) {
-                qDebug() << "Error: " << error;
-            }
+        // Writing out the errors
+        for (const auto & error: handlerComponent.errors()) {
+            qDebug() << "Error: " << error;
+        }
 
-            if (handler) {
-                qDebug() << "We got the handler";
-
-                registerHandler(handler);
-            }
+        if (handler) {
+            registerHandler(handler);
         }
     }
 
@@ -114,13 +115,20 @@ void ShellManager::loadHandlers()
 
 void ShellManager::registerHandler(QObject * handler)
 {
+    qDebug() << "We got the handler" << handler->property("shell").toString();
+
     connect(
         handler, &QObject::destroyed,
         this,    &ShellManager::deregisterHandler
     );
 
     connect(
-        handler, SIGNAL(updated()),
+        handler, SIGNAL(willingChanged()),
+        this,    SLOT(requestShellUpdate())
+    );
+
+    connect(
+        handler, SIGNAL(priorityChanged()),
         this,    SLOT(requestShellUpdate())
     );
 

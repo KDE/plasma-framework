@@ -19,44 +19,27 @@
  */
 
 import QtQuick 2
-import org.kde.plasma.shells.blank 0.1 as Blank
 import org.kde.solidx 0.1 as SolidX
 import QtQuick.Window 2.0
 
 Item {
     id: main
 
-    property string shell  : "org.kde.blank"
+    property string shell  : "org.kde.desktop"
+    property bool willing  : !solidx.touchscreenPresent
+    property int  priority : 1
+
+    // This is not needed, but allows the
+    // handler to know whether its shell is loaded
     property bool loaded   : false
-    property bool willing  : solidx.touchscreenPresent
-    property int  priority : 0
-
-    signal updated()
-
-    onWillingChanged:  {
-        console.log("This is the new status - is blank shell willing? " + willing)
-        main.updated()
-    }
-
-    onPriorityChanged: main.updated()
-
-    onLoadedChanged:
-        if (loaded) {
-            handler.load()
-        } else {
-            handler.unload()
-        }
-
-    Blank.HandlerObject {
-        id: handler
-    }
 
     SolidX.Interface {
         id: solidx
     }
 
+    // TODO: This is not needed - just for testing purposes
     Window {
-        id: blankDialog
+        id: desktopDialog
 
         visible: main.loaded
 
@@ -71,7 +54,7 @@ Item {
         Text {
             anchors.fill: parent
             font.pointSize: 32
-            text: "Blank"
+            text: "Desktop"
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment:   Text.AlignVCenter
         }
