@@ -88,12 +88,9 @@ void ShellManager::loadHandlers()
     // TODO: Use corona's qml engine when it switches from QScriptEngine
     static QQmlEngine * engine = new QQmlEngine(this);
 
-    qDebug() << "Searching for shells inside this directory:" << s_shellsDir;
-
     for (const auto & dir: QDir(s_shellsDir).entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
-        qDebug() << "Yada!!!";
         const QString qmlFile = s_shellsDir + dir + s_shellLoaderPath;
-        qDebug() << "Making a new instance of " << qmlFile;
+        // qDebug() << "Making a new instance of " << qmlFile;
 
         QQmlComponent handlerComponent(engine,
                 QUrl::fromLocalFile(qmlFile)
@@ -102,7 +99,7 @@ void ShellManager::loadHandlers()
 
         // Writing out the errors
         for (const auto & error: handlerComponent.errors()) {
-            qDebug() << "Error: " << error;
+            qWarning() << "Error: " << error;
         }
 
         if (handler) {
@@ -115,7 +112,7 @@ void ShellManager::loadHandlers()
 
 void ShellManager::registerHandler(QObject * handler)
 {
-    qDebug() << "We got the handler" << handler->property("shell").toString();
+    // qDebug() << "We got the handler: " << handler->property("shell").toString();
 
     connect(
         handler, &QObject::destroyed,
@@ -149,15 +146,12 @@ void ShellManager::deregisterHandler(QObject * handler)
 
 void ShellManager::requestShellUpdate()
 {
-    qDebug() << "Somebody wants us to check whether we should change the current shell";
     d->shellUpdateDelay.start();
 }
 
 void ShellManager::updateShell()
 {
     d->shellUpdateDelay.stop();
-
-    qDebug() << "We got a request to update the current shell";
 
     if (d->handlers.isEmpty()) {
         qFatal("We have no shell handlers installed");
@@ -167,22 +161,16 @@ void ShellManager::updateShell()
     // Finding the handler that has the priority closest to zero.
     // We will return a handler even if there are no willing ones.
 
-    qDebug() << "We have " << d->handlers.count() << " candidates";
-
     auto handler =* std::min_element(d->handlers.cbegin(), d->handlers.cend(),
             [] (QObject * left, QObject * right)
             {
                 auto willing = [] (QObject * handler)
                 {
-                    qDebug()
-                        << handler->property("state")
-                        << "willing? " << handler->property("willing");
                     return handler->property("willing").toBool();
                 };
 
                 auto priority = [] (QObject * handler)
                 {
-                    qDebug() << "priority? " << handler->property("priority");
                     return handler->property("priority").toInt();
                 };
 
@@ -199,19 +187,11 @@ void ShellManager::updateShell()
     if (handler == d->currentHandler) return;
 
     // Activating the new handler and killing the old one
-    qDebug() << "Activating the new handler and killing the old one";
-
     if (d->currentHandler) {
-        qDebug() << "Loaded?" << d->currentHandler->property("loaded");
         d->currentHandler->setProperty("loaded", false);
     }
 
     d->currentHandler = handler;
-
-    qDebug() << "Loaded?" << d->currentHandler->property("loaded");
-    qDebug() << "Willing?" << d->currentHandler->property("willing");
-    qDebug() << "Priority?" << d->currentHandler->property("priority");
-
     d->currentHandler->setProperty("loaded", true);
 
     // d->corona->setShell(d->currentHandler->property("shell").toString());
