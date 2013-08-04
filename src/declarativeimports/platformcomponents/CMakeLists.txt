@@ -1,29 +1,37 @@
-cmake_minimum_required(VERSION 2.8.10.20130309)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-project(PlasmaPlatformComponents)
+include(CheckCXXSourceCompiles)
 
-find_package(ECM 0.0.8 REQUIRED NO_MODULE)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
+add_definitions("-std=c++11")
 
-find_package(
-    KF5 MODULE REQUIRED
-    COMPONENTS CMake Compiler InstallDirs
+set(CMAKE_MODULE_PATH
+    /opt/kf5/usr/kde/share/ECM-0.0.8/find-modules/
+    ${CMAKE_MODULE_PATH}
     )
 
-# set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+set(platformcomponents_SRCS
+    platformextensionplugin.cpp
+    application.cpp
+    )
 
-# find_package(KF5 5.0.0 REQUIRED MODULE COMPONENTS CMake Compiler InstallDirs)
+include(CheckIncludeFiles)
+include(CheckFunctionExists)
+include(CheckCXXSourceCompiles)
 
-# find_package(Qt5 5.2.0 REQUIRED NO_MODULE COMPONENTS Core Gui)
+find_package(Qt5 5.2.0 REQUIRED NO_MODULE COMPONENTS Core DBus Declarative Quick Qml)
 
-include(FeatureSummary)
-include(CMakePackageConfigHelpers)
-# include(ECMSetupVersion)
+add_library(platformcomponentsplugin SHARED ${platformcomponents_SRCS})
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_BINARY_DIR}/src)
+qt5_use_modules(platformcomponentsplugin Core Widgets Declarative DBus Quick Qml)
 
-add_subdirectory(src/platformcomponents)
+target_link_libraries(
+    platformcomponentsplugin
+    Qt5::Core
+    Qt5::DBus
+    Qt5::Declarative
+)
 
-if ("${CMAKE_BINARY_DIR}" STREQUAL "${CMAKE_CURRENT_BINARY_DIR}")
-    feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
-endif()
+install(TARGETS platformcomponentsplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/platformcomponents)
+install(FILES qmldir DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/platformcomponents)
+

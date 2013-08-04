@@ -20,6 +20,7 @@
 
 import QtQuick 2
 import org.kde.plasma.hardware 0.1 as Hardware
+import org.kde.plasma.platformcomponents 1.0 as Platform
 import QtQuick.Window 2.0
 
 Item {
@@ -34,6 +35,11 @@ Item {
     property bool loaded   : false
 
     Hardware.Interface { id: hardware }
+
+    Platform.Application {
+        application: "xterm"
+        running: main.loaded
+    }
 
     // TODO: This is not needed - just for testing purposes
     Window {
