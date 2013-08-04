@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef SOLIDX_INTERFACE_P_H
-#define SOLIDX_INTERFACE_P_H
+#ifndef HARDWARE_INTERFACE_P_H
+#define HARDWARE_INTERFACE_P_H
 
 #include "interface.h"
 
@@ -26,7 +26,7 @@
 #include <QList>
 #include "backends/abstractinputdevicebackend.h"
 
-namespace solidx {
+namespace hardware {
 
 class Interface::Private: public QObject {
     Q_OBJECT
@@ -53,8 +53,8 @@ public:
     QList<AbstractInputDeviceBackend*> backends;
 };
 
-} // namespace solidx
+} // namespace hardware
 
 
-#endif /* SOLIDX_INTERFACE_P_H */
+#endif /* HARDWARE_INTERFACE_P_H */
 

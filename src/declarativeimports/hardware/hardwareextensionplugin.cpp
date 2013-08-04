@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "solidxextensionplugin.h"
+#include "hardwareextensionplugin.h"
 
 //#include <QtDeclarative/qdeclarative.h>
 #include <QtQml>
@@ -27,12 +27,12 @@
 #include "interface.h"
 #include "inputdevicemodel.h"
 
-class SolidXExtensionPlugin: public QQmlExtensionPlugin {
+class HardwareExtensionPlugin: public QQmlExtensionPlugin {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.kde.solidx")
+    Q_PLUGIN_METADATA(IID "org.kde.plasma.hardware")
 
 public:
-    SolidXExtensionPlugin(QObject * parent = Q_NULLPTR)
+    HardwareExtensionPlugin(QObject * parent = Q_NULLPTR)
         : QQmlExtensionPlugin(parent)
     {
         qDebug() << "instantiated plugin object";
@@ -40,11 +40,11 @@ public:
 
     void registerTypes(const char * uri) Q_DECL_OVERRIDE
     {
-        using namespace solidx;
+        using namespace hardware;
 
         qDebug() << "plugin loaded, registering types " << uri;
 
-        Q_ASSERT(QLatin1String(uri) == QLatin1String("org.kde.solidx"));
+        Q_ASSERT(QLatin1String(uri) == QLatin1String("org.kde.plasma.hardware"));
 
         qmlRegisterType<Interface> (uri, 0, 1, "Interface");
         qmlRegisterType<InputDeviceModel> (uri, 0, 1, "InputDeviceModel");
@@ -52,5 +52,5 @@ public:
 
 };
 
-#include "solidxextensionplugin.moc"
+#include "hardwareextensionplugin.moc"
 

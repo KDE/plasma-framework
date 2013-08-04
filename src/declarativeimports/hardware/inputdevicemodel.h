@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef SOLIDX_INPUTDEVICEMODEL_H
-#define SOLIDX_INPUTDEVICEMODEL_H
+#ifndef HARDWARE_INPUTDEVICEMODEL_H
+#define HARDWARE_INPUTDEVICEMODEL_H
 
 #include <QAbstractListModel>
 #include <QString>
@@ -26,7 +26,7 @@
 #include "utils/d_ptr.h"
 #include "inputdevice.h"
 
-namespace solidx {
+namespace hardware {
 
 /**
  * InputDevices
@@ -34,8 +34,8 @@ namespace solidx {
 class InputDeviceModel: public QAbstractListModel {
     Q_OBJECT
 
-    Q_PROPERTY(solidx::InputDevice::Type type READ type WRITE setType)
-    Q_PROPERTY(solidx::InputDevice::Subtype subtype READ subtype WRITE setSubtype)
+    Q_PROPERTY(hardware::InputDevice::Type type READ type WRITE setType)
+    Q_PROPERTY(hardware::InputDevice::Subtype subtype READ subtype WRITE setSubtype)
 
 public:
     // explicit InputDeviceModel(
@@ -61,7 +61,7 @@ private:
     D_PTR;
 };
 
-} // namespace solidx
+} // namespace hardware
 
-#endif /* SOLIDX_INPUTDEVICEMODEL_H */
+#endif /* HARDWARE_INPUTDEVICEMODEL_H */
 

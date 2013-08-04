@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef SOLIDX_XLIB_INPUTDEVICE_P_H
-#define SOLIDX_XLIB_INPUTDEVICE_P_H
+#ifndef HARDWARE_XLIB_INPUTDEVICE_P_H
+#define HARDWARE_XLIB_INPUTDEVICE_P_H
 
 #include <QObject>
 #include <QDebug>
@@ -47,7 +47,7 @@
 #undef Bool
 #undef None
 
-namespace solidx {
+namespace hardware {
 namespace backends {
 namespace xlib {
 
@@ -141,7 +141,7 @@ private:
 
 } // namespace xlib
 } // namespace backends
-} // namespace solidx
+} // namespace hardware
 
-#endif // SOLIDX_XLIB_INPUTDEVICE_P_H
+#endif // HARDWARE_XLIB_INPUTDEVICE_P_H
 

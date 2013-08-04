@@ -22,7 +22,7 @@
 
 #include <QtDBus/QDBusConnection>
 
-namespace solidx {
+namespace hardware {
 namespace backends {
 namespace fake {
 
@@ -100,5 +100,5 @@ const InputDevice & FakeInputDeviceBackend::device(const QString & id) const
 
 } // namespace fake
 } // namespace backends
-} // namespace solidx
+} // namespace hardware
 

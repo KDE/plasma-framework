@@ -1,20 +1,9 @@
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-include(CheckCXXSourceCompiles)
-
-add_definitions("-std=c++11")
-
-set(CMAKE_MODULE_PATH
-    /opt/kf5/usr/kde/share/ECM-0.0.8/find-modules/
-    ${CMAKE_MODULE_PATH}
-    )
-
-set(solidx_common_SRCS
+set(hardware_common_SRCS
     inputdevice.cpp
     inputdevicemodel.cpp
     interface.cpp
-    solidxextensionplugin.cpp
+    hardwareextensionplugin.cpp
 
     backends/abstractinputdevicebackend.cpp
 
@@ -23,9 +12,9 @@ set(solidx_common_SRCS
     backends/fake/fakeinputdevicebackend.cpp
     )
 
-set(solidx_LIB_SRCS
-    ${solidx_common_SRCS}
-    solidxextensionplugin.cpp
+set(hardware_LIB_SRCS
+    ${hardware_common_SRCS}
+    hardwareextensionplugin.cpp
     )
 
 include(CheckIncludeFiles)
@@ -42,12 +31,12 @@ include_directories(
     ${XCB_INCLUDE_DIR}
     )
 
-add_library(solidxextensionplugin SHARED ${solidx_LIB_SRCS})
+add_library(hardwareextensionplugin SHARED ${hardware_LIB_SRCS})
 
-qt5_use_modules(solidxextensionplugin Core Widgets Declarative DBus Quick Qml)
+qt5_use_modules(hardwareextensionplugin Core Widgets Declarative DBus Quick Qml)
 
 target_link_libraries(
-    solidxextensionplugin
+    hardwareextensionplugin
     ${X11_X11_LIB}
     ${X11_INPUT_LIB} -lXi
     ${XCB_XCB_LIBRARIES}
@@ -58,6 +47,6 @@ target_link_libraries(
     Qt5::Declarative
 )
 
-install(TARGETS solidxextensionplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/solidx)
-install(FILES qmldir DESTINATION ${QML_INSTALL_DIR}/org/kde/solidx)
+install(TARGETS hardwareextensionplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/hardware)
+install(FILES qmldir DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/hardware)
 

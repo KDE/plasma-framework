@@ -27,7 +27,7 @@
 
 #include <QDebug>
 
-namespace solidx {
+namespace hardware {
 
 Interface::Private::Private(Interface * parent)
     : q(parent),
@@ -132,6 +132,6 @@ bool Interface::isTouchscreenPresent() const
     return d->numTouchscreen > 0;
 }
 
-} // namespace solidx
+} // namespace hardware
 
 

@@ -17,40 +17,27 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef SOLIDX_FAKE_INPUTDEVICE_H
-#define SOLIDX_FAKE_INPUTDEVICE_H
+#include "inputdevice.h"
 
-#include "../abstractinputdevicebackend.h"
+namespace hardware {
 
-#include <memory>
+InputDevice::InputDevice(
+        const QString & _id,
+        const QString & _name,
+        Type _type,
+        Subtype _subtype
+    )
+    : id(_id), name(_name), type(_type), subtype(_subtype)
+{
+}
 
-namespace solidx {
-namespace backends {
-namespace fake {
-
-class FakeInputDeviceBackend: public AbstractInputDeviceBackend {
-    Q_OBJECT
-
-public:
-    explicit FakeInputDeviceBackend(QObject *parent = 0);
-    ~FakeInputDeviceBackend();
-
-    QStringList devices() const Q_DECL_OVERRIDE;
-    const InputDevice & device(const QString & id) const Q_DECL_OVERRIDE;
-
-Q_SIGNALS:
-    void addedDevice(const QString & id);
-    void removedDevice(const QString & id);
-
-private:
-    class Private;
-    friend class Private;
-    const std::shared_ptr<Private> d;
+InputDevice InputDevice::null {
+    QString(),
+    QString(),
+    Type::Error,
+    Subtype::Error
 };
 
-} // namespace fake
-} // namespace backends
-} // namespace solidx
+} // namespace hardware
 
-#endif /* SOLIDX_FAKE_INPUTDEVICE_H */
 

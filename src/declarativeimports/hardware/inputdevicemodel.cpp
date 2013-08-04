@@ -27,7 +27,7 @@
 
 #include <QDebug>
 
-namespace solidx {
+namespace hardware {
 
 InputDeviceModel::Private::Private(InputDeviceModel * parent)
     : q(parent)
@@ -141,6 +141,6 @@ InputDevice::Subtype InputDeviceModel::subtype() const
 
 
 
-} // namespace solidx
+} // namespace hardware
 
 

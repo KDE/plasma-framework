@@ -19,7 +19,7 @@
 
 #include "abstractinputdevicebackend.h"
 
-namespace solidx {
+namespace hardware {
 
 AbstractInputDeviceBackend::AbstractInputDeviceBackend(QObject * parent)
     : QObject(parent)
@@ -30,6 +30,6 @@ AbstractInputDeviceBackend::~AbstractInputDeviceBackend()
 {
 }
 
-} // namespace solidx
+} // namespace hardware
 
 

@@ -17,8 +17,47 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef SOLIDX_EXTENSION_PLUGIN_H
-#define SOLIDX_EXTENSION_PLUGIN_H
+#ifndef HARDWARE_XLIB_CONNECTION_H
+#define HARDWARE_XLIB_CONNECTION_H
 
-#endif /* SOLIDX_EXTENSION_PLUGIN_H */
+#include <QObject>
+
+#include <memory>
+#include <functional>
+
+#include <X11/extensions/XI.h>
+
+struct _XDisplay;
+union  _XEvent;
+
+namespace hardware {
+namespace backends {
+namespace xlib {
+
+/**
+ * XlibConnection
+ */
+class XlibConnection {
+public:
+    XlibConnection();
+    virtual ~XlibConnection();
+
+    _XDisplay * display() const;
+
+    void handleExtensionEvent(int eventType, XEventClass & eventClass, std::function<void(const _XEvent &)> handler);
+    void releaseExtensionEventHandler(int eventType);
+
+private:
+
+    class Private;
+    const std::shared_ptr<Private> d;
+};
+
+
+} // namespace xlib
+} // namespace backends
+} // namespace hardware
+
+
+#endif /* HARDWARE_XLIB_CONNECTION_H */
 

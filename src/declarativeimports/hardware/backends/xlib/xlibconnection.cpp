@@ -29,7 +29,7 @@
 
 #include <X11/extensions/XInput.h>
 
-namespace solidx {
+namespace hardware {
 namespace backends {
 namespace xlib {
 
@@ -115,6 +115,6 @@ void XlibConnection::releaseExtensionEventHandler(int eventType)
 
 } // namespace xlib
 } // namespace backends
-} // namespace solidx
+} // namespace hardware
 
 

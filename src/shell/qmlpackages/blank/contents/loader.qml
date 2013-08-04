@@ -19,23 +19,21 @@
  */
 
 import QtQuick 2
-import org.kde.solidx 0.1 as SolidX
+import org.kde.plasma.hardware 0.1 as Hardware
 import QtQuick.Window 2.0
 
 Item {
     id: main
 
     property string shell  : "org.kde.blank"
-    property bool willing  : solidx.touchscreenPresent
+    property bool willing  : hardware.touchscreenPresent
     property int  priority : 0
 
     // This is not needed, but allows the
     // handler to know whether its shell is loaded
     property bool loaded   : false
 
-    SolidX.Interface {
-        id: solidx
-    }
+    Hardware.Interface { id: hardware }
 
     // TODO: This is not needed - just for testing purposes
     Window {

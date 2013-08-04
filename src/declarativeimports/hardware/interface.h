@@ -17,60 +17,41 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef SOLIDX_INPUTDEVICE_H
-#define SOLIDX_INPUTDEVICE_H
+#ifndef HARDWARE_INTERFACE_H
+#define HARDWARE_INTERFACE_H
 
-#include <QAbstractListModel>
+#include <QObject>
 #include <QString>
 
 #include "utils/d_ptr.h"
 
-namespace solidx {
+namespace hardware {
 
 /**
  * InputDevices
  */
-class InputDevice: public QObject {
+class Interface: public QObject {
     Q_OBJECT
 
+    Q_PROPERTY(bool keyboardPresent READ isKeyboardPresent NOTIFY keyboardPresenceChanged);
+    Q_PROPERTY(bool touchscreenPresent READ isTouchscreenPresent NOTIFY touchscreenPresenceChanged);
+
 public:
-    enum class Type {
-        Any          = 0,
+    Interface(QObject * parent = Q_NULLPTR);
+    ~Interface();
 
-        Keyboard     = 1,
-        Pointer      = 2,
+    bool isKeyboardPresent() const;
+    bool isTouchscreenPresent() const;
 
-        Error        = 255
-    };
+Q_SIGNALS:
+    void keyboardPresenceChanged(bool present);
+    void touchscreenPresenceChanged(bool present);
 
-    enum class Subtype {
-        Any          = 0,
-
-        Touchpad     = 1,
-        Touchscreen  = 2,
-
-        FullKeyboard = 3,
-        SpecialKeys  = 4,
-
-        Error        = 255
-    };
-
-    InputDevice(
-            const QString & id,
-            const QString & name,
-            Type type = Type::Error,
-            Subtype subtype = Subtype::Error
-        );
-
-    QString id;
-    QString name;
-    Type type;
-    Subtype subtype;
-
-    static InputDevice null;
+private:
+    D_PTR;
 };
 
-} // namespace solidx
+} // namespace hardware
 
-#endif /* SOLIDX_INPUTDEVICE_H */
+#endif /* HARDWARE_INTERFACE_H */
 

@@ -17,27 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "inputdevice.h"
+#ifndef HARDWARE_EXTENSION_PLUGIN_H
+#define HARDWARE_EXTENSION_PLUGIN_H
 
-namespace solidx {
-
-InputDevice::InputDevice(
-        const QString & _id,
-        const QString & _name,
-        Type _type,
-        Subtype _subtype
-    )
-    : id(_id), name(_name), type(_type), subtype(_subtype)
-{
-}
-
-InputDevice InputDevice::null {
-    QString(),
-    QString(),
-    Type::Error,
-    Subtype::Error
-};
-
-} // namespace solidx
-
+#endif /* HARDWARE_EXTENSION_PLUGIN_H */
 

@@ -21,7 +21,7 @@
 #include "xlibconnection.h"
 #include "xlibinputdevicebackend_p.h"
 
-namespace solidx {
+namespace hardware {
 namespace backends {
 namespace xlib {
 
@@ -315,5 +315,5 @@ const InputDevice & XlibInputDeviceBackend::device(const QString & id) const
 
 } // namespace xlib
 } // namespace backends
-} // namespace solidx
+} // namespace hardware
 

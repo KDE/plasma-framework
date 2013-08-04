@@ -17,12 +17,12 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef SOLIDX_INPUTDEVICEMODEL_P_H
-#define SOLIDX_INPUTDEVICEMODEL_P_H
+#ifndef HARDWARE_INPUTDEVICEMODEL_P_H
+#define HARDWARE_INPUTDEVICEMODEL_P_H
 
 #include "inputdevicemodel.h"
 
-namespace solidx {
+namespace hardware {
 
 class AbstractInputDeviceBackend;
 
@@ -48,7 +48,7 @@ public:
     InputDeviceModel * const q;
 };
 
-} // namespace solidx
+} // namespace hardware
 
-#endif /* SOLIDX_INPUTDEVICEMODEL_P_H */
+#endif /* HARDWARE_INPUTDEVICEMODEL_P_H */
 

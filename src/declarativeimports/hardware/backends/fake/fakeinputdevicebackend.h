@@ -17,50 +17,40 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef SOLIDX_FAKE_INPUTDEVICE_P_H
-#define SOLIDX_FAKE_INPUTDEVICE_P_H
+#ifndef HARDWARE_FAKE_INPUTDEVICE_H
+#define HARDWARE_FAKE_INPUTDEVICE_H
 
-#include <QObject>
-#include <QDebug>
+#include "../abstractinputdevicebackend.h"
 
-#include "inputdevice.h"
+#include <memory>
 
-#include "fakeinputdevicebackend.h"
-#include "utils/sharedsingleton.h"
-
-#include <map>
-
-namespace solidx {
+namespace hardware {
 namespace backends {
 namespace fake {
 
-class FakeInputDeviceBackend::Private
-    : public QObject, public utils::SharedSingleton<Private>
-{
+class FakeInputDeviceBackend: public AbstractInputDeviceBackend {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.kde.SolidXTest")
 
 public:
-    Private();
+    explicit FakeInputDeviceBackend(QObject *parent = 0);
+    ~FakeInputDeviceBackend();
 
-    std::map<QString, std::unique_ptr<InputDevice>> devices;
+    QStringList devices() const Q_DECL_OVERRIDE;
+    const InputDevice & device(const QString & id) const Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
     void addedDevice(const QString & id);
     void removedDevice(const QString & id);
 
-public Q_SLOTS:
-    void addDevice(const QString & id, const QString & name,
-            int type, int subtype);
-
-    void removeDevice(const QString & id);
-
+private:
+    class Private;
+    friend class Private;
+    const std::shared_ptr<Private> d;
 };
-
 
 } // namespace fake
 } // namespace backends
-} // namespace solidx
+} // namespace hardware
 
-#endif // SOLIDX_FAKE_INPUTDEVICE_P_H
+#endif /* HARDWARE_FAKE_INPUTDEVICE_H */
 

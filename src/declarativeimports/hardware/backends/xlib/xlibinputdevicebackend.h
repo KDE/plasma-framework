@@ -17,47 +17,40 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef SOLIDX_XLIB_CONNECTION_H
-#define SOLIDX_XLIB_CONNECTION_H
+#ifndef HARDWARE_XLIB_INPUTDEVICE_H
+#define HARDWARE_XLIB_INPUTDEVICE_H
 
-#include <QObject>
+#include "../abstractinputdevicebackend.h"
 
 #include <memory>
-#include <functional>
 
-#include <X11/extensions/XI.h>
-
-struct _XDisplay;
-union  _XEvent;
-
-namespace solidx {
+namespace hardware {
 namespace backends {
 namespace xlib {
 
-/**
- * XlibConnection
- */
-class XlibConnection {
+class XlibInputDeviceBackend: public AbstractInputDeviceBackend {
+    Q_OBJECT
+
 public:
-    XlibConnection();
-    virtual ~XlibConnection();
+    explicit XlibInputDeviceBackend(QObject *parent = 0);
+    ~XlibInputDeviceBackend();
 
-    _XDisplay * display() const;
+    QStringList devices() const Q_DECL_OVERRIDE;
+    const InputDevice & device(const QString & id) const Q_DECL_OVERRIDE;
 
-    void handleExtensionEvent(int eventType, XEventClass & eventClass, std::function<void(const _XEvent &)> handler);
-    void releaseExtensionEventHandler(int eventType);
+Q_SIGNALS:
+    void addedDevice(const QString & id);
+    void removedDevice(const QString & id);
 
 private:
-
     class Private;
+    friend class Private;
     const std::shared_ptr<Private> d;
 };
 
-
 } // namespace xlib
 } // namespace backends
-} // namespace solidx
+} // namespace hardware
 
-
-#endif /* SOLIDX_XLIB_CONNECTION_H */
+#endif /* HARDWARE_XLIB_INPUTDEVICE_H */
 
