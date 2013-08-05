@@ -80,6 +80,10 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
     m_creationTimer = new QTimer(this);
     m_creationTimer->setSingleShot(true);
     connect(m_creationTimer, &QTimer::timeout, this, &AppletInterface::init);
+
+    m_collapseTimer = new QTimer(this);
+    m_collapseTimer->setSingleShot(true);
+    connect(m_collapseTimer, &QTimer::timeout, this, &AppletInterface::compactRepresentationCheck);
 }
 
 AppletInterface::~AppletInterface()
@@ -569,7 +573,11 @@ void AppletInterface::geometryChanged(const QRectF &newGeometry, const QRectF &o
     Q_UNUSED(oldGeometry)
 
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
+    m_collapseTimer->start(100);
+}
 
+void AppletInterface::compactRepresentationCheck()
+{
     if (!m_qmlObject->rootObject() || qobject_cast<ContainmentInterface *>(this)) {
         return;
     }
@@ -584,7 +592,7 @@ void AppletInterface::geometryChanged(const QRectF &newGeometry, const QRectF &o
     }
 
     //TODO: completely arbitrary for now
-    if (newGeometry.width() < minHint.width() || newGeometry.height() < minHint.height()) {
+    if (width() < minHint.width() || height() < minHint.height()) {
         m_expanded = false;
 
         //we are already an icon: nothing to do

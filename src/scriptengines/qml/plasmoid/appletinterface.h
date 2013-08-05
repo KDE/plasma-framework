@@ -180,11 +180,16 @@ Q_SIGNALS:
     void implicitHeightChanged();
 
 protected:
-    virtual void init();
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
     void itemChange(ItemChange change, const ItemChangeData &value);
 
     DeclarativeAppletScript *m_appletScriptEngine;
+
+protected Q_SLOTS:
+    virtual void init();
+
+private Q_SLOTS:
+    void compactRepresentationCheck();
 
 private:
     //Helper for minimumWidth etc.
@@ -203,6 +208,7 @@ private:
     QWeakPointer<QObject> m_compactUiObject;
 
     QTimer *m_creationTimer;
+    QTimer *m_collapseTimer;
 
     Plasma::Types::BackgroundHints m_backgroundHints;
     bool m_busy : 1;
