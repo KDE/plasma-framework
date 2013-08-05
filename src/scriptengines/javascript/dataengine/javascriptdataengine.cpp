@@ -263,7 +263,7 @@ void JavaScriptDataEngine::reportError(ScriptEnv *env, bool fatal) const
     Q_UNUSED(fatal)
 
     // qDebug() << "Error: " << env->engine()->uncaughtException().toString()
-             << " at line " << env->engine()->uncaughtExceptionLineNumber() << endl;
+    //         << " at line " << env->engine()->uncaughtExceptionLineNumber() << endl;
     // qDebug() << env->engine()->uncaughtExceptionBacktrace();
 }
 

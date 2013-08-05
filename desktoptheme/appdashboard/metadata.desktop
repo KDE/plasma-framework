@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Application dashboard
+Name[bs]=Aplikacijska kontrolna ploča
 Name[cs]=Pracovní plocha aplikace
 Name[de]=Anwendungsübersicht
 Name[es]=Tablero de mandos de la aplicación
@@ -15,6 +16,7 @@ Name[sv]=Instrumentpanel för program
 Name[uk]=Панель приладів програм
 Name[x-test]=xxApplication dashboardxx
 Comment=Intended as Application dashboard default
+Comment[bs]=Planirano kao podrazumijevana aplikacijska kontrolna ploča
 Comment[cs]=Zamýšleno jako výchozí pracovní plocha aplikace
 Comment[de]=Als Voreinstellung für Anwendungsübersicht angedacht
 Comment[es]=Pensado como tablero de mandos por omisión de la aplicación

@@ -34,5 +34,4 @@ set(runnermodeltest_SRCS
 qt4_automoc(${runnermodeltest_SRCS})
 add_executable(runnermodeltest ${runnermodeltest_SRCS})
 target_link_libraries(runnermodeltest ${QT_QTTEST_LIBRARY} ${plasma_LIBRARIES} plasma)
-add_test(plasma-runnermodeltest runnermodeltest)
 ecm_mark_as_test(runnermodeltest)

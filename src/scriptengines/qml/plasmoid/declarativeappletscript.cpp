@@ -69,9 +69,6 @@ DeclarativeAppletScript::~DeclarativeAppletScript()
 
 bool DeclarativeAppletScript::init()
 {
-    //FIXME: what replaced this?
-    //KGlobal::locale()->insertCatalog("plasma_applet_" % description().pluginName());
-
     //make possible to import extensions from the package
     //FIXME: probably to be removed, would make possible to use native code from within the package :/
     //m_interface->qmlObject()->engine()->addImportPath(package()->path()+"/contents/imports");
