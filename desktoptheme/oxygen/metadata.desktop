@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Oxygen
+Name[bs]=kiseonik
 Name[cs]=Oxygen
 Name[de]=Oxygen
 Name[es]=Oxígeno
@@ -15,6 +16,7 @@ Name[sv]=Oxygen
 Name[uk]=Oxygen
 Name[x-test]=xxOxygenxx
 Comment=Theme done in the Oxygen style
+Comment[bs]=Tema urađena u stilu Kiseonika
 Comment[cs]=Motiv ve stylu Oxygen
 Comment[de]=Oberflächen-Design im Oxygen-Stil
 Comment[es]=Tema realizado al estilo de Oxígeno

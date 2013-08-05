@@ -110,8 +110,8 @@ void ContainmentPrivate::setScreen(int newScreen)
 #ifndef NDEBUG
                 // qDebug() << "currently is on screen" << currently->screen()
 //                          << "desktop" << currently->desktop()
-                         << "and is" << currently->activity()
-                         << (QObject*)currently << "i'm" << (QObject*)q;
+//                         << "and is" << currently->activity()
+//                         << (QObject*)currently << "i'm" << (QObject*)q;
 #endif
                 currently->setScreen(-1);
                 swapScreensWith = currently;
@@ -125,13 +125,11 @@ void ContainmentPrivate::setScreen(int newScreen)
     q->updateConstraints(Plasma::Types::ScreenConstraint);
 
     if (oldScreen != newScreen) {
-        /*
 #ifndef NDEBUG
         // qDebug() << "going to signal change for" << q
+        //         << ", old screen & desktop:" << oldScreen
+        //         << ", new:" << screen << desktop;
 #endif
-                 << ", old screen & desktop:" << oldScreen
-                 << ", new:" << screen << desktop;
-                 */
         KConfigGroup c = q->config();
         c.writeEntry("screen", screen);
         emit q->configNeedsSaving();

@@ -182,7 +182,7 @@ ScriptEngine *loadEngine(const QString &language, Types::ComponentType type, QOb
 
 #ifndef NDEBUG
         // qDebug() << "Couldn't load script engine for language " << language
-                 << "! error reported: " << error;
+        //         << "! error reported: " << error;
 #endif
     }
 

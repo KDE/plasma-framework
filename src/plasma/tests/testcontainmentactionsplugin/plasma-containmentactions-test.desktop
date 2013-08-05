@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Test
+Name[bs]=Test
 Name[cs]=Test
 Name[de]=Test
 Name[es]=Prueba
@@ -14,6 +15,7 @@ Name[sv]=Test
 Name[uk]=Тест
 Name[x-test]=xxTestxx
 Comment=A dummy plugin for testing
+Comment[bs]=Lažni priključak za probe
 Comment[cs]=Falešný zásuvný modul pro testování
 Comment[de]=Ein Dummy-Modul zum Testen.
 Comment[es]=Un complemento de simulación para hacer pruebas
