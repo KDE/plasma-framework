@@ -69,4 +69,5 @@ private:
     friend class AppletInterface;
 };
 
+
 #endif

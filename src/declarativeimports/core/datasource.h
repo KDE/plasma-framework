@@ -49,7 +49,7 @@ public:
     };
     Q_DECLARE_FLAGS(Changes, Change)
 
-    typedef QHash<QString, QVariant> Data;
+    typedef QMap<QString, QVariant> Data;
 
     DataSource(QObject* parent=0);
 
@@ -89,10 +89,10 @@ public:
 
     /**
      * All the data fetched by this dataengine.
-     * This is an hash of hashes. At the first level, there are the source names, at the secons, they keys set by the DataEngine
+     * This is a map of maps. At the first level, there are the source names, at the secons, they keys set by the DataEngine
      */
-    Q_PROPERTY(QVariantHash data READ data NOTIFY dataChanged);
-    QVariantHash data() const {return m_data;}
+    Q_PROPERTY(QVariantMap data READ data NOTIFY dataChanged);
+    QVariantMap data() const {return m_data;}
 
     /**
      * @returns a Plasma::Service given a source name
@@ -131,7 +131,7 @@ private:
     QString m_id;
     int m_interval;
     QString m_engine;
-    QVariantHash m_data;
+    QVariantMap m_data;
     Plasma::DataEngine* m_dataEngine;
     Plasma::DataEngineConsumer* m_dataEngineConsumer;
     QStringList m_connectedSources;

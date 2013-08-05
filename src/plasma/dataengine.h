@@ -73,6 +73,8 @@ class PLASMA_EXPORT DataEngine : public QObject
          **/
         explicit DataEngine(const KPluginInfo &plugin, QObject *parent = 0);
 
+        explicit DataEngine(QObject *parent = 0, const QVariantList &args = QVariantList());
+
         ~DataEngine();
 
         /**
@@ -427,6 +429,11 @@ Types::NoAlignment) const;
  */
 #define K_EXPORT_PLASMA_DATAENGINE(libname, classname) \
 K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
+K_EXPORT_PLUGIN(factory("plasma_engine_" #libname)) \
+K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
+
+#define K_EXPORT_PLASMA_DATAENGINE_WITH_JSON(libname, classname, jsonFile) \
+K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();) \
 K_EXPORT_PLUGIN(factory("plasma_engine_" #libname)) \
 K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
 

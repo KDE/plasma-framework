@@ -30,6 +30,8 @@ find_package(Qt5X11Extras REQUIRED NO_MODULE)
 
 add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0)
 
+#add_definitions(-Wno-deprecated) 
+
 if(KDE_PLATFORM_FEATURE_DISABLE_DEPRECATED)
    set(KDE_NO_DEPRECATED TRUE)
    set(CMAKE_AUTOMOC_MOC_OPTIONS "-DKDE_NO_DEPRECATED")
@@ -194,7 +196,5 @@ install(FILES
 add_subdirectory(src)
 add_subdirectory( desktoptheme )
 
-# install(EXPORT plasmaTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-#         FILE plasmaTargets.cmake COMPONENT Devel)
 install(EXPORT PlasmaTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" FILE PlasmaTargets.cmake NAMESPACE KF5:: COMPONENT Devel)
 feature_summary(WHAT ALL   FATAL_ON_MISSING_REQUIRED_PACKAGES)
