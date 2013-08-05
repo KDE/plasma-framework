@@ -447,11 +447,11 @@ void AbstractRunnerPrivate::setupScriptSupport()
     //         << ", main script is" << package->filePath("mainscript");
 #endif
 
-    const QString translationsPath = package->filePath("translations");
-    if (!translationsPath.isEmpty()) {
-        KGlobal::dirs()->addResourceDir("locale", translationsPath);
-        KLocalizedString::insertCatalog(runnerDescription.pluginName());
-    }
+    // FIXME: Replace with ki18n functionality once semantics is clear.
+    // const QString translationsPath = package->filePath("translations");
+    // if (!translationsPath.isEmpty()) {
+    //     KGlobal::dirs()->addResourceDir("locale", translationsPath);
+    // }
 }
 
 } // Plasma namespace

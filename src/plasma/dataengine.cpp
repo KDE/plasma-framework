@@ -580,11 +580,11 @@ void DataEnginePrivate::setupScriptSupport()
              << ", main script is" << package->filePath("mainscript");
     */
 
-    const QString translationsPath = package->filePath("translations");
-    if (!translationsPath.isEmpty()) {
-        KGlobal::dirs()->addResourceDir("locale", translationsPath);
-        KLocalizedString::insertCatalog(dataEngineDescription.pluginName());
-    }
+    // FIXME: Replace with ki18n functionality once semantics is clear.
+    // const QString translationsPath = package->filePath("translations");
+    // if (!translationsPath.isEmpty()) {
+    //     KGlobal::dirs()->addResourceDir("locale", translationsPath);
+    // }
 }
 
 void DataEnginePrivate::scheduleSourcesUpdated()
