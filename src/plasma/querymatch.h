@@ -72,7 +72,6 @@ class PLASMA_EXPORT QueryMatch
          * Constructs a PossibleMatch associated with a given RunnerContext
          * and runner.
          *
-         * @param search the RunnerContext this match belongs to
          * @param runner the runner this match belongs to
          */
         explicit QueryMatch(AbstractRunner *runner);
