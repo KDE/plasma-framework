@@ -78,7 +78,7 @@ public:
     QColor color() const;
     void setColor(const QColor &color);
 
-    Q_INVOKABLE void setData(const QString &mimeType, const QString &data);
+    Q_INVOKABLE void setData(const QString &mimeType, const QVariant &data);
 
     QQuickItem* source() const;
     void setSource(QQuickItem* source);
