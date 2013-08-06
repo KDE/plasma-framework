@@ -62,7 +62,8 @@ DataEngine::DataEngine(const KPluginInfo &plugin, QObject *parent)
 }
 
 DataEngine::DataEngine(QObject* parent, const QVariantList &args)
-    : Plasma::DataEngine(KPluginInfo(args), parent)
+    : QObject(parent),
+      d(new DataEnginePrivate(this, KPluginInfo(args)))
 {
     if (d->script) {
         d->setupScriptSupport();
