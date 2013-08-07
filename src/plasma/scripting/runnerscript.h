@@ -127,8 +127,7 @@ private:
 };
 
 #define K_EXPORT_PLASMA_RUNNERSCRIPTENGINE(libname, classname) \
-K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
-K_EXPORT_PLUGIN(factory("plasma_runnerscriptengine_" #libname))
+K_PLUGIN_FACTORY(factory, registerPlugin<classname>();)
 
 } //Plasma namespace
 

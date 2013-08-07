@@ -189,8 +189,7 @@ private:
 };
 
 #define K_EXPORT_PLASMA_APPLETSCRIPTENGINE(libname, classname) \
-K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
-K_EXPORT_PLUGIN(factory("plasma_appletscriptengine_" #libname))
+K_PLUGIN_FACTORY(factory, registerPlugin<classname>();)
 
 } //Plasma namespace
 
