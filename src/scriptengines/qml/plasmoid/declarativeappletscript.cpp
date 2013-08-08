@@ -99,17 +99,6 @@ QString DeclarativeAppletScript::filePath(const QString &type, const QString &fi
     return package().filePath(type.toLocal8Bit().constData(), file);
 }
 
-void DeclarativeAppletScript::configChanged()
-{
-/*TODO: invent something that can replace event listeners
-    if (!m_env) {
-        return;
-    }
-
-    m_env->callEventListeners("configchanged");
-*/
-}
-
 QObject *DeclarativeAppletScript::loadui(const QString &filename)
 {
     QFile f(filename);
