@@ -63,7 +63,6 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
     qmlRegisterType<AppletInterface>();
     qmlRegisterType<QAction>();
 
-    connect(this, SIGNAL(releaseVisualFocus()), applet(), SIGNAL(releaseVisualFocus()));
     connect(this, SIGNAL(configNeedsSaving()), applet(), SIGNAL(configNeedsSaving()));
     connect(applet(), SIGNAL(immutabilityChanged(Plasma::Types::ImmutabilityType)), this, SIGNAL(immutableChanged()));
     connect(applet(), SIGNAL(statusChanged(Plasma::Types::ItemStatus)), this, SIGNAL(statusChanged()));

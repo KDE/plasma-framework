@@ -385,15 +385,6 @@ class PLASMA_EXPORT Applet : public QObject
         void activate();
 
 
-//Completely UI-specific, remove or move to scriptengine
-        /**
-         * This signal indicates that an application launch, window
-         * creation or window focus event was triggered. This is used, for instance,
-         * to ensure that the Dashboard view in Plasma Desktop hides when such an event is
-         * triggered by an item it is displaying.
-         */
-        void releaseVisualFocus();
-
 //TODO: fix usage in containment, port to QObject::destroyed
         /**
          * Emitted when the applet is deleted
