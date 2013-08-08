@@ -167,7 +167,7 @@ void ContainmentInterface::appletRemovedForward(Plasma::Applet *applet)
 
 void ContainmentInterface::loadWallpaper()
 {
-    if (m_appletScriptEngine->drawWallpaper()) {
+    if (m_appletScriptEngine->drawWallpaper() && !containment()->wallpaper().isEmpty()) {
         delete m_wallpaperInterface;
 
         m_wallpaperInterface = new WallpaperInterface(this);

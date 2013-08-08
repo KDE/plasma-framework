@@ -57,6 +57,7 @@ private Q_SLOTS:
     void syncWallpaperPackage();
 
 private:
+    QString m_wallpaperPlugin;
     ContainmentInterface *m_containmentInterface;
     QmlObject *m_qmlObject;
     Plasma::Package m_pkg;
