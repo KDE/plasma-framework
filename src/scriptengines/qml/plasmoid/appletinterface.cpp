@@ -732,7 +732,7 @@ void AppletInterface::itemChange(ItemChange change, const ItemChangeData &value)
 {
     if (change == QQuickItem::ItemSceneChange) {
         //we have a window: create the 
-        if (value.window && !m_qmlObject->rootObject() && !m_creationTimer->isActive()) {
+        if (value.window && !m_qmlObject->rootObject() /*&& !m_creationTimer->isActive()*/) {
             init();
 
             /*Experiment on even more delayed, doesn't seem to be good

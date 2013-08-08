@@ -67,6 +67,17 @@ void ContainmentInterface::init()
          connect(containment()->corona(), &Plasma::Corona::availableScreenRegionChanged,
                  this, &ContainmentInterface::availableScreenRegionChanged);
      }
+
+     //HACK, why appletAddedForward doesn't get called?
+     foreach (Plasma::Applet *applet, containment()->applets()) {
+         appletAddedForward(applet);
+     }
+     foreach (QObject *appletObj, m_appletInterfaces) {
+         AppletInterface *applet = qobject_cast<AppletInterface *>(appletObj);
+         if (!applet->qmlObject()) {
+             applet->init();
+         }
+     }
 }
 
 QList <QObject *> ContainmentInterface::applets()

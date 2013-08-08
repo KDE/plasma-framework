@@ -213,6 +213,7 @@ private:
     Plasma::Types::BackgroundHints m_backgroundHints;
     bool m_busy : 1;
     bool m_expanded : 1;
+    friend class ContainmentInterface;
 };
 
 #endif
