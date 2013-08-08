@@ -88,8 +88,8 @@ bool DeclarativeAppletScript::init()
     // set the graphicObject dynamic property on applet
     a->setProperty("graphicObject", QVariant::fromValue(m_interface));
 
-    connect(applet(), SIGNAL(activate()),
-            this, SLOT(activate()));
+    connect(applet(), &Plasma::Applet::activate,
+            this, &DeclarativeAppletScript::activate);
 
     return true;
 }
