@@ -48,8 +48,6 @@ public:
     bool include(const QString &path);
 
 
-    static QObject *loadui(const QString &filename);
-    QObject *loadService(const QString &pluginName);
 
 public Q_SLOTS:
     void executeAction(const QString &name);

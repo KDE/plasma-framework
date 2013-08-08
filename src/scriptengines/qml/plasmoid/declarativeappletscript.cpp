@@ -99,22 +99,6 @@ QString DeclarativeAppletScript::filePath(const QString &type, const QString &fi
     return package().filePath(type.toLocal8Bit().constData(), file);
 }
 
-QObject *DeclarativeAppletScript::loadui(const QString &filename)
-{
-    QFile f(filename);
-    if (!f.open(QIODevice::ReadOnly)) {
-        qWarning() << i18n("Unable to open '%1'",filename);
-        return 0;
-    }
-
-    QUiLoader loader;
-    QWidget *w = loader.load(&f);
-    f.close();
-
-    return w;
-}
-
-
 void DeclarativeAppletScript::constraintsEvent(Plasma::Types::Constraints constraints)
 {
     if (constraints & Plasma::Types::FormFactorConstraint) {
@@ -155,11 +139,6 @@ bool DeclarativeAppletScript::include(const QString &path)
     return m_env->include(path);
     */
     return false;
-}
-
-QObject *DeclarativeAppletScript::loadService(const QString &pluginName)
-{
-    return Plasma::PluginLoader::self()->loadService(pluginName, QVariantList(), applet());
 }
 
 QList<QAction*> DeclarativeAppletScript::contextualActions()
