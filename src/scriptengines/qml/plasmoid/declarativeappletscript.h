@@ -45,10 +45,6 @@ public:
 
     void constraintsEvent(Plasma::Types::Constraints constraints);
 
-    bool include(const QString &path);
-
-
-
 public Q_SLOTS:
     void executeAction(const QString &name);
     void activate();

@@ -133,14 +133,6 @@ void DeclarativeAppletScript::executeAction(const QString &name)
     }
 }
 
-bool DeclarativeAppletScript::include(const QString &path)
-{
-    /*TODO: probably include() doesn't make any sense anymore
-    return m_env->include(path);
-    */
-    return false;
-}
-
 QList<QAction*> DeclarativeAppletScript::contextualActions()
 {
     if (!m_interface) {
