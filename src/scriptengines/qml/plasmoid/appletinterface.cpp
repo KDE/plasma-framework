@@ -185,6 +185,7 @@ void AppletInterface::init()
     }
     geometryChanged(QRectF(), QRectF(x(), y(), width(), height()));
     emit busyChanged();
+    m_appletScriptEngine->setUiReady(true);
 }
 
 Plasma::Types::FormFactor AppletInterface::formFactor() const

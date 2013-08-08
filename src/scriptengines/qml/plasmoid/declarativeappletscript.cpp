@@ -56,7 +56,8 @@ K_EXPORT_PLASMA_APPLETSCRIPTENGINE(declarativeappletscript, DeclarativeAppletScr
 
 DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariantList &args)
     : Plasma::AppletScript(parent),
-      m_interface(0)
+      m_interface(0),
+      m_uiReady(false)
 {
     qmlRegisterType<AppletInterface>();
     qmlRegisterType<ConfigPropertyMap>();
@@ -112,6 +113,21 @@ void DeclarativeAppletScript::constraintsEvent(Plasma::Types::Constraints constr
     if (constraints & Plasma::Types::ContextConstraint) {
         emit contextChanged();
     }
+}
+
+void DeclarativeAppletScript::setUiReady(bool ready)
+{
+    if (m_uiReady == ready) {
+        return;
+    }
+
+    m_uiReady = ready;
+    emit uiReadyChanged(ready);
+}
+
+bool DeclarativeAppletScript::isUiReady() const
+{
+    return m_uiReady;
 }
 
 void DeclarativeAppletScript::activate()

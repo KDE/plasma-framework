@@ -45,6 +45,9 @@ public:
 
     void constraintsEvent(Plasma::Types::Constraints constraints);
 
+    void setUiReady(bool ready);
+    bool isUiReady() const;
+
 public Q_SLOTS:
     void executeAction(const QString &name);
     void activate();
@@ -56,9 +59,11 @@ Q_SIGNALS:
     void formFactorChanged();
     void locationChanged();
     void contextChanged();
+    void uiReadyChanged(bool ready);
 
 private:
     AppletInterface *m_interface;
+    bool m_uiReady;
     friend class AppletInterface;
 };
 
