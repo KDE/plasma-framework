@@ -179,6 +179,8 @@ void Containment::restore(KConfigGroup &group)
 
     setLocation((Plasma::Types::Location)group.readEntry("location", (int)d->location));
     setFormFactor((Plasma::Types::FormFactor)group.readEntry("formfactor", (int)d->formFactor));
+
+    setWallpaper(group.readEntry("wallpaperplugin", ContainmentPrivate::defaultWallpaper));
     //qDebug() << "setScreen from restore";
     d->setScreen(group.readEntry("screen", d->screen));
     d->activityId = group.readEntry("activityId", QString());
@@ -187,7 +189,7 @@ void Containment::restore(KConfigGroup &group)
     restoreContents(group);
     setImmutability((Types::ImmutabilityType)group.readEntry("immutability", (int)Types::Mutable));
 
-    setWallpaper(group.readEntry("wallpaperplugin", ContainmentPrivate::defaultWallpaper));
+    
 
     KConfigGroup cfg = KConfigGroup(corona()->config(), "ActionPlugins");
     cfg = KConfigGroup(&cfg, QString::number(containmentType()));

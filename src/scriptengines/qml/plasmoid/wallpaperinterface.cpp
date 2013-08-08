@@ -82,7 +82,6 @@ Plasma::ConfigLoader *WallpaperInterface::configScheme()
 
 void WallpaperInterface::syncWallpaperPackage()
 {
-qWarning()<<"22222222222222222"<<m_wallpaperPlugin<<" "<<m_containmentInterface->containment()->wallpaper();
     if (m_wallpaperPlugin == m_containmentInterface->containment()->wallpaper()) {
         return;
     }
@@ -129,6 +128,7 @@ qWarning()<<"22222222222222222"<<m_wallpaperPlugin<<" "<<m_containmentInterface-
     } else {
         qWarning() << "Error loading the wallpaper, package not found";
     }
+
     emit packageChanged();
     emit configurationChanged();
 }
