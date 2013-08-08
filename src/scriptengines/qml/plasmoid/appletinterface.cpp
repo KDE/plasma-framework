@@ -63,15 +63,20 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
     qmlRegisterType<AppletInterface>();
     qmlRegisterType<QAction>();
 
-    connect(this, SIGNAL(configNeedsSaving()), applet(), SIGNAL(configNeedsSaving()));
-    connect(applet(), SIGNAL(immutabilityChanged(Plasma::Types::ImmutabilityType)), this, SIGNAL(immutableChanged()));
-    connect(applet(), SIGNAL(statusChanged(Plasma::Types::ItemStatus)), this, SIGNAL(statusChanged()));
-    connect(m_appletScriptEngine, SIGNAL(formFactorChanged()),
-            this, SIGNAL(formFactorChanged()));
-    connect(m_appletScriptEngine, SIGNAL(locationChanged()),
-            this, SIGNAL(locationChanged()));
-    connect(m_appletScriptEngine, SIGNAL(contextChanged()),
-            this, SIGNAL(contextChanged()));
+    connect(this, &AppletInterface::configNeedsSaving,
+            applet(), &Plasma::Applet::configNeedsSaving);
+    connect(applet(), &Plasma::Applet::immutabilityChanged,
+            this, &AppletInterface::immutableChanged);
+
+    connect(applet(), &Plasma::Applet::statusChanged,
+            this, &AppletInterface::statusChanged);
+
+    connect(m_appletScriptEngine, &DeclarativeAppletScript::formFactorChanged,
+            this, &AppletInterface::formFactorChanged);
+    connect(m_appletScriptEngine, &DeclarativeAppletScript::locationChanged,
+            this, &AppletInterface::locationChanged);
+    connect(m_appletScriptEngine, &DeclarativeAppletScript::contextChanged,
+            this, &AppletInterface::contextChanged);
 
     m_qmlObject = new QmlObject(this);
     m_qmlObject->setInitializationDelayed(true);
