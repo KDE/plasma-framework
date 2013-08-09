@@ -7,8 +7,10 @@ target_link_libraries(fullmodelaccesstest
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${QT_QTTEST_LIBRARY}
-    ${KDE4_KDECORE_LIBS}
+    ${KCore_LIBRARIES}
     ${KDE4Support_LIBRARIES}
+
+    ${KI18n_LIBRARIES}
     )
 
 add_test(plasma-fullmodelaccesstest fullmodelaccesstest)

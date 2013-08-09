@@ -9,7 +9,9 @@ add_library(runnermodelplugin SHARED ${runnermodel_SRCS})
 target_link_libraries(runnermodelplugin
         ${Qt5Quick_LIBRARIES}
         ${Qt5Qml_LIBRARIES}
-        plasma)
+	${KI18n_LIBRARIES}
+        plasma
+	)
 
 
 install(TARGETS runnermodelplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/runnermodel)

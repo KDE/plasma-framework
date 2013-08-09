@@ -5,7 +5,7 @@ add_executable(plugintest
     plugintest.cpp
 )
 
-target_link_libraries(plugintest kdeqt5staging plasma)
+target_link_libraries(plugintest kdeqt5staging plasma ${KI18n_LIBRARIES} ${KService_LIBRARIES} )
 
 message("INSTALL_TARGETS_DEFAULT_ARGS ${INSTALL_TARGETS_DEFAULT_ARGS}")
 

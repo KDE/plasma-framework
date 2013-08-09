@@ -18,6 +18,7 @@ target_link_libraries(sortfiltermodeltest
     ${KDE4Support_LIBRARIES}
     ${QT_QTGUI_LIBRARY}
     ${QT_QTTEST_LIBRARY}
+    ${KI18n_LIBRARIES}
     )
 
 

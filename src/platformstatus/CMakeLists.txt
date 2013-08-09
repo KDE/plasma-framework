@@ -20,6 +20,7 @@ target_link_libraries(
    ${KService_LIBRARIES}
    ${KCoreAddons_LIBRARIES}
    ${KDBusAddons_LIBRARIES}
+   ${KI18n_LIBRARIES}
    Qt5::DBus
    Qt5::Quick
    )

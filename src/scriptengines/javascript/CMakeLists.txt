@@ -49,12 +49,12 @@ set(simple_javascript_engine_SRCS
 
 include_directories(${PHONON_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/common)
 
-kde4_add_plugin(plasma_appletscript_simple_javascript ${simple_javascript_engine_SRCS})
+plasma_add_plugin(plasma_appletscript_simple_javascript ${simple_javascript_engine_SRCS})
 
 target_link_libraries(plasma_appletscript_simple_javascript
-                       ${KDE4_KDECORE_LIBS}
+                       ${KCore_LIBRARIES}
                        ${KDE4_KIO_LIBS}
-                       ${KDE4_PLASMA_LIBS}
+                       ${Plasma_LIBRARIES}
                        ${QT_QTDECLARATIVE_LIBRARY}
                        ${QT_QTSCRIPT_LIBRARY}
                        ${QT_QTUITOOLS_LIBRARY}
@@ -75,12 +75,12 @@ set(javascript_runner_engine_SRCS
     simplebindings/i18n.cpp
 )
 
-kde4_add_plugin(plasma_runnerscript_javascript ${javascript_runner_engine_SRCS})
+plasma_add_plugin(plasma_runnerscript_javascript ${javascript_runner_engine_SRCS})
 
 target_link_libraries(plasma_runnerscript_javascript
-                      ${KDE4_KDECORE_LIBS}
+                      ${KCore_LIBRARIES}
                       ${KDE4_KIO_LIBS}
-                      ${KDE4_PLASMA_LIBS}
+                      ${Plasma_LIBRARIES}
                       ${QT_QTSCRIPT_LIBRARY})
 
 install(TARGETS plasma_runnerscript_javascript DESTINATION ${PLUGIN_INSTALL_DIR})
@@ -100,12 +100,12 @@ set(javascript_dataengine_engine_SRCS
     simplebindings/i18n.cpp
     simplebindings/qscriptnonguibookkeeping.cpp
 )
-kde4_add_plugin(plasma_dataenginescript_javascript ${javascript_dataengine_engine_SRCS})
+plasma_add_plugin(plasma_dataenginescript_javascript ${javascript_dataengine_engine_SRCS})
 
 target_link_libraries(plasma_dataenginescript_javascript
-                      ${KDE4_KDECORE_LIBS}
+                      ${KCore_LIBRARIES}
                       ${KDE4_KIO_LIBS}
-                      ${KDE4_PLASMA_LIBS}
+                      ${Plasma_LIBRARIES}
                       ${QT_QTSCRIPT_LIBRARY})
 
 install(TARGETS plasma_dataenginescript_javascript DESTINATION ${PLUGIN_INSTALL_DIR})
@@ -118,8 +118,8 @@ set(javascript_addon_packagestructure_SRCS
     common/javascriptaddonpackagestructure.cpp
 )
 
-kde4_add_plugin(plasma_packagestructure_javascriptaddon ${javascript_addon_packagestructure_SRCS})
-target_link_libraries(plasma_packagestructure_javascriptaddon ${KDE4_PLASMA_LIBS})
+plasma_add_plugin(plasma_packagestructure_javascriptaddon ${javascript_addon_packagestructure_SRCS})
+target_link_libraries(plasma_packagestructure_javascriptaddon ${Plasma_LIBRARIES})
 
 install(TARGETS plasma_packagestructure_javascriptaddon DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES data/plasma-packagestructure-javascript-addon.desktop DESTINATION ${SERVICES_INSTALL_DIR})
