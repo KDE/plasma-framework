@@ -69,6 +69,7 @@ public:
     void updateShortcuts();
     void globalShortcutChanged();
     void propagateConfigChanged();
+    void setUiReady();
 
     static KActionCollection* defaultActions(QObject *parent);
 
@@ -114,6 +115,7 @@ public:
     bool needsConfig : 1;
     bool started : 1;
     bool globalShortcutEnabled : 1;
+    bool uiReady : 1;
 };
 
 } // Plasma namespace

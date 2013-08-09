@@ -82,9 +82,6 @@ void ContainmentInterface::init()
     if (!m_appletInterfaces.isEmpty()) {
         emit appletsChanged();
     }
-    if (m_appletScriptEngine->m_inProgressAppletInterfaces.isEmpty()) {
-        m_appletScriptEngine->setUiReady(true);
-    }
 }
 
 QList <QObject *> ContainmentInterface::applets()
@@ -176,7 +173,6 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
     }
 
     m_appletInterfaces << appletGraphicObject;
-    m_appletScriptEngine->m_inProgressAppletInterfaces.insert(appletGraphicObject);
     emit appletAdded(appletGraphicObject);
     emit appletsChanged();
 }

@@ -364,7 +364,7 @@ class PLASMA_EXPORT Applet : public QObject
          * @since 4.4
          */
         void statusChanged(Plasma::Types::ItemStatus status);
-        
+
 //CONFIGURATION
         /**
          * Emitted when an applet has changed values in its configuration
@@ -375,7 +375,6 @@ class PLASMA_EXPORT Applet : public QObject
          * applets.
          */
         void configNeedsSaving();
-        
 
 //ACTIONS
         /**

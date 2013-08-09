@@ -434,6 +434,10 @@ void Applet::flushPendingConstraintsEvents()
     Plasma::Types::Constraints c = d->pendingConstraints;
     d->pendingConstraints = Types::NoConstraint;
 
+    if (c & Plasma::Types::UiReadyConstraint) {
+        d->setUiReady();
+    }
+
     if (c & Plasma::Types::StartupCompletedConstraint) {
         //common actions
         bool unlocked = immutability() == Types::Mutable;

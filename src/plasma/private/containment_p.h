@@ -22,6 +22,7 @@
 #define CONTAINMENT_P_H
 
 #include <kactioncollection.h>
+#include <QSet>
 
 #include "plasma.h"
 #include "applet.h"
@@ -97,6 +98,8 @@ public:
     Types::FormFactor formFactor;
     Types::Location location;
     QList<Applet *> applets;
+    //Applets still considered not ready
+    QSet <Applet *> loadingApplets;
     QString wallpaper;
     QHash<QString, ContainmentActions*> localActionPlugins;
     int screen;

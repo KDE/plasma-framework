@@ -46,9 +46,6 @@ public:
 
     void constraintsEvent(Plasma::Types::Constraints constraints);
 
-    void setUiReady(bool ready);
-    bool isUiReady() const;
-
 public Q_SLOTS:
     void executeAction(const QString &name);
     void activate();
@@ -64,8 +61,6 @@ Q_SIGNALS:
 
 private:
     AppletInterface *m_interface;
-    bool m_uiReady;
-    QSet<QObject *> m_inProgressAppletInterfaces;
     friend class AppletInterface;
     friend class ContainmentInterface;
 };

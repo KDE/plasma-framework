@@ -157,6 +157,11 @@ Q_SIGNALS:
      */
     void saveState(KConfigGroup &group) const;
 
+    /**
+     * @param uiReady true if the UI for this applet is ready
+     */
+    void uiReadyChanged(bool uiReady);
+
 public Q_SLOTS:
 
     /**
