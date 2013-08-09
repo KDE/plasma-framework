@@ -24,6 +24,7 @@
 #include <kdemacros.h>
 
 #include <QQmlEngine>
+#include <QSet>
 
 #include <Plasma/AppletScript>
 
@@ -64,7 +65,9 @@ Q_SIGNALS:
 private:
     AppletInterface *m_interface;
     bool m_uiReady;
+    QSet<QObject *> m_inProgressAppletInterfaces;
     friend class AppletInterface;
+    friend class ContainmentInterface;
 };
 
 

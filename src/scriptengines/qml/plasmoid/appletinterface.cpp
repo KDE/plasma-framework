@@ -185,7 +185,21 @@ void AppletInterface::init()
     }
     geometryChanged(QRectF(), QRectF(x(), y(), width(), height()));
     emit busyChanged();
-    m_appletScriptEngine->setUiReady(true);
+
+    if (!qobject_cast<Plasma::Containment *>(applet())) {
+        m_appletScriptEngine->setUiReady(true);
+
+        ContainmentInterface *containmentGraphicObject =  qobject_cast<ContainmentInterface *>(applet()->containment()->property("graphicObject").value<QObject *>());
+
+        if (containmentGraphicObject) {
+            DeclarativeAppletScript *containmentScript = containmentGraphicObject->m_appletScriptEngine;
+        
+            containmentScript->m_inProgressAppletInterfaces.remove(this);
+            if (containmentScript->m_inProgressAppletInterfaces.isEmpty()) {
+                containmentScript->setUiReady(true);
+            }
+        }
+    }
 }
 
 Plasma::Types::FormFactor AppletInterface::formFactor() const
