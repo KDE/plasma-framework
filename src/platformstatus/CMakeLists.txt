@@ -11,8 +11,7 @@ qt4_add_dbus_adaptor (
    platformstatus.h PlatformStatus
    )
 
-add_library(kded_platformstatus MODULE ${kded_platformstatus_SRCS} )
-set_target_properties(kded_platformstatus PROPERTIES PREFIX "")
+plasma_add_plugin(kded_platformstatus ${kded_platformstatus_SRCS} )
 
 target_link_libraries(
    kded_platformstatus
