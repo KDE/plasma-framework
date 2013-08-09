@@ -46,11 +46,6 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
     setAcceptedMouseButtons(Qt::RightButton);
 
     qmlRegisterType<ContainmentInterface>();
-}
-
-void ContainmentInterface::init()
-{
-    AppletInterface::init();
 
     connect(containment(), &Plasma::Containment::appletRemoved,
             this, &ContainmentInterface::appletRemovedForward);
@@ -67,6 +62,11 @@ void ContainmentInterface::init()
          connect(containment()->corona(), &Plasma::Corona::availableScreenRegionChanged,
                  this, &ContainmentInterface::availableScreenRegionChanged);
      }
+}
+
+void ContainmentInterface::init()
+{
+    AppletInterface::init();
 }
 
 QList <QObject *> ContainmentInterface::applets()
