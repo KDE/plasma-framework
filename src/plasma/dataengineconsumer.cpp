@@ -23,7 +23,7 @@
 #include "private/dataengineconsumer_p.h"
 
 #include <QSet>
-#include <qurlpathinfo.h>
+#include <QUrl>
 
 #include <QDebug>
 
