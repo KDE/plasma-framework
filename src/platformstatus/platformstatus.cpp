@@ -4,7 +4,7 @@
 #include <QStandardPaths>
 
 #include <KConfigGroup>
-#include <KDebug>
+#include <QDebug>
 #include <KDirWatch>
 #include <KPluginFactory>
 

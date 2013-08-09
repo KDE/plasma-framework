@@ -21,7 +21,7 @@
 #include <QtScript/QScriptContext>
 #include <QColor>
 
-#include <KDebug>
+#include <QDebug>
 
 #include <Plasma/Theme>
 

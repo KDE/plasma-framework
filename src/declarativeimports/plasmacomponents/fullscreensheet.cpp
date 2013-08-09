@@ -23,7 +23,7 @@
 #include <QDesktopWidget>
 #include <QGraphicsView>
 
-#include <KDebug>
+#include <QDebug>
 
 FullScreenSheet::FullScreenSheet(QDeclarativeItem *parent)
     : FullScreenWindow(parent)

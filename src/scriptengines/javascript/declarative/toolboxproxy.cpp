@@ -24,7 +24,7 @@
 
 #include <QAction>
 #include <KIcon>
-#include <KDebug>
+#include <QDebug>
 
 #include <Plasma/Corona>
 

@@ -24,7 +24,7 @@
 #include <QFile>
 #include <QMetaEnum>
 
-#include <KDebug>
+#include <QDebug>
 #include <KDesktopFile>
 #include <KIO/Job>
 #include <KLocale>

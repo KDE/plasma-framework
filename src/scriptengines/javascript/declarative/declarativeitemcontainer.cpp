@@ -19,7 +19,7 @@
 
 #include "declarativeitemcontainer_p.h"
 
-#include <KDebug>
+#include <QDebug>
 
 DeclarativeItemContainer::DeclarativeItemContainer(QGraphicsItem *parent)
     : QGraphicsWidget(parent)

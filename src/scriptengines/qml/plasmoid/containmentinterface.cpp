@@ -28,7 +28,7 @@
 
 #include <KActionCollection>
 #include <KAuthorized>
-#include <KDebug>
+#include <QDebug>
 #include <KLocalizedString>
 
 #include <Plasma/ContainmentActions>

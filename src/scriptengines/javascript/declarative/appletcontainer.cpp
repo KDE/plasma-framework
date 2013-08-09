@@ -21,7 +21,7 @@
 
 #include <QGraphicsLayout>
 
-#include <KDebug>
+#include <QDebug>
 
 #include <Plasma/Applet>
 

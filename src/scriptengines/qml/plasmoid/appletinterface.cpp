@@ -33,7 +33,7 @@
 #include <QTimer>
 
 #include <KActionCollection>
-#include <KDebug>
+#include <QDebug>
 #include <KGlobalSettings>
 #include <KService>
 #include <KServiceTypeTrader>

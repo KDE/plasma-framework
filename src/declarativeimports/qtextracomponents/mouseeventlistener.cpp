@@ -25,7 +25,7 @@
 #include <QMouseEvent>
 #include <QTimer>
 
-#include <KDebug>
+#include <QDebug>
 
 static const int PressAndHoldDelay = 800;
 

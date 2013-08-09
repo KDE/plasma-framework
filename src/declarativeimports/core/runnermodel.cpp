@@ -23,7 +23,7 @@
 #include <QAction>
 #include <QTimer>
 
-#include <KDebug>
+#include <QDebug>
 
 #include <Plasma/RunnerManager>
 

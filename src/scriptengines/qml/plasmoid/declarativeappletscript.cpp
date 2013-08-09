@@ -29,7 +29,7 @@
 #include <QWidget>
 
 #include <KConfigGroup>
-#include <KDebug>
+#include <QDebug>
 #include <KGlobal>
 #include <KLocale>
 #include <KGlobalSettings>

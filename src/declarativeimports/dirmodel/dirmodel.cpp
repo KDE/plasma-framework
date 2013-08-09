@@ -23,7 +23,7 @@
 #include <QPixmap>
 
 #include <KDirLister>
-#include <KDebug>
+#include <QDebug>
 #include <KIO/PreviewJob>
 #include <KImageCache>
 #include <KMimeType>

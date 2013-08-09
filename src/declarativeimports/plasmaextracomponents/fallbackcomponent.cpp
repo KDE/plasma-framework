@@ -23,7 +23,7 @@
 #include <QFile>
 #include <QStandardPaths>
 
-#include <KDebug>
+#include <QDebug>
 
 
 FallbackComponent::FallbackComponent(QObject *parent)

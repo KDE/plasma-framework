@@ -23,7 +23,7 @@
 
 #include "plasmakpart.h"
 
-#include <KDebug>
+#include <QDebug>
 
 #include <Plasma/Containment>
 

@@ -29,7 +29,7 @@
 #include <QGraphicsLinearLayout>
 #include <QTimer>
 
-#include <KDebug>
+#include <QDebug>
 #include <KStandardDirs>
 
 #include <Plasma/Containment>

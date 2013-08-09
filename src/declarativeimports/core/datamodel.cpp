@@ -22,7 +22,7 @@
 
 #include <QTimer>
 
-#include <KDebug>
+#include <QDebug>
 
 namespace Plasma
 {
