@@ -81,10 +81,6 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
     m_qmlObject = new QmlObject(this);
     m_qmlObject->setInitializationDelayed(true);
 
-    m_creationTimer = new QTimer(this);
-    m_creationTimer->setSingleShot(true);
-    connect(m_creationTimer, &QTimer::timeout, this, &AppletInterface::init);
-
     m_collapseTimer = new QTimer(this);
     m_collapseTimer->setSingleShot(true);
     connect(m_collapseTimer, &QTimer::timeout, this, &AppletInterface::compactRepresentationCheck);
@@ -185,7 +181,8 @@ void AppletInterface::init()
     }
     geometryChanged(QRectF(), QRectF(x(), y(), width(), height()));
     emit busyChanged();
-    m_appletScriptEngine->setUiReady(true);
+
+    applet()->updateConstraints(Plasma::Types::UiReadyConstraint);
 }
 
 Plasma::Types::FormFactor AppletInterface::formFactor() const
@@ -732,15 +729,8 @@ void AppletInterface::itemChange(ItemChange change, const ItemChangeData &value)
 {
     if (change == QQuickItem::ItemSceneChange) {
         //we have a window: create the 
-        if (value.window && !m_qmlObject->rootObject() && !m_creationTimer->isActive()) {
+        if (value.window && !m_qmlObject->rootObject()) {
             init();
-
-            /*Experiment on even more delayed, doesn't seem to be good
-            QTime time = QTime::currentTime();
-            qsrand((uint)time.msec());
-            const int interval = qrand() % ((1000 + 1) - 50) + 50;
-            //QTimer::singleShot(interval, m_appletScriptEngine, SLOT(delayedInit()));
-            m_creationTimer->start(interval);*/
         }
     }
     QQuickItem::itemChange(change, value);

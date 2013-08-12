@@ -395,6 +395,14 @@ void Containment::addApplet(Applet *applet)
 
     d->applets << applet;
 
+    if (!applet->d->uiReady) {
+        d->loadingApplets << applet;
+        if (static_cast<Applet *>(this)->d->uiReady) {
+            static_cast<Applet *>(this)->d->uiReady = false;
+            emit uiReadyChanged(false);
+        }
+    }
+
     connect(applet, SIGNAL(configNeedsSaving()), this, SIGNAL(configNeedsSaving()));
     connect(applet, SIGNAL(appletDeleted(Plasma::Applet*)), this, SLOT(appletDeleted(Plasma::Applet*)));
     connect(applet, SIGNAL(statusChanged(Plasma::Types::ItemStatus)), this, SLOT(checkStatus(Plasma::Types::ItemStatus)));
@@ -508,6 +516,11 @@ void Containment::addContainmentActions(const QString &trigger, const QString &p
 QHash<QString, ContainmentActions*> &Containment::containmentActions()
 {
     return d->localActionPlugins;
+}
+
+bool Containment::isUiReady() const
+{
+    return static_cast<const Applet *>(this)->d->uiReady;
 }
 
 void Containment::setActivity(const QString &activityId)

@@ -205,6 +205,11 @@ class PLASMA_EXPORT Containment : public Applet
         QHash<QString, ContainmentActions*> &containmentActions();
 
 
+       /**
+        * @returns true when the ui of this containment is fully loaded, as well the ui of every applet in it
+        */
+        bool isUiReady() const;
+
 Q_SIGNALS:
         /**
          * This signal is emitted when a new applet is created by the containment
@@ -261,6 +266,12 @@ Q_SIGNALS:
          * @since 5.0
          */
         void formFactorChanged(Plasma::Types::FormFactor formFactor);
+
+        /**
+         * Emitted when the ui has been fully loaded and is fully working
+         * @param uiReady true when the ui of the containment is ready, as well the ui of each applet in it
+         */
+        void uiReadyChanged(bool uiReady);
 
     public Q_SLOTS:
         /**

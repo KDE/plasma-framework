@@ -67,6 +67,21 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
 void ContainmentInterface::init()
 {
     AppletInterface::init();
+
+    foreach (QObject *appletObj, m_appletInterfaces) {
+        AppletInterface *applet = qobject_cast<AppletInterface *>(appletObj);
+        if (applet) {
+            if (!applet->qmlObject()) {
+                applet->init();
+            }
+            m_appletInterfaces << applet;
+            emit appletAdded(applet);
+        }
+    }
+
+    if (!m_appletInterfaces.isEmpty()) {
+        emit appletsChanged();
+    }
 }
 
 QList <QObject *> ContainmentInterface::applets()
@@ -131,17 +146,22 @@ QVariantList ContainmentInterface::availableScreenRegion(int id) const
 
 void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
 {
+    if (!applet) {
+        return;
+    }
+
     QObject *appletGraphicObject = applet->property("graphicObject").value<QObject *>();
     QObject *contGraphicObject = containment()->property("graphicObject").value<QObject *>();
 
-    qDebug() << "Applet added:" << applet << applet->title() << appletGraphicObject;
+    qDebug() << "Applet added on containment:" << containment()->title() << contGraphicObject
+             << "Applet: " << applet << applet->title() << appletGraphicObject;
 
-    if (applet && contGraphicObject && appletGraphicObject) {
+    if (contGraphicObject && appletGraphicObject) {
         appletGraphicObject->setProperty("visible", false);
         appletGraphicObject->setProperty("parent", QVariant::fromValue(contGraphicObject));
 
     //if an appletGraphicObject is not set, we have to display some error message
-    } else if (applet && contGraphicObject) {
+    } else if (contGraphicObject) {
         QObject *errorUi = qmlObject()->createObjectFromSource(QUrl::fromLocalFile(containment()->corona()->package().filePath("appleterror")));
 
         if (errorUi) {

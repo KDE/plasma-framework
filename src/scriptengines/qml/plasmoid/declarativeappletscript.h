@@ -24,6 +24,7 @@
 #include <kdemacros.h>
 
 #include <QQmlEngine>
+#include <QSet>
 
 #include <Plasma/AppletScript>
 
@@ -45,9 +46,6 @@ public:
 
     void constraintsEvent(Plasma::Types::Constraints constraints);
 
-    void setUiReady(bool ready);
-    bool isUiReady() const;
-
 public Q_SLOTS:
     void executeAction(const QString &name);
     void activate();
@@ -63,8 +61,8 @@ Q_SIGNALS:
 
 private:
     AppletInterface *m_interface;
-    bool m_uiReady;
     friend class AppletInterface;
+    friend class ContainmentInterface;
 };
 
 
