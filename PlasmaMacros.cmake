@@ -1,7 +1,7 @@
 
 find_package(KF5 MODULE REQUIRED COMPONENTS InstallDirs)
 
-macro(installPackage dir component)
+macro(plasma_install_package dir component)
    set(root ${ARGV2})
    set(type ${ARGV3})
    if(NOT root)
