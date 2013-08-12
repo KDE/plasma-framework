@@ -2,12 +2,21 @@
 find_package(KF5 MODULE REQUIRED COMPONENTS InstallDirs)
 
 
-# plasma_install_package(path componentname)
+# plasma_install_package(path componentname [root] [type])
 #
 # Installs a Plasma package to the system path
 # @arg path The source path to install from, location of metadata.desktop
 # @arg componentname The plugin name of the component, corresponding to the
 #       X-KDE-PluginInfo-Name key in metadata.desktop
+# @arg root The subdirectory to install to, default: plasma/plasmoids
+# @arg root The subdirectory to install to, default: plasma/plasmoids
+# @arg type The type, default to applet, or applet, package, containment,
+#       wallpaper, shell, lookandfeel, etc.
+# @see Types column in plasmapkg --list-types
+#
+# Examples:
+# plasma_install_package(mywidget org.kde.plasma.mywidget) # installs an applet
+# plasma_install_package(declarativetoolbox org.kde.toolbox plasma/packages package) # installs a generic package
 #
 macro(plasma_install_package dir component)
    set(root ${ARGV2})
@@ -29,7 +38,10 @@ endmacro()
 # Basically does add_library and removes the prefix of the library
 #
 # @arg pluginname The name of the plugin,
-# @arg componentname The source files to be built
+# @arg sources_SRC The source files to be built
+#
+# Example:
+# plasma_add_plugin(plasma_engine_statusnotifieritem ${statusnotifieritem_engine_SRCS})
 #
 macro(plasma_add_plugin plugin)
     set(plugin_sources ${ARGN} )
