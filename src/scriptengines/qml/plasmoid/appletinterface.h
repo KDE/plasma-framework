@@ -207,7 +207,6 @@ private:
     QmlObject *m_qmlObject;
     QWeakPointer<QObject> m_compactUiObject;
 
-    QTimer *m_creationTimer;
     QTimer *m_collapseTimer;
 
     Plasma::Types::BackgroundHints m_backgroundHints;
