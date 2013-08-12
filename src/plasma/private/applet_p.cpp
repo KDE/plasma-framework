@@ -284,7 +284,7 @@ void AppletPrivate::setUiReady()
         c = q->containment();
         if (c) {
             q->containment()->d->loadingApplets.remove(q);
-            if (q->containment()->d->loadingApplets.isEmpty()) {
+            if (q->containment()->d->loadingApplets.isEmpty() && !static_cast<Applet *>(q->containment())->d->uiReady) {
                 static_cast<Applet *>(q->containment())->d->uiReady = true;
                 emit q->containment()->uiReadyChanged(true);
             }
