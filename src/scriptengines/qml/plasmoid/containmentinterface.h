@@ -66,6 +66,7 @@ public:
 
     QString activity() const;
 
+    Q_INVOKABLE void lockWidgets(bool locked);
     Q_INVOKABLE QRectF screenGeometry(int id) const;
     Q_INVOKABLE QVariantList availableScreenRegion(int id) const;
 
@@ -84,6 +85,7 @@ Q_SIGNALS:
     void activityChanged();
     void availableScreenRegionChanged();
     void appletsChanged();
+    ///void immutableChanged();
 
 protected Q_SLOTS:
     void appletAddedForward(Plasma::Applet *applet);

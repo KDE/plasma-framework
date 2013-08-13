@@ -31,6 +31,7 @@
 #include <QDebug>
 #include <KLocalizedString>
 
+#include <plasma.h>
 #include <Plasma/ContainmentActions>
 #include <Plasma/Corona>
 #include <Plasma/Package>
@@ -118,6 +119,12 @@ void ContainmentInterface::setContainmentType(ContainmentInterface::Type type)
 int ContainmentInterface::screen() const
 {
     return containment()->screen();
+}
+
+void ContainmentInterface::lockWidgets(bool locked)
+{
+    containment()->setImmutability(!locked ? Plasma::Types::Mutable : Plasma::Types::UserImmutable);
+    emit immutableChanged();
 }
 
 QRectF ContainmentInterface::screenGeometry(int id) const
