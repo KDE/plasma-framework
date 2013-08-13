@@ -79,13 +79,6 @@ class DialogProxy : public QQuickWindow
      * Plasma Location of the dialog window. Useful if this dialog is apopup for a panel
      */
     Q_PROPERTY(int location READ location WRITE setLocation NOTIFY locationChanged)
-//This won't be available on windows, but should be used only by kwin and never by applets anyways
-#ifndef Q_WS_WIN
-    /**
-     * Window ID of the dialog window.
-     **/
-    Q_PROPERTY(qulonglong windowId READ windowId CONSTANT)
-#endif
 
     Q_CLASSINFO("DefaultProperty", "mainItem")
 
@@ -122,10 +115,6 @@ public:
     void setLocation(int location);
 
     QObject *margins() const;
-
-#ifndef Q_WS_WIN
-    qulonglong windowId() const;
-#endif
 
     /**
      * @returns The suggested screen position for the popup
