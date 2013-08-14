@@ -503,6 +503,7 @@ void Containment::addContainmentActions(const QString &trigger, const QString &p
         if (plugin) {
             cfg.writeEntry(trigger, pluginName);
             containmentActions().insert(trigger, plugin);
+            plugin->setContainment(this);
         } else {
             //bad plugin... gets removed. is this a feature or a bug?
             cfg.deleteEntry(trigger);

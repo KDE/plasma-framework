@@ -57,8 +57,6 @@ ContainmentActions::ContainmentActions(QObject *parentObject, const QVariantList
     if (!mutableArgs.isEmpty()) {
         mutableArgs.removeFirst();
     }
-
-    setParent(parentObject);
 }
 
 ContainmentActions::~ContainmentActions()
@@ -171,6 +169,7 @@ QString ContainmentActions::eventToString(QEvent *event)
 void ContainmentActions::setContainment(Containment *newContainment)
 {
     d->containment = newContainment;
+    restore(config());
 }
 
 } // Plasma namespace
