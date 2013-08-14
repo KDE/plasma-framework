@@ -358,24 +358,15 @@ Item {
             active: delegate.item.hasOverState && mouse.containsMouse
         }
 
-        Text {
+        Label {
             id: label
 
             width: parent.width - icon.width - parent.spacing
             height: parent.height
 
-            font.capitalization: theme.defaultFont.capitalization
-            font.family: theme.defaultFont.family
-            font.italic: theme.defaultFont.italic
-            font.letterSpacing: theme.defaultFont.letterSpacing
-            font.pointSize: theme.defaultFont.pointSize
-            font.strikeout: theme.defaultFont.strikeout
-            font.underline: theme.defaultFont.underline
-            font.weight: theme.defaultFont.weight
-            font.wordSpacing: theme.defaultFont.wordSpacing
-
             color: mouse.containsMouse ? theme.buttonTextColor : theme.textColor
             Behavior on color { ColorAnimation { duration: 100 } }
+            elide: Text.ElideRight
 
             horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
