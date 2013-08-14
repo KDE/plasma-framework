@@ -212,8 +212,7 @@ void Containment::restore(KConfigGroup &group)
         defaultActionsCfg = KConfigGroup(&defaultActionsCfg, "ContainmentActions");
 
         foreach (const QString &key, defaultActionsCfg.keyList()) {
-            //qDebug() << "loading" << key;
-            addContainmentActions(key, cfg.readEntry(key, QString()));
+            addContainmentActions(key, defaultActionsCfg.readEntry(key, QString()));
         }
     }
 
