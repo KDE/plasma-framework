@@ -125,18 +125,22 @@ bool ThemePrivate::useCache()
             cacheSize = config.themeCacheKb();
         }
         const bool isRegularTheme = themeName != systemColorsTheme;
-        QString cacheFile = "plasma_theme_" + themeName;
+        const QString cacheFile = "plasma_theme_" + themeName;
 
         if (isRegularTheme) {
+            const QString cacheFileBase = cacheFile + "*.kcache";
+
             const QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "desktoptheme/" + themeName + "/metadata.desktop");
-            const KPluginInfo pluginInfo(path);
+            QString currentCacheFileName;
+            if (!path.isEmpty()) {
+                const KPluginInfo pluginInfo(path);
+                currentCacheFileName = cacheFile + "_v" + pluginInfo.version() +  ".kcache";
+            }
 
             // now we check for, and remove if necessary, old caches
-            const QString cacheFileBase = cacheFile + "*.kcache";
-            cacheFile += "_v" + pluginInfo.version();
-            const QString currentCacheFileName = cacheFile + ".kcache";
             foreach (const QString &file, QStandardPaths::locateAll(QStandardPaths::CacheLocation, cacheFileBase)) {
-                if (!file.endsWith(currentCacheFileName)) {
+                if (currentCacheFileName.isEmpty() ||
+                    !file.endsWith(currentCacheFileName)) {
                     QFile::remove(file);
                 }
             }
