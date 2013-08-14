@@ -69,8 +69,6 @@ DataEngine::DataEngine(QObject* parent, const QVariantList &args)
         d->setupScriptSupport();
         d->script->init();
     }
-    qDebug() << "PWC dataengine: " << d->dataEngineDescription.isValid() << d->dataEngineDescription.name();
-    qDebug() << "PWC args: " << args;
 }
 
 DataEngine::~DataEngine()
