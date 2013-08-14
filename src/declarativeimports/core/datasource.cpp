@@ -168,7 +168,7 @@ void DataSource::removeSource(const QString &source)
     }
 }
 
-Plasma::Service *DataSource::serviceForSource(const QString &source)
+QObject* DataSource::serviceForSource(const QString &source)
 {
     if (!m_services.contains(source)) {
         Plasma::Service *service = m_dataEngine->serviceForSource(source);
