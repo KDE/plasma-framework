@@ -159,4 +159,8 @@ class PLASMA_EXPORT ContainmentActions : public QObject
 K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
 K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
 
+#define K_EXPORT_PLASMA_CONTAINMENTACTIONS_WITH_JSON(libname, classname, jsonFile) \
+K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();) \
+K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
+
 #endif // PLASMA_CONTAINMENTACTIONS_H
