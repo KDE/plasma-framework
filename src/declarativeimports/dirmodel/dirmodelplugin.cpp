@@ -26,7 +26,7 @@
 void DirModelPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.dirmodel"));
-    qmlRegisterType<DirModel>(uri, 0, 1, "DirModel");
+    qmlRegisterType<DirModel>(uri, 2,0, "DirModel");
 }
 
 #include "moc_dirmodelplugin.cpp"
