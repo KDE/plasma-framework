@@ -32,7 +32,7 @@
 #include <Plasma/Package>
 
 #include "containmentconfigview.h"
-// #include "panelview.h"
+#include "panelview.h"
 #include "view.h"
 #include "scripting/desktopscriptengine.h"
 #include "widgetexplorer/widgetexplorerview.h"
@@ -54,9 +54,11 @@ public:
     QDesktopWidget * desktopWidget;
     QList <View *> views;
     WidgetExplorerView * widgetExplorerView;
-    // QHash <Plasma::Containment *, PanelView *> panelViews;
+    QHash <Plasma::Containment *, PanelView *> panelViews;
     KConfigGroup desktopDefaultsConfig;
     WorkspaceScripting::DesktopScriptEngine * scriptEngine;
+    QList<Plasma::Containment *> waitingPanels;
+    QSet<Plasma::Containment *> loadingDesktops;
 
     QTimer appConfigSyncTimer;
 };
@@ -201,19 +203,19 @@ void ShellCorona::checkScreen(int screen, bool signalWhenExists)
 
 
     //ensure the panels get views too
-    // if (signalWhenExists) {
-    //     foreach (Plasma::Containment * c, containments()) {
-    //         if (c->screen() != screen) {
-    //             continue;
-    //         }
+    if (signalWhenExists) {
+        foreach (Plasma::Containment * c, containments()) {
+            if (c->screen() != screen) {
+                continue;
+            }
 
-    //         Plasma::Types::ContainmentType t = c->containmentType();
-    //         if (t == Plasma::Types::PanelContainment ||
-    //             t == Plasma::Types::CustomPanelContainment) {
-    //             emit containmentAdded(c);
-    //         }
-    //     }
-    // }
+            Plasma::Types::ContainmentType t = c->containmentType();
+            if (t == Plasma::Types::PanelContainment ||
+                t == Plasma::Types::CustomPanelContainment) {
+                emit containmentAdded(c);
+            }
+        }
+    }
 }
 
 void ShellCorona::checkDesktop(/*Activity *activity,*/ bool signalWhenExists, int screen)
@@ -263,10 +265,10 @@ QRect ShellCorona::availableScreenRect(int id) const
     return d->desktopWidget->availableGeometry(id);
 }
 
-// PanelView *ShellCorona::panelView(Plasma::Containment *containment) const
-// {
-//     return d->panelViews.value(containment);
-// }
+PanelView *ShellCorona::panelView(Plasma::Containment *containment) const
+{
+    return d->panelViews.value(containment);
+}
 
 
 ///// SLOTS
@@ -313,6 +315,24 @@ void ShellCorona::checkViews()
     }
 }
 
+void ShellCorona::checkLoadingDesktopsComplete()
+{
+    Plasma::Containment *c = qobject_cast<Plasma::Containment *>(sender());
+    if (c) {
+        disconnect(c, &Plasma::Containment::uiReadyChanged,
+                   this, &ShellCorona::checkLoadingDesktopsComplete);
+        d->loadingDesktops.remove(c);
+    }
+
+    if (d->loadingDesktops.isEmpty()) {
+        foreach (Plasma::Containment *cont, d->waitingPanels) {
+            d->panelViews[cont] = new PanelView(this);
+            d->panelViews[cont]->setContainment(cont);
+        }
+        d->waitingPanels.clear();
+    }
+}
+
 void ShellCorona::updateScreenOwner(int wasScreen, int isScreen, Plasma::Containment *containment)
 {
     qDebug() << "Was screen" << wasScreen << "Is screen" << isScreen <<"Containment" << containment << containment->title();
@@ -320,21 +340,27 @@ void ShellCorona::updateScreenOwner(int wasScreen, int isScreen, Plasma::Contain
     if (containment->formFactor() == Plasma::Types::Horizontal ||
         containment->formFactor() == Plasma::Types::Vertical) {
 
-        // if (isScreen >= 0) {
-        //     d->panelViews[containment] = new PanelView(this);
-        //     d->panelViews[containment]->init();
-        //     d->panelViews[containment]->setContainment(containment);
-        //     d->panelViews[containment]->show();
-        // } else {
-        //     if (d->panelViews.contains(containment)) {
-        //         d->panelViews[containment]->setContainment(0);
-        //         d->panelViews[containment]->deleteLater();
-        //         d->panelViews.remove(containment);
-        //     }
-        // }
+        if (isScreen >= 0) {
+            d->waitingPanels << containment;
+        } else {
+            if (d->panelViews.contains(containment)) {
+                d->panelViews[containment]->setContainment(0);
+                d->panelViews[containment]->deleteLater();
+                d->panelViews.remove(containment);
+            }
+        }
+        checkLoadingDesktopsComplete();
 
     //Desktop view
     } else {
+
+        if (containment->isUiReady()) {
+            checkLoadingDesktopsComplete();
+        } else {
+            d->loadingDesktops.insert(containment);
+            connect(containment, &Plasma::Containment::uiReadyChanged,
+                    this, &ShellCorona::checkLoadingDesktopsComplete);
+        }
 
         if (isScreen < 0 || d->views.count() < isScreen + 1) {
             qWarning() << "Invalid screen";

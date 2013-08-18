@@ -59,7 +59,7 @@ add_executable(plasma-shell
     main.cpp
     configview.cpp
     containmentconfigview.cpp
-    desktopcorona.cpp
+    # desktopcorona.cpp
     shellcorona.cpp
     panelview.cpp
     shellpluginloader.cpp

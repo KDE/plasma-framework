@@ -31,7 +31,7 @@ namespace Plasma
     class Applet;
 } // namespace Plasma
 
-// class PanelView;
+class PanelView;
 namespace WorkspaceScripting {
     class DesktopScriptEngine;
 }
@@ -68,7 +68,7 @@ public:
     QRegion availableScreenRegion(int id) const;
     QRect availableScreenRect(int id) const;
 
-    // PanelView *panelView(Plasma::Containment *containment) const;
+    PanelView *panelView(Plasma::Containment *containment) const;
 
 public Q_SLOTS:
     /**
@@ -119,6 +119,7 @@ protected Q_SLOTS:
 
 
 private Q_SLOTS:
+    void checkLoadingDesktopsComplete();
     void handleContainmentAdded(Plasma::Containment *c);
     void showWidgetExplorer();
     void syncAppConfig();
