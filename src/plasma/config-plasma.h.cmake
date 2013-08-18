@@ -4,6 +4,7 @@
 #cmakedefine01 PLASMA_NO_KUTILS
 #cmakedefine01 PLASMA_NO_GLOBAL_SHORTCUTS
 #cmakedefine01 HAVE_X11
+#cmakedefine01 HAVE_GLX
 
 /*FIXME: Only used in CMakeLists.txt, to be removed ?*/
 #cmakedefine01 PLASMA_NO_KNEWSTUFF

@@ -43,6 +43,7 @@
 #include "serviceoperationstatus.h"
 
 #include "tooltip.h"
+#include "windowthumbnail.h"
 
 // #include "dataenginebindings_p.h"
 
@@ -102,6 +103,8 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
 
     qmlRegisterInterface<Plasma::DataSource>("DataSource");
     qRegisterMetaType<Plasma::DataSource*>("DataSource");
+
+    qmlRegisterType<Plasma::WindowThumbnail>(uri, 2, 0, "WindowThumbnail");
 
 }
 

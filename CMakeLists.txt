@@ -74,7 +74,7 @@ find_package(KDE4Support REQUIRED NO_MODULE)
 
 #optional features
 find_package(X11 MODULE)
-find_package(XCB MODULE COMPONENTS XCB)
+find_package(XCB MODULE COMPONENTS XCB COMPOSITE DAMAGE)
 set_package_properties(XCB PROPERTIES DESCRIPTION "X protocol C-language Binding"
                        URL "http://xcb.freedesktop.org"
                        TYPE RECOMMENDED
@@ -130,6 +130,17 @@ set_package_properties(LibAttica PROPERTIES DESCRIPTION "Support for Get Hot New
                        URL "https://projects.kde.org/attica"
                        TYPE REQUIRED
                       )
+
+find_package(OpenGL)
+set_package_properties(OpenGL PROPERTIES DESCRIPTION "The OpenGL libraries"
+                       URL "http://www.opengl.org"
+                       TYPE OPTIONAL
+                      )
+if(OPENGL_FOUND)
+    set(HAVE_GLX HAVE_X11)
+else()
+    set(HAVE_GLX 0)
+endif()
 
 #########################################################################
 
