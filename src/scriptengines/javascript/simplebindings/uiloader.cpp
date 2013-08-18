@@ -23,7 +23,7 @@
 #include <QGraphicsLinearLayout>
 #include <QStringList>
 
-#include <KDebug>
+#include <QDebug>
 
 #include <Plasma/BusyWidget>
 #include <Plasma/CheckBox>

@@ -47,6 +47,7 @@ PanelView::PanelView(DesktopCorona *corona, QWindow *parent)
     setColor(QColor(Qt::transparent));
     setFlags(Qt::FramelessWindowHint);
     KWindowSystem::setType(winId(), NET::Dock);
+    setVisible(false);
 
     //TODO: how to take the shape from the framesvg?
     KWindowEffects::enableBlurBehind(winId(), true);
@@ -58,6 +59,16 @@ PanelView::PanelView(DesktopCorona *corona, QWindow *parent)
             this, &PanelView::positionPanel);
     connect(this, &View::containmentChanged,
             this, &PanelView::restore);
+
+    if (!m_corona->package().isValid()) {
+        qWarning() << "Invalid home screen package";
+    }
+
+    setResizeMode(View::SizeRootObjectToView);
+    qmlRegisterType<QScreen>();
+    engine()->rootContext()->setContextProperty("panel", this);
+    setSource(QUrl::fromLocalFile(m_corona->package().filePath("views", "Panel.qml")));
+    positionPanel();
 }
 
 PanelView::~PanelView()
@@ -93,19 +104,6 @@ KConfigGroup PanelView::config() const
     } else {
         return KConfigGroup(&views, "Horizontal" + QString::number(screen()->size().width()));
     }
-}
-
-void PanelView::init()
-{
-    if (!m_corona->package().isValid()) {
-        qWarning() << "Invalid home screen package";
-    }
-
-    setResizeMode(View::SizeRootObjectToView);
-    qmlRegisterType<QScreen>();
-    engine()->rootContext()->setContextProperty("panel", this);
-    setSource(QUrl::fromLocalFile(m_corona->package().filePath("views", "Panel.qml")));
-    positionPanel();
 }
 
 Qt::Alignment PanelView::alignment() const
@@ -329,6 +327,10 @@ void PanelView::restore()
         return;
     }
 
+    setVisible(containment()->isUiReady());
+    connect(containment(), &Plasma::Containment::uiReadyChanged,
+            this, &PanelView::setVisible);
+
     static const int MINSIZE = 10;
 
     m_offset = config().readEntry<int>("offset", 0);
@@ -371,6 +373,7 @@ void PanelView::restore()
     emit maximumLengthChanged();
     emit minimumLengthChanged();
     emit offsetChanged();
+    emit alignmentChanged();
 }
 
 void PanelView::resizeEvent(QResizeEvent *ev)

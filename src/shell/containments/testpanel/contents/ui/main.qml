@@ -44,12 +44,15 @@ Item {
         onFormFactorChanged: {
             if (plasmoid.formFactor == PlasmaCore.Types.Vertical) {
                 for (var container in row.children) {
-                    container.parent = column
-                    print("AAAA"+container)
+                    var item = row.children[0];
+                    item.parent = column
+                    item.width = column.width
                 }
             } else {
                 for (var container in column.children) {
-                    container.parent = row
+                    var item = column.children[0];
+                    item.parent = row
+                    item.height = row.height
                 }
             }
         }
@@ -61,11 +64,11 @@ Item {
             id: container
             visible: false
 
-            width: Math.min(root.width, root.height)
-            height:  width
+            Layout.preferredWidth: Math.min(root.width, root.height)
+            Layout.preferredHeight: Layout.preferredWidth
+
 
             property Item applet
-
 
             PlasmaComponents.BusyIndicator {
                 z: 1000

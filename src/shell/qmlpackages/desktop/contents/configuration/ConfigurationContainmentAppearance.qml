@@ -17,25 +17,20 @@
  */
 
 import QtQuick 2.0
-import org.kde.plasma.components 2.0 as PlasmaComponents
-import org.kde.plasma.extras 2.0 as PlasmaExtras
 import org.kde.plasma.configuration 2.0
 import QtQuick.Controls 1.0 as QtControls
+import QtQuick.Layouts 1.0
 
-Column {
+ColumnLayout {
     id: root
 
-    spacing: _m
-    PlasmaExtras.Title {
-        text: "Plugins"
-    }
-
+    property int formAlignment: pluginComboBox.x
 
 //BEGIN functions
     function saveConfig() {
         for (var key in configDialog.wallpaperConfiguration) {
-            if (main.currentPage["cfg_"+key] !== undefined) {
-                configDialog.wallpaperConfiguration[key] = main.currentPage["cfg_"+key]
+            if (main.currentItem["cfg_"+key] !== undefined) {
+                configDialog.wallpaperConfiguration[key] = main.currentItem["cfg_"+key]
             }
         }
         configDialog.applyWallpaper()
@@ -43,91 +38,54 @@ Column {
 
     function restoreConfig() {
         for (var key in configDialog.wallpaperConfiguration) {
-            if (main.currentPage["cfg_"+key] !== undefined) {
-                main.currentPage["cfg_"+key] = configDialog.wallpaperConfiguration[key]
+            if (main.currentItem["cfg_"+key] !== undefined) {
+                main.currentItem["cfg_"+key] = configDialog.wallpaperConfiguration[key]
             }
         }
     }
 //END functions
 
-    ListView {
-        id: categoriesView
-        anchors {
-            left: parent.left
-            right: parent.right
-        }
-        height: 100
-        orientation: ListView.Horizontal 
-
-        model: configDialog.wallpaperConfigModel
-        delegate: ConfigCategoryDelegate {
-            id: delegate
-            current: categoriesView.currentIndex == index
-            anchors {
-                top: parent.top
-                bottom: parent.bottom
-                left: undefined
-                right: undefined
-            }
-            width: 64
-            onClicked: {
-                configDialog.currentWallpaper = model.pluginName
-                if (categoriesView.currentIndex == index) {
-                    return
-                } else {
-                    categoriesView.currentIndex = index;
-                    main.sourceFile = model.source
-                    root.restoreConfig()
-                }
-            }
-            onCurrentChanged: {
-                categoriesView.currentIndex = index
-                if (current) {
-                    categoriesView.currentIndex = index
-                }
-            }
-            Component.onCompleted: {
-                if (configDialog.currentWallpaper == model.pluginName) {
-                    loadWallpaperTimer.pendingCurrent = model
-                    loadWallpaperTimer.restart()
-                }
-            }
-        }
-        highlight: Rectangle {
-            color: theme.highlightColor
-        }
-        Timer {
-            id: loadWallpaperTimer
-            interval: 100
-            property variant pendingCurrent
-            onTriggered: {
-                if (pendingCurrent) {
-                    categoriesView.currentIndex = pendingCurrent.index
-                    main.sourceFile = pendingCurrent.source
-                    root.restoreConfig()
-                }
+    Component.onCompleted: {
+        for (var i = 0; i < configDialog.wallpaperConfigModel.count; ++i) {
+            var data = configDialog.wallpaperConfigModel.get(i);
+            for(var j in data) print(j)
+            if (configDialog.currentWallpaper == data.pluginName) {
+                pluginComboBox.currentIndex = i
+                break;
             }
         }
     }
-    PlasmaComponents.PageStack {
+
+    Row {
+        spacing: 4
+        QtControls.Label {
+            anchors.verticalCenter: pluginComboBox.verticalCenter
+            text: "Wallpaper plugin:"
+        }
+        QtControls.ComboBox {
+            id: pluginComboBox
+            model: configDialog.wallpaperConfigModel
+            textRole: "name"
+            onCurrentIndexChanged: {
+                var model = configDialog.wallpaperConfigModel.get(currentIndex)
+                main.sourceFile = model.source
+                root.restoreConfig()
+            }
+        }
+    }
+
+    QtControls.StackView {
         id: main
+        Layout.fillHeight: true;
         anchors {
-            left: categoriesView.left;
+            left: parent.left;
             right: parent.right;
         }
-        width: implicitWidth
-        height: implicitHeight
         property string sourceFile
         onSourceFileChanged: {
             if (sourceFile != "") {
-                main.opacity = 1;
                 replace(Qt.resolvedUrl(sourceFile))
-                //main.width = mainColumn.implicitWidth
-                main.height = mainColumn.implicitHeight
-            } else {
-                main.opacity = 0
             }
         }
-        Behavior on opacity { NumberAnimation {} }
     }
 }

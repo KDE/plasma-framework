@@ -24,7 +24,7 @@
 #include <QFile>
 #include <QMetaEnum>
 
-#include <KDebug>
+#include <QDebug>
 #include <KDesktopFile>
 #include <KIO/Job>
 #include <KLocale>
@@ -191,7 +191,7 @@ bool ScriptEnv::importBuiltinExtension(const QString &extension, QScriptValue &o
 
 bool ScriptEnv::importExtensions(const KPluginInfo &info, QScriptValue &obj, Authorization &auth)
 {
-    QStringList requiredExtensions = info.service()->property("X-Plasma-RequiredExtensions", QVariant::StringList).toStringList();
+    QStringList requiredExtensions = info.property("X-Plasma-RequiredExtensions", QVariant::StringList).toStringList();
     if (!requiredExtensions.isEmpty()) {
         // qDebug() << "required extensions are" << requiredExtensions;
     }
@@ -219,7 +219,7 @@ bool ScriptEnv::importExtensions(const KPluginInfo &info, QScriptValue &obj, Aut
         }
     }
 
-    QStringList optionalExtensions = info.service()->property("X-Plasma-OptionalExtensions", QVariant::StringList).toStringList();
+    QStringList optionalExtensions = info.property("X-Plasma-OptionalExtensions", QVariant::StringList).toStringList();
     if (!optionalExtensions.isEmpty()) {
         // qDebug() << "optional extensions are" << optionalExtensions;
     }

@@ -23,10 +23,10 @@
 #include <QSize>
 #include <KDirModel>
 #include <QVariant>
+#include <KImageCache>
+#include <KSharedDataCache>
 
 class QTimer;
-
-class KImageCache;
 
 /**
  * This class provides a QML binding to KDirModel

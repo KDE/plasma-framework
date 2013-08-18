@@ -26,7 +26,7 @@
 #include "qrangemodel.h"
 
 #include <KSharedConfig>
-#include <KDebug>
+#include <QDebug>
 #include <KGlobal>
 
 #include <kdeclarative/kdeclarative.h>
@@ -108,7 +108,7 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
     qmlRegisterUncreatableType<DialogStatus>(uri, 2, 0, "DialogStatus", "");
     qmlRegisterUncreatableType<PageOrientation>(uri, 2, 0, "PageOrientation", "");
     qmlRegisterUncreatableType<PageStatus>(uri, 2, 0, "PageStatus", "");
-    qmlRegisterUncreatableType<Units>(uri, 0, 1, "Units", "");
+    qmlRegisterUncreatableType<Units>(uri, 2, 0, "Units", "");
 }
 
 

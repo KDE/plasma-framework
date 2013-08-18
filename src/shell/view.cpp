@@ -42,6 +42,14 @@ View::View(Plasma::Corona *corona, QWindow *parent)
 
     connect(screen(), &QScreen::virtualGeometryChanged,
             this, &View::screenGeometryChanged);
+
+    if (!m_corona->package().isValid()) {
+        qWarning() << "Invalid home screen package";
+    }
+
+    setResizeMode(View::SizeRootObjectToView);
+    setSource(QUrl::fromLocalFile(m_corona->package().filePath("views", "Desktop.qml")));
+
 }
 
 View::~View()
@@ -63,18 +71,12 @@ KConfigGroup View::config() const
     return KConfigGroup(&views, QString::number(containment()->screen()));
 }
 
-void View::init()
-{
-    if (!m_corona->package().isValid()) {
-        qWarning() << "Invalid home screen package";
-    }
-
-    setResizeMode(View::SizeRootObjectToView);
-    setSource(QUrl::fromLocalFile(m_corona->package().filePath("views", "Desktop.qml")));
-}
-
 void View::setContainment(Plasma::Containment *cont)
 {
+    if (m_containment.data() == cont) {
+        return;
+    }
+
     Plasma::Types::Location oldLoc = (Plasma::Types::Location)location();
     Plasma::Types::FormFactor oldForm = formFactor();
 

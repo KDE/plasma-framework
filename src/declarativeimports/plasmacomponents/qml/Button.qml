@@ -33,6 +33,7 @@ import QtQuick 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import "private" as Private
 
+
 Item {
     id: button
 
@@ -236,25 +237,15 @@ Item {
             active: shadow.hasOverState && mouse.containsMouse
         }
 
-        Text {
+        Label {
             id: label
 
             width: parent.width - icon.width - parent.spacing
             height: parent.height
-
-            font.capitalization: theme.defaultFont.capitalization
-            font.family: theme.defaultFont.family
-            font.italic: theme.defaultFont.italic
-            font.letterSpacing: theme.defaultFont.letterSpacing
-            font.pointSize: theme.defaultFont.pointSize
-            font.strikeout: theme.defaultFont.strikeout
-            font.underline: theme.defaultFont.underline
-            font.weight: theme.defaultFont.weight
-            font.wordSpacing: theme.defaultFont.wordSpacing
             color: theme.buttonTextColor
             horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            elide: button.width < button.implicitWidth ? Text.ElideRight : Text.ElideNone
+            elide: Text.ElideRight
         }
     }
 

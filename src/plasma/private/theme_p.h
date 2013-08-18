@@ -27,6 +27,7 @@
 #include <QDebug>
 #include <KColorScheme>
 #include <KImageCache>
+#include <KSharedDataCache>
 #include <KWindowSystem>
 #include <QTimer>
 

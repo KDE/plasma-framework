@@ -21,7 +21,7 @@
 
 #include <QtQml>
 
-#include <KDebug>
+#include <QDebug>
 
 #include <Plasma/QueryMatch>
 

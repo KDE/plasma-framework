@@ -295,7 +295,6 @@ void ShellCorona::checkViews()
         for (int i = d->views.count(); i < d->desktopWidget->screenCount(); ++i) {
             View *view = new View(this);
             QSurfaceFormat format;
-            view->init();
             view->show();
 
             d->views << view;

@@ -28,7 +28,7 @@
 Q_DECLARE_METATYPE(QEasingCurve)
 Q_DECLARE_METATYPE(QEasingCurve*)
 
-#include <KDebug>
+#include <QDebug>
 static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
 {
     if (ctx->argumentCount() > 0) {

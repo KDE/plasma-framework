@@ -32,7 +32,7 @@ target_link_libraries(corebindingsplugin
         ${Qt5Qml_LIBRARIES}
         ${KDECLARATIVE_LIBRARIES}
         ${KDE4_KDEUI_LIBS}
-        ${KDE4_KDECORE_LIBS}
+        ${KCore_LIBRARIES}
         plasma)
 
 install(TARGETS corebindingsplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/core)

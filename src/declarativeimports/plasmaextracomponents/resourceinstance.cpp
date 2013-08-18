@@ -24,7 +24,7 @@
 #include <QTimer>
 
 #include <KActivities/ResourceInstance>
-#include <KDebug>
+#include <QDebug>
 
 
 ResourceInstance::ResourceInstance(QQuickItem *parent)

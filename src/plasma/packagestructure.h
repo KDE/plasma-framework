@@ -97,8 +97,6 @@ private:
  */
 #define K_EXPORT_PLASMA_PACKAGE(libname, classname) \
 K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
-K_EXPORT_PLUGIN(factory("plasma_packagestructure_" #libname)) \
 K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
-
 #endif
 

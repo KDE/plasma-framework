@@ -20,7 +20,7 @@
 
 #include <QFile>
 
-#include <KDebug>
+#include <QDebug>
 
 #include <Plasma/AbstractRunner>
 #include <Plasma/Package>

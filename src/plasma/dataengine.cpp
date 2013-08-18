@@ -56,9 +56,18 @@ DataEngine::DataEngine(const KPluginInfo &plugin, QObject *parent)
         d->setupScriptSupport();
         d->script->init();
     } else {
-        // qDebug() << "called";
         // default implementation does nothing. this is for engines that have to
         // start things in motion external to themselves before they can work
+    }
+}
+
+DataEngine::DataEngine(QObject* parent, const QVariantList &args)
+    : QObject(parent),
+      d(new DataEnginePrivate(this, KPluginInfo(args)))
+{
+    if (d->script) {
+        d->setupScriptSupport();
+        d->script->init();
     }
 }
 
@@ -382,8 +391,8 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info)
 {
     updateTimestamp.start();
 
-    if (info.isValid()) {
-        e->setObjectName(info.name());
+    if (dataEngineDescription.isValid()) {
+        e->setObjectName(dataEngineDescription.name());
     } else {
         e->setObjectName("NullEngine");
     }

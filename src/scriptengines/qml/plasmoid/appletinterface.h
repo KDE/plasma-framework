@@ -68,6 +68,14 @@ class AppletInterface : public QQuickItem
     Q_PROPERTY(Plasma::Types::ItemStatus status READ status WRITE setStatus NOTIFY statusChanged)
     Q_PROPERTY(QString associatedApplication WRITE setAssociatedApplication READ associatedApplication)
 
+    //Size hints Note that the containments may chose to not respect them.
+    Q_PROPERTY(qreal minimumWidth READ minimumWidth NOTIFY minimumWidthChanged)
+    Q_PROPERTY(qreal minimumHeight READ minimumHeight NOTIFY minimumHeightChanged)
+    Q_PROPERTY(qreal maximumWidth READ maximumWidth NOTIFY maximumWidthChanged)
+    Q_PROPERTY(qreal maximumHeight READ maximumHeight NOTIFY maximumHeightChanged)
+    Q_PROPERTY(qreal implicitWidth READ implicitWidth NOTIFY implicitWidthChanged)
+    Q_PROPERTY(qreal implicitHeight READ implicitHeight NOTIFY implicitHeightChanged)
+
 public:
     AppletInterface(DeclarativeAppletScript *script, QQuickItem *parent = 0);
     ~AppletInterface();
@@ -142,6 +150,13 @@ public:
     bool userConfiguring() const;
     int apiVersion() const;
 
+    qreal minimumWidth() const;
+    qreal minimumHeight() const;
+    qreal maximumWidth() const;
+    qreal maximumHeight() const;
+    qreal implicitWidth() const;
+    qreal implicitHeight() const;
+
 Q_SIGNALS:
     void releaseVisualFocus();
     void configNeedsSaving();
@@ -157,14 +172,29 @@ Q_SIGNALS:
     void busyChanged();
     void expandedChanged();
 
+    void minimumWidthChanged();
+    void minimumHeightChanged();
+    void maximumWidthChanged();
+    void maximumHeightChanged();
+    void implicitWidthChanged();
+    void implicitHeightChanged();
+
 protected:
-    virtual void init();
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
     void itemChange(ItemChange change, const ItemChangeData &value);
 
     DeclarativeAppletScript *m_appletScriptEngine;
 
+protected Q_SLOTS:
+    virtual void init();
+
+private Q_SLOTS:
+    void compactRepresentationCheck();
+
 private:
+    //Helper for minimumWidth etc.
+    qreal readGraphicsObjectSizeHint(const char *hint) const;
+
     QStringList m_actions;
     QSignalMapper *m_actionSignals;
     QString m_currentConfig;
@@ -177,11 +207,12 @@ private:
     QmlObject *m_qmlObject;
     QWeakPointer<QObject> m_compactUiObject;
 
-    QTimer *m_creationTimer;
+    QTimer *m_collapseTimer;
 
     Plasma::Types::BackgroundHints m_backgroundHints;
     bool m_busy : 1;
     bool m_expanded : 1;
+    friend class ContainmentInterface;
 };
 
 #endif

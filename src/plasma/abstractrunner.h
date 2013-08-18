@@ -458,7 +458,6 @@ class PLASMA_EXPORT AbstractRunner : public QObject
 
 #define K_EXPORT_PLASMA_RUNNER( libname, classname )     \
 K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
-K_EXPORT_PLUGIN(factory("plasma_runner_" #libname)) \
 K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
 
 /**
@@ -468,7 +467,6 @@ K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
  */
 #define K_EXPORT_RUNNER_CONFIG( name, classname )     \
 K_PLUGIN_FACTORY(ConfigFactory, registerPlugin<classname>();) \
-K_EXPORT_PLUGIN(ConfigFactory("kcm_krunner_" #name)) \
 K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
 
 #endif

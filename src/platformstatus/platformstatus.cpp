@@ -25,7 +25,7 @@
 #include <QMap>
 
 #include <KConfigGroup>
-#include <KDebug>
+#include <QDebug>
 #include <KDirWatch>
 #include <KPluginFactory>
 
@@ -47,7 +47,6 @@ public:
 const char *defaultPackage = "org.kde.desktop";
 
 K_PLUGIN_FACTORY(PlatformStatusFactory, registerPlugin<PlatformStatus>();)
-K_EXPORT_PLUGIN(PlatformStatusFactory("platformstatus"))
 
 PlatformStatus::PlatformStatus(QObject *parent, const QVariantList &)
     : KDEDModule(parent)

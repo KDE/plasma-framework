@@ -179,6 +179,8 @@ void Containment::restore(KConfigGroup &group)
 
     setLocation((Plasma::Types::Location)group.readEntry("location", (int)d->location));
     setFormFactor((Plasma::Types::FormFactor)group.readEntry("formfactor", (int)d->formFactor));
+
+    setWallpaper(group.readEntry("wallpaperplugin", ContainmentPrivate::defaultWallpaper));
     //qDebug() << "setScreen from restore";
     d->setScreen(group.readEntry("screen", d->screen));
     d->activityId = group.readEntry("activityId", QString());
@@ -187,7 +189,7 @@ void Containment::restore(KConfigGroup &group)
     restoreContents(group);
     setImmutability((Types::ImmutabilityType)group.readEntry("immutability", (int)Types::Mutable));
 
-    setWallpaper(group.readEntry("wallpaperplugin", ContainmentPrivate::defaultWallpaper));
+    
 
     KConfigGroup cfg = KConfigGroup(corona()->config(), "ActionPlugins");
     cfg = KConfigGroup(&cfg, QString::number(containmentType()));
@@ -210,8 +212,7 @@ void Containment::restore(KConfigGroup &group)
         defaultActionsCfg = KConfigGroup(&defaultActionsCfg, "ContainmentActions");
 
         foreach (const QString &key, defaultActionsCfg.keyList()) {
-            //qDebug() << "loading" << key;
-            addContainmentActions(key, cfg.readEntry(key, QString()));
+            addContainmentActions(key, defaultActionsCfg.readEntry(key, QString()));
         }
     }
 
@@ -393,8 +394,15 @@ void Containment::addApplet(Applet *applet)
 
     d->applets << applet;
 
+    if (!applet->d->uiReady) {
+        d->loadingApplets << applet;
+        if (static_cast<Applet *>(this)->d->uiReady) {
+            static_cast<Applet *>(this)->d->uiReady = false;
+            emit uiReadyChanged(false);
+        }
+    }
+
     connect(applet, SIGNAL(configNeedsSaving()), this, SIGNAL(configNeedsSaving()));
-    connect(applet, SIGNAL(releaseVisualFocus()), this, SIGNAL(releaseVisualFocus()));
     connect(applet, SIGNAL(appletDeleted(Plasma::Applet*)), this, SLOT(appletDeleted(Plasma::Applet*)));
     connect(applet, SIGNAL(statusChanged(Plasma::Types::ItemStatus)), this, SLOT(checkStatus(Plasma::Types::ItemStatus)));
     connect(applet, SIGNAL(activate()), this, SIGNAL(activate()));
@@ -495,6 +503,7 @@ void Containment::addContainmentActions(const QString &trigger, const QString &p
         if (plugin) {
             cfg.writeEntry(trigger, pluginName);
             containmentActions().insert(trigger, plugin);
+            plugin->setContainment(this);
         } else {
             //bad plugin... gets removed. is this a feature or a bug?
             cfg.deleteEntry(trigger);
@@ -507,6 +516,11 @@ void Containment::addContainmentActions(const QString &trigger, const QString &p
 QHash<QString, ContainmentActions*> &Containment::containmentActions()
 {
     return d->localActionPlugins;
+}
+
+bool Containment::isUiReady() const
+{
+    return static_cast<const Applet *>(this)->d->uiReady;
 }
 
 void Containment::setActivity(const QString &activityId)

@@ -1,3 +1,2 @@
  
-installPackage(testcontainment org.kde.testcontainment plasma/plasmoids containment)
-installPackage(testpanel org.kde.panel applets plasma/plasmoids containment)
+plasma_install_package(testpanel org.kde.panel plasma/plasmoids containment)

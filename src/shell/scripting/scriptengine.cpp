@@ -25,27 +25,26 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QScriptValueIterator>
+#include <QStandardPaths>
 
-#include <KDebug>
+#include <QDebug>
 #include <KGlobal>
-#include <kdeversion.h>
-#include <KGlobalSettings>
 #include <KLocalizedString>
 #include <KMimeTypeTrader>
 #include <KServiceTypeTrader>
 #include <KShell>
 #include <KStandardDirs>
 #include <KComponentData>
-#include <k4aboutdata.h>
 
 // KIO
-#include <kemailsettings.h> // no camelcase include
+//#include <kemailsettings.h> // no camelcase include
 
 #include <Plasma/Applet>
 #include <Plasma/Containment>
 #include <Plasma/Corona>
 #include <Plasma/Package>
 #include <Plasma/PluginLoader>
+#include <qstandardpaths.h>
 
 #include "appinterface.h"
 #include "containment.h"
@@ -108,8 +107,7 @@ QScriptValue ScriptEngine::activityForScreen(QScriptContext *context, QScriptEng
 
 QScriptValue ScriptEngine::newActivity(QScriptContext *context, QScriptEngine *engine)
 {
-    //FIXME: will be org.kde.desktop
-    return createContainment("Desktop", "org.kde.testcontainment", context, engine);
+    return createContainment("Desktop", "org.kde.desktopcontainment", context, engine);
 }
 
 QScriptValue ScriptEngine::newPanel(QScriptContext *context, QScriptEngine *engine)
@@ -277,7 +275,7 @@ QScriptValue ScriptEngine::loadTemplate(QScriptContext *context, QScriptEngine *
     LayoutTemplatePackageStructure structure;
     Plasma::Package package(&structure);
     KPluginInfo info(offers.first());
-    const QString path = KStandardDirs::locate("data", package.defaultPackageRoot() + '/' + info.pluginName() + '/');
+    const QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, package.defaultPackageRoot() + '/' + info.pluginName() + '/');
     if (path.isEmpty()) {
         // qDebug() << "script path is empty";
         return false;
@@ -329,7 +327,7 @@ QScriptValue ScriptEngine::applicationExists(QScriptContext *context, QScriptEng
     }
 
     // first, check for it in $PATH
-    if (!KStandardDirs::findExe(application).isEmpty()) {
+    if (!QStandardPaths::findExecutable(application).isEmpty()) {
         return true;
     }
 
@@ -382,10 +380,11 @@ QScriptValue ScriptEngine::defaultApplication(QScriptContext *context, QScriptEn
     // specific implementation system. there is much room for improvement here. see
     // kdebase-runtime/kcontrol/componentchooser/ for all the gory details ;)
     if (application.compare("mailer", Qt::CaseInsensitive) == 0) {
-        KEMailSettings settings;
+  //      KEMailSettings settings;
 
         // in KToolInvocation, the default is kmail; but let's be friendlier :)
-        QString command = settings.getSetting(KEMailSettings::ClientProgram);
+//        QString command = settings.getSetting(KEMailSettings::ClientProgram);
+	QString command;
         if (command.isEmpty()) {
             if (KService::Ptr kontact = KService::serviceByStorageId("kontact")) {
                 return storageId ? kontact->storageId() : onlyExec(kontact->exec());
@@ -395,7 +394,8 @@ QScriptValue ScriptEngine::defaultApplication(QScriptContext *context, QScriptEn
         }
 
         if (!command.isEmpty()) {
-            if (settings.getSetting(KEMailSettings::ClientTerminal) == "true") {
+            //if (settings.getSetting(KEMailSettings::ClientTerminal) == "true") {
+	    if (false) {
                 KConfigGroup confGroup(KGlobal::config(), "General");
                 const QString preferredTerminal = confGroup.readPathEntry("TerminalApplication", QString::fromLatin1("konsole"));
                 command = preferredTerminal + QString::fromLatin1(" -e ") + command;
@@ -432,9 +432,12 @@ QScriptValue ScriptEngine::defaultApplication(QScriptContext *context, QScriptEn
         return storageId ? service->storageId() : onlyExec(service->exec());
     } else {
         // try the files in share/apps/kcm_componentchooser/
-        const QStringList services = KGlobal::dirs()->findAllResources("data","kcm_componentchooser/*.desktop", KStandardDirs::NoDuplicates);
-        //qDebug() << "ok, trying in" << services.count();
+        const QStringList services = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "kcm_componentchooser/");
+        qDebug() << "ok, trying in" << services;
         foreach (const QString &service, services) {
+            if (!service.endsWith(".desktop")) {
+                continue;
+            }
             KConfig config(service, KConfig::SimpleConfig);
             KConfigGroup cg = config.group(QByteArray());
             const QString type = cg.readEntry("valueName", QString());
@@ -469,13 +472,13 @@ QScriptValue ScriptEngine::applicationPath(QScriptContext *context, QScriptEngin
     }
 
     // first, check for it in $PATH
-    const QString path = KStandardDirs::findExe(application);
+    const QString path = QStandardPaths::findExecutable(application);
     if (!path.isEmpty()) {
         return path;
     }
 
     if (KService::Ptr service = KService::serviceByStorageId(application)) {
-        return KStandardDirs::locate("apps", service->entryPath());
+        return QStandardPaths::locate(QStandardPaths::ApplicationsLocation, service->entryPath());
     }
 
     if (application.contains("'")) {
@@ -492,7 +495,7 @@ QScriptValue ScriptEngine::applicationPath(QScriptContext *context, QScriptEngin
 
     if (!offers.isEmpty()) {
         KService::Ptr offer = offers.first();
-        return KStandardDirs::locate("apps", offer->entryPath());
+        return QStandardPaths::locate(QStandardPaths::ApplicationsLocation, offer->entryPath());
     }
 
     return QString();
@@ -515,21 +518,21 @@ QScriptValue ScriptEngine::userDataPath(QScriptContext *context, QScriptEngine *
         return KStandardDirs::locateLocal(type.toLatin1(), filename);
     }
 
+    QStringList locations;
     if (type.compare("desktop", Qt::CaseInsensitive) == 0) {
-        return KGlobalSettings::desktopPath();
+        locations = QStandardPaths::standardLocations(QStandardPaths::DesktopLocation);
     } else if (type.compare("documents", Qt::CaseInsensitive) == 0) {
-        return KGlobalSettings::documentPath();
+        locations = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
     } else if (type.compare("music", Qt::CaseInsensitive) == 0) {
-        return KGlobalSettings::musicPath();
+        locations = QStandardPaths::standardLocations(QStandardPaths::MusicLocation);
     } else if (type.compare("video", Qt::CaseInsensitive) == 0) {
-        return KGlobalSettings::videosPath();
+        locations = QStandardPaths::standardLocations(QStandardPaths::MoviesLocation);
     } else if (type.compare("downloads", Qt::CaseInsensitive) == 0) {
-        return KGlobalSettings::downloadPath();
+        locations = QStandardPaths::standardLocations(QStandardPaths::DownloadLocation);
     } else if (type.compare("pictures", Qt::CaseInsensitive) == 0) {
-        return KGlobalSettings::picturesPath();
+        locations = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
     }
-
-    return QString();
+    return locations.count() ? locations.first() : QString();
 }
 
 QScriptValue ScriptEngine::knownWallpaperPlugins(QScriptContext *context, QScriptEngine *engine)
@@ -690,15 +693,14 @@ QStringList ScriptEngine::pendingUpdateScripts(Plasma::Corona *corona)
 
     KConfigGroup cg(KGlobal::config(), "Updates");
     QStringList performed = cg.readEntry("performed", QStringList());
-    const QString localDir = KGlobal::dirs()->localkdedir();
-    const QString localXdgDir = KGlobal::dirs()->localxdgdatadir();
+    const QString localXdgDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
 
     foreach (const QString &script, scripts) {
         if (performed.contains(script)) {
             continue;
         }
 
-        if (script.startsWith(localDir) || script.startsWith(localXdgDir)) {
+        if (script.startsWith(localXdgDir)) {
             // qDebug() << "skipping user local script: " << script;
             continue;
         }

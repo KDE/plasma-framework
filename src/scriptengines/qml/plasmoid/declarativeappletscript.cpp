@@ -29,7 +29,7 @@
 #include <QWidget>
 
 #include <KConfigGroup>
-#include <KDebug>
+#include <QDebug>
 #include <KGlobal>
 #include <KLocale>
 #include <KGlobalSettings>
@@ -88,8 +88,8 @@ bool DeclarativeAppletScript::init()
     // set the graphicObject dynamic property on applet
     a->setProperty("graphicObject", QVariant::fromValue(m_interface));
 
-    connect(applet(), SIGNAL(activate()),
-            this, SLOT(activate()));
+    connect(applet(), &Plasma::Applet::activate,
+            this, &DeclarativeAppletScript::activate);
 
     return true;
 }
@@ -98,33 +98,6 @@ QString DeclarativeAppletScript::filePath(const QString &type, const QString &fi
 {
     return package().filePath(type.toLocal8Bit().constData(), file);
 }
-
-void DeclarativeAppletScript::configChanged()
-{
-/*TODO: invent something that can replace event listeners
-    if (!m_env) {
-        return;
-    }
-
-    m_env->callEventListeners("configchanged");
-*/
-}
-
-QObject *DeclarativeAppletScript::loadui(const QString &filename)
-{
-    QFile f(filename);
-    if (!f.open(QIODevice::ReadOnly)) {
-        qWarning() << i18n("Unable to open '%1'",filename);
-        return 0;
-    }
-
-    QUiLoader loader;
-    QWidget *w = loader.load(&f);
-    f.close();
-
-    return w;
-}
-
 
 void DeclarativeAppletScript::constraintsEvent(Plasma::Types::Constraints constraints)
 {
@@ -158,19 +131,6 @@ void DeclarativeAppletScript::executeAction(const QString &name)
     if (m_interface->qmlObject()->rootObject()) {
          QMetaObject::invokeMethod(m_interface->qmlObject()->rootObject(), QString("action_" + name).toLatin1(), Qt::DirectConnection);
     }
-}
-
-bool DeclarativeAppletScript::include(const QString &path)
-{
-    /*TODO: probably include() doesn't make any sense anymore
-    return m_env->include(path);
-    */
-    return false;
-}
-
-QObject *DeclarativeAppletScript::loadService(const QString &pluginName)
-{
-    return Plasma::PluginLoader::self()->loadService(pluginName, QVariantList(), applet());
 }
 
 QList<QAction*> DeclarativeAppletScript::contextualActions()

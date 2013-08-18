@@ -157,6 +157,11 @@ Q_SIGNALS:
      */
     void saveState(KConfigGroup &group) const;
 
+    /**
+     * @param uiReady true if the UI for this applet is ready
+     */
+    void uiReadyChanged(bool uiReady);
+
 public Q_SLOTS:
 
     /**
@@ -189,8 +194,7 @@ private:
 };
 
 #define K_EXPORT_PLASMA_APPLETSCRIPTENGINE(libname, classname) \
-K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
-K_EXPORT_PLUGIN(factory("plasma_appletscriptengine_" #libname))
+K_PLUGIN_FACTORY(factory, registerPlugin<classname>();)
 
 } //Plasma namespace
 

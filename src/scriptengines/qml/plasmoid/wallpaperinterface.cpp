@@ -38,10 +38,12 @@ WallpaperInterface::WallpaperInterface(ContainmentInterface *parent)
       m_configLoader(0),
       m_configuration(0)
 {
+    if (!m_containmentInterface->containment()->wallpaper().isEmpty()) {
+        syncWallpaperPackage();
+    }
     connect(m_containmentInterface->containment(), &Plasma::Containment::wallpaperChanged,
             this, &WallpaperInterface::syncWallpaperPackage);
 
-    syncWallpaperPackage();
 }
 
 WallpaperInterface::~WallpaperInterface()
@@ -80,6 +82,12 @@ Plasma::ConfigLoader *WallpaperInterface::configScheme()
 
 void WallpaperInterface::syncWallpaperPackage()
 {
+    if (m_wallpaperPlugin == m_containmentInterface->containment()->wallpaper()) {
+        return;
+    }
+
+    m_wallpaperPlugin = m_containmentInterface->containment()->wallpaper();
+    
     if (!m_qmlObject) {
         m_qmlObject = new QmlObject(this);
         m_qmlObject->setInitializationDelayed(true);
@@ -87,7 +95,7 @@ void WallpaperInterface::syncWallpaperPackage()
 
     m_pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
     m_pkg.setDefaultPackageRoot("plasma/wallpapers");
-    m_pkg.setPath(m_containmentInterface->containment()->wallpaper());
+    m_pkg.setPath(m_wallpaperPlugin);
 
     m_configLoader->deleteLater();
     m_configuration->deleteLater();

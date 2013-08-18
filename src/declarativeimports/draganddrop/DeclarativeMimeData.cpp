@@ -118,9 +118,13 @@ void DeclarativeMimeData::setColor(const QColor &color)
     }
 }
 
-void DeclarativeMimeData::setData(const QString &mimeType, const QString &data)
+void DeclarativeMimeData::setData(const QString &mimeType, const QVariant &data)
 {
-    QMimeData::setData(mimeType, data.toLatin1());
+    if (data.type() == QVariant::ByteArray) {
+        QMimeData::setData(mimeType, data.toByteArray());
+    } else if (data.canConvert(QVariant::String)) {
+        QMimeData::setData(mimeType, data.toString().toLatin1());
+    }
 }
 
 /*!

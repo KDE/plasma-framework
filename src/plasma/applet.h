@@ -364,7 +364,7 @@ class PLASMA_EXPORT Applet : public QObject
          * @since 4.4
          */
         void statusChanged(Plasma::Types::ItemStatus status);
-        
+
 //CONFIGURATION
         /**
          * Emitted when an applet has changed values in its configuration
@@ -375,7 +375,6 @@ class PLASMA_EXPORT Applet : public QObject
          * applets.
          */
         void configNeedsSaving();
-        
 
 //ACTIONS
         /**
@@ -384,15 +383,6 @@ class PLASMA_EXPORT Applet : public QObject
          */
         void activate();
 
-
-//Completely UI-specific, remove or move to scriptengine
-        /**
-         * This signal indicates that an application launch, window
-         * creation or window focus event was triggered. This is used, for instance,
-         * to ensure that the Dashboard view in Plasma Desktop hides when such an event is
-         * triggered by an item it is displaying.
-         */
-        void releaseVisualFocus();
 
 //TODO: fix usage in containment, port to QObject::destroyed
         /**
@@ -594,7 +584,6 @@ class PLASMA_EXPORT Applet : public QObject
  */
 #define K_EXPORT_PLASMA_APPLET(libname, classname) \
 K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
-K_EXPORT_PLUGIN(factory("plasma_applet_" #libname)) \
 K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
 
 #endif // multiple inclusion guard

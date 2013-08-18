@@ -377,7 +377,7 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
 
     if (offers.isEmpty()) {
 #ifndef NDEBUG
-        // qDebug() << "offers is empty for " << name;
+         qDebug() << "offers is empty for " << name;
 #endif
         return 0;
     }

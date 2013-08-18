@@ -20,7 +20,7 @@
 
 #include <QScriptEngine>
 
-#include <KDebug>
+#include <QDebug>
 
 FileDialogProxy::FileDialogProxy(KFileDialog::OperationMode mode, QObject *parent)
     : QObject(parent),

@@ -162,6 +162,13 @@ bool ConfigLoaderHandler::endElement(const QString &namespaceURI,
 
 //     qDebug() << "ConfigLoaderHandler::endElement(" << localName << qName;
     const QString tag = localName.toLower();
+    if (tag == "group") {
+        m_name = "__operationName";
+        m_type = "string";
+        //m_default = currentGroup();
+        addItem();
+        resetState();
+    }
     if (tag == "entry") {
         addItem();
         resetState();

@@ -67,7 +67,8 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
           transient(false),
           needsConfig(false),
           started(false),
-          globalShortcutEnabled(false)
+          globalShortcutEnabled(false),
+          uiReady(false)
 {
     if (appletId == 0) {
         appletId = ++s_maxAppletId;
@@ -268,6 +269,29 @@ void AppletPrivate::propagateConfigChanged()
     }
 
     q->configChanged();
+}
+
+void AppletPrivate::setUiReady()
+{
+    //am i the containment?
+    Containment *c = qobject_cast<Containment *>(q);
+    if (c) {
+        //if we are the containment and there is still some uncomplete applet, we're still incomplete
+        if (!c->d->loadingApplets.isEmpty()) {
+            return;
+        }
+    } else {
+        c = q->containment();
+        if (c) {
+            q->containment()->d->loadingApplets.remove(q);
+            if (q->containment()->d->loadingApplets.isEmpty() && !static_cast<Applet *>(q->containment())->d->uiReady) {
+                static_cast<Applet *>(q->containment())->d->uiReady = true;
+                emit q->containment()->uiReadyChanged(true);
+            }
+        }
+    }
+
+    uiReady = true;
 }
 
 void AppletPrivate::setIsContainment(bool nowIsContainment, bool forceUpdate)

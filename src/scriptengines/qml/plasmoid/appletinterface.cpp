@@ -33,7 +33,7 @@
 #include <QTimer>
 
 #include <KActionCollection>
-#include <KDebug>
+#include <QDebug>
 #include <KGlobalSettings>
 #include <KService>
 #include <KServiceTypeTrader>
@@ -63,23 +63,27 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
     qmlRegisterType<AppletInterface>();
     qmlRegisterType<QAction>();
 
-    connect(this, SIGNAL(releaseVisualFocus()), applet(), SIGNAL(releaseVisualFocus()));
-    connect(this, SIGNAL(configNeedsSaving()), applet(), SIGNAL(configNeedsSaving()));
-    connect(applet(), SIGNAL(immutabilityChanged(Plasma::Types::ImmutabilityType)), this, SIGNAL(immutableChanged()));
-    connect(applet(), SIGNAL(statusChanged(Plasma::Types::ItemStatus)), this, SIGNAL(statusChanged()));
-    connect(m_appletScriptEngine, SIGNAL(formFactorChanged()),
-            this, SIGNAL(formFactorChanged()));
-    connect(m_appletScriptEngine, SIGNAL(locationChanged()),
-            this, SIGNAL(locationChanged()));
-    connect(m_appletScriptEngine, SIGNAL(contextChanged()),
-            this, SIGNAL(contextChanged()));
+    connect(this, &AppletInterface::configNeedsSaving,
+            applet(), &Plasma::Applet::configNeedsSaving);
+    connect(applet(), &Plasma::Applet::immutabilityChanged,
+            this, &AppletInterface::immutableChanged);
+
+    connect(applet(), &Plasma::Applet::statusChanged,
+            this, &AppletInterface::statusChanged);
+
+    connect(m_appletScriptEngine, &DeclarativeAppletScript::formFactorChanged,
+            this, &AppletInterface::formFactorChanged);
+    connect(m_appletScriptEngine, &DeclarativeAppletScript::locationChanged,
+            this, &AppletInterface::locationChanged);
+    connect(m_appletScriptEngine, &DeclarativeAppletScript::contextChanged,
+            this, &AppletInterface::contextChanged);
 
     m_qmlObject = new QmlObject(this);
     m_qmlObject->setInitializationDelayed(true);
 
-    m_creationTimer = new QTimer(this);
-    m_creationTimer->setSingleShot(true);
-    connect(m_creationTimer, &QTimer::timeout, this, &AppletInterface::init);
+    m_collapseTimer = new QTimer(this);
+    m_collapseTimer->setSingleShot(true);
+    connect(m_collapseTimer, &QTimer::timeout, this, &AppletInterface::compactRepresentationCheck);
 }
 
 AppletInterface::~AppletInterface()
@@ -177,6 +181,8 @@ void AppletInterface::init()
     }
     geometryChanged(QRectF(), QRectF(x(), y(), width(), height()));
     emit busyChanged();
+
+    applet()->updateConstraints(Plasma::Types::UiReadyConstraint);
 }
 
 Plasma::Types::FormFactor AppletInterface::formFactor() const
@@ -467,6 +473,59 @@ int AppletInterface::apiVersion() const
     return offers.first()->property("X-KDE-PluginInfo-Version", QVariant::Int).toInt();
 }
 
+//private api, just an helper
+qreal AppletInterface::readGraphicsObjectSizeHint(const char *hint) const
+{
+    if (!m_qmlObject->rootObject()) {
+        return -1;
+    }
+
+
+    QVariant prop;
+
+    if (m_compactUiObject) {
+        prop = m_compactUiObject.data()->property(hint);
+    } else {
+        prop = m_qmlObject->rootObject()->property(hint);
+    }
+
+    if (prop.isValid() && prop.canConvert<qreal>()) {
+        return qMax(qreal(1), prop.toReal());
+    } else {
+        return -1;
+    }
+}
+
+qreal AppletInterface::minimumWidth() const
+{
+    return readGraphicsObjectSizeHint("minimumWidth");
+}
+
+qreal AppletInterface::minimumHeight() const
+{
+    return readGraphicsObjectSizeHint("minimumHeight");
+}
+
+qreal AppletInterface::maximumWidth() const
+{
+    return readGraphicsObjectSizeHint("maximumWidth");
+}
+
+qreal AppletInterface::maximumHeight() const
+{
+    return readGraphicsObjectSizeHint("maximumHeight");
+}
+
+qreal AppletInterface::implicitWidth() const
+{
+    return readGraphicsObjectSizeHint("implicitWidth");
+}
+
+qreal AppletInterface::implicitHeight() const
+{
+    return readGraphicsObjectSizeHint("implicitHeight");
+}
+
 void AppletInterface::debug(const QString &msg)
 {
     qDebug() << msg;
@@ -516,13 +575,26 @@ void AppletInterface::geometryChanged(const QRectF &newGeometry, const QRectF &o
     Q_UNUSED(oldGeometry)
 
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
+    m_collapseTimer->start(100);
+}
 
+void AppletInterface::compactRepresentationCheck()
+{
     if (!m_qmlObject->rootObject() || qobject_cast<ContainmentInterface *>(this)) {
         return;
     }
 
+    //Read the minimum width of the full representation, not our own, since we could be in collapsed mode
+    QSizeF minHint(-1, -1);
+    if (m_qmlObject->rootObject()->property("minimumWidth").canConvert<qreal>()) {
+        minHint.setWidth(m_qmlObject->rootObject()->property("minimumWidth").toReal());
+    }
+    if (m_qmlObject->rootObject()->property("minimumHeight").canConvert<qreal>()) {
+        minHint.setHeight(m_qmlObject->rootObject()->property("minimumHeight").toReal());
+    }
+
     //TODO: completely arbitrary for now
-    if (newGeometry.width() < 100 || newGeometry.height() < 100) {
+    if (width() < minHint.width() || height() < minHint.height()) {
         m_expanded = false;
 
         //we are already an icon: nothing to do
@@ -537,7 +609,7 @@ void AppletInterface::geometryChanged(const QRectF &newGeometry, const QRectF &o
         //build the icon representation
         if (m_compactUiObject) {
             QQmlComponent *compactComponent = m_qmlObject->rootObject()->property("compactRepresentation").value<QQmlComponent *>();
-            
+
             if (compactComponent) {
                 compactRepresentation = compactComponent->create(m_qmlObject->engine()->rootContext());
             } else {
@@ -563,10 +635,41 @@ void AppletInterface::geometryChanged(const QRectF &newGeometry, const QRectF &o
             QQmlExpression expr(m_qmlObject->engine()->rootContext(), m_compactUiObject.data(), "parent");
             QQmlProperty prop(m_compactUiObject.data(), "anchors.fill");
             prop.write(expr.evaluate());
-            
+
             m_qmlObject->rootObject()->setProperty("parent", QVariant::fromValue(m_compactUiObject.data()));
             m_compactUiObject.data()->setProperty("applet", QVariant::fromValue(m_qmlObject->rootObject()));
-        
+
+            //hook m_compactUiObject size hints to this size hint
+            //Here we have to use the old connect syntax, because we don't have access to the class type
+            if (m_qmlObject->rootObject()) {
+                disconnect(m_qmlObject->rootObject(), 0, this, 0);
+            }
+            if (m_compactUiObject.data()->property("minimumWidth").isValid()) {
+                connect(m_compactUiObject.data(), SIGNAL(minimumWidthChanged()),
+                        this, SIGNAL(minimumWidthChanged()));
+            }
+            if (m_compactUiObject.data()->property("minimumHeight").isValid()) {
+                connect(m_compactUiObject.data(), SIGNAL(minimumHeightChanged()),
+                        this, SIGNAL(minimumHeightChanged()));
+            }
+
+            if (m_compactUiObject.data()->property("maximumWidth").isValid()) {
+                connect(m_compactUiObject.data(), SIGNAL(maximumWidthChanged()),
+                        this, SIGNAL(maximumWidthChanged()));
+            }
+            if (m_compactUiObject.data()->property("maximumHeight").isValid()) {
+                connect(m_compactUiObject.data(), SIGNAL(maximumHeightChanged()),
+                        this, SIGNAL(maximumHeightChanged()));
+            }
+
+            if (m_compactUiObject.data()->property("implicitWidth").isValid()) {
+                connect(m_compactUiObject.data(), SIGNAL(implicitWidthChanged()),
+                        this, SIGNAL(implicitWidthChanged()));
+            }
+            if (m_compactUiObject.data()->property("implicitHeight").isValid()) {
+                connect(m_compactUiObject.data(), SIGNAL(implicitHeightChanged()),
+                        this, SIGNAL(implicitHeightChanged()));
+            }
         //failed to create UI, don't do anything, return in expanded status
         } else {
             m_expanded = true;
@@ -583,6 +686,35 @@ void AppletInterface::geometryChanged(const QRectF &newGeometry, const QRectF &o
             return;
         }
 
+        disconnect(m_compactUiObject.data(), 0, this, 0);
+        //Here we have to use the old connect syntax, because we don't have access to the class type
+        if (m_qmlObject->rootObject()->property("minimumWidth").isValid()) {
+            connect(m_qmlObject->rootObject(), SIGNAL(minimumWidthChanged()),
+                    this, SIGNAL(minimumWidthChanged()));
+        }
+        if (m_qmlObject->rootObject()->property("minimumHeight").isValid()) {
+            connect(m_qmlObject->rootObject(), SIGNAL(minimumHeightChanged()),
+                    this, SIGNAL(minimumHeightChanged()));
+        }
+
+        if (m_qmlObject->rootObject()->property("maximumWidth").isValid()) {
+            connect(m_qmlObject->rootObject(), SIGNAL(maximumWidthChanged()),
+                    this, SIGNAL(maximumWidthChanged()));
+        }
+        if (m_qmlObject->rootObject()->property("maximumHeight").isValid()) {
+            connect(m_qmlObject->rootObject(), SIGNAL(maximumHeightChanged()),
+                    this, SIGNAL(maximumHeightChanged()));
+        }
+
+        if (m_qmlObject->rootObject()->property("implicitWidth").isValid()) {
+            connect(m_qmlObject->rootObject(), SIGNAL(implicitWidthChanged()),
+                    this, SIGNAL(implicitWidthChanged()));
+        }
+        if (m_qmlObject->rootObject()->property("implicitHeight").isValid()) {
+            connect(m_qmlObject->rootObject(), SIGNAL(implicitHeightChanged()),
+                    this, SIGNAL(implicitHeightChanged()));
+        }
+
         m_qmlObject->rootObject()->setProperty("parent", QVariant::fromValue(this));
         m_compactUiObject.data()->deleteLater();
 
@@ -597,15 +729,8 @@ void AppletInterface::itemChange(ItemChange change, const ItemChangeData &value)
 {
     if (change == QQuickItem::ItemSceneChange) {
         //we have a window: create the 
-        if (value.window && !m_qmlObject->rootObject() && !m_creationTimer->isActive()) {
+        if (value.window && !m_qmlObject->rootObject()) {
             init();
-
-            /*Experiment on even more delayed, doesn't seem to be good
-            QTime time = QTime::currentTime();
-            qsrand((uint)time.msec());
-            const int interval = qrand() % ((1000 + 1) - 50) + 50;
-            //QTimer::singleShot(interval, m_appletScriptEngine, SLOT(delayedInit()));
-            m_creationTimer->start(interval);*/
         }
     }
     QQuickItem::itemChange(change, value);

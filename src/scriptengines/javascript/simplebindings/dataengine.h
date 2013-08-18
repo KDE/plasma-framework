@@ -22,7 +22,7 @@
 #include <QScriptEngine>
 #include <QScriptValue>
 #include <QScriptValueIterator>
-#include <KDebug>
+#include <QDebug>
 
 #include <Plasma/DataEngine>
 #include <Plasma/Service>

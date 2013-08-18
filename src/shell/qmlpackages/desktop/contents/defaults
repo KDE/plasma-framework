@@ -1,17 +1,17 @@
 [Desktop]
 Containment=org.kde.desktop
-ToolBox=org.kde.toolbox
+ToolBox=org.kde.desktoptoolbox
 RuntimePlatform=
 
 [Desktop][ContainmentActions]
-Ctrl;LeftButton=org.kde.standardmenu
-MiddleButton=org.kde.paste
+RightButton;NoModifier=org.kde.contextmenu
+MiddleButton;NoModifier=org.kde.paste
  
 [Panel]
 Containment=org.kde.panel
 ToolBox=org.kde.paneltoolbox
 [Panel][ContainmentActions]
-Ctrl;LeftButton=org.kde.standardmenu
+RightButton;NoModifier=org.kde.contextmenu
 
 [Theme]
 Theme=default

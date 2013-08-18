@@ -29,7 +29,7 @@
 #include <QGraphicsLinearLayout>
 #include <QTimer>
 
-#include <KDebug>
+#include <QDebug>
 #include <KStandardDirs>
 
 #include <Plasma/Containment>
@@ -42,7 +42,6 @@
 #include "plasmakpartview.h"
 
 K_PLUGIN_FACTORY(plasmaKPartFactory, registerPlugin<PlasmaKPart>();)
-K_EXPORT_PLUGIN(plasmaKPartFactory("plasma-kpart","plasma-kpart") )
 
 PlasmaKPart::PlasmaKPart(QWidget *parentWidget, QObject *parent, const QVariantList &args)
     : KParts::ReadOnlyPart(parent),

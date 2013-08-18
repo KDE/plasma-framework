@@ -50,16 +50,16 @@ Rectangle {
 //BEGIN functions
     function saveConfig() {
         for (var key in plasmoid.configuration) {
-            if (main.currentPage["cfg_"+key] !== undefined) {
-                plasmoid.configuration[key] = main.currentPage["cfg_"+key]
+            if (main.currentItem["cfg_"+key] !== undefined) {
+                plasmoid.configuration[key] = main.currentItem["cfg_"+key]
             }
         }
     }
 
     function restoreConfig() {
         for (var key in plasmoid.configuration) {
-            if (main.currentPage["cfg_"+key] !== undefined) {
-                main.currentPage["cfg_"+key] = plasmoid.configuration[key]
+            if (main.currentItem["cfg_"+key] !== undefined) {
+                main.currentItem["cfg_"+key] = plasmoid.configuration[key]
             }
         }
     }
@@ -97,7 +97,7 @@ Rectangle {
             Layout.fillHeight: true
             Layout.preferredHeight: parent.height - buttonsRow.height
 
-            QtControls.ScrollView{
+            QtControls.ScrollView {
                 id: categoriesScroll
                 frameVisible: true
                 anchors {
@@ -113,19 +113,25 @@ Rectangle {
                     contentHeight: childrenRect.height
                     anchors.fill: parent
 
-                    property Item currentItem
+                    property Item currentItem: categoriesColumn.children[1]
 
-                    Rectangle {
+                    Item {
                         id: categories
                         width: parent.width
-                        height: Math.max(categoriesView.height, categoriesColumn.height)
-                        color: syspal.base
+                        height: categoriesColumn.height
 
-                        Rectangle {
-                            color: syspal.highlight
+                        Item {
                             width: parent.width
-                            height:  theme.iconSizes.IconSizeHuge
-                            y: index * height
+                            height: categoriesView.currentItem.height
+                            y: categoriesView.currentItem.y
+                            Rectangle {
+                                color: syspal.highlight
+                                radius: 3
+                                anchors {
+                                    fill: parent
+                                    margins: 2
+                                }
+                            }
                             Behavior on y {
                                 NumberAnimation {
                                     duration: 250
@@ -151,7 +157,7 @@ Rectangle {
                     }
                 }
             }
-            QtControls.ScrollView{
+            QtControls.ScrollView {
                 id: pageScroll
                 anchors {
                     top: parent.top
@@ -166,8 +172,11 @@ Rectangle {
                         height: childrenRect.height
                         QtControls.StackView {
                             id: main
-                            anchors.fill: parent
-                            anchors.margins: 12
+                            anchors {
+                                left: parent.left
+                                right: parent.right
+                            }
+                            height: Math.max(pageScroll.height, currentItem.implicitHeight)
                             property string sourceFile
                             Timer {
                                 id: pageSizeSync
@@ -204,11 +213,11 @@ Rectangle {
                 rightMargin: spacing
             }
             QtControls.Button {
-                iconSource: "dialog-ok"
+                iconName: "dialog-ok"
                 text: "Ok"
                 onClicked: {
-                    if (main.currentPage.saveConfig !== undefined) {
-                        main.currentPage.saveConfig()
+                    if (main.currentItem.saveConfig !== undefined) {
+                        main.currentItem.saveConfig()
                     } else {
                         root.saveConfig()
                     }
@@ -216,18 +225,18 @@ Rectangle {
                 }
             }
             QtControls.Button {
-                iconSource: "dialog-ok-apply"
+                iconName: "dialog-ok-apply"
                 text: "Apply"
                 onClicked: {
-                    if (main.currentPage.saveConfig !== undefined) {
-                        main.currentPage.saveConfig()
+                    if (main.currentItem.saveConfig !== undefined) {
+                        main.currentItem.saveConfig()
                     } else {
                         root.saveConfig()
                     }
                 }
             }
             QtControls.Button {
-                iconSource: "dialog-cancel"
+                iconName: "dialog-cancel"
                 text: "Cancel"
                 onClicked: configDialog.close()
             }

@@ -22,7 +22,7 @@
 
 #include <QTimer>
 
-#include <KDebug>
+#include <QDebug>
 
 namespace Plasma
 {
@@ -136,10 +136,10 @@ void SortFilterModel::setSortOrder(const Qt::SortOrder order)
     sort(0, order);
 }
 
-QVariantHash SortFilterModel::get(int row) const
+QVariantMap SortFilterModel::get(int row) const
 {
     QModelIndex idx = index(row, 0);
-    QVariantHash hash;
+    QVariantMap hash;
 
     QHash<int, QByteArray>::const_iterator i;
     for (i = roleNames().constBegin(); i != roleNames().constEnd(); ++i) {
@@ -199,7 +199,7 @@ void DataModel::dataUpdated(const QString &sourceName, const Plasma::DataEngine:
         QVariantList list;
 
         if (!m_dataSource->data().isEmpty()) {
-            QVariantHash::const_iterator i = m_dataSource->data().constBegin();
+            QVariantMap::const_iterator i = m_dataSource->data().constBegin();
 
             while (i != m_dataSource->data().constEnd()) {
                 if (!m_sourceFilter.isEmpty() && m_sourceFilterRE.isValid() && !m_sourceFilterRE.exactMatch(i.key())) {
@@ -252,8 +252,8 @@ void DataModel::setDataSource(QObject *object)
 
     m_dataSource = source;
 
-    const QHash<QString, QVariant> data = source->data();
-    QHash<QString, QVariant>::const_iterator i = data.constBegin();
+    const QMap<QString, QVariant> data = source->data();
+    QMap<QString, QVariant>::const_iterator i = data.constBegin();
     while (i != data.constEnd()) {
         dataUpdated(i.key(), i.value().value<Plasma::DataEngine::Data>());
         ++i;
@@ -343,10 +343,10 @@ void DataModel::setItems(const QString &sourceName, const QVariantList &list)
     m_items[sourceName] = list.toVector();
 
     if (!list.isEmpty()) {
-        if (list.first().canConvert<QVariantHash>()) {
+        if (list.first().canConvert<QVariantMap>()) {
             foreach (const QVariant &item, list) {
-                const QVariantHash &vh = item.value<QVariantHash>();
-                QHashIterator<QString, QVariant> it(vh);
+                const QVariantMap &vh = item.value<QVariantMap>();
+                QMapIterator<QString, QVariant> it(vh);
                 while (it.hasNext()) {
                     it.next();
                     const QString &roleName = it.key();
@@ -395,7 +395,7 @@ void DataModel::removeSource(const QString &sourceName)
     if (m_keyRoleFilter.isEmpty()) {
         //source name in the map, linear scan
         for (int i = 0; i < m_items.value(QString()).count(); ++i) {
-            if (m_items.value(QString())[i].value<QVariantHash>().value("DataEngineSource") == sourceName) {
+            if (m_items.value(QString())[i].value<QVariantMap>().value("DataEngineSource") == sourceName) {
                 beginResetModel();
                 m_items[QString()].remove(i);
                 endResetModel();
@@ -436,11 +436,8 @@ QVariant DataModel::data(const QModelIndex &index, int role) const
 
     //is it the reserved role: DataEngineSource ?
     //also, if each source is an item DataEngineSource is a role between all the others, otherwise we know it from the role variable
-    //finally, sub items are some times QVariantHash some times QVariantMaps
     if (!m_keyRoleFilter.isEmpty() && m_roleNames.value(role) == "DataEngineSource") {
         return source;
-    } else if (m_items.value(source).value(actualRow).canConvert<QVariantHash>()) {
-        return m_items.value(source).value(actualRow).value<QVariantHash>().value(m_roleNames.value(role));
     } else {
         return m_items.value(source).value(actualRow).value<QVariantMap>().value(m_roleNames.value(role));
     }
@@ -491,17 +488,17 @@ int DataModel::columnCount(const QModelIndex &parent) const
     return 1;
 }
 
-QVariantHash DataModel::get(int row) const
+QVariantMap DataModel::get(int row) const
 {
     QModelIndex idx = index(row, 0);
-    QVariantHash hash;
+    QVariantMap map;
 
     QHash<int, QByteArray>::const_iterator i;
     for (i = roleNames().constBegin(); i != roleNames().constEnd(); ++i) {
-        hash[i.value()] = data(idx, i.key());
+        map[i.value()] = data(idx, i.key());
     }
 
-    return hash;
+    return map;
 }
 
 int DataModel::roleNameToId(const QString &name)

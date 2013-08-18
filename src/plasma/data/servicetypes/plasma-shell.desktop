@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/Shell
 Name=Plasma Shell
 Name[de]=Plasma-Umgebung
+Name[fi]=Plasma-kuori
 Name[fr]=Terminal de Plasma
 Name[nl]=Plasma Shell
 Name[pt]=Consola do Plasma
