@@ -74,8 +74,8 @@ class AppletInterface : public QQuickItem
     Q_PROPERTY(qreal maximumWidth READ maximumWidth NOTIFY maximumWidthChanged)
     Q_PROPERTY(qreal maximumHeight READ maximumHeight NOTIFY maximumHeightChanged)
     //implicitWidth/height is already there
-    //Q_PROPERTY(qreal implicitWidth READ implicitWidth NOTIFY implicitWidthChanged)
-    //Q_PROPERTY(qreal implicitHeight READ implicitHeight NOTIFY implicitHeightChanged)
+    Q_PROPERTY(qreal implicitWidth READ implicitWidth NOTIFY implicitWidthChanged)
+    Q_PROPERTY(qreal implicitHeight READ implicitHeight NOTIFY implicitHeightChanged)
     Q_PROPERTY(bool fillWidth READ fillWidth NOTIFY fillWidthChanged)
     Q_PROPERTY(bool fillHeight READ fillHeight NOTIFY fillHeightChanged)
 
@@ -181,8 +181,8 @@ Q_SIGNALS:
     void minimumHeightChanged();
     void maximumWidthChanged();
     void maximumHeightChanged();
-    //void implicitWidthChanged();
-    //void implicitHeightChanged();
+    void implicitWidthChanged();
+    void implicitHeightChanged();
     void fillWidthChanged();
     void fillHeightChanged();
 

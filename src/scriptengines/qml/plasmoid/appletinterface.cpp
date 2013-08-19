@@ -534,7 +534,7 @@ qreal AppletInterface::readGraphicsObjectSizeHint(const char *hint) const
     }
 
     if (prop.isValid() && prop.canConvert<qreal>()) {
-        return qMax(qreal(1), prop.toReal());
+        return prop.toReal();
     } else {
         return -1;
     }
@@ -715,6 +715,8 @@ void AppletInterface::compactRepresentationCheck()
                         this, SIGNAL(implicitHeightChanged()));
             }
 
+            emit fillWidthChanged();
+            emit fillHeightChanged();
             emit minimumWidthChanged();
             emit minimumHeightChanged();
             emit implicitWidthChanged();
@@ -766,6 +768,8 @@ void AppletInterface::compactRepresentationCheck()
                     this, SIGNAL(implicitHeightChanged()));
         }
 
+        emit fillWidthChanged();
+        emit fillHeightChanged();
         emit minimumWidthChanged();
         emit minimumHeightChanged();
         emit implicitWidthChanged();
