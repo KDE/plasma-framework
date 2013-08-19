@@ -73,8 +73,11 @@ class AppletInterface : public QQuickItem
     Q_PROPERTY(qreal minimumHeight READ minimumHeight NOTIFY minimumHeightChanged)
     Q_PROPERTY(qreal maximumWidth READ maximumWidth NOTIFY maximumWidthChanged)
     Q_PROPERTY(qreal maximumHeight READ maximumHeight NOTIFY maximumHeightChanged)
-    Q_PROPERTY(qreal implicitWidth READ implicitWidth NOTIFY implicitWidthChanged)
-    Q_PROPERTY(qreal implicitHeight READ implicitHeight NOTIFY implicitHeightChanged)
+    //implicitWidth/height is already there
+    //Q_PROPERTY(qreal implicitWidth READ implicitWidth NOTIFY implicitWidthChanged)
+    //Q_PROPERTY(qreal implicitHeight READ implicitHeight NOTIFY implicitHeightChanged)
+    Q_PROPERTY(bool fillWidth READ fillWidth NOTIFY fillWidthChanged)
+    Q_PROPERTY(bool fillHeight READ fillHeight NOTIFY fillHeightChanged)
 
 public:
     AppletInterface(DeclarativeAppletScript *script, QQuickItem *parent = 0);
@@ -150,6 +153,8 @@ public:
     bool userConfiguring() const;
     int apiVersion() const;
 
+    bool fillWidth() const;
+    bool fillHeight() const;
     qreal minimumWidth() const;
     qreal minimumHeight() const;
     qreal maximumWidth() const;
@@ -176,8 +181,10 @@ Q_SIGNALS:
     void minimumHeightChanged();
     void maximumWidthChanged();
     void maximumHeightChanged();
-    void implicitWidthChanged();
-    void implicitHeightChanged();
+    //void implicitWidthChanged();
+    //void implicitHeightChanged();
+    void fillWidthChanged();
+    void fillHeightChanged();
 
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);

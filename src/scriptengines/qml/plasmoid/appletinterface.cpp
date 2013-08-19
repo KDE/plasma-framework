@@ -473,6 +473,50 @@ int AppletInterface::apiVersion() const
     return offers.first()->property("X-KDE-PluginInfo-Version", QVariant::Int).toInt();
 }
 
+bool AppletInterface::fillWidth() const
+{
+    if (!m_qmlObject->rootObject()) {
+        return false;
+    }
+
+
+    QVariant prop;
+
+    if (m_compactUiObject) {
+        prop = m_compactUiObject.data()->property("fillWidth");
+    } else {
+        prop = m_qmlObject->rootObject()->property("fillWidth");
+    }
+
+    if (prop.isValid() && prop.canConvert<bool>()) {
+        return prop.toBool();
+    } else {
+        return false;
+    }
+}
+
+bool AppletInterface::fillHeight() const
+{
+    if (!m_qmlObject->rootObject()) {
+        return false;
+    }
+
+
+    QVariant prop;
+
+    if (m_compactUiObject) {
+        prop = m_compactUiObject.data()->property("fillHeight");
+    } else {
+        prop = m_qmlObject->rootObject()->property("fillHeight");
+    }
+
+    if (prop.isValid() && prop.canConvert<bool>()) {
+        return prop.toBool();
+    } else {
+        return false;
+    }
+}
+
 //private api, just an helper
 qreal AppletInterface::readGraphicsObjectSizeHint(const char *hint) const
 {
@@ -670,6 +714,13 @@ void AppletInterface::compactRepresentationCheck()
                 connect(m_compactUiObject.data(), SIGNAL(implicitHeightChanged()),
                         this, SIGNAL(implicitHeightChanged()));
             }
+
+            emit minimumWidthChanged();
+            emit minimumHeightChanged();
+            emit implicitWidthChanged();
+            emit implicitHeightChanged();
+            emit maximumWidthChanged();
+            emit maximumHeightChanged();
         //failed to create UI, don't do anything, return in expanded status
         } else {
             m_expanded = true;
@@ -714,6 +765,13 @@ void AppletInterface::compactRepresentationCheck()
             connect(m_qmlObject->rootObject(), SIGNAL(implicitHeightChanged()),
                     this, SIGNAL(implicitHeightChanged()));
         }
+
+        emit minimumWidthChanged();
+        emit minimumHeightChanged();
+        emit implicitWidthChanged();
+        emit implicitHeightChanged();
+        emit maximumWidthChanged();
+        emit maximumHeightChanged();
 
         m_qmlObject->rootObject()->setProperty("parent", QVariant::fromValue(this));
         m_compactUiObject.data()->deleteLater();
