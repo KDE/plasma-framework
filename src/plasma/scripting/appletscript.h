@@ -72,18 +72,6 @@ public:
     Plasma::Applet *applet() const;
 
     /**
-     * Called when the script should paint the applet
-     *
-     * @param painter the QPainter to use
-     * @param option the style option containing such flags as selection, level of detail, etc
-     * @param contentsRect the rect to paint within; automatically adjusted for
-     *                     the background, if any
-     */
-    virtual void paintInterface(QPainter *painter,
-                                const QStyleOptionGraphicsItem *option,
-                                const QRect &contentsRect);
-
-    /**
      * Called when any of the geometry constraints have been updated.
      *
      * This is always called prior to painting and should be used as an

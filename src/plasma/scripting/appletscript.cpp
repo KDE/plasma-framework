@@ -57,15 +57,6 @@ Applet *AppletScript::applet() const
     return d->applet;
 }
 
-void AppletScript::paintInterface(QPainter *painter,
-                                  const QStyleOptionGraphicsItem *option,
-                                  const QRect &contentsRect)
-{
-    Q_UNUSED(painter);
-    Q_UNUSED(option);
-    Q_UNUSED(contentsRect);
-}
-
 void AppletScript::constraintsEvent(Plasma::Types::Constraints constraints)
 {
     Q_UNUSED(constraints);
