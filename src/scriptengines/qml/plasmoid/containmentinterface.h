@@ -35,20 +35,11 @@ class ContainmentInterface : public AppletInterface
     Q_OBJECT
     Q_PROPERTY(QList <QObject *> applets READ applets NOTIFY appletsChanged)
     Q_PROPERTY(bool drawWallpaper READ drawWallpaper WRITE setDrawWallpaper)
-    Q_PROPERTY(Type containmentType READ containmentType WRITE setContainmentType)
+    Q_PROPERTY(Plasma::Types::ContainmentType containmentType READ containmentType WRITE setContainmentType)
     Q_PROPERTY(int screen READ screen NOTIFY screenChanged)
     Q_PROPERTY(QString activity READ activity NOTIFY activityChanged)
-    Q_ENUMS(Type)
 
 public:
-    enum Type {
-        NoContainmentType = -1,  /**< @internal */
-        DesktopContainment = 0,  /**< A desktop containment */
-        PanelContainment,        /**< A desktop panel */
-        CustomContainment = 127, /**< A containment that is neither a desktop nor a panel
-                                    but something application specific */
-        CustomPanelContainment = 128 /**< A customized desktop panel */
-    };
     ContainmentInterface(DeclarativeAppletScript *parent);
 //Not for QML
     inline Plasma::Containment *containment() const { return static_cast<Plasma::Containment *>(m_appletScriptEngine->applet()->containment()); }
@@ -60,8 +51,8 @@ public:
 
     void setDrawWallpaper(bool drawWallpaper);
     bool drawWallpaper();
-    Type containmentType() const;
-    void setContainmentType(Type type);
+    Plasma::Types::ContainmentType containmentType() const;
+    void setContainmentType(Plasma::Types::ContainmentType type);
     int screen() const;
 
     QString activity() const;

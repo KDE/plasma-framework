@@ -106,14 +106,14 @@ bool ContainmentInterface::drawWallpaper()
     return m_appletScriptEngine->drawWallpaper();
 }
 
-ContainmentInterface::Type ContainmentInterface::containmentType() const
+Plasma::Types::ContainmentType ContainmentInterface::containmentType() const
 {
-    return (ContainmentInterface::Type)m_appletScriptEngine->containmentType();
+    return m_appletScriptEngine->containmentType();
 }
 
-void ContainmentInterface::setContainmentType(ContainmentInterface::Type type)
+void ContainmentInterface::setContainmentType(Plasma::Types::ContainmentType type)
 {
-    m_appletScriptEngine->setContainmentType((Plasma::Types::ContainmentType)type);
+    m_appletScriptEngine->setContainmentType(type);
 }
 
 int ContainmentInterface::screen() const
