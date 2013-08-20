@@ -27,7 +27,6 @@ target_link_libraries(plasmacomponentsplugin
         ${Qt5Quick_LIBRARIES}
         ${Qt5Qml_LIBRARIES}
         ${QT_QTGUI_LIBRARY}
-        ${KDE4_KDEUI_LIBRARY}
         ${KDECLARATIVE_LIBRARIES}
         plasma)
 

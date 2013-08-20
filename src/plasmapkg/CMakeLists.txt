@@ -5,7 +5,7 @@ add_executable(plasmapkg
     plasmapkg.cpp
 )
 
-target_link_libraries(plasmapkg kdeqt5staging plasma ${KI18n_LIBRARIES} ${KService_LIBRARIES} )
+target_link_libraries(plasmapkg kdeqt5staging plasma ${KI18n_LIBRARIES} ${KService_LIBRARIES} KF5::KCoreAddons)
 
 message("INSTALL_TARGETS_DEFAULT_ARGS ${INSTALL_TARGETS_DEFAULT_ARGS}")
 
