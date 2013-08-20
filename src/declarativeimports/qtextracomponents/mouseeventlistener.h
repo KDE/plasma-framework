@@ -146,6 +146,7 @@ public:
 protected:
     void hoverEnterEvent(QHoverEvent *event);
     void hoverLeaveEvent(QHoverEvent *event);
+    void hoverMoveEvent(QHoverEvent * event);
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
