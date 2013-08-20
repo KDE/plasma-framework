@@ -170,10 +170,9 @@ bool MouseEventListener::childMouseEventFilter(QQuickItem *item, QEvent *event)
         return false;
     }
 
-    m_lastEvent = event;
-
     switch (event->type()) {
     case QEvent::MouseButtonPress: {
+        m_lastEvent = event;
         QMouseEvent *me = static_cast<QMouseEvent *>(event);
         //the parent will receive events in its own coordinates
         const QPointF myPos = item->mapToItem(this, me->pos());
@@ -187,6 +186,7 @@ bool MouseEventListener::childMouseEventFilter(QQuickItem *item, QEvent *event)
         break;
     }
     case QEvent::MouseMove: {
+        m_lastEvent = event;
         QMouseEvent *me = static_cast<QMouseEvent *>(event);
         const QPointF myPos = item->mapToItem(this, me->pos());
         KDeclarativeMouseEvent dme(myPos.x(), myPos.y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
@@ -196,6 +196,7 @@ bool MouseEventListener::childMouseEventFilter(QQuickItem *item, QEvent *event)
         break;
     }
     case QEvent::MouseButtonRelease: {
+        m_lastEvent = event;
         QMouseEvent *me = static_cast<QMouseEvent *>(event);
         const QPointF myPos = item->mapToItem(this, me->pos());
         KDeclarativeMouseEvent dme(myPos.x(), myPos.y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
@@ -210,6 +211,7 @@ bool MouseEventListener::childMouseEventFilter(QQuickItem *item, QEvent *event)
         break;
     }
     case QEvent::Wheel: {
+        m_lastEvent = event;
         QWheelEvent *we = static_cast<QWheelEvent *>(event);
         KDeclarativeWheelEvent dwe(we->pos(), we->globalPos(), we->delta(), we->buttons(), we->modifiers(), we->orientation());
         emit wheelMoved(&dwe);
