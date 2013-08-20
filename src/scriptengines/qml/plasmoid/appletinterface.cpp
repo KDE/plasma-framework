@@ -67,6 +67,8 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
             applet(), &Plasma::Applet::configNeedsSaving);
     connect(applet(), &Plasma::Applet::immutabilityChanged,
             this, &AppletInterface::immutableChanged);
+    connect(applet(), &Plasma::Applet::userConfiguringChanged,
+            this, &AppletInterface::userConfiguringChanged);
 
     connect(applet(), &Plasma::Applet::statusChanged,
             this, &AppletInterface::statusChanged);
@@ -77,6 +79,7 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
             this, &AppletInterface::locationChanged);
     connect(m_appletScriptEngine, &DeclarativeAppletScript::contextChanged,
             this, &AppletInterface::contextChanged);
+
 
     m_qmlObject = new QmlObject(this);
     m_qmlObject->setInitializationDelayed(true);
@@ -458,8 +461,7 @@ bool AppletInterface::immutable() const
 
 bool AppletInterface::userConfiguring() const
 {
-    //FIXME
-    return false;
+    return applet()->isUserConfiguring();
 }
 
 int AppletInterface::apiVersion() const

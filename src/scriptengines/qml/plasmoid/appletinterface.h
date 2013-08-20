@@ -63,7 +63,7 @@ class AppletInterface : public QQuickItem
     Q_PROPERTY(bool expanded WRITE setExpanded READ isExpanded NOTIFY expandedChanged)
     Q_PROPERTY(Plasma::Types::BackgroundHints backgroundHints WRITE setBackgroundHints READ backgroundHints NOTIFY backgroundHintsChanged)
     Q_PROPERTY(bool immutable READ immutable NOTIFY immutableChanged)
-    Q_PROPERTY(bool userConfiguring READ userConfiguring) // @since 4.5
+    Q_PROPERTY(bool userConfiguring READ userConfiguring NOTIFY userConfiguringChanged)
     Q_PROPERTY(int apiVersion READ apiVersion CONSTANT)
     Q_PROPERTY(Plasma::Types::ItemStatus status READ status WRITE setStatus NOTIFY statusChanged)
     Q_PROPERTY(QString associatedApplication WRITE setAssociatedApplication READ associatedApplication)
@@ -185,6 +185,7 @@ Q_SIGNALS:
     void implicitHeightChanged();
     void fillWidthChanged();
     void fillHeightChanged();
+    void userConfiguringChanged();
 
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
