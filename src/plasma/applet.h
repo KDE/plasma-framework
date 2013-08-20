@@ -209,6 +209,18 @@ class PLASMA_EXPORT Applet : public QObject
          */
         bool configurationRequired() const;
 
+        /**
+         * @return true when the configuration interface is being shown
+         * @since 4.5
+         */
+        bool isUserConfiguring() const;
+
+        /**
+         * Tells the applet the user is configuring
+         * @param configuring true if the configuration ui is showing
+         */
+        void setUserConfiguring(bool configuring);
+
 //UTILS
         /**
          * Accessor for the associated Package object if any.
@@ -376,6 +388,11 @@ class PLASMA_EXPORT Applet : public QObject
          */
         void configNeedsSaving();
 
+        /**
+         * emitted when the config ui appears or disappears
+         */
+        void userConfiguringChanged(bool configuring);
+
 //ACTIONS
         /**
          * Emitted when activation is requested due to, for example, a global
@@ -389,7 +406,7 @@ class PLASMA_EXPORT Applet : public QObject
          * Emitted when the applet is deleted
          */
         void appletDeleted(Plasma::Applet *applet);
-        
+
     public Q_SLOTS:
 //BOOKKEEPING
         /**

@@ -409,6 +409,21 @@ void Applet::setConfigurationRequired(bool needsConfig, const QString &reason)
     d->showConfigurationRequiredMessage(needsConfig, reason);
 }
 
+bool Applet::isUserConfiguring() const
+{
+    return d->userConfiguring;
+}
+
+void Applet::setUserConfiguring(bool configuring)
+{
+    if (configuring == d->userConfiguring) {
+        return;
+    }
+
+    d->userConfiguring = configuring;
+    emit userConfiguringChanged(configuring);
+}
+
 Types::ItemStatus Applet::status() const
 {
     return d->itemStatus;
@@ -465,10 +480,6 @@ void Applet::flushPendingConstraintsEvents()
 
         d->updateShortcuts();
         Containment *cont = containment();
-        Corona *corona = 0;
-        if (cont) {
-            corona = cont->corona();
-        }
     }
 
     if (c & Plasma::Types::ImmutableConstraint) {
