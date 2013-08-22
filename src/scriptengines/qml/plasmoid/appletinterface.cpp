@@ -135,6 +135,7 @@ void AppletInterface::init()
     m_qmlObject->engine()->rootContext()->setContextProperty("plasmoid", this);
 
     m_qmlObject->completeInitialization();
+    emit rootItemChanged();
 
     qDebug() << "Graphic object created:" << applet() << applet()->property("graphicObject");
 
@@ -206,6 +207,14 @@ QString AppletInterface::currentActivity() const
 QObject* AppletInterface::configuration() const
 {
     return m_configuration;
+}
+
+QObject* AppletInterface::rootItem() const
+{
+    if (!m_qmlObject) {
+        return 0;
+    }
+    return m_qmlObject->rootObject();
 }
 
 QString AppletInterface::icon() const
