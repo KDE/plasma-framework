@@ -21,11 +21,11 @@
 
 #include <QtQuick/QQuickView>
 
-#include <plasma/plasmaview_export.h>
+#include "plasma/plasmaview_export.h"
 #include "plasma/corona.h"
 #include "plasma/containment.h"
 
-#include "configview.h"
+class ViewPrivate;
 
 class PLASMAVIEW_EXPORT View : public QQuickView
 {
@@ -52,7 +52,7 @@ public:
 
     QRectF screenGeometry();
 
-protected Q_SLOTS:
+public Q_SLOTS:
     virtual void showConfigurationInterface(Plasma::Applet *applet);
 
 Q_SIGNALS:
@@ -62,9 +62,8 @@ Q_SIGNALS:
     void screenGeometryChanged();
 
 private:
-    Plasma::Corona *m_corona;
-    QWeakPointer<Plasma::Containment> m_containment;
-    QWeakPointer<ConfigView> m_configView;
+    ViewPrivate *const d;
+    friend class ViewPrivate;
 };
 
 #endif // VIEW_H
