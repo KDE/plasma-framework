@@ -135,7 +135,6 @@ void AppletInterface::init()
     m_qmlObject->engine()->rootContext()->setContextProperty("plasmoid", this);
 
     m_qmlObject->completeInitialization();
-    emit rootItemChanged();
 
     qDebug() << "Graphic object created:" << applet() << applet()->property("graphicObject");
 
@@ -207,14 +206,6 @@ QString AppletInterface::currentActivity() const
 QObject* AppletInterface::configuration() const
 {
     return m_configuration;
-}
-
-QObject* AppletInterface::rootItem() const
-{
-    if (!m_qmlObject) {
-        return 0;
-    }
-    return m_qmlObject->rootObject();
 }
 
 QString AppletInterface::icon() const
@@ -666,7 +657,7 @@ void AppletInterface::compactRepresentationCheck()
             QQmlComponent *compactComponent = m_qmlObject->rootObject()->property("compactRepresentation").value<QQmlComponent *>();
 
             if (compactComponent) {
-                compactRepresentation = compactComponent->create(m_qmlObject->engine()->rootContext());
+                compactRepresentation = compactComponent->create(compactComponent->creationContext());
             } else {
                 compactRepresentation = m_qmlObject->createObjectFromSource(QUrl::fromLocalFile(applet()->containment()->corona()->package().filePath("defaultcompactrepresentation")));
             }
