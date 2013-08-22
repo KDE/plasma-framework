@@ -33,41 +33,73 @@
 #include <Plasma/Corona>
 #include <Plasma/PluginLoader>
 
-
-//////////////////////////////ContainmentConfigView
-ContainmentConfigView::ContainmentConfigView(Plasma::Containment *cont, QWindow *parent)
-    : ConfigView(cont, parent),
-      m_containment(cont),
-      m_wallpaperConfigModel(0),
-      m_currentWallpaperConfig(0),
-      m_ownWallpaperConfig(0)
+class ContainmentConfigViewPrivate
 {
-    engine()->rootContext()->setContextProperty("configDialog", this);
+public:
+    ContainmentConfigViewPrivate(Plasma::Containment *cont, ContainmentConfigView *view);
+    ~ContainmentConfigViewPrivate();
+
+    void syncWallpaperObjects();
+    void applyWallpaper();
+    ConfigModel *doWallpaperConfigModel();
+    void setCurrentWallpaper(const QString &wallpaper);
+
+    ContainmentConfigView *q;
+    Plasma::Containment *containment;
+    ConfigModel *wallpaperConfigModel;
+    QString currentWallpaper;
+    ConfigPropertyMap *currentWallpaperConfig;
+    ConfigPropertyMap *ownWallpaperConfig;
+};
+
+ContainmentConfigViewPrivate::ContainmentConfigViewPrivate(Plasma::Containment *cont, ContainmentConfigView *view)
+    : q(view),
+      containment(cont),
+      wallpaperConfigModel(0),
+      currentWallpaperConfig(0),
+      ownWallpaperConfig(0)
+{
+    q->engine()->rootContext()->setContextProperty("configDialog", q);
     setCurrentWallpaper(cont->containment()->wallpaper());
 
     Plasma::Package pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
     pkg.setDefaultPackageRoot("plasma/wallpapers");
-    pkg.setPath(m_containment->wallpaper());
+    pkg.setPath(containment->wallpaper());
     QFile file(pkg.filePath("config", "main.xml"));
-    KConfigGroup cfg = m_containment->config();
+    KConfigGroup cfg = containment->config();
     cfg = KConfigGroup(&cfg, "Wallpaper");
 
     syncWallpaperObjects();
 }
 
-ContainmentConfigView::~ContainmentConfigView()
+ContainmentConfigViewPrivate::~ContainmentConfigViewPrivate()
 {
 }
 
-void ContainmentConfigView::init()
+void ContainmentConfigViewPrivate::syncWallpaperObjects()
 {
-    setSource(QUrl::fromLocalFile(m_containment->containment()->corona()->package().filePath("containmentconfigurationui")));
+    QObject *wallpaperGraphicsObject = containment->property("wallpaperGraphicsObject").value<QObject *>();
+    q->engine()->rootContext()->setContextProperty("wallpaper", wallpaperGraphicsObject);
+
+    //FIXME: why m_wallpaperGraphicsObject->property("configuration").value<ConfigPropertyMap *>() doesn't work?
+    currentWallpaperConfig = static_cast<ConfigPropertyMap *>(wallpaperGraphicsObject->property("configuration").value<QObject *>());
 }
 
-ConfigModel *ContainmentConfigView::wallpaperConfigModel()
+void ContainmentConfigViewPrivate::applyWallpaper()
 {
-    if (!m_wallpaperConfigModel) {
-        m_wallpaperConfigModel = new ConfigModel(this);
+   containment->setWallpaper(currentWallpaper);
+
+    delete ownWallpaperConfig;
+    ownWallpaperConfig = 0;
+
+    syncWallpaperObjects();
+    emit q->wallpaperConfigurationChanged();
+}
+
+ConfigModel *ContainmentConfigViewPrivate::doWallpaperConfigModel()
+{
+    if (!wallpaperConfigModel) {
+        wallpaperConfigModel = new ConfigModel(q);
         QStringList dirs(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "plasma/wallpapers", QStandardPaths::LocateDirectory));
         Plasma::Package pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
         foreach (const QString &dirPath, dirs) {
@@ -87,74 +119,89 @@ ConfigModel *ContainmentConfigView::wallpaperConfigModel()
                 if (!pkg.isValid()) {
                     continue;
                 }
-                ConfigCategory *cat = new ConfigCategory(m_wallpaperConfigModel);
+                ConfigCategory *cat = new ConfigCategory(wallpaperConfigModel);
                 cat->setName(pkg.metadata().name());
                 cat->setIcon(pkg.metadata().icon());
                 cat->setSource(pkg.filePath("ui", "config.qml"));
                 cat->setPluginName(package);
-                m_wallpaperConfigModel->appendCategory(cat);
+                wallpaperConfigModel->appendCategory(cat);
             }
         }
     }
-    return m_wallpaperConfigModel;
+    return wallpaperConfigModel;
 }
 
-ConfigPropertyMap *ContainmentConfigView::wallpaperConfiguration() const
+void ContainmentConfigViewPrivate::setCurrentWallpaper(const QString &wallpaper)
 {
-    return m_currentWallpaperConfig;
-}
-
-QString ContainmentConfigView::currentWallpaper() const
-{
-    return m_currentWallpaper;
-}
-
-void ContainmentConfigView::setCurrentWallpaper(const QString &wallpaper)
-{
-    if (m_currentWallpaper == wallpaper) {
+    if (currentWallpaper == wallpaper) {
         return;
     }
 
-    delete m_ownWallpaperConfig;
-    m_ownWallpaperConfig = 0;
+    delete ownWallpaperConfig;
+    ownWallpaperConfig = 0;
 
-    if (m_containment->wallpaper() == wallpaper) {
+    if (containment->wallpaper() == wallpaper) {
         syncWallpaperObjects();
     } else {
-
         //we have to construct an independent ConfigPropertyMap when we want to configure wallpapers that are not the current one
         Plasma::Package pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
         pkg.setDefaultPackageRoot("plasma/wallpapers");
         pkg.setPath(wallpaper);
         QFile file(pkg.filePath("config", "main.xml"));
-        KConfigGroup cfg = m_containment->config();
+        KConfigGroup cfg = containment->config();
         cfg = KConfigGroup(&cfg, "Wallpaper");
-        m_currentWallpaperConfig = m_ownWallpaperConfig = new ConfigPropertyMap(new Plasma::ConfigLoader(&cfg, &file), this);
+        currentWallpaperConfig = ownWallpaperConfig = new ConfigPropertyMap(new Plasma::ConfigLoader(&cfg, &file), q);
     }
 
-    m_currentWallpaper = wallpaper;
-    emit currentWallpaperChanged();
-    emit wallpaperConfigurationChanged();
+    currentWallpaper = wallpaper;
+    emit q->currentWallpaperChanged();
+    emit q->wallpaperConfigurationChanged();
+}
+
+//////////////////////////////ContainmentConfigView
+ContainmentConfigView::ContainmentConfigView(Plasma::Containment *cont, QWindow *parent)
+    : ConfigView(cont, parent),
+      d(new ContainmentConfigViewPrivate(cont, this))
+{
+}
+
+ContainmentConfigView::~ContainmentConfigView()
+{
+}
+
+void ContainmentConfigView::init()
+{
+    setSource(QUrl::fromLocalFile(d->containment->containment()->corona()->package().filePath("containmentconfigurationui")));
+}
+
+ConfigModel *ContainmentConfigView::wallpaperConfigModel()
+{
+    return d->doWallpaperConfigModel();
+}
+
+ConfigPropertyMap *ContainmentConfigView::wallpaperConfiguration() const
+{
+    return d->currentWallpaperConfig;
+}
+
+QString ContainmentConfigView::currentWallpaper() const
+{
+    return d->currentWallpaper;
+}
+
+void ContainmentConfigView::setCurrentWallpaper(const QString &wallpaper)
+{
+    d->setCurrentWallpaper(wallpaper);
 }
 
 void ContainmentConfigView::applyWallpaper()
 {
-    m_containment->setWallpaper(m_currentWallpaper);
-
-    delete m_ownWallpaperConfig;
-    m_ownWallpaperConfig = 0;
-
-    syncWallpaperObjects();
-    emit wallpaperConfigurationChanged();
+    d->applyWallpaper();
 }
 
 void ContainmentConfigView::syncWallpaperObjects()
 {
-    QObject *wallpaperGraphicsObject = m_containment->property("wallpaperGraphicsObject").value<QObject *>();
-    engine()->rootContext()->setContextProperty("wallpaper", wallpaperGraphicsObject);
-
-    //FIXME: why m_wallpaperGraphicsObject->property("configuration").value<ConfigPropertyMap *>() doesn't work?
-    m_currentWallpaperConfig = static_cast<ConfigPropertyMap *>(wallpaperGraphicsObject->property("configuration").value<QObject *>());
+    d->syncWallpaperObjects();
 }
 
 #include "moc_containmentconfigview.cpp"

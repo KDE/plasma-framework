@@ -27,7 +27,7 @@ namespace Plasma {
     class Containment;
 }
 class ConfigPropertyMap;
-
+class ContainmentConfigViewPrivate;
 
 //TODO: is it possible to move this in the shell?
 class ContainmentConfigView : public ConfigView
@@ -58,11 +58,7 @@ protected:
     void syncWallpaperObjects();
 
 private:
-    Plasma::Containment *m_containment;
-    ConfigModel *m_wallpaperConfigModel;
-    QString m_currentWallpaper;
-    ConfigPropertyMap *m_currentWallpaperConfig;
-    ConfigPropertyMap *m_ownWallpaperConfig;
+    ContainmentConfigViewPrivate *const d;
 };
 
 #endif // multiple inclusion guard
