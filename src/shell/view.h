@@ -41,7 +41,7 @@ public:
 
     virtual KConfigGroup config() const;
 
-    void setContainment(Plasma::Containment *cont);
+    virtual void setContainment(Plasma::Containment *cont);
     Plasma::Containment *containment() const;
 
     //FIXME: Plasma::Types::Location should be something qml can understand
@@ -53,7 +53,7 @@ public:
     QRectF screenGeometry();
 
 protected Q_SLOTS:
-    void showConfigurationInterface(Plasma::Applet *applet);
+    virtual void showConfigurationInterface(Plasma::Applet *applet);
 
 Q_SIGNALS:
     void locationChanged(Plasma::Types::Location location);

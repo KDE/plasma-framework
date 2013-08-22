@@ -54,7 +54,7 @@ View::View(Plasma::Corona *corona, QWindow *parent)
 
 View::~View()
 {
-    
+
 }
 
 Plasma::Corona *View::corona() const
@@ -172,11 +172,8 @@ void View::showConfigurationInterface(Plasma::Applet *applet)
     }
 
     Plasma::Containment *cont = qobject_cast<Plasma::Containment *>(applet);
-    PanelView *pv = qobject_cast< PanelView* >(this);
 
-    if (cont && pv) {
-        m_configView = new PanelConfigView(cont, pv);
-    } else if (cont) {
+    if (cont) {
         m_configView = new ContainmentConfigView(cont);
     } else {
         m_configView = new ConfigView(applet);

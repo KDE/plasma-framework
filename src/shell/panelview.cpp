@@ -90,6 +90,33 @@ PanelView::~PanelView()
     }
 }
 
+void PanelView::setContainment(Plasma::Containment *cont)
+{
+    View::setContainment(cont);
+
+    if (containment()) {
+        connect(containment(), &Plasma::Containment::configureRequested,
+                this, &PanelView::showConfigurationInterface);
+    }
+}
+
+void PanelView::showConfigurationInterface(Plasma::Applet *applet)
+{
+    if (m_panelConfigView) {
+        m_panelConfigView.data()->hide();
+        m_panelConfigView.data()->deleteLater();
+    }
+
+    Plasma::Containment *cont = qobject_cast<Plasma::Containment *>(applet);
+
+    if (cont) {
+        m_panelConfigView = new PanelConfigView(cont, this);
+    }
+
+    m_panelConfigView.data()->init();
+    m_panelConfigView.data()->show();
+}
+
 KConfigGroup PanelView::config() const
 {
     if (!containment()) {

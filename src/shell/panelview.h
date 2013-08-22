@@ -22,7 +22,7 @@
 
 #include "view.h"
 #include "panelconfigview.h"
-#include <QtCore/qpointer.h>
+#include <QtCore/QWeakPointer>
 
 class DesktopCorona;
 
@@ -61,8 +61,11 @@ public:
     int minimumLength() const;
     void setMinimumLength(int length);
 
+    void setContainment(Plasma::Containment *cont);
+
 protected:
     void resizeEvent(QResizeEvent *ev);
+    void showConfigurationInterface(Plasma::Applet *applet);
 
 Q_SIGNALS:
     void alignmentChanged();
@@ -83,7 +86,7 @@ private:
     int m_maxLength;
     int m_minLength;
     Qt::Alignment m_alignment;
-    QPointer<PanelConfigView> m_panelConfigView;
+    QWeakPointer<PanelConfigView> m_panelConfigView;
     DesktopCorona *m_corona;
 };
 
