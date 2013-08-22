@@ -25,7 +25,7 @@ find_package(Solid REQUIRED)
 
 # The Qt5Widgets_INCLUDES also includes the include directories for
 # dependencies QtCore and QtGui
-include_directories(${Qt5Widgets_DEFINITIONS} ${Qt5Quick_DEFINITIONS} ${QT_INCLUDES} ${KDE4_INCLUDES})
+include_directories(${Qt5Widgets_DEFINITIONS} ${Qt5Quick_DEFINITIONS} ${QT_INCLUDES} ${KDE4_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
 
 # We need add -DQT_WIDGETS_LIB when using QtWidgets in Qt 5.
 add_definitions(${Qt5Widgets_DEFINITIONS} ${Qt5Quick_DEFINITIONS} ${Qt5Qml_DEFINITIONS})
@@ -33,6 +33,48 @@ add_definitions(${Qt5Widgets_DEFINITIONS} ${Qt5Quick_DEFINITIONS} ${Qt5Qml_DEFIN
 # Executables fail to build with Qt 5 in the default configuration
 # without -fPIE. We add that here.
 set(CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
+
+#plasmaview
+set(plasmaview_LIB_SRC
+    view.cpp
+    configview.cpp
+    containmentconfigview.cpp
+)
+
+add_library(plasmaview SHARED ${plasmaview_LIB_SRC})
+
+target_link_libraries(plasmaview
+    ${Qt5Quick_LIBRARIES}
+    ${Qt5Qml_LIBRARIES}
+    ${KWindowSystem_LIBRARIES}
+    plasma
+    kdeclarative
+    KF5::KI18n
+    KF5::KService
+)
+
+set_target_properties(plasmaview PROPERTIES
+                             VERSION 5.0.0
+                             SOVERSION 5
+                      )
+
+install(TARGETS plasmaview EXPORT kdelibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+generate_export_header(plasmaview)
+
+set(plasmaview_LIB_INCLUDES
+    ${CMAKE_CURRENT_BINARY_DIR}/plasmaview_export.h
+    view.h
+    configview.h
+    containmentconfigview.h
+)
+
+install(FILES ${plasmaview_LIB_INCLUDES}
+        DESTINATION ${INCLUDE_INSTALL_DIR}/plasma COMPONENT Devel)
+
+#install(FILES ${plasmaview_LIB_INCLUDES}
+ #   DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma COMPONENT Devel)
+#end of plasmaview
 
 set(scripting_SRC
     scripting/appinterface.cpp

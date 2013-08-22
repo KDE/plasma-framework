@@ -26,6 +26,8 @@
 #include <QQmlListProperty>
 #include <QStandardItemModel>
 
+#include <plasma/plasmaview_export.h>
+
 namespace Plasma {
     class Applet;
 }
@@ -33,7 +35,7 @@ namespace Plasma {
 class ConfigPropertyMap;
 
 
-class ConfigCategory : public QObject
+class PLASMAVIEW_EXPORT ConfigCategory : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
@@ -70,7 +72,7 @@ private:
     QString m_pluginName;
 };
 
-class ConfigModel : public QAbstractListModel
+class PLASMAVIEW_EXPORT ConfigModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(QQmlListProperty<ConfigCategory> categories READ categories CONSTANT)
@@ -99,7 +101,7 @@ public:
     Q_INVOKABLE QVariant get(int row) const;
 
     QQmlListProperty<ConfigCategory> categories();
-    
+
     static ConfigCategory *categories_at(QQmlListProperty<ConfigCategory> *prop, int index);
     static void categories_append(QQmlListProperty<ConfigCategory> *prop, ConfigCategory *o);
     static int categories_count(QQmlListProperty<ConfigCategory> *prop);
@@ -116,7 +118,7 @@ private:
 
 //TODO: the config view for the containment should be a subclass
 //TODO: is it possible to move this in the shell?
-class ConfigView : public QQuickView
+class PLASMAVIEW_EXPORT ConfigView : public QQuickView
 {
     Q_OBJECT
     Q_PROPERTY(ConfigModel *configModel READ configModel CONSTANT)

@@ -21,13 +21,13 @@
 
 #include <QtQuick/QQuickView>
 
-
+#include <plasma/plasmaview_export.h>
 #include "plasma/corona.h"
 #include "plasma/containment.h"
 
 #include "configview.h"
 
-class View : public QQuickView
+class PLASMAVIEW_EXPORT View : public QQuickView
 {
     Q_OBJECT
     Q_PROPERTY(int location READ location WRITE setLocation NOTIFY locationChanged)
