@@ -34,6 +34,7 @@ namespace Plasma {
 
 class ConfigPropertyMap;
 
+class ConfigCategoryPrivate;
 
 class PLASMAVIEW_EXPORT ConfigCategory : public QObject
 {
@@ -66,11 +67,10 @@ Q_SIGNALS:
     void pluginNameChanged();
 
 private:
-    QString m_name;
-    QString m_icon;
-    QString m_source;
-    QString m_pluginName;
+    ConfigCategoryPrivate *const d;
 };
+
+class ConfigModelPrivate;
 
 class PLASMAVIEW_EXPORT ConfigModel : public QAbstractListModel
 {
@@ -111,8 +111,8 @@ Q_SIGNALS:
     void countChanged();
 
 private:
-    QList<ConfigCategory*>m_categories;
-    QWeakPointer<Plasma::Applet> m_appletInterface;
+    friend class ConfigModelPrivate;
+    ConfigModelPrivate *const d;
 };
 
 
