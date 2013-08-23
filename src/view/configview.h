@@ -26,7 +26,7 @@
 #include <QQmlListProperty>
 #include <QStandardItemModel>
 
-#include <plasma/plasmaview_export.h>
+#include <plasmaview_export.h>
 
 namespace Plasma {
     class Applet;
