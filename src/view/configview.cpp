@@ -338,7 +338,7 @@ void ConfigModel::categories_append(QQmlListProperty<ConfigCategory> *prop, Conf
 
 int ConfigModel::categories_count(QQmlListProperty<ConfigCategory> *prop)
 {
-    ConfigModelPrivate::categories_count(prop);
+    return ConfigModelPrivate::categories_count(prop);
 }
 
 void ConfigModel::categories_clear(QQmlListProperty<ConfigCategory> *prop)
