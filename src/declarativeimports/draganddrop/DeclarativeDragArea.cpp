@@ -28,6 +28,7 @@
 #include <QIcon>
 #include <QMimeData>
 #include <QMouseEvent>
+#include <QPainter>
 #include <QApplication>
 #include <QQmlContext>
 #include <QQuickWindow>
@@ -214,20 +215,21 @@ void DeclarativeDragArea::mouseMoveEvent(QMouseEvent *event)
     }
     if (m_draggingJustStarted) {
         m_draggingJustStarted = false;
-
+        qDebug() << "DDDD DRag";
         QDrag *drag = new QDrag(parent());
         DeclarativeMimeData* dataCopy = new DeclarativeMimeData(m_data); //Qt will take ownership of this copy and delete it.
         drag->setMimeData(dataCopy);
 
-        QSize _s(48,48);
+        const QSize _s(48,48); // FIXME: smarter, please
 
         if (!m_delegateImage.isNull()) {
             drag->setPixmap(QPixmap::fromImage(m_delegateImage));
-            qDebug() << "++++++isntnull";
+            qDebug() << "++++++delegateImage";
         } else {
+            qDebug() << "DDD NO Delegte image";
             if (m_delegate) {
                 QRectF rf;
-                qDebug() << "has delegate" << m_delegate;
+                qDebug() << "DDD +++ delegate" << m_delegate;
                 rf = QRectF(0, 0, m_delegate->width(), m_delegate->height());
                 rf = m_delegate->mapRectToScene(rf);
                 QImage grabbed = window()->grabWindow();
@@ -240,15 +242,45 @@ void DeclarativeDragArea::mouseMoveEvent(QMouseEvent *event)
                 drag->setPixmap(pm);
 
             } else if (mimeData()->hasImage()) {
-//                 rf = QRectF(x(), y(), width(), height());
-//                 rf = mapRectToScene(rf);
+                qDebug() << "++++++hasImage";
                 QImage im = qvariant_cast<QImage>(mimeData()->imageData());
                 drag->setPixmap(QPixmap::fromImage(im));
             } else if (mimeData()->hasColor()) {
+                qDebug() << "++++++color";
                 QPixmap px(_s);
                 px.fill(mimeData()->color());
                 drag->setPixmap(px);
+            } else {
+                // icons otherwise
+                QStringList icons;
+                qDebug() << "DDD adding icons dan maar";
+                if (mimeData()->hasText()) {
+                    icons << "text-plain";
+                }
+                if (mimeData()->hasHtml()) {
+                    icons << "text-html";
+                }
+                if (mimeData()->hasUrls()) {
+                    foreach (const QVariant &u, mimeData()->urls()) {
+                        icons << "text-html";
+                    }
+                }
+                if (icons.count()) {
+                    const int _w = 32;
+                    QPixmap pm(_w*icons.count(), _w);
+                    pm.fill(Qt::transparent);
+                    QPainter p(&pm);
+                    int i = 0;
+                    foreach (const QString &ic, icons) {
+                        p.drawPixmap(QPoint(i*_w, 0), QIcon::fromTheme(ic).pixmap(_w, _w));
+                        i++;
+                    }
+                    p.end();
+                    drag->setPixmap(pm);
+                }
+                qDebug() << "DD pixmaps set for icons: " << icons;
             }
+
         }
 
         drag->setHotSpot(QPoint(drag->pixmap().width()/2, drag->pixmap().height()/2)); // TODO: Make a property for that
