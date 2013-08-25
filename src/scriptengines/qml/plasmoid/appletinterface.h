@@ -50,6 +50,9 @@ class AppletInterface : public QQuickItem
 {
     Q_OBJECT
 
+    /**
+     * The QML root object defined in the applet main.qml
+     */
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     //TODO: writable icon
     Q_PROPERTY(QString icon READ icon CONSTANT)

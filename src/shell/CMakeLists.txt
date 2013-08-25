@@ -84,6 +84,7 @@ target_link_libraries(plasma-shell
  kdeclarative
  KF5::KI18n
  KF5::XmlGui
+ kdeqt5staging
 )
 
 

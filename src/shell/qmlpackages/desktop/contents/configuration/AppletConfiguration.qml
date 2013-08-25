@@ -176,7 +176,7 @@ Rectangle {
                                 left: parent.left
                                 right: parent.right
                             }
-                            height: Math.max(pageScroll.height, currentItem.implicitHeight)
+                            height: Math.max(pageScroll.height, currentItem != null ? currentItem.implicitHeight : 0)
                             property string sourceFile
                             Timer {
                                 id: pageSizeSync
@@ -217,11 +217,11 @@ Rectangle {
                 text: "Ok"
                 onClicked: {
                     if (main.currentItem.saveConfig !== undefined) {
-                        main.currentItem.saveConfig()
+                        main.currentItem.saveConfig();
                     } else {
-                        root.saveConfig()
+                        root.saveConfig();
                     }
-                    configDialog.close()
+                    configDialog.close();
                 }
             }
             QtControls.Button {
@@ -229,9 +229,9 @@ Rectangle {
                 text: "Apply"
                 onClicked: {
                     if (main.currentItem.saveConfig !== undefined) {
-                        main.currentItem.saveConfig()
+                        main.currentItem.saveConfig();
                     } else {
-                        root.saveConfig()
+                        root.saveConfig();
                     }
                 }
             }

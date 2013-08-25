@@ -26,11 +26,12 @@
 #include <QDir>
 #include <QQmlContext>
 #include <QQmlEngine>
-
+#include <QQmlComponent>
 
 #include <KLocalizedString>
 
 #include <Plasma/Corona>
+#include <Plasma/ContainmentActions>
 #include <Plasma/PluginLoader>
 
 class ContainmentConfigViewPrivate
@@ -163,6 +164,7 @@ ContainmentConfigView::ContainmentConfigView(Plasma::Containment *cont, QWindow 
     : ConfigView(cont, parent),
       d(new ContainmentConfigViewPrivate(cont, this))
 {
+    qmlRegisterType<QStandardItemModel>();
 }
 
 ContainmentConfigView::~ContainmentConfigView()
@@ -203,6 +205,93 @@ void ContainmentConfigView::applyWallpaper()
 void ContainmentConfigView::syncWallpaperObjects()
 {
     d->syncWallpaperObjects();
+}
+
+ConfigModel *ContainmentConfigView::containmentActionConfigModel()
+{
+    if (!m_containmentActionConfigModel) {
+        m_containmentActionConfigModel = new ConfigModel(this);
+
+        KPluginInfo::List actions = Plasma::PluginLoader::self()->listContainmentActionsInfo(QString());
+
+        Plasma::Package pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
+
+        foreach (const KPluginInfo &info, actions) {
+            pkg.setDefaultPackageRoot(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "plasma/containmentactions", QStandardPaths::LocateDirectory));
+            ConfigCategory *cat = new ConfigCategory(m_containmentActionConfigModel);
+            cat->setName(info.name());
+            cat->setIcon(info.icon());
+            cat->setSource(pkg.filePath("ui", "config.qml"));
+            cat->setPluginName(info.pluginName());
+            m_containmentActionConfigModel->appendCategory(cat);
+        }
+
+    }
+    return m_containmentActionConfigModel;
+}
+
+QStandardItemModel *ContainmentConfigView::currentContainmentActionsModel()
+{
+    if (!m_currentContainmentActionsModel) {
+        m_currentContainmentActionsModel = new CurrentContainmentActionsModel(m_containment, this);
+    }
+    return m_currentContainmentActionsModel;
+}
+
+
+//////////////////////////////ContainmentConfigView
+CurrentContainmentActionsModel::CurrentContainmentActionsModel(Plasma::Containment *cotainment, QObject *parent)
+    : QStandardItemModel(parent)
+{
+    QHash<int, QByteArray> roleNames;
+    roleNames[NameRole] = "name";
+    roleNames[PluginRole] = "plugin";
+
+    setRoleNames(roleNames);
+
+    QHash<QString, Plasma::ContainmentActions*> actions = cotainment->containmentActions();
+
+    QHashIterator<QString, Plasma::ContainmentActions*> i(actions);
+    while (i.hasNext()) {
+        i.next();
+
+        QStandardItem *item = new QStandardItem();
+        item->setData(i.key(), NameRole);
+        item->setData(i.value()->pluginInfo().pluginName(), PluginRole);
+        appendRow(item);
+    }
+}
+
+CurrentContainmentActionsModel::~CurrentContainmentActionsModel()
+{
+}
+
+void CurrentContainmentActionsModel::append(const QString &action, const QString &plugin)
+{
+    QStandardItem *item = new QStandardItem();
+    item->setData(action, NameRole);
+    item->setData(plugin, PluginRole);
+    appendRow(item);
+}
+
+void CurrentContainmentActionsModel::update(int row, const QString &action, const QString &plugin)
+{
+    QModelIndex idx = index(row, 0);
+
+    if (idx.isValid()) {
+        setData(idx, action, NameRole);
+        setData(idx, plugin, PluginRole);
+    }
+}
+
+void CurrentContainmentActionsModel::remove(int row)
+{
+    removeRows(row, 1);
+}
+
+void CurrentContainmentActionsModel::save()
+{
+
 }
 
 #include "moc_containmentconfigview.cpp"

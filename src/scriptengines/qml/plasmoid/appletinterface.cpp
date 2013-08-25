@@ -657,7 +657,7 @@ void AppletInterface::compactRepresentationCheck()
             QQmlComponent *compactComponent = m_qmlObject->rootObject()->property("compactRepresentation").value<QQmlComponent *>();
 
             if (compactComponent) {
-                compactRepresentation = compactComponent->create(m_qmlObject->engine()->rootContext());
+                compactRepresentation = compactComponent->create(compactComponent->creationContext());
             } else {
                 compactRepresentation = m_qmlObject->createObjectFromSource(QUrl::fromLocalFile(applet()->containment()->corona()->package().filePath("defaultcompactrepresentation")));
             }

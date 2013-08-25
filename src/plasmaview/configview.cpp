@@ -32,6 +32,7 @@
 
 #include <KGlobal>
 #include <KLocalizedString>
+#include <kdeclarative/kdeclarative.h>
 
 #include <Plasma/Corona>
 #include <Plasma/PluginLoader>
@@ -373,6 +374,12 @@ ConfigViewPrivate::ConfigViewPrivate(Plasma::Applet *appl, ConfigView *view)
 void ConfigViewPrivate::init()
 {
     applet->setUserConfiguring(true);
+
+    KDeclarative kdeclarative;
+    kdeclarative.setDeclarativeEngine(engine());
+    kdeclarative.setupBindings();
+    qmlRegisterType<ConfigModel>("org.kde.plasma.configuration", 2, 0, "ConfigModel");
+    qmlRegisterType<ConfigCategory>("org.kde.plasma.configuration", 2, 0, "ConfigCategory");
 
     //FIXME: problem on nvidia, all windows should be transparent or won't show
     q->setColor(Qt::transparent);
