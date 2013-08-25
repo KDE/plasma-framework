@@ -20,7 +20,7 @@
 #define PANELVIEW_H
 
 
-#include "view.h"
+#include <PlasmaView/View>
 #include "panelconfigview.h"
 #include <QtCore/QWeakPointer>
 
