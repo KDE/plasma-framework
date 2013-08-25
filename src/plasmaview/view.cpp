@@ -183,7 +183,7 @@ View::View(Plasma::Corona *corona, QWindow *parent)
 
 View::~View()
 {
-
+    delete d;
 }
 
 Plasma::Corona *View::corona() const

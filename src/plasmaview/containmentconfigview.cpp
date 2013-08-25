@@ -167,6 +167,7 @@ ContainmentConfigView::ContainmentConfigView(Plasma::Containment *cont, QWindow 
 
 ContainmentConfigView::~ContainmentConfigView()
 {
+    delete d;
 }
 
 void ContainmentConfigView::init()

@@ -259,7 +259,9 @@ ConfigModel::ConfigModel(QObject *parent)
 }
 
 ConfigModel::~ConfigModel()
-{}
+{
+    delete d;
+}
 
 int ConfigModel::rowCount(const QModelIndex &index) const
 {
