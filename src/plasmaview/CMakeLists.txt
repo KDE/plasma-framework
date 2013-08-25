@@ -6,6 +6,11 @@ set(plasmaview_LIB_SRC
     containmentconfigview.cpp
 )
 
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}
+                    ${CMAKE_CURRENT_BINARY_DIR}
+                    )
+
 add_library(plasmaview SHARED ${plasmaview_LIB_SRC})
 
 target_link_libraries(plasmaview
@@ -35,7 +40,11 @@ set(plasmaview_LIB_INCLUDES
 )
 
 install(FILES ${plasmaview_LIB_INCLUDES}
-        DESTINATION ${INCLUDE_INSTALL_DIR}/plasma COMPONENT Devel)
+        DESTINATION ${INCLUDE_INSTALL_DIR}/plasmaview COMPONENT Devel)
+
+install(DIRECTORY
+        includes/PlasmaView
+        DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/ COMPONENT Devel)
 
 set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/PlasmaView")
 
@@ -52,8 +61,4 @@ install(FILES
 )
 
 install(EXPORT PlasmaViewTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" FILE PlasmaViewTargets.cmake NAMESPACE KF5:: )
-
-#install(FILES ${plasmaview_LIB_INCLUDES}
- #   DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma COMPONENT Devel)
-#end of plasmaview
 
