@@ -396,8 +396,6 @@ void ConfigViewPrivate::init()
         delete object;
     }
 
-    Plasma::Containment *cont = qobject_cast<Plasma::Containment *>(applet);
-
     q->engine()->rootContext()->setContextProperty("plasmoid", applet->property("graphicObject").value<QObject*>());
     q->engine()->rootContext()->setContextProperty("configDialog", q);
     component->completeCreate();
