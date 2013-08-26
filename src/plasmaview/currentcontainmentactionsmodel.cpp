@@ -28,47 +28,85 @@
 #include <KAboutData>
 #include <KAboutApplicationDialog>
 #include <KLocalizedString>
+#include <KConfigGroup>
 
 #include <Plasma/Corona>
 #include <Plasma/Containment>
 #include <Plasma/ContainmentActions>
 #include <Plasma/PluginLoader>
 
-
-CurrentContainmentActionsModel::CurrentContainmentActionsModel(Plasma::Containment *cotainment, QObject *parent)
-    : QStandardItemModel(parent),
-      m_containment(cotainment)
+class CurrentContainmentActionsModelPrivate
 {
-    QHash<int, QByteArray> roleNames;
-    roleNames[ActionRole] = "action";
-    roleNames[PluginRole] = "plugin";
+public:
+    CurrentContainmentActionsModelPrivate(CurrentContainmentActionsModel *currentContainmentActionsModel);
+    ~CurrentContainmentActionsModelPrivate();
 
-    setRoleNames(roleNames);
+    void init();
 
-    m_baseCfg = KConfigGroup(m_containment->corona()->config(), "ActionPlugins");
+    QString mouseEventString(int mouseButtons, int modifiers);
+    QString wheelEventString(const QPointF &delta, int mouseButtons, int modifiers);
+    bool append(const QString &action, const QString &plugin);
+    void update(int row, const QString &action, const QString &plugin);
+    void remove(int row);
+    void showConfiguration(int row);
+    void showAbout(int row);
+    void save();
 
-    QHash<QString, Plasma::ContainmentActions*> actions = cotainment->containmentActions();
+    CurrentContainmentActionsModel *q;
+    Plasma::Containment *containment;
+    QHash<QString, Plasma::ContainmentActions *> plugins;
+    KConfigGroup baseCfg;
+};
+
+CurrentContainmentActionsModelPrivate::CurrentContainmentActionsModelPrivate(CurrentContainmentActionsModel *currentContainmentActionsModel)
+      : q(currentContainmentActionsModel)
+{
+}
+
+CurrentContainmentActionsModelPrivate::~CurrentContainmentActionsModelPrivate()
+{
+    baseCfg = KConfigGroup(containment->corona()->config(), "ActionPlugins");
+
+    QHash<QString, Plasma::ContainmentActions*> actions = containment->containmentActions();
 
     QHashIterator<QString, Plasma::ContainmentActions*> i(actions);
     while (i.hasNext()) {
         i.next();
 
         QStandardItem *item = new QStandardItem();
-        item->setData(i.key(), ActionRole);
-        item->setData(i.value()->pluginInfo().pluginName(), PluginRole);
-        appendRow(item);
-        m_plugins[i.key()] = Plasma::PluginLoader::self()->loadContainmentActions(m_containment, i.value()->pluginInfo().pluginName());
-        m_plugins[i.key()]->setContainment(m_containment);
-        KConfigGroup cfg(&m_baseCfg, i.key());
-        m_plugins[i.key()]->restore(cfg);
+        item->setData(i.key(), CurrentContainmentActionsModel::ActionRole);
+        item->setData(i.value()->pluginInfo().pluginName(), CurrentContainmentActionsModel::PluginRole);
+        q->appendRow(item);
+        plugins[i.key()] = Plasma::PluginLoader::self()->loadContainmentActions(containment, i.value()->pluginInfo().pluginName());
+        plugins[i.key()]->setContainment(containment);
+        KConfigGroup cfg(&baseCfg, i.key());
+        plugins[i.key()]->restore(cfg);
     }
 }
 
-CurrentContainmentActionsModel::~CurrentContainmentActionsModel()
+void CurrentContainmentActionsModelPrivate::init()
 {
+    baseCfg = KConfigGroup(containment->corona()->config(), "ActionPlugins");
+
+    QHash<QString, Plasma::ContainmentActions*> actions = containment->containmentActions();
+
+    QHashIterator<QString, Plasma::ContainmentActions*> i(actions);
+    while (i.hasNext()) {
+        i.next();
+
+        QStandardItem *item = new QStandardItem();
+        item->setData(i.key(), CurrentContainmentActionsModel::ActionRole);
+        item->setData(i.value()->pluginInfo().pluginName(), CurrentContainmentActionsModel::PluginRole);
+        q->appendRow(item);
+        plugins[i.key()] = Plasma::PluginLoader::self()->loadContainmentActions(containment, i.value()->pluginInfo().pluginName());
+        plugins[i.key()]->setContainment(containment);
+        KConfigGroup cfg(&baseCfg, i.key());
+        plugins[i.key()]->restore(cfg);
+    }
+
 }
 
-QString CurrentContainmentActionsModel::mouseEventString(int mouseButton, int modifiers)
+QString CurrentContainmentActionsModelPrivate::mouseEventString(int mouseButton, int modifiers)
 {
     QMouseEvent *mouse = new QMouseEvent(QEvent::MouseButtonRelease, QPoint(), (Qt::MouseButton)mouseButton, (Qt::MouseButton)mouseButton, (Qt::KeyboardModifiers) modifiers);
 
@@ -79,7 +117,7 @@ QString CurrentContainmentActionsModel::mouseEventString(int mouseButton, int mo
     return string;
 }
 
-QString CurrentContainmentActionsModel::wheelEventString(const QPointF &delta, int mouseButtons, int modifiers)
+QString CurrentContainmentActionsModelPrivate::wheelEventString(const QPointF &delta, int mouseButtons, int modifiers)
 {
     QWheelEvent *wheel = new QWheelEvent(QPointF(), QPointF(), delta.toPoint(), QPoint(), 0, Qt::Vertical, (Qt::MouseButtons)mouseButtons, (Qt::KeyboardModifiers) modifiers);
 
@@ -90,56 +128,56 @@ QString CurrentContainmentActionsModel::wheelEventString(const QPointF &delta, i
     return string;
 }
 
-bool CurrentContainmentActionsModel::append(const QString &action, const QString &plugin)
+bool CurrentContainmentActionsModelPrivate::append(const QString &action, const QString &plugin)
 {
-    if (m_plugins.contains(action)) {
+    if (plugins.contains(action)) {
         return false;
     }
 
     QStandardItem *item = new QStandardItem();
-    item->setData(action, ActionRole);
-    item->setData(plugin, PluginRole);
-    appendRow(item);
-    m_plugins[action] = Plasma::PluginLoader::self()->loadContainmentActions(m_containment, plugin);
-    KConfigGroup cfg(&m_baseCfg, action);
-    m_plugins[action]->setContainment(m_containment);
-    m_plugins[action]->restore(cfg);
+    item->setData(action, CurrentContainmentActionsModel::ActionRole);
+    item->setData(plugin, CurrentContainmentActionsModel::PluginRole);
+    q->appendRow(item);
+    plugins[action] = Plasma::PluginLoader::self()->loadContainmentActions(containment, plugin);
+    KConfigGroup cfg(&baseCfg, action);
+    plugins[action]->setContainment(containment);
+    plugins[action]->restore(cfg);
     return true;
 }
 
-void CurrentContainmentActionsModel::update(int row, const QString &action, const QString &plugin)
+void CurrentContainmentActionsModelPrivate::update(int row, const QString &action, const QString &plugin)
 {
-    const QString oldPlugin = itemData(index(row, 0)).value(PluginRole).toString();
+    const QString oldPlugin = q->itemData(q->index(row, 0)).value(CurrentContainmentActionsModel::PluginRole).toString();
 
-    QModelIndex idx = index(row, 0);
+    QModelIndex idx = q->index(row, 0);
 
     if (idx.isValid()) {
-        setData(idx, action, ActionRole);
-        setData(idx, plugin, PluginRole);
+        q->setData(idx, action, CurrentContainmentActionsModel::ActionRole);
+        q->setData(idx, plugin, CurrentContainmentActionsModel::PluginRole);
 
-        if (m_plugins.contains(action) && oldPlugin != plugin) {
-            delete m_plugins[action];
-            m_plugins[action] = Plasma::PluginLoader::self()->loadContainmentActions(m_containment, plugin);
+        if (plugins.contains(action) && oldPlugin != plugin) {
+            delete plugins[action];
+            plugins[action] = Plasma::PluginLoader::self()->loadContainmentActions(containment, plugin);
         }
     }
 }
 
-void CurrentContainmentActionsModel::remove(int row)
+void CurrentContainmentActionsModelPrivate::remove(int row)
 {
-    const QString action = itemData(index(row, 0)).value(ActionRole).toString();
-    removeRows(row, 1);
+    const QString action = q->itemData(q->index(row, 0)).value(CurrentContainmentActionsModel::ActionRole).toString();
+    q->removeRows(row, 1);
 
-    if (m_plugins.contains(action)) {
-        delete m_plugins[action];
-        m_plugins.remove(action);
+    if (plugins.contains(action)) {
+        delete plugins[action];
+        plugins.remove(action);
     }
 }
 
-void CurrentContainmentActionsModel::showConfiguration(int row)
+void CurrentContainmentActionsModelPrivate::showConfiguration(int row)
 {
-    const QString action = itemData(index(row, 0)).value(ActionRole).toString();
+    const QString action = q->itemData(q->index(row, 0)).value(CurrentContainmentActionsModel::ActionRole).toString();
 
-    if (!m_plugins.contains(action)) {
+    if (!plugins.contains(action)) {
         return;
     }
 
@@ -150,7 +188,7 @@ void CurrentContainmentActionsModel::showConfiguration(int row)
     configDlg->setWindowModality(Qt::WindowModal);
 
     //put the config in the dialog
-    QWidget *w = m_plugins[action]->createConfigurationInterface(configDlg);
+    QWidget *w = plugins[action]->createConfigurationInterface(configDlg);
     QString title;
     if (w) {
         lay->addWidget(w);
@@ -163,22 +201,22 @@ void CurrentContainmentActionsModel::showConfiguration(int row)
                                                         Qt::Horizontal, configDlg);
     lay->addWidget(buttons);
 
-    connect(buttons, SIGNAL(accepted()), this, SLOT(acceptConfig()));
-    connect(buttons, SIGNAL(rejected()), this, SLOT(rejectConfig()));
+    QObject::connect(buttons, SIGNAL(accepted()), q, SLOT(acceptConfig()));
+    QObject::connect(buttons, SIGNAL(rejected()), q, SLOT(rejectConfig()));
 
 
     configDlg->show();
 }
 
-void CurrentContainmentActionsModel::showAbout(int row)
+void CurrentContainmentActionsModelPrivate::showAbout(int row)
 {
-    const QString action = itemData(index(row, 0)).value(ActionRole).toString();
+    const QString action = q->itemData(q->index(row, 0)).value(CurrentContainmentActionsModel::ActionRole).toString();
 
-    if (!m_plugins.contains(action)) {
+    if (!plugins.contains(action)) {
         return;
     }
 
-    KPluginInfo info = m_plugins[action]->pluginInfo();
+    KPluginInfo info = plugins[action]->pluginInfo();
 
     KAboutData aboutData(info.name().toUtf8(),
             info.name().toUtf8(),
@@ -191,31 +229,94 @@ void CurrentContainmentActionsModel::showAbout(int row)
 
     aboutData.addAuthor(ki18n(info.author().toUtf8()).toString(), ki18n(QByteArray()).toString(), info.email().toLatin1());
 
-    KAboutApplicationDialog *aboutDialog = new KAboutApplicationDialog(aboutData, qobject_cast<QWidget*>(parent()));
+    KAboutApplicationDialog *aboutDialog = new KAboutApplicationDialog(aboutData, qobject_cast<QWidget*>(q->parent()));
     aboutDialog->show();
 }
 
-void CurrentContainmentActionsModel::save()
+void CurrentContainmentActionsModelPrivate::save()
 {
 
     //TODO: this configuration save is still a stub, not completely "correct" yet
     //clean old config, just i case
-    foreach (const QString &group, m_baseCfg.groupList()) {
-        KConfigGroup cfg = KConfigGroup(&m_baseCfg, group);
+    foreach (const QString &group, baseCfg.groupList()) {
+        KConfigGroup cfg = KConfigGroup(&baseCfg, group);
         cfg.deleteGroup();
 
-        if (m_plugins.contains(group)) {
-            m_containment->setContainmentActions(group, QString());
+        if (plugins.contains(group)) {
+            containment->setContainmentActions(group, QString());
         }
     }
 
-    QHashIterator<QString, Plasma::ContainmentActions*> i(m_plugins);
+    QHashIterator<QString, Plasma::ContainmentActions*> i(plugins);
     while (i.hasNext()) {
-        m_containment->setContainmentActions(i.key(), i.value()->pluginInfo().pluginName());
+        containment->setContainmentActions(i.key(), i.value()->pluginInfo().pluginName());
         i.next();
-        KConfigGroup cfg(&m_baseCfg, i.key());
+        KConfigGroup cfg(&baseCfg, i.key());
         i.value()->save(cfg);
     }
+}
+
+
+/////////////////////CurrentContainmentActionsModel
+CurrentContainmentActionsModel::CurrentContainmentActionsModel(Plasma::Containment *cont, QObject *parent)
+    : QStandardItemModel(parent),
+      d(new CurrentContainmentActionsModelPrivate(this))
+{
+    QHash<int, QByteArray> roleNames;
+    roleNames[ActionRole] = "action";
+    roleNames[PluginRole] = "plugin";
+
+    setRoleNames(roleNames);
+
+    //WARNING!!!!
+    //WARNING!!!!
+    //containment must have a valid value before init is being called
+    d->containment = cont;
+    d->init();
+}
+
+CurrentContainmentActionsModel::~CurrentContainmentActionsModel()
+{
+}
+
+QString CurrentContainmentActionsModel::mouseEventString(int mouseButton, int modifiers)
+{
+    return d->mouseEventString(mouseButton, modifiers);
+}
+
+QString CurrentContainmentActionsModel::wheelEventString(const QPointF &delta, int mouseButtons, int modifiers)
+{
+    return d->wheelEventString(delta, mouseButtons, modifiers);
+}
+
+bool CurrentContainmentActionsModel::append(const QString &action, const QString &plugin)
+{
+    return d->append(action, plugin);
+}
+
+void CurrentContainmentActionsModel::update(int row, const QString &action, const QString &plugin)
+{
+    d->update(row, action, plugin);
+}
+
+void CurrentContainmentActionsModel::remove(int row)
+{
+    d->remove(row);
+}
+
+void CurrentContainmentActionsModel::showConfiguration(int row)
+{
+    d->showConfiguration(row);
+}
+
+void CurrentContainmentActionsModel::showAbout(int row)
+{
+    d->showAbout(row);
+}
+
+void CurrentContainmentActionsModel::save()
+{
+    d->save();
 }
 
 #include "moc_currentcontainmentactionsmodel.cpp"

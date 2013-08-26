@@ -22,12 +22,11 @@
 
 #include <QStandardItemModel>
 
-#include <KConfigGroup>
-
 namespace Plasma {
     class Containment;
-    class ContainmentActions;
 }
+
+class CurrentContainmentActionsModelPrivate;
 
 class CurrentContainmentActionsModel : public QStandardItemModel
 {
@@ -52,9 +51,7 @@ public:
     Q_INVOKABLE void save();
 
 private:
-    Plasma::Containment *m_containment;
-    QHash<QString, Plasma::ContainmentActions *> m_plugins;
-    KConfigGroup m_baseCfg;
+    CurrentContainmentActionsModelPrivate *const d;
 };
 
 #endif
