@@ -4,6 +4,7 @@ set(plasmaview_LIB_SRC
     view.cpp
     configview.cpp
     containmentconfigview.cpp
+    currentcontainmentactionsmodel.cpp
 )
 
 
@@ -37,6 +38,7 @@ set(plasmaview_LIB_INCLUDES
     view.h
     configview.h
     containmentconfigview.h
+    currentcontainmentactionsmodel.h
 )
 
 install(FILES ${plasmaview_LIB_INCLUDES}

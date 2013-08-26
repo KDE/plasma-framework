@@ -77,6 +77,7 @@ public:
 
     QColor color() const;
     void setColor(const QColor &color);
+    Q_INVOKABLE bool hasColor() const;
 
     Q_INVOKABLE void setData(const QString &mimeType, const QVariant &data);
 

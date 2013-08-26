@@ -1,7 +1,5 @@
 project(draganddrop)
 
-include(KDE4Defaults)
-
 set(declarativedragdrop_SRCS
     draganddropplugin.cpp
     DeclarativeDragArea.cpp

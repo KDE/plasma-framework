@@ -23,30 +23,14 @@
 
 #include "configview.h"
 
+
 namespace Plasma {
     class Containment;
 }
-class ConfigPropertyMap;
+
 class ContainmentConfigViewPrivate;
-
-class CurrentContainmentActionsModel : public QStandardItemModel
-{
-    Q_OBJECT
-
-public:
-    enum Roles {
-        NameRole = Qt::UserRole+1,
-        PluginRole
-    };
-
-    CurrentContainmentActionsModel(Plasma::Containment *cotainment, QObject *parent = 0);
-    ~CurrentContainmentActionsModel();
-
-    Q_INVOKABLE void append(const QString &action, const QString &plugin);
-    Q_INVOKABLE void update(int row, const QString &action, const QString &plugin);
-    Q_INVOKABLE void remove(int row);
-    Q_INVOKABLE void save();
-};
+class ConfigPropertyMap;
+class CurrentContainmentActionsModel;
 
 //TODO: is it possible to move this in the shell?
 class ContainmentConfigView : public ConfigView
