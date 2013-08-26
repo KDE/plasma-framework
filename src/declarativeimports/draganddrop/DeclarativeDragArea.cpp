@@ -33,8 +33,6 @@
 #include <QQmlContext>
 #include <QQuickWindow>
 
-#include <KMimeType>
-
 #include <QDebug>
 
 /*!
@@ -44,7 +42,7 @@
 DeclarativeDragArea::DeclarativeDragArea(QQuickItem *parent)
     : QQuickItem(parent),
     m_delegate(0),
-    m_source(0),
+    m_source(parent),
     m_target(0),
     m_enabled(true),
     m_draggingJustStarted(false),
@@ -54,7 +52,9 @@ DeclarativeDragArea::DeclarativeDragArea(QQuickItem *parent)
 {
     m_startDragDistance = QApplication::startDragDistance();
     setAcceptedMouseButtons(Qt::LeftButton);
-    //setFiltersChildEvents(true);
+//     setFiltersChildEvents(true);
+    setFlag(ItemAcceptsDrops, m_enabled);
+    setAcceptHoverEvents(true);
     setFiltersChildMouseEvents(true);
 }
 
@@ -209,51 +209,56 @@ void DeclarativeDragArea::mouseMoveEvent(QMouseEvent *event)
 {
     if ( !m_enabled
          || QLineF(event->screenPos(), m_buttonDownPos).length()
-            < m_startDragDistance && false) {
-        qDebug() << "return";
+            < m_startDragDistance) {
         return;
     }
+
     if (m_draggingJustStarted) {
         m_draggingJustStarted = false;
-        qDebug() << "DDDD DRag";
-        QDrag *drag = new QDrag(parent());
+        qDebug() << "************ DDDD new QDrag" << objectName();
+        QDrag *drag = new QDrag(this);
         DeclarativeMimeData* dataCopy = new DeclarativeMimeData(m_data); //Qt will take ownership of this copy and delete it.
+        dataCopy->setText(objectName());
         drag->setMimeData(dataCopy);
+        //qDebug() << "-----> data: dragarea: " << this << x() << y() << " mimedata: " << m_data << (dataCopy->hasColor() ? dataCopy->color().name() : " no color") ;
 
         const QSize _s(48,48); // FIXME: smarter, please
 
         if (!m_delegateImage.isNull()) {
             drag->setPixmap(QPixmap::fromImage(m_delegateImage));
-            qDebug() << "++++++delegateImage";
+//             qDebug() << "++++++delegateImage";
         } else {
-            qDebug() << "DDD NO Delegte image";
+//             qDebug() << "DDD NO Delegte image";
             if (m_delegate) {
-                QRectF rf;
-                qDebug() << "DDD +++ delegate" << m_delegate;
-                rf = QRectF(0, 0, m_delegate->width(), m_delegate->height());
-                rf = m_delegate->mapRectToScene(rf);
-                QImage grabbed = window()->grabWindow();
-                //rf = rf.intersected(QRectF(0, 0, grabbed.width(), grabbed.height()));
-                grabbed = grabbed.copy(rf.toAlignedRect());
-                qDebug() << " +++++++++++++++++++++++ dim: " << rf;
-                grabbed.save("file:///tmp/grabbed.png");
-                QPixmap pm = QPixmap::fromImage(grabbed);
-                qDebug() << " set new pixmap" << grabbed.size();
-                drag->setPixmap(pm);
+                // This is just highly unreliable, let's completely skip this
+                // until we have a non-digusting way of "attaching an item to
+                // the cursor
+//                 QRectF rf;
+//                 qDebug() << "DDD +++ delegate" << m_delegate;
+//                 rf = QRectF(0, 0, m_delegate->width(), m_delegate->height());
+//                 rf = m_delegate->mapRectToScene(rf);
+//                 QImage grabbed = window()->grabWindow();
+//                 //rf = rf.intersected(QRectF(0, 0, grabbed.width(), grabbed.height()));
+//                 grabbed = grabbed.copy(rf.toAlignedRect());
+// //                 qDebug() << " +++++++++++++++++++++++ dim: " << rf;
+//                 grabbed.save("file:///tmp/grabbed.png");
+//                 QPixmap pm = QPixmap::fromImage(grabbed);
+//                 qDebug() << " set new pixmap" << grabbed.size();
+//                 drag->setPixmap(pm);
 
             } else if (mimeData()->hasImage()) {
-                qDebug() << "++++++hasImage";
+//                 qDebug() << "++++++hasImage";
                 QImage im = qvariant_cast<QImage>(mimeData()->imageData());
                 drag->setPixmap(QPixmap::fromImage(im));
             } else if (mimeData()->hasColor()) {
-                qDebug() << "++++++color";
+//                 qDebug() << "++++++color";
                 QPixmap px(_s);
                 px.fill(mimeData()->color());
                 drag->setPixmap(px);
             } else {
                 // icons otherwise
                 QStringList icons;
-                qDebug() << "DDD adding icons dan maar";
+//                 qDebug() << "DDD adding icons dan maar";
                 if (mimeData()->hasText()) {
                     icons << "text-plain";
                 }
@@ -262,11 +267,12 @@ void DeclarativeDragArea::mouseMoveEvent(QMouseEvent *event)
                 }
                 if (mimeData()->hasUrls()) {
                     foreach (const QVariant &u, mimeData()->urls()) {
+                        Q_UNUSED(u);
                         icons << "text-html";
                     }
                 }
                 if (icons.count()) {
-                    const int _w = 32;
+                    const int _w = 48;
                     QPixmap pm(_w*icons.count(), _w);
                     pm.fill(Qt::transparent);
                     QPainter p(&pm);
@@ -283,7 +289,7 @@ void DeclarativeDragArea::mouseMoveEvent(QMouseEvent *event)
 
         }
 
-        drag->setHotSpot(QPoint(drag->pixmap().width()/2, drag->pixmap().height()/2)); // TODO: Make a property for that
+        //drag->setHotSpot(QPoint(drag->pixmap().width()/2, drag->pixmap().height()/2)); // TODO: Make a property for that
         //setCursor(Qt::OpenHandCursor);    //TODO? Make a property for the cursor
 
         emit dragStarted();
@@ -291,7 +297,6 @@ void DeclarativeDragArea::mouseMoveEvent(QMouseEvent *event)
         Qt::DropAction action = drag->exec(m_supportedActions, m_defaultAction);
         emit drop(action);
     }
-
 }
 
 bool DeclarativeDragArea::childMouseEventFilter(QQuickItem *item, QEvent *event)
