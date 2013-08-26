@@ -376,7 +376,7 @@ void ConfigViewPrivate::init()
     applet->setUserConfiguring(true);
 
     KDeclarative kdeclarative;
-    kdeclarative.setDeclarativeEngine(engine());
+    kdeclarative.setDeclarativeEngine(q->engine());
     kdeclarative.setupBindings();
     qmlRegisterType<ConfigModel>("org.kde.plasma.configuration", 2, 0, "ConfigModel");
     qmlRegisterType<ConfigCategory>("org.kde.plasma.configuration", 2, 0, "ConfigCategory");

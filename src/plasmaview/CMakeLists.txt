@@ -22,6 +22,8 @@ target_link_libraries(plasmaview
     kdeclarative
     KF5::KI18n
     KF5::KService
+    KF5::KCoreAddons
+    KF5::XmlGui
 )
 
 set_target_properties(plasmaview PROPERTIES

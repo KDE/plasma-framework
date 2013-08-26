@@ -110,14 +110,14 @@ void ViewPrivate::setContainment(Plasma::Containment *cont)
         return;
     }
 
-    connect(cont, &Plasma::Containment::locationChanged,
-            this, &View::locationChanged);
-    connect(cont, &Plasma::Containment::formFactorChanged,
-            this, &View::formFactorChanged);
-    connect(cont, &Plasma::Containment::configureRequested,
-            this, &View::showConfigurationInterface);
+    QObject::connect(cont, &Plasma::Containment::locationChanged,
+            q, &View::locationChanged);
+    QObject::connect(cont, &Plasma::Containment::formFactorChanged,
+            q, &View::formFactorChanged);
+    QObject::connect(cont, &Plasma::Containment::configureRequested,
+            q, &View::showConfigurationInterface);
 
-    QObject *graphicObject = m_containment.data()->property("graphicObject").value<QObject *>();
+    QObject *graphicObject = containment.data()->property("graphicObject").value<QObject *>();
 
     if (graphicObject) {
         qDebug() << "using as graphic containment" << graphicObject << containment.data();
