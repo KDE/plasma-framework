@@ -199,7 +199,7 @@ void Containment::restore(KConfigGroup &group)
     if (cfg.exists()) {
         foreach (const QString &key, cfg.keyList()) {
             //qDebug() << "loading" << key;
-            addContainmentActions(key, cfg.readEntry(key, QString()));
+            setContainmentActions(key, cfg.readEntry(key, QString()));
         }
     } else { //shell defaults
         KConfigGroup defaultActionsCfg;
@@ -212,7 +212,7 @@ void Containment::restore(KConfigGroup &group)
         defaultActionsCfg = KConfigGroup(&defaultActionsCfg, "ContainmentActions");
 
         foreach (const QString &key, defaultActionsCfg.keyList()) {
-            addContainmentActions(key, defaultActionsCfg.readEntry(key, QString()));
+            setContainmentActions(key, defaultActionsCfg.readEntry(key, QString()));
         }
     }
 
@@ -478,7 +478,7 @@ QString Containment::wallpaper() const
     return d->wallpaper;
 }
 
-void Containment::addContainmentActions(const QString &trigger, const QString &pluginName)
+void Containment::setContainmentActions(const QString &trigger, const QString &pluginName)
 {
     KConfigGroup cfg = d->containmentActionsConfig();
     ContainmentActions *plugin = 0;
