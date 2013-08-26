@@ -96,6 +96,11 @@ class PLASMA_EXPORT ContainmentActions : public QObject
         virtual QWidget *createConfigurationInterface(QWidget *parent);
 
         /**
+         * This method is called when the user's configuration changes are accepted
+         */
+        virtual void configurationAccepted();
+
+        /**
          * Called when a "next" action is triggered (e.g. by mouse wheel scroll). This
          * can be used to scroll through a list of items this plugin manages such as
          * windows, virtual desktops, activities, etc.

@@ -104,6 +104,11 @@ QWidget *ContainmentActions::createConfigurationInterface(QWidget *parent)
     return 0;
 }
 
+void ContainmentActions::configurationAccepted()
+{
+    //do nothing by default
+}
+
 void ContainmentActions::performNextAction()
 {
     //do nothing by default, implement in subclasses
@@ -169,7 +174,6 @@ QString ContainmentActions::eventToString(QEvent *event)
 void ContainmentActions::setContainment(Containment *newContainment)
 {
     d->containment = newContainment;
-    restore(config());
 }
 
 } // Plasma namespace

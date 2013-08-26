@@ -495,8 +495,12 @@ void Containment::setContainmentActions(const QString &trigger, const QString &p
     if (pluginName.isEmpty()) {
         cfg.deleteEntry(trigger);
     } else if (plugin) {
-        // it already existed, reset the containment so it wil reload config on next show
-        plugin->setContainment(0);
+        //it already existed, just reload config
+        plugin->setContainment(this); //to be safe
+        //FIXME make a truly unique config group
+        KConfigGroup pluginConfig = KConfigGroup(&cfg, trigger);
+        plugin->restore(pluginConfig);
+
     } else {
         plugin = PluginLoader::self()->loadContainmentActions(this, pluginName);
 
@@ -504,6 +508,8 @@ void Containment::setContainmentActions(const QString &trigger, const QString &p
             cfg.writeEntry(trigger, pluginName);
             containmentActions().insert(trigger, plugin);
             plugin->setContainment(this);
+            KConfigGroup pluginConfig = KConfigGroup(&cfg, trigger);
+            plugin->restore(pluginConfig);
         } else {
             //bad plugin... gets removed. is this a feature or a bug?
             cfg.deleteEntry(trigger);
