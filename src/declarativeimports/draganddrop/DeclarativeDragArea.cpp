@@ -216,7 +216,7 @@ void DeclarativeDragArea::mouseMoveEvent(QMouseEvent *event)
     if (m_draggingJustStarted) {
         m_draggingJustStarted = false;
         qDebug() << "************ DDDD new QDrag" << objectName();
-        QDrag *drag = new QDrag(this);
+        QDrag *drag = new QDrag(parent());
         DeclarativeMimeData* dataCopy = new DeclarativeMimeData(m_data); //Qt will take ownership of this copy and delete it.
         dataCopy->setText(objectName());
         drag->setMimeData(dataCopy);
