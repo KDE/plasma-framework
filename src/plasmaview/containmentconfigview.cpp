@@ -62,6 +62,8 @@ ContainmentConfigViewPrivate::ContainmentConfigViewPrivate(Plasma::Containment *
     : q(view),
       containment(cont),
       wallpaperConfigModel(0),
+      containmentActionConfigModel(0),
+      currentContainmentActionsModel(0),
       currentWallpaperConfig(0),
       ownWallpaperConfig(0)
 {
