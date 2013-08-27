@@ -263,6 +263,22 @@ void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)
     event->accept();
 }
 
+void ContainmentInterface::wheelEvent(QWheelEvent *event)
+{
+    const QString trigger = Plasma::ContainmentActions::eventToString(event);
+    Plasma::ContainmentActions *plugin = containment()->containmentActions().value(trigger);
+
+    if (plugin) {
+        if (event->delta() < 0) {
+            plugin->performNextAction();
+        } else {
+            plugin->performPreviousAction();
+        }
+    } else {
+        event->setAccepted(false);
+    }
+}
+
 
 
 void ContainmentInterface::addAppletActions(QMenu &desktopMenu, Plasma::Applet *applet, QEvent *event)

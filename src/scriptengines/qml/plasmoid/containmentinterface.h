@@ -65,6 +65,7 @@ protected:
     void init();
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
+    void wheelEvent(QWheelEvent *event);
 
     void addAppletActions(QMenu &desktopMenu, Plasma::Applet *applet, QEvent *event);
     void addContainmentActions(QMenu &desktopMenu, QEvent *event);
