@@ -30,8 +30,9 @@
 
 //********** Theme *************
 
-ThemeProxy::ThemeProxy(QObject *parent)
-    : Plasma::Theme(parent)
+ThemeProxy::ThemeProxy(QQmlEngine *parent)
+    : Plasma::Theme(parent),
+      m_engine(parent)
 {
     m_defaultIconSize = KIconLoader::global()->currentSize(KIconLoader::Desktop);
 
@@ -58,14 +59,26 @@ QString ThemeProxy::themeName() const
     return Plasma::Theme::themeName();
 }
 
-QFont ThemeProxy::defaultFont() const
+QJSValue ThemeProxy::defaultFont() const
 {
-    return QApplication::font();
+    QJSValue val(m_engine->toScriptValue(QApplication::font()));
+    const QSize size(QFontMetrics(QApplication::font()).boundingRect("M").size());
+    QJSValue sizeObj(m_engine->newObject());
+    sizeObj.setProperty("width", size.width());
+    sizeObj.setProperty("height", size.height());
+    val.setProperty("mSize", sizeObj);
+    return val;
 }
 
-QFont ThemeProxy::smallestFont() const
+QJSValue ThemeProxy::smallestFont() const
 {
-    return KGlobalSettings::smallestReadableFont();
+    QJSValue val(m_engine->toScriptValue(KGlobalSettings::smallestReadableFont()));
+    const QSize size(QFontMetrics(QApplication::font()).boundingRect("M").size());
+    QJSValue sizeObj(m_engine->newObject());
+    sizeObj.setProperty("width", size.width());
+    sizeObj.setProperty("height", size.height());
+    val.setProperty("mSize", sizeObj);
+    return val;
 }
 
 QSizeF ThemeProxy::mSize(const QFont &font) const

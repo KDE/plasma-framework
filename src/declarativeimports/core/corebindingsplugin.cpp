@@ -55,7 +55,7 @@ void CoreBindingsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 
     QQmlContext *context = engine->rootContext();
 
-    ThemeProxy *theme = new ThemeProxy(context);
+    ThemeProxy *theme = new ThemeProxy(engine);
     context->setContextProperty("theme", theme);
 
 /*    KDeclarative kdeclarative;
@@ -85,7 +85,8 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterType<Plasma::SvgItem>(uri, 2, 0, "SvgItem");
     qmlRegisterType<Plasma::FrameSvgItem>(uri, 2, 0, "FrameSvgItem");
 
-    qmlRegisterType<ThemeProxy>(uri, 2, 0, "Theme");
+    //qmlRegisterType<ThemeProxy>(uri, 2, 0, "Theme");
+    qmlRegisterType<ThemeProxy>();
 
     qmlRegisterType<Plasma::DataSource>(uri, 2, 0, "DataSource");
     qmlRegisterType<Plasma::DataModel>(uri, 2, 0, "DataModel");

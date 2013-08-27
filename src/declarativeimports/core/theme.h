@@ -24,6 +24,8 @@
 
 #include <QFont>
 #include <QColor>
+#include <QJSValue>
+#include <QQmlEngine>
 
 #include <Plasma/Theme>
 
@@ -43,8 +45,8 @@ class ThemeProxy : public Plasma::Theme
     Q_PROPERTY(QString wallpaperPath READ wallpaperPath NOTIFY themeChanged)
 
     //fonts
-    Q_PROPERTY(QFont defaultFont READ defaultFont NOTIFY defaultFontChanged)
-    Q_PROPERTY(QFont smallestFont READ smallestFont NOTIFY smallestFontChanged)
+    Q_PROPERTY(QJSValue defaultFont READ defaultFont NOTIFY defaultFontChanged)
+    Q_PROPERTY(QJSValue smallestFont READ smallestFont NOTIFY smallestFontChanged)
 
     // colors
     Q_PROPERTY(QColor textColor READ textColor NOTIFY themeChanged)
@@ -84,12 +86,12 @@ class ThemeProxy : public Plasma::Theme
     Q_PROPERTY(QQmlPropertyMap *iconSizes READ iconSizes NOTIFY iconSizesChanged)
 
 public:
-    ThemeProxy(QObject *parent = 0);
+    ThemeProxy(QQmlEngine *parent = 0);
     ~ThemeProxy();
 
     QString themeName() const;
-    QFont defaultFont() const;
-    QFont smallestFont() const;
+    QJSValue defaultFont() const;
+    QJSValue smallestFont() const;
     /**
      * @return The size of an uppercase M in a font, defaultFont() by default
      */
@@ -136,6 +138,7 @@ Q_SIGNALS:
 private:
     int m_defaultIconSize;
     QQmlPropertyMap *m_iconSizes;
+    QQmlEngine *m_engine;
 };
 
 #endif
