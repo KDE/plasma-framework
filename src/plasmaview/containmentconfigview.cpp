@@ -1,4 +1,6 @@
 #include "currentcontainmentactionsmodel_p.h"
+#include "containmentconfigview.h"
+
 #include <kdeclarative/configpropertymap.h>
 
 #include <QDebug>
