@@ -71,12 +71,6 @@ class PLASMA_EXPORT ContainmentActions : public QObject
         KPluginInfo pluginInfo() const;
 
         /**
-         * Returns the configurations of this containmentactions
-         * @since 5.0
-         */
-        KConfigGroup config() const;
-
-        /**
          * This method should be called once the plugin is loaded or settings are changed.
          * @param config Config group to load settings
          * @see init

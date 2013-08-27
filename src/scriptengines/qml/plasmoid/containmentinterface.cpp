@@ -365,7 +365,8 @@ void ContainmentInterface::addContainmentActions(QMenu &desktopMenu, QEvent *eve
         plugin->setContainment(containment());
 
         // now configure it
-        KConfigGroup cfg = plugin->config();
+        KConfigGroup cfg(containment()->corona()->config(), "ActionPlugins");
+        cfg = KConfigGroup(&cfg, QString::number(containment()->containmentType()));
         KConfigGroup pluginConfig = KConfigGroup(&cfg, trigger);
         plugin->restore(pluginConfig);
     }

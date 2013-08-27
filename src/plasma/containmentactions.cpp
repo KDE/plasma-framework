@@ -77,17 +77,6 @@ Containment *ContainmentActions::containment()
     return qobject_cast<Containment*>(parent());
 }
 
-KConfigGroup ContainmentActions::config() const
-{
-    KConfigGroup cfg;
-    if (!d->containment) {
-        return cfg;
-    }
-
-    cfg = KConfigGroup(d->containment->corona()->config(), "ActionPlugins");
-    return KConfigGroup(&cfg, QString::number(d->containment->containmentType()));
-}
-
 void ContainmentActions::restore(const KConfigGroup &config)
 {
     Q_UNUSED(config);
