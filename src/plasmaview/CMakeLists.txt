@@ -4,7 +4,7 @@ set(plasmaview_LIB_SRC
     view.cpp
     configview.cpp
     containmentconfigview.cpp
-    currentcontainmentactionsmodel.cpp
+    currentcontainmentactionsmodel_p.cpp
 )
 
 
