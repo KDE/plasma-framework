@@ -29,6 +29,7 @@ for FS in `find $PWD  -name '*.qml'`; do
     perl -p -i -e 's/org\.kde\.locale 0\.1/org.kde.locale 2.0/g' $FS
 
     perl -p -i -e 's/org\.kde\.draganddrop 1\.0/org.kde.draganddrop 2.0/g' $FS
+    perl -p -i -e 's/theme\.defaultFont\.mSize/theme.mSize/g' $FS
 done
 
 

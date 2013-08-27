@@ -15,7 +15,7 @@ for FS in `find $PWD -type f -name 'CMakeLists.txt'`; do
 
     perl -p -i -e 's/KDE4_KIDLETIME_LIBRARY/KIdleTime_LIBRARIES/g' $FS
     perl -p -i -e 's/KDE4_PLASMA_LIBS/Plasma_LIBRARIES/g' $FS
-    perl -p -i -e 's/KDE4_KDECORE_LIBS/KCore_LIBRARIES/g' $FS
+    perl -p -i -e 's/\$\{KDE4_KDECORE_LIBS\}//g' $FS
     perl -p -i -e 's/KDE4_SOLID_LIBS/Solid_LIBRARIES/g' $FS
 done
 
