@@ -277,6 +277,7 @@ CurrentContainmentActionsModel::CurrentContainmentActionsModel(Plasma::Containme
 
 CurrentContainmentActionsModel::~CurrentContainmentActionsModel()
 {
+    delete d;
 }
 
 QString CurrentContainmentActionsModel::mouseEventString(int mouseButton, int modifiers)
