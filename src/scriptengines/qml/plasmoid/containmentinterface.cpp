@@ -43,8 +43,7 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
     : AppletInterface(parent),
       m_wallpaperInterface(0)
 {
-    //TODO: will accept all events specified as registered with containment actions
-    setAcceptedMouseButtons(Qt::RightButton);
+    setAcceptedMouseButtons(Qt::AllButtons);
 
     qmlRegisterType<ContainmentInterface>();
 
@@ -229,11 +228,16 @@ QString ContainmentInterface::activity() const
 
 void ContainmentInterface::mousePressEvent(QMouseEvent *event)
 {
-    event->accept();
+    event->setAccepted(containment()->containmentActions().contains(Plasma::ContainmentActions::eventToString(event)));
 }
 
 void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)
 {
+    if (!containment()->containmentActions().contains(Plasma::ContainmentActions::eventToString(event))) {
+        event->setAccepted(false);
+        return;
+    }
+
     QMenu desktopMenu;
 
     //FIXME: very inefficient appletAt() implementation
