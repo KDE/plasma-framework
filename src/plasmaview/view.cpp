@@ -18,48 +18,177 @@
 
 #include "view.h"
 #include "containmentconfigview.h"
-#include "panelconfigview.h"
-#include "panelview.h"
-
+#include "configview.h"
 
 #include <QDebug>
 #include <QQuickItem>
 #include <QQmlContext>
 #include <QTimer>
 #include <QScreen>
+
 #include "plasma/pluginloader.h"
+
+class ViewPrivate
+{
+public:
+
+    ViewPrivate(Plasma::Corona *corona, View *view);
+    ~ViewPrivate();
+
+    void init();
+    void setContainment(Plasma::Containment *cont);
+    Plasma::Types::FormFactor formFactor() const;
+    int location() const;
+    void showConfigurationInterface(Plasma::Applet *applet);
+
+    View *q;
+    friend class View;
+    Plasma::Corona *corona;
+    QWeakPointer<Plasma::Containment> containment;
+    QWeakPointer<ConfigView> configView;
+};
+
+ViewPrivate::ViewPrivate(Plasma::Corona *cor, View *view)
+    : q(view),
+      corona(cor)
+{
+}
+
+ViewPrivate::~ViewPrivate()
+{
+}
+
+void ViewPrivate::init()
+{
+ //FIXME: for some reason all windows must have alpha enable otherwise the ones that do won't paint.
+    //Probably is an architectural problem
+    QSurfaceFormat format;
+    format.setAlphaBufferSize(8);
+    q->setFormat(format);
+
+    QObject::connect(q->screen(), &QScreen::virtualGeometryChanged,
+            q, &View::screenGeometryChanged);
+
+    if (!corona->package().isValid()) {
+        qWarning() << "Invalid home screen package";
+    }
+
+    q->setResizeMode(View::SizeRootObjectToView);
+    q->setSource(QUrl::fromLocalFile(corona->package().filePath("views", "Desktop.qml")));
+}
+
+void ViewPrivate::setContainment(Plasma::Containment *cont)
+{
+    if (containment.data() == cont) {
+        return;
+    }
+
+    Plasma::Types::Location oldLoc = (Plasma::Types::Location)location();
+    Plasma::Types::FormFactor oldForm = formFactor();
+
+    if (containment) {
+        QObject::disconnect(containment.data(), 0, q, 0);
+        QObject *oldGraphicObject = containment.data()->property("graphicObject").value<QObject *>();
+        if (oldGraphicObject) {
+            //make sure the graphic object won't die with us
+            oldGraphicObject->setParent(cont);
+        }
+    }
+
+    containment = cont;
+
+    if (oldLoc != location()) {
+        emit q->locationChanged((Plasma::Types::Location)location());
+    }
+    if (oldForm != formFactor()) {
+        emit q->formFactorChanged(formFactor());
+    }
+
+    emit q->containmentChanged();
+
+    if (!cont) {
+        return;
+    }
+
+    QObject::connect(cont, &Plasma::Containment::locationChanged,
+            q, &View::locationChanged);
+    QObject::connect(cont, &Plasma::Containment::formFactorChanged,
+            q, &View::formFactorChanged);
+    QObject::connect(cont, &Plasma::Containment::configureRequested,
+            q, &View::showConfigurationInterface);
+
+    QObject *graphicObject = containment.data()->property("graphicObject").value<QObject *>();
+
+    if (graphicObject) {
+        qDebug() << "using as graphic containment" << graphicObject << containment.data();
+
+        //graphicObject->setProperty("visible", false);
+        graphicObject->setProperty("drawWallpaper",
+                                   (cont->containmentType() == Plasma::Types::DesktopContainment ||
+                                    cont->containmentType() == Plasma::Types::CustomContainment));
+        graphicObject->setProperty("parent", QVariant::fromValue(q->rootObject()));
+        q->rootObject()->setProperty("containment", QVariant::fromValue(graphicObject));
+    } else {
+        qWarning() << "Containment graphic object not valid";
+    }
+}
+
+int ViewPrivate::location() const
+{
+    if (!containment) {
+        return Plasma::Types::Desktop;
+    }
+    return containment.data()->location();
+}
+
+Plasma::Types::FormFactor ViewPrivate::formFactor() const
+{
+    if (!containment) {
+        return Plasma::Types::Planar;
+    }
+    return containment.data()->formFactor();
+}
+
+void ViewPrivate::showConfigurationInterface(Plasma::Applet *applet)
+{
+    if (configView) {
+        configView.data()->hide();
+        configView.data()->deleteLater();
+    }
+
+    if (!applet || !applet->containment()) {
+        return;
+    }
+
+    Plasma::Containment *cont = qobject_cast<Plasma::Containment *>(applet);
+
+    if (cont) {
+        configView = new ContainmentConfigView(cont);
+    } else {
+        configView = new ConfigView(applet);
+    }
+    configView.data()->init();
+    configView.data()->show();
+}
+
+
 
 
 View::View(Plasma::Corona *corona, QWindow *parent)
     : QQuickView(parent),
-      m_corona(corona)
+      d(new ViewPrivate(corona, this))
 {
-    //FIXME: for some reason all windows must have alpha enable otherwise the ones that do won't paint.
-    //Probably is an architectural problem
-    QSurfaceFormat format;
-    format.setAlphaBufferSize(8);
-    setFormat(format);
-
-    connect(screen(), &QScreen::virtualGeometryChanged,
-            this, &View::screenGeometryChanged);
-
-    if (!m_corona->package().isValid()) {
-        qWarning() << "Invalid home screen package";
-    }
-
-    setResizeMode(View::SizeRootObjectToView);
-    setSource(QUrl::fromLocalFile(m_corona->package().filePath("views", "Desktop.qml")));
-
+    d->init();
 }
 
 View::~View()
 {
-    
+    delete d;
 }
 
 Plasma::Corona *View::corona() const
 {
-    return m_corona;
+    return d->corona;
 }
 
 KConfigGroup View::config() const
@@ -73,86 +202,29 @@ KConfigGroup View::config() const
 
 void View::setContainment(Plasma::Containment *cont)
 {
-    if (m_containment.data() == cont) {
-        return;
-    }
-
-    Plasma::Types::Location oldLoc = (Plasma::Types::Location)location();
-    Plasma::Types::FormFactor oldForm = formFactor();
-
-    if (m_containment) {
-        disconnect(m_containment.data(), 0, this, 0);
-        QObject *oldGraphicObject = m_containment.data()->property("graphicObject").value<QObject *>();
-        if (oldGraphicObject) {
-            //make sure the graphic object won't die with us
-            oldGraphicObject->setParent(cont);
-        }
-    }
-
-    m_containment = cont;
-
-    if (oldLoc != location()) {
-        emit locationChanged((Plasma::Types::Location)location());
-    }
-    if (oldForm != formFactor()) {
-        emit formFactorChanged(formFactor());
-    }
-
-    emit containmentChanged();
-
-    if (!cont) {
-        return;
-    }
-
-    connect(cont, &Plasma::Containment::locationChanged,
-            this, &View::locationChanged);
-    connect(cont, &Plasma::Containment::formFactorChanged,
-            this, &View::formFactorChanged);
-    connect(cont, &Plasma::Containment::configureRequested,
-            this, &View::showConfigurationInterface);
-
-    QObject *graphicObject = m_containment.data()->property("graphicObject").value<QObject *>();
-
-    if (graphicObject) {
-        qDebug() << "using as graphic containment" << graphicObject << m_containment.data();
-
-        //graphicObject->setProperty("visible", false);
-        graphicObject->setProperty("drawWallpaper",
-                                   (cont->containmentType() == Plasma::Types::DesktopContainment ||
-                                    cont->containmentType() == Plasma::Types::CustomContainment));
-        graphicObject->setProperty("parent", QVariant::fromValue(rootObject()));
-        rootObject()->setProperty("containment", QVariant::fromValue(graphicObject));
-    } else {
-        qWarning() << "Containment graphic object not valid";
-    }
+    d->setContainment(cont);
 }
 
 Plasma::Containment *View::containment() const
 {
-    return m_containment.data();
+    return d->containment.data();
 }
 
 //FIXME: wrong types
 void View::setLocation(int location)
 {
-    m_containment.data()->setLocation((Plasma::Types::Location)location);
+    d->containment.data()->setLocation((Plasma::Types::Location)location);
 }
 
 //FIXME: wrong types
 int View::location() const
 {
-    if (!m_containment) {
-        return Plasma::Types::Desktop;
-    }
-    return m_containment.data()->location();
+    return d->location();
 }
 
 Plasma::Types::FormFactor View::formFactor() const
 {
-    if (!m_containment) {
-        return Plasma::Types::Planar;
-    }
-    return m_containment.data()->formFactor();
+    return d->formFactor();
 }
 
 QRectF View::screenGeometry()
@@ -162,28 +234,7 @@ QRectF View::screenGeometry()
 
 void View::showConfigurationInterface(Plasma::Applet *applet)
 {
-    if (m_configView) {
-        m_configView.data()->hide();
-        m_configView.data()->deleteLater();
-    }
-
-    if (!applet || !applet->containment()) {
-        return;
-    }
-
-    Plasma::Containment *cont = qobject_cast<Plasma::Containment *>(applet);
-    PanelView *pv = qobject_cast< PanelView* >(this);
-
-    if (cont && pv) {
-        m_configView = new PanelConfigView(cont, pv);
-    } else if (cont) {
-        m_configView = new ContainmentConfigView(cont);
-    } else {
-        m_configView = new ConfigView(applet);
-    }
-    m_configView.data()->init();
-
-    m_configView.data()->show();
+    d->showConfigurationInterface(applet);
 }
 
 #include "moc_view.cpp"
