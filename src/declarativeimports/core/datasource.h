@@ -116,7 +116,7 @@ protected Q_SLOTS:
     void setupData();
 
 Q_SIGNALS:
-    void newData(const QString &sourceName, const Plasma::DataEngine::Data &data);
+    void newData(const QString &sourceName, const QVariantMap &data);
     void sourceAdded(const QString &source);
     void sourceRemoved(const QString &source);
     void sourceConnected(const QString &source);
