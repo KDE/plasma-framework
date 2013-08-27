@@ -30,6 +30,7 @@ namespace Plasma {
 
 class ConfigPropertyMap;
 class CurrentContainmentActionsModel;
+class ContainmentConfigViewPrivate;
 
 //TODO: is it possible to move this in the shell?
 class ContainmentConfigView : public ConfigView
@@ -64,6 +65,7 @@ protected:
     void syncWallpaperObjects();
 
 private:
+    ContainmentConfigViewPrivate *const d;
     Plasma::Containment *m_containment;
     ConfigModel *m_wallpaperConfigModel;
     ConfigModel *m_containmentActionConfigModel;
