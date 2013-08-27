@@ -21,13 +21,13 @@
 
 #include <QtQuick/QQuickView>
 
-
+#include <plasmaview/plasmaview_export.h>
 #include "plasma/corona.h"
 #include "plasma/containment.h"
 
-#include "configview.h"
+class ViewPrivate;
 
-class View : public QQuickView
+class PLASMAVIEW_EXPORT View : public QQuickView
 {
     Q_OBJECT
     Q_PROPERTY(int location READ location WRITE setLocation NOTIFY locationChanged)
@@ -41,7 +41,7 @@ public:
 
     virtual KConfigGroup config() const;
 
-    void setContainment(Plasma::Containment *cont);
+    virtual void setContainment(Plasma::Containment *cont);
     Plasma::Containment *containment() const;
 
     //FIXME: Plasma::Types::Location should be something qml can understand
@@ -52,8 +52,8 @@ public:
 
     QRectF screenGeometry();
 
-protected Q_SLOTS:
-    void showConfigurationInterface(Plasma::Applet *applet);
+public Q_SLOTS:
+    virtual void showConfigurationInterface(Plasma::Applet *applet);
 
 Q_SIGNALS:
     void locationChanged(Plasma::Types::Location location);
@@ -62,9 +62,8 @@ Q_SIGNALS:
     void screenGeometryChanged();
 
 private:
-    Plasma::Corona *m_corona;
-    QWeakPointer<Plasma::Containment> m_containment;
-    QWeakPointer<ConfigView> m_configView;
+    ViewPrivate *const d;
+    friend class ViewPrivate;
 };
 
 #endif // VIEW_H
