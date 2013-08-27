@@ -66,7 +66,6 @@ protected:
 
 private:
     ContainmentConfigViewPrivate *const d;
-    CurrentContainmentActionsModel *m_currentContainmentActionsModel;
 };
 
 #endif // multiple inclusion guard
