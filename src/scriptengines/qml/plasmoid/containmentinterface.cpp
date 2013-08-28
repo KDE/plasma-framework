@@ -23,6 +23,7 @@
 #include "wallpaperinterface.h"
 #include <kdeclarative/qmlobject.h>
 
+#include <QClipboard>
 #include <QQmlExpression>
 #include <QQmlProperty>
 #include <QMimeData>
@@ -154,7 +155,25 @@ QVariantList ContainmentInterface::availableScreenRegion(int id) const
 
 void ContainmentInterface::processMimeData(QMimeData *data, int x, int y)
 {
-    qWarning() << "Arrived mimeData" << data->urls() << data->formats() << "at" << x << ", " << y;
+    const QMimeData *mimeData = data;
+
+    if (!mimeData) {
+        QClipboard *clipboard = QGuiApplication::clipboard();
+        mimeData = clipboard->mimeData(QClipboard::Selection);
+        //TODO if that's not supported (ie non-linux) should we try clipboard instead of selection?
+    }
+
+    qDebug() << "Arrived mimeData" << mimeData->urls() << mimeData->formats() << "at" << x << ", " << y;
+
+    if (mimeData->hasFormat("text/x-plasmoidservicename")) {
+        QString data = mimeData->data("text/x-plasmoidservicename");
+        const QStringList appletNames = data.split('\n', QString::SkipEmptyParts);
+        foreach (const QString &appletName, appletNames) {
+            qDebug() << "adding" << appletName;
+            QRectF geom(QPoint(x, y), QSize(0, 0));
+            containment()->createApplet(appletName);
+        }
+    }
 }
 
 void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
