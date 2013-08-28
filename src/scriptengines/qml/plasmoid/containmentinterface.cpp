@@ -171,7 +171,23 @@ void ContainmentInterface::processMimeData(QMimeData *data, int x, int y)
         foreach (const QString &appletName, appletNames) {
             qDebug() << "adding" << appletName;
             QRectF geom(QPoint(x, y), QSize(0, 0));
-            containment()->createApplet(appletName);
+            //HACK
+            //This is necessary to delay the appletAdded signal (of containmentInterface) AFTER the applet graphics object has been created
+            blockSignals(true);
+            Plasma::Applet *applet = containment()->createApplet(appletName);
+
+            QObject *appletGraphicObject;
+            if (applet) {
+                appletGraphicObject = applet->property("graphicObject").value<QObject *>();
+                if (appletGraphicObject) {
+                    appletGraphicObject->setProperty("x", x);
+                    appletGraphicObject->setProperty("y", y);
+                }
+            }
+
+            blockSignals(false);
+            emit appletAdded(appletGraphicObject);
+            emit appletsChanged();
         }
     }
 }
