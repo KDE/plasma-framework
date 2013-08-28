@@ -187,6 +187,7 @@ set(plasma_LIB_INCLUDES
     corona.h
     datacontainer.h
     dataengine.h
+    dataengineconsumer.h
     pluginloader.h
     framesvg.h
     package.h
