@@ -29,7 +29,7 @@ for FS in `find $PWD  -name '*.qml'`; do
     perl -p -i -e 's/org\.kde\.locale 0\.1/org.kde.locale 2.0/g' $FS
 
     perl -p -i -e 's/org\.kde\.draganddrop 1\.0/org.kde.draganddrop 2.0/g' $FS
-    perl -p -i -e 's/theme\.defaultFont\.mSize/theme.mSize/g' $FS
+    #perl -p -i -e 's/theme\.mSize/theme.defaultFont.mSize/g' $FS
 done
 
 
@@ -69,40 +69,49 @@ done
 #exit;
 
 
-# Change a whole bunch of classes that have more or less been renamed
-# in QtQuick2 - this is useful if you have C++ classes that you're
-# exporting to the QML runtime
+# Some types have moved to the more QML-friendly Plasma::Types:: namespace
 
 for FS in `find $PWD  -name '*.h' -o -name '*.cpp'`; do
 
-    perl -p -i -e 's/QDeclarativeItem/QQuickItem/g' $FS
-    perl -p -i -e 's/QDeclarativeView/QQuickView/g' $FS
-    perl -p -i -e 's/QDeclarativeImageProvider/QQuickImageProvider/g' $FS
-    perl -p -i -e 's/QDeclarativeComponent/QQmlComponent/g' $FS
-    perl -p -i -e 's/QDeclarativeContext/QQmlContext/g' $FS
-    perl -p -i -e 's/QDeclarativeEngine/QQmlEngine/g' $FS
-    perl -p -i -e 's/QDeclarativeError/QQmlError/g' $FS
-    perl -p -i -e 's/QDeclarativeExpression/QQmlExpression/g' $FS
-    perl -p -i -e 's/QDeclarativeExtensionPlugin/QQmlExtensionPlugin/g' $FS
-    perl -p -i -e 's/QDeclarativeInfo/QQmlInfo/g' $FS
-    perl -p -i -e 's/QDeclarativeListReference/QQmlListReference/g' $FS
-    perl -p -i -e 's/QDeclarativeNetworkAccessManagerFactory/QQmlNetworkAccessManagerFactory/g' $FS
-    perl -p -i -e 's/QDeclarativeParserStatus/QQmlParserStatus/g' $FS
-    perl -p -i -e 's/QDeclarativeProperty/QQmlProperty/g' $FS
-    perl -p -i -e 's/QDeclarativePropertyMap/QQmlPropertyMap/g' $FS
-    perl -p -i -e 's/QDeclarativePropertyValueSource/QQmlPropertyValueSource/g' $FS
-    perl -p -i -e 's/QDeclarativeScriptString/QQmlScriptString/g' $FS
+    perl -p -i -e 's/Plasma\:\:PopupApplet/Plasma::Applet/g' $FS
 
-    perl -p -i -e 's/QGraphicsSceneMouseEvent/QMouseEvent/g' $FS
-    perl -p -i -e 's/QGraphicsSceneWheel/QWheelEvent/g' $FS
-    perl -p -i -e 's/QGraphicsSceneHoverEvent/QHoverEvent/g' $FS
-
-    # Fix up includes
-    perl -p -i -e 's/\#include \<QtDeclarative\/QQuickItem\>/\#include \<QtQuick\/QQuickItem\>/g' $FS
-    perl -p -i -e 's/\#include \<QtDeclarative\/QQmlContext\>/\#include \<QtQml\/QQmlContext\>/g' $FS
-    perl -p -i -e 's/\#include \<QtDeclarative\/QQmlEngine\>/\#include \<QtQml\/QQmlEngine\>/g' $FS
-
-
+    
+    # Constraint
+    perl -p -i -e 's/Plasma\:\:Constraint/Plasma::Types::Constraint/g' $FS
+    perl -p -i -e 's/Plasma\:\:NoConstraint/Plasma::Types::NoConstraint/g' $FS
+    perl -p -i -e 's/Plasma\:\:FormFactorConstraint/Plasma::Types::FormFactorConstraint/g' $FS
+    perl -p -i -e 's/Plasma\:\:LocationConstraint/Plasma::Types::LocationConstraint/g' $FS
+    perl -p -i -e 's/Plasma\:\:ScreenConstraint/Plasma::Types::ScreenConstraint/g' $FS
+    perl -p -i -e 's/Plasma\:\:ImmutableConstraint/Plasma::Types::ImmutableConstraint/g' $FS
+    perl -p -i -e 's/Plasma\:\:StartupCompletedConstraint/Plasma::Types::StartupCompletedConstraint/g' $FS
+    perl -p -i -e 's/Plasma\:\:ContextConstraint/Plasma::Types::ContextConstraint/g' $FS
+    perl -p -i -e 's/Plasma\:\:UiReadyConstraint/Plasma::Types::UiReadyConstraint/g' $FS
+    perl -p -i -e 's/Plasma\:\:AllConstraints/Plasma::Types::AllConstraints/g' $FS
+    
+    # FormFactor
+    perl -p -i -e 's/Plasma\:\:Planar/Plasma::Types::Planar/g' $FS
+    perl -p -i -e 's/Plasma\:\:MediaCenter/Plasma::Types::MediaCenter/g' $FS
+    perl -p -i -e 's/Plasma\:\:Horizontal/Plasma::Types::Horizontal/g' $FS
+    perl -p -i -e 's/Plasma\:\:Vertical/Plasma::Types::Vertical/g' $FS
+    perl -p -i -e 's/Plasma\:\:Application/Plasma::Types::Application/g' $FS
+    
+    
+    # Location
+    perl -p -i -e 's/Plasma\:\:Floating/Plasma::Types::Floating/g' $FS
+    perl -p -i -e 's/Plasma\:\:Desktop/Plasma::Types::Desktop/g' $FS
+    perl -p -i -e 's/Plasma\:\:FullScreen/Plasma::Types::FullScreen/g' $FS
+    perl -p -i -e 's/Plasma\:\:TopEdge/Plasma::Types::TopEdge/g' $FS
+    perl -p -i -e 's/Plasma\:\:BottomEdge/Plasma::Types::BottomEdge/g' $FS
+    perl -p -i -e 's/Plasma\:\:LeftEdge/Plasma::Types::LeftEdge/g' $FS
+    perl -p -i -e 's/Plasma\:\:RightEdge/Plasma::Types::RightEdge/g' $FS
+    
+    # ItemStatus
+    perl -p -i -e 's/Plasma\:\:ItemStatus/Plasma::Types::ItemStatus/g' $FS
+    perl -p -i -e 's/Plasma\:\:UnknownStatus/Plasma::Types::UnknownStatus/g' $FS
+    perl -p -i -e 's/Plasma\:\:PassiveStatus/Plasma::Types::PassiveStatus/g' $FS
+    perl -p -i -e 's/Plasma\:\:ActiveStatus/Plasma::Types::ActiveStatus/g' $FS
+    perl -p -i -e 's/Plasma\:\:NeedsAttentionStatus/Plasma::Types::NeedsAttentionStatus/g' $FS
+    perl -p -i -e 's/Plasma\:\:AcceptingInputStatus/Plasma::Types::AcceptingInputStatus/g' $FS
 done
 
 
