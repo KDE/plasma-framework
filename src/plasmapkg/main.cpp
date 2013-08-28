@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 
     app.setApplicationVersion(version);
     parser.addVersionOption();
-    parser.addHelpOption(description);
+    parser.setApplicationDescription(description);
     parser.addOption(QCommandLineOption(QStringList() << "h" << "hash", i18nc("Do not translate <path>", "Generate a SHA1 hash for the package at <path>"), "path"));
     parser.addOption(QCommandLineOption(QStringList() << "g" << "global", i18n("For install or remove, operates on packages installed for all users.")));
     parser.addOption(QCommandLineOption(QStringList() << "type",

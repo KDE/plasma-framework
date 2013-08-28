@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 
     app.setApplicationVersion(version);
     parser->addVersionOption();
-    parser->addHelpOption(description);
+    parser->setApplicationDescription(description);
 
     parser->addOption(QCommandLineOption(QStringList() << "s" << "show", i18nc("Do not translate <name>", "Show plugins"), "name"));
 
