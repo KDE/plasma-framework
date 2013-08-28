@@ -204,6 +204,10 @@ void DeclarativeDragArea::mousePressEvent(QMouseEvent* event)
     m_draggingJustStarted = true;
 }
 
+void DeclarativeDragArea::mouseReleaseEvent(QMouseEvent* event)
+{
+    m_draggingJustStarted = false;
+}
 
 void DeclarativeDragArea::mouseMoveEvent(QMouseEvent *event)
 {
@@ -305,10 +309,27 @@ bool DeclarativeDragArea::childMouseEventFilter(QQuickItem *item, QEvent *event)
         return false;
     }
 
-    if (event->type() == QEvent::MouseMove) {
+    switch (event->type()) {
+    case QEvent::MouseButtonPress: {
+        QMouseEvent *me = static_cast<QMouseEvent *>(event);
+        qDebug() << "press in dragarea";
+        mousePressEvent(me);
+        break;
+    }
+    case QEvent::MouseMove: {
         QMouseEvent *me = static_cast<QMouseEvent *>(event);
         qDebug() << "move in dragarea";
         mouseMoveEvent(me);
+        break;
+    }
+    case QEvent::MouseButtonRelease: {
+        QMouseEvent *me = static_cast<QMouseEvent *>(event);
+        qDebug() << "release in dragarea";
+        mouseReleaseEvent(me);
+        break;
+    }
+    default:
+        break;
     }
 
     return QQuickItem::childMouseEventFilter(item, event);
