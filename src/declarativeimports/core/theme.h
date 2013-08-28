@@ -45,8 +45,8 @@ class ThemeProxy : public Plasma::Theme
     Q_PROPERTY(QString wallpaperPath READ wallpaperPath NOTIFY themeChanged)
 
     //fonts
-    Q_PROPERTY(QJSValue defaultFont READ defaultFont NOTIFY defaultFontChanged)
-    Q_PROPERTY(QJSValue smallestFont READ smallestFont NOTIFY smallestFontChanged)
+    Q_PROPERTY(QFont  defaultFont READ defaultFont NOTIFY defaultFontChanged)
+    Q_PROPERTY(QFont  smallestFont READ smallestFont NOTIFY smallestFontChanged)
 
     // colors
     Q_PROPERTY(QColor textColor READ textColor NOTIFY themeChanged)
@@ -90,8 +90,8 @@ public:
     ~ThemeProxy();
 
     QString themeName() const;
-    QJSValue defaultFont() const;
-    QJSValue smallestFont() const;
+    QFont defaultFont() const;
+    QFont smallestFont() const;
     /**
      * @return The size of an uppercase M in a font, defaultFont() by default
      */

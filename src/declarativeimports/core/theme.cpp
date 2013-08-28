@@ -59,26 +59,14 @@ QString ThemeProxy::themeName() const
     return Plasma::Theme::themeName();
 }
 
-QJSValue ThemeProxy::defaultFont() const
+QFont ThemeProxy::defaultFont() const
 {
-    QJSValue val(m_engine->toScriptValue(QApplication::font()));
-    const QSize size(QFontMetrics(QApplication::font()).boundingRect("M").size());
-    QJSValue sizeObj(m_engine->newObject());
-    sizeObj.setProperty("width", size.width());
-    sizeObj.setProperty("height", size.height());
-    val.setProperty("mSize", sizeObj);
-    return val;
+    return QApplication::font();
 }
 
-QJSValue ThemeProxy::smallestFont() const
+QFont ThemeProxy::smallestFont() const
 {
-    QJSValue val(m_engine->toScriptValue(KGlobalSettings::smallestReadableFont()));
-    const QSize size(QFontMetrics(QApplication::font()).boundingRect("M").size());
-    QJSValue sizeObj(m_engine->newObject());
-    sizeObj.setProperty("width", size.width());
-    sizeObj.setProperty("height", size.height());
-    val.setProperty("mSize", sizeObj);
-    return val;
+    return KGlobalSettings::smallestReadableFont();
 }
 
 QSizeF ThemeProxy::mSize(const QFont &font) const

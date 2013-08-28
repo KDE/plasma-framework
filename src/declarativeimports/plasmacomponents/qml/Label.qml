@@ -48,4 +48,9 @@ Text {
     color: theme.textColor
 
     opacity: enabled? 1 : 0.6
+    Component.onCompleted: {
+        for (var i in theme.defaultFont) {
+            print("AA"+i+theme.defaultFont[i])
+        }
+    }
 }
