@@ -26,14 +26,17 @@
 #include <QQmlListProperty>
 #include <QStandardItemModel>
 
+#include <plasmaview/plasmaview_export.h>
+
 namespace Plasma {
     class Applet;
 }
 
 class ConfigPropertyMap;
 
+class ConfigCategoryPrivate;
 
-class ConfigCategory : public QObject
+class PLASMAVIEW_EXPORT ConfigCategory : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
@@ -64,13 +67,12 @@ Q_SIGNALS:
     void pluginNameChanged();
 
 private:
-    QString m_name;
-    QString m_icon;
-    QString m_source;
-    QString m_pluginName;
+    ConfigCategoryPrivate *const d;
 };
 
-class ConfigModel : public QAbstractListModel
+class ConfigModelPrivate;
+
+class PLASMAVIEW_EXPORT ConfigModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(QQmlListProperty<ConfigCategory> categories READ categories CONSTANT)
@@ -99,7 +101,7 @@ public:
     Q_INVOKABLE QVariant get(int row) const;
 
     QQmlListProperty<ConfigCategory> categories();
-    
+
     static ConfigCategory *categories_at(QQmlListProperty<ConfigCategory> *prop, int index);
     static void categories_append(QQmlListProperty<ConfigCategory> *prop, ConfigCategory *o);
     static int categories_count(QQmlListProperty<ConfigCategory> *prop);
@@ -109,12 +111,16 @@ Q_SIGNALS:
     void countChanged();
 
 private:
-    QList<ConfigCategory*>m_categories;
-    QWeakPointer<Plasma::Applet> m_appletInterface;
+    friend class ConfigModelPrivate;
+    ConfigModelPrivate *const d;
 };
 
 
-class ConfigView : public QQuickView
+class ConfigViewPrivate;
+
+//TODO: the config view for the containment should be a subclass
+//TODO: is it possible to move this in the shell?
+class PLASMAVIEW_EXPORT ConfigView : public QQuickView
 {
     Q_OBJECT
     Q_PROPERTY(ConfigModel *configModel READ configModel CONSTANT)
@@ -132,8 +138,7 @@ protected:
      void resizeEvent(QResizeEvent *re);
 
 private:
-    Plasma::Applet *m_applet;
-    ConfigModel *m_configModel;
+    ConfigViewPrivate *const d;
 };
 
 #endif // multiple inclusion guard
