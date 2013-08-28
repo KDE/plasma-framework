@@ -25,6 +25,7 @@
 
 #include <QQmlExpression>
 #include <QQmlProperty>
+#include <QMimeData>
 
 #include <KActionCollection>
 #include <KAuthorized>
@@ -44,6 +45,7 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
       m_wallpaperInterface(0)
 {
     setAcceptedMouseButtons(Qt::AllButtons);
+    setFlag(QQuickItem::ItemAcceptsDrops);
 
     qmlRegisterType<ContainmentInterface>();
 
@@ -148,6 +150,11 @@ QVariantList ContainmentInterface::availableScreenRegion(int id) const
         regVal << QVariant::fromValue(QRectF(rect));
     }
     return regVal;
+}
+
+void ContainmentInterface::processMimeData(QMimeData *data, int x, int y)
+{
+    qWarning() << "Arrived mimeData" << data->urls() << data->formats() << "at" << x << ", " << y;
 }
 
 void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)

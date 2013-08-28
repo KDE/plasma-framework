@@ -60,6 +60,7 @@ public:
     Q_INVOKABLE void lockWidgets(bool locked);
     Q_INVOKABLE QRectF screenGeometry(int id) const;
     Q_INVOKABLE QVariantList availableScreenRegion(int id) const;
+    Q_INVOKABLE void processMimeData(QMimeData *data, int x, int y);
 
 protected:
     void init();
