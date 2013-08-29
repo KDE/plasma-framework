@@ -9,11 +9,19 @@ INCLUDE_DIRECTORIES(
         ${KDECLARATIVE_INCLUDE_DIR}
 )
 
+add_definitions(-DHAVE_X11=${X11_FOUND})
+
+if(X11_FOUND)
+    # FIXME: remove when upstream CMakeLists is fixed
+    find_package(XCB REQUIRED)
+endif()
+
 set(corebindings_SRCS
     corebindingsplugin.cpp
     theme.cpp
     datamodel.cpp
     datasource.cpp
+    dialogshadows.cpp
     runnermodel.cpp
     svgitem.cpp
     framesvgitem.cpp
@@ -36,6 +44,11 @@ target_link_libraries(corebindingsplugin
         KF5::KIconThemes
         KF5::KWindowSystem
         plasma)
+
+if(X11_FOUND)
+  target_link_libraries(corebindingsplugin ${X11_LIBRARIES} ${XCB_XCB_LIBRARIES} )
+  target_link_libraries(corebindingsplugin Qt5::X11Extras)
+endif(X11_FOUND)
 
 install(TARGETS corebindingsplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/core)
 install(FILES qmldir ToolTip.qml DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/core)

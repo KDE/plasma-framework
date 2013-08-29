@@ -20,6 +20,7 @@
 
 #include "dialog.h"
 #include "framesvgitem.h"
+#include "dialogshadows_p.h"
 
 #include <QApplication>
 #include <QQuickItem>
@@ -83,10 +84,12 @@ DialogProxy::DialogProxy(QQuickItem *parent)
     m_frameSvgItem = new Plasma::FrameSvgItem(contentItem());
     m_frameSvgItem->setImagePath("dialogs/background");
     //m_frameSvgItem->setImagePath("widgets/background"); // larger borders, for testing those
+    DialogShadows::self()->addWindow(this, m_frameSvgItem->enabledBorders());
 }
 
 DialogProxy::~DialogProxy()
 {
+    DialogShadows::self()->removeWindow(this);
 }
 
 QQuickItem *DialogProxy::mainItem() const
@@ -184,6 +187,7 @@ void DialogProxy::setVisible(const bool visible)
         }
         raise();
     }
+    DialogShadows::self()->addWindow(this, m_frameSvgItem->enabledBorders());
     QQuickWindow::setVisible(visible);
 }
 
@@ -431,6 +435,12 @@ void DialogProxy::focusOutEvent(QFocusEvent *ev)
     m_activeWindow = false;
     emit activeWindowChanged();
     QQuickWindow::focusOutEvent(ev);
+}
+
+void DialogProxy::showEvent(QShowEvent *event)
+{
+    DialogShadows::self()->addWindow(this, m_frameSvgItem->enabledBorders());
+    QQuickWindow::showEvent(event);
 }
 
 #include "dialog.moc"
