@@ -66,13 +66,6 @@ protected:
 
 private:
     ContainmentConfigViewPrivate *const d;
-    Plasma::Containment *m_containment;
-    ConfigModel *m_wallpaperConfigModel;
-    ConfigModel *m_containmentActionConfigModel;
-    CurrentContainmentActionsModel *m_currentContainmentActionsModel;
-    QString m_currentWallpaper;
-    ConfigPropertyMap *m_currentWallpaperConfig;
-    ConfigPropertyMap *m_ownWallpaperConfig;
 };
 
 #endif // multiple inclusion guard
