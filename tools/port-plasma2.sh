@@ -29,9 +29,13 @@ for FS in `find $PWD  -name '*.qml'`; do
     perl -p -i -e 's/org\.kde\.locale 0\.1/org.kde.locale 2.0/g' $FS
 
     perl -p -i -e 's/org\.kde\.draganddrop 1\.0/org.kde.draganddrop 2.0/g' $FS
-    #perl -p -i -e 's/theme\.mSize/theme.defaultFont.mSize/g' $FS
+    perl -p -i -e 's/theme\.mSize\./theme.mSize(theme.defaultFont)./g' $FS
+   perl -p -i -e 's/theme\.defaultFont\.mSize\./theme.mSize(theme.defaultFont)./g' $FS
+   perl -p -i -e 's/\(theme\.defaultFont\)\(theme\.defaultFont\)/(theme.defaultFont)/g' $FS
+#    perl -p -i -e 's/Plasma\.Types\./PlasmaCore.Types./g' $FS
 done
 
+#exit
 
 # Qt 4.7, QtQuick 1.0 and QtQuick 1.1 imports become QtQuick 2.0
 
@@ -94,8 +98,13 @@ for FS in `find $PWD  -name '*.h' -o -name '*.cpp'`; do
     perl -p -i -e 's/Plasma\:\:Horizontal/Plasma::Types::Horizontal/g' $FS
     perl -p -i -e 's/Plasma\:\:Vertical/Plasma::Types::Vertical/g' $FS
     perl -p -i -e 's/Plasma\:\:Application/Plasma::Types::Application/g' $FS
-    
-    
+
+    # FormFactor
+    perl -p -i -e 's/Plasma\:\:ImmutabilityType/Plasma::Types::ImmutabilityType/g' $FS
+    perl -p -i -e 's/Plasma\:\:Mutable/Plasma::Types::Mutable/g' $FS
+    perl -p -i -e 's/Plasma\:\:UserImmutable/Plasma::Types::UserImmutable/g' $FS
+    perl -p -i -e 's/Plasma\:\:SystemImmutable/Plasma::Types::SystemImmutable/g' $FS
+
     # Location
     perl -p -i -e 's/Plasma\:\:Floating/Plasma::Types::Floating/g' $FS
     perl -p -i -e 's/Plasma\:\:Desktop/Plasma::Types::Desktop/g' $FS

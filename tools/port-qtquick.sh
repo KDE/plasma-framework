@@ -22,6 +22,7 @@ for FS in `find $PWD  -name '*.h' -o -name '*.cpp'`; do
 
     perl -p -i -e 's/QGraphicsWidget/QQuickItem/g' $FS
 
+    perl -p -i -e 's/QGraphicsObject/QQuickItem/g' $FS
     perl -p -i -e 's/QDeclarativeItem/QQuickItem/g' $FS
     perl -p -i -e 's/QDeclarativeView/QQuickView/g' $FS
     perl -p -i -e 's/QDeclarativeImageProvider/QQuickImageProvider/g' $FS
@@ -41,8 +42,10 @@ for FS in `find $PWD  -name '*.h' -o -name '*.cpp'`; do
     perl -p -i -e 's/QDeclarativeScriptString/QQmlScriptString/g' $FS
 
     perl -p -i -e 's/QGraphicsSceneMouseEvent/QMouseEvent/g' $FS
+    perl -p -i -e 's/QGraphicsSceneContextMenuEvent/QContextMenuEvent/g' $FS
     perl -p -i -e 's/QGraphicsSceneWheel/QWheelEvent/g' $FS
     perl -p -i -e 's/QGraphicsSceneHoverEvent/QHoverEvent/g' $FS
+    perl -p -i -e 's/QWheelEventEvent/QWheelEvent/g' $FS
 
     # Fix up includes
     perl -p -i -e 's/\#include \<QtGui\/QQuickItem\>/\#include \<QtQuick\/QQuickItem\>/g' $FS
