@@ -52,7 +52,7 @@ public:
 
     QRectF screenGeometry();
 
-public Q_SLOTS:
+protected Q_SLOTS:
     virtual void showConfigurationInterface(Plasma::Applet *applet);
 
 Q_SIGNALS:
