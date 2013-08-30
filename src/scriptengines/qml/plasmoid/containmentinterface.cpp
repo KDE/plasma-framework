@@ -78,7 +78,7 @@ void ContainmentInterface::init()
                 applet->init();
             }
             m_appletInterfaces << applet;
-            emit appletAdded(applet);
+            emit appletAdded(applet, 0, 0);
         }
     }
 
@@ -177,14 +177,11 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y)
             QObject *appletGraphicObject;
             if (applet) {
                 appletGraphicObject = applet->property("graphicObject").value<QObject *>();
-                if (appletGraphicObject) {
-                    appletGraphicObject->setProperty("x", x);
-                    appletGraphicObject->setProperty("y", y);
-                }
             }
 
             blockSignals(false);
-            emit appletAdded(appletGraphicObject);
+
+            emit appletAdded(appletGraphicObject, x, y);
             emit appletsChanged();
         }
     }
@@ -219,7 +216,7 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
     }
 
     m_appletInterfaces << appletGraphicObject;
-    emit appletAdded(appletGraphicObject);
+    emit appletAdded(appletGraphicObject, 0, 0);
     emit appletsChanged();
 }
 

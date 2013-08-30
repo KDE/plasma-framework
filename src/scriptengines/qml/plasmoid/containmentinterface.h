@@ -72,7 +72,7 @@ protected:
     void addContainmentActions(QMenu &desktopMenu, QEvent *event);
 
 Q_SIGNALS:
-    void appletAdded(QObject *applet);
+    void appletAdded(QObject *applet, int x, int y);
     void appletRemoved(QObject *applet);
     void screenChanged();
     void activityChanged();
