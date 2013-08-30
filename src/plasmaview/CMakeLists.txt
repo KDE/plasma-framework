@@ -39,7 +39,6 @@ set(plasmaview_LIB_INCLUDES
     ${CMAKE_CURRENT_BINARY_DIR}/plasmaview_export.h
     view.h
     configview.h
-    containmentconfigview.h
 )
 
 install(FILES ${plasmaview_LIB_INCLUDES}
