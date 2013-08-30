@@ -20,8 +20,6 @@
 #ifndef SHELLMANAGER_H
 #define SHELLMANAGER_H
 
-#include <utils/d_ptr.h>
-
 #include <QObject>
 
 class ShellManager: public QObject {
@@ -46,7 +44,8 @@ Q_SIGNALS:
 private:
     ShellManager();
 
-    D_PTR;
+    class Private;
+    const QScopedPointer<Private> d;
 };
 
 #endif /* SHELLMANAGER_H */

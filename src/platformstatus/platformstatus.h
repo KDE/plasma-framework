@@ -25,8 +25,6 @@
 
 #include <QStringList>
 
-#include <utils/d_ptr.h>
-
 class PlatformStatus : public KDEDModule
 {
     Q_OBJECT
@@ -113,7 +111,8 @@ private Q_SLOTS:
     void fileDirtied(const QString &path);
 
 private:
-    D_PTR;
+    class Private;
+    const QScopedPointer<Private> d;
 };
 
 #endif

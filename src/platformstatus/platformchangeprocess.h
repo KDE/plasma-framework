@@ -22,8 +22,6 @@
 
 #include <QObject>
 
-#include "d_ptr.h"
-
 /**
  * PlatformChangeProcess
  * Class handles a platform change - all the
@@ -60,7 +58,8 @@ Q_SIGNALS:
     void finished(int changeId);
 
 private:
-    D_PTR;
+    class Private;
+    const QScopedPointer<Private> d;
 };
 
 

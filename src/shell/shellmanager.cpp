@@ -19,8 +19,6 @@
 
 #include "shellmanager.h"
 
-#include <utils/d_ptr_implementation.h>
-
 #include <algorithm>
 
 #include <QDebug>
@@ -59,6 +57,7 @@ public:
 };
 
 ShellManager::ShellManager()
+    : d(new Private())
 {
     ShellPluginLoader::init();
 

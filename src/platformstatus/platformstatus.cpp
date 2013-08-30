@@ -32,8 +32,6 @@
 #include "platformchangeprocess.h"
 #include "platformstatusadaptor.h"
 
-#include <utils/d_ptr_implementation.h>
-
 class PlatformStatus::Private {
 public:
     QString shellPackage;
@@ -49,7 +47,7 @@ const char *defaultPackage = "org.kde.desktop";
 K_PLUGIN_FACTORY(PlatformStatusFactory, registerPlugin<PlatformStatus>();)
 
 PlatformStatus::PlatformStatus(QObject *parent, const QVariantList &)
-    : KDEDModule(parent)
+    : KDEDModule(parent), d(new Private())
 {
     new PlatformStatusAdaptor(this);
     QDBusConnection::sessionBus().registerObject("/PlatformStatus", this);

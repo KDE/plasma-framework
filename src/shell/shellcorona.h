@@ -23,9 +23,6 @@
 
 #include "plasma/corona.h"
 
-
-#include <utils/d_ptr.h>
-
 namespace Plasma
 {
     class Applet;
@@ -125,7 +122,8 @@ private Q_SLOTS:
     void syncAppConfig();
 
 private:
-    D_PTR;
+    class Private;
+    const QScopedPointer<Private> d;
 };
 
 #endif // SHELLCORONA_H

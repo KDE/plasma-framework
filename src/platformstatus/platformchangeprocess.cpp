@@ -18,7 +18,6 @@
  */
 
 #include "platformchangeprocess.h"
-#include "d_ptr_implementation.h"
 
 #include <QStringList>
 
@@ -31,6 +30,7 @@ public:
 
 PlatformChangeProcess::PlatformChangeProcess(int changeId,
         const QString & initiator, const QString & platform)
+    : d(new Private())
 {
     Q_UNUSED(initiator);
 

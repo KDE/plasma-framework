@@ -20,7 +20,6 @@
  */
 
 #include "shellcorona.h"
-#include <utils/d_ptr_implementation.h>
 
 #include <QApplication>
 #include <QDebug>
@@ -70,7 +69,7 @@ WorkspaceScripting::DesktopScriptEngine * ShellCorona::scriptEngine() const
 
 
 ShellCorona::ShellCorona(QObject *parent)
-    : Plasma::Corona(parent)
+    : Plasma::Corona(parent), d(new Private())
 {
     d->desktopDefaultsConfig = KConfigGroup(KSharedConfig::openConfig(package().filePath("defaults")), "Desktop");
 
