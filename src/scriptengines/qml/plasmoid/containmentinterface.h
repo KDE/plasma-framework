@@ -30,6 +30,10 @@
 class QmlObject;
 class WallpaperInterface;
 
+namespace KIO {
+    class Job;
+}
+
 class ContainmentInterface : public AppletInterface
 {
     Q_OBJECT
@@ -84,10 +88,17 @@ protected Q_SLOTS:
     void appletAddedForward(Plasma::Applet *applet);
     void appletRemovedForward(Plasma::Applet *applet);
     void loadWallpaper();
+    void dropJobResult(KJob *job);
+    void mimeTypeRetrieved(KIO::Job *job, const QString &mimetype);
 
 private:
+    void clearDataForMimeJob(KIO::Job *job);
+    void addApplet(const QString &plugin, const QVariantList &args, const QPoint &pos);
+
     WallpaperInterface *m_wallpaperInterface;
     QList<QObject *> m_appletInterfaces;
+    QHash<KJob*, QPoint> m_dropPoints;
+    QHash<KJob*, QMenu*> m_dropMenus;
 };
 
 #endif
