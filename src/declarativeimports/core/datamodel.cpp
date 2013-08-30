@@ -188,7 +188,7 @@ DataModel::~DataModel()
 {
 }
 
-void DataModel::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
+void DataModel::dataUpdated(const QString &sourceName, const QVariantMap &data)
 {
     if (!m_sourceFilter.isEmpty() && m_sourceFilterRE.isValid() && !m_sourceFilterRE.exactMatch(sourceName)) {
         return;
@@ -259,10 +259,12 @@ void DataModel::setDataSource(QObject *object)
         ++i;
     }
 
-    connect(m_dataSource, SIGNAL(newData(const QString &, const Plasma::DataEngine::Data &)),
-            this, SLOT(dataUpdated(const QString &, const Plasma::DataEngine::Data &)));
-    connect(m_dataSource, SIGNAL(sourceRemoved(const QString &)), this, SLOT(removeSource(const QString &)));
-    connect(m_dataSource, SIGNAL(sourceDisconnected(const QString &)), this, SLOT(removeSource(const QString &)));
+    connect(m_dataSource, &DataSource::newData,
+            this, &DataModel::dataUpdated);
+    connect(m_dataSource, &DataSource::sourceRemoved,
+            this, &DataModel::removeSource);
+    connect(m_dataSource, &DataSource::sourceDisconnected,
+            this, &DataModel::removeSource);
 }
 
 QObject *DataModel::dataSource() const

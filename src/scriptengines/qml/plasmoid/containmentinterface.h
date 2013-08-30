@@ -30,25 +30,20 @@
 class QmlObject;
 class WallpaperInterface;
 
+namespace KIO {
+    class Job;
+}
+
 class ContainmentInterface : public AppletInterface
 {
     Q_OBJECT
     Q_PROPERTY(QList <QObject *> applets READ applets NOTIFY appletsChanged)
     Q_PROPERTY(bool drawWallpaper READ drawWallpaper WRITE setDrawWallpaper)
-    Q_PROPERTY(Type containmentType READ containmentType WRITE setContainmentType)
+    Q_PROPERTY(Plasma::Types::ContainmentType containmentType READ containmentType WRITE setContainmentType)
     Q_PROPERTY(int screen READ screen NOTIFY screenChanged)
     Q_PROPERTY(QString activity READ activity NOTIFY activityChanged)
-    Q_ENUMS(Type)
 
 public:
-    enum Type {
-        NoContainmentType = -1,  /**< @internal */
-        DesktopContainment = 0,  /**< A desktop containment */
-        PanelContainment,        /**< A desktop panel */
-        CustomContainment = 127, /**< A containment that is neither a desktop nor a panel
-                                    but something application specific */
-        CustomPanelContainment = 128 /**< A customized desktop panel */
-    };
     ContainmentInterface(DeclarativeAppletScript *parent);
 //Not for QML
     inline Plasma::Containment *containment() const { return static_cast<Plasma::Containment *>(m_appletScriptEngine->applet()->containment()); }
@@ -60,8 +55,8 @@ public:
 
     void setDrawWallpaper(bool drawWallpaper);
     bool drawWallpaper();
-    Type containmentType() const;
-    void setContainmentType(Type type);
+    Plasma::Types::ContainmentType containmentType() const;
+    void setContainmentType(Plasma::Types::ContainmentType type);
     int screen() const;
 
     QString activity() const;
@@ -69,17 +64,19 @@ public:
     Q_INVOKABLE void lockWidgets(bool locked);
     Q_INVOKABLE QRectF screenGeometry(int id) const;
     Q_INVOKABLE QVariantList availableScreenRegion(int id) const;
+    Q_INVOKABLE void processMimeData(QMimeData *data, int x, int y);
 
 protected:
     void init();
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
+    void wheelEvent(QWheelEvent *event);
 
     void addAppletActions(QMenu &desktopMenu, Plasma::Applet *applet, QEvent *event);
     void addContainmentActions(QMenu &desktopMenu, QEvent *event);
 
 Q_SIGNALS:
-    void appletAdded(QObject *applet);
+    void appletAdded(QObject *applet, int x, int y);
     void appletRemoved(QObject *applet);
     void screenChanged();
     void activityChanged();
@@ -91,10 +88,17 @@ protected Q_SLOTS:
     void appletAddedForward(Plasma::Applet *applet);
     void appletRemovedForward(Plasma::Applet *applet);
     void loadWallpaper();
+    void dropJobResult(KJob *job);
+    void mimeTypeRetrieved(KIO::Job *job, const QString &mimetype);
 
 private:
+    void clearDataForMimeJob(KIO::Job *job);
+    void addApplet(const QString &plugin, const QVariantList &args, const QPoint &pos);
+
     WallpaperInterface *m_wallpaperInterface;
     QList<QObject *> m_appletInterfaces;
+    QHash<KJob*, QPoint> m_dropPoints;
+    QHash<KJob*, QMenu*> m_dropMenus;
 };
 
 #endif

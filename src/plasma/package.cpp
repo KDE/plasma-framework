@@ -204,7 +204,7 @@ void Package::setAllowExternalPaths(bool allow)
 
 KPluginInfo Package::metadata() const
 {
-    qDebug() << "metadata: " << d->path << filePath("metadata");
+    //qDebug() << "metadata: " << d->path << filePath("metadata");
     if (!d->metadata && !d->path.isEmpty()) {
         const QString metadataPath = filePath("metadata");
         if (!metadataPath.isEmpty()) {
@@ -280,9 +280,9 @@ QString Package::filePath(const char *fileType, const QString &filename) const
     QStringList paths;
 
     if (qstrlen(fileType) != 0) {
-        qDebug()<<d->contents.keys();
+        //qDebug()<<d->contents.keys();
         if (!d->contents.contains(fileType)) {
-            qDebug() << "package does not contain" << fileType << filename;
+            //qDebug() << "package does not contain" << fileType << filename;
             return QString();
         }
 
@@ -442,7 +442,7 @@ void Package::setPath(const QString &path)
                 paths << p;
             }
         }
-        qDebug() << "paths:" << p << paths << d->defaultPackageRoot;
+        //qDebug() << "paths:" << p << paths << d->defaultPackageRoot;
     } else {
         const QDir dir(path);
         if (QFile::exists(dir.canonicalPath())) {
@@ -452,7 +452,7 @@ void Package::setPath(const QString &path)
     QFileInfo fileInfo(path);
 
     if (fileInfo.isFile() && d->tempRoot.isEmpty()) {
-        qDebug() << "before unzip: path " << path;
+        //qDebug() << "before unzip: path " << path;
         d->path = path;
         d->tempRoot = d->unpack(path);
     }

@@ -196,7 +196,7 @@ class PLASMA_EXPORT Containment : public Applet
          * @param pluginName the name of the plugin to attempt to load. blank = set no plugin.
          * @since 4.4
          */
-        void addContainmentActions(const QString &trigger, const QString &pluginName);
+        void setContainmentActions(const QString &trigger, const QString &pluginName);
 
         /**
          * @return All the loaded containment action plugins, indexed by trigger name

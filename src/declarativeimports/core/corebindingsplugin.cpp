@@ -55,23 +55,14 @@ void CoreBindingsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 
     QQmlContext *context = engine->rootContext();
 
-    ThemeProxy *theme = new ThemeProxy(context);
+    ThemeProxy *theme = new ThemeProxy(engine);
     context->setContextProperty("theme", theme);
 
-/*    KDeclarative kdeclarative;
-    kdeclarative.setDeclarativeEngine(engine);
-    kdeclarative.initialize();
-    QScriptEngine *scriptEngine = kdeclarative.scriptEngine();
-
-    //inject the hack only if wasn't injected already
-    if (!scriptEngine->globalObject().property("i18n").isValid()) {
-        //binds things like kconfig and icons
+    if (!engine->rootContext()->contextObject()) {
+        KDeclarative kdeclarative;
+        kdeclarative.setDeclarativeEngine(engine);
         kdeclarative.setupBindings();
     }
-
-    registerDataEngineMetaTypes(scriptEngine);
-    */
-    //qDebug() << "====> org.kde.plasma.core loaded.";
 }
 
 void CoreBindingsPlugin::registerTypes(const char *uri)
@@ -85,7 +76,8 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterType<Plasma::SvgItem>(uri, 2, 0, "SvgItem");
     qmlRegisterType<Plasma::FrameSvgItem>(uri, 2, 0, "FrameSvgItem");
 
-    qmlRegisterType<ThemeProxy>(uri, 2, 0, "Theme");
+    //qmlRegisterType<ThemeProxy>(uri, 2, 0, "Theme");
+    qmlRegisterType<ThemeProxy>();
 
     qmlRegisterType<Plasma::DataSource>(uri, 2, 0, "DataSource");
     qmlRegisterType<Plasma::DataModel>(uri, 2, 0, "DataModel");

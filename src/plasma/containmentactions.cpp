@@ -77,17 +77,6 @@ Containment *ContainmentActions::containment()
     return qobject_cast<Containment*>(parent());
 }
 
-KConfigGroup ContainmentActions::config() const
-{
-    KConfigGroup cfg;
-    if (!d->containment) {
-        return cfg;
-    }
-
-    cfg = KConfigGroup(d->containment->corona()->config(), "ActionPlugins");
-    return KConfigGroup(&cfg, QString::number(d->containment->containmentType()));
-}
-
 void ContainmentActions::restore(const KConfigGroup &config)
 {
     Q_UNUSED(config);
@@ -102,6 +91,11 @@ QWidget *ContainmentActions::createConfigurationInterface(QWidget *parent)
 {
     Q_UNUSED(parent);
     return 0;
+}
+
+void ContainmentActions::configurationAccepted()
+{
+    //do nothing by default
 }
 
 void ContainmentActions::performNextAction()
@@ -169,7 +163,6 @@ QString ContainmentActions::eventToString(QEvent *event)
 void ContainmentActions::setContainment(Containment *newContainment)
 {
     d->containment = newContainment;
-    restore(config());
 }
 
 } // Plasma namespace

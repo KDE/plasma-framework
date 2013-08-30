@@ -18,6 +18,7 @@
 
 #include "panelview.h"
 #include "shellcorona.h"
+#include "panelshadows_p.h"
 
 #include <QAction>
 #include <QDebug>
@@ -45,7 +46,7 @@ PanelView::PanelView(ShellCorona *corona, QWindow *parent)
     setFormat(format);
     setClearBeforeRendering(true);
     setColor(QColor(Qt::transparent));
-    setFlags(Qt::FramelessWindowHint);
+    setFlags(Qt::FramelessWindowHint|Qt::WindowDoesNotAcceptFocus);
     KWindowSystem::setType(winId(), NET::Dock);
     setVisible(false);
 
@@ -69,6 +70,7 @@ PanelView::PanelView(ShellCorona *corona, QWindow *parent)
     engine()->rootContext()->setContextProperty("panel", this);
     setSource(QUrl::fromLocalFile(m_corona->package().filePath("views", "Panel.qml")));
     positionPanel();
+    PanelShadows::self()->addWindow(this);
 }
 
 PanelView::~PanelView()
@@ -88,6 +90,7 @@ PanelView::~PanelView()
         m_corona->requestApplicationConfigSync();
         m_corona->requestApplicationConfigSync();
     }
+    PanelShadows::self()->removeWindow(this);
 }
 
 KConfigGroup PanelView::config() const
@@ -399,6 +402,12 @@ void PanelView::resizeEvent(QResizeEvent *ev)
     }
 
     View::resizeEvent(ev);
+}
+
+void PanelView::showEvent(QShowEvent *event)
+{
+    PanelShadows::self()->addWindow(this);
+    View::showEvent(event);
 }
 
 #include "moc_panelview.cpp"

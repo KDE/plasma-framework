@@ -92,7 +92,7 @@ Item {
     opacity: enabled ? 1 : 0.6
     //long notation to not make it overwritten by implementations
     Connections {
-        target: root
+        target: (root != undefined) ? root : undefined
         onPressedChanged: {
             //TabBar is the granparent
             internal.tabBar.currentTab = root
@@ -113,7 +113,7 @@ Item {
 
         property Item tabBar: Utils.findParent(root, "currentTab")
         property Item tabGroup: Utils.findParent(tab, "currentTab")
-        property bool portrait: root.height >= label.paintedHeight + 16
+        property bool portrait: (root != undefined) && (label != undefined) && root.height >= label.paintedHeight + 16
 
         function click() {
             root.clicked()

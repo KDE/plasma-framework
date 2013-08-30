@@ -196,7 +196,7 @@ Q_SIGNALS:
     void filterRegExpChanged(const QString &);
 
 private Q_SLOTS:
-    void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
+    void dataUpdated(const QString &sourceName, const QVariantMap &data);
     void removeSource(const QString &sourceName);
 
 private:

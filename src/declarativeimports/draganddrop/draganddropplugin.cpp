@@ -35,6 +35,7 @@ void DragAndDropPlugin::registerTypes(const char *uri)
 
     qmlRegisterType<DeclarativeDropArea>(uri, 2, 0, "DropArea");
     qmlRegisterType<DeclarativeDragArea>(uri, 2, 0, "DragArea");
+    qmlRegisterType<QMimeData>();
     qmlRegisterUncreatableType<DeclarativeMimeData>(uri, 2, 0, "MimeData", "MimeData cannot be created from QML.");
     qmlRegisterUncreatableType<DeclarativeDragDropEvent>(uri, 2, 0, "DragDropEvent", "DragDropEvent cannot be created from QML.");
 }

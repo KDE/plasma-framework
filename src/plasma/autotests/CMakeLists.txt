@@ -14,7 +14,9 @@ MACRO(PLASMA_UNIT_TESTS)
        FOREACH(_testname ${ARGN})
                add_executable(${_testname} ${_testname}.cpp)
                target_link_libraries(${_testname} ${QT_QTTEST_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY}
-                                     ${KDE4_KIO_LIBS} ${KDE4_KDEUI_LIBS} plasma ${KArchive_LIBRARIES} ${KCoreAddons_LIBRARIES})
+                                     ${KDE4_KIO_LIBS} plasma ${KArchive_LIBRARIES} ${KCoreAddons_LIBRARIES}
+                                     KF5::KConfigGui
+                                     KF5::KI18n)
                if(QT_QTOPENGL_FOUND)
                    target_link_libraries(${_testname} ${QT_QTOPENGL_LIBRARY})
                endif(QT_QTOPENGL_FOUND)

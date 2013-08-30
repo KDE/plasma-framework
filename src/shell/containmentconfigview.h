@@ -23,16 +23,20 @@
 
 #include "configview.h"
 
+
 namespace Plasma {
     class Containment;
 }
-class ConfigPropertyMap;
 
+class ConfigPropertyMap;
+class CurrentContainmentActionsModel;
 
 //TODO: is it possible to move this in the shell?
 class ContainmentConfigView : public ConfigView
 {
     Q_OBJECT
+    Q_PROPERTY(ConfigModel *containmentActionConfigModel READ containmentActionConfigModel CONSTANT)
+    Q_PROPERTY(QStandardItemModel *currentContainmentActionsModel READ currentContainmentActionsModel CONSTANT)
     Q_PROPERTY(ConfigModel *wallpaperConfigModel READ wallpaperConfigModel CONSTANT)
     Q_PROPERTY(ConfigPropertyMap *wallpaperConfiguration READ wallpaperConfiguration NOTIFY wallpaperConfigurationChanged)
     Q_PROPERTY(QString currentWallpaper READ currentWallpaper WRITE setCurrentWallpaper NOTIFY currentWallpaperChanged)
@@ -43,6 +47,8 @@ public:
 
     virtual void init();
 
+    ConfigModel *containmentActionConfigModel();
+    QStandardItemModel *currentContainmentActionsModel();
     ConfigModel *wallpaperConfigModel();
     QString currentWallpaper() const;
     void setCurrentWallpaper(const QString &wallpaper);
@@ -60,6 +66,8 @@ protected:
 private:
     Plasma::Containment *m_containment;
     ConfigModel *m_wallpaperConfigModel;
+    ConfigModel *m_containmentActionConfigModel;
+    CurrentContainmentActionsModel *m_currentContainmentActionsModel;
     QString m_currentWallpaper;
     ConfigPropertyMap *m_currentWallpaperConfig;
     ConfigPropertyMap *m_ownWallpaperConfig;

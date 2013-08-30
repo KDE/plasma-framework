@@ -50,6 +50,9 @@ class AppletInterface : public QQuickItem
 {
     Q_OBJECT
 
+    /**
+     * The QML root object defined in the applet main.qml
+     */
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     //TODO: writable icon
     Q_PROPERTY(QString icon READ icon CONSTANT)
@@ -63,7 +66,7 @@ class AppletInterface : public QQuickItem
     Q_PROPERTY(bool expanded WRITE setExpanded READ isExpanded NOTIFY expandedChanged)
     Q_PROPERTY(Plasma::Types::BackgroundHints backgroundHints WRITE setBackgroundHints READ backgroundHints NOTIFY backgroundHintsChanged)
     Q_PROPERTY(bool immutable READ immutable NOTIFY immutableChanged)
-    Q_PROPERTY(bool userConfiguring READ userConfiguring) // @since 4.5
+    Q_PROPERTY(bool userConfiguring READ userConfiguring NOTIFY userConfiguringChanged)
     Q_PROPERTY(int apiVersion READ apiVersion CONSTANT)
     Q_PROPERTY(Plasma::Types::ItemStatus status READ status WRITE setStatus NOTIFY statusChanged)
     Q_PROPERTY(QString associatedApplication WRITE setAssociatedApplication READ associatedApplication)
@@ -73,8 +76,11 @@ class AppletInterface : public QQuickItem
     Q_PROPERTY(qreal minimumHeight READ minimumHeight NOTIFY minimumHeightChanged)
     Q_PROPERTY(qreal maximumWidth READ maximumWidth NOTIFY maximumWidthChanged)
     Q_PROPERTY(qreal maximumHeight READ maximumHeight NOTIFY maximumHeightChanged)
+    //implicitWidth/height is already there
     Q_PROPERTY(qreal implicitWidth READ implicitWidth NOTIFY implicitWidthChanged)
     Q_PROPERTY(qreal implicitHeight READ implicitHeight NOTIFY implicitHeightChanged)
+    Q_PROPERTY(bool fillWidth READ fillWidth NOTIFY fillWidthChanged)
+    Q_PROPERTY(bool fillHeight READ fillHeight NOTIFY fillHeightChanged)
 
 public:
     AppletInterface(DeclarativeAppletScript *script, QQuickItem *parent = 0);
@@ -150,6 +156,8 @@ public:
     bool userConfiguring() const;
     int apiVersion() const;
 
+    bool fillWidth() const;
+    bool fillHeight() const;
     qreal minimumWidth() const;
     qreal minimumHeight() const;
     qreal maximumWidth() const;
@@ -178,6 +186,9 @@ Q_SIGNALS:
     void maximumHeightChanged();
     void implicitWidthChanged();
     void implicitHeightChanged();
+    void fillWidthChanged();
+    void fillHeightChanged();
+    void userConfiguringChanged();
 
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);

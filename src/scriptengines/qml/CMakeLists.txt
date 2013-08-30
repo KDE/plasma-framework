@@ -35,6 +35,7 @@ target_link_libraries(plasma_appletscript_declarative
     ${Qt5Qml_LIBRARIES}
     ${QT_QTUITOOLS_LIBRARY}
     ${KCore_LIBRARIES}
+    KF5::KI18n
     plasma
     kdeclarative
 )

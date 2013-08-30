@@ -87,7 +87,7 @@ Item {
     //icon + label + left margin + right margin + spacing between icon and text
     //here it assumesleft margin = right top = bottom, why?
     // because the right and bottom margins can be disabled, so they would return 0, but their actual size is still needed for size hints
-    property real minimumWidth: theme.smallIconSize + label.paintedWidth + delegate.margins.left + delegate.margins.left + ((icon.valid) ? delegate.margins.left : 0)
+    property real minimumWidth: Math.max(theme.smallIconSize, height) + label.paintedWidth + delegate.margins.left + delegate.margins.left + ((icon.valid) ? delegate.margins.left : 0)
 
     /**
      * The smallest height this button can be to show all the contents

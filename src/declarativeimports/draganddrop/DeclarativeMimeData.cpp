@@ -110,6 +110,13 @@ QColor DeclarativeMimeData::color() const
      }
     return QColor();
 }
+
+bool DeclarativeMimeData::hasColor() const
+{
+    //qDebug() << " hasColor " << (QMimeData::hasColor() ? color().name() : "false");
+    return QMimeData::hasColor();
+}
+
 void DeclarativeMimeData::setColor(const QColor &color)
 {
     if (this->color() != color) {
