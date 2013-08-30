@@ -48,10 +48,24 @@ public:
     ConfigCategory(QObject *parent = 0);
     ~ConfigCategory();
 
+    /**
+     * @return the name of the category
+     **/
     QString name() const;
+
+    /**
+     * @param name the name of the category
+     **/
     void setName(const QString &name);
 
+    /**
+     * @return the icon of the category
+     **/
     QString icon() const;
+
+    /**
+     * @param icon the icon of the category
+     **/
     void setIcon(const QString &icon);
 
     QString source() const;
@@ -61,9 +75,24 @@ public:
     void setPluginName(const QString &pluginName);
 
 Q_SIGNALS:
+    /**
+     * emitted when the name id changed
+     **/
     void nameChanged();
+
+    /**
+     * emitted when the icon is changed
+     **/
     void iconChanged();
+
+    /**
+     * emitted when the source is changed
+     **/
     void sourceChanged();
+
+    /**
+     * emitted when the plugin is changed
+     **/
     void pluginNameChanged();
 
 private:
@@ -89,7 +118,15 @@ public:
     ConfigModel(QObject *parent = 0);
     ~ConfigModel();
 
+    /**
+     * add a new category in the model
+     * @param ConfigCategory the new category
+     **/
     void appendCategory(ConfigCategory *c);
+
+    /**
+     * clears the model
+     **/
     void clear();
 
     void setApplet(Plasma::Applet *interface);
@@ -98,6 +135,11 @@ public:
     int count() {return rowCount();}
     virtual int rowCount(const QModelIndex &index = QModelIndex()) const;
     virtual QVariant data(const QModelIndex&, int) const;
+
+    /**
+     * @param row the row for which the data will be returned
+     * @raturn the data of the specified row
+     **/
     Q_INVOKABLE QVariant get(int row) const;
 
     QQmlListProperty<ConfigCategory> categories();
@@ -108,6 +150,9 @@ public:
     static void categories_clear(QQmlListProperty<ConfigCategory> *prop);
 
 Q_SIGNALS:
+    /**
+     * emitted when the count is changed
+     **/
     void countChanged();
 
 private:
