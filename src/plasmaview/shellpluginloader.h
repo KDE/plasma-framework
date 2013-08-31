@@ -23,6 +23,8 @@
 #include <Plasma/PluginLoader>
 #include <plasmaview/plasmaview_export.h>
 
+class ShellPluginLoaderPrivate;
+
 class PLASMAVIEW_EXPORT ShellPluginLoader : public Plasma::PluginLoader
 {
 public:
@@ -31,6 +33,8 @@ public:
 
 protected:
     Plasma::Package internalLoadPackage(const QString &packageFormat, const QString &specialization);
+private:
+    ShellPluginLoaderPrivate *const d;
 
 };
 
