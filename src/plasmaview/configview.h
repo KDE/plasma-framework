@@ -142,6 +142,9 @@ public:
      **/
     Q_INVOKABLE QVariant get(int row) const;
 
+    /**
+     * @return the categories of the model
+     **/
     QQmlListProperty<ConfigCategory> categories();
 
     static ConfigCategory *categories_at(QQmlListProperty<ConfigCategory> *prop, int index);
@@ -171,11 +174,18 @@ class PLASMAVIEW_EXPORT ConfigView : public QQuickView
     Q_PROPERTY(ConfigModel *configModel READ configModel CONSTANT)
 
 public:
+    /**
+     * @param applet the applet of this ConfigView
+     * @param parent the QWindow in which this ConfigView is parented to
+     **/
     ConfigView(Plasma::Applet *applet, QWindow *parent = 0);
     virtual ~ConfigView();
 
     virtual void init();
 
+    /**
+     * @return the ConfigModel of the ConfigView
+     **/
     ConfigModel *configModel() const;
 
 protected:
