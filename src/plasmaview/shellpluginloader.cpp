@@ -18,7 +18,7 @@
  */
 
 #include "shellpluginloader.h"
-#include "shellpackage.h"
+#include "shellpackage_p.h"
 
 
 ShellPluginLoader::ShellPluginLoader()

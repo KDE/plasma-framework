@@ -17,7 +17,7 @@
 *   Boston, MA 02110-1301, USA.                                               *
 *******************************************************************************/
 
-#include "shellpackage.h"
+#include "shellpackage_p.h"
 
 #include <KLocalizedString>
 
@@ -57,8 +57,8 @@ void ShellPackageStructure::initPackage(Plasma::Package *package)
 
     //WIdget explorer
     package->addFileDefinition("widgetexplorer", "explorer/WidgetExplorer.qml", i18n("Widgets explorer UI"));
-    
-    
+
+
     //package->setRequired("mainscript", true);
 }
 
