@@ -21,11 +21,11 @@
 #define SHELLPLUGINLOADER_H
 
 #include <Plasma/PluginLoader>
+#include <plasmaview/plasmaview_export.h>
 
-
-class ShellPluginLoader: public Plasma::PluginLoader
+class PLASMAVIEW_EXPORT ShellPluginLoader : public Plasma::PluginLoader
 {
-public: 
+public:
     ShellPluginLoader();
     ~ShellPluginLoader();
 
