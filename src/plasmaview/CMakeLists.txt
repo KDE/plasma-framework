@@ -3,7 +3,7 @@ project(PlasmaView)
 set(plasmaview_LIB_SRC
     view.cpp
     configview.cpp
-    containmentconfigview.cpp
+    containmentconfigview_p.cpp
     currentcontainmentactionsmodel_p.cpp
 )
 

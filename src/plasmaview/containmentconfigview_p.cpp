@@ -18,7 +18,7 @@
  */
 
 #include "currentcontainmentactionsmodel_p.h"
-#include "containmentconfigview.h"
+#include "containmentconfigview_p.h"
 
 #include <kdeclarative/configpropertymap.h>
 
@@ -191,4 +191,4 @@ void ContainmentConfigView::syncWallpaperObjects()
     m_currentWallpaperConfig = static_cast<ConfigPropertyMap *>(wallpaperGraphicsObject->property("configuration").value<QObject *>());
 }
 
-#include "moc_containmentconfigview.cpp"
+#include "moc_containmentconfigview_p.cpp"

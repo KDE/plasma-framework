@@ -17,7 +17,7 @@
  */
 
 #include "view.h"
-#include "containmentconfigview.h"
+#include "containmentconfigview_p.h"
 #include "configview.h"
 
 #include <QDebug>
