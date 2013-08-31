@@ -70,6 +70,11 @@ Plasma::Package Corona::package() const
     return d->package;
 }
 
+void Corona::setPackage(const QString & package)
+{
+    d->package.setPath(package);
+}
+
 void Corona::saveLayout(const QString &configName) const
 {
     KSharedConfigPtr c;
