@@ -25,10 +25,29 @@
 
 #include "utils/d_ptr.h"
 
+/**
+ * Class which handles an application execution.
+ *
+ * Example:
+ * <code>
+ * Application {
+ *     application: "xterm"
+ *     running: terminalRunningCheckbox.checked
+ * }
+ * </code>
+ */
 class Application: public QObject {
     Q_OBJECT
 
+    /**
+     * The name or path of the applications
+     */
     Q_PROPERTY(QString application READ application WRITE setApplication NOTIFY applicationChanged);
+
+    /**
+     * Indicates whether the user wants the application to be running or not.
+     * It does not refer to the actual state of the application.
+     */
     Q_PROPERTY(bool running READ running WRITE setRunning NOTIFY runningChanged);
 
 public:
@@ -38,13 +57,13 @@ public:
     QString application() const;
     bool running() const;
 
-public Q_SLOTS:
+public:
     void setApplication(const QString & application);
+    void setRunning(bool run);
 
+public Q_SLOTS:
     void start();
     void terminate();
-
-    void setRunning(bool run);
 
 Q_SIGNALS:
     void applicationChanged(const QString & application);
