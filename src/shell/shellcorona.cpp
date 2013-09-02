@@ -30,7 +30,6 @@
 #include <KLocalizedString>
 #include <Plasma/Package>
 
-#include "containmentconfigview.h"
 #include "panelview.h"
 #include "view.h"
 #include "scripting/desktopscriptengine.h"
