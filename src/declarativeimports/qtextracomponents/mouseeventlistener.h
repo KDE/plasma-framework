@@ -135,6 +135,8 @@ class MouseEventListener : public QQuickItem
      */
     Q_PROPERTY(bool containsMouse READ containsMouse NOTIFY containsMouseChanged)
 
+    Q_PROPERTY(Qt::MouseButtons acceptedButtons READ acceptedButtons WRITE setAcceptedButtons NOTIFY acceptedButtonsChanged)
+
 public:
     MouseEventListener(QQuickItem *parent=0);
     ~MouseEventListener();
@@ -142,6 +144,9 @@ public:
     bool containsMouse() const;
     void setHoverEnabled(bool enable);
     bool hoverEnabled() const;
+
+    Qt::MouseButtons acceptedButtons() const;
+    void setAcceptedButtons(Qt::MouseButtons buttons);
 
 protected:
     void hoverEnterEvent(QHoverEvent *event);
@@ -162,6 +167,7 @@ Q_SIGNALS:
     void wheelMoved(KDeclarativeWheelEvent *wheel);
     void containsMouseChanged(bool containsMouseChanged);
     void hoverEnabledChanged(bool hoverEnabled);
+    void acceptedButtonsChanged();
 
 private Q_SLOTS:
     void handlePressAndHold();
@@ -175,6 +181,7 @@ private:
     QEvent *m_lastEvent;
     QTimer *m_pressAndHoldTimer;
     bool m_containsMouse;
+    Qt::MouseButtons m_acceptedButtons;
 };
 
 #endif

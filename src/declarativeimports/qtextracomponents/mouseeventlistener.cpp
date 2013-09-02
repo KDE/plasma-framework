@@ -35,7 +35,8 @@ MouseEventListener::MouseEventListener(QQuickItem *parent)
     m_pressed(false),
     m_pressAndHoldEvent(0),
     m_lastEvent(0),
-    m_containsMouse(false)
+    m_containsMouse(false),
+    m_acceptedButtons(Qt::LeftButton)
 {
     m_pressAndHoldTimer = new QTimer(this);
     m_pressAndHoldTimer->setSingleShot(true);
@@ -51,6 +52,21 @@ MouseEventListener::MouseEventListener(QQuickItem *parent)
 
 MouseEventListener::~MouseEventListener()
 {
+}
+
+Qt::MouseButtons MouseEventListener::acceptedButtons() const
+{
+    return m_acceptedButtons;
+}
+
+void MouseEventListener::setAcceptedButtons(Qt::MouseButtons buttons)
+{
+    if (buttons == m_acceptedButtons) {
+        return;
+    }
+
+    m_acceptedButtons = buttons;
+    emit acceptedButtonsChanged();
 }
 
 void MouseEventListener::setHoverEnabled(bool enable)
@@ -107,7 +123,8 @@ bool MouseEventListener::containsMouse() const
 
 void MouseEventListener::mousePressEvent(QMouseEvent *me)
 {
-    if (m_lastEvent == me) {
+    if (m_lastEvent == me || !(me->buttons() & m_acceptedButtons)) {
+        me->setAccepted(false);
         return;
     }
 
@@ -130,7 +147,8 @@ void MouseEventListener::mousePressEvent(QMouseEvent *me)
 
 void MouseEventListener::mouseMoveEvent(QMouseEvent *me)
 {
-    if (m_lastEvent == me) {
+    if (m_lastEvent == me || !(me->buttons() & m_acceptedButtons)) {
+        me->setAccepted(false);
         return;
     }
 
@@ -140,7 +158,8 @@ void MouseEventListener::mouseMoveEvent(QMouseEvent *me)
 
 void MouseEventListener::mouseReleaseEvent(QMouseEvent *me)
 {
-    if (m_lastEvent == me) {
+    if (m_lastEvent == me || !(me->buttons() & m_acceptedButtons)) {
+        me->setAccepted(false);
         return;
     }
 
@@ -191,6 +210,11 @@ bool MouseEventListener::childMouseEventFilter(QQuickItem *item, QEvent *event)
     case QEvent::MouseButtonPress: {
         m_lastEvent = event;
         QMouseEvent *me = static_cast<QMouseEvent *>(event);
+
+        if (!(me->buttons() & m_acceptedButtons)) {
+            break;
+        }
+
         //the parent will receive events in its own coordinates
         const QPointF myPos = item->mapToItem(this, me->pos());
         KDeclarativeMouseEvent dme(myPos.x(), myPos.y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
@@ -225,6 +249,10 @@ bool MouseEventListener::childMouseEventFilter(QQuickItem *item, QEvent *event)
     case QEvent::MouseMove: {
         m_lastEvent = event;
         QMouseEvent *me = static_cast<QMouseEvent *>(event);
+        if (!(me->buttons() & m_acceptedButtons)) {
+            break;
+        }
+
         const QPointF myPos = item->mapToItem(this, me->pos());
         KDeclarativeMouseEvent dme(myPos.x(), myPos.y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
         //qDebug() << "positionChanged..." << dme.x() << dme.y();
@@ -235,6 +263,10 @@ bool MouseEventListener::childMouseEventFilter(QQuickItem *item, QEvent *event)
     case QEvent::MouseButtonRelease: {
         m_lastEvent = event;
         QMouseEvent *me = static_cast<QMouseEvent *>(event);
+        if (!(me->buttons() & m_acceptedButtons)) {
+            break;
+        }
+
         const QPointF myPos = item->mapToItem(this, me->pos());
         KDeclarativeMouseEvent dme(myPos.x(), myPos.y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
         m_pressed = false;
