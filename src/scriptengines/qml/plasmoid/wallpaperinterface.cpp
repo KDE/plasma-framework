@@ -93,8 +93,7 @@ void WallpaperInterface::syncWallpaperPackage()
         m_qmlObject->setInitializationDelayed(true);
     }
 
-    m_pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
-    m_pkg.setDefaultPackageRoot("plasma/wallpapers");
+    m_pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/QmlWallpaper");
     m_pkg.setPath(m_wallpaperPlugin);
 
     m_configLoader->deleteLater();
