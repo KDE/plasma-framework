@@ -61,7 +61,7 @@ public:
     /**
      * Setting the package name
      */
-    void setPackage(const QString & package);
+    void setPackage(const Plasma::Package &package);
 
     /**
      * @return all containments on this Corona

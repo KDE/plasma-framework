@@ -70,9 +70,9 @@ Plasma::Package Corona::package() const
     return d->package;
 }
 
-void Corona::setPackage(const QString & package)
+void Corona::setPackage(const Plasma::Package &package)
 {
-    d->package.setPath(package);
+    d->package = package;
 }
 
 void Corona::saveLayout(const QString &configName) const
@@ -291,8 +291,6 @@ CoronaPrivate::CoronaPrivate(Corona *corona)
 {
     //TODO: make Package path configurable
     KConfigGroup config(KSharedConfig::openConfig(), "General");
-    package = Plasma::PluginLoader::self()->loadPackage("Plasma/Shell");
-    package.setPath(config.readEntry("shell", "org.kde.desktop"));
 
     if (QCoreApplication::instance()) {
         configName = QCoreApplication::instance()->applicationName() + "-appletsrc";
