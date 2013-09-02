@@ -17,7 +17,7 @@
 *   Boston, MA 02110-1301, USA.                                               *
 *******************************************************************************/
 
-#include "shellpackage.h"
+#include "shellpackage_p.h"
 
 #include <KLocalizedString>
 

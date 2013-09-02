@@ -17,9 +17,9 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "containmentconfigview.h"
-#include <Plasma/Containment>
-#include "currentcontainmentactionsmodel.h"
+#include "currentcontainmentactionsmodel_p.h"
+#include "containmentconfigview_p.h"
+
 #include <kdeclarative/configpropertymap.h>
 
 #include <QDebug>
@@ -33,10 +33,6 @@
 #include <Plasma/Corona>
 #include <Plasma/ContainmentActions>
 #include <Plasma/PluginLoader>
-
-
-
-
 
 //////////////////////////////ContainmentConfigView
 ContainmentConfigView::ContainmentConfigView(Plasma::Containment *cont, QWindow *parent)
@@ -195,4 +191,4 @@ void ContainmentConfigView::syncWallpaperObjects()
     m_currentWallpaperConfig = static_cast<ConfigPropertyMap *>(wallpaperGraphicsObject->property("configuration").value<QObject *>());
 }
 
-#include "moc_containmentconfigview.cpp"
+#include "moc_containmentconfigview_p.cpp"
