@@ -17,36 +17,37 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef D_PTR_H
-#define D_PTR_H
+#ifndef D_PTR_IMPLEMENTATION_H
+#define D_PTR_IMPLEMENTATION_H
 
-#include <memory>
+#include <utility>
 
 namespace utils {
 
 template <typename T>
-class d_ptr {
-private:
-    std::unique_ptr<T> d;
+d_ptr<T>::d_ptr() : d(new T())
+{
+}
 
-public:
-    d_ptr();
+template <typename T>
+template <typename ...Args>
+d_ptr<T>::d_ptr(Args && ... args)
+    : d(new T(std::forward<Args>(args)... ))
+{
+}
 
-    template <typename ...Args>
-    d_ptr(Args && ...);
+template <typename T>
+d_ptr<T>::~d_ptr()
+{
+}
 
-    ~d_ptr();
-
-    T * operator->() const;
-
-    T * get() const;
-};
-
-#define D_PTR \
-    class Private;                            \
-    friend class Private;                     \
-    const ::utils::d_ptr<Private> d     \
+template<typename T>
+T * d_ptr<T>::operator->() const
+{
+    return d.get();
+}
 
 } // namespace utils
 
 #endif
+
