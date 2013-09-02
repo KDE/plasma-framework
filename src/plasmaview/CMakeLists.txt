@@ -20,12 +20,12 @@ target_link_libraries(plasmaview
     ${Qt5Quick_LIBRARIES}
     ${Qt5Qml_LIBRARIES}
     ${KWindowSystem_LIBRARIES}
+    ${KI18n_LIBRARIES}
+    ${KService_LIBRARIES}
+    ${KCoreAddons_LIBRARIES}
+    ${XmlGui_LIBRARIES}
     plasma
     kdeclarative
-    KF5::KI18n
-    KF5::KService
-    KF5::KCoreAddons
-    KF5::XmlGui
 )
 
 set_target_properties(plasmaview PROPERTIES
