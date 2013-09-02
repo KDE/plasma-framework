@@ -36,70 +36,8 @@ class ConfigPropertyMap;
 
 class ConfigCategoryPrivate;
 
-class PLASMAVIEW_EXPORT ConfigCategory : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-    Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged)
-    Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
-    Q_PROPERTY(QString pluginName READ pluginName WRITE setPluginName NOTIFY pluginNameChanged)
-
-public:
-    ConfigCategory(QObject *parent = 0);
-    ~ConfigCategory();
-
-    /**
-     * @return the name of the category
-     **/
-    QString name() const;
-
-    /**
-     * @param name the name of the category
-     **/
-    void setName(const QString &name);
-
-    /**
-     * @return the icon of the category
-     **/
-    QString icon() const;
-
-    /**
-     * @param icon the icon of the category
-     **/
-    void setIcon(const QString &icon);
-
-    QString source() const;
-    void setSource(const QString &source);
-
-    QString pluginName() const;
-    void setPluginName(const QString &pluginName);
-
-Q_SIGNALS:
-    /**
-     * emitted when the name id changed
-     **/
-    void nameChanged();
-
-    /**
-     * emitted when the icon is changed
-     **/
-    void iconChanged();
-
-    /**
-     * emitted when the source is changed
-     **/
-    void sourceChanged();
-
-    /**
-     * emitted when the plugin is changed
-     **/
-    void pluginNameChanged();
-
-private:
-    ConfigCategoryPrivate *const d;
-};
-
 class ConfigModelPrivate;
+class ConfigCategory;
 
 class PLASMAVIEW_EXPORT ConfigModel : public QAbstractListModel
 {
