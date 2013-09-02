@@ -24,6 +24,8 @@
 
 #include <QAbstractNativeEventFilter>
 
+#include <xcb/xcb.h>
+
 namespace Plasma
 {
 
@@ -43,7 +45,7 @@ Q_SIGNALS:
     void effectChanged(bool on);
 
 private:
-    QString m_property;
+    xcb_atom_t m_property;
     bool m_effectActive;
 };
 
